@@ -47,8 +47,8 @@ typedef enum _EAlign EAlign;
 class TextFormat: public Format
 {
 	QString      _police;
-	unsigned int _pos;
-	unsigned int _taille;		/* Length of the string */
+	//unsigned int _pos;
+	//unsigned int _taille;		/* Length of the string */
 	unsigned int _size;		/* Size of the police   */
 	unsigned int _weight;		/* bold                 */
 	bool         _italic;
@@ -64,10 +64,12 @@ class TextFormat: public Format
 		 * Creates a new instance of TextFormat.
 		 *
 		 */
-		TextFormat(): _pos(0), _taille(0), _size(11), _weight(0), _italic(false),
+		TextFormat(): _size(11), _weight(0), _italic(false),
 				_underline(false), _strikeout(0)
 		{
 			_textcolor = 0;
+			setPos(0);
+			setLength(0);
 		}
 
 		/* 
@@ -81,8 +83,8 @@ class TextFormat: public Format
 		/**
 		 * Accessors
 		 */
-		unsigned int getPos       () const { return _pos;       }
-		unsigned int getLength    () const { return _taille;    }
+		//unsigned int getPos       () const { return _pos;       }
+		//unsigned int getLength    () const { return _taille;    }
 		unsigned int getSize      () const { return _size;      }
 		unsigned int getWeight    () const { return _weight;    }
 		EAlign       getAlign     () const { return _vertalign; }
@@ -98,8 +100,8 @@ class TextFormat: public Format
 		/**
 		 * Modifiers
 		 */
-		void setPos        (const unsigned int pos){ _pos       = pos;  }
-		void setLength     (const unsigned int t)  { _taille    = t; }
+		//void setPos        (const unsigned int pos){ _pos       = pos;  }
+		//void setLength     (const unsigned int t)  { _taille    = t; }
 		void setSize       (const unsigned int t)  { _size      = t; }
 		void setWeight     (const unsigned int w)  { _weight    = w; }
 		void setItalic     (bool i)                { _italic    = i; }

@@ -38,7 +38,8 @@ Anchor::~Anchor()
 void Anchor::analyse(const QDomNode balise)
 {
 	/* MARKUPS FORMAT id="1" pos="0" len="17">...</FORMAT> */
-	
+	Format::analyse(balise);
+
 	/* Parameters Analyse */
 	kdDebug() << "ANALYSE AN ANCHOR" << endl;
 	

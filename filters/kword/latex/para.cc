@@ -284,14 +284,14 @@ void Para::analyseFormat(const QDomNode balise)
 				{
 					zone = new TextZone(_texte, this);
 					zone->analyse(balise);
-					if(((TextZone*) zone)->getPos() != _currentPos)
+					if(zone->getPos() != _currentPos)
 					{
 						if(_lines == 0)
 							_lines = new QList<Format>;
 							/* Create first a default format */
 						zoneFirst = new TextZone(_texte, this);
-						((TextZone*) zoneFirst)->setPos(_currentPos);
-						((TextZone*) zoneFirst)->setLength(((TextZone*) zone)->getPos() - _currentPos);
+						zoneFirst->setPos(_currentPos);
+						zoneFirst->setLength(zone->getPos() - _currentPos);
 						((TextZone*) zoneFirst)->analyse();
 
 						/* Add the text without format */
@@ -319,6 +319,22 @@ void Para::analyseFormat(const QDomNode balise)
 		default: /* Unknown */
 				kdDebug() << "Format not yet supported" << endl;
 	}
+
+	if(zone->getPos() != _currentPos)
+	{
+		if(_lines == 0)
+			_lines = new QList<Format>;
+			/* Create first a default format */
+		zoneFirst = new TextZone(_texte, this);
+		zoneFirst->setPos(_currentPos);
+		zoneFirst->setLength(zone->getPos() - _currentPos);
+		((TextZone*) zoneFirst)->analyse();
+		kdDebug() << "pos courante : " << _currentPos << endl;
+		/* Add the text without format */
+		_lines->append(zoneFirst);
+		_currentPos = _currentPos + zoneFirst->getLength();
+	}
+	
 	if(zone != 0)
 	{
 		if(_lines == 0)
@@ -326,7 +342,7 @@ void Para::analyseFormat(const QDomNode balise)
 
 		/* add the text */
 		_lines->append(zone);
-		_currentPos = _currentPos + ((TextZone*) zone)->getLength();
+		_currentPos = _currentPos + zone->getLength();
 	}
 }
 

@@ -56,7 +56,9 @@ class Para;
 class Format: public XmlParser
 {
 	EFormat _id;
-	
+	unsigned int _pos;
+	unsigned int _taille;		/* Length of the string */
+
 	/* USEFULL DATA */
 	Para*   _para;		/* Parent class */
 
@@ -83,14 +85,16 @@ class Format: public XmlParser
 		EFormat getId        () const { return _id;   }
 		Para*   getPara      () const { return _para; }
 		EFormat getFormatType() const { return _id;   }
-		//int getPos()
-		//int get	
+		unsigned int getPos       () const { return _pos;       }
+		unsigned int getLength    () const { return _taille;    }
 
 		/**
 		 * Modifiers
 		 */
 		void setId   (int   id)   { _id   = (EFormat) id; }
 		void setPara (Para* para) { _para = para;         }
+		void setPos        (const unsigned int pos){ _pos       = pos;  }
+		void setLength     (const unsigned int t)  { _taille    = t; }
 
 		/**
 		 * Helpfull functions

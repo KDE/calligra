@@ -30,8 +30,8 @@
 void Format::analyse(const QDomNode balise)
 {
 	/* <FORMAT id="1" pos="0" len="17"> */
-	setId(getAttr(balise, "ID").toInt());
-	//setPos(getAttr(balise, "pos").toInt());
-	//setTaille (getAttr(balise, "len").toInt());
+	setId(getAttr(balise, "id").toInt());
+	setPos(getAttr(balise, "pos").toInt());
+	setLength(getAttr(balise, "len").toInt());
 }
 

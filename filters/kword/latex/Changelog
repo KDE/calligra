@@ -1,4 +1,10 @@
-july 2001
+29 july 2001
+- bug fixes
+	o bug fix for headers but are still problems.
+	o bug fix when a anchor or other embeded object are on the same
+	  line than a text zone.
+	
+15 july 2001
 - bug fixes
 	o characters encoding bug
 	o somes table bugs

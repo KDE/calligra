@@ -178,7 +178,8 @@ void Texte::generate(QTextStream &out)
 	kdDebug() << "NB PARA " << _parags.count() << endl;
 	//iter.setList(_parags);
 
-	if(getSection() == SS_TABLE)
+	if(getSection() == SS_TABLE || getSection() == SS_HEADERS ||
+	   getSection() == SS_FOOTERS)
 	{
 		/* If the element has a border display it here */
 		if(hasTopBorder())
@@ -190,15 +191,11 @@ void Texte::generate(QTextStream &out)
 	}
 	_lastEnv = ENV_NONE;
 	_lastTypeEnum = TL_NONE;
-	//while(!iter.isTerminate())
+	
 	Para* currentPara = _parags.first();
 	while( currentPara != 0)
 	{
-		//Para* currentPara = iter.getCourant();
-		/* layout managment */
-		if((!currentPara->isChapter() &&
-			_lastTypeEnum == TL_NONE && getSection() != SS_FOOTNOTES &&
-			getSection() != SS_HEADERS && getSection() != SS_FOOTERS &&
+		if((!currentPara->isChapter() && _lastTypeEnum == TL_NONE &&
 			_lastEnv != getNextEnv(_parags, _parags.at()) &&
 			currentPara->notEmpty()) ||
 			_lastEnv != getNextEnv(_parags, _parags.at()) )
@@ -206,6 +203,7 @@ void Texte::generate(QTextStream &out)
 			currentPara->generateBeginEnv(out);
 			_lastEnv = currentPara->getEnv();
 		}
+		
 		/* List managment */
 		if(isBeginEnum(lastPara, currentPara))
 		{
@@ -225,17 +223,19 @@ void Texte::generate(QTextStream &out)
 			_lastTypeEnum = TL_NONE;
 		}
 		/* layout managment (left, center, justify, right) */
-		if((!lastPara->isChapter() &&
-				getSection() != SS_FOOTNOTES && getSection() != SS_HEADERS &&
-				getSection() != SS_FOOTERS &&
-				_lastEnv != getNextEnv(_parags, _parags.at()) &&
-				lastPara->notEmpty()) ||
-				_lastEnv != getNextEnv(_parags, _parags.at()))
+		if((!lastPara->isChapter() && _lastEnv != getNextEnv(_parags, _parags.at()) &&
+			lastPara->notEmpty()) ||
+			_lastEnv != getNextEnv(_parags, _parags.at()))
+		{
 			lastPara->generateEndEnv(out);
-		out << endl << endl;
+			out << endl;
+		}
+		if(getSection() != SS_HEADERS && getSection() != SS_FOOTERS)
+			out << endl;
 	}
 
-	if(getSection() == SS_TABLE)
+	if(getSection() == SS_TABLE || getSection() == SS_HEADERS ||
+	   getSection() == SS_FOOTERS)
 	{
 		out << "\\end{minipage}" << endl;
 
@@ -264,13 +264,14 @@ EEnv Texte::getNextEnv(QList<Para> liste, const int pos)
 }
 
 /* next is the paragraph which will be generated, just after */
-
 bool Texte::isBeginEnum(Para* previous, Para* next)
 {
 	/* If it's a list : */
 	/* - go in a new list */
 	/* - change depth (a list in a list) */
 	/* - or two lists nearby (but with the same depth) */
+	kdDebug() << "---------------------------------" << endl;
+	kdDebug() << getSection() << " = " << SS_HEADERS << endl;
 	if(next->isList() && getSection() != SS_FOOTNOTES &&
 		getSection() != SS_HEADERS && getSection() != SS_FOOTERS)
 	{

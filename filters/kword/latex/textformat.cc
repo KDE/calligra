@@ -114,8 +114,9 @@ void TextFormat::analyseParam(const QDomNode balise)
 	/* <FORMAT id="1" pos="0" len="17"> */
 
 	//setId(getAttr(balise, "id").toInt());
-	setPos(getAttr(balise, "pos").toInt());
-	setLength(getAttr(balise, "len").toInt());
+	//setPos(getAttr(balise, "pos").toInt());
+	//setLength(getAttr(balise, "len").toInt());
+	Format::analyse(balise);
 }
 
 /*******************************************/

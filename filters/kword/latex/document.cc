@@ -241,8 +241,8 @@ void Document::generateTypeHeader(QTextStream &out, Element *header)
 		out << "}" << endl;
 		out << "\\fancyhead[R]{}" << endl;
 	}
-	if(_fileHeader->getHeadType() == TH_EVODD)
-	{
+	/*if(_fileHeader->getHeadType() == TH_EVODD)
+	{*/
 		switch(header->getInfo())
 		{
 			case SI_NONE:
@@ -263,14 +263,14 @@ void Document::generateTypeHeader(QTextStream &out, Element *header)
 				out << "\\fancyhead[LE]{}" << endl;
 				break;
 		}
-	}
+	//}
 	//if(_fileHeader->getHeadType() == TH_FIRST && header->getInfo() == SI_FIRST)
 	if(header->getInfo() == SI_FIRST)
 	{
-		out << "\\markright{";
+		out << "\\fancyhead{";
 		header->generate(out);
 		out << "}" << endl;
-		out << "\\thispagestyle{myheadings}" << endl;
+		out << "\\thispagestyle{fancy}" << endl;
 	}
 }
 
@@ -308,8 +308,10 @@ void Document::generateTypeFooter(QTextStream &out, Element *footer)
 	}
 	else if(_fileHeader->getFootType() == TH_FIRST && footer->getInfo() == SI_FIRST)
 	{
-		//out << "\\markright{}" << endl;
-		//out << "\\thispagestyle{heading}" << endl;
+		out << "\\fanycfoot{";
+		footer->generate(out);
+		out << "}" << endl;
+		out << "\\thispagestyle{fancy}" << endl;
 	}
 }
 

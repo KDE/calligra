@@ -1,4 +1,3 @@
 send bugs to rjacolin@ifrance.com. Thanks you.
-
-	- no end of flow if the next textzone is empty (the textzone is ignored).
-
+	- problems with headers/footers
+	- problems with footnotes
