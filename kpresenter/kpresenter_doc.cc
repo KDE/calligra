@@ -4517,7 +4517,10 @@ QStringList KPresenterDoc::presentationList()
     {
         ListCustomSlideShow::Iterator it;
         for ( it = m_customListSlideShow.begin(); it != m_customListSlideShow.end(); ++it )
+        {
+            kdDebug()<<" it.key() :"<<it.key()<<endl;
             lst << it.key();
+        }
     }
     return lst;
 }

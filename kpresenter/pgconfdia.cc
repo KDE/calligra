@@ -24,9 +24,11 @@
 #include "kprpage.h"
 
 #include <qbuttongroup.h>
+#include <qhbuttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qhbox.h>
+#include <qvbox.h>
 #include <qgroupbox.h>
 #include <qheader.h>
 #include <qlabel.h>
@@ -145,18 +147,21 @@ void PgConfDia::setupPageSlides()
 				      "show.</p>") );
     QGridLayout *slidesLayout = new QGridLayout( slidesPage,7 , 2 );
 
-    m_customSlide = new QRadioButton( i18n( "Custom Slide Show" ), slidesPage, "customslide" );
-    slidesLayout->addMultiCellWidget( m_customSlide, 0, 0, 0, 1 );
 
-    QLabel *lab = new QLabel( i18n( "Custom Slide" ),slidesPage );
-    slidesLayout->addWidget( lab, 1, 0 );
+    QButtonGroup *group=new QVButtonGroup( slidesPage );
+    group->setRadioButtonExclusive( true );
 
-    m_customSlideCombobox = new QComboBox( slidesPage );
+    m_customSlide = new QRadioButton( i18n( "Custom Slide Show" ), group, "customslide" );
+
+    QHBox *box = new QHBox( group );
+
+    QLabel *lab = new QLabel( i18n( "Custom Slide" ),box );
+
+    m_customSlideCombobox = new QComboBox( box );
     m_customSlideCombobox->insertStringList( m_doc->presentationList() );
-    slidesLayout->addWidget( m_customSlideCombobox, 1, 1 );
 
-    m_selectedSlide = new QRadioButton( i18n( "Selected Pages" ), slidesPage, "selectedslide" );
-    slidesLayout->addMultiCellWidget( m_selectedSlide, 2,2,0,1 );
+    m_selectedSlide = new QRadioButton( i18n( "Selected Pages" ), group, "selectedslide" );
+    slidesLayout->addMultiCellWidget( group, 0,2,0,1 );
 
     slides = new QListView( slidesPage );
     slidesLayout->addMultiCellWidget( slides, 3, 6, 0, 1 );
@@ -186,6 +191,15 @@ void PgConfDia::setupPageSlides()
 
     spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
     slidesLayout->addMultiCellWidget( buttonGroup, 6, 6, 0, 1 );
+
+    if ( m_doc->presentationName().isEmpty() )
+    {
+        m_selectedSlide->setChecked( true );
+        m_customSlideCombobox->setCurrentText( m_doc->presentationName() );
+    }
+    else
+        m_customSlide->setChecked( true );
+
 }
 
 PgConfDia::~PgConfDia()
