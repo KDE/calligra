@@ -247,25 +247,9 @@
     <Function>
       <Name>COUNT</Name>
       <Type>Float</Type>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
 	<Text>This function returns the count of integer or floating arguments passed. You can count using a range: COUNT(A1:B5) or using a list of values like COUNT(12;5;12.5).</Text>
@@ -281,25 +265,9 @@
     <Function>
       <Name>COUNTA</Name>
       <Type>Float</Type>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
 	<Text>This function returns the count of all non empty arguments passed. You can count using a range: COUNTA(A1:B5) or using a list of values like COUNTA(12;5;12.5).</Text>
@@ -380,25 +348,9 @@
     <Function>
       <Name>SUM</Name>
       <Type>Float</Type>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
 	<Text>The SUM() function calculates the sum of all the values given as parameters. You can calculate the sum of a range SUM(A1:B5) or a list of values like SUM(12;5;12.5).</Text>
@@ -413,25 +365,9 @@
     <Function>
       <Name>SUMA</Name>
       <Type>Float</Type>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
 	<Text>The SUMA() function calculates the sum of all the values given as parameters. You can calculate the sum of a range SUMA(A1:B5) or a list of values like SUMA(12;5;12.5). If a parameter contains text or the boolean value FALSE it is counted as 0, if a parameter evaluates to TRUE it is counted as 1.</Text>
@@ -446,25 +382,9 @@
     <Function>
       <Name>PRODUCT</Name>
       <Type>Float</Type>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
 	<Text>The PRODUCT() function calculates the product of all the values given as parameters. You can calculate the product of a range: PRODUCT(A1:B5) or a list of values like product(12;5;12.5). If no numeric values are found 0 is returned.</Text>
@@ -479,25 +399,9 @@
     <Function>
       <Name>KPRODUCT</Name>
       <Type>Float</Type>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
 	<Text>The KPRODUCT() function calculates the product of all the values given as parameters. You can calculate the product of a range: KPRODUCT(A1:B5) or a list of values like product(12;5;12.5). If no numeric values are found 1 is returned.</Text>
@@ -512,25 +416,9 @@
     <Function>
       <Name>DIV</Name>
       <Type>Float</Type>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
 	<Text>The DIV() function divides the first value by the other values in turn. You can calculate using a range: DIV(A1:B5) or a list of values like DIV(12;5;12.5).</Text>
@@ -545,25 +433,9 @@
     <Function>
       <Name>SUMSQ</Name>
       <Type>Float</Type>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
 	<Text>The SUMSQ() function calculates the sum of all the squares of values given as parameters. You can calculate the sum of a range SUMSQ(A1:B5) or a list of values like SUMSQ(12;5;12.5).</Text>
@@ -578,25 +450,9 @@
     <Function>
       <Name>MAX</Name>
       <Type>Float</Type>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
 	<Text>The MAX() function returns the largest value given in the parameters.</Text>
@@ -612,25 +468,9 @@
     <Function>
       <Name>MAXA</Name>
       <Type>Float</Type>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
 	<Text>The MAXA() function returns the largest value given in the parameters without ignoring boolean values. TRUE evaluates to 1, FALSE evaluates to 0.</Text>
@@ -647,25 +487,9 @@
     <Function>
       <Name>MIN</Name>
       <Type>Float</Type>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
 	<Text>The MIN() function returns the smallest value given in the parameters.</Text>
@@ -681,25 +505,9 @@
     <Function>
       <Name>MINA</Name>
       <Type>Float</Type>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
 	<Text>The MINA() function returns the smallest value given in the parameters without ignoring boolean values: TRUE evaluates to 1, FALSE to 0.</Text>
@@ -716,25 +524,9 @@
     <Function>
       <Name>MULTIPLY</Name>
       <Type>Float</Type>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Floating point values</Comment>
-	<Type range="true">Float</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
 	<Text>The MULTIPLY() function multiplies all the values given in the parameters. You can multiply values given by a range MULTIPLY(A1:B5) or a list of values like MULTIPLY(12;5;12.5).</Text>
@@ -748,25 +540,9 @@
     <Function>
       <Name>MULTINOMIAL</Name>
       <Type>Float</Type>
-      <Parameter optional="true">
-	<Comment>Integer values</Comment>
-	<Type range="true">Int</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Integer values</Comment>
-	<Type range="true">Int</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Integer values</Comment>
-	<Type range="true">Int</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Integer values</Comment>
-	<Type range="true">Int</Type>
-      </Parameter>
-      <Parameter optional="true">
-	<Comment>Integer values</Comment>
-	<Type range="true">Int</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
 	<Text>The MULTINOMIAL() function returns the multinomial of each number in the parameters. It uses this formula for MULTINOMIAL(a,b,c):</Text>
@@ -1117,26 +893,6 @@
         <Related>RAND</Related>
       </Help>
     </Function>
-
-static char *help_mround = {
-	N_("@FUNCTION=MROUND\n"
-	   "@SYNTAX=MROUND(number,multiple)\n"
-
-	   "@DESCRIPTION="
-	   "MROUND function rounds a given number to the desired multiple. "
-	   "@number is the number you want rounded and @multiple is the "
-	   "the multiple to which you want to round the number. "
-	   "\n"
-	   "If @number and @multiple have different sign, MROUND "
-	   "returns #NUM! error.\n"
-	   "This function is Excel compatible.\n"
-	   "\n"
-	   "@EXAMPLES=\n"
-	   "MROUND(1.7,0.2) equals 1.8.\n"
-	   "MROUND(321.123,0.12) equals 321.12.\n"
-	   "\n"
-	   "@SEEALSO=ROUNDDOWN,ROUND,ROUNDUP")
-};
     <Function>
       <Name>MROUND</Name>
       <Type>Float</Type>
