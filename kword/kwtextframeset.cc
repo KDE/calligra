@@ -317,7 +317,7 @@ void KWTextFrameSet::statistics( ulong & charsWithSpace, ulong & charsWithoutSpa
         {
             QChar ch = s[i];
             ++charsWithSpace;
-            if ( ch.isSpace() )
+            if ( !ch.isSpace() )
                 ++charsWithoutSpace;
             if ( ch.isSpace() || ch.isPunct() )
             {
