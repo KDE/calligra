@@ -6,7 +6,16 @@ BUGS :
   - copy&paste with mouse (MMB) bugs (ah, QT 2 bug)
     '^' + 'e' = 'e' !
   - selecting several lines : first line gets unselected
+  - Replacing selected text works not correctly, e.g. following happens
+    Write This is my text.
+    select "my " and type "a ", it will first remove "my ",
+    so the new text is "This is text", and then insert a at the position the
+    cursor was, so you end up with "This is texa t" instead of "This is a text".
+  - When selecting a whole line and changing attribs, a word in next and/or prev line
+    is changed too 
 - Placing of objects is not precise 
+- When pasting a page set default page to currentPage + 1
+
 
 TO FINISH:
 ===========
@@ -25,6 +34,14 @@ MISSING FEATURES / TODO:
 - use GM in all dialogs
 - Rewrite autoforms (using XML)
 - Possibility to print 1, 2 or 4 slides / page
+- Menu item for copy page (to do it without copy+paste)
+- Extend Contents to Height => Fit contents to height (also shrink spacings!)
+  Maybe don´t only change spacings but also fontsizes
+- Make option for txt obj to be abe to set a few colors and automatically use
+  them in this order for the paragraphs (like always one in black and one in blue and
+  again and again)
+ 
+
 
 
 Reginald Stadlbauer <reggie@kde.org>
