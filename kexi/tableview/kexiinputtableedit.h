@@ -30,7 +30,8 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 	Q_OBJECT
 
 	public:
-		KexiInputTableEdit(QVariant value, int type, QString ov=QString::null, bool mark=false,
+//		KexiInputTableEdit(QVariant value, int type, QString ov=QString::null, bool mark=false,
+		KexiInputTableEdit(QVariant value, int type, const QString& add=QString::null,
 		 QWidget *parent=0, const char *name=0, QStringList comp = QStringList());
 
 		virtual QVariant value();

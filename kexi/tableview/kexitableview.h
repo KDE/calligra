@@ -371,7 +371,9 @@ protected:
 	virtual void setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h );
 
 	void setupNavigator();
-	
+	void setNavRowNumber(int newrow);
+	void setNavRowCount(int newrows);
+
 	//! used to update info about row count after a change
 	void updateRowCountInfo();
 

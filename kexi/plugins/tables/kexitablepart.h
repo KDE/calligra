@@ -34,8 +34,11 @@ class KexiTablePart : public KexiPart::Part
 		KexiTablePart(QObject *parent, const char *name, const QStringList &);
 		~KexiTablePart();
 
-		virtual void	execute(KexiMainWindow *win, const KexiPart::Item &);
-		virtual void    createGUIClient(KexiMainWindow *win);
+//		virtual void execute(KexiMainWindow *win, const KexiPart::Item &);
+		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item);
+		virtual void createGUIClient(KexiMainWindow *win);
+
+		virtual QString instanceName() const;
 };
 
 #endif

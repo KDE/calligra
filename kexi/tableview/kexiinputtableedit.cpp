@@ -34,7 +34,9 @@
 #include <knumvalidator.h>
 	
 
-KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, QString ov, bool mark, QWidget *parent, const char *name, QStringList comp)
+//KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, QString ov, bool mark, 
+KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& add,
+	QWidget *parent, const char *name, QStringList comp)
  : KexiTableEdit()
 {
 	m_type = type; //TODO(js) remove m_type !
@@ -95,22 +97,42 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, QString ov, boo
 	}
 	else
 #endif
-		if (m_type==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
-			QString tmp_val = value.toString();
-			//TODO(js): get decimal places settings here...
-			QStringList sl = QStringList::split(".", tmp_val);
-			if (tmp_val.isEmpty())
-				m_cview->setText("");
-			else if (sl.count()==2) {
-				kdDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
-				tmp_val = sl[0] + KGlobal::locale()->decimalSymbol() + sl[1];
+		QString tmp_val = value.toString();
+
+		if (KexiDB::Field::isFPNumericType(m_type)) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
+			if (value.toDouble() == 0.0) {
+				tmp_val=add; //eat 0
+			}
+			else {
+				//TODO(js): get decimal places settings here...
+				QStringList sl = QStringList::split(".", tmp_val);
+				if (tmp_val.isEmpty())
+					m_cview->setText("");
+				else if (sl.count()==2) {
+					kdDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
+					tmp_val = sl[0] + KGlobal::locale()->decimalSymbol() + sl[1];
+				}
+				tmp_val+=add;
 			}
 			m_cview->setText(tmp_val);
 			QValidator *validator = new KDoubleValidator(m_cview);
 			m_cview->setValidator( validator );
 		}
+		else if (KexiDB::Field::isNumericType(m_type)) {
+			if (value.toInt() == 0) {
+				tmp_val=add; //eat 0
+			}
+			else {
+				tmp_val += add;
+			}
+			m_cview->setText(tmp_val);
+			//js: @todo implement ranges here!
+			QValidator *validator = new KIntValidator(m_cview);
+			m_cview->setValidator( validator );
+		}
 		else {
-			m_cview->setText(value.toString());
+			tmp_val+=add;
+			m_cview->setText(tmp_val);
 		}
 		kdDebug() << "KexiInputTableEdit::KexiInputTableEdit(): have to mark! "
 			<< m_cview->text().length() << endl;

@@ -137,6 +137,7 @@ class KexiTableViewPrivate
 	KLineEdit *navRowNumber;
 	QIntValidator *navRowNumberValidator;
 	KLineEdit *navRowCount; //!< readonly counter
+	int nav1DigitWidth;
 
 	QLabel *scrollBarTip;
 	QTimer scrollBarTipTimer;

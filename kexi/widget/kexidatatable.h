@@ -24,8 +24,16 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 		~KexiDataTable();
 
 		void			setData(KexiDB::Cursor *cursor);
+
+		virtual QWidget* mainWidget();
+		KexiDataTableView* tableView() const { return m_view; }
+
+		virtual QSize minimumSizeHint() const;
+		virtual QSize sizeHint() const;
+
 	protected:
-		void			initActions();
+		void init();
+		void initActions();
 
 	protected slots:
 		void filter();

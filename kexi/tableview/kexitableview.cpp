@@ -78,6 +78,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	viewport()->setBackgroundMode(NoBackground);
 //	viewport()->setFocusPolicy(StrongFocus);
 	viewport()->setFocusPolicy(WheelFocus);
+	setFocusProxy(viewport());
 
 	//setup colors defaults
 	setBackgroundMode(PaletteBackground);
@@ -149,7 +150,6 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 
 //	navPanelLyr->addStretch(25);
 	
-//	d->navPanel->updateGeometry();
 
 /*	d->pVerticalHeader = new KexiTableHeader(this);
 	
@@ -184,6 +184,17 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 //	updateScrollBars();
 }
 
+KexiTableView::~KexiTableView()
+{
+	cancelEditor();
+
+	if (m_owner)
+		delete m_data;
+	delete d;
+}
+
+
+
 //! Setup navigator widget
 void KexiTableView::setupNavigator()
 {
@@ -201,8 +212,8 @@ void KexiTableView::setupNavigator()
 	QFont f = d->navPanel->font();
 	f.setPixelSize((bw > 12) ? 12 : bw);
 	QFontMetrics fm(f);
-	int fw = fm.width("888888");
-	
+	d->nav1DigitWidth = fm.width("8");
+
 	d->navBtnFirst = new QToolButton(d->navPanel);
 	d->navBtnFirst->setMaximumWidth(bw);
 	d->navBtnFirst->setFocusPolicy(NoFocus);
@@ -219,9 +230,9 @@ void KexiTableView::setupNavigator()
 	spc->setFixedWidth(6);
 	
 	d->navRowNumber = new KLineEdit(d->navPanel);
-	d->navRowNumber->setAlignment(AlignRight | AlignVCenter);
+	d->navRowNumber->setAlignment(AlignLeft | AlignVCenter);
 	d->navRowNumber->setFocusPolicy(ClickFocus);
-	d->navRowNumber->setFixedWidth(fw);
+//	d->navRowNumber->setFixedWidth(fw);
 	d->navRowNumberValidator = new QIntValidator(1, 1, this);
 	d->navRowNumber->setValidator(d->navRowNumberValidator);
 	d->navRowNumber->installEventFilter(this);
@@ -229,19 +240,25 @@ void KexiTableView::setupNavigator()
 	
 	KLineEdit *lbl_of = new KLineEdit(i18n("of"), d->navPanel);
 	lbl_of->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
-	lbl_of->setMaximumWidth(fm.width(lbl_of->text())+10);
+	lbl_of->setMaximumWidth(fm.width(lbl_of->text())+8);
 	lbl_of->setReadOnly(true);
 	lbl_of->setLineWidth(0);
 	lbl_of->setFocusPolicy(NoFocus);
 	lbl_of->setAlignment(AlignCenter);
 	
 	d->navRowCount = new KLineEdit(d->navPanel);
+//	d->navRowCount->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
 	d->navRowCount->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
-	d->navRowCount->setMaximumWidth(fw);
+//	d->navRowCount->setMaximumWidth(fw);
 	d->navRowCount->setReadOnly(true);
 	d->navRowCount->setLineWidth(0);
 	d->navRowCount->setFocusPolicy(NoFocus);
 	d->navRowCount->setAlignment(AlignLeft | AlignVCenter);
+
+	lbl_of->setFont(f);
+	d->navRowNumber->setFont(f);
+	d->navRowCount->setFont(f);
+	d->navPanel->setFont(f);
 
 	d->navBtnNext = new QToolButton(d->navPanel);
 	d->navBtnNext->setMaximumWidth(bw);
@@ -267,10 +284,6 @@ void KexiTableView::setupNavigator()
 	spc = new QFrame(d->navPanel);
 	spc->setFixedWidth(6);
 
-	lbl_of->setFont(f);
-	d->navRowCount->setFont(f);
-	d->navPanel->setFont(f);
-
 	connect(d->navRowNumber,SIGNAL(returnPressed(const QString&)),
 		this,SLOT(navRowNumber_ReturnPressed(const QString&)));
 	connect(d->navRowNumber,SIGNAL(lostFocus()),
@@ -282,15 +295,29 @@ void KexiTableView::setupNavigator()
 	connect(d->navBtnNew,SIGNAL(clicked()),this,SLOT(navBtnNewClicked()));
 	connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
 		this,SLOT(vScrollBarValueChanged(int)));
+
+	d->navPanel->updateGeometry();
 }
 
-KexiTableView::~KexiTableView()
-{
-	cancelEditor();
 
-	if (m_owner)
-		delete m_data;
-	delete d;
+void KexiTableView::setNavRowNumber(int newrow)
+{
+	const QString & n = QString::number(newrow);
+	if (d->navRowNumber->text().length() != n.length()) {//resize
+		d->navRowNumber->setFixedWidth(d->nav1DigitWidth*QMAX(n.length()+1, d->navRowCount->text().length()+1)+6);
+	}
+	d->navRowNumber->setText(n);
+	d->navRowCount->deselect();
+}
+
+void KexiTableView::setNavRowCount(int newrows)
+{
+	const QString & n = QString::number(newrows);
+	if (d->navRowCount->text().length() != n.length()) {//resize
+		d->navRowCount->setFixedWidth(d->nav1DigitWidth*n.length()+6);
+	}
+	d->navRowCount->setText(n);
+	d->navRowCount->deselect();
 }
 
 void KexiTableView::setData( KexiTableViewData *data, bool owner )
@@ -695,16 +722,21 @@ QSizePolicy KexiTableView::sizePolicy() const
 QSize KexiTableView::sizeHint() const
 {
 	const QSize &ts = tableSize();
-	return QSize(ts.width() + leftMargin() + 2*2, //+ QMIN(d->pVerticalHeader->width(),d->rowHeight) + margin()*2,
+	return QSize(
+		QMAX( ts.width() + leftMargin() + 2*2, (d->navPanel ? d->navPanel->width() : 0) ),
+		//+ QMIN(d->pVerticalHeader->width(),d->rowHeight) + margin()*2,
 		QMAX( ts.height()+topMargin()+horizontalScrollBar()->sizeHint().height(), 
-		      minimumSizeHint().height() ) 
-		);
+			minimumSizeHint().height() )
+	);
 //		QMAX(ts.height() + topMargin(), minimumSizeHint().height()) );
 }
 
 QSize KexiTableView::minimumSizeHint() const
 {
-	return QSize(columnWidth(1), d->rowHeight*3 + d->pTopHeader->height());
+	return QSize(
+		leftMargin() + columnWidth(0) + 2*2, 
+		d->rowHeight*5/2 + topMargin() + (d->navPanel ? d->navPanel->height() : 0)
+	);//d->pTopHeader->height());
 }
 
 void KexiTableView::createBuffer(int width, int height)
@@ -909,8 +941,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 */
 
 //	int iOffset = 0;
-	QPen fg(colorGroup().text());
-	p->setPen(fg);
+//	QPen fg(colorGroup().text());
+//	p->setPen(fg);
 #if 0 //todo(js)
 	if(item->isInsertItem())
 	{
@@ -1054,15 +1086,18 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	// draw selection background
 	
 	if (!txt.isEmpty() && d->pCurrentItem == item 
-		&& col == d->curCol && !m_data->columns[col].readOnly && viewport()->hasFocus()) //js: && !d->recordIndicator)
+		&& col == d->curCol && !m_data->columns[col].readOnly) //js: && !d->recordIndicator)
 	{
 //		QRect bound=fontMetrics().boundingRect(x, y_offset, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, item->at(col).toString());
 		QRect bound=fontMetrics().boundingRect(x, y_offset, w - (x+x), h, align, txt);
 		bound.setX(bound.x()-1);
 		bound.setY(0);
 		bound.setWidth(bound.width()+2);
-		p->setPen(colorGroup().highlightedText());
-		p->fillRect(bound, colorGroup().highlight());
+		bound.setHeight(d->rowHeight-1);
+		if (viewport()->hasFocus())
+			p->fillRect(bound, colorGroup().highlight());
+		else
+			p->fillRect(bound, gray);
 	}
 //	p->drawText(x, y_offset, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, item->at(col).toString());
 	
@@ -1074,23 +1109,22 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			gray_pen.setColor(gray);
 			p->setPen(gray_pen);
 		}
+		else {
+			p->setPen(colorGroup().text());
+		}
 		p->drawRect(0, 0, x2, y2);
 //			p->drawRect(-1, -1, w+1, h+1);
 	}
 	
 	// draw text
-	if (!txt.isEmpty())
+	if (!txt.isEmpty()) {
+		if (d->pCurrentItem == item && col == d->curCol)
+			p->setPen(colorGroup().highlightedText());
+		else
+			p->setPen(colorGroup().text());
 		p->drawText(x, y_offset, w - (x+x), h, align, txt);
-	p->setPen(fg);
-#if 0 //todo(js)
-	if(item->isInsertItem())
-	{
-		QFont f = p->font();
-		f.setBold(false);
-		p->setFont(f);
-//		iOffset = 3;
 	}
-#endif
+	p->setPen(pen);//restore
 }
 
 QPoint KexiTableView::contentsToViewport2( const QPoint &p )
@@ -1728,7 +1762,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 			d->pEditor = new KexiInputTableEdit(val, columnType(col), addText, false, viewport(), "inPlaceEd",
 			 d->pColumnDefaults.at(col)->toStringList());
 #else
-			d->pEditor = new KexiInputTableEdit(val, t, addText, false, viewport(), "inPlaceEd",
+			d->pEditor = new KexiInputTableEdit(val, t, addText, viewport(), "inPlaceEd",
 			 QStringList());
 #endif
 			static_cast<KexiInputTableEdit*>(d->pEditor)->end(false);
@@ -1997,7 +2031,8 @@ void KexiTableView::setCursor(int row, int col/*=-1*/)
 		kdDebug(44021) << "setCursor(): " <<QString("old:%1,%2 new:%3,%4").arg(d->curCol).arg(d->curRow).arg(newcol).arg(newrow) << endl;
 		
 		if (d->curRow != newrow) {//update current row info
-			d->navRowNumber->setText(QString::number(newrow+1));
+			setNavRowNumber(newrow+1);
+//			d->navRowNumber->setText(QString::number(newrow+1));
 			d->navBtnPrev->setEnabled(newrow>0);
 			d->navBtnFirst->setEnabled(newrow>0);
 			d->navBtnNext->setEnabled(newrow<(rows()-1+(isInsertingEnabled()?1:0)));
@@ -2417,14 +2452,16 @@ void KexiTableView::navRowNumber_ReturnPressed(const QString& text)
 void KexiTableView::navRowNumber_lostFocus()
 {
 	int r = validRowNumber(d->navRowNumber->text());
-	d->navRowNumber->setText( QString::number( r+1 ) );
+	setNavRowNumber(r+1);
+//	d->navRowNumber->setText( QString::number( r+1 ) );
 	selectRow( r );
 }
 
 void KexiTableView::updateRowCountInfo()
 {
 	d->navRowNumberValidator->setRange(1,rows()+(isInsertingEnabled()?1:0));
-	d->navRowCount->setText(QString::number(rows()));
+	setNavRowCount(rows());
+//	d->navRowCount->setText(QString::number(rows()));
 }
 
 void KexiTableView::navBtnLastClicked()
