@@ -11,7 +11,7 @@
             <x>0</x>
             <y>0</y>
             <width>594</width>
-            <height>262</height>
+            <height>287</height>
         </rect>
     </property>
     <property name="caption">
@@ -112,17 +112,23 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>CheckBoxAuthorInfo</cstring>
+        <spacer row="3" column="0">
+            <property name="name" stdset="0">
+                <cstring>Spacer1</cstring>
             </property>
-            <property name="enabled">
-                <bool>false</bool>
+            <property name="orientation">
+                <enum>Vertical</enum>
             </property>
-            <property name="text">
-                <string>&amp;Export information about author</string>
+            <property name="sizeType">
+                <enum>Expanding</enum>
             </property>
-        </widget>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
         <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>buttonGroupMode</cstring>
@@ -142,27 +148,61 @@
                 </property>
                 <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>radioModeCss</cstring>
-                    </property>
-                    <property name="text">
-                        <string>CSS: use CSS as much as possible</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
                         <cstring>radioModeDocStruct</cstring>
                     </property>
                     <property name="enabled">
                         <bool>true</bool>
                     </property>
                     <property name="text">
-                        <string>Document Structure Only: no formatting</string>
+                        <string>L&amp;ight: convert the document structure to (X)HTML</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Convert only the document structure</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>radioModeStrict</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Normal: convert to (X)HTML</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Convert the document structure and simple formatting (Recommended to re-import in KWord or to export for older HTML user agents)</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>radioModeCss</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Extended: convert to (X)HTML with CSS</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Convert as much possible of the KWord document (Recommend for exporting to other modern word processors)</string>
                     </property>
                 </widget>
             </vbox>
+        </widget>
+        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>CheckBoxAuthorInfo</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="text">
+                <string>&amp;Export information about author</string>
+            </property>
         </widget>
         <widget class="QButtonGroup" row="0" column="0">
             <property name="name">
@@ -185,11 +225,17 @@
                     <property name="name">
                         <cstring>radioDocType1</cstring>
                     </property>
+                    <property name="focusPolicy">
+                        <enum>TabFocus</enum>
+                    </property>
                     <property name="text">
                         <string>&amp;HTML 4.01</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>HTML 4.01 (For older HTML user agents) </string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -202,31 +248,24 @@
                     <property name="checked">
                         <bool>true</bool>
                     </property>
+                    <property name="toolTip" stdset="0">
+                        <string>XHTML 1.0</string>
+                    </property>
                 </widget>
             </vbox>
         </widget>
-        <spacer row="3" column="0">
-            <property name="name" stdset="0">
-                <cstring>Spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
     </grid>
 </widget>
 <tabstops>
     <tabstop>radioDocType1</tabstop>
     <tabstop>radioDocType2</tabstop>
+    <tabstop>radioEncodingUTF8</tabstop>
+    <tabstop>radioEncodingLocal</tabstop>
+    <tabstop>comboBoxEncoding</tabstop>
+    <tabstop>radioModeDocStruct</tabstop>
+    <tabstop>radioModeStrict</tabstop>
+    <tabstop>radioModeCss</tabstop>
+    <tabstop>CheckBoxAuthorInfo</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
