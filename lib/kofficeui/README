@@ -1,0 +1,19 @@
+To install the KOffice-UserInterface library do:
+
+cd pics
+make install
+cd ..
+make depend
+make all
+make install
+
+If you want to compile the test program, with which
+you can open all dialogs of the library do:
+
+cd test
+make depend
+make all
+./test
+
+Reginald Stadlbauer
+<reggie@kde.org>
