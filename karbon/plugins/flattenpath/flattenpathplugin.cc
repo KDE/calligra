@@ -53,7 +53,7 @@ FlattenPathPlugin::slotFlattenPath()
 }
 
 VFlattenDlg::VFlattenDlg( QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true,  i18n( "Polygonize" ), Ok | Cancel )
+	: KDialogBase( parent, name, true,  i18n( "Flatten Path" ), Ok | Cancel )
 {
 	// add input fields on the left:
 	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
