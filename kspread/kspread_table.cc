@@ -1909,12 +1909,10 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
         {
            c->clearProperty(KSpreadCell::PFaktor);
            c->clearNoFallBackProperties( KSpreadCell::PFaktor );
-
            c->clearProperty(KSpreadCell::PPrecision);
            c->clearNoFallBackProperties( KSpreadCell::PPrecision );
-
-          c->clearProperty(KSpreadCell::PFormatNumber);
-          c->clearNoFallBackProperties( KSpreadCell::PFormatNumber );
+           c->clearProperty(KSpreadCell::PFormatNumber);
+           c->clearNoFallBackProperties( KSpreadCell::PFormatNumber );
         }
       }
 
@@ -3230,7 +3228,6 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
       for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
         {
         RowLayout *rw=nonDefaultRowLayout(i);
-
         rw->setTopBorderPen(pen);
         rw->setRightBorderPen(pen);
         rw->setLeftBorderPen(pen);
@@ -3275,6 +3272,33 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
         cl->setFallDiagonalPen( pen );
         cl->setGoUpDiagonalPen(pen );
         }
+              RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PRightBorder)
+        ||rw->hasProperty(KSpreadCell::PLeftBorder)|| rw->hasProperty(KSpreadCell::PTopBorder)
+        || rw->hasProperty(KSpreadCell::PBottomBorder)
+        || rw->hasProperty(KSpreadCell::PFallDiagonal)
+        || rw->hasProperty(KSpreadCell::PGoUpDiagonal)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        cell->setTopBorderPen(pen);
+                        cell->setRightBorderPen(pen);
+                        cell->setLeftBorderPen(pen);
+                        cell->setBottomBorderPen(pen);
+                        cell->setFallDiagonalPen( pen );
+                        cell->setGoUpDiagonalPen(pen );
+                        }
+                }
+        }
+
       emit sig_updateView( this );
       return;
     }
