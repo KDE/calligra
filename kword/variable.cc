@@ -35,9 +35,10 @@ QString KWVariablePgNumFormat::convert(KWVariable *_var)
       return QString();
     }
 
-  // for now...
   QString str;
   str.setNum(dynamic_cast<KWPgNumVariable*>(_var)->getPgNum());
+  str.prepend(pre);
+  str.append(post);
   return QString(str);
 }
 

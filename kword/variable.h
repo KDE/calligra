@@ -91,7 +91,7 @@ public:
 class KWVariablePgNumFormat : public KWVariableFormat
 {
 public:
-  KWVariablePgNumFormat() {}
+  KWVariablePgNumFormat() { pre = "-"; post = "-"; }
 
   virtual VariableFormatType getType()
   { return VFT_PGNUM; }
@@ -100,6 +100,15 @@ public:
 
   virtual QString convert(KWVariable *_var);
 
+  void setPre(const QString &_pre) { pre = _pre; }
+  void setPost(const QString &_post) { pre = _post; }
+  
+  QString getPre() { return pre; }
+  QString getPost() { return post; }
+  
+protected:
+  QString pre,post;
+  
 };
 
 /******************************************************************/
