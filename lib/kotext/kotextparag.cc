@@ -916,7 +916,9 @@ int KoTextParag::findCustomItem( const KoTextCustomItem * custom ) const
 void KoTextParag::printRTDebug( int info )
 {
     kdDebug() << "Paragraph " << this << "   (" << paragId() << ") [changed="
-              << hasChanged() << ", valid=" << isValid() << "] ------------------ " << endl;
+              << hasChanged() << ", valid=" << isValid()
+              << ", needsSpellCheck=" << string()->needsSpellCheck()
+              << "] ------------------ " << endl;
     if ( prev() && prev()->paragId() + 1 != paragId() )
         kdWarning() << "  Previous paragraph " << prev() << " has ID " << prev()->paragId() << endl;
     if ( next() && next()->paragId() != paragId() + 1 )

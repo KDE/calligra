@@ -177,15 +177,14 @@ void KoBgSpellCheck::spellCheckerMisspelling( const QString &old, const QStringL
     KoTextObject * fs = m_bgSpell.currentTextObj;
     Q_ASSERT( fs );
     if ( !fs ) return;
-    if ( !m_bgSpell.currentParag ) return;
-    kdDebug() << "KoBgSpellCheck::spellCheckerMisspelling parag=" << m_bgSpell.currentParag->paragId() << " pos=" << pos << " length=" << old.length() << endl;
-    // TODO use Misspelled format instead
-    //fs->highlightPortion( m_bgSpell.currentParag, pos, old.length(), 0L /*m_gui->canvasWidget()*/ );
-    KoTextStringChar *ch = m_bgSpell.currentParag->at( pos );
+    Qt3::QTextParag* parag = m_bgSpell.currentParag;
+    if ( !parag ) return;
+    kdDebug() << "KoBgSpellCheck::spellCheckerMisspelling parag=" << parag << " (id=" << parag->paragId() << ", length=" << parag->length() << ") pos=" << pos << " length=" << old.length() << endl;
+    KoTextStringChar *ch = parag->at( pos );
     KoTextFormat format( *static_cast<KoTextFormat *>(ch->format()) );
     format.setMisspelled( true );
-    m_bgSpell.currentParag->setFormat( pos, old.length(), &format, true, QTextFormat::Misspelled );
-    m_bgSpell.currentParag->setChanged( true );
+    parag->setFormat( pos, old.length(), &format, true, QTextFormat::Misspelled );
+    parag->setChanged( true );
     // TODO delay this, so that repaints are 'compressed'
     slotRepaintChanged( m_bgSpell.currentTextObj );
 }
@@ -196,7 +195,7 @@ void KoBgSpellCheck::spellCheckerDone( const QString & )
     if(m_bgSpell.currentParag)
         m_bgSpell.currentParag->string()->setNeedsSpellCheck( false );
     if( m_bgSpell.currentTextObj)
-        m_bgSpell.currentTextObj->setBeedSpellCheck(false);
+        m_bgSpell.currentTextObj->setNeedSpellCheck(false);
     // Done checking the current paragraph, schedule the next one
     QTimer::singleShot( 10, this, SLOT( spellCheckNextParagraph() ) );
 }
