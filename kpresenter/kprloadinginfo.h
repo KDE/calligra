@@ -64,6 +64,7 @@ public:
     }
 
     int presSpeed;
+    CustomListMap m_tmpCustomListMap;
 private:
     QDict<lstAnimation> m_animationsShowDict;
     QDict<lstAnimation> m_animationsHideDict;
