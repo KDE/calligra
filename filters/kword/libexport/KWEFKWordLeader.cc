@@ -321,7 +321,7 @@ static void ProcessStylesPluralTag (QDomNode myNode, void *, KWEFKWordLeader *le
     leader->doOpenStyles ();
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList << TagProcessing ( "STYLE", ProcessStyleTag, NULL );
+    tagProcessingList << TagProcessing ( "STYLE", ProcessStyleTag, leader );
     ProcessSubtags (myNode, tagProcessingList, leader);
     
     leader->doCloseStyles ();
@@ -464,12 +464,28 @@ static void ProcessDocTag ( QDomNode         myNode,
 
     QValueList<ParaData> paraList;
 
-    // TODO: do all those tags still exist in KWord 1.2?
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList << TagProcessing ( "PAPER",       ProcessPaperTag,        NULL               )
+
+    leader->doOpenHead();
+
+    // At first, process <PAPER>, even if mostly the output will need to be delayed.
+    tagProcessingList.append ( TagProcessing ( "PAPER",       ProcessPaperTag,     NULL ) );
+    ProcessSubtags (myNode, tagProcessingList, leader);
+
+    // Then we process the styles
+    tagProcessingList.clear();
+    tagProcessingList.append ( TagProcessing ( "STYLES",      ProcessStylesPluralTag, NULL ) );
+    ProcessSubtags (myNode, tagProcessingList, leader);
+
+    leader->doCloseHead();
+    leader->doOpenBody();
+
+    tagProcessingList.clear();
+    // TODO: do all those tags still exist in KWord 1.2?
+    tagProcessingList << TagProcessing ( "PAPER",       NULL,                   NULL               ) // Already done
                       << TagProcessing ( "ATTRIBUTES",  NULL,                   NULL               )
                       << TagProcessing ( "FOOTNOTEMGR", NULL,                   NULL               )
-                      << TagProcessing ( "STYLES",      ProcessStylesPluralTag, NULL               )
+                      << TagProcessing ( "STYLES",      NULL,                   NULL               ) // Already done
                       << TagProcessing ( "SERIALL",     NULL,                   NULL               )
                       << TagProcessing ( "CLIPARTS",    NULL,                   NULL               )
                       << TagProcessing ( "PIXMAPS",     ProcessPixmapsTag,      (void *) &paraList )
@@ -479,6 +495,8 @@ static void ProcessDocTag ( QDomNode         myNode,
     leader->doFullDocument (paraList, filterData->storeFileName, filterData->exportFileName);
 
     FreeCellParaLists (paraList);
+
+    leader->doCloseBody();
 
 #if 0
     kdError (30508) << "ProcessDocTag () - End" << endl;
@@ -526,9 +544,6 @@ DO_VOID_DEFINITION (doOpenDocument)
 DO_VOID_DEFINITION (doCloseDocument)
 DO_VOID_DEFINITION (doOpenStyles)
 DO_VOID_DEFINITION (doCloseStyles)
-DO_VOID_DEFINITION (doOpenTextFrameSet)
-DO_VOID_DEFINITION (doCloseTextFrameSet)
-
 
 bool KWEFKWordLeader::doFullDocumentInfo (const KWEFDocumentInfo &docInfo)
 {
@@ -580,16 +595,22 @@ static bool ProcessStoreFile ( QByteArray       &byteArrayIn,
                                KWEFKWordLeader  *leader )
 {
     QDomDocument qDomDocumentIn;
+    
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
 
-    if ( !qDomDocumentIn.setContent (byteArrayIn) )
+    if ( !qDomDocumentIn.setContent (byteArrayIn, &errorMsg, &errorLine, &errorColumn) )
     {
-        kdError (30508) << "ProcessStoreFile (): Parsing Error!" << endl;
+        kdError (30508) << "Parsing Error! Aborting! (in ProcessStoreFile)" << endl
+            << "  Line: " << errorLine << " Column: " << errorColumn << endl
+            << "  Message: " << errorMsg << endl;
 
         return false;
     }
 
 #if 0
-    kdError (30508) << "DOM document type "
+    kdDebug (30508) << "DOM document type "
                     << qDomDocumentIn.doctype ().name () << "." << endl;
 #endif
 
@@ -636,14 +657,12 @@ bool KWEFKWordLeader::filter ( const QString &filenameIn,
     KoStore koStoreIn (filenameIn, KoStore::Read);
     QByteArray byteArrayIn;
 
-
-    doOpenHead ();
-
     if ( koStoreIn.open ( "documentinfo.xml" ) )
     {
         byteArrayIn = koStoreIn.read ( koStoreIn.size () );
         koStoreIn.close ();
 
+        kdDebug (30508) << "Processing Document Info..." << endl;
         ProcessStoreFile (byteArrayIn, ProcessDocumentInfoTag, filterData, this);
     }
     else
@@ -652,16 +671,12 @@ bool KWEFKWordLeader::filter ( const QString &filenameIn,
         kdWarning (30508) << "Unable to open documentinfo.xml sub-file!" << endl;
     }
 
-    doCloseHead ();
-
-
-    doOpenBody ();
-
     if ( koStoreIn.open ( "root" ) )
     {
         byteArrayIn = koStoreIn.read ( koStoreIn.size () );
         koStoreIn.close ();
 
+        kdDebug (30508) << "Processing KWord File (KoStore)..." << endl;
         ProcessStoreFile (byteArrayIn, ProcessDocTag, filterData, this);
     }
     else
@@ -675,6 +690,7 @@ bool KWEFKWordLeader::filter ( const QString &filenameIn,
             byteArrayIn = file.readAll ();
             file.close ();
 
+            kdDebug (30508) << "Processing KWord File (QFile)..." << endl;
             ProcessStoreFile (byteArrayIn, ProcessDocTag, filterData, this);
         }
         else
@@ -684,9 +700,6 @@ bool KWEFKWordLeader::filter ( const QString &filenameIn,
             return false;
         }
     }
-
-    doCloseBody ();
-
 
     doCloseDocument ();
 

@@ -41,8 +41,6 @@ class KWEFKWordLeader
     public: // public leader/worker functions (DO NOT use in your own code!)
         bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
         bool doFullDocument (const QValueList<ParaData> &, QString &, QString &);
-        bool doOpenTextFrameSet (void);
-        bool doCloseTextFrameSet (void);
         bool doFullPaperFormat (const int format, const double width, const double height, const int orientation);
         bool doOpenHead (void);
         bool doCloseHead (void);

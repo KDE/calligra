@@ -184,7 +184,8 @@ static void ProcessBoolIntAttrTag ( QDomNode  myNode,
             break;
 
         case -1:
-            kdError(30508) << "Bad attributes in " << myNode.nodeName () << " tag!" << endl;
+            kdWarning(30508) << "Bad attribute " << attrName << " in "
+                << myNode.nodeName () << " tag!" << endl;
             break;
 
         default:
@@ -296,8 +297,16 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
     switch ( formatId )
     {
         case 1:   // regular texts
-            if ( formatPos != -1 && formatLen != -1 )
             {
+                if ( formatPos == -1 || formatLen == -1 )
+                {
+                    // We have no position and no length defined
+                    // It can happen in a child of <STYLE>, just put secure values
+                    formatPos=0;
+                    formatLen=0;
+                    kdDebug (30508) << "Missing formatting! Style?" << endl;
+                }
+                // TODO: use directly a FormatData or a TextFormatting instead of using temporary variables
                 QString  fontName;
                 bool     italic    = false;
                 bool     underline = false;
@@ -310,6 +319,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
                 LinkData linkData;
 
                 QValueList<TagProcessing> tagProcessingList;
+                // TODO: delete CHARSET (does not exist anymore in KOffice 1.2)
                 tagProcessingList << TagProcessing ( "CHARSET",             NULL,                   NULL                        )
                                   << TagProcessing ( "ITALIC",              ProcessBoolIntValueTag, (void *) &italic            )
                                   << TagProcessing ( "UNDERLINE",           ProcessBoolIntValueTag, (void *) &underline         )
@@ -327,16 +337,9 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
                                                   TextFormatting ( fontName, italic, underline, strikeout,
                                                                    weight, fontSize, fgColor, bgColor,
                                                                    verticalAlignment, linkData.name, linkData.href, false ) );
-            }
-#if 0   // happens with empty lines
-            else
-            {
-                kdError(30508) << "Missing formatting!" << endl;
-            }
-#endif
 
-            break;
-
+                break;
+            }
         case 6:   // anchors
             if ( formatPos != -1 && formatLen != -1 )
             {
@@ -368,7 +371,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
             break;
 
         default:
-            kdError(30508) << "Unexpected FORMAT attribute id value " << formatId << "!" << endl;
+            kdError(30508) << "Unexpected FORMAT attribute id value " << formatId << " !" << endl;
             AllowNoSubtags (myNode);
     }
 }
@@ -411,7 +414,7 @@ static void ProcessCounterTag ( QDomNode myNode, void *tagData, KWEFKWordLeader 
 
 static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *)
 {
-    // WARNING: This is exactly the format AbiWord needs for defining its tabulators
+    // WARNING: This is exactly the format that AbiWord needs for defining its tabulators
     // TODO: make this function independant of the AbiWord export filter
 
     QString *tabulator = (QString *) tagData;
@@ -523,28 +526,24 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     ProcessSubtags (myNode, tagProcessingList, leader);
 
 
-    if ( formatDataList.count () )
+    if ( formatDataList.isEmpty () )
     {
-        layout->formatData = *formatDataList.begin ();
+        kdWarning (30508) << "No FORMAT tag within LAYOUT/STYLE!" << endl;
+    }
+    else
+    {
+        layout->formatData = formatDataList.first ();
 
         if ( formatDataList.count () > 1 )
         {
-            kdError (30508) << "More than one FORMAT tag within LAYOUT!" << endl;
+            kdWarning (30508) << "More than one FORMAT tag within LAYOUT/STYLE!" << endl;
         }
     }
-#if 0   // happens with empty lines
-    else
-    {
-        kdError (30508) << "No FORMAT tag within LAYOUT!" << endl;
-    }
-#endif
-
 
     if ( layout->styleName.isEmpty () )
     {
         layout->styleName = "Standard";
-
-        kdError(30508) << "Bad layout name value!" << endl;
+        kdWarning (30508) << "Empty layout name!" << endl;
     }
 
     if ( lineSpacing == "oneandhalf" )
@@ -579,7 +578,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
 void ProcessTextTag ( QDomNode myNode, void *tagData, KWEFKWordLeader * )
 {
     QString *tagText = (QString *) tagData;
-    
+
     QDomText myText ( myNode.firstChild ().toText () );
 
     if ( !myText.isNull () )
