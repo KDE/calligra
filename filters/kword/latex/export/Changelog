@@ -1,3 +1,13 @@
+
+12 September 2002
+- features
+	o Add a new option to choose the class.
+	
+- internal
+	o Change the way to go through options to parser.
+
+KOFFICE RELEASE 1.2 11 September 2002
+
 19 may 2002
 - features
 	o border for table :

@@ -57,10 +57,11 @@ void LATEXExportDia::createDialog()
 	QWidget *page = new QWidget( this );
 	setMainWidget(page);
 	QBoxLayout *mainLayout = new QVBoxLayout(page, 0, spacingHint());
+	
+	/* First part */
 	styleBox = new QVButtonGroup(i18n("Document Style"), page);
 	mainLayout->addWidget(styleBox);
 
-	/* First part */
 	QBoxLayout *styleLayout = new QVBoxLayout(page);
 
 	latexStyleRBtn = new QRadioButton(i18n("Latex style"), styleBox);
@@ -116,12 +117,26 @@ void LATEXExportDia::createDialog()
 	docBox->setButton(0);			/* NEW DOC IS THE DEFAULT. */
 	docLayout->activate();
 
+	/* Fourth part */
+	classBox = new QVButtonGroup(i18n("Class"), page);
+	mainLayout->addWidget(classBox);
+
+	QBoxLayout *classLayout = new QVBoxLayout(page);
+
+	classList = new QComboBox(true, styleBox);
+	classList->insertItem("article");
+	classList->insertItem("book");
+	classList->insertItem("letter");
+	classList->insertItem("report");
+	classList->insertItem("slides");
+	classLayout->addWidget(classList);
+
 	/* Display the main layout */
 	mainLayout->addStretch(5);
 	mainLayout->activate();
 }
 
-QString LATEXExportDia::state()
+/*QString LATEXExportDia::state()
 {
 	QString result;
 
@@ -143,7 +158,7 @@ QString LATEXExportDia::state()
 	else if(kwordStyleRBtn == styleBox->selected())
 		result += "KWORD";
 	return result;
-}
+}*/
 
 void LATEXExportDia::slotOk()
 {
@@ -152,6 +167,20 @@ void LATEXExportDia::slotOk()
 	kdDebug() << "LATEX FILTER --> BEGIN" << endl;
 	//Xml2LatexParser LATEXParser(_arrayIn, _fileOut, state());
 	Xml2LatexParser LATEXParser(_in, _fileOut, state());
+	if(embededRBtn == docBox->selected())
+		LATEXParser->setEmbeded(true);
+	else
+		LATEXParser->setEmbeded(false);
+	if(unicodeRBtn == langBox->selected())
+		LATEXParser->useLatinEnc();
+	else
+		LATEXParser->useUnicodeEnc();
+	if(latexStyleRBtn == styleBox->selected())
+		LATEXParser->useLatexStyle();
+	else
+		LATEXParser->useKwordStyle();
+	LATEXParser->setClass(classList->currentText());
+	
 	LATEXParser.analyse();
 	kdDebug() << "---------- generate file -------------" << endl;
 	LATEXParser.generate();

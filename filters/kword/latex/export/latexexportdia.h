@@ -64,16 +64,17 @@ class LATEXExportDia : public KDialogBase, public DCOPObject
 		virtual ~LATEXExportDia() {}
 		void createDialog();
 
-		virtual QString state();
+		//virtual QString state();
 		void setInputFile(QString file)  { _fileIn = file; }
 		void setInputData(QByteArray a)  { _arrayIn = a; }		/* deprecated */
 		void setOutputFile(QString file) { _fileOut = file; }
 
 	private:
-		QVButtonGroup* styleBox,       *langBox,        *docBox;
+		QVButtonGroup* styleBox,       *langBox,        *docBox, *classBox;
 		QRadioButton*  latexStyleRBtn, *kwordStyleRBtn;	/* Document style */
 		QRadioButton*  unicodeRBtn,    *latin1RBtn;		/* Language       */
 		QRadioButton*  newDocRBtn,     *embededRBtn;	/* Latex file     */
+		QComboBox* classList;		/* Class */
 	
 	k_dcop:
 		void useDefaultConfig() { slotOk(); }

@@ -46,14 +46,21 @@ class Xml2LatexParser : public XmlParser
 		/**
 		 * @param in tar file.
 		 * @param fileOut Output latex filename.
-		 * @param config Option choosen.
 		 */
-		Xml2LatexParser(const KoStore*, QString, QString);
+		Xml2LatexParser(const KoStore*, QString);
 
 		virtual ~Xml2LatexParser() {}
 
 		/* Accesors */
 		bool isEmbeded() const { return _isEmbeded; }
+
+		/* Modifiors */
+		void setEmbeded(bool emb) const { _isEmbeded = emb; }
+		
+		/**
+		 * Get options from the options dialog box.
+		 * @deprecated use accesor methods
+		 */
 		void analyse_config(QString);
 
 		void analyse();

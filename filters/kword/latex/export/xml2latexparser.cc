@@ -25,7 +25,7 @@
 
 #include "xml2latexparser.h"
 
-Xml2LatexParser::Xml2LatexParser(const KoStore* in, QString fileOut, QString config):
+Xml2LatexParser::Xml2LatexParser(const KoStore* in, QString fileOut):
 		XmlParser(in), _file(fileOut), _in( in )
 {
 	//kdDebug() << fileIn.latin1() << endl;
@@ -34,7 +34,7 @@ Xml2LatexParser::Xml2LatexParser(const KoStore* in, QString fileOut, QString con
 	setFileHeader(_fileHeader);
 	setRoot(&_document);
 	_isEmbeded = false;
-	analyse_config(config);
+	//analyse_config(config);
 }
 
 void Xml2LatexParser::analyse_config(QString config)

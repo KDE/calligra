@@ -40,6 +40,7 @@ class XmlParser
 	static bool _useLatexStyle;
 	static bool _useLatin1;
 	static bool _useUnicode;
+	static QString _class;
 
 	protected:
 		/* All the inherit class must be have a link with
@@ -62,6 +63,7 @@ class XmlParser
 		QString     getDocument     () const { return _document.toString(); }
 		Document*   getRoot         () const { return _root;                }
 		FileHeader* getFileHeader   () const { return _fileHeader; }
+		QString     getClass        () const { return _class; }
 		QString     getChildName(QDomNode, int);
 		QDomNode    getChild(QDomNode, QString);
 		QDomNode    getChild(QDomNode, QString, int);
@@ -76,10 +78,12 @@ class XmlParser
 
 		QDomNode init() { return _document.documentElement(); }
 
-		void        useUnicodeEnc   ()              { _useUnicode    = true; _useLatin1 = false;  }
-		void        useLatin1Enc    ()              { _useLatin1     = true; _useUnicode = false; }
-		void        useLatexStyle   ()              { _useLatexStyle = true;  }
-		void        useKwordStyle   ()              { _useLatexStyle = false; }
+		void        useUnicodeEnc   ()                 { _useUnicode    = true; _useLatin1 = false;  }
+		void        useLatin1Enc    ()                 { _useLatin1     = true; _useUnicode = false; }
+		void        useLatexStyle   ()                 { _useLatexStyle = true;  }
+		void        useKwordStyle   ()                 { _useLatexStyle = false; }
+		/** The class can be article, book, letter, report or slides. */
+		void        setClass        (QString classDoc) { _class = classDoc; }
 
 		/*void analyse(){};
 		void generate(){};*/
