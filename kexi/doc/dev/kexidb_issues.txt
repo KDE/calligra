@@ -85,9 +85,10 @@ kexi__objects
 //This table contains additional data for query schemas
 kexi_querydata
 	q_id integer REFERENCES kexi__objects(o_id),
-	q_sql varchar //raw sql text - stored in the unchanged form entered by a user (or generated)
-	q_valid boolean //query schema may be invalid (syntactically or logically, 
+	q_sql varchar, //raw sql text - stored in the unchanged form entered by a user (or generated)
+	q_valid boolean, //query schema may be invalid (syntactically or logically, 
 	                //but still can be stored)
+	q_parent_tab integer REFERENCES kexi__objects(o_id) //parent table of this query
 
 //This table contains fields that are members of given kexi object.
 //Not all object types should be allowed, now allowed are tables and queries
