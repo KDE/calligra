@@ -2,7 +2,7 @@ include $(top_srcdir)/kexi/Makefile.global
 
 kde_module_LTLIBRARIES = keximigrate_pqxxmigrate.la
 
-INCLUDES = -I$(srcdir)/../../.. $(all_includes) -I$(top_srcdir)/kexi -I$(PG_INCDIR) -I$(PQXX_INCDIR)
+INCLUDES = -I$(srcdir)/../../.. -I$(top_srcdir)/kexi $(all_includes) -I$(PG_INCDIR) -I$(PQXX_INCDIR)
 
 keximigrate_pqxxmigrate_la_METASOURCES = AUTO
 

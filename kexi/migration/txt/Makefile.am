@@ -2,7 +2,7 @@ include $(top_srcdir)/kexi/Makefile.global
 
 kde_module_LTLIBRARIES = keximigrate_txtmigrate.la
 
-INCLUDES = -I$(srcdir)/../../.. $(all_includes) -I$(top_srcdir)/kexi
+INCLUDES = -I$(srcdir)/../../.. -I$(top_srcdir)/kexi $(all_includes)
 
 keximigrate_txtmigrate_la_METASOURCES = AUTO
 
