@@ -196,7 +196,15 @@ QDateTime KWord13Document::creationDate( void ) const
         const int year = getPropertyInternal( "VARIABLESETTINGS:createFileYear" ).toInt();
         const int month = getPropertyInternal( "VARIABLESETTINGS:createFileMonth" ).toInt();
         const int day = getPropertyInternal( "VARIABLESETTINGS:createFileDay" ).toInt();
-        dt.setDate( QDate ( year, month, day) );
+        
+        if ( QDate::isValid( year, month, day) )
+        {
+            dt.setDate( QDate ( year, month, day) );
+        }
+        else
+        {
+            kdDebug(30520) << "No syntax 2 creation date!" << endl;
+        }
     }
     else
     {
@@ -217,7 +225,14 @@ QDateTime KWord13Document::modificationDate( void ) const
         const int year = getPropertyInternal( "VARIABLESETTINGS:modifyFileYear" ).toInt();
         const int month = getPropertyInternal( "VARIABLESETTINGS:modifyFileMonth" ).toInt();
         const int day = getPropertyInternal( "VARIABLESETTINGS:modifyFileDay" ).toInt();
-        dt.setDate( QDate ( year, month, day) );
+        if ( QDate::isValid( year, month, day) )
+        {
+            dt.setDate( QDate ( year, month, day) );
+        }
+        else
+        {
+            kdDebug(30520) << "No syntax 2 modification date!" << endl;
+        }
     }
     else
     {
