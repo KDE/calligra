@@ -371,7 +371,9 @@ Todo:
 In Progress:
 ------------
 -> save/load font format
-
+-> Save/load numeric-style
+	-> scientific format
+	-> Time/Date format
 Done:
 -----
 -> save/load page name

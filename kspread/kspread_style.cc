@@ -630,7 +630,42 @@ QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles )
 QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
 {
     KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_DATE );
-    return "";
+    switch( m_formatType )
+    {
+    case KSpreadFormat::ShortDate:
+    case KSpreadFormat::TextDate:
+    case KSpreadFormat::date_format1:
+    case KSpreadFormat::date_format2:
+    case KSpreadFormat::date_format3:
+    case KSpreadFormat::date_format4:
+    case KSpreadFormat::date_format5:
+    case KSpreadFormat::date_format6:
+    case KSpreadFormat::date_format7:
+    case KSpreadFormat::date_format8:
+    case KSpreadFormat::date_format9:
+    case KSpreadFormat::date_format10:
+    case KSpreadFormat::date_format11:
+    case KSpreadFormat::date_format12:
+    case KSpreadFormat::date_format13:
+    case KSpreadFormat::date_format14:
+    case KSpreadFormat::date_format15:
+    case KSpreadFormat::date_format16:
+    case KSpreadFormat::date_format17:
+    case KSpreadFormat::date_format18:
+    case KSpreadFormat::date_format19:
+    case KSpreadFormat::date_format20:
+    case KSpreadFormat::date_format21:
+    case KSpreadFormat::date_format22:
+    case KSpreadFormat::date_format23:
+    case KSpreadFormat::date_format24:
+    case KSpreadFormat::date_format25:
+    case KSpreadFormat::date_format26:
+        break;
+    default:
+        kdDebug()<<"this date format is not defined ! :"<<m_formatType<<endl;
+        break;
+    }
+    return mainStyles.lookup( currentCellStyle, "N" );
 }
 
 QString KSpreadStyle::saveOasisStyleNumericCustom( KoGenStyles&mainStyles )
@@ -662,16 +697,56 @@ QString KSpreadStyle::saveOasisStyleNumericCustom( KoGenStyles&mainStyles )
 
 QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles )
 {
-    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_TIME );
+    //<number:time-style style:name="N42" style:family="data-style">
+    //<number:hours number:style="long"/>
+    //<number:text>:</number:text>
+    //<number:minutes number:style="long"/>
+    //<number:text> </number:text>
+    //<number:am-pm/>
+    //</number:time-style>
 
-    return "";
+    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_TIME );
+    switch( m_formatType )
+    {
+    case KSpreadFormat::Time:
+    case KSpreadFormat::SecondeTime:
+    case KSpreadFormat::Time_format1:
+    case KSpreadFormat::Time_format2:
+    case KSpreadFormat::Time_format3:
+    case KSpreadFormat::Time_format4:
+    case KSpreadFormat::Time_format5:
+    case KSpreadFormat::Time_format6:
+    case KSpreadFormat::Time_format7:
+    case KSpreadFormat::Time_format8:
+        break;
+    default:
+        kdDebug()<<"time format not defined :"<<m_formatType<<endl;
+        break;
+    }
+    return mainStyles.lookup( currentCellStyle, "N" );
 }
 
 
 QString KSpreadStyle::saveOasisStyleNumericFraction( KoGenStyles &mainStyles )
 {
     KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_FRACTION );
-    return "";
+    switch( m_formatType )
+    {
+    case KSpreadFormat::fraction_half:
+    case KSpreadFormat::fraction_quarter:
+    case KSpreadFormat::fraction_eighth:
+    case KSpreadFormat::fraction_sixteenth:
+    case KSpreadFormat::fraction_tenth:
+    case KSpreadFormat::fraction_hundredth:
+    case KSpreadFormat::fraction_one_digit:
+    case KSpreadFormat::fraction_two_digits:
+    case KSpreadFormat::fraction_three_digits:
+        break;
+    default:
+        kdDebug()<<" fraction format not defined :"<<m_formatType<<endl;
+        break;
+    }
+    return mainStyles.lookup( currentCellStyle, "N" );
 }
 
 
