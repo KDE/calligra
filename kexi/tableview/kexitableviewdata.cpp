@@ -24,6 +24,8 @@
 
 #include "kexitableviewdata.h"
 
+#include "kexivalidator.h"
+
 #include <kexidb/field.h>
 #include <kexidb/queryschema.h>
 #include <kexidb/roweditbuffer.h>
@@ -44,6 +46,7 @@ KexiTableViewColumn::KexiTableViewColumn(KexiDB::Field& f, bool owner)
 
 	m_nameOrCaption = field->captionOrName();
 	m_readOnly = false;
+	m_validator = 0;
 }
 
 KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype,
@@ -65,6 +68,7 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 	m_nameOrCaption = field->captionOrName();
 	m_fieldOwned = true;
 	m_readOnly = false;
+	m_validator = 0;
 }
 
 KexiTableViewColumn::KexiTableViewColumn(
@@ -86,18 +90,30 @@ KexiTableViewColumn::KexiTableViewColumn(
 	}
 	//setup column's readonly flag: true if this is parent table's field
 	m_readOnly = (query.parentTable()!=f.table());
+	m_validator = 0;
 }
 
 KexiTableViewColumn::KexiTableViewColumn(bool)
 : field(0)
 {
 	isDBAware = false;
+	m_validator = 0;
 }
 
-KexiTableViewColumn::~KexiTableViewColumn() 
+KexiTableViewColumn::~KexiTableViewColumn()
 {
 	if (m_fieldOwned)
 		delete field;
+	setValidator( 0 );
+}
+
+void KexiTableViewColumn::setValidator( KexiValidator* v )
+{
+	if (m_validator) {//remove old one
+		if (!m_validator->parent()) //destroy if has no parent
+			delete m_validator;
+	}
+	m_validator = v;
 }
 
 bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const

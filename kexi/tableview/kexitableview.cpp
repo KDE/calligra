@@ -56,6 +56,7 @@
 #include "kexitableview.h"
 #include "kexitablerm.h"
 #include "kexi_utils.h"
+#include "kexivalidator.h"
 
 #include "kexidatetableedit.h"
 #include "kexicelleditorfactory.h"
@@ -1543,14 +1544,16 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	case Key_Tab:
 	case Key_Backtab:
 		if (nobtn && e->key()==Key_Tab) {
-			acceptEditor();
-			curCol = QMIN(columns() - 1, curCol + 1);
+			if (acceptEditor()) {
+				curCol = QMIN(columns() - 1, curCol + 1);
+			}
 		}
 		else if ((e->state()==ShiftButton && e->key()==Key_Tab)
-			|| (e->state()==NoButton && e->key()==Key_Backtab)
-			|| (e->state()==ShiftButton && e->key()==Key_Backtab)) {
-			acceptEditor();
-			curCol = QMAX(0, curCol - 1);
+		 || (e->state()==NoButton && e->key()==Key_Backtab)
+		 || (e->state()==ShiftButton && e->key()==Key_Backtab)) {
+			if (acceptEditor()) {
+				curCol = QMAX(0, curCol - 1);
+			}
 		}
 		break;
 	case Key_Up:
@@ -2238,6 +2241,15 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 	{
 		kdDebug(44021) << "setCursor(): " <<QString("old:%1,%2 new:%3,%4").arg(d->curCol).arg(d->curRow).arg(newcol).arg(newrow) << endl;
 		
+		// cursor moved: get rid of editor
+		if (d->pEditor) {
+			if (!d->contentsMousePressEvent_dblClick) {
+				if (!acceptEditor()) {
+					return;
+				}
+			}
+		}
+
 		if (d->curRow != newrow) {//update current row info
 			setNavRowNumber(newrow+1);
 //			d->navRowNumber->setText(QString::number(newrow+1));
@@ -2245,13 +2257,6 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 			d->navBtnFirst->setEnabled(newrow>0);
 			d->navBtnNext->setEnabled(newrow<(rows()-1+(isInsertingEnabled()?1:0)));
 			d->navBtnLast->setEnabled(newrow!=(rows()-1));
-		}
-		
-		// cursor moved: get rid of editor
-		if (d->pEditor) {
-			if (!d->contentsMousePressEvent_dblClick) {
-				acceptEditor();
-			}
 		}
 
 		// cursor moved to other row: end of row editing
@@ -2396,15 +2401,33 @@ bool KexiTableView::acceptEditor()
 	}
 
 	bool allow = true;
-	emit aboutToChangeItem(d->pCurrentItem, newval, allow);
-	if (allow) {
-		//send changes to the backend
-		m_data->updateRowEditBuffer(d->curCol,newval);
+	//1. check using validator
+	KexiValidator *validator = m_data->column(d->curCol)->validator();
+	if (validator) {
+		QString msg, desc;
+		KexiValidator::Result res = validator->check(m_data->column(d->curCol)->field->captionOrName(), 
+			newval, msg, desc);
+		if (res == KexiValidator::Error) {
+			//js: todo: message!!!
+			allow = false;
+		}
+		else if (res == KexiValidator::Warning) {
+			//js: todo: message!!!
+		}
+	}
 
-		kdDebug() << "KexiTableView::acceptEditor(): ------ EDIT BUFFER CHANGED TO:" << endl;
-		m_data->rowEditBuffer()->debug();
-	} else {
-		kdDebug() << "KexiTableView::acceptEditor(): ------ CHANGE NOT ALLOWED BY aboutToChangeItem() signal" << endl;
+	if (allow) {
+		//2. check using signal
+		emit aboutToChangeItem(d->pCurrentItem, newval, allow);
+		if (allow) {
+			//send changes to the backend
+			m_data->updateRowEditBuffer(d->curCol,newval);
+
+			kdDebug() << "KexiTableView::acceptEditor(): ------ EDIT BUFFER CHANGED TO:" << endl;
+			m_data->rowEditBuffer()->debug();
+		} else {
+			kdDebug() << "KexiTableView::acceptEditor(): ------ CHANGE NOT ALLOWED BY aboutToChangeItem() signal" << endl;
+		}
 	}
 
 	if (allow) {

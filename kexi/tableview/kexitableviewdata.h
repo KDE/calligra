@@ -39,6 +39,8 @@ class RowEditBuffer;
 class Cursor;
 }
 
+class KexiValidator;
+
 /*! Single column definition. */
 class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 	public:
@@ -80,6 +82,14 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		//! or finally - field's name
 		inline QString nameOrCaption() const { return m_nameOrCaption; }
 
+		/*! Assigns validator \a v for this column. 
+		 If the validator has no parent obejct, it will be owned by the column, 
+		 so you shouldn't care about destroying it. */
+		void setValidator( KexiValidator* v );
+
+		//! \return validator assigned for this column of 0 if there is no validator assigned.
+		KexiValidator* validator() const { return m_validator; }
+
 		KexiDB::Field* field;
 
 		bool isDBAware : 1; //!< true if data is stored in DB, not only in memeory
@@ -98,6 +108,9 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		KexiTableViewColumn(bool);
 
 		QString m_nameOrCaption;
+
+		KexiValidator* m_validator;
+
 		bool m_readOnly : 1;
 		bool m_fieldOwned : 1;
 		
