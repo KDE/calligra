@@ -221,7 +221,7 @@ int GOval::getNeighbourPoint (const Coord& p) {
   return -1;
 }
 
-void GOval::movePoint (int idx, float dx, float dy) {
+void GOval::movePoint (int idx, float dx, float dy, bool /*ctrlPressed*/) {
   float adx = std::fabs (dx);
   float ady = std::fabs (dy);
   float angle = 0;

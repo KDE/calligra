@@ -219,7 +219,7 @@ QList<Coord>& GPolyline::getPoints () {
   return points;
 }
 
-void GPolyline::movePoint (int idx, float dx, float dy) {
+void GPolyline::movePoint (int idx, float dx, float dy, bool /*ctrlPressed*/) {
   float x = points.at (idx)->x ();
   float y = points.at (idx)->y ();
   float ndx, ndy;

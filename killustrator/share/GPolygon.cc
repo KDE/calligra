@@ -331,10 +331,10 @@ void GPolygon::setSymmetricPolygon (const Coord& sp, const Coord& ep,
   updateRegion ();
 }
 
-void GPolygon::movePoint (int idx, float dx, float dy) {
+void GPolygon::movePoint (int idx, float dx, float dy, bool ctrlPressed) {
   gShape.setInvalid ();
   if (kind == PK_Polygon)
-    GPolyline::movePoint (idx, dx, dy);
+    GPolyline::movePoint (idx, dx, dy, ctrlPressed);
   else {
     // round the corner
     float xoff, yoff, off;

@@ -74,6 +74,8 @@ EditPointTool::~EditPointTool () {
 }
 
 void EditPointTool::setMode (Mode m) {
+  if(mode==m)
+    return;
   mode = m;
   switch (m) {
   case MovePoint:
@@ -166,7 +168,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       float dx = xpos - lastPos.x ();
       float dy = ypos - lastPos.y ();
       if (dx != 0 || dy != 0) {
-        obj->movePoint (pointIdx, dx, dy);
+        obj->movePoint (pointIdx, dx, dy, me->state()&Qt::ControlButton);
         lastPos = Coord (xpos, ypos);
       }
     }
@@ -183,7 +185,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
         float dx = xpos - lastPos.x ();
         float dy = ypos - lastPos.y ();
         if (dx != 0 || dy != 0)
-          obj->movePoint (pointIdx, dx, dy);
+          obj->movePoint (pointIdx, dx, dy, me->state()&Qt::ControlButton);
 
         EditPointCmd *cmd = new EditPointCmd (doc, obj, pointIdx,
                                               xpos - startPos.x (),

@@ -38,7 +38,7 @@ public:
   GPolygon (QList<Coord>& coords);
   ~GPolygon () {}
 
-  virtual void movePoint (int idx, float dx, float dy);
+  virtual void movePoint (int idx, float dx, float dy, bool ctrlPressed=false);
 
   virtual void draw (QPainter& p, bool withBasePoints = false,
                      bool outline = false);

@@ -155,7 +155,7 @@ void GBezier::setPoint (int idx, const Coord& p) {
   }
 }
 
-void GBezier::movePoint (int idx, float dx, float dy) {
+void GBezier::movePoint (int idx, float dx, float dy, bool ctrlPressed) {
   float x = points.at (idx)->x ();
   float y = points.at (idx)->y ();
   float ndx, ndy;
@@ -180,25 +180,25 @@ void GBezier::movePoint (int idx, float dx, float dy) {
       points.at (cidx)->y (y + ndy);
     }
   }
-  if (isEndPoint (idx)) {
-    points.at (idx - 1)->x (points.at (idx - 1)->x () + ndx);
-    points.at (idx - 1)->y (points.at (idx - 1)->y () + ndy);
-    points.at (idx + 1)->x (points.at (idx + 1)->x () + ndx);
-    points.at (idx + 1)->y (points.at (idx + 1)->y () + ndy);
-    if (cidx >= 0) {
-      points.at (cidx - 1)->x (points.at (cidx - 1)->x () + ndx);
-      points.at (cidx - 1)->y (points.at (cidx - 1)->y () + ndy);
-      points.at (cidx + 1)->x (points.at (cidx + 1)->x () + ndx);
-      points.at (cidx + 1)->y (points.at (cidx + 1)->y () + ndy);
-    }
-    computePPoints ();
-    updateRegion ();
+  if (isEndPoint (idx) && !ctrlPressed) {
+      points.at (idx - 1)->x (points.at (idx - 1)->x () + ndx);
+      points.at (idx - 1)->y (points.at (idx - 1)->y () + ndy);
+      points.at (idx + 1)->x (points.at (idx + 1)->x () + ndx);
+      points.at (idx + 1)->y (points.at (idx + 1)->y () + ndy);
+      if (cidx >= 0) {
+          points.at (cidx - 1)->x (points.at (cidx - 1)->x () + ndx);
+          points.at (cidx - 1)->y (points.at (cidx - 1)->y () + ndy);
+          points.at (cidx + 1)->x (points.at (cidx + 1)->x () + ndx);
+          points.at (cidx + 1)->y (points.at (cidx + 1)->y () + ndy);
+      }
   }
-  else {
+  else if(!ctrlPressed) {
     updateBasePoint (cPoint (idx));
     if (cidx >=0)
       updateBasePoint (cPoint (cidx));
   }
+  computePPoints ();
+  updateRegion ();
 }
 
 QString GBezier::typeName () const
@@ -324,9 +324,11 @@ void GBezier::drawHelpLines (QPainter& p) {
         points.at (i + 2)->x () == FLT_MAX)
       continue;
 
+    Coord c = points.at (i + 1)->transform (tmpMatrix);
     Coord c1 = points.at (i)->transform (tmpMatrix);
     Coord c2 = points.at (i + 2)->transform (tmpMatrix);
-    Painter::drawLine (p, c1.x (), c1.y (), c2.x (), c2.y ());
+    Painter::drawLine (p, c1.x (), c1.y (), c.x (), c.y ());
+    Painter::drawLine (p, c.x (), c.y (), c2.x (), c2.y ());
   }
   p.restore ();
 }
@@ -345,9 +347,11 @@ void GBezier::drawHelpLinesForWorkingSegment (QPainter& p) {
     }
 
     p.setPen (pen1);
+    Coord c = points.at (i + 1)->transform (tmpMatrix);
     Coord c1 = points.at (i)->transform (tmpMatrix);
     Coord c2 = points.at (i + 2)->transform (tmpMatrix);
-    Painter::drawLine (p, c1.x (), c1.y (), c2.x (), c2.y ());
+    Painter::drawLine (p, c1.x (), c1.y (), c.x (), c.y ());
+    Painter::drawLine (p, c.x (), c.y (), c2.x (), c2.y ());
     p.setPen (pen2);
     Painter::drawRect (p, c1.x () - 2, c1.y () - 2, 4, 4);
     Painter::drawRect (p, c2.x () - 2, c2.y () - 2, 4, 4);

@@ -47,7 +47,7 @@ public:
   virtual void addPoint (int idx, const Coord& p, bool update = true);
   virtual void insertPoint (int idx, const Coord& p, bool update = true);
   void _addPoint (int idx, const Coord& p);
-  void movePoint (int idx, float dx, float dy);
+  void movePoint (int idx, float dx, float dy, bool ctrlPressed=false);
 
   const Coord& getPoint (int idx);
   QList<Coord>& getPoints ();

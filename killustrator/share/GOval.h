@@ -56,7 +56,7 @@ public:
   virtual QDomElement writeToXml(QDomDocument &document);
 
   virtual int getNeighbourPoint (const Coord& p);
-  virtual void movePoint (int idx, float dx, float dy);
+  virtual void movePoint (int idx, float dx, float dy, bool ctrlPressed=false);
 
   virtual QString typeName () const;
 

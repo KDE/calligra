@@ -216,7 +216,7 @@ void GSegment::draw (QPainter& p, bool withBasePoints, bool /*outline*/,
   }
 }
 
-void GSegment::movePoint (int idx, float dx, float dy) {
+void GSegment::movePoint (int idx, float dx, float dy, bool /*ctrlPressed*/) {
   assert (idx >= 0 && ((skind == sk_Bezier && idx < 4) ||
                        (skind == sk_Line && idx < 2)));
   points[idx].x (points[idx].x () + dx);
@@ -337,7 +337,7 @@ bool GCurve::contains (const Coord& p) {
     return false;
 }
 
-void GCurve::movePoint (int idx, float dx, float dy) {
+void GCurve::movePoint (int idx, float dx, float dy, bool /*ctrlPressed*/) {
   int pidx = 0;
   QValueList<GSegment>::Iterator i;
   float ndx = dx * iMatrix.m11 () + dy * iMatrix.m21 ();

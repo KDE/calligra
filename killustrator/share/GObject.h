@@ -301,7 +301,7 @@ public:
     virtual void restoreState (GOState* state);
 
     virtual int getNeighbourPoint (const Coord& ) { return -1; }
-    virtual void movePoint (int /*idx*/, float /*dx*/, float /*dy*/) {}
+    virtual void movePoint (int /*idx*/, float /*dx*/, float /*dy*/, bool /*ctrlPressed*/=false) {}
     virtual void removePoint (int , bool) {}
 
     /**

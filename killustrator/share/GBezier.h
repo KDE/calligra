@@ -41,7 +41,7 @@ public:
   virtual bool contains (const Coord& p);
 
   virtual void setPoint (int idx, const Coord& p);
-  virtual void movePoint (int idx, float dx, float dy);
+  virtual void movePoint (int idx, float dx, float dy, bool ctrlPressed=false);
   virtual void removePoint (int idx, bool update = true);
   virtual void insertPoint (int idx, const Coord& p, bool update = true);
 

@@ -39,7 +39,7 @@ public:
 
   QDomElement writeToXml(QDomDocument &document);
   void draw (QPainter& p, bool withBasePoints, bool outline, bool drawFirst);
-  void movePoint (int idx, float dx, float dy);
+  void movePoint (int idx, float dx, float dy, bool ctrlPressed=false);
 
   Rect boundingBox ();
   bool contains (const Coord& p);
@@ -73,7 +73,7 @@ public:
 
   virtual QDomElement writeToXml (QDomDocument &document);
 
-  virtual void movePoint (int /*idx*/, float /*dx*/, float /*dy*/);
+  virtual void movePoint (int idx, float dx, float dy, bool ctrlPressed=false);
   virtual void removePoint (int idx, bool update = true);
   virtual int getNeighbourPoint (const Coord& p);
 
