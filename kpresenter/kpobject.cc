@@ -384,6 +384,22 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
         QString speed = animation->attribute( "presentation:speed" );
         kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<endl;
         kdDebug()<<" speed :"<<speed<<endl;
+
+        //kpresenter have three state (medium/slow/fast)
+        //not implemented into kpresenter
+        //add it.
+        if ( speed =="medium" )
+        {
+        }
+        else if ( speed=="slow" )
+        {
+        }
+        else if ( speed=="fast" )
+        {
+        }
+        else
+            kdDebug()<<" speed argument is not defined :"<<speed<<endl;
+
         if (effectStr=="fade")
         {
             if (dir=="from-right")

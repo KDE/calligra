@@ -590,6 +590,23 @@ void KPBackGround::loadOasis(KoOasisContext & context )
             }
         }
     }
+    if ( styleStack.hasAttribute( "presentation:transition-speed", QString::null, "drawing-page" ) )
+    {
+        // this argument is not defined into kpresenter_doc and not into kprpage
+        // TODO add it into each page.
+        QString speed = styleStack.attribute( "presentation:transition-speed", QString::null, "drawing-page" );
+        if ( speed == "slow" )
+        {
+        }
+        else if ( speed == "medium" )
+        {
+        }
+        else if ( speed == "fast" )
+        {
+        }
+        else
+            kdDebug()<<" transition-speed not defined :"<<speed<<endl;
+    }
     if ( styleStack.hasAttribute("presentation:duration" , QString::null, "drawing-page"))
     {
         kdDebug()<<"styleStack.hasAttribute(presentation:duration , QString::null, drawing-page ) :"<<styleStack.hasAttribute("presentation:duration" , QString::null, "drawing-page")<<endl;
