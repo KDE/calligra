@@ -317,6 +317,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     m_pInsertHandle = 0L;
 
+    m_specialCharDlg = 0;
+
     m_selectionInfo = new KSpreadSelection( this );
 
     // Vert. Scroll Bar
