@@ -79,7 +79,7 @@ static QString AmiProUnescape( const QString& str )
       if( str[i+1] == '\\' )
       {
         result.truncate( result.length() - 1 ); // remove the '<'
-        result.append( QChar(str[i+2].unicode()&0x7f) );
+        result.append( QChar(str[i+2].unicode() | 0x80 ) );
         i += 3;
       }
 
@@ -342,6 +342,10 @@ bool AmiProParser::parseStyle( const QStringList& lines )
   style.spaceAfter = lines[18].stripWhiteSpace().toFloat() / 20.0;
 
   m_styleList.append( style );
+
+  // "Style #0", "Style #1" and such are special styles
+  // do not import these styles
+  if( style.name.left( 7 ) != "Style #" )
   if( m_listener )
     return m_listener->doDefineStyle( style );
   return true;

@@ -161,7 +161,7 @@ static QString AmiProLayoutAsXML( const AmiProLayout& layout )
                   QString::number( layout.linespace );
 
   result.append( "<LAYOUT>\n" );
-  result.append( "  <NAME value=\"" + referredStyle + "\" />\n" );
+  result.append( "  <NAME value=\"" + XMLEscape( referredStyle ) + "\" />\n" );
   result.append( "  <FLOW align=\"" + align + "\" />\n" );
   result.append( "  <LINESPACING value=\"" + linespacing + "\" />\n" );
   result.append( "  <OFFSETS " + offsets + " />\n" );
