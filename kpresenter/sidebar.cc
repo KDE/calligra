@@ -833,9 +833,11 @@ void Outline::setCurrentPage( int pg )
     OutlineSlideItem *item = slideItem( pg );
     if( item && ( item!=currentItem()->parent() ) )
     {
+        blockSignals( true );
         setCurrentItem( item );
         setSelected( item, true );
         ensureItemVisible( item );
+        blockSignals( false );
     }
 }
 
