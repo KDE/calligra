@@ -52,6 +52,7 @@
 #include <kmessagebox.h>
 #include <kformulaedit.h>
 #include <kdebug.h>
+#include <kglobalsettings.h>
 
 #include <dcopclient.h>
 #include <dcopref.h>
@@ -331,12 +332,12 @@ void KivioView::setupActions()
 
   (void) new KAction( i18n("Align && Distribute"), ALT+Key_A, this, SLOT(alignStencilsDlg()), actionCollection(), "alignStencils" );
 
-  (void) new KAction( i18n("Cut"), "editcut", CTRL+Key_X, this, SLOT(cutStencil()), actionCollection(), "cutStencil" );
-  (void) new KAction( i18n("Copy"), "editcopy", CTRL+Key_C, this, SLOT(copyStencil()), actionCollection(), "copyStencil" );
-  (void) new KAction( i18n("Paste"), "editpaste", CTRL+Key_V, this, SLOT(pasteStencil()), actionCollection(), "pasteStencil" );
+  KStdAction::cut( this, SLOT(cutStencil()), actionCollection(), "cutStencil" );
+  KStdAction::copy( this, SLOT(copyStencil()), actionCollection(), "copyStencil" );
+  KStdAction::paste( this, SLOT(pasteStencil()), actionCollection(), "pasteStencil" );
 
-  (void) new KAction( i18n("Select All"), "select_all_stencils", CTRL+Key_A, this, SLOT(selectAllStencils()), actionCollection(), "selectAllStencils" );
-  (void) new KAction( i18n("Select None"), "unselect_all_stencils", CTRL+SHIFT+Key_A, this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils" );
+  KStdAction::selectAll( this, SLOT( selectAllStencils() ), actionCollection(), "selectAllStencils" ); 
+  (void) new KAction( i18n("Select None"), CTRL+SHIFT+Key_A, this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils" );
 
   (void) new KAction( i18n("Group Selected Stencils"), "group_stencils", CTRL+Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
   (void) new KAction( i18n("Ungroup Selected Stencils"), "ungroup_stencils", CTRL+SHIFT+Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
@@ -435,7 +436,7 @@ void KivioView::setupActions()
   connect( m_pDoc, SIGNAL(unitsChanged(int)), vRuler, SLOT(setUnit(int)) );
   connect( m_pDoc, SIGNAL(unitsChanged(int)), hRuler, SLOT(setUnit(int)) );
 
-  (void) new KAction( i18n("Options"), 0, this, SLOT(optionsDialog()), actionCollection(), "options" );
+  KStdAction::preferences(this, SLOT(optionsDialog()), actionCollection(), "options" );
 }
 
 void KivioView::initActions()
@@ -600,7 +601,7 @@ void KivioView::removePage()
 {
   if ( doc()->map()->count() <= 1 ) {
     QApplication::beep();
-    KMessageBox::sorry( this, i18n("You cannot delete the only page of the map."), i18n("Remove page") ); // FIXME bad english? no english!
+    KMessageBox::sorry( this, i18n("You cannot delete the only page of the document."), i18n("Remove page") );
     return;
   }
   QApplication::beep();
@@ -1017,7 +1018,7 @@ void KivioView::updateToolBars()
     pStencil = m_pActivePage->selectedStencils()->first();
     if( !pStencil )
     {
-        m_setFontFamily->setFont( "times" );
+	m_setFontFamily->setFont( KGlobalSettings::generalFont().family() );
         m_setFontSize->setFontSize( 12 );
         m_setBold->setChecked( false );
         m_setItalics->setChecked( false );
@@ -1378,7 +1379,7 @@ void KivioView::setupPrinter(KPrinter &p)
 void KivioView::exportPage()
 {
    // First build a filter list
-   QString extList = QString("Image Files: (");
+   QString extList = i18n("Image Files: (");
    char *pStr;
    QStrList strList;
    ExportPageDialog dlg(this, "Export Page Dialog");
