@@ -315,8 +315,8 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 			unsigned int end = params.findRev(")");
 			QString key = params.mid( start, end - start );
 			gc->fill.gradient() = m_gradients[ key ];
-			gc->fill.gradient().transform( gc->matrix );
 			gc->fill.gradient().transform( m_gradientTransforms[ key ] );
+			gc->fill.gradient().transform( gc->matrix );
 			gc->fill.setType( VFill::grad );
 		}
 		else
@@ -343,6 +343,7 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 			QString key = params.mid( start, end - start );
 			gc->stroke.gradient() = m_gradients[ key ];
 			gc->stroke.gradient().transform( m_gradientTransforms[ key ] );
+			gc->stroke.gradient().transform( gc->matrix );
 			gc->stroke.setType( VStroke::grad );
 		}
 		else
