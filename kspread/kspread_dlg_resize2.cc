@@ -90,7 +90,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name, type_resi
 	}
 
   m_pSize2 = new KDoubleNumInput( page );
-  m_pSize2->setRange( 2, 400, 1 );
+  m_pSize2->setRange( KoUnit::ptToUnit( 2, m_pView->doc()->getUnit() ), KoUnit::ptToUnit( 400, m_pView->doc()->getUnit() ), KoUnit::ptToUnit( 1, m_pView->doc()->getUnit() ) );
   m_pSize2->setLabel( label );
   m_pSize2->setPrecision( 2 );
   m_pSize2->setValue( KoUnit::ptToUnit( size, m_pView->doc()->getUnit() ) );
