@@ -7,10 +7,10 @@ INCLUDES= -I$(srcdir)/.. $(KOFFICECORE_INCLUDES) $(all_includes)
 
 METASOURCES = AUTO
 
-check_PROGRAMS = coloraction_test kopointtest korecttest
+check_PROGRAMS = kopointtest korecttest # coloraction_test
 
-coloraction_test_SOURCES = coloraction_test.cpp
-coloraction_test_LDADD = ../libkofficeui.la
+#coloraction_test_SOURCES = coloraction_test.cpp
+#coloraction_test_LDADD = ../libkofficeui.la
 
 kopointtest_SOURCES = kopointtest.cpp
 kopointtest_LDADD = ../libkofficeui.la

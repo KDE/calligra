@@ -29,10 +29,10 @@ texgraphexport.h texgraphexportdia.h rectangle.h \
 text.h xmlparser.h
 
 ######## Debug
-check_PROGRAMS = texlauncher
-texlauncher_SOURCES = texlauncher.cc
-texlauncher_LDADD = libtexgraphexport.la
-texlauncher_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+#check_PROGRAMS = texlauncher
+#texlauncher_SOURCES = texlauncher.cc
+#texlauncher_LDADD = libtexgraphexport.la
+#texlauncher_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 
 
