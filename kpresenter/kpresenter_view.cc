@@ -96,6 +96,9 @@
 #include <KPresenterViewIface.h>
 #include <kpresenter_dlg_config.h>
 
+#include <qrichtext_p.h>
+#include <kotextobject.h>
+
 #define DEBUG
 
 static const char *pageup_xpm[] = {
@@ -381,7 +384,7 @@ void KPresenterView::editSelectAll()
 	page->setToolEditMode( TEM_MOUSE );
 	page->selectAllObj();
     } else {
-	page->kTxtObj()->selectAll( TRUE );
+	//page->kTxtObj()->selectAll( TRUE );
     }
 }
 
@@ -1336,9 +1339,10 @@ void KPresenterView::mtextFont()
 void KPresenterView::textEnumList()
 {
     m_pKPresenterDoc->setModified(true);
-    KTextEdit *txtObj = page->kTxtObj();
+    KPTextView *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
+#if 0
     if ( txtObj ) {
 	if ( txtObj->paragType() != KTextEdit::EnumList ) {
 	    txtObj->setParagType( KTextEdit::EnumList );
@@ -1349,15 +1353,17 @@ void KPresenterView::textEnumList()
 	else
 	    txtObj->repaint( FALSE );
     }
+#endif
 }
 
 /*===============================================================*/
 void KPresenterView::textUnsortList()
 {
     m_pKPresenterDoc->setModified(true);
-    KTextEdit *txtObj = page->kTxtObj();
+    KPTextView *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
+#if 0
     if ( txtObj ) {
 	if ( txtObj->paragType() != KTextEdit::BulletList ) {
 	    txtObj->setParagType( KTextEdit::BulletList );
@@ -1368,15 +1374,17 @@ void KPresenterView::textUnsortList()
 	else
 	    txtObj->repaint( FALSE );
     }
+#endif
 }
 
 /*===============================================================*/
 void KPresenterView::textNormalText()
 {
     m_pKPresenterDoc->setModified(true);
-    KTextEdit *txtObj = page->kTxtObj();
+    KPTextView *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
+#if 0
     if ( txtObj ) {
 	txtObj->setParagType( KTextEdit::Normal );
 	if ( !page->kTxtObj() )
@@ -1384,15 +1392,17 @@ void KPresenterView::textNormalText()
 	else
 	    txtObj->repaint( FALSE );
     }
+#endif
 }
 
 /*===============================================================*/
 void KPresenterView::textDepthPlus()
 {
     m_pKPresenterDoc->setModified(true);
-    KTextEdit *txtObj = page->kTxtObj();
+    KPTextView *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
+#if 0
     if ( txtObj ) {
 	txtObj->setListDepth( 1 );
 	if ( !page->kTxtObj() )
@@ -1400,15 +1410,17 @@ void KPresenterView::textDepthPlus()
 	else
 	    txtObj->repaint( FALSE );
     }
+#endif
 }
 
 /*===============================================================*/
 void KPresenterView::textDepthMinus()
 {
     m_pKPresenterDoc->setModified(true);
-    KTextEdit *txtObj = page->kTxtObj();
+    KPTextView *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
+#if 0
     if ( txtObj ) {
 	txtObj->setListDepth( -1 );
 	if ( !page->kTxtObj() )
@@ -1416,14 +1428,16 @@ void KPresenterView::textDepthMinus()
 	else
 	    txtObj->repaint( FALSE );
     }
+#endif
 }
 
 /*===============================================================*/
 void KPresenterView::textSettings()
 {
-    KTextEdit *txtObj = page->kTxtObj();
+    KPTextView *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
+#if 0
     if ( txtObj ) {
 	TextDialog dlg( this, 0, TRUE );
 	dlg.comboBullet1->setCurrentItem( (int)txtObj->document()->textSettings().bulletType[0] );
@@ -1457,18 +1471,20 @@ void KPresenterView::textSettings()
 		txtObj->repaint( FALSE );
 	}
     }
+#endif
 }
 
 /*===============================================================*/
 void KPresenterView::textContentsToHeight()
 {
-    KTextEdit *txtObj = 0L;
+    KPTextView *txtObj = 0L;
 
     if ( page->kTxtObj() )
 	txtObj = page->kTxtObj();
     else if ( page->haveASelectedTextObj() )
 	txtObj = page->haveASelectedTextObj();
 
+#if 0
     if ( txtObj )
 	txtObj->extendContents2Height();
 
@@ -1476,6 +1492,7 @@ void KPresenterView::textContentsToHeight()
 	m_pKPresenterDoc->repaint( false );
     else if ( txtObj )
 	txtObj->repaint( FALSE );
+#endif
 }
 
 /*===============================================================*/
@@ -1494,7 +1511,11 @@ void KPresenterView::textObjectToContents()
     if ( page->haveASelectedKPTextObj() )
 	m_pKPresenterDoc->repaint( false );
     else if ( txtObj )
-	txtObj->getKTextObject()->repaint( FALSE );
+    {
+#if 0
+	txtObj->textObject()->repaint( FALSE );
+#endif
+    }
 }
 
 /*===============================================================*/
@@ -3272,14 +3293,16 @@ void KPresenterView::search()
 {
     if ( !searchDialog )
 	return;
-    KTextEdit *txtObj = page->kTxtObj();
+    KPTextView *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
     if ( !txtObj )
 	return;
+#if 0
     QString txt = searchDialog->lineEdit->text();
     if ( !txtObj->find( txt, searchDialog->cs, searchDialog->wo, !searchDialog->back ) )
 	KMessageBox::information( this, i18n( "%1 not found!" ).arg( txt ), i18n( "Find" ) );
+#endif
 }
 
 void KPresenterView::nextPage()

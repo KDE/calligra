@@ -74,6 +74,10 @@
 #include <unistd.h>
 #include <config.h>
 
+#include <qrichtext_p.h>
+#include <kotextobject.h>
+#include <kostyle.h>
+
 #include <KPresenterDocIface.h>
 using namespace std;
 
@@ -115,8 +119,10 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
       _gradientCollection(), _clipartCollection(), _commands(), _hasHeader( false ),
       _hasFooter( false ), urlIntern()
 {
-    fCollection = new KTextEditFormatCollection;
+    //fCollection = new KTextEditFormatCollection;
     setInstance( KPresenterFactory::global() );
+
+    m_standardStyle=new KoStyle( "Standard" );
 
     dcop = 0;
     _clean = true;
@@ -159,7 +165,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     ignoreSticky = TRUE;
     m_pixmapMap = 0L;
     raiseAndLowerObject = false;
-
     _header = new KPTextObject( this );
     _header->setDrawEditRect( false );
     _footer = new KPTextObject( this );
@@ -181,6 +186,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     if ( name )
 	dcopObject();
+
 }
 
 void KPresenterDoc::initConfig()
@@ -200,6 +206,11 @@ void KPresenterDoc::initConfig()
     }
     // Apply configuration, without creating an undo/redo command
     replaceObjs( false );
+}
+
+KoStyle* KPresenterDoc::standardStyle()
+{
+    return m_standardStyle;
 }
 
 /*==============================================================*/
@@ -225,8 +236,8 @@ KPresenterDoc::~KPresenterDoc()
     _objectList->clear();
     delete _objectList;
     _backgroundList.clear();
-
-    delete fCollection;
+    delete m_standardStyle;
+    //delete fCollection;
 }
 
 /*======================= make child list intern ================*/
@@ -2715,10 +2726,12 @@ void KPresenterDoc::insertText( QRect r, int diffx, int diffy, QString text, KPr
     kptextobject->setSize( r.width(), r.height() );
     kptextobject->setSelected( true );
     if ( !text.isEmpty() && _view ) {
-	kptextobject->getKTextObject()->clear();
-	kptextobject->getKTextObject()->setText( text );
-	kptextobject->getKTextObject()->document()->setFontToAll( _view->currFont() );
-	kptextobject->getKTextObject()->document()->setColorToAll( _view->currColor() );
+#if 0
+	kptextobject->textObjectView()->clear();
+	kptextobject->textObjectView()->setText( text );
+	kptextobject->textObject()->document()->setFontToAll( _view->currFont() );
+	kptextobject->textObject()->document()->setColorToAll( _view->currColor() );
+#endif
     }
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, this );
@@ -3491,8 +3504,10 @@ QString KPresenterDoc::getPageTitle( unsigned int pgNum, const QString &_title, 
     for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() )
         if ( kpobject->getType() == OT_TEXT && rect.contains( kpobject->getBoundingRect( 0, 0 ) ) ) {
             tmp=static_cast<KPTextObject*>( kpobject );
-            if(tmp->getKTextObject()->lines() > 0)
+#if 0
+            if(tmp->textObjectView()->lines() > 0)
                 objs.append( tmp );
+#endif
         }
 
     if ( objs.isEmpty() )
@@ -3508,7 +3523,10 @@ QString KPresenterDoc::getPageTitle( unsigned int pgNum, const QString &_title, 
     if ( !textobject )
         return QString( _title );
 
-    QString txt = textobject->getKTextObject()->text().stripWhiteSpace();
+    QString txt = "";
+#if 0
+    textobject->textObjectView()->text().stripWhiteSpace();
+#endif
     if ( txt.isEmpty() )
         return _title;
     unsigned int i=0;

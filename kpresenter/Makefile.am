@@ -1,5 +1,5 @@
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(KOTEXT_INCLUDES)
 
 bin_SCRIPTS = kprconverter.pl
 
@@ -7,7 +7,7 @@ bin_SCRIPTS = kprconverter.pl
 kde_module_LTLIBRARIES = libkpresenterpart.la
 libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
 	kpresenter_doc.cc \
-	page.cc ktextedit.cc styledia.cc \
+	page.cc  styledia.cc \
 	pgconfdia.cc effectdia.cc \
 	kpresenter_utils.cc rotatedia.cc searchdia.ui \
 	shadowdia.cc presstructview.cc \
@@ -32,7 +32,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	kpresenter_dlg_config.cc
 
 libkpresenterpart_la_LDFLAGS = $(KDE_PLUGIN)
-libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) 
+libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT)
 libkpresenterpart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
@@ -51,7 +51,7 @@ dummy.cc:
 	echo > dummy.cc
 
 noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
-		backdia.h page.h ktextedit.h styledia.h \
+		backdia.h page.h styledia.h \
 		global.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
 		rotatedia.h shadowdia.h presstructview.h \

@@ -1048,15 +1048,17 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
 
 		    kpobject->activate( this, diffx(), diffy() );
 		    setTextBackground( kptextobject );
-		    connect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
+#if 0
+		    connect( kptextobject->textObjectView(), SIGNAL( currentFontChanged( const QFont & ) ),
 			     this, SLOT( toFontChanged( const QFont & ) ) );
-		    connect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
+		    connect( kptextobject->textObjectView(), SIGNAL( currentColorChanged( const QColor & ) ),
 			     this, SLOT( toColorChanged( const QColor & ) ) );
-		    connect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
+		    connect( kptextobject->textObjectView(), SIGNAL( currentAlignmentChanged( int ) ),
 			     this, SLOT( toAlignChanged( int ) ) );
-		    connect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
+		    connect( kptextobject->textObjectView(), SIGNAL( exitEditMode() ),
 			     this, SLOT( exitEditMode() ) );
-		    kptextobject->getKTextObject()->setFocus();
+#endif
+		    //kptextobject->textObjectView()->setFocus();
 		    editNum = i;
 		    break;
 		} else if ( kpobject->getType() == OT_PART ) {
@@ -1103,8 +1105,7 @@ void Page::keyPressEvent( QKeyEvent *e )
 	if ( e->key() == Key_Escape ) {
             exitEditMode();
 	} else if ( objectList()->at( editNum )->getType() == OT_TEXT )
-	    QApplication::sendEvent( dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->
-				     getKTextObject(), e );
+	    QApplication::sendEvent( dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView(), e );
     } else if ( mouseSelectedObject ) {
 	if ( e->state() & ControlButton ) {
 	    switch ( e->key() ) {
@@ -1224,11 +1225,13 @@ void Page::selectObj( int num )
         selectObj( objectList()->at( num ) );
         if ( objectList()->at( num )->getType() == OT_TEXT ) {
             KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( objectList()->at( num ) );
-            QFont f( kptextobject->getKTextObject()->font() );
-            QColor c( kptextobject->getKTextObject()->color() );
+            QFont f( kptextobject->textObjectView()->textFont() );
+            QColor c( kptextobject->textObjectView()->textColor() );
             toFontChanged( f );
             toColorChanged( c );
-            toAlignChanged( kptextobject->getKTextObject()->alignment() );
+#if 0
+            toAlignChanged( kptextobject->textObjectView()->alignment() );
+#endif
         }
         emit objectSelectedChanged();
     }
@@ -1247,11 +1250,13 @@ void Page::selectObj( KPObject *kpobject )
     kpobject->setSelected( true );
     if ( kpobject->getType() == OT_TEXT ) {
         KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-        QFont f( kptextobject->getKTextObject()->font() );
-        QColor c( kptextobject->getKTextObject()->color() );
+        QFont f( kptextobject->textObjectView()->textFont() );
+        QColor c( kptextobject->textObjectView()->textColor() );
         toFontChanged( f );
         toColorChanged( c );
-        toAlignChanged( kptextobject->getKTextObject()->alignment() );
+#if 0
+        toAlignChanged( kptextobject->textObjectView()->alignment() );
+#endif
     }
 
     view->penColorChanged( view->kPresenterDoc()->getPen( QPen( Qt::black, 1, Qt::SolidLine ) ) );
@@ -1348,7 +1353,7 @@ void Page::setupMenus()
 void Page::clipCut()
 {
     if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT )
-        dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->cut();
+        dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->cut();
     view->editCut();
 }
 
@@ -1356,7 +1361,7 @@ void Page::clipCut()
 void Page::clipCopy()
 {
     if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT )
-        dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->copy();
+        dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->copy();
     view->editCopy();
 }
 
@@ -1364,7 +1369,7 @@ void Page::clipCopy()
 void Page::clipPaste()
 {
     if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT )
-        dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->paste();
+        dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->paste();
     view->editPaste();
 }
 
@@ -1404,16 +1409,18 @@ void Page::chClip()
 void Page::setTextFont( const QFont &font )
 {
     if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT ) {
-	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->setFocus();
-	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->setFont( font );
+	//dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->setFocus();
+#if 0
+	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->setTextFont( font );
+#endif
     } else {
 	KPObject *kpobject = 0;
 
 	for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
 	    kpobject = objectList()->at( i );
 	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT ) {
-		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->document()->setFontToAll( font );
-		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->updateCurrentFormat();
+		//dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setFontToAll( font );
+		//dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->updateCurrentFormat();
 	    }
 	}
 	repaint( false );
@@ -1424,8 +1431,8 @@ void Page::setTextFont( const QFont &font )
 void Page::setTextColor( const QColor &color )
 {
     if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT ) {
-	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->setFocus();
-	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->setColor( color );
+	//dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->setFocus();
+	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->setTextColor( color );
     } else {
 	KPObject *kpobject = 0;
 
@@ -1433,8 +1440,8 @@ void Page::setTextColor( const QColor &color )
 	{
 	    kpobject = objectList()->at( i );
 	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT ) {
-		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->document()->setColorToAll( color );
-		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->updateCurrentFormat();
+		//dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setColorToAll( color );
+//		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->updateCurrentFormat();
 	    }
 	}
 	repaint( false );
@@ -1444,16 +1451,16 @@ void Page::setTextColor( const QColor &color )
 void Page::setTextBold( bool b )
 {
     if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT ) {
-	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->setFocus();
-	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->setBold( b );
+	//dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->setFocus();
+	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->setBold( b );
     } else {
 	KPObject *kpobject = 0;
 
 	for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
 	    kpobject = objectList()->at( i );
 	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT ) {
-		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->document()->setBoldToAll( b );
-		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->updateCurrentFormat();
+		//dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setBoldToAll( b );
+//		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->updateCurrentFormat();
 	    }
 	}
 	repaint( false );
@@ -1463,16 +1470,16 @@ void Page::setTextBold( bool b )
 void Page::setTextItalic( bool b )
 {
     if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT ) {
-	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->setFocus();
-	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->setItalic( b );
+	//dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->setFocus();
+	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->setItalic( b );
     } else {
 	KPObject *kpobject = 0;
 
 	for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
 	    kpobject = objectList()->at( i );
 	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT ) {
-		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->document()->setItalicToAll( b );
-		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->updateCurrentFormat();
+		//dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setItalicToAll( b );
+//		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->updateCurrentFormat();
 	    }
 	}
 	repaint( false );
@@ -1482,16 +1489,16 @@ void Page::setTextItalic( bool b )
 void Page::setTextUnderline( bool b )
 {
     if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT ) {
-	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->setFocus();
-	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->setUnderline( b );
+	//dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->setFocus();
+	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->setUnderline( b );
     } else {
 	KPObject *kpobject = 0;
 
 	for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
 	    kpobject = objectList()->at( i );
 	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT ) {
-		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->document()->setUnderlineToAll( b );
-		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->updateCurrentFormat();
+		//dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setUnderlineToAll( b );
+//		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->updateCurrentFormat();
 	    }
 	}
 	repaint( false );
@@ -1501,16 +1508,16 @@ void Page::setTextUnderline( bool b )
 void Page::setTextFamily( const QString &f )
 {
     if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT ) {
-	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->setFocus();
-	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->setFamily( f );
+	//dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->setFocus();
+	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->setFamily( f );
     } else {
 	KPObject *kpobject = 0;
 
 	for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
 	    kpobject = objectList()->at( i );
 	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT ) {
-		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->document()->setFamilyToAll( f );
-		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->updateCurrentFormat();
+		//dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setFamilyToAll( f );
+//		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->updateCurrentFormat();
 	    }
 	}
 	repaint( false );
@@ -1520,16 +1527,16 @@ void Page::setTextFamily( const QString &f )
 void Page::setTextPointSize( int s )
 {
     if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT ) {
-	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->setFocus();
-	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject()->setPointSize( s );
+	//dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->setFocus();
+	dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView()->setPointSize( s );
     } else {
 	KPObject *kpobject = 0;
 
 	for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
 	    kpobject = objectList()->at( i );
 	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT ) {
-		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->document()->setPointSizeToAll( s );
-		dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->updateCurrentFormat();
+		//dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setPointSizeToAll( s );
+//		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->updateCurrentFormat();
 	    }
 	}
 	repaint( false );
@@ -1540,7 +1547,7 @@ void Page::setTextPointSize( int s )
 void Page::setTextAlign( int align )
 {
     if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT ) {
-        ( (KPTextObject*)objectList()->at( editNum ) )->getKTextObject()->setAlignment( align );
+        //( (KPTextObject*)objectList()->at( editNum ) )->textObjectView()->setAlignment( align );
         repaint( FALSE );
     } else {
         KPObject *kpobject = 0;
@@ -1548,7 +1555,9 @@ void Page::setTextAlign( int align )
         for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
             kpobject = objectList()->at( i );
             if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT )
-                dynamic_cast<KPTextObject*>( kpobject )->getKTextObject()->document()->setAlignmentToAll( align );
+            {
+                //dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setAlignmentToAll( align );
+            }
         }
         repaint( FALSE );
     }
@@ -1587,7 +1596,7 @@ bool Page::haveASelectedPictureObj()
 }
 
 /*================================================================*/
-KTextEdit *Page::haveASelectedTextObj()
+KPTextView *Page::haveASelectedTextObj()
 {
     KPObject *kpobject = 0;
 
@@ -1595,7 +1604,7 @@ KTextEdit *Page::haveASelectedTextObj()
     {
         kpobject = objectList()->at( i );
         if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT )
-            return dynamic_cast<KPTextObject*>( kpobject )->getKTextObject();
+            return dynamic_cast<KPTextObject*>( kpobject )->textObjectView();
     }
 
     return 0L;
@@ -3143,14 +3152,16 @@ void Page::editSelectedTextArea()
 
 		    kpobject->activate( this, diffx(), diffy() );
 		    setTextBackground( kptextobject );
-		    connect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
+#if 0
+		    connect( kptextobject->textObjectView(), SIGNAL( currentFontChanged( const QFont & ) ),
 			     this, SLOT( toFontChanged( const QFont & ) ) );
-		    connect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
+		    connect( kptextobject->textObjectView(), SIGNAL( currentColorChanged( const QColor & ) ),
 			     this, SLOT( toColorChanged( const QColor & ) ) );
-		    connect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
+		    connect( kptextobject->textObjectView(), SIGNAL( currentAlignmentChanged( int ) ),
 			     this, SLOT( toAlignChanged( int ) ) );
-		    connect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
+		    connect( kptextobject->textObjectView(), SIGNAL( exitEditMode() ),
 			     this, SLOT( exitEditMode() ) );
+#endif
 		    editNum = i;
 		    break;
 		}
@@ -3488,10 +3499,10 @@ void Page::gotoPage( int pg )
 }
 
 /*================================================================*/
-KTextEdit* Page::kTxtObj()
+KPTextView* Page::kTxtObj()
 {
     return ( ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT ) ?
-             dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->getKTextObject() : 0 );
+             dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView() : 0 );
 }
 
 /*================================================================*/
@@ -3710,16 +3721,17 @@ void Page::exitEditMode()
         if ( kpobject->getType() == OT_TEXT ) {
             KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
             kptextobject->deactivate( view->kPresenterDoc() );
-            kptextobject->getKTextObject()->clearFocus();
-            disconnect( kptextobject->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
+            //kptextobject->textObjectView()->clearFocus();
+#if 0
+            disconnect( kptextobject->textObjectView(), SIGNAL( currentFontChanged( const QFont & ) ),
                         this, SLOT( toFontChanged( const QFont & ) ) );
-            disconnect( kptextobject->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
+            disconnect( kptextobject->textObjectView(), SIGNAL( currentColorChanged( const QColor & ) ),
                         this, SLOT( toColorChanged( const QColor & ) ) );
-            disconnect( kptextobject->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
+            disconnect( kptextobject->textObjectView(), SIGNAL( currentAlignmentChanged( int ) ),
                         this, SLOT( toAlignChanged( int ) ) );
-            disconnect( kptextobject->getKTextObject(), SIGNAL( exitEditMode() ),
+            disconnect( kptextobject->textObjectView(), SIGNAL( exitEditMode() ),
                         this, SLOT( exitEditMode() ) );
-
+#endif
             //kdDebug(33001) << "Page::exitEditMode page=" << currPgNum()-1 << endl;
             // Title of slide may have changed
             emit updateSideBarItem( currPgNum()-1 );
@@ -3833,9 +3845,11 @@ void Page::setTextBackground( KPTextObject *obj )
     bitBlt( &bpix, 0, 0, &pix, obj->getOrig().x(), obj->getOrig().y() -
 	    getPageRect( 0 ).height() * ( view->getCurrPgNum() - 1 ), bpix.width(), bpix.height() );
     QBrush b( white, bpix );
-    QPalette pal( obj->getKTextObject()->palette() );
+#if 0
+    QPalette pal( obj->textObjectView()->palette() );
     pal.setBrush( QColorGroup::Base, b );
-    obj->getKTextObject()->setPalette( pal );
+    obj->textObjectView()->setPalette( pal );
+#endif
 }
 
 QValueList<int> Page::pages(const QString &range) {

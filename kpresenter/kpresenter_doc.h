@@ -23,7 +23,7 @@
 class KPresenterDoc;
 class KPresenterView;
 class DCOPObject;
-class KTextEditFormatCollection;
+//class KTextEditFormatCollection;
 
 #include <koDocument.h>
 #include <koDocumentChild.h>
@@ -50,6 +50,8 @@ class KPFooterHeaderEditor;
 class KPTextObject;
 class StyleDia;
 class KPPartObject;
+
+class KoStyle;
 
 /******************************************************************/
 /* class KPresenterChild                                          */
@@ -292,13 +294,15 @@ public:
     void groupObjects();
     void ungroupObjects();
 
-    KTextEditFormatCollection *formatCollection() const { return fCollection; }
+    //KTextEditFormatCollection *formatCollection() const { return fCollection; }
 
     QStringList manualTitleList;
 
     void initConfig();
 
     bool raiseAndLowerObject;
+
+    KoStyle* standardStyle();
 
 public slots:
     void movePage( int from, int to );
@@ -402,9 +406,12 @@ protected:
 
     int saveOnlyPage;
     QString m_tempFileInClipboard;
-    KTextEditFormatCollection *fCollection;
+    //KTextEditFormatCollection *fCollection;
     QValueList<bool> m_selectedSlides;
     bool ignoreSticky;
+
+    KoStyle *m_standardStyle;
+
 
 private:
     void pageTitleInsert( unsigned int pageNumber);

@@ -33,6 +33,20 @@
 
 #include <kpresenter_view.h>
 #include <kpresenter_doc.h>
+
+#include <qrichtext_p.h>
+#include <kotextobject.h>
+#include <kostyle.h>
+#include <kotextdocument.h>
+#include <kotextformatter.h>
+#include <kotextformat.h>
+#include <kozoomhandler.h>
+
+#include <qfont.h>
+
+#include "kptextobject.moc"
+
+
 using namespace std;
 
 /******************************************************************/
@@ -67,13 +81,23 @@ const QString &KPTextObject::attrWhitespace=KGlobal::staticQString("whitespace")
 
 /*================ default constructor ===========================*/
 KPTextObject::KPTextObject(  KPresenterDoc *doc )
-    : KP2DObject(), ktextobject( doc, this, 0, "" )
+    : KP2DObject()
 {
-    ktextobject.hide();
+    m_doc=doc;
+
+    KoTextDocument * textdoc=new KoTextDocument( new KoZoomHandler() , 0,
+                                                 new KoTextFormatCollection( QFont("helvetica") ));
+
+    m_textobj= new KoTextObject( textdoc, doc->standardStyle());
+
+    //ktextobject.hide();
+    m_textobjview=new KPTextView( this );
+
     brush = Qt::NoBrush;
     pen = QPen( Qt::black, 1, Qt::NoPen );
     drawEditRect = true;
     drawEmpty = true;
+
 }
 
 /*======================= set size ===============================*/
@@ -85,10 +109,15 @@ void KPTextObject::setSize( int _width, int _height )
     KPObject::setSize( _width, _height );
     if ( move )
         return;
-    ktextobject.resize( ext );
+    //ktextobject.resize( ext );
     // hack, somehow se should rather get rid of the delayed resize in KTextEdit
-    QApplication::sendPostedEvents( &ktextobject, QEvent::Resize );
-    // WTH ? This creates the ficlker when going fullscreen ! (DF)
+
+
+    //QApplication::sendPostedEvents( &ktextobject, QEvent::Resize );
+
+
+
+// WTH ? This creates the ficlker when going fullscreen ! (DF)
     // qApp->processEvents();
 
     if ( fillType == FT_GRADIENT && gradient )
@@ -101,8 +130,10 @@ void KPTextObject::resizeBy( int _dx, int _dy )
     KPObject::resizeBy( _dx, _dy );
     if ( move )
         return;
-    ktextobject.resize( ext );
-    QApplication::sendPostedEvents( &ktextobject, QEvent::Resize );
+
+//ktextobject.resize( ext );
+    //QApplication::sendPostedEvents( &ktextobject, QEvent::Resize );
+
     //qApp->processEvents(); // hack, somehow se should rather get rid of the delayed resize in KTextEdit
 
     if ( fillType == FT_GRADIENT && gradient )
@@ -121,8 +152,10 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc )
 void KPTextObject::load(const QDomElement &element)
 {
     KP2DObject::load(element);
+#if 0
     QDomElement e=element.namedItem(tagTEXTOBJ).toElement();
     if(!e.isNull()) {
+
         ktextobject.document()->setLineSpacing( e.attribute( attrLineSpacing ).toInt() );
         ktextobject.document()->setParagSpacing( e.attribute( attrParagSpacing ).toInt() );
         ktextobject.document()->setMargin( e.attribute( attrMargin ).toInt() );
@@ -146,16 +179,19 @@ void KPTextObject::load(const QDomElement &element)
         }
         loadKTextObject( e, t );
     }
+#endif
     setSize( ext.width(), ext.height() );
 }
 
 /*========================= draw =================================*/
 void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
 {
+    kdDebug()<<"draw( QPainter *_painter, int _diffx, int _diffy )\n";
     if ( move ) {
         KPObject::draw( _painter, _diffx, _diffy );
         return;
     }
+
 
     _painter->save();
 //    _painter->setClipRect( getBoundingRect( _diffx, _diffy ) );
@@ -173,8 +209,10 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
     if ( shadowDistance > 0 ) {
         _painter->save();
-        ktextobject.document()->enableDrawAllInOneColor( shadowColor );
 
+#if 0
+        ktextobject.document()->enableDrawAllInOneColor( shadowColor );
+#endif
         if ( angle == 0 ) {
             int sx = ox;
             int sy = oy;
@@ -189,13 +227,16 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
                     drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
                     break;
                 default:
-                    ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+                {
+
+                    //   ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+                }
                 }
             } else {
-                ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+                //ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
             }
 
-            ktextobject.document()->disableDrawAllInOneColor();
+            //ktextobject.document()->disableDrawAllInOneColor();
         } else {
             _painter->translate( ox, oy );
 
@@ -226,12 +267,14 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
                     drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
                     break;
                 default:
-                    ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+                {
+                    //   ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+                }
                 }
             } else {
-                ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+                //ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
             }
-            ktextobject.document()->disableDrawAllInOneColor();
+            //ktextobject.document()->disableDrawAllInOneColor();
         }
         _painter->restore();
     }
@@ -257,10 +300,13 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
                 drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
                 break;
             default:
-                ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+            {
+
+                //   ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+            }
             }
         } else {
-            ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+            //ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
         }
     } else {
         QRect br = QRect( 0, 0, ow, oh );
@@ -299,63 +345,86 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
                 drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
                 break;
             default:
-                ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+            {
+                //   ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+            }
             }
         } else {
-            ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+            //ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
         }
     }
 
     _painter->restore();
-
     KPObject::draw( _painter, _diffx, _diffy );
+    kdDebug()<<"End draw( QPainter *_painter, int _diffx, int _diffy )\n";
 }
 
 /*========================== activate ============================*/
 void KPTextObject::activate( QWidget *_widget, int diffx, int diffy )
 {
+    kdDebug()<<"activate( QWidget *_widget, int diffx, int diffy )\n";
+#if 0
     ktextobject.reparent( _widget, 0, QPoint( orig.x() - diffx, orig.y() - diffy ), false );
     ktextobject.resize( ext.width(), ext.height() );
     ktextobject.show();
     ktextobject.setCursor( Qt::ibeamCursor );
+#endif
+    textObjectView()->showCursor();
+    kdDebug()<<"End activate( QWidget *_widget, int diffx, int diffy )\n";
 }
 
 /*========================== deactivate ==========================*/
 void KPTextObject::deactivate( KPresenterDoc *doc )
 {
+    kdDebug()<<" KPTextObject::deactivate( KPresenterDoc *doc )\n";
     recalcPageNum( doc );
+    textObjectView()->hideCursor();
+#if 0
     ktextobject.reparent( 0, 0, QPoint( 0, 0 ), false );
     ktextobject.hide();
+#endif
+    kdDebug()<<"End KPTextObject::deactivate( KPresenterDoc *doc )\n";
 }
 
 /*========================= zoom =================================*/
 void KPTextObject::zoom( float _fakt )
 {
+    kdDebug()<<"KPTextObject::zoom( float _fakt ) :"<< _fakt<<endl;
     KPObject::zoom( _fakt );
+#if 0
     ktextobject.zoom( _fakt );
+#endif
 }
 
 /*==================== zoom orig =================================*/
 void KPTextObject::zoomOrig()
 {
+    kdDebug()<<"KPTextObject::zoomOrig()\n";
     KPObject::zoomOrig();
+#if 0
     ktextobject.unzoom();
+#endif
 }
 
 /*================================================================*/
 void KPTextObject::extendObject2Contents( KPresenterView */*view*/ )
 {
+#if 0
     QSize s( ktextobject.neededSize() );
     setSize( s.width(), s.height() );
+#endif
 }
 
 /*=========================== save ktextobject ===================*/
 QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
 {
-
+#if 0
     KTextEditParag *parag = ktextobject.document()->firstParag();
     KTextEditDocument::TextSettings textSettings = ktextobject.document()->textSettings();
+#endif
+
     QDomElement textobj=doc.createElement(tagTEXTOBJ);
+#if 0
     textobj.setAttribute(attrLineSpacing, ktextobject.document()->lineSpacing());
     textobj.setAttribute(attrParagSpacing, ktextobject.document()->paragSpacing());
     textobj.setAttribute(attrMargin, ktextobject.document()->margin());
@@ -401,6 +470,7 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
         textobj.appendChild(paragraph);
         parag = parag->next();
     }
+#endif
     return textobj;
 }
 
@@ -424,6 +494,7 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText, const QString &tmpF
 /*====================== load ktextobject ========================*/
 void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
 {
+#if 0
     QDomElement e = elem.firstChild().toElement();
     KTextEditParag *lastParag = ktextobject.document()->firstParag();
     lastParag->remove( 0, 1 );
@@ -495,6 +566,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
     settings.paragSpacing = QMAX( ktextobject.document()->paragSpacing(), paragSpacing );
     ktextobject.document()->setTextSettings( settings );
     ktextobject.updateCurrentFormat();
+#endif
 }
 
 /*================================================================*/
@@ -519,6 +591,7 @@ void KPTextObject::recalcPageNum( KPresenterDoc *doc )
 
 void KPTextObject::drawParags( QPainter *p, int from, int to )
 {
+#if 0
     int i = 0;
     KTextEditParag *parag = ktextobject.document()->firstParag();
     while ( parag ) {
@@ -535,4 +608,82 @@ void KPTextObject::drawParags( QPainter *p, int from, int to )
         if ( i > to )
             return;
     }
+#endif
+}
+
+KoTextDocument * KPTextObject::textDocument() const
+{
+    return m_textobj->textDocument();
+}
+
+
+KPTextView::KPTextView( KPTextObject * txtObj )
+    : KoTextView( txtObj->textObject() )
+{
+    kdDebug()<<"KPTextView::KPTextView( KPTextObject * txtObj )********\n";
+    KoTextView::setReadWrite( txtObj->kPresenterDocument()->isReadWrite() );
+    connect( textView(), SIGNAL( cut() ), SLOT( cut() ) );
+    connect( textView(), SIGNAL( copy() ), SLOT( copy() ) );
+    connect( textView(), SIGNAL( paste() ), SLOT( paste() ) );
+    updateUI( true, true );
+}
+
+
+void KPTextView::cut()
+{
+    kdDebug()<<"KPTextView::cut()\n";
+   //todo
+}
+
+void KPTextView::copy()
+{
+    kdDebug()<<"KPTextView::copy()\n";
+    //todo
+}
+
+void KPTextView::paste()
+{
+    kdDebug()<<"KPTextView::paste()\n";
+    //todo
+}
+
+void KPTextView::updateUI( bool updateFormat, bool force  )
+{
+    kdDebug()<<"updateUI( bool updateFormat, bool force  )\n";
+    KoTextView::updateUI( updateFormat, force  );
+}
+
+void KPTextView::ensureCursorVisible()
+{
+
+    kdDebug()<<"KPTextView::ensureCursorVisible()\n";
+}
+
+void KPTextView::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch )
+{
+    kdDebug()<<"doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch )\n";
+}
+
+void KPTextView::startDrag()
+{
+    kdDebug()<<"KPTextView::startDrag()\n";
+}
+
+
+void KPTextView::showFormat( KoTextFormat */*format*/ )
+{
+    kdDebug()<<"KPTextView::showFormat( KoTextFormat *format )\n";
+    //todo
+}
+
+void KPTextView::pgUpKeyPressed()
+{
+    kdDebug()<<"KPTextView::pgUpKeyPressed()\n";
+    //todo
+}
+
+void KPTextView::pgDownKeyPressed()
+{
+    kdDebug()<<"KPTextView::pgDownKeyPressed()\n";
+    //todo
 }

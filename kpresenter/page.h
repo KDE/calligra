@@ -55,6 +55,8 @@ class QRect;
 class QSize;
 class QPoint;
 
+class KPTextView;
+
 /**********************************************************************/
 /* class Page - There is ONE instance of this class for a given view  */
 /* It manages the graphical representation of all the objects         */
@@ -85,7 +87,7 @@ public:
     void setTextUnderline( bool b );
     void setTextFamily( const QString &f );
     void setTextPointSize( int s );
-    KTextEdit* kTxtObj();
+    KPTextView* kTxtObj();
     KPTextObject* kpTxtObj();
 
     // Start a screen presentation
@@ -114,7 +116,7 @@ public:
     void setAutoForm( QString _autoform )
     { autoform = _autoform; }
 
-    KTextEdit *haveASelectedTextObj();
+    KPTextView *haveASelectedTextObj();
     KPTextObject *haveASelectedKPTextObj();
 
     void drawPageInPix( QPixmap&, int );

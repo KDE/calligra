@@ -33,13 +33,13 @@ TextCmd::TextCmd(QString name, KPresenterDoc *doc, KPTextObject *tObj)
 /*====================== execute =================================*/
 void TextCmd::execute()
 {
-    textObject->ktextobject.redo();
-    document->repaint(textObject);
+/*    textObject->ktextobject.redo();
+      document->repaint(textObject);*/
 }
 
 /*====================== unexecute ===============================*/
 void TextCmd::unexecute()
 {
-    textObject->ktextobject.undo();
-    document->repaint(textObject);
+/*    textObject->ktextobject.undo();
+      document->repaint(textObject);*/
 }
