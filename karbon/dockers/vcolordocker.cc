@@ -109,7 +109,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	mainWidgetLayout->addWidget( mTabWidget );
 	mainWidgetLayout->addWidget( mOpacity );
 	mainWidgetLayout->activate();
-	mainWidget->setMaximumHeight( 164 );
+	mainWidget->setMaximumHeight( 174 );
 	mainWidget->setMinimumWidth( 194 );
 
 	setWidget( mainWidget );
