@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -211,6 +211,9 @@ class KexiMainWindowImpl::Private
 		//! Indicates if project is started in --final mode
 		bool final : 1;
 
+		//! Used on opening 1st child window
+		bool maximizeFirstOpenedChildFrm : 1;
+
 	Private(KexiMainWindowImpl* w)
 		: dialogs(401)
 		, wnd(w)
@@ -242,6 +245,7 @@ class KexiMainWindowImpl::Private
 #ifndef KEXI_SHOW_UNIMPLEMENTED
 		dummy_action = new KActionMenu("", wnd);
 #endif
+		maximizeFirstOpenedChildFrm = false;
 	}
 	~Private() {
 	}
@@ -1309,9 +1313,10 @@ KexiMainWindowImpl::restoreSettings()
 		default:;//-1
 	}
 
-	// restore a possible maximized Childframe mode
-	bool maxChildFrmMode = d->config->readBoolEntry("maximized childframes", true);
-	setEnableMaximizedChildFrmMode(maxChildFrmMode);
+	// restore a possible maximized Childframe mode, 
+	// will be used in KexiMainWindowImpl::addWindow()
+	d->maximizeFirstOpenedChildFrm = d->config->readBoolEntry("maximized childframes", true);
+	setEnableMaximizedChildFrmMode(d->maximizeFirstOpenedChildFrm);
 
 #if 0
 	if ( !initialGeometrySet() ) {
@@ -2337,10 +2342,13 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 		}
 	}
 
+	const bool isInMaximizedChildFrmMode = this->isInMaximizedChildFrmMode();
+
 	KMdiMainFrm::closeWindow(dlg, layoutTaskBar);
 
 	//focus navigator if nothing else available
 	if (d->dialogs.isEmpty()) {
+		d->maximizeFirstOpenedChildFrm = isInMaximizedChildFrmMode;
 		if (d->nav)
 			d->nav->setFocus();
 		d->updatePropEditorVisibility(0);
@@ -2995,6 +3003,18 @@ void KexiMainWindowImpl::slotImportProject()
 //	iw->setGeometry(300,300,400,300);
 //	iw->show();
 #endif
+}
+
+void KexiMainWindowImpl::addWindow( KMdiChildView* pView, int flags )
+{
+	//maximize this window, if it's 
+//@todo Certain windows' sizes, e.g. forms could have own size configation specified!
+//      Query for this, and if so: give up.
+	if (d->maximizeFirstOpenedChildFrm) {
+		flags |= KMdi::Maximize;
+		d->maximizeFirstOpenedChildFrm = false;
+	}
+	KexiMainWindow::addWindow( pView, flags );
 }
 
 #include "keximainwindowimpl.moc"

@@ -98,6 +98,9 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 			Just calls closeDialog(). Use closeDialog() if you need, not this one. */
 		virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true);
 
+		/*! Reimplemented for internal reasons. */
+		virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd );
+
 		/*! Closes dialog \a dlg. If dialog's data (see KexiDialoBase::dirty()) is unsaved,
 		 used will be asked if saving should be perforemed.
 		 \return true on successull closing or false on closing error.
