@@ -377,259 +377,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     ContainerHandler* h = new ContainerHandler( this, m_pCanvas );
     connect( h, SIGNAL( popupMenu( KoChild*, const QPoint& ) ), this, SLOT( popupChildMenu( KoChild*, const QPoint& ) ) );
 
-    m_bold = new KToggleAction( i18n("Bold"), "text_bold", CTRL + Key_B, actionCollection(), "bold");
-    connect( m_bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
-    m_italic = new KToggleAction( i18n("Italic"), "text_italic", CTRL + Key_I, actionCollection(), "italic");
-    connect( m_italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
-    m_underline = new KToggleAction( i18n("Underline"), "text_under", CTRL + Key_U, actionCollection(), "underline");
-    connect( m_underline, SIGNAL( toggled( bool ) ), this, SLOT( underline( bool ) ) );
-
-    m_strikeOut = new KToggleAction( i18n("Strike out"), "text_strike", 0, actionCollection(), "strikeout");
-    connect( m_strikeOut, SIGNAL( toggled( bool ) ), this, SLOT( strikeOut( bool ) ) );
-
-    m_percent = new KToggleAction( i18n("Percent format"), "percent", 0, actionCollection(), "percent");
-    connect( m_percent, SIGNAL( toggled( bool ) ), this, SLOT( percent( bool ) ) );
-    m_precplus = new KAction( i18n("Increase precision"), "prec_plus", 0, this,
-                              SLOT( precisionPlus() ), actionCollection(), "precplus");
-    m_precminus = new KAction( i18n("Decrease precision"), "prec_minus", 0, this,
-                              SLOT( precisionMinus() ), actionCollection(), "precminus");
-    m_money = new KToggleAction( i18n("Money format"), "money", 0, actionCollection(), "money");
-    connect( m_money, SIGNAL( toggled( bool ) ), this, SLOT( moneyFormat( bool ) ) );
-    m_alignLeft = new KToggleAction( i18n("Align left"), "text_left", 0, actionCollection(), "left");
-    connect( m_alignLeft, SIGNAL( toggled( bool ) ), this, SLOT( alignLeft( bool ) ) );
-    m_alignLeft->setExclusiveGroup( "Align" );
-    m_alignCenter = new KToggleAction( i18n("Align center"), "text_center", 0, actionCollection(), "center");
-    connect( m_alignCenter, SIGNAL( toggled( bool ) ), this, SLOT( alignCenter( bool ) ) );
-    m_alignCenter->setExclusiveGroup( "Align" );
-    m_alignRight = new KToggleAction( i18n("Align right"), "text_right", 0, actionCollection(), "right");
-    connect( m_alignRight, SIGNAL( toggled( bool ) ), this, SLOT( alignRight( bool ) ) );
-    m_alignRight->setExclusiveGroup( "Align" );
-
-    m_alignTop = new KToggleAction( i18n("Align top"), "text_top", 0, actionCollection(), "top");
-    connect( m_alignTop, SIGNAL( toggled( bool ) ), this, SLOT( alignTop( bool ) ) );
-    m_alignTop->setExclusiveGroup( "Pos" );
-    m_alignMiddle = new KToggleAction( i18n("Align middle"), "middle", 0, actionCollection(), "middle");
-    connect( m_alignMiddle, SIGNAL( toggled( bool ) ), this, SLOT( alignMiddle( bool ) ) );
-    m_alignMiddle->setExclusiveGroup( "Pos" );
-    m_alignBottom = new KToggleAction( i18n("Align bottom"), "text_bottom", 0, actionCollection(), "bottom");
-    connect( m_alignBottom, SIGNAL( toggled( bool ) ), this, SLOT( alignBottom( bool ) ) );
-    m_alignBottom->setExclusiveGroup( "Pos" );
-
-    m_transform = new KAction( i18n("Transform object..."), "rotate", 0, this, SLOT( transformPart() ),
-                               actionCollection(), "transform" );
-    m_transform->setEnabled( FALSE );
-    // ### This seems to be duplicated ....
-    connect( m_transform, SIGNAL( activated() ), this, SLOT( transformPart() ) );
-    m_copy = KStdAction::copy( this, SLOT( copySelection() ), actionCollection(), "copy" );
-
-    m_copy_as_text=new KAction( i18n("Copy as text"),0, this, SLOT( copyAsText() ), actionCollection(), "copy_as_text" );
-
-    m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(), "paste" );
-    m_cut = KStdAction::cut( this, SLOT( cutSelection() ), actionCollection(), "cut" );
-    m_specialPaste = new KAction( i18n("Special Paste..."), "special_paste",0, this, SLOT( specialPaste() ), actionCollection(), "specialPaste" );
-    m_editCell = new KAction( i18n("Modify Cell"),"cell_edit", CTRL + Key_M, this, SLOT( editCell() ), actionCollection(), "editCell" );
-    m_delete = new KAction( i18n("Delete"),"deletecell", 0, this, SLOT( deleteSelection() ), actionCollection(), "delete" );
-    m_clearText = new KAction( i18n("Text"), 0, this, SLOT( clearTextSelection() ), actionCollection(), "cleartext" );
-    m_clearComment = new KAction( i18n("Comment"), 0, this, SLOT( clearCommentSelection() ), actionCollection(), "clearcomment" );
-    m_clearValidity = new KAction( i18n("Validity"), 0, this, SLOT( clearValiditySelection() ), actionCollection(), "clearvalidity" );
-    m_clearConditional = new KAction( i18n("Conditional cell attributes"), 0, this, SLOT( clearConditionalSelection() ), actionCollection(), "clearconditional" );
-    // ---------------------------- Bernd -----------------------
-    //Key_Shift ..
-
-    m_recalc_workbook = new KAction( i18n("Recalculate Workbook"),Key_F9, this, SLOT( RecalcWorkBook() ), actionCollection(), "RecalcWorkBook" );
-    m_recalc_worksheet = new KAction( i18n("Recalculate Worksheet"),SHIFT + Key_F9, this, SLOT( RecalcWorkSheet() ), actionCollection(), "RecalcWorkSheet" );
-
-    // ---------------------------- Bernd -----------------------
-
-
-
-
-    m_adjust = new KAction( i18n("Adjust row and column"), 0, this, SLOT( adjust() ), actionCollection(), "adjust" );
-    m_default = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ), actionCollection(), "default" );
-    m_areaName = new KAction( i18n("Area name..."), 0, this, SLOT( setAreaName() ), actionCollection(), "areaname" );
-    m_showArea = new KAction( i18n("Show area..."), 0, this, SLOT( showAreaName() ), actionCollection(), "showArea" );
-    m_resizeRow = new KAction( i18n("Resize row..."), "resizerow", 0, this, SLOT( resizeRow() ), actionCollection(), "resizeRow" );
-    m_resizeColumn = new KAction( i18n("Resize column..."), "resizecol", 0, this, SLOT( resizeColumn() ), actionCollection(), "resizeCol" );
-    m_equalizeRow = new KAction( i18n("Equalize row"), "adjustrow", 0, this, SLOT( equalizeRow() ), actionCollection(), "equalizeRow" );
-    m_equalizeColumn = new KAction( i18n("Equalize column"), "adjustcol", 0, this, SLOT( equalizeColumn() ), actionCollection(), "equalizeCol" );
-
-    m_fontSizeUp = new KAction( i18n("Increase font size"), "fontsizeup", 0, this, SLOT( increaseFontSize() ), actionCollection(), "increaseFontSize" );
-    m_fontSizeDown = new KAction( i18n("Decrease font size"), "fontsizedown", 0, this, SLOT( decreaseFontSize() ), actionCollection(), "decreaseFontSize" );
-    m_upper = new KAction( i18n("Upper case"), "upper", 0, this, SLOT( upper() ), actionCollection(), "upper" );
-    m_lower = new KAction( i18n("Lower case"), "lower", 0, this, SLOT( lower() ), actionCollection(), "lower" );
-    m_gotoCell = new KAction( i18n("Goto Cell..."),"goto", 0, this, SLOT( gotoCell() ), actionCollection(), "gotoCell" );
-    m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
-    m_undo->setEnabled( FALSE );
-    m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );
-    m_redo->setEnabled( FALSE );
-    m_paperLayout = new KAction( i18n("Paper Layout..."), 0, this, SLOT( paperLayoutDlg() ), actionCollection(), "paperLayout" );
-
-    m_sortList = new KAction( i18n("Custom lists..."), 0, this, SLOT( sortList() ), actionCollection(), "sortlist" );
-
-
-    m_insertTable = new KAction( i18n("Insert Table"),"inserttable", 0, this, SLOT( insertTable() ), actionCollection(), "insertTable" );
-    m_removeTable = new KAction( i18n("Remove Table"), "delete_table",0,this, SLOT( removeTable() ), actionCollection(), "removeTable" );
-
-    m_renameTable=new KAction( i18n("Rename table..."),0,this, SLOT( slotRename() ), actionCollection(), "renameTable" );
-
-    m_nextTable = new KAction( i18n("Next table"), CTRL + Key_PageDown, this,
-                               SLOT( nextTable() ), actionCollection(),
-                               "nextTable");
-    m_prevTable = new KAction( i18n("Previous table"), CTRL + Key_PageUp, this,
-                               SLOT( previousTable() ), actionCollection(),
-                               "previousTable");
-    m_firstTable = new KAction( i18n("First table"), 0, this,
-                               SLOT( firstTable() ), actionCollection(),
-                               "firstTable");
-    m_lastTable = new KAction( i18n("Last table"), 0, this,
-                               SLOT( lastTable() ), actionCollection(),
-                               "lastTable");
-
-    m_showTable = new KAction(i18n("Show Table"),0 ,this,SLOT( showTable()), actionCollection(), "showTable" );
-    m_hideTable = new KAction(i18n("Hide Table"),0 ,this,SLOT( hideTable()), actionCollection(), "hideTable" );
-    m_preference = new KAction( i18n("Configure KSpread..."),"configure", 0, this, SLOT( preference() ), actionCollection(), "preference" );
-    m_firstLetterUpper = new KAction( i18n("Convert first letter to upper case"),"first_letter_upper" ,0, this, SLOT( firstLetterUpper() ), actionCollection(), "firstletterupper" );
-    m_verticalText = new KToggleAction( i18n("Vertical text"),"vertical_text" ,0 ,actionCollection(), "verticaltext" );
-    connect( m_verticalText, SIGNAL( toggled( bool ) ), this, SLOT( verticalText( bool ) ) );
-    m_changeAngle = new KAction( i18n("Change Angle..."), 0, this, SLOT( changeAngle() ), actionCollection(), "changeangle" );
-    m_addModifyComment = new KAction( i18n("&Add/modify comment..."),"comment", 0, this, SLOT( addModifyComment() ), actionCollection(), "addmodifycomment" );
-    m_removeComment = new KAction( i18n("&Remove comment"),"removecomment", 0, this, SLOT( removeComment() ), actionCollection(), "removecomment" );
-    m_editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this, SLOT( editGlobalScripts() ),
-                                       actionCollection(), "editGlobalScripts" );
-    m_editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this, SLOT( editLocalScripts() ), actionCollection(), "editLocalScripts" );
-    m_reloadScripts = new KAction( i18n("Reload Scripts"), 0, this, SLOT( reloadScripts() ), actionCollection(), "reloadScripts" );
-    m_showPageBorders = new KToggleAction( i18n("Show page borders"), 0, actionCollection(), "showPageBorders");
-    connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this, SLOT( togglePageBorders( bool ) ) );
-    KStdAction::find(this, SLOT(find()), actionCollection());
-    KStdAction::replace(this, SLOT(replace()), actionCollection());
-    m_conditional = new KAction( i18n("Conditional cell attributes..."), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
-    m_validity = new KAction( i18n("Validity..."), 0, this, SLOT( validity() ), actionCollection(), "validity" );
-    m_sort = new KAction( i18n("Sort..."), 0, this, SLOT( sort() ), actionCollection(), "sort" );
-    m_consolidate = new KAction( i18n("Consolidate..."), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
-    m_mergeCell = new KAction( i18n("Merge cells"),"mergecell" ,0, this, SLOT( mergeCell() ), actionCollection(), "mergecell" );
-    m_dissociateCell = new KAction( i18n("Dissociate cells"),"dissociatecell" ,0, this, SLOT( dissociateCell() ), actionCollection(), "dissociatecell" );
-
-    m_increaseIndent = new KAction( i18n("Increase indent"),"format_increaseindent" ,0, this, SLOT( increaseIndent() ), actionCollection(), "increaseindent" );
-    m_decreaseIndent = new KAction( i18n("Decrease indent"),"format_decreaseindent" ,0, this, SLOT( decreaseIndent() ), actionCollection(),"decreaseindent");
-
-    m_multiRow = new KToggleAction( i18n("Multi Row"), "multirow", 0, actionCollection(), "multiRow" );
-    connect( m_multiRow, SIGNAL( toggled( bool ) ), this, SLOT( multiRow( bool ) ) );
-    m_selectFont = new KFontAction( i18n("Select Font"), 0, actionCollection(), "selectFont" );
-    connect( m_selectFont, SIGNAL( activated( const QString& ) ), this, SLOT( fontSelected( const QString& ) ) );
-    m_selectFontSize = new KFontSizeAction( i18n("Select Font Size"), 0, actionCollection(), "selectFontSize" );
-    connect( m_selectFontSize, SIGNAL( fontSizeChanged( int ) ), this, SLOT( fontSizeSelected( int ) ) );
-    m_deleteColumn = new KAction( i18n("Delete Column(s)"), "delete_table_col", 0, this, SLOT( deleteColumn() ),
-                                  actionCollection(), "deleteColumn" );
-    m_deleteRow = new KAction( i18n("Delete Row(s)"), "delete_table_row", 0, this, SLOT( deleteRow() ),
-                               actionCollection(), "deleteRow" );
-    m_insertColumn = new KAction( i18n("Insert Column(s)"), "insert_table_col" , 0, this, SLOT( insertColumn() ),
-                                  actionCollection(), "insertColumn" );
-    m_insertRow = new KAction( i18n("Insert Row(s)"), "insert_table_row", 0, this, SLOT( insertRow() ),
-                               actionCollection(), "insertRow" );
-    m_hideRow = new KAction( i18n("Hide Row(s)"), "hide_table_row", 0, this, SLOT( hideRow() ),
-                               actionCollection(), "hideRow" );
-    m_showRow = new KAction( i18n("Show Row(s)"), "show_table_row", 0, this, SLOT( showRow() ),
-                               actionCollection(), "showRow" );
-    m_showSelRows = new KAction( i18n("Show Row(s)"), "show_table_row", 0, this, SLOT( showSelRows() ),
-                               actionCollection(), "showSelRows" );
-    m_showSelRows->setEnabled(false);
-    m_hideColumn = new KAction( i18n("Hide Column(s)"), "hide_table_column", 0, this, SLOT( hideColumn() ),
-                               actionCollection(), "hideColumn" );
-    m_showColumn = new KAction( i18n("Show Column(s)"), "show_table_column", 0, this, SLOT( showColumn() ),
-                               actionCollection(), "showColumn" );
-    m_showSelColumns = new KAction( i18n("Show Column(s)"), "show_table_column", 0, this, SLOT( showSelColumns() ),
-                                 actionCollection(), "showSelColumns" );
-    m_showSelColumns->setEnabled(false);
-    m_insertCell = new KAction( i18n("Insert Cell(s)..."), "insertcell", 0, this, SLOT( slotInsert() ),
-                               actionCollection(), "insertCell" );
-    m_removeCell = new KAction( i18n("Remove Cell(s)..."), "removecell", 0, this, SLOT( slotRemove() ),
-                               actionCollection(), "removeCell" );
-    m_insertCellCopy = new KAction( i18n("Paste with insertion..."), "insertcellcopy", 0, this, SLOT( slotInsertCellCopy() ),
-                               actionCollection(), "insertCellCopy" );
-    m_cellLayout = new KAction( i18n("Cell Format..."),"cell_layout", CTRL + ALT + Key_F, this, SLOT( layoutDlg() ),
-                               actionCollection(), "cellLayout" );
-    m_formulaSelection = new KSelectAction( i18n("Formula Selection"), 0, actionCollection(), "formulaSelection" );
-    m_spellChecking = KStdAction::spelling( this, SLOT( extraSpelling() ),
-                                            actionCollection(), "spelling" );
-
-    QStringList lst;
-    lst.append( "SUM");
-    lst.append( "AVERAGE");
-    lst.append( "IF");
-    lst.append( "COUNT");
-    lst.append( "MIN");
-    lst.append( "MAX");
-    lst.append( i18n("Others...") );
-    ((KSelectAction*) m_formulaSelection)->setItems( lst );
-    m_formulaSelection->setComboWidth( 80 );
-    m_formulaSelection->setCurrentItem(0);
-    connect( m_formulaSelection, SIGNAL( activated( const QString& ) ),
-             this, SLOT( formulaSelection( const QString& ) ) );
-
-    // Insert menu
-    (void) new KAction( i18n("&Math expression..."), "funct", 0, this, SLOT( insertMathExpr() ),
-                        actionCollection(), "insertMathExpr" );
-    (void) new KAction( i18n("&Series..."),"series", 0, this, SLOT( insertSeries() ), actionCollection(), "series" );
-    (void) new KAction( i18n("&Hyperlink..."), 0, this, SLOT( insertHyperlink() ), actionCollection(), "insertHyperlink" );
-    m_insertPart=new KoPartSelectAction( i18n("&Object..."), "frame_query", this, SLOT( insertObject() ),
-                        actionCollection(), "insertPart");
-    m_insertChartFrame=new KAction( i18n("&Chart"), "frame_chart", 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
-
-    m_autoSum = new KAction( i18n("AutoSum"), "black_sum", 0, this, SLOT( autoSum() ),
-                             actionCollection(), "autoSum" );
-    m_sortDec = new KAction( i18n("Sort decreasing"), "sort_decrease", 0, this, SLOT( sortDec() ),
-                             actionCollection(), "sortDec" );
-    m_sortInc = new KAction( i18n("Sort increasing"), "sort_incr", 0, this, SLOT( sortInc() ),
-                             actionCollection(), "sortInc" );
-    m_textColor = new TKSelectColorAction( i18n("Text color"), TKSelectColorAction::TextColor, actionCollection(), "textColor",true );
-    connect( m_textColor, SIGNAL(activated()), SLOT(changeTextColor()) );
-    m_textColor->setDefaultColor(QColor());
-
-
-    m_bgColor = new TKSelectColorAction( i18n("Background color"),TKSelectColorAction::FillColor, actionCollection(), "backgroundColor",true );
-    connect(m_bgColor,SIGNAL(activated()),SLOT(changeBackgroundColor()));
-    m_bgColor->setDefaultColor(QColor());
-
-    m_borderLeft = new KAction( i18n("Border left"), "border_left", 0, this, SLOT( borderLeft() ), actionCollection(), "borderLeft" );
-    m_borderRight = new KAction( i18n("Border Right"), "border_right", 0, this, SLOT( borderRight() ), actionCollection(), "borderRight" );
-    m_borderTop = new KAction( i18n("Border Top"), "border_top", 0, this, SLOT( borderTop() ), actionCollection(), "borderTop" );
-    m_borderBottom = new KAction( i18n("Border Bottom"), "border_bottom", 0, this, SLOT( borderBottom() ), actionCollection(), "borderBottom" );
-    m_borderAll = new KAction( i18n("All borders"), "border_all", 0, this, SLOT( borderAll() ), actionCollection(), "borderAll" );
-    m_borderRemove = new KAction( i18n("Remove Borders"), "border_remove", 0, this, SLOT( borderRemove() ), actionCollection(), "borderRemove" );
-    m_borderOutline = new KAction( i18n("Border Outline"), ("border_outline"), 0, this, SLOT( borderOutline() ), actionCollection(), "borderOutline" );
-    m_borderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "borderColor" );
-    connect(m_borderColor,SIGNAL(activated()),SLOT(changeBorderColor()));
-
-    m_tableFormat = new KAction( i18n("Table Style..."), 0, this, SLOT( tableFormat() ), actionCollection(), "tableFormat" );
-    // m_oszi = new KAction( i18n("Osciloscope..."),"oscilloscope", 0, this, SLOT( oszilloscope() ), actionCollection(), "oszi" );
-
-
-    //menu calc
-    m_menuCalcSum = new KToggleAction( i18n("Sum"), 0, actionCollection(), "menu_sum");
-    connect( m_menuCalcSum, SIGNAL( toggled( bool ) ), this, SLOT( menuCalc( bool ) ) );
-    m_menuCalcSum->setExclusiveGroup( "Calc" );
-
-    m_menuCalcMin = new KToggleAction( i18n("Min"), 0, actionCollection(), "menu_min");
-    connect( m_menuCalcMin, SIGNAL( toggled( bool ) ), this, SLOT( menuCalc( bool ) ) );
-    m_menuCalcMin->setExclusiveGroup( "Calc" );
-
-     m_menuCalcMax = new KToggleAction( i18n("Max"), 0, actionCollection(), "menu_max");
-    connect( m_menuCalcMax, SIGNAL( toggled( bool ) ), this, SLOT( menuCalc( bool ) ) );
-    m_menuCalcMax->setExclusiveGroup( "Calc" );
-
-    m_menuCalcAverage = new KToggleAction( i18n("Average"), 0, actionCollection(), "menu_average");
-    connect( m_menuCalcAverage, SIGNAL( toggled( bool ) ), this, SLOT( menuCalc( bool ) ) );
-    m_menuCalcAverage->setExclusiveGroup( "Calc" );
-    m_menuCalcCount = new KToggleAction( i18n("Count"), 0, actionCollection(), "menu_count");
-    connect( m_menuCalcCount, SIGNAL( toggled( bool ) ), this, SLOT( menuCalc( bool ) ) );
-    m_menuCalcCount->setExclusiveGroup( "Calc" );
-
-
-    m_menuCalcNone = new KToggleAction( i18n("None"), 0, actionCollection(), "menu_none");
-    connect( m_menuCalcNone, SIGNAL( toggled( bool ) ), this, SLOT( menuCalc( bool ) ) );
-    m_menuCalcNone->setExclusiveGroup( "Calc" );
-
-    //
 
     connect( this, SIGNAL( childSelected( KoDocumentChild* ) ),
              this, SLOT( slotChildSelected( KoDocumentChild* ) ) );
@@ -649,6 +396,626 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     addStatusBarItem( m_sbCalcLabel, 0 );
     if(m_sbCalcLabel)
         connect(m_sbCalcLabel ,SIGNAL(itemPressed( int )),this,SLOT(statusBarClicked(int)));
+
+    initializeCalcActions();
+    initializeInsertActions();
+    initializeEditActions();
+    initializeAreaOperationActions();
+    initializeGlobalOperationActions();
+    initializeCellOperationActions();
+    initializeCellPropertyActions();
+    initializeTextFormatActions();
+    initializeTextLayoutActions();
+    initializeTextPropertyActions();
+    initializeTableActions();
+    initializeSpellChecking();
+    initializeRowColumnActions();
+    initializeBorderActions();
+}
+
+
+void KSpreadView::initializeCalcActions()
+{
+  //menu calc
+  /*******************************/
+  m_menuCalcSum = new KToggleAction( i18n("Sum"), 0, actionCollection(),
+                                     "menu_sum");
+  connect( m_menuCalcSum, SIGNAL( toggled( bool ) ), this,
+           SLOT( menuCalc( bool ) ) );
+  m_menuCalcSum->setExclusiveGroup( "Calc" );
+
+  /*******************************/
+  m_menuCalcMin = new KToggleAction( i18n("Min"), 0, actionCollection(),
+                                     "menu_min");
+  connect( m_menuCalcMin, SIGNAL( toggled( bool ) ), this,
+           SLOT( menuCalc( bool ) ) );
+  m_menuCalcMin->setExclusiveGroup( "Calc" );
+
+  /*******************************/
+  m_menuCalcMax = new KToggleAction( i18n("Max"), 0, actionCollection(),
+                                     "menu_max");
+  connect( m_menuCalcMax, SIGNAL( toggled( bool ) ), this,
+           SLOT( menuCalc( bool ) ) );
+  m_menuCalcMax->setExclusiveGroup( "Calc" );
+
+  /*******************************/
+  m_menuCalcAverage = new KToggleAction( i18n("Average"), 0, actionCollection(),
+                                         "menu_average");
+  connect( m_menuCalcAverage, SIGNAL( toggled( bool ) ), this,
+           SLOT( menuCalc( bool ) ) );
+  m_menuCalcAverage->setExclusiveGroup( "Calc" );
+
+  /*******************************/
+  m_menuCalcCount = new KToggleAction( i18n("Count"), 0, actionCollection(),
+                                       "menu_count");
+  connect( m_menuCalcCount, SIGNAL( toggled( bool ) ), this,
+           SLOT( menuCalc( bool ) ) );
+  m_menuCalcCount->setExclusiveGroup( "Calc" );
+
+
+  /*******************************/
+  m_menuCalcNone = new KToggleAction( i18n("None"), 0, actionCollection(),
+                                      "menu_none");
+  connect( m_menuCalcNone, SIGNAL( toggled( bool ) ), this,
+           SLOT( menuCalc( bool ) ) );
+  m_menuCalcNone->setExclusiveGroup( "Calc" );
+
+  /*******************************/
+}
+
+
+void KSpreadView::initializeInsertActions()
+{
+  (void) new KAction( i18n("&Math expression..."), "funct", 0, this,
+                      SLOT( insertMathExpr() ), actionCollection(),
+                      "insertMathExpr" );
+
+  (void) new KAction( i18n("&Series..."),"series", 0, this,
+                      SLOT( insertSeries() ), actionCollection(), "series" );
+
+  (void) new KAction( i18n("&Hyperlink..."), 0, this, SLOT( insertHyperlink() ),
+                      actionCollection(), "insertHyperlink" );
+
+  m_insertPart=new KoPartSelectAction( i18n("&Object..."), "frame_query", this,
+                                       SLOT( insertObject() ),
+                                       actionCollection(), "insertPart");
+
+  m_insertChartFrame=new KAction( i18n("&Chart"), "frame_chart", 0, this,
+                                  SLOT( insertChart() ), actionCollection(),
+                                  "insertChart" );
+}
+
+void KSpreadView::initializeEditActions()
+{
+  m_copy = KStdAction::copy( this, SLOT( copySelection() ), actionCollection(),
+                             "copy" );
+  m_copy->setToolTip("Copy the cell object to the clipboard.");
+
+  m_copy_as_text=new KAction( i18n("Copy as text"),0, this, SLOT( copyAsText() ),
+                              actionCollection(), "copy_as_text" );
+  m_copy_as_text->setToolTip
+    ("Copy the text result of the cell to the clipboard.");
+
+  m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(),
+                               "paste" );
+  m_paste->setToolTip("Paste the contents of the clipboard at the cursor");
+
+  m_cut = KStdAction::cut( this, SLOT( cutSelection() ), actionCollection(),
+                           "cut" );
+  m_cut->setToolTip("Move the cell object to the clipboard.");
+
+  m_specialPaste = new KAction( i18n("Special Paste..."), "special_paste",0,
+                                this, SLOT( specialPaste() ), actionCollection(),
+                                "specialPaste" );
+  m_specialPaste->setToolTip
+    ("Paste the contents of the clipboard with special options.");
+
+  m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
+  m_undo->setEnabled( FALSE );
+
+  m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );
+  m_redo->setEnabled( FALSE );
+
+  KStdAction::find(this, SLOT(find()), actionCollection());
+
+  KStdAction::replace(this, SLOT(replace()), actionCollection());
+}
+
+void KSpreadView::initializeAreaOperationActions()
+{
+  m_areaName = new KAction( i18n("Area name..."), 0, this,
+                            SLOT( setAreaName() ), actionCollection(),
+                            "areaname" );
+
+  m_showArea = new KAction( i18n("Show area..."), 0, this,
+                            SLOT( showAreaName() ), actionCollection(),
+                            "showArea" );
+
+  m_sortList = new KAction( i18n("Custom lists..."), 0, this,
+                            SLOT( sortList() ), actionCollection(),
+                            "sortlist" );
+
+  m_sort = new KAction( i18n("Sort..."), 0, this, SLOT( sort() ),
+                        actionCollection(), "sort" );
+
+  m_autoSum = new KAction( i18n("AutoSum"), "black_sum", 0, this,
+                           SLOT( autoSum() ), actionCollection(), "autoSum" );
+
+  m_sortDec = new KAction( i18n("Sort decreasing"), "sort_decrease", 0, this,
+                           SLOT( sortDec() ), actionCollection(), "sortDec" );
+
+  m_sortInc = new KAction( i18n("Sort increasing"), "sort_incr", 0, this,
+                           SLOT( sortInc() ), actionCollection(), "sortInc" );
+
+  m_consolidate = new KAction( i18n("Consolidate..."), 0, this,
+                               SLOT( consolidate() ), actionCollection(),
+                               "consolidate" );
+
+}
+
+void KSpreadView::initializeGlobalOperationActions()
+{
+  m_recalc_workbook = new KAction( i18n("Recalculate Workbook"),Key_F9, this,
+                                   SLOT( RecalcWorkBook() ), actionCollection(),
+                                   "RecalcWorkBook" );
+
+  m_recalc_worksheet = new KAction( i18n("Recalculate Worksheet"),SHIFT + Key_F9,
+                                    this, SLOT( RecalcWorkSheet() ),
+                                    actionCollection(), "RecalcWorkSheet" );
+
+  m_preference = new KAction( i18n("Configure KSpread..."),"configure", 0, this,
+                              SLOT( preference() ), actionCollection(),
+                              "preference" );
+
+  m_editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this,
+                                     SLOT( editGlobalScripts() ),
+                                     actionCollection(), "editGlobalScripts" );
+
+  m_editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this,
+                                    SLOT( editLocalScripts() ),
+                                    actionCollection(), "editLocalScripts" );
+
+  m_reloadScripts = new KAction( i18n("Reload Scripts"), 0, this,
+                                 SLOT( reloadScripts() ), actionCollection(),
+                                 "reloadScripts" );
+
+  m_showPageBorders = new KToggleAction( i18n("Show page borders"), 0,
+                                         actionCollection(), "showPageBorders");
+  connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this,
+           SLOT( togglePageBorders( bool ) ) );
+
+  m_formulaSelection = new KSelectAction(i18n("Formula Selection"), 0,
+                                         actionCollection(), "formulaSelection");
+  QStringList lst;
+  lst.append( "SUM");
+  lst.append( "AVERAGE");
+  lst.append( "IF");
+  lst.append( "COUNT");
+  lst.append( "MIN");
+  lst.append( "MAX");
+  lst.append( i18n("Others...") );
+  ((KSelectAction*) m_formulaSelection)->setItems( lst );
+  m_formulaSelection->setComboWidth( 80 );
+  m_formulaSelection->setCurrentItem(0);
+  connect( m_formulaSelection, SIGNAL( activated( const QString& ) ),
+           this, SLOT( formulaSelection( const QString& ) ) );
+
+
+  m_transform = new KAction( i18n("Transform object..."), "rotate", 0, this,
+                             SLOT( transformPart() ),
+                             actionCollection(), "transform" );
+
+
+
+  m_transform->setEnabled( FALSE );
+  // ### This seems to be duplicated ....
+  connect( m_transform, SIGNAL( activated() ), this, SLOT( transformPart() ) );
+
+
+  m_paperLayout = new KAction( i18n("Paper Layout..."), 0, this,
+                               SLOT( paperLayoutDlg() ), actionCollection(),
+                               "paperLayout" );
+}
+
+
+void KSpreadView::initializeCellOperationActions()
+{
+  m_editCell = new KAction( i18n("Modify Cell"),"cell_edit", CTRL + Key_M, this,
+                            SLOT( editCell() ), actionCollection(), "editCell" );
+
+  m_delete = new KAction( i18n("Delete"),"deletecell", 0, this,
+                          SLOT( deleteSelection() ), actionCollection(),
+                          "delete" );
+
+  m_clearText = new KAction( i18n("Text"), 0, this, SLOT( clearTextSelection() ),
+                             actionCollection(), "cleartext" );
+
+  m_gotoCell = new KAction( i18n("Goto Cell..."),"goto", 0, this,
+                            SLOT( gotoCell() ), actionCollection(), "gotoCell" );
+
+  m_mergeCell = new KAction( i18n("Merge cells"),"mergecell" ,0, this,
+                             SLOT( mergeCell() ), actionCollection(),
+                             "mergecell" );
+
+  m_dissociateCell = new KAction( i18n("Dissociate cells"),"dissociatecell" ,0,
+                                  this, SLOT( dissociateCell() ),
+                                  actionCollection(), "dissociatecell" );
+
+  m_removeCell = new KAction( i18n("Remove Cell(s)..."), "removecell", 0, this,
+                              SLOT( slotRemove() ), actionCollection(),
+                              "removeCell" );
+
+  m_insertCellCopy = new KAction( i18n("Paste with insertion..."),
+                                  "insertcellcopy", 0, this,
+                                  SLOT( slotInsertCellCopy() ),
+                                  actionCollection(), "insertCellCopy" );
+
+  m_insertCell = new KAction( i18n("Insert Cell(s)..."), "insertcell", 0, this,
+                              SLOT( slotInsert() ), actionCollection(),
+                              "insertCell" );
+
+}
+
+void KSpreadView::initializeCellPropertyActions()
+{
+  m_addModifyComment = new KAction( i18n("&Add/modify comment..."),"comment", 0,
+                                    this, SLOT( addModifyComment() ),
+                                    actionCollection(), "addmodifycomment" );
+
+  m_removeComment = new KAction( i18n("&Remove comment"),"removecomment", 0,
+                                 this, SLOT( removeComment() ),
+                                 actionCollection(), "removecomment" );
+
+  m_conditional = new KAction( i18n("Conditional cell attributes..."), 0, this,
+                               SLOT( conditional() ), actionCollection(),
+                               "conditional" );
+
+  m_validity = new KAction( i18n("Validity..."), 0, this, SLOT( validity() ),
+                            actionCollection(), "validity" );
+
+  m_clearComment = new KAction( i18n("Comment"), 0, this,
+                                SLOT( clearCommentSelection() ),
+                                actionCollection(), "clearcomment" );
+
+  m_clearValidity = new KAction( i18n("Validity"), 0, this,
+                                 SLOT( clearValiditySelection() ),
+                                 actionCollection(), "clearvalidity" );
+
+  m_clearConditional = new KAction( i18n("Conditional cell attributes"), 0, this,
+                                    SLOT( clearConditionalSelection() ),
+                                    actionCollection(), "clearconditional" );
+
+  m_increaseIndent = new KAction( i18n("Increase indent"),
+                                  "format_increaseindent",0, this,
+                                  SLOT( increaseIndent() ), actionCollection(),
+                                  "increaseindent" );
+
+  m_decreaseIndent = new KAction( i18n("Decrease indent"),
+                                  "format_decreaseindent" ,0, this,
+                                  SLOT( decreaseIndent() ), actionCollection(),
+                                  "decreaseindent");
+
+  m_multiRow = new KToggleAction( i18n("Multi Row"), "multirow", 0,
+                                  actionCollection(), "multiRow" );
+  connect( m_multiRow, SIGNAL( toggled( bool ) ), this,
+           SLOT( multiRow( bool ) ) );
+
+  m_cellLayout = new KAction( i18n("Cell Format..."),"cell_layout",
+                              CTRL + ALT + Key_F, this, SLOT( layoutDlg() ),
+                              actionCollection(), "cellLayout" );
+
+  m_default = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ),
+                           actionCollection(), "default" );
+
+  m_bgColor = new TKSelectColorAction( i18n("Background color"),
+                                       TKSelectColorAction::FillColor,
+                                       actionCollection(), "backgroundColor",
+                                       true );
+  connect(m_bgColor,SIGNAL(activated()),SLOT(changeBackgroundColor()));
+  m_bgColor->setDefaultColor(QColor());
+
+}
+
+
+void KSpreadView::initializeTextFormatActions()
+{
+  /*******************************/
+  m_percent = new KToggleAction( i18n("Percent format"), "percent", 0,
+                                 actionCollection(), "percent");
+  connect( m_percent, SIGNAL( toggled( bool ) ), this, SLOT( percent( bool ) ) );
+
+  /*******************************/
+  m_precplus = new KAction( i18n("Increase precision"), "prec_plus", 0, this,
+                            SLOT( precisionPlus() ), actionCollection(),
+                            "precplus");
+
+  /*******************************/
+  m_precminus = new KAction( i18n("Decrease precision"), "prec_minus", 0, this,
+                             SLOT( precisionMinus() ), actionCollection(),
+                             "precminus");
+
+  /*******************************/
+  m_money = new KToggleAction( i18n("Money format"), "money", 0,
+                               actionCollection(), "money");
+  connect( m_money, SIGNAL( toggled( bool ) ), this,
+           SLOT( moneyFormat( bool ) ) );
+
+  /*******************************/
+  m_upper = new KAction( i18n("Upper case"), "upper", 0, this,
+                         SLOT( upper() ), actionCollection(), "upper" );
+
+  /*******************************/
+  m_lower = new KAction( i18n("Lower case"), "lower", 0, this,
+                         SLOT( lower() ), actionCollection(), "lower" );
+
+  /*******************************/
+  m_firstLetterUpper = new KAction( i18n("Convert first letter to upper case"),
+                                    "first_letter_upper" ,0, this,
+                                    SLOT( firstLetterUpper() ),
+                                    actionCollection(), "firstletterupper" );
+}
+
+void KSpreadView::initializeTextLayoutActions()
+{
+  /*******************************/
+  m_alignLeft = new KToggleAction( i18n("Align left"), "text_left", 0,
+                                   actionCollection(), "left");
+  connect( m_alignLeft, SIGNAL( toggled( bool ) ), this,
+           SLOT( alignLeft( bool ) ) );
+  m_alignLeft->setExclusiveGroup( "Align" );
+
+  /*******************************/
+  m_alignCenter = new KToggleAction( i18n("Align center"), "text_center", 0,
+                                     actionCollection(), "center");
+  connect( m_alignCenter, SIGNAL( toggled( bool ) ), this,
+           SLOT( alignCenter( bool ) ) );
+  m_alignCenter->setExclusiveGroup( "Align" );
+
+  /*******************************/
+  m_alignRight = new KToggleAction( i18n("Align right"), "text_right", 0,
+                                    actionCollection(), "right");
+  connect( m_alignRight, SIGNAL( toggled( bool ) ), this,
+           SLOT( alignRight( bool ) ) );
+  m_alignRight->setExclusiveGroup( "Align" );
+
+  /*******************************/
+  m_alignTop = new KToggleAction( i18n("Align top"), "text_top", 0,
+                                  actionCollection(), "top");
+  connect( m_alignTop, SIGNAL( toggled( bool ) ), this,
+           SLOT( alignTop( bool ) ) );
+  m_alignTop->setExclusiveGroup( "Pos" );
+
+  /*******************************/
+  m_alignMiddle = new KToggleAction( i18n("Align middle"), "middle", 0,
+                                     actionCollection(), "middle");
+  connect( m_alignMiddle, SIGNAL( toggled( bool ) ), this,
+           SLOT( alignMiddle( bool ) ) );
+  m_alignMiddle->setExclusiveGroup( "Pos" );
+
+  /*******************************/
+  m_alignBottom = new KToggleAction( i18n("Align bottom"), "text_bottom", 0,
+                                     actionCollection(), "bottom");
+  connect( m_alignBottom, SIGNAL( toggled( bool ) ), this,
+           SLOT( alignBottom( bool ) ) );
+  m_alignBottom->setExclusiveGroup( "Pos" );
+
+  /*******************************/
+  m_verticalText = new KToggleAction( i18n("Vertical text"),"vertical_text" ,
+                                      0 ,actionCollection(), "verticaltext" );
+  connect( m_verticalText, SIGNAL( toggled( bool ) ), this,
+           SLOT( verticalText( bool ) ) );
+
+  /*******************************/
+  m_changeAngle = new KAction( i18n("Change Angle..."), 0, this,
+                               SLOT( changeAngle() ), actionCollection(),
+                               "changeangle" );
+}
+
+void KSpreadView::initializeTextPropertyActions()
+{
+  /*******************************/
+  m_bold = new KToggleAction( i18n("Bold"), "text_bold", CTRL + Key_B,
+                              actionCollection(), "bold");
+  connect( m_bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
+
+  /*******************************/
+  m_italic = new KToggleAction( i18n("Italic"), "text_italic", CTRL + Key_I,
+                                actionCollection(), "italic");
+  connect( m_italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
+
+  /*******************************/
+  m_underline = new KToggleAction( i18n("Underline"), "text_under",
+                                   CTRL + Key_U, actionCollection(),
+                                   "underline");
+  connect( m_underline, SIGNAL( toggled( bool ) ), this,
+           SLOT( underline( bool ) ) );
+
+  /*******************************/
+  m_strikeOut = new KToggleAction( i18n("Strike out"), "text_strike", 0,
+                                   actionCollection(), "strikeout");
+  connect( m_strikeOut, SIGNAL( toggled( bool ) ), this,
+           SLOT( strikeOut( bool ) ) );
+
+  /*******************************/
+  m_selectFont = new KFontAction( i18n("Select Font"), 0, actionCollection(),
+                                  "selectFont" );
+  connect( m_selectFont, SIGNAL( activated( const QString& ) ), this,
+           SLOT( fontSelected( const QString& ) ) );
+
+  /*******************************/
+  m_selectFontSize = new KFontSizeAction( i18n("Select Font Size"), 0,
+                                          actionCollection(), "selectFontSize" );
+  connect( m_selectFontSize, SIGNAL( fontSizeChanged( int ) ), this,
+           SLOT( fontSizeSelected( int ) ) );
+
+  /*******************************/
+  m_fontSizeUp = new KAction( i18n("Increase font size"), "fontsizeup", 0, this,
+                              SLOT( increaseFontSize() ), actionCollection(),
+                              "increaseFontSize" );
+
+  /*******************************/
+  m_fontSizeDown = new KAction( i18n("Decrease font size"), "fontsizedown", 0,
+                                this, SLOT( decreaseFontSize() ),
+                                actionCollection(), "decreaseFontSize" );
+
+  /*******************************/
+  m_textColor = new TKSelectColorAction( i18n("Text color"),
+                                         TKSelectColorAction::TextColor,
+                                         actionCollection(), "textColor",true );
+  connect( m_textColor, SIGNAL(activated()), SLOT(changeTextColor()) );
+  m_textColor->setDefaultColor(QColor());
+
+  /*******************************/
+}
+
+void KSpreadView::initializeTableActions()
+{
+  m_insertTable = new KAction( i18n("Insert Table"),"inserttable", 0, this,
+                               SLOT( insertTable() ), actionCollection(),
+                               "insertTable" );
+
+  m_removeTable = new KAction( i18n("Remove Table"), "delete_table",0,this,
+                               SLOT( removeTable() ), actionCollection(),
+                               "removeTable" );
+
+  m_renameTable=new KAction( i18n("Rename table..."),0,this,
+                             SLOT( slotRename() ), actionCollection(),
+                             "renameTable" );
+
+  m_nextTable = new KAction( i18n("Next table"), CTRL + Key_PageDown, this,
+                             SLOT( nextTable() ), actionCollection(),
+                             "nextTable");
+
+  m_prevTable = new KAction( i18n("Previous table"), CTRL + Key_PageUp, this,
+                             SLOT( previousTable() ), actionCollection(),
+                             "previousTable");
+
+  m_firstTable = new KAction( i18n("First table"), 0, this,
+                              SLOT( firstTable() ), actionCollection(),
+                              "firstTable");
+
+  m_lastTable = new KAction( i18n("Last table"), 0, this,
+                             SLOT( lastTable() ), actionCollection(),
+                             "lastTable");
+
+  m_showTable = new KAction(i18n("Show Table"),0 ,this,SLOT( showTable()),
+                            actionCollection(), "showTable" );
+
+  m_hideTable = new KAction(i18n("Hide Table"),0 ,this,SLOT( hideTable()),
+                            actionCollection(), "hideTable" );
+
+  m_tableFormat = new KAction( i18n("Table Style..."), 0, this,
+                               SLOT( tableFormat() ), actionCollection(),
+                               "tableFormat" );
+}
+
+void KSpreadView::initializeSpellChecking()
+{
+  m_spellChecking = KStdAction::spelling( this, SLOT( extraSpelling() ),
+                                          actionCollection(), "spelling" );
+}
+
+
+void KSpreadView::initializeRowColumnActions()
+{
+  m_adjust = new KAction( i18n("Adjust row and column"), 0, this,
+                          SLOT( adjust() ), actionCollection(), "adjust" );
+
+  m_resizeRow = new KAction( i18n("Resize row..."), "resizerow", 0, this,
+                             SLOT( resizeRow() ), actionCollection(),
+                             "resizeRow" );
+
+  m_resizeColumn = new KAction( i18n("Resize column..."), "resizecol", 0, this,
+                                SLOT( resizeColumn() ), actionCollection(),
+                                "resizeCol" );
+
+  m_equalizeRow = new KAction( i18n("Equalize row"), "adjustrow", 0, this,
+                               SLOT( equalizeRow() ), actionCollection(),
+                               "equalizeRow" );
+
+  m_equalizeColumn = new KAction( i18n("Equalize column"), "adjustcol", 0, this,
+                                  SLOT( equalizeColumn() ), actionCollection(),
+                                  "equalizeCol" );
+
+  m_deleteColumn = new KAction( i18n("Delete Column(s)"), "delete_table_col", 0,
+                                this, SLOT( deleteColumn() ),
+                                actionCollection(), "deleteColumn" );
+
+  m_deleteRow = new KAction( i18n("Delete Row(s)"), "delete_table_row", 0, this,
+                             SLOT( deleteRow() ), actionCollection(),
+                             "deleteRow" );
+
+  m_insertColumn = new KAction( i18n("Insert Column(s)"), "insert_table_col" ,
+                                0, this, SLOT( insertColumn() ),
+                                actionCollection(), "insertColumn" );
+
+  m_insertRow = new KAction( i18n("Insert Row(s)"), "insert_table_row", 0, this,
+                             SLOT( insertRow() ), actionCollection(),
+                             "insertRow" );
+
+  m_hideRow = new KAction( i18n("Hide Row(s)"), "hide_table_row", 0, this,
+                           SLOT( hideRow() ), actionCollection(), "hideRow" );
+
+  m_showRow = new KAction( i18n("Show Row(s)"), "show_table_row", 0, this,
+                           SLOT( showRow() ), actionCollection(), "showRow" );
+
+  m_showSelRows = new KAction( i18n("Show Row(s)"), "show_table_row", 0, this,
+                               SLOT( showSelRows() ), actionCollection(),
+                               "showSelRows" );
+  m_showSelRows->setEnabled(false);
+
+  m_hideColumn = new KAction( i18n("Hide Column(s)"), "hide_table_column", 0,
+                              this, SLOT( hideColumn() ), actionCollection(),
+                              "hideColumn" );
+
+  m_showColumn = new KAction( i18n("Show Column(s)"), "show_table_column", 0,
+                              this, SLOT( showColumn() ), actionCollection(),
+                              "showColumn" );
+
+  m_showSelColumns = new KAction( i18n("Show Column(s)"), "show_table_column",
+                                  0, this, SLOT( showSelColumns() ),
+                                  actionCollection(), "showSelColumns" );
+  m_showSelColumns->setEnabled(false);
+
+}
+
+
+void KSpreadView::initializeBorderActions()
+{
+  m_borderLeft = new KAction( i18n("Border left"), "border_left", 0, this,
+                              SLOT( borderLeft() ), actionCollection(),
+                              "borderLeft" );
+
+  m_borderRight = new KAction( i18n("Border Right"), "border_right", 0, this,
+                               SLOT( borderRight() ), actionCollection(),
+                               "borderRight" );
+
+  m_borderTop = new KAction( i18n("Border Top"), "border_top", 0, this,
+                             SLOT( borderTop() ), actionCollection(),
+                             "borderTop" );
+
+  m_borderBottom = new KAction( i18n("Border Bottom"), "border_bottom", 0, this,
+                                SLOT( borderBottom() ), actionCollection(),
+                                "borderBottom" );
+
+  m_borderAll = new KAction( i18n("All borders"), "border_all", 0, this,
+                             SLOT( borderAll() ), actionCollection(),
+                             "borderAll" );
+
+  m_borderRemove = new KAction( i18n("Remove Borders"), "border_remove", 0,
+                                this, SLOT( borderRemove() ), actionCollection(),
+                                "borderRemove" );
+
+  m_borderOutline = new KAction( i18n("Border Outline"), ("border_outline"), 0,
+                                 this, SLOT( borderOutline() ),
+                                 actionCollection(), "borderOutline" );
+
+  m_borderColor = new TKSelectColorAction( i18n("Border Color"),
+                                           TKSelectColorAction::LineColor,
+                                           actionCollection(), "borderColor" );
+
+  connect(m_borderColor,SIGNAL(activated()),SLOT(changeBorderColor()));
+
 }
 
 KSpreadView::~KSpreadView()
@@ -969,7 +1336,7 @@ void KSpreadView::spellCleanup()
   m_spell.currentSpellTable = 0L;
   m_spell.currentCell       = 0L;
 
-  KMessageBox::information( this, i18n( "Spell checking is complete." ) );  
+  KMessageBox::information( this, i18n( "Spell checking is complete." ) );
   // not supported yet
   //    if(m_spell.macroCmdSpellCheck)
   //      m_pDoc->addCommand(m_spell.macroCmdSpellCheck);

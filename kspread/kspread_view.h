@@ -671,6 +671,25 @@ private:
     QStringList m_replaceStrings;
 
     KStatusBarLabel* m_sbCalcLabel;
+
+
+  /* helper functions */
+    void initializeCalcActions();
+    void initializeInsertActions();
+    void initializeEditActions();
+    void initializeAreaOperationActions();
+    void initializeGlobalOperationActions();
+    void initializeCellOperationActions();
+    void initializeCellPropertyActions();
+    void initializeTextFormatActions();
+    void initializeTextLayoutActions();
+    void initializeTextPropertyActions();
+    void initializeTableActions();
+    void initializeSpellChecking();
+    void initializeRowColumnActions();
+    void initializeBorderActions();
+
+
 };
 
 #endif
