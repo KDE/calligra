@@ -112,11 +112,11 @@ bool KivioStencilSpawnerInfo::loadXML( const QDomElement &e )
     }
     
     if(m_title.isEmpty()) {
-      m_title = origTitle;
+      m_title = i18n( "Stencils", origTitle);
     }
     
     if(m_desc.isEmpty()) {
-      m_desc = origDesc;
+      m_desc = i18n( "Stencils", origDesc);
     }
 
     node = node.nextSibling();
