@@ -1695,8 +1695,6 @@ void OpenCalcImport::loadFontStyle( KSpreadFormat * layout, QDomElement const * 
   }
   if ( font->hasAttribute( "fo:font-weight" ) )
     layout->setTextFontBold( true ); // only thing we support
-  if ( font->hasAttribute( "fo:font-weight" ) )
-    layout->setTextFontBold( true ); // only thing we support
   if ( font->hasAttribute( "fo:text-underline" ) || font->hasAttribute( "style:text-underline" ) )
     layout->setTextFontUnderline( true ); // only thing we support
   if ( font->hasAttribute( "style:text-crossing-out" ) )
