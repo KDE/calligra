@@ -672,7 +672,17 @@ void KWDocument::recalcFrames()
                 }
             }
         }
-
+    } else {
+        double height=0;
+        for (QPtrListIterator<KWFrameSet> fit = framesetsIterator(); fit.current() ; ++fit ) {
+            if(fit.current()->frameSetInfo()==KWFrameSet::FI_BODY) {
+                KWFrameSet * fs = fit.current();
+                for (QPtrListIterator<KWFrame> f = fs->frameIterator(); f.current() ; ++f ) {
+                    height=QMAX(height, f.current()->bottom());
+                }
+            }
+        }
+        m_pages = static_cast<int>((height / ptPaperHeight()) + 0.5);
     }
 
     if ( isHeaderVisible() ) {
