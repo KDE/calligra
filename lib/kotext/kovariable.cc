@@ -936,56 +936,6 @@ void KoVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) cons
 {
     // TODO implement saving variables
     kdWarning(32500) << "Not implemented: OASIS saving of variables" << endl;
-    switch( type() )
-    {
-    case VT_DATE:
-        kdDebug()<<" variable date found \n";
-        break;
-    case VT_DATE_VAR_KWORD10:
-        kdDebug()<<" variable date found old \n";
-        break;
-    case VT_TIME:
-        kdDebug()<<" variable time found \n";
-        break;
-    case VT_TIME_VAR_KWORD10:
-        kdDebug()<<" variable time found old \n";
-        break;
-    case VT_PGNUM:
-        writer.startElement( "text:page-number" );
-        if ( subType() == KoPgNumVariable::VST_PGNUM_PREVIOUS )
-        {
-            writer.addAttribute( "text:select-page", "previous" );
-        }
-        else if ( subType() == KoPgNumVariable::VST_PGNUM_NEXT )
-        {
-            writer.addAttribute( "text:select-page", "next" );
-
-        }
-        writer.addTextNode( "<number>" );//todo fix me
-        writer.endElement();
-        kdDebug()<<" variable pgnum \n";
-        break;
-    case VT_CUSTOM:
-        kdDebug()<<" variable custom \n";
-        break;
-    case VT_MAILMERGE:
-        kdDebug()<<" variable mail merge \n";
-        break;
-    case VT_FIELD:
-        kdDebug()<<" variable field \n";
-        break;
-    case VT_LINK:
-        kdDebug()<<" variable link \n";
-        break;
-    case VT_NOTE:
-        kdDebug()<<" variable note \n";
-        break;
-    case VT_FOOTNOTE:
-        kdDebug()<<" variable footnote \n";
-        break;
-    default:
-        kdDebug()<<" variable is not implemented :"<<type()<<endl;
-    }
 }
 
 void KoVariable::setVariableFormat( KoVariableFormat *_varFormat )
@@ -1107,6 +1057,34 @@ void KoDateVariable::load( QDomElement& elem )
         if ( e.hasAttribute( "subtype" ))
             m_subtype = e.attribute( "subtype").toInt();
     }
+}
+
+void KoDateVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    switch( m_subtype )
+    {
+    case VST_DATE_FIX:
+    case VST_DATE_CURRENT:
+        writer.startElement( "text:date" );
+        if ( m_subtype == VST_DATE_FIX )
+        {
+            writer.addAttribute( "text:date-value", m_varValue.toDate().toString( Qt::ISODate) );
+            writer.addAttribute( "text:fixed", "true" );
+        }
+        writer.addAttribute( "text:date-adjust", m_correctDate );
+        break;
+    case VST_DATE_LAST_PRINTING:
+        writer.startElement( "text:print" );
+        break;
+    case VST_DATE_CREATE_FILE:
+        writer.startElement( "text:creation" );
+        break;
+    case  VST_DATE_MODIFY_FILE:
+        writer.startElement( "text:modification" );
+        break;
+    }
+    writer.addAttribute( "text:date-adjust", m_correctDate );
+    writer.endElement();
 }
 
 void KoDateVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
@@ -1323,6 +1301,19 @@ void KoTimeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
     }
 }
 
+void KoTimeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    writer.startElement( "text:time" );
+    writer.addAttribute( "text:time-adjust", m_correctTime );
+    if (m_subtype == VST_TIME_FIX )
+    {
+        writer.addAttribute( "text:fixed", "true" );
+        writer.addAttribute( "text:time-value", m_varValue.toTime().toString( Qt::ISODate ) );
+    }
+    writer.endElement();
+}
+
+
 QStringList KoTimeVariable::actionTexts()
 {
     QStringList lst;
@@ -1461,6 +1452,11 @@ void KoCustomVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*con
     }
 }
 
+void KoCustomVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    //todo
+}
+
 QString KoCustomVariable::value() const
 {
     return m_varColl->getVariableValue( m_varValue.toString() );
@@ -1581,6 +1577,32 @@ void KoPgNumVariable::load( QDomElement& elem )
             m_varValue = QVariant(pgNumElem.attribute("value"));
     }
 }
+
+void KoPgNumVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    if ( m_subtype == VST_PGNUM_PREVIOUS || m_subtype ==VST_PGNUM_NEXT )
+    {
+        writer.startElement( "text:page-number" );
+        if ( m_subtype == VST_PGNUM_PREVIOUS )
+        {
+            writer.addAttribute( "text:select-page", "previous" );
+        }
+        else if ( m_subtype == VST_PGNUM_NEXT )
+        {
+            writer.addAttribute( "text:select-page", "next" );
+        }
+        writer.addTextNode( m_varValue.toInt() );
+        writer.endElement();
+    }
+    else if ( m_subtype == VST_CURRENT_SECTION )
+    {
+        writer.startElement( "text:chapter" );
+        writer.addTextNode( m_varValue.toString() );
+        writer.endElement();
+    }
+    kdDebug()<<" variable pgnum \n";
+}
+
 void KoPgNumVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
     const QCString afterText( elem.tagName().latin1() + 5 );
@@ -1785,6 +1807,11 @@ void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*cont
         m_subtype = VST_EMAIL;
 
     m_varValue = QVariant( elem.text() );
+}
+
+void KoFieldVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    //todo
 }
 
 void KoFieldVariable::recalc()
@@ -2134,7 +2161,18 @@ void KoMailMergeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*
     // TODO
 }
 
+void KoMailMergeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    //todo
+}
+
+
 void KoLinkVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+{
+    // TODO
+}
+
+void KoLinkVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
     // TODO
 }
@@ -2142,4 +2180,9 @@ void KoLinkVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
 void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
     // TODO
+}
+
+void KoNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    //todo
 }
