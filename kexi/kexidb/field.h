@@ -160,52 +160,57 @@ class KEXI_DB_EXPORT Field
 		/*! \return table schema of table that owns this field. */
 		virtual TableSchema* table() const;
 
-		/*! @return true if the field is autoincrement (e.g. integer/numeric) */
+		/*! \return true if the field is autoincrement (e.g. integer/numeric) */
 		inline bool isAutoIncrement() const { return constraints() & AutoInc; }
 
-		/*! @return true if the field is member of single-field primary key */
+		/*! \return true if the field is member of single-field primary key */
 		inline bool isPrimaryKey() const { return constraints() & PrimaryKey; }
 
-		/*! @return true if the field is member of single-field unique key */
+		/*! \return true if the field is member of single-field unique key */
 		inline bool isUniqueKey() const { return constraints() & Unique; }
 
-		/*! @return true if the field is member of single-field foreign key */
+		/*! \return true if the field is member of single-field foreign key */
 		inline bool isForeignKey() const { return constraints() & ForeignKey; }
 
-		/*! @return true if the field is not allowed to be null */
+		/*! \return true if the field is not allowed to be null */
 		inline bool isNotNull() const { return constraints() & NotNull; }
 
-		/*! @return true if the field is not allowed to be null */
+		/*! \return true if the field is not allowed to be null */
 		inline bool isNotEmpty() const { return constraints() & NotEmpty; }
 
-		/*! @return true if the field is of any numeric type (integer of floating-point) */
+		/*! \return true if the field is of any numeric type (integer or floating point) */
 		inline bool isNumericType() const { return Field::isNumericType(m_type); }
 		
-		/*! static version of isNumericType() method */
+		/*! static version of isNumericType() method
+		 *! \return true if the field is of any numeric type (integer or floating point)*/
 		static bool isNumericType(uint type);
 
-		/*! @return true if the field is of any integer type */
+		/*! \return true if the field is of any integer type */
 		inline bool isIntegerType() const { return Field::isIntegerType(m_type); }
 		
-		/*! static version of isIntegerType() method */
+		/*! static version of isIntegerType() method
+		 *! \return true if the field is of any integer type */
 		static bool isIntegerType(uint type);
 		
-		/*! @return true if the field is of any floating-point-numeric type */
+		/*! \return true if the field is of any floating point numeric type */
 		inline bool isFPNumericType() const { return Field::isFPNumericType(m_type); }
 		
-		/*! static version of isFPNumericType() method */
+		/*! static version of isFPNumericType() method 
+		 *! \return true if the field is of any floating point numeric type */
 		static bool isFPNumericType(uint type);
 
-		/*! @return true if the field is of any date or time-related type */
+		/*! \return true if the field is of any date or time related type */
 		inline bool isDateTimeType() const { return Field::isDateTimeType(m_type); }
 		
-		/*! static version of isDateTimeType() method */
+		/*! static version of isDateTimeType() method
+		 *! \return true if the field is of any date or time related type */
 		static bool isDateTimeType(uint type);
 
 		/*! @return true if the field is of any text type */
 		inline bool isTextType() const { return Field::isTextType(m_type); }
 		
-		/*! static version of isTextType() method */
+		/*! static version of isTextType() method
+		 *! \return true if the field is of any text type */
 		static bool isTextType(uint type);
                         
 //js: we have m_table for this		/*!
@@ -250,9 +255,10 @@ class KEXI_DB_EXPORT Field
 		inline bool isUnsigned() const { return m_options & Unsigned; }
 //		virtual bool isBinary() const;
 
-		//! \return true is this field has EMPTY propery (i.e. it is of type string-like or BLOB)
+		//! \return true if this field has EMPTY property (i.e. it is of type string or is a BLOB)
 		inline bool hasEmptyProperty() const { return Field::hasEmptyProperty(m_type); }
-		/*! static version of canBeEmpty() method */
+		/*! static version of hasEmptyProperty() method
+		 *! \return true if this field has EMPTY property (i.e. it is of type string or is a BLOB) */
 		static bool hasEmptyProperty(uint type);
 
 		void setType(Type t);

@@ -34,7 +34,7 @@ class TableSchema;
 class Field;
 
 /**
- * class wich contains detailed i18n'ed error describtion
+ * class which contains detailed i18n'ed error description
  */
 class KEXI_DB_EXPORT ParserError
 {
@@ -77,7 +77,7 @@ class KEXI_DB_EXPORT Parser
 
 		/**
 		 * constructs an empty object of the parser
-		 * @param db is used for things like wildcard resolvation, if 0 parser wroks in "pure mode"
+		 * @param db is used for things like wildcard resolution. If 0 parser works in "pure mode"
 		 */
 		Parser(Connection *connection);
 		~Parser();
@@ -93,7 +93,7 @@ class KEXI_DB_EXPORT Parser
 		void		clear();
 
 		/**
-		 * @returns the resulting operation or OP_Error if faild
+		 * @returns the resulting operation or OP_Error if failed
 		 */
 		OPCode		operation() { return m_operation; }
 
@@ -137,11 +137,13 @@ class KEXI_DB_EXPORT Parser
 		void		createSelect();
 
 		/**
+		 * @internal
 		 * returns a INTERNAL list of fields
 		 */
 		PFieldList	*fieldList() { return m_fieldList; }
 
 		/**
+		 * @internal
 		 * INTERNAL use only: sets a error
 		 */
 		void		setError(const ParserError &err) { m_error = err; }

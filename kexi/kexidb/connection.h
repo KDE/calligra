@@ -60,36 +60,36 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 from you Connection's subclass destructor. */
 		virtual ~Connection();
 
-		/*! \return parameters that had been used for create this connection. */
+		/*! \return parameters that were used to create this connection. */
 		ConnectionData* data() { return m_data; }
 
-		/*! return driver that is source for this connection. */
+		/*! return the driver used for this connection. */
 		Driver* driver() const { return m_driver; }
 
 		/*! Connects to driver with given parameters. 
 		 \return true if successfull. */
 		bool connect();
 
-		/*! \return true, if connection is properly estableshed. */
+		/*! \return true, if connection is properly established. */
 		bool isConnected() { return m_is_connected; }
 
-		/*! \return true, both if connection is properly estableshed
+		/*! \return true, both if connection is properly established
 		 and any database within this connection is properly used
 		 with useDatabase(). */
 		bool isDatabaseUsed();
 		
-		/*! Disconnects to driver with given parameters. 
+		/*! Disconnects from driver with given parameters. 
 		 Database (if used) is closed, and any active transactions 
 		 (if supported) are rolled back, so commit these before disconnecting,
 		 if you'd like to save your changes. */
 		bool disconnect();
 
 		/*! \return list of database names for opened connection.
-		 If \a also_system_db is true, system database's names are also returned. */
+		 If \a also_system_db is true, the system database names are also returned. */
 		QStringList databaseNames(bool also_system_db = false);
 
 		/*! \return true if database \a dbName exists.
-		 If \a ignoreErrors if true, error flag of connection 
+		 If \a ignoreErrors is true, error flag of connection 
 		  won't be modified for any errors (it will quietly return),
 		  else (ignoreErrors == false) we can check why db does 
 		  not exist using error(), errorNum() and/or errorMsg(). */
@@ -157,7 +157,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 that are stored in currently used database. */
 		QValueList<int> objectIds(int objType);
 
-		/*! Creates new transaction handle and starts new transaction.
+		/*! Creates new transaction handle and starts a new transaction.
 		 \return KexiDB::Transaction object if transaction has been started 
 		 successfully, otherwise null transaction. 
 		 For drivers that allow single transaction per connection
