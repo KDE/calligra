@@ -97,6 +97,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"brsp",		setBorderProperty,	offsetof(RTFBorder,space), 0 ),
 	MEMBER(	0L,		"caps",		setToggleProperty,	state.format.caps, 0 ),
 	MEMBER(	0L,		"cb",		setNumericProperty,	state.format.bgcolor, 0 ),
+	MEMBER(	0L,		"highlight",	setNumericProperty,	state.format.bgcolor, 0 ),
 	PROP(	"Text",		"cell",		insertTableCell,	0L, 0 ),
 	PROP(	0L,		"cellx",	insertCellDef,		0L, 0 ),
 	MEMBER(	0L,		"cf",		setNumericProperty,	state.format.color, 0 ),
