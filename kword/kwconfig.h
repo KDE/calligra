@@ -37,7 +37,7 @@ class KIntNumInput;
 class KCommand;
 class KWDocument;
 class KListView;
-class KEditListBox;
+class KoSpellConfigWidget;
 
 class ConfigureSpellPage : public QObject
 {
@@ -46,17 +46,10 @@ public:
     ConfigureSpellPage( KWView *_view, QVBox *box, char *name = 0 );
     void apply();
     void slotDefault();
-public slots:
-    void slotClearIgnoreAllHistory();
 private:
     KWView* m_pView;
-    KSpellConfig *_spellConfig;
-    QCheckBox *_dontCheckUpperWord;
-    QCheckBox *_dontCheckTitleCase;
-    QCheckBox *cbBackgroundSpellCheck;
-    QPushButton *clearIgnoreAllHistory;
     KConfig* config;
-    KEditListBox *m_listpath;
+    KoSpellConfigWidget *m_spellConfigWidget;
 };
 
 class ConfigureInterfacePage : public QObject
