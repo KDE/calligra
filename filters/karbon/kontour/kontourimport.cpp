@@ -101,6 +101,15 @@ void KontourImport::convert()
 				fill.setColor( color );
 				rect->setFill( fill );
 			}
+			if( !object.attribute( "strokecolor" ).isEmpty() )
+			{
+				VStroke stroke;
+				QColor c;
+				c.setNamedColor( object.attribute( "strokecolor" ) );
+				VColor color( c );
+				stroke.setColor( color );
+				rect->setStroke( stroke );
+			}
 			m_document.append( rect );
 		}
 		else
@@ -119,7 +128,17 @@ void KontourImport::convert()
 			double height =  top - bottom;
 			double width = right - left; 
 			// Append the ellipse to the document
-			m_document.append( new VEllipse( 0L, KoPoint( left, top ),  width, height ) );
+			VObject *ellipse = new VEllipse( 0L, KoPoint( left, top ),  width, height );
+			if( !object.attribute( "strokecolor" ).isEmpty() )
+			{
+				VStroke stroke;
+				QColor c;
+				c.setNamedColor( object.attribute( "strokecolor" ) );
+				VColor color( c );
+				stroke.setColor( color );
+				ellipse->setStroke( stroke );
+			}
+			m_document.append( ellipse );
 		}
 		else
 		if ( b.tagName() == "polyline" )
