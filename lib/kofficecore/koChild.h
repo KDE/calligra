@@ -22,6 +22,17 @@
 #include <qobject.h>
 #include <qwmatrix.h>
 
+/**
+ * KoChild is an abstract base class that represents the geometry
+ * associtated with an embedded document. In general handles its position
+ * relative to the embedded documents parent.
+ *
+ * In detail it handles size, matrix operations and can give you
+ * a clip region. It can deal with scaling, rotation etc. because it
+ * makes heavy usage of QWMatrix.
+ *
+ * @see KoDocumentChild
+ */
 class KoChild : public QObject
 {
   Q_OBJECT
