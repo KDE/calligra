@@ -1171,6 +1171,7 @@ void KWDeleteTableCommand::execute()
     m_pTable->setVisible( false );
     doc->refreshDocStructure((int)Tables);
     doc->updateAllFrames();
+    m_pTable->updateFrames(); // not in the doc list anymore, so the above call didn't do it!
     doc->layout();
     doc->repaintAllViews();
     doc->updateRulerFrameStartEnd();

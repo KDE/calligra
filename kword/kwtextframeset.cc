@@ -1461,6 +1461,7 @@ void KWTextFrameSet::updateFrames( int flags )
 {
     // Not visible ? Don't bother then.
     if ( !isVisible() ) {
+        //kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " not visible" << endl;
         m_textobj->setVisible(false);
         return;
     }
@@ -2548,6 +2549,9 @@ QString KWTextFrameSet::selectedText() const
 
 void KWTextFrameSet::highlightPortion( KoTextParag * parag, int index, int length, KWCanvas * canvas, bool repaint )
 {
+    Q_ASSERT( isVisible() );
+    Q_ASSERT( m_textobj->isVisible() );
+    //kdDebug() << "highlighting in " << getName() << " parag=" << parag->paragId() << " index=" << index << " repaint=" << repaint << endl;
     m_textobj->highlightPortion( parag, index, length, repaint );
     if ( repaint ) {
         // Position the cursor
