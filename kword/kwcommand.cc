@@ -376,6 +376,13 @@ KWFrameBackGroundColorCommand::KWFrameBackGroundColorCommand( const QString &nam
 {
 }
 
+KWFrameBackGroundColorCommand::~KWFrameBackGroundColorCommand()
+{
+    m_indexFrame.setAutoDelete(true);
+    m_oldBackGroundColor.setAutoDelete(true);
+}
+
+
 void KWFrameBackGroundColorCommand::execute()
 {
     FrameIndex *tmp;

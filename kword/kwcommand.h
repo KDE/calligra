@@ -117,7 +117,7 @@ class KWFrameBackGroundColorCommand : public KNamedCommand
 {
 public:
     KWFrameBackGroundColorCommand( const QString &name, QPtrList<FrameIndex> &_listFrameIndex, QPtrList<QBrush> &_oldBrush, const QBrush & _newColor ) ;
-    ~KWFrameBackGroundColorCommand() {}
+    ~KWFrameBackGroundColorCommand();
 
     void execute();
     void unexecute();
