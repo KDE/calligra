@@ -1,11 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Service
-Name=oowriter Import Filter for KSpread
-X-KDE-Export=application/x-kword
-X-KDE-Import=application/x-oowriter
+Name=OpenOffice.org Impress Import Filter for KPresenter
+X-KDE-Export=application/x-kpresenter
+X-KDE-Import=application/x-ooimpress
 X-KDE-Weight=1
-X-KDE-Library=liboowriterimport
+X-KDE-Library=libooimpressimport
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
 X-KDE-LibraryDependencies=
