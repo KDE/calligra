@@ -655,7 +655,11 @@ void Canvas::zoomOut () {
 }
 
 void Canvas::readGridProperties () {
+#if NEWKDE
+  KConfig* config = kapp->config ();
+#else
   KConfig* config = kapp->getConfig ();
+#endif
   QString oldgroup = config->group ();
 
   config->setGroup ("Grid");
@@ -673,7 +677,11 @@ void Canvas::readGridProperties () {
 }
 
 void Canvas::saveGridProperties () {
+#if NEWKDE
+  KConfig* config = kapp->config ();
+#else
   KConfig* config = kapp->getConfig ();
+#endif
   QString oldgroup = config->group ();
 
   config->setGroup ("Grid");
