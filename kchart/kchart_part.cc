@@ -158,7 +158,7 @@ void KChartPart::saveConfig( KConfig *conf ) {
     _params->saveConfig(conf);
 }
 
-bool KChartPart::save( ostream& out, const char *_format ) {
+bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
   cerr << "save kchart called!\n";
   QDomDocument doc( "chart" );
   doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -172,8 +172,8 @@ bool KChartPart::save( ostream& out, const char *_format ) {
   QDomElement data = doc.createElement("data");
   data.setAttribute("rows", currentData.rows());
   data.setAttribute("cols", currentData.cols());
-  for (int row = 0;row < currentData.rows();row++) {
-      for (int col = 0;col < currentData.cols();col++) {
+  for (unsigned int row = 0;row < currentData.rows();row++) {
+      for (unsigned int col = 0;col < currentData.cols();col++) {
 	// later we need a value 
 	cerr << "Row " << row << "\n";
 	KChartValue t = currentData.cell(row, col);
@@ -201,12 +201,12 @@ bool KChartPart::save( ostream& out, const char *_format ) {
   return true;
 };
 
-bool KChartPart::loadChildren( KoStore* _store ) {
+bool KChartPart::loadChildren( KoStore* /*_store*/ ) {
   cerr << "kchart loadChildren called\n";
   return true;
 };
 
-bool KChartPart::loadXML( const QDomDocument& doc, KoStore* store ) {
+bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
   cerr << "kchart loadXML called\n";
   // <spreadsheet>
   //  m_bLoading = true;
@@ -296,6 +296,10 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.10  1999/11/21 20:26:45  boloni
+ * -multidocument view works - but it still freezes at load and new. But this
+ * time it is probably my fault somewhere
+ *
  * Revision 1.9  1999/11/21 17:43:29  boloni
  * -save and load works but the New and Load mechanisms from KoMainWindow hangs
  * it. Use loading from the command line.

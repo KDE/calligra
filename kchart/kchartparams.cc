@@ -126,7 +126,7 @@ void KChartParameters::saveColorArray(KConfig *conf,
   QString confname;
   confname.sprintf("%s_count",name.ascii());
   conf->writeEntry(confname, arr->count());
-  for(int i=0; i!=arr->count(); i++) {
+  for(unsigned int i=0; i!=arr->count(); i++) {
     confname.sprintf("%s_%d", name.ascii(), i);
     conf->writeEntry(confname, arr->color(i));
   }

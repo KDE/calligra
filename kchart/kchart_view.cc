@@ -46,7 +46,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     createTempData();
 }
 
-void KChartView::paintEvent( QPaintEvent* ev )
+void KChartView::paintEvent( QPaintEvent* /*ev*/ )
 {
     QPainter painter;
     painter.begin( this );

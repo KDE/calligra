@@ -1,3 +1,6 @@
+#ifndef KCHARTENGINE_H
+#define KCHARTENGINE_H
+
 class kchartEngine {
 public:
   KChartParameters* params;
@@ -108,3 +111,4 @@ private:
 
   int init();
 };
+#endif // KCHARTENGINE_H

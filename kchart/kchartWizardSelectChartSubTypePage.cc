@@ -23,7 +23,7 @@ kchartWizardSelectChartSubTypePage::kchartWizardSelectChartSubTypePage( QWidget*
 }
 
 
-void kchartWizardSelectChartSubTypePage::chartSubTypeSelected( int type )
+void kchartWizardSelectChartSubTypePage::chartSubTypeSelected( int /*type*/ )
 {
     /*
   switch( _chart->chartType() ) {

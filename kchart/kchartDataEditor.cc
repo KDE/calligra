@@ -14,8 +14,8 @@ kchartDataEditor::kchartDataEditor() :
 }
 
 void kchartDataEditor::setData(KChartData* dat) {
-  for (int row = 0;row != dat->rows();row++)
-    for (int col = 0; col !=dat->cols(); col++) {
+  for (unsigned int row = 0;row != dat->rows();row++)
+    for (unsigned int col = 0; col !=dat->cols(); col++) {
       cerr << "Set dialog cell for " << row << "," << col << "\n";
       KChartValue t = dat->cell(row,col);
       // fill it in from the part

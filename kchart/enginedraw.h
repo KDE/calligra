@@ -1,3 +1,6 @@
+#ifndef ENGINEDRAW_H
+#define ENGINEDRAW_H
+
 void draw_3d_bar( QPainter* p,
 	     int x1,
 	     int x2,
@@ -30,3 +33,5 @@ void draw_3d_area( QPainter* p,
 			  int ydepth,
 			  QColor clr,
 		   QColor clrshd );
+
+#endif // ENGINEDRAW_H

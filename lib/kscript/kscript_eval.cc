@@ -2497,7 +2497,7 @@ bool KSEval_t_input( KSParseNode*, KSContext& context )
     return TRUE;
 }
 
-bool KSEval_t_line( KSParseNode* node, KSContext& context )
+bool KSEval_t_line( KSParseNode* /*node*/, KSContext& context )
 {
     context.setValue( context.interpreter()->lastInputLine() );
     

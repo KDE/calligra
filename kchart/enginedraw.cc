@@ -54,7 +54,7 @@ draw_3d_bar( QPainter* p,
 }
 
 void draw_3d_line( QPainter*	p,
-		   int y0,
+		   int /*y0*/,
 		   int x1,
 		   int x2,
 		   int y1[],

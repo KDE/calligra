@@ -26,7 +26,7 @@ KSProxy::~KSProxy()
 {
 }
 
-KSValue::Ptr KSProxy::member( KSContext& context, const QString& name )
+KSValue::Ptr KSProxy::member( KSContext& context, const QString& /*name*/ )
 {
     if ( context.leftExpr() )
     {

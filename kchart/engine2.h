@@ -1,7 +1,8 @@
 
 // these are the things horribly scattered around
 
-
+#ifndef ENGINE2_H
+#define ENGINE2_H
 
 #define HIGHSET		0
 #define LOWSET		1
@@ -63,7 +64,7 @@ struct tmp_slice_t { int	i;					// original index
     char	hidden;				// 'behind' top [3D] pie
     float	angle;				// radian
     float	slice; };			// radian
-static float				pie_3D_rad;			// user requested 3D angle in radians
+static float				pie_3D_rad; 	// user requested 3D angle in radians
 
 // degrees (radians) between angle a, and depth angle
 // 1&2, so comparisons can be done.
@@ -72,7 +73,7 @@ static float				pie_3D_rad;			// user requested 3D angle in radians
 #define RAD_DIST2( a ) ( (dist_foo2=ABS(((a>-.00001&&a<.00001)?0.00001:a)-pie_3D_rad)), ((dist_foo2>M_PI)? ABS(dist_foo2-2.0*M_PI): dist_foo2) )
 
 
-static float				dist_foo1, dist_foo2;
+static float				dist_foo1, dist_foo2; // by Werner
 
 
 #define	HYP_DEPTH	( (double)((imagewidth+imageheight)/2) * ((double)params->_3d_depth)/100.0 )
@@ -99,3 +100,4 @@ struct BS {
 #define EPSILON		((1.0/256.0)/2.0)
 #define GET_DEC(x)	( (x) - (float)(int)(x) )
 
+#endif // ENGINE2_H

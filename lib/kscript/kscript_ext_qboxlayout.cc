@@ -38,7 +38,7 @@ KSObject_QBoxLayout::KSObject_QBoxLayout( KSClass* c ) : KS_Qt_Object( c )
 {
 }
 
-bool KSObject_QBoxLayout::ksQBoxLayout( KSContext& context )
+bool KSObject_QBoxLayout::ksQBoxLayout( KSContext& /*context*/ )
 {
 /*  qDebug("QBoxLayout\n");
 

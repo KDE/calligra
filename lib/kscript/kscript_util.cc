@@ -204,7 +204,7 @@ bool KSUtil::checkArgs( KSContext& context, const QValueList<KSValue::Ptr>& args
 }
 
 bool KSUtil::checkArg( KSContext& context, const KSValue::Ptr& arg,
-		       const QCString& signature, const QString& method, bool fatal )
+		       const QCString& signature, const QString& /*method*/, bool fatal )
 {
     int pos = 0;
 

@@ -133,7 +133,7 @@ bool KSObject_QButtonGroup::ksQButtonGroup_insert( KSContext& context )
   return true;
 }
 
-bool KSObject_QButtonGroup::ksQButtonGroup_remove( KSContext& context )
+bool KSObject_QButtonGroup::ksQButtonGroup_remove( KSContext& /*context*/ )
 {
   qDebug("QButtonGroup::remove\n");
   // TODO

@@ -105,7 +105,7 @@ void kchartEngine::computeSize() {
     cerr << "Here it is still ok!\n";
     /* one "space" interval above + below */
     int jumpout_value = NUM_YPOINTS-1;
-    for(int i=1; i<NUM_YPOINTS; ++i ) {
+    for(unsigned int i=1; i<NUM_YPOINTS; ++i ) {
 				// if( ypoints[i] > ylbl_interval )
 				//	break;
       if( (highest-lowest)/ypoints[i] < ((float)max_num_ylbls-(1.0+1.0))
