@@ -114,10 +114,11 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		QPtrList<QWidget> m_widgets;
 		bool		m_multiple;
 		FormManager     *m_manager;
-		KCommand	*m_lastcom;
+		PropertyCommand	*m_lastcom;
 		bool		m_undoing;
 
 		friend class PropertyCommand;
+		friend class LayoutPropertyCommand;
 };
 
 }

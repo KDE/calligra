@@ -77,27 +77,25 @@ PropertyCommand::name() const
 
 // LayoutPropertyCommand
 
-LayoutPropertyCommand::LayoutPropertyCommand(Container *container, Container::LayoutType oldType, Container::LayoutType newType)
- : KCommand(),  m_value(newType), m_oldvalue(oldType)
+LayoutPropertyCommand::LayoutPropertyCommand(ObjectPropertyBuffer *buf, const QString &name, const QVariant &oldValue, const QVariant &value)
+ : PropertyCommand(buf, name, oldValue, value, "layout")
 {
-	m_containername = container->widget()->name();
-	m_form = container->form();
+	m_form = buf->m_manager->activeForm();
+	Container *m_container = m_form->objectTree()->lookup(name)->container();
+	for(ObjectTreeItem *it = m_container->tree()->children()->first(); it; it = m_container->tree()->children()->next())
+		m_geometries.insert(it->name(), it->widget()->geometry());
 }
 
 void
 LayoutPropertyCommand::execute()
 {
-	Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
-	for(ObjectTreeItem *it = m_container->tree()->children()->first(); it; it = m_container->tree()->children()->next())
-		m_geometries.insert(it->name(), it->widget()->geometry());
-
-	m_container->setLayout(m_value);
+	PropertyCommand::execute();
 }
 
 void
 LayoutPropertyCommand::unexecute()
 {
-	Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
+	Container *m_container = m_form->objectTree()->lookup(m_name)->container();
 	m_container->setLayout(Container::NoLayout);
 	for(QMap<QString,QRect>::Iterator it = m_geometries.begin(); it != m_geometries.end(); ++it)
 	{
@@ -105,19 +103,14 @@ LayoutPropertyCommand::unexecute()
 		if(tree)
 			tree->widget()->setGeometry(it.data());
 	}
-	m_container->setLayout(m_oldvalue);
-}
 
-void
-LayoutPropertyCommand::setValue(Container::LayoutType type)
-{
-	m_value = type;
+	PropertyCommand::unexecute();
 }
 
 QString
 LayoutPropertyCommand::name() const
 {
-	return i18n("Change layout of %1").arg(m_containername);
+	return i18n("Change layout of %1").arg(m_name);
 }
 
 

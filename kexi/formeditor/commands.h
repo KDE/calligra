@@ -60,22 +60,17 @@ class PropertyCommand : public KCommand
 		QString    m_property;
 };
 
-class LayoutPropertyCommand : public KCommand
+class LayoutPropertyCommand : public PropertyCommand
 {
 	public:
-		LayoutPropertyCommand(Container *container, Container::LayoutType oldType, Container::LayoutType newType);
+		LayoutPropertyCommand(ObjectPropertyBuffer *buf, const QString &name, const QVariant &oldValue, const QVariant &value);
 
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
 
-		void  setValue(Container::LayoutType type);
-
 	protected:
 		Form *m_form;
-		QString  m_containername;
-		Container::LayoutType   m_value;
-		Container::LayoutType   m_oldvalue;
 		QMap<QString,QRect>  m_geometries;
 };
 

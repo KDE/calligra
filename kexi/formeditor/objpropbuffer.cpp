@@ -71,9 +71,8 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty 
 	{
 		if(!m_multiple)
 		{
-			PropertyCommand *com = static_cast<PropertyCommand*>(m_lastcom);
-			if(com && com->property() == prop.name() && !m_undoing)
-				com->setValue(value);
+			if(m_lastcom && m_lastcom->property() == prop.name() && !m_undoing)
+				m_lastcom->setValue(value);
 			else if(!m_undoing)
 			{
 				m_lastcom = new PropertyCommand(this, m_object->name(), m_object->property(property.latin1()), value, prop.name());
@@ -369,9 +368,8 @@ ObjectPropertyBuffer::saveAlignProperty()
 	const QMetaProperty *meta = m_object->metaObject()->property(count, true);
 	m_object->setProperty("alignment", meta->keysToValue(list));
 
-	PropertyCommand *com = static_cast<PropertyCommand*>(m_lastcom);
-	if(com && com->property() == "alignment" && !m_undoing)
-		com->setValue(meta->keysToValue(list));
+	if(m_lastcom && m_lastcom->property() == "alignment" && !m_undoing)
+		m_lastcom->setValue(meta->keysToValue(list));
 	else if(!m_undoing)
 	{
 		m_lastcom = new PropertyCommand(this, m_object->name(), m_object->property("alignment"), meta->keysToValue(list), "alignment");
@@ -431,17 +429,15 @@ ObjectPropertyBuffer::saveLayoutProperty(const QString &value)
 	if(value == "VBox")        type = Container::VBox;
 	if(value == "Grid")        type = Container::Grid;
 
-	LayoutPropertyCommand *com = static_cast<LayoutPropertyCommand*>(m_lastcom);
-	if(com && !m_undoing)
-		com->setValue(type);
+	if(m_lastcom && !m_undoing)
+		m_lastcom->setValue(value);
 	else if(!m_undoing)
 	{
-		m_lastcom = new LayoutPropertyCommand(cont, cont->layoutType(), type);
-		m_manager->activeForm()->commandHistory()->addCommand(m_lastcom, true);
+		m_lastcom = new LayoutPropertyCommand(this, m_object->name(), (*this)["layout"]->oldValue(), value);
+		m_manager->activeForm()->commandHistory()->addCommand(m_lastcom, false);
 	}
-	else
-		cont->setLayout(type);
 
+	cont->setLayout(type);
 }
 
 ObjectPropertyBuffer::~ObjectPropertyBuffer()
