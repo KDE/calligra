@@ -261,29 +261,35 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         || curFormat->textUnderlineColor() !=refFormat->textUnderlineColor()
         || curFormat->underlineLineStyle() !=refFormat->underlineLineStyle())
     {
-        elem = doc.createElement( "UNDERLINE" );
-        formatElem.appendChild( elem );
-        if ( curFormat->doubleUnderline() )
-            elem.setAttribute( "value", "double" );
-        else
-            elem.setAttribute( "value", static_cast<int>(curFormat->underline()) );
-        QString strLineType=lineStyleToString( curFormat->underlineLineStyle() );
-        elem.setAttribute( "styleline", strLineType );
-        if ( curFormat->textUnderlineColor().isValid() )
-            elem.setAttribute( "underlinecolor", curFormat->textUnderlineColor().name() );
+        if ( curFormat->underlineNbLineType()!= KoTextFormat::NONE )
+        {
+            elem = doc.createElement( "UNDERLINE" );
+            formatElem.appendChild( elem );
+            if ( curFormat->doubleUnderline() )
+                elem.setAttribute( "value", "double" );
+            else
+                elem.setAttribute( "value", static_cast<int>(curFormat->underline()) );
+            QString strLineType=lineStyleToString( curFormat->underlineLineStyle() );
+            elem.setAttribute( "styleline", strLineType );
+            if ( curFormat->textUnderlineColor().isValid() )
+                elem.setAttribute( "underlinecolor", curFormat->textUnderlineColor().name() );
+        }
     }
     if( !refFormat
         || curFormat->strikeOutNbLineType() != refFormat->strikeOutNbLineType()
         || curFormat->strikeOutLineStyle()!= refFormat->strikeOutLineStyle())
     {
-        elem = doc.createElement( "STRIKEOUT" );
-        formatElem.appendChild( elem );
-        if ( curFormat->doubleStrikeOut() )
-            elem.setAttribute( "value", "double" );
-        else
-            elem.setAttribute( "value", static_cast<int>(curFormat->strikeOut()) );
-        QString strLineType=lineStyleToString( curFormat->strikeOutLineStyle() );
-        elem.setAttribute( "styleline", strLineType );
+        if ( curFormat->strikeOutNbLineType()!= KoTextFormat::NONE )
+        {
+            elem = doc.createElement( "STRIKEOUT" );
+            formatElem.appendChild( elem );
+            if ( curFormat->doubleStrikeOut() )
+                elem.setAttribute( "value", "double" );
+            else
+                elem.setAttribute( "value", static_cast<int>(curFormat->strikeOut()) );
+            QString strLineType=lineStyleToString( curFormat->strikeOutLineStyle() );
+            elem.setAttribute( "styleline", strLineType );
+        }
     }
     // ######## Not needed in 3.0?
     /*
