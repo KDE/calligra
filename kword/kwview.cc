@@ -5314,6 +5314,12 @@ void KWView::startKSpell()
                       this, SLOT(spellCheckerCorrected(const QString&, int, const QString&)) );
     QObject::connect( m_spell.dlg, SIGNAL(done(const QString&) ),
                       this, SLOT(spellCheckerDone(const QString&)) );
+
+    QObject::connect( m_spell.dlg, SIGNAL( finished() ),
+                      this, SLOT( spellCheckerFinished( ) ) );
+    QObject::connect( m_spell.dlg, SIGNAL(cancel() ),
+                      this, SLOT( spellCheckerCancel() ) );
+
     m_spell.dlg->show();
 #endif
     //clearSpellChecker();
@@ -5373,65 +5379,66 @@ void KWView::spellCheckerDone( const QString & )
     if ( textdoc )
         textdoc->textFrameSet()->removeHighlight();
 
-        clearSpellChecker();
+    clearSpellChecker();
 #endif
 }
 
 void KWView::clearSpellChecker()
 {
- #ifdef HAVE_LIBKSPELL2
+#ifdef HAVE_LIBKSPELL2
     kdDebug(32001) << "KWView::clearSpellChecker" << endl;
     delete m_spell.kospell;
     m_spell.kospell=0;
     delete m_spell.dlg;
     m_spell.dlg = 0L;
+
     delete m_spell.textIterator;
     m_spell.textIterator = 0L;
+
     if(m_spell.macroCmdSpellCheck)
         m_doc->addCommand(m_spell.macroCmdSpellCheck);
+
     m_spell.macroCmdSpellCheck=0L;
     m_spell.replaceAll.clear();
     //m_doc->setReadWrite(true);
 #endif
 }
 
-void KWView::spellCheckerFinished() // connected to death()
+void KWView::spellCheckerCancel()
 {
- #ifdef HAVE_LIBKSPELL2
-    kdDebug(32001) << "KWView::spellCheckerFinished (death)" << endl;
-    bool kspellNotConfigured=false;
-    delete m_spell.kospell;
-    m_spell.kospell = 0;
-    //FIXME
-#if 0
-    KSpell::spellStatus status = m_spell.kspell->status();
-    delete m_spell.kspell;
-    m_spell.kspell = 0;
-    if (status == KSpell::Error)
-    {
-        kspellNotConfigured=true;
-    }
-    else if (status == KSpell::Crashed)
-    {
-        KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
-    }
+#ifdef HAVE_LIBKSPELL2
+    kdDebug()<<"void KWView::spellCheckerCancel() \n";
+    spellCheckerRemoveHighlight();
+    //we add command :( => don't add command and reverte changes
+    clearSpellChecker();
+
+//we cancel spell check so perhaps reverse all changes
 #endif
+}
+
+
+void KWView::spellCheckerRemoveHighlight()
+{
+#ifdef HAVE_LIBKSPELL2
     KoTextObject* textobj = m_spell.kospell->currentTextObject();
     if ( textobj ) {
         KWTextDocument *textdoc=static_cast<KWTextDocument *>( textobj->textDocument() );
         if ( textdoc )
             textdoc->textFrameSet()->removeHighlight();
     }
-
-    //m_doc->setReadWrite(true);
-    clearSpellChecker();
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
         edit->drawCursor( TRUE );
-    if(kspellNotConfigured)
-    {
-        configureSpellChecker();
-    }
+#endif
+}
+
+void KWView::spellCheckerFinished()
+{
+#ifdef HAVE_LIBKSPELL2
+    kdDebug(32001) << "KWView::spellCheckerFinished (death)" << endl;
+    spellCheckerRemoveHighlight();
+    clearSpellChecker();
+
 #endif
 }
 

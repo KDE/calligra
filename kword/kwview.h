@@ -450,6 +450,8 @@ protected slots:
     void spellCheckerCorrected( const QString &, int, const QString & );
     void spellCheckerDone( const QString & );
     void spellCheckerFinished( );
+    void spellCheckerCancel();
+
     void spellAddAutoCorrect (const QString & originalword, const QString & newword);
     void slotApplyFont();
     void slotApplyParag();
@@ -506,6 +508,8 @@ protected:
     void tableStyleSelected( KWTableStyle *_sty );
     void changeFootEndNoteState();
     void refreshDeletePageAction();
+
+    void spellCheckerRemoveHighlight();
 
 private:
     KWDocument *m_doc;
