@@ -188,4 +188,9 @@
  <Separator/>
  <Action name="backgroundColor"/>
 </ToolBar>
+<Menu name="menupage_popup">
+  <Action name="renameTable"/>
+  <Action name="insertTable"/>
+  <Action name="removeTable"/>
+</Menu>
 </kpartgui>

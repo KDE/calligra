@@ -312,6 +312,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     m_insertTable = new KAction( i18n("Insert Table"),"inserttable", 0, this, SLOT( insertTable() ), actionCollection(), "insertTable" );
     m_removeTable = new KAction( i18n("Remove Table"), "delete_table",0,this, SLOT( removeTable() ), actionCollection(), "removeTable" );
+
+    m_renameTable=new KAction( i18n("Rename table..."),0,this, SLOT( slotRename() ), actionCollection(), "renameTable" );
+
     m_showTable = new KAction(i18n("Show Table"),0 ,this,SLOT( showTable()), actionCollection(), "showTable" );
     m_hideTable = new KAction(i18n("Hide Table"),0 ,this,SLOT( hideTable()), actionCollection(), "hideTable" );
     m_preference = new KAction( i18n("Configure KSpread..."),"configure", 0, this, SLOT( preference() ), actionCollection(), "preference" );
@@ -2712,7 +2715,7 @@ void KSpreadView::zoomPlus()
 
 void KSpreadView::removeTable()
 {
-   if ( doc()->map()->count() <= 1 )
+   if ( doc()->map()->count() <= 1||(m_pTabBar->listshow().count()<=1) )
     {
         KNotifyClient::beep();
         KMessageBox::sorry( this, i18n("You cannot delete the only table of the map."), i18n("Remove table") ); // FIXME bad english? no english!
@@ -2736,6 +2739,11 @@ void KSpreadView::removeTable()
     }
 }
 
+
+void KSpreadView::slotRename()
+{
+    m_pTabBar->slotRename();
+}
 
 void KSpreadView::setText( const QString& _text )
 {
@@ -3206,6 +3214,13 @@ void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     }
 
     KoView::guiActivateEvent( ev );
+}
+
+void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+     static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
 }
 
 #include "kspread_view.moc"

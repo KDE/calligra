@@ -174,7 +174,7 @@ public:
     void initCalcMenu();
 
     void changeNbOfRecentFiles(int _nb);
-
+    void openPopupMenuMenuPage( const QPoint & _point );
 public slots:
     void initialPosition();
     /**
@@ -305,6 +305,7 @@ protected slots:
     void slotInsert();
     void slotInsertCellCopy();
     void slotRemove();
+    void slotRename();
 
     /**
      * Invoked if the popup menu for an embedded document should be opened.
@@ -450,6 +451,7 @@ private:
     KAction* m_paperLayout;
     KAction* m_insertTable;
     KAction* m_removeTable;
+    KAction* m_renameTable;
     KAction* m_editGlobalScripts;
     KAction* m_editLocalScripts;
     KAction* m_reloadScripts;

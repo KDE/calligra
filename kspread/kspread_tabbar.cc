@@ -42,7 +42,6 @@ KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent )
     : QWidget( (QWidget *)_parent )
 {
     m_pView = _parent;
-    m_pPopupMenu = 0L;
 
     m_pAutoScrollTimer = new QTimer(this);
     connect( m_pAutoScrollTimer, SIGNAL(timeout()), SLOT(slotAutoScroll()));
@@ -56,7 +55,6 @@ KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent )
 
 KSpreadTabBar::~KSpreadTabBar()
 {
-    delete m_pPopupMenu;
 }
 
 void KSpreadTabBar::addTab( const QString& _text )
@@ -217,29 +215,6 @@ void KSpreadTabBar::setActiveTab( const QString& _text )
     emit tabChanged( _text );
 }
 
-void KSpreadTabBar::slotRemove( )
-{
-    if ( (m_pView->doc()->map()->count() <= 1 )||(tabsList.count()<=1) )
-    {
-        KNotifyClient::beep();
-        KMessageBox::error( this,i18n("You cannot delete the only table of the map."), i18n("Remove table") ); // FIXME bad english? no english!
-        return;
-    }
-    KNotifyClient::beep();
-    int ret = KMessageBox::warningYesNo( this, i18n("You are going to remove the active table.\nDo you want to continue?"), i18n("Remove table"));
-    if ( ret == 3 )
-    {
-        m_pView->doc()->setModified( true );
-        if ( m_pView->canvasWidget()->editor() )
-        {
-                m_pView->canvasWidget()->deleteEditor( false );
-        }
-        KSpreadTable *tbl = m_pView->activeTable();
-        tbl->removeTable();
-        m_pView->doc()->map()->removeTable( tbl );
-        delete tbl;
-    }
-}
 
 void KSpreadTabBar::slotAdd()
 {
@@ -361,15 +336,7 @@ void KSpreadTabBar::openPopupMenu( const QPoint &_global )
 {
     if ( !m_pView->koDocument()->isReadWrite() )
       return;
-
-    if ( m_pPopupMenu != 0L )
-        delete m_pPopupMenu;
-    m_pPopupMenu = new QPopupMenu();
-
-    m_pPopupMenu->insertItem( i18n( "Rename table..." ), this, SLOT( slotRename() ) );
-    m_pPopupMenu->insertItem( KSBarIcon("inserttable"),i18n( "Insert table" ), this, SLOT( slotAdd() ) );
-    m_pPopupMenu->insertItem( KSBarIcon("delete_table"),i18n( "Remove table" ), this, SLOT( slotRemove() ) );
-    m_pPopupMenu->popup( _global );
+    m_pView->openPopupMenuMenuPage( _global );
 }
 
 void KSpreadTabBar::renameTab( const QString& old_name, const QString& new_name )
