@@ -71,7 +71,7 @@ spHelper::list()
 class KexiProperty::KexiPropertyListData
 {
 	public:
-		KexiProperty::KexiPropertyListData()
+		KexiPropertyListData()
 		{
 		}
 		QStringList keys, names;
