@@ -1797,41 +1797,43 @@ void KPrChangeStartingPageCommand::unexecute()
     m_doc->recalcVariables( VT_PGNUM );
 }
 
-KPrChangeDisplayLinkCommand::KPrChangeDisplayLinkCommand( const QString &name, KPresenterDoc *_doc, bool _oldDisplay,bool _newDisplay, PropertiesLink _type):
+
+KPrChangeVariableSettingsCommand::KPrChangeVariableSettingsCommand( const QString &name, KPresenterDoc *_doc, bool _oldValue, bool _newValue, VariableProperties _type):
     KNamedCommand(name),
     m_doc(_doc),
     type(_type),
-    m_bOldDisplay(_oldDisplay),
-    m_bNewDisplay(_newDisplay)
+    m_bOldValue(_oldValue),
+    m_bNewValue(_newValue)
 {
 }
 
-void KPrChangeDisplayLinkCommand::execute()
+void KPrChangeVariableSettingsCommand::changeValue( bool b )
 {
     switch(type)
     {
-    case PL_DISPLAY:
-        m_doc->getVariableCollection()->variableSetting()->setDisplayLink(m_bNewDisplay);
+    case VS_DISPLAYLINK:
+        m_doc->getVariableCollection()->variableSetting()->setDisplayLink(b);
+        m_doc->recalcVariables( VT_LINK );
         break;
-    case  PL_UNDERLINE:
-        m_doc->getVariableCollection()->variableSetting()->setUnderlineLink(m_bNewDisplay);
+    case  VS_UNDERLINELINK:
+        m_doc->getVariableCollection()->variableSetting()->setUnderlineLink(b);
+        m_doc->recalcVariables( VT_LINK );
+        break;
+    case VS_DISPLAYCOMMENT:
+        m_doc->getVariableCollection()->variableSetting()->setDisplayComment(b);
+        m_doc->recalcVariables( VT_NOTE );
         break;
     }
-    m_doc->recalcVariables( VT_LINK );
 }
 
-void KPrChangeDisplayLinkCommand::unexecute()
+void KPrChangeVariableSettingsCommand::execute()
 {
-    switch(type)
-    {
-    case PL_DISPLAY:
-        m_doc->getVariableCollection()->variableSetting()->setDisplayLink(m_bOldDisplay);
-        break;
-    case  PL_UNDERLINE:
-        m_doc->getVariableCollection()->variableSetting()->setUnderlineLink(m_bOldDisplay);
-        break;
-    }
-    m_doc->recalcVariables( VT_LINK );
+    changeValue(m_bNewValue);
+}
+
+void KPrChangeVariableSettingsCommand::unexecute()
+{
+    changeValue(m_bOldValue);
 }
 
 KPrDeletePageCmd::KPrDeletePageCmd( const QString &_name, int pos,KPrPage *_page, KPresenterDoc *_doc):

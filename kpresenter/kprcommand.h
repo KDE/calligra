@@ -762,20 +762,21 @@ protected:
 /**
  * Command to display link setting
  */
-class KPrChangeDisplayLinkCommand : public KNamedCommand
+class KPrChangeVariableSettingsCommand : public KNamedCommand
 {
 public:
-    enum PropertiesLink { PL_DISPLAY, PL_UNDERLINE};
-    KPrChangeDisplayLinkCommand( const QString &name, KPresenterDoc *_doc, bool _oldDisplay, bool _newDisplay, PropertiesLink _type);
-    ~KPrChangeDisplayLinkCommand(){}
+    enum VariableProperties { VS_DISPLAYLINK, VS_UNDERLINELINK, VS_DISPLAYCOMMENT};
+    KPrChangeVariableSettingsCommand( const QString &name, KPresenterDoc *_doc, bool _oldValue, bool _newValue, VariableProperties _type);
+    ~KPrChangeVariableSettingsCommand(){}
 
     void execute();
     void unexecute();
 protected:
+    void changeValue( bool b );
     KPresenterDoc *m_doc;
-    PropertiesLink type;
-    bool m_bOldDisplay;
-    bool m_bNewDisplay;
+    VariableProperties type;
+    bool m_bOldValue;
+    bool m_bNewValue;
 };
 
 /**

@@ -500,7 +500,7 @@ void ConfigureMiscPage::apply()
             macroCmd=new KMacroCommand(i18n("Change display link command"));
         }
 
-        KPrChangeDisplayLinkCommand *cmd=new KPrChangeDisplayLinkCommand( i18n("Change display link command"), doc, b_new ,b, KPrChangeDisplayLinkCommand::PL_DISPLAY);
+        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand( i18n("Change display link command"), doc, b_new ,b, KPrChangeVariableSettingsCommand::VS_DISPLAYLINK);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
@@ -512,20 +512,24 @@ void ConfigureMiscPage::apply()
         {
             macroCmd=new KMacroCommand(i18n("Change display link command"));
         }
-        KPrChangeDisplayLinkCommand *cmd=new KPrChangeDisplayLinkCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->displayLink() ,b, KPrChangeDisplayLinkCommand::PL_UNDERLINE);
+        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->underlineLink() ,b, KPrChangeVariableSettingsCommand::VS_UNDERLINELINK);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
 
-    if(macroCmd)
-        doc->addCommand(macroCmd);
-
     b=m_displayComment->isChecked();
     if(doc->getVariableCollection()->variableSetting()->displayComment()!=b)
     {
-        doc->getVariableCollection()->variableSetting()->setDisplayComment(b);
-        doc->recalcVariables( VT_NOTE );
+        if(!macroCmd)
+        {
+            macroCmd=new KMacroCommand(i18n("Change display link command"));
+        }
+        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->displayComment() ,b, KPrChangeVariableSettingsCommand::VS_DISPLAYCOMMENT);
+        cmd->execute();
+        macroCmd->addCommand(cmd);
     }
+    if(macroCmd)
+        doc->addCommand(macroCmd);
 
     doc->setGridX( KoUnit::ptFromUnit( resolutionX->value(), doc->getUnit() ));
     doc->setGridY( KoUnit::ptFromUnit( resolutionY->value(), doc->getUnit() ));
