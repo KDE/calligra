@@ -1752,12 +1752,12 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
 
     if (tag == "text:date")
     {
-        QDate date(QDate::fromString(object.attribute("text:date-value"), Qt::ISODate));
+        QDateTime dt(QDate::fromString(object.attribute("text:date-value"), Qt::ISODate));
 
         bool fixed = (object.hasAttribute("text:fixed") && object.attribute("text:fixed")=="true");
 
-        if (!date.isValid()) {
-            date = QDate::currentDate(); // OOo docs say so :)
+        if (!dt.isValid()) {
+            dt = QDateTime::currentDateTime(); // OOo docs say so :)
             fixed = false;
         }
 
@@ -1768,25 +1768,31 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
 
         variable.appendChild(typeElem);
 
-        QDomElement dateElem = doc.createElement("DATE");
-        dateElem.setAttribute("subtype", fixed ? 0 : 1); // VST_DATE_FIX, VST_DATE_CURRENT
-        dateElem.setAttribute("fix", fixed ? 1 : 0);
-        dateElem.setAttribute("day", date.day());
-        dateElem.setAttribute("month", date.month());
-        dateElem.setAttribute("year", date.year());
+        const QDate date(dt.date());
+        const QTime time(dt.time());
+        QDomElement dateElement = doc.createElement("DATE");
+        dateElement.setAttribute("subtype", fixed ? 0 : 1); // VST_DATE_FIX, VST_DATE_CURRENT
+        dateElement.setAttribute("fix", fixed ? 1 : 0);
+        dateElement.setAttribute("day", date.day());
+        dateElement.setAttribute("month", date.month());
+        dateElement.setAttribute("year", date.year());
+        dateElement.setAttribute("hour", time.hour());
+        dateElement.setAttribute("minute", time.minute());
+        dateElement.setAttribute("second", time.second());
         if (object.hasAttribute("text:date-adjust"))
-            dateElem.setAttribute("correct", object.attribute("text:date-adjust"));
+            dateElement.setAttribute("correct", object.attribute("text:date-adjust"));
 
-        variable.appendChild(dateElem);
+        variable.appendChild(dateElement);
     }
     else if (tag == "text:time")
     {
-        QTime time(QTime::fromString(object.attribute("text:time-value"), Qt::ISODate));
+        // Use QDateTime to work around a possible problem of QTime::FromString in Qt 3.2.2
+        QDateTime dt(QDateTime::fromString(object.attribute("text:time-value"), Qt::ISODate));
 
         bool fixed = (object.hasAttribute("text:fixed") && object.attribute("text:fixed")=="true");
 
-        if (!time.isValid()) {
-            time = QTime::currentTime(); // OOo docs say so :)
+        if (!dt.isValid()) {
+            dt = QDateTime::currentDateTime(); // OOo docs say so :)
             fixed = false;
         }
 
@@ -1797,16 +1803,17 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
 
         variable.appendChild(typeElem);
 
-        QDomElement timeElem = doc.createElement("TIME");
-        timeElem.setAttribute("subtype", fixed ? 0 : 1); // VST_TIME_FIX, VST_TIME_CURRENT
-        timeElem.setAttribute("fix", fixed ? 1 : 0);
-        timeElem.setAttribute("hour", time.hour());
-        timeElem.setAttribute("minute", time.minute());
-        timeElem.setAttribute("second", time.second());
+        const QTime time(dt.time());
+        QDomElement timeElement = doc.createElement("TIME");
+        timeElement.setAttribute("subtype", fixed ? 0 : 1); // VST_TIME_FIX, VST_TIME_CURRENT
+        timeElement.setAttribute("fix", fixed ? 1 : 0);
+        timeElement.setAttribute("hour", time.hour());
+        timeElement.setAttribute("minute", time.minute());
+        timeElement.setAttribute("second", time.second());
         /*if (object.hasAttribute("text:time-adjust"))
           timeElem.setAttribute("correct", object.attribute("text:time-adjust"));*/ // ### TODO
 
-        variable.appendChild(timeElem);
+        variable.appendChild(timeElement);
     }
     else if (tag == "text:page-number")
     {
