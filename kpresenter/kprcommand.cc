@@ -102,7 +102,7 @@ void ShadowCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-SetOptionsCmd::SetOptionsCmd( const QString &_name, QPtrList<QPoint> &_diffs, QPtrList<KPObject> &_objects,
+SetOptionsCmd::SetOptionsCmd( const QString &_name, QValueList<KoPoint> &_diffs, QPtrList<KPObject> &_objects,
                               int _rastX, int _rastY, int _orastX, int _orastY,
                               const QColor &_txtBackCol, const QColor &_otxtBackCol, KPresenterDoc *_doc )
     : KCommand( _name ), diffs( _diffs ), objects( _objects ), txtBackCol( _txtBackCol ), otxtBackCol( _otxtBackCol )
@@ -126,6 +126,7 @@ SetOptionsCmd::~SetOptionsCmd()
 /*====================== execute =================================*/
 void SetOptionsCmd::execute()
 {
+    // ## use iterator
     for ( unsigned int i = 0; i < objects.count(); i++ )
         objects.at( i )->moveBy( *diffs.at( i ) );
 
@@ -138,7 +139,7 @@ void SetOptionsCmd::execute()
 void SetOptionsCmd::unexecute()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->moveBy( -diffs.at( i )->x(), -diffs.at( i )->y() );
+        objects.at( i )->moveBy( -(*diffs.at( i )).x(), -(*diffs.at( i )).y() );
 
     doc->setRasters( orastX, orastY, false );
     doc->setTxtBackCol( otxtBackCol );
@@ -1733,8 +1734,8 @@ void KPrChangeVariableSettingCommand::unexecute()
 KPrDeletePageCmd::KPrDeletePageCmd( const QString &_name, int pos,KPrPage *_page, KPresenterDoc *_doc):
     KCommand(_name),
     doc(_doc),
-    position(pos),
-    m_page(_page)
+    m_page(_page),
+    position(pos)
 {
 }
 

@@ -385,7 +385,7 @@ private:
 
     KoPointArray m_pointArray, m_oldCubicBezierPointArray;
     QPoint m_dragStartPoint, m_dragEndPoint, m_dragSymmetricEndPoint;
-    QPoint m_CubicBezierSecondPoint, m_CubicBezierThirdPoint;
+    KoPoint m_CubicBezierSecondPoint, m_CubicBezierThirdPoint;
     unsigned int m_indexPointArray;
     bool m_drawPolyline;
     bool m_drawCubicBezierCurve;

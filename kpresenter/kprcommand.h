@@ -85,7 +85,7 @@ protected:
 class SetOptionsCmd : public KCommand
 {
 public:
-    SetOptionsCmd( const QString &_name, QPtrList<QPoint> &_diffs, QPtrList<KPObject> &_objects,
+    SetOptionsCmd( const QString &_name, QValueList<KoPoint> &_diffs, QPtrList<KPObject> &_objects,
                    int _rastX, int _rastY, int _orastX, int _orastY,
                    const QColor &_txtBackCol, const QColor &_otxtBackCol, KPresenterDoc *_doc );
     ~SetOptionsCmd();
@@ -95,7 +95,7 @@ public:
 
 protected:
 
-    QPtrList<QPoint> diffs;
+    QValueList<KoPoint> diffs;
     QPtrList<KPObject> objects;
     int rastX, rastY;
     int orastX, orastY;

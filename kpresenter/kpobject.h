@@ -135,6 +135,8 @@ public:
     { return ext; }
     virtual KoPoint getOrig() const
     { return orig; }
+    KoRect getRect() const
+    { return KoRect( getOrig(), getSize() ); }
     virtual Effect getEffect() const
     { return effect; }
     virtual Effect2 getEffect2() const

@@ -178,7 +178,7 @@ int KPObject::load(const QDomElement &element) {
             orig.setX(e.attribute(attrX).toDouble());
         if(e.hasAttribute(attrY))
         {
-            offset=e.attribute(attrY).toDouble();
+            offset=e.attribute(attrY).toInt();
             orig.setY(0);
         }
         origTopLeftPointInGroup = orig;
@@ -302,8 +302,8 @@ KoRect KPObject::getBoundingRect( ) const
         mtx.rotate( angle );
         KoRect rr = KoRect::fromQRect(mtx.mapRect( r.toQRect() ));
 
-        int diffw = std::abs( rr.width() - r.width() );
-        int diffh = std::abs( rr.height() - r.height() );
+        double diffw = std::abs( rr.width() - r.width() );
+        double diffh = std::abs( rr.height() - r.height() );
 
         return KoRect( r.x() - diffw, r.y() - diffh,
                       r.width() + diffw * 2, r.height() + diffh * 2 );
@@ -322,11 +322,11 @@ bool KPObject::contains( const KoPoint &_point ) const
     else
     {
         KoRect br = KoRect( 0, 0, ext.width(), ext.height() );
-        int pw = br.width();
-        int ph = br.height();
+        double pw = br.width();
+        double ph = br.height();
         KoRect rr = br;
-        int yPos = -rr.y();
-        int xPos = -rr.x();
+        double yPos = -rr.y();
+        double xPos = -rr.x();
         rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m;
@@ -353,11 +353,11 @@ bool KPObject::intersects( const KoRect &_rect ) const
     else
     {
         KoRect br = KoRect( 0, 0, ext.width(), ext.height() );
-        int pw = br.width();
-        int ph = br.height();
+        double pw = br.width();
+        double ph = br.height();
         KoRect rr = br;
-        int yPos = -rr.y();
-        int xPos = -rr.x();
+        double yPos = -rr.y();
+        double xPos = -rr.x();
         rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m;
@@ -375,13 +375,13 @@ bool KPObject::intersects( const KoRect &_rect ) const
 /*======================== get cursor ============================*/
 QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType ) const
 {
-    int px = _point.x();
-    int py = _point.y();
+    double px = _point.x();
+    double py = _point.y();
 
-    int ox = orig.x() ;
-    int oy = orig.y();
-    int ow = ext.width();
-    int oh = ext.height();
+    double ox = orig.x() ;
+    double oy = orig.y();
+    double ow = ext.width();
+    double oh = ext.height();
 
     KoRect r( ox, oy, ow, oh );
 
@@ -519,11 +519,11 @@ void KPObject::paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler )
         if ( angle != 0 )
         {
             KoRect br = KoRect( 0, 0, ext.width(), ext.height() );
-            int pw = br.width();
-            int ph = br.height();
+            double pw = br.width();
+            double ph = br.height();
             KoRect rr = br;
-            int yPos = -rr.y();
-            int xPos = -rr.x();
+            double yPos = -rr.y();
+            double xPos = -rr.x();
             rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
             QWMatrix m;
@@ -840,11 +840,11 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
             _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
             KoRect br = KoRect( 0, 0, ow, oh );
-            int pw = br.width();
-            int ph = br.height();
+            double pw = br.width();
+            double ph = br.height();
             KoRect rr = br;
-            int yPos = -rr.y();
-            int xPos = -rr.x();
+            double yPos = -rr.y();
+            double xPos = -rr.x();
             rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
             int sx = 0;
@@ -876,11 +876,11 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
     else
     {
         KoRect br = KoRect( 0, 0, ow, oh );
-        int pw = br.width();
-        int ph = br.height();
+        double pw = br.width();
+        double ph = br.height();
         KoRect rr = br;
-        int yPos = -rr.y();
-        int xPos = -rr.x();
+        double yPos = -rr.y();
+        double xPos = -rr.x();
         rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m;

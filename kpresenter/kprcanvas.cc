@@ -419,8 +419,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         Q_ASSERT(txtObj);
         if(txtObj->contains( docPoint ))
         {
-            KoPoint pos=docPoint - txtObj->getOrig();
-            pos=m_view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x()+ diffx(),pos.y()+diffy()));
+            KoPoint pos = docPoint - txtObj->getOrig(); // in pt, but now translated into the object's coordinate system
             mousePressed=true;
             if(e->button() == RightButton)
             {
@@ -434,7 +433,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 QApplication::clipboard()->setSelectionMode( false );
             }
             else
-                m_currentTextObjectView->mousePressEvent(e, m_view->zoomHandler()->zoomPoint(pos));
+                m_currentTextObjectView->mousePressEvent(e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
             return;
         }
     }
@@ -442,7 +441,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     //disallow selecting objects outside the "page"
     if ( editMode ) {
-        if( !m_activePage->getZoomPageRect().contains(e->pos()))
+        if( !m_activePage->getPageRect().contains( docPoint ) )
             return;
     }
 
@@ -517,8 +516,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
                     p.drawLine( m_dragStartPoint, _oldSymmetricEndPoint );  // erase old line
 
-                    m_pointArray.putPoints( m_indexPointArray, 3,m_view->zoomHandler()->unzoomItX( m_CubicBezierSecondPoint.x()), m_view->zoomHandler()->unzoomItY(m_CubicBezierSecondPoint.y()),
-                                            m_view->zoomHandler()->unzoomItX(m_CubicBezierThirdPoint.x()), m_view->zoomHandler()->unzoomItY(m_CubicBezierThirdPoint.y()),
+                    m_pointArray.putPoints( m_indexPointArray, 3, m_CubicBezierSecondPoint.x(), m_CubicBezierSecondPoint.y(),
+                                            m_CubicBezierThirdPoint.x(), m_CubicBezierThirdPoint.y(),
                                             m_view->zoomHandler()->unzoomItX(m_dragStartPoint.x()), m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y()) );
                     m_indexPointArray += 3;
                     m_drawLineWithCubicBezierCurve = true;
@@ -544,7 +543,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                             KoSize s = kpobject->getSize();
                             KoPoint pnt = kpobject->getOrig();
                             KoRect rect(pnt.x() /*- m_view->zoomHandler()->unzoomItX( diffx())*/, pnt.y() /*- m_view->zoomHandler()->unzoomItY( diffy())*/, s.width(), s.height() );
-                            QRect rect2=m_view->zoomHandler()->zoomRect(rect);
+                            //QRect rect2=m_view->zoomHandler()->zoomRect(rect);
                             if ( rect.contains( docPoint ) ) {
                                 overObject = true;
                                 if ( kpobject->isSelected() && modType == MT_MOVE ) deSelAll = false;
@@ -660,8 +659,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 ++m_indexPointArray;
             }
             else {
-                m_pointArray.putPoints( m_indexPointArray, 2, m_view->zoomHandler()->unzoomItX(m_CubicBezierSecondPoint.x()), m_view->zoomHandler()->unzoomItY(m_CubicBezierSecondPoint.y()),
-                                        m_view->zoomHandler()->unzoomItX(m_CubicBezierThirdPoint.x()), m_view->zoomHandler()->unzoomItY(m_CubicBezierThirdPoint.y() ));
+                m_pointArray.putPoints( m_indexPointArray, 2, m_CubicBezierSecondPoint.x(), m_CubicBezierSecondPoint.y(),
+                                        m_CubicBezierThirdPoint.x(), m_CubicBezierThirdPoint.y() );
                 m_indexPointArray += 2;
             }
 
@@ -769,8 +768,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         if ( kpobject ) {
             ratio = static_cast<double>( static_cast<double>( kpobject->getSize().width() ) /
                                          static_cast<double>( kpobject->getSize().height() ) );
-            oldRect = QRect( kpobject->getOrig().x(), kpobject->getOrig().y(),
-                             kpobject->getSize().width(), kpobject->getSize().height() );
+            //oldRect = QRect( kpobject->getOrig().x(), kpobject->getOrig().y(),
+            //                 kpobject->getSize().width(), kpobject->getSize().height() );
+            oldRect = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
         }
     }
 }
@@ -867,10 +867,9 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                         if ( kpobject->isSelected() ) {
                             kpobject->setMove( false );
                             _objects.append( kpobject );
-                            _repaint( QRect( kpobject->getBoundingRect( ).x() + ( firstX - mx ),
-                                             kpobject->getBoundingRect( ).y() + ( firstY - my ),
-                                             kpobject->getBoundingRect( ).width(),
-                                             kpobject->getBoundingRect(  ).height() ) );
+                            QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
+                            br.moveBy( firstX - mx, firstY - my );
+                            _repaint( br );
                             _repaint( kpobject );
                         }
                     }
@@ -1102,10 +1101,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         if(txtObj->contains( e->pos() )&&mousePressed)
         {
             KoPoint pos=m_view->zoomHandler()->unzoomPoint(e->pos()) - txtObj->getOrig();
-            pos=m_view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x()+ diffx(),pos.y()+diffy()));
-
-            m_currentTextObjectView->mouseMoveEvent( e, m_view->kPresenterDoc()-> zoomHandler()->zoomPoint(pos));
-            return;
+            m_currentTextObjectView->mouseMoveEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
         }
         return;
     }
@@ -1126,7 +1122,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     KoRect rect(pnt.x(), pnt.y() , s.width(), s.height() );
                     if ( rect.contains( docPoint ) ) {
                         if ( kpobject->isSelected() ) {
-			    setCursor( kpobject->getCursor( /*QPoint( e->x(), e->y() )*/m_view->zoomHandler()->unzoomPoint(e->pos()+QPoint(diffx(),diffy())) , modType ) );
+			    setCursor( kpobject->getCursor( docPoint, modType ) );
 			    cursorAlreadySet = true;
 			    break;
 			}
@@ -2049,7 +2045,8 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
     // Zoom backgrounds to the correct size for full screen
     KPresenterDoc * doc = m_view->kPresenterDoc();
 
-    doc->zoomHandler()->setZoomAndResolution( _presFakt*100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
+    // ## TODO get rid of presFakt
+    doc->zoomHandler()->setZoomAndResolution( qRound(_presFakt*100), QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
 
     if ( m_showOnlyPage == -1 )
     {
@@ -2902,6 +2899,9 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 /*================================================================*/
 void KPrCanvas::doObjEffects()
 {
+    /// ### Note: this is for full-screen mode only.
+    /// ### There should be NO use of diffx(), diffy() anywhere in this method!
+
     QPixmap screen_orig( kapp->desktop()->width(), kapp->desktop()->height() );
     bool drawn = false;
 
@@ -2950,9 +2950,11 @@ void KPrCanvas::doObjEffects()
 
                 _objList.append( kpobject );
 
-                int x = 0, y = 0, w = 0, h = 0;
-                KoRect br = kpobject->getBoundingRect(  );
-                x = br.x(); y = br.y(); w = br.width(); h = br.height();
+                QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
+                int x = br.x();
+                int y = br.y();
+                int w = br.width();
+                int h = br.height();
 
                 switch ( kpobject->getEffect() )
                 {
@@ -3018,7 +3020,7 @@ void KPrCanvas::doObjEffects()
                 _objList.append( kpobject );
 
                 int x = 0, y = 0, w = 0, h = 0;
-                KoRect br = kpobject->getBoundingRect(  );
+                QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
                 x = br.x(); y = br.y(); w = br.width(); h = br.height();
 
                 switch ( kpobject->getEffect3() )
@@ -3112,15 +3114,18 @@ void KPrCanvas::doObjEffects()
                 for ( int i = 0; i < static_cast<int>( _objList.count() ); i++ )
                 {
                     KPObject * kpobject = _objList.at( i );
-                    int _w =  kapp->desktop()->width() - ( kpobject->getOrig().x() - diffx() );
-                    int _h =  kapp->desktop()->height() - ( kpobject->getOrig().y() - diffy() );
-                    int ox = 0, oy = 0, ow = 0, oh = 0;
-                    ox = kpobject->getOrig().x();
-                    oy = kpobject->getOrig().y();
-                    ow = kpobject->getSize().width();
-                    oh = kpobject->getSize().height();
+                    // Origin of the object, in pixels
+                    QPoint objectOrig = m_view->zoomHandler()->zoomPoint( kpobject->getOrig() );
+                    // Distance from object to bottom right position of the screen...
+                    int _w =  kapp->desktop()->width() - ( objectOrig.x() /*- diffx()*/ );
+                    int _h =  kapp->desktop()->height() - ( objectOrig.y() /*- diffy()*/ );
+                    QRect objectRect = m_view->zoomHandler()->zoomRect( kpobject->getRect() );
+                    int ox = objectRect.x();
+                    int oy = objectRect.y();
+                    int ow = objectRect.width();
+                    int oh = objectRect.height();
 
-                    KoRect br = kpobject->getBoundingRect( );
+                    QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
                     int bx = br.x();
                     int by = br.y();
                     int bw = br.width();
@@ -4637,13 +4642,15 @@ void KPrCanvas::scalePixmapToBeOrigIn( const QSize &/*origSize*/, const QSize &c
 
 void KPrCanvas::setTextBackground( KPTextObject *obj )
 {
+    // This is called when double-clicking on a text object.
+    // What should happen exactly ? (DF)
+#if 0
     QPixmap pix( m_activePage->getZoomPageRect().size() );
     QPainter painter( &pix );
     m_activePage->background()->draw( &painter, FALSE );
-    QPixmap bpix( obj->getSize().toQSize() );
+    QPixmap bpix( obj->getSize().toQSize() ); // ## zoom it !
     bitBlt( &bpix, 0, 0, &pix, obj->getOrig().x(), obj->getOrig().y() -
             m_activePage->getZoomPageRect().height() * ( m_view->getCurrPgNum() - 1 ), bpix.width(), bpix.height() );
-#if 0
     QBrush b( white, bpix );
     QPalette pal( obj->textObjectView()->palette() );
     pal.setBrush( QColorGroup::Base, b );
@@ -4699,18 +4706,16 @@ void KPrCanvas::moveObject( int x, int y, bool key )
             if ( kpobject->isSelected() ) {
                 p.begin( this );
                 kpobject->setMove( true );
-                kpobject->draw( &p,m_view->zoomHandler() );
-                kpobject->moveBy( KoPoint( newPosX, newPosY ) );
-                kpobject->draw( &p,m_view->zoomHandler() );
+                kpobject->draw( &p, m_view->zoomHandler() );
+                kpobject->moveBy( newPosX, newPosY );
+                kpobject->draw( &p, m_view->zoomHandler() );
                 p.end();
 
                 kpobject->setMove( false );
                 _objects.append( kpobject );
-                //FIXME x and y I don't sure that we can unzoom it for repaint
-                _repaint( QRect( kpobject->getBoundingRect(  ).x() + ( -1*x ),
-                                 kpobject->getBoundingRect(  ).y() + ( -1*y ),
-                                 kpobject->getBoundingRect(  ).width(),
-                                 kpobject->getBoundingRect(  ).height() ) );
+                QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
+                br.moveBy( -x, -y );
+                _repaint( br );
                 _repaint( kpobject );
             }
         }
@@ -5003,21 +5008,22 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
 
         double _secondX = m_dragEndPoint.x() - _diffX;
         double _secondY = m_dragEndPoint.y() - _diffY;
-        m_CubicBezierSecondPoint = QPoint( _secondX, _secondY );
+        m_CubicBezierSecondPoint = KoPoint( _secondX, _secondY );
 
         double _thirdX = m_dragSymmetricEndPoint.x() - _diffX;
         double _thirdY = m_dragSymmetricEndPoint.y() - _diffY;
-        m_CubicBezierThirdPoint = QPoint( _thirdX, _thirdY );
+        m_CubicBezierThirdPoint = KoPoint( _thirdX, _thirdY );
 
         if ( toolEditMode == INS_QUADRICBEZIERCURVE ) {
             _secondX = _thirdX;
             _secondY = _thirdY;
-            m_CubicBezierSecondPoint = QPoint( _secondX, _secondY );
+            m_CubicBezierSecondPoint = KoPoint( _secondX, _secondY );
         }
 
         KoPointArray points;
         points.putPoints( 0, 4, _firstX,_firstY, _secondX,_secondY, _thirdX,_thirdY, _fourthX,_fourthY );
-        p.drawCubicBezier( points.toQPointArray() );  // draw new cubic bezier curve
+        // draw new cubic bezier curve
+        p.drawCubicBezier( points.toQPointArray() );  // ### zoom it, don't convert it!
 
         m_oldCubicBezierPointArray = points;
 
