@@ -27,6 +27,7 @@
 class QString;
 class QTextStream;
 class KZip;
+class KoStore;
 class KWord13Document;
 
 class KWord13OasisGenerator
@@ -55,6 +56,7 @@ protected: // ZIP methods
 protected:
     KWord13Document* m_kwordDocument;
     KZip* m_zip; ///< Output OOWriter file
+    KoStore* m_store;
     uint m_size; ///< Size of ZIP entry
     QTextStream* m_streamOut;
     QByteArray m_contentBody; ///< office:body element of content.xml

@@ -26,12 +26,15 @@
 #include <kzip.h>
 
 #include <kofficeversion.h>
+#include <koStore.h>
+#include <koStoreDevice.h>
+#include <koxmlwriter.h>
 
 #include "kword13document.h"
 
 #include "kword13oasisgenerator.h"
 
-KWord13OasisGenerator::KWord13OasisGenerator( void ) : m_kwordDocument( 0 ), m_zip( 0 ), m_streamOut( 0 )
+KWord13OasisGenerator::KWord13OasisGenerator( void ) : m_kwordDocument( 0 ), m_zip( 0 ), m_store( 0 ), m_streamOut( 0 )
 {
 }
 
@@ -446,65 +449,70 @@ void KWord13OasisGenerator::writeContentXml(void)
 
 void KWord13OasisGenerator::writeMetaXml(void)
 {
-    if ( !m_zip || !m_kwordDocument )
+    if ( !m_store || !m_kwordDocument )
         return;
 
-    zipPrepareWriting("meta.xml");
+    m_store->open("meta.xml"); // ### TODO: check error!
+    KoStoreDevice io ( m_store );
+    io.open( IO_WriteOnly );  // ### TODO: check error!
 
-    writeStartOfFile("meta");
-
-    zipWriteData(" <office:meta>\n");
-
+    KoXmlWriter writer( &io, "office:document-meta" );
+    
+    writer.startElement( "office:meta" );
+    
     // Tell who we are in case that we have a bug in our filter output!
-    zipWriteData( "  <meta:generator>KOffice " );
-    zipWriteData( escapeOOText( KOFFICE_VERSION_STRING ) );
-    zipWriteData( " / KWord's OOWriter Export Filter " );
-    zipWriteData( QString( "$Revision$" ).remove( '$' ) );
-
-    zipWriteData("</meta:generator>\n");
-
-    // ### TODO
+    writer.startElement( "meta:generator" );
+    QString strVersion = "KOffice ";
+    strVersion += KOFFICE_VERSION_STRING;
+    strVersion += " / KWord's OOWriter Export Filter ";
+    strVersion += QString( "$Revision$" ).remove( '$' );
+    writer.addTextSpan( strVersion );
+    writer.endElement();
+        
 #if 0
     if (!m_docInfo.title.isEmpty())
     {
-        zipWriteData("  <dc:title>");
-        zipWriteData(escapeOOText(m_docInfo.title));
-        zipWriteData("</dc:title>\n");
+        writer.startElement( "dc:title" );
+        writer.addTextSpan( m_docInfo.title );
+        writer.endElement();
     }
     if (!m_docInfo.abstract.isEmpty())
     {
-        zipWriteData("  <dc:description>");
-        zipWriteData(escapeOOText(m_docInfo.abstract));
-        zipWriteData("</dc:description>\n");
+        writer.startElement( "dc:description");
+        writer.addTextSpan( m_docInfo.abstract );
+        writer.endElement();
     }
 #endif
+    
+    // ### TODO
 
     QDateTime dt;
     
     dt = m_kwordDocument->creationDate();
     if ( dt.isValid() )
     {
-        zipWriteData("  <meta:creation-date>");
-        zipWriteData( escapeOOText( dt.toString( Qt::ISODate) ) );
-        zipWriteData("</meta:creation-date>\n");
+        writer.startElement( "meta:creation-date");
+        writer.addTextSpan( dt.toString( Qt::ISODate) );
+        writer.endElement();
     }
 
     dt = m_kwordDocument->modificationDate();
     if ( dt.isValid() )
     {
-        zipWriteData("  <dc:date>");
-        zipWriteData( escapeOOText( dt.toString( Qt::ISODate ) ) );
-        zipWriteData("</dc:date>\n");
+        writer.startElement( "dc:date");
+        writer.addTextSpan( dt.toString( Qt::ISODate) );
+        writer.endElement();
     }
 
     dt = m_kwordDocument->lastPrintingDate();
     if ( dt.isValid() )
     {
-        zipWriteData("  <meta:print-date>");
-        zipWriteData( escapeOOText( dt.toString( Qt::ISODate ) ) );
-        zipWriteData("</meta:print-date>\n");
+        writer.startElement( "meta:print-date");
+        writer.addTextSpan( dt.toString( Qt::ISODate) );
+        writer.endElement();
     }
-
+    
+#if 0
     zipWriteData( "  <meta:document-statistic" );
 
     // KWord files coming from import filters mostly do not have no page count
@@ -532,16 +540,31 @@ void KWord13OasisGenerator::writeMetaXml(void)
 #endif
     zipWriteData( "\"" );
     zipWriteData( "/>\n" ); // meta:document-statistic
+#endif    
+    writer.endElement();
     
-    zipWriteData(" </office:meta>\n");
-    zipWriteData("</office:document-meta>\n");
-
-    zipDoneWriting();
+    io.close();
+    m_store->close();
 }
 
 
 bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document& kwordDocument )
 {
+#if 1
+    KoStore* m_store = KoStore::createStore( fileName, KoStore::Write, "application/vnd.sun.xml.writer", KoStore::Zip );
+    if ( ! m_store )
+    {
+        kdError(30520) << "Cannot create output KoStore" << endl;
+        return false;
+    }
+    m_store->disallowNameExpansion();
+    
+    
+    
+    
+    delete m_store;
+    m_store = 0;
+#else
     m_streamOut = new QTextStream( m_contentBody, IO_WriteOnly );
     m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
     
@@ -588,7 +611,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     kdDebug(30520) << "Deleting ZIP..." << endl;
     delete m_zip;
     m_zip=NULL;
-    
+#endif    
     return true;
 }
 
