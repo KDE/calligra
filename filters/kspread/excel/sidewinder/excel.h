@@ -776,40 +776,44 @@ private:
 };
 
 /**
-  Class Date1904Record represents Date1904 record, which specifies
+  Class DateModeRecord represents DateMode record, which specifies
   reference date for displaying date value of given serial number.
+  If base1904 is true, the reference date is 1st of January, 1904 (in which
+  serial number 1 means 2nd of January, 1904). Otherwise, the reference
+  date is 31st of December, 1899 (in which serial number 1 means
+  1st of January, 1900).
  */
-class Date1904Record : public Record
+class DateModeRecord : public Record
 {
 public:
 
   static const unsigned int id;
 
   /**
-   * Creates a new Date1904 record.
+   * Creates a new DateMode record.
    */
-  Date1904Record();
+  DateModeRecord();
   
   /**
    * Destroy the record.
    */
-  ~Date1904Record();
+  ~DateModeRecord();
   
   /**
    * Returns true if the reference date is 1st of January, 1904 or false
    * if the reference date is 31st of December, 1899.
    * 
-   * \sa setRef1904
+   * \sa setBase1904
    */
-  bool ref1904() const;
+  bool base1904() const;
   
   /**
    * If r is true, sets the reference date to 1st of January, 1904. Else,
    * sets the reference date to 31st of December, 1899.
    * 
-   * \sa ref1904
+   * \sa base1904
    */
-  void setRef1904( bool r );
+  void setBase1904( bool r );
 
   /**
    \reimpl
@@ -819,7 +823,7 @@ public:
   /**
    \reimpl
    */
-  virtual const char* name(){ return "DATE1904"; }
+  virtual const char* name(){ return "DATEMODE"; }
 
   /**
    \reimpl
@@ -828,8 +832,8 @@ public:
 
 private:
   // no copy or assign
-  Date1904Record( const Date1904Record& );
-  Date1904Record& operator=( const Date1904Record& );
+  DateModeRecord( const DateModeRecord& );
+  DateModeRecord& operator=( const DateModeRecord& );
 
   class Private;
   Private* d;
@@ -2666,7 +2670,7 @@ private:
   void handleBoolErr( BoolErrRecord* record );
   void handleBlank( BlankRecord* record );
   void handleColInfo( ColInfoRecord* record );
-  void handleDate1904( Date1904Record* record );
+  void handleDateMode( DateModeRecord* record );
   void handleDimension( DimensionRecord* record );
   void handleFormat( FormatRecord* record );
   void handleFont( FontRecord* record );

@@ -347,8 +347,8 @@ Record* RecordFactory::create( unsigned type )
   if( type == ColInfoRecord::id )
     record = new ColInfoRecord();
     
-  if( type == Date1904Record::id )
-    record = new Date1904Record();
+  if( type == DateModeRecord::id )
+    record = new DateModeRecord();
     
   if( type == DimensionRecord::id )
     record = new DimensionRecord();
@@ -1078,50 +1078,50 @@ void ColInfoRecord::dump( std::ostream& out ) const
 }
 
 
-// ========== DATE1904 ========== 
+// ========== DATEMODE ========== 
 
-const unsigned int Date1904Record::id = 0x0022;
+const unsigned int DateModeRecord::id = 0x0022;
 
-class Date1904Record::Private
+class DateModeRecord::Private
 {
 public:
-  bool ref1904;
+  bool base1904;
 };
 
-Date1904Record::Date1904Record():
+DateModeRecord::DateModeRecord():
   Record()
 {
-  d = new Date1904Record::Private();
-  d->ref1904 = false;
+  d = new DateModeRecord::Private();
+  d->base1904 = false;
 }
 
-Date1904Record::~Date1904Record()
+DateModeRecord::~DateModeRecord()
 {
   delete d;
 }
 
-bool Date1904Record::ref1904() const
+bool DateModeRecord::base1904() const
 {
-  return d->ref1904;
+  return d->base1904;
 }
 
-void Date1904Record::setRef1904( bool r )
+void DateModeRecord::setBase1904( bool r )
 {
-  d->ref1904 = r;
+  d->base1904 = r;
 }
 
-void Date1904Record::setData( unsigned size, const unsigned char* data )
+void DateModeRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 2 ) return;
   
   unsigned flag = readU16( data );
-  d->ref1904 = flag != 0;
+  d->base1904 = flag != 0;
 }
 
-void Date1904Record::dump( std::ostream& out ) const
+void DateModeRecord::dump( std::ostream& out ) const
 {
-  out << "DATE1904" << std::endl;
-  out << " 1904 ref : " << (ref1904() ? "Yes" : "No") << std::endl;
+  out << "DATEMODE" << std::endl;
+  out << " 1904 base : " << (base1904() ? "Yes" : "No") << std::endl;
 }
 
 
@@ -3068,7 +3068,7 @@ void ExcelReader::handleColInfo( ColInfoRecord* record )
   }  
 }
 
-void ExcelReader::handleDate1904( Date1904Record* record )
+void ExcelReader::handleDateMode( DateModeRecord* record )
 {
   if( !record ) return;
   
