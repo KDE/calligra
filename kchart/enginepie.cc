@@ -163,12 +163,12 @@ pie_gif( short imagewidth,
 
 		double	this_sin;
                 double	this_cos;
-                slice_angle[0][i] = that/2.0+last; /* mid-point on full pie */
-                slice_angle[1][i] = last;	   /* 1st on full pie */
-                slice_angle[2][i] = that+last;	   /* 2nd on full pie */
+                slice_angle[i][0] = that/2.0+last; /* mid-point on full pie */
+                slice_angle[i][1] = last;	   /* 1st on full pie */
+                slice_angle[i][2] = that+last;	   /* 2nd on full pie */
 
-		this_sin = sin( (double)slice_angle[0][i] );
-                this_cos = cos( (double)slice_angle[0][i] );
+		this_sin = sin( (double)slice_angle[i][0] );
+                this_cos = cos( (double)slice_angle[i][0] );
 
                 if( params->missing.isNull() || !params->missing[offsetCol+i] )
 		  {
@@ -233,7 +233,7 @@ pie_gif( short imagewidth,
                     // adjust for inter-label spacing
                     //				if( lbl[i] && *lbl[i] )
                     //					{
-                    //					char which_edge = slice_angle[0][i] > M_PI? +1: -1;		// which semi
+                    //					char which_edge = slice_angle[i][0] > M_PI? +1: -1;		// which semi
                     //					last_label_yedge = cheight - (int)( (rad +				// top or bottom of label
                     //														(float)(this_explode +
                     //														(float)GDCPIE_label_dist)) * (float)this_cos ) +
@@ -254,35 +254,35 @@ pie_gif( short imagewidth,
                         int		this_x_explode_pos;
 
                         // first N E S W (actually no need for N)
-                        if( (slice_angle[1][i] < M_PI_2 && M_PI_2 < slice_angle[2][i]) &&				// E
+                        if( (slice_angle[i][1] < M_PI_2 && M_PI_2 < slice_angle[i][2]) &&				// E
                             (this_x_explode_pos=OX(i,M_PI_2,1)) > cx+cwidth )
                             rad -= (float)ABS( (double)(1+this_x_explode_pos-(cx+cwidth))/sin(M_PI_2) );
-                        if( (slice_angle[1][i] < 3.0*M_PI_2 && 3.0*M_PI_2 < slice_angle[2][i]) &&		// W
+                        if( (slice_angle[i][1] < 3.0*M_PI_2 && 3.0*M_PI_2 < slice_angle[i][2]) &&		// W
                             (this_x_explode_pos=OX(i,3.0*M_PI_2,1)) < cx-cwidth )
                             rad -= (float)ABS( (double)(this_x_explode_pos-(cx+cwidth))/sin(3.0*M_PI_2) );
-                        if( (slice_angle[1][i] < M_PI && M_PI < slice_angle[2][i]) &&					// S
+                        if( (slice_angle[i][1] < M_PI && M_PI < slice_angle[i][2]) &&					// S
                             (this_y_explode_pos=OY(i,M_PI,1)) > cy+cheight )
                             rad -= (float)ABS( (double)(1+this_y_explode_pos-(cy+cheight))/cos(M_PI) );
 
                         for( j=0; j<3; ++j ) {
                             this_y_explode_pos = IY(i,j,1);
                             if( this_y_explode_pos < cy-cheight )
-                                rad -= (float)ABS( (double)((cy-cheight)-this_y_explode_pos)/cos((double)slice_angle[j][i]) );
+                                rad -= (float)ABS( (double)((cy-cheight)-this_y_explode_pos)/cos((double)slice_angle[i][j]) );
                             if( this_y_explode_pos > cy+cheight )
-                                rad -= (float)ABS( (double)(1+this_y_explode_pos-(cy+cheight))/cos((double)slice_angle[j][i]) );
+                                rad -= (float)ABS( (double)(1+this_y_explode_pos-(cy+cheight))/cos((double)slice_angle[i][j]) );
 
                             this_x_explode_pos = IX(i,j,1);
                             if( this_x_explode_pos < cx-cwidth )
-                                rad -= (float)ABS( (double)((cx-cwidth)-this_x_explode_pos)/sin((double)slice_angle[j][i]) );
+                                rad -= (float)ABS( (double)((cx-cwidth)-this_x_explode_pos)/sin((double)slice_angle[i][j]) );
                             if( this_x_explode_pos > cx+cwidth )
-                                rad -= (float)ABS( (double)(1+this_x_explode_pos-(cx+cwidth))/sin((double)slice_angle[j][i]) );
+                                rad -= (float)ABS( (double)(1+this_x_explode_pos-(cx+cwidth))/sin((double)slice_angle[i][j]) );
                         }
                     }
                 }
                 others[i] = FALSE;
             } else {
                 others[i] = TRUE;
-                slice_angle[0][i] = -MAXFLOAT;
+                slice_angle[i][0] = -MAXFLOAT;
             }
             last += that;
         }
