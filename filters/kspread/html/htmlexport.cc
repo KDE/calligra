@@ -161,7 +161,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
         iUsedColumn=0;
         for ( currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
         {
-            cell = table->cellAt( currentcolumn, currentrow, true );
+            cell = table->cellAt( currentcolumn, currentrow, false );
             QString text;
             if ( !cell->isDefault() && !cell->isEmpty() )
             {
@@ -203,7 +203,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
 
         for ( currentcolumn = 1 ; currentcolumn < iMaxUsedColumn ; currentcolumn++ )
         {
-            KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, true );
+            KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, false );
             colspan_cells=cell->extraXCells();
             if (cell->needsPrinting())
               nonempty_cells++;

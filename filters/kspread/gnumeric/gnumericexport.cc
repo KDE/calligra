@@ -514,7 +514,7 @@ Hidden="0"/>
 	       {
 
 		 QDomElement cell_contents;
-		 KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, true);
+		 KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, false );
 
 
 		 QString text;

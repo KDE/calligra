@@ -122,7 +122,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString& from, const QCStr
         QString line;
         for ( int currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
         {
-            KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, true );
+            KSpreadCell * cell = table->cellAt( currentcolumn, currentrow, false );
             QString text;
             if ( !cell->isDefault() && !cell->isEmpty() )
             {

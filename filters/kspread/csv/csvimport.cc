@@ -122,7 +122,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
             value += step;
             emit sigProgress(value);
             table->setText(row + 1, col + 1, dialog->getText(row, col), false);
-            cell = table->cellAt(col + 1, row + 1);
+            cell = table->cellAt( col + 1, row + 1, false );
 
             switch (dialog->getHeader(col))
             {

@@ -242,7 +242,7 @@ void setStyleInfo(QDomNode *sheet, KSpreadTable *table){
 		{
 		  for(row = (e.attribute("startRow").toInt()+1); row<= (e.attribute("endRow").toInt()+1); row++)
 		    {
-		      KSpreadCell * kspread_cell = table->cellAt(column, row, true );
+		      KSpreadCell * kspread_cell = table->cellAt( column, row, false );
 		      QDomElement style_element = style.toElement(); // try to convert the node to an element.
 
 
@@ -637,8 +637,8 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString& from, const 
 
 		if (e.hasAttribute("ExprID"))
 		  {
-		    //		    QString encoded_string(table->cellAt(column,row, true)->encodeFormula(row,column).utf8());
-		    QString encoded_string(table->cellAt(column,row, true)->encodeFormula().latin1());
+		    //		    QString encoded_string(table->cellAt( column, row, false)->encodeFormula( row, column ).utf8());
+		    QString encoded_string(table->cellAt( column, row, false )->encodeFormula().latin1());
 
 
 		    char *tmp_string = (char *)malloc(strlen(encoded_string.latin1()));
@@ -666,10 +666,10 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString& from, const 
 		    //		    expr = exprID_dict[QString("1")];
 
 		    qDebug("FOO:%d %d",column, row);
-		    qDebug("%s",table->cellAt(column,row, true)->decodeFormula(expr,column,row).latin1());
+		    qDebug("%s",table->cellAt( column, row, false )->decodeFormula( expr, column, row ).latin1());
 		    qDebug("%s",expr);
 
-		    table->setText(row, column, table->cellAt(column,row, true)->decodeFormula(expr,column,row), false);
+		    table->setText(row, column, table->cellAt( column, row, false )->decodeFormula( expr, column, row ), false);
 		  }
 	      }
 	  }
