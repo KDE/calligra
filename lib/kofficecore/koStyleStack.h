@@ -21,11 +21,14 @@
 #ifndef KOSTYLESTACK_H
 #define KOSTYLESTACK_H
 
-#include <kofficemacros.h>
 
 #include <qvaluelist.h>
 #include <qdom.h>
 #include <qvaluestack.h>
+
+#include <kdemacros.h>
+
+#include "kofficemacros.h"
 
 /**
  *  @brief This class implements a stack for the different styles of an object.
