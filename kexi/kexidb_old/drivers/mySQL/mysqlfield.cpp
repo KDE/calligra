@@ -149,6 +149,52 @@ MySqlField::length()
 	return m_field->length;
 }
 
+QString
+MySqlField::sql2string(KexiDBField::ColumnType sqltype)
+{
+	switch(sqltype)
+	{
+		case SQLLongVarChar:
+			return "TEXT";
+		case SQLVarchar:
+			return "VARCHAR";
+		case SQLInteger:
+			return "INTEGER";
+		case SQLSmallInt:
+			return "SMALLINT";
+		case SQLTinyInt:
+			return "TINYINT";
+		case SQLNumeric:
+			return "NUMERIC";
+		case SQLDouble:
+			return "DOUBLE";
+		case SQLBigInt:
+			return "BIGINT";
+		case SQLDecimal:
+			return "DECIMAL";
+		case SQLFloat:
+			return "FLOAT";
+		case SQLBinary:
+			return "VARCHAR BINARY";
+		case SQLLongVarBinary:
+			return "LONGBLOB";
+		case SQLVarBinary:
+			return "BLOB";
+		case SQlDate:
+			return "DATE";
+		case SQLTime:
+			return "TIME";
+		case SQLTimeStamp:
+			return "TIMESTAMP";
+		case SQLBit:
+			return "BOOL";
+		case SQLInvalid:
+			return QString::null;
+	}
+
+	return QString::null;
+}
+
 MySqlField::~MySqlField()
 {
 }

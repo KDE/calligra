@@ -76,6 +76,8 @@ class MySqlDB : public KexiDB
 		QString		escape(const QString &str);
 		QString		realEscape(const QString &str);
 		QByteArray	realEscape(const QByteArray &a); 
+		virtual bool alterField(const QString& table, const QString& field, const QString& newFieldName,
+			KexiDBField::ColumnType dtype, int length, bool notNull, const QString& defaultVal, bool autoInc);
 
 		/*!
 		 *  friendy mode

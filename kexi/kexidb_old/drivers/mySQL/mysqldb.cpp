@@ -263,6 +263,36 @@ MySqlDB::lastAuto()
 	return (unsigned long)mysql_insert_id(m_mysql);
 }
 
+bool
+MySqlDB::alterField(const QString& table, const QString& field, const QString& newFieldName,
+ KexiDBField::ColumnType dtype, int length, bool notNull, const QString& defaultVal, bool autoInc)
+{
+	kdDebug() << "MySqlDB::alterField: Table: " << table << " Field: " << field << endl;
+	kdDebug() << "MySqlDB::alterField: DataType: " << MySqlField::sql2string(dtype) << "ColumnType: " << dtype << endl;
+	QString qstr = "ALTER TABLE " + table + " CHANGE " + field + " " + newFieldName;
+	qstr += " " + MySqlField::sql2string(dtype) + "(" + QString::number(length) + ")";
+	
+	if(notNull)
+	{
+		qstr += " NOT NULL";
+	}
+	else
+	{
+		qstr += " NULL";
+	}
+	
+	if(defaultVal != "") {
+		qstr += " DEFAULT " + defaultVal;
+	}
+	
+	if(autoInc) {
+		qstr += "AUTO_INCREMENT, ADD INDEX(" + newFieldName + ")";
+	}
+	
+	kdDebug() << "MySqlDB::alterField: Query: " << qstr << endl;
+	return query(qstr);
+}
+
 MySqlDB::~MySqlDB()
 {
 	if(m_connected)

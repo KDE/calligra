@@ -23,6 +23,7 @@ Boston, MA 02111-1307, USA.
 #include <qobject.h>
 
 #include "kexidbresult.h"
+#include "kexidbfield.h"
 
 class KexiDBInterfaceManager;
 class KexiDBDriver;
@@ -60,6 +61,8 @@ class KexiDB : public QObject
 
 		virtual bool query(QString statement);
 		virtual QString escape(QString &str);
+		virtual bool alterField(const QString&, const QString&, const QString&, KexiDBField::ColumnType,
+			int, bool, const QString&, bool);
 		
 		virtual KexiDBResult	*getResult();
 

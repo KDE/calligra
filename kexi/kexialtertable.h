@@ -22,6 +22,8 @@
 
 #include <kexidialogbase.h>
 
+class QStringList;
+
 class KStatusBar;
 
 class KexiTableView;
@@ -43,7 +45,7 @@ class KexiAlterTable : public KexiDialogBase
 		KexiTableView* m_view;
 		KStatusBar* m_statusbar;
 		QString m_table;
-		KexiDBRecord* m_record;
+		QStringList m_fieldnames;
 };
 
 #endif

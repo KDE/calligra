@@ -79,7 +79,7 @@ KexiDBField::typeName(ColumnType sqltype)
 		case SQLDouble:
 			return "Double";
 		case SQLBigInt:
-			return "Big Ineger";
+			return "Big Integer";
 		case SQLDecimal:
 			return "Decimal";
 		case SQLFloat:
@@ -165,6 +165,12 @@ int
 KexiDBField::length()
 {
 	return 0;
+}
+
+QString
+KexiDBField::sql2string(KexiDBField::ColumnType sqltype)
+{
+	return QString::null;
 }
 
 KexiDBField::~KexiDBField()

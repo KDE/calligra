@@ -140,6 +140,13 @@ KexiDB::escape(QString &)
 	return QString::null;
 }
 
+bool
+KexiDB::alterField(const QString& table, const QString& field, const QString& newFieldName,
+ KexiDBField::ColumnType dtype, int length, bool notNull, const QString& defaultVal, bool autoInc)
+{
+	return false;
+}
+
 KexiDBResult*
 KexiDB::getResult()
 {

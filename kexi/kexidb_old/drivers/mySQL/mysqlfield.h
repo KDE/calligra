@@ -47,9 +47,10 @@ class MySqlField : public KexiDBField
 		
 		QVariant		defaultValue();
 		int					length();
+	
+		static QString sql2string(KexiDBField::ColumnType sqltype);
 	protected:
 		MYSQL_FIELD *m_field;
-
 };
 
 #endif

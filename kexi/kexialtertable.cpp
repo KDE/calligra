@@ -18,6 +18,7 @@
  */
 
 #include <qlayout.h>
+#include <qstringlist.h>
 
 #include <kstatusbar.h>
 #include <klocale.h>
@@ -55,19 +56,21 @@ KexiAlterTable::KexiAlterTable(QWidget *parent, QString table, const char *name)
 
 void KexiAlterTable::initTable()
 {
-	m_record = kexi->project()->db()->queryRecord("select * from " + m_table + " limit 1 ", false);
-	m_record->next();
+	KexiDBRecord* record = kexi->project()->db()->queryRecord("select * from " + m_table + " limit 1 ", false);
+	record->next();
+	m_fieldnames.clear();
 	int fc = 0;
 	
-	for(uint i = 0; i < m_record->fieldCount(); i++)
+	for(uint i = 0; i < record->fieldCount(); i++)
 	{
 		KexiTableItem *it = new KexiTableItem(m_view);
-		it->setValue(0, m_record->fieldInfo(i)->name());
-		it->setValue(1, m_record->fieldInfo(i)->type());
-		it->setValue(2, m_record->fieldInfo(i)->length());
-		it->setValue(3, m_record->fieldInfo(i)->not_null());
-		it->setValue(4, m_record->fieldInfo(i)->defaultValue());
-		it->setValue(5, m_record->fieldInfo(i)->auto_increment());
+		it->setValue(0, record->fieldInfo(i)->name());
+		m_fieldnames.append(record->fieldInfo(i)->name());
+		it->setValue(1, record->fieldInfo(i)->type());
+		it->setValue(2, record->fieldInfo(i)->length());
+		it->setValue(3, record->fieldInfo(i)->not_null());
+		it->setValue(4, record->fieldInfo(i)->defaultValue());
+		it->setValue(5, record->fieldInfo(i)->auto_increment());
 		it->setHint(QVariant(fc++));
 	}
 
@@ -75,9 +78,11 @@ void KexiAlterTable::initTable()
 	KexiTableItem *insert = new KexiTableItem(m_view);
 	insert->setHint(QVariant(fc));
 	insert->setInsertItem(true);
+	
+	delete record;
 }
 
-void KexiAlterTable::slotItemChanged(KexiTableItem *i, int col)
+void KexiAlterTable::slotItemChanged(KexiTableItem *i, int /*col*/)
 {
 	if(i->isInsertItem())
 	{
@@ -87,18 +92,9 @@ void KexiAlterTable::slotItemChanged(KexiTableItem *i, int col)
 	{
 		int field = i->getHint().toInt();
 		kdDebug() << "KexiAlterTable::slotItemChanged(" << field << ")" << endl;
-		
-		switch(col)
-		{
-			case 0:
-			{
-				kdDebug() << "KexiAlterTable: Old fieldname: " << m_record->fieldInfo(field)->name() << " New fieldname: "
-				 << i->getValue(col).toString() << endl;
-				kexi->project()->db()->query("alter table " + m_table + " change " + m_record->fieldInfo(field)->name() +
-				 " " + i->getValue(col).toString());
-				break;
-			}
-		}
+		kexi->project()->db()->alterField(m_table, m_fieldnames[field], i->getValue(0).toString(),
+		 static_cast<KexiDBField::ColumnType> (i->getValue(1).toInt()), i->getValue(2).toInt(), i->getValue(3).toBool(),
+		 i->getValue(4).toString(), i->getValue(5).toBool());
 	}
 }
 

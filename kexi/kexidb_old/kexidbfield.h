@@ -30,24 +30,24 @@ class KexiDBField
 	public:
 		enum ColumnType
 		{
-			SQLInvalid,
-			SQLBigInt,
-			SQLBinary,
-			SQLBit,
-			SQlDate,
-			SQLDecimal,
-			SQLDouble,
-			SQLFloat,
-			SQLInteger,
-			SQLLongVarBinary,
-			SQLLongVarChar,
-			SQLNumeric,
-			SQLSmallInt,
-			SQLTime,
-			SQLTimeStamp,
-			SQLTinyInt,
-			SQLVarBinary,
-			SQLVarchar
+			SQLInvalid = 0,
+			SQLBigInt = 1,
+			SQLBinary = 2,
+			SQLBit = 3,
+			SQlDate = 4,
+			SQLDecimal = 5,
+			SQLDouble = 6,
+			SQLFloat = 7,
+			SQLInteger = 8,
+			SQLLongVarBinary = 9,
+			SQLLongVarChar = 10,
+			SQLNumeric = 11,
+			SQLSmallInt = 12,
+			SQLTime = 13,
+			SQLTimeStamp = 14,
+			SQLTinyInt = 15,
+			SQLVarBinary = 16,
+			SQLVarchar = 17
 		};
 
 		KexiDBField(QString table, unsigned int field);
@@ -74,6 +74,8 @@ class KexiDBField
 		virtual ColumnType	sqlType();
 		virtual QVariant defaultValue();
 		virtual int length();
+
+		static QString sql2string(KexiDBField::ColumnType sqltype);
 };
 
 #endif
