@@ -22,6 +22,9 @@
 
 #include <qwidget.h>
 
+#define RESIZEWIDGET_SIZE  8
+#define RESIZEWIDGET_SPACE 40
+
 class ResizeWidget : public QWidget
 {
   Q_OBJECT
@@ -30,8 +33,16 @@ public:
 
   enum Type { TopLeft, TopRight, BottomLeft, BottomRight, Top, Left, Right, Bottom };
 
-  ResizeWidget( Type _type, QColor _color, QWidget* _parent = 0, WFlags f = 0 );
+  ResizeWidget( QWidget* _widget, Type _type, QColor _color, WFlags f = 0 );
   ~ResizeWidget();
+
+  void resizeMini();
+
+  virtual QSize sizeHint() const;
+
+signals:
+
+  void resizing( const QRect& _rect );
 
 protected:
 
@@ -41,6 +52,7 @@ private:
 
   Type m_type;
   QColor m_color;
+  QWidget* m_widget;
 };
 
 #endif  // __resizewidget_h__

@@ -17,36 +17,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "formregion.h"
-#include "formarea.h"
-
-#include <qlabel.h>
-#include <qpushbutton.h>
 #include <qlayout.h>
 
-// only for debug
+#include "resizewidget.h"
+#include "form.h"
+#include "formregion.h"
+#include "kformeditor_doc.h"
+
+// only for debugging
 #include <iostream.h>
 
-FormRegion::FormRegion( const QString& _title, QWidget* _form )
-  : QWidget( _form )
+Form::Form( KformEditorDoc* _pDoc, QWidget* _parent )
+  : QWidget( _parent ), m_pDoc( _pDoc )
 {
-  QVBoxLayout* layout = new QVBoxLayout( this );
+  resize( m_pDoc->getFormWidth(), m_pDoc->getFormHeight() );
 
-  // TODO: Label oder nicht drueckbaren Button einfuegen fuer Titel
+  // TODO: Insert all (not one) form regions here.
 
-  QLabel* label = new QLabel( _title, this );
-  label->resize( label->sizeHint() );
-  layout->addWidget( label, 0 );
+  // TODO: Ich glaubem der Hintergrund kann gar nicht gesehen werden.
+  setBackgroundColor( darkGray );
 
-  m_pArea = new FormArea( this );
-  layout->addWidget( m_pArea, 1 );
+  QGridLayout* layout = new QGridLayout( this, 1, 1 );
 
-  resize( 300, 500 );
+  FormRegion* region = new FormRegion( "Formular", this );
+  layout->addWidget( region, 0, 0);
 }
 
-FormRegion::~FormRegion()
+Form::~Form()
 {
 }
 
-#include "formregion.moc"
+#include "form.moc"
 

@@ -22,6 +22,8 @@
 
 #include <qwidget.h>
 
+class FormArea;
+
 class FormRegion : public QWidget
 {
   Q_OBJECT
@@ -36,12 +38,16 @@ public:
    *  @param _title  Title of the region that appears in the label.
    *  @param _parent Parent widget.
    */
-  FormRegion( const QString& _title, QWidget* _parent );
+  FormRegion( const QString& _title, QWidget* _form );
 
   /**
    *  Destructor.
    */
   ~FormRegion();
+
+private:
+
+  FormArea* m_pArea;
 };
 
 #endif  // __formregion_h__

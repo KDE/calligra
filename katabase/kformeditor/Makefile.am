@@ -15,13 +15,15 @@ kformeditor_SOURCES = \
  kformeditor_view.cc \
  kformeditor_main.cc \
  kformeditor_shell.cc \
+ form.cc \
+ formregion.cc \
+ formobject.cc \
+ formarea.cc \
  widgetwrapper.cc \
  resizewidget.cc \
- formregion.cc \
- formsizedlg.cc \
- formpropertydlg.cc \
  backgrounddlg.cc \
- formobject.cc
+ formpropertydlg.cc \
+ formsizedlg.cc
 
 noinst_HEADERS = \
  kformeditor.h \
@@ -29,25 +31,28 @@ noinst_HEADERS = \
  kformeditor_shell.h \
  kformeditor_doc.h \
  kformeditor_view.h \
+ form.h \
+ formregion.h \
+ formarea.h \
+ formobject.h \
  widgetwrapper.h \
  resizewidget.h \
- formregion.h \
- formsizedlg.h \
- formpropertydlg.h \
  backgrounddlg.h \
- formobject.h
+ formpropertydlg.h \
+ formsizedlg.h
 
 METASOURCES = \
  kformeditor_main.moc \
  kformeditor_shell.moc \
  kformeditor_doc.moc \
  kformeditor_view.moc \
+ form.moc \
  formregion.moc \
- formsizedlg.moc \
- formpropertydlg.moc \
+ formarea.moc \
  backgrounddlg.moc \
- widgetwrapper.moc \
- resizewidget.moc
+ formpropertydlg.moc \
+ formsizedlg.moc \
+ widgetwrapper.moc
 
 idl_DATA = kformeditor.idl
 

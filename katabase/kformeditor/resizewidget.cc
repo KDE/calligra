@@ -22,23 +22,57 @@
 // only for debug
 #include <iostream.h>
 
-ResizeWidget::ResizeWidget( Type _type, QColor _color, QWidget* _parent, WFlags f )
-  : QWidget( _parent, 0, f ), m_type ( _type ), m_color ( _color )
+ResizeWidget::ResizeWidget( QWidget* _widget, Type _type, QColor _color, WFlags f )
+  : QWidget( _widget, 0, f ), m_widget( _widget ), m_type ( _type ), m_color ( _color )
 {
-  resize( 8, 8 );
-  raise();
   setBackgroundColor( m_color );
+
+  switch( _type )
+  {
+    case TopLeft :
+    case BottomRight :
+      setCursor( sizeFDiagCursor );
+      break;
+    case TopRight :
+    case BottomLeft :
+      setCursor( sizeBDiagCursor );
+      break;
+    case Top :
+    case Bottom :
+      setCursor( sizeVerCursor );
+      break;
+    case Left :
+    case Right :
+      setCursor( sizeHorCursor );
+      break;
+    default:
+      break;
+  }
 }
- 
+
 ResizeWidget::~ResizeWidget()
 {
+}
+
+void ResizeWidget::resizeMini()
+{
+  resize( RESIZEWIDGET_SIZE, RESIZEWIDGET_SIZE );
+}
+
+QSize ResizeWidget::sizeHint() const
+{
+  return QSize( RESIZEWIDGET_SIZE, RESIZEWIDGET_SIZE );
 }
 
 void ResizeWidget::mouseMoveEvent( QMouseEvent* _event )
 {
   if( _event->state() & LeftButton )
   {
-    // TODO: hier das parent resizen
+    QPoint pos;
+
+    pos = mapToParent( _event->pos() );
+
+    emit resizing( QRect( QPoint( 0, 0 ), pos ) );
   }
 }
 

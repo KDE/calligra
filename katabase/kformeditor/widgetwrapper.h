@@ -36,21 +36,28 @@ public:
   SelectState selectState();
   virtual bool eventFilter( QObject* _obj, QEvent* _event );
 
+protected:
+
+//virtual void resizeEvent( QResizeEvent* _event );
+
 public slots:
 
   void slotSelectPrimary();
   void slotSelectSecondary();
   void slotUnselect();
+  void slotResizing( const QRect& _rect );
 
 signals:
 
   void clicked( WidgetWrapper* );
   void clickedShift( WidgetWrapper* );
+  void moveWidget( WidgetWrapper*, const QPoint& );
 
 private:
 
   void addExtraChilds( const QColor& _color );
   void removeExtraChilds();
+  void installChildEventFilter( QWidget* _widget );
 
   SelectState m_selectState;
   QWidget* m_widget;

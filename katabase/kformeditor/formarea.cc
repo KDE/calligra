@@ -17,7 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "formregion.h"
 #include "formarea.h"
 
 #include <qlabel.h>
@@ -27,26 +26,20 @@
 // only for debug
 #include <iostream.h>
 
-FormRegion::FormRegion( const QString& _title, QWidget* _form )
-  : QWidget( _form )
+FormArea::FormArea( QWidget* _region )
+  : QWidget( _region )
 {
-  QVBoxLayout* layout = new QVBoxLayout( this );
-
-  // TODO: Label oder nicht drueckbaren Button einfuegen fuer Titel
-
-  QLabel* label = new QLabel( _title, this );
-  label->resize( label->sizeHint() );
-  layout->addWidget( label, 0 );
-
-  m_pArea = new FormArea( this );
-  layout->addWidget( m_pArea, 1 );
-
-  resize( 300, 500 );
+  setBackgroundColor( green );
 }
 
-FormRegion::~FormRegion()
+FormArea::~FormArea()
 {
 }
 
-#include "formregion.moc"
+void FormArea::mouseMoveEvent( QMouseEvent* _event )
+{
+  cerr << "FormArea::mouseMoveEvent() : " << _event->pos().x() << "," <<_event->pos().y() << endl;
+}
+
+#include "formarea.moc"
 

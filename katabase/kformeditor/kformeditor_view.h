@@ -20,17 +20,17 @@
 #ifndef __kformeditor_gui_h__
 #define __kformeditor_gui_h__
 
-#include <qscrollview.h>
+#include <qwidget.h>
 #include <openparts_ui.h>
 #include <koFrame.h>
 #include <koView.h>
 
 #include "kformeditor.h"
 
+class Form;
 class KformEditorDoc;
-class WidgetWrapper;
 
-class KformEditorView : public QScrollView,
+class KformEditorView : public QWidget,
                         virtual public KoViewIf,
                         virtual public KformEditor::View_skel
 {
@@ -73,8 +73,6 @@ signals:
 public slots:
 
   void slotUpdateView();
-  void slotClick( WidgetWrapper* _widget );
-  void slotShiftClick( WidgetWrapper* _widget );
 
 protected:
 
@@ -83,11 +81,8 @@ protected:
   virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr );
   virtual void newView();
   virtual void helpUsing();
-  virtual bool eventFilter( QObject*, QEvent* );
-  void resizeEvent( QResizeEvent* _event );
-  void initChilds();
   bool event( const char* _event, const CORBA::Any& _value );
-  void drawContents( QPainter* _painter, int _clipx, int _clipy, int _clipw, int _cliph );
+//void drawContents( QPainter* _painter, int _clipx, int _clipy, int _clipw, int _cliph );
 
 private:
 
@@ -143,10 +138,8 @@ private:
 
   OpenPartsUI::StatusBar_var m_vStatusBar;
   
+  Form* m_pForm;
   KformEditorDoc* m_pDoc;
-  QWidget* m_background;
-  WidgetWrapper* m_primaryWidget;
-  int m_countSelectedWidgets;
 };
 
 #endif

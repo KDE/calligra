@@ -43,12 +43,8 @@
 #include "kformeditor_view.h"
 #include "kformeditor_shell.h"
 
-#include "formobject.h"
-#include "widgetwrapper.h"
-
-#include "backgrounddlg.h"
-#include "formpropertydlg.h"
-#include "formsizedlg.h"
+#include "form.h"
+#include "resizewidget.h"
 
 /*****************************************************************************
  *
@@ -57,7 +53,7 @@
  *****************************************************************************/
 
 KformEditorView::KformEditorView( QWidget* _parent, const char* _name, KformEditorDoc* _doc )
-  : QScrollView( _parent, _name )
+  : QWidget( _parent, _name )
   , KoViewIf( _doc )
   , OPViewIf( _doc )
   , KformEditor::View_skel()
@@ -67,7 +63,7 @@ KformEditorView::KformEditorView( QWidget* _parent, const char* _name, KformEdit
   OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus );
 
   m_pDoc = _doc;
-  m_countSelectedWidgets = 0;
+  m_pForm = NULL;
 
   QObject::connect( m_pDoc, SIGNAL( sigUpdateView() ), this, SLOT( slotUpdateView() ) );
 
@@ -119,17 +115,26 @@ void KformEditorView::init()
 
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    m_vStatusBar->insertItem( Q2C( i18n( "Form editor started" ) ), 1);
+    CORBA::String_var text = Q2C( i18n( "Form editor started" ) );
+    m_vStatusBar->insertItem( text, 1);
 
     m_vStatusBar->enable( ::OpenPartsUI::Show );
   }
 */
 
   /******************************************************
-   * Childs
+   * Form
    ******************************************************/
 
-  initChilds();
+  m_pForm = new Form( m_pDoc, this );
+
+  ResizeWidget* rw1 = new ResizeWidget( m_pForm, ResizeWidget::Right, blue );
+  rw1->move( m_pDoc->getFormWidth(), 0 );
+  rw1->raise();
+
+  ResizeWidget* rw2 = new ResizeWidget( m_pForm, ResizeWidget::Bottom, blue );
+  rw1->move( 0, m_pDoc->getFormHeight() );
+  rw1->raise();
 }
 
 void KformEditorView::cleanUp()
@@ -161,9 +166,6 @@ void KformEditorView::cleanUp()
 */
 
   m_pDoc->removeView( this );
-
-  m_background = NULL;
-  m_primaryWidget = NULL;
 
   KoViewIf::cleanUp();
 }
@@ -291,6 +293,16 @@ bool KformEditorView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fac
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
   m_idToolBarAlignment_Bottom = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentBottom", true, tooltip, -1 );
 
+  m_vToolBarAlignment->insertSeparator( -1 );
+
+  tooltip = Q2C( i18n( "Horizontal balance" ) );
+  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  m_idToolBarAlignment_Bottom = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentBottom", true, tooltip, -1 );
+
+tooltip = Q2C( i18n( "Vertical balance" ) );
+  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  m_idToolBarAlignment_Bottom = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentBottom", true, tooltip, -1 );
+
   m_vToolBarAlignment->enable( OpenPartsUI::Show );
 
   return true;
@@ -355,6 +367,10 @@ bool KformEditorView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
   m_vMenuInsert->insertItem6( pix, text, this, "insertButton", 0, -1, -1 );
 
+  text = Q2C( i18n( "&Checkbox" ) );
+  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  m_vMenuInsert->insertItem6( pix, text, this, "insertCheckBox", 0, -1, -1 );
+
   text = Q2C( i18n( "&Label" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
   m_vMenuInsert->insertItem6( pix, text, this, "insertLabel", 0, -1, -1 );
@@ -367,9 +383,9 @@ bool KformEditorView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
   m_vMenuInsert->insertItem6( pix, text, this, "insertListBox", 0, -1, -1 );
 
-  text = Q2C( i18n( "&Checkbox" ) );
+  text = Q2C( i18n( "&Subform" ) );
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
-  m_vMenuInsert->insertItem6( pix, text, this, "insertCheckBox", 0, -1, -1 );
+  m_vMenuInsert->insertItem6( pix, text, this, "insertListBox", 0, -1, -1 );
 
   text = Q2C( i18n( "&Alignment" ) );
   _menubar->insertMenu( text, m_vMenuAlignment, -1, -1 );
@@ -408,6 +424,16 @@ bool KformEditorView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentBottom", CTRL + Key_X, -1, -1 );
 
+  m_vMenuAlignment->insertSeparator( -1 );
+
+  text = Q2C( i18n( "&Horizontal balance" ) );
+  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  m_vMenuAlignment->insertItem6( pix, text, this, "alignmentBottom", CTRL + Key_X, -1, -1 );
+
+  text = Q2C( i18n( "&Vertical balance" ) );
+  pix = OPUIUtils::convertPixmap( ICON( "unknown.xpm" ) );
+  m_vMenuAlignment->insertItem6( pix, text, this, "alignmentBottom", CTRL + Key_X, -1, -1 );
+
   return true;
 }
 
@@ -436,6 +462,7 @@ void KformEditorView::newView()
   shell->setDocument( m_pDoc );
 }
 
+/*
 void KformEditorView::initChilds()
 {
   // Remove all existing childs
@@ -446,28 +473,25 @@ void KformEditorView::initChilds()
   {
     cerr << "KFormViewer: Inserting child" << endl;
  
-    QWidget* obj = new WidgetWrapper( (*it)->create( this ) );
+//  QWidget* wrapper = new WidgetWrapper( (*it)->create( this ) );
+    QWidget* wrapper = new WidgetWrapper( 0 );
  
-    if( obj )
+    if( wrapper )
     {
-      QScrollView::addChild( obj );
-      QScrollView::moveChild( obj, (*it)->posx(), (*it)->posy() );
+      QScrollView::addChild( wrapper );
+      QScrollView::moveChild( wrapper, (*it)->posx(), (*it)->posy() );
  
-      QObject::connect( obj,  SIGNAL( clicked( WidgetWrapper* ) ),
+      QObject::connect( wrapper,  SIGNAL( clicked( WidgetWrapper* ) ),
                         this, SLOT( slotClick( WidgetWrapper* ) ) );
-      QObject::connect( obj,  SIGNAL( clickedShift( WidgetWrapper* ) ),
+      QObject::connect( wrapper,  SIGNAL( clickedShift( WidgetWrapper* ) ),
                         this, SLOT( slotShiftClick( WidgetWrapper* ) ) );
       QObject::connect( this, SIGNAL( unselectAll() ),
-                        obj,  SLOT( slotUnselect() ) );
-      obj->setBackgroundColor( m_pDoc->backgroundColor() );
+                        wrapper,  SLOT( slotUnselect() ) );
+      QObject::connect( wrapper, SIGNAL( moveWidget( WidgetWrapper*, const QPoint& ) ),
+                        this,  SLOT( slotMoveWidget( WidgetWrapper*, const QPoint& ) ) );
+      wrapper->setBackgroundColor( m_pDoc->backgroundColor() );
     }
   }
-  m_background = new QWidget( this );
-  QScrollView::addChild( m_background );
-  m_background->installEventFilter( this );
-  m_background->resize( m_pDoc->getFormWidth(), m_pDoc->getFormHeight() );
-  m_background->setBackgroundColor( m_pDoc->backgroundColor() );
-  m_background->lower();
 
   m_primaryWidget = NULL;
   m_countSelectedWidgets = 0;
@@ -478,6 +502,7 @@ void KformEditorView::drawContents( QPainter* _painter, int _clipx, int _clipy, 
   QColor color( 80, 80, 80 );
   _painter->fillRect( _clipx, _clipy, _clipw, _cliph, QBrush( color ) );
 }
+*/
 
 void KformEditorView::editUndo()
 {
@@ -548,6 +573,7 @@ void KformEditorView::editBackground()
     m_vStatusBar->changeItem( text, 1 );
   }
 
+/*
   BackgroundDlg* dlg = new BackgroundDlg( m_pDoc->backgroundColor() );
 
   if( dlg->exec() == QDialog::Accepted )
@@ -558,6 +584,7 @@ void KformEditorView::editBackground()
 
     m_background->setBackgroundColor( dlg->color() );
   }
+*/
 
   slotUpdateView();
 }
@@ -692,6 +719,7 @@ void KformEditorView::alignmentBottom()
   }
 }
 
+/*
 bool KformEditorView::eventFilter( QObject* _obj, QEvent* _event )
 {
   if( ( _event->type() == QEvent::MouseButtonPress ) ||
@@ -711,17 +739,20 @@ void KformEditorView::resizeEvent( QResizeEvent* _event )
 
   slotUpdateView();
 }
+*/
 
 void KformEditorView::slotUpdateView()
 {
   if( !m_pDoc->isEmpty() )
   {
-    resizeContents( m_pDoc->getFormWidth(), m_pDoc->getFormHeight() );
+    //resizeContents( m_pDoc->getFormWidth(), m_pDoc->getFormHeight() );
   }
 
-  QScrollView::update();
+  QWidget::update();
+//QScrollView::update();
 }
 
+/*
 void KformEditorView::slotClick( WidgetWrapper* _widget )
 {
   if( m_countSelectedWidgets == 0 )
@@ -810,5 +841,12 @@ void KformEditorView::slotShiftClick( WidgetWrapper* _widget )
 
   slotUpdateView();
 }
+
+void KformEditorView::slotMoveWidget( WidgetWrapper* _widget, const QPoint& _pos )
+{
+//moveChild( _widget, _pos.x(), _pos.y() );
+  _widget->resize( _pos.x(), _pos.y() );
+}
+*/
 
 #include "kformeditor_view.moc"

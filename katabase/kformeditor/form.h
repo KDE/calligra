@@ -15,38 +15,40 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/
+*/     
 
-#include "formregion.h"
-#include "formarea.h"
+#ifndef __form_h__
+#define __form_h__
 
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
+#include <qwidget.h>
 
-// only for debug
-#include <iostream.h>
+class KformEditorDoc;
 
-FormRegion::FormRegion( const QString& _title, QWidget* _form )
-  : QWidget( _form )
+class Form : public QWidget
 {
-  QVBoxLayout* layout = new QVBoxLayout( this );
+  Q_OBJECT
 
-  // TODO: Label oder nicht drueckbaren Button einfuegen fuer Titel
+public:
 
-  QLabel* label = new QLabel( _title, this );
-  label->resize( label->sizeHint() );
-  layout->addWidget( label, 0 );
+  /**
+   *  Constructor.
+   *
+   *  Initalizes a object of a form.
+   *
+   *  @param _pDoc   Document.
+   *  @param _parent Parent widget.
+   */
+  Form( KformEditorDoc* _pDoc, QWidget* _parent );
 
-  m_pArea = new FormArea( this );
-  layout->addWidget( m_pArea, 1 );
+  /**
+   *  Destructor.
+   */
+  ~Form();
 
-  resize( 300, 500 );
-}
+private:
 
-FormRegion::~FormRegion()
-{
-}
+  KformEditorDoc* m_pDoc;
+};
 
-#include "formregion.moc"
+#endif  // __form_h__
 
