@@ -1,6 +1,5 @@
 ^^^^^^^^^^^^^^^  IMPORTANT  ^^^^^^^^^^^^^^^^^^^^^^
 **** New Features : ******
-* When double-clicking on a QLabel or a QLabel (others ?), the widget should be inline-editable (also on creation)
 * Create an event editor and manage signals/slots (EventBuffer ?)
 	HOWEVER, SIGNAL/SLOT ISSUES (js):
 	1. signals/slots mechanism is hard to use for average folks
@@ -44,3 +43,4 @@
 * Alignment and layout properties also support old values (3/06/04)
 * Better handling of multiple widgets in ObjectPropertyBuffer : each widget has its own old value, so reset will act as expected (3/07/04)
 * Remove all these " Q*** " names (3/08/04)
+* When double-clicking on a QLabel or a QLabel (others ?), the widget should be inline-editable (also on creation) (3/11/04)

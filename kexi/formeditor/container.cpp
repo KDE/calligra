@@ -276,7 +276,6 @@ Container::eventFilter(QObject *s, QEvent *e)
 		}
 		case QEvent::MouseButtonDblClick:
 		{
-			kdDebug() << "mouse dboule click" << endl;
 			QWidget *w = static_cast<QWidget*>(s);
 			if(!w)
 				return false;
@@ -303,7 +302,10 @@ void
 Container::setSelectedWidget(QWidget *w, bool add)
 {
 	if(w)
-	kdDebug() << "slotSelectionChanged " << w->name()<< endl;
+	{
+		kdDebug() << "slotSelectionChanged " << w->name()<< endl;
+		w->setFocus();
+	}
 
 	if(add && w)
 	{

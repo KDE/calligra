@@ -238,6 +238,9 @@ InsertWidgetCommand::execute()
 	Container::LayoutType type = m_container->layoutType();
 	m_container->setLayout(Container::NoLayout);
 	m_container->setLayout(type);
+
+	m_container->setSelectedWidget(w, false);
+	m_form->manager()->lib()->startEditing(w->className(), w, m_container);
 	kdDebug() << "Container::eventFilter(): widget added " << this << endl;
 }
 

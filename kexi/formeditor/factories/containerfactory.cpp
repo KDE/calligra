@@ -23,7 +23,9 @@
 #include "containerfactory.h"
 #include "container.h"
 #include "form.h"
+#include "formmanager.h"
 #include "objecttree.h"
+#include "objpropbuffer.h"
 
 ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, name)
@@ -118,6 +120,27 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 	}
 
 	return;
+}
+
+void
+ContainerFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container)
+{
+	m_container = container;
+	if(classname == "QButtonGroup")
+	{
+		QButtonGroup *group = static_cast<QButtonGroup*>(w);
+		QRect r = QRect(group->x()+2, group->y()-5, group->width()-10, 20);
+		createEditor(group->title(), group, r, Qt::AlignAuto);
+		return;
+	}
+	return;
+}
+
+void
+ContainerFactory::changeText(const QString &text)
+{
+	KFormDesigner::ObjectPropertyBuffer *buff = m_container->form()->manager()->buffer();
+	(*buff)["title"]->setValue(text);
 }
 
 void ContainerFactory::AddTabPage()

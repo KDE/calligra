@@ -123,14 +123,26 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 		virtual void		createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)=0;
 
+		/*! Creates (if necessary) an editor to edit the contents of the widget directly in the Form
+		   (eg creates a line edit to change the text of a label). \a classname is the class the widget belongs to, \a w is the widget to edit
+		   and \a container is the parent container of this widget (to access Form etc.).
+		 */
 		virtual void		startEditing(const QString &classname, QWidget *w, Container *container)=0;
 
-		virtual KLineEdit*	createEditor(const QString &text, QWidget *w, QRect geometry, int align);
-
 	protected:
+		/*! This function creates a KLineEdit to input some text and edit a widget's contents. This can be used in startEditing().
+		   \a text is the text to display by default in the line edit, \a w is the edited widget, \a geometry is the geometry the new line
+		   edit should have, and \a align is Qt::AlignmentFlags of the new line edit.
+		 */
+		virtual KLineEdit*	createEditor(const QString &text, QWidget *w, QRect geometry, int align);
+		/*! This function destroys the editor. */
 		virtual void  resetEditor();
 		virtual bool  eventFilter(QObject *obj, QEvent *ev);
+
 	protected slots:
+		/*! You have to implement this function for editing inside the Form to work. This slot is called when the line edit text changes,
+		  and you have to make it really change the good property of the widget (text, or title, etc.).
+		 */
 		virtual void  changeText(const QString &newText){;}
 
 	protected:
