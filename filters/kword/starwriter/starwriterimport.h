@@ -18,14 +18,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __STARWRITER5IMPORT_H
-#define __STARWRITER5IMPORT_H
+#ifndef __STARWRITERIMPORT_H
+#define __STARWRITERIMPORT_H
 
 #include <koFilter.h>
 #include <qstring.h>
 #include <qcstring.h>
 
-class StarWriter5Import: public KoFilter
+class StarWriterImport: public KoFilter
 {
     Q_OBJECT
 
@@ -34,8 +34,8 @@ public:
     bool hasHeader;
     bool hasFooter;
 
-    StarWriter5Import(KoFilter *parent, const char *name, const QStringList&);
-    virtual ~StarWriter5Import();
+    StarWriterImport(KoFilter *parent, const char *name, const QStringList&);
+    virtual ~StarWriterImport();
     KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
 
 private:

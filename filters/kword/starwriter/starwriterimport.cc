@@ -29,46 +29,44 @@
 
 #include <kolestorage.h>
 
-typedef KGenericFactory<StarWriter5Import, KoFilter> StarWriter5ImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libstarwriter5import, StarWriter5ImportFactory("starwriter5import"));
+typedef KGenericFactory<StarWriterImport, KoFilter> StarWriterImportFactory;
+K_EXPORT_COMPONENT_FACTORY(libstarwriterimport, StarWriterImportFactory("starwriterimport"));
 
 // get unsigned 24-bit integer at given offset
-static inline Q_UINT32 readU24(QByteArray array, unsigned p)
+static inline Q_UINT32 readU24(QByteArray array, Q_UINT32 p)
 {
    Q_UINT8* ptr = (Q_UINT8*) array.data();
    return (Q_UINT32) (ptr[p] + (ptr[p+1] << 8) + (ptr[p+2] << 16));
 }
 
-StarWriter5Import::StarWriter5Import(KoFilter *, const char *, const QStringList&) : KoFilter(), hasHeader(false), hasFooter(false)
+StarWriterImport::StarWriterImport(KoFilter *, const char *, const QStringList&) : KoFilter(), hasHeader(false), hasFooter(false)
 {
 }
 
-StarWriter5Import::~StarWriter5Import()
+StarWriterImport::~StarWriterImport()
 {
 }
 
-KoFilter::ConversionStatus StarWriter5Import::convert(const QCString& from, const QCString& to)
+KoFilter::ConversionStatus StarWriterImport::convert(const QCString& from, const QCString& to)
 {
     // Check for proper conversion
+    // When 4.x is supported, use also: || (from != "application/x-starwriter")
     if ((to != "application/x-kword") || (from != "application/vnd.stardivision.writer"))
         return KoFilter::NotImplemented;
 
+    // Read the streams
     KOLE::Storage storage;
     storage.open(m_chain->inputFile());
 
     QDataStream* stream;
 
     stream = storage.stream("StarWriterDocument");
-    if (!stream)
-        return KoFilter::WrongFormat;
-
+    if (!stream) return KoFilter::WrongFormat;
     StarWriterDocument.resize(stream->device()->size());
     stream->readRawBytes(StarWriterDocument.data(), StarWriterDocument.size());
 
     stream = storage.stream("SwPageStyleSheets");
-    if (!stream)
-        return KoFilter::WrongFormat;
-
+    if (!stream) return KoFilter::WrongFormat;
     SwPageStyleSheets.resize(stream->device()->size());
     stream->readRawBytes(SwPageStyleSheets.data(), SwPageStyleSheets.size());
 
@@ -85,8 +83,7 @@ KoFilter::ConversionStatus StarWriter5Import::convert(const QCString& from, cons
 
     // Prepare storage device and return
     KoStoreDevice *out = m_chain->storageFile("maindoc.xml", KoStore::Write);
-    if (out)
-    {
+    if (out) {
         QCString cstring = maindoc.utf8();
         cstring.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         out->writeBlock((const char*) cstring, cstring.length());
@@ -95,34 +92,38 @@ KoFilter::ConversionStatus StarWriter5Import::convert(const QCString& from, cons
     return KoFilter::OK;
 }
 
-// This should always return true,
-// because StarWriter non-5.x files have a different mime-type...
-bool StarWriter5Import::checkDocumentVersion()
+bool StarWriterImport::checkDocumentVersion()
 {
-    if(SwPageStyleSheets.size() < 6) return false;
-    if(StarWriterDocument.size() < 6) return false;
+    if (SwPageStyleSheets.size() < 0x0B) return false;
+    if (StarWriterDocument.size() < 0x0B) return false;
 
-    if(SwPageStyleSheets[0x00] != 'S') return false;
-    if(SwPageStyleSheets[0x01] != 'W') return false;
-    if(SwPageStyleSheets[0x02] != '5') return false;
-    if(SwPageStyleSheets[0x03] != 'H') return false;
-    if(SwPageStyleSheets[0x04] != 'D') return false;
-    if(SwPageStyleSheets[0x05] != 'R') return false;
+    if (SwPageStyleSheets[0x00] != 'S') return false;
+    if (SwPageStyleSheets[0x01] != 'W') return false;
+    // When 4.x is supported use also: || (SwPageStyleSheets[0x02] != '4')
+    if (SwPageStyleSheets[0x02] != '5') return false;
+    if (SwPageStyleSheets[0x03] != 'H') return false;
+    if (SwPageStyleSheets[0x04] != 'D') return false;
+    if (SwPageStyleSheets[0x05] != 'R') return false;
 
-    if(StarWriterDocument[0x00] != 'S') return false;
-    if(StarWriterDocument[0x01] != 'W') return false;
-    if(StarWriterDocument[0x02] != '5') return false;
-    if(StarWriterDocument[0x03] != 'H') return false;
-    if(StarWriterDocument[0x04] != 'D') return false;
-    if(StarWriterDocument[0x05] != 'R') return false;
+    if (StarWriterDocument[0x00] != 'S') return false;
+    if (StarWriterDocument[0x01] != 'W') return false;
+    // When 4.x is supported use also: || (StarWriterDocument[0x02] != '4')
+    if (StarWriterDocument[0x02] != '5') return false;
+    if (StarWriterDocument[0x03] != 'H') return false;
+    if (StarWriterDocument[0x04] != 'D') return false;
+    if (StarWriterDocument[0x05] != 'R') return false;
+
+    // Password-protection is not supported for the moment
+    Q_UINT16 flags = StarWriterDocument[0x0A] + 0x0100*StarWriterDocument[0x0D];
+    if (flags & 0x0008) return false;
 
     return true;
 }
 
-bool StarWriter5Import::addKWordHeader()
+bool StarWriterImport::addKWordHeader()
 {
     // Proper prolog and epilog
-    QString  prolog = "<!DOCTYPE DOC>\n";
+    QString prolog = "<!DOCTYPE DOC>\n";
     prolog.append("<DOC mime=\"application/x-kword\" syntaxVersion=\"2\" editor=\"KWord\">\n");
     prolog.append("<PAPER width=\"595\" height=\"841\" format=\"1\" fType=\"0\" orientation=\"0\" hType=\"0\" columns=\"1\">\n");
     prolog.append(" <PAPERBORDERS left=\"36\" right=\"36\" top=\"36\" bottom=\"36\" />\n");
@@ -139,95 +140,92 @@ bool StarWriter5Import::addKWordHeader()
     maindoc.prepend(prolog);
     maindoc.append(epilog);
 
-    return true;   // is it really useful?
+    return true;
 }
 
-bool StarWriter5Import::addPageProperties()
+bool StarWriterImport::addPageProperties()
 {
-    return true;   // is it really useful?
+    return true;
 }
 
-// FIXME: written just for compiling needs...
-bool StarWriter5Import::addStyles()
+bool StarWriterImport::addStyles()
 {
-    return true;   // is it really useful?
+    return true;
 }
 
-// FIXME: written just for compiling needs...
+// FIXME
 // 1. search for the right starting point
 // 2. determine the length
 // 3. parse everything with parseNodes()
-bool StarWriter5Import::addHeaders()
+bool StarWriterImport::addHeaders()
 {
-    return true;   // is it really useful?
+    return true;
 }
 
-// FIXME: same as before
-bool StarWriter5Import::addFooters()
+bool StarWriterImport::addFooters()
 {
-    return true;   // is it really useful?
+    return true;
 }
 
-bool StarWriter5Import::addBody()
+bool StarWriterImport::addBody()
 {
-    // Find the starting point, by: 
-    // 1. skipping the header       
-    int len = StarWriterDocument[7];
-    int p = len;
+    // Find the starting point, by:
+    // 1. skipping the header
+    Q_UINT32 len = StarWriterDocument[0x07];
+    Q_UINT32 p = len;
 
-    // 2. skipping 8 more bytes if necessary    
-    p += 8;
+    // 2. skipping 8 more bytes
+    p += 0x08;
 
-    // 3. skipping useless sections 
+    // 3. skipping useless sections
     char c = StarWriterDocument[p];
     while (c != 'N') {
-        len = readU24( StarWriterDocument, p+1 );
+        len = readU24(StarWriterDocument, p+1);
         p += len;
         c = StarWriterDocument[p];
     };   // there is at least one empty paragraph!
 
-    // Select nodes and pass them to parseNodes() 
-    len = readU24( StarWriterDocument, p+1 );
-
+    // Select nodes and pass them to parseNodes()
+    len = readU24(StarWriterDocument, p+1);
     // FIXME: is this the right frame name?
-    QByteArray data( len );
-    for( unsigned k=0; k<len; k++ )
+    QByteArray data(len);
+    for (Q_UINT32 k=0; k<len; k++)
       data[k] = StarWriterDocument[p+k];
-    return parseNodes( data, "Text Frameset");   // is it really useful?
+    return parseNodes(data, "Text Frameset");
 }
 
-QString StarWriter5Import::convertToKWordString( QByteArray s)
+QString StarWriterImport::convertToKWordString(QByteArray s)
 {
     QString result;
 
-    for ( unsigned i = 0; i < s.size(); i++)
+    for (Q_UINT32 i = 0x00; i < s.size(); i++)
         if (s[i] == '&') result += "&amp;";
         else if (s[i] == '<') result += "&lt;";
         else if (s[i] == '>') result += "&gt;";
         else if (s[i] == '"') result += "&quot;";
-        else if (s[i] == 39) result += "&apos;";
-        else if (s[i] == 9) result += "\t";
+        else if (s[i] == 0x27) result += "&apos;";
+        else if (s[i] == 0x09) result += "\t";
         // FIXME: more to add here
         //        (manual breaks, soft-hyphens, non-breaking spaces, variables)
-        else result += QChar( s[i] );
+        else result += QChar(s[i]);
 
     return result;
 }
 
-bool StarWriter5Import::parseNodes( QByteArray n, QString caption )
+bool StarWriterImport::parseNodes(QByteArray n, QString caption)
 {
     // textTable and textGraphics are not necessary
     QByteArray s;
 
     // Loop
-    int p = 0x09;   // is it a fixed value? is it the same for headers/footers?
+    Q_UINT32 p = 0x09;   // is it a fixed value? is it the same for headers/footers?
 
     while (p < n.size()) {
         char c = n[p];
-        int len = readU24(n, p+1);
+        Q_UINT32 len = readU24(n, p+1);
 
         s.resize(len);
-        for (unsigned k = 0x00; k < len; k++)
+        for (Q_UINT32 k = 0x00; k < len; k++)
             s[k] = n[p+k];
 
         switch (c) {
@@ -249,10 +247,10 @@ bool StarWriter5Import::parseNodes( QByteArray n, QString caption )
     return true;
 }
 
-bool StarWriter5Import::parseText(QByteArray n, QString caption)
+bool StarWriterImport::parseText(QByteArray n, QString caption)
 {
     QByteArray s;
-    int len;
+    Q_UINT32 len;
     QString paragraph;
 
     // Preliminary check
@@ -261,7 +259,7 @@ bool StarWriter5Import::parseText(QByteArray n, QString caption)
     // Retrieve the paragraph (text-only)
     len = readU24(n, 0x09) & 0xFFFF;
     s.resize(len);
-    for (unsigned k = 0x00; k < len; k++)
+    for (Q_UINT32 k = 0x00; k < len; k++)
         s[k] = n[0x0B+k];
 
     // Write it to the variable
@@ -273,14 +271,12 @@ bool StarWriter5Import::parseText(QByteArray n, QString caption)
     return true;
 }
 
-// FIXME: written just for compiling needs...
-bool StarWriter5Import::parseTable(QByteArray n)
+bool StarWriterImport::parseTable(QByteArray n)
 {
     return (n[0x00] == 'E');
 };
 
-// FIXME: written just for compiling needs...
-bool StarWriter5Import::parseGraphics(QByteArray n)
+bool StarWriterImport::parseGraphics(QByteArray n)
 {
     return (n[0x00] == 'G');
 }
