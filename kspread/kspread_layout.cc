@@ -1824,7 +1824,7 @@ bool RowLayout::load( const QDomElement& row, int yshift, PasteMode sp)
 
     if( row.hasAttribute( "hide" ) )
     {
-        m_bHide = (int)row.attribute("hide").toInt( &ok );
+        setHide( (int)row.attribute("hide").toInt( &ok ) );
         if(!ok)
                 return false;
     }
@@ -2061,7 +2061,7 @@ bool ColumnLayout::load( const QDomElement& col, int xshift,PasteMode sp )
     }
     if( col.hasAttribute( "hide" ) )
     {
-        m_bHide = (int)col.attribute("hide").toInt( &ok );
+        setHide( (int)col.attribute("hide").toInt( &ok ) );
         if(!ok)
                 return false;
     }
