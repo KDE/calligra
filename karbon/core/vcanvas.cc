@@ -97,6 +97,18 @@ VCanvas::focusInEvent( QFocusEvent * )
 }
 
 KoPoint
+VCanvas::toViewport( const KoPoint &p ) const
+{
+	KoPoint p2 = p;
+	p2.setX( ( p.x() * m_view->zoom() ) - contentsX() / m_view->zoom() + PAGE_OFFSETX );
+	if( contentsHeight() > height() )
+		p2.setY( ( contentsHeight() - ( p.y() * m_view->zoom() + contentsY() + PAGE_OFFSETY ) ) );
+	else
+		p2.setY( ( height() - p.y() * m_view->zoom() + PAGE_OFFSETY ) );
+	return p2;
+}
+
+KoPoint
 VCanvas::toContents( const KoPoint &p ) const
 {
 	KoPoint p2 = p;

@@ -49,6 +49,7 @@ public:
 	 */
 	void setPos( const KoPoint& p );
 
+	KoPoint toViewport( const KoPoint & ) const;
 	KoPoint toContents( const KoPoint & ) const;
 	KoRect boundingBox() const;
 
