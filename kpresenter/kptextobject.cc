@@ -110,7 +110,6 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     drawEditRect = true;
     drawEmpty = true;
     editingTextObj = false;
-    protectContent = false;
     connect( m_textobj, SIGNAL( newCommand( KCommand * ) ),
              SLOT( slotNewCommand( KCommand * ) ) );
     connect( m_textobj, SIGNAL( availableHeightNeeded() ),
@@ -186,7 +185,7 @@ double KPTextObject::load(const QDomElement &element)
     QDomElement e=element.namedItem(tagTEXTOBJ).toElement();
     if(!e.isNull()) {
         if ( e.hasAttribute( "protectcontent"))
-            protectContent= (bool)e.attribute( "protectcontent" ).toInt();
+            setProtectContent((bool)e.attribute( "protectcontent" ).toInt());
 #if 0
         ktextobject.document()->setLineSpacing( e.attribute( attrLineSpacing ).toInt() );
         ktextobject.document()->setParagSpacing( e.attribute( attrParagSpacing ).toInt() );
@@ -382,8 +381,8 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
 #endif
 
     QDomElement textobj=doc.createElement(tagTEXTOBJ);
-    if ( protectContent )
-        textobj.setAttribute( "protectcontent", (int)protectContent);
+    if ( isProtectContent() )
+        textobj.setAttribute( "protectcontent", (int)isProtectContent());
 #if 0
     textobj.setAttribute(attrLineSpacing, ktextobject.document()->lineSpacing());
     textobj.setAttribute(attrParagSpacing, ktextobject.document()->paragSpacing());
@@ -1682,9 +1681,7 @@ void KPTextView::dropEvent( QDropEvent * e )
             int objTextNum=-1;
             objTextNum=KPrTextDrag::decodeTextObjectNumber( e );
             KPTextObject * obj = m_canvas->textObjectByPos( objTextNum );
-            //don't remove text if we dnd and textobj is protected
-            if ( obj->isProtectContent() )
-                obj->textDocument()->removeSelection(KoTextDocument::Standard );
+
             obj =obj  ? obj : kpTextObject();
             if ( obj )
             {

@@ -122,8 +122,8 @@ public:
 
     KCommand *textContentsToHeight();
     KCommand *textObjectToContents();
-    void setProtectContent ( bool _protect ) { protectContent= _protect;}
-    bool isProtectContent() const { return protectContent;}
+    void setProtectContent ( bool _protect ) { textObject()->setProtectContent(_protect);}
+    bool isProtectContent() const { return textObject()->protectContent();}
 
 signals:
     void repaintChanged( KPTextObject* );
@@ -162,7 +162,6 @@ private:
 
     bool drawEditRect, drawEmpty;
     bool editingTextObj;
-    bool protectContent;
 };
 
 
