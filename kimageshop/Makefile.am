@@ -4,8 +4,7 @@ INCLUDES  = -I$(srcdir)/widgets -I$(srcdir)/dialogs -I$(srcdir)/tools\
 kimageshop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 kimageshop_LDADD = ../lib/kofficeui/libkofficeui.la
 
-libkimageshop_la_LDFLAGS = -avoid-version -module
-
+libkimageshop_la_LDFLAGS = $(all_libraries) -avoid-version -module
 libkimageshop_la_LIBADD =  widgets/libkiswidgets.la dialogs/libkisdialogs.la tools/libkistools.la ../lib/kofficeui/libkofficeui.la $(LIB_KIMGIO) 
 
 SUBDIRS = widgets dialogs tools . data pics
