@@ -58,7 +58,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 }
 
 
-VUnitDoubleSpinBox::VUnitDoubleSpinBox( double lower, double upper, double step, double value, int precision, QWidget *parent, const char *name )
+VUnitDoubleSpinBox::VUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value, int precision, const char *name )
 	: KDoubleSpinBox( lower, upper, step, value, precision, parent, name )
 {
 	m_validator = new KoUnitDoubleValidator( this, this );

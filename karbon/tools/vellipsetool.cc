@@ -37,9 +37,9 @@ VEllipseTool::VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QW
 {
 	// add width/height-input:
 	m_widthLabel = new QLabel( i18n( "Width:" ), this );
-	m_width = new VUnitDoubleSpinBox( 0.0, 1000.0, 0.5, 0.0, 2, this );
+	m_width = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	m_heightLabel = new QLabel( i18n( "Height:" ), this );
-	m_height = new VUnitDoubleSpinBox( 0.0, 1000.0, 0.5, 0.0, 2, this );
+	m_height = new VUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	refreshUnit();
 	setInsideMargin( 4 );
 	setInsideSpacing( 2 );

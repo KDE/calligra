@@ -44,8 +44,8 @@ private:
 class VUnitDoubleSpinBox : public KDoubleSpinBox
 {
 public:
-	VUnitDoubleSpinBox( double lower, double upper, double step, double value = 0.0,
-					 int precision = 2, QWidget *parent = 0, const char *name = 0 );
+	VUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
+					 int precision = 2, const char *name = 0 );
 
 	virtual void setValidator( const QValidator * );
 	void setUnit( KoUnit::Unit = KoUnit::U_PT );
