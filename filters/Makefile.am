@@ -7,9 +7,7 @@ endif
 
 if compile_filter_KONTOUR
 if include_KARBON
-if maintained_KONTOUR
 KONTOURDIR = kontour
-endif
 endif
 endif
 
