@@ -23,7 +23,7 @@
 
 
 #include <qobject.h>
-
+#include <qstringlist.h>
 class KoTextObject;
 class KSpell;
 class KoDocument;
@@ -49,7 +49,8 @@ public:
     virtual void slotRepaintChanged(KoTextObject *obj)=0;
 
     virtual KoTextObject* nextTextObject( KoTextObject *obj )=0;
-
+    void addIgnoreWordAll( const QString & word);
+    void clearIgnoreWordAll( );
 public slots:
     void startBackgroundSpellCheck();
 
@@ -81,7 +82,7 @@ protected:
 
 private:
     KSpellConfig * m_pKSpellConfig;
-
+    QStringList m_spellListIgnoreAll;
     bool m_bSpellCheckEnabled;
     bool m_bDontCheckUpperWord;
     bool m_bDontCheckTitleCase;

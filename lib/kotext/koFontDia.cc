@@ -84,12 +84,13 @@ KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSu
 void KoFontChooser::setFont( const QFont &_font, bool _subscript, bool _superscript, bool _doubleUnderline )
 {
     m_newFont = _font;
-    m_chooseFont->setFont( m_newFont );
     m_underline->setChecked( _font.underline() );
     m_strikeOut->setChecked( _font.strikeOut() );
     m_subScript->setChecked( _subscript );
     m_superScript->setChecked( _superscript );
     m_doubleUnderline->setChecked( _doubleUnderline );
+
+    m_chooseFont->setFont( m_newFont );
     m_changedFlags = 0;
 }
 

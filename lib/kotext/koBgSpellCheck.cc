@@ -62,6 +62,20 @@ void KoBgSpellCheck::setIgnoreTitleCase( bool b)
     m_bDontCheckTitleCase = b;
 }
 
+void KoBgSpellCheck::addIgnoreWordAll( const QString & word)
+{
+    if( m_spellListIgnoreAll.findIndex( word )==-1)
+        m_spellListIgnoreAll.append( word );
+    m_spellListIgnoreAll.clear();
+    m_pKSpellConfig->setIgnoreList( m_spellListIgnoreAll );
+}
+
+void KoBgSpellCheck::clearIgnoreWordAll( )
+{
+    m_spellListIgnoreAll.clear();
+    m_pKSpellConfig->setIgnoreList( m_spellListIgnoreAll );
+}
+
 void KoBgSpellCheck::startBackgroundSpellCheck()
 {
     if ( !m_bSpellCheckEnabled || !m_bgSpell.currentTextObj )
