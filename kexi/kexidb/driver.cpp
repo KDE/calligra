@@ -99,8 +99,8 @@ bool Driver::isValid()
 		setError(ERR_INCOMPAT_DRIVER_VERSION, 
 		i18n("Incompatible database driver's \"%1\" version: found version %2, expected version %3.")
 		.arg(name())
-		.arg(QString("%1.%2").arg(versionMajor(),versionMinor()))
-		.arg(QString("%1.%2").arg(KexiDB::versionMajor(),KexiDB::versionMinor())));
+		.arg(QString("%1.%2").arg(versionMajor()).arg(versionMinor()))
+		.arg(QString("%1.%2").arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor())));
 		return false;
 	}
 		
