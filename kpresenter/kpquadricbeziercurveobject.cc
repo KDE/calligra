@@ -63,9 +63,9 @@ KPQuadricBezierCurveObject &KPQuadricBezierCurveObject::operator=( const KPQuadr
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPQuadricBezierCurveObject::save( QDomDocument& doc )
+QDomDocumentFragment KPQuadricBezierCurveObject::save( QDomDocument& doc, int offset )
 {
-    QDomDocumentFragment fragment = KPObject::save( doc );
+    QDomDocumentFragment fragment = KPObject::save( doc, offset );
     fragment.appendChild( KPObject::createPenElement( "PEN", pen, doc ) );
     if ( !controlPoints.isNull() ) {
         QDomElement elemPoints = doc.createElement( "POINTS" );
@@ -91,9 +91,9 @@ QDomDocumentFragment KPQuadricBezierCurveObject::save( QDomDocument& doc )
 }
 
 /*========================== load ================================*/
-void KPQuadricBezierCurveObject::load(const QDomElement &element)
+int KPQuadricBezierCurveObject::load(const QDomElement &element)
 {
-    KPObject::load( element );
+    int offset=KPObject::load( element );
     QDomElement e = element.namedItem( "PEN" ).toElement();
     if ( !e.isNull() )
         setPen( KPObject::toPen( e ) );
@@ -137,18 +137,19 @@ void KPQuadricBezierCurveObject::load(const QDomElement &element)
             tmp = e.attribute( "value" ).toInt();
         lineEnd = static_cast<LineEnd>( tmp );
     }
+    return offset;
 }
 
 /*========================= draw =================================*/
-void KPQuadricBezierCurveObject::draw( QPainter *_painter, int _diffx, int _diffy )
+void KPQuadricBezierCurveObject::draw( QPainter *_painter )
 {
     if ( move ) {
-        KPObject::draw( _painter, _diffx, _diffy );
+        KPObject::draw( _painter );
         return;
     }
 
-    int ox = orig.x() - _diffx;
-    int oy = orig.y() - _diffy;
+    int ox = orig.x();
+    int oy = orig.y();
     int ow = ext.width();
     int oh = ext.height();
 
@@ -220,7 +221,7 @@ void KPQuadricBezierCurveObject::draw( QPainter *_painter, int _diffx, int _diff
 
     _painter->restore();
 
-    KPObject::draw( _painter, _diffx, _diffy );
+    KPObject::draw( _painter );
 }
 
 /*===================== get angle ================================*/

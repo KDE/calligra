@@ -32,9 +32,9 @@ class QPushButton;
 class KColorButton;
 class QSlider;
 class KPBackGround;
-class KPresenterDoc;
 class QCheckBox;
 class QTabWidget;
+class KPRPage;
 
 /*******************************************************************
  *
@@ -47,7 +47,7 @@ class BackPreview : public QFrame
     Q_OBJECT
 
 public:
-    BackPreview( QWidget *parent, KPresenterDoc *doc );
+    BackPreview( QWidget *parent, KPRPage *m_page );
     virtual ~BackPreview();
 
     KPBackGround *backGround() const {
@@ -77,7 +77,7 @@ public:
 	     const QString &backPic, const QDateTime &picLM,
 	     const QString &backClip, const QDateTime &clipLM,
 	     BackView backPicView, bool _unbalanced,
-	     int _xfactor, int _yfactor, KPresenterDoc *doc );
+	     int _xfactor, int _yfactor, KPRPage *m_page  );
 
     QColor getBackColor1() const;
     QColor getBackColor2() const;

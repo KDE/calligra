@@ -44,8 +44,8 @@ public:
 
     KPPartObject &operator=( const KPPartObject & );
 
-    virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load(const QDomElement &element);
+    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
+    virtual int load(const QDomElement &element);
 
     virtual void rotate( float _angle );
     virtual void setSize( int _width, int _height );
@@ -60,7 +60,7 @@ public:
     virtual QString getTypeString() const
     { return i18n("Embedded object"); }
 
-    virtual void draw( QPainter *_painter, int _diffx, int _diffy );
+    virtual void draw( QPainter *_painter );
 
     virtual void activate( QWidget *_widget, int diffx, int diffy );
     virtual void deactivate();

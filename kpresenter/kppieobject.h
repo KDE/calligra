@@ -79,8 +79,8 @@ public:
     virtual LineEnd getLineEnd() const
     { return lineEnd; }
 
-    virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load(const QDomElement &element);
+    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
+    virtual int load(const QDomElement &element);
 
 protected:
     virtual void paint( QPainter *_painter );

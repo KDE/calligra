@@ -64,9 +64,9 @@ KPPieObject &KPPieObject::operator=( const KPPieObject & )
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPPieObject::save( QDomDocument& doc )
+QDomDocumentFragment KPPieObject::save( QDomDocument& doc, int offset )
 {
-  QDomDocumentFragment fragment=KP2DObject::save(doc);
+  QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
   if (lineBegin!=L_NORMAL)
     fragment.appendChild(KPObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
   if (lineEnd!=L_NORMAL)
@@ -81,9 +81,9 @@ QDomDocumentFragment KPPieObject::save( QDomDocument& doc )
 }
 
 /*========================== load ================================*/
-void KPPieObject::load(const QDomElement &element)
+int KPPieObject::load(const QDomElement &element)
 {
-    KP2DObject::load(element);
+    int offset=KP2DObject::load(element);
     QDomElement e=element.namedItem("LINEBEGIN").toElement();
     if(!e.isNull()) {
         int tmp=0;
@@ -119,6 +119,7 @@ void KPPieObject::load(const QDomElement &element)
             tmp=e.attribute("value").toInt();
         pieType=static_cast<PieType>(tmp);
     }
+    return offset;
 }
 
 /*======================== paint =================================*/

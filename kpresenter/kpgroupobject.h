@@ -67,10 +67,10 @@ public:
     virtual QString getTypeString() const
     { return i18n("Group"); }
 
-    virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load(const QDomElement &element, KPresenterDoc *doc);
+    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
+    virtual int load(const QDomElement &element, KPresenterDoc *doc);
 
-    virtual void draw( QPainter *_painter, int _diffx, int _diffy );
+    virtual void draw( QPainter *_painter );
 
     void setUpdateObjects( bool b ) {
         updateObjs = b;

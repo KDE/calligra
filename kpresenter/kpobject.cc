@@ -107,12 +107,12 @@ KPObject::~KPObject()
 {
 }
 
-QDomDocumentFragment KPObject::save( QDomDocument& doc )
+QDomDocumentFragment KPObject::save( QDomDocument& doc, int offset )
 {
     QDomDocumentFragment fragment=doc.createDocumentFragment();
     QDomElement elem=doc.createElement(tagORIG);
     elem.setAttribute(attrX, orig.x());
-    elem.setAttribute(attrY, orig.y());
+    elem.setAttribute(attrY, orig.y()+offset);
     fragment.appendChild(elem);
     elem=doc.createElement(tagSIZE);
     elem.setAttribute(attrWidth, ext.width());
@@ -167,15 +167,18 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc )
     return fragment;
 }
 
-void KPObject::load(const QDomElement &element) {
+int KPObject::load(const QDomElement &element) {
 
+    int offset=0;
     QDomElement e=element.namedItem(tagORIG).toElement();
     if(!e.isNull()) {
         if(e.hasAttribute(attrX))
             orig.setX(e.attribute(attrX).toInt());
         if(e.hasAttribute(attrY))
-            orig.setY(e.attribute(attrY).toInt());
-
+        {
+            offset=e.attribute(attrY).toInt();
+            orig.setY(0);
+        }
         origTopLeftPointInGroup = orig;
     }
     e=element.namedItem(tagSIZE).toElement();
@@ -272,12 +275,13 @@ void KPObject::load(const QDomElement &element) {
         disappearSoundEffect = false;
         d_fileName = QString::null;
     }
+    return offset;
 }
 
 /*======================= get bounding rect ======================*/
-QRect KPObject::getBoundingRect( int _diffx, int _diffy ) const
+QRect KPObject::getBoundingRect( ) const
 {
-    QRect r( orig.x() - _diffx, orig.y() - _diffy,
+    QRect r( orig.x() , orig.y(),
              ext.width(), ext.height() );
 
     if ( shadowDistance > 0 )
@@ -305,11 +309,11 @@ QRect KPObject::getBoundingRect( int _diffx, int _diffy ) const
 }
 
 /*======================== contain point ? =======================*/
-bool KPObject::contains( QPoint _point, int _diffx, int _diffy ) const
+bool KPObject::contains( QPoint _point ) const
 {
     if ( angle == 0.0 )
     {
-        QRect r( orig.x() - _diffx, orig.y() - _diffy,
+        QRect r( orig.x() , orig.y() ,
                  ext.width(), ext.height() );
         return r.contains( _point );
     }
@@ -329,18 +333,18 @@ bool KPObject::contains( QPoint _point, int _diffx, int _diffy ) const
         m.translate( rr.left() + xPos, rr.top() + yPos );
 
         QRect r = m.map( br );
-        r.moveBy( orig.x() - _diffx, orig.y() - _diffy );
+        r.moveBy( orig.x() , orig.y() );
 
         return r.contains( _point );
     }
 }
 
 /*================================================================*/
-bool KPObject::intersects( QRect _rect, int _diffx, int _diffy ) const
+bool KPObject::intersects( QRect _rect ) const
 {
     if ( angle == 0.0 )
     {
-        QRect r( orig.x() - _diffx, orig.y() - _diffy,
+        QRect r( orig.x(), orig.y(),
                  ext.width(), ext.height() );
         return r.intersects( _rect );
     }
@@ -360,20 +364,20 @@ bool KPObject::intersects( QRect _rect, int _diffx, int _diffy ) const
         m.translate( rr.left() + xPos, rr.top() + yPos );
 
         QRect r = m.map( br );
-        r.moveBy( orig.x() - _diffx, orig.y() - _diffy );
+        r.moveBy( orig.x(), orig.y() );
 
         return r.intersects( _rect );
     }
 }
 
 /*======================== get cursor ============================*/
-QCursor KPObject::getCursor( QPoint _point, int _diffx, int _diffy, ModifyType &_modType ) const
+QCursor KPObject::getCursor( QPoint _point, ModifyType &_modType ) const
 {
     int px = _point.x();
     int py = _point.y();
 
-    int ox = orig.x() - _diffx;
-    int oy = orig.y() - _diffy;
+    int ox = orig.x() ;
+    int oy = orig.y();
     int ow = ext.width();
     int oh = ext.height();
 
@@ -467,12 +471,12 @@ void KPObject::zoomOrig()
 }
 
 /*======================== draw ==================================*/
-void KPObject::draw( QPainter *_painter, int _diffx, int _diffy )
+void KPObject::draw( QPainter *_painter )
 {
     if ( dSelection )
     {
         _painter->save();
-        _painter->translate( orig.x() - _diffx, orig.y() - _diffy );
+        _painter->translate( orig.x() , orig.y() );
         paintSelection( _painter );
         _painter->restore();
     }
@@ -765,9 +769,9 @@ void KP2DObject::setFillType( FillType _fillType )
         gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
 }
 
-QDomDocumentFragment KP2DObject::save( QDomDocument& doc )
+QDomDocumentFragment KP2DObject::save( QDomDocument& doc,int offset )
 {
-    QDomDocumentFragment fragment=KPObject::save(doc);
+    QDomDocumentFragment fragment=KPObject::save(doc, offset);
     if(fillType!=FT_BRUSH)
         fragment.appendChild(KPObject::createValueElement(tagFILLTYPE, static_cast<int>(fillType), doc));
     if(gColor1!=Qt::red || gColor2!=Qt::green || gType!=BCT_GHORZ || unbalanced || xfactor!=100 || yfactor!=100)
@@ -780,9 +784,9 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc )
     return fragment;
 }
 
-void KP2DObject::load(const QDomElement &element)
+int KP2DObject::load(const QDomElement &element)
 {
-    KPObject::load(element);
+    int offset=KPObject::load(element);
     QDomElement e=element.namedItem(tagPEN).toElement();
     if(!e.isNull())
         setPen(KPObject::toPen(e));
@@ -814,18 +818,19 @@ void KP2DObject::load(const QDomElement &element)
         xfactor=100;
         yfactor=100;
     }
+    return offset;
 }
 
-void KP2DObject::draw( QPainter *_painter, int _diffx, int _diffy )
+void KP2DObject::draw( QPainter *_painter )
 {
     if ( move )
     {
-        KPObject::draw( _painter, _diffx, _diffy );
+        KPObject::draw( _painter );
         return;
     }
 
-    int ox = orig.x() - _diffx;
-    int oy = orig.y() - _diffy;
+    int ox = orig.x();
+    int oy = orig.y();
     int ow = ext.width();
     int oh = ext.height();
 
@@ -907,5 +912,5 @@ void KP2DObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
     _painter->restore();
 
-    KPObject::draw( _painter, _diffx, _diffy );
+    KPObject::draw( _painter );
 }

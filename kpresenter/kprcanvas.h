@@ -17,8 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef PAGE_H
-#define PAGE_H
+
+#ifndef __KPRCANVAS__
+#define __KPRCANVAS__
 
 #include <qwidget.h>
 #include <qptrlist.h>
@@ -61,22 +62,23 @@ class QPoint;
 class KPresenterSoundPlayer;
 class KoTextObject;
 class KoParagCounter;
+class KPRPage;
 
 class KPTextView;
 
 /**********************************************************************/
-/* class Page - There is ONE instance of this class for a given view  */
+/* class KPCanvas - There is ONE instance of this class for a given view  */
 /* It manages the graphical representation of all the objects         */
 /**********************************************************************/
-class Page : public QWidget
+class KPrCanvas : public QWidget
 {
     Q_OBJECT
 
 public:
 
     // constructor - destructor
-    Page( QWidget *parent=0, const char *name=0, KPresenterView *_view=0 );
-    ~Page();
+    KPrCanvas( QWidget *parent=0,const char *name=0,KPresenterView *_view=0 );
+    ~KPrCanvas();
 
     // public functions
     void selectAllObj();
@@ -139,6 +141,8 @@ public:
 
     void gotoPage( int pg );
 
+    KPRPage* activePage();
+    void setActivePage( KPRPage* _active);
 
     QPtrList<KoTextObject> objectText();
     bool oneObjectTextExist();
@@ -164,7 +168,7 @@ public:
     KPTextView *currentTextObjectView() const { return m_currentTextObjectView; }
 
     KPresenterView * getView(){return view;}
-    QPtrList<KPObject> *objectList();
+    QPtrList<KPObject> objectList();
 
     void stopSound();
 
@@ -194,6 +198,7 @@ public slots:
     void picViewOrig1280x1024();
     void picViewOrig1600x1200();
     void picViewOrigFactor();
+    void slotSetActivePage( KPRPage* _active);
 
 
 signals:
@@ -247,9 +252,7 @@ protected:
     void setupMenus();
 
     // get - set data
-    QPtrList<KPBackGround> *backgroundList();
-    const QPtrList<KPBackGround> *backgroundList() const;
-    const QPtrList<KPObject> *objectList() const;
+    const QPtrList<KPObject> & getObjectList() const;
     unsigned int objNums() const;
     unsigned int currPgNum() const;
     unsigned int rastX() const;
@@ -259,7 +262,6 @@ protected:
     bool spManualSwitch() const;
     QRect getPageRect( unsigned int p, float fakt=1.0, bool decBorders = true );
     unsigned int pageNums();
-    int getPageOfObj( int i, float fakt = 1.0 );
     float objSpeedFakt();
     float pageSpeedFakt();
     bool calcRatio( int &dx, int &dy, KPObject *kpobject, double ratio ) const;
@@ -354,6 +356,8 @@ private:
     bool m_drawCubicBezierCurve;
     bool m_drawLineWithCubicBezierCurve;
 
+    KPRPage *m_activePage;
+
 private:
     QValueList<int> pages(const QString &range);
     bool pagesHelper(const QString &chunk, QValueList<int> &list);
@@ -384,4 +388,5 @@ private slots:
     void slotExitPres();
     void terminateEditing( KPTextObject * );
 };
+
 #endif //PAGE_H

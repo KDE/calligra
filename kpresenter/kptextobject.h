@@ -35,7 +35,7 @@ class KoTextView;
 class KoTextObject;
 class KPTextView;
 class KCommand;
-class Page;
+class KPrCanvas;
 class KoPoint;
 class KoVariable;
 class KPrTextDrag;
@@ -73,13 +73,13 @@ public:
 
     void setShadowParameter(int _distance,ShadowDirection _direction,QColor _color);
 
-    virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load(const QDomElement &element);
+    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
+    virtual int load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter, int _diffx, int _diffy );
+    virtual void draw( QPainter *_painter );
     void draw( QPainter *_painter, int _diffx, int _diffy,
                bool onlyChanged, QTextCursor* cursor, bool resetChanged );
-    void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, Page* /*page*/ );
+    void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* /*canvas*/ );
 
     virtual void zoom( float _fakt );
     virtual void zoomOrig();
@@ -96,10 +96,10 @@ public:
 
     KPresenterDoc* kPresenterDocument() const { return m_doc; }
 
-    KPTextView * createKPTextView( Page * );
+    KPTextView * createKPTextView( KPrCanvas * );
 
     void removeHighlight ();
-    void highlightPortion( Qt3::QTextParag * parag, int index, int length, Page */*_page*/ );
+    void highlightPortion( Qt3::QTextParag * parag, int index, int length, KPrCanvas */*_canvas*/ );
 
     KCommand * pasteKPresenter( QTextCursor * cursor, const QCString & data, bool removeSelected );
 
@@ -154,7 +154,7 @@ class KPTextView : public KoTextView
 {
 Q_OBJECT
 public:
-    KPTextView( KPTextObject * txtObj, Page *_page );
+    KPTextView( KPTextObject * txtObj, KPrCanvas *_canvas );
     virtual ~KPTextView();
     KoTextView * textView() { return this; }
     KPTextObject * kpTextObject() { return m_kptextobj; }
@@ -205,7 +205,7 @@ protected:
     virtual void pgDownKeyPressed();
 
     KPTextObject *m_kptextobj;
-    Page *m_page;
+    KPrCanvas *m_canvas;
     KoParagLayout m_paragLayout;
     QPtrList<KAction> m_actionList; // for the kodatatools
 };

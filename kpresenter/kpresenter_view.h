@@ -32,7 +32,6 @@ class QPopupMenu;
 class DCOPObject;
 class KPresenterView;
 class BackDia;
-class Page;
 class KoRuler;
 class QScrollBar;
 class AFChoose;
@@ -65,6 +64,8 @@ class KoParagCounter;
 class KActionMenu;
 class KoSearchContext;
 class KPrFindReplace;
+class KPrCanvas;
+
 
 class PageBase : public QWidget
 {
@@ -335,7 +336,8 @@ public:
     void changePicture( const QString & );
     void changeClipart( const QString & );
 
-    Page* getPage() {return page; }
+    KPrCanvas* getCanvas() { return m_canvas;}
+
     void setRulerMouseShow( bool _show );
     void setRulerMousePos( int mx, int my );
 
@@ -591,7 +593,7 @@ private:
     int sharpnessValue;
 
     // the page
-    Page *page;
+    KPrCanvas *m_canvas;
     KoRuler *h_ruler, *v_ruler;
     KoTabChooser *tabChooser;
     // text toolbar values

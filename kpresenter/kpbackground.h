@@ -33,18 +33,18 @@ class QPicture;
 class DCOPObject;
 class QDomDocument;
 class QDomElement;
+class KPRPage;
 
 /******************************************************************/
 /* Class: KPBackGround                                            */
 /* The background for a given page.                               */
-/* Stored in KPresenterDoc's list of backgrounds.                 */
 /******************************************************************/
 
 class KPBackGround
 {
 public:
     KPBackGround( KPImageCollection *_imageCollection, KPGradientCollection *_gradientCollection,
-                  KPClipartCollection *_clipartCollection, KPresenterDoc *_doc );
+                  KPClipartCollection *_clipartCollection, KPRPage *_page );
     ~KPBackGround()
     {; }
 
@@ -112,7 +112,7 @@ public:
     QSize getSize() const
     { return ext; }
 
-    void draw( QPainter *_painter, QPoint _offset, bool _drawBorders );
+    void draw( QPainter *_painter, bool _drawBorders );
 
     void restore();
 
@@ -123,7 +123,7 @@ protected:
     void drawBackColor( QPainter *_painter );
     void drawBackPix( QPainter *_painter );
     void drawBorders( QPainter *_painter );
-    void drawHeaderFooter( QPainter *_painter, const QPoint &_offset );
+    void drawHeaderFooter( QPainter *_painter );
     void removeGradient();
 
     BackType backType;
@@ -146,7 +146,7 @@ protected:
     KPClipart backClipart;
 
     QSize ext;
-    KPresenterDoc *doc;
+    KPRPage *m_page;
     int footerHeight;
 
     DCOPObject *dcop;

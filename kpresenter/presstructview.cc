@@ -22,7 +22,7 @@
 #include <kpbackground.h>
 #include <kpobject.h>
 #include <kpresenter_view.h>
-#include <page.h>
+#include "kprcanvas.h"
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -32,6 +32,7 @@
 #include <qwmatrix.h>
 #include <qvbox.h>
 #include <qcheckbox.h>
+#include <kdebug.h>
 
 /******************************************************************
  *
@@ -55,7 +56,7 @@ void KPSlidePreview::setPage( QListViewItem *item )
     QPixmap pix( doc->getPageRect( 0, 0, 0 ).size() );
     pix.fill( Qt::white );
     int i = ( (KPPresStructObjectItem*)item )->getPageNum();
-    view->getPage()->drawPageInPix2( pix, i * doc->getPageRect( 0, 0, 0 ).height(), i );
+    view->getCanvas()->drawPageInPix2( pix, i * doc->getPageRect( 0, 0, 0 ).height(), i );
 
     int w = doc->getPageRect( 0, 0, 0 ).width();
     int h = doc->getPageRect( 0, 0, 0 ).height();
@@ -213,16 +214,15 @@ void KPPresStructView::setupSlideList()
 
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
         KPPresStructObjectItem *item = new KPPresStructObjectItem( slides );
-        item->setPage( doc->backgroundList()->at( i ), i );
+        item->setPage( doc->pageList().at( i )->background(), i );
         item->setText( 0, QString( "%1" ).arg( i + 1 ) );
         item->setText( 1, doc->pageTitle( i, i18n( "Slide %1" ).arg( i + 1 ) ) );
-        for ( int j = doc->objNums() - 1; j >= 0; --j ) {
-            if ( doc->getPageOfObj( j, 0, 0 ) == (int)i + 1 ) {
-                KPPresStructObjectItem *item_ = new KPPresStructObjectItem( item );
-                item_->setPage( doc->backgroundList()->at( i ), i );
-                item_->setObject( doc->objectList()->at( j ), j );
-                item_->setNum(j);
-            }
+        for ( int j = doc->pageList().at( i )->objNums() - 1; j >= 0; --j ) {
+            KPPresStructObjectItem *item_ = new KPPresStructObjectItem( item );
+            item_->setPage( doc->pageList().at( i )->background(), i );
+            QPtrList<KPObject> list(doc->pageList().at( i )->objectList());
+            item_->setObject( list.at( j ), j );
+            item_->setNum(j);
         }
     }
 }
@@ -263,15 +263,14 @@ void KPPresStructView::makeStuffVisible( QListViewItem *item )
     if ( !item->parent() )
         view->skipToPage( item->text( 0 ).toInt() - 1 );
     else {
-        view->getPage()->deSelectAllObj();
+        view->getCanvas()->deSelectAllObj();
         if (item->parent())
             view->skipToPage( item->parent()->text( 0 ).toInt() - 1 );
         else
             view->skipToPage( item->text( 0 ).toInt() - 1 );
-        int obj = dynamic_cast<KPPresStructObjectItem *>(item)->getNum();
-        KPObject *kpobject = doc->objectList()->at( obj );
+        KPObject *kpobject = dynamic_cast<KPPresStructObjectItem *>(item)->getObject();
         if (kpobject) {
-          QRect rect( kpobject->getBoundingRect( 0, 0 ) );
+          QRect rect( kpobject->getBoundingRect(  ) );
           kpobject->setSelected( true );
           doc->repaint( kpobject );
           rect.setLeft( rect.left() - 20 );

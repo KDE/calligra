@@ -45,7 +45,7 @@
 #include <qfont.h>
 
 #include "kptextobject.moc"
-#include "page.h"
+#include "kprcanvas.h"
 #include <koAutoFormat.h>
 #include <koparagcounter.h>
 #include <kaction.h>
@@ -163,17 +163,17 @@ void KPTextObject::resizeBy( int _dx, int _dy )
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPTextObject::save( QDomDocument& doc )
+QDomDocumentFragment KPTextObject::save( QDomDocument& doc, int offset )
 {
-    QDomDocumentFragment fragment=KP2DObject::save(doc);
+    QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
     fragment.appendChild(saveKTextObject( doc ));
     return fragment;
 }
 
 /*========================== load ================================*/
-void KPTextObject::load(const QDomElement &element)
+int KPTextObject::load(const QDomElement &element)
 {
-    KP2DObject::load(element);
+    int offset=KP2DObject::load(element);
     QDomElement e=element.namedItem(tagTEXTOBJ).toElement();
     if(!e.isNull()) {
 
@@ -214,25 +214,26 @@ void KPTextObject::load(const QDomElement &element)
         //loadKTextObject( e, -1 /*TODO*/ );
     }
     setSize( ext.width(), ext.height() ); // this will to formatMore()
+    return offset;
 }
 
 /*========================= draw =================================*/
-void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
+void KPTextObject::draw( QPainter *_painter )
 {
     if ( move )
     {
-        KPObject::draw( _painter, _diffx, _diffy );
+        KPObject::draw( _painter );
         return;
     }
 
-    draw( _painter, _diffx, _diffy, false, 0L, true );
+    draw( _painter,0, 0, false, 0L, true );
 }
 
 void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy,
                          bool onlyChanged, QTextCursor* cursor, bool resetChanged )
 {
     _painter->save();
-    setupClipRegion( _painter, getBoundingRect( _diffx, _diffy ) );
+    setupClipRegion( _painter, getBoundingRect(  ) );
 
     int ox = orig.x() - _diffx;
     int oy = orig.y() - _diffy;
@@ -282,7 +283,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy,
     }
     _painter->restore();
 
-    KPObject::draw( _painter, _diffx, _diffy );
+    KPObject::draw( _painter );
 }
 
 // This method simply draws the paragraphs in the given painter
@@ -880,7 +881,7 @@ void KPTextObject::drawParags( QPainter *painter, const QColorGroup& cg, int fro
         false /*onlyChanged*/, false /*cursor != 0*/, 0 /*cursor*/ /*, resetChanged*/ );
 }
 
-void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, Page* page )
+void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* canvas )
 {
     p->translate( orig.x(), orig.y() );
     KoTextParag* parag = static_cast<KoTextParag *>(cursor->parag());
@@ -898,7 +899,7 @@ void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisi
     iPoint.rx() += xadj;
     vPoint.rx() += xadj;
     // very small clipping around the cursor
-    QRect clip( vPoint.x() - 5, vPoint.y() - page->getView()->getDiffY(), 10, cursorHeight );
+    QRect clip( vPoint.x() - 5, vPoint.y() - canvas->getView()->getDiffY(), 10, cursorHeight );
     setupClipRegion( p, clip );
 
     QPixmap *pix = 0;
@@ -918,7 +919,7 @@ void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisi
     QFont f = parag->at( cursor->index() )->format()->font();
     int line;
     parag->lineStartOfChar( cursor->index(), 0, &line );
-    m_doc->getKPresenterView()->getPage()->setXimPosition( ximPoint.x(), ximPoint.y(),
+    m_doc->getKPresenterView()->getCanvas()->setXimPosition( ximPoint.x(), ximPoint.y(),
                                                            0, cursorHeight - parag->lineSpacing( line ),
                                                            &f );
 }
@@ -945,9 +946,9 @@ void KPTextObject::slotRepaintChanged()
     emit repaintChanged( this );
 }
 
-KPTextView * KPTextObject::createKPTextView( Page * _page )
+KPTextView * KPTextObject::createKPTextView( KPrCanvas * _canvas )
 {
-    return new KPTextView( this, _page );
+    return new KPTextView( this, _canvas );
 }
 
 
@@ -956,7 +957,7 @@ void KPTextObject::removeHighlight ()
     m_textobj->removeHighlight();
 }
 
-void KPTextObject::highlightPortion( Qt3::QTextParag * parag, int index, int length, Page */*_page*/ )
+void KPTextObject::highlightPortion( Qt3::QTextParag * parag, int index, int length, KPrCanvas*/*_canvas*/ )
 {
     m_textobj->highlightPortion( parag, index, length );
 #if 0
@@ -1018,22 +1019,22 @@ void KPTextObject::slotFormatChanged(const KoTextFormat &_format)
     m_doc->getKPresenterView()->showFormat( _format );
 }
 
-KPTextView::KPTextView( KPTextObject * txtObj,Page *_page )
+KPTextView::KPTextView( KPTextObject * txtObj,KPrCanvas *_canvas )
     : KoTextView( txtObj->textObject() )
 {
-    m_page=_page;
+    m_canvas=_canvas;
     m_kptextobj=txtObj;
-    connect( txtObj->textObject(), SIGNAL( selectionChanged(bool) ), m_page, SIGNAL( selectionChanged(bool) ) );
+    connect( txtObj->textObject(), SIGNAL( selectionChanged(bool) ), m_canvas, SIGNAL( selectionChanged(bool) ) );
     KoTextView::setReadWrite( txtObj->kPresenterDocument()->isReadWrite() );
     connect( textView(), SIGNAL( cut() ), SLOT( cut() ) );
     connect( textView(), SIGNAL( copy() ), SLOT( copy() ) );
     connect( textView(), SIGNAL( paste() ), SLOT( paste() ) );
     updateUI( true, true );
 #if 0
-    if( m_page->getView() && m_page->getView()->getHRuler())
+    if( m_canvas->getView() && m_canvas->getView()->getHRuler())
     {
-        m_page->getView()->getHRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
-        m_page->getView()->getHRuler()->repaint();
+        m_canvas->getView()->getHRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
+        m_canvas->getView()->getHRuler()->repaint();
     }
 #endif
 
@@ -1042,17 +1043,17 @@ KPTextView::KPTextView( KPTextObject * txtObj,Page *_page )
 KPTextView::~KPTextView()
 {
 #if 0
-    if( m_page->getView() && m_page->getView()->getHRuler())
+    if( m_canvas->getView() && m_canvas->getView()->getHRuler())
     {
-        m_page->getView()->getHRuler()->changeFlags(0);
-        m_page->getView()->getHRuler()->repaint();
+        m_canvas->getView()->getHRuler()->changeFlags(0);
+        m_canvas->getView()->getHRuler()->repaint();
     }
 #endif
 }
 
 void KPTextView::terminate()
 {
-    disconnect( textView()->textObject(), SIGNAL( selectionChanged(bool) ), m_page, SIGNAL( selectionChanged(bool) ) );
+    disconnect( textView()->textObject(), SIGNAL( selectionChanged(bool) ), m_canvas, SIGNAL( selectionChanged(bool) ) );
     textView()->terminate();
 }
 
@@ -1101,7 +1102,7 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
     KoTextParag * parag = static_cast<KoTextParag*>( cursor()->parag());
     if ( m_paragLayout.alignment != parag->alignment() || force ) {
         m_paragLayout.alignment = parag->alignment();
-        m_page->getView()->alignChanged(  m_paragLayout.alignment );
+        m_canvas->getView()->alignChanged(  m_paragLayout.alignment );
     }
 
     // Counter
@@ -1117,7 +1118,7 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
     }
     if ( m_paragLayout.counter->style() != cstyle || force )
     {
-        m_page->getView()->showCounter( * m_paragLayout.counter );
+        m_canvas->getView()->showCounter( * m_paragLayout.counter );
     }
     if(m_paragLayout.leftBorder!=parag->leftBorder() ||
        m_paragLayout.rightBorder!=parag->rightBorder() ||
@@ -1149,10 +1150,10 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
         m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] = parag->margin(QStyleSheetItem::MarginFirstLine);
         m_paragLayout.margins[QStyleSheetItem::MarginLeft] = parag->margin(QStyleSheetItem::MarginLeft);
         m_paragLayout.margins[QStyleSheetItem::MarginRight] = parag->margin(QStyleSheetItem::MarginRight);
-        m_page->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine], m_paragLayout.margins[QStyleSheetItem::MarginRight] );
+        m_canvas->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine], m_paragLayout.margins[QStyleSheetItem::MarginRight] );
     }
     m_paragLayout.setTabList( parag->tabList() );
-    KoRuler * hr = m_page->getView()->getHRuler();
+    KoRuler * hr = m_canvas->getView()->getHRuler();
     if ( hr )
         hr->setTabList( parag->tabList() );
 }
@@ -1172,12 +1173,12 @@ void KPTextView::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int inde
 void KPTextView::startDrag()
 {
     textView()->dragStarted();
-    m_page->dragStarted();
-    KPrTextDrag *drag = newDrag( m_page );
+    m_canvas->dragStarted();
+    KPrTextDrag *drag = newDrag( m_canvas );
     if ( !kpTextObject()->kPresenterDocument()->isReadWrite() )
         drag->dragCopy();
     else {
-        if ( drag->drag() && QDragObject::target() != m_page  ) {
+        if ( drag->drag() && QDragObject::target() != m_canvas  ) {
             textObject()->removeSelectedText( cursor() );
         }
     }
@@ -1186,7 +1187,7 @@ void KPTextView::startDrag()
 
 void KPTextView::showFormat( KoTextFormat *format )
 {
-    m_page->getView()->showFormat( *format );
+    m_canvas->getView()->showFormat( *format );
 }
 
 void KPTextView::pgUpKeyPressed()
@@ -1243,13 +1244,13 @@ void KPTextView::drawCursor( bool b )
     // TODO a kword-like painting method (many changes required though)
     //kpTextObject()->kPresenterDocument()->repaint( kpTextObject() );
 
-    QPainter painter( m_page );
-    //painter.translate( -m_page->contentsX(), -m_page->contentsY() );
-    //painter.setBrushOrigin( -m_page->contentsX(), -m_page->contentsY() );
-    painter.translate( -m_page->getView()->getDiffX(), -m_page->getView()->getDiffY() );
-    //painter.setBrushOrigin( -m_page->contentsX(), -m_page->contentsY() );
+    QPainter painter( m_canvas );
+    //painter.translate( -m_canvas->contentsX(), -m_canvas->contentsY() );
+    //painter.setBrushOrigin( -m_canvas->contentsX(), -m_canvas->contentsY() );
+    painter.translate( -m_canvas->getView()->getDiffX(), -m_canvas->getView()->getDiffY() );
+    //painter.setBrushOrigin( -m_canvas->contentsX(), -m_canvas->contentsY() );
 
-    kpTextObject()->drawCursor( &painter, cursor(), b, m_page );
+    kpTextObject()->drawCursor( &painter, cursor(), b, m_canvas );
 }
 
 void KPTextView::mousePressEvent( QMouseEvent *e, const QPoint &_pos)
@@ -1314,7 +1315,7 @@ void KPTextView::insertVariable( int type, int subtype )
     if ( type == VT_CUSTOM )
     {
         // Choose an existing variable
-        KoVariableNameDia dia( m_page, doc->getVariableCollection()->getVariables() );
+        KoVariableNameDia dia( m_canvas, doc->getVariableCollection()->getVariables() );
         if ( dia.exec() == QDialog::Accepted )
             var = new KoCustomVariable( textObject()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection() );
     }
@@ -1399,7 +1400,7 @@ void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
     }
 
     QPoint iPoint=e->pos() - kpTextObject()->getOrig();
-    iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_page->diffx(),iPoint.y()+m_page->diffy()) );
+    iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
 
     textObject()->emitHideCursor();
     placeCursor( iPoint );
@@ -1419,14 +1420,14 @@ void KPTextView::dropEvent( QDropEvent * e )
         e->acceptAction();
         QTextCursor dropCursor( textDocument() );
         QPoint dropPoint=e->pos() - kpTextObject()->getOrig();
-        dropPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(dropPoint.x()+ m_page->diffx(),dropPoint.y()+m_page->diffy()) );
+        dropPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(dropPoint.x()+ m_canvas->diffx(),dropPoint.y()+m_canvas->diffy()) );
 
         // ####### Factorize code in libkotext!
         KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
         dropCursor.place( dropPoint, textDocument()->firstParag() );
         kdDebug(32001) << "KPTextView::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
 
-        if ( ( e->source() == m_page ) &&
+        if ( ( e->source() == m_canvas ) &&
              e->action() == QDropEvent::Move ) {
             //kdDebug()<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;;
             if ( textDocument()->hasSelection( KoTextDocument::Standard ) )

@@ -33,6 +33,8 @@ class KoVariable;
 class KoVariableFormatCollection;
 class KPrVariableCollection;
 
+#include "kprpage.h"
+
 #include <koDocument.h>
 #include <koDocumentChild.h>
 
@@ -109,9 +111,6 @@ public:
     virtual bool initDoc() { return insertNewTemplate( 0, 0, true ); }
     void initEmpty();
 
-    // insert an object
-    virtual void insertObject( const QRect&, KoDocumentEntry&, int, int );
-
     // change geometry of a child
 
     // page layout
@@ -122,91 +121,11 @@ public:
     unsigned int insertNewPage( int, int, bool _restore=true );
     bool insertNewTemplate( int, int, bool clean=false );
 
-    // get number of pages and objects
-    unsigned int getPageNums() const { return _backgroundList.count(); }
-    unsigned int objNums() const { return _objectList->count(); }
+    const QPtrList<KPRPage> & getPageList() const {return m_pageList;}
 
-    // background
-    void setBackColor( unsigned int, QColor, QColor, BCType, bool, int, int );
-    void setBackPixmap( unsigned int pageNum, const KPImageKey & key );
-    void setBackClipart( unsigned int pageNum, const KPClipartKey & key );
-    void setBackView( unsigned int, BackView );
-    void setBackType( unsigned int, BackType );
-    bool setPenBrush( QPen, QBrush, LineEnd, LineEnd, FillType, QColor, QColor, BCType,
-		      bool, int, int, bool );
-    bool setLineBegin( LineEnd );
-    bool setLineEnd( LineEnd );
-    bool setPieSettings( PieType, int, int );
-    bool setRectSettings( int, int );
-    bool setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
-    void setPageEffect( unsigned int, PageEffect );
-    bool setPenColor( QColor, bool );
-    bool setBrushColor( QColor, bool );
-    BackType getBackType( unsigned int );
-    BackView getBackView( unsigned int );
-    //QString getBackPixFilename( unsigned int );
-    KoImageKey getBackPixKey( unsigned int );
-    //QDateTime getBackPixLastModified( unsigned int );
-    KPClipartKey getBackClipKey( unsigned int );
-    //QDateTime getBackClipLastModified( unsigned int );
-    QColor getBackColor1( unsigned int );
-    QColor getBackColor2( unsigned int );
-    bool getBackUnbalanced( unsigned int );
-    int getBackXFactor( unsigned int );
-    int getBackYFactor( unsigned int );
-    BCType getBackColorType( unsigned int );
-    PageEffect getPageEffect( unsigned int );
-    QPen getPen( QPen );
-    QBrush getBrush( QBrush );
-    LineEnd getLineBegin( LineEnd );
-    LineEnd getLineEnd( LineEnd );
-    FillType getFillType( FillType );
-    QColor getGColor1( QColor );
-    QColor getGColor2( QColor );
-    BCType getGType( BCType );
-    PieType getPieType( PieType );
-    bool getGUnbalanced( bool );
-    int getGXFactor( int );
-    int getGYFactor( int );
-    int getRndX( int );
-    int getRndY( int );
-    int getPieLength( int );
-    int getPieAngle( int );
-    bool getSticky( bool );
-    bool getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue, int *_sharpnessValue );
+    QPtrList<KPRPage> pageList() const { return m_pageList;}
 
-    // raise and lower objs
-    void raiseObjs( int, int );
-    void lowerObjs( int, int );
-
-    // insert/change objects
-    void insertPicture( const QString &, int, int, int _x = 10, int _y = 10 );
-    void insertClipart( const QString &, int, int );
-    void changePicture( const QString & );
-    void changeClipart( const QString & );
-    void insertLine( QRect, QPen, LineEnd, LineEnd, LineType, int, int );
-    void insertRectangle( QRect, QPen, QBrush, FillType, QColor, QColor, BCType, int, int, bool ,int, int, int, int );
-    void insertCircleOrEllipse( QRect, QPen, QBrush, FillType, QColor, QColor, BCType, bool ,int, int, int, int );
-    void insertPie( QRect, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
-                    BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le, bool ,int, int, int diffx, int diffy );
-    void insertText( QRect, int, int, QString text = QString::null, KPresenterView *_view = 0L );
-    void insertAutoform( QRect, QPen, QBrush, LineEnd, LineEnd, FillType, QColor,
-                         QColor, BCType, const QString &, bool ,int, int, int, int );
-
-    void insertFreehand( const QPointArray &, QRect, QPen, LineEnd, LineEnd, int, int );
-    void insertPolyline( const QPointArray &, QRect, QPen, LineEnd, LineEnd, int, int );
-
-    void insertQuadricBezierCurve( const QPointArray &, const QPointArray &, QRect, QPen, LineEnd, LineEnd, int, int );
-    void insertCubicBezierCurve( const QPointArray &, const QPointArray &, QRect, QPen, LineEnd, LineEnd, int, int );
-
-    void insertPolygon( const QPointArray &, QRect, QPen, QBrush, FillType, QColor, QColor, BCType,
-                        bool ,int, int, int, int, bool, int, int );
-
-    // get list of pages and objects
-    QPtrList<KPBackGround> *backgroundList() { return &_backgroundList; }
-    QPtrList<KPObject> *objectList() { return _objectList; }
-    const QPtrList<KPBackGround> *backgroundList() const { return &_backgroundList; }
-    const QPtrList<KPObject> *objectList() const { return _objectList; }
+    void insertObjectInPage(int offset, KPObject *_obj);
 
     // get - set raster
     unsigned int rastX() const { return _rastX; }
@@ -227,14 +146,12 @@ public:
     void setInfinitLoop( bool il ) { _spInfinitLoop = il; }
     void setManualSwitch( bool ms ) { _spManualSwitch = ms; }
 
+
     // size of page
     QRect getPageRect( unsigned int num, int diffx, int diffy,
 		       float fakt = 1.0, bool decBorders = true ) const;
 
-    // delete/reorder objects
-    void deleteObjs( bool _add = true );
-    void copyObjs( int, int );
-    void pasteObjs( const QByteArray & data, int, int, int );
+    void insertObject(KPresenterChild* ch ){ insertChild(ch);}
 
     void savePage( const QString &file, int pgnum );
     void pastePage( const QMimeSource * data, int pgnum );
@@ -250,17 +167,12 @@ public:
 
     // stuff for screen-presentations
     QValueList<int> reorderPage( unsigned int, int, int, float fakt = 1.0 );
-    // Returns the page on which the object @p objNum is, 1-based.
-    int getPageOfObj( int objNum, int diffx, int diffy, float fakt = 1.0 );
 
     QPen presPen() const { return _presPen; }
     void setPresPen( QPen p ) {_presPen = p; }
 
-    int numSelected() const;
-    KPObject* getSelectedObj();
-
-    void restoreBackground( int );
-    void loadPastedObjs( const QString &in, int currPage );
+    void restoreBackground( KPRPage * );
+    void loadPastedObjs( const QString &in, int currPage, KPRPage* _page );
 
     void deSelectAllObj();
 
@@ -270,12 +182,6 @@ public:
 
     KoAutoFormat * getAutoFormat() { return m_autoFormat; }
 
-    void alignObjsLeft();
-    void alignObjsCenterH();
-    void alignObjsRight();
-    void alignObjsTop();
-    void alignObjsCenterV();
-    void alignObjsBottom();
     void replaceObjs( bool createUndoRedo = true );
 
     PresSpeed getPresSpeed() const { return presSpeed; }
@@ -294,11 +200,6 @@ public:
     int getTopBorder();
     int getBottomBorder();
 
-    void setObjectList( QPtrList<KPObject> *_list ) {
-        _objectList->setAutoDelete( false ); _objectList = _list; _objectList->setAutoDelete( false );
-    }
-
-    int getPenBrushFlags();
 
     void enableEmbeddedParts( bool f );
 
@@ -321,14 +222,14 @@ public:
 
     virtual DCOPObject* dcopObject();
 
-    void groupObjects();
-    void ungroupObjects();
-
     QStringList manualTitleList;
 
     void initConfig();
 
     bool raiseAndLowerObject;
+
+    bool pasting;
+    int pasteXOffset, pasteYOffset;
 
     KoStyle* standardStyle();
 
@@ -363,6 +264,9 @@ public:
     KoVariableFormatCollection *variableFormatCollection() { return m_varFormatCollection; }
 
     void recalcVariables( int type );
+
+    void recalcPageNum();
+
     KPrVariableCollection *getVariableCollection() {return m_varColl;}
 
     void refreshMenuCustomVariable();
@@ -372,7 +276,7 @@ public:
 
     void reorganizeGUI();
 
-
+    
     // For NoteBar
     void setNoteText( int _pageNum, const QString &_text );
     QString getNoteText( int _pageNum );
@@ -387,6 +291,7 @@ public:
 
     void updateRuler();
 
+    unsigned int getPageNums() const { return m_pageList.count(); }
 
     // Tell all views to stop editing this frameset, if they were doing so
     void terminateEditing( KPTextObject * textObj )
@@ -408,6 +313,7 @@ signals:
     void pageNumChanged();
     void sig_updateRuler();
     void sig_terminateEditing( KPTextObject * );
+    void sig_changeActivePage( KPRPage* );
 
 protected slots:
     void slotDocumentRestored();
@@ -428,7 +334,7 @@ protected:
     QDomElement saveTitle( QDomDocument &doc );
     QDomElement saveNote( QDomDocument &doc );
     void loadBackground( const QDomElement &element );
-    void loadObjects( const QDomElement &element, bool _paste = false );
+    void loadObjects( const QDomElement &element, bool _paste = false, KPRPage *_page=0L );
     void loadTitle( const QDomElement &element );
     void loadNote( const QDomElement &element );
     virtual bool completeLoading( KoStore* /* _store */ );
@@ -444,11 +350,6 @@ protected:
 
     // page layout
     KoPageLayout _pageLayout;
-    // List of backgrounds (one per page)
-    QPtrList<KPBackGround> _backgroundList;
-
-    // list of objects
-    QPtrList<KPObject> *_objectList;
 
     // screenpresentations
     bool _spInfinitLoop, _spManualSwitch;
@@ -472,9 +373,6 @@ protected:
     KPImageCollection _imageCollection;
     KPGradientCollection _gradientCollection;
     KPClipartCollection _clipartCollection;
-
-    bool pasting;
-    int pasteXOffset, pasteYOffset;
 
     KPTextObject *_header, *_footer;
     bool _hasHeader, _hasFooter;
@@ -531,6 +429,7 @@ private:
 
 
     KPresenterView *m_kpresenterView;;
+    QPtrList<KPRPage> m_pageList;
 };
 
 #endif

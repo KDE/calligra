@@ -129,9 +129,9 @@ void KPAutoformObject::setFillType( FillType _fillType )
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPAutoformObject::save( QDomDocument& doc )
+QDomDocumentFragment KPAutoformObject::save( QDomDocument& doc, int offset )
 {
-    QDomDocumentFragment fragment=KP2DObject::save(doc);
+    QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
     if (lineBegin!=L_NORMAL)
         fragment.appendChild(KPObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
     if (lineEnd!=L_NORMAL)
@@ -156,9 +156,9 @@ QDomDocumentFragment KPAutoformObject::save( QDomDocument& doc )
 }
 
 /*========================== load ================================*/
-void KPAutoformObject::load(const QDomElement &element)
+int KPAutoformObject::load(const QDomElement &element)
 {
-    KP2DObject::load(element);
+    int offset=KP2DObject::load(element);
     QDomElement e=element.namedItem("LINEBEGIN").toElement();
     if(!e.isNull()) {
         int tmp=0;
@@ -197,6 +197,7 @@ void KPAutoformObject::load(const QDomElement &element)
         filename = locate("autoforms", filename, KPresenterFactory::global());
         atfInterp.load( filename );
     }
+    return offset;
 }
 
 /*===================== get angle ================================*/

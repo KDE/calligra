@@ -120,11 +120,11 @@ void KPPartObject::resizeBy( int _dx, int _dy )
 }
 
 /*======================== draw ==================================*/
-void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
+void KPPartObject::draw( QPainter *_painter )
 {
     if ( move )
     {
-        KPObject::draw( _painter, _diffx, _diffy );
+        KPObject::draw( _painter );
         return;
     }
 
@@ -136,7 +136,6 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
     int penw = pen.width() / 2;
 
     _painter->save();
-    _painter->translate( -_diffx, -_diffy );
 
     if ( angle == 0 )
     {
@@ -192,7 +191,7 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
     _painter->restore();
 
-    KPObject::draw( _painter, _diffx, _diffy );
+    KPObject::draw( _painter );
 }
 
 /*================================================================*/
@@ -232,7 +231,7 @@ void KPPartObject::deactivate()
 }
 
 /*================================================================*/
-QDomDocumentFragment KPPartObject::save( QDomDocument& doc )
+QDomDocumentFragment KPPartObject::save( QDomDocument& doc, int offset )
 {
     // ### FIXME
     QDomDocumentFragment fragment=doc.createDocumentFragment();
@@ -258,9 +257,9 @@ QDomDocumentFragment KPPartObject::save( QDomDocument& doc )
 }
 
 /*========================== load ================================*/
-void KPPartObject::load(const QDomElement &element)
+int KPPartObject::load(const QDomElement &element)
 {
-    KPObject::load(element);
+    int offset=KPObject::load(element);
     QDomElement e=element.namedItem("PEN").toElement();
     if(!e.isNull())
         setPen(KPObject::toPen(e));
@@ -280,6 +279,7 @@ void KPPartObject::load(const QDomElement &element)
         if(gradient)
             gradient->init(gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
     }
+    return offset;
 }
 
 #include <kppartobject.moc>

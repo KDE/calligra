@@ -45,6 +45,7 @@
 #include "kprtextdocument.h"
 using namespace Qt3;
 #include <kdebug.h>
+#include "kprvariable.h"
 
 
 /******************************************************************/
@@ -155,7 +156,7 @@ SetBackCmd::SetBackCmd( QString _name, QColor _backColor1, QColor _backColor2, B
 			bool _oldBackUnbalanced, int _oldBackXFactor, int _oldBackYFactor,
 			const KPClipartKey & _oldBackPix, const KPClipartKey & _oldBackClip,
                         BackView _oldBackView, BackType _oldBackType,
-			bool _takeGlobal, int _currPgNum, KPresenterDoc *_doc )
+			bool _takeGlobal, KPresenterDoc *_doc, KPRPage *_page )
     : KCommand( _name ), backColor1( _backColor1 ), backColor2( _backColor2 ), unbalanced( _backUnbalanced ),
       xfactor( _backXFactor ), yfactor( _backYFactor ), backPix( _backPix ), backClip( _backClip ),
       oldBackColor1( _oldBackColor1 ), oldBackColor2( _oldBackColor2 ), oldUnbalanced( _oldBackUnbalanced ),
@@ -168,36 +169,37 @@ SetBackCmd::SetBackCmd( QString _name, QColor _backColor1, QColor _backColor2, B
     oldBackView = _oldBackView;
     oldBackType = _oldBackType;
     takeGlobal = _takeGlobal;
-    currPgNum = _currPgNum;
     doc = _doc;
+    m_page=_page;
 }
 
 /*====================== execute =================================*/
 void SetBackCmd::execute()
 {
+
     if ( !takeGlobal ) {
-	doc->setBackColor( currPgNum - 1, backColor1, backColor2, bcType,
+	m_page->setBackColor( backColor1, backColor2, bcType,
 			   unbalanced, xfactor, yfactor );
-	doc->setBackType( currPgNum - 1, backType );
-	doc->setBackView( currPgNum - 1, backView );
-	doc->setBackPixmap( currPgNum - 1, backPix );
-	doc->setBackClipart( currPgNum - 1, backClip );
-	doc->restoreBackground( currPgNum - 1 );
+	m_page->setBackType(  backType );
+	m_page->setBackView(  backView );
+	m_page->setBackPixmap( backPix );
+	m_page->setBackClipart( backClip );
+	doc->restoreBackground( m_page );
     } else {
 	unsigned int i = 0;
-	for ( i = 0; i < doc->getPageNums(); i++ ) {
-	    doc->setBackColor( i, backColor1, backColor2, bcType,
+        QPtrListIterator<KPRPage> it( doc->getPageList() );
+        for ( ; it.current() ; ++it )
+        {
+ 	    it.current()->setBackColor(  backColor1, backColor2, bcType,
 			       unbalanced, xfactor, yfactor );
-	    doc->setBackType( i, backType );
-	    doc->setBackView( i, backView );
-	    doc->setBackPixmap( i, backPix );
-	    doc->setBackClipart( i, backClip );
-	}
+	    it.current()->setBackType( backType );
+	    it.current()->setBackView( backView );
+	    it.current()->setBackPixmap(  backPix );
+	    it.current()->setBackClipart( backClip );
+            doc->restoreBackground(it.current());
+        }
 
-	for ( i = 0; i < doc->getPageNums(); i++ )
-	    doc->restoreBackground( i );
     }
-
     doc->repaint( false );
 }
 
@@ -205,28 +207,26 @@ void SetBackCmd::execute()
 void SetBackCmd::unexecute()
 {
     if ( !takeGlobal ) {
-	doc->setBackColor( currPgNum - 1, oldBackColor1, oldBackColor2, oldBcType,
+	m_page->setBackColor(  oldBackColor1, oldBackColor2, oldBcType,
 			   oldUnbalanced, oldXFactor, oldYFactor );
-	doc->setBackType( currPgNum - 1, oldBackType );
-	doc->setBackView( currPgNum - 1, oldBackView );
-	doc->setBackPixmap( currPgNum - 1, oldBackPix );
-	doc->setBackClipart( currPgNum - 1, oldBackClip );
-	doc->restoreBackground( currPgNum - 1 );
+	m_page->setBackType( oldBackType );
+	m_page->setBackView(  oldBackView );
+	m_page->setBackPixmap(  oldBackPix );
+	m_page->setBackClipart( oldBackClip );
+	doc->restoreBackground( m_page );
     } else {
-	unsigned int i = 0;
-	for ( i = 0; i < doc->getPageNums(); i++ ) {
-	    doc->setBackColor( i, oldBackColor1, oldBackColor2, oldBcType,
+        QPtrListIterator<KPRPage> it( doc->getPageList() );
+        for ( ; it.current() ; ++it )
+        {
+ 	    it.current()->setBackColor(  oldBackColor1, oldBackColor2, oldBcType,
 			       oldUnbalanced, oldXFactor, oldYFactor );
-	    doc->setBackType( i, oldBackType );
-	    doc->setBackView( i, oldBackView );
-	    doc->setBackPixmap( i, oldBackPix );
-	    doc->setBackClipart( i, oldBackClip );
-	}
-
-	for ( i = 0; i < doc->getPageNums(); i++ )
-	    doc->restoreBackground( i );
+	    it.current()->setBackType( oldBackType );
+	    it.current()->setBackView( oldBackView );
+	    it.current()->setBackPixmap(  oldBackPix );
+	    it.current()->setBackClipart( oldBackClip );
+            doc->restoreBackground(it.current());
+        }
     }
-
     doc->repaint( false );
 }
 
@@ -315,11 +315,12 @@ void ChgClipCmd::unexecute()
 
 /*======================== constructor ===========================*/
 ChgPixCmd::ChgPixCmd( QString _name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
-                      KPresenterDoc *_doc )
+                      KPresenterDoc *_doc, KPRPage *_page)
     : KCommand( _name )
 {
     oldObject = _oldObject;
     newObject = _newObject;
+    m_page=_page;
     doc = _doc;
     oldObject->incCmdRef();
     newObject->incCmdRef();
@@ -337,18 +338,14 @@ ChgPixCmd::~ChgPixCmd()
 /*======================== execute ===============================*/
 void ChgPixCmd::execute()
 {
-    unsigned int pos = doc->objectList()->findRef( oldObject );
-    doc->objectList()->take( pos );
-    doc->objectList()->insert( pos, newObject );
+    m_page->insertObject(oldObject, newObject);
     doc->repaint( newObject );
 }
 
 /*====================== unexecute ===============================*/
 void ChgPixCmd::unexecute()
 {
-    unsigned int pos = doc->objectList()->findRef( newObject );
-    doc->objectList()->take( pos );
-    doc->objectList()->insert( pos, oldObject );
+    m_page->insertObject(newObject, oldObject);
     doc->repaint( oldObject );
 }
 
@@ -357,11 +354,12 @@ void ChgPixCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-DeleteCmd::DeleteCmd( QString _name, QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
+DeleteCmd::DeleteCmd( QString _name, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPRPage *_page )
     : KCommand( _name ), objects( _objects )
 {
     objects.setAutoDelete( false );
     doc = _doc;
+    m_page=_page;
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->incCmdRef();
 }
@@ -378,12 +376,13 @@ void DeleteCmd::execute()
 {
     QRect oldRect;
 
+    QPtrList<KPObject> list (m_page->objectList());
     for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-	oldRect = objects.at( i )->getBoundingRect( 0, 0 );
-	if ( doc->objectList()->findRef( objects.at( i ) ) != -1 )
+	oldRect = objects.at( i )->getBoundingRect();
+	if ( list.findRef( objects.at( i ) ) != -1 )
 	{
-	    doc->objectList()->take( doc->objectList()->findRef( objects.at( i ) ) );
+            m_page->takeObject(objects.at(i));
 	    objects.at( i )->removeFromObjList();
 	}
 	doc->repaint( oldRect );
@@ -396,7 +395,7 @@ void DeleteCmd::unexecute()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-	doc->objectList()->append( objects.at( i ) );
+	m_page->appendObject( objects.at( i ) );
 	objects.at( i )->addToObjList();
 	doc->repaint( objects.at( i ) );
     }
@@ -475,11 +474,12 @@ void EffectCmd::unexecute()
 /*==============================================================*/
 GroupObjCmd::GroupObjCmd( const QString &_name,
 			  const QPtrList<KPObject> &_objects,
-			  KPresenterDoc *_doc )
+			  KPresenterDoc *_doc, KPRPage *_page )
     : KCommand( _name ), objects( _objects )
 {
     objects.setAutoDelete( false );
     doc = _doc;
+    m_page=_page;
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->incCmdRef();
     grpObj = new KPGroupObject( objects );
@@ -497,7 +497,7 @@ GroupObjCmd::~GroupObjCmd()
 /*==============================================================*/
 void GroupObjCmd::execute()
 {
-    QRect r = objects.first()->getBoundingRect( 0, 0 );
+    QRect r = objects.first()->getBoundingRect( );
     KPObject *obj = 0;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
@@ -505,9 +505,9 @@ void GroupObjCmd::execute()
         obj->setOrigPointInGroup( obj->getOrig() );
         obj->setOrigSizeInGroup( obj->getSize() );
 	obj->setSelected( false );
-	doc->objectList()->take( doc->objectList()->findRef( obj ) );
+        m_page->takeObject(obj);
 	obj->removeFromObjList();
-	r = r.unite( obj->getBoundingRect( 0, 0 ) );
+	r = r.unite( obj->getBoundingRect( ) );
     }
 
     grpObj->setUpdateObjects( false );
@@ -515,7 +515,7 @@ void GroupObjCmd::execute()
     grpObj->setOrigSizeInGroup( QSize( r.width(), r.height() ) );
     grpObj->setOrig( r.x(), r.y() );
     grpObj->setSize( r.width(), r.height() );
-    doc->objectList()->append( grpObj );
+    m_page->appendObject( grpObj );
     grpObj->addToObjList();
     grpObj->setUpdateObjects( true );
     grpObj->setSelected( true );
@@ -531,12 +531,12 @@ void GroupObjCmd::unexecute()
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
 	obj = objects.at( i );
-	doc->objectList()->append( obj );
+	m_page->appendObject( obj );
 	obj->addToObjList();
 	obj->setSelected( true );
     }
 
-    doc->objectList()->take( doc->objectList()->findRef( grpObj ) );
+    m_page->takeObject(grpObj);
     grpObj->removeFromObjList();
 
     doc->repaint( false );
@@ -549,11 +549,12 @@ void GroupObjCmd::unexecute()
 /*==============================================================*/
 UnGroupObjCmd::UnGroupObjCmd( const QString &_name,
 			  KPGroupObject *grpObj_,
-			  KPresenterDoc *_doc )
+			  KPresenterDoc *_doc, KPRPage *_page )
     : KCommand( _name ), objects( grpObj_->getObjects() )
 {
     objects.setAutoDelete( false );
     doc = _doc;
+    m_page=_page;
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->incCmdRef();
     grpObj = grpObj_;
@@ -576,12 +577,12 @@ void UnGroupObjCmd::execute()
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
 	obj = objects.at( i );
-	doc->objectList()->append( obj );
+	m_page->appendObject( obj );
 	obj->addToObjList();
 	obj->setSelected( true );
     }
 
-    doc->objectList()->take( doc->objectList()->findRef( grpObj ) );
+    m_page->takeObject(grpObj);
     grpObj->removeFromObjList();
 
     doc->repaint( false );
@@ -590,22 +591,22 @@ void UnGroupObjCmd::execute()
 /*==============================================================*/
 void UnGroupObjCmd::unexecute()
 {
-    QRect r = objects.first()->getBoundingRect( 0, 0 );
+    QRect r = objects.first()->getBoundingRect(  );
 
     KPObject *obj = 0;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
 	obj = objects.at( i );
 	obj->setSelected( false );
-	doc->objectList()->take( doc->objectList()->findRef( obj ) );
+	m_page->takeObject(obj);
 	obj->removeFromObjList();
-	r = r.unite( obj->getBoundingRect( 0, 0 ) );
+	r = r.unite( obj->getBoundingRect( ) );
     }
 
     grpObj->setUpdateObjects( false );
     grpObj->setOrig( r.x(), r.y() );
     grpObj->setSize( r.width(), r.height() );
-    doc->objectList()->append( grpObj );
+    m_page->appendObject( grpObj );
     grpObj->addToObjList();
     grpObj->setUpdateObjects( true );
     grpObj->setSelected( true );
@@ -618,11 +619,12 @@ void UnGroupObjCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-InsertCmd::InsertCmd( QString _name, KPObject *_object, KPresenterDoc *_doc )
+InsertCmd::InsertCmd( QString _name, KPObject *_object, KPresenterDoc *_doc, KPRPage *_page )
     : KCommand( _name )
 {
     object = _object;
     doc = _doc;
+    m_page=_page;
     object->incCmdRef();
 }
 
@@ -635,21 +637,20 @@ InsertCmd::~InsertCmd()
 /*====================== execute =================================*/
 void InsertCmd::execute()
 {
-    doc->objectList()->append( object );
+    m_page->appendObject( object );
     object->addToObjList();
     if ( object->getType() == OT_TEXT )
-    {
 	( (KPTextObject*)object )->recalcPageNum( doc );
-    }
     doc->repaint( object );
 }
 
 /*====================== unexecute ===============================*/
 void InsertCmd::unexecute()
 {
-    QRect oldRect = object->getBoundingRect( 0, 0 );
-    if ( doc->objectList()->findRef( object ) != -1 ) {
-	doc->objectList()->take( doc->objectList()->findRef( object ) );
+    QRect oldRect = object->getBoundingRect(  );
+    QPtrList<KPObject> list(m_page->objectList());
+    if ( list.findRef( object ) != -1 ) {
+	m_page->takeObject(  object );
 	object->removeFromObjList();
         if ( object->getType() == OT_TEXT )
             doc->terminateEditing( (KPTextObject*)object );
@@ -662,43 +663,32 @@ void InsertCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-LowerRaiseCmd::LowerRaiseCmd( QString _name, QPtrList<KPObject> *_oldList, QPtrList<KPObject> *_newList, KPresenterDoc *_doc )
+LowerRaiseCmd::LowerRaiseCmd( QString _name, QPtrList<KPObject> _oldList, QPtrList<KPObject> _newList, KPresenterDoc *_doc, KPRPage *_page )
     : KCommand( _name )
 {
     oldList = _oldList;
     newList = _newList;
+    m_page=_page;
     m_executed = false;
-    oldList->setAutoDelete( false );
-    newList->setAutoDelete( false );
+    oldList.setAutoDelete( false );
+    newList.setAutoDelete( false );
     doc = _doc;
 
-    for ( unsigned int i = 0; i < oldList->count(); i++ )
-        oldList->at( i )->incCmdRef();
+    for ( unsigned int i = 0; i < oldList.count(); i++ )
+        oldList.at( i )->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 LowerRaiseCmd::~LowerRaiseCmd()
 {
-    for ( unsigned int i = 0; i < oldList->count(); i++ )
-        oldList->at( i )->decCmdRef();
-
-    // I'm not sure how to handle this here correctly ( to avoid memory leaks and not to crash... )
-    //delete oldList;
-    //delete newList;
-
-    // David: well, it's simple: if execute() was done last, only oldList should be deleted
-    // and if unexecute() was done last, only newList should be deleted
-    // (reason: the doc - or another command - holds the other list).
-    if ( m_executed )
-        delete oldList;
-    else
-        delete newList;
+    for ( unsigned int i = 0; i < oldList.count(); i++ )
+        oldList.at( i )->decCmdRef();
 }
 
 /*====================== execute =================================*/
 void LowerRaiseCmd::execute()
 {
-    doc->setObjectList( newList );
+    m_page->setObjectList( newList );
     doc->repaint( false );
     m_executed = true;
 }
@@ -706,7 +696,7 @@ void LowerRaiseCmd::execute()
 /*====================== unexecute ===============================*/
 void LowerRaiseCmd::unexecute()
 {
-    doc->setObjectList( oldList );
+    m_page->setObjectList( oldList );
     doc->repaint( false );
     m_executed = false;
 }
@@ -716,11 +706,12 @@ void LowerRaiseCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd::MoveByCmd( QString _name, QPoint _diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
+MoveByCmd::MoveByCmd( QString _name, QPoint _diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc,KPRPage *_page )
     : KCommand( _name ), diff( _diff ), objects( _objects )
 {
     objects.setAutoDelete( false );
     doc = _doc;
+    m_page=_page;
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
 	if ( objects.at( i )->getType() == OT_TEXT ) {
 	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
@@ -743,7 +734,7 @@ void MoveByCmd::execute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	oldRect = objects.at( i )->getBoundingRect( 0, 0 );
+	oldRect = objects.at( i )->getBoundingRect(  );
 	objects.at( i )->moveBy( diff );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -754,6 +745,7 @@ void MoveByCmd::execute()
 	doc->repaint( oldRect );
 	doc->repaint( objects.at( i ) );
     }
+
 }
 
 /*====================== unexecute ===============================*/
@@ -762,7 +754,7 @@ void MoveByCmd::unexecute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	oldRect = objects.at( i )->getBoundingRect( 0, 0 );
+	oldRect = objects.at( i )->getBoundingRect( );
 	objects.at( i )->moveBy( -diff.x(), -diff.y() );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -813,7 +805,7 @@ void MoveByCmd2::execute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	oldRect = objects.at( i )->getBoundingRect( 0, 0 );
+	oldRect = objects.at( i )->getBoundingRect(  );
 	objects.at( i )->moveBy( *diffs.at( i ) );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -833,7 +825,7 @@ void MoveByCmd2::unexecute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	oldRect = objects.at( i )->getBoundingRect( 0, 0 );
+	oldRect = objects.at( i )->getBoundingRect(  );
 	objects.at( i )->moveBy( -diffs.at( i )->x(), -diffs.at( i )->y() );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -1281,7 +1273,7 @@ PgConfCmd::PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
                       bool _oldManualSwitch, bool _oldInfinitLoop,
                       PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, int _oldPageTimer,
                       bool _oldSoundEffect, QString _oldFileName,
-                      KPresenterDoc *_doc, int _pgNum )
+                      KPresenterDoc *_doc, KPRPage *_page )
     : KCommand( _name )
 {
     manualSwitch = _manualSwitch;
@@ -1299,7 +1291,7 @@ PgConfCmd::PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
     oldSoundEffect = _oldSoundEffect;
     oldFileName = _oldFileName;
     doc = _doc;
-    pgNum = _pgNum;
+    m_page=_page;
 }
 
 /*================================================================*/
@@ -1307,11 +1299,11 @@ void PgConfCmd::execute()
 {
     doc->setManualSwitch( manualSwitch );
     doc->setInfinitLoop( infinitLoop );
-    doc->setPageEffect( pgNum, pageEffect );
+    m_page->setPageEffect( pageEffect );
     doc->setPresSpeed( presSpeed );
-    doc->setPageTimer( pgNum, pageTimer );
-    doc->setPageSoundEffect( pgNum, soundEffect );
-    doc->setPageSoundFileName( pgNum, fileName );
+    m_page->setPageTimer(  pageTimer );
+    m_page->setPageSoundEffect(  soundEffect );
+    m_page->setPageSoundFileName(  fileName );
 }
 
 /*================================================================*/
@@ -1319,11 +1311,11 @@ void PgConfCmd::unexecute()
 {
     doc->setManualSwitch( oldManualSwitch );
     doc->setInfinitLoop( oldInfinitLoop );
-    doc->setPageEffect( pgNum, oldPageEffect );
+    m_page->setPageEffect( oldPageEffect );
     doc->setPresSpeed( oldPresSpeed );
-    doc->setPageTimer( pgNum, oldPageTimer );
-    doc->setPageSoundEffect( pgNum, oldSoundEffect );
-    doc->setPageSoundFileName( pgNum, oldFileName );
+    m_page->setPageTimer(  oldPageTimer );
+    m_page->setPageSoundEffect(  oldSoundEffect );
+    m_page->setPageSoundFileName(  oldFileName );
 }
 
 /******************************************************************/
@@ -1528,7 +1520,7 @@ void ResizeCmd::execute()
 {
     QRect oldRect;
 
-    oldRect = object->getBoundingRect( 0, 0 );
+    oldRect = object->getBoundingRect( );
     object->moveBy( m_diff );
     object->resizeBy( r_diff );
     if ( object->getType() == OT_TEXT )
@@ -1552,7 +1544,7 @@ void ResizeCmd::unexecute( bool _repaint )
 {
     QRect oldRect;
 
-    oldRect = object->getBoundingRect( 0, 0 );
+    oldRect = object->getBoundingRect( );
     object->moveBy( -m_diff.x(), -m_diff.y() );
     object->resizeBy( -r_diff.width(), -r_diff.height() );
     if ( object->getType() == OT_TEXT )
@@ -1701,4 +1693,25 @@ QTextCursor * KPrPasteTextCommand::unexecute( QTextCursor *c )
     if ( m_idx == 0 )
         static_cast<KoTextParag *>( firstParag )->setParagLayout( m_oldParagLayout );
     return c;
+}
+
+
+KPrChangeVariableSettingCommand::KPrChangeVariableSettingCommand( const QString &name, KPresenterDoc *_doc, int _oldVarOffset, int _newVarOffset):
+    KCommand(name),
+    m_doc(_doc),
+    oldVarOffset(_oldVarOffset),
+    newVarOffset(_newVarOffset)
+{
+}
+
+void KPrChangeVariableSettingCommand::execute()
+{
+    m_doc->getVariableCollection()->variableSetting()->setNumberOffset(newVarOffset);
+    m_doc->recalcVariables( VT_PGNUM );
+}
+
+void KPrChangeVariableSettingCommand::unexecute()
+{
+    m_doc->getVariableCollection()->variableSetting()->setNumberOffset(oldVarOffset);
+    m_doc->recalcVariables( VT_PGNUM );
 }

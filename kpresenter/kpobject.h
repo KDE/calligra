@@ -108,15 +108,15 @@ public:
     virtual void setDisappearSoundEffectFileName( QString _d_fileName )
     { d_fileName = _d_fileName; }
 
-    virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load(const QDomElement &element);
+    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
+    virtual int load(const QDomElement &element);
 
     virtual ObjType getType() const
     { return OT_UNDEFINED; }
     virtual QString getTypeString() const
     { return QString(); }
 
-    virtual QRect getBoundingRect( int _diffx, int _diffy ) const;
+    virtual QRect getBoundingRect( ) const;
     virtual bool isSelected() const
     { return selected; }
     virtual float getAngle() const
@@ -171,13 +171,13 @@ public:
     virtual void doSpecificEffects( bool _specEffects, bool _onlyCurrStep = true )
     { specEffects = _specEffects; onlyCurrStep = _onlyCurrStep; }
 
-    virtual void draw( QPainter *_painter, int _diffx, int _diffy );
+    virtual void draw( QPainter *_painter );
 
-    virtual bool contains( QPoint _point, int _diffx, int _diffy ) const;
-    virtual bool intersects( QRect _rect, int _diffx, int _diffy ) const;
-    virtual QCursor getCursor( QPoint _point, int _diffx, int _diffy, ModifyType &_modType ) const;
+    virtual bool contains( QPoint _point ) const;
+    virtual bool intersects( QRect _rect ) const;
+    virtual QCursor getCursor( QPoint _point, ModifyType &_modType ) const;
 
-    virtual void activate( QWidget * /*_widget*/, int /*diffx*/, int /*diffy*/ )
+    virtual void activate( QWidget * /*_widget*/)
     {; }
     virtual void deactivate()
     {; }
@@ -334,10 +334,10 @@ public:
     virtual int getGYFactor() const
     { return yfactor; }
 
-    virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load(const QDomElement &element);
+    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
+    virtual int load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter, int _diffx, int _diffy );
+    virtual void draw( QPainter *_painter );
 
 protected:
     virtual void paint( QPainter */*_painter*/ ) {}

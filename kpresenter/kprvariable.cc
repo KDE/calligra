@@ -57,7 +57,9 @@ void KPrPgNumVariable::recalc()
         //see KPTextObject::recalcPageNum( KPresenterDoc *doc )
     }
     else
+    {
         m_pgNum = m_doc->getPageNums()+m_varColl->variableSetting()->numberOffset();
+    }
     resize();
 }
 

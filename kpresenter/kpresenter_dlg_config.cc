@@ -39,6 +39,9 @@
 
 #include <float.h>
 #include <kspell.h>
+#include <knumvalidator.h>
+#include <qlineedit.h>
+#include <kprcommand.h>
 
 KPConfig::KPConfig( KPresenterView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
@@ -364,13 +367,15 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     m_undoRedoLimit->setRange(10, 60, 1);
     grid->addWidget(m_undoRedoLimit,0,0);
 
+    QLabel *varLabel= new QLabel(i18n("Variable number offset:"),tmpQGroupBox);
+    grid->addWidget(varLabel,1,0);
 
     KPresenterDoc* doc = m_pView->kPresenterDoc();
     m_oldVariableOffset=doc->getVariableCollection()->variableSetting()->numberOffset();
-    m_variableNumberOffset=new KIntNumInput(m_oldVariableOffset,tmpQGroupBox);
-    m_variableNumberOffset->setLabel(i18n("Variable number offset:"));
-    m_variableNumberOffset->setRange(0,100,1);
-    grid->addWidget(m_variableNumberOffset,1,0);
+    m_variableNumberOffset=new QLineEdit(tmpQGroupBox);
+    m_variableNumberOffset->setValidator(new KIntValidator(0,9999,m_variableNumberOffset));
+    grid->addWidget(m_variableNumberOffset,2,0);
+    m_variableNumberOffset->setText(QString::number(m_oldVariableOffset));
 }
 
 void ConfigureMiscPage::apply()
@@ -383,11 +388,13 @@ void ConfigureMiscPage::apply()
         config->writeEntry("UndoRedo",newUndo);
         doc->setUndoRedoLimit(newUndo);
     }
-    int newVarOffset=m_variableNumberOffset->value();
+    int newVarOffset=m_variableNumberOffset->text().toInt();
     if(newVarOffset!=m_oldVariableOffset)
     {
-        doc->getVariableCollection()->variableSetting()->setNumberOffset(m_variableNumberOffset->value());
-        doc->recalcVariables( VT_PGNUM );
+        KPrChangeVariableSettingCommand *cmd = new KPrChangeVariableSettingCommand( i18n("Change starting page number"), doc, m_oldVariableOffset,newVarOffset );
+        cmd->execute();
+        doc->addCommand(cmd);
+
     }
 }
 

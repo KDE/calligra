@@ -92,7 +92,7 @@ private:
     KIntNumInput* m_undoRedoLimit;
     int m_oldNbRedo;
     int m_oldVariableOffset;
-    KIntNumInput* m_variableNumberOffset;
+    QLineEdit* m_variableNumberOffset;
 };
 
 class KPConfig : public KDialogBase

@@ -35,6 +35,7 @@
 // for getenv ()
 #include <stdlib.h>
 using namespace std;
+#include <kdebug.h>
 
 /******************************************************************/
 /* Class: KPBackGround                                            */
@@ -42,7 +43,7 @@ using namespace std;
 
 /*================================================================*/
 KPBackGround::KPBackGround( KPImageCollection *_imageCollection, KPGradientCollection *_gradientCollection,
-                            KPClipartCollection *_clipartCollection, KPresenterDoc *_doc )
+                            KPClipartCollection *_clipartCollection, KPRPage *_page )
     : footerHeight( 0 )
 {
     dcop = 0;
@@ -63,8 +64,10 @@ KPBackGround::KPBackGround( KPImageCollection *_imageCollection, KPGradientColle
     gradientCollection = _gradientCollection;
     clipartCollection = _clipartCollection;
     gradient = 0L;
-
-    doc = _doc;
+    m_page=_page;
+    //temporary
+    if( m_page)
+        setBgSize( m_page->getZoomPageRect().size(),false);
 }
 
 /*================================================================*/
@@ -102,11 +105,9 @@ void KPBackGround::setBackClipart( const QString &_filename, QDateTime _lastModi
 }
 
 /*================================================================*/
-void KPBackGround::draw( QPainter *_painter, QPoint _offset, bool _drawBorders )
+void KPBackGround::draw( QPainter *_painter, bool _drawBorders )
 {
     _painter->save();
-    _painter->translate( _offset.x(), _offset.y() );
-
     switch ( backType )
     {
     case BT_COLOR:
@@ -134,7 +135,7 @@ void KPBackGround::draw( QPainter *_painter, QPoint _offset, bool _drawBorders )
     if ( _drawBorders )
         drawBorders( _painter );
 
-    drawHeaderFooter( _painter, _offset );
+    drawHeaderFooter( _painter );
 
     _painter->restore();
 }
@@ -144,13 +145,10 @@ void KPBackGround::restore()
 {
     if ( backType == BT_PICTURE )
         setBackPixmap( backImage.key().filename(), backImage.key().lastModified() );
-
     if ( backType == BT_CLIPART )
 	setBackClipart( backClipart.key().filename(), backClipart.key().lastModified() );
-
     if ( backType != BT_PICTURE )
         backImage = KPImage();
-
     if ( backType == BT_COLOR || backType == BT_CLIPART ||
 	 backType == BT_PICTURE && backView == BV_CENTER ) {
 	if ( gradient ) {
@@ -159,7 +157,6 @@ void KPBackGround::restore()
 	}
 	gradient = gradientCollection->getGradient( backColor1, backColor2, bcType, ext, unbalanced, xfactor, yfactor );
     }
-
     if ( backType == BT_PICTURE && backView != BV_CENTER && gradient ) {
 	gradientCollection->removeRef( backColor1, backColor2, bcType, ext, unbalanced, xfactor, yfactor );
 	gradient = 0;
@@ -423,7 +420,9 @@ void KPBackGround::load( const QDomElement &element )
 void KPBackGround::drawBackColor( QPainter *_painter )
 {
     if ( getBackColorType() == BCT_PLAIN || getBackColor1() == getBackColor2() )
+    {
         _painter->fillRect( 0, 0, ext.width(), ext.height(), QBrush( getBackColor1() ) );
+    }
     else if ( gradient )
         _painter->drawPixmap( 0, 0, *gradient );
 }
@@ -483,9 +482,9 @@ void KPBackGround::drawBackPix( QPainter *_painter )
 }
 
 /*================================================================*/
-void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
+void KPBackGround::drawHeaderFooter( QPainter *_painter )
 {
-    if ( doc->hasHeader() ) {
+    if ( m_page->kPresenterDoc()->hasHeader() ) {
 #if 0
         QSize s( doc->header()->textObject()->size() );
 
@@ -507,7 +506,7 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 
         doc->header()->setSize( ext.width(), doc->header()->textObject()->document()->lastParag()->rect().bottom() + 1 );
 #endif
-        doc->header()->draw( _painter, 0, 0 );
+        m_page->kPresenterDoc()->header()->draw( _painter );
 #if 0
         if ( doc->header()->textObject()->isModified() )
             doc->header()->textObject()->resize( s );
@@ -515,7 +514,7 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 #endif
     }
 
-    if ( doc->hasFooter() ) {
+    if ( m_page->kPresenterDoc()->hasFooter() ) {
 #if 0
         QSize s( doc->footer()->textObject()->size() );
         QPoint pnt( doc->footer()->textObject()->x(), doc->footer()->textObject()->y() );
@@ -535,7 +534,7 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
             pgnum = 0;
         doc->footer()->textObject()->setPageNum( ++pgnum );
 #endif
-        doc->footer()->draw( _painter, 0, 0 );
+        m_page->kPresenterDoc()->footer()->draw( _painter );
 #if 0
         if ( doc->footer()->textObject()->isModified() )
             doc->footer()->textObject()->resize( s.width(), s.height() );

@@ -76,9 +76,9 @@ void KPClipartObject::setClipart( const KPClipartKey & key )
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPClipartObject::save( QDomDocument& doc )
+QDomDocumentFragment KPClipartObject::save( QDomDocument& doc, int offset )
 {
-    QDomDocumentFragment fragment=KP2DObject::save(doc);
+    QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
     QDomElement elem=doc.createElement("KEY");
     m_clipart.key().saveAttributes(elem);
     fragment.appendChild(elem);
@@ -86,9 +86,9 @@ QDomDocumentFragment KPClipartObject::save( QDomDocument& doc )
 }
 
 /*========================== load ================================*/
-void KPClipartObject::load(const QDomElement &element)
+int KPClipartObject::load(const QDomElement &element)
 {
-    KP2DObject::load(element);
+    int offset=KP2DObject::load(element);
     QDomElement e=element.namedItem("KEY").toElement();
     if(!e.isNull()) {
         KPClipartKey key;
@@ -106,22 +106,23 @@ void KPClipartObject::load(const QDomElement &element)
             m_clipart = clipartCollection->loadClipart( e.attribute("filename") );
         }
     }
+    return offset;
 }
 
 /*========================= draw =================================*/
-void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
+void KPClipartObject::draw( QPainter *_painter )
 {
     if ( move )
     {
-        KPObject::draw( _painter, _diffx, _diffy );
+        KPObject::draw( _painter );
         return;
     }
 
     if ( m_clipart.isNull() )
         return;
 
-    int ox = orig.x() - _diffx;
-    int oy = orig.y() - _diffy;
+    int ox = orig.x();
+    int oy = orig.y();
     int ow = ext.width();
     int oh = ext.height();
 
@@ -201,5 +202,5 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
     _painter->restore();
 
-    KPObject::draw( _painter, _diffx, _diffy );
+    KPObject::draw( _painter );
 }

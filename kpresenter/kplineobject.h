@@ -63,10 +63,10 @@ public:
     virtual LineType getLineType() const
     { return lineType; }
 
-    virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load(const QDomElement &element);
+    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
+    virtual int load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter, int _diffx, int _diffy );
+    virtual void draw( QPainter *_painter );
 
 protected:
     float getAngle( QPoint p1, QPoint p2 );

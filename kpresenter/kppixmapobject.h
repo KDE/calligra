@@ -34,7 +34,7 @@ class QPixmap;
 
 class KPPixmapObject : public KP2DObject
 {
-    friend class Page;
+    friend class KPrCanvas;
 
 public:
     KPPixmapObject( KPImageCollection *_imageCollection );
@@ -66,10 +66,10 @@ public:
     virtual QString getTypeString() const
     { return i18n("Picture"); }
 
-    virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load(const QDomElement &element);
+    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
+    virtual int load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter, int _diffx, int _diffy );
+    virtual void draw( QPainter *_painter );
 
 protected:
     KPPixmapObject() {}

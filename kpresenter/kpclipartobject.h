@@ -53,10 +53,10 @@ public:
     QString getFileName() const
     { return m_clipart.key().filename(); }
 
-    virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load(const QDomElement &element);
+    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
+    virtual int load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter, int _diffx, int _diffy );
+    virtual void draw( QPainter *_painter );
 
     KPClipartCollection::Key getKey() const
     { return m_clipart.key(); }

@@ -25,7 +25,7 @@
 #include <koSearchDia.h>
 using namespace Qt3;
 
-class Page;
+class KPrCanvas;
 class KMacroCommand;
 class KPTextView;
 class KoTextObject;
@@ -44,15 +44,15 @@ class KPrFindReplace : public KoFindReplace
 {
     Q_OBJECT
 public:
-    KPrFindReplace( Page * page, KoSearchDia * dialog , KPTextView *textView ,const QPtrList<KoTextObject> & lstObject);
-    KPrFindReplace( Page * page, KoReplaceDia * dialog, KPTextView *textView,const QPtrList<KoTextObject> & lstObject);
+    KPrFindReplace( KPrCanvas * canvas, KoSearchDia * dialog , KPTextView *textView ,const QPtrList<KoTextObject> & lstObject);
+    KPrFindReplace( KPrCanvas * canvas, KoReplaceDia * dialog, KPTextView *textView,const QPtrList<KoTextObject> & lstObject);
     ~KPrFindReplace();
     
     virtual void emitNewCommand(KCommand *);
     virtual void highlightPortion(Qt3::QTextParag * parag, int index, int length, KoTextDocument *textdoc);
 
 private:
-    Page *m_page;
+    KPrCanvas *m_canvas;
 };
 
 #endif

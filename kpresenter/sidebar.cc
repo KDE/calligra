@@ -33,7 +33,7 @@
 
 #include "sidebar.h"
 #include "kpresenter_view.h"
-#include "page.h"
+#include "kprcanvas.h"
 #include <qapplication.h>
 
 class OutlineItem: public QCheckListItem
@@ -116,7 +116,6 @@ void ThumbBar::rebuildItems()
     QIconViewItem *item = new QIconViewItem(dynamic_cast<QIconView *>(this), QString::number(i+1), getSlideThumb(i));
     item->setDragEnabled(false);  //no dragging for now
   }
-
   arrangeItemsInGrid(QSize(130, 120), true);
 
   uptodate = true;
@@ -131,7 +130,7 @@ QPixmap ThumbBar::getSlideThumb(int slideNr)
   QPixmap pix( doc->getPageRect( 0, 0, 0 ).size() );
   pix.fill( Qt::white );
 
-  view->getPage()->drawPageInPix2( pix, slideNr * doc->getPageRect( 0, 0, 0 ).height(), slideNr);
+  view->getCanvas()->drawPageInPix2( pix, slideNr * doc->getPageRect( 0, 0, 0 ).height(), slideNr);
 
   int extent = 120;
 

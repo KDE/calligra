@@ -49,8 +49,8 @@ public:
     virtual void getRnds( int &_xRnd, int &_yRnd ) const
     { _xRnd = xRnd; _yRnd = yRnd; }
 
-    virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load(const QDomElement &element);
+    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
+    virtual int load(const QDomElement &element);
 
 protected:
     virtual void paint( QPainter *_painter );

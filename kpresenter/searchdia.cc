@@ -19,7 +19,7 @@
 
 #include <kdebug.h>
 #include "searchdia.h"
-#include "page.h"
+#include "kprcanvas.h"
 #include "kpresenter_view.h"
 #include "kpresenter_doc.h"
 #include "kptextobject.h"
@@ -29,16 +29,16 @@
 #include "kprtextdocument.h"
 #include <kotextdocument.h>
 
-KPrFindReplace::KPrFindReplace( Page * page, KoSearchDia * dialog ,KPTextView *textView ,const QPtrList<KoTextObject> & lstObject)
-    :KoFindReplace( page, dialog,textView ,lstObject)
+KPrFindReplace::KPrFindReplace( KPrCanvas * canvas, KoSearchDia * dialog ,KPTextView *textView ,const QPtrList<KoTextObject> & lstObject)
+    :KoFindReplace( canvas, dialog,textView ,lstObject)
 {
-    m_page= page;
+    m_canvas= canvas;
 }
 
-KPrFindReplace::KPrFindReplace( Page * page, KoReplaceDia * dialog, KPTextView *textView,const QPtrList<KoTextObject> & lstObject)
-    :KoFindReplace( page, dialog,textView ,lstObject)
+KPrFindReplace::KPrFindReplace( KPrCanvas * canvas, KoReplaceDia * dialog, KPTextView *textView,const QPtrList<KoTextObject> & lstObject)
+    :KoFindReplace( canvas, dialog,textView ,lstObject)
 {
-    m_page= page;
+    m_canvas= canvas;
 }
 
 KPrFindReplace::~KPrFindReplace()
@@ -48,12 +48,12 @@ KPrFindReplace::~KPrFindReplace()
 
 void KPrFindReplace::emitNewCommand(KCommand *cmd)
 {
-    m_page->getView()->kPresenterDoc()->addCommand(cmd);
+    m_canvas->getView()->kPresenterDoc()->addCommand(cmd);
 }
 
 void KPrFindReplace::highlightPortion(Qt3::QTextParag * parag, int index, int length, KoTextDocument *_textdoc)
 {
     KPrTextDocument *textdoc=static_cast<KPrTextDocument *>(_textdoc);
-    textdoc->textObject()->highlightPortion( parag, index, length,m_page );
+    textdoc->textObject()->highlightPortion( parag, index, length,m_canvas );
 }
 #include "searchdia.moc"

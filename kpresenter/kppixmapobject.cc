@@ -106,9 +106,9 @@ void KPPixmapObject::setPixmap( const KPImageKey & key, const QSize &/*_size*/ )
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc )
+QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, int offset )
 {
-    QDomDocumentFragment fragment=KP2DObject::save(doc);
+    QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
     QDomElement elem=doc.createElement("KEY");
     image.key().saveAttributes(elem);
     fragment.appendChild(elem);
@@ -116,9 +116,9 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc )
 }
 
 /*========================== load ================================*/
-void KPPixmapObject::load(const QDomElement &element)
+int KPPixmapObject::load(const QDomElement &element)
 {
-    KP2DObject::load(element);
+    int offset=KP2DObject::load(element);
     QDomElement e=element.namedItem("KEY").toElement();
     if(!e.isNull()) {
         KPImageKey key;
@@ -166,21 +166,22 @@ void KPPixmapObject::load(const QDomElement &element)
             image = image.scale( ext );
         }
     }
+    return offset;
 }
 
 /*========================= draw =================================*/
-void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
+void KPPixmapObject::draw( QPainter *_painter )
 {
     if ( move )
     {
-        KPObject::draw( _painter, _diffx, _diffy );
+        KPObject::draw( _painter );
         return;
     }
 
     if ( image.isNull() ) return;
 
-    int ox = orig.x() - _diffx;
-    int oy = orig.y() - _diffy;
+    int ox = orig.x();
+    int oy = orig.y();
     int ow = ext.width();
     int oh = ext.height();
 
@@ -321,5 +322,5 @@ void KPPixmapObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
     _painter->restore();
 
-    KPObject::draw( _painter, _diffx, _diffy );
+    KPObject::draw( _painter );
 }

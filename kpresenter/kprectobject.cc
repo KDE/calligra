@@ -56,9 +56,9 @@ KPRectObject &KPRectObject::operator=( const KPRectObject & )
 }
 
 /*========================= save =================================*/
-QDomDocumentFragment KPRectObject::save( QDomDocument& doc )
+QDomDocumentFragment KPRectObject::save( QDomDocument& doc, int offset )
 {
-    QDomDocumentFragment fragment=KP2DObject::save(doc);
+    QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
     if (xRnd!=0 || yRnd!=0) {
         QDomElement elem=doc.createElement("RNDS");
         elem.setAttribute("x", xRnd);
@@ -69,9 +69,9 @@ QDomDocumentFragment KPRectObject::save( QDomDocument& doc )
 }
 
 /*========================== load ================================*/
-void KPRectObject::load(const QDomElement &element)
+int KPRectObject::load(const QDomElement &element)
 {
-    KP2DObject::load(element);
+    int offset=KP2DObject::load(element);
     QDomElement e=element.namedItem("RNDS").toElement();
     if(!e.isNull()) {
         int tmp=0;
@@ -83,6 +83,7 @@ void KPRectObject::load(const QDomElement &element)
             tmp=e.attribute("y").toInt();
         yRnd=tmp;
     }
+    return offset;
 }
 
 /*======================== paint =================================*/

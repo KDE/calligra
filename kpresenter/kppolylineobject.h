@@ -52,10 +52,10 @@ public:
     virtual LineEnd getLineBegin() const { return lineBegin; }
     virtual LineEnd getLineEnd() const { return lineEnd; }
 
-    virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load( const QDomElement &element );
+    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
+    virtual int load( const QDomElement &element );
 
-    virtual void draw( QPainter *_painter, int _diffx, int _diffy );
+    virtual void draw( QPainter *_painter );
 
     virtual void setSize( int _width, int _height );
     virtual void resizeBy( QSize _size );

@@ -31,7 +31,7 @@
 #include <notebar.h>
 #include <kpresenter_view.h>
 #include <kpresenter_doc.h>
-#include <page.h>
+#include "kprpage.h"
 
 
 NoteBar::NoteBar( QWidget *_parent, KPresenterDoc *_doc, KPresenterView *_view )

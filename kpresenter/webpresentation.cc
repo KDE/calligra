@@ -20,7 +20,7 @@
 #include <webpresentation.h>
 
 #include <kpresenter_view.h>
-#include <page.h>
+#include "kprcanvas.h"
 
 #include <kstandarddirs.h>
 #include <unistd.h>
@@ -206,7 +206,7 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
         pix.resize( doc->getPageRect( 0, 0, 0, 1.0, false ).size() );
         pix.fill( Qt::white );
         int pgNum = slideInfos[i].pageNumber;
-        view->getPage()->drawPageInPix2( pix, pgNum * doc->getPageRect( 0, 0, 0, 1.0, false ).height(), pgNum );
+        view->getCanvas()->drawPageInPix2( pix, pgNum * doc->getPageRect( 0, 0, 0, 1.0, false ).height(), pgNum );
         filename = QString( "%1/pics/slide_%2.%3" ).arg( path ).arg( i + 1 ).arg( format );
         if ( zoom != 100 ) {
             QWMatrix m;
@@ -393,7 +393,8 @@ void KPWebPresentation::init()
     }
 
     title = i18n("Slideshow");
-
+    //LAURENT FIXME
+#if 0
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
     {
         if ( doc->isSlideSelected( i ) )
@@ -404,7 +405,7 @@ void KPWebPresentation::init()
             slideInfos.append( info );
         }
     }
-
+#endif
     backColor = Qt::white;
     textColor = Qt::black;
     titleColor = Qt::red;

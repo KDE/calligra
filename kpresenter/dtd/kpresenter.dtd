@@ -64,12 +64,12 @@
 <!--    Contains general attributes variables. Has no children.
 
         Attributes:
-            number_offset:     define variable offset.
+            startingPageNumber:     to the starting page number.
 -->
 <!ELEMENT VARIABLESETTINGS
     EMPTY>
 <!ATTLIST VARIABLESETTINGS
-    processing CDATA #REQUIRED>
+    startingPageNumber CDATA #REQUIRED>
 
 <!--	Contains all the objects on the pages.
 -->

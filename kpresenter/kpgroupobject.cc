@@ -129,9 +129,9 @@ void KPGroupObject::resizeBy( int _dx, int _dy )
 }
 
 /*================================================================*/
-QDomDocumentFragment KPGroupObject::save( QDomDocument& doc )
+QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, int offset )
 {
-    QDomDocumentFragment fragment=KPObject::save(doc);
+    QDomDocumentFragment fragment=KPObject::save(doc, offset);
     QDomElement objs=doc.createElement("OBJECTS");
     fragment.appendChild(objs);
 
@@ -142,16 +142,17 @@ QDomDocumentFragment KPGroupObject::save( QDomDocument& doc )
             continue;
         QDomElement object=doc.createElement("OBJECT");
         object.setAttribute("type", static_cast<int>( kpobject->getType() ));
-        object.appendChild(kpobject->save( doc ));
+        object.appendChild(kpobject->save( doc,offset ));
         objs.appendChild(object);
     }
     return fragment;
 }
 
 /*================================================================*/
-void KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
+int KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
 {
-    KPObject::load(element);
+    //FIXME
+    int offset=KPObject::load(element);
     updateObjs = false;
     QDomElement group=element.namedItem("OBJECTS").toElement();
     if(!group.isNull()) {
@@ -239,23 +240,24 @@ void KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
         }
     }
     updateObjs = true;
+    return offset;
 }
 
 /*================================================================*/
-void KPGroupObject::draw( QPainter *_painter, int _diffx, int _diffy )
+void KPGroupObject::draw( QPainter *_painter )
 {
     if ( move ) {
-        KPObject::draw( _painter, _diffx, _diffy );
+        KPObject::draw( _painter );
         return;
     }
 
     KPObject *kpobject = 0;
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
         kpobject = objects.at( i );
-        kpobject->draw( _painter, _diffy, _diffy );
+        kpobject->draw( _painter );
     }
 
-    KPObject::draw( _painter, _diffx, _diffy );
+    KPObject::draw( _painter );
 }
 
 /*================================================================*/

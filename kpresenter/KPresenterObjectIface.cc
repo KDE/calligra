@@ -37,7 +37,7 @@ int KPresenterObjectIface::getType()
 
 QRect KPresenterObjectIface::getBoundingRect()
 {
-    return obj->getBoundingRect( 0, 0 );
+    return obj->getBoundingRect( );
 }
 
 bool KPresenterObjectIface::isSelected()

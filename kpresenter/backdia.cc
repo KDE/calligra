@@ -47,15 +47,16 @@
  *******************************************************************/
 
 /*=============================================================*/
-BackPreview::BackPreview( QWidget *parent, KPresenterDoc *doc )
+BackPreview::BackPreview( QWidget *parent, KPRPage *m_page )
     : QFrame( parent )
 {
     setFrameStyle( WinPanel | Sunken );
-    back = new KPBackGround( doc->getImageCollection(),
-                             doc->getGradientCollection(),
-                             doc->getClipartCollection(),
-                             doc );
+    back = new KPBackGround( m_page->kPresenterDoc()->getImageCollection(),
+                             m_page->kPresenterDoc()->getGradientCollection(),
+                             m_page->kPresenterDoc()->getClipartCollection(),
+                             m_page );
     setMinimumSize( 300, 200 );
+
 }
 
 BackPreview::~BackPreview()
@@ -69,7 +70,7 @@ void BackPreview::drawContents( QPainter *p )
     QFrame::drawContents( p );
     p->save();
     p->translate( contentsRect().x(), contentsRect().y() );
-    back->draw( p, QPoint( 0, 0 ), false );
+    back->draw( p, false );
     p->restore();
 }
 
@@ -91,7 +92,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
                   const QString &backPic, const QDateTime &picLM,
                   const QString &backClip, const QDateTime &clipLM,
                   BackView backPicView, bool _unbalanced,
-                  int _xfactor, int _yfactor, KPresenterDoc *doc )
+                  int _xfactor, int _yfactor, KPRPage *m_page )
     : KDialogBase( parent, name, true, "",KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel|KDialogBase::User1 ), picLastModified( picLM ), clipLastModified( clipLM )
 {
     lockUpdate = true;
@@ -234,7 +235,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
     // ------------------------ preview
 
-    preview = new BackPreview( page, doc );
+    preview = new BackPreview( page, m_page );
     hbox->addWidget( preview );
 
     // ------------------------ buttons

@@ -64,8 +64,8 @@ public:
     void setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
     void getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue, int *_sharpnessValue );
 
-    virtual QDomDocumentFragment save( QDomDocument& doc );
-    virtual void load( const QDomElement &element );
+    virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
+    virtual int load( const QDomElement &element );
 
 protected:
     void paint( QPainter *_painter );

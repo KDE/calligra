@@ -27,7 +27,6 @@
 
 class KPresenterDoc;
 class KPresenterView;
-class Page;
 class KURLRequester;
 class KColorButton;
 
