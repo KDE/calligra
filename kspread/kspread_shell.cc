@@ -44,7 +44,7 @@ void KSpreadShell_impl::fileNew()
   m_rDoc = OPParts::Document::_duplicate( new KSpreadDoc );
   if ( !m_rDoc->init() )
   {
-    QMessageBox::critical( this, i18n("KSpread Error"), i18n("Could not init"), i18n(OK) );
+    QMessageBox::critical( this, i18n("KSpread Error"), i18n("Could not init"), i18n("OK") );
     return;
   }
   

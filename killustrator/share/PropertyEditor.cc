@@ -140,7 +140,7 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
 
   // the standard buttons
   KButtonBox *bbox = new KButtonBox (this);
-  button = bbox->addButton (i18n (OK));
+  button = bbox->addButton (i18n ("OK"));
   connect (button, SIGNAL (clicked ()), SLOT (applyPressed ()));
   button = bbox->addButton (i18n ("Cancel"));
   connect (button, SIGNAL (clicked ()), SLOT (reject ()));

@@ -64,7 +64,7 @@ AboutDialog::AboutDialog (QWidget* parent) :
     frame->setFrameStyle (QFrame::HLine|QFrame::Sunken);
     frame->setGeometry (5, 235, 390, 5);
 
-    QPushButton* button = new QPushButton (OK, this);
+    QPushButton* button = new QPushButton ("OK", this);
     button->setGeometry (width () / 2 - 50, height () - 45, 75, 32);
     button->setDefault (true);
     connect (button, SIGNAL(released ()), this, SLOT(accept ()));

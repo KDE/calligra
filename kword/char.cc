@@ -144,6 +144,16 @@ KWChar* KWString::split(unsigned int _pos)
   return __data;
 }
 
+QString KWString::toString(unsigned int _pos,unsigned int _len)
+{
+  QString str = "";
+  
+  for (unsigned int i = _pos;i <= _len + _pos;i++)
+    str += _data_[i].c;
+
+  return QString(str);
+}
+
 void KWString::resize(unsigned int _size,bool del = true)
 {
   if ( _size == _len_ )

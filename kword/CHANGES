@@ -169,3 +169,11 @@ Reggie, 3.10.1998:
   (there are some redraw problems when selecting text now because of the 
    automatical scrolling)
 - Some bugfixes in KWFormatContext
+
+Reggie, 4.10.1998:
+------------------
+- Bugfix with calculating correct line heights (ascender/descender)
+- Bugfix with setting the formats correctly
+- I think I fixed now all redraw problems when selecting text
+  (it's flickering now a bit, but I'll fix that too one time :-)
+- Implemented simple Cut&Copy (ASCII text)

@@ -373,7 +373,7 @@ CORBA::Boolean KoDocument::saveAs( const char *_url, const char *)
   
   if ( !u.isLocalFile() )
   {
-    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), i18n( "Can not save to remote URL\n" ), i18n( OK ) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), i18n( "Can not save to remote URL\n" ), i18n( "OK" ) );
     return false;
   }
 
@@ -383,7 +383,7 @@ CORBA::Boolean KoDocument::saveAs( const char *_url, const char *)
     string tmp = i18n("Could not write to\n" );
     tmp += u.path();
     cerr << tmp << endl;
-    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp.c_str(), i18n( OK ) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp.c_str(), i18n( "OK" ) );
     return false;
   }
 
@@ -437,7 +437,7 @@ CORBA::Boolean KoDocument::saveAsMimePart( const char *_url, const char *, const
   
   if ( !u.isLocalFile() )
   {
-    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), i18n( "Can not save to remote URL\n" ), i18n( OK ) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), i18n( "Can not save to remote URL\n" ), i18n( "OK" ) );
     return false;
   }
 
@@ -447,7 +447,7 @@ CORBA::Boolean KoDocument::saveAsMimePart( const char *_url, const char *, const
     QString tmp;
     tmp.sprintf( i18n("Could not write to\n%s" ), u.path() );
     cerr << tmp << endl;
-    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( OK ) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( "OK" ) );
     return false;
   }
 

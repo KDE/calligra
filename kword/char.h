@@ -100,6 +100,8 @@ public:
   KWChar* data()
     { return _data_; }
 
+  QString toString(unsigned int _pos,unsigned int _len);
+
 protected:
   KWChar* alloc(unsigned int _size);
   void free(KWChar* _data,unsigned int _len);

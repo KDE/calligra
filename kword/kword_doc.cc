@@ -498,7 +498,6 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 	}
     }
 
-  if (hasSelection) drawSelection(_painter,xOffset,yOffset);
   _painter.restore();
 }
 
@@ -656,6 +655,9 @@ void KWordDocument_impl::insertPicture(QString _filename,KWPage *_paperWidget)
 /*================================================================*/
 void KWordDocument_impl::drawSelection(QPainter &_painter,int xOffset,int yOffset)
 {
+  _painter.save();
+  RasterOp rop = _painter.rasterOp();
+    
   _painter.setRasterOp(NotROP);
   _painter.setBrush(black);
   _painter.setPen(NoPen);
@@ -717,6 +719,9 @@ void KWordDocument_impl::drawSelection(QPainter &_painter,int xOffset,int yOffse
     }
   _w = tmpFC1.getPTPos() - _x;
   _painter.drawRect(_x - xOffset,_y - yOffset,_w,_h);
+
+  _painter.setRasterOp(rop);
+  _painter.restore();
 }
 
 /*================================================================*/
@@ -810,4 +815,62 @@ void KWordDocument_impl::deleteSelectedText(KWFormatContext *_fc,QPainter &_pain
 	}
       _fc->setTextPos(tmpFC1.getTextPos());
     }
+}
+
+/*================================================================*/
+void KWordDocument_impl::copySelectedText()
+{
+  KWFormatContext tmpFC2(this);
+  KWFormatContext tmpFC1(this);
+
+  QString clipString = "";
+
+  if (selStart.getParag() == selEnd.getParag())
+    {
+      if (selStart.getTextPos() < selEnd.getTextPos())
+	{  
+	  tmpFC1 = selStart;
+	  tmpFC2 = selEnd;
+	}
+      else
+	{
+	  tmpFC1 = selEnd;
+	  tmpFC2 = selStart;
+	}
+      
+      clipString = tmpFC1.getParag()->getKWString()->toString(tmpFC1.getTextPos(),tmpFC2.getTextPos() - tmpFC1.getTextPos());
+    }
+  else
+    {
+      KWParag *parag = getFirstParag();
+      while (parag)
+	{
+	  if (parag == selStart.getParag())
+	    {
+	      tmpFC1 = selStart;
+	      tmpFC2 = selEnd;
+	      break;
+	    }
+	  if (parag == selEnd.getParag())
+	    {
+	      tmpFC2 = selStart;
+	      tmpFC1 = selEnd;
+	      break;
+	    }
+	}
+ 
+      clipString = tmpFC1.getParag()->getKWString()->toString(tmpFC1.getTextPos(),tmpFC1.getParag()->getTextLen() - tmpFC1.getTextPos());
+      parag = tmpFC1.getParag()->getNext();
+      while (parag && parag != tmpFC2.getParag())
+	{
+	  clipString += "\n";
+	  clipString += parag->getKWString()->toString(0,parag->getTextLen());
+	  parag = parag->getNext();
+	}
+      clipString += "\n";
+      clipString += tmpFC2.getParag()->getKWString()->toString(0,tmpFC2.getTextPos());
+    }
+
+  QClipboard *cb = QApplication::clipboard();
+  cb->setText(clipString.data());
 }

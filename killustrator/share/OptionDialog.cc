@@ -42,7 +42,7 @@ OptionDialog::OptionDialog (QWidget* parent, const char* name) :
   widget = createGeneralWidget (this);
 
   addTab (widget, i18n ("General"));
-  setOkButton (i18n (OK));
+  setOkButton (i18n ("OK"));
   setCancelButton (i18n ("Cancel"));
 
   adjustSize ();

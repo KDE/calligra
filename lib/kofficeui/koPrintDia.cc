@@ -223,7 +223,7 @@ KoPrintDiaData::KoPrintDiaData( QWidget* parent )
 
 	ok = new QPushButton( parent, "PushButton_2" );
 	ok->setGeometry( 180, 250, 100, 30 );
-	ok->setText( i18n( OK ) );
+	ok->setText( i18n( "OK" ) );
 
 	tmpQLabel = new QLabel( parent, "Label_4" );
 	tmpQLabel->setGeometry( 10, 190, 100, 30 );

@@ -201,7 +201,7 @@ void KIllustratorShell::fileNew () {
   if (! m_rDoc->init ()) {
     QMessageBox::critical (this, i18n ("KIllustrator Error"),
 			   i18n ("Could not initialize document !"),
-			   i18n (OK));
+			   i18n ("OK"));
     return;
   }
 

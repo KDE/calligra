@@ -44,6 +44,7 @@ class KWPage;
 #include <qpainter.h>
 #include <qregion.h>
 #include <qstring.h>
+#include <qclipboard.h>
 
 #include <koPageLayoutDia.h>
 
@@ -255,6 +256,7 @@ public:
     { return hasSelection; }
 
   void deleteSelectedText(KWFormatContext *_fc,QPainter &_painter);
+  void copySelectedText();
 
 signals:
   void sig_imageModified();

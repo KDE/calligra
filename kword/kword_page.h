@@ -112,6 +112,9 @@ public:
 
   void insertPictureAsChar(QString _filename);
 
+  void editCut();
+  void editCopy();
+
 public slots:
   void newLeftIndent(int _left)
     { setLeftIndent(static_cast<float>(_left)); }

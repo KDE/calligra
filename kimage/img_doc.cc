@@ -60,7 +60,7 @@ CORBA::Boolean ImageDocument_impl::import( const char *_url )
   KURL u( _url );
   if ( u.isMalformed() )
   {
-    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Malformed URL"), i18n(OK) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Malformed URL"), i18n("OK") );
     return false;
   }
   if ( !u.isLocalFile() )
@@ -86,12 +86,12 @@ CORBA::Boolean ImageDocument_impl::export( const char *_url, const char *_format
   KURL u( _url );
   if ( u.isMalformed() )
   {
-    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Malformed URL"), i18n(OK) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Malformed URL"), i18n("OK") );
     return false;
   }
   if ( !u.isLocalFile() )
   {
-    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Only local files are supported"), i18n(OK) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Only local files are supported"), i18n("OK") );
     return false;
   }
 
@@ -346,7 +346,7 @@ void ImageDocument_impl::insertObject( const QRect& _rect, const char *_server_n
 
   if ( !doc->init() )
   {
-    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Could not init"), i18n(OK) );
+    QMessageBox::critical( (QWidget*)0L, i18n("KImage Error"), i18n("Could not init"), i18n("OK") );
     return;
   }
 

@@ -29,6 +29,8 @@ KWFormatContext::KWFormatContext( KWordDocument_impl *_doc ) : KWFormat()
   lineStartPos = 0;
   lineEndPos = 0;
   specialHeight = 0;
+  ptMaxAscender = 0;
+  ptMaxDescender = 0;
 }
 
 KWFormatContext::~KWFormatContext()
@@ -38,6 +40,9 @@ KWFormatContext::~KWFormatContext()
 
 void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true )
 {
+  specialHeight = 0;
+  ptMaxAscender = 0;
+  ptMaxDescender = 0;
     // Offset from the top of the page
     ptY = document->getPTTopBorder();
     column = 1;
@@ -611,6 +616,8 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     lineEndPos = lineStartPos;
     ptMaxAscender = 0;
     ptMaxDescender = 0;
+    ptAscender = 0;
+    ptDescender = 0;
     
     unsigned int tmpPTWidth = 0;
     unsigned int tmpPTAscender;
@@ -678,8 +685,8 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     ptStartPos = ptPos;
 
     // Assume the counter to have the maximum ascender/descender
-    ptMaxAscender = ptCounterAscender;
-    ptMaxDescender = ptCounterDescender;
+    //ptMaxAscender = ptCounterAscender;
+    //ptMaxDescender = ptCounterDescender;
 
     // Calculate the counter position
     // Is the counter fixed to the left side ?
@@ -715,6 +722,8 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	  assert( text[ textPos ].attrib->getClassId() == ID_KWCharFormat );
 	  KWCharFormat *f = (KWCharFormat*)text[ textPos ].attrib;
 	  apply( *f->getFormat() );
+	  if (textPos == lineStartPos)
+	    lineStartFormat = *this;
 	}
 	
 	// if we will not fit into the line anymore, let us leave the loop

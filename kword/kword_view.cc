@@ -252,11 +252,13 @@ void KWordView_impl::editRedo()
 /*===============================================================*/
 void KWordView_impl::editCut()
 {
+  gui->getPaperWidget()->editCut();
 }
 
 /*===============================================================*/
 void KWordView_impl::editCopy()
 {
+  gui->getPaperWidget()->editCopy();
 }
 
 /*===============================================================*/
