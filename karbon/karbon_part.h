@@ -32,6 +32,9 @@ public:
 	// insert a new vobject:
 	void insertObject( const VObject* object );
 
+	// select vobjects within the rect:
+	void selectObjects( const QRect &rect );
+
 	// insert a command into the undo/redo-history:
 	void addCommand( VCommand* cmd );
 

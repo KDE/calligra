@@ -16,6 +16,7 @@
 #include <qwmatrix.h>
 #include "vccmd_ellipse.h"
 #include "vccmd_star.h"
+#include "vccmd_spiral.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -52,6 +53,11 @@ KarbonPart::initDoc()
 
 	insertObject( elly );
 	insertObject( rect );
+
+	VCCmdSpiral t(this, 100, 100, 50.0, 25, 0.2, true);
+	VPath *spi = t.createPath();
+
+	insertObject(spi);
 
 	VPath* obj = elly->booleanOp( rect, 0 );
 
@@ -103,6 +109,12 @@ KarbonPart::insertObject( const VObject* object )
 	// objects.
 	activeLayer()->insertObject( object );
 	setModified( true );
+}
+
+void
+KarbonPart::selectObjects( const QRect &rect )
+{
+	activeLayer()->selectObjects( rect);
 }
 
 void

@@ -3,6 +3,7 @@ INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../core -I$(srcdir)/../ui -I$(srcdir)/../.
 noinst_LTLIBRARIES = libkarbontools.la
 
 noinst_HEADERS = \
+	vccmd_select.h \
 	vccmd_ellipse.h \
 	vccmd_polygon.h \
 	vccmd_rectangle.h \
@@ -10,6 +11,7 @@ noinst_HEADERS = \
 	vccmd_sinus.h \
 	vccmd_spiral.h \
 	vccmd_star.h \
+	vctool_select.h \
 	vctool_ellipse.h \
 	vctool_rectangle.h \
 	vctool_roundrect.h \
@@ -17,6 +19,7 @@ noinst_HEADERS = \
 	vctool_star.h
 
 libkarbontools_la_SOURCES = \
+	vccmd_select.cc \
 	vccmd_ellipse.cc \
 	vccmd_polygon.cc \
 	vccmd_rectangle.cc \
@@ -24,6 +27,7 @@ libkarbontools_la_SOURCES = \
 	vccmd_sinus.cc \
 	vccmd_spiral.cc \
 	vccmd_star.cc \
+	vctool_select.cc \
 	vctool_ellipse.cc \
 	vctool_rectangle.cc \
 	vctool_roundrect.cc \

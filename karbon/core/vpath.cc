@@ -635,7 +635,7 @@ VPath::draw( QPainter& painter, const QRect& rect,
 		}
 	}
 
-	if( state() == normal )
+	if( state() == selected )
 	{
 		painter.setBrush( Qt::NoBrush );
 

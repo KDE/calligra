@@ -32,3 +32,14 @@ VLayer::insertObject( const VObject* object )
 	// put new objects "on top" by appending them:
 	m_objects.append( object );
 }
+
+void
+VLayer::selectObjects( const QRect &rect )
+{
+	QPtrListIterator<VObject> itr = m_objects;
+    for ( ; itr.current() ; ++itr )
+    {
+		if( rect.contains( itr.current()->boundingBox() ) )
+			itr.current()->setState( VObject::selected );
+    }
+}
