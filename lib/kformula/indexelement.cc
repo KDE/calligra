@@ -160,6 +160,34 @@ IndexElement::IndexElement( const IndexElement& other )
 }
 
 
+QChar IndexElement::getCharacter() const
+{
+    if ( !content->isTextOnly() ) {
+        return QChar::null;
+    }
+
+    if ( hasUpperRight() && !upperRight->isTextOnly() ) {
+        return QChar::null;
+    }
+    if ( hasUpperMiddle() && !upperMiddle->isTextOnly() ) {
+        return QChar::null;
+    }
+    if ( hasUpperLeft() && !upperLeft->isTextOnly() ) {
+        return QChar::null;
+    }
+    if ( hasLowerRight() && !lowerRight->isTextOnly() ) {
+        return QChar::null;
+    }
+    if ( hasLowerMiddle() && !lowerMiddle->isTextOnly() ) {
+        return QChar::null;
+    }
+    if ( hasLowerLeft() && !lowerLeft->isTextOnly() ) {
+        return QChar::null;
+    }
+
+    return ' ';
+}
+
 void IndexElement::entered( SequenceElement* child )
 {
     if ( child == content ) {

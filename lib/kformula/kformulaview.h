@@ -60,11 +60,6 @@ public:
     QPoint getCursorPoint() const;
 
     /**
-     * @returns the area the cursor is currently on.
-     */
-    QRect getDirtyArea() const;
-
-    /**
      * Puts the widget in read only mode.
      */
     void setReadOnly(bool ro);

@@ -297,7 +297,6 @@ void SequenceElement::calcCursorSize( const ContextStyle& context,
             cursor->cursorSize.setRect( point.x()+x, point.y() - 2*unitY,
                                         width + unitX, height + 4*unitY );
         }
-        cursor->selectionArea = cursor->cursorSize;
     }
     else {
         if ( smallCursor ) {
@@ -323,7 +322,7 @@ void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context
 {
     painter.setRasterOp( Qt::XorROP );
     if ( cursor->isSelection() ) {
-        const LuPixelRect& r = cursor->selectionArea;
+        const LuPixelRect& r = cursor->cursorSize;
         painter.fillRect( context.layoutUnitToPixelX( r.x() ),
                           context.layoutUnitToPixelY( r.y() ),
                           context.layoutUnitToPixelX( r.width() ),
@@ -1299,7 +1298,7 @@ void SequenceElement::parse()
         // be used.
         element->setElementType(0);
 
-        if (element->getCharacter() == QChar::null) {
+        if (element->getCharacter().isNull()) {
             textSequence = false;
         }
     }
@@ -1308,6 +1307,15 @@ void SequenceElement::parse()
     SequenceParser parser(symbols);
     parseTree = parser.parse(children);
 
+    // With the IndexElement dynamically changing its text/non-text
+    // behaviour we need to reparse your parent, too. Hacky!
+    BasicElement* p = getParent();
+    if ( p != 0 ) {
+        SequenceElement* seq = dynamic_cast<SequenceElement*>( p->getParent() );
+        if ( seq != 0 ) {
+            seq->parse();
+        }
+    }
     // debug
     //parseTree->output();
 }

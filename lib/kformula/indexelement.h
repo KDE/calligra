@@ -45,6 +45,13 @@ public:
     }
 
     /**
+     * @returns the character that represents this element. Used for
+     * parsing a sequence.
+     * This is guaranteed to be QChar::null for all non-text elements.
+     */
+    virtual QChar getCharacter() const;
+
+    /**
      * The cursor has entered one of our child sequences.
      * This is a good point to tell the user where he is.
      */

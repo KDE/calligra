@@ -153,7 +153,7 @@ void KFormulaWidget::slotSelectAll()
 void KFormulaWidget::slotCursorChanged(bool visible, bool selecting)
 {
     emit cursorChanged(visible, selecting);
-    update(formulaView.getDirtyArea());
+    update();
 }
 
 #include "kformulawidget.moc"

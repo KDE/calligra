@@ -441,12 +441,6 @@ private:
     LuPixelRect cursorSize;
 
     /**
-     * The area that gets inverted when the cursor is in selection
-     * mode.
-     */
-    LuPixelRect selectionArea;
-
-    /**
      * Tells whether the cursor has been changed. This is set
      * by any of the setSomething methods. It's used by the
      * widget the cursor belongs to.

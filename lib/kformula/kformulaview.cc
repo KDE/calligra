@@ -72,11 +72,6 @@ struct View::View_Impl {
     bool cursorHasChanged;
 
     /**
-     * The area that needs an update because the cursor moved.
-     */
-    QRect dirtyArea;
-
-    /**
      * The formula we show.
      */
     Container* document;
@@ -92,8 +87,6 @@ FormulaCursor* View::cursor() const        { return impl->cursor; }
 bool& View::cursorHasChanged()             { return impl->cursorHasChanged; }
 bool& View::smallCursor()                  { return impl->smallCursor; }
 Container* View::container() const { return impl->document; }
-
-QRect View::getDirtyArea() const { return impl->dirtyArea; }
 
 
 View::View(Container* doc)
@@ -372,14 +365,10 @@ void View::removeFormula()
 void View::emitCursorChanged()
 {
     if (cursor()->hasChanged() || cursorHasChanged()) {
-        const ContextStyle& context = contextStyle();
 
         cursor()->clearChangedFlag();
         cursorHasChanged() = false;
-
-        impl->dirtyArea = context.layoutUnitToPixel( cursor()->getCursorSize() );
         cursor()->calcCursorSize( contextStyle(), smallCursor() );
-        impl->dirtyArea |= context.layoutUnitToPixel( cursor()->getCursorSize() );
 
         emit cursorChanged(cursorVisible(), cursor()->isSelection());
     }
