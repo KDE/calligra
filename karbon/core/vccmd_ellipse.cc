@@ -39,7 +39,7 @@ VCCmdEllipse::execute()
 		// translate path and scale:
 		VAffineMap aff_map;
 		aff_map.scale( w, h );
-		aff_map.translate( m_tlX + w/2.0, m_brY + h/2.0 );
+		aff_map.translate( m_tlX + w*0.5, m_brY + h*0.5 );
 		m_object->transform( aff_map );
 
 		// add path:

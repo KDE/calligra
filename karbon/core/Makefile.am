@@ -12,6 +12,7 @@ noinst_HEADERS = \
 	vccmd_spiral.h \
 	vccmd_star.h \
 	vcommand.h \
+	vctool_rectangle.h \
 	vglobal.h \
 	vlayer.h \
 	vobject.h \
@@ -29,6 +30,7 @@ libkarboncore_la_SOURCES = \
 	vccmd_sinus.cc \
 	vccmd_spiral.cc \
 	vccmd_star.cc \
+	vctool_rectangle.cc \
 	vlayer.cc \
 	vpath.cc \
 	vpoint.cc \

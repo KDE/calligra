@@ -2,12 +2,11 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#include <math.h>
-
 #include <klocale.h>
 
 #include "vaffinemap.h"
 #include "vccmd_sinus.h"
+#include "vglobal.h"
 #include "vpath.h"
 
 VCCmdSinus::VCCmdSinus( KarbonPart* part,
@@ -29,40 +28,40 @@ VCCmdSinus::execute()
 	{
 		m_object = new VPath();
 		m_object->moveTo( 0.0, 0.0 );
+
 		for ( uint i = 0; i < m_periods; ++i )
 		{
-			// i think 1/7 and sqrt( 2 ) etc. gets optimized away with -O2, no?
 			m_object->curveTo(
-				i + 1.0/24.0,	( 2.0 * sqrt( 2.0 ) - 1.0 ) / 7.0,
-				i + 1.0/12.0,	( 4.0 * sqrt( 2.0 ) - 2.0 ) / 7.0,
-				i + 1.0/8.0,	sqrt( 2.0 ) / 2.0 );
+				i + 1.0/24.0,	( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7,
+				i + 1.0/12.0,	( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7,
+				i + 1.0/8.0,	VGlobal::sqrt2 * 0.5 );
 			m_object->curveTo(
-				i + 1.0/6.0,	( 3.0 * sqrt( 2.0 ) + 2.0 ) / 7.0,
+				i + 1.0/6.0,	( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7,
 				i + 5.0/24.0,	1.0,
 				i + 1.0/4.0,	1.0  );
 			m_object->curveTo(
 				i + 7.0/24.0,	1.0,
-				i + 1.0/3.0,	( 3.0 * sqrt( 2.0 ) + 2.0 ) / 7.0,
-				i + 3.0/8.0,	sqrt( 2.0 ) / 2.0 );
+				i + 1.0/3.0,	( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7,
+				i + 3.0/8.0,	VGlobal::sqrt2 * 0.5 );
 			m_object->curveTo(
-				i + 5.0/12.0,	( 4.0 * sqrt( 2.0 ) - 2.0 ) / 7.0,
-				i + 11.0/24.0,	( 2.0 * sqrt( 2.0 ) - 1.0 ) / 7.0,
+				i + 5.0/12.0,	( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7,
+				i + 11.0/24.0,	( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7,
 				i + 1.0/2.0,	0.0 );
 			m_object->curveTo(
-				i + 13.0/24.0,	-( 2.0 * sqrt( 2.0 ) - 1.0 ) / 7.0,
-				i + 7.0/12.0,	-( 4.0 * sqrt( 2.0 ) - 2.0 ) / 7.0,
-				i + 5.0/8.0,	-sqrt( 2.0 ) / 2.0 );
+				i + 13.0/24.0,	-( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7,
+				i + 7.0/12.0,	-( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7,
+				i + 5.0/8.0,	-VGlobal::sqrt2 * 0.5 );
 			m_object->curveTo(
-				i + 2.0/3.0,	-( 3.0 * sqrt( 2.0 ) + 2.0 ) / 7.0,
+				i + 2.0/3.0,	-( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7,
 				i + 17.0/24.0,	-1.0,
 				i + 3.0/4.0,	-1.0 );
 			m_object->curveTo(
 				i + 19.0/24.0,	-1.0,
-				i + 5.0/6.0,	-( 3.0 * sqrt( 2.0 ) + 2.0 ) / 7.0,
-				i + 7.0/8.0,	-sqrt( 2.0 ) / 2.0 );
+				i + 5.0/6.0,	-( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7,
+				i + 7.0/8.0,	-VGlobal::sqrt2 * 0.5 );
 			m_object->curveTo(
-				i + 11.0/12.0,	-( 4.0 * sqrt( 2.0 ) - 2.0 ) / 7.0,
-				i + 23.0/24.0,	-( 2.0 * sqrt( 2.0 ) - 1.0 ) / 7.0,
+				i + 11.0/12.0,	-( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7,
+				i + 23.0/24.0,	-( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7,
 				i + 1.0,		0.0 );
 		}
 

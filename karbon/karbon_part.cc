@@ -25,8 +25,8 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	m_layers.append( new VLayer() );
 
 // <test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	VCCmdRectangle* cmd = new VCCmdRectangle( this, 100, 200, 300, 50, 30 );
-	cmd->execute();
+	m_commandHistory->addCommand(
+		new VCCmdRectangle( this, 100, 300, 300, 150, 30 ) );
 // </test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }
 

@@ -7,6 +7,8 @@
 
 // The abstract base class for all VObject-manipulating classes.
 
+class QEvent;
+
 class VCommand;
 class VObject;
 
@@ -15,7 +17,10 @@ class VTool
 public:
 	virtual ~VTool() = 0;
 
-	virtual VCommand* manipulate( VObject* object );
+	virtual bool eventFilter( QEvent* event ) { return false; }
+
+	// only manipulating (opposed to creating) tools have to implement this:
+	virtual VCommand* manipulate( VObject* object ) { return 0L; }
 };
 
 #endif

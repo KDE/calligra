@@ -315,6 +315,8 @@ VPath::~VPath()
 void
 VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
 {
+	if ( isDeleted() ) return;
+
 	painter.save();
 
 	// >>> draw the path contour >>>
@@ -347,7 +349,7 @@ VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
 
 // TODO: remove hardcoded values:
 	painter.setPen( Qt::black );
-	painter.setBrush( QColor( 121, 205, 205 ) );
+	painter.setBrush( QColor( 205, 205, 205 ) );
 
 // TODO: filling not-closed shapes?
 	// draw open or closed path ?

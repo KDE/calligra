@@ -9,11 +9,13 @@
 
 #include "vcanvas.h"	// necessary because of canvas()
 
-class KAction;
-class KSelectAction;
 class QPaintEvent;
 
+class KAction;
+class KSelectAction;
+
 class KarbonPart;
+class VTool;
 
 class KarbonView : public KoView
 {
@@ -25,6 +27,8 @@ public:
 	virtual void paintEverything( QPainter &p, const QRect &rect,
 		bool transparent = false );
 
+	virtual bool eventFilter( QObject* object, QEvent* event );
+	
 	virtual QWidget* canvas() { return m_canvas; }
 
 protected slots:
@@ -42,6 +46,8 @@ private:
 
 	KarbonPart* m_part;
 	VCanvas* m_canvas;
+
+	static VTool* s_currentTool;
 
 	// actions:
 	KSelectAction* m_zoomAction;
