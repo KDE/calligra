@@ -193,7 +193,7 @@ QString KoFilterManager::import( const char* _url, const char *_native_format )
   if ( !f )
   {
     QString tmp;
-    tmp.sprintf( i18n("Could not open file\n%s"), url.path() );
+    tmp.sprintf( i18n("Could not open file\n%s"), url.path().ascii() );
     QMessageBox::critical( 0L, i18n("Error"), tmp, i18n("OK") );
     return QString();
   }

@@ -147,6 +147,7 @@ CORBA::Boolean KWordDocument::init()
 bool KWordDocument::loadTemplate(const char *_url)
 {
   KURL u(_url);
+  
   if (u.isMalformed())
     return false;
 
@@ -156,10 +157,10 @@ bool KWordDocument::loadTemplate(const char *_url)
       return false;
     }
 
-  ifstream in(u.path());
+  ifstream in(u.path().ascii());
   if (!in)
     {
-      cerr << "Could not open" << u.path() << endl;
+      cerr << "Could not open" << u.path().ascii() << endl;
       return false;
     }
 

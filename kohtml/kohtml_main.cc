@@ -38,7 +38,7 @@
 #include <kmimemagic.h>
 
 #include "kohtml_shell.h"
-#include "kohtml_doc.h" 
+#include "kohtml_doc.h"
 
 bool g_bWithGUI = true;
 
@@ -49,7 +49,7 @@ list<string> g_openFiles;
 KOFFICE_DOCUMENT_FACTORY( KoHTMLDoc, KoHTMLFactory, KoHTML::DocumentFactory_skel );
 typedef OPAutoLoader<KoHTMLFactory> KoHTMLAutoLoader;
 
-KoHTMLApp::KoHTMLApp( int argc, char** argv ) : 
+KoHTMLApp::KoHTMLApp( int argc, char** argv ) :
      KoApplication( argc, argv, "kohtml" )
 {
 }
@@ -88,17 +88,18 @@ void KoHTMLApp::start()
 int main( int argc, char **argv )
 {
   KoHTMLAutoLoader loader("IDL:KoHTML/DocumentFactory:1.0", "KoHTML");
-  
+
   KoHTMLApp app(argc, argv);
 
-  KIOJob::initStatic();
+#warning "Reggie: I had to comment out KIOJob::initStatic(), because this is protected now. How should this be fixed?"
+  //KIOJob::initStatic();
   KIOCache::initStatic();
   KRegistry * registry = new KRegistry;
   registry->addFactory( new KMimeTypeFactory );
   registry->load();
   KMimeType::check();
   KMimeMagic::initStatic();
-  
+
   int i = 1;
   if ( strcmp( argv[i], "-s" ) == 0 || strcmp( argv[i], "--server" ) == 0 )
      {
@@ -110,6 +111,6 @@ int main( int argc, char **argv )
     g_openFiles.push_back((const char *) argv[i]);
 
   app.exec();
-  
+
   return 0;
 }

@@ -33,7 +33,7 @@
 #include "htmwidget.h"
 #include "kohtml_doc.h"
 
-KMyHTMLView::KMyHTMLView(KoHTMLDoc *doc, QWidget *parent = 0L, const char *name = 0L, 
+KMyHTMLView::KMyHTMLView(KoHTMLDoc *doc, QWidget *parent = 0L, const char *name = 0L,
                          int flags = 0, KMyHTMLView *parent_view = 0L)
 :KHTMLView(parent, name, flags, parent_view, (new KMyHTMLWidget(0L, "" )) )
 {
@@ -44,16 +44,16 @@ KMyHTMLView::KMyHTMLView(KoHTMLDoc *doc, QWidget *parent = 0L, const char *name 
   m_bDone = true;
   m_pParent = parent_view;
   m_strDocument = "";
-  
+
   getKHTMLWidget()->setFocusPolicy( QWidget::StrongFocus );
-  
+
   connect( this, SIGNAL(documentDone( KHTMLView * )),
            this, SLOT(documentFinished( KHTMLView * )));
   connect( this, SIGNAL( imageRequest( const char * )),
            this, SLOT( requestImage( const char * )));
   connect( this, SIGNAL( cancelImageRequest( const char * )),
            this, SLOT( cancelImage( const char * )));
-	   
+	
   if ( m_pParent )
      {
        connect(this, SIGNAL(URLSelected(KHTMLView *, const char *, int, const char *)),
@@ -77,16 +77,16 @@ void KMyHTMLView::draw(QPainter *painter, int width, int height)
   view->resize( width, height );
 
   drawWidget( view );
-  
+
   // this does not seem to work :-((
   cerr << "drawing scrollbars" << endl;
   if (displayHScroll) drawWidget( horz );
   if (displayVScroll) drawWidget( vert );
-  
+
   painter->drawPixmap( 0, 0, *m_pPixmap );
-  
+
   delete m_pPixmap;
-  
+
   cerr << "done" << endl;
 }
 
@@ -97,7 +97,7 @@ void KMyHTMLView::drawWidget( QWidget *widget )
   int x1 = widget->pos().x() ;//- pos().x();
   int y1 = widget->pos().y() ;//- pos().y();
 
-  cerr << "coords: " << x1 << " " 
+  cerr << "coords: " << x1 << " "
                      << y1 << " : "
 		     << widget->width() << " "
 		     << widget->height() << endl;
@@ -122,9 +122,9 @@ void KMyHTMLView::drawWidget( QWidget *widget )
 	    if (w->parentWidget() == widget /*&& w->isVisible()*/)
 	      drawWidget( w );
 	  }
-	}  
-    }  
-    
+	}
+    }
+
 }
 
 void KMyHTMLView::begin( const char *url, int dx, int dy )
@@ -137,9 +137,9 @@ void KMyHTMLView::begin( const char *url, int dx, int dy )
 KHTMLView *KMyHTMLView::newView(QWidget *parent = 0L, const char *name = 0L, int flags = 0L)
 {
   KMyHTMLView *view = new KMyHTMLView(m_pDoc, parent, name, flags, this);
-  
+
   m_lstChildren.append( new FrameChild( view ));
-  
+
   return view;
 }
 
@@ -154,11 +154,11 @@ void KMyHTMLView::openURL( const char *url, bool reload )
      {
        end();
        m_bParsing = false;
-     }  
-     
+     }
+
   cancelAllRequests(); // just to be on the save side
-  
-  m_bReload = reload;     
+
+  m_bReload = reload;
   m_bDone = false;
   m_strURL = url;
 
@@ -169,8 +169,8 @@ void KMyHTMLView::openURL( const char *url, bool reload )
    *  for (imageList)
    *      imageCache->removeURL( entry.url );
    */
-   
-  m_pDoc->requestDocument( this, url, m_bReload ); 
+
+  m_pDoc->requestDocument( this, url, m_bReload );
 }
 
 void KMyHTMLView::feedDocumentData( const char *data, bool eof )
@@ -182,23 +182,26 @@ void KMyHTMLView::feedDocumentData( const char *data, bool eof )
      {
        m_bParsing = true;
        m_lstChildren.clear();
-       
+
+#warning "Reggie: I had to ifdef out some stuff here because of changes in KURL. Simon, please fix that!"
+#if 0
        KURLList lst;
        KURL::split( m_strURL, lst );
        QString burl = lst.getLast()->url();
        begin( burl, 0, 0 );
+#endif
        parse();
      }
 
   m_strDocument += data;
   write( data );
-  
-  if ( eof ) 
+
+  if ( eof )
      {
        end();
        m_bParsing = false;
        documentFinished( this );
-     }  
+     }
 }
 
 void KMyHTMLView::stop()
@@ -210,16 +213,16 @@ void KMyHTMLView::stop()
        end();
        m_pDoc->cancelDocument( this, m_strURL );
      }
-          
+
   m_bDone = true;
   cancelAllRequests(); //we don't want to run into any trouble
-  
+
   //let's "stop" all children
   QListIterator<FrameChild> it( m_lstChildren );
   for (; it.current(); ++it)
     if ( !it.current()->m_bDone )
       it.current()->m_pView->stop();
-  
+
   if ( m_pParent )
      m_pParent->childFinished( this );
   else
@@ -233,17 +236,17 @@ void KMyHTMLView::childFinished( KMyHTMLView *child_view )
   for (; it.current(); ++it)
     if ( it.current()->m_pView == child_view )
        it.current()->m_bDone = true;
-       
+
   if ( m_bDone )
-    documentFinished( this );       
+    documentFinished( this );
 }
 
 void KMyHTMLView::save( ostream &out )
 {
   return;
-  
+
   SavedPage *p = saveYourself();
-  
+
   out << otag << "<VIEW "
       << "scrolling=\"" << p->scrolling << "\" "
       << "frameborder=\"" << p->frameborder << "\" "
@@ -254,22 +257,22 @@ void KMyHTMLView::save( ostream &out )
       << "title=\"" << p->title << "\" "
       << "xOffset=\"" << p->xOffset << "\" "
       << "yOffset=\"" << p->yOffset << "\" ";
-      
+
   if (p->isFrame)
      out << "frameName=\"" << p->frameName << "\" ";
-      
-  out << ">" << endl;      
+
+  out << ">" << endl;
 
 /*
   out << "<DATA>"
       << html_data_here (encoded?)
       << "</DATA>" << endl;
-*/      
+*/
 
-  //hm... I might consider moving this to KoHTMLDoc...    
+  //hm... I might consider moving this to KoHTMLDoc...
 
-  out << etag << "</VIEW>" << endl;      
-  
+  out << etag << "</VIEW>" << endl;
+
   delete p;
 }
 
@@ -282,23 +285,23 @@ bool KMyHTMLView::isChild( KMyHTMLView *view )
       if ( childView == view || childView->isChild( view ) )
         return true;
     }
-  return false;    
+  return false;
 }
 
 void KMyHTMLView::documentFinished( KHTMLView *view )
 {
   if ( view != this )
     return;
-    
+
   m_bDone = true;
-  
+
   QListIterator<FrameChild> it( m_lstChildren );
   for (; it.current(); ++it)
     if ( !it.current()->m_bDone )
       return;
-      
+
   if ( m_pParent )
-    m_pParent->childFinished( this );      
+    m_pParent->childFinished( this );
   else
      //let's notify our "parent document"
      m_pDoc->viewFinished( this );

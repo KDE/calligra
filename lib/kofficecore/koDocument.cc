@@ -558,7 +558,7 @@ CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char *_format )
   ifstream in( u.path() );
   if ( !in )
   {
-    cerr << "Could not open" << u.path() << endl;
+    cerr << "Could not open" << u.path().ascii() << endl;
     return false;
   }
 
