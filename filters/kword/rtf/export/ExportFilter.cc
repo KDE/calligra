@@ -28,11 +28,12 @@
 #include <qfileinfo.h>
 #include <qfontinfo.h>
 #include <qpicture.h>
-#include <qregion.h> // for #include <kdebugclasses.h>
+#include <qregion.h> // for 
 #include <qimage.h>
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kdebugclasses.h>
 
 #include <KWEFUtil.h>
 #include <KWEFBaseWorker.h>
