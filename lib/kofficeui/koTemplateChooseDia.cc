@@ -48,6 +48,8 @@
 #include <kfileiconview.h>
 #include <kfileitem.h>
 #include <kmessagebox.h>
+#include <qapplication.h>
+#include <qtooltip.h>
 
 class MyFileDialog : public KFileDialog
 {
@@ -91,6 +93,7 @@ class MyFileDialog : public KFileDialog
 };
 
 /*================================================================*/
+
 /*================================================================*/
 
 class KoTemplateChooseDiaPrivate {
@@ -253,7 +256,7 @@ KoTemplateChooseDia::DialogType KoTemplateChooseDia::getDialogType() const {
 void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * layout)
 {
 
-        d->m_recent = new KFileIconView(widgetbase, "recent files");
+        d->m_recent = new KoTCDRecentFilesIconView(widgetbase, "recent files");
         // I prefer the icons to be in "most recent first" order (DF)
         d->m_recent->setSorting( static_cast<QDir::SortSpec>( QDir::Time | QDir::Reversed ) );
         layout->addWidget(d->m_recent,0,0);
@@ -650,7 +653,6 @@ QString KoTemplateChooseDia::descriptionText(const QString &name, const QString 
 }
 
 /*================================================================*/
-/*================================================================*/
 
 QIconViewItem * KoTCDIconCanvas::load( KoTemplateGroup *group, const QString& name)
 {
@@ -679,8 +681,57 @@ QIconViewItem * KoTCDIconCanvas::load( KoTemplateGroup *group, const QString& na
     return itemtoreturn;
 }
 
+/*================================================================*/
 
+KoTCDRecentFilesIconView::~KoTCDRecentFilesIconView()
+{
+    removeToolTip();
+}
+
+void KoTCDRecentFilesIconView::showToolTip( QIconViewItem* item )
+{
+    removeToolTip();
+    if ( !item )
+        return;
+
+    // Mostly duplicated from KFileIconView, because it only shows tooltips
+    // for truncated icon texts, and we want tooltips on all icons,
+    // with the full path...
+    // KFileIconView would need a virtual method for deciding if a tooltip should be shown,
+    // and another one for deciding what's the text of the tooltip...
+    const KFileItem *fi = ( (KFileIconViewItem*)item )->fileInfo();
+    QString toolTipText = fi->url().prettyURL( 0, KURL::StripFileProtocol );
+    toolTip = new QLabel( QString::fromLatin1(" %1 ").arg(toolTipText), 0,
+                          "myToolTip",
+                          WStyle_StaysOnTop | WStyle_Customize | WStyle_NoBorder | WStyle_Tool | WX11BypassWM );
+    toolTip->setFrameStyle( QFrame::Plain | QFrame::Box );
+    toolTip->setLineWidth( 1 );
+    toolTip->setAlignment( AlignLeft | AlignTop );
+    toolTip->move( QCursor::pos() + QPoint( 14, 14 ) );
+    toolTip->adjustSize();
+    QRect screen = QApplication::desktop()->screenGeometry(
+        QApplication::desktop()->screenNumber(QCursor::pos()));
+    if (toolTip->x()+toolTip->width() > screen.right()) {
+        toolTip->move(toolTip->x()+screen.right()-toolTip->x()-toolTip->width(), toolTip->y());
+    }
+    if (toolTip->y()+toolTip->height() > screen.bottom()) {
+        toolTip->move(toolTip->x(), screen.bottom()-toolTip->y()-toolTip->height()+toolTip->y());
+    }
+    toolTip->setFont( QToolTip::font() );
+    toolTip->setPalette( QToolTip::palette(), TRUE );
+    toolTip->show();
+}
+
+void KoTCDRecentFilesIconView::removeToolTip()
+{
+    delete toolTip;
+    toolTip = 0;
+}
+
+void KoTCDRecentFilesIconView::hideEvent( QHideEvent *ev )
+{
+    removeToolTip();
+    KFileIconView::hideEvent( ev );
+}
 
 #include "koTemplateChooseDia.moc"
-
-

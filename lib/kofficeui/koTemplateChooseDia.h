@@ -82,6 +82,37 @@ class KoTCDIconViewItem : public KIconViewItem
 
 };
 
+#include <kfileiconview.h>
+#include <qlabel.h>
+/**
+ * Our reimplementation of KFileIconView used as the "recent files" view
+ * within the template-chooser dialog.
+ * @internal
+ */
+class KoTCDRecentFilesIconView : public KFileIconView {
+    Q_OBJECT
+    public:
+	KoTCDRecentFilesIconView( QWidget* parent, const char* name ) :
+		KFileIconView( parent, name ), toolTip(0)
+	{
+	    connect( this, SIGNAL( onItem( QIconViewItem * ) ),
+                     SLOT( showToolTip( QIconViewItem * ) ) );
+	    connect( this, SIGNAL( onViewport() ),
+                     SLOT( removeToolTip() ) );
+	}
+        virtual ~KoTCDRecentFilesIconView();
+    protected:
+        /**
+         * Reimplemented to remove an eventual tooltip
+         */
+        virtual void hideEvent( QHideEvent * );
+
+    private slots:
+        void showToolTip( QIconViewItem* );
+        void removeToolTip();
+    private:
+        QLabel* toolTip;
+};
 
 class KInstance;
 class KoTemplateChooseDiaPrivate;
