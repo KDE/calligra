@@ -39,7 +39,7 @@ EllipseTool::EllipseTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 
 	// initialize ellipse tool settings
 	lineThickness = 4;
-	lineOpacity = 255;
+	opacity = 255;
 	usePattern = false;
 	useGradient = false;
 	fillSolid = false;
@@ -51,9 +51,6 @@ EllipseTool::~EllipseTool()
 
 void EllipseTool::mousePress(QMouseEvent *event)
 {
-	if (m_pDoc -> isEmpty())
-		return;
-
 	if (event -> button() == LeftButton) {
 		m_dragging = true;
 		m_dragStart = event -> pos();
@@ -63,9 +60,6 @@ void EllipseTool::mousePress(QMouseEvent *event)
 
 void EllipseTool::mouseMove(QMouseEvent *event)
 {
-	if (m_pDoc -> isEmpty())
-		return;
-
 	if (m_dragging) {
 		// erase old ellipse on canvas
 		drawEllipse(m_dragStart, m_dragEnd);
@@ -78,9 +72,6 @@ void EllipseTool::mouseMove(QMouseEvent *event)
 
 void EllipseTool::mouseRelease(QMouseEvent *event)
 {
-	if (m_pDoc -> isEmpty())
-		return;
-
 	if (m_dragging && event -> state() == LeftButton) {
 		// erase old ellipse on canvas
 		drawEllipse(m_dragStart, m_dragEnd);
@@ -144,14 +135,14 @@ void EllipseTool::optionsDialog()
 	ts.usePattern       = usePattern;
 	ts.useGradient      = useGradient;
 	ts.lineThickness    = lineThickness;
-	ts.lineOpacity      = lineOpacity;
+	ts.opacity      = opacity;
 	ts.fillShapes       = fillSolid;
-	ts.opacity          = lineOpacity;
+	ts.opacity          = opacity;
 
 	bool old_usePattern       = usePattern;
 	bool old_useGradient      = useGradient;
 	int  old_lineThickness    = lineThickness;
-	int  old_lineOpacity      = lineOpacity;
+	int  old_opacity      = opacity;
 	bool old_fillSolid        = fillSolid;
 
 	ToolOptionsDialog OptsDialog(tt_linetool, ts);
@@ -162,19 +153,19 @@ void EllipseTool::optionsDialog()
 		return;
         
 	lineThickness = OptsDialog.lineToolTab()->thickness();
-        lineOpacity   = OptsDialog.lineToolTab()->opacity();
+        opacity   = OptsDialog.lineToolTab()->opacity();
         usePattern    = OptsDialog.lineToolTab()->usePattern();
         fillSolid     = OptsDialog.lineToolTab()->solid(); 
         useGradient   = OptsDialog.lineToolTab()->useGradient();
 
 	// User change value ?
 	if ( old_usePattern != usePattern || old_useGradient != useGradient 
-			|| old_lineOpacity != lineOpacity || old_lineThickness != lineThickness
+			|| old_opacity != opacity || old_lineThickness != lineThickness
 			|| old_fillSolid != fillSolid ) {    
 		KisPainter *p = m_pView->kisPainter();
 
 		p->setLineThickness( lineThickness );
-		p->setLineOpacity( lineOpacity );
+		p->setLineOpacity( opacity );
 		p->setFilledEllipse( fillSolid );
 		p->setPatternFill( usePattern );
 		p->setGradientFill( useGradient );

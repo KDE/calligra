@@ -39,7 +39,7 @@ PolyLineTool::PolyLineTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 
 	// initialize polyline tool settings
 	lineThickness = 4;
-	lineOpacity = 255;
+	opacity = 255;
 	usePattern = false;
 	useGradient = false;
 	useRegions = false;
@@ -63,9 +63,6 @@ void PolyLineTool::finish(QPoint p)
 
 void PolyLineTool::mousePress(QMouseEvent *event)
 {
-	if (m_pDoc -> isEmpty())
-		return;
-
 	// start the polyline, and/or complete the 
 	// polyline segment
 	if (event -> button() == LeftButton) {
@@ -98,9 +95,6 @@ void PolyLineTool::mousePress(QMouseEvent *event)
 
 void PolyLineTool::mouseMove(QMouseEvent *event)
 {
-	if (m_pDoc -> isEmpty())
-		return;
-
 	if (m_dragging) {
 		drawLine(m_dragStart, m_dragEnd);
 		m_dragEnd = event -> pos();
@@ -142,13 +136,13 @@ void PolyLineTool::optionsDialog()
     ts.usePattern       = usePattern;
     ts.useGradient      = useGradient;
     ts.lineThickness    = lineThickness;
-    ts.lineOpacity      = lineOpacity;
+    ts.opacity      = opacity;
     ts.fillShapes       = useRegions;
 
     bool old_usePattern       = usePattern;
     bool old_useGradient      = useGradient;
     int  old_lineThickness    = lineThickness;
-    int  old_lineOpacity      = lineOpacity;
+    int  old_opacity      = opacity;
     bool old_useRegions       = useRegions;
     
     ToolOptionsDialog OptsDialog(tt_linetool, ts);
@@ -159,19 +153,19 @@ void PolyLineTool::optionsDialog()
         return;
         
     lineThickness = OptsDialog.lineToolTab()->thickness();
-    lineOpacity   = OptsDialog.lineToolTab()->opacity();
+    opacity   = OptsDialog.lineToolTab()->opacity();
     usePattern    = OptsDialog.lineToolTab()->usePattern();
     useGradient   = OptsDialog.lineToolTab()->useGradient();
     useRegions    = OptsDialog.lineToolTab()->solid();
 
     // User change value ?
     if ( old_usePattern != usePattern || old_useGradient != useGradient 
-		    || old_lineOpacity != lineOpacity || old_lineThickness != lineThickness
+		    || old_opacity != opacity || old_lineThickness != lineThickness
 		    || old_useRegions != useRegions ) {    
 	    KisPainter *p = m_pView->kisPainter();
 
 	    p->setLineThickness( lineThickness );
-	    p->setLineOpacity( lineOpacity );
+	    p->setLineOpacity( opacity );
 	    p->setPatternFill( usePattern );
 	    p->setGradientFill( useGradient );
 
@@ -205,7 +199,7 @@ bool PolyLineTool::loadSettings(QDomElement& elem)
 
 	if (rc) {
 		lineThickness = elem.attribute("thickness").toInt();
-		lineOpacity = elem.attribute("opacity").toInt();
+		opacity = elem.attribute("opacity").toInt();
 		useRegions = static_cast<bool>(elem.attribute("fillInteriorRegions").toInt());
 		usePattern = static_cast<bool>(elem.attribute("useCurrentPattern").toInt());
 		useGradient = static_cast<bool>(elem.attribute("fillWithGradient").toInt());

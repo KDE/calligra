@@ -39,7 +39,7 @@ LineTool::LineTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 
 	// initialize line tool settings
 	lineThickness = 4;
-	lineOpacity = 255;
+	opacity = 255;
 	usePattern = false;
 	useGradient = false;
 	useRegions = false;
@@ -51,9 +51,6 @@ LineTool::~LineTool()
 
 void LineTool::mousePress(QMouseEvent *event)
 {
-	if (m_pDoc -> isEmpty())
-		return;
-
 	if (event -> button() == LeftButton) {
 		m_dragging = true;
 		m_dragStart = event->pos();
@@ -63,9 +60,6 @@ void LineTool::mousePress(QMouseEvent *event)
 
 void LineTool::mouseMove(QMouseEvent *event)
 {
-	if (m_pDoc -> isEmpty())
-		return;
-
 	if (m_dragging) {
 		// erase old line
 		drawLine(m_dragStart, m_dragEnd);
@@ -78,9 +72,6 @@ void LineTool::mouseMove(QMouseEvent *event)
 
 void LineTool::mouseRelease(QMouseEvent *event)
 {
-	if (m_pDoc -> isEmpty())
-		return;
-
 	if (m_dragging && event -> state() == LeftButton) {
 		// erase old line
 		drawLine(m_dragStart, m_dragEnd);
@@ -115,18 +106,18 @@ void LineTool::drawLine(const QPoint& start, const QPoint& end)
 
 void LineTool::optionsDialog()
 {
-    ToolOptsStruct ts;    
+	ToolOptsStruct ts;    
     
-    ts.usePattern     = usePattern;
-    ts.useGradient    = useGradient;
+	ts.usePattern = usePattern;
+	ts.useGradient = useGradient;
     ts.lineThickness  = lineThickness;
-    ts.lineOpacity    = lineOpacity;
+    ts.opacity    = opacity;
     ts.fillShapes     = useRegions;
 
     bool old_usePattern       = usePattern;
     bool old_useGradient      = useGradient;
     int  old_lineThickness    = lineThickness;
-    int  old_lineOpacity      = lineOpacity;
+    int  old_opacity      = opacity;
     bool old_useRegions       = useRegions;
     
     ToolOptionsDialog OptsDialog(tt_linetool, ts);
@@ -137,19 +128,19 @@ void LineTool::optionsDialog()
         return;
 
     lineThickness = OptsDialog.lineToolTab()->thickness();
-    lineOpacity   = OptsDialog.lineToolTab()->opacity();
+    opacity   = OptsDialog.lineToolTab()->opacity();
     usePattern    = OptsDialog.lineToolTab()->usePattern();
     useGradient   = OptsDialog.lineToolTab()->useGradient();
     useRegions    = OptsDialog.lineToolTab()->solid();
 
     // User change value ?
     if ( old_usePattern != usePattern || old_useGradient != useGradient 
-		    || old_lineOpacity != lineOpacity || old_lineThickness != lineThickness
+		    || old_opacity != opacity || old_lineThickness != lineThickness
 		    || old_useRegions != useRegions ) {    
 	    KisPainter *p = m_pView->kisPainter();
 
 	    p->setLineThickness( lineThickness );
-	    p->setLineOpacity( lineOpacity );
+	    p->setLineOpacity( opacity );
 	    p->setPatternFill( usePattern );
 	    p->setGradientFill( useGradient );
 
@@ -170,11 +161,12 @@ void LineTool::toolSelect()
 	if (m_pView) {
 		KisPainter *gc = m_pView -> kisPainter();
 
+		kdDebug() << "opacity = " << opacity << endl;
+
 		gc -> setLineThickness(lineThickness);
 		gc -> setLineOpacity(opacity);
 		gc -> setPatternFill(usePattern);
 		gc -> setGradientFill(useGradient);
-
 		m_pView -> activateTool(this);
 	}
 }

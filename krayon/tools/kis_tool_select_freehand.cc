@@ -69,7 +69,7 @@ void FreehandSelectTool::finish( QPoint p )
 
 void FreehandSelectTool::clearOld()
 {
-   if (m_pDoc->isEmpty()) return;
+//   if (m_pDoc->isEmpty()) return;
 
    // clear everything in 
    QRect updateRect(0, 0, m_pDoc->current()->width(), m_pDoc->current()->height());
@@ -82,8 +82,8 @@ void FreehandSelectTool::clearOld()
 
 void FreehandSelectTool::mousePress( QMouseEvent* event )
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+//    if ( m_pDoc->isEmpty() )
+//        return;
 
     // start the freehand line.
     if( event->button() == LeftButton && !moveSelectArea ) {
@@ -119,7 +119,7 @@ void FreehandSelectTool::mousePress( QMouseEvent* event )
 
 void FreehandSelectTool::mouseMove( QMouseEvent* event )
 {
-    if (m_pDoc->isEmpty()) return;
+//    if (m_pDoc->isEmpty()) return;
 
     if( event->button() == RightButton ) return;
 

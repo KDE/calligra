@@ -18,7 +18,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <assert.h>
 #include <math.h>
 
 #include <qpainter.h>
@@ -41,7 +40,7 @@ PolyGonTool::PolyGonTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 	m_dragging = false;
 	pCanvas = canvas;
 	lineThickness = 4;
-	lineOpacity = 255;
+	opacity = 255;
 	cornersValue = 3;
 	sharpnessValue = 0;
 	usePattern = false;
@@ -59,9 +58,6 @@ PolyGonTool::~PolyGonTool()
 
 void PolyGonTool::mousePress(QMouseEvent *event)
 {
-	if (m_pDoc -> isEmpty())
-		return;
-
 	if (event -> button() == LeftButton) {
 		m_dragging = true;
 		m_dragStart = event -> pos();
@@ -71,9 +67,6 @@ void PolyGonTool::mousePress(QMouseEvent *event)
 
 void PolyGonTool::mouseMove(QMouseEvent *event)
 {
-	if (m_pDoc -> isEmpty())
-		return;
-
 	if (m_dragging) {
 		// erase old polygon on canvas
 		drawPolygon(m_dragStart, m_dragEnd);
@@ -86,9 +79,6 @@ void PolyGonTool::mouseMove(QMouseEvent *event)
 
 void PolyGonTool::mouseRelease(QMouseEvent *event)
 {
-	if (m_pDoc -> isEmpty())
-		return;
-
 	if (m_dragging && event -> state() == LeftButton) {
 		// erase old polygon on canvas
 		drawPolygon(m_dragStart, m_dragEnd);
@@ -182,7 +172,7 @@ void PolyGonTool::optionsDialog()
 	ts.usePattern       = usePattern;
 	ts.useGradient      = useGradient;
 	ts.lineThickness    = lineThickness;
-	ts.lineOpacity      = lineOpacity;
+	ts.opacity      = opacity;
 	ts.fillShapes       = useRegions;
 	ts.polygonCorners   = cornersValue;
 	ts.polygonSharpness = sharpnessValue;
@@ -192,7 +182,7 @@ void PolyGonTool::optionsDialog()
 	bool old_usePattern       = usePattern;
 	bool old_useGradient      = useGradient;
 	int  old_lineThickness    = lineThickness;
-	int  old_lineOpacity      = lineOpacity;
+	int  old_opacity      = opacity;
 	bool old_useRegions       = useRegions;
 	int old_cornersValue      = cornersValue;
 	int old_sharpnessValue    = sharpnessValue;
@@ -207,7 +197,7 @@ void PolyGonTool::optionsDialog()
 		return;
 
 	lineThickness = pOptsDialog->polygonToolTab()->thickness();
-	lineOpacity   = pOptsDialog->polygonToolTab()->opacity();
+	opacity   = pOptsDialog->polygonToolTab()->opacity();
 	cornersValue  = pOptsDialog->polygonToolTab()->corners();
 	sharpnessValue = pOptsDialog->polygonToolTab()->sharpness();
 	usePattern    = pOptsDialog->polygonToolTab()->usePattern();
@@ -218,15 +208,15 @@ void PolyGonTool::optionsDialog()
 
 	// User change value ?
 	if (old_usePattern != usePattern || old_useGradient != useGradient 
-			|| old_lineOpacity != lineOpacity || old_lineThickness != lineThickness
+			|| old_opacity != opacity || old_lineThickness != lineThickness
 			|| old_useRegions != useRegions || old_cornersValue != cornersValue
 			|| old_sharpnessValue != sharpnessValue || old_checkPolygon != checkPolygon
 			|| old_checkConcavePolygon != checkConcavePolygon) {    
 		KisPainter *p = m_pView -> kisPainter();
 
-		assert(p);
+		Q_ASSERT(p);
 		p->setLineThickness(lineThickness);
-		p->setLineOpacity(lineOpacity);
+		p->setLineOpacity(opacity);
 		p->setPatternFill(usePattern);
 		p->setGradientFill(useGradient);
 		p->setFilledPolygon(useRegions);

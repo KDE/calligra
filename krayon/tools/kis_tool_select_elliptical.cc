@@ -49,8 +49,6 @@ EllipticalSelectTool::~EllipticalSelectTool()
 
 void EllipticalSelectTool::clearOld()
 {
-    if (m_pDoc->isEmpty()) return;
-        
     if(m_dragStart.x() != -1)
         drawEllipse( m_dragStart, m_dragEnd ); 
 
@@ -65,9 +63,6 @@ void EllipticalSelectTool::clearOld()
 
 void EllipticalSelectTool::mousePress( QMouseEvent* event )
 {
-    if ( m_pDoc->isEmpty() )
-        return;
-
     if( event->button() == LeftButton && !moveSelectArea)
     {
         clearOld();
@@ -106,9 +101,6 @@ void EllipticalSelectTool::mousePress( QMouseEvent* event )
 
 void EllipticalSelectTool::mouseMove( QMouseEvent* event )
 {
-    if ( m_pDoc->isEmpty() )
-        return;
-
     if( m_dragging && !dragSelectArea )
     {
         drawEllipse( m_dragStart, m_dragEnd );
@@ -193,9 +185,6 @@ void EllipticalSelectTool::mouseMove( QMouseEvent* event )
 
 void EllipticalSelectTool::mouseRelease( QMouseEvent* event )
 {
-    if ( m_pDoc->isEmpty() )
-        return;
-
     if( ( m_dragging ) && ( event->button() == LeftButton ) && ( !moveSelectArea ) )
     {
         m_dragging = false;
@@ -274,24 +263,22 @@ void EllipticalSelectTool::mouseRelease( QMouseEvent* event )
 
 void EllipticalSelectTool::drawEllipse( const QPoint& start, const QPoint& end )
 {
-    QPainter p, pCanvas;
+	QPainter p;
 
-    p.begin( m_canvas );
-    p.setRasterOp( Qt::NotROP );
-    p.setPen( QPen( Qt::DotLine ) );
+	p.begin(m_canvas);
+	p.setRasterOp(Qt::NotROP);
+	p.setPen(QPen(Qt::DotLine));
 
-    float zF = m_pView->zoomFactor();
+	float zF = m_pView -> zoomFactor();
     
-    /* adjust for scroll ofset as this draws on the canvas, not on
-    the image itself QRect(left, top, width, height) */
+	/* adjust for scroll ofset as this draws on the canvas, not on
+	   the image itself QRect(left, top, width, height) */
     
-    p.drawEllipse( QRect(start.x() + m_pView->xPaintOffset() 
-                                - (int)(zF * m_pView->xScrollOffset()),
-                      start.y() + m_pView->yPaintOffset() 
-                                - (int)(zF * m_pView->yScrollOffset()), 
-                      end.x() - start.x(), 
-                      end.y() - start.y()) );
-    p.end();
+	p.drawEllipse(QRect(start.x() + m_pView -> xPaintOffset() - (int)(zF * m_pView -> xScrollOffset()),
+				start.y() + m_pView -> yPaintOffset() - (int)(zF * m_pView -> yScrollOffset()), 
+				end.x() - start.x(), 
+				end.y() - start.y()));
+	p.end();
 }
 
 void EllipticalSelectTool::setupAction(QObject *collection)

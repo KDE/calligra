@@ -53,7 +53,6 @@ protected:
 private:
 
     int         lineThickness;
-    int         lineOpacity;
     int         cornersValue;
     int         sharpnessValue;
 

@@ -68,7 +68,7 @@ void PolygonalSelectTool::finish(QPoint p)
 
 void PolygonalSelectTool::clearOld()
 {
-   if (m_pDoc->isEmpty()) return;
+//   if (m_pDoc->isEmpty()) return;
         
    // if(m_dragStart.x() != -1)
         // drawRect( m_dragStart, m_dragEnd ); 
@@ -85,8 +85,8 @@ void PolygonalSelectTool::clearOld()
 
 void PolygonalSelectTool::mousePress( QMouseEvent* event )
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+//    if ( m_pDoc->isEmpty() )
+//        return;
 
     // start the polyline, and/or complete the segment
     if( event->button() == LeftButton && !moveSelectArea )
@@ -182,7 +182,7 @@ void PolygonalSelectTool::mousePress( QMouseEvent* event )
 
 void PolygonalSelectTool::mouseMove( QMouseEvent* event )
 {
-    if (m_pDoc->isEmpty()) return;
+//    if (m_pDoc->isEmpty()) return;
 
     if( m_dragging )
     {
@@ -286,8 +286,6 @@ void PolygonalSelectTool::mouseRelease( QMouseEvent* event )
             img->markDirty( QRect( zoomed( pos ) - m_hotSpot, clipPixmap.size() ) );
     }
 }
-
-
 
 void PolygonalSelectTool::drawLine( const QPoint& start, const QPoint& end )
 {

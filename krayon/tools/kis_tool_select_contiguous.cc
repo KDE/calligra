@@ -46,7 +46,7 @@ ContiguousSelectTool::~ContiguousSelectTool()
 
 void ContiguousSelectTool::clearOld()
 {
-   if (m_pDoc->isEmpty()) return;
+//   if (m_pDoc->isEmpty()) return;
         
    if(m_dragStart.x() != -1)
         drawRect( m_dragStart, m_dragEnd ); 
@@ -61,8 +61,8 @@ void ContiguousSelectTool::clearOld()
 
 void ContiguousSelectTool::mousePress( QMouseEvent* event )
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+ //   if ( m_pDoc->isEmpty() )
+//        return;
 
     if( event->button() == LeftButton )
     {
@@ -85,8 +85,8 @@ void ContiguousSelectTool::mousePress( QMouseEvent* event )
 
 void ContiguousSelectTool::mouseMove( QMouseEvent* event )
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+//    if ( m_pDoc->isEmpty() )
+//        return;
 
     if( m_dragging )
     {
@@ -99,8 +99,8 @@ void ContiguousSelectTool::mouseMove( QMouseEvent* event )
 
 void ContiguousSelectTool::mouseRelease( QMouseEvent* event )
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+//    if ( m_pDoc->isEmpty() )
+//        return;
 
     if( ( m_dragging ) && ( event->button() == LeftButton ) )
     {

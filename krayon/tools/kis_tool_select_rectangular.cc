@@ -51,7 +51,7 @@ RectangularSelectTool::~RectangularSelectTool()
 
 void RectangularSelectTool::clearOld()
 {
-   if (m_pDoc->isEmpty()) return;
+//   if (m_pDoc->isEmpty()) return;
         
    if(m_dragStart.x() != -1)
         drawRect( m_dragStart, m_dragEnd ); 
@@ -67,8 +67,8 @@ void RectangularSelectTool::clearOld()
 
 void RectangularSelectTool::mousePress( QMouseEvent* event )
 {
-    if ( m_pDoc->isEmpty() )
-        return;
+//    if ( m_pDoc->isEmpty() )
+ //       return;
 
     if( event->button() == LeftButton && !moveSelectArea )
     {
@@ -108,8 +108,6 @@ void RectangularSelectTool::mousePress( QMouseEvent* event )
 
 void RectangularSelectTool::mouseMove( QMouseEvent* event )
 {
-    if ( m_pDoc->isEmpty() )
-        return;
 
     if( m_dragging && !dragSelectArea )
     {
@@ -195,7 +193,6 @@ void RectangularSelectTool::mouseMove( QMouseEvent* event )
 
 void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 {
-    if (m_pDoc->isEmpty()) return;
     
     if( ( m_dragging ) && ( event->button() == LeftButton ) && ( !moveSelectArea ) )
     {
@@ -288,24 +285,22 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
 
 void RectangularSelectTool::drawRect( const QPoint& start, const QPoint& end )
 {
-    QPainter p, pCanvas;
+	QPainter p;
 
-    p.begin( m_canvas );
-    p.setRasterOp( Qt::NotROP );
-    p.setPen( QPen( Qt::DotLine ) );
+	p.begin(m_canvas);
+	p.setRasterOp(Qt::NotROP);
+	p.setPen(QPen(Qt::DotLine));
 
-    float zF = m_pView->zoomFactor();
+	float zF = m_pView -> zoomFactor();
     
-    /* adjust for scroll ofset as this draws on the canvas, not on
-    the image itself QRect(left, top, width, height) */
+	/* adjust for scroll ofset as this draws on the canvas, not on
+	   the image itself QRect(left, top, width, height) */
     
-    p.drawRect( QRect(start.x() + m_pView->xPaintOffset() 
-                                - (int)(zF * m_pView->xScrollOffset()),
-                      start.y() + m_pView->yPaintOffset() 
-                                - (int)(zF * m_pView->yScrollOffset()), 
-                      end.x() - start.x(), 
-                      end.y() - start.y()) );
-    p.end();
+	p.drawRect(QRect(start.x() + m_pView -> xPaintOffset() - (int)(zF * m_pView -> xScrollOffset()),
+				start.y() + m_pView -> yPaintOffset() - (int)(zF * m_pView -> yScrollOffset()), 
+				end.x() - start.x(), 
+				end.y() - start.y()));
+	p.end();
 }
 
 void RectangularSelectTool::setupAction(QObject *collection)

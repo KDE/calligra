@@ -39,7 +39,7 @@ RectangleTool::RectangleTool(KisDoc *doc, KisCanvas *canvas) : KisTool(doc)
 
 	// initialize rectangle tool settings
 	lineThickness = 4;
-	lineOpacity = 255;
+	opacity = 255;
 	usePattern = false;
 	useGradient = false;
 	fillSolid = false;
@@ -51,9 +51,6 @@ RectangleTool::~RectangleTool()
 
 void RectangleTool::mousePress(QMouseEvent *event)
 {
-	if (m_pDoc -> isEmpty())
-		return;
-
 	if (event -> button() == LeftButton) {
 		m_dragging = true;
 		m_dragStart = event -> pos();
@@ -63,9 +60,6 @@ void RectangleTool::mousePress(QMouseEvent *event)
 
 void RectangleTool::mouseMove(QMouseEvent *event)
 {
-	if (m_pDoc -> isEmpty())
-		return;
-
 	if (m_dragging) {
 		// erase old lines on canvas
 		drawRectangle(m_dragStart, m_dragEnd);
@@ -78,9 +72,6 @@ void RectangleTool::mouseMove(QMouseEvent *event)
 
 void RectangleTool::mouseRelease(QMouseEvent *event)
 {
-	if (m_pDoc -> isEmpty())
-		return;
-
 	if (m_dragging && event -> state() == LeftButton) {
 		// erase old lines on canvas
 		drawRectangle(m_dragStart, m_dragEnd);
@@ -144,14 +135,14 @@ void RectangleTool::optionsDialog()
 	ts.usePattern = usePattern;
 	ts.useGradient      = useGradient;
 	ts.lineThickness    = lineThickness;
-	ts.lineOpacity      = lineOpacity;
-	ts.opacity          = lineOpacity;
+	ts.opacity      = opacity;
+	ts.opacity          = opacity;
 	ts.fillShapes       = fillSolid;
 
 	bool old_usePattern       = usePattern;
 	bool old_useGradient      = useGradient;
 	int  old_lineThickness    = lineThickness;
-	int  old_lineOpacity      = lineOpacity;
+	int  old_opacity      = opacity;
 	bool old_fillSolid        = fillSolid;
 
 	ToolOptionsDialog OptsDialog(tt_linetool, ts);
@@ -162,19 +153,19 @@ void RectangleTool::optionsDialog()
 		return;
 
 	lineThickness = OptsDialog.lineToolTab()->thickness();
-	lineOpacity   = OptsDialog.lineToolTab()->opacity();
+	opacity   = OptsDialog.lineToolTab()->opacity();
 	usePattern    = OptsDialog.lineToolTab()->usePattern();
 	useGradient   = OptsDialog.lineToolTab()->useGradient();
 	fillSolid     = OptsDialog.lineToolTab()->solid();  
 
 	// User change value ?
 	if ( old_usePattern != usePattern || old_useGradient != useGradient 
-			|| old_lineOpacity != lineOpacity || old_lineThickness != lineThickness
+			|| old_opacity != opacity || old_lineThickness != lineThickness
 			|| old_fillSolid != fillSolid) {    
 		KisPainter *p = m_pView->kisPainter();
 
 		p->setLineThickness(lineThickness);
-		p->setLineOpacity(lineOpacity);
+		p->setLineOpacity(opacity);
 		p->setFilledRectangle(fillSolid);
 		p->setPatternFill(usePattern);
 		p->setGradientFill(useGradient);

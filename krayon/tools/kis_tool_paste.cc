@@ -427,15 +427,16 @@ void PasteTool::setupAction(QObject *collection)
 
 void PasteTool::toolSelect()
 {
-	if (m_pView) {
-		    if(m_pDoc -> getClipImage()) {
-			    setClip();
-			    m_pView -> activateTool(this);
-			    m_pView -> slotUpdateImage();
-		    }
-		    else
-			    KMessageBox::sorry(NULL, i18n("Nothing to paste!"), "", false);
+	if (!m_pView)
+		return;
+
+	if(m_pDoc -> getClipImage()) {
+		setClip();
+		m_pView -> activateTool(this);
+		m_pView -> slotUpdateImage();
 	}
+	else
+		KMessageBox::sorry(NULL, i18n("Nothing to paste!"), "", false);
 }
 
 bool PasteTool::shouldRepaint()

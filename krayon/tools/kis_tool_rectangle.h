@@ -53,7 +53,6 @@ protected:
 protected:
 
     int         lineThickness;
-    int         lineOpacity;
 
     QPoint      m_dragStart;
     QPoint      m_dragEnd;
