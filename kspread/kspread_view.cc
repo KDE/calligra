@@ -4164,7 +4164,7 @@ void KSpreadView::paperLayoutDlg()
 
     KoUnit::Unit unit = doc()->getUnit();
 
-    KSpreadPaperLayout *dlg=new KSpreadPaperLayout( 0, "PageLayout", pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit, m_pTable, this);
+    KSpreadPaperLayout *dlg=new KSpreadPaperLayout( this, "PageLayout", pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit, m_pTable, this);
     dlg->show();
     // dlg destroys itself
 
