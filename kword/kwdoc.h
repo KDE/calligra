@@ -761,6 +761,7 @@ protected:
     void nextParagraphNeedingCheck();
     // fix up Z-order for import from older kword versions.
     void fixZOrders();
+    QString checkSectionTitleInParag( KoTextParag* parag, KWTextFrameSet*, int pageNum ) const;
     KoView* createViewInstance( QWidget* parent, const char* name );
     virtual bool saveChildren( KoStore *_store );
 

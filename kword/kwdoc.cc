@@ -3947,6 +3947,33 @@ void KWDocument::slotChapterParagraphFormatted( KoTextParag* /*parag*/ )
     // (or if it keeps existing info then it can't update properly)
 }
 
+QString KWDocument::checkSectionTitleInParag( KoTextParag* parag, KWTextFrameSet* frameset, int pageNum ) const
+{
+    if ( parag->counter() && parag->counter()->numbering() == KoParagCounter::NUM_CHAPTER
+         && parag->counter()->depth() == 0 )
+    {
+        QString txt = parag->string()->toString();
+        txt = txt.left( txt.length() - 1 ); // remove trailing space
+#ifndef NDEBUG // not needed, just checking
+        KoPoint p;
+        KWFrame* frame = frameset->internalToDocument( parag->rect().topLeft(), p );
+        Q_ASSERT( frame );
+        if ( frame ) {
+            int pgNum = frame->pageNum();
+            if( pgNum != pageNum )
+                kdWarning() << "sectionTitle: was looking for pageNum " << pageNum << ", got frame " << frame << " page " << pgNum << endl;
+        }
+        kdDebug(32001) << "KWDocument::sectionTitle for " << pageNum << ":" << txt << endl;
+#endif
+        // Ensure array is big enough
+        if ( pageNum > (int)m_sectionTitles.size()-1 )
+            const_cast<KWDocument*>(this)->m_sectionTitles.resize( pageNum + 1 );
+        const_cast<KWDocument*>(this)->m_sectionTitles[ pageNum ] = txt;
+        return txt;
+    }
+    return QString::null;
+}
+
 QString KWDocument::sectionTitle( int pageNum ) const
 {
     //kdDebug(32001) << "KWDocument::sectionTitle(pageNum=" << pageNum << ") m_sectionTitles.size()=" << m_sectionTitles.size() << endl;
@@ -3985,40 +4012,31 @@ QString KWDocument::sectionTitle( int pageNum ) const
     //kdDebug(32001) << "KWDocument::sectionTitle " << pageNum
     //          << " topLUpix=" << topLUpix << " bottomLUpix=" << bottomLUpix << endl;
 
+    KoTextParag* lastParagOfPageAbove = parag;
     for ( ; parag ; parag = parag->next() )
     {
         if ( parag->rect().bottom() < topLUpix ) // too early
+        {
+            lastParagOfPageAbove = parag;
             continue;
+        }
         if ( parag->rect().top() > bottomLUpix ) // done
             break;
-        if ( parag->counter() && parag->counter()->numbering() == KoParagCounter::NUM_CHAPTER
-             && parag->counter()->depth() == 0 )
-        {
-            QString txt = parag->string()->toString();
-            txt = txt.left( txt.length() - 1 ); // remove trailing space
-#ifndef NDEBUG // not needed, just checking
-            KoPoint p;
-            KWFrame* frame = frameset->internalToDocument( parag->rect().topLeft(), p );
-            Q_ASSERT( frame );
-            if ( frame ) {
-                int pgNum = frame->pageNum();
-                if( pgNum != pageNum )
-                    kdWarning() << "sectionTitle: was looking for pageNum " << pageNum << ", got frame " << frame << " page " << pgNum << endl;
-            }
-            //kdDebug(32001) << "KWDocument::sectionTitle " << txt << endl;
-#endif
-            // Ensure array is big enough
-            if ( pageNum > (int)m_sectionTitles.size()-1 )
-                const_cast<KWDocument*>(this)->m_sectionTitles.resize( pageNum + 1 );
-            const_cast<KWDocument*>(this)->m_sectionTitles[ pageNum ] = txt;
+        QString txt = checkSectionTitleInParag( parag, frameset, pageNum );
+        if ( !txt.isEmpty() )
             return txt;
-        }
     }
 
     // No heading found in page.
-    // Try going back to previous pages to find one - recursively.
-    if ( pageNum > 0 )
-        return sectionTitle( pageNum - 1 );
+    // Go back up until the first section parag
+    parag = lastParagOfPageAbove;
+    for (  ; parag ; parag = parag->prev() )
+    {
+        QString txt = checkSectionTitleInParag( parag, frameset, pageNum );
+        if ( !txt.isEmpty() )
+            return txt;
+    }
+
     // First page, no heading found
     return QString::null;
 }
