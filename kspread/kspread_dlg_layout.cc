@@ -1871,6 +1871,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   QStringList tmpListFont;
   QFontDatabase *fontDataBase = new QFontDatabase();
   tmpListFont = fontDataBase->families();
+  delete fontDataBase;
 
   listFont.setItems(tmpListFont);
 
