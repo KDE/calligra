@@ -63,7 +63,8 @@ bool KoOasisSettings::selectItemMap( const QString &itemMapName )
     return false;
 }
 
-QString KoOasisSettings::parseConfigItem( const QString &item ) const
+
+bool KoOasisSettings::selectItemMapNamed( const QString &itemMapName )
 {
     if ( !m_element.isNull() ) {
         QDomNode n = m_element.firstChild();
@@ -77,9 +78,51 @@ QString KoOasisSettings::parseConfigItem( const QString &item ) const
                 {
                     const QDomElement viewItem = tmp.toElement();
                     if ( viewItem.isNull() ) continue;
-                    if ( viewItem.tagName() == "config:config-item" && viewItem.attribute("config:name")==item)
+                    if ( viewItem.tagName() == "config:config-item-map-named" && viewItem.attribute("config:name")==itemMapName)
                     {
-                        return viewItem.text();
+                        m_element = viewItem;
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+QString KoOasisSettings::parseConfigItemName( const QDomElement & element, const QString &item ) const
+{
+    QDomNode tmp = element.firstChild();
+    for ( ; !tmp.isNull() ; tmp = tmp.nextSibling() )
+    {
+        const QDomElement viewItem = tmp.toElement();
+        if ( viewItem.isNull() ) continue;
+        if ( viewItem.tagName() == "config:config-item" && viewItem.attribute("config:name")==item )
+        {
+            return viewItem.text();
+        }
+    }
+    return QString::null;
+}
+
+QString KoOasisSettings::parseConfigItem( const QString &item, const QString &itemNameEntry ) const
+{
+    if ( !m_element.isNull() ) {
+        QDomNode n = m_element.firstChild();
+        for ( ; !n.isNull() ; n = n.nextSibling() ) {
+            const QDomElement element = n.toElement();
+            if ( element.isNull() ) continue;
+            if ( element.tagName() ==  "config:config-item-map-entry" )
+            {
+                if ( itemNameEntry.isEmpty() )
+                {
+                    return parseConfigItemName( element, item );
+                }
+                else
+                {
+                    if ( element.attribute( "config:name" ) == itemNameEntry )
+                    {
+                        return parseConfigItemName( element, item );
                     }
                 }
             }
@@ -89,55 +132,55 @@ QString KoOasisSettings::parseConfigItem( const QString &item ) const
 }
 
 
-QString KoOasisSettings::parseConfigItemString( const QString & configName ) const
+QString KoOasisSettings::parseConfigItemString( const QString & configName, const QString &itemNameEntry ) const
 {
-    return parseConfigItem( configName );
+    return parseConfigItem( configName, itemNameEntry );
 }
 
-int KoOasisSettings::parseConfigItemInt( const QString & configName ) const
+int KoOasisSettings::parseConfigItemInt( const QString & configName, const QString &itemNameEntry ) const
 {
     int value=0;
     bool ok;
-    QString str = parseConfigItem( configName );
+    QString str = parseConfigItem( configName, itemNameEntry );
     value = str.toInt( &ok );
     if ( ok )
         return value;
     return 0;
 }
 
-double KoOasisSettings::parseConfigItemDouble( const QString & configName ) const
+double KoOasisSettings::parseConfigItemDouble( const QString & configName, const QString &itemNameEntry ) const
 {
     double value=0.0;
     bool ok;
-    QString str = parseConfigItem( configName );
+    QString str = parseConfigItem( configName, itemNameEntry );
     value = str.toDouble( &ok );
     if ( ok )
         return value;
     return 0.0;
 }
 
-bool KoOasisSettings::parseConfigItemBool( const QString & configName ) const
+bool KoOasisSettings::parseConfigItemBool( const QString & configName, const QString &itemNameEntry ) const
 {
-    QString str = parseConfigItem( configName );
+    QString str = parseConfigItem( configName, itemNameEntry );
     return ( str == "true"  ? true : false );
 }
 
-short KoOasisSettings::parseConfigItemShort( const QString & configName ) const
+short KoOasisSettings::parseConfigItemShort( const QString & configName, const QString &itemNameEntry ) const
 {
     short value=0;
     bool ok;
-    QString str = parseConfigItem( configName );
+    QString str = parseConfigItem( configName, itemNameEntry );
     value = str.toShort( &ok );
     if ( ok )
         return value;
     return 0;
 }
 
-long KoOasisSettings::parseConfigItemLong( const QString & configName ) const
+long KoOasisSettings::parseConfigItemLong( const QString & configName, const QString &itemNameEntry ) const
 {
     long value=0;
     bool ok;
-    QString str = parseConfigItem( configName );
+    QString str = parseConfigItem( configName, itemNameEntry );
     value = str.toLong( &ok );
     if ( ok )
         return value;

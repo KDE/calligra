@@ -37,6 +37,16 @@
  *         \<config:config-item-map-indexed config:name="Views"\>
  *           \<config:config-item-map-entry\>
  *             \<config:config-item config:name="SnapLinesDrawing" config:type="string"\>value\</config:config-item\>
+ *               ....
+ *                \<config:config-item-map-named config:name="Tables"\>
+ *                  \<config:config-item-map-entry config:name="Sheet1"\>
+ *                    \<config:config-item config:name="CursorPositionX"\>
+ *                    ......
+ *                  \</config:config-item-map-entry\>
+ *                  \<config:config-item-map-entry config:name="Sheet2"\>
+ *                  ....
+ *                  \</config:config-item-map-entry\>
+ *                \</config:config-item-map-named\>
  *           .....
  *           \</config:config-item-map-entry\>
  *         \</config:config-item-map-indexed\>
@@ -71,16 +81,20 @@ public:
      */
     bool selectItemMap( const QString &itemMapName );
 
-    int parseConfigItemInt( const QString & configName ) const;
-    double parseConfigItemDouble( const QString & configName ) const;
-    QString parseConfigItemString( const QString & configName ) const;
-    bool parseConfigItemBool( const QString & configName ) const;
-    short parseConfigItemShort( const QString & configName ) const;
-    long parseConfigItemLong( const QString & configName ) const;
+    int parseConfigItemInt( const QString & configName, const QString &itemNameEntry = QString::null ) const;
+    double parseConfigItemDouble( const QString & configName, const QString &itemNameEntry = QString::null ) const;
+    QString parseConfigItemString( const QString & configName, const QString &itemNameEntry = QString::null ) const;
+    bool parseConfigItemBool( const QString & configName, const QString &itemNameEntry = QString::null ) const;
+    short parseConfigItemShort( const QString & configName, const QString &itemNameEntry = QString::null ) const;
+    long parseConfigItemLong( const QString & configName, const QString &itemNameEntry = QString::null ) const;
+
+    bool selectItemMapNamed( const QString &itemMapName );
 
 private:
     /// internal
-    QString parseConfigItem( const QString &item ) const;
+    QString parseConfigItem( const QString &item, const QString &itemNameEntry = QString::null ) const;
+    /// internal
+    QString parseConfigItemName( const QDomElement & element, const QString &item ) const;
 
     const QDomDocument m_doc;
     QDomElement m_element;
