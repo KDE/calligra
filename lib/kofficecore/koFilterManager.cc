@@ -29,6 +29,7 @@
 #include <kmimemagic.h>
 
 #include <qmsgbox.h>
+#include <qstringlist.h>
 
 #include <assert.h>
 #include <string.h>
@@ -97,10 +98,11 @@ QString KoFilterManager::fileSelectorList( Direction direction, const char *_for
     // Did we get exact this mime type ?
     if ( t && mime == t->mimeType() )
     {
-      QStrList patterns = t->patterns();
+      QStringList patterns = t->patterns();
       const char* s;
-      for( s = patterns.first(); s != 0L; s = patterns.next() )
+      for(unsigned int j = 0;j < patterns.count();j++)
       {
+	s = patterns[j];
 	if ( !ret.isEmpty() )
 	  ret += "\n";
 	ret += s;
@@ -172,7 +174,7 @@ QString KoFilterManager::import( const char* _url, const char *_native_format )
   if ( vec.size() == 0 )
   {
     QString tmp;
-    tmp.sprintf( i18n("Could not import file of type\n%s"), t->mimeType() );
+    tmp.sprintf( i18n("Could not import file of type\n%s"), t->mimeType().ascii() );
     QMessageBox::critical( 0L, i18n("Missing import filter"), tmp, i18n("OK") );
     return QString();
   }
