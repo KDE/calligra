@@ -555,6 +555,12 @@ void KoStyleFontTab::save()
     m_style->format().setColor( m_chooser->color() );
     if(m_chooser->backGroundColor()!=QApplication::palette().color( QPalette::Active, QColorGroup::Base ))
         m_style->format().setTextBackgroundColor(m_chooser->backGroundColor());
+
+    m_style->format().setTextUnderlineColor(m_chooser->underlineColor());
+    m_style->format().setNbLineType (m_chooser->getNblineType());
+    m_style->format().setLineType (m_chooser->getUnderlineType());
+    m_style->format().setStrikeOutType( m_chooser->getStrikeOutType() );
+
 }
 
 QString KoStyleFontTab::tabName()
