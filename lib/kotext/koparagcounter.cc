@@ -291,7 +291,7 @@ void KoParagCounter::save( QDomElement & element )
         element.setAttribute( "lefttext", m_prefix );
     if ( !m_suffix.isEmpty() )
         element.setAttribute( "righttext", m_suffix );
-    if ( !m_startNumber == 1 )
+    if ( m_startNumber != 1 )
         element.setAttribute( "start", m_startNumber );
     if ( m_numbering != NUM_NONE )
         element.setAttribute( "numberingtype", static_cast<int>( m_numbering ) );
