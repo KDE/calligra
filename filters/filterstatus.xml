@@ -175,7 +175,7 @@
             <filter id="kword_mswrite">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/mswrite"/>
                 <title xml:lang="en_us">MS Write</title>
-                <stat import="twostars" export="planned"/>
+                <stat import="threestars" export="threestars"/>
             </filter>
             <filter id="kword_oowriter">
                 <title xml:lang="en_us">OpenOffice Writer</title>
