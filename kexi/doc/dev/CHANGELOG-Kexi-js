@@ -250,6 +250,17 @@ lucijan	#3 0x414dbf54 in strdup () from /lib/tls/libc.so.6
 lucijan	js^: yes simply add a new kexi__object but o_caption as NULL
 ::FIXIT
 
+
+
+FIXIT::: open Dialog:
+jowenn	by the way I have a problem with your open dialog. I can only open db's not in current directory, if I add the full path in the file name edit box
+jowenn	Not sure were that comes from, had no time to investigate
+js	jowenn: please send me example for reproduction
+jowenn	start kex, browse to a directory click onto something.kexi than I get an error box: Can't open "something.kexi"
+jowenn	If I copy the path from the directory combo and enter "/path/to/something/something.kexi" it works
+jowenn	fails here both, using the keyboard or the mouse
+::FIXIT
+
 TODO: Put Conenction::dropTable() and Conenction::dropQuery() INSIDE TRANSACTION!!!!!!!
 
 ===================== Kexi 0.1 Beta 2 =====================
