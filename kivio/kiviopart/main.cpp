@@ -42,7 +42,9 @@ int main( int argc, char **argv )
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "kivio" );
 
-    app.start();
+    if (!app.start())
+      return 1;
+
     app.exec();
     return 0;
 }
