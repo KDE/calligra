@@ -156,7 +156,7 @@ bool KoDocument::saveFile()
     return false;
 
   KMimeType::Ptr t = KMimeType::findByURL( m_url, 0, TRUE );
-  QCString outputMimeType = t->mimeType().latin1();
+  QCString outputMimeType = t->name().latin1();
 
   QApplication::setOverrideCursor( waitCursor );
 
@@ -788,7 +788,7 @@ QCString KoDocument::readNativeFormatMimeType( KInstance *instance )
 {
   QString instname = instance ? instance->instanceName() : kapp->instanceName();
 
-  KService::Ptr service = KService::service( instname );
+  KService::Ptr service = KService::serviceByDesktopName( instname );
 
   if ( !service )
     return QCString();

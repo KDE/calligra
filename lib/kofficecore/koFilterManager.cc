@@ -75,7 +75,7 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
 
         t = KMimeType::mimeType( mime );
         // Did we get exact this mime type ?
-        if ( t && mime == t->mimeType() )
+        if ( t && mime == t->name() )
         {
             QStringList patterns = t->patterns();
             const char* s;
@@ -168,7 +168,7 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
         t = KMimeType::mimeType( mime );
         // Did we get exact this mime type ?
-        if ( t && mime == t->mimeType() )
+        if ( t && mime == t->name() )
         {
             QStringList patterns = t->patterns();
             const char* s;
@@ -226,7 +226,7 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
         t = KMimeType::mimeType( mime );
         // Did we get exactly this mime type ?
-        if ( t && mime == t->mimeType() )
+        if ( t && mime == t->name() )
         {
             KoFilterDialog *filterdia=vec1[i].createFilterDialog();
             ASSERT(filterdia);
@@ -295,9 +295,9 @@ const QString KoFilterManager::import( const QString & _file, const char *_nativ
 
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
     QCString mimeType;
-    if ( t && t->mimeType()!="application/octet-stream" ) {
-        kdDebug(30003) << "Found MimeType " << t->mimeType() << endl;
-        mimeType = t->mimeType();
+    if ( t && t->name()!="application/octet-stream" ) {
+        kdDebug(30003) << "Found MimeType " << t->name() << endl;
+        mimeType = t->name();
     }
     else {
         kdDebug(30003) << "No MimeType found. Setting text/plain" << endl;
@@ -318,7 +318,7 @@ const QString KoFilterManager::import( const QString & _file, const char *_nativ
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
     if ( vec.isEmpty() )
     {
-        QString tmp = i18n("Could not import file of type\n%1").arg( t->mimeType() );
+        QString tmp = i18n("Could not import file of type\n%1").arg( t->name() );
         QApplication::restoreOverrideCursor();
         KMessageBox::error( 0L, tmp, i18n("Missing import filter") );
         return "";
@@ -382,9 +382,9 @@ const QString KoFilterManager::prepareExport( const QString & file, const char *
 
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, url.isLocalFile() );
     QCString mimeType;
-    if (t && t->mimeType() != "application/octet-stream") {
-        kdDebug(30003) << "Found MimeType " << t->mimeType() << endl;
-        mimeType = t->mimeType();
+    if (t && t->name() != "application/octet-stream") {
+        kdDebug(30003) << "Found MimeType " << t->name() << endl;
+        mimeType = t->name();
     }
     else {
         kdDebug(30003) << "No MimeType found. Setting text/plain" << endl;
@@ -408,7 +408,7 @@ const QString KoFilterManager::prepareExport( const QString & file, const char *
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
     if ( vec.isEmpty() )
     {
-        QString tmp = i18n("Could not export file of type\n%1").arg( t->mimeType() );
+        QString tmp = i18n("Could not export file of type\n%1").arg( t->name() );
         QApplication::restoreOverrideCursor();
         KMessageBox::error( 0L, tmp, i18n("Missing export filter") );
         return file;
