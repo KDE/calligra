@@ -116,9 +116,10 @@ void Formula::getFormula(QDomNode p, int indent)
 				_formula = _formula + "</" + p.nodeName() + ">\n";
 			}
 			break;
-		/*default:
-			kdError() << "Can't happen" << endl;
-			break;*/
+                        //default:
+                        //kdError() << "Can't happen" << endl;
+                        //break;
+
 	}
 }
 
@@ -154,7 +155,7 @@ void Formula::generate(QTextStream &out)
 	KFormula::Document formulaDoc( kapp->sessionConfig() );
 
 	KFormula::Container* formula = new KFormula::Container( &formulaDoc );
-	if ( !formula->load( doc ) ) {
+	if ( !formula->load( doc.documentElement () ) ) {
 		kdError() << "Failed." << endl;
 	}
 
