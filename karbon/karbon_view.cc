@@ -197,7 +197,6 @@ KarbonView::registerTool( VTool *tool )
 		m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "Tools" );
 		if( !m_toolFactory )
 			m_toolFactory = new VToolFactory( this );
-		m_toolbox->setupTools();
 		connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
 	}
 	m_toolbox->registerTool( tool );
@@ -214,11 +213,11 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 			m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "Tools" );
 			if( !m_toolFactory )
 				m_toolFactory = new VToolFactory( this );
-			m_toolbox->setupTools();
 		}
 		else
 			m_toolbox = shell()->toolBar( "Tools" );
 
+		m_toolbox->setupTools();
 		m_currentTool = 0L;
 		connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
 
@@ -696,10 +695,10 @@ KarbonView::zoomChanged( const KoPoint &p )
 	bool bOK;
 	if( !p.isNull() )
 	{
-		kdDebug() << "p.x(): " << p.x() << endl;
-		kdDebug() << "p.y(): " << p.y() << endl;
-		centerX = ( p.x() * zoom() ) / double( m_canvas->contentsWidth() );
-		centerY = 1 - ( p.y() * zoom() ) / double( m_canvas->contentsHeight() );
+		kdDebug() << "p.x(): " << p.x() + 20 << endl;
+		kdDebug() << "p.y(): " << p.y() + 40 << endl;
+		centerX = ( ( p.x() + 20 ) * zoom() ) / double( m_canvas->contentsWidth() );
+		centerY = 1 - ( ( p.y() + 40 ) * zoom() ) / double( m_canvas->contentsHeight() );
 		zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
 	}
 	else if( m_zoomAction->currentText() == i18n("  Width") )
@@ -718,6 +717,8 @@ KarbonView::zoomChanged( const KoPoint &p )
 	}
 	else
 	{
+		kdDebug() << "p.x() : " << double( m_canvas->contentsX() + m_canvas->visibleWidth() / 2 ) << endl;
+		kdDebug() << "p.y() : " << double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) << endl;
 		centerX = double( m_canvas->contentsX() + m_canvas->visibleWidth() / 2 ) / double( m_canvas->contentsWidth() );
 		centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
 		zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
