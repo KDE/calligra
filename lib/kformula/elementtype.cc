@@ -298,15 +298,8 @@ void TextType::saveMathML( SequenceElement* se, QDomDocument doc, QDomElement de
         QString mathvariant = format2variant( te->getCharStyle(), te->getCharFamily());
         if ( !mathvariant.isNull() )
             text.setAttribute( "mathvariant", mathvariant );
-        if ( be->getCharacter().latin1() != 0 ) {
-            // A latin-1 character, we can save it as it is.
-            text.appendChild( doc.createTextNode( be->getCharacter() ) );
-        }
-        else {
-            // An unicode char
-            QString s;
-            text.appendChild( doc.createEntityReference( s.sprintf( "#x%05X", be->getCharacter().unicode() ) ) );
-        }
+        
+        text.appendChild( doc.createTextNode( be->getCharacter() ) );
 
         de.appendChild( text );
         if ( i != end() - 1 ) {
