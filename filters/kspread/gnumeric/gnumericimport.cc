@@ -1430,7 +1430,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
                             //kdDebug()<<" expression1.isNull() "<<expression1.isNull()<<endl;
                             if ( validation_element.hasAttribute( "Type" ) )
                             {
-                                int valueOp = validation_element.attribute( "Operator" ).toInt();
+                                int valueOp = validation_element.attribute( "Type" ).toInt();
                                 switch( valueOp )
                                 {
                                 case 0:
