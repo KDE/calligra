@@ -4,6 +4,7 @@ Changes between 1.3 and 1.3.1
 - Keep bookmark valid after deleting its paragraph
 - Usability improvements in "select bookmark" dialog
 - Fixed drawing of borders for copied frames (e.g. header/footers)
+- Fixed "text doesn't immediately run around copied frame on new page" (#73819)
 
 Last changes for KWord-1.3
 ==========================
