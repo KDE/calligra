@@ -1292,7 +1292,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				rgce >> extno >> intno;
 				rgce >> integer;
 
-				if( intno < m_names.count() )
+				if( intno <= m_names.count() )
 					str = m_names[intno-1];
 				else
 					str =  QString("extname(EXT(%1),%2)").arg(extno).arg(intno);
