@@ -78,6 +78,67 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
 
 bool RTFWorker::makeImage(const FrameAnchor& anchor)
 {
+    QString strImageName(anchor.picture.koStoreName);
+
+    const int pos=strImageName.findRev('.');
+    if (pos==-1)
+    {
+        kdError(30503) << "Images without extensions are not supported: " << anchor.picture.koStoreName << endl;
+        return true;
+    }
+    const QString strExt(strImageName.mid(pos).lower());
+
+    QString strTag;
+    if (strExt==".bmp")
+        strTag="\\wbitmap";
+    else if (strExt==".png")
+        strTag="\\pngblip";
+    else if ( (strExt==".jpeg") || (strExt==".jpg") )
+        strTag="\\jpegblip";
+    else if (strExt==".wmf")
+        strTag="\\wmetafile";
+    else
+    {
+        kdWarning(30503) << "Cannot support type of picture:" << anchor.picture.koStoreName << endl;
+        return true;
+    }
+
+    kdDebug(30503) << "Picture " << anchor.picture.koStoreName << " will be written as " << strTag << endl;
+
+    m_textBody += "{\\pict";
+    m_textBody += strTag;
+    // ### TODO: height/width original/scaled
+
+    QByteArray image;
+    if (!loadKoStoreFile(anchor.picture.koStoreName,image))
+    {
+        kdWarning(30503) << "Unable to load picture " << anchor.picture.koStoreName << endl;
+        return true;
+    }
+
+    const int width  = int(anchor.right  - anchor.left) * 20;
+    const int height = int(anchor.bottom - anchor.top)  * 20;
+    m_textBody += "\\picwgoal";
+    m_textBody += QString::number(width, 10);
+    m_textBody += "\\pichgoal";
+    m_textBody += QString::number(height, 10);
+
+    m_textBody+=" ";
+    const char hex[] = "0123456789abcdef";
+    for (uint i=0; i<image.size(); i++)
+    {
+        if (!(i%40))
+            m_textBody += m_eol;
+        const char ch=image.at(i);
+        m_textBody += hex[(ch>>4)&0x0f]; // Done this way to avoid signed/unsigned problems
+        m_textBody += hex[(ch&0x0f)];
+    }
+
+
+    m_textBody+="}";
+
+
+
 #if 0
     QString strImageName(anchor.picture.koStoreName);
 
@@ -115,13 +176,13 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
 }
 
 void RTFWorker::formatTextParagraph(const QString& strText,
- const FormatData& formatOrigin, const FormatData& format)
+    const FormatData& formatOrigin, const FormatData& format)
 {
     QString strEscaped(escapeRtfText(strText));
 
     // Replace line feeds by forced line breaks
     int pos;
-    QString strBr("\\line "); // ### TODO: verify
+    QString strBr("\\line ");
     while ((pos=strEscaped.find(QChar(10)))>-1)
     {
         strEscaped.replace(pos,1,strBr);
@@ -231,6 +292,7 @@ void RTFWorker::ProcessParagraphData (const QString& strTag, const QString &para
             }
             else if (6==(*paraFormatDataIt).id)
             {
+                kdDebug(30503) << "Found an anchor of type: " << (*paraFormatDataIt).frameAnchor.type << endl;
                 // We have an image, a clipart or a table
 
                 // But first, we must sure that the paragraph is not opened.
@@ -273,6 +335,7 @@ bool RTFWorker::doFullParagraph(const QString& paraText,
     QString strParaText=paraText;
     QString strTag; // Tag that will be written.
 
+#if 0
     if ( layout.counter.numbering == CounterData::NUM_LIST )
     {
         const uint layoutDepth=layout.counter.depth+1; // Word's depth starts at 0!
@@ -322,8 +385,6 @@ bool RTFWorker::doFullParagraph(const QString& paraText,
             newList.m_typeList=layout.counter.style;
             m_listStack.push(newList);
         }
-
-        // TODO: with Cascaded Style Sheet, we could add the exact counter type that we want
         strTag="li";
     }
     else
@@ -354,6 +415,7 @@ bool RTFWorker::doFullParagraph(const QString& paraText,
             strTag="p";
         }
     }
+#endif
 
     ProcessParagraphData(strTag, strParaText, layout, paraFormatDataList);
 
@@ -399,14 +461,17 @@ bool RTFWorker::doCloseFile(void)
 bool RTFWorker::doOpenDocument(void)
 {
     // Make the file header
-    *m_streamOut << "{\\rtf1\\ansi\\ansicpg1200 \\uc0 \\deff0" << m_eol;
+
+    // Note: we use \\ansicpg1252 because 1200 is not supposed to be supported
+    *m_streamOut << "{\\rtf1\\ansi\\ansicpg1252\\uc0\\deff0" << m_eol;
 
     // Default color table
-    m_colorList << QColor(0,0,0)     << QColor(0,0,255)     << QColor(0,255,255)
-                << QColor(0,255,0)   << QColor(255,0,255)   << QColor(255,0,0)
-                << QColor(255,255,0) << QColor(255,255,255) << QColor(0,0,128)
-                << QColor(0,128,128) << QColor(0,128,0)     << QColor(128,0,128)
-                << QColor(128,0,0)   << QColor(128,128,0)   << QColor(128,128,128);
+    m_colorList
+        << QColor(0,0,0)     << QColor(0,0,255)     << QColor(0,255,255)
+        << QColor(0,255,0)   << QColor(255,0,255)   << QColor(255,0,0)
+        << QColor(255,255,0) << QColor(255,255,255) << QColor(0,0,128)
+        << QColor(0,128,128) << QColor(0,128,0)     << QColor(128,0,128)
+        << QColor(128,0,0)   << QColor(128,128,0)   << QColor(128,128,128);
 
     return true;
 }
@@ -455,7 +520,7 @@ void RTFWorker::writeFontData(void)
                 }
             }
         }
-        *m_streamOut << "\\fcharset0\\fprq2 "; // font definition
+        *m_streamOut << "\\fcharset0\\fprq" << (info.fixedPitch()?1:2) << " "; // font definition
         *m_streamOut << escapeRtfText(info.family()); // ### TODO: does RTF allows brackets in the font names?
         *m_streamOut <<  ";}" << m_eol; // end font table entry
     }
@@ -584,6 +649,7 @@ bool RTFWorker::doOpenTextFrameSet(void)
 
 bool RTFWorker::doCloseTextFrameSet(void)
 {
+#if 0
     if (!m_listStack.isEmpty())
     {
         for (uint i=m_listStack.size(); i>0; i--)
@@ -599,6 +665,7 @@ bool RTFWorker::doCloseTextFrameSet(void)
             }
         }
     }
+#endif
     return true;
 }
 
@@ -607,7 +674,7 @@ void RTFWorker::openParagraph(const LayoutData& layout)
     m_textBody += "\\pard";
     if (m_inTable)
         m_textBody += "\\intbl";
-    m_textBody += "{";
+    m_textBody += "{\\plain";
     LayoutData styleLayout;
     m_textBody += lookupStyle(layout.styleName, styleLayout);
     m_textBody += layoutToRtf(styleLayout,layout,false);
@@ -926,9 +993,29 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
         kdWarning(30503) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
 #endif
+
+    if (!layout.tabulatorList.isEmpty()
+        && (force || (layoutOrigin.tabulatorList!=layout.tabulatorList) ))
+    {
+        TabulatorList::ConstIterator it;
+        for (it=layout.tabulatorList.begin();it!=layout.tabulatorList.end();it++)
+        {
+            switch ((*it).m_type)
+            {
+                case 0: default: strLayout += "\\tql"; break; // ### TODO: does \tql exists?
+                case 1:  strLayout += "\\tqc"; break;
+                case 2:  strLayout += "\\tqr"; break;
+                case 3:  strLayout += "\\tqdec"; break;
+            }
+    
+            strLayout += "\\tx";
+            strLayout += QString::number(int((*it).m_ptpos)*20, 10);
+        }
+    }
+
     // TODO: borders
 
-    // This must remain last, as the last property does not have a semi-colon
+    // This must remain last, as it adds a terminating space.
     strLayout+=textFormatToRtf(layoutOrigin.formatData.text,
         layout.formatData.text,force);
 
