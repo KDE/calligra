@@ -111,6 +111,7 @@ Package: kpresenter
 Architecture: any
 Section: kde
 Depends: ${shlibs:Depends}, ${perl:Depends}
+Recommends: libkscan1
 Suggests: khelpcenter, koffice-doc-html
 Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Replaces: koffice-libs (<< 1:1.1-20010404-0)
@@ -155,6 +156,7 @@ Package: kword
 Architecture: any
 Section: kde
 Depends: ${shlibs:Depends}
+Recommends: libkscan1
 Suggests: khelpcenter, koffice-doc-html
 Conflicts: koffice-libs (<< 1:1.2.90-0)
 Replaces: koffice-libs (<< 1:1.2.90-0)

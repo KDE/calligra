@@ -1,6 +1,6 @@
 kexi 0 kexi
-libkexicore 0 kexi (>= 1:1.2.90-0)
-libkexidatatable 0 kexi (>= 1:1.2.90-0)
-libkexidb 0 kexi (>= 1:1.2.90-0)
-libkexiextendedwidgets 0 kexi (>= 1:1.2.90-0)
-libkformeditor 0 kexi (>= 1:1.2.90-0)
+libkexicore 0 kexi (>= 1:1.2.94-0)
+libkexidatatable 0 kexi (>= 1:1.2.94-0)
+libkexidb 0 kexi (>= 1:1.2.94-0)
+libkexiextendedwidgets 0 kexi (>= 1:1.2.94-0)
+libkformeditor 0 kexi (>= 1:1.2.94-0)
