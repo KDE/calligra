@@ -474,6 +474,7 @@ QDomDocument GDocument::saveToXml () {
     QDomElement killustrator=document.createElement("killustaror");
     killustrator.setAttribute("editor", "KIllustrator");
     killustrator.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
+    killustrator.setAttribute("version", "2");
     document.appendChild(killustrator);
 
     QDomElement head=document.createElement("head");
@@ -615,6 +616,10 @@ bool GDocument::readFromXml (const  QDomDocument &document) {
     QDomElement killustrator = document.documentElement();
     if ( killustrator.attribute( "mime" ) != KILLUSTRATOR_MIMETYPE )
         return false;
+    if( killustrator.attribute("version")!="2") {
+        kdError() << "Sorry, KIllustrator's current file format is incompatible to the old format." << endl;
+        return false;
+    }
 
     QDomElement head=killustrator.namedItem("head").toElement();
     setAutoUpdate (false);
