@@ -176,9 +176,7 @@ Page</guimenuitem> options by selecting the a frame of the document then double 
 rulers.</para>
 </tip>
 
-<para>A dialog box will appear with two tabs, labeled <guilabel>Format and
-Borders</guilabel> and <guilabel>Header
-and Footer</guilabel>.</para>
+<para>A dialog box will appear.</para>
 
 <para>The <guilabel>Format and Borders</guilabel> tab is for altering
 the paper size, and changing the margins.</para>
@@ -242,19 +240,6 @@ white-space surrounding the text in your main frame.  You can enter any
 number from 0 to the maximum size of the page in these boxes.  The units
 are the same for all four boxes, and is the same as the measurement
 listed at the top of the dialog..</para>
-
-<para>Clicking on the <guilabel>Header and Footer</guilabel> tab allows the user to
-specify header and footer information. </para>
-
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="dtpfmtpg2.png" format="PNG"/></imageobject>
-</mediaobject>
-</screenshot>
-
-<note><para>While in page layout mode, you can not use headers, footers or footnotes, so none of
-these options will change the look of your page layout document.</para></note>
 
 </sect2>
 </sect1>
