@@ -1170,28 +1170,14 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
     // activeTable()->setMarker( QPoint( col, row ) );
 
-    KSpreadCell *cell = table->cellAt( col, row );
+    KSpreadCell *cell = table->cellAt( col, row, true );
 
-    // Go to the upper left corner of the obscuring object
-    // uncommented by Norbert (nandres@web.de)
-    // why would we want to do this? Excel and StarCalc behave differently
-    // If you do that you cannot access any obscured cells using the mouse.
-    /*
-    if ( cell->isObscured() )
-    {
-    // activeTable()->setSelection( QPoint( cell->obscuringCellsColumn(),
-    //                                        cell->obscuringCellsRow() ) );
-    col = cell->obscuringCellsColumn();
-    row = cell->obscuringCellsRow();
-    cell = table->cellAt( col, row );
-    }
-    */
-    // use this instead: (go to first cell, if cells are merged)
+    // Go to the upper left corner of the obscuring object if cells are merged
     if (cell->isObscuringForced())
     {
         col = cell->obscuringCellsColumn();
         row = cell->obscuringCellsRow();
-        cell = table->cellAt(col, row);
+        cell = table->cellAt(col, row, true);
         //        activeTable()->setSelection( QRect(col, row, col, row) );
     }
 
@@ -1382,17 +1368,25 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
   setChooseMarkerRow( row );
   KSpreadCell *cell = table->cellAt( chooseMarkerColumn(), chooseMarkerRow() );
 
-  // Go to the upper left corner of the obscuring object
-  if ( cell->isObscured() )
+  // Go to the upper left corner of the obscuring object if it is a merged cell
+  if ( cell->isObscuringForced() )
   {
     setChooseMarkerRow( cell->obscuringCellsRow() );
     setChooseMarkerColumn( cell->obscuringCellsColumn() );
     cell = table->cellAt( chooseMarkerColumn(), chooseMarkerRow() );
   }
 
-  selection.setCoords( chooseMarkerColumn(), chooseMarkerRow(),
-                       chooseMarkerColumn() + cell->extraXCells(),
-                       chooseMarkerRow() + cell->extraYCells() );
+  if ( cell->isForceExtraCells() )
+  {
+      selection.setCoords( chooseMarkerColumn(), chooseMarkerRow(),
+                           chooseMarkerColumn() + cell->extraXCells(),
+                           chooseMarkerRow() + cell->extraYCells() );
+  }
+  else
+  {
+      selection.setCoords( chooseMarkerColumn(), chooseMarkerRow(),
+                           chooseMarkerColumn(), chooseMarkerRow() );
+  }
 
   table->setChooseRect( selection );
   m_iMouseStartColumn = chooseMarkerColumn();
@@ -2038,10 +2032,12 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		      }
 		  }
 	      }
-              // don't go to KS_rowMax, if there is nothing down there, stay where you are
+              // don't go to KS_rowMax?, if there is nothing down there, stay where you are
+              // uncommented for visual feedback
               if (y >= rowMax)
-                  y = markerRow();
-	      gotoLocation( x, QMIN( rowMax, y ), 0, make_select, true, true );
+                  y = KS_rowMax;
+
+	      gotoLocation( x, QMIN( KS_rowMax, y ), 0, make_select, true, true );
 	      repaint();
 	  }
 
@@ -2088,9 +2084,10 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		      }
 		  }
 	      }
-              // if there is nothing on the right anymore, we stay where we are
+              // if there is nothing on the right anymore, why not stay where we are?
+              // ... for visual feedback
               if (x >= colMax)
-                  x = markerColumn();
+                  x = KS_colMax;
 
 	      gotoLocation( QMIN( KS_colMax, x ), y, 0, make_select, true, true );
 	      repaint();
