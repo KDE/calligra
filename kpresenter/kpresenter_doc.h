@@ -53,7 +53,7 @@ class DCOPObject;
 #include <komlWriter.h>
 #include <ktempfile.h>
 
-#include <iostream.h>
+#include <qtextstream.h>
 #include <fstream.h>
 #include <torben.h>
 #include <strstream.h>
@@ -83,6 +83,9 @@ public:
 
     virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
 
+    bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
+    bool save( QTextStream & out );
+
 };
 
 /*****************************************************************/
@@ -104,11 +107,12 @@ public:
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false );
 
     // save
-    virtual bool save( ostream&, const char *_format );
+    virtual bool save( QTextStream&, const char *_format );
     virtual bool completeSaving( KoStore* _store );
 
     // load
-    virtual bool loadXML( KOMLParser&, KoStore* );
+    virtual bool loadXML( KOMLParser & parser );
+    virtual bool loadXML( const QDomDocument & doc );
     virtual bool loadChildren( KoStore* _store );
 
     virtual bool initDoc() { return insertNewTemplate( 0, 0, true ); }
@@ -254,7 +258,7 @@ public:
     KPObject* getSelectedObj();
 
     void restoreBackground( int );
-    void loadStream( istream&, int );
+    void loadPastedObjs( const QString &in, int currPage );
 
     void deSelectAllObj();
 
@@ -350,8 +354,8 @@ protected:
 
     virtual void draw( QPaintDevice*, long int, long int, float _scale );
 
-    void saveBackground( ostream& );
-    void saveObjects( ostream& );
+    void saveBackground( QTextStream& );
+    void saveObjects( QTextStream& );
     void loadBackground( KOMLParser&, vector<KOMLAttrib>& );
     void loadObjects( KOMLParser&, vector<KOMLAttrib>&, bool _paste = false );
     virtual bool completeLoading( KoStore* /* _store */ );

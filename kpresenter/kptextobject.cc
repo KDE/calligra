@@ -103,7 +103,7 @@ void KPTextObject::setFillType( FillType _fillType )
 }
 
 /*========================= save =================================*/
-void KPTextObject::save( ostream& out )
+void KPTextObject::save( QTextStream& out )
 {
     out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;
     out << indent << "<SIZE width=\"" << ext.width() << "\" height=\"" << ext.height() << "\"/>" << endl;
@@ -138,12 +138,12 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 
     while ( parser.open( 0L, tag ) )
     {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	// orig
 	if ( name == "ORIG" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -157,7 +157,7 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// disappear
 	else if ( name == "DISAPPEAR" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -173,7 +173,7 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// size
 	else if ( name == "SIZE" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -187,7 +187,7 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// shadow
 	else if ( name == "SHADOW" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -210,7 +210,7 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// effects
 	else if ( name == "EFFECTS" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -224,7 +224,7 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// angle
 	else if ( name == "ANGLE" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -236,7 +236,7 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// presNum
 	else if ( name == "PRESNUM" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -249,7 +249,7 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	else if ( name == "TEXTOBJ" )
 	{
 	    ktextobject.clear( false );
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -266,7 +266,7 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// pen
 	else if ( name == "PEN" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -287,7 +287,7 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// brush
 	else if ( name == "BRUSH" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -306,7 +306,7 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// fillType
 	else if ( name == "FILLTYPE" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -319,7 +319,7 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// gradient
 	else if ( name == "GRADIENT" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -602,7 +602,7 @@ void KPTextObject::extendObject2Contents( KPresenterView */*view*/ )
 }
 
 /*=========================== save ktextobject ===================*/
-void KPTextObject::saveKTextObject( ostream& out )
+void KPTextObject::saveKTextObject( QTextStream& out )
 {
     TxtObj *txtObj;
     TxtLine *txtLine;
@@ -695,11 +695,11 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
     TxtObj *objPtr;
 
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	// enumListType
 	if ( name == "ENUMLISTTYPE" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -744,7 +744,7 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 
 	// unsortListType
 	else if ( name == "UNSORTEDLISTTYPE" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "chr" )
@@ -776,7 +776,7 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 	// paragraph
 	else if ( name == "PARAGRAPH" ) {
 	    txtParagraph = ktextobject.addParagraph();
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "horzAlign" )
@@ -792,23 +792,23 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 	    }
 
 	    while ( parser.open( 0L, tag ) ) {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 
 		// line
 		if ( name == "LINE" ) {
 		    while ( parser.open( 0L, tag ) ) {
-			KOMLParser::parseTag( tag.c_str(), name, lst );
+			parser.parseTag( tag.c_str(), name, lst );
 
 			// object
 			if ( name == "OBJ" ) {
 			    objPtr = new TxtObj();
 
 			    while ( parser.open( 0L, tag ) ) {
-				KOMLParser::parseTag( tag.c_str(), name, lst );
+				parser.parseTag( tag.c_str(), name, lst );
 
 				// type
 				if ( name == "TYPE" ) {
-				    KOMLParser::parseTag( tag.c_str(), name, lst );
+				    parser.parseTag( tag.c_str(), name, lst );
 				    vector<KOMLAttrib>::const_iterator it = lst.begin();
 				    for( ; it != lst.end(); it++ ) {
 					if ( ( *it ).m_strName == "value" )
@@ -818,7 +818,7 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 
 				// font
 				else if ( name == "FONT" ) {
-				    KOMLParser::parseTag( tag.c_str(), name, lst );
+				    parser.parseTag( tag.c_str(), name, lst );
 				    vector<KOMLAttrib>::const_iterator it = lst.begin();
 				    for( ; it != lst.end(); it++ ) {
 					if ( ( *it ).m_strName == "family" )
@@ -837,7 +837,7 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 
 				// color
 				else if ( name == "COLOR" ) {
-				    KOMLParser::parseTag( tag.c_str(), name, lst );
+				    parser.parseTag( tag.c_str(), name, lst );
 				    vector<KOMLAttrib>::const_iterator it = lst.begin();
 				    for( ; it != lst.end(); it++ ) {
 					if ( ( *it ).m_strName == "red" )
@@ -853,7 +853,7 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 
 				// vertical align
 				else if ( name == "VERTALIGN" ) {
-				    KOMLParser::parseTag( tag.c_str(), name, lst );
+				    parser.parseTag( tag.c_str(), name, lst );
 				    vector<KOMLAttrib>::const_iterator it = lst.begin();
 				    for( ; it != lst.end(); it++ ) {
 					if ( ( *it ).m_strName == "value" )
@@ -866,7 +866,7 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
 				    QCString tmputf8;
 				    string tmp;
 
-				    KOMLParser::parseTag( tag.c_str(), name, lst );
+				    parser.parseTag( tag.c_str(), name, lst );
 				    vector<KOMLAttrib>::const_iterator it = lst.begin();
 				    for( ; it != lst.end(); it++ ) {
 					if ( ( *it ).m_strName == "value" ) {

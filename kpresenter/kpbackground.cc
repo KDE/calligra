@@ -193,7 +193,7 @@ void KPBackGround::restore()
 }
 
 /*================================================================*/
-void KPBackGround::save( ostream& out )
+void KPBackGround::save( QTextStream& out )
 {
     out << indent << "<BACKTYPE value=\"" << static_cast<int>( backType ) << "\"/>" << endl;
     out << indent << "<BACKVIEW value=\"" << static_cast<int>( backView ) << "\"/>" << endl;
@@ -223,12 +223,12 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 
     while ( parser.open( 0L, tag ) )
     {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	// backtype
 	if ( name == "BACKTYPE" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -240,7 +240,7 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// pageEffect
 	else if ( name == "PGEFFECT" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -252,7 +252,7 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// backview
 	else if ( name == "BACKVIEW" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -264,7 +264,7 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// backcolor 1
 	else if ( name == "BACKCOLOR1" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -283,7 +283,7 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// gradient
 	else if ( name == "BGRADIENT" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -299,7 +299,7 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// backcolor 2
 	else if ( name == "BACKCOLOR2" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -318,7 +318,7 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// backColorType
 	else if ( name == "BCTYPE" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -332,7 +332,7 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	{
 	    int year, month, day, hour, minute, second, msec;
 
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -364,7 +364,7 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// backpic
 	else if ( name == "BACKPIX" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 
 	    bool openPic = true;
@@ -411,7 +411,7 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	{
 	    int year, month, day, hour, minute, second, msec;
 
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -439,7 +439,7 @@ void KPBackGround::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// backclip
 	else if ( name == "BACKCLIP" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {

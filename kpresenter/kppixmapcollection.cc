@@ -260,7 +260,7 @@ QPixmap *KPPixmapCollection::loadPixmap( const QImage &image, const Key &key, bo
 }
 
 /*================================================================*/
-ostream& operator<<( ostream &out, KPPixmapDataCollection::Key &key )
+QTextStream& operator<<( QTextStream &out, KPPixmapDataCollection::Key &key )
 {
     QDate date = key.lastModified.date();
     QTime time = key.lastModified.time();
@@ -275,7 +275,7 @@ ostream& operator<<( ostream &out, KPPixmapDataCollection::Key &key )
 }
 
 /*================================================================*/
-ostream& operator<<( ostream &out, KPPixmapCollection::Key &key )
+QTextStream& operator<<( QTextStream &out, KPPixmapCollection::Key &key )
 {
     out << key.dataKey << " width=\"" << key.size.width() << "\" height=\""
 	<< key.size.height() << "\" ";

@@ -115,7 +115,7 @@ void KPGroupObject::resizeBy( int _dx, int _dy )
 }
 
 /*================================================================*/
-void KPGroupObject::save( ostream& out )
+void KPGroupObject::save( QTextStream& out )
 {
     out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;
     out << indent << "<SIZE width=\"" << ext.width() << "\" height=\"" << ext.height() << "\"/>" << endl;
@@ -144,11 +144,11 @@ void KPGroupObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst,
     updateObjs = false;
     
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	// orig
 	if ( name == "ORIG" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "x" )
@@ -160,7 +160,7 @@ void KPGroupObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst,
 
 	// size
 	else if ( name == "SIZE" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "width" )
@@ -169,7 +169,7 @@ void KPGroupObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst,
 		    ext.setHeight( atoi( ( *it ).m_strValue.c_str() ) );
 	    }
 	} else if ( name == "OBJECTS" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -177,11 +177,11 @@ void KPGroupObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst,
 	    ObjType t = OT_LINE;
 
 	    while ( parser.open( 0L, tag ) ) {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 
 		// object
 		if ( name == "OBJECT" ) {
-		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    parser.parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ ) {
 			if ( ( *it ).m_strName == "type" )

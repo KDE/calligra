@@ -59,7 +59,7 @@ public:
     virtual ObjType getType()
     { return OT_GROUP; }
 
-    virtual void save( ostream& out );
+    virtual void save( QTextStream& out );
     virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst, KPresenterDoc *doc );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );

@@ -103,7 +103,7 @@ public:
     virtual int getGYFactor()
     { return yfactor; }
 
-    virtual void save( ostream& out );
+    virtual void save( QTextStream& out );
     virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );

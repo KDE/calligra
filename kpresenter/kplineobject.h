@@ -26,7 +26,7 @@
 #include <qpen.h>
 
 #include <koStream.h>
-#include <iostream.h>
+#include <qtextstream.h>
 
 #define RAD_FACTOR 180.0 / M_PI
 
@@ -66,7 +66,7 @@ public:
     virtual LineType getLineType()
     { return lineType; }
 
-    virtual void save( ostream& out );
+    virtual void save( QTextStream& out );
     virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );

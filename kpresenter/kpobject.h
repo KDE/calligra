@@ -31,7 +31,7 @@
 #include "global.h"
 
 #include <koStream.h>
-#include <iostream.h>
+#include <qtextstream.h>
 
 #include "kpgradient.h"
 
@@ -90,7 +90,7 @@ public:
     virtual void setEffect3( Effect3 _effect3)
     { effect3 = _effect3; }
 
-    virtual void save( ostream& /*out*/ )
+    virtual void save( QTextStream& /*out*/ )
     {; }
     virtual void load( KOMLParser& /*parser*/, vector<KOMLAttrib>& /*lst*/ )
     {; }

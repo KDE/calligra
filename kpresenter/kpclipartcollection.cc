@@ -100,7 +100,7 @@ void KPClipartCollection::removeRef( const Key &key )
 }
 
 /*================================================================*/
-ostream& operator<<( ostream &out, KPClipartCollection::Key &key )
+QTextStream& operator<<( QTextStream &out, KPClipartCollection::Key &key )
 {
     QDate date = key.lastModified.date();
     QTime time = key.lastModified.time();

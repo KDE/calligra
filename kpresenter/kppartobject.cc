@@ -308,7 +308,7 @@ void KPPartObject::setFillType( FillType _fillType )
 }
 
 /*================================================================*/
-void KPPartObject::save( ostream& out )
+void KPPartObject::save( QTextStream& out )
 {
     out << indent << "<EFFECTS effect=\"" << static_cast<int>( effect ) << "\" effect2=\""
 	<< static_cast<int>( effect2 ) << "\"/>" << endl;
@@ -337,12 +337,12 @@ void KPPartObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 
     while ( parser.open( 0L, tag ) )
     {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	// effects
 	if ( name == "EFFECTS" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -356,7 +356,7 @@ void KPPartObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// pen
 	else if ( name == "PEN" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -377,7 +377,7 @@ void KPPartObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// brush
 	else if ( name == "BRUSH" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -396,7 +396,7 @@ void KPPartObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// disappear
 	else if ( name == "DISAPPEAR" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -412,7 +412,7 @@ void KPPartObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// angle
 	else if ( name == "ANGLE" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -424,7 +424,7 @@ void KPPartObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// presNum
 	else if ( name == "PRESNUM" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -436,7 +436,7 @@ void KPPartObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// fillType
 	else if ( name == "FILLTYPE" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -449,7 +449,7 @@ void KPPartObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// gradient
 	else if ( name == "GRADIENT" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {

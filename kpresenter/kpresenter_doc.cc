@@ -81,6 +81,7 @@
 #include <koRuler.h>
 #include <koFilterManager.h>
 #include <koStore.h>
+#include <koStoreDevice.h>
 #include <koStoreStream.h>
 
 #include <stdlib.h>
@@ -120,6 +121,83 @@ KPresenterChild::~KPresenterChild()
 KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
 {
   return 0L;
+}
+
+bool KPresenterChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
+{
+  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
+  for( ; it != _attribs.end(); it++ )
+  {
+    if ( (*it).m_strName == "url" )
+    {
+      m_tmpURL = (*it).m_strValue.c_str();
+    }
+    else if ( (*it).m_strName == "mime" )
+    {
+      m_tmpMimeType = (*it).m_strValue.c_str();
+    }
+    else
+      kdDebug(30003) << "Unknown attrib 'OBJECT:" << (*it).m_strName.c_str() << "'" << endl;
+  }
+
+  if ( m_tmpURL.isEmpty() )
+  {	
+    kdDebug(30003) << "Empty 'url' attribute in OBJECT" << endl;
+    return false;
+  }
+  else if ( m_tmpMimeType.isEmpty() )
+  {
+    kdDebug(30003) << "Empty 'mime' attribute in OBJECT" << endl;
+    return false;
+  }
+
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
+
+  bool brect = false;
+
+  // RECT
+  while( parser.open( 0L, tag ) )
+  {
+    parser.parseTag( tag.c_str(), name, lst );
+
+    if ( name == "RECT" )
+    {
+      brect = true;
+      m_tmpGeometry = tagToRect( lst );
+      setGeometry( m_tmpGeometry );
+    }
+    else
+      kdDebug(30003) << "Unknown tag '" << tag.c_str() << "' in OBJECT" << endl;
+
+    if ( !parser.close( tag ) )
+    {
+      kdDebug(30003) << "ERR: Closing Child in OBJECT" << endl;
+      return false;
+    }
+  }
+
+  if ( !brect )
+  {
+    kdDebug(30003) << "Missing RECT in OBJECT" << endl;
+    return false;
+  }
+
+  return true;
+}
+
+
+bool KPresenterChild::save( QTextStream& out )
+{
+  assert( document() );
+  QString u = document()->url().url();
+  QString mime = document()->mimeType();
+
+  out << indent << "<OBJECT url=\"" << u.ascii() << "\" mime=\"" << mime.ascii() << "\">"
+      << geometry() << "</OBJECT>" << endl;
+
+  return true;
 }
 
 /******************************************************************/
@@ -235,14 +313,14 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const char *_path )
     QListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
 	QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-	if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, "", internURL ) )
+	if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
           return false;
     }
     return true;
 }
 
 /*========================== save ===============================*/
-bool KPresenterDoc::save(ostream& out,const char * /* format */)
+bool KPresenterDoc::save(QTextStream& out,const char * /* format */)
 {
     KPObject *kpobject = 0L;
 
@@ -380,7 +458,7 @@ void KPresenterDoc::enableEmbeddedParts( bool f )
 }
 
 /*========================== save background ====================*/
-void KPresenterDoc::saveBackground( ostream& out )
+void KPresenterDoc::saveBackground( QTextStream& out )
 {
     KPBackGround *kpbackground = 0;
 
@@ -396,7 +474,7 @@ void KPresenterDoc::saveBackground( ostream& out )
 }
 
 /*========================== save objects =======================*/
-void KPresenterDoc::saveObjects( ostream& out )
+void KPresenterDoc::saveObjects( QTextStream& out )
 {
     KPObject *kpobject = 0;
 
@@ -444,10 +522,13 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
               u2.prepend( url().url() + "/" );
 
 	    if ( _store->open( u2 ) ) {
-	        ostorestream out( _store );
-	        writeImageToStream( out, it.data(), format );
-	        out.flush();
-	        _store->close();
+              KoStoreDevice dev( _store );
+              QImageIO io;
+              io.setIODevice( &dev );
+              io.setImage( it.data() );
+              io.setFormat( format );
+              io.write();
+              _store->close();
 	    }
 	}
     }
@@ -462,9 +543,8 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
               u2.prepend( url().url() + "/" );
 
 	    if ( _store->open( u2 ) ) {
-	        ostorestream out( _store );
-	        out << it2.data();
-	        out.flush();
+                KoStoreDevice dev( _store );
+                dev.writeBlock( it2.data().data(), it2.data().size() );
 	        _store->close();
 	    }
 	}
@@ -485,8 +565,14 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
     return true;
 }
 
+bool KPresenterDoc::loadXML( const QDomDocument& doc )
+{
+    KOMLParser parser( doc );
+    return loadXML( parser );
+}
+
 /*========================== load ===============================*/
-bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
+bool KPresenterDoc::loadXML( KOMLParser & parser )
 {
     string tag;
     vector<KOMLAttrib> lst;
@@ -527,7 +613,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	    return false;
 	}
 
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 	vector<KOMLAttrib>::const_iterator it = lst.begin();
 	for( ; it != lst.end(); it++ ) {
 	    if ( ( *it ).m_strName == "mime" ) {
@@ -544,10 +630,10 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 
     // PAPER
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	if ( name == "EMBEDDED" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -556,7 +642,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	    QRect r;
 	
 	    while ( parser.open( 0L, tag ) ) {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 		if ( name == "OBJECT" ) {
 		    ch->load( parser, lst );
 		    r = ch->geometry();
@@ -567,7 +653,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		    _objectList->append( kppartobject );
 		    //emit sig_insertObject( ch, kppartobject );
 		} else if ( name == "SETTINGS" ) {
-		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    parser.parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ ) {
 		    }
@@ -585,7 +671,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		kppartobject->setSize( r.width(), r.height() );
 	    }
 	} else if ( name == "PAPER" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "format" )
@@ -621,9 +707,9 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 
 	    // PAPERBORDERS, HEAD, FOOT
 	    while ( parser.open( 0L, tag ) ) {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 		if ( name == "PAPERBORDERS" ) {
-		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    parser.parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ ) {
 			if ( ( *it ).m_strName == "left" ) {
@@ -680,7 +766,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	    }
 
 	} else if ( name == "BACKGROUND" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "rastX" )
@@ -706,7 +792,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	    loadBackground( parser, lst );
 	} else if ( name == "HEADER" ) {
 	    if ( _clean || !hasHeader() ) {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 		vector<KOMLAttrib>::const_iterator it = lst.begin();
 		for( ; it != lst.end(); it++ ) {
 		    if ( ( *it ).m_strName == "show" ) {
@@ -718,7 +804,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	    }
 	} else if ( name == "FOOTER" ) {
 	    if ( _clean || !hasFooter() ) {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 		vector<KOMLAttrib>::const_iterator it = lst.begin();
 		for( ; it != lst.end(); it++ ) {
 		    if ( ( *it ).m_strName == "show" ) {
@@ -729,42 +815,42 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		_footer->load( parser, lst );
 	    }
 	} else if ( name == "OBJECTS" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
 	    lastObj = _objectList->count() - 1;
 	    loadObjects( parser, lst );
 	} else if ( name == "INFINITLOOP" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "value" )
 		    _spInfinitLoop = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
 	    }
 	} else if ( name == "PRESSPEED" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "value" )
 		    presSpeed = static_cast<PresSpeed>( atoi( ( *it ).m_strValue.c_str() ) );
 	    }
 	} else if ( name == "MANUALSWITCH" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "value" )
 		    _spManualSwitch = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
 	    }
 	} else if ( name == "PRESSLIDES" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "value" )
 		    presentSlides = static_cast<PresentSlides>( atoi( ( *it ).m_strValue.c_str() ) );
 	    }
 	} else if ( name == "SELSLIDES" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -773,9 +859,9 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		int nr;
 		bool show;
 
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 		if ( name == "SLIDE" ) {
-		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    parser.parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ ) {
 			if ( ( *it ).m_strName == "nr" )
@@ -793,7 +879,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		}
 	    }
 	} else if ( name == "PIXMAPS" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -803,9 +889,9 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		int year, month, day, hour, minute, second, msec;
 		QString n;
 		
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 		if ( name == "KEY" ) {
-		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    parser.parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    n = QString::null;
 		    for( ; it != lst.end(); it++ ) {
@@ -844,7 +930,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		}
 	    }
 	} else if ( name == "CLIPARTS" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
@@ -854,10 +940,10 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		int year, month, day, hour, minute, second, msec;
 		QString n;
 		
-		KOMLParser::parseTag( tag.c_str(), name, lst );
+		parser.parseTag( tag.c_str(), name, lst );
 		if ( name == "KEY" ) {
 		    n = QString::null;
-		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    parser.parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ )
 		    {
@@ -907,29 +993,6 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
     if ( _rastX == 0 ) _rastX = 10;
     if ( _rastY == 0 ) _rastY = 10;
 
-    if ( !_store ) {
-	if ( _clean )
-	    setPageLayout( __pgLayout, 0, 0 );
- 	else {
-	    QRect r = getPageSize( 0, 0, 0 );
-	    _backgroundList.last()->setSize( r.width(), r.height() );
-	    _backgroundList.last()->restore();
-	}
-	
-	_pixmapCollection.setAllowChangeRef( true );
-	_pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
-
-	KPObject *kpobject = 0L;
-	for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() ) {
-	    if ( kpobject->getType() == OT_PICTURE ) {
-		if ( _clean || _objectList->findRef( kpobject ) > lastObj )
-		    dynamic_cast<KPPixmapObject*>( kpobject )->reload();
-	    } else if ( kpobject->getType() == OT_TEXT ) {
-		dynamic_cast<KPTextObject*>( kpobject )->recalcPageNum( this );
-	    }
-	}
-    }
-
     addToRecentlyOpenedList( url().url() );
 
     return true;
@@ -942,7 +1005,7 @@ void KPresenterDoc::loadBackground( KOMLParser& parser, vector<KOMLAttrib>& lst 
     string name;
 
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	// page
 	if ( name == "PAGE" ) {
@@ -969,11 +1032,11 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bo
     ObjType t = OT_LINE;
 
     while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	// object
 	if ( name == "OBJECT" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 		if ( ( *it ).m_strName == "type" )
@@ -1124,15 +1187,21 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	    QImage img;
 
 	    if ( _store->open( u ) ) {
-		istorestream in( _store );
-		in >> img;
-	        _store->close();
+                KoStoreDevice dev(_store );
+                QImageIO io( &dev, 0 );
+                io.read( );
+                img = io.image();
+
+		_store->close();
 	    } else {
 		u.prepend( "file:" );
 		if ( _store->open( u ) ) {
-		    istorestream in( _store );
-		    in >> img;
-		    _store->close();
+                  KoStoreDevice dev(_store );
+                  QImageIO io( &dev, 0 );
+                  io.read( );
+                  img = io.image();
+
+                  _store->close();
 		}
 	    }
 
@@ -1156,15 +1225,23 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	    QPicture pic;
 
 	    if ( _store->open( u ) ) {
-		istorestream in( _store );
-		in >> pic;
-	        _store->close();
+              KoStoreDevice dev(_store );
+              int size = _store->size();
+              char * data = new char[size];
+              dev.readBlock( data, size );
+              pic.setData( data, size );
+              delete data;
+              _store->close();
 	    } else {
 		u.prepend( "file:" );
 		if ( _store->open( u ) ) {
-		    istorestream in( _store );
-		    in >> pic;
-		    _store->close();
+                  KoStoreDevice dev(_store );
+                  int size = _store->size();
+                  char * data = new char[size];
+                  dev.readBlock( data, size );
+                  pic.setData( data, size );
+                  delete data;
+                  _store->close();
 		}
 	    }
 
@@ -3315,8 +3392,8 @@ void KPresenterDoc::copyObjs( int diffx, int diffy )
     if ( !numSelected() )
 	return;
     QClipboard *cb = QApplication::clipboard();
-    string clip_str;
-    tostrstream out( clip_str );
+    QString clip_str;
+    QTextStream out( &clip_str, IO_WriteOnly );
     KPObject *kpobject = 0;
 
     out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org"
@@ -3334,15 +3411,12 @@ void KPresenterDoc::copyObjs( int diffx, int diffy )
     }
     out << etag << "</DOC>" << endl;
 
-    cb->setText( QString::fromUtf8(clip_str.c_str()) );
+    cb->setText( clip_str );
 }
 
 /*=============================================================*/
 void KPresenterDoc::savePage( const QString &file, int pgnum )
 {
-    string str;
-    tostrstream out( str );
-
     saveOnlyPage = pgnum;
     saveNativeFormat( file );
     saveOnlyPage = -1;
@@ -3356,12 +3430,11 @@ void KPresenterDoc::pasteObjs( int diffx, int diffy, int currPage )
     pasting = true;
     pasteXOffset = diffx + 20;
     pasteYOffset = diffy + 20;
-    QCString clip_str = QApplication::clipboard()->text().utf8();
+    QString clip_str = QApplication::clipboard()->text();
 
     if ( clip_str.isEmpty() ) return;
 
-    istrstream in( clip_str.data() );
-    loadStream( in, currPage );
+    loadPastedObjs( clip_str, currPage );
 
     pasting = false;
     setModified(true);
@@ -3404,11 +3477,12 @@ void KPresenterDoc::restoreBackground( int pageNum )
 	backgroundList()->at( pageNum )->restore();
 }
 
-/*==================== load stream ==============================*/
-void KPresenterDoc::loadStream( istream &in, int currPage )
+/*==================== load pasted objects ==============================*/
+void KPresenterDoc::loadPastedObjs( const QString &in, int currPage )
 {
-    KOMLStreamFeed feed( in );
-    KOMLParser parser( &feed );
+    QDomDocument doc;
+    doc.setContent( in );
+    KOMLParser parser( doc );
 
     string tag;
     vector<KOMLAttrib> lst;
@@ -3423,7 +3497,7 @@ void KPresenterDoc::loadStream( istream &in, int currPage )
     bool insertPage = false;
     bool ok = false;
 
-    KOMLParser::parseTag( tag.c_str(), name, lst );
+    parser.parseTag( tag.c_str(), name, lst );
     vector<KOMLAttrib>::const_iterator it = lst.begin();
     for( ; it != lst.end(); it++ ) {
 	if ( ( *it ).m_strName == "mime" ) {
@@ -3470,7 +3544,7 @@ void KPresenterDoc::loadStream( istream &in, int currPage )
 		_page++;
 	    objStartY = getPageSize( _page - 1, 0, 0 ).y() + getPageSize( _page - 1, 0, 0 ).height();
 	    docAlreadyOpen = true;
-	    loadXML( parser, 0 );
+	    loadXML( parser );
 	    objStartY = 0;
 	    _clean = true;
 	    KPBackGround *kpbackground = _backgroundList.at( _backgroundList.count() - 1 );	
@@ -3824,8 +3898,8 @@ void KPresenterDoc::copyPage( int num )
 	return;
 
     QClipboard *cb = QApplication::clipboard();
-    string clip_str;
-    tostrstream out( clip_str );
+    QString clip_str;
+    QTextStream out( &clip_str, IO_WriteOnly );
     KPObject *kpobject = 0;
     KPBackGround *kpbackground = _backgroundList.at( num );
 
@@ -3855,7 +3929,7 @@ void KPresenterDoc::copyPage( int num )
     out << etag << "</OBJECTS>" << endl;
     out << etag << "</DOC>" << endl;
 
-    cb->setText( clip_str.c_str() );
+    cb->setText( clip_str );
 }
 
 /*================================================================*/

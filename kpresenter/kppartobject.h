@@ -42,7 +42,7 @@ public:
 
     KPPartObject &operator=( const KPPartObject & );
 
-    virtual void save( ostream& out );
+    virtual void save( QTextStream& out );
     virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
 
     virtual void rotate( float _angle );

@@ -132,7 +132,7 @@ void KPPieObject::setFillType( FillType _fillType )
 }
 
 /*========================= save =================================*/
-void KPPieObject::save( ostream& out )
+void KPPieObject::save( QTextStream& out )
 {
     out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;
     out << indent << "<SIZE width=\"" << ext.width() << "\" height=\"" << ext.height() << "\"/>" << endl;
@@ -171,12 +171,12 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 
     while ( parser.open( 0L, tag ) )
     {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+	parser.parseTag( tag.c_str(), name, lst );
 
 	// orig
 	if ( name == "ORIG" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -190,7 +190,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// size
 	else if ( name == "SIZE" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -204,7 +204,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// disappear
 	else if ( name == "DISAPPEAR" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -220,7 +220,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// shadow
 	else if ( name == "SHADOW" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -243,7 +243,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// effects
 	else if ( name == "EFFECTS" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -256,7 +256,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// pen
 	else if ( name == "PEN" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -277,7 +277,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// brush
 	else if ( name == "BRUSH" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -296,7 +296,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// angle
 	else if ( name == "ANGLE" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -308,7 +308,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// presNum
 	else if ( name == "PRESNUM" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -320,7 +320,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// fillType
 	else if ( name == "FILLTYPE" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -333,7 +333,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// gradient
 	else if ( name == "GRADIENT" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -369,7 +369,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// lineBegin
 	else if ( name == "LINEBEGIN" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -381,7 +381,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// lineEnd
 	else if ( name == "LINEEND" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -393,7 +393,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// pieAngle
 	else if ( name == "PIEANGLE" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -405,7 +405,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// pieLength
 	else if ( name == "PIELENGTH" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {
@@ -417,7 +417,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	// pieType
 	else if ( name == "PIETYPE" )
 	{
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    parser.parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ )
 	    {

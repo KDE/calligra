@@ -94,7 +94,7 @@ public:
     virtual int getGYFactor()
     { return yfactor; }
 
-    virtual void save( ostream& out );
+    virtual void save( QTextStream& out );
     virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
@@ -110,7 +110,7 @@ public:
     void recalcPageNum( KPresenterDoc *doc );
     
 protected:
-    virtual void saveKTextObject( ostream& out );
+    virtual void saveKTextObject( QTextStream& out );
     virtual void loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst );
 
     QString decode( const QString &_str );

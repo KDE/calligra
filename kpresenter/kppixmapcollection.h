@@ -29,7 +29,7 @@
 
 #include "global.h"
 
-#include <iostream.h>
+#include <qtextstream.h>
 
 /******************************************************************/
 /* Class: KPPixmapDataCollection				  */
@@ -186,7 +186,7 @@ protected:
 
 };
 
-ostream& operator<<( ostream &out, KPPixmapDataCollection::Key &key );
-ostream& operator<<( ostream &out, KPPixmapCollection::Key &key );
+QTextStream& operator<<( QTextStream &out, KPPixmapDataCollection::Key &key );
+QTextStream& operator<<( QTextStream &out, KPPixmapCollection::Key &key );
 
 #endif

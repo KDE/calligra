@@ -27,7 +27,7 @@
 
 #include "global.h"
 
-#include <iostream.h>
+#include <qtextstream.h>
 
 /******************************************************************/
 /* Class: KPClipartCollection					  */
@@ -108,6 +108,6 @@ protected:
 
 };
 
-ostream& operator<<( ostream &out, KPClipartCollection::Key &key );
+QTextStream& operator<<( QTextStream &out, KPClipartCollection::Key &key );
 
 #endif
