@@ -1,9 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name = mySQL
-Type = Service
-X-KDE-Library = libmysqlinterface
-X-KDE-Description = the mySQL engine is mostly used for bigger databases and is networktransparent
-ServiceTypes = KexiDB/Interface
 Comment = mySQL is a quick database engine, which provides quick access to personal databases but also big databases
-Comment[de] = mySQL ist eine schnell Datenbank. Sie bietet sowohl schnellen zugriff für kleine datenbanken alsauch für große
+Comment[de] = mySQL ist eine schnell Datenbank. Sie bietet sowohl schnellen zugriff für kleine datenbanken alsauch für großeType = Service
+X-KDE-Library = libmysqlinterface
+ServiceTypes = KexiDB/Interface
+Type= Service
+InitialPreference=8
+MimeType=text/plain
+

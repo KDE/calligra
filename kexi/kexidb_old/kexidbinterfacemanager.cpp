@@ -61,8 +61,10 @@ KexiDBInterfaceManager::load(QString driver)
 		KexiDBDriver *d = m_driverList.find(driver);
 		if(d)
 		{
+			kdDebug() << "KexiDBInterfaceManager::load(): d found" << endl;
 			if(d->service())
 			{
+				kdDebug() << "KexiDBInterfaceManager::load(): d->service found" << endl;
 				KexiDB *plugin = KParts::ComponentFactory::createInstanceFromService<KexiDB>(d->service(), this, "driverPlugin", QStringList());
 				
 				if(plugin)
@@ -70,7 +72,6 @@ KexiDBInterfaceManager::load(QString driver)
 					kdDebug() << "KexiDBInterfaceManager::load(): loading suceed: " << plugin << endl;
 				}
 			}
-//			}
 		}
 	}
 }

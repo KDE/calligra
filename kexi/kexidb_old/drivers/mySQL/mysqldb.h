@@ -23,6 +23,11 @@ Boston, MA 02111-1307, USA.
 
 #include "../../kexiDB/kexidb.h"
 
+/*!
+ * should overwrite kexiDB/kexiDB
+ * all other members ar done by the
+ * baseclass
+ */
 class MySqlDB : public KexiDB
 {
 	Q_OBJECT
