@@ -10,9 +10,9 @@ kexi_la_LIBADD = ./core/libkexicore.la \
 
 #SUBDIRS= 3rdparty kexidb core tableview . data widget plugins tests
 SUBDIRS= 3rdparty kexidb core tableview widget formeditor \
-plugins data pics main . tests
+data pics main migration plugins . tests
 
-#(will be reenabled after main/startup move) migration 
+#(will be reenabled after main/startup move)  
 
 kdelnkdir = $(kde_appsdir)/Office
 xdg_apps_DATA = kexi.desktop
