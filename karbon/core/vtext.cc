@@ -163,18 +163,12 @@ VText::transform( const QWMatrix& m )
 		itr.current()->transform( m );
 }
 
-KoRect
-VText::boundingBox( const double zoomFactor ) const
-{
-	return m_glyphs.boundingBox( zoomFactor );
-}
-
 bool
-VText::intersects( const KoRect& rect, const double zoomFactor ) const
+VText::isInside( const KoRect& rect ) const
 {
 	VObjectListIterator itr = m_glyphs;
 	for ( ; itr.current() ; ++itr )
-		if( itr.current()->intersects( rect, zoomFactor ) )
+		if( itr.current()->isInside( rect ) )
 			return true;
 
 	return false;

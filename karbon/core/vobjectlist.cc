@@ -10,6 +10,7 @@
 #include <kdebug.h>
 
 VObjectList::VObjectList()
+	: m_boundingBoxIsInvalid( true )
 {
 }
 
@@ -17,20 +18,26 @@ VObjectList::~VObjectList()
 {
 }
 
-KoRect
-VObjectList::boundingBox( const double zoomFactor ) const
+const KoRect&
+VObjectList::boundingBox() const
 {
-	if( count() > 0 )
+	if( m_boundingBoxIsInvalid )
 	{
-		KoRect rect = getFirst()->boundingBox( zoomFactor );
-		VObjectListIterator itr( *this );
-		++itr;
-		for ( ; itr.current() ; ++itr )
-			rect |= itr.current()->boundingBox( zoomFactor );
+		// clear:
+		m_boundingBox = KoRect();
 
-		return rect;
+		if( count() > 0 )
+		{
+			m_boundingBox = getFirst()->boundingBox();
+			VObjectListIterator itr( *this );
+			++itr;
+			for ( ; itr.current() ; ++itr )
+				m_boundingBox |= itr.current()->boundingBox();
+
+			m_boundingBoxIsInvalid = false;
+		}
 	}
-	else
-		return KoRect();
+
+	return m_boundingBox;
 }
 

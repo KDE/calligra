@@ -49,7 +49,8 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 	KoPoint fp = view->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	KoRect rect = part()->document().selection().boundingBox( 1 / view->zoom() );
+	KoRect rect = part()->document().selection().boundingBox();
+
 	kdDebug() << " x: " << rect.x() << " y: " << rect.y() << " rect.width: " << rect.width() << " rect.height: " << rect.height() << endl;
 	if( !part()->document().selection().isEmpty()
 		&& ( m_state != normal || rect.contains( fp /* view->zoom() */ ) ) )
@@ -79,7 +80,7 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 
 			itr2.current()->draw(
 				painter,
-				itr2.current()->boundingBox( view->zoom() ) );
+				itr2.current()->boundingBox() );
 		}
 		painter->setZoomFactor( 1.0 );
 	}
@@ -156,9 +157,9 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 
 			part()->document().selectObjectsWithinRect(
 				KoRect(
-					qRound( fp.x() / view->zoom() ), qRound( fp.y() / view->zoom() ),
-					qRound( ( lp.x() - fp.x() ) / view->zoom() ),
-					qRound( ( lp.y() - fp.y() ) / view->zoom() ) ).normalize(), 1,
+					fp.x() * view->zoom(), fp.y() * view->zoom(),
+					( lp.x() - fp.x() ) * view->zoom(),
+					( lp.y() - fp.y() ) * view->zoom() ).normalize(),
 				true );
 
 			//if( part()->selection().count() > 0  )

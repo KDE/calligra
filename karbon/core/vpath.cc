@@ -45,11 +45,12 @@ VPath::~VPath()
 void
 VPath::draw( VPainter *painter, const KoRect& rect )
 {
-	double zoomFactor = painter->zoomFactor();
 	if( state() == state_deleted )
 		return;
 
-	if( zoomFactor != 1 && !rect.intersects( boundingBox( zoomFactor ) ) )
+	double zoomFactor = painter->zoomFactor();
+
+	if( zoomFactor != 1 && !rect.intersects( boundingBox() ) )
 		return;
 
 	painter->save();
@@ -280,27 +281,32 @@ VPath::transform( const QWMatrix& m )
 	}
 }
 
-KoRect
-VPath::boundingBox( const double zoomFactor ) const
+const KoRect&
+VPath::boundingBox() const
 {
-	KoRect rect;
-
-	QPtrListIterator<VSegmentList> itr( m_segmentLists );
-	for( itr.toFirst(); itr.current(); ++itr )
+	if( m_boundingBoxIsInvalid )
 	{
-		rect |= itr.current()->boundingBox();
+		// clear:
+		m_boundingBox = KoRect();
+
+		QPtrListIterator<VSegmentList> itr( m_segmentLists );
+		for( itr.toFirst(); itr.current(); ++itr )
+		{
+			m_boundingBox |= itr.current()->boundingBox();
+		}
+
+		m_boundingBoxIsInvalid = false;
 	}
 
-	return KoRect(
-		qRound( rect.left() / zoomFactor ),
-		qRound( rect.top() / zoomFactor ),
-		qRound( rect.width() / zoomFactor ),
-		qRound( rect.height() / zoomFactor ) );
+	return m_boundingBox;
 }
 
 bool
-VPath::intersects( const KoRect& qrect, const double zoomFactor ) const
+VPath::isInside( const KoRect& rect ) const
 {
+// TODO: this is only a temporary solution:
+return rect.intersects( boundingBox() );
+/*
 	KoRect rect( qrect.topLeft() * zoomFactor, qrect.bottomRight() * zoomFactor );
 
 	VPathBounding bb;
@@ -316,6 +322,7 @@ VPath::intersects( const KoRect& qrect, const double zoomFactor ) const
 	}
 
 	return false;
+*/
 }
 
 VObject*

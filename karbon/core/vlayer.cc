@@ -88,8 +88,7 @@ VLayer::moveObjectUp( const VObject* object )
 }
 
 VObjectList
-VLayer::objectsWithinRect( const KoRect& rect,
-	const double zoomFactor ) const
+VLayer::objectsWithinRect( const KoRect& rect ) const
 {
 	VObjectList list;
 	VObjectListIterator itr( m_objects );
@@ -97,7 +96,7 @@ VLayer::objectsWithinRect( const KoRect& rect,
 	for ( ; itr.current(); ++itr )
 	{
 		if( itr.current()->state() != state_deleted &&
-			itr.current()->intersects( rect, zoomFactor ) )
+			itr.current()->isInside( rect ) )
 		{
 			list.append( itr.current() );
 		}

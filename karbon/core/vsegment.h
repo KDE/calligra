@@ -87,7 +87,9 @@ public:
 	bool isFlat( double flatness = VGlobal::flatnessTolerance ) const;
 
 	/// Calculates the bounding box.
-	KoRect boundingBox() const;
+	const KoRect& boundingBox() const;
+	bool boundingBoxIsInvalid() const { return m_boundingBoxIsInvalid; }
+	void invalidateBoundingBox() { m_boundingBoxIsInvalid = true; }
 
 	/**
 	 *  Splits segment at 0 <= t <= 1. Returns the first segment and transforms
@@ -119,6 +121,9 @@ private:
 	VSegmentType m_type;
 	bool m_smooth;			// first ctrl-point is "smooth".
 	KoPoint m_point[3];
+
+	mutable KoRect m_boundingBox;
+	mutable bool m_boundingBoxIsInvalid;
 };
 
 #endif

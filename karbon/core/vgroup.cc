@@ -69,18 +69,12 @@ VGroup::setState( const VState state )
         itr.current()->setState( state );
 }
 
-KoRect
-VGroup::boundingBox( const double zoomFactor ) const
-{
-	return m_objects.boundingBox( zoomFactor );
-}
-
 bool
-VGroup::intersects( const KoRect& rect, const double zoomFactor ) const
+VGroup::isInside( const KoRect& rect ) const
 {
 	VObjectListIterator itr = m_objects;
 	for ( ; itr.current() ; ++itr )
-		if( itr.current()->intersects( rect, zoomFactor ) )
+		if( itr.current()->isInside( rect ) )
 			return true;
 
 	return false;

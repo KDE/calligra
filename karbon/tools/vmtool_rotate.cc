@@ -77,7 +77,8 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 	{
 		setCursor( view );
 		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
-		KoRect rect = part()->document().selection().boundingBox( 1 / view->zoom() );
+		KoRect rect = part()->document().selection().boundingBox();
+
 		m_sp = KoPoint( int( rect.left() + rect.width() / 2 ), int( rect.top() + rect.height() / 2 ) );
 		KoPoint sp( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
 		m_angle = atan2( lp.y() - m_sp.y(), lp.x() - m_sp.x() );
@@ -126,7 +127,7 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 			}
 			itr2.current()->transform( mat );
 			itr2.current()->setState( state_edit );
-			itr2.current()->draw( painter, itr2.current()->boundingBox( view->zoom() ) );
+			itr2.current()->draw( painter, itr2.current()->boundingBox() );
 		}
 		painter->setZoomFactor( 1.0 );
 	}

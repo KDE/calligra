@@ -30,8 +30,7 @@ public:
 	void moveObjectDown( const VObject* object );
 	void moveObjectUp( const VObject* object );
 
-	VObjectList objectsWithinRect( const KoRect& rect,
-		const double zoomFactor ) const;
+	VObjectList objectsWithinRect( const KoRect& rect ) const;
 
 	// clean up object list:
 	void removeDeletedObjects();

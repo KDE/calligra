@@ -8,8 +8,8 @@
 #include <qdom.h>
 
 VDocument::VDocument()
-	: m_mime ("application/x-karbon"), m_version ("0.1"),
-	  m_editor ("karbon14 0.0.1"), m_syntaxVersion ("0.1")
+	: m_mime( "application/x-karbon" ), m_version( "0.1" ),
+		m_editor( "karbon14 0.0.1" ), m_syntaxVersion( "0.1" )
 {
 	// create a layer. we need at least one:
 	m_layers.setAutoDelete( true );
@@ -28,7 +28,7 @@ VDocument::insertLayer( const VLayer* layer )
 }
 
 void
-VDocument::save( QDomDocument &doc ) const
+VDocument::save( QDomDocument& doc ) const
 {
 	QDomElement me = doc.createElement( "DOC" );
 
@@ -152,7 +152,7 @@ VDocument::selectObjectsWithinRect( const KoRect& rect,
 
 	for ( ; itr.current(); ++itr )
 	{
-		objects = itr.current()->objectsWithinRect( rect, zoomFactor );
+		objects = itr.current()->objectsWithinRect( rect );
 		VObjectListIterator itr2( objects );
 		for ( ; itr2.current(); ++itr2 )
 		{

@@ -97,8 +97,8 @@ public:
 	/// Applies an affine transformation.
 	virtual void transform( const QWMatrix& m );
 
-	virtual KoRect boundingBox( const double zoomFactor ) const;
-	virtual bool intersects( const KoRect& qrect, const double zoomFactor ) const;
+	virtual const KoRect& boundingBox() const;
+	virtual bool isInside( const KoRect& rect ) const;
 
 	virtual VObject* clone();
 

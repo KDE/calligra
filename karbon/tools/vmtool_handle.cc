@@ -65,7 +65,7 @@ VMToolHandle::draw( QPainter& painter, const double zoomFactor )
 
 	if( part()->document().selection().count() > 0 )
 	{
-		m_bbox = part()->document().selection().boundingBox( 1 / zoomFactor );
+		m_bbox = part()->document().selection().boundingBox();
 		kdDebug() << " x : " << m_bbox.x() << ", " << m_bbox.y() << ", " << m_bbox.width() << ", " << m_bbox.height() << endl;
 		painter.drawRect( m_bbox.toQRect() );
 

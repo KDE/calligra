@@ -70,7 +70,8 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 
 	KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
-	KoRect rect = part()->document().selection().boundingBox( 1 / view->zoom() );
+	KoRect rect = part()->document().selection().boundingBox();
+
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->document().selection().isEmpty() && VMToolHandle::instance( m_part )->activeNode() != NODE_MM )
 	{
@@ -145,7 +146,7 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 		{
 			itr2.current()->transform( mat );
 			itr2.current()->setState( state_edit );
-			itr2.current()->draw( painter, itr2.current()->boundingBox( view->zoom() ) );
+			itr2.current()->draw( painter, itr2.current()->boundingBox() );
 		}
 		painter->setZoomFactor( 1.0 );
 	}

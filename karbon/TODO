@@ -1,7 +1,6 @@
 -	mirror coordinate-system so origin is bottom-left
 -	rotate/scale/shear tool dont work
--	optimize boundingbox: cache in vsegmentlist (+ vsegment ?) and apply affine
-	trafos (dont recalculate in that case) to them too
+-	remove temporary solution for vpath::intersects()
 -	reintroduce whirl
 -	why do we pass "VObjectList" to MCmds? We could use part->selection().
 -	painting (NotROP) while shape creation isnt good. creation should instead

@@ -36,12 +36,17 @@ class VVisitor;
 class VObject
 {
 public:
-	VObject( VState state = state_normal ) { m_state = state; }
+	VObject( VState state = state_normal )
+	{
+		m_state = state;
+		m_boundingBoxIsInvalid = true;
+	}
 	VObject( const VObject &obj )
 	{
 		m_fill   = obj.m_fill;
 		m_stroke = obj.m_stroke;
 		m_state  = obj.m_state;
+		m_boundingBoxIsInvalid = true;
 	}
 	virtual ~VObject() {}
 
@@ -66,11 +71,24 @@ public:
 	/**
 	 * Calculates the tightest bounding box around the object.
 	 *
-	 * @param zoomFactor the zoom factor to take into account when calculating the bbox.
 	 * @return the bounding box.
 	 */
-	virtual KoRect boundingBox( const double /*zoomFactor*/ ) const
-		{ return KoRect(); }
+	virtual const KoRect& boundingBox() const
+		{ return m_boundingBox; }
+
+	/**
+	 * Checks if the bounding box is invalid and needs to be recalculated.
+	 *
+	 * @return true if bounding box is invalid.
+	 */
+	 bool boundingBoxIsInvalid() const { return m_boundingBoxIsInvalid; }
+
+	/**
+	 * Invalidates the bounding box, so it has to be recalculated.
+	 */
+	 void invalidateBoundingBox()
+	 	{ m_boundingBoxIsInvalid = true; }
+
 	/**
 	 * Tests whether this object intersects the given rectangle.
 	 * Default is false, each VObject derivative has to implement
@@ -78,9 +96,10 @@ public:
 	 *
 	 * @param rect the rectangle to test against.
 	 * @param zoomFactor 
-	 * @return true indicates one or more segments intersect with rect, false otherwise.
+	 * @return true indicates one or more segments intersects or is inside rect,
+	 * false otherwise.
 	 */
-	virtual bool intersects( const KoRect& /*rect*/, const double /*zoomFactor*/ ) const
+	virtual bool isInside( const KoRect& /*rect*/ ) const
 		{ return false; };
 
 	/**
@@ -125,6 +144,10 @@ public:
 protected:
 	VFill m_fill;
 	VStroke m_stroke;
+
+	/// Bounding box.
+	mutable KoRect m_boundingBox;
+	mutable bool m_boundingBoxIsInvalid;
 
 private:
 	VState m_state;

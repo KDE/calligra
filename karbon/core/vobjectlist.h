@@ -17,7 +17,13 @@ public:
 	VObjectList();
 	virtual ~VObjectList();
 
-	KoRect boundingBox( const double zoomFactor ) const;
+	const KoRect& boundingBox() const;
+	bool boundingBoxIsInvalid() const { return m_boundingBoxIsInvalid; }
+	void invalidateBoundingBox() { m_boundingBoxIsInvalid = true; }
+
+private:
+	mutable KoRect m_boundingBox;
+	mutable bool m_boundingBoxIsInvalid;
 };
 
 typedef QPtrListIterator<VObject> VObjectListIterator;

@@ -30,8 +30,10 @@ public:
 
 	virtual void transform( const QWMatrix& m );
 
-    virtual KoRect boundingBox( const double zoomFactor ) const;
-    virtual bool intersects( const KoRect& rect, const double zoomFactor ) const;
+    virtual const KoRect& boundingBox() const
+		{ return m_objects.boundingBox(); }
+
+    virtual bool isInside( const KoRect& rect ) const;
 
     virtual VObject* clone();
 

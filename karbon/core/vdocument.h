@@ -33,7 +33,7 @@ public:
 
 	const VLayerList& layers() const { return m_layers; }
 
-	void save( QDomDocument &doc ) const;
+	void save( QDomDocument& doc ) const;
 	bool load( const QDomElement& element );
 
 	// manipulate selection:
@@ -55,3 +55,4 @@ private:
 };
 
 #endif
+
