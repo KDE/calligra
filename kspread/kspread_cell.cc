@@ -5025,12 +5025,16 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
 	    {
 	      QString link = subText.attribute( "xlink:href" );
 	      text = "!<a href=\"" + link + "\"><i>" + text + "</i></a>";
+	      m_pQML = new QSimpleRichText( text.mid(1),  QApplication::font() );//, m_pTable->widget() );
+	      d->strText = text;
 	    }
 	}
       else
-        text = textP.text(); // our text, could contain formating for value or result of formul
-      setCellText( text );
-      setValue( text );
+	{
+	  text = textP.text(); // our text, could contain formating for value or result of formul
+	  setCellText( text );
+	  setValue( text );
+	}
     }
     
     return true;
