@@ -8,6 +8,7 @@
 #include <kpushbutton.h>
 #include <klineedit.h>
 #include <qcombobox.h>
+#include <kcombobox.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
 #include <kparts/componentfactory.h>
@@ -74,7 +75,7 @@ static QString util_encodeColumnLabelText( int column )
 
 
 KexiKSpreadSource::KexiKSpreadSource(QWidget *parent):KexiKSpreadSourceBase(parent),KexiTableImportSourceIface() {
-		QHBoxLayout *l=new QHBoxLayout(kspreadFrame),m_headerArea(0,0,0,0),m_dataArea(0,0,0,0);
+		QHBoxLayout *l=new QHBoxLayout(kspreadFrame),m_headerArea(0,0,0,0),m_dataArea(0,0,0,0),m_headerTable(),m_dataTable();
 		l->setAutoAdd(true);
 
 		QString partName=QString("KexiKSpreadImportDoc%1").arg(0);
@@ -86,6 +87,21 @@ KexiKSpreadSource::KexiKSpreadSource(QWidget *parent):KexiKSpreadSourceBase(pare
 			 kdDebug()<<"Trying to make a KoDocument out of the ReadOnlyPart"<<endl;
 			 m_kspread=static_cast<KoDocument*>(rop->qt_cast("KoDocument"));
 			 if (m_kspread==0) kdDebug()<<"ERROR ***********************************"<<endl;
+			 else {
+				QByteArray param;
+				QByteArray data;
+				QCString retType;
+			        if (!m_kspread->dcopObject()->process("map()",param,retType,data)) {
+		         	       kdDebug()<<"Error, can't get DCOPRef to the kspread document map (1)"<<endl;
+		        	} else {
+				        if (retType!="DCOPRef") {
+			                	kdDebug()<<"Error, can't get DCOPRef to the kspread document map (2)"<<endl;
+			        	} else {
+					        QDataStream streamIn(data,IO_ReadOnly);
+					        streamIn>>m_documentMap;
+					}
+				}
+			}
 		}
 		l->activate();
 		connect(syncHeader,SIGNAL(clicked()),this,SLOT(syncHeaderSection()));
@@ -116,24 +132,24 @@ bool KexiKSpreadSource::eventFilter ( QObject * watched, QEvent * e ) {
 	return false;
 }
 
-void KexiKSpreadSource::showRange(const QString& range) {
-	if (!m_kspread) return;
-	if (range.isEmpty()) return;
+
+QRect KexiKSpreadSource::rangeFromString(const QString& range,QString &tableName) {
+	if (range.isEmpty()) return QRect();
 
 	//check for valid input
 	QRegExp rangeDescription=QRegExp("\\s*\\w+\\s*\\[\\s*[a-zA-Z]+[0-9]+\\s*\\:\\s*[a-zA-Z]+[0-9]+\\s*\\]\\s*");
 	if (!rangeDescription.exactMatch(range)) {
 		kdDebug()<<range<<" is not a valid KexiKSpreadSource range value"<<endl;
-		return;
+		return QRect();
 	}
 
 	//retrieve the table name;
 	QRegExp tableNameExpr=QRegExp("\\s*\\w+\\s*\\[");
 	tableNameExpr.search(range);
-	QString tableName=tableNameExpr.capturedTexts()[0];
+	tableName=tableNameExpr.capturedTexts()[0];
 	tableName.truncate(tableName.length()-1);
 	tableName=tableName.stripWhiteSpace();
-
+	
 	//retrieve the range begining
 	//col
 	QRegExp startColExpr=QRegExp("\\[\\s*[a-zA-Z]+");
@@ -165,7 +181,21 @@ void KexiKSpreadSource::showRange(const QString& range) {
 	endRowName.stripWhiteSpace();
 	int endRow=endRowName.toInt();
 
-	showRange(tableName,startCol,startRow,endCol,endRow);
+	QRect r;
+	r.setLeft(startCol);
+	r.setRight(endCol);
+	r.setTop(startRow);
+	r.setBottom(endRow);
+	return r;
+
+}
+
+void KexiKSpreadSource::showRange(const QString& range) {
+	if (!m_kspread) return;
+	QString tableName;
+	QRect r=rangeFromString(range,tableName);
+	if (!r.isValid()) return;
+	showRange(tableName,r.left(),r.top(),r.right(),r.bottom());
 }
 
 void KexiKSpreadSource::showRange(const QString& tableName, int startCol, int startRow, int endCol, int endRow) {
@@ -258,6 +288,35 @@ QString KexiKSpreadSource::getRange() {
 
 }
 
+bool KexiKSpreadSource::checkConsistency() {
+	m_dataArea=rangeFromString(dataRange->text(),m_dataTable);
+	if (!m_dataArea.isValid()){
+		KMessageBox::sorry(this,i18n("You haven't specified a valid cell range, which contains the data, you would like to import"));
+		return false;
+	}
+	if (useHeader->isChecked()) {
+		m_headerArea=rangeFromString(headerRowColumnRange->text(),m_headerTable);
+		if (!m_headerArea.isValid()) {
+			KMessageBox::sorry(this,i18n("You have chosen that a separate header range should be used. The specified range is invalid though. You have to fix that problem, before you can proceed"));
+			return false;
+		}
+	}
+
+	m_recordIsRow=!(dataRowType->currentItem());
+	kdDebug()<<"dataEndType->currentItem() == "<<dataEndType->currentItem()<<endl;
+	switch (dataEndType->currentItem()) {
+		case 0:m_dataEnd=RangeEnd;
+			break;
+		case 1:m_dataEnd=ShrinkEmpty;
+			break;
+		case 2:m_dataEnd=ExpandEmpty;
+			break;
+		default: m_dataEnd=RangeEnd;
+	}
+	kdDebug()<<"m_dataEnd=="<<m_dataEnd<<endl;
+	return true;
+}
+
 bool KexiKSpreadSource::setFile(const QString &fileName) {
 	m_file=fileName;
 	if (m_kspread) {
@@ -278,24 +337,51 @@ int KexiKSpreadSource::fieldCount() {
 }
 
 KexiDBTable KexiKSpreadSource::tableStructure() {
-#warning "IMPORTANT: SANITY CHECKS NEED TO BE ALLOWED BY  THE FRAMEWORK"
 	KexiDBTable tbl("KSpreadSOURCE");
 	if (!m_kspread) return tbl;
+	if (m_documentMap.isNull()) return tbl; //perhaps display an error dialog about an internal error or a mismatching kspread interface
 
-	m_kspread->dcopObject();
-/*
-	if (useHeader->checked()) {
-		if (m_headerArea.width()<m_headerArea.height()) {
-			int start=m_headerArea.top();
-			int end=m_headerArea.top()+m_headerArea.height();
-			for (int i=start;i<end;i++) {
-						
-			}
-		} else {
-		}
+	int start;
+	int end;
+	QString table;
+	QRect area;
+	if (useHeader->isChecked()) {
+		table=m_headerTable;
+		area=m_headerArea;
 	} else {
+		table=m_dataTable;
+		area=m_dataArea;
+		if (m_recordIsRow)
+			area.setBottom(area.top());
+		else
+			area.setRight(area.left());
+#warning fixme
+	}	
+	
+	if (area.width()<area.height()) {
+		start=area.top();
+		end=area.top()+area.height();
+		int col=area.left();		
+		for (int i=start;i<end;i++)  {
+			QString fieldName=kspreadCellAsString(table,col,i);
+			if (fieldName.isEmpty()) fieldName=QString("Unknown_%1").arg(i);
+			tbl.addField(KexiDBField(kspreadCellAsString(table,col,i),KexiDBField::SQLVarchar));
+		}
+
+	} else {
+		start=area.left();
+		end=area.left()+area.width();
+		int row=area.top();
+		for (int i=start;i<end;i++) {
+			QString fieldName=kspreadCellAsString(table,i,row);
+			if (fieldName.isEmpty()) fieldName=QString("Unknown_%1").arg(i);
+			tbl.addField(KexiDBField(fieldName,KexiDBField::SQLVarchar));
+		}
+
 	}
-*/
+
+
+
 	return tbl;
 /*
 	int cols=preview->numCols();
@@ -308,15 +394,70 @@ KexiDBTable KexiKSpreadSource::tableStructure() {
 }
 
 bool KexiKSpreadSource::firstTableRow() {
-	m_dataPos=0;
-//	return (preview->numRows()>0);
+	if (m_recordIsRow)	
+		m_dataPos=m_dataArea.top()-1;
+	else
+		m_dataPos=m_dataArea.left()-1;
+	return nextTableRow();
 }
 
 bool KexiKSpreadSource::nextTableRow() {
 	m_dataPos++;
-//	return (m_dataPos<preview->numRows());
+
+	kdDebug()<<"nextTableRow"<<endl;
+	if ((m_dataEnd==RangeEnd) || (m_dataEnd==ShrinkEmpty)){
+		kdDebug()<<"RangeEnd or ShrinkEmpty"<<endl;
+		if (m_recordIsRow) {
+			if (m_dataPos>m_dataArea.bottom()) return false;
+			if (m_dataEnd==ShrinkEmpty) {
+				kdDebug()<<"record is a row | shrink mode"<<endl;
+				QRect rec=QRect(m_dataArea.left(),m_dataPos,m_dataArea.width(),1);
+				return !kspreadNoContent(m_dataTable,rec);
+			}
+
+		} else {
+			if (m_dataPos>m_dataArea.right()) return false;
+			if (m_dataEnd==ShrinkEmpty) {
+				QRect rec=QRect(m_dataPos,m_dataArea.top(),1,m_dataArea.height());
+				return !kspreadNoContent(m_dataTable,rec);
+			}
+		}
+		return true;		
+	}
+
+	if (m_recordIsRow) {
+		QRect rec=QRect(m_dataArea.left(),m_dataPos,m_dataArea.width(),1);
+		return !kspreadNoContent(m_dataTable,rec);
+	} else {
+		QRect rec=QRect(m_dataPos,m_dataArea.top(),1,m_dataArea.height());
+		return !kspreadNoContent(m_dataTable,rec);
+	}
 }
 
 QVariant KexiKSpreadSource::tableValue(int field) {
 //	return QVariant(preview->text(m_dataPos,field));
+	if (m_recordIsRow) 
+		return kspreadCellAsString(m_dataTable,field+m_dataArea.left(),m_dataPos);
+	else
+		return kspreadCellAsString(m_dataTable,m_dataPos,field+m_dataArea.top());
 }
+
+
+QString KexiKSpreadSource::kspreadCellAsString(const QString& table, int x, int y) {
+	kdDebug()<<"MapRefObj:"<<m_documentMap.obj()<<endl;
+	kdDebug()<<"Table of interest:"<<table<<endl;
+	kdDebug()<<"kpsreadCellAsString"<<endl;
+	DCOPRef cellRef=DCOPRef(m_documentMap.app(),(QString::fromUtf8(m_documentMap.obj())+"/"+table+"/"+util_encodeColumnLabelText(x)+ QString::number(y)).utf8());
+	QString value=cellRef.call("visibleContentAsString");
+	return value;
+}
+
+bool KexiKSpreadSource::kspreadNoContent(const QString& table, QRect area) {
+	kdDebug()<<"MapRefObj:"<<m_documentMap.obj()<<endl;
+	kdDebug()<<"Table of interest:"<<table<<endl;
+	kdDebug()<<"kspreadNoContent"<<endl;
+	DCOPRef cellRef=DCOPRef(m_documentMap.app(),(QString::fromUtf8(m_documentMap.obj())+"/"+table).utf8());
+	bool value=cellRef.call("areaHasNoContent(QRect)",area);
+	return value;
+}
+

@@ -97,6 +97,8 @@ QPtrList<QWidget> KexiKSpreadImport::sourceWidgets(QWidget *parent) {
 bool KexiKSpreadImport::pageChanging(QWidget *from, QWidget *to) {
 	if (to==pageBefore()) return true;
 	if (from==pageBefore()) return true;
+	if (from==pageAfter()) return true;
+	if (to==pageAfter()) return m_srcWidget->checkConsistency();
 	return false;
 }
 
