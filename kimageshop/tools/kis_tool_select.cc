@@ -26,8 +26,8 @@
 
 SelectTool::SelectTool( KisDoc* _doc, KisCanvas* _canvas )
   : KisTool( _doc )
-  , m_canvas( _canvas )
   , m_dragging( false ) 
+  , m_canvas( _canvas )
 {
 }
 

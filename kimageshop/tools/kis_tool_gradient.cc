@@ -27,9 +27,9 @@
 
 GradientTool::GradientTool( KisDoc* _doc, KisCanvas* _canvas, KisGradient* _gradient )
   : KisTool( _doc )
+  , m_dragging( false )
   , m_pCanvas( _canvas )
   , m_gradient( _gradient )
-  , m_dragging( false )
 {
 }
 
