@@ -218,7 +218,7 @@ void KoColorPanel::insertDefaultColors()
     insertColor(QColor( 152 ,   251 ,   152 ), i18n( "color", "PaleGreen" ), false);
     insertColor(QColor( 255 ,   215 ,     0 ), i18n( "color", "Gold" ), false);
     insertColor(QColor( 173 ,   255 ,    47 ), i18n( "color", "GreenYellow" ), false);
-    insertColor(QColor( 176 ,   196 ,   222 ), i18n( "color", "LightSteel Blue" ), false);
+    insertColor(QColor( 176 ,   196 ,   222 ), i18n( "color", "LightSteelBlue" ), false);
     insertColor(QColor( 144 ,   238 ,   144 ), i18n( "color", "LightGreen" ), false);
     insertColor(QColor( 221 ,   160 ,   221 ), i18n( "color", "Plum" ), false);
     insertColor(QColor( 190 ,   190 ,   190 ), i18n( "color", "Gray" ), false);
