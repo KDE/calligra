@@ -85,7 +85,7 @@
 #include "preview.h"
 
 /******************************************************************/
-/* Class: KWordView						  */
+/* Class: KWordView                                               */
 /******************************************************************/
 
 /*================================================================*/
@@ -133,9 +133,9 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
     setXMLFile( "kword.rc" );
 
     QObject::connect( m_pKWordDoc, SIGNAL( sig_insertObject( KWordChild*, KWPartFrameSet* ) ),
-		      this, SLOT( slotInsertObject( KWordChild*, KWPartFrameSet* ) ) );
+                      this, SLOT( slotInsertObject( KWordChild*, KWPartFrameSet* ) ) );
     QObject::connect( m_pKWordDoc, SIGNAL( sig_updateChildGeometry( KWordChild* ) ),
-		      this, SLOT( slotUpdateChildGeometry( KWordChild* ) ) );
+                      this, SLOT( slotUpdateChildGeometry( KWordChild* ) ) );
 
 
     KFontChooser::getFontList(fontList, false);
@@ -149,7 +149,7 @@ void KWordView::showEvent( QShowEvent *e )
 {
     KoView::showEvent( e );
     if ( gui && gui->getPaperWidget() )
-	gui->getPaperWidget()->setFocus();
+        gui->getPaperWidget()->setFocus();
 }
 
 /*================================================================*/
@@ -169,8 +169,8 @@ void KWordView::initGui()
 
     gui->getPaperWidget()->repaintScreen( TRUE );
     if ( gui ) {
- 	gui->showGUI( TRUE );
- 	gui->getPaperWidget()->recalcText();
+        gui->showGUI( TRUE );
+        gui->getPaperWidget()->recalcText();
     }
     ( (KToggleAction*)actionToolsEdit )->blockSignals( TRUE );
     ( (KToggleAction*)actionToolsEdit )->setChecked( TRUE );
@@ -208,7 +208,7 @@ void KWordView::initGui()
 
     /* ???
     if ( ( (KoMainWindow*)shell() )->fileToolBar() )
-	( (KoMainWindow*)shell() )->fileToolBar()->setBarPos( KToolBar::Left );
+        ( (KoMainWindow*)shell() )->fileToolBar()->setBarPos( KToolBar::Left );
     */
 }
 
@@ -230,51 +230,51 @@ void KWordView::setupActions()
     actionEditFind->setText( i18n( "&Find and Replace..." ) );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     actionEditDelFrame = new KAction( i18n( "&Delete Frame" ), 0,
-				      this, SLOT( editDeleteFrame() ),
-				      actionCollection(), "edit_delframe" );
+                                      this, SLOT( editDeleteFrame() ),
+                                      actionCollection(), "edit_delframe" );
     actionEditReconnectFrame = new KAction( i18n( "&Reconnect Frame..." ), 0,
-					    this, SLOT( editReconnectFrame() ),
-					    actionCollection(), "edit_reconnect" );
+                                            this, SLOT( editReconnectFrame() ),
+                                            actionCollection(), "edit_reconnect" );
     actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
-					this, SLOT( editCustomVars() ),
-					actionCollection(), "edit_customvars" );
+                                        this, SLOT( editCustomVars() ),
+                                        actionCollection(), "edit_customvars" );
     actionEditSlDataBase = new KAction( i18n( "Serial &Letter Database..." ), 0,
-					this, SLOT( editSerialLetterDataBase() ),
-					actionCollection(), "edit_sldatabase" );
+                                        this, SLOT( editSerialLetterDataBase() ),
+                                        actionCollection(), "edit_sldatabase" );
 
     // -------------- View actions
 // DEBUG info
     actionPrintDebug = new KAction( i18n( "Print debug info" ) , 0,
-				       this, SLOT( printDebug() ),
-				       actionCollection(), "printdebug" );
+                                       this, SLOT( printDebug() ),
+                                       actionCollection(), "printdebug" );
     actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
-						   this, SLOT( viewFormattingChars() ),
-						   actionCollection(), "view_formattingchars" );
+                                                   this, SLOT( viewFormattingChars() ),
+                                                   actionCollection(), "view_formattingchars" );
     actionViewFrameBorders = new KToggleAction( i18n( "Frame &Borders" ), 0,
-						   this, SLOT( viewFrameBorders() ),
-						   actionCollection(), "view_frameborders" );
+                                                   this, SLOT( viewFrameBorders() ),
+                                                   actionCollection(), "view_frameborders" );
     actionViewTableGrid = new KToggleAction( i18n( "&Table Grid" ), 0,
-					     this, SLOT( viewTableGrid() ),
-						   actionCollection(), "view_tablegrid" );
+                                             this, SLOT( viewTableGrid() ),
+                                                   actionCollection(), "view_tablegrid" );
     actionViewHeader = new KToggleAction( i18n( "&Header" ), 0,
-					  this, SLOT( viewHeader() ),
-					  actionCollection(), "view_header" );
+                                          this, SLOT( viewHeader() ),
+                                          actionCollection(), "view_header" );
     actionViewFooter = new KToggleAction( i18n( "&Footer" ), 0,
-					  this, SLOT( viewFooter() ),
-					  actionCollection(), "view_footer" );
+                                          this, SLOT( viewFooter() ),
+                                          actionCollection(), "view_footer" );
     actionViewFootNotes = new KToggleAction( i18n( "&Footnotes" ), 0,
-					     this, SLOT( viewFootNotes() ),
-					  actionCollection(), "view_footnotes" );
+                                             this, SLOT( viewFootNotes() ),
+                                          actionCollection(), "view_footnotes" );
     ( (KToggleAction*)actionViewFootNotes )->setExclusiveGroup( "notes" );
     actionViewEndNotes = new KToggleAction( i18n( "&Endnotes" ), 0,
-					     this, SLOT( viewEndNotes() ),
-					  actionCollection(), "view_endnotes" );
+                                             this, SLOT( viewEndNotes() ),
+                                          actionCollection(), "view_endnotes" );
     ( (KToggleAction*)actionViewEndNotes )->setExclusiveGroup( "notes" );
 
     actionViewZoom = new KSelectAction( i18n( "Zoom" ), 0,
-					actionCollection(), "view_zoom" );
-    connect( ( ( KSelectAction* )actionViewZoom ), SIGNAL( activated( const QString & ) ),	
-	     this, SLOT( viewZoom( const QString & ) ) );
+                                        actionCollection(), "view_zoom" );
+    connect( ( ( KSelectAction* )actionViewZoom ), SIGNAL( activated( const QString & ) ),
+             this, SLOT( viewZoom( const QString & ) ) );
     QStringList lst;
     lst << "50%";
     lst << "100%";
@@ -288,198 +288,198 @@ void KWordView::setupActions()
     ( (KSelectAction*)actionViewZoom )->setItems( lst );
     // -------------- Insert actions
     actionInsertPicture = new KAction( i18n( "&Picture..." ), "picture", Key_F2,
-				       this, SLOT( insertPicture() ),
-				       actionCollection(), "insert_picture" );
+                                       this, SLOT( insertPicture() ),
+                                       actionCollection(), "insert_picture" );
 #if 0
     actionInsertClipart = new KAction( i18n( "&Clipart..." ), "clipart", Key_F3,
-				       this, SLOT( insertClipart() ),
-				       actionCollection(), "insert_clipart" );
+                                       this, SLOT( insertClipart() ),
+                                       actionCollection(), "insert_clipart" );
 #endif
-#if 0				
+#if 0
     actionInsertSpecialChar = new KAction( i18n( "&Special Character..." ), "char", ALT + SHIFT + Key_C,
-					   this, SLOT( insertSpecialChar() ),
-					   actionCollection(), "insert_specialchar" );
+                                           this, SLOT( insertSpecialChar() ),
+                                           actionCollection(), "insert_specialchar" );
 #endif
     actionInsertFrameBreak = new KAction( i18n( "&Hard Frame Break" ), CTRL + Key_Return,
-					  this, SLOT( insertFrameBreak() ),
-					  actionCollection(), "insert_framebreak" );
+                                          this, SLOT( insertFrameBreak() ),
+                                          actionCollection(), "insert_framebreak" );
     actionInsertFootEndNote = new KAction( i18n( "&Footnote or Endnote..." ), 0,
-					   this, SLOT( insertFootNoteEndNote() ),
-					   actionCollection(), "insert_footendnote" );
+                                           this, SLOT( insertFootNoteEndNote() ),
+                                           actionCollection(), "insert_footendnote" );
     actionInsertContents = new KAction( i18n( "&Table Of Contents..." ), 0,
-					this, SLOT( insertContents() ),
-					actionCollection(), "insert_contents" );
+                                        this, SLOT( insertContents() ),
+                                        actionCollection(), "insert_contents" );
     actionInsertVarDateFix = new KAction( i18n( "Date (&fix)" ), 0,
-					  this, SLOT( insertVariableDateFix() ),
-					  actionCollection(), "insert_var_datefix" );
+                                          this, SLOT( insertVariableDateFix() ),
+                                          actionCollection(), "insert_var_datefix" );
     actionInsertVarDate = new KAction( i18n( "&Date (variable)" ), 0,
-				       this, SLOT( insertVariableDateVar() ),
-				       actionCollection(), "insert_var_datevar" );
+                                       this, SLOT( insertVariableDateVar() ),
+                                       actionCollection(), "insert_var_datevar" );
     actionInsertVarTimeFix = new KAction( i18n( "Time (&fix)" ), 0,
-					  this, SLOT( insertVariableTimeFix() ),
-					  actionCollection(), "insert_var_timefix" );
+                                          this, SLOT( insertVariableTimeFix() ),
+                                          actionCollection(), "insert_var_timefix" );
     actionInsertVarTime = new KAction( i18n( "&Time (variable)" ), 0,
-				       this, SLOT( insertVariableTimeVar() ),
-				       actionCollection(), "insert_var_timevar" );
+                                       this, SLOT( insertVariableTimeVar() ),
+                                       actionCollection(), "insert_var_timevar" );
     actionInsertVarPgNum = new KAction( i18n( "&Page Number" ), 0,
-					this, SLOT( insertVariablePageNum() ),
-					actionCollection(), "insert_var_pgnum" );
+                                        this, SLOT( insertVariablePageNum() ),
+                                        actionCollection(), "insert_var_pgnum" );
     actionInsertVarCustom = new KAction( i18n( "&Custom..." ), 0,
-					 this, SLOT( insertVariableCustom() ),
-					 actionCollection(), "insert_var_custom" );
+                                         this, SLOT( insertVariableCustom() ),
+                                         actionCollection(), "insert_var_custom" );
     actionInsertVarSerialLetter = new KAction( i18n( "&Serial Letter..." ), 0,
-					       this, SLOT( insertVariableSerialLetter() ),
-					       actionCollection(), "insert_var_serialletter" );
+                                               this, SLOT( insertVariableSerialLetter() ),
+                                               actionCollection(), "insert_var_serialletter" );
 
     // ---------------- Tools actions
     actionToolsEdit = new KToggleAction( i18n( "Edit &Text" ), "edittool", Key_F4,
-					 this, SLOT( toolsEdit() ),
-					 actionCollection(), "tools_edit" );
+                                         this, SLOT( toolsEdit() ),
+                                         actionCollection(), "tools_edit" );
     ( (KToggleAction*)actionToolsEdit )->setExclusiveGroup( "tools" );
     actionToolsEditFrames = new KToggleAction( i18n( "Edit &Frames" ), "editframetool", Key_F5,
-					       this, SLOT( toolsEditFrame() ),
-					       actionCollection(), "tools_editframes" );
+                                               this, SLOT( toolsEditFrame() ),
+                                               actionCollection(), "tools_editframes" );
     ( (KToggleAction*)actionToolsEditFrames )->setExclusiveGroup( "tools" );
     actionToolsCreateText = new KToggleAction( i18n( "&Create Text Frame" ), "textframetool", Key_F6,
-					       this, SLOT( toolsCreateText() ),
-					       actionCollection(), "tools_createtext" );
+                                               this, SLOT( toolsCreateText() ),
+                                               actionCollection(), "tools_createtext" );
     ( (KToggleAction*)actionToolsCreateText )->setExclusiveGroup( "tools" );
     actionToolsCreatePix = new KToggleAction( i18n( "&Create Picture Frame" ), "picframetool", Key_F7,
-					      this, SLOT( toolsCreatePix() ),
-					      actionCollection(), "tools_createpix" );
+                                              this, SLOT( toolsCreatePix() ),
+                                              actionCollection(), "tools_createpix" );
     ( (KToggleAction*)actionToolsCreatePix )->setExclusiveGroup( "tools" );
     actionToolsCreateClip = new KToggleAction( i18n( "&Create Clipart Frame" ), "clipart", Key_F8,
-					       this, SLOT( toolsClipart() ),
-					       actionCollection(), "tools_createclip" );
+                                               this, SLOT( toolsClipart() ),
+                                               actionCollection(), "tools_createclip" );
     ( (KToggleAction*)actionToolsCreateClip )->setExclusiveGroup( "tools" );
     actionToolsCreateTable = new KToggleAction( i18n( "&Create Table" ), "table", Key_F9,
-						this, SLOT( toolsTable() ),
-						actionCollection(), "tools_table" );
+                                                this, SLOT( toolsTable() ),
+                                                actionCollection(), "tools_table" );
     ( (KToggleAction*)actionToolsCreateTable )->setExclusiveGroup( "tools" );
     actionToolsCreateKSpreadTable = new KToggleAction( i18n( "&Create KSpread Table Frame" ), "table", Key_F10,
-						       this, SLOT( toolsKSpreadTable() ),
-						       actionCollection(), "tools_kspreadtable" );
+                                                       this, SLOT( toolsKSpreadTable() ),
+                                                       actionCollection(), "tools_kspreadtable" );
     ( (KToggleAction*)actionToolsCreateKSpreadTable )->setExclusiveGroup( "tools" );
     actionToolsCreateFormula = new KToggleAction( i18n( "&Create Formula Frame" ), "formula", Key_F11,
-						  this, SLOT( toolsFormula() ),
-						  actionCollection(), "tools_formula" );
+                                                  this, SLOT( toolsFormula() ),
+                                                  actionCollection(), "tools_formula" );
     ( (KToggleAction*)actionToolsCreateFormula )->setExclusiveGroup( "tools" );
     actionToolsCreatePart = new KToggleAction( i18n( "&Create Part Frame" ), "parts", Key_F12,
-					       this, SLOT( toolsPart() ),
-					       actionCollection(), "tools_part" );
+                                               this, SLOT( toolsPart() ),
+                                               actionCollection(), "tools_part" );
     ( (KToggleAction*)actionToolsCreatePart )->setExclusiveGroup( "tools" );
 
 
     // ------------------------- Format actions
     actionFormatFont = new KAction( i18n( "&Font..." ), ALT + CTRL + Key_F,
-				    this, SLOT( formatFont() ),
-				    actionCollection(), "format_font" );
+                                    this, SLOT( formatFont() ),
+                                    actionCollection(), "format_font" );
     actionFormatColor = new KColorAction( i18n( "&Color..." ), KColorAction::TextColor, ALT + CTRL + Key_C,
-				     this, SLOT( textColor() ),
-				     actionCollection(), "format_color" );
+                                     this, SLOT( textColor() ),
+                                     actionCollection(), "format_color" );
     actionFormatParag = new KAction( i18n( "&Paragraph..." ), 0,
-				     this, SLOT( formatParagraph() ),
-				     actionCollection(), "format_paragraph" );
+                                     this, SLOT( formatParagraph() ),
+                                     actionCollection(), "format_paragraph" );
     actionFormatFrameSet = new KAction( i18n( "&Frame/Frameset..." ), 0,
-				     this, SLOT( formatFrameSet() ),
-				     actionCollection(), "format_frameset" );
+                                     this, SLOT( formatFrameSet() ),
+                                     actionCollection(), "format_frameset" );
     actionFormatPage = new KAction( i18n( "P&age..." ), 0,
-				     this, SLOT( formatPage() ),
-				    actionCollection(), "format_page" );
+                                     this, SLOT( formatPage() ),
+                                    actionCollection(), "format_page" );
     actionFormatFontSize = new KFontSizeAction( i18n( "Font Size" ), 0,
-					      actionCollection(), "format_fontsize" );
-    connect( ( ( KFontSizeAction* )actionFormatFontSize ), SIGNAL( activated( const QString & ) ),	
-	     this, SLOT( textSizeSelected( const QString & ) ) );
+                                              actionCollection(), "format_fontsize" );
+    connect( ( ( KFontSizeAction* )actionFormatFontSize ), SIGNAL( activated( const QString & ) ),
+             this, SLOT( textSizeSelected( const QString & ) ) );
     actionFormatFontFamily = new KFontAction( i18n( "Font Family" ), 0,
-					      actionCollection(), "format_fontfamily" );
-    connect( ( ( KFontAction* )actionFormatFontFamily ), SIGNAL( activated( const QString & ) ),	
-	     this, SLOT( textFontSelected( const QString & ) ) );
+                                              actionCollection(), "format_fontfamily" );
+    connect( ( ( KFontAction* )actionFormatFontFamily ), SIGNAL( activated( const QString & ) ),
+             this, SLOT( textFontSelected( const QString & ) ) );
     actionFormatStyle = new KSelectAction( i18n( "Style" ), 0,
-					   actionCollection(), "format_style" );
-    connect( ( ( KSelectAction* )actionFormatStyle ), SIGNAL( activated( const QString & ) ),	
-	     this, SLOT( textStyleSelected( const QString & ) ) );
+                                           actionCollection(), "format_style" );
+    connect( ( ( KSelectAction* )actionFormatStyle ), SIGNAL( activated( const QString & ) ),
+             this, SLOT( textStyleSelected( const QString & ) ) );
     lst.clear();
     for ( unsigned int i = 0; i < m_pKWordDoc->paragLayoutList.count(); i++ )
- 	lst << m_pKWordDoc->paragLayoutList.at( i )->getName();
+        lst << m_pKWordDoc->paragLayoutList.at( i )->getName();
     styleList = lst;
     ( (KSelectAction*)actionFormatStyle )->setItems( lst );
     actionFormatBold = new KToggleAction( i18n( "&Bold" ), "text_bold", CTRL + Key_B,
-					   this, SLOT( textBold() ),
-					   actionCollection(), "format_bold" );
+                                           this, SLOT( textBold() ),
+                                           actionCollection(), "format_bold" );
     actionFormatItalic = new KToggleAction( i18n( "&Italic" ), "text_italic", CTRL + Key_I,
-					   this, SLOT( textItalic() ),
-					   actionCollection(), "format_italic" );
+                                           this, SLOT( textItalic() ),
+                                           actionCollection(), "format_italic" );
     actionFormatUnderline = new KToggleAction( i18n( "&Underline" ), "text_under", CTRL + Key_U,
-					   this, SLOT( textUnderline() ),
-					   actionCollection(), "format_underline" );
+                                           this, SLOT( textUnderline() ),
+                                           actionCollection(), "format_underline" );
     actionFormatAlignLeft = new KToggleAction( i18n( "Align &Left" ), "alignLeft", ALT + Key_L,
-				       this, SLOT( textAlignLeft() ),
-				       actionCollection(), "format_alignleft" );
+                                       this, SLOT( textAlignLeft() ),
+                                       actionCollection(), "format_alignleft" );
     ( (KToggleAction*)actionFormatAlignLeft )->setExclusiveGroup( "align" );
     ( (KToggleAction*)actionFormatAlignLeft )->setChecked( TRUE );
     actionFormatAlignCenter = new KToggleAction( i18n( "Align &Center" ), "alignCenter", ALT + Key_C,
-					 this, SLOT( textAlignCenter() ),
-					 actionCollection(), "format_aligncenter" );
+                                         this, SLOT( textAlignCenter() ),
+                                         actionCollection(), "format_aligncenter" );
     ( (KToggleAction*)actionFormatAlignCenter )->setExclusiveGroup( "align" );
     actionFormatAlignRight = new KToggleAction( i18n( "Align &Right" ), "alignRight", ALT + Key_R,
-					this, SLOT( textAlignRight() ),
-					actionCollection(), "format_alignright" );
+                                        this, SLOT( textAlignRight() ),
+                                        actionCollection(), "format_alignright" );
     ( (KToggleAction*)actionFormatAlignRight )->setExclusiveGroup( "align" );
     actionFormatAlignBlock = new KToggleAction( i18n( "Align &Block" ), "alignBlock", ALT + Key_B,
-					this, SLOT( textAlignBlock() ),
-					actionCollection(), "format_alignblock" );
+                                        this, SLOT( textAlignBlock() ),
+                                        actionCollection(), "format_alignblock" );
     ( (KToggleAction*)actionFormatAlignBlock )->setExclusiveGroup( "align" );
     actionFormatLineSpacing = new KSelectAction( i18n( "Linespacing" ), 0,
-						 actionCollection(), "format_linespacing" );
-    connect( ( ( KSelectAction* )actionFormatLineSpacing ), SIGNAL( activated( const QString & ) ),	
-	     this, SLOT( textLineSpacing( const QString & ) ) );
+                                                 actionCollection(), "format_linespacing" );
+    connect( ( ( KSelectAction* )actionFormatLineSpacing ), SIGNAL( activated( const QString & ) ),
+             this, SLOT( textLineSpacing( const QString & ) ) );
     lst.clear();
     for ( unsigned int i = 0; i <= 10; i++ )
- 	lst << QString( "%1" ).arg( i );
+        lst << QString( "%1" ).arg( i );
     ( (KSelectAction*)actionFormatLineSpacing )->setItems( lst );
     actionFormatEnumList = new KToggleAction( i18n( "Enumerated List" ), "enumList", 0,
-					      this, SLOT( textEnumList() ),
-					      actionCollection(), "format_enumlist" );
+                                              this, SLOT( textEnumList() ),
+                                              actionCollection(), "format_enumlist" );
     ( (KToggleAction*)actionFormatEnumList )->setExclusiveGroup( "style" );
     actionFormatUnsortList = new KToggleAction( i18n( "Bullet List" ), "unsortedList", 0,
-					      this, SLOT( textUnsortList() ),
-					      actionCollection(), "format_unsortlist" );
+                                              this, SLOT( textUnsortList() ),
+                                              actionCollection(), "format_unsortlist" );
     ( (KToggleAction*)actionFormatUnsortList )->setExclusiveGroup( "style" );
     actionFormatSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
-					      this, SLOT( textSuperScript() ),
-					      actionCollection(), "format_super" );
+                                              this, SLOT( textSuperScript() ),
+                                              actionCollection(), "format_super" );
     ( (KToggleAction*)actionFormatSuper )->setExclusiveGroup( "valign" );
     actionFormatSub = new KToggleAction( i18n( "Subscript" ), "sub", 0,
-					      this, SLOT( textSubScript() ),
-					      actionCollection(), "format_sub" );
+                                              this, SLOT( textSubScript() ),
+                                              actionCollection(), "format_sub" );
     ( (KToggleAction*)actionFormatSub )->setExclusiveGroup( "valign" );
     actionFormatBrdLeft = new KToggleAction( i18n( "Paragraph Border Left" ), "borderleft", 0,
-					     this, SLOT( textBorderLeft() ),
-					     actionCollection(), "format_brdleft" );
+                                             this, SLOT( textBorderLeft() ),
+                                             actionCollection(), "format_brdleft" );
     actionFormatBrdRight = new KToggleAction( i18n( "Paragraph Border Right" ), "borderright", 0,
-					     this, SLOT( textBorderRight() ),
-					     actionCollection(), "format_brdright" );
+                                             this, SLOT( textBorderRight() ),
+                                             actionCollection(), "format_brdright" );
     actionFormatBrdTop = new KToggleAction( i18n( "Paragraph Border Top" ), "bordertop", 0,
-					     this, SLOT( textBorderTop() ),
-					     actionCollection(), "format_brdtop" );
+                                             this, SLOT( textBorderTop() ),
+                                             actionCollection(), "format_brdtop" );
     actionFormatBrdBottom = new KToggleAction( i18n( "Paragraph Border Bottom" ), "borderbottom", 0,
-					       this, SLOT( textBorderBottom() ),
-					     actionCollection(), "format_brdbottom" );
+                                               this, SLOT( textBorderBottom() ),
+                                             actionCollection(), "format_brdbottom" );
     actionFormatBrdColor = new KColorAction( i18n( "Paragraph Border Color" ), KColorAction::FrameColor, 0,
-					     this, SLOT( textBorderColor() ),
-					     actionCollection(), "format_brdcolor" );
+                                             this, SLOT( textBorderColor() ),
+                                             actionCollection(), "format_brdcolor" );
     actionFormatBrdWidth = new KSelectAction( i18n( "Paragraph Border Width" ), 0,
-						 actionCollection(), "format_brdwidth" );
-    connect( ( ( KSelectAction* )actionFormatBrdWidth ), SIGNAL( activated( const QString & ) ),	
-	     this, SLOT( textBorderWidth( const QString & ) ) );
+                                                 actionCollection(), "format_brdwidth" );
+    connect( ( ( KSelectAction* )actionFormatBrdWidth ), SIGNAL( activated( const QString & ) ),
+             this, SLOT( textBorderWidth( const QString & ) ) );
     lst.clear();
     for ( unsigned int i = 0; i < 10; i++ )
- 	lst << QString( "%1" ).arg( i + 1 );
+        lst << QString( "%1" ).arg( i + 1 );
     ( (KSelectAction*)actionFormatBrdWidth )->setItems( lst );
     actionFormatBrdStyle = new KSelectAction( i18n( "Paragraph Border Style" ), 0,
-						 actionCollection(), "format_brdstyle" );
-    connect( ( ( KSelectAction* )actionFormatBrdStyle ), SIGNAL( activated( const QString & ) ),	
-	     this, SLOT( textBorderStyle( const QString & ) ) );
+                                                 actionCollection(), "format_brdstyle" );
+    connect( ( ( KSelectAction* )actionFormatBrdStyle ), SIGNAL( activated( const QString & ) ),
+             this, SLOT( textBorderStyle( const QString & ) ) );
     lst.clear();
     lst.append( i18n( "solid line" ) );
     lst.append( i18n( "dash line ( ---- )" ) );
@@ -491,121 +491,121 @@ void KWordView::setupActions()
     // ---------------------------- frame toolbar actions
 
     actionFrameBrdLeft = new KToggleAction( i18n( "Frame Border Left" ), "borderleft", 0,
-					     this, SLOT( frameBorderLeft() ),
-					     actionCollection(), "frame_brdleft" );
+                                             this, SLOT( frameBorderLeft() ),
+                                             actionCollection(), "frame_brdleft" );
     actionFrameBrdRight = new KToggleAction( i18n( "Frame Border Right" ), "borderright", 0,
-					     this, SLOT( frameBorderRight() ),
-					     actionCollection(), "frame_brdright" );
+                                             this, SLOT( frameBorderRight() ),
+                                             actionCollection(), "frame_brdright" );
     actionFrameBrdTop = new KToggleAction( i18n( "Frame Border Top" ), "bordertop", 0,
-					     this, SLOT( frameBorderTop() ),
-					     actionCollection(), "frame_brdtop" );
+                                             this, SLOT( frameBorderTop() ),
+                                             actionCollection(), "frame_brdtop" );
     actionFrameBrdBottom = new KToggleAction( i18n( "Frame Border Bottom" ), "borderbottom", 0,
-					       this, SLOT( frameBorderBottom() ),
-					     actionCollection(), "frame_brdbottom" );
+                                               this, SLOT( frameBorderBottom() ),
+                                             actionCollection(), "frame_brdbottom" );
     actionFrameBrdColor = new KColorAction( i18n( "Frame Border Color" ), KColorAction::FrameColor, 0,
-					     this, SLOT( frameBorderColor() ),
-					     actionCollection(), "frame_brdcolor" );
+                                             this, SLOT( frameBorderColor() ),
+                                             actionCollection(), "frame_brdcolor" );
     actionFrameBrdStyle = new KSelectAction( i18n( "Frame Border Style" ), 0,
-					     actionCollection(), "frame_brdstyle" );
-    connect( ( ( KSelectAction* )actionFrameBrdStyle ), SIGNAL( activated( const QString & ) ),	
-	     this, SLOT( frameBorderStyle( const QString & ) ) );
+                                             actionCollection(), "frame_brdstyle" );
+    connect( ( ( KSelectAction* )actionFrameBrdStyle ), SIGNAL( activated( const QString & ) ),
+             this, SLOT( frameBorderStyle( const QString & ) ) );
     ( (KSelectAction*)actionFrameBrdStyle )->setItems( lst );
     actionFrameBrdWidth = new KSelectAction( i18n( "Frame Border Width" ), 0,
-						 actionCollection(), "frame_brdwidth" );
-    connect( ( ( KSelectAction* )actionFrameBrdWidth ), SIGNAL( activated( const QString & ) ),	
-	     this, SLOT( frameBorderWidth( const QString & ) ) );
+                                                 actionCollection(), "frame_brdwidth" );
+    connect( ( ( KSelectAction* )actionFrameBrdWidth ), SIGNAL( activated( const QString & ) ),
+             this, SLOT( frameBorderWidth( const QString & ) ) );
     lst.clear();
     for ( unsigned int i = 0; i < 10; i++ )
- 	lst << QString( "%1" ).arg( i + 1 );
+        lst << QString( "%1" ).arg( i + 1 );
     ( (KSelectAction*)actionFrameBrdWidth )->setItems( lst );
     actionFrameBackColor = new KColorAction( i18n( "Frame Background Color" ), KColorAction::BackgroundColor, 0,
-					     this, SLOT( frameBackColor() ),
-					     actionCollection(), "frame_backcolor" );
+                                             this, SLOT( frameBackColor() ),
+                                             actionCollection(), "frame_backcolor" );
 
     // ---------------------- formula toolbar actions
 
     actionFormulaPower = new KAction( i18n( "Power" ), "rsup", 0,
-				      this, SLOT( formulaPower() ),
-				      actionCollection(), "formula_power" );
+                                      this, SLOT( formulaPower() ),
+                                      actionCollection(), "formula_power" );
     actionFormulaSubscript = new KAction( i18n( "Subscript" ), "rsub" , 0,
-				      this, SLOT( formulaSubscript() ),
-				      actionCollection(), "formula_subscript" );
+                                      this, SLOT( formulaSubscript() ),
+                                      actionCollection(), "formula_subscript" );
     actionFormulaParentheses = new KAction( i18n( "Parentheses" ), "paren" , 0,
-				      this, SLOT( formulaParentheses() ),
-				      actionCollection(), "formula_parentheses" );
+                                      this, SLOT( formulaParentheses() ),
+                                      actionCollection(), "formula_parentheses" );
     actionFormulaAbs = new KAction( i18n( "Absolute Value" ), "abs", 0,
-				    this, SLOT( formulaAbsValue() ),
-				      actionCollection(), "formula_abs" );
+                                    this, SLOT( formulaAbsValue() ),
+                                      actionCollection(), "formula_abs" );
     actionFormulaBrackets = new KAction( i18n( "Brackets" ), "brackets", 0,
-				      this, SLOT( formulaBrackets() ),
-				      actionCollection(), "formula_brackets" );
+                                      this, SLOT( formulaBrackets() ),
+                                      actionCollection(), "formula_brackets" );
     actionFormulaFraction = new KAction( i18n( "Fraction" ), "frac", 0,
-					 this, SLOT( formulaFraction() ),
-				      actionCollection(), "formula_fraction" );
+                                         this, SLOT( formulaFraction() ),
+                                      actionCollection(), "formula_fraction" );
     actionFormulaRoot = new KAction( i18n( "Root" ), "sqrt", 0,
-					 this, SLOT( formulaRoot() ),
-				     actionCollection(), "formula_root" );
+                                         this, SLOT( formulaRoot() ),
+                                     actionCollection(), "formula_root" );
     actionFormulaIntegral = new KAction( i18n( "Integral" ), "int", 0,
-					 this, SLOT( formulaIntegral() ),
-				      actionCollection(), "formula_integral" );
+                                         this, SLOT( formulaIntegral() ),
+                                      actionCollection(), "formula_integral" );
     actionFormulaMatrix = new KAction( i18n( "Matrix" ), "matrix", 0,
-					 this, SLOT( formulaMatrix() ),
-				      actionCollection(), "formula_matrix" );
+                                         this, SLOT( formulaMatrix() ),
+                                      actionCollection(), "formula_matrix" );
     actionFormulaLeftSuper = new KAction( i18n( "Left Superscript" ), "lsup" , 0,
-					 this, SLOT( formulaLeftSuper() ),
-				      actionCollection(), "formula_leftsup" );
+                                         this, SLOT( formulaLeftSuper() ),
+                                      actionCollection(), "formula_leftsup" );
     actionFormulaLeftSub = new KAction( i18n( "Left Subscript" ), "lsub" , 0,
-					 this, SLOT( formulaLeftSub() ),
-				      actionCollection(), "formula_leftsub" );
+                                         this, SLOT( formulaLeftSub() ),
+                                      actionCollection(), "formula_leftsub" );
     actionFormulaProduct = new KAction( i18n( "Formula Product" ), "prod", 0,
-					 this, SLOT( formulaProduct() ),
-				      actionCollection(), "formula_product" );
+                                         this, SLOT( formulaProduct() ),
+                                      actionCollection(), "formula_product" );
     actionFormulaSum = new KAction( i18n( "Formula Sum" ), "sum", 0,
-					 this, SLOT( formulaSum() ),
-				      actionCollection(), "formula_sum" );
+                                         this, SLOT( formulaSum() ),
+                                      actionCollection(), "formula_sum" );
 
     // ---------------------- Table actions
 
     actionTableInsertRow = new KAction( i18n( "&Insert Row..." ), "insert_table_row", 0,
-			       this, SLOT( tableInsertRow() ),
-			       actionCollection(), "table_insrow" );
+                               this, SLOT( tableInsertRow() ),
+                               actionCollection(), "table_insrow" );
     actionTableInsertCol = new KAction( i18n( "&Insert Column..." ), "insert_table_col", 0,
-			       this, SLOT( tableInsertCol() ),
-			       actionCollection(), "table_inscol" );
+                               this, SLOT( tableInsertCol() ),
+                               actionCollection(), "table_inscol" );
     actionTableDelRow = new KAction( i18n( "&Delete Row..." ), "delete_table_row", 0,
-				     this, SLOT( tableDeleteRow() ),
-				     actionCollection(), "table_delrow" );
+                                     this, SLOT( tableDeleteRow() ),
+                                     actionCollection(), "table_delrow" );
     actionTableDelCol = new KAction( i18n( "&Delete Column..." ), "delete_table_col", 0,
-			       this, SLOT( tableDeleteCol() ),
-				     actionCollection(), "table_delcol" );
+                               this, SLOT( tableDeleteCol() ),
+                                     actionCollection(), "table_delcol" );
     actionTableJoinCells = new KAction( i18n( "&Join Cells" ), 0,
-					this, SLOT( tableJoinCells() ),
-					actionCollection(), "table_joincells" );
+                                        this, SLOT( tableJoinCells() ),
+                                        actionCollection(), "table_joincells" );
     actionTableSplitCells = new KAction( i18n( "&Split Cells" ), 0,
-					this, SLOT( tableSplitCells() ),
-					 actionCollection(), "table_splitcells" );
+                                        this, SLOT( tableSplitCells() ),
+                                         actionCollection(), "table_splitcells" );
     actionTableUngroup = new KAction( i18n( "&Ungroup Table" ), 0,
-					this, SLOT( tableUngroupTable() ),
-					 actionCollection(), "table_ungroup" );
+                                        this, SLOT( tableUngroupTable() ),
+                                         actionCollection(), "table_ungroup" );
     actionTableDelete = new KAction( i18n( "&Delete Table" ), 0,
-					this, SLOT( tableDelete() ),
-					 actionCollection(), "table_delete" );
+                                        this, SLOT( tableDelete() ),
+                                         actionCollection(), "table_delete" );
 
     // ---------------------- Extra actions
 
     actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
     actionExtraAutocorrection = new KAction( i18n( "&Autocorrection..." ), 0,
-					 this, SLOT( extraAutoFormat() ),
-					 actionCollection(), "extra_autocorrection" );
+                                         this, SLOT( extraAutoFormat() ),
+                                         actionCollection(), "extra_autocorrection" );
     actionExtraStylist = new KAction( i18n( "&Stylist..." ), 0,
-				      this, SLOT( extraStylist() ),
-				      actionCollection(), "extra_stylist" );
+                                      this, SLOT( extraStylist() ),
+                                      actionCollection(), "extra_stylist" );
     actionExtraOptions = new KAction( i18n( "&Options..." ), 0,
-					 this, SLOT( extraOptions() ),
-				      actionCollection(), "extra_options" );
+                                         this, SLOT( extraOptions() ),
+                                      actionCollection(), "extra_options" );
     actionExtraCreateTemplate = new KAction( i18n( "&Create Template from Document..." ), 0,
-					     this, SLOT( extraCreateTemplate() ),
-				      actionCollection(), "extra_template" );
+                                             this, SLOT( extraCreateTemplate() ),
+                                      actionCollection(), "extra_template" );
 }
 
 /*====================== construct ==============================*/
@@ -638,20 +638,20 @@ void KWordView::createKWordGUI()
     setFormat( format, FALSE );
 
     if ( gui )
-	gui->setDocument( m_pKWordDoc );
+        gui->setDocument( m_pKWordDoc );
 
     format = m_pKWordDoc->getDefaultParagLayout()->getFormat();
     if ( gui )
-	gui->getPaperWidget()->formatChanged( format );
+        gui->getPaperWidget()->formatChanged( format );
 
     KWFrameSet *frameset;
     for ( unsigned int i = 0; i < m_pKWordDoc->getNumFrameSets(); i++ ) {
-	frameset = m_pKWordDoc->getFrameSet( i );
-	if ( frameset->getFrameType() == FT_PART )
-	    slotInsertObject( dynamic_cast<KWPartFrameSet*>( frameset )->getChild(),
-			      dynamic_cast<KWPartFrameSet*>( frameset ) );
-	else if ( frameset->getFrameType() == FT_FORMULA )
-	    dynamic_cast<KWFormulaFrameSet*>( frameset )->create( gui->getPaperWidget() );
+        frameset = m_pKWordDoc->getFrameSet( i );
+        if ( frameset->getFrameType() == FT_PART )
+            slotInsertObject( dynamic_cast<KWPartFrameSet*>( frameset )->getChild(),
+                              dynamic_cast<KWPartFrameSet*>( frameset ) );
+        else if ( frameset->getFrameType() == FT_FORMULA )
+            dynamic_cast<KWFormulaFrameSet*>( frameset )->create( gui->getPaperWidget() );
     }
 }
 
@@ -675,11 +675,11 @@ void KWordView::showFormulaToolbar( bool show )
 void KWordView::clipboardDataChanged()
 {
 //     if ( kapp->clipboard()->text().isEmpty() ) {
-// 	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, FALSE );
-// 	m_vToolBarEdit->setItemEnabled( ID_EDIT_PASTE, FALSE );
+//      m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, FALSE );
+//      m_vToolBarEdit->setItemEnabled( ID_EDIT_PASTE, FALSE );
 //     } else {
-// 	m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, TRUE );
-// 	m_vToolBarEdit->setItemEnabled( ID_EDIT_PASTE, TRUE );
+//      m_vMenuEdit->setItemEnabled( m_idMenuEdit_Paste, TRUE );
+//      m_vToolBarEdit->setItemEnabled( ID_EDIT_PASTE, TRUE );
 //     }
 }
 
@@ -697,85 +697,85 @@ bool KWordView::printDlg()
 
     switch ( pgLayout.format ) {
     case PG_DIN_A3: prt.setPageSize( QPrinter::A3 );
-	break;
+        break;
     case PG_DIN_A4: prt.setPageSize( QPrinter::A4 );
-	break;
+        break;
     case PG_DIN_A5: prt.setPageSize( QPrinter::A5 );
-	break;
+        break;
     case PG_US_LETTER: prt.setPageSize( QPrinter::Letter );
-	break;
+        break;
     case PG_US_LEGAL: prt.setPageSize( QPrinter::Legal );
-	break;
+        break;
     case PG_US_EXECUTIVE: prt.setPageSize( QPrinter::Executive );
-	break;
+        break;
     case PG_DIN_B5: prt.setPageSize( QPrinter::B5 );
-	break;
+        break;
     case PG_SCREEN: {
-	qWarning( i18n( "You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!" ) );
-	prt.setPageSize( QPrinter::A4 );
-	makeLandscape = TRUE;
+        kdWarning() << i18n( "You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!" ) << endl;
+        prt.setPageSize( QPrinter::A4 );
+        makeLandscape = TRUE;
     } break;
     default: {
-	warning( i18n( "The used page layout is not supported by QPrinter. I set it to DIN A4." ) );
-	prt.setPageSize( QPrinter::A4 );
+        kdWarning() << i18n( "The used page layout is not supported by QPrinter. I set it to DIN A4." ) << endl;
+        prt.setPageSize( QPrinter::A4 );
     } break;
     }
 
     switch ( pgLayout.orientation ) {
     case PG_PORTRAIT: prt.setOrientation( QPrinter::Portrait );
-	break;
+        break;
     case PG_LANDSCAPE: prt.setOrientation( QPrinter::Landscape );
-	break;
+        break;
     }
 
     float left_margin = 0.0;
     float top_margin = 0.0;
 
     if ( makeLandscape ) {
-	prt.setOrientation( QPrinter::Landscape );
-	left_margin = 28.5;
-	top_margin = 15.0;
+        prt.setOrientation( QPrinter::Landscape );
+        left_margin = 28.5;
+        top_margin = 15.0;
     }
 
     if ( prt.setup( this ) ) {
-	setCursor( waitCursor );
-	gui->getPaperWidget()->viewport()->setCursor( waitCursor );
+        setCursor( waitCursor );
+        gui->getPaperWidget()->viewport()->setCursor( waitCursor );
 
-	QList<KWVariable> *vars = m_pKWordDoc->getVariables();
-	KWVariable *v = 0;
-	bool serialLetter = FALSE;
-	for ( v = vars->first(); v; v = vars->next() ) {
-	    if ( v->getType() == VT_SERIALLETTER ) {
-		serialLetter = TRUE;
-		break;
-	    }
-	}
-	
-	if ( !m_pKWordDoc->getSerialLetterDataBase() ||
-	     m_pKWordDoc->getSerialLetterDataBase()->getNumRecords() == 0 )
-	    serialLetter = FALSE;
-	
-	if ( !serialLetter ) { 	
-	    QPainter painter;
-	    painter.begin( &prt );
-	    m_pKWordDoc->print( &painter, &prt, left_margin, top_margin );
-	    painter.end();
-	} else {
-	    QPainter painter;
-	    painter.begin( &prt );
-	    for ( int i = 0;i < m_pKWordDoc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
-		m_pKWordDoc->setSerialLetterRecord( i );
-		m_pKWordDoc->print( &painter, &prt, left_margin, top_margin );
-		if ( i < m_pKWordDoc->getSerialLetterDataBase()->getNumRecords() - 1 )
-		    prt.newPage();
-	    }
-	    m_pKWordDoc->setSerialLetterRecord( -1 );
-	    painter.end();
-	}
-	
-	
-	setCursor( arrowCursor );
-	gui->getPaperWidget()->viewport()->setCursor( ibeamCursor );
+        QList<KWVariable> *vars = m_pKWordDoc->getVariables();
+        KWVariable *v = 0;
+        bool serialLetter = FALSE;
+        for ( v = vars->first(); v; v = vars->next() ) {
+            if ( v->getType() == VT_SERIALLETTER ) {
+                serialLetter = TRUE;
+                break;
+            }
+        }
+
+        if ( !m_pKWordDoc->getSerialLetterDataBase() ||
+             m_pKWordDoc->getSerialLetterDataBase()->getNumRecords() == 0 )
+            serialLetter = FALSE;
+
+        if ( !serialLetter ) {
+            QPainter painter;
+            painter.begin( &prt );
+            m_pKWordDoc->print( &painter, &prt, left_margin, top_margin );
+            painter.end();
+        } else {
+            QPainter painter;
+            painter.begin( &prt );
+            for ( int i = 0;i < m_pKWordDoc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
+                m_pKWordDoc->setSerialLetterRecord( i );
+                m_pKWordDoc->print( &painter, &prt, left_margin, top_margin );
+                if ( i < m_pKWordDoc->getSerialLetterDataBase()->getNumRecords() - 1 )
+                    prt.newPage();
+            }
+            m_pKWordDoc->setSerialLetterRecord( -1 );
+            painter.end();
+        }
+
+
+        setCursor( arrowCursor );
+        gui->getPaperWidget()->viewport()->setCursor( ibeamCursor );
     }
     return TRUE;
 }
@@ -786,53 +786,53 @@ void KWordView::setFormat( const KWFormat &_format, bool _check, bool _update_pa
     if ( _check && _format == format ) return;
 
     if ( gui && gui->getPaperWidget() && gui->getPaperWidget()->getCursor() &&
-	 gui->getPaperWidget()->getCursor()->getParag()
-	 && gui->getPaperWidget()->getCursor()->getTextPos() > 0
-	 && gui->getPaperWidget()->getCursor()->getParag()->getKWString()->
-	 data()[ gui->getPaperWidget()->getCursor()->getTextPos() - 1 ].attrib
-	 && gui->getPaperWidget()->getCursor()->getParag()->
-	 getKWString()->data()[ gui->getPaperWidget()->getCursor()->getTextPos() - 1 ].attrib->getClassId() == ID_KWCharFootNote )
-	return;
+         gui->getPaperWidget()->getCursor()->getParag()
+         && gui->getPaperWidget()->getCursor()->getTextPos() > 0
+         && gui->getPaperWidget()->getCursor()->getParag()->getKWString()->
+         data()[ gui->getPaperWidget()->getCursor()->getTextPos() - 1 ].attrib
+         && gui->getPaperWidget()->getCursor()->getParag()->
+         getKWString()->data()[ gui->getPaperWidget()->getCursor()->getTextPos() - 1 ].attrib->getClassId() == ID_KWCharFootNote )
+        return;
 
     format = _format;
 
-    if ( _format.getUserFont()->getFontName() ) {
-	( (KFontAction*)actionFormatFontFamily )->blockSignals( TRUE );
-	( (KFontAction*)actionFormatFontFamily )->
-	    setCurrentItem( fontList.findIndex( _format.getUserFont()->getFontName() ) );
-	( (KFontAction*)actionFormatFontFamily )->blockSignals( FALSE );
+    if ( !_format.getUserFont()->getFontName().isEmpty() ) {
+        ( (KFontAction*)actionFormatFontFamily )->blockSignals( TRUE );
+        ( (KFontAction*)actionFormatFontFamily )->
+            setCurrentItem( fontList.findIndex( _format.getUserFont()->getFontName() ) );
+        ( (KFontAction*)actionFormatFontFamily )->blockSignals( FALSE );
     }
 
     if ( _format.getPTFontSize() != -1 ) {
-	( (KFontSizeAction*)actionFormatFontSize )->blockSignals( TRUE );
-	( (KFontSizeAction*)actionFormatFontSize )->setFontSize( format.getPTFontSize() );
-	( (KFontSizeAction*)actionFormatFontSize )->blockSignals( FALSE );
+        ( (KFontSizeAction*)actionFormatFontSize )->blockSignals( TRUE );
+        ( (KFontSizeAction*)actionFormatFontSize )->setFontSize( format.getPTFontSize() );
+        ( (KFontSizeAction*)actionFormatFontSize )->blockSignals( FALSE );
     }
 
     if ( _format.getWeight() != -1 ) {
-	( (KToggleAction*)actionFormatBold )->blockSignals( TRUE );
-	( (KToggleAction*)actionFormatBold )->setChecked( _format.getWeight() == QFont::Bold );
-	( (KToggleAction*)actionFormatBold )->blockSignals( FALSE );
-	tbFont.setBold( _format.getWeight() == QFont::Bold );
+        ( (KToggleAction*)actionFormatBold )->blockSignals( TRUE );
+        ( (KToggleAction*)actionFormatBold )->setChecked( _format.getWeight() == QFont::Bold );
+        ( (KToggleAction*)actionFormatBold )->blockSignals( FALSE );
+        tbFont.setBold( _format.getWeight() == QFont::Bold );
     }
     if ( _format.getItalic() != -1 ) {
-	( (KToggleAction*)actionFormatItalic )->blockSignals( TRUE );
-	( (KToggleAction*)actionFormatItalic )->setChecked( _format.getItalic() );
-	( (KToggleAction*)actionFormatItalic )->blockSignals( FALSE );
-	tbFont.setItalic( _format.getItalic() );
+        ( (KToggleAction*)actionFormatItalic )->blockSignals( TRUE );
+        ( (KToggleAction*)actionFormatItalic )->setChecked( _format.getItalic() );
+        ( (KToggleAction*)actionFormatItalic )->blockSignals( FALSE );
+        tbFont.setItalic( _format.getItalic() );
     }
     if ( _format.getUnderline() != -1 ) {
-	( (KToggleAction*)actionFormatUnderline )->blockSignals( TRUE );
-	( (KToggleAction*)actionFormatUnderline )->setChecked( _format.getUnderline() );
-	( (KToggleAction*)actionFormatUnderline )->blockSignals( FALSE );
-	tbFont.setUnderline( _format.getUnderline() );
+        ( (KToggleAction*)actionFormatUnderline )->blockSignals( TRUE );
+        ( (KToggleAction*)actionFormatUnderline )->setChecked( _format.getUnderline() );
+        ( (KToggleAction*)actionFormatUnderline )->blockSignals( FALSE );
+        tbFont.setUnderline( _format.getUnderline() );
     }
 
     if ( _format.getColor().isValid() ) {
-	( (KColorAction*)actionFormatColor )->blockSignals( TRUE );
-	( (KColorAction*)actionFormatColor )->setColor( _format.getColor() );
-	( (KColorAction*)actionFormatColor )->blockSignals( FALSE );
-	tbColor = QColor( _format.getColor() );
+        ( (KColorAction*)actionFormatColor )->blockSignals( TRUE );
+        ( (KColorAction*)actionFormatColor )->setColor( _format.getColor() );
+        ( (KColorAction*)actionFormatColor )->blockSignals( FALSE );
+        tbColor = QColor( _format.getColor() );
     }
 
     ( (KToggleAction*)actionFormatSuper )->blockSignals( TRUE );
@@ -845,36 +845,36 @@ void KWordView::setFormat( const KWFormat &_format, bool _check, bool _update_pa
     format = _format;
 
     if ( _update_page )
-	gui->getPaperWidget()->formatChanged( format, _redraw );
+        gui->getPaperWidget()->formatChanged( format, _redraw );
 }
 
 /*================================================================*/
 void KWordView::setFlow( KWParagLayout::Flow _flow )
 {
     if ( _flow != flow ) {
-	flow = _flow;
-	switch ( flow ) {
-	case KWParagLayout::LEFT:
-	    ( (KToggleAction*)actionFormatAlignLeft )->blockSignals( TRUE );
-	    ( (KToggleAction*)actionFormatAlignLeft )->setChecked( TRUE );
-	    ( (KToggleAction*)actionFormatAlignLeft )->blockSignals( FALSE );
-	    break;
-	case KWParagLayout::CENTER:
-	    ( (KToggleAction*)actionFormatAlignCenter )->blockSignals( TRUE );
-	    ( (KToggleAction*)actionFormatAlignCenter )->setChecked( TRUE );
-	    ( (KToggleAction*)actionFormatAlignCenter )->blockSignals( FALSE );
-	    break;
-	case KWParagLayout::RIGHT:
-	    ( (KToggleAction*)actionFormatAlignRight )->blockSignals( TRUE );
-	    ( (KToggleAction*)actionFormatAlignRight )->setChecked( TRUE );
-	    ( (KToggleAction*)actionFormatAlignRight )->blockSignals( FALSE );
-	    break;
-	case KWParagLayout::BLOCK:
-	    ( (KToggleAction*)actionFormatAlignBlock )->blockSignals( TRUE );
-	    ( (KToggleAction*)actionFormatAlignBlock )->setChecked( TRUE );
-	    ( (KToggleAction*)actionFormatAlignBlock )->blockSignals( FALSE );
-	    break;
-	}
+        flow = _flow;
+        switch ( flow ) {
+        case KWParagLayout::LEFT:
+            ( (KToggleAction*)actionFormatAlignLeft )->blockSignals( TRUE );
+            ( (KToggleAction*)actionFormatAlignLeft )->setChecked( TRUE );
+            ( (KToggleAction*)actionFormatAlignLeft )->blockSignals( FALSE );
+            break;
+        case KWParagLayout::CENTER:
+            ( (KToggleAction*)actionFormatAlignCenter )->blockSignals( TRUE );
+            ( (KToggleAction*)actionFormatAlignCenter )->setChecked( TRUE );
+            ( (KToggleAction*)actionFormatAlignCenter )->blockSignals( FALSE );
+            break;
+        case KWParagLayout::RIGHT:
+            ( (KToggleAction*)actionFormatAlignRight )->blockSignals( TRUE );
+            ( (KToggleAction*)actionFormatAlignRight )->setChecked( TRUE );
+            ( (KToggleAction*)actionFormatAlignRight )->blockSignals( FALSE );
+            break;
+        case KWParagLayout::BLOCK:
+            ( (KToggleAction*)actionFormatAlignBlock )->blockSignals( TRUE );
+            ( (KToggleAction*)actionFormatAlignBlock )->setChecked( TRUE );
+            ( (KToggleAction*)actionFormatAlignBlock )->blockSignals( FALSE );
+            break;
+        }
     }
 }
 
@@ -882,51 +882,51 @@ void KWordView::setFlow( KWParagLayout::Flow _flow )
 void KWordView::setLineSpacing( int _spc )
 {
     if ( _spc != spc ) {
-	spc = _spc;
-	( (KSelectAction*)actionFormatLineSpacing )->blockSignals( TRUE );
-	( (KSelectAction*)actionFormatLineSpacing )->setCurrentItem( _spc );
-	( (KSelectAction*)actionFormatLineSpacing )->blockSignals( FALSE );
+        spc = _spc;
+        ( (KSelectAction*)actionFormatLineSpacing )->blockSignals( TRUE );
+        ( (KSelectAction*)actionFormatLineSpacing )->setCurrentItem( _spc );
+        ( (KSelectAction*)actionFormatLineSpacing )->blockSignals( FALSE );
     }
 }
 
 /*================================================================*/
 void KWordView::setParagBorders( KWParagLayout::Border _left, KWParagLayout::Border _right,
-				 KWParagLayout::Border _top, KWParagLayout::Border _bottom )
+                                 KWParagLayout::Border _top, KWParagLayout::Border _bottom )
 {
     if ( left != _left || right != _right || top != _top || bottom != _bottom ) {
-	left = _left;
-	right = _right;
-	top = _top;
-	bottom = _bottom;
+        left = _left;
+        right = _right;
+        top = _top;
+        bottom = _bottom;
 
-	( (KToggleAction*)actionFormatBrdLeft )->blockSignals( TRUE );
-	( (KToggleAction*)actionFormatBrdLeft )->setChecked( left.ptWidth > 0 );
-	( (KToggleAction*)actionFormatBrdLeft )->blockSignals( FALSE );
-	( (KToggleAction*)actionFormatBrdRight )->blockSignals( TRUE );
-	( (KToggleAction*)actionFormatBrdRight )->setChecked( right.ptWidth > 0 );
-	( (KToggleAction*)actionFormatBrdRight )->blockSignals( FALSE );
-	( (KToggleAction*)actionFormatBrdTop )->blockSignals( TRUE );
-	( (KToggleAction*)actionFormatBrdTop )->setChecked( top.ptWidth > 0 );
-	( (KToggleAction*)actionFormatBrdTop )->blockSignals( FALSE );
-	( (KToggleAction*)actionFormatBrdBottom )->blockSignals( TRUE );
-	( (KToggleAction*)actionFormatBrdBottom )->setChecked( bottom.ptWidth > 0 );
-	( (KToggleAction*)actionFormatBrdBottom )->blockSignals( FALSE );
-	if ( left.ptWidth > 0 ) {
-	    tmpBrd = left;
-	    setParagBorderValues();
-	}
-	if ( right.ptWidth > 0 ) {
-	    tmpBrd = right;
-	    setParagBorderValues();
-	}
-	if ( top.ptWidth > 0 ) {
-	    tmpBrd = top;
-	    setParagBorderValues();
-	}
-	if ( bottom.ptWidth > 0 ) {
-	    tmpBrd = bottom;
-	    setParagBorderValues();
-	}
+        ( (KToggleAction*)actionFormatBrdLeft )->blockSignals( TRUE );
+        ( (KToggleAction*)actionFormatBrdLeft )->setChecked( left.ptWidth > 0 );
+        ( (KToggleAction*)actionFormatBrdLeft )->blockSignals( FALSE );
+        ( (KToggleAction*)actionFormatBrdRight )->blockSignals( TRUE );
+        ( (KToggleAction*)actionFormatBrdRight )->setChecked( right.ptWidth > 0 );
+        ( (KToggleAction*)actionFormatBrdRight )->blockSignals( FALSE );
+        ( (KToggleAction*)actionFormatBrdTop )->blockSignals( TRUE );
+        ( (KToggleAction*)actionFormatBrdTop )->setChecked( top.ptWidth > 0 );
+        ( (KToggleAction*)actionFormatBrdTop )->blockSignals( FALSE );
+        ( (KToggleAction*)actionFormatBrdBottom )->blockSignals( TRUE );
+        ( (KToggleAction*)actionFormatBrdBottom )->setChecked( bottom.ptWidth > 0 );
+        ( (KToggleAction*)actionFormatBrdBottom )->blockSignals( FALSE );
+        if ( left.ptWidth > 0 ) {
+            tmpBrd = left;
+            setParagBorderValues();
+        }
+        if ( right.ptWidth > 0 ) {
+            tmpBrd = right;
+            setParagBorderValues();
+        }
+        if ( top.ptWidth > 0 ) {
+            tmpBrd = top;
+            setParagBorderValues();
+        }
+        if ( bottom.ptWidth > 0 ) {
+            tmpBrd = bottom;
+            setParagBorderValues();
+        }
     }
 }
 
@@ -947,50 +947,50 @@ void KWordView::setTool( MouseMode _mouseMode )
 {
     switch ( _mouseMode ) {
     case MM_EDIT:
-	( (KToggleAction*)actionToolsEdit )->blockSignals( TRUE );
-	( (KToggleAction*)actionToolsEdit )->setChecked( TRUE );
-	( (KToggleAction*)actionToolsEdit )->blockSignals( FALSE );
-	break;
+        ( (KToggleAction*)actionToolsEdit )->blockSignals( TRUE );
+        ( (KToggleAction*)actionToolsEdit )->setChecked( TRUE );
+        ( (KToggleAction*)actionToolsEdit )->blockSignals( FALSE );
+        break;
     case MM_EDIT_FRAME:
-	( (KToggleAction*)actionToolsEditFrames )->blockSignals( TRUE );
-	( (KToggleAction*)actionToolsEditFrames )->setChecked( TRUE );
-	( (KToggleAction*)actionToolsEditFrames )->blockSignals( FALSE );
-	break;
+        ( (KToggleAction*)actionToolsEditFrames )->blockSignals( TRUE );
+        ( (KToggleAction*)actionToolsEditFrames )->setChecked( TRUE );
+        ( (KToggleAction*)actionToolsEditFrames )->blockSignals( FALSE );
+        break;
     case MM_CREATE_TEXT:
-	( (KToggleAction*)actionToolsCreateText )->blockSignals( TRUE );
-	( (KToggleAction*)actionToolsCreateText )->setChecked( TRUE );
-	( (KToggleAction*)actionToolsCreateText )->blockSignals( FALSE );
-	break;
+        ( (KToggleAction*)actionToolsCreateText )->blockSignals( TRUE );
+        ( (KToggleAction*)actionToolsCreateText )->setChecked( TRUE );
+        ( (KToggleAction*)actionToolsCreateText )->blockSignals( FALSE );
+        break;
     case MM_CREATE_PIX:
-	( (KToggleAction*)actionToolsCreatePix )->blockSignals( TRUE );
-	( (KToggleAction*)actionToolsCreatePix )->setChecked( TRUE );
-	( (KToggleAction*)actionToolsCreatePix )->blockSignals( FALSE );
-	break;
+        ( (KToggleAction*)actionToolsCreatePix )->blockSignals( TRUE );
+        ( (KToggleAction*)actionToolsCreatePix )->setChecked( TRUE );
+        ( (KToggleAction*)actionToolsCreatePix )->blockSignals( FALSE );
+        break;
     case MM_CREATE_CLIPART:
-	( (KToggleAction*)actionToolsCreateClip )->blockSignals( TRUE );
-	( (KToggleAction*)actionToolsCreateClip )->setChecked( TRUE );
-	( (KToggleAction*)actionToolsCreateClip )->blockSignals( FALSE );
-	break;
+        ( (KToggleAction*)actionToolsCreateClip )->blockSignals( TRUE );
+        ( (KToggleAction*)actionToolsCreateClip )->setChecked( TRUE );
+        ( (KToggleAction*)actionToolsCreateClip )->blockSignals( FALSE );
+        break;
     case MM_CREATE_TABLE:
-	( (KToggleAction*)actionToolsCreateTable )->blockSignals( TRUE );
-	( (KToggleAction*)actionToolsCreateTable )->setChecked( TRUE );
-	( (KToggleAction*)actionToolsCreateTable )->blockSignals( FALSE );
-	break;
+        ( (KToggleAction*)actionToolsCreateTable )->blockSignals( TRUE );
+        ( (KToggleAction*)actionToolsCreateTable )->setChecked( TRUE );
+        ( (KToggleAction*)actionToolsCreateTable )->blockSignals( FALSE );
+        break;
     case MM_CREATE_KSPREAD_TABLE:
-	( (KToggleAction*)actionToolsCreateKSpreadTable )->blockSignals( TRUE );
-	( (KToggleAction*)actionToolsCreateKSpreadTable )->setChecked( TRUE );
-	( (KToggleAction*)actionToolsCreateKSpreadTable )->blockSignals( FALSE );
-	break;
+        ( (KToggleAction*)actionToolsCreateKSpreadTable )->blockSignals( TRUE );
+        ( (KToggleAction*)actionToolsCreateKSpreadTable )->setChecked( TRUE );
+        ( (KToggleAction*)actionToolsCreateKSpreadTable )->blockSignals( FALSE );
+        break;
     case MM_CREATE_FORMULA:
-	( (KToggleAction*)actionToolsCreateFormula )->blockSignals( TRUE );
-	( (KToggleAction*)actionToolsCreateFormula )->setChecked( TRUE );
-	( (KToggleAction*)actionToolsCreateFormula )->blockSignals( FALSE );
-	break;
+        ( (KToggleAction*)actionToolsCreateFormula )->blockSignals( TRUE );
+        ( (KToggleAction*)actionToolsCreateFormula )->setChecked( TRUE );
+        ( (KToggleAction*)actionToolsCreateFormula )->blockSignals( FALSE );
+        break;
     case MM_CREATE_PART:
-	( (KToggleAction*)actionToolsCreatePart )->blockSignals( TRUE );
-	( (KToggleAction*)actionToolsCreatePart )->setChecked( TRUE );
-	( (KToggleAction*)actionToolsCreatePart )->blockSignals( FALSE );
-	break;
+        ( (KToggleAction*)actionToolsCreatePart )->blockSignals( TRUE );
+        ( (KToggleAction*)actionToolsCreatePart )->setChecked( TRUE );
+        ( (KToggleAction*)actionToolsCreatePart )->blockSignals( FALSE );
+        break;
     }
     QWidget *tbFormat = 0;
     QWidget *tbFrame = 0;
@@ -1005,12 +1005,12 @@ void KWordView::setTool( MouseMode _mouseMode )
       if ( _mouseMode == MM_EDIT_FRAME )
       {
         tbFormat->hide();
-	tbFrame->show();
+        tbFrame->show();
       }
       else
       {
         tbFormat->show();
-	tbFrame->hide();
+        tbFrame->hide();
       }
     }
     actionTableInsertRow->setEnabled( FALSE );
@@ -1023,17 +1023,17 @@ void KWordView::setTool( MouseMode _mouseMode )
 
     switch ( _mouseMode ) {
     case MM_EDIT: {
-	actionTableInsertRow->setEnabled( TRUE );
-	actionTableInsertCol->setEnabled( TRUE );
-	actionTableDelRow->setEnabled( TRUE );
-	actionTableDelCol->setEnabled( TRUE );
-	actionTableJoinCells->setEnabled( TRUE );
-	actionTableSplitCells->setEnabled( TRUE );
-	actionTableDelete->setEnabled( TRUE );
+        actionTableInsertRow->setEnabled( TRUE );
+        actionTableInsertCol->setEnabled( TRUE );
+        actionTableDelRow->setEnabled( TRUE );
+        actionTableDelCol->setEnabled( TRUE );
+        actionTableJoinCells->setEnabled( TRUE );
+        actionTableSplitCells->setEnabled( TRUE );
+        actionTableDelete->setEnabled( TRUE );
     } break;
     case MM_EDIT_FRAME: {
-	actionTableJoinCells->setEnabled( TRUE );
-	actionTableSplitCells->setEnabled( TRUE );
+        actionTableJoinCells->setEnabled( TRUE );
+        actionTableSplitCells->setEnabled( TRUE );
     } break;
     default: break;
     }
@@ -1045,7 +1045,7 @@ void KWordView::updateStyle( QString _styleName, bool _updateFormat )
     int pos = styleList.findIndex( _styleName );
 
     if ( pos == -1 )
-	return;
+        return;
 
     ( (KSelectAction*)actionFormatStyle )->blockSignals( TRUE );
     ( (KSelectAction*)actionFormatStyle )->setCurrentItem( pos );
@@ -1062,7 +1062,7 @@ void KWordView::updateStyle( QString _styleName, bool _updateFormat )
     setFormat( m_pKWordDoc->findParagLayout( _styleName )->getFormat(), FALSE, _updateFormat, FALSE );
 
     if ( gui )
-	gui->getHorzRuler()->setTabList( m_pKWordDoc->findParagLayout( _styleName )->getTabList() );
+        gui->getHorzRuler()->setTabList( m_pKWordDoc->findParagLayout( _styleName )->getTabList() );
 }
 
 /*===============================================================*/
@@ -1070,7 +1070,7 @@ void KWordView::updateStyleList()
 {
     styleList.clear();
     for ( unsigned int i = 0; i < m_pKWordDoc->paragLayoutList.count(); i++ ) {
-	styleList.append( m_pKWordDoc->paragLayoutList.at( i )->getName() );
+        styleList.append( m_pKWordDoc->paragLayoutList.at( i )->getName() );
     }
     ( (KSelectAction*)actionFormatStyle )->setItems( styleList );
     updateStyle( gui->getPaperWidget()->getParagLayout()->getName() );
@@ -1082,7 +1082,7 @@ void KWordView::editUndo()
     m_pKWordDoc->undo();
     gui->getPaperWidget()->recalcWholeText( TRUE );
     if ( gui->getPaperWidget()->formulaIsActive() )
-	gui->getPaperWidget()->insertFormulaChar( UNDO_CHAR );
+        gui->getPaperWidget()->insertFormulaChar( UNDO_CHAR );
 }
 
 /*===============================================================*/
@@ -1091,43 +1091,43 @@ void KWordView::editRedo()
     m_pKWordDoc->redo();
     gui->getPaperWidget()->recalcWholeText( TRUE );
     if ( gui->getPaperWidget()->formulaIsActive() )
-	gui->getPaperWidget()->insertFormulaChar( REDO_CHAR );
+        gui->getPaperWidget()->insertFormulaChar( REDO_CHAR );
 }
 
 /*===============================================================*/
 void KWordView::editCut()
 {
     if ( gui->getPaperWidget()->formulaIsActive() )
-	gui->getPaperWidget()->insertFormulaChar( CUT_CHAR );
+        gui->getPaperWidget()->insertFormulaChar( CUT_CHAR );
     else
-	gui->getPaperWidget()->editCut();
+        gui->getPaperWidget()->editCut();
 }
 
 /*===============================================================*/
 void KWordView::editCopy()
 {
     if ( gui->getPaperWidget()->formulaIsActive() )
-	gui->getPaperWidget()->insertFormulaChar( COPY_CHAR );
+        gui->getPaperWidget()->insertFormulaChar( COPY_CHAR );
     else
-	gui->getPaperWidget()->editCopy();
+        gui->getPaperWidget()->editCopy();
 }
 
 /*===============================================================*/
 void KWordView::editPaste()
 {
     if ( gui->getPaperWidget()->formulaIsActive() )
-	gui->getPaperWidget()->insertFormulaChar( PASTE_CHAR );
+        gui->getPaperWidget()->insertFormulaChar( PASTE_CHAR );
     else {
-	QClipboard *cb = QApplication::clipboard();
+        QClipboard *cb = QApplication::clipboard();
 
-	if ( cb->data()->provides( MIME_TYPE ) ) {
-	    if ( cb->data()->encodedData( MIME_TYPE ).size() )
-		gui->getPaperWidget()->editPaste( cb->data()->encodedData( MIME_TYPE ), MIME_TYPE );
-	} else if ( cb->data()->provides( "text/plain" ) ) {
-	    if ( cb->data()->encodedData( "text/plain" ).size() )
-		gui->getPaperWidget()->editPaste( cb->data()->encodedData( "text/plain" ) );
-	} else if ( !cb->text().isEmpty() )
-	    gui->getPaperWidget()->editPaste( cb->text() );
+        if ( cb->data()->provides( MIME_TYPE ) ) {
+            if ( cb->data()->encodedData( MIME_TYPE ).size() )
+                gui->getPaperWidget()->editPaste( cb->data()->encodedData( MIME_TYPE ), MIME_TYPE );
+        } else if ( cb->data()->provides( "text/plain" ) ) {
+            if ( cb->data()->encodedData( "text/plain" ).size() )
+                gui->getPaperWidget()->editPaste( cb->data()->encodedData( "text/plain" ) );
+        } else if ( !cb->text().isEmpty() )
+            gui->getPaperWidget()->editPaste( cb->text() );
     }
 }
 
@@ -1227,7 +1227,7 @@ void KWordView::viewFooter()
 void KWordView::viewFootNotes()
 {
     if ( !( (KToggleAction*)actionViewFootNotes )->isChecked() )
-	return;
+        return;
     setNoteType( KWFootNoteManager::FootNotes);
 }
 
@@ -1235,7 +1235,7 @@ void KWordView::viewFootNotes()
 void KWordView::viewEndNotes()
 {
     if ( !( (KToggleAction*)actionViewEndNotes )->isChecked() )
-	return;
+        return;
     setNoteType( KWFootNoteManager::EndNotes);
 }
 
@@ -1269,16 +1269,16 @@ void KWordView::viewZoom( const QString &s )
     int zoom = z.toInt();
     int oldZoom = m_pKWordDoc->getZoom();
     if ( zoom != m_pKWordDoc->getZoom() ) {
-	KoPageLayout pgLayout;
-	KoColumns cl;
-	KoKWHeaderFooter hf;
-	m_pKWordDoc->setZoom( 100 );
-	m_pKWordDoc->getPageLayout( pgLayout, cl, hf );
-	m_pKWordDoc->setZoom( zoom );
-	m_pKWordDoc->updateFrameSizes( oldZoom );
-	newPageLayout( pgLayout );
-	gui->getVertRuler()->setZoom(static_cast<double>(zoom)/100.0);
-	gui->getHorzRuler()->setZoom(static_cast<double>(zoom)/100.0);
+        KoPageLayout pgLayout;
+        KoColumns cl;
+        KoKWHeaderFooter hf;
+        m_pKWordDoc->setZoom( 100 );
+        m_pKWordDoc->getPageLayout( pgLayout, cl, hf );
+        m_pKWordDoc->setZoom( zoom );
+        m_pKWordDoc->updateFrameSizes( oldZoom );
+        newPageLayout( pgLayout );
+        gui->getVertRuler()->setZoom(static_cast<double>(zoom)/100.0);
+        gui->getHorzRuler()->setZoom(static_cast<double>(zoom)/100.0);
     }
     gui->getPaperWidget()->setFocus();
 }
@@ -1293,7 +1293,7 @@ void KWordView::insertPicture()
     fd.setContentsPreviewWidget( new Preview( &fd ) );
     fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
+        file = fd.selectedFile();
 #else
     KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, TRUE );
     fd.setCaption(i18n("Insert Picture"));
@@ -1302,7 +1302,7 @@ void KWordView::insertPicture()
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
-	url = fd.selectedURL();
+        url = fd.selectedURL();
 
     if( url.isEmpty() )
       return;
@@ -1395,11 +1395,11 @@ void KWordView::insertFootNoteEndNote()
         KMessageBox::sorry( this,
                             i18n( "Sorry, you can only insert footnotes or\n"
                                   "endnotes into the first frameset."),
-        		    i18n("Insert Footnote/Endnote"));
+                            i18n("Insert Footnote/Endnote"));
     } else {
-	KWFootNoteDia dia( 0L, "", m_pKWordDoc, gui->getPaperWidget(), start,
-		 m_pKWordDoc->getNoteType() == KWFootNoteManager::FootNotes );
-	dia.show();
+        KWFootNoteDia dia( 0L, "", m_pKWordDoc, gui->getPaperWidget(), start,
+                 m_pKWordDoc->getNoteType() == KWFootNoteManager::FootNotes );
+        dia.show();
     }
 }
 
@@ -1417,31 +1417,31 @@ void KWordView::formatFont()
     QFont tmpFont = tbFont;
 
     if ( KFontDialog::getFont( tmpFont ) ) {
-	tbFont = tmpFont;
-	format.setUserFont( m_pKWordDoc->findUserFont( tbFont.family() ) );
-	format.setPTFontSize( tbFont.pointSize() );
-	format.setWeight( tbFont.weight() );
-	format.setItalic( tbFont.italic() );
-	format.setUnderline( tbFont.underline() );
- 	( (KFontAction*)actionFormatFontFamily )->blockSignals( TRUE );
- 	( (KFontAction*)actionFormatFontFamily )->setFont( tbFont.family() );
- 	( (KFontAction*)actionFormatFontFamily )->blockSignals( FALSE );
- 	( (KFontSizeAction*)actionFormatFontSize )->blockSignals( TRUE );
- 	( (KFontSizeAction*)actionFormatFontSize )->setFontSize( tbFont.pointSize() );
- 	( (KFontSizeAction*)actionFormatFontSize )->blockSignals( FALSE );
- 	( (KToggleAction*)actionFormatBold )->blockSignals( TRUE );
- 	( (KToggleAction*)actionFormatBold )->setChecked( tbFont.bold() );
- 	( (KToggleAction*)actionFormatBold )->blockSignals( FALSE );
- 	( (KToggleAction*)actionFormatItalic )->blockSignals( TRUE );
- 	( (KToggleAction*)actionFormatItalic )->setChecked( tbFont.italic() );
- 	( (KToggleAction*)actionFormatItalic )->blockSignals( FALSE );
- 	( (KToggleAction*)actionFormatUnderline )->blockSignals( TRUE );
- 	( (KToggleAction*)actionFormatUnderline )->setChecked( tbFont.underline() );
- 	( (KToggleAction*)actionFormatUnderline )->blockSignals( FALSE );
-	if ( gui ) {
-	    gui->getPaperWidget()->formatChanged( format );
-	    gui->getPaperWidget()->setFocus();
-	}
+        tbFont = tmpFont;
+        format.setUserFont( m_pKWordDoc->findUserFont( tbFont.family() ) );
+        format.setPTFontSize( tbFont.pointSize() );
+        format.setWeight( tbFont.weight() );
+        format.setItalic( tbFont.italic() );
+        format.setUnderline( tbFont.underline() );
+        ( (KFontAction*)actionFormatFontFamily )->blockSignals( TRUE );
+        ( (KFontAction*)actionFormatFontFamily )->setFont( tbFont.family() );
+        ( (KFontAction*)actionFormatFontFamily )->blockSignals( FALSE );
+        ( (KFontSizeAction*)actionFormatFontSize )->blockSignals( TRUE );
+        ( (KFontSizeAction*)actionFormatFontSize )->setFontSize( tbFont.pointSize() );
+        ( (KFontSizeAction*)actionFormatFontSize )->blockSignals( FALSE );
+        ( (KToggleAction*)actionFormatBold )->blockSignals( TRUE );
+        ( (KToggleAction*)actionFormatBold )->setChecked( tbFont.bold() );
+        ( (KToggleAction*)actionFormatBold )->blockSignals( FALSE );
+        ( (KToggleAction*)actionFormatItalic )->blockSignals( TRUE );
+        ( (KToggleAction*)actionFormatItalic )->setChecked( tbFont.italic() );
+        ( (KToggleAction*)actionFormatItalic )->blockSignals( FALSE );
+        ( (KToggleAction*)actionFormatUnderline )->blockSignals( TRUE );
+        ( (KToggleAction*)actionFormatUnderline )->setChecked( tbFont.underline() );
+        ( (KToggleAction*)actionFormatUnderline )->blockSignals( FALSE );
+        if ( gui ) {
+            gui->getPaperWidget()->formatChanged( format );
+            gui->getPaperWidget()->setFocus();
+        }
     }
 }
 
@@ -1449,8 +1449,8 @@ void KWordView::formatFont()
 void KWordView::formatParagraph()
 {
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_SPACING | KWParagDia::PD_FLOW |
-			       KWParagDia::PD_BORDERS |
-			       KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, m_pKWordDoc );
+                               KWParagDia::PD_BORDERS |
+                               KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, m_pKWordDoc );
     paragDia->setCaption( i18n( "KWord - Paragraph settings" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setLeftIndent( gui->getPaperWidget()->getLeftIndent() );
@@ -1481,15 +1481,15 @@ void KWordView::formatPage()
     KoHeadFoot hf;
     int flags = FORMAT_AND_BORDERS | KW_HEADER_AND_FOOTER | DISABLE_UNIT;
     if ( m_pKWordDoc->getProcessingType() == KWordDocument::WP )
-	flags = flags | COLUMNS;
+        flags = flags | COLUMNS;
     else
-	flags = flags | DISABLE_BORDERS;
+        flags = flags | DISABLE_BORDERS;
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags ) ) {
-	m_pKWordDoc->setPageLayout( pgLayout, cl, kwhf );
-	gui->getVertRuler()->setPageLayout( pgLayout );
-	gui->getHorzRuler()->setPageLayout( pgLayout );
-	gui->getPaperWidget()->frameSizeChanged( pgLayout );
+        m_pKWordDoc->setPageLayout( pgLayout, cl, kwhf );
+        gui->getVertRuler()->setPageLayout( pgLayout );
+        gui->getHorzRuler()->setPageLayout( pgLayout );
+        gui->getPaperWidget()->frameSizeChanged( pgLayout );
     }
 }
 
@@ -1498,7 +1498,7 @@ void KWordView::formatFrameSet()
 {
     if ( m_pKWordDoc->getFirstSelectedFrame() )
     {
-	gui->getPaperWidget()->femProps();
+        gui->getPaperWidget()->femProps();
     } else {
         KMessageBox::sorry( this,
                             i18n("Sorry, you have to select a frame first."),
@@ -1515,11 +1515,11 @@ void KWordView::extraSpelling()
     kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ) );
 
     QObject::connect( kspell, SIGNAL( death() ),
-		      this, SLOT( spellCheckerFinished() ) );
+                      this, SLOT( spellCheckerFinished() ) );
     QObject::connect( kspell, SIGNAL( misspelling( QString, QStringList*, unsigned ) ),
-		      this, SLOT( spellCheckerMisspelling( QString, QStringList*, unsigned ) ) );
+                      this, SLOT( spellCheckerMisspelling( QString, QStringList*, unsigned ) ) );
     QObject::connect( kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
-		      this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
+                      this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
     QObject::connect( kspell, SIGNAL( done( const QString & ) ), this, SLOT( spellCheckerDone( const QString & ) ) );
 }
 
@@ -1534,9 +1534,9 @@ void KWordView::extraAutoFormat()
 void KWordView::extraStylist()
 {
     if ( styleManager ) {
-	styleManager->close();
-	delete styleManager;
-	styleManager = 0;
+        styleManager->close();
+        delete styleManager;
+        styleManager = 0;
     }
     styleManager = new KWStyleManager( this, m_pKWordDoc, fontList );
     connect( styleManager, SIGNAL( okClicked() ), this, SLOT( styleManagerOk() ) );
@@ -1554,11 +1554,11 @@ void KWordView::extraCreateTemplate()
     m_pKWordDoc->saveNativeFormat( file );
 
     KoTemplateCreateDia::createTemplate( "kword_template", KWordFactory::global(),
-					 file, pix, this );
+                                         file, pix, this );
     system( QString( "rm %1" ).arg( file ).latin1() );
     KWordFactory::global()->dirs()->addResourceType("kword_template",
-						    KStandardDirs::kde_default( "data" ) +
-						    "kword/templates/");
+                                                    KStandardDirs::kde_default( "data" ) +
+                                                    "kword/templates/");
 }
 
 /*===============================================================*/
@@ -1570,7 +1570,7 @@ void KWordView::extraOptions()
 void KWordView::toolsEdit()
 {
     if ( !( (KToggleAction*)actionToolsEdit )->isChecked() )
-	return;
+        return;
     gui->getPaperWidget()->mmEdit();
 }
 
@@ -1578,7 +1578,7 @@ void KWordView::toolsEdit()
 void KWordView::toolsEditFrame()
 {
     if ( !( (KToggleAction*)actionToolsEditFrames )->isChecked() )
-	return;
+        return;
     gui->getPaperWidget()->mmEditFrame();
 }
 
@@ -1586,7 +1586,7 @@ void KWordView::toolsEditFrame()
 void KWordView::toolsCreateText()
 {
     if ( !( (KToggleAction*)actionToolsCreateText )->isChecked() )
-	return;
+        return;
     gui->getPaperWidget()->mmCreateText();
 }
 
@@ -1594,7 +1594,7 @@ void KWordView::toolsCreateText()
 void KWordView::toolsCreatePix()
 {
     if ( !( (KToggleAction*)actionToolsCreatePix )->isChecked() )
-	return;
+        return;
     gui->getPaperWidget()->mmEdit();
 
     QString file;
@@ -1604,7 +1604,7 @@ void KWordView::toolsCreatePix()
     fd.setContentsPreviewWidget( new Preview( &fd ) );
     fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     if ( fd.exec() == QDialog::Accepted )
-	file = fd.selectedFile();
+        file = fd.selectedFile();
 #else
     KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Writing), 0, 0, TRUE );
     //fd.setPreviewMode( FALSE, TRUE );
@@ -1613,7 +1613,7 @@ void KWordView::toolsCreatePix()
     //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
-	url = fd.selectedURL();
+        url = fd.selectedURL();
 
     if( url.isEmpty() )
       return;
@@ -1628,17 +1628,17 @@ void KWordView::toolsCreatePix()
 #endif
 
     if ( !file.isEmpty() ) {
-	gui->getPaperWidget()->mmCreatePix();
-	gui->getPaperWidget()->setPixmapFilename( file );
+        gui->getPaperWidget()->mmCreatePix();
+        gui->getPaperWidget()->setPixmapFilename( file );
     } else
-	gui->getPaperWidget()->mmEdit();
+        gui->getPaperWidget()->mmEdit();
 }
 
 /*===============================================================*/
 void KWordView::toolsClipart()
 {
     if ( !( (KToggleAction*)actionToolsCreateClip )->isChecked() )
-	return;
+        return;
     gui->getPaperWidget()->mmClipart();
 }
 
@@ -1646,18 +1646,18 @@ void KWordView::toolsClipart()
 void KWordView::toolsTable()
 {
     if ( !( (KToggleAction*)actionToolsCreateTable )->isChecked() )
-	return;
+        return;
     if ( tableDia ) {
-	tableDia->close();
-	delete tableDia;
-	tableDia = 0L;
+        tableDia->close();
+        delete tableDia;
+        tableDia = 0L;
     }
 
     tableDia = new KWTableDia( this, "", gui->getPaperWidget(), m_pKWordDoc,
-			       gui->getPaperWidget()->tableRows(),
-			       gui->getPaperWidget()->tableCols(),
-			       gui->getPaperWidget()->tableWidthMode(),
-			       gui->getPaperWidget()->tableHeightMode() );
+                               gui->getPaperWidget()->tableRows(),
+                               gui->getPaperWidget()->tableCols(),
+                               gui->getPaperWidget()->tableWidthMode(),
+                               gui->getPaperWidget()->tableHeightMode() );
     tableDia->setCaption( i18n( "KWord - Insert Table" ) );
     tableDia->show();
 }
@@ -1666,7 +1666,7 @@ void KWordView::toolsTable()
 void KWordView::toolsKSpreadTable()
 {
     if ( !( (KToggleAction*)actionToolsCreateKSpreadTable )->isChecked() )
-	return;
+        return;
     gui->getPaperWidget()->mmKSpreadTable();
 
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kspread" );
@@ -1683,7 +1683,7 @@ void KWordView::toolsKSpreadTable()
 void KWordView::toolsFormula()
 {
     if ( !( (KToggleAction*)actionToolsCreateFormula )->isChecked() )
-	return;
+        return;
     gui->getPaperWidget()->mmFormula();
 }
 
@@ -1691,12 +1691,12 @@ void KWordView::toolsFormula()
 void KWordView::toolsPart()
 {
     if ( !( (KToggleAction*)actionToolsCreatePart )->isChecked() )
-	return;
+        return;
     gui->getPaperWidget()->mmEdit();
 
     KoDocumentEntry pe = KoPartSelectDia::selectPart( this );
     if ( pe.isEmpty() )
-	return;
+        return;
 
     gui->getPaperWidget()->mmPart();
     gui->getPaperWidget()->setPartEntry( pe );
@@ -1713,11 +1713,11 @@ void KWordView::tableInsertRow()
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
                                   "before inserting a new row." ),
-			    i18n( "Insert Row" ) );
+                            i18n( "Insert Row" ) );
     } else {
-	KWInsertDia dia( this, "", grpMgr, m_pKWordDoc, KWInsertDia::ROW, gui->getPaperWidget() );
-	dia.setCaption( i18n( "Insert Row" ) );
-	dia.show();
+        KWInsertDia dia( this, "", grpMgr, m_pKWordDoc, KWInsertDia::ROW, gui->getPaperWidget() );
+        dia.setCaption( i18n( "Insert Row" ) );
+        dia.show();
     }
 }
 
@@ -1732,21 +1732,21 @@ void KWordView::tableInsertCol()
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
                                   "before inserting a new column." ),
-			    i18n( "Insert Column" ) );
+                            i18n( "Insert Column" ) );
     } else {
-	if ( grpMgr->getBoundingRect().right() + 62 > static_cast<int>( m_pKWordDoc->getPTPaperWidth() ) )
+        if ( grpMgr->getBoundingRect().right() + 62 > static_cast<int>( m_pKWordDoc->getPTPaperWidth() ) )
         {
             KMessageBox::sorry( this,
                             i18n( "There is not enough space at the right of the table\n"
                                   "to insert a new column." ),
-			    i18n( "Insert Column" ) );
-	}
-	else
-	{
-	    KWInsertDia dia( this, "", grpMgr, m_pKWordDoc, KWInsertDia::COL, gui->getPaperWidget() );
-	    dia.setCaption( i18n( "Insert Column" ) );
-	    dia.show();
-	}
+                            i18n( "Insert Column" ) );
+        }
+        else
+        {
+            KWInsertDia dia( this, "", grpMgr, m_pKWordDoc, KWInsertDia::COL, gui->getPaperWidget() );
+            dia.setCaption( i18n( "Insert Column" ) );
+            dia.show();
+        }
     }
 }
 
@@ -1761,26 +1761,26 @@ void KWordView::tableDeleteRow()
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
                                   "before deleting a row." ),
-			    i18n( "Delete Row" ) );
+                            i18n( "Delete Row" ) );
     } else {
-	if ( grpMgr->getRows() == 1 )
-	{
-	    int result;
-	    result = KMessageBox::warningContinueCancel(this,
-	    		i18n("The table has only one row.\n"
-	    		     "Deleting this row will delete the table.\n\n"
-	    		     "Do you want to delete the table?"),
-	    		i18n("Delete Row"),
-	    		i18n("&Delete"));
-	    if (result == KMessageBox::Continue)
-	    {
-	        gui->getPaperWidget()->deleteTable( grpMgr );
-	    }
-	} else {
-	    KWDeleteDia dia( this, "", grpMgr, m_pKWordDoc, KWDeleteDia::ROW, gui->getPaperWidget() );
-	    dia.setCaption( i18n( "Delete Row" ) );
-	    dia.show();
-	}
+        if ( grpMgr->getRows() == 1 )
+        {
+            int result;
+            result = KMessageBox::warningContinueCancel(this,
+                        i18n("The table has only one row.\n"
+                             "Deleting this row will delete the table.\n\n"
+                             "Do you want to delete the table?"),
+                        i18n("Delete Row"),
+                        i18n("&Delete"));
+            if (result == KMessageBox::Continue)
+            {
+                gui->getPaperWidget()->deleteTable( grpMgr );
+            }
+        } else {
+            KWDeleteDia dia( this, "", grpMgr, m_pKWordDoc, KWDeleteDia::ROW, gui->getPaperWidget() );
+            dia.setCaption( i18n( "Delete Row" ) );
+            dia.show();
+        }
     }
 }
 
@@ -1795,26 +1795,26 @@ void KWordView::tableDeleteCol()
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
                                   "before deleting a column." ),
-			    i18n( "Delete Column" ) );
+                            i18n( "Delete Column" ) );
     } else {
-	if ( grpMgr->getCols() == 1 )
-	{
-	    int result;
-	    result = KMessageBox::warningContinueCancel(this,
-	    		i18n("The table has only one column.\n"
-	    		     "Deleting this column will delete the table.\n\n"
-	    		     "Do you want to delete the table?"),
-	    		i18n("Delete Column"),
-	    		i18n("&Delete"));
-	    if (result == KMessageBox::Continue)
-	    {
-	        gui->getPaperWidget()->deleteTable( grpMgr );
-	    }
-	} else {
-	    KWDeleteDia dia( this, "", grpMgr, m_pKWordDoc, KWDeleteDia::COL, gui->getPaperWidget() );
-	    dia.setCaption( i18n( "Delete Column" ) );
-	    dia.show();
-	}
+        if ( grpMgr->getCols() == 1 )
+        {
+            int result;
+            result = KMessageBox::warningContinueCancel(this,
+                        i18n("The table has only one column.\n"
+                             "Deleting this column will delete the table.\n\n"
+                             "Do you want to delete the table?"),
+                        i18n("Delete Column"),
+                        i18n("&Delete"));
+            if (result == KMessageBox::Continue)
+            {
+                gui->getPaperWidget()->deleteTable( grpMgr );
+            }
+        } else {
+            KWDeleteDia dia( this, "", grpMgr, m_pKWordDoc, KWDeleteDia::COL, gui->getPaperWidget() );
+            dia.setCaption( i18n( "Delete Column" ) );
+            dia.show();
+        }
     }
 }
 
@@ -1829,23 +1829,23 @@ void KWordView::tableJoinCells()
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
                                   "before joining cells." ),
-			    i18n( "Join Cells" ) );
+                            i18n( "Join Cells" ) );
     } else {
-	QPainter painter;
-	painter.begin( gui->getPaperWidget() );
-	if ( !grpMgr->joinCells() )
-	{
-	    KMessageBox::sorry( this,
-				i18n( "You have to select some cells which are next to each other\n"
-				      "and are not already joined." ),
-				i18n( "Join Cells" ) );
-	}
-	painter.end();
-	QRect r = grpMgr->getBoundingRect();
-	r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
-		   r.y() - gui->getPaperWidget()->contentsY(),
-		   r.width(), r.height() );
-	gui->getPaperWidget()->repaintScreen( r, TRUE );
+        QPainter painter;
+        painter.begin( gui->getPaperWidget() );
+        if ( !grpMgr->joinCells() )
+        {
+            KMessageBox::sorry( this,
+                                i18n( "You have to select some cells which are next to each other\n"
+                                      "and are not already joined." ),
+                                i18n( "Join Cells" ) );
+        }
+        painter.end();
+        QRect r = grpMgr->getBoundingRect();
+        r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
+                   r.y() - gui->getPaperWidget()->contentsY(),
+                   r.width(), r.height() );
+        gui->getPaperWidget()->repaintScreen( r, TRUE );
     }
 }
 
@@ -1860,22 +1860,22 @@ void KWordView::tableSplitCells()
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
                                   "before splitting cells." ),
-			    i18n( "Split Cells" ) );
+                            i18n( "Split Cells" ) );
     } else {
-	QPainter painter;
-	painter.begin( gui->getPaperWidget() );
-	if ( !grpMgr->splitCell() )
-	{
-	    KMessageBox::sorry( this,
-	                        i18n("You have to select a joined cell."),
-	                        i18n("Split Cells") );
-	}				
-	painter.end();
-	QRect r = grpMgr->getBoundingRect();
-	r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
-		   r.y() - gui->getPaperWidget()->contentsY(),
-		   r.width(), r.height() );
-	gui->getPaperWidget()->repaintScreen( r, TRUE );
+        QPainter painter;
+        painter.begin( gui->getPaperWidget() );
+        if ( !grpMgr->splitCell() )
+        {
+            KMessageBox::sorry( this,
+                                i18n("You have to select a joined cell."),
+                                i18n("Split Cells") );
+        }
+        painter.end();
+        QRect r = grpMgr->getBoundingRect();
+        r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
+                   r.y() - gui->getPaperWidget()->contentsY(),
+                   r.width(), r.height() );
+        gui->getPaperWidget()->repaintScreen( r, TRUE );
     }
 }
 
@@ -1890,23 +1890,23 @@ void KWordView::tableUngroupTable()
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
                                   "before ungrouping a table." ),
-			    i18n( "Ungroup Table" ) );
+                            i18n( "Ungroup Table" ) );
     } else {
         int result;
         result = KMessageBox::warningContinueCancel(this,
-        		i18n("Ungrouping a table can not be undone.\n"
-        		     "Are you sure you want to ungroup the table?"),
-        		i18n("Ungroup Table"), i18n("&Ungroup"));
-	if (result == KMessageBox::Continue)
-	{
-	    QRect r = grpMgr->getBoundingRect();
-	    grpMgr->ungroup();
-	    r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
-		       r.y() - gui->getPaperWidget()->contentsY(),
-		       r.width(), r.height() );
-	    gui->getPaperWidget()->repaintScreen( r, TRUE );
+                        i18n("Ungrouping a table can not be undone.\n"
+                             "Are you sure you want to ungroup the table?"),
+                        i18n("Ungroup Table"), i18n("&Ungroup"));
+        if (result == KMessageBox::Continue)
+        {
+            QRect r = grpMgr->getBoundingRect();
+            grpMgr->ungroup();
+            r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
+                       r.y() - gui->getPaperWidget()->contentsY(),
+                       r.width(), r.height() );
+            gui->getPaperWidget()->repaintScreen( r, TRUE );
             m_pKWordDoc->delGroupManager(grpMgr);
-	}
+        }
     }
 }
 
@@ -1917,13 +1917,13 @@ void KWordView::tableDelete()
     if ( !grpMgr )
     {
         KMessageBox::sorry( this,
-	                    i18n( "You have to put the cursor into a table \n"
-			          "or select it to delete it!" ),
-			    i18n( "Delete Table" ) );
-    }			
+                            i18n( "You have to put the cursor into a table \n"
+                                  "or select it to delete it!" ),
+                            i18n( "Delete Table" ) );
+    }
     else
     {
-	gui->getPaperWidget()->deleteTable( grpMgr );
+        gui->getPaperWidget()->deleteTable( grpMgr );
     }
 }
 
@@ -1932,11 +1932,11 @@ void KWordView::textStyleSelected( const QString &_style )
 {
     QString style = _style;
     if ( gui )
-	gui->getPaperWidget()->applyStyle( style );
+        gui->getPaperWidget()->applyStyle( style );
     format = m_pKWordDoc->findParagLayout( style )->getFormat();
     if ( gui ) {
-	gui->getPaperWidget()->formatChanged( format, FALSE );
-	gui->getPaperWidget()->setFocus();
+        gui->getPaperWidget()->formatChanged( format, FALSE );
+        gui->getPaperWidget()->setFocus();
     }
     updateStyle( style, FALSE );
 }
@@ -1948,8 +1948,8 @@ void KWordView::textSizeSelected( const QString &_size)
     tbFont.setPointSize( size.toInt() );
     format.setPTFontSize( size.toInt() );
     if ( gui ) {
-	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::FontSize );
-	gui->getPaperWidget()->setFocus();
+        gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::FontSize );
+        gui->getPaperWidget()->setFocus();
     }
 }
 
@@ -1960,8 +1960,8 @@ void KWordView::textFontSelected( const QString &_font )
     tbFont.setFamily( font );
     format.setUserFont( m_pKWordDoc->findUserFont( font ) );
     if ( gui ) {
-	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::FontFamily );
-	gui->getPaperWidget()->setFocus();
+        gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::FontFamily );
+        gui->getPaperWidget()->setFocus();
     }
 }
 
@@ -1971,7 +1971,7 @@ void KWordView::textBold()
     tbFont.setBold( !tbFont.bold() );
     format.setWeight( tbFont.bold() ? QFont::Bold : QFont::Normal );
     if ( gui )
-	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Weight );
+        gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Weight );
 }
 
 /*========================== text italic ========================*/
@@ -1980,7 +1980,7 @@ void KWordView::textItalic()
     tbFont.setItalic( !tbFont.italic() );
     format.setItalic( tbFont.italic() ? 1 : 0 );
     if ( gui )
-	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Italic );
+        gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Italic );
 }
 
 /*======================== text underline =======================*/
@@ -1989,19 +1989,19 @@ void KWordView::textUnderline()
     tbFont.setUnderline( !tbFont.underline() );
     format.setUnderline( tbFont.underline() ? 1 : 0 );
     if ( gui )
-	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Underline );
+        gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Underline );
 }
 
 /*=========================== text color ========================*/
 void KWordView::textColor()
 {
     if ( KColorDialog::getColor( tbColor ) ) {
-	( (KColorAction*)actionFormatColor )->blockSignals( TRUE );
-	( (KColorAction*)actionFormatColor )->setColor( tbColor );
-	( (KColorAction*)actionFormatColor )->blockSignals( FALSE );
-	format.setColor( tbColor );
-	if ( gui )
-	    gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Color );
+        ( (KColorAction*)actionFormatColor )->blockSignals( TRUE );
+        ( (KColorAction*)actionFormatColor )->setColor( tbColor );
+        ( (KColorAction*)actionFormatColor )->blockSignals( FALSE );
+        format.setColor( tbColor );
+        if ( gui )
+            gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Color );
     }
 }
 
@@ -2009,40 +2009,40 @@ void KWordView::textColor()
 void KWordView::textAlignLeft()
 {
     if ( !( (KToggleAction*)actionFormatAlignLeft )->isChecked() )
-	return;
+        return;
     flow = KWParagLayout::LEFT;
     if ( gui )
-	gui->getPaperWidget()->setFlow( KWParagLayout::LEFT );
+        gui->getPaperWidget()->setFlow( KWParagLayout::LEFT );
 }
 
 /*======================= text align center =====================*/
 void KWordView::textAlignCenter()
 {
     if ( !( (KToggleAction*)actionFormatAlignCenter )->isChecked() )
-	return;
+        return;
     flow = KWParagLayout::CENTER;
     if ( gui )
-	gui->getPaperWidget()->setFlow( KWParagLayout::CENTER );
+        gui->getPaperWidget()->setFlow( KWParagLayout::CENTER );
 }
 
 /*======================= text align right ======================*/
 void KWordView::textAlignRight()
 {
     if ( !( (KToggleAction*)actionFormatAlignRight )->isChecked() )
-	return;
+        return;
     flow = KWParagLayout::RIGHT;
     if ( gui )
-	gui->getPaperWidget()->setFlow( KWParagLayout::RIGHT );
+        gui->getPaperWidget()->setFlow( KWParagLayout::RIGHT );
 }
 
 /*======================= text align block ======================*/
 void KWordView::textAlignBlock()
 {
     if ( !( (KToggleAction*)actionFormatAlignBlock )->isChecked() )
-	return;
+        return;
     flow = KWParagLayout::BLOCK;
     if ( gui )
-	gui->getPaperWidget()->setFlow( KWParagLayout::BLOCK );
+        gui->getPaperWidget()->setFlow( KWParagLayout::BLOCK );
 }
 
 /*===============================================================*/
@@ -2051,7 +2051,7 @@ void KWordView::textLineSpacing( const QString &spc)
     KWUnit u;
     u.setPT( spc.toInt() );
     if ( gui )
-	gui->getPaperWidget()->setLineSpacing( u );
+        gui->getPaperWidget()->setLineSpacing( u );
 }
 
 /*====================== enumerated list ========================*/
@@ -2059,11 +2059,11 @@ void KWordView::textEnumList()
 {
     bool b = ( (KToggleAction*)actionFormatEnumList )->isChecked();
     if ( b ) {
-	if ( gui )
-	    gui->getPaperWidget()->setEnumList();
+        if ( gui )
+            gui->getPaperWidget()->setEnumList();
     } else {
-	if ( gui )
-	    gui->getPaperWidget()->setNormalText();
+        if ( gui )
+            gui->getPaperWidget()->setNormalText();
     }
 }
 
@@ -2072,11 +2072,11 @@ void KWordView::textUnsortList()
 {
     bool b = ( (KToggleAction*)actionFormatUnsortList )->isChecked();
     if ( b ) {
-	if ( gui )
-	    gui->getPaperWidget()->setBulletList();
+        if ( gui )
+            gui->getPaperWidget()->setBulletList();
     } else {
-	if ( gui )
-	    gui->getPaperWidget()->setNormalText();
+        if ( gui )
+            gui->getPaperWidget()->setNormalText();
     }
 }
 
@@ -2085,12 +2085,12 @@ void KWordView::textSuperScript()
 {
     bool b = ( (KToggleAction*)actionFormatSuper )->isChecked();
     if ( b )
-	vertAlign = KWFormat::VA_SUPER;
+        vertAlign = KWFormat::VA_SUPER;
     else
-	vertAlign = KWFormat::VA_NORMAL;
+        vertAlign = KWFormat::VA_NORMAL;
     format.setVertAlign( vertAlign );
     if ( gui )
-	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Vertalign );
+        gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Vertalign );
 }
 
 /*===============================================================*/
@@ -2098,12 +2098,12 @@ void KWordView::textSubScript()
 {
     bool b = ( (KToggleAction*)actionFormatSub )->isChecked();
     if ( b )
-	vertAlign = KWFormat::VA_SUB;
+        vertAlign = KWFormat::VA_SUB;
     else
-	vertAlign = KWFormat::VA_NORMAL;
+        vertAlign = KWFormat::VA_NORMAL;
     format.setVertAlign( vertAlign );
     if ( gui )
-	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Vertalign );
+        gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::Vertalign );
 }
 
 /*===============================================================*/
@@ -2111,12 +2111,12 @@ void KWordView::textBorderLeft()
 {
     bool b = ( (KToggleAction*)actionFormatBrdLeft )->isChecked();
     if ( b )
-	left = tmpBrd;
+        left = tmpBrd;
     else
-	left.ptWidth = 0;
+        left.ptWidth = 0;
 
     if ( gui )
-	gui->getPaperWidget()->setParagLeftBorder( left );
+        gui->getPaperWidget()->setParagLeftBorder( left );
 }
 
 /*===============================================================*/
@@ -2124,12 +2124,12 @@ void KWordView::textBorderRight()
 {
     bool b = ( (KToggleAction*)actionFormatBrdRight )->isChecked();
     if ( b )
-	right = tmpBrd;
+        right = tmpBrd;
     else
-	right.ptWidth = 0;
+        right.ptWidth = 0;
 
     if ( gui )
-	gui->getPaperWidget()->setParagRightBorder( right );
+        gui->getPaperWidget()->setParagRightBorder( right );
 }
 
 /*===============================================================*/
@@ -2137,12 +2137,12 @@ void KWordView::textBorderTop()
 {
     bool b = ( (KToggleAction*)actionFormatBrdTop )->isChecked();
     if ( b )
-	top = tmpBrd;
+        top = tmpBrd;
     else
-	top.ptWidth = 0;
+        top.ptWidth = 0;
 
     if ( gui )
-	gui->getPaperWidget()->setParagTopBorder( top );
+        gui->getPaperWidget()->setParagTopBorder( top );
 }
 
 /*===============================================================*/
@@ -2150,21 +2150,21 @@ void KWordView::textBorderBottom()
 {
     bool b = ( (KToggleAction*)actionFormatBrdBottom )->isChecked();
     if ( b )
-	bottom = tmpBrd;
+        bottom = tmpBrd;
     else
-	bottom.ptWidth = 0;
+        bottom.ptWidth = 0;
 
     if ( gui )
-	gui->getPaperWidget()->setParagBottomBorder( bottom );
+        gui->getPaperWidget()->setParagBottomBorder( bottom );
 }
 
 /*================================================================*/
 void KWordView::textBorderColor()
 {
     if ( KColorDialog::getColor( tmpBrd.color ) ) {
-	( (KColorAction*)actionFormatBrdColor )->blockSignals( TRUE );
-	( (KColorAction*)actionFormatBrdColor )->setColor( tmpBrd.color );
-	( (KColorAction*)actionFormatBrdColor )->blockSignals( FALSE );
+        ( (KColorAction*)actionFormatBrdColor )->blockSignals( TRUE );
+        ( (KColorAction*)actionFormatBrdColor )->setColor( tmpBrd.color );
+        ( (KColorAction*)actionFormatBrdColor )->blockSignals( FALSE );
     }
 }
 
@@ -2180,15 +2180,15 @@ void KWordView::textBorderStyle( const QString &style )
     QString stl = style;
 
     if ( stl == i18n( "solid line" ) )
-	tmpBrd.style = KWParagLayout::SOLID;
+        tmpBrd.style = KWParagLayout::SOLID;
     else if ( stl == i18n( "dash line ( ---- )" ) )
-	tmpBrd.style = KWParagLayout::DASH;
+        tmpBrd.style = KWParagLayout::DASH;
     else if ( stl == i18n( "dot line ( **** )" ) )
-	tmpBrd.style = KWParagLayout::DOT;
+        tmpBrd.style = KWParagLayout::DOT;
     else if ( stl == i18n( "dash dot line ( -*-* )" ) )
-	tmpBrd.style = KWParagLayout::DASH_DOT;
+        tmpBrd.style = KWParagLayout::DASH_DOT;
     else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
-	tmpBrd.style = KWParagLayout::DASH_DOT_DOT;
+        tmpBrd.style = KWParagLayout::DASH_DOT_DOT;
 }
 
 /*================================================================*/
@@ -2196,7 +2196,7 @@ void KWordView::frameBorderLeft()
 {
     bool b = ( (KToggleAction*)actionFrameBrdLeft )->isChecked();
     if ( gui )
-	gui->getPaperWidget()->setLeftFrameBorder( frmBrd, b );
+        gui->getPaperWidget()->setLeftFrameBorder( frmBrd, b );
 }
 
 /*================================================================*/
@@ -2204,7 +2204,7 @@ void KWordView::frameBorderRight()
 {
     bool b = ( (KToggleAction*)actionFrameBrdRight )->isChecked();
     if ( gui )
-	gui->getPaperWidget()->setRightFrameBorder( frmBrd, b );
+        gui->getPaperWidget()->setRightFrameBorder( frmBrd, b );
 }
 
 /*================================================================*/
@@ -2212,7 +2212,7 @@ void KWordView::frameBorderTop()
 {
     bool b = ( (KToggleAction*)actionFrameBrdTop )->isChecked();
     if ( gui )
-	gui->getPaperWidget()->setTopFrameBorder( frmBrd, b );
+        gui->getPaperWidget()->setTopFrameBorder( frmBrd, b );
 }
 
 /*================================================================*/
@@ -2220,16 +2220,16 @@ void KWordView::frameBorderBottom()
 {
     bool b = ( (KToggleAction*)actionFrameBrdBottom )->isChecked();
     if ( gui )
-	gui->getPaperWidget()->setBottomFrameBorder( frmBrd, b );
+        gui->getPaperWidget()->setBottomFrameBorder( frmBrd, b );
 }
 
 /*================================================================*/
 void KWordView::frameBorderColor()
 {
     if ( KColorDialog::getColor( frmBrd.color ) ) {
-	( (KColorAction*)actionFrameBrdColor )->blockSignals( TRUE );
-	( (KColorAction*)actionFrameBrdColor )->setColor( frmBrd.color );
-	( (KColorAction*)actionFrameBrdColor )->blockSignals( FALSE );
+        ( (KColorAction*)actionFrameBrdColor )->blockSignals( TRUE );
+        ( (KColorAction*)actionFrameBrdColor )->setColor( frmBrd.color );
+        ( (KColorAction*)actionFrameBrdColor )->blockSignals( FALSE );
     }
 }
 
@@ -2245,15 +2245,15 @@ void KWordView::frameBorderStyle( const QString &style )
     QString stl = style;
 
     if ( stl == i18n( "solid line" ) )
-	frmBrd.style = KWParagLayout::SOLID;
+        frmBrd.style = KWParagLayout::SOLID;
     else if ( stl == i18n( "dash line ( ---- )" ) )
-	frmBrd.style = KWParagLayout::DASH;
+        frmBrd.style = KWParagLayout::DASH;
     else if ( stl == i18n( "dot line ( **** )" ) )
-	frmBrd.style = KWParagLayout::DOT;
+        frmBrd.style = KWParagLayout::DOT;
     else if ( stl == i18n( "dash dot line ( -*-* )" ) )
-	frmBrd.style = KWParagLayout::DASH_DOT;
+        frmBrd.style = KWParagLayout::DASH_DOT;
     else if ( stl == i18n( "dash dot dot line ( -**- )" ) )
-	frmBrd.style = KWParagLayout::DASH_DOT_DOT;
+        frmBrd.style = KWParagLayout::DASH_DOT_DOT;
 }
 
 /*================================================================*/
@@ -2261,12 +2261,12 @@ void KWordView::frameBackColor()
 {
     QColor c = backColor.color();
     if ( KColorDialog::getColor( c ) ) {
-	backColor.setColor( c );
-	( (KColorAction*)actionFrameBackColor )->blockSignals( TRUE );
-	( (KColorAction*)actionFrameBackColor )->setColor( c );
-	( (KColorAction*)actionFrameBackColor )->blockSignals( FALSE );
-	if ( gui )
-	    gui->getPaperWidget()->setFrameBackgroundColor( backColor );
+        backColor.setColor( c );
+        ( (KColorAction*)actionFrameBackColor )->blockSignals( TRUE );
+        ( (KColorAction*)actionFrameBackColor )->setColor( c );
+        ( (KColorAction*)actionFrameBackColor )->blockSignals( FALSE );
+        if ( gui )
+            gui->getPaperWidget()->setFrameBackgroundColor( backColor );
     }
 }
 
@@ -2371,28 +2371,28 @@ void KWordView::keyReleaseEvent( QKeyEvent *e )
 void KWordView::mousePressEvent( QMouseEvent *e )
 {
     if ( gui )
-	QApplication::sendEvent( gui->getPaperWidget(), e );
+        QApplication::sendEvent( gui->getPaperWidget(), e );
 }
 
 /*================================================================*/
 void KWordView::mouseMoveEvent( QMouseEvent *e )
 {
     if ( gui )
-	QApplication::sendEvent( gui->getPaperWidget(), e );
+        QApplication::sendEvent( gui->getPaperWidget(), e );
 }
 
 /*================================================================*/
 void KWordView::mouseReleaseEvent( QMouseEvent *e )
 {
     if ( gui )
-	QApplication::sendEvent( gui->getPaperWidget(), e );
+        QApplication::sendEvent( gui->getPaperWidget(), e );
 }
 
 /*================================================================*/
 void KWordView::focusInEvent( QFocusEvent *e )
 {
     if ( gui )
-	QApplication::sendEvent( gui->getPaperWidget(), e );
+        QApplication::sendEvent( gui->getPaperWidget(), e );
 }
 
 /*================================================================*/
@@ -2457,18 +2457,18 @@ void KWordView::paragDiaOk()
     {
     case U_MM:
     {
-	gui->getHorzRuler()->setLeftIndent( paragDia->getLeftIndent().mm() );
-	gui->getHorzRuler()->setFirstIndent( paragDia->getFirstLineIndent().mm() );
+        gui->getHorzRuler()->setLeftIndent( paragDia->getLeftIndent().mm() );
+        gui->getHorzRuler()->setFirstIndent( paragDia->getFirstLineIndent().mm() );
     } break;
     case U_INCH:
     {
-	gui->getHorzRuler()->setLeftIndent( paragDia->getLeftIndent().inch() );
-	gui->getHorzRuler()->setFirstIndent( paragDia->getFirstLineIndent().inch() );
+        gui->getHorzRuler()->setLeftIndent( paragDia->getLeftIndent().inch() );
+        gui->getHorzRuler()->setFirstIndent( paragDia->getFirstLineIndent().inch() );
     } break;
     case U_PT:
     {
-	gui->getHorzRuler()->setLeftIndent( paragDia->getLeftIndent().pt() );
-	gui->getHorzRuler()->setFirstIndent( paragDia->getFirstLineIndent().pt() );
+        gui->getHorzRuler()->setLeftIndent( paragDia->getLeftIndent().pt() );
+        gui->getHorzRuler()->setFirstIndent( paragDia->getFirstLineIndent().pt() );
     } break;
     }
 
@@ -2511,24 +2511,24 @@ void KWordView::spellCheckerReady()
 
     currParag = 0;
     for ( unsigned int i = 0; i < m_pKWordDoc->getNumFrameSets(); i++ ) {
-	KWFrameSet *frameset = m_pKWordDoc->getFrameSet( i );
-	if ( frameset->getFrameType() != FT_TEXT )
-	    continue;
-	currFrameSetNum = i;
-	currParag = dynamic_cast<KWTextFrameSet*>( frameset )->getFirstParag();
-	break;
+        KWFrameSet *frameset = m_pKWordDoc->getFrameSet( i );
+        if ( frameset->getFrameType() != FT_TEXT )
+            continue;
+        currFrameSetNum = i;
+        currParag = dynamic_cast<KWTextFrameSet*>( frameset )->getFirstParag();
+        break;
     }
-	
+
     if ( !currParag ) {
-	kspell->cleanUp();
-	return;
+        kspell->cleanUp();
+        return;
     }
 
     QString text;
     KWParag *p = currParag;
     while ( currParag ) {
-	text += currParag->getKWString()->toString() + "\n";
-	currParag = currParag->getNext();
+        text += currParag->getKWString()->toString() + "\n";
+        currParag = currParag->getNext();
     }
     text += "\n";
     currParag = p;
@@ -2545,23 +2545,23 @@ void KWordView::spellCheckerMisspelling( QString , QStringList* , unsigned )
 void KWordView::spellCheckerCorrected( QString old, QString corr, unsigned )
 {
     if ( !currParag )
-	return;
+        return;
 
     QString text;
     while ( currParag ) {
-	text = currParag->getKWString()->toString();
-	int pos = text.find( old, lastTextPos );
-	if ( pos != -1 ) {
-	    KWFormat f( m_pKWordDoc );
-	    f = *( ( (KWCharFormat*)currParag->getKWString()->data()[ pos ].attrib )->getFormat() );
-	    currParag->getKWString()->remove( pos, old.length() );
-	    currParag->insertText( pos, corr );
-	    currParag->setFormat( pos, corr.length(), f );
-	    lastTextPos = pos + corr.length();
-	    break;
-	}
-	currParag = currParag->getNext();
-	lastTextPos = 0;
+        text = currParag->getKWString()->toString();
+        int pos = text.find( old, lastTextPos );
+        if ( pos != -1 ) {
+            KWFormat f( m_pKWordDoc );
+            f = *( ( (KWCharFormat*)currParag->getKWString()->data()[ pos ].attrib )->getFormat() );
+            currParag->getKWString()->remove( pos, old.length() );
+            currParag->insertText( pos, corr );
+            currParag->setFormat( pos, corr.length(), f );
+            lastTextPos = pos + corr.length();
+            break;
+        }
+        currParag = currParag->getNext();
+        lastTextPos = 0;
     }
 }
 
@@ -2604,13 +2604,11 @@ void KWordView::searchDiaClosed()
 void KWordView::changeUndo( QString _text, bool _enable )
 {
     if ( _enable ) {
-	actionEditUndo->setEnabled( TRUE );
-	QString str;
-	str.sprintf( i18n( "Undo: %s" ), _text.data() );
-	actionEditUndo->setText( str );
+        actionEditUndo->setEnabled( TRUE );
+        actionEditUndo->setText(i18n( "Undo: %1" ).arg(_text));
     } else {
-	actionEditUndo->setEnabled( FALSE );
-	actionEditUndo->setText( i18n( "No Undo possible" ) );
+        actionEditUndo->setEnabled( FALSE );
+        actionEditUndo->setText( i18n( "No Undo possible" ) );
     }
 }
 
@@ -2618,18 +2616,16 @@ void KWordView::changeUndo( QString _text, bool _enable )
 void KWordView::changeRedo( QString _text, bool _enable )
 {
     if ( _enable ) {
-	actionEditRedo->setEnabled( TRUE );
-	QString str;
-	str.sprintf( i18n( "Redo: %s" ), _text.data() );
-	actionEditRedo->setText( str );
+        actionEditRedo->setEnabled( TRUE );
+        actionEditRedo->setText(i18n( "Redo: %1" ).arg(_text));
     } else {
-	actionEditRedo->setEnabled( FALSE );
-	actionEditRedo->setText( i18n( "No Redo possible" ) );
+        actionEditRedo->setEnabled( FALSE );
+        actionEditRedo->setText( i18n( "No Redo possible" ) );
     }
 }
 
 /******************************************************************/
-/* Class: KWLayoutWidget					  */
+/* Class: KWLayoutWidget                                          */
 /******************************************************************/
 
 KWLayoutWidget::KWLayoutWidget( QWidget *parent, KWordGUI *g )
@@ -2645,7 +2641,7 @@ void KWLayoutWidget::resizeEvent( QResizeEvent *e )
 }
 
 /******************************************************************/
-/* Class: KWordGUI      					  */
+/* Class: KWordGUI                                                */
 /******************************************************************/
 KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view )
     : QWidget( parent, "" )
@@ -2675,7 +2671,7 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
     tabChooser = new KoTabChooser( left, KoTabChooser::TAB_ALL );
 
     r_horz = new KoRuler( left, paperWidget->viewport(), Qt::Horizontal, layout,
-			  KoRuler::F_INDENTS | KoRuler::F_TABS, tabChooser );
+                          KoRuler::F_INDENTS | KoRuler::F_TABS, tabChooser );
     r_vert = new KoRuler( left, paperWidget->viewport(), Qt::Vertical, layout, 0 );
     connect( r_horz, SIGNAL( newPageLayout( KoPageLayout ) ), view, SLOT( newPageLayout( KoPageLayout ) ) );
     connect( r_horz, SIGNAL( newLeftIndent( double ) ), paperWidget, SLOT( newLeftIndent( double ) ) );
@@ -2691,17 +2687,17 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
 
     switch ( KWUnit::unitType( doc->getUnit() ) ) {
     case U_MM:
-    	r_horz->setLeftIndent( paperWidget->getLeftIndent().mm() );
-	r_horz->setFirstIndent( paperWidget->getFirstLineIndent().mm() );
-	break;
+        r_horz->setLeftIndent( paperWidget->getLeftIndent().mm() );
+        r_horz->setFirstIndent( paperWidget->getFirstLineIndent().mm() );
+        break;
     case U_INCH:
-    	r_horz->setLeftIndent( paperWidget->getLeftIndent().inch() );
-	r_horz->setFirstIndent( paperWidget->getFirstLineIndent().inch() );
-	break;
+        r_horz->setLeftIndent( paperWidget->getLeftIndent().inch() );
+        r_horz->setFirstIndent( paperWidget->getFirstLineIndent().inch() );
+        break;
     case U_PT:
-    	r_horz->setLeftIndent( paperWidget->getLeftIndent().pt() );
-	r_horz->setFirstIndent( paperWidget->getFirstLineIndent().pt() );
-	break;
+        r_horz->setLeftIndent( paperWidget->getLeftIndent().pt() );
+        r_horz->setFirstIndent( paperWidget->getFirstLineIndent().pt() );
+        break;
     }
 
     r_horz->hide();
@@ -2713,10 +2709,10 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
     reorganize();
 
     if ( doc->getProcessingType() == KWordDocument::DTP )
-	paperWidget->setRuler2Frame( 0, 0 );
+        paperWidget->setRuler2Frame( 0, 0 );
 
     connect( r_horz, SIGNAL( tabListChanged( QList<KoTabulator>* ) ), paperWidget,
-	     SLOT( tabListChanged( QList<KoTabulator>* ) ) );
+             SLOT( tabListChanged( QList<KoTabulator>* ) ) );
 
     paperWidget->forceFullUpdate();
 

@@ -34,7 +34,7 @@ char s_FONT_CCId[]="$Id$";
 /*================================================================*/
 KWUserFont::KWUserFont( KWordDocument *_doc, QString _name )
 {
-    fontName = qstrdup( _name );
+    fontName = qstrdup( _name.latin1() );
 
     document = _doc;
     document->userFontList.append( this );
@@ -70,7 +70,7 @@ KWDisplayFont::KWDisplayFont( KWordDocument *_doc, KWUserFont *_font, unsigned i
     ptSize = _size;
 
     for ( int i = 0; i < 65536; ++i )
-	widths[ i ] = 0;
+        widths[ i ] = 0;
     asc = fm.ascent();
     desc = fm.descent();
 }

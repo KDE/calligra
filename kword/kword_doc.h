@@ -451,7 +451,7 @@ protected:
 
     int applyStyleTemplate;
 
-    QStrList changedStyles;
+    QStringList changedStyles;
 
     bool _loaded;
 

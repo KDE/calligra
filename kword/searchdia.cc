@@ -186,7 +186,7 @@ void KWSearchDia::setupTab1()
     for ( int i = 4; i <= 100; i++ )
     {
         tmp.sprintf( "%d", i );
-        sizes.append( tmp );
+        sizes.append( tmp.latin1() );
         if ( i == searchEntry->size ) curr = i - 4;
     }
     cmSize->insertStrList( &sizes );
@@ -422,7 +422,7 @@ void KWSearchDia::setupTab2()
     for ( int i = 4; i <= 100; i++ )
     {
         tmp.sprintf( "%d", i );
-        sizes.append( tmp );
+        sizes.append( tmp.latin1() );
         if ( i == replaceEntry->size ) curr = i - 4;
     }
     rcmSize->insertStrList( &sizes );
@@ -708,18 +708,18 @@ void KWSearchDia::slotCheckVertAlign()
 /*================================================================*/
 void KWSearchDia::slotFamily( const QString & family )
 {
-    searchEntry->family = qstrdup( family );
+    searchEntry->family = qstrdup( family.latin1() );
     view->setSearchEntry( searchEntry );
 
     QFont f = QFont( KGlobalSettings::generalFont() );
-    f.setFamily( qstrdup( family ) );
+    f.setFamily( qstrdup( family.latin1() ) );
     eSearch->setFont( f );
 }
 
 /*================================================================*/
 void KWSearchDia::slotSize( const QString & size )
 {
-    searchEntry->size = atoi( size );
+    searchEntry->size = size.toInt();
     view->setSearchEntry( searchEntry );
 }
 
@@ -851,19 +851,19 @@ void KWSearchDia::replaceAll()
         if ( replace && cAsk->isChecked() )
         {
             int result = KMessageBox::warningYesNoCancel( this,
-            			i18n( "Replace selected text?" ),
-            			i18n( "Replace" ),
-				i18n( "&Replace" ), i18n( "&Skip" ) );
+                                i18n( "Replace selected text?" ),
+                                i18n( "Replace" ),
+                                i18n( "&Replace" ), i18n( "&Skip" ) );
 
-	    if (result == KMessageBox::Cancel)
-	    {
-	       // Cancel
-	       break;
-	    }
-	
-	    if (result == KMessageBox::No)
-	    {
-	        // Skip
+            if (result == KMessageBox::Cancel)
+            {
+               // Cancel
+               break;
+            }
+
+            if (result == KMessageBox::No)
+            {
+                // Skip
                 if ( addlen ) page->addLen();
                 page->repaintScreen( false );
                 continue;
@@ -980,18 +980,18 @@ void KWSearchDia::rslotCheckVertAlign()
 /*================================================================*/
 void KWSearchDia::rslotFamily( const QString & family )
 {
-    replaceEntry->family = qstrdup( family );
+    replaceEntry->family = qstrdup( family.latin1() );
     view->setReplaceEntry( replaceEntry );
 
     QFont f = QFont( KGlobalSettings::generalFont() );
-    f.setFamily( qstrdup( family ) );
+    f.setFamily( qstrdup( family.latin1() ) );
     eReplace->setFont( f );
 }
 
 /*================================================================*/
 void KWSearchDia::rslotSize( const QString & size )
 {
-    replaceEntry->size = atoi( size );
+    replaceEntry->size = size.toInt();
     view->setReplaceEntry( replaceEntry );
 }
 

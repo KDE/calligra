@@ -785,7 +785,7 @@ KWFrame *tmpFrame=frames.at(0);
             l = l2;
         }
 
-        if(! l->isEmpty()) 
+        if(! l->isEmpty())
             frameList.append( l );
     }
 
@@ -1245,7 +1245,7 @@ KWTextFrameSet *KWTextFrameSet::getCopy() {
         newFS->addFrame(thisFrame);
     }
 kdDebug() << "orig has " << getNumFrames() << ", new has " << newFS->getNumFrames() << endl;
-    if(newFS->getNumFrames() >0) 
+    if(newFS->getNumFrames() >0)
         newFS->assign(this);
     return newFS;
 }
@@ -2103,7 +2103,7 @@ void KWGroupManager::addFrameSet( KWFrameSet *fs, unsigned int row, unsigned int
         if ( cells.at( i )->row * 10 + cells.at( i )->col > sum )
             break;
     }
-    if(fs->getName()==0 || *fs->getName()==0) 
+    if(fs->getName().isEmpty())
         fs->setName(QString ("Cell %1,%2").arg(col+1).arg(row+1));
 
     // If the group is anchored, we must adjust the incoming frameset.
@@ -2136,9 +2136,9 @@ KWFrameSet *KWGroupManager::getFrameSet( unsigned int row, unsigned int col )
 KWGroupManager::Cell *KWGroupManager::getCell( unsigned int row, unsigned int col )
 {
     for ( unsigned int i = 0; i < cells.count(); i++ ) {
-        if ( cells.at( i )->row <= row && 
+        if ( cells.at( i )->row <= row &&
                 cells.at( i )->col <= col &&
-                cells.at( i )->row+cells.at( i )->rows > row && 
+                cells.at( i )->row+cells.at( i )->rows > row &&
                 cells.at( i )->col+cells.at( i )->cols > col ) {
             return cells.at( i );
         }
@@ -2250,7 +2250,7 @@ void KWGroupManager::recalcCols()
                     cell = getCell(i,col);
                     if(cell==activeCell)
                         cell=0;
-                    else 
+                    else
                         difference=(activeCell->frameSet->getFrame(0)->left()- coordinate) * -1;
                 } else {
                     cell = getCell(i,col-1);
@@ -2261,7 +2261,7 @@ void KWGroupManager::recalcCols()
                         cell->frameSet->getFrame(0)->width() + difference);
                 }
             }
-            if(col!=0) 
+            if(col!=0)
                 activeCell->frameSet->getFrame(0)->setWidth(
                   activeCell->frameSet->getFrame(0)->width() +
                   activeCell->frameSet->getFrame(0)->left()- coordinate);
@@ -2388,7 +2388,7 @@ void KWGroupManager::recalcRows()
         }
     }
 
-    // do positioning of frames 
+    // do positioning of frames
     unsigned int y,nextY = getFrameSet( 0, 0 )->getFrame( 0 )->y();
     for ( unsigned int j = 0; j < rows; j++ ) {
         y=nextY;
@@ -2440,7 +2440,7 @@ void KWGroupManager::recalcRows()
                 if(cell->row + cell->rows -1 == j && cell->frameSet && cell->frameSet->getFrame(0)){
                     nextY=cell->frameSet->getFrame(0) -> bottom() + 3;
                 }
-            } else 
+            } else
                 kdDebug () << "Something is wrong with this cell " <<cell->row << "," << cell->col << endl;
         }
 
@@ -2450,7 +2450,7 @@ void KWGroupManager::recalcRows()
          static_cast<int>( doc->getPTPaperHeight() * doc->getPages() ) )
         doc->appendPage( doc->getPages() - 1 );
 
-    // Reggie: UHHHHHHHHHHHH: Ugly and slow but it helps for now 
+    // Reggie: UHHHHHHHHHHHH: Ugly and slow but it helps for now
     Cell *c;
     for ( unsigned int f = 0; f < cells.count(); f++ ) {
         c = cells.at( f );
@@ -2573,7 +2573,7 @@ bool KWGroupManager::isOneSelected(unsigned int &row, unsigned int &col) {
     int selectedCell=-1;
     for ( unsigned int i = 0; i < cells.count(); i++ ) {
         if(cells.at(i)->frameSet->getFrame(0)->isSelected())  {
-            if(selectedCell==-1) 
+            if(selectedCell==-1)
                 selectedCell=i;
             else
                 selectedCell=cells.count()+1;
@@ -2813,7 +2813,7 @@ bool KWGroupManager::joinCells() {
         if(cell->frameSet->getFrame(0)->isSelected()) {
             colEnd+=cell->cols;
             //width+=cell->frameSet->getFrame(0)->width();
-        } else 
+        } else
             break;
     }
 
@@ -2828,20 +2828,20 @@ bool KWGroupManager::joinCells() {
             }
             rowEnd+=cell->rows;
             //height+=cell->frameSet->getFrame(0)->height();
-        } else 
+        } else
             break;
     }
 kdDebug() << "joining ("<< rowBegin << ","<< colBegin << ") up until (" << rowEnd << "," << colEnd << ")" << endl;
     // if just one cell selected for joining; exit.
-    if(rowBegin == rowEnd && colBegin == colEnd || 
-            getCell(rowBegin,colBegin) == getCell(rowEnd,colEnd)) 
+    if(rowBegin == rowEnd && colBegin == colEnd ||
+            getCell(rowBegin,colBegin) == getCell(rowEnd,colEnd))
         return false;
 
-    height=getCell(rowEnd,colBegin)->frameSet->getFrame(0)->bottom() - 
+    height=getCell(rowEnd,colBegin)->frameSet->getFrame(0)->bottom() -
         getCell(rowBegin,colBegin)->frameSet->getFrame(0)->top();
-    width=getCell(rowBegin,colEnd)->frameSet->getFrame(0)->right() - 
+    width=getCell(rowBegin,colEnd)->frameSet->getFrame(0)->right() -
         getCell(rowBegin,colBegin)->frameSet->getFrame(0)->left();
-    
+
     // do the actual merge.
     for(unsigned int i=colBegin; i<=colEnd;i++) {
         for(unsigned int j=rowBegin; j<=rowEnd;j++) {
@@ -2862,7 +2862,7 @@ kdDebug() << "joining ("<< rowBegin << ","<< colBegin << ") up until (" << rowEn
     recalcCols();
     recalcRows();
 
-    return true; 
+    return true;
 }
 
 /*================================================================*/

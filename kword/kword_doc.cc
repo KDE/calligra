@@ -1669,7 +1669,7 @@ bool KWordDocument::saveToStream( QIODevice * dev )
         QString format = QFileInfo( it.current()->getFilename() ).extension().upper();
         if ( format == "JPG" )
             format = "JPEG";
-        if ( QImage::outputFormats().find( format ) == -1 )
+        if ( QImage::outputFormats().find( QFile::encodeName(format) ) == -1 )
             format = "BMP";
         QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
         if ( !isStoredExtern() )
@@ -1741,7 +1741,7 @@ bool KWordDocument::completeSaving( KoStore *_store )
         QString format = QFileInfo( it.current()->getFilename() ).extension().upper();
         if ( format == "JPG" )
             format = "JPEG";
-        if ( QImage::outputFormats().find( format ) == -1 )
+        if ( QImage::outputFormats().find( QFile::encodeName(format) ) == -1 )
             format = "BMP";
 
         QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
@@ -1753,7 +1753,7 @@ bool KWordDocument::completeSaving( KoStore *_store )
             QImageIO io;
             io.setIODevice( &dev );
             io.setImage( *it.current() );
-            io.setFormat( format );
+            io.setFormat( QFile::encodeName(format) );
             io.write();
             _store->close();
         }
@@ -2238,7 +2238,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
         }
 
         if ( _fc.getTextPos() > textLen ) {
-            warning( "Reggie: WOW - something has gone really wrong here!!!!!, my position in the text is longer then my text" );
+            kdWarning() << "Reggie: WOW - something has gone really wrong here!!!!!, my position in the text is longer then my text" << endl;
             return FALSE;
         }
 
@@ -3259,7 +3259,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 }
 
 /*================================================================*/
-void KWordDocument::appendPage( unsigned int _page, bool /*redrawBackgroundWhenAppendPage*/ )
+void KWordDocument::appendPage( unsigned int /*_page*/, bool /*redrawBackgroundWhenAppendPage*/ )
 {
     //QRect pageRect( 0, _page * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
     kdDebug() <<"KWordDocument::appendPage" << endl;
@@ -3777,7 +3777,7 @@ void KWordDocument::setStyleChanged( QString _name )
 /*================================================================*/
 bool KWordDocument::isStyleChanged( QString _name )
 {
-    return ( changedStyles.find( _name ) != -1 );
+    return ( changedStyles.findIndex( _name ) != -1 );
 }
 
 /*================================================================*/

@@ -99,7 +99,7 @@ QString KWImageCollection::generateKey( KWImage &_image )
 
     // Key: filename-width-height
     // e.g. /home/reggie/pics/kde.gif-40-36
-    key.sprintf( "%s--%d-%d", _image.getFilename().data(),
+    key.sprintf( "%s--%d-%d", _image.getFilename().latin1(),
                  _image.width(), _image.height() );
     return key;
 }
@@ -111,7 +111,7 @@ QString KWImageCollection::generateKey( KWImage &_image, QSize _imgSize )
 
     // Key: filename-width-height
     // e.g. /home/reggie/pics/kde.gif-40-36
-    key.sprintf( "%s--%d-%d", _image.getFilename().data(),
+    key.sprintf( "%s--%d-%d", _image.getFilename().latin1(),
                  _imgSize.width(), _imgSize.height() );
     return key;
 }
@@ -119,7 +119,7 @@ QString KWImageCollection::generateKey( KWImage &_image, QSize _imgSize )
 /*================================================================*/
 KWImage *KWImageCollection::findImage( QString _key )
 {
-    return images.find( _key.data() );
+    return images.find( _key.latin1() );
 }
 
 /*================================================================*/
@@ -127,7 +127,7 @@ KWImage *KWImageCollection::insertImage( QString _key, KWImage &_image )
 {
     KWImage *image = new KWImage( doc, _image );
 
-    images.insert( _key.data(), image );
+    images.insert( _key.latin1(), image );
     image->incRef();
 
     return image;
@@ -144,7 +144,7 @@ KWImage *KWImageCollection::insertImage( QString _key, KWImage &_image, QSize _i
         image = new KWImage( doc, __image, _image.getFilename() );
     }
 
-    images.insert( _key.data(), image );
+    images.insert( _key.latin1(), image );
     image->incRef();
 
     return image;

@@ -30,14 +30,14 @@
 #include <unistd.h>
 
 /******************************************************************/
-/* Class: KWFormat						  */
+/* Class: KWFormat                                                */
 /******************************************************************/
 
 /*================================================================*/
 KWFormat::KWFormat( KWordDocument *_doc, const QColor& _color,
-		    KWUserFont *_font, int _font_size, int _weight,
-		    char _italic, char _underline,
-		    VertAlign _vertAlign )
+                    KWUserFont *_font, int _font_size, int _weight,
+                    char _italic, char _underline,
+                    VertAlign _vertAlign )
 {
     doc = _doc;
     color = _color;
@@ -89,7 +89,7 @@ KWFormat& KWFormat::operator=( const KWFormat& _format )
     color = _format.getColor();
     ref = 0;
     if ( !doc )
-	doc =  _format.doc;
+        doc =  _format.doc;
 
     return *this;
 }
@@ -98,24 +98,24 @@ KWFormat& KWFormat::operator=( const KWFormat& _format )
 bool KWFormat::operator==( const KWFormat & _format ) const
 {
     return ( *userFont == *_format.getUserFont() &&
-	     ptFontSize == _format.getPTFontSize() &&
-	     weight == _format.getWeight() &&
-	     italic == _format.getItalic() &&
-	     underline == _format.getUnderline() &&
-	     color == _format.getColor() &&
-	     vertAlign == _format.getVertAlign() );
+             ptFontSize == _format.getPTFontSize() &&
+             weight == _format.getWeight() &&
+             italic == _format.getItalic() &&
+             underline == _format.getUnderline() &&
+             color == _format.getColor() &&
+             vertAlign == _format.getVertAlign() );
 }
 
 /*================================================================*/
 bool KWFormat::operator!=( const KWFormat & _format ) const
 {
     return ( *userFont != *_format.getUserFont() ||
-	     ptFontSize != _format.getPTFontSize() ||
-	     weight != _format.getWeight() ||
-	     italic != _format.getItalic() ||
-	     underline != _format.getUnderline() ||
-	     color != _format.getColor() ||
-	     vertAlign != _format.getVertAlign() );
+             ptFontSize != _format.getPTFontSize() ||
+             weight != _format.getWeight() ||
+             italic != _format.getItalic() ||
+             underline != _format.getUnderline() ||
+             color != _format.getColor() ||
+             vertAlign != _format.getVertAlign() );
 }
 
 /*================================================================*/
@@ -141,22 +141,22 @@ KWDisplayFont* KWFormat::loadFont( KWordDocument *_doc )
 void KWFormat::apply( const KWFormat &_format )
 {
     if ( _format.getUserFont() )
-	userFont = _format.getUserFont();
+        userFont = _format.getUserFont();
 
     if ( _format.getPTFontSize() != -1 )
-	ptFontSize = _format.getPTFontSize();
+        ptFontSize = _format.getPTFontSize();
 
     if ( _format.getWeight() != -1 )
-	weight = _format.getWeight();
+        weight = _format.getWeight();
 
     if ( _format.getItalic() != -1 )
-	italic = _format.getItalic();
+        italic = _format.getItalic();
 
     if ( _format.getUnderline() != -1 )
-	underline = _format.getUnderline();
+        underline = _format.getUnderline();
 
     if ( _format.getColor().isValid() )
-	color = _format.getColor();
+        color = _format.getColor();
 
     vertAlign = _format.getVertAlign();
 }
@@ -169,10 +169,10 @@ void KWFormat::decRef()
     //debug( "dec ref ( %d ): %s", ref, key.data() );
 
     if ( ref <= 0 && doc )
-	doc->getFormatCollection()->removeFormat( this );
+        doc->getFormatCollection()->removeFormat( this );
 
-    if ( !doc && ref == 0 ) warning( "RefCount of the format == 0, but I couldn't delete it, "
-				     " because I have not a pointer to the document!" );
+    if ( !doc && ref == 0 ) kdWarning() << "RefCount of the format == 0, but I couldn't delete it, "
+                                " because I have not a pointer to the document!" << endl;
 }
 
 /*================================================================*/
@@ -206,114 +206,114 @@ void KWFormat::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument 
 
     while ( parser.open( 0L, tag ) )
     {
-	parser.parseTag( tag.c_str(), name, lst );
+        parser.parseTag( tag.c_str(), name, lst );
 
-	// color
-	if ( name == "COLOR" )
-	{
-	    unsigned int r = 0, g = 0, b = 0;
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "red" )
-		{
-		    r = atoi( ( *it ).m_strValue.c_str() );
-		    color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "green" )
-		{
-		    g = atoi( ( *it ).m_strValue.c_str() );
-		    color.setRgb( r, g, b );
-		}
-		else if ( ( *it ).m_strName == "blue" )
-		{
-		    b = atoi( ( *it ).m_strValue.c_str() );
-		    color.setRgb( r, g, b );
-		}
-	    }
-	}
+        // color
+        if ( name == "COLOR" )
+        {
+            unsigned int r = 0, g = 0, b = 0;
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "red" )
+                {
+                    r = atoi( ( *it ).m_strValue.c_str() );
+                    color.setRgb( r, g, b );
+                }
+                else if ( ( *it ).m_strName == "green" )
+                {
+                    g = atoi( ( *it ).m_strValue.c_str() );
+                    color.setRgb( r, g, b );
+                }
+                else if ( ( *it ).m_strName == "blue" )
+                {
+                    b = atoi( ( *it ).m_strValue.c_str() );
+                    color.setRgb( r, g, b );
+                }
+            }
+        }
 
-	// font
-	else if ( name == "FONT" )
-	{
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "name" )
-		    userFont = _doc->findUserFont( correctQString( ( *it ).m_strValue.c_str() ) );
-	    }
-	}
+        // font
+        else if ( name == "FONT" )
+        {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "name" )
+                    userFont = _doc->findUserFont( correctQString( ( *it ).m_strValue.c_str() ) );
+            }
+        }
 
-	// font size
-	else if ( name == "SIZE" )
-	{
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    ptFontSize = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
+        // font size
+        else if ( name == "SIZE" )
+        {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "value" )
+                    ptFontSize = atoi( ( *it ).m_strValue.c_str() );
+            }
+        }
 
-	// weight
-	else if ( name == "WEIGHT" )
-	{
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    weight = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
+        // weight
+        else if ( name == "WEIGHT" )
+        {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "value" )
+                    weight = atoi( ( *it ).m_strValue.c_str() );
+            }
+        }
 
-	// italic
-	else if ( name == "ITALIC" )
-	{
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    italic = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
+        // italic
+        else if ( name == "ITALIC" )
+        {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "value" )
+                    italic = atoi( ( *it ).m_strValue.c_str() );
+            }
+        }
 
-	// underline
-	else if ( name == "UNDERLINE" )
-	{
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    underline = atoi( ( *it ).m_strValue.c_str() );
-	    }
-	}
+        // underline
+        else if ( name == "UNDERLINE" )
+        {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "value" )
+                    underline = atoi( ( *it ).m_strValue.c_str() );
+            }
+        }
 
-	// vertical alignment
-	else if ( name == "VERTALIGN" )
-	{
-	    parser.parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    vertAlign = static_cast<VertAlign>( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	}
+        // vertical alignment
+        else if ( name == "VERTALIGN" )
+        {
+            parser.parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "value" )
+                    vertAlign = static_cast<VertAlign>( atoi( ( *it ).m_strValue.c_str() ) );
+            }
+        }
 
-	else
-	    kdError(32001) << "Unknown tag '" << tag.c_str() <<
-			"' in FORMAT" << endl;
+        else
+            kdError(32001) << "Unknown tag '" << tag.c_str() <<
+                        "' in FORMAT" << endl;
 
-	if ( !parser.close( tag ) )
-	{
-		kdError(32001) << "Closing " << tag.c_str() << endl;
-	    return;
-	}
+        if ( !parser.close( tag ) )
+        {
+                kdError(32001) << "Closing " << tag.c_str() << endl;
+            return;
+        }
     }
 }

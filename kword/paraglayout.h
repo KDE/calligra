@@ -34,7 +34,7 @@
 class KWParagLayout;
 
 /******************************************************************/
-/* Class: KWParagLayout						  */
+/* Class: KWParagLayout                                           */
 /******************************************************************/
 
 /**
@@ -49,42 +49,42 @@ class KWParagLayout
 public:
     enum Flow {LEFT, RIGHT, CENTER, BLOCK};
     enum CounterType {CT_NONE = 0, CT_NUM = 1, CT_ALPHAB_L = 2, CT_ALPHAB_U = 3,
-		      CT_ROM_NUM_L = 4, CT_ROM_NUM_U = 5, CT_BULLET = 6,
-		      CT_CUSTOM = 7 };
+                      CT_ROM_NUM_L = 4, CT_ROM_NUM_U = 5, CT_BULLET = 6,
+                      CT_CUSTOM = 7 };
     enum NumType {NT_LIST = 0, NT_CHAPTER = 1};
 
     enum BorderStyle {SOLID = 0, DASH = 1, DOT = 2, DASH_DOT = 3, DASH_DOT_DOT = 4};
     struct Border
     {
-	Border()
-	    : color( Qt::black ), style( SOLID ), ptWidth( 1 ) {
-	}
-	QColor color;
-	BorderStyle style;
-	unsigned int ptWidth;
-	bool operator==( const Border _brd ) const {
-	    return ( style == _brd.style && color == _brd.color && ptWidth == _brd.ptWidth );
-	}
-	bool operator!=( const Border _brd ) const {
-	    return ( style != _brd.style || color != _brd.color || ptWidth != _brd.ptWidth );
-	}
+        Border()
+            : color( Qt::black ), style( SOLID ), ptWidth( 1 ) {
+        }
+        QColor color;
+        BorderStyle style;
+        unsigned int ptWidth;
+        bool operator==( const Border _brd ) const {
+            return ( style == _brd.style && color == _brd.color && ptWidth == _brd.ptWidth );
+        }
+        bool operator!=( const Border _brd ) const {
+            return ( style != _brd.style || color != _brd.color || ptWidth != _brd.ptWidth );
+        }
     };
 
     struct Counter
     {
-	unsigned int counterDepth;
-	QChar counterBullet;
-	QString counterLeftText;
-	QString counterRightText;
-	CounterType counterType;
-	int startCounter;
-	NumType numberingType;
-	QString bulletFont;
-	QString customCounterDef;
+        unsigned int counterDepth;
+        QChar counterBullet;
+        QString counterLeftText;
+        QString counterRightText;
+        CounterType counterType;
+        int startCounter;
+        NumType numberingType;
+        QString bulletFont;
+        QString customCounterDef;
     };
 
     KWParagLayout( KWordDocument *_doc, bool _add = true,
-		   QString _name = "Standard" );
+                   QString _name = "Standard" );
     ~KWParagLayout();
 
     KWParagLayout& operator=( const KWParagLayout &_layout );
@@ -139,7 +139,7 @@ public:
     QChar getCounterBullet() const { return counter.counterBullet; }
     int getCounterDepth() const { return counter.counterDepth; }
     QString getCounterLeftText() const { return counter.counterLeftText; }
-    QString getCounterRightText() const { return counter.counterRightText.data(); }
+    QString getCounterRightText() const { return counter.counterRightText.latin1(); }
 
     QString getFollowingParagLayout() { return followingParagLayout; }
 
@@ -153,7 +153,7 @@ public:
     void setTabList( const QList<KoTabulator> *tabList );
 
     bool getNextTab( unsigned int _ptPos, unsigned int _lBorder, unsigned int _rBorder,
-		     unsigned int &_tabPos, KoTabulators &_tabType );
+                     unsigned int &_tabPos, KoTabulators &_tabType );
     bool hasSpecialTabs() const { return specialTabs; }
 
 protected:

@@ -898,7 +898,7 @@ void KWPage::vmpRightButton( QMouseEvent *e, int mx, int my )
         painter.end();
 
         if ( attrib )
-            debug( "ObjectType: %d, %p", attrib->getClassId(), attrib );
+            kdDebug() << "ObjectType: " << attrib->getClassId() << attrib << endl;
         return;
     }
     if ( doc->getFrameSet( mx, my ) == -1 ) {
@@ -4438,7 +4438,7 @@ void KWPage::insertAnchor( KWCharAnchor *_anchor )
 void KWPage::insertVariable( VariableType type )
 {
     if ( !doc->getVarFormats().find( static_cast<int>( type ) ) ) {
-        warning( "HUHU... No variable format for type %d available!", static_cast<int>( type ) );
+        kdWarning() << "HUHU... No variable format for type " << static_cast<int>( type ) << " available!" << endl;
         return;
     }
 

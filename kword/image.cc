@@ -40,8 +40,8 @@ void KWImage::decRef()
 
     if ( ref <= 0 && doc )
         doc->getImageCollection()->removeImage( this );
-    if ( !doc && ref == 0 ) warning( "RefCount of the image == 0, but I couldn't delete it, "
-                                     " because I have not a pointer to the document!" );
+    if ( !doc && ref == 0 ) kdWarning() << "RefCount of the image == 0, but I couldn't delete it, "
+                                " because I have not a pointer to the document!" << endl;
 }
 
 /*================================================================*/
@@ -86,11 +86,11 @@ void KWImage::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *
         }
 
         else
-	    kdError(32001) << "Unknown tag '" << tag.c_str() << "' in IMAGE" << endl;
+            kdError(32001) << "Unknown tag '" << tag.c_str() << "' in IMAGE" << endl;
 
         if ( !parser.close( tag ) )
         {
-	    kdError(32001) << "Closing " << tag.c_str() << endl;
+            kdError(32001) << "Closing " << tag.c_str() << endl;
             return;
         }
     }
