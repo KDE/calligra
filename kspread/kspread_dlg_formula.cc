@@ -51,12 +51,12 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     {
         m_pView->canvasWidget()->createEditor( KSpreadCanvas::CellEditor );
         if(cell->text().isEmpty())
-                m_pView->canvasWidget()->editor()->setText( "=" );
+          m_pView->canvasWidget()->editor()->setText( "=" );
         else
-                if(cell->text().at(0)!='=')
-                        m_pView->canvasWidget()->editor()->setText( "="+cell->text()+"+" );
-                else
-                        m_pView->canvasWidget()->editor()->setText( cell->text()+"+" );
+          if(cell->text().at(0)!='=')
+            m_pView->canvasWidget()->editor()->setText( "="+cell->text() );
+          else
+            m_pView->canvasWidget()->editor()->setText( cell->text() );
     }
 
     Q_ASSERT( m_pView->canvasWidget()->editor() );
