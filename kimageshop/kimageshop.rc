@@ -1,4 +1,4 @@
-<!DOCTYPE QConfig ><QConfig name="KImageShop">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KImageShop">
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
   <Action name="undo"/>
@@ -50,7 +50,7 @@
   <Action name="help_about"/>
  </Menu>
 </MenuBar>
-<ToolBar position="top">
+<ToolBar name="edit" position="top">
   <Action name="undo"/>
   <Action name="redo"/>
   <Separator/>
@@ -58,11 +58,11 @@
   <Action name="cut"/>
   <Action name="paste"/>
 </ToolBar>
-<ToolBar position="top">
+<ToolBar name="gradient" position="top">
   <Action name="dialog_gradient"/>
   <Action name="dialog_gradienteditor"/>
 </ToolBar>
-<ToolBar position="left">
+<ToolBar name="tools" position="left">
   <Action name="tool_select_rect"/>
   <Action name="tool_move"/>
   <Action name="tool_zoom"/>
@@ -73,4 +73,4 @@
   <Action name="tool_gradient"/>
   <Action name="tool_eraser"/>
 </ToolBar>
-</QConfig>
+</kpartgui>
