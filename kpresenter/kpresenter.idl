@@ -23,6 +23,7 @@ module KPresenter
       oneway void insertCircleOrEllipse();
       oneway void insertText();
       oneway void insertAutoform();
+      oneway void insertObject();
 
       oneway void insertLineHidl();
       oneway void insertLineVidl();

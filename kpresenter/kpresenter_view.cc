@@ -227,6 +227,16 @@ void KPresenterView_impl::insertAutoform()
   afChoose->show();
 }
 
+/*======================== insert object ========================*/
+void KPresenterView_impl::insertObject()
+{
+  KoPartEntry* pe = KoPartSelectDia::selectPart();
+  if ( !pe )
+    return;
+  
+  startRectSelection(pe->name());
+}
+
 /*===================== extra pen and brush =====================*/
 void KPresenterView_impl::extraPenBrush()
 {
@@ -1111,8 +1121,8 @@ void KPresenterView_impl::setupMenu()
       tmp += "/kpresenter/toolbar/parts.xpm";
       pix = loadPixmap(tmp);
       m_idMenuInsert_Part = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(klocale->translate("P&art")),m_idMenuInsert,
-						    this,CORBA::string_dup("insertPart"));
+						    CORBA::string_dup(klocale->translate("&Object...")),m_idMenuInsert,
+						    this,CORBA::string_dup("insertObject"));
 
       // extra menu
       m_idMenuExtra = m_rMenuBar->insertMenu(CORBA::string_dup(klocale->translate("&Extra")));
@@ -1438,8 +1448,8 @@ void KPresenterView_impl::setupInsertToolbar()
       tmp += "/kpresenter/toolbar/parts.xpm";
       pix = loadPixmap(tmp);
       m_idButtonInsert_Part = m_rToolBarInsert->insertButton(CORBA::string_dup(pix),
-							     CORBA::string_dup(klocale->translate("Insert Part")),
-							     this,CORBA::string_dup("insertPart"));
+							     CORBA::string_dup(klocale->translate("Insert Object")),
+							     this,CORBA::string_dup("insertObject"));
    }
 }
 
@@ -1847,5 +1857,89 @@ void KPresenterView_impl::getFonts()
   
   XFreeFontNames(fontNames_copy);
   XCloseDisplay(kde_display);
+}
+
+/*========================== start rect selection ================*/
+void KPresenterView_impl::startRectSelection(const char *_part_name)
+{
+  m_strNewPart = _part_name;
+  m_bRectSelection = true;
+}
+
+/*========================== cancel rect selection ===============*/
+void KPresenterView_impl::cancelRectSelection()
+{
+  m_bRectSelection = false;
+  update();
+}
+ 
+/*========================== paint rect selection ================*/
+void KPresenterView_impl::paintRectSelection()
+{
+  QPainter painter;
+  painter.begin(this);
+  
+  painter.setRasterOp(NotROP);
+  painter.drawRect(m_rctRectSelection);
+  painter.end();
+}
+
+/*======================== mouse press event =====================*/
+void KPresenterView_impl::mousePressEvent(QMouseEvent *_ev)
+{
+  cout << "Mouse pressed" << endl;
+  
+  if ( !m_bRectSelection )
+    return;
+
+  m_rctRectSelection.setTop(_ev->pos().y());
+  m_rctRectSelection.setLeft(_ev->pos().x());
+  m_rctRectSelection.setBottom(_ev->pos().y());
+  m_rctRectSelection.setRight(_ev->pos().x());
+
+  paintRectSelection();
+}
+
+/*========================= mouse move event =====================*/
+void KPresenterView_impl::mouseMoveEvent(QMouseEvent *_ev)
+{
+  if (!m_bRectSelection)
+    return;
+  
+  paintRectSelection();
+
+  if (_ev->pos().y() < m_rctRectSelection.top())
+    m_rctRectSelection.setBottom(m_rctRectSelection.top());
+  else
+    m_rctRectSelection.setBottom(_ev->pos().y());
+
+  if (_ev->pos().x() < m_rctRectSelection.left())
+    m_rctRectSelection.setRight(m_rctRectSelection.left());
+  else
+    m_rctRectSelection.setRight(_ev->pos().x());
+
+  paintRectSelection();
+}
+
+/*======================= mouse release event ====================*/
+void KPresenterView_impl::mouseReleaseEvent(QMouseEvent *_ev)
+{
+  if (!m_bRectSelection)
+    return;
+
+  paintRectSelection();
+  
+  if (_ev->pos().y() < m_rctRectSelection.top())
+    m_rctRectSelection.setBottom(m_rctRectSelection.top());
+  else
+    m_rctRectSelection.setBottom(_ev->pos().y());
+
+  if (_ev->pos().x() < m_rctRectSelection.left())
+    m_rctRectSelection.setRight(m_rctRectSelection.left());
+  else
+    m_rctRectSelection.setRight(_ev->pos().x());
+  
+  m_bRectSelection = false;
+  m_pKPresenterDoc->insertObject(m_rctRectSelection,m_strNewPart);
 }
 

@@ -31,6 +31,7 @@ class Page;
 #include <op_app.h>
 #include <utils.h>
 #include <part_frame_impl.h>
+#include <koPartSelectDia.h>
 
 #include <qwidget.h>
 #include <qrect.h>
@@ -140,6 +141,7 @@ public:
   void insertLineD2idl();
   void insertNormRectidl();
   void insertRoundRectidl();
+  void insertObject();
 
   // extra menu
   virtual void extraPenBrush();
@@ -273,6 +275,13 @@ protected:
   
   // get fonts
   void getFonts();
+
+  void startRectSelection(const char*);
+  void cancelRectSelection();
+  void paintRectSelection();
+  void mousePressEvent(QMouseEvent*);
+  void mouseReleaseEvent(QMouseEvent*);
+  void mouseMoveEvent(QMouseEvent*);
 
   // ********** variables **********
 
@@ -442,6 +451,10 @@ protected:
   TxtParagraph::HorzAlign tbAlign;
   QColor tbColor;
   QStrList fontList;
+
+  bool m_bRectSelection;
+  QRect m_rctRectSelection;
+  QString m_strNewPart;
 
 };
 

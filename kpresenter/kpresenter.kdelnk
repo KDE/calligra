@@ -1,7 +1,7 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KPresenter
-Exec=kpresenter --server
+Exec=kpresenter.bin --server
 Comment=Reggie's Presentation Software
 MimeTypes=application/x-kpresenter,
 RepoID=IDL:KPresenter/Factory:1.0,

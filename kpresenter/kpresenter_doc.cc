@@ -186,14 +186,16 @@ void KPresenterDocument_impl::removeView(KPresenterView_impl *_view)
 }
 
 /*========================= insert an object =====================*/
-void KPresenterDocument_impl::insertObject(const QRect& _rect)
+void KPresenterDocument_impl::insertObject(const QRect& _rect,const char* _part_name)
 {
-  KPresenterChild *p = 0L;
-  OPParts::Document_var doc = new KPresenterDocument_impl;
+  OPParts::Document_var doc = imr_newdoc(_part_name);
+  if (CORBA::is_nil(doc))
+    return;
+  
   KPresenterChild* ch = new KPresenterChild(this,_rect,doc);
   m_lstChildren.append(ch);
   
-  emit sig_insertObject(p);
+  emit sig_insertObject(ch);
 }
 
 /*======================= change child geometry ==================*/

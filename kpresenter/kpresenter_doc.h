@@ -36,6 +36,7 @@ class KPresenterView_impl;
 #include <qcursor.h>
 
 #include <koPageLayoutDia.h>
+#include <koIMR.h>
 
 #include "kpresenter_view.h"
 #include "global.h"
@@ -148,10 +149,10 @@ public:
   virtual void removeView(KPresenterView_impl *_view);
   
   // insert an object
-  virtual void insertObject(const QRect& _rect);
+  virtual void insertObject(const QRect&,const char*);
 
   // change geomentry of a child
-  virtual void changeChildGeometry(KPresenterChild *_child, const QRect&);
+  virtual void changeChildGeometry(KPresenterChild*,const QRect&);
   
   // get iterator if a child
   virtual QListIterator<KPresenterChild> childIterator();
