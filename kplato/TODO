@@ -110,9 +110,8 @@ Done    Plain
               * or find a better suited "standard" format
                   http://proj.chbs.dk/specifications/
 
-Taken       Use KPlato namespace for all KPlato classes
-            Remove KPT prefix from all KPlato classes
-            Remove kpt prefix from all KPlato source code files
+Done        Use KPlato namespace for all KPlato classes
+-           Remove KPT prefix from all KPlato classes (ask mailing list!)
 
 -           Write good doxygen compatible API docs in the source code!
 
