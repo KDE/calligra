@@ -79,6 +79,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KDChartParams* params,
     ytitle= new QLineEdit( gb2 );
     ytitle->setMaximumWidth(130);
     grid2->addWidget(ytitle,3,0);
+    ytitle->setEnabled(false);
 
     tmpLabel = new QLabel( i18n( "X-Title" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
@@ -87,6 +88,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KDChartParams* params,
     xtitle= new QLineEdit( gb2 );
     xtitle->setMaximumWidth(130);
     grid2->addWidget(xtitle,5,0);
+    xtitle->setEnabled(false);
 
     tmpLabel = new QLabel( i18n( "Y-Label format" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
@@ -95,6 +97,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KDChartParams* params,
     ylabel_fmt= new QLineEdit( gb2 );
     ylabel_fmt->setMaximumWidth(130);
     grid2->addWidget(ylabel_fmt,1,1);
+    ylabel_fmt->setEnabled(false);
 
     tmpLabel = new QLabel( i18n( "Y-Title 2" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
