@@ -163,8 +163,6 @@
   <Action name="screen_prev"/>
   <Action name="screen_next"/>
   <Action name="screen_last"/>
-  <Separator/>
-  <Action name="screen_presstruct"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
   <Action name="extra_configure" group="settings_configure"/>
