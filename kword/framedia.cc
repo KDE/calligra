@@ -23,6 +23,7 @@
 #include "framedia.h"
 #include "framedia.moc"
 #include "defs.h"
+#include "kwcommand.h"
 
 #include <klocale.h>
 #include <kapp.h>
@@ -998,7 +999,8 @@ bool KWFrameDia::applyChanges()
                     _frameSet->setName( name );
                     _frameSet->addFrame( frame );
                     doc->addFrameSet( _frameSet );
-
+                    KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create text frame"), doc,  frame) ;
+                    doc->addCommand(cmd);
                     updateFrames();
                     return true;
                 }

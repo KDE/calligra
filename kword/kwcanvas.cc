@@ -889,6 +889,8 @@ void KWCanvas::mrCreatePixmap()
                                      m_insRect.height() );
         frameset->addFrame( frame );
         doc->addFrameSet( frameset );
+        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a picture frame"), doc,  frame) ;
+        doc->addCommand(cmd);
         doc->frameChanged( frame );
     }
     setMouseMode( MM_EDIT );
@@ -911,6 +913,8 @@ void KWCanvas::mrCreateFormula()
         KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
         frameset->addFrame( frame );
         doc->addFrameSet( frameset );
+        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a formula frame"), doc,  frame) ;
+        doc->addCommand(cmd);
         doc->frameChanged( frame );
     }
     setMouseMode( MM_EDIT );

@@ -54,6 +54,7 @@
 #include "contents.h"
 #include "kwview.h"
 #include "kwfactory.h"
+#include "kwcommand.h"
 #include <kdebug.h>
 #include <assert.h>
 
@@ -1766,6 +1767,9 @@ void KWDocument::insertObject( const QRect& rect, KoDocumentEntry& _e )
     KWFrame *frame = new KWFrame(frameset, rect.x(), rect.y(), rect.width(), rect.height() );
     frameset->addFrame( frame );
     addFrameSet( frameset );
+
+    KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a part frame"), this,  frame) ;
+    addCommand(cmd);
 
     emit sig_insertObject( ch, frameset );
 

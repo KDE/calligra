@@ -681,4 +681,38 @@ void KWDeleteFrameCommand::unexecute()
     m_pDoc->frameChanged( frame );
 }
 
+KWCreateFrameCommand::KWCreateFrameCommand( const QString &name, KWDocument *_doc, KWFrame * frame ):
+    KCommand(name),
+    m_pDoc(_doc)
+{
+    KWFrameSet *frameSet = frame->getFrameSet();
+    ASSERT( frameSet );
+    frameIndex.m_iFrameIndex = frameSet->getFrameFromPtr( frame );
+    frameIndex.m_iFrameSetIndex = _doc->getFrameSetNum( frameSet );
+    copyFrame = frame->getCopy();
+}
+
+void KWCreateFrameCommand::execute()
+{
+    KWFrameSet *frameSet = m_pDoc->getFrameSet( frameIndex.m_iFrameSetIndex );
+    KWFrame * frame = copyFrame->getCopy();
+    frame->setFrameSet( frameSet );
+    frameSet->addFrame( frame );
+
+    KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>( frameSet );
+    if ( textfs )
+        textfs->formatMore();
+    m_pDoc->frameChanged( frame );
+}
+
+void KWCreateFrameCommand::unexecute()
+{
+    KWFrameSet *frameSet = m_pDoc->getFrameSet( frameIndex.m_iFrameSetIndex );
+    ASSERT( frameSet );
+    KWFrame *frame = frameSet->getFrame( frameIndex.m_iFrameIndex );
+    ASSERT( frame );
+    frameSet->delFrame( frameIndex.m_iFrameIndex );
+
+    m_pDoc->frameChanged( frame );
+}
 

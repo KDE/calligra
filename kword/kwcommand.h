@@ -293,5 +293,21 @@ protected:
     KWFrame *copyFrame;
 };
 
+/**
+ * Command created when you create a frame
+ */
+class KWCreateFrameCommand : public KCommand
+{
+public:
+    KWCreateFrameCommand( const QString &name, KWDocument *_doc, KWFrame * frame) ;
+    ~KWCreateFrameCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWDocument *m_pDoc;
+    FrameIndex frameIndex;
+    KWFrame *copyFrame;
+};
 
 #endif
