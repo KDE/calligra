@@ -216,7 +216,7 @@ void Document::pageBreak()
     pageBreak.setAttribute( "hardFrameBreakAfter", "true" );
 }
 
-void Document::headersFound( const wvWare::Functor<wvWare::Parser97, wvWare::HeaderData>& parseHeaders )
+void Document::headersFound( const wvWare::HeaderFunctor& parseHeaders )
 {
     // The functor is a first-class "citicen" (value semantics)
     //wvWare::Functor<wvWare::Parser97, wvWare::HeaderData> myFunctor( parseHeaders );
