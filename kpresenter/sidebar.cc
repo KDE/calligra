@@ -83,13 +83,13 @@ SideBar::SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
 
 void SideBar::currentChanged(QWidget *tab)
 {
-  if (tab == _thb) {
-    if (!_thb->uptodate)
-      _thb->rebuildItems();
-    else
-      _thb->arrangeItemsInGrid(QSize(130, 120), true);
-    //TODO set position to current slide
-  }
+    if (tab == _thb) {
+        if (!_thb->uptodate && _thb->isVisible())
+            _thb->rebuildItems();
+        else
+            _thb->arrangeItemsInGrid(QSize(130, 120), true);
+        //TODO set position to current slide
+    }
 }
 
 ThumbBar::ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
@@ -108,6 +108,8 @@ ThumbBar::ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
 
 void ThumbBar::rebuildItems()
 {
+    if( !isVisible())
+        return;
   kdDebug(33001) << "ThumbBar::rebuildItems" << endl;
 
   QApplication::setOverrideCursor( Qt::waitCursor );

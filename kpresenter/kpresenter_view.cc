@@ -4112,6 +4112,7 @@ void KPresenterView::updateSideBar()
         sidebar->blockSignals( TRUE );
 	sidebar->thumbBar()->uptodate = false;
         sidebar->outline()->rebuildItems();
+        sidebar->thumbBar()->rebuildItems();
         sidebar->blockSignals( FALSE );
     }
 }

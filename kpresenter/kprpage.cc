@@ -2687,11 +2687,16 @@ void KPrPage::insertClipart( const QString &_file, const KoRect &_rect )
 
 void KPrPage::enableEmbeddedParts( bool f )
 {
+    KPPartObject *obj=0L;
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType()==OT_PART)
-	    dynamic_cast<KPPartObject*>( it.current() )->enableDrawing( f );
+        {
+            obj=dynamic_cast<KPPartObject*>( it.current() );
+            if(obj)
+                obj->enableDrawing( f );
+        }
     }
 }
 
