@@ -254,15 +254,57 @@ public:
      */
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
+    /**
+     * Skip the keyword, as we do not need to do anything with it
+     * (either because it is supported anyway or because we cannot support it.)
+     */
     void ignoreKeyword( RTFProperty * );
+    /**
+     * Set document codepage.
+     * @note Mac's code pages > 10000 are not supported
+     */
     void setCodepage( RTFProperty * );
+    /**
+     * Set document codepage to Mac (also known as MacRoman or as Apple Roman)
+     */
     void setMacCodepage( RTFProperty * );
+    /**
+     * Set document codepage to CP1252
+     * @note Old RTF files have a \ansi keyword but no \ansicpg keyword
+     */
     void setAnsiCodepage( RTFProperty * );
+    /**
+     * Set document codepage to IBM 850
+     */
     void setPcaCodepage( RTFProperty * );
+    /**
+     * Set document codepage to IBM 435.
+     * @note As Qt does not support IBM 435, this is currently approximated as IBM 850
+     */
     void setPcCodepage( RTFProperty * );
+    /**
+     * Sets the value of a boolean RTF property specified by token.
+     * @param property the property to set
+     * @deprecated not portable, as it needs an out-of-specification use of offsetof
+     */
     void setToggleProperty( RTFProperty * );
+    /**
+     * Sets a boolean RTF property specified by token.
+     * @param property the property to set
+     * @deprecated not portable, as it needs an out-of-specification use of offsetof
+     */
     void setFlagProperty( RTFProperty *property );
+    /**
+     * Sets the value of a numeric RTF property specified by token.
+     * @param property the property to set
+     * @deprecated not portable, as it assumes that an enum is a char
+     */
     void setNumericProperty( RTFProperty *property );
+    /**
+     * Sets an enumeration (flag) RTF property specified by token.
+     * @param property the property to set
+     * @deprecated not portable, as it assumes that an enum is a char
+     */
     void setEnumProperty( RTFProperty *property );
     /**
      * Set font style hint
@@ -295,6 +337,7 @@ public:
     void setBorderProperty( RTFProperty *property );
     /**
      * Sets the value of a border color specified by token.
+     * @deprecated not portable, as it needs an out-of-specification use of offsetof
      */
     void setBorderColor( RTFProperty * );
     /**
@@ -302,10 +345,25 @@ public:
      * @param property the property to set
      */
     void setBorderStyle( RTFProperty *property );
+    /**
+     * Sets the value of the font baseline (superscript).
+     */
     void setUpProperty( RTFProperty * );
+    /**
+     * Reset character-formatting properties.
+     */
     void setPlainFormatting( RTFProperty * = 0L );
+    /**
+     * Reset paragraph-formatting properties
+     */
     void setParagraphDefaults( RTFProperty * = 0L );
+    /**
+     * Reset section-formatting properties.
+     */
     void setSectionDefaults( RTFProperty * = 0L );
+    /**
+     * Reset table-formatting properties.
+     */
     void setTableRowDefaults( RTFProperty * = 0L );
     /**
      * Select which border is the current one.
@@ -320,8 +378,17 @@ public:
     void insertParagraph( RTFProperty * = 0L );
     void insertPageBreak( RTFProperty * );
     void insertTableCell( RTFProperty * );
+    /**
+     * Finish table row and calculate cell borders.
+     */
     void insertTableRow( RTFProperty * = 0L );
+    /**
+     * Inserts a table cell definition.
+     */
     void insertCellDef( RTFProperty * );
+    /**
+     * Inserts a tabulator definition.
+     */
     void insertTabDef( RTFProperty * );
     /**
      * Inserts a single (Unicode) character in UTF8 format.
@@ -334,32 +401,115 @@ public:
     void insertHexSymbol( RTFProperty * );
     /// Insert unicode character (keyword \\u).
     void insertUnicodeSymbol( RTFProperty * );
+    /**
+     * Insert a date or time field
+     */
     void insertDateTime( RTFProperty *property );
+    /**
+     * Insert a page number field
+     */
     void insertPageNumber( RTFProperty * );
+    /**
+     * Parse the picture identifier
+     */
     void parseBlipUid( RTFProperty* );
+    /**
+     * Parse recursive fields.
+     * @note The {\fldrslt ...} group will be used for
+     * unsupported and embedded fields.
+     */
     void parseField( RTFProperty* );
     void parseFldinst( RTFProperty* );
     void parseFldrslt( RTFProperty* );
+    /**
+     * Font table destination callback
+     */
     void parseFontTable( RTFProperty * );
+    /**
+     * This function parses footnotes
+     * \todo Endnotes
+     */
     void parseFootNote( RTFProperty * );
+    /**
+     * Style sheet destination callback.
+     */
     void parseStyleSheet( RTFProperty * );
+    /**
+     * Color table destination callback.
+     */
     void parseColorTable( RTFProperty * );
+    /**
+     * Picture destination callback.
+     */
     void parsePicture( RTFProperty * );
+    /**
+     * Rich text destination callback.
+     */
     void parseRichText( RTFProperty * );
+    /**
+     * Plain text destination callback.
+     */
     void parsePlainText( RTFProperty * );
+    /**
+     * Do nothing special for this group
+     */
     void parseGroup( RTFProperty * );
+    /**
+     * Discard all tokens until the current group is closed.
+     */
     void skipGroup( RTFProperty * );
+    /**
+     * Change the destination.
+     */
     void changeDestination( RTFProperty *property );
 
+    /**
+     * Reset formatting properties to their default settings.
+     */
     void resetState();
+    /**
+     * Add anchor to current destination (see KWord DTD).
+     * @param instance the frameset number in the document
+     */
     void addAnchor( const char *instance );
+    /**
+     * Add format information to document node.
+     * @param node the document node (destination)
+     * @param format the format information
+     * @param baseFormat the format information is based on this format
+     */
     void addFormat( DomNode &node, const KWFormat& format, const RTFFormat* baseFormat );
+    /**
+     * Add layout information to document node.
+     * @param node the document node (destination)
+     * @param name the name of the current style
+     * @param layout the paragraph layout information
+     * @param frameBreak paragraph is always the last in a frame if true
+     */
     void addLayout( DomNode &node, const QString &name, const RTFLayout &layout, bool frameBreak );
+    /**
+     * Add paragraph information to document node.
+     * @param node the document node (destination)
+     * @param frameBreak paragraph is always the last in a frame if true
+     */
     void addParagraph( DomNode &node, bool frameBreak );
     void addVariable(const DomNode& spec, int type, const QString& key, const RTFFormat* fmt=0);
     void addImportedPicture( const QString& rawFileName );
+    /**
+     *  Add a date/time field and split it for KWord
+     * @param format format of the date/time
+     * @param isDate is it a date field? (For the default format, if needed)
+     */
     void addDateTime( const QString& format, const bool isDate, RTFFormat& fmt );
+    /**
+     * Finish table and recalculate cell borders.
+     */
     void finishTable();
+    /**
+     * Write out part (file inside the store).
+     * @param name the internal name of the part
+     * @param node the data to write
+     */
     void writeOutPart( const char *name, const DomNode &node );
 
 

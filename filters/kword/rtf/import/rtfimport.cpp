@@ -309,12 +309,6 @@ RTFImport::RTFImport( KoFilter *, const char *, const QStringList& )
     fnnum=0;
 }
 
-/**
- * Convert document from RTF to KWord format.
- * @param from the mimetype for RTF
- * @param to the mimetype for KWord
- * @return true if the document was successfully converted
- */
 KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCString& to )
 {
     // This filter only supports RTF to KWord conversion
@@ -804,17 +798,10 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     return KoFilter::OK;
 }
 
-/**
- * Skip the keyword, as we do not need to do anything with it
- * (either because it is supported anyway or because we cannot support it.)
- */
 void RTFImport::ignoreKeyword( RTFProperty * )
 {
 }
 
-/**
- * Set document codepage.
- */
 void RTFImport::setCodepage( RTFProperty * )
 {
     QTextCodec* oldCodec = textCodec;
@@ -834,9 +821,6 @@ void RTFImport::setCodepage( RTFProperty * )
         textCodec = oldCodec;
 }
 
-/**
- * Set document codepage to Mac
- */
 void RTFImport::setMacCodepage( RTFProperty * )
 {
     QTextCodec* oldCodec = textCodec;
@@ -846,10 +830,6 @@ void RTFImport::setMacCodepage( RTFProperty * )
         textCodec = oldCodec;
 }
 
-/**
- * Set document codepage to CP1252
- * (Old RTF files have a \ansi keyword but no \ansicpg keyword)
- */
 void RTFImport::setAnsiCodepage( RTFProperty * )
 {
     QTextCodec* oldCodec = textCodec;
@@ -859,9 +839,6 @@ void RTFImport::setAnsiCodepage( RTFProperty * )
         textCodec = oldCodec;
 }
 
-/**
- * Set document codepage to IBM 850
- */
 void RTFImport::setPcaCodepage( RTFProperty * )
 {
     QTextCodec* oldCodec = textCodec;
@@ -871,9 +848,6 @@ void RTFImport::setPcaCodepage( RTFProperty * )
         textCodec = oldCodec;
 }
 
-/**
- * Set document codepage.
- */
 void RTFImport::setPcCodepage( RTFProperty * )
 {
     QTextCodec* oldCodec = textCodec;
@@ -883,38 +857,21 @@ void RTFImport::setPcCodepage( RTFProperty * )
         textCodec = oldCodec;
 }
 
-/**
- * Sets the value of a boolean RTF property specified by token.
- * @param property the property to set
- */
 void RTFImport::setToggleProperty( RTFProperty *property )
 {
     ((bool *)this)[property->offset] = (!token.hasParam || token.value != 0);
 }
 
-/**
- * Sets a boolean RTF property specified by token.
- * @param property the property to set
- */
 void RTFImport::setFlagProperty( RTFProperty *property )
 {
     ((bool *)this)[property->offset] = property->value;
 }
 
-/**
- * Sets the value of a numeric RTF property specified by token.
- * @param property the property to set
- */
 void RTFImport::setNumericProperty( RTFProperty *property )
 {
     *((int *)(((char *)this) + property->offset)) = token.hasParam ? token.value : property->value;
 }
 
-/**
- * Sets an enumeration (flag) RTF property specified by token.
- * @param property the property to set
- * @deprecated
- */
 void RTFImport::setEnumProperty( RTFProperty *property )
 {
     *((int *)(((char *)this) + property->offset)) = property->value;
@@ -987,17 +944,11 @@ void RTFImport::setBorderColor( RTFProperty * )
     }
 }
 
-/**
- * Sets the value of the font baseline (superscript).
- */
 void RTFImport::setUpProperty( RTFProperty * )
 {
     state.format.baseline = token.hasParam ? -token.value : -6;
 }
 
-/**
- * Reset character-formatting properties.
- */
 void RTFImport::setPlainFormatting( RTFProperty * )
 {
     RTFFormat &format = state.format;
@@ -1022,9 +973,6 @@ void RTFImport::setPlainFormatting( RTFProperty * )
     // Do not reset format.uc !
 }
 
-/**
- * Reset paragraph-formatting properties
- */
 void RTFImport::setParagraphDefaults( RTFProperty * )
 {
     RTFLayout &layout = state.layout;
@@ -1057,9 +1005,6 @@ void RTFImport::setParagraphDefaults( RTFProperty * )
     layout.pageBA	= false;
 }
 
-/**
- * Reset section-formatting properties.
- */
 void RTFImport::setSectionDefaults( RTFProperty * )
 {
     RTFSectionLayout &section = state.section;
@@ -1069,9 +1014,6 @@ void RTFImport::setSectionDefaults( RTFProperty * )
     section.titlePage		= false;
 }
 
-/**
- * Reset table-formatting properties.
- */
 void RTFImport::setTableRowDefaults( RTFProperty * )
 {
     RTFTableRow &tableRow = state.tableRow;
@@ -1144,9 +1086,6 @@ void RTFImport::insertTableCell( RTFProperty * )
     textState->cell.clear( 3 );
 }
 
-/**
- * Finish table row and calculate cell borders.
- */
 void RTFImport::insertTableRow( RTFProperty * )
 {
     if (!textState->frameSets.isEmpty())
@@ -1212,9 +1151,6 @@ void RTFImport::insertTableRow( RTFProperty * )
     }
 }
 
-/**
- * Inserts a table cell definition.
- */
 void RTFImport::insertCellDef( RTFProperty * )
 {
     RTFTableCell &cell = state.tableCell;
@@ -1231,9 +1167,6 @@ void RTFImport::insertCellDef( RTFProperty * )
     }
 }
 
-/**
- * Inserts a tabulator definition.
- */
 void RTFImport::insertTabDef( RTFProperty * )
 {
     RTFTab tab = state.layout.tab;
@@ -1350,9 +1283,6 @@ void RTFImport::insertUnicodeSymbol( RTFProperty * )
     (this->*destination.destproc)(0L);
 }
 
-/**
- * Font table destination callback
- */
 void RTFImport::parseFontTable( RTFProperty * )
 {
     if (token.type == RTFTokenizer::OpenGroup)
@@ -1405,9 +1335,6 @@ void RTFImport::parseFontTable( RTFProperty * )
     }
 }
 
-/**
- * Style sheet destination callback.
- */
 void RTFImport::parseStyleSheet( RTFProperty * )
 {
     if (token.type == RTFTokenizer::OpenGroup)
@@ -1435,9 +1362,6 @@ void RTFImport::parseStyleSheet( RTFProperty * )
     }
 }
 
-/**
- * Color table destination callback.
- */
 void RTFImport::parseColorTable( RTFProperty * )
 {
     if (token.type == RTFTokenizer::OpenGroup)
@@ -1448,6 +1372,7 @@ void RTFImport::parseColorTable( RTFProperty * )
     }
     else if (token.type == RTFTokenizer::PlainText)
     {
+        // Note: the color table can be a simple ; character only, especially in PWD files
 	// Search for semicolon(s)
 	while ((token.text = strchr( token.text, ';' )))
 	{
@@ -1458,9 +1383,6 @@ void RTFImport::parseColorTable( RTFProperty * )
     }
 }
 
-/**
- * Parse the picture identifier
- */
 void RTFImport::parseBlipUid( RTFProperty * )
 {
     if (token.type == RTFTokenizer::OpenGroup)
@@ -1477,9 +1399,6 @@ void RTFImport::parseBlipUid( RTFProperty * )
     }
 }
 
-/**
- * Picture destination callback.
- */
 void RTFImport::parsePicture( RTFProperty * )
 {
     if (state.ignoreGroup)
@@ -1679,9 +1598,6 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     frameSets.closeNode( "FRAMESET" );
 }
 
-/**
- * Insert a pagenumber field
- */
 void RTFImport::insertPageNumber( RTFProperty * )
 {
     DomNode node;
@@ -1692,20 +1608,12 @@ void RTFImport::insertPageNumber( RTFProperty * )
     addVariable( node, 4, "NUMBER", &state.format);
 }
 
-/**
- * Insert a date or time field
- */
 void RTFImport::insertDateTime( RTFProperty *property )
 {
     kdDebug(30515) << "insertDateTime: " << property->value << endl;
     addDateTime( QString::null, bool(property->value), state.format );
 }
 
-/**
- *  Add a date/time field and split it for KWord
- * @param format format of the date/time
- * @param isDate is it a date field? (For the default format, if needed)
- */
 void RTFImport::addDateTime( const QString& format, const bool isDate, RTFFormat& fmt )
 {
     bool asDate=isDate; // Should the variable be a date variable?
@@ -1749,10 +1657,6 @@ void RTFImport::addDateTime( const QString& format, const bool isDate, RTFFormat
     }
 }
 
-/**
- * Parse recursive fields. The {\fldrslt ...} group will be used for
- * unsupported and embedded fields.
- */
 void RTFImport::parseField( RTFProperty * )
 {
     if (token.type == RTFTokenizer::OpenGroup)
@@ -1953,10 +1857,6 @@ void RTFImport::addVariable (const DomNode& spec, int type, const QString& key, 
     textState->formats << kwFormat;
 }
 
-/**
- * This function parses footnotes
- * \todo Endnotes
- */
 void RTFImport::parseFootNote( RTFProperty * property)
 {
     if(token.type==RTFTokenizer::OpenGroup)
@@ -1984,9 +1884,6 @@ void RTFImport::parseFootNote( RTFProperty * property)
     parseRichText(property);
 }
 
-/**
- * Rich text destination callback.
- */
 void RTFImport::parseRichText( RTFProperty * )
 {
     if (token.type == RTFTokenizer::OpenGroup)
@@ -2046,9 +1943,6 @@ void RTFImport::parseRichText( RTFProperty * )
     }
 }
 
-/**
- * Plain text destination callback.
- */
 void RTFImport::parsePlainText( RTFProperty * )
 {
     if (token.type == RTFTokenizer::OpenGroup)
@@ -2061,24 +1955,15 @@ void RTFImport::parsePlainText( RTFProperty * )
     }
 }
 
-/**
- * Do nothing special for this group
- */
 void RTFImport::parseGroup( RTFProperty * )
 {
 }
 
-/**
- * Discard all tokens until the current group is closed.
- */
 void RTFImport::skipGroup( RTFProperty * )
 {
     state.ignoreGroup = true;
 }
 
-/**
- * Reset formatting properties to their default settings.
- */
 void RTFImport::resetState()
 {
     setPlainFormatting();
@@ -2087,9 +1972,6 @@ void RTFImport::resetState()
     setTableRowDefaults();
 }
 
-/**
- * Change the destination.
- */
 void RTFImport::changeDestination( RTFProperty *property )
 {
     kdDebug(30515) << "changeDestination: " << property->name << endl;
@@ -2111,10 +1993,6 @@ void RTFImport::changeDestination( RTFProperty *property )
     (this->*destination.destproc)(0L);
 }
 
-/**
- * Add anchor to current destination (see KWord DTD).
- * @param instance the frameset number in the document
- */
 void RTFImport::addAnchor( const char *instance )
 {
     DomNode node;
@@ -2132,12 +2010,6 @@ void RTFImport::addAnchor( const char *instance )
     textState->formats << kwFormat;
 }
 
-/**
- * Add format information to document node.
- * @param node the document node (destination)
- * @param format the format information
- * @param baseFormat the format information is based on this format
- */
 void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFFormat* baseFormat )
 {
     // Support both (\dn, \up) and (\sub, \super) for super/sub script
@@ -2352,13 +2224,6 @@ void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFForma
     node.closeNode( "FORMAT" );
 }
 
-/**
- * Add layout information to document node.
- * @param node the document node (destination)
- * @param name the name of the current style
- * @param layout the paragraph layout information
- * @param frameBreak paragraph is always the last in a frame if true
- */
 void RTFImport::addLayout( DomNode &node, const QString &name, const RTFLayout &layout, bool frameBreak )
 {
     // Style name and alignment
@@ -2510,11 +2375,6 @@ void RTFImport::addLayout( DomNode &node, const QString &name, const RTFLayout &
     }
 }
 
-/**
- * Add paragraph information to document node.
- * @param node the document node (destination)
- * @param frameBreak paragraph is always the last in a frame if true
- */
 void RTFImport::addParagraph( DomNode &node, bool frameBreak )
 {
     node.addNode( "PARAGRAPH" );
@@ -2584,9 +2444,6 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
     textState->formats.clear();
 }
 
-/**
- * Finish table and recalculate cell borders.
- */
 void RTFImport::finishTable()
 {
     kdDebug(30515) << "Starting TFImport::finishTable..." << endl;
@@ -2716,11 +2573,6 @@ void RTFImport::finishTable()
     kdDebug(30515) << "Quitting TFImport::finishTable..." << endl;
 }
 
-/**
- * Write out part (file inside the store).
- * @param name the internal name of the part
- * @param node the data to write
- */
 void RTFImport::writeOutPart( const char *name, const DomNode& node )
 {
     KoStoreDevice* dev = m_chain->storageFile( name, KoStore::Write );
