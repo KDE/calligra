@@ -50,7 +50,6 @@
 #endif
 #include <qregexp.h>
 
- #include "koAutoFormat.moc"
 
 KoCompletionBox::KoCompletionBox( QWidget * parent, const char * name, WFlags f)
   : QLabel(parent,name,f)
@@ -2417,3 +2416,5 @@ void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat
         }
     }
 }
+
+#include "koAutoFormat.moc"
