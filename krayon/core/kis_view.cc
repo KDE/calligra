@@ -43,7 +43,17 @@
 #include <kiconloader.h>
 #include <kimageeffect.h>
 #include <kapp.h>
+
+// Grmbl, X headers.....
+#ifdef GrayScale
+#define FooXGrayScale GrayScale
+#undef GrayScale
+#endif
 #include <kprinter.h>
+#ifdef FooXGrayScale
+#define GrayScale 1
+#undef FooXGrayScale
+#endif
 
 // core classes
 #include "kis_view.h"
