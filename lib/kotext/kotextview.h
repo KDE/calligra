@@ -127,7 +127,7 @@ public:
     QString wordUnderCursor( const KoTextCursor& cursor );
 
     /** Return the list of actions from data-tools. Used to populate a RMB popupmenu usually. */
-    QPtrList<KAction> dataToolActionList(KInstance * instance, const QString& word);
+    QPtrList<KAction> dataToolActionList(KInstance * instance, const QString& word, bool & _singleWord );
 
     void insertSoftHyphen();
     void insertLineBreak();
@@ -149,6 +149,8 @@ public:
     void copyTextOfComment();
 
     KoStyle * createStyleFromSelection(const QString & name);
+
+    QString underCursorWord();
 
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.

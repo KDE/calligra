@@ -945,7 +945,7 @@ KoLinkVariable * KoTextView::linkVariable()
     return dynamic_cast<KoLinkVariable *>(variable());
 }
 
-QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance, const QString& word )
+QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance, const QString& word, bool & _singleWord )
 {
     m_singleWord = false;
     m_wordUnderCursor = QString::null;
@@ -989,12 +989,23 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance, const QSt
     // Add tools that work on a single word if that is the case
     if ( m_singleWord )
     {
+        _singleWord = true;
         tools += KDataToolInfo::query( "QString", "application/x-singleword", instance );
     }
     // Maybe one day we'll have tools that use libkotext (or qt3's qrt), to act on formatted text
     tools += KDataToolInfo::query( "KoTextString", "application/x-qrichtext", instance );
 
     return KDataToolAction::dataToolActionList( tools, this, SLOT( slotToolActivated( const KDataToolInfo &, const QString & ) ) );
+}
+
+QString KoTextView::underCursorWord()
+{
+    QString text;
+    if ( textObject()->hasSelection() )
+        text = textObject()->selectedText();
+    else
+        text = m_wordUnderCursor;
+    return text;
 }
 
 void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & command )
