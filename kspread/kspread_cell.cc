@@ -1880,7 +1880,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
       QPair<double,double> corner = qMakePair( x, y );
       painter.save();
 
-      obscuringCell->paintCell( rect, painter, view, 
+      obscuringCell->paintCell( rect, painter, view,
                                 corner, obscuringCellRef );
       painter.restore();
     }
@@ -1940,8 +1940,8 @@ void KSpreadCell::paintObscuredCells(const QRect& rect, QPainter& painter,
           KSpreadCell* cell = m_pTable->cellAt( cellRef.x() + x,
                                                 cellRef.y() + y );
 
-          cell->paintCell( rect, painter, view, 
-                           qMakePair( xpos, ypos ), 
+          cell->paintCell( rect, painter, view,
+                           qMakePair( xpos, ypos ),
                            QPoint(cellRef.x() + x, cellRef.y() + y));
         }
         xpos += cl->dblWidth();
@@ -2831,7 +2831,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter)
 	 }
        }
      }
-     if(fm.width(localizedNumber)<w)
+     if(fm.width(localizedNumber)<w && !m_pTable->getShowFormula())
      {
        return localizedNumber;
      }
