@@ -1,3 +1,9 @@
-Changes after KChart 1.1
+Changes since KChart 1.2
+------------------------
+
+Fix paininting of surrounding frame (see also #46251 Legend not completely visible )
+
+
+Changes since KChart 1.1
 ------------------------
 -Add dcop interface

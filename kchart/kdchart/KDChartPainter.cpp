@@ -1177,6 +1177,18 @@ throw( KDChartNotEnoughSpaceException )
     else
         drawRect = QRect( 0, 0, painterMetrics.width(), painterMetrics.height() );
 
+    /*
+      Philipp:
+      Hack to display the surrounding frame.
+      Frames are displayed by the rect (rect-1,rect-1,width+1,height+1) See KDFrame::paintEdges
+      The QMAX in it makes it even worth.
+      As the primary rect "drawRect" doesn't contain these coordinates, it would be displayed wrong.
+      So I'm deducting on each side 1 pixel to enable the display of the surrounding frame
+    */
+    drawRect.moveBy( 1,1 );
+    drawRect.setWidth( drawRect.width()-2 );
+    drawRect.setHeight( drawRect.height()-2 );
+
     int yposTop    = drawRect.top();
     int xposLeft   = drawRect.left();
     int yposBottom = drawRect.height();
