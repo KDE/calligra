@@ -122,8 +122,6 @@ Module for SVG and WMF previews in Konqueror.
 
 Add triple click (select a paragraph)
 
-Add Dcop Interface
-
 Rewrite of tables where positioning is much more fool-proof and table-borders actually work.
 More intelligent table-cell-scaling for cells with mixed text lengths
 
@@ -135,3 +133,4 @@ Setting tabs via the rulers is more intuitive.
 
 Add link (internet link/ address mail / file link)
 
+Add dcop interface : now we can insert text, change text format, etc...

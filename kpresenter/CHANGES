@@ -12,4 +12,5 @@ Changes after KPresenter 1.1
 - Limit position/size object to page
 - spell checking/search/find works on all page
 - Add "Show Presentation Duration"
+- Add dcop interface : now we can insert text, change text format, etc...
 
