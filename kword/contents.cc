@@ -239,7 +239,11 @@ KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int dept
         {
             KoTabulatorList tabList;
             KoTabulator tab;
-            tab.ptPos = KoUnit::fromUserValue( floor( KoUnit::toMM( fs->frame( 0 )->width() )  ), KoUnit::unit("mm") );
+            
+            //added 2 mm safety from border, otherwise the page number goes on the next line (assuming bug is in KoText)
+            //### REMOVE SAFETY DISTANCE FOR KOFFICE 2.0 (assuming KoText gets replaced) - raphael
+            tab.ptPos = KoUnit::fromUserValue( floor( KoUnit::toMM( fs->frame( 0 )->width() ) - 2 ), KoUnit::unit("mm") );
+            
             tab.type = T_RIGHT;
             tab.filling = TF_DOTS;
             tab.ptWidth = 0.5;
