@@ -38,6 +38,7 @@
 
 #include "karbon_view.h"
 #include "vkopainter.h"
+#include "vglobal.h"
 #include "vpainterfactory.h"
 #include "vselection.h"
 #include "vtexttool.h"
@@ -89,7 +90,7 @@ ShadowPreview::mouseReleaseEvent( QMouseEvent* e )
 	else
 	{
 		float r = acos( dx / fd );
-		a = int( ( dy <= 0 ? r : 6.2832 - r ) / 6.2832 * 360. );
+		a = int( ( dy <= 0 ? r : VGlobal::twopi - r ) / VGlobal::twopi * 360. );
 	}
 
 	emit changed( a, ( int
@@ -140,7 +141,12 @@ ShadowPreview::paintEvent( QPaintEvent* )
 
 	p.setPen( VStroke( color ) );
 	p.setBrush( VFill( color ) );
-	traceShape( &p, int( w / 4 + d * cos( a / 360. * 6.2832 ) ), int( h / 4 + d * sin( a / 360. * 6.2832 ) ), int( w / 2 ), int( h / 2 ) );
+
+	traceShape(
+		&p,
+		int( w / 4 + d * cos( a / 360. * VGlobal::twopi ) ),
+		int( h / 4 + d * sin( a / 360. * VGlobal::twopi ) ), int( w / 2 ), int( h / 2 ) );
+
 	p.strokePath();
 	p.fillPath();
 
@@ -582,7 +588,7 @@ void
 VTextTool::drawEditedText()
 {
 	if( !m_editedText )
-		return ;
+		return;
 
 	kdDebug() << "Drawing: " << m_editedText->text() << endl;
 
@@ -651,7 +657,7 @@ VTextTool::textChanged()
 {
 
 	if( !m_editedText )
-		return ;
+		return;
 
 	if( !m_creating && m_text && m_text->state() != VObject::hidden )
 	{
@@ -677,7 +683,7 @@ void
 VTextTool::accept()
 {
 	if( !m_editedText )
-		return ;
+		return;
 
 	VTextCmd* cmd;
 
@@ -725,7 +731,7 @@ void
 VTextTool::editBasePath()
 {
 	if( !m_editedText )
-		return ;
+		return;
 
 	view()->part()->document().selection()->clear();
 	view()->part()->document().selection()->append( &m_editedText->basePath() );
@@ -736,7 +742,7 @@ void
 VTextTool::convertToShapes()
 {
 	if( !m_text )
-		return ;
+		return;
 
 	VTextToCompositeCmd* cmd = new VTextToCompositeCmd(
 								   &view()->part()->document(),
@@ -759,7 +765,7 @@ void
 VTextTool::visitVComposite( VComposite& composite )
 {
 	if( composite.paths().count() == 0 )
-		return ;
+		return;
 
 	m_text = 0L;
 
@@ -851,7 +857,7 @@ void
 VTextTool::VTextCmd::execute()
 {
 	if( !m_text )
-		return ;
+		return;
 
 	if( !m_textModifications )
 	{
@@ -889,7 +895,7 @@ void
 VTextTool::VTextCmd::unexecute()
 {
 	if( !m_text )
-		return ;
+		return;
 
 	if( !m_textModifications )
 	{
@@ -929,7 +935,7 @@ void
 VTextTool::VTextToCompositeCmd::execute()
 {
 	if( !m_text )
-		return ;
+		return;
 
 	if( !m_group )
 	{
@@ -949,7 +955,7 @@ void
 VTextTool::VTextToCompositeCmd::unexecute()
 {
 	if( !m_text )
-		return ;
+		return;
 
 	m_text->setState( VObject::normal );
 

@@ -38,9 +38,10 @@ public:
 
 	void repaintAll( const KoRect & );
 	void repaintAll( bool drawVObjects = true );
-	void setYMirroring( bool edit );
 	void toContents( int vx, int vy, int x, int y ) const;
 	KoPoint toContents( const KoPoint & ) const;
+
+	void setYMirroring( bool edit );
 
 	QPixmap *pixmap() { return m_pixmap; }
 

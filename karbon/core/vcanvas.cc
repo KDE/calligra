@@ -95,20 +95,19 @@ VCanvas::setYMirroring( bool edit )
 	VPainter *p;
 	QWMatrix mat;
 	//kdDebug() << "viewport()->height() : " << contentsHeight() << endl;
+
 	if( edit )
-	{
 		p = m_view->painterFactory()->editpainter();
-		mat.scale( 1, -1 );
-	}
 	else
-	{
 		p = m_view->painterFactory()->painter();
-		mat.scale( 1, -1 );
-	}
+
+	mat.scale( 1, -1 );
+
 	if( contentsHeight() > height() )
 		mat.translate( -contentsX(), contentsY() - contentsHeight() );
 	else
 		mat.translate( 0, -height() );
+
 	p->setWorldMatrix( mat );
 }
 
