@@ -4566,7 +4566,7 @@ void KSpreadHBorder::updateColumns( int from, int to )
 
 void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 {
-  KSpreadSheet *table = m_pCanvas->activeTable();
+  KSpreadSheet * table = m_pCanvas->activeTable();
   if ( !table )
     return;
 
@@ -4587,6 +4587,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   double xPos;
   //Get the left column and the current x-position
   int x = table->leftColumn( int( m_pCanvas->doc()->unzoomItX( _ev->rect().x() ) + m_pCanvas->xOffset() ), xPos );
+
   //Align to the offset
   xPos = xPos - m_pCanvas->xOffset();
   int height = m_pCanvas->doc()->zoomItY( XBORDER_HEIGHT );
@@ -4608,73 +4609,143 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
                        m_pCanvas->markerRow() + cell->extraYCells());
 
   //several cells selected but not just a cell merged
-  bool area = ( m_pView->selection().left()!=0 &&
-                extraCell != m_pView->selection() );
+  bool area = ( m_pView->selection().left()!=0 && extraCell != m_pView->selection() );
 
-  //Loop through the columns, until we are out of range
-  while ( xPos <= m_pCanvas->doc()->unzoomItX( _ev->rect().right() ) )
+  if ( table->isRightToLeft() )
   {
-    bool highlighted = ( area && x >= m_pView->selection().left() &&
-                         x <= m_pView->selection().right());
-    bool selected = ( highlighted && util_isColumnSelected(m_pView->selection()) &&
-                      (!util_isRowSelected(m_pView->selection())) );
-    bool current = ( !highlighted && x == m_pView->selection().left() );
+    xPos = m_pCanvas->doc()->unzoomItX( _ev->rect().right() ) - xPos;
 
-    const ColumnFormat *col_lay = table->columnFormat( x );
-    int zoomedXPos = m_pCanvas->doc()->zoomItX( xPos );
-    int width = m_pCanvas->doc()->zoomItX( xPos + col_lay->dblWidth() ) - zoomedXPos;
+    //Loop through the columns, until we are out of range
+    while ( xPos >= m_pCanvas->doc()->unzoomItX( _ev->rect().left() ) )
+    {
+      bool highlighted = ( area && x >= m_pView->selection().left() && x <= m_pView->selection().right());
+      bool selected = ( highlighted && util_isColumnSelected( m_pView->selection() ) &&
+                        ( !util_isRowSelected( m_pView->selection() ) ) );
+      bool current = ( !highlighted && x == m_pView->selection().left() );
 
-    if ( selected )
-    {
-      QBrush fillSelected( colorGroup().brush( QColorGroup::Highlight ) );
-      qDrawShadePanel( &painter,
-                       zoomedXPos, 0, width, height,
-                       colorGroup(), FALSE, 1, &fillSelected );
-    }
-    else if ( highlighted )
-    {
-      QBrush fillHighlighted( colorGroup().brush( QColorGroup::Background ) );
-      qDrawShadePanel( &painter,
-                       zoomedXPos, 0, width, height,
-                       colorGroup(), true, 1, &fillHighlighted );
-    }
-    else
-    {
-      QBrush fill( colorGroup().brush( QColorGroup::Background ) );
-      qDrawShadePanel( &painter,
-                       zoomedXPos, 0, width, height,
-                       colorGroup(), FALSE, 1, &fill );
-    }
+      const ColumnFormat * col_lay = table->columnFormat( x );
+      xPos -= col_lay->dblWidth();
+      int zoomedXPos = m_pCanvas->doc()->zoomItX( xPos );
+      int width = m_pCanvas->doc()->zoomItX( xPos + col_lay->dblWidth() ) - zoomedXPos;
 
-    // Reset painter
-    painter.setFont( normalFont );
-    painter.setPen( colorGroup().text() );
+      if ( selected )
+      {
+        QBrush fillSelected( colorGroup().brush( QColorGroup::Highlight ) );
+        qDrawShadePanel( &painter,
+                         zoomedXPos, 0, width, height,
+                         colorGroup(), FALSE, 1, &fillSelected );
+      }
+      else if ( highlighted )
+      {
+        QBrush fillHighlighted( colorGroup().brush( QColorGroup::Background ) );
+        qDrawShadePanel( &painter,
+                         zoomedXPos, 0, width, height,
+                         colorGroup(), true, 1, &fillHighlighted );
+      }
+      else
+      {
+        QBrush fill( colorGroup().brush( QColorGroup::Background ) );
+        qDrawShadePanel( &painter,
+                         zoomedXPos, 0, width, height,
+                         colorGroup(), FALSE, 1, &fill );
+      }
 
-    if ( selected )
-      painter.setPen( colorGroup().highlightedText() );
-    else if ( highlighted || current )
-      painter.setFont( boldFont );
-    if(!m_pView->activeTable()->getShowColumnNumber())
-    {
+      // Reset painter
+      painter.setFont( normalFont );
+      painter.setPen( colorGroup().text() );
+
+      if ( selected )
+        painter.setPen( colorGroup().highlightedText() );
+      else if ( highlighted || current )
+        painter.setFont( boldFont );
+      if ( !m_pView->activeTable()->getShowColumnNumber() )
+      {
         QString colText = util_encodeColumnLabelText( x );
         int len = painter.fontMetrics().width( colText );
-        if(!col_lay->isHide())
-            painter.drawText( zoomedXPos + ( width - len ) / 2,
-                  ( height + painter.fontMetrics().ascent() -
-                    painter.fontMetrics().descent() ) / 2, colText );
-    }
-    else
-    {
+        if ( !col_lay->isHide() )
+          painter.drawText( zoomedXPos + ( width - len ) / 2,
+                            ( height + painter.fontMetrics().ascent() -
+                              painter.fontMetrics().descent() ) / 2, colText );
+      }
+      else
+      {
         QString tmp;
         int len = painter.fontMetrics().width( tmp.setNum(x) );
         if(!col_lay->isHide())
-            painter.drawText( zoomedXPos + ( width - len ) / 2,
-                  ( height + painter.fontMetrics().ascent() -
-                    painter.fontMetrics().descent() ) / 2,
-                    tmp.setNum(x) );
+          painter.drawText( zoomedXPos + ( width - len ) / 2,
+                            ( height + painter.fontMetrics().ascent() -
+                              painter.fontMetrics().descent() ) / 2,
+                            tmp.setNum(x) );
+      }
+      ++x;
+    }    
+  }
+  else
+  {
+    //Loop through the columns, until we are out of range
+    while ( xPos <= m_pCanvas->doc()->unzoomItX( _ev->rect().right() ) )
+    {
+      bool highlighted = ( area && x >= m_pView->selection().left() && x <= m_pView->selection().right());
+      bool selected = ( highlighted && util_isColumnSelected( m_pView->selection() ) &&
+                        ( !util_isRowSelected( m_pView->selection() ) ) );
+      bool current = ( !highlighted && x == m_pView->selection().left() );
+
+      const ColumnFormat *col_lay = table->columnFormat( x );
+      int zoomedXPos = m_pCanvas->doc()->zoomItX( xPos );
+      int width = m_pCanvas->doc()->zoomItX( xPos + col_lay->dblWidth() ) - zoomedXPos;
+
+      if ( selected )
+      {
+        QBrush fillSelected( colorGroup().brush( QColorGroup::Highlight ) );
+        qDrawShadePanel( &painter,
+                         zoomedXPos, 0, width, height,
+                         colorGroup(), FALSE, 1, &fillSelected );
+      }
+      else if ( highlighted )
+      {
+        QBrush fillHighlighted( colorGroup().brush( QColorGroup::Background ) );
+        qDrawShadePanel( &painter,
+                         zoomedXPos, 0, width, height,
+                         colorGroup(), true, 1, &fillHighlighted );
+      }
+      else
+      {
+        QBrush fill( colorGroup().brush( QColorGroup::Background ) );
+        qDrawShadePanel( &painter,
+                         zoomedXPos, 0, width, height,
+                         colorGroup(), FALSE, 1, &fill );
+      }
+
+      // Reset painter
+      painter.setFont( normalFont );
+      painter.setPen( colorGroup().text() );
+
+      if ( selected )
+        painter.setPen( colorGroup().highlightedText() );
+      else if ( highlighted || current )
+        painter.setFont( boldFont );
+      if ( !m_pView->activeTable()->getShowColumnNumber() )
+      {
+        QString colText = util_encodeColumnLabelText( x );
+        int len = painter.fontMetrics().width( colText );
+        if(!col_lay->isHide())
+          painter.drawText( zoomedXPos + ( width - len ) / 2,
+                            ( height + painter.fontMetrics().ascent() -
+                              painter.fontMetrics().descent() ) / 2, colText );
+      }
+      else
+      {
+        QString tmp;
+        int len = painter.fontMetrics().width( tmp.setNum(x) );
+        if(!col_lay->isHide())
+          painter.drawText( zoomedXPos + ( width - len ) / 2,
+                            ( height + painter.fontMetrics().ascent() -
+                              painter.fontMetrics().descent() ) / 2,
+                            tmp.setNum(x) );
+      }
+      xPos += col_lay->dblWidth();
+      ++x;
     }
-    xPos += col_lay->dblWidth();
-    x++;
   }
 }
 

@@ -2922,6 +2922,7 @@ void KSpreadView::addTable( KSpreadSheet *_t )
   insertTable( _t );
 
     // Connect some signals
+    QObject::connect( _t, SIGNAL( sig_refreshView() ), SLOT( slotRefreshView() ) );
     QObject::connect( _t, SIGNAL( sig_updateView( KSpreadSheet* ) ), SLOT( slotUpdateView( KSpreadSheet* ) ) );
     QObject::connect( _t->print(), SIGNAL( sig_updateView( KSpreadSheet* ) ), SLOT( slotUpdateView( KSpreadSheet* ) ) );
     QObject::connect( _t, SIGNAL( sig_updateView( KSpreadSheet *, const QRect& ) ),
@@ -2994,7 +2995,7 @@ void KSpreadView::removeAllTables()
   m_pDoc->emitEndOperation();
 }
 
-void KSpreadView::setActiveTable( KSpreadSheet *_t,bool updateTable )
+void KSpreadView::setActiveTable( KSpreadSheet * _t, bool updateTable )
 {
   if ( _t == m_pTable )
     return;
@@ -3008,6 +3009,9 @@ void KSpreadView::setActiveTable( KSpreadSheet *_t,bool updateTable )
     savedMarkers.replace(m_pTable, selectionInfo()->marker());
   }
 
+
+  KSpreadSheet * oldSheet = m_pTable;
+
   m_pTable = _t;
 
   if ( m_pTable == 0L )
@@ -3015,8 +3019,12 @@ void KSpreadView::setActiveTable( KSpreadSheet *_t,bool updateTable )
     m_pDoc->emitEndOperation();
     return;
   }
+
+  if ( oldSheet && oldSheet->isRightToLeft() != m_pTable->isRightToLeft() )
+    refreshView();
+
   m_pDoc->setDisplayTable( m_pTable );
-  if(updateTable)
+  if ( updateTable )
   {
     m_pTabBar->setActiveTab( _t->tableName() );
     m_pVBorderWidget->repaint();
@@ -4538,146 +4546,189 @@ int KSpreadView::bottomBorder() const
 
 void KSpreadView::refreshView()
 {
-    bool active=activeTable()->getShowFormula();
-    if ( m_pTable && !m_pTable->isProtected() )
-    {
-      m_alignLeft->setEnabled(!active);
-      m_alignCenter->setEnabled(!active);
-      m_alignRight->setEnabled(!active);
-    }
-    active=m_pDoc->getShowFormulaBar();
-    editWidget()->showEditWidget(active);
-    int posFrame=30;
-    if (active)
-      posWidget()->show();
-    else
-    {
-      posWidget()->hide();
-      posFrame=0;
-    }
+  KSpreadSheet * table = activeTable();
 
-    m_pToolWidget->show();
+  bool active = table->getShowFormula();
 
-    // If this value (30) is changed then topBorder() needs to
-    // be changed, too.
-    m_pToolWidget->setGeometry( 0, 0, width(), /*30*/posFrame );
-    int top = /*30*/posFrame;
+  if ( table && !table->isProtected() )
+  {
+    m_alignLeft->setEnabled( !active );
+    m_alignCenter->setEnabled( !active );
+    m_alignRight->setEnabled( !active );
+  }
+  active = m_pDoc->getShowFormulaBar();
+  editWidget()->showEditWidget( active );
 
-    int widthVScrollbar  = m_pVertScrollBar->sizeHint().width();// 16;
-    int heightHScrollbar = m_pHorzScrollBar->sizeHint().height();
+  int posFrame = 30;
+  if ( active )
+    posWidget()->show();
+  else
+  {
+    posWidget()->hide();
+    posFrame = 0;
+  }
 
-    if (m_pDoc->getShowTabBar())
-    {
-      m_pTabBarFirst->setGeometry( 0, height() - heightHScrollbar,
-                                   heightHScrollbar, heightHScrollbar );
-      m_pTabBarLeft->setGeometry( heightHScrollbar, height() - heightHScrollbar,
+  m_pToolWidget->show();
+
+  // If this value (30) is changed then topBorder() needs to
+  // be changed, too.
+  m_pToolWidget->setGeometry( 0, 0, width(), /*30*/posFrame );
+  int top = /*30*/posFrame;
+
+  int widthVScrollbar  = m_pVertScrollBar->sizeHint().width();// 16;
+  int heightHScrollbar = m_pHorzScrollBar->sizeHint().height();
+
+  int left = 0;
+  if ( table->isRightToLeft() && m_pDoc->getShowVerticalScrollBar() )
+    left = widthVScrollbar;
+
+  if (m_pDoc->getShowTabBar())
+  {
+    m_pTabBarFirst->setGeometry( left, height() - heightHScrollbar,
+                                 heightHScrollbar, heightHScrollbar );
+    m_pTabBarLeft->setGeometry( left + heightHScrollbar, height() - heightHScrollbar,
+                                heightHScrollbar, heightHScrollbar );
+    m_pTabBarRight->setGeometry( left + heightHScrollbar * 2, height() - heightHScrollbar,
+                                 heightHScrollbar, heightHScrollbar );
+    m_pTabBarLast->setGeometry( left + heightHScrollbar * 3, height() - heightHScrollbar,
                                   heightHScrollbar, heightHScrollbar );
-      m_pTabBarRight->setGeometry( heightHScrollbar * 2, height() - heightHScrollbar,
-                                   heightHScrollbar, heightHScrollbar );
-      m_pTabBarLast->setGeometry( heightHScrollbar * 3, height() - heightHScrollbar,
-                                  heightHScrollbar, heightHScrollbar );
-      m_pTabBarFirst->show();
-      m_pTabBarLeft->show();
-      m_pTabBarRight->show();
-      m_pTabBarLast->show();
-    }
-    else
-    {
-      m_pTabBarFirst->hide();
-      m_pTabBarLeft->hide();
-      m_pTabBarRight->hide();
-      m_pTabBarLast->hide();
-    }
+    m_pTabBarFirst->show();
+    m_pTabBarLeft->show();
+    m_pTabBarRight->show();
+    m_pTabBarLast->show();
+  }
+  else
+  {
+    m_pTabBarFirst->hide();
+    m_pTabBarLeft->hide();
+    m_pTabBarRight->hide();
+    m_pTabBarLast->hide();
+  }
 
-    if (!m_pDoc->getShowHorizontalScrollBar())
-      m_pTabBar->setGeometry( heightHScrollbar * 4, height() - heightHScrollbar,
-                              width() - heightHScrollbar * 4, heightHScrollbar );
-    else
-      m_pTabBar->setGeometry( heightHScrollbar * 4, height() - heightHScrollbar,
-                              width() / 2 - heightHScrollbar * 4, heightHScrollbar );
-    if(m_pDoc->getShowTabBar())
-      m_pTabBar->show();
-    else
-      m_pTabBar->hide();
+  if (!m_pDoc->getShowHorizontalScrollBar())
+    m_pTabBar->setGeometry( left + heightHScrollbar * 4, height() - heightHScrollbar,
+                            width() - heightHScrollbar * 4, heightHScrollbar );
+  else
+    m_pTabBar->setGeometry( left + heightHScrollbar * 4, height() - heightHScrollbar,
+                            width() / 2 - heightHScrollbar * 4, heightHScrollbar );
+  if ( m_pDoc->getShowTabBar() )
+    m_pTabBar->show();
+  else
+    m_pTabBar->hide();
 
-    // David's suggestion: move the scrollbars to KSpreadCanvas, but keep those resize statements
-    if(m_pDoc->getShowHorizontalScrollBar())
-      m_pHorzScrollBar->show();
-    else
-      m_pHorzScrollBar->hide();
+  // David's suggestion: move the scrollbars to KSpreadCanvas, but keep those resize statements
+  if ( m_pDoc->getShowHorizontalScrollBar() )
+    m_pHorzScrollBar->show();
+  else
+    m_pHorzScrollBar->hide();
+  
+  left = 0;
+  if ( !activeTable()->isRightToLeft() )
+    left = width() - widthVScrollbar;
+  
+  if ( !m_pDoc->getShowTabBar() && !m_pDoc->getShowHorizontalScrollBar())
+    m_pVertScrollBar->setGeometry( left,
+                                   top,
+                                   widthVScrollbar,
+                                   height() - top );
+  else
+    m_pVertScrollBar->setGeometry( left,
+                                   top,
+                                   widthVScrollbar,
+                                   height() - heightHScrollbar - top );
+  m_pVertScrollBar->setSteps( 20 /*linestep*/, m_pVertScrollBar->height() /*pagestep*/);
 
-    if(!m_pDoc->getShowTabBar() && !m_pDoc->getShowHorizontalScrollBar())
-      m_pVertScrollBar->setGeometry( width() - widthVScrollbar,
-                                     top,
-                                     widthVScrollbar,
-                                     height() - top );
-    else
-      m_pVertScrollBar->setGeometry( width() - widthVScrollbar,
-                                     top,
-                                     widthVScrollbar,
-                                     height() - heightHScrollbar - top );
-    m_pVertScrollBar->setSteps( 20 /*linestep*/, m_pVertScrollBar->height() /*pagestep*/);
-    if (m_pDoc->getShowVerticalScrollBar())
-      m_pVertScrollBar->show();
-    else
-    {
-      widthVScrollbar = 0;
-      m_pVertScrollBar->hide();
-    }
+  if ( m_pDoc->getShowVerticalScrollBar() )
+    m_pVertScrollBar->show();
+  else
+  {
+    widthVScrollbar = 0;
+    m_pVertScrollBar->hide();
+  }
 
-    int widthRowHeader = int( m_pCanvas->doc()->zoomItX( YBORDER_WIDTH ) );
-    if (m_pDoc->getShowRowHeader())
-      m_pVBorderWidget->show();
+  int widthRowHeader = int( m_pCanvas->doc()->zoomItX( YBORDER_WIDTH ) );
+  if ( m_pDoc->getShowRowHeader() )
+    m_pVBorderWidget->show();
+  else
+  {
+    widthRowHeader = 0;
+    m_pVBorderWidget->hide();
+  }
+
+  int heightColHeader = int( m_pCanvas->doc()->zoomItY( XBORDER_HEIGHT ) );
+  if ( m_pDoc->getShowColHeader() )
+    m_pHBorderWidget->show();
+  else
+  {
+    heightColHeader = 0;
+    m_pHBorderWidget->hide();
+  }
+  
+  if ( statusBar() )
+  {
+    if ( m_pDoc->getShowStatusBar() )
+      statusBar()->show();
     else
-    {
-      widthRowHeader = 0;
-      m_pVBorderWidget->hide();
-    }
-
-    int heightColHeader = int( m_pCanvas->doc()->zoomItY( XBORDER_HEIGHT ) );
-    if(m_pDoc->getShowColHeader())
-      m_pHBorderWidget->show();
+      statusBar()->hide();
+  }
+  
+  if ( table->isRightToLeft() )
+  {
+    if ( !m_pDoc->getShowTabBar() && !m_pDoc->getShowHorizontalScrollBar() )
+      m_pFrame->setGeometry( widthVScrollbar, top, width() - widthVScrollbar, height() - top - heightHScrollbar);
     else
-    {
-      heightColHeader = 0;
-      m_pHBorderWidget->hide();
-    }
+      m_pFrame->setGeometry( widthVScrollbar, top, width() - widthVScrollbar,
+                             height() - heightHScrollbar - top );
 
-    if (statusBar())
-    {
-      if(m_pDoc->getShowStatusBar())
-        statusBar()->show();
-      else
-        statusBar()->hide();
-    }
-
+    m_pHorzScrollBar->setGeometry( width() / 2 + widthVScrollbar,
+                                   height() - heightHScrollbar,
+                                   width() / 2 - widthVScrollbar,
+                                   heightHScrollbar );
+    m_pHorzScrollBar->setSteps( 20 /*linestep*/, m_pHorzScrollBar->width() /*pagestep*/);
+  }
+  else
+  {
+    if ( !m_pDoc->getShowTabBar() && !m_pDoc->getShowHorizontalScrollBar() )
+      m_pFrame->setGeometry( 0, top, width() - widthVScrollbar, height() - top - heightHScrollbar);
+    else
+      m_pFrame->setGeometry( 0, top, width() - widthVScrollbar,
+                             height() - heightHScrollbar - top );
     m_pHorzScrollBar->setGeometry( width() / 2,
                                    height() - heightHScrollbar,
                                    width() / 2 - widthVScrollbar,
                                    heightHScrollbar );
     m_pHorzScrollBar->setSteps( 20 /*linestep*/, m_pHorzScrollBar->width() /*pagestep*/);
+  }
 
-    if(!m_pDoc->getShowTabBar() && !m_pDoc->getShowHorizontalScrollBar())
-      m_pFrame->setGeometry( 0, top, width() - widthVScrollbar, height() - top - heightHScrollbar);
-    else
-      m_pFrame->setGeometry( 0, top, width() - widthVScrollbar,
-                             height() - heightHScrollbar - top );
-    m_pFrame->show();
+  m_pFrame->show();
 
-    m_pCanvas->setGeometry( widthRowHeader, heightColHeader,
-                            m_pFrame->width() -widthRowHeader, m_pFrame->height() - heightColHeader );
-    m_pCanvas->updatePosWidget();
+  left = 0;
+  if ( !table->isRightToLeft() )
+    left = widthRowHeader;
 
+  m_pCanvas->setGeometry( left, heightColHeader,
+                          m_pFrame->width() - widthRowHeader, m_pFrame->height() - heightColHeader );
+  m_pCanvas->updatePosWidget();
+
+  left = 0;
+  if ( table->isRightToLeft() )
+  {
+    m_pHBorderWidget->setGeometry( 1.0, 0,
+                                   m_pFrame->width() - widthRowHeader, heightColHeader );
+
+    left = width() - widthRowHeader - widthVScrollbar;
+  }
+  else
     m_pHBorderWidget->setGeometry( widthRowHeader + 1, 0,
                                    m_pFrame->width() - widthRowHeader, heightColHeader );
 
-    m_pVBorderWidget->setGeometry( 0,heightColHeader + 1, widthRowHeader,
-                                   m_pFrame->height() - heightColHeader );
+  m_pVBorderWidget->setGeometry( left, heightColHeader + 1, widthRowHeader,
+                                 m_pFrame->height() - heightColHeader );
 }
 
 void KSpreadView::resizeEvent( QResizeEvent * )
 {
- refreshView();
+  refreshView();
 }
 
 void KSpreadView::popupChildMenu( KoChild* child, const QPoint& global_pos )
@@ -5672,6 +5723,14 @@ void KSpreadView::setText( const QString& _text )
 void KSpreadView::slotAddTable( KSpreadSheet *_table )
 {
   addTable( _table );
+}
+
+void KSpreadView::slotRefreshView()
+{
+  refreshView();
+  m_pCanvas->repaint();
+  m_pVBorderWidget->repaint();
+  m_pHBorderWidget->repaint();
 }
 
 void KSpreadView::slotUpdateView( KSpreadSheet *_table )

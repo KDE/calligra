@@ -434,6 +434,7 @@ protected slots:
 
 public slots:
     // Document signals
+    void slotRefreshView();
     void slotUpdateView( KSpreadSheet *_table );
     void slotUpdateView( KSpreadSheet *_table, const QRect& );
     void slotUpdateHBorder( KSpreadSheet *_table );

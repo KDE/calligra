@@ -400,9 +400,10 @@ void KSpreadTabBar::slotRename()
                 // Recursion
                 slotRename();
                 return;
-             }
-             m_pView->updateEditWidget();
-             m_pView->doc()->setModified( true );
+            }
+
+            m_pView->updateEditWidget();
+            m_pView->doc()->setModified( true );
         }
     }
 }

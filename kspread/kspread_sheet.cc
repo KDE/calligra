@@ -219,7 +219,8 @@ KSpreadSheet* KSpreadSheet::find( int _id )
 }
 
 KSpreadSheet::KSpreadSheet( KSpreadMap *_map, const QString &tableName, const char *_name )
-  : QObject( _map, _name )
+  : QObject( _map, _name ),
+    m_bRightToLeft( false )
 {
   if ( s_mapTables == 0L )
     s_mapTables = new QIntDict<KSpreadSheet>;
@@ -6048,6 +6049,23 @@ void KSpreadSheet::setProtected( QCString const & passwd )
   m_strPassword = passwd;
 }
 
+void KSpreadSheet::checkContentDirection( QString const & name )
+{
+  bool rtl = m_bRightToLeft;
+
+  kdDebug() << "name[0].direction(): " << name[0].direction() << ", RTL: " << rtl << endl;    
+  if ( name.left(3) == "rtl" ) // for testing...
+  {
+    kdDebug() << "Table direction set to right to left" << endl;
+    m_bRightToLeft = true;
+  }
+  else
+    m_bRightToLeft = false;
+
+  if ( rtl != m_bRightToLeft )
+    emit sig_refreshView();
+}
+
 bool KSpreadSheet::loadXML( const QDomElement& table )
 {
     bool ok = false;
@@ -6325,6 +6343,8 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
       else
         m_strPassword = QCString( "" );
     }
+
+    checkContentDirection( m_strName );
 
     return true;
 }
@@ -6660,8 +6680,10 @@ bool KSpreadSheet::setTableName( const QString& name, bool init, bool makeUndo )
         }
     }
 
-    m_pDoc->changeAreaTableName(old_name,name);
+    m_pDoc->changeAreaTableName(old_name, name);
     emit sig_nameChanged( this, old_name );
+
+    checkContentDirection( name );
 
     return TRUE;
 }

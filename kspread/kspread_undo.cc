@@ -865,7 +865,7 @@ void KSpreadUndoSetTableName::undo()
 
     m_redoName = table->tableName();
 
-    table->setTableName( m_name,false,false );
+    table->setTableName( m_name,false,false );    
 
     doc()->undoBuffer()->unlock();
 }

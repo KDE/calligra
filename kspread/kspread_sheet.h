@@ -285,6 +285,7 @@ public:
     virtual bool loadChildren( KoStore* _store );
 
     bool isLoading();
+    inline bool isRightToLeft() const { return m_bRightToLeft; }
 
     void password( QCString & passwd ) const { passwd = m_strPassword; }
     bool isProtected() const { return !m_strPassword.isNull(); }
@@ -1098,6 +1099,7 @@ public:
 
 
 signals:
+    void sig_refreshView();
     void sig_updateView( KSpreadSheet *_table );
     void sig_updateView( KSpreadSheet *_table, const QRect& );
     void sig_updateHBorder( KSpreadSheet *_table );
@@ -1220,6 +1222,7 @@ protected:
 
 
     bool m_bScrollbarUpdates;
+    bool m_bRightToLeft;
 
     DCOPObject* m_dcop;
     bool m_bTableHide;
@@ -1309,7 +1312,8 @@ private:
 
     void convertObscuringBorders();
     void checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, int & ret);
-    int adjustColumnHelper( KSpreadCell * c, int _col, int _row );
+    int  adjustColumnHelper( KSpreadCell * c, int _col, int _row );
+    void checkContentDirection( QString const & name );
 };
 
 typedef KSpreadSheet KSpreadTable;

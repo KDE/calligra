@@ -3064,7 +3064,7 @@ int KSpreadCell::defineAlignX()
     int a = align( column(), row() );
     if ( a == KSpreadCell::Undefined )
     {
-        if ( m_value.isBoolean() || m_value.isNumber() )
+        if ( m_value.isBoolean() || m_value.isNumber() || m_pTable->isRightToLeft() )
             a = KSpreadCell::Right;
         else
             a = KSpreadCell::Left;
