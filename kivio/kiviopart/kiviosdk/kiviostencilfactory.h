@@ -26,7 +26,8 @@ class QPixmap;
 #include <qstring.h>
 #include <qobject.h>
 #include <qstringlist.h>
-class KivioStencilFactory : public QObject
+#include <koffice_export.h>
+class KIVIO_EXPORT KivioStencilFactory : public QObject
 {
 	Q_OBJECT
     public:

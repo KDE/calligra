@@ -27,13 +27,13 @@
 
 #include "kivio_1d_stencil.h"
 #include "kivio_arrowhead.h"
-
+#include <koffice_export.h>
 class KivioIntraStencilData;
 class KivioCustomDragData;
 class KivioPage;
 
 namespace Kivio {
-  class PolyLineConnector : public Kivio1DStencil
+  class KIVIO_EXPORT PolyLineConnector : public Kivio1DStencil
   {
     public:
       PolyLineConnector();

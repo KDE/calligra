@@ -20,7 +20,7 @@ class KivioIntraStencilData;
 class KivioStencil;
 
 
-class Kivio1DStencil : public KivioStencil
+class KDE_EXPORT Kivio1DStencil : public KivioStencil
 {
 protected:
     QPtrList <KivioConnectorPoint> *m_pConnectorPoints;

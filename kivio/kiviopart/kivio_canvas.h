@@ -31,7 +31,7 @@
 #include <koQueryTrader.h>
 #include <koPoint.h>
 #include <koRect.h>
-
+#include <koffice_export.h>
 #include "kivio_intra_stencil_data.h"
 
 class KivioView;
@@ -56,7 +56,7 @@ class KoRect;
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
 
-class KivioCanvas : public QWidget
+class KIVIO_EXPORT KivioCanvas : public QWidget
 { Q_OBJECT
     friend class KivioView;
   public:

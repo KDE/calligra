@@ -24,13 +24,13 @@
 
 #include "kivio_settings.h"
 #include "kivio_grid_data.h"
-
+#include <koffice_export.h>
 
 namespace Kivio {
   /**
   * This class handles all settings
   */
-  class Config : public Kivio::Settings
+  class KIVIO_EXPORT Config : public Kivio::Settings
   {
     public:
       /**

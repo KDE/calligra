@@ -25,7 +25,7 @@
 #include <qcolor.h>
 #include <koRect.h>
 #include <koPageLayout.h>
-
+#include <koffice_export.h>
 class KivioPage;
 class KivioLayer;
 class KivioStencil;
@@ -121,7 +121,7 @@ public:
     void unexecute() { KivioAddStencilCommand::execute(); }
 };
 
-class KivioChangeStencilTextCommand : public KNamedCommand
+class KIVIO_EXPORT KivioChangeStencilTextCommand : public KNamedCommand
 {
 public:
     KivioChangeStencilTextCommand( const QString &_name, KivioStencil *_stencil, const QString & _oldText, const QString & _newText, KivioPage *_page);
@@ -175,7 +175,7 @@ protected:
 
 };
 
-class KivioResizeStencilCommand : public KNamedCommand
+class KIVIO_EXPORT  KivioResizeStencilCommand : public KNamedCommand
 {
 public:
     KivioResizeStencilCommand(const QString &_name, KivioStencil *_stencil, KoRect _initSize, KoRect _endSize, KivioPage *_page );
@@ -191,7 +191,7 @@ protected:
     KivioPage *m_page;
 };
 
-class KivioMoveStencilCommand : public KNamedCommand
+class KIVIO_EXPORT KivioMoveStencilCommand : public KNamedCommand
 {
 public:
     KivioMoveStencilCommand(const QString &_name, KivioStencil *_stencil, KoRect _initSize, KoRect _endSize, KivioPage *_page );

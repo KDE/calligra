@@ -30,7 +30,7 @@
 #include <koGlobal.h>
 
 #include "kivio_config.h"
-
+#include <koffice_export.h>
 class KivioDoc;
 class KivioView;
 class KivioMap;
@@ -63,7 +63,7 @@ class QFont;
 
 using namespace Kivio;
 
-class KivioDoc : public KoDocument
+class KIVIO_EXPORT KivioDoc : public KoDocument
 {
   Q_OBJECT
   friend class KivioPage;

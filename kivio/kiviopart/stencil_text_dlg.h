@@ -20,10 +20,10 @@
 #define STENCIL_TEXT_DLG_H
 
 #include <kdialogbase.h>
-
+#include <koffice_export.h>
 class QTextEdit;
 
-class KivioStencilTextDlg : public KDialogBase
+class KIVIO_EXPORT KivioStencilTextDlg : public KDialogBase
 {
   Q_OBJECT
   protected:

@@ -20,9 +20,9 @@
 #define KIVIO_STENCIL_SPAWNER_INFO_H
 
 #include <qstring.h>
-
+#include <koffice_export.h>
 class QDomElement;
-class KivioStencilSpawnerInfo
+class KIVIO_EXPORT KivioStencilSpawnerInfo
 {
 protected:
     QString m_author,

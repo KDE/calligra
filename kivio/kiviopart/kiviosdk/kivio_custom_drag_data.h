@@ -20,8 +20,9 @@
 #define KIVIO_CUSTOM_DRAG_DATA_H
 
 class KivioPage;
+#include <koffice_export.h>
 
-class KivioCustomDragData
+class KIVIO_EXPORT KivioCustomDragData
 {
 public:
     KivioCustomDragData();

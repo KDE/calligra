@@ -21,13 +21,14 @@
 
 #include <qobject.h>
 #include "kivio_mousetool.h"
+#include <koffice_export.h>
 
 namespace Kivio {
   class Plugin;
   
   /**
   This class manages the plugins*/
-  class PluginManager : public QObject {
+  class KIVIO_EXPORT PluginManager : public QObject {
     Q_OBJECT
     public:
       PluginManager(KivioView* parent, const char* name = 0);

@@ -21,10 +21,11 @@
 
 #include <koSize.h>
 #include <qcolor.h>
+#include <koffice_export.h>
 
 class QDomElement;
 
-class KivioGridData
+class KIVIO_EXPORT KivioGridData
 {
 public:
   KivioGridData();

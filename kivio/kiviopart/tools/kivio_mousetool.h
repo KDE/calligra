@@ -22,14 +22,14 @@
 #include "kivio_plugin.h"
 
 #include <qptrlist.h>
-
+#include <koffice_export.h>
 class KivioStencil;
 class KoPoint;
 
 namespace Kivio {
   /**
   Baseclass for mouse tools (like eg the select tool)*/
-  class MouseTool : public Kivio::Plugin
+  class KIVIO_EXPORT MouseTool : public Kivio::Plugin
   {
     Q_OBJECT
     public:

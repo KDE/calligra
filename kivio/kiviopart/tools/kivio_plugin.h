@@ -21,12 +21,13 @@
 
 #include <kparts/plugin.h>
 #include <kivio_view.h>
+#include <koffice_export.h>
 
 namespace Kivio {
   /**
   This class provides the base for all plugins in Kivio
   */
-  class Plugin : public KParts::Plugin
+  class KIVIO_EXPORT Plugin : public KParts::Plugin
   {
     Q_OBJECT
     public:

@@ -78,7 +78,7 @@ class KivioStraightConnector : public Kivio1DStencil
     virtual double endAHLength()                 { return m_endAH->length(); }
 };
 
-class KivioConnectorFactory : public KivioStencilFactory
+class KIVIOPLUGINS_EXPORT KivioConnectorFactory : public KivioStencilFactory
 {
   Q_OBJECT
   public:

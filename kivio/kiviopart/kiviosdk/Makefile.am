@@ -5,7 +5,7 @@ noinst_LTLIBRARIES =libkiviosdk.la
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart/config \
 	-I$(top_builddir)/kivio/kiviopart/config \
 	-I$(top_srcdir)/kivio/kiviopart\
-	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes) $(PYTHONINC)
+	$(KOFFICECORE_INCLUDES) $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes) $(PYTHONINC)
 
 libkiviosdk_la_METASOURCES = AUTO
 

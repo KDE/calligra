@@ -113,7 +113,7 @@ typedef enum
 
 
 
-class KivioStencil
+class KDE_EXPORT KivioStencil
 {
   protected:
     // Dimensions, size

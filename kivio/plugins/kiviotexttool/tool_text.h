@@ -21,7 +21,7 @@
 #define TOOL_TEXT_H
 
 #include "kivio_mousetool.h"
-
+#include <koffice_export.h>
 class QMouseEvent;
 class QCursor;
 
@@ -33,7 +33,7 @@ class KivioView;
 class KivioPage;
 class KoPoint;
 
-class TextTool : public Kivio::MouseTool
+class KIVIO_EXPORT TextTool : public Kivio::MouseTool
 {
   Q_OBJECT
   public:

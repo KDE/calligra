@@ -47,7 +47,7 @@ class DCOPObject;
 #include <koPoint.h>
 
 #include "kivio_stencil.h"
-
+#include <koffice_export.h>
 class KivioPainter;
 class KPrinter;
 class KivioView;
@@ -76,7 +76,7 @@ struct DistributeData
   Extent extent;
 };
 
-class KivioPage : public QObject
+class KIVIO_EXPORT KivioPage : public QObject
 {
   Q_OBJECT
   public:

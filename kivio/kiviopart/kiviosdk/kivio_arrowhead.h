@@ -25,7 +25,7 @@
 
 #include <qcolor.h>
 #include <qdom.h>
-
+#include <koffice_export.h>
 #define KIVIO_CUT_LENGTH         -1.0f
 #define KIVIO_CUT_HALF_LENGTH    -2.0f
 
@@ -83,7 +83,7 @@ struct KivioArrowHeadData
 };
 
 
-class KivioArrowHead
+class KDE_EXPORT KivioArrowHead
 {
   protected:
     /**

@@ -76,9 +76,10 @@ class KoLineStyleAction;
 #include <koDocument.h>
 #include <koUnit.h>
 
+#include <koffice_export.h>
 using namespace Kivio;
 
-class KivioView : public KoView
+class KIVIO_EXPORT KivioView : public KoView
 {
   Q_OBJECT
   friend class KivioCanvas;

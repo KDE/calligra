@@ -20,11 +20,11 @@
 #define KIVIO_FACTORY_H
 
 #include <koFactory.h>
-
+#include <koffice_export.h>
 class KInstance;
 class KAboutData;
 
-class KivioFactory : public KoFactory
+class KIVIO_EXPORT KivioFactory : public KoFactory
 { Q_OBJECT
 public:
   KivioFactory( QObject* parent = 0, const char* name = 0 );

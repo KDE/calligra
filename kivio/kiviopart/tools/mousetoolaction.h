@@ -20,10 +20,11 @@
 #define KIVIOMOUSETOOLACTION_H
 
 #include <kactionclasses.h>
+#include <koffice_export.h>
 
 namespace Kivio {
 
-class MouseToolAction : public KRadioAction
+class KIVIO_EXPORT MouseToolAction : public KRadioAction
 {
   Q_OBJECT
   public:
