@@ -537,6 +537,7 @@ public:
     int adjustColumn( const QPoint &_marker, int _col = -1 );
     int adjustRow( const QPoint &_marker, int _row = -1 );
 
+    bool isCellSelected(int column, int row);
     /**
     * Check wether an entire row is selected in the current selection
     */

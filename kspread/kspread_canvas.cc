@@ -1189,7 +1189,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
         bool isLink = (m_strAnchor.find("http://") == 0 || m_strAnchor.find("mailto:") == 0
                        || m_strAnchor.find("ftp://") == 0 || m_strAnchor.find("file:") == 0 );
         bool isLocalLink = (m_strAnchor.find("file:") == 0);
-        if( isLink ) 
+        if( isLink )
         {
             QString question = i18n("Do you want to open this link to '%1'?\n").arg(m_strAnchor);
             if( isLocalLink ) {
@@ -1887,7 +1887,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
               if (max == -1)
                   return;
-                  
+
               if ( m_bChoose )
                   chooseGotoLocation( max, markerRow(), 0, make_select );
               else
@@ -2349,15 +2349,10 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
 	} while( rl->isHide() && i_top != 1);
     }
 
-    /*old_marker_outer.setCoords( QMAX( 1, old_marker.left() - 1 ), QMAX( 1, old_marker.top() - 1 ),
-                                old_marker.right() + 1, old_marker.bottom() + 1 );*/
-    old_marker_outer.setCoords( QMAX( 1,         i_left-1 ),   QMAX( 1,         i_top-1 ),
-                                QMIN( KS_colMax, i_right+1 ) , QMIN( KS_rowMax, i_bottom+1 ) );
+    old_marker_outer.setCoords( QMAX( 1, i_left-1 ), QMAX( 1, i_top-1 ),
+                                QMIN( KS_colMax, i_right+1 ) ,
+                                QMIN( KS_rowMax, i_bottom+1 ) );
 
-
-    // QRect old_marker_rect = _old_sel;
-    // if ( old_marker_rect.left() == 0 )
-    // old_marker_rect =  QRect( m_marker, m_marker );
 
     // Old selection was empty -> Just use the marker
     if ( old_sel.left() == 0 )
@@ -2399,14 +2394,12 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
 	    rl = activeTable()->nonDefaultRowLayout( i_top );
  	} while( rl->isHide() && i_top!=0);
     }
-    /*old_outer.setCoords( QMAX( 1, old_sel.left() - 1 ), QMAX( 1, old_sel.top() - 1 ),
-                         old_sel.right() + 1, old_sel.bottom() + 1 );*/
-    old_outer.setCoords( QMAX( 1, i_left-2  ),         QMAX( 1, i_top-2  ),
-                         QMIN( KS_colMax, i_right+2 ), QMIN( KS_rowMax, i_bottom+2) );
+
+    old_outer.setCoords( QMAX( 1, i_left-2  ), QMAX( 1, i_top-2  ),
+                         QMIN( KS_colMax, i_right+2 ),
+                         QMIN( KS_rowMax, i_bottom+2) );
 
     // Which cells are located next to the new selection ?
-    // QRect new_outer;
-    // outer.setCoords( new_sel.left() - 1, new_sel.top() - 1, new_sel.right() + 1, new_sel.bottom() + 1 );
 
     // Determine which area might be subject of repainting.
     QRect uni = old_sel.unite( new_sel ).unite( old_outer ).unite( old_marker ).unite( new_marker );
@@ -2415,13 +2408,9 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     uni.rBottom() = QMIN( KS_colMax, uni.bottom() );
     uni.rRight() = QMIN( KS_rowMax, uni.right() );
 
-    //qDebug("UNI left/top :%i/%i right/bottom :%i/%i", uni.left(), uni.top(), uni.right(), uni.bottom() );
-
     // Determine the position of "uni" rect on the screen.
     int left = table->columnPos( uni.left() );
     int top = table->rowPos( uni.top() );
-    // int right = table->columnPos( uni.right() + 1 );
-    // int bottom = table->rowPos( uni.bottom() + 1 );
 
     QPainter painter;
     painter.begin( this );
@@ -2463,8 +2452,6 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     int bottom_row = uni.bottom();
     int left_col = uni.left();
     int right_col = uni.right();
-
-    QRect r;
 
     int ypos = top;
     for ( int y = top_row; y <= bottom_row && ypos <= view.bottom(); y++ )
@@ -2628,30 +2615,11 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
             // c) One of its edges used to show the marker but does no longer
             if ( ( new_sel.contains( p ) ^ old_sel.contains( p ) ) ||   // a) and b)
                  ( ( old_border & new_border ) != old_border )        // c)
-                 ||new_marker.contains(QPoint(x,y))||old_marker.contains(QPoint(x,y)))
+                 ||new_marker.contains(p)||old_marker.contains(p))
 
             {
-                if(cell->isForceExtraCells())
-                        cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
-                else if ( cell->isObscured() && cell->isObscuringForced() )
-                {
-		    int moveX=cell->obscuringCellsColumn();
-		    int moveY=cell->obscuringCellsRow();
-		    KSpreadCell *cell2 = table->cellAt( moveX, moveY );
-		    if( cell2->extraXCells()>1 && cell2->extraYCells()>1 )
-			{
-			    QRect area;
-			    area.setCoords( moveX+1,                     moveY+1,
-			                    moveX+cell2->extraXCells()-1,moveY+cell2->extraYCells()-1);
-			    if(!area.contains(x,y))
-				cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
-			}
-		    else
-			cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
-
-                }
-                else
-		    cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
+                cell->paintCell( view, painter, QPoint(xpos, ypos),
+                                 QPoint(x,y));
             }
 
             xpos += col_lay->width();
@@ -3124,7 +3092,7 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
     else if (m_bSelection)
     {
         QRect rect = table->selectionRect();
-        
+
         // TODO: please don't remove. Right now it's useless, but it's for a future feature
         // Norbert
         bool m_frozen = false;
@@ -3135,7 +3103,7 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
             int i;
             RowLayout * row;
             QValueList<int>hiddenRows;
-            
+
             for ( i = rect.top(); i <= rect.bottom(); ++i )
             {
                 row = m_pView->activeTable()->rowLayout( i );
@@ -3144,7 +3112,7 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
                     hiddenRows.append(i);
                 }
             }
-            
+
             if (hiddenRows.count() > 0)
                 m_pView->activeTable()->showRow(0, -1, hiddenRows);
         }
@@ -3555,7 +3523,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     m_iResizedColumn = table->leftColumn( _ev->pos().x() - /*3*/1, tmp, m_pCanvas );
     paintSizeIndicator( _ev->pos().x(), true );
   }
-  else if ( ( rect.left() != rect.right() ) 
+  else if ( ( rect.left() != rect.right() )
             && ( tmpCol >= rect.left() )
             && ( tmpCol <= rect.right() ) )
   {
@@ -3667,7 +3635,7 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
     else if (m_bSelection)
     {
         QRect rect = table->selectionRect();
-        
+
         // TODO: please don't remove. Right now it's useless, but it's for a future feature
         // Norbert
         bool m_frozen = false;
@@ -3678,7 +3646,7 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
             int i;
             ColumnLayout * col;
             QValueList<int>hiddenCols;
-            
+
             for ( i = rect.left(); i <= rect.right(); ++i )
             {
                 col = m_pView->activeTable()->columnLayout( i );
@@ -3687,7 +3655,7 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
                     hiddenCols.append(i);
                 }
             }
-            
+
             if (hiddenCols.count() > 0)
                 m_pView->activeTable()->showColumn(0, -1, hiddenCols);
         }
@@ -3875,8 +3843,8 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     while ( x < width() )
     {
     int w = table->columnLayout( col )->width( m_pCanvas );
-    
-    if ( _ev->pos().x() >= x + w - 1 
+
+    if ( _ev->pos().x() >= x + w - 1
     && _ev->pos().x() <= x + w + 1
     &&!(table->columnLayout(tmpCol)->isHide() && tmpCol == 1) )
     {

@@ -191,19 +191,18 @@ public:
 
     /**
      * Paints the cell.
+     *
+     * @param rect the portion of the canvas that is actually in view
+     * @param painter the painter object to paint on
+     * @param corner coordinates on the painter where the top left corner
+     *               of the cell should be painted
+     * @param cellRef the column/row coordinates of the cell.
+     * @param drawCursor whether to draw the cursor and selection or not
      */
-    void paintCell( const QRect& _rect, QPainter &_painter, int _tx, int _ty,
-                    int _col, int _row, ColumnLayout *cl, RowLayout *rl,
-                    QRect *_prect = 0L, bool override_obscured = false, bool drawCursor=true );
+    void paintCell( const QRect& rect, QPainter &painter, QPoint corner,
+                    QPoint cellRef, bool drawCursor=true );
 
-    /**
-     * A convenience function
-     */
-    void paintCell( const QRect & _ev, QPainter &_painter,
-                    int _col, int _row,
-                    QRect *_prect = 0L );
-
-    /**
+  /**
      * @return the column this cell is in. May return 0 if the cell is the default cell.
      */
     int column() const { return m_iColumn; }
@@ -488,7 +487,7 @@ public:
      *                    depending on it.
      */
     void NotifyDepending( int col, int row, KSpreadTable* table, bool isDepending );
-    
+
     /**
      * Causes the layout to be recalculated when the cell is drawn next time.
      * This flag is for example set if the width of the column changes or if
@@ -669,7 +668,6 @@ public:
 
 
     void freeAllObscuredCells();
-
 
     QString dataTypeToString( DataType dt ) const;
     DataType stringToDataType( const QString& str ) const;
@@ -967,6 +965,22 @@ private:
      */
     static QChar decimal_point;
     static const char* s_dataTypeToString[];
+
+  /* helper functions to the paintCell(...) function */
+    void paintCellBorders(QPainter& painter, QPoint corner, QPoint cellRef);
+    void paintMarker(QPainter& painter, QPoint corner, QPoint cellRef);
+    void paintPageBorders(QPainter& painter, QPoint corner, QPoint cellRef);
+    void paintText(QPainter& painter, QPoint corner, QPoint cellRef,
+                   bool selected);
+    void paintMoreTextIndicator(QPainter& painter, QPoint corner,
+                                QPoint cellRef);
+    void paintCommentIndicator(QPainter& painter, QPoint corner, QPoint cellRef);
+    void paintDefaultBorders(QPainter& painter, QPoint corner, QPoint cellRef);
+    void paintBackground(QPainter& painter, QPoint corner, QPoint cellRef,
+                         bool selected);
+    void paintObscuredCells(const QRect& rect, QPainter& painter, QPoint corner,
+                            QPoint cellRef);
+
 };
 
 #endif

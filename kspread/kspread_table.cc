@@ -4856,7 +4856,7 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
             KSpreadCell *cell = cellAt( x, y );
             QRect r( 0, 0, view.width(), view.height() );
-            cell->paintCell( r, _painter, xpos, ypos, x, y, col_lay, row_lay );
+            cell->paintCell( r, _painter, QPoint(xpos, ypos), QPoint(x,y));
 
             xpos += col_lay->width();
         }
@@ -5632,6 +5632,19 @@ KSpreadCell* KSpreadTable::getNextCellLeft(int col, int row)
 
 KSpreadCell* KSpreadTable::getNextCellRight(int col, int row)
 { return m_cells.getNextCellRight(col, row); }
+
+bool KSpreadTable::isCellSelected(int column, int row)
+{
+  bool selected;
+  KSpreadCell* cell = cellAt(column, row);
+  selected = selectionRect().contains( QPoint( column, row ) );
+  if ( cell->isObscured() )
+  {
+    selected = selectionRect().contains(
+      QPoint( cell->obscuringCellsColumn(), cell->obscuringCellsRow() ) );
+  }
+  return selected;
+}
 
 #ifndef NDEBUG
 void KSpreadTable::printDebug()

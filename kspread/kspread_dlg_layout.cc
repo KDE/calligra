@@ -3186,8 +3186,7 @@ void CellLayoutPageBorder::applyTopOutline( int _left, int _top, int _right,
     for ( int x = _left; x <= _right; x++ )
     {
       KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,_top );
-      if(!obj->isObscuringForced())
-        obj->setTopBorderPen( tmpPen );
+      obj->setTopBorderPen( tmpPen );
     }
   }
   else if( dlg->isRowSelected )
@@ -3212,23 +3211,13 @@ void CellLayoutPageBorder::applyBottomOutline( int _left, int _top, int _right,
                                                int _bottom )
 {
   KSpreadBorderButton* bottom = borderButtons[BorderType_Bottom];
-  bool once = false;
   QPen tmpPen( bottom->getColor(),bottom->getPenWidth(),bottom->getPenStyle());
-  if( !dlg->isRowSelected )
+  if( !dlg->isRowSelected && !dlg->isColumnSelected )
   {
     for ( int x = _left; x <= _right; x++ )
     {
       KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,_bottom );
-      if(!obj->isObscuringForced())
-        obj->setBottomBorderPen( tmpPen );
-      else if(obj->isObscuringForced() && !once )
-      {
-        once = true;
-        int moveX=obj->obscuringCellsColumn();
-        int moveY=obj->obscuringCellsRow();
-        obj = dlg->getTable()->nonDefaultCell( moveX,  moveY );
-        obj->setBottomBorderPen( tmpPen );
-      }
+      obj->setBottomBorderPen( tmpPen );
     }
   }
   else if( dlg->isRowSelected )
@@ -3237,8 +3226,7 @@ void CellLayoutPageBorder::applyBottomOutline( int _left, int _top, int _right,
     for( ;c; c = c->nextCell() )
     {
       int row = c->row();
-      if ( dlg->top <= row && dlg->bottom >= row
-           &&!c->isObscuringForced())
+      if ( dlg->top <= row && dlg->bottom >= row )
       {
         c->clearProperty(KSpreadCell::PBottomBorder);
         c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
@@ -3255,22 +3243,21 @@ void CellLayoutPageBorder::applyLeftOutline( int _left, int _top, int _right,
 {
   KSpreadBorderButton* left = borderButtons[BorderType_Left];
   QPen tmpPen( left->getColor(),left->getPenWidth(),left->getPenStyle());
-  if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
+  if( !dlg->isColumnSelected )
   {
     for ( int y = _top; y <= _bottom; y++ )
     {
       KSpreadCell *obj = dlg->getTable()->nonDefaultCell( _left,y );
-      if(!obj->isObscuringForced())
-        obj->setLeftBorderPen( tmpPen );
+      obj->setLeftBorderPen( tmpPen );
     }
   }
-  else if( dlg->isColumnSelected )
+  else
   {
     KSpreadCell*c= dlg->getTable()->firstCell();
     for( ;c; c = c->nextCell() )
     {
       int col = c->column();
-      if ( dlg->left == col && !c->isObscuringForced())
+      if ( dlg->left == col )
       {
         c->clearProperty(KSpreadCell::PLeftBorder);
         c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
@@ -3294,49 +3281,19 @@ void CellLayoutPageBorder::applyLeftOutline( int _left, int _top, int _right,
       }
     }
   }
-  else if( dlg->isRowSelected )
-  {
-    KSpreadCell*c= dlg->getTable()->firstCell();
-    for( ;c; c = c->nextCell() )
-    {
-      int row = c->row();
-      if ( dlg->top <= row && dlg->bottom >= row
-           &&!c->isObscuringForced() && c->column()==1)
-      {
-        c->clearProperty(KSpreadCell::PLeftBorder);
-        c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
-      }
-    }
-    for ( int y = _top; y <= _bottom; y++ )
-    {
-      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( 1,y );
-      if(!obj->isObscuringForced())
-          obj->setLeftBorderPen( tmpPen );
-    }
-  }
 }
 
 void CellLayoutPageBorder::applyRightOutline( int _left, int _top, int _right,
                                               int _bottom )
 {
   KSpreadBorderButton* right = borderButtons[BorderType_Right];
-  bool once=false;
   QPen tmpPen( right->getColor(),right->getPenWidth(),right->getPenStyle());
   if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
   {
     for ( int y = _top; y <= _bottom; y++ )
     {
       KSpreadCell *obj = dlg->getTable()->nonDefaultCell( _right,y );
-      if(!obj->isObscuringForced())
-        obj->setRightBorderPen(tmpPen);
-      else if(obj->isObscuringForced() && !once )
-      {
-        once=true;
-        int moveX=obj->obscuringCellsColumn();
-        int moveY=obj->obscuringCellsRow();
-        obj = dlg->getTable()->nonDefaultCell( moveX,  moveY );
-        obj->setRightBorderPen(tmpPen);
-      }
+      obj->setRightBorderPen(tmpPen);
     }
   }
   else if(  dlg->isColumnSelected )
@@ -3345,7 +3302,7 @@ void CellLayoutPageBorder::applyRightOutline( int _left, int _top, int _right,
     for( ;c; c = c->nextCell() )
     {
       int col = c->column();
-      if ( dlg->right == col && !c->isObscuringForced())
+      if ( dlg->right == col )
       {
         c->clearProperty(KSpreadCell::PRightBorder);
         c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
@@ -3370,38 +3327,6 @@ void CellLayoutPageBorder::applyRightOutline( int _left, int _top, int _right,
       }
     }
   }
-  else if(  dlg->isRowSelected )
-  {
-    KSpreadCell*c= dlg->getTable()->firstCell();
-    for( ;c; c = c->nextCell() )
-    {
-      int row = c->row();
-      if ( dlg->top <= row && dlg->bottom >= row
-           && !c->isObscuringForced()
-/* Dunno if this is necessary, isn't used for columns either (Philipp)
-   therefore I commented it out:*/
-           /* && c->column()==KS_colMax*/)
-      {
-        c->clearProperty(KSpreadCell::PRightBorder);
-        c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
-      }
-    }
-
-    for ( int y = _top; y <= _bottom; y++ )
-    {
-      KSpreadCell *obj = dlg->getTable()->nonDefaultCell( _right,y );
-      if(!obj->isObscuringForced())
-        obj->setRightBorderPen(tmpPen);
-      else if(obj->isObscuringForced() && !once )
-      {
-        once=true;
-        int moveX=obj->obscuringCellsColumn();
-        int moveY=obj->obscuringCellsRow();
-        obj = dlg->getTable()->nonDefaultCell( moveX,  moveY );
-        obj->setRightBorderPen(tmpPen);
-      }
-    }
-  }
 }
 
 void CellLayoutPageBorder::applyDiagonalOutline( int _left, int _top, int _right,
@@ -3420,13 +3345,10 @@ void CellLayoutPageBorder::applyDiagonalOutline( int _left, int _top, int _right
       for ( int y = _top; y <= _bottom; y++ )
       {
         KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,y );
-        if(!obj->isObscuringForced())
-        {
-          if ( fallDiagonal->isChanged() )
-            obj->setFallDiagonalPen( tmpPenFall );
-          if ( goUpDiagonal->isChanged() )
-            obj->setGoUpDiagonalPen( tmpPenGoUp );
-        }
+        if ( fallDiagonal->isChanged() )
+          obj->setFallDiagonalPen( tmpPenFall );
+        if ( goUpDiagonal->isChanged() )
+          obj->setGoUpDiagonalPen( tmpPenGoUp );
       }
     }
   }
@@ -3436,7 +3358,7 @@ void CellLayoutPageBorder::applyDiagonalOutline( int _left, int _top, int _right
     for( ;c; c = c->nextCell() )
     {
       int col = c->column();
-      if ( dlg->left <= col && dlg->right >= col && !c->isObscuringForced())
+      if ( dlg->left <= col && dlg->right >= col )
       {
         if ( fallDiagonal->isChanged() )
         {
@@ -3482,8 +3404,7 @@ void CellLayoutPageBorder::applyDiagonalOutline( int _left, int _top, int _right
     for( ;c; c = c->nextCell() )
     {
       int row = c->row();
-      if ( dlg->top <= row && dlg->bottom >= row
-           &&!c->isObscuringForced())
+      if ( dlg->top <= row && dlg->bottom >= row )
       {
         if ( fallDiagonal->isChanged() )
         {
@@ -3509,12 +3430,13 @@ void CellLayoutPageBorder::applyDiagonalOutline( int _left, int _top, int _right
   }
 }
 
-void CellLayoutPageBorder::applyHorizontalOutline( int _left, int _top, int _right,
-                                                   int _bottom )
+void CellLayoutPageBorder::applyHorizontalOutline( int _left, int _top,
+                                                   int _right, int _bottom )
 {
   QPen tmpPen( borderButtons[BorderType_Horizontal]->getColor(),
                borderButtons[BorderType_Horizontal]->getPenWidth(),
                borderButtons[BorderType_Horizontal]->getPenStyle());
+
   if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
   {
     for ( int x = _left; x <= _right; x++ )
@@ -3522,8 +3444,7 @@ void CellLayoutPageBorder::applyHorizontalOutline( int _left, int _top, int _rig
       for ( int y = _top+1; y <= _bottom; y++ )
       {
         KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x, y );
-        if(!obj->isObscuringForced())
-          obj->setTopBorderPen(tmpPen);
+        obj->setTopBorderPen(tmpPen);
       }
     }
   }
@@ -3533,8 +3454,7 @@ void CellLayoutPageBorder::applyHorizontalOutline( int _left, int _top, int _rig
     for( ;c; c = c->nextCell() )
     {
       int col = c->column();
-      if ( dlg->left <= col && dlg->right >= col
-           &&!c->isObscuringForced())
+      if ( dlg->left <= col && dlg->right >= col )
       {
         c->clearProperty(KSpreadCell::PTopBorder);
         c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
@@ -3567,8 +3487,7 @@ void CellLayoutPageBorder::applyHorizontalOutline( int _left, int _top, int _rig
     for( ;c; c = c->nextCell() )
     {
       int row = c->row();
-      if ( (dlg->top+1) <= row && dlg->bottom >= row
-           &&!c->isObscuringForced())
+      if ( (dlg->top+1) <= row && dlg->bottom >= row )
       {
         c->clearProperty(KSpreadCell::PTopBorder);
         c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
@@ -3595,8 +3514,7 @@ void CellLayoutPageBorder::applyVerticalOutline( int _left, int _top, int _right
       for ( int y = _top; y <= _bottom; y++ )
       {
         KSpreadCell *obj = dlg->getTable()->nonDefaultCell( x,y );
-        if(!obj->isObscuringForced())
-          obj->setLeftBorderPen( tmpPen );
+        obj->setLeftBorderPen( tmpPen );
       }
     }
   }
@@ -3606,8 +3524,7 @@ void CellLayoutPageBorder::applyVerticalOutline( int _left, int _top, int _right
     for( ;c; c = c->nextCell() )
     {
       int col = c->column();
-      if ( dlg->left <= col && dlg->right >= col
-           &&!c->isObscuringForced())
+      if ( dlg->left <= col && dlg->right >= col )
       {
         c->clearProperty(KSpreadCell::PLeftBorder);
         c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
@@ -3639,8 +3556,7 @@ void CellLayoutPageBorder::applyVerticalOutline( int _left, int _top, int _right
     for( ;c; c = c->nextCell() )
     {
       int row = c->row();
-      if ( dlg->top <= row && dlg->bottom >= row
-           &&!c->isObscuringForced())
+      if ( dlg->top <= row && dlg->bottom >= row )
       {
         c->clearProperty(KSpreadCell::PLeftBorder);
         c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );

@@ -304,6 +304,9 @@ void KSpreadCell::unobscure()
 void KSpreadCell::clicked( KSpreadCanvas *_canvas )
 {
 
+  kdDebug(36001) << "clicked" << util_cellName(m_iColumn, m_iRow) << " and = "
+                 << m_strOutText << endl;
+
   if ( m_style == KSpreadCell::ST_Normal )
     return;
   else if ( m_style == KSpreadCell::ST_Select )
@@ -1681,671 +1684,840 @@ static void paintCellHelper( QPainter& _painter, int _tx, int _ty, int col, int 
     }
 }
 
-// Used by m_pObscuringCell->paintCell, in the next method
-void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
-                              int _col, int _row, QRect *_prect )
+void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
+                             QPoint corner, QPoint cellRef, bool drawCursor )
 {
-    RowLayout *rl = m_pTable->rowLayout( _row );
-    ColumnLayout *cl = m_pTable->columnLayout( _col );
-    int tx = m_pTable->columnPos( _col/*, _canvas*/ );
-    int ty = m_pTable->rowPos( _row/*, _canvas*/ );
+  static int paintingObscured = 0;
+  /* this flag indicates that we are working on drawing the cells that a cell
+     is obscuring.  The value is the number of levels down we are currently
+     working -- i.e. a cell obscured by a cell which is obscured by a cell.
+  */
 
-    paintCell( _rect, _painter, tx, ty, _col, _row, cl, rl, _prect );
-}
+  /* if we're working on drawing an obscured cell, that means this cell
+     should have a cell that obscured it. */
+  Q_ASSERT(!(paintingObscured > 0 && m_pObscuringCell == NULL));
 
-void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
-                             int _tx, int _ty,
-                             int _col, int _row,
-                             ColumnLayout *cl, RowLayout *rl,
-                             QRect *_prect, bool override_obscured, bool drawCursor )
-{
-    // If this cell is obscured then draw the obscuring one instead.
-    if ( m_pObscuringCell && !override_obscured )
+  /* the cellref passed in should be this cell -- except if this is the default
+     cell */
+  Q_ASSERT(!((cellRef.x() != m_iColumn) || (cellRef.y() != m_iRow)) &&
+           !isDefault());
+
+
+
+
+  ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
+  RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
+  int height = (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
+  int width =  (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
+  bool selected = m_pTable->isCellSelected(cellRef.x(), cellRef.y());
+  // Dont draw any selection when printing.
+  if ( painter.device()->isExtDev() || !drawCursor)
+    selected = false;
+
+  calc();
+
+  // Need to make a new layout ?
+  if ( m_bLayoutDirtyFlag )
+    makeLayout( painter, cellRef.x(), cellRef.y() );
+
+  QRect r2( corner.x(), corner.y(), width, height );
+  if ( !r2.intersects( rect ) )
+    return;
+
+  if (!isObscuringForced())
+  {
+    paintBackground(painter, corner, cellRef, selected);
+  }
+
+  paintDefaultBorders(painter, corner, cellRef);
+  paintCellBorders(painter, corner, cellRef);
+
+  /* paint all the cells that this one obscures */
+  paintingObscured++;
+  paintObscuredCells(rect, painter, corner, cellRef);
+  paintingObscured--;
+
+  /* now print content, if this cell isn't obscured */
+  if (!isObscured())
+    /* don't paint content if this cell is obscured */
+  {
+    paintCommentIndicator(painter, corner, cellRef);
+    paintMoreTextIndicator(painter, corner, cellRef);
+
+  /**
+   * QML ?
+   */
+    if ( m_pQML && (!painter.device()->isExtDev() ||
+                    !getDontprintText(cellRef.x(), cellRef.y()) ))
     {
-        _painter.save();
-        m_pObscuringCell->paintCell( _rect, _painter,
-                                     m_pObscuringCell->column(),
-				     m_pObscuringCell->row(), _prect );
-        _painter.restore();
-        m_bLayoutDirtyFlag = FALSE;
-        return;
-    }
-
-    // Need to recalculate ?
-    if ( /*m_bCalcDirtyFlag*/calcDirtyFlag() && !override_obscured )
-        calc();
-
-    //bool old_layoutflag = m_bLayoutDirtyFlag;
-    // Need to make a new layout ?
-    if ( m_bLayoutDirtyFlag && !override_obscured )
-        makeLayout( _painter, _col, _row );
-
-    // Determine the dimension of the cell.
-    int w = cl->width();
-    int h = rl->height();
-
-    // Do we really need to display this cell ?
-    // Obeye extra cells.
-    int w2 = w;
-    int h2 = h;
-    if ( m_iExtraXCells )
-        w2 = m_iExtraWidth;
-    if ( m_iExtraYCells )
-        h2 = m_iExtraHeight;
-
-    QRect r2( _tx, _ty, w2, h2 );
-    if ( !r2.intersects( _rect ) )
-        return;
-
-    // Tell our caller where we painted.
-    // ## Torben: Where is this used ?
-    if ( _prect )
-        _prect->setRect( _tx, _ty, w2, h2 );
-
-    // is the cell selected ?
-    bool selected = m_pTable->selectionRect().contains( QPoint( _col, _row ) );
-    if ( m_pObscuringCell )
-        selected = m_pTable->selectionRect().contains( QPoint( m_pObscuringCell->column(),
-                                                                    m_pObscuringCell->row() ) );
-
-    // Dont draw any selection when printing.
-    if ( _painter.device()->isExtDev() || !drawCursor)
-        selected = FALSE;
-
-    QColorGroup defaultColorGroup = QApplication::palette().active();
-    QRect m = m_pTable->marker();
-
-    int moveX=0;
-    int moveY=0;
-    if( isObscured() && isObscuringForced() )
-    {
-    moveX=obscuringCellsColumn();
-    moveY=obscuringCellsRow();
-    }
-
-    // Determine the correct background color
-    if ( selected && ( _col != m.left() || _row != m.top() )
-    && (moveX!=m.left() || moveY!=m.top()))
-        _painter.setBackgroundColor( defaultColorGroup.highlight() );
-    else
-      {
-        QColor bg = bgColor( _col, _row );
-
-        // if ( m_pObscuringCell )
-        // bg = m_pObscuringCell->bgColor( m_pObscuringCell->column(),
-        // m_pObscuringCell->row() );
-        if (! _painter.device()->isExtDev() )
-                {
-                if ( bg.isValid() )
-		  {
-                        _painter.setBackgroundColor( bg );
-
-		  }
-                else
-                        _painter.setBackgroundColor( defaultColorGroup.base() );
-                }
-        else
-                {
-                //bad hack but there is a qt bug
-                //so I can print backgroundcolor
-                    QBrush bb( bg );
-                    if( !bg.isValid())
-                        bb.setColor(Qt::white);
-                    _painter.fillRect( _tx , _ty ,w2 ,h2 , bb );
-
-                }
-    }
-
-    //
-    // Determine the pens that should be used for drawing
-    // the borders.
-    //
-    QPen left_pen = leftBorderPen( _col, _row );
-    QPen right_pen = rightBorderPen( _col, _row );
-    QPen top_pen = topBorderPen( _col, _row );
-    QPen bottom_pen = bottomBorderPen( _col, _row );
-
-    // Calculate some offsets so that we know later which
-    // rectangle of the cell still needs to be erased.
-    int top_offset = 0;
-    int bottom_offset = 0;
-    int left_offset = 0;
-    int right_offset = 0;
-    // Erase the background of the cell.
-    if ( !_painter.device()->isExtDev() )
-        _painter.eraseRect( _tx + left_offset, _ty + top_offset,
-                            w2 - left_offset - right_offset,
-                            h2 - top_offset - bottom_offset );
-    //
-    // First draw the default borders so that they don't
-    // overwrite any other border.
-    //
-    if ( ( left_pen.style() == Qt::NoPen ) &&
-         ( !m_pObscuringCell || m_pObscuringCell->column() == _col ) )
-    {
-        if( table()->getShowGrid() && !_painter.device()->isExtDev())
-        {
-            left_offset = 1;
-
-            int dt = 0;
-            QPen t = m_pTable->cellAt( _col, _row - 1 )->leftBorderPen( _col, _row - 1 );
-            if ( t.style() != Qt::NoPen )
-                dt = 1;
-
-            int db = 0;
-            if ( _row < KS_rowMax ) {
-                QPen b = m_pTable->cellAt( _col, _row + 1 )->leftBorderPen( _col, _row + 1 );
-                if ( b.style() != Qt::NoPen )
-                    db = 1;
-            }
-
-            _painter.setPen( table()->doc()->defaultGridPen() );
-            _painter.drawLine( _tx, _ty + dt, _tx, _ty + h - db );
-        }
-    }
-    if ( top_pen.style() == Qt::NoPen &&
-         ( !m_pObscuringCell || m_pObscuringCell->row() == _row ) )
-    {
-        if( table()->getShowGrid() && !_painter.device()->isExtDev())
-        {
-            top_offset = 1;
-
-            QPen l = m_pTable->cellAt( _col, _row - 1 )->leftBorderPen( _col, _row - 1 );
-            QPen r = m_pTable->cellAt( _col, _row - 1 )->rightBorderPen( _col, _row - 1 );
-
-            int dl = 0;
-            if ( l.style() != Qt::NoPen )
-                dl = ( l.width() - 1 ) / 2 + 1;
-            int dr = 0;
-            if ( r.style() != Qt::NoPen )
-                dr = r.width() / 2;
-
-            _painter.setPen( table()->doc()->defaultGridPen() );
-            _painter.drawLine( _tx + dl, _ty, _tx + w - dr, _ty );
-        }
-    }
-
-    //
-    // Now draw the borders which where set by the user.
-    //
-    if ( left_pen.style() != Qt::NoPen )
-    {
-        int top = ( QMAX( 0, -1 + (int)top_pen.width() ) ) / 2 + ( ( QMAX( 0, -1 + (int)top_pen.width() ) ) % 2 );
-        int bottom = ( QMAX( 0, -1 + (int)bottom_pen.width() ) ) / 2 + 1;
-
-        _painter.setPen( left_pen );
-        _painter.drawLine( _tx, _ty - top, _tx, _ty + h + bottom );
-
-        left_offset = left_pen.width() - ( left_pen.width() / 2 );
-    }
-    if ( right_pen.style() != Qt::NoPen && extraXCells() == 0 )
-    {
-        int top = ( QMAX( 0, -1 + (int)top_pen.width() ) ) / 2 +  ( ( QMAX( 0, -1 + (int)top_pen.width() ) ) % 2 );
-        int bottom = ( QMAX( 0, -1 + (int)bottom_pen.width() ) ) / 2 + 1;
-        _painter.setPen( right_pen );
-
-        _painter.drawLine( w + _tx, _ty - top, w + _tx, _ty + h + bottom );
-        right_offset = right_pen.width() / 2;
-    }
-    if ( top_pen.style() != Qt::NoPen )
-    {
-        _painter.setPen( top_pen );
-        _painter.drawLine( _tx, _ty, _tx + w, _ty );
-
-        top_offset = top_pen.width() - ( top_pen.width() / 2 );
-    }
-    if ( bottom_pen.style() != Qt::NoPen && extraYCells() == 0 )
-    {
-        _painter.setPen( bottom_pen );
-        _painter.drawLine( _tx, h + _ty, _tx + w, h + _ty );
-
-        bottom_offset = bottom_pen.width() / 2;
-    }
-
-    // Erase the background of the cell.
-    /*if ( !_painter.device()->isExtDev() )
-        _painter.eraseRect( _tx + left_offset, _ty + top_offset,
-                            w - left_offset - right_offset,
-                            h - top_offset - bottom_offset );
-    */
-    // Draw a background brush
-    QBrush bb = backGroundBrush( _col, _row );
-    if( bb.style() != Qt::NoBrush )
-    {
-        _painter.fillRect( _tx + left_offset, _ty + top_offset,
-                           w - left_offset - right_offset,
-                           h - top_offset - bottom_offset, bb );
-    }
-
-    //
-    // Look at the cells on our corners. It may happen that we
-    // just erased parts of their borders corner, so we might need
-    // to repaint these corners.
-    //
-    KSpreadCell* cell_t = m_pTable->cellAt( _col, _row - 1 );
-    KSpreadCell* cell_r = 0L;
-    if ( _col < KS_colMax )
-        cell_r = m_pTable->cellAt( _col + 1, _row );
-    KSpreadCell* cell_l = m_pTable->cellAt( _col - 1, _row );
-    // Not yet used .... KSpreadCell* cell_b = m_pTable->cellAt( _col, _row + 1 );
-
-    // Fix the borders which meet at the top left corner
-    QPen vert_pen = cell_t->leftBorderPen( _col, _row - 1 );
-    if ( vert_pen.style() != Qt::NoPen )
-    {
-        QPen horz_pen = cell_l->topBorderPen( _col - 1, _row );
-        int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
-        _painter.setPen( vert_pen );
-        _painter.drawLine( _tx, _ty, _tx, _ty + bottom );
-    }
-
-    // Fix the borders which meet at the top right corner
-    vert_pen = cell_t->rightBorderPen( _col, _row - 1 );
-    if ( vert_pen.style() != Qt::NoPen )
-    {
-        QPen horz_pen = cell_r->topBorderPen( _col + 1, _row );
-        int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
-        _painter.setPen( vert_pen );
-        _painter.drawLine( _tx + w, _ty, _tx + w, _ty + bottom );
-    }
-
-    QColor textColorPrint = textColor( _col, _row);
-    // This cell is obscured? Then don't draw any content
-    if ( override_obscured )
-        goto drawmarker;
-    // This cell is obscuring other ones? Then we redraw their
-    // background and borders before we paint our content there.
-    else if ( extraXCells() || extraYCells() )
-    {
-        int ypos = _ty;
-        for( int y = 0; y <= extraYCells(); ++y )
-        {
-            int xpos = _tx;
-            RowLayout* rl = m_pTable->rowLayout( _row + y );
-
-            for( int x = 0; x <= extraXCells(); ++ x )
-            {
-                ColumnLayout* cl = m_pTable->columnLayout( _col + x );
-                if ( y != 0 || x != 0 )
-                {
-                    KSpreadCell* cell = m_pTable->cellAt( _col + x, _row + y );
-                    cell->paintCell( _rect, _painter, xpos, ypos, _col + x, _row + y, cl, rl, 0, true );
-                }
-                xpos += cl->width();
-            }
-
-            ypos += rl->height();
-        }
-    }
-
-    //
-    // Draw diagonal borders.
-    //
-    if ( fallDiagonalPen(_col, _row).style() != Qt::NoPen )
-    {
-        // Diagonal line go across other cells if this cell is
-        // a multicol/row cell. So use "w2" instead of "w" ...
-        _painter.setPen( fallDiagonalPen(_col, _row) );
-        _painter.drawLine( _tx, _ty, _tx + w2, _ty + h2 );
-    }
-    if (goUpDiagonalPen(_col, _row).style() != Qt::NoPen )
-    {
-        _painter.setPen( goUpDiagonalPen(_col, _row) );
-        _painter.drawLine( _tx, _ty + h2 , _tx + w2, _ty );
-    }
-
-    // Point the little corner if there is a comment attached
-    // to this cell.
-    if( !comment(column(),row()).isEmpty() && rl->height()>2 && cl->width()>10
-&&!_painter.device()->isExtDev() && table()->doc()->getShowCommentIndicator())
-    {
-        QPointArray point( 3 );
-        point.setPoint( 0,_tx + w2 - 10, _ty );
-        point.setPoint( 1, _tx + w2,_ty );
-        point.setPoint( 2, _tx + w2,_ty + 10 );
-        _painter.setBrush( QBrush(Qt::red  ) );
-        _painter.setPen( Qt::NoPen );
-        _painter.drawPolygon( point );
-    }
-
-    //show  a red triangle when it's not possible to write all text in cell
-    //don't print the red triangle
-
-    if(m_bCellTooShort && !_painter.device()->isExtDev() && rl->height()>2  && cl->width()>4)
-    {
-        QPointArray point( 3 );
-        point.setPoint( 0,_tx + w2-4 , (_ty+h2/2)-4 );
-        point.setPoint( 1, _tx + w2,(_ty+h2/2) );
-        point.setPoint( 2, _tx + w2-4,(_ty+h2/2) + 4 );
-        _painter.setBrush( QBrush(Qt::red  ) );
-        _painter.setPen( Qt::NoPen );
-        _painter.drawPolygon( point );
-     }
-    /**
-     * Modification for drawing the button
-     */
-    if ( m_style == KSpreadCell::ST_Button )
-    {
-#ifdef __GNUC__
-#warning "Disabled for now :} (Werner)"
-#endif
-#if 0
-        QBrush fill( Qt::lightGray );
-        QApplication::style().drawControl( QStyle::CE_PushButton, &_painter, this,
-                                           QRect( _tx + 1, _ty + 1, w2 - 1, h2 - 1 ),
-                                           defaultColorGroup ); //, selected, &fill );
-#endif
-    }
-    /**
-     * Modification for drawing the combo box
-     */
-    else if ( m_style == KSpreadCell::ST_Select )
-    {
-#ifdef __GNUC__
-#warning "Disabled for now :} (Werner)"
-#endif
-#if 0
-      QApplication::style().drawComboButton(  &_painter, _tx + 1, _ty + 1,
-                                                w2 - 1, h2 - 1,
-						defaultColorGroup, selected );
-#endif
-    }
-
-    // Resolve the text color if invalid (=default)
-    if(!textColorPrint.isValid())
-    {
-        if(_painter.device()->isExtDev())
-            textColorPrint = Qt::black;
-        else
-            textColorPrint = QApplication::palette().active().text();
-    }
-
-    /**
-     * QML ?
-     */
-    if ( m_pQML && (!_painter.device()->isExtDev()||(_painter.device()->isExtDev() && !getDontprintText(_col,_row)) ))
-      {
-        _painter.save();
-        m_pQML->draw( &_painter, _tx, _ty, QRegion( QRect( _tx, _ty, w, h ) ), defaultColorGroup, 0 );
-        _painter.restore();
+      painter.save();
+      m_pQML->draw( &painter, corner.x(), corner.y(),
+                    QRegion( QRect( corner.x(), corner.y(), colLayout->width(),
+                                    rowLayout->height() ) ),
+                    QApplication::palette().active(), 0 );
+      painter.restore();
     }
     /**
      * Usual Text
      */
-    else if ( !m_strOutText.isEmpty() && (!_painter.device()->isExtDev()||(_painter.device()->isExtDev() && !getDontprintText(_col,_row)) ))
+    else if ( !m_strOutText.isEmpty() &&
+              (!painter.device()->isExtDev() ||
+               !getDontprintText(cellRef.x(),cellRef.y())))
     {
-        QPen tmpPen( textColorPrint );
-        /*
-        if ( selected && ( _col != m.left() || _row != m.top() )  )
+      paintText(painter, corner, cellRef, selected);
+    }
+  } /* if (!isObscured()) */
+
+
+  if (drawCursor)
+  {
+    paintMarker(painter, corner, cellRef);
+  }
+
+  if (isObscured() && paintingObscured == 0)
+  {
+    /* print the cell obscuring this one */
+
+    /* if paintingObscured is > 0, that means drawing this cell was triggered
+       while already drawing the obscuring cell -- don't want to cause an
+       infinite loop
+    */
+    // Determine the dimension of the cell.
+    QPoint obscuringCellRef(obscuringCellsColumn(), obscuringCellsRow());
+    QPoint obscuringCellLoc( m_pTable->columnPos(obscuringCellsColumn()),
+                             m_pTable->rowPos(obscuringCellsRow()));
+
+    painter.save();
+    m_pObscuringCell->paintCell( rect, painter, obscuringCellLoc,
+                                 obscuringCellRef);
+    painter.restore();
+  }
+
+}
+/* the following code was commented out in the above function.  I'll leave
+   it here in case this functionality is ever re-implemented and someone
+   wants some code to start from */
+
+  /**
+     * Modification for drawing the button
+     */
+/*
+  if ( m_style == KSpreadCell::ST_Button )
+  {
+
+  QBrush fill( Qt::lightGray );
+  QApplication::style().drawControl( QStyle::CE_PushButton, &_painter, this,
+  QRect( _tx + 1, _ty + 1, w2 - 1, h2 - 1 ),
+  defaultColorGroup ); //, selected, &fill );
+
+    }
+*/
+    /**
+     * Modification for drawing the combo box
+     */
+/*
+  else if ( m_style == KSpreadCell::ST_Select )
+    {
+      QApplication::style().drawComboButton(  &_painter, _tx + 1, _ty + 1,
+                                                w2 - 1, h2 - 1,
+						defaultColorGroup, selected );
+    }
+*/
+
+
+
+void KSpreadCell::paintObscuredCells(const QRect& rect, QPainter& painter,
+                                     QPoint corner, QPoint cellRef)
+{
+  // This cell is obscuring other ones? Then we redraw their
+  // background and borders before we paint our content there.
+  if ( extraXCells() || extraYCells() )
+  {
+    int ypos = corner.y();
+    for( int y = 0; y <= extraYCells(); ++y )
+    {
+      int xpos = corner.x();
+      RowLayout* rl = m_pTable->rowLayout( cellRef.y() + y );
+
+      for( int x = 0; x <= extraXCells(); ++ x )
+      {
+        ColumnLayout* cl = m_pTable->columnLayout( cellRef.x() + x );
+        if ( y != 0 || x != 0 )
         {
-            QPen p( textPen(_col,_row) );
-            p.setColor( defaultColorGroup.highlightedText() );
-            _painter.setPen( p );
+          KSpreadCell* cell = m_pTable->cellAt( cellRef.x() + x,
+                                                cellRef.y() + y );
+
+          cell->paintCell( rect, painter, QPoint(xpos, ypos),
+                           QPoint(cellRef.x() + x, cellRef.y() + y));
         }
-        else*/
+        xpos += cl->width();
+      }
 
-        //_painter.setPen( textPen(_col,_row) );
+      ypos += rl->height();
+    }
+  }
+}
 
-        // #### Torben: This looks like duplication to me
-	KSpreadConditional condition;
 
-        if(conditions.GetCurrentCondition(condition) &&
-	   !m_pTable->getShowFormula())
-        {
-            _painter.setFont( condition.fontcond );
-            tmpPen.setColor( condition.colorcond );
-        }
-        else
-        {
-            _painter.setFont( textFont(_col,_row ) );
-            if( isNumeric() && !m_pTable->getShowFormula() )
-            {
-                double v = valueDouble() * factor(column(),row());
-                if ( floatColor( _col, _row) == KSpreadCell::NegRed && v < 0.0 && !m_pTable->getShowFormula() )
-                    tmpPen.setColor( Qt::red );
-                //else
-                //    tmpPen.setColor( textColorPrint );
-            }
-            //else
-            //    tmpPen.setColor( textColorPrint );
-        }
-        //_painter.setPen(tmpPen);
+void KSpreadCell::paintBackground(QPainter& painter, QPoint corner,
+                                  QPoint cellRef, bool selected)
+{
+  QColorGroup defaultColorGroup = QApplication::palette().active();
+  QRect m = m_pTable->marker();
+  ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
+  RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
+  int width = (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
+  int height =  (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
 
-        if ( selected && ( _col != m.left() || _row != m.top() )  )
-        {
-            QPen p( tmpPen );
-            p.setColor( defaultColorGroup.highlightedText() );
-            _painter.setPen( p );
-        }
-        else
-            _painter.setPen(tmpPen);
+  // Determine the correct background color
+  if ( selected && ( cellRef.x() != m.left() || cellRef.y() != m.top() ))
+  {
+    painter.setBackgroundColor( defaultColorGroup.highlight() );
+  }
+  else
+  {
+    QColor bg = bgColor( cellRef.x(), cellRef.y() );
 
-        QString tmpText=m_strOutText;
-	int tmpHeight=m_iOutTextHeight;
-	int tmpWidth=m_iOutTextWidth;
-        if(m_bCellTooShort)
-                m_strOutText=textDisplaying(_painter);
+    if (! painter.device()->isExtDev() )
+    {
+      if ( bg.isValid() )
+      {
+        painter.setBackgroundColor( bg );
 
-        //hide zero
-        if(m_pTable->getHideZero() && isNumeric() && valueDouble() * factor(column(),row())==0)
-            m_strOutText=QString::null;
-        ColumnLayout *cl1 = m_pTable->columnLayout( column() );
-        RowLayout *rl1 = m_pTable->rowLayout( row() );
-        if( cl1->isHide()|| (rl1->height()<=2))
-        {
-            //clear extracell if column or row is hidden
-            freeAllObscuredCells();
-            m_strOutText="";
-        }
+      }
+      else
+        painter.setBackgroundColor( defaultColorGroup.base() );
+    }
+    else
+    {
+      //bad hack but there is a qt bug
+      //so I can print backgroundcolor
+      QBrush bb( bg );
+      if( !bg.isValid())
+        bb.setColor(Qt::white);
+      /* I think this just gets erased below....I'll figure it out later. */
+      painter.fillRect( corner.x(), corner.y(), width, height, bb );
+    }
+  }
 
-        conditionAlign( _painter, _col, _row );
+  // Erase the background of the cell.
+  if ( !painter.device()->isExtDev() )
+    painter.eraseRect( corner.x(), corner.y(), width, height );
 
-        int indent=0;
-	int offsetCellTooShort=0;
-        int a = defineAlignX();
-        //apply indent if text is align to left not when text is at right or middle
-        if(  a==KSpreadCell::Left && !isEmpty())
-                indent=getIndent(column(),row());
-	//made an offset, otherwise ### is under red triangle
-	if( a==KSpreadCell::Right && !isEmpty() &&m_bCellTooShort )
-	  offsetCellTooShort=4;
-	 QFontMetrics fm2 = _painter.fontMetrics();
-	 int offsetFont=0;
-	 if((alignY(column(),row())==KSpreadCell::Bottom)&& textFontUnderline(column(), row() ))
-	   {
-	     offsetFont=fm2.underlinePos()+1;
-	   }
-        int tmpAngle=getAngle(_col,_row);
-        if ( !multiRow(_col,_row) && !verticalText(_col,_row) && !tmpAngle)
-                {
-                _painter.drawText( indent+_tx + m_iTextX -offsetCellTooShort, _ty + m_iTextY - offsetFont, m_strOutText );
-                }
-        else if( tmpAngle!=0)
-        {
-            int angle=tmpAngle;
-            QFontMetrics fm = _painter.fontMetrics();
-            _painter.rotate(angle);
-            int x;
-            if(angle>0)
-                x=indent+_tx + m_iTextX;
-            else
-                x=indent+static_cast<int>(_tx + m_iTextX -(fm.descent() + fm.ascent())*sin(angle*M_PI/180));
-            int y;
-            if(angle>0)
-                y=_ty + m_iTextY;
-            else
-                y=_ty + m_iTextY+m_iOutTextHeight;
-            _painter.drawText( qRound(x*cos(angle*M_PI/180) + y*sin(angle*M_PI/180)),
-                               qRound(-x*sin(angle*M_PI/180) + y*cos(angle*M_PI/180)) , m_strOutText );
-            _painter.rotate(-angle);
-        }
-        else if( multiRow(_col,_row) && !verticalText(_col,_row))
-        {
-            QString t;
-            int i;
-            int pos = 0;
-            int dy = 0;
-            int dx = 0;
-            QFontMetrics fm = _painter.fontMetrics();
-            do
-            {
-                i = m_strOutText.find( "\n", pos );
-                if ( i == -1 )
-                    t = m_strOutText.mid( pos, m_strOutText.length() - pos );
-                else
-                {
-                    t = m_strOutText.mid( pos, i - pos );
-                    pos = i + 1;
-                }
+  // Draw a background brush
+  QBrush bb = backGroundBrush( cellRef.x(), cellRef.y() );
 
-                int a = defineAlignX();
-                if(m_pTable->getShowFormula())
-                    a = KSpreadCell::Left;
+  int left_offset = 0;
+  int top_offset = 0;
+  int right_offset = 0;
+  int bottom_offset = 0;
+  /* TODO:
+     these need to be initialized with the 'overhang' of the border of the
+     neighboring cell (be aware of cells to the corner).  We might also want
+     to account for the extra width of this cell's border although that
+     doesn't seem quite necessary since those are painted later over top of
+     these.
+     Another option is just to repaint neighboring cell's borders here
+     Here's some code that sort of, kind of, did this before:
 
-                // #### Torben: This looks duplicated for me
-                switch( a )
-                {
-                case KSpreadCell::Left:
-                    m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
-                    break;
-                case KSpreadCell::Right:
-                    m_iTextX = w2 - BORDER_SPACE - fm.width( t )
-                               - rightBorderWidth( _col, _row );
-                    break;
-                case KSpreadCell::Center:
-                    m_iTextX = ( w2 - fm.width( t ) ) / 2;
-                }
-                _painter.drawText( indent+_tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
+  //
+  // Look at the cells on our corners. It may happen that we
+  // just erased parts of their borders corner, so we might need
+  // to repaint these corners.
+  //
+  KSpreadCell* cell_t = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 );
+  KSpreadCell* cell_r = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() );
+  KSpreadCell* cell_l = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() );
+  // Not yet used .... KSpreadCell* cell_b = m_pTable->cellAt( _col, _row + 1 );
+
+  // Fix the borders which meet at the top left corner
+  QPen vert_pen = cell_t->leftBorderPen( cellRef.x(), cellRef.y() - 1 );
+  if ( vert_pen.style() != Qt::NoPen )
+  {
+    QPen horz_pen = cell_l->topBorderPen( cellRef.x() - 1, cellRef.y() );
+    int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
+    painter.setPen( vert_pen );
+    painter.drawLine( corner.x(), corner.y(), corner.x(),
+                      corner.y() + bottom );
+  }
+
+  // Fix the borders which meet at the top right corner
+  vert_pen = cell_t->rightBorderPen( cellRef.x(), cellRef.y() - 1 );
+  if ( vert_pen.style() != Qt::NoPen )
+  {
+    QPen horz_pen = cell_r->topBorderPen( cellRef.x() + 1, cellRef.y() );
+    int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
+    painter.setPen( vert_pen );
+    painter.drawLine( corner.x() + width, corner.y(),
+                      corner.x() + width, corner.y() + bottom );
+  }
+
+
+
+  */
+
+  if( bb.style() != Qt::NoBrush )
+  {
+    painter.fillRect( corner.x() + left_offset, corner.y() + top_offset,
+                       width - left_offset - right_offset,
+                       height - top_offset - bottom_offset, bb );
+  }
+}
+
+void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
+                                      QPoint cellRef)
+{
+  QPen left_pen = leftBorderPen( cellRef.x(), cellRef.y() );
+  QPen top_pen = topBorderPen( cellRef.x(), cellRef.y() );
+  ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
+  RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
+  int height = (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
+  int width =  (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
+  /* Each cell is responsible for drawing it's top and left portions of the
+     "default" grid. --Or not drawing it if it shouldn't be there.*/
+
+  /* should we do the left border? */
+  if ( left_pen.style() == Qt::NoPen &&
+       ( !m_pObscuringCell || m_pObscuringCell->column() == cellRef.x()))
+  {
+    if( table()->getShowGrid() && !painter.device()->isExtDev())
+    {
+      int dt = 0;
+      QPen t = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->leftBorderPen( cellRef.x(), cellRef.y() - 1 );
+      if ( t.style() != Qt::NoPen )
+        dt = 1;
+
+      int db = 0;
+      if ( cellRef.y() < KS_rowMax ) {
+        QPen b = m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->leftBorderPen( cellRef.x(), cellRef.y() + 1 );
+        if ( b.style() != Qt::NoPen )
+          db = 1;
+      }
+
+      painter.setPen( table()->doc()->defaultGridPen() );
+      painter.drawLine( corner.x(), corner.y() + dt, corner.x(),
+                        corner.y() + height - db );
+    }
+  }
+
+  if ( top_pen.style() == Qt::NoPen &&
+       ( !m_pObscuringCell || m_pObscuringCell->row() == cellRef.y() ))
+  {
+    if( table()->getShowGrid() && !painter.device()->isExtDev())
+    {
+      QPen l = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->leftBorderPen( cellRef.x(), cellRef.y() - 1 );
+      QPen r = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->rightBorderPen( cellRef.x(), cellRef.y() - 1 );
+
+      int dl = 0;
+      if ( l.style() != Qt::NoPen )
+        dl = ( l.width() - 1 ) / 2 + 1;
+      int dr = 0;
+      if ( r.style() != Qt::NoPen )
+        dr = r.width() / 2;
+
+      painter.setPen( table()->doc()->defaultGridPen() );
+      painter.drawLine( corner.x() + dl, corner.y(), corner.x() + width - dr,
+                        corner.y() );
+    }
+  }
+}
+
+void KSpreadCell::paintCommentIndicator(QPainter& painter, QPoint corner,
+                                        QPoint cellRef)
+{
+  // Point the little corner if there is a comment attached
+  // to this cell.
+  ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
+  RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
+  int width =  (m_iExtraYCells ? m_iExtraHeight : colLayout->width());
+
+  if( !comment(column(),row()).isEmpty() && rowLayout->height() > 2 &&
+      colLayout->width() > 10 && !painter.device()->isExtDev() &&
+      table()->doc()->getShowCommentIndicator())
+  {
+    QPointArray point( 3 );
+    point.setPoint( 0, corner.x() + width - 10, corner.y() );
+    point.setPoint( 1, corner.x() + width, corner.y() );
+    point.setPoint( 2, corner.x() + width, corner.y() + 10 );
+    painter.setBrush( QBrush(Qt::red ) );
+    painter.setPen( Qt::NoPen );
+    painter.drawPolygon( point );
+  }
+}
+
+void KSpreadCell::paintMoreTextIndicator(QPainter& painter, QPoint corner,
+                                         QPoint cellRef)
+{
+  ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
+  RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
+  int height = (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
+  int width =  (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
+  //show  a red triangle when it's not possible to write all text in cell
+  //don't print the red triangle if we're printing
+
+  if(m_bCellTooShort && !painter.device()->isExtDev() &&
+     rowLayout->height() > 2  && colLayout->width() > 4)
+  {
+    QPointArray point( 3 );
+    point.setPoint( 0, corner.x() + width - 4 , (corner.y() + height/2) - 4 );
+    point.setPoint( 1, corner.x() + width,(corner.y() + height/2) );
+    point.setPoint( 2, corner.x() + width - 4,(corner.y() + height/2) + 4 );
+    painter.setBrush( QBrush(Qt::red  ) );
+    painter.setPen( Qt::NoPen );
+    painter.drawPolygon( point );
+  }
+}
+
+void KSpreadCell::paintText(QPainter& painter, QPoint corner, QPoint cellRef,
+                            bool selected)
+{
+  ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
+  RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
+
+  int width =  (m_iExtraYCells ? m_iExtraHeight : colLayout->width());
+  QRect m = m_pTable->marker();
+  QColorGroup defaultColorGroup = QApplication::palette().active();
+
+  QColor textColorPrint = textColor( cellRef.x(), cellRef.y() );
+  QPen tmpPen( textColorPrint );
+
+  // Resolve the text color if invalid (=default)
+  if(!textColorPrint.isValid())
+  {
+    if(painter.device()->isExtDev())
+      textColorPrint = Qt::black;
+    else
+      textColorPrint = QApplication::palette().active().text();
+  }
+  /*
+    if ( selected && ( _col != m.left() || _row != m.top() )  )
+    {
+    QPen p( textPen(_col,_row) );
+    p.setColor( defaultColorGroup.highlightedText() );
+    _painter.setPen( p );
+    }
+    else*/
+
+  //_painter.setPen( textPen(_col,_row) );
+
+  // #### Torben: This looks like duplication to me
+  KSpreadConditional condition;
+
+  if(conditions.GetCurrentCondition(condition) &&
+     !m_pTable->getShowFormula())
+  {
+    painter.setFont( condition.fontcond );
+    tmpPen.setColor( condition.colorcond );
+  }
+  else
+  {
+    painter.setFont( textFont( cellRef.x(), cellRef.y() ) );
+    if( isNumeric() && !m_pTable->getShowFormula() )
+    {
+      double v = valueDouble() * factor(column(),row());
+      if ( floatColor( cellRef.x(), cellRef.y()) == KSpreadCell::NegRed && v < 0.0 )
+        tmpPen.setColor( Qt::red );
+    }
+  }
+
+  if ( selected && ( cellRef.x() != m.left() || cellRef.y() != m.top() )  )
+  {
+    QPen p( tmpPen );
+    p.setColor( defaultColorGroup.highlightedText() );
+    painter.setPen( p );
+  }
+  else
+  {
+    painter.setPen(tmpPen);
+  }
+
+  QString tmpText = m_strOutText;
+  int tmpHeight = m_iOutTextHeight;
+  int tmpWidth = m_iOutTextWidth;
+  if( m_bCellTooShort )
+  {
+    m_strOutText=textDisplaying( painter );
+  }
+
+  //hide zero
+  if(m_pTable->getHideZero() && isNumeric() &&
+     valueDouble() * factor(column(),row()) == 0 )
+  {
+    m_strOutText=QString::null;
+  }
+
+  if( colLayout->isHide()|| (rowLayout->height()<=2))
+  {
+    //clear extracell if column or row is hidden
+    freeAllObscuredCells();
+    m_strOutText="";
+  }
+
+  conditionAlign( painter, cellRef.x(), cellRef.y() );
+
+  int indent = 0;
+  int offsetCellTooShort = 0;
+  int a = defineAlignX();
+  //apply indent if text is align to left not when text is at right or middle
+  if(  a == KSpreadCell::Left && !isEmpty())
+  {
+    indent=getIndent(column(),row());
+  }
+
+  //made an offset, otherwise ### is under red triangle
+  if( a == KSpreadCell::Right && !isEmpty() && m_bCellTooShort )
+  {
+    offsetCellTooShort=4;
+  }
+
+  QFontMetrics fm2 = painter.fontMetrics();
+  int offsetFont=0;
+
+  if((alignY(column(),row()) == KSpreadCell::Bottom)&&
+     textFontUnderline(column(), row() ))
+  {
+    offsetFont=fm2.underlinePos()+1;
+  }
+  int tmpAngle=getAngle( cellRef.x(), cellRef.y() );
+  if ( !multiRow( cellRef.x(), cellRef.y() ) &&
+       !verticalText( cellRef.x(), cellRef.y()) && !tmpAngle)
+  {
+    painter.drawText( indent + corner.x() + m_iTextX - offsetCellTooShort,
+                      corner.y() + m_iTextY - offsetFont, m_strOutText );
+  }
+  else if( tmpAngle != 0)
+  {
+    int angle = tmpAngle;
+    QFontMetrics fm = painter.fontMetrics();
+    painter.rotate(angle);
+    int x;
+    if(angle > 0)
+      x = indent + corner.x() + m_iTextX;
+    else
+      x = indent + static_cast<int>(corner.x() + m_iTextX -
+                                    (fm.descent() + fm.ascent()) *
+                                    sin(angle*M_PI/180));
+    int y;
+    if(angle > 0)
+      y = corner.y() + m_iTextY;
+    else
+      y = corner.y() + m_iTextY + m_iOutTextHeight;
+    painter.drawText( qRound(x*cos(angle*M_PI/180) + y*sin(angle*M_PI/180)),
+                      qRound(-x*sin(angle*M_PI/180) + y*cos(angle*M_PI/180)),
+                      m_strOutText );
+    painter.rotate(-angle);
+  }
+  else if( multiRow( cellRef.x(), cellRef.y()) && !verticalText(cellRef.x(), cellRef.y()))
+  {
+    QString t;
+    int i;
+    int pos = 0;
+    int dy = 0;
+    int dx = 0;
+    QFontMetrics fm = painter.fontMetrics();
+    do
+    {
+      i = m_strOutText.find( "\n", pos );
+      if ( i == -1 )
+        t = m_strOutText.mid( pos, m_strOutText.length() - pos );
+      else
+      {
+        t = m_strOutText.mid( pos, i - pos );
+        pos = i + 1;
+      }
+
+      int a = defineAlignX();
+      if(m_pTable->getShowFormula())
+        a = KSpreadCell::Left;
+
+      // #### Torben: This looks duplicated for me
+      switch( a )
+      {
+      case KSpreadCell::Left:
+        m_iTextX = leftBorderWidth( cellRef.x(), cellRef.y() ) + BORDER_SPACE;
+        break;
+      case KSpreadCell::Right:
+        m_iTextX = width - BORDER_SPACE - fm.width( t )
+                   - rightBorderWidth( cellRef.x(), cellRef.y() );
+        break;
+      case KSpreadCell::Center:
+        m_iTextX = ( width - fm.width( t ) ) / 2;
+      }
+      painter.drawText( indent + corner.x() + m_iTextX + dx,
+                        corner.y() + m_iTextY + dy, t );
                 dy += fm.descent() + fm.ascent();
-            }
-            while ( i != -1 );
-        }
-        else if(verticalText(_col,_row)&&!m_strOutText.isEmpty())
-        {
-            QString t;
-            int i=0;
-            int dy = 0;
-            int dx = 0;
-            int j=0;
-            QFontMetrics fm = _painter.fontMetrics();
-            do
-            {
-                i=m_strOutText.length();
-                t=m_strOutText.at(j);
-                _painter.drawText( indent +_tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
-                dy += fm.descent() + fm.ascent();
-                j++;
-            }
-            while ( j != i );
-        }
-
-        if(m_bCellTooShort)
-	  {
-	    m_strOutText=tmpText;
-	    m_iOutTextHeight=tmpHeight;
-	    m_iOutTextWidth=tmpWidth;
-	  }
-        if(m_pTable->getHideZero() && isNumeric() &&   valueDouble() * factor(column(),row())==0)
-                m_strOutText=tmpText;
-        cl1 = m_pTable->columnLayout( column() );
-        rl1 = m_pTable->rowLayout( row() );
-        if( cl1->isHide()|| (rl1->height()<=2))
-                m_strOutText=tmpText;
-
     }
-
-    // Dont draw page borders or the marker when printing
-    if ( _painter.device()->isExtDev() )
-        return;
-
-    // Draw page borders
-    if ( m_pTable->isShowPageBorders() )
+    while ( i != -1 );
+  }
+  else if(verticalText( cellRef.x(), cellRef.y()) && !m_strOutText.isEmpty())
+  {
+    QString t;
+    int i=0;
+    int dy = 0;
+    int dx = 0;
+    int j=0;
+    QFontMetrics fm = painter.fontMetrics();
+    do
     {
-        if ( m_pTable->isOnNewPageY( _row ) )
-        {
-            _painter.setPen( Qt::red );
-            _painter.drawLine( _tx, _ty, _tx + w, _ty );
-        }
-        if ( m_pTable->isOnNewPageX( _col ) )
-        {
-            _painter.setPen( Qt::red );
-            _painter.drawLine( _tx, _ty, _tx, _ty + h );
-        }
+      i = m_strOutText.length();
+      t = m_strOutText.at(j);
+      painter.drawText( indent + corner.x() + m_iTextX + dx,
+                        corner.y() + m_iTextY + dy, t );
+      dy += fm.descent() + fm.ascent();
+      j++;
     }
+    while ( j != i );
+  }
 
- drawmarker:
-    if ( _painter.device()->isExtDev() || !drawCursor)
-      return;
-    //
-    // Draw the marker
-    //
-    // Some of this code is duplicated in KSpreadCanvas::updateSelection
-    //
-    QRect marker = m_pTable->markerRect();
-    QRect larger;
-    larger.setCoords( marker.left() - 1, marker.top() - 1, marker.right() + 1, marker.bottom() + 1 );
+  if(m_bCellTooShort)
+  {
+    m_strOutText = tmpText;
+    m_iOutTextHeight = tmpHeight;
+    m_iOutTextWidth = tmpWidth;
+  }
 
-    QPen pen(Qt::black,3);
-    _painter.setPen( pen );
+  if(m_pTable->getHideZero() && isNumeric() &&
+     valueDouble() * factor(column(),row())==0)
+  {
+    m_strOutText=tmpText;
+  }
 
-    // The marker is exactly this cell ?
-    if ( marker.left() == _col && marker.right() == _col &&
-         marker.top() == _row && marker.bottom() == _row )
+  if( colLayout->isHide()|| (rowLayout->height()<=2))
+    m_strOutText=tmpText;
+
+}
+
+void KSpreadCell::paintPageBorders(QPainter& painter, QPoint corner,
+                                   QPoint cellRef)
+{
+  if ( painter.device()->isExtDev() )
+    return;
+
+  ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
+  RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
+  int height = (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
+  int width =  (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
+
+  // Draw page borders
+  if ( m_pTable->isShowPageBorders() )
+  {
+    if ( m_pTable->isOnNewPageY( cellRef.y() ) )
     {
-        paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
-        paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
-        paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
-        paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 4, marker );
+      painter.setPen( Qt::red );
+      painter.drawLine( corner.x(), corner.y(), corner.x() + width,
+                        corner.y() );
     }
-    else if ( marker.contains( QPoint(_col, _row) ) )
+    if ( m_pTable->isOnNewPageX( cellRef.x() ) )
     {
-        // int w = cl->width();
-        // int h = rl->height();
-
-        // Upper border ?
-        if ( _row == marker.top() )
-            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
-        // Left border ?
-        if ( _col == marker.left() )
-            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 4, marker );
-        // Lower border ?
-        if ( _row == marker.bottom() )
-            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
-        // Right border ?
-        if ( _col == marker.right() )
-            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
+      painter.setPen( Qt::red );
+      painter.drawLine( corner.x(), corner.y(), corner.x(),
+                        corner.y() + height );
     }
-    // Dont obeye extra cells
-    else if ( larger.contains( QPoint(_col, _row) ) )
+  }
+}
+
+void KSpreadCell::paintMarker(QPainter& painter, QPoint corner, QPoint cellRef)
+{
+  if ( painter.device()->isExtDev() )
+    return;
+
+  ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
+  RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
+
+  /* as far as borders are concerned, we only print our own, even if we are
+     merged into another cell.  So don't use m_iExtraWidth/Height */
+  int height = rowLayout->height();
+  int width =  colLayout->width();
+
+  //
+  // Draw the marker
+  //
+  // Some of this code is duplicated in KSpreadCanvas::updateSelection
+  //
+  QRect marker = m_pTable->markerRect();
+  QRect larger;
+  larger.setCoords( marker.left() - 1, marker.top() - 1, marker.right() + 1,
+                    marker.bottom() + 1 );
+
+  QPen pen(Qt::black,3);
+  painter.setPen( pen );
+
+  // The marker is exactly this cell ?
+  if ( marker.left() == cellRef.x() && marker.right() == cellRef.x() &&
+       marker.top() == cellRef.y() && marker.bottom() == cellRef.y())
+  {
+    paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                     width, height, 1, marker );
+    paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                     width, height, 2, marker );
+    paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                     width, height, 3, marker );
+    paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                     width, height, 4, marker );
+  }
+  else if ( marker.contains( cellRef ) )
+  {
+    // Upper border ?
+    if ( cellRef.y() == marker.top() )
+      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                       width, height, 1, marker );
+    // Left border ?
+    if ( cellRef.x() == marker.left() )
+      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                       width, height, 4, marker );
+    // Lower border ?
+    if ( cellRef.y() == marker.bottom() )
+      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                       width, height, 3, marker );
+    // Right border ?
+    if ( cellRef.x() == marker.right() )
+      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(),
+                       cellRef.y(), width, height, 2, marker );
+  }
+  // Dont obey extra cells
+  else if ( larger.contains( QPoint(cellRef.x(), cellRef.y()) ) )
+  {
+    // Upper border ?
+    if ( cellRef.x() >= marker.left() && cellRef.x() <= marker.right() &&
+         cellRef.y() - 1 == marker.bottom() )
+      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                       width, height, 1, marker );
+    // Left border ?
+    if ( cellRef.y() >= marker.top() && cellRef.y() <= marker.bottom() &&
+         cellRef.x() - 1 == marker.right() )
+      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                       width, height, 4, marker );
+    // Lower border ?
+    if ( cellRef.x() >= marker.left() && cellRef.x() <= marker.right() &&
+         cellRef.y() + 1 == marker.top() )
+      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                       width, height, 3, marker );
+    // Right border ?
+    if ( cellRef.y() >= marker.top() && cellRef.y() <= marker.bottom() &&
+         cellRef.x() + 1 == marker.left() )
+      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                       width, height, 2, marker );
+    // Top left corner ?
+    if ( cellRef.y() == marker.bottom() + 1 && cellRef.x() == marker.right() + 1 )
+      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                       width, height, 11, marker );
+    // Top right corner ?
+    if ( cellRef.y() == marker.bottom() + 1 && cellRef.x() == marker.left() - 1 )
+      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                       width, height, 12, marker );
+    // Bottom right corner ?
+    if ( cellRef.y() == marker.top() - 1 && cellRef.x() == marker.left() - 1 )
+      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                       width, height, 13, marker );
+    // Bottom left corner ?
+    if ( cellRef.y() == marker.top() - 1 && cellRef.x() == marker.right() + 1 )
+      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
+                       width, height, 14, marker );
+  }
+}
+
+void KSpreadCell::paintCellBorders(QPainter& painter, QPoint corner,
+                                   QPoint cellRef)
+{
+  ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
+  RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
+  int height = rowLayout->height();
+  int width =  colLayout->width();
+
+  /* we might not paint some borders if this cell is merged with another in
+     that direction */
+  bool paintLeft = true;
+  bool paintRight = true;
+  bool paintTop = true;
+  bool paintBottom = true;
+
+  if (isObscured())
+  {
+    int xDiff = cellRef.x() - obscuringCellsColumn();
+    int yDiff = cellRef.y() - obscuringCellsRow();
+    paintLeft = xDiff == 0;
+    paintTop = yDiff == 0;
+
+    paintRight = m_pObscuringCell->extraXCells() == xDiff;
+    paintBottom = m_pObscuringCell->extraYCells() == yDiff;
+  }
+
+  paintRight = paintRight && extraXCells() == 0;
+  paintBottom = paintBottom && extraYCells() == 0;
+
+
+  int top_offset = 0;
+  int bottom_offset = 0;
+  int left_offset = 0;
+  int right_offset = 0;
+  //
+  // Determine the pens that should be used for drawing
+  // the borders.
+  //
+  QPen left_pen = leftBorderPen( cellRef.x(), cellRef.y() );
+  QPen right_pen = rightBorderPen( cellRef.x(), cellRef.y() );
+  QPen top_pen = topBorderPen( cellRef.x(), cellRef.y() );
+  QPen bottom_pen = bottomBorderPen( cellRef.x(), cellRef.y() );
+
+  if ( left_pen.style() != Qt::NoPen && paintLeft)
+  {
+    int top = ( QMAX( 0, -1 + (int)top_pen.width() ) ) / 2 +
+              ( ( QMAX( 0, -1 + (int)top_pen.width() ) ) % 2 );
+    int bottom = ( QMAX( 0, -1 + (int)bottom_pen.width() ) ) / 2 + 1;
+
+    painter.setPen( left_pen );
+    painter.drawLine( corner.x(), corner.y() - top, corner.x(),
+                      corner.y() + height + bottom );
+
+    left_offset = left_pen.width() - ( left_pen.width() / 2 );
+  }
+  if ( right_pen.style() != Qt::NoPen && paintRight)
+  {
+    int top = ( QMAX( 0, -1 + (int)top_pen.width() ) ) / 2 +
+              ( ( QMAX( 0, -1 + (int)top_pen.width() ) ) % 2 );
+    int bottom = ( QMAX( 0, -1 + (int)bottom_pen.width() ) ) / 2 + 1;
+
+    painter.setPen( right_pen );
+    painter.drawLine( width + corner.x(), corner.y() - top,
+                       width + corner.x(), corner.y() + height + bottom );
+    right_offset = right_pen.width() / 2;
+  }
+  if ( top_pen.style() != Qt::NoPen && paintTop)
+  {
+    painter.setPen( top_pen );
+    painter.drawLine( corner.x(), corner.y(), corner.x() + width, corner.y() );
+
+    top_offset = top_pen.width() - ( top_pen.width() / 2 );
+  }
+  if ( bottom_pen.style() != Qt::NoPen &&paintBottom )
+  {
+    painter.setPen( bottom_pen );
+    painter.drawLine( corner.x(), height + corner.y(), corner.x() + width,
+                      height + corner.y() );
+
+    bottom_offset = bottom_pen.width() / 2;
+  }
+
+
+
+  //
+  // Draw diagonal borders.
+  //
+  if (!isObscuringForced())
+  {
+    if ( fallDiagonalPen( cellRef.x(), cellRef.y() ).style() != Qt::NoPen )
     {
-        // int w = cl->width();
-        // int h = rl->height();
-
-        // Upper border ?
-        if ( _col >= marker.left() && _col <= marker.right() && _row - 1 == marker.bottom() )
-            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
-        // Left border ?
-        if ( _row >= marker.top() && _row <= marker.bottom() && _col - 1 == marker.right() )
-            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 4, marker );
-        // Lower border ?
-        if ( _col >= marker.left() && _col <= marker.right() && _row + 1 == marker.top() )
-            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
-        // Right border ?
-        if ( _row >= marker.top() && _row <= marker.bottom() && _col + 1 == marker.left() )
-            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
-        // Top left corner ?
-        if ( _row == marker.bottom() + 1 && _col == marker.right() + 1 )
-            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 11, marker );
-        // Top right corner ?
-        if ( _row == marker.bottom() + 1 && _col == marker.left() - 1 )
-            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 12, marker );
-        // Bottom right corner ?
-        if ( _row == marker.top() - 1 && _col == marker.left() - 1 )
-            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 13, marker );
-        // Bottom left corner ?
-        if ( _row == marker.top() - 1 && _col == marker.right() + 1 )
-            paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 14, marker );
+      painter.setPen( fallDiagonalPen(cellRef.x(), cellRef.y()) );
+      painter.drawLine( corner.x(), corner.y(), corner.x() + width,
+                        corner.y() + height );
     }
+    if (goUpDiagonalPen( cellRef.x(), cellRef.y() ).style() != Qt::NoPen )
+    {
+      painter.setPen( goUpDiagonalPen(cellRef.x(), cellRef.y()) );
+      painter.drawLine( corner.x(), corner.y() + height , corner.x() + width,
+                        corner.y() );
+    }
+  }
 }
 
 int KSpreadCell::defineAlignX()
