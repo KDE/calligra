@@ -4,6 +4,7 @@
 #include <qbuttongroup.h>
 
 #include <kcolorbutton.h>
+#include <klocale.h>
 
 #include "shadowdialogimpl.h"
 #include "textpreview.h"
@@ -14,7 +15,7 @@ ShadowDialogImpl::ShadowDialogImpl( QWidget *parent, const char* name )
     _preview = new TextPreview( previewPanel );
     QHBoxLayout *lay = new QHBoxLayout( previewPanel, previewPanel->lineWidth(), 0 );
     lay->addWidget( _preview );
-
+    distanceSpinBox->setSuffix(i18n("pt"));
     ltButton->setPixmap( BarIcon( "shadowLU" ) );
     tButton->setPixmap( BarIcon( "shadowU" ) );
     rtButton->setPixmap( BarIcon( "shadowRU" ) );
