@@ -54,9 +54,6 @@ HtmlExportDialog :: HtmlExportDialog(QWidget* parent)
 
 
     setMainWidget(m_dialog);
-
-    connect(m_dialog->comboBoxEncoding, SIGNAL(activated(int)), this,
-        SLOT(comboBoxEncodingActivated(int)));
 }
 
 HtmlExportDialog :: ~HtmlExportDialog(void)
@@ -99,11 +96,6 @@ QTextCodec* HtmlExportDialog::getCodec(void) const
     }
 
     return codec;
-}
-
-void HtmlExportDialog::comboBoxEncodingActivated(int)
-{
-    m_dialog->buttonGroupEncoding->setButton(2); // Select the "other" button
 }
 
 HtmlExportDialog::Mode HtmlExportDialog::getMode(void) const

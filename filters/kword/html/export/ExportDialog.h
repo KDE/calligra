@@ -1,4 +1,4 @@
-// $Header$
+// 
 
 /*
    This file is part of the KDE project
@@ -46,8 +46,6 @@ public:
     Mode getMode(void) const;
 private:
     ExportDialogUI* m_dialog;
-private slots:
-    void comboBoxEncodingActivated(int);
 };
 
 #endif /* EXPORT_DIALOG_H */
