@@ -39,14 +39,14 @@ public:
 
     // Modify the paragraph with style information from various sources...
     //
-    // An array of SPRMs (grpprl) with an optional TAP.
+    // An array of SPRMs (grpprl).
     // An existing base style.
     // List format.
     // Property exceptions.
     // Paragraph height.
     // Predefined style from stylesheet.
 
-    void apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap = NULL);
+    void apply(const MsWord::U8 *grpprl, unsigned count);
     void apply(MsWord::U16 style);
     void apply(MsWord::LFO &style);
     void apply(MsWord::PAPXFKP &style);
@@ -57,6 +57,11 @@ public:
 
     static MsWord::U16 getRealOpcode(unsigned shortOpcode); 
 
+    // Get the properties.
+ 
+    const MsWord::PAP *getPap(void) { return &m_pap; }
+    const MsWord::CHP *getChp(void) { return &m_chp; }
+    const MsWord::TAP *getTap(void) { return &m_tap; }
 private:
     friend class MsWord;
 
@@ -66,6 +71,10 @@ private:
     // The default character properties for this paragraph.
 
     MsWord::CHP m_chp;
+
+    // Any table properties for the row terminated by this paragraph.
+
+    MsWord::TAP m_tap;
 
     // Encodings of all Word97 sprms.
 

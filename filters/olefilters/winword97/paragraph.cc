@@ -42,14 +42,15 @@ Paragraph::Paragraph(MsWord &document) :
     m_chp.lidFE = 0x400;
     m_chp.wCharScale = 100;
     m_chp.fUsePgsuSettings = (MsWord::U16)-1;
+    memset(&m_tap, 0, sizeof(m_tap));
 }
 
 Paragraph::~Paragraph()
 {
 }
 
-// An array of SPRMs (grpprl) with an optional TAP.
-void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap)
+// An array of SPRMs (grpprl).
+void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count)
 {
     MsWord::U16 opcodeValue;
     struct
@@ -806,9 +807,18 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
         case sprmPBrcRight: // 0x6427
             MsWordGenerated::read(in + bytes, &m_pap.brcRight);
             break;
+        case sprmPBrcBetween: // 0x6628
+             MsWordGenerated::read(in + bytes, &m_pap.brcBetween);
+             break;
+        case sprmPBrcBar: // 0x6629
+             MsWordGenerated::read(in + bytes, &m_pap.brcBar);
+             break;
         case sprmCPicLocation: // 0x6A03
             MsWordGenerated::read(in + bytes, &m_chp.fcPic_fcObj_lTagObj);
             m_chp.fSpec = 1;
+            break;
+        case sprmTTlp: // 0x740A
+            MsWordGenerated::read(in + bytes, &m_tap.tlp);
             break;
         case sprmPDxaRight: // 0x840E
             MsWordGenerated::read(in + bytes, &m_pap.dxaRight);
@@ -828,6 +838,9 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
         case sprmPDxaWidth: // 0x841A
             MsWordGenerated::read(in + bytes, &m_pap.dxaWidth);
             break;
+        case sprmTDyaRowHeight: // 0x9407
+            MsWordGenerated::read(in + bytes, &m_tap.dyaRowHeight);
+            break;
         case sprmTDxaGapHalf: // 0x9602
             // TBD: NYI
             break;
@@ -846,33 +859,28 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap
         case sprmPAnld: // 0xC63E
             MsWordGenerated::read(in + bytes, &m_pap.anld);
             break;
-
-        // TAP-specific stuff...
-
         case sprmTTableBorders: // 0xD605
-            if (tap)
-            {
-                MsWordGenerated::read(in + bytes, &tap->rgbrcTable[0], 6);
-            }
+            MsWordGenerated::read(in + bytes, &m_tap.rgbrcTable[0], 6);
             break;
         case sprmTDefTable: // 0xD608
-            if (tap)
-            {
-                // Get cell count.
 
-                MsWordGenerated::read(in + bytes, &tmp);
-                tap->itcMac = tmp;
-                tmp = 1;
+            // Get cell count.
 
-                // Get cell boundaries and descriptions.
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_tap.itcMac = tmp;
+            tmp = 1;
 
-                tmp += MsWordGenerated::read(in + bytes + tmp, (MsWord::U16 *)&tap->rgdxaCenter[0], tap->itcMac + 1);
-                tmp += MsWordGenerated::read(in + bytes + tmp, &tap->rgtc[0], tap->itcMac);
-            }
-            else
-            {
-                kdError(MsWord::s_area) << "Paragraph::apply: cannot apply sprmTDefTable without a TAP" << endl;
-            }
+            // Get cell boundaries and descriptions.
+
+            tmp += MsWordGenerated::read(in + bytes + tmp, &m_tap.rgdxaCenter[0], m_tap.itcMac + 1);
+            tmp += MsWordGenerated::read(in + bytes + tmp, &m_tap.rgtc[0], m_tap.itcMac);
+            break;
+        case sprmTDefTableShd: // 0xD609
+
+            // TBD: this is completely different to the documented algorithm!
+
+            tmp = operandSize/sizeof(m_tap.rgshd[0]);
+            MsWordGenerated::read(in + bytes, &m_tap.rgshd[0], tmp);
             break;
         default:
             if (!(m_document.m_fib.nFib > MsWord::s_maxWord6Version) &&

@@ -61,9 +61,16 @@ private:
 
     void encode(QString &text);
 
+    QString colourType(
+        unsigned colour,
+        const char *red,
+        const char *green,
+        const char *blue,
+        unsigned defaultColour = 1) const;
+
     // Convert from Word number format codes to our own number format.
 
-    char numberingType(unsigned nfc);
+    char numberingType(unsigned nfc) const;
 
     void gotError(const QString &text);
     void gotParagraph(const QString &text, PAP &style);

@@ -19,6 +19,7 @@
 
 #include <winworddoc.h>
 #include <qregexp.h>
+#define DISABLE_FLOATING true
 
 WinWordDoc::WinWordDoc(
     QDomDocument &part,
@@ -242,7 +243,7 @@ void WinWordDoc::gotTableBegin()
     if (m_phase == TEXT_PASS)
     {
         m_body.append("<PARAGRAPH>\n<TEXT>");
-if (1)
+if (DISABLE_FLOATING)
 {
         if (m_tableManager == 1)
             m_body.append("This filter is currently unable to position tables correctly."
@@ -294,10 +295,8 @@ void WinWordDoc::gotTableRow(const QString texts[], const PAP /*styles*/[], TAP 
             m_body.append(QString::number(i));
             m_body.append("\" rows=\"");
             m_body.append(QString::number(1));
-//            m_body.append(QString::number(m_tableRows));
             m_body.append("\" cols=\"");
             m_body.append(QString::number(1));
-//            m_body.append(QString::number(row.itcMac));
             m_body.append("\" removeable=\"0\" visible=\"1\">\n"
                 " <FRAME left=\"");
             cellEdge = row.rgdxaCenter[i] - row.rgdxaCenter[0];
@@ -310,10 +309,27 @@ void WinWordDoc::gotTableRow(const QString texts[], const PAP /*styles*/[], TAP 
             cellEdge = cellEdge + s_hMargin;
             m_body.append(QString::number(cellEdge));
             m_body.append("\" top=\"");
+if (DISABLE_FLOATING)
             m_body.append(QString::number(400 + m_tableRow * 30));
+else
+            m_body.append(QString::number(30 + m_tableRow * 30));
             m_body.append("\" bottom=\"");
+if (DISABLE_FLOATING)
             m_body.append(QString::number(500 + m_tableRow * 30));
-            m_body.append("\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0");
+else
+            m_body.append(QString::number(60 + m_tableRow * 30));
+            m_body.append(
+                "\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\" "
+                "lWidth=\"1\" lStyle=\"0\" " +
+                colourType(row.rgtc[i].brcLeft.ico, "lRed", "lGreen", "lBlue") +
+                "rWidth=\"1\" rStyle=\"0\" " +
+                colourType(row.rgtc[i].brcRight.ico, "rRed", "rGreen", "rBlue") +
+                "tWidth=\"1\" tStyle=\"0\" " +
+                colourType(row.rgtc[i].brcTop.ico, "tRed", "tGreen", "tBlue") +
+                "bWidth=\"1\" bStyle=\"0\" " +
+                colourType(row.rgtc[i].brcBottom.ico, "bRed", "bGreen", "bBlue") +
+                colourType(row.rgshd[i].icoBack, "bkRed", "bkGreen", "bkBlue", 8) +
+                "bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0");
             m_body.append("\" autoCreateNewFrame=\"0\" newFrameBehaviour=\"1\"/>\n");
             m_body.append("<PARAGRAPH>\n<TEXT>");
             xml_friendly = texts[i];
@@ -326,7 +342,79 @@ void WinWordDoc::gotTableRow(const QString texts[], const PAP /*styles*/[], TAP 
     m_tableRow++;
 }
 
-char WinWordDoc::numberingType(unsigned nfc)
+QString WinWordDoc::colourType(
+    unsigned colour,
+    const char *red,
+    const char *green,
+    const char *blue,
+    unsigned defaultColour) const
+{
+    // Word colours are:
+    //     0 Auto
+    //     1 Black
+    //     2 Blue
+    //     3 Cyan
+    //     4 Green
+    //     5 Magenta
+    //     6 Red
+    //     7 Yellow
+    //     8 White
+    //     9 DkBlue
+    //     10 DkCyan
+    //     11 DkGreen
+    //     12 DkMagenta
+    //     13 DkRed
+    //     14 DkYellow
+    //     15 DkGray
+    //     16 LtGray
+    //
+    // I've translated these by approximately matching the Word name
+    // to an X name as indicated. I'm sure there is a more rational way
+    // to do this!
+
+    static unsigned colourTypes[17] =
+    {
+        0x000000, // 0 returns the default colour.
+        0x000000, // 1 black
+        0x0000ff, // 2 blue
+        0x00ffff, // 3 cyan
+        0x00ff00, // 4 green
+        0xff00ff, // 5 magenta
+        0xff0000, // 6 red
+        0xffff00, // 7 yellow
+        0xffffff, // 8 white
+        0x483d8b, // 9 DarkSlateBlue
+        0x008b8b, // 10 cyan4
+        0x006400, // 11 DarkGreen
+        0x8b008b, // 12 magenta4
+        0x8b0000, // 13 red4
+        0x8b8b00, // 14 yellow4
+        0x3d3d3d, // 15 grey24
+        0xd3d3d3  // 16 LightGrey
+    };
+
+    QString result;
+
+    if (colour > 16)
+        colour = defaultColour;
+    if (colour == 0)
+        colour = defaultColour;
+    result += red;
+    result += "=\"";
+    result += QString::number((colourTypes[colour] >> 16) & 0xff);
+    result += "\" ";
+    result += green;
+    result += "=\"";
+    result += QString::number((colourTypes[colour] >> 8) & 0xff);
+    result += "\" ";
+    result += blue;
+    result += "=\"";
+    result += QString::number((colourTypes[colour]) & 0xff);
+    result += "\" ";
+    return result;
+}
+
+char WinWordDoc::numberingType(unsigned nfc) const
 {
     // Word number formats are:
     //

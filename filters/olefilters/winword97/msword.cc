@@ -192,13 +192,7 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
 
         if (paragraph.m_pap.fTtp)
         {
-            MsWord::TAP tap;
-
-            // A TAP describes the row.
-
-            memset(&tap, 0, sizeof(tap));
-            paragraph.apply(style.ptr, style.count, &tap);
-            gotTableRow(m_tableText, m_tableStyle, tap);
+            gotTableRow(m_tableText, m_tableStyle, paragraph.m_tap);
             m_tableColumn = 0;
         }
         else
