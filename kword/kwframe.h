@@ -251,7 +251,7 @@ public:
      */
     virtual void drawContents( QPainter *, const QRect &,
                                QColorGroup &, bool onlyChanged, bool resetChanged,
-                               KWViewMode *viewMode );
+                               KWViewMode *viewMode, KWCanvas *canvas );
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent( QKeyEvent * ) {}
@@ -368,9 +368,10 @@ public:
      * @param frame The frame to be drawn
      * @param settingsFrame The frame from which we take the settings (usually @p frame, but not with Copy behaviour)
      * @param crect The rectangle (in "contents coordinates") to be painted
-     * @param viewMode The current view mode ( for coord transformation )
+     * @param canvas The canvas in which we are drawing (for settings)
      */
-    virtual void drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame, const QRect &crect, KWViewMode *viewMode );
+    void drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame,
+                          const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas );
 
     /**
      * Paint this frameset
@@ -380,6 +381,8 @@ public:
      * @param onlyChanged If true, only redraw what has changed (see KWCanvas::repaintChanged)
      * @param resetChanged If true, set the changed flag to false after drawing.
      * @param edit If set, this frameset is being edited, so a cursor is needed.
+     * @param viewMode For coordinate conversion, always set.
+     * @param canvas For view settings. WARNING: canvas can be 0 (e.g. in embedded documents).
      *
      * The way this "onlyChanged/resetChanged" works is: when something changes,
      * all views are asked to redraw themselves with onlyChanged=true.
@@ -392,7 +395,10 @@ public:
      */
     virtual void drawContents( QPainter *painter, const QRect &crect,
                                QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                               KWFrameSetEdit *edit, KWViewMode *viewMode );
+                               KWFrameSetEdit *edit, KWViewMode *viewMode, KWCanvas *canvas );
+
+    // This is used (e.g. by KWTextParag) to get the view settings
+    KWCanvas * currentDrawnCanvas() const { return m_currentDrawnCanvas; }
 
     /**
      * Draw a particular frame of this frameset.
@@ -546,6 +552,7 @@ protected:
     bool m_removeableHeader, m_visible;
     QString m_name;
     KWTextFrameSet * m_anchorTextFs;
+    KWCanvas * m_currentDrawnCanvas;           // The canvas currently being drawn.
 };
 
 /******************************************************************/

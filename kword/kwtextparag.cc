@@ -372,27 +372,55 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
                                  lastFormat, i, selectionStarts,
                                  selectionEnds, cg, rightToLeft );
 
-    if ( 0 ) /// TODO
+    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
+    if ( doc && doc->viewFormattingChars() )
     {
+        painter.save();
+        QPen pen( Qt::red ); // ?
+        painter.setPen( pen );
         //kdDebug() << "KWTextParag::drawParagString start=" << start << " len=" << len << " length=" << length() << endl;
         if ( start + len == length() )
         {
             // drawing the end of the parag
-            painter.save();
-            QPen pen( Qt::red ); // ?
-            painter.setPen( pen );
-            int size = QMIN( lastFormat->width('x'), h * 3 / 4 );
+            int w = lastFormat->width('x'); // see KWTextFrameSet::adjustFlow
+            int size = QMIN( w, h * 3 / 4 );
+            int arrowsize = textDocument()->zoomHandler()->zoomItY( 2 );
             // x,y is the bottom right corner of the reversed L
-            int x = startX + bw;
-            int y = lastY + baseLine;
-            painter.drawLine( x + size, y - size, x + size, y );
-            painter.drawLine( x + size, y, x, y );
+            int x = startX + bw + w - 1;
+            int y = lastY + baseLine - arrowsize;
+            //kdDebug() << "KWTextParag::drawParagString drawing CR at " << x << "," << y << endl;
+            painter.drawLine( x, y - size, x, y );
+            painter.drawLine( x, y, x - size, y );
             // Now the arrow
-            int arrowsize = textDocument()->zoomHandler()->zoomItY( 3 );
-            painter.drawLine( x, y, x + arrowsize, y - arrowsize );
-            painter.drawLine( x, y, x + arrowsize, y + arrowsize );
-            painter.restore();
+            painter.drawLine( x - size, y, x - size + arrowsize, y - arrowsize );
+            painter.drawLine( x - size, y, x - size + arrowsize, y + arrowsize );
         }
+        // Now draw spaces and tabs
+        int end = QMIN( start + len, length() - 1 ); // don't look at the trailing space
+        for ( int i = start ; i < end ; ++i )
+        {
+            QTextStringChar &ch = string()->at(i);
+            if ( ch.c == ' ' )
+            {
+                int w = string()->width(i);
+                int size = QMAX( 2, QMIN( w/2, h/3 ) ); // Enfore that it's a square, and that it's visible
+                painter.drawRect( ch.x + (w - size) / 2, lastY + (h - size) / 2, size, size );
+            }
+            else if ( ch.c == '\t' )
+            {
+                QTextStringChar &nextch = string()->at(i+1);
+                //kdDebug() << "tab x=" << ch.x << " next x=" << nextch.x << endl;
+                int availWidth = nextch.x - ch.x - 1;
+                int x = ch.x + availWidth / 2;
+                int size = QMIN( availWidth, lastFormat->width('W') ) / 2; // actually the half size
+                int y = lastY + h/2;
+                int arrowsize = textDocument()->zoomHandler()->zoomItY( 2 );
+                painter.drawLine( x + size, y, x - size, y );
+                painter.drawLine( x + size, y, x + size - arrowsize, y - arrowsize );
+                painter.drawLine( x + size, y, x + size - arrowsize, y + arrowsize );
+            }
+        }
+        painter.restore();
     }
 }
 

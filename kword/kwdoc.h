@@ -421,16 +421,10 @@ public:
     /** call by undo/redo frame border => update all button border frame **/
     void refreshFrameBorderButton();
 
-    // Settings
-
+    // This settings has to be here [instead of KWView] because we need to
+    // format paragraphs slightly differently (to add room for the CR char)
     bool viewFormattingChars() const { return m_viewFormattingChars; }
     void setViewFormattingChars(bool _b) { m_viewFormattingChars=_b; }
-
-    bool viewFrameBorders() const { return m_viewFrameBorders; }
-    void setViewFrameBorders(bool _b){ m_viewFrameBorders=_b; }
-
-    bool viewTableGrid() const { return m_viewTableGrid; }
-    void setViewTableGrid(bool _b) { m_viewTableGrid = _b;}
 
     bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
     void setDontCheckUpperWord(bool _b) { m_bDontCheckUpperWord=_b;}
@@ -446,6 +440,7 @@ public:
     int getNbPagePerRow() { return m_iNbPagePerRow; }
     void setNbPagePerRow(int _nb) { m_iNbPagePerRow=_nb; }
 
+    // This could be in KWView, but the problem is loading/saving it.....
     void setShowRuler(bool _ruler){ m_bShowRuler=_ruler; }
     bool showRuler() const { return m_bShowRuler; }
 
@@ -571,7 +566,7 @@ private:
     KSpellConfig *m_pKSpellConfig;
 
     QFont m_defaultFont;
-    bool m_viewFormattingChars, m_viewFrameBorders, m_viewTableGrid;
+    bool m_viewFormattingChars;
     bool m_bShowRuler;
     bool m_bDontCheckUpperWord;
     bool m_bDontCheckTitleCase;

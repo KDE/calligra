@@ -324,7 +324,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     if ( lastFormatted == textdoc->lastParag() && !onlyChanged)
     {
         int docHeight = textdoc->height();
-        QRect frameRect = m_currentViewMode->normalToView( kWordDocument()->zoomRect( *frame ) );
+        QRect frameRect = m_currentDrawnCanvas->viewMode()->normalToView( kWordDocument()->zoomRect( *frame ) );
 
         //QListIterator<KWFrame> frameIt( frameIterator() );
         //int totalHeight = 0;
@@ -342,11 +342,12 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     //m_currentDrawnFrame = 0L;
 }
 
-void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWViewMode * viewMode )
+void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWCanvas *canvas )
 {
     // This redraws the paragraph where the cursor is - with a small clip region around the cursor
 
-    m_currentViewMode = viewMode; // in case KWAnchor gets called
+    m_currentDrawnCanvas = canvas;
+    KWViewMode *viewMode = canvas->viewMode();
     QListIterator<KWFrame> frameIt( frameIterator() );
     int totalHeight = 0;
     bool drawn = false;
@@ -417,11 +418,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         }
         totalHeight += normalFrameRect.height();
     }
-    // Well this is a no-op currently (we don't use QTextFlow::draw)
-    //if ( textdoc->flow() )
-    //textdoc->flow()->draw( p, r.x() - cursor->totalOffsetX(),
-    //                        r.y() - cursor->totalOffsetX(), r.width(), r.height() );
-
+    m_currentDrawnCanvas = 0L;
 }
 
 void KWTextFrameSet::layout()
@@ -825,6 +822,16 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
 
     int yp_ro = yp;
     QTextFlow::adjustFlow( yp_ro, w, h, parag, FALSE );
+
+    //Hack. Fixing the parag rect from here, to add room for the CR formatting character
+    if ( parag && m_doc->viewFormattingChars() )
+    {
+        if ( parag->lineStartList().count() == 1 ) // don't use lines() here, parag not formatted yet
+        {
+            QTextFormat * lastFormat = parag->at( parag->length() - 1 )->format();
+            parag->setWidth( parag->rect().width() + lastFormat->width('x') );
+        }
+    }
 }
 
 void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorGroup & cg )
@@ -3705,7 +3712,7 @@ void KWTextFrameSetEdit::drawCursor( bool visible )
     p.translate( -m_canvas->contentsX(), -m_canvas->contentsY() );
     p.setBrushOrigin( -m_canvas->contentsX(), -m_canvas->contentsY() );
 
-    textFrameSet()->drawCursor( &p, cursor, visible, m_canvas->viewMode() );
+    textFrameSet()->drawCursor( &p, cursor, visible, m_canvas );
     cursorVisible = visible;
 }
 

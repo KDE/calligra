@@ -30,6 +30,7 @@ DESCRIPTION
 #include "kwcanvas.h"
 #include "kwcommand.h"
 #include "kwviewmode.h"
+#include "kwview.h"
 
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     KWFrameSet( doc )
@@ -1363,7 +1364,7 @@ void KWTableFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyReg
     }
 }
 
-void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, KWViewMode *viewMode )
+void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas )
 {
     painter->save();
 
@@ -1382,10 +1383,11 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, KWView
 	bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
         painter->setBrush( bgBrush );
 
-        // Draw default borders using view settings except when printing, or disabled.
-        QPen viewSetting( lightGray );
+        // Draw default borders using view settings...
+        QPen viewSetting( lightGray ); // TODO use qcolorgroup
+        // ...except when printing, or embedded doc, or disabled.
         if ( ( painter->device()->devType() == QInternal::Printer ) ||
-            !m_doc->viewFrameBorders() )
+             !canvas || !canvas->gui()->getView()->viewFrameBorders() )
         {
             viewSetting.setColor( bgBrush.color() );
         }
@@ -1483,9 +1485,9 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, KWView
 
 void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
                                     QColorGroup & cg, bool onlyChanged, bool resetChanged,
-                                    KWFrameSetEdit * edit, KWViewMode * viewMode )
+                                    KWFrameSetEdit * edit, KWViewMode * viewMode, KWCanvas *canvas )
 {
-    drawBorders( painter, crect, viewMode );
+    drawBorders( painter, crect, viewMode, canvas );
     for (unsigned int i=0; i < m_cells.count() ; i++)
     {
         if (edit)
@@ -1493,11 +1495,11 @@ void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
             KWTableFrameSetEdit * tableEdit = static_cast<KWTableFrameSetEdit *>(edit);
             if ( tableEdit->currentCell() && m_cells.at(i) == tableEdit->currentCell()->frameSet() )
             {
-                m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged, tableEdit->currentCell(), viewMode );
+                m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged, tableEdit->currentCell(), viewMode, canvas );
                 continue;
             }
         }
-        m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged, 0L, viewMode );
+        m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged, 0L, viewMode, canvas );
     }
 
 }

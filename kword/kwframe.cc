@@ -382,7 +382,7 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
 KWFrameSet::KWFrameSet( KWDocument *doc )
     : m_doc( doc ), frames(), m_framesOnTop(), m_info( FI_BODY ),
       m_current( 0 ), grpMgr( 0L ), m_removeableHeader( false ), m_visible( true ),
-      m_anchorTextFs( 0L )
+      m_anchorTextFs( 0L ), m_currentDrawnCanvas( 0L )
 {
     // Send our "repaintChanged" signals to the document.
     connect( this, SIGNAL( repaintChanged( KWFrameSet * ) ),
@@ -469,7 +469,7 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
     }
 }
 
-void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame, const QRect &crect, KWViewMode *viewMode )
+void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame, const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas )
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
     //kdDebug(32002) << "KWFrameSet::drawFrameBorder frame: " << frame
@@ -488,10 +488,11 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
     bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
     painter->setBrush( bgBrush );
 
-    // Draw default borders using view settings except when printing, or disabled.
+    // Draw default borders using view settings...
     QPen viewSetting( lightGray ); // TODO use qcolorgroup
+    // ...except when printing, or embedded doc, or disabled.
     if ( ( painter->device()->devType() == QInternal::Printer ) ||
-         !m_doc->viewFrameBorders() )
+         !canvas || !canvas->gui()->getView()->viewFrameBorders() )
     {
         viewSetting.setColor( bgBrush.color() );
     }
@@ -831,12 +832,13 @@ void KWFrameSet::updateFrames()
 
 void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg,
                                bool onlyChanged, bool resetChanged,
-                               KWFrameSetEdit *edit, KWViewMode *viewMode )
+                               KWFrameSetEdit *edit, KWViewMode *viewMode, KWCanvas *canvas )
 {
     /* kdDebug(32002) << "KWFrameSet::drawContents " << this << " " << getName()
                    << " onlyChanged=" << onlyChanged << " resetChanged=" << resetChanged
                    << " crect= " << DEBUGRECT(crect)
                    << endl; */
+    m_currentDrawnCanvas = canvas;
 
     QListIterator<KWFrame> frameIt( frameIterator() );
     KWFrame * lastRealFrame = 0L;
@@ -909,7 +911,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                 p->save();
                 p->setClipRegion( reg );
                 KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
-                drawFrameBorder( p, frame, settingsFrame, r, viewMode );
+                drawFrameBorder( p, frame, settingsFrame, r, viewMode, canvas );
                 p->restore();
             }// else kdDebug() << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
         }
@@ -920,6 +922,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
         }
         totalHeight += normalFrameRect.height();
     }
+    m_currentDrawnCanvas = 0L;
 }
 
 bool KWFrameSet::contains( double mx, double my )
@@ -1205,9 +1208,9 @@ KWFrameSetEdit::KWFrameSetEdit( KWFrameSet * fs, KWCanvas * canvas )
 
 void KWFrameSetEdit::drawContents( QPainter *p, const QRect &crect,
                                    QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                                   KWViewMode * viewMode )
+                                   KWViewMode *viewMode, KWCanvas *canvas )
 {
-    frameSet()->drawContents( p, crect, cg, onlyChanged, resetChanged, this, viewMode );
+    frameSet()->drawContents( p, crect, cg, onlyChanged, resetChanged, this, viewMode, canvas );
 }
 
 /******************************************************************/

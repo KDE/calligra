@@ -94,10 +94,10 @@ public:
      *                    allowing the caller to determine which areas remain to be painted.
      */
     virtual void createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode );
-    void drawBorders( QPainter *painter, const QRect &crect, KWViewMode *viewMode );
+    void drawBorders( QPainter *painter, const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas );
     virtual void drawContents( QPainter * painter, const QRect & crect,
                                QColorGroup & cg, bool onlyChanged, bool resetChanged,
-                               KWFrameSetEdit *, KWViewMode * );
+                               KWFrameSetEdit *edit, KWViewMode *viewMode, KWCanvas *canvas );
     // Dummy since we reimplement drawContents
     virtual void drawFrame(KWFrame *, QPainter *, const QRect &, QColorGroup &,
         bool, bool, KWFrameSetEdit *) {}
@@ -221,7 +221,7 @@ public:
 
     /** Contribute to the document statistics */
     virtual int paragraphs();
-    virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, 
+    virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words,
         ulong & sentences, ulong & syllables );
 
     virtual void finalize();

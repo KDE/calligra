@@ -89,6 +89,14 @@ public:
     void showZoom( int zoom ); // show a zoom value in the combo
     void setZoom( int zoom, bool updateViews ); // change the zoom value
 
+    // TODO load/save in kwordrc
+    bool viewFrameBorders() const { return m_viewFrameBorders; }
+    void setViewFrameBorders(bool _b){ m_viewFrameBorders=_b; }
+
+    // Currently unused
+    bool viewTableGrid() const { return m_viewTableGrid; }
+    void setViewTableGrid(bool _b) { m_viewTableGrid = _b;}
+
 //    virtual void setNoteType(KWFootNoteManager::NoteType nt, bool change=true);
 
     KWDocument *kWordDocument() { return m_doc; }
@@ -149,8 +157,8 @@ public slots:
 
     void viewPageMode();
     void viewPreviewMode();
-    void viewFormattingChars();
-    void viewFrameBorders();
+    void slotViewFormattingChars();
+    void slotViewFrameBorders();
     void viewHeader();
     void viewFooter();
     void viewFootNotes();
@@ -410,6 +418,8 @@ private:
     // Zoom values for each viewmode ( todo a viewmode enum and a qmap or so )
     int m_zoomViewModeNormal;
     int m_zoomViewModePreview;
+
+    bool m_viewFrameBorders, m_viewTableGrid;
 };
 
 /******************************************************************/

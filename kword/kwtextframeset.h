@@ -119,16 +119,16 @@ public:
 
     virtual void drawContents( QPainter *p, const QRect &r,
                                QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                               KWFrameSetEdit* edit, KWViewMode *viewMode )
+                               KWFrameSetEdit* edit, KWViewMode *viewMode, KWCanvas *canvas )
     {
         m_currentViewMode = viewMode;
-        KWFrameSet::drawContents( p, r, cg, onlyChanged, resetChanged, edit, viewMode );
+        KWFrameSet::drawContents( p, r, cg, onlyChanged, resetChanged, edit, viewMode, canvas );
     }
 
     virtual void drawFrame( KWFrame * frame, QPainter *painter, const QRect & crect,
                             QColorGroup &cg, bool onlyChanged, bool resetChanged, KWFrameSetEdit * edit );
 
-    void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWViewMode *viewMode );
+    void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWCanvas *canvas );
 
     void insert( QTextCursor * cursor, KWTextFormat * currentFormat, const QString &text,
                  bool checkNewLine, bool removeSelected, const QString & commandName,
@@ -202,7 +202,7 @@ public:
 
     // Calculate statistics for this frameset
     virtual int paragraphs();
-    virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, 
+    virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace,
         ulong & words, ulong& sentences, ulong & syllables );
 
     // reimplemented from QTextFlow

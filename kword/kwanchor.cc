@@ -91,7 +91,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     }
     // Draw the frame
     QColorGroup cg2( cg );
-    m_frameset->drawContents( p, crect, cg2, false /*?*/, false /*?*/, 0L, fs->currentViewMode() );
+    m_frameset->drawContents( p, crect, cg2, false, false, 0L, fs->currentViewMode(), fs->currentDrawnCanvas() );
 
     if ( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer ) {
         QPoint nPoint;

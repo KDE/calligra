@@ -162,9 +162,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_iNbPagePerRow = 4;
 
     m_bShowRuler = true;
+
     m_viewFormattingChars = false;
-    m_viewFrameBorders = true;
-    m_viewTableGrid = true;
 
     m_bDontCheckUpperWord = false;
     m_bDontCheckTitleCase = false;
@@ -1914,7 +1913,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
         KWFrameSet * frameset = fit.current();
         if ( frameset->isVisible() && !frameset->isFloating() )
             frameset->drawContents( &painter, rect, cg, false /*onlyChanged*/, false /*resetChanged*/,
-                                    0L, viewMode );
+                                    0L, viewMode, 0L );
     }
     delete viewMode;
 }

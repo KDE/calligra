@@ -121,6 +121,8 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     // Default values.
     m_zoomViewModeNormal = m_doc->zoom();
     m_zoomViewModePreview = 33;
+    m_viewFrameBorders = true;
+    m_viewTableGrid = true;
 
     setInstance( KWFactory::global() );
     setXMLFile( "kword.rc" );
@@ -244,7 +246,7 @@ void KWView::initGui()
     if ( m_gui )
         m_gui->showGUI();
     setTool( MM_EDIT );
-    actionViewFrameBorders->setChecked( m_doc->viewFrameBorders() );
+    actionViewFrameBorders->setChecked( viewFrameBorders() );
     actionViewFormattingChars->setChecked( m_doc->viewFormattingChars() );
 
     actionViewHeader->setChecked(m_doc->isHeaderVisible());
@@ -321,11 +323,10 @@ void KWView::setupActions()
     actionViewPreviewMode->setExclusiveGroup( "viewmodes" );
 
     actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
-                                                   this, SLOT( viewFormattingChars() ),
+                                                   this, SLOT( slotViewFormattingChars() ),
                                                    actionCollection(), "view_formattingchars" );
-    actionViewFormattingChars->setEnabled( false ); // ## not implemented
     actionViewFrameBorders = new KToggleAction( i18n( "Frame &Borders" ), 0,
-                                                   this, SLOT( viewFrameBorders() ),
+                                                   this, SLOT( slotViewFrameBorders() ),
                                                    actionCollection(), "view_frameborders" );
     actionViewHeader = new KToggleAction( i18n( "&Header" ), 0,
                                           this, SLOT( viewHeader() ),
@@ -1431,15 +1432,16 @@ void KWView::showZoom( int zoom )
     actionViewZoom->setCurrentItem( list.findIndex(zoomStr)  );
 }
 
-void KWView::viewFormattingChars()
+void KWView::slotViewFormattingChars()
 {
     m_doc->setViewFormattingChars(actionViewFormattingChars->isChecked());
-    m_gui->canvasWidget()->repaintAll();
+    m_doc->layout(); // Due to the different formatting when this option is activated
+    m_doc->repaintAllViews();
 }
 
-void KWView::viewFrameBorders()
+void KWView::slotViewFrameBorders()
 {
-    m_doc->setViewFrameBorders(actionViewFrameBorders->isChecked());
+    setViewFrameBorders(actionViewFrameBorders->isChecked());
     m_gui->canvasWidget()->repaintAll();
 }
 
@@ -1447,26 +1449,12 @@ void KWView::viewHeader()
 {
     m_doc->setHeaderVisible( actionViewHeader->isChecked() );
     m_doc->updateResizeHandles( );
-    /*
-    KoPageLayout pgLayout;
-    KoColumns cl;
-    KoKWHeaderFooter hf;
-    m_doc->getPaeLayout( pgLayout, cl, hf );
-    m_doc->setPageLayout( pgLayout, cl, hf );
-    */
 }
 
 void KWView::viewFooter()
 {
     m_doc->setFooterVisible( actionViewFooter->isChecked() );
     m_doc->updateResizeHandles( );
-    /*
-    KoPageLayout pgLayout;
-    KoColumns cl;
-    KoKWHeaderFooter hf;
-    m_doc->getPageLayout( pgLayout, cl, hf );
-    m_doc->setPageLayout( pgLayout, cl, hf );
-    */
 }
 
 void KWView::viewFootNotes()
@@ -1897,7 +1885,7 @@ void KWView::extraCreateTemplate()
     {
         KWFrameSet * frameset = fit.current();
         if ( frameset->isVisible() && !frameset->isFloating() )
-            frameset->drawContents( &painter, pageRect, cg, false, false, 0L, viewMode );
+            frameset->drawContents( &painter, pageRect, cg, false, false, 0L, viewMode, 0L );
     }
 
     painter.end();
