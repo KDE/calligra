@@ -1,5 +1,7 @@
 <sect1 id="lists">
 <title>Lists</title>
+<indexterm><primary>lists</primary></indexterm>
+
 <para>&kword; has a simple and flexible list creation system.
 Using the same interface, &kword; can create bulleted or enumerated lists of nearly any depth.  
 For easy, simple lists, &kword; offers

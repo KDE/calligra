@@ -1,5 +1,8 @@
 <sect1 id="format-characters">
 <title>Formatting Characters</title>
+<indexterm><primary>text</primary><secondary>formatting</secondary></indexterm>
+<indexterm><primary>font</primary><secondary>formatting</secondary></indexterm>
+<indexterm><primary>formatting text</primary></indexterm>
 
 <para>This section will cover the changes that can be made to individual characters or
 blocks of characters including:</para>
@@ -16,6 +19,27 @@ blocks of characters including:</para>
 
 <sect2 id="change-font">
 <title>Changing Size, Font, Font Style, Text color and Background Colors</title>
+<indexterm><primary>text</primary><secondary>change size</secondary></indexterm>
+<indexterm><primary>change text size</primary></indexterm>
+<indexterm><primary>text</primary><secondary>change font</secondary></indexterm>
+<indexterm><primary>change text font</primary></indexterm>
+<indexterm><primary>text</primary><secondary>change color</secondary></indexterm>
+<indexterm><primary>change text color</primary></indexterm>
+<indexterm><primary>text</primary><secondary>change background color</secondary></indexterm>
+<indexterm><primary>change text background color</primary></indexterm>
+<indexterm><primary>text</primary><secondary>bold</secondary></indexterm>
+<indexterm><primary>bold text</primary></indexterm>
+<indexterm><primary>text</primary><secondary>italicized</secondary></indexterm>
+<indexterm><primary>italicized text</primary></indexterm>
+<indexterm><primary>text</primary><secondary>underlined</secondary></indexterm>
+<indexterm><primary>underlined text</primary></indexterm>
+<indexterm><primary>text</primary><secondary>strikethrough</secondary></indexterm>
+<indexterm><primary>strikethrough text</primary></indexterm>
+<indexterm><primary>text</primary><secondary>superscript</secondary></indexterm>
+<indexterm><primary>superscript text</primary></indexterm>
+<indexterm><primary>text</primary><secondary>subscript</secondary></indexterm>
+<indexterm><primary>subscript text</primary></indexterm>
+
 
 <sect3 id="change-font-keyboard">
 <title>Using the Keyboard or Tool-bars</title>
@@ -163,6 +187,8 @@ made.</para>
 
 <sect2 id="change-font-case">
 <title>Changing Font Case</title>
+<indexterm><primary>text</primary><secondary>changing case</secondary></indexterm>
+<indexterm><primary>change case of text</primary></indexterm>
 
 <para>&kword; can change the case (uppercase or lowercase) of large blocks of text to one of five pre-defined styles.  
 Begin by selecting the block of text you want changed.  Select <menuchoice>

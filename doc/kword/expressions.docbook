@@ -1,4 +1,6 @@
 <sect1 id="expressions"><title>Expressions </title>
+<indexterm><primary>expressions</primary></indexterm>
+
 <para>Expressions are a way to quickly insert common phrases into a document.  Once an expression has been selected, the
 text is inserted into &kword;.</para>
 <note><para>  Expressions are different from variables.  Expressions are inserted as regular text, and can only be

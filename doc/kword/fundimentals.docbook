@@ -3,10 +3,10 @@
 <para>This section of the documentation discusses starting &kword;, introduces the user to templates and
 discusses an important difference between two major types of templates.</para>
 
-<indexterm><primary>Starting &kword;</primary></indexterm>
 
 <sect1 id="starting-kword">
 <title>Starting &kword;</title>
+<indexterm><primary>starting &kword;</primary></indexterm>
 
 <para>&kword; can be started one of four ways:</para>
 

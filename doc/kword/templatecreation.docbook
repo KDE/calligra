@@ -11,7 +11,10 @@ exactly matches the documents needs.</para>
 
 <para>An unlimited number of templates can be created in &kword;, and
 they can be organized into categories for easy recall.</para>
+
 <sect2 id="template-add"><title>Creating a new template</title>
+<indexterm><primary>templates</primary><secondary>creating</secondary></indexterm>
+
 <para>Templates are created by first generating the layout in
 &kword; based on one of the predefined templates, and then saving the
 file.  Instead of saving it as a traditional file, it is saved as a
@@ -61,7 +64,9 @@ Simply select the desired icon using the dialog box.  Click <guibutton>OK</guibu
 document, your new category/new template will appear in the open file
 dialog.</para>
 </sect2>
+
 <sect2 id="template-delete"><title>Removing a template</title>
+<indexterm><primary>templates</primary><secondary>deleting</secondary></indexterm>
 <para>To delete a template, follow these steps:</para>
 <procedure>
 <step>
@@ -80,6 +85,8 @@ the template.  Simply click <guibutton>Yes</guibutton>.</para></step>
 <para>The template is now deleted.</para>
 </sect2>
 <sect2 id="template-delete-group"><title>Removing a template group</title>
+<indexterm><primary>templates</primary><secondary>deleting template group</secondary></indexterm>
+
 <para>To delete a group of templates, follow these steps:</para>
 <procedure>
 <step>

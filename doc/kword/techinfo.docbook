@@ -1,5 +1,7 @@
 <sect1 id="kword-file-format">
 <title>&kword; file format</title>
+<indexterm><primary>&kword;</primary><secondary>file format</secondary></indexterm>
+
 <para>&kword; uses two open source, independently developed standards
 for its file format.  The combination was chosen for its balance between
 convenience and open development models.</para>

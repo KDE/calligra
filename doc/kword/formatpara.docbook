@@ -1,6 +1,6 @@
 <sect1 id="format-para">
 <title>Formatting Paragraphs</title>
-
+<indexterm><primary>paragraph</primary><secondary>formatting</secondary></indexterm>
 <para>This section will detail all the options available to format paragraphs.</para>
 
 <para>To format a paragraph, place the cursor in the paragraph.  To format more than
@@ -35,6 +35,9 @@ linkend="para-shadow">Shadow</link>.</para>
 
 <sect2 id="indents-and-spaces">
 <title>Indents and Spaces</title>
+<indexterm><primary>paragraph</primary><secondary>indent lines</secondary></indexterm>
+<indexterm><primary>paragraph</primary><secondary>change line spacing</secondary></indexterm>
+<indexterm><primary>paragraph</primary><secondary>keep lines and paragraphs together</secondary></indexterm>
 
 <para>With this dialog box the
 spacing between lines, and the spacing between paragraphs can be specified.</para>
@@ -151,6 +154,10 @@ document.</para>
 
 <sect2 id="para-aligns">
 <title>Aligns</title>
+<indexterm><primary>paragraph</primary><secondary>justification</secondary></indexterm>
+<indexterm><primary>paragraph</primary><secondary>center paragraph</secondary></indexterm>
+<indexterm><primary>paragraph</primary><secondary>left/right aligns</secondary></indexterm>
+<indexterm><primary>paragraph</primary><secondary>horizontally align paragraphs</secondary></indexterm>
 
 <para>This section determines how the text is placed <emphasis>within
 the line</emphasis>.  With other applications, you may have referred to
@@ -200,6 +207,7 @@ document.</para>
 
 <sect2 id="para-borders">
 <title>Borders</title>
+<indexterm><primary>paragraph</primary><secondary>borders</secondary></indexterm>
 
 <para>The next section is used to define and configure graphical borders
 around your paragraphs.</para>
@@ -296,6 +304,9 @@ paragraph borders will look.</para>
 
 <sect2 id="para-bullets-and-numbers">
 <title>Bullets and Numbering</title>
+<indexterm><primary>paragraph</primary><secondary>bulleted</secondary></indexterm>
+<indexterm><primary>paragraph</primary><secondary>numbered</secondary></indexterm>
+<indexterm><primary>lists</primary></indexterm>
 
 <para>A very common element of a document, is a list of items.  The list
 contains several elements which may be numbered, for easy
@@ -347,6 +358,8 @@ see <link linkend="tab-stops">Using Tab Stops</link>.</para>
 </sect2>
 <sect2 id="para-shadow">
 <title>Shadows</title>
+<indexterm><primary>paragraph</primary><secondary>shadows</secondary></indexterm>
+<indexterm><primary>text</primary><secondary>shadowing</secondary></indexterm>
 
 <screenshot>
 <mediaobject>

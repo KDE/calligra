@@ -1,5 +1,8 @@
 <sect1 id="headers-and-footers">
 <title>Headers/Footers</title>
+<indexterm><primary>headers</primary><secondary>using</secondary></indexterm>
+<indexterm><primary>footers</primary><secondary>using</secondary></indexterm>
+
 <sect2 id="headers-and-footers-intro"><title>Introduction</title>
 <para>With multi-page documents, you might want to provide certain
 information at the top or bottom of each page throughout the document.

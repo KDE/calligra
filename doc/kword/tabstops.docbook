@@ -1,5 +1,7 @@
 <sect1 id="tab-stops">
 <title>Using Tab Stops</title>
+<indexterm><primary>tab stops</primary><secondary>using</secondary></indexterm>
+<indexterm><primary>paragraph</primary><secondary>setting tab stops</secondary></indexterm>
 
 <para>Tab stops are a (very useful) holdover from the days of
 typewriters.  They allow you to align text into columns quickly and
@@ -49,6 +51,7 @@ ruler.</para>
 
 <sect2 id="tab-stop-setting">
 <title>Setting Tab Stops</title>
+<indexterm><primary>tab stops</primary><secondary>setting a new tab stop</secondary></indexterm>
 
 <para>Tab stops can be set one of two ways:</para>
 
@@ -139,6 +142,7 @@ In most cases this should be left as <guilabel>Blank</guilabel>. For information
 
 <sect2 id="tab-stop-moving">
 <title>Moving Tab Stops</title>
+<indexterm><primary>tab stops</primary><secondary>moving</secondary></indexterm>
 
 <para>Tab stops can be moved one of two ways:</para>
 
@@ -216,6 +220,8 @@ list labeled <guilabel>Alignment</guilabel> or change the white space character 
 
 <sect2 id="tab-stop-remove">
 <title>Removing Tab Stops</title>
+<indexterm><primary>tab stops</primary><secondary>removing</secondary></indexterm>
+<indexterm><primary>tab stops</primary><secondary>deleting</secondary></indexterm>
 
 <para>
 Tab stops can be removed one of two ways:
@@ -286,6 +292,8 @@ is in the box on the left side of the dialog panel</para>
 </sect2>
 <sect2 id="tab-fill">
 <title>Tab filling</title>
+<indexterm><primary>tab stops</primary><secondary>tab filling</secondary></indexterm>
+
 <para>By default, &kword; uses the standard tab function that you are familiar with when using a typewriter or most wordprocessing programs.
 You can, however, have &kword; insert spaces or lines to fill the tab space.</para>
 <para>To change the way the tab fills work in &kword; you change the dropdown box labeled <guilabel>Filling</guilabel>.  This drop down box

@@ -1,4 +1,5 @@
 <sect1 id="links"><title>Document Links </title>
+<indexterm><primary>document links</primary></indexterm>
 
 <para>&kword; has the ability to insert Internet addresses, email addresses and file locations with a descriptor.  This is most often used to
 create web pages in &kword;.</para>

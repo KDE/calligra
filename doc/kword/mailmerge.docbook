@@ -1,4 +1,6 @@
 <sect1 id="mail-merge"><title>Mail Merge</title>
+<indexterm><primary>mail merge</primary><secondary>introduction</secondary></indexterm>
+
 <para>&kword; has the ability to use data from an outside database (or internal database) to <emphasis>personalize</emphasis> your 
 documents for individual members/clients/friends.</para>
 <para>This section of the manual will cover all aspects of creating, merging and printing documents that are specific to &kword;.  This 
@@ -17,6 +19,8 @@ SQL database for your data source.</para></listitem>
 
 <sect2 id="mail-merge-sql">
 <title>Using an outside database (SQL) to create documents</title>
+<indexterm><primary>mail merge</primary><secondary>using outside database</secondary></indexterm>
+
 <para>&kword; has the ability to use several of the most popular open source databases as a source of data for personalized documents.</para>
 <note><para>In order to access an outside database using SQL, your machine needs to have the appropriate database module compiled 
 into your copy of QT.</para>
@@ -136,6 +140,8 @@ data.LastName=eMail.LastName
 
 <sect2 id="mail-merge-internal">
 <title>Using an internal representation of tabular data to create documents</title>
+<indexterm><primary>mail merge</primary><secondary>using &kword; data tables</secondary></indexterm>
+
 <para>For small sets of data, or when you do not currently have a database containing the merge data, &kword; 
 offers you the ability to enter the data <emphasis>directly into &kword;</emphasis> in tabular form.  This internal data 
 structure can then be used to create documents with this data inserted at predefined locations.</para>
@@ -247,6 +253,8 @@ value of the entry for that individual record.</para>
 
 <sect4 id="mail-merge-field-insert">
 <title>Insert a merge field</title>
+<indexterm><primary>mail merge</primary><secondary>inserting merge fields</secondary></indexterm>
+
 <para>To insert a merge field, place the cursor at the desired place in the document.  Select <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
 <guimenuitem>Mail Merge...</guimenuitem></menuchoice> from
@@ -258,6 +266,8 @@ you can proceed to printing your document.</para>
 
 <sect4 id="mail-merge-field-delete">
 <title>Delete a merge field</title>
+<indexterm><primary>mail merge</primary><secondary>deleting a merge field</secondary></indexterm>
+
 <para>To delete a merge field, simply place the cursor at the end of the merge field, and press the &Backspace; key.  The entire 
 merge field will be deleted.</para>
 <para></para>
@@ -266,6 +276,8 @@ merge field will be deleted.</para>
 
 <sect3 id="mail-merge-print">
 <title>Previewing and printing the merged document</title>
+<indexterm><primary>mail merge</primary><secondary>merging data and text</secondary></indexterm>
+
 <para>Once you have inserted all the merge fields you want, you are ready to preview and print the personalized documents.</para>
 <sect4 id="mail-merge-print-preview">
 <title>Preview your documents before printing</title>

@@ -1,5 +1,7 @@
 <sect1 id="insert-file">
 <title>Inserting files</title>
+<indexterm><primary>inserting files</primary></indexterm>
+
 <para>&kword; has the ability to insert a previously saved &kword; file into the current document.  This is especially useful for 
 large documents that have multiple authors.</para>
 <para>To insert a &kword; file into the current document, place the cursor at the desired insertion point of the document.</para>

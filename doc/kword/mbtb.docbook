@@ -36,6 +36,8 @@ information located elsewhere in the &kword; Handbook.</para>
 
 <sect1 id="toolbars">
 <title>Hiding, Changing, and Moving Tool Bars</title>
+<indexterm><primary>toolbars</primary><secondary>hiding</secondary></indexterm>
+<indexterm><primary>toolbars</primary><secondary>flattening</secondary></indexterm>
 
 <para>&kword; offers the user great flexibility when it comes to
 toolbars.  This first section will show you some of the many options
@@ -102,6 +104,7 @@ listed.  Simply select the toolbar you want to hide or restore.</para>
 
 <sect2 id="move-toolbar">
 <title>Moving Toolbars around</title>
+<indexterm><primary>toolbars</primary><secondary>moving</secondary></indexterm>
 
 <para>Toolbars can be located on the screen in 4 places.</para>
 
@@ -156,6 +159,7 @@ appear.  Select <guimenuitem>Top</guimenuitem>,
 
 <sect2 id="toolbar-options">
 <title>Changing the look of your toolbars</title>
+<indexterm><primary>toolbars</primary><secondary>formatting</secondary></indexterm>
 
 <para>Toolbars can have their buttons displayed different ways.  Below
 are examples of the four options for the <emphasis>File</emphasis>
@@ -200,6 +204,7 @@ select your preference from the list.</para>
 
 <sect3 id="toolbar-options-size">
 <title>Changing Icon Size</title>
+<indexterm><primary>toolbars</primary><secondary>changing size</secondary></indexterm>
 
 <para>You can also select the size of the icons by clicking on the
 toolbar with the &RMB;.  A small submenu will appear.  Select
@@ -2404,6 +2409,8 @@ a task from the menubar.  Click on that task for more details. </para>
 
 <sect1 id="select-colors">
 <title>Selecting Colors from a Color dialog</title>
+<indexterm><primary>selecting a color</primary></indexterm>
+
 <para>&kword; uses a common dialog box any time the user needs to select a color for an object (text, backgrounds, borders, etc.).</para>
 <para>This section will go into some detail on how to use this color dialog to choose the best color for your object.</para>
 <para>When it is necessary to select a color, a dialog box appears.</para>
@@ -2489,6 +2496,8 @@ and click once.  &kword; will detect the selected color and automatically change
 </sect1>
 <sect1 id="file-dialog">
 <title>Selecting files using the file dialog</title>
+<indexterm><primary>using file dialog</primary></indexterm>
+
 <para>&kword; uses a common dialog box for all file related actions (saving, loading, or selecting new files 
 for insertion into the document). An example is shown below.</para>
 <screenshot>

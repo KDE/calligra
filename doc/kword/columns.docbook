@@ -1,5 +1,6 @@
 <sect1 id="columns">
 <title>Columns</title>
+<indexterm><primary>columns</primary></indexterm>
 
 <para>You can divide the page into several columns, of equal width, with
 a user controlled space in between each column.</para>

@@ -1,4 +1,7 @@
 <sect1 id="endnotes-and-footnotes"><title>Footnotes</title>
+<indexterm><primary>footnotes</primary><secondary>introduction</secondary></indexterm>
+<indexterm><primary>endnotes</primary><secondary>introduction</secondary></indexterm>
+
 <para>&kword; has a complete set of tools to create and manage footnotes.  When you assign a footnote, &kword; automatically 
 places the footnote at the bottom of the correct page.  If the footnote reference point is moved to a new page, the footnote automatically 
 follows. </para>

@@ -1,5 +1,7 @@
 <sect1 id="styles">
 <title>Text styles</title>
+<indexterm><primary>text styles</primary><secondary>introduction</secondary></indexterm>
+
 <sect2 id="style-intro"><title>Introduction to text styles</title>
 <para>When you build documents that are more complex than a business
 letter, such as a book, newsletter, or resume, the document is often
@@ -56,6 +58,7 @@ frame.  Tablestyles determine how tables appear in the finished document.</para>
 
 <sect2 id="style-select">
 <title>Changing the text style of text</title>
+<indexterm><primary>text styles</primary><secondary>changing text style of selected text</secondary></indexterm>
 
 <para>To change the text style of text, first, <link linkend="select">select
 the text</link> you want the changes to apply to.</para>
@@ -82,6 +85,7 @@ fileref="chstylebut.png" format="PNG"/></imageobject></inlinemediaobject>.</para
 
 <sect2 id="style-add">
 <title>Creating a text style</title>
+<indexterm><primary>text styles</primary><secondary>creating</secondary></indexterm>
 
 <para>If you plan on using text styles extensively in a large document, you
 will probably want to create new text styles specific for your needs.
@@ -230,6 +234,7 @@ to become part of the text style, you must <link linkend="style-edit">edit the t
 
 <sect2 id="style-deleting">
 <title>Deleting a text style</title>
+<indexterm><primary>text styles</primary><secondary>deleting</secondary></indexterm>
 
 <para>Deleting an unneeded text style is easy.</para>
 
@@ -260,6 +265,7 @@ so you will not be given an opportunity to back out.</para>
 
 <sect2 id="style-edit">
 <title>Editing a text style</title>
+<indexterm><primary>text styles</primary><secondary>editing</secondary></indexterm>
 
 <para>The true power of text styles, is the ability to edit the formatting
 options of that text style <emphasis>after</emphasis> the text style is defined.  
@@ -317,6 +323,8 @@ text style.</para>
 
 <sect2 id="style-import">
 <title>Import a text style</title>
+<indexterm><primary>text styles</primary><secondary>importing</secondary></indexterm>
+
 <para>&kword; has the ability to import a text style from one &kword; document and include it in the 
 list of text text styles in another &kword; document.</para>
 <para>To import a text style, select <menuchoice><guimenu>Format</guimenu><guimenuitem>Import Style...</guimenuitem></menuchoice>

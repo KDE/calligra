@@ -1,5 +1,8 @@
 <chapter id="options">
 <title>&kword; Options</title>
+<indexterm><primary>&kword;</primary><secondary>options</secondary></indexterm>
+<indexterm><primary>configuring &kword;</primary></indexterm>
+
 <para>This section of the documentation will show you how to configure &kword; to suit your personal work style and preferences.</para>
 <para>&kword; can be modified in three separate ways:</para>
 <orderedlist>
@@ -9,6 +12,8 @@
 </orderedlist>
 <sect1 id="options-keybindings">
 <title>Configure Shortcuts</title>
+<indexterm><primary>configuring keyboard shortcuts</primary></indexterm>
+<indexterm><primary>keyboard shortcuts</primary><secondary>changing</secondary></indexterm>
 
 <para>To configure the keyboard shortcuts select <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure Key
@@ -118,6 +123,7 @@ to accept the changes or <guibutton>Cancel</guibutton> to cancel your changes.</
 
 <sect1 id="options-toolbars">
 <title>Configure Toolbars</title>
+<indexterm><primary>configuring toolbars</primary></indexterm>
 
 <para>To configure &kword;'s toolbars
 select <menuchoice> <guimenu>Settings</guimenu><guimenuitem>Configure
@@ -202,6 +208,7 @@ will change.</para>
 
 <sect1 id="options-kword">
 <title>&kword; Options</title>
+<indexterm><primary>&kword;</primary><secondary>options</secondary></indexterm>
 
 <para>To configure options regarding spelling and the user interface
 select <menuchoice> <guimenu>Settings</guimenu><guimenuitem>Configure

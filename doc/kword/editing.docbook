@@ -172,8 +172,8 @@ from the menubar.</para>
 
 <sect1 id="undo-redo">
 <title>Undo/Redo</title>
-<indexterm><primary>Undoing last edit</primary></indexterm>
-<indexterm><primary>Redoing previously undone edit</primary></indexterm>
+<indexterm><primary>undoing last edit</primary></indexterm>
+<indexterm><primary>redoing previously undone edit</primary></indexterm>
 <para>It happens all the time.  While working on a document, a change is made.
 The change was wrong, now you want to back out of your changes.</para>
 

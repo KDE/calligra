@@ -1,4 +1,6 @@
 <sect1 id="comments"><title>Document Comments </title>
+<indexterm><primary>comments</primary></indexterm>
+
 <para>Document comments are included in &kword; to allow you to have your documents read by another 
 person. That person can make comments about the text and the comment will appear right next to the text. </para>
 

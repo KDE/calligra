@@ -1,5 +1,6 @@
 <sect1 id="tables">
 <title>Tables</title>
+<indexterm><primary>tables</primary><secondary>using</secondary></indexterm>
 
 <para>&kword; has the built in ability to generate tables for the display of data.</para>
 
@@ -17,6 +18,7 @@ document.</para></tip>
 <emphasis>created in &kword;</emphasis> only.</para>
 
 <sect2 id="table-new"><title>Adding a new Table</title>
+<indexterm><primary>tables</primary><secondary>adding</secondary></indexterm>
 
 <para>You can create a table in KWord in one of three ways:</para>
 
@@ -153,12 +155,15 @@ For more information see the section on <link linkend="table-templates">Using fo
 
 <sect2 id="table-navigation">
 <title>Moving between cells in a table</title>
+<indexterm><primary>tables</primary><secondary>navigating</secondary></indexterm>
+
 <para>You can navigate between cells of the table by using the mouse (simply click in the cell you want to edit),
 or by using the keyboard (use the arrow keys to move up, down, left or right one cell at a time)..</para>
 
 </sect2>
 <sect2 id="table-delete">
 <title>Deleting a Table</title>
+<indexterm><primary>tables</primary><secondary>deleting</secondary></indexterm>
 
 <para>To delete a table in &kword;:</para>
 
@@ -178,6 +183,7 @@ Table</guimenuitem></menuchoice> from the menubar</para>
 
 <sect2 id="table-insert-row">
 <title>Insert Row in Table</title>
+<indexterm><primary>tables</primary><secondary>inserting a row</secondary></indexterm>
 
 <para>You can insert a row into any place in a table.</para>
 
@@ -223,6 +229,7 @@ limits you to the rows currently in the table.</para>
 
 <sect2 id="table-insert-column">
 <title>Insert Column in Table</title>
+<indexterm><primary>tables</primary><secondary>inserting a column</secondary></indexterm>
 
 <para>To insert a column into a table:</para>
 
@@ -266,6 +273,7 @@ box limits you to the columns currently in the table.</para>
 
 <sect2 id="table-delete-row">
 <title>Delete Row in Table</title>
+<indexterm><primary>tables</primary><secondary>deleting a row</secondary></indexterm>
 
 <para>To delete a row from a table:</para>
 
@@ -297,6 +305,7 @@ delete any rows.</para>
 
 <sect2 id="table-delete-column">
 <title>Delete Column in Table</title>
+<indexterm><primary>tables</primary><secondary>deleting a column</secondary></indexterm>
 
 <para>To delete a column from a table:</para>
 
@@ -331,6 +340,8 @@ continuing.</para>
 
 <sect2 id="table-resize-column">
 <title>Change column width</title>
+<indexterm><primary>tables</primary><secondary>change column width</secondary></indexterm>
+
 <para>When a table is created, all columns are equal in width.  You can change the width of individual columns by using
 <link linkend="table-resize-column-mouse">the mouse</link> or <link linkend="table-resize-column-dialog">the keyboard</link>.</para>
 <sect3 id="table-resize-column-mouse"><title>Using the mouse</title>
@@ -354,6 +365,7 @@ width unchanged.</para>
 
 <sect2 id="table-join-cells">
 <title>Join Cells in Table</title>
+<indexterm><primary>tables</primary><secondary>join cells</secondary></indexterm>
 
 <para>A table is traditionally made of a grid of rows and columns, with
 equal sized cells throughout the table.</para>
@@ -403,6 +415,7 @@ frame.  Any text from any other frames will be hidden from view.</para>
 
 <sect2 id="table-split-cells">
 <title>Split Cells in Table</title>
+<indexterm><primary>tables</primary><secondary>split cells</secondary></indexterm>
 
 <para>In addition to combining two or more cells into a single cell, it is easy to split one cell into may cells.</para>
 
@@ -425,6 +438,7 @@ the number of columns you want to split this cell into.</para>
 
 <sect2 id="table-ungroup">
 <title>Ungroup a Table</title>
+<indexterm><primary>tables</primary><secondary>ungrouping</secondary></indexterm>
 
 <para>If you select <menuchoice> <guimenu>Table</guimenu>
 <guimenuitem>Ungroup Table</guimenuitem></menuchoice> from the menubar, &kword; will convert each cell in your table
@@ -434,6 +448,7 @@ into an individual frame.  You can then move these frames around independently o
 
 <sect2 id="table-protect">
 <title>Protecting a cell in a table.</title>
+<indexterm><primary>tables</primary><secondary>protecting cells</secondary></indexterm>
 
 <para>You can protect any or all cells in a table from accidental modification or deletion.</para>
 <para>Simply select the cell(s) you want to protect, then:</para>
@@ -450,6 +465,7 @@ from the submenu.</para>
 
 <sect2 id="table-format">
 <title>Formating a Table</title>
+<indexterm><primary>tables</primary><secondary>formating</secondary></indexterm>
 
 <para>There are many aspects of a table that can be formatted.</para>
 
@@ -462,6 +478,8 @@ from the submenu.</para>
 
 <sect3 id="table-geometry">
 <title>Altering the number of rows and columns in a table.</title>
+<indexterm><primary>tables</primary><secondary>changing geometry</secondary></indexterm>
+
 <para>Previously in the manual, we have discussed how to individually add or delete columns.  &kword; also provides the 
 user the ability to make major changes to the number of rows and columns in a table.</para>
 <para>Select <menuchoice> <guimenu>Table</guimenu>
@@ -506,6 +524,8 @@ the desired row. The mouse pointer will turn from an arrow to a hand.  If you cl
 
 <sect3 id="table-templates">
 <title>Using table templates to format an entire table.</title>
+<indexterm><primary>tables</primary><secondary>templates</secondary></indexterm>
+
 <para>&kword; has templates for many commonly used table formatting options.  Table templates provide 
 the same formatting functionality for tables that
 document templates provide you for formating your documents.</para>
@@ -567,11 +587,16 @@ changes.</para>
 </sect2>
 <sect2 id="tablestyle">
 <title>Using table styles</title>
+<indexterm><primary>tables</primary><secondary>styles</secondary></indexterm>
+<indexterm><primary>table styles</primary></indexterm>
+
 <para>Table styles are a rapid way for you to format individual cells of your table to common formats.  You can add or remove
 table styles, and change predefined table styles to suit your needs. A table style, consists of a frame style and a text style
 which are grouped together and named.</para>
 <sect3 id="tablestyle-use">
 <title>Formatting a cell with a table styles</title>
+<indexterm><primary>table styles</primary><secondary>formatting a cell with</secondary></indexterm>
+
 <para>To format a cell using a predefined table style simply:</para>
 <para>Select the cell(s) by holding down &Ctrl; and clicking within the cell with the &LMB;.  You can also 
 <link linkend="table-format-selcol">select columns</link> and <link linkend="table-format-selrow">rows</link>.</para>
@@ -583,6 +608,8 @@ you want and all selected cells will automatically be formatting using the optio
 
 <sect3 id="tablestyle-edit">
 <title>Editing a table style</title>
+<indexterm><primary>table styles</primary><secondary>editing</secondary></indexterm>
+
 <para>To change the options of a table style, you will use the Table Style Manager.</para>
 <para>Select <menuchoice>
 <guimenu>Table</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
@@ -613,6 +640,8 @@ be changed to reflect the new options.</para>
 
 <sect3 id="tablestyle-add">
 <title>Creating a new table style</title>
+<indexterm><primary>table styles</primary><secondary>creating</secondary></indexterm>
+
 <para>To create a new table style, select <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
 from the menubar. A dialog box will appear.</para>
@@ -635,6 +664,8 @@ of the previously selected table style.</para>
 
 <sect3 id="tablestyle-delete">
 <title>Deleting a table style</title>
+<indexterm><primary>table styles</primary><secondary>deleting</secondary></indexterm>
+
 <para>To delete table style, select <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
 from the menubar. A dialog box will appear.</para>
@@ -653,6 +684,8 @@ Select the table style by clicking once with the &LMB; in the list on the left.<
 
 <sect3 id="tablestyle-reorder">
 <title>Changing the order of the table style in the list</title>
+<indexterm><primary>table styles</primary><secondary>reordering</secondary></indexterm>
+
 <para>To change the order that the table style are listed, select <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
 from the menubar. A dialog box will appear.</para>
@@ -672,6 +705,8 @@ selected table style up or down in the list of table styles.</para>
 
 <sect3 id="tablestyle-import">
 <title>Importing a table style from another &kword; file</title>
+<indexterm><primary>table styles</primary><secondary>importing</secondary></indexterm>
+
 <para>To import a table style from another &kword; file, select <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
 from the menubar. A dialog box will appear.</para>

@@ -1,5 +1,7 @@
 <sect1 id="bookmarks">
 <title>Document bookmarks</title>
+<indexterm><primary>bookmarks</primary></indexterm>
+
 <para>Bookmarks are invisible placeholders that allow you to move easily to specified points in a large document.</para>
 <tip><para>Some other wordprocessors have bookmarks as part of their interface.  If you are familiar with their use, you will 
 find that &kword; functions in a similar manner.</para></tip>

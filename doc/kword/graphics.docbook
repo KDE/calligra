@@ -1,4 +1,6 @@
 <sect1 id="graphics"><title>Graphics</title>
+<indexterm><primary>graphics</primary><secondary>introduction</secondary></indexterm>
+
 <para>&kword; is very good at handling textual information.  &kword; can also be used to incorporate
 graphical images with text.  </para>
 <para>Pictures can be inserted into a document as either <emphasis>framed</emphasis> or <emphasis>inline</emphasis> images.</para>
@@ -9,6 +11,8 @@ frame. If text is inserted in front of the picture, the picture travels down the
 stay in the same area of the page as the text that surrounds it.</para>
 <para>Framed pictures, on the other hand, need to be moved by hand on the page.  </para>
 <sect2 id="insert-graphics"><title>Insert Graphics</title>
+<indexterm><primary>graphics</primary><secondary>inserting</secondary></indexterm>
+
 <para>There are three ways to insert a picture into a document:</para>
 <itemizedlist>
 <listitem>
@@ -80,20 +84,28 @@ picture frame is correct, release the &LMB;.  &kword; will insert the picture in
 frame.</para>
 </sect2>
 <sect2 id="resize-Graphics"><title>Changing the size of a picture</title>
+<indexterm><primary>graphics</primary><secondary>change the size of</secondary></indexterm>
+
 <para>Resizing a picture is done by changing the size of the frame that surrounds it.  &kword; will automatically change the picture to fill the
 entire frame.</para>
 <para>For information on changing the size of a frame, see <link linkend="resize-frame">Resizing frames</link>. </para>
 </sect2>
 <sect2 id="move-graphics"><title>Move Pictures</title>
+<indexterm><primary>graphics</primary><secondary>moving</secondary></indexterm>
+
 <para>The only way to move an inline image around on the page, is to alter the flow of the text that surrounds it.  If this
 is causing problems, the picture can always be <link linkend="switch-graphics">changed to a framed picture</link>.</para>
 <para>To move a framed picture in &kword; is the same as <link linkend="move-frame">moving any frame</link> in &kword;.</para>
 <para></para>
 </sect2>
 <sect2 id="delete-graphics"><title>Delete Graphics</title>
+<indexterm><primary>graphics</primary><secondary>deleting</secondary></indexterm>
+
 <para>To delete a graphic in &kword;, simply <link linkend="delete-frame">delete the frame</link> around it.</para>
 </sect2>
 <sect2 id="save-graphics"><title>Saving Graphic in separate file</title>
+<indexterm><primary>graphics</primary><secondary>saving in a seperate file</secondary></indexterm>
+
 <para>You can save a picture or graph to a separate file (for use in another document or to archive the graphic).</para>
 <para>Simply click once on the graphic with the &RMB;.  A submenu will appear.  Select <guilabel>Save Picture...</guilabel>. 
 A dialog will appear that will allow you to specify where to save the graphic.</para>
@@ -102,6 +114,8 @@ document so it can be archived or used in another application.</para></note>
 </sect2>
 
 <sect2 id="switch-graphics"><title>Switching between inline and framed pictures</title>
+<indexterm><primary>graphics</primary><secondary>switching between inline and framed</secondary></indexterm>
+
 <para>Switching between inline pictures and framed pictures is easy in &kword;.</para>
 <sect3 id="inline-to-frame"><title>Change an inline picture to a framed picture</title>
 <para>To change in inline picture to a framed picture, click on the desired picture with the &LMB; once.  This selects the frame
