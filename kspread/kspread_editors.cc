@@ -154,7 +154,7 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
 	}
 	
 	// End choosing. May be restarted by KSpreadTextEditor::slotTextChanged
-	if ( e->type() == QEvent::KeyPress && !k->ascii() == 0 )
+	if ( e->type() == QEvent::KeyPress && !k->text().isEmpty() )
         {
 	    kdDebug(36001) << "eventFilter End Choose" << endl;
 	    canvas()->endChoose();

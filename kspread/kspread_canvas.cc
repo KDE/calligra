@@ -1247,7 +1247,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     default:
 
       // No null character ...
-      if ( _ev->ascii() == 0 || !m_pView->koDocument()->isReadWrite() )
+      if ( _ev->text().isEmpty() || !m_pView->koDocument()->isReadWrite() )
       {
         _ev->accept();
         return;
