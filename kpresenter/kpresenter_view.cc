@@ -3192,8 +3192,12 @@ void KPresenterView::setupActions()
                                   actionCollection(), "change_link");
 
 
-    actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
+    actionEditCustomVarsEdit = new KAction( i18n( "&Custom Variables..." ), 0,
                                         this, SLOT( editCustomVars() ),
+                                        actionCollection(), "edit_vars" );
+
+    actionEditCustomVars = new KAction( i18n( "Edit Variable..." ), 0,
+                                        this, SLOT( editCustomVariable() ),
                                         actionCollection(), "edit_customvars" );
 
 
@@ -5653,7 +5657,8 @@ void KPresenterView::refreshCustomMenu()
     actionInsertCustom->popupMenu()->insertSeparator();
 
     actionEditCustomVars->setEnabled(state);
-    actionInsertCustom->insert( actionEditCustomVars );
+    actionEditCustomVarsEdit->setEnabled( state );
+    actionInsertCustom->insert( actionEditCustomVarsEdit );
 }
 
 
@@ -5673,6 +5678,30 @@ void KPresenterView::insertNewCustomVariable()
     if ( edit )
         edit->insertVariable( VT_CUSTOM, 0 );
 }
+
+void KPresenterView::editCustomVariable()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+    {
+        KoCustomVariable *var = static_cast<KoCustomVariable *>(edit->variable());
+        if (var)
+        {
+            QString oldvalue = var->value();
+            KoCustomVarDialog dia( this, var );
+            if ( dia.exec() )
+            {
+                if( var->value() != oldvalue )
+                {
+                    KPrChangeCustomVariableValue *cmd=new KPrChangeCustomVariableValue(i18n( "Change Custom Variable" ),m_pKPresenterDoc, oldvalue, var->value(), var );
+                    m_pKPresenterDoc->addCommand(cmd);
+                }
+                m_pKPresenterDoc->recalcVariables( VT_CUSTOM );
+            }
+        }
+    }
+}
+
 
 void KPresenterView::editCustomVars()
 {

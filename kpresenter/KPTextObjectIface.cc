@@ -326,4 +326,5 @@ QString KPTextObjectIface::verticalAlignment() const
     default:
         break;
     }
+    return QString::null;
 }

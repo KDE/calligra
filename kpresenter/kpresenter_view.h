@@ -407,6 +407,7 @@ public slots:
     void autoSpellCheck();
 
     void insertFile();
+    void editCustomVariable();
 
 public:
     // create GUI
@@ -1022,7 +1023,7 @@ private:
     KToggleAction *actionAlignVerticalCenter;
 
     KToggleAction *actionAllowBgSpellCheck;
-
+    KAction *actionEditCustomVarsEdit;
 
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;
