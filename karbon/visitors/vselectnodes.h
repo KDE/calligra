@@ -11,10 +11,8 @@
 #include "koPoint.h"
 #include "koRect.h"
 
+#include "vglobal.h"
 #include "vvisitor.h"
-
-
-class VSegment;
 
 
 class VSelectNodes : public VVisitor
@@ -46,8 +44,6 @@ public:
 
 	virtual void visitVSegmentList( VSegmentList& segmentList );
 
-	QPtrList<VSegment>& result() { return m_segments; }
-
 private:
 	bool m_allNodes;
 	bool m_select;
@@ -55,7 +51,6 @@ private:
 
 	KoPoint m_point;
 	KoRect m_rect;
-	QPtrList<VSegment> m_segments;
 };
 
 #endif

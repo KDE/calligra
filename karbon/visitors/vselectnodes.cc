@@ -35,13 +35,10 @@ VSelectNodes::visitVSegmentList( VSegmentList& segmentList )
 				//	m_prev->m_nodeSelected[2] )
 				//{
 					segmentList.current()->selectCtrlPoint1( m_select );
-//					m_nodeEdited[0] = m_select;
 
 					if( m_select )
 					{
 						segmentList.current()->prev()->selectKnot( false );
-//						m_nodeEdited[1] = false;
-//						m_nodeEdited[2] = false;
 					}
 
 					setSuccess();
@@ -56,13 +53,10 @@ VSelectNodes::visitVSegmentList( VSegmentList& segmentList )
 				//if( m_nodeSelected[2] )
 				//{
 					segmentList.current()->selectCtrlPoint2( m_select );
-//					m_nodeEdited[1] = m_select;
 
 					if( m_select )
 					{
 						segmentList.current()->prev()->selectKnot( false );
-//						m_nodeEdited[0] = false;
-//						m_nodeEdited[2] = false;
 					}
 
 					setSuccess();
@@ -73,8 +67,6 @@ VSelectNodes::visitVSegmentList( VSegmentList& segmentList )
 			{
 				segmentList.current()->selectCtrlPoint2( m_select );
 				segmentList.current()->selectKnot( m_select );
-//				m_nodeSelected[1] = m_nodeEdited[1] = m_select;
-//				m_nodeSelected[2] = m_nodeEdited[2] = m_select;
 
 				setSuccess();
 			}
@@ -112,7 +104,6 @@ VSelectNodes::visitVSegmentList( VSegmentList& segmentList )
 			if( m_rect.contains( segmentList.current()->knot() ) )
 			{
 				segmentList.current()->selectKnot( m_select );
-//				m_nodeSelected[2] = m_nodeEdited[2] = true;
 
 				setSuccess();
 			}

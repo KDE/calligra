@@ -11,7 +11,7 @@
 #include <qptrlist.h>
 
 #include "vobject.h"
-#include "vsegment.h"
+
 
 class QObject;
 class QPainter;
@@ -91,16 +91,9 @@ public:
 	const VObjectList& objects() const { return m_objects; }
 
 
-	/**
-	 * Read only access to the segments with selected nodes.
-	 */
-	const QPtrList<VSegment>& segments() const { return m_segments; }
-
 	bool appendNode( const KoPoint& p );
 	bool checkNode( const KoPoint& p );
-//	void appendNodes();
 	void clearNodes();
-
 
 	/**
 	 * Returns the handle node id, the QPoint is inside.
@@ -112,11 +105,6 @@ private:
 	 * A list of selected objects.
 	 */
 	VObjectList m_objects;
-
-	/**
-	 * A list of segments with selected nodes.
-	 */
-	QPtrList<VSegment> m_segments;
 
 	/**
 	 * Handle and handlenodes paint coordinates.

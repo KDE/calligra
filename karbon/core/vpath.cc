@@ -83,6 +83,10 @@ drawNode( VPainter* painter, const KoPoint& p, int width, double zoomFactor )
 		KoPoint(
 			p.x() - width / zoomFactor,
 			p.y() + width / zoomFactor ) );
+	painter->lineTo(
+		KoPoint(
+			p.x() - width / zoomFactor,
+			p.y() - width / zoomFactor ) );
 }
 
 void
@@ -110,6 +114,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 	{
 		// paint fill:
 		painter->newPath();
+
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
 			VSegmentListIterator jtr( *( itr.current() ) );
@@ -182,7 +187,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 			painter->strokePath();
 		}
 
-		// draw a "knot" at the center:
+		// Draw center node:
 		if( m_drawCenterNode )
 		{
 			const KoPoint center = boundingBox().center();
@@ -198,8 +203,8 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 		}
 	}
 
-	// Draw nodes:
-	if( state() == selected || state() == edit )
+	// Draw nodes and control lines:
+	if( state() == selected )
 	{
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
@@ -209,12 +214,14 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 				painter->newPath();
 				painter->setRasterOp( Qt::NotROP );
 
+				VStroke stroke;
+				stroke.setLineWidth( 1.0 / zoomFactor );
+				stroke.setColor( Qt::blue.light().rgb() );
+				painter->setPen( stroke );
+				painter->setBrush( Qt::blue.light() );
+
 				if( jtr.current()->type() == VSegment::curve )
 				{
-					VStroke stroke;
-					stroke.setLineWidth( 1.0 / zoomFactor );
-					stroke.setColor( Qt::blue.light().rgb() );
-					painter->setPen( stroke );
 					painter->newPath();
 
 					// Draw control lines:
@@ -247,36 +254,22 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 					// Draw control node1:
 					painter->newPath();
 
-					if( jtr.current()->ctrlPoint1Selected() )
-					{
-						painter->setBrush( Qt::blue.light() );
-						drawNode( painter, jtr.current()->ctrlPoint1(), 3, zoomFactor );
-					}
-					else
-					{
-						painter->setBrush( Qt::NoBrush );
-						drawNode( painter, jtr.current()->ctrlPoint1(), 1, zoomFactor );
-					}
+					drawNode( painter, jtr.current()->ctrlPoint1(), 2, zoomFactor );
 
-					painter->fillPath();
+					if( jtr.current()->ctrlPoint1Selected() )
+						painter->fillPath();
+
 					painter->strokePath();
 
 
 					// Draw control node2:
 					painter->newPath();
 
-					if( jtr.current()->ctrlPoint2Selected() )
-					{
-						painter->setBrush( Qt::blue.light() );
-						drawNode( painter, jtr.current()->ctrlPoint2(), 3, zoomFactor );
-					}
-					else
-					{
-						painter->setBrush( Qt::NoBrush );
-						drawNode( painter, jtr.current()->ctrlPoint2(), 1, zoomFactor );
-					}
+					drawNode( painter, jtr.current()->ctrlPoint2(), 2, zoomFactor );
 
-					painter->fillPath();
+					if( jtr.current()->ctrlPoint2Selected() )
+						painter->fillPath();
+
 					painter->strokePath();
 				}
 
@@ -284,18 +277,16 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 				// Draw knot:
 				painter->newPath();
 
+				drawNode( painter, jtr.current()->knot(), 2, zoomFactor );
+
 				if( jtr.current()->knotSelected() )
 				{
-					painter->setBrush( Qt::blue.light() );
-					drawNode( painter, jtr.current()->knot(), 3, zoomFactor );
+					painter->fillPath();
+kdDebug() << "*** yes" << endl;
 				}
 				else
-				{
-					painter->setBrush( Qt::NoBrush );
-					drawNode( painter, jtr.current()->knot(), 1, zoomFactor );
-				}
+kdDebug() << "*** no" << endl;
 
-				painter->fillPath();
 				painter->strokePath();
 			}
 		}

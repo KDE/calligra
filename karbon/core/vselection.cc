@@ -88,8 +88,6 @@ VSelection::append( const KoRect& rect )
 	VLayerListIterator itr(
 		static_cast<VDocument*>( parent() )->layers() );
 
-	m_segments.clear();
-
 	for ( ; itr.current(); ++itr )
 	{
 		VObjectListIterator itr2( itr.current()->objects() );
@@ -101,12 +99,7 @@ VSelection::append( const KoRect& rect )
 // TODO: use a zoom dependant vflatten visitor to achieve finer resolution:
 				itr2.current()->boundingBox().intersects( rect ) )
 			{
-				VSelectNodes op( rect );
-				op.visit( *itr.current() );
 				append( itr2.current() );
-				QPtrListIterator<VSegment> it2( op.result() );
-				for( it2.toFirst(); it2.current(); ++it2 )
-					m_segments.append( it2.current() );
 			}
 		}
 	}
@@ -117,11 +110,13 @@ VSelection::append( const KoRect& rect )
 void
 VSelection::clear()
 {
-	clearNodes();
+	VSelectNodes op( false );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
 	{
+		op.visit( *itr.current() );
+
 		if( itr.current()->state() != deleted )
 			itr.current()->setState( normal );
 	}
@@ -238,6 +233,21 @@ VSelection::handleNode( const QPoint& point ) const
 	return node_none;
 }
 
+bool
+VSelection::checkNode( const KoPoint &p )
+{
+	VSelectNodes op( p );
+
+	VObjectListIterator itr = m_objects;
+	for( ; itr.current(); ++itr )
+	{
+		if( op.visit( *itr.current() ) )
+			return true;
+	}
+
+	return false;
+}
+
 void
 VSelection::clearNodes()
 {
@@ -248,61 +258,22 @@ VSelection::clearNodes()
 	{
 		op.visit( *itr.current() );
 	}
-
-	m_segments.clear();
-}
-
-/*
-void
-VSelection::appendNodes()
-{
-	VSelectNodes op;
-
-	m_segments.clear();
-	VObjectListIterator itr = m_objects;
-	for( ; itr.current(); ++itr )
-	{
-		op.visit( *itr.current() );
-		QPtrListIterator<VSegment> it2( op.result() );
-		for( it2.toFirst(); it2.current(); ++it2 )
-			m_segments.append( it2.current() );
-	}
-}
-*/
-
-bool
-VSelection::checkNode( const KoPoint &p )
-{
-	VSelectNodes op( p );
-
-	VObjectListIterator itr = m_objects;
-	for( ; itr.current(); ++itr )
-	{
-		op.visit( *itr.current() );
-		if( op.result().count() > 0 )
-			return true;
-	}
-
-	return false;
-	/*QPtrListIterator<VSegment> itr( m_segments );
-	for( itr.toFirst(); itr.current(); ++itr )
-		if( itr.current()->checkNode( p ) )
-			return true;
-
-	return false;*/
 }
 
 bool
 VSelection::appendNode( const KoPoint &p )
 {
-	VSelectNodes op( p, true, 2.0 );
+	bool success = false;
+
+	VSelectNodes op( p );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
 	{
-		op.visit( *itr.current() );
+		if( op.visit( *itr.current() ) )
+			success = true;
 	}
 
-	return m_segments.count() > 0;
+	return success;
 }
 

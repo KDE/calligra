@@ -534,30 +534,6 @@ VSegment::revert() const
 	return segment;
 }
 
-/*
-void
-VSegment::deselect()
-{
-	// Deselect all nodes:
-	m_nodeSelected[0] = false;
-	m_nodeSelected[1] = false;
-	m_nodeSelected[2] = false;
-	m_nodeEdited[0] = false;
-	m_nodeEdited[1] = false;
-	m_nodeEdited[2] = false;
-}
-*/
-
-bool
-VSegment::hasSelectedNodes() const
-{
-	return
-		( m_prev && m_prev->m_nodeSelected[2] ) ||
-		m_nodeSelected[0] ||
-		m_nodeSelected[1] ||
-		m_nodeSelected[2];
-}
-
 void
 VSegment::save( QDomElement& element ) const
 {

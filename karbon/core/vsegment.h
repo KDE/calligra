@@ -229,11 +229,6 @@ public:
 	bool edited( uint index ) const
 		{ return m_nodeEdited[index]; }
 
-	/**
-	 * Returns true if at least one node is selected.
-	 */
-	bool hasSelectedNodes() const;
-
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
