@@ -182,7 +182,7 @@ int getFieldIndex( QString const & fieldname, QRect const & database, KSpreadShe
     if ( cell->isDefault() )
       continue;
 
-    if ( fieldname == cell->strOutText() )
+    if ( fieldname.lower() == cell->strOutText().lower() )
       return i;
   }
 
