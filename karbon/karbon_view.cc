@@ -313,7 +313,6 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 {
 	if( m_toolbox )
 	{
-		kdDebug() << "GOT IT! parent :" << parent << endl;
 		delete m_toolbox;
 		delete m_historyDocker;
 		delete m_contextHelpDocker;
@@ -346,7 +345,7 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 	m_painterFactory->painter()->resize( width(), height() );
 	m_painterFactory->editpainter()->resize( width(), height() );
 	m_canvas->resize( width(), height() );
-	kdDebug() << "Moving to : " << m_canvas->contentsHeight() - height() << endl;
+	//kdDebug() << "Moving to : " << m_canvas->contentsHeight() - height() << endl;
 	m_canvas->setContentsPos( 0, m_canvas->contentsHeight() - height() );
 	reorganizeGUI();
 }

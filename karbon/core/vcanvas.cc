@@ -94,7 +94,7 @@ VCanvas::setYMirroring( bool edit )
 {
 	VPainter *p;
 	QWMatrix mat;
-	kdDebug() << "viewport()->height() : " << contentsHeight() << endl;
+	//kdDebug() << "viewport()->height() : " << contentsHeight() << endl;
 	if( edit )
 	{
 		p = m_view->painterFactory()->editpainter();
