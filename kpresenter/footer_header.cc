@@ -175,19 +175,19 @@ void KPFooterHeaderEditor::setupHeader()
     htool2->insertSeparator();
 
     h_aleft = 5;
-    htool2->insertButton( KPBarIcon( "alignLeft" ), h_aleft,
+    htool2->insertButton( KPBarIcon( "text_left" ), h_aleft,
                           SIGNAL( clicked() ), this,
                           SLOT( headerAlignLeft() ), true, i18n( "Align Left" ) );
     htool2->setToggle( h_aleft, true );
 
     h_acenter = 6;
-    htool2->insertButton( KPBarIcon( "alignCenter" ), h_acenter,
+    htool2->insertButton( KPBarIcon( "text_center" ), h_acenter,
                           SIGNAL( clicked() ), this,
                           SLOT( headerAlignCenter() ), true, i18n( "Align Center" ) );
     htool2->setToggle( h_acenter, true );
 
     h_aright = 7;
-    htool2->insertButton( KPBarIcon( "alignRight" ), h_aright,
+    htool2->insertButton( KPBarIcon( "text_right" ), h_aright,
                           SIGNAL( clicked() ), this,
                           SLOT( headerAlignRight() ), true, i18n( "Align Right" ) );
     htool2->setToggle( h_aright, true );
