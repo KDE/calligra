@@ -28,8 +28,6 @@ module KImage
 {
 	interface View : KOffice::View
 	{
-		// Slots für Menus
-
 		// Edit
 		slot void editImage();
 		slot void importImage();

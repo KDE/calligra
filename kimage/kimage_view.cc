@@ -58,6 +58,9 @@ KImageView::KImageView( QWidget *_parent, const char *_name, KImageDoc* _doc ) :
 
   QObject::connect( m_pDoc, SIGNAL( sig_updateView() ), this, SLOT( slotUpdateView() ) );
 
+  m_drawMode = 0;
+  m_centerMode = 1;
+
   slotUpdateView();
 }
 
@@ -167,7 +170,60 @@ bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory 
   tmp = kapp->kde_icondir().copy();
   tmp += "/mini/unknown.xpm";
   pix = OPUIUtils::loadPixmap( tmp );
-  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ),
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 4, SIGNAL( clicked() ),
+							this, "editImage", true,
+							i18n( "Edit image" ), -1 );
+
+  m_vToolBarEdit->insertSeparator( -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kimage/pics/undo.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
+							this, "undo", true,
+							i18n( "Undo" ), -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kimage/pics/redo.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
+							this, "redo", true,
+							i18n( "Redo" ), -1 );
+
+  m_vToolBarEdit->insertSeparator( -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kimage/pics/editpaste.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
+							this, "editImage", true,
+							i18n( "Edit image" ), -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kimage/pics/areaselect.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
+							this, "editImage", true,
+							i18n( "Edit image" ), -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kimage/pics/airbrush.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
+							this, "editImage", true,
+							i18n( "Edit image" ), -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kimage/pics/circle.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
+							this, "editImage", true,
+							i18n( "Edit image" ), -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kimage/pics/eraser.xpm";
+  pix = OPUIUtils::loadPixmap( tmp );
+  m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 5, SIGNAL( clicked() ),
 							this, "editImage", true,
 							i18n( "Edit image" ), -1 );
 
@@ -278,6 +334,9 @@ void KImageView::newView()
   shell->setDocument( m_pDoc );
 }
 
+/**
+ **  Gets the image from the document and resizes it if necessary
+ */
 void KImageView::slotUpdateView()
 {
   if ( m_pDoc->image().isNull() )
@@ -387,6 +446,9 @@ void KImageView::resizeEvent( QResizeEvent *_ev )
     return;
 }
 
+/**
+ ** Paints the image in the shell window
+ */
 void KImageView::paintEvent( QPaintEvent *_ev )
 {
   if ( m_pixmap.isNull() )
@@ -395,8 +457,15 @@ void KImageView::paintEvent( QPaintEvent *_ev )
   QPainter painter;
   painter.begin( this );
 
-  painter.drawPixmap( ( width() - m_pixmap.width() ) / 2, ( height() - m_pixmap.height() ) / 2, m_pixmap );
-
+  if ( m_centerMode )
+  {
+    painter.drawPixmap( ( width() - m_pixmap.width() ) / 2, ( height() - m_pixmap.height() ) / 2, m_pixmap );
+  }
+  else
+  {
+    painter.drawPixmap( 0, 0, m_pixmap );
+  }
+  
   painter.end();
 }
 

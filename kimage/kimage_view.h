@@ -93,8 +93,10 @@ public slots:
 protected:
   // C++
   virtual void init();
+  
   // IDL
   virtual bool event( const char* _event, const CORBA::Any& _value );
+
   // C++
   virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
   virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
@@ -104,27 +106,41 @@ protected:
 
   virtual void resizeEvent( QResizeEvent *_ev );
   virtual void paintEvent( QPaintEvent *_ev );
-  
+
+  // edit toolbar
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
   CORBA::Long m_idButtonEdit_Lines;
   CORBA::Long m_idButtonEdit_Areas;
   CORBA::Long m_idButtonEdit_Bars;
   CORBA::Long m_idButtonEdit_Cakes;
 
+  // edit menu
   OpenPartsUI::Menu_var m_vMenuEdit;
   CORBA::Long m_idMenuEdit_Edit;
   CORBA::Long m_idMenuEdit_Import;
   CORBA::Long m_idMenuEdit_Export;
   CORBA::Long m_idMenuEdit_Page;
+
+  // view menu
   OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuEdit_Center;
+
+  // zoom menu
   OpenPartsUI::Menu_var m_vMenuZoom;
   CORBA::Long m_idMenuZoom_FitToView;
   CORBA::Long m_idMenuZoom_FitWithProps;
   CORBA::Long m_idMenuZoom_Original;
+  
+  // transform menu
   OpenPartsUI::Menu_var m_vMenuTransform;
+
+  // filter menu
   OpenPartsUI::Menu_var m_vMenuFilter;
+
+  // plugins menu
   OpenPartsUI::Menu_var m_vMenuPlugIns;
+
+  // help menu
   OpenPartsUI::Menu_var m_vMenuHelp;
   CORBA::Long m_idMenuHelp_About;
   CORBA::Long m_idMenuHelp_Using;
@@ -132,6 +148,8 @@ protected:
   KImageDoc *m_pDoc;  
 
   QPixmap m_pixmap;
+  int m_drawMode;
+  int m_centerMode;
   
   int m_iXOffset;
   int m_iYOffset;
