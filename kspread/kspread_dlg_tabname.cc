@@ -37,7 +37,7 @@ KSpreadTableName::KSpreadTableName( KSpreadView* _parent, const char* _name, QSt
 	: QDialog( _parent, _name, true )
 {
    m_pView = _parent;
-
+   m_TableName=_tableName;
    setCaption( i18n("Change Table Name") );
 
    QLabel* tmpQLabel;
@@ -80,6 +80,7 @@ void KSpreadTableName::slotOk()
       {
          KNotifyClient::beep();
          KMessageBox::information( this, i18n("A table with this name already exists."), i18n("Change table name") );
+         m_pTableName->setText(m_TableName);
          return;
       }
    }
