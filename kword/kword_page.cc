@@ -1782,7 +1782,9 @@ void KWPage::setMouseMode(MouseMode _mm)
 {
   mouseMode = _mm;
   mmUncheckAll();
-  
+  gui->getView()->uncheckAllTools();
+  gui->getView()->setTool(mouseMode);
+
   switch (mouseMode)
     {
     case MM_EDIT: 
@@ -1822,7 +1824,7 @@ void KWPage::setupMenus()
   mm_edit_frame = mm_menu->insertItem(i18n("Edit Frames"),this,SLOT(mmEditFrame()));
   mm_create_text = mm_menu->insertItem(i18n("Create Text-Frame"),this,SLOT(mmCreateText()));
   mm_create_pix = mm_menu->insertItem(i18n("Create Pixmap-Frame"),this,SLOT(mmCreatePix()));
-  mm_menu->setCheckable(false);
+  mm_menu->setCheckable(true);
 
   frame_edit_menu = new QPopupMenu();
   CHECK_PTR(frame_edit_menu);

@@ -1,12 +1,9 @@
 /* XPM */
 static char *redo[] = {
-/* width height num_colors chars_per_pixel */
 "    22    22        3            1",
-/* colors */
 ". c none",
 "# c #808080",
 "a c #000000",
-/* pixels */
 "......................",
 "......................",
 "......................",

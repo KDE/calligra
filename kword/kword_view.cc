@@ -61,7 +61,8 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
   m_pKWordDoc = 0L;
   m_bUnderConstruction = true;
   m_bShowGUI = true;
-
+  m_vMenuTools = 0L;
+  m_vToolBarTools = 0L;
   m_lstFrames.setAutoDelete(true);  
   gui = 0;
   flow = KWParagLayout::LEFT;
@@ -89,23 +90,6 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
 		   this,SLOT(slotInsertObject(KWordChild*)));
   QObject::connect(m_pKWordDoc,SIGNAL(sig_updateChildGeometry(KWordChild*)),
 		   this,SLOT(slotUpdateChildGeometry(KWordChild*)));
-
-  // Create GUI
-  gui = new KWordGUI(this,m_bShowGUI,m_pKWordDoc,this);
-  gui->setGeometry(0,0,width(),height());
-  gui->show();
-
-  gui->getPaperWidget()->formatChanged(format);
-  widget()->setFocusProxy(gui);
-
-  setFormat(format,false);
-
-  if (gui)
-    gui->setDocument(m_pKWordDoc);
-
-  format.setDefaults(m_pKWordDoc);
-  if (gui)
-    gui->getPaperWidget()->formatChanged(format);
 }
 
 /*================================================================*/
@@ -132,6 +116,23 @@ void KWordView::init()
     tool_bar_manager->registerClient( id(), this );
   else
     cerr << "Did not get a tool bar manager" << endl;  
+
+  // Create GUI
+  gui = new KWordGUI(this,m_bShowGUI,m_pKWordDoc,this);
+  gui->setGeometry(0,0,width(),height());
+  gui->show();
+
+  gui->getPaperWidget()->formatChanged(format);
+  widget()->setFocusProxy(gui);
+
+  setFormat(format,false);
+
+  if (gui)
+    gui->setDocument(m_pKWordDoc);
+
+  format.setDefaults(m_pKWordDoc);
+  if (gui)
+    gui->getPaperWidget()->formatChanged(format);
 }
 
 /*================================================================*/
@@ -250,12 +251,12 @@ void KWordView::setFormat( KWFormat &_format, bool _check = true, bool _update_p
     {
       fontList.find(_format.getUserFont()->getFontName());
       if ( !CORBA::is_nil( m_vToolBarText ) )
-	m_vToolBarText->setCurrentComboItem(m_idComboText_FontList,fontList.at());
+	m_vToolBarText->setCurrentComboItem(ID_FONT_LIST,fontList.at());
     }
 
   if (_format.getPTFontSize() != -1)
       if ( !CORBA::is_nil( m_vToolBarText ) )
-	m_vToolBarText->setCurrentComboItem(m_idComboText_FontSize,_format.getPTFontSize() - 4);
+	m_vToolBarText->setCurrentComboItem(ID_FONT_SIZE,_format.getPTFontSize() - 4);
   
   if (_format.getWeight() != -1)
     {
@@ -283,7 +284,7 @@ void KWordView::setFormat( KWFormat &_format, bool _check = true, bool _update_p
 	  OpenPartsUI::Pixmap pix;
 	  pix.data = CORBA::string_dup( colorToPixString(_format.getColor() ) );
 	  
-	  m_vToolBarText->setButtonPixmap(m_idButtonText_Color, pix );
+	  m_vToolBarText->setButtonPixmap(ID_TEXT_COLOR, pix );
 	}
       tbColor = QColor(_format.getColor());
     }
@@ -397,6 +398,59 @@ bool KWordView::event( const char* _event, const CORBA::Any& _value )
   END_EVENT_MAPPER;
   
   return false;
+}
+
+/*===============================================================*/
+void KWordView::uncheckAllTools()
+{
+  if (m_vMenuTools && m_vToolBarTools)
+    {
+      m_vMenuTools->setItemChecked(m_idMenuTools_Edit,false);
+      m_vMenuTools->setItemChecked(m_idMenuTools_EditFrame,false);
+      m_vMenuTools->setItemChecked(m_idMenuTools_CreateText,false);
+      m_vMenuTools->setItemChecked(m_idMenuTools_CreatePix,false);
+      
+      m_vToolBarTools->setToggle(ID_TOOL_EDIT,true);
+      m_vToolBarTools->setToggle(ID_TOOL_EDIT_FRAME,true);
+      m_vToolBarTools->setToggle(ID_TOOL_CREATE_TEXT,true);
+      m_vToolBarTools->setToggle(ID_TOOL_CREATE_PIX,true);
+      
+      m_vToolBarTools->setButton(ID_TOOL_EDIT,false);
+      m_vToolBarTools->setButton(ID_TOOL_EDIT_FRAME,false);
+      m_vToolBarTools->setButton(ID_TOOL_CREATE_TEXT,false);
+      m_vToolBarTools->setButton(ID_TOOL_CREATE_PIX,false);
+    }
+}
+
+/*===============================================================*/
+void KWordView::setTool(MouseMode _mouseMode)
+{
+  if (m_vMenuTools && m_vToolBarTools)
+    {
+      switch (_mouseMode)
+	{
+	case MM_EDIT: 
+	  {
+	    m_vMenuTools->setItemChecked(m_idMenuTools_Edit,true);
+	    m_vToolBarTools->setButton(ID_TOOL_EDIT,true);
+	  } break;
+	case MM_EDIT_FRAME: 
+	  {
+	    m_vMenuTools->setItemChecked(m_idMenuTools_EditFrame,true);
+	    m_vToolBarTools->setButton(ID_TOOL_EDIT_FRAME,true);
+	  } break;
+	case MM_CREATE_TEXT:
+	  {
+	    m_vMenuTools->setItemChecked(m_idMenuTools_CreateText,true);
+	    m_vToolBarTools->setButton(ID_TOOL_CREATE_TEXT,true);
+	  } break;
+	case MM_CREATE_PIX:
+	  {
+	    m_vMenuTools->setItemChecked(m_idMenuTools_CreatePix,true);
+	    m_vToolBarTools->setButton(ID_TOOL_CREATE_PIX,true);
+	  } break;
+	}
+    }
 }
 
 /*===============================================================*/
@@ -567,6 +621,30 @@ void KWordView::extraOptions()
 }
 
 /*===============================================================*/
+void KWordView::toolsEdit()
+{
+  gui->getPaperWidget()->mmEdit();
+}
+
+/*===============================================================*/
+void KWordView::toolsEditFrame()
+{
+  gui->getPaperWidget()->mmEditFrame();
+}
+
+/*===============================================================*/
+void KWordView::toolsCreateText()
+{
+  gui->getPaperWidget()->mmCreateText();
+}
+
+/*===============================================================*/
+void KWordView::toolsCreatePix()
+{
+  gui->getPaperWidget()->mmCreatePix();
+}
+
+/*===============================================================*/
 void KWordView::helpContents()
 {
 }
@@ -644,7 +722,7 @@ void KWordView::textColor()
       OpenPartsUI::Pixmap pix;
       pix.data = CORBA::string_dup( colorToPixString( tbColor ) );
 
-      m_vToolBarText->setButtonPixmap( m_idButtonText_Color, pix );
+      m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR , pix );
       format.setColor(tbColor);
       gui->getPaperWidget()->formatChanged(format);
     }
@@ -779,7 +857,7 @@ void KWordView::textBorderColor()
   {
     OpenPartsUI::Pixmap pix;
     pix.data = CORBA::string_dup( colorToPixString( tmpBrd.color ) );
-    m_vToolBarText->setButtonPixmap( m_idButtonText_BorderColor, pix );
+    m_vToolBarText->setButtonPixmap( ID_BORDER_COLOR , pix );
   }
   
 //   if (m_vToolBarText->isButtonOn(m_idButtonText_BorderLeft))
@@ -873,7 +951,7 @@ void KWordView::textBorderStyle(const char *style)
 void KWordView::resizeEvent(QResizeEvent *e)
 {
   QWidget::resizeEvent(e);
-  gui->resize(width(),height());
+  if (gui) gui->resize(width(),height());
 }
 
 /*================================================================*/
@@ -982,7 +1060,7 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuFormat_Paragraph = m_vMenuFormat->insertItem4( i18n("Paragraph..."), this, "formatParagraph", 0, -1, -1 );
   m_idMenuFormat_Page = m_vMenuFormat->insertItem4( i18n("Page..."), this, "formatPage", 0, -1, -1 );
 
-  m_vMenuInsert->insertSeparator( -1 );
+  m_vMenuFormat->insertSeparator( -1 );
 
   m_idMenuFormat_Numbering = m_vMenuFormat->insertItem4( i18n("Numbering..."), this, "formatNumbering", 0, -1, -1 );
   m_idMenuFormat_Style = m_vMenuFormat->insertItem4( i18n("&Style..."), this, "formatStyle", 0, -1, -1 );
@@ -997,7 +1075,31 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_idMenuExtra_Options = m_vMenuExtra->insertItem4( i18n("&Options..."), this, "extraOptions", 0, -1, -1 );
 
-  m_idMenuExtra_Options = m_vMenuExtra->insertItem4( i18n("&Options..."), this, "extraOptions", 0, -1, -1 );
+  // tools menu
+  _menubar->insertMenu( i18n( "&Tools" ), m_vMenuTools, -1, -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kword/toolbar/edittool.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuTools_Edit = m_vMenuTools->insertItem6(pix, i18n("&Edit Text"), this, "toolsEdit", 0, -1, -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kword/toolbar/editframetool.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuTools_EditFrame = m_vMenuTools->insertItem6(pix, i18n("&Edit Frames"), this, "toolsEditFrame", 0, -1, -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kword/toolbar/textframetool.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuTools_CreateText = m_vMenuTools->insertItem6(pix, i18n("&Create Text Frame"), this, "toolsCreateText", 0, -1, -1 );
+
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kword/toolbar/picframetool.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idMenuTools_CreatePix = m_vMenuTools->insertItem6(pix, i18n("&Create Picture Frame"), this, "toolsCreatePix", 0, -1, -1 );
+
+  m_vMenuTools->setCheckable(true);
+  m_vMenuTools->setItemChecked(m_idMenuTools_Edit,true);
 
   // help menu
   m_vMenuHelp = _menubar->helpMenu();
@@ -1109,7 +1211,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   // style combobox
   OpenPartsUI::StrList stylelist;
   stylelist.length( 0 );
-  m_idComboText_Style = m_vToolBarText->insertCombo( stylelist, 1, false, SIGNAL( activated( const char* ) ),
+  m_idComboText_Style = m_vToolBarText->insertCombo( stylelist, ID_STYLE_LIST, false, SIGNAL( activated( const char* ) ),
 						     this, "textStyleSelected", true, i18n("Style"),
 						     200, -1, OpenPartsUI::AtBottom );
 
@@ -1122,10 +1224,10 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     sprintf( buffer, "%i", i );
     sizelist[i-4] = CORBA::string_dup( buffer );
   }
-  m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, 2, true, SIGNAL( activated( const char* ) ),
+  m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, true, SIGNAL( activated( const char* ) ),
 							this, "fontSizeSelected", true,
 							i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
-  m_vToolBarText->setCurrentComboItem(m_idComboText_FontSize,8);
+  m_vToolBarText->setCurrentComboItem(ID_FONT_SIZE,8);
   tbFont.setPointSize(12);
 
   // fonts combobox
@@ -1134,11 +1236,11 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   fonts.length( fontList.count() );
   for(unsigned int i = 0;i < fontList.count(); i++ )
     fonts[i] = CORBA::string_dup( fontList.at(i) );
-  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, 1, false, SIGNAL( activated( const char* ) ), this,
+  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, false, SIGNAL( activated( const char* ) ), this,
 							"textFontSelected", true, i18n("Font List"),
 							200, -1, OpenPartsUI::AtBottom );
   tbFont.setFamily(fontList.at(0));
-  m_vToolBarText->setCurrentComboItem(m_idComboText_FontList,0);
+  m_vToolBarText->setCurrentComboItem(ID_FONT_LIST,0);
 
   m_vToolBarText->insertSeparator( -1 );
 
@@ -1173,7 +1275,8 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   tbColor = black;
   OpenPartsUI::Pixmap colpix;
   colpix.data = CORBA::string_dup( colorToPixString( tbColor ) );
-  m_idButtonText_Color = m_vToolBarText->insertButton2( colpix, 1, SIGNAL( clicked() ), this, "textColor", true, i18n("Text Color"), -1 );
+  m_idButtonText_Color = m_vToolBarText->insertButton2( colpix, ID_TEXT_COLOR, SIGNAL( clicked() ), this, "textColor", 
+							true, i18n("Text Color"), -1 );
 
   m_vToolBarText->insertSeparator( -1 );
 
@@ -1278,7 +1381,8 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   // border color
   tmpBrd.color = black;
   colpix.data = CORBA::string_dup( colorToPixString( tmpBrd.color ) );
-  m_idButtonText_BorderColor = m_vToolBarText->insertButton2( colpix, 1, SIGNAL( clicked() ), this, "textBorderColor", true, i18n("Border Color"), -1);
+  m_idButtonText_BorderColor = m_vToolBarText->insertButton2( colpix, ID_BORDER_COLOR, SIGNAL( clicked() ), this, "textBorderColor", 
+							      true, i18n("Border Color"), -1);
 
   // border width combobox
   OpenPartsUI::StrList widthlist;
@@ -1307,6 +1411,45 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   tmpBrd.style = KWParagLayout::SOLID;
 
   m_vToolBarText->enable( OpenPartsUI::Show );
+
+  // TOOLBAR Tools
+  m_vToolBarTools = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+  m_vToolBarTools->setFullWidth( false );
+ 
+  // edit
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kword/toolbar/edittool.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonTools_Edit = m_vToolBarTools->insertButton2( pix, ID_TOOL_EDIT, SIGNAL( clicked() ), this, "toolsEdit", 
+							 true, i18n("Edit Text Tool"), -1);
+  m_vToolBarTools->setToggle(ID_TOOL_EDIT,true);
+  m_vToolBarTools->setButton(ID_TOOL_EDIT,true);
+
+  // edit frame
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kword/toolbar/editframetool.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonTools_EditFrame = m_vToolBarTools->insertButton2( pix, ID_TOOL_EDIT_FRAME, SIGNAL( clicked() ), this, "toolsEditFrame", 
+							      true, i18n("Edit Frames Tool"), -1);
+  m_vToolBarTools->setToggle(ID_TOOL_EDIT_FRAME,true);
+
+  // create text frame
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kword/toolbar/textframetool.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonTools_CreateText = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_TEXT, SIGNAL( clicked() ), this, "toolsCreateText", 
+							       true, i18n("Create Text Frame"), -1);
+  m_vToolBarTools->setToggle(ID_TOOL_CREATE_TEXT,true);
+
+  // create pix frame
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kword/toolbar/picframetool.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
+  m_idButtonTools_CreatePix = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_PIX, SIGNAL( clicked() ), this, "toolsCreatePix", 
+							       true, i18n("Create Picture Frame"), -1);
+  m_vToolBarTools->setToggle(ID_TOOL_CREATE_PIX,true);
+
+  m_vToolBarTools->enable( OpenPartsUI::Show );
 
   return true;
 }      
@@ -1412,7 +1555,7 @@ void KWordView::setParagBorderValues()
 
   OpenPartsUI::Pixmap colpix;
   colpix.data = CORBA::string_dup( colorToPixString( tmpBrd.color ) );
-  m_vToolBarText->setButtonPixmap( m_idButtonText_BorderColor, colpix );
+  m_vToolBarText->setButtonPixmap(ID_BORDER_COLOR, colpix );
 }
 
 /*================================================================*/

@@ -116,6 +116,11 @@ public:
   virtual void extraStylist();
   virtual void extraOptions();
 
+  virtual void toolsEdit();
+  virtual void toolsEditFrame();
+  virtual void toolsCreateText();
+  virtual void toolsCreatePix();
+
   virtual void helpContents();
   virtual void helpAbout();
   virtual void helpAboutKOffice();
@@ -143,7 +148,7 @@ public:
   virtual void textBorderColor();
   virtual void textBorderWidth(const char *width);
   virtual void textBorderStyle(const char *style);
-  
+
   virtual void setMode( KOffice::View::Mode _mode);
   virtual void setFocus(CORBA::Boolean mode);
 
@@ -156,6 +161,8 @@ public:
 			       KWParagLayout::Border _top,KWParagLayout::Border _bottom);
 
   KWordGUI *getGUI() { return gui; }
+  void uncheckAllTools();
+  void setTool(MouseMode _mouseMode);
 
 public slots:
   void slotInsertObject(KWordChild *_child);
@@ -229,6 +236,13 @@ protected:
   CORBA::Long m_idMenuExtra_Stylist;
   CORBA::Long m_idMenuExtra_Options;
 
+  // tools menu
+  OpenPartsUI::Menu_var m_vMenuTools;
+  CORBA::Long m_idMenuTools_Edit;
+  CORBA::Long m_idMenuTools_EditFrame;
+  CORBA::Long m_idMenuTools_CreateText;
+  CORBA::Long m_idMenuTools_CreatePix;
+
   // help menu
   OpenPartsUI::Menu_var m_vMenuHelp;
   CORBA::Long m_idMenuHelp_Contents;
@@ -273,6 +287,13 @@ protected:
   CORBA::Long m_idComboText_BorderWidth;
   CORBA::Long m_idComboText_BorderStyle;
 
+  // tools toolbar
+  OpenPartsUI::ToolBar_var m_vToolBarTools;
+  CORBA::Long m_idButtonTools_Edit;
+  CORBA::Long m_idButtonTools_EditFrame;
+  CORBA::Long m_idButtonTools_CreateText;
+  CORBA::Long m_idButtonTools_CreatePix;
+
   QList<KWordFrame> m_lstFrames;
 
   // text toolbar values
@@ -289,6 +310,16 @@ protected:
   KWParagLayout::Border left,right,top,bottom,tmpBrd;
 
   KWParagDia *paragDia;
+
+  static const int ID_TOOL_EDIT = 2;
+  static const int ID_TOOL_EDIT_FRAME = 3;
+  static const int ID_TOOL_CREATE_TEXT = 4;
+  static const int ID_TOOL_CREATE_PIX = 5;
+  static const int ID_TEXT_COLOR = 6;
+  static const int ID_BORDER_COLOR = 7;
+  static const int ID_FONT_SIZE = 8;
+  static const int ID_FONT_LIST = 9;
+  static const int ID_STYLE_LIST = 10;
 
 };
 

@@ -36,6 +36,11 @@ module KWord
       slot void extraStylist();
       slot void extraOptions();
       
+      slot void toolsEdit();
+      slot void toolsEditFrame();
+      slot void toolsCreateText();
+      slot void toolsCreatePix();
+
       slot void helpContents();
       slot void helpAbout();
       slot void helpAboutKOffice();
