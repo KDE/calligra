@@ -116,7 +116,7 @@ bool KoMainWindow::openDocument( const KURL & url, bool isTempFile )
     {
 	delete newdoc;
         if ( isTempFile )
-            unlink( url.path().ascii() );
+          //unlink( url.path().ascii() );
 	return FALSE;
     }
 
@@ -167,7 +167,7 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
 	do {
 #ifdef USE_QFD
 	    file = QFileDialog::getSaveFileName( QString::null, filter );
-#else	    
+#else	
 	    file = KFileDialog::getSaveFileName( QString::null, filter );
 #endif
 	    if ( file.isNull() )
@@ -235,7 +235,7 @@ bool KoMainWindow::closeDocument()
 					i18n( "Yes" ), i18n( "No" ), i18n( "Cancel" ) );
 
         switch(res) {
-        case 0 : 
+        case 0 :
 	    return saveDocument( nativeFormatMimeType(), nativeFormatPattern(), nativeFormatName() );
         case 1 :
           {
