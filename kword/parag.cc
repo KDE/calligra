@@ -242,6 +242,17 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 		KWFormat *format = document->getFormatCollection()->getFormat(_format);
 		dynamic_cast<KWCharVariable*>(text.data()[_pos + i].attrib)->setFormat(format);
 	      } break;
+	    case ID_KWCharFootNote:
+	      {
+		KWFormat *format = document->getFormatCollection()->getFormat(_format);
+		KWFormat f(document,_format);
+		if (document->getFootNoteManager().showFootNotesSuperscript())
+		  f.setVertAlign(KWFormat::VA_SUPER);
+		else
+		  f.setVertAlign(KWFormat::VA_NORMAL);
+		format = document->getFormatCollection()->getFormat(f);
+		dynamic_cast<KWCharFootNote*>(text.data()[_pos + i].attrib)->setFormat(format);
+	      } break;
 	    default: break;
 	    }
 	continue;

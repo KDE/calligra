@@ -1015,3 +1015,11 @@ Reggie, 2.4.1999:
 -----------------
 - Some cleanups
 - Much more work on footnotes/endnotes
+
+Reggie, 3.4.1999:
+-----------------
+- More work on footnotes:
+  - Inserting simple footnotes works
+  - Footnote-Manager calculates/updates numbers correctly
+  - Implemented Formatting/Displaying
+- Fixed formatting of inserted variables

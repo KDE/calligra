@@ -1768,6 +1768,30 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 	      } break;
 	    case ID_KWCharVariable:
 	      {
+		KWCharFormat *f = (KWCharFormat*)text[ _fc.getTextPos() ].attrib;
+		_fc.apply( *f->getFormat() );
+		// Change the painter
+		if (_fc.getVertAlign() == KWFormat::VA_NORMAL)
+		  {
+		    _painter.setFont( *_fc.loadFont( this ) );
+		    plus = 0;
+		  }
+		else if (_fc.getVertAlign() == KWFormat::VA_SUB)
+		  {
+		    QFont _font = *_fc.loadFont( this );
+		    _font.setPointSize((2 * _font.pointSize()) / 3);
+		    _painter.setFont(_font);
+		    plus = _font.pointSize() / 2;
+		  }
+		else if (_fc.getVertAlign() == KWFormat::VA_SUPER)
+		  {
+		    QFont _font = *_fc.loadFont( this );
+		    _font.setPointSize((2 * _font.pointSize()) / 3);
+		    _painter.setFont(_font);
+		    plus = - _fc.getPTAscender() + _font.pointSize() / 2;
+		  }
+		_painter.setPen( _fc.getColor() );
+
 		KWCharVariable *v = dynamic_cast<KWCharVariable*>(text[_fc.getTextPos()].attrib);
 		
 		if (_drawVarBack)
@@ -1777,6 +1801,44 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 		_painter.drawText(tmpPTPos - xOffset,
 				 _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset -
 				 _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus,v->getText());
+		
+		_fc.cursorGotoNextChar( _painter );
+	      } break;
+	    case ID_KWCharFootNote:
+	      {
+		KWCharFootNote *fn = dynamic_cast<KWCharFootNote*>(text[_fc.getTextPos()].attrib);
+		
+// 		if (_drawVarBack)
+// 		  _painter.fillRect(tmpPTPos - xOffset,_fc.getPTY() - yOffset,
+// 				    _painter.fontMetrics().width(v->getText()),_fc.getLineHeight(),gray);
+		
+		KWCharFormat *f = (KWCharFormat*)text[ _fc.getTextPos() ].attrib;
+		_fc.apply( *f->getFormat() );
+		// Change the painter
+		if (_fc.getVertAlign() == KWFormat::VA_NORMAL)
+		  {
+		    _painter.setFont( *_fc.loadFont( this ) );
+		    plus = 0;
+		  }
+		else if (_fc.getVertAlign() == KWFormat::VA_SUB)
+		  {
+		    QFont _font = *_fc.loadFont( this );
+		    _font.setPointSize((2 * _font.pointSize()) / 3);
+		    _painter.setFont(_font);
+		    plus = _font.pointSize() / 2;
+		  }
+		else if (_fc.getVertAlign() == KWFormat::VA_SUPER)
+		  {
+		    QFont _font = *_fc.loadFont( this );
+		    _font.setPointSize((2 * _font.pointSize()) / 3);
+		    _painter.setFont(_font);
+		    plus = - _fc.getPTAscender() + _font.pointSize() / 2;
+		  }
+		_painter.setPen( _fc.getColor() );
+
+		_painter.drawText(tmpPTPos - xOffset,
+				  _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset -
+				  _fc.getParag()->getParagLayout()->getLineSpacing().pt() + plus,fn->getText());
 		
 		_fc.cursorGotoNextChar( _painter );
 	      } break;

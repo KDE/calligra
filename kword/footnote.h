@@ -34,20 +34,22 @@ public:
 
   int getStart() { return start; }
   void setStart(int s) { start = s; recalc(); }
-  
+
   void recalc();
 
   int findStart(KWFormatContext *_fc,QPainter &p);
-  
+
   bool showFootNotesSuperscript() { return superscript; }
   void setShowFootNotesSuperscript(bool _s) { superscript = _s; }
+
+  void insertFootNote(KWFootNote *fn);
   
 protected:
   KWordDocument *doc;
   int start;
   QList<KWFootNote> footNotes;
   bool superscript;
-  
+
 };
 
 /******************************************************************/
@@ -63,29 +65,32 @@ public:
     int to;
     QString space;
   };
-  
+
   KWFootNote(KWordDocument *_doc,QList<KWFootNoteInternal> *_parts);
 
   KWFootNote *copy() { return new KWFootNote(doc,new QList<KWFootNoteInternal>(parts)); }
 
   int getStart() { return start; }
   int getEnd() { return end; }
-  
+
   QString getText() { return text; }
-  
+
   /**
    * returns new end
    */
   int setStart(int _start);
+
+  void setBefore(const QString &_before) { before = _before; }
+  void setAfter(const QString &_after) { after = _after; }
   
 protected:
   void makeText();
-  
+
   KWordDocument *doc;
   int start,end;
   QList<KWFootNoteInternal> parts;
   QString before,after,text;
-  
+
 };
 
 #endif

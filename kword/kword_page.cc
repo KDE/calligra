@@ -4010,11 +4010,15 @@ void KWPage::insertVariable(VariableType type)
 void KWPage::insertFootNote(KWFootNote *fn)
 {
   fc->getParag()->insertFootNote(fc->getTextPos(),fn);
+  doc->getFootNoteManager().insertFootNote(fn);
   KWFormat fmt(doc,format);
   if (doc->getFootNoteManager().showFootNotesSuperscript())
     fmt.setVertAlign(KWFormat::VA_SUPER);
   else
     fmt.setVertAlign(KWFormat::VA_NORMAL);
-  
+
   fc->getParag()->setFormat(fc->getTextPos(),1,fmt);
+
+  recalcPage(0L);
+  recalcCursor(true);
 }

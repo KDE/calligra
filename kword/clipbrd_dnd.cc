@@ -27,7 +27,7 @@ KWordDrag::KWordDrag(QWidget *dragSource = 0L,const char *name = 0L)
   : QDragObject(dragSource,name), kword(), plain(), html()
 {
 }
-  
+
 /*================================================================*/
 void KWordDrag::setPlain(const QString &_plain)
 {
@@ -45,16 +45,16 @@ void KWordDrag::setHTML(const QString &_html)
 {
   html = _html;
 }
-  
+
 /*================================================================*/
 const char *KWordDrag::format(int i) const
 {
-  for (unsigned int j = 0;MimeTypes[j] != QString::null;j++)
+  for (int j = 0;MimeTypes[j] != QString::null;j++)
     {
       if (i == j)
 	return MimeTypes[j].ascii();
     }
-  
+
   return 0L;
 }
 
@@ -62,7 +62,7 @@ const char *KWordDrag::format(int i) const
 QByteArray KWordDrag::encodedData(const char *mime) const
 {
   QCString str;
-  
+
   if (QString(mime) == MimeTypes[0])
     str = plain.ascii();
   else if (QString(mime) == MimeTypes[1])

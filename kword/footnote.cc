@@ -46,12 +46,12 @@ int KWFootNoteManager::findStart(KWFormatContext *_fc,QPainter &p)
 {
   if (_fc->getFrameSet() > 1)
     return -1;
-  
+
   KWFormatContext fc(doc,_fc->getFrameSet());
   fc.init(dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(_fc->getFrameSet() - 1))->getFirstParag(),p);
   int curr = start;
   KWParag *parag = fc.getParag();
-  
+
   while (parag != _fc->getParag())
     {
       KWString *str = parag->getKWString();
@@ -63,7 +63,7 @@ int KWFootNoteManager::findStart(KWFormatContext *_fc,QPainter &p)
 
       parag = fc.getParag()->getNext();
     }
-  
+
   if (parag)
     {
       KWString *str = parag->getKWString();
@@ -73,10 +73,33 @@ int KWFootNoteManager::findStart(KWFormatContext *_fc,QPainter &p)
 	    curr = dynamic_cast<KWCharFootNote*>(str->data()[i].attrib)->getFootNote()->getEnd() + 1;
 	}
     }
-  
+
   return curr;
 }
 
+/*================================================================*/
+void KWFootNoteManager::insertFootNote(KWFootNote *fn)
+{
+  if (fn->getStart() == 1)
+    {
+      footNotes.insert(0,fn);
+      recalc();
+      return;
+    }
+  
+  int i = 1;
+  KWFootNote *_fn = 0L;
+  for (_fn = footNotes.first();_fn;_fn = footNotes.next(),i++)
+    {
+      if (_fn->getEnd() != -1 && _fn->getEnd() == fn->getStart() - 1 || _fn->getStart() == fn->getStart() - 1)
+	{
+	  footNotes.insert(i,fn);
+	  break;
+	}
+    }
+  
+  recalc();
+}
 
 /******************************************************************/
 /* Class: KWFootNote                                              */
@@ -89,7 +112,7 @@ KWFootNote::KWFootNote(KWordDocument *_doc,QList<KWFootNoteInternal> *_parts)
   doc = _doc;
   parts = *_parts;
   makeText();
-  
+
 
   if (parts.isEmpty())
     warning(i18n("WARNING: Empty footnote/endnote inserted!"));
@@ -104,29 +127,29 @@ KWFootNote::KWFootNote(KWordDocument *_doc,QList<KWFootNoteInternal> *_parts)
 int KWFootNote::setStart(int _start)
 {
   if (parts.isEmpty()) return _start;
-  
+
   int diff = _start - parts.first()->from;
-  
+
   KWFootNoteInternal *fn = 0L;
   for (fn = parts.first();fn;fn = parts.next())
     {
       fn->from += diff;
       if (fn->to != -1) fn->to += diff;
     }
-  
+
   makeText();
 
   start = parts.first()->from;
   end = parts.last()->to == -1 ? parts.last()->from : parts.last()->to;
 
-  return end; 
+  return end;
 }
 
 /*================================================================*/
 void KWFootNote::makeText()
 {
   text = before;
-    
+
   KWFootNoteInternal *fn = 0L;
   for (fn = parts.first();fn;fn = parts.next())
     {
@@ -136,10 +159,10 @@ void KWFootNote::makeText()
 	  text += fn->space;
 	  text += QString().setNum(fn->to);
 	}
-      if (fn != parts.last()) 
+      if (fn != parts.last())
 	text += ", ";
     }
-  
+
   text += after;
 }
 

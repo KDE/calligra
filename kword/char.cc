@@ -722,6 +722,7 @@ void freeChar( KWChar& _char )
       case ID_KWCharImage:
       case ID_KWCharTab:
       case ID_KWCharVariable:
+      case ID_KWCharFootNote:
 	delete _char.attrib;
 	break;
       default:

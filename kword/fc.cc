@@ -558,6 +558,13 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
 		ptPos += displayFont->getPTWidth(v->getText());
 		pos++;
 	      } break;
+	    case ID_KWCharFootNote:
+	      {
+		KWCharFootNote *fn = dynamic_cast<KWCharFootNote*>(text[pos].attrib);
+		apply(*fn->getFormat());
+		ptPos += displayFont->getPTWidth(fn->getText());
+		pos++;
+	      } break;
 	    case ID_KWCharTab:
 	      {
 		unsigned int tabPos = 0;
@@ -742,6 +749,13 @@ int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
 	    v->getVar()->recalc();
 	    apply(*v->getFormat());
 	    ptPos += displayFont->getPTWidth(v->getText());
+	    pos++;
+	  } break;
+	case ID_KWCharFootNote:
+	  {
+	    KWCharFootNote *fn = dynamic_cast<KWCharFootNote*>(text[pos].attrib);
+	    apply(*fn->getFormat());
+	    ptPos += displayFont->getPTWidth(fn->getText());
 	    pos++;
 	  } break;
 	case ID_KWCharTab:
@@ -1020,6 +1034,14 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt()) - indent - _right && _broken)
 	      break;
 	  }
+	else if (c == 0 && text[textPos].attrib->getClassId() == ID_KWCharFootNote)
+	  {
+	    if (displayFont->getPTWidth(dynamic_cast<KWCharFootNote*>(text[textPos].attrib)->getText()) + ptPos >=
+		xShift + (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() -
+			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt() -
+			  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt()) - indent - _right && _broken)
+	      break;
+	  }
 	
 	// Is it a space character
 	if (c == ' ')
@@ -1053,6 +1075,13 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 		  v->getVar()->recalc();
 		  apply(*v->getFormat());
 		  ptPos += displayFont->getPTWidth(v->getText());
+		  textPos++;
+		} break;
+	      case ID_KWCharFootNote:
+		{
+		  KWCharFootNote *fn = dynamic_cast<KWCharFootNote*>(text[textPos].attrib);
+		  apply(*fn->getFormat());
+		  ptPos += displayFont->getPTWidth(fn->getText());
 		  textPos++;
 		} break;
 	      case ID_KWCharTab:

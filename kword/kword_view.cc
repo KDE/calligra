@@ -347,6 +347,13 @@ void KWordView::setFormat(KWFormat &_format,bool _check = true,bool _update_page
 {
   if (_check && _format == format || !m_vToolBarText) return;
 
+  if (gui && gui->getPaperWidget() && gui->getPaperWidget()->getCursor() && gui->getPaperWidget()->getCursor()->getParag()
+      && gui->getPaperWidget()->getCursor()->getParag()->getKWString()->data()[gui->getPaperWidget()->getCursor()->getTextPos() - 1].attrib
+      && gui->getPaperWidget()->getCursor()->getTextPos() > 0
+      && gui->getPaperWidget()->getCursor()->getParag()->
+      getKWString()->data()[gui->getPaperWidget()->getCursor()->getTextPos() - 1].attrib->getClassId() == ID_KWCharFootNote)
+    return;
+  
   format = _format;
 
   if (_format.getUserFont()->getFontName())
@@ -972,38 +979,40 @@ void KWordView::insertFootNoteEndNote()
   p.begin(gui->getPaperWidget());
   int start = m_pKWordDoc->getFootNoteManager().findStart(gui->getPaperWidget()->getCursor(),p);
   p.end();
-							  
+							
   if (start == -1)
     QMessageBox::critical(0L,i18n("Error"),i18n("Currently you can only insert footnotes or\n"
 						"endotes into the first frameset!"),i18n("OK"));
   else
     {
       debug("NUMBER: %d",start);
-     
+
       /**************
-       * 
+       *
        * Dialog for crating the footnote/endnote must be called here!
        *
        **************/
-      
+
       // Remove this later >>>>>>>>>>>>>>
-      
+
       KWFootNote::KWFootNoteInternal *fi = new KWFootNote::KWFootNoteInternal;
       fi->from = start;
       fi->to = -1;
       fi->space = "-";
-      
+
       QList<KWFootNote::KWFootNoteInternal> *lfi = new QList<KWFootNote::KWFootNoteInternal>();
       lfi->setAutoDelete(false);
       lfi->append(fi);
-      
+
       KWFootNote *fn = new KWFootNote(m_pKWordDoc,lfi);
+      fn->setBefore("[");
+      fn->setAfter("]");
       
       // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-      
-      //gui->getPaperWidget()->insertFootNote(fn);
+
+      gui->getPaperWidget()->insertFootNote(fn);
     }
-      
+
   sendFocusEvent();
 }
 
