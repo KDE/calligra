@@ -14,7 +14,7 @@ noinst_HEADERS = main.h
 
 libthesaurustool_la_METASOURCES = main.moc
 
-service_DATA = thesaurustool.desktop thesaurustool_kword.desktop
+service_DATA = thesaurustool.desktop
 servicedir = $(kde_servicesdir)
 
 datadir = $(kde_datadir)/thesaurus
