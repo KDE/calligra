@@ -386,7 +386,7 @@ void KivioOptionsDialog::applyGuides()
 void KivioOptionsDialog::defaultPage()
 {
   m_layout = KoPageLayoutDia::standardLayout();
-  m_unitCombo->setCurrentItem(KoUnit::U_PT);
+  m_unitCombo->setCurrentItem(KoUnit::U_MM);
   setLayoutText(m_layout);
   m_bordersChBox->setChecked(true);
   m_marginsChBox->setChecked(true);

@@ -645,6 +645,7 @@ void KivioDoc::saveConfig()
     config->writeEntry("ShowGrid", grid().isShow );
     config->writeEntry("SnapGrid",grid().isSnap);
     config->writeEntry("GridColor",grid().color);
+    config->writeEntry("Unit", KoUnit::unitName(m_units));
 }
 
 void KivioDoc::initConfig()
@@ -659,6 +660,7 @@ void KivioDoc::initConfig()
         QColor color=QColor(200,200,200);
         d.color =config->readColorEntry( "GridColor", &color );
         setGrid(d);
+        m_units = KoUnit::unit(config->readEntry("Unit", "mm"));
     }
 }
 
