@@ -308,7 +308,15 @@ void BackDia::selectPic()
   radioColor->setChecked(false);
   radioClip->setChecked(false);
 
-  QString file = KFileDialog::getOpenFileName(getenv("HOME"),"*.gif ; *.jpg ; *.jpeg ; *.bmp ; *.xbm ; *.xpm ; *.pnm ; *.GIF ; *.JPG ; *.JPEG ; *.BMP ; *.XBM ; *.XPM ; *.PNM",0);
+  QString file = KFileDialog::getOpenFileName(getenv("HOME"),
+					      "*.gif *GIF|GIF-Pictures\n"
+					      "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+					      "*.bmp *.BMP|Windows Bitmaps\n"
+					      "*.xbm *.XBM|XWindow Pitmaps\n"
+					      "*.xpm *.XPM|Pixmaps\n"
+					      "*.pnm *.PNM|PNM-Pictures\n"
+					      "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures",0);
+
   if (!file.isEmpty()) openPic((const char*)file);
 }
 
@@ -319,7 +327,7 @@ void BackDia::selectClip()
   radioColor->setChecked(false);
   radioPic->setChecked(false);
 
-  QString file = KFileDialog::getOpenFileName(getenv("HOME"),"*.wmf ; *.WMF",0);
+  QString file = KFileDialog::getOpenFileName(getenv("HOME"),"*.wmf *.WMF|Windows Metafiles",0);
   if (!file.isEmpty()) openClip((const char*)file);
 }
 

@@ -355,6 +355,7 @@ protected:
   QString m_strFileURL;
 
   bool _clean;
+  int objStartY,objStartNum;
 
 };
 

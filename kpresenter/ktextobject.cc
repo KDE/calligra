@@ -939,7 +939,7 @@ TxtParagraph::HorzAlign KTextObject::horzAlign(int p = -1)
 }
 
 /*=================== get QPicture of the obj ====================*/
-QPicture* KTextObject::getPic(int _x,int _y,int _w,int _h)
+QPicture* KTextObject::getPic(int _x,int _y,int _w,int _h,bool presMode=false)
 {
   QPainter p;
 
@@ -948,11 +948,25 @@ QPicture* KTextObject::getPic(int _x,int _y,int _w,int _h)
   p.setClipping(true);
   p.setClipRect(_x,_y,_w,_h);
   ystart = 0;
-  for (unsigned i = 0;i < paragraphs();i++)
+  
+  if (paragraphList.count() == 1 && paragraphAt(0)->lines() == 1 && 
+      paragraphAt(0)->lineAt(0)->items() == 1 && !presMode)
     {
-      paintCell(&p,i,0);
-      ystart += cellHeights.at(i)->wh;
+      QFont _font("utopia",20);
+      _font.setBold(true);
+      p.setFont(_font);
+      p.setPen(yellow);
+      p.drawText(0,0,_w,_h,AlignLeft,"Doubleclick to edit");
     }
+  else
+    {
+      for (unsigned i = 0;i < paragraphs();i++)
+	{
+	  paintCell(&p,i,0);
+	  ystart += cellHeights.at(i)->wh;
+	}
+    }
+
   p.end();
   ystart = 0;
   drawPic = false;

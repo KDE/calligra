@@ -155,7 +155,14 @@ void KPresenterView_impl::insertPage()
 void KPresenterView_impl::insertPicture()
 {
   page->deSelectAllObj();
-  QString file = KFileDialog::getOpenFileName(getenv("HOME"),"*.gif ; *.jpg ; *.jpeg ; *.bmp ; *.xbm ; *.xpm ; *.pnm ; *.GIF ; *.JPG ; *.JPEG ; *.BMP ; *.XBM ; *.XPM ; *.PNM",0);
+  QString file = KFileDialog::getOpenFileName(getenv("HOME"),
+					      "*.gif *GIF|GIF-Pictures\n"
+					      "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+					      "*.bmp *.BMP|Windows Bitmaps\n"
+					      "*.xbm *.XBM|XWindow Pitmaps\n"
+					      "*.xpm *.XPM|Pixmaps\n"
+					      "*.pnm *.PNM|PNM-Pictures\n"
+					      "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures",0);
   if (!file.isEmpty()) m_pKPresenterDoc->insertPicture((const char*)file,xOffset,yOffset);
 
 
@@ -170,7 +177,7 @@ void KPresenterView_impl::insertPicture()
 void KPresenterView_impl::insertClipart()
 {
   page->deSelectAllObj();
-  QString file = KFileDialog::getOpenFileName(getenv("HOME"),"*.WMF ; *.wmf",0);
+  QString file = KFileDialog::getOpenFileName(getenv("HOME"),"*.WMF *.wmf|Windows Metafiles",0);
   if (!file.isEmpty()) m_pKPresenterDoc->insertClipart((const char*)file,xOffset,yOffset);
 
 //   QEvent ev(Event_Leave);
@@ -1199,7 +1206,14 @@ void KPresenterView_impl::repaint(unsigned int x,unsigned int y,unsigned int w,
 void KPresenterView_impl::changePicture(unsigned int,const char* filename)
 {
   QFileInfo fileInfo(filename);
-  QString file = KFileDialog::getOpenFileName(fileInfo.dirPath(false),"*.gif ; *.jpg ; *.jpeg ; *.bmp ; *.xbm ; *.xpm ; *.pnm ; *.GIF ; *.JPG ; *.JPEG ; *.BMP ; *.XBM ; *.XPM ; *.PNM",0);
+  QString file = KFileDialog::getOpenFileName(getenv("HOME"),
+					      "*.gif *GIF|GIF-Pictures\n"
+					      "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+					      "*.bmp *.BMP|Windows Bitmaps\n"
+					      "*.xbm *.XBM|XWindow Pitmaps\n"
+					      "*.xpm *.XPM|Pixmaps\n"
+					      "*.pnm *.PNM|PNM-Pictures\n"
+					      "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures",0);
 
   if (!file.isEmpty()) m_pKPresenterDoc->changePicture((const char*)file,xOffset,yOffset);
 }
@@ -1208,7 +1222,7 @@ void KPresenterView_impl::changePicture(unsigned int,const char* filename)
 void KPresenterView_impl::changeClipart(unsigned int,const char* filename)
 {
   QFileInfo fileInfo(filename);
-  QString file = KFileDialog::getOpenFileName(fileInfo.dirPath(false),"*.wmf ; *.WMF",0);
+  QString file = KFileDialog::getOpenFileName(fileInfo.dirPath(false),"*.wmf *.WMF|Windows Metafiles",0);
 
   if (!file.isEmpty()) m_pKPresenterDoc->changeClipart((const char*)file,xOffset,yOffset);
 }
@@ -1341,7 +1355,7 @@ void KPresenterView_impl::setupMenu()
 
       // insert menu
       m_idMenuInsert = m_rMenuBar->insertMenu(CORBA::string_dup(klocale->translate("&Insert")));
-      m_idMenuInsert_Page = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("Pa&ge")),m_idMenuInsert,
+      m_idMenuInsert_Page = m_rMenuBar->insertItem(CORBA::string_dup(klocale->translate("Pa&ge...")),m_idMenuInsert,
 						   this,CORBA::string_dup("insertPage"));
       m_rMenuBar->insertSeparator(m_idMenuInsert);
       tmp = kapp->kde_datadir().copy();

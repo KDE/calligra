@@ -236,7 +236,7 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 	    case OT_TEXT: /* text */
 	      {
  		objPtr->objPic = objPtr->textObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),
-							 objPtr->ow,objPtr->oh);
+							 objPtr->ow,objPtr->oh,!editMode);
  		painter->translate((float)objPtr->ox - (float)diffx(),(float)objPtr->oy - (float)diffy());
  		objPtr->objPic->play(painter);
  		painter->resetXForm();

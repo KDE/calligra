@@ -6,7 +6,7 @@ LDADD = autoformEdit/atfinterpreter.o autoformEdit/afchoose.o \
 	../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
 	-lop -lkfile -lkfm -lkdeui -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
-	-lkom  -ljpeg $(LIBSOCKET) 
+	-lkom  -ljpeg $(LIBSOCKET) -ldl
 
 ####### Files
 
@@ -37,7 +37,7 @@ idl_HEADER =    kpresenter.h
 kdelnk_DATA = kpresenter.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
-SUBDIRS = autoformEdit autoforms pics toolbar 
+SUBDIRS = autoformEdit autoforms pics toolbar templates
 
 ####### Implicit rules
 

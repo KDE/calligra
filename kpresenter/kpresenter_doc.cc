@@ -111,6 +111,8 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   _pageLayout.top = 0;
   _pageLayout.bottom = 0;
   _pageLayout.unit = PG_MM;
+  objStartY = 0;
+  objStartNum = 0;
   setPageLayout(_pageLayout,0,0);
 }
 
@@ -147,6 +149,8 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   _pageLayout.bottom = 0;
   _pageLayout.unit = PG_MM;
   setPageLayout(_pageLayout,0,0);
+  objStartY = 0;
+  objStartNum = 0;
   insertNewTemplate(0,0,true);
 }
 
@@ -932,7 +936,7 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 		  for(;it != lst.end();it++)
 		    {
 		      if ((*it).m_strName == "value")
-			objPtr->objNum = atoi((*it).m_strValue.c_str());
+			objPtr->objNum = atoi((*it).m_strValue.c_str()) + objStartNum;
 		    }
 		}
 
@@ -970,7 +974,7 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 		      if ((*it).m_strName == "x")
 			objPtr->ox = atoi((*it).m_strValue.c_str());
 		      if ((*it).m_strName == "y")
-			objPtr->oy = atoi((*it).m_strValue.c_str());
+			objPtr->oy = atoi((*it).m_strValue.c_str()) + objStartY;
 		      if ((*it).m_strName == "w")
 			objPtr->ow = atoi((*it).m_strValue.c_str());
 		      if ((*it).m_strName == "h")
@@ -1401,6 +1405,7 @@ unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy)
   _pageNums++;
 
   pagePtr = new Background;
+  _pageList.append(pagePtr);
   pagePtr->pageNum = _pageNums;
   pagePtr->backType = BT_COLOR;
   pagePtr->backPicView = BV_CENTER;
@@ -1420,7 +1425,6 @@ unsigned int KPresenterDocument_impl::insertNewPage(int diffx,int diffy)
   pagePtr->timeParts.setAutoDelete(false);
   pagePtr->timeParts.append((int*)10);
   pagePtr->hasSameCPix = false;
-  _pageList.append(pagePtr);
 
   emit restoreBackColor(_pageNums-1);
   repaint(true);
@@ -1433,9 +1437,13 @@ unsigned int KPresenterDocument_impl::insertNewTemplate(int diffx,int diffy,bool
 {
   QString templateDir = KApplication::kde_datadir();
 
-  QString file = KFileDialog::getOpenFileName(templateDir+"/kpresenter/templates/","*.kpt",0);
+  QString file = KFilePreviewDialog::getOpenFileName(templateDir+"/kpresenter/templates/plain.kpt","*.kpt|KPresenter templates",0);
   _clean = clean;
+  objStartY = getPageSize(_pageList.count(),0,0).y() + getPageSize(_pageList.count(),0,0).height();
+  objStartNum = _objList.count();
   if (!file.isEmpty()) open(file);
+  objStartNum = 0;
+  objStartY = 0;
   _clean = true;
 }
 
