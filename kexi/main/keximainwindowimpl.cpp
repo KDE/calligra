@@ -545,22 +545,24 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 
 	QString not_found_msg;
 	//ok, now open "autoopen: objects
-	for (QValueList< QPair<QString,QString> >::Iterator it = projectData->autoopenObjects.begin(); it != projectData->autoopenObjects.end(); ++it ) {
+//	for (QValueList< QPair<QString,QString> >::Iterator it = projectData->autoopenObjects.begin(); it != projectData->autoopenObjects.end(); ++it ) {
+	for (QValueList<KexiProjectData::ObjectInfo>::Iterator it = projectData->autoopenObjects.begin(); it != projectData->autoopenObjects.end(); ++it ) {
 //		openObject(QString("kexi/")+(*it).first,(*it).second);
-		KexiPart::Info *i = Kexi::partManager().info( QString("kexi/")+(*it).first );
+		KexiProjectData::ObjectInfo info = *it;
+		KexiPart::Info *i = Kexi::partManager().info( QString("kexi/")+info["type"] );
 		if (!i) {
-			not_found_msg += ( (*it).second + " - " + i18n("unknown object type \"%1\"").arg((*it).first)+"<br>" );
+			not_found_msg += ( info["name"] + " - " + i18n("unknown object type \"%1\"").arg(info["type"])+"<br>" );
 			continue;
 		}
 
-		KexiPart::Item *item = d->prj->item(i, (*it).second);
+		KexiPart::Item *item = d->prj->item(i, info["name"]);
 
 		if (!item) {
-			not_found_msg += ( (*it).second + " - " + i18n("object not found") +"<br>" );
+			not_found_msg += ( info["name"] + " - " + i18n("object not found") +"<br>" );
 			continue;
 		}
-		if (!openObject(item)) {
-			not_found_msg += ( (*it).second + " - " + i18n("cannot open object").arg((*it).first) +"<br>" );
+		if (!openObject(item, info["action"]=="design" ? Kexi::DesignViewMode : Kexi::DataViewMode)) {
+			not_found_msg += ( info["name"] + " - " + i18n("cannot open object") +"<br>" );
 			continue;
 		}
 	}

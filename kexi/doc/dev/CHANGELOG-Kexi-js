@@ -287,6 +287,12 @@ Detailed TODO for Beta3:
 --ordered set of fields that are visible in popup tableview (ie. just query that is bound with the column)
 -use one and multi-key relations from kexidb
 
+2004-02-09
+- --design command-line option added, especially useful for developers
+
+2004-02-08
+- libkeximain introduced (by splitting libkexicore)
+
 2004-02-04
 Table view:
   -Generic Cell Editor Framework introduced

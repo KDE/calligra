@@ -42,33 +42,16 @@
 static KCmdLineOptions options[] =
 {
   { "open [<object_type>:]<object_name>", I18N_NOOP("Open object of type <object_type>\nand name <object_name> from specified project\non application start.\n<object_type>: is optional, if omitted - table\ntype is assumed.\nOther object types can be query, report, form,\nscript (may be more or less, depending on your\nplugins installed).\nUse \"\" chars to specify names containing spaces.\nExamples: --open MyTable,\n --open query:\"My very big query\""), 0 },
+  { "design [<object_type>:]<object_name>", I18N_NOOP("Like --open, but the object will\nbe opened in Design Mode, if one is available"), 0 },
   { "+[file]", I18N_NOOP("Database project file (or shortcut file) to open"), 0 },
   // INSERT YOUR COMMANDLINE OPTIONS HERE
   KCmdLineLastOption
 };
 
-bool startupActions(KexiProjectData * &projectData)
+void getAutoopenObjects(KexiProjectData * &projectData, 
+	KCmdLineArgs *args, const QCString &action_name)
 {
-	KCmdLineArgs *args = KCmdLineArgs::parsedArgs(0);
-	if (!args || args->count()==0)
-		return true;
-	
-	kdDebug() << "ARGC==" << args->count() << endl;
-	for (int i=0;i<args->count();i++) {
-		kdDebug() << "ARG" <<i<< "= " << args->arg(i) <<endl;
-	}
-	QString fname;
-	fname = args->arg(0);
-	projectData = Kexi::detectProjectData( fname, 0 );
-	if (!projectData)
-		return false;
-	if (args->count()>1) {
-		//TODO: KRun another Kexi instances
-	}
-
-	//---autoopen objects:
-	QString not_found_msg;
-	QCStringList list = args->getOptionList("open");
+	QCStringList list = args->getOptionList(action_name);
 	QCStringList::const_iterator it;
 	for ( it = list.begin(); it!=list.end(); ++it) {
 		QString type_name, obj_name, item=*it;
@@ -93,25 +76,39 @@ bool startupActions(KexiProjectData * &projectData)
 		}
 		if (type_name.isEmpty() || obj_name.isEmpty())
 			continue;
-
+		KexiProjectData::ObjectInfo info;
+		info["name"]=obj_name;
+		info["type"]=type_name;
+		info["action"]=action_name;
 		//ok, now add info for this object
-		projectData->autoopenObjects.append( QPair<QString,QString>(type_name, obj_name) );
-/*
-		//ok, now open this object
-		QString obj_mime = QString("kexi/") + type_name;
-		QString obj_identifier = obj_mime + "/" + obj_name;
-		KexiProjectHandler *hd = handlerForMime(obj_mime);
-		KexiProjectHandlerProxy *pr = hd ? hd->proxy(view) : 0;
-		if (!pr || !pr->executeItem(obj_identifier)) {
-			if (!not_found_msg.isEmpty())
-				not_found_msg += ",<br>";
-			not_found_msg += (pr ? pr->part()->name() : I18N_NOOP("Unknown object")) + " \"" + obj_name + "\"";
-		}
+		projectData->autoopenObjects.append( info );
+//		projectData->autoopenObjects.append( QPair<QString,QString>(type_name, obj_name) );
 	}
-	if (!not_found_msg.isEmpty())
-		KMessageBox::sorry(0, "<p><b>" + I18N_NOOP("Requested objects cannot be opened:") + "</b><p>" + not_found_msg );
-	*/
+}
+
+bool startupActions(KexiProjectData * &projectData)
+{
+	KCmdLineArgs *args = KCmdLineArgs::parsedArgs(0);
+	if (!args || args->count()==0)
+		return true;
+	
+	kdDebug() << "ARGC==" << args->count() << endl;
+	for (int i=0;i<args->count();i++) {
+		kdDebug() << "ARG" <<i<< "= " << args->arg(i) <<endl;
 	}
+	QString fname;
+	fname = args->arg(0);
+	projectData = Kexi::detectProjectData( fname, 0 );
+	if (!projectData)
+		return false;
+	if (args->count()>1) {
+		//TODO: KRun another Kexi instances
+	}
+
+	//---autoopen objects:
+	getAutoopenObjects(projectData, args, "open");
+	getAutoopenObjects(projectData, args, "design");
+
 	return true;
 }
 

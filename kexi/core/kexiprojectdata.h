@@ -38,6 +38,7 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 {
 	public:
 		typedef QPtrList<KexiProjectData> List;
+		typedef QMap<QCString,QString> ObjectInfo;
 		
 		KexiProjectData();
 
@@ -71,7 +72,7 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 		void setDescription(const QString& desc) { m_desc=desc; }
 
 		//! objects to open on startup (come from command line "-open" option)
-		QValueList< QPair<QString,QString> > autoopenObjects;
+		QValueList<ObjectInfo> autoopenObjects;
 
 /*		static const QString &generateTmpName();
 
