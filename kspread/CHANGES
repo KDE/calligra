@@ -1,0 +1,130 @@
+Changes since 1.2
+=================
+Bugfixes:
+- Fix rendering bugs of cell borders (when scrolled up)
+
+
+
+Changes from 1.1 to 1.2
+=======================
+
+Since RC1:
+----------
+Bugfixes:
+- Fix display and printout with special files (offset by 1 pixel).
+- Fix printout of thick cell borders on page borders
+- Fix printout of children, when they overlap one page
+- Fix #45967, #31130
+- Fix #45944 (Normal): Paste special->text overwrite borders
+- Fix #42456 (Normal): merged cells with centered text do not survive insert/delete rows
+- Fix #45943 (Crash): crash after "money format"
+- Fix function documentation (YEAR(), FACTDOUBLE() )
+- Fix parsing and error checking for spreadsheet names.
+- Fix #46045 (Normal): serious errors in forumulas
+- Fix Embedded chart changes titles when opening again
+- Fix #44628 (Grave): 1.1 document not read with 1.2 - circular references
+- Fix #40150 (Normal): Precision problem in calculations
+- Fix #29524:  KSpread Formula editors tooltip should be changed
+- Fix #18083: KSpread rounding error
+- Fix #46530: crash on selecting validity
+- Fix #45395: Save as HTML is called "mime type"
+- Fix #34088: Precision of currency is too low or overflow is handled in a strange way
+- Fix #45324: consolidate function result reference area selecting unintuitive
+
+Until RC1:
+----------
+New:
+- Like all of KOffice: a readonly GUI for embedding into Konqueror
+- More DCOP calls
+
+Bugfixes:
+- bug fixes
+- Fix cancel add embedded document.
+- Fix mem leak
+- Fix copy/paste attribute.
+- Fix offset of rotated text in one case (top/middle)
+
+Until beta2:
+------------
+
+- bug fixes
+- perfomance enhancements
+- print functions:
+    - added option for print grid, comment indicator and formula indicator
+    - added print range definiton
+    - added repeat columns & rows on printout
+    - added "<pages>" macro in header/footer
+- paper layout now a property of sheet (not the whole workbook)
+- header/footer now a property of sheet (not the whole workbook)
+- Settings in paper layout are now undoable
+- Sort enhanced for
+    - sorting by up to three rows or columns
+    - possibility of putting the result of sorting some place else
+    - you can use a custom lists (like days of week) as a primary key
+    - option if you want to copy the layout or not
+    - you can define a row header which gets copied but not sorted
+- auto continuation support for every direction and all types supported in
+  KSpread and for more complex series like 1,3,4,6,...
+- just one "copy" instead of "copy" and "copy as text"
+- insertion of series supports now doubles and decreasing series
+- support for inserting data from SQL databases
+- implemented "Goal Seek"
+- implemented new shortcuts for cell formating 
+- implemented "Insert from text file" and "Insert formated clipboard data"
+- Added "Text to Column"
+- improved Data Consolidate, with more choices: Sum, Average, Count,
+  Min, Max, Product, Standard Deviation, Variance.
+- fixed some functions to be Excel-compatibel (FIND, REPLACE,LEFT,
+  RIGHT,MID,REPT)
+- now it's "Sheet" everywhere, not more "Table"
+- added formula indicator (small blue rectangle on the corner,
+  when the cell holds a formula). idea from Quattro Pro
+- added Greek to EURO() function
+- new function category: Engineering
+- added support with templates
+- added support for changing row/col and table of named areas
+- Multiple views work for spreadsheets (can change tables, select different
+  parts of the sheet independantly in each open view or embedded object)
+- DCOP interface for a table has changed.  Many of the operations have been
+  moved to the 'view' class.  Current DCOP scripts will need to be updated
+- Zoom
+
+new functions added:
+ ISBLANK, CHAR, CODE, VALUE, DOLLAR, CONCATENATE, FIXED, T, TEXT, SUBSTITUTE,
+ SEARCH, INFO, FILENAME, TYPE, COUNTBLANK, N, AVEDEV, ARABIC, AVERAGEA, ROT,
+ FIB, BASE, FACTDOUBLE, SQRTPI, QUOTIENT, MULTINOMIAL, COUNTIF
+
+Until beta1:
+------------
+
+- bug fixes
+- performance enhancements
+- support up to 2^15 columns and rows, formerly it was 676 columns and 10000
+  rows
+
+- add support for spell-check
+- many new built-in functions (see detailed list below)
+- function name is now case-insensitive
+- "Related Function" in formula editor
+- move functions in kspread_interpreter into several kspread_functions_*.cc
+
+New functions added:
+ conversion:
+   INT2BOOL, CharToAscii, AsciiToChar, BOOL2STRING, NUM2STRING,
+   BOOL2INT
+ math:
+   DIV, LCD, PRODUCT, LCM, TOGGLE, TRIM, ABS
+ text:
+   COMPARE, CLEAN, SLEEK, PROPER, REPLACE
+ date/time:
+   DAYS, WEEKS, MONTHS, YEARS
+ financial:
+   DB, SLN, SYD, EURO
+ logical:
+   XOR
+ statistical:
+   CHIDIST, FDIST, TDIST, CONFIDENCE, BETADIST, GAMMADIST, 
+   PHI, GAUSS, MEDIAN, POISSON, GAMMALN, NORMINV, NORMSINV, 
+   WEIBULL, EXPONDIST, NORMDIST, NORMSDIST, FISHER, 
+   FISHERINV, LOGNORMDIST
+  
