@@ -5102,6 +5102,16 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             }            
         }
     
+    // integer and floating-point value
+    if( element.hasAttribute( "table:value-type" ) )
+        if( element.attribute( "table:value-type" ) == "float" )
+        {
+            bool ok = false;
+            double value = element.attribute( "table:value" ).toDouble( &ok ); 
+            if( ok ) setValue( value );
+        }
+    
+    
     // cell comment/annotation
     QDomElement annotationElement = element.namedItem( "office:annotation" ).toElement();
     if ( !annotationElement.isNull() )
