@@ -35,6 +35,8 @@
   <!ENTITY footend SYSTEM "footendnotes.docbook">
   <!ENTITY struct SYSTEM "docstruct.docbook">
   <!ENTITY mmerge SYSTEM "mailmerge.docbook">
+  <!ENTITY insfile SYSTEM "insertfile.docbook">
+  <!ENTITY bookmarks SYSTEM "bookmarks.docbook">
   
   <!ENTITY deleteme SYSTEM "do_not_translate.docbook">
 
@@ -61,7 +63,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-02-04</date>
+<date>2002-06-15</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -422,6 +424,8 @@ If any document variables were changed, &kword; will update their values through
 &comments;
 &footend;
 &parts;
+&insfile;
+&bookmarks;
 &formulas;
 </chapter>
 <!--&guides4; -->

@@ -26,6 +26,17 @@ frames</para>
 </listitem>
 </itemizedlist>
 
+<para>All of these options can be altered using a set of dialog boxs, 
+or the look of your frame can be adjusted by using a previously defined <emphasis>Framestyle</emphasis>.</para>
+<para>A <emphasis>framestyle</emphasis> is a predefined set of frameset formatting options which is given a name.  Once a frame 
+has been assigned to a framestyle, any changes made to the framestyle will be reflected in all framesets which are 
+assigned that framestyle.</para>
+<tip><para>You may be noticing that framestyles function in a way similar to <emphasis>styles</emphasis>.  The main difference, is 
+framestyles control the look of the frame, and styles control the look of paragraphs within the frame.</para></tip>
+
+<sect2 id="frame-dialogs">
+<title>Using the frame settings dialogs</title>
+
 <para>All of these settings can be determined in the <guilabel>Frame
 Properties</guilabel> dialog box.</para>
 
@@ -41,7 +52,7 @@ edit.</para>
 <listitem>
 <para>Select <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Frame/Frameset</guimenuitem></menuchoice>
-from the Menu bar</para>
+from the menubar.</para>
 </listitem>
 
 <listitem>
@@ -59,7 +70,7 @@ tabs labeled <link linkend="format-frame-options">Options</link>,
 <link linkend="format-frame-geometry">Geometry</link> and
 <link linkend="format-frame-background">Background</link>.</para>
 
-<sect2 id="format-frame-options"><title>General Options</title>
+<sect3 id="format-frame-options"><title>General Options</title>
 
 <screenshot>
 <mediaobject>
@@ -134,13 +145,13 @@ will automatically be applied to all frames within the frameset.</para>
 <para>If you place a mark in the checkbox labeled <guilabel>Protect content</guilabel>, &kword;
 will not allow any changes to the text within the frame, or the formatting of the text within the frameset.</para>
 
-<note><para>You can still reshape or even delete the frame, but the content within the frame is locked.  To lock the location 
+<note><para>You can still reshape or even delete the frame, but the content within the frame is locked.  To lock the location
 and size of the frame, see the <link linkend="format-frame-geometry">Geometry</link> tab.</para></note>
 
 <para>To make changes to the text, you need to remove the mark from <guilabel>Protect content</guilabel>.</para>
 
-</sect2>
-<sect2 id="format-frame-tra"><title>Text Flow around frames</title>
+</sect3>
+<sect3 id="format-frame-tra"><title>Text Flow around frames</title>
 <para>To adjust how text flows around overlapping frames, click the tab
 labeled <guilabel>Text Run Around</guilabel>.</para>
 
@@ -205,8 +216,8 @@ frame.</para>
 the size of the runaround gap will create a white border between the
 text in the two text frames. </para>
 
-</sect2>
-<sect2 id="format-frame-connect"><title>Reconnect frames</title>
+</sect3>
+<sect3 id="format-frame-connect"><title>Reconnect frames</title>
 
 <para>You can change which frameset the current frame belongs to by selecting 
 the <guilabel>Connect text frames</guilabel> tab.</para>
@@ -229,8 +240,8 @@ as the only frame in the frameset (for now).</para>
 <tip><para>It is helpful to name your framesets with descriptive names.   Name the frameset with a description of the contents
 so that you can quickly refer to it again later.</para></tip>
 
-</sect2>
-<sect2 id="format-frame-geometry"><title>Frame size and position</title>
+</sect3>
+<sect3 id="format-frame-geometry"><title>Frame size and position</title>
 
 <para>You can adjust the size and position of your frame by
 clicking on the tab labeled <guilabel>Geometry</guilabel>.</para>
@@ -266,8 +277,8 @@ relative to the top left corner of the frame you specified above. not to the siz
 margins <emphasis>With in the frame</emphasis>.  This should not be confused with margins for the page, which are defined in the 
 <link linkend="page-format">page properties dialog box</link>.</para>
 
-</sect2>
-<sect2 id="format-frame-background"><title>Frame Background</title>
+</sect3>
+<sect3 id="format-frame-background"><title>Frame Background</title>
 
 <para>You can adjust the background color of the text frame by selecting the <guilabel>Background</guilabel> tab.</para>
 
@@ -288,5 +299,134 @@ margins <emphasis>With in the frame</emphasis>.  This should not be confused wit
 
 <para>Select <guibutton>OK</guibutton> to accept all of your changes.</para>
 <para>Select <guibutton>Cancel</guibutton> to forget all of your changes.</para>
+</sect3>
+</sect2>
+
+<sect2 id="framestyles">
+<title>Using framesyles</title>
+<sect3 id="framestyles-use">
+<title>Formatting a frame with a framestyle</title>
+<para>To format a frame using a predefined framestyle simply:</para>
+<para>Select the frame(s) by holding down &Ctrl; and clicking within the frame with the &LMB;.</para>
+<para>Select <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Framestyle</guimenuitem></menuchoice>
+from the menubar.  A submenu will appear, listing all the currently defined framestyles.  Select the name of the framestyle
+you want and all selected frames will automatically be formatting using the options of that framestyle.</para>
+</sect3>
+
+<sect3 id="framestyle-edit">
+<title>Editing a framestyle</title>
+<para>To change the options of a framesyle, you will use the framestylist.</para>
+<para>Select <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Framestylist</guimenuitem></menuchoice>
+from the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="framestylist.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>All of the currently defined framestyles are listed in the listbox on the left.  The currently selected framestyle is highlighted, and 
+the name of the currently selected framestyle is listed in the text box labeled <guilabel>Name</guilabel>. (In this example, 
+the currently selected framestyle is <emphasis>Light grey</emphasis>.)</para>
+<para>Select the name of the framestyle you want to change by clicking on the name of the framestyle in the listbox on the left.</para>
+<para>There are three tabs in on the right side of the dialog box:  <guilabel>General</guilabel>, <guilabel>Borders</guilabel> 
+and <guilabel>Background</guilabel></para>
+<para>In the <guilabel>General</guilabel> tab, you can change the name of the liststyle by typing the new name in the text box 
+labeled <guilabel>Name</guilabel>.  You can also see a preview of what your frame will look like in the preview box.</para>
+<para>The <guilabel>Borders</guilabel> tab works the same as the tab of the same name when formatting a paragraph.  For more specific
+information click <link linkend="para-borders">here</link>.</para>
+<para>The <guilabel>Background</guilabel> tab operates identically to the same tab when it is used from the menubar.  Click 
+<link linkend="format-frame-background">here</link> for more specific instructions.</para>
+<para>Once all changes have been made, click <guibutton>OK</guibutton> to save your changes. All of the affected framesets will 
+be changed to reflect the new options.</para>
+</sect3>
+
+<sect3 id="framestyle-add">
+<title>Creating a new framestyle</title>
+<para>To create a new framestyle, select <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Framestylist</guimenuitem></menuchoice>
+from the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="framestylist.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>Select a framestyle from the list at the left which most closely matches your new desired framestyle.
+The selected framestyle will be used as a template for the new framestyle.  Select the framestyle by clicking
+once with the &LMB; in the list on the left.</para>
+<para>Click on the <guibutton>New</guibutton> button.  &kword; will generate a new framstyle, which is a copy
+of the previously selected framestyle.</para>
+<para>Choose a name for your new framestyle, and type it in the text box labeld <guilabel>Name</guilabel>.</para>
+<para>You can now change your frame border and background options.  For details, see 
+<link linkend="framestyle-edit">Editing a framestyle</link>.</para>
+</sect3>
+
+<sect3 id="framestyle-delete">
+<title>Deleting a framestyle</title>
+<para>To delete framestyle, select <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Framestylist</guimenuitem></menuchoice>
+from the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="framestylist.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>Select the framestyle you want to delete from the list at the left.
+Select the framestyle by clicking once with the &LMB; in the list on the left.</para>
+<para>Click on the <guibutton>Delete</guibutton> button.</para>
+<note><para>&kword; will not allow you to delete the <emphasis>Plain</emphasis> framestyle. </para></note>
+</sect3>
+
+<sect3 id="framestyle-reorder">
+<title>Changing the order of the framestyles in the list</title>
+<para>To change the order that the framestyles are listed, select <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Framestylist</guimenuitem></menuchoice>
+from the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="framestylist.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>The order  the framestyles are listed in the menu is determined by the order of the framestyles in the list on the left.</para>
+<para>Select the framestyle you want to move from the list at the left by clicking once with the &LMB;.</para>
+<para>Now click on the up and down arrows located at the bottom of the list of framestyles.  This will move the
+selected framestyle up or down in the list of framestyles.</para>
+<para>When you are satisfied witth the order of the list, select <guibutton>OK</guibutton>.</para>
+</sect3>
+
+<sect3 id="framestyle-import">
+<title>Importing a framestyle from another &kword; file</title>
+<para>To import a framestyle from another &kword; file, select <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Framestylist</guimenuitem></menuchoice>
+from the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="framestylist.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>Click the button labeled <guibutton>Import From File</guibutton>.  A dialog box will appear allowing you to 
+select the &kword; file using the <link linkend="file-dialog">file selection dialog</link>.  Choose your file, and select 
+<guibutton>OK</guibutton>.</para>
+<para>A new dialog box will appear listing all available framestyles for importing.</para>
+<tip><para>If &kword; encounters a duplicate framestyle name in the selected file, it will append a number to the end of the 
+framestyle name to identify the imported style.</para>
+<para>As an example, if you import the <emphasis>Plain</emphasis> framestyle from another &kword; file, &kword; will change
+the name to <emphasis>Plain- 1</emphasis>.</para></tip>
+<para>Select <emphasis>all</emphasis> the framestyles you want to import.  Then click
+<guibutton>OK</guibutton>.</para>
+<para>The framestyles will now appear at the bottom of your list of framestyles.  Click <guibutton>OK</guibutton> 
+to save the framestyles in the new document.</para>
+</sect3>
 </sect2>
 </sect1>

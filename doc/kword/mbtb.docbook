@@ -1010,6 +1010,32 @@ For more information refer to the section entitled
 </varlistentry>
 
 <varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>File...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to insert another &kword; file within the document.</action>
+For more information refer to the section entitled
+<link linkend="insert-file">Inserting Files</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Bookmark</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to add comments to selected text.</action>
+For more information refer to the section entitled
+<link linkend="bookmarks">Document Bookmarks</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term id="menu-create-text-frame">
 <menuchoice>
 <shortcut>
@@ -1226,6 +1252,18 @@ using the menubar. </para>
 </varlistentry>
 
 <varlistentry>
+<term id="menu-import-style">
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Import Style</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to import a style.</action> For more information go to <link
+linkend="styles">Styles</link></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <menuchoice>
 <guimenu>Format</guimenu><guimenuitem>Create Style From Selection</guimenuitem>
@@ -1355,6 +1393,35 @@ using the menubar. </para>
 </varlistentry>
 
 <varlistentry>
+<term id="menu-framestylist">
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>R</keycap></keycombo>
+</shortcut>
+<guimenu>Frames</guimenu><guimenuitem>Framestylist</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to edit the frame styles.</action> For more information see the section entitled
+Framestylist.</para>
+<para>Typing <keycombo action="simul">&Alt;&Ctrl;<keycap>R</keycap></keycombo> is equivalent to
+using the menubar. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-framestyle">
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Framestyle</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to format the selected frame(s) with a pre-defined Framestyle.</action> For more information see the section entitled
+Framestyle.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Text Background Color</guimenuitem>
@@ -1368,7 +1435,7 @@ using the menubar. </para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Configure Frame Border</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Configure Frame Borders</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1391,6 +1458,18 @@ appear with all available border styles.  Select the correct style and the borde
 <variablelist>
 
 <varlistentry>
+<term id="menu-table-properties">
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Properties</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to change the number of rows and columns in a table.</action> For more
+on tables, <link linkend="tables">click here</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term id="menu-insert-row">
 <menuchoice>
 <guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Insert Row</guimenuitem>
@@ -1408,7 +1487,7 @@ equivalent to using the menubar.</para>
 <varlistentry>
 <term id="menu-delete-row">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Delete Row</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Delete Selected Row</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1439,7 +1518,7 @@ equivalent to using the menubar.</para>
 <varlistentry>
 <term id="menu-delete-column">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Delete Column</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Delete Selected Column</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1466,7 +1545,7 @@ is equivalent to using the menubar.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Cells</guimenuitem><guimenuitem>Join Cells</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem><guimenuitem>Join Cells</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1479,7 +1558,7 @@ here</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Cells</guimenuitem><guimenuitem>Split Cells</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem><guimenuitem>Split Cells</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1492,7 +1571,7 @@ here</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Cells</guimenuitem><guimenuitem>Protect Cells</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem><guimenuitem>Protect Cells</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1525,6 +1604,30 @@ find more about tables in the section entitled <link linkend="tables">Tables</li
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Tablestylist</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Lets you edit tablestyles.</action>  You can
+find more about tables in the section entitled <link linkend="tables">Tables</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Tablestyle</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Lets you format the currently selected table using a preformatted template.</action>  You can
+find more about tables in the section entitled <link linkend="tables">Tables</link>.</para>
+</listitem>
+</varlistentry>
+
 </variablelist>
 </sect2>
 
@@ -1534,13 +1637,24 @@ find more about tables in the section entitled <link linkend="tables">Tables</li
 <variablelist>
 
 <varlistentry>
-<term id="menu-spell">
+<term id="menu-auto-spell">
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Spelling</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Autospellcheck</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>Will <link linkend="spell-check"><action>check the spelling of</action></link> the document.</para> 
+<para>Will toggle <link linkend="auto-spell-check">automatic spellchecking</link> of the document on and off.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-spell">
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Will <link linkend="spell-check"><action>check the spelling of</action></link> the document.</para>
 <para>Clicking <inlinemediaobject><imageobject><imagedata
 fileref="spell.png" format="PNG"/></imageobject></inlinemediaobject> is
 equivalent to using the menubar. </para>
@@ -1592,7 +1706,7 @@ here</link>.</para>
 </term>
 <listitem>
 <para><action>Allows you to modify the autocompletion options.</action>
-For more see the section on<link linkend="autocomplete">Autocompletion</link>.</para>
+For more see the section on <link linkend="autocomplete">Autocompletion</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1625,13 +1739,38 @@ Changing Font Case</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Edit personal expressions</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Personal Expressions</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>This is for adding and editing expressions. </action> 
+<para><action>This is for adding and editing expressions. </action>
 For information on using and adding expressions
 refer to the section entitled <link linkend="expressions">Expressions</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Custom Variables</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This is for editing custom document variables. </action>
+For information on using and adding expressions
+refer to the section entitled <link linkend="variables">Document variables</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Select Bookmark...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Jump to, rename or delete bookmarks.  For more information see the section entitled 
+<link linkend="bookmarks">Document Bookmarks</link>.</para>
 </listitem>
 </varlistentry>
 
