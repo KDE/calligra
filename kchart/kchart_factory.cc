@@ -28,6 +28,7 @@ KInstance* KChartFactory::s_global = 0;
 KChartFactory::KChartFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
+    global();
 }
 
 KChartFactory::~KChartFactory()

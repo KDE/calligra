@@ -39,6 +39,7 @@ KInstance *GraphiteFactory::s_global=0;
 
 GraphiteFactory::GraphiteFactory(QObject *parent, const char *name)
                                 : KoFactory(parent, name) {
+    global();
 }
 
 GraphiteFactory::~GraphiteFactory() {

@@ -64,6 +64,7 @@ KInstance* KPresenterFactory::s_global = 0;
 KPresenterFactory::KPresenterFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
+    global();
 }
 
 KPresenterFactory::~KPresenterFactory()

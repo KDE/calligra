@@ -23,6 +23,7 @@ KInstance* KIllustratorFactory::s_global = 0;
 KIllustratorFactory::KIllustratorFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
+    global();
 }
 
 KIllustratorFactory::~KIllustratorFactory()

@@ -22,6 +22,7 @@ KInstance* ExampleFactory::s_global = 0;
 ExampleFactory::ExampleFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
+    global();
 }
 
 ExampleFactory::~ExampleFactory()
@@ -71,7 +72,6 @@ KInstance* ExampleFactory::global()
 	// Tell the iconloader about share/apps/koffice/icons
 	s_global->iconLoader()->addAppDir("koffice");
     }
-
     return s_global;
 }
 
