@@ -35,7 +35,7 @@ public:
 	: KIconCanvas( parent, name ) {};
 
     bool isCurrentValid() { return currentItem(); }
-    void loadDir( const QString &dirname, const QString &filter );
+    void loadDir( const QString &dirname );
 
 protected:
     void viewportMousePressEvent( QMouseEvent *e ) {
@@ -51,6 +51,10 @@ protected:
 
 signals:
     void currentChanged( const QString & );
+private slots:
+    void slotLoadDir();
+private:
+    QString m_dirname;
 };
 
 
@@ -103,7 +107,7 @@ public:
      * @return The return type (see above)
      */
     KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
-			const char *format=0L, 
+			const char *format=0L,
 			const QString &nativePattern=QString::null,
 			const QString &nativeName=QString::null,
 			const DialogType &dialogType=Everything,

@@ -31,6 +31,8 @@
 #include <qtabwidget.h>
 #include <qradiobutton.h>
 
+#include <kapp.h>
+#include <kdesktopfile.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <kurl.h>
@@ -221,8 +223,9 @@ void KoTemplateChooseDia::setupTabs()
 	for ( d->m_grpPtr = d->m_groupList.first();d->m_grpPtr != 0;d->m_grpPtr = d->m_groupList.next() ) {
 	    d->m_grpPtr->m_tab = new QVBox( d->m_tabs );
 	    d->m_grpPtr->m_loadWid = new MyIconCanvas( d->m_grpPtr->m_tab );
-	    d->m_grpPtr->m_loadWid->loadDir( d->m_grpPtr->m_dir.absFilePath(), "*.png" );
+	    d->m_grpPtr->m_loadWid->loadDir( d->m_grpPtr->m_dir.absFilePath() );
 	    d->m_grpPtr->m_loadWid->setBackgroundColor( colorGroup().base() );
+	    d->m_grpPtr->m_loadWid->setWordWrapIconText( true ); // DF
 	    d->m_grpPtr->m_loadWid->show();
 	    connect( d->m_grpPtr->m_loadWid, SIGNAL( doubleClicked( QIconViewItem * ) ),
 		     this, SLOT( chosen() ) );
@@ -286,8 +289,8 @@ void KoTemplateChooseDia::chosen()
 		for ( d->m_grpPtr = d->m_groupList.first();d->m_grpPtr != 0;d->m_grpPtr = d->m_groupList.next() ) {
 		    if ( d->m_grpPtr->m_tab->isVisible() && !d->m_grpPtr->m_loadWid->getCurrent().isEmpty() ) {
 			QFileInfo f(d->m_grpPtr->m_loadWid->getCurrent());
-			emit templateChosen( QString( d->m_grpPtr->m_name + "/" + f.fileName() ) );
 			d->m_templateName = QString( d->m_grpPtr->m_name + "/" + f.fileName() );
+			emit templateChosen( d->m_templateName );
 			d->m_fullTemplateName = d->m_grpPtr->m_loadWid->getCurrent();	
 			accept();
 		    }
@@ -402,20 +405,102 @@ void KoTemplateChooseDia::chooseFile()
 }
 
 void KoTemplateChooseDia::tabsChanged( const QString & ) {
-    if ( !d->m_firstTime ) openTemplate(); d->m_firstTime = false;
+    if ( !d->m_firstTime ) openTemplate();
+    d->m_firstTime = false;
 }
 
-void MyIconCanvas::loadDir( const QString &dirname, const QString &filter )
+void MyIconCanvas::loadDir( const QString &dirname )
 {
+    m_dirname = dirname;
+    QTimer::singleShot( 0, this, SLOT(slotLoadDir()) );
+}
+
+void MyIconCanvas::slotLoadDir()
+{
+    QString dirname = m_dirname;
+    setResizeMode(Fixed);
+    QApplication::setOverrideCursor(waitCursor);
     QDir d( dirname );
-    if( !filter.isEmpty() )
-	d.setNameFilter(filter);
 
     if( d.exists() ) {
 	QStringList files=d.entryList( QDir::Files | QDir::Readable, QDir::Name );
 	for(unsigned int i=0; i<files.count(); ++i)
-	    files[i]=dirname + QChar('/') + files[i];		
-	loadFiles(files);
+        {
+            emit progress(i);
+            kapp->processEvents();
+
+	    QString filePath = dirname + QChar('/') + files[i];		
+            //kdDebug() << filePath << endl;
+            QString icon;
+            QString text;
+            QString templatePath;
+            // If a desktop file, then read the name from it.
+            // Otherwise (or if no name in it?) use file name
+            if ( KDesktopFile::isDesktopFile( filePath ) ) {
+                KSimpleConfig config( filePath, true );
+                config.setDesktopGroup();
+                if ( config.readEntry( "Type" ) == "Link" )
+                {
+                    text = config.readEntry("Name");
+                    icon = config.readEntry("Icon");
+                    if ( icon[0] != '/' ) // allow absolute paths for icons
+                        icon = dirname + '/' + icon;
+                    templatePath = config.readEntry("URL");
+                    kdDebug() << "Link to : " << templatePath << endl;
+                    if ( templatePath[0] != '/' )
+                    {
+                        if ( templatePath.left(6) == "file:/" ) // I doubt this will happen
+                            templatePath = templatePath.right( templatePath.length() - 6 );
+                        else
+                            //kdDebug() << "dirname=" << dirname << endl;
+                            templatePath = dirname + '/' + templatePath;
+                    }
+                } else
+                    continue; // Invalid
+            }
+            else if ( files[i].right(4) != ".png" )
+                // Ignore everything that is not a PNG file
+                continue;
+            else {
+                // Found a PNG file - the template must be here in the same dir.
+                icon = filePath;
+                QFileInfo fi(filePath);
+                text = fi.baseName();
+                templatePath = filePath; // Note that we store the .png file as the template !
+                // That's the way it's always been done. Then the app replaces the extension...
+            }
+
+            // We've got our info, now create the item
+            // This code is shamelessly borrowed from KIconCanvas::slotLoadFiles
+            QImage img;
+            kdDebug() << "Icon=" << icon << endl;
+            img.load(icon);
+            if (img.isNull())
+                continue;
+            if (img.width() > 60 || img.height() > 60)
+            {
+                if (img.width() > img.height())
+                {
+                    int height = (int) ((60.0 / img.width()) * img.height());
+                    img = img.smoothScale(60, height);
+                } else
+                {
+                    int width = (int) ((60.0 / img.height()) * img.width());
+                    img = img.smoothScale(width, 60);
+                }
+            }
+            QPixmap pm;
+            pm.convertFromImage(img);
+
+            QIconViewItem *item = new QIconViewItem(this, text, pm);
+            item->setKey(templatePath);
+            item->setDragEnabled(false);
+            item->setDropEnabled(false);
+
+        }
     }
+    QApplication::restoreOverrideCursor();
+    setResizeMode(Adjust);
 }
+
 #include "koTemplateChooseDia.moc"
