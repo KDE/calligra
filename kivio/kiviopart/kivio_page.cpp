@@ -1115,7 +1115,7 @@ void KivioPage::alignStencils(AlignData d)
         return;
 
     if (d.centerOfPage) {
-        KMacroCommand *macro = new KMacroCommand(i18n("Center Stencil"));
+        KMacroCommand *macro = new KMacroCommand(i18n("Move Stencil"));
         float w = m_pPageLayout.ptWidth;
         float h = m_pPageLayout.ptHeight;
 
@@ -1123,7 +1123,7 @@ void KivioPage::alignStencils(AlignData d)
         {
             KivioRect oldRect = pStencil->rect();
             pStencil->setPosition((w-pStencil->w())/2,(h-pStencil->h())/2);
-            KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Align Stencil"),
+            KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"),
               pStencil, oldRect, pStencil->rect(), this);
             macro->addCommand(cmd);
             pStencil = m_lstSelection.next();
@@ -1134,7 +1134,7 @@ void KivioPage::alignStencils(AlignData d)
     }
 
     if (d.v != AlignData::None || d.h != AlignData::None) {
-        KMacroCommand *macro = new KMacroCommand(i18n("Align Stencil"));
+        KMacroCommand *macro = new KMacroCommand(i18n("Move Stencil"));
         float x = pStencil->x();
         float y = pStencil->y();
         float w = pStencil->w();
@@ -1171,7 +1171,7 @@ void KivioPage::alignStencils(AlignData d)
                   break;
             }
 
-            KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Align Stencil"),
+            KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"),
               pStencil, oldRect, pStencil->rect(), this);
             macro->addCommand(cmd);
             pStencil = m_lstSelection.next();
@@ -1411,12 +1411,12 @@ void KivioPage::distributeStencils(DistributeData d)
   }
 
   if(d.v != DistributeData::None || d.h != DistributeData::None) {
-    KMacroCommand *macro = new KMacroCommand(i18n("Distribute Stencil"));
+    KMacroCommand *macro = new KMacroCommand(i18n("Move Stencil"));
     QValueListIterator<KivioRect> it;
     pStencil = m_lstSelection.first();
 
     for(it = oldRects.begin(); it != oldRects.end(); ++it) {
-      KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand(i18n("Distribute Stencil"),
+      KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand(i18n("Move Stencil"),
         pStencil, (*it), pStencil->rect(), this);
       macro->addCommand( cmd);
       pStencil = m_lstSelection.next();
