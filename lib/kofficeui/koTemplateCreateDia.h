@@ -71,22 +71,4 @@ private:
     KoTemplateCreateDiaPrivate *d;
 };
 
-
-class KoNewGroupDia : public KDialogBase {
-
-    Q_OBJECT
-public:
-    KoNewGroupDia(QWidget *parent);
-    ~KoNewGroupDia() {}
-
-    // If the name is empty, Cancel was pressed :)
-    static QString newGroupName(QWidget *parent);
-    QString name() const;
-
-private slots:
-    void slotTextChanged(const QString &name);
-
-private:
-    KLineEdit *m_name;
-};
 #endif

@@ -33,6 +33,7 @@
 #include <klocale.h>
 #include <koTemplates.h>
 #include <kfiledialog.h>
+#include <klineeditdlg.h>
 #include <kmessagebox.h>
 #include <kimageio.h>
 #include <kstandarddirs.h>
@@ -116,10 +117,10 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     d->m_groups->sort();
 
     QHBoxLayout *bbox=new QHBoxLayout(leftbox);
-    d->m_add=new QPushButton(i18n("Add Group..."), mainwidget);
+    d->m_add=new QPushButton(i18n("&Add Group..."), mainwidget);
     connect(d->m_add, SIGNAL(clicked()), this, SLOT(slotAddGroup()));
     bbox->addWidget(d->m_add);
-    d->m_remove=new QPushButton(i18n("Remove"), mainwidget);
+    d->m_remove=new QPushButton(i18n("&Remove..."), mainwidget);
     connect(d->m_remove, SIGNAL(clicked()), this, SLOT(slotRemove()));
     bbox->addWidget(d->m_remove);
 
@@ -130,7 +131,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
                                            KDialogBase::spacingHint());
     pixlayout->addSpacing(pixbox->fontMetrics().height()/2);
     pixlayout->addStretch(1);
-    d->m_default=new QRadioButton(i18n("Default"), pixbox);
+    d->m_default=new QRadioButton(i18n("&Default"), pixbox);
     d->m_default->setChecked(true);
     connect(d->m_default, SIGNAL(clicked()), this, SLOT(slotDefault()));
     pixlayout->addWidget(d->m_default);
@@ -139,7 +140,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     d->m_custom->setChecked(false);
     connect(d->m_custom, SIGNAL(clicked()), this, SLOT(slotCustom()));
     custombox->addWidget(d->m_custom);
-    d->m_select=new QPushButton(i18n("Select..."), pixbox);
+    d->m_select=new QPushButton(i18n("&Select..."), pixbox);
     connect(d->m_select, SIGNAL(clicked()), this, SLOT(slotSelect()));
     custombox->addWidget(d->m_select, 1);
     custombox->addStretch(1);
@@ -343,9 +344,9 @@ void KoTemplateCreateDia::slotNameChanged(const QString &name) {
 }
 
 void KoTemplateCreateDia::slotAddGroup() {
-
-    QString name=KoNewGroupDia::newGroupName(this);
-    if(name.isEmpty())
+    bool ok=false;
+    QString name=KLineEditDlg::getText( i18n("Add Group"),i18n("Enter group name:"),QString::null, &ok, this );
+    if(!ok)
         return;
     KoTemplateGroup *group=d->m_tree->find(name);
     if(group && !group->isHidden())
@@ -438,50 +439,6 @@ void KoTemplateCreateDia::fillGroupTree() {
             (void)new QListViewItem(groupItem, t->name());
         }
     }
-}
-
-
-KoNewGroupDia::KoNewGroupDia(QWidget *parent) :
-    KDialogBase(parent, "KoNewGroupDia", true, i18n("Enter Name"),
-                KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok) {
-
-    QFrame *mainwidget=makeMainWidget();
-    QGridLayout *grid=new QGridLayout(mainwidget, 4, 2, KDialogBase::marginHint(),
-                                      KDialogBase::spacingHint());
-    QLabel *label=new QLabel(i18n("Please enter the name of the new group."), mainwidget);
-    grid->addMultiCellWidget(label, 1, 1, 0, 1);
-    label=new QLabel(i18n("Name:"), mainwidget);
-    grid->addWidget(label, 2, 0);
-    m_name=new KLineEdit(mainwidget);
-    m_name->setFocus();
-    connect(m_name, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTextChanged(const QString&)));
-    grid->addWidget(m_name, 2, 1);
-    grid->setRowStretch(0, 1);
-    grid->setRowStretch(3, 1);
-    enableButtonOK(false);
-}
-
-QString KoNewGroupDia::newGroupName(QWidget *parent) {
-
-    KoNewGroupDia *dia=new KoNewGroupDia(parent);
-    QString name;
-    if(dia->exec()==QDialog::Accepted)
-        name=dia->name();
-    delete dia;
-    return name;
-}
-
-QString KoNewGroupDia::name() const {
-    return m_name->text();
-}
-
-void KoNewGroupDia::slotTextChanged(const QString &name) {
-
-    if(name.isEmpty())
-        enableButtonOK(false);
-    else
-        enableButtonOK(true);
 }
 
 #include <koTemplateCreateDia.moc>
