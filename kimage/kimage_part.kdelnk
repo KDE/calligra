@@ -1,7 +1,7 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KImage
-Exec=img --server
+Exec=kimage.bin --server
 Comment=Torben's Image Viewer
 MimeTypes=application/x-kimage,image/gif,
 RepoID=IDL:KImage/Factory:1.0,

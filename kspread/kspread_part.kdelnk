@@ -1,7 +1,7 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KSpread
-Exec=kspread --server
+Exec=kspread.bin --server
 Comment=Torben's Spread Sheet
 MimeTypes=application/x-kspread,
 RepoID=IDL:KSpread/Factory:1.0,
