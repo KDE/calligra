@@ -6,7 +6,7 @@ INCLUDES= $(KOML_INCLUDES) $(KSTORE_INCLUDES) $(all_includes)
 # apps doesn't use it ! So we have to keep it - even when we make it empty.
 libkofficecore_la_LIBADD  = \
         $(top_builddir)/lib/koml/libkoml.la \
-	$(top_builddir)/lib/store/libkstore.la $(LIB_KPARTS)
+	$(top_builddir)/lib/store/libkstore.la $(LIB_KPARTS) -lkdeprint
 
 ####### Files
 

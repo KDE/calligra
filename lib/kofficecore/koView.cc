@@ -420,12 +420,12 @@ void KoView::setupGlobalActions() {
         actionCollection(), "view_newview" );
 }
 
-void KoView::setupPrinter( QPrinter & )
+void KoView::setupPrinter( KPrinter & )
 {
     kdDebug() << "KoView::setupPrinter not implemented by the application!" << endl;
 }
 
-void KoView::print( QPrinter & )
+void KoView::print( KPrinter & )
 {
     kdDebug() << "KoView::print not implemented by the application!" << endl;
 }

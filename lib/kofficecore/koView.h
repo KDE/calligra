@@ -22,6 +22,7 @@
 #include <qwidget.h>
 #include <qguardedptr.h>
 
+#include <kprinter.h>
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
 
@@ -245,8 +246,8 @@ public:
    */
   virtual DCOPObject * dcopObject();
 
-  virtual void setupPrinter( QPrinter &printer );
-  virtual void print( QPrinter &printer );
+  virtual void setupPrinter( KPrinter &printer );
+  virtual void print( KPrinter &printer );
 
   /**
    * @return the KoMainWindow in which this view is currently.
