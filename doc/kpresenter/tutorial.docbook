@@ -1,5 +1,6 @@
 <!-- <?xml version="1.0" ?>
-<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant
+ V1.0//EN" "dtd/kdex.dtd">
           
 To edit or validate this document separately, uncomment this prolog
 Be sure to comment it out again when you are done -->
@@ -142,7 +143,7 @@ page</phrase></textobject>
 <para>
 The new slide now appears in the editing window. To change between pages
 of your presentation, you can select slides in the pane to the left
-(highlighted in red for this screenshot).
+(highlighted in blue for this screenshot).
 </para>
 
 <screenshot>
