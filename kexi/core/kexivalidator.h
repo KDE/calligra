@@ -72,7 +72,7 @@ class KEXICORE_EXPORT KexiValidator : public QValidator
 		}
 
 		static const QString msgYouCanImproveData() {
-			return i18n("You can improve data in this row or use \"Cancel row changes\" function.");
+			return i18n("You can correct data in this row or use \"Cancel row changes\" function.");
 		}
 
 

@@ -2227,7 +2227,9 @@ tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& mes
 				dlg->part()->info()->projectPartID(),
 				d->nameDialog->widget()->nameText(), tmp_sdata );
 		if (found) {
-			KMessageBox::information(this, i18n("%1 \"%2\" already exists.\nPlease choose other name.")
+			KMessageBox::information(this, i18n("%1 is the type of the object (eg 'report', 'table', 'query') and %2 is its name"
+			 " For example: Table \"my_table\" allready exists" , 
+				"%1 \"%2\" already exists.\nPlease choose other name.")
 				.arg(dlg->part()->instanceName()).arg(d->nameDialog->widget()->nameText()));
 			continue;
 		}
@@ -2277,7 +2279,7 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 	if (dlg->dirty() && !d->forceDialogClosing) {
 		//dialog's data is dirty:
 		const int quertionRes = KMessageBox::questionYesNoCancel( this,
-			i18n( "<p>The object has been modified: %1 \"%2\".</p><p>Do you want to save it?</p>" )
+			i18n("%1 is the type of the object (eg 'Report', 'Table', 'query') and %2 is its name",  "<p>%1 \"%2\" has been modified.</p><p>Do you want to save it?</p>" )
 			.arg(dlg->part()->instanceName()).arg(dlg->partItem()->name()),
 			QString::null,
 			KStdGuiItem::save(),

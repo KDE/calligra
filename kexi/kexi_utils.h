@@ -39,7 +39,7 @@ inline void KEXI_UNFINISHED(QString feature_name) {
 	else 
 			msg = i18n("\"%1\" function is not available").arg(feature_name.replace("&","")); 
 
-	KMessageBox::sorry(0, i18n("%1 for version %2 of %3 application.").arg(msg)
+	KMessageBox::sorry(0, i18n("%1 is one of the sentence above ie This function is not available"," %1 for version %2 of %3 application.").arg(msg)
 		.arg(KEXI_VERSION_STRING).arg(KEXI_APP_NAME) );
 }
 
