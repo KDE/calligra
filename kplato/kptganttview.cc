@@ -67,15 +67,10 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
 	m_currentItem(0),
     m_taskView(0),
     m_showSlack(true),
-    m_firstTime(true),
-    m_linkParentItem(0),
-    m_linkMode(false)
+    m_firstTime(true)
 {
 
     setOrientation(QSplitter::Vertical);
-
-    m_linkCursor = QCursor(CrossCursor);
-    m_selectColor = QColor(255, 221, 118);
     
     m_gantt = new KDGanttView(this, "Gantt view");
     m_gantt->setLinkItemsEnabled(true);
@@ -712,15 +707,6 @@ void KPTGanttView::slotItemRenamed(KDGanttViewItem* item, int col, const QString
     if (col == 0) {
         m_mainview->renameNode(getNode(item), QString(str));
     }
-}
-
-void KPTGanttView::setLinkMode(bool state) {
-    m_linkMode = state; 
-    m_linkParentItem = 0;
-    if (state)
-        m_gantt->setCursor(m_linkCursor);
-    else
-        m_gantt->unsetCursor();
 }
 
  void KPTGanttView::slotGvItemClicked(KDGanttViewItem *) {

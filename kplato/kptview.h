@@ -110,7 +110,6 @@ protected slots:
 	void slotUnindentTask();
 	void slotMoveTaskUp();
 	void slotMoveTaskDown();
-    void slotLinkMode();
 
     void slotConnectNode();
 	void slotChanged(QWidget *);
@@ -154,8 +153,6 @@ private:
     KAction *actionUnindentTask;
     KAction *actionMoveTaskUp;
     KAction *actionMoveTaskDown;
-    
-    KToggleAction *actionLinkMode;
     
     // ------ View
     KAction *actionViewGantt;

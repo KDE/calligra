@@ -67,8 +67,6 @@
         <Action name="unindent_task"/>
         <Action name="move_task_up"/>
         <Action name="move_task_down"/>
-        <Separator/>
-        <Action name="link_mode"/>
     </ToolBar>
     <ToolBar name="report" position="top"><Text>Report</Text>
         <Action name="go_firstpage"/>

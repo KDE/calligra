@@ -72,8 +72,6 @@ class KPTGanttView : public QSplitter
     void print(KPrinter &printer);
 
     void addTaskLink(KDGanttViewTaskLink *link);
-    void setLinkMode(bool mode);
-    bool linkMode() const { return m_linkMode; }
     
     bool exportGantt(QIODevice* device); // testing
     
@@ -150,12 +148,6 @@ private:
     bool m_showSlack;
     bool m_firstTime;
     QPtrList<KDGanttViewTaskLink> m_taskLinks;
-    KDGanttViewItem *m_linkParentItem;
-    bool m_linkMode;
-    QCursor m_linkCursor;
-    QColor m_parentColorStart, m_parentColorMiddle, m_parentColorEnd;
-    QColor m_itemColorStart, m_itemColorMiddle, m_itemColorEnd;
-    QColor m_selectColor;
 };
 
 }  //KPlato namespace

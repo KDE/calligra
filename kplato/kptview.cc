@@ -138,9 +138,6 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     actionMoveTaskDown = new KAction(i18n("Move Down"), "move_task_down", 0, this,
         SLOT(slotMoveTaskDown()), actionCollection(), "move_task_down");
 
-    actionLinkMode = new KToggleAction(i18n("Link Mode"), "link_mode", 0, this,
-        SLOT(slotLinkMode()), actionCollection(), "link_mode");
-
     // ------ View
     actionViewGantt = new KAction(i18n("Gantt"), "gantt_chart", 0, this, SLOT(slotViewGantt()), actionCollection(), "view_gantt");
     actionViewPert = new KAction(i18n("PERT"), "pert_chart", 0, this, SLOT(slotViewPert()), actionCollection(), "view_pert");
@@ -592,12 +589,6 @@ void KPTView::slotMoveTaskDown()
         KPTNodeMoveDownCmd *cmd = new KPTNodeMoveDownCmd(getPart(), *task, i18n("Move Task Down"));
         getPart()->addCommand(cmd);
     }
-}
-
-void KPTView::slotLinkMode()
-{
-    kdDebug()<<k_funcinfo<<endl;
-    m_ganttview->setLinkMode(actionLinkMode->isChecked());
 }
 
 void KPTView::slotAddRelation(KPTNode *par, KPTNode *child) {
