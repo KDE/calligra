@@ -161,7 +161,7 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
       d->m_leCompany->setText( name );
   }
 
-  (void) new QLabel( i18n( "EMail :" ), grid );
+  (void) new QLabel( i18n( "Email :" ), grid );
   d->m_leEmail = new QLineEdit( authorInfo->email(), grid );
 
   if ( authorInfo->email().isEmpty() )
