@@ -26,5 +26,3 @@ service_DATA = kword_ascii_import.desktop kword_ascii_export.desktop
 
 servicedir = $(kde_servicesdir)
 
-messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/kwordasciifilter.pot

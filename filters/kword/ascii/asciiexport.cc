@@ -1,4 +1,4 @@
-// $Header$
+// 
 
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -57,7 +57,7 @@ public:
 protected:
     virtual void setupTranslations(void)
     {
-        KGlobal::locale()->insertCatalogue("kwordasciifilter");
+        KGlobal::locale()->insertCatalogue("kofficefilters");
     }
 };
 

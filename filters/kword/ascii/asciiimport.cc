@@ -56,7 +56,7 @@ public:
 protected:
     virtual void setupTranslations( void )
     {
-        KGlobal::locale()->insertCatalogue( "kwordasciifilter" );
+        KGlobal::locale()->insertCatalogue( "kofficefilters" );
     }
 };
 
