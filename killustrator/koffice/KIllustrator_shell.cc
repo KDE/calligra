@@ -33,6 +33,7 @@
 
 #include <kfiledialog.h>
 #include <kiconloader.h>
+#include <kstdaccel.h>
 #include <kimgio.h>
 #include <qmsgbox.h>
 #include <qkeycode.h>
@@ -93,18 +94,19 @@ void KIllustratorShell::createFileMenu (OPMenuBar* mbar) {
     return;
   }
   
+  KStdAccel stdAccel;
   m_pFileMenu = new OPMenu (mbar);
 
   m_idMenuFile_New = 
     m_pFileMenu->insertItem (Icon ("filenew.xpm" ), i18n ("&New"), 
-			     this, SLOT (slotFileNew ()), CTRL + Key_N);
+			     this, SLOT (slotFileNew ()), stdAccel.openNew());
   m_idMenuFile_Open = 
     m_pFileMenu->insertItem (Icon ("fileopen.xpm"), i18n ("&Open..."), 
-			     this, SLOT (slotFileOpen ()), CTRL + Key_O);
+			     this, SLOT (slotFileOpen ()), stdAccel.open());
   m_pFileMenu->insertSeparator (-1);
   m_idMenuFile_Save = 
     m_pFileMenu->insertItem (Icon ("filefloppy.xpm"), i18n ("&Save"), 
-			     this, SLOT (slotFileSave ()), CTRL + Key_S);
+			     this, SLOT (slotFileSave ()), stdAccel.save());
   m_pFileMenu->setItemEnabled (m_idMenuFile_Save, false);
   
   m_idMenuFile_SaveAs = 
@@ -123,8 +125,8 @@ void KIllustratorShell::createFileMenu (OPMenuBar* mbar) {
 
   m_pFileMenu->insertSeparator (-1);
   m_idMenuFile_Print = 
-    m_pFileMenu->insertItem (i18n ("&Print..."), this, 
-			     SLOT (slotFilePrint ()));
+    m_pFileMenu->insertItem (Icon ("fileprint.xpm"), i18n ("&Print..."), this, 
+			     SLOT (slotFilePrint ()),  stdAccel.print());
   m_pFileMenu->setItemEnabled (m_idMenuFile_Print, false);
   
   m_idMenuFile_Info = 
@@ -134,14 +136,14 @@ void KIllustratorShell::createFileMenu (OPMenuBar* mbar) {
   m_pFileMenu->insertSeparator (-1);
   m_idMenuFile_Close = 
     m_pFileMenu->insertItem (i18n ("&Close"), this, 
-			     SLOT (slotFileClose ()), CTRL + Key_W);
+			     SLOT (slotFileClose ()), stdAccel.close());
   m_pFileMenu->setItemEnabled (m_idMenuFile_Close, false);
   
   m_idMenuFile_Quit = 
-    m_pFileMenu->insertItem (i18n ("&Quit"), this, 
-			     SLOT (slotFileQuit ()), CTRL + Key_Q);
+    m_pFileMenu->insertItem (Icon( "exit.xpm" ), i18n ("&Quit"), this, 
+			     SLOT (slotFileQuit ()), stdAccel.quit());
 
-  mbar->insertItem (i18n ("&File"), m_pFileMenu);
+  mbar->insertItem (i18n ("&File"), m_pFileMenu, -1, 0);
 }
 
 void KIllustratorShell::setDocument (KIllustratorDocument* doc) {
