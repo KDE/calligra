@@ -1166,6 +1166,11 @@ unsigned MsWord::read(U16 lid, const U8 *in, unsigned baseInFile, STD *out)
     out->unused8_3 = shifterU16;
     shifterU16 >>= 14;
 
+    // The grupx reader code has to know about the alignment of the STD. We
+    // choose to store this in a convenient field.
+
+    out->fScratch = ((int)in & 1);
+
     // If the baseInFile is less than 10, then the style name is not stored in unicode!
 
     S8 offset = 10 - baseInFile;
@@ -1190,8 +1195,6 @@ unsigned MsWord::read(U16 lid, const U8 *in, unsigned baseInFile, STD *out)
         bytes += MsWordGenerated::read(in + bytes, &terminator);
     }
     out->grupx = in + bytes;
-    if ((int)out->grupx & 1)
-        out->grupx++;
 
     // Set the length to the offset of the last stored byte.
 

@@ -994,9 +994,10 @@ void Paragraph::apply(MsWord::STD &style)
     grpprl = style.grupx;
     if (style.sgc == 1)
     {
-        // Align to an even-byte position.
+        // Align to an even-byte offset *within* the STD. The alignment
+        // of the STD was stored in fScratch.
 
-        if ((int)grpprl & 1)
+        if (((int)grpprl & 1) ^ style.fScratch)
             grpprl++;
         grpprl += MsWordGenerated::read(grpprl, &cbUpx);
         if (cbUpx)
@@ -1016,9 +1017,10 @@ void Paragraph::apply(MsWord::STD &style)
     if ((style.sgc == 1) ||
         (style.sgc == 2))
     {
-        // Align to an even-byte position.
+        // Align to an even-byte offset *within* the STD. The alignment
+        // of the STD was stored in fScratch.
 
-        if ((int)grpprl & 1)
+        if (((int)grpprl & 1) ^ style.fScratch)
             grpprl++;
         grpprl += MsWordGenerated::read(grpprl, &cbUpx);
         if (cbUpx)
