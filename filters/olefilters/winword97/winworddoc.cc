@@ -154,7 +154,7 @@ void WinWordDoc::gotError(const QString &text)
     m_success = false;
 }
 
-void WinWordDoc::gotParagraph(const QString &text, PAP &style)
+void WinWordDoc::gotParagraph(const QString &text, PAP &/*style*/)
 {
     if (m_phase == TEXT_PASS)
     {
@@ -268,7 +268,7 @@ void WinWordDoc::gotTableEnd()
 {
 }
 
-void WinWordDoc::gotTableRow(const QString texts[], const PAP styles[], TAP &row)
+void WinWordDoc::gotTableRow(const QString texts[], const PAP /*styles*/[], TAP &row)
 {
     if (m_phase == INIT)
     {

@@ -110,7 +110,7 @@ QString KSpreadTableIface::name() const
 }
 
 
-bool KSpreadTableIface::processDynamic( const QCString& fun, const QByteArray& data,
+bool KSpreadTableIface::processDynamic( const QCString& fun, const QByteArray&/*data*/,
                                         QCString& replyType, QByteArray &replyData )
 {
     kdDebug(36001) << "Calling '" << fun.data() << "'" << endl;

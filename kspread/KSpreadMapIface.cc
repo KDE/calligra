@@ -18,7 +18,7 @@ DCOPRef KSpreadMapIface::table( const QString& name )
 {
     KSpreadTable* t = m_map->findTable( name );
     if ( !t )
-	return DCOPRef();
+        return DCOPRef();
 
     return DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
 }
@@ -28,8 +28,8 @@ DCOPRef KSpreadMapIface::tableByIndex( int index )
     KSpreadTable* t = m_map->tableList().at( index );
     if ( !t )
     {
-	kdDebug(36001) << "+++++ No table found at index " << index << endl;
-	return DCOPRef();
+        kdDebug(36001) << "+++++ No table found at index " << index << endl;
+        return DCOPRef();
     }
 
     kdDebug(36001) << "+++++++ Returning table " << t->QObject::name() << endl;
@@ -49,7 +49,7 @@ QStringList KSpreadMapIface::tableNames() const
     QList<KSpreadTable>& lst = m_map->tableList();
     QListIterator<KSpreadTable> it( lst );
     for( ; it.current(); ++it )
-	names.append( it.current()->name() );
+        names.append( it.current()->name() );
 
     return names;
 }
@@ -61,7 +61,7 @@ QValueList<DCOPRef> KSpreadMapIface::tables()
     QList<KSpreadTable>& lst = m_map->tableList();
     QListIterator<KSpreadTable> it( lst );
     for( ; it.current(); ++it )
-	t.append( DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopObject()->objId() ) );
+        t.append( DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopObject()->objId() ) );
 
     return t;
 }
@@ -69,7 +69,7 @@ QValueList<DCOPRef> KSpreadMapIface::tables()
 DCOPRef KSpreadMapIface::insertTable( const QString& name )
 {
     if ( m_map->findTable( name ) )
-	return table( name );
+        return table( name );
 
     KSpreadTable* t = new KSpreadTable( m_map, name );
     t->setTableName( name );
@@ -78,20 +78,20 @@ DCOPRef KSpreadMapIface::insertTable( const QString& name )
     return table( name );
 }
 
-bool KSpreadMapIface::processDynamic(const QCString &fun, const QByteArray &data,
-				     QCString& replyType, QByteArray &replyData)
+bool KSpreadMapIface::processDynamic(const QCString &fun, const QByteArray &/*data*/,
+                                     QCString& replyType, QByteArray &replyData)
 {
     // Does the name follow the pattern "foobar()" ?
     uint len = fun.length();
     if ( len < 3 )
-	return FALSE;
+        return FALSE;
 
     if ( fun[ len - 1 ] != ')' || fun[ len - 2 ] != '(' )
-	return FALSE;
+        return FALSE;
 
     KSpreadTable* t = m_map->findTable( fun.left( len - 2 ).data() );
     if ( !t )
-	return FALSE;
+        return FALSE;
 
     replyType = "DCOPRef";
     QDataStream out( replyData, IO_WriteOnly );

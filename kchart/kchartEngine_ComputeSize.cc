@@ -61,7 +61,7 @@ void KChartEngine::computeSize() {
   if( params->xaxis && params->hasxlabel )
         {
           int biggest     = -MAXINT;
-          int len = 0;
+          unsigned int len = 0;
           for( int i=0; i<num_points; ++i )
                 {
                   biggest = QMAX( len, params->xlbl[i].length() );
@@ -152,7 +152,6 @@ void KChartEngine::computeSize() {
 
     /* find smallest interval-point > highest */
     tmp_highest = lowest;
-    int maxcount = 0;
     do
           {     // while( (tmp_highest += ylbl_interval) <= highest )
                 int nmrtr=0;

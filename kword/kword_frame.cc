@@ -728,7 +728,7 @@ KWTextFrameSet::~KWTextFrameSet()
 /*================================================================*/
 void KWTextFrameSet::update()
 {
-    int amount=frames.count();
+    unsigned int amount=frames.count();
     KWFrame *tmpFrame=frames.at(0);
     typedef QList<KWFrame> FrameList;
     QList<FrameList> frameList;

@@ -1095,7 +1095,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
     lineStartFormat = *this;
 
     if ( static_cast<int>( ptWidth ) < doc->getRastX() ) {
-        int newptY = pFrame->getNextFreeYPos( ptY, getLineHeight() );
+        unsigned int newptY = pFrame->getNextFreeYPos( ptY, getLineHeight() );
         if(ptY != newptY) {
             ptY = newptY+2;
             return makeLineLayout( TRUE, TRUE, redrawBackgroundWhenAppendPage );

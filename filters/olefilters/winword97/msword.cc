@@ -167,7 +167,7 @@ void MsWord::constructionError(unsigned line, const char *reason)
     kdError(s_area) << m_constructionError << endl;
 }
 
-void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::PAPXFKP &style, CHPXarray &chpxs)
+void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::PAPXFKP &style, CHPXarray &/*chpxs*/)
 {
     Paragraph paragraph = Paragraph(*this);
 
@@ -863,7 +863,7 @@ void MsWord::gotError(const QString &text)
     kdError(s_area) << text << endl;
 }
 
-void MsWord::gotParagraph(const QString &text, PAP &style)
+void MsWord::gotParagraph(const QString &/*text*/, PAP &/*style*/)
 {
     kdDebug(s_area) << "MsWord::gotParagraph: normal" << endl;
 }
@@ -873,7 +873,7 @@ void MsWord::gotHeadingParagraph(const QString &text, PAP &style)
     kdDebug(s_area) << "MsWord::gotParagraph: heading level: " << style.istd << ": " << text << endl;
 }
 
-void MsWord::gotListParagraph(const QString &text, PAP &style)
+void MsWord::gotListParagraph(const QString &/*text*/, PAP &style)
 {
     kdDebug(s_area) << "MsWord::gotParagraph: list level: " << style.ilvl << endl;
 }
@@ -888,7 +888,7 @@ void MsWord::gotTableEnd()
     kdDebug(s_area) << "MsWord::gotParagraph: table end" << endl;
 }
 
-void MsWord::gotTableRow(const QString texts[], const PAP styles[], TAP &row)
+void MsWord::gotTableRow(const QString /*texts*/[], const PAP /*styles*/[], TAP &row)
 {
     kdDebug(s_area) << "MsWord::gotParagraph: table row: cells: " << row.itcMac << endl;
 }

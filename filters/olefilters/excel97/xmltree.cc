@@ -76,7 +76,7 @@ const QDomDocument* const XMLTree::part()
   return root;
 }
 
-void XMLTree::getFont(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
+void XMLTree::getFont(Q_UINT16 /*xf*/, QDomElement &f, Q_UINT16 fontid)
 {
   QDomElement font = root->createElement("font");
 
@@ -321,7 +321,7 @@ bool XMLTree::_blank(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_bof(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_bof(Q_UINT16 /*size*/, QDataStream& body)
 {
   Q_UINT16 type;
 
@@ -347,7 +347,7 @@ bool XMLTree::_boolerr(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_bottommargin(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_bottommargin(Q_UINT16 /*size*/, QDataStream& body)
 {
   double value;
   body >> value;
@@ -356,7 +356,7 @@ bool XMLTree::_bottommargin(Q_UINT16 size, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_boundsheet(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_boundsheet(Q_UINT16 /*size*/, QDataStream& body)
 {
   QDomElement *e;
 
@@ -427,7 +427,7 @@ bool XMLTree::_codepage(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_colinfo(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_colinfo(Q_UINT16 /*size*/, QDataStream& body)
 {
   Q_UINT16 first, last, width;
 
@@ -593,7 +593,7 @@ bool XMLTree::_fngroupname(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_font(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_font(Q_UINT16 /*size*/, QDataStream& body)
 {
   QChar *c;
   Q_UINT8 lsb, msb;
@@ -621,7 +621,7 @@ bool XMLTree::_font(Q_UINT16 size, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_footer(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_footer(Q_UINT16 /*size*/, QDataStream& body)
 {
   if (footerCount++ == 0) {
     QDomElement e;
@@ -641,7 +641,7 @@ bool XMLTree::_footer(Q_UINT16 size, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_format(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_format(Q_UINT16 /*size*/, QDataStream& body)
 {
   Q_UINT16 id;
   format_rec *f = new format_rec;
@@ -678,7 +678,7 @@ bool XMLTree::_hcenter(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_header(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_header(Q_UINT16 /*size*/, QDataStream& body)
 {
   if (headerCount++ == 0) {
     QDomElement e;
@@ -738,7 +738,7 @@ bool XMLTree::_iteration(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_label(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_label(Q_UINT16 /*size*/, QDataStream& body)
 {
   Q_UINT16 row, column, xf, length;
 
@@ -760,7 +760,7 @@ bool XMLTree::_label(Q_UINT16 size, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_labelsst(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_labelsst(Q_UINT16 /*size*/, QDataStream& body)
 {
   Q_UINT16 row, column, xf;
   Q_UINT32 isst;
@@ -779,7 +779,7 @@ bool XMLTree::_labelsst(Q_UINT16 size, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_leftmargin(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_leftmargin(Q_UINT16 /*size*/, QDataStream& body)
 {
   double value;
   body >> value;
@@ -884,7 +884,7 @@ bool XMLTree::_note(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_number(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_number(Q_UINT16 /*size*/, QDataStream& body)
 {
   double value;
   QString s;
@@ -994,7 +994,7 @@ bool XMLTree::_refreshall(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_rightmargin(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_rightmargin(Q_UINT16 /*size*/, QDataStream& body)
 {
   double value;
   body >> value;
@@ -1003,7 +1003,7 @@ bool XMLTree::_rightmargin(Q_UINT16 size, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_rk(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_rk(Q_UINT16 /*size*/, QDataStream& body)
 {
   double value = 0;
   QString s;
@@ -1043,7 +1043,7 @@ bool XMLTree::_rk(Q_UINT16 size, QDataStream& body)
   return true;
 }
 
-bool XMLTree::_row(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_row(Q_UINT16 /*size*/, QDataStream& body)
 {
   Q_UINT16 rowNr, skip, height;
 
@@ -1112,7 +1112,7 @@ bool XMLTree::_sound(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_sst(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_sst(Q_UINT16 /*size*/, QDataStream& body)
 {
   char *name;
   QString *s;
@@ -1313,7 +1313,7 @@ bool XMLTree::_templt(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_topmargin(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_topmargin(Q_UINT16 /*size*/, QDataStream& body)
 {
   double value;
   body >> value;
@@ -1382,7 +1382,7 @@ bool XMLTree::_windowprotect(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_writeaccess(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_writeaccess(Q_UINT16 /*size*/, QDataStream& body)
 {
   Q_UINT8 length;
 
@@ -1418,7 +1418,7 @@ bool XMLTree::_xct(Q_UINT16, QDataStream&)
   return true;
 }
 
-bool XMLTree::_xf(Q_UINT16 size, QDataStream& body)
+bool XMLTree::_xf(Q_UINT16 /*size*/, QDataStream& body)
 {
   xf_rec *x = new xf_rec;
   body >> x->ifnt >> x->ifmt >> x->attr >> x->align >> x->indent;

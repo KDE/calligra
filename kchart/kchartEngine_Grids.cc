@@ -103,7 +103,6 @@ void KChartEngine::drawGridAndLabels(bool do_ylbl_fractions)
         }
 
   /* draw grid lines & y label(s) */
-  int i,j;
   float tmp_y = lowest;
 
   QColor labelcolor = params->YLabelColor;
@@ -423,7 +422,6 @@ void KChartEngine::drawXTicks()
                   QString currentfulllabel = params->xlbl[xi];
                   xlen = -1;
                   xstrs_num = -1;
-                  int j = -1;
                   QStringList sublabels = QStringList::split( '\n', currentfulllabel );
                   for( QStringList::Iterator sublabelit = sublabels.begin();
                            sublabelit != sublabels.end(); ++sublabelit ) {
