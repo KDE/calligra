@@ -483,7 +483,9 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
     if( m_doc->firstView() && m_doc->firstView()->getCanvas())
         editMode = m_doc->firstView()->getCanvas()->getEditMode();
 
-    uint drawingFlags = KoTextDocument::DrawSelections;
+    uint drawingFlags = 0;
+    if ( _painter->device() && _painter->device()->devType() != QInternal::Printer )
+        drawingFlags |= KoTextDocument::DrawSelections;
     if ( m_doc->backgroundSpellCheckEnabled() && editMode )
         drawingFlags |= KoTextDocument::DrawMisspelledLine;
     if ( !editMode )
