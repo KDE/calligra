@@ -6704,6 +6704,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
             number = 1;
         kdDebug() << "Repeated: " << number << endl;
     }
+
     KoStyleStack styleStack;
     if ( column.hasAttribute( "table:default-cell-style-name" ) )
     {
@@ -6721,10 +6722,10 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
     {
         QString str = column.attribute( "table:style-name" );
         QDomElement *style = oasisStyles.styles()[str];
+        styleStack.pop();
         styleStack.push( *style );
         kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }
-    //layout.loadOasisStyleProperties( styleStack, oasisStyles );
 
     if ( styleStack.hasAttribute( "style:column-width" ) )
     {
@@ -6747,8 +6748,6 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
 
     if ( number>30 )
         number = 30; //todo fixme !
-
-
 
     for ( int i = 0; i < number; ++i )
     {

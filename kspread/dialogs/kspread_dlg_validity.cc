@@ -168,6 +168,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   message =new QTextEdit( tmpQButtonGroup);
   grid2->addMultiCellWidget(message,3, 4,1, 1);
   lay1->addWidget(tmpQButtonGroup);
+  message->setTextFormat( Qt::PlainText );
 
   QFrame *page3 = addPage(i18n("Input Help"));
   lay1 = new QVBoxLayout( page3, KDialogBase::marginHint(), KDialogBase::spacingHint() );
@@ -196,6 +197,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   messageHelp =new QTextEdit( tmpQButtonGroup);
   grid3->addMultiCellWidget(messageHelp,3, 4,1, 1);
   lay1->addWidget(tmpQButtonGroup);
+  messageHelp->setTextFormat( Qt::PlainText );
 
 
   connect(choose,SIGNAL(activated(int )),this,SLOT(changeIndexCond(int)));
