@@ -2,7 +2,7 @@
 
 bool KSpreadTableIface::process(const QCString &fun, const QByteArray &data, QCString& replyType, QByteArray &replyData)
 {
-	if ( fun == "cell(intint)" )
+	if ( fun == "cell(int,int)" )
 	{
 		QDataStream str( data, IO_ReadOnly );
 		int x;
@@ -47,6 +47,8 @@ bool KSpreadTableIface::process(const QCString &fun, const QByteArray &data, QCS
 		out << name( );
 		return TRUE;
 	}
+	if ( DCOPObject::process( fun, data, replyType, replyData ) )
+		return TRUE;
 	return FALSE;
 }
 

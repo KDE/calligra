@@ -9,6 +9,7 @@
 #include <kscript_util.h>
 #include <kscript_func.h>
 #include <kscript_proxy.h>
+#include <kscript_synext.h>
 
 #include <math.h>
 
@@ -1336,7 +1337,7 @@ KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadTable* table,
 {
   // Create the parse tree.
   KSParser parser;
-  if ( !parser.parse( formula ) )
+  if ( !parser.parse( formula, KSCRIPT_EXTENSION_KSPREAD ) )
   {
     context.setException( new KSException( "SyntaxError", parser.errorMessage() ) );
     return 0;

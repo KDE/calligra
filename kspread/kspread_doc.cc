@@ -83,7 +83,7 @@ KSpreadDoc::KSpreadDoc( QObject* parent, const char* name )
   m_pMap = new KSpreadMap( this, "Map" );
 
   m_pUndoBuffer = new KSpreadUndo( this );
-  
+
   // Make us scriptable if the document has a name
   if ( name )
       dcopObject();
@@ -326,14 +326,11 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
 
 KSpreadTable* KSpreadDoc::createTable()
 {
-    // char buffer[ 128 ];
-    // sprintf( buffer, "Table%i", m_iTableId );
   QString s( i18n("Table%1") );
   s = s.arg( m_iTableId++ );
-  
-  KSpreadTable *t = new KSpreadTable( m_pMap, 0 /*, buffer */ );
+
+  KSpreadTable *t = new KSpreadTable( m_pMap, s );
   t->setTableName( s );
-  t->setMap( m_pMap );
   return t;
 }
 

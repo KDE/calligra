@@ -2,7 +2,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) \
 -I$(top_srcdir)/lib/kscript -I$(top_builddir)/lib/kscript
 
 kspread_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kspread_LDADD = ../lib/kofficeui/libkofficeui.la
+kspread_LDADD = ../kchart/libkchart.la libkspread.la ../lib/kofficeui/libkofficeui.la
 
 libkspread_la_LDFLAGS = -avoid-version -module
 
@@ -28,7 +28,7 @@ libkspread_la_SOURCES = kspread_canvas.cc \
 	kspread_events.cc  kspread_dlg_assistant2.cc kspread_dlg_show.cc \
 	kspread_dlg_insert.cc KSpreadDocIface_skel.cpp KSpreadMapIface_skel.cpp \
 	KSpreadTableIface_skel.cpp KSpreadDocIface.cc KSpreadMapIface.cc \
-	KSpreadTableIface.cc
+	KSpreadTableIface.cc KSpreadCellIface.cc KSpreadCellIface_skel.cpp
 
 kspread_SOURCES = main.cc
 
@@ -44,7 +44,8 @@ noinst_HEADERS = kspread_shell.h kspread_doc.h \
 	kspread_dlg_sort.h kspread_dlg_create.h kspread_dlg_anchor.h  \
 	kspread_dlg_resize.h kspread_factory.h kspread_handler.h \
 	kspread_events.h kspread_global.h  \
-	kspread_dlg_assistant2.h kspread_dlg_show.h kspread_dlg_insert.h
+	kspread_dlg_assistant2.h kspread_dlg_show.h kspread_dlg_insert.h \
+	KSpreadCellIface.h KSpreadMapIface.h KSpreadTableIface.h KSpreadDocIface.h
 
 libkspread_la_METASOURCES = kspread_shell.moc kspread_doc.moc \
 		  	    kspread_view.moc kspread_tabbar.moc kspread_canvas.moc \
@@ -76,6 +77,9 @@ KSpreadTableIface_skel.cpp: KSpreadTableIface.kidl
 KSpreadMapIface.kidl: KSpreadMapIface.h
 	( kidl KSpreadMapIface.h >KSpreadMapIface.kidl; kidl2cpp --no-stub KSpreadMapIface.kidl )
 KSpreadMapIface_skel.cpp: KSpreadMapIface.kidl
+KSpreadCellIface.kidl: KSpreadCellIface.h
+	( kidl KSpreadCellIface.h >KSpreadCellIface.kidl; kidl2cpp --no-stub KSpreadCellIface.kidl )
+KSpreadCellIface_skel.cpp: KSpreadCellIface.kidl
 
 parser:
 	flex lex.l

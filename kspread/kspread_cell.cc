@@ -544,7 +544,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     int h = m_pQML->height();
     int w = m_pQML->width();
     debug("QML w=%i max=%i",w,max_width);
-    
+
     m_richWidth=w;
     m_richHeight=h;
     // Occupy the needed extra cells in horizontal direction
@@ -811,7 +811,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   }
   m_iExtraWidth = w;
   m_iExtraHeight = h;
-  
+
   if ( m_style == ST_Select )
     w -= 16;
 
@@ -855,7 +855,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	    }
 	}
     }
-    
+
     m_iExtraXCells = 0;
     m_iExtraYCells = 0;
   }
@@ -986,7 +986,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	{
 	  w += cl2->width() - 1;
 	  c++;
-	  
+	
 	  // Enough space ?
 	  if ( m_iOutTextWidth <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
 	       rightBorderWidth( _col, _row ) )
@@ -1297,7 +1297,7 @@ bool KSpreadCell::calc( bool _makedepend )
     }
     // m_bLayoutDirtyFlag = true;
     m_bProgressFlag = false;
-    
+
     if ( m_style == ST_Select )
     {
 	SelectPrivate *s = (SelectPrivate*)m_pPrivate;
@@ -1341,7 +1341,7 @@ bool KSpreadCell::calc( bool _makedepend )
       SelectPrivate *s = (SelectPrivate*)m_pPrivate;
       s->parse( m_strFormularOut );
   }
-  
+
   m_bLayoutDirtyFlag = true;
   m_bProgressFlag = false;
 
@@ -1350,14 +1350,14 @@ bool KSpreadCell::calc( bool _makedepend )
   return true;
 }
 
-QString KSpreadCell::valueString()
+QString KSpreadCell::valueString() const
 {
   if ( m_style == ST_Select )
     return ((SelectPrivate*)m_pPrivate)->text();
 
   if ( isFormular() )
     return m_strFormularOut;
-  
+
   return m_strText;
 }
 
@@ -2068,7 +2068,7 @@ void KSpreadCell::setText( const QString& _text )
 	  calc();
       if ( m_bLayoutDirtyFlag )
 	  makeLayout( m_pTable->painter(), column(), row() );
-      
+
       SelectPrivate *s = (SelectPrivate*)m_pPrivate;
       if ( m_content == Formula )
 	  s->parse( m_strFormularOut );
@@ -2086,27 +2086,30 @@ void KSpreadCell::setText( const QString& _text )
 
 void KSpreadCell::setValue( double _d )
 {
-  // Free all content data
-  if ( m_pQML )
-    delete m_pQML;
-  m_pQML = 0;
-  if ( m_pVisualFormula )
-    delete m_pVisualFormula;
-  m_pVisualFormula = 0;
-  if ( isFormular() )
-    clearFormular();
+    m_bError = false;
+    m_strText = QString::number( _d );
 
-  m_lstDepends.clear();
+    // Free all content data
+    if ( m_pQML )
+	delete m_pQML;
+    m_pQML = 0;
+    if ( m_pVisualFormula )
+	delete m_pVisualFormula;
+    m_pVisualFormula = 0;
+    if ( isFormular() )
+	clearFormular();
 
-  m_bValue = true;
-  m_bBool = false;
-  m_dValue = _d;
-  m_bLayoutDirtyFlag = true;
-  m_content = Text;
+    m_lstDepends.clear();
 
-  // Do not update formulas and stuff here
-  if ( !m_pTable->isLoading() )
-    update();
+    m_bValue = true;
+    m_bBool = false;
+    m_dValue = _d;
+    m_bLayoutDirtyFlag = true;
+    m_content = Text;
+
+    // Do not update formulas and stuff here
+    if ( !m_pTable->isLoading() )
+	update();
 }
 
 void KSpreadCell::update()
@@ -2121,12 +2124,12 @@ void KSpreadCell::update()
 
     if ( m_pObscuringCell )
 	qDebug("------- Is obscured");
-    
+
   cerr << "C=" << m_iColumn << " R=" << m_iRow << endl;
 
   bool b_update_begin = m_bDisplayDirtyFlag;
   m_bDisplayDirtyFlag = true;
-  
+
   // UPDATE_BEGIN;
 
   /* m_lstDepends.clear();
@@ -2985,7 +2988,7 @@ KSpreadCell::~KSpreadCell()
 void SelectPrivate::parse( const char* _text )
 {
     qDebug("PARSE=%s", _text );
-    
+
   m_lstItems.clear();
 
   if ( !_text )

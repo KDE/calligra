@@ -3,6 +3,9 @@
 #include "kspread_doc.h"
 #include "kspread_map.h"
 
+#include <kapp.h>
+#include <dcopclient.h>
+
 KSpreadDocIface::KSpreadDocIface( KSpreadDoc* doc )
     : DCOPObject( doc )
 {
@@ -11,7 +14,7 @@ KSpreadDocIface::KSpreadDocIface( KSpreadDoc* doc )
 
 DCOPRef KSpreadDocIface::map()
 {
-    return DCOPRef( m_doc->map()->dcopObject() );
+    return DCOPRef( kapp->dcopClient()->appId(), m_doc->map()->dcopObject()->objId() );
 }
 
 QString KSpreadDocIface::url()

@@ -306,15 +306,15 @@ public:
     bool isBool() const {  return m_bBool; }
     bool valueBool() const { return ( m_dValue != 0.0 ); }
     double valueDouble() const { return m_dValue; }
-    QString valueString();
+    QString valueString() const;
     void setValue( double _d );
-    
+
     /* return size of the text*/
     int textWidth() {return m_iOutTextWidth; }
     int textHeight() {return m_iOutTextHeight; }
     int richTextWidth() {return m_richWidth; }
     int richTextHeight() {return m_richHeight;}
-     
+
     /**
      * Like @ref updateDepending, but the cells content will be refreshed
      * on all views.
@@ -379,7 +379,7 @@ public:
      */
     virtual void setLayoutDirtyFlag();
     bool layoutDirtyFlag() const { return m_bLayoutDirtyFlag; }
-    
+
     void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
     void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true ; }
 
@@ -460,7 +460,7 @@ public:
     int extraYCells() const { return m_iExtraYCells; }
     int extraWidth() const { return m_iExtraWidth; }
     int extraHeight() const { return m_iExtraHeight; }
-    
+
     bool isFormular() { return m_content == Formula; }
 
     QString encodeFormular( int _col = -1, int _row = -1 );
@@ -478,7 +478,7 @@ public:
      * Calculates the layout of the cell.
      */
     virtual void makeLayout( QPainter &_painter, int _col, int _row );
-    
+
     /**
      * Parses the formula.
      * Fills @ref #dependList and @ref #formula.
@@ -487,7 +487,7 @@ public:
     bool makeFormular();
 
 protected:
-    
+
     /**
      * Cleans up formula stuff.
      * Call this before you store a new formula or to delete the
@@ -658,7 +658,7 @@ protected:
      * A pointer to the decimal separator
      */
     static char decimal_point;
-    
+
    /**
    * size of richText
    */

@@ -2,6 +2,10 @@
 
 #include "kspread_map.h"
 #include "kspread_table.h"
+#include "kspread_doc.h"
+
+#include <kapp.h>
+#include <dcopclient.h>
 
 KSpreadMapIface::KSpreadMapIface( KSpreadMap* map )
     : DCOPObject( map )
@@ -13,9 +17,9 @@ DCOPRef KSpreadMapIface::table( const QString& name )
 {
     KSpreadTable* t = m_map->findTable( name );
     if ( !t )
-	return DCOPRef( 0 );
-    
-    return DCOPRef( t->dcopObject() );
+	return DCOPRef();
+
+    return DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
 }
 
 DCOPRef KSpreadMapIface::table( int index )
@@ -24,12 +28,12 @@ DCOPRef KSpreadMapIface::table( int index )
     if ( !t )
     {
 	qDebug("+++++ No table found at index %i", index );
-	return DCOPRef( 0 );
+	return DCOPRef();
     }
-    
+
     qDebug("+++++++ Returning table %s", t->QObject::name() );
-    
-    return DCOPRef( t->dcopObject() );
+
+    return DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
 }
 
 int KSpreadMapIface::tableCount() const
@@ -56,8 +60,40 @@ QValueList<DCOPRef> KSpreadMapIface::tables()
     QList<KSpreadTable>& lst = m_map->tableList();
     QListIterator<KSpreadTable> it( lst );
     for( ; it.current(); ++it )
-	t.append( DCOPRef( it.current()->dcopObject() ) );
+	t.append( DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopObject()->objId() ) );
 
     return t;
 }
 
+DCOPRef KSpreadMapIface::insertTable( const QString& name )
+{
+    if ( m_map->findTable( name ) )
+	return table( name );
+    
+    KSpreadTable* t = new KSpreadTable( m_map, name );
+    t->setTableName( name );
+    m_map->doc()->addTable( t );
+    
+    return table( name );
+}
+
+bool KSpreadMapIface::processDynamic(const QCString &fun, const QByteArray &data,
+				     QCString& replyType, QByteArray &replyData)
+{
+    // Does the name follow the pattern "foobar()" ?
+    uint len = fun.length();
+    if ( len < 3 )
+	return FALSE;
+    
+    if ( fun[ len - 1 ] != ')' || fun[ len - 2 ] != '(' )
+	return FALSE;
+    
+    KSpreadTable* t = m_map->findTable( fun.left( len - 2 ).data() );
+    if ( !t )
+	return FALSE;
+
+    replyType = "DCOPRef";
+    QDataStream out( replyData, IO_WriteOnly );
+    out << DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );    
+    return TRUE;
+}

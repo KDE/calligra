@@ -176,6 +176,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
   m_id = s_id++;
   s_mapTables->insert( m_id, this );
 
+  m_pMap = _map;
   m_pDoc = _map->doc();
   m_dcop = 0;
   m_bShowPageBorders = FALSE;
@@ -209,7 +210,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
   m_sort = FALSE;
 
   setHide(false);
-  
+
   // Get a unique name so that we can offer scripting
   if ( !_name )
   {
@@ -217,7 +218,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
       s.sprintf("Table%i", s_id );
       QObject::setName( s.data() );
   }
-  
+
   initInterpreter();
 }
 

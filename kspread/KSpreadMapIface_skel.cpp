@@ -43,6 +43,18 @@ bool KSpreadMapIface::process(const QCString &fun, const QByteArray &data, QCStr
 		out << tables( );
 		return TRUE;
 	}
+	if ( fun == "insertTable(QString)" )
+	{
+		QDataStream str( data, IO_ReadOnly );
+		QString name;
+		str >> name;
+		replyType = "DCOPRef";
+		QDataStream out( replyData, IO_WriteOnly );
+		out << insertTable(name );
+		return TRUE;
+	}
+	if ( DCOPObject::process( fun, data, replyType, replyData ) )
+		return TRUE;
 	return FALSE;
 }
 

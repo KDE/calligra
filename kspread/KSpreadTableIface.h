@@ -8,12 +8,17 @@
 #include <qrect.h>
 
 class KSpreadTable;
+class KSpreadCellProxy;
 
 class KSpreadTableIface : virtual public DCOPObject
 {
     K_DCOP
 public:
     KSpreadTableIface( KSpreadTable* );
+    ~KSpreadTableIface();
+
+    bool processDynamic( const QCString& fun, const QByteArray& data,
+			 QCString& replyType, QByteArray &replyData );
 
 k_dcop:
     virtual DCOPRef cell( int x, int y );
@@ -21,9 +26,10 @@ k_dcop:
     virtual QRect selection() const;
     virtual void setSelection( const QRect& selection );
     virtual QString name() const;
-    
+
 private:
     KSpreadTable* m_table;
+    KSpreadCellProxy* m_proxy;
 };
 
 #endif
