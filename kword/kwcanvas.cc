@@ -1729,6 +1729,7 @@ void KWCanvas::updateCurrentFormat()
 
 void KWCanvas::ungroupTable(KWTableFrameSet *table)
 {
+    deleteFrameSetEditTable(table);
     table->ungroup();
     doc->delFrameSet(table);
     //when you ungroup a table
