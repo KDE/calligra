@@ -61,6 +61,9 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     m_table.height = KWTableFrameSet::TblAuto;
     m_table.floating = true;
 
+    m_tableSplit.nbRows=1;
+    m_tableSplit.nbCols=1;
+
     curTable = 0L;
     m_printing = false;
 

@@ -29,7 +29,7 @@
 #include <kapp.h>
 #include <klocale.h>
 
-KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, int numrows, int numcols)
+KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, unsigned int numrows, unsigned int numcols)
     : KDialogBase( Plain, i18n("Split cell"), Ok | Cancel, Ok, parent, name, true)
 {
     m_cols= numcols;

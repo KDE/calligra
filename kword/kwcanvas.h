@@ -139,6 +139,12 @@ public:
     int tableHeightMode() { return m_table.height; }
     bool tableIsFloating() { return m_table.floating; }
 
+    unsigned int splitCellRows(){return m_tableSplit.nbRows;}
+    unsigned int splitCellCols(){return m_tableSplit.nbCols;}
+    
+    void setSplitCellRows(unsigned int _nb){ m_tableSplit.nbRows=_nb;}
+    void setSplitCellCols(unsigned int _nb){ m_tableSplit.nbCols=_nb;}
+
     void createTable( unsigned int rows, unsigned int cols,
                       int /*KWTableFrameSet::CellSize*/ wid, int /*KWTableFrameSet::CellSize*/ hei,
                       bool isFloating );
@@ -272,6 +278,14 @@ private:
     } m_table;
     KWTableFrameSet *curTable;
     KWFrameMoveCommand *cmdMoveFrame;
+
+    // Split cell in table
+    struct
+    {
+	unsigned int nbCols;
+        unsigned int nbRows;	
+    }m_tableSplit;
+    
 };
 
 #endif

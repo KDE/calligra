@@ -2533,9 +2533,13 @@ void KWView::tableJoinCells()
 }
 
 void KWView::tableSplitCells() {
-    KWSplitCellDia *splitDia=new KWSplitCellDia( this,"split cell" ); // TODO remember last settings..
+    KWSplitCellDia *splitDia=new KWSplitCellDia( this,"split cell",m_gui->canvasWidget()->splitCellRows(),m_gui->canvasWidget()->splitCellCols() );
     if(splitDia->exec()) {
-        tableSplitCells(splitDia->cols(), splitDia->rows());
+        unsigned int nbCols=splitDia->cols();
+        unsigned int nbRows=splitDia->rows();
+        m_gui->canvasWidget()->setSplitCellRows(nbRows);
+        m_gui->canvasWidget()->setSplitCellCols(nbCols);
+        tableSplitCells(nbCols, nbRows);
     }
     delete splitDia;
 }

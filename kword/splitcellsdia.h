@@ -35,16 +35,16 @@ class KWSplitCellDia : public KDialogBase {
     Q_OBJECT
 
 public:
-    KWSplitCellDia( QWidget *parent, const char *name, int numrows=1, int numcols=1);
+    KWSplitCellDia( QWidget *parent, const char *name, unsigned int numrows=1, unsigned int numcols=1);
 
-    int rows() { return m_rows; }
-    int cols() { return m_cols; }
+    unsigned int rows() { return m_rows; }
+    unsigned int cols() { return m_cols; }
 
 protected:
     QSpinBox *nRows, *nCols;
     KWTablePreview *preview;
 
-    int m_rows, m_cols;
+    unsigned int m_rows, m_cols;
 
 protected slots:
     void rowsChanged( int );
