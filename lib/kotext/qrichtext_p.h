@@ -809,7 +809,7 @@ public:
     const QList<QTextCustomItem> & allCustomItems() const { return customItems; }
 
     void setFlow( QTextFlow *f );
-    void forgetFlow();
+    void takeFlow();
     QTextFlow *flow() const { return flow_; }
     bool verticalBreak() const { return pages; }
     void setVerticalBreak( bool b ) { pages = b; }
@@ -1773,7 +1773,7 @@ inline void QTextDocument::setFlow( QTextFlow *f )
     flow_ = f;
 }
 
-inline void QTextDocument::forgetFlow()
+inline void QTextDocument::takeFlow()
 {
     flow_ = 0L;
 }

@@ -170,7 +170,9 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
             painter.setPen( KoBorder::borderPen( bottomBorder, bottomBorderWidth, defaultColor ) );
         else
             painter.setPen( defaultPen );
-        int y = rect.bottom() + bottomBorderWidth - bottomBorderWidth/2;
+	//kdDebug() << "bottomBorderWidth=" << bottomBorderWidth << " bottomBorderWidth/2=" << (int)bottomBorderWidth/2 << endl;
+        int y = rect.bottom() + bottomBorderWidth - (bottomBorderWidth-1)/2;
+	//kdDebug() << "   -> bottom=" << rect.bottom() << " y=" << y << endl;
         painter.drawLine( rect.left()-leftBorderWidth, y, rect.right()+rightBorderWidth, y );
     }
     if ( leftBorderWidth > 0 )
@@ -188,7 +190,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
             painter.setPen( KoBorder::borderPen( rightBorder, rightBorderWidth, defaultColor ) );
         else
             painter.setPen( defaultPen );
-        int x = rect.right() + rightBorderWidth - rightBorderWidth/2;
+        int x = rect.right() + rightBorderWidth - (rightBorderWidth-1)/2;
         painter.drawLine( x, rect.top()-topBorderWidth, x, rect.bottom()+bottomBorderWidth );
     }
 }
