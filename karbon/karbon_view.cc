@@ -143,8 +143,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_whirlPinchDlg->setRadius( 100.0 );
 
 	m_layersDocker = 0L;
-	m_toolOptionsDocker = new VToolOptionsDocker( this );
-	m_toolOptionsDocker->show();
 
 	// tools:
 	m_ellipseTool = new VEllipseTool( this );
@@ -217,7 +215,6 @@ KarbonView::~KarbonView()
 	delete( m_ColorManager );
 	delete( m_TransformDlg );
 
-	delete( m_toolOptionsDocker );
 	delete( m_strokeDocker );
 
 	// tools:
@@ -280,6 +277,8 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 			mainWindow()->addDockWindow( m_contextHelpDocker, DockRight );
 			m_layersDocker = new VLayersDocker( this );
 			mainWindow()->addDockWindow( m_layersDocker, DockRight );
+			m_toolOptionsDocker = new VToolOptionsDocker( this );
+			m_toolOptionsDocker->show();
 			selectTool();
 		}
 		mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0);
@@ -299,6 +298,7 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 		delete m_toolbox;
 		delete m_historyDocker;
 		delete m_contextHelpDocker;
+		delete m_toolOptionsDocker;
 		delete m_layersDocker;
 		m_toolbox = 0L;
 		return;
