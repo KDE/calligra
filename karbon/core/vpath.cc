@@ -5,6 +5,7 @@
 #include <math.h>
 #include <koPoint.h>
 #include <qpainter.h>
+#include <qptrvector.h>
 #include <qvaluelist.h>
 #include <qwmatrix.h>
 
@@ -14,192 +15,86 @@
 #include <kdebug.h>
 
 // TODO:
-// - make sure that lastpoint==currenpoint doesnt get removed
-// - set m_isDirty everywhere
-// - reimplement cubicBezier() ?
 
-
-struct VSegment
-{
-	VSegment( const double& x3, const double& y3 )
-		: m_p3( x3, y3 ) {}
-
-	enum
-	{
-		moveTo,
-		lineTo,
-		curveTo,
-		curve1To,
-		curve2To,
-		closePath
-	} m_type;
-
-	KoPoint m_p3;
-};
-
-struct VMoveTo : VSegment
-{
-	VMoveTo( const double& x3, const double& y3 )
-		: VSegment( x3, y3 ) { m_type = moveTo; }
-};
-
-struct VLineTo : VSegment
-{
-	VLineTo( const double& x3, const double& y3 )
-		: VSegment( x3, y3 ) { m_type = lineTo; }
-};
-
-struct VCurveTo : VSegment
-{
-	VCurveTo(
-		const double& x1, const double& y1,
-		const double& x2, const double& y2,
-		const double& x3, const double& y3 )
-		: m_p1( x1, y1 ), m_p2( x2, y2 ), VSegment( x3, y3 ) { m_type = curveTo; }
-
-	KoPoint m_p1;
-	KoPoint m_p2;
-};
-
-struct VCurve1To : VSegment
-{
-	VCurve1To(
-		const double& x2, const double& y2,
-		const double& x3, const double& y3 )
-		: m_p2( x2, y2 ), VSegment( x3, y3 ) { m_type = curve1To; }
-
-	KoPoint m_p2;
-};
-
-struct VCurve2To : VSegment
-{
-	VCurve2To(
-		const double& x1, const double& y1,
-		const double& x3, const double& y3 )
-		: m_p1( x1, y1 ), VSegment( x3, y3 ) { m_type = curve2To; }
-
-	KoPoint m_p1;
-};
-
-struct VClosePath : VSegment
-{
-	VClosePath( const double& x3, const double& y3 )
-		: VSegment( x3, y3 ) { m_type = closePath; }
-};
-
-// -----------------------------------
-// -----------------------------------
-
-// fundamental segment-intersection algorithms.
-
-// if bounding (minmax-)boxes dont intersect, beziers/lines dont either:
-static bool
-boundingBoxesIntersect(
-	const KoPoint& a0, const KoPoint& a1, const KoPoint& a2, const KoPoint& a3,
-	const KoPoint& b0, const KoPoint& b1, const KoPoint& b2, const KoPoint& b3 )
-{
-	double minax;
-	double maxax;
-
-	if( a0.x() > a3.x() )
-		{ minax = a3.x(); maxax = a0.x(); }
-	else
-		{ minax = a0.x(); maxax = a3.x(); }
-	if( a1.x() < minax )
-		minax = a1.x();
-	else if( a1.x() > maxax )
-		maxax = a1.x();
-	if( a2.x() < minax )
-		minax = a2.x();
-	else if( a2.x() > maxax )
-		maxax = a2.x();
-
-	double minay;
-	double maxay;
-
-	if( a0.y() > a3.y() )
-		{ minay = a3.y(); maxay = a0.y(); }
-	else
-		{ minay = a0.y(); maxay = a3.y(); }
-	if( a1.y() < minay )
-		minay = a1.y();
-	else if( a1.y() > maxay )
-		maxay = a1.y();
-	if( a2.y() < minay )
-		minay = a2.y();
-	else if( a2.y() > maxay )
-		maxay = a2.y();
-
-	double minbx;
-	double maxbx;
-
-	if( b0.x() > b3.x() )
-		{ minbx = b3.x(); maxbx = b0.x(); }
-	else
-		{ minbx = b0.x(); maxbx = b3.x(); }
-	if( b1.x() < minbx )
-		minbx = b1.x();
-	else if( b1.x() > maxbx )
-		maxbx = b1.x();
-	if( b2.x() < minbx )
-		minbx = b2.x();
-	else if( b2.x() > maxbx )
-		maxbx = b2.x();
-
-	double minby;
-	double maxby;
-
-	if( b0.y() > b3.y() )
-		{ minby = b3.y(); maxby = b0.y(); }
-	else
-		{ minby = b0.y(); maxby = b3.y(); }
-	if( b1.y() < minby )
-		minby = b1.y();
-	else if( b1.y() > maxby )
-		maxby = b1.y();
-	if( b2.y() < minby )
-		minby = b2.y();
-	else if( b2.y() > maxby )
-		maxby = b2.y();
-
-	if ( minax > maxbx || minbx > maxax || minay > maxby || minby > maxay )
-		return false;
-
-	return true;
-}
 
 // calculate distance of point c from line L0L1:
 static double
-height( const KoPoint& l0, const KoPoint& l1, const KoPoint& c )
+height( const KoPoint* l0, const KoPoint* l1, const KoPoint* c )
 {
-	// calculate determinant of L0C and LOL1 to obtain projection of vector L0C to the
-	// orthogonal vector of L0L1:
+	// calculate determinant of L0C and LOL1 to obtain projection of vector L0C to 
+	// the orthogonal vector of L0L1:
 	double det =
-		c.x()  * l0.y() + l1.x() * c.y()  - c.x()  * l1.y() -
-		l0.x() * c.y()  + l0.x() * l1.y() - l1.x() * l0.y();
+		c->x()  * l0->y() + l1->x() * c->y()  - c->x()  * l1->y() -
+		l0->x() * c->y()  + l0->x() * l1->y() - l1->x() * l0->y();
 	// calculate norm = length(L0L1):
 	double norm = sqrt(
-		( l1.x() - l0.x() ) * ( l1.x() - l0.x() ) +
-		( l1.y() - l0.y() ) * ( l1.y() - l0.y() ) );
+		( l1->x() - l0->x() ) * ( l1->x() - l0->x() ) +
+		( l1->y() - l0->y() ) * ( l1->y() - l0->y() ) );
 
 	// if norm is very small, simply return distance L0C:
 	if( norm < 1.0e-6 )
 		return( sqrt(
-			( c.x() - l0.x() ) * ( c.x() - l0.x() ) +
-			( c.y() - l0.y() ) * ( c.y() - l0.y() ) ) );
+			( c->x() - l0->x() ) * ( c->x() - l0->x() ) +
+			( c->y() - l0->y() ) * ( c->y() - l0->y() ) ) );
 
 	// normalize:
 	return ( det / norm );
 }
 
-// check if bezier is flat (to e.g. substitute it by a line):
-static bool
-bezierIsFlat(
-	const KoPoint& p0, const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
+// -----------------------------------
+// -----------------------------------
+
+class VSegment
+{
+public:
+	VSegment( const KoPoint& p3, VSegment* prev  )
+		: m_p3( p3 ), m_prev( prev ) {}
+	virtual ~VSegment() {}
+
+	const KoPoint* p0() const
+	{
+		if( m_prev != 0L )
+			return m_prev->p3();
+		else
+			return 0L;
+	}
+	virtual const KoPoint* p1() const
+		{ return 0L; }
+	virtual const KoPoint* p2() const
+		{ return 0L; }
+	const KoPoint* p3() const
+		{ return &m_p3; }
+
+	virtual void setP1( const KoPoint& p ) {}
+	virtual void setP2( const KoPoint& p ) {}
+	void setP3( const KoPoint& p ) { m_p3 = p; };
+
+	VSegment* previous() const { return m_prev; }
+	void setPrevious( VSegment* prev ) { m_prev = prev; }
+
+	virtual bool isFlat() const;
+	virtual void calcBoundingBox( KoPoint& min, KoPoint& max ) const;
+	virtual void addYourselfLeftSplittedAtTo(
+		const double t, VPath& path ) const = 0;
+	virtual QPtrVector<VSegment> splitAtMidpoint() const = 0;
+
+	void findIntersectionParametersWith( const double t0, const double t1,
+		const VSegment* segB, const double u0, const double u1,
+		QValueList<double>& paramsA, QValueList<double>& paramsB ) const;
+	void addIntersectionsWithTo( const VSegment* b,
+		VPath& pathA, VPath& pathB ) const;
+
+private:
+	KoPoint m_p3;
+	VSegment* m_prev;
+};
+
+bool
+VSegment::isFlat() const
 {
 	if(
-		QABS( height( p0, p3, p1 ) ) > VGlobal::bezierFlatnessTolerance ||
-		QABS( height( p0, p3, p2 ) ) > VGlobal::bezierFlatnessTolerance )
+		QABS( height( p0(), p3(), p1() ) ) > VGlobal::bezierFlatnessTolerance ||
+		QABS( height( p0(), p3(), p2() ) ) > VGlobal::bezierFlatnessTolerance )
 	{
 		return false;
 	}
@@ -207,26 +102,426 @@ bezierIsFlat(
 	return true;
 }
 
-// calculate bezier/bezier-intersections:
-static void
-findIntersectionsRecursively(
-	const KoPoint* a0, const KoPoint* a1, const KoPoint* a2, const KoPoint* a3,
-	const KoPoint* b0, const KoPoint* b1, const KoPoint* b2, const KoPoint* b3,
-	QPtrList<VSegment>& a, QPtrList<VSegment>& b )
+void
+VSegment::calcBoundingBox( KoPoint& min, KoPoint& max ) const
 {
-	if( !boundingBoxesIntersect( *a0, *a1, *a2, *a3, *b0, *b1, *b2, *b3 ) )
+	if ( m_prev == 0L )
 		return;
-// TODO
+
+	if( p0()->x() > p3()->x() )
+		{ min.setX( p3()->x() ); max.setX( p0()->x() ); }
+	else
+		{ min.setX( p0()->x() ); max.setX( p3()->x() ); }
+	if( p1()->x() < min.x() )
+		min.setX( p1()->x() );
+	else if( p1()->x() > max.x() )
+		max.setX( p1()->x() );
+	if( p2()->x() < min.x() )
+		min.setX( p2()->x() );
+	else if( p2()->x() > max.x() )
+		max.setX( p2()->x() );
+
+	if( p0()->y() > p3()->y() )
+		{ min.setY( p3()->y() ); max.setY( p0()->y() ); }
+	else
+		{ min.setY( p0()->y() ); max.setY( p3()->y() ); }
+	if( p1()->y() < min.y() )
+		min.setY( p1()->y() );
+	else if( p1()->y() > max.y() )
+		max.setY( p1()->y() );
+	if( p2()->y() < min.y() )
+		min.setY( p2()->y() );
+	else if( p2()->y() > max.y() )
+		max.setY( p2()->y() );
 }
+
+void
+VSegment::findIntersectionParametersWith( const double t0, const double t1,
+	const VSegment* segB, const double u0, const double u1,
+	QValueList<double>& paramsA, QValueList<double>& paramsB ) const
+{
+// TODO: to save some stack, maybe move bb-test in front of all
+// findIntersectionParametersWith() calls?
+
+	// calculate bounding-boxes:
+	KoPoint minA;
+	KoPoint maxA;
+	calcBoundingBox( minA, maxA );
+
+	KoPoint minB;
+	KoPoint maxB;
+	segB->calcBoundingBox( minB, maxB );
+
+	// bounding-boxes dont intersect => game over:
+	if (
+		minA.x() > maxB.x() || minB.x() > maxA.x() ||
+		minA.y() > maxB.y() || minB.y() > maxA.y() )
+	{
+		return;
+	}
+
+	if( isFlat() )
+	{
+		if( segB->isFlat() )
+		{
+			// calculate intersection of line segments:
+			KoPoint a03  = *p3() - *p0();
+			KoPoint b03  = *( segB->p3() ) - *( segB->p0() );
+			double det = b03.x() * a03.y() - b03.y() * a03.x();
+			
+			if( det == 0.0 )
+				return;
+			else
+			{
+				KoPoint a0b0 = *( segB->p0() ) - *p0();
+				const double one_det = 1.0 / det;
+
+				double t = one_det * ( b03.x() * a0b0.y() - b03.y() * a0b0.x() );
+				double u = one_det * ( a03.x() * a0b0.y() - a03.y() * a0b0.x() );
+				
+				if ( t < 0.0 || t > 1.0 || u < 0.0 || u > 1.0 )
+					return;
+
+				paramsA.append( t0 + t * ( t1 - t0 ) );
+				paramsB.append( u0 + u * ( u1 - u0 ) );
+			}
+		}
+		else
+		{
+			double midU = 0.5 * ( u0 + u1 );
+			QPtrVector<VSegment> newSegsB = segB->splitAtMidpoint();
+
+			newSegsB.at( 0 )->findIntersectionParametersWith(
+				u0, midU, this, t0, t1, paramsA, paramsB );
+			newSegsB.at( 1 )->findIntersectionParametersWith(
+				midU, u1, this, t0, t1, paramsA, paramsB );
+		}
+	}
+	else
+	{
+		double midT = 0.5 * ( t0 + t1 );
+		QPtrVector<VSegment> newSegsA = splitAtMidpoint();
+
+		if( segB->isFlat() )
+		{
+			newSegsA.at( 0 )->findIntersectionParametersWith(
+				t0, midT, segB, u0, u1, paramsA, paramsB );
+			newSegsA.at( 1 )->findIntersectionParametersWith(
+				midT, t1, segB, u0, u1, paramsA, paramsB );
+		}
+		else
+		{
+			double midU = 0.5 * ( u0 + u1 );
+			QPtrVector<VSegment> newSegsB = segB->splitAtMidpoint();
+
+			newSegsA.at( 0 )->findIntersectionParametersWith(
+				t0, midT, newSegsB.at( 0 ), u0, midU, paramsA, paramsB );
+			newSegsA.at( 1 )->findIntersectionParametersWith(
+				midT, t1, newSegsB.at( 0 ), u0, midU, paramsA, paramsB );
+			newSegsA.at( 0 )->findIntersectionParametersWith(
+				t0, midT, newSegsB.at( 1 ), midU, u1, paramsA, paramsB );
+			newSegsA.at( 1 )->findIntersectionParametersWith(
+				midT, t1, newSegsB.at( 1 ), midU, u1, paramsA, paramsB );
+		}
+	}
+}
+
+void
+VSegment::addIntersectionsWithTo( const VSegment* segB,
+		VPath& pathA, VPath& pathB ) const
+{
+	// list of intersection-params:
+	QValueList<double> paramsA;
+	QValueList<double> paramsB;
+
+	findIntersectionParametersWith( 0.0, 1.0, segB, 0.0, 1.0, paramsA, paramsB );
+
+	qHeapSort( paramsA );
+	qHeapSort( paramsB );
+	
+	QValueList<double>::iterator itr;
+	for( itr = paramsA.begin(); itr != paramsA.end(); ++itr )
+		addYourselfLeftSplittedAtTo( *itr, pathA );
+	for( itr = paramsB.begin(); itr != paramsB.end(); ++itr )
+		segB->addYourselfLeftSplittedAtTo( *itr, pathB );
+}
+
+
+class VMoveTo : public VSegment
+{
+public:
+	VMoveTo( const KoPoint& p3, VSegment* prev = 0L )
+		: VSegment( p3, prev ) {}
+
+	virtual bool isFlat() const { return true; }
+	virtual void addYourselfLeftSplittedAtTo( const double t, VPath& path ) const;
+	virtual QPtrVector<VSegment> splitAtMidpoint() const;
+};
+
+
+class VLineTo : public VSegment
+{
+public:
+	VLineTo( const KoPoint& p3, VSegment* prev )
+		: VSegment( p3, prev ) {}
+
+	virtual bool isFlat() const { return true; }
+	virtual void calcBoundingBox( KoPoint& min, KoPoint& max ) const;
+	virtual void addYourselfLeftSplittedAtTo( const double t, VPath& path ) const;
+	virtual QPtrVector<VSegment> splitAtMidpoint() const;
+};
+
+void
+VLineTo::calcBoundingBox( KoPoint& min, KoPoint& max ) const
+{
+	if ( previous() == 0L )
+		return;
+
+	if( p0()->x() > p3()->x() )
+		{ min.setX( p3()->x() ); max.setX( p0()->x() ); }
+	else
+		{ min.setX( p0()->x() ); max.setX( p3()->x() ); }
+
+	if( p0()->y() > p3()->y() )
+		{ min.setY( p3()->y() ); max.setY( p0()->y() ); }
+	else
+		{ min.setY( p0()->y() ); max.setY( p3()->y() ); }
+}
+
+void
+VLineTo::addYourselfLeftSplittedAtTo( const double t, VPath& path ) const
+{
+	if ( p0() == 0L || t < 0.0 || t > 1.0 )
+		return;
+//	path.lineTo();
+}
+
+QPtrVector<VSegment>
+VLineTo::splitAtMidpoint( ) const
+{
+	QPtrVector<VSegment> segments( 2 );
+
+	if ( p0() == 0L )
+		return segments;
+
+	KoPoint midPoint(
+		( p0()->x() + p3()->x() ) * 0.5,
+		( p0()->y() + p3()->y() ) * 0.5 );
+
+	VLineTo* line1 = new VLineTo( midPoint, previous() );
+	VLineTo* line2 = new VLineTo( *p3(), line1 );
+
+	segments.insert( 0, line1 );
+	segments.insert( 1, line2 );
+
+	return segments;
+}
+
+
+class VCurveTo : public VSegment
+{
+public:
+	VCurveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3, VSegment*
+ prev )
+		: m_p1( p1 ), m_p2( p2 ), VSegment( p3, prev ) {}
+
+	virtual const KoPoint* p1() const
+		{ return &m_p1; }
+	virtual const KoPoint* p2() const
+		{ return &m_p2; }
+
+	virtual void setP1( const KoPoint& p ) { m_p1 = p; }
+	virtual void setP2( const KoPoint& p ) { m_p2 = p; }
+
+	virtual void addYourselfLeftSplittedAtTo( const double t, VPath& path ) const;
+	virtual QPtrVector<VSegment> splitAtMidpoint() const;
+
+private:
+	KoPoint m_p1;
+	KoPoint m_p2;
+};
+
+void
+VCurveTo::addYourselfLeftSplittedAtTo( const double t, VPath& path ) const
+{
+	if ( p0() == 0L || t < 0.0 || t > 1.0 )
+		return;
+//	path.curveTo();
+}
+
+QPtrVector<VSegment>
+VCurveTo::splitAtMidpoint( ) const
+{
+	QPtrVector<VSegment> segments( 2 );
+
+	if ( p0() == 0L )
+		return segments;
+
+	KoPoint midPoint(
+		( p0()->x() + p3()->x() ) * 0.5,
+		( p0()->y() + p3()->y() ) * 0.5 );
+
+	VLineTo* line1 = new VLineTo( midPoint, previous() );
+	VLineTo* line2 = new VLineTo( *p3(), line1 );
+
+	segments.insert( 0, line1 );
+	segments.insert( 1, line2 );
+
+	return segments;
+}
+
+
+class VCurve1To : public VSegment
+{
+public:
+	VCurve1To( const KoPoint& p2, const KoPoint& p3, VSegment* prev )
+		: m_p2( p2 ), VSegment( p3, prev ) {}
+
+	virtual const KoPoint* p1() const
+		{ return p0(); }
+	virtual const KoPoint* p2() const
+		{ return &m_p2; }
+
+	virtual void setP2( const KoPoint& p ) { m_p2 = p; }
+
+	virtual void addYourselfLeftSplittedAtTo( const double t, VPath& path ) const;
+	virtual QPtrVector<VSegment> splitAtMidpoint() const;
+
+private:
+	KoPoint m_p2;
+};
+
+void
+VCurve1To::addYourselfLeftSplittedAtTo( const double t, VPath& path ) const
+{
+	if ( p0() == 0L || t < 0.0 || t > 1.0 )
+		return;
+//	path.curve1To();
+}
+
+QPtrVector<VSegment>
+VCurve1To::splitAtMidpoint( ) const
+{
+	QPtrVector<VSegment> segments( 2 );
+
+	if ( p0() == 0L )
+		return segments;
+
+	KoPoint midPoint(
+		( p0()->x() + p3()->x() ) * 0.5,
+		( p0()->y() + p3()->y() ) * 0.5 );
+
+	VLineTo* line1 = new VLineTo( midPoint, previous() );
+	VLineTo* line2 = new VLineTo( *p3(), line1 );
+
+	segments.insert( 0, line1 );
+	segments.insert( 1, line2 );
+
+	return segments;
+}
+
+
+class VCurve2To : public VSegment
+{
+public:
+	VCurve2To( const KoPoint& p1, const KoPoint& p3, VSegment* prev )
+		: m_p1( p1 ), VSegment( p3, prev ) {}
+
+	virtual const KoPoint* p1() const
+		{ return &m_p1; }
+	virtual const KoPoint* p2() const
+		{ return p3(); }
+
+	virtual void setP1( const KoPoint& p ) { m_p1 = p; }
+
+	virtual void addYourselfLeftSplittedAtTo( const double t, VPath& path ) const;
+	virtual QPtrVector<VSegment> splitAtMidpoint() const;
+
+private:
+	KoPoint m_p1;
+};
+
+void
+VCurve2To::addYourselfLeftSplittedAtTo( const double t, VPath& path ) const
+{
+	if ( p0() == 0L || t < 0.0 || t > 1.0 )
+		return;
+//	path.curve2To();
+}
+
+QPtrVector<VSegment>
+VCurve2To::splitAtMidpoint( ) const
+{
+	QPtrVector<VSegment> segments( 2 );
+
+	if ( p0() == 0L )
+		return segments;
+
+	KoPoint midPoint(
+		( p0()->x() + p3()->x() ) * 0.5,
+		( p0()->y() + p3()->y() ) * 0.5 );
+
+	VLineTo* line1 = new VLineTo( midPoint, previous() );
+	VLineTo* line2 = new VLineTo( *p3(), line1 );
+
+	segments.insert( 0, line1 );
+	segments.insert( 1, line2 );
+
+	return segments;
+}
+
+
+class VClosePath : public VSegment
+{
+public:
+	VClosePath( const KoPoint& p3, VSegment* prev = 0L )
+		: VSegment( p3, prev ) {}
+
+	virtual bool isFlat() const { return true; }
+
+	virtual void addYourselfLeftSplittedAtTo( const double t, VPath& path ) const;
+	virtual QPtrVector<VSegment> splitAtMidpoint() const;
+};
+
+void
+VClosePath::addYourselfLeftSplittedAtTo( const double t, VPath& path ) const
+{
+	if ( p0() == 0L || t < 0.0 || t > 1.0 )
+		return;
+//	path.close();
+}
+
+QPtrVector<VSegment>
+VClosePath::splitAtMidpoint( ) const
+{
+	QPtrVector<VSegment> segments( 2 );
+
+	if ( p0() == 0L )
+		return segments;
+
+	KoPoint midPoint(
+		( p0()->x() + p3()->x() ) * 0.5,
+		( p0()->y() + p3()->y() ) * 0.5 );
+
+	VLineTo* line1 = new VLineTo( midPoint, previous() );
+	VLineTo* line2 = new VLineTo( *p3(), line1 );
+
+	segments.insert( 0, line1 );
+	segments.insert( 1, line2 );
+
+	return segments;
+}
+
 
 // -----------------------------------
 // -----------------------------------
+
 
 VPath::VPath()
 	: VObject()
 {
 	// we need a current point at (0,0):
-	m_segments.append( new VMoveTo( 0.0, 0.0 ) );
+	m_segments.append( new VMoveTo( KoPoint( 0.0, 0.0 ) ) );
 }
 
 VPath::VPath( const VPath& path )
@@ -253,77 +548,24 @@ VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
 
 	for( ; itr.current(); ++itr )
 	{
-		QPointArray seg_qpa;
-
-		switch( itr.current()->m_type )
+		if( VClosePath* seg = dynamic_cast<VClosePath*>( itr.current() ) )
+			continue;
+		else
+		if( VMoveTo* seg = dynamic_cast<VMoveTo*>( itr.current() ) )
+			painter.moveTo( seg->p3()->x(), seg->p3()->y() );
+		else
+		if( VLineTo* seg = dynamic_cast<VLineTo*>( itr.current() ) )
+			painter.lineTo( seg->p3()->x(), seg->p3()->y() );
+		else
 		{
-			case VSegment::moveTo:
-				painter.moveTo( itr.current()->m_p3.x(), itr.current()->m_p3.y() );
-			break;
-			case VSegment::lineTo:
-			case VSegment::closePath:
-				painter.lineTo( itr.current()->m_p3.x(), itr.current()->m_p3.y() );
-			break;
-			case VSegment::curveTo:
-				seg_qpa.resize( 4 );
-				--itr;
-				seg_qpa.setPoint( 0,
-					itr.current()->m_p3.x(),
-					itr.current()->m_p3.y() );
-				++itr;
-				seg_qpa.setPoint( 1,
-					static_cast<VCurveTo*>( itr.current() )->m_p1.x(),
-					static_cast<VCurveTo*>( itr.current() )->m_p1.y() );
-				seg_qpa.setPoint( 2,
-					static_cast<VCurveTo*>( itr.current() )->m_p2.x(),
-					static_cast<VCurveTo*>( itr.current() )->m_p2.y() );
-				seg_qpa.setPoint( 3,
-					itr.current()->m_p3.x(),
-					itr.current()->m_p3.y() );
+			QPointArray seg_qpa( 4 );
+			seg_qpa.setPoint( 0, seg->p0()->x(), seg->p0()->y() );
+			seg_qpa.setPoint( 1, seg->p1()->x(), seg->p1()->y() );
+			seg_qpa.setPoint( 2, seg->p2()->x(), seg->p2()->y() );
+			seg_qpa.setPoint( 3, seg->p3()->x(), seg->p3()->y() );
 
-				painter.drawPolyline( seg_qpa.cubicBezier() );
-				painter.moveTo( itr.current()->m_p3.x(), itr.current()->m_p3.y() );
-			break;
-			case VSegment::curve1To:
-				seg_qpa.resize( 4 );
-				--itr;
-				seg_qpa.setPoint( 0,
-					itr.current()->m_p3.x(),
-					itr.current()->m_p3.y() );
-				seg_qpa.setPoint( 1,
-					itr.current()->m_p3.x(),
-					itr.current()->m_p3.y() );
-				++itr;
-				seg_qpa.setPoint( 2,
-					static_cast<VCurveTo*>( itr.current() )->m_p2.x(),
-					static_cast<VCurveTo*>( itr.current() )->m_p2.y() );
-				seg_qpa.setPoint( 3,
-					itr.current()->m_p3.x(),
-					itr.current()->m_p3.y() );
-
-				painter.drawPolyline( seg_qpa.cubicBezier() );
-				painter.moveTo( itr.current()->m_p3.x(), itr.current()->m_p3.y() );
-			break;
-			case VSegment::curve2To:
-				seg_qpa.resize( 4 );
-				--itr;
-				seg_qpa.setPoint( 0,
-					itr.current()->m_p3.x(),
-					itr.current()->m_p3.y() );
-				++itr;
-				seg_qpa.setPoint( 1,
-					static_cast<VCurveTo*>( itr.current() )->m_p1.x(),
-					static_cast<VCurveTo*>( itr.current() )->m_p1.y() );
-				seg_qpa.setPoint( 2,
-					itr.current()->m_p3.x(),
-					itr.current()->m_p3.y() );
-				seg_qpa.setPoint( 3,
-					itr.current()->m_p3.x(),
-					itr.current()->m_p3.y() );
-
-				painter.drawPolyline( seg_qpa.cubicBezier() );
-				painter.moveTo( itr.current()->m_p3.x(), itr.current()->m_p3.y() );
-			break;
+			painter.drawPolyline( seg_qpa.cubicBezier() );
+			painter.moveTo( seg->p3()->x(), seg->p3()->y() );
 		}
 	}
 
@@ -416,8 +658,8 @@ VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
 		const uint handleSize = 3;
 
 		painter.drawRect(
-			itr.current()->m_p3.x() - handleSize,
-			itr.current()->m_p3.y() - handleSize,
+			itr.current()->p3()->x() - handleSize,
+			itr.current()->p3()->y() - handleSize,
 			handleSize*2 + 1,
 			handleSize*2 + 1 );
 
@@ -479,7 +721,7 @@ VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
 const KoPoint&
 VPath::currentPoint() const
 {
-	return( m_segments.getLast()->m_p3 );
+	return *( m_segments.getLast()->p3() );
 }
 
 VPath&
@@ -488,14 +730,13 @@ VPath::moveTo( const double& x, const double& y )
 	if( isClosed() ) return *this;
 
 	// modify last moveTo:
-	if ( m_segments.getLast()->m_type == VSegment::moveTo )
+	if ( dynamic_cast<VMoveTo*>( m_segments.getLast() ) )
 	{
-		m_segments.getLast()->m_p3.setX( x );
-		m_segments.getLast()->m_p3.setY( y );
+		m_segments.getLast()->setP3( KoPoint( x, y ) );
 	}
 	else
 		// or append a new moveTo:
-		m_segments.append( new VMoveTo( x, y ) );
+		m_segments.append( new VMoveTo( KoPoint( x, y ), m_segments.getLast() ) );
 
 	return *this;
 }
@@ -505,7 +746,7 @@ VPath::lineTo( const double& x, const double& y )
 {
 	if( isClosed() ) return *this;
 
-	m_segments.append( new VLineTo( x, y ) );
+	m_segments.append( new VLineTo( KoPoint( x, y ), m_segments.getLast() ) );
 
 	return *this;
 }
@@ -518,7 +759,11 @@ VPath::curveTo(
 {
 	if( isClosed() ) return *this;
 
-	m_segments.append( new VCurveTo( x1, y1, x2, y2, x3, y3 ) );
+	m_segments.append(
+		new VCurveTo(
+			KoPoint( x1, y1 ),
+			KoPoint( x2, y2 ),
+			KoPoint( x3, y3 ), m_segments.getLast() ) );
 
 	return *this;
 }
@@ -530,7 +775,10 @@ VPath::curve1To(
 {
 	if( isClosed() ) return *this;
 
-	m_segments.append( new VCurve1To( x2, y2, x3, y3 ) );
+	m_segments.append(
+		new VCurve1To(
+			KoPoint( x2, y2 ),
+			KoPoint( x3, y3 ), m_segments.getLast() ) );
 
 	return *this;
 }
@@ -542,7 +790,10 @@ VPath::curve2To(
 {
 	if( isClosed() ) return *this;
 
-	m_segments.append( new VCurve2To( x1, y1, x3, y3 ) );
+	m_segments.append(
+		new VCurve2To(
+			KoPoint( x1, y1 ),
+			KoPoint( x3, y3 ), m_segments.getLast() ) );
 
 	return *this;
 }
@@ -558,8 +809,8 @@ VPath::arcTo(
 
 	// we need to calculate the tangent points. therefore calculate tangents
 	// D10=P1P0 and D12=P1P2 first:
-	double dx10 = m_segments.getLast()->m_p3.x() - x1;
-	double dy10 = m_segments.getLast()->m_p3.y() - y1;
+	double dx10 = m_segments.getLast()->p3()->x() - x1;
+	double dy10 = m_segments.getLast()->p3()->y() - y1;
 	double dx12 = x2 - x1;
 	double dy12 = y2 - y1;
 
@@ -582,7 +833,7 @@ VPath::arcTo(
 		double d1t0 = dist / sqrt(dsq10);
 		double d1t1 = dist / sqrt(dsq12);
 
-// TODO: check for(r<0
+// TODO: check for r<0
 
 		double bx0 = x1 + dx10*d1t0;
 		double by0 = y1 + dy10*d1t0;
@@ -590,8 +841,8 @@ VPath::arcTo(
 		// if(bx0,by0) deviates from current point, add a line to it:
 // TODO: decide via radius<XXX or sthg?
 		if(
-			bx0 != m_segments.getLast()->m_p3.x() ||
-			by0 != m_segments.getLast()->m_p3.y() )
+			bx0 != m_segments.getLast()->p3()->x() ||
+			by0 != m_segments.getLast()->p3()->y() )
 		{
 			lineTo( bx0, by0 );
 		}
@@ -631,8 +882,7 @@ VPath::close()
 
 	m_segments.append(
 		new VClosePath(
-			m_segments.getFirst()->m_p3.x(),
-			m_segments.getFirst()->m_p3.y() ) );
+			*( m_segments.getFirst()->p3() ), m_segments.getLast() ) );
 
 	return *this;
 }
@@ -641,8 +891,7 @@ VPath::close()
 bool
 VPath::isClosed() const
 {
-	return
-		m_segments.getLast()->m_type == VSegment::closePath;
+	return dynamic_cast<VClosePath*>( m_segments.getLast() );
 }
 
 VPath*
@@ -660,9 +909,6 @@ VPath::booleanOp( const VPath* path, int type ) const
 	VPath pathA;
 	VPath pathB;
 
-	// holds a list of t's:
-	QValueList<double> params;
-
 	QPtrListIterator<VSegment> itrA( m_segments );
 	QPtrListIterator<VSegment> itrB( path->m_segments );
 
@@ -670,10 +916,11 @@ VPath::booleanOp( const VPath* path, int type ) const
 	{
 		for( itrB.toFirst(); itrB.current(); ++itrB )
 		{
+			itrA.current()->addIntersectionsWithTo(
+				itrB.current(), pathA, pathB );
 		}
 	}
 
-	qHeapSort( params );
 
 	return 0L;
 }
@@ -684,24 +931,12 @@ VPath::transform( const QWMatrix& m )
 	QPtrListIterator<VSegment> itr( m_segments );
 	for( ; itr.current() ; ++itr )
 	{
-		switch( itr.current()->m_type )
-		{
-			case VSegment::curveTo:
-				static_cast<VCurveTo*>( itr.current() )->m_p1 =
-					static_cast<VCurveTo*>( itr.current() )->m_p1.transform( m );
-				static_cast<VCurveTo*>( itr.current() )->m_p2 =
-					static_cast<VCurveTo*>( itr.current() )->m_p2.transform( m );
-			break;
-			case VSegment::curve1To:
-				static_cast<VCurve1To*>( itr.current() )->m_p2 =
-					static_cast<VCurve1To*>( itr.current() )->m_p2.transform( m );
-			break;
-			case VSegment::curve2To:
-				static_cast<VCurve2To*>( itr.current() )->m_p1 =
-					static_cast<VCurve2To*>( itr.current() )->m_p1.transform( m );
-			break;
-		}
-		itr.current()->m_p3 = itr.current()->m_p3.transform( m );
+		if( itr.current()->p1() )
+			itr.current()->setP1( itr.current()->p1()->transform( m ) );
+		if( itr.current()->p2() )
+			itr.current()->setP2( itr.current()->p2()->transform( m ) );
+		
+		itr.current()->setP3( itr.current()->p3()->transform( m ) );
 	}
 
 	return *this;

@@ -13,7 +13,7 @@
 class QWMatrix;
 class KoPoint;
 
-struct VSegment;
+class VSegment;
 
 class VPath : public VObject
 {
