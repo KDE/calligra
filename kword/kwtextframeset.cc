@@ -3513,7 +3513,7 @@ void KWTextFrameSetEdit::terminate()
 
 void KWTextFrameSetEdit::slotFrameDeleted( KWFrame *frm )
 {
-    if ( m_currentFrame = frm )
+    if ( m_currentFrame == frm )
         m_currentFrame = 0L;
 }
 
