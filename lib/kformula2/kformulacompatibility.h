@@ -22,7 +22,6 @@
 
 #include <qdom.h>
 #include <qstring.h>
-//#include <qvaluestack.h>
 
 
 /**
@@ -34,30 +33,28 @@ public:
 
     KFormulaCompatibility();
 
+    /**
+     * Builds a kformula DOM from a old formula string.
+     */
     QDomDocument buildDOM(QString text);
 
 private:
 
     QDomElement readSequence(QDomDocument doc);
-
     QDomElement readMatrix(QDomDocument doc);
 
-    void appendToSequence(QDomElement sequence, QDomElement element) { sequence.appendChild(element); }
-    
-    void appendNextSequence(QDomDocument doc, QDomElement element);
+    void appendToSequence(QDomElement sequence, QDomElement element, int leftIndexSeen);
 
+    void appendNextSequence(QDomDocument doc, QDomElement element);
     QDomElement getLastSequence(QDomDocument doc, QDomElement sequence);
     
     QDomElement findIndexNode(QDomDocument doc, QDomElement sequence);
 
     ushort nextToken() { return formulaString[pos++].unicode(); }
-
     ushort lookAhead(uint i) const { return formulaString[pos+i].unicode(); }
-
     void pushback() { pos--; }
     
     bool hasNext() const { return pos < formulaString.length(); }
-
     uint tokenLeft() const { return formulaString.length()-pos; }
 
     /**
@@ -69,11 +66,6 @@ private:
      * current pos
      */
     uint pos;
-
-    /**
-     * a stack for sequences we have read but not inserted yet
-     */
-    //QValueStack<QDomElement> stack;
 };
 
 #endif // KFORMULACOMPATIBILITY_H

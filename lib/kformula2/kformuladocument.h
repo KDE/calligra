@@ -65,6 +65,9 @@ public:
      */
     const ContextStyle& getContextStyle() const { return contextStyle; }
 
+    double getXResolution() const { return contextStyle.getXResolution(); }
+    double getYResolution() const { return contextStyle.getYResolution(); }
+
     /**
      * Sets the resolution (factor) to be used to draw the formula.
      * Make sure to recalc all formulas after you called this.
@@ -120,8 +123,11 @@ public:
     KAction* getAddGenericLowerAction()  { return addGenericLowerAction; }
     KAction* getRemoveEnclosingAction()  { return removeEnclosingAction; }
     KAction* getMakeGreekAction()        { return makeGreekAction; }
+    KAction* getInsertSymbolAction()     { return insertSymbolAction; }
     KSelectAction* getLeftBracketAction()  { return leftBracket; }
     KSelectAction* getRightBracketAction() { return rightBracket; }
+    KSelectAction* getSymbolNamesAction()  { return symbolNamesAction; }
+    KToggleAction* getSyntaxHighlightingAction() { return syntaxHighlightingAction; }
 
 public slots:
 

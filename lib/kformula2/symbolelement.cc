@@ -615,16 +615,23 @@ bool SymbolElement::readContentFromDom(QDomNode& node)
     }
     node = node.nextSibling();
 
-    lower = buildChild(node, "LOWER");
-    if (lower != 0) {
+    bool lowerRead = false;
+    bool upperRead = false;
+    
+    while (!node.isNull() && !(upperRead && lowerRead)) {
+
+        if (!lowerRead && (node.nodeName().upper() == "LOWER")) {
+            lower = buildChild(node, "LOWER");
+            lowerRead = lower != 0;
+        }
+
+        if (!upperRead && (node.nodeName().upper() == "UPPER")) {
+            upper = buildChild(node, "UPPER");
+            upperRead = upper != 0;
+        }
+
         node = node.nextSibling();
     }
-
-    upper = buildChild(node, "UPPER");
-    if (upper != 0) {
-        node = node.nextSibling();
-    }
-
     return true;
 }
 

@@ -123,10 +123,31 @@ QDomElement KFormulaCompatibility::findIndexNode(QDomDocument doc, QDomElement s
         QDomElement con = doc.createElement("CONTENT");
         element.appendChild(con);
         con.appendChild(getLastSequence(doc, sequence));
-        //appendToSequence(sequence, element, leftIndexContent);
         sequence.appendChild(element);
     }
     return element;
+}
+
+
+void KFormulaCompatibility::appendToSequence(QDomElement sequence, QDomElement element, int leftIndexSeen)
+{
+    if (leftIndexSeen > 0) {
+        if (sequence.lastChild().nodeName() == "INDEX") {
+            QDomElement index = sequence.lastChild().toElement();
+            if ((index.firstChild().nodeName() == "CONTENT") &&
+                (index.firstChild().firstChild().nodeName() == "SEQUENCE")) {
+                QDomElement seq = index.firstChild().firstChild().toElement();
+                if (element.nodeName() == "SEQUENCE") {
+                    index.firstChild().replaceChild(element, seq);
+                }
+                else {
+                    seq.appendChild(element);
+                }
+                return;
+            }
+        }
+    }
+    sequence.appendChild(element);
 }
 
 
@@ -180,7 +201,8 @@ QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
     if ((tokenLeft() > 6) && (lookAhead(1) == OF_SEPARATOR)) {
         return readMatrix(doc);
     }
-    
+
+    int leftIndexSeen = 0;
     QDomElement sequence = doc.createElement("SEQUENCE");
 
     while (hasNext()) {
@@ -189,9 +211,11 @@ QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
         // Debug
         //cout << "read: " << ch << " (" << static_cast<char>(ch) << ')' << endl;
 
+        if (leftIndexSeen > 0) leftIndexSeen--;
+        
         switch (ch) {
             case '{':
-                appendToSequence(sequence, readSequence(doc));
+                appendToSequence(sequence, readSequence(doc), leftIndexSeen);
                 break;
             case '}':
                 return sequence;
@@ -204,7 +228,7 @@ QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
                 }
                 
                 QDomElement element = doc.createElement("BRACKET");
-                appendToSequence(sequence, element);
+                appendToSequence(sequence, element, leftIndexSeen);
                 element.setAttribute("LEFT", ch);
                 element.setAttribute("RIGHT", (ch=='(') ? ')' : ((ch=='[') ? ']' : '|'));
 
@@ -224,14 +248,7 @@ QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
                 element.appendChild(den);
                 appendNextSequence(doc, den);
 
-                appendToSequence(sequence, element);
-                break;
-            }
-            case OF_POWER: {
-                QDomElement element = findIndexNode(doc, sequence);
-                QDomElement upperRight = doc.createElement("UPPERRIGHT");
-                element.appendChild(upperRight);
-                appendNextSequence(doc, upperRight);
+                appendToSequence(sequence, element, leftIndexSeen);
                 break;
             }
             case OF_SQRT: {
@@ -244,7 +261,14 @@ QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
                 element.appendChild(ind);
                 ind.appendChild(getLastSequence(doc, sequence));
 
-                appendToSequence(sequence, element);
+                appendToSequence(sequence, element, leftIndexSeen);
+                break;
+            }
+            case OF_POWER: {
+                QDomElement element = findIndexNode(doc, sequence);
+                QDomElement upperRight = doc.createElement("UPPERRIGHT");
+                element.appendChild(upperRight);
+                appendNextSequence(doc, upperRight);
                 break;
             }
             case OF_SUB: {
@@ -267,9 +291,10 @@ QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
                     element.appendChild(con);
                     QDomElement seq = doc.createElement("SEQUENCE");
                     con.appendChild(seq);
-                    appendToSequence(sequence, element);
+                    appendToSequence(sequence, element, leftIndexSeen);
                 }
                 element.appendChild(upperLeft);
+                leftIndexSeen = 2;
                 break;
             }
             case OF_LSUB: {
@@ -285,23 +310,58 @@ QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
                     element.appendChild(con);
                     QDomElement seq = doc.createElement("SEQUENCE");
                     con.appendChild(seq);
-                    appendToSequence(sequence, element);
+                    appendToSequence(sequence, element, leftIndexSeen);
                 }
                 element.appendChild(lowerLeft);
+                leftIndexSeen = 2;
                 break;
             }
             case OF_ABOVE: {
+                if (sequence.lastChild().nodeName() == "SEQUENCE") {
+                    QDomElement seq = sequence.lastChild().toElement();
+                    if ((seq.childNodes().count() == 1) &&
+                        ((seq.lastChild().nodeName() == "SYMBOL") ||
+                         (seq.lastChild().nodeName() == "INDEX"))) {
+                        sequence.removeChild(seq);
+
+                        QDomElement element = seq.lastChild().toElement();
+                        QDomElement upper = (element.nodeName() == "SYMBOL") ?
+                            doc.createElement("UPPER") :
+                            doc.createElement("UPPERMIDDLE");
+                        element.appendChild(upper);
+                        appendNextSequence(doc, upper);
+                        appendToSequence(sequence, element, leftIndexSeen);
+                        break;
+                    }
+                }
                 QDomElement element = findIndexNode(doc, sequence);
-                QDomElement upperMiddle = doc.createElement("UPPERMIDDLE");
-                element.appendChild(upperMiddle);
-                appendNextSequence(doc, upperMiddle);
+                QDomElement upper = doc.createElement("UPPERMIDDLE");
+                element.appendChild(upper);
+                appendNextSequence(doc, upper);
                 break;
             }
             case OF_BELOW: {
+                if (sequence.lastChild().nodeName() == "SEQUENCE") {
+                    QDomElement seq = sequence.lastChild().toElement();
+                    if ((seq.childNodes().count() == 1) &&
+                        ((seq.lastChild().nodeName() == "SYMBOL") ||
+                         (seq.lastChild().nodeName() == "INDEX"))) {
+                        sequence.removeChild(seq);
+
+                        QDomElement element = seq.lastChild().toElement();
+                        QDomElement lower = (element.nodeName() == "SYMBOL") ?
+                            doc.createElement("LOWER") :
+                            doc.createElement("LOWERMIDDLE");
+                        element.appendChild(lower);
+                        appendNextSequence(doc, lower);
+                        appendToSequence(sequence, element, leftIndexSeen);
+                        break;
+                    }
+                }
                 QDomElement element = findIndexNode(doc, sequence);
-                QDomElement lowerMiddle = doc.createElement("LOWERMIDDLE");
-                element.appendChild(lowerMiddle);
-                appendNextSequence(doc, lowerMiddle);
+                QDomElement lower = doc.createElement("LOWERMIDDLE");
+                element.appendChild(lower);
+                appendNextSequence(doc, lower);
                 break;
             }
             case OF_SYMBOL:
@@ -316,23 +376,23 @@ QDomElement KFormulaCompatibility::readSequence(QDomDocument doc)
                                      ((ch==SUM) ? Sum : Product));
                 
                 QDomElement con = doc.createElement("CONTENT");
+                element.appendChild(con);
                 con.appendChild(readSequence(doc));
                 pushback();
-                element.appendChild(con);
-                appendToSequence(sequence, element);
+                appendToSequence(sequence, element, leftIndexSeen);
                 break;
             }
             case ARROW: {
                 QDomElement element = doc.createElement("TEXT");
                 element.setAttribute("CHAR", QString(QChar(static_cast<char>(174))));
                 element.setAttribute("SYMBOL", "1");
-                appendToSequence(sequence, element);
+                appendToSequence(sequence, element, leftIndexSeen);
                 break;
             }
             default: {
                 QDomElement element = doc.createElement("TEXT");
                 element.setAttribute("CHAR", QString(formulaString[pos-1]));
-                appendToSequence(sequence, element);
+                appendToSequence(sequence, element, leftIndexSeen);
             }
         }
     }

@@ -682,8 +682,8 @@ bool KFormulaContainer::importOldText(QString text)
 {
     KFormulaCompatibility converter;
     QDomDocument doc = converter.buildDOM(text);
-    //QCString data = doc.toCString();
-    //cerr << (const char *)data << endl;
+    QCString data = doc.toCString();
+    cerr << (const char *)data << endl;
     return load(doc);
 }
 

@@ -246,6 +246,7 @@ void KFormulaDocument::createActions(KActionCollection* collection)
                                           0, this, SLOT(symbolNames()),
                                           collection, "formula_symbolnames");
     symbolNamesAction->setItems(names);
+    selectedName = names[0];
 }
 
 
@@ -423,8 +424,7 @@ void KFormulaDocument::toggleSyntaxHighlighting()
     
     KFormulaContainer* f;
     for (f=formulae.first(); f != 0; f=formulae.next()) {
-        f->changed();
-        f->testDirty();
+        f->recalc();
     }
 }
 

@@ -68,6 +68,9 @@ public:
      */
     //ContextStyle(KConfig *config);
 
+    double getXResolution() const { return m_zoomedResolutionX; }
+    double getYResolution() const { return m_zoomedResolutionY; }
+    
     void setResolution(double zX, double zY);
 
     bool getSyntaxHighlighting() { return syntaxHighlighting; }

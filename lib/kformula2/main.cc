@@ -83,9 +83,6 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
 
 void TestWidget::importOld(QString file)
 {
-    slotSelectAll();
-    getDocument()->cut();
-    
     QFile f(file);
     if (!f.open(IO_ReadOnly)) {
         cerr << "Error opening file" << endl;
