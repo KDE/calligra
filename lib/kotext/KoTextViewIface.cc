@@ -79,3 +79,33 @@ void KoTextViewIface::setDefaultFormat()
     m_textView->setDefaultFormat();
 }
 
+QColor KoTextViewIface::textColor() const
+{
+    return m_textView->textColor();
+}
+
+QString KoTextViewIface::textFontFamily()const
+{
+    return m_textView->textFontFamily();
+}
+
+QColor KoTextViewIface::textBackgroundColor()const
+{
+    return m_textView->textBackgroundColor();
+}
+
+void KoTextViewIface::setTextColor(const QColor &color)
+{
+    m_textView->setTextColor(color);
+}
+
+void KoTextViewIface::setTextBackgroundColor(const QColor &color)
+{
+    m_textView->setTextBackgroundColor(color);
+}
+
+void KoTextViewIface::setAlign(int align)
+{
+    m_textView->setAlign(align);
+}
+

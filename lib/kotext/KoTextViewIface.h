@@ -46,6 +46,14 @@ k_dcop:
 
     void setDefaultFormat();
 
+    QColor textColor() const;
+    QString textFontFamily()const;
+    QColor textBackgroundColor()const;
+
+    void setTextColor(const QColor &color);
+    void setTextBackgroundColor(const QColor &);
+    void setAlign(int align);
+
 private:
     KoTextView *m_textView;
 
