@@ -1384,9 +1384,17 @@ Reggie, 13.7.1999:
 - Tabs (Tab key) works again
 
 Reggie, 14.7.1999:
------------------
+------------------
 - Improved DnD a lot
 
 Reggie, 4.7.1999:
--------------
+-----------------
 - Don't allow to connect new frames with framesets of a table
+
+Reggie, 9.7.1999:
+-----------------
+- Enabled filters again
+- Fixed some more redraw errors (clear empty areas)
+  (there are still lots of redraw errors and somtimes too much redraws - I
+   think I have enough todo for the next days :-)
+

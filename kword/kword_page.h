@@ -36,6 +36,7 @@ class QPaintEvent;
 class QResizeEvent;
 class QKeyEvent;
 class QPopupMenu;
+class QRegion;
 class KWFrameDia;
 
 /******************************************************************/
@@ -131,7 +132,7 @@ public:
     void recalcWholeText( bool _cursor = false, bool _fast = false );
     void recalcWholeText( KWParag *start, unsigned int fs );
     void footerHeaderDisappeared();
-    void drawBorders( QPainter &_painter, QRect v_area, bool drawBack = true );
+    void drawBorders( QPainter &_painter, QRect v_area, bool drawBack = true, QRegion *region = 0 );
     void drawFrameSelection( QPainter &_painter, KWFrame *_frame );
     void setRuler2Frame( unsigned int _frameset, unsigned int _frame );
     void setMouseMode( MouseMode _mm );
