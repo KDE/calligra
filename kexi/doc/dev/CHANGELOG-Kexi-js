@@ -284,7 +284,7 @@ HOT TODO:
 PROBLEMS
 1. katepart on win32: void KateSyntaxDocument::setupModeList (bool force)
    Works slowly for the 1st time because there is no cache. 
-   Workaround: removed most of apps/katepart/syntac/*.xml files
+   Workaround: removed most of apps/katepart/syntax/*.xml files
 
 CC_MAIL: dkite@shaw.ca
 
@@ -292,9 +292,6 @@ CCPASTEUR:
 	-why pixmap's code is in kexiproperty/kexipropertybuffer?
 	-perhaps we'd reuse KDE Menu editor GUI?
  
-TODO:
-add KexiViewBase::removeDataBlock() so we can use it in KexiFormPart::remove()
-
 TODO: Query designer: update query after change in Connection cache
 TODO: Kate Part: call qApp->processEvents() on highlighting schema loading, 
  so 'wait' cursor can be visible on 1st loading.
@@ -307,6 +304,25 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 - add clever query relatins parsing 
       (needed for switching back to GUI editor from texdt mode)
 - remove single-char token names with chars (more readable + more effective)
+
+2004-07-23
+Core
+- KexiViewBase::removeDataBlock() and KexiDialogBase::removeDataBlock() added.
+- more error messages added
+Main
+- Startup dialog re-enabled
+KexiDB
+- Utils: most smaller functions are now inline
+- optimizations:
+  * Connection::querySingleRecord(), querySingleString():
+    " LIMIT 1" is added to the statement
+  * Connection::resultExists(): "SELECT 1 FROM (<statement>) LIMIT 1" 
+     statement is executed
+  * Connection::resultCount() added: "SELECT COUNT() FROM (<statement>)" 
+     statement is executed
+- Cursor::open(): sets error message when needed
+Query Designer
+- KexiQueryView: shows error on failed execution
 
 2004-07-22
 Main

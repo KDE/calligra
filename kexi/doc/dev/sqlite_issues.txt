@@ -77,6 +77,11 @@ These checks should be made in KexiDB SQLite engine driver. In fact for each dri
 
 
 ----------------------------------------------------------------
+8. ERRORS Found
+8.1 select * from (select name from persons limit 1) limit 2
+ -should return 1 row; returns 2
+
+----------------------------------------------------------------
 
 HINTS:
 
