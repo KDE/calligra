@@ -976,4 +976,9 @@ void KoRuler::setRightIndent( double _right )
     repaint( false );
 }
 
+void KoRuler::changeFlags(int _flags)
+{
+    d->flags = _flags;
+}
+
 #include "koRuler.moc"

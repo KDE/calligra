@@ -167,6 +167,13 @@ public:
      */
     void setReadWrite( bool _readWrite );
 
+    /*
+     * Change KoRuler flag, for kword is useful to
+     * disable Indent function when frame is different
+     * from text frame
+     */
+    void changeFlags(int _flags);
+
 signals:
     void newPageLayout( KoPageLayout );
     void newLeftIndent( double );
