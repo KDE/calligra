@@ -177,6 +177,7 @@ public:
 	bool checkNode( const KoPoint &p );
 	bool selectNode( const KoRect &r );
 	void selectNode();
+	bool isSelected() const { return m_isSelected[ 0 ] || m_isSelected[ 1 ] || m_isSelected[ 2 ]; }
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );

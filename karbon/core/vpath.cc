@@ -182,7 +182,10 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 				painter->newPath();
 				painter->setRasterOp( Qt::NotROP );
 				painter->setPen( Qt::NoPen );
-				painter->setBrush( Qt::blue.light() );
+				if( jtr.current()->isSelected() )
+					painter->setBrush( Qt::blue.light() );
+				else
+					painter->setBrush( Qt::NoBrush );
 
 				painter->moveTo(
 					KoPoint(
