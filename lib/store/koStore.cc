@@ -311,12 +311,12 @@ QIODevice::Offset KoStore::size() const
   if ( !m_bIsOpen )
   {
     kdWarning(s_area) << "KoStore: You must open before asking for a size" << endl;
-    return static_cast<Q_ULONG>(-1);
+    return static_cast<QIODevice::Offset>(-1);
   }
   if ( m_mode != Read )
   {
     kdWarning(s_area) << "KoStore: Can not get size from store that is opened for writing" << endl;
-    return static_cast<Q_ULONG>(-1);
+    return static_cast<QIODevice::Offset>(-1);
   }
   return m_iSize;
 }
@@ -423,7 +423,8 @@ bool KoStore::extractFile ( const QString &srcName, const QString &fileName )
     file.writeBlock ( data.data(), block );
   }
 
-  Q_ASSERT( total == size() );
+  if( size() != static_cast<QIODevice::Offset>(-1) )
+  	Q_ASSERT( total == size() );
 
   file.close();
   close();
