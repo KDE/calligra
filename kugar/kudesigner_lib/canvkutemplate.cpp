@@ -391,7 +391,7 @@ CanvasBand * CanvasKugarTemplate::band( KuDesignerCanvasRtti type, int level )
         case KuDesignerRttiDetailHeader:
             return details[level].first.first;
         case KuDesignerRttiDetail:
-            return details[level].first.second;
+            return details[level].second;
         case KuDesignerRttiDetailFooter:
             return details[level].first.second;
         case KuDesignerRttiPageFooter:

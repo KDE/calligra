@@ -267,6 +267,7 @@ void AddReportItemCommand::execute()
     m_item->setX(m_x);
     m_item->setY(m_y);
     kdDebug() << "Execute: item created" << endl;
+    kdDebug() << "section: "<<m_section<<", level: "<<m_sectionLevel<<endl;
     m_item->setSection(m_doc->templ->band(m_section, m_sectionLevel));
     m_item->updateGeomProps();
 
