@@ -41,7 +41,7 @@ QString HtmlBasicWorker::textFormatToCss(const TextFormatting& formatData) const
     if ( !fontName.isEmpty() )
     {
         strElement+="font-family: ";
-        strElement+=fontName; // TODO: add alternative font names
+        strElement+=escapeHtmlText(fontName); // TODO: add alternative font names
         strElement+="; ";
     }
 
@@ -178,7 +178,7 @@ void HtmlBasicWorker::openFormatData(const FormatData& formatOrigin,
         if (!format.text.fontName.isEmpty())
         {
             *m_streamOut << " face=\"";
-            *m_streamOut << format.text.fontName; // TODO: add alternative font names
+            *m_streamOut << escapeHtmlText(format.text.fontName); // TODO: add alternative font names
             *m_streamOut << "\"";
         }
         // We use absolute font sizes, as relative ones give too many problems.

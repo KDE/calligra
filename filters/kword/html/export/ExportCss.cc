@@ -96,7 +96,7 @@ QString HtmlCssWorker::textFormatToCss(const TextFormatting& formatOrigin,
         && (force || (formatOrigin.fontName!=formatData.fontName)))
     {
         strElement+="font-family: ";
-        strElement+=fontName; // TODO: add alternative font names
+        strElement+=escapeHtmlText(fontName); // TODO: add alternative font names
         strElement+="; ";
     }
 
