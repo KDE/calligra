@@ -160,12 +160,17 @@ void Container::cursorHasMoved( FormulaCursor* )
 
 void Container::moveOutLeft( FormulaCursor* cursor )
 {
-    emit cursorExitLeft( cursor );
+    emit leaveFormula( cursor, EXIT_LEFT );
 }
 
 void Container::moveOutRight( FormulaCursor* cursor )
 {
-    emit cursorExitRight( cursor );
+    emit leaveFormula( cursor, EXIT_RIGHT );
+}
+
+void Container::removeFormula( FormulaCursor* cursor )
+{
+    emit leaveFormula( cursor, REMOVE_FORMULA );
 }
 
 FormulaCursor* Container::activeCursor()
@@ -371,7 +376,8 @@ double Container::baseline() const
 {
     const ContextStyle& context = document()->getContextStyle();
     //return context.layoutUnitToPixelY( rootElement()->getBaseline() );
-    return context.layoutUnitPtToPt( context.pixelYToPt( rootElement()->getBaseline() ) );
+    //return context.layoutUnitPtToPt( context.pixelYToPt( rootElement()->getBaseline() ) );
+    return context.pixelYToPt( rootElement()->getBaseline() );
 }
 
 void Container::moveTo( int x, int y )

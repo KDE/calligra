@@ -46,10 +46,8 @@ struct View::View_Impl {
                 view, SLOT(slotFormulaLoaded(FormulaElement*)));
         connect(document, SIGNAL(cursorMoved(FormulaCursor*)),
                 view, SLOT(slotCursorMoved(FormulaCursor*)));
-        connect( document, SIGNAL( cursorExitLeft( FormulaCursor* ) ),
-                 view, SLOT( slotCursorExitLeft( FormulaCursor* ) ) );
-        connect( document, SIGNAL( cursorExitRight( FormulaCursor* ) ),
-                 view, SLOT( slotCursorExitRight( FormulaCursor* ) ) );
+        connect( document, SIGNAL( leaveFormula( FormulaCursor*, int ) ),
+                 view, SLOT( slotLeaveFormula( FormulaCursor*, int ) ) );
 
         cursor = document->createCursor();
     }
@@ -267,17 +265,20 @@ void View::slotElementWillVanish(BasicElement* element)
     emitCursorChanged();
 }
 
-void View::slotCursorExitLeft( FormulaCursor* c )
+void View::slotLeaveFormula( FormulaCursor* c, int cmd )
 {
     if ( cursor() == c ) {
-        exitLeft();
-    }
-}
-
-void View::slotCursorExitRight( FormulaCursor* c )
-{
-    if ( cursor() == c ) {
-        exitRight();
+        switch ( cmd ) {
+        case Container::EXIT_LEFT:
+            exitLeft();
+            break;
+        case Container::EXIT_RIGHT:
+            exitRight();
+            break;
+        case Container::REMOVE_FORMULA:
+            removeFormula();
+            break;
+        }
     }
 }
 
@@ -362,6 +363,10 @@ void View::exitLeft()
 void View::exitRight()
 {
     //kdDebug( DEBUGID ) << "View::exitRight" << endl;
+}
+
+void View::removeFormula()
+{
 }
 
 void View::emitCursorChanged()

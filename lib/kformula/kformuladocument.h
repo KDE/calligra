@@ -92,13 +92,13 @@ public:
     //void setResolution(double zX, double zY);
 
     /**
-     * Creates a new formula. The whole idea of the formula document
-     * is to contain formulas.
+     * Registers a new formula to be part of this document. Each formula
+     * must be part of exactly one document. So you better register!
      *
-     * The new formula is not owned by the document so you are responsible
+     * The formula is not owned by the document so you are responsible
      * to delete in properly.
      */
-    Container* createFormula();
+    void registerFormula( Container* );
 
     /**
      * Sets a new formula.

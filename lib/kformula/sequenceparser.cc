@@ -104,10 +104,10 @@ void SequenceParser::readNumber()
             if ( ch.isNumber() ) {
                 readDigits();
             }
-            else {
-                tokenEnd--;
-                return;
-            }
+//             else {
+//                 tokenEnd--;
+//                 return;
+//             }
         }
 
         // there might as well be an exponent

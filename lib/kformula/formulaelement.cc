@@ -77,6 +77,11 @@ void FormulaElement::moveOutRight( FormulaCursor* cursor )
     document->moveOutRight( cursor );
 }
 
+void FormulaElement::removeFormula( FormulaCursor* cursor )
+{
+    document->removeFormula( cursor );
+}
+
 /**
  * Calculates the formulas sizes and positions.
  */

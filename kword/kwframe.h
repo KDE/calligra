@@ -894,6 +894,8 @@ public:
     /** Gets called if the cursor ties to leave the formula at its end. */
     void exitRight();
 
+    void removeFormula();
+
 protected slots:
 
     /**

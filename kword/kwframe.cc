@@ -1842,7 +1842,6 @@ void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, c
 }
 
 
-
 class FormulaView : public KFormula::View {
 public:
     FormulaView( KWFormulaFrameSetEdit* edit, KFormula::Container* c )
@@ -1854,10 +1853,10 @@ public:
     /** Gets called if the cursor ties to leave the formula at its end. */
     virtual void exitRight() { m_edit->exitRight(); }
 
+    virtual void removeFormula() { m_edit->removeFormula(); }
 private:
     KWFormulaFrameSetEdit* m_edit;
 };
-
 
 /******************************************************************/
 /* Class: KWFormulaFrameSet                                       */
@@ -1866,7 +1865,9 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc ), m_changed( false )
 {
     kdDebug(32001) << "KWFormulaFrameSet::KWFormulaFrameSet" << endl;
-    formula = _doc->getFormulaDocument()->createFormula();
+    formula = new KFormula::Container( _doc->getFormulaDocument() );
+    _doc->getFormulaDocument()->registerFormula( formula );
+
     // With the new drawing scheme (drawFrame being called with translated painter)
     // there is no need to move the KFormulaContainer anymore, it remains at (0,0).
     formula->moveTo( 0, 0 );
@@ -1999,7 +2000,8 @@ void KWFormulaFrameSet::paste( QDomNode& formulaElem )
 {
     if (!formulaElem.isNull()) {
         if (formula == 0) {
-            formula = m_doc->getFormulaDocument()->createFormula();
+            formula = new KFormula::Container( m_doc->getFormulaDocument() );
+            m_doc->getFormulaDocument()->registerFormula( formula );
             connect(formula, SIGNAL(formulaChanged(double, double)),
                     this, SLOT(slotFormulaChanged(double, double)));
         }
@@ -2078,7 +2080,7 @@ KFormula::View* KWFormulaFrameSetEdit::getFormulaView() { return formulaView; }
 void KWFormulaFrameSetEdit::keyPressEvent( QKeyEvent* event )
 {
     //kdDebug(32001) << "KWFormulaFrameSetEdit::keyPressEvent" << endl;
-    formulaView->keyPressEvent( event );;
+    formulaView->keyPressEvent( event );
 }
 
 void KWFormulaFrameSetEdit::mousePressEvent( QMouseEvent* event,
@@ -2159,6 +2161,17 @@ void KWFormulaFrameSetEdit::exitRight()
     int index = formulaFrameSet()->findAnchor(0)->index();
     KoTextParag *parag = static_cast<KoTextParag*>( formulaFrameSet()->findAnchor( 0 )->paragraph() );
     m_canvas->editTextFrameSet( formulaFrameSet()->anchorFrameset(), parag, index+1 );
+}
+
+void KWFormulaFrameSetEdit::removeFormula()
+{
+    KWCanvas* canvas = m_canvas;
+
+    // This call will destroy us! We cannot use 'this' afterwards!
+    exitRight();
+
+    QKeyEvent keyEvent( QEvent::KeyPress, Key_Backspace, 0, 0 );
+    canvas->currentFrameSetEdit()->keyPressEvent( &keyEvent );
 }
 
 void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )

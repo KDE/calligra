@@ -72,6 +72,7 @@ public:
     virtual void cursorHasMoved( FormulaCursor* ) = 0;
     virtual void moveOutLeft( FormulaCursor* ) = 0;
     virtual void moveOutRight( FormulaCursor* ) = 0;
+    virtual void removeFormula( FormulaCursor* ) {}
     virtual const SymbolTable& getSymbolTable() const = 0;
 };
 
@@ -85,6 +86,8 @@ class Container : public QObject, public FormulaDocument {
     Q_OBJECT
 
 public:
+
+    enum ViewActions { EXIT_LEFT, EXIT_RIGHT, REMOVE_FORMULA };
 
     /**
      * Construct a new formula.
@@ -126,6 +129,7 @@ public:
 
     void moveOutLeft( FormulaCursor* );
     void moveOutRight( FormulaCursor* );
+    void removeFormula( FormulaCursor* );
 
     /**
      * Draws the whole thing.
@@ -269,8 +273,7 @@ signals:
      */
     //void cursorChanged(FormulaCursor* cursor);
 
-    void cursorExitLeft( FormulaCursor* cursor );
-    void cursorExitRight( FormulaCursor* cursor );
+    void leaveFormula( FormulaCursor* cursor, int cmd );
 
     /**
      * The formula has changed and needs to be redrawn.

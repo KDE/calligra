@@ -50,6 +50,7 @@ class View : public QObject {
     Q_OBJECT
 
 public:
+
     View(Container*);
     virtual ~View();
 
@@ -131,6 +132,14 @@ public:
     /** Gets called if the cursor ties to leave the formula at its end. */
     virtual void exitRight();
 
+    /**
+     * Gets called if the whole formula should be removed.
+     * There are perfectly good reasons to handle this inside
+     * the document. But kword seems to prefer the view to
+     * trigger the action. (I might be wrong...)
+     */
+    virtual void removeFormula();
+
 signals:
 
     /**
@@ -161,8 +170,7 @@ protected slots:
      */
     void slotElementWillVanish(BasicElement*);
 
-    void slotCursorExitLeft( FormulaCursor* cursor );
-    void slotCursorExitRight( FormulaCursor* cursor );
+    void slotLeaveFormula( FormulaCursor* cursor, int cmd );
 
 private:
 

@@ -85,6 +85,12 @@ public:
     void moveOutRight( FormulaCursor* );
 
     /**
+     * Gets called when the formula wants to vanish. The one who
+     * holds it should create an appropriate command and execute it.
+     */
+    void removeFormula( FormulaCursor* );
+
+    /**
      * Calculates the formulas sizes and positions.
      */
     void calcSizes( ContextStyle& context );

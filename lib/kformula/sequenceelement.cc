@@ -889,9 +889,19 @@ Command* SequenceElement::buildCommand( Container* container, Request* request )
         }
     }
     case req_remove: {
-        DirectedRemove* dr = static_cast<DirectedRemove*>( request );
-        KFCRemove* command = new KFCRemove( container, dr->direction() );
-        return command;
+        FormulaCursor* cursor = container->activeCursor();
+        SequenceElement* sequence = cursor->normal();
+        if ( sequence &&
+             ( sequence == sequence->formula() ) &&
+             ( sequence->countChildren() == 0 ) ) {
+            sequence->formula()->removeFormula( cursor );
+            return 0;
+        }
+        else {
+            DirectedRemove* dr = static_cast<DirectedRemove*>( request );
+            KFCRemove* command = new KFCRemove( container, dr->direction() );
+            return command;
+        }
     }
     case req_compactExpression: {
         FormulaCursor* cursor = container->activeCursor();

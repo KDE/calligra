@@ -669,7 +669,14 @@ QString FormulaStringParser::nextToken()
         uint begin = pos;
         readNumber();
         currentType = NUMBER;
-        return current = m_formula.mid( begin, pos-begin );
+        current = m_formula.mid( begin, pos-begin );
+        if ( current[0] == '.' ) {
+            current = "0" + current;
+        }
+        if ( current[current.length()-1] == '.' ) {
+            current = current + "0";
+        }
+        return current;
     }
     else if ( m_formula[pos].isLetter() ) {
         uint begin = pos;

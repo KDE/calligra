@@ -276,12 +276,11 @@ void Document::setZoom( double zoomX, double zoomY, bool updateViews, bool forPr
     }
 }
 
-Container* Document::createFormula()
+void Document::registerFormula( Container* f )
 {
     lazyInit();
-    Container* f = new Container(this);
+    //Container* f = new Container(this);
     impl->formulae.append(f);
-    return f;
 }
 
 
