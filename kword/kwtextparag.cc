@@ -222,7 +222,6 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
             posPrefix += format->width( prefix,i);
 
         p->drawText( x-posPrefix, y - h + base, prefix );
-
         QRect er( x - width, y - h + height / 2 - width / 2, width, width );
         // Draw the bullet.
         switch ( m_layout.counter->style() )
@@ -243,10 +242,13 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
                 // font with the given family. This conserves the right size etc.
                 if ( !m_layout.counter->customBulletFont().isEmpty() )
                 {
-                    newFont.setFamily( m_layout.counter->customBulletFont() );
-                    p->setFont( newFont );
+                    QFont bulletFont=newFont;
+                    bulletFont.setFamily( m_layout.counter->customBulletFont() );
+                    p->setFont( bulletFont );
                 }
+
                 p->drawText( x - width, y - h + base, m_layout.counter->customBulletCharacter() );
+                p->setFont( newFont );
                 break;
             default:
                 break;
