@@ -75,6 +75,7 @@
 #include <kcoloractions.h>
 #include <kfontdialog.h>
 #include <kstddirs.h>
+#include <kmessagebox.h>
 
 #include <stdlib.h>
 #include <X11/Xlib.h>
@@ -104,6 +105,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
     m_bUnderConstruction = TRUE;
     m_bShowGUI = TRUE;
     gui = 0;
+    kspell = 0;
     flow = KWParagLayout::LEFT;
     paragDia = 0L;
     styleManager = 0L;
@@ -1419,9 +1421,18 @@ void KWordView::formatFrameSet()
 /*===============================================================*/
 void KWordView::extraSpelling()
 {
+    if (kspell) return; // Already in progress
     currParag = 0L;
     currFrameSetNum = -1;
     kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ) );
+
+    QObject::connect( kspell, SIGNAL( death() ),
+		      this, SLOT( spellCheckerFinished() ) );
+    QObject::connect( kspell, SIGNAL( misspelling( QString, QStringList*, unsigned ) ),
+		      this, SLOT( spellCheckerMisspelling( QString, QStringList*, unsigned ) ) );
+    QObject::connect( kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
+		      this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
+    QObject::connect( kspell, SIGNAL( done( const char* ) ), this, SLOT( spellCheckerDone( const char* ) ) );
 }
 
 /*===============================================================*/
@@ -3323,17 +3334,6 @@ void KWordView::spellCheckerReady()
 {
     // #### currently only the first available textframeset is checked!!!
 
-    if ( !kspell->isOk() ) {
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "Error when spellchecking! Make sure\n"
-							    "ISpell is installed!" ), i18n( "OK" ) );
-	return;
-    }
-
-    QObject::connect( kspell, SIGNAL( misspelling( QString, QStrList*, unsigned ) ),
-		      this, SLOT( spellCheckerMisspelling( QString, QStrList*, unsigned ) ) );
-    QObject::connect( kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
-		      this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
-    QObject::connect( kspell, SIGNAL( done( const char* ) ), this, SLOT( spellCheckerDone( const char* ) ) );
     currParag = 0;
     for ( unsigned int i = 0; i < m_pKWordDoc->getNumFrameSets(); i++ ) {
 	KWFrameSet *frameset = m_pKWordDoc->getFrameSet( i );
@@ -3346,12 +3346,6 @@ void KWordView::spellCheckerReady()
 	
     if ( !currParag ) {
 	kspell->cleanUp();
-	QObject::disconnect( kspell, SIGNAL( misspelling( QString, QStrList*, unsigned ) ), this,
-			     SLOT( spellCheckerMisspelling( QString, QStrList*, unsigned ) ) );
-	QObject::disconnect( kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
-			     this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
-	QObject::disconnect( kspell, SIGNAL( done( const char* ) ), this, SLOT( spellCheckerDone( const char* ) ) );
-	delete kspell;
 	return;
     }
 
@@ -3368,7 +3362,7 @@ void KWordView::spellCheckerReady()
 }
 
 /*================================================================*/
-void KWordView::spellCheckerMisspelling( QString , QStrList* , unsigned )
+void KWordView::spellCheckerMisspelling( QString , QStringList* , unsigned )
 {
 }
 
@@ -3399,16 +3393,30 @@ void KWordView::spellCheckerCorrected( QString old, QString corr, unsigned )
 /*================================================================*/
 void KWordView::spellCheckerDone( const char* )
 {
-    kspell->cleanUp();
-    QObject::disconnect( kspell, SIGNAL( misspelling( QString, QStrList*, unsigned ) ), this,
-			 SLOT( spellCheckerMisspelling( QString, QStrList*, unsigned ) ) );
-    QObject::disconnect( kspell, SIGNAL( corrected( QString, QString, unsigned ) ),
-			 this, SLOT( spellCheckerCorrected( QString, QString, unsigned ) ) );
-    QObject::disconnect( kspell, SIGNAL( done( const char* ) ), this, SLOT( spellCheckerDone( const char* ) ) );
-    delete kspell;
     gui->getPaperWidget()->recalcWholeText();
     gui->getPaperWidget()->recalcCursor( TRUE );
+    kspell->cleanUp();
 }
+
+/*================================================================*/
+void KWordView::spellCheckerFinished( )
+{
+    KSpell::spellStatus status = kspell->status();                                
+    delete kspell;
+    kspell = 0;
+    if (status == KSpell::Error)
+    {
+        KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
+        "Please make sure you have ISpell properly configured and in your PATH."));
+    }
+    else if (status == KSpell::Crashed)
+    {
+        KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
+        gui->getPaperWidget()->recalcWholeText();
+        gui->getPaperWidget()->recalcCursor( TRUE );
+    }
+}
+
 
 /*================================================================*/
 void KWordView::searchDiaClosed()

@@ -268,9 +268,10 @@ public slots:
     void openPageLayoutDia()  { formatPage(); }
     void newPageLayout( KoPageLayout _layout );
     void spellCheckerReady();
-    void spellCheckerMisspelling( QString, QStrList*, unsigned );
+    void spellCheckerMisspelling( QString, QStringList*, unsigned );
     void spellCheckerCorrected( QString, QString, unsigned );
     void spellCheckerDone( const char* );
+    void spellCheckerFinished( );
     void searchDiaClosed();
 
     void clipboardDataChanged();
