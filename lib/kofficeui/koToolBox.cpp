@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "toolbox.h"
+#include "koToolBox.h"
 #include "koDocumentChild.h"
 
 #include <qlayout.h>
@@ -225,4 +225,4 @@ void KoTransformToolBox::setYShearing( double v )
     m_shearY->setValue( int( v * 10.0 ) );
 }
 
-#include "toolbox.moc"
+#include "koToolBox.moc"

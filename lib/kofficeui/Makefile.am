@@ -15,13 +15,13 @@ libkofficeui_la_SOURCES = koPageLayoutDia.cc \
 	koPartSelectDia.cc \
 	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
 	koKoolBar.cc koTemplateCreateDia.cc \
-	kcoloractions.cpp toolbox.cpp koTemplates.cc
+	kcoloractions.cpp koToolBox.cpp koTemplates.cc
 
 include_HEADERS = koPageLayoutDia.h \
 	koPartSelectDia.h \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \
 	koKoolBar.h koTemplateCreateDia.h \
-	kcoloractions.h toolbox.h koTemplates.h \
+	kcoloractions.h koToolBox.h koTemplates.h \
 	koGlobal.h
 
 METASOURCES = AUTO
