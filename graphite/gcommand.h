@@ -74,6 +74,7 @@ public:
 
 private:
     void clipCommands();  // ensures that the limits are kept
+    void helpRedo();
 
     QList<GCommand> m_commands;
     GCommand *m_present;

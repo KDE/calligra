@@ -48,6 +48,7 @@ public:
     virtual bool initDoc();
 
     virtual QCString mimeType() const;
+    GCommandHistory *history() { return m_history; }
 
     // The canvas forwards the Events to us. We test if any
     // object has been hit (z-order!) and handle the event.

@@ -237,7 +237,7 @@ const QRect &GGroup::boundingRect() const {
     return m_boundingRect;
 }
 
-GObjectM9r *GGroup::createM9r(const GObjectM9r::Mode &/*mode*/) {
+GObjectM9r *GGroup::createM9r(GraphitePart */*part*/, const GObjectM9r::Mode &/*mode*/) {
     // TODO - also the M9r :)
     return 0L;
 }

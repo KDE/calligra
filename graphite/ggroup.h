@@ -60,7 +60,7 @@ public:
     virtual const bool intersects(const QRect &r) const;
     virtual const QRect &boundingRect() const;
 
-    virtual GObjectM9r *createM9r(const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
+    virtual GObjectM9r *createM9r(GraphitePart *part, const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
 
     virtual const QPoint origin() const;
     virtual void setOrigin(const QPoint &origin);

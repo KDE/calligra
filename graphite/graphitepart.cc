@@ -103,10 +103,12 @@ void GraphitePart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/, bo
 
 void GraphitePart::edit_undo() {
     kdDebug(37001) << "GraphitePart: edit_undo called" << endl;
+    m_history->undo();
 }
 
 void GraphitePart::edit_redo() {
     kdDebug(37001) << "GraphitePart: edit_redo called" << endl;
+    m_history->redo();
 }
 
 void GraphitePart::edit_cut() {

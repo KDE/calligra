@@ -96,40 +96,18 @@ void GCommandHistory::redo() {
 
     if(m_first) {
 	m_present->execute();
+	m_first=false;
 	m_undo->setEnabled(true);
 	m_undo->setText(i18n("Und&o: %1").arg(m_present->name()));
-	m_first=false;
 	m_commands.first();
-	if(m_commands.next()!=0) {
-	    GCommand *tmp=m_commands.current();
-	    m_redo->setEnabled(true);
-	    m_redo->setText(i18n("Re&do: %1").arg(tmp->name()));
-	}
-	else {
-	    if(m_redo->isEnabled()) {
-		m_redo->setEnabled(false);
-		m_redo->setText(i18n("No Redo Possible"));
-	    }
-	}
+	helpRedo();
     }
-
-    if(m_commands.findRef(m_present)!=-1 && m_commands.next()!=0) {
+    else if(m_commands.findRef(m_present)!=-1 && m_commands.next()!=0) {
 	m_present=m_commands.current();
 	m_present->execute();
 	m_undo->setEnabled(true);
-	m_undo->setText(i18n("Und&o: %1").arg(m_present->name()));	
-    }
-
-    if(m_commands.next()!=0) {
-	    GCommand *tmp=m_commands.current();
-	    m_redo->setEnabled(true);
-	    m_redo->setText(i18n("Re&do: %1").arg(tmp->name()));
-    }
-    else {
-	if(m_redo->isEnabled()) {
-	    m_redo->setEnabled(false);
-	    m_redo->setText(i18n("No Redo Possible"));
-	}
+	m_undo->setText(i18n("Und&o: %1").arg(m_present->name()));
+	helpRedo();
     }
 }
 
@@ -165,5 +143,20 @@ void GCommandHistory::clipCommands() {
     if((index+m_redoLimit)<count) {
 	for(int i=0; i<(count-(index+m_redoLimit)); ++i)
 	    m_commands.removeLast();
+    }
+}
+
+void GCommandHistory::helpRedo() {
+
+    if(m_commands.next()!=0) {
+	GCommand *tmp=m_commands.current();
+	m_redo->setEnabled(true);
+	m_redo->setText(i18n("Re&do: %1").arg(tmp->name()));
+    }
+    else {
+	if(m_redo->isEnabled()) {
+	    m_redo->setEnabled(false);
+	    m_redo->setText(i18n("No Redo Possible"));
+	}
     }
 }

@@ -45,7 +45,7 @@ public:
     virtual const bool intersects(const QRect &r) const;
     virtual const QRect &boundingRect() const;
 
-    virtual GObjectM9r *createM9r(const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
+    virtual GObjectM9r *createM9r(GraphitePart *part, const GObjectM9r::Mode &mode=GObjectM9r::Manipulate);
 
     virtual const QPoint origin() const { return m_a; }
     virtual void setOrigin(const QPoint &origin);
@@ -72,7 +72,7 @@ class GLineM9r : public G1DObjectM9r {
 
     Q_OBJECT
 public:
-    GLineM9r(GLine *line, const Mode &mode);
+    GLineM9r(GLine *line, const Mode &mode, GraphitePart *part);
     virtual ~GLineM9r();
 
     virtual void draw(QPainter &p);

@@ -42,6 +42,7 @@ class KDialogBase;
 
 class GObject;
 class GraphiteView;
+class GraphitePart;
 
 
 // This is the manipulator class for GObject. Manipulators (M9r's)
@@ -90,8 +91,9 @@ public:
     virtual GObject *gobject() = 0;
 
 protected:
-    GObjectM9r(const Mode &mode) : QObject(), m_mode(mode), first_call(true),
-				   m_dialog(0L) {}
+    GObjectM9r(const Mode &mode, GraphitePart *part) : QObject(), m_mode(mode),
+						       first_call(true), m_dialog(0L),
+                                                       m_part(part) {}
 
     // This menthod returns a property dialog for an object. It
     // creates an empty KDialogBase (IconList mode!) or returns the
@@ -108,6 +110,7 @@ protected:
     Mode m_mode;
     bool first_call; // Whether this is the first call for this M9r (no hit test!)
     KDialogBase *m_dialog;
+    GraphitePart *m_part;  // we need that for the history
 };
 
 
@@ -124,8 +127,8 @@ protected slots:
     virtual void setPenColor(const QColor &color);
 
 protected:
-    G1DObjectM9r(GObject *object, const Mode &mode) : GObjectM9r(mode),
-						      m_object(object) {}
+    G1DObjectM9r(GObject *object, const Mode &mode, GraphitePart *part)
+	: GObjectM9r(mode, part), m_object(object) {}
     virtual KDialogBase *createPropertyDialog(QWidget *parent);
 
 private:
@@ -195,7 +198,7 @@ public:
     virtual const bool intersects(const QRect &r) const = 0;  // does the object intersect the rectangle?
     virtual const QRect &boundingRect() const = 0;            // the bounding rectangle of this object
 
-    virtual GObjectM9r *createM9r(const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) = 0;
+    virtual GObjectM9r *createM9r(GraphitePart *part, const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) = 0;
 
     const QString &name() const { return m_name; }       // name of the object (e.g. "Line001")
     void setName(const QString &name) { m_name=name; }   // set the name

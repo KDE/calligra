@@ -215,8 +215,8 @@ const QRect &GLine::boundingRect() const {
     return m_boundingRect;				
 }
 
-GObjectM9r *GLine::createM9r(const GObjectM9r::Mode &mode) {
-    return new GLineM9r(this, mode);
+GObjectM9r *GLine::createM9r(GraphitePart *part, const GObjectM9r::Mode &mode) {
+    return new GLineM9r(this, mode, part);
 }
 
 void GLine::setOrigin(const QPoint &origin) {
@@ -270,7 +270,8 @@ void GLine::resize(const QRect &boundingRect) {
 }
 
 
-GLineM9r::GLineM9r(GLine *line, const Mode &mode) : G1DObjectM9r(line, mode), m_line(line) {
+GLineM9r::GLineM9r(GLine *line, const Mode &mode, GraphitePart *part)
+    : G1DObjectM9r(line, mode, part), m_line(line) {
     m_line->setState(GObject::Handles);
 }
 
