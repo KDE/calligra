@@ -34,7 +34,7 @@ class KListView;
 class KLineEdit;
 class QListBox;
 class QSpinBox;
-
+class KIntNumInput;
 /**
  *
  */
@@ -127,7 +127,7 @@ protected:
     KoAutoFormatExceptionWidget *twoUpperLetter;
     QListBox *m_listCompletion;
     QSpinBox *m_minWordLength;
-    QSpinBox *m_maxNbWordCompletion;
+    KIntNumInput *m_maxNbWordCompletion;
 
 protected slots:
     virtual void slotOk();

@@ -34,6 +34,7 @@
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <kdebug.h>
+#include <knuminput.h>
 
 KoAutoFormatLineEdit::KoAutoFormatLineEdit ( QWidget * parent, const char * name )
     : QLineEdit(parent,name)
@@ -418,10 +419,9 @@ void KoAutoFormatDia::setupTab5()
     lab=new QLabel( i18n("Max. number of completion word:"), tab5);
     lab->resize( lab->sizeHint() );
 
-    m_maxNbWordCompletion = new QSpinBox( tab5);
+    m_maxNbWordCompletion = new KIntNumInput( tab5);
     m_maxNbWordCompletion->setValue ( m_docAutoFormat->getConfigNbMaxCompletionWord() );
-    m_maxNbWordCompletion->setMinValue( 1 );
-    m_maxNbWordCompletion->setMaxValue( 500 );
+    m_maxNbWordCompletion->setRange( 1, 500, 1, false);
     m_maxNbWordCompletion->resize( m_maxNbWordCompletion->sizeHint() );
 
     cbAppendSpace = new QCheckBox( tab5 );
