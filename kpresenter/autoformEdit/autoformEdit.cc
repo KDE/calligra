@@ -16,6 +16,7 @@
 
 #include "autoformEdit.h"
 #include <kglobal.h>
+#include <kstddirs.h>
 #include "autoformEdit.moc"
 
 /*================================================================*/
@@ -248,11 +249,11 @@ void AEditWin::fileSave()
     if (!groupName.isEmpty() && !fileName.isEmpty())
     {
         QString atfName = locateLocal("autoforms", groupName + "/" + fileName);
-        if (atfInterpret) 
+        if (atfInterpret)
 	  atfInterpret->save(atfName);
         editWid->saved();
 	QString pixName = atfName.left(atfName.findRev('.')) + ".xpm";
-        if (drawWid) 
+        if (drawWid)
 	  drawWid->createPixmap(pixName);
     }
     else fileSaveAs();
@@ -486,7 +487,7 @@ void AEditWin::afChooseOk(const QString & c)
     groupName = fileInfo.dirPath(false);
 
     QString atfName = locate("autoforms", groupName + "/" + fileName);
-    
+
     if (atfInterpret) atfInterpret->load(atfName);
     sendSource();
     sendPntArry(drawWid->aW(),drawWid->aH());

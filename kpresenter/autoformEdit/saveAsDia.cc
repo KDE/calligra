@@ -16,6 +16,8 @@
 
 #include "saveAsDia.h"
 #include "saveAsDia.moc"
+#include <kglobal.h>
+#include <kstddirs.h>
 
 /******************************************************************/
 /* class SaveAsDia                                                */
@@ -86,11 +88,11 @@ void SaveAsDia::getGroups()
 {
   char c[256];
   QString str;
-  
+
   QStringList autoformDirs = KGlobal::dirs()->getResourceDirs("autoforms");
   for (QStringList::ConstIterator it = autoformDirs.begin();
        it != autoformDirs.end(); it++) {
-    
+
     QFile afInf(*it + ".autoforms");
 
     afInf.open(IO_ReadOnly);
@@ -104,7 +106,7 @@ void SaveAsDia::getGroups()
 	  groupList.append(str);
 	strcpy(c,"");
       }
-    
+
     afInf.close();
   }
 }
