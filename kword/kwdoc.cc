@@ -1202,17 +1202,17 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
 
         KWStyle *sty = new KWStyle( styleElem, m_defaultFont );
         addStyleTemplate( sty );
-        followingStyles.append(styleElem.namedItem("FOLLOWING").toElement().attribute("name"));
+        if(m_styleList.count() > followingStyles.count() )
+            followingStyles.append(styleElem.namedItem("FOLLOWING").toElement().attribute("name"));
+        else 
+            kdWarning () << "Found duplicate style decleration, overwriting former";
     }
 
     ASSERT( followingStyles.count() == m_styleList.count() );
-    //kdDebug() << "KWDocument::loadStyleTemplates followingStyles:" << followingStyles.count() << endl;
-    //kdDebug() << "KWDocument::loadStyleTemplates m_styleList:" << m_styleList.count() << endl;
 
     unsigned int i=0;
     for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
         KWStyle * style = findStyle(*it);
-        //kdDebug() << "KWDocument::loadStyleTemplates setFollowingStyle " << style << endl;
         m_styleList.at(i++)->setFollowingStyle( style );
     }
 
