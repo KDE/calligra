@@ -22,7 +22,7 @@
 #ifndef __KILLU_POLYGONE_H__
 #define __KILLU_POLYGONE_H__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qtextstream.h>
 /*#include "element.h"
 #include "point.h"*/
@@ -37,7 +37,7 @@
  */
 class Polygone: public Polyline
 {
-	//QList<Point> _points;
+	//QPtrList<Point> _points;
 
 	public:
 		/**

@@ -23,12 +23,12 @@
 #ifndef __KILLU_GROUP_H__
 #define __KILLU_GROUP_H__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include "element.h"
 
 class Group: public Element
 {
-	QList<Element> _set;
+	QPtrList<Element> _set;
 
 	public:
 		Group();

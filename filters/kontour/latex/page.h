@@ -66,7 +66,7 @@ class Page: public XmlParser
 			  _bottomMargin,
 			  _topMargin;
 
-	QList<Layer> _layers;
+	QPtrList<Layer> _layers;
 
 	public:
 		/**

@@ -22,7 +22,7 @@
 #ifndef __KILLU_TEXT_H__
 #define __KILLU_TEXT_H__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qtextstream.h>
 
 #include "element.h"
@@ -46,7 +46,7 @@ class Text: public Element
 {
 	double      _x, _y;
 	EAlign      _align;
-	QList<Font> _fonts;
+	QPtrList<Font> _fonts;
 	QString     _text;
 
 	public:

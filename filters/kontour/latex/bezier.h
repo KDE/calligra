@@ -22,7 +22,7 @@
 #ifndef __KILLU_BEZIER_H__
 #define __KILLU_BEZIER_H__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qtextstream.h>
 #include "element.h"
 #include "point.h"
@@ -39,7 +39,7 @@ class Bezier: public Element
 {
 	EArrow _arrow1, _arrow2;
 	bool   _closed;
-	QList<Point> _points;
+	QPtrList<Point> _points;
 
 	public:
 		/**

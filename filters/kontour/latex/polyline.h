@@ -24,7 +24,7 @@
 
 #include <qtextstream.h>
 #include "element.h"
-#include <qlist.h>
+#include <qptrlist.h>
 #include "point.h"
 
 enum EArrow
@@ -43,7 +43,7 @@ class Polyline: public Element
 {
 	EArrow _arrow1, _arrow2;
 	protected:
-		QList<Point> _points;
+		QPtrList<Point> _points;
 
 	public:
 		/**

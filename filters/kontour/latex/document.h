@@ -58,7 +58,7 @@ class Document: public XmlParser
 
 	/* CHILDREN */
 	//Layer  _layer;
-	QList<Page>   _pages;
+	QPtrList<Page>   _pages;
 	Header _header;
 
 	LatexType _latexType;

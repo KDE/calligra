@@ -22,7 +22,7 @@
 #ifndef __KILLU_LAYER_H__
 #define __KILLU_LAYER_H__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qtextstream.h>
 #include "xmlparser.h"
 #include "element.h"
@@ -37,7 +37,7 @@
  */
 class Layer: public XmlParser
 {
-	QList<Element> _set;	
+	QPtrList<Element> _set;	
 
 	public:
 		/**

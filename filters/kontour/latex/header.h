@@ -24,7 +24,7 @@
 
 #include <qtextstream.h>
 #include <qcolor.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include "xmlparser.h"
 
@@ -76,8 +76,8 @@ class Header: public XmlParser
 		  _bottomMargin,
 		  _topMargin;
 	TUnit     _unit;*/
-	QList<QColor> _colors;
-	QList<QString> _colorname;
+	QPtrList<QColor> _colors;
+	QPtrList<QString> _colorname;
 
 	/* GRID */
 	int       _dx, _dy;
