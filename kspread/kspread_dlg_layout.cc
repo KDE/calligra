@@ -147,7 +147,10 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDlg * dlg )
   if ( m_dlg->getStyle()->parent() )
     m_parentBox->setCurrentText( m_dlg->getStyle()->parentName() );
   else
+  {
     m_parentBox->setCurrentText( i18n( "<None>" ) );
+    m_parentBox->setEnabled( false );
+  }
   groupBoxLayout->addWidget( m_parentBox, 1, 1 );
 
   QSpacerItem * spacer = new QSpacerItem( 20, 260, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -172,7 +175,7 @@ bool GeneralTab::apply( KSpreadCustomStyle * style )
 {
   KSpreadCustomStyle * p = 0;
 
-  if ( m_parentBox->currentText() != i18n( "<None>" ) && !m_parentBox->currentText().isEmpty() )
+  if ( m_parentBox->isEnabled() && m_parentBox->currentText() != i18n( "<None>" ) && !m_parentBox->currentText().isEmpty() )
   {
     if ( m_nameEdit->text() == m_parentBox->currentText() )
     {
@@ -195,16 +198,21 @@ bool GeneralTab::apply( KSpreadCustomStyle * style )
     }
   }
 
-  if ( !m_dlg->getStyleManager()->validateStyleName( m_nameEdit->text(), style ) )
+  if ( m_nameEdit->isEnabled() )
   {
-    KMessageBox::sorry( this, i18n( "A style with this name already exists." ) );
-    return false;
-  }
-
-  if ( style->type() != KSpreadStyle::BUILTIN )
-  {
-    style->setName( m_nameEdit->text() );
-    style->setParent( p );
+    if ( !m_dlg->getStyleManager()->validateStyleName( m_nameEdit->text(), style ) )
+    {
+      KMessageBox::sorry( this, i18n( "A style with this name already exists." ) );
+      return false;
+    }
+    
+    if ( style->type() != KSpreadStyle::BUILTIN )
+    {
+      QString name( style->name() );
+      style->setName( m_nameEdit->text() );
+      style->setParent( p );
+      m_dlg->getStyleManager()->changeName( name, m_nameEdit->text() );
+    }
   }
 
   return true;

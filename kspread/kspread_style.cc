@@ -1279,6 +1279,12 @@ void KSpreadCustomStyle::setName( QString const & name )
   m_name = name;
 }
 
+void KSpreadCustomStyle::refreshParentName()
+{
+  if ( m_parent )
+    m_parentName = m_parent->name();
+}
+
 void KSpreadCustomStyle::changeAlignX( KSpreadFormat::Align alignX )
 {
   m_alignX = alignX;

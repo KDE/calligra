@@ -197,6 +197,28 @@ bool KSpreadStyleManager::validateStyleName( QString const & name, KSpreadCustom
   return true;
 }
 
+void KSpreadStyleManager::changeName( QString const & oldName, QString const & newName )
+{
+  Styles::iterator iter = m_styles.begin();
+  Styles::iterator end  = m_styles.end();
+  
+  while ( iter != end )
+  {
+    if ( iter.data()->parentName() == oldName )
+      iter.data()->refreshParentName();
+
+    ++iter;
+  }
+
+  iter = m_styles.find( oldName );
+  if ( iter != end )
+  {
+    KSpreadCustomStyle * s = iter.data();
+    m_styles.erase( iter );
+    m_styles[newName] = s;
+  }
+}
+
 QStringList KSpreadStyleManager::styleNames() const
 {
   QStringList list;

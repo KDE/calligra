@@ -5402,6 +5402,8 @@ void KSpreadView::styleDialog()
 {
   KSpreadStyleDlg dlg( this, m_pDoc->styleManager() );
   dlg.exec();
+
+  m_selectStyle->setItems( m_pDoc->styleManager()->styleNames() );
 }
 
 void KSpreadView::paperLayoutDlg()
@@ -5601,7 +5603,7 @@ void KSpreadView::createStyleFromCell()
   while( true )
   {
     styleName = KLineEditDlg::getText( i18n( "Create style from cell..." ),
-                                               i18n( "Enter name:" ), styleName, &ok, this );
+                                       i18n( "Enter name:" ), styleName, &ok, this );
     
     if ( !ok ) // User pushed an OK button.
       return;
@@ -5641,7 +5643,6 @@ void KSpreadView::styleSelected( const QString & style )
 
     if ( s )
     {
-      kdDebug() << "Setting style" << endl;
       m_pDoc->emitBeginOperation(false);      
       m_pTable->setSelectionStyle( selectionInfo(), s );
       m_pDoc->emitEndOperation();

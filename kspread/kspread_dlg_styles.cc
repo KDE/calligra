@@ -193,6 +193,8 @@ void KSpreadStyleDlg::slotUser2()
   kdDebug() << "Showing dialog" << endl;
 
   CellFormatDlg dlg( m_view, s, m_styleManager, m_view->doc() );
+
+  slotDisplayMode( m_dlg->m_displayBox->currentItem() );
 }
 
 void KSpreadStyleDlg::slotUser3()

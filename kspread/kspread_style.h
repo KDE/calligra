@@ -286,6 +286,7 @@ class KSpreadCustomStyle : public KSpreadStyle
   void setType( StyleType type ) { m_type = type; }
 
   void setName( QString const & name );
+  void refreshParentName();
 
   void changeAlignX( KSpreadFormat::Align  alignX );
   void changeAlignY( KSpreadFormat::AlignY alignY );
