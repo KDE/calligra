@@ -58,8 +58,7 @@ public:
 
     // Convert the @p nPoint in the normal coordinate system
     // into a point (@p iPoint) in the internal qtextdoc coordinates.
-    // If @p onlyY is true, the X coordinate isn't taken into account - but should be 0
-    KWFrame * normalToInternal( QPoint nPoint, QPoint &iPoint, bool onlyY = false ) const;
+    KWFrame * normalToInternal( QPoint nPoint, QPoint &iPoint ) const;
 
     // Convert the @p in the internal qtextdoc coordinates
     // into a point in the normal coordinate system.
@@ -77,8 +76,9 @@ public:
     // Views notify the KWTextFrameSet of which area of the text
     // they're looking at, so that formatMore() ensures it's always formatted
     // correctly.
-    // @p bottom is usually contentsY()+visibleHeight()
-    void updateViewArea( QWidget * w, int bottom );
+    // @param w the wigdet (usually kwcanvas) that identifies the view
+    // @param nPointBottom the max the view looks at, in normal coordinates
+    void updateViewArea( QWidget * w, const QPoint & nPointBottom );
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &attributes );

@@ -110,7 +110,7 @@ int KWTextFrameSet::availableHeight() const
     return m_availableHeight;
 }
 
-KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool onlyY ) const
+KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint ) const
 {
     int totalHeight = 0;
     KWFrame * copyFrame = 0L;
@@ -121,8 +121,6 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
         KWFrame *frame = frameIt.current();
         QRect frameRect = kWordDocument()->zoomRect( *frame );
         QRect r( frameRect );
-        if ( onlyY )
-            r.setLeft(0);      // nPoint.x will be 0 too, so only the Y coords will count
         if ( r.contains( nPoint ) ) // both r and p are in "normal coordinates"
         {
             // This translates the coordinates from the normal coord system
@@ -148,12 +146,6 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
         totalHeight += frameRect.height();
     }
 
-#if 0
-    if ( onlyY ) // we only care about Y -> easy, return "we're below the bottom"
-        return QPoint( 0, totalHeight );
-    kdDebug(32002) << "KWTextFrameSet::normalToInternal " << nPoint.x() << "," << nPoint.y()
-                   << " not in any frame of " << (void*)this << endl;
-#endif
     return 0;
 }
 
@@ -1448,22 +1440,22 @@ void KWTextFrameSet::doChangeInterval()
     interval = 0;
 }
 
-void KWTextFrameSet::updateViewArea( QWidget * w, int maxY )
+void KWTextFrameSet::updateViewArea( QWidget * w, const QPoint & nPointBottom )
 {
     (void) availableHeight(); // make sure that it's not -1
-    //kdDebug(32002) << "KWTextFrameSet::updateViewArea " << (void*)w << " " << w->name() << " maxY=" << maxY << " m_availableHeight=" << m_availableHeight << " textdoc->height()=" << textdoc->height() << endl;
-    if ( maxY >= m_availableHeight ) // Speedup
+    /*kdDebug(32002) << "KWTextFrameSet::updateViewArea " << (void*)w << " " << w->name()
+                     << " nPointBottom=" << nPointBottom.x() << "," << nPointBottom.y()
+                     << " m_availableHeight=" << m_availableHeight << " textdoc->height()=" << textdoc->height() << endl;*/
+
+    // Convert to internal qtextdoc coordinates
+    QPoint iPoint;
+    int maxY;
+    if ( normalToInternal( nPointBottom, iPoint ) )
+        maxY = iPoint.y();
+    else // not found, assume worse
         maxY = m_availableHeight;
-    else
-    {
-        // Convert to internal qtextdoc coordinates
-        QPoint iPoint;
-        if ( normalToInternal( QPoint(0, maxY), iPoint, true /* only care for Y */ ) )
-            maxY = iPoint.y();
-        else // not found, assume worse
-            maxY = m_availableHeight;
-    }
-    //kdDebug(32002) << "KWTextFrameSet::updateViewArea maxY now " << maxY << endl;
+
+    kdDebug(32002) << "KWTextFrameSet::updateViewArea maxY now " << maxY << endl;
     // Update map
     m_mapViewAreas.replace( w, maxY );
 

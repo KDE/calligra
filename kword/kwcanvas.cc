@@ -1711,7 +1711,7 @@ void KWCanvas::doAutoScroll()
 void KWCanvas::slotContentsMoving( int cx, int cy )
 {
     //QPoint nPointTop = m_viewMode->viewToNormal( QPoint( cx, cy ) );
-    QPoint nPointBottom = m_viewMode->viewToNormal( QPoint( cx, cy + visibleHeight() ) );
+    QPoint nPointBottom = m_viewMode->viewToNormal( QPoint( cx + visibleWidth(), cy + visibleHeight() ) );
     //kdDebug() << "KWCanvas::slotContentsMoving " << cy << endl;
     // Update our "formatted paragraphs needs" in the text framesets
     QListIterator<KWFrameSet> fit = doc->framesetsIterator();
@@ -1720,7 +1720,7 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
         KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>(fit.current());
         if ( fs )
         {
-            fs->updateViewArea( this, nPointBottom.y() );
+            fs->updateViewArea( this, nPointBottom );
         }
     }
     QPoint rulerTopLeft = rulerPos( cx, cy );
