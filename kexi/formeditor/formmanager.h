@@ -107,6 +107,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		 an icon ...)
 		*/
 		bool              isTopLevel(QWidget *w);
+		bool              isPasteEnabled();
 
 		//! \return A pointer to the KexiPropertyEditor we use.
 		KexiPropertyEditor* editor() const { return m_editor; }
@@ -230,6 +231,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void bufferSwitched(KexiPropertyBuffer *buff);
 		/*! This signal is emitted when any change is made to the Form \a form, so it will need to be saved. */
 		void dirty(KFormDesigner::Form *form);
+
+		void widgetSelected(Form *form, bool multiple);
+		void formWidgetSelected(Form *form);
+		void noFormSelected();
 
 		void createFormSlot(Form *form, const QString &widget, const QString &signal);
 		void connectionCreated(Form *form, Connection &connection);

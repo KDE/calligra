@@ -129,6 +129,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list and its resizeHandle is removed. */
 		void			unSelectWidget(QWidget *w);
 		void			resetSelection();
+		void			emitActionSignals();
 
 		/*! Sets the Form interactivity mode. If is used when pasting widgets, or loading a Form.
 		 */

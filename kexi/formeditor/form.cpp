@@ -225,6 +225,7 @@ Form::setSelectedWidget(QWidget *w, bool add)
 	}
 	m_selected.append(w);
 	emit selectionChanged(w, add);
+	emitActionSignals();
 
 	// WidgetStack and TabWidget pages widgets shouldn't have resize handles, but their parent
 	if(!m_manager->isTopLevel(w) && w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
@@ -248,9 +249,22 @@ Form::unSelectWidget(QWidget *w)
 void
 Form::resetSelection()
 {
-	m_selected.clear();
-	m_resizeHandles.clear();
-	emit selectionChanged(0, false);
+	//m_selected.clear();
+	//m_resizeHandles.clear();
+	//emit selectionChanged(0, false);
+	setSelectedWidget(m_topTree->widget(), false);
+}
+
+void
+Form::emitActionSignals()
+{
+	// Update menu and toolbar items
+	if(m_selected.count() > 1)
+		emit m_manager->widgetSelected(this, true);
+	else if(m_selected.first() != m_topTree->widget())
+		emit m_manager->widgetSelected(this, false);
+	else
+		emit m_manager->formWidgetSelected(this);
 }
 
 ///////////////////////////  Various slots and signals /////////////////////

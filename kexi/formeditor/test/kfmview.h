@@ -31,6 +31,15 @@ class KFMView : public KMainWindow
 		void slotPreviewForm();
 		void slotCreateFormSlot(Form *form, const QString &widget, const QString &signal);
 
+	protected slots:
+		void slotWidgetSelected(Form *form, bool multiple);
+		void slotFormWidgetSelected(Form *form);
+		void slotNoFormSelected();
+
+	protected:
+		void disableWidgetActions();
+		void enableFormActions();
+
 	private:
 		QWorkspace  *w;
 		KFormDesigner::FormManager *manager;

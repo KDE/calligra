@@ -18,6 +18,7 @@
 #include <kstdaction.h>
 
 #include "form.h"
+#include "objecttree.h"
 #include "container.h"
 #include "formmanager.h"
 #include "objecttreeview.h"
@@ -52,7 +53,7 @@ KFMView::KFMView()
 
 	manager->setEditors(editor, view);
 
-	new KAction(i18n("Print Object Tree"), "view_tree", KShortcut(0), manager, SLOT(debugTree()), actionCollection(), "dtree");
+	//new KAction(i18n("Print Object Tree"), "view_tree", KShortcut(0), manager, SLOT(debugTree()), actionCollection(), "dtree");
 	KStdAction::save(manager, SLOT(saveForm()), actionCollection());
 	KStdAction::saveAs(manager, SLOT(saveFormAs()), actionCollection());
 	KStdAction::open(manager, SLOT(loadForm()), actionCollection());
@@ -98,6 +99,12 @@ KFMView::KFMView()
 	connect(manager, SIGNAL(createFormSlot(Form*, const QString &, const QString &)),
 	   this, SLOT(slotCreateFormSlot(Form*, const QString&, const QString &)) );
 
+	// action stuff
+	connect(manager, SIGNAL(widgetSelected(Form*, bool)), SLOT(slotWidgetSelected(Form*, bool)));
+	connect(manager, SIGNAL(formWidgetSelected(Form*)), SLOT(slotFormWidgetSelected(Form*)));
+	connect(manager, SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
+	slotNoFormSelected();
+
 	createGUI("kfmui.rc", true);
 	setXMLFile("kfmui.rc", true);
 	setAutoSaveSettings();
@@ -123,6 +130,149 @@ KFMView::slotCreateFormSlot(KFormDesigner::Form *form, const QString &widget, co
 {
 	kdDebug() << "KFMView::slotCreateFormSlot()  The user wants to create a slot on Form " << form->toplevelContainer()->widget()->name() <<
 	 " for widget " << widget << " connected to signal " << signal << endl;
+}
+
+void
+KFMView::slotWidgetSelected(Form *form, bool multiple)
+{
+	enableFormActions();
+	// Enable edit actions
+	if(actionCollection()->action( KStdAction::name(KStdAction::Copy) ))
+		actionCollection()->action(KStdAction::name(KStdAction::Copy) )->setEnabled(true);
+	if(actionCollection()->action( KStdAction::name(KStdAction::Cut) ))
+		actionCollection()->action( KStdAction::name(KStdAction::Cut) )->setEnabled(true);
+#if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
+	if(actionCollection()->action( KStdAction::name(KStdAction::Clear) ))
+		actionCollection()->action( KStdAction::name(KStdAction::Clear) )->setEnabled(true);
+#endif
+
+	// 'Align Widgets' menu
+	if(actionCollection()->action("align_menu"))
+		actionCollection()->action("align_menu")->setEnabled(true);
+	if(actionCollection()->action("align_to_left"))
+		actionCollection()->action("align_to_left")->setEnabled(multiple);
+	if(actionCollection()->action("align_to_right"))
+		actionCollection()->action("align_to_right")->setEnabled(multiple);
+	if(actionCollection()->action("align_to_top"))
+		actionCollection()->action("align_to_top")->setEnabled(multiple);
+	if(actionCollection()->action("align_to_bottom"))
+		actionCollection()->action("align_to_bottom")->setEnabled(multiple);
+
+	if(actionCollection()->action("adjust_size_menu"))
+		actionCollection()->action("adjust_size_menu")->setEnabled(true);
+	if(actionCollection()->action("format_raise"))
+		actionCollection()->action("format_raise")->setEnabled(true);
+	if(actionCollection()->action("format_lower"))
+		actionCollection()->action("format_lower")->setEnabled(true);
+
+	// If the widgets selected is a container, we enable layout actions
+	if(!multiple)
+	{
+		KFormDesigner::ObjectTreeItem *item = form->objectTree()->lookup( form->selectedWidgets()->first()->name() );
+		if(item && item->container())
+			multiple = true;
+	}
+	// Layout actions
+	if(actionCollection()->action("layout_hbox"))
+		actionCollection()->action("layout_hbox")->setEnabled(multiple);
+	if(actionCollection()->action("layout_vbox"))
+		actionCollection()->action("layout_vbox")->setEnabled(multiple);
+	if(actionCollection()->action("layout_grid"))
+		actionCollection()->action("layout_grid")->setEnabled(multiple);
+}
+
+void
+KFMView::slotFormWidgetSelected(Form *)
+{
+	disableWidgetActions();
+	enableFormActions();
+}
+
+void
+KFMView::slotNoFormSelected()
+{
+	disableWidgetActions();
+
+	// Disable paste action
+	if(actionCollection()->action( KStdAction::name(KStdAction::Paste) ))
+		actionCollection()->action( KStdAction::name(KStdAction::Paste) )->setEnabled(false);
+
+	// Disable 'Tools' actions
+	if(actionCollection()->action("pixmap_collection"))
+		actionCollection()->action("pixmap_collection")->setEnabled(false);
+	if(actionCollection()->action("form_connections"))
+		actionCollection()->action("form_connections")->setEnabled(false);
+	if(actionCollection()->action("taborder"))
+		actionCollection()->action("taborder")->setEnabled(false);
+	if(actionCollection()->action("change_style"))
+		actionCollection()->action("change_style")->setEnabled(false);
+
+	// Disable items in 'File'
+	if(actionCollection()->action( KStdAction::name(KStdAction::Save) ))
+		actionCollection()->action( KStdAction::name(KStdAction::Save) )->setEnabled(false);
+	if(actionCollection()->action( KStdAction::name(KStdAction::SaveAs) ))
+		actionCollection()->action( KStdAction::name(KStdAction::SaveAs) )->setEnabled(false);
+	if(actionCollection()->action( KStdAction::name(KStdAction::PrintPreview) ))
+		actionCollection()->action( KStdAction::name(KStdAction::PrintPreview) )->setEnabled(false);
+	if(actionCollection()->action( KStdAction::name(KStdAction::SaveAs) ))
+		actionCollection()->action( KStdAction::name(KStdAction::SaveAs) )->setEnabled(false);
+}
+
+void
+KFMView::enableFormActions()
+{
+	// Enable 'Tools' actions
+	if(actionCollection()->action("pixmap_collection"))
+		actionCollection()->action("pixmap_collection")->setEnabled(true);
+	if(actionCollection()->action("form_connections"))
+		actionCollection()->action("form_connections")->setEnabled(true);
+	if(actionCollection()->action("taborder"))
+		actionCollection()->action("taborder")->setEnabled(true);
+	if(actionCollection()->action("change_style"))
+		actionCollection()->action("change_style")->setEnabled(true);
+
+	// Enable items in 'File'
+	if(actionCollection()->action( KStdAction::name(KStdAction::Save) ))
+		actionCollection()->action( KStdAction::name(KStdAction::Save) )->setEnabled(true);
+	if(actionCollection()->action( KStdAction::name(KStdAction::SaveAs) ))
+		actionCollection()->action( KStdAction::name(KStdAction::SaveAs) )->setEnabled(true);
+	if(actionCollection()->action( KStdAction::name(KStdAction::PrintPreview) ))
+		actionCollection()->action( KStdAction::name(KStdAction::PrintPreview) )->setEnabled(true);
+	if(actionCollection()->action( KStdAction::name(KStdAction::SaveAs) ))
+		actionCollection()->action( KStdAction::name(KStdAction::SaveAs) )->setEnabled(true);
+
+	if(actionCollection()->action( KStdAction::name(KStdAction::Paste) ))
+		actionCollection()->action( KStdAction::name(KStdAction::Paste) )->setEnabled(manager->isPasteEnabled());
+}
+
+void
+KFMView::disableWidgetActions()
+{
+	// Disable edit actions
+	if(actionCollection()->action( KStdAction::name(KStdAction::Copy) ))
+		actionCollection()->action(KStdAction::name(KStdAction::Copy) )->setEnabled(false);
+	if(actionCollection()->action( KStdAction::name(KStdAction::Cut) ))
+		actionCollection()->action( KStdAction::name(KStdAction::Cut) )->setEnabled(false);
+#if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
+	if(actionCollection()->action( KStdAction::name(KStdAction::Clear) ))
+		actionCollection()->action( KStdAction::name(KStdAction::Clear) )->setEnabled(false);
+#endif
+
+	// Disable format functions
+	if(actionCollection()->action("align_menu"))
+		actionCollection()->action("align_menu")->setEnabled(false);
+	if(actionCollection()->action("adjust_size_menu"))
+		actionCollection()->action("adjust_size_menu")->setEnabled(false);
+	if(actionCollection()->action("format_raise"))
+		actionCollection()->action("format_raise")->setEnabled(false);
+	if(actionCollection()->action("format_lower"))
+		actionCollection()->action("format_lower")->setEnabled(false);
+	if(actionCollection()->action("layout_hbox"))
+		actionCollection()->action("layout_hbox")->setEnabled(false);
+	if(actionCollection()->action("layout_vbox"))
+		actionCollection()->action("layout_vbox")->setEnabled(false);
+	if(actionCollection()->action("layout_grid"))
+		actionCollection()->action("layout_grid")->setEnabled(false);
 }
 
 KFMView::~KFMView()

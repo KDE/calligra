@@ -164,6 +164,12 @@ FormManager::createActions(KActionCollection *parent, KMainWindow *client)
 	return actions;
 }
 
+bool
+FormManager::isPasteEnabled()
+{
+	return m_domDoc.namedItem("UI").hasChildNodes();
+}
+
 void
 FormManager::insertWidget(const QString &classname)
 {
@@ -332,6 +338,8 @@ FormManager::windowChanged(QWidget *w)
 		showPropertyBuffer(0);
 		if(draggingConnection())
 			stopDraggingConnection();
+
+		emit noFormSelected();
 		return;
 	}
 
@@ -375,6 +383,11 @@ FormManager::windowChanged(QWidget *w)
 				resetCreatedConnection();
 
 			m_active = form;
+
+			if(!m_active->objectTree()) // ie preview form
+				emit noFormSelected();
+			else
+				m_active->emitActionSignals();
 			//if(m_client)
 			//	m_client->createGUI(m_client->xmlFile());
 			/*Actions actions;
@@ -506,7 +519,7 @@ FormManager::initForm(Form *form)
 	m_active = form;
 	m_count++;
 
-	m_buffer->setSelectedWidget(form->toplevelContainer()->widget());
+	//m_buffer->setSelectedWidget(form->toplevelContainer()->widget());
 
 	connect(form, SIGNAL(selectionChanged(QWidget*, bool)), m_buffer, SLOT(setSelectedWidget(QWidget*, bool)));
 	if(m_treeview)
@@ -517,6 +530,7 @@ FormManager::initForm(Form *form)
 	}
 	connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), form, SLOT(changeName(const QString&, const QString&)));
 
+	form->setSelectedWidget(form->objectTree()->widget());
 	windowChanged(form->toplevelContainer()->widget());
 }
 
@@ -647,6 +661,8 @@ FormManager::copyWidget()
 	// and ensure images is at the end
 	if(!parent.namedItem("images").isNull())
 		parent.insertAfter(parent.namedItem("images"), QDomNode());
+
+	activeForm()->emitActionSignals(); // to update 'Paste' item state
 }
 
 void
@@ -755,6 +771,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemo
 	m_popup->setItemEnabled(MenuCopy, enableRemove);
 	m_popup->setItemEnabled(MenuCut, enableRemove);
 	m_popup->setItemEnabled(MenuDelete, enableRemove);
+	m_popup->setItemEnabled(MenuPaste, isPasteEnabled());
 
 	// We only enablelayout creation if more than one widget with the same parent are selected
 	bool enableLayout = false;

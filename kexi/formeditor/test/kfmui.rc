@@ -7,7 +7,6 @@
   </Menu>
   <Menu name="tools">
    <Action name="taborder"/>
-   <Action name="adjust"/>
    <Action name="change_style"/>
    <Action name="pixmap_collection"/>
    <Action name="form_connections"/>
@@ -55,10 +54,6 @@
    <Separator/>
    <Action name="format_raise"/>
    <Action name="format_lower"/>
-  </Menu>
-  <Menu name="Debug">
-   <text>&amp;Debug</text>
-   <Action name="dtree"/>
   </Menu>
 </MenuBar>
 
