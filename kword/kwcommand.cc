@@ -80,7 +80,7 @@ QTextCursor * KWPasteTextCommand::execute( QTextCursor *c )
     c->setParag( firstParag );
     c->setIndex( m_idx );
     for ( int i = 0; i < (int)text.length(); ++i )
-        c->gotoRight();
+        c->gotoNextLetter();
 
     // Redo the parag lookup because if firstParag was empty, insert() has
     // shifted it down (side effect of splitAndInsertEmptyParag)
