@@ -46,6 +46,10 @@
 
 using namespace std;
 
+static const int CURRENT_SYNTAX_VERSION = 1;
+// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
+static const char * CURRENT_DTD_VERSION = "1.1";
+
 /*****************************************************************************
  *
  * KSpreadDoc
@@ -216,12 +220,11 @@ QDomDocument KSpreadDoc::saveXML()
       static_cast<KSpreadView *>( it.current() )->deleteEditor( true );
   }
 
-  QDomDocument doc( "spreadsheet" );
-  doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-  QDomElement spread = doc.createElement( "spreadsheet" );
+  QDomDocument doc = createDomDocument( "spreadsheet", CURRENT_DTD_VERSION );
+  QDomElement spread = doc.documentElement();
   spread.setAttribute( "editor", "KSpread" );
   spread.setAttribute( "mime", "application/x-kspread" );
-  doc.appendChild( spread );
+  spread.setAttribute( "syntaxVersion", CURRENT_SYNTAX_VERSION );
   QDomElement paper = doc.createElement( "paper" );
   paper.setAttribute( "format", paperFormatString() );
   paper.setAttribute( "orientation", orientationString() );

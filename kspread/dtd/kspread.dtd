@@ -20,12 +20,14 @@
 		author:		The document's author
 		email:		The document's author's email address
 		editor:		The program this file was written with
-		mime:		The MIME type (must always have the value application/x-kspread
+                syntaxVersion:  Integer version of the syntax. Currently 1.
+		mime:		The MIME type (must always have the value application/x-kspread)
 -->
 <!ELEMENT spreadsheet (paper, locale ,areaname, map)>  
 <!ATTLIST spreadsheet   author CDATA #IMPLIED
                         email  CDATA #IMPLIED
                         editor CDATA #IMPLIED
+                        syntaxVersion NMTOKEN #IMPLIED
                         mime   CDATA "application/x-kspread">
 
 <!--	Describes the page format. Can have no or one BORDERS child that
