@@ -67,6 +67,8 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name
   m_bShowGUI = true;
   m_bRectSelection = false;
   presStarted = false;
+  origFramesList.setAutoDelete(true);
+  origPartsList.setAutoDelete(true);
 }
 
 /*======================= destructor ============================*/
@@ -408,6 +410,7 @@ void KPresenterView_impl::screenStart()
 	(float)page->height() / (float)KPresenterDoc()->getPageSize(1,0,0).height() : 1.0;
       float _presFakt = min(_presFaktW,_presFaktH);
       page->setPresFakt(_presFakt);
+      zoomParts(_presFakt);
 
       _xOffset = xOffset;
       _yOffset = yOffset;
@@ -444,6 +447,7 @@ void KPresenterView_impl::screenStop()
   if (presStarted)
     {
       page->recreate((QWidget*)this,0,QPoint(0,0),true);
+      zoomBackParts();
       xOffset = _xOffset;
       yOffset = _yOffset;
       page->stopScreenPresentation();
@@ -1218,7 +1222,7 @@ void KPresenterView_impl::resizeEvent(QResizeEvent *e)
     {
       horz->hide();
       vert->hide();
-      //page->resize(widget()->width(),widget()->height());
+      page->resize(widget()->width(),widget()->height());
     }  
 }
 
@@ -1226,6 +1230,53 @@ void KPresenterView_impl::resizeEvent(QResizeEvent *e)
 void KPresenterView_impl::keyPressEvent(QKeyEvent *e)
 {
   page->keyPressEvent(e);
+}
+
+/*========================= zoom Parts ==========================*/
+void KPresenterView_impl::zoomParts(float _fakt)
+{
+  if (!origFramesList.isEmpty()) origFramesList.clear();
+  if (!origPartsList.isEmpty()) origPartsList.clear();
+  
+  QListIterator<KPresenterFrame> it(m_lstFrames);
+
+  for(;it.current();++it)
+    {
+      QRect *r = new QRect(it.current()->geometry().x(),it.current()->geometry().y(),
+			   it.current()->geometry().width(),it.current()->geometry().height());
+      origFramesList.append(r);
+      it.current()->hide();
+    }
+
+  QListIterator<KPresenterChild> _it(KPresenterDoc()->lstChildren());
+
+  for(;_it.current();++_it)
+    {
+      QRect *r = new QRect(_it.current()->geometry().x(),_it.current()->geometry().y(),
+			   _it.current()->geometry().width(),_it.current()->geometry().height());
+      origPartsList.append(r);
+    }
+}
+
+/*======================= zoom back Parts =======================*/
+void KPresenterView_impl::zoomBackParts()
+{
+  QListIterator<KPresenterFrame> it(m_lstFrames);
+
+  for(unsigned int i = 0;it.current();++it,i++)
+    {
+      it.current()->show();
+      it.current()->setGeometry(origFramesList.at(i)->x(),origFramesList.at(i)->y(),
+ 				origFramesList.at(i)->width(),origFramesList.at(i)->height());
+    }
+
+  QListIterator<KPresenterChild> _it(KPresenterDoc()->lstChildren());
+
+  for(unsigned int i = 0;_it.current();++_it,i++)
+    {
+      _it.current()->setGeometry(QRect(origPartsList.at(i)->x(),origPartsList.at(i)->y(),
+				       origPartsList.at(i)->width(),origPartsList.at(i)->height()));
+    }
 }
 
 /*======================= setup menu ============================*/

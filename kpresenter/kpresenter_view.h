@@ -51,6 +51,7 @@ class Page;
 #include <qpopmenu.h>
 #include <qcursor.h>
 #include <qfileinf.h>
+#include <qpoint.h>
 
 #include <kcolordlg.h>
 #include <koAboutDia.h>
@@ -298,6 +299,10 @@ protected:
   void mouseMoveEvent(QMouseEvent*);
   void keyPressEvent(QKeyEvent*);
   
+  // screen presentation
+  void zoomParts(float);
+  void zoomBackParts();
+
   // ********** variables **********
 
   // document
@@ -479,6 +484,9 @@ protected:
 
   KPresenterShell_impl* shell;
   QSize oldSize;
+
+  QList<QRect> origPartsList;
+  QList<QRect> origFramesList;
 };
 
 #endif

@@ -265,6 +265,8 @@ public:
   QList<int> reorderPage(unsigned int,int,int,float fakt = 1.0);
   int getPageOfObj(int,int,int,float fakt = 1.0);
 
+  QList<KPresenterChild> lstChildren() {return m_lstChildren;}
+
 signals:
 
   // document modified
