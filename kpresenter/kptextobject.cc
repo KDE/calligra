@@ -1380,8 +1380,13 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
         //kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
         if(refLink().isNull())
         {
+            QPopupMenu * popup;
             view->plugActionList( "datatools", actionList );
-            QPopupMenu * popup = view->popupMenu("text_popup");
+            KoNoteVariable * var = dynamic_cast<KoNoteVariable *>(variable());
+            if( var )
+                popup = view->popupMenu("note_popup");
+            else
+                popup = view->popupMenu("text_popup");
             Q_ASSERT(popup);
             if (popup)
                 popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
@@ -1410,6 +1415,16 @@ void KPTextView::insertLink(const QString &_linkName, const QString & hrefName)
     KoVariable * var = 0L;
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
     var = new KoLinkVariable( textObject()->textDocument(),_linkName,hrefName , doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
+    insertVariable( var);
+}
+
+
+void KPTextView::insertNote(const QString &_note)
+{
+    KoVariable * var = 0L;
+    KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
+
+    var = new KoNoteVariable( textObject()->textDocument(),_note, doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
     insertVariable( var);
 }
 

@@ -126,7 +126,10 @@
 #include <kostyle.h>
 #include "kprstylemanager.h"
 
+#include <koNoteDia.h>
+
 #include <kstdaccel.h>
+#include <koDocumentInfo.h>
 
 #define DEBUG
 
@@ -2963,6 +2966,15 @@ void KPresenterView::setupActions()
 
     // Necessary for the actions that are not plugged anywhere
     actAutoComplete->plugAccel( accel );
+
+
+    actionInsertNote = new KAction( i18n( "Note" ), 0,
+                                    this, SLOT( insertNote() ),
+                                    actionCollection(), "insert_note" );
+    actionEditNote = new KAction( i18n("Edit Note"), 0,
+                                  this,SLOT(editNote()),
+                                  actionCollection(), "edit_note");
+
 }
 
 void KPresenterView::textSubScript()
@@ -5623,5 +5635,51 @@ void KPresenterView::slotAutoComplete()
         edit->autoCompletion();
 }
 
+void KPresenterView::insertNote()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( !edit )
+        return;
+    QString authorName;
+    KoDocumentInfo * info = m_pKPresenterDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    else
+        authorName = authorPage->fullName();
+
+    KoNoteDia *noteDia = new KoNoteDia( this, QString::null,authorName );
+    if( noteDia->exec() )
+    {
+        edit->insertNote(noteDia->noteText());
+    }
+    delete noteDia;
+}
+
+void KPresenterView::editNote()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+    {
+        KoVariable * tmpVar=edit->variable();
+        KoNoteVariable * var = dynamic_cast<KoNoteVariable *>(tmpVar);
+        if(var)
+        {
+            QString authorName;
+            KoDocumentInfo * info = m_pKPresenterDoc->documentInfo();
+            KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+            if ( !authorPage )
+                kdWarning() << "Author information not found in documentInfo !" << endl;
+            else
+                authorName = authorPage->fullName();
+            KoNoteDia *noteDia = new KoNoteDia( this, var->note(), authorName);
+            if( noteDia->exec() )
+            {
+                var->setNote( noteDia->noteText());
+            }
+            delete noteDia;
+        }
+    }
+}
 
 #include <kpresenter_view.moc>

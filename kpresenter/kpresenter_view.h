@@ -152,6 +152,9 @@ public slots:
 
     void viewFooter();
     void viewHeader();
+    void insertNote();
+    void editNote();
+
 
     // insert menu
     void insertPage();
@@ -781,6 +784,9 @@ private:
     KAction *actionChangePic;
     KAction *actionExtraSpellCheck;
     KAction *actionFormatDefault;
+
+    KAction *actionInsertNote;
+    KAction *actionEditNote;
 
 
     DCOPObject *dcop;

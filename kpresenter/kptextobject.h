@@ -196,6 +196,7 @@ public:
     void insertLink(const QString &_linkName, const QString & hrefName);
     void insertVariable( KoVariable *var);
     void terminate();
+    void insertNote(const QString &_note);
 
 public slots:
     void cut();
