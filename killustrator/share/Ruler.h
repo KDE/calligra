@@ -28,13 +28,15 @@
 #include <qwidget.h>
 #include <qpixmap.h>
 
+#include "PStateManager.h"
+
 class Ruler : public QWidget {
   Q_OBJECT
 public:
-  enum MeasurementUnit { Point, Centimeter, Inch };
+  //  enum MeasurementUnit { Point, Centimeter, Inch };
   enum Orientation { Horizontal, Vertical };
 
-  Ruler (Orientation o, MeasurementUnit mu = Point, QWidget *parent = 0L,
+  Ruler (Orientation o, MeasurementUnit mu = UnitPoint, QWidget *parent = 0L,
 	 const char* name = 0L);
 
   MeasurementUnit measurementUnit () const;

@@ -109,11 +109,11 @@ void Ruler::recalculateSize (QResizeEvent *e) {
   updatePointer (currentPosition, currentPosition);
 }
 
-Ruler::MeasurementUnit Ruler::measurementUnit () const {
+MeasurementUnit Ruler::measurementUnit () const {
   return  munit;
 }
 
-void Ruler::setMeasurementUnit (Ruler::MeasurementUnit mu) {
+void Ruler::setMeasurementUnit (MeasurementUnit mu) {
   munit = mu;
   drawRuler ();
   updatePointer (currentPosition, currentPosition);
@@ -200,7 +200,7 @@ void Ruler::drawRuler () {
   
   if (orientation == Horizontal) {
     switch (munit) {
-    case Point:
+    case UnitPoint:
       {
 	for (int i = 0; i < buffer->width (); i += step) {
 	  if (i % step1 == 0) {
@@ -215,13 +215,15 @@ void Ruler::drawRuler () {
 	}
 	break;
       }
-      default:
-	break;
+    case UnitMillimeter:
+    case UnitInch:
+    default:
+      break;
     }
   }
   else {
     switch (munit) {
-    case Point:
+    case UnitPoint:
       {
 	for (int i = 0; i < buffer->height (); i += step) {
 	  if (i % step1 == 0) {
@@ -236,6 +238,8 @@ void Ruler::drawRuler () {
 	}
 	break;
       }
+    case UnitMillimeter:
+    case UnitInch:
     default:
       break;
     }

@@ -22,40 +22,32 @@
 
 */
 
-#ifndef PStateManager_h_
-#define PStateManager_h_
+#ifndef OptionDialog_h_
+#define OptionDialog_h_
 
-#include <qstrlist.h>
-#include <qobject.h>
+#include <qdialog.h>
+#include <qtabdialog.h>
+#include <qlabel.h>
+#include <qpushbt.h>
+#include <ktabctl.h>
+#include <kcombo.h>
 
-enum MeasurementUnit { UnitPoint, UnitMillimeter, UnitInch };
-
-class PStateManager : public QObject {
+class OptionDialog : public QTabDialog {
   Q_OBJECT
-protected:
-  PStateManager ();
-
 public:
-  static PStateManager* instance ();
+  OptionDialog (QWidget* parent = 0L, const char* name = 0L);
 
-  void readDefaultSettings ();
-  
-  void addRecentFile (const char* fname);
-  QStrList getRecentFiles ();
+  static int setup ();
 
-  MeasurementUnit defaultMeasurementUnit ();
-  void setDefaultMeasurementUnit (MeasurementUnit unit);
+protected:
+  QWidget* createGeneralWidget (QWidget* parent);
 
-signals:
-  void recentFilesChanged ();
-
-public slots:
-  void saveDefaultSettings ();
+private slots:
+  void applyPressed ();
+  void helpPressed ();
 
 private:
-  QStrList recentFiles;
-  static PStateManager* managerInstance;
-  MeasurementUnit defaultUnit;
+  KCombo* unit;
 };
 
 #endif

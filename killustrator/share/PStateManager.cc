@@ -34,6 +34,7 @@
 PStateManager* PStateManager::managerInstance = 0L;
 
 PStateManager::PStateManager () {
+  defaultUnit = UnitPoint;
   readDefaultSettings ();
 }
 
@@ -47,6 +48,15 @@ void PStateManager::readDefaultSettings () {
   KConfig* config = kapp->getConfig ();
   QString oldgroup = config->group ();
 
+  config->setGroup ("General");
+  QString value = config->readEntry ("DefaultUnit", "pt");
+  if (value == "mm")
+    defaultUnit = UnitMillimeter;
+  else if (value == "inch")
+    defaultUnit = UnitInch;
+  else
+    defaultUnit = UnitPoint;
+  
   config->setGroup ("DefaultObjectProperties");
 
   GObject::OutlineInfo oInfo;
@@ -109,9 +119,30 @@ QStrList PStateManager::getRecentFiles () {
   return recentFiles;
 }
 
+MeasurementUnit PStateManager::defaultMeasurementUnit () {
+  return defaultUnit;
+}
+
+void PStateManager::setDefaultMeasurementUnit (MeasurementUnit unit) {
+  defaultUnit = unit;
+}
+
 void PStateManager::saveDefaultSettings () {
   KConfig* config = kapp->getConfig ();
   QString oldgroup = config->group ();
+
+  config->setGroup ("General");
+  switch (defaultUnit) {
+  case UnitPoint:
+    config->writeEntry ("DefaultUnit", "pt");
+    break;
+  case UnitMillimeter:
+    config->writeEntry ("DefaultUnit", "mm");
+    break;
+  case UnitInch:
+    config->writeEntry ("DefaultUnit", "inch");
+    break;
+  }
 
   config->setGroup ("DefaultObjectProperties");
 
