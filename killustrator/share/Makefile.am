@@ -1,7 +1,9 @@
 INCLUDES= $(all_includes) -I.. 
-EXTRA_DIST = prolog.ps prolog.ps.in fontmap
+
+EXTRA_DIST = prolog.ps.in $(data_DATA)
 
 datadir = $(kde_datadir)/killustrator
+data_DATA = prolog.ps fontmap
 
 noinst_LIBRARIES = libkillu.a
 
@@ -82,21 +84,6 @@ BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
 		PStateManager.moc OptionDialog.moc UnitBox.moc
 
 DISTCLEANFILES = $(BUILTSOURCES)
-
-
-# just install datas here. Use install-exec-data for scripts and etc.
-# the binary itself is already installed from automake
-# use mkinstalldirs, not "install -d"
-# don't install a list of file. Just one file per install.
-# if you have more of them, create a subdirectory with an extra Makefile 
-install-data-local: prolog.ps
-	$(INSTALL_DATA) prolog.ps $(datadir) 
-	$(INSTALL_DATA) fontmap $(datadir)
-
-# remove ALL you have installed in install-data-local or install-exec-local
-uninstall-local:
-	rm -f $(datadir)/prolog.ps
-	rm -f $(datadir)/fontmap
 
 prolog.ps: prolog.ps.in
 	perl ../cleanup_ps < prolog.ps.in > prolog.ps
