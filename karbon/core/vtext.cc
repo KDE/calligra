@@ -306,6 +306,8 @@ VText::save( QDomElement& element ) const
 	{
 		QDomElement me = element.ownerDocument().createElement( "TEXT" );
 
+		m_basePath.save( me );
+
 		VObject::save( me );
 
 		// save font properties
@@ -322,8 +324,6 @@ VText::save( QDomElement& element ) const
 		me.setAttribute( "shadowdist",			m_shadowDistance );
 
 		element.appendChild( me );
-
-		m_basePath.save( me );
 
 		// save all glyphs / paths
 		VPathListIterator itr = m_glyphs;
@@ -351,21 +351,23 @@ VText::load( const QDomElement& element )
 
 	m_text = element.attribute( "text", "" );
 
-    // load text glyphs:
 	QDomNodeList list = element.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
+	QDomElement e = list.item( 0 ).toElement();
+	if( e.tagName() == "PATH" )
+		m_basePath.load( e );
+
+	// load text glyphs:
+	for( uint i = 1; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
 		{
-			QDomElement e = list.item( i ).toElement();
-			if( e.tagName() == "COMPOSITE" )
+			e = list.item( i ).toElement();
+			if( e.tagName() == "PATH" )
 			{
 				VPath *composite = new VPath( this );
 				composite->load( e );
 				m_glyphs.append( composite );
 			}
-			if( e.tagName() == "PATH" )
-				m_basePath.load( e );
 			if( e.tagName() == "STROKE" )
 				m_stroke->load( e );
 			if( e.tagName() == "FILL" )
