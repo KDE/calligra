@@ -2924,7 +2924,6 @@ void KSpreadVBorder::resizeRow(int resize,int nb,bool makeUndo  )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   ASSERT( table );
-
   if(nb==-1)
   {
     if(makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )

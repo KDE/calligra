@@ -134,67 +134,47 @@ void KSpreadresize2::slotOk()
 {
     QRect selection( m_pView->activeTable()->selectionRect() );
     QRect rect=selection;
-    if(selection.bottom()==0 ||selection.top()==0 || selection.left()==0
-       || selection.right()==0)
+    if(selection.bottom()<=0 ||selection.top()<=0 || selection.left()<=0
+       || selection.right()<=0)
       {
 	switch(type)
 	  {
 	  case resize_row:
 	    rect.setCoords(1,m_pView->canvasWidget()->markerRow(),0x7FFF,m_pView->canvasWidget()->markerRow());
 	    break;
-	    case resize_column:
-	      rect.setCoords(m_pView->canvasWidget()->markerColumn(),1,m_pView->canvasWidget()->markerColumn(),0x7FFF);
-	      break;
+	  case resize_column:
+	    rect.setCoords(m_pView->canvasWidget()->markerColumn(),1,m_pView->canvasWidget()->markerColumn(),0x7FFF);
+	    break;
 	  }
       }
     int new_size=m_pSize2->value();
     if ( !m_pView->doc()->undoBuffer()->isLocked() )
-    {
+      {
         KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(),m_pView->activeTable() , rect );
         m_pView->doc()->undoBuffer()->appendUndo( undo );
-    }
-    if(m_pDefault->isChecked())
-    {
+      }
     switch(type)
-	{
-	case resize_row:
-		for(int i=selection.top();i<=selection.bottom();i++)
-			m_pView->vBorderWidget()->resizeRow(20,i,false );
-		break;
-	case resize_column:
-		for(int i=selection.left();i<=selection.right();i++)
-			m_pView->hBorderWidget()->resizeColumn(60,i,false );
-		break;
-	default :
-	        kdDebug(36001) <<"Err in type_resize" << endl;
-		break;
-	}
-    }
-    else
-    {
-    switch(type)
-	{
-	case resize_row:
-		if(m_pDefault->isChecked())
-			for(int i=selection.top();i<=selection.bottom();i++)
-					m_pView->vBorderWidget()->resizeRow(20,i,false );
-		else
-			for(int i=selection.top();i<=selection.bottom();i++)
-				m_pView->vBorderWidget()->resizeRow(new_size,i,false );
-		break;
-	case resize_column:
-		if(m_pDefault->isChecked())
-			for(int i=selection.left();i<=selection.right();i++)
-				m_pView->hBorderWidget()->resizeColumn(60,i,false );
-		else
-			for(int i=selection.left();i<=selection.right();i++)
-				m_pView->hBorderWidget()->resizeColumn(new_size,i,false );
-		break;
-	default :
-	        kdDebug(36001) <<"Err in type_resize" << endl;
-		break;
-	}
-    }
+      {
+      case resize_row:
+	if(m_pDefault->isChecked())
+	  for(int i=rect.top();i<=rect.bottom();i++)
+	    m_pView->vBorderWidget()->resizeRow(20,i,false );
+	else
+	  for(int i=rect.top();i<=rect.bottom();i++)
+	    m_pView->vBorderWidget()->resizeRow(new_size,i,false );
+	break;
+      case resize_column:
+	if(m_pDefault->isChecked())
+	  for(int i=rect.left();i<=rect.right();i++)
+	    m_pView->hBorderWidget()->resizeColumn(60,i,false );
+	else
+	  for(int i=rect.left();i<=rect.right();i++)
+	    m_pView->hBorderWidget()->resizeColumn(new_size,i,false );
+	break;
+      default :
+	kdDebug(36001) <<"Err in type_resize" << endl;
+	break;
+      }
     accept();
 }
 

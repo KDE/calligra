@@ -2731,14 +2731,19 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         conditionAlign( _painter, _col, _row );
 
         int indent=0;
+	int offsetCellTooShort=0;
         int a = defineAlignX();
         //apply indent if text is align to left not when text is at right or middle
         if(  a==KSpreadCell::Left && !isEmpty())
                 indent=getIndent(column(),row());
+	//made an offset, otherwise ### is undo red triangle
+	if( a==KSpreadCell::Right && !isEmpty() &&m_bCellTooShort )
+	  offsetCellTooShort=4;
+	 
         int tmpAngle=getAngle(_col,_row);
         if ( !multiRow(_col,_row) && !verticalText(_col,_row) && !tmpAngle)
                 {
-                _painter.drawText( indent+_tx + m_iTextX, _ty + m_iTextY, m_strOutText );
+                _painter.drawText( indent+_tx + m_iTextX -offsetCellTooShort, _ty + m_iTextY, m_strOutText );
                 }
         else if( tmpAngle!=0)
         {
@@ -3009,14 +3014,14 @@ if( isValue())
                                         }
                                 }
                         }
-                if(fm.width(localizedNumber)<w)
+                if(fm.width(localizedNumber)<w) 
                         return localizedNumber;
                 }
 	QString str("####");
 	int i;
 	for(i=4;i!=0;i--)
 	  {
-	    if(fm.width(str.right(i))<w)
+	    if(fm.width(str.right(i))<(w-4-1))
 	      break;
 	  }
         return str.right(i);//QString("###");
