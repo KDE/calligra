@@ -64,14 +64,14 @@ _chart( chart )
     _layout = new QGridLayout(this, 2, 4, 5);
     _layout->setRowStretch(0,0);
     _layout->setRowStretch(1,0);
+    addButton( i18n( "Bar" ), "chart_bar", KDChartParams::Bar );
     addButton( i18n( "Lines" ), "chart_line", KDChartParams::Line );
     addButton( i18n( "Area" ),  "chart_area", KDChartParams::Area );
-    addButton( i18n( "Bar" ), "chart_bar", KDChartParams::Bar );
+    addButton(i18n("Hi-Lo-Close"), "chart_hilo", KDChartParams::HiLo );
+    addButton(i18n("Box & Whisker "), "chart_boxwhisker", KDChartParams::BoxWhisker );
     addButton( i18n( "Pie" ), "chart_pie", KDChartParams::Pie );
     addButton( i18n( "Ring" ), "chart_ring", KDChartParams::Ring );
-    addButton(i18n("Hi-Lo-Close"), "chart_hilo", KDChartParams::HiLo );
     addButton(i18n("Polar"), "chart_polar", KDChartParams::Polar);
-    addButton(i18n("Box & Whisker "), "chart_boxwhisker", KDChartParams::BoxWhisker );
 
     QPushButton *current = ((QPushButton*)_typeBG->find( _chart->params()->chartType() ));
     if (current != NULL) {

@@ -180,7 +180,6 @@ void KChartView::updateReadWrite( bool /*readwrite*/ )
 #endif
 }
 
-
 void KChartView::createTempData()
 {
     int row, col;

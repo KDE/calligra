@@ -17,6 +17,8 @@ namespace KChart
 class KChartPart;
 
 // Contains a button with a text label below it
+//
+// FIXME: Move to kchartWizardSelectChartTypePage.cc
 class KChartButton : public QVBox
 {
   Q_OBJECT

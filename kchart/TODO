@@ -14,18 +14,19 @@ Before release of KOffice 1.4
     New page in config dialog like pie settings?
   - Tooltips & What's this help?
   - Remove the predefined bar chart?
-  - What do the settins in Edit->Page Setup do?
+  - Make the settings in Edit->"Page Layout" clearer?
+  - Singular or plural for tooltips, not both.
 
   - Fix ChangeLog re: bug titles.					DONE
-  - Grep for FIXME and fix them
+  - Grep for FIXME and fix the urgent ones.
 
 * Toolbars
   - Separate toolbar for chart types (separate from data editor, etc).
-  - Group pie chart with ring chart and polar.
-  - Group Box&Whiskers with HiLo
+  - Reorder: Group pie chart with ring chart and polar.			DONE
+             Group Box&Whiskers with HiLo				DONE
 
 * Icons
-  - Smaller icons for chart subtypes.
+  - Smaller icons for chart subtypes in config dialog.
   - Wrong images for HiLo subtype icons.
 
 * Data editor
@@ -42,7 +43,11 @@ Before release of KOffice 1.4
   - Check handling of defaults.
 
 * Wizard
+  - Pages:
+    - "Select Chart Type" page: Reorder like the toolbark		DONE
+                                Black border around selected type?
   - Make Help button work.
+  - The Back button should be in the same place on all pages.
   - Subtype page should also have icons for subtypes like config dialog.
   - Why is Finish button disabled for two pages?
 

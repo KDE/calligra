@@ -1,3 +1,10 @@
+2005-03-07    <inge@lysator.liu.se>
+
+	Reorder chart types to make it more logical order
+	* kchart.rc (Toolbar): Reorder chart types
+	* kchartWizardSelectChartTypePage.cc (constructor): Reorder chart
+	types into same order.
+
 2005-03-06  Inge Wallin  <inge@lysator.liu.se>
 
 	Begin to support the Apply button in the data editor.
