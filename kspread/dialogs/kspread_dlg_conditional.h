@@ -2,7 +2,7 @@
    Copyright (C) 2002-2003 Norbert Andres <nandres@web.de>
              (C) 2002-2003 Philipp Mueller <philipp.mueller@gmx.de>
              (C) 2002 John Dailey <dailey@vt.edu>
-             (C) 1999-2001 Laurent Montel <montel@kde.org>
+             (C) 1999-2004 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,13 +32,12 @@ class KLineEdit;
 class KSpreadCell;
 class KSpreadStyle;
 class KSpreadView;
-
 #include "kspread_condition.h"
 
 class KSpreadConditionalWidget : public QWidget
 {
   Q_OBJECT
-  
+
  public:
   KSpreadConditionalWidget( QWidget * parent = 0, const char * name = 0, WFlags fl = 0 );
   ~KSpreadConditionalWidget();
@@ -47,12 +46,12 @@ class KSpreadConditionalWidget : public QWidget
   QComboBox * m_style_1;
   KLineEdit * m_firstValue_1;
   KLineEdit * m_secondValue_1;
-  
+
   QComboBox * m_condition_2;
   QComboBox * m_style_2;
   KLineEdit * m_firstValue_2;
   KLineEdit * m_secondValue_2;
-  
+
   QComboBox * m_condition_3;
   QComboBox * m_style_3;
   KLineEdit * m_firstValue_3;
@@ -90,9 +89,9 @@ class KSpreadConditionalDlg : public KDialogBase
   bool checkInputData( KLineEdit const * const edit1,
                        KLineEdit const * const edit2 );
   bool checkInputData();
-  bool getCondition( KSpreadConditional & newCondition, QComboBox const * const cb,
-                     KLineEdit const * const edit1, KLineEdit const * const edit2,
-                     QComboBox const * const sb, KSpreadStyle * style );
+  bool getCondition( KSpreadConditional & newCondition, const QComboBox * cb,
+                     const KLineEdit * edit1, const KLineEdit * edit2,
+                     const QComboBox * sb, KSpreadStyle * style );
 
 };
 

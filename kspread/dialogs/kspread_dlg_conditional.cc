@@ -22,6 +22,7 @@
 
 
 #include "kspread_dlg_conditional.h"
+#include "kspread_condition.h"
 
 #include "kspread_canvas.h"
 #include "kspread_cell.h"
@@ -581,9 +582,9 @@ bool KSpreadConditionalDlg::checkInputData()
   return true;
 }
 
-bool KSpreadConditionalDlg::getCondition( KSpreadConditional & newCondition, QComboBox const * const cb,
-                                          KLineEdit const * const edit1, KLineEdit const * const edit2,
-                                          QComboBox const * const sb, KSpreadStyle * style )
+bool KSpreadConditionalDlg::getCondition( KSpreadConditional & newCondition, const QComboBox * cb,
+                                          const KLineEdit * edit1, const KLineEdit * edit2,
+                                          const QComboBox * sb, KSpreadStyle * style )
 {
   if ( !cb->isEnabled() )
     return false;
