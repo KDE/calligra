@@ -175,7 +175,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     //   _pageLayout.ptTop = 0;
     //   _pageLayout.ptBottom = 0;
 
-    _pageLayout.unit = KoUnit::U_MM;
+    //_pageLayout.unit = KoUnit::U_MM;
     m_indent = MM_TO_POINT( 10.0 );
     KPrPage *newpage=new KPrPage(this);
     m_pageList.insert( 0,newpage);
@@ -235,12 +235,11 @@ void KPresenterDoc::slotCommandExecuted()
 void KPresenterDoc::setUnit( KoUnit::Unit _unit )
 {
     m_unit = _unit;
-    _pageLayout.unit=m_unit;
 
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it ) {
-        ((KPresenterView*)it.current())->getHRuler()->setUnit( KoUnit::unitName( m_unit ) );
-        ((KPresenterView*)it.current())->getVRuler()->setUnit( KoUnit::unitName( m_unit ) );
+        ((KPresenterView*)it.current())->getHRuler()->setUnit( m_unit );
+        ((KPresenterView*)it.current())->getVRuler()->setUnit( m_unit );
     }
 }
 
@@ -339,7 +338,7 @@ void KPresenterDoc::addCommand( KCommand * cmd )
 bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
 {
     int i = 0;
-    KPObject *kpobject = 0L;
+    //KPObject *kpobject = 0L;
 
     if ( saveOnlyPage == -1 ) // Don't save all children into template for one page
            // ###### TODO: save objects that are on that page
@@ -388,7 +387,7 @@ QDomDocument KPresenterDoc::saveXML()
     paper.setAttribute("ptHeight", _pageLayout.ptHeight);
 
     paper.setAttribute("orientation", static_cast<int>( _pageLayout.orientation ));
-    paper.setAttribute("unit", static_cast<int>( _pageLayout.unit ));
+    paper.setAttribute("unit", m_unit );
     QDomElement paperBorders=doc.createElement("PAPERBORDERS");
 
     paperBorders.setAttribute("ptLeft", _pageLayout.ptLeft);
@@ -525,7 +524,7 @@ QDomDocumentFragment KPresenterDoc::saveBackground( QDomDocument &doc )
 /*========================== save objects =======================*/
 QDomElement KPresenterDoc::saveObjects( QDomDocument &doc )
 {
-    KPObject *kpobject = 0;
+    //KPObject *kpobject = 0;
     QDomElement objects=doc.createElement("OBJECTS");
 
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
@@ -711,7 +710,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     if ( _clean ) {
         //KoPageLayout __pgLayout;
         __pgLayout = KoPageLayoutDia::standardLayout();
-        __pgLayout.unit = KoUnit::U_MM;
+        //__pgLayout.unit = KoUnit::U_MM;
         _spInfinitLoop = false;
         _spManualSwitch = true;
         _rastX = 20;
@@ -784,75 +783,57 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 __pgLayout.orientation=static_cast<KoOrientation>(elem.attribute("orientation").toInt());
             if(elem.hasAttribute("ptWidth"))
                 __pgLayout.ptWidth = elem.attribute("ptWidth").toDouble();
-            if(elem.hasAttribute("inchWidth"))  //compatibility
-                __pgLayout.inchWidth = elem.attribute("inchWidth").toDouble();
-            if(elem.hasAttribute("mmWidth"))    //compatibility
-                __pgLayout.mmWidth = elem.attribute("mmWidth").toDouble();
+            else if(elem.hasAttribute("inchWidth"))  //compatibility
+                __pgLayout.ptWidth = INCH_TO_POINT( elem.attribute("inchWidth").toDouble() );
+            else if(elem.hasAttribute("mmWidth"))    //compatibility
+                __pgLayout.ptWidth = MM_TO_POINT( elem.attribute("mmWidth").toDouble() );
             if(elem.hasAttribute("ptHeight"))
                 __pgLayout.ptHeight = elem.attribute("ptHeight").toDouble();
-            if(elem.hasAttribute("inchHeight")) //compatibility
-                __pgLayout.inchHeight = elem.attribute("inchHeight").toDouble();
-            if(elem.hasAttribute("mmHeight"))   //compatibility
-                __pgLayout.mmHeight = elem.attribute("mmHeight").toDouble();
+            else if(elem.hasAttribute("inchHeight")) //compatibility
+                __pgLayout.ptHeight = INCH_TO_POINT( elem.attribute("inchHeight").toDouble() );
+            else if(elem.hasAttribute("mmHeight"))   //compatibility
+                __pgLayout.ptHeight = MM_TO_POINT( elem.attribute("mmHeight").toDouble() );
             if(elem.hasAttribute("unit"))
-                __pgLayout.unit = static_cast<KoUnit::Unit>(elem.attribute("unit").toInt());
-            if(elem.hasAttribute("width")) {
-                __pgLayout.mmWidth = elem.attribute("width").toDouble();
-                __pgLayout.ptWidth = MM_TO_POINT( __pgLayout.mmWidth );
-                __pgLayout.inchWidth = MM_TO_INCH( __pgLayout.mmWidth );
-            }
-            if(elem.hasAttribute("height")) {
-                __pgLayout.mmHeight = elem.attribute("height").toDouble();
-                __pgLayout.ptHeight = MM_TO_POINT( __pgLayout.mmHeight );
-                __pgLayout.inchHeight = MM_TO_INCH( __pgLayout.mmHeight );
-            }
+                m_unit = static_cast<KoUnit::Unit>(elem.attribute("unit").toInt());
+            if(elem.hasAttribute("width"))
+                __pgLayout.ptWidth = MM_TO_POINT( elem.attribute("width").toDouble() );
+            if(elem.hasAttribute("height"))
+                __pgLayout.ptHeight = MM_TO_POINT( elem.attribute("height").toDouble() );
 
             QDomElement borders=elem.namedItem("PAPERBORDERS").toElement();
             if(!borders.isNull()) {
-                if(borders.hasAttribute("left")) {
-                    __pgLayout.mmLeft = borders.attribute("left").toDouble();
-                    __pgLayout.ptLeft = MM_TO_POINT( __pgLayout.mmLeft );
-                    __pgLayout.inchLeft = MM_TO_INCH( __pgLayout.mmLeft );
-                }
-                if(borders.hasAttribute("top")) {
-                    __pgLayout.mmTop = borders.attribute("top").toDouble();
-                    __pgLayout.ptTop = MM_TO_POINT( __pgLayout.mmTop );
-                    __pgLayout.inchTop = MM_TO_INCH( __pgLayout.mmTop );
-                }
-                if(borders.hasAttribute("right")) {
-                    __pgLayout.mmRight = borders.attribute("right").toDouble();
-                    __pgLayout.ptRight = MM_TO_POINT( __pgLayout.mmRight );
-                    __pgLayout.inchRight = MM_TO_INCH( __pgLayout.mmRight );
-                }
-                if(borders.hasAttribute("bottom")) {
-                    __pgLayout.mmBottom = borders.attribute("bottom").toDouble();
-                    __pgLayout.ptBottom = MM_TO_POINT( __pgLayout.mmBottom );
-                    __pgLayout.inchBottom = MM_TO_INCH( __pgLayout.mmBottom );
-                }
+                if(borders.hasAttribute("left"))
+                    __pgLayout.ptLeft = MM_TO_POINT( borders.attribute("left").toDouble() );
+                if(borders.hasAttribute("top"))
+                    __pgLayout.ptTop = MM_TO_POINT( borders.attribute("top").toDouble() );
+                if(borders.hasAttribute("right"))
+                    __pgLayout.ptRight = MM_TO_POINT( borders.attribute("right").toDouble() );
+                if(borders.hasAttribute("bottom"))
+                    __pgLayout.ptBottom = MM_TO_POINT( borders.attribute("bottom").toDouble() );
                 if(borders.hasAttribute("ptLeft"))
                     __pgLayout.ptLeft = borders.attribute("ptLeft").toDouble();
-                if(borders.hasAttribute("inchLeft"))    //compatibility
-                    __pgLayout.inchLeft = borders.attribute("inchLeft").toDouble();
-                if(borders.hasAttribute("mmLeft"))      //compatibility
-                    __pgLayout.mmLeft = borders.attribute("mmLeft").toDouble();
+                else if(borders.hasAttribute("inchLeft"))    //compatibility
+                    __pgLayout.ptLeft = INCH_TO_POINT( borders.attribute("inchLeft").toDouble() );
+                else if(borders.hasAttribute("mmLeft"))      //compatibility
+                    __pgLayout.ptLeft = MM_TO_POINT( borders.attribute("mmLeft").toDouble() );
                 if(borders.hasAttribute("ptRight"))
                     __pgLayout.ptRight = borders.attribute("ptRight").toDouble();
-                if(borders.hasAttribute("inchRight"))   //compatibility
-                    __pgLayout.inchRight = borders.attribute("inchRight").toDouble();
-                if(borders.hasAttribute("mmRight"))     //compatibility
-                    __pgLayout.mmRight = borders.attribute("mmRight").toDouble();
+                else if(borders.hasAttribute("inchRight"))   //compatibility
+                    __pgLayout.ptRight = INCH_TO_POINT( borders.attribute("inchRight").toDouble() );
+                else if(borders.hasAttribute("mmRight"))     //compatibility
+                    __pgLayout.ptRight = MM_TO_POINT( borders.attribute("mmRight").toDouble() );
                 if(borders.hasAttribute("ptTop"))
                     __pgLayout.ptTop = borders.attribute("ptTop").toDouble();
-                if(borders.hasAttribute("inchTop"))     //compatibility
-                    __pgLayout.inchTop = borders.attribute("inchTop").toDouble();
-                if(borders.hasAttribute("mmTop"))       //compatibility
-                    __pgLayout.mmTop = borders.attribute("mmTop").toDouble();
+                else if(borders.hasAttribute("inchTop"))     //compatibility
+                    __pgLayout.ptTop = INCH_TO_POINT( borders.attribute("inchTop").toDouble() );
+                else if(borders.hasAttribute("mmTop"))       //compatibility
+                    __pgLayout.ptTop = MM_TO_POINT( borders.attribute("mmTop").toDouble() );
                 if(borders.hasAttribute("ptBottom"))
                     __pgLayout.ptBottom = borders.attribute("ptBottom").toDouble();
-                if(borders.hasAttribute("inchBottom"))  //compatibility
-                    __pgLayout.inchBottom = borders.attribute("inchBottom").toDouble();
-                if(borders.hasAttribute("mmBottom"))    //compatibility
-                    __pgLayout.mmBottom = borders.attribute("inchBottom").toDouble();
+                else if(borders.hasAttribute("inchBottom"))  //compatibility
+                    __pgLayout.ptBottom = INCH_TO_POINT( borders.attribute("inchBottom").toDouble() );
+                else if(borders.hasAttribute("mmBottom"))    //compatibility
+                    __pgLayout.ptBottom = MM_TO_POINT( borders.attribute("inchBottom").toDouble() );
             }
         } else if(elem.tagName()=="VARIABLESETTINGS"){
             getVariableCollection()->variableSetting()->load(document);
@@ -1310,7 +1291,6 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout )
 
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
         m_pageList.at( i )->background()->setBgSize( m_pageList.at( i )->getZoomPageRect().size() );
-    setUnit(  _pageLayout.unit );
 
     repaint( false );
     // don't setModified(true) here, since this is called on startup

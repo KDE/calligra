@@ -1027,12 +1027,14 @@ void KPresenterView::extraBackground()
 void KPresenterView::extraLayout()
 {
     KoPageLayout pgLayout = m_pKPresenterDoc->pageLayout();
-    KoPageLayout oldLayout = m_pKPresenterDoc->pageLayout();
+    KoPageLayout oldLayout = pgLayout;
     KoHeadFoot hf;
+    KoUnit::Unit oldUnit = m_pKPresenterDoc->getUnit();
+    KoUnit::Unit unit = oldUnit;
 
-    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, FORMAT_AND_BORDERS ) ) {
+    if ( KoPageLayoutDia::pageLayout( pgLayout, hf, FORMAT_AND_BORDERS, unit ) ) {
 	PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ),
-						    pgLayout, oldLayout, this );
+						    pgLayout, oldLayout, unit, oldUnit, this );
 	pgLayoutCmd->execute();
 	kPresenterDoc()->addCommand( pgLayoutCmd );
         updateRuler();
@@ -1983,8 +1985,9 @@ void KPresenterView::setExtraPenWidth( unsigned int width )
 void KPresenterView::newPageLayout( KoPageLayout _layout )
 {
     KoPageLayout oldLayout = m_pKPresenterDoc->pageLayout();
+    KoUnit::Unit unit = m_pKPresenterDoc->getUnit(); // unchanged
 
-    PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ), _layout, oldLayout, this );
+    PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ), _layout, oldLayout, unit, unit, this );
     pgLayoutCmd->execute();
     kPresenterDoc()->addCommand( pgLayoutCmd );
     updateRuler();
@@ -3463,10 +3466,10 @@ void KPresenterView::setupRulers()
     tabChooser = new KoTabChooser( pageBase, KoTabChooser::TAB_ALL );
     tabChooser->setReadWrite(kPresenterDoc()->isReadWrite());
 
-    h_ruler = new KoRuler( pageBase, m_canvas, Qt::Horizontal, kPresenterDoc()->pageLayout(), KoRuler::F_INDENTS | KoRuler::F_TABS, tabChooser );
+    h_ruler = new KoRuler( pageBase, m_canvas, Qt::Horizontal, kPresenterDoc()->pageLayout(), KoRuler::F_INDENTS | KoRuler::F_TABS, kPresenterDoc()->getUnit(), tabChooser );
     h_ruler->changeFlags(0);
     h_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
-    v_ruler = new KoRuler( pageBase, m_canvas, Qt::Vertical, kPresenterDoc()->pageLayout(), 0 );
+    v_ruler = new KoRuler( pageBase, m_canvas, Qt::Vertical, kPresenterDoc()->pageLayout(), 0, kPresenterDoc()->getUnit() );
     v_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
     m_canvas->resize( m_canvas->width() - 20, m_canvas->height() - 20 );
     m_canvas->move( 20, 20 );
@@ -3494,8 +3497,8 @@ void KPresenterView::setupRulers()
     connect( h_ruler, SIGNAL( newFirstIndent( double ) ), this, SLOT( newFirstIndent( double ) ) );
     connect( h_ruler, SIGNAL( newRightIndent( double ) ), this, SLOT( newRightIndent( double ) ) );
 
-    h_ruler->setUnit( m_pKPresenterDoc->getUnitName() );
-    v_ruler->setUnit( m_pKPresenterDoc->getUnitName() );
+    h_ruler->setUnit( m_pKPresenterDoc->getUnit() );
+    v_ruler->setUnit( m_pKPresenterDoc->getUnit() );
 }
 
 /*==============================================================*/
@@ -3508,8 +3511,6 @@ void KPresenterView::unitChanged( QString u )
 void KPresenterView::setRanges()
 {
     if ( vert && horz && m_canvas && m_pKPresenterDoc ) {
-        int xOffset = m_canvas->diffx();
-        int yOffset = m_canvas->diffy();
 	vert->setSteps( 10, m_canvas->height() );
 	vert->setRange( 0, QMAX( 0, m_canvas->activePage()->getZoomPageRect().height()  - m_canvas->height() ) );
 	horz->setSteps( 10, m_canvas->activePage()->getZoomPageRect().width() +

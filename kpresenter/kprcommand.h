@@ -535,6 +535,7 @@ class PgLayoutCmd : public KCommand
 {
 public:
     PgLayoutCmd( QString _name, KoPageLayout _layout, KoPageLayout _oldLayout,
+                 KoUnit::Unit _oldUnit, KoUnit::Unit _unit,
                  KPresenterView *_view );
 
     virtual void execute();
@@ -543,6 +544,7 @@ public:
 protected:
 
     KoPageLayout layout, oldLayout;
+    KoUnit::Unit unit, oldUnit;
     KPresenterView *view;
 
 };

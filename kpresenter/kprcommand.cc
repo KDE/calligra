@@ -186,7 +186,6 @@ void SetBackCmd::execute()
 	m_page->setBackClipart( backClip );
 	doc->restoreBackground( m_page );
     } else {
-	unsigned int i = 0;
         QPtrListIterator<KPrPage> it( doc->getPageList() );
         for ( ; it.current() ; ++it )
         {
@@ -1324,29 +1323,42 @@ void PgConfCmd::unexecute()
 
 /*======================== constructor ===========================*/
 PgLayoutCmd::PgLayoutCmd( QString _name, KoPageLayout _layout, KoPageLayout _oldLayout,
+                          KoUnit::Unit _oldUnit, KoUnit::Unit _unit,
                           KPresenterView *_view )
     : KCommand( _name )
 {
     layout = _layout;
     oldLayout = _oldLayout;
     view = _view;
+    oldUnit = _oldUnit;
+    unit = _unit;
 }
 
 /*====================== execute =================================*/
 void PgLayoutCmd::execute()
 {
-    view->kPresenterDoc()->setPageLayout( layout );
+    KPresenterDoc *doc = view->kPresenterDoc();
+    doc->setUnit( unit );
+    doc->setPageLayout( layout );
     view->getHRuler()->setPageLayout( layout );
+    view->getHRuler()->setUnit( doc->getUnitName() );
     view->getVRuler()->setPageLayout( layout );
+    view->getVRuler()->setUnit( doc->getUnitName() );
     view->setRanges();
 }
 
 /*====================== unexecute ===============================*/
 void PgLayoutCmd::unexecute()
 {
-    view->kPresenterDoc()->setPageLayout( oldLayout );
+    KPresenterDoc *doc = view->kPresenterDoc();
+    doc->setUnit( unit );
+    doc->setPageLayout( layout );
+    doc->setUnit( oldUnit );
+    doc->setPageLayout( oldLayout );
     view->getHRuler()->setPageLayout( oldLayout );
+    view->getHRuler()->setUnit( doc->getUnitName() );
     view->getVRuler()->setPageLayout( oldLayout );
+    view->getVRuler()->setUnit( doc->getUnitName() );
     view->setRanges();
 }
 

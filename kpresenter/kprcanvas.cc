@@ -230,9 +230,9 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         bufPainter.setBrushOrigin( -diffx(), -diffy() );
 
         QRect crect( paintEvent->rect() ); // the rectangle that needs to be repainted, in widget coordinates
-        kdDebug(33001) << "KPrCanvas::paintEvent " << DEBUGRECT( crect ) << endl;
+        //kdDebug(33001) << "KPrCanvas::paintEvent " << DEBUGRECT( crect ) << endl;
         crect.moveBy( diffx(), diffy() ); // now in contents coordinates
-          kdDebug(33001) << "KPrCanvas::paintEvent after applying diffx/diffy: " << DEBUGRECT( crect ) << endl;
+        //kdDebug(33001) << "KPrCanvas::paintEvent after applying diffx/diffy: " << DEBUGRECT( crect ) << endl;
 
         if ( editMode || !fillBlack )
             bufPainter.fillRect( crect, white );
