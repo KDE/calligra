@@ -984,7 +984,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         for ( ; fIt != m_framesOnTop.end() ; ++fIt )
         {
             QRect r = painter->xForm( viewMode->normalToView( doc->zoomRect( (*fIt).outerRect ) ) );
-            kdDebug(32002) << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
+            //kdDebug(32002) << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
             reg -= r; // subtract
         }
         return reg;

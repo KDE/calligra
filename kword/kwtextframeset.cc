@@ -590,20 +590,17 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     {
         if ( (*fIt).runAround == RA_SKIP )
         {
-            int top = kWordDocument()->zoomItY( (*fIt).outerRect.top() );
-            int bottom = kWordDocument()->zoomItY( (*fIt).outerRect.bottom() );
+            QRect rectOnTop = kWordDocument()->zoomRect( (*fIt).outerRect );
             QPoint iTop, iBottom; // top and bottom in internal coordinates
-            if ( normalToInternal( QPoint( 0, top ), iTop, true ) &&  // we know the frame is on top, so using onlyY is ok
-                 normalToInternal( QPoint( 0, bottom ), iBottom, true ) &&
+            if ( normalToInternal( rectOnTop.topLeft(), iTop ) &&
+                 normalToInternal( rectOnTop.bottomLeft(), iBottom ) &&
                  checkVerticalBreak( yp, h, parag, linesTogether,
                                      iTop.y(), iBottom.y() ) )
             {
                 kdDebug(32002) << "KWTextFrameSet::adjustFlow breaking around RA_SKIP frame yp="<<yp<<" h=" << h << endl;
                 // We don't "break;" here because there could be another such frame below the first one
-                // In fact if they are in the wrong order we could fail to skip both...
-                // Back to the beginning then
-                m_framesOnTop.remove( fIt );
-                fIt = m_framesOnTop.begin();
+                // We assume that the frames on top are in order ( top to bottom ), btw.
+                // They should be, since updateFrames reorders before updating frames-on-top
                 breaked = true;
             }
         }
