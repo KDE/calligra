@@ -42,6 +42,7 @@
 #include "zoomtool.h"
 #include "gradienttool.h"
 #include "colorpicker.h"
+#include "newdialog.h"
 
 #include <kruler.h>
 #include <klocale.h>

@@ -43,6 +43,9 @@ void BrushTool::mousePress(QMouseEvent *e)
   if (e->button() != QMouseEvent::LeftButton)
     return;
 
+  if( !m_pDoc->imageExtents().contains( e->pos() ))
+    return;
+
   if( !m_pDoc->getCurrentLayer()->isVisible() )
     return;
 
@@ -110,6 +113,9 @@ void BrushTool::mouseMove(QMouseEvent *e)
 {
   if(m_dragging)
     {
+      if( !m_pDoc->imageExtents().contains( e->pos() ))
+	return;
+
       if( !m_pDoc->getCurrentLayer()->isVisible() )
 	return;
 

@@ -104,6 +104,12 @@ KImageShopDoc::~KImageShopDoc()
     free(imageData);
 }
 
+
+QRect KImageShopDoc::imageExtents()
+{
+  return QRect(0, 0, w, h);
+}
+
 bool KImageShopDoc::loadFromURL( const QString& _url )
 {
   cout << "KImageShopDoc::loadFromURL" << endl;
@@ -129,11 +135,11 @@ bool KImageShopDoc::initDoc()
   setLayerOpacity(255);
 
   // load some test layers
-  QString _image = locate("kis_images", "cam9b.jpg", KImageShopFactory::global());
-  addRGBLayer(_image);
-  setLayerOpacity(255);
+  //QString _image = locate("kis_images", "cam9b.jpg", KImageShopFactory::global());
+  //addRGBLayer(_image);
+  //setLayerOpacity(255);
 
-  _image = locate("kis_images", "cambw12.jpg", KImageShopFactory::global());
+  QString _image = locate("kis_images", "cambw12.jpg", KImageShopFactory::global());
   addRGBLayer(_image);
   moveLayer(256,384);
   setLayerOpacity(180);
@@ -154,6 +160,7 @@ bool KImageShopDoc::initDoc()
   */
 
   compositeImage(QRect());
+  setModified(true);
   return true;
 }
 

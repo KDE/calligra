@@ -64,6 +64,8 @@ public:
     Layer* getCurrentLayer() { return currentLayer; }
     int getCurrentLayerIndex() { return layers.find( currentLayer ); }
     void setCurrentLayer( int _layer );
+
+    QRect imageExtents();
     
     void upperLayer( unsigned int _layer );
     void lowerLayer( unsigned int _layer );
