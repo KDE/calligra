@@ -27,12 +27,12 @@
 #include "document.h"
 
 #ifndef IMAGE_IMPORT
-/*namespace wvWare
+namespace wvWare
 {
     class PictureHandler
     {
     };
-}*/
+}
 #endif // IMAGE_IMPORT
 
 class KWordPictureHandler : public QObject, public wvWare::PictureHandler
