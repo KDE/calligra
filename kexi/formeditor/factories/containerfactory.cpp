@@ -32,19 +32,21 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	wBtnGroup->setPixmap("frame");
 	wBtnGroup->setClassName("QButtonGroup");
 	wBtnGroup->setName(i18n("Button Group"));
+	wBtnGroup->setDescription(i18n("A simple container with a title"));
 	m_classes.append(wBtnGroup);
 
 	KFormDesigner::Widget *wTabWidget = new KFormDesigner::Widget(this);
 	wTabWidget->setPixmap("tabwidget");
 	wTabWidget->setClassName("QTabWidget");
 	wTabWidget->setName(i18n("Tab Widget"));
+	wTabWidget->setDescription(i18n("An widget to display multiple pages using tabs"));
 	m_classes.append(wTabWidget);
 
 	KFormDesigner::Widget *wWidget = new KFormDesigner::Widget(this);
 	wWidget->setPixmap("widget");
 	wWidget->setClassName("QWidget");
 	wWidget->setName(i18n("Empty Widget"));
-//	wLabel->setDescription(i18n("A widget to display text or pixmaps"));
+	wWidget->setDescription(i18n("An empty container with no frame"));
 	m_classes.append(wWidget);
 }
 

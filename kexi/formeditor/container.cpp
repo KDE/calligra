@@ -280,7 +280,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			if(!w)
 				return false;
 			m_form->manager()->lib()->startEditing(w->className(), w, this);
-			return false;
+			return true;
 		}
 
 		case QEvent::ContextMenu:

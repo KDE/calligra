@@ -82,6 +82,11 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty 
 				m_lastcom = new PropertyCommand(this, QString(m_object->name()), m_object->property(property.latin1()), value, prop.name());
 				m_manager->activeForm()->addCommand(m_lastcom, false);
 			}
+
+			ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_object->name());
+			if((*this)[property.latin1()]->changed())
+				tree->addModProperty(property, m_object->property(property.latin1()));
+
 			m_object->setProperty(property.latin1(), value);
 			emit propertyChanged(m_object, property, value);
 		}

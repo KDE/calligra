@@ -88,10 +88,11 @@ ObjectTreeItem::debug(int ident)
 void
 ObjectTreeItem::addModProperty(const QString &property, const QVariant &oldValue)
 {
+	kdDebug() << "wanting to add the property" << property << endl;
 	if(!m_props.contains(property))
 	{
 		m_props.insert(property, oldValue);
-		kdDebug() << "added " << property << endl;
+		kdDebug() << "ObjectTree:: added the property in my list" << property << endl;
 	}
 }
 

@@ -62,7 +62,7 @@ class KFORMEDITOR_EXPORT Widget
 		 */
 		virtual QString	name() { return m_name; }
 
-		//virtual QString description() { return m_desc; }
+		virtual QString description() { return m_desc; }
 
 		/**
 		 * this is executed at doubleclick on the widget
@@ -74,13 +74,13 @@ class KFORMEDITOR_EXPORT Widget
 		void		setPixmap(const QString &p) { m_pixmap = p; }
 		void		setClassName(const QString &s) { m_class = s; }
 		void		setName(const QString &n) { m_name = n; }
-		//void		setDescription(const QString &desc) { m_desc = desc;}
+		void		setDescription(const QString &desc) { m_desc = desc;}
 
 	private:
 		QString		m_pixmap;
 		QString		m_class;
 		QString		m_name;
-		//QString		m_desc;
+		QString		m_desc;
 		WidgetFactory	*m_factory;
 
 };
@@ -136,10 +136,11 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		   \a text is the text to display by default in the line edit, \a w is the edited widget, \a geometry is the geometry the new line
 		   edit should have, and \a align is Qt::AlignmentFlags of the new line edit.
 		 */
-		virtual KLineEdit*	createEditor(const QString &text, QWidget *w, QRect geometry, int align);
+		virtual KLineEdit*	createEditor(const QString &text, QWidget *w, QRect geometry, int align,  bool useFrame=false,
+		     BackgroundMode background = Qt::NoBackground);
 		/*! This function destroys the editor. */
 		virtual bool  eventFilter(QObject *obj, QEvent *ev);
-		virtual void  changeProperty(const char *name, const QString &text, Container *container);
+		virtual void  changeProperty(const char *name, const QVariant &value, Container *container);
 
 	protected slots:
 		/*! You have to implement this function for editing inside the Form to work. This slot is called when the line edit text changes,

@@ -37,15 +37,18 @@ WidgetFactory::WidgetFactory(QObject *parent, const char *name)
 }
 
 KLineEdit*
-WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int align)
+WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int align,  bool useFrame, BackgroundMode background)
 {
 	KLineEdit *editor = new KLineEdit(text, w->parentWidget());
 	editor->setAlignment(align);
 	editor->setPalette(w->palette());
 	editor->setGeometry(geometry);
-	editor->setBackgroundMode(w->backgroundMode());
+	if(background == Qt::NoBackground)
+		editor->setBackgroundMode(w->backgroundMode());
+	else
+		editor->setBackgroundMode(background);
 	editor->installEventFilter(this);
-	editor->setFrame(w->isA("QLineEdit"));
+	editor->setFrame(useFrame);
 	editor->show();
 	editor->setFocus();
 	connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeText(const QString&)));
@@ -55,6 +58,7 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int
 	m_handles = new ResizeHandleSet(editor, true);
 
 	m_editor = editor;
+	m_widget = w;
 	return editor;
 }
 
@@ -100,10 +104,10 @@ WidgetFactory::editorDeleted()
 }
 
 void
-WidgetFactory::changeProperty(const char *name, const QString &text, Container *container)
+WidgetFactory::changeProperty(const char *name, const QVariant &value, Container *container)
 {
 	KFormDesigner::ObjectPropertyBuffer *buff = container->form()->manager()->buffer();
-	(*buff)[name]->setValue(text);
+	(*buff)[name]->setValue(value, true);
 }
 
 WidgetFactory::~WidgetFactory()
