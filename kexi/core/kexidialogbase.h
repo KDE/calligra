@@ -70,10 +70,16 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 
 	signals:
 		void updateContextHelp();
+
+		//! emitted when the window is about to close
+		void closing();
+
 	protected:
 		void registerDialog();
-		virtual void attachToGUIClient(); //JOWENN: make that protected perhaps
-		virtual void detachFromGUIClient(); //JOWENN: make that protected perhaps
+		virtual void attachToGUIClient();
+		virtual void detachFromGUIClient();
+		virtual void closeEvent( QCloseEvent * e );
+
 	private:
 		KexiMainWindow *m_parentWindow;
 		bool m_isRegistered;

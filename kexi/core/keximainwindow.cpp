@@ -1215,6 +1215,9 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 	if (e->type()==QEvent::AccelOverride) {
 		kdDebug() << "AccelOverride EVENT" << endl;
 	}
+	if (e->type()==QEvent::Close) {
+		kdDebug() << "Close EVENT" << endl;
+	}
 	QWidget *focus_w = 0;
 	QWidget *w = findWindow(static_cast<QWidget*>(obj));
 	if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut) {

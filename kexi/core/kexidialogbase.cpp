@@ -97,5 +97,11 @@ void KexiDialogBase::detach()
 	}
 }*/
 
+void KexiDialogBase::closeEvent( QCloseEvent * e )
+{
+	emit closing();
+	KMdiChildView::closeEvent(e);
+}
+
 #include "kexidialogbase.moc"
 
