@@ -108,6 +108,7 @@ KPObject::KPObject()
 
 KPObject::~KPObject()
 {
+    delete dcop;
 }
 
 QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )

@@ -43,6 +43,7 @@ KoBgSpellCheck::KoBgSpellCheck()
 KoBgSpellCheck::~KoBgSpellCheck()
 {
     delete m_bgSpell.kspell;
+    delete m_pKSpellConfig;
 }
 
 void KoBgSpellCheck::enableBackgroundSpellCheck( bool b )
