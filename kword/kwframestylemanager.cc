@@ -19,6 +19,7 @@
 
 #include "kwframestylemanager.h"
 #include "kwframestylemanager.moc"
+#include "kwimportstyledia.h"
 
 #include <kwdoc.h>
 #include <koParagDia.h>
@@ -119,7 +120,7 @@ void KWFrameStyleListItem::apply()
 KWFrameStyleManager::KWFrameStyleManager( QWidget *_parent, KWDocument *_doc, const QPtrList<KWFrameStyle> & style)
     : KDialogBase( _parent, "Framestylist", true,
                    i18n("Framestylist"),
-                   KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply )
+                   KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply| KDialogBase::User1 )
 {
     m_doc = _doc;
 
@@ -143,6 +144,8 @@ KWFrameStyleManager::KWFrameStyleManager( QWidget *_parent, KWDocument *_doc, co
     noSignals=false;
     switchStyle();
     setInitialSize( QSize( 600, 370 ) );
+    setButtonText( KDialogBase::User1, i18n("Import From File") );
+    connect(this, SIGNAL(user1Clicked()), this, SLOT(importFromFile()));
 }
 
 void KWFrameStyleManager::addTab( KWFrameStyleManagerTab * tab )
@@ -317,6 +320,38 @@ void KWFrameStyleManager::save() {
 
         m_currentFrameStyle->setName( m_nameString->text() );
     }
+}
+
+void KWFrameStyleManager::importFromFile()
+{
+    QStringList lst;
+    for ( int i = 0; i<m_stylesList->count();i++)
+    {
+        lst << m_stylesList->text(i );
+    }
+
+    KWImportStyleDia dia( m_doc, lst, this, 0 );
+    if ( dia.exec() ) {
+        QPtrList<KWFrameStyle> list = dia.listOfStyleImported();
+        addStyle( list);
+    }
+
+}
+
+void KWFrameStyleManager::addStyle(const QPtrList<KWFrameStyle> &listStyle )
+{
+    save();
+
+    QPtrListIterator<KWFrameStyle> style( listStyle );
+    for ( ; style.current() ; ++style )
+    {
+        noSignals=true;
+        m_stylesList->insertItem( style.current()->translatedName() );
+        m_frameStyles.append( new KWFrameStyleListItem( 0L,new KWFrameStyle(*style.current())) );
+        noSignals=false;
+
+    }
+    updateGUI();
 }
 
 void KWFrameStyleManager::addStyle()

@@ -106,7 +106,7 @@ public:
     void updateAllStyleLists();
 
 protected:
-
+    void addStyle(const QPtrList<KWFrameStyle> & style );
     void setupWidget(const QPtrList<KWFrameStyle> & style);
     void addGeneralTab();
     void apply();
@@ -144,6 +144,7 @@ protected slots:
     void moveUpStyle();
     void moveDownStyle();
     void renameStyle(const QString &);
+    void importFromFile();
 protected:
     void addTab( KWFrameStyleManagerTab * tab );
 };
