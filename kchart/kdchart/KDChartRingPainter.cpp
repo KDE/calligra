@@ -22,6 +22,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <stdlib.h> // abs
+
 #include "KDChartRingPainter.h"
 #include "KDChartParams.h"
 
