@@ -983,7 +983,7 @@ int TxtParagraph::width()
     for ( linePtr = lineList.first(); linePtr != 0; linePtr = lineList.next() )
 	w = QMAX( w, linePtr->width() );
 
-    return w + _leftIndent;
+    return w;
 }
 
 /*==================== height of the paragraph ===================*/
@@ -6456,7 +6456,7 @@ QSize KTextObject::neededSize()
 {
     int w = 0, h = 0;
     for ( unsigned int i = 0; i < paragraphList.count(); i++ ) {
-	w = QMAX( w, paragraphList.at( i )->width() + 10 ); // add some buffer
+	w = QMAX( w, paragraphList.at( i )->width() + xstart + getLeftIndent( i ) );
 	h += paragraphList.at( i )->height();
     }
 	
