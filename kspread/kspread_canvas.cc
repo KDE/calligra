@@ -619,60 +619,6 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     // Get the current selected rectangle
     QRect selection( table->selectionRect() );
 
-    /*
-    // Over which cell is the mouse ?
-    int ypos, xpos;
-    int row = table->topRow( _ev->pos().y(), ypos, this );
-    int col = table->leftColumn( _ev->pos().x(), xpos, this );
-    KSpreadCell* cell = table->visibleCellAt( col, row );
-
-    QString comment;
-    // Test whether the mouse is over some anchor
-    if ( cell )
-    {
-	m_strAnchor = cell->testAnchor( _ev->pos().x() - xpos, _ev->pos().y() - ypos, this );
-	comment=cell->getComment();
-    }
-
-    // Determine position and width of the current cell.
-    cell = table->cellAt( col, row );
-    int u = cell->width( col, this );
-    int extraCol = col;
-    int extraRow = row;
-    int xpos1 = xpos;
-    int ypos1 = ypos;
-
-    // Special treatment for obscured cells.
-    if ( cell->isObscured() && cell->isObscuringForced() )
-    {
-	// Find the obscuring cell
-	int moveX = cell->obscuringCellsColumn();
-	int moveY = cell->obscuringCellsRow();
-	cell = table->cellAt( moveX, moveY );
-	
-	// Use the obscuring cells dimensions
-	u = cell->width( moveX, this );
-	extraCol = moveX;
-	extraRow = moveY;
-	xpos1 = table->columnPos( extraCol, this );
-	ypos1 = table->rowPos( extraRow, this );
-    }
-
-    // Is the cursor over the comment marker (if there is any) then
-    // show the comment.
-    if ( _ev->pos().x() >= xpos1 + u - 10 && _ev->pos().x() <= xpos1 + u  &&
-         _ev->pos().y() >= ypos1  && _ev->pos().y() <= ypos1 +10 && !comment.isEmpty())
-    {
-	if( !labelComment )
-	    showComment( extraRow, extraCol );
-    }
-    else if( labelComment )
-    {
-	delete labelComment;
-	labelComment=0;
-    }
-    */
-
     int xpos;
     int ypos;
     int row = table->topRow( _ev->pos().y(), ypos, this );
