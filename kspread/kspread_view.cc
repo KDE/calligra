@@ -817,6 +817,27 @@ void ViewPrivate::initActions()
       0, view, SLOT( adjust() ), ac, "adjust" );
   actions->adjust->setToolTip(i18n("Adjusts row/column size so that the contents will fit."));
 
+  // -- navigation actions --
+
+  actions->gotoCell = new KAction( i18n("Goto Cell..."),"goto",
+      0, view, SLOT( gotoCell() ), ac, "gotoCell" );
+  actions->gotoCell->setToolTip(i18n("Move to a particular cell."));
+
+  actions->nextTable = new KAction( i18n("Next Sheet"),
+      Qt::CTRL+Qt::Key_PageDown, view, SLOT( nextTable() ), ac, "nextTable");
+  actions->nextTable->setToolTip(i18n("Move to the next sheet."));
+
+  actions->prevTable = new KAction( i18n("Previous Sheet"),
+      Qt::CTRL+Qt::Key_PageUp, view, SLOT( previousTable() ), ac, "previousTable");
+  actions->prevTable->setToolTip(i18n("Move to the previous sheet."));
+
+  actions->firstTable = new KAction( i18n("First Sheet"),
+      0, view, SLOT( firstTable() ), ac, "firstTable");
+  actions->firstTable->setToolTip(i18n("Move to the first sheet."));
+
+  actions->lastTable = new KAction( i18n("Last Sheet"),
+      0, view, SLOT( lastTable() ), ac, "lastTable");
+  actions->lastTable->setToolTip(i18n("Move to the last sheet."));
 }
 
 
@@ -963,7 +984,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     initializeEditActions();
     initializeAreaOperationActions();
     initializeGlobalOperationActions();
-    initializeCellOperationActions();
     initializeTableActions();
     initializeSpellChecking();
 
@@ -1386,16 +1406,6 @@ void KSpreadView::initializeGlobalOperationActions()
 }
 
 
-void KSpreadView::initializeCellOperationActions()
-{
-
-  d->actions->gotoCell = new KAction( i18n("Goto Cell..."),"goto", 0, this,
-                            SLOT( gotoCell() ), actionCollection(), "gotoCell" );
-  d->actions->gotoCell->setToolTip(i18n("Move to a particular cell."));
-
-
-}
-
 void KSpreadView::initializeTableActions()
 {
   d->actions->insertTable = new KAction( i18n("Insert Sheet"),"inserttable", 0, this,
@@ -1420,26 +1430,6 @@ void KSpreadView::initializeTableActions()
                              SLOT( slotRename() ), actionCollection(),
                              "renameTable" );
   d->actions->renameTable->setToolTip(i18n("Rename the active sheet."));
-
-  d->actions->nextTable = new KAction( i18n("Next Sheet"), CTRL + Key_PageDown, this,
-                             SLOT( nextTable() ), actionCollection(),
-                             "nextTable");
-  d->actions->nextTable->setToolTip(i18n("Move to the next sheet."));
-
-  d->actions->prevTable = new KAction( i18n("Previous Sheet"), CTRL + Key_PageUp, this,
-                             SLOT( previousTable() ), actionCollection(),
-                             "previousTable");
-  d->actions->prevTable->setToolTip(i18n("Move to the previous sheet."));
-
-  d->actions->firstTable = new KAction( i18n("First Sheet"), 0, this,
-                              SLOT( firstTable() ), actionCollection(),
-                              "firstTable");
-  d->actions->firstTable->setToolTip(i18n("Move to the first sheet."));
-
-  d->actions->lastTable = new KAction( i18n("Last Sheet"), 0, this,
-                             SLOT( lastTable() ), actionCollection(),
-                             "lastTable");
-  d->actions->lastTable->setToolTip(i18n("Move to the last sheet."));
 
   d->actions->showTable = new KAction(i18n("Show Sheet..."),0 ,this,SLOT( showTable()),
                             actionCollection(), "showTable" );

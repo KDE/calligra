@@ -684,7 +684,6 @@ private:
   void initializeEditActions();
   void initializeAreaOperationActions();
   void initializeGlobalOperationActions();
-  void initializeCellOperationActions();
   void initializeTableActions();
   void initializeSpellChecking();
   void adjustMapActions( bool mode );
