@@ -205,7 +205,7 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
         d->paragCache.insert( parag, parag );
         return;
     }
-    //kdDebug()<<"Para modified pos = "<<pos<<", length = "<< length <<endl;
+    //kdDebug()<<"Para modified " << parag << " pos = "<<pos<<", length = "<< length <<endl;
 #if KDE_VERSION > KDE_MAKE_VERSION(3,3,0)
     if ( length < 10 ) {
         QString str = parag->string()->stringToSpellCheck();
@@ -235,6 +235,8 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
 void KoBgSpellCheck::slotParagraphDeleted( KoTextParag* parag )
 {
     d->paragCache.take( parag );
+    if ( parag == d->backSpeller->currentParag() )
+        d->backSpeller->slotCurrentParagraphDeleted();
 }
 
 void KoBgSpellCheck::slotClearPara()
