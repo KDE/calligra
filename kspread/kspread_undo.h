@@ -24,11 +24,11 @@ class KSpreadUndo;
 class KSpreadUndoAction;
 class KSpreadTable;
 class KSpreadLayout;
-class KSpreadCell;
+//class KSpreadCell;
 class KSpreadDoc;
 class ColumnLayout;
 class RowLayout;
-
+#include "kspread_cell.h"
 #include <qstack.h>
 #include <qstring.h>
 #include <qrect.h>
@@ -137,7 +137,7 @@ protected:
 class KSpreadUndoSetText : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadTable *_table, const QString& _text, int _column, int _row );
+    KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadTable *_table, const QString& _text, int _column, int _row,KSpreadCell::formatNumber _formatNumber );
     virtual ~KSpreadUndoSetText();
 
     virtual void undo();
@@ -149,6 +149,8 @@ protected:
     int m_iColumn;
     QString m_strText;
     QString m_strRedoText;
+    KSpreadCell::formatNumber m_eFormatNumber;
+    KSpreadCell::formatNumber m_eFormatNumberRedo;
 };
 
 class KSpreadUndoCellLayout : public KSpreadUndoAction

@@ -1563,7 +1563,7 @@ QString KSpreadCell::createTimeFormat( )
                 tmp=QString().sprintf("%02d", m_Time.hour())+":"+QString().sprintf("%02d",m_Time.minute()) +" "+ i18n("AM");
         }
     else if(m_eFormatNumber == Time_format2)
-        { //9 : 01 :5 AM
+        { //9:01:05 AM
         QString tmpTime;
         if( m_Time.hour()>12)
                 tmp=QString().sprintf("%02d", m_Time.hour()-12)+":"+QString().sprintf("%02d",m_Time.minute()) +":"+QString().sprintf("%02d",m_Time.second())+" "+ i18n("PM");

@@ -504,7 +504,7 @@ void KSpreadTable::setText( int _row, int _column, const QString& _text, bool up
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        KSpreadUndoSetText *undo = new KSpreadUndoSetText( m_pDoc, this, cell->text(), _column, _row );
+        KSpreadUndoSetText *undo = new KSpreadUndoSetText( m_pDoc, this, cell->text(), _column, _row,cell->getFormatNumber(_column, _row) );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
 

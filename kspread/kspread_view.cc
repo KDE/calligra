@@ -2072,7 +2072,7 @@ void KSpreadView::slotActivateTool( int _id )
       {
       if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-        KSpreadUndoSetText* undo = new KSpreadUndoSetText( m_pDoc, m_pTable, tmpText, m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+        KSpreadUndoSetText* undo = new KSpreadUndoSetText( m_pDoc, m_pTable, tmpText, m_pCanvas->markerColumn(), m_pCanvas->markerRow() ,cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
         m_pDoc->undoBuffer()->appendUndo( undo );
         }
       cell->setCellText( text, true );

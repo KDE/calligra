@@ -337,6 +337,11 @@ QString KSpreadCellIface::getFormatNumber() const
         case KSpreadCell::SecondeTime:
                 stringFormat="SecondeTime";
                 break;
+        case KSpreadCell::Time_format1:
+        case KSpreadCell::Time_format2:
+        case KSpreadCell::Time_format3:
+                stringFormat="time format";
+                break;
         case KSpreadCell::fraction_half:
                 stringFormat="fraction_half";
                 break;
