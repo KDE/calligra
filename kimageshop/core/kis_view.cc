@@ -100,7 +100,9 @@ void KisView::setupCanvas()
 
 void KisView::setupSideBar()
 {
-  m_pSideBar = new KisSideBar(this, "kis_sidebar");  
+  m_pSideBar = new KisSideBar(this, "kis_sidebar"); 
+  connect(m_pSideBar, SIGNAL(fgColorChanged(const KisColor&)), this, SLOT(slotSetFGColor(const KisColor&)));
+  connect(m_pSideBar, SIGNAL(bgColorChanged(const KisColor&)), this, SLOT(slotSetBGColor(const KisColor&))); 
 }
 
 void KisView::setupScrollBars()
@@ -289,6 +291,8 @@ void KisView::setupActions()
   m_tool_airbrush = new KToggleAction( i18n("&Airbrush tool"), KISBarIcon("airbrush"), 0, this,
 				       SLOT( tool_airbrush() ),actionCollection(), "tool_airbrush");
   m_tool_airbrush->setExclusiveGroup( "tools" );
+  m_tool_airbrush->setEnabled( false );
+ 
   m_tool_eraser = new KToggleAction( i18n("&Eraser tool"), KISBarIcon("eraser"), 0, this,
 			      SLOT( tool_eraser() ),actionCollection(), "tool_eraser");
   m_tool_eraser->setExclusiveGroup( "tools" );

@@ -22,14 +22,73 @@
 #define __kis_sidebar_h__
 
 #include <qframe.h>
+#include <kis_color.h>
 
-class KisSideBar : public QFrame
+class KDualColorButton;
+
+class TopFrame : public QFrame
+{
+  Q_OBJECT;
+
+ public:
+  TopFrame( QWidget* parent = 0, const char* name = 0 );
+
+ protected:
+  virtual void drawContents ( QPainter * );
+};
+
+class ControlFrame : public QFrame
+{
+  Q_OBJECT;
+
+ public:
+  ControlFrame( QWidget* parent = 0, const char* name = 0 );
+  ~ControlFrame();
+
+  void setFGColor(const KisColor&);
+  void setBGColor(const KisColor&);
+
+ signals:
+  void fgColorChanged(const KisColor&);
+  void bgColorChanged(const KisColor&);
+
+ protected:
+  virtual void resizeEvent ( QResizeEvent * );
+
+ protected slots:
+  void slotFGColorSelected(const QColor&);
+  void slotBGColorSelected(const QColor&);
+
+ private:
+  KDualColorButton  *m_pColorButton;
+};
+
+class KisSideBar : public QWidget
 {
   Q_OBJECT;
 
  public:
   KisSideBar( QWidget* parent = 0, const char* name = 0 );
+  ~KisSideBar();
 
+ public slots:
+  void slotSetFGColor(const KisColor&);
+  void slotSetBGColor(const KisColor&);
+
+ signals:
+  void fgColorChanged(const KisColor&);
+  void bgColorChanged(const KisColor&);
+
+ protected:
+  virtual void resizeEvent ( QResizeEvent * );
+
+ protected slots:
+  void slotFGColorSelected(const KisColor&);
+  void slotBGColorSelected(const KisColor&);
+
+ private:
+  TopFrame     *m_pTopFrame;
+  ControlFrame *m_pControlFrame;
 };
 
 #endif
