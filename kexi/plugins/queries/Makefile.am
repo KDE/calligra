@@ -2,7 +2,7 @@ include $(top_srcdir)/kexi/Makefile.global
 
 kde_module_LTLIBRARIES = kexihandler_query.la
 
-#kexihandler_query_la_SOURCES = kexiquerypart.cpp kexiquerydesigner.cpp kexiquerypartitem.cpp kexiquerypartproxy.cpp \
+#kexihandler_query_la_SOURCES = kexiquerypart.cpp \
 #				kexiquerydesignerguieditor.cpp kexiquerydesignersql.cpp  \
 #				kexiquerydesignersqlhistory.cpp kexiparameterlisteditor.ui kexiaddparamwidget.ui \
 #				kexiaddparamdialog.cpp kexidynamicqueryparameterdialog.cpp

@@ -33,7 +33,6 @@
 #include <kexiproject.h>
 #include <keximainwindow.h>
 
-#include "kexiquerydesigner.h"
 #include "kexiquerydesignersqleditor.h"
 #include "kexiquerydesignersqlhistory.h"
 #include "kexiquerydesignersql.h"
