@@ -37,8 +37,8 @@ UnitBox::UnitBox (QWidget* parent, const char* name) : QWidget (parent, name) {
   unitCombo->insertItem (unitToString (UnitPoint));
   unitCombo->insertItem (unitToString (UnitMillimeter));
   unitCombo->insertItem (unitToString (UnitInch));
-  unitCombo->insertItem (unitToString (UnitCentimeter));
   unitCombo->insertItem (unitToString (UnitPica));
+  unitCombo->insertItem (unitToString (UnitCentimeter));
   unitCombo->insertItem (unitToString (UnitDidot));
   unitCombo->insertItem (unitToString (UnitCicero));
   unitCombo->setCurrentItem (int (unit = defaultUnit));

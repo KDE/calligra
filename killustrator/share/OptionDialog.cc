@@ -72,8 +72,8 @@ QWidget* OptionDialog::createGeneralWidget (QWidget* parent) {
   unit->insertItem (unitToString (UnitPoint));
   unit->insertItem (unitToString (UnitMillimeter));
   unit->insertItem (unitToString (UnitInch));
-  unit->insertItem (unitToString (UnitCentimeter));
   unit->insertItem (unitToString (UnitPica));
+  unit->insertItem (unitToString (UnitCentimeter));
   unit->insertItem (unitToString (UnitDidot));
   unit->insertItem (unitToString (UnitCicero));
   unit->move (80, 20);
@@ -179,12 +179,15 @@ int OptionDialog::setup () {
       psm->setDefaultMeasurementUnit (UnitInch);
       break;
     case 3:
-      psm->setDefaultMeasurementUnit (UnitCentimeter);
+      psm->setDefaultMeasurementUnit (UnitPica);
       break;
     case 4:
-      psm->setDefaultMeasurementUnit (UnitDidot);
+      psm->setDefaultMeasurementUnit (UnitCentimeter);
       break;
     case 5:
+      psm->setDefaultMeasurementUnit (UnitDidot);
+      break;
+    case 6:
       psm->setDefaultMeasurementUnit (UnitCicero);
       break;
     default:

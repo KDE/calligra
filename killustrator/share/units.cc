@@ -54,11 +54,11 @@ float cvtPtToInch (float value) {
 }
 
 float cvtPtToDidot (float value) {
-  return value * 1157.0 / 1238.0; // 1157 dd = 1238 pt
+  return value * 0.9383888886; // 1157 dd = 1238 pt
 }
 
 float cvtPtToCicero (float value) {
-  return value * 1157.0/14856.0; // 1 cc = 12 dd
+  return value * 0.9383888886 / 12.0; // 1 cc = 12 dd
 }
 
 float cvtInchToPt (float value) {
@@ -74,11 +74,11 @@ float cvtCmToPt (float value) {
 }
 
 float cvtDidotToPt (float value) {
-  return value / 1157.0 * 1238.0;
+  return value / 1.065656267;
 }
 
 float cvtCiceroToPt (float value) {
-  return value / 14856 * 1157;
+  return value / 1.065656267 * 12.0;
 }
 
 float cvtPtToUnit (MeasurementUnit unit, float value) {
