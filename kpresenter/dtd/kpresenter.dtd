@@ -30,7 +30,7 @@
                 syntaxVersion:  Integer version of the syntax. Currently 2.
 		mime:		The MIME type (must always have the value application/x-kpresenter)
 -->
-<!ELEMENT DOC (PAPER | BACKGROUND | VARIABLESETTINGS | HEADER | FOOTER | PAGETITLES | PAGENOTES | OBJECTS | INFINITLOOP | MANUALSWITCH | PRESSPEED | PIXMAPS | SELSLIDES | PICTURES | PIXMAPS | CLIPARTS | SHOWPRESENTATIONDURATION | HELPLINES | SPELLCHECKIGNORELIST)* >
+<!ELEMENT DOC (PAPER | BACKGROUND | VARIABLESETTINGS | HEADER | FOOTER | PAGETITLES | PAGENOTES | OBJECTS | INFINITLOOP | MANUALSWITCH | PRESSPEED | PIXMAPS | SELSLIDES | STYLES | PICTURES | PIXMAPS | CLIPARTS | SHOWPRESENTATIONDURATION | HELPLINES | SPELLCHECKIGNORELIST)* >
 <!ATTLIST DOC   author CDATA #IMPLIED
                 email CDATA #IMPLIED
                 editor CDATA #IMPLIED
@@ -297,6 +297,8 @@
 			blue	CDATA #IMPLIED
 			chr		CDATA #REQUIRED>
 
+<!ENTITY % layout "TEXT|COUNTER|INDENTS|OFFSETS|LINESPACING|LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|TABULATOR*|SHADOW|NAME">
+
 <!--	Describes a paragraph in a text object
 
 		Attributes:
@@ -305,7 +307,7 @@
 		type	0=normal, 1=bullet-list, 2=enum-list
 		depth	list depth
 -->
-<!ELEMENT P  (TEXT|COUNTER|INDENTS|OFFSETS|LINESPACING|LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|TABULATOR|SHADOW|NAME)*>
+<!ELEMENT P (%layout;)*>
 <!ATTLIST P
 		align	NMTOKEN #REQUIRED
 		type	NMTOKEN #REQUIRED
@@ -663,6 +665,35 @@ TODO: finish documentation
 
 <!ELEMENT LINETYPE EMPTY >
 <!ATTLIST LINETYPE value NMTOKEN #REQUIRED >
+
+<!--
+        A style is a global setting that is used for all paragraphs which use that
+        style. As the markup is stored in one place (the style) changing the markup
+        throughout the document is simply a task of changing one or two styles.
+        Highly recommended for structured documents.
+
+        A style element contains the same child elements as the P tag
+        (all the paragraph properties), as well as a text format in the FORMAT tag.
+        It also contains the name of the following style, i.e. the one used when
+        the user presses Enter in a paragraph using this style.
+
+        Attributes:
+          outline   if "true", this style is part of the Table Of Contents.
+                    (by default it is not).
+-->
+<!ELEMENT STYLES
+    (STYLE*)>
+<!ELEMENT STYLE
+    (%layout;|FORMAT|FOLLOWING)*>
+<!ATTLIST STYLE
+    outline CDATA #IMPLIED>
+
+<!-- Description of text format inside a style -->
+<!ELEMENT FORMAT EMPTY>
+<!ATTLIST FORMAT
+    <!-- The exact same attributes as TEXT can have.
+         Is it possible to define an entity for a list of attributes? -->
+>
 
 <!ELEMENT PICTURES ( KEY* ) >
 
