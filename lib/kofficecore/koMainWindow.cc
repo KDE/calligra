@@ -495,7 +495,7 @@ bool KoMainWindow::saveDocument( bool saveas )
 #if KDE_VERSION >= 220 // only in kdelibs > 2.1
                 outputFormat=dialog->currentMimeFilter().latin1();
 #else
-                KMimeType::Ptr t = KMimeType::findByURL( m_url, 0, TRUE );
+                KMimeType::Ptr t = KMimeType::findByURL( newURL, 0, TRUE );
                 outputFormat = t->name().latin1();
 #endif
             }
@@ -552,7 +552,10 @@ bool KoMainWindow::saveDocument( bool saveas )
                     .arg( QString( "<b>%1</b><p>" ).arg( comment ) ), // in case we want to remove the bold later
                     i18n( "File Export: Confirmation Required" ),
                     i18n( "Continue" ),
-                    "FileExportConfirmation", true );
+#if KDE_VERSION >= 220
+                    "FileExportConfirmation",
+#endif
+                    true );
                 if (res == KMessageBox::Cancel )
                     return false;
             }
