@@ -441,8 +441,8 @@ KarbonView::ellipseTool()
 void
 KarbonView::polygonTool()
 {
-	if( shell()->rootView() == this )
-	{
+	//if( shell()->rootView() == this )
+	//{
 		if( m_currentTool == m_polygonTool )
 			m_polygonTool->showDialog();
 		else
@@ -451,7 +451,7 @@ KarbonView::polygonTool()
 			m_currentTool = m_polygonTool;
 			m_currentTool->activate();
 		}
-	}
+	//}
 }
 
 void
@@ -465,8 +465,8 @@ KarbonView::rectangleTool()
 void
 KarbonView::roundRectTool()
 {
-	if( shell()->rootView() == this )
-	{
+	//if( shell()->rootView() == this )
+	//{
 		if( m_currentTool == m_roundRectTool )
 			m_roundRectTool->showDialog();
 		else
@@ -475,7 +475,7 @@ KarbonView::roundRectTool()
 			m_currentTool = m_roundRectTool;
 			m_currentTool->activate();
 		}
-	}
+	//}
 }
 
 void
@@ -534,8 +534,8 @@ KarbonView::shearTool()
 void
 KarbonView::sinusTool()
 {
-	if( shell()->rootView() == this )
-	{
+	//if( shell()->rootView() == this )
+	//{
 		if( m_currentTool == m_sinusTool )
 			m_sinusTool->showDialog();
 		else
@@ -544,14 +544,14 @@ KarbonView::sinusTool()
 			m_currentTool = m_sinusTool;
 			m_currentTool->activate();
 		}
-	}
+	//}
 }
 
 void
 KarbonView::spiralTool()
 {
-	if( shell()->rootView() == this )
-	{
+	//if( shell()->rootView() == this )
+	//{
 		if( m_currentTool == m_spiralTool )
 			m_spiralTool->showDialog();
 		else
@@ -560,14 +560,14 @@ KarbonView::spiralTool()
 			m_currentTool = m_spiralTool;
 			m_currentTool->activate();
 		}
-	}
+	//}
 }
 
 void
 KarbonView::starTool()
 {
-	if( shell()->rootView() == this )
-	{
+	//if( shell()->rootView() == this )
+	//{
 		if( m_currentTool == m_starTool )
 			m_starTool->showDialog();
 		else
@@ -576,14 +576,14 @@ KarbonView::starTool()
 			m_currentTool = m_starTool;
 			m_currentTool->activate();
 		}
-	}
+	//}
 }
 
 void
 KarbonView::gradTool()
 {
-	if( shell()->rootView() == this )
-	{
+	//if( shell()->rootView() == this )
+	//{
 		if( m_currentTool == m_gradTool )
 			m_gradTool->showDialog();
 		else
@@ -592,7 +592,7 @@ KarbonView::gradTool()
 			m_currentTool = m_gradTool;
 			m_currentTool->activate();
 		}
-	}
+	//}
 }
 
 
