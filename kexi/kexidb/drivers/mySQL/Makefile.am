@@ -10,7 +10,7 @@ kexidb_mysqldriver_la_SOURCES = mysqldriver.cpp mysqlconnection.cpp mysqlcursor.
 
 kexidb_mysqldriver_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) $(MYSQL_LIBS) -lmysqlclient ../../libkexidb.la
 
-kexidb_mysqldriver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) -L$(MYSQL_LIBS) -no-undefined
+kexidb_mysqldriver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) -no-undefined
 
 
 kde_services_DATA = kexidb_mysqldriver.desktop
