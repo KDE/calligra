@@ -122,7 +122,7 @@ LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent, const char *_na
     m_linkIcon = new QPixmap;
     if( !m_linkIcon->load( _icon ) )
       QMessageBox::critical( this, "Canvas", "Can't find link.png" );
-    m_linkRect = QRect( QPoint( 25,( CELLHEIGHT - m_linkIcon->height() ) / 2 ), m_linkIcon->size() ); 
+    m_linkRect = QRect( QPoint( 25,( CELLHEIGHT - m_linkIcon->height() ) / 2 ), m_linkIcon->size() );
   }
 
   m_pLayerTab = new LayerTab(_doc, this, _name);
@@ -133,4 +133,5 @@ LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent, const char *_na
 }
 
 #include "layerdlg.moc"
+
 
