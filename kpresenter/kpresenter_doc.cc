@@ -4484,5 +4484,17 @@ void KPresenterDoc::updateCustomListSlideShow( CustomListMap & map )
     setModified( true );
 }
 
+QStringList KPresenterDoc::presentationList()
+{
+    QStringList lst;
+    if ( !m_customListSlideShow.isEmpty() )
+    {
+        ListCustomSlideShow::Iterator it;
+        for ( it = m_customListSlideShow.begin(); it != m_customListSlideShow.end(); ++it )
+            lst << it.key();
+    }
+    return lst;
+}
+
 
 #include "kpresenter_doc.moc"

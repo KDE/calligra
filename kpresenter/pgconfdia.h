@@ -65,9 +65,9 @@ protected:
     QRadioButton *m_manualButton, *m_autoButton;
     KColorButton* penColor;
     KIntNumInput* penWidth;
-
+    QComboBox *m_customSlideCombobox;
     QListView *slides;
-
+    QRadioButton *m_customSlide, *m_selectedSlide;
     void setupPageGeneral();
     void setupPageSlides();
 

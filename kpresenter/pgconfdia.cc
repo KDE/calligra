@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2002, 2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2004 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +25,7 @@
 
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
+#include <qcombobox.h>
 #include <qhbox.h>
 #include <qgroupbox.h>
 #include <qheader.h>
@@ -141,10 +143,23 @@ void PgConfDia::setupPageSlides()
 				      "are used in the presentation. Slides that are not "
 				      "selected will not be displayed during the slide "
 				      "show.</p>") );
-    QVBoxLayout *slidesLayout = new QVBoxLayout( slidesPage, 0, spacingHint() );
-    slidesLayout->setAutoAdd( true );
+    QGridLayout *slidesLayout = new QGridLayout( slidesPage,7 , 2 );
+
+    m_customSlide = new QRadioButton( i18n( "Custom Slide Show" ), slidesPage, "customslide" );
+    slidesLayout->addMultiCellWidget( m_customSlide, 0, 0, 0, 1 );
+
+    QLabel *lab = new QLabel( i18n( "Custom Slide" ),slidesPage );
+    slidesLayout->addWidget( lab, 1, 0 );
+
+    m_customSlideCombobox = new QComboBox( slidesPage );
+    m_customSlideCombobox->insertStringList( m_doc->presentationList() );
+    slidesLayout->addWidget( m_customSlideCombobox, 1, 1 );
+
+    m_selectedSlide = new QRadioButton( i18n( "Selected Pages" ), slidesPage, "selectedslide" );
+    slidesLayout->addMultiCellWidget( m_selectedSlide, 2,2,0,1 );
 
     slides = new QListView( slidesPage );
+    slidesLayout->addMultiCellWidget( slides, 3, 6, 0, 1 );
     slides->addColumn( i18n("Slide") );
     slides->setSorting( -1 );
     slides->header()->hide();
@@ -168,7 +183,9 @@ void PgConfDia::setupPageSlides()
     connect( deselectAllButton, SIGNAL( clicked() ), this, SLOT( deselectAllSlides() ) );
 
     QWidget* spacer = new QWidget( buttonGroup );
+
     spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+    slidesLayout->addMultiCellWidget( buttonGroup, 6, 6, 0, 1 );
 }
 
 PgConfDia::~PgConfDia()
