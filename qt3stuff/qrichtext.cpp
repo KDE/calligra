@@ -1029,14 +1029,7 @@ void QTextCursor::gotoWordLeft()
 	    allowSame = TRUE;
     }
 
-    if ( string->prev() ) {
-	string = string->prev();
-	while ( !string->isVisible() )
-	    string = string->prev();
-	idx = string->length() - 1;
-    } else {
-	gotoLineStart();
-    }
+    idx = 0;
 }
 
 void QTextCursor::gotoWordRight()
@@ -4705,6 +4698,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     int ls = doc ? parag->lineSpacing() : 0;
 
     int i = start;
+    //qDebug( "Initial QTextParagLineStart at y=%d", y );
     QTextParagLineStart *lineStart = new QTextParagLineStart( y, 0, 0 );
     insertLineStart( parag, 0, lineStart );
     int lastBreak = -1;
@@ -4788,6 +4782,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	       wrapAtColumn() == -1 && x + ww > w - 4 && lastBreak == -1 && allowBreakInWords() ||
 	       wrapAtColumn() != -1 && col >= wrapAtColumn() ) ||
 	       parag->isNewLinesAllowed() && lastChr == '\n' ) {
+            //qDebug( "BREAKING" );
 	    if ( wrapAtColumn() != -1 )
 		minw = QMAX( minw, x + ww );
             // No breakable char found -> break at current char
@@ -4864,29 +4859,36 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	} else if ( lineStart && ( isBreakable( string, i ) || parag->isNewLinesAllowed() && c->c == '\n' ) ) {
             // Breakable character
 	    if ( len <= 2 || i < len - 1 ) {
+                //qDebug( " Breakable character (i=%d len=%d): combining %d/%d with %d/%d", i, len,
+                //        tmpBaseLine, tmph, c->ascent(), c->height()+ls );
                 // (combine tmpBaseLine/tmph and this character)
                 int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height()+ls - c->ascent() );
                 tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
                 tmph = tmpBaseLine + belowBaseLine;
+                //qDebug(  " -> tmpBaseLine/tmph : %d/%d", tmpBaseLine, tmph );
                 // TODO if tmph > initialHeight,  call adjust[LR]Margin, and if the result is != initial[LR]Margin,
                 // format this line again
 	    }
 	    minw = QMAX( minw, tminw );
 	    tminw = marg + ww;
             // (combine lineStart and tmpBaseLine/tmph)
+            //qDebug( "Breakable character: combining %d/%d with %d/%d", lineStart->baseLine, h, tmpBaseLine, tmph );
             int belowBaseLine = QMAX( h - lineStart->baseLine, tmph - tmpBaseLine );
             lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
 	    h = lineStart->baseLine + belowBaseLine;
             lineStart->h = h;
+            //qDebug(  " -> lineStart->baseLine/lineStart->h : %d/%d", lineStart->baseLine, lineStart->h );
 	    if ( i < len - 2 || c->c != ' ' )
 		lastBreak = i;
 	} else {
             // Non-breakable character
 	    tminw += ww;
+            //qDebug( " Non-breakable character: combining %d/%d with %d/%d", tmpBaseLine, tmph, c->ascent(), c->height()+ls );
             // (combine tmpBaseLine/tmph and this character)
             int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height()+ls - c->ascent() );
             tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
 	    tmph = tmpBaseLine + belowBaseLine;
+            //qDebug(  " -> tmpBaseLine/tmph : %d/%d", tmpBaseLine, tmph );
             // TODO if tmph > initialHeight,  call adjust[LR]Margin, and if the result is != initial[LR]Margin,
             // format this line again
 	}
@@ -4897,11 +4899,13 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 
     // Finish formatting the last line
     if ( lineStart ) {
+        //qDebug( "Last Line.... Combining %d/%d with %d/%d", lineStart->baseLine, h, tmpBaseLine, tmph );
         // (combine lineStart and tmpBaseLine/tmph)
         int belowBaseLine = QMAX( h - lineStart->baseLine, tmph - tmpBaseLine );
         lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
         h = lineStart->baseLine + belowBaseLine;
 	lineStart->h = h;
+        //qDebug(  " -> lineStart->baseLine/lineStart->h : %d/%d", lineStart->baseLine, lineStart->h );
 	// last line in a paragraph is not justified
 	if ( align == Qt3::AlignJustify )
 	    align = Qt3::AlignAuto;
@@ -4920,7 +4924,10 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 	double yscale = scale_factor( metrics.logicalDpiY() );
 	m = (int)( (double)m * yscale );
     }
+    //qDebug( "Adding h(%d) and bottomMargin(%d) to y(%d) => %d", h, m, y, y+h+m );
     y += h + m;
+    //if ( doc && doc->addMargins() )
+    //    y -= parag->topMargin(); // Was already in y's initial value
 
     if ( !isWrapEnabled() )
 	minw = QMAX( minw, c->x + ww ); // #### Lars: Fix this for BiDi, please
