@@ -1,7 +1,7 @@
 // $Header$
 
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,6 +49,7 @@
 #include <koGlobal.h>
 #include <koFilterChain.h>
 #include <koPictureKey.h>
+#include <koPicture.h>
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
@@ -125,11 +126,8 @@ private:
     QString escapeAbiWordText(const QString& strText) const;
     bool makeTable(const FrameAnchor& anchor);
     bool makeImage(const FrameAnchor& anchor, const bool isImage);
-    bool convertUnknownImage(const QString& name, QByteArray& image);
+    bool convertUnknownPicture(const QString& name, const QString& extension, QByteArray& image);
     void writeAbiProps(const TextFormatting& formatLayout, const TextFormatting& format);
-    void writeImageData(const QString& koStoreName, const QString& keyName);
-    void writeClipartData(const QString& koStoreName, const QString& keyName);
-    void writeSvgData(const QString& koStoreName, const QString& keyName);
     void writePictureData(const QString& koStoreName, const QString& keyName);
 
 private:
@@ -259,7 +257,7 @@ bool AbiWordWorker::doOpenDocument(void)
     return true;
 }
 
-bool AbiWordWorker::convertUnknownImage(const QString& strName, QByteArray& image)
+bool AbiWordWorker::convertUnknownPicture(const QString& strName, const QString& extension, QByteArray& image)
 {
     QIODevice* io=getSubFileDevice(strName);
     if (!io)
@@ -268,31 +266,31 @@ bool AbiWordWorker::convertUnknownImage(const QString& strName, QByteArray& imag
         return false;
     }
 
-    kdDebug(30506) << "Image " << strName << " has size: " << io->size() << endl;
-
-    QImageIO imageIO(io,NULL);
-
-    if (!imageIO.read())
+    kdDebug(30506) << "Picture " << strName << " has size: " << io->size() << endl;
+    
+    KoPicture picture;
+    if (!picture.load(io, extension)) // we do not care about KoPictureKey
     {
-        kdWarning(30506) << "Could not read image: " << strName << " (AbiWordWorker::convertUnknownImage)" << endl;
+        kdWarning(30506) << "Could not read picture: " << strName << " (AbiWordWorker::convertUnknownPicture)" << endl;
         return false;
     }
-
-    kdDebug(30506) << "Image: " << strName << " (AbiWordWorker::convertUnknownImage)" << endl;
+    
+    QImageIO imageIO;
+    imageIO.setImage(picture.generateImage(picture.getOriginalSize())); // ### TODO: KoPicture::getOriginalSize is bad for cliparts
 
     QBuffer buffer(image); // A QBuffer is a QIODevice
     if (!buffer.open(IO_WriteOnly))
     {
-        kdWarning(30506) << "Could not open buffer! (AbiWordWorker::convertUnknownImage)" << endl;
+        kdWarning(30506) << "Could not open buffer! (AbiWordWorker::convertUnknownPicture)" << endl;
         return false;
     }
 
     imageIO.setIODevice(&buffer);
-    imageIO.setFormat("PNG");
+    imageIO.setFormat("PNG"); // Save as PNG
 
     if (!imageIO.write())
     {
-        kdWarning(30506) << "Could not write converted image! (AbiWordWorker::convertUnknownImage)" << endl;
+        kdWarning(30506) << "Could not write converted image! (AbiWordWorker::convertUnknownPicture)" << endl;
         return false;
     }
     buffer.close();
@@ -300,13 +298,13 @@ bool AbiWordWorker::convertUnknownImage(const QString& strName, QByteArray& imag
     return true;
 }
 
-void AbiWordWorker::writeImageData(const QString& koStoreName, const QString& keyName)
+void AbiWordWorker::writePictureData(const QString& koStoreName, const QString& keyName)
 {
-    kdDebug(30506) << "Picture is Image " << endl;
+    kdDebug(30506) << "AbiWordWorker::writeImageData" << endl;
 
     QByteArray image;
 
-    QString strExtension(koStoreName);
+    QString strExtension(koStoreName.lower());
     const int result=koStoreName.findRev(".");
     if (result>=0)
     {
@@ -315,26 +313,22 @@ void AbiWordWorker::writeImageData(const QString& koStoreName, const QString& ke
 
     bool isImageLoaded=false;
 
-    QString strMime;
-
     if (strExtension=="png")
     {
-        strMime="image/png";
         isImageLoaded=loadKoStoreFile(koStoreName,image);
     }
     else
     {
-        // All other image types must be converted to PNG
-        //   (yes, even JPEG!)
-        strMime="image/png";
-        isImageLoaded=convertUnknownImage(koStoreName,image);
+        // All other picture types must be converted to PNG
+        //   (yes, even JPEG, SVG or WMF!)
+        isImageLoaded=convertUnknownPicture(koStoreName,strExtension,image);
     }
 
     if (isImageLoaded)
     {
         *m_streamOut << "<d name=\"" << keyName << "\""
             << " base64=\"yes\""
-            << " mime=\"" << strMime << "\">\n";
+            << " mime=\"image/png\">\n";
 
         QCString base64=KCodecs::base64Encode(image,true);
 
@@ -344,115 +338,9 @@ void AbiWordWorker::writeImageData(const QString& koStoreName, const QString& ke
     }
     else
     {
-        kdWarning(30506) << "Unable to load image: " << koStoreName << endl;
+        kdWarning(30506) << "Unable to load picture: " << koStoreName << endl;
     }
 }
-
-void AbiWordWorker::writeClipartData(const QString& koStoreName, const QString& keyName)
-{
-    // We must always convert the image to SVG
-    QString strMime="image/svg-xml"; // Yes, it is -xml not +xml
-
-    kdDebug(30506) << "Picture is QPicture " << koStoreName << endl;
-
-    QPicture picture;
-
-    QIODevice* io=getSubFileDevice(koStoreName);
-    if (!io)
-    {
-        // NO message error, as there must be already one
-        return;
-    }
-
-    if (picture.load(io,NULL))
-    {
-        *m_streamOut << "<d name=\"" << keyName << "\""
-            << " base64=\"no\""
-            << " mime=\"" << strMime << "\">\n"
-            << "<![CDATA["; // Open CDATA section
-        // Do not add a new line after <![CDATA[ (No white space before a XML declaration)
-        // TODO/FIXME. aarrgghh, we cannot have a XML declaration at all!
-
-        // Save picture as SVG
-
-        // Not sure what is better: call the QIODevice directly or through QTextStream::device()?
-        // QPicture::save saves in UTF-8, so we have no problem!
-        // TODO/FIXME. aarrgghh, we cannot have a XML declaration at all!
-        if (!picture.save(m_streamOut->device(),"svg"))
-        {
-            kdWarning(30506) << "Could not save clipart: "  << koStoreName << endl;
-        }
-
-        *m_streamOut << "]]>\n" // Close CDATA section
-            << "</d>\n";
-    }
-    else
-    {
-        kdWarning(30506) << "Unable to load clipart: " << koStoreName << endl;
-    }
-}
-
-void AbiWordWorker::writeSvgData(const QString& koStoreName, const QString& keyName)
-{
-    QByteArray svg;
-    QString strMime="image/svg-xml"; // Yes, it is -xml not +xml
-
-    kdDebug(30506) << "Picture is SVG" << endl;
-
-    if (!loadKoStoreFile(koStoreName,svg))
-    {
-        // NO message error, as there must be already one
-        return;
-    }
-
-    QDomDocument svgDoc;
-    if (!svgDoc.setContent(svg))
-    {
-        kdWarning(30506) << "Parsing of SVG failed..." << endl;
-        return; // TODO: full error line/column/message
-    }
-
-    *m_streamOut << "<d name=\"" << keyName << "\""
-        << " base64=\"no\""
-        << " mime=\"" << strMime << "\">\n"
-        << "<![CDATA["; // Open CDATA section
-
-    // Do not add a new line after <![CDATA[ (No white space before a XML declaration)
-    // TODO/FIXME. aarrgghh, we cannot have a XML declaration at all!
-    *m_streamOut << svgDoc;
-
-    *m_streamOut << "]]>\n" // Close CDATA section
-        << "</d>\n";
-}
-
-void AbiWordWorker::writePictureData(const QString& koStoreName, const QString& keyName)
-{
-    kdDebug(30506) << "Picture " << koStoreName << endl;
-    QString strExtension(koStoreName);
-    const int result=koStoreName.findRev(".");
-    if (result>=0)
-    {
-        strExtension=koStoreName.mid(result+1).lower();
-    }
-
-    if (strExtension=="wmf")
-    {
-        kdDebug(30506) << "Type " << strExtension << " not supported!" << endl;
-    }
-    else if (strExtension=="svg")
-    {
-        writeSvgData(koStoreName,keyName);
-    }
-    else if (strExtension=="qpic")
-    {
-        writeClipartData(koStoreName,keyName);
-    }
-    else
-    {
-        writeImageData(koStoreName,keyName);
-    }
-}
-
 
 bool AbiWordWorker::doCloseDocument(void)
 {
