@@ -2,7 +2,7 @@
 .\" First parameter, NAME, should be all caps
 .\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
 .\" other parameters are allowed: see man(7), man(1)
-.TH KIVIO 1 "November 9, 2002"
+.TH KPRCONVERTER.PL 1 "December 20, 2001"
 .\" Please adjust this date whenever revising the manpage.
 .\"
 .\" Some roff macros, for reference:
@@ -16,30 +16,36 @@
 .\" .sp <n>    insert n+1 empty lines
 .\" for manpage-specific macros, see man(7)
 .SH NAME
-kivio \- a flowcharting program for the KDE Office Suite
+kprconverter.pl \- converts a KPresenter document from old to new format
 .SH SYNOPSIS
-.B kivio
-.RI "[ " generic-options " ] [ " file " ]"
+.B kprconverter.pl
+.I old-XML new-XML
 .SH DESCRIPTION
 This manual page documents briefly the
-.B kivio
+.B kprconverter.pl
 command.
 This manual page was written for the Debian GNU/Linux distribution
 because the original program does not have a manual page.
 .PP
-\fBKivio\fP is a flowcharting program that offers basic flowcharting
-abilities, but with a twist.  Objects are scriptable, and a backend plugin
-system offers the ability to make objects do just about anything.
+This Perl script converts the XML data within a KPresenter document from the
+old format (v1) to the new format (v2), which is necessary due to the new
+text object.  It reads the old XML data from \fIold-XML\fP and writes new
+converted XML data to \fInew-XML\fP.
 .PP
-This application is part of the KDE Office Suite.
-.SH OPTIONS
-For a full summary of options, run \fIkivio \-\-help\fP.
+The XML data stored in a KPresenter document can be accessed by passing
+the \fB.kpr\fP document through gunzip.
+.PP
+This utility is part of the KDE Office Suite.
+.SH NOTES
+Be aware that \fIold-XML\fP should not be the
+original \fB.kpr\fP document, but should
+instead be just the extracted XML data.
+.PP
+This script is automatically called by KPresenter when an old format
+document is opened.  Ordinary users should not need to run this script
+themselves.
 .SH SEE ALSO
-Some documentation from the program author
-is available in \fI/usr/share/doc/kivio/\fP.
+.BR kpresenter (1).
 .SH AUTHOR
-Kivio was written by Dave Marotti <lndshark@speakeasy.net>, Max Judin
-<max@thekompany.com> and Dmitry Poplavsky <dima@kde.org>.
-.br
 This manual page was prepared by Ben Burton <bab@debian.org>
 for the Debian GNU/Linux system (but may be used by others).
