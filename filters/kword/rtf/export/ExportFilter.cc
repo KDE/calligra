@@ -80,6 +80,7 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
 
 // convert unknown image to PNG using QImageIO
 // return false is failed
+// TODO use KoPicture::generatePixmaps
 
 bool RTFWorker::convertUnknownImage(QByteArray& unknownImage, QByteArray& image)
 {
@@ -869,7 +870,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
     // TODO: rename variable formatData
     QString strElement; // TODO: rename this variable
 
-    // Font name // ### TODO: lookup
+    // Font name 
     const QString fontName(formatData.fontName);
     if (!fontName.isEmpty()
         && (force || (formatOrigin.fontName!=formatData.fontName)))
@@ -926,7 +927,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
         if ( formatData.bgColor.isValid() )
         {
             strElement+=lookupColor("\\cb", formatData.bgColor);
-            strElement+=lookupColor("\\highlight", formatData.bgColor); 
+            strElement+=lookupColor("\\highlight", formatData.bgColor); // MS Word wants this 
         }
     }
 
