@@ -222,7 +222,8 @@ bool KoDocument::isSingleViewMode() const
     return d->m_bSingleViewMode;
 }
 
-bool KoDocument::isEmbedded() const {
+bool KoDocument::isEmbedded() const
+{
     return dynamic_cast<KoDocument *>( parent() ) != 0;
 }
 
@@ -251,12 +252,12 @@ bool KoDocument::saveFile()
 
     QApplication::setOverrideCursor( waitCursor );
 
-    if ( KIO::NetAccess::exists( m_url ) ) { // this file exists => backup
+    if ( KIO::NetAccess::exists( url() ) ) { // this file exists => backup
         // TODO : make this configurable ?
-        KURL backup( m_url );
+        KURL backup( url() );
         backup.setPath( backup.path() + QString::fromLatin1("~") );
         (void) KIO::NetAccess::del( backup );
-        (void) KIO::NetAccess::copy( m_url, backup );
+        (void) KIO::NetAccess::copy( url(), backup );
 
         // This is noticeably faster, but not network transparent, and more importantly
         // it fails with '(' and other special chars in the filename.
@@ -493,13 +494,9 @@ void KoDocument::setViewBuildDocument( KoView *view, const QDomDocument &doc )
     uint viewIdx = d->m_views.at();
 
     if ( d->m_viewBuildDocuments.count() == viewIdx )
-    {
         d->m_viewBuildDocuments.append( doc );
-    }
     else if ( d->m_viewBuildDocuments.count() > viewIdx )
-    {
         d->m_viewBuildDocuments[ viewIdx ] = doc;
-    }
 }
 
 QDomDocument KoDocument::viewBuildDocument( KoView *view )
@@ -659,7 +656,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
     }
     if ( store->open( "preview.png" ) )
     {
-        savePreview( store);
+        savePreview( store );
         store->close();
     }
 
@@ -828,9 +825,8 @@ bool KoDocument::openURL( const KURL & _url )
             emit completed();
     }
     else
-    {
         ret = KParts::ReadWritePart::openURL( url );
-    }
+
     if ( autosaveOpened )
         m_url = KURL(); // Force save to act like 'Save As'
     else
@@ -862,8 +858,9 @@ bool KoDocument::openFile()
     if ( d->m_bSingleViewMode && !d->m_views.isEmpty() )
     {
         // We already had a view (this happens when doing reload in konqueror)
-        removeView( d->m_views.first() );
-        delete d->m_views.first();
+        KoView* v = d->m_views.first();
+        removeView( v );
+        delete v;
         Q_ASSERT( d->m_views.isEmpty() );
     }
 
@@ -1116,7 +1113,7 @@ void KoDocument::emitEndOperation()
 
 bool KoDocument::isStoredExtern()
 {
-    return ( m_url.protocol() != STORE_PROTOCOL );
+    return ( url().protocol() != STORE_PROTOCOL );
 }
 
 void KoDocument::setModified( bool mod )
