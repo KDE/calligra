@@ -1,3 +1,18 @@
+koffice (1:1.1.0-final-1) unstable; urgency=low
+
+  * Final koffice 1.1 release.
+  * Uses objprelink.
+
+ -- Ben Burton <benb@acm.org>  Tue, 28 Aug 2001 07:56:35 -0500
+
+koffice (1:1.1.0-1rc2-1) unstable; urgency=low
+
+  * Renumbering 1.1-final as 1.1-rc2 since the release date has moved
+    and further slight changes are taking place upstream.  Looks kludgy
+    but it'll only be here a week. :)
+
+ -- Ben Burton <benb@acm.org>  Thu, 23 Aug 2001 09:46:48 -0500
+
 koffice (1:1.1.0-1) unstable; urgency=low
 
   * New upstream release.
