@@ -211,7 +211,7 @@ KoFilterEntry::KoFilterEntry( const KoComponentEntry& _e ) : KoComponentEntry( _
 
 QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_count*/ )
 {
-  kdebug(0, 30003, "KoFilterEntry::query( %s, <ignored> )", _constr );
+  kDebugInfo( 30003, "KoFilterEntry::query( %s, <ignored> )", _constr );
   QValueList<KoFilterEntry> lst;
 
   KTrader *trader = KTrader::self();
@@ -220,7 +220,7 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_coun
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
-  kdebug(0, 30003, "Query returned %d offers\n", max);
+  kDebugInfo( 30003, "Query returned %d offers\n", max);
   for( unsigned int i = 0; i < max; i++ )
   {
     KoFilterEntry f( koParseFilterProperties( *it ) );

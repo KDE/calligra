@@ -574,13 +574,13 @@ const KURL & KoDocument::url() const
 
 bool KoDocument::loadBinary( istream& , bool, KoStore* )
 {
-    kdebug( KDEBUG_ERROR, 30003, "KoDocument::loadBinary not implemented" );
+    kDebugError( 30003, "KoDocument::loadBinary not implemented" );
     return false;
 }
 
 bool KoDocument::loadXML( KOMLParser&, KoStore*  )
 {
-    kdebug( KDEBUG_ERROR, 30003, "KoDocument::loadXML not implemented" );
+    kDebugError( 30003, "KoDocument::loadXML not implemented" );
     return false;
 }
 
@@ -601,7 +601,7 @@ bool KoDocument::completeSaving( KoStore* )
 
 bool KoDocument::save( ostream&, const char* )
 {
-    kdebug( KDEBUG_ERROR, 30003, "KoDocument::save not implemented" );
+    kDebugError( 30003, "KoDocument::save not implemented" );
     return false;
 }
 

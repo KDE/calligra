@@ -141,17 +141,17 @@ const QString KoFilterManager::import( const QString & _url, const char *_native
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, url.isLocalFile() );
     QCString mimeType;
     if (t) {
-        kdebug( KDEBUG_INFO, 30003, "######### FOUND MimeType %s", t->mimeType().data() );
+        kDebugInfo( 30003, "######### FOUND MimeType %s", t->mimeType().data() );
         mimeType = t->mimeType();
     }
     else {
-        kdebug( KDEBUG_INFO, 30003, "####### No MimeType found. findByURL returned 0. Setting text/plain" );
+        kDebugInfo( 30003, "####### No MimeType found. findByURL returned 0. Setting text/plain" );
         mimeType = "text/plain";
     }
 
     if ( mimeType == _native_format )
     {
-        kdebug( KDEBUG_INFO, 30003, "strcmp( mimeType, _native_format ) == 0 !! Returning without conversion. " );
+        kDebugInfo( 30003, "strcmp( mimeType, _native_format ) == 0 !! Returning without conversion. " );
         assert( url.isLocalFile() );
         return _url;
     }
@@ -210,17 +210,17 @@ const bool KoFilterManager::export_() {
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, url.isLocalFile() );
     QCString mimeType;
     if (t) {
-        kdebug( KDEBUG_INFO, 30003, "######### FOUND MimeType %c", t->mimeType().ascii() );
+        kDebugInfo( 30003, "######### FOUND MimeType %c", t->mimeType().ascii() );
         mimeType = t->mimeType();
     }
     else {
-        kdebug( KDEBUG_INFO, 30003, "####### No MimeType found. findByURL returned 0. Setting text/plain" );
+        kDebugInfo( 30003, "####### No MimeType found. findByURL returned 0. Setting text/plain" );
         mimeType = "text/plain";
     }
 
     if ( (strcmp( mimeType, native_format ) == 0) )
     {
-        kdebug( KDEBUG_INFO, 30003, "strcmp( mimeType, _native_format ) == 0 !! Returning without conversion. " );
+        kDebugInfo( 30003, "strcmp( mimeType, _native_format ) == 0 !! Returning without conversion. " );
         assert( url.isLocalFile() );
         return false;
     }
