@@ -570,12 +570,6 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 
     makeCounterLayout(_painter); // !!! HACK !!!
 
-    // Calculate the shift for the first visible character. This may be the counter, too
-    unsigned int xShift = document->getPTLeftBorder() + ( column - 1 ) * ( document->getPTColumnWidth() + document->getPTColumnSpacing() );
-
-    ptLeft = xShift;
-    ptWidth = document->getPTColumnWidth();
-
     // The indentation of the line. This is only the indentation
     // the user selected.
     unsigned int indent;
@@ -591,6 +585,13 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     else
       indent = parag->getParagLayout()->getPTLeftIndent();
     
+    // Calculate the shift for the first visible character. This may be the counter, too
+    unsigned int xShift = document->getPTLeftBorder() + ( column - 1 ) * ( document->getPTColumnWidth() + document->getPTColumnSpacing() )
+      + indent;
+
+    ptLeft = xShift;
+    ptWidth = document->getPTColumnWidth();
+
     // First line ? Draw the couter ?
     if ( lineStartPos == 0 && parag->getParagLayout()->getCounterNr() != -1 )
     {
@@ -616,9 +617,9 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     if ( parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT )
 	ptPos = xShift + document->getPTColumnWidth() - right - ptTextLen;
     else if ( parag->getParagLayout()->getFlow() == KWParagLayout::LEFT )
-	ptPos = xShift + left + indent;
+	ptPos = xShift + left;
     else if ( parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK )
-	ptPos = xShift + left + indent;
+	ptPos = xShift + left;
     else if ( parag->getParagLayout()->getFlow() == KWParagLayout::CENTER )
 	ptPos = xShift + ( document->getPTColumnWidth() - indent - left - right - ptTextLen ) / 2;
 
@@ -654,7 +655,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     lineStartFormat = *this;
     
     // Loop until we reach the end of line
-    while( ptPos < xShift + document->getPTColumnWidth()  && textPos < parag->getTextLen() )
+    while( ptPos < xShift + document->getPTColumnWidth() - indent  && textPos < parag->getTextLen() )
     {
 	char c = text[ textPos ].c;
 	
@@ -724,7 +725,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     
     // Calculate the space between words if we have "block" formating.
     if ( parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK && spaces > 0)
-      ptSpacing = (float)( document->getPTColumnWidth() - ptTextLen ) / (float)spaces;
+      ptSpacing = (float)( document->getPTColumnWidth() - ptTextLen - indent) / (float)spaces;
     else
       ptSpacing = 0;
 
