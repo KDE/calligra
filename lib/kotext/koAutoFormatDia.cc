@@ -552,10 +552,12 @@ void KoAutoFormatDia::initTab3()
     cbAdvancedAutoCorrection->setChecked(m_autoFormat.getConfigAdvancedAutoCorrect());
     cbAutoCorrectionWithFormat->setChecked( m_autoFormat.getConfigCorrectionWithFormat());
     m_pListView->clear();
-    KoAutoFormatEntryMap::ConstIterator it;
-    it = m_autoFormat.firstAutoFormatEntry();
-    for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
-        ( void )new QListViewItem( m_pListView, it.key(), it.data().replace() );
+
+    QDictIterator<KoAutoFormatEntry> it( m_autoFormat.getAutoFormatEntries());
+    for( ; it.current(); ++it )
+    {
+        ( void )new QListViewItem( m_pListView, it.currentKey(), it.current()->replace() );
+    }
 }
 
 void KoAutoFormatDia::setupTab4()
@@ -604,12 +606,10 @@ void KoAutoFormatDia::slotRemoveEntry()
 
 void KoAutoFormatDia::slotfind( const QString & )
 {
-    KoAutoFormatEntryMap::ConstIterator it;
-    it  = m_autoFormat.findFormatEntry(m_find->text());
-
-    if ( it != m_autoFormat.lastAutoFormatEntry() )
+    KoAutoFormatEntry *entry = m_autoFormat.findFormatEntry(m_find->text());
+    if ( entry )
     {
-        m_replace->setText(it.data().replace().latin1());
+        m_replace->setText(entry->replace().latin1());
         pbAdd->setText(i18n("&Modify"));
         m_pListView->setCurrentItem(m_pListView->findItem(m_find->text(),0));
 
@@ -618,7 +618,6 @@ void KoAutoFormatDia::slotfind( const QString & )
         pbAdd->setText(i18n("&Add"));
         m_pListView->setCurrentItem(0L);
     }
-
     slotfind2("");
 }
 
@@ -626,21 +625,20 @@ void KoAutoFormatDia::slotfind( const QString & )
 void KoAutoFormatDia::slotfind2( const QString & )
 {
     bool state = !m_replace->text().isEmpty() && !m_find->text().isEmpty();
-    KoAutoFormatEntryMap::ConstIterator it;
-    it  = m_autoFormat.findFormatEntry(m_find->text());
-    pbRemove->setEnabled(state && (it != m_autoFormat.lastAutoFormatEntry()));
+    KoAutoFormatEntry * entry=m_autoFormat.findFormatEntry(m_find->text());
+    pbRemove->setEnabled(state && entry);
     pbAdd->setEnabled(state);
 }
 
 
 void KoAutoFormatDia::refreshEntryList()
 {
-    KoAutoFormatEntryMap::ConstIterator it;
-    it  = m_autoFormat.firstAutoFormatEntry();
-
     m_pListView->clear();
-    for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
-        ( void )new QListViewItem( m_pListView, it.key(), it.data().replace() );
+    QDictIterator<KoAutoFormatEntry> it( m_autoFormat.getAutoFormatEntries());
+    for( ; it.current(); ++it )
+    {
+        ( void )new QListViewItem( m_pListView, it.currentKey(), it.current()->replace() );
+    }
     m_pListView->setCurrentItem(m_pListView->firstChild ());
     bool state = !(m_replace->text().isEmpty()) && !(m_find->text().isEmpty());
     //we can delete item, as we search now in listbox and not in m_find lineedit
@@ -649,13 +647,14 @@ void KoAutoFormatDia::refreshEntryList()
 }
 
 
-void KoAutoFormatDia::addEntryList(const QString &key, KoAutoFormatEntry &_autoEntry)
+void KoAutoFormatDia::addEntryList(const QString &key, KoAutoFormatEntry *_autoEntry)
 {
     m_autoFormat.addAutoFormatEntry( key, _autoEntry );
 }
 
 
-void KoAutoFormatDia::editEntryList(const QString &key,const QString &newFindString, KoAutoFormatEntry &_autoEntry)
+
+void KoAutoFormatDia::editEntryList(const QString &key,const QString &newFindString, KoAutoFormatEntry *_autoEntry)
 {
     m_autoFormat.removeAutoFormatEntry( key );
     m_autoFormat.addAutoFormatEntry( newFindString, _autoEntry );
@@ -678,7 +677,7 @@ void KoAutoFormatDia::slotAddEntry()
         KMessageBox::sorry( 0L, i18n( "Find string is the same as replace string!" ) );
 	return;
     }
-    KoAutoFormatEntry tmp = KoAutoFormatEntry( repl );
+    KoAutoFormatEntry *tmp = new KoAutoFormatEntry( repl );
 
     if(pbAdd->text() == i18n( "&Add" ))
         addEntryList(find, tmp);

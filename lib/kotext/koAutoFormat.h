@@ -28,6 +28,7 @@
 #include <qstringlist.h>
 #include <qptrvector.h>
 #include <qdom.h>
+#include <qdict.h>
 class KoDocument;
 class KoTextParag;
 class KoTextObject;
@@ -49,8 +50,6 @@ public:
     // What we replace it with is replace().
     KoAutoFormatEntry(const QString& replace = QString::null);
     ~KoAutoFormatEntry();
-    KoAutoFormatEntry(const KoAutoFormatEntry& _entry);
-
     QString replace() const { return m_replace; }
     KoSearchContext *formatEntryContext()const;
     void createNewEntryContext();
@@ -220,9 +219,16 @@ public:
     bool getConfigCorrectionWithFormat() const
     { return m_bAutoCorrectionWithFormat; }
 
+    const QDict<KoAutoFormatEntry> & getAutoFormatEntries() const{
+        return m_entries;
+    }
+
+    KoAutoFormatEntry * findFormatEntry(const QString & text) {
+        return m_entries[text];
+    }
 
     // Add/remove entries, called by the dialog
-    void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
+    void addAutoFormatEntry( const QString &key, KoAutoFormatEntry *entry ) {
 	m_entries.insert( key, entry );
 	buildMaxLen();
     }
@@ -231,16 +237,6 @@ public:
         m_entries.remove( key );
 	buildMaxLen();
     }
-
-    // Iterate over the entries. Called by the dialog
-    KoAutoFormatEntryMap::ConstIterator firstAutoFormatEntry()
-    { return m_entries.begin(); }
-
-    KoAutoFormatEntryMap::ConstIterator lastAutoFormatEntry()
-    { return m_entries.end(); }
-
-    KoAutoFormatEntryMap::ConstIterator findFormatEntry(QString find)
-    { return m_entries.find(find); }
 
     // Copy all autoformat entries from another KWAutoFormat. Called by the dialog
     void copyAutoFormatEntries( const KoAutoFormat & other )
@@ -295,7 +291,7 @@ protected:
 
     static void changeTextFormat(KoSearchContext *formatOptions, KoTextFormat * format, int & flags );
     void loadEntry( const QDomElement &nl);
-    QDomElement saveEntry( QMapIterator<QString, KoAutoFormatEntry>_entry, QDomDocument doc);
+    QDomElement saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QDomDocument doc);
 private:
     void detectStartOfLink(const QString &word);
     void autoFormatIsActive();
@@ -331,7 +327,8 @@ private:
     TypographicQuotes m_typographicDefaultSimpleQuotes;
 
     KCompletion *m_listCompletion;
-    KoAutoFormatEntryMap m_entries;
+
+    QDict<KoAutoFormatEntry> m_entries;
 
     KoAutoFormatEntryMap m_superScriptEntries;
 

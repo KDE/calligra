@@ -47,30 +47,8 @@ KoAutoFormatEntry::KoAutoFormatEntry(const QString& replace)
     m_formatOptions= 0L;
 }
 
-KoAutoFormatEntry::KoAutoFormatEntry(const KoAutoFormatEntry& _entry)
-    :m_replace(_entry.replace())
-{
-    kdDebug()<<" KoAutoFormatEntry::KoAutoFormatEntry(const KoAutoFormatEntry& _entry) :"<<this<<endl;
-    m_formatOptions= 0L;
-    if ( _entry.formatEntryContext() )
-    {
-        m_formatOptions = new KoSearchContext();
-        m_formatOptions->m_family = _entry.formatEntryContext()->m_family;
-        m_formatOptions->m_color = _entry.formatEntryContext()->m_color;
-        m_formatOptions->m_backGroungColor = _entry.formatEntryContext()->m_backGroungColor;
-        m_formatOptions->m_size = _entry.formatEntryContext()->m_size;
-        m_formatOptions->m_vertAlign = _entry.formatEntryContext()->m_vertAlign;
-        m_formatOptions->m_underline = _entry.formatEntryContext()->m_underline;
-        m_formatOptions->m_strikeOut = _entry.formatEntryContext()->m_strikeOut;
-        m_formatOptions->m_strings = _entry.formatEntryContext()->m_strings;
-        m_formatOptions->m_optionsMask = _entry.formatEntryContext()->m_optionsMask;
-        m_formatOptions->m_options = _entry.formatEntryContext()->m_options;
-    }
-}
-
 KoAutoFormatEntry::~KoAutoFormatEntry()
 {
-    kdDebug()<<" delete KoAutoFormatEntry::~KoAutoFormatEntry(): "<<this<<endl;
     delete m_formatOptions;
     m_formatOptions=0L;
 }
@@ -180,6 +158,7 @@ KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
 KoAutoFormat::~KoAutoFormat()
 {
     delete m_listCompletion;
+    m_entries.clear();
 }
 
 void KoAutoFormat::loadListOfWordCompletion()
@@ -379,80 +358,73 @@ void KoAutoFormat::readConfig()
 
 void KoAutoFormat::loadEntry( const QDomElement &nl)
 {
-    KoAutoFormatEntry tmp =KoAutoFormatEntry(nl.attribute("replace"));
+    KoAutoFormatEntry *tmp =new KoAutoFormatEntry(nl.attribute("replace"));
     if ( nl.hasAttribute("FONT"))
     {
-        tmp.createNewEntryContext();
-        tmp.formatEntryContext()->m_family=nl.attribute("FONT");
-        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::Family;
+        tmp->createNewEntryContext();
+        tmp->formatEntryContext()->m_family=nl.attribute("FONT");
+        tmp->formatEntryContext()->m_optionsMask |= KoSearchContext::Family;
     }
     if ( nl.hasAttribute("SIZE" ))
     {
-        tmp.createNewEntryContext();
-        tmp.formatEntryContext()->m_size = nl.attribute("SIZE" ).toInt();
-        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::Size;
+        tmp->createNewEntryContext();
+        tmp->formatEntryContext()->m_size = nl.attribute("SIZE" ).toInt();
+        tmp->formatEntryContext()->m_optionsMask |= KoSearchContext::Size;
     }
     if (nl.hasAttribute("ITALIC" ))
     {
-        tmp.createNewEntryContext();
-        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::Italic;
+        tmp->createNewEntryContext();
+        tmp->formatEntryContext()->m_optionsMask |= KoSearchContext::Italic;
         QString value = nl.attribute("ITALIC");
         if ( value.toInt() == 1 )
-            tmp.formatEntryContext()->m_options |= KoSearchContext::Italic;
+            tmp->formatEntryContext()->m_options |= KoSearchContext::Italic;
     }
     if (nl.hasAttribute("UNDERLINE" ))
     {
-        tmp.createNewEntryContext();
-        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::Underline;
+        tmp->createNewEntryContext();
+        tmp->formatEntryContext()->m_optionsMask |= KoSearchContext::Underline;
         QString value = nl.attribute("UNDERLINE");
         if ( value =="single" )
-            tmp.formatEntryContext()->m_underline = KoTextFormat::U_SIMPLE;
+            tmp->formatEntryContext()->m_underline = KoTextFormat::U_SIMPLE;
         else if ( value =="double" )
-            tmp.formatEntryContext()->m_underline = KoTextFormat::U_DOUBLE;
+            tmp->formatEntryContext()->m_underline = KoTextFormat::U_DOUBLE;
         else
-            tmp.formatEntryContext()->m_underline = KoTextFormat::U_NONE;
+            tmp->formatEntryContext()->m_underline = KoTextFormat::U_NONE;
     }
     if (nl.hasAttribute("STRIKEOUT" ))
     {
-        tmp.createNewEntryContext();
-        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::StrikeOut;
+        tmp->createNewEntryContext();
+        tmp->formatEntryContext()->m_optionsMask |= KoSearchContext::StrikeOut;
         QString value = nl.attribute("STRIKEOUT");
         if ( value =="single" )
-            tmp.formatEntryContext()->m_strikeOut = KoTextFormat::S_SIMPLE;
+            tmp->formatEntryContext()->m_strikeOut = KoTextFormat::S_SIMPLE;
         else if ( value =="double" )
-            tmp.formatEntryContext()->m_strikeOut = KoTextFormat::S_DOUBLE;
+            tmp->formatEntryContext()->m_strikeOut = KoTextFormat::S_DOUBLE;
         else
-            tmp.formatEntryContext()->m_strikeOut = KoTextFormat::S_NONE;
+            tmp->formatEntryContext()->m_strikeOut = KoTextFormat::S_NONE;
     }
     if (nl.hasAttribute("VERTALIGN" ))
     {
-        tmp.createNewEntryContext();
-        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::VertAlign;
+        tmp->createNewEntryContext();
+        tmp->formatEntryContext()->m_optionsMask |= KoSearchContext::VertAlign;
         QString value = nl.attribute("VERTALIGN");
-        tmp.formatEntryContext()->m_vertAlign=static_cast<KoTextFormat::VerticalAlignment>( nl.attribute("value").toInt() );
+        tmp->formatEntryContext()->m_vertAlign=static_cast<KoTextFormat::VerticalAlignment>( nl.attribute("value").toInt() );
     }
     if ( nl.hasAttribute("TEXTCOLOR" ))
     {
-        tmp.createNewEntryContext();
-        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::Color;
+        tmp->createNewEntryContext();
+        tmp->formatEntryContext()->m_optionsMask |= KoSearchContext::Color;
         QColor col( nl.attribute("TEXTCOLOR" ));
-        tmp.formatEntryContext()->m_color = col;
+        tmp->formatEntryContext()->m_color = col;
     }
     if ( nl.hasAttribute("TEXTBGCOLOR" ))
     {
-        tmp.createNewEntryContext();
-        tmp.formatEntryContext()->m_optionsMask |= KoSearchContext::BgColor;
+        tmp->createNewEntryContext();
+        tmp->formatEntryContext()->m_optionsMask |= KoSearchContext::BgColor;
         QColor col( nl.attribute("TEXTBGCOLOR" ));
-        tmp.formatEntryContext()->m_backGroungColor = col;
+        tmp->formatEntryContext()->m_backGroungColor = col;
     }
-
-    if (tmp.formatEntryContext() )
-    {
-        kdDebug()<<"tmp.formatEntryContext()->m_optionsMask :"<<tmp.formatEntryContext()->m_optionsMask<<endl;
-        m_entries.insert( nl.attribute("find"), KoAutoFormatEntry(tmp) );
-    }
-    else
-        m_entries.insert( nl.attribute("find"), tmp );
+    m_entries.insert( nl.attribute("find"), tmp );
 }
 
 void KoAutoFormat::saveConfig()
@@ -502,7 +474,7 @@ void KoAutoFormat::saveConfig()
 
 
     config.setGroup( "AutoFormatEntries" );
-    KoAutoFormatEntryMap::Iterator it = m_entries.begin();
+    QDictIterator<KoAutoFormatEntry> it( m_entries );
 
     //refresh m_maxFindLength
     m_maxFindLength=0;
@@ -513,10 +485,10 @@ void KoAutoFormat::saveConfig()
     QDomElement items;
     items = doc.createElement("items");
     QDomElement data;
-    for ( ; it != m_entries.end() ; ++it )
+    for ( ; it.current() ; ++it )
     {
 	items.appendChild(saveEntry( it, doc));
-        m_maxFindLength=QMAX(m_maxFindLength,it.key().length());
+        m_maxFindLength=QMAX(m_maxFindLength,it.currentKey().length());
     }
     begin.appendChild(items);
 
@@ -583,15 +555,15 @@ void KoAutoFormat::saveConfig()
     config.sync();
 }
 
-QDomElement KoAutoFormat::saveEntry( QMapIterator<QString, KoAutoFormatEntry> _entry, QDomDocument doc)
+QDomElement KoAutoFormat::saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QDomDocument doc)
 {
     QDomElement data;
     data = doc.createElement("item");
-    data.setAttribute("find", _entry.key());
-    data.setAttribute("replace", _entry.data().replace());
-    if ( _entry.data().formatEntryContext() )
+    data.setAttribute("find", _entry.currentKey());
+    data.setAttribute("replace", _entry.current()->replace());
+    if ( _entry.current()->formatEntryContext() )
     {
-        KoSearchContext *tmp = _entry.data().formatEntryContext();
+        KoSearchContext *tmp = _entry.current()->formatEntryContext();
         if ( tmp->m_optionsMask & KoSearchContext::Family )
         {
             data.setAttribute("FONT", tmp->m_family);
@@ -885,7 +857,7 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
             if ( ch.isSpace() || ch.isPunct() || i==0)
             {
                 if(i==0 && word.length()<m_maxFindLength)
-                   word.prepend( ch );
+                    word.prepend( ch );
                 wordArray[word.length()]=word;
             }
             word.prepend( ch );
@@ -900,57 +872,60 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
     // This allows an o(n) behaviour instead of an o(n^2).
     for(int i=m_maxFindLength;i>0;--i)
     {
-        KoAutoFormatEntryMap::ConstIterator it = m_entries.find((wordArray[i].lower()));
-        if ( wordArray[i]!=0 && it!=m_entries.end() )
+        if ( !wordArray[i].isEmpty())
         {
+            KoAutoFormatEntry* it = m_entries[wordArray[i].lower()];
             unsigned int length = wordArray[i].length();
             int start = index - length;
-            KoTextCursor cursor( parag->document() );
-            cursor.setParag( parag );
-            cursor.setIndex( start );
-            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
-            cursor.setIndex( start + length );
-            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            KCommand *cmd = 0L;
-            if (!it.data().formatEntryContext() || !m_bAutoCorrectionWithFormat)
-                cmd = txtObj->replaceSelectionCommand( textEditCursor, it.data().replace(),
-                                                             KoTextObject::HighlightSelection,
-                                                             i18n("Autocorrect word") );
-            else
+
+            if ( wordArray[i]!=0  && it )
             {
-                int flags = 0;
-                KoTextFormat * lastFormat = parag->at( start )->format();
-                KoTextFormat * newFormat = new KoTextFormat(*lastFormat);
-                kdDebug()<<"it.data().formatEntryContext()->m_optionsMask :"<<it.data().formatEntryContext()->m_optionsMask<<endl;
-                kdDebug()<<" it.data().formatEntryContext() :;"<<it.data().formatEntryContext()<<endl;
-                changeTextFormat(it.data().formatEntryContext(), newFormat, flags );
-                kdDebug()<<" flags :"<<flags<<endl;
-                KMacroCommand *macro = new KMacroCommand( i18n("Autocorrect word with format"));
-                KCommand *cmd2=txtObj->replaceSelectionCommand( textEditCursor, it.data().replace(),
-                                                               KoTextObject::HighlightSelection,
-                                                               i18n("Autocorrect word") );
-                if ( cmd2 )
-                    macro->addCommand(cmd2);
+                unsigned int length = wordArray[i].length();
+                int start = index - length;
                 KoTextCursor cursor( parag->document() );
                 cursor.setParag( parag );
                 cursor.setIndex( start );
                 textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
-                cursor.setIndex( start + length + 1 );
+                cursor.setIndex( start + length );
                 textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+                KCommand *cmd = 0L;
+                if (!it->formatEntryContext() || !m_bAutoCorrectionWithFormat)
+                    cmd = txtObj->replaceSelectionCommand( textEditCursor, it->replace(),
+                                                           KoTextObject::HighlightSelection,
+                                                           i18n("Autocorrect word") );
+                else
+                {
+                    int flags = 0;
+                    KoTextFormat * lastFormat = parag->at( start )->format();
+                    KoTextFormat * newFormat = new KoTextFormat(*lastFormat);
+                    changeTextFormat(it->formatEntryContext(), newFormat, flags );
+                    KMacroCommand *macro = new KMacroCommand( i18n("Autocorrect word with format"));
+                    KCommand *cmd2=txtObj->replaceSelectionCommand( textEditCursor, it->replace(),
+                                                                    KoTextObject::HighlightSelection,
+                                                                    i18n("Autocorrect word") );
+                    if ( cmd2 )
+                        macro->addCommand(cmd2);
+                    KoTextCursor cursor( parag->document() );
+                    cursor.setParag( parag );
+                    cursor.setIndex( start );
+                    textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+                    cursor.setIndex( start + length + 1 );
+                    textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
 
 
-                cmd2 =txtObj->setFormatCommand( textEditCursor, &lastFormat, newFormat, flags, false, KoTextObject::HighlightSelection );
-                macro->addCommand( cmd2);
-                cmd = macro;
+                    cmd2 =txtObj->setFormatCommand( textEditCursor, &lastFormat, newFormat, flags, false, KoTextObject::HighlightSelection );
+                    macro->addCommand( cmd2);
+                    cmd = macro;
+                }
+                // The space/tab/CR that we inserted is still there but delete/insert moved the cursor
+                // -> go right
+                txtObj->emitHideCursor();
+                textEditCursor->gotoRight();
+                txtObj->emitShowCursor();
+                delete [] wordArray;
+                index = index - length +it->replace().length();
+                return cmd;
             }
-            // The space/tab/CR that we inserted is still there but delete/insert moved the cursor
-            // -> go right
-            txtObj->emitHideCursor();
-            textEditCursor->gotoRight();
-            txtObj->emitShowCursor();
-            delete [] wordArray;
-            index = index - length +it.data().replace().length();
-            return cmd;
         }
     }
     delete [] wordArray;
@@ -1659,11 +1634,11 @@ bool KoAutoFormat::isSeparator( const QChar &c )
 
 void KoAutoFormat::buildMaxLen()
 {
-    QMap< QString, KoAutoFormatEntry >::Iterator it = m_entries.begin();
-
     m_maxFindLength = 0;
-    for ( ; it != m_entries.end(); ++it )
-	m_maxFindLength = QMAX( m_maxFindLength, it.key().length() );
+
+    QDictIterator<KoAutoFormatEntry> it( m_entries );
+    for( ; it.current(); ++it )
+	m_maxFindLength = QMAX( m_maxFindLength, it.currentKey().length() );
 }
 
 QStringList KoAutoFormat::listCompletion() const
@@ -1831,7 +1806,6 @@ void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat
 {
     if (formatOptions )
     {
-        kdDebug()<<"formatOptions->m_optionsMask :"<<formatOptions->m_optionsMask<<endl;
         if (formatOptions->m_optionsMask & KoSearchContext::Bold)
         {
             format->setBold( formatOptions->m_options & KoSearchContext::Bold);
@@ -1858,7 +1832,6 @@ void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat
 
         if ( formatOptions->m_optionsMask & KoSearchContext::Italic)
         {
-            kdDebug()<<"italic *****************************\n";
             format->setItalic( formatOptions->m_options & KoSearchContext::Italic);
             flags |=KoTextFormat::Italic;
         }

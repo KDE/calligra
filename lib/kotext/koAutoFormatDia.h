@@ -89,8 +89,8 @@ class KoAutoFormatDia : public KDialogBase
 
 public:
     KoAutoFormatDia( QWidget *parent, const char *name, KoAutoFormat * autoFormat );
-    void addEntryList(const QString &key, KoAutoFormatEntry &_autoEntry);
-    void editEntryList(const QString &key,const QString &newFindString, KoAutoFormatEntry &_autoEntry);
+    void addEntryList(const QString &key, KoAutoFormatEntry *_autoEntry);
+    void editEntryList(const QString &key,const QString &newFindString, KoAutoFormatEntry *_autoEntry);
 protected:
     bool applyConfig();
     void setupTab1();
