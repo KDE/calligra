@@ -1489,7 +1489,7 @@ void KSpreadUndoDelete::createListCell( QCString &listCell,QValueList<columnSize
                 {
                 columnSize tmpSize;
                 tmpSize.columnNumber=y;
-                tmpSize.columnWidth=cl->width();
+                tmpSize.columnWidth=cl->dblWidth();
                 listCol.append(tmpSize);
                 }
         }
@@ -1505,7 +1505,7 @@ void KSpreadUndoDelete::createListCell( QCString &listCell,QValueList<columnSize
                 {
                 rowSize tmpSize;
                 tmpSize.rowNumber=y;
-                tmpSize.rowHeight=rw->height();
+                tmpSize.rowHeight=rw->dblHeight();
                 listRow.append(tmpSize);
                 }
         }
@@ -1548,7 +1548,7 @@ void KSpreadUndoDelete::undo()
         for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnFormat *cl=table->nonDefaultColumnFormat((*it2).columnNumber);
-           cl->setWidth(int((*it2).columnWidth));
+           cl->setDblWidth((*it2).columnWidth);
         }
     }
     else if( util_isRowSelected( m_selection ) )
@@ -1557,7 +1557,7 @@ void KSpreadUndoDelete::undo()
         for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
         {
            RowFormat *rw=table->nonDefaultRowFormat((*it2).rowNumber);
-           rw->setHeight(int((*it2).rowHeight));
+           rw->setDblHeight((*it2).rowHeight);
         }
     }
 
@@ -1586,7 +1586,7 @@ void KSpreadUndoDelete::redo()
         for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnFormat *cl=table->nonDefaultColumnFormat((*it2).columnNumber);
-           cl->setWidth(int((*it2).columnWidth));
+           cl->setDblWidth((*it2).columnWidth);
         }
     }
     else if( util_isRowSelected( m_selection ) )
@@ -1595,7 +1595,7 @@ void KSpreadUndoDelete::redo()
         for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
         {
            RowFormat *rw=table->nonDefaultRowFormat((*it2).rowNumber);
-           rw->setHeight(int((*it2).rowHeight));
+           rw->setDblHeight((*it2).rowHeight);
         }
     }
 
@@ -1641,7 +1641,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
 	     {
 	       columnSize tmpSize;
 	       tmpSize.columnNumber=y;
-	       tmpSize.columnWidth=cl->width();
+	       tmpSize.columnWidth=cl->dblWidth();
 	       listCol.append(tmpSize);
 	     }
         }
@@ -1655,7 +1655,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
 	     {
 	       rowSize tmpSize;
 	       tmpSize.rowNumber=y;
-	       tmpSize.rowHeight=rw->height();
+	       tmpSize.rowHeight=rw->dblHeight();
 	       listRow.append(tmpSize);
 	     }
         }
@@ -1669,7 +1669,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
 	     {
 	       columnSize tmpSize;
 	       tmpSize.columnNumber=y;
-	       tmpSize.columnWidth=cl->width();
+	       tmpSize.columnWidth=cl->dblWidth();
 	       listCol.append(tmpSize);
 	     }
         }
@@ -1680,7 +1680,7 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
 	     {
 	       rowSize tmpSize;
 	       tmpSize.rowNumber=y;
-	       tmpSize.rowHeight=rw->height();
+	       tmpSize.rowHeight=rw->dblHeight();
 	       listRow.append(tmpSize);
 	     }
         }
@@ -1708,7 +1708,7 @@ void KSpreadUndoResizeColRow::undo()
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnFormat *cl=table->columnFormat((*it2).columnNumber);
-           cl->setWidth((int)(*it2).columnWidth);
+           cl->setDblWidth((*it2).columnWidth);
         }
     }
     else if( util_isRowSelected( m_rctRect ) ) // complete row(s)
@@ -1717,7 +1717,7 @@ void KSpreadUndoResizeColRow::undo()
     for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
         {
            RowFormat *rw=table->rowFormat((*it2).rowNumber);
-           rw->setHeight((int)(*it2).rowHeight);
+           rw->setDblHeight((*it2).rowHeight);
         }
     }
     else // row and column
@@ -1726,13 +1726,13 @@ void KSpreadUndoResizeColRow::undo()
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnFormat *cl=table->columnFormat((*it2).columnNumber);
-           cl->setWidth((int)(*it2).columnWidth);
+           cl->setDblWidth((*it2).columnWidth);
         }
     QValueList<rowSize>::Iterator it1;
     for ( it1 = m_lstRow.begin(); it1 != m_lstRow.end(); ++it1 )
         {
            RowFormat *rw=table->rowFormat((*it1).rowNumber);
-           rw->setHeight((int)(*it1).rowHeight);
+           rw->setDblHeight((*it1).rowHeight);
         }
     }
 
@@ -1752,7 +1752,7 @@ void KSpreadUndoResizeColRow::redo()
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnFormat *cl=table->columnFormat((*it2).columnNumber);
-           cl->setWidth((int)(*it2).columnWidth);
+           cl->setDblWidth((*it2).columnWidth);
         }
     }
     else if( util_isRowSelected( m_rctRect ) ) // complete row(s)
@@ -1761,7 +1761,7 @@ void KSpreadUndoResizeColRow::redo()
     for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
         {
            RowFormat *rw=table->rowFormat((*it2).rowNumber);
-           rw->setHeight((int)(*it2).rowHeight);
+           rw->setDblHeight((*it2).rowHeight);
         }
     }
     else // row and column
@@ -1770,13 +1770,13 @@ void KSpreadUndoResizeColRow::redo()
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnFormat *cl=table->columnFormat((*it2).columnNumber);
-           cl->setWidth((int)(*it2).columnWidth);
+           cl->setDblWidth((*it2).columnWidth);
         }
     QValueList<rowSize>::Iterator it1;
     for ( it1 = m_lstRedoRow.begin(); it1 != m_lstRedoRow.end(); ++it1 )
         {
            RowFormat *rw=table->rowFormat((*it1).rowNumber);
-           rw->setHeight((int)(*it1).rowHeight);
+           rw->setDblHeight((*it1).rowHeight);
         }
     }
 
@@ -2464,7 +2464,7 @@ void KSpreadUndoCellPaste::createListCell( QCString &listCell,QValueList<columnS
                 {
                 columnSize tmpSize;
                 tmpSize.columnNumber=y;
-                tmpSize.columnWidth=cl->width();
+                tmpSize.columnWidth=cl->dblWidth();
                 listCol.append(tmpSize);
                 }
         }
@@ -2499,7 +2499,7 @@ void KSpreadUndoCellPaste::createListCell( QCString &listCell,QValueList<columnS
                 {
                 rowSize tmpSize;
                 tmpSize.rowNumber=y;
-                tmpSize.rowHeight=rw->height();
+                tmpSize.rowHeight=rw->dblHeight();
                 listRow.append(tmpSize);
                 }
         }
@@ -2551,7 +2551,7 @@ void KSpreadUndoCellPaste::undo()
                 for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
                         {
                         ColumnFormat *cl=table->nonDefaultColumnFormat((*it2).columnNumber);
-                        cl->setWidth(int((*it2).columnWidth));
+                        cl->setDblWidth((*it2).columnWidth);
                         }
                 }
         else
@@ -2573,7 +2573,7 @@ void KSpreadUndoCellPaste::undo()
                 for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
                         {
                         RowFormat *rw=table->nonDefaultRowFormat((*it2).rowNumber);
-                        rw->setHeight(int((*it2).rowHeight));
+                        rw->setDblHeight((*it2).rowHeight);
                         }
                 }
         else
@@ -2627,7 +2627,7 @@ void KSpreadUndoCellPaste::redo()
          for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
                 {
                 ColumnFormat *cl=table->nonDefaultColumnFormat((*it2).columnNumber);
-                cl->setWidth(int((*it2).columnWidth));
+                cl->setDblWidth((*it2).columnWidth);
                 }
 
     }
@@ -2648,7 +2648,7 @@ void KSpreadUndoCellPaste::redo()
         for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
                 {
                 RowFormat *rw=table->nonDefaultRowFormat((*it2).rowNumber);
-                 rw->setHeight(int((*it2).rowHeight));
+                 rw->setDblHeight((*it2).rowHeight);
                  }
     }
     else

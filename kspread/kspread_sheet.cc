@@ -339,12 +339,12 @@ RowFormat* KSpreadSheet::rowFormat( int _row )
 
 void KSpreadSheet::setDefaultHeight( double height )
 {
-  m_pDefaultRowFormat->setHeight( (int)height );
+  m_pDefaultRowFormat->setDblHeight( height );
 }
 
 void KSpreadSheet::setDefaultWidth( double width )
 {
-  m_pDefaultColumnFormat->setWidth( (int)width );
+  m_pDefaultColumnFormat->setDblWidth( width );
 }
 
 int KSpreadSheet::leftColumn( int _xpos, double &_left,
@@ -577,7 +577,7 @@ ColumnFormat* KSpreadSheet::nonDefaultColumnFormat( int _column, bool force_crea
 
     p = new ColumnFormat( this, _column );
     // TODO: copy the default ColumnFormat here!!
-    p->setWidth( m_pDefaultColumnFormat->width() );
+    p->setDblWidth( m_pDefaultColumnFormat->dblWidth() );
 
     m_columns.insertElement( p, _column );
 
@@ -592,7 +592,7 @@ RowFormat* KSpreadSheet::nonDefaultRowFormat( int _row, bool force_creation )
 
     p = new RowFormat( this, _row );
     // TODO: copy the default RowLFormat here!!
-    p->setHeight( m_pDefaultRowFormat->height() );
+    p->setDblHeight( m_pDefaultRowFormat->dblHeight() );
 
     m_rows.insertElement( p, _row );
 
