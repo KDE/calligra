@@ -58,7 +58,7 @@
 #include "kspread_canvas.h"
 #include "kspread_tabbar.h"
 #include "kspread_view.h"
-#include "kspread_dlg_formula2.h"
+#include "kspread_dlg_formula.h"
 #include "kspread_dlg_special.h"
 #include "kspread_dlg_goto.h"
 #include "kspread_dlg_replace.h"
@@ -1039,10 +1039,7 @@ void KSpreadView::fontSelected( const QString &_font )
 
 void KSpreadView::insertFormula()
 {
-  // Old formula dialog
-  //KSpreaddlgformula* dlg = new KSpreaddlgformula( this, "Formula Editor" );
-  // Laurent's new formula dialog
-  KSpreadDlgFormula2* dlg = new KSpreadDlgFormula2( this, "Formula Editor" );
+  KSpreadDlgFormula* dlg = new KSpreadDlgFormula( this, "Formula Editor" );
   dlg->show();
   // Is the dialog deleted when it's closed ? (David)
 }
@@ -1058,7 +1055,7 @@ void KSpreadView::formulaSelection( const QString &_math )
 	return;
     }
 
-    KSpreadDlgFormula2* dlg = new KSpreadDlgFormula2( this, "Formula Editor",_math );
+    KSpreadDlgFormula* dlg = new KSpreadDlgFormula( this, "Formula Editor",_math );
     dlg->show();
     /*KSpreadcreate* dlg = new KSpreadcreate( this, _math );
     dlg->show();*/
@@ -1180,7 +1177,7 @@ void KSpreadView::funct()
     if ( m_pTable == 0L )
 	return;
 
-    KSpreadDlgFormula2* dlg = new KSpreadDlgFormula2( this, "Formula Editor" );
+    KSpreadDlgFormula* dlg = new KSpreadDlgFormula( this, "Formula Editor" );
     dlg->show();
 }
 
