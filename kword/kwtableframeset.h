@@ -260,7 +260,7 @@ public:
     }
 
     // Forward all events to the current cell
-    virtual void keyPressEvent( QKeyEvent * e ) { if ( m_currentCell ) m_currentCell->keyPressEvent( e ); }
+    virtual void keyPressEvent( QKeyEvent * e );
     virtual void mousePressEvent( QMouseEvent * e );
     virtual void mouseMoveEvent( QMouseEvent * e ) { if ( m_currentCell ) m_currentCell->mouseMoveEvent( e ); }
     virtual void mouseReleaseEvent( QMouseEvent * e ) { if ( m_currentCell ) m_currentCell->mouseReleaseEvent( e ); }

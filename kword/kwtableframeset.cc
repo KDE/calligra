@@ -1528,4 +1528,47 @@ KWFrameSetEdit* KWTableFrameSetEdit::currentTextEdit()
     return m_currentCell;
 }
 
+
+void  KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
+{
+    KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_currentCell->frameSet());
+    KWFrameSet *fs;
+    KWTableFrameSet* tableFrame=tableFrameSet();
+    bool moveToOtherCell=false;
+    switch( e->key() )
+    {
+        case QKeyEvent::Key_Up:
+        {
+            if ( cell->m_col > 0 )
+               fs = tableFrame->getCell(  cell->m_row, cell->m_col - 1 );
+            else if ( cell->m_row > 0 )
+                fs = tableFrame->getCell(  cell->m_row - 1,tableFrame->getCols() - 1 );
+            else
+                fs = tableFrame->getCell( tableFrame->getRows() - 1,tableFrame->getCols() - 1 );
+            if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->getCursor()->parag()->prev())
+                moveToOtherCell=true;
+        }
+        break;
+        case QKeyEvent::Key_Down:
+        {
+            if ( cell->m_col < tableFrame->getCols() - 1 )
+                fs = tableFrame->getCell( cell->m_row, cell->m_col + 1 );
+            else if ( cell->m_row < tableFrame->getRows() - 1 )
+                fs = tableFrame->getCell( cell->m_row + 1, 0 );
+            else
+                fs = tableFrame->getCell( 0, 0 );
+
+            if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->getCursor()->parag()->next())
+                moveToOtherCell=true;
+        }
+        break;
+    }
+
+    if(moveToOtherCell)
+        setCurrentCell( fs );
+
+    if ( m_currentCell && !moveToOtherCell)
+        m_currentCell->keyPressEvent( e );
+}
+
 #include "kwtableframeset.moc"
