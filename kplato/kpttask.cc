@@ -391,13 +391,13 @@ KPTDateTime KPTTask::calculatePredeccessors(const QPtrList<KPTRelation> &list, i
         if (!time.isValid() || t > time)
             time = t;
     }
-    kdDebug()<<time.toString()<<"                  "<<m_name<<" calculatePredeccessors() ("<<list.count()<<")"<<endl;
+    //kdDebug()<<time.toString()<<"                  "<<m_name<<" calculatePredeccessors() ("<<list.count()<<")"<<endl;
     return time;
 }
 KPTDateTime KPTTask::calculateForward(int use) {
     //kdDebug()<<k_funcinfo<<m_name<<<<endl;
     if (m_visitedForward) {
-    kdDebug()<<earliestStart.toString()<<" + "<<m_durationBackward.toString()<<" "<<m_name<<" calculateForward() (visited)"<<endl;
+    //kdDebug()<<earliestStart.toString()<<" + "<<m_durationBackward.toString()<<" "<<m_name<<" calculateForward() (visited)"<<endl;
         return earliestStart + m_durationForward;
     }
     // First, calculate all predecessors
@@ -435,7 +435,7 @@ KPTDateTime KPTTask::calculateForward(int use) {
     } else { // ???
         m_durationForward = KPTDuration::zeroDuration;
     }
-    kdDebug()<<earliestStart.toString()<<" + "<<m_durationBackward.toString()<<" "<<m_name<<" calculateForward()"<<endl;
+    //kdDebug()<<earliestStart.toString()<<" + "<<m_durationBackward.toString()<<" "<<m_name<<" calculateForward()"<<endl;
     m_visitedForward = true;
     return earliestStart + m_durationForward;
 }
@@ -465,13 +465,13 @@ KPTDateTime KPTTask::calculateSuccessors(const QPtrList<KPTRelation> &list, int 
         if (!time.isValid() || t < time)
             time = t;
     }
-    kdDebug()<<time.toString()<<"                  "<<m_name<<" calculateSuccessors() ("<<list.count()<<")"<<endl;
+    //kdDebug()<<time.toString()<<"                  "<<m_name<<" calculateSuccessors() ("<<list.count()<<")"<<endl;
     return time;
 }
 KPTDateTime KPTTask::calculateBackward(int use) {
     //kdDebug()<<k_funcinfo<<m_name<<<<endl;
     if (m_visitedBackward) {
-    kdDebug()<<latestFinish.toString()<<" - "<<m_durationBackward.toString()<<" "<<m_name<<" calculateBackward() (visited)"<<endl;
+    //kdDebug()<<latestFinish.toString()<<" - "<<m_durationBackward.toString()<<" "<<m_name<<" calculateBackward() (visited)"<<endl;
         return latestFinish - m_durationBackward;
     }
     // First, calculate all successors
@@ -509,7 +509,7 @@ KPTDateTime KPTTask::calculateBackward(int use) {
     } else { // ???
         m_durationBackward = KPTDuration::zeroDuration;
     }
-    kdDebug()<<latestFinish.toString()<<" - "<<m_durationBackward.toString()<<" "<<m_name<<" calculateBackward()"<<endl;
+    //kdDebug()<<latestFinish.toString()<<" - "<<m_durationBackward.toString()<<" "<<m_name<<" calculateBackward()"<<endl;
     m_visitedBackward = true;
     return latestFinish - m_durationBackward;
 }
@@ -541,7 +541,7 @@ KPTDateTime KPTTask::schedulePredeccessors(const QPtrList<KPTRelation> &list, in
         if (!time.isValid() || t > time)
             time = t;
     }
-    kdDebug()<<time.toString()<<" "<<m_name<<" schedulePredeccessors()"<<endl;
+    //kdDebug()<<time.toString()<<" "<<m_name<<" schedulePredeccessors()"<<endl;
     return time;
 }
 
@@ -614,7 +614,7 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
         m_duration = m_endTime - m_startTime;
         kdWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     }
-    kdDebug()<<m_startTime.toString()<<" : "<<m_endTime.toString()<<" "<<m_name<<" scheduleForward()"<<endl;
+    //kdDebug()<<m_startTime.toString()<<" : "<<m_endTime.toString()<<" "<<m_name<<" scheduleForward()"<<endl;
     m_visitedForward = true;
     return m_endTime;
 }
@@ -861,14 +861,14 @@ void KPTTask::addChildProxyRelations(QPtrList<KPTRelation> &list) {
 
 void KPTTask::addParentProxyRelation(KPTNode *node, const KPTRelation *rel) {
     if (node->type() != Type_Summarytask) {
-        kdDebug()<<"Add parent proxy from "<<node->name()<<" to (me) "<<m_name<<endl;
+        //kdDebug()<<"Add parent proxy from "<<node->name()<<" to (me) "<<m_name<<endl;
         m_parentProxyRelations.append(new KPTProxyRelation(node, this, rel->timingType(), rel->timingRelation(), rel->lag()));
     }
 }
 
 void KPTTask::addChildProxyRelation(KPTNode *node, const KPTRelation *rel) {
     if (node->type() != Type_Summarytask) {
-        kdDebug()<<"Add child proxy from (me) "<<m_name<<" to "<<node->name()<<endl;
+        //kdDebug()<<"Add child proxy from (me) "<<m_name<<" to "<<node->name()<<endl;
         m_childProxyRelations.append(new KPTProxyRelation(this, node, rel->timingType(), rel->timingRelation(), rel->lag()));
     }
 }
