@@ -39,6 +39,9 @@ class QDomDocument;
 class QDomElement;
 class KoZoomHandler;
 class KPrPage;
+class KoXmlWriter;
+class KoGenStyles;
+
 
 class KPBackGround
 {
@@ -123,6 +126,7 @@ public:
     QDomElement save( QDomDocument &doc, const bool saveAsKOffice1Dot1 );
     void load( const QDomElement &element );
     void loadOasis( KoOasisContext & context );
+    void saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles );
 
 protected:
     void drawBackColor( QPainter *_painter, const QSize& ext, const QRect& crect );

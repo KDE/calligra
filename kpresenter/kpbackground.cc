@@ -38,6 +38,7 @@ using namespace std;
 #include <kglobalsettings.h>
 #include <koStore.h>
 #include <koStoreDevice.h>
+#include <koGenStyles.h>
 
 KPBackGround::KPBackGround( KPrPage *_page )
     // : footerHeight( 0 )
@@ -116,6 +117,11 @@ void KPBackGround::reload()
         backPicture = pictureCollection()->insertPicture(backPicture);
     else
         backPicture.clear();
+}
+
+
+void KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
+{
 }
 
 QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1 )
