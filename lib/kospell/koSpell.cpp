@@ -452,25 +452,25 @@ void KOSpell::dialog2 (int result)
         // adding to personal dict takes effect at the next line, not the current
         ignorelist.prepend(dlgorigword.lower());
         break;
-    case KS_REPLACE:
-        //todo fixme lastpos !
-        kdDebug()<<" newbuffer :"<<newbuffer<<endl;
-        offset+=replacement().length()-replacement().length();
-        newbuffer.replace (lastpos, replacement().length(), replacement());
-        kdDebug()<<" apres :"<<newbuffer<<endl;
-
-        emit corrected (dlgorigword ,  replacement(), lastpos);
-        break;
     case KS_REPLACEALL:
         replacelist.append (dlgorigword);
         replacelist.append (replacement());
         kdDebug()<<" newbuffer :"<<newbuffer<<endl;
 
         offset+=replacement().length()-replacement().length();
-        newbuffer.replace (lastpos, replacement().length()+1, replacement()+" " );
+        newbuffer.replace (lastpos, replacement().length(), replacement()+" " );
         kdDebug()<<" apres :"<<newbuffer<<endl;
         emit replaceall( dlgorigword ,  replacement() );
-        //don't break it ! => emit for replaceall signal corrected( ...)
+        emit corrected (dlgorigword ,  replacement(), lastpos);
+        break;
+    case KS_REPLACE:
+        kdDebug()<<" newbuffer :"<<newbuffer<<endl;
+
+        offset+=replacement().length()-replacement().length();
+        newbuffer.replace (lastpos, replacement().length(), replacement()+" " );
+        kdDebug()<<" apres :"<<newbuffer<<endl;
+        emit corrected (dlgorigword ,  replacement(), lastpos);
+        break;
     case KS_CHECKAGAINWITHNEWLANGUAGE:
         changeSpellLanguage( ksdlg->languageIndex());
         spellCheckReplaceWord( dlgreplacement);
