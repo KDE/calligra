@@ -169,6 +169,27 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		m_painter->lineTo( KoPoint( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
 		m_painter->fillPath();
 	}
+	else
+	{
+		VFill fill;
+		fill.setFillRule( VFill::evenOdd );
+		fill.setColor( Qt::white );
+		m_painter->setBrush( fill );
+		m_painter->setPen( Qt::NoPen );
+		m_painter->newPath();
+		m_painter->moveTo( KoPoint( STROKE_TOPX, STROKE_TOPY ) );
+		m_painter->lineTo( KoPoint( STROKE_BOTTOMX, STROKE_TOPY ) );
+		m_painter->lineTo( KoPoint( STROKE_BOTTOMX, STROKE_BOTTOMY ) );
+		m_painter->lineTo( KoPoint( STROKE_TOPX, STROKE_BOTTOMY ) );
+		m_painter->lineTo( KoPoint( STROKE_TOPX, STROKE_TOPY ) );
+
+		m_painter->moveTo( KoPoint( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
+		m_painter->lineTo( KoPoint( STROKE_BOTTOMX_INNER, STROKE_TOPY_INNER ) );
+		m_painter->lineTo( KoPoint( STROKE_BOTTOMX_INNER, STROKE_BOTTOMY_INNER ) );
+		m_painter->lineTo( KoPoint( STROKE_TOPX_INNER, STROKE_BOTTOMY_INNER ) );
+		m_painter->lineTo( KoPoint( STROKE_TOPX_INNER, STROKE_TOPY_INNER ) );
+		m_painter->fillPath();
+	}
 
 	// show 3D outline of stroke part
 	VColor color;
@@ -209,6 +230,16 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->lineTo( KoPoint( STROKE_TOPX_INNER + 1, STROKE_BOTTOMY_INNER - 1 ) );
 	m_painter->strokePath();
 
+	if( s.type() == VStroke::none )
+	{
+		stroke.setColor( Qt::red );
+		m_painter->setPen( stroke );
+		m_painter->newPath();
+		m_painter->moveTo( KoPoint( STROKE_BOTTOMX, STROKE_TOPY ) );
+		m_painter->lineTo( KoPoint( STROKE_TOPX, STROKE_BOTTOMY ) );
+		m_painter->strokePath();
+	}
+
 	if( f.type() != VFill::none )
 	{
 		if( f.type() != VFill::solid )
@@ -248,6 +279,21 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY) );
 		m_painter->fillPath();
 	}
+	else
+	{
+		VFill fill;
+		fill.setColor( Qt::white );
+		m_painter->setBrush( fill );
+		m_painter->setPen( Qt::NoPen );
+		m_painter->newPath();
+		m_painter->moveTo( KoPoint( FILL_TOPX, FILL_TOPY ) );
+		m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
+		m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_BOTTOMY ) );
+		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
+		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_TOPY) );
+		m_painter->fillPath();
+	}
+
 	// show 3D outline of fill part
 	m_painter->setBrush( Qt::NoBrush );
 	color.set( 1.0, 1.0, 1.0 );
@@ -267,6 +313,16 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->lineTo( KoPoint( FILL_BOTTOMX, FILL_BOTTOMY ) );
 	m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
 	m_painter->strokePath();
+
+	if( f.type() == VFill::none )
+	{
+		stroke.setColor( Qt::red );
+		m_painter->setPen( stroke );
+		m_painter->newPath();
+		m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
+		m_painter->lineTo( KoPoint( FILL_TOPX, FILL_BOTTOMY ) );
+		m_painter->strokePath();
+	}
 
 	m_painter->end();
 

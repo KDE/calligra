@@ -1071,9 +1071,18 @@ KarbonView::selectionChanged()
 	{
 		VGroup *group = dynamic_cast<VGroup *>( part()->document().selection()->objects().getFirst() );
 		m_groupObjects->setEnabled( !group && ( count > 1 ) );
-		m_ungroupObjects->setEnabled( group && ( count == 1 )  );
-		m_strokeFillPreview->update( *part()->document().selection()->objects().getFirst()->stroke(),
-												*part()->document().selection()->objects().getFirst()->fill() );
+		m_ungroupObjects->setEnabled( group && ( count == 1 ) );
+		if( count == 1 )
+			m_strokeFillPreview->update( *part()->document().selection()->objects().getFirst()->stroke(),
+													*part()->document().selection()->objects().getFirst()->fill() );
+		else
+		{
+			VStroke stroke;
+			stroke.setType( VStroke::none );
+			VFill fill;
+			m_strokeFillPreview->update( stroke, fill );
+		}
+
 		part()->document().selection()->setStroke( *( part()->document().selection()->objects().getFirst()->stroke() ) );
 		part()->document().selection()->setFill( *( part()->document().selection()->objects().getFirst()->fill() ) );
 		m_setLineWidth->setEnabled( true );
