@@ -137,6 +137,7 @@ protected:
     int m_iColumn;
     int m_iNbCol;
     QRect m_printRange;
+    QPair<int, int> m_printRepeatColumns;
 };
 
 class KSpreadUndoInsertColumn : public KSpreadUndoAction
@@ -169,6 +170,7 @@ protected:
     int m_iRow;
     int m_iNbRow;
     QRect m_printRange;
+    QPair<int, int> m_printRepeatRows;
 };
 
 class KSpreadUndoInsertRow : public KSpreadUndoAction
@@ -277,6 +279,10 @@ protected:
     bool m_printGridRedo;
     QRect m_printRange;
     QRect m_printRangeRedo;
+    QPair<int, int> m_printRepeatColumns;
+    QPair<int, int> m_printRepeatColumnsRedo;
+    QPair<int, int> m_printRepeatRows;
+    QPair<int, int> m_printRepeatRowsRedo;
 };
 
 
