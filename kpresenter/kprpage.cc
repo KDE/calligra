@@ -284,6 +284,19 @@ void KPrPage::load( const QDomElement &element )
     else {
         m_soundFileName=QString::null;
     }
+
+    e=element.namedItem("HEADERFOOTER").toElement();
+    if(!e.isNull()) {
+        if(e.hasAttribute("header"))
+            m_bHasHeader =static_cast<bool>(e.attribute("header").toInt());
+        else
+            m_bHasHeader = false;
+
+        if(e.hasAttribute("footer"))
+            m_bHasFooter =static_cast<bool>(e.attribute("footer").toInt());
+        else
+            m_bHasFooter = false;
+    }
 }
 
 void KPrPage::loadOasis(KoOasisContext & context )
@@ -477,7 +490,10 @@ QDomElement KPrPage::save( QDomDocument &doc, const bool saveAsKOffice1Dot1 )
         element.setAttribute( "soundFileName", m_soundFileName );
         page.appendChild( element );
     }
-
+    element = doc.createElement( "HEADERFOOTER" );
+    element.setAttribute( "header", static_cast<int>(m_bHasHeader ) );
+    element.setAttribute( "footer", static_cast<int>(m_bHasFooter ) );
+    page.appendChild( element );
     return page;
 }
 

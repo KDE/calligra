@@ -754,6 +754,7 @@ void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDom
 
 }
 
+//TODO with changes with new file format header/footer can't be change
 void KPresenterDoc::compatibilityFromOldFileFormat()
 {
     //function to keep compatibility with old file format
