@@ -322,7 +322,7 @@ void KoHTMLShell::releaseDocument()
 void KoHTMLShell::slotFileNew()
 {
   if (!newDocument())
-     QMessageBox::critical(this, i18n("KoHTML Error"), i18n("Could not create new document"), i18n("Ok"));
+     QMessageBox::critical(this, i18n("KoHTML Error"), i18n("Could not create new document"), i18n("OK"));
 }
 
 void KoHTMLShell::slotFileOpen()
@@ -336,7 +336,7 @@ void KoHTMLShell::slotFileOpen()
   {
     QString msg;
     msg.sprintf(i18n("Could not open\n%s"), file.data());
-    QMessageBox::critical(this, i18n("IO Error"), msg, i18n("Ok"));
+    QMessageBox::critical(this, i18n("IO Error"), msg, i18n("OK"));
   }
 }
 
@@ -368,7 +368,7 @@ void KoHTMLShell::slotFileOpenURL()
             setRootPart(m_pView->id());
             interface()->setActivePart(m_pView->id());
 
-	    m_pDoc->openURL( url.url().c_str() );
+	    m_pDoc->openURL( url.url().c_str(), false );
   
             if (m_pFileMenu)
                {
@@ -405,14 +405,14 @@ void KoHTMLShell::slotFileSave()
   {
     QString msg;
     msg.sprintf(i18n("Could not save\n%s"), url.in());
-    QMessageBox::critical(this, i18n("IO Error"), msg, i18n("Ok"));
+    QMessageBox::critical(this, i18n("IO Error"), msg, i18n("OK"));
   }
 }
 
 void KoHTMLShell::slotFileSaveAs()
 {
   if (!saveDocument("", ""))
-    QMessageBox::critical(this, i18n("IO Error"), i18n("Could not save file"), i18n("Ok"));
+    QMessageBox::critical(this, i18n("IO Error"), i18n("Could not save file"), i18n("OK"));
 }
 
 void KoHTMLShell::slotFileClose()

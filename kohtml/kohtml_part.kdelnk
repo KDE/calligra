@@ -31,6 +31,6 @@ MimeTypes=application/x-kohtml,
 RepoID=IDL:KoHTML/DocumentFactory:1.0,
 ActivationMode=shared
 Type=OpenPart
-Icon=kohtml.xpm
+Icon=unknown.xpm
 MiniIcon=unknown.xpm
 ServiceType=KOfficeDocument

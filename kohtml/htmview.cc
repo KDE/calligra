@@ -25,33 +25,57 @@
 #include "htmview.h"
 #include "htmview.moc"
 
-#include "htmwidget.h"
-
-#include <iostream.h>
-
 #include <qobjectlist.h>
 
-KMyHTMLView::KMyHTMLView(QWidget *parent = 0L, const char *name = 0L, int flags = 0,
-                    KMyHTMLView *parent_view = 0L)
+#include <k2url.h>
+#include <list>
+
+#include "htmwidget.h"
+#include "kohtml_doc.h"
+
+KMyHTMLView::KMyHTMLView(KoHTMLDoc *doc, QWidget *parent = 0L, const char *name = 0L, 
+                         int flags = 0, KMyHTMLView *parent_view = 0L)
 :KHTMLView(parent, name, flags, parent_view, (new KMyHTMLWidget(0L, "" )) )
 {
+  m_pDoc = doc;
+  m_lstChildren.setAutoDelete( true );
+  m_bParsing = false;
+  m_bReload = false;
+  m_bDone = true;
+  m_pParent = parent_view;
+  m_strDocument = "";
+  
+  getKHTMLWidget()->setFocusPolicy( QWidget::StrongFocus );
+  
+  connect( this, SIGNAL(documentDone( KHTMLView * )),
+           this, SLOT(documentFinished( KHTMLView * )));
+  connect( this, SIGNAL( imageRequest( const char * )),
+           this, SLOT( requestImage( const char * )));
+  connect( this, SIGNAL( cancelImageRequest( const char * )),
+           this, SLOT( cancelImage( const char * )));
+	   
+  if ( m_pParent )
+     {
+       connect(this, SIGNAL(URLSelected(KHTMLView *, const char *, int, const char *)),
+               m_pParent, SLOT(slotURLSelected(KHTMLView *, const char *, int, const char *)));
+       connect(this, SIGNAL(onURL(KHTMLView *, const char *)),
+               m_pParent, SLOT(slotOnURL(KHTMLView *, const char *)));
+     }			
+
 }
 
 KMyHTMLView::~KMyHTMLView()
 {
-  if (view) delete view;
+  stop();
 }
 
 void KMyHTMLView::draw(QPainter *painter, int width, int height)
 {
-  cerr << "void KMyHTMLView::draw(QPainter *painter, int width, int height)" << endl;
-
-  pixmap = new QPixmap( width, height );
+  m_pPixmap = new QPixmap( width, height );
 
 //  pixmap->fill();
   view->resize( width, height );
 
-  cerr << "drawing view" << endl;
   drawWidget( view );
   
   // this does not seem to work :-((
@@ -59,9 +83,9 @@ void KMyHTMLView::draw(QPainter *painter, int width, int height)
   if (displayHScroll) drawWidget( horz );
   if (displayVScroll) drawWidget( vert );
   
-  painter->drawPixmap( 0, 0, *pixmap );
+  painter->drawPixmap( 0, 0, *m_pPixmap );
   
-  delete pixmap;
+  delete m_pPixmap;
   
   cerr << "done" << endl;
 }
@@ -78,7 +102,7 @@ void KMyHTMLView::drawWidget( QWidget *widget )
 		     << widget->width() << " "
 		     << widget->height() << endl;
 
-  QPainter::redirect( widget, pixmap );
+  QPainter::redirect( widget, m_pPixmap );
   QPaintEvent pe( QRect(x1, y1, widget->width(), widget->height()));
   QApplication::sendEvent( widget, &pe );
   QPainter::redirect( widget, 0 );
@@ -103,30 +127,189 @@ void KMyHTMLView::drawWidget( QWidget *widget )
     
 }
 
+void KMyHTMLView::begin( const char *url, int dx, int dy )
+{
+  m_strDocument = "";
+  m_lstChildren.clear();
+  KHTMLView::begin( url, dx, dy );
+}
+
 KHTMLView *KMyHTMLView::newView(QWidget *parent = 0L, const char *name = 0L, int flags = 0L)
 {
-  cout << "uh, creating new patched view" << endl;
+  KMyHTMLView *view = new KMyHTMLView(m_pDoc, parent, name, flags, this);
   
-  KMyHTMLView *view = new KMyHTMLView(parent, name, flags, this);
-  
-    connect( view, SIGNAL( documentStarted( KHTMLView * ) ),
-	     this, SLOT( slotDocumentStarted( KHTMLView * ) ) );
-    connect( view, SIGNAL( documentDone( KHTMLView * ) ),
-	     this, SLOT( slotDocumentDone( KHTMLView * ) ) );
-    connect( view, SIGNAL( documentRequest( KHTMLView *, const char * ) ),
-             this, SLOT( slotDocumentRequest( KHTMLView *, const char * ) ) );	     
-    connect( view, SIGNAL( imageRequest( KHTMLView *, const char * ) ),
-	     this, SLOT( slotImageRequest( KHTMLView *, const char * ) ) );
-    connect( view, SIGNAL( URLSelected( KHTMLView *, const char*, int, const char* ) ),
-	     this, SLOT( slotURLSelected( KHTMLView *, const char *, int, const char* ) ) );    
-    connect( view, SIGNAL( onURL( KHTMLView *, const char* ) ),
-	     this, SLOT( slotOnURL( KHTMLView *, const char * ) ) );
-    connect( view, SIGNAL( popupMenu( KHTMLView *, const char*, const QPoint & ) ),
-	     this, SLOT( slotPopupMenu( KHTMLView *, const char *, const QPoint & ) ) );
-    connect( view, SIGNAL( cancelImageRequest( KHTMLView *, const char* ) ),
-	     this, SLOT( slotCancelImageRequest( KHTMLView *, const char * ) ) );
-    connect( view, SIGNAL( formSubmitted( KHTMLView *, const char *, const char*, const char* ) ),
-	     this, SLOT( slotFormSubmitted( KHTMLView *, const char *, const char*, const char* ) ) );
+  m_lstChildren.append( new FrameChild( view ));
   
   return view;
+}
+
+void KMyHTMLView::openURL( const char *url )
+{
+  openURL( url, false );
+}
+
+void KMyHTMLView::openURL( const char *url, bool reload )
+{
+  if ( m_bParsing )
+     {
+       end();
+       m_bParsing = false;
+     }  
+     
+  cancelAllRequests(); // just to be on the save side
+  
+  m_bReload = reload;     
+  m_bDone = false;
+  m_strURL = url;
+
+  /*
+   * TODO: Do something like (pseudo code) :
+   *  ( ONLY IF m_bReload = TRUE )
+   *  imageList = getImageRefsFromWidget()
+   *  for (imageList)
+   *      imageCache->removeURL( entry.url );
+   */
+   
+  m_pDoc->requestDocument( this, url, m_bReload ); 
+}
+
+void KMyHTMLView::feedDocumentData( const char *data, bool eof )
+{
+  if ( m_bDone )
+    return; //aiieeee
+
+  if ( !m_bParsing )
+     {
+       m_bParsing = true;
+       m_lstChildren.clear();
+       
+       list<K2URL> lst;
+       K2URL::split( m_strURL, lst );
+       QString burl = lst.back().url().c_str();
+       begin( burl, 0, 0 );
+       parse();
+     }
+
+  m_strDocument += data;
+  write( data );
+  
+  if ( eof ) 
+     {
+       end();
+       m_bParsing = false;
+       documentFinished( this );
+     }  
+}
+
+void KMyHTMLView::stop()
+{
+
+  if ( m_bParsing )
+     {
+       m_bParsing = false;
+       end();
+       m_pDoc->cancelDocument( this, m_strURL );
+     }
+          
+  m_bDone = true;
+  cancelAllRequests(); //we don't want to run into any trouble
+  
+  //let's "stop" all children
+  QListIterator<FrameChild> it( m_lstChildren );
+  for (; it.current(); ++it)
+    if ( !it.current()->m_bDone )
+      it.current()->m_pView->stop();
+  
+  if ( m_pParent )
+     m_pParent->childFinished( this );
+  else
+     //let's notify our "parent document"
+     m_pDoc->viewFinished( this );
+}
+
+void KMyHTMLView::childFinished( KMyHTMLView *child_view )
+{
+  QListIterator<FrameChild> it( m_lstChildren );
+  for (; it.current(); ++it)
+    if ( it.current()->m_pView == child_view )
+       it.current()->m_bDone = true;
+       
+  if ( m_bDone )
+    documentFinished( this );       
+}
+
+void KMyHTMLView::save( ostream &out )
+{
+  return;
+  
+  SavedPage *p = saveYourself();
+  
+  out << otag << "<VIEW "
+      << "scrolling=\"" << p->scrolling << "\" "
+      << "frameborder=\"" << p->frameborder << "\" "
+      << "marginwidth=\"" << p->marginwidth << "\" "
+      << "marginheight=\"" << p->marginheight << "\" "
+      << "allowresize=\"" << p->allowresize << "\" "
+      << "url=\"" << p->url << "\" "
+      << "title=\"" << p->title << "\" "
+      << "xOffset=\"" << p->xOffset << "\" "
+      << "yOffset=\"" << p->yOffset << "\" ";
+      
+  if (p->isFrame)
+     out << "frameName=\"" << p->frameName << "\" ";
+      
+  out << ">" << endl;      
+
+/*
+  out << "<DATA>"
+      << html_data_here (encoded?)
+      << "</DATA>" << endl;
+*/      
+
+  //hm... I might consider moving this to KoHTMLDoc...    
+
+  out << etag << "</VIEW>" << endl;      
+  
+  delete p;
+}
+
+bool KMyHTMLView::isChild( KMyHTMLView *view )
+{
+  QListIterator<FrameChild> it( m_lstChildren );
+  for (; it.current(); ++it)
+    {
+      KMyHTMLView *childView = it.current()->m_pView;
+      if ( childView == view || childView->isChild( view ) )
+        return true;
+    }
+  return false;    
+}
+
+void KMyHTMLView::documentFinished( KHTMLView *view )
+{
+  if ( view != this )
+    return;
+    
+  m_bDone = true;
+  
+  QListIterator<FrameChild> it( m_lstChildren );
+  for (; it.current(); ++it)
+    if ( !it.current()->m_bDone )
+      return;
+      
+  if ( m_pParent )
+    m_pParent->childFinished( this );      
+  else
+     //let's notify our "parent document"
+     m_pDoc->viewFinished( this );
+}
+
+void KMyHTMLView::requestImage( const char *url )
+{
+  m_pDoc->requestImage( this, url, m_bReload );
+}
+
+void KMyHTMLView::cancelImage( const char *url )
+{
+  m_pDoc->cancelImage( this, url );
 }

@@ -89,3 +89,14 @@ Wed Jan 27 22:53:39 1999 Simon Hausmann <tronical@gmx.net>
         * fixes with frame support
 
         * renamed some files
+
+Mon Feb 8 22:45:23 1999 Simon Hausmann <tronical@gmx.net>
+
+        * countless internal changes and bugfixes (...an almost complete
+          rewrite)
+
+        * implemented listing of directories
+
+        * lots of stuff I forgot...
+
+        * new bugs ;(

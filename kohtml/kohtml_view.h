@@ -82,6 +82,7 @@ public:
   virtual void editCopy();
   virtual void editHTMLCode();
   virtual void editSettings();
+  virtual void editKeys();
   
   virtual void viewToolBar();
   virtual void viewStatusBar();
@@ -121,6 +122,9 @@ public slots:
   void slotGeometryEnd(KoFrame *frame);  
   void slotMoveEnd(KoFrame *frame);
 
+  void slotBack2();
+  void slotForward2();
+  
   void slotDocumentContentChanged();
   
   void slotSetCaption(const char *title);
@@ -132,16 +136,21 @@ public slots:
   void slotCopyURLtoClipboard();
 
   void slotUpdateConfig();
+
+  void eventOpenURL( const char *url, bool reload );
   
 protected:
   virtual void init();
   virtual bool event(const char *event, const CORBA::Any &value);
   virtual bool mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar);
   virtual bool mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory);
+  virtual bool mappingOpenURL( KoHTML::EventOpenURL event );
 
   virtual void pushURLToHistory();
   virtual void updateHistory(bool enableBack, bool enableForward);
 
+  KAccel *m_pAccel;
+  
   OpenPartsUI::MenuBar_var m_vMenuBar;
   OpenPartsUI::Menu_var m_vMenuEdit;
   OpenPartsUI::Menu_var m_vMenuEdit_Insert;
@@ -155,6 +164,7 @@ protected:
 
   OpenPartsUI::Menu_var m_vMenuOptions;
   CORBA::Long m_idMenuOptions_Settings;
+  CORBA::Long m_idMenuOptions_ConfigureKeys;
   CORBA::Long m_idMenuOptions_View_ToolBar;
   CORBA::Long m_idMenuOptions_View_StatusBar;
 
@@ -185,29 +195,32 @@ protected:
   static const int ID_EDIT_INSERT_OBJECT     = 2;
   static const int ID_EDIT_HTMLCODE          = 3;
   static const int ID_OPTIONS_SETTINGS       = 4;
-  static const int ID_OPTIONS_VIEW_TOOLBAR   = 5;
-  static const int ID_OPTIONS_VIEW_STATUSBAR = 6;
-  static const int ID_LOCATION               = 7;
-  static const int ID_BOOKMARKS_ADD          = 8;
-  static const int ID_BOOKMARKS_EDIT         = 9;
-  static const int ID_BACK                   = 10;
-  static const int ID_FORWARD                = 11;
-  static const int ID_HOME                   = 12;
-  static const int ID_RELOAD                 = 13;
-  static const int ID_STOP                   = 14;
-  static const int ID_OPENURL                = 15;
+  static const int ID_OPTIONS_CONFIGUREKEYS  = 5;
+  static const int ID_OPTIONS_VIEW_TOOLBAR   = 6;
+  static const int ID_OPTIONS_VIEW_STATUSBAR = 7;
+  static const int ID_LOCATION               = 8;
+  static const int ID_BOOKMARKS_ADD          = 9;
+  static const int ID_BOOKMARKS_EDIT         = 10;
+  static const int ID_BACK                   = 11;
+  static const int ID_FORWARD                = 12;
+  static const int ID_HOME                   = 13;
+  static const int ID_RELOAD                 = 14;
+  static const int ID_STOP                   = 15;
+  static const int ID_OPENURL                = 16;
 
   KoHTMLDoc *m_pDoc;
-  
+
+  QString m_strTmpFile;
+    
   int m_idBookmarkId;
   map<int,QString*> m_mapBookmarks;
   
   QString m_strCurrentURL;
-  
+
   bool m_bStackLock;
   QStack<SavedPage> m_backStack;
   QStack<SavedPage> m_forwardStack;
- 
+    
   QList<KoHTMLFrame> m_lstFrames;
 
   QString m_strCaptionText;

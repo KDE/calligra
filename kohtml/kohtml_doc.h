@@ -36,6 +36,7 @@ class KoHTMLDoc;
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
 #include <qlist.h>
+#include <qtimer.h>
 #include <krect.h>
 
 #include <kurl.h>
@@ -83,10 +84,8 @@ public:
   KoHTMLDoc();
   ~KoHTMLDoc();
 
-  virtual char *htmlData();
   virtual char *htmlURL();
-  virtual void openURL(const char *_url);
-  virtual void feedData(const char *url, const char *data);
+  virtual void openURL( const char *_url, CORBA::Boolean reload );
 
   virtual void documentStarted();
   virtual void documentDone();
@@ -148,36 +147,40 @@ public:
   void changeChildGeometry(KoHTMLChild *child, const KRect &rect);
   QListIterator<KoHTMLChild> childIterator();
 
-  void addHTMLView(KHTMLView *view);
-  void removeHTMLView(KHTMLView *view);
+  // these two functions are needed to make using the internal view (for
+  // the printing extension) possible.
+  void addHTMLView( KMyHTMLView *view );
+  void removeHTMLView( KMyHTMLView *view );
+  
+  void requestDocument( KMyHTMLView *view, const char *url, bool reload );
+  void cancelDocument( KMyHTMLView *view, const char *url );
+  
+  void viewFinished( KMyHTMLView *view );
+  
+  void requestImage( KMyHTMLView *view, const char *url, bool reload );
+  void cancelImage( KMyHTMLView *view, const char *url );
 
 signals:
   void sig_insertObject(KoHTMLChild *child);
   void sig_updateChildGeometry(KoHTMLChild *child);
   void contentChanged();
   
-  void imageLoaded(const char *url, const char *filename);
-  
 protected slots:
-  void slotDocumentRequest(KHTMLView *view, const char *url);
-  void slotCancelDocumentRequest(KHTMLView *view, const char *url);
-  void slotImageRequest(KHTMLView *view, const char *url);
-  void slotCancelImageRequest(KHTMLView *view, const char *url);
-  void slotDocumentStarted(KHTMLView *view);
-  void slotDocumentDone(KHTMLView *view);
+//  void slotDocumentStarted(KHTMLView *view);
+//  void slotDocumentDone(KHTMLView *view);
 
-  void slotDocumentLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *data, int len);
-  void slotImageLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *filename);  
-
-  void slotUpdateInternalView();
+  void slotJobData( KoHTMLJob *job, const char *data, int len, bool eof );
+  
   void slotDocumentDoneInternal(KHTMLView *view);
 
-  void slotHTMLCodeLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *data, int len);
-  void slotHTMLLoadError(const char *errMsg);
+  void slotHTMLLoadError(KoHTMLJob *job, const char *errMsg);
   void slotHTMLRedirect(int id, const char *url);
+  void slotTimeout();
 
 private:
-  KoHTMLJob *findJob(KHTMLView *view, const char *url, KoHTMLJob::JobType jType);
+  KoHTMLJob *findJob( KMyHTMLView *view, const char *url, KoHTMLJob::JobType type );
+
+  QTimer m_timer;
   
   bool m_bModified;
   bool m_bEmpty;
@@ -188,16 +191,13 @@ private:
   CORBA::Long m_lastWidth;
   CORBA::Long m_lastHeight;
   CORBA::Float m_lastScale;
+  int m_lastXOffset;
+  int m_lastYOffset;
 
   bool m_bLoadError;
   QString m_strErrorMsg;
   
-  QString m_strHTMLData;
-  
   QString m_strCurrentURL;
-
-  int m_htmlDocumentCounter; // number of frame documents or
-                             // 1 if document is no frameset
 
   KoHTML::KoHTMLDocument::SaveLoadMode m_eSaveLoadMode;
 
@@ -205,7 +205,7 @@ private:
 
   QList<KoHTMLView> m_lstViews;
   QList<KoHTMLChild> m_lstChildren;
-  QList<KHTMLView> m_lstHTMLViews;
+  QList<KMyHTMLView> m_lstHTMLViews;
   QList<KoHTMLJob> m_lstJobs;
 };
 

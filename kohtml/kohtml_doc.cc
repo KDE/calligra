@@ -32,7 +32,6 @@
 #include <qpaintdevice.h>
 
 #include <khtmlsavedpage.h>
-//#include <khtmlcache.h>
 
 #include "htmwidget.h"
 #include "kfileio.h"
@@ -71,12 +70,41 @@ KoHTMLDoc::KoHTMLDoc()
 
   m_bModified = false;
   m_bLoadError = false;
+
+  m_eSaveLoadMode = KoHTML::KoHTMLDocument::URLOnly;
+
+  m_bRepaintDocument = true;
+  m_pDocumentPixmap = 0L;
+  m_lastWidth = -1;
+  m_lastHeight = -1;
+  m_lastScale = -1;
+  m_lastXOffset = -1;
+  m_lastYOffset = -1;
+
+  m_strCurrentURL = "";
+  
+  QObject::connect( &m_timer, SIGNAL(timeout()),
+                    this, SLOT(slotTimeout()));
+  
+  m_pInternalView = 0L;
+//  m_pInternalView = new KMyHTMLView( this );
+  
+//  addHTMLView(m_pInternalView);
+/*
+  QObject::connect(this, SIGNAL(contentChanged()),
+                         SLOT(slotUpdateInternalView()));
+  QObject::connect(m_pInternalView, SIGNAL(documentDone(KHTMLView *)),
+                   this, SLOT(slotDocumentDoneInternal(KHTMLView *)));
+*/
 }
 
 KoHTMLDoc::~KoHTMLDoc()
 {
-  removeHTMLView(m_pInternalView);
-  delete m_pInternalView;
+  if ( m_pInternalView )
+     {
+       removeHTMLView(m_pInternalView);
+       delete m_pInternalView;
+     }  
   
   if (m_pDocumentPixmap)
     delete m_pDocumentPixmap;
@@ -142,32 +170,7 @@ int KoHTMLDoc::viewCount()
 
 CORBA::Boolean KoHTMLDoc::init()
 {
-  m_eSaveLoadMode = KoHTML::KoHTMLDocument::URLOnly;
-
-  m_strHTMLData = "";  
-  m_strCurrentURL = "";
-
-  m_bRepaintDocument = true;
-  m_pDocumentPixmap = 0L;
-  m_lastWidth = -1;
-  m_lastHeight = -1;
-  m_lastScale = -1;
-  
-  m_pInternalView = new KMyHTMLView;
-  
-  addHTMLView(m_pInternalView);
-
-  QObject::connect(this, SIGNAL(contentChanged()),
-                         SLOT(slotUpdateInternalView()));
-  QObject::connect(m_pInternalView, SIGNAL(documentDone(KHTMLView *)),
-                   this, SLOT(slotDocumentDoneInternal(KHTMLView *)));
-
   return true;
-}
-
-char *KoHTMLDoc::htmlData()
-{
-  return CORBA::string_dup( m_strHTMLData.data() );
 }
 
 char *KoHTMLDoc::htmlURL()
@@ -175,49 +178,48 @@ char *KoHTMLDoc::htmlURL()
   return CORBA::string_dup( m_strCurrentURL.data() );
 }
 
-void KoHTMLDoc::openURL(const char *_url)
+void KoHTMLDoc::openURL( const char *_url, CORBA::Boolean reload )
 {
-  m_strCurrentURL = _url;
-  m_strCurrentURL = m_strCurrentURL.stripWhiteSpace();
-  
-  KURL u(m_strCurrentURL);
-  
-  if (!u.isMalformed())
-     {
-       stopLoading();
-       
-       m_bLoadError = false;
-       m_bDocumentDone = false;
-     
-       m_strHTMLData = "";
-       
-       m_htmlDocumentCounter = 1;
-       
-       KoHTMLJob *job = new KoHTMLJob(0L, 0L, u.url(), KoHTMLJob::HTML);
-       
-       QObject::connect(job, SIGNAL(jobDone(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *, int)),
-                        this, SLOT(slotHTMLCodeLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *, int)));
-       QObject::connect(job, SIGNAL(jobError(const char *)),
-                        this, SLOT(slotHTMLLoadError(const char *)));
-       QObject::connect(job, SIGNAL(sigRedirection(int, const char *)),
-                        this, SLOT(slotHTMLRedirect(int, const char *)));
-     
-       m_lstJobs.append(job);
-     
-       job->start();
-       documentStarted();
-     }
-}
+  QString url = _url;
+  url.stripWhiteSpace();
 
-void KoHTMLDoc::feedData(const char *url, const char *data)
-{
-  documentStarted();
-  m_strCurrentURL = url;
-  m_strHTMLData = data;
-  m_bDocumentDone = true;
-  documentDone();
-  emit contentChanged();
-  m_bRepaintDocument = true;
+  K2URL u( url );
+  
+  if ( u.isMalformed() )
+    return;
+  
+  K2URLList l1, l2;
+  K2URL::split( url, l1 );
+  K2URL::split( m_strCurrentURL, l2 );
+  
+  string anchor = l1.back().ref();
+  
+  l1.back().setRef("");
+  l2.back().setRef("");
+  
+  m_strCurrentURL = u.url().c_str();
+  
+  stopLoading();
+       
+  m_bLoadError = false;
+  m_bDocumentDone = false;
+     
+  if ( (!((bool)reload)) && urlcmp( l1, l2 ) )
+    {
+      K2URL::decode( anchor );
+      QListIterator<KMyHTMLView> it( m_lstHTMLViews );
+      for (; it.current(); ++it)
+        it.current()->gotoAnchor( anchor.c_str() );
+    }
+  else
+    {
+      //update all views
+      QListIterator<KMyHTMLView> it( m_lstHTMLViews );
+      for (; it.current(); ++it)
+        it.current()->openURL( u.url().c_str(), (bool)reload );
+       
+      documentStarted();
+    }
 }
 
 void KoHTMLDoc::documentStarted()
@@ -240,14 +242,24 @@ CORBA::Boolean KoHTMLDoc::documentLoading()
 void KoHTMLDoc::stopLoading()
 {
   cerr << "killing old stuff" << endl;
+  
+  //"stop" all views
+  QListIterator<KMyHTMLView> it2( m_lstHTMLViews );
+  for (; it2.current(); ++it2)
+    it2.current()->stop();
+
+  cerr << "1" << endl;
+      
   QListIterator<KoHTMLJob> it(m_lstJobs);
   for (; it.current(); ++it)
       {
         KoHTMLJob *job = it.current();
+        cerr << "killing job (" << job->url() << ")" << endl;
         m_lstJobs.removeRef(job);
         job->kill();
-        cerr << "killed job" << endl;
       }     
+
+  cerr << "2" << endl;
       
   assert( m_lstJobs.count() == 0 );      
   m_bRepaintDocument = true;
@@ -263,32 +275,36 @@ void KoHTMLDoc::setSaveLoadMode( KoHTML::KoHTMLDocument::SaveLoadMode mode )
   m_eSaveLoadMode = mode;
 }
 
-void KoHTMLDoc::slotHTMLCodeLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *data, int len)
+void KoHTMLDoc::slotHTMLLoadError(KoHTMLJob *job, const char *errMsg)
 {
-  m_strHTMLData = QString(data, len);
+  job->view()->stop();
 
-  m_lstJobs.removeRef(job);
+  m_lstJobs.removeRef( job );
+  
+  m_strErrorMsg = errMsg;  
 
-  emit contentChanged();    
-
-  m_bRepaintDocument = true;
-}
-
-void KoHTMLDoc::slotHTMLLoadError(const char *errMsg)
-{
-  m_bLoadError = true;
-  m_strErrorMsg = errMsg;
+  m_timer.start( 0, true );  
 }
 
 void KoHTMLDoc::slotHTMLRedirect(int id, const char *url)
 {
-  m_strCurrentURL = url;
+  K2URL u( url );
+  m_strCurrentURL = u.url().c_str();
+}
+
+void KoHTMLDoc::slotTimeout()
+{
+  QMessageBox::critical(0L, i18n("KoHTML Error"), m_strErrorMsg, i18n("OK"));
+  
+  QListIterator<KoHTMLView> it( m_lstViews );
+  for (; it.current(); ++it)
+    it.current()->slotBack();
 }
 
 void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
                      CORBA::Float _scale)
 {
-  if (m_strCurrentURL.isEmpty())
+  if ( m_strCurrentURL.isEmpty() )
      {
        QPainter painter;
        painter.begin( dev );
@@ -308,8 +324,16 @@ void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
        return;
      }
 
+       
+  if ( m_lstHTMLViews.count() == 0 )
+    return;
+    
+  KMyHTMLView *view = m_lstHTMLViews.first();
+
   if ((!m_pDocumentPixmap) || (m_bRepaintDocument) || (width != m_lastWidth) || 
-      (height != m_lastHeight) || (_scale != m_lastScale))
+      (height != m_lastHeight) || (_scale != m_lastScale) ||
+      (view->xOffset() != m_lastXOffset) || (view->yOffset() != m_lastYOffset )
+     )
      {
        if (m_pDocumentPixmap)
          m_pDocumentPixmap->resize( width, height );
@@ -321,6 +345,8 @@ void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
        m_lastWidth = width;
        m_lastHeight = height;
        m_lastScale = _scale;	 
+       m_lastXOffset = view->xOffset();
+       m_lastYOffset = view->yOffset();
        m_bRepaintDocument = false;
      }
 
@@ -333,23 +359,27 @@ void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
 void KoHTMLDoc::drawDocument(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
 		             CORBA::Float _scale )
 { 
+  KMyHTMLView *view = m_pInternalView;
+
   QPainter painter;
   painter.begin(dev);
 
   if (_scale != 1.0) painter.translate(_scale, _scale);
   
-//  if (!m_bDocumentDone) return;
+  cerr << "view is #1 " << view << endl;
 
-  if (m_lstHTMLViews.count() > 1)
-     {
-       KHTMLView *v = m_lstHTMLViews.at(1);
-       int x = v->xOffset();
-       int y = v->yOffset();
-       
-       m_pInternalView->gotoXY(x, y);
-     }
+  if ( !view && m_lstHTMLViews.count() > 0 )
+    view = m_lstHTMLViews.first();
 
-  m_pInternalView->draw( &painter, width, height );
+  cerr << "view is #2 " << view << endl;
+    
+  if ( !view )
+    {
+      painter.end();
+      return;    
+    }  
+
+  view->draw( &painter, width, height );
   
   drawChildren(&painter, _scale);
   
@@ -370,8 +400,8 @@ void KoHTMLDoc::drawChildren( QPainter *painter, CORBA::Float _scale)
         it.current()->draw(_scale, true)->play(&p2);
 	p2.end();
 	painter->drawPixmap(geom.left(), geom.top(), pix);
-      }	
-}			     
+      }
+}      
 
 bool KoHTMLDoc::hasToWriteMultipart()
 {
@@ -437,7 +467,7 @@ bool KoHTMLDoc::loadXML(KOMLParser &parser, KOStore::Store_ptr store)
 	       
 	       parser.readText(tmp);
 		   
-	       openURL( tmp.c_str() );
+	       openURL( tmp.c_str(), true );
 	     }
 	  else if (name == "OBJECT")
 	     {
@@ -480,9 +510,12 @@ bool KoHTMLDoc::save(ostream &out, const char *format)
 	      << "\" editor=\"" << "KoHTML"
 	      << "\" mime=\"" << MIME_TYPE << "\" >" << endl;
 	      
-  KURL u(m_strCurrentURL);
-  out << otag << "<URL>" << u.url() << "</URL>" << endl;
-  
+  out << otag << "<URL>" << m_strCurrentURL.data() << "</URL>" << endl;
+
+  /*
+   * m_pInternalView->save( out ) ??????
+   */
+    
   QListIterator<KoHTMLChild> ch(m_lstChildren);
   for (; ch.current(); ++ch)
       ch.current()->save(out);
@@ -513,7 +546,7 @@ void KoHTMLDoc::insertObject(const KRect &rect, KoDocumentEntry &de)
      
   if (!doc->init())
      {
-       QMessageBox::critical(0L, i18n("KoHTML Error"), i18n("Could not initialize child document"), i18n("Ok"));
+       QMessageBox::critical(0L, i18n("KoHTML Error"), i18n("Could not initialize child document"), i18n("OK"));
        return;
      }
     
@@ -551,231 +584,159 @@ QListIterator<KoHTMLChild> KoHTMLDoc::childIterator()
   return QListIterator<KoHTMLChild>(m_lstChildren);
 }
 
-void KoHTMLDoc::addHTMLView(KHTMLView *view)
+void KoHTMLDoc::addHTMLView(KMyHTMLView *view)
 {
   m_lstHTMLViews.append(view);  
-  
-  QObject::connect(view, SIGNAL(documentRequest(KHTMLView *, const char *)),
-                   this, SLOT(slotDocumentRequest(KHTMLView *, const char *)));
-  QObject::connect(view, SIGNAL(cancelDocumentRequest(KHTMLView *, const char *)),
-                   this, SLOT(slotCancelDocumentRequest(KHTMLView *, const char *)));
-  QObject::connect(view, SIGNAL(imageRequest(KHTMLView *, const char *)),
-                   this, SLOT(slotImageRequest(KHTMLView *, const char *)));
-  QObject::connect(view, SIGNAL(cancelImageRequest(KHTMLView *, const char *)),
-                   this, SLOT(slotCancelImageRequest(KHTMLView *, const char *)));
-  QObject::connect(view, SIGNAL(documentStarted(KHTMLView *)),
-                   this, SLOT(slotDocumentStarted(KHTMLView *)));
-  QObject::connect(view, SIGNAL(documentDone(KHTMLView *)),
-                   this, SLOT(slotDocumentDone(KHTMLView *)));
-		   
-  QObject::connect(this, SIGNAL(imageLoaded(const char *, const char *)),
-                   view, SLOT(slotImageLoaded(const char *, const char *)));
+/*  
+  if ( m_pInternalView && view != m_pInternalView )
+    {
+      m_pInternalView->stop();
+      
+      QListIterator<KoHTMLJob> it( m_lstJobs );
+      for (; it.current(); ++it)
+        {
+	  KoHTMLJob *job = it.current();
+	  m_lstJobs.removeRef( job );
+	  job->kill();
+	}
+*/      
+/*      
+      QListIterator<KoHTMLJob> it( m_lstJobs );
+      for (; it.current(); ++it)
+        {
+          KoHTMLJob *job = it.current();
+
+	  if ( job->view() == m_pInternalView ||
+	       m_pInternalView->isChild( job->view() ) )
+	     {
+               cerr << "killing job (" << job->url() << ")" << endl;
+               m_lstJobs.removeRef(job);
+               job->kill();
+             }
+     
+	}   
+*/  
+/*      m_lstHTMLViews.removeRef( m_pInternalView );
+      delete m_pInternalView;
+      m_pInternalView = 0L;
+    }*/
 }
 
-void KoHTMLDoc::removeHTMLView(KHTMLView *view)
+void KoHTMLDoc::removeHTMLView(KMyHTMLView *view)
 {
-  QListIterator<KoHTMLJob> it(m_lstJobs);
-  
-  for (; it.current(); ++it)
-      {
-        KoHTMLJob *j = it.current();
-	if ((j->topParent() == view))
-	   {
-	     m_lstJobs.removeRef(j);
-	     delete j;
-	   }     
-      }
-
-  view->disconnect(this);
-  
+  view->stop();
+    
   m_lstHTMLViews.removeRef(view);
 }
 
-KoHTMLJob *KoHTMLDoc::findJob(KHTMLView *view, const char *url, KoHTMLJob::JobType jType)
+void KoHTMLDoc::requestDocument( KMyHTMLView *view, const char *url, bool reload )
 {
-  QListIterator<KoHTMLJob> it(m_lstJobs);
+  KoHTMLJob *job = new KoHTMLJob( view, url, url, KoHTMLJob::HTML, reload );
   
-  for (; it.current(); ++it)
-      {
-        KoHTMLJob *j = it.current();
-	if ((j->type() == jType) &&
-	    (strcmp(j->url(), url) == 0) &&
-	    (j->parent() == view))
-	   return j;
-      }
-      
-  return 0L;      
+  QObject::connect( job, SIGNAL(jobData( KoHTMLJob *, const char *, int, bool )),
+                    this, SLOT(slotJobData( KoHTMLJob *, const char *, int, bool )));
+
+  //is a top-level view?		    
+  if ( m_lstHTMLViews.findRef( view ) != -1 )
+    QObject::connect( job, SIGNAL(sigRedirection(int, const char *)),
+                      this, SLOT(slotHTMLRedirect(int, const char *)));
+
+  QObject::connect( job, SIGNAL(jobError(KoHTMLJob *, const char *)),
+                    this, SLOT(slotHTMLLoadError(KoHTMLJob *, const char *)));
+
+  m_lstJobs.append( job );
+  
+  job->start();		    
 }
 
-void KoHTMLDoc::slotDocumentRequest(KHTMLView *view, const char *url)
+void KoHTMLDoc::cancelDocument( KMyHTMLView *view, const char *url )
 {
-  KHTMLView *topView = view->topView();
-
-  cerr << "void KoHTMLDoc::slotDocumentRequest() = " << url << endl;
+  KoHTMLJob *job = findJob( view, url, KoHTMLJob::HTML );
+  
+  if (!job)
+    return; //aarghl...
     
-  if (m_lstHTMLViews.findRef(topView) == -1)
-     {
-       cerr << "AAAAAAIEEEEEE!!!" << endl;
-       return;
-     }
-     
-  if (view == topView)
-     {
-       cerr << "TOPVIEW!!!!!!!!!!" << endl;
-       openURL(url);
-       return;
-     }     
-     
-  KoHTMLJob *job = new KoHTMLJob(topView, view, url, KoHTMLJob::HTML);
+  m_lstJobs.removeRef( job );    
   
-  m_lstJobs.append(job);
-  
-  QObject::connect(job, SIGNAL(jobDone(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *, int)),
-                   this, SLOT(slotDocumentLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *, int)));
-
-  job->start();	   
-}
-
-void KoHTMLDoc::slotCancelDocumentRequest(KHTMLView *view, const char *url)
-{
-  KoHTMLJob *job = findJob(view, url, KoHTMLJob::HTML);
-  
-  if (!job)
-     {
-       cerr << "void KoHTMLDoc::slotCancelDocumentRequest(KHTMLView *view, const char *url)" << endl;
-       cerr << "no job for url " << url << endl;
-       return;
-     }
-
-  m_lstJobs.removeRef(job);
   job->kill();
 }
 
-void KoHTMLDoc::slotImageRequest(KHTMLView *view, const char *url)
+void KoHTMLDoc::viewFinished( KMyHTMLView *view )
 {
-  KHTMLView *topView = view->topView();
-  
-  if (m_lstHTMLViews.findRef(topView) == -1)
-     {
-       cerr << "AAAAAAIEEEEEE!!!" << endl;
-       return;
-     }
-     
-  KoHTMLJob *job = new KoHTMLJob(topView, view, url, KoHTMLJob::Image);
-  
-  m_lstJobs.append(job);
-  
-  QObject::connect(job, SIGNAL(jobDone(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *)),
-                   this, SLOT(slotImageLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *)));
-  job->start();		   
+  if (m_lstHTMLViews.findRef( view ) == -1)
+    return; //aaiieeee
+
+//  if ( m_lstHTMLViews.count() > 0 && view == m_pInternalView )
+//    return;
+    
+  emit contentChanged();
+  documentDone();
+  m_bRepaintDocument = true;
 }
 
-void KoHTMLDoc::slotCancelImageRequest(KHTMLView *view, const char *url)
+void KoHTMLDoc::requestImage( KMyHTMLView *view, const char *url, bool reload )
 {
-  KoHTMLJob *job = findJob(view, url, KoHTMLJob::Image);
+  K2URLList lst;
+  K2URL::split( view->getKHTMLWidget()->getDocumentURL().url(), lst );
+  K2URL u( lst.back(), url );
+  string dataURL = url;
+  
+  if ( strcmp( u.protocol(), lst.back().protocol() ) == 0 )
+     {
+       lst.back() = u;
+       K2URL::join( lst, dataURL );
+     }
+    
+  KoHTMLJob *job = new KoHTMLJob( view, url, dataURL.c_str(), KoHTMLJob::Image, reload );
+  
+  QObject::connect( job, SIGNAL(jobData( KoHTMLJob *, const char *, int, bool )),
+                    this, SLOT(slotJobData( KoHTMLJob *, const char *, int, bool )));
+
+// leave out error handling.......arghl
+
+  m_lstJobs.append( job );
+  
+  job->start();		    
+}
+
+void KoHTMLDoc::cancelImage( KMyHTMLView *view, const char *url )
+{
+  KoHTMLJob *job = findJob( view, url, KoHTMLJob::HTML );
   
   if (!job)
-     {
-       cerr << "void KoHTMLDoc::slotCancelImageRequest(KHTMLView *view, const char *url)" << endl;
-       cerr << "no job for url " << url << endl;
-       return;
-     }
+    return; //aarghl...
 
-  m_lstJobs.removeRef(job);
+  m_lstJobs.removeRef( job );    
+        
   job->kill();
 }
 
-void KoHTMLDoc::slotDocumentStarted(KHTMLView *view)
+void KoHTMLDoc::slotJobData( KoHTMLJob *job, const char *data, int len, bool eof )
 {
-  KHTMLView *topView = view->topView();
-  
-  if (m_lstHTMLViews.findRef(topView) == -1)
-     {
-       cerr << "AAAAAAIEEEEEE!!!" << endl;
-       return;
-     }
-     
-//  if (view == topView) documentStarted();
-  m_bRepaintDocument = true;
-}
-
-void KoHTMLDoc::slotDocumentDone(KHTMLView *view)
-{
-  KHTMLView *topView = view->topView();
-  
-  if (m_lstHTMLViews.findRef(topView) == -1)
-     {
-       cerr << "AAAAAAIEEEEEE!!!" << endl;
-       return;
-     }
-     
-  if (view == topView) 
-    {
-      documentDone();
-
-      // BadHack(tm) ... :-((
-      if (m_bLoadError)
-         {
-           m_bLoadError = false;
-           QMessageBox::critical(0L, i18n("KoHTML IO Error"), m_strErrorMsg, i18n("Abort"));
-	 }  
-    }  
-
-  m_bRepaintDocument = true;
-}
-
-void KoHTMLDoc::slotDocumentLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *data, int len)
-{
-  KHTMLView *topView = parent->topView();
-  
-  if (m_lstHTMLViews.findRef(topView) == -1)
-     {
-       cerr << "AAAAAAIEEEEEE!!!" << endl;
-       return;
-     }
-
-  cerr << "void KoHTMLDoc::slotDocumentLoaded( " << url << " );" << endl;
-     
-  parent->begin(url);
-  parent->parse();
-  parent->write(data);
-  parent->end();
-  parent->show();
-  
-  m_lstJobs.removeRef(job);
-  m_bRepaintDocument = true;
-}
-
-void KoHTMLDoc::slotImageLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *filename)
-{
-  KHTMLView *topView = parent->topView();
-  
-  if (m_lstHTMLViews.findRef(topView) == -1)
-     {
-       cerr << "AAAAAAIEEEEEE!!!" << endl;
-       return;
-     }
-     
-  emit imageLoaded(url, filename);
-  
-  m_lstJobs.removeRef(job);
-  m_bRepaintDocument = true;
-}
-
-void KoHTMLDoc::slotUpdateInternalView()
-{
-  KURL u(m_strCurrentURL);
-  
-  m_bDocumentDone = false;
-  
-  m_pInternalView->begin(u.url());
-  m_pInternalView->parse();
-  m_pInternalView->write(m_strHTMLData);
-  m_pInternalView->end();
+  if ( job->type() == KoHTMLJob::HTML )
+    job->view()->feedDocumentData( data, eof );
+  else
+    job->view()->data( job->url(), data, len, eof );
+    
+  if ( eof )
+    m_lstJobs.removeRef( job );
 }
 
 void KoHTMLDoc::slotDocumentDoneInternal(KHTMLView *view)
 {
   m_bDocumentDone = true;
   m_bRepaintDocument = true;
+}
+
+KoHTMLJob *KoHTMLDoc::findJob( KMyHTMLView *view, const char *url, KoHTMLJob::JobType type )
+{
+  QListIterator<KoHTMLJob> it( m_lstJobs );
+  
+  for (; it.current(); ++it)
+    if ( it.current()->view() == view &&
+         it.current()->url() == url &&
+	 it.current()->type() == type )
+      return it.current();
+  
+  return 0L;
 }

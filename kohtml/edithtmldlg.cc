@@ -44,7 +44,7 @@ HTMLEditDlg::HTMLEditDlg(QString data)
   QHBoxLayout *buttonLayout = new QHBoxLayout();
   layout->addLayout(buttonLayout);
   
-  QPushButton *ok = new QPushButton(i18n("Ok"), this);
+  QPushButton *ok = new QPushButton(i18n("OK"), this);
   ok->setMinimumSize( ok->sizeHint() );
   ok->adjustSize();
   connect(ok, SIGNAL(clicked()), SLOT(accept()));

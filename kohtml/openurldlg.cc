@@ -103,6 +103,20 @@ OpenURLDlg::~OpenURLDlg()
   if (completion) delete completion;
 }
 
+QString OpenURLDlg::url()
+{
+  QString url = urlEdit->text();
+  
+  url = url.stripWhiteSpace();
+  
+  if (url.find("www") == 0)
+    url.prepend("http://");
+  else if (url.find("ftp.") == 0)
+    url.prepend("ftp://");
+    
+  return url;    
+}
+
 void OpenURLDlg::chooseFile()
 {
   QString file = KFileDialog::getOpenFileName( getenv("HOME") );

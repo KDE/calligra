@@ -35,7 +35,7 @@ public:
   OpenURLDlg();
   ~OpenURLDlg();
 
-  QString url() { return urlEdit->text(); }
+  QString url();
 
 protected slots:
   void chooseFile();  

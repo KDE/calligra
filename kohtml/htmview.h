@@ -26,27 +26,76 @@
 #define __htmview_h_
 
 #include <qpainter.h>
+#include <qlist.h>
+#include <iostream.h>
 
 #include <khtmlview.h>
-
 #include <khtmlsavedpage.h>
+
+class KoHTMLDoc;
 
 class KMyHTMLView : public KHTMLView
 {
   Q_OBJECT
 public:
-  KMyHTMLView(QWidget *parent = 0L, const char *name = 0L, int flags = 0,
-                    KMyHTMLView *parent_view = 0L);
+  KMyHTMLView( KoHTMLDoc *doc, QWidget *parent = 0L, const char *name = 0L, int flags = 0,
+                    KMyHTMLView *parent_view = 0L );
   ~KMyHTMLView();
 
-  void draw(QPainter *painter, int width, int height);
+  void draw( QPainter *painter, int width, int height );
 
   void drawWidget( QWidget *widget );
 
-  virtual KHTMLView *newView(QWidget *parent, const char *name = 0L, int flags = 0L);
+  virtual void begin( const char *url, int dx, int dy );
   
+  virtual KHTMLView *newView( QWidget *parent, const char *name = 0L, int flags = 0L );
+  
+  virtual void openURL( const char *url );
+  virtual void openURL( const char *url, bool reload );
+  
+  void feedDocumentData( const char *data, bool eof );
+  
+  void stop();
+  
+  void childFinished( KMyHTMLView *child_view );
+
+  void save( ostream &out );
+
+  bool isChild( KMyHTMLView *child );
+  
+public slots:
+  void redirectURL( int /*id*/, const char *url ) { m_strURL = url; }
+    
+protected slots:
+  void documentFinished( KHTMLView *view );  
+  void requestImage( const char *url );
+  void cancelImage( const char *url );
+
+protected:
+  QString m_strDocument;  
+      
 private:
-  QPixmap *pixmap;
+
+  struct FrameChild
+  {
+    FrameChild( KMyHTMLView *view )
+    {
+      m_pView = view;
+      m_bDone = false;
+    }
+    
+    KMyHTMLView *m_pView;
+    bool m_bDone;
+  };
+
+  QPixmap *m_pPixmap;
+  KoHTMLDoc *m_pDoc;
+  QList<FrameChild> m_lstChildren;
+  bool m_bParsing;
+  bool m_bReload;
+  bool m_bDone;
+  QString m_strURL;
+  KMyHTMLView *m_pParent;
 };
 
 #endif

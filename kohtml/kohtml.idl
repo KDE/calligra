@@ -36,10 +36,10 @@ module KoHTML
 		slot void editCopy();
 		slot void editHTMLCode();
 		slot void editSettings();
+		slot void editKeys();
 		
 		slot void viewToolBar();
 		slot void viewStatusBar();
-//		slot void toggleCache();
 	
 		slot void newView();
 		slot void insertObject();
@@ -66,16 +66,9 @@ module KoHTML
 
 	interface KoHTMLDocument : KOffice::Document, KOffice::Print
 	{
-	        string htmlData();
 		string htmlURL();
 		
-                void openURL(in string url);
-		
-		/**
-		 * Use this function to manually "load" html code.
-		 * (note: data must contain the complete html code!)
-		 */ 
-		void feedData(in string url, in string data);
+                void openURL(in string url, in boolean reload);
 		
 		signal void documentStarted();
 		signal void documentDone();
@@ -88,11 +81,20 @@ module KoHTML
 		
 		SaveLoadMode saveLoadMode();
 		void setSaveLoadMode( in SaveLoadMode mode );
+		
         };
-	
+		
 	interface DocumentFactory : KOffice::DocumentFactory
 	{
 	};
+	
+	struct EventOpenURL
+	{
+	        string url;
+		boolean reload;
+        };
+	const string eventOpenURL = "UserEvent/KoHTML/OpenURL";
+	
 };
 
 #endif

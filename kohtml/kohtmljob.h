@@ -29,43 +29,43 @@
 #include <kio_cache.h>
 #include <khtmlview.h>
 
+#include "htmview.h"
+
 class KoHTMLJob: public CachedKIOJob
 {
   Q_OBJECT
 public:
   enum JobType { HTML, Image };
 
-  KoHTMLJob(KHTMLView *_topParent, KHTMLView *_parent, const char *_url, JobType _jType);
+  KoHTMLJob( KMyHTMLView *_view, const char *_url, const char *_dataURL, JobType _jType, bool _reload );
   ~KoHTMLJob();
   
   void start();
   
-  JobType type() { return m_eJType; }
-  const char *url() { return m_strURL.data(); }
-  KHTMLView *parent() { return m_pParent; }
-  KHTMLView *topParent() { return m_pTopParent; }
+  JobType type() const { return m_eJType; }
+  const char *url() const { return m_strURL.data(); }
+  KMyHTMLView *view() const { return m_pView; }
   
 signals:  
-  void jobDone(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *filename);
-  void jobDone(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *data, int len);
-  void jobError(const char *errMsg);  
+  void jobData( KoHTMLJob *job, const char *data, int len, bool eof );
+  void jobError( KoHTMLJob *job, const char *errMsg );
   
 protected slots:
   void slotJobFinished();
-  void slotJobRedirection(int id, const char *_url);
-  void slotJobData(int id, const char *data, int len);
-  void slotError(int id, int errid, const char *txt);
-  void slotJobSize(int id, unsigned long bytes);
+  void slotJobRedirection( int id, const char *_url );
+  void slotJobData( int id, const char *data, int len );
+  void slotJobListEntry( int id, UDSEntry &entry );
+  void slotError( int id, int errid, const char *txt );
   
 private:
-  KHTMLView *m_pTopParent, *m_pParent;
+  KMyHTMLView *m_pView;
   QString m_strURL;
+  QString m_strDataURL;
   QString m_strTmpFile;
   JobType m_eJType;
-  QString m_strHTML;
-  int m_htmlLen;
-  bool m_bIsHTTP;
-  unsigned int m_sizeInKBytes;
+  bool m_bIsFTP;
+  bool m_bReload;
+  bool m_bListDir;
 };
 
 #endif
