@@ -3,6 +3,8 @@ Food for thought:
 General info:
 - FAQ for comp.graphics.algorithms:
   http://www.landfield.com/faqs/graphics/algorithms-faq/
+- Guru's Lair Cubic Spline Library 
+  http://www.tinaja.com/cubic01.html
 - Graphics Gems Repository
   http://www.acm.org/tog/GraphicsGems/
   (especially http://www.acm.org/tog/GraphicsGems/gemsiv/curve_isect/)
@@ -30,4 +32,4 @@ Similar projects:
 
 Keywords for use with search engines:
 geometric design, computational geometry, computer aided geometric design, cagd,
-bezier, casteljau, intersection, algorithm
+bezier, casteljau, intersection, algorithm, cubic spline

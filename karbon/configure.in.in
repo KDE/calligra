@@ -1,2 +1,2 @@
 dnl Nothing to compile yet
-DO_NOT_COMPILE="$DO_NOT_COMPILE core ui"
+DO_NOT_COMPILE="$DO_NOT_COMPILE karbon"
