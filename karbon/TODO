@@ -1,15 +1,16 @@
 GUI:
 -	split the dialog under "Object->Transform" into different non-tabbed dialogs
--	put the dockers in a space optimized way into a docker which shows up in "View"
+-	put all dockers in a space optimized way into a docker which shows up in "View"
 -	remove the "Selection property" docker, this is basically the same as the above docker
 -	remove the dialogs which show up when double clicking the strokefillpreview, this job is done
 	by "color manager" docker
--	make some pattern widget, krita seems to have a nice one, maybe we can work
-	together, share pattern images and put something in kofficeui.
 -	other koffice apps have widgts that may of interest to us, for instance in kpresenter. We should
 	try to reuse them.
 
 REAL BUGS:
+-	VSelectionTool has an offset error relative to the handle nodes in the VSelection.
+-	VSelection shouldnt have "QRect* m_qrect;" but KoRect. QRect/QPoints are a lowlevel detail.
+	All tools and other classes should use KoPoint and KoRect.
 -	fix i18n singular/plural
 -	zooming has problems (zoom out: shapes and selection coords are different. zoom back:
 	canvas is "fragmented")
@@ -17,24 +18,23 @@ REAL BUGS:
 -	copying works wrong: the last selected shape is pasted instead of the shape one copied
 
 TODO:
+-	polylinetool seems to generate flat beziers instead of lines. this gives unexpected results
+	in "round corners".
 -	VImage
 -	VPattern like VImage with embedded binaries instead of paths
+-	bring text support back, ideally using fontconfig and freetype, and no xft.
+-	printing
 -	use VPathIterator everywhere instead of direct VPath access where not necessary.
 	this way you'll get node undo/redo automatically.
--	port all sophisticated VPath::functions like counterClockwise() to VPathIterator.
 -	add undo/redo to shape commands like VFlattenCmd etc
--	if selecting many shapes, the fill/stroke state should be "unknown",
-	preview widgets needs to paint questionmarks or something in this case
 -	select first/last segment's knot if one of each other's knot is selected
 -	port path commands to vgroup::insertNewDeleteOld(), maybe add a vpathcommand
-	similar to vshapecommand
+	similar to vshapecommand. move this into a visitor instead.
 -	allow for multiple strokes and fills in VPath which get rendered in the order they occur.
 -	use inside/intersection tests in vpath::combine() for changing winding.
 -	use vflatten in vselectool for more precise selection (lenny)
--	printing
 -	change flatness test in intersection code to a estimation used in gems code. otherwise
 	if the 2 input curves are the same our code runs forever.
--   bring text support back, ideally using fontconfig and freetype, and no xft.
 
 WISHLIST:
 -	Ctrl or Shift (pressed) while dragging a shape should make the shape move along only one axis
@@ -54,6 +54,6 @@ MAKE IT NICE:
 -	can't we pass VTool::draw() a painter inseatd of each tool creating a painter itself?
 -	remove V*Tool::refreshUnit(). call this directly via dialog() instead
 -	pass all dialogs a parent
--	introduce centroid() for vsegmentlist. problem: CM for beziers?
+-	introduce centroid() for vpath. problem: CM for beziers?
 -	think about using ghostscript's flatten algo (see comments in vflatten.cc)
 
