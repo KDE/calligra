@@ -85,6 +85,8 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
   QString root, documentInfo;
 
   QDomDocument mainDocument( "spreadsheet" );
+  mainDocument.appendChild( mainDocument.createProcessingInstruction(
+    "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
 
   QDomElement spreadsheet;
   spreadsheet = mainDocument.createElement( "spreadsheet" );
@@ -202,7 +204,6 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
   if( out )
     {
       QCString cstring = mainDocument.toCString();
-      cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
       out->writeBlock( (const char*) cstring, cstring.length() );
       out->close();
     }
