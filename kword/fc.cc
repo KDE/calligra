@@ -906,7 +906,6 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     //debug("start: %d, end: %d",lineStartPos,lineEndPos);
 
     compare_formats = true;
-
     // If we are in the last line, return FALSE
     if ( lineEndPos == parag->getTextLen() )
 	return FALSE;
@@ -924,6 +923,8 @@ unsigned int KWFormatContext::getLineHeight()
 
 void KWFormatContext::makeCounterLayout(QPainter &_painter)
 {
+  if (parag->getParagLayout()->getCounterType() == KWParagLayout::CT_NONE) return;
+
   KWFormat format(doc,parag->getParagLayout()->getFormat());
   format.apply(parag->getParagLayout()->getFormat());
   if (parag->getParagLayout()->getCounterType() == KWParagLayout::CT_BULLET)

@@ -886,7 +886,7 @@ KWParag* KWordDocument::findFirstParagOfRect(unsigned int _ypos,unsigned int _pa
 }
 
 /*================================================================*/
-void KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset, int _w, int _h )
+bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset, int _w, int _h )
 {
   _painter.save();
 
@@ -915,7 +915,7 @@ void KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
   if (cr.intersect(visible).isEmpty())
     {
       _painter.restore();
-      return;
+      return false;
     }
 
   _painter.setClipRegion(cr);
@@ -1021,7 +1021,7 @@ void KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
       if (i > 200 || _fc.getTextPos() > textLen) 
 	{
 	  warning("Reggie: WOW - something has gone really wrong here!!!!!");
-	  return;
+	  return false;
 	}
 
       buffer[i] = text[ _fc.getTextPos() ].c;
@@ -1093,6 +1093,7 @@ void KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
     }
 
   _painter.restore();
+  return true;
 }
 
 /*================================================================*/

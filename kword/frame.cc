@@ -38,6 +38,7 @@ KWFrame::KWFrame()
   intersections.setAutoDelete(true); 
   selected = false;
   runAroundGap = 1;
+  mostRight = false;
 }
 
 /*================================================================*/
@@ -48,6 +49,7 @@ KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright)
   intersections.setAutoDelete(true); 
   selected = false;
   runAroundGap = 1;
+  mostRight = false;
 } 
 
 /*================================================================*/
@@ -58,6 +60,7 @@ KWFrame::KWFrame(const KPoint &topleft,const KSize &size)
   intersections.setAutoDelete(true); 
   selected = false;
   runAroundGap = 1;
+  mostRight = false;
 }    
 
 /*================================================================*/
@@ -68,6 +71,7 @@ KWFrame::KWFrame(int left,int top,int width,int height)
   intersections.setAutoDelete(true); 
   selected = false;
   runAroundGap = 1;
+  mostRight = false;
 }
 
 /*================================================================*/
@@ -78,6 +82,7 @@ KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap)
   intersections.setAutoDelete(true); 
   selected = false;
   runAroundGap = _gap;
+  mostRight = false;
 }
 
 /*================================================================*/
@@ -88,6 +93,7 @@ KWFrame::KWFrame(const QRect &_rect)
   intersections.setAutoDelete(true); 
   selected = false;
   runAroundGap = 1;
+  mostRight = false;
 }
 
 /*================================================================*/
@@ -362,11 +368,21 @@ void KWTextFrameSet::update()
   frames.setAutoDelete(false);
   frames.clear();
 
+  int rm = 0;
   for (unsigned int n = 0;n < frameList.count();n++)
     {
       for (unsigned int o = 0;o < frameList.at(n)->count();o++)
 	{
 	  frames.append(frameList.at(n)->at(o));
+	  frames.at(frames.count() - 1)->setMostRight(false);
+	  if (frames.count() > 1)
+	    {
+	      if (frames.at(frames.count() - 2)->right() > frames.at(frames.count() - 1)->right())
+		{
+		  frames.at(frames.count() - 2)->setMostRight(true);
+		  rm++;
+		}
+	    }
 	}
     }
 

@@ -74,10 +74,14 @@ public:
   void setRunAroundGap(int gap)
     { runAroundGap = gap; }
 
+  bool isMostRight() { return mostRight; }
+  void setMostRight(bool _mr) { mostRight = _mr; }
+
 protected:
   RunAround runAround;
   bool selected;
   int runAroundGap;
+  bool mostRight;
 
   QList<KRect> intersections;
 

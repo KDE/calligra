@@ -928,6 +928,13 @@ void KWPage::paintEvent(QPaintEvent* e)
 		  {
 		    if (paintfc->getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
 			static_cast<int>(paintfc->getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
+		    if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->isMostRight() && 
+			doc->getFrameSet(i)->getNumFrames() > paintfc->getFrame() &&
+			doc->getFrameSet(i)->getFrame(paintfc->getFrame())->top() - 
+			static_cast<int>(yOffset) >
+			static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight()) &&
+			static_cast<int>(paintfc->getPTY() - yOffset) > height())
+		      break;
 		    if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->top() - static_cast<int>(yOffset) >
 			static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
 		      break;
@@ -1300,16 +1307,17 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	paintfc = *fc;
 	bool bend = false;
 
-	KRect currFrame = KRect(frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset,
-				frameSet->getFrame(paintfc.getFrame() - 1)->y() - yOffset,
-				frameSet->getFrame(paintfc.getFrame() - 1)->width(),
-				frameSet->getFrame(paintfc.getFrame() - 1)->height());
 	unsigned int currFrameNum = paintfc.getFrame() - 1;
 
 	while (!bend)
 	  {
 	    if (paintfc.getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
 		static_cast<int>(paintfc.getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
+	    if (frameSet->getFrame(currFrameNum)->isMostRight() && frameSet->getNumFrames() > currFrameNum + 1 &&
+		frameSet->getFrame(paintfc.getFrame())->top() - static_cast<int>(yOffset) >
+		static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight()) &&
+		static_cast<int>(paintfc.getPTY() - yOffset) > height())
+	      break;
 	    if (frameSet->getFrame(paintfc.getFrame() - 1)->top() - static_cast<int>(yOffset) >
 		static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
 	      break;
@@ -1320,23 +1328,23 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 			     _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
 			     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
 			     paintfc.getLineHeight(),QBrush(white));
-	    doc->printLine(paintfc,painter,xOffset,yOffset,width(),height());
-	    bend = !paintfc.makeNextLineLayout(painter);
-
-	    if (paintfc.getFrame() - 1 != currFrameNum)
+	    if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height()))
 	      {
-		drawBuffer(currFrame);
-		currFrame = KWFrame(frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset,
-				    frameSet->getFrame(paintfc.getFrame() - 1)->y() - yOffset,
-				    frameSet->getFrame(paintfc.getFrame() - 1)->width(),
-				    frameSet->getFrame(paintfc.getFrame() - 1)->height());
-		currFrameNum = paintfc.getFrame() - 1;
+		drawBuffer(QRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+				 paintfc.getPTY() - yOffset,
+				 _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),
+												  paintfc.getLineHeight()) -
+				 frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+				 paintfc.getLineHeight()));
 	      }
-
+	    bend = !paintfc.makeNextLineLayout(painter);
+	    
+	    if (paintfc.getFrame() - 1 != currFrameNum)
+	      currFrameNum = paintfc.getFrame() - 1;
+	    
 	    if (paintfc.getPage() > lastVisiblePage)
 	      bend = true;
 	  }
-	drawBuffer(currFrame);
 
 	if ((int)paintfc.getPTY() + (int)paintfc.getLineHeight() < frameSet->getFrame(paintfc.getFrame() - 1)->bottom())
 	  {
@@ -1436,16 +1444,17 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	paintfc = *fc;
 	bool bend = false;
 
-	KRect currFrame = KRect(frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset,
-				frameSet->getFrame(paintfc.getFrame() - 1)->y() - yOffset,
-				frameSet->getFrame(paintfc.getFrame() - 1)->width(),
-				frameSet->getFrame(paintfc.getFrame() - 1)->height());
 	unsigned int currFrameNum = paintfc.getFrame() - 1;
 
 	while (!bend)
 	  {
 	    if (paintfc.getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
 		static_cast<int>(paintfc.getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
+	    if (frameSet->getFrame(currFrameNum)->isMostRight() && frameSet->getNumFrames() > currFrameNum + 1 &&
+		frameSet->getFrame(paintfc.getFrame())->top() - static_cast<int>(yOffset) >
+		static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight()) &&
+		static_cast<int>(paintfc.getPTY() - yOffset) > height())
+	      break;
 	    if (frameSet->getFrame(paintfc.getFrame() - 1)->top() - static_cast<int>(yOffset) >
 		static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
 	      break;
@@ -1456,23 +1465,23 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 			     _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
 			     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
 			     paintfc.getLineHeight(),QBrush(white));
-	    doc->printLine(paintfc,painter,xOffset,yOffset,width(),height());
-	    bend = !paintfc.makeNextLineLayout(painter);
-
-	    if (paintfc.getFrame() - 1 != currFrameNum)
+	    if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height()))
 	      {
-		drawBuffer(currFrame);
-		currFrame = KWFrame(frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset,
-				    frameSet->getFrame(paintfc.getFrame() - 1)->y() - yOffset,
-				    frameSet->getFrame(paintfc.getFrame() - 1)->width(),
-				    frameSet->getFrame(paintfc.getFrame() - 1)->height());
-		currFrameNum = paintfc.getFrame() - 1;
+		drawBuffer(QRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+				 paintfc.getPTY() - yOffset,
+				 _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),
+												  paintfc.getLineHeight()) -
+				 frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+				 paintfc.getLineHeight()));
 	      }
-
+	    bend = !paintfc.makeNextLineLayout(painter);
+	    
+	    if (paintfc.getFrame() - 1 != currFrameNum)
+	      currFrameNum = paintfc.getFrame() - 1;
+	    
 	    if (paintfc.getPage() > lastVisiblePage)
 	      bend = true;
 	  }
-	drawBuffer(currFrame);
 
 	if ((int)paintfc.getPTY() + (int)paintfc.getLineHeight() < frameSet->getFrame(paintfc.getFrame() - 1)->bottom())
 	  {
@@ -1548,16 +1557,17 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    paintfc = *fc;
 	    bool bend = false;
 	    
-	    KRect currFrame = KRect(frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset,
-				    frameSet->getFrame(paintfc.getFrame() - 1)->y() - yOffset,
-				    frameSet->getFrame(paintfc.getFrame() - 1)->width(),
-				    frameSet->getFrame(paintfc.getFrame() - 1)->height());
 	    unsigned int currFrameNum = paintfc.getFrame() - 1;
 	    
 	    while (!bend)
 	      {
 		if (paintfc.getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
 		    static_cast<int>(paintfc.getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
+		if (frameSet->getFrame(currFrameNum)->isMostRight() && frameSet->getNumFrames() > currFrameNum + 1 &&
+		    frameSet->getFrame(paintfc.getFrame())->top() - static_cast<int>(yOffset) >
+		    static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight()) &&
+		    static_cast<int>(paintfc.getPTY() - yOffset) > height())
+		  break;
 		if (frameSet->getFrame(paintfc.getFrame() - 1)->top() - static_cast<int>(yOffset) >
 		    static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
 		  break;
@@ -1568,23 +1578,23 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 				 _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()) -
 				 frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
 				 paintfc.getLineHeight(),QBrush(white));
-		doc->printLine(paintfc,painter,xOffset,yOffset,width(),height());
+		if (doc->printLine(paintfc,painter,xOffset,yOffset,width(),height()))
+		  {
+		    drawBuffer(QRect(_x + frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+				     paintfc.getPTY() - yOffset,
+				     _wid - frameSet->getFrame(paintfc.getFrame() - 1)->getLeftIndent(paintfc.getPTY(),
+												      paintfc.getLineHeight()) -
+				     frameSet->getFrame(paintfc.getFrame() - 1)->getRightIndent(paintfc.getPTY(),paintfc.getLineHeight()),
+				     paintfc.getLineHeight()));
+		  }
 		bend = !paintfc.makeNextLineLayout(painter);
 		
 		if (paintfc.getFrame() - 1 != currFrameNum)
-		  {
-		    drawBuffer(currFrame);
-		    currFrame = KWFrame(frameSet->getFrame(paintfc.getFrame() - 1)->x() - xOffset,
-					frameSet->getFrame(paintfc.getFrame() - 1)->y() - yOffset,
-					frameSet->getFrame(paintfc.getFrame() - 1)->width(),
-					frameSet->getFrame(paintfc.getFrame() - 1)->height());
-		    currFrameNum = paintfc.getFrame() - 1;
-		  }
+		  currFrameNum = paintfc.getFrame() - 1;
 		
 		if (paintfc.getPage() > lastVisiblePage)
 		  bend = true;
 	      }
-	    drawBuffer(currFrame);
 
 	    if (isPrev)
 	      fc->cursorGotoNextLine(painter);
