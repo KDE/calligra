@@ -84,7 +84,7 @@ void KisSideBar::slotSetBGColor(const KisColor& c)
 
 void KisSideBar::slotChooserColorSelected(const KisColor& c)
 {
-  if (m_pControlFrame->activeColor() == FOREGROUND)
+  if (m_pControlFrame->activeColor() == ac_Foreground)
 	{
 	  m_pControlFrame->slotSetFGColor(c);
 	  emit fgColorChanged( c );
@@ -424,17 +424,17 @@ ControlFrame::ControlFrame( QWidget* parent, const char* name ) : QFrame( parent
 ActiveColor ControlFrame::activeColor()
 {
   if (m_pColorButton->current() == KDualColorButton::Foreground)
-	return FOREGROUND;
+	return ac_Foreground;
   else
-	return BACKGROUND;
+	return ac_Background;
 }
 
 void ControlFrame::slotActiveColorChanged(KDualColorButton::DualColor s)
 {
   if (s == KDualColorButton::Foreground)
-	emit activeColorChanged(FOREGROUND);
+	emit activeColorChanged(ac_Foreground);
   else
-	emit activeColorChanged(BACKGROUND);
+	emit activeColorChanged(ac_Background);
 }
 
 void ControlFrame::slotSetBrush(const KisBrush& b)

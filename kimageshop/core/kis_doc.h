@@ -62,6 +62,9 @@ public:
 	virtual bool load( istream& in, KoStore* _store );
 	virtual bool loadXML( const QDomDocument& doc, KoStore* store );
 
+	virtual bool completeLoading( KoStore* store );
+	virtual bool completeSaving( KoStore* );
+
 	virtual bool hasToWriteMultipart();
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
@@ -79,7 +82,7 @@ public:
 	/*
 	 * Create new KisImage, add it to our KisImage list and make it the current Image.
 	 */
-    KisImage* newImage(const QString& _name, int w, int h, cMode cm = CM_RGBA, bgMode bgm = BM_WHITE);
+    KisImage* newImage(const QString& name, int width, int height, cMode cm = cm_RGBA, uchar bitDepth = 8);
 
 	/*
 	 * Remove img from our list and delete it.

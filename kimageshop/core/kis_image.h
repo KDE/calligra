@@ -30,6 +30,7 @@
 #include <X11/Xlib.h>
 
 #include "kis_layer.h"
+#include "kis_global.h"
 
 class KisBrush;
 
@@ -43,19 +44,26 @@ class KisImage : public QObject
     Q_OBJECT
 
  public:
-    KisImage( const QString& _name, int w = 512, int h = 512 );
-    ~KisImage();
+	KisImage( const QString& name, int width = 400, int height = 400,
+			  cMode cm = cm_RGBA, uchar bitDepth = 8 );
+    virtual ~KisImage();
 
-    QString name()                { return m_name; }
-    void setName(const QString& _name) { m_name = _name; }
+    int     height()       { return m_height; }
+    int     width()        { return m_width; }
+    QString name()         { return m_name; }
+	QString author()       { return m_author; }
+	QString email()        { return m_email; }
+	cMode   colorMode()    { return m_cMode; } 
+	uchar   bitDepth()     { return m_bitDepth; }
+    QSize   size()         { return QSize( m_width, m_height); }
+    QRect   imageExtents() { return QRect(0, 0, m_width, m_height); }
+
+    void setName(const QString& n)    { m_name = n; }
+	void setAuthor(const QString& a)  { m_author = a; }
+	void setEmail(const QString& e)  { m_email = e; }
     
     void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
     void paintPixmap( QPainter *painter, QRect area);
-
-    int height()          { return h; }
-    int width()           { return w; }
-    QSize size()          { return QSize( w, h); }
-    QRect imageExtents()  { return QRect(0, 0, w, h); }
 
     KisLayer* getCurrentLayer() { return currentLayer; }
     int getCurrentLayerIndex() { return layers.find( currentLayer ); }
@@ -106,9 +114,6 @@ class KisImage : public QObject
         
  private:
     enum dispVisual { unknown, rgb565, rgb888x } visual;
-
-    int         w;
-    int         h;
     int         channels;
     QRect       viewportRect;
     int         xTiles;
@@ -123,7 +128,14 @@ class KisImage : public QObject
     uchar       *background;
     char        *imageData;
     XImage      *xi;
+
     QString     m_name;
+	QString     m_author;
+	QString     m_email;
+    int         m_width;
+    int         m_height;
+	cMode       m_cMode;
+	uchar       m_bitDepth;
 };
 
 #endif

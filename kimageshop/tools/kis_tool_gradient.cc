@@ -113,8 +113,8 @@ void GradientTool::drawGradient( const QPoint& start, const QPoint& end )
   KisColor startColor = m_pView->fgColor();
   KisColor endColor = m_pView->bgColor();
 
-  if( ( startColor.native() == CS_RGB ) &&
-      ( endColor.native() == CS_RGB ) )
+  if( ( startColor.native() == cs_RGB ) &&
+      ( endColor.native() == cs_RGB ) )
   {
     // draw RGB gradient
 

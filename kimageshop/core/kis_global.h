@@ -24,15 +24,19 @@
 // size for graphic blocks - must be a power of 2
 const int TILE_SIZE = 64;
 
-enum ActiveColor { NONE, FOREGROUND, BACKGROUND};
+enum ActiveColor { ac_Foreground, ac_Background};
 
 // color spaces
-enum cSpace { CS_INDEXED, CS_RGB, CS_HSV, CS_CMYK, CS_LAB };
+enum cSpace { cs_Indexed, cs_RGB, cs_HSV, cs_CMYK, cs_Lab };
 
 // color modes
-enum cMode { CM_INDEXED, CM_GREYSCALE, CM_RGB, CM_RGBA, CM_CMYK, CM_CMYKA, CM_LAB, CM_LABA };
+enum cMode { cm_Indexed, cm_Greyscale, cm_RGB, cm_RGBA, cm_CMYK, cm_CMYKA, cm_Lab, cm_LabA };
+
+// channel id's
+enum cId { ci_Indexed, ci_Alpha, ci_Red, ci_Green, ci_Blue, ci_Cyan,
+		   ci_Magenta, ci_Yellow, ci_Black, ci_L, ci_a, ci_b };
 
 // background mode
-enum bgMode {BM_WHITE, BM_TRANSPARENT, BM_BACKGROUNDCOLOR, BM_FOREGROUNDCOLOR };
+enum bgMode {bm_White, bm_Transparent, bm_BackgroundColor, bm_ForegroundColor };
 
 #endif

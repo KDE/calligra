@@ -60,7 +60,7 @@ bool KisDoc::initDoc()
 {
   QString name;
   name.sprintf("image %d", m_Images.count()+1);
-  KisImage *img = newImage(name, 512, 512, CM_RGBA, BM_WHITE);
+  KisImage *img = newImage(name, 400, 400, cm_RGBA, 8);
   if (!img)
     return false;
 
@@ -154,6 +154,12 @@ bool KisDoc::save( ostream& out, const char* )
   return true;
 }
 
+bool KisDoc::completeSaving( KoStore* )
+{
+  // TODO: Store binary image data.
+  return true;
+}
+
 bool KisDoc::load( istream& in, KoStore* store )
 {
   QBuffer buffer;
@@ -181,6 +187,13 @@ bool KisDoc::load( istream& in, KoStore* store )
 
 bool KisDoc::loadXML( const QDomDocument& , KoStore* )
 {
+  // TODO: Load XML file.
+  return true;
+}
+
+bool KisDoc::completeLoading( KoStore* )
+{
+  // TODO: Load binary image data.
   return true;
 }
 
@@ -269,9 +282,9 @@ KisDoc::~KisDoc()
     }
 }
 
-KisImage* KisDoc::newImage(const QString& _name, int w, int h, cMode /* cm */ , bgMode /* bgm */ )
+KisImage* KisDoc::newImage(const QString& n, int width, int height, cMode cm , uchar bitDepth )
 {
-  KisImage *img = new KisImage( _name, w, h );
+  KisImage *img = new KisImage( n, width, height, cm, bitDepth );
   m_Images.append(img);
 
   return img;
@@ -320,7 +333,7 @@ bool KisDoc::loadImage( const QString& file )
   int w = img.width();
   int h = img.height();
 
-  KisImage *kis_img = newImage(name, w, h, CM_RGBA, BM_WHITE);
+  KisImage *kis_img = newImage(name, w, h, cm_RGBA, bm_White);
   if (!kis_img)
     return false;
 
@@ -344,16 +357,16 @@ void KisDoc::slotNewImage()
 
   int w = m_pNewDialog->newwidth();
   int h = m_pNewDialog->newheight();
-  bgMode bg = m_pNewDialog->backgroundMode();
+  //bgMode bg = m_pNewDialog->backgroundMode();
   cMode cm = m_pNewDialog->colorMode();
 
   QString name;
   name.sprintf("image %d", m_Images.count()+1);
 
-  KisImage *img = newImage(name, w, h, cm, bg);
+  KisImage *img = newImage(name, w, h, cm, 8);
   if (!img)
     return;
-
+  
   // add background layer
   img->addRGBLayer(QRect(0, 0, w, h), QColor(255, 255, 255), "background");
   img->setLayerOpacity(255);

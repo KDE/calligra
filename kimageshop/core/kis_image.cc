@@ -44,10 +44,12 @@
 
 #define KIS_DEBUG(AREA, CMD)
 
-KisImage::KisImage( const QString& _name, int width, int height )
-  : w (width)
-  , h (height)
-  , m_name (_name)
+KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
+  : m_name (n)
+  , m_width (w)
+  , m_height (h)
+  , m_cMode (cm)
+  , m_bitDepth (bd)
 {
   viewportRect = QRect(0,0,w,h);
 
