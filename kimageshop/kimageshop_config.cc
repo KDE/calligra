@@ -35,10 +35,26 @@ QFont 			KImageShopConfig::m_smallFont;
 QFont 			KImageShopConfig::m_tinyFont;
 
 
+KImageShopConfig * KImageShopConfig::getNewConfig()
+{
+  if ( doInit ) {
+    return ( new KImageShopConfig() );
+  }
+  
+  else {
+    if ( instanceList.count() == 0 ) {
+      debug("oups, KImageShopConfig is already initialized, but instanceList is empty?!?!");
+      return ( new KImageShopConfig() );
+    }
+
+    return ( new KImageShopConfig( *instanceList.first() ) );
+  }
+}
+
+
 KImageShopConfig::KImageShopConfig() : QObject( 0L, "kimageshop config" )
 {
   kc = KGlobal::config();
-
 
   // load and init global settings only once
   if ( doInit ) {
@@ -47,21 +63,26 @@ KImageShopConfig::KImageShopConfig() : QObject( 0L, "kimageshop config" )
 
     doInit = false;
   }
-  
-  loadConfig();
+
   instanceList.append( this );
-  
+
   m_pLayerDlgConfig = new LayerDlgConfig( this );
   m_pBrushDlgConfig = new BrushDlgConfig( this );
   m_pColorDlgConfig = new ColorDlgConfig( this );
   m_pGradientDlgConfig = new GradientDlgConfig( this );
   m_pGradientEditorConfig = new GradientEditorConfig( this );
   // ...
+
+
+  // now load all the settings for the config objects
+  loadConfig();
 }
 
 
 KImageShopConfig::KImageShopConfig( const KImageShopConfig& config )
 {
+  instanceList.append( this );
+
   m_pLayerDlgConfig = new LayerDlgConfig( *m_pLayerDlgConfig );
   m_pBrushDlgConfig = new BrushDlgConfig( *m_pBrushDlgConfig );
   m_pColorDlgConfig = new ColorDlgConfig( *m_pColorDlgConfig );
@@ -78,7 +99,7 @@ KImageShopConfig::~KImageShopConfig()
   // when the last document is closed, save the global settings
   if ( instanceList.isEmpty() )
     saveGlobalSettings();
-  
+
   delete m_pLayerDlgConfig;
   delete m_pBrushDlgConfig;
   delete m_pColorDlgConfig;
@@ -125,7 +146,7 @@ void KImageShopConfig::loadGlobalSettings()
   font = KGlobal::generalFont();
   font.setPointSize( 8 );
   m_tinyFont = kc->readFontEntry( "Tiny Font", &font );
-  
+
   // ...
 }
 
@@ -136,7 +157,7 @@ void KImageShopConfig::saveGlobalSettings()
 
   kc->writeEntry( "Small Font", m_smallFont );
   kc->writeEntry( "Tiny Font", m_tinyFont );
-  
+
   // ...
 }
 
@@ -165,61 +186,48 @@ void KImageShopConfig::saveDialogSettings()
 
 // The base configuration class
 
-BaseKFDConfig::BaseKFDConfig( const QString& _title = QString::null )
-  : m_title( _title )
-{
-}
+
 
 void BaseKFDConfig::loadConfig( KConfig *_config )
 {
-  if( m_title != QString::null )
-  {
-    if( _config->hasGroup( m_title ) )
-    {
-      _config->hasGroup( m_title );
-
-      m_docked = _config->readBoolEntry( "Docked", true );
-      m_posX   = _config->readUnsignedNumEntry( "PositionX", 0 );
-      m_posY   = _config->readUnsignedNumEntry( "PositionY", 0 );
-    }
-  }
+  m_docked = _config->readBoolEntry( "Docked", true );
+  m_posX   = _config->readUnsignedNumEntry( "PositionX", 0 );
+  m_posY   = _config->readUnsignedNumEntry( "PositionY", 0 );
 }
 
 void BaseKFDConfig::saveConfig( KConfig *_config )
 {
   // TODO: save the right values
 
-  if( m_title != QString::null )
-  {
-    _config->setGroup( name() );
-
-    _config->writeEntry( "Docked", false );
-    _config->writeEntry( "PositionX", 50 );
-    _config->writeEntry( "PositionY", 50 );
-
-    _config->sync();
-  }
+  _config->writeEntry( "Docked", false );
+  _config->writeEntry( "PositionX", 50 );
+  _config->writeEntry( "PositionY", 50 );
+  
+  _config->sync();
 }
 
 // the configuration classes
 
 LayerDlgConfig::LayerDlgConfig( QObject *parent, const char *name )
 {
-  
+
 }
 
 LayerDlgConfig::LayerDlgConfig( const LayerDlgConfig& config )
 {
-  
+
 }
 
 void LayerDlgConfig::loadConfig( KConfig *kc )
 {
+  kc->setGroup( "LayerDialog Settings" );
   BaseKFDConfig::loadConfig( kc );
+
 }
 
 void LayerDlgConfig::saveConfig( KConfig *kc )
 {
+  kc->setGroup( "LayerDialog Settings" );
   BaseKFDConfig::saveConfig( kc );
 
 }
@@ -228,21 +236,24 @@ void LayerDlgConfig::saveConfig( KConfig *kc )
 
 BrushDlgConfig::BrushDlgConfig( QObject *parent, const char *name )
 {
-  
+
 }
 
 BrushDlgConfig::BrushDlgConfig( const BrushDlgConfig& config )
 {
-  
+
 }
 
 void BrushDlgConfig::loadConfig( KConfig *kc )
 {
+  kc->setGroup( "BrushDialog Settings" );
   BaseKFDConfig::loadConfig( kc );
+
 }
 
 void BrushDlgConfig::saveConfig( KConfig *kc )
 {
+  kc->setGroup( "BrushDialog Settings" );
   BaseKFDConfig::saveConfig( kc );
 
 }
@@ -251,68 +262,79 @@ void BrushDlgConfig::saveConfig( KConfig *kc )
 
 ColorDlgConfig::ColorDlgConfig( QObject *parent, const char *name )
 {
-  
+
 }
 
 ColorDlgConfig::ColorDlgConfig( const ColorDlgConfig& config )
 {
-  
+
 }
 
 void ColorDlgConfig::loadConfig( KConfig *kc )
 {
+  kc->setGroup( "ColorDialog Settings" );
   BaseKFDConfig::loadConfig( kc );
+
 }
 
 void ColorDlgConfig::saveConfig( KConfig *kc )
 {
+  kc->setGroup( "ColorDialog Settings" );
   BaseKFDConfig::saveConfig( kc );
+
 }
 
 //////
 
 GradientDlgConfig::GradientDlgConfig( QObject *parent, const char *name )
 {
-  
+
 }
 
 GradientDlgConfig::GradientDlgConfig( const GradientDlgConfig& config )
 {
-  
+
 }
 
 void GradientDlgConfig::loadConfig( KConfig *kc )
 {
+  kc->setGroup( "GradientDialog Settings" );
   BaseKFDConfig::loadConfig( kc );
+
 }
 
 void GradientDlgConfig::saveConfig( KConfig *kc )
 {
+  kc->setGroup( "GradientDialog Settings" );
   BaseKFDConfig::saveConfig( kc );
+
 }
 
 //////
 
 GradientEditorConfig::GradientEditorConfig( QObject *parent, const char *name )
 {
-  
+
 }
 
 GradientEditorConfig::GradientEditorConfig( const GradientEditorConfig& config)
 {
-  
+
 }
 
 void GradientEditorConfig::loadConfig( KConfig *kc )
 {
+  kc->setGroup( "GradientEditor Settings" );
   BaseKFDConfig::loadConfig( kc );
+
 }
 
 void GradientEditorConfig::saveConfig( KConfig *kc )
 {
+  kc->setGroup( "GradientEditor Settings" );
   BaseKFDConfig::saveConfig( kc );
+
 }
 
 
 #include "kimageshop_config.moc"
-

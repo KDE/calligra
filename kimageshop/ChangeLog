@@ -1,3 +1,12 @@
+Wed Aug 25 23:46:20 1999  Carsten Pfeiffer  <pfeiffer@kde.org>
+
+	* kimageshop_config.cc (getNewConfig): 
+	small API change, always use static method getNewConfig() to
+	create an instance of KImageShopConfig
+
+	Made the DialogConfigClasses set the right KConfig group before
+	calling BaseKFDClass::loadSettings()/saveSettings()
+
 Wed Aug 25 12:43:00 1999  Michael Koch  <koch@kde.org>
 
         * kimageshop_config.cc,h:

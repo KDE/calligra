@@ -35,33 +35,37 @@ class ColorDlgConfig;
 class GradientDlgConfig;
 class GradientEditorConfig;
 
+/**
+ * Global configuration class for KImageShop
+ *
+ * There are different types of configuration settings:
+ * @li global settings, that are the same for every full @ref KImageShopView
+ * @li other settings, specific to one single KImageShopView instance
+ *
+ * Every KImageShopView instance creates a new object of this class to hold
+ * instance specific settings; global settings are shared between all of them
+ *
+ * Use @see #getNewConfig to create an instance of this class:
+ * the first instance will load settings from disk (global settings via
+ * @see #loadConfig and instance specific settings via
+ * @see loadGlobalSettings), subsequent instances will get the current
+ * settings from the first instance.
+ *
+ * @author Carsten Pfeiffer <pfeiffer@kde.org>
+ * @version $Id$
+ */
 class KImageShopConfig : public QObject
 {
   Q_OBJECT
 
 public:
+
   /**
-   * Global configuration class for KImageShop
-   *
-   * There are different types of configuration settings:
-   * @li global settings, that are the same for every full @ref KImageShopView
-   * 	 instance
-   * @li other settings, specific to one single KImageShopView instance
-   *
-   * Every KImageShopView instance creates a new object of this class to hold,
-   * instance specific settings, but global settings are shared between all
-   * of them.
-   * Only the first instance of this class should use this constructor (which
-   * loads all specific settings from disk via @see #loadConfig), subsequent
-   * instances should be created via @see #getNewConfig.
-   *
-   * Loads global settings via @see #loadGlobalSettings and loads the last
-   * saved instance specific settings via @see #loadConfig
-   *
-   * @author Carsten Pfeiffer <pfeiffer@kde.org>
-   * @version $Id$
+   * A factory for config objects. Use it to create a new config object for
+   * each new KImageShopView instance
    */
-  KImageShopConfig();
+  static KImageShopConfig *getNewConfig();
+
   ~KImageShopConfig();
 
   /**
@@ -87,21 +91,25 @@ public:
    */
   void 	loadConfig();
 
-  /**
-   * A factory for new config objects. Use it to create a new config object for
-   * each new KImageShopView instance
-   */
-  KImageShopConfig *getNewConfig();
 
   void 	loadDialogSettings();
   void 	saveDialogSettings();
 
+
 protected:
+
   /**
    * loads the global settings - called only once from the constructor of the
    * first instance
    */
   void 	loadGlobalSettings();
+
+  /**
+   * This constructor creates the first KImageShopConfig object and loads
+   * the settings from disk. Subsequent objects get these settings from this
+   * object thru the copy constructor, but transparently (@see #getNewConfig)
+   */
+  KImageShopConfig();
 
   /**
    *  A copy constructor for the KImageShopConfig class (doh)
@@ -148,7 +156,7 @@ private:
 class BaseConfig : public QObject
 {
   Q_OBJECT
-  
+
 public:
   virtual void loadConfig( KConfig * ) = 0;
   virtual void saveConfig( KConfig * ) = 0;
@@ -159,13 +167,10 @@ class BaseKFDConfig : public BaseConfig
   Q_OBJECT
 
 public:
-  BaseKFDConfig( const QString& _title = QString::null );
-
   virtual void loadConfig( KConfig * );
   virtual void saveConfig( KConfig * );
 
 private:
-  QString m_title;
   bool m_docked;
   int m_posX;
   int m_posY;
@@ -179,10 +184,10 @@ public:
   LayerDlgConfig( QObject *parent=0, const char *name=0 );
   LayerDlgConfig( const LayerDlgConfig& );
   ~LayerDlgConfig() {};
-  
+
   void loadConfig( KConfig * );
   void saveConfig( KConfig * );
-  
+
 private:
 
 };
@@ -195,10 +200,10 @@ public:
   BrushDlgConfig( QObject *parent=0, const char *name=0 );
   BrushDlgConfig( const BrushDlgConfig& );
   ~BrushDlgConfig() {};
-  
+
   void loadConfig( KConfig * );
   void saveConfig( KConfig * );
-  
+
 
 private:
 
@@ -212,10 +217,10 @@ public:
   ColorDlgConfig( QObject *parent=0, const char *name=0 );
   ColorDlgConfig( const ColorDlgConfig& );
   ~ColorDlgConfig() {};
-  
+
   void loadConfig( KConfig * );
   void saveConfig( KConfig * );
-  
+
 
 private:
 
@@ -229,10 +234,10 @@ public:
   GradientDlgConfig( QObject *parent=0, const char *name=0 );
   GradientDlgConfig( const GradientDlgConfig& );
   ~GradientDlgConfig() {};
-  
+
   void loadConfig( KConfig * );
   void saveConfig( KConfig * );
-  
+
 
 private:
 
@@ -246,10 +251,10 @@ public:
   GradientEditorConfig( QObject *parent=0, const char *name=0 );
   GradientEditorConfig( const GradientEditorConfig& );
   ~GradientEditorConfig() {};
-  
+
   void loadConfig( KConfig * );
   void saveConfig( KConfig * );
-  
+
 
 private:
 
