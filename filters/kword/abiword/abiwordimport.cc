@@ -133,13 +133,7 @@ public:
         bold=false;
         underline=false;
         strikeout=false;
-        red=0;
-        green=0;
-        blue=0;
         textPosition=0;
-    	textBgRed=0;
-        textBgGreen=0;
-        textBgBlue=0;
     }
     ~StackItem()
     {
@@ -156,12 +150,8 @@ public:
     bool        bold;
     bool        underline;
     bool        strikeout;
-    int         red;
-    int         green;
-    int         blue;
-    int         textBgRed;
-    int         textBgGreen;
-    int         textBgBlue;
+    QColor      fgColor;
+    QColor      bgColor;
     int         textPosition; //Normal (0), subscript(1), superscript (2)
 };
 
@@ -332,21 +322,15 @@ void PopulateProperties(StackItem* stackItem,
     QString strColour=abiPropsMap["color"].getValue();
     if (!strColour.isEmpty())
     {
-        // The coulour information is *not* lead by a hash (#)
-        QColor col("#"+strColour);
-        stackItem->red  =col.red();
-        stackItem->green=col.green();
-        stackItem->blue =col.blue();
+        // The colour information is *not* lead by a hash (#)
+        stackItem->fgColor.setNamedColor("#"+strColour);
    }
 
     QString strBackgroundTextColor=abiPropsMap["bgcolor"].getValue();
     if(!strBackgroundTextColor.isEmpty())
     {
-        // The coulour information is *not* lead by a hash (#)
-        QColor col("#"+strBackgroundTextColor);
-        stackItem->textBgRed  =col.red();
-        stackItem->textBgGreen=col.green();
-        stackItem->textBgBlue =col.blue();
+        // The colour information is *not* lead by a hash (#)
+        stackItem->bgColor.setNamedColor("#"+strBackgroundTextColor);
     }
 
     QString strFontSize=abiPropsMap["font-size"].getValue();
@@ -369,73 +353,72 @@ void PopulateProperties(StackItem* stackItem,
 
 static void AddFormat(QDomElement& formatElementOut, StackItem* stackItem, QDomDocument& mainDocument)
 {
+    QDomElement element;
     if (!stackItem->fontName.isEmpty())
     {
-        QDomElement fontElementOut=mainDocument.createElement("FONT");
-        fontElementOut.setAttribute("name",stackItem->fontName); // Font name
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        element=mainDocument.createElement("FONT");
+        element.setAttribute("name",stackItem->fontName); // Font name
+        formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
     if (stackItem->fontSize)
     {
-        QDomElement fontElementOut=mainDocument.createElement("SIZE");
-        fontElementOut.setAttribute("value",stackItem->fontSize);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        element=mainDocument.createElement("SIZE");
+        element.setAttribute("value",stackItem->fontSize);
+        formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
     if (stackItem->italic)
     {
-        QDomElement fontElementOut=mainDocument.createElement("ITALIC");
-        fontElementOut.setAttribute("value",1);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        element=mainDocument.createElement("ITALIC");
+        element.setAttribute("value",1);
+        formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
     if (stackItem->bold)
     {
-        QDomElement fontElementOut=mainDocument.createElement("WEIGHT");
-        fontElementOut.setAttribute("value",75);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        element=mainDocument.createElement("WEIGHT");
+        element.setAttribute("value",75);
+        formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
     if (stackItem->underline)
     {
-        QDomElement elementOut=mainDocument.createElement("UNDERLINE");
-        elementOut.setAttribute("value",1);
-        formatElementOut.appendChild(elementOut); //Append to <FORMAT>
+        element=mainDocument.createElement("UNDERLINE");
+        element.setAttribute("value",1);
+        formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
     if (stackItem->strikeout)
     {
-        QDomElement elementOut=mainDocument.createElement("STRIKEOUT");
-        elementOut.setAttribute("value",1);
-        formatElementOut.appendChild(elementOut); //Append to <FORMAT>
+        element=mainDocument.createElement("STRIKEOUT");
+        element.setAttribute("value",1);
+        formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
     if (stackItem->textPosition)
     {
-        QDomElement fontElementOut=mainDocument.createElement("VERTALIGN");
-        fontElementOut.setAttribute("value",stackItem->textPosition);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        element=mainDocument.createElement("VERTALIGN");
+        element.setAttribute("value",stackItem->textPosition);
+        formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
-    if (stackItem->red || stackItem->green || stackItem->blue)
+    if (stackItem->fgColor.isValid())
     {
-        // FIXME: we surely need black if the style is non-black
-        QDomElement fontElementOut=mainDocument.createElement("COLOR");
-        fontElementOut.setAttribute("red",stackItem->red);
-        fontElementOut.setAttribute("green",stackItem->green);
-        fontElementOut.setAttribute("blue",stackItem->blue);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        element=mainDocument.createElement("COLOR");
+        element.setAttribute("red",  stackItem->fgColor.red());
+        element.setAttribute("green",stackItem->fgColor.green());
+        element.setAttribute("blue", stackItem->fgColor.blue());
+        formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
-    if (stackItem->textBgRed || stackItem->textBgGreen || stackItem->textBgBlue)
+    if (stackItem->bgColor.isValid())
     {
-        // FIXME: we surely need black if the style is non-black
-        QDomElement fontElementOut=mainDocument.createElement("TEXTBACKGROUNDCOLOR");
-        fontElementOut.setAttribute("red",stackItem->textBgRed);
-        fontElementOut.setAttribute("green",stackItem->textBgGreen);
-        fontElementOut.setAttribute("blue",stackItem->textBgBlue);
-        formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        element=mainDocument.createElement("TEXTBACKGROUNDCOLOR");
+        element.setAttribute("red",  stackItem->bgColor.red());
+        element.setAttribute("green",stackItem->bgColor.green());
+        element.setAttribute("blue", stackItem->bgColor.blue());
+        formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 }
 
