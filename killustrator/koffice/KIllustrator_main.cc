@@ -33,9 +33,6 @@
 #include <koDocument.h>
 #include <opAutoLoader.h>
 
-bool withGUI = true;
-list<string> openFiles;
-
 KOFFICE_DOCUMENT_FACTORY(KIllustratorDocument, KIllustratorFactory, KIllustrator::DocumentFactory_skel )
 
 typedef OPAutoLoader<KIllustratorFactory> KIllustratorAutoLoader;
@@ -48,40 +45,10 @@ KIllustratorApp::KIllustratorApp (int& argc, char** argv) :
 KIllustratorApp::~KIllustratorApp () {
 }
 
-void KIllustratorApp::start () {
-  if (withGUI) {
-    if (openFiles.size () == 0) {
-      KIllustratorShell *m_pShell = new KIllustratorShell;
-      m_pShell->show ();
-      m_pShell->newDocument ();
-    }
-    else {
-      for (list<string>::iterator i = openFiles.begin (); 
-	   i != openFiles.end (); i++) {
-	KIllustratorShell *m_pShell = new KIllustratorShell;
-	m_pShell->show ();
-	cout << "open doc: " << i->c_str () << endl;
-	m_pShell->openDocument (i->c_str (), "");
-      }
-    }
-  }
-}
-
 int main (int argc, char** argv) {
   KIllustratorAutoLoader loader ("IDL:KIllustrator/DocumentFactory:1.0", 
                                  "KIllustrator");
   KIllustratorApp app (argc, argv);
-  int i = 1;
-
-  if (::strcmp (argv[i], "-s") == 0 || ::strcmp (argv[i], "--server") == 0) {
-    i++;
-    withGUI = false;
-  }
-
-  for (; i < argc; i++)
-    openFiles.push_back (argv[i]);
-
-  cout << "exec KIllustrator" << endl;
   app.exec ();
 
   return 0;

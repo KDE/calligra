@@ -56,6 +56,7 @@ noinst_HEADERS = kdiagramm_main.h kdiagramm_shell.h kdiagramm_doc.h \
 		 sheet.h table.h parser.h sheetdlg.h
 
 idl_DATA = kdiagramm.idl
+kdiagramm.h : $(top_builddir)/lib/kofficecore/koffice.idl
 
 kdelnk_DATA = kdiagramm.desktop
 kdelnkdir = $(kde_appsdir)/KOffice

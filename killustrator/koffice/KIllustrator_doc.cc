@@ -118,28 +118,27 @@ bool KIllustratorDocument::load (istream& in, KOStore::Store_ptr ) {
 bool KIllustratorDocument::loadChildren (KOStore::Store_ptr store) {
   QListIterator<KIllustratorChild> it (m_lstChildren);
   for (; it.current (); ++it) {
-    if (! it.current ()->loadDocument (store, it.current ()->mimeType ()))
+    if (! it.current ()->loadDocument (store))
       return false;
   }
 
   return true;
 }
 
-void KIllustratorDocument::makeChildListIntern (KOffice::Document_ptr _root,
-						const char *_path) {
-  cout << "KIllustrator::makeChildListIntern ()" << endl;
+bool KIllustratorDocument::saveChildren (KOStore::Store_ptr _store, const char *_path) {
+  cerr << "void KIllustratorDocument::saveChildren( KOStore::Store _store, const char *_path )" << endl;
   int i = 0;
   QListIterator<KIllustratorChild> it (m_lstChildren);
-  for (; it.current (); ++it) {
-    QString tmp;
-    tmp.sprintf ("/%i", i++);
-    QString path (_path);
-    path += tmp.data ();
-
-    KOffice::Document_var doc = it.current ()->document ();
-    doc->makeChildList (_root, path);
-  }
-}
+  for( ; it.current(); ++it )
+    {
+        // set the child document's url to an internal url (ex: "tar:/0/1")
+        QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
+        KOffice::Document_var doc = it.current()->document();
+        if ( !doc->saveToStore( _store, 0L, internURL ) )
+          return false;
+    }
+  return true;
+}  
 
 bool KIllustratorDocument::hasToWriteMultipart () {
   return (m_lstChildren.count () > 0);

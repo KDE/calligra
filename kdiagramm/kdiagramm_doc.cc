@@ -104,8 +104,6 @@ void KDiagrammDoc::cleanUp()
 
   assert( m_lstViews.count() == 0 );
 
-  m_lstAllChildren.clear();
-
   KoDocument::cleanUp();
 }
 

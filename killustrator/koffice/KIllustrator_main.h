@@ -33,8 +33,6 @@ public:
   KIllustratorApp (int& argc, char** argv);
   ~KIllustratorApp ();
 
-  virtual void start ();
-
 protected:
 };
 

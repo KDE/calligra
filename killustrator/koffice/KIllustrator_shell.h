@@ -47,7 +47,7 @@ public:
 
   // C++
   virtual bool newDocument ();
-  virtual bool openDocument (const char* filename, const char* fmt);
+  virtual bool openDocument (const char* filename);
   virtual bool saveDocument ();
   virtual bool closeDocument ();
   virtual bool closeAllDocuments ();

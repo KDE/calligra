@@ -35,6 +35,7 @@ METASOURCES = KIllustrator_main.moc \
 	GPart.moc
 
 idl_DATA = KIllustrator.idl
+KIllustrator.h: $(top_builddir)/lib/kofficecore/koffice.idl
 
 kdelnk_DATA = killustrator.desktop
 kdelnkdir = $(kde_appsdir)/KOffice

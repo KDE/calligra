@@ -149,24 +149,21 @@ bool KDiagrammShell::newDocument()
   return true;
 }
 
-bool KDiagrammShell::openDocument( const char *_url, const char *_format )
+bool KDiagrammShell::openDocument( const char *_url )
 {
-  if ( _format == 0L || *_format == 0 )
-    _format = "application/x-kdiagramm";
-
   if ( m_pDoc && m_pDoc->isEmpty() )
     releaseDocument();
   else if ( m_pDoc && !m_pDoc->isEmpty() )
   {
     KDiagrammShell *s = new KDiagrammShell();
     s->show();
-    return s->openDocument( _url, _format );
+    return s->openDocument( _url );
   }
 
   cerr << "Creating new document" << endl;
 
   m_pDoc = new KDiagrammDoc;
-  if ( !m_pDoc->loadFromURL( _url, _format ) )
+  if ( !m_pDoc->loadFromURL( _url ) )
     return false;
 
   m_pView = m_pDoc->createDiagrammView( frame() );
@@ -289,7 +286,7 @@ void KDiagrammShell::slotFileOpen()
   if ( file.isNull() )
     return;
 
-  if ( !openDocument( file, "" ) )
+  if ( openDocument( file  ) )
   {
     QString tmp;
     tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );

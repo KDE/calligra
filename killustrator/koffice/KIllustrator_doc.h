@@ -72,8 +72,7 @@ public:
   // --- C++ ---
   // Overloaded methods from KoDocument
 
-  virtual void makeChildListIntern (KOffice::Document_ptr _root, 
-				    const char *_path);
+  virtual bool saveChildren (KOStore::Store_ptr _store, const char *_path);
   bool save (ostream& os, const char *fmt);
   bool load (istream& is, KOStore::Store_ptr store);
   bool loadChildren (KOStore::Store_ptr store);

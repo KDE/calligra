@@ -212,10 +212,7 @@ bool KIllustratorShell::newDocument () {
   return true;
 }
 
-bool KIllustratorShell::openDocument (const char* url, const char* fmt) {
-  if (fmt == 0L || *fmt == '\0')
-    fmt = "application/x-killustrator";
-
+bool KIllustratorShell::openDocument (const char* url) {
   if (m_pDoc && m_pDoc->isEmpty ()) {
     cout << "release document" << endl;
     releaseDocument ();
@@ -223,12 +220,12 @@ bool KIllustratorShell::openDocument (const char* url, const char* fmt) {
   if (m_pDoc && ! m_pDoc->isEmpty ()) {
     KIllustratorShell *shell = new KIllustratorShell ();
     shell->show ();
-    return shell->openDocument (url, fmt);
+    return shell->openDocument (url);
   }
 
   cout << "create new document" << endl;
   m_pDoc = new KIllustratorDocument ();
-  if (! m_pDoc->loadFromURL (url, fmt))
+  if (! m_pDoc->loadFromURL (url))
     return false;
 
   cout << "create new view" << endl;
@@ -301,7 +298,7 @@ void KIllustratorShell::slotFileOpen () {
   if (fname.isNull ())
     return;
 
-  if (! openDocument (fname, "")) {
+  if (! openDocument (fname)) {
     QMessageBox::critical (this, i18n ("KIllustrator Error"),
 			   i18n ("Could not open file"), i18n ("OK"));
   }

@@ -34,8 +34,6 @@ public:
   KDiagrammApp( int &argc, char** argv );
   ~KDiagrammApp();
   
-  virtual void start();
-  
 protected:
   KDiagrammShell *m_pShell;
 };
