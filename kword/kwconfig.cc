@@ -54,11 +54,13 @@
 #include <kdeversion.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
+#include <kglobal.h>
 #include <kurlrequesterdlg.h>
 #include <kfiledialog.h>
 #include <qtabwidget.h>
 #include <keditlistbox.h>
 #include <koSpellConfig.h>
+#include <koGlobal.h>
 
 // little helper stolen from kmail
 // (Note: KDialogBase should have version of the methods that take a QString for the icon name)
@@ -101,6 +103,15 @@ KWConfig::KWConfig( KWView* parent )
 
   m_doc = parent->kWordDocument();
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
+
+
+  QStringList alllang = KoGlobal::listOfLanguage();
+  kdDebug()<<" alllang :"<<alllang.count()<<endl;
+  for ( QStringList::ConstIterator it = alllang.begin();
+	it != alllang.end(); ++it )
+    {
+      kdDebug()<<" name :"<<(*it) <<" tag :"<<KoGlobal::tagOfLanguage(*it)<<endl;
+    }
 }
 
 void KWConfig::openPage(int flags)

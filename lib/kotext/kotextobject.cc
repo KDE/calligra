@@ -2251,7 +2251,7 @@ QString KoTextFormatInterface::language() const
     return currentFormat()->language();
 }
 
-KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, KoTextFormat::AttributeStyle _fontAttribute, bool _shadowText, double _relativeTextSize, int _offsetFromBaseLine, bool _wordByWord,int flags)
+KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, KoTextFormat::AttributeStyle _fontAttribute, bool _shadowText, double _relativeTextSize, int _offsetFromBaseLine, bool _wordByWord, const QString &_lang, int flags)
 {
     KoTextFormat format( *currentFormat() );
     format.setFont( font );
@@ -2267,6 +2267,7 @@ KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscri
     format.setOffsetFromBaseLine( _offsetFromBaseLine);
     format.setWordByWord( _wordByWord );
     format.setAttributeFont( _fontAttribute);
+    format.setLanguage( _lang );
     if(!_subscript)
     {
         if(!_superscript)
@@ -2417,7 +2418,7 @@ KCommand *KoTextFormatInterface::setCounterCommand(const KoParagCounter & counte
     return setParagLayoutFormatCommand(&format,KoParagLayout::BulletNumber);
 }
 
-KCommand *KoTextFormatInterface::setLanguage(const QString &_lang)
+KCommand *KoTextFormatInterface::setLanguageCommand(const QString &_lang)
 {
     KoTextFormat format( *currentFormat() );
     format.setLanguage(_lang);

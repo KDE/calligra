@@ -74,6 +74,9 @@ public:
     bool getWordByWord()const;
     void setWordByWord( bool _b);
 
+    QString getLanguage() const;
+    void setLanguage( const QString & );
+
     KoTextFormat::AttributeStyle getFontAttribute()const;
     void setFontAttribute( KoTextFormat::AttributeStyle _att);
 
@@ -105,6 +108,7 @@ protected slots:
     void slotOffsetFromBaseLineChanged( int );
     void slotChangeAttributeFont( int );
     void slotWordByWordClicked();
+    void slotChangeLanguage( int );
 private:
     KFontChooser *m_chooseFont;
     QRadioButton *m_superScript;
@@ -145,6 +149,7 @@ public:
                KoTextFormat::StrikeOutLineType _strikeOutType,
                KoTextFormat::StrikeOutLineStyle _strikeOutLine,
                KoTextFormat::AttributeStyle _fontAttribute,
+               const QString &_language,
                double _relativeSize,
                int _offsetFromBaseLine,
                bool _withSubSuperScript=true );
@@ -165,6 +170,8 @@ public:
 
     int getOffsetFromBaseLine() const {return m_chooser->getOffsetFromBaseLine();}
     bool getWordByWord()const{ return m_chooser->getWordByWord();}
+
+    QString getLanguage() const { return m_chooser->getLanguage();}
 
     int changedFlags() const { return m_chooser->changedFlags(); }
 
@@ -195,6 +202,7 @@ private:
     int m_offsetBaseLine;
     bool m_wordByWord;
     KoTextFormat::AttributeStyle m_fontAttribute;
+    QString m_language;
 };
 
 #endif

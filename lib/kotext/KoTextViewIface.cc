@@ -95,7 +95,7 @@ void KoTextViewIface::setTextSuperScript(bool on)
 
 void KoTextViewIface::setLanguage(const QString & _lang)
 {
-    KCommand *cmd=m_textView->setLanguage(_lang);
+    KCommand *cmd=m_textView->setLanguageCommand(_lang);
     delete cmd;
 }
 

@@ -84,7 +84,7 @@ public:
     //void setFamily(const QString &font);
     KCommand *setFamilyCommand(const QString &font);
     //void setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
-    KCommand *setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, KoTextFormat::AttributeStyle _fontAttribute, bool _shadowText, double _relativeTextSize, int _offsetFromBaseLine, bool _wordByWord, int flags);
+    KCommand *setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, KoTextFormat::AttributeStyle _fontAttribute, bool _shadowText, double _relativeTextSize, int _offsetFromBaseLine, bool _wordByWord, const QString &_lang, int flags);
     //void setTextSubScript(bool on);
     KCommand *setTextSubScriptCommand(bool on);
     //void setTextSuperScript(bool on);
@@ -108,7 +108,7 @@ public:
     //void setCounter(const KoParagCounter & counter );
     KCommand *setCounterCommand(const KoParagCounter & counter );
 
-    KCommand *setLanguage(const QString &);
+    KCommand *setLanguageCommand(const QString &);
 
     KCommand *setShadowTextCommand( bool _b );
 

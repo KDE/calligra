@@ -592,6 +592,7 @@ void KoStyleFontTab::update()
     m_chooser->setWordByWord( m_style->format().wordByWord());
     m_chooser->setRelativeTextSize( m_style->format().relativeTextSize());
     m_chooser->setOffsetFromBaseLine( m_style->format().offsetFromBaseLine());
+    m_chooser->setLanguage( m_style->format().language());
 
 }
 
@@ -624,6 +625,7 @@ void KoStyleFontTab::save()
     m_style->format().setAttributeFont( m_chooser->getFontAttribute());
     m_style->format().setOffsetFromBaseLine( m_chooser->getOffsetFromBaseLine());
 
+    m_style->format().setLanguage( m_chooser->getLanguage());
 }
 
 QString KoStyleFontTab::tabName()

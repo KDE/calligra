@@ -32,6 +32,7 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <knuminput.h>
+#include <koGlobal.h>
 
 class KoFontChooser::KoFontChooserPrivate
 {
@@ -44,6 +45,7 @@ public:
     KIntNumInput *m_offsetBaseLine;
     QCheckBox *m_wordByWord;
     QComboBox *m_fontAttribute;
+    QComboBox *m_language;
 };
 
 KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript, uint fontListCriteria)
@@ -210,6 +212,13 @@ void KoFontChooser::setupTab2()
     lst <<i18n("Small caps");
     d->m_fontAttribute->insertStringList( lst );
 
+    lab = new QLabel( i18n("Language:"), grp);
+    grid->addWidget( lab, 8, 0);
+
+    d->m_language = new QComboBox( grp );
+    d->m_language->insertStringList( KoGlobal::listOfLanguage() );
+    grid->addWidget( d->m_language, 9, 0 );
+
     connect( d->m_strikeOut, SIGNAL(activated ( int )), this, SLOT( slotStrikeOutTypeChanged( int ) ) );
     connect( m_underlineColorButton, SIGNAL(clicked()), this, SLOT( slotUnderlineColor() ) );
     connect( m_underlining,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlining( int )));
@@ -218,6 +227,7 @@ void KoFontChooser::setupTab2()
     connect( d->m_shadow, SIGNAL(clicked()), this, SLOT( slotShadowClicked() ) );
     connect( d->m_wordByWord, SIGNAL(clicked()), this, SLOT( slotWordByWordClicked() ) );
     connect( d->m_fontAttribute,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeAttributeFont( int )));
+    connect( d->m_language,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeLanguage( int )));
 
 }
 
@@ -236,6 +246,16 @@ bool KoFontChooser::getShadowText()const
 void KoFontChooser::setShadowText( bool _b)
 {
     d->m_shadow->setChecked( _b);
+}
+
+void KoFontChooser::setLanguage( const QString & _tag)
+{
+    d->m_language->setCurrentItem (KoGlobal::languageIndexFromTag( _tag));
+}
+
+QString KoFontChooser::getLanguage() const
+{
+    return KoGlobal::tagOfLanguage( d->m_language->currentText() );
 }
 
 KoTextFormat::AttributeStyle KoFontChooser::getFontAttribute()const
@@ -402,6 +422,11 @@ void KoFontChooser::slotWordByWordClicked()
 void KoFontChooser::slotChangeAttributeFont( int )
 {
     m_changedFlags |= KoTextFormat::Attribute;
+}
+
+void KoFontChooser::slotChangeLanguage( int )
+{
+    m_changedFlags |= KoTextFormat::Language;
 }
 
 void KoFontChooser::slotChangeColor()
@@ -668,6 +693,7 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
                       KoTextFormat::StrikeOutLineType _strikeOutType,
                       KoTextFormat::StrikeOutLineStyle _strikeOutLine,
                       KoTextFormat::AttributeStyle _fontAttribute,
+                      const QString &_language,
                       double _relativeSize,
                       int _offsetFromBaseLine,
                       bool _withSubSuperScript )
@@ -687,7 +713,8 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
       m_relativeSize( _relativeSize ),
       m_offsetBaseLine( _offsetFromBaseLine),
       m_wordByWord( _wordByWord ),
-      m_fontAttribute( _fontAttribute)
+      m_fontAttribute( _fontAttribute),
+      m_language ( _language )
 {
     setButtonText( KDialogBase::User1, i18n("&Reset") );
 
@@ -726,6 +753,7 @@ void KoFontDia::slotReset()
     m_chooser->setRelativeTextSize( m_relativeSize);
     m_chooser->setOffsetFromBaseLine( m_offsetBaseLine );
     m_chooser->setFontAttribute( m_fontAttribute );
+    m_chooser->setLanguage( m_language );
     m_chooser->updatePositionButton();
 }
 

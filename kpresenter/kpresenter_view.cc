@@ -1873,6 +1873,7 @@ void KPresenterView::mtextFont()
                                textIface->strikeOutLineType(),
                                textIface->strikeOutLineStyle(),
                                textIface->fontAttribute(),
+                               textIface->language(),
                                textIface->relativeTextSize(),
                                textIface->offsetFromBaseLine());
 
@@ -1905,6 +1906,7 @@ void KPresenterView::slotApplyFont()
                           m_fontDlg->getRelativeTextSize(),
                           m_fontDlg->getOffsetFromBaseLine(),
                           m_fontDlg->getWordByWord(),
+                          m_fontDlg->getLanguage(),
                           flags);
     }
 }

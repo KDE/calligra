@@ -3266,6 +3266,7 @@ void KWView::formatFont()
                                textIface->strikeOutLineType(),
                                textIface->strikeOutLineStyle(),
                                textIface->fontAttribute(),
+                               textIface->language(),
                                textIface->relativeTextSize(),
                                textIface->offsetFromBaseLine());
 
@@ -3304,6 +3305,7 @@ void KWView::slotApplyFont()
                                                          m_fontDlg->getRelativeTextSize(),
                                                          m_fontDlg->getOffsetFromBaseLine(),
                                                          m_fontDlg->getWordByWord(),
+                                                         m_fontDlg->getLanguage(),
                                                          flags);
             if (cmd)
                 globalCmd->addCommand(cmd);
