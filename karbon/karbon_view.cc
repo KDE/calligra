@@ -315,6 +315,10 @@ KarbonView::print( KPrinter &printer )
 	VQPainter p( ( QPaintDevice * ) & printer, width(), height() );
 	p.begin();
 	p.setZoomFactor( 1.0 );
+	QWMatrix mat;
+    mat.scale( 1, -1 );
+	mat.translate( 0, -part()->document().height() );
+    p.setWorldMatrix( mat );
 
 	// print the doc using QPainter at zoom level 1
 	// TODO : better use eps export?
