@@ -101,7 +101,7 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
 void KoFontChooser::setupTab2()
 {
     QWidget *page = new QWidget( this );
-    addTab( page, i18n( "Fonts Effect" ) );
+    addTab( page, i18n( "Font Effects" ) );
 
     QVBoxLayout *lay1 = new QVBoxLayout( page, KDialog::marginHint(), KDialog::spacingHint() );
     QGroupBox *grp = new QGroupBox(page);
