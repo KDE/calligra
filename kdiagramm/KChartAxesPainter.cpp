@@ -107,22 +107,22 @@ void KChartAxesPainter::setupLegend( QPaintDevice* paintdev, table_t* table )
 	_chart->_rightmargin += _chart->_legendxsize;
 
 	// Set the x starting point
-	_chart->_legendxstart = pdm.width() - _chart-> _rightmargin;
+	_chart->_legendxstart = _chart->_width - _chart->_rightmargin;
 	
 	// Set the y starting point, depending on alignment
 	if( _chart->_legendplacement == RightTop )
 	  _chart->_legendystart = _chart->_topmargin;
 	else if( _chart->_legendplacement == RightCenter )
-	  _chart->_legendystart = pdm.height() - _chart->_bottommargin - _chart->_legendysize;
+	  _chart->_legendystart = _chart->_height - _chart->_bottommargin - _chart->_legendysize;
 	else { // RightBottom
-	  int height = pdm.height() - _chart->_topmargin - _chart->_bottommargin;
+	  int height = _chart->_height - _chart->_topmargin - _chart->_bottommargin;
 	  _chart->_legendystart = (int)rint( _chart->_topmargin + height/2 -
 								 _chart->_legendysize/2 );
 	}
   }
   else { // position the legend below the graph
 	// which width can we use
-	int width = pdm.width() - _chart->_leftmargin - _chart->_rightmargin;
+	int width = _chart->_width - _chart->_leftmargin - _chart->_rightmargin;
 
 	// compute a number of columns if none is given by the user
 	if ( _chart->_legendcols == -1 )
@@ -139,11 +139,11 @@ void KChartAxesPainter::setupLegend( QPaintDevice* paintdev, table_t* table )
 	_chart->_bottommargin += _chart->_legendysize;
 
 	// Set the y starting point
-	_chart->_legendystart = pdm.height() - _chart->_bottommargin;
+	_chart->_legendystart = _chart->_height - _chart->_bottommargin;
 
 	// Set the x starting point, depending on alignment
 	if( _chart->_legendplacement == BottomRight )
-	  _chart->_legendxstart = pdm.width() - _chart->_rightmargin - _chart->_legendxsize;
+	  _chart->_legendxstart = _chart->_width - _chart->_rightmargin - _chart->_legendxsize;
 	else if( _chart->_legendplacement == BottomLeft )
 	  _chart->_legendxstart = _chart->_leftmargin;
 	else // BottomCenter
@@ -184,7 +184,7 @@ bool KChartAxesPainter::setupCoords( QPaintDevice* paintdev, table_t* table )
   
   // calculate top and bottom of bounding box
   QPaintDeviceMetrics pdm( paintdev );
-  _chart->_bottom = pdm.height() - _chart->_bottommargin - 1 -
+  _chart->_bottom = _chart->_height - _chart->_bottommargin - 1 -
 	( _chart->_xlabelfontheight ? _chart->_xlabelfontheight : 0 ) -
 	( _chart->_xaxisfontheight ? _chart->_xaxisfontheight : 0 ) -
 	( labelheight ? labelheight * _chart->_textspacing : 0 );
@@ -208,7 +208,7 @@ bool KChartAxesPainter::setupCoords( QPaintDevice* paintdev, table_t* table )
   
   if( _chart->_twoaxes )
 	ls = _chart->_yaxisfontwidth * _chart->_ylabellength[1];
-  _chart->_right = pdm.width() - _chart->_rightmargin - 1 -
+  _chart->_right = _chart->_width - _chart->_rightmargin - 1 -
 	( _chart->_twoaxes ? 1 : 0 ) * ( ( ls ? ( ls + _chart->_axisspace ) : 0 ) +
 							 ( _chart->_ylabelfontheight2 ? ( _chart->_ylabelfontheight2 + _chart->_textspacing ) : 0 ) );
 
@@ -395,7 +395,7 @@ void KChartAxesPainter::drawText( QPainter* painter, table_t* table )
 	int xlabelx = 3 * ( _chart->_left  + _chart->_right ) / 4 -
 	  _chart->_xlabel.length() * _chart->_xlabelfontwidth / 2;
 	QPaintDeviceMetrics pdm( painter->device() );
-	int xlabely = pdm.height() - _chart->_xlabelfontheight - _chart->_bottommargin;
+	int xlabely = _chart->_height - _chart->_xlabelfontheight - _chart->_bottommargin;
 
 	painter->setFont( _chart->xLabelFont() );
 	painter->setPen( _chart->_labelcolor );
@@ -424,7 +424,7 @@ void KChartAxesPainter::drawText( QPainter* painter, table_t* table )
   // ylabel 2 (if needed)
   if( _chart->_twoaxes && _chart->_ylabelfontheight2 ) {
 	QPaintDeviceMetrics pdm( painter->device() );
-	int ylabel2x = pdm.width() - _chart->_ylabelfontheight - _chart->_rightmargin;
+	int ylabel2x = _chart->_width - _chart->_ylabelfontheight - _chart->_rightmargin;
 	int ylabel2y = ( _chart->_bottom - _chart->_top ) / 2 +
 	  _chart->_y2label.length() * _chart->_ylabelfontwidth / 2;
 

@@ -44,23 +44,20 @@ noinst_HEADERS =	kdiagramm_main.h kdiagramm_shell.h kdiagramm_doc.h \
 					KoDiagrammGeometryConfigPage.h
 
 
-SRCMETA = kdiagramm_main.moc kdiagramm_shell.moc kdiagramm_doc.moc \
+METASOURCES = kdiagramm_main.moc kdiagramm_shell.moc kdiagramm_doc.moc \
 	kdiagramm_view.moc koDiagramm.moc table.moc sheet.moc sheetdlg.moc \
-	KChartAreaPainter.moc KChartAxesPainter.moc KChartBarsPainter.moc \
-	KChartLinesPainter.moc KChartLinesPointsPainter.moc KChartPainter.moc \
-	KChartPie3DPainter.moc KChartPiePainter.moc KChartPointsPainter.moc \
 	KoDiagrammColorConfigPage.moc KoDiagrammBarConfigDialog.moc \
 	KoDiagrammAreaConfigDialog.moc KoDiagrammPieConfigDialog.moc \
 	KoDiagrammLinesConfigDialog.moc KoDiagrammLinesPointsConfigDialog.moc \
-	KoDiagrammPointsConfigDialog.moc KoDiagrammPointsConfigDialog.moc \
+	KoDiagrammPointsConfigDialog.moc KoDiagrammConfigDialog.moc \
 	KoDiagrammBarConfigPage.moc KoDiagrammGeometryConfigPage.moc
 
 noinst_HEADERS = kdiagramm_main.h kdiagramm_shell.h kdiagramm_doc.h \
 	         kdiagramm.h kdiagramm_view.h chart.h \
 		 sheet.h table.h parser.h sheetdlg.h
 
-METASOURCES = kdiagramm_main.moc kdiagramm_shell.moc kdiagramm_doc.moc \
-	kdiagramm_view.moc koDiagramm.moc table.moc sheet.moc sheetdlg.moc
+#METASOURCES = kdiagramm_main.moc kdiagramm_shell.moc kdiagramm_doc.moc \
+#	kdiagramm_view.moc koDiagramm.moc table.moc sheet.moc sheetdlg.moc
 
 idl_DATA = kdiagramm.idl
 idl_HEADERS = kdiagramm.h

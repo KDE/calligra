@@ -27,6 +27,11 @@ public:
   virtual QPainter* setupPaintDev( QPaintDevice* paintdev );
   virtual QColor chooseDataColor( int dataset );
 
+  inline void setWidthHeight(unsigned int w,unsigned int h) {
+    _chart->_width = w; _chart->_height = h; 
+    _chart->_left = _chart->_top = 0; _chart->_right = w; _chart->_bottom = h;
+  }
+
 protected:
 	uint numDatasets( table_t* table );
 	uint maxPos( table_t* table );

@@ -174,6 +174,9 @@ inline KoDiagrammParameters::KoDiagrammParameters()
   _leftmargin = 0;
   _rightmargin = 0;
   
+  _width = 20;
+  _height = 20;
+
   // the colours
   _bgcolor = white;
   _fgcolor = darkBlue;

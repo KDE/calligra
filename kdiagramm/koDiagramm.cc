@@ -70,7 +70,7 @@ bool operator < ( const pair<double, string>& x, const pair<double, string>& y)
 
 KoDiagrammView::KoDiagrammView( QWidget *_parent ) : QWidget( _parent )
 {
-  setBackgroundColor( white );
+  //setBackgroundColor( white );
 }
 
 KoDiagrammView::~KoDiagrammView()
@@ -235,7 +235,10 @@ void KoDiagramm::setupPainter( QPainter& painter )
 {
 	painter.setPen( _params._fgcolor );
 	painter.setPen( _params._bgcolor );
-	painter.eraseRect( painter.window() );
+	//painter.eraseRect( painter.window() );
+
+	// should be configurable later...
+	_params._transparency = true;
 	painter.setBackgroundMode( _params._transparency ? TransparentMode :
 							   OpaqueMode );
 }
@@ -254,6 +257,7 @@ void KoDiagramm::drawDiagrammSaeulen( QPainter& painter, int _width, int _height
 		m_lastPainterType = Bars;
 	}
 	setupPainter( painter );
+	_chartpainter->setWidthHeight(_width,_height);
 	_chartpainter->paintChart( &painter, &m_table );
 #else
   // Farben
@@ -757,6 +761,7 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
 			m_lastPainterType = Lines;
 		}
 		setupPainter( painter );
+		_chartpainter->setWidthHeight(_width,_height);
 		_chartpainter->paintChart( &painter, &m_table );
 	} else if( m_diaType == DT_AREA ) {
 		if( m_lastPainterType != Area ) {
@@ -765,6 +770,7 @@ void KoDiagramm::drawDiagrammLinien( QPainter& painter, int _width, int _height 
 			m_lastPainterType = Area;
 		}
 		setupPainter( painter );
+		_chartpainter->setWidthHeight(_width,_height);
 		_chartpainter->paintChart( &painter, &m_table );
 	}
 #else

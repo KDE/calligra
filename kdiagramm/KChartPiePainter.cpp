@@ -44,7 +44,7 @@ bool KChartPiePainter::setupCoords( QPaintDevice* paintdev )
 {
   QPaintDeviceMetrics pdm( paintdev );
   
-  _chart->_pieheight = (int)rint( 0.1 * pdm.height() );
+  _chart->_pieheight = (int)rint( 0.1 * _chart->_height );
 
   // Make sure we are not reserving space we don't need
   if( _chart->_title.isEmpty() ) _chart->_titlefontheight = 0;
@@ -52,12 +52,12 @@ bool KChartPiePainter::setupCoords( QPaintDevice* paintdev )
 
   // Calculate the bounding box for the pie and some width, height and 
   // centre parameters.
-  _chart->_bottom = pdm.height() - _chart->_pieheight - _chart->_bottommargin - 
+  _chart->_bottom = _chart->_height - _chart->_pieheight - _chart->_bottommargin - 
 	( _chart->_xlabelfontheight ? _chart->_xlabelfontheight + _chart->_textspacing : 0 );
   _chart->_top = _chart->_topmargin + ( _chart->_titlefontheight ? ( _chart->_titlefontheight +
 								_chart->_textspacing ) : 0 );
   _chart->_left = _chart->_leftmargin;
-  _chart->_right = pdm.width() - _chart->_rightmargin;
+  _chart->_right = _chart->_width - _chart->_rightmargin;
   _chart->_width = _chart->_right - _chart->_left;
   _chart->_height = _chart->_bottom - _chart->_top;
   _xcenter = ( _chart->_right + _chart->_left ) / 2;
@@ -97,7 +97,7 @@ void KChartPiePainter::drawText( QPainter* painter, table_t* table )
   QPaintDeviceMetrics pdm( painter->device() );
   if( _chart->_xlabelfontheight ) {
 	int tx = _xcenter - _chart->_xlabel.length() * _chart->_xlabelfontwidth/2;
-	int ty = pdm.height() - _chart->_bottommargin - _chart->_xlabelfontheight;
+	int ty = _chart->_height - _chart->_bottommargin - _chart->_xlabelfontheight;
 	QFontMetrics fm( _chart->xLabelFont() );
 	painter->setFont( _chart->xLabelFont() );
 	painter->setPen( _chart->_labelcolor );
