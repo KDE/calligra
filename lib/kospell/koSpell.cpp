@@ -94,6 +94,7 @@ KOSpell::KOSpell (QWidget *_parent, const QString &_caption,
 
   ksconfig=0;
   ksdlg=0;
+  lastpos = 0;
   //won't be using the dialog in ksconfig, just the option values
   if (_ksc!=0)
     ksconfig = new KOSpellConfig (*_ksc);
@@ -424,7 +425,6 @@ void KOSpell::dialog2 (int result)
 
     dlgreplacement=ksdlg->replacement();
     bool testNextWord = true;
-    //process result here
     switch (dlgresult)
     {
     case KS_IGNORE:
@@ -439,7 +439,7 @@ void KOSpell::dialog2 (int result)
         addPersonal (dlgorigword);
         personaldict=TRUE;
         emit addword (dlgorigword);
-        // adding to pesonal dict takes effect at the next line, not the current
+        // adding to personal dict takes effect at the next line, not the current
         ignorelist.prepend(dlgorigword.lower());
         break;
     case KS_REPLACEALL:
