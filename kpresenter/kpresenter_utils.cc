@@ -306,10 +306,8 @@ QString lineEndBeginSvg( LineEnd element )
         str = "m737 1131h394l-564-1131-567 1131h398l-398 787h1131z";
         break;
     case L_DOUBLE_LINE_ARROW:
-        //FIXME !!!!!!!!!!!!
-        // not defined into ooimpress filter.
-        //marker.addAttribute( "svg:viewBox", "...." );
-        //marker.addAttribute( "svg:d", "...." );
+        //this define is not good I don't know how to define it.
+        str = "m0 11h312 312h122z";
         break;
     }
     return str;
