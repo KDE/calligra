@@ -30,9 +30,6 @@ KexiQueryView::KexiQueryView(KexiMainWindow *win, QWidget *parent, const char *n
  : KexiDataTable(win, parent, name)
 {
 	tableView()->setInsertingEnabled(false); //default
-
-//	bool c = false;
-//	afterSwitchFrom(0, c);
 }
 
 KexiQueryView::~KexiQueryView()
@@ -45,7 +42,8 @@ bool KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 		return false;
 	KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*query);
 	if (!rec) {
-		//todo: error
+		parentDialog()->setStatus(i18n("Query executing failed."), parentDialog()->mainWin()->project()->dbConnection()->errorMsg());
+		//todo: also provide server result and sql statement
 		return false;
 	}
 	setData(rec);
