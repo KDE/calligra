@@ -227,8 +227,8 @@ KexiProject::items(const QString &mime)
 KexiPart::Item
 KexiProject::item(const QString &mime, const QString &name)
 {
-	KexiPart::ItemList &list = items(mime);
-	const QString &l_name = name.lower();
+	KexiPart::ItemList list = items(mime);
+	const QString l_name = name.lower();
 	for (KexiPart::ItemList::Iterator it = list.begin(); it!=list.end(); ++ it) {
 		if ((*it).name().lower()==l_name)
 			return *it;
@@ -239,8 +239,8 @@ KexiProject::item(const QString &mime, const QString &name)
 KexiPart::Item
 KexiProject::item(KexiPart::Info *i, const QString &name)
 {
-	KexiPart::ItemList &list = items(i);
-	const QString &l_name = name.lower();
+	KexiPart::ItemList list = items(i);
+	const QString l_name = name.lower();
 	for (KexiPart::ItemList::Iterator it = list.begin(); it!=list.end(); ++ it) {
 		if ((*it).name().lower()==l_name)
 			return *it;

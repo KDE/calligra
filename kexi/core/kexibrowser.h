@@ -57,7 +57,7 @@ class KEXICORE_EXPORT KexiBrowser : public KListView
 
 	signals: 
 		//! item execution requested
-		void executeItem( KexiPart::Item& );
+		void executeItem( KexiPart::Item );
 
 	protected slots:
 		void		slotContextMenu(KListView*, QListViewItem *i, const QPoint &point);

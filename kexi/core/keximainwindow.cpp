@@ -394,7 +394,7 @@ KexiMainWindow::initNavigator()
 		d->nav = new KexiBrowser(this, "kexi/db", 0);
 		d->nav->installEventFilter(this);
 		d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
-		connect(d->nav,SIGNAL(executeItem(KexiPart::Item&)),this,SLOT(executeObject(KexiPart::Item&)));
+		connect(d->nav,SIGNAL(executeItem(KexiPart::Item)),this,SLOT(executeObject(KexiPart::Item)));
 
 	}
 	if(d->prj->isConnected())
