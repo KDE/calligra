@@ -97,7 +97,7 @@ KexiDB::connect(QString, QString, QString)
 }
 
 bool
-KexiDB::connect(QString, QString, QString, QString)
+KexiDB::connect(QString, QString, QString, QString, bool)
 {
 	/*! implemented for linking reasons */
 	kdDebug() << "KexiDB::connect(db): sorry you are wrong here" << endl;

@@ -63,7 +63,7 @@ bool
 MySqlDB::connect(QString host, QString user, QString password)
 {
 	kdDebug() << "MySqlDB::connect(" << host << "," << user << "," << password << ")" << endl;
-	m_mysql = mysql_connect(m_mysql, host.latin1(), user.latin1(), password.latin1());
+	mysql_real_connect(m_mysql, host.local8Bit(), user.local8Bit(), password.local8Bit(), 0, 0, 0, 0);
 	if(mysql_errno(m_mysql) == 0)
 	{
 		m_connected = true;
@@ -72,19 +72,24 @@ MySqlDB::connect(QString host, QString user, QString password)
 		m_password = password;
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+	
+	kdDebug() << "MySqlDB::connect(...) failed: " << mysql_error(m_mysql) << endl;
+	return false;
 }
 
 bool
-MySqlDB::connect(QString host, QString user, QString password, QString db)
+MySqlDB::connect(QString host, QString user, QString password, QString db, bool create)
 {
 	kdDebug() << "MySqlDB::connect(QString host, QString user, QString password, QString db)" << endl;
 	if(m_connected && host == m_host && user == m_user && password == m_password)
 	{
 		kdDebug() << "MySqlDB::connect(db): already connected" << endl;
+		
+		//create new database if needed
+		if(create)
+		{
+			query("create database " + db);
+		}
 		//simple change to db:
 		query("use "+db);
 		kdDebug() << "MySqlDB::connect(db): errno: " << mysql_error(m_mysql) << endl;
@@ -97,6 +102,12 @@ MySqlDB::connect(QString host, QString user, QString password, QString db)
 	{
 		if(connect(host, user, password))
 		{
+			//create new database if needed
+			if(create)
+			{
+				query("create database " + db);
+			}
+			
 			query("use "+db);
 			m_connectedDB = true;
 			return true;

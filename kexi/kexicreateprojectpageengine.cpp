@@ -19,11 +19,13 @@ Boston, MA 02111-1307, USA.
 
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qframe.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <kcombobox.h>
 #include <ktextbrowser.h>
+#include <kdialog.h>
 
 #include "kexiDB/kexidbdriver.h"
 
@@ -35,6 +37,8 @@ KexiCreateProjectPageEngine::KexiCreateProjectPageEngine(KexiCreateProject *pare
 {
 	QLabel *lPic = new QLabel("", this);
 	lPic->setPixmap(*wpic);
+	lPic->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+	lPic->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum));
 
 	QLabel *lEngine = new QLabel(i18n("Driver: "), this);
 	
@@ -48,6 +52,7 @@ KexiCreateProjectPageEngine::KexiCreateProjectPageEngine(KexiCreateProject *pare
 	g->addWidget(lEngine,		0,	1);
 	g->addWidget(m_engine,		0,	2);
 	g->addMultiCellWidget(m_summery,1,	1,	1,	2);
+	g->setSpacing(KDialog::spacingHint());
 
 	fill();
 

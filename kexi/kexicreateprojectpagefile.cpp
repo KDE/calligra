@@ -21,9 +21,11 @@ Boston, MA 02111-1307, USA.
 #include <qlayout.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
+#include <qframe.h>
 
 #include <klocale.h>
 #include <kurlrequester.h>
+#include <kdialog.h>
 
 #include "kexicreateprojectpagefile.h"
 
@@ -33,6 +35,8 @@ KexiCreateProjectPageFile::KexiCreateProjectPageFile(KexiCreateProject *parent, 
 	//cool picture ;)
 	QLabel *lPic = new QLabel("", this);
 	lPic->setPixmap(*wpic);
+	lPic->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+	lPic->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum));
 
 	//widgets
 	QButtonGroup *buttonBase = new QButtonGroup(this);
@@ -53,6 +57,7 @@ KexiCreateProjectPageFile::KexiCreateProjectPageFile(KexiCreateProject *parent, 
 	g->addWidget(m_btnEmbedd,	1,	1);
 	g->addWidget(m_btnExtern,	2,	1);
 	g->addWidget(m_externURL,	3,	1);
+	g->setSpacing(KDialog::spacingHint());
 
 	setProperty("caption", QVariant(i18n("File")));
 	setProperty("section", QVariant("LocalDB"));

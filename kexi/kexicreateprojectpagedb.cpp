@@ -19,10 +19,15 @@ Boston, MA 02111-1307, USA.
 
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
+#include <qframe.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <klistview.h>
+#include <klineedit.h>
+#include <kdialog.h>
 
 #include "kexiDB/kexidb.h"
 
@@ -37,20 +42,56 @@ KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPix
 	//cool picture ;)
 	QLabel *lPic = new QLabel("", this);
 	lPic->setPixmap(*wpic);
+	lPic->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+	lPic->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum));
 
 	//default properties
 	setProperty("section", QVariant("RemoteDB"));
-	setProperty("caption", QVariant(i18n("Connection")));
+	setProperty("caption", QVariant(i18n("Select Database")));
+		
+	//existing databases radiobutton
+	m_existingRBtn = new QRadioButton(i18n("Select from existing databases:"), this);
+	m_existingRBtn->setChecked(true);
 
-	//widget
+	//existing databases list
 	m_databases = new KListView(this);
-	m_databases->addColumn(i18n("Select Database"));
+	m_databases->addColumn(i18n("Database"));
 	connect(m_databases, SIGNAL(selectionChanged()), this, SLOT(slotDatabaseChanged()));
-
+	connect(m_existingRBtn, SIGNAL(toggled(bool)), m_databases, SLOT(setEnabled(bool)));
+	
+	//new database radiobutton
+	m_newRBtn = new QRadioButton(i18n("Create new database:"), this);
+	m_newRBtn->setChecked(false);
+	connect(m_newRBtn, SIGNAL(toggled(bool)), this, SLOT(slotModeChanged(bool)));
+	
+	//new database lineedit
+	m_newEdit = new KLineEdit(this);
+	m_newEdit->setEnabled(false);
+	connect(m_newRBtn, SIGNAL(toggled(bool)), m_newEdit, SLOT(setEnabled(bool)));
+	connect(m_newEdit, SIGNAL(textChanged(const QString&)), this, SLOT(slotDatabaseChanged()));
+	
 	//layout once again...
-	QGridLayout *g = new QGridLayout(this);
-	g->addWidget(lPic,		0,	0);
-	g->addWidget(m_databases,	0,	1);
+	QHBoxLayout *g = new QHBoxLayout(this);
+	g->addWidget(lPic);
+	g->setSpacing(KDialog::spacingHint());
+	
+	//input widgets layout
+	QVBoxLayout *iv = new QVBoxLayout(g);
+	iv->addWidget(m_existingRBtn);
+	iv->addWidget(m_databases);
+	iv->setSpacing(KDialog::spacingHint());
+	
+	//new database layout
+	QHBoxLayout *nh = new QHBoxLayout(iv);
+	nh->addWidget(m_newRBtn);
+	nh->addWidget(m_newEdit);
+	nh->setSpacing(KDialog::spacingHint());
+	
+	//buttongroup
+	QButtonGroup* selectBGrp = new QButtonGroup(this);
+	selectBGrp->hide();
+	selectBGrp->insert(m_existingRBtn);
+	selectBGrp->insert(m_newRBtn);
 }
 
 void
@@ -78,7 +119,7 @@ bool
 KexiCreateProjectPageDB::connectDB()
 {
 	m_cred.database = data("database").toString();
-	if(kexi->project()->initDbConnection(m_cred))
+	if(kexi->project()->initDbConnection(m_cred, data("create").toBool()))
 	{
 		return true;
 		kexi->mainWindow()->browser()->generateView();
@@ -91,8 +132,56 @@ KexiCreateProjectPageDB::slotDatabaseChanged()
 	if(!m_databases->currentItem())
 		return;
 
-	setProperty("database", QVariant(m_databases->currentItem()->text(0)));
-	setProperty("finish", QVariant(true));
+	if(!data("create").toBool())
+	{
+		setProperty("database", QVariant(m_databases->currentItem()->text(0)));
+		setProperty("finish", QVariant(true));
+	}
+	else
+	{
+		setProperty("database", QVariant(m_newEdit->text()));
+		
+		if(m_newEdit->text().length() > 0)
+		{
+			setProperty("finish", QVariant(true));
+		}
+		else
+		{
+			setProperty("finish", QVariant(false));
+		}
+	}
+}
+
+void
+KexiCreateProjectPageDB::slotModeChanged(bool state)
+{
+	setProperty("create", QVariant(state));
+	
+	if(state)
+	{
+		setProperty("database", QVariant(m_newEdit->text()));
+		
+		if(m_newEdit->text().length() > 0)
+		{
+			setProperty("finish", QVariant(true));
+		}
+		else
+		{
+			setProperty("finish", QVariant(false));
+		}
+	}
+	else
+	{
+		if(m_databases->currentItem())
+		{
+			setProperty("database", QVariant(m_databases->currentItem()->text(0)));
+			setProperty("finish", QVariant(true));
+		}
+		else
+		{
+			setProperty("finish", QVariant(false));
+		}
+	}
 }
 
 KexiCreateProjectPageDB::~KexiCreateProjectPageDB()

@@ -56,7 +56,7 @@ class MySqlDB : public KexiDB
 		KexiDBRecord	*queryRecord(QString querystatement, bool buffer=false);
 
 		bool		connect(QString host, QString user, QString password);
-		bool		connect(QString host, QString user, QString password, QString db);
+		bool		connect(QString host, QString user, QString password, QString db, bool create = false);
 
 		QStringList	databases();
 		QStringList	tables();

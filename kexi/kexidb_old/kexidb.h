@@ -49,7 +49,7 @@ class KexiDB : public QObject
 
 		/*! connect to database hope that is ansi-compatible */
 		virtual bool connect(QString host, QString user, QString password);
-		virtual bool connect(QString host, QString user, QString password, QString db);
+		virtual bool connect(QString host, QString user, QString password, QString db, bool create = false);
 		/*! connect method for file-based databases*/
 		virtual bool load(QString file);
 

@@ -25,6 +25,8 @@ Boston, MA 02111-1307, USA.
 
 class KListView;
 class QTimer;
+class QRadioButton;
+class KLineEdit;
 
 class KexiCreateProject;
 
@@ -41,10 +43,14 @@ class KexiCreateProjectPageDB : public KexiCreateProjectPage
 
 	protected:
 		KListView	*m_databases;
+		QRadioButton *m_existingRBtn;
+		QRadioButton *m_newRBtn;
+		KLineEdit *m_newEdit;
 		Credentials	m_cred;
 
 	protected slots:
 		void		slotDatabaseChanged();
+		void		slotModeChanged(bool state);
 };
 
 #endif

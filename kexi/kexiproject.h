@@ -49,7 +49,7 @@ public:
 
 	bool saveProject();
 	bool loadProject();
-	bool initDbConnection(const Credentials& cred);
+	bool initDbConnection(const Credentials& cred, const bool create = false);
 	bool initHostConnection(const Credentials &cred);
 	
 	KexiDB* db() { return m_db; };

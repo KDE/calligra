@@ -131,7 +131,7 @@ KexiProject::loadProject()
 }
 
 bool 
-KexiProject::initDbConnection(const Credentials &cred)
+KexiProject::initDbConnection(const Credentials &cred, const bool create)
 {
 	kdDebug() << "KexiProject::initDbConnection()" << endl;
 	
@@ -148,7 +148,7 @@ KexiProject::initDbConnection(const Credentials &cred)
 	}
 
 	kdDebug() << "KexiProject::initDBConnection(): using simple method\n  because current driver is: " << m_db->driverName() << endl;
-	if(m_db->connect(cred.host, cred.user, cred.password, cred.database))
+	if(m_db->connect(cred.host, cred.user, cred.password, cred.database, create))
 	{
 		m_cred = cred;
 		kdDebug() << "KexiProject::initDbConnection(): loading succeeded" << endl;
