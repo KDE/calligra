@@ -148,7 +148,7 @@ static bool kspreadfunc_xor_helper( KSContext& context, QValueList<KSValue::Ptr>
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
-      if ( !kspreadfunc_and_helper( context, (*it)->listValue(), first ) )
+      if ( !kspreadfunc_xor_helper( context, (*it)->listValue(), first ) )
         return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
@@ -163,7 +163,7 @@ static bool kspreadfunc_xor_helper( KSContext& context, QValueList<KSValue::Ptr>
 // Function: XOR
 bool kspreadfunc_xor( KSContext& context )
 {
-  bool first = true;
+  bool first = false;
   bool b = kspreadfunc_xor_helper( context, context.value()->listValue(), first );
 
   if ( b )
