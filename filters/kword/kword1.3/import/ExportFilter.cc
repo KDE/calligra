@@ -377,6 +377,7 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
     zipWriteData(">\n");
 }
 
+// Font declaration is supposed to disappear in OASIS (### TODO)
 void OOWriterWorker::writeFontDeclaration(void)
 {
     zipWriteData( " <office:font-decls>\n");
@@ -567,7 +568,7 @@ void OOWriterWorker::writeMetaXml(void)
 
     zipWriteData( "  <meta:document-statistic" );
 
-    // KWord files coming from import filters mostly do not have the correct page count
+    // KWord files coming from import filters mostly do not have no page count
     if ( m_numPages > 0 )
     {
         zipWriteData( " meta:page-count=\"" );
@@ -575,7 +576,7 @@ void OOWriterWorker::writeMetaXml(void)
         zipWriteData( "\"" );
     }
 
-    zipWriteData( " meta:image-count=\"" ); // This not specified in the OO specification section 2.1.19 (### TODO)
+    zipWriteData( " meta:image-count=\"" ); // This is not specified in the OO specification section 2.1.19, fixed in OASIS (### TODO)
     zipWriteData( QString::number ( m_pictureNumber ) );
     zipWriteData( "\"" );
 
@@ -848,6 +849,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         || (formatOrigin.strikeoutWord != formatData.strikeoutWord ) )
     {
         // Strikeout and underline can only have one word-by-word behaviour in OO
+        // (OO Issue #????? ; will not be changed.)
         strElement+="fo:score-spaces=\""; // Are space processed?
         if ( formatData.underlineWord || formatData.strikeoutWord )
         {
@@ -867,7 +869,8 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
     if ( force || ( formatOrigin.language != formatData.language ) )
     {
         const QString lang ( formatData.language );
-        if ( ! lang.isEmpty() )
+        if ( ( ! lang.isEmpty() )
+            && ( lang != "xx" ) ) // "xx" is KDE's test language, so skip it
         {
             const int res = lang.find( '_' );
 
@@ -1203,6 +1206,8 @@ static uint getFirstRowColumnWidths( const Table& table, QMemArray<double>& widt
 bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 {
 #ifdef ALLOW_TABLE
+
+    // Be careful that while being similar the following 3 strings have different purposes
     const QString automaticTableStyle ( makeAutomaticStyleName( "Table", m_tableNumber ) );
     const QString tableName( QString( "Table" ) + QString::number( m_tableNumber ) ); // m_tableNumber was already increased
     const QString translatedName( i18n( "Object name", "Table %1").arg( m_tableNumber ) );
@@ -1226,7 +1231,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 
     if ( numberColumns <= 0 )
     {
-        kdDebug(30520) << "Could not get correct column widths, so approximate" << endl;
+        kdDebug(30520) << "Could not get correct column widths, so approximating" << endl;
         // There was a problem, the width array cannot be trusted, so try to do a column width array with the first row
         numberColumns = getFirstRowColumnWidths( anchor.table, widthArray, firstRowNumber );
         if ( numberColumns <= 0 )
@@ -1242,6 +1247,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     kdDebug(30520) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
 
     *m_streamOut << "</text:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
+    
     *m_streamOut << "<table:table table:name=\""
         << escapeOOText( translatedName )
         << "\" table:style-name=\""
@@ -1295,7 +1301,9 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     makeTableRows( tableName, anchor.table, firstRowNumber );
 
     *m_streamOut << "</table:table>\n";
+    
     *m_streamOut << "<text:p text:style-name=\"Standard\">\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
+    
 #endif
     return true;
 }
@@ -1422,7 +1430,7 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor, const bool useFrameS
     if (m_zip)
     {
 #if 0
-        // ### FIXME Why is the following line not working? (It makes unzip having problems with meta.xml)
+        // ### FIXME Why is the following line not working (at least with KDE 3.1)? (It makes unzip having problems with meta.xml)
         m_zip->writeFile(ooName,QString::null, QString::null, image.size(), image.data());
 #else
         zipPrepareWriting(ooName);
@@ -1527,7 +1535,8 @@ void OOWriterWorker::processFootnote( const VariableData& variable )
 
 void OOWriterWorker::processNote( const VariableData& variable )
 {
-    // KWord 1.3's annotations are anonymous and undated, however the OO specification tells that author and date are mandatory.
+    // KWord 1.3's annotations are anonymous and undated,
+    //  however the OO specification tells that author and date are mandatory (even if OOWriter 1.1 consider them optional)
 
     *m_streamOut << "<office:annotation office:create-date=\"";
 
@@ -1559,14 +1568,15 @@ void OOWriterWorker::processVariable ( const QString&,
 {
     if (0==formatData.variable.m_type)
     {
-        *m_streamOut << "<text:date/>";
+        *m_streamOut << "<text:date/>"; // ### TODO: parameters
     }
     else if (2==formatData.variable.m_type)
     {
-        *m_streamOut << "<text:time/>";
+        *m_streamOut << "<text:time/>"; // ### TODO: parameters
     }
     else if (4==formatData.variable.m_type)
     {
+        // ### TODO: the other under-types, other parameters
         if (formatData.variable.isPageNumber())
         {
             *m_streamOut << "<text:page-number text:select-page=\"current\"/>";
@@ -1610,7 +1620,7 @@ void OOWriterWorker::processAnchor ( const QString&,
     const TextFormatting& /*formatLayout*/, //TODO
     const FormatData& formatData)
 {
-    // We have an image or a table
+    // We have a picture or a table
     if ( (2==formatData.frameAnchor.type) // <IMAGE> or <PICTURE>
         || (5==formatData.frameAnchor.type) ) // <CLIPART>
     {
@@ -1987,8 +1997,6 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
 
     processParagraphData(paraText, layout.formatData.text, paraFormatDataList);
 
-    // Before closing the paragraph, test if we have a page break
-
     if (header)
         *m_streamOut << "</text:h>\n";
     else
@@ -2039,7 +2047,7 @@ bool OOWriterWorker::doCloseStyles(void)
 bool OOWriterWorker::doFullPaperFormat(const int format,
             const double width, const double height, const int orientation)
 {
-    if ( ( format < 0 ) // Be carefull that 0 is ISO A3
+    if ( ( format < 0 ) // Be careful that 0 is ISO A3
         || ( width < 1.0 )
         || ( height < 1.0 ) )
     {
@@ -2048,7 +2056,7 @@ bool OOWriterWorker::doFullPaperFormat(const int format,
         KoFormat newFormat = KoFormat ( format );
         if ( ( format < 0 ) || ( format > PG_LAST_FORMAT ) )
         {
-            // Bad or unknown format so assume ISO A4
+            // Bad or unknown format, so assume ISO A4
             newFormat = PG_DIN_A4;
         }
         m_paperWidth = KoPageFormat::width ( newFormat, KoOrientation( orientation ) ) * 72.0 / 25.4 ;
