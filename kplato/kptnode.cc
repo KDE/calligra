@@ -138,7 +138,7 @@ void KPTNode::delDependParentNode( int number, bool remove) {
         m_dependParentNodes.take(number);
 }
 
-void KPTNode::initialise_arcs() {
+void KPTNode::initialize_arcs() {
   // Clear all lists of arcs and set unvisited to zero
   start_node()->successors.list.clear();
   start_node()->successors.unvisited = 0;
@@ -156,7 +156,7 @@ void KPTNode::initialise_arcs() {
   }
   // Now do the same for each subnode
   for( QPtrListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
-      i.current()->initialise_arcs();
+      i.current()->initialize_arcs();
 }
 
 void KPTNode::set_up_arcs() {

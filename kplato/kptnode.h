@@ -35,100 +35,112 @@ class KPTProject;
  * This class is basically an abstract interface to make the design more OO.
  */
 class KPTNode {
-  /* Many KPTProject functions deal with lists of KPTNode objects. Although
-   * KPTNode protected functions can be called for any KPTNode in a list
-   * from a KPTNode function (data hiding is at class level) KPTProject can't
-   * call the same functions unless we explicitly allow this. A friend
-   * declaration is a simple solution.
-   */
-  friend class KPTProject;
-    public:
+    friend class KPTProject;
 
-        KPTNode();
-        virtual ~KPTNode();
+public:
+    KPTNode();
 
-        // simple child node management
-        // Child nodes are things like subtasks, basically a task can exists of several sub-tasks, 
-        // creating a table has 4 subtasks, 1) measuring 2) cutting 3) building 4) painting.
-        KPTNode *getParent() const {return m_parent; }
-        const QPtrList<KPTNode> &childNodeIterator() const { return m_nodes; }
-        int numChildren() const { return m_nodes.count(); }
-        virtual void addChildNode( KPTNode *node);
-        virtual void insertChildNode( unsigned int index, KPTNode *node);
-        void delChildNode( KPTNode *node, bool remove=true);
-        void delChildNode( int number, bool remove=true);
-        KPTNode *getChildNode( int number) { return m_nodes.at(number); }
+    // Declare the class abstract
+    virtual ~KPTNode() = 0;
 
-        // Type of this node.
-        enum NodeType {
-          PROJECT=0,
-          TASK=1,
-          POINT_IN_TIME=2 };
+    // simple child node management
+    // Child nodes are things like subtasks, basically a task can exists of
+    // several sub-tasks. Creating a table has 4 subtasks, 1) measuring
+    // 2) cutting 3) building 4) painting.
+    KPTNode *getParent() const { return m_parent; }
+    const QPtrList<KPTNode> &childNodeIterator() const { return m_nodes; }
+    int numChildren() const { return m_nodes.count(); }
+    virtual void addChildNode( KPTNode *node);
+    virtual void insertChildNode( unsigned int index, KPTNode *node);
+    void delChildNode( KPTNode *node, bool remove=true);
+    void delChildNode( int number, bool remove=true);
+    KPTNode *getChildNode( int number) { return m_nodes.at(number); }
 
-        NodeType nodeType() { return m_nodeType; }
+    // Time-dependent child-node-management.
+    // list all nodes that are dependent upon this one.
+    // Building a house requires the table to be finished, therefore the
+    // house-building is time dependent on the table-building. So a child
+    // of the table-building node is the house-building node.
 
-        // Time-dependent child-node-management.
-        // list all nodes that are dependent upon this one.
-        // Building a house requires the table to be finished, therefor the house-building
-        // is time dependent on the table-building. So a child of the table-building node is the 
-        // house-building node.
+    int numDependChildNodes() const { return m_dependChildNodes.count(); }
+    virtual void addDependChildNode( KPTNode *node, TimingType t=START_ON_DATE,
+				     TimingRelation p=FINISH_START);
+    virtual void addDependChildNode( KPTNode *node, TimingType t,
+				     TimingRelation p, KPTDuration lag);
+    virtual void addDependChildNode( KPTRelation *relation);
+    virtual void insertDependChildNode( unsigned int index, KPTNode *node,
+					TimingType t=START_ON_DATE,
+					TimingRelation p=FINISH_START);
+    void delDependChildNode( KPTNode *node, bool remove=false);
+    void delDependChildNode( int number, bool remove=false);
+    KPTRelation *getDependChildNode( int number) {
+	return m_dependChildNodes.at(number);
+    } 
 
-        int numDependChildNodes() const { return m_dependChildNodes.count(); }
-        virtual void addDependChildNode( KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
-        virtual void addDependChildNode( KPTNode *node, TimingType t, TimingRelation p, KPTDuration lag);
-        virtual void addDependChildNode( KPTRelation *relation);
-        virtual void insertDependChildNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
-        void delDependChildNode( KPTNode *node, bool remove=false);
-        void delDependChildNode( int number, bool remove=false);
-        KPTRelation *getDependChildNode( int number) { return m_dependChildNodes.at(number); } 
+    int numDependParentNodes() const { return m_dependParentNodes.count(); }
+    virtual void addDependParentNode(KPTNode *node, TimingType t=START_ON_DATE,
+				     TimingRelation p=FINISH_START);
+    virtual void addDependParentNode( KPTNode *node, TimingType t,
+				      TimingRelation p, KPTDuration lag);
+    virtual void addDependParentNode( KPTRelation *relation);
+    virtual void insertDependParentNode( unsigned int index, KPTNode *node,
+					 TimingType t=START_ON_DATE,
+					 TimingRelation p=FINISH_START);
+    void delDependParentNode( KPTNode *node, bool remove=false);
+    void delDependParentNode( int number, bool remove=false);
+    KPTRelation *getDependParentNode( int number) {
+	return m_dependParentNodes.at(number);
+    }
 
-        int numDependParentNodes() const { return m_dependParentNodes.count(); }
-        virtual void addDependParentNode( KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
-        virtual void addDependParentNode( KPTNode *node, TimingType t, TimingRelation p, KPTDuration lag);
-        virtual void addDependParentNode( KPTRelation *relation);
-        virtual void insertDependParentNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
-        void delDependParentNode( KPTNode *node, bool remove=false);
-        void delDependParentNode( int number, bool remove=false);
-        KPTRelation *getDependParentNode( int number) { return m_dependParentNodes.at(number); } 
+    void setStartTime(KPTDuration startTime) { m_startTime=startTime; }
+    const KPTDuration &startTime() const { return m_startTime; }
+    void setEndTime(KPTDuration endTime) { m_endTime=endTime; }
+    const KPTDuration &endTime() const { return m_endTime; }
 
-        void setStartTime(KPTDuration startTime) { m_startTime=startTime; }
-        const KPTDuration &startTime() const { return m_startTime; }
-        void setEndTime(KPTDuration endTime) { m_endTime=endTime; }
-        const KPTDuration &endTime() const { return m_endTime; }
+    void setEffort(KPTEffort* e) { m_effort = e; }
+    KPTEffort* effort() { return m_effort; }
 
+    /**
+     * The expected Duration is the expected time to complete a Task, Project,
+     * etc. For an individual Task, this will calculate the expected duration
+     * by querying the Distribution of the Task. If the Distribution is a
+     * simple RiskNone, the value will equal the mode Duration, but for other
+     * Distributions like RiskHigh, the value will have to be calculated. For
+     * a Project or Subproject, the expected Duration is calculated by
+     * PERT/CPM. 
+     */
+    virtual KPTDuration *getExpectedDuration() = 0;
 
-        void setEffort(KPTEffort* e) { m_effort = e; }
-        KPTEffort* effort() { return m_effort; }
+    /**
+     * Instead of using the expected duration, generate a random value using
+     * the Distribution of each Task. This can be used for Monte-Carlo
+     * estimation of Project duration.
+     */
+    virtual KPTDuration *getRandomDuration() = 0;
 
-        /** The expected Duration is the expected time to complete a Task, Project, etc. For an 
-         *  individual Task, this will calculate the expected duration by querying 
-         *  the Distribution of the Task. If the Distribution is a simple RiskNone, the value 
-         *  will equal the mode Duration, but for other Distributions like RiskHigh, the value 
-         *  will have to be calculated. For a Project or Subproject, the expected Duration is 
-         *  calculated by PERT/CPM. 
-         */
-        virtual KPTDuration *getExpectedDuration() = 0;
+    /**
+     * Calculate the start time, use startTime() for the actually started time.
+     */
+    virtual KPTDuration *getStartTime() = 0;
 
-        /** Instead of using the expected duration, generate a random value using the Distribution of 
-         *  each Task. This can be used for Monte-Carlo estimation of Project duration.
-         */
-        virtual KPTDuration *getRandomDuration() = 0;
+    /**
+     * Retrieve the calculated float of this node
+     */
+    virtual KPTDuration *getFloat() =0;
 
-        /** Calculate the start time, use startTime() for the actually started time.
-         */
-        virtual KPTDuration *getStartTime() = 0;
+    /**
+     * Calculate the delay of this node. Use the calculated startTime and the
+     * setted startTime.
+     */
+    KPTDuration *getDelay();
 
-        /** Retrieve the calculated float of this node
-         */
-        virtual KPTDuration *getFloat() =0;
+    void setName(QString name) { m_name=name; }
+    QString name() const { return m_name; }
 
-        /** Calculate the delay of this node. Use the calculated startTime and the setted startTime.
-         */
-        KPTDuration *getDelay();
+    KPTDuration getEarliestStart() const { return earliestStart; }
+    KPTDuration getLatestFinish() const { return latestFinish; }
 
-        void setName(QString name) { m_name=name; }
-        QString name() const { return m_name; }
- protected:
+protected:
     /**
      * For pert/cpm it is useful to have a hidden start node for each
      * user-visible node. For KPTProject objects, this will be a
@@ -150,19 +162,19 @@ class KPTNode {
      * or end node.
      */
     KPTNode* owner_node() {
-      return this == this->end_node() ? this : m_parent;
+	return this == this->end_node() ? this : m_parent;
     }
     /**
-     * Initialise the lists of nodes successors.list and
+     * Initialize the lists of nodes successors.list and
      * predecessors.list so that they match the time-dependencies of this
      * node. Although the lists contain nodes, refer to them as arcs
      * because we are interested in the relation between the nodes.
      */
-    void initialise_arcs();
+    void initialize_arcs();
     /**
      * Set up the arcs so that pert/cpm will work.
      *
-     * Precondition: initialise_arcs() has been called.
+     * Precondition: initialize_arcs() has been called.
      */
     void set_up_arcs();
     /**
@@ -173,9 +185,9 @@ class KPTNode {
      * Precondition: set_up_arcs() has been called.
      */
     void set_unvisited_values();
- private:
+
     typedef KPTDuration KPTNode::*start_type;
- protected:
+
     /**
      * Set values of earliest start or latest finish for start and
      * end node of this  node and all subnodes
@@ -183,65 +195,68 @@ class KPTNode {
      * @param time The time to set all values to.
      * @param start Either KPTNode::earliestStart or KPTNode::latestFinish.
      */
-    void set_pert_values( const KPTDuration& time,
-                  start_type start );
-    protected:
-        QPtrList<KPTNode> m_nodes;
-        QPtrList<KPTRelation> m_dependChildNodes;
-        QPtrList<KPTRelation> m_dependParentNodes;
-        KPTNode *m_parent;
-        NodeType m_nodeType;
-        QString m_name;
+    void set_pert_values( const KPTDuration& time, start_type start );
 
-        KPTDuration m_startTime, m_endTime; // both entered during the project, not at the initial calculation.
-        // effort variables.
-        KPTEffort* m_effort;
+    QPtrList<KPTNode> m_nodes;
+    QPtrList<KPTRelation> m_dependChildNodes;
+    QPtrList<KPTRelation> m_dependParentNodes;
+    KPTNode *m_parent;
+    QString m_name;
+
+    // Both of these are entered during the project, not at the initial
+    // calculation.
+    KPTDuration m_startTime, m_endTime;
+
+    KPTEffort* m_effort;
 
     struct dependencies {
-      /**
-       * An efficiently reconstructable list of successor/predecessor
-       * nodes. These are the implicit ones rather than the nodes
-       * explicitly created as KPTRelation objects.
-       */
-      std::vector<KPTNode*> list;
-      /**
-       * The total number of successors/predecessors. Sum of sizes of
-       * list and m_depend*Nodes.
-       */
-      unsigned int number;
-      /**
-       * The number of successors/predecessors not yet visited.
-       * Used internally by pert/cpm algorithm.
-       */
-      unsigned int unvisited;
+	/**
+	 * An efficiently reconstructable list of successor/predecessor
+	 * nodes. These are the implicit ones rather than the nodes
+	 * explicitly created as KPTRelation objects.
+	 */
+	std::vector<KPTNode*> list;
+	/**
+	 * The total number of successors/predecessors. Sum of sizes of
+	 * list and m_depend*Nodes.
+	 */
+	unsigned int number;
+	/**
+	 * The number of successors/predecessors not yet visited.
+	 * Used internally by pert/cpm algorithm.
+	 */
+	unsigned int unvisited;
     } predecessors, successors;
+
     KPTDuration earliestStart;
     KPTDuration latestFinish;
 };
 
 /** 
-  * Any @ref KPTNode will store how much time it takes to complete the node (typically a @ref KPTTask)
-  * in the traditional scheduling software the effort which is needed to complete the node is not simply
-  * a timespan but is stored as an optimistic, a pessimistic and an expected timespan.
+  * Any @ref KPTNode will store how much time it takes to complete the node
+  * (typically a @ref KPTTask) in the traditional scheduling software the
+  * effort which is needed to complete the node is not simply a timespan but
+  * is stored as an optimistic, a pessimistic and an expected timespan.
   */
 class KPTEffort {
+public:
+    KPTEffort ( KPTDuration e = KPTDuration(), KPTDuration p = KPTDuration(),
+		KPTDuration o = KPTDuration() );
+    ~KPTEffort();
 
-    public:
-        KPTEffort ( KPTDuration e = KPTDuration(), KPTDuration p = KPTDuration(), KPTDuration o = KPTDuration() );
-        ~KPTEffort();
-
-        const KPTDuration& optimistic() {return m_optimisticDuration;}
-        const KPTDuration& pessimistic() {return m_pessimisticDuration;}
+    const KPTDuration& optimistic() {return m_optimisticDuration;}
+    const KPTDuration& pessimistic() {return m_pessimisticDuration;}
     const KPTDuration& expected() {return m_expectedDuration;}
+
     /**
      * No effort.
      */
     static const KPTEffort zeroEffort;
 
-    private:
-       KPTDuration m_optimisticDuration;
-       KPTDuration m_pessimisticDuration;
-       KPTDuration m_expectedDuration;
+private:
+    KPTDuration m_optimisticDuration;
+    KPTDuration m_pessimisticDuration;
+    KPTDuration m_expectedDuration;
 };
 
 #endif
