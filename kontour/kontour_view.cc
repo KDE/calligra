@@ -71,6 +71,8 @@
 #include "DuplicateCmd.h"
 #include "DeleteCmd.h"
 #include "ReorderCmd.h"
+#include "GroupCmd.h"
+#include "UngroupCmd.h"
 #include "ToPathCmd.h"
 
 KontourView::KontourView(QWidget *parent, const char *name, KontourDocument *doc):
@@ -194,8 +196,7 @@ void KontourView::setupActions()
   m_showOutlinePanel = new KToggleAction(i18n("Show &Outline Panel"), 0, actionCollection(), "showOutlinePanel");
   connect(m_showOutlinePanel, SIGNAL(toggled(bool)), this, SLOT(slotShowOutlinePanel(bool)));
 
-  /* Layout menu */
-
+  // Layout menu
   m_snapToGrid = new KToggleAction(i18n("&Align To Grid"), "snap_to_grid", 0, actionCollection(), "alignToGrid");
   connect(m_snapToGrid, SIGNAL(toggled(bool)), this, SLOT(slotAlignToGrid(bool)));
   m_snapToGrid->setChecked(activeDocument()->snapToGrid());
@@ -204,24 +205,22 @@ void KontourView::setupActions()
   connect( m_alignToHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToHelplines( bool ) ) );
   m_alignToHelplines->setChecked(activeDocument()->snapToHelplines());
 
-  m_toFront = new KAction( i18n("To &Front"), 0, this, SLOT( slotToFront() ), actionCollection(), "toFront" );
-  m_toBack = new KAction( i18n("To &Back"), 0, this, SLOT( slotToBack() ), actionCollection(), "toBack" );
-  m_forwardOne = new KAction( i18n("Forward &One"), 0, this, SLOT( slotForwardOne() ), actionCollection(), "forwardOne" );
-  m_backOne = new KAction( i18n("B&ack One"), 0, this, SLOT( slotBackOne() ), actionCollection(), "backOne" );
+  m_toFront = new KAction( i18n("To &Front"), 0, this, SLOT( slotToFront() ), actionCollection(), "toFront");
+  m_toBack = new KAction( i18n("To &Back"), 0, this, SLOT( slotToBack() ), actionCollection(), "toBack");
+  m_forwardOne = new KAction( i18n("Forward &One"), 0, this, SLOT( slotForwardOne() ), actionCollection(), "forwardOne");
+  m_backOne = new KAction( i18n("B&ack One"), 0, this, SLOT( slotBackOne() ), actionCollection(), "backOne");
 
-  new KAction(i18n("&Group"), "group", 0, this, SLOT(slotGroup()), actionCollection(), "group");
-  new KAction(i18n("&Ungroup"), "ungroup", 0, this, SLOT(slotUngroup()), actionCollection(), "ungroup");
+  m_group = new KAction(i18n("&Group"), "group", 0, this, SLOT(slotGroup()), actionCollection(), "group");
+  m_ungroup = new KAction(i18n("&Ungroup"), "ungroup", 0, this, SLOT(slotUngroup()), actionCollection(), "ungroup");
 
-  /* Style menu */
-
+  // Style menu
   m_styles = new KSelectAction(i18n("&Styles"), 0, actionCollection(), "styles");
   connect(m_styles, SIGNAL(activated(const QString &)),this, SLOT(slotStyles(const QString &)));
 
   m_addStyle = new KAction(i18n("&Add style"), 0, this, SLOT(slotAddStyle()), actionCollection(), "addStyle");
   m_deleteStyle = new KAction(i18n("&Delete style"), 0, this, SLOT(slotDeleteStyle()), actionCollection(), "deleteStyle");
 
-  /* Modify menu */
-
+  // Modify menu
   m_distribute = new KAction( i18n("&Align/Distribute..."), 0, this, SLOT(slotDistribute()), actionCollection(), "distribute");
   m_convertToPath = new KAction(i18n("&Convert to Path"), 0, this, SLOT(slotConvertToPath()), actionCollection(), "convertToPath");
 
@@ -633,6 +632,10 @@ void KontourView::changeSelection()
     m_duplicate->setEnabled(true);
     m_deselectAll->setEnabled(true);
   }
+  if(page->objectCount() <= 1)
+    m_group->setEnabled(false);
+  else
+    m_ungroup->setEnabled(true);
   if(page->objectCount() == page->selectionCount())
     m_selectAll->setEnabled(false);
   else
@@ -847,12 +850,14 @@ void KontourView::slotBackOne()
 
 void KontourView::slotGroup()
 {
-//    cmdHistory.addCommand (new GroupCmd (m_pDoc->gdoc()), true);
+  GroupCmd *cmd = new GroupCmd(activeDocument());
+  mDoc->history()->addCommand(cmd);
 }
 
 void KontourView::slotUngroup()
 {
-//    cmdHistory.addCommand (new UngroupCmd (m_pDoc->gdoc()), true);
+//  UngroupCmd *cmd = new UngroupCmd(activeDocument());
+//  mDoc->history()->addCommand(cmd);
 }
 
 void KontourView::slotStyles(const QString &s)

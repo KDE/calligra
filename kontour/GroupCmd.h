@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,26 +23,25 @@
 
 */
 
-#ifndef GroupCmd_h_
-#define GroupCmd_h_
+#ifndef __GroupCmd_h__
+#define __GroupCmd_h__
 
-#include <Command.h>
+#include "Command.h"
 
-class GDocument;
 class GObject;
 class GGroup;
 
-class GroupCmd : public Command {
+class GroupCmd : public Command
+{
 public:
-  GroupCmd (GDocument* doc);
-  ~GroupCmd ();
+  GroupCmd(GDocument *aGDoc);
+  ~GroupCmd();
 
-  void execute ();
-  void unexecute ();
+  void execute();
+  void unexecute();
 
 private:
-  GDocument* document;
-  GGroup* group;
+  GGroup *group;
   QPtrList<GObject> objects;
 };
 

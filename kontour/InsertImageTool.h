@@ -26,6 +26,7 @@
 #define __InsertImageTool_h__
 
 #include "Tool.h"
+#include <kurl.h>
 
 class InsertImageTool : public Tool
 {
@@ -36,6 +37,8 @@ public:
   void activate();
   void deactivate();
   void processEvent(QEvent *e);
+private:
+  KURL url;
 };
 
 #endif

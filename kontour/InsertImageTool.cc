@@ -25,11 +25,17 @@
 #include "InsertImageTool.h"
 
 #include <kaction.h>
+#include <kfiledialog.h>
 #include <klocale.h>
-#include <kurl.h>
 #include <kdebug.h>
 
-#include <kfiledialog.h>
+#include "kontour_view.h"
+#include "kontour_doc.h"
+#include "GDocument.h"
+#include "GImage.h"
+#include "Canvas.h"
+#include "ToolController.h"
+#include "CreateImageCmd.h"
 
 InsertImageTool::InsertImageTool(QString aId, ToolController *tc):
 Tool(aId, tc)
@@ -41,7 +47,7 @@ Tool(aId, tc)
 
 void InsertImageTool::activate()
 {
-  KURL url = KFileDialog::getImageOpenURL();
+  url = KFileDialog::getImageOpenURL();
   kdDebug(38000) << "URL=" << url.url() << endl;
 }
 
@@ -51,20 +57,32 @@ void InsertImageTool::deactivate()
 
 void InsertImageTool::processEvent(QEvent *e)
 {
-/*  KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
-  GPage *page = toolController()->view()->activeDocument()->activePage();
+  KontourDocument *doc = static_cast<KontourDocument *>(toolController()->view()->koDocument());
+//  GPage *page = toolController()->view()->activeDocument()->activePage();
   Canvas *canvas = toolController()->view()->canvas();
 
   if(!doc->isReadWrite())
     return;
+
   if(e->type() == QEvent::MouseButtonPress)
-    processButtonPressEvent((QMouseEvent *)e, page, canvas);
+  {
+  }
   else if(e->type() == QEvent::MouseMove)
-    processMouseMoveEvent((QMouseEvent *)e, page, canvas);
+  {
+  }
   else if(e->type() == QEvent::MouseButtonRelease)
-    processButtonReleaseEvent((QMouseEvent *)e, page, canvas);
+  {
+    GImage *img = new GImage(url);
+    double zoom = toolController()->view()->activeDocument()->zoomFactor();
+    QWMatrix m;
+    m = m.translate((static_cast<QMouseEvent *>(e)->x() - canvas->xOffset()) / zoom, (static_cast<QMouseEvent *>(e)->y() - canvas->yOffset()) / zoom);
+    img->transform(m, true);
+    CreateImageCmd *cmd = new CreateImageCmd(toolController()->view()->activeDocument(), img);
+    doc->history()->addCommand(cmd);
+  }
   else if(e->type() == QEvent::KeyPress)
-    processKeyPressEvent((QKeyEvent *)e, page, canvas);*/
+  {
+  }
 }
 
 #include "InsertImageTool.moc"

@@ -385,19 +385,7 @@ bool Canvas::eventFilter(QObject *o, QEvent *e)
   if(e->type() == QEvent::KeyPress)
   {
     QKeyEvent *ke = (QKeyEvent *)e;
-    if(ke->key() == Key_Tab)
-/*      {
-         if (toolController->getActiveTool ()->id()==Tool::ToolSelect)
-            ((SelectionTool *)
-             toolController->getActiveTool ())->processTabKeyEvent (mGDoc,this);
-      }
-      else if(toolController->getActiveTool ()->id()!=Tool::ToolText
-              && ke->key()== Key_Backspace)
-          emit backSpaceCalled();
-      else if(toolController->getActiveTool()->id()!=Tool::ToolText
-              && ke->key()== Key_Delete)
-          emit backSpaceCalled();
-      else*/
+//    if(ke->key() == Key_Tab)
     keyPressEvent(ke);
     return true;
   }

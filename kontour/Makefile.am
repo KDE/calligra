@@ -43,6 +43,7 @@ libkontourpart_la_SOURCES = \
 	GOval.cc \
 	GRect.cc \
 	GImage.cc \
+	GGroup.cc \
 	GStyle.cc \
 	GStyleList.cc \
 	LayerPanel.cc \
@@ -65,6 +66,8 @@ libkontourpart_la_SOURCES = \
 	DuplicateCmd.cc \
 	ToPathCmd.cc \
 	ReorderCmd.cc \
+	GroupCmd.cc \
+	UngroupCmd.cc \
 	TranslateCmd.cc \
 	ScaleCmd.cc \
 	ShearCmd.cc \

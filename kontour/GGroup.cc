@@ -3,7 +3,7 @@
   $Id$
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -40,7 +40,7 @@ GObject()
 GGroup::GGroup(const QDomElement &element):
 GObject(element.namedItem("go").toElement())
 {
-  QDomElement child = element.firstChild().toElement();
+/*  QDomElement child = element.firstChild().toElement();
     for( ; !child.isNull(); child = child.nextSibling().toElement() ) {
         if(child.tagName()=="gobject")
             continue;
@@ -57,16 +57,16 @@ GObject(element.namedItem("go").toElement())
 //        }
         if(obj)  // safer
             addObject(obj);
-    }
+    }*/
 }
 
 GGroup::GGroup(const GGroup &obj):
 GObject(obj)
 {
-  QPtrList<GObject> tmp = obj.getMembers();
+/*  QPtrList<GObject> tmp = obj.getMembers();
   for(GObject *o=tmp.first(); o!=0L; o=tmp.next())
         members.append(o->copy());
-  calcBoundingBox();
+  calcBoundingBox();*/
 }
 
 GGroup::~GGroup()
@@ -75,15 +75,15 @@ GGroup::~GGroup()
     o->unref();
 }
 
-GObject *GGroup::copy() const
-{
-  return new GGroup(*this);
-}
-
 void GGroup::addObject(GObject *obj)
 {
   obj->ref();
   members.append(obj);
+}
+
+GObject *GGroup::copy() const
+{
+  return new GGroup(*this);
 }
 
 QString GGroup::typeName() const
@@ -94,33 +94,50 @@ QString GGroup::typeName() const
 QDomElement GGroup::writeToXml(QDomDocument &document)
 {
   QDomElement group = document.createElement("group");
-  group.appendChild(GObject::writeToXml(document));
+/*  group.appendChild(GObject::writeToXml(document));
   for(GObject *o = members.first(); o != 0L; o = members.next())
-    group.appendChild(o->writeToXml(document));
+    group.appendChild(o->writeToXml(document));*/
   return group;
 }
 
-void GGroup::draw(QPainter &p, bool, bool outline, bool)
+void GGroup::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, bool outline, bool withEditMarks)
 {
-  p.save();
-  p.setWorldMatrix(tmpMatrix, true);
-  for(GObject *o = members.first(); o != 0L; o = members.next())
-    o->draw(p, false, outline);
-  p.restore();
+//  for(GObject *o = members.first(); o != 0L; o = members.next())
+//    o->draw(p, false, outline);
 }
 
-bool GGroup::contains (const Coord& p) {
-    if (box.contains (p)) {
+int GGroup::getNeighbourPoint(const KoPoint &p)
+{
+  return -1;
+}
+
+void GGroup::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
+{
+}
+
+void GGroup::removePoint(int idx, bool update)
+{
+}
+
+bool GGroup::contains(const KoPoint &p)
+{
+/*    if (box.contains (p)) {
         Coord np = p.transform (iMatrix);
         for (GObject *o=members.first(); o!=0L; o=members.next())
             if (o->contains (np))
                 return true;
-    }
-    return false;
+    }*/
+  return false;
 }
 
-void GGroup::calcBoundingBox () {
-  if (members.isEmpty ())
+bool GGroup::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
+{
+  return true;
+}
+
+void GGroup::calcBoundingBox()
+{
+/*  if (members.isEmpty ())
     return;
 
   GObject *o=members.first();
@@ -147,35 +164,17 @@ void GGroup::calcBoundingBox () {
     mr.bottom (QMAX(p[i].y (), mr.bottom ()));
   }
 
-  updateBoundingBox (mr);
+  updateBoundingBox (mr);*/
 }
 
-void GGroup::updateProperties (GObject::Property prop, int mask)
+GPath *GGroup::convertToPath() const
 {
-    GObject *o=members.first();
-    for (; o!=0L; o=members.next()) {
-      if (prop == GObject::Prop_Outline) {
-          // don't update the custom info (shape etc.)
-          outlineInfo.mask = mask & (GObject::OutlineInfo::Color |
-                                     GObject::OutlineInfo::Style |
-                                     GObject::OutlineInfo::Width);
-          o->setOutlineInfo (outlineInfo);
-      }
-      if (prop == GObject::Prop_Fill) {
-          fillInfo.mask = mask;
-          o->setFillInfo (fillInfo);
-      }
-    }
+  return 0L;
 }
 
-void GGroup::restoreState (GOState* state) {
-  tMatrix = state->matrix;
-  iMatrix = tMatrix.invert ();
-  tmpMatrix = tMatrix;
-  //setFillInfo (state->fInfo);
-  //setOutlineInfo (state->oInfo);
-
-  updateRegion ();
+bool GGroup::isConvertible() const
+{
+  return false;
 }
 
 #include "GGroup.moc"

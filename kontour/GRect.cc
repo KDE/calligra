@@ -152,7 +152,6 @@ void GRect::calcBoundingBox()
 
 int GRect::getNeighbourPoint(const KoPoint &p)
 {
-// TODO implement isNear() and transform()
 /*  for(int i = 1; i >= 0; i--)
   {
     KoPoint c = segPoint[i].transform(tMatrix);
@@ -164,67 +163,6 @@ int GRect::getNeighbourPoint(const KoPoint &p)
 
 void GRect::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
 {
-/*  double adx = fabs (dx);
-  double ady = fabs (dy);
-  double angle = 0;
-
-  if (idx == 0 && segPoint[0] == segPoint[1])
-    idx = 1;
-
-  Rect r (sPoint, ePoint);
-  r.normalize ();
-
-  double a = r.width () / 2.0;
-  double b = r.height () / 2.0;
-
-  if (adx > ady) {
-    double x = segPoint[idx].x () + dx;
-    if (x < r.left ())
-      x = r.left ();
-    else if (x > r.right ())
-      x = r.right ();
-
-    x -= (r.left () + a);
-    angle = acos (x / a) * RAD_FACTOR;
-    if (segPoint[idx].y () < r.center ().y ())
-      angle = 360 - angle;
-  }
-  else {
-    double y = segPoint[idx].y () + dy;
-    if (y < r.top ())
-      y = r.top ();
-    else if (y > r.bottom ())
-      y = r.bottom ();
-
-    y -= (r.top () + b);
-    angle = asin (y / b) * RAD_FACTOR;
-    if (segPoint[idx].y () < r.center ().y ()) {
-      if (segPoint[idx].x () > r.center ().x ())
-        angle += 360;
-      else
-        angle = 180 - angle;;
-    }
-    else if (segPoint[idx].x () < r.center ().x ())
-      angle = 180 - angle;
-  }
-  if (idx == 0)
-    sAngle = angle;
-  else
-    eAngle = angle;
-
-  // test for equality
-  double a1 = qRound (sAngle < 0 ? sAngle + 360 : sAngle);
-  double a2 = qRound (eAngle < 0 ? eAngle + 360 : eAngle);
-  if (a1 >= a2 - 1 && a1 <= a2 + 1) {
-    eAngle = sAngle;
-    outlineInfo.shape = GObject::OutlineInfo::DefaultShape;
-  }
-  else if (outlineInfo.shape == GObject::OutlineInfo::DefaultShape)
-    outlineInfo.shape = GObject::OutlineInfo::ArcShape;
-
-  gShape.setInvalid ();
-
-  updateRegion ();*/
 }
 
 void GRect::removePoint(int idx, bool update)
@@ -273,11 +211,41 @@ bool GRect::findNearestPoint(const KoPoint &p, double max_dist, double &dist, in
 GPath *GRect::convertToPath() const
 {
   GPath *path = new GPath(true);
-  path->beginTo(sPoint.x(), sPoint.y());
-  path->lineTo(sPoint.x(), ePoint.y());
-  path->lineTo(ePoint.x(), ePoint.y());
-  path->lineTo(ePoint.x(), sPoint.y());
-  path->lineTo(sPoint.x(), sPoint.y());
+  KoVectorPath *vec = new KoVectorPath;
+  double rx = 0.5 * mXRoundness * (ePoint.x() - sPoint.x());
+  double ry = 0.5 * mYRoundness * (ePoint.y() - sPoint.y());
+  if(mXRoundness != 0.0 && mYRoundness != 0.0)
+  {
+    double w = ePoint.x() - sPoint.x();
+    double h = ePoint.y() - sPoint.y();
+    double rx = 0.5 * mXRoundness * w;
+    double ry = 0.5 * mYRoundness * h;
+    if(rx > w / 2)
+      rx = w / 2;
+    if(ry > h / 2)
+      ry = h / 2;
+    path->beginTo(sPoint.x() + rx, sPoint.y());
+    path->curveTo(sPoint.x(), sPoint.y() + ry, sPoint.x() + rx * (1 - 0.552), sPoint.y(), sPoint.x(), sPoint.y() + ry * (1 - 0.552));
+    if(ry < h / 2)
+      path->lineTo(sPoint.x(), sPoint.y() + h - ry);
+    path->curveTo(sPoint.x() + rx, sPoint.y() + h, sPoint.x(), sPoint.y() + h - ry * (1 - 0.552), sPoint.x() + rx * (1 - 0.552), sPoint.y() + h);
+    if(rx < w / 2)
+      path->lineTo(sPoint.x() + w - rx, sPoint.y() + h);
+    path->curveTo(sPoint.x() + w, sPoint.y() + h - ry, sPoint.x() + w - rx * (1 - 0.552), sPoint.y() + h, sPoint.x() + w, sPoint.y() + h - ry * (1 - 0.552));
+    if(ry < h / 2)
+      path->lineTo(sPoint.x() + w, sPoint.y() + ry);
+    path->curveTo(sPoint.x() + w - rx, sPoint.y(), sPoint.x() + w, sPoint.y() + ry * (1 - 0.552), sPoint.x() + w - rx * (1 - 0.552), sPoint.y());
+    if(rx < w / 2)
+      path->lineTo(sPoint.x() + rx, sPoint.y());
+  }
+  else
+  {
+    path->beginTo(sPoint.x(), sPoint.y());
+    path->lineTo(sPoint.x(), ePoint.y());
+    path->lineTo(ePoint.x(), ePoint.y());
+    path->lineTo(ePoint.x(), sPoint.y());
+    path->lineTo(sPoint.x(), sPoint.y());
+  }
   path->matrix(matrix());
   path->style(style());
   return path;

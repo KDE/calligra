@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -27,9 +27,7 @@
 #define __GGroup_h__
 
 #include "GObject.h"
-
-class GOState;
-class Coord;
+#include <qptrlist.h>
 
 class GGroup : public GObject
 {
@@ -40,13 +38,14 @@ public:
   GGroup(const GGroup &obj);
   ~GGroup();
 
-  GObject *copy() const;
-
+  const QPtrList<GObject> &getMembers() const {return members; }
   void addObject(GObject *obj);
 
-  QString typeName() const;
+  GObject *copy() const;
+
+  QString typeName () const;
   QDomElement writeToXml(QDomDocument &document);
-  void draw(QPainter &p, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
+  void draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
 
   int getNeighbourPoint(const KoPoint &point);
   void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
@@ -56,13 +55,7 @@ public:
 
   void calcBoundingBox();
   GPath *convertToPath() const;
-
-
-  virtual void restoreState (GOState* state);
-  const QPtrList<GObject> &getMembers() const { return members; }
-
-protected:
-  virtual void updateProperties (GObject::Property prop, int mask);
+  bool isConvertible() const;
 
 private:
   QPtrList<GObject> members;

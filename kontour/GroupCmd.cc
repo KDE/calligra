@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,7 +23,7 @@
 
 */
 
-#include <GroupCmd.h>
+#include "GroupCmd.h"
 
 #include <klocale.h>
 #include <qdict.h>
@@ -31,9 +32,10 @@
 #include <GGroup.h>
 #include "GPage.h"
 
-GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {
-  document = doc;
-  group = 0L;
+GroupCmd::GroupCmd(GDocument *aGDoc):
+Command(aGDoc, i18n("Group Objects"))
+{
+/*  group = 0L;
 
   QMap<int, GObject*> idx_map;
 
@@ -48,16 +50,18 @@ GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {
        it != idx_map.end(); ++it) {
       // now insert the objects according their position in the list
       objects.append(it.data());
-  }
+  }*/
 }
 
-GroupCmd::~GroupCmd () {
-  if (group)
-    group->unref ();
+GroupCmd::~GroupCmd()
+{
+  if(group)
+    group->unref();
 }
 
-void GroupCmd::execute () {
-  if (!objects.isEmpty ()) {
+void GroupCmd::execute()
+{
+/*  if (!objects.isEmpty ()) {
     group = new GGroup (document);
     group->ref();
 
@@ -74,11 +78,12 @@ void GroupCmd::execute () {
     document->activePage()->deleteSelectedObjects ();
     document->activePage()->selectObject (group);
     document->setAutoUpdate (true);
-  }
+  }*/
 }
 
-void GroupCmd::unexecute () {
-  int pos = document->activePage()->findIndexOfObject (group);
+void GroupCmd::unexecute()
+{
+/*  int pos = document->activePage()->findIndexOfObject (group);
   if (pos != -1) {
     document->setAutoUpdate (false);
     // extract the members of the group
@@ -97,6 +102,5 @@ void GroupCmd::unexecute () {
     // remove the group object
     document->activePage()->deleteObject (group);
     document->setAutoUpdate (true);
-  }
+  }*/
 }
-

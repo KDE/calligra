@@ -28,25 +28,25 @@
 #include <qdom.h>
 #include <qimage.h>
 
+#include <kurl.h>
 #include <klocale.h>
+#include <koPainter.h>
+#include <kdebug.h>
 
 GImage::GImage(const KURL &url):
 GObject()
 {
-/*  if (url.isLocalFile ()) {
-    pix = new QPixmap (url.path ());
-    if (pix->isNull ()) {
+  mImage = new QImage();
+  if(url.isLocalFile())
+  {
+    mImage->load(url.path());
+/*    if (pix->isNull ()) {
       delete pix;
       pix = 0L;
       kdWarning(38000) << "pixmap is null !!!" << endl;
-    }
+    }*/
   }
-  if (pix) {
-    // use real pixmap dimension
-    width = pix->width ();
-    height = pix->height ();
-  }
-  calcBoundingBox ();*/
+  calcBoundingBox();
 }
 
 GImage::GImage(const QDomElement &element):
@@ -105,7 +105,10 @@ QDomElement GImage::writeToXml(QDomDocument &document)
 
 void GImage::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, bool outline, bool withEditMarks)
 {
-
+  QWMatrix m;
+  m = m.translate(aXOffset, aYOffset);
+  m = tmpMatrix * m;
+  p->drawImage(mImage, style()->fillOpacity(), m);
 }
 
 int GImage::getNeighbourPoint(const KoPoint &p)
@@ -123,6 +126,13 @@ void GImage::removePoint(int idx, bool update)
 
 bool GImage::contains(const KoPoint &p)
 {
+  double x1, y1, x2, y2;
+  if(box.contains(p))
+  {
+    QPoint pp = iMatrix.map(QPoint(static_cast<int>(p.x()), static_cast<int>(p.y())));
+    if(pp.x() <= mImage->width() && pp.x() >= 0 && pp.y() <= mImage->height() && pp.y() >= 0)
+      return true;
+  }
   return false;
 }
 
@@ -133,7 +143,7 @@ bool GImage::findNearestPoint(const KoPoint &p, double max_dist, double &dist, i
 
 void GImage::calcBoundingBox()
 {
-//  calcUntransformedBoundingBox(Coord (0, 0), Coord (width, 0), Coord(width, height), Coord(0, height));
+  box = calcUntransformedBoundingBox(KoPoint(0, 0), KoPoint(mImage->width(), 0), KoPoint(mImage->width(), mImage->height()), KoPoint(0, mImage->height()));
 }
 
 GPath *GImage::convertToPath() const

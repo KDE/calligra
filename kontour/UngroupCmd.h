@@ -24,7 +24,7 @@
 
 #ifndef UngroupCmd_h_
 #define UngroupCmd_h_
-
+/*
 #include <Command.h>
 
 class GDocument;
@@ -47,5 +47,5 @@ private:
     };
     QPtrList<GPair> groups;
 };
-
+*/
 #endif

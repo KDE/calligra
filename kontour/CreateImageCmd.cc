@@ -46,6 +46,7 @@ CreateImageCmd::~CreateImageCmd()
 void CreateImageCmd::execute()
 {
   document()->activePage()->insertObject(object);
+  document()->emitChanged(object->boundingBox(), true);
 }
 
 void CreateImageCmd::unexecute()

@@ -218,6 +218,8 @@ private:
   KAction             *m_toBack;
   KAction             *m_forwardOne;
   KAction             *m_backOne;
+  KAction             *m_group;
+  KAction             *m_ungroup;
 
   KSelectAction       *m_styles;
   KAction             *m_addStyle;
