@@ -78,6 +78,7 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
 
     slotExpressionActivated(m_typeExpression->currentText() );
     resize(200,300);
+    m_bChanged=false;
 }
 
 void KWEditPersonnalExpression::slotExpressionActivated(const QString &_text )
@@ -155,7 +156,8 @@ void KWEditPersonnalExpression::init(const QString& filename )
 
 void KWEditPersonnalExpression::slotOk()
 {
-    saveFile();
+    if( m_bChanged)
+        saveFile();
     KDialogBase::slotOk();
 }
 
@@ -174,6 +176,7 @@ void KWEditPersonnalExpression::slotAddExpression()
         m_listOfExpression->clear();
         m_listOfExpression->insertStringList(lst);
         m_delExpression->setEnabled(true);
+        m_bChanged=true;
     }
 }
 
@@ -190,6 +193,7 @@ void KWEditPersonnalExpression::slotDelExpression()
         m_listOfExpression->clear();
         m_listOfExpression->insertStringList(lst);
         m_delExpression->setEnabled(lst.count()>0);
+        m_bChanged=true;
     }
 }
 
@@ -209,6 +213,7 @@ void KWEditPersonnalExpression::slotAddGroup()
         m_delExpression->setEnabled(false);
         m_delGroup->setEnabled(true);
         enableButtonOK( true );
+        m_bChanged=true;
     }
 }
 
@@ -226,6 +231,7 @@ void KWEditPersonnalExpression::slotDelGroup()
     m_addExpression->setEnabled(hasItems);
     m_delExpression->setEnabled(hasItems);
     m_delGroup->setEnabled(hasItems);
+    m_bChanged=true;
 
 }
 

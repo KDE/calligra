@@ -58,6 +58,7 @@ protected slots:
     QPushButton *m_addGroup;
     QPushButton *m_delGroup;
     QPushButton *m_delExpression;
+    bool m_bChanged;
 };
 
 #endif
