@@ -133,9 +133,9 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
             // (which doesn't have frames, borders, etc.)
             iPoint.setX( nPoint.x() - frameRect.left() );
             iPoint.setY( nPoint.y() - ( frameRect.top() - frame->internalY() ) );
-            /*kdDebug() << "normalToInternal: returning " << iPoint.x() << "," << iPoint.y()
-                      << " internalY=" << frame->internalY() << " because r: " << DEBUGRECT(r)
-                      << " contains nPoint:" << nPoint.x() << "," << nPoint.y() << endl;*/
+            kdDebug() << "normalToInternal: returning " << iPoint.x() << "," << iPoint.y()
+                      << " internalY=" << frame->internalY() << " because " << DEBUGRECT(frameRect)
+                      << " contains nPoint:" << nPoint.x() << "," << nPoint.y() << endl;
             return frame;
         }
         else if ( mouseSelection ) // try harder if true
@@ -147,6 +147,9 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
                 // We are at the left of this frame (and not in any other frame of this frameset)
                 iPoint.setX( 0 );
                 iPoint.setY( nPoint.y() - ( frameRect.top() - frame->internalY() ) );
+                kdDebug() << "normalToInternal: returning " << iPoint.x() << "," << iPoint.y()
+                          << " internalY=" << frame->internalY() << " because openLeftRect=" << DEBUGRECT(openLeftRect)
+                          << " contains nPoint:" << nPoint.x() << "," << nPoint.y() << endl;
                 return frame;
             }
             QRect openTopRect( frameRect );
@@ -155,12 +158,54 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
             {
                 // We are at the top of this frame (...)
                 iPoint.setX( nPoint.x() - frameRect.left() );
-                iPoint.setY( 0 );
+                iPoint.setY( frame->internalY() );
+                kdDebug() << "normalToInternal: returning " << iPoint.x() << "," << iPoint.y()
+                          << " internalY=" << frame->internalY() << " because openTopRect=" << DEBUGRECT(openTopRect)
+                          << " contains nPoint:" << nPoint.x() << "," << nPoint.y() << endl;
                 return frame;
             }
         }
     }
+    // Not found. This means either:
+    // if mouseSelection == false : the mouse isn't over any frame, in the page pageNum.
+    // if mouseSelection == true : we are under (or at the right of), the frames in pageNum.
+    if ( mouseSelection ) // in that case, go for the first frame in the next page.
+    {
+        if ( pageNum + 1 >= m_framesInPage.size() + m_firstPage )
+        {
+            // Under last frame of last page!
+            KWFrame *frame = frames.getLast();
+            QRect frameRect = kWordDocument()->zoomRect( *frame );
+            iPoint.setX( frameRect.width() );
+            iPoint.setY( frame->internalY() + frameRect.height() );
+            kdDebug() << "normalToInternal: returning " << iPoint.x() << "," << iPoint.y()
+                      << " because we are under all frames of the last page" << endl;
+            return frame;
+        }
+        else
+        {
+            QListIterator<KWFrame> frameIt( framesInPage( pageNum + 1 ) );
+            if ( frameIt.current() )
+            {
+                // There is a frame on the next page
+                KWFrame *frame = frameIt.current();
+                QRect frameRect = kWordDocument()->zoomRect( *frame );
+                QRect openTopRect( frameRect );
+                openTopRect.setY( 0 );
+                if ( openTopRect.contains( nPoint ) ) // We are at the top of this frame
+                    iPoint.setX( nPoint.x() - frameRect.left() );
+                else
+                    iPoint.setX( 0 ); // We are, hmm, on the left or right of the frames
+                iPoint.setY( frame->internalY() );
+                kdDebug() << "normalToInternal: returning " << iPoint.x() << "," << iPoint.y()
+                          << " because we are under all frames of page " << pageNum << endl;
+                return frame;
+            } // else there is a gap (no frames on that page, but on some other further down)
+            // This case isn't handled (and should be VERY rare I think)
+        }
+    }
 
+    iPoint = nPoint; // bah
     return 0;
 }
 
