@@ -606,28 +606,41 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
             if ( !ok ) return false;
         }
     }
+#endif
+
     QDomElement graph = params.namedItem( "graph" ).toElement();
     if(!graph.isNull()) {
         if(graph.hasAttribute( "grid" )) {
-            _params->grid=(bool) graph.attribute("grid").toInt( &ok );
+            bool b=(bool) graph.attribute("grid").toInt( &ok );
+            _params->setAxisShowGrid(KDChartAxisParams::AxisPosLeft,b );
+            _params->setAxisShowGrid(KDChartAxisParams::AxisPosBottom,b );
             if(!ok) return false;
         }
         if(graph.hasAttribute( "xaxis" )) {
-            _params->xaxis=(bool) graph.attribute("xaxis").toInt( &ok );
+            bool b=(bool) graph.attribute("xaxis").toInt( &ok );
             if(!ok) return false;
+            _params->setAxisVisible(KDChartAxisParams::AxisPosBottom,b);
         }
         if(graph.hasAttribute( "yaxis" )) {
-            _params->yaxis=(bool) graph.attribute("yaxis").toInt( &ok );
+            bool b=(bool) graph.attribute("yaxis").toInt( &ok );
             if(!ok) return false;
+            _params->setAxisVisible(KDChartAxisParams::AxisPosLeft,b);
         }
+#if 0
+        //no implemented
         if(graph.hasAttribute( "shelf" )) {
             _params->shelf=(bool) graph.attribute("shelf").toInt( &ok );
             if(!ok) return false;
         }
+#endif
         if(graph.hasAttribute( "yaxis2" )) {
-            _params->yaxis2=(bool) graph.attribute("yaxis2").toInt( &ok );
+            bool b=(bool) graph.attribute("yaxis2").toInt( &ok );
             if(!ok) return false;
+            _params->setAxisVisible(KDChartAxisParams::AxisPosRight,b);
         }
+
+#if 0
+        //no implemented
         if(graph.hasAttribute( "ystyle" )) {
             _params->yval_style=(bool) graph.attribute("ystyle").toInt( &ok );
             if(!ok) return false;
@@ -678,7 +691,10 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
             if(!ok)
                 return false;
         }
+#endif
     }
+
+#if 0
     QDomElement graphparams = params.namedItem( "graphparams" ).toElement();
     if(!graphparams.isNull()) {
         if(graphparams.hasAttribute( "dept3d" )) {
