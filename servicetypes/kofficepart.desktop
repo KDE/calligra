@@ -1,4 +1,13 @@
 [Desktop Entry]
+Type=ServiceType
 X-KDE-ServiceType=KOfficePart
 Comment=KOffice Component
-Comment[fr]=Composant KOffice
+Comment[ca]=Component KOffice
+Comment[cs]=komponenta KOffice
+Comment[da]=KOffice komponent
+Comment[de]=KOffice-Komponente
+Comment[fi]=Koffice komponentti
+Comment[hu]=KOffice Segédeszköz
+Comment[ja]=KOffice¥³¥ó¥Ý¡¼¥Í¥ó¥È
+Comment[no]=KOffice-komponent
+Comment[no_NY]=KOffice-komponent

@@ -1,9 +1,16 @@
 [Desktop Entry]
+Type=ServiceType
 X-KDE-ServiceType=KOfficePlugin
 Comment=KOffice Plugin
+Comment[ca]=Accessori KOffice
+Comment[cs]=KOffice plugin
+Comment[da]=KOffice plugin
 Comment[eo]=Filtrilo por la programo Oficejo
 Comment[fi]=Koffice sovelma
 Comment[ja]=KOfficeプラグイン
+Comment[no]=KOffice-pluginn
+Comment[no_NY]=KOffice-'plugin'
+Comment[sr]=Plugin za KOffice
 Comment[sv]=Insticksprogram till KOffice
 
 [PropertyDef::MenuEntries]

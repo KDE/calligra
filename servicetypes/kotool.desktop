@@ -1,11 +1,19 @@
 [Desktop Entry]
+Type=ServiceType
 X-KDE-ServiceType=KoDataTool
 Comment=KOffice Tool
+Comment[ca]=Eina KOffice
+Comment[cs]=Nástoj KOffice
+Comment[da]=KOffice redskab
 Comment[de]=KOffice Werkzeug
 Comment[eo]=Ilo por la programo Oficejo
 Comment[fi]=Koffice työkalu
 Comment[hu]=KOffice Segédeszköz
 Comment[ja]=KOffice¥Ä¡¼¥ë
+Comment[mi]=KOffice Segédeszköz
+Comment[no]=KOffice-verktøy
+Comment[no_NY]=KOffice-verktøy
+Comment[sr]=Alat za KOffice
 Comment[sv]=Verktyg till KOffice
 
 [PropertyDef::Commands]
