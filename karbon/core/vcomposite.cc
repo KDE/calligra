@@ -233,7 +233,7 @@ VComposite::draw( VPainter* painter, const KoRect* rect ) const
 						  jtr.current()->prev()->knotSelected() ) )
 					{
 						painter->setBrush( Qt::blue.light() );
-						painter->drawNode( jtr.current()->ctrlPoint1(), 3 );
+						painter->drawNode( jtr.current()->ctrlPoint1(), 2 );
 					}
 					else
 						painter->setBrush( Qt::NoBrush );
@@ -249,7 +249,7 @@ VComposite::draw( VPainter* painter, const KoRect* rect ) const
 						jtr.current()->knotSelected() )
 					{
 						painter->setBrush( Qt::blue.light() );
-						painter->drawNode( jtr.current()->ctrlPoint2(), 3 );
+						painter->drawNode( jtr.current()->ctrlPoint2(), 2 );
 					}
 					else
 						painter->setBrush( Qt::NoBrush );
@@ -265,7 +265,7 @@ VComposite::draw( VPainter* painter, const KoRect* rect ) const
 				else
 					painter->setBrush( Qt::blue.light() );
 
-				painter->drawNode( jtr.current()->knot(), 3 );
+				painter->drawNode( jtr.current()->knot(), m_stroke->lineWidth() > 5.0 ? 3 : 2 );
 			}
 		}
 
