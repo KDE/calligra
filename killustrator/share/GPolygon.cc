@@ -6,7 +6,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -14,7 +14,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -95,15 +95,15 @@ GPolygon::GPolygon (GPolygon::Kind pkind) : GPolyline () {
   points.setAutoDelete (true);
   kind = pkind;
 }
-  
-GPolygon::GPolygon (const list<XmlAttribute>& attribs, Kind pkind) 
+
+GPolygon::GPolygon (const list<XmlAttribute>& attribs, Kind pkind)
   : GPolyline (attribs) {
   points.setAutoDelete (true);
   kind = pkind;
   if (kind != PK_Polygon) {
     list<XmlAttribute>::const_iterator first = attribs.begin ();
     float x = 0, y = 0, w = 0, h = 0;
-    
+
     while (first != attribs.end ()) {
       const string& attr = (*first).name ();
       if (attr == "x")
@@ -129,7 +129,7 @@ GPolygon::GPolygon (const list<XmlAttribute>& attribs, Kind pkind)
 GPolygon::GPolygon (const GPolygon& obj) : GPolyline (obj) {
   kind = obj.kind;
 }
-  
+
 GPolygon::GPolygon (QList<Coord>& coords) : GPolyline () {
   Coord *p1 = coords.first (), *p2 = 0L;
   bool ready = false;
@@ -181,7 +181,7 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
   if (! workInProgress () && !outline) {
     initBrush (brush);
     p.setBrush (brush);
-    
+
     if (gradientFill ()) {
       if (! gShape.valid ())
 	updateGradientShape (p);
@@ -193,7 +193,7 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
   if (kind == PK_Polygon) {
     QPointArray parray (num);
     for (i = 0; i < num; i++) {
-      parray.setPoint (i, (int) points.at (i)->x (), 
+      parray.setPoint (i, (int) points.at (i)->x (),
 		       (int) points.at (i)->y ());
     }
     p.drawPolygon (parray);
@@ -206,7 +206,7 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
 		       p2.x () - p1.x (),
 		       p2.y () - p1.y (), Roundness, Roundness);
     else
-      Painter::drawRect (p, p1.x (), p1.y (), p2.x () - p1.x (), 
+      Painter::drawRect (p, p1.x (), p1.y (), p2.x () - p1.x (),
 			 p2.y () - p1.y ());
   }
 
@@ -235,7 +235,7 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
 }
 
 void GPolygon::insertPoint (int idx, const Coord& p, bool update) {
-  if (kind != PK_Polygon) 
+  if (kind != PK_Polygon)
     kind = PK_Polygon;
   GPolyline::insertPoint (idx, p, update);
 }
@@ -283,8 +283,8 @@ void GPolygon::setEndPoint (const Coord& p) {
   updateRegion ();
 }
 
-void GPolygon::setSymmetricPolygon (const Coord& sp, const Coord& ep, 
-				    int nCorners, 
+void GPolygon::setSymmetricPolygon (const Coord& sp, const Coord& ep,
+				    int nCorners,
 				    bool concave, int sharpness) {
   int i;
   points.clear ();
@@ -292,7 +292,7 @@ void GPolygon::setSymmetricPolygon (const Coord& sp, const Coord& ep,
   float a, angle = 2 * M_PI / nCorners;
   float dx = (float) fabs (sp.x () - ep.x ());
   float dy = (float) fabs (sp.y () - ep.y ());
-  float radius = (dx > dy ? dx / 2.0 : dy / 2.0); 
+  float radius = (dx > dy ? dx / 2.0 : dy / 2.0);
   float xoff = sp.x () + radius;
   float yoff = sp.y () + radius;
   float xp, yp;
@@ -392,10 +392,10 @@ bool GPolygon::inside_polygon (const Coord& p) {
         p2 = points.first ();
         ready = true;
       }
-      if (line_intersects (*p1, *p2, t1, t2)) 
+      if (line_intersects (*p1, *p2, t1, t2))
         counter++;
       p1 = p2;
-    } 
+    }
   }
   */
   return counter & 1;
@@ -405,7 +405,7 @@ void GPolygon::update_rpoints () {
   int i;
 
   if (kind != PK_Polygon && Roundness > 0) {
-    if (points.count () < 4) 
+    if (points.count () < 4)
       return;
 
     float w = points.at (1)->x () - points.at (0)->x ();
@@ -419,9 +419,9 @@ void GPolygon::update_rpoints () {
     for (i = 0; i < 4; i++) {
       rpoints.at (i * 2)->x (points.at (i)->x () + xoff * xfactors[i * 2]);
       rpoints.at (i * 2)->y (points.at (i)->y () + yoff * yfactors[i * 2]);
-      rpoints.at (i * 2 + 1)->x (points.at (i)->x () + 
+      rpoints.at (i * 2 + 1)->x (points.at (i)->x () +
 				 xoff * xfactors[i * 2 + 1]);
-      rpoints.at (i * 2 + 1)->y (points.at (i)->y () + 
+      rpoints.at (i * 2 + 1)->y (points.at (i)->y () +
 				 yoff * yfactors[i * 2 + 1]);
     }
   }
@@ -429,7 +429,7 @@ void GPolygon::update_rpoints () {
 
 int GPolygon::getNeighbourPoint (const Coord& p) {
   if (kind != PK_Polygon && Roundness > 0) {
-    for (unsigned int i = 0; i < rpoints.count (); i++) { 
+    for (unsigned int i = 0; i < rpoints.count (); i++) {
       Coord c = rpoints.at (i)->transform (tMatrix);
       if (c.isNear (p, NEAR_DISTANCE))
 	return i;
@@ -471,7 +471,7 @@ void GPolygon::writeToXml (XmlWriter& xml) {
 }
 
 void GPolygon::updateGradientShape (QPainter& p) {
-  // define the rectangular box for the gradient pixmap 
+  // define the rectangular box for the gradient pixmap
   // (in object coordinate system)
   if (kind != PK_Polygon) {
     const Coord& p1 = *(points.at (0));
@@ -488,8 +488,8 @@ void GPolygon::updateGradientShape (QPainter& p) {
   for (unsigned int i = 0; i < num; i++)
     pnts.setPoint (i, qRound (points.at (i)->x ()),
 		   qRound (points.at (i)->y ()));
-  
-  if (kind == PK_Polygon || 
+
+  if (kind == PK_Polygon ||
       (kind != PK_Polygon && (Roundness == 0 || Roundness == 100))) {
     if (kind == PK_Polygon || Roundness == 0) {
       QRegion region (matrix.map (pnts));
@@ -503,7 +503,7 @@ void GPolygon::updateGradientShape (QPainter& p) {
       QRect rect (pnts.point (0).x (), pnts.point (0).y (), w, h);
       rect = rect.normalize ();
       QPointArray epnts;
-      epnts.makeEllipse (rect.x (), rect.y (), 
+      epnts.makeEllipse (rect.x (), rect.y (),
 			 rect.width (), rect.height ());
       gShape.setRegion (QRegion (matrix.map (epnts)));
     }
@@ -518,16 +518,16 @@ void GPolygon::updateGradientShape (QPainter& p) {
     float xrad = nrect.width () * Roundness / 200.0;
     float yrad = nrect.height () * Roundness / 200.0;
 
-    QRect trect (nrect.x (), nrect.y () + yrad, 
+    QRect trect (nrect.x (), nrect.y () + yrad,
 		 nrect.width (), nrect.height () - 2 * yrad);
     QPointArray tarray (trect, true);
     QPointArray clip1 = matrix.map (tarray);
 
-    trect = QRect (nrect.x () + xrad, nrect.y (), 
+    trect = QRect (nrect.x () + xrad, nrect.y (),
 		   nrect.width () - 2 * xrad, nrect.height ());
     tarray = QPointArray (trect, true);
     QPointArray clip2 = matrix.map (tarray);
-    
+
 
     QRegion region (clip1);
     region = region.unite (QRegion (clip2));
@@ -535,15 +535,15 @@ void GPolygon::updateGradientShape (QPainter& p) {
     tarray.makeEllipse (nrect.x (), nrect.y (), xrad * 2 , yrad * 2);
     region = region.unite (matrix.map (tarray));
 
-    tarray.makeEllipse (nrect.right () - (2 * xrad), nrect.y (), 
+    tarray.makeEllipse (nrect.right () - (2 * xrad), nrect.y (),
 			xrad * 2, yrad * 2);
     region = region.unite (matrix.map (tarray));
 
-    tarray.makeEllipse (nrect.x (), nrect.bottom () - (2 * yrad), 
+    tarray.makeEllipse (nrect.x (), nrect.bottom () - (2 * yrad),
 			xrad * 2, yrad * 2);
     region = region.unite (matrix.map (tarray));
 
-    tarray.makeEllipse (nrect.right () - (2 * xrad), 
+    tarray.makeEllipse (nrect.right () - (2 * xrad),
 			nrect.bottom () - (2 * yrad), xrad * 2, yrad * 2);
     region = region.unite (matrix.map (tarray));
 
@@ -571,7 +571,7 @@ void GPolygon::getPath (vector<Coord>& path) {
 //  (1) more than 3 points
 //  (2) dimension greater or equal 1
 bool GPolygon::isValid () {
-  if (points.count () >= 3) 
+  if (points.count () >= 3)
     return GPolyline::isValid ();
   else
     return false;
@@ -580,11 +580,11 @@ bool GPolygon::isValid () {
 bool GPolygon::splitAt (unsigned int idx, GObject*& obj1, GObject*& obj2) {
   bool result = false;
 
-  if (idx >= 0 && idx < points.count ()) {
+  if (idx < points.count ()) {
     GPolyline* other = new GPolyline (* ((GPolyline *) this));
     other->removeAllPoints ();
     unsigned int i, num = points.count ();
-    for (i = idx; i < num; i++) 
+    for (i = idx; i < num; i++)
       other->_addPoint (other->numOfPoints (), *points.at (i));
     for (i = 0; i <= idx; i++)
       other->_addPoint (other->numOfPoints (), *points.at (i));
