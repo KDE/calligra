@@ -129,7 +129,7 @@ void KChartConfigDialog::apply()
     //             For KOffice 1.2 this is to be removed by a checkbox.
     //                                                (khz, 10.12.2001)
     if( 230 == backColor.red() && 222 == backColor.green() && 222 == backColor.blue() ){
-        bool bFound; 
+        bool bFound;
         const KDChartParams::KDChartFrameSettings * innerFrame =
             _params->frameSettings( KDChartEnums::AreaInnermost, bFound );
         if( bFound ) {
@@ -220,6 +220,8 @@ void KChartConfigDialog::apply()
         //     for( uint i = 0; i < NUMDATACOLORS; i++ )
         // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
     }
+    // data in the params struct has changed; notify application
+    emit dataChanged();
 }
 
 void KChartConfigDialog::defaults()
@@ -232,7 +234,7 @@ void KChartConfigDialog::defaults()
     _colorpage->setHdFtColor(     KDChartParams::HdFtPosFooter,
       _params->headerFooterColor( KDChartParams::HdFtPosFooter ) );
 
-    bool bFound; 
+    bool bFound;
     const KDChartParams::KDChartFrameSettings * innerFrame =
       _params->frameSettings( KDChartEnums::AreaInnermost, bFound );
     if( bFound )
