@@ -1126,6 +1126,7 @@ bool KoDocument::saveOasisPreview( KoStore* store )
 
     // NOTE: we cannot use QDataStream, as it is not 1:1
     QByteArray imageData;
+    // ### TODO: perhaps use a KoStoreDevice instead
     QBuffer buffer(imageData);
     buffer.open(IO_WriteOnly);
     imageIO.setIODevice(&buffer);
@@ -1145,6 +1146,7 @@ bool KoDocument::savePreview( KoStore* store )
 
     // NOTE: we cannot use QDataStream, as it is not 1:1
     QByteArray imageData;
+    // ### TODO: perhaps use a KoStoreDevice instead
     QBuffer buffer(imageData);
     buffer.open(IO_WriteOnly);
     imageIO.setIODevice(&buffer);
