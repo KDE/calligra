@@ -2408,24 +2408,24 @@ namespace KSpreadCurrency_LNS
     { "$", I18N_NOOP("New Zealand"), I18N_NOOP("Dollar"), "$" },
     { "$", I18N_NOOP("United States"), I18N_NOOP("Dollar"), "$" },
 
-    { "", "", "", "" }, // unspecified 
-    { "", I18N_NOOP("Austria"), I18N_NOOP("Euro"), "" },
-    { "", I18N_NOOP("Belgium"), I18N_NOOP("Euro"), "" },
-    { "", I18N_NOOP("Finland"), I18N_NOOP("Euro"), "" },
-    { "", I18N_NOOP("France"), I18N_NOOP("Euro"), "" },
-    { "", I18N_NOOP("Germany"), I18N_NOOP("Euro"), "" },
-    { "", I18N_NOOP("Greece"), I18N_NOOP("Euro"), "" },
-    { "", I18N_NOOP("Ireland"), I18N_NOOP("Euro"), "" },
-    { "", I18N_NOOP("Italy"), I18N_NOOP("Euro"), "" },
-    { "", I18N_NOOP("Luxembourg"), I18N_NOOP("Euro"), "" },
-    { "", I18N_NOOP("Monaco"), I18N_NOOP("Euro"), "" },
-    { "", I18N_NOOP("Netherlands"), I18N_NOOP("Euro"), "" },
-    { "", I18N_NOOP("Portugal"), I18N_NOOP("Euro"), "" },
-    { "", I18N_NOOP("Spain"), I18N_NOOP("Euro"), "" },
+    { "ค", "", "ค", "ค" }, // unspecified 
+    { "ค", I18N_NOOP("Austria"), I18N_NOOP("Euro"), "ค" },
+    { "ค", I18N_NOOP("Belgium"), I18N_NOOP("Euro"), "ค" },
+    { "ค", I18N_NOOP("Finland"), I18N_NOOP("Euro"), "ค" },
+    { "ค", I18N_NOOP("France"), I18N_NOOP("Euro"), "ค" },
+    { "ค", I18N_NOOP("Germany"), I18N_NOOP("Euro"), "ค" },
+    { "ค", I18N_NOOP("Greece"), I18N_NOOP("Euro"), "ค" },
+    { "ค", I18N_NOOP("Ireland"), I18N_NOOP("Euro"), "ค" },
+    { "ค", I18N_NOOP("Italy"), I18N_NOOP("Euro"), "ค" },
+    { "ค", I18N_NOOP("Luxembourg"), I18N_NOOP("Euro"), "ค" },
+    { "ค", I18N_NOOP("Monaco"), I18N_NOOP("Euro"), "ค" },
+    { "ค", I18N_NOOP("Netherlands"), I18N_NOOP("Euro"), "ค" },
+    { "ค", I18N_NOOP("Portugal"), I18N_NOOP("Euro"), "ค" },
+    { "ค", I18N_NOOP("Spain"), I18N_NOOP("Euro"), "ค" },
 
-    { "", I18N_NOOP("United Kingdom"), I18N_NOOP("Pound"), "" },
+    { "ฃ", I18N_NOOP("United Kingdom"), I18N_NOOP("Pound"), "ฃ" },
 
-    { "", I18N_NOOP("Japan"), I18N_NOOP("Yen"), "" },
+    { "ฅ", I18N_NOOP("Japan"), I18N_NOOP("Yen"), "ฅ" },
 
     { "AFA", I18N_NOOP("Afganistan"), I18N_NOOP("Afghani"), I18N_NOOP("AFA") },
     { "ALL", I18N_NOOP("Albania"), I18N_NOOP("Lek"), I18N_NOOP("Lek") },
@@ -2441,7 +2441,7 @@ namespace KSpreadCurrency_LNS
     { "AWG", I18N_NOOP("Aruba"), I18N_NOOP("Aruban Guilder"), I18N_NOOP("AWG") },
     { "AUD", I18N_NOOP("Australia"), I18N_NOOP("Australian Dollar"), I18N_NOOP("AUD") },
     { "EUR", I18N_NOOP("Austria"), I18N_NOOP("Euro"), I18N_NOOP("EUR") },
-    { "ATS", I18N_NOOP("Austria"), I18N_NOOP("Schilling"), I18N_NOOP("รถS") },
+    { "ATS", I18N_NOOP("Austria"), I18N_NOOP("Schilling"), I18N_NOOP("S") },
     { "AZM", I18N_NOOP("Azerbaijan"), I18N_NOOP("Azerbaijanian Manat"), I18N_NOOP("AZM") },
     { "BSD", I18N_NOOP("Bahamas"), I18N_NOOP("Bahamian Dollar"), I18N_NOOP("BSD") },
     { "BHD", I18N_NOOP("Bahrain"), I18N_NOOP("Bahraini Dinar"), I18N_NOOP("BHD") },
@@ -2761,12 +2761,12 @@ KSpreadCurrency::KSpreadCurrency(QString const & code, currencyFormat format)
 {
   if ( format == Gnumeric )
   {
-    if ( code.find( '' ) != -1 )
-      m_code = "";
-    else if ( code.find( '' ) != -1 )
-      m_code = "";
-    else if ( code.find( '' ) != -1 )
-      m_code = "";
+    if ( code.find( 'ค' ) != -1 )
+      m_code = "ค";
+    else if ( code.find( 'ฃ' ) != -1 )
+      m_code = "ฃ";
+    else if ( code.find( 'ฅ' ) != -1 )
+      m_code = "ฅ";
     else if ( code[0] == '[' && code[1] == '$' ) 
     {
       int n = code.find(']');
