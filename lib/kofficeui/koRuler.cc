@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 
 class KoRulerPrivate {
@@ -346,6 +347,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
     d->oldMx = e->x();
     d->oldMy = e->y();
     d->mousePressed = true;
+    d->removeTab=false;
 
     if ( e->button() == RightButton ) {
 	QPoint pnt( QCursor::pos() );
@@ -440,6 +442,10 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 void KoRuler::mouseReleaseEvent( QMouseEvent *e )
 {
     d->mousePressed = false;
+
+    // Hacky, but necessary to prevent multiple tabs with the same coordinates (Werner)
+    if(d->removeTab)
+	mouseMoveEvent(e);
 
     if ( d->action == A_BR_RIGHT || d->action == A_BR_LEFT ) {
 	d->whileMovingBorderRight = false;
