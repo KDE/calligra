@@ -1464,13 +1464,13 @@ bool KWordDocument::completeLoading( KoStore *_store )
 
 	    QImage img;
 
-	    if ( _store->open( u, "" ) ) {
+	    if ( _store->open( u ) ) {
 		istorestream in( _store );
 		in >> img;
 		_store->close();
 	    } else {
 		u.prepend( "file:" );
-		if ( _store->open( u, "" ) ) {
+		if ( _store->open( u ) ) {
 		    istorestream in( _store );
 		    in >> img;
 		    _store->close();
@@ -1645,12 +1645,10 @@ bool KWordDocument::completeSaving( KoStore *_store )
 	    format = "BMP";
 
 	QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
-	QCString mime ( "image/" );
-        mime += format.lower().ascii();
         if ( !isStoredExtern() )
           u2.prepend( url().url() + "/" );
 	
-	if ( _store->open( u2, mime.lower() ) ) {
+	if ( _store->open( u2 ) ) {
 	    ostorestream out( _store );
 	    writeImageToStream( out, *it.current(), format );
 	    out.flush();
