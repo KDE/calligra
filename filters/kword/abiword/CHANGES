@@ -1,0 +1,10 @@
+i: import 
+e: export
+i/e: import/export
+
+Post-1.2
+========
+
+- i/e: support for <metadata>
+- e: file format like AbiWord 1.1.2
+- e: fix bug when font name has an &
