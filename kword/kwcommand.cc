@@ -351,14 +351,14 @@ QTextCursor * KWPasteTextCommand::execute( QTextCursor *c )
         parag = static_cast<KWTextParag *>(parag->next());
         //kdDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
     }
+    textFs->zoom( false );
+
     // In case loadFormatting queued any image request
     KWDocument * doc = textFs->kWordDocument();
     doc->processImageRequests();
 
     // In case of any inline frameset
     doc->pasteFrames( elem, 0 );
-
-    textFs->zoom( false );
 
     m_lastParag = c->parag()->paragId();
     m_lastIndex = c->index();
