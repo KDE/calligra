@@ -1342,11 +1342,11 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
     m_mousePressed = true; // needed for the dbl-click + move feature.
 }
 
-void KWCanvas::setLeftFrameBorder( KoBorder newBorder, bool on )
+KCommand *KWCanvas::setLeftFrameBorder( KoBorder newBorder, bool on )
 {
     QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
-        return;
+        return 0L;
     QPtrList<FrameBorderTypeStruct> tmpBorderList;
     QPtrList<FrameIndex> frameindexList;
     bool leftFrameBorderChanged=false;
@@ -1385,16 +1385,17 @@ void KWCanvas::setLeftFrameBorder( KoBorder newBorder, bool on )
     if(leftFrameBorderChanged)
     {
         KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Left Border frame"),frameindexList,tmpBorderList,newBorder);
-        m_doc->addCommand(cmd);
         m_doc->repaintAllViews();
+        return cmd;
     }
+    return 0L;
 }
 
-void KWCanvas::setRightFrameBorder( KoBorder newBorder, bool on )
+KCommand *KWCanvas::setRightFrameBorder( KoBorder newBorder, bool on )
 {
     QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
-        return;
+        return 0L;
     QPtrList<FrameBorderTypeStruct> tmpBorderList;
     QPtrList<FrameIndex> frameindexList;
     bool rightFrameBorderChanged=false;
@@ -1433,16 +1434,17 @@ void KWCanvas::setRightFrameBorder( KoBorder newBorder, bool on )
     if( rightFrameBorderChanged)
     {
         KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Right Border frame"),frameindexList,tmpBorderList,newBorder);
-        m_doc->addCommand(cmd);
         m_doc->repaintAllViews();
+        return cmd;
     }
+    return 0L;
 }
 
-void KWCanvas::setTopFrameBorder( KoBorder newBorder, bool on )
+KCommand *KWCanvas::setTopFrameBorder( KoBorder newBorder, bool on )
 {
     QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
-        return;
+        return 0L;
 
     QPtrList<FrameBorderTypeStruct> tmpBorderList;
     QPtrList<FrameIndex> frameindexList;
@@ -1482,16 +1484,17 @@ void KWCanvas::setTopFrameBorder( KoBorder newBorder, bool on )
     if(topFrameBorderChanged)
     {
         KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Top Border frame"),frameindexList,tmpBorderList,newBorder);
-        m_doc->addCommand(cmd);
         m_doc->repaintAllViews();
+        return cmd;
     }
+    return 0L;
 }
 
-void KWCanvas::setBottomFrameBorder( KoBorder newBorder, bool on )
+KCommand *KWCanvas::setBottomFrameBorder( KoBorder newBorder, bool on )
 {
     QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
-        return;
+        return 0L;
     bool bottomFrameBorderChanged=false;
     QPtrList<FrameBorderTypeStruct> tmpBorderList;
     QPtrList<FrameIndex> frameindexList;
@@ -1529,9 +1532,10 @@ void KWCanvas::setBottomFrameBorder( KoBorder newBorder, bool on )
     if(bottomFrameBorderChanged)
     {
         KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Bottom Border frame"),frameindexList,tmpBorderList,newBorder);
-        m_doc->addCommand(cmd);
         m_doc->repaintAllViews();
+        return cmd;
     }
+    return 0L;
 }
 
 void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )

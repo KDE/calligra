@@ -81,10 +81,10 @@ public:
     /**
     * set frame border. Sets frame border to newBorder, or to 0 if on==false.
     */
-    void setLeftFrameBorder( KoBorder newBorder, bool on );
-    void setRightFrameBorder( KoBorder newBorder, bool on );
-    void setTopFrameBorder( KoBorder newBorder, bool on );
-    void setBottomFrameBorder( KoBorder newBorder, bool on );
+    KCommand *setLeftFrameBorder( KoBorder newBorder, bool on );
+    KCommand *setRightFrameBorder( KoBorder newBorder, bool on );
+    KCommand *setTopFrameBorder( KoBorder newBorder, bool on );
+    KCommand *setBottomFrameBorder( KoBorder newBorder, bool on );
 
     void setFrameBackgroundColor( const QBrush &backColor );
 

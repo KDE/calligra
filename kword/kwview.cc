@@ -3982,7 +3982,6 @@ void KWView::backgroundColor()
 void KWView::borderSet()
 {
     // The effect of this action depends on if we are in Edit Text or Edit Frame mode.
-
     m_border.left = m_border.common;
     m_border.right = m_border.common;
     m_border.top = m_border.common;
@@ -4012,10 +4011,40 @@ void KWView::borderSet()
     }
     else
     {
-        m_gui->canvasWidget()->setLeftFrameBorder( m_border.common, actionBorderLeft->isChecked() );
-        m_gui->canvasWidget()->setRightFrameBorder( m_border.common, actionBorderRight->isChecked() );
-        m_gui->canvasWidget()->setTopFrameBorder( m_border.common, actionBorderTop->isChecked() );
-        m_gui->canvasWidget()->setBottomFrameBorder( m_border.common, actionBorderBottom->isChecked() );
+        KMacroCommand *macro = new KMacroCommand( i18n("Change Border"));
+        bool createMacro = false;
+        KCommand*cmd=m_gui->canvasWidget()->setLeftFrameBorder( m_border.common, actionBorderLeft->isChecked() );
+        if ( cmd )
+        {
+            macro->addCommand( cmd);
+            createMacro= true;
+        }
+        cmd = m_gui->canvasWidget()->setRightFrameBorder( m_border.common, actionBorderRight->isChecked() );
+        if ( cmd )
+        {
+            macro->addCommand( cmd);
+            createMacro= true;
+        }
+
+        cmd = m_gui->canvasWidget()->setTopFrameBorder( m_border.common, actionBorderTop->isChecked() );
+        if ( cmd )
+        {
+            macro->addCommand( cmd);
+            createMacro= true;
+        }
+
+        cmd = m_gui->canvasWidget()->setBottomFrameBorder( m_border.common, actionBorderBottom->isChecked() );
+        if ( cmd )
+        {
+            macro->addCommand( cmd);
+            createMacro= true;
+        }
+        if ( createMacro )
+        {
+            m_doc->addCommand( macro );
+        }
+        else
+            delete macro;
     }
 }
 
