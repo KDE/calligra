@@ -107,8 +107,6 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
                                       wvWare::UChar character, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                       const wvWare::FootnoteFunctor& parseFootnote )
 {
-    // TODO in wv2: give me the custom label, if not autoNumbered!
-    // TODO: missing CHP for the variable?
     bool autoNumbered = (character.unicode() == 2);
     QDomElement varElem = insertVariable( 11 /*KWord code for footnotes*/, chp, "STRI" );
     QDomElement footnoteElem = varElem.ownerDocument().createElement( "FOOTNOTE" );
@@ -325,11 +323,11 @@ void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Wo
         }
         format.appendChild( bgcolElem );
     }
-    kdDebug() << "chp=" << chp << " emboss:" << chp->fEmboss << " imprint:" << chp->fImprint << endl;
+
     // Shadow text. Only on/off. The properties are defined at the paragraph level (in KWord).
     if ( !refChp || refChp->fShadow != chp->fShadow || refChp->fImprint != chp->fImprint ) {
         QDomElement weight( mainDocument().createElement( "SHADOWTEXT" ) );
-        weight.setAttribute( "value", chp->fShadow ? "1" : "0" );
+        weight.setAttribute( "value", (chp->fShadow || chp->fImprint) ? "1" : "0" );
         format.appendChild( weight );
         if ( chp->fShadow )
             m_shadowTextFound = Shadow;
