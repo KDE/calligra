@@ -54,10 +54,9 @@ install: build
 binary-indep: build install
 	dh_testroot
 	dh_testdir
-	dh_clean -k
 	dh_installdocs -i
 	dh_installchangelogs -i
-	cp debian/README.task debian/tmp/usr/share/doc/task-koffice/README
+	cp debian/README.task debian/task-koffice/usr/share/doc/task-koffice/README
 	dh_compress -i
 	dh_fixperms -i
 	dh_installdeb -i
