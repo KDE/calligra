@@ -131,11 +131,15 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     : KoDocument( parentWidget,widgetName, parent, name, singleViewMode ),
       _gradientCollection(),
       _hasHeader( false ),
-      _hasFooter( false ),
-      m_unit( KoUnit::U_MM )
+      _hasFooter( false )
 {
     setInstance( KPresenterFactory::global() );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
+    if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
+        m_unit = KoUnit::U_INCH;
+    } else {
+        m_unit = KoUnit::U_CM;
+    }
     m_pageWhereLoadObject=0L;
     m_loadingInfo=0L;
     m_tabStop = MM_TO_POINT( 15.0 );
