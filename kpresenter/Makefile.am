@@ -1,6 +1,6 @@
 
-INCLUDES=	-I../lib/kofficeui $(all_includes) -I$(idldir)
-LDFLAGS	=	$(all_libraries) 
+INCLUDES=	-I../lib/kofficeui $(all_includes) -I$(idldir) $(MICO_INCLUDES)
+LDFLAGS	=	$(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = autoformEdit/atfinterpreter.o autoformEdit/afchoose.o \
 	../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
@@ -42,10 +42,11 @@ SUFFIXES = .h .moc
 .h.moc:
 	$(MOC) $< -o $@      
 
-idl: kpresenter.idl
-	idl -I$(idldir) kpresenter.idl
+kpresenter.h: kpresenter.idl
+	$(IDL) -I$(idldir) kpresenter.idl
 
 
+kpresenter.cc: kpresenter.h
 kpresenter_main.cc: kpresenter_main.moc
 kpresenter_doc.cc: kpresenter_doc.moc
 kpresenter_view.cc: kpresenter_view.moc
@@ -58,3 +59,5 @@ styledia.cc: styledia.moc
 kenumlistdia.cc: kenumlistdia.moc
 kcharselect.cc: kcharselect.moc
 kcharselectdia.cc: kcharselectdia.moc
+kpresenter_main.cc: kpresenter_view.h
+kpresenter_view.h: kpresenter.h
