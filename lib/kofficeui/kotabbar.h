@@ -32,23 +32,24 @@ class KoTabBarPrivate;
 
 /**
  * The KoTabBar class provides a tab bar, for use to switch active
- * sheet in a document.
+ * page/sheet in a document.
  *
- * The tab bar is used by KSpreadView. It is the small widget on the left
- * corner of the main view. Sheets are displayed as tabs, clicking on
+ * The tab bar is typically used in the main view. 
+ * It is the small widget on the bottom left corner. 
+ * Pages/sheets are displayed as tabs, clicking on
  * one of the tab will activate the corresponding sheet (this is actually
- * done in KSpreadView). Current active sheet is marked by bold text.
+ * done in main view). Current active page/sheet is marked by bold text.
  *
- * The tab bar supports the sheet reorder by dragging a certain tab
- * and move it to another location. KSpreadView would handle the necessary
+ * The tab bar supports page/sheet reorder by dragging a certain tab
+ * and move it to another location. The main view should handle the necessary
  * action to perform the actual reorder.
  *
  * There are four scroll buttons available in the tab bar. They are used
  * to shift the tabs in left and right direction, for example when there
  * are more tabs than the space available to display all tabs.
  *
- * Since a sheet can be hidden, the tab bar only shows the visible sheet.
- * When a hidden sheet is shown again, it will be on the same position as
+ * Since a page/sheet can be hidden, the tab bar only shows the visible page/sheet.
+ * When a hidden page or sheet is shown again, it will be on the same position as
  * before it was hidden.
  *
  * When the document is protected, it is necessary to set the tab bar as
@@ -215,8 +216,7 @@ public slots:
 signals:
 
     /**
-     * Emitted if the active tab changed. This will cause the
-     * KSpreadView to change its active table, too.
+     * Emitted if the active tab changed. 
      */
     void tabChanged( const QString& _text );
 
