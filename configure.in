@@ -78,6 +78,7 @@ AC_OUTPUT( \
 	kpresenter/templates/Screenpresentations/Makefile \
 	kpresenter/templates/Professional/Makefile \
 	kpresenter/toolbar/Makefile \
+	kpresenter/dtd/Makefile \
 	kspread/Makefile \
 	kspread/pics/Makefile \
 	kspread/scripts/Makefile \
