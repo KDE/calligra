@@ -330,7 +330,7 @@
                 relativetextsize CDATA #REQUIRED
                 offsetfrombaseline CDATA #REQUIRED
                 wordbyword CDATA #REQUIRED
-                fontattribute (none | uppercase | lowercase)#REQUIRED>
+                fontattribute (none | upper | lower)#REQUIRED>
 
 <!-- 
         A paragraph and a style can have counter data.
