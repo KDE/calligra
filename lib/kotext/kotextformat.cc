@@ -1556,22 +1556,22 @@ QStringList KoTextFormat::fontAttributeList()
 QStringList KoTextFormat::underlineStyleList()
 {
     QStringList lst;
-    lst <<i18n("Solid Line");
-    lst <<i18n("Dash Line");
-    lst <<i18n("Dot Line");
-    lst <<i18n("Dash Dot Line");
-    lst <<i18n("Dash Dot Dot Line");
+    lst <<"_________";   // SOLID
+    lst <<"___ ___ __";  // DASH
+    lst <<"_ _ _ _ _ _"; // DOT
+    lst <<"___ _ ___ _"; // DASH_DOT
+    lst <<"___ _ _ ___"; // DASH_DOT_DOT
     return lst;
 }
 
 QStringList KoTextFormat::strikeOutStyleList()
 {
     QStringList lst;
-    lst <<i18n("Solid Line");
-    lst <<i18n("Dash Line");
-    lst <<i18n("Dot Line");
-    lst <<i18n("Dash Dot Line");
-    lst <<i18n("Dash Dot Dot Line");
+    lst <<"_________";   // SOLID
+    lst <<"___ ___ __";  // DASH
+    lst <<"_ _ _ _ _ _"; // DOT
+    lst <<"___ _ ___ _"; // DASH_DOT
+    lst <<"___ _ _ ___"; // DASH_DOT_DOT
     return lst;
 }
 

@@ -1776,11 +1776,11 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
 
     cFilling = new QComboBox( FALSE, gTabLeader);
     cFilling->insertItem( i18n( "Blank" ) );
-    cFilling->insertItem( i18n( "Dots" ) );
-    cFilling->insertItem( i18n( "Line" ) );
-    cFilling->insertItem( i18n( "DashLine" ) );
-    cFilling->insertItem( i18n( "DashDotLine" ) );
-    cFilling->insertItem( i18n( "DashDotDotLine" ) );
+    cFilling->insertItem( "_ _ _ _ _ _"); // DOT
+    cFilling->insertItem( "_________");   // SOLID
+    cFilling->insertItem( "___ ___ __");  // DASH
+    cFilling->insertItem( "___ _ ___ _"); // DASH_DOT
+    cFilling->insertItem( "___ _ _ ___"); // DASH_DOT_DOT
     TextLabel2->setBuddy( cFilling );
     fillingGrid->addWidget( cFilling, 0, 1 );
 
