@@ -1,10 +1,9 @@
 usr/bin/kpresenter
 usr/bin/kprconverter.pl
 usr/lib/kpresenter.*
-usr/lib/kde2/libkpresenterpart.*
+usr/lib/kde3/libkpresenterpart.*
 usr/share/applnk/Office/kpresenter.desktop
-usr/share/apps/kpresenter/*
-usr/share/mimelnk/application/x-kpresenter.desktop
+usr/share/apps/kpresenter
 usr/share/icons/hicolor/16x16/apps/kpresenter.png
 usr/share/icons/hicolor/32x32/apps/kpresenter.png
 usr/share/icons/hicolor/48x48/apps/kpresenter.png

@@ -73,14 +73,6 @@ install-stamp: build
 	$(INSTALL_DIR) $(pixmaps)
 	$(INSTALL_FILE) debian/*.xpm $(pixmaps)
 
-	# Install kformula icons.
-	$(INSTALL_DIR) $(icons)/locolor/16x16/apps
-	$(INSTALL_DIR) $(icons)/locolor/32x32/apps
-	$(INSTALL_FILE) debian/kformula.lo16.xpm \
-		$(icons)/locolor/16x16/apps/kformula.xpm
-	$(INSTALL_FILE) kformula/kformula.xpm \
-		$(icons)/locolor/32x32/apps/kformula.xpm
-
 	# Main install.
 	$(MAKE) install DESTDIR=`pwd`/$(tmp)
 
@@ -91,12 +83,10 @@ install-stamp: build
 	mv $(tmp)/usr/bin/kprconverter.pl.new $(tmp)/usr/bin/kprconverter.pl
 	chmod 755 $(tmp)/usr/bin/kprconverter.pl
 
-	# Sort out this mess where kivio wants to installed a shared library
-	# in /usr/share with the wrong extension.
-	# We'll put a symlink in kivio.links.
-	$(INSTALL_DIR) $(tmp)/usr/lib/kivio
-	mv $(tmp)/usr/share/apps/kivio/autoloadStencils/straight_connector.ksp \
-		$(tmp)/usr/lib/kivio/libstraight_connector.so
+	# Fix kivio's straight_connector.ksp.
+	$(INSTALL_DIR) $(tmp)/usr/lib/kde3
+	mv $(tmp)/usr/lib/straight_connector.ksp $(tmp)/usr/lib/kde3
+	chmod a-x $(tmp)/usr/lib/kde3/straight_connector.ksp
 
 	# Generate HTML docs.
 	for i in `find $(tmp) -name "index.docbook"`; do \
@@ -104,7 +94,7 @@ install-stamp: build
 	  popd > /dev/null; done
 
 	# Make common links for docs.
-	for p in `dh_listpackages`; do \
+	for p in `dh_listpackages` thesaurus; do \
 	  for i in `find $(kdedocs) -type d -name $$p`; do \
 	    ln -f -n -s ../common $$i/common; done; done
 
@@ -121,6 +111,7 @@ binary-indep: build install
 	dh_installmenu -i
 	dh_installmime -i
 	dh_installman -i
+	dh_installchangelogs -pkoffice
 	dh_installchangelogs -pkoffice-doc-html
 	dh_link -i
 	#dh_strip -i
@@ -152,16 +143,15 @@ binary-arch: build install
 	dh_installmime -a
 	dh_installman -a
 	dh_undocumented -a
-	dh_installchangelogs -pkoffice
 	dh_installchangelogs -pkoffice-libs
 	dh_installchangelogs -pkoffice-dev
+	dh_installchangelogs -pkarbon
 	dh_installchangelogs -pkchart kchart/CHANGES
 	dh_installchangelogs -pkformula
-	dh_installchangelogs -pkontour
 	dh_installchangelogs -pkivio kivio/CHANGELOG
+	dh_installchangelogs -pkontour
 	dh_installchangelogs -pkoshell
 	dh_installchangelogs -pkpresenter kpresenter/CHANGES
-	#dh_installchangelogs -pkrayon
 	dh_installchangelogs -pkspread kspread/CHANGES
 	dh_installchangelogs -pkugar kugar/ChangeLog
 	dh_installchangelogs -pkword kword/CHANGES
@@ -176,6 +166,8 @@ binary-arch: build install
 	  -ldebian/koffice-libs/usr/lib
 	dh_shlibdeps -pkoffice-libs \
 	  -ldebian/koffice-libs/usr/lib
+	dh_shlibdeps -pkarbon \
+	  -ldebian/koffice-libs/usr/lib:debian/karbon/usr/lib
 	dh_shlibdeps -pkchart \
 	  -ldebian/koffice-libs/usr/lib:debian/kchart/usr/lib
 	dh_shlibdeps -pkformula \
@@ -188,8 +180,6 @@ binary-arch: build install
 	  -ldebian/koffice-libs/usr/lib:debian/koshell/usr/lib
 	dh_shlibdeps -pkpresenter \
 	  -ldebian/koffice-libs/usr/lib:debian/kpresenter/usr/lib
-	#dh_shlibdeps -pkrayon \
-	#  -ldebian/koffice-libs/usr/lib:debian/krayon/usr/lib
 	dh_shlibdeps -pkspread \
 	  -ldebian/koffice-libs/usr/lib:debian/kspread/usr/lib
 	dh_shlibdeps -pkugar \
