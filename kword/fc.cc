@@ -111,7 +111,7 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
       }
     }
     else
-      parag = dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag();
+      parag = dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag(frame - 1);
     // On which page are we now ...
     parag->setStartPage( page );
     parag->setEndPage( page );
@@ -632,8 +632,13 @@ void KWFormatContext::cursorGotoPixelLine(unsigned int mx,unsigned int my,QPaint
 {
   textPos = 0;
 
-  init(dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag(),_painter);
-  
+  if (document->getFrameSet(frameSet - 1)->getFrameInfo() == FI_BODY)
+    init(dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag(),_painter);
+  else
+    init(dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag(frame - 1),_painter,true,true,
+	 document->getFrameSet(frameSet - 1)->getFrame(mx,my) + 1,
+	 document->getFrameSet(frameSet - 1)->getFrame(document->getFrameSet(frameSet - 1)->getFrame(mx,my))->getPageNum() + 1);
+
   if (ptY <= my && ptY + getLineHeight() >= my &&
       ptLeft <= mx && ptLeft + ptWidth >= mx)
     {
@@ -642,7 +647,7 @@ void KWFormatContext::cursorGotoPixelLine(unsigned int mx,unsigned int my,QPaint
       return;
     }
 
-  KWParag *_p = document->getFirstParag(frameSet - 1);
+  KWParag *_p = dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getFirstParag(frame - 1);
   while (_p->getPTYEnd() < my && _p->getNext())
     _p = _p->getNext();
 

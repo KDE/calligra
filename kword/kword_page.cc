@@ -1156,7 +1156,6 @@ void KWPage::paintEvent(QPaintEvent* e)
 		    r.moveBy(0,fs->getFrame(frm)->height() + 1);
 
 		    p = dynamic_cast<KWTextFrameSet*>(fs)->getFirstParag(frm);
-
 		    paintfc->setFrameSet(i + 1);
 		    paintfc->init(p,painter,true,true,frm + 1,fs->getFrame(frm)->getPageNum() + 1);
 		    

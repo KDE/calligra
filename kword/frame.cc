@@ -332,7 +332,9 @@ void KWTextFrameSet::init()
 //       p->setFormat(0,strlen("Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen."),*format);
 //     }
 
-  first = even = odd = parags;
+  first = parags;
+  even = parags;
+  odd = parags;
 
   updateCounters();
 }
@@ -744,7 +746,9 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
     }
 
   // Reggie: For now - this HAS to be replaced for working headers/footers!
-  first = even = odd = parags;
+  first = parags;
+  even = parags;
+  odd = parags;
 
   updateCounters();
 }
@@ -861,6 +865,62 @@ void KWTextFrameSet::updateAllStyles()
     }
 
   updateCounters();
+}
+
+/*================================================================*/
+void KWTextFrameSet::updateParagOrder(KoHFType _type)
+{
+  if (getFrameInfo() != FI_BODY)
+    {
+      if (even == odd && even == first)
+	delete even;
+      else if (first != odd && first != even && even == odd)
+	{
+	  delete first;
+	  delete even;
+	}
+      if (odd == first && even != odd)
+	{
+	  delete even;
+	  delete odd;
+	}
+
+      KWFormat *format = new KWFormat(doc);
+      format->setDefaults(doc);
+
+      switch (_type)
+ 	{
+ 	case HF_SAME:
+ 	  {
+	    first = new KWParag(this,doc,0L,0L,doc->getDefaultParagLayout());
+	    first->insertText(0," ");
+	    first->setFormat(0,1,*format);
+	    even = first;
+	    odd = first;
+	  } break;
+	case HF_FIRST_DIFF:
+	  {
+	    first = new KWParag(this,doc,0L,0L,doc->getDefaultParagLayout());
+	    first->insertText(0," ");
+	    first->setFormat(0,1,*format);
+	    even = new KWParag(this,doc,0L,0L,doc->getDefaultParagLayout());
+	    even->insertText(0," ");
+	    even->setFormat(0,1,*format);
+	    odd = even;
+	  } break;
+	case HF_EO_DIFF:
+	  {
+	    first = new KWParag(this,doc,0L,0L,doc->getDefaultParagLayout());
+	    first->insertText(0," ");
+	    first->setFormat(0,1,*format);
+	    odd = first;
+	    even = new KWParag(this,doc,0L,0L,doc->getDefaultParagLayout());
+	    even->insertText(0," ");
+	    even->setFormat(0,1,*format);
+	  } break;
+	}
+      parags = first;
+    }
 }
 
 /******************************************************************/

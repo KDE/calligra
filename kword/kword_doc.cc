@@ -174,6 +174,8 @@ bool KWordDocument::loadTemplate(const char *_url)
 /*================================================================*/
 void KWordDocument::setPageLayout(KoPageLayout _layout,KoColumns _cl,KoKWHeaderFooter _hf)
 { 
+  KoKWHeaderFooter __hf = pageHeaderFooter;
+
   if (processingType == WP)
     {
       pageLayout = _layout; 
@@ -192,6 +194,29 @@ void KWordDocument::setPageLayout(KoPageLayout _layout,KoColumns _cl,KoKWHeaderF
       pageLayout.ptTop = 0;
       pageLayout.ptBottom = 0;
       pageHeaderFooter = _hf;
+    }
+
+  if (__hf.header != pageHeaderFooter.header)
+    {
+      for (unsigned int i = 0;i < frames.count();i++)
+	{
+	  if (frames.at(i)->getFrameType() == FT_TEXT && frames.at(i)->getFrameInfo() == FI_HEADER)
+	    {
+	      dynamic_cast<KWTextFrameSet*>(frames.at(i))->updateParagOrder(pageHeaderFooter.header);
+	      break;
+	    }
+	}
+    }
+  if (__hf.footer != pageHeaderFooter.footer)
+    {
+      for (unsigned int i = 0;i < frames.count();i++)
+	{
+	  if (frames.at(i)->getFrameType() == FT_TEXT && frames.at(i)->getFrameInfo() == FI_FOOTER)
+	    {
+	      dynamic_cast<KWTextFrameSet*>(frames.at(i))->updateParagOrder(pageHeaderFooter.footer);
+	      break;
+	    }
+	}
     }
 
   if (processingType == WP)
@@ -654,6 +679,14 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
       fs->setAutoCreateNewFrame(false);
     }
   
+  for (unsigned int i = 0;i < frames.count();i++)
+    {
+      if (frames.at(i)->getFrameType() == FT_TEXT && frames.at(i)->getFrameInfo() == FI_HEADER)
+	dynamic_cast<KWTextFrameSet*>(frames.at(i))->updateParagOrder(pageHeaderFooter.header);
+      if (frames.at(i)->getFrameType() == FT_TEXT && frames.at(i)->getFrameInfo() == FI_FOOTER)
+	dynamic_cast<KWTextFrameSet*>(frames.at(i))->updateParagOrder(pageHeaderFooter.footer);
+    }	
+
   return true;
 }
 

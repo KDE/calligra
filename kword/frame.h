@@ -126,7 +126,7 @@ public:
     { return FT_BASE; }
   virtual FrameInfo getFrameInfo()
     { return frameInfo; }
-  void setFrameInfo(FrameInfo fi) { frameInfo = fi; }
+  void setFrameInfo(FrameInfo fi) { frameInfo = fi; if (fi != FI_BODY) init(); }
 
   virtual void addFrame(KWFrame _frame);
   virtual void addFrame(KWFrame *_frame);
@@ -214,6 +214,8 @@ public:
 
   void updateCounters();
   void updateAllStyles();
+
+  void updateParagOrder(KoHFType _type);
 
 protected:
   virtual void init();

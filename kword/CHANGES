@@ -536,3 +536,4 @@ Reggie, 20.12.1998:
 Reggie, 21.12.1998:
 -------------------
 - Fixes with loading/saving docs
+- More work on the internals of headers/footers (don't try it out yet - it crashes very often)
