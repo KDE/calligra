@@ -5,9 +5,6 @@ Bugs:
 -----
 - textformatter: need to check for line-level breaking during the formatting of each line
 Currently we do it afterwards, so if the margins differ, where the line ends up, we can't notice.
-- Fix drawing of table cell borders
-- Add code to ensure that adjacent cells have the same border setting for the borders they share
-- Need a routine which renders the table per row in a way that any cellsize is adjusted to fit. [still needed?]
 - anything else that http://bugs.kde.org mentions ;)
 
 Missing or incomplete stuff:
@@ -28,17 +25,8 @@ Books (collection of documents) should be implemented
 Implement complete DCOP interface
 Make everything scriptable
 Add "TopOfFrame"-TopOfPage" etc to styles.
+add "Keep this parag with the next/prev" options to styles.
 
-cleanup:
---------
-- All enums should belong to a class, making it safe for namespace clashes. Class::Enum-value 
-  should be used everywhere
-
------------------ Things to keep in mind
-- All classes and methods should have proper documentation, in the proper format.
-- Try to put any code that relies on pages to be one under the other (as they are
-now) in KWCanvas. This will allow for inheriting KWCanvas later and changing
-that behaviour, to implement other view modes.
 
 External files:
 --------------
@@ -125,3 +113,36 @@ Thanx to: Reginald Stadlbauer <reggie@kde.org>
 Author: Thomas Zander <zander@kde.org>
 New maintainer: David Faure <david@mandrakesoft.com>
 
+
+OK-ing the stylist seems to apply style change to all styles, not just the changed ones...
+
+Add a RMB option on a copy-frame to update position of all copies in that FS.
+Add RMB option on text to copy current format to a (new) style. Including tab positions..
+
+- picture insertion point when pasting should be as an inline frame. Using default placing methods.
+- cut/paste of images do not work across documents (also in bugs.kde.org)
+- auto-update TOC before printing, so no doc is printed with an out-of-date TOC. It might alter the layout, ok, but an out-of-date TOC is just a waste of paper (besides being misleading...)
+- The "Company" field in doc settings is not taken from the system. The author and email are...
+- interaction with frame breaks are a bit strange. How do you remove it? You cannot select it, nor can you use backspace or del..
+- the stylist has a poor use of pixel space. Huge preview areas, for sometimes just 4 radio buttons. Too many tabs too...
+My suggestion would be to combine "Indent and Spacing", "Aligns" and
+"Borders". The Preview would be very similar to the preview for the two
+first. Also, for alignement, you can use the icons readily available in
+the actions of KDE, providing the text as tooltips. Use icons whereever
+you can, providing help with tooltips. People will get used to them, and
+if they forget, there are tooltips about 2.5 seconds away.
+This way, you can save a lot of screen space, and maybe even the
+tabulators would fit in that single tab.
+Generally, I like interfaces which display all the info you need, maybe
+a bit dense, but also knowing there's an easy way to know what they
+mean. Toolbars are the greatest example of this.
+
+- one should be able to introduce dependencies between styles, so if I want to change the general font of the text, I do not have to modify all the styles.
+- If I specify a "document title" in the preferences, I would still like to see the filepath in the window titlebar.
+- split view: when I move the cursor in one of the views, the other moves too... all the benefit is lost !
+- when writing bulks of text, when the cursor gets to the border of the window, it should not only scroll 1 line (to make sure the cursor stays in the visible portion of the document) but should be moved to the center of the window (like in emacs:-). So the average position of the cursor is the center of the window, rather than the bollom line.
+- non-breakable spaces?
+
+- interaction with KoParts is somehow strange. Especially positioning them in the document, as the size when using the handles is not the same as the end product. But I am not used to it in the Windows world either...
+  This is due to the problemsn that we don't zoom and dont allow easy moving in the parts. A square which representst the whole placed document when moving just the little screen would be nice.
+- rotating pictures. Is that possible ?
