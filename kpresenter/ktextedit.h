@@ -38,7 +38,6 @@
 #include <qpainter.h>
 #include <limits.h>
 #include <qptrdict.h>
-#include <kdebug.h>
 
 class QPainter;
 class QPaintEvent;
@@ -1266,7 +1265,7 @@ inline void KTextEditParag::setParagId( int i )
 inline int KTextEditParag::paragId() const
 {
     if ( id == -1 )
-        kdDebug() << "invalid parag id!!!!!!!! (" << this << ")" << endl;
+        qWarning( "invalid parag id!!!!!!!! (%p)", this );
     return id;
 }
 
