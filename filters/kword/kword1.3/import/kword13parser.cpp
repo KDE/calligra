@@ -129,7 +129,7 @@ bool KWord13Parser::startElementLayout( const QString&, const QXmlAttributes& at
     if ( m_currentLayout )
     {
         // Delete an eventually already existing paragraph (should not happen)
-        qDebug("Current layout already defined!");
+        kdWarning(30520) << "Current layout already defined!" << endl;
         delete m_currentLayout;
     }
     
@@ -152,7 +152,7 @@ bool KWord13Parser::startElementParagraph( const QString&, const QXmlAttributes&
     if ( m_currentParagraph )
     {
         // Delete an eventually already existing paragraph (should not happen)
-        qDebug("Current paragraph already defined!");
+        kdWarning(30520) << "Current paragraph already defined!" << endl;
         delete m_currentParagraph;
     }
         
@@ -177,21 +177,19 @@ bool KWord13Parser::startElementFrame( const QString& name, const QXmlAttributes
                 attrName += ':';
                 attrName += attributes.qName( i );
                 stackItem->m_currentFrameset->m_frameData[ attrName ] = attributes.value( i );
-                qDebug("FrameData: %s = %s", attrName.latin1(), attributes.value( i ).latin1() );
+                kdDebug(30520) << "FrameData: " << attrName << " = " << attributes.value( i ) << endl;
             }
             
         }
         else
         {
-            //kdError(30520) << "Data of <FRAMESET> not found" << endl;
-            qDebug("Data of <FRAMESET> not found");
+            kdError(30520) << "Data of <FRAMESET> not found" << endl;
             return false;
         }
     }
     else if ( stackItem->elementType != ElementTypeUnknownFrameset )
     {
-        //kdError(30520) << "<FRAME> not child of <FRAMESET>" << endl;
-        qDebug("<FRAME> not child of <FRAMESET>");
+        kdError(30520) << "<FRAME> not child of <FRAMESET>" << endl;
         return false;
     }
     return true;
@@ -204,8 +202,7 @@ bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttribu
     
     if ( frameTypeStr.isEmpty() || frameInfoStr.isEmpty() )
     {
-        // kdError(30520) << "<FRAMESET> without frameType or frameInfo attribute!" << endl;
-        qDebug("<FRAMESET> without frameType or frameInfo attribute!");
+        kdError(30520) << "<FRAMESET> without frameType or frameInfo attribute!" << endl;
         return false;
     }
     
@@ -246,7 +243,7 @@ bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttribu
         // ### frametype == 3 : embedded (but only in <SETTINGS>)
         else
         {
-            qDebug("Unknown text frameset!");
+            kdError(30520) << "Unknown text frameset!" << endl;
             m_kwordDocument->m_otherFramesetList.append( frameset );
             stackItem->m_currentFrameset = m_kwordDocument->m_otherFramesetList.current();
         }
@@ -254,8 +251,7 @@ bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttribu
     else
     {
         // Frame of unknown/unsupported type
-        //kdWarning(30520) << "Unknown/unsupported <FRAMESET> type! Type: " << frameTypeStr << " Info: " << frameInfoStr << emdl;
-        qDebug("Unknown <FRAMESET> type! Type: %i Info: %i", frameType, frameInfo);
+        kdWarning(30520) << "Unknown/unsupported <FRAMESET> type! Type: " << frameTypeStr << " Info: " << frameInfoStr << endl;
         stackItem->elementType = ElementTypeUnknownFrameset;
         KWordFrameset* frameset = new KWordFrameset( frameType, frameInfo, attributes.value( "name" ) );
         m_kwordDocument->m_otherFramesetList.append( frameset );
@@ -277,25 +273,24 @@ bool KWord13Parser::startElementDocumentAttributes( const QString& name, const Q
             attrName += ':';
             attrName += attributes.qName( i );
             m_kwordDocument->m_documentProperties[ attrName ] = attributes.value( i );
-            qDebug("DocAttr: %s = %s", attrName.latin1(), attributes.value( i ).latin1() );
+            kdDebug(30520) << "DocAttr: " <<  attrName << " = " << attributes.value( i ) << endl;
         }
         return true;
     }
     else
     {
-        qDebug("Wrong parent!");
+        kdError(30520) << "Wrong parent!" << endl;
         return false;
     }
 }
 
 bool KWord13Parser::startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes )
 {
-    qDebug("%s<%s>", indent.latin1(), name.latin1() );
+    kdDebug(30520) << indent << "<" << name << ">" << endl; // DEBUG
     indent += "*"; //DEBUG
     if (parserStack.isEmpty())
     {
-        //kdError(30520) << "Stack is empty!! Aborting! (in KWordParser::startElement)" << endl;
-        qDebug("Stack is empty!! Aborting! (in KWordParser::startElement)");
+        kdError(30520) << "Stack is empty!! Aborting! (in KWordParser::startElement)" << endl;
         return false;
     }
     
@@ -304,8 +299,7 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
 
     if (!stackItem)
     {
-        //kdError(30506) << "Could not create Stack Item! Aborting! (in StructureParser::startElement)" << endl;
-        qDebug("Could not create Stack Item! Aborting! (in StructureParser::startElement)");
+        kdError(30520) << "Could not create Stack Item! Aborting! (in StructureParser::startElement)" << endl;
         return false;
     }
 
@@ -404,11 +398,10 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
 bool KWord13Parser :: endElement( const QString&, const QString& , const QString& name)
 {
     indent.remove( 0, 1 ); // DEBUG
-    //qDebug("%s</%s>", indent.latin1(), name.latin1() );
+    //kdDebug(30520) << indent << "</" << name << ">" << endl; // DEBUG
     if (parserStack.isEmpty())
     {
-        //kdError(30506) << "Stack is empty!! Aborting! (in StructureParser::endElement)" << endl;
-        qDebug("Stack is empty!! Aborting! (in StructureParser::endElement)");
+        kdError(30520) << "Stack is empty!! Aborting! (in StructureParser::endElement)" << endl;
         return false;
     }
 
@@ -465,8 +458,7 @@ bool KWord13Parser :: endElement( const QString&, const QString& , const QString
     if (!success)
     {
         // If we have no success, then it was surely a tag mismatch. Help debugging!
-        //kdError(30506) << "Found closing tag name: " << name << " expected: " << stackItem->itemName << endl;
-        qDebug("Found closing tag name: %s expected: %s", name.latin1(), stackItem->itemName.latin1() );
+        kdError(30506) << "Found closing tag name: " << name << " expected: " << stackItem->itemName << endl;
     }
     
     delete stackItem;
@@ -495,8 +487,7 @@ bool KWord13Parser :: characters ( const QString & ch )
 
     if (parserStack.isEmpty())
     {
-        //kdError(30520) << "Stack is empty!! Aborting! (in StructureParser::characters)" << endl;
-        qDebug("Stack is empty!! Aborting! (in KWordParser::characters)");
+        kdError(30520) << "Stack is empty!! Aborting! (in StructureParser::characters)" << endl;
         return false;
     }
 
@@ -514,7 +505,7 @@ bool KWord13Parser :: characters ( const QString & ch )
         }
         else
         {
-            qDebug("No current paragraph defined! Tag mismatch?");
+            kdError(30520) << "No current paragraph defined! Tag mismatch?" << endl;
             success = false;
         }
     }
@@ -524,8 +515,7 @@ bool KWord13Parser :: characters ( const QString & ch )
         if (!success)
         {
             // We have a parsing error, so abort!
-            // kdError(30520) << "Empty element "<< stackItem->itemName <<" is not empty! Aborting! (in KWordParser::characters)" << endl;
-            qDebug("Empty element %s  is not empty! Aborting! (in KWordParser::characters)", stackItem->itemName.latin1());
+            kdError(30520) << "Empty element "<< stackItem->itemName <<" is not empty! Aborting! (in KWordParser::characters)" << endl;
         }
     }
     else

@@ -19,6 +19,8 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <kdebug.h>
+
 #include "kword13utils.h"
 #include "kword13frameset.h"
 
@@ -34,7 +36,7 @@ KWordFrameset::~KWordFrameset( void )
 
 bool KWordFrameset::addParagraph(const KWordParagraph&)
 {
-    qDebug("Cannot add paragraph! Not a text frameset!");
+    kdDebug(30520) << "Cannot add paragraph! Not a text frameset!" << endl;
     return false;
 }
 
