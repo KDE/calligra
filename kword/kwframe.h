@@ -358,12 +358,17 @@ public:
         (usually @p frame, but can also be the real frame if frame is a copy) */
     static KWFrame * settingsFrame(KWFrame* frame);
 
-    /* Iterator over the child frames */
+    /** Iterator over the child frames */
     const QPtrList<KWFrame> &frameIterator() const { return frames; }
-    /* Get frame number */
+    /** Get frame number */
     int frameFromPtr( KWFrame *frame );
-    /* Get number of child frames */
+    /** Get number of child frames */
     unsigned int getNumFrames() const { return frames.count(); }
+
+    /** Called when the user resizes a frame. Calls resizeFrame. */
+    void resizeFrameSetCoords( KWFrame* frame, double newLeft, double newTop, double newRight, double newBottom, bool finalSize );
+    /** Called when the user resizes a frame. Reimplemented by KWPictureFrameSet. */
+    virtual void resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize );
 
     /** True if the frameset was deleted (but not destroyed, since it's in the undo/redo) */
     bool isDeleted() const { return frames.isEmpty(); }
@@ -623,6 +628,9 @@ public:
 
     void loadImage( const QString &fileName, const QSize &_imgSize );
     void setSize( const QSize & _imgSize );
+
+    /** Called when the user resizes a frame. */
+    virtual void resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize );
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );

@@ -569,7 +569,7 @@ void KWView::setupActions()
     actionFormatFontSize->setComboWidth( 30 );
 
     actionFontSizeIncrease = new KAction( i18n("Increase Font Size") , CTRL + Key_Greater, this, SLOT( increaseFontSize() ), actionCollection(), "increase_fontsize" );
-    actionFontSizeDecrease = new KAction( i18n("Decrease Font Size"), CTRL + Key_Less, this, SLOT( decreaseFontSize() ), actionCollection(), "decrease_fontsize" );   
+    actionFontSizeDecrease = new KAction( i18n("Decrease Font Size"), CTRL + Key_Less, this, SLOT( decreaseFontSize() ), actionCollection(), "decrease_fontsize" );
 
     actionFormatFontFamily = new KFontAction( i18n( "Font Family" ), 0,
                                               actionCollection(), "format_fontfamily" );
@@ -3884,7 +3884,7 @@ void KWView::changePicture()
     KWFrame * frame = m_doc->getFirstSelectedFrame();
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
     oldFile=frameset->image().key().filename();
-    if ( KWInsertPicDia::selectPictureDia(file,oldFile ) )
+    if ( KWInsertPicDia::selectPictureDia(file, KWInsertPicDia::SelectImage , oldFile ) )
     {
          KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change picture"), FrameIndex(frame), oldFile, file, true ) ;
 
@@ -3901,7 +3901,7 @@ void KWView::changeClipart()
 
     KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->frameSet());
     oldFile=frameset->key().filename();
-    if ( KWInsertPicDia::selectClipartDia(file,oldFile ) )
+    if ( KWInsertPicDia::selectPictureDia(file, KWInsertPicDia::SelectClipart, oldFile ) )
     {
 
         KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change clipart"), FrameIndex( frame ), oldFile, file, false ) ;

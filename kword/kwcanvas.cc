@@ -633,6 +633,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     double newTop = frame->top();
     double newRight = frame->right();
     double newBottom = frame->bottom();
+    KWFrameSet* frameSet = frame->frameSet();
     if ( page == oldPage )
     {
         //kdDebug() << "KWCanvas::mmEditFrameResize old rect " << DEBUGRECT( *frame ) << endl;
@@ -666,8 +667,8 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
         }
 
         // Keep Aspect Ratio feature
-        if ( frame->frameSet()->type() == FT_PICTURE &&
-             static_cast<KWPictureFrameSet *>( frame->frameSet() )->keepAspectRatio()
+        if ( frameSet->type() == FT_PICTURE &&
+             static_cast<KWPictureFrameSet *>( frameSet )->keepAspectRatio()
               )
         {
             double resizedFrameRatio = m_resizedFrameInitialSize.width() / m_resizedFrameInitialSize.height();
@@ -702,16 +703,18 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
         // Keep copy of old rectangle, for repaint()
         QRect oldRect = m_viewMode->normalToView( frame->outerRect() );
 
-        frame->setLeft(newLeft);
+        frameSet->resizeFrameSetCoords( frame, newLeft, newTop, newRight, newBottom, false /*not final*/ );
+        /*frame->setLeft(newLeft);
         frame->setTop(newTop);
         frame->setRight(newRight);
-        frame->setBottom(newBottom);
+        frame->setBottom(newBottom);*/
+
         //kdDebug() << "KWCanvas::mmEditFrameResize newTop=" << newTop << " newBottom=" << newBottom << " height=" << frame->height() << endl;
 
         // If header/footer, resize the first frame
-        if ( frame->frameSet()->isHeaderOrFooter() )
+        if ( frameSet->isHeaderOrFooter() )
         {
-            KWFrame * origFrame = frame->frameSet()->frame( 0 );
+            KWFrame * origFrame = frameSet->frame( 0 );
             origFrame->setLeft(newLeft);
             origFrame->setTop(newTop);
             origFrame->setRight(newRight);
@@ -726,13 +729,13 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
         drawWidth=frame->width();
         drawY=frame->top();
         drawHeight=frame->height();
-        if (frame->frameSet()->getGroupManager()) { // is table
+        if (frameSet->getGroupManager()) { // is table
             if (!(top || bottom)) { /// full height.
-                drawY=frame->frameSet()->getGroupManager()->getBoundingRect().y();
-                drawHeight=frame->frameSet()->getGroupManager()->getBoundingRect().height();
+                drawY=frameSet->getGroupManager()->getBoundingRect().y();
+                drawHeight=frameSet->getGroupManager()->getBoundingRect().height();
             } else if (!(left || right)) { // full width.
-                drawX=frame->frameSet()->getGroupManager()->getBoundingRect().x();
-                drawWidth=frame->frameSet()->getGroupManager()->getBoundingRect().width();
+                drawX=frameSet->getGroupManager()->getBoundingRect().x();
+                drawWidth=frameSet->getGroupManager()->getBoundingRect().width();
             }
         }
         //p.drawRect( drawX, drawY, drawWidth, drawHeight );
@@ -1062,6 +1065,8 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
                     m_doc->recalcFrames();
                     frame->updateResizeHandles();
                 }
+                // Especially useful for EPS images: set final size
+                frame->frameSet()->resizeFrame( frame, frame->width(), frame->height(), true );
             }
             delete cmdMoveFrame; // Unused after all
             cmdMoveFrame = 0L;

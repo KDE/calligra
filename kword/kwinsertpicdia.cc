@@ -67,12 +67,13 @@ public:
 
     QSize pixmapSize() const { return m_type == IPD_IMAGE ? m_pixmap.size() : QSize(); }
 
-    void setClipart( const QString & filename )
+    bool setClipart( const QString & filename )
     {
         m_type = IPD_CLIPART;
         m_pixmap = QPixmap();
-        (void)KoClipartCollection::loadFromFile( filename, &m_picture );
+        bool ret = KoClipartCollection::loadFromFile( filename, &m_picture );
         repaint(false);
+        return ret;
     }
 
     void drawContents( QPainter *p )
@@ -107,36 +108,33 @@ KWInsertPicDia::KWInsertPicDia( QWidget *parent, const char *name )
     setInitialSize( QSize(400, 300) );
 
     QWidget *page = plainPage();
-    QGridLayout *grid = new QGridLayout( page, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( page, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QPushButton *pbImage = new QPushButton( i18n( "Choose &Image" ), page );
     grid->addWidget( pbImage, 0, 0 );
     connect( pbImage, SIGNAL( clicked() ), SLOT( slotChooseImage() ) );
 
-    QPushButton *pbClipart = new QPushButton( i18n( "Choose &Clipart" ), page );
-    grid->addWidget( pbClipart, 1, 0 );
-    connect( pbClipart, SIGNAL( clicked() ), SLOT( slotChooseClipart() ) );
-
     m_cbInline = new QCheckBox( i18n( "Insert Picture Inline" ), page );
-    grid->addWidget( m_cbInline, 2, 0 );
+    grid->addWidget( m_cbInline, 1, 0 );
 
     m_cbKeepRatio= new QCheckBox( i18n("Retain original aspect ratio"),page);
-    grid->addWidget( m_cbKeepRatio,3,0);
+    grid->addWidget( m_cbKeepRatio, 2, 0);
 
     m_preview = new KWInsertPicPreview( page );
-    grid->addMultiCellWidget( m_preview, 0, 4, 1, 1 );
+    grid->addMultiCellWidget( m_preview, 0, 3, 1, 1 );
 
     // Stretch the buttons and checkboxes a little, but stretch the preview much more
     grid->setRowStretch( 0, 1 );
     grid->setRowStretch( 1, 1 );
     grid->setRowStretch( 2, 1 );
-    grid->setRowStretch( 3, 1 );
-    grid->setRowStretch( 4, 10);
+    grid->setRowStretch( 3, 10 );
     grid->setColStretch( 0, 1 );
     grid->setColStretch( 1, 10 );
     m_cbKeepRatio->setChecked(true);
     enableButtonOK( false );
     setFocus();
+
+    slotChooseImage(); // save the user time, directly open the dialog
 }
 
 bool KWInsertPicDia::makeInline() const
@@ -151,7 +149,8 @@ bool KWInsertPicDia::keepRatio() const
 
 void KWInsertPicDia::slotChooseImage()
 {
-    if ( KWInsertPicDia::selectPictureDia(m_filename ) )
+    int result = KWInsertPicDia::selectPictureDia( m_filename, SelectImage | SelectClipart );
+    if ( result == SelectImage )
     {
         if ( m_preview->setPixmap( m_filename ) )
         {
@@ -160,36 +159,50 @@ void KWInsertPicDia::slotChooseImage()
             m_cbKeepRatio->setEnabled( true );
             m_cbKeepRatio->setChecked( true );
         }
+    } else if ( result == SelectClipart )
+    {
+        if ( m_preview->setClipart( m_filename ) )
+        {
+            m_type = IPD_CLIPART;
+            enableButtonOK( true );
+            m_cbKeepRatio->setEnabled( false );
+            m_cbKeepRatio->setChecked( false );
+        }
     }
 }
 
-bool KWInsertPicDia::selectPictureDia( QString &filename, const QString & _path)
+int KWInsertPicDia::selectPictureDia( QString &filename, int flags, const QString & _path)
 {
-    KFileDialog fd( _path, KImageIO::pattern(KImageIO::Reading), 0, 0, TRUE );
+    QStringList mimetypes;
+    if ( flags & SelectClipart )
+        mimetypes += KoPictureFilePreview::clipartMimeTypes();
+    if ( flags & SelectImage )
+        mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
+    KFileDialog fd( _path, QString::null, 0, 0, TRUE );
+    fd.setMimeFilter( mimetypes );
     fd.setCaption(i18n("Choose Image"));
     QString file = selectPicture( fd );
     if ( !file.isEmpty() )
     {
         filename = file;
-        return true;
+        KMimeType::Ptr mime = KMimeType::findByPath( file );
+        if ( flags & SelectClipart &&
+             KoPictureFilePreview::clipartMimeTypes().contains( mime->name() ) )
+            return SelectClipart;
+        return SelectImage;
     }
-    return false;
+    return 0;
 }
 
 
 
+#if 0
 void KWInsertPicDia::slotChooseClipart()
 {
     if ( KWInsertPicDia::selectClipartDia(m_filename ) )
     {
-        m_type = IPD_CLIPART;
-        m_preview->setClipart( m_filename );
-        enableButtonOK( true );
-        m_cbKeepRatio->setEnabled( false );
-        m_cbKeepRatio->setChecked( false );
     }
 }
-
 
 bool KWInsertPicDia::selectClipartDia( QString &filename, const QString & _path)
 {
@@ -203,6 +216,7 @@ bool KWInsertPicDia::selectClipartDia( QString &filename, const QString & _path)
     }
     return false;
 }
+#endif
 
 QString KWInsertPicDia::selectPicture( KFileDialog & fd )
 {

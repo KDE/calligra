@@ -43,13 +43,19 @@ public:
 
     bool keepRatio() const;
 
-    static bool selectClipartDia( QString &filename, const QString & _path=QString::null);
-
-    static bool selectPictureDia( QString &filename, const QString & _path=QString::null);
+    //static bool selectClipartDia( QString &filename, const QString & _path=QString::null);
+    enum { SelectImage = 1, SelectClipart = 2 };
+    /**
+     * @param filename output parameter containing the selected path to chosen file.
+     * Remote files are automatically downloaded first.
+     * @param flags SelectImage, SelectClipart, or both (bitfield).
+     * Return 0 if cancelled, SelectImage if picture was chosen, SelectClipart if clipart.
+     */
+    static int selectPictureDia( QString &filename, int flags, const QString & _path=QString::null);
 
 protected slots:
     void slotChooseImage();
-    void slotChooseClipart();
+    //void slotChooseClipart();
 
 protected:
     static QString selectPicture( KFileDialog & fd );

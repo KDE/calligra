@@ -1258,6 +1258,19 @@ void KWFrameSet::setNewFrameBehavior( KWFrame::NewFrameBehavior nfb ) {
         f->setNewFrameBehavior(nfb);
 }
 
+void KWFrameSet::resizeFrameSetCoords( KWFrame* frame, double newLeft, double newTop, double newRight, double newBottom, bool finalSize )
+{
+    frame->setLeft( newLeft );
+    frame->setTop( newTop );
+    resizeFrame( frame, newRight - newLeft, newBottom - newTop, finalSize );
+}
+
+void KWFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool )
+{
+    frame->setWidth( newWidth );
+    frame->setHeight( newHeight );
+}
+
 
 #ifndef NDEBUG
 void KWFrameSet::printDebug()
@@ -1347,6 +1360,13 @@ void KWPictureFrameSet::setSize( const QSize & _imgSize )
     m_image = m_image.scale( _imgSize );
 }
 
+void KWPictureFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize )
+{
+    KWFrameSet::resizeFrame( frame, newWidth, newHeight, finalSize );
+    QSize newSize = kWordDocument()->zoomSize( frame->size() );
+    m_image = m_image.scale( newSize, !finalSize /* finalSize==false -> fast mode=true */ );
+                                                                            }
+
 QDomElement KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
@@ -1405,7 +1425,7 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
 void KWPictureFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
                                    QColorGroup &, bool, bool, KWFrameSetEdit * )
 {
-    kdDebug() << "KWPictureFrameSet::drawFrame crect=" << DEBUGRECT(crect) << endl;
+    //kdDebug() << "KWPictureFrameSet::drawFrame crect=" << DEBUGRECT(crect) << endl;
     m_image.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->width() ), kWordDocument()->zoomItY( frame->height() ),
                   crect.x(), crect.y(), crect.width(), crect.height() );
 }
