@@ -425,23 +425,23 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
         QDomElement footerStyle = style->namedItem( "style:footer-style" ).toElement();
         QDomElement headerLeftElem = masterPage->namedItem( "style:header-left" ).toElement();
         if ( !headerLeftElem.isNull() ) {
-            kdDebug() << "Found header-left" << endl;
+            kdDebug(30518) << "Found header-left" << endl;
             hasEvenOddHeader = true;
             importHeaderFooter( mainDocument, headerLeftElem, hasEvenOddHeader, headerStyle );
         }
         QDomElement headerElem = masterPage->namedItem( "style:header" ).toElement();
         if ( !headerElem.isNull() ) {
-            kdDebug() << "Found header" << endl;
+            kdDebug(30518) << "Found header" << endl;
             importHeaderFooter( mainDocument, headerElem, hasEvenOddHeader, headerStyle );
         }
         QDomElement footerLeftElem = masterPage->namedItem( "style:footer-left" ).toElement();
         if ( !footerLeftElem.isNull() ) {
-            kdDebug() << "Found footer-left" << endl;
+            kdDebug(30518) << "Found footer-left" << endl;
             importHeaderFooter( mainDocument, footerLeftElem, hasEvenOddFooter, footerStyle );
         }
         QDomElement footerElem = masterPage->namedItem( "style:footer" ).toElement();
         if ( !footerElem.isNull() ) {
-            kdDebug() << "Found footer" << endl;
+            kdDebug(30518) << "Found footer" << endl;
             importHeaderFooter( mainDocument, footerElem, hasEvenOddFooter, footerStyle );
         }
     }
@@ -853,7 +853,7 @@ void OoWriterImport::writeCounter( QDomDocument& doc, QDomElement& layoutElement
         if ( !bulletChar.isEmpty() ) {
 #if 0 // doesn't work well. Fonts lack those symbols!
             counter.setAttribute( "bullet", bulletChar[0].unicode() );
-            kdDebug() << "bullet code " << bulletChar[0].unicode() << endl;
+            kdDebug(30518) << "bullet code " << bulletChar[0].unicode() << endl;
             QString fontName = listStyleProperties.attribute( "style:font-name" );
             counter.setAttribute( "bulletfont", fontName );
 #endif
@@ -1708,7 +1708,7 @@ void OoWriterImport::importCommonFrameProperties( QDomElement& frameElementOut )
 QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& object)
 {
     const QString frameName ( object.attribute("draw:name") ); // ### TODO: what if empty, i.e. non-unique
-    kdDebug() << "appendTextBox " << frameName << endl;
+    kdDebug(30518) << "appendTextBox " << frameName << endl;
     m_styleStack.save();
     fillStyleStack( object, "draw:style-name" ); // get the style for the graphics element
 
