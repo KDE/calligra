@@ -90,7 +90,7 @@
 #endif
 #include <qlayout.h>
 #include <unistd.h>
-#include <kimgio.h>
+#include <kimageio.h>
 #include <ktoolbar.h>
 #include <kmenubar.h>
 //#include <kglobal.h>
@@ -180,7 +180,7 @@ KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
   layout->setItemChecked (ID_LAYOUT_ALIGN_HLINES, canvas->alignToHelplines ());
 
   if (! previewHandlerRegistered) {
-    kimgioRegister ();
+	  KImageIO::registerFormats ();
 /*
 #ifndef USE_QFD
     KFilePreviewDialog::registerPreviewModule ("kil", kilPreviewHandler,

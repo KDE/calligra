@@ -24,7 +24,7 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kstddirs.h>
-#include <kimgio.h>
+#include <kimageio.h>
 #include <kinstance.h>
 #include <klocale.h>
 #include <kaboutdata.h>

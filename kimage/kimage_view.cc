@@ -22,7 +22,7 @@
 #include <qmessagebox.h>
 
 #include <kdebug.h>
-#include <kimgio.h>
+#include <kimageio.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kcolordlg.h>

@@ -61,7 +61,7 @@
 #include <kmessagebox.h>
 #include <kbuttonbox.h>
 #include <ksimpleconfig.h>
-#include <kimgio.h>
+#include <kimageio.h>
 
 #include <kstddirs.h>
 #include <kglobal.h>

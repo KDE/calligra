@@ -29,7 +29,7 @@
 #include <qimage.h>
 #include <qglobal.h>
 #include <qpainter.h>
-#include <kimgio.h>
+#include <kimageio.h>
 #include "ImageExport.h"
 #include "GDocument.h"
 #include "gif.h"

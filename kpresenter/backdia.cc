@@ -43,7 +43,7 @@
 #include <kcolorbtn.h>
 #include <klocale.h>
 #include <kfiledialog.h>
-#include <kimgio.h>
+#include <kimageio.h>
 #include <kbuttonbox.h>
 #include <kio/netaccess.h>
 

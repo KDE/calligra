@@ -19,7 +19,7 @@
 
 #include <qmessagebox.h>
 
-#include <kimgio.h>
+#include <kimageio.h>
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kfiledialog.h>

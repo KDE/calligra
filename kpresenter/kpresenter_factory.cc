@@ -21,7 +21,7 @@
 #include "kpresenter_doc.h"
 #include "preview.h"
 
-#include <kimgio.h>
+#include <kimageio.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kstddirs.h>

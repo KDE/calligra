@@ -22,7 +22,7 @@
 #include "koDocument.h"
 #include "koMainWindow.h"
 #include <klocale.h>
-#include <kimgio.h>
+#include <kimageio.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kstddirs.h>
@@ -38,7 +38,7 @@ KoApplication::KoApplication()
     // Tell the iconloader about share/apps/koffice/icons
     KGlobal::instance()->iconLoader()->addAppDir("koffice");
 
-    kimgioRegister();
+    KImageIO::registerFormats();
 
     // Quit when last window closed
     connect( this, SIGNAL( lastWindowClosed() ), this, SLOT( quit() ) );

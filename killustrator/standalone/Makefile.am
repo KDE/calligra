@@ -25,7 +25,7 @@ FILTER_LIBS = ../filter/libfilter.la
 XML_LIBS = ../xmlutils/libxml.la
 KSHARE_LIBS = ../share/libkillu.la
 killustrator_LDADD   =  $(FILTER_LIBS) $(KSHARE_LIBS) $(XML_LIBS) \
-	                $(LIB_KFILE) $(LIB_KIMGIO) $(LIBJPEG) $(LIBTIFF)
+	                $(LIB_KFILE) $(LIBJPEG) $(LIBTIFF)
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = KIllustrator.h

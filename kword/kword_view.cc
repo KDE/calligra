@@ -72,7 +72,7 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <kaction.h>
-#include <kimgio.h>
+#include <kimageio.h>
 #include <kcoloractions.h>
 #include <kfontdialog.h>
 #include <kstddirs.h>

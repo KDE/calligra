@@ -27,7 +27,7 @@
 
 #include <kstddirs.h>
 #include <kdebug.h>
-#include <kimgio.h>
+#include <kimageio.h>
 
 #include <koStream.h>
 #include <koStore.h>

@@ -71,7 +71,7 @@
 #include <kcolordlg.h>
 #include <kfontdialog.h>
 #include <kglobal.h>
-#include <kimgio.h>
+#include <kimageio.h>
 
 #include <koPartSelectDia.h>
 #include <koQueryTypes.h>
