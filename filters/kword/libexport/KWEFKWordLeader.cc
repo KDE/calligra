@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
    Copyright (c) 2001 IABG mbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
@@ -410,13 +410,6 @@ static void ProcessPixmapsTag ( QDomNode         myNode,
 }
 
 
-struct FilterData
-{
-    QString storeFileName;
-    QString exportFileName;
-};
-
-
 static void FreeCellParaLists ( QValueList<ParaData> &paraList )
 {
     QValueList<ParaData>::Iterator paraIt;
@@ -451,10 +444,8 @@ static void ProcessDocTag ( QDomNode         myNode,
                             KWEFKWordLeader  *leader )
 {
 #if 0
-    kdError (30508) << "ProcessDocTag () - Begin" << endl;
+    kdDebug (30508) << "ProcessDocTag () - Begin" << endl;
 #endif
-
-    FilterData *filterData = (FilterData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "editor",        "", NULL )
@@ -500,14 +491,14 @@ static void ProcessDocTag ( QDomNode         myNode,
 
     ProcessSubtags (myNode, tagProcessingList, leader);
 
-    leader->doFullDocument (paraList, filterData->storeFileName, filterData->exportFileName);
+    leader->doFullDocument (paraList);
 
     FreeCellParaLists (paraList);
 
     leader->doCloseBody();
 
 #if 0
-    kdError (30508) << "ProcessDocTag () - End" << endl;
+    kdDebug (30508) << "ProcessDocTag () - End" << endl;
 #endif
 }
 
@@ -565,12 +556,10 @@ bool KWEFKWordLeader::doFullDocumentInfo (const KWEFDocumentInfo &docInfo)
 }
 
 
-bool KWEFKWordLeader::doFullDocument (const QValueList<ParaData> &paraList,
-                                      QString                    &storeFileName,
-                                      QString                    &exportFileName )
+bool KWEFKWordLeader::doFullDocument (const QValueList<ParaData> &paraList)
 {
     if ( m_worker )
-        return m_worker->doFullDocument (paraList, storeFileName, exportFileName);
+        return m_worker->doFullDocument (paraList);
 
     return false;
 }
@@ -602,11 +591,10 @@ bool KWEFKWordLeader::doFullDefineStyle ( LayoutData &layout )
 
 static bool ProcessStoreFile ( QByteArray       &byteArrayIn,
                                void            (*processor) (QDomNode, void *, KWEFKWordLeader *),
-                               FilterData       &filterData,
                                KWEFKWordLeader  *leader )
 {
     QDomDocument qDomDocumentIn;
-    
+
     QString errorMsg;
     int errorLine;
     int errorColumn;
@@ -627,7 +615,7 @@ static bool ProcessStoreFile ( QByteArray       &byteArrayIn,
 
     QDomNode docNode = qDomDocumentIn.documentElement ();
 
-    processor (docNode, &filterData, leader);
+    processor (docNode, NULL, leader);
 
     return true;
 }
@@ -641,7 +629,7 @@ bool KWEFKWordLeader::loadKoStoreFile(const QString& fileName, QByteArray& array
         return false;
     }
 
-    KoStore koStore (m_filenameIn, KoStore::Read);
+    KoStore koStore (m_filenameIn, KoStore::Read); // TODO
 
     if ( koStore.open ( fileName ) )
     {
@@ -657,22 +645,20 @@ bool KWEFKWordLeader::loadKoStoreFile(const QString& fileName, QByteArray& array
     return true;
 }
 
-bool KWEFKWordLeader::filter ( const QString &filenameIn,
-                               const QString &filenameOut,
-                               const QString &from,
-                               const QString &to,
-                               const QString &             )
+
+KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
+    const QCString& from, const QCString& to)
 {
     if ( from != "application/x-kword" )
     {
-        return false;
+        return KoFilter::NotImplemented;
     }
 
 
-    if ( !doOpenFile (filenameOut,to) )
+    if ( !doOpenFile (chain->outputFile(),to) )
     {
         kdError (30508) << "Worker could not open export file! Aborting!" << endl;
-        return false;
+        return KoFilter::StupidError;
     }
 
 
@@ -680,16 +666,10 @@ bool KWEFKWordLeader::filter ( const QString &filenameIn,
     {
         kdError (30508) << "Worker could not open document! Aborting!" << endl;
         doAbortFile ();
-        return false;
+        return KoFilter::StupidError;
     }
 
-
-    FilterData filterData;
-    filterData.storeFileName = filenameIn;
-    filterData.exportFileName = filenameOut;
-
-
-    KoStore koStoreIn (filenameIn, KoStore::Read);
+    KoStore koStoreIn (chain->inputFile(), KoStore::Read);  // TODO
     QByteArray byteArrayIn;
 
     if ( koStoreIn.open ( "documentinfo.xml" ) )
@@ -698,7 +678,7 @@ bool KWEFKWordLeader::filter ( const QString &filenameIn,
         koStoreIn.close ();
 
         kdDebug (30508) << "Processing Document Info..." << endl;
-        ProcessStoreFile (byteArrayIn, ProcessDocumentInfoTag, filterData, this);
+        ProcessStoreFile (byteArrayIn, ProcessDocumentInfoTag, this);
     }
     else
     {
@@ -710,32 +690,32 @@ bool KWEFKWordLeader::filter ( const QString &filenameIn,
     {
         byteArrayIn = koStoreIn.read ( koStoreIn.size () );
         koStoreIn.close ();
-        m_filenameIn=filenameIn;
+        m_filenameIn=chain->inputFile();
 
         kdDebug (30508) << "Processing KWord File (KoStore)..." << endl;
-        ProcessStoreFile (byteArrayIn, ProcessDocTag, filterData, this);
+        ProcessStoreFile (byteArrayIn, ProcessDocTag, this);
     }
     else
     {
         // We were not able to open maindoc.xml
         // But perhaps we have an untarred, uncompressed file
         //  (it might happen with koconverter)
-        QFile file (filenameIn);
+        QFile file (chain->inputFile());
         if (file.open (IO_ReadOnly))
         {
             byteArrayIn = file.readAll ();
             file.close ();
-            
+
             // DO *not* set m_filenameIn as we have not any KoStore
 
             kdDebug (30508) << "Processing KWord File (QFile)..." << endl;
-            ProcessStoreFile (byteArrayIn, ProcessDocTag, filterData, this);
+            ProcessStoreFile (byteArrayIn, ProcessDocTag, this);
         }
         else
         {
             kdError (30508) << "Unable to open input file!" << endl;
             doAbortFile ();
-            return false;
+            return KoFilter::StupidError;
         }
     }
 
@@ -743,5 +723,5 @@ bool KWEFKWordLeader::filter ( const QString &filenameIn,
 
     doCloseFile ();
 
-    return true;
+    return KoFilter::OK;
 }

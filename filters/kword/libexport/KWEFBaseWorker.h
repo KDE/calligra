@@ -45,7 +45,7 @@ class KWEFBaseWorker
         virtual bool doOpenTextFrameSet (void); // Like AbiWord's <section>
         virtual bool doCloseTextFrameSet (void); // Like AbiWord's </section>
         virtual bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
-        virtual bool doFullDocument (const QValueList<ParaData> &, QString &, QString &);
+        virtual bool doFullDocument (const QValueList<ParaData> &);
         virtual bool doFullAllParagraphs (const QValueList<ParaData>& paraList);
         virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
             const ValueListFormatData& paraFormatDataList);

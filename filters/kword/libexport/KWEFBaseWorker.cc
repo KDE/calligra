@@ -40,7 +40,7 @@ bool KWEFBaseWorker::doAbortFile(void)
     return doCloseFile();
 }
 
-bool KWEFBaseWorker::doFullDocument (const QValueList<ParaData>& paraList, QString &, QString &)
+bool KWEFBaseWorker::doFullDocument (const QValueList<ParaData>& paraList)
 {
     if (!doOpenTextFrameSet())
         return false;

@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001. 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,8 @@
 #ifndef KWEF_KWORDLEADER_H
 #define KWEF_KWORDLEADER_H
 
+#include <koFilterChain.h>
+
 #include <KWEFBaseWorker.h>
 
 class KWEFKWordLeader
@@ -36,13 +38,13 @@ class KWEFKWordLeader
     public:
         void setWorker ( KWEFBaseWorker *newWorker );
         KWEFBaseWorker *getWorker(void) const;
-        bool filter ( const QString& filenameIn, const QString& filenameOut,
-                      const QString& from, const QString& to, const QString& param );
+        KoFilter::ConversionStatus convert( KoFilterChain* chain,
+            const QCString& from, const QCString& to);
     public: // callbacks
         bool loadKoStoreFile(const QString& fileName, QByteArray& array);
     public: // public leader/worker functions (DO NOT use in your own code!)
         bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
-        bool doFullDocument (const QValueList<ParaData> &, QString &, QString &);
+        bool doFullDocument (const QValueList<ParaData> &);
         bool doFullPaperFormat (const int format, const double width, const double height, const int orientation);
         bool doOpenHead (void);
         bool doCloseHead (void);
