@@ -6,6 +6,7 @@
 #include <ktoolbar.h>
 #include <qpainter.h>
 #include <qtooltip.h>
+#include <qwhatsthis.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -114,6 +115,7 @@ TKSelectColorAction::~TKSelectColorAction()
 
 void TKSelectColorAction::initToolBarButton(TKToolBarButton* b)
 {
+  QWhatsThis::add( b, whatsThis() );
   TKAction::initToolBarButton(b);
   b->setDelayedPopup( popupMenu() );
   updatePixmap(b);
