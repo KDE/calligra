@@ -54,7 +54,7 @@ class KFontSizeAction;
 class KToggleAction;
 class KoPartSelectAction;
 class KSpreadSpell;
-//class KMacroCommand;
+class KSpreadMacroUndoAction;
 
 class KActionMenu;
 
@@ -605,6 +605,7 @@ private:
       KSpreadTable *  firstSpellTable;
       KSpreadTable *  currentSpellTable;
       KSpreadCell  *  currentCell;
+      KSpreadMacroUndoAction *macroCmdSpellCheck;
       unsigned int    spellCurrCellX;
       unsigned int    spellCurrCellY;
       unsigned int    spellStartCellX;

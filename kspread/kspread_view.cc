@@ -1195,15 +1195,9 @@ KSpreadView::~KSpreadView()
         disconnect(m_sbCalcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
 
         }*/
-    if (m_selectionInfo)
-    {
-      delete m_selectionInfo;
-    }
 
-    if(m_spell.kspell)
-    {
-        delete m_spell.kspell;
-    }
+    delete m_selectionInfo;
+    delete m_spell.kspell;
 
     m_pCanvas->endChoose();
     m_pTable = 0; // set the active table to 0L so that when during destruction
@@ -1337,7 +1331,6 @@ void KSpreadView::RecalcWorkBook(){
 
 void KSpreadView::slotRefreshLocale()
 {
-    kdDebug(36001)<<"KSpreadView::slotRefreshLocale()***************\n";
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable();
 	  tbl != 0L;
@@ -1368,7 +1361,7 @@ void KSpreadView::extraSpelling()
   if (m_pTable == 0L)
     return;
 
-  //  m_spell.macroCmdSpellCheck = 0L;
+  m_spell.macroCmdSpellCheck = 0L;
   m_spell.firstSpellTable    = m_pTable;
   m_spell.currentSpellTable  = m_spell.firstSpellTable;
 
@@ -1554,9 +1547,11 @@ void KSpreadView::spellCleanup()
 
 
   KMessageBox::information( this, i18n( "Spell checking is complete." ) );
-  // not supported yet
-  //    if(m_spell.macroCmdSpellCheck)
-  //      m_pDoc->addCommand(m_spell.macroCmdSpellCheck);
+
+  if(m_spell.macroCmdSpellCheck)
+      m_pDoc->undoBuffer()->appendUndo( m_spell.macroCmdSpellCheck );
+  m_spell.macroCmdSpellCheck=0L;
+
 }
 
 
@@ -1652,56 +1647,55 @@ void KSpreadView::spellCheckerCorrected( const QString & old, const QString & co
                                                      m_spell.spellCurrCellX,
                                                      m_spell.spellCurrCellY,
                                                      cell->formatType());
-  m_pDoc->undoBuffer()->appendUndo( undo );
-
   content.replace( pos, old.length(), corr );
   cell->setCellText( content );
   m_pEditWidget->setText( content );
 
-  // TODO ?:
-  //  if(!m_spell.macroCmdSpellCheck)
-  //    m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct Misspelled Word"));
-  //  m_spell.macroCmdSpellCheck->addCommand(textobj->textObject()->replaceSelectionCommand(&cursor, corr, KoTextObject::HighlightSelection, QString::null ));
+  if(!m_spell.macroCmdSpellCheck)
+      m_spell.macroCmdSpellCheck=new KSpreadMacroUndoAction( m_pDoc, i18n("Correct Misspelled Word") );
+  m_spell.macroCmdSpellCheck->addCommand(undo);
 }
 
 void KSpreadView::spellCheckerDone( const QString & )
 {
-  int result = m_spell.kspell->dlgResult();
+    int result = m_spell.kspell->dlgResult();
 
-  m_spell.kspell->cleanUp();
-  delete m_spell.kspell;
-  m_spell.kspell = 0L;
+    m_spell.kspell->cleanUp();
+    delete m_spell.kspell;
+    m_spell.kspell = 0L;
 
-  if ( result != KS_CANCEL && result != KS_STOP )
-  {
-    if (m_spell.spellCheckSelection)
+    if ( result != KS_CANCEL && result != KS_STOP )
     {
-      if ( (m_spell.spellCurrCellY <= m_spell.spellEndCellY)
-           && (m_spell.spellCurrCellX <= m_spell.spellEndCellX) )
-      {
-        startKSpell();
-        return;
-      }
-    }
-    else
-    {
-      if ( m_spell.currentCell )
-      {
-        m_spell.currentCell = m_spell.currentCell->nextCell();
+        if (m_spell.spellCheckSelection)
+        {
+            if ( (m_spell.spellCurrCellY <= m_spell.spellEndCellY)
+                 && (m_spell.spellCurrCellX <= m_spell.spellEndCellX) )
+            {
+                startKSpell();
+                return;
+            }
+        }
+        else
+        {
+            if ( m_spell.currentCell )
+            {
+                m_spell.currentCell = m_spell.currentCell->nextCell();
 
-        startKSpell();
+                startKSpell();
 
-        return;
-      }
+                return;
+            }
+        }
     }
-  }
 #if KDE_VERSION >= 305
-        m_spell.replaceAll.clear();
+    m_spell.replaceAll.clear();
 #endif
 
-  // Not implemented yet
-  //        if(m_spell.macroCmdSpellCheck)
-  //            m_pDoc->addCommand(m_spell.macroCmdSpellCheck);
+    if(m_spell.macroCmdSpellCheck)
+    {
+        m_pDoc->undoBuffer()->appendUndo( m_spell.macroCmdSpellCheck );
+    }
+    m_spell.macroCmdSpellCheck=0L;
 }
 
 void KSpreadView::spellCheckerFinished()
@@ -1730,9 +1724,12 @@ void KSpreadView::spellCheckerFinished()
     KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
   }
 
-  // Not implemented yet
-  //    if(m_spell.macroCmdSpellCheck)
-  //        m_pDoc->addCommand(m_spell.macroCmdSpellCheck);
+  if(m_spell.macroCmdSpellCheck)
+  {
+      m_pDoc->undoBuffer()->appendUndo( m_spell.macroCmdSpellCheck );
+  }
+  m_spell.macroCmdSpellCheck=0L;
+
 
   if(kspellNotConfigured)
   {
@@ -3741,8 +3738,7 @@ void KSpreadView::slotPopupAdjustRow()
 void KSpreadView::slotListChoosePopupMenu( )
 {
  assert( m_pTable );
- if (  m_popupListChoose != 0L )
-   delete m_popupListChoose;
+ delete m_popupListChoose;
 
  if(!koDocument()->isReadWrite() )
    return;
