@@ -27,8 +27,7 @@
 
 
 VRoundCornersCmd::VRoundCornersCmd( VDocument* doc, double radius )
-	: VCommand( doc, i18n( "Round Corners" ) ),
-	  m_oldObjects( 0L ), m_newObjects( 0L )
+	: VCommand( doc, i18n( "Round Corners" ) )
 {
 	// Set members.
 	m_oldObjects = document()->selection()->clone();
@@ -37,8 +36,7 @@ VRoundCornersCmd::VRoundCornersCmd( VDocument* doc, double radius )
 
 
 	// Create new shapes.
-	if( !m_newObjects )
-		m_newObjects = new VSelection();
+	m_newObjects = new VSelection();
 
 	VObject* newObject;
 
@@ -76,14 +74,13 @@ VRoundCornersCmd::execute()
 	if( m_newObjects->objects().count() <= 0 )
 		return;
 
-	document()->selection()->clear();
-
 	VObjectListIterator itr( m_oldObjects->objects() );
 
 	// Hide old objects.
 	for( ; itr.current(); ++itr )
 	{
 		itr.current()->setState( VObject::deleted );
+		document()->selection()->take( *itr.current() );
 	}
 
 	// Show new objects.
@@ -116,6 +113,7 @@ VRoundCornersCmd::unexecute()
 	for( itr = m_newObjects->objects(); itr.current(); ++itr )
 	{
 		itr.current()->setState( VObject::deleted );
+		document()->selection()->take( *itr.current() );
 	}
 }
 
