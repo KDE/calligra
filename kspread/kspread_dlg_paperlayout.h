@@ -20,7 +20,6 @@
 #define __kspread_dlg_paperlayout__
 
 #include <kdialogbase.h>
-#define private protected
 #include <koPageLayoutDia.h>
 class KSpreadTable;
 class QCheckBox;
