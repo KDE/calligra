@@ -3114,9 +3114,13 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat, bool force )
         m_canvas->gui()->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine], m_paragLayout.margins[QStyleSheetItem::MarginRight] );
     }
 
-    m_paragLayout.setTabList( parag->tabList() );
-    KoRuler * hr = m_canvas->gui()->getHorzRuler();
-    if ( hr ) hr->setTabList( parag->tabList() );
+    if( m_paragLayout.tabList() != parag->tabList() )
+    {
+        m_paragLayout.setTabList( parag->tabList() );
+        KoRuler * hr = m_canvas->gui()->getHorzRuler();
+        if ( hr )
+            hr->setTabList( parag->tabList() );
+    }
     // There are more paragraph settings, but those that are not directly
     // visible in the UI don't need to be handled here.
     // For instance parag and line spacing stuff, borders etc.
