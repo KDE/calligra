@@ -501,7 +501,13 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 //		if(moveCursor)
 //		selectPrev();
 //		d->pUpdateTimer->start(1,true);
-	updateRow(d->curRow);
+	//get last visible row
+	int r = rowAt(clipper()->height());
+	if (r==-1) {
+		r = rows()+1+(isInsertingEnabled()?1:0);
+	}
+	//update all visible rows below 
+	updateContents( contentsX(), rowPos(d->curRow), clipper()->width(), d->rowHeight*(r-d->curRow));
 
 	//update navigator's data
 	setNavRowCount(rows());
@@ -524,7 +530,7 @@ void KexiTableView::deleteCurrentRow()
 		break;
 	case AskDelete:
 		if (KMessageBox::questionYesNo(this, i18n("Do you want to delete selected row?"), 0, 
-			KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeDeleteRow"/*config entry*/)==KMessageBox::No)
+			KStdGuiItem::yes(), KStdGuiItem::no(), "dontAskBeforeDeleteRow"/*config entry*/)==KMessageBox::No)
 			return;
 		break;
 	case SignalDelete:
@@ -707,9 +713,14 @@ void KexiTableView::slotUpdate()
 //	viewport()->setUpdatesEnabled(false);
 ///	resizeContents(s.width(), s.height());
 //	viewport()->setUpdatesEnabled(true);
-	updateGeometries();
-	updateContents(0, 0, viewport()->width(), contentsHeight());
-	updateGeometries();
+
+	updateContents();
+
+//	updateContents(0, contentsY()+clipper()->height()-2*d->rowHeight, clipper()->width(), d->rowHeight*3);
+	
+	//updateGeometries();
+//	updateContents(0, 0, viewport()->width(), contentsHeight());
+//	updateGeometries();
 }
 
 bool KexiTableView::isSortingEnabled() const
@@ -2063,6 +2074,11 @@ void KexiTableView::resizeEvent(QResizeEvent *e)
 			horizontalScrollBar()->sizeHint().height()
 		);
 
+	if ((contentsHeight() - e->size().height()) <= d->rowHeight) {
+		slotUpdate();
+		triggerUpdate();
+	}
+
 /*		d->navPanel->setGeometry(
 			frameWidth(),
 			viewport()->height() +d->pTopHeader->height() 
@@ -2255,16 +2271,22 @@ void KexiTableView::ensureCellVisible(int row, int col/*=-1*/)
 	QRect r( columnPos(col==-1 ? d->curCol : col), rowPos(row), 
 		columnWidth(col==-1 ? d->curCol : col), rowHeight());
 
-	if (d->navPanel && horizontalScrollBar()->isHidden() && row == (rows()-1)) {
+/*	if (d->navPanel && horizontalScrollBar()->isHidden() && row == rows()-1) {
 		//when cursor is moved down and navigator covers the cursor's area,
 		//area is scrolled up
 		if ((viewport()->height() - d->navPanel->height()) < r.bottom()) {
 			scrollBy(0,r.bottom() - (viewport()->height() - d->navPanel->height()));
 		}
+	}*/
+
+	if (d->navPanel && horizontalScrollBar()->isHidden()) {
+		//a hack: for visible navigator: increase height of the visible rect 'r'
+		r.setBottom(r.bottom()+d->navPanel->height());
 	}
 
 	QPoint pcenter = r.center();
-	ensureVisible(pcenter.x(), pcenter.y(), columnWidth(col==-1 ? d->curCol : col)/2, rowHeight()/2);
+	ensureVisible(pcenter.x(), pcenter.y(), r.width()/2, r.height()/2);
+	slotUpdate();
 }
 
 void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
@@ -3008,7 +3030,8 @@ void KexiTableView::triggerUpdate()
 {
 	kdDebug(44021) << "KexiTableView::triggerUpdate()" << endl;
 //	if (!d->pUpdateTimer->isActive())
-		d->pUpdateTimer->start(200, true);
+		d->pUpdateTimer->start(20, true);
+//		d->pUpdateTimer->start(200, true);
 }
 
 int KexiTableView::columnType(int col) const
@@ -3253,8 +3276,6 @@ void KexiTableView::vScrollBarValueChanged(int v)
 	kdDebug(44021) << "VCHANGED: " << v << " / " << horizontalScrollBar()->maxValue() <<  endl;
 	
 //	updateContents();
-//	triggerUpdate();
-	
 	d->pVerticalHeader->update(); //<-- dirty but needed
 	
 	QRect r = verticalScrollBar()->sliderRect();
@@ -3283,6 +3304,11 @@ void KexiTableView::vScrollBarValueChanged(int v)
 			d->scrollBarTip->raise();
 			d->scrollBarTipTimer.start(500, true);
 		}
+	}
+	//update bottom view region
+	if (d->navPanel && (contentsHeight() - contentsY() - clipper()->height()) <= QMAX(d->rowHeight,d->navPanel->height())) {
+		slotUpdate();
+		triggerUpdate();
 	}
 }
 
