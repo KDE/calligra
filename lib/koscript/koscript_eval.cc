@@ -1267,6 +1267,7 @@ bool KSEval_t_func_call( KSParseNode* node, KSContext& context )
 
   // Create a list of parameters
   context.setValue( new KSValue( KSValue::ListType ) );
+  context.setExtraData(new KSValue(KSValue::ListType));
 
   KSParseNode *right = node->branch2();
   if ( right )
@@ -2046,6 +2047,15 @@ bool KSEval_func_call_params( KSParseNode* node, KSContext& context )
   }
 
   context.value()->listValue().append( l.shareValue() );
+
+  if (left->getType() == t_cell || left->getType() == t_range)
+  {
+    context.extraData()->listValue().append(new KSValue(left->getStringLiteral()));
+  }
+  else
+  {
+    context.extraData()->listValue().append(new KSValue());
+  }
 
   // More parameters ?
   KSParseNode *right = node->branch2();

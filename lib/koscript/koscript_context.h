@@ -245,6 +245,17 @@ public:
    */
   KSValue* shareValue() { if ( !m_value ) return 0; m_value->ref(); return m_value; }
 
+  /**
+   * Set a field of generic extra data for this context
+   */
+  void setExtraData( KSValue* p ) { m_extraData = p; }
+
+  /**
+   * Retrieve any extra data associated with this context
+   */
+  KSValue* extraData() { return m_extraData; }
+
+
   void setException( KSContext& c ) { m_exception = c.exception(); if ( c.exception() ) c.exception()->ref(); }
   void setException( KSException::Ptr& p ) { m_exception = p; }
   void setException( KSException* p ) { m_exception = p; }
@@ -292,6 +303,7 @@ public:
 
 private:
   KSValue::Ptr m_value;
+  KSValue::Ptr m_extraData;
   KSException::Ptr m_exception;
   KSScope::Ptr m_scope;
   bool m_bLeftExpr;

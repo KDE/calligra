@@ -47,6 +47,7 @@ KSContext::~KSContext()
   // You may NOT change the order of the following two lines!
   m_exception = 0;
   m_value = 0;
+  m_extraData = 0;
 }
 
 /*************************************************
@@ -173,7 +174,7 @@ KSValue* KSScope::object( const QString& name, bool _insert )
           {
             KSSharedPtr<KSValue> ptr( it.data() );
             return ptr;
-          } 
+          }
       }
 
     it = m_globalSpace->begin();
