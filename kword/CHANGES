@@ -1653,3 +1653,9 @@ Reggie, 9.12.1999:
 - Fixed creating table of contents
 - Select all is now ALT + A, CTRL + A and CTRL + E work as expeced
 
+Reggie, 19.12.1999:
+-----------------
+- It doesn't crash anymore when splitting a line which contains
+  footnotes/endnotes - but footnotes/endnotes are a really broken, I think
+  I need to rewrite that part
+

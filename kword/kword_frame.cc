@@ -846,14 +846,20 @@ void KWTextFrameSet::insertParag( KWParag *_parag, InsertPos _pos )
 /*================================================================*/
 void KWTextFrameSet::splitParag( KWParag *_parag, unsigned int _pos )
 {
-    KWParag *_new = 0L, *_next = 0L;
-
-    if ( _parag ) _next = _parag->getNext();
+    KWParag *_new = 0, *_next = 0;
 
     unsigned int len = _parag->getTextLen() - _pos;
     KWChar* _string = _parag->getKWString()->split( _pos );
+    if ( _parag ) 
+	_next = _parag->getNext();
+
     _new = new KWParag( this, doc, _parag, _next, _parag->getParagLayout() );
-    if ( _next ) _next->setPrev( _new );
+    if ( _next ) {
+ 	_next->setPrev( _new );
+	_new->setNext( _next );
+    } else {
+	_new->setNext( 0 );
+    }
 
     _new->appendText( _string, len );
 
@@ -1086,7 +1092,8 @@ void KWTextFrameSet::updateCounters()
 		for ( i = 0; i < 16; i++ ) {
 		    if ( counterData[ i ] < 0 ) {
 			switch ( p->getParagLayout()->getCounterType() ) {
-			case KWParagLayout::CT_NUM: case KWParagLayout::CT_ROM_NUM_L: case KWParagLayout::CT_ROM_NUM_U:
+			case KWParagLayout::CT_NUM: case KWParagLayout::CT_ROM_NUM_L: 
+			case KWParagLayout::CT_ROM_NUM_U:
 			    counterData[ i ] = atoi( p->getParagLayout()->getStartCounter() );
 			    break;
 			case KWParagLayout::CT_ALPHAB_L:
@@ -1113,16 +1120,17 @@ void KWTextFrameSet::updateCounters()
 			listData[ i ] = -2;
 		}
 		ct = p->getParagLayout()->getCounterType();
-		if ( p->getParagLayout()->getCounterType() != KWParagLayout::CT_BULLET )
+		if ( p->getParagLayout()->getCounterType() != KWParagLayout::CT_BULLET ) {
 		    listData[ p->getParagLayout()->getCounterDepth() ]++;
-		else if ( listData[ 0 ] != -2 ) {
+		} else if ( listData[ 0 ] != -2 ) {
 		    for ( i = 0; i < 16; i++ )
 			listData[ i ] = -2;
 		}
 		for ( i = 0; i < 16; i++ ) {
 		    if ( listData[ i ] < 0 ) {
 			switch ( p->getParagLayout()->getCounterType() ) {
-			case KWParagLayout::CT_NUM: case KWParagLayout::CT_ROM_NUM_L: case KWParagLayout::CT_ROM_NUM_U:
+			case KWParagLayout::CT_NUM: case KWParagLayout::CT_ROM_NUM_L: 
+			case KWParagLayout::CT_ROM_NUM_U:
 			    listData[ i ] = atoi( p->getParagLayout()->getStartCounter() );
 			    break;
 			case KWParagLayout::CT_ALPHAB_L:

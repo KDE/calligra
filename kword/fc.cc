@@ -945,7 +945,7 @@ bool KWFormatContext::makeNextLineLayout( bool redrawBackgroundWhenAppendPage )
 	return FALSE;
 
     if ( !parag ) {
-	qDebug( "1" );
+	//qDebug( "1" );
 	doc->checkNumberOfPages( this );
 	return FALSE;
     }

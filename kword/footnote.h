@@ -29,9 +29,9 @@
 #include <string>
 
 class KWFootNote;
-class KWordDocument;
 class KWFormatContext;
 class KWParag;
+class KWordDocument;
 
 /******************************************************************/
 /* Class: KWFootNoteManager                                       */
@@ -75,6 +75,8 @@ protected:
     NoteType noteType;
     QString firstParag;
 
+    friend class KWFootNote;
+    
 };
 
 /******************************************************************/
@@ -93,7 +95,7 @@ public:
 
     KWFootNote( KWordDocument *_doc, QList<KWFootNoteInternal> *_parts );
 
-    KWFootNote *copy() { return new KWFootNote( doc, new QList<KWFootNoteInternal>( parts ) ); }
+    KWFootNote *copy();
 
     int getStart() { return start; }
     int getEnd() { return end; }

@@ -197,7 +197,7 @@ class KWString
 {
 public:
     KWString( KWordDocument *_doc )
-    { _max_ = 0; _len_ = 0; _data_ = 0L; doc = _doc; }
+    { _max_ = 0; _len_ = 0; _data_ = 0L; doc = _doc; allowRemoveFn = FALSE; }
     KWString( QString _text, KWordDocument *_doc );
     KWString( const KWString &_string );
     ~KWString()
@@ -253,10 +253,11 @@ protected:
     KWChar* _data_;
     KWordDocument *doc;
     QString cache;
-
+    bool allowRemoveFn;
+    
 };
 
-void freeChar( KWChar& _char, KWordDocument *_doc );
+void freeChar( KWChar& _char, KWordDocument *_doc, bool allowRemoveFn = FALSE );
 ostream& operator<<( ostream &out, KWString &_string );
 
 #endif

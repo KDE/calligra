@@ -312,7 +312,7 @@ void KWAutoFormat::doSpellCheck( KWParag *parag, KWFormatContext *fc )
 
     if ( isSeparator( parag->getKWString()->data()[ fc->getTextPos() ].c ) ) {
 	if ( !spBuffer.isEmpty() && spBegin ) {
-	    qDebug( "spellcheck: %s", spBuffer.latin1() );
+	    //qDebug( "spellcheck: %s", spBuffer.latin1() );
 	    spBuffer = QString::null;
 	    spBegin = 0;
 	}

@@ -41,7 +41,7 @@
 
 /*================================================================*/
 KWString::KWString( QString _str, KWordDocument *_doc )
-    : cache()
+    : cache(), allowRemoveFn( FALSE )
 {
     if ( _str == 0L ) {
 	_data_ = 0L;
@@ -70,6 +70,7 @@ KWString::KWString( const KWString &_string )
     _max_ = _string._max_;
     doc = _string.doc;
     cache = _string.cache;
+    allowRemoveFn = FALSE;
 }
 
 /*================================================================*/
@@ -103,7 +104,7 @@ KWChar* KWString::alloc( unsigned int _len )
 void KWString::free( KWChar* _data, unsigned int _len )
 {
     for ( unsigned int i = 0; i < _len; ++i )
-	freeChar( _data[ i ], doc );
+	freeChar( _data[ i ], doc, allowRemoveFn );
 }
 
 /*================================================================*/
@@ -270,8 +271,10 @@ void KWString::clear()
 bool KWString::remove( unsigned int _pos, unsigned int _len )
 {
     if ( _pos + _len <= _len_ && ( int )_pos >= 0 ) {
+	allowRemoveFn = TRUE;
 	for ( unsigned int i = _pos; i < _pos + _len; i++ )
-	    freeChar( _data_[ i ], doc );
+	    freeChar( _data_[ i ], doc, allowRemoveFn );
+	allowRemoveFn = FALSE;
 
 	memmove( _data_ + _pos, _data_ + _pos + _len, sizeof( KWChar ) * ( _len_ - _pos - _len ) );
 	resize( _len_ - _len, false );
@@ -431,7 +434,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 		    for ( unsigned int i = __pos; i < __pos + __len; i++ )
 		    {
 			if ( static_cast<int>( i ) > static_cast<int>( size() - 1 ) ) break;
-			freeChar( _data_[ i ], doc );
+			freeChar( _data_[ i ], doc, allowRemoveFn );
 			_kwformat = new KWCharFormat( format );
 			_data_[ i ].attrib = _kwformat;
 			format->incRef();
@@ -447,7 +450,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 //		       image = _doc->getImageCollection()->getImage( *_image, key );
 		    _kwimage = new KWCharImage( 0L );
 		    doc->addImageRequest( _image->getFilename(), _kwimage );
-		    freeChar( _data_[ __pos ], doc );
+		    freeChar( _data_[ __pos ], doc, allowRemoveFn );
 		    _data_[ __pos ].c = KWSpecialChar;
 		    _data_[ __pos ].attrib = _kwimage;
 		    delete _image;
@@ -455,7 +458,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 		} break;
 		case ID_KWCharTab: {
 		    _kwtab = new KWCharTab();
-		    freeChar( _data_[ __pos ], doc );
+		    freeChar( _data_[ __pos ], doc, allowRemoveFn );
 		    _data_[ __pos ].c = KWSpecialChar;
 		    _data_[ __pos ].attrib = _kwtab;
 		} break;
@@ -506,7 +509,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 			    _format = new KWFormat();
 			    _format->load( parser, lst, _doc );
 			    format = _doc->getFormatCollection()->getFormat( *_format );
-			    freeChar( _data_[ __pos ], doc );
+			    freeChar( _data_[ __pos ], doc, allowRemoveFn );
 			    v->setFormat( format );
 			    _data_[ __pos ].attrib = v;
 			    _data_[ __pos ].c = KWSpecialChar;
@@ -534,7 +537,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 			    _format = new KWFormat();
 			    _format->load( parser, lst, _doc );
 			    format = _doc->getFormatCollection()->getFormat( *_format );
-			    freeChar( _data_[ __pos ], doc );
+			    freeChar( _data_[ __pos ], doc, allowRemoveFn );
 			    v->setFormat( format );
 			    _data_[ __pos ].attrib = v;
 			    _data_[ __pos ].c = KWSpecialChar;
@@ -885,7 +888,7 @@ QCString KWString::utf8( bool _decoded )
 }
 
 /*================================================================*/
-void freeChar( KWChar& _char, KWordDocument *_doc )
+void freeChar( KWChar& _char, KWordDocument *_doc, bool allowRemoveFn )
 {
     if ( _char.attrib ) {
 	switch( _char.attrib->getClassId() ) {
@@ -896,7 +899,10 @@ void freeChar( KWChar& _char, KWordDocument *_doc )
 	    delete _char.attrib;
 	    break;
 	case ID_KWCharFootNote: {
-	    _doc->getFootNoteManager().removeFootNote( dynamic_cast<KWCharFootNote*>( _char.attrib )->getFootNote() );
+	    if ( allowRemoveFn ) {
+		_doc->getFootNoteManager().
+		    removeFootNote( dynamic_cast<KWCharFootNote*>( _char.attrib )->getFootNote() );
+	    }
 	    delete _char.attrib;
 	} break;
 	default: ; //assert( 0 );
