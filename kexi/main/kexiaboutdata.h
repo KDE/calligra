@@ -21,7 +21,7 @@
 #ifndef _KEXI_ABOU_DATA_
 #define _KEXI_ABOU_DATA_
 
-#include <kexi_global.h>
+#include <kexi_version.h>
 #include <kaboutdata.h>
 #include <config.h>
 #include <kdeversion.h>

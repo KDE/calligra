@@ -38,7 +38,7 @@ Boston, MA 02111-1307, USA.
 #include "kexicreateprojectpageengine.h"
 #include "kexiproject.h"
 
-#include "kexi_global.h"
+#include "kexi_version.h"
 
 //! Small extension: list item that can be shown as disabled, but still selectable
 class KexiListBoxItem : public QListBoxPixmap {

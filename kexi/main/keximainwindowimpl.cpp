@@ -2467,7 +2467,13 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 		}
 	}
 	QWidget *w = findWindow(static_cast<QWidget*>(obj));
-	if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut) {
+	if (e->type()==QEvent::FocusIn) {
+		focus_w = focusWindow();
+		KexiVDebug << "Focus EVENT" << endl;
+		KexiVDebug << (focus_w ? focus_w->name() : "" )  << endl;
+		KexiVDebug << "eventFilter: " <<e->type() << " " <<obj->name() <<endl;
+	}
+	else if (e->type()==QEvent::FocusOut) {
 		focus_w = focusWindow();
 		KexiVDebug << "Focus EVENT" << endl;
 		KexiVDebug << (focus_w ? focus_w->name() : "" )  << endl;
@@ -2980,8 +2986,6 @@ KexiMainWindowImpl::initUserActions()
 
 void KexiMainWindowImpl::slotImportProject()
 {
-	KReplaceDialog dlg(this);
-	dlg.exec();
 #ifndef KEXI_NO_MIGRATION
 	QDialog *d = KexiInternalPart::createModalDialogInstance("migration", this, this);
 	if (!d)
