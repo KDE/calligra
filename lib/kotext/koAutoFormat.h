@@ -244,7 +244,9 @@ public:
     }
 
     void removeAutoFormatEntry( const QString &key ) {
+        m_entries.setAutoDelete(true);
         m_entries.remove( key );
+        m_entries.setAutoDelete(false);
 	buildMaxLen();
     }
 

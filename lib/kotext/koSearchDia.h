@@ -68,6 +68,7 @@ public:
     } Options;
 
     KoSearchContext();
+    ~KoSearchContext();
 
     QString m_family;
     QColor m_color;

@@ -693,7 +693,8 @@ void KoAutoFormatDia::slotChangeTextFormatEntry()
         if ( dia->exec())
         {
             dia->ctxOptions( );
-            entry->setFormatEntryContext( tmpFormat );
+            if ( createNewFormat )
+                entry->setFormatEntryContext( tmpFormat );
             autocorrectionEntryChanged= true;
 
         }

@@ -48,6 +48,10 @@ KoSearchContext::KoSearchContext()
     m_underline = KoTextFormat::U_NONE;
     m_strikeOut = KoTextFormat::S_NONE;
 }
+KoSearchContext::~KoSearchContext()
+{
+}
+
 
 KoSearchContextUI::KoSearchContextUI( KoSearchContext *ctx, QWidget *parent )
     : QObject(parent), m_ctx(ctx), m_parent(parent)

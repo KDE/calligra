@@ -63,8 +63,6 @@ void KoAutoFormatEntry::createNewEntryContext()
     if ( !m_formatOptions )
     {
         m_formatOptions = new KoSearchContext();
-        m_formatOptions->m_optionsMask = 0;
-        m_formatOptions->m_options = 0;
     }
 }
 
