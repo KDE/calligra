@@ -2145,7 +2145,7 @@ bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
   if ( postfix() )
     out << " postfix=\"" << postfix() << '"';
 
-  out << " float=\"" << (unsigned int)floatFormat() << "\" floatcolor=" << (unsigned int)floatColor()
+  out << " float=\"" << (unsigned int)floatFormat() << "\" floatcolor=\"" << (unsigned int)floatColor()
       << "\" faktor=\"" << m_dFaktor << "\"/>" << endl;
 
   if ( m_textFont != m_pTable->defaultCell()->textFont() )
