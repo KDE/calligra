@@ -45,7 +45,7 @@ KoShellWindow::KoShellWindow()
 
   m_pKoolBar = new KoKoolBar( m_pLayout );
 
-  setView( m_pLayout );
+  setCentralWidget( m_pLayout );
 
   m_pFrame = new KoShellFrame( m_pLayout );
 
