@@ -246,6 +246,10 @@ KontourImport::parseGroup( const QDomElement &e )
 			parseGObject( path, point );
 			m_document.append( path );	
 		}
+		else if( b.tagName() == "group" )
+		{
+			parseGroup( b.toElement().firstChild().toElement() );
+		}
 	}
 }
 
