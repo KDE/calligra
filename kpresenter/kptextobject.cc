@@ -1310,7 +1310,7 @@ void KPTextView::insertVariable( KoVariable *var )
         kdDebug() << "KPTextView::insertVariable currentFormat=" << currentFormat() << endl;
 #endif
         textObject()->insert( cursor(), currentFormat(), KoTextObject::customItemChar(),
-                                false, false, i18n("Insert Variable"),
+                                false, true, i18n("Insert Variable"),
                                 customItemsMap );
         var->recalc();
         cursor()->parag()->invalidate(0);
