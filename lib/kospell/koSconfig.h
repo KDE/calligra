@@ -29,9 +29,10 @@ class QLabel;
 class KConfig;
 class KOSpellConfigPrivate;
 
-// Should be replaced by the charset strings
+// ### TODO: Should be replaced by the charset strings
 // because the config file would be more stable
 // when inserting entries in the list
+// ### TODO: rename the enum values, as all ISO-8859 are not Latin ones (ISO-8859-15 is "only" Latin9)
 enum OEncoding {
   KOS_E_ASCII=0,
   KOS_E_LATIN1=1,
