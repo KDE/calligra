@@ -256,7 +256,9 @@ void importWizard::accept()
     kexi_conn = driver->createConnection(*cdata);
 
     //import = new pqxxMigrate(srcConn->selectedConnectionData(), srcdbname->selectedProjectData()->databaseName(), kexi_conn, dbname, false);
-    
+
+#if 0
+piggz: local variable 'import' used without having been initialized
     if (import->performImport())
     {
         KMessageBox::information(this, i18n("Import Succeeded."), i18n("Success"));
@@ -265,6 +267,7 @@ void importWizard::accept()
     {
         KMessageBox::error(this, i18n("Import failed because: "), i18n("Failure"));
     }
+#endif
 }
 
 //===========================================================
