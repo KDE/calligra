@@ -19,7 +19,7 @@
 
 DESCRIPTION
 
-    This file impements an abstraction of the on-disk format of Microsoft
+    This file implements an abstraction of the on-disk format of Microsoft
     Word documents. The public interface implements iterators that allow
     convenient traversal of the types of data in a document.
 
@@ -32,6 +32,8 @@ DESCRIPTION
 
 #include <kdebug.h>
 #include <mswordgenerated.h>
+
+class Paragraph;
 
 class MsWord: public MsWordGenerated
 {
@@ -148,7 +150,7 @@ public:
     // Cache for styles in stylesheet. This is an array of fully "decoded"
     // PAPs - that will help performance with lots of paragraphs.
 
-    PAP *m_styles;
+    Paragraph **m_styles;
 
     // Cache for list styles. This is an array of LVLF pointersfully "decoded"
     // PAPs - that will help performance with lots of paragraphs.
@@ -229,6 +231,7 @@ public:
     };
 
 private:
+    friend class Paragraph;
 
     // Error handling and reporting support.
 
@@ -260,16 +263,6 @@ private:
     unsigned m_tableColumn;
     QString m_tableText[64];
     PAP m_tableStyle[64];
-
-    // Initialise and construct the PAP for a paragrpah.
-
-    void paragraphStyleCreate(PAP *pap);
-    void paragraphStyleModify(PAP *pap, unsigned style);
-    void paragraphStyleModify(PAP *pap, TAP *tap, const U8 *grpprl, unsigned count);
-    void paragraphStyleModify(PAP *pap, LFO &style, bool useFormatting, bool useStartAt);
-    void paragraphStyleModify(PAP *pap, PAPXFKP &style);
-    void paragraphStyleModify(PAP *pap, PHE &layout);
-    void paragraphStyleModify(PAP *pap, STD &style);
 
     // Fetch the styles in the style sheet.
 

@@ -1,56 +1,62 @@
-/* This file is part of the KDE project
-   Copyright (C) 1999 Werner Trobin <wtrobin@carinthia.com>
+/*
+    Copyright (C) 2000, S.R.Haque <shaheedhaque@hotmail.com>.
+    This file is part of the KDE project
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
+
+DESCRIPTION
+
+    This file implements an abstraction for paragraph properties in Microsoft
+    Word documents. In other words, it is an abstraction for the PAP structure.
 */
 
 #ifndef PARAGRAPH_H
 #define PARAGRAPH_H
 
-#include <qobject.h>
-#include <qarray.h>
-#include <qstring.h>
+#include <msword.h>
 
-#include <fib.h>
-
-class Section;
-
-class Paragraph : public QObject {
-
-    Q_OBJECT
-
+class Paragraph
+{
 public:
-    Paragraph(const Section * const parent, const unsigned char * const mainData,
-              const FIB * const fib, const QArray<int> &rowMarks,
-              const QArray<int> &cellMarks);
+
+    // Create a paragraph with default properties.
+
+    Paragraph(MsWord &document);
     ~Paragraph();
 
-    const bool isOk() const { return m_success; }
-    const bool convert();
-    const QString paragraph() const { return m_paragraph; }
+    // Modify the paragraph with style information from various sources...
+    //
+    // An array of SPRMs (grpprl) with an optional TAP.
+    // An existing base style.
+    // List format.
+    // Property exceptions.
+    // Paragraph height.
+    // Predefined style from stylesheet.
+
+    void apply(const MsWord::U8 *grpprl, unsigned count, MsWord::TAP *tap = NULL);
+    void apply(MsWord::U16 style);
+    void apply(MsWord::LFO &style, bool useFormatting, bool useStartAt);
+    void apply(MsWord::PAPXFKP &style);
+    void apply(MsWord::PHE &layout);
+    void apply(MsWord::STD &style);
 
 private:
-    Paragraph(const Paragraph &);
-    const Paragraph &operator=(const Paragraph &);
+    friend class MsWord;
 
-    QString m_paragraph;
-    bool m_success;
-    const Section * const m_parent;
-    const unsigned char * const m_mainData;
-    const FIB * const m_fib;
-    QArray<int> m_rowMarks, m_cellMarks;
+    MsWord &m_document;
+    MsWord::PAP m_pap;
 };
 #endif // PARAGRAPH_H

@@ -23,12 +23,16 @@
     http://www.wvWare.com).
 */
 
+#include <errno.h>
+#include <iconv.h>
 #include <kdebug.h>
 #include <msword.h>
-#include <string.h>
+#include <paragraph.h>
+//#include <string.h>
 
 short MsWord::char2unicode(unsigned char c)
 {
+/*
     static const short CP2UNI[] =
     {
         0x20ac, 0x0000, 0x201a, 0x0192,
@@ -45,6 +49,53 @@ short MsWord::char2unicode(unsigned char c)
         return static_cast<short>(c);
     else
         return CP2UNI[c-0x80];
+*/
+
+        char f_code[33];            /* From CCSID                           */
+        char t_code[33];            /* To CCSID                             */
+        iconv_t iconv_handle;       /* Conversion Descriptor returned       */
+                                /* from iconv_open() function           */
+        char *obuf;                 /* Buffer for converted characters      */
+        char *p;
+        size_t ibuflen;               /* Length of input buffer               */        size_t obuflen;               /* Length of output buffer              */        const char *ibuf;
+        char *codepage;
+        char buffer[1];
+        char buffer2[2];
+        U16 eachchar = c;
+        buffer[0]=eachchar;
+        ibuf = buffer;
+        obuf = buffer2;
+
+
+
+        /* All reserved positions of from code (last 12 characters) and to code
+  */
+        /* (last 19 characters) must be set to hexadecimal zeros.
+  */
+
+        memset(f_code,'\0',33);
+        memset(t_code,'\0',33);
+
+        strcpy(f_code,"CP1252");
+        strcpy(t_code,"UCS-2");
+
+        iconv_handle = iconv_open(t_code,f_code);
+        if (iconv_handle == (iconv_t)-1)
+                {
+                kdError(s_area) << "iconv_open fail: " << errno << " cannot convertto unicode" << endl;
+                return('?');
+                }
+
+        ibuflen = 1;
+    obuflen = 2;
+        p = obuf;
+    iconv(iconv_handle, &ibuf, &ibuflen, &obuf, &obuflen);
+    eachchar = (U8)*p++;
+    eachchar = (eachchar << 8)&0xFF00;
+    eachchar += (U8)*p;
+
+        iconv_close(iconv_handle);
+        return(eachchar);
 }
 
 void MsWord::constructionError(unsigned line, const char *reason)
@@ -53,20 +104,19 @@ void MsWord::constructionError(unsigned line, const char *reason)
     kdError(s_area) << m_constructionError << endl;
 }
 
-void MsWord::decodeParagraph(const QString &text, PHE &layout, PAPXFKP &style)
+void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::PAPXFKP &style)
 {
-    PAP pap;
+    Paragraph paragraph = Paragraph(*this);
 
     // Work out the paragraph details.
 
-    paragraphStyleCreate(&pap);
-    paragraphStyleModify(&pap, style);
-    paragraphStyleModify(&pap, layout);
+    paragraph.apply(style);
+    paragraph.apply(layout);
 
-    // We treat table paragraphs somewhat differently...so edal with
+    // We treat table paragraphs somewhat differently...so deal with
     // them first.
 
-    if (pap.fInTable)
+    if (paragraph.m_pap.fInTable)
     {
         if (!m_wasInTable)
         {
@@ -77,21 +127,21 @@ void MsWord::decodeParagraph(const QString &text, PHE &layout, PAPXFKP &style)
 
         // When we get to the end of the row, output the whole lot.
 
-        if (pap.fTtp)
+        if (paragraph.m_pap.fTtp)
         {
-            TAP tap;
+            MsWord::TAP tap;
 
             // A TAP describes the row.
 
             memset(&tap, 0, sizeof(tap));
-            paragraphStyleModify(&pap, &tap, style.grpprl, style.grpprlBytes);
+            paragraph.apply(style.grpprl, style.grpprlBytes, &tap);
             gotTableRow(m_tableText, m_tableStyle, tap);
             m_tableColumn = 0;
         }
         else
         {
             m_tableText[m_tableColumn] = text;
-            m_tableStyle[m_tableColumn] = pap;
+            m_tableStyle[m_tableColumn] = paragraph.m_pap;
             m_tableColumn++;
         }
         return;
@@ -102,12 +152,12 @@ void MsWord::decodeParagraph(const QString &text, PHE &layout, PAPXFKP &style)
 
     // What kind of paragraph was this?
 
-    if ((pap.istd >= 1) && (pap.istd <= 9))
+    if ((paragraph.m_pap.istd >= 1) && (paragraph.m_pap.istd <= 9))
     {
-        gotHeadingParagraph(text, pap);
+        gotHeadingParagraph(text, paragraph.m_pap);
     }
     else
-    if (pap.ilfo)
+    if (paragraph.m_pap.ilfo)
     {
         const U8 *ptr = m_tableStream + m_fib.fcPlfLfo; //lcbPlfLfo.
         const U8 *ptr2;
@@ -119,13 +169,13 @@ void MsWord::decodeParagraph(const QString &text, PHE &layout, PAPXFKP &style)
 
         ptr += MsWordGenerated::read(ptr, &lfoCount);
         ptr2 = ptr + lfoCount * sizeof(LFO);
-        if (lfoCount < pap.ilfo)
-            kdError(s_area) << "MsWord::error finding LFO[" << pap.ilfo << "]" << endl;
+        if (lfoCount < paragraph.m_pap.ilfo)
+            kdError(s_area) << "MsWord::error finding LFO[" << paragraph.m_pap.ilfo << "]" << endl;
 
         // Skip all the LFOs before our one, so that we can traverse the variable
         // length LFOLVL arrays.
 
-        for (i = 1; i < pap.ilfo; i++)
+        for (i = 1; i < paragraph.m_pap.ilfo; i++)
         {
             LFO data;
             LFOLVL levelOverride;
@@ -177,7 +227,7 @@ void MsWord::decodeParagraph(const QString &text, PHE &layout, PAPXFKP &style)
 
             // If this LFOLVL is ours, we are done!
 
-            if (pap.ilvl == levelOverride.ilvl)
+            if (paragraph.m_pap.ilvl == levelOverride.ilvl)
             {
                 break;
             };
@@ -193,31 +243,31 @@ void MsWord::decodeParagraph(const QString &text, PHE &layout, PAPXFKP &style)
         // If the LFOLVL was not a complete override, resort to the LSTs for whatever
         // is missing.
 
-        paragraphStyleModify(&pap, data, !levelOverride.fFormatting, !levelOverride.fStartAt);
+        paragraph.apply(data, !levelOverride.fFormatting, !levelOverride.fStartAt);
         if (levelOverride.fStartAt)
         {
             // Apply the startAt.
 
-            pap.anld.iStartAt = levelOverride.iStartAt;
-            kdDebug(s_area) << "got startAt " << pap.anld.iStartAt << " from LFOLVL" << endl;
+            paragraph.m_pap.anld.iStartAt = levelOverride.iStartAt;
+            kdDebug(s_area) << "got startAt " << paragraph.m_pap.anld.iStartAt << " from LFOLVL" << endl;
         }
         if (levelOverride.fFormatting)
         {
             // Apply the grpprl.
 
             kdDebug(s_area) << "getting formatting from LFO" << endl;
-            paragraphStyleModify(&pap, NULL, ptr3, level.cbGrpprlPapx);
+            paragraph.apply(ptr3, level.cbGrpprlPapx);
 
             // Apply the startAt.
 
-            pap.anld.iStartAt = level.iStartAt;
-            kdDebug(s_area) << "got startAt " << pap.anld.iStartAt << " from LVLF" << endl;
+            paragraph.m_pap.anld.iStartAt = level.iStartAt;
+            kdDebug(s_area) << "got startAt " << paragraph.m_pap.anld.iStartAt << " from LVLF" << endl;
         }
-        gotListParagraph(text, pap);
+        gotListParagraph(text, paragraph.m_pap);
     }
     else
     {
-        gotParagraph(text, pap);
+        gotParagraph(text, paragraph.m_pap);
     }
 }
 
@@ -434,7 +484,7 @@ void MsWord::getStyles()
 
     // Construct the array of styles, and then walk the array reading in the style definitions.
 
-    m_styles = new PAP [stshi.cstd];
+    m_styles = new Paragraph *[stshi.cstd];
     for (unsigned i = 0; i < stshi.cstd; i++)
     {
         U16 cbStd;
@@ -452,8 +502,8 @@ void MsWord::getStyles()
 
             if (std.sgc == 1)
             {
-                paragraphStyleCreate(&m_styles[i]);
-                paragraphStyleModify(&m_styles[i], std);
+                m_styles[i] = new Paragraph(*this);
+                m_styles[i]->apply(std);
             }
         }
         else
@@ -547,1061 +597,6 @@ MsWord::~MsWord()
 {
 }
 
-// Set PAP to its initial value.
-
-void MsWord::paragraphStyleCreate(PAP *pap)
-{
-    memset(pap, 0, sizeof(*pap));
-    pap->fWidowControl = 1;
-    pap->lspd.fMultLinespace = 1;
-    pap->lspd.dyaLine = 240;
-    pap->lvl = 9;
-}
-
-// Apply a base style.
-
-void MsWord::paragraphStyleModify(PAP *pap, unsigned style)
-{
-    unsigned originalStyle;
-
-    // Record the style index.
-
-    originalStyle = pap->istd;
-
-    // Walk the grpprl, then restore the style index.
-
-    *pap = m_styles[style];
-    pap->istd = originalStyle;
-}
-
-
-// Apply a grpprl.
-
-void MsWord::paragraphStyleModify(PAP *pap, TAP *tap, const U8 *grpprl, unsigned count)
-{
-    // Encodings of all Word97 sprms.
-
-    typedef enum
-    {
-        sprmCFRMarkDel = 0x0800,
-        sprmCFRMark = 0x0801,
-        sprmCFFldVanish = 0x0802,
-        sprmCFData = 0x0806,
-        sprmCFOle2 = 0x080A,
-        sprmCFBold = 0x0835,
-        sprmCFItalic = 0x0836,
-        sprmCFStrike = 0x0837,
-        sprmCFOutline = 0x0838,
-        sprmCFShadow = 0x0839,
-        sprmCFSmallCaps = 0x083A,
-        sprmCFCaps = 0x083B,
-        sprmCFVanish = 0x083C,
-        sprmCFImprint = 0x0854,
-        sprmCFSpec = 0x0855,
-        sprmCFObj = 0x0856,
-        sprmCFEmboss = 0x0858,
-        sprmCFBiDi = 0x085A,
-        sprmCFDiacColor = 0x085B,
-        sprmCFBoldBi = 0x085C,
-        sprmCFItalicBi = 0x085D,
-        sprmCFUsePgsuSettings = 0x0868,
-        sprmPJc = 0x2403,
-        sprmPFSideBySide = 0x2404,
-        sprmPFKeep = 0x2405,
-        sprmPFKeepFollow = 0x2406,
-        sprmPFPageBreakBefore = 0x2407,
-        sprmPBrcl = 0x2408,
-        sprmPBrcp = 0x2409,
-        sprmPFNoLineNumb = 0x240C,
-        sprmPFInTable = 0x2416,
-        sprmPFTtp = 0x2417,
-        sprmPWr = 0x2423,
-        sprmPFNoAutoHyph = 0x242A,
-        sprmPFLocked = 0x2430,
-        sprmPFWidowControl = 0x2431,
-        sprmPFKinsoku = 0x2433,
-        sprmPFWordWrap = 0x2434,
-        sprmPFOverflowPunct = 0x2435,
-        sprmPFTopLinePunct = 0x2436,
-        sprmPFAutoSpaceDE = 0x2437,
-        sprmPFAutoSpaceDN = 0x2438,
-        sprmPISnapBaseLine = 0x243B,
-        sprmPFBiDi = 0x2441,
-        sprmPFNumRMIns = 0x2443,
-        sprmPCrLf = 0x2444,
-        sprmPFUsePgsuSettings = 0x2447,
-        sprmPFAdjustRight = 0x2448,
-        sprmPIncLvl = 0x2602,
-        sprmPIlvl = 0x260A,
-        sprmPPc = 0x261B,
-        sprmPOutLvl = 0x2640,
-        sprmCSfxText = 0x2859,
-        sprmCIdctHint = 0x286F,
-        sprmCHighlight = 0x2A0C,
-        sprmCFFtcAsciSymb = 0x2A10,
-        sprmCDefault = 0x2A32,
-        sprmCPlain = 0x2A33,
-        sprmCKcd = 0x2A34,
-        sprmCKul = 0x2A3E,
-        sprmCIco = 0x2A42,
-        sprmCHpsInc = 0x2A44,
-        sprmCHpsPosAdj = 0x2A46,
-        sprmCIss = 0x2A48,
-        sprmCFDStrike = 0x2A53,
-        sprmPicBrcl = 0x2E00,
-        sprmScnsPgn = 0x3000,
-        sprmSiHeadingPgn = 0x3001,
-        sprmSFEvenlySpaced = 0x3005,
-        sprmSFProtected = 0x3006,
-        sprmSBkc = 0x3009,
-        sprmSFTitlePage = 0x300A,
-        sprmSFAutoPgn = 0x300D,
-        sprmSNfcPgn = 0x300E,
-        sprmSFPgnRestart = 0x3011,
-        sprmSFEndnote = 0x3012,
-        sprmSLnc = 0x3013,
-        sprmSGprfIhdt = 0x3014,
-        sprmSLBetween = 0x3019,
-        sprmSVjc = 0x301A,
-        sprmSBOrientation = 0x301D,
-        sprmSBCustomize = 0x301E,
-        sprmSFBiDi = 0x3228,
-        sprmSFFacingCol = 0x3229,
-        sprmSFRTLGutter = 0x322A,
-        sprmTFCantSplit = 0x3403,
-        sprmTTableHeader = 0x3404,
-        sprmPWHeightAbs = 0x442B,
-        sprmPDcs = 0x442C,
-        sprmPShd = 0x442D,
-        sprmPWAlignFont = 0x4439,
-        sprmPFrameTextFlow = 0x443A,
-        sprmPIstd = 0x4600,
-        sprmPIlfo = 0x460B,
-        sprmPNest = 0x4610,
-        sprmPBrcTop10 = 0x461C,
-        sprmPBrcLeft10 = 0x461D,
-        sprmPBrcBottom10 = 0x461E,
-        sprmPBrcRight10 = 0x461F,
-        sprmPBrcBetween10 = 0x4620,
-        sprmPBrcBar10 = 0x4621,
-        sprmPDxaFromText10 = 0x4622,
-        sprmCIbstRMark = 0x4804,
-        sprmCIdslRMark = 0x4807,
-        sprmCIdCharType = 0x480B,
-        sprmCHpsPos = 0x4845,
-        sprmCHpsKern = 0x484B,
-        sprmCYsri = 0x484E,
-        sprmCCharScale = 0x4852,
-        sprmCLidBi = 0x485F,
-        sprmCIbstRMarkDel = 0x4863,
-        sprmCShd = 0x4866,
-        sprmCIdslRMarkDel = 0x4867,
-        sprmCCpg = 0x486B,
-        sprmCRgLid0 = 0x486D,
-        sprmCRgLid1 = 0x486E,
-        sprmCIstd = 0x4A30,
-        sprmCFtcDefault = 0x4A3D,
-        sprmCLid = 0x4A41,
-        sprmCHps = 0x4A43,
-        sprmCHpsMul = 0x4A4D,
-        sprmCRgFtc0 = 0x4A4F,
-        sprmCRgFtc1 = 0x4A50,
-        sprmCRgFtc2 = 0x4A51,
-        sprmCFtcBi = 0x4A5E,
-        sprmCIcoBi = 0x4A60,
-        sprmCHpsBi = 0x4A61,
-        sprmSDmBinFirst = 0x5007,
-        sprmSDmBinOther = 0x5008,
-        sprmSCcolumns = 0x500B,
-        sprmSNLnnMod = 0x5015,
-        sprmSLnnMin = 0x501B,
-        sprmSPgnStart = 0x501C,
-        sprmSDmPaperReq = 0x5026,
-        sprmSClm = 0x5032,
-        sprmSTextFlow = 0x5033,
-        sprmSPgbProp = 0x522F,
-        sprmTJc = 0x5400,
-        sprmTFBiDi = 0x560B,
-        sprmTDelete = 0x5622,
-        sprmTMerge = 0x5624,
-        sprmTSplit = 0x5625,
-        sprmPDyaLine = 0x6412,
-        sprmPBrcTop = 0x6424,
-        sprmPBrcLeft = 0x6425,
-        sprmPBrcBottom = 0x6426,
-        sprmPBrcRight = 0x6427,
-        sprmPBrcBetween = 0x6428,
-        sprmPBrcBar = 0x6629,
-        sprmPHugePapx = 0x6645,
-        sprmCDttmRMark = 0x6805,
-        sprmCObjLocation = 0x680E,
-        sprmCDttmRMarkDel = 0x6864,
-        sprmCBrc = 0x6865,
-        sprmCPicLocation = 0x6A03,
-        sprmCSymbol = 0x6A09,
-        sprmPicBrcTop = 0x6C02,
-        sprmPicBrcLeft = 0x6C03,
-        sprmPicBrcBottom = 0x6C04,
-        sprmPicBrcRight = 0x6C05,
-        sprmSBrcTop = 0x702B,
-        sprmSBrcLeft = 0x702C,
-        sprmSBrcBottom = 0x702D,
-        sprmSBrcRight = 0x702E,
-        sprmSDxtCharSpace = 0x7030,
-        sprmTTlp = 0x740A,
-        sprmTHTMLProps = 0x740C,
-        sprmTInsert = 0x7621,
-        sprmTDxaCol = 0x7623,
-        sprmTSetShd = 0x7627,
-        sprmTSetShdOdd = 0x7628,
-        sprmTTextFlow = 0x7629,
-        sprmPDxaRight = 0x840E,
-        sprmPDxaLeft = 0x840F,
-        sprmPDxaLeft1 = 0x8411,
-        sprmPDxaAbs = 0x8418,
-        sprmPDyaAbs = 0x8419,
-        sprmPDxaWidth = 0x841A,
-        sprmPDyaFromText = 0x842E,
-        sprmPDxaFromText = 0x842F,
-        sprmCDxaSpace = 0x8840,
-        sprmSDxaColumns = 0x900C,
-        sprmSDxaLnn = 0x9016,
-        sprmSDyaTop = 0x9023,
-        sprmSDyaBottom = 0x9024,
-        sprmSDyaLinePitch = 0x9031,
-        sprmTDyaRowHeight = 0x9407,
-        sprmTDxaLeft = 0x9601,
-        sprmTDxaGapHalf = 0x9602,
-        sprmPDyaBefore = 0xA413,
-        sprmPDyaAfter = 0xA414,
-        sprmSDyaPgn = 0xB00F,
-        sprmSDxaPgn = 0xB010,
-        sprmSDyaHdrTop = 0xB017,
-        sprmSDyaHdrBottom = 0xB018,
-        sprmSXaPage = 0xB01F,
-        sprmSYaPage = 0xB020,
-        sprmSDxaLeft = 0xB021,
-        sprmSDxaRight = 0xB022,
-        sprmSDzaGutter = 0xB025,
-        sprmPIstdPermute = 0xC601,
-        sprmPChgTabsPapx = 0xC60D,
-        sprmPChgTabs = 0xC615,
-        sprmPRuler = 0xC632,
-        sprmPAnld = 0xC63E,
-        sprmPPropRMark = 0xC63F,
-        sprmPNumRM = 0xC645,
-        sprmCIstdPermute = 0xCA31,
-        sprmCMajority = 0xCA47,
-        sprmCHpsNew50 = 0xCA49,
-        sprmCHpsInc1 = 0xCA4A,
-        sprmCMajority50 = 0xCA4C,
-        sprmCPropRMark = 0xCA57,
-        sprmCDispFldRMark = 0xCA62,
-        sprmPicScale = 0xCE01,
-        sprmSOlstAnm = 0xD202,
-        sprmSPropRMark = 0xD227,
-        sprmTTableBorders = 0xD605,
-        sprmTDefTable10 = 0xD606,
-        sprmTDefTable = 0xD608,
-        sprmTDefTableShd = 0xD609,
-        sprmTSetBrc = 0xD620,
-        sprmTSetBrc10 = 0xD626,
-        sprmTDiagLine = 0xD62A,
-        sprmTVertMerge = 0xD62B,
-        sprmTVertAlign = 0xD62C,
-        sprmCChs = 0xEA08,
-        sprmCSizePos = 0xEA3F,
-        sprmSDxaColWidth = 0xF203,
-        sprmSDxaColSpacing = 0xF204
-    } opcodes;
-    union
-    {
-        U16 value;
-        struct
-        {
-            U16 ispmd: 9;
-            U16 fSpec: 1;
-            U16 sgc: 3;
-            U16 spra: 3;
-        } bits;
-    } opcode;
-    unsigned operandSize;
-    unsigned operandSizes[8] =
-    {
-        1,
-        1,
-        2,
-        4,
-        2,
-        2,
-        0,
-        3
-    };
-    const U8 *in = grpprl;
-    unsigned bytes = 0;
-
-    // Walk the grpprl.
-
-    while (bytes < count)
-    {
-        if (m_fib.nFib > s_maxWord6Version)
-        {
-            bytes += MsWordGenerated::read(in + bytes, &opcode.value);
-        }
-        else
-        {
-            U8 sprm;
-
-            // Convert sprm to new format.
-
-            bytes += MsWordGenerated::read(in + bytes, &sprm);
-            switch (sprm)
-            {
-            case 2:
-                opcode.value = sprmPIstd;
-                break;
-            case 3:
-                opcode.value = sprmPIstdPermute;
-                break;
-            case 4:
-                opcode.value = sprmPIncLvl;
-                break;
-            case 5:
-                opcode.value = sprmPJc;
-                break;
-            case 6:
-                opcode.value = sprmPFSideBySide;
-                break;
-            case 7:
-                opcode.value = sprmPFKeep;
-                break;
-            case 8:
-                opcode.value = sprmPFKeepFollow;
-                break;
-            case 9:
-                opcode.value = sprmPFPageBreakBefore;
-                break;
-            case 10:
-                opcode.value = sprmPBrcl;
-                break;
-            case 11:
-                opcode.value = sprmPBrcp;
-                break;
-            case 12:
-                opcode.value = sprmPAnld;
-                break;
-            case 13:
-                opcode.value = sprmPIlvl;
-                break;
-            case 14:
-                opcode.value = sprmPFNoLineNumb;
-                break;
-            case 15:
-                opcode.value = sprmPChgTabsPapx;
-                break;
-            case 16:
-                opcode.value = sprmPDxaRight;
-                break;
-            case 17:
-                opcode.value = sprmPDxaLeft;
-                break;
-            case 18:
-                opcode.value = sprmPNest;
-                break;
-            case 19:
-                opcode.value = sprmPDxaLeft1;
-                break;
-            case 20:
-                opcode.value = sprmPDyaLine;
-                break;
-            case 21:
-                opcode.value = sprmPDyaBefore;
-                break;
-            case 22:
-                opcode.value = sprmPDyaAfter;
-                break;
-            case 23:
-                opcode.value = sprmPChgTabs;
-                break;
-            case 24:
-                opcode.value = sprmPFInTable;
-                break;
-            case 25:
-                opcode.value = sprmPFTtp;
-                break;
-            case 26:
-                opcode.value = sprmPDxaAbs;
-                break;
-            case 27:
-                opcode.value = sprmPDyaAbs;
-                break;
-            case 28:
-                opcode.value = sprmPDxaWidth;
-                break;
-            case 29:
-                opcode.value = sprmPPc;
-                break;
-            case 30:
-                opcode.value = sprmPBrcTop10;
-                break;
-            case 31:
-                opcode.value = sprmPBrcLeft10;
-                break;
-            case 32:
-                opcode.value = sprmPBrcBottom10;
-                break;
-            case 33:
-                opcode.value = sprmPBrcRight10;
-                break;
-            case 34:
-                opcode.value = sprmPBrcBetween10;
-                break;
-            case 35:
-                opcode.value = sprmPBrcBar10;
-                break;
-            case 36:
-                opcode.value = sprmPDxaFromText10;
-                break;
-            case 37:
-                opcode.value = sprmPWr;
-                break;
-            case 38:
-                opcode.value = sprmPBrcTop;
-                break;
-            case 39:
-                opcode.value = sprmPBrcLeft;
-                break;
-            case 40:
-                opcode.value = sprmPBrcBottom;
-                break;
-            case 41:
-                opcode.value = sprmPBrcRight;
-                break;
-            case 42:
-                opcode.value = sprmPBrcBetween;
-                break;
-            case 43:
-                opcode.value = sprmPBrcBar;
-                break;
-            case 44:
-                opcode.value = sprmPFNoAutoHyph;
-                break;
-            case 45:
-                opcode.value = sprmPWHeightAbs;
-                break;
-            case 46:
-                opcode.value = sprmPDcs;
-                break;
-            case 47:
-                opcode.value = sprmPShd;
-                break;
-            case 48:
-                opcode.value = sprmPDyaFromText;
-                break;
-            case 49:
-                opcode.value = sprmPDxaFromText;
-                break;
-            case 50:
-                opcode.value = sprmPFLocked;
-                break;
-            case 51:
-                opcode.value = sprmPFWidowControl;
-                break;
-            case 52:
-                opcode.value = sprmPRuler;
-                break;
-            case 65:
-                opcode.value = sprmCFRMarkDel;
-                break;
-            case 66:
-                opcode.value = sprmCFRMark;
-                break;
-            case 67:
-                opcode.value = sprmCFFldVanish;
-                break;
-            case 68:
-                opcode.value = sprmCPicLocation;
-                break;
-            case 69:
-                opcode.value = sprmCIbstRMark;
-                break;
-            case 70:
-                opcode.value = sprmCDttmRMark;
-                break;
-            case 71:
-                opcode.value = sprmCFData;
-                break;
-            case 72:
-                opcode.value = sprmCIdslRMark;
-                break;
-            case 73:
-                opcode.value = sprmCChs;
-                break;
-            case 74:
-                opcode.value = sprmCSymbol;
-                break;
-            case 75:
-                opcode.value = sprmCFOle2;
-                break;
-            case 80:
-                opcode.value = sprmCIstd;
-                break;
-            case 81:
-                opcode.value = sprmCIstdPermute;
-                break;
-            case 82:
-                opcode.value = sprmCDefault;
-                break;
-            case 83:
-                opcode.value = sprmCPlain;
-                break;
-            case 85:
-                opcode.value = sprmCFBold;
-                break;
-            case 86:
-                opcode.value = sprmCFItalic;
-                break;
-            case 87:
-                opcode.value = sprmCFStrike;
-                break;
-            case 88:
-                opcode.value = sprmCFOutline;
-                break;
-            case 89:
-                opcode.value = sprmCFShadow;
-                break;
-            case 90:
-                opcode.value = sprmCFSmallCaps;
-                break;
-            case 91:
-                opcode.value = sprmCFCaps;
-                break;
-            case 92:
-                opcode.value = sprmCFVanish;
-                break;
-            case 93:
-                opcode.value = sprmCRgFtc0;
-                break;
-            case 94:
-                opcode.value = sprmCKul;
-                break;
-            case 95:
-                opcode.value = sprmCSizePos;
-                break;
-            case 96:
-                opcode.value = sprmCDxaSpace;
-                break;
-            case 97:
-                opcode.value = sprmCLid;
-                break;
-            case 98:
-                opcode.value = sprmCIco;
-                break;
-            case 99:
-                opcode.value = sprmCHps;
-                break;
-            case 100:
-                opcode.value = sprmCHpsInc;
-                break;
-            case 101:
-                opcode.value = sprmCHpsPos;
-                break;
-            case 102:
-                opcode.value = sprmCHpsPosAdj;
-                break;
-            case 103:
-                opcode.value = sprmCMajority;
-                break;
-            case 104:
-                opcode.value = sprmCIss;
-                break;
-            case 105:
-                opcode.value = sprmCHpsNew50;
-                break;
-            case 106:
-                opcode.value = sprmCHpsInc1;
-                break;
-            case 107:
-                opcode.value = sprmCHpsKern;
-                break;
-            case 108:
-                opcode.value = sprmCMajority50;
-                break;
-            case 109:
-                opcode.value = sprmCHpsMul;
-                break;
-            case 110:
-                opcode.value = sprmCYsri;
-                break;
-            case 117:
-                opcode.value = sprmCFSpec;
-                break;
-            case 118:
-                opcode.value = sprmCFObj;
-                break;
-            case 119:
-                opcode.value = sprmPicBrcl;
-                break;
-            case 120:
-                opcode.value = sprmPicScale;
-                break;
-            case 121:
-                opcode.value = sprmPicBrcTop;
-                break;
-            case 122:
-                opcode.value = sprmPicBrcLeft;
-                break;
-            case 123:
-                opcode.value = sprmPicBrcBottom;
-                break;
-            case 124:
-                opcode.value = sprmPicBrcRight;
-                break;
-            case 131:
-                opcode.value = sprmScnsPgn;
-                break;
-            case 132:
-                opcode.value = sprmSiHeadingPgn;
-                break;
-            case 133:
-                opcode.value = sprmSOlstAnm;
-                break;
-            case 136:
-                opcode.value = sprmSDxaColWidth;
-                break;
-            case 137:
-                opcode.value = sprmSDxaColSpacing;
-                break;
-            case 138:
-                opcode.value = sprmSFEvenlySpaced;
-                break;
-            case 139:
-                opcode.value = sprmSFProtected;
-                break;
-            case 140:
-                opcode.value = sprmSDmBinFirst;
-                break;
-            case 141:
-                opcode.value = sprmSDmBinOther;
-                break;
-            case 142:
-                opcode.value = sprmSBkc;
-                break;
-            case 143:
-                opcode.value = sprmSFTitlePage;
-                break;
-            case 144:
-                opcode.value = sprmSCcolumns;
-                break;
-            case 145:
-                opcode.value = sprmSDxaColumns;
-                break;
-            case 146:
-                opcode.value = sprmSFAutoPgn;
-                break;
-            case 147:
-                opcode.value = sprmSNfcPgn;
-                break;
-            case 148:
-                opcode.value = sprmSDyaPgn;
-                break;
-            case 149:
-                opcode.value = sprmSDxaPgn;
-                break;
-            case 150:
-                opcode.value = sprmSFPgnRestart;
-                break;
-            case 151:
-                opcode.value = sprmSFEndnote;
-                break;
-            case 152:
-                opcode.value = sprmSLnc;
-                break;
-            case 153:
-                opcode.value = sprmSGprfIhdt;
-                break;
-            case 154:
-                opcode.value = sprmSNLnnMod;
-                break;
-            case 155:
-                opcode.value = sprmSDxaLnn;
-                break;
-            case 156:
-                opcode.value = sprmSDyaHdrTop;
-                break;
-            case 157:
-                opcode.value = sprmSDyaHdrBottom;
-                break;
-            case 158:
-                opcode.value = sprmSLBetween;
-                break;
-            case 159:
-                opcode.value = sprmSVjc;
-                break;
-            case 160:
-                opcode.value = sprmSLnnMin;
-                break;
-            case 161:
-                opcode.value = sprmSPgnStart;
-                break;
-            case 162:
-                opcode.value = sprmSBOrientation;
-                break;
-            case 163:
-                opcode.value = sprmSBCustomize;
-                break;
-            case 164:
-                opcode.value = sprmSXaPage;
-                break;
-            case 165:
-                opcode.value = sprmSYaPage;
-                break;
-            case 166:
-                opcode.value = sprmSDxaLeft;
-                break;
-            case 167:
-                opcode.value = sprmSDxaRight;
-                break;
-            case 168:
-                opcode.value = sprmSDyaTop;
-                break;
-            case 169:
-                opcode.value = sprmSDyaBottom;
-                break;
-            case 170:
-                opcode.value = sprmSDzaGutter;
-                break;
-            case 171:
-                opcode.value = sprmSDmPaperReq;
-                break;
-            case 182:
-                opcode.value = sprmTJc;
-                break;
-            case 183:
-                opcode.value = sprmTDxaLeft;
-                break;
-            case 184:
-                opcode.value = sprmTDxaGapHalf;
-                break;
-            case 185:
-                opcode.value = sprmTFCantSplit;
-                break;
-            case 186:
-                opcode.value = sprmTTableHeader;
-                break;
-            case 187:
-                opcode.value = sprmTTableBorders;
-                break;
-            case 188:
-                opcode.value = sprmTDefTable10;
-                break;
-            case 189:
-                opcode.value = sprmTDyaRowHeight;
-                break;
-            case 190:
-                opcode.value = sprmTDefTable;
-                break;
-            case 191:
-                opcode.value = sprmTDefTableShd;
-                break;
-            case 192:
-                opcode.value = sprmTTlp;
-                break;
-            case 193:
-                opcode.value = sprmTSetBrc;
-                break;
-            case 194:
-                opcode.value = sprmTInsert;
-                break;
-            case 195:
-                opcode.value = sprmTDelete;
-                break;
-            case 196:
-                opcode.value = sprmTDxaCol;
-                break;
-            case 197:
-                opcode.value = sprmTMerge;
-                break;
-            case 198:
-                opcode.value = sprmTSplit;
-                break;
-            case 199:
-                opcode.value = sprmTSetBrc10;
-                break;
-            case 200:
-                opcode.value = sprmTSetShd;
-                break;
-            default:
-                opcode.value = sprm;
-            }
-        }
-        operandSize = operandSizes[opcode.bits.spra];
-        if (!operandSize)
-        {
-            U8 t8;
-            U16 t16;
-
-            // Get length of variable size operand.
-
-            switch (opcode.value)
-            {
-            case sprmPChgTabs:
-                bytes += MsWordGenerated::read(in + bytes, &t8);
-                operandSize = t8;
-                if (operandSize == 255)
-                    kdError(s_area) << "MsWord::paragraphStyleModify: cannot parse sprmPChgTabs" << endl;
-                break;
-            case sprmTDefTable10:
-            case sprmTDefTable:
-                bytes += MsWordGenerated::read(in + bytes, &t16);
-                operandSize = t16 - 1;
-                break;
-            default:
-                bytes += MsWordGenerated::read(in + bytes, &t8);
-                operandSize = t8;
-                break;
-            }
-        }
-
-        // Apply known opcodes.
-
-        U8 tmp;
-
-        //kdDebug(s_area) << "MsWord::paragraphStyleModify: opcode:" << opcode.value << endl;
-        switch (opcode.value)
-        {
-        case sprmPJc: // 0x2403
-            MsWordGenerated::read(in + bytes, &pap->jc);
-            break;
-        case sprmPFSideBySide: // 0x2404
-            MsWordGenerated::read(in + bytes, &tmp);
-            pap->fSideBySide = tmp;
-            break;
-        case sprmPFKeep:
-            MsWordGenerated::read(in + bytes, &tmp);
-            pap->fKeep = tmp;
-            break;
-        case sprmPFKeepFollow:
-            MsWordGenerated::read(in + bytes, &tmp);
-            pap->fKeepFollow = tmp;
-            break;
-        case sprmPFPageBreakBefore: // 0x2407
-            MsWordGenerated::read(in + bytes, &tmp);
-            pap->fPageBreakBefore = tmp;
-            break;
-        case sprmPFInTable: // 0x2416
-            MsWordGenerated::read(in + bytes, &tmp);
-            pap->fInTable = tmp;
-            break;
-        case sprmPFTtp:
-            MsWordGenerated::read(in + bytes, &tmp);
-            pap->fTtp = tmp;
-            break;
-        case sprmPIlvl: // 0x260a
-            MsWordGenerated::read(in + bytes, &pap->ilvl);
-            break;
-        case sprmPOutLvl: // 0x2640
-            MsWordGenerated::read(in + bytes, &pap->lvl);
-            break;
-        case sprmPIstd: // 0x4600
-            MsWordGenerated::read(in + bytes, &pap->istd);
-            break;
-        case sprmPIlfo: // 0x460B
-            MsWordGenerated::read(in + bytes, &pap->ilfo);
-            break;
-        case sprmPBrcTop: // 0x6424
-            MsWordGenerated::read(in + bytes, &pap->brcTop);
-            break;
-        case sprmPBrcLeft: // 0x6425
-            MsWordGenerated::read(in + bytes, &pap->brcLeft);
-            break;
-        case sprmPBrcBottom: // 0x6426
-            MsWordGenerated::read(in + bytes, &pap->brcBottom);
-            break;
-        case sprmPBrcRight: // 0x6427
-            MsWordGenerated::read(in + bytes, &pap->brcRight);
-            break;
-        case sprmPDxaRight: // 0x840E
-            MsWordGenerated::read(in + bytes, &pap->dxaRight);
-            break;
-        case sprmPDxaLeft: // 0x840F
-            MsWordGenerated::read(in + bytes, &pap->dxaLeft);
-            break;
-        case sprmPDxaLeft1: // 0x8411
-            MsWordGenerated::read(in + bytes, &pap->dxaLeft1);
-            break;
-        case sprmPDxaAbs: // 0x8418
-            MsWordGenerated::read(in + bytes, &pap->dxaAbs);
-            break;
-        case sprmPDyaAbs: // 0x8419
-            MsWordGenerated::read(in + bytes, &pap->dyaAbs);
-            break;
-        case sprmPDxaWidth: // 0x841A
-            MsWordGenerated::read(in + bytes, &pap->dxaWidth);
-            break;
-        case sprmPDyaBefore: // 0xA413
-            MsWordGenerated::read(in + bytes, &pap->dyaBefore);
-            break;
-        case sprmPDyaAfter: // 0xA414
-            MsWordGenerated::read(in + bytes, &pap->dyaAfter);
-            break;
-
-        // TAP-specific stuff...
-
-        case sprmTTableBorders:
-            if (tap)
-            {
-                MsWordGenerated::read(in + bytes, &tap->rgbrcTable[0], 6);
-            }
-            break;
-        case sprmTDefTable:
-            if (tap)
-            {
-                // Get cell count.
-
-                MsWordGenerated::read(in + bytes, &tmp);
-                tap->itcMac = tmp;
-                tmp = 1;
-
-                // Get cell boundaries and descriptions.
-
-                tmp += MsWordGenerated::read(in + bytes + tmp, (U16 *)&tap->rgdxaCenter[0], tap->itcMac + 1);
-                tmp += MsWordGenerated::read(in + bytes + tmp, &tap->rgtc[0], tap->itcMac);
-            }
-            break;
-        default:
-            if (!(m_fib.nFib > s_maxWord6Version) &&
-                (bytes == count) &&
-                (opcode.value == 0))
-            {
-                // The last byte of a Word6 grpprl can be a zero padding byte.
-            }
-            else
-            {
-                kdWarning(s_area) << "MsWord::paragraphStyleModify: unsupported opcode:" << opcode.value << endl;
-            }
-            break;
-        }
-        bytes += operandSize;
-    }
-}
-
-// Apply list formatting.
-
-void MsWord::paragraphStyleModify(PAP *pap, LFO &style, bool useFormatting, bool useStartAt)
-{
-    const U8 *ptr = m_tableStream + m_fib.fcPlcfLst; //lcbPlcfLst.
-    U16 lstfCount;
-    LSTF data;
-    int i;
-
-    // Find the number of LSTFs.
-
-    ptr += MsWordGenerated::read(ptr, &lstfCount);
-
-    // Walk the LSTFs.
-
-    for (i = 0; i < lstfCount; i++)
-    {
-        ptr += MsWordGenerated::read(ptr, &data);
-        if (data.lsid == style.lsid)
-        {
-            // Record the style index.
-
-            pap->istd = data.rgistd[pap->ilvl];
-
-            // Build the base PAP if required.
-
-            if (pap->istd != 4095)
-                paragraphStyleModify(pap, pap->istd);
-
-            U8 *ptr2 = (U8 *)m_listStyles[i][pap->ilvl];
-            LVLF level;
-            U16 numberTextLength;
-            QString numberText;
-
-            // Apply the LVLF.
-
-            ptr2 += MsWordGenerated::read(ptr2, &level);
-            pap->anld.nfc = level.nfc;
-            pap->anld.jc = level.jc;
-            if (useStartAt)
-            {
-                // Apply the startAt.
-
-                pap->anld.iStartAt = level.iStartAt;
-            }
-
-            // Apply the variable length parts.
-
-            if (useFormatting)
-            {
-                // Apply the grpprl.
-
-                paragraphStyleModify(pap, NULL, ptr2, level.cbGrpprlPapx);
-            }
-            ptr2 += level.cbGrpprlPapx;
-            ptr2 += level.cbGrpprlChpx;
-            ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
-            ptr2 += read(ptr2, &numberText, numberTextLength, true);
-            break;
-        }
-    }
-    if (i == lstfCount)
-        kdError(s_area) << "MsWord::error finding LSTF[" << style.lsid << "]" << endl;
-}
-
-// Apply a PAPX.
-
-void MsWord::paragraphStyleModify(PAP *pap, PAPXFKP &style)
-{
-    // Record the style index.
-
-    pap->istd = style.istd;
-
-    // Build the base PAP then walk the grpprl.
-
-    paragraphStyleModify(pap, style.istd);
-    paragraphStyleModify(pap, NULL, style.grpprl, style.grpprlBytes);
-}
-
-// Apply a layout.
-
-void MsWord::paragraphStyleModify(PAP *pap, PHE &layout)
-{
-    pap->phe = layout;
-}
-
-// Extract the paragraph style for an STD.
-
-void MsWord::paragraphStyleModify(PAP *pap, STD &style)
-{
-    if (style.sgc != 1)
-    {
-        kdError(s_area) << "MsWord::paragraphStyleModify: not a paragraph style: " << style.sgc << endl;
-        return;
-    }
-
-    const U8 *grpprl;
-    U16 cbUpx;
-
-    // Align to an even-byte position.
-
-    grpprl = style.grupx;
-    if ((int)grpprl & 1)
-        grpprl++;
-    grpprl += MsWordGenerated::read(grpprl, &cbUpx);
-
-    // Record the style index.
-
-    grpprl += MsWordGenerated::read(grpprl, &pap->istd);
-
-    // Build the base PAP then walk the grpprl.
-
-    paragraphStyleModify(pap, pap->istd);
-    paragraphStyleModify(pap, NULL, grpprl, cbUpx - 2);
-}
-
 void MsWord::parse()
 {
     if (m_constructionError.length())
@@ -1629,34 +624,34 @@ void MsWord::parse()
         // byte count preceeding the first entry, and the number of entries.
         //
         // For the text plex, we store the start and size of the plex in the table
-    
+
         typedef enum
         {
             clxtGrpprl = 1,
             clxtPlcfpcd = 2
         };
-    
+
         struct
         {
             U32 byteCountOffset;
             U32 count;
         } grpprls;
-    
+
         struct
         {
             const U8 *ptr;
             U32 byteCount;
         } textPlex;
-    
+
         unsigned count = 0;
         const U8 *ptr;
         const U8 *end;
         U8 clxt = 0;
         U16 cb;
         U32 lcb;
-    
+
         // First skip the grpprls.
-    
+
         ptr = m_tableStream + m_fib.fcClx;
         end = ptr + m_fib.lcbClx;
         grpprls.byteCountOffset = (ptr + 1) - m_tableStream;
@@ -1673,9 +668,9 @@ void MsWord::parse()
             ptr += MsWordGenerated::read(ptr, &cb);
             ptr += cb;
         }
-    
+
         // Now locate the piece table.
-    
+
         while (ptr < end)
         {
             ptr += MsWordGenerated::read(ptr, &clxt);
@@ -1700,7 +695,7 @@ void MsWord::parse()
         // Locate the piece table in a complex document.
 
         Plex<PCD, 8> *pieceTable = new Plex<PCD, 8>(m_fib);
-    
+
         U32 startFc;
         U32 endFc;
         PCD data;
