@@ -549,9 +549,8 @@ void KPresenterView::toolsDiagramm()
     page->deSelectAllObj();
     page->setToolEditMode( INS_DIAGRAMM );
 
-    QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'IDL:KDiagramm/DocumentFactory:1.0#KDiagramm' in RepoIds", 1 );
-    if ( vec.isEmpty() )
-    {
+    QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'IDL:KChart/DocumentFactory:1.0#KChart' in RepoIds", 1 );
+    if ( vec.isEmpty() ) {
 	cout << "Got no results" << endl;
 	QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no charting component registered" ), i18n( "Ok" ) );
 	return;
@@ -930,14 +929,14 @@ void KPresenterView::screenAssignEffect()
     }
 
     page->setToolEditMode( TEM_MOUSE );
-    
+
     QList<KPObject> objs;
     if ( page->canAssignEffect( objs ) ) {
 	effectDia = new EffectDia( this, "Effect", objs, this );
 	effectDia->setCaption( i18n( "KPresenter - Assign effects" ) );
 	QObject::connect( effectDia, SIGNAL( effectDiaOk() ), this, SLOT( effectOk() ) );
 	effectDia->show();
-    } 
+    }
 }
 
 /*========================== screen start =======================*/
