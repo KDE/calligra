@@ -70,7 +70,7 @@ KexiProjectData::KexiProjectData(
 	setCaption(caption);
 }
 
-KexiProjectData::KexiProjectData( KexiProjectData& pdata )
+KexiProjectData::KexiProjectData( const KexiProjectData& pdata )
  : QObject(0, "KexiProjectData"), KexiDB::SchemaData()
  , d( 0 )
 {

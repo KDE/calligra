@@ -47,7 +47,7 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 			const QString& dbname = QString::null, const QString& caption = QString::null );
 			
 		/*! Constructs a copy of \a pdata */
-		KexiProjectData( KexiProjectData& pdata );
+		KexiProjectData( const KexiProjectData& pdata );
 			
 //		const QString& driverName, const QString& databaseName, const QString &hostName, unsigned short int port,
 //			 const QString& userName, const QString &password, const QString& fileName);

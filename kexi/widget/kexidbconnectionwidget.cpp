@@ -41,7 +41,7 @@
 class KexiDBConnectionWidget::Private
 {
 	public:
-		KexiDBConnectionWidget::Private()
+		Private()
 		{
 		}
 
