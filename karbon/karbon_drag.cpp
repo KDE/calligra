@@ -25,27 +25,30 @@
 
 #include "vdocument.h"
 
-KarbonDrag::KarbonDrag(QWidget* dragSource, const char* name)
- : QDragObject(dragSource, name)
+KarbonDrag::KarbonDrag( QWidget *dragSource, const char *name )
+ : QDragObject( dragSource, name )
 {
 	m_encodeFormats[0] = "application/vnd.kde.karbon";
 	m_decodeFormats[0] = "application/vnd.kde.karbon";
 }
 
-const char* KarbonDrag::format(int i) const
+const char *
+KarbonDrag::format( int i ) const
 {
-	if(i < NumEncodeFmts) {
+	if( i < NumEncodeFmts ) {
 		return m_encodeFormats[i];
 	}
 
 	return 0L;
 }
 
-QByteArray KarbonDrag::encodedData(const char* mimetype) const
+QByteArray
+KarbonDrag::encodedData( const char* mimetype ) const
 {
 	QCString result;
 
-	if(m_encodeFormats[0] == mimetype) {
+	if( m_encodeFormats[0] == mimetype )
+	{
 		VObjectListIterator itr( m_objects );
 		// build a xml fragment containing the selection as karbon xml
 		QDomDocument doc( "clip" );
@@ -61,33 +64,36 @@ QByteArray KarbonDrag::encodedData(const char* mimetype) const
 	return result;
 }
 
-bool KarbonDrag::canDecode(QMimeSource* e)
+bool
+KarbonDrag::canDecode( QMimeSource* e)
 {
-	for(int i = 0; i < NumDecodeFmts; i++) {
-		if(e->provides(m_decodeFormats[i])) {
+	for( int i = 0; i < NumDecodeFmts; i++ )
+	{
+		if( e->provides( m_decodeFormats[i] ) )
 			return true;
-		}
 	}
 
 	return false;
 }
 
-bool KarbonDrag::decode(QMimeSource* e, VObjectList& sl, VDocument& vdoc)
+bool
+KarbonDrag::decode( QMimeSource* e, VObjectList& sl, VDocument& vdoc )
 {
-	if(e->provides(m_decodeFormats[0])) {
+	if( e->provides( m_decodeFormats[0] ) )
+	{
 		QDomDocument doc( "clip" );
-		QByteArray data = e->encodedData(m_decodeFormats[0]);
+		QByteArray data = e->encodedData( m_decodeFormats[0] );
 		doc.setContent( QCString( data, data.size()+1 ) );
 		QDomElement clip = doc.documentElement();
 		// Try to parse the clipboard data
-		if( clip.tagName() == "clip" ) {
+		if( clip.tagName() == "clip" )
+		{
 			VObjectList selection;
 			VGroup grp( &vdoc );
 			grp.load( clip );
 			VObjectListIterator itr( grp.objects() );
-			for( ; itr.current() ; ++itr ) {
-				sl.append(itr.current()->clone());
-			}
+			for( ; itr.current() ; ++itr )
+				sl.append( itr.current()->clone() );
 
 			return true;
 		}
@@ -96,14 +102,15 @@ bool KarbonDrag::decode(QMimeSource* e, VObjectList& sl, VDocument& vdoc)
 	return false;
 }
 
-void KarbonDrag::setObjectList(VObjectList l)
+void
+KarbonDrag::setObjectList( VObjectList l )
 {
 	VObjectListIterator itr( l );
 	m_objects.clear();
 
-	for( ; itr.current() ; ++itr ) {
-		m_objects.append(itr.current()->clone());
-	}
+	for( ; itr.current() ; ++itr )
+		m_objects.append( itr.current()->clone() );
 }
 
 #include "karbon_drag.moc"
+

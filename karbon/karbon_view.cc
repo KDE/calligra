@@ -285,7 +285,7 @@ KarbonView::dragEnterEvent( QDragEnterEvent *event )
 }
 
 void
-KarbonView::dropEvent ( QDropEvent *e )
+KarbonView::dropEvent( QDropEvent *e )
 {
 	//Accepts QColor - from Color Manager's KColorPatch
 	QColor color;
@@ -375,13 +375,12 @@ KarbonView::editCopy()
 void
 KarbonView::addSelectionToClipboard() const
 {
-	if(part()->document().selection()->objects().count() <= 0) {
+	if( part()->document().selection()->objects().count() <= 0 )
 		return;
-	}
 
 	KarbonDrag* kd = new KarbonDrag();
-	kd->setObjectList(part()->document().selection()->objects());
-	QApplication::clipboard()->setData(kd);
+	kd->setObjectList( part()->document().selection()->objects() );
+	QApplication::clipboard()->setData( kd );
 }
 
 void
