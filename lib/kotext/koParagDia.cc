@@ -40,7 +40,7 @@
 #include <koGlobal.h>
 #include <qgroupbox.h>
 
-KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, QWidget * parent, const char* name  )
+KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTypeLetter, QWidget * parent, const char* name  )
     :QWidget( parent, name ),
     stylesList()
 {
@@ -50,7 +50,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, QWidget * parent,
     vbox->addWidget( gStyle);
     QGridLayout * grid = new QGridLayout(gStyle, 12, 5, 2*KDialog::marginHint(), 2*KDialog::spacingHint());
 
-    makeCounterRepresenterList( stylesList );
+    makeCounterRepresenterList( stylesList, onlyStyleTypeLetter );
 
     lstStyle = new QListBox( gStyle, "styleListBox" );
     grid->addMultiCellWidget( lstStyle, 0, 11, 0, 0);
@@ -208,7 +208,7 @@ void KoCounterStyleWidget::numTypeChanged( int nType ) {
 }
 
 
-void KoCounterStyleWidget::makeCounterRepresenterList( QPtrList<StyleRepresenter>& stylesList )
+void KoCounterStyleWidget::makeCounterRepresenterList( QPtrList<StyleRepresenter>& stylesList, bool onlyStyleTypeLetter )
 {
     stylesList.setAutoDelete( true );
     stylesList.append( new StyleRepresenter(i18n( "Arabic Numbers" )
@@ -221,6 +221,8 @@ void KoCounterStyleWidget::makeCounterRepresenterList( QPtrList<StyleRepresenter
             ,  KoParagCounter::STYLE_ROM_NUM_L ));
     stylesList.append( new StyleRepresenter(i18n( "Upper Roman Numbers" )
             ,  KoParagCounter::STYLE_ROM_NUM_U ));
+    if ( !onlyStyleTypeLetter )
+    {
     stylesList.append( new StyleRepresenter(i18n( "Disc Bullet" )
             ,  KoParagCounter::STYLE_DISCBULLET , true));
     stylesList.append( new StyleRepresenter(i18n( "Square Bullet" )
@@ -231,7 +233,7 @@ void KoCounterStyleWidget::makeCounterRepresenterList( QPtrList<StyleRepresenter
             ,  KoParagCounter::STYLE_CIRCLEBULLET , true));
     stylesList.append( new StyleRepresenter(i18n( "Custom Bullet" )
             ,  KoParagCounter::STYLE_CUSTOMBULLET , true));
-
+    }
     stylesList.append( new StyleRepresenter(i18n( "None" ), KoParagCounter::STYLE_NONE));
 }
 
@@ -1361,7 +1363,7 @@ KoParagCounterWidget::KoParagCounterWidget( QWidget * parent, const char * name 
     Form1Layout->addWidget( gNumbering );
     connect( gNumbering, SIGNAL( clicked( int ) ), this, SLOT( numTypeChanged( int ) ) );
 
-    m_styleWidget = new KoCounterStyleWidget( true, this );
+    m_styleWidget = new KoCounterStyleWidget( true, false, this );
 
     connect( m_styleWidget, SIGNAL( sig_suffixChanged (const QString &) ), this, SLOT( suffixChanged(const QString &) ) );
     connect( m_styleWidget, SIGNAL( sig_prefixChanged (const QString &) ), this, SLOT( prefixChanged(const QString &) ) );

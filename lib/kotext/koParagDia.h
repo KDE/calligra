@@ -202,7 +202,7 @@ class KoCounterStyleWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoCounterStyleWidget( bool displayDepth= true, QWidget* parent = 0, const char* name = 0 );
+    KoCounterStyleWidget( bool displayDepth= true, bool onlyStyleTypeLetter = false, QWidget* parent = 0, const char* name = 0 );
 
     class StyleRepresenter {
         public:
@@ -221,7 +221,7 @@ public:
             bool m_bullet;
     };
 
-    static void makeCounterRepresenterList( QPtrList<StyleRepresenter>& stylesList );
+    static void makeCounterRepresenterList( QPtrList<StyleRepresenter>& stylesList , bool onlyStyleTypeLetter = false );
     void fillStyleCombo(KoParagCounter::Numbering type = KoParagCounter::NUM_LIST);
     void display( const KoParagLayout & lay );
     void changeKWSpinboxType(KoParagCounter::Style st);
