@@ -60,11 +60,11 @@ Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidge
 
   installEventFilter(this);
 
-  vBar->setLineStep(1);
-  hBar->setLineStep(1);
+  vBar->setLineStep(5);
+  hBar->setLineStep(5);
 
-  vBar->setPageStep(10);
-  hBar->setPageStep(10);
+  vBar->setPageStep(50);
+  hBar->setPageStep(50);
   
   connect(vBar, SIGNAL(valueChanged(int)), SLOT(scrollY(int)));
   connect(hBar, SIGNAL(valueChanged(int)), SLOT(scrollX(int)));
@@ -106,61 +106,69 @@ Canvas::~Canvas()
  }
 
 void Canvas::resizeEvent(QResizeEvent *e)
- {
-  buffer->resize(size());
-  mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
-  mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
-  emit visibleAreaChanged(mXOffset, mYOffset);
- }
+{
+   buffer->resize(size());
+   mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
+   mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
+   emit visibleAreaChanged(mXOffset, mYOffset);
+}
 
 QSize Canvas::actualSize()
- {
-  int w = width() + actualPaperSizePt().width();
-  int h = height() + actualPaperSizePt().height();
-  return QSize(w, h);
- }
+{
+   int w = width() + actualPaperSizePt().width();
+   int h = height() + actualPaperSizePt().height();
+   return QSize(w, h);
+}
 
 QSize Canvas::actualPaperSizePt() const
- {
-  int w = (int) (document->getPaperWidth () * resolution * zoomFactor / 72.0);
-  int h = (int) (document->getPaperHeight () * resolution * zoomFactor / 72.0);
-  return QSize(w, h);
- }
+{
+   int w = (int) (document->getPaperWidth () * resolution * zoomFactor / 72.0);
+   int h = (int) (document->getPaperHeight () * resolution * zoomFactor / 72.0);
+   return QSize(w, h);
+}
 
 void Canvas::updateScrollBars()
 {
-   hBar->setRange(-actualSize().width()/2,actualSize().width()/2);
-   vBar->setRange(-actualSize().height()/2,actualSize().height()/2);
-  
-   if(hBar->value() > hBar->maxValue() || hBar->value() < hBar->minValue())
-      hBar->setValue(0);
+   //the range of a scrollbar depends on how much of the canvas is not visible
+   QSize tmpSize=actualPaperSizePt();
+   int i=tmpSize.width()-width();
+   if (i<=0)
+      hBar->setRange(0,0);
+   else
+      hBar->setRange(-i/2-10,i/2+10);
 
-   if(vBar->value() > vBar->maxValue() || vBar->value() < vBar->minValue())
-      vBar->setValue(0);
- }
+   i=tmpSize.height()-height();
+   if (i<=0)
+      vBar->setRange(0,0);
+   else
+      vBar->setRange(-i/2-10,i/2+10);
+
+   hBar->setValue(hBar->value());
+   vBar->setValue(vBar->value());
+}
 
 void Canvas::scrollX(int v)
- {
-  xPaper = v;
-  mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
-  repaint();
-  emit visibleAreaChanged((width() - actualPaperSizePt().width())/2-xPaper,(height() - actualPaperSizePt().height())/2 -yPaper);
- }
+{
+   xPaper = v;
+   mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
+   repaint();
+   emit visibleAreaChanged((width() - actualPaperSizePt().width())/2-xPaper,(height() - actualPaperSizePt().height())/2 -yPaper);
+}
  
 void Canvas::scrollY(int v)
- {
-  yPaper = v;
+{
+   yPaper = v;
 
-  mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
-  repaint();
-  emit visibleAreaChanged((width() - actualPaperSizePt().width())/2-xPaper,(height() - actualPaperSizePt().height())/2 -yPaper);
- }
+   mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
+   repaint();
+   emit visibleAreaChanged((width() - actualPaperSizePt().width())/2-xPaper,(height() - actualPaperSizePt().height())/2 -yPaper);
+}
 
 void Canvas::centerPage()
- {
-  hBar->setValue(0);
-  vBar->setValue(0);
- }
+{
+   hBar->setValue(0);
+   vBar->setValue(0);
+}
 
 /*
     Draw
@@ -234,19 +242,26 @@ void Canvas::calculateSize ()
 }
 
 void Canvas::setZoomFactor (float factor)
- {
-  zoomFactor = factor;
-  // recompute pixmaps of fill areas
-  document->invalidateClipRegions ();
-  updateScrollBars();
-  mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
-  mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
-  repaint();
-  emit sizeChanged ();
-  emit visibleAreaChanged((width() - actualPaperSizePt().width())/2-xPaper,(height() - actualPaperSizePt().height())/2 -yPaper);
-  //emit zoomFactorChanged (zoomFactor, x/2 ,y/2);
-  emit zoomFactorChanged (zoomFactor);
- }
+{
+   zoomFactor = factor;
+   // recompute pixmaps of fill areas
+   document->invalidateClipRegions ();
+   updateScrollBars();
+   mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
+   mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
+   repaint();
+   emit sizeChanged ();
+   emit visibleAreaChanged((width() - actualPaperSizePt().width())/2-xPaper,(height() - actualPaperSizePt().height())/2 -yPaper);
+   //emit zoomFactorChanged (zoomFactor, x/2 ,y/2);
+   emit zoomFactorChanged (zoomFactor);
+   /*kdDebug()<<"Canvas::setZoomFactor(): width: "<<width()<<" actPaperSize.width: "<<actualPaperSizePt().width()<<" xPaper: "<<xPaper<<" actPaperSize.height: "<<actualPaperSizePt().height()<<" yPaper: "<<yPaper<<endl;
+   kdDebug()<<"Canvas::setZoomFactor(): width: "<<width()<<" actPaperSize.width: "<<actualPaperSizePt().width()<<" xPaper: "<<xPaper<<" actPaperSize.height: "<<actualPaperSizePt().height()<<" yPaper: "<<yPaper<<endl;
+   kdDebug()<<"Canvas::setZoomFactor(): actSize w: "<<actualSize().width()<<" actualSize h: "<<actualSize().height()<<endl;
+   kdDebug()<<"Canvas::setZoomFactor(): paperwidth: "<<document->getPaperWidth()<<" height: "<<document->getPaperHeight()<<endl;
+   kdDebug()<<"Canvas::setZoomFactor(): zoom: "<<zoomFactor<<" res: "<<resolution<<endl;
+   kdDebug()<<"Canvas::setZoomFactor(): hbar min: "<<hBar->minValue()<<" max: "<<hBar->maxValue()<<" val: "<<hBar->value()<<endl;
+   kdDebug()<<"Canvas::setZoomFactor(): vbar min: "<<vBar->minValue()<<" max: "<<vBar->maxValue()<<" val: "<<vBar->value()<<endl;*/
+}
 
 void Canvas::setToolController (ToolController* tc)
  {
