@@ -68,7 +68,7 @@ struct Markup {
 };
 
 Token *ParseXml(
-  char *zFile,        /* Complete text of the file being parsed */
+  const char *zFile,  /* Complete text of the file being parsed */
   int *piFile         /* Index of next unparsed character in zFile */
 );
 

@@ -131,7 +131,7 @@ char *ReadFileIntoMemory(const char *fileName){
     nError++;
     return 0;
   }
-  textBuf = malloc( statBuf.st_size + 1 );
+  textBuf = (char*) malloc( statBuf.st_size + 1 );
   if( textBuf==0 ){
     fprintf(stderr,"%s: can't malloc %ld bytes to hold this file.\n",
       fileName, statBuf.st_size + 1);
@@ -645,7 +645,7 @@ static void StrUNCpy(char *zDest, const char *zSrc, int N){
 ** terminated the parse.
 */
 Token *ParseXml(
-  char *zFile,        /* Complete text of the file being parsed */
+  const char *zFile,  /* Complete text of the file being parsed */
   int *piFile         /* Index of next unparsed character in zFile */
 ){
   int i;              /* For looping thru the file */
@@ -662,7 +662,7 @@ Token *ParseXml(
     if( isspace(c) ){
       while( (c=zFile[i])!='\n' && isspace(c) ){ i++; }
       if( c=='\n' ){
-        p = SafeMalloc( sizeof(Token) + (i - iStart) + 2 );
+        p = (Token*) SafeMalloc( sizeof(Token) + (i - iStart) + 2 );
         p->offset = iStart;
         p->eType = TT_EOL;
         p->zText = (char*)&p[1];
@@ -670,7 +670,7 @@ Token *ParseXml(
         p->zText[i - iStart + 1] = 0;
         i++;
       }else{
-        p = SafeMalloc( sizeof(Token) + (i - iStart) + 1 );
+        p = (Token*) SafeMalloc( sizeof(Token) + (i - iStart) + 1 );
         p->offset = iStart;
         p->eType = TT_Space;
         p->zText = (char*)&p[1];
@@ -679,7 +679,7 @@ Token *ParseXml(
       }
     }else if( c!='<' ){
       while( (c=zFile[i])!=0 && !isspace(c) && c!='<' ){ i++; }
-      p = SafeMalloc( sizeof(Token) + (i - iStart) + 1 );
+      p = (Token*) SafeMalloc( sizeof(Token) + (i - iStart) + 1 );
       p->offset = iStart;
       p->eType = TT_Word;
       p->zText = (char*)&p[1];
@@ -717,7 +717,7 @@ Token *ParseXml(
         nError++;
         continue;
       }
-      pM = SafeMalloc( sizeof(Markup) + n + 1 );
+      pM = (Markup*) SafeMalloc( sizeof(Markup) + n + 1 );
       pM->token.offset = iStart;
       pM->token.eType = TT_Markup;
       pM->token.zText = (char*)&pM[1];
@@ -768,7 +768,7 @@ Token *ParseXml(
           }
           nArgVal = i - iArgVal;
         }
-        pArg = SafeMalloc( sizeof(Arg) + nArgName + nArgVal + 2 );
+        pArg = (Arg*) SafeMalloc( sizeof(Arg) + nArgName + nArgVal + 2 );
         pArg->offset = iArgName;
         pArg->zName = (char*)&pArg[1];
         StrUNCpy(pArg->zName, &zFile[iArgName], nArgName);
@@ -966,7 +966,7 @@ char **WordList(Token *pList, int *pN){
     nByte += len + 1;
     if( len>0 && p->zText[len-1]==',' ){ usesCommas = 1; }
   }
-  z = malloc( nByte + (n+1)*sizeof(char*) );
+  z = (char*) malloc( nByte + (n+1)*sizeof(char*) );
   if( z==0 ){
     if( pN ) *pN = 0;
     return 0;
@@ -1049,7 +1049,7 @@ int StrCmp(const char *atext,const char *btext){
 /* Make a copy of a string
 */
 char *StrDup(char *zOrig){
-  char *zNew = SafeMalloc( strlen(zOrig)+1 );
+  char *zNew = (char*) SafeMalloc( strlen(zOrig)+1 );
   strcpy(zNew,zOrig);
   return zNew;
 }

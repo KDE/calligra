@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/stat.h>
 #include <string.h>
 #include "kword_xml2html.h"
@@ -2002,7 +2003,7 @@ void mainFunc( const char *data ) {
     char Usage[]="Usage:  xml2html file1 <file2...fileN> output file1\n"
                  "        <output file2...output fileN>\n";
 #endif
-    char *zXmlFile;
+    const char *zXmlFile;
     FILE *OutputFile;
     HTMLTree *pHTMLTree;
     HTMLTree *pSaveHTMLTree;
