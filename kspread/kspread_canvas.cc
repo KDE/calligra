@@ -2602,7 +2602,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   {
     // Determine row to resize
     int tmp;
-    m_iResizedRow = table->topRow( _ev->pos().y() - 3, tmp, m_pCanvas );
+    m_iResizedRow = table->topRow( _ev->pos().y() - 1, tmp, m_pCanvas );
 
     paintSizeIndicator( _ev->pos().y(), true );
   }
@@ -2670,8 +2670,8 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
         }
         int height = 0;
         int y = table->rowPos( m_iResizedRow, m_pCanvas );
-        if (( m_pCanvas->zoom() * (float)( _ev->pos().y() - y ) ) < (20.0* m_pCanvas->zoom()) )
-            height = (int)( 20.0 * m_pCanvas->zoom() );
+        if (( m_pCanvas->zoom() * (float)( _ev->pos().y() - y ) ) < (2.0* m_pCanvas->zoom()))
+            height = (int)(2.0* m_pCanvas->zoom());
         else
             height = _ev->pos().y() - y;
 
@@ -2716,7 +2716,7 @@ void KSpreadVBorder::adjustRow(int _row,bool makeUndo)
     KSpreadTable *table = m_pCanvas->activeTable();
     assert( table );
     RowLayout *rl = table->nonDefaultRowLayout( select );
-    adjust=QMAX((int)(20* m_pCanvas->zoom()),adjust);
+    adjust=QMAX((int)(2.0* m_pCanvas->zoom()),adjust);
     rl->setHeight(adjust,m_pCanvas);
     m_pView->koDocument()->setModified(true);
   }
@@ -2736,7 +2736,7 @@ void KSpreadVBorder::equalizeRow(int resize )
   for (int i=selection.top();i<=selection.bottom();i++)
   {
      rl= table->nonDefaultRowLayout( i );
-     resize=QMAX((int)(20* m_pCanvas->zoom()), resize);
+     resize=QMAX((int)(2.0* m_pCanvas->zoom()), resize);
      rl->setHeight( resize, m_pCanvas );
   }
 }
@@ -2755,7 +2755,7 @@ void KSpreadVBorder::resizeRow(int resize,int nb,bool makeUndo  )
         m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
     }
     RowLayout *rl = table->nonDefaultRowLayout( m_iSelectionAnchor );
-    resize = QMAX( (int)(20* m_pCanvas->zoom()), resize );
+    resize = QMAX( (int)(2.0* m_pCanvas->zoom()), resize );
     rl->setHeight( resize, m_pCanvas );
   }
   else
@@ -2772,7 +2772,7 @@ void KSpreadVBorder::resizeRow(int resize,int nb,bool makeUndo  )
         m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
       }
       RowLayout *rl = table->nonDefaultRowLayout( m_pCanvas->markerRow() );
-      resize=QMAX((int)(20* m_pCanvas->zoom()), resize);
+      resize=QMAX((int)(2.0* m_pCanvas->zoom()), resize);
       rl->setHeight( resize, m_pCanvas );
     }
     else
@@ -2786,7 +2786,7 @@ void KSpreadVBorder::resizeRow(int resize,int nb,bool makeUndo  )
       for (int i=selection.top();i<=selection.bottom();i++)
       {
         rl= table->nonDefaultRowLayout( i );
-        resize=QMAX((int)(20* m_pCanvas->zoom()), resize);
+        resize=QMAX((int)(2.0* m_pCanvas->zoom()), resize);
         rl->setHeight( resize, m_pCanvas );
       }
     }
@@ -2886,8 +2886,8 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
       painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
 
     m_iResizePos = mouseY;
-    // Dont make the row have a height < 20 pixel.
-    int twenty = (int)( 20.0 * m_pCanvas->zoom() );
+    // Dont make the row have a height < 2 pixel.
+    int twenty = (int)( 2.0 * m_pCanvas->zoom() );
     int y = table->rowPos( m_iResizedRow, m_pCanvas );
     if ( m_iResizePos < y + twenty )
       m_iResizePos = y + twenty;
@@ -3052,7 +3052,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   {
     // Determine the column to resize
     int tmp;
-    m_iResizedColumn = table->leftColumn( _ev->pos().x() - 3, tmp, m_pCanvas );
+    m_iResizedColumn = table->leftColumn( _ev->pos().x() - /*3*/1, tmp, m_pCanvas );
     paintSizeIndicator( _ev->pos().x(), true );
   }
   else
@@ -3119,8 +3119,8 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
     }
     int width=0;
     int x = table->columnPos( m_iResizedColumn, m_pCanvas );
-    if ( ( m_pCanvas->zoom() * (float)( _ev->pos().x() - x ) ) < (20.0* m_pCanvas->zoom()) )
-        width= (int)(20.0* m_pCanvas->zoom());
+    if ( ( m_pCanvas->zoom() * (float)( _ev->pos().x() - x ) ) < (2.0* m_pCanvas->zoom()))
+        width= (int)(2.0* m_pCanvas->zoom());
     else
         width=_ev->pos().x() - x;
     for(int i=start;i<=end;i++)
@@ -3167,7 +3167,7 @@ void KSpreadHBorder::adjustColumn(int _col, bool makeUndo)
 
     ColumnLayout *cl = table->nonDefaultColumnLayout( select );
 
-    adjust = QMAX( (int)(20 * m_pCanvas->zoom()), adjust );
+    adjust = QMAX( (int)(2.0 * m_pCanvas->zoom()), adjust );
     cl->setWidth( adjust, m_pCanvas );
     m_pView->koDocument()->setModified(true);
   }
@@ -3187,7 +3187,7 @@ void KSpreadHBorder::equalizeColumn( int resize)
   for (int i=selection.left();i<=selection.right();i++)
   {
       cl= table->nonDefaultColumnLayout( i );
-      resize = QMAX( (int)(20* m_pCanvas->zoom()), resize );
+      resize = QMAX( (int)(2.0* m_pCanvas->zoom()), resize );
       cl->setWidth( resize, m_pCanvas );
   }
 
@@ -3208,7 +3208,7 @@ void KSpreadHBorder::resizeColumn(int resize,int nb,bool makeUndo  )
         m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
     }
     ColumnLayout *cl = table->nonDefaultColumnLayout( m_iSelectionAnchor );
-    resize = QMAX( (int)(20* m_pCanvas->zoom()), resize );
+    resize = QMAX( (int)(2.0* m_pCanvas->zoom()), resize );
     cl->setWidth( resize, m_pCanvas );
   }
   else
@@ -3227,7 +3227,7 @@ void KSpreadHBorder::resizeColumn(int resize,int nb,bool makeUndo  )
 
       ColumnLayout *cl = table->nonDefaultColumnLayout( m_pCanvas->markerColumn() );
 
-      resize = QMAX( (int)(20* m_pCanvas->zoom()), resize );
+      resize = QMAX( (int)(2.0* m_pCanvas->zoom()), resize );
       cl->setWidth( resize, m_pCanvas );
     }
     else
@@ -3242,7 +3242,7 @@ void KSpreadHBorder::resizeColumn(int resize,int nb,bool makeUndo  )
       {
         cl= table->nonDefaultColumnLayout( i );
 
-        resize = QMAX( (int)(20* m_pCanvas->zoom()), resize );
+        resize = QMAX( (int)(2.0* m_pCanvas->zoom()), resize );
         cl->setWidth( resize, m_pCanvas );
       }
     }
@@ -3338,8 +3338,8 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
       painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
 
     m_iResizePos = mouseX;
-    int twenty = (int)( 20.0 * m_pCanvas->zoom() );
-    // Dont make the column have a width < 20 pixels.
+    int twenty = (int)( 2.0 * m_pCanvas->zoom() );
+    // Dont make the column have a width < 2 pixels.
     int x = table->columnPos( m_iResizedColumn, m_pCanvas );
     if ( m_iResizePos < x + twenty )
       m_iResizePos = x + twenty;

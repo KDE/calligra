@@ -77,7 +77,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 		for(i=selection.left()+1;i<=selection.right();i++)
 			if(size!=m_pView->activeTable()->columnLayout(i)->width(m_pView->canvasWidget()))
 			equals=false;
-		
+
 		label=i18n("Width");
 		tmpCheck+=" (60)";
 		break;
@@ -86,7 +86,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 		break;
 	}
 
-  
+
   if(!equals)
   	switch(type)
 	{
@@ -99,13 +99,13 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 	}
 
   m_pSize2=new KIntNumInput(size, this, 10);
-  m_pSize2->setRange(20, 400, 1);
+  m_pSize2->setRange(2, 400, 1);
   m_pSize2->setLabel(label);
   lay1->addWidget(m_pSize2);
-  
+
   m_pDefault=new QCheckBox(tmpCheck,this);
   lay1->addWidget(m_pDefault);
-  
+
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
   m_pOk = bb->addButton( i18n("OK") );
