@@ -553,6 +553,8 @@ CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char *_format )
   in.unget(); in.unget(); in.unget(); in.unget();
   
   cout << "PATTERN=" << buf << endl;
+
+  setURL( _url );
   
   // Is it a koffice store ?
   if ( strncasecmp( buf, "KS01", 4 ) == 0 )
@@ -575,7 +577,7 @@ CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char *_format )
       return false;
     }
 
-    return completeLoading( 0L );
+    return completeLoading( &store );
   }
   // Standalone XML or some binary data
   else 

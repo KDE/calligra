@@ -80,9 +80,9 @@ protected:
    * @param _store may be 0L.
    */
   virtual bool loadBinary( istream &, bool _randomaccess, KOStore::Store_ptr _store )
-  { cerr << "KoDocument::loadBinary not implemented" << endl; assert(0); return false; };
+  { cerr << "KoDocument::loadBinary not implemented" << endl; return false; };
   virtual bool loadXML( KOMLParser&, KOStore::Store_ptr _store )
-  { cerr << "KoDocument::loadXML not implemented" << endl; assert(0); return false; };
+  { cerr << "KoDocument::loadXML not implemented" << endl; return false; };
   /**
    * You need to overload this function if your document may contain embedded documents.
    * This function is called to load embedded documents.
@@ -113,7 +113,7 @@ protected:
    * Saves only an OBJECT tag for this document.
    */
   virtual bool save( ostream& out, const char *_format )
-  { cerr << "KoDocument::save not implemented" << endl; assert(0); return false; };
+  { cerr << "KoDocument::save not implemented" << endl; return false; };
   /**
    * Usually you dont want to overload this function. It saves all children which have
    * been registered due to @ref #makeChildListIntern.

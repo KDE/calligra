@@ -5,6 +5,7 @@
 #include <qimage.h>
 #include <qimageio.h>
 #include <qiodev.h>
+#include <qbuffer.h>
 
 ostream& operator<< ( ostream& outs, const QRect &_rect )
 {
@@ -295,17 +296,23 @@ protected:
 
 istream& operator>> ( istream& ins, QImage &_img )
 {
-  CPP2QIO in( ins );
-  QImageIO io( &in, 0 );
-  if ( io.read() )
-    {
-      cerr << "IMAGE ok" << endl;
-      
-      _img = io.image();
-    }
+  // Create a random access device in memory
+  char buffer[ 4096 ];
+
+  QBuffer buff;
+  buff.open( IO_WriteOnly );
   
-  else
-    cerr << "ERROR: while loading image from istream" << endl;
+  while ( !ins.eof() )
+  {
+    ins.read( buffer, 4096 );
+    buff.writeBlock( buffer, ins.gcount() );
+  }
+
+  buff.close();
+  
+  _img.loadFromData( buff.buffer() );
 
   return ins;
-}       
+}
+
+
