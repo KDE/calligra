@@ -145,7 +145,11 @@ void KSpreadTextEditor::slotTextChanged( const QString& t )
     if (mw < width())
       mw = width();
 
-    setGeometry(x(), y(), mw, height());
+    if (t.isRightToLeft())
+      setGeometry(x() - mw + width(), y(), mw, height());
+    else
+      setGeometry(x(), y(), mw, height());
+
     m_length -= 2;
   }
 
