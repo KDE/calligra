@@ -225,21 +225,67 @@ bool EndElementP (StackItem* stackItem)
     return true;
 }
 
-bool StartElementField(StackItem* stackItem, StackItem* stackCurrent, const QXmlAttributes& attributes)
+bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
+    QDomDocument& mainDocument, const QXmlAttributes& attributes)
 {
     // <field> element elements can be nested in <p>
     if (stackCurrent->elementType==ElementTypeParagraph)
     {
         QString strType=attributes.value("type").stripWhiteSpace();
         kdDebug()<<"field type ****************************:"<<strType<<endl;
+        // TODO: a <field> can have formating in  the props attribute. Can KWord follow?
         AbiPropsMap abiPropsMap;
         PopulateProperties(stackItem,QString::null,attributes,abiPropsMap,true);
 
-        stackItem->elementType=ElementTypeField;
-        stackItem->stackElementParagraph=stackCurrent->stackElementParagraph;   // <PARAGRAPH>
-        stackItem->stackElementText=stackCurrent->stackElementText;   // <TEXT>
-        stackItem->stackElementFormatsPlural=stackCurrent->stackElementFormatsPlural; // <FORMATS>
-        stackItem->pos=stackCurrent->pos; //Propagate the position
+        stackItem->elementType=ElementTypeEmpty;
+
+        // We create a format element
+        QDomElement formatElement=mainDocument.createElement("FORMAT");
+        formatElement.setAttribute("id",4); // Variable
+        formatElement.setAttribute("pos",stackItem->pos); // Start position
+        formatElement.setAttribute("len",1); // Start position
+
+        if (strType=="time")
+        {
+            QDomElement typeElement=mainDocument.createElement("TYPE");
+            typeElement.setAttribute("key","TIMELocale");
+            typeElement.setAttribute("type",2); // Time
+            typeElement.setAttribute("text","00:00");
+            formatElement.appendChild(typeElement); //Append to <FORMAT>
+            QDomElement timeElement=mainDocument.createElement("TIME");
+            // We cannot calculate the time, so default to midnight
+            timeElement.setAttribute("hour",0);
+            timeElement.setAttribute("minute",0);
+            timeElement.setAttribute("second",0);
+            timeElement.setAttribute("fix",0);
+            formatElement.appendChild(timeElement); //Append to <FORMAT>
+        }
+        else if ((strType=="page_number")||(strType=="page_count"))
+        {
+            QDomElement typeElement=mainDocument.createElement("TYPE");
+            typeElement.setAttribute("key","NUMBER");
+            typeElement.setAttribute("type",4); // page number/count
+            typeElement.setAttribute("text",1); // We cannot count the pages, so give a default value
+            formatElement.appendChild(typeElement); //Append to <FORMAT>
+            QDomElement pgnumElement=mainDocument.createElement("PGNUM"); // TODO: not documented in KWord's DTD
+            pgnumElement.setAttribute("subtype",(strType=="page_count")?1:0);
+            pgnumElement.setAttribute("value",1);
+            formatElement.appendChild(pgnumElement); //Append to <FORMAT>
+        }
+        else
+        {
+            kdWarning(30506) << "Unknown <field> type: " << strType << endl;
+            return true;
+        }
+
+        // Now insert the elemnt into the document (we work on stackCurrent)
+        stackCurrent->stackElementFormatsPlural.appendChild(formatElement);
+        stackCurrent->stackElementText.appendChild(mainDocument.createTextNode("#"));
+        stackCurrent->pos++; // Adjust position
+
+        // Add formating (use stackItem)
+        AddFormat(formatElement, stackItem, mainDocument);
+
     }
     else
     {//we are not nested correctly, so consider it a parse error!
@@ -247,24 +293,6 @@ bool StartElementField(StackItem* stackItem, StackItem* stackCurrent, const QXml
             << stackCurrent->itemName << endl;
         return false;
     }
-    return true;
-}
-
-bool charactersElementField (StackItem* /*stackItem*/, QDomDocument& /*mainDocument*/, const QString & /*ch*/)
-{
-// TODO
-    return true;
-}
-
-bool EndElementField (StackItem* stackItem, StackItem* stackCurrent)
-{
-    if (!stackItem->elementType==ElementTypeField)
-    {
-        kdError(30506) << "Wrong element type!! Aborting! (</field> in StructureParser::endElement)" << endl;
-        return false;
-    }
-    stackItem->stackElementText.normalize();
-    stackCurrent->pos=stackItem->pos; //Propagate the position back to the parent element
     return true;
 }
 
@@ -844,8 +872,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     }
     else if (name=="field")
     {
-        kdDebug(30506)<<"A Field ------------------------------------\n";
-        success=StartElementField(stackItem,structureStack.current(),attributes);
+        success=StartElementField(stackItem,structureStack.current(),mainDocument,attributes);
     }
     else if (name=="s") // Seems only to exist as lower case
     {
@@ -899,10 +926,6 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     {
         success=EndElementP(stackItem);
     }
-    else if (name=="field")
-    {
-        success=EndElementField(stackItem,structureStack.current());
-    }
     else if (name=="d")
     {
         success=EndElementD(stackItem, m_chain, pictureNumber, mainDocument, pixmapsElement);
@@ -950,10 +973,6 @@ bool StructureParser :: characters ( const QString & ch )
     else if (stackItem->elementType==ElementTypeParagraph)
     { // <p>
         success=charactersElementC(stackItem,mainDocument,ch);
-    }
-    else if (stackItem->elementType==ElementTypeField)
-    {
-        success=charactersElementField(stackItem,mainDocument,ch);
     }
     else if (stackItem->elementType==ElementTypeEmpty)
     {

@@ -40,12 +40,11 @@ enum StackItemElementType{
     ElementTypeUnknown  = 0,
     ElementTypeBottom,      // Bottom of the stack
     ElementTypeIgnore,      // Element is known but ignored
-    ElementTypeEmpty,       // Element is empty ( <pagesize>, <s>, <image>)
+    ElementTypeEmpty,       // Element is empty ( <pagesize>, <s>, <image>, <field>)
     ElementTypeAbiWord,     // <abiword>
     ElementTypeSection,     // <section>
     ElementTypeParagraph,   // <p>
     ElementTypeContent,     // <c>
-    ElementTypeField,       // <field>
     ElementTypeRealData     // <d>
 };
 
