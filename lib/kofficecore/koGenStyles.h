@@ -173,6 +173,10 @@ public:
     void addProperty( const QString& propName, const QString& propValue, PropertyType type = DefaultType ) {
         m_properties[type].insert( propName, propValue );
     }
+    /// Overloaded of addProperty version that take a char*, usually for "..."
+    void addProperty( const QString& propName, const char* propValue, PropertyType type = DefaultType ) {
+        m_properties[type].insert( propName, QString::fromUtf8( propValue ), type );
+    }
     /// Overloaded of addProperty version that converts an int to a string
     void addProperty( const QString& propName, int propValue, PropertyType type = DefaultType ) {
         m_properties[type].insert( propName, QString::number( propValue ), type );
@@ -197,6 +201,10 @@ public:
      */
     void addAttribute( const QString& attrName, const QString& attrValue ) {
         m_attributes.insert( attrName, attrValue );
+    }
+    /// Overloaded of version of addAttribute that takes a char*, usually for "..."
+    void addAttribute( const QString& attrName, const char* attrValue ) {
+        m_attributes.insert( attrName, QString::fromUtf8( attrValue ) );
     }
     /// Overloaded of version of addAttribute that converts an int to a string
     void addAttribute( const QString& attrName, int attrValue ) {
