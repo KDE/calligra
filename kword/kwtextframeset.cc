@@ -553,8 +553,6 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
     bool drawCursor = edit!=0L;
     KoTextCursor * cursor = edit ? static_cast<KWTextFrameSetEdit *>(edit)->cursor() : 0;
 
-#define DEBUGBRUSH(b) "[ style:" << (b).style() << " color:" << (b).color().name() << " hasPixmap:" << (b).pixmap() << "]"
-
     uint drawingFlags = 0;
     if ( viewMode->drawSelections() )
         drawingFlags |= KoTextDocument::DrawSelections;
@@ -563,7 +561,7 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
     if ( m_doc->viewFormattingChars() )
         drawingFlags |= KoTextDocument::DrawFormattingChars;
 
-    //kdDebug() << "KWTextFrameSet::drawFrame calling drawWYSIWYG. cg base color:" << DEBUGBRUSH(cg.brush( QColorGroup::Base)) << endl;
+    //kdDebug(32001) << "KWTextFrameSet::drawFrame calling drawWYSIWYG. cg base color:" << cg.brush( QColorGroup::Base) << endl;
     KoTextParag * lastFormatted = textDocument()->drawWYSIWYG(
         painter, r.x(), r.y(), r.width(), r.height(),
         cg, kWordDocument(),
