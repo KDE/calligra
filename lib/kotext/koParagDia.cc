@@ -39,6 +39,7 @@
 #include <kozoomhandler.h>
 #include <koGlobal.h>
 #include <qgroupbox.h>
+#include <knuminput.h>
 
 KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTypeLetter, QWidget * parent, const char* name  )
     :QWidget( parent, name ),
@@ -697,39 +698,24 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     lLeft->setAlignment( AlignRight );
     indentGrid->addWidget( lLeft, 2, 0 );
 
-    eLeft = new QLineEdit( indentFrame );
-    eLeft->setValidator( new KFloatValidator( 0,frameWidth,true,eLeft ) );
-    eLeft->setText( i18n("0.00") );
-    eLeft->setMaxLength( 5 );
-    eLeft->setEchoMode( QLineEdit::Normal );
-    eLeft->setFrame( true );
+    eLeft = new KDoubleNumInput( indentFrame );
     indentGrid->addWidget( eLeft, 2, 1 );
-    connect( eLeft, SIGNAL( textChanged( const QString & ) ), this, SLOT( leftChanged( const QString & ) ) );
+    connect( eLeft, SIGNAL( valueChanged(double ) ), this, SLOT( leftChanged( double ) ) );
 
     QLabel * lRight = new QLabel( i18n("Right (%1):").arg(unitName), indentFrame );
     lRight->setAlignment( AlignRight );
     indentGrid->addWidget( lRight, 3, 0 );
 
-    eRight = new QLineEdit( indentFrame );
-    eRight->setValidator( new KFloatValidator( 0,frameWidth,true,eRight ) );
-    eRight->setText( i18n("0.00") );
-    eRight->setMaxLength( 5 );
-    eRight->setEchoMode( QLineEdit::Normal );
-    eRight->setFrame( true );
+    eRight = new KDoubleNumInput( indentFrame );
     indentGrid->addWidget( eRight, 3, 1 );
-    connect( eRight, SIGNAL( textChanged( const QString & ) ), this, SLOT( rightChanged( const QString & ) ) );
+    connect( eRight, SIGNAL( valueChanged( double ) ), this, SLOT( rightChanged( double ) ) );
 
     QLabel * lFirstLine = new QLabel( i18n("First Line (%1):").arg(unitName), indentFrame );
     lFirstLine->setAlignment( AlignRight );
     indentGrid->addWidget( lFirstLine, 4, 0 );
 
-    eFirstLine = new QLineEdit( indentFrame );
-    eFirstLine->setValidator( new KFloatValidator( -9999,frameWidth,true,eFirstLine ) );
-    eFirstLine->setText( i18n("0.00") );
-    eFirstLine->setMaxLength( 5 );
-    eFirstLine->setEchoMode( QLineEdit::Normal );
-    eFirstLine->setFrame( true );
-    connect( eFirstLine, SIGNAL( textChanged( const QString & ) ), this, SLOT( firstChanged( const QString & ) ) );
+    eFirstLine = new KDoubleNumInput( indentFrame );
+    connect( eFirstLine, SIGNAL( valueChanged( double ) ), this, SLOT( firstChanged( double ) ) );
     indentGrid->addWidget( eFirstLine, 4, 1 );
 
     // grid row spacing
@@ -771,14 +757,8 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
     spacingGrid->addWidget( cSpacing, 1, 0 );
 
-    eSpacing = new QLineEdit( spacingFrame );
-    eSpacing->setValidator( new KFloatValidator(0, 9999, true, eSpacing ) );
-    eSpacing->setText( i18n("0") );
-    eSpacing->setMaxLength( 2 );
-    eSpacing->setEchoMode( QLineEdit::Normal );
-    eSpacing->setFrame( true );
-    eSpacing->setEnabled(false);
-    connect( eSpacing, SIGNAL( textChanged( const QString & ) ), this, SLOT( spacingChanged( const QString & ) ) );
+    eSpacing = new KDoubleNumInput( spacingFrame );
+    connect( eSpacing, SIGNAL( valueChanged( double ) ), this, SLOT( spacingChanged( double ) ) );
     spacingGrid->addWidget( eSpacing, 1, 1 );
 
     // grid row spacing
@@ -798,26 +778,16 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     lBefore->setAlignment( AlignRight );
     pSpaceGrid->addWidget( lBefore, 1, 0 );
 
-    eBefore = new QLineEdit( pSpaceFrame );
-    eBefore->setValidator( new KFloatValidator( 0, 9999, true, eBefore ) );
-    eBefore->setText( i18n("0.00") );
-    eBefore->setMaxLength( 5 );
-    eBefore->setEchoMode( QLineEdit::Normal );
-    eBefore->setFrame( true );
-    connect( eBefore, SIGNAL( textChanged( const QString & ) ), this, SLOT( beforeChanged( const QString & ) ) );
+    eBefore = new KDoubleNumInput( pSpaceFrame );
+    connect( eBefore, SIGNAL( valueChanged( double ) ), this, SLOT( beforeChanged( double ) ) );
     pSpaceGrid->addWidget( eBefore, 1, 1 );
 
     QLabel * lAfter = new QLabel( i18n("After (%1):").arg(unitName), pSpaceFrame );
     lAfter->setAlignment( AlignRight );
     pSpaceGrid->addWidget( lAfter, 2, 0 );
 
-    eAfter = new QLineEdit( pSpaceFrame );
-    eAfter->setValidator( new KFloatValidator(0, 9999, true, eAfter ) );
-    eAfter->setText( i18n("0.00") );
-    eAfter->setMaxLength( 5 );
-    eAfter->setEchoMode( QLineEdit::Normal );
-    eAfter->setFrame( true );
-    connect( eAfter, SIGNAL( textChanged( const QString & ) ), this, SLOT( afterChanged( const QString & ) ) );
+    eAfter = new KDoubleNumInput( pSpaceFrame );
+    connect( eAfter, SIGNAL( valueChanged( double ) ), this, SLOT( afterChanged( double ) ) );
     pSpaceGrid->addWidget( eAfter, 2, 1 );
 
     // grid row spacing
@@ -836,27 +806,27 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
 
 double KoIndentSpacingWidget::leftIndent() const
 {
-    return QMAX(0,KoUnit::fromUserValue( eLeft->text(), m_unit ));
+    return QMAX(0,KoUnit::ptFromUnit( eLeft->value(), m_unit ));
 }
 
 double KoIndentSpacingWidget::rightIndent() const
 {
-    return QMAX(0,KoUnit::fromUserValue( eRight->text(), m_unit ));
+    return QMAX(0,KoUnit::ptFromUnit( eRight->value(), m_unit ));
 }
 
 double KoIndentSpacingWidget::firstLineIndent() const
 {
-    return KoUnit::fromUserValue( eFirstLine->text(), m_unit );
+    return KoUnit::ptFromUnit( eFirstLine->value(), m_unit );
 }
 
 double KoIndentSpacingWidget::spaceBeforeParag() const
 {
-    return QMAX(0, KoUnit::fromUserValue( eBefore->text(), m_unit ));
+    return QMAX(0, KoUnit::ptFromUnit( eBefore->value(), m_unit ));
 }
 
 double KoIndentSpacingWidget::spaceAfterParag() const
 {
-    return QMAX(0,KoUnit::fromUserValue( eAfter->text(), m_unit ));
+    return QMAX(0,KoUnit::ptFromUnit( eAfter->value(), m_unit ));
 }
 
 double KoIndentSpacingWidget::lineSpacing() const
@@ -871,7 +841,7 @@ double KoIndentSpacingWidget::lineSpacing() const
         return KoParagLayout::LS_DOUBLE;
     case 3:
     default:
-        return QMAX(0,KoUnit::fromUserValue( eSpacing->text(), m_unit ));
+        return QMAX(0,KoUnit::ptFromUnit( eSpacing->value(), m_unit ));
     }
 }
 
@@ -890,32 +860,26 @@ int KoIndentSpacingWidget::pageBreaking() const
 void KoIndentSpacingWidget::display( const KoParagLayout & lay )
 {
     double _left = lay.margins[QStyleSheetItem::MarginLeft];
-    QString str = KoUnit::userValue( _left, m_unit );
-    eLeft->setText( str );
+    eLeft->setValue( KoUnit::ptToUnit( _left, m_unit ) );
     prev1->setLeft( _left );
 
     double _right = lay.margins[QStyleSheetItem::MarginRight];
-    str = KoUnit::userValue( _right, m_unit );
-    eRight->setText( str );
+    eRight->setValue( KoUnit::ptToUnit( _right, m_unit ) );
     prev1->setRight( _right );
 
     double _first = lay.margins[QStyleSheetItem::MarginFirstLine];
-    str = KoUnit::userValue( _first, m_unit );
-    eFirstLine->setText( str );
+    eFirstLine->setValue( KoUnit::ptToUnit( _first, m_unit ) );
     prev1->setFirst( _first  );
 
     double _before = lay.margins[QStyleSheetItem::MarginTop];
-    str = KoUnit::userValue( _before, m_unit );
-    eBefore->setText( str );
+    eBefore->setValue( KoUnit::ptToUnit( _before, m_unit ) );
     prev1->setBefore( _before );
 
     double _after = lay.margins[QStyleSheetItem::MarginBottom];
-    str = KoUnit::userValue( _after, m_unit );
-    eAfter->setText( str );
+    eAfter->setValue( KoUnit::ptToUnit( _after, m_unit ) );
     prev1->setAfter( _after );
 
     double _spacing = lay.lineSpacing;
-    str = QString::null;
     eSpacing->setEnabled(false);
     if ( _spacing == 0 )
         cSpacing->setCurrentItem( 0 );
@@ -927,9 +891,8 @@ void KoIndentSpacingWidget::display( const KoParagLayout & lay )
     {
         cSpacing->setCurrentItem( 3 );
         eSpacing->setEnabled(true);
-        str = KoUnit::userValue( _spacing, m_unit );
     }
-    eSpacing->setText( str );
+    eSpacing->setValue( KoUnit::ptToUnit( _spacing, m_unit ) );
     prev1->setSpacing( _spacing );
 
     cKeepLinesTogether->setChecked( lay.pageBreaking & KoParagLayout::KeepLinesTogether );
@@ -954,19 +917,19 @@ QString KoIndentSpacingWidget::tabName()
     return i18n( "Indent and Spacing" );
 }
 
-void KoIndentSpacingWidget::leftChanged( const QString & _text )
+void KoIndentSpacingWidget::leftChanged( double _val )
 {
-    prev1->setLeft( _text.toDouble() );
+    prev1->setLeft( _val );
 }
 
-void KoIndentSpacingWidget::rightChanged( const QString & _text )
+void KoIndentSpacingWidget::rightChanged( double _val )
 {
-    prev1->setRight( _text.toDouble() );
+    prev1->setRight( _val );
 }
 
-void KoIndentSpacingWidget::firstChanged( const QString & _text )
+void KoIndentSpacingWidget::firstChanged( double _val )
 {
-    prev1->setFirst( _text.toDouble() );
+    prev1->setFirst( _val );
 }
 
 void KoIndentSpacingWidget::spacingActivated( int _index )
@@ -974,7 +937,7 @@ void KoIndentSpacingWidget::spacingActivated( int _index )
     if ( _index == cSpacing->count()-1 /* last item */ ) {
         eSpacing->setEnabled( true );
         eSpacing->setFocus();
-        prev1->setSpacing( eSpacing->text().toDouble() );
+        prev1->setSpacing( eSpacing->value() );
     } else {
         eSpacing->setEnabled( false );
         // 1 -> oneandhalf (8)
@@ -983,19 +946,19 @@ void KoIndentSpacingWidget::spacingActivated( int _index )
     }
 }
 
-void KoIndentSpacingWidget::spacingChanged( const QString & _text )
+void KoIndentSpacingWidget::spacingChanged( double _val )
 {
-    prev1->setSpacing( _text.toDouble() );
+    prev1->setSpacing( _val );
 }
 
-void KoIndentSpacingWidget::beforeChanged( const QString & _text )
+void KoIndentSpacingWidget::beforeChanged( double _val )
 {
-    prev1->setBefore( _text.toDouble() );
+    prev1->setBefore( _val );
 }
 
-void KoIndentSpacingWidget::afterChanged( const QString & _text )
+void KoIndentSpacingWidget::afterChanged( double _val )
 {
-    prev1->setAfter( _text.toDouble() );
+    prev1->setAfter( _val );
 }
 
 KoParagAlignWidget::KoParagAlignWidget( QWidget * parent, const char * name )
@@ -1606,12 +1569,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     TextLabel3->setAlignment( AlignRight );
     fillingGrid->addWidget( TextLabel3, 1, 0 );
 
-    eWidth = new QLineEdit( gTabLeader );
-    eWidth->setValidator( new KFloatValidator( 0, 9999, true, eWidth ) );
-    eWidth->setText( i18n("0.00") );
-    eWidth->setMaxLength( 5 );
-    eWidth->setEchoMode( QLineEdit::Normal );
-    eWidth->setFrame( true );
+    eWidth = new KDoubleNumInput( gTabLeader );
     fillingGrid->addWidget( eWidth, 1, 1 );
 
     GroupBox5Layout->addLayout( fillingGrid );
@@ -1649,7 +1607,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     connect(bDeleteAll,SIGNAL(clicked ()),this,SLOT(deleteAllClicked()));
     connect(bgAlign,SIGNAL(clicked (int)),this,SLOT(updateAlign(int)));
     connect(cFilling,SIGNAL(activated (int)),this,SLOT(updateFilling(int)));
-    connect(eWidth,SIGNAL(textChanged ( const QString & ) ),this,SLOT(updateWidth()));
+    connect(eWidth,SIGNAL(valueChanged ( double ) ),this,SLOT(updateWidth()));
     connect(lstTabs,SIGNAL(highlighted (int)),this,SLOT(setActiveItem(int)));
     noSignals=false;
 }
@@ -1766,7 +1724,7 @@ void KoParagTabulatorsWidget::setActiveItem(int selected) {
         default:
             cFilling->setCurrentItem(0);
     }
-    eWidth->setText( KoUnit::userValue( selectedTab->ptWidth, m_unit ) );
+    eWidth->setValue( KoUnit::ptToUnit( selectedTab->ptWidth, m_unit ) );
     sTabPos->setText( tabToString(selectedTab));
     bDelete->setEnabled(true);
     bDeleteAll->setEnabled(true);
@@ -1829,7 +1787,7 @@ void KoParagTabulatorsWidget::updateFilling(int selected) {
 
 void KoParagTabulatorsWidget::updateWidth() {
     KoTabulator *selectedTab = &m_tabList[lstTabs->currentItem()];
-    selectedTab->ptWidth = QMAX( 0, KoUnit::fromUserValue( eWidth->text(), m_unit ) );
+    selectedTab->ptWidth = QMAX( 0, KoUnit::ptFromUnit( eWidth->value(), m_unit ) );
 }
 
 void KoParagTabulatorsWidget::sortLists() {

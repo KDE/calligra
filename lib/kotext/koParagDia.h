@@ -49,6 +49,7 @@ class QListBox;
 class QPushButton;
 class QRadioButton;
 class QWidget;
+class KDoubleNumInput;
 
 /**
  * This is the base class for any widget [usually used in a tab]
@@ -111,15 +112,15 @@ public:
     int pageBreaking() const;
 
 private slots:
-    void leftChanged( const QString & );
-    void rightChanged( const QString & );
-    void firstChanged( const QString & );
+    void leftChanged( double );
+    void rightChanged( double );
+    void firstChanged( double );
     void spacingActivated( int );
-    void spacingChanged( const QString & );
-    void beforeChanged( const QString & );
-    void afterChanged( const QString & );
+    void spacingChanged( double );
+    void beforeChanged( double );
+    void afterChanged( double );
 private:
-    QLineEdit *eLeft, *eRight, *eFirstLine, *eBefore, *eAfter, *eSpacing;
+    KDoubleNumInput *eLeft, *eRight, *eFirstLine, *eBefore, *eAfter, *eSpacing;
     QComboBox *cSpacing;
     QCheckBox *cKeepLinesTogether, *cHardBreakBefore, *cHardBreakAfter;
     KPagePreview *prev1;
@@ -369,7 +370,7 @@ protected:
     QLineEdit* sAlignChar;
     QGroupBox* gTabLeader;
     QComboBox* cFilling;
-    QLineEdit* eWidth;
+    KDoubleNumInput* eWidth;
     QPushButton* bNew;
     QPushButton* bDelete;
     QPushButton* bDeleteAll;
@@ -417,9 +418,9 @@ public:
     void setShadowDistance( int sd );
     void setShadowColor( const QColor & sc );
 
-    short int getShadowDirection() { return shadowDirection; }
-    int getShadowDistance() { return shadowDistance; }
-    QColor getShadowColor() { return shadowColor; }
+    short int getShadowDirection() const{ return shadowDirection; }
+    int getShadowDistance() const{ return shadowDistance; }
+    QColor getShadowColor()const { return shadowColor; }
 
 protected:
     KoShadowPreview *m_shadowPreview;
@@ -493,7 +494,7 @@ public:
     KoParagDia( QWidget*, const char*, int flags, KoUnit::Unit unit, double _frameWidth=-1,bool breakLine=true);
     ~KoParagDia();
 
-    int getFlags() { return m_flags; }
+    int getFlags()const { return m_flags; }
 
     /** Make a given page the current one - @p page is a flag (PD_something) value */
     void setCurrentPage( int page );
