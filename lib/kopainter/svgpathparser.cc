@@ -346,6 +346,10 @@ SVGPathParser::parseSVG( const QString &s, bool process )
 					ptr = getCoord( ptr, tox );
 					ptr = getCoord( ptr, toy );
 
+					// Spec: radii are nonnegative numbers
+					rx = fabs(rx);
+					ry = fabs(ry);
+
 					if( process )
 						calculateArc( relative, curx, cury, angle, tox, toy, rx, ry, largeArc, sweep );
 					else
