@@ -29,6 +29,15 @@ NondelimiterTerminator [ \t\n\',()<>\.:=*+-/<>@;?]
 ")" return RIGHTPAREN;
 "." return DOT;
 "$" return DOLLAR_SIGN;
+"%" return PERCENT;
+
+"=" return EQUAL;
+"<>" return NOT_EQUAL;
+"<" return LESS_THAN;
+"<=" return LESS_OR_EQUAL;
+">" return GREATER_THAN;
+">=" return GREATER_OR_EQUAL;
+
 
 "'" return SINGLE_QUOTE;
 "?" return QUESTION_MARK;
@@ -1723,6 +1732,11 @@ return DOUBLE_QUOTED_STRING;
 <DelimOrSep>")" {
 	BEGIN 0;
 	return RIGHTPAREN;
+}
+<DelimOrSep>"%" {
+	BEGIN 0;
+//	yylval.comparisonOp = SetComparisonConstants::SETCOMP_EQUAL;
+	return PERCENT;
 }
 <DelimOrSep>"=" {
 	BEGIN 0;

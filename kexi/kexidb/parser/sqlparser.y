@@ -1,3 +1,4 @@
+%token PERCENT
 %token SQL_TYPE
 %token SQL_ABS
 %token ACOS
@@ -350,9 +351,16 @@
 %type <stringValue> CHARACTER_STRING_LITERAL
 %type <stringValue> DOUBLE_QUOTED_STRING
 
+%type <field> ColExpression
+%type <field> ColView
+
 %type <coltype> SQL_TYPE
 %type <integerValue> UNSIGNED_INTEGER
 %type <integerValue> SIGNED_INTEGER
+
+%left EQUAL NOT_EQUAL GREATER_THAN GREATER_OR_EQUAL LESS_THAN LESS_OR_EQUAL LIKE PERCENT
+%left ARITHMETIC_PLUS ARITHMETIC_MINUS
+%left ASTERISK SLASH
 
 %{
 #include <stdio.h>
@@ -426,6 +434,7 @@
 	char stringValue[255];
 	int integerValue;
 	KexiDB::Field::Type coltype;
+	KexiDB::Field *field;
 }
 
 %%
@@ -527,7 +536,7 @@ SQL_TYPE
 ;
 
 SelectStatement:
-Select ColViews 
+Select ColViews
 {
 /*
 	parser->select()->setBaseTable($4);
@@ -562,12 +571,173 @@ SELECT
 ;
 
 ColViews:
-ColViews COMMA ColView|ColView
+ColViews COMMA ColItem|ColItem
 {
 }
 ;
 
+ColItem:
+ColExpression
+{
+	kdDebug() << " adding field '" << $1->name() << "'" << endl;
+}
+| ColWildCard
+{
+}
+| ColExpression AS USER_DEFINED_NAME
+{
+	kdDebug() << " adding field '" << $1->name() << "' as '" << $3 << "'" << endl;
+}
+;
+
 ColView:
+USER_DEFINED_NAME
+{
+	kdDebug() << "  + col " << $1 << endl;
+	$$ = new KexiDB::Field();
+	$$->setName($1);
+//	parser->select()->addField(field);
+	requiresTable = true;
+}
+| USER_DEFINED_NAME DOT USER_DEFINED_NAME
+{
+	kdDebug() << "  + col " << $3 << " from " << $1 << endl;
+	$$ = new KexiDB::Field();
+//	s->setTable($1);
+	$$->setName($3);
+//	parser->select()->addField(field);
+	requiresTable = true;
+}
+| CHARACTER_STRING_LITERAL
+{
+	$$ = new KexiDB::Field();
+	$$->setName($1);
+//	parser->select()->addField(field);
+	kdDebug() << "  + constant " << $1 << endl;
+}
+| SIGNED_INTEGER
+{
+	$$ = new KexiDB::Field();
+	$$->setName(QString::number($1));
+//	parser->select()->addField(field);
+	kdDebug() << "  + numerical constant " << $1 << endl;
+}
+| UNSIGNED_INTEGER
+{
+	$$ = new KexiDB::Field();
+	$$->setName(QString::number($1));
+//	parser->select()->addField(field);
+	kdDebug() << "  + numerical constant " << $1 << endl;
+}
+;
+
+ColExpression:
+ColView
+{
+	$$ = $1;
+}
+| ColExpression ARITHMETIC_PLUS ColExpression
+{
+	kdDebug() << $1->name() << " + " << $3->name() << endl;
+	$$->setName($1->name() + " + " + $3->name());
+}
+| ColExpression ARITHMETIC_MINUS ColExpression
+{
+	kdDebug() << $1->name() << " - " << $3->name() << endl;
+	$$->setName($1->name() + " - " + $3->name());
+}
+| ColExpression SLASH ColExpression
+{
+	kdDebug() << $1->name() << " / " << $3->name() << endl;
+	$$->setName($1->name() + " / " + $3->name());
+}
+| ColExpression ASTERISK ColExpression
+{
+	kdDebug() << $1->name() << " * " << $3->name() << endl;
+	$$->setName($1->name() + " * " + $3->name());
+}
+| ColExpression EQUAL ColExpression
+{
+	kdDebug() << $1->name() << " = " << $3->name() << endl;
+	$$->setName($1->name() + " = " + $3->name());
+}
+| ColExpression NOT_EQUAL ColExpression
+{
+	kdDebug() << $1->name() << " <> " << $3->name() << endl;
+	$$->setName($1->name() + " <> " + $3->name());
+}
+| ColExpression GREATER_THAN ColExpression
+{
+	kdDebug() << $1->name() << " > " << $3->name() << endl;
+	$$->setName($1->name() + " > " + $3->name());
+}
+| ColExpression GREATER_OR_EQUAL ColExpression
+{
+	kdDebug() << $1->name() << " >= " << $3->name() << endl;
+	$$->setName($1->name() + " >= " + $3->name());
+}
+| ColExpression LESS_THAN ColExpression
+{
+	kdDebug() << $1->name() << " < " << $3->name() << endl;
+	$$->setName($1->name() + " < " + $3->name());
+}
+| ColExpression LESS_OR_EQUAL ColExpression
+{
+	kdDebug() << $1->name() << " <= " << $3->name() << endl;
+	$$->setName($1->name() + " <= " + $3->name());
+}
+| ColExpression LIKE ColExpression
+{
+	kdDebug() << $1->name() << " LIKE " << $3->name() << endl;
+	$$->setName($1->name() + " LIKE " + $3->name());
+}
+| ColExpression PERCENT ColExpression
+{
+	kdDebug() << $1->name() << " % " << $3->name() << endl;
+	$$->setName($1->name() + " % " + $3->name());
+}
+| LEFTPAREN ColExpression RIGHTPAREN
+{
+	kdDebug() << "(" << $2->name() << ")" << endl;
+	$$ = $2;
+	$$->setName("(" + $2->name() + ")");
+}
+| SUM LEFTPAREN ColExpression RIGHTPAREN
+{
+	$$ = $3;
+	$$->setName("SUM(" + $3->name() + ")");
+//wait	$$->containsGroupingAggregate(true);
+//wait	parser->select()->grouped(true);
+}
+| SQL_MIN LEFTPAREN ColExpression RIGHTPAREN
+{
+	$$ = $3;
+	$$->setName("MIN(" + $3->name() + ")");
+//wait	$$->containsGroupingAggregate(true);
+//wait	parser->select()->grouped(true);
+}
+| SQL_MAX LEFTPAREN ColExpression RIGHTPAREN
+{
+	$$ = $3;
+	$$->setName("MAX(" + $3->name() + ")");
+//wait	$$->containsGroupingAggregate(true);
+//wait	parser->select()->grouped(true);
+}
+| AVG LEFTPAREN ColExpression RIGHTPAREN
+{
+	$$ = $3;
+	$$->setName("AVG(" + $3->name() + ")");
+//wait	$$->containsGroupingAggregate(true);
+//wait	parser->select()->grouped(true);
+}
+| DISTINCT LEFTPAREN ColExpression RIGHTPAREN
+{
+	$$ = $3;
+	$$->setName("DISTINCT(" + $3->name() + ")");
+}
+;
+
+ColWildCard:
 ASTERISK
 {
 	kdDebug() << "all columns" << endl;
@@ -575,23 +745,6 @@ ASTERISK
 	field->setName("*");
 	parser->select()->addField(field);
 //	parser->select()->setUnresolvedWildcard(true);
-	requiresTable = true;
-}
-| USER_DEFINED_NAME
-{
-	kdDebug() << "  + col " << $1 << endl;
-	field = new KexiDB::Field();
-	field->setName($1);
-	parser->select()->addField(field);
-	requiresTable = true;
-}
-| USER_DEFINED_NAME DOT USER_DEFINED_NAME
-{
-	kdDebug() << "  + col " << $3 << " from " << $1 << endl;
-	field = new KexiDB::Field();
-//	s->setTable($1);
-	field->setName($3);
-	parser->select()->addField(field);
 	requiresTable = true;
 }
 | USER_DEFINED_NAME DOT ASTERISK
@@ -602,37 +755,6 @@ ASTERISK
 	parser->select()->addField(field);
 //	parser->select()->setUnresolvedWildcard(true);
 	requiresTable = true;
-}
-| CHARACTER_STRING_LITERAL
-{
-	field = new KexiDB::Field();
-	field->setName($1);
-	parser->select()->addField(field);
-	kdDebug() << "  + constant " << $1 << endl;
-}
-| SIGNED_INTEGER
-{
-	field = new KexiDB::Field();
-	field->setName(QString::number($1));
-	parser->select()->addField(field);
-	kdDebug() << "  + numerical constant " << $1 << endl;
-}
-| UNSIGNED_INTEGER
-{
-	field = new KexiDB::Field();
-	field->setName(QString::number($1));
-	parser->select()->addField(field);
-	kdDebug() << "  + numerical constant " << $1 << endl;
-}
-| ColView AS USER_DEFINED_NAME
-{
-	kdDebug() << "  => alias: " << $3 << endl;
-	if(field->name() == "*")
-	{
-		kdDebug() << "can't use aliases ond wildcards!" << endl;
-		yyerror("syntax error");
-		YYERROR;
-	}
 }
 ;
 
