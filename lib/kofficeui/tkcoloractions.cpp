@@ -212,9 +212,9 @@ void TKSelectColorAction::setActiveColor( const QColor& color )
 
 void TKSelectColorAction::selectColorDialog()
 {
+    QColor color;
     if ( d->defaultColorMenu )
     {
-       QColor color;
         if ( KColorDialog::getColor(color,d->defaultColor) == QDialog::Accepted )
         {
             setCurrentColor(color);
