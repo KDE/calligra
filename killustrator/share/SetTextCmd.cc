@@ -25,7 +25,7 @@
 #include "SetTextCmd.h"
 #include <klocale.h>
 
-SetTextCmd::SetTextCmd (GDocument* doc, GText* obj, const QString& s) 
+SetTextCmd::SetTextCmd (GDocument* doc, GText* obj, const QString& ) 
   : Command(i18n("Change Text"))
 {
   document = doc;

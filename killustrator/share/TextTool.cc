@@ -184,7 +184,7 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   return;
 }
 
-void TextTool::activate (GDocument* doc, Canvas* canvas) {
+void TextTool::activate (GDocument* /*doc*/, Canvas* /*canvas*/) {
   emit modeSelected ("");
 }
 

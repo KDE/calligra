@@ -34,8 +34,8 @@
 ZoomTool::ZoomTool (CommandHistory* history) : Tool (history) {
 }
 
-void ZoomTool::processEvent (QEvent* e, GDocument *doc, 
-				  Canvas* canvas) {
+void ZoomTool::processEvent (QEvent* e, GDocument */*doc*/, 
+			     Canvas* canvas) {
   if (e->type () == 
 #if QT_VERSION >= 199
       QEvent::MouseButtonRelease

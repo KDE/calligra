@@ -46,8 +46,6 @@ int main (int argc, char** argv) {
   fpsetmask (fpgetmask() & ~(FP_X_DZ|FP_X_INV));
 #endif
   KApplication* app = new KApplication (argc, argv, APP_NAME);
-#warning "Reggie: I had to comment out KIOJob::initStatic(), because this is protected now. How should this be fixed?"
-  //KIOJob::initStatic();
 
   QObject::connect (app, SIGNAL(saveYourself ()),
 		    PStateManager::instance (), SLOT(saveDefaultSettings ()));

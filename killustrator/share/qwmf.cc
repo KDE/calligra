@@ -333,7 +333,7 @@ bool QWinMetaFile::paint(const QPaintDevice* aTarget)
   if (mPainter.isActive()) return FALSE;
 
   if (mObjHandleTab) delete[] mObjHandleTab;
-  mObjHandleTab = new (WinObjHandle*)[MAX_OBJHANDLE];
+  mObjHandleTab = new WinObjHandle*[MAX_OBJHANDLE];
   for (i=MAX_OBJHANDLE-1; i>=0; i--)
     mObjHandleTab[i] = NULL;
 
@@ -461,12 +461,12 @@ QPointArray* QWinMetaFile::pointArray(short num, short* parm)
 unsigned int QWinMetaFile::toDWord(short* parm)
 {
   unsigned int l;
-  char *bytes;
-  char swap[4];
-
+ 
 #if LITTLE_ENDIAN
   l = *(unsigned int*)parm;
 #else
+  char swap[4];
+  char *bytes;
   bytes = (char*)parm;
   swap[0] = bytes[2];
   swap[1] = bytes[3];

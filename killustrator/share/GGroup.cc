@@ -81,7 +81,7 @@ void GGroup::addObject (GObject* obj) {
   updateRegion ();
 }
 
-void GGroup::draw (Painter& p, bool withBasePoints, bool outline) {
+void GGroup::draw (Painter& p, bool /*withBasePoints*/, bool outline) {
   p.save ();
   p.setWorldMatrix (tmpMatrix, true);
 

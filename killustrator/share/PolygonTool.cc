@@ -147,7 +147,7 @@ void PolygonTool::setConcavePolygon (bool flag) {
   createConcavePolygon = flag;
 }
 
-void PolygonTool::activate (GDocument* doc, Canvas* canvas) {
+void PolygonTool::activate (GDocument* /*doc*/, Canvas* /*canvas*/) {
   emit modeSelected (i18n ("Create Polygon"));
 }
 

@@ -363,7 +363,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
 }
 
 void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc, 
-					     Canvas* canvas) {
+					     Canvas* /*canvas*/) {
   int hmask;
   GObject *obj = 0L;
 

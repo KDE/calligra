@@ -197,7 +197,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
   return;
 }
 
-void FreeHandTool::activate (GDocument* doc, Canvas*) {
+void FreeHandTool::activate (GDocument* /*doc*/, Canvas*) {
   buttonIsDown = false;
   emit modeSelected (i18n ("Create FreeHand Line"));
 }

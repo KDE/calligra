@@ -136,7 +136,7 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
   }
 }
 
-void RectangleTool::activate (GDocument*, Canvas* canvas) {
+void RectangleTool::activate (GDocument*, Canvas* /*canvas*/) {
   emit modeSelected (i18n ("Create Rectangle"));
 }
 
