@@ -659,16 +659,15 @@ void getReference(Q_UINT16 row, Q_UINT16 column, Q_INT16 &refRow, Q_INT16 &refCo
 	}
 }
 
-
-
 struct sExcelFunction
 {
-	const char	*name;
-	Q_UINT16	index;
-	Q_UINT16	params;
+	const char *name;
+	Q_UINT16 index;
+	Q_UINT16 params;
 };
 
-static const sExcelFunction ExcelFunctions[] = {
+static const sExcelFunction ExcelFunctions[] =
+{
 	{ "COUNT",            0,    0 },
 	{ "IF",               1,    0 },
 	{ "ISNV",             2,    1 },
@@ -756,7 +755,7 @@ static const sExcelFunction ExcelFunctions[] = {
 	{ "VLOOKUP",          102,  0 },
 	{ "ISREF",            105,  1 },
 	{ "LOG",              109,  0 },
-	{ "CHAR",             111,  1 },
+	{ "AsciiToChar",      111,  1 },  /* EXCEL: CHAR */
 	{ "LOWER",            112,  1 },
 	{ "UPPER",            113,  1 },
 	{ "PROPPER",          114,  1 },
@@ -766,7 +765,7 @@ static const sExcelFunction ExcelFunctions[] = {
 	{ "TRIM",             118,  1 },
 	{ "REPLACE",          119,  4 },
 	{ "SUBSTITUTE",       120,  0 },
-	{ "CODE",             121,  1 },
+	{ "CharToAscii",      121,  1 },  /* EXCEL: CODE */
 	{ "FIND",             124,  0 },
 	{ "CELL",             125,  0 },
 	{ "ISERR",            126,  1 },
@@ -882,7 +881,7 @@ static const sExcelFunction ExcelFunctions[] = {
 	{ "MODALVALUE",       330,  0 },
 	{ "TRIMMEAN",         331,  2 },
 	{ "TINV",             332,  2 },
-	{ "CONCAT",           336,  0 },
+	{ "JOIN",             336,  0 },  /* EXCEL: CONCAT */
 	{ "POW",              337,  2 },  /* EXCEL: POWER */
 	{ "RADIAN",           342,  1 },  /* EXCEL: RAD */
 	{ "DEGREE",           343,  1 },  /* EXCEL: DEG */
@@ -902,59 +901,70 @@ static const sExcelFunction ExcelFunctions[] = {
 	{ "VARA",             367,  0 }
 };
 
-#define MAX_EXCELFUNCTIONS (sizeof(ExcelFunctions)/sizeof(ExcelFunctions[0]))
-
-static const sExcelFunction *ExcelFunction( Q_UINT16 nIndex )
+static const sExcelFunction *ExcelFunction(Q_UINT16 nIndex)
 {
     int first = 0;
-    int last  = MAX_EXCELFUNCTIONS-1;
-    while (first <= last)
+    int last = (sizeof(ExcelFunctions) / sizeof(ExcelFunctions[0])) - 1;
+	
+    while(first <= last)
     {
-	int curr = first + (last - first) / 2;
+		int curr = first + (last - first) / 2;
         const sExcelFunction *pCurr = ExcelFunctions + curr;
-        if (pCurr->index > nIndex)
+        if(pCurr->index > nIndex)
             last = curr - 1;
-        else if (pCurr->index < nIndex)
+        else if(pCurr->index < nIndex)
             first = curr + 1;
         else
             return pCurr;
     }
-    return NULL;
+	
+    return 0;
 }
 
-
-static QString Excel_ErrorString( Q_UINT8 no )
+static QString Excel_ErrorString(Q_UINT8 no)
 {
-	switch( no ) {
-		case 0x00:  return "#NULL!";
-		case 0x07:  return "#DIV/0!";
-		case 0x0F:  return "#VALUE!";
-		case 0x17:  return "#REF!";
-		case 0x1D:  return "#NAME?";
-		case 0x24:  return "#NUM!";
-		case 0x2A:  return "#N/A!";
+	switch(no)
+	{
+		case 0x00:
+			return "#NULL!";
+		case 0x07:
+			return "#DIV/0!";
+		case 0x0F:
+			return "#VALUE!";
+		case 0x17:
+			return "#REF!";
+		case 0x1D:
+			return "#NAME?";
+		case 0x24:
+			return "#NUM!";
+		case 0x2A:
+			return "#N/A!";
 	}
+	
 	return "#UNKNOWN!";
 }
 
-const QString& concatValues( QStringList *parsedFormula, int count, QString joinVal, 
-			QString prefix=QString::null, QString postfix=QString::null )
+const QString &concatValues(QStringList *parsedFormula, int count, QString joinVal, QString prefix = QString::null, QString postfix = QString::null)
 {
 	QString sum;
-	while (count) {
+	while(count)
+	{
 		count--;
 		sum.prepend(parsedFormula->last());
-		if (count) sum.prepend(joinVal);
+
+		if(count)
+			sum.prepend(joinVal);
+		
 		parsedFormula->pop_back();
 	}
 	
-	if (!prefix.isNull())	sum.prepend(prefix);
-	if (!postfix.isNull())	sum.append(postfix);
+	if(!prefix.isNull())
+		sum.prepend(prefix);
+	
+	if(!postfix.isNull())
+		sum.append(postfix);
 
 	parsedFormula->append(sum);
-
-//	kdWarning(30511) << "  New Formula: " << parsedFormula->join(" X ") << endl;
-
 	return parsedFormula->last();
 }
 
@@ -1009,46 +1019,46 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 
 				break;
 			case 0x03:  // ptgAdd
-				concatValues( &parsedFormula, 2, "+" );
+				concatValues(&parsedFormula, 2, "+");
 				break;
 			case 0x04:  // ptgSub
-				concatValues( &parsedFormula, 2, "-" );
+				concatValues(&parsedFormula, 2, "-");
 				break;
 			case 0x05:  // ptgMul
-				concatValues( &parsedFormula, 2, "*" );
+				concatValues(&parsedFormula, 2, "*");
 				break;
 			case 0x06:  // ptgDiv
-				concatValues( &parsedFormula, 2, "/" );
+				concatValues(&parsedFormula, 2, "/");
 				break;
 			case 0x07:  // ptgPower
-				concatValues( &parsedFormula, 2, "^" ); // Hmmm, not supported by kspread.
+				concatValues(&parsedFormula, 2, "^"); // Hmmm, not supported by kspread.
 				break;
 			case 0x08:  // ptgConcat
-				concatValues( &parsedFormula, 2, "&" );
+				concatValues(&parsedFormula, 2, "&");
 				break;
 			case 0x09:  // ptgLT
-				concatValues( &parsedFormula, 2, "<" );
+				concatValues(&parsedFormula, 2, "<");
 				break;
 			case 0x0a:  // ptgLE
-				concatValues( &parsedFormula, 2, "<=" );
+				concatValues(&parsedFormula, 2, "<=");
 				break;
 			case 0x0b:  // ptgEQ
-				concatValues( &parsedFormula, 2, "==" );
+				concatValues(&parsedFormula, 2, "==");
 				break;
 			case 0x0c:  // ptgGE
-				concatValues( &parsedFormula, 2, ">=" );
+				concatValues(&parsedFormula, 2, ">=");
 				break;
 			case 0x0d:  // ptgGT
-				concatValues( &parsedFormula, 2, ">" );
+				concatValues(&parsedFormula, 2, ">");
 				break;
 			case 0x0e:  // ptgNE
-				concatValues( &parsedFormula, 2, "!=" );
+				concatValues(&parsedFormula, 2, "!=");
 				break;
 			case 0x10:  // ptgUnion
-				concatValues( &parsedFormula, 2, ";" );
+				concatValues(&parsedFormula, 2, ";");
 				break;
 			case 0x11:  // ptgRange
-				concatValues( &parsedFormula, 2, ":" );
+				concatValues(&parsedFormula, 2, ":");
 				break;
 			case 0x12:  // ptgUPlus
 				parsedFormula.last().prepend("+");
@@ -1078,7 +1088,6 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				parsedFormula.append(QString("\"%1\"").arg(buffer8bit));
 
 				delete []buffer8bit;
-
 				break;
 			case 0x18:  // ptgExtended
 				rgce >> byte;
@@ -1086,22 +1095,23 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				break;
 			case 0x19:  // ptgAttr
 				rgce >> byte >> integer;
-				if (byte & 0x04) {
+				if(byte & 0x04)
+				{
 					integer++;
 					integer *= 2;
-					while (integer--) { rgce >> byte; };
-				} else	
-				if (byte & 0x10) {
-					concatValues( &parsedFormula, 1, "", "sum(" ,")" );
-				};
+					while(integer--)
+						rgce >> byte;
+				}
+				else if(byte & 0x10)
+					concatValues(&parsedFormula, 1, "", "sum(" ,")");
 				break;
 			case 0x1c:  // ptgErr
 				rgce >> byte;
-				parsedFormula.append( Excel_ErrorString(byte) );
+				parsedFormula.append(Excel_ErrorString(byte));
 				break;
 			case 0x1d:  // ptgBool
 				rgce >> byte;
-				parsedFormula.append(byte ? "True":"False");
+				parsedFormula.append(byte ? "True" : "False");
 				break;
 			case 0x1e:  // ptgInt
 				rgce >> integer;
@@ -1109,19 +1119,17 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				break;
 			case 0x1f:  // ptgNum
 				rgce >> number;
-				if (((int)number) == number)
+				if(((int) number) == number)
 					parsedFormula.append(QString().setNum((int)number));
 				else
 					parsedFormula.append(m_locale.formatNumber(number));
 				break;
 			case 0x20:  // ptgArray
-				parsedFormula.append( "ConstArray" );
-				break;
-				
+				parsedFormula.append("ConstArray");
+				break;				
 			case 0x22:  // ptgFuncVar
 				rgce >> byte;
 				// fall through....
-
 			case 0x21:  // ptgFunc
 				Q_UINT16 index;
 				rgce >> index;
@@ -1129,22 +1137,22 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 
 				excelFunc = ExcelFunction(index);
 
-				if (excelFunc) {
-				   newop = QString(excelFunc->name) + "(";
-				   count = excelFunc->params;
-				} else {
-				   newop = QString("ExcelFunc_%1(").arg(index);
-				   kdWarning(30511) << "Formula contains unhandled function " 
-					   		<< index << endl;
-				   count = 1;
+				if(excelFunc)
+				{
+					newop = QString(excelFunc->name) + "(";
+					count = excelFunc->params;
+				}
+				else
+				{
+					newop = QString("ExcelFunc_%1(").arg(index);
+					kdWarning(30511) << "Formula contains unhandled function "  << index << endl;
+					count = 1;
 				}
 				
-				if (ptg == 0x22) // variable count of arguments
+				if(ptg == 0x22) // variable count of arguments
 					count = byte & 0x7F;
 				
-//				kdWarning(30511) << "concat " << count << " " << newop << endl;
-
-				concatValues( &parsedFormula, count, ";", newop, ")" );
+				concatValues(&parsedFormula, count, ";", newop, ")");
 				break;
 
 			case 0x23:  // ptg????
@@ -1188,13 +1196,12 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				getReference(row, column, refRow, refColumn, biff, shared);
 				getReference(row, column, refRowLast, refColumnLast, biff, shared);
 
-				str = QString("#%1#%2#:#%3#%4#").arg(refColumn).arg(refRow)
-						.arg(refColumnLast).arg(refRowLast);
+				str = QString("#%1#%2#:#%3#%4#").arg(refColumn).arg(refRow).arg(refColumnLast).arg(refRowLast);
 				parsedFormula.append(str);
 				break;
 			case 0x26:  // ptgMemArea
 				rgce >> integer >> integer >> integer;
-				parsedFormula.append( "MemArea" );
+				parsedFormula.append("MemArea");
 				break;
 			case 0x27:  // ptgMemErr
 			case 0x28:  // ptgMemNoMem
@@ -1210,7 +1217,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				rgce >> extno >> intno;
 				rgce >> integer;
 				str = QString("extname(EXT(%1),%2)").arg(extno).arg(intno);
-				parsedFormula.append( str );
+				parsedFormula.append(str);
 				break;
 			case 0x3a:  // ptgRef3d
 			case 0x3c:  // ptgRef3dErr
@@ -1228,8 +1235,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 					else
 						str = "Unknown_Sheet";
 
-					str = QString("%1!#%2#%3#").arg(str)
-					       	.arg(refColumn).arg(refRow);
+					str = QString("%1!#%2#%3#").arg(str).arg(refColumn).arg(refRow);
 					parsedFormula.append(str);
 				}
 				else
@@ -1258,12 +1264,8 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 					getReference(row, column, refRow, refColumn, biff, shared);
 					getReference(row, column, refRowLast, refColumnLast, biff, shared);
 
-					str = QString("%1!#%2#%3#:#%4#%5#")
-							.arg(str)
-							.arg(refColumn).arg(refRow)
-							.arg(refColumnLast).arg(refRowLast);
-					parsedFormula.append(str);
-					
+					str = QString("%1!#%2#%3#:#%4#%5#").arg(str).arg(refColumn).arg(refRow).arg(refColumnLast).arg(refRowLast);
+					parsedFormula.append(str);					
 				}
 				else
 				{
@@ -1277,6 +1279,6 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				break;
 		}
 	}
-//	kdWarning(30511) << "Helper::getFormula: " << parsedFormula.join("  ") << endl;
+	
 	return parsedFormula.join("");
 }
