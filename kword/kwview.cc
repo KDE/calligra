@@ -292,7 +292,7 @@ void KWView::setupActions()
     lst << "500%";
     actionViewZoom->setItems( lst );
     // -------------- Insert actions
-    (void) new KAction( i18n( "&Table" ), "table", 0,
+    (void) new KAction( i18n( "&Table" ), "inline_table", 0,
                         this, SLOT( insertTable() ),
                         actionCollection(), "insert_table" );
 
