@@ -365,9 +365,11 @@ void KWView::initGui()
     // This is probably to emit currentMouseModeChanged and set the cursor
     m_gui->canvasWidget()->setMouseMode( m_gui->canvasWidget()->mouseMode() );
 
+    bool editingFormula = dynamic_cast<KWFormulaFrameSetEdit *>( m_gui->canvasWidget()->currentFrameSetEdit() ) != 0;
+    kdDebug() << k_funcinfo << "editingFormula=" << editingFormula << endl;
     //showFormulaToolbar( FALSE ); // not called, to avoid creating the formula-document if not necessary
     if(shell())
-      shell()->showToolbar( "formula_toolbar", false );
+        shell()->showToolbar( "formula_toolbar", editingFormula );
 
     // Prevention against applyMainWindowSettings hiding the statusbar
     KStatusBar * sb = statusBar();
@@ -1479,6 +1481,7 @@ void KWView::insertNewCustomVariable()
 
 void KWView::showFormulaToolbar( bool show )
 {
+    kdDebug() << k_funcinfo << show << endl;
     m_doc->getFormulaDocument()->setEnabled( show );
     if(shell())
       shell()->showToolbar( "formula_toolbar", show );
