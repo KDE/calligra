@@ -1,0 +1,5 @@
+Reggie, 11.1.1999:
+------------------
+- Added undo/redo command for setting styles (pen, brush, line begin/end, garadients, etc.)
+- All style settings are done using this command now
+- Fixes when using some other commands

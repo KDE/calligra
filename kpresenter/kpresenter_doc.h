@@ -78,6 +78,7 @@ class KPresenterView;
 #include "lowraicmd.h"
 #include "pievaluecmd.h"
 #include "rectvaluecmd.h"
+#include "penbrushcmd.h"
 #include "commandhistory.h"
 
 #include "styledia.h"

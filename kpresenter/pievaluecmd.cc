@@ -67,3 +67,5 @@ void PieValueCmd::unexecute()
     }
   doc->repaint(false);
 }
+
+

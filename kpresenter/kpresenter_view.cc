@@ -1767,12 +1767,13 @@ void KPresenterView::rotateOk()
   for (int i = 0;i < static_cast<int>(kPresenterDoc()->objectList()->count());i++)
     {
       kpobject = kPresenterDoc()->objectList()->at(i);
-      tmp = new RotateCmd::RotateValues;
-      tmp->angle = kpobject->getAngle();
-      _oldRotate.append(tmp);
-
       if (kpobject->isSelected())
-	_objects.append(kpobject);
+	{
+	  tmp = new RotateCmd::RotateValues;
+	  tmp->angle = kpobject->getAngle();
+	  _oldRotate.append(tmp);
+	  _objects.append(kpobject);
+	}
     }
 
   if (!_objects.isEmpty())
@@ -1806,14 +1807,15 @@ void KPresenterView::shadowOk()
   for (int i = 0;i < static_cast<int>(kPresenterDoc()->objectList()->count());i++)
     {
       kpobject = kPresenterDoc()->objectList()->at(i);
-      tmp = new ShadowCmd::ShadowValues;
-      tmp->shadowDirection = kpobject->getShadowDirection();
-      tmp->shadowDistance = kpobject->getShadowDistance();
-      tmp->shadowColor = kpobject->getShadowColor();
-      _oldShadow.append(tmp);
-
       if (kpobject->isSelected())
-	_objects.append(kpobject);
+	{
+	  tmp = new ShadowCmd::ShadowValues;
+	  tmp->shadowDirection = kpobject->getShadowDirection();
+	  tmp->shadowDistance = kpobject->getShadowDistance();
+	  tmp->shadowColor = kpobject->getShadowColor();
+	  _oldShadow.append(tmp);
+	  _objects.append(kpobject);
+	}
     }
 
   if (!_objects.isEmpty())

@@ -987,121 +987,151 @@ void KPresenterDoc::setPageEffect(unsigned int pageNum,PageEffect pageEffect)
 }
 
 /*===================== set pen and brush ========================*/
-bool KPresenterDoc::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,FillType ft,QColor g1,QColor g2, BCType gt)
+bool KPresenterDoc::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,FillType ft,QColor g1,QColor g2,BCType gt)
 {
   KPObject *kpobject = 0;
   bool ret = false;
+  
+  QList<KPObject> _objects;
+  QList<PenBrushCmd::Pen> _oldPen;
+  QList<PenBrushCmd::Brush> _oldBrush;
+  PenBrushCmd::Pen _newPen,*ptmp;
+  PenBrushCmd::Brush _newBrush,*btmp;
+
+  _newPen.pen = QPen(pen);
+  _newPen.lineBegin = lb;
+  _newPen.lineEnd = le;
+
+  _newBrush.brush = QBrush(brush);
+  _newBrush.fillType = ft;
+  _newBrush.gColor1 = g1;
+  _newBrush.gColor2 = g2;
+  _newBrush.gType = gt;
+  
+  _objects.setAutoDelete(false);
+  _oldPen.setAutoDelete(false);
+  _oldBrush.setAutoDelete(false);
   
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
       if (kpobject->isSelected())
 	{
+	  ptmp = new PenBrushCmd::Pen;
+	  btmp = new PenBrushCmd::Brush;
 	  switch (kpobject->getType())
 	    {
 	    case OT_LINE:
 	      {
-		dynamic_cast<KPLineObject*>(kpobject)->setPen(pen);
-		dynamic_cast<KPLineObject*>(kpobject)->setLineBegin(lb);
-		dynamic_cast<KPLineObject*>(kpobject)->setLineEnd(le);
+		ptmp->pen = QPen(dynamic_cast<KPLineObject*>(kpobject)->getPen());
+		ptmp->lineBegin = dynamic_cast<KPLineObject*>(kpobject)->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPLineObject*>(kpobject)->getLineEnd();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_RECT:
 	      {
-		dynamic_cast<KPRectObject*>(kpobject)->setPen(pen);
-		dynamic_cast<KPRectObject*>(kpobject)->setBrush(brush);
-		dynamic_cast<KPRectObject*>(kpobject)->setFillType(ft);
-		dynamic_cast<KPRectObject*>(kpobject)->setGColor1(g1);
-		dynamic_cast<KPRectObject*>(kpobject)->setGColor2(g2);
-		dynamic_cast<KPRectObject*>(kpobject)->setGType(gt);
+		ptmp->pen = QPen(dynamic_cast<KPRectObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPRectObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPRectObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPRectObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPRectObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPRectObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_ELLIPSE:
 	      {
-		dynamic_cast<KPEllipseObject*>(kpobject)->setPen(pen);
-		dynamic_cast<KPEllipseObject*>(kpobject)->setBrush(brush);
-		dynamic_cast<KPEllipseObject*>(kpobject)->setFillType(ft);
-		dynamic_cast<KPEllipseObject*>(kpobject)->setGColor1(g1);
-		dynamic_cast<KPEllipseObject*>(kpobject)->setGColor2(g2);
-		dynamic_cast<KPEllipseObject*>(kpobject)->setGType(gt);
+		ptmp->pen = QPen(dynamic_cast<KPEllipseObject*>(kpobject)->getPen());
+		btmp->brush = dynamic_cast<KPEllipseObject*>(kpobject)->getBrush();
+		btmp->fillType = dynamic_cast<KPEllipseObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPEllipseObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPEllipseObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPEllipseObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_AUTOFORM:
 	      {
-		dynamic_cast<KPAutoformObject*>(kpobject)->setPen(pen);
-		dynamic_cast<KPAutoformObject*>(kpobject)->setBrush(brush);
-		dynamic_cast<KPAutoformObject*>(kpobject)->setLineBegin(lb);
-		dynamic_cast<KPAutoformObject*>(kpobject)->setLineEnd(le);
-		dynamic_cast<KPAutoformObject*>(kpobject)->setFillType(ft);
-		dynamic_cast<KPAutoformObject*>(kpobject)->setGColor1(g1);
-		dynamic_cast<KPAutoformObject*>(kpobject)->setGColor2(g2);
-		dynamic_cast<KPAutoformObject*>(kpobject)->setGType(gt);
+		ptmp->pen = QPen(dynamic_cast<KPAutoformObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPAutoformObject*>(kpobject)->getBrush());
+		ptmp->lineBegin = dynamic_cast<KPAutoformObject*>(kpobject)->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPAutoformObject*>(kpobject)->getLineEnd();
+		btmp->fillType = dynamic_cast<KPAutoformObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPAutoformObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPAutoformObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPAutoformObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_PIE:
 	      {
-		dynamic_cast<KPPieObject*>(kpobject)->setPen(pen);
-		dynamic_cast<KPPieObject*>(kpobject)->setBrush(brush);
-		dynamic_cast<KPPieObject*>(kpobject)->setLineBegin(lb);
-		dynamic_cast<KPPieObject*>(kpobject)->setLineEnd(le);
-		dynamic_cast<KPPieObject*>(kpobject)->setFillType(ft);
-		dynamic_cast<KPPieObject*>(kpobject)->setGColor1(g1);
-		dynamic_cast<KPPieObject*>(kpobject)->setGColor2(g2);
-		dynamic_cast<KPPieObject*>(kpobject)->setGType(gt);
+		ptmp->pen = QPen(dynamic_cast<KPPieObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPPieObject*>(kpobject)->getBrush());
+		ptmp->lineBegin = dynamic_cast<KPPieObject*>(kpobject)->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPPieObject*>(kpobject)->getLineEnd();
+		btmp->fillType = dynamic_cast<KPPieObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPPieObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPPieObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPPieObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_PART:
 	      {
-		dynamic_cast<KPPartObject*>(kpobject)->setPen(pen);
-		dynamic_cast<KPPartObject*>(kpobject)->setBrush(brush);
-		dynamic_cast<KPPartObject*>(kpobject)->setFillType(ft);
-		dynamic_cast<KPPartObject*>(kpobject)->setGColor1(g1);
-		dynamic_cast<KPPartObject*>(kpobject)->setGColor2(g2);
-		dynamic_cast<KPPartObject*>(kpobject)->setGType(gt);
+		ptmp->pen = QPen(dynamic_cast<KPPartObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPPartObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPPartObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPPartObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPPartObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPPartObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_TEXT:
 	      {
-		dynamic_cast<KPTextObject*>(kpobject)->setPen(pen);
-		dynamic_cast<KPTextObject*>(kpobject)->setBrush(brush);
-		dynamic_cast<KPTextObject*>(kpobject)->setFillType(ft);
-		dynamic_cast<KPTextObject*>(kpobject)->setGColor1(g1);
-		dynamic_cast<KPTextObject*>(kpobject)->setGColor2(g2);
-		dynamic_cast<KPTextObject*>(kpobject)->setGType(gt);
+		ptmp->pen = QPen(dynamic_cast<KPTextObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPTextObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPTextObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPTextObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPTextObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPTextObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_PICTURE:
 	      {
-		dynamic_cast<KPPixmapObject*>(kpobject)->setPen(pen);
-		dynamic_cast<KPPixmapObject*>(kpobject)->setBrush(brush);
-		dynamic_cast<KPPixmapObject*>(kpobject)->setFillType(ft);
-		dynamic_cast<KPPixmapObject*>(kpobject)->setGColor1(g1);
-		dynamic_cast<KPPixmapObject*>(kpobject)->setGColor2(g2);
-		dynamic_cast<KPPixmapObject*>(kpobject)->setGType(gt);
+		ptmp->pen = QPen(dynamic_cast<KPPixmapObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPPixmapObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPPixmapObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPPixmapObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPPixmapObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPPixmapObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_CLIPART:
 	      {
-		dynamic_cast<KPClipartObject*>(kpobject)->setPen(pen);
-		dynamic_cast<KPClipartObject*>(kpobject)->setBrush(brush);
-		dynamic_cast<KPClipartObject*>(kpobject)->setFillType(ft);
-		dynamic_cast<KPClipartObject*>(kpobject)->setGColor1(g1);
-		dynamic_cast<KPClipartObject*>(kpobject)->setGColor2(g2);
-		dynamic_cast<KPClipartObject*>(kpobject)->setGType(gt);
+		ptmp->pen = QPen(dynamic_cast<KPClipartObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPClipartObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPClipartObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPClipartObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPClipartObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPClipartObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    default: break;
 	    }
+	  _oldPen.append(ptmp);
+	  _oldBrush.append(btmp);
+	  _objects.append(kpobject);
 	}
+    }
+
+  if (!_objects.isEmpty())
+    {
+      PenBrushCmd *penBrushCmd = new PenBrushCmd(i18n("Apply Styles"),_oldPen,_oldBrush,_newPen,_newBrush,_objects,this);
+      commands()->addCommand(penBrushCmd);
+      penBrushCmd->execute();
+    }
+  else
+    {
+      _oldPen.setAutoDelete(true);
+      _oldPen.clear();
+      _oldBrush.setAutoDelete(true);
+      _oldBrush.clear();
     }
 
   m_bModified = true;
@@ -1114,34 +1144,67 @@ bool KPresenterDoc::setLineBegin(LineEnd lb)
   KPObject *kpobject = 0;
   bool ret = false;
   
+  QList<KPObject> _objects;
+  QList<PenBrushCmd::Pen> _oldPen;
+  QList<PenBrushCmd::Brush> _oldBrush;
+  PenBrushCmd::Pen _newPen,*ptmp;
+  PenBrushCmd::Brush _newBrush,*btmp;
+
+  _newPen.lineBegin = lb;
+
+  _objects.setAutoDelete(false);
+  _oldPen.setAutoDelete(false);
+  _oldBrush.setAutoDelete(false);
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
       if (kpobject->isSelected())
 	{
+	  btmp = new PenBrushCmd::Brush;
+	  ptmp = new PenBrushCmd::Pen;
 	  switch (kpobject->getType())
 	    {
 	    case OT_LINE:
 	      {
-		dynamic_cast<KPLineObject*>(kpobject)->setLineBegin(lb);
+		ptmp->pen = QPen(dynamic_cast<KPLineObject*>(kpobject)->getPen());
+		ptmp->lineBegin = dynamic_cast<KPLineObject*>(kpobject)->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPLineObject*>(kpobject)->getLineEnd();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_AUTOFORM:
 	      {
-		dynamic_cast<KPAutoformObject*>(kpobject)->setLineBegin(lb);
+		ptmp->pen = QPen(dynamic_cast<KPAutoformObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPAutoformObject*>(kpobject)->getBrush());
+		ptmp->lineBegin = dynamic_cast<KPAutoformObject*>(kpobject)->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPAutoformObject*>(kpobject)->getLineEnd();
+		btmp->fillType = dynamic_cast<KPAutoformObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPAutoformObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPAutoformObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPAutoformObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
-	    case OT_PIE:
-	      {
-		dynamic_cast<KPPieObject*>(kpobject)->setLineBegin(lb);
-		ret = true;
-		repaint(kpobject);
-	      } break;
-	    default: break;
+	    default: continue; break;
 	    }
+	  _oldPen.append(ptmp);
+	  _oldBrush.append(btmp);
+	  _objects.append(kpobject);
 	}
+    }
+
+  if (!_objects.isEmpty())
+    {
+      PenBrushCmd *penBrushCmd = new PenBrushCmd(i18n("Change Line Begin"),_oldPen,_oldBrush,_newPen,_newBrush,_objects,
+						 this,PenBrushCmd::LB_ONLY);
+      commands()->addCommand(penBrushCmd);
+      penBrushCmd->execute();
+    }
+  else
+    {
+      _oldPen.setAutoDelete(true);
+      _oldPen.clear();
+      _oldBrush.setAutoDelete(true);
+      _oldBrush.clear();
     }
 
   m_bModified = true;
@@ -1154,34 +1217,67 @@ bool KPresenterDoc::setLineEnd(LineEnd le)
   KPObject *kpobject = 0;
   bool ret = false;
   
+  QList<KPObject> _objects;
+  QList<PenBrushCmd::Pen> _oldPen;
+  QList<PenBrushCmd::Brush> _oldBrush;
+  PenBrushCmd::Pen _newPen,*ptmp;
+  PenBrushCmd::Brush _newBrush,*btmp;
+
+  _newPen.lineEnd = le;
+
+  _objects.setAutoDelete(false);
+  _oldPen.setAutoDelete(false);
+  _oldBrush.setAutoDelete(false);
+  
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
       if (kpobject->isSelected())
 	{
+	  btmp = new PenBrushCmd::Brush;
+	  ptmp = new PenBrushCmd::Pen;
 	  switch (kpobject->getType())
 	    {
 	    case OT_LINE:
 	      {
-		dynamic_cast<KPLineObject*>(kpobject)->setLineEnd(le);
+		ptmp->pen = QPen(dynamic_cast<KPLineObject*>(kpobject)->getPen());
+		ptmp->lineBegin = dynamic_cast<KPLineObject*>(kpobject)->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPLineObject*>(kpobject)->getLineEnd();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_AUTOFORM:
 	      {
-		dynamic_cast<KPAutoformObject*>(kpobject)->setLineEnd(le);
+		ptmp->pen = QPen(dynamic_cast<KPAutoformObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPAutoformObject*>(kpobject)->getBrush());
+		ptmp->lineBegin = dynamic_cast<KPAutoformObject*>(kpobject)->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPAutoformObject*>(kpobject)->getLineEnd();
+		btmp->fillType = dynamic_cast<KPAutoformObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPAutoformObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPAutoformObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPAutoformObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
-	    case OT_PIE:
-	      {
-		dynamic_cast<KPPieObject*>(kpobject)->setLineEnd(le);
-		ret = true;
-		repaint(kpobject);
-	      } break;
-	    default: break;
+	    default: continue; break;
 	    }
+	  _oldPen.append(ptmp);
+	  _oldBrush.append(btmp);
+	  _objects.append(kpobject);
 	}
+    }
+
+  if (!_objects.isEmpty())
+    {
+      PenBrushCmd *penBrushCmd = new PenBrushCmd(i18n("Change Line End"),_oldPen,_oldBrush,_newPen,_newBrush,_objects,
+						 this,PenBrushCmd::LE_ONLY);
+      commands()->addCommand(penBrushCmd);
+      penBrushCmd->execute();
+    }
+  else
+    {
+      _oldPen.setAutoDelete(true);
+      _oldPen.clear();
+      _oldBrush.setAutoDelete(true);
+      _oldBrush.clear();
     }
 
   m_bModified = true;
@@ -1210,14 +1306,16 @@ bool KPresenterDoc::setPieSettings(PieType pieType,int angle,int len)
       kpobject = objectList()->at(i);
       if (kpobject->getType() == OT_PIE)
 	{
-	  tmp = new PieValueCmd::PieValues;
-	  tmp->pieType = dynamic_cast<KPPieObject*>(kpobject)->getPieType();
-	  tmp->pieAngle = dynamic_cast<KPPieObject*>(kpobject)->getPieAngle();
-	  tmp->pieLength = dynamic_cast<KPPieObject*>(kpobject)->getPieLength();
-	  _oldValues.append(tmp);
 	  if (kpobject->isSelected())
-	    _objects.append(kpobject);
-	  ret = true;
+	    {
+	      tmp = new PieValueCmd::PieValues;
+	      tmp->pieType = dynamic_cast<KPPieObject*>(kpobject)->getPieType();
+	      tmp->pieAngle = dynamic_cast<KPPieObject*>(kpobject)->getPieAngle();
+	      tmp->pieLength = dynamic_cast<KPPieObject*>(kpobject)->getPieLength();
+	      _oldValues.append(tmp);
+	      _objects.append(kpobject);
+	      ret = true;
+	    }
 	}
     }
   
@@ -1258,12 +1356,14 @@ bool KPresenterDoc::setRectSettings(int _rx,int _ry)
       kpobject = objectList()->at(i);
       if (kpobject->getType() == OT_RECT)
 	{
-	  tmp = new RectValueCmd::RectValues;
-	  dynamic_cast<KPRectObject*>(kpobject)->getRnds(tmp->xRnd,tmp->yRnd);
-	  _oldValues.append(tmp);
 	  if (kpobject->isSelected())
-	    _objects.append(kpobject);
-	  ret = true;
+	    {
+	      tmp = new RectValueCmd::RectValues;
+	      dynamic_cast<KPRectObject*>(kpobject)->getRnds(tmp->xRnd,tmp->yRnd);
+	      _oldValues.append(tmp);
+	      _objects.append(kpobject);
+	      ret = true;
+	    }
 	}
     }
   
@@ -1289,106 +1389,142 @@ bool KPresenterDoc::setPenColor(QColor c,bool fill)
   KPObject *kpobject = 0;
   bool ret = false;
   
+  QList<KPObject> _objects;
+  QList<PenBrushCmd::Pen> _oldPen;
+  QList<PenBrushCmd::Brush> _oldBrush;
+  PenBrushCmd::Pen _newPen,*ptmp;
+  PenBrushCmd::Brush _newBrush,*btmp;
+
+  if (!fill)
+    _newPen.pen = NoPen;
+  else
+    _newPen.pen = QPen(c);
+  
+  _objects.setAutoDelete(false);
+  _oldPen.setAutoDelete(false);
+  _oldBrush.setAutoDelete(false);
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
       if (kpobject->isSelected())
 	{
+	  ptmp = new PenBrushCmd::Pen;
+	  btmp = new PenBrushCmd::Brush;
 	  switch (kpobject->getType())
 	    {
 	    case OT_LINE:
 	      {
-		QPen pen = dynamic_cast<KPLineObject*>(kpobject)->getPen();
-		if (pen.style() == NoPen) pen.setStyle(SolidLine);
-		pen.setColor(c);
-		if (!fill) pen = NoPen;
-		dynamic_cast<KPLineObject*>(kpobject)->setPen(pen);
+		ptmp->pen = QPen(dynamic_cast<KPLineObject*>(kpobject)->getPen());
+		ptmp->lineBegin = dynamic_cast<KPLineObject*>(kpobject)->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPLineObject*>(kpobject)->getLineEnd();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_RECT:
 	      {
-		QPen pen = dynamic_cast<KPRectObject*>(kpobject)->getPen();
-		if (pen.style() == NoPen) pen.setStyle(SolidLine);
-		pen.setColor(c);
-		if (!fill) pen = NoPen;
-		dynamic_cast<KPRectObject*>(kpobject)->setPen(pen);
+		ptmp->pen = QPen(dynamic_cast<KPRectObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPRectObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPRectObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPRectObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPRectObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPRectObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_ELLIPSE:
 	      {
-		QPen pen = dynamic_cast<KPEllipseObject*>(kpobject)->getPen();
-		if (pen.style() == NoPen) pen.setStyle(SolidLine);
-		pen.setColor(c);
-		if (!fill) pen = NoPen;
-		dynamic_cast<KPEllipseObject*>(kpobject)->setPen(pen);
+		ptmp->pen = QPen(dynamic_cast<KPEllipseObject*>(kpobject)->getPen());
+		btmp->brush = dynamic_cast<KPEllipseObject*>(kpobject)->getBrush();
+		btmp->fillType = dynamic_cast<KPEllipseObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPEllipseObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPEllipseObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPEllipseObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_AUTOFORM:
 	      {
-		QPen pen = dynamic_cast<KPAutoformObject*>(kpobject)->getPen();
-		if (pen.style() == NoPen) pen.setStyle(SolidLine);
-		pen.setColor(c);
-		if (!fill) pen = NoPen;
-		dynamic_cast<KPAutoformObject*>(kpobject)->setPen(pen);
+		ptmp->pen = QPen(dynamic_cast<KPAutoformObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPAutoformObject*>(kpobject)->getBrush());
+		ptmp->lineBegin = dynamic_cast<KPAutoformObject*>(kpobject)->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPAutoformObject*>(kpobject)->getLineEnd();
+		btmp->fillType = dynamic_cast<KPAutoformObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPAutoformObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPAutoformObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPAutoformObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_PIE:
 	      {
-		QPen pen = dynamic_cast<KPPieObject*>(kpobject)->getPen();
-		if (pen.style() == NoPen) pen.setStyle(SolidLine);
-		pen.setColor(c);
-		if (!fill) pen = NoPen;
-		dynamic_cast<KPPieObject*>(kpobject)->setPen(pen);
+		ptmp->pen = QPen(dynamic_cast<KPPieObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPPieObject*>(kpobject)->getBrush());
+		ptmp->lineBegin = dynamic_cast<KPPieObject*>(kpobject)->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPPieObject*>(kpobject)->getLineEnd();
+		btmp->fillType = dynamic_cast<KPPieObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPPieObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPPieObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPPieObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_PART:
 	      {
-		QPen pen = dynamic_cast<KPPartObject*>(kpobject)->getPen();
-		if (pen.style() == NoPen) pen.setStyle(SolidLine);
-		pen.setColor(c);
-		if (!fill) pen = NoPen;
-		dynamic_cast<KPPartObject*>(kpobject)->setPen(pen);
+		ptmp->pen = QPen(dynamic_cast<KPPartObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPPartObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPPartObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPPartObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPPartObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPPartObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
-	      } break;
-	    case OT_PICTURE:
-	      {
-		QPen pen = dynamic_cast<KPPixmapObject*>(kpobject)->getPen();
-		if (pen.style() == NoPen) pen.setStyle(SolidLine);
-		pen.setColor(c);
-		if (!fill) pen = NoPen;
-		dynamic_cast<KPPixmapObject*>(kpobject)->setPen(pen);
-		ret = true;
-		repaint(kpobject);
-	      } break;
-	    case OT_CLIPART:
-	      {
-		QPen pen = dynamic_cast<KPClipartObject*>(kpobject)->getPen();
-		if (pen.style() == NoPen) pen.setStyle(SolidLine);
-		pen.setColor(c);
-		if (!fill) pen = NoPen;
-		dynamic_cast<KPClipartObject*>(kpobject)->setPen(pen);
-		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_TEXT:
 	      {
-		QPen pen = dynamic_cast<KPTextObject*>(kpobject)->getPen();
-		if (pen.style() == NoPen) pen.setStyle(SolidLine);
-		pen.setColor(c);
-		if (!fill) pen = NoPen;
-		dynamic_cast<KPTextObject*>(kpobject)->setPen(pen);
+		ptmp->pen = QPen(dynamic_cast<KPTextObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPTextObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPTextObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPTextObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPTextObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPTextObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
+	      } break;
+	    case OT_PICTURE:
+	      {
+		ptmp->pen = QPen(dynamic_cast<KPPixmapObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPPixmapObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPPixmapObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPPixmapObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPPixmapObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPPixmapObject*>(kpobject)->getGType();
+		ret = true;
+	      } break;
+	    case OT_CLIPART:
+	      {
+		ptmp->pen = QPen(dynamic_cast<KPClipartObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPClipartObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPClipartObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPClipartObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPClipartObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPClipartObject*>(kpobject)->getGType();
+		ret = true;
 	      } break;
 	    default: break;
 	    }
+	  _oldPen.append(ptmp);
+	  _oldBrush.append(btmp);
+	  _objects.append(kpobject);
 	}
+    }
+
+  if (!_objects.isEmpty())
+    {
+      PenBrushCmd *penBrushCmd = new PenBrushCmd(i18n("Change Pen"),_oldPen,_oldBrush,_newPen,_newBrush,_objects,
+						 this,PenBrushCmd::PEN_ONLY);
+      commands()->addCommand(penBrushCmd);
+      penBrushCmd->execute();
+    }
+  else
+    {
+      _oldPen.setAutoDelete(true);
+      _oldPen.clear();
+      _oldBrush.setAutoDelete(true);
+      _oldBrush.clear();
     }
 
   m_bModified = true;
@@ -1401,104 +1537,137 @@ bool KPresenterDoc::setBrushColor(QColor c,bool fill)
   KPObject *kpobject = 0;
   bool ret = false;
   
+  QList<KPObject> _objects;
+  QList<PenBrushCmd::Pen> _oldPen;
+  QList<PenBrushCmd::Brush> _oldBrush;
+  PenBrushCmd::Pen _newPen,*ptmp;
+  PenBrushCmd::Brush _newBrush,*btmp;
+
+  _newBrush.fillType = FT_BRUSH;
+  if (!fill)
+    _newBrush.brush = NoBrush;
+  else
+    _newBrush.brush = QBrush(c);
+  
+  _objects.setAutoDelete(false);
+  _oldPen.setAutoDelete(false);
+  _oldBrush.setAutoDelete(false);
+
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
-      if (kpobject->isSelected())
+      if (kpobject->isSelected() && kpobject->getType() != OT_LINE)
 	{
+	  ptmp = new PenBrushCmd::Pen;
+	  btmp = new PenBrushCmd::Brush;
 	  switch (kpobject->getType())
 	    {
 	    case OT_RECT:
 	      {
-		QBrush brush = dynamic_cast<KPRectObject*>(kpobject)->getBrush();
-		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
-		brush.setColor(c);
-		if (!fill) brush = NoBrush;
-		dynamic_cast<KPRectObject*>(kpobject)->setFillType(FT_BRUSH);
-		dynamic_cast<KPRectObject*>(kpobject)->setBrush(brush);
+		ptmp->pen = QPen(dynamic_cast<KPRectObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPRectObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPRectObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPRectObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPRectObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPRectObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_ELLIPSE:
 	      {
-		QBrush brush = dynamic_cast<KPEllipseObject*>(kpobject)->getBrush();
-		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
-		brush.setColor(c);
-		if (!fill) brush = NoBrush;
-		dynamic_cast<KPEllipseObject*>(kpobject)->setFillType(FT_BRUSH);
-		dynamic_cast<KPEllipseObject*>(kpobject)->setBrush(brush);
+		ptmp->pen = QPen(dynamic_cast<KPEllipseObject*>(kpobject)->getPen());
+		btmp->brush = dynamic_cast<KPEllipseObject*>(kpobject)->getBrush();
+		btmp->fillType = dynamic_cast<KPEllipseObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPEllipseObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPEllipseObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPEllipseObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_AUTOFORM:
 	      {
-		QBrush brush = dynamic_cast<KPAutoformObject*>(kpobject)->getBrush();
-		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
-		brush.setColor(c);
-		if (!fill) brush = NoBrush;
-		dynamic_cast<KPAutoformObject*>(kpobject)->setFillType(FT_BRUSH);
-		dynamic_cast<KPAutoformObject*>(kpobject)->setBrush(brush);
+		ptmp->pen = QPen(dynamic_cast<KPAutoformObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPAutoformObject*>(kpobject)->getBrush());
+		ptmp->lineBegin = dynamic_cast<KPAutoformObject*>(kpobject)->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPAutoformObject*>(kpobject)->getLineEnd();
+		btmp->fillType = dynamic_cast<KPAutoformObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPAutoformObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPAutoformObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPAutoformObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_PIE:
 	      {
-		QBrush brush = dynamic_cast<KPPieObject*>(kpobject)->getBrush();
-		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
-		brush.setColor(c);
-		if (!fill) brush = NoBrush;
-		dynamic_cast<KPPieObject*>(kpobject)->setFillType(FT_BRUSH);
-		dynamic_cast<KPPieObject*>(kpobject)->setBrush(brush);
+		ptmp->pen = QPen(dynamic_cast<KPPieObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPPieObject*>(kpobject)->getBrush());
+		ptmp->lineBegin = dynamic_cast<KPPieObject*>(kpobject)->getLineBegin();
+		ptmp->lineEnd = dynamic_cast<KPPieObject*>(kpobject)->getLineEnd();
+		btmp->fillType = dynamic_cast<KPPieObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPPieObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPPieObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPPieObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_PART:
 	      {
-		QBrush brush = dynamic_cast<KPPartObject*>(kpobject)->getBrush();
-		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
-		brush.setColor(c);
-		if (!fill) brush = NoBrush;
-		dynamic_cast<KPPartObject*>(kpobject)->setFillType(FT_BRUSH);
-		dynamic_cast<KPPartObject*>(kpobject)->setBrush(brush);
+		ptmp->pen = QPen(dynamic_cast<KPPartObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPPartObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPPartObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPPartObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPPartObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPPartObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
-	      } break;
-	    case OT_PICTURE:
-	      {
-		QBrush brush = dynamic_cast<KPPixmapObject*>(kpobject)->getBrush();
-		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
-		brush.setColor(c);
-		if (!fill) brush = NoBrush;
-		dynamic_cast<KPPixmapObject*>(kpobject)->setFillType(FT_BRUSH);
-		dynamic_cast<KPPixmapObject*>(kpobject)->setBrush(brush);
-		ret = true;
-		repaint(kpobject);
-	      } break;
-	    case OT_CLIPART:
-	      {
-		QBrush brush = dynamic_cast<KPClipartObject*>(kpobject)->getBrush();
-		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
-		brush.setColor(c);
-		if (!fill) brush = NoBrush;
-		dynamic_cast<KPClipartObject*>(kpobject)->setFillType(FT_BRUSH);
-		dynamic_cast<KPClipartObject*>(kpobject)->setBrush(brush);
-		ret = true;
-		repaint(kpobject);
 	      } break;
 	    case OT_TEXT:
 	      {
-		QBrush brush = dynamic_cast<KPTextObject*>(kpobject)->getBrush();
-		if (brush.style() == NoBrush) brush.setStyle(SolidPattern);
-		brush.setColor(c);
-		if (!fill) brush = NoBrush;
-		dynamic_cast<KPTextObject*>(kpobject)->setFillType(FT_BRUSH);
-		dynamic_cast<KPTextObject*>(kpobject)->setBrush(brush);
+		ptmp->pen = QPen(dynamic_cast<KPTextObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPTextObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPTextObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPTextObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPTextObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPTextObject*>(kpobject)->getGType();
 		ret = true;
-		repaint(kpobject);
 	      } break;
-	    default: break;
+	    case OT_PICTURE:
+	      {
+		ptmp->pen = QPen(dynamic_cast<KPPixmapObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPPixmapObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPPixmapObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPPixmapObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPPixmapObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPPixmapObject*>(kpobject)->getGType();
+		ret = true;
+	      } break;
+	    case OT_CLIPART:
+	      {
+		ptmp->pen = QPen(dynamic_cast<KPClipartObject*>(kpobject)->getPen());
+		btmp->brush = QBrush(dynamic_cast<KPClipartObject*>(kpobject)->getBrush());
+		btmp->fillType = dynamic_cast<KPClipartObject*>(kpobject)->getFillType();
+		btmp->gColor1 = dynamic_cast<KPClipartObject*>(kpobject)->getGColor1();
+		btmp->gColor2 = dynamic_cast<KPClipartObject*>(kpobject)->getGColor2();
+		btmp->gType = dynamic_cast<KPClipartObject*>(kpobject)->getGType();
+		ret = true;
+	      } break;
+	    default: continue; break;
 	    }
+	  _oldPen.append(ptmp);
+	  _oldBrush.append(btmp);
+	  _objects.append(kpobject);
 	}
+    }
+
+  if (!_objects.isEmpty())
+    {
+      PenBrushCmd *penBrushCmd = new PenBrushCmd(i18n("Change Brush"),_oldPen,_oldBrush,_newPen,_newBrush,_objects,
+						 this,PenBrushCmd::BRUSH_ONLY);
+      commands()->addCommand(penBrushCmd);
+      penBrushCmd->execute();
+    }
+  else
+    {
+      _oldPen.setAutoDelete(true);
+      _oldPen.clear();
+      _oldBrush.setAutoDelete(true);
+      _oldBrush.clear();
     }
 
   m_bModified = true;
