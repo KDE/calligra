@@ -800,6 +800,7 @@ void KWFrameDia::slotFloatingToggled(bool b)
     }
     // grp2->setEnabled( !b ); do margins make sense for floating frames ?  (I think so; Thomas)
     // well margins are not implemented yet, anyway
+    grp2->hide();
 
     if ( tab2 )
         runGroup->setEnabled( !b ); // Runaround options don't make sense for floating frames
