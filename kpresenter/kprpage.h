@@ -40,6 +40,8 @@ class DCOPObject;
 class KPTextObject;
 class KoTextObject;
 class KPPixmapObject;
+class KoStyle;
+
 class KPrPage
 {
 public:
@@ -245,7 +247,7 @@ public:
     KPObject * getEditObj(const KoPoint & pos);
     KPObject* getObjectAt( const KoPoint&pos );
     KPPixmapObject * picViewOrigHelper();
-
+    void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
 protected:
 
 private:

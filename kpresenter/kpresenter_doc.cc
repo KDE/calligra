@@ -131,7 +131,13 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
     m_pageWhereLoadObject=0L;
 
-    m_standardStyle = new KoStyle( "Standard" );
+    m_styleList.setAutoDelete( false );
+    m_deletedStyles.setAutoDelete( true );
+
+    KoStyle* m_standardStyle = new KoStyle( "Standard" );
+    addStyleTemplate( m_standardStyle );
+
+    m_lastStyle = 0L;
 
     m_defaultFont = KoGlobal::defaultFont();
     // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
@@ -312,11 +318,6 @@ void KPresenterDoc::initConfig()
 
 }
 
-KoStyle* KPresenterDoc::standardStyle()
-{
-    return m_standardStyle;
-}
-
 /*==============================================================*/
 DCOPObject* KPresenterDoc::dcopObject()
 {
@@ -337,7 +338,6 @@ KPresenterDoc::~KPresenterDoc()
     delete _header;
     delete _footer;
 #endif
-    delete m_standardStyle;
 
     delete m_commandHistory;
     delete m_zoomHandler;
@@ -2454,6 +2454,139 @@ void KPresenterDoc::refreshAllNoteBar(int page, const QString &text, KPresenterV
         if ( view->getNoteBar() && view != exceptView && (view->getCurrPgNum()-1 == page))
             view->getNoteBar()->setCurrentNoteText(text );
     }
+}
+
+
+void KPresenterDoc::loadStyleTemplates( QDomElement stylesElem )
+{
+#if 0
+    QValueList<QString> followingStyles;
+    QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
+    for (unsigned int item = 0; item < listStyles.count(); item++) {
+        QDomElement styleElem = listStyles.item( item ).toElement();
+
+        KWStyle *sty = new KWStyle( QString::null );
+        // Load the paraglayout from the <STYLE> element
+        KoParagLayout lay = KoStyle::loadStyle( styleElem,syntaxVersion() );
+        // This way, KWTextParag::setParagLayout also sets the style pointer, to this style
+        lay.style = sty;
+        sty->paragLayout() = lay;
+
+        QDomElement nameElem = styleElem.namedItem("NAME").toElement();
+        if ( !nameElem.isNull() )
+        {
+            sty->setName( nameElem.attribute("value") );
+            //kdDebug() << "KWStyle created " << this << " name=" << m_name << endl;
+        } else
+            kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
+
+        // followingStyle is set by KWDocument::loadStyleTemplates after loading all the styles
+        sty->setFollowingStyle( sty );
+
+        QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
+        if ( !formatElem.isNull() )
+            sty->format() = KWTextParag::loadFormat( formatElem, 0L, defaultFont() );
+        else
+            kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
+
+        // Style created, now let's try to add it
+
+        sty = addStyleTemplate( sty );
+
+        if(m_styleList.count() > followingStyles.count() )
+        {
+            QString following = styleElem.namedItem("FOLLOWING").toElement().attribute("name");
+            followingStyles.append( following );
+        }
+        else
+            kdWarning () << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
+    }
+
+    Q_ASSERT( followingStyles.count() == m_styleList.count() );
+
+    unsigned int i=0;
+    for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
+        KWStyle * style = findStyle(*it);
+        m_styleList.at(i++)->setFollowingStyle( style );
+    }
+#endif
+}
+
+
+KoStyle* KPresenterDoc::addStyleTemplate( KoStyle * sty )
+{
+    // First check for duplicates.
+    for ( KoStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+    {
+        if ( p->name() == sty->name() ) {
+            // Replace existing style
+            if ( sty != p )
+            {
+                *p = *sty;
+                delete sty;
+            }
+            return p;
+        }
+    }
+    m_styleList.append( sty );
+    return sty;
+}
+
+void KPresenterDoc::removeStyleTemplate ( KoStyle *style ) {
+    if( m_styleList.removeRef(style)) {
+        // Remember to delete this style when deleting the document
+        m_deletedStyles.append(style);
+    }
+}
+
+
+KoStyle* KPresenterDoc::findStyle( const QString & _name )
+{
+    // Caching, to speed things up
+    if ( m_lastStyle && m_lastStyle->name() == _name )
+        return m_lastStyle;
+
+    QPtrListIterator<KoStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        if ( styleIt.current()->name() == _name ) {
+            m_lastStyle = styleIt.current();
+            return m_lastStyle;
+        }
+    }
+
+    return 0L;
+}
+
+
+void KPresenterDoc::updateAllStyleLists()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+    {
+        ((KPresenterView*)it.current())->updateStyleList();
+    }
+}
+
+void KPresenterDoc::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )
+{
+    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
+    {
+        m_pageList.at(i)->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
+    }
+}
+
+void KPresenterDoc::saveStyle( KoStyle *sty, QDomElement parentElem )
+{
+    QDomDocument doc = parentElem.ownerDocument();
+    QDomElement styleElem = doc.createElement( "STYLE" );
+    parentElem.appendChild( styleElem );
+
+    KoStyle::saveStyle( sty->paragLayout(), sty->followingStyle() ,styleElem );
+#if 0 //fixme
+    QDomElement formatElem = KWTextParag::saveFormat( doc, &sty->format(), 0L, 0, 0 );
+    styleElem.appendChild( formatElem );
+#endif
 }
 
 

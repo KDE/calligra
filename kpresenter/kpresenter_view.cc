@@ -123,6 +123,8 @@
 #include "kprvariable.h"
 #include "kprcanvas.h"
 #include <qpaintdevicemetrics.h>
+#include <kostyle.h>
+#include "kprstylemanager.h"
 
 #define DEBUG
 
@@ -2927,6 +2929,17 @@ void KPresenterView::setupActions()
     actionViewZoom->setComboWidth( 50 );
     changeZoomMenu( );
 
+    actionFormatStylist = new KAction( i18n( "&Stylist..." ), ALT + CTRL + Key_S,
+                        this, SLOT( extraStylist() ),
+                        actionCollection(), "format_stylist" );
+
+
+    actionFormatStyle = new KSelectAction( i18n( "St&yle" ), 0,
+                                           actionCollection(), "format_style" );
+    connect( actionFormatStyle, SIGNAL( activated( int ) ),
+             this, SLOT( textStyleSelected( int ) ) );
+    updateStyleList();
+
 }
 
 void KPresenterView::textSubScript()
@@ -5444,6 +5457,53 @@ void KPresenterView::viewHeader()
     KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Show Footer"):i18n("Hide Footer") , m_pKPresenterDoc,state ,m_pKPresenterDoc->header());
     m_pKPresenterDoc->addCommand(cmd);
 
+}
+
+
+void KPresenterView::showStyle( const QString & styleName )
+{
+    QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleList() );
+    for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
+    {
+        if ( styleIt.current()->name() == styleName ) {
+            actionFormatStyle->setCurrentItem( pos );
+            return;
+        }
+    }
+}
+
+void KPresenterView::updateStyleList()
+{
+    QString currentStyle = actionFormatStyle->currentText();
+    QStringList lst;
+    QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleList() );
+    for (; styleIt.current(); ++styleIt ) {
+        lst << styleIt.current()->translatedName();
+    }
+    actionFormatStyle->setItems( lst );
+    showStyle( currentStyle );
+}
+
+void KPresenterView::extraStylist()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+        edit->hideCursor();
+    KPrStyleManager * styleManager = new KPrStyleManager( this, m_pKPresenterDoc->getUnit(),m_pKPresenterDoc, m_pKPresenterDoc->styleList());
+    styleManager->exec();
+    delete styleManager;
+    if ( edit )
+        edit->showCursor();
+}
+
+void KPresenterView::textStyleSelected( int index )
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if(edit)
+    {
+        edit->applyStyle( m_pKPresenterDoc->styleAt( index ) );
+        m_canvas->setFocus();
+    }
 }
 
 #include <kpresenter_view.moc>

@@ -42,6 +42,7 @@ class KPrTextDrag;
 class KPrTextDocument;
 class DCOPObject;
 class KPrPage;
+class KoStyle;
 
 /******************************************************************/
 /* Class: KPTextObject                                            */
@@ -103,6 +104,7 @@ public:
     KPresenterDoc* kPresenterDocument() const { return m_doc; }
 
     KPTextView * createKPTextView( KPrCanvas * );
+    void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
 
     void removeHighlight ();
     void highlightPortion( Qt3::QTextParag * parag, int index, int length, KPrCanvas */*_canvas*/ );

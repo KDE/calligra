@@ -105,7 +105,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     KPrTextDocument * textdoc = new KPrTextDocument( this ,
                                                      new KoTextFormatCollection( doc->defaultFont() ));
 
-    m_textobj = new KoTextObject( textdoc, doc->standardStyle());
+    m_textobj = new KoTextObject( textdoc, m_doc->findStyle( "Standard" ));
 
     brush = Qt::NoBrush;
     brush.setColor(QColor());
@@ -1015,6 +1015,12 @@ void KPTextObject::slotFormatChanged(const KoTextFormat &_format)
 {
     m_doc->getKPresenterView()->showFormat( _format );
 }
+
+void KPTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )
+{
+    m_textobj->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
+}
+
 
 KPTextView::KPTextView( KPTextObject * txtObj,KPrCanvas *_canvas )
     : KoTextView( txtObj->textObject() )

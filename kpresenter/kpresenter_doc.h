@@ -33,6 +33,7 @@ class KoVariable;
 class KoVariableFormatCollection;
 class KPrVariableCollection;
 class KTempFile;
+class KoStyle;
 
 #include "kprpage.h"
 
@@ -245,7 +246,22 @@ public:
 
     bool raiseAndLowerObject;
 
-    KoStyle* standardStyle();
+    const QPtrList<KoStyle> & styleList() const { return m_styleList; }
+    /**
+     * Look for a style named @p name. If not found, it will return 0L.
+     */
+    KoStyle* findStyle( const QString & name );
+    /**
+     * Return style number @p i.
+     */
+    KoStyle* styleAt( int i ) { return m_styleList.at(i); }
+
+
+    KoStyle* addStyleTemplate( KoStyle *style );
+
+    void removeStyleTemplate ( KoStyle *style );
+    void updateAllStyleLists();
+    void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
 
     void addCommand( KCommand * cmd );
 
@@ -352,6 +368,9 @@ protected:
      */
     virtual bool saveChildren( KoStore* _store, const QString &_path );
 
+    void loadStyleTemplates( QDomElement styles );
+    void saveStyle( KoStyle *sty, QDomElement parentElem );
+
     QDomDocumentFragment saveBackground( QDomDocument& );
     QDomElement saveObjects( QDomDocument &doc );
     QDomElement saveTitle( QDomDocument &doc );
@@ -428,8 +447,6 @@ protected:
     QString m_tempFileInClipboard;
     bool ignoreSticky;
 
-    KoStyle *m_standardStyle;
-
     KCommandHistory * m_commandHistory;
     KoZoomHandler* m_zoomHandler;
     QFont m_defaultFont;
@@ -453,6 +470,13 @@ private:
     KPrPage *m_initialActivePage;
     KPrPage *m_pageWhereLoadObject;
     KPrPage *m_stickyPage;
+
+    QPtrList<KoStyle> m_styleList;
+    QPtrList<KoStyle> m_deletedStyles;
+
+    // Cached value for findStyle()
+    KoStyle *m_lastStyle;
+
 };
 
 #endif

@@ -53,6 +53,7 @@
 #include <kotextobject.h>
 #include <koRect.h>
 #include <qapplication.h>
+#include <kostyle.h>
 
 /******************************************************************/
 /* class KPrPage - KPrPage                                        */
@@ -3673,4 +3674,15 @@ KPPixmapObject * KPrPage::picViewOrigHelper( )
       }
   }
   return obj;
+}
+
+void KPrPage::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )
+{
+  QPtrListIterator<KPObject> it( m_objectList );
+  for ( ; it.current() ; ++it )
+  {
+      KPTextObject *obj=dynamic_cast<KPTextObject*>(it.current());
+      if( obj)
+          obj->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
+  }
 }

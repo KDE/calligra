@@ -114,6 +114,8 @@ public:
     void showZoom( int zoom ); // show a zoom value in the combo
     void setZoom( int zoom, bool updateViews ); // change the zoom value
     void changeZoomMenu( int zoom=-1);
+    void showStyle( const QString & styleName );
+    void updateStyleList();
 
     KoZoomHandler *zoomHandler();
 
@@ -330,6 +332,8 @@ public slots:
     void slotHRulerDoubleClicked();
 
     void changeCaseOfText();
+    void textStyleSelected( int );
+    void extraStylist();
 
 public:
     // create GUI
@@ -796,6 +800,10 @@ private:
     KAction *actionRefreshAllVariable;
 
     KSelectAction *actionViewZoom;
+
+    KSelectAction *actionFormatStyle;
+
+    KAction *actionFormatStylist;
 
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;
