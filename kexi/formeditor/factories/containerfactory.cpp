@@ -21,6 +21,8 @@
 #include <qobjectlist.h>
 #include <qpainter.h>
 #include <qvaluevector.h>
+#include <qfileinfo.h>
+#include <qscrollview.h>
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
@@ -212,6 +214,41 @@ InsertPageCommand::name() const
 	return i18n("Add Page");
 }
 
+/////// Sub forms ////////////////////////:
+
+SubForm::SubForm(KFormDesigner::FormManager *manager, QWidget *parent, const char *name)
+: QScrollView(parent, name), m_manager(manager), m_form(0), m_widget(0)
+{
+	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+	viewport()->setPaletteBackgroundColor(colorGroup().mid());
+}
+
+void
+SubForm::setFormName(const QString &name)
+{
+	if(name.isEmpty())
+		return;
+
+	QFileInfo info(name);
+	if(!info.exists() || (m_manager->activeForm() && (info.fileName() == m_manager->activeForm()->filename()) ) )
+		return; // we check if this is valid form
+
+	// we create the container widget
+	delete m_widget;
+	m_widget = new QWidget(viewport(), "subform_widget");
+	m_widget->show();
+	addChild(m_widget);
+	m_form = new KFormDesigner::Form(m_manager, this->name());
+	m_form->createToplevel(m_widget);
+
+	// and load the sub form
+	KFormDesigner::FormIO::loadFormFromFile(m_form, m_widget, name);
+	m_form->setDesignMode(false);
+
+	m_formName = name;
+
+}
+
 /////   The factory /////////////////////////
 
 ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringList &)
@@ -294,6 +331,14 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wGrid->setNamePrefix(i18n("GridBox"));
 	wGrid->setDescription(i18n("A simple container to group widgets in a grid"));
 	m_classes.append(wGrid);
+
+	KFormDesigner::WidgetInfo *wSubForm = new KFormDesigner::WidgetInfo(this);
+	wSubForm->setPixmap("form");
+	wSubForm->setClassName("SubForm");
+	wSubForm->setName(i18n("Sub Form"));
+	wSubForm->setNamePrefix(i18n("SubForm"));
+	wSubForm->setDescription(i18n("A form widget included in another Form"));
+	m_classes.append(wSubForm);
 }
 
 KFormDesigner::WidgetInfoList
@@ -388,6 +433,11 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		Grid *w = new Grid(p, n);
 		new KFormDesigner::Container(container, w, container);
 		return w;
+	}
+	else if(c == "SubForm")
+	{
+		SubForm *subform = new SubForm(container->form()->manager(), p, n);
+		return subform;
 	}
 
 	return 0;
@@ -520,8 +570,10 @@ ContainerFactory::readSpecialProperty(const QString &, QDomElement &node, QWidge
 }
 
 QStringList
-ContainerFactory::autoSaveProperties(const QString &)
+ContainerFactory::autoSaveProperties(const QString &c)
 {
+	if(c == "SubForm")
+		return QStringList("formName");
 	return QStringList();
 }
 

@@ -26,6 +26,7 @@
    <Action name="pointer"/>
    <Action name="drag_connection"/>
    <Separator/>
+   <Action name="library_widget_SubForm"/>
    <Action name="library_widget_QGroupBox"/>
    <Action name="library_widget_KTabWidget"/>
    <Action name="library_widget_QWidgetStack"/>
@@ -80,6 +81,7 @@
 </ToolBar>
 <ToolBar name="containers" fullWidth="false" noMerge="1">
  <text>Containers</text>
+   <Action name="library_widget_SubForm"/>
    <Action name="library_widget_QGroupBox"/>
    <Action name="library_widget_KTabWidget"/>
    <Action name="library_widget_QWidgetStack"/>

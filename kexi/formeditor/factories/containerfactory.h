@@ -23,7 +23,6 @@
 #include <kcommand.h>
 
 #include "widgetfactory.h"
-#include "container.h"
 
 namespace KFormDesigner
 {
@@ -92,6 +91,27 @@ class KFORMEDITOR_EXPORT Grid : public QFrame
 
 	protected:
 		bool  m_preview;
+};
+
+//! A form embedded as a widget inside other form
+class KFORMEDITOR_EXPORT SubForm : public QScrollView
+{
+	Q_OBJECT
+	Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true);
+
+	public:
+		SubForm(KFormDesigner::FormManager *manager, QWidget *parent, const char *name);
+		~SubForm() {}
+
+		//! \return the name of the subform inside the db
+		QString   formName() const { return m_formName; }
+		void      setFormName(const QString &name);
+
+	private:
+		KFormDesigner::FormManager *m_manager;
+		KFormDesigner::Form   *m_form;
+		QWidget  *m_widget;
+		QString   m_formName;
 };
 
 //! Standard Factory for all container widgets
