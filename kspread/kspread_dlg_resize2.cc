@@ -92,8 +92,10 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name, type_resi
   m_pSize2 = new KDoubleNumInput( page );
   m_pSize2->setRange( 2, 400, 1 );
   m_pSize2->setLabel( label );
-  m_pSize2->setPrecision( 3 );
+  m_pSize2->setPrecision( 2 );
   m_pSize2->setValue( KoUnit::ptToUnit( size, m_pView->doc()->getUnit() ) );
+  //store the visible value, for later check for changes
+  size = KoUnit::ptFromUnit( m_pSize2->value(), m_pView->doc()->getUnit() );
   m_pSize2->setSuffix( m_pView->doc()->getUnitName() );
   lay1->addWidget( m_pSize2 );
 
@@ -120,35 +122,38 @@ void KSpreadresize2::slotOk()
 {
     QRect selection( m_pView->activeTable()->selection() );
 
-    double new_size = KoUnit::ptFromUnit( m_pSize2->value() + 0.00005 /* rounded */, m_pView->doc()->getUnit() );
-    if ( !m_pView->doc()->undoBuffer()->isLocked() )
+    double new_size = KoUnit::ptFromUnit( m_pSize2->value(), m_pView->doc()->getUnit() );
+    if ( int( size ) != int( new_size ) )
     {
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(), m_pView->activeTable(), selection );
-        m_pView->doc()->undoBuffer()->appendUndo( undo );
-    }
-    switch(type)
-    {
-      case resize_row:
-	if( m_pDefault->isChecked() )
-	  for( int i=selection.top(); i<=selection.bottom(); i++ ) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
-	    m_pView->vBorderWidget()->resizeRow( heightOfRow, i, false );
-	else
-	  for( int i=selection.top(); i<=selection.bottom(); i++ ) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
-	    m_pView->vBorderWidget()->resizeRow( new_size, i, false );
-	break;
+        if ( !m_pView->doc()->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(), m_pView->activeTable(), selection );
+            m_pView->doc()->undoBuffer()->appendUndo( undo );
+        }
+        switch(type)
+        {
+          case resize_row:
+	    if( m_pDefault->isChecked() )
+	      for( int i=selection.top(); i<=selection.bottom(); i++ ) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
+	        m_pView->vBorderWidget()->resizeRow( heightOfRow, i, false );
+	    else
+	      for( int i=selection.top(); i<=selection.bottom(); i++ ) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
+	        m_pView->vBorderWidget()->resizeRow( new_size, i, false );
+	    break;
 
-      case resize_column:
-	if( m_pDefault->isChecked() )
-	  for( int i=selection.left(); i<=selection.right(); i++ ) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
+          case resize_column:
+	    if( m_pDefault->isChecked() )
+	      for( int i=selection.left(); i<=selection.right(); i++ ) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
 	    m_pView->hBorderWidget()->resizeColumn( colWidth, i, false );
-	else
-	  for( int i=selection.left(); i<=selection.right(); i++ ) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
-	    m_pView->hBorderWidget()->resizeColumn( new_size, i, false );
-	break;
+	    else
+	      for( int i=selection.left(); i<=selection.right(); i++ ) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
+	        m_pView->hBorderWidget()->resizeColumn( new_size, i, false );
+	    break;
 
-      default :
-	kdDebug(36001) << "Err in type_resize" << endl;
-	break;
+          default :
+	    kdDebug(36001) << "Err in type_resize" << endl;
+	    break;
+        }
     }
     accept();
 }
