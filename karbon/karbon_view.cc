@@ -97,7 +97,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_whirlPinchDlg->setAngle( 20.0 );
 	m_whirlPinchDlg->setPinch( 0.0 );
 	m_whirlPinchDlg->setRadius( 100.0 );
-	
+
 	// widgets:
 	m_canvas = new VCanvas( this, part );
 	m_canvas->viewport()->installEventFilter( this );

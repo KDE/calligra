@@ -58,7 +58,7 @@ VShapeTool::eventFilter( QEvent* event )
 		VShapeCmd* cmd = new VShapeCmd(
 			&view()->part()->document(),
 			name(),
-			shape() );
+			shape( true ) );
 
 		view()->part()->addCommand( cmd, true );
 		view()->selectionChanged();

@@ -37,9 +37,9 @@ VRoundRectTool::activate()
 }
 
 VPath*
-VRoundRectTool::shape() const
+VRoundRectTool::shape( bool decide ) const
 {
-	if( m_d1 <= 1.0 && m_d2 <= 1.0 )
+	if( decide && m_d1 <= 1.0 && m_d2 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return

@@ -32,7 +32,7 @@ protected:
 	// Make it "abstract":
 	virtual ~VShapeTool() {}
 
-	virtual VPath* shape() const = 0;
+	virtual VPath* shape( bool decide = false ) const = 0;
 	
 	/// Draws the object while it is edited.
 	virtual void drawTemporaryObject() const;

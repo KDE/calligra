@@ -37,9 +37,9 @@ VStarTool::activate()
 }
 
 VPath*
-VStarTool::shape() const
+VStarTool::shape( bool decide ) const
 {
-	if( m_d1 <= 1.0 )
+	if( decide && m_d1 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return

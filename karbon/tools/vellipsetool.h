@@ -20,7 +20,7 @@ public:
 	
 	virtual void activate();
 
-	virtual VPath* shape() const;
+	virtual VPath* shape( bool decide = false ) const;
 
 private:
 	VEllipseDlg* m_dialog;

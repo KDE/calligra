@@ -36,9 +36,9 @@ VEllipseTool::activate()
 }
 
 VPath*
-VEllipseTool::shape() const
+VEllipseTool::shape( bool decide ) const
 {
-	if( m_d1 <= 1.0 && m_d2 <= 1.0 )
+	if( decide && m_d1 <= 1.0 && m_d2 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return
