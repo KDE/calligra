@@ -375,11 +375,22 @@ void KoMainWindow::addRecentURL( const KURL& url )
     // (call coming from KoDocument because it must work with cmd line, template dlg, file/open, etc.)
     if ( !url.isEmpty() )
     {
-        m_recent->addURL( url );
+        bool ok = true;
         if ( url.isLocalFile() )
-            KRecentDocument::add(url.path(-1));
+        {
+            QString path = url.path( -1 );
+            QStringList tmpDirs = KGlobal::dirs()->resourceDirs( "tmp" );
+            for ( QStringList::Iterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it )
+                if ( path.contains( *it ) )
+                    ok = false; // it's in the tmp resource
+            if ( ok )
+                KRecentDocument::add(path);
+        }
         else
             KRecentDocument::add(url.url(-1), true);
+
+        if ( ok )
+            m_recent->addURL( url );
         saveRecentFiles();
     }
 }
