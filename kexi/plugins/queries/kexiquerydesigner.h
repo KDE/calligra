@@ -34,7 +34,8 @@ class KexiQueryDesigner : public KexiDialogBase
 	Q_OBJECT
 
 	public:
-		KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name, KexiQueryPartItem *item);
+		KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name, KexiQueryPartItem *item,
+		 bool modeview=true);
 		~KexiQueryDesigner();
 
 		virtual	KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
@@ -61,6 +62,8 @@ class KexiQueryDesigner : public KexiDialogBase
 		KexiQueryDesignerGuiEditor	*m_editor;
 		KexiQueryDesignerSQL		*m_sql;
 		KexiDataTable			*m_view;
+
+		KexiQueryPartItem		*m_item;
 };
 
 #endif

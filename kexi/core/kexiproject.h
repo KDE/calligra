@@ -89,6 +89,7 @@ public:
 
 
 	void addFileReference(FileReference);
+	void removeFileReference(const QString &location);
 	void removeFileReference(FileReference);
 	References fileReferences(const QString &group);
 

@@ -27,35 +27,24 @@
 class QString;
 class KexiProjectHandler;
 class KexiQueryDesigner;
+class KexiTableList;
 
 class KexiQueryPartItem: public KexiProjectHandlerItem
 {
 	Q_OBJECT
+
 public:
-
-	class QueryEntry
-	{
-	public:
-		QueryEntry(){;}
-		QueryEntry(const QString& source_, const QString& field_,
-			bool show_, const QString& orC_, const QString& andC_): source(source_),
-				field(field_),show(show_),orC(orC_),andC(andC_){;}
-		QString source;
-		QString field;
-		bool show;
-		QString orC;
-		QString andC;
-	};
-
-	typedef QValueList<QueryEntry> QueryEntryList;
 
 	KexiQueryPartItem(KexiProjectHandler *parent, const QString& name, const QString& mime,
 			const QString& identifier);
 	virtual ~KexiQueryPartItem();
-	const QueryEntryList &getQueryData();
-	void setQueryData(const QueryEntryList&);
+
 	void setParameterList(const KexiDataProvider::ParameterList& params);
 	const KexiDataProvider::ParameterList parameters();
+
+	KexiTableList	*designData() { return m_designData; }
+	QString		sql() { return m_sql; }
+	void		setSQL(const QString &sql) { m_sql = sql; }
 
 	void store(KoStore*);
 	void load(KoStore*);
@@ -65,8 +54,9 @@ protected:
 	friend class KexiQueryDesigerGuiEditor;
 
 private:
-	QueryEntryList m_queryEntryList;
-	KexiDataProvider::ParameterList m_params;
+	KexiTableList			*m_designData;
+	QString				m_sql;
+	KexiDataProvider::ParameterList	m_params;
 };
 
 #endif

@@ -102,6 +102,10 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 		m_socket = socket;
 		return true;
 	}
+	else
+	{
+		throw KexiDBError(0, mysql_error(m_mysql));
+	}
 
 	kdDebug() << "MySqlDB::connect(...) failed: " << mysql_error(m_mysql) << endl;
 	return false;

@@ -43,6 +43,8 @@ public:
 	void attach(KexiTableView *tableView, bool sorted=false);
 	void attach(KexiTableView *tableView, int position);
 
+	void setTable(KexiTableView *table) { m_pTable = table; }
+
 	void setHint(QVariant hint)
 	{
 		m_hint = hint;

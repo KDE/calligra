@@ -33,12 +33,14 @@
 
 #include <kexiDB/kexidberror.h>
 
+#include "kexiquerypartitem.h"
 #include "kexidatatable.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexiquerydesignersql.h"
 #include "kexiquerydesigner.h"
 
-KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name, KexiQueryPartItem *item)
+KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name,
+ KexiQueryPartItem *item, bool modeview)
  : KexiDialogBase(view,parent, name)
 {
 	QVBoxLayout *l = new QVBoxLayout(this);
@@ -47,9 +49,8 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char 
 	m_tab = new QTabWidget(this);
 	m_tab->setTabPosition(QTabWidget::Bottom);
 	l->addWidget(m_tab);
-	connect(m_tab, SIGNAL(currentChanged(QWidget *)), this, SLOT(viewChanged(QWidget *)));
 
-	m_editor = new KexiQueryDesignerGuiEditor(view, this, this, "design");
+	m_editor = new KexiQueryDesignerGuiEditor(view, this, this, item, "design");
 	connect(m_editor, SIGNAL(contextHelp(const QString &, const QString &)), this,
 	 SLOT(slotContextHelp(const QString &, const QString &)));
 	m_sql = new KexiQueryDesignerSQL(this);
@@ -64,8 +65,31 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char 
 	QStatusBar *status = new QStatusBar(this);
 	l->addWidget(status);
 
-	registerAs(DocumentWindow);
+	registerAs(DocumentWindow, item->identifier());
 	setContextHelp(i18n("Queries"), i18n("After having set up relations you can drag fields from different tables into the \"query table\"."));
+
+	if(modeview)
+	{
+		m_statement = item->sql();
+		m_tab->setCurrentPage(2);
+
+		bool success = false;
+		try
+		{
+			if(m_view->executeQuery(m_statement))
+				success = true;
+		}
+		catch(KexiDBError &err)
+		{
+			err.toUser(this);
+			emit queryExecuted(m_statement, success);
+		}
+
+		emit queryExecuted(m_statement, success);
+	}
+
+	m_item = item;
+	connect(m_tab, SIGNAL(currentChanged(QWidget *)), this, SLOT(viewChanged(QWidget *)));
 }
 
 void
@@ -83,6 +107,7 @@ KexiQueryDesigner::query()
 		emit queryExecuted(m_statement, success);
 	}
 
+	m_item->setSQL(m_statement);
 	emit queryExecuted(m_statement, success);
 
 }
@@ -129,6 +154,14 @@ KexiQueryDesigner::print(KPrinter &p)
 
 KexiQueryDesigner::~KexiQueryDesigner()
 {
+	if(m_currentView == 0)
+	{
+		m_item->setSQL(m_editor->getQuery());
+	}
+	else if(m_currentView == 1)
+	{
+		m_item->setSQL(m_sql->getQuery());
+	}
 }
 
 #include "kexiquerydesigner.moc"

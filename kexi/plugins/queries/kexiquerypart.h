@@ -50,6 +50,9 @@ class KexiQueryPart : public KexiProjectHandler
 	protected:
 		friend class KexiQueryPartProxy;
 
+	signals:
+		virtual	void				itemListChanged(KexiProjectHandler *);
+
 };
 
 #endif

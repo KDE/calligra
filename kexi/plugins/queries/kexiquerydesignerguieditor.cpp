@@ -44,8 +44,10 @@
 #include "kexiview.h"
 #include "kexiaddparamdialog.h"
 #include "kexirelation.h"
+#include "kexiquerypartitem.h"
 
-KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *parent, KexiQueryDesigner *myparent, const char *name)
+KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *parent,
+ KexiQueryDesigner *myparent, KexiQueryPartItem *item, const char *name)
  : QWidget(parent, name)
 {
 	m_db = view->project()->db();
@@ -56,7 +58,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_tables = view->project()->handlerForMime("kexi/relation")->embeddReadOnly(hSplitter, view);
 	QSplitter *vSplitter = new QSplitter(Horizontal, hSplitter);
 //	m_tables = new KexiRelationDialog(view,this, "querytables", true);
-	m_designTable = new KexiTableView(vSplitter);
+	m_designTable = new KexiTableView(vSplitter, "designer", item->designData());
 	m_designTable->m_editOnDubleClick = true;
 	connect(m_designTable, SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
 	connect(m_designTable, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
@@ -76,7 +78,10 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_designTable->addColumn(i18n("AND condition"), QVariant::String, true);
 	m_designTable->addColumn(i18n("OR condition"), QVariant::String, true);
 
-	clear();
+	m_content = item->designData();
+	setUpTable();
+
+//	clear();
 /*
 	m_insertItem = new KexiTableItem(m_designTable);
 	m_insertItem->setValue(0, 0);
@@ -153,16 +158,20 @@ KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
 		i++;
 	}
 
+	kdDebug() << "KexiQueryDesignerGuiEditor::slotDropped(): insert=>usual" << endl;
 	m_insertItem->setValue(0, i);
 	m_insertItem->setValue(1, srcField);
 	m_insertItem->setValue(2, true);
 	m_insertItem->setInsertItem(false);
 
+	kdDebug() << "KexiQueryDesignerGuiEditor::slotDropped(): new insert" << endl;
 	KexiTableItem *newInsert = new KexiTableItem(m_designTable);
 	newInsert->setValue(0, 0);
 	newInsert->setValue(2, true);
 	newInsert->setInsertItem(true);
 	m_insertItem = newInsert;
+
+	kdDebug() << "KexiQueryDesignerGuiEditor::slotDropped(): done!" << endl;
 }
 
 void
@@ -414,6 +423,17 @@ KexiQueryDesignerGuiEditor::slotItemSelected(KexiTableItem *)
 		<tr><td><font size=\"-1\">&lt;&gt; 'ab'</td><td><font size=\"-1\">matches any string except <i>ab</i></td></tr>\
 		<tr><td><font size=\"-1\">like \"%pine%\"</td><td><font size=\"-1\">matches '<i>pine</i>', '<i>pineapple</i>', '<i>porcupine</i>'</td></tr>\
 		</table></font>"));
+	}
+}
+
+void KexiQueryDesignerGuiEditor::setUpTable()
+{
+	KexiTableItem *it;
+	for(it = m_content->first(); it; it = m_content->next())
+	{
+		it->setTable(m_designTable);
+		if(it->isInsertItem())
+			m_insertItem = it;
 	}
 }
 

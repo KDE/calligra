@@ -34,6 +34,7 @@ class KexiDB;
 class KexiTableView;
 class KexiTableItem;
 class KexiRelationDialog;
+class KexiQueryPartItem;
 
 struct InvolvedTable
 {
@@ -67,7 +68,8 @@ class KexiQueryDesignerGuiEditor : public QWidget
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerGuiEditor(KexiView *view,QWidget *parent, KexiQueryDesigner *myparent, const char *name=0);
+		KexiQueryDesignerGuiEditor(KexiView *view,QWidget *parent, KexiQueryDesigner *myparent,
+		 KexiQueryPartItem *item, const char *name=0);
 		~KexiQueryDesignerGuiEditor();
 
 		QString			getQuery();
@@ -81,6 +83,9 @@ class KexiQueryDesignerGuiEditor : public QWidget
 		void appendLine(const QString &source, const QString &field, bool show, const QString &andC, 
 				const QString &orC);
 
+
+	protected:
+		void			setUpTable();
 
 	protected slots:
 		void			slotDropped(QDropEvent *ev);
@@ -105,6 +110,7 @@ class KexiQueryDesignerGuiEditor : public QWidget
 
 		KexiTableItem		*m_insertItem;
 		QStringList		m_sourceList;
+		KexiTableList		*m_content;
 //		ConditionList		m_conditions;
 
 //		InvolvedTables		m_involvedTables;

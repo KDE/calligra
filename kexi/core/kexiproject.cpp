@@ -364,11 +364,19 @@ KexiProject::addFileReference(FileReference fileref)
 }
 
 void
+KexiProject::removeFileReference(const QString &location)
+{
+//	if(m_fileReferences.findIndex(fileref) != -1)
+	m_fileReferences.remove(location);
+}
+
+void
 KexiProject::removeFileReference(FileReference fileref)
 {
 //	if(m_fileReferences.findIndex(fileref) != -1)
-		m_fileReferences.remove(fileref.location);
+	m_fileReferences.remove(fileref.location);
 }
+
 
 QString
 KexiProject::boolToString(bool b)

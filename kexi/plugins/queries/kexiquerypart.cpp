@@ -73,11 +73,11 @@ void KexiQueryPart::store (KoStore *ks)
 {
 	kdDebug() << "KexiQueryPart::store(KoStore*)" << endl;
 
-    for(KexiProjectHandler::ItemIterator it(*items());it.current();++it)
-    {
+	for(KexiProjectHandler::ItemIterator it(*items());it.current();++it)
+	{
 		KexiQueryPartItem *qpi=static_cast<KexiQueryPartItem*>(it.current());
 		qpi->store(ks);
-    }
+	}
 }
 
 void KexiQueryPart::load (KoStore *ks)
@@ -90,7 +90,7 @@ void KexiQueryPart::load (KoStore *ks)
 	{
 		kdDebug() << "KexiQueryPart::getQueries() added " << (*it).name << endl;
 		KexiQueryPartItem *qpi;
-		list->insert((*it).name,qpi=new KexiQueryPartItem(this, (*it).name, "kexi/query", (*it).name));
+		list->insert("kexi/query/" + (*it).name,qpi=new KexiQueryPartItem(this, (*it).name, "kexi/query", (*it).name));
 		qpi->load(ks);
 	}
 

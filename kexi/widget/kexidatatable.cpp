@@ -145,10 +145,9 @@ void KexiDataTable::setDataSet(KexiDBRecord *rec)
 bool
 KexiDataTable::executeQuery(const QString &queryStatement)
 {
-
-
-	kdDebug() << "KexiDataTable::executeQuery(): executing query..." << endl;
-//	m_record = kexiProject()->db()->queryRecord(queryStatement, false);
+	kdDebug() << "KexiDataTable::executeQuery(): executing query: '" << queryStatement << "'" << endl;
+	if(queryStatement == "")
+		return false;
 
 	try
 	{
@@ -160,6 +159,8 @@ KexiDataTable::executeQuery(const QString &queryStatement)
 		err.toUser(this);
 		return false;
 	}
+
+	kdDebug() << "KexiDataTable::executeQuery(): record: " << m_record << endl;
 
 	setDataSet(m_record);
 	return true;
@@ -173,20 +174,22 @@ KexiDataTable::slotItemChanged(KexiTableItem *i, int col)
 		i->setInsertItem(false);
 		i->setHint(QVariant(m_record->insert()));
 		m_record->update(i->getHint().toInt(), col, i->getValue(col));
-		m_record->commit(i->getHint().toInt(), true);
+		try
+		{
+			m_record->commit(i->getHint().toInt(), true);
+		}
+		catch(KexiDBError &err)
+		{
+			KMessageBox::detailedError(this, i18n("Error occupied while updating table"), err.message(),
+			 i18n("Database Error"));
+//			err.toUser(this);
+			return;
+		}
+//		i->setInsertItem(false);
+
 		KexiDBField *fi = m_record->fieldInfo(col);
 		m_db->watcher()->update(this, fi->table(), fi->name(), i->getHint().toUInt(),
 		 i->getValue(col));
-
-		/*
-		for(uint f=0; f < m_record->fieldCount(); f++)
-		{
-			if(m_record->fieldInfo(f)->primary_key())
-			{
-				i->setValue(f, QVariant((unsigned int)m_record->last_id()));
-			}
-		}
-		*/
 
 		KexiTableItem *newinsert = new KexiTableItem(m_tableView);
 		newinsert->setHint(QVariant(i->getHint().toInt() + 1));

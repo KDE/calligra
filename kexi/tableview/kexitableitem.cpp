@@ -31,12 +31,8 @@
 KexiTableItem::KexiTableItem(int numCols)
 {
 	m_columns.resize(numCols);
-
 	m_insertItem = false;
-	setInsertItem(false);
-//	m_columns.setAutoDelete(true);
-//	for(int i=0; i < numCols; i++)
-//		m_columns.insert(i, new QVariant);
+	m_pTable = 0;
 }
 
 void KexiTableItem::attach(KexiTableView *tableView, bool sorted=false)
@@ -53,14 +49,14 @@ void KexiTableItem::attach(KexiTableView *tableView, bool sorted=false)
 	}
 	tableView->m_numRows++;
 	tableView->triggerUpdate();
-	
+
 //	if(isInsertItem())
 //		tableView->recordMarker()->setInsertRow(position);
 }
 
 void KexiTableItem::attach(KexiTableView *tableView, int position)
 {
-	qDebug("inserting at position %i", position);
+//	qDebug("inserting at position %i", position);
 	m_position = position;
 	tableView->m_contents->insert(position, this);
 	tableView->m_numRows++;
@@ -80,7 +76,7 @@ KexiTableItem::KexiTableItem(KexiTableView *tableView)
 
 //	m_columnsI.resize(numCols);
 //	m_columnsF.resize(numCols);
-	
+
 //	for(int i=0; i < tableView->cols(); i++)
 //		m_columns.insert(i, new QString);
 //	for(int i=0; i < tableView->cols(); i++)
@@ -100,20 +96,20 @@ KexiTableItem::KexiTableItem(KexiTableView *tableView, bool sorted, ...)
 {
 	va_list ap;
 	va_start(ap, sorted);
-	
+
 	int numCols=tableView->cols();
 	m_columns.resize(numCols);
 	m_columns.setAutoDelete(true);
 
 //	m_columnsI.resize(numCols);
 //	m_columnsF.resize(numCols);
-	
+
 //	for(int i=0; i < tableView->cols(); i++)
 //		m_columns.insert(i, new QString);
 	for(int i=0; i < tableView->cols(); i++)
 		m_columns.insert(i, new QVariant(va_arg(ap, QVariant)));
 
-		
+
     if(!sorted)
 		tableView->m_contents.append(this);
 	else
@@ -132,6 +128,10 @@ void
 KexiTableItem::setInsertItem(bool insertItem)
 {
 	m_insertItem = insertItem;
+
+	if(!m_pTable)
+		return;
+
 //	int m_position = m_pTable->m_contents.find(this);
 	if(insertItem)
 	{

@@ -115,9 +115,16 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *c
 	m_pContextMenu = 0;
 
 	if(!contents)
+	{
 		m_contents = new KexiTableList();
+	}
 	else
+	{
+		kdDebug() << "KexiTableView::KexiTableView(): using shared contents" << endl;
 		m_contents = contents;
+		m_numRows = contents->count();
+		triggerUpdate();
+	}
 
 	m_contents->setAutoDelete(true);
 

@@ -63,6 +63,7 @@ KexiQueryPartProxy::itemContext(const QString& identifier)
 {
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
 	m->insertAction(i18n("Open Query"), SLOT(slotOpen(const QString &)));
+	m->insertAction(i18n("Edit Query"), SLOT(slotEdit(const QString &)));
 	m->insertAction(i18n("Delete Query"), SLOT(slotDelete(const QString &)));
 
 	return m;
@@ -85,8 +86,8 @@ KexiQueryPartProxy::slotCreateQuery()
     if(ok && name.length() > 0)
     {
 		KexiQueryPartItem *it;
-        part()->items()->insert(name,it=new KexiQueryPartItem(part(), name, "kexi/query", name));
-        KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "query",it);
+        part()->items()->insert("kexi/query/" + name,it=new KexiQueryPartItem(part(), name, "kexi/query", name));
+        KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "query",it, false);
         emit m_queryPart->itemListChanged(part());
         kexiView()->project()->addFileReference(FileReference("Queries",name,"/query/" + name + ".query"));
 		kqd->show();
@@ -97,18 +98,43 @@ KexiQueryPartProxy::slotCreateQuery()
 void
 KexiQueryPartProxy::slotOpen(const QString& identifier)
 {
+	if(kexiView()->activateWindow(identifier))
+		return;
+
 	KexiProjectHandlerItem *it=(*(part()->items()))[identifier];
 	if (!it) return;
 	KexiQueryPartItem *it1=static_cast<KexiQueryPartItem*>(it->qt_cast("KexiQueryPartItem"));
 	if (!it1) return;
 
-    KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "oq",it1);
-    kqd->show();
+	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "oq", it1, true);
+	kqd->show();
 }
 
 void
-KexiQueryPartProxy::slotDelete(const QString&  identifier)
+KexiQueryPartProxy::slotEdit(const QString &identifier)
 {
+	if(kexiView()->activateWindow(identifier))
+		return;
+
+	KexiProjectHandlerItem *it=(*(part()->items()))[identifier];
+	if (!it) return;
+	KexiQueryPartItem *it1=static_cast<KexiQueryPartItem*>(it->qt_cast("KexiQueryPartItem"));
+	if (!it1) return;
+
+	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "oq", it1, false);
+	kqd->show();
+}
+
+void
+KexiQueryPartProxy::slotDelete(const QString &identifier)
+{
+	QString name = part()->localIdentifier(identifier);
+	kdDebug() << "KexiQueryPartProxy::slotDelete() id: " << identifier << endl;
+	kdDebug() << "KexiQueryPartProxy::slotDelete() name: " << name << endl;
+	kexiView()->project()->removeFileReference("/query/" + name + ".query");
+	part()->items()->remove(identifier);
+	KexiQueryPart *npart = static_cast<KexiQueryPart *>(part());
+	emit npart->itemListChanged(part());
 }
 
 #include "kexiquerypartproxy.moc"
