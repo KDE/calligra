@@ -3133,9 +3133,14 @@ void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bo
     // I tried using QDomDocument::setContent( QByteArray ) but that leads to parse error at the end
 
     //kdDebug(32001) << "KWTextFrameSet::pasteKWord" << endl;
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Paste Text") );
     QTextDocument *textdoc = textDocument();
+    KCommand *cmd2 =0L;
     if ( removeSelected && textdoc->hasSelection( QTextDocument::Standard ) )
-        removeSelectedText( cursor );
+        cmd2 = removeSelectedTextCommand( cursor, QTextDocument::Standard );
+    if(cmd2)
+        macroCmd->addCommand(cmd2);
+    //removeSelectedText( cursor );
     emit hideCursor();
     // correct but useless due to unzoom/zoom
     // (which invalidates everything and sets lastformatted to firstparag)
@@ -3146,11 +3151,15 @@ void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bo
     // Using insert() wouldn't help storing the parag stuff for redo
     KWPasteTextCommand * cmd = new KWPasteTextCommand( textDocument(), cursor->parag()->paragId(), cursor->index(), data );
     textDocument()->addCommand( cmd );
-    m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Paste Text") ) ); // the wrapper KCommand
+    //m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Paste Text") ) ); // the wrapper KCommand
+
+    macroCmd->addCommand( new KWTextCommand( this, /*cmd, */i18n("Paste Text") ) ); // the wrapper KCommand
+
     *cursor = *( cmd->execute( cursor ) );
 
     (void) availableHeight(); // calculate it again (set to -1 due to unzoom/zoom)
 
+    m_doc->addCommand(macroCmd);
     formatMore();
     emit repaintChanged( this );
     emit ensureCursorVisible();
