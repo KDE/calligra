@@ -24,7 +24,7 @@ class QPixmap;
 
 #include "kexiprojecthandler.h"
 
-class KexiRelationHandler: public KexiProjectPart
+class KexiRelationHandler: public KexiProjectHandler
 {
 	Q_OBJECT
 
@@ -49,7 +49,7 @@ class KexiRelationHandler: public KexiProjectPart
 		friend class KexiRelationHandlerProxy;
 
 	signals:
-		void				itemListChanged(KexiProjectPart*);
+		void				itemListChanged(KexiProjectHandler*);
 };
 
 #endif

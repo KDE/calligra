@@ -34,8 +34,8 @@
 #define KEXIPROJECT(obj) (static_cast<KexiProject*>(obj->qt_cast("KexiProject")))
 
 
-class KexiProjectPartItem;
-class KexiProjectPartProxy;
+class KexiProjectHandlerItem;
+class KexiProjectHandlerProxy;
 
 
 /*!
@@ -43,23 +43,23 @@ class KexiProjectPartProxy;
  *  queries, tables, forms, reports
  */
 
-class KexiProjectPart : public QObject
+class KexiProjectHandler : public QObject
 {
 	Q_OBJECT
 
 	public:
-		typedef QPtrList<KexiProjectPartItem> ItemList;
+		typedef QPtrList<KexiProjectHandlerItem> ItemList;
 
 
-		KexiProjectPart(KexiProject *project);
-		virtual ~KexiProjectPart() {};
+		KexiProjectHandler(KexiProject *project);
+		virtual ~KexiProjectHandler() {};
 
 		//general information about parthandler
 		virtual QString			name() = 0;
 		virtual QString			mime() = 0;
 		virtual bool			visible() = 0;
 
-		KexiProjectPartProxy		*proxy(KexiView *);
+		KexiProjectHandlerProxy		*proxy(KexiView *);
 		virtual void hookIntoView(KexiView*)=0;
 		virtual void unhookFromView(KexiView*);		
 
@@ -74,13 +74,13 @@ class KexiProjectPart : public QObject
 		KexiProject *kexiProject();
 
 	signals:
-		void itemListChanged(KexiProjectPart*);
+		void itemListChanged(KexiProjectHandler*);
 		
 	protected:
-		void insertIntoViewProxyMap(KexiView*,KexiProjectPartProxy*);
+		void insertIntoViewProxyMap(KexiView*,KexiProjectHandlerProxy*);
 		void deleteFromViewProxyMap(KexiView*);
 	private:
-		typedef QMap<KexiView*,KexiProjectPartProxy*> ViewProxyMap; 
+		typedef QMap<KexiView*,KexiProjectHandlerProxy*> ViewProxyMap; 
 		ViewProxyMap m_viewProxyMap;
 		KexiProject *m_project;					
 		ItemList* m_items;

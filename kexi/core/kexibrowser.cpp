@@ -37,10 +37,6 @@
 #include "kexibrowser.h"
 #include "kexiworkspace.h"
 #include "kexibrowseritem.h"
-//#include "kexidatatable.h"
-#include "kexialtertable.h"
-//#include "kexiquerydesigner.h"
-//#include "kexikugarwrapper.h"
 #include "kexiproject.h"
 #include "kexiprojecthandler.h"
 #include "kexiprojecthandlerproxy.h"
@@ -48,7 +44,7 @@
 #include "kexihandlerpopupmenu.h"
 #include "kexidialogbase.h"
 
-KexiBrowser::KexiBrowser(QWidget *parent, QString mime, KexiProjectPart *part, const char *name )
+KexiBrowser::KexiBrowser(QWidget *parent, QString mime, KexiProjectHandler *part, const char *name )
  : KListView(parent,name)
 {
 //	iconLoader = KGlobal::iconLoader();
@@ -65,14 +61,14 @@ KexiBrowser::KexiBrowser(QWidget *parent, QString mime, KexiProjectPart *part, c
 
 	if(part)
 	{
-		connect(part, SIGNAL(itemListChanged(KexiProjectPart *)), this, SLOT(slotItemListChanged(KexiProjectPart *)));
+		connect(part, SIGNAL(itemListChanged(KexiProjectHandler *)), this, SLOT(slotItemListChanged(KexiProjectHandler *)));
 		slotItemListChanged(part);
 	}
 
 }
 
 void
-KexiBrowser::addGroup(KexiProjectPart *part)
+KexiBrowser::addGroup(KexiProjectHandler *part)
 {
 	//A littlebit hacky at the moment
 	KexiBrowserItem *item = new KexiBrowserItem(this, 
@@ -87,7 +83,7 @@ KexiBrowser::addGroup(KexiProjectPart *part)
 }
 
 void
-KexiBrowser::addItem(KexiProjectPartItem *item)
+KexiBrowser::addItem(KexiProjectHandlerItem *item)
 {
 	kdDebug() << "KexiBrowser::addItem() looking for " << item->mime() << endl;
 	if(m_mime == "kexi/db" && m_baseItems.find(item->mime()))
@@ -104,9 +100,9 @@ KexiBrowser::addItem(KexiProjectPartItem *item)
 }
 
 void
-KexiBrowser::slotItemListChanged(KexiProjectPart *parent)
+KexiBrowser::slotItemListChanged(KexiProjectHandler *parent)
 {
-	KexiProjectPart::ItemList *plist = parent->items();
+	KexiProjectHandler::ItemList *plist = parent->items();
 
 	kdDebug() << "KexiBrowser::slotItemListChanged() " << plist->count() << " items" << endl;
 	
@@ -121,7 +117,7 @@ KexiBrowser::slotItemListChanged(KexiProjectPart *parent)
 	}
 
 	
-	for(KexiProjectPartItem *item = plist->first(); item; item = plist->next())
+	for(KexiProjectHandlerItem *item = plist->first(); item; item = plist->next())
 	{
 		kdDebug() << "KexiBrowser::slotItemListChanged() adding " << item->mime() << endl;
 		addItem(item);

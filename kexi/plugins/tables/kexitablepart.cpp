@@ -36,7 +36,7 @@
 #include "kexialtertable.h"
 
 KexiTablePart::KexiTablePart(QObject *project,const char *,const QStringList &)
- : KexiProjectPart(KEXIPROJECT(project))
+ : KexiProjectHandler(KEXIPROJECT(project))
 {
 	kdDebug() << "KexiTablePart::KexiTablePart()" << endl;
 
@@ -89,7 +89,7 @@ KexiTablePart::getTables()
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it )
 	{
 		kdDebug() << "KexiTablePart::getTables() added " << (*it) << endl;
-		list->append(new KexiProjectPartItem(this, (*it), "kexi/table", (*it)));
+		list->append(new KexiProjectHandlerItem(this, (*it), "kexi/table", (*it)));
 	}
 
 	emit itemListChanged(this);

@@ -34,7 +34,7 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, QString mime, QString name, 
 	m_item = 0;
 }
 
-KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectPartProxy *proxy)
+KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerProxy *proxy)
  : KListViewItem(parent, proxy->part()->name())
 {
 	m_mime = proxy->part()->mime();
@@ -45,7 +45,7 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectPartProxy *proxy)
 	m_item = 0;
 }
 
-KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectPartItem *item)
+KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerItem *item)
  : KListViewItem(parent, item->name())
 {
 	m_mime = item->mime();
@@ -65,7 +65,7 @@ KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, QString mime, QString na
 	m_item = 0;
 }
 
-KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiProjectPartItem *item)
+KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiProjectHandlerItem *item)
  : KListViewItem(parent, item->name())
 {
 	m_mime = item->mime();
@@ -75,13 +75,13 @@ KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiProjectPartItem *ite
 	m_proxy = 0;
 }
 
-KexiProjectPartProxy*
+KexiProjectHandlerProxy*
 KexiBrowserItem::proxy()
 {
 	return m_proxy;
 }
 
-KexiProjectPartItem*
+KexiProjectHandlerItem*
 KexiBrowserItem::item()
 {
 	return m_item;

@@ -132,7 +132,7 @@ KexiTabBrowser::slotUpdateBrowsers()
 
 	
 	
-	for(KexiProjectPart *part = plist->first(); part; part = plist->next())
+	for(KexiProjectHandler *part = plist->first(); part; part = plist->next())
 	{
 		kdDebug() << "KexiTabBrowser::slotUpdateBrowsers(): showing " << part->name() << endl;
 		
@@ -142,7 +142,7 @@ KexiTabBrowser::slotUpdateBrowsers()
 			addBrowser(new KexiBrowser(m_stack, part->mime(), part), part->groupPixmap(), part->name());
 			kdDebug() << "KexiTabBrowser::slotUpdateBrowsers(): added " << part->name() << endl;
 			// Update the databasetab
-			connect(part, SIGNAL(itemListChanged(KexiProjectPart*)), m_db, SLOT(slotItemListChanged(KexiProjectPart*)));
+			connect(part, SIGNAL(itemListChanged(KexiProjectHandler*)), m_db, SLOT(slotItemListChanged(KexiProjectHandler*)));
 		}
 	}
 }

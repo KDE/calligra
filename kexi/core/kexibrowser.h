@@ -31,8 +31,8 @@ class QListViewItem;
 class KIconLoader;
 class KexiBrowserItem;
 class KexiView;
-class KexiProjectPart;
-class KexiProjectPartItem;
+class KexiProjectHandler;
+class KexiProjectHandlerItem;
 
 typedef QDict<KexiBrowserItem> BaseItemList;
 
@@ -41,22 +41,22 @@ class KexiBrowser : public KListView
 	Q_OBJECT
 
 	public:
-		KexiBrowser(QWidget *parent, QString mime, KexiProjectPart *part, const char *name=0);
+		KexiBrowser(QWidget *parent, QString mime, KexiProjectHandler *part, const char *name=0);
 
 	private:
 		KexiView	*m_view;
-		KexiProjectPart	*m_part;
+		KexiProjectHandler	*m_part;
 		QString		m_mime;
 
 		BaseItemList	m_baseItems;
 
 	public slots:
-		void		addGroup(KexiProjectPart *part);
-		void		addItem(KexiProjectPartItem *item);
+		void		addGroup(KexiProjectHandler *part);
+		void		addItem(KexiProjectHandlerItem *item);
 
 	protected slots:
 		void		slotContextMenu(KListView*, QListViewItem *i, const QPoint &point);
-		void		slotItemListChanged(KexiProjectPart *);
+		void		slotItemListChanged(KexiProjectHandler *);
 		void		slotExecuteItem(QListViewItem *item);
 };
 

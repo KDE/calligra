@@ -9,7 +9,7 @@ libkexicore_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 	kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp \
 	kexiprojecthandlerproxy.cpp kexiprojecthandleritem.cpp \
 	KexiProjectIface.cpp kexihandlerpopupmenu.cpp kexiprojecthandler.cpp \
-	kexirelation.cpp 
+	kexirelation.cpp kexidragobjects.cpp kexidataprovider.cpp
 
 
 

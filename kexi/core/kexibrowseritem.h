@@ -23,24 +23,24 @@
 #include <klistview.h>
 #include <qstring.h>
 
-class KexiProjectPartProxy;
-class KexiProjectPartItem;
+class KexiProjectHandlerProxy;
+class KexiProjectHandlerItem;
 
 class KexiBrowserItem : public KListViewItem
 {
 	public:
 		/*constructor for listviews in seperated lists */
 		KexiBrowserItem(KListView *parent, QString mime, QString name, QString identifier);
-		KexiBrowserItem(KListView *parent, KexiProjectPartProxy  *proxy);
-		KexiBrowserItem(KListView *parent, KexiProjectPartItem *item);
+		KexiBrowserItem(KListView *parent, KexiProjectHandlerProxy  *proxy);
+		KexiBrowserItem(KListView *parent, KexiProjectHandlerItem *item);
 		/*constructor for main db listing */
 		KexiBrowserItem(KListViewItem *parent, QString mime, QString name, QString identifier);
-		KexiBrowserItem(KListViewItem *parent, KexiProjectPartItem *item);
+		KexiBrowserItem(KListViewItem *parent, KexiProjectHandlerItem *item);
 
 		~KexiBrowserItem() {};
 
-		KexiProjectPartItem	*item();
-		KexiProjectPartProxy	*proxy();
+		KexiProjectHandlerItem	*item();
+		KexiProjectHandlerProxy	*proxy();
 		QString			mime();
 		QString			name();
 		QString			identifier();
@@ -48,8 +48,8 @@ class KexiBrowserItem : public KListViewItem
 		void			clearChildren();
 
 	protected:
-		KexiProjectPartItem	*m_item;
-		KexiProjectPartProxy	*m_proxy;
+		KexiProjectHandlerItem	*m_item;
+		KexiProjectHandlerProxy	*m_proxy;
 		QString			m_mime;
 		QString			m_name;
 		QString			m_identifier;

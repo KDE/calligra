@@ -32,7 +32,7 @@
 #include "kexiquerypartproxy.h"
 
 KexiQueryPart::KexiQueryPart(QObject *project,const char *,const QStringList &)
- : KexiProjectPart(KEXIPROJECT(project))
+ : KexiProjectHandler(KEXIPROJECT(project))
 {
 	kdDebug() << "KexiQueryPart::KexiQueryPart()" << endl;
 }
@@ -77,7 +77,7 @@ KexiQueryPart::getQueries()
 	for(References::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
 	{
 		kdDebug() << "KexiQueryPart::getQueries() added " << (*it).name << endl;
-		list->append(new KexiProjectPartItem(this, (*it).name, "kexi/query", (*it).name));
+		list->append(new KexiProjectHandlerItem(this, (*it).name, "kexi/query", (*it).name));
 	}
 	
 	emit itemListChanged(this);

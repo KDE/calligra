@@ -24,7 +24,7 @@ class QPixmap;
 
 #include "kexiprojecthandler.h"
 
-class KexiQueryPart : public KexiProjectPart
+class KexiQueryPart : public KexiProjectHandler
 {
 	Q_OBJECT
 
@@ -50,7 +50,7 @@ class KexiQueryPart : public KexiProjectPart
 		void				 getQueries();
 
 	signals:
-		void				itemListChanged(KexiProjectPart*);
+		void				itemListChanged(KexiProjectHandler*);
 };
 
 #endif

@@ -27,7 +27,7 @@
 #include "kexirelationhandlerproxy.h"
 
 KexiRelationHandler::KexiRelationHandler(QObject *project,const char *,const QStringList &)
- : KexiProjectPart(KEXIPROJECT(project))
+ : KexiProjectHandler(KEXIPROJECT(project))
 {
 	kdDebug() << "KexiRelationHandler::KexiRelationHandler()" << endl;
 }

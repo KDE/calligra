@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -17,32 +17,46 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIPROJECTPARTITEM_H
-#define KEXIPROJECTPARTITEM_H
+#ifndef KEXIRELATIONVIEWTABLE_H
+#define KEXIRELATIONVIEWTABLE_H
 
 #include <qobject.h>
 
-#include "kexiprojecthandler.h"
+#include <klistview.h>
 
-class KexiProjectHandlerItem : public QObject
+#include "kexirelation.h"
+#include "kexirelationview.h"
+
+class KexiRelationView;
+
+class KexiRelationViewTable : public KListView
 {
 	Q_OBJECT
 
 	public:
-		KexiProjectHandlerItem(KexiProjectHandler *parent, const QString& name, const QString& mime, 
-				const QString& identifier);
-		~KexiProjectHandlerItem();
+		KexiRelationViewTable(KexiRelationView *parent, QString table, QStringList fields, const char *name=0);
+		~KexiRelationViewTable();
 
-		KexiProjectHandler	*projectPart();
-		QString		name();
-		QString		mime();
-		QString		identifier();
+		QString			table() const { return m_table; };
+		int			globalY(const QString &item);
+		void setReadOnly(bool);
+
+	signals:
+		void			tableScrolling(QString);
+
+	protected:
+		virtual bool		acceptDrag(QDropEvent *e) const;
+		virtual QDragObject	*dragObject();
+
+	protected slots:
+		void			slotDropped(QDropEvent *e);
+		void			slotContentsMoving(int, int);
 
 	private:
-		KexiProjectHandler	*m_parent;
-		QString 	m_name;
-		QString 	m_mime;
-		QString 	m_identifier;
+		QStringList		m_fieldList;
+		QString			m_table;
+
+		KexiRelationView	*m_parent;
 };
 
 #endif

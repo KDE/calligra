@@ -35,7 +35,7 @@
 #include "kexiview.h"
 
 KexiRelationHandlerProxy::KexiRelationHandlerProxy(KexiRelationHandler *part,KexiView *view)
- : KexiProjectPartProxy(part,view),KXMLGUIClient()
+ : KexiProjectHandlerProxy(part,view),KXMLGUIClient()
 {
 	kdDebug() << "KexiRelationHandlerProxy::KexiRelationHandlerProxy()" << endl;
 
@@ -72,6 +72,9 @@ KexiRelationHandlerProxy::executeItem(const QString&)
 void
 KexiRelationHandlerProxy::slotShowRelationEditor()
 {
+        KexiRelationDialog *krd = new KexiRelationDialog(kexiView(), 0);
+        krd->show();
+
 }
 
 #include "kexirelationhandlerproxy.moc"

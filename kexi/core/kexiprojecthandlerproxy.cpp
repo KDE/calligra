@@ -22,19 +22,19 @@
 #include "kexiprojecthandler.h"
 #include "kexiview.h"
 
-KexiProjectPartProxy::KexiProjectPartProxy(KexiProjectPart *part,KexiView *view)
+KexiProjectHandlerProxy::KexiProjectHandlerProxy(KexiProjectHandler *part,KexiView *view)
  : QObject(part)
 {
 	m_part=part;
 	m_view=view;
 }
 
-KexiProjectPart *KexiProjectPartProxy::part()
+KexiProjectHandler *KexiProjectHandlerProxy::part()
 {
 	return m_part;
 }
 
-KexiView *KexiProjectPartProxy::kexiView()
+KexiView *KexiProjectHandlerProxy::kexiView()
 {
 	return m_view;
 }

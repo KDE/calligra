@@ -24,23 +24,23 @@
 
 #include <kdebug.h>
 
-KexiProjectPart::KexiProjectPart(KexiProject *project)
+KexiProjectHandler::KexiProjectHandler(KexiProject *project)
  : QObject(project)
 {
 	m_project=project;
 	m_items = new ItemList();
 	
 	if(project)
-		project->registerProjectPart(this);
+		project->registerProjectHandler(this);
 }
 
-KexiProjectPartProxy *KexiProjectPart::proxy(KexiView *view)
+KexiProjectHandlerProxy *KexiProjectHandler::proxy(KexiView *view)
 {
 	ViewProxyMap::iterator it=m_viewProxyMap.find(view);
 	return ((it==m_viewProxyMap.end())?0:(*it));
 }
 
-void KexiProjectPart::insertIntoViewProxyMap(KexiView* view, KexiProjectPartProxy* proxy)
+void KexiProjectHandler::insertIntoViewProxyMap(KexiView* view, KexiProjectHandlerProxy* proxy)
 {
 	if (m_viewProxyMap.find(view)!=m_viewProxyMap.end())
 	{
@@ -50,7 +50,7 @@ void KexiProjectPart::insertIntoViewProxyMap(KexiView* view, KexiProjectPartProx
 	m_viewProxyMap.insert(view,proxy);
 }
 
-void KexiProjectPart::deleteFromViewProxyMap(KexiView* view)
+void KexiProjectHandler::deleteFromViewProxyMap(KexiView* view)
 {
         ViewProxyMap::iterator it=m_viewProxyMap.find(view);
 	if (it!=m_viewProxyMap.end())
@@ -60,19 +60,19 @@ void KexiProjectPart::deleteFromViewProxyMap(KexiView* view)
 	}
 }
 
-KexiProject *KexiProjectPart::kexiProject()
+KexiProject *KexiProjectHandler::kexiProject()
 {
 	return m_project;
 }
 
-void KexiProjectPart::unhookFromView(KexiView* view)
+void KexiProjectHandler::unhookFromView(KexiView* view)
 {
 	deleteFromViewProxyMap(view);
 }
 
 
-KexiProjectPart::ItemList*
-KexiProjectPart::items()
+KexiProjectHandler::ItemList*
+KexiProjectHandler::items()
 {
 	return m_items;
 }

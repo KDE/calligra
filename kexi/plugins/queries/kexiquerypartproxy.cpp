@@ -35,7 +35,7 @@
 #include "kexiview.h"
 
 KexiQueryPartProxy::KexiQueryPartProxy(KexiQueryPart *part,KexiView *view)
- : KexiProjectPartProxy(part,view),KXMLGUIClient()
+ : KexiProjectHandlerProxy(part,view),KXMLGUIClient()
 {
 	m_queryPart=part;
 	kdDebug() << "KexiQueryPartProxy::KexiQueryPartProxy()" << endl;
@@ -82,12 +82,12 @@ KexiQueryPartProxy::slotCreateQuery()
         bool ok = false;
         QString name = KLineEditDlg::getText(i18n("New Query"), i18n("Query Name:"), "", &ok, kexiView());
 
-	KexiProjectPart::ItemList *list=part()->items();
+	KexiProjectHandler::ItemList *list=part()->items();
 
         if(ok && name.length() > 0)
         {
                 KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, name, "query");
-                list->append(new KexiProjectPartItem(part(), name, "kexi/query", name));
+                list->append(new KexiProjectHandlerItem(part(), name, "kexi/query", name));
                 emit m_queryPart->itemListChanged(part());
 //              project()->addFileReference("/query/" + name + ".query");
 

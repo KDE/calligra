@@ -28,7 +28,7 @@
 class KexiDoc;
 class DCOPObject;
 class KexiRelation;
-class KexiProjectPart;
+class KexiProjectHandler;
 
 struct FileReference
 {
@@ -51,7 +51,7 @@ struct Credentials
 
 typedef QMap<QString, QDomElement> Groups;
 typedef QValueList<FileReference> References;
-typedef QPtrList<KexiProjectPart> PartList;
+typedef QPtrList<KexiProjectHandler> PartList;
 
 class KexiProject : public KoDocument
 {
@@ -77,7 +77,7 @@ public:
 	bool initHostConnection(const Credentials &cred);
 	void clear();
 
-	void registerProjectPart(KexiProjectPart *part);
+	void registerProjectHandler(KexiProjectHandler *part);
 	PartList *getParts();
 
 	KexiDB* db()const { return m_db; };

@@ -25,7 +25,7 @@
 class QPixmap;
 class KexiTablePartProxy;
 
-class KexiTablePart : public KexiProjectPart
+class KexiTablePart : public KexiProjectHandler
 {
 	Q_OBJECT
 

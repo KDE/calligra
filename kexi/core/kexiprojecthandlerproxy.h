@@ -29,24 +29,24 @@
 #include "kexihandlerpopupmenu.h"
 #include "kexiview.h"
 
-class KexiProjectPartProxy : public QObject
+class KexiProjectHandlerProxy : public QObject
 {
 	Q_OBJECT
 
 	public:
-		KexiProjectPartProxy(KexiProjectPart *part, KexiView *view);
-		virtual ~KexiProjectPartProxy() {};
+		KexiProjectHandlerProxy(KexiProjectHandler *part, KexiView *view);
+		virtual ~KexiProjectHandlerProxy() {};
 
 		virtual KexiPartPopupMenu	*groupContext() = 0;
 		virtual KexiPartPopupMenu	*itemContext(const QString &identifier) = 0;
 
 		KexiView *kexiView();
-		KexiProjectPart *part();
+		KexiProjectHandler *part();
 
 		virtual void executeItem(const QString& identifier)=0;
 	protected:
 		QGuardedPtr<KexiView> m_view;
-		KexiProjectPart *m_part;
+		KexiProjectHandler *m_part;
 		
 };
 

@@ -36,7 +36,7 @@
 #include "kexialtertable.h"
 
 KexiTablePartProxy::KexiTablePartProxy(KexiTablePart *part,KexiView *view)
- : KexiProjectPartProxy(part,view),KXMLGUIClient()
+ : KexiProjectHandlerProxy(part,view),KXMLGUIClient()
 {
 	m_tablePart=part;
 	kdDebug() << "KexiTablePartProxy::KexiTablePartProxy()" << endl;
@@ -74,7 +74,7 @@ KexiTablePartProxy::itemContext(const QString& identifier)
 void
 KexiTablePartProxy::slotCreate()
 {
-	KexiProjectPart::ItemList *list=m_tablePart->items();
+	KexiProjectHandler::ItemList *list=m_tablePart->items();
         bool ok = false;
         QString name = KLineEditDlg::getText(i18n("New Table"), i18n("Table Name:"), "", &ok, 0);
 
@@ -84,7 +84,7 @@ KexiTablePartProxy::slotCreate()
                 {
                         KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, name, "alterTable");
                         kat->show();
-                        list->append(new KexiProjectPartItem(part(), name, "kexi/table", name));
+                        list->append(new KexiProjectHandlerItem(part(), name, "kexi/table", name));
                         emit m_tablePart->itemListChanged(part());
                 }
         }

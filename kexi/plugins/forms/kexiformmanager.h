@@ -13,14 +13,32 @@ class QWidget;
 class KexiProject;
 class KexiView;
 
-class KexiFormManager
+class KexiFormManager: public KexiProjectHandler
 {
 
 public:
 	enum Mode{View=0,Edit=1};
 
-	KexiFormManager(KexiProject *project);
+        KexiQueryPart(QObject *project,const char *,const QStringList &);
 	virtual ~KexiFormManager();
+
+        virtual QString                         name();
+        virtual QString                         mime();
+        virtual bool                            visible();
+
+
+        virtual void hookIntoView(KexiView *view);
+
+        virtual void store (KoStore *){;}
+        virtual void load  (KoStore *){;}
+
+
+        virtual QPixmap                         groupPixmap();
+        virtual QPixmap                         itemPixmap();
+
+	
+
+
 	QStringList forms() const;
 	bool rename(const QString& oldName, const QString& newName);
 	bool deleteForm(const QString& name);
@@ -29,18 +47,15 @@ public:
 	void showForm(const QString& name, Mode, KexiView *view);
 
 protected:
-	class Item
+	class KexiProjectHandlerItem
 	{
 	public:
-		Item();
+		Item(KexiFormManager *manager,QString name, QString identifier);
 		~Item();
 		QGuardedPtr<KexiFormBase> form;
 		QDomDocument *doc;
 	};
 
-private:
-	QDict<Item> m_forms;
-	KexiProject *m_project;
 };
 
 #endif

@@ -105,7 +105,7 @@ KoView* KexiProject::createViewInstance( QWidget* parent, const char* name )
 {
 	kdDebug() << "KoView* KexiProject::createViewInstance()" << endl;
     	KexiView *v= new KexiView( KexiView::MDIWindowMode,this, parent, name );
-        for(KexiProjectPart *part = m_parts->first(); part; part = m_parts->next())
+        for(KexiProjectHandler *part = m_parts->first(); part; part = m_parts->next())
 		part->hookIntoView(v);
 	return v;
 }
@@ -379,9 +379,9 @@ KexiProject::clear()
 }
 
 void
-KexiProject::registerProjectPart(KexiProjectPart *part)
+KexiProject::registerProjectHandler(KexiProjectHandler *part)
 {
-	kdDebug() << "KexiProject::registerProjectPart()" << endl;
+	kdDebug() << "KexiProject::registerProjectHandler()" << endl;
 	m_parts->append(part);
 	emit partListUpdated();
 }
@@ -439,7 +439,7 @@ void KexiProject::loadHandlers()
 	KTrader::OfferList ol=KTrader::self()->query("Kexi/Handler");
 	for (KTrader::OfferList::ConstIterator it=ol.begin(); it!=ol.end(); ++it)
 	{
-		(void) KParts::ComponentFactory::createInstanceFromService<KexiProjectPart>(
+		(void) KParts::ComponentFactory::createInstanceFromService<KexiProjectHandler>(
 			*it,this);	
 	}
 }
