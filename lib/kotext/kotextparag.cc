@@ -602,7 +602,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     }
 
 	// Paint a zigzag line for "wrong" background spellchecking checked words:
-	if(
+    if(
 		painter.device()->devType() != QInternal::Printer &&
 		lastFormat->isMisspelled() &&
 		!textDocument()->drawingShadow() &&
@@ -1134,7 +1134,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         }
     }
     else if ( format->underline() ||
-      format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD)
+                format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD)
     {
         int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
         QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
@@ -1167,9 +1167,37 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         font.setUnderline( FALSE );
         p->setFont( font );
     }
+    else if ( format->waveUnderline() )
+    {
+        int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
+        QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
+        p->save();
+        p->setPen( QPen( col, 1, Qt::SolidLine ) );
+        // Draw 3 pixel lines with increasing offset and distance 4:
+        for( int zigzag_line = 0; zigzag_line < 4; ++zigzag_line )
+        {
+            for( int zigzag_x = zigzag_line; zigzag_x < bw; zigzag_x += 4 )
+            {
+                p->drawPoint(
+                    startX + zigzag_x,
+                    lastY + h - 4 + zigzag_line );
+            }
+        }
+
+        // "Double" the pixel number for the middle line:
+        for( int zigzag_x = 3; zigzag_x < bw; zigzag_x += 4 )
+        {
+            p->drawPoint(
+                startX + zigzag_x,
+                lastY + h - 2 );
+        }
+        p->restore();
+        font.setUnderline( FALSE );
+        p->setFont( font );
+    }
 
     if ( format->strikeOutLineType() == KoTextFormat::S_SIMPLE
-        || format->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD)
+         || format->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD)
     {
         unsigned int dim = (format->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD)? KoBorder::zoomWidthY( 2, zh, 1 ) : KoBorder::zoomWidthY( 1, zh, 1 );
 
