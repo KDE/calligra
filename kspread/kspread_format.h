@@ -49,7 +49,7 @@ public:
     enum FormatType { Number=0, Text_format=5, Money=10, Percentage=25, Scientific=30,
                       ShortDate=35, TextDate=36, Time=50, SecondeTime=51,
                       Time_format1=52, Time_format2=53, Time_format3=54, Time_format4=55,
-                      Time_format5=56, Time_format6=57, Time_format7=58,
+                      Time_format5=56, Time_format6=57, Time_format7=58, Time_format8=59,
                       fraction_half=70,fraction_quarter=71,fraction_eighth=72,fraction_sixteenth=73,
                       fraction_tenth=74,fraction_hundredth=75,fraction_one_digit=76,
                       fraction_two_digits=77,fraction_three_digits=78,

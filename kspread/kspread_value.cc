@@ -284,8 +284,8 @@ QString KSpreadValue::errorMessage() const
 void KSpreadValue::setValue( const QDateTime& dt )
 {
   // reference is 31 Dec, 1899 midnight
-  QDate refDate = QDate( 1899, 12, 31 );
-  QTime refTime = QTime( 0, 0 );
+  QDate refDate( 1899, 12, 31 );
+  QTime refTime( 0, 0 );
 
   double f = refDate.daysTo( dt.date() ) + 1.0;
   f += refTime.secsTo( dt.time() ) / 86400.0;
@@ -296,7 +296,7 @@ void KSpreadValue::setValue( const QDateTime& dt )
 void KSpreadValue::setValue( const QTime& time )
 {
   // reference time is midnight
-  QTime refTime = QTime( 0, 0 );
+  QTime refTime( 0, 0 );
   double f = refTime.secsTo( time ) / 86400.0;
 
   setValue( f );

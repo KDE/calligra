@@ -173,5 +173,7 @@ bool util_isColumnSelected(const QRect &selection);
 bool util_isRowSelected(const QRect &selection);
 
 bool util_validateTableName(QString name);
+QDateTime util_readTime( const QString & intstr, KLocale * locale, bool withSeconds, 
+                         bool * ok, bool & duration );
 
 #endif

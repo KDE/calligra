@@ -1084,7 +1084,8 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
                   ||cellFormatType==KSpreadCell::Time_format4
                   ||cellFormatType==KSpreadCell::Time_format5
                   ||cellFormatType==KSpreadCell::Time_format6
-                  ||cellFormatType==KSpreadCell::Time_format7)
+                  ||cellFormatType==KSpreadCell::Time_format7
+                  ||cellFormatType==KSpreadCell::Time_format8)
           time->setChecked(true);
         else if ( cellFormatType==KSpreadCell::fraction_half 
                   || cellFormatType==KSpreadCell::fraction_quarter ||
@@ -1229,6 +1230,7 @@ void CellFormatPageFloat::slotChangeState()
             list+= util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format5);
             list+= ( util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format6) + i18n(" (=[mm]::ss)") );
             list+= ( util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format7) + i18n(" (=[hh]::mm::ss)") );
+            list+= ( util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format8) + i18n(" (=[hh]::mm)") );
             listFormat->insertStringList(list);
 
             if( cellFormatType==KSpreadCell::Time )
@@ -1249,6 +1251,8 @@ void CellFormatPageFloat::slotChangeState()
                 listFormat->setCurrentItem(7);
             else if(cellFormatType==KSpreadCell::Time_format7)
                 listFormat->setCurrentItem(8);
+            else if(cellFormatType==KSpreadCell::Time_format8)
+                listFormat->setCurrentItem(9);
             else
                 listFormat->setCurrentItem(0);
         }
@@ -1478,6 +1482,8 @@ void CellFormatPageFloat::makeTimeFormat()
         tmpFormat=KSpreadCell::Time_format6;
     else if(current==8)
         tmpFormat=KSpreadCell::Time_format7;
+    else if(current==9)
+        tmpFormat=KSpreadCell::Time_format8;
 
     tmp = util_timeFormat( dlg->locale(), dlg->m_time, tmpFormat);
     exampleLabel->setText(tmp);
@@ -1802,6 +1808,8 @@ void CellFormatPageFloat::applyFormat( KSpreadFormat *_obj )
                         _obj->setFormatType(KSpreadCell::Time_format6 );
                     else if(current==8)
                         _obj->setFormatType(KSpreadCell::Time_format7 );
+                    else if(current==9)
+                        _obj->setFormatType(KSpreadCell::Time_format8 );
                 }
             else if(money->isChecked())
             {

@@ -3845,7 +3845,7 @@ bool KSpreadCell::isTime() const
 
   // workaround, since date/time is stored as floating-point
   return m_value.isNumber() 
-    && ( ( (ft >= Time) && (ft <= Time_format7) ) );
+    && ( ( (ft >= Time) && (ft <= Time_format8) ) );
 }
 
 QDate KSpreadCell::valueDate() const
@@ -4013,11 +4013,16 @@ void KSpreadCell::checkTextInput()
     {
         // Force default time format if format isn't time
         FormatType tmpFormat = formatType();
-        if( tmpFormat!=SecondeTime && tmpFormat!=Time_format1
-            && tmpFormat!=Time_format2 && tmpFormat!=Time_format3)
-            setFormatType(Time);
+        if ( tmpFormat != SecondeTime && tmpFormat != Time_format1
+             && tmpFormat != Time_format2 && tmpFormat != Time_format3
+             && tmpFormat != Time_format4 && tmpFormat != Time_format6
+             && tmpFormat != Time_format5 && tmpFormat != Time_format7
+             && tmpFormat != Time_format8 )
+          setFormatType(Time);
+
         // Parsing as time acts like an autoformat: we even change m_strText
-        m_strText=locale()->formatTime( m_value.asDateTime().time(), true);
+        if ( tmpFormat != Time_format7 ) // [h]:mm:ss -> might get set by tryParseTime(str)
+          m_strText = locale()->formatTime( m_value.asDateTime().time(), true);
         return;
     }
 
@@ -4025,7 +4030,7 @@ void KSpreadCell::checkTextInput()
     m_value.setValue( KSpreadValue( m_strText ) );
 
     // convert first letter to uppercase ?
-    if(m_pTable->getFirstLetterUpper() && !m_strText.isEmpty())
+    if (m_pTable->getFirstLetterUpper() && !m_strText.isEmpty())
     {
         QString str = m_value.asString();
         m_value.setValue( KSpreadValue( str[0].upper() + str.right( str.length()-1 ) ) );
@@ -4144,10 +4149,16 @@ bool KSpreadCell::tryParseDate( const QString& str )
 
 bool KSpreadCell::tryParseTime( const QString& str )
 {
-    bool valid = false;
-    QTime tmpTime = locale()->readTime(str,&valid);
+    bool valid    = false;
+    bool duration = false;
+
+    QDateTime tmpTime = util_readTime(str, locale(), true, &valid, duration);
+    if (!tmpTime.isValid())
+      tmpTime = util_readTime(str, locale(), false, &valid, duration);
+
     if (!valid)
     {
+        QTime tm;
         if(locale()->use12Clock())
         {
             QString stringPm=i18n("pm");
@@ -4157,23 +4168,32 @@ bool KSpreadCell::tryParseTime( const QString& str )
             {
                 QString tmp=str.mid(0,str.length()-stringPm.length());
                 tmp=tmp.simplifyWhiteSpace();
-                tmpTime=locale()->readTime(tmp+" "+stringPm, &valid);
-                if(!valid)
-                    tmpTime=locale()->readTime(tmp+":00 "+stringPm, &valid);
+                tm = locale()->readTime(tmp+" "+stringPm, &valid);
+                if (!valid)
+                    tm = locale()->readTime(tmp+":00 "+stringPm, &valid);
             }
             else if((pos=str.find(stringAm))!=-1)
             {
-                QString tmp=str.mid(0,str.length()-stringAm.length());
-                tmp=tmp.simplifyWhiteSpace();
-                tmpTime=locale()->readTime(tmp+" "+stringAm, &valid);
+                QString tmp = str.mid(0,str.length()-stringAm.length());
+                tmp = tmp.simplifyWhiteSpace();
+                tm = locale()->readTime(tmp+" "+stringAm, &valid);
                 if (!valid)
-                    tmpTime=locale()->readTime(tmp+":00 "+stringAm, &valid);
+                    tm = locale()->readTime(tmp+":00 "+stringAm, &valid);
             }
         }
+        if ( valid )
+          m_value.setValue( KSpreadValue( tm ) );
+        return valid;
     }
-    if(valid)
+    if (valid)
     {
+      if ( duration )
+      {
         m_value.setValue( KSpreadValue( tmpTime ) );
+        setFormatType( Time_format7 );
+      }
+      else
+        m_value.setValue( KSpreadValue( tmpTime.time() ) );
     }
     return valid;
 }
