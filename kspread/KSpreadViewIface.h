@@ -62,6 +62,10 @@ k_dcop:
     virtual void clearCommentSelection();
     virtual void clearValiditySelection();
     virtual void clearConditionalSelection();
+    virtual void goalSeek();
+    virtual void insertFromDatabase();
+    virtual void insertFromTextfile();
+    virtual void insertFromClipboard();
 
 private:
     KSpreadView* m_view;

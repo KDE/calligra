@@ -221,3 +221,23 @@ void KSpreadViewIface::clearConditionalSelection()
 {
     m_view->clearConditionalSelection();
 }
+
+void KSpreadViewIface::goalSeek()
+{
+    m_view->goalSeek();
+}
+
+void KSpreadViewIface::insertFromDatabase()
+{
+    m_view->insertFromDatabase();
+}
+
+void KSpreadViewIface::insertFromTextfile()
+{
+    m_view->insertFromTextfile();
+}
+
+void KSpreadViewIface::insertFromClipboard()
+{
+    m_view->insertFromClipboard();
+}
