@@ -1,7 +1,8 @@
 /* -*- C++ -*-
 
   This file is part of Kontour.
-  Copyright (C) 2001 Rob Buis (rwlbuis@wanadoo..nl)
+  Copyright (C) 2001 Rob Buis (rwlbuis@wanadoo.nl)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -25,13 +26,10 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qspinbox.h>
-#include <qgrid.h>
 #include <qlabel.h>
-#include <qvgroupbox.h>
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
 #include <qpainter.h>
-#include <qbitmap.h>
 #include <qcombobox.h>
 
 #include <koColorChooser.h>
@@ -41,11 +39,6 @@
 
 #include "GStyle.h"
 #include "BrushCells.h"
-
-#define JOIN_WIDTH  20
-#define JOIN_HEIGHT 20
-#define CAP_WIDTH   20
-#define CAP_HEIGHT  20
 
 PaintPanel::PaintPanel(QWidget *parent, const char *name):
 QTabWidget(parent, name)
@@ -95,42 +88,46 @@ OutlinePanel::OutlinePanel(QWidget *parent, const char *name):
 QTabWidget(parent, name)
 {
   setTabShape(Triangular);
-  /* Color tab */
-  QGroupBox *outlineColor = new QGroupBox(2, Qt::Vertical, this);
-  mStroked = new QCheckBox(i18n("stroked"), outlineColor);
+  mStroked = new QCheckBox(i18n("stroked"), this);
   connect(mStroked, SIGNAL(toggled(bool)), this, SIGNAL(changeStroked(bool)));
-  mOutlinePanel = new KoColorChooser(outlineColor);
+  insertTab(mStroked, i18n("Stroking"));
+  /* Color tab */
+  mOutlinePanel = new KoColorChooser(this);
   connect(mOutlinePanel, SIGNAL(colorChanged(const KoColor &)), this, SIGNAL(changeOutlineColor(const KoColor &)));
   connect(this, SIGNAL(colorChanged(const KoColor &)), mOutlinePanel, SLOT(slotChangeColor(const KoColor &)));
+  insertTab(mOutlinePanel, i18n("Color"));
 
   /* Style tab */
-  QVGroupBox *outlineStyle = new QVGroupBox(this);
+
+  QWidget *mOutlineStyle = new QWidget(this);
+  QGridLayout *mOutlineStyleLayout = new QGridLayout(mOutlineStyle, 3, 2);
 
   /* Outline width */
-  QWidget *lwidth = new QWidget(outlineStyle);
-  QHBoxLayout *lay = new QHBoxLayout(lwidth);
-  QLabel *lwidthText = new QLabel(i18n("Width"), lwidth);
-  lay->addWidget(lwidthText);
-  mlwidthBox = new QSpinBox(0, 100, 1, lwidth);
-  connect(mlwidthBox, SIGNAL(valueChanged(int)), this, SLOT(slotChangeLinewidth(int)));
-  lay->addWidget(mlwidthBox);
+  QLabel *mWidthText = new QLabel(i18n("Width"), mOutlineStyle);
+  mWidthBox = new QSpinBox(0, 100, 1, mOutlineStyle);
+  connect(mWidthBox, SIGNAL(valueChanged(int)), this, SLOT(slotChangeLineWidth(int)));
 
   /* Join style selection */
-  QGrid *join = new QGrid(4, outlineStyle);
-  join->setSpacing(70);
-  join->setMargin(0);
-  QLabel *joinText = new QLabel(i18n("Join"), join);
-  joinText->setMargin(0);
-  mJoinBox = new QButtonGroup(3, Qt::Horizontal, join);
+  mJoinBox = new QButtonGroup(3, Qt::Horizontal, mOutlineStyle);
   mJoinBox->setFrameStyle(QFrame::NoFrame);
   mJoinBox->setExclusive(true);
-  QPushButton *round = new QPushButton(mJoinBox);
-  round->setToggleButton(true);
-  round->setMaximumWidth(JOIN_WIDTH);
-  round->setMaximumHeight(JOIN_HEIGHT);
-  /*round->setMinimumWidth(JOIN_WIDTH);
-  round->setMinimumHeight(JOIN_HEIGHT);*/
-  QPixmap pix(JOIN_WIDTH, JOIN_HEIGHT);
+  QPushButton *mRoundBtn = new QPushButton(mJoinBox);
+  mRoundBtn->setToggleButton(true);
+  mRoundBtn->setFixedWidth(20);
+  mRoundBtn->setFixedHeight(20);
+  QPushButton *mMiterBtn = new QPushButton(mJoinBox);
+  mMiterBtn->setToggleButton(true);
+  mMiterBtn->setFixedWidth(20);
+  mMiterBtn->setFixedHeight(20);
+  QPushButton *mBevelBtn = new QPushButton(mJoinBox);
+  mBevelBtn->setToggleButton(true);
+  mBevelBtn->setFixedWidth(20);
+  mBevelBtn->setFixedHeight(20);
+  connect(mJoinBox, SIGNAL(pressed(int)), this, SLOT(slotJoinPressed(int)));
+
+  QLabel *mJoinText = new QLabel(i18n("Join"), mOutlineStyle);
+  
+/*  QPixmap pix(JOIN_WIDTH, JOIN_HEIGHT);
   QBitmap bmap(JOIN_WIDTH, JOIN_HEIGHT);
   pix.fill();
   QPainter p(&pix);
@@ -168,16 +165,36 @@ QTabWidget(parent, name)
   p.drawPolyline(pa);
   bmap = pix;
   pix.setMask(bmap);
-  bevel->setPixmap(pix);
-
-  connect(mJoinBox, SIGNAL(pressed(int)), this, SLOT(slotJoinPressed(int)));
+  bevel->setPixmap(pix);*/
 
   /* Cap style selection */
-  QGrid *cap = new QGrid(4, outlineStyle);
-  cap->setSpacing(70);
-  cap->setMargin(0);
-  QLabel *capText = new QLabel(i18n("Cap"), cap);
-  mCapBox = new QButtonGroup(3, Qt::Horizontal, cap);
+  mCapBox = new QButtonGroup(3, Qt::Horizontal, mOutlineStyle);
+  mCapBox->setFrameStyle(QFrame::NoFrame);
+  mCapBox->setExclusive(true);
+  QPushButton *mCRoundBtn = new QPushButton(mCapBox);
+  mCRoundBtn->setToggleButton(true);
+  mCRoundBtn->setFixedWidth(20);
+  mCRoundBtn->setFixedHeight(20);
+  QPushButton *mSquareBtn = new QPushButton(mCapBox);
+  mSquareBtn->setToggleButton(true);
+  mSquareBtn->setFixedWidth(20);
+  mSquareBtn->setFixedHeight(20);
+  QPushButton *mFlatBtn = new QPushButton(mCapBox);
+  mFlatBtn->setToggleButton(true);
+  mFlatBtn->setFixedWidth(20);
+  mFlatBtn->setFixedHeight(20);
+  connect(mCapBox, SIGNAL(pressed(int)), this, SLOT(slotJoinPressed(int)));
+
+  QLabel *mCapText = new QLabel(i18n("Cap"), mOutlineStyle);
+
+  mOutlineStyleLayout->addWidget(mWidthText, 0, 0);
+  mOutlineStyleLayout->addWidget(mWidthBox, 0, 1);
+  mOutlineStyleLayout->addWidget(mJoinText, 1, 0);
+  mOutlineStyleLayout->addWidget(mJoinBox, 1, 1);
+  mOutlineStyleLayout->addWidget(mCapText, 2, 0);
+  mOutlineStyleLayout->addWidget(mCapBox, 2, 1);
+
+/*  mCapBox = new QButtonGroup(3, Qt::Horizontal, cap);
   mCapBox->setFrameStyle(QFrame::NoFrame);
   mCapBox->setExclusive(true);
   QPushButton *cround = new QPushButton(mCapBox);
@@ -215,15 +232,12 @@ QTabWidget(parent, name)
   p.drawPolyline(pa);
   bmap = pix;
   pix.setMask(bmap);
-  flat->setPixmap(pix);
+  flat->setPixmap(pix);*/
 
-  connect(mCapBox, SIGNAL(pressed(int)), this, SLOT(slotCapPressed(int)));
-
-  insertTab(outlineColor, i18n("Color"));
-  insertTab(outlineStyle, i18n("Style"));
+  insertTab(mOutlineStyle, i18n("Style"));
 }
 
-void OutlinePanel::slotChangeLinewidth(int lwidth)
+void OutlinePanel::slotChangeLineWidth(int lwidth)
 {
   emit changeLinewidth((unsigned int)lwidth);
 }
@@ -255,9 +269,9 @@ void OutlinePanel::slotCapPressed(int which)
 void OutlinePanel::slotStyleChanged(const GStyle &style)
 {
   mStroked->setChecked(style.stroked());
-  mlwidthBox->blockSignals(true);
-  mlwidthBox->setValue(style.outlineWidth());
-  mlwidthBox->blockSignals(false);
+  mWidthBox->blockSignals(true);
+  mWidthBox->setValue(style.outlineWidth());
+  mWidthBox->blockSignals(false);
   //mOutlinePanel->blockSignals(true);
   emit colorChanged(style.outlineColor());
   //mOutlinePanel->blockSignals(false);

@@ -2,6 +2,7 @@
 
   This file is part of Kontour.
   Copyright (C) 2001 Rob Buis (rwlbuis@wanadoo.nl)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -77,14 +78,14 @@ signals:
   void changeCapStyle(Qt::PenCapStyle);
 
 private slots:
-  void slotChangeLinewidth(int lwidth);
+  void slotChangeLineWidth(int lwidth);
 
 private:
-  QCheckBox *mStroked;
-  QSpinBox *mlwidthBox;
-  QButtonGroup *mJoinBox;
-  QButtonGroup *mCapBox;
-  KoColorChooser *mOutlinePanel;
+  QCheckBox       *mStroked;
+  QSpinBox        *mWidthBox;
+  QButtonGroup    *mJoinBox;
+  QButtonGroup    *mCapBox;
+  KoColorChooser  *mOutlinePanel;
 };
 
 #endif

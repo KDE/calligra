@@ -21,10 +21,6 @@
 */
 
 #include "TransformPanel.h"
-#include "GPage.h"
-#include "TranslateCmd.h"
-#include "RotateCmd.h"
-#include "DuplicateCmd.h"
 
 #include <qtabwidget.h>
 #include <qgroupbox.h>
@@ -37,7 +33,13 @@
 #include <kcommand.h>
 #include <kdebug.h>
 
-TransformPanel::TransformPanel(QWidget *parent, const char *name) : QDockWindow(QDockWindow::InDock, parent, name)
+#include "GPage.h"
+#include "TranslateCmd.h"
+#include "RotateCmd.h"
+#include "DuplicateCmd.h"
+
+TransformPanel::TransformPanel(QWidget *parent, const char *name):
+QDockWindow(QDockWindow::InDock, parent, name)
 {
   m_tab = new QTabWidget(this);
   m_tab->setTabShape(QTabWidget::Triangular);
