@@ -61,6 +61,7 @@ class KoPartSelectAction;
 class KoCharSelectDia;
 class KWTextFrameset;
 class KMacroCommand;
+class KWFrameSet;
 
 namespace Qt3 {
 class QTextFormat;
@@ -157,6 +158,8 @@ public:
     QPtrList<KAction> &dataToolActionList() { return m_actionList; }
 
     static void checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWord );
+
+    void insertInlinePicture();
 
 public slots:
     void fileStatistics();
@@ -485,6 +488,7 @@ private:
 	KMacroCommand * macroCmdSpellCheck;
      } m_spell;
 
+    KWFrameSet *fsInline;
 };
 
 /******************************************************************/

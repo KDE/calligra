@@ -90,6 +90,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     dcop = 0;
     dcopObject(); // build it
 
+    fsInline=0L;
     m_spell.kspell = 0;
     m_border.left.color = white;
     m_border.left.style = KoBorder::SOLID;
@@ -210,6 +211,7 @@ KWView::~KWView()
     // Delete gui while we still exist ( it needs documentDeleted() )
     delete m_gui;
     delete m_sbPageLabel;
+    delete fsInline;
     delete dcop;
 }
 
@@ -1877,10 +1879,9 @@ void KWView::slotEmbedImage( const QString &filename )
 void KWView::insertPicture( const QString &filename, bool isClipart,
                             bool makeInline, QSize pixmapSize, bool _keepRatio )
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit && makeInline )
+    if ( makeInline )
     {
-        KWFrameSet * fs = 0L;
+        fsInline = 0L;
         uint width = 0;
         uint height = 0;
         if ( isClipart )
@@ -1888,7 +1889,7 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
             KWClipartFrameSet *frameset = new KWClipartFrameSet( m_doc, QString::null );
             frameset->loadClipart( filename );
             //frameset->setKeepAspectRatio( _keepRatio);
-            fs = frameset;
+            fsInline = frameset;
             // Set an initial size
             width = m_doc->zoomItX( 100 );
             height = m_doc->zoomItY( 100 );
@@ -1909,23 +1910,56 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
             KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
             frameset->loadImage( filename, QSize( width, height ) );
             frameset->setKeepAspectRatio( _keepRatio);
-            fs = frameset;
+            fsInline = frameset;
         }
+        KWFrame *frame = new KWFrame( fsInline, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );
+        fsInline->addFrame( frame, false );
+        m_gui->canvasWidget()->inlinePictureStarted();
+        setTool( KWCanvas::MM_EDIT );
+        KMessageBox::information(this,
+                                 i18n("Set cursor where you want insert inline picture."),
+                                 i18n("Insert Picture Inline"),
+                                 "SetCursorInsertInlinePicture",true);
 
-        m_doc->addFrameSet( fs, false ); // done first since the frame number is stored in the undo/redo
-        KWFrame *frame = new KWFrame( fs, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );
-        fs->addFrame( frame, false );
+#if 0
         edit->insertFloatingFrameSet( fs, i18n("Insert Picture Inline") );
         fs->finalize(); // done last since it triggers a redraw
         // Reset the 'tool'
         setTool( KWCanvas::MM_EDIT );
         m_doc->refreshDocStructure(Pictures);
+#endif
     }
     else
     {
         m_gui->canvasWidget()->insertPicture( filename, isClipart, pixmapSize,_keepRatio );
     }
 }
+
+void KWView::insertInlinePicture()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if(edit)
+    {
+        m_doc->addFrameSet( fsInline, false ); // done first since the frame number is stored in the undo/redo
+#if 0
+        KWFrame *frame = new KWFrame( fsInline, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );
+        fsInline->addFrame( frame, false );
+#endif
+        edit->insertFloatingFrameSet( fsInline, i18n("Insert Picture Inline") );
+        fsInline->finalize(); // done last since it triggers a redraw
+        // Reset the 'tool'
+        setTool( KWCanvas::MM_EDIT );
+        m_doc->refreshDocStructure(Pictures);
+        fsInline=0L;
+    }
+    else
+    {
+        delete fsInline;
+        fsInline=0L;
+    }
+}
+
+
 
 void KWView::insertSpecialChar()
 {

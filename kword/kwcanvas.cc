@@ -47,6 +47,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     m_currentFrameSetEdit = 0L;
     m_mousePressed = false;
     m_imageDrag = false;
+    m_frameInline = false;
     m_viewMode = new KWViewModeNormal( m_doc ); // maybe pass as parameter, for initial value ( loaded from doc ) ?
     cmdMoveFrame=0L;
 
@@ -483,6 +484,12 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 if ( emitChanged ) // emitted after mousePressEvent [for tables]
                     emit currentFrameSetEditChanged();
                  emit updateRuler();
+                 //insert inline picture
+                 if( m_frameInline)
+                 {
+                     m_gui->getView()->insertInlinePicture();
+                     m_frameInline=false;
+                 }
             }
             m_scrollTimer->start( 50 );
         }
@@ -2146,6 +2153,11 @@ void KWCanvas::printRTDebug( int info )
 void KWCanvas::setXimPosition( int x, int y, int w, int h )
 {
     QWidget::setMicroFocusHint( x - contentsX(), y - contentsY(), w, h );
+}
+
+void KWCanvas::inlinePictureStarted()
+{
+    m_frameInline=true;
 }
 
 #include "kwcanvas.moc"

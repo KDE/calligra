@@ -168,6 +168,8 @@ public:
     QPoint pageCorner();
     void updateRulerOffsets( int cx = -1, int cy = -1 );
 
+    void inlinePictureStarted();
+
 protected:
     void applyGrid( KoPoint &p );
     void applyAspectRatio( double ratio, KoRect& insRect );
@@ -254,6 +256,7 @@ private:
     bool m_mousePressed;
     bool m_printing;
     bool m_imageDrag;
+    bool m_frameInline;
     KWViewMode *m_viewMode;
 
     // Frame stuff
