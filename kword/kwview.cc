@@ -1725,17 +1725,20 @@ void KWView::extraCreateTemplate()
 {
     int width = 60;
     int height = 60;
-    double ratio = (double)doc->paperHeight() / (double)doc->paperWidth();
+    double ratio = doc->ptPaperHeight() / doc->ptPaperWidth();
     if ( ratio > 1 )
         width = qRound( 60 / ratio );
     else
         height = qRound( 60 / ratio );
-    kdDebug() << "KWView::extraCreateTemplate ratio=" << ratio << " preview size: " << width << "," << height << endl;
+    double zoom = (double)width / doc->ptPaperWidth();
+    int oldZoom = doc->zoom();
+    setZoom( qRound( 100 * zoom ), false );
+    kdDebug() << "KWView::extraCreateTemplate ratio=" << ratio << " preview size: " << width << "," << height
+              << " zoom:" << zoom << endl;
     QPixmap pix( width, height );
     pix.fill( Qt::white );
     QPainter painter;
     painter.begin( &pix );
-    painter.scale( (double)width / (double)doc->paperWidth(), (double)height / (double)doc->paperHeight() );
     QRect pageRect( 0, 0, doc->paperWidth(), doc->paperHeight() );
 
     // Draw frame borders
@@ -1755,6 +1758,7 @@ void KWView::extraCreateTemplate()
 
     painter.end();
     delete viewMode;
+    setZoom( oldZoom, false );
 
     KTempFile tempFile( QString::null, ".kwt" );
     tempFile.setAutoDelete(true);
