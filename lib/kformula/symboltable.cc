@@ -227,6 +227,10 @@ SymbolTable::SymbolTable()
 
 void SymbolTable::init()
 {
+    // We expect to have a working symbol font.
+    defaultInitUnicode();
+    defaultInitFont();
+
     QString filename = KGlobal::dirs()->findResource( "data", "kformula/unicode.tbl" );
     if ( QFile::exists( filename ) ) {
         QFile file( filename );
@@ -236,12 +240,10 @@ void SymbolTable::init()
         }
         else {
             kdWarning( DEBUGID ) << "Error opening file '" << filename.latin1() << "'. Using defaults." << endl;
-            defaultInitUnicode();
         }
     }
     else {
         kdWarning( DEBUGID ) << "'unicode.tbl' not found. Using defaults." << endl;
-        defaultInitUnicode();
     }
 
     QStringList fontFiles = KGlobal::dirs()->findAllResources( "data", "kformula/*.font" );
@@ -261,12 +263,10 @@ void SymbolTable::init()
         }
         if ( !anySuccess ) {
             kdWarning( DEBUGID ) << "No font file read. Using defaults." << endl;
-            defaultInitFont();
         }
     }
     else {
         kdWarning( DEBUGID ) << "No font files found. Using defaults." << endl;
-        defaultInitFont();
     }
 }
 

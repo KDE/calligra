@@ -124,7 +124,8 @@ def make_font_table(font):
 
 def make_all_font_tables():
     for font in fonttable:
-        make_font_table(font)
+        if font != "symbol":
+            make_font_table(font)
         
 if __name__ == '__main__':
     parser = make_parser()
