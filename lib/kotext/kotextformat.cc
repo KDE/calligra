@@ -123,6 +123,13 @@ KoTextFormat::KoTextFormat( const KoTextFormat & fm )
     // ### The parent constructor didn't call our version of generateKey()
 }
 
+KoTextFormat& KoTextFormat::operator=( const KoTextFormat &fm )
+{
+    QTextFormat::operator=( fm );
+    m_textBackColor=fm.textBackgroundColor();
+    return *this;
+}
+
 KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, QTextFormatCollection * coll )
       : QTextFormat( f, c, coll )
 {

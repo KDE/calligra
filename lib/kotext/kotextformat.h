@@ -35,7 +35,7 @@ public:
     //KoTextFormat( const QStyleSheetItem *s );
     KoTextFormat( const QFont &f, const QColor &c, QTextFormatCollection * coll );
     KoTextFormat( const KoTextFormat &fm );
-    //KoTextFormat& operator=( const KoTextFormat &fm );
+    KoTextFormat& operator=( const KoTextFormat &fm );
 
     virtual void copyFormat( const QTextFormat & nf, int flags );
 
