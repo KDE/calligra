@@ -222,7 +222,7 @@ VStrokeFillPreview::drawFill( const VFill &f )
 					fill.gradient().setVector( KoPoint( 30, 50 ) );
 				}
 			}
-			else
+			if( f.type() == VFill::patt )
 			{
 				fill.pattern() = f.pattern();
 				fill.pattern().setOrigin( KoPoint( 20, 10 ) );
@@ -317,7 +317,7 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 
 				fill.setType( VFill::grad );
 			}
-			else
+			if( s.type() == VStroke::patt )
 			{
 				fill.pattern() = s.pattern();
 				fill.pattern().setOrigin( KoPoint( FILL_TOPX, 10 ) );
