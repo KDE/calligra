@@ -73,12 +73,11 @@
    <Action name="loadPalette"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
+  <Action name="configure"/>
   <Action name="page"/>
-  <Action name="grid"/>
   <Action name="helplines"/>
   <Action name="ellipseSettings"/>
   <Action name="polygonSettings"/>
-  <Action name="configure"/>
   <Separator/>
     <Action name="layers"/>
  </Menu>

@@ -31,13 +31,15 @@ class QComboBox;
 class KColorButton;
 class QCheckBox;
 class UnitBox;
+class GDocument;
 
-class OptionDialog : public KDialogBase {
+class OptionDialog : public KDialogBase
+{
   Q_OBJECT
 public:
-  OptionDialog (QWidget* parent = 0L, const char* name = 0L);
+  OptionDialog (GDocument *adoc, QWidget* parent = 0L, const char* name = 0L);
 
-  static int setup ();
+  static int setup (GDocument *adoc);
 
 protected:
   void createGeneralWidget (QWidget* parent);
@@ -47,16 +49,21 @@ protected:
   void createVertLineWidget (QWidget* parent);
 
 private:
+  GDocument *doc;
+ 
+  /*General*/
   QComboBox* unit;
   UnitBox *horiz, *vert;
   UnitBox *smallStep, *bigStep;
   
+  /*Helplines*/
+  UnitBox *horizValue, *vertValue;
+  QListBox *horizList, *vertList;
+  
+  /*Grid*/
   QCheckBox *gbutton, *sbutton;
   UnitBox *hspinbox, *vspinbox;
   KColorButton *cbutton;
-  
-  UnitBox *horizValue, *vertValue;
-  QListBox *horizList, *vertList;
 };
 
 #endif

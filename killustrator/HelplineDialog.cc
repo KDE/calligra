@@ -122,7 +122,7 @@ void HelplineDialog::applyPressed ()
 {
     canvas->setHorizHelplines (horizLines);
     canvas->setVertHelplines (vertLines);
-    canvas->saveGridProperties();
+//    canvas->saveGridProperties();
 }
 
 void HelplineDialog::initLists () {

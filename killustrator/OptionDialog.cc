@@ -37,24 +37,27 @@
 #include <UnitBox.h>
 #include <PStateManager.h>
 
-OptionDialog::OptionDialog (QWidget* parent, const char* name) :
+OptionDialog::OptionDialog (GDocument *adoc,QWidget* parent, const char* name) :
     KDialogBase(KDialogBase::TreeList, i18n("Option"),
                 KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok,
-                parent, name, true)
+                parent, name, true),doc(adoc)
 {
   QStringList list;
   createGeneralWidget(addPage(i18n("General")));
-  createGridWidget(addPage(i18n("Grid")));
   createEditWidget(addPage(i18n("Edit")));
   list.clear();
-  list << i18n("Helplines") << i18n("vertical");
+  list << i18n("Document") << i18n("Helplines") << i18n("Vertical");
   createVertLineWidget(addPage(list));
   list.clear();
-  list << i18n("Helplines") << i18n("horizontal");
+  list << i18n("Document") << i18n("Helplines") << i18n("Horizontal");
   createHorizLineWidget(addPage(list));
+  list.clear();
+  list << i18n("Document") << i18n("Grid");
+  createGridWidget(addPage(list));
 }
 
-void OptionDialog::createGeneralWidget (QWidget* parent) {
+void OptionDialog::createGeneralWidget (QWidget* parent)
+{
 
     QGridLayout *layout=new QGridLayout(parent, 2, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
     QLabel *label = new QLabel(i18n("Unit:"), parent);
@@ -75,7 +78,8 @@ void OptionDialog::createGeneralWidget (QWidget* parent) {
                           PStateManager::instance ()->defaultMeasurementUnit ());
 }
 
-void OptionDialog::createEditWidget (QWidget* parent) {
+void OptionDialog::createEditWidget (QWidget* parent)
+{
 
     QBoxLayout *layout=new QVBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
     QGroupBox *box = new QGroupBox(i18n("Duplicate Offset"), parent);
@@ -173,48 +177,6 @@ void OptionDialog::createGridWidget (QWidget* parent) {
     layout->addWidget(clabel, 2, 0);
 }
 
-int OptionDialog::setup ()
-{
-
-   OptionDialog dialog (0L, "Options");
-
-   int res=dialog.exec();
-   if(res == QDialog::Accepted)
-   {
-      int selection = dialog.unit->currentItem ();
-      PStateManager* psm = PStateManager::instance ();
-      switch (selection)
-      {
-      case 0:
-         psm->setDefaultMeasurementUnit (UnitPoint);
-         break;
-      case 1:
-         psm->setDefaultMeasurementUnit (UnitMillimeter);
-         break;
-      case 2:
-         psm->setDefaultMeasurementUnit (UnitInch);
-                break;
-      case 3:
-         psm->setDefaultMeasurementUnit (UnitPica);
-         break;
-      case 4:
-         psm->setDefaultMeasurementUnit (UnitCentimeter);
-         break;
-      case 5:
-         psm->setDefaultMeasurementUnit (UnitDidot);
-         break;
-      case 6:
-         psm->setDefaultMeasurementUnit (UnitCicero);
-         break;
-      default:
-         break;
-      }
-      psm->setStepSizes (dialog.smallStep->getValue (),dialog.bigStep->getValue ());
-      psm->setDuplicateOffsets (dialog.horiz->getValue (),dialog.vert->getValue ());
-   }
-   return res;
-}
-
 void OptionDialog::createHorizLineWidget (QWidget* parent)
 {
 
@@ -283,6 +245,48 @@ void OptionDialog::createVertLineWidget (QWidget* parent)
     connect (button, SIGNAL(clicked ()), this, SLOT(deleteVertLine ()));
     right->addWidget(button);
     right->addStretch();
+}
+
+int OptionDialog::setup (GDocument *adoc)
+{
+
+   OptionDialog dialog (adoc, 0L, "Options");
+
+   int res=dialog.exec();
+   if(res == QDialog::Accepted)
+   {
+      int selection = dialog.unit->currentItem ();
+      PStateManager* psm = PStateManager::instance ();
+      switch (selection)
+      {
+      case 0:
+         psm->setDefaultMeasurementUnit (UnitPoint);
+         break;
+      case 1:
+         psm->setDefaultMeasurementUnit (UnitMillimeter);
+         break;
+      case 2:
+         psm->setDefaultMeasurementUnit (UnitInch);
+                break;
+      case 3:
+         psm->setDefaultMeasurementUnit (UnitPica);
+         break;
+      case 4:
+         psm->setDefaultMeasurementUnit (UnitCentimeter);
+         break;
+      case 5:
+         psm->setDefaultMeasurementUnit (UnitDidot);
+         break;
+      case 6:
+         psm->setDefaultMeasurementUnit (UnitCicero);
+         break;
+      default:
+         break;
+      }
+      psm->setStepSizes (dialog.smallStep->getValue (),dialog.bigStep->getValue ());
+      psm->setDuplicateOffsets (dialog.horiz->getValue (),dialog.vert->getValue ());
+   }
+   return res;
 }
 
 #include <OptionDialog.moc>

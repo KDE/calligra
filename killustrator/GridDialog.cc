@@ -128,22 +128,21 @@ void GridDialog::setGridColor(QColor color)
 void GridDialog::setupGrid (Canvas* canvas)
 {
    GridDialog dialog (0L, "Grid");
-   kdDebug()<<"GridDialog::setupGrid(): snapToGrid "<<int(canvas->snapToGrid())<<endl;
-   dialog.setShowGridOn (canvas->showGrid ());
+/*   dialog.setShowGridOn (canvas->showGrid ());
    dialog.setSnapToGridOn (canvas->snapToGrid ());
    dialog.setDistances ((float) canvas->getHorizGridDistance (),
                         (float) canvas->getVertGridDistance ());
-   dialog.setGridColor (canvas->gridColor());
+   dialog.setGridColor (canvas->gridColor());*/
 
    if (dialog.exec() == Accepted)
    {
-      canvas->setGridDistance (dialog.horizontalDistance (),
+/*      canvas->setGridDistance (dialog.horizontalDistance (),
                                dialog.verticalDistance ());
       canvas->showGrid (dialog.showGrid ());
       canvas->snapToGrid (dialog.snapToGrid ());
       canvas->setGridColor (dialog.gridColor());
       canvas->repaint ();
-      canvas->saveGridProperties();
+      canvas->saveGridProperties();*/
    }
 }
 

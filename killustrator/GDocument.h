@@ -30,6 +30,7 @@
 #include <qlist.h>
 #include <qvaluelist.h>
 #include <qstring.h>
+#include <qcolor.h>
 
 #include "Coord.h"
 
@@ -90,10 +91,21 @@ public:
   QDomDocument saveToXml();
   bool readFromXml (const QDomDocument &document);
 
-//  Grid, Helplines
-  void setGrid (float dx, float dy, bool snap);
-  void getGrid (float& dx, float& dy, bool& snap);
+//  Grid
+  void showGrid (bool flag);
+  bool showGrid () const { return gridIsOn; }
 
+  void snapToGrid (bool flag);
+  bool snapToGrid () const { return gridSnapIsOn; }
+  
+  void gridColor(QColor color);
+  QColor gridColor() const { return mGridColor; };
+
+  void setGridDistance (float hdist, float vdist);
+  float horizGridDistance () const { return gridx; }
+  float vertGridDistance () const { return gridy; }
+
+//  Helplines
   void setHelplines (const QValueList<float>& hlines,
                      const QValueList<float>& vlines,
                      bool snap);
@@ -121,6 +133,12 @@ signals:
 protected:
   KIllustratorDocument *doc;
 
+  /*Grid settings*/
+  QColor mGridColor;
+  float gridx, gridy;
+  bool gridSnapIsOn;
+  bool gridIsOn;
+
   int curPageNum;
   bool autoUpdate;
   bool modifyFlag; 
@@ -130,8 +148,7 @@ protected:
   GPage *active_page;     // the current page
   Rect selBox;
   bool selBoxIsValid;
-  bool snapToGrid, snapToHelplines;
-  float gridx, gridy;
+  bool snapToHelplines;
   QValueList<float> hHelplines, vHelplines;
 };
 

@@ -154,7 +154,6 @@ private slots:
     void slotShowGrid( bool );
     void slotShowHelplines( bool );
     void slotPage();
-    void slotGrid();
     void slotHelplines();
     void slotAlignToGrid( bool );
     void slotAlignToHelplines( bool );

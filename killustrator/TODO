@@ -1,110 +1,17 @@
-TODO-LIST
+TODO before 0.8 final (KOffice 1.1)
+* SVG Import/Export filters
+* CMX Import filter
+* New layers dialog (tree...)
+* New options dialog
+* Tabbar some fixes
+* More redrawing speed (complex rewriting canvas?)
+* Canvas color
+* Bug fixing and cleaning code
 
-* Layers: Undo of deleting
-* Moving of objects between layers without copy/paste. [Tobias Burnus].
+TODO before 1.0 final
+* New color support
+* Transparency support
+...
 
-**Filters
-* Import/Export filters: AI, XCF, (CMX) etc.
-  SVG filter (export/import or both) or other filters (Adobe
-  Illustrator, Corel CMX, GIMP XCF or GFig, etc.) 
-  PGML: http://www.w3.org/TR/1998/NOTE-PGML
-* Autotrace plugin support, http://homepages.go.com/~martweb/AutoTrace.htm
-* WMF import/(export) filter; presently only inserting as QWmfObjects works,
-  but this cannot be edited (see Edit|Insert|Clipart)
-
-* Pattern: Besides no background as second colour, an optional second colour
-  should be supported
-
-**Zooming
-
-
-
-
-
-* If the mouse pointer (PointEditTool) is outside an arc/pie, paint an arc, else
-  paint a pie
-
-* [Ctrl] makes a circle instead of an ellipse and a sq. instead of a rectangle.
-  This switch should also be available when the first point is already set
-  (mouse: left button down)
-  [Shift] should be made to draw centerbased ellips/rectangles.
-
-* Support in Page Dialog: Add Page size rectangle
-  maybe: Change the pagedialog (from koffice) to a KIll. one,
-  with support for pagecolor and other units as well as more
-  pageformats (Keep in mind things like pagearrangements and facing pages)
-
---------------------------------
-Bugs and features from the bug and wish website
-* A textbox tool should be addded. Or, if one double clicks on a box, a marker
-  comes up so that text can be added in its interior. If this is done, then text
-  alignment within a box should also be available.
-  [Stefan Farestam stefan@tibco.com]
-* Connectors (a la visio), i.e. lines that connect objects and that are updated
-  when the object is moved [Stefan Farestam stefan@tibco.com].
-* Possibility to create library objects, and also arrange library objects in
-  collections [Stefan Farestam stefan@tibco.com].
-* It would be nice if text could be added to lines, i.e. if I double click on a
-  line, then I can enter some text in a text box. This text could ideally be
-  made either to:
-  - follow the line 
-  - always be orthogonal to it 
-  - always horizontal/vertical 
-  [Stefan Farestam stefan@tibco.com]
-* When I double click on a textbox, I would like to edit the text directly
-  [Stefan Farestam stefan@tibco.com].
-* Export interface should be available through a command line interface, so if I
-  want to automatically convert all ".kil" files to ".eps", then that should be
-  easy to do. (It would certainly be ok if killustrator provided the possibility
-  to convert only one file at a time) [Stefan Farestam stefan@tibco.com].
-* Zooming in current bounding box [Hagen Höpfner].
-* Change the number of corners for symmetrical polygons [Hagen Höpfner].
-* When you choose a tool by clocking on it once it draws one object then pops
-  back to the selection tool, if you click twice is stays selected and doesn't
-  pop back [Paul Campbell paul@chromatic.com].
-* You can 'duplicate' an object, by default it appears down and to the right of
-  the orignal, and the duplicated object is selected. However if you duplicate
-  an object, then immediately move it somewhere else the program remembers the
-  distance moved so that if you immediately duplicate again it moves the new
-  object the same distance yet again - you can use this feature to make arrays
-  of objects easily - this state is forgotten as soon as you perform any other
-  action (care must be taken to make objects pin to the side of the page and not
-  go out of reach) [Paul Campbell paul@chromatic.com].
-* A Designworks-like curve tool [Martin Weber Martin.Weber@usa.net].
-* Shearing, whereby the opposite side is fixed. [Tobias Burnus].
-
-* An extrusion tool similar to Corel Draw. [Lawrence Commander].
---------------------------------
-
-Projects:
-
-
-Bigger ones
-* Support an nonpage drawing area and make sure no object is goes over this
-  extra area.
-  (for implemention: Consider that it might be possible that KIll. is extended
-  to multipage and that a facing page view (starting on the left or right)
-  will be come possible.)
-  
-* Export selected objects only (e.g. to eps, kil etc.)
-
-* Moving Objects between layers
-  (and honor the vertical position, harder for objects which are partly in a
-  layer below and above)
-
-* Zoom arbitry values
-  If the combobox is editable (see KO version), this seems to work well,
-  maybe this needs only a two liner.
-  If this is done:
-  - Zoom to object
-
-* When zooming using the mouse, the viewport should be centered relative to the
-  mouse position, using the combobox the topmost left point should be used
-  (presently everything seems to be reverted to (0,0))
-
-* arbitray values for the angle of linear gradient
-  (presently: only horizontal and vertical)
-
-
-* selecting more than one point should be possible when using the point edit
-  tool
+Last update:
+Igor Janssen <rm@linux.ru.net> 1.06.2001

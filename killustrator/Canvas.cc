@@ -94,9 +94,6 @@ Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidge
 
   buffer = new QPixmap();
 
-  mGridColor = blue;
-
-  readGridProperties ();
   updateGridInfos ();
 
   setFocusPolicy (StrongFocus);
@@ -342,7 +339,7 @@ void Canvas::paintEvent (QPaintEvent* e)
    // clear the canvas
 
    // draw the grid
-   if(gridIsOn)
+   if(document->showGrid())
       drawGrid (p);
 
    p.save();
@@ -573,7 +570,7 @@ void Canvas::updateRegion (const Rect& reg)
 
 //  p.fillRect(rr.left (), rr.top (), rr.width (), rr.height (),red);
 
-  if(gridIsOn)
+  if(document->showGrid())
    drawGrid (p);
 
   int w = (int) (document->getPaperWidth () * resolution * zoomFactor / 72.0);
@@ -634,46 +631,11 @@ void Canvas::print( KPrinter &printer )
 }
 
 /*************************[GRID]*************************/
-
-void Canvas::showGrid (bool flag)
- {
-  if (gridIsOn != flag) {
-    gridIsOn = flag;
-    repaint();
-    //emit gridStatusChanged ();
-    //saveGridProperties ();
-  }
- }
-
-void Canvas::snapToGrid (bool flag)
-{
-   if (gridSnapIsOn != flag)
-   {
-      gridSnapIsOn = flag;
-      //saveGridProperties ();
-      //emit gridStatusChanged ();
-      document->setGrid (hGridDistance, vGridDistance, gridSnapIsOn);
-   }
-}
-
-void Canvas::setGridColor(QColor color)
-{
-    mGridColor = color;
-    //saveGridProperties ();
-}
-
-void Canvas::setGridDistance (float hdist, float vdist)
-{
-   hGridDistance = hdist;
-   vGridDistance = vdist;
-   //saveGridProperties ();
-   document->setGrid (hGridDistance, vGridDistance, gridSnapIsOn);
-}
-
 Rect Canvas::snapTranslatedBoxToGrid (const Rect& r) {
   float x1, x2, y1, y2;
 
-  if (helplinesSnapIsOn || gridSnapIsOn) {
+  if (helplinesSnapIsOn || document->snapToGrid())
+  {
     x1 = snapXPositionToGrid (r.left ());
     x2 = snapXPositionToGrid (r.right ());
     y1 = snapYPositionToGrid (r.top ());
@@ -698,7 +660,7 @@ Rect Canvas::snapTranslatedBoxToGrid (const Rect& r) {
 Rect Canvas::snapScaledBoxToGrid (const Rect& r, int hmask) {
   float x1, x2, y1, y2;
 
-  if (helplinesSnapIsOn || gridSnapIsOn)
+  if (helplinesSnapIsOn || document->snapToGrid())
    {
     x1 = snapXPositionToGrid (r.left ());
     x2 = snapXPositionToGrid (r.right ());
@@ -734,12 +696,12 @@ float Canvas::snapXPositionToGrid (float pos) {
       }
     }
   }
-  if (gridSnapIsOn && ! snap) {
-    int n = (int) (pos / hGridDistance);
-    float r = fmod (pos, hGridDistance);
-    if (r > (hGridDistance / 2.0))
+  if (document->snapToGrid() && ! snap) {
+    int n = (int) (pos / document->horizGridDistance());
+    float r = fmod (pos, document->horizGridDistance());
+    if (r > (document->horizGridDistance() / 2.0))
       n++;
-    pos = hGridDistance * n;
+    pos = document->horizGridDistance() * n;
   }
   return pos;
 }
@@ -759,12 +721,13 @@ float Canvas::snapYPositionToGrid (float pos)
       }
     }
   }
-  if (gridSnapIsOn && ! snap) {
-    int n = (int) (pos / vGridDistance);
-    float r = fmod (pos, vGridDistance);
-    if (r > (vGridDistance / 2.0))
+  if (document->snapToGrid() && ! snap)
+  {
+    int n = (int) (pos / document->vertGridDistance());
+    float r = fmod (pos, document->vertGridDistance());
+    if (r > (document->vertGridDistance() / 2.0))
       n++;
-    pos = vGridDistance * n;
+    pos = document->vertGridDistance() * n;
   }
   return pos;
  }
@@ -790,30 +753,30 @@ void Canvas::snapPositionToGrid (float& x, float& y) {
       }
     }
   }
-  if (gridSnapIsOn && ! snap) {
-    int n = (int) (x / hGridDistance);
-    float r = fmod (x, hGridDistance);
-    if (r > (hGridDistance / 2.0))
+  if (document->snapToGrid() && ! snap)
+  {
+    int n = (int) (x / document->horizGridDistance());
+    float r = fmod (x, document->horizGridDistance());
+    if (r > (document->horizGridDistance() / 2.0))
       n++;
-    x = hGridDistance * n;
+    x = document->horizGridDistance() * n;
 
-    n = (int) (y / vGridDistance);
-    r = fmod (y, vGridDistance);
-    if (r > (vGridDistance / 2.0))
+    n = (int) (y / document->vertGridDistance());
+    r = fmod (y, document->vertGridDistance());
+    if (r > (document->vertGridDistance() / 2.0))
       n++;
-    y = vGridDistance * n;
+    y = document->vertGridDistance() * n;
   }
 }
 
-//#include <iostream.h>
 void Canvas::drawGrid (QPainter& p)
 {
-   QPen pen1 (mGridColor, 0);
+   QPen pen1 (document->gridColor(), 0);
    p.save ();
    p.setPen (pen1);
 
    //the vertical lines
-   float hd = hGridDistance * zoomFactor;
+   float hd = document->horizGridDistance() * zoomFactor;
    while(hd < MIN_GRID_DIST)
      hd *= 2.0;
    int tmp=m_visibleArea.left()/(int)hd;
@@ -827,7 +790,7 @@ void Canvas::drawGrid (QPainter& p)
 
    //the horizontal lines
    //correct grid, aleXXX
-   float vd = vGridDistance * zoomFactor;
+   float vd = document->horizGridDistance() * zoomFactor;
    while(vd < MIN_GRID_DIST)
      vd *= 2.0;
    /* example:   vd = 20
@@ -847,61 +810,10 @@ void Canvas::drawGrid (QPainter& p)
    }
 
    p.restore ();
-//   kdDebug(38000)<<"Canvas::drawGrid(): x: "<<hGridDistance<<" hd: "<<hd<<" y: "<<vGridDistance<<" vd: "<<vd<<endl;
-}
-
-void Canvas::readGridProperties ()
-{
-   //kdDebug()<<"Canvas::readGridProps()"<<endl;
-   KConfig* config = kapp->config ();
-
-   config->setGroup ("Grid");
-
-   vGridDistance = (float) config->readDoubleNumEntry ("vGridDistance", 50.0);
-   hGridDistance = (float) config->readDoubleNumEntry ("hGridDistance", 50.0);
-   gridIsOn = config->readBoolEntry ("showGrid", false);
-   gridSnapIsOn = config->readBoolEntry ("snapToGrid", false);
-   mGridColor = config->readColorEntry ("GridColor", &mGridColor);
-   document->setGrid(vGridDistance,hGridDistance,gridSnapIsOn);
-   //kdDebug()<<"gridSnapIsOn: "<<int(gridSnapIsOn)<<endl;
-   //kdDebug()<<"vGridDistance: "<<vGridDistance<<endl;
-   //kdDebug()<<"hGridDistance: "<<hGridDistance<<endl;
-
-   config->setGroup ("Helplines");
-   helplinesAreOn = config->readBoolEntry ("showHelplines");
-   helplinesSnapIsOn = config->readBoolEntry ("snapToHelplines");
-
-
-}
-
-void Canvas::saveGridProperties ()
-{
-   //kdDebug()<<"Canvas::saveGridProps()"<<endl;
-  KConfig* config = kapp->config ();
-
-  config->setGroup ("Grid");
-
-  config->writeEntry ("vGridDistance", (double) vGridDistance);
-  config->writeEntry ("hGridDistance", (double) hGridDistance);
-  config->writeEntry ("showGrid", gridIsOn);
-  config->writeEntry ("snapToGrid", gridSnapIsOn);
-  config->writeEntry ("GridColor", mGridColor);
-  //kdDebug()<<"gridSnapIsOn: "<<int(gridSnapIsOn)<<endl;
-  //kdDebug()<<"vGridDistance: "<<vGridDistance<<endl;
-  //kdDebug()<<"hGridDistance: "<<hGridDistance<<endl;
-
-  config->setGroup ("Helplines");
-  config->writeEntry ("showHelplines", helplinesAreOn);
-  config->writeEntry ("snapToHelplines", helplinesSnapIsOn);
-
-  config->sync ();
 }
 
 void Canvas::updateGridInfos ()
 {
-   //kdDebug()<<"gridsnapison: "<<int(gridSnapIsOn)<<endl;
-   document->getGrid (hGridDistance, vGridDistance, gridSnapIsOn);
-   //kdDebug()<<"after getGrid() gridsnapison: "<<int(gridSnapIsOn)<<endl;
    document->getHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
 }
 
@@ -997,18 +909,21 @@ void Canvas::setHorizHelplines (const QValueList<float>& lines) {
   document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
 }
 
-void Canvas::setVertHelplines (const QValueList<float>& lines) {
+void Canvas::setVertHelplines (const QValueList<float>& lines)
+{
   vertHelplines = lines;
   if (helplinesAreOn)
     repaint();
   document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
 }
 
-const QValueList<float>& Canvas::getHorizHelplines () const {
+const QValueList<float>& Canvas::getHorizHelplines () const 
+{
   return horizHelplines;
 }
 
-const QValueList<float>& Canvas::getVertHelplines () const {
+const QValueList<float>& Canvas::getVertHelplines () const
+{
   return vertHelplines;
 }
 
@@ -1043,37 +958,42 @@ bool Canvas::showHelplines ()
    return helplinesAreOn;
 }
 
-int Canvas::indexOfHorizHelpline (float pos) {
+int Canvas::indexOfHorizHelpline (float pos)
+{
     int ret=0;
-    for (QValueList<float>::Iterator i = horizHelplines.begin(); i!=horizHelplines.end(); ++i, ++ret) {
-        if (pos - NEAR_DISTANCE < *i &&
-            pos + NEAR_DISTANCE > *i)
+    for (QValueList<float>::Iterator i = horizHelplines.begin(); i!=horizHelplines.end(); ++i, ++ret)
+    {
+        if (pos - NEAR_DISTANCE < *i && pos + NEAR_DISTANCE > *i)
             return ret;
     }
     return -1;
 }
 
-int Canvas::indexOfVertHelpline (float pos) {
+int Canvas::indexOfVertHelpline (float pos)
+{
     int ret=0;
-    for (QValueList<float>::Iterator i = vertHelplines.begin(); i!=vertHelplines.end(); ++i, ++ret) {
-        if (pos - NEAR_DISTANCE < *i &&
-            pos + NEAR_DISTANCE > *i)
+    for (QValueList<float>::Iterator i = vertHelplines.begin(); i!=vertHelplines.end(); ++i, ++ret)
+    {
+        if (pos - NEAR_DISTANCE < *i && pos + NEAR_DISTANCE > *i)
             return ret;
     }
     return -1;
 }
 
-void Canvas::updateHorizHelpline (int idx, float pos) {
+void Canvas::updateHorizHelpline (int idx, float pos)
+{
   horizHelplines[idx] = pos;
   repaint();
 }
 
-void Canvas::updateVertHelpline (int idx, float pos) {
+void Canvas::updateVertHelpline (int idx, float pos)
+{
   vertHelplines[idx] = pos;
   repaint();
 }
 
-void Canvas::updateHelplines () {
+void Canvas::updateHelplines ()
+{
   document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
 }
 

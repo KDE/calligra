@@ -235,7 +235,6 @@ void KIllustratorView::createMyGUI()
 
     // Layout menu
     new KAction( i18n("&Page..."), 0, this, SLOT( slotPage() ), actionCollection(), "page" );
-    m_setupGrid=new KAction( i18n("&Grid..."), 0, this, SLOT( slotGrid() ), actionCollection(), "grid" );
     m_setupHelplines=new KAction( i18n("&Helplines..."), 0, this, SLOT( slotHelplines() ), actionCollection(), "helplines" );
 
     m_alignToGrid = new KToggleAction( i18n("&Align To Grid"), 0, actionCollection(), "alignToGrid" );
@@ -322,8 +321,8 @@ void KIllustratorView::createMyGUI()
     m_showRuler->setChecked( true );
     m_showHelplines->setChecked(canvas->showHelplines());
     m_alignToHelplines->setChecked(canvas->alignToHelplines());
-    m_showGrid->setChecked(canvas->showGrid());
-    m_alignToGrid->setChecked(canvas->snapToGrid());
+    m_showGrid->setChecked(activeDocument()->showGrid());
+    m_alignToGrid->setChecked(activeDocument()->snapToGrid());
     m_selectTool->setChecked( true );
     if(m_pDoc->isReadWrite())
       tcontroller->toolSelected( Tool::ToolSelect);
@@ -634,16 +633,18 @@ void KIllustratorView::popupForRulers()
     if(!m_pDoc->isReadWrite())
         return;
 
-   if (rulerMenu==0)
+   if (!rulerMenu)
    {
       rulerMenu = new KPopupMenu();
+      kdDebug() << "create"<<endl;
       m_showGrid->plug(rulerMenu);
       m_showHelplines->plug(rulerMenu);
       m_setupGrid->plug(rulerMenu);
       m_setupHelplines->plug(rulerMenu);
       m_alignToGrid->plug(rulerMenu);
       m_alignToHelplines->plug(rulerMenu);
-   };
+      kdDebug() << "added"<<endl;
+   }
    rulerMenu->popup( QCursor::pos () );
 }
 
@@ -906,11 +907,8 @@ void KIllustratorView::slotShowRuler( bool b )
 
 void KIllustratorView::slotShowGrid( bool b )
 {
-   if (b!=canvas->showGrid())
-   {
-      canvas->showGrid( b );
-      canvas->saveGridProperties();
-   };
+   if (b!=activeDocument()->showGrid())
+     activeDocument()->showGrid( b );
 }
 
 void KIllustratorView::slotShowHelplines( bool b )
@@ -918,9 +916,8 @@ void KIllustratorView::slotShowHelplines( bool b )
    if (b!=canvas->showHelplines())
    {
       canvas->showHelplines( b );
-      canvas->saveGridProperties();
    }
-};
+}
 
 void KIllustratorView::slotPage()
 {
@@ -929,13 +926,6 @@ void KIllustratorView::slotPage()
 
     if (KoPageLayoutDia::pageLayout (pLayout, header, FORMAT_AND_BORDERS))
         m_pDoc->gdoc()->activePage()->setPageLayout (pLayout);
-}
-
-void KIllustratorView::slotGrid()
-{
-    GridDialog::setupGrid (canvas);
-    m_alignToGrid->setChecked(canvas->snapToGrid());
-    m_showGrid->setChecked(canvas->showGrid());
 }
 
 void KIllustratorView::slotHelplines()
@@ -947,20 +937,14 @@ void KIllustratorView::slotHelplines()
 
 void KIllustratorView::slotAlignToGrid( bool b )
 {
-   if (b!=canvas->snapToGrid())
-   {
-      canvas->snapToGrid( b );
-      canvas->saveGridProperties();
-   };
+   if (b!=activeDocument()->snapToGrid())
+      activeDocument()->snapToGrid( b );
 }
 
 void KIllustratorView::slotAlignToHelplines( bool b )
 {
    if (b!=canvas->alignToHelplines())
-   {
       canvas->alignToHelplines( b );
-      canvas->saveGridProperties();
-   };
 }
 
 void KIllustratorView::slotTransformPosition()
@@ -1045,7 +1029,7 @@ void KIllustratorView::slotBlend()
 
 void KIllustratorView::slotOptions()
 {
-   if (OptionDialog::setup()==QDialog::Accepted)
+   if (OptionDialog::setup(activeDocument())==QDialog::Accepted)
    {
       hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
       vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());

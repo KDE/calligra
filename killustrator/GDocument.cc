@@ -73,8 +73,11 @@ GDocument::~GDocument ()
 
 void GDocument::initialize ()
 {
-  gridx = gridy = 20.0;
-  snapToGrid = snapToHelplines = false;
+  gridx = 20.0;
+  gridy = 20.0;
+  gridSnapIsOn = false;
+  gridIsOn = false;
+  mGridColor = blue;
 
   modifyFlag = false;
   filename = i18n("<unnamed>");
@@ -227,7 +230,7 @@ QDomDocument GDocument::saveToXml ()
   QDomElement grid=document.createElement("grid");
   grid.setAttribute ("dx", gridx);
   grid.setAttribute ("dy", gridy);
-  grid.setAttribute ("align", snapToGrid ? 1 : 0);
+  grid.setAttribute ("align", gridSnapIsOn ? 1 : 0);
   head.appendChild(grid);
 
   QDomElement helplines=document.createElement("helplines");
@@ -275,7 +278,7 @@ bool GDocument::readFromXml (const  QDomDocument &document)
     QDomElement grid=head.namedItem("grid").toElement();
     gridx=grid.attribute("dx").toFloat();
     gridy=grid.attribute("dy").toFloat();
-    snapToGrid=(grid.attribute("align").toInt()==1);
+    gridSnapIsOn = (grid.attribute("align").toInt()==1);
 
     QDomElement helplines=grid.namedItem("helplines").toElement();
     snapToHelplines=(helplines.attribute("align").toInt()==1);
@@ -316,7 +319,7 @@ bool GDocument::readFromXml (const  QDomDocument &document)
     QDomElement grid=head.namedItem("grid").toElement();
     gridx=grid.attribute("dx").toFloat();
     gridy=grid.attribute("dy").toFloat();
-    snapToGrid=(grid.attribute("align").toInt()==1);
+    gridSnapIsOn = (grid.attribute("align").toInt()==1);
 
     QDomElement helplines=grid.namedItem("helplines").toElement();
     snapToHelplines=(helplines.attribute("align").toInt()==1);
@@ -348,20 +351,6 @@ bool GDocument::readFromXml (const  QDomDocument &document)
   return false;
 }
 
-void GDocument::setGrid (float dx, float dy, bool snap)
-{
-  gridx = dx;
-  gridy = dy;
-  snapToGrid = snap;
-}
-
-void GDocument::getGrid (float& dx, float& dy, bool& snap)
-{
-  dx = gridx;
-  dy = gridy;
-  snap = snapToGrid;
-}
-
 void GDocument::setHelplines (const QValueList<float>& hlines,
                               const QValueList<float>& vlines,
                               bool snap)
@@ -383,6 +372,35 @@ void GDocument::getHelplines (QValueList<float>& hlines, QValueList<float>& vlin
 void GDocument::helplineStatusChanged ()
 {
   emit gridChanged ();
+}
+
+/****************[Grid]**********************/
+
+void GDocument::showGrid (bool flag)
+{
+  if (gridIsOn != flag)
+  {
+    gridIsOn = flag;
+  }
+}
+
+void GDocument::snapToGrid (bool flag)
+{
+  if(gridSnapIsOn != flag)
+  {
+    gridSnapIsOn = flag;
+  }
+}
+
+void GDocument::gridColor(QColor color)
+{
+  mGridColor = color;
+}
+
+void GDocument::setGridDistance (float hdist, float vdist)
+{
+  gridx = hdist;
+  gridy = vdist;
 }
 
 #include <GDocument.moc>

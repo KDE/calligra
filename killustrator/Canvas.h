@@ -101,20 +101,6 @@ public:
 /*
     GRID
 */
-  void showGrid (bool flag);
-  bool showGrid () const { return gridIsOn; }
-
-  void snapToGrid (bool flag);
-  bool snapToGrid () const { return gridSnapIsOn; }
-  
-  void setGridColor(QColor color);
-  QColor gridColor() const { return mGridColor; };
-
-  void setGridDistance (float hdist, float vdist);
-  float getHorizGridDistance () const { return hGridDistance; }
-  float getVertGridDistance () const { return vGridDistance; }
-  void saveGridProperties ();
-
   void snapPositionToGrid (float& x, float& y);
   Rect snapTranslatedBoxToGrid (const Rect& r);
   Rect snapScaledBoxToGrid (const Rect& r, int hmask);
@@ -145,8 +131,6 @@ protected:
   
   float snapXPositionToGrid (float pos);
   float snapYPositionToGrid (float pos);
-
-  void readGridProperties ();
 
   bool eventFilter (QObject *, QEvent *);
   /* Events */
@@ -201,18 +185,14 @@ private:
   float zoomFactor;
   GDocument *document;
   ToolController *toolController;
-  QColor mGridColor;
-  float hGridDistance, vGridDistance;
   int pendingRedraws;
   Rect regionForUpdate, region;
 
   QValueList<float> horizHelplines, vertHelplines;
   float tmpHorizHelpline, tmpVertHelpline;
 
-  bool gridSnapIsOn;
   bool helplinesSnapIsOn;
   bool helplinesAreOn:1;
-  bool gridIsOn:1;
   bool dragging:1;
   bool ensureVisibilityFlag:1;
   bool drawBasePoints:1;
