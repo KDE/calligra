@@ -722,7 +722,7 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
     const TextFormatting& formatLayout,
     const FormatData& formatData)
 {
-    // Retrieve text and escape it (and necessary space, atbs and line-break tags)
+    // Retrieve text and escape it (and necessary space, tabs and line-break tags)
     QString partialText(escapeOOSpan(paraText.mid(formatData.pos,formatData.len)));
 
     if (formatData.text.missing)
