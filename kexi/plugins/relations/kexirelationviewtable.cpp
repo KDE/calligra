@@ -54,7 +54,13 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 
 	setFrameStyle( QFrame::WinPanel | QFrame::Raised );
 
+// sorry but at least under linux it looked like a fat german tourist
+// maybe we should find a better way for different estetic ideas :)
+#ifdef Q_WS_WIN
 	QVBoxLayout *lyr = new QVBoxLayout(this,5,1); //js: using Q*BoxLayout is a good idea
+#else
+	QVBoxLayout *lyr = new QVBoxLayout(this,2,1); //js: using Q*BoxLayout is a good idea
+#endif
 
 	m_tableHeader = new KexiRelationViewTableContainerHeader(table, this);
 	m_tableHeader->unsetFocus();
@@ -73,7 +79,7 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 		this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)));
 }
 
-void KexiRelationViewTableContainer::slotContextMenu(KListView *lv, QListViewItem *i, const QPoint& p)
+void KexiRelationViewTableContainer::slotContextMenu(KListView *, QListViewItem *, const QPoint &p)
 {
 	m_parent->executePopup(p);
 }
@@ -95,16 +101,16 @@ int KexiRelationViewTableContainer::globalY(const QString &field)
 
 QSize KexiRelationViewTableContainer::sizeHint()
 {
+#ifdef Q_WS_WIN
 	QSize s = m_tableView->sizeHint()
-		+ QSize(  2*5 , m_tableHeader->height() + 2 * 5 );
-//	QSize s = m_tableView->sizeHint()
-//		+ QSize(  2 * layout()->margin(), m_tableHeader->height() + 2 * layout()->margin() );
+		+ QSize(  2 * 5 , m_tableHeader->height() + 2 * 5 );
+#else
+	QSize s = m_tableView->sizeHint();
+	s.setWidth(s.width() + 4);
+	s.setHeight(m_tableHeader->height() + s.height());
+#endif
+
 	return s;
-/*	return QSize(m_tableView->columnWidth(1) + 2*frameWidth() +2 * layout()->margin(), 
-		(m_tableView->childCount()+1)*m_tableView->firstChild()->totalHeight()
-		+m_tableHeader->height()
-		+2*frameWidth() + 2 * layout()->margin() );
-		*/
 }
 
 QSize KexiRelationViewTable::sizeHint()
@@ -115,7 +121,7 @@ kdDebug() << m_table << " cw=" << columnWidth(1) + fm.width("i") << ", " << fm.w
 
 	QSize s( 
 		QMAX( columnWidth(1) + fm.width("i"), fm.width(m_table+"  ")), 
-		childCount()*firstChild()->totalHeight() + 5 );
+		childCount()*firstChild()->totalHeight() + 4 );
 //	QSize s( columnWidth(1), childCount()*firstChild()->totalHeight() + 3*firstChild()->totalHeight()/10);
 	return s;
 }
