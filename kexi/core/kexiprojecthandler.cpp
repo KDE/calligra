@@ -63,6 +63,7 @@ void KexiProjectHandler::deleteFromViewProxyMap(KexiView* view)
 
 KexiProject *KexiProjectHandler::kexiProject()
 {
+	if (m_project.isNull()) return 0;
 	return m_project;
 }
 

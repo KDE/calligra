@@ -24,6 +24,7 @@
 #include <qobject.h>
 #include <qpopupmenu.h>
 #include <qdict.h>
+#include <qguardedptr.h>
 
 #include "kexiproject.h"
 #include "kexidialogbase.h"
@@ -90,7 +91,7 @@ class KexiProjectHandler : public QObject
 	private:
 		typedef QMap<KexiView*,KexiProjectHandlerProxy*> ViewProxyMap; 
 		ViewProxyMap m_viewProxyMap;
-		KexiProject *m_project;					
+		QGuardedPtr<KexiProject> m_project;					
 		ItemList* m_items;
 };
 

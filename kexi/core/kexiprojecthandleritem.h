@@ -21,6 +21,7 @@
 #define KEXIPROJECTPARTITEM_H
 
 #include <qobject.h>
+#include <qguardedptr.h>
 
 #include "kexiprojecthandler.h"
 
@@ -40,7 +41,7 @@ class KexiProjectHandlerItem : public QObject
 		QString		shortIdentifier();
 
 	private:
-		KexiProjectHandler	*m_parent;
+		QGuardedPtr<KexiProjectHandler>	m_parent;
 		QString 	m_name;
 		QString 	m_mime;
 		QString 	m_shortIdentifier;
