@@ -677,7 +677,11 @@ public:
      */
     bool testValidity() const;
 
-    void conditionAlign(QPainter &painter,int _col,int _row);
+    /**
+     * Calculates the text parameters stored in cell
+     * Applies font to use to @param painter
+     */
+    void calculateTextParameters( QPainter &painter, int _col, int _row );
 
     /**
      * return align X when align is undefined
@@ -804,6 +808,11 @@ protected:
      * Format a numeric value (isNumeric()==true) using the user-specified format
      */
     QString createFormat( double value, int col, int row );
+
+    /**
+     * Applies the font to use to @param painter
+     */
+    void applyZoomedFont( QPainter &painter, int _col, int _row );
 
     /**
      * When you insert a cell at bottom or right

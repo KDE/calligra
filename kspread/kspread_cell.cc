@@ -825,7 +825,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     //
     // Determine the correct font
     //
-    conditionAlign( _painter, _col, _row );
+    applyZoomedFont( _painter, _col, _row );
 
     //Adjust fontsize to zoomlevel
     QFont tmpFont = _painter.font();
@@ -1476,19 +1476,29 @@ void KSpreadCell::textSize( QPainter &_paint )
     }
 }
 
-void KSpreadCell::conditionAlign( QPainter &_paint, int _col, int _row )
+
+void KSpreadCell::applyZoomedFont( QPainter &painter, int _col, int _row )
 {
     KSpreadConditional condition;
 
     if( conditions.currentCondition( condition ) &&
            !m_pTable->getShowFormula() )
     {
-        _paint.setFont( condition.fontcond );
+        painter.setFont( condition.fontcond );
     }
     else
     {
-        _paint.setFont( textFont(_col,_row ) );
+        painter.setFont( textFont( _col, _row ) );
     }
+}
+
+void KSpreadCell::calculateTextParameters( QPainter &_paint, int _col, int _row )
+{
+    applyZoomedFont( _paint, _col, _row );
+
+    textSize( _paint );
+
+    offsetAlign( _col, _row );
 }
 
 bool KSpreadCell::makeFormula()
@@ -2376,7 +2386,7 @@ void KSpreadCell::paintText( QPainter& painter,
   KSpreadConditional condition;
 
   //Set the font according to condition
-  conditionAlign( painter, cellRef.x(), cellRef.y() );
+  applyZoomedFont( painter, cellRef.x(), cellRef.y() );
 
   //Check for red font color for negativ values
   if( !conditions.currentCondition( condition ) )
@@ -2484,15 +2494,15 @@ void KSpreadCell::paintText( QPainter& painter,
     painter.rotate( angle );
     double x;
     if( angle > 0 )
-      x = indent + (int)(cellRect.x()) + m_dTextX;
+      x = indent + cellRect.x() + m_dTextX;
     else
       x = indent + cellRect.x() + m_dTextX -
                      ( fm.descent() + fm.ascent() ) * sin( angle * M_PI / 180 );
     double y;
     if( angle > 0 )
-      y = (int)(cellRect.y()) + m_dTextY;
+      y = cellRect.y() + m_dTextY;
     else
-      y = (int)(cellRect.y()) + m_dTextY + m_dOutTextHeight;
+      y = cellRect.y() + m_dTextY + m_dOutTextHeight;
     painter.drawText( doc->zoomItX( x * cos( angle * M_PI / 180 ) +
                                     y * sin( angle * M_PI / 180 ) ),
                       doc->zoomItY( -x * sin( angle * M_PI / 180 ) +
@@ -2530,11 +2540,11 @@ void KSpreadCell::paintText( QPainter& painter,
         m_dTextX = leftBorderWidth( cellRef.x(), cellRef.y() ) + BORDER_SPACE;
         break;
       case KSpreadCell::Right:
-        m_dTextX = (int)(cellRect.width() - BORDER_SPACE - fm.width( t )
-                         - rightBorderWidth( cellRef.x(), cellRef.y() ));
+        m_dTextX = cellRect.width() - BORDER_SPACE - fm.width( t ) -
+                   rightBorderWidth( cellRef.x(), cellRef.y() );
         break;
       case KSpreadCell::Center:
-        m_dTextX = (int)(( cellRect.width() - fm.width( t ) ) / 2);
+        m_dTextX = ( cellRect.width() - fm.width( t ) ) / 2;
       }
       painter.drawText( doc->zoomItX( indent + cellRect.x() + m_dTextX + dx ),
                         doc->zoomItY( cellRect.y() + m_dTextY + dy ), t );

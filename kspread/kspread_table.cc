@@ -4542,7 +4542,7 @@ void KSpreadSheet::decreaseIndent( KSpreadSelection* selectionInfo )
 int KSpreadSheet::adjustColumnHelper( KSpreadCell * c, int _col, int _row )
 {
     int long_max = 0;
-    c->conditionAlign( painter(), _col, _row );
+    c->calculateTextParameters( painter(), _col, _row );
     if ( c->textWidth() > long_max )
     {
         int indent = 0;
@@ -4557,7 +4557,7 @@ int KSpreadSheet::adjustColumnHelper( KSpreadCell * c, int _col, int _row )
 
         if ( a == KSpreadCell::Left )
             indent = c->getIndent( c->column(), c->row() );
-        long_max = indent + c->textWidth()
+        long_max = indent + (int)c->textWidth()
                    + c->leftBorderWidth( c->column(), c->row() )
                    + c->rightBorderWidth( c->column(), c->row() );
     }
@@ -4642,9 +4642,9 @@ int KSpreadSheet::adjustRow( KSpreadSelection* selectionInfo, int _row )
         {
           if ( !c->isEmpty() && !c->isObscured() )
           {
-            c->conditionAlign( painter(), c->column(), row );
+            c->calculateTextParameters( painter(), c->column(), row );
             if( c->textHeight() > long_max )
-              long_max = c->textHeight()
+              long_max = (int)c->textHeight()
                 + c->topBorderWidth( c->column(), c->row() )
                 + c->bottomBorderWidth( c->column(), c->row() );
           }
@@ -4664,9 +4664,9 @@ int KSpreadSheet::adjustRow( KSpreadSelection* selectionInfo, int _row )
         {
           if ( !c->isEmpty() && !c->isObscured() )
           {
-            c->conditionAlign( painter(), c->column(), row );
+            c->calculateTextParameters( painter(), c->column(), row );
             if ( c->textHeight() > long_max )
-              long_max = c->textHeight()
+              long_max = (int)c->textHeight()
                 + c->topBorderWidth( c->column(), c->row() )
                 + c->bottomBorderWidth( c->column(), c->row() );
           }
@@ -4684,9 +4684,9 @@ int KSpreadSheet::adjustRow( KSpreadSelection* selectionInfo, int _row )
         if ( cell != m_pDefaultCell && !cell->isEmpty()
             && !cell->isObscured() )
         {
-          cell->conditionAlign( painter(), x, y );
+          cell->calculateTextParameters( painter(), x, y );
           if ( cell->textHeight() > long_max )
-            long_max = cell->textHeight()
+            long_max = (int)cell->textHeight()
               + cell->topBorderWidth( cell->column(), cell->row() )
               + cell->bottomBorderWidth( cell->column(), cell->row() );
         }
