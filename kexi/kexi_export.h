@@ -20,7 +20,9 @@
 #ifndef _KEXI_EXPORT_H_
 #define _KEXI_EXPORT_H_
 
-#include <kdeversion.h> /* this will also include <kdelibs_export.h>, if available */
+#ifdef __cplusplus
+# include <kdeversion.h> /* this will also include <kdelibs_export.h>, if available */
+#endif 
 /* KDE_EXPORT will be defined multiple times without this on kdelibs 3.3 (tested on 3.3.1) */
 #include <kdemacros.h>
 
@@ -151,6 +153,14 @@
 # define KEXIGUIUTILS_EXPORT KDE_IMPORT
 #else
 # define KEXIGUIUTILS_EXPORT //for apps
+#endif
+
+#ifdef MAKE_KROSS_MAIN_LIB
+# define KROSS_MAIN_EXPORT KDE_EXPORT
+#elif defined(KDE_MAKE_LIB)
+# define KROSS_MAIN_EXPORT KDE_IMPORT
+#else
+# define KROSS_MAIN_EXPORT //for apps
 #endif
 
 /* -- compile-time settings -- */
