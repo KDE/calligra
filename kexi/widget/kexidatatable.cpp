@@ -37,6 +37,7 @@
 KexiDataTable::KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, 
 	const char *name, bool dbAware)
  : KexiViewBase(mainWin, parent, name)
+ , m_view(0)
 {
 	if (dbAware)
 		m_view = new KexiDataTableView(this, "view");
@@ -50,6 +51,7 @@ KexiDataTable::KexiDataTable(KexiMainWindow *mainWin, QWidget *parent,
 KexiDataTable::KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, 
 	KexiDB::Cursor *cursor, const char *name)
  : KexiViewBase(mainWin, parent, name)
+ , m_view(0)
 {
 	m_view = new KexiDataTableView(this, "view", cursor);
 	init();
@@ -158,13 +160,13 @@ QWidget* KexiDataTable::mainWidget()
 QSize KexiDataTable::minimumSizeHint() const
 {
 //	QWidget*const w= (QWidget*const)mainWidget();
-	return m_view->minimumSizeHint();
+	return m_view ? m_view->minimumSizeHint() : KexiViewBase::minimumSizeHint();
 //	return mainWidget() ? mainWidget()->minimumSizeHint() : KMdiChildView::minimumSizeHint();
 }
 
 QSize KexiDataTable::sizeHint() const
 {
-	return m_view->sizeHint();
+	return m_view ? m_view->sizeHint() : KexiViewBase::sizeHint();
 }
 
 // update actions --------------
