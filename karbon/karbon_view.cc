@@ -18,6 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "karbon_view.h"
+
 #include <qbuttongroup.h>
 #include <qdockarea.h>
 #include <qdragobject.h>
@@ -94,7 +96,6 @@
 // The rest.
 #include "karbon_factory.h"
 #include "karbon_part.h"
-#include "karbon_view.h"
 #include "karbon_view_iface.h"
 #include "vgroup.h"
 #include "vpainterfactory.h"
