@@ -76,6 +76,13 @@ public:
      */
     virtual KoDocument* rootDocument() const;
 
+    /**
+     * Retrieves the topmost parent document. In almost all cases this
+     * is equivalent to rootDocument(), except when we've got multiple
+     * views of an embedded document (parent is located in another shell!)
+     */
+    virtual KoDocument* topmostParentDocument() const;;
+
     virtual KoView *rootView() const;
 
     /**
@@ -206,9 +213,9 @@ protected:
      *         (don't display anything in this case, the error dialog box is also implemented here
      *         but restore the original URL in slotFileSaveAs)
      */
-    virtual bool saveDocument( bool _saveas = FALSE );
+    virtual bool saveDocument( bool _saveas = false );
 
-    virtual bool queryClose(bool forQuit=FALSE);
+    virtual bool queryClose();
 
     KRecentFilesAction *m_recent;
 

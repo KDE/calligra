@@ -299,9 +299,10 @@ KURL KoDocumentChild::url()
 
 KoDocumentChild::~KoDocumentChild()
 {
-  if ( d->m_doc )
+  if ( d->m_doc ) {
     delete d->m_doc;
-
+    d->m_doc=0L;
+  }
   delete d;
 }
 

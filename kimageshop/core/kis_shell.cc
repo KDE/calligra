@@ -57,6 +57,11 @@ KoDocument* KisShell::createDoc() const
 
 void KisShell::slotFileNew()
 {
+  // This is buggy - Please contact me whenever this should be compiled
+  // again! (Can't test it right now, because it crashes) (Werner)
+#ifdef __GNUC__
+#warning BUG
+#endif
   KisDoc* doc = (KisDoc*)rootDocument();
 
   if ( !doc )

@@ -66,8 +66,10 @@ public:
   KoMainWindowPrivate()
   {
     m_rootDoc = 0L;
+    m_parentRootDoc = 0L;
     m_manager = 0L;
     bMainWindowGUIBuilt = false;
+    m_forQuit=false;
     m_splitted=false;
     m_activePart = 0L;
     m_activeView = 0L;
@@ -81,6 +83,7 @@ public:
   }
 
   KoDocument *m_rootDoc;
+  KoDocument *m_parentRootDoc;
   QList<KoView> m_rootViews;
   KParts::PartManager *m_manager;
 
@@ -99,6 +102,7 @@ public:
 
   bool bMainWindowGUIBuilt;
   bool m_splitted;
+  bool m_forQuit;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
@@ -224,6 +228,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     oldRootDoc->removeShell( this );
 
   d->m_rootDoc = doc;
+  d->m_parentRootDoc=0L;
 
   if ( doc )
   {
@@ -234,14 +239,6 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     d->m_rootViews.current()->show();
     d->m_rootDoc->addShell( this );
     d->m_removeView->setEnabled(false);
-
-    KAction *docinfo=actionCollection()->action("file_documentinfo");
-    if(docinfo) {
-      if(doc->isEmbedded())
-	docinfo->setEnabled(false);
-      else
-	docinfo->setEnabled(true);
-    }
   }
 
   updateCaption();
@@ -262,6 +259,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
 void KoMainWindow::setRootDocumentDirect( KoDocument *doc )
 {
   d->m_rootDoc = doc;
+  d->m_parentRootDoc=0L;
   // maybe we want to add the KoView as parameter and set it into
   // d->m_rootView but it doesn't seem used at all ?!? (David)
 }
@@ -292,7 +290,18 @@ void KoMainWindow::updateCaption()
 
 KoDocument *KoMainWindow::rootDocument() const
 {
-  return d->m_rootDoc;
+    return d->m_rootDoc;
+}
+
+KoDocument *KoMainWindow::topmostParentDocument() const
+{
+  if(d->m_parentRootDoc!=0L)
+    return d->m_parentRootDoc;
+  d->m_parentRootDoc=d->m_rootDoc;
+  // get the tompost parent document (save because of inherits())
+  while(d->m_parentRootDoc && d->m_parentRootDoc->isEmbedded())
+    d->m_parentRootDoc = static_cast<KoDocument*>(d->m_parentRootDoc->parent());
+  return d->m_parentRootDoc;
 }
 
 KoView *KoMainWindow::rootView() const
@@ -310,11 +319,7 @@ KParts::PartManager *KoMainWindow::partManager()
 bool KoMainWindow::openDocument( const KURL & url )
 {
     m_recent->addURL( url );
-    KoDocument* doc = rootDocument();
-	
-    // get the real root document
-    while(doc && doc->isEmbedded())
-      doc = static_cast<KoDocument*>(doc->parent());
+    KoDocument* doc = topmostParentDocument();
 
     KoDocument *newdoc;
     if(doc) {
@@ -352,7 +357,7 @@ bool KoMainWindow::openDocument( const KURL & url )
 
 bool KoMainWindow::saveDocument( bool saveas )
 {
-    KoDocument* pDoc = rootDocument();
+    KoDocument* pDoc = topmostParentDocument();
 
     QCString _native_format = pDoc->nativeFormatMimeType();
 
@@ -361,8 +366,8 @@ bool KoMainWindow::saveDocument( bool saveas )
         KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
         dialog->setCaption( i18n("Save document as") );
         KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Export,
-                                              _native_format, nativeFormatPattern(),
-                                              nativeFormatName(), true);
+                                              _native_format, pDoc->firstShell()->nativeFormatPattern(),
+                                              pDoc->firstShell()->nativeFormatName(), true);
 	KURL newURL;
 
         bool bOk = true;
@@ -411,12 +416,12 @@ bool KoMainWindow::saveDocument( bool saveas )
       return pDoc->save();
 }
 
-bool KoMainWindow::queryClose(bool forQuit)
+bool KoMainWindow::queryClose()
 {
   if ( rootDocument() == 0 )
     return true;
   kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount() << endl;
-  if ( !forQuit && rootDocument()->viewCount() > 1 )
+  if ( !d->m_forQuit && rootDocument()->viewCount() > 1 )
     // there are more open, and we are closing just one, so no problem for closing
     return true;
 
@@ -442,11 +447,7 @@ bool KoMainWindow::queryClose(bool forQuit)
 
 void KoMainWindow::slotFileNew()
 {
-    KoDocument* doc = rootDocument();
-
-    // get the real root document
-    while(doc && doc->isEmbedded())
-      doc = dynamic_cast<KoDocument*>(doc->parent());
+    KoDocument* doc = topmostParentDocument();
 
     KoDocument *newdoc;
     if(doc) {
@@ -479,9 +480,15 @@ void KoMainWindow::slotFileOpen()
 {
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
     dialog->setCaption( i18n("Open document") );
-    KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import,
-                                           KoDocument::readNativeFormatMimeType(), nativeFormatPattern(),
-                                           nativeFormatName(), true);
+    if(!rootDocument())
+	KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import,
+					       KoDocument::readNativeFormatMimeType(), nativeFormatPattern(),
+					       nativeFormatName(), true);
+    else
+	KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import,
+					       topmostParentDocument()->nativeFormatMimeType(),
+					       topmostParentDocument()->firstShell()->nativeFormatPattern(),
+					       topmostParentDocument()->firstShell()->nativeFormatName(), true);
     KURL url;
     if(dialog->exec()==QDialog::Accepted)
         url=dialog->selectedURL();
@@ -513,10 +520,10 @@ void KoMainWindow::slotFileSaveAs()
 
 void KoMainWindow::slotDocumentInfo()
 {
-  if ( !d->m_rootDoc )
+  if ( !topmostParentDocument() )
     return;
 
-  KoDocumentInfo *docInfo = d->m_rootDoc->documentInfo();
+  KoDocumentInfo *docInfo = topmostParentDocument()->documentInfo();
 
   if ( !docInfo )
     return;
@@ -525,8 +532,8 @@ void KoMainWindow::slotDocumentInfo()
   if ( dlg->exec() )
   {
     dlg->save();
-    d->m_rootDoc->setModified( true );
-    d->m_rootDoc->setTitleModified();
+    topmostParentDocument()->setModified( true );
+    topmostParentDocument()->setTitleModified();
   }
 
   delete dlg;
@@ -602,8 +609,10 @@ void KoMainWindow::slotSplitView() {
 
 void KoMainWindow::slotCloseAllViews() {
 
-  if(queryClose(true))
-    d->m_rootDoc->delayedDestruction();
+  d->m_forQuit=true;
+  if(queryClose())
+    topmostParentDocument()->delayedDestruction();
+  d->m_forQuit=false;
 }
 
 

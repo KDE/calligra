@@ -151,6 +151,13 @@ KoDocument::~KoDocument()
 {
   kdDebug(30003) << "KoDocument::~KoDocument() " << this << endl;
 
+  KoDocumentChild *child=d->m_children.first();
+  for( ; child!=0L; child=d->m_children.next()) {
+      d->m_children.removeRef(child);
+      delete child;
+      child=0L;
+  }
+
   kdDebug(30003) << "KoDocument::~KoDocument() shells:" << d->m_shells.count() << endl;
   d->m_shells.setAutoDelete( true );
   d->m_shells.clear();
@@ -161,6 +168,8 @@ KoDocument::~KoDocument()
 
   delete d;
   m_documentList->removeRef(this);
+  if(m_documentList->isEmpty())
+    kapp->quit();
 }
 
 void KoDocument::delayedDestruction()
@@ -313,8 +322,6 @@ void KoDocument::slotChildChanged( KoChild *c )
 void KoDocument::slotDestruct()
 {
   delete this;
-  if(m_documentList->isEmpty())
-    kapp->quit();
 }
 
 QList<KoDocumentChild> &KoDocument::children() const
