@@ -3370,9 +3370,9 @@ void KWView::formatPage()
     tmpOldLayout._hf=kwhf;
 
     KoHeadFoot hf;
-    int flags = FORMAT_AND_BORDERS | KW_HEADER_AND_FOOTER | DISABLE_UNIT;
+    int flags = FORMAT_AND_BORDERS | DISABLE_UNIT;
     if ( m_doc->processingType() == KWDocument::WP )
-        flags |= COLUMNS;
+        flags |= KW_HEADER_AND_FOOTER | COLUMNS;
     else
         flags |= DISABLE_BORDERS;
 
