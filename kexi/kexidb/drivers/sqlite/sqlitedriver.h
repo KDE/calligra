@@ -66,6 +66,10 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteDriver : public Driver
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
 
 	SQLiteDriverPrivate *dp;
+	
+	private:
+		static const char *keywords[];
+
 };
 
 };

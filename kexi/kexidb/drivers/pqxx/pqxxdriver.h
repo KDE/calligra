@@ -55,7 +55,7 @@ class KEXI_DB_EXPORT pqxxSqlDriver : public Driver
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
 
 	private:
-
+		static const char *keywords[];
 };
 
 };

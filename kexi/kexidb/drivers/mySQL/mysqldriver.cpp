@@ -38,7 +38,6 @@ Boston, MA 02111-1307, USA.
 #include <kexidb/field.h>
 #include <kexidb/driver_p.h>
 
-
 using namespace KexiDB;
 
 KEXIDB_DRIVER_INFO( MySqlDriver, mysql );
@@ -66,7 +65,9 @@ MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &a
 	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
 	beh->USING_DATABASE_REQUIRED_TO_CONNECT=false;
 	beh->QUOTATION_MARKS_FOR_IDENTIFIER='`';
-
+	beh->SQL_KEYWORDS = keywords;
+	initSQLKeywords(331);
+	
 	//predefined properties
 #if MYSQL_VERSION_ID < 40000
 	d->properties["client_library_version"] = MYSQL_SERVER_VERSION; //nothing better
@@ -88,7 +89,7 @@ MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &a
 	d->typeNames[Field::Double]="DOUBLE";
 	d->typeNames[Field::Text]="VARCHAR";
 	d->typeNames[Field::LongText]="LONGTEXT";
-	d->typeNames[Field::BLOB]="BLOB"; 
+	d->typeNames[Field::BLOB]="BLOB";
 }
 
 MySqlDriver::~MySqlDriver()

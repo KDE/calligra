@@ -902,7 +902,8 @@ bool Connection::executeSQL( const QString& statement )
 	return true;
 }
 
-QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
+QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
+    int drvEscaping) const
 {
 //"SELECT FROM ..." is theoretically allowed "
 //if (querySchema.fieldCount()<1)
@@ -925,7 +926,8 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 
 			if (f->isQueryAsterisk()) {
 				if (static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) //single-table *
-					sql += (escapeIdentifier(f->table()->name() + QString::fromLatin1(".*")));
+					sql += escapeIdentifier(f->table()->name(), drvEscaping) +
+					       QString::fromLatin1(".*");
 				else //all-tables *
 					sql += QString::fromLatin1("*");
 			}
@@ -944,7 +946,8 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 					if (tableName.isEmpty())
 						tableName = f->table()->name();
 						
-					sql += (escapeIdentifier(tableName) + "." + escapeIdentifier(f->name()));
+					sql += (escapeIdentifier(tableName, drvEscaping) + "." +
+					        escapeIdentifier(f->name(), drvEscaping));
 				}
 				QString aliasString = QString(querySchema.columnAlias(number));
 				if (!aliasString.isEmpty())
@@ -965,7 +968,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 		{
 			if (!s_from.isEmpty())
 				s_from += QString::fromLatin1(", ");
-			s_from += escapeIdentifier(table->name());
+			s_from += escapeIdentifier(table->name(), drvEscaping);
 			QString aliasString = QString(querySchema.tableAlias(number));
 			if (!aliasString.isEmpty())
 				s_from += (QString::fromLatin1(" AS ") + aliasString);
@@ -990,10 +993,14 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 		for (QPtrListIterator<Field::Pair> p_it(*rel->fieldPairs()); (pair = p_it.current()); ++p_it) {
 			if (!s_where_sub.isEmpty())
 				s_where_sub += QString::fromLatin1(" AND ");
-			s_where_sub += (pair->first->table()->name() + QString::fromLatin1(".") + 
-				escapeIdentifier(pair->first->name()) + QString::fromLatin1(" = ")  +
-				escapeIdentifier(pair->second->table()->name()) + QString::fromLatin1(".") +
-				escapeIdentifier(pair->second->name()));
+			s_where_sub += (
+				escapeIdentifier(pair->first->table()->name(), drvEscaping) +
+				QString::fromLatin1(".") + 
+				escapeIdentifier(pair->first->name(), drvEscaping) +
+				QString::fromLatin1(" = ")  +
+				escapeIdentifier(pair->second->table()->name(), drvEscaping) +
+				QString::fromLatin1(".") +
+				escapeIdentifier(pair->second->name(), drvEscaping));
 		}
 		if (rel->fieldPairs()->count()>1) {
 			s_where_sub.prepend("(");

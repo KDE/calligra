@@ -397,6 +397,13 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 CCMAIL: dkite@shaw.ca
 
+2004-11-12
+Kexi
+- 2 icons fixed
+KexiDB
+- Support for Generic SQL Keywords Escaping
+  contributed by Martin Ellis <m.a.ellis@ncl.ac.uk> 
+
 2004-11-11, 12
 Property Editor
 - 'undo changes' button improved (icon, tooltip)

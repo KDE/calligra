@@ -48,6 +48,9 @@ class KEXIDB_MYSQL_DRIVER_EXPORT MySqlDriver : public Driver
 		virtual QCString drv_escapeIdentifier( const QCString& str) const;
 		
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
+	
+	private:
+		static const char *keywords[];
 };
 }
 

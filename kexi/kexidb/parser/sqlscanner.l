@@ -36,6 +36,8 @@ extern void setError(const QString& errName, const QString& errDesc);
 
 %}
 
+/* *** Please reflect changes to this file in ../driver_p.cpp *** */
+
 %option case-insensitive
 %option noyywrap
 %option never-interactive
@@ -44,6 +46,8 @@ whitespace	[ \t\n]
 digit				[0-9]
 /*identifier	[a-zA-Z_][a-zA-Z_0-9]* */
 identifier	[a-zA-Z_0-9]+
+quoted_identifier (\"[a-zA-Z_0-9]+\")
+
 integer			{digit}+
 decimal			(({digit}*\.{digit}+)|({digit}+\.{digit}*))
 real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}+))
@@ -259,7 +263,22 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 	ECOUNT;
 	strncpy(yylval.stringValue, yytext, yyleng + 1);
 	if (yytext[0]>='0' && yytext[0]<='9') {
-		setError(i18n("Invalid identifier"),i18n("Identifiers should start with a letter or '_' character"));
+		setError(i18n("Invalid identifier"),
+		  i18n("Identifiers should start with a letter or '_' character"));
+		return SCAN_ERROR;
+//		return ERROR_DIGIT_BEFORE_IDENTIFIER;
+	}
+	return IDENTIFIER;
+}
+
+{quoted_identifier} {
+	kdDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
+	ECOUNT;
+	strncpy(yylval.stringValue, yytext + 1, yyleng - 1);
+	yylval.stringValue[yyleng - 2] = 0x00;
+	if (yytext[1]>='0' && yytext[1]<='9') {
+		setError(i18n("Invalid identifier"),
+		  i18n("Identifiers should start with a letter or '_' character"));
 		return SCAN_ERROR;
 //		return ERROR_DIGIT_BEFORE_IDENTIFIER;
 	}

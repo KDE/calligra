@@ -6,7 +6,7 @@ INCLUDES = -I$(srcdir)/../../.. $(all_includes) -I$(MYSQL_INC) -I$(srcdir)/../..
 
 kexidb_mysqldriver_la_METASOURCES = AUTO
 
-kexidb_mysqldriver_la_SOURCES = mysqldriver.cpp mysqlconnection.cpp mysqlcursor.cpp
+kexidb_mysqldriver_la_SOURCES = mysqldriver.cpp mysqlconnection.cpp mysqlcursor.cpp mysqlkeywords.cpp
 
 kexidb_mysqldriver_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) $(MYSQL_LIBS) -lmysqlclient ../../libkexidb.la
 

@@ -8,13 +8,13 @@ win32:LIBS += $(MYSQL_LIB)/mysqlclient.lib
 
 TARGET		= kexidb_mysqldriver$$KDEBUG
 
-system( moc mysqldriver.h -o moc/mysqldriver.moc )
-system( moc mysqlconnection.h -o moc/mysqlconnection.moc )
+system( bash kmoc )
 
 SOURCES = \
 mysqlconnection.cpp \
 mysqldriver.cpp \
-mysqlcursor.cpp
+mysqlcursor.cpp \
+mysqlkeywords.cpp
 
 HEADERS		= 
 

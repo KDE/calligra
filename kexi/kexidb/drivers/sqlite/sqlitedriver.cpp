@@ -64,6 +64,8 @@ SQLiteDriver::SQLiteDriver( QObject *parent, const char *name, const QStringList
 	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=true;
 	beh->QUOTATION_MARKS_FOR_IDENTIFIER='"';
 	beh->SELECT_1_SUBQUERY_SUPPORTED = true;
+	beh->SQL_KEYWORDS = keywords;
+	initSQLKeywords(29);
 
 	//predefined properties
 	d->properties["client_library_version"] = sqlite_libversion();

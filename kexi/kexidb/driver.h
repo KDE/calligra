@@ -21,6 +21,7 @@
 #define KEXIDB_DRIVER_H
 
 #include <qobject.h>
+#include <qdict.h>
 
 #include <kexidb/object.h>
 #include <kexidb/field.h>
@@ -200,10 +201,18 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		*/
 		virtual QCString escapeString( const QCString& str ) const = 0;
 		
+		enum EscapeType { EscapeDriver = 0x01, EscapeKexi = 0x02};
+		enum EscapePolicy { EscapeAsNecessary = 0x04, EscapeAlways = 0x08 };
 		//! Driver-specific identifier escaping (e.g. for a table name, db name, etc.)
-		QString escapeIdentifier( const QString& str) const;
-		QCString escapeIdentifier( const QCString& str) const;
+		/*! Escape database identifier (\a str) in order that keywords
+		   can be used as table names, column names, etc.
+		   \a options is the union of the EscapeType and EscapePolicy types.
+		   If no escaping options are given, defaults to driver escaping as
+		   necessary. */
+		QString escapeIdentifier( const QString& str, int options = 0x05) const;
+		QCString escapeIdentifier( const QCString& str, int options = 0x05) const;
 
+		
 		QVariant propertyValue( const QCString& propName ) const;
 
 		QString propertyCaption( const QCString& propName ) const;
@@ -231,7 +240,8 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 to be implemented in the same way.
 		*/
 		virtual QCString drv_escapeIdentifier( const QCString& str ) const = 0;
-
+		
+		
 		/*! Used by DriverManager. 
 		 Note for driver developers: Reimplement this.
 		 In your reimplementation you should initialize:
@@ -250,13 +260,20 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 eventually delete it. Better use Connection destructor. */
 		Connection* removeConnection( Connection *conn );
 
+
 	friend class Connection;
 	friend class Cursor;
 	friend class DriverManagerInternal;
 
-		DriverBehaviour *beh;
-		
-		DriverPrivate *d;
+
+	/*! Used to initialise the dictionary of driver-specific keywords.
+	    Should be called by the Driver's constructor.
+	    \a hashSize is the number of buckets to use in the dictionary.
+	    \sa DriverPrivate::SQL_KEYWORDS. */
+	void initSQLKeywords(int hashSize = 17);
+
+	DriverBehaviour *beh;
+	DriverPrivate *d;
 };
 
 } //namespace KexiDB

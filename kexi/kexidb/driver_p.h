@@ -25,11 +25,15 @@
 #endif
 
 #include <qstring.h>
+#include <qvariant.h>
 #include <qmap.h>
 #include <qptrdict.h>
-#include <qvariant.h>
-
+#include <qasciidict.h>
+#include <qvaluevector.h>
 #include <kgenericfactory.h>
+#include "connection.h"
+
+class KService;
 
 namespace KexiDB {
 
@@ -120,6 +124,10 @@ class KEXI_DB_EXPORT DriverBehaviour
 	/*! True if "SELECT 1 from (subquery)" is supported. False by default.
 	 Used in Connection::resultExists() for optimization. It's set to true for SQLite driver. */
 	bool SELECT_1_SUBQUERY_SUPPORTED : 1;
+
+	/*! Keywords that need to be escaped for the driver.  Set this before calling
+	    Driver::initSQLKeywords. */
+	const char** SQL_KEYWORDS;
 };
 
 /*! Private driver's data members. Available for implementation. */
@@ -127,6 +135,7 @@ class DriverPrivate
 {
 	public:
 		DriverPrivate();
+		virtual ~DriverPrivate();
 
 		QPtrDict<Connection> connections;
 
@@ -181,9 +190,40 @@ class DriverPrivate
 		 -it's done automatically. */
 		QMap<QCString,QString> propertyCaptions;
 
+	/*! Kexi SQL keywords that need to be escaped if used as an identifier (e.g.
+	    for a table or column name).  These keywords will be escaped by the
+	    front-end, even if they are not recognised by the backend to provide
+	    UI consistency and to allow DB migration without changing the queries.
+	    \sa DriverPrivate::initKexiKeywords(), KexiDB::kexiSQLKeywords.
+	*/
+	static QAsciiDict<bool>* kexiSQLDict;
+	static const char *kexiSQLKeywords[];
+	
+	/*! Driver-specific SQL keywords that need to be escaped if used as an
+	    identifier (e.g. for a table or column name) that aren't also Kexi SQL 
+	    keywords.  These don't neccesarily need to be escaped when displayed by
+	    the front-end, because they won't confuse the parser.  However, they do
+	    need to be escaped before sending to the DB-backend which will have
+	    it's own parser. 
+	
+	    \sa DriverBehaviour::SQL_KEYWORDS.
+	*/	
+	QAsciiDict<bool>* driverSQLDict;
+	
+	/*! Initialise the dictionary of Kexi SQL keywords used for escaping. */
+	void initKexiKeywords();
+	/*! Initialise the dictionary of driver-specific keywords used for escaping.
+	    \a hashSize is the number of buckets to use in the dictionary.
+	    \sa Driver::initSQLKeywords(). */
+	void initDriverKeywords(const char* keywords[], int hashSize);
+	
 	protected:
-		/*! Used by driver manager to initialize properties taken using internal driver flags. */
+		/*! Used by driver manager to initialize properties taken using internal
+	      driver flags. */
 		void initInternalProperties();
+	
+	private:
+		void initKeywords(const char* keywords[], QAsciiDict<bool>& dict);
 	
 	friend class DriverManagerInternal;
 };

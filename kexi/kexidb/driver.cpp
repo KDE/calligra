@@ -39,47 +39,9 @@ using namespace KexiDB;
  or when we cannot get one */
 QValueVector<QString> dflt_typeNames;
 
-//---------------------------------------------
-
-DriverPrivate::DriverPrivate()
- : isFileDriver(false)
- , isDBOpenedAfterCreate(false)
- , features(Driver::NoFeatures)
-{
-	properties["client_library_version"] = "";
-	propertyCaptions["client_library_version"] = i18n("Client library version");
-
-	properties["default_server_encoding"] = "";
-	propertyCaptions["default_server_encoding"] = i18n("Default character encoding on server");
-}
-
-void DriverPrivate::initInternalProperties()
-{
-	properties["is_file_database"] = QVariant(isFileDriver, 1);
-	propertyCaptions["is_file_database"] = i18n("File-based database driver");
-	if (isFileDriver) {
-		properties["file_database_mimetype"] = fileDBDriverMimeType;
-		propertyCaptions["file_database_mimetype"] = i18n("File-based database's MIME type");
-	}
-	QString str;
-	if (features & Driver::SingleTransactions)
-		str = i18n("Single transactions");
-	else if (features & Driver::MultipleTransactions)
-		str = i18n("Multiple transactions");
-	else if (features & Driver::NestedTransactions)
-		str = i18n("Nested transactions");
-	else if (features & Driver::IgnoreTransactions)
-		str = i18n("Ignored");
-	else
-		str = i18n("None");
-	properties["transaction_support"] = str;
-	propertyCaptions["transaction_support"] = i18n("Transaction support");
-
-	properties["kexidb_driver_version"] = QString("%1.%2").arg(versionMajor()).arg(versionMinor());
-	propertyCaptions["kexidb_driver_version"] = i18n("KexiDB driver version");
-}
 
 //---------------------------------------------
+
 
 DriverBehaviour::DriverBehaviour()
 	: UNSIGNED_TYPE_KEYWORD("UNSIGNED")
@@ -92,11 +54,13 @@ DriverBehaviour::DriverBehaviour()
 	, USING_DATABASE_REQUIRED_TO_CONNECT(true)
 	, _1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY(false)
 	, SELECT_1_SUBQUERY_SUPPORTED(false)
+	, SQL_KEYWORDS(0)
 {
+
 }
 
 //---------------------------------------------
-
+		
 Driver::Driver( QObject *parent, const char *name, const QStringList & )
 	: QObject( parent, name )
 	, Object()
@@ -107,7 +71,10 @@ Driver::Driver( QObject *parent, const char *name, const QStringList & )
 	//TODO: reasonable size
 	d->connections.resize(101);
 	d->typeNames.resize(Field::LastType + 1);
+
+	d->initKexiKeywords();
 }
+
 
 Driver::~Driver()
 {
@@ -298,27 +265,55 @@ QValueList<QCString> Driver::propertyNames() const
 	return names;
 }
 
-QString Driver::escapeIdentifier( const QString& str) const
+QString Driver::escapeIdentifier(const QString& str, int options) const
 {
-	const uint len = str.length(); 
-	for (uint i=0; i<len; i++) {
-		if (str[i]==' ') {
-			return QString(beh->QUOTATION_MARKS_FOR_IDENTIFIER)
-				+drv_escapeIdentifier(str) + QString(beh->QUOTATION_MARKS_FOR_IDENTIFIER);
-		}
-	}
-	return drv_escapeIdentifier(str);
+	QCString cstr = str.latin1();
+	return QString(escapeIdentifier(cstr, options));
 }
 
-QCString Driver::escapeIdentifier( const QCString& str) const
+QCString Driver::escapeIdentifier(const QCString& str, int options) const
 {
-	const uint len = str.length();
-	for (uint i=0; i<len; i++) {
-		if (str[i]==' ') {
-			return QCString(beh->QUOTATION_MARKS_FOR_IDENTIFIER) + drv_escapeIdentifier(str) + QCString(beh->QUOTATION_MARKS_FOR_IDENTIFIER);
-		}
+	bool needOuterQuotes = false;
+
+// Need to use quotes if ...
+// ... we have been told to, or ...
+	if(options & EscapeAlways)
+		needOuterQuotes = true;
+
+// ... or if the driver does not have a list of keywords,
+	else if(!d->driverSQLDict)
+		needOuterQuotes = true;
+
+// ... or if it's a keyword in Kexi's SQL dialect,
+	else if(d->kexiSQLDict->find(str))
+		needOuterQuotes = true;
+
+// ... or if it's a keyword in the backends SQL dialect,
+// (have already checked !d->driverSQLDict)
+	else if((options & EscapeDriver) && d->driverSQLDict->find(str))
+		needOuterQuotes = true;
+
+// ... or if the identifier has a space in it...
+  else if(str.find(' ') != -1)
+		needOuterQuotes = true;
+
+	if(needOuterQuotes && (options & EscapeKexi)) {
+		const char quote = '"';
+		return quote + QCString(str).replace( quote, "\"\"" ) + quote;
 	}
-	return drv_escapeIdentifier(str);
+	else if (needOuterQuotes) {
+		const char quote = beh->QUOTATION_MARKS_FOR_IDENTIFIER.latin1();
+		return quote + drv_escapeIdentifier(str) + quote;
+	} else {
+		return drv_escapeIdentifier(str);
+	}
+}
+
+void Driver::initSQLKeywords(int hashSize) {
+
+	if(!d->driverSQLDict && beh->SQL_KEYWORDS != 0) {
+	  d->initDriverKeywords(beh->SQL_KEYWORDS, hashSize);
+	}
 }
 
 #include "driver.moc"

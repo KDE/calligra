@@ -305,6 +305,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note for driver developers: you should initialize cursor engine-specific 
 		 resources and return Cursor subclass' object 
 		 (passing \a query and \a cursor_options to it's constructor).
+		 Kexi SQL and driver-specific escaping is performed on table names.
 		*/
 		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 ) = 0;
 
@@ -322,11 +323,15 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 \return opened cursor created for results of this query
 		 or NULL if there was any error on the cursor creation or opening.
 		 Cursor can have optionally applied \a cursor_options 
-		 (one of more selected from KexiDB::Cursor::Options).*/
+		 (one of more selected from KexiDB::Cursor::Options).
+		 Identifiers in \a statement that are the same as keywords in Kexi
+		 SQL or the backend's SQL need to have been escaped.
+		 */
 		Cursor* executeQuery( const QString& statement, uint cursor_options = 0 );
 
 		/*! \overload executeQuery( const QString& statement, uint cursor_options = 0 )
-		 Statement is build from data provided by \a query schema.*/
+		 Statement is build from data provided by \a query schema. 
+		 Kexi SQL and driver-specific escaping is performed on table names. */
 		Cursor* executeQuery( QuerySchema& query, uint cursor_options = 0 );
 
 		/*! \overload executeQuery( const QString& statement, uint cursor_options = 0 )
@@ -570,7 +575,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note: The statement string can be specific for this connection's driver database, 
 		 and thus not reusable in general.
 		*/
-		QString selectStatement( QuerySchema& querySchema ) const;
+		QString selectStatement( QuerySchema& querySchema, int drvEscaping = 0x05 ) const;
 
 		/*! \return sql string of actually executed SQL statement,
 		 usually using drv_executeSQL(). If there was error during executing SQL statement, 
@@ -902,8 +907,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 For efficiency, kexi__* system tables and columns therein are not escaped
 		 - we assume these are valid identifiers for all drivers.
 		*/
-		inline QString escapeIdentifier(const QString& id) const {
-			return m_driver->escapeIdentifier(id);
+		inline QString escapeIdentifier(const QString& id, 
+		    int drvEscaping = 0x05) const {
+			return m_driver->escapeIdentifier(id, drvEscaping);
 		}
 		
 		

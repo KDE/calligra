@@ -46,6 +46,8 @@ pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringLi
 	beh->AUTO_INCREMENT_PK_FIELD_OPTION = "PRIMARY KEY";
 	beh->ALWAYS_AVAILABLE_DATABASE_NAME = "template1";
 	beh->QUOTATION_MARKS_FOR_IDENTIFIER = '"';
+	beh->SQL_KEYWORDS = keywords;
+	initSQLKeywords(233);
 
 	//predefined properties
 	d->properties["client_library_version"] = "";//TODO

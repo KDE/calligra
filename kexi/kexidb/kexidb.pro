@@ -23,6 +23,7 @@ SOURCES = \
 object.cpp \
 drivermanager.cpp \
 driver.cpp \
+driver_p.cpp \
 connectiondata.cpp \
 connection.cpp \
 utils.cpp \
@@ -42,6 +43,7 @@ parser/parser.cpp \
 parser/parser_p.cpp \
 parser/sqlparser.cpp \
 parser/sqlscanner.cpp \
-expression.cpp
+expression.cpp \
+keywords.cpp 
 
 #HEADERS =

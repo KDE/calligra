@@ -7,7 +7,8 @@ system( bash kmoc )
 SOURCES = \
 sqliteconnection.cpp \
 sqlitedriver.cpp \
-sqlitecursor.cpp
+sqlitecursor.cpp \
+../sqlite/sqlitekeywords.cpp
 
 HEADERS		= 
 
