@@ -509,43 +509,38 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 case TEM_MOUSE: {
                     bool overObject = false;
                     bool deSelAll = true;
+                    bool _resizeObj = false;
                     KPObject *kpobject = 0;
 
                     firstX = contentsPoint.x();
                     firstY = contentsPoint.y();
-		    kpobject=m_activePage->getObjectResized(docPoint, modType, deSelAll, overObject );
-		    if(kpobject)
-		      {
-			oldBoundingRect=getOldBoundingRect(kpobject);
-			resizeObjNum = kpobject;
-		      }
-		    else
-		      {
-			kpobject=m_view->kPresenterDoc()->stickyPage()->getObjectResized(docPoint, modType, deSelAll, overObject );
-			if(kpobject)
-			  {
-			    oldBoundingRect=getOldBoundingRect(kpobject);
-			    resizeObjNum = kpobject;
-			  }
-		      }
-
+		    kpobject = m_activePage->getObjectResized( docPoint, modType, deSelAll, overObject, _resizeObj );
+		    if ( kpobject && _resizeObj ) {
+			oldBoundingRect = getOldBoundingRect( kpobject );
+                        resizeObjNum = kpobject;
+                    }
+                    /*
+                    else {
+                        _resizeObj = false;
+                        kpobject = m_view->kPresenterDoc()->stickyPage()->getObjectResized( docPoint, modType,
+                                                                                            deSelAll, overObject, _resizeObj );
+                        if( kpobject && _resizeObj ) {
+                            oldBoundingRect = getOldBoundingRect( kpobject );
+                            resizeObjNum = kpobject;
+                        }
+                    }
+                    */
                     if ( deSelAll && !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                         deSelectAllObj();
 
-                    if ( overObject )
-                    {
-		      if(kpobject)
-			{
-			  if(!kpobject->isSelected())
+                    if ( overObject ) {
+                        if ( kpobject ) {
                             selectObj( kpobject );
-			  else if(kpobject->isSelected() &&  (e->state() & ShiftButton))
-                            deSelectObj(kpobject);
-			  modType = MT_NONE;
-			  raiseObject();
-			}
+                            modType = MT_NONE;
+                            raiseObject();
+                        }
                     }
-                    else
-                    {
+                    else {
                         modType = MT_NONE;
                         if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                             deSelectAllObj();

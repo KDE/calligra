@@ -239,7 +239,7 @@ public:
     KPObject * getCursor(const QPoint &pos );
     KPObject * getCursor(const KoPoint &pos );
 
-    KPObject * getObjectResized(const KoPoint &pos, ModifyType modType, bool &desel, bool &_over );
+    KPObject * getObjectResized(const KoPoint &pos, ModifyType modType, bool &desel, bool &_over, bool &_resize );
     KPObject * getEditObj(const KoPoint & pos);
     KPObject* getObjectAt( const KoPoint&pos );
 
