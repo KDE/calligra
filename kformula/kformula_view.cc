@@ -186,6 +186,9 @@ void KFormulaPartView::print(KPrinter& printer)
     m_pDoc->getFormula()->print(printer);
 }
 
+const KFormula::View* KFormulaPartView::formulaView() const { return formulaWidget->view(); }
+KFormula::View* KFormulaPartView::formulaView() { return formulaWidget->view(); }
+
 void KFormulaPartView::cursorChanged(bool visible, bool selecting)
 {
     cutAction->setEnabled(visible && selecting);

@@ -38,6 +38,10 @@ KFORMULA_NAMESPACE_BEGIN
 
 const int DEBUGID = 40000;
 
+// to make kdDebug a litte more interessting...
+//#define TERM_RESET "[0m"
+//#define TERM_ERROR "[40;31;m"
+
 /**
  * The type to be used for points.
  */
@@ -279,6 +283,14 @@ class TextRequest : public Request {
 public:
     TextRequest( QString text ) : Request( req_addText ), m_text( text ) {}
     QString text() const { return m_text; }
+};
+
+class MatrixRequest : public Request {
+    uint m_rows, m_columns;
+public:
+    MatrixRequest( uint rows, uint columns ) : Request( req_addMatrix ), m_rows( rows ), m_columns( columns ) {}
+    uint rows() const { return m_rows; }
+    uint columns() const { return m_columns; }
 };
 
 KFORMULA_NAMESPACE_END

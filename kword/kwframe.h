@@ -214,9 +214,9 @@ public:
     void setMinFrameHeight(double h) {m_minFrameHeight=h;}
     double minFrameHeight(void) {return m_minFrameHeight;}
 
-    /** Return if the point is on the frame. 
+    /** Return if the point is on the frame.
         @param point the point in real pt
-        @param borderOfFrameOnly when true an additional check is done if the point 
+        @param borderOfFrameOnly when true an additional check is done if the point
           is on the border.  */
     bool frameAtPos( QPoint point, bool borderOfFrameOnly=false);
 
@@ -860,10 +860,8 @@ public:
         return static_cast<KWFormulaFrameSet*>(frameSet());
     }
 
-    KFormula::View* getFormulaView() const
-    {
-        return formulaView;
-    }
+    const KFormula::View* getFormulaView() const { return formulaView; }
+    KFormula::View* getFormulaView() { return formulaView; }
 
     virtual DCOPObject* dcopObject();
 

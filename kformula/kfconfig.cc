@@ -36,7 +36,7 @@ KFConfig::KFConfig( KFormulaPartView* parent )
 {
     //kdDebug( 40000 ) << "KFConfig::KFConfig" << endl;
     QVBox* page = addVBoxPage( i18n( "Formula" ), i18n( "Formula settings" ),
-                               BarIcon( "settings", KIcon::SizeMedium ) );
+                               BarIcon( "kformula", KIcon::SizeMedium ) );
     _page = new KFormula::ConfigurePage( parent->document()->getDocument(), this,
                                          KFormulaFactory::global()->config(),
                                          page );

@@ -106,11 +106,24 @@ public:
 
     void setSmallCursor(bool small);
 
+    // simple cursor movement.
+
+    void moveLeft( int flag = NormalMovement );
+    void moveRight( int flag = NormalMovement );
+    void moveUp( int flag = NormalMovement );
+    void moveDown( int flag = NormalMovement );
+
+    void moveHome( int flag = NormalMovement );
+    void moveEnd( int flag = NormalMovement );
+
     /** @returns whether the cursor is at the first position. */
     bool isHome() const;
 
     /** @returns whether the cursor is at the last position. */
     bool isEnd() const;
+
+    void eraseSelection( Direction direction = beforeCursor );
+    void addText( QString str );
 
 signals:
 

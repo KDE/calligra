@@ -268,6 +268,44 @@ void View::slotSelectAll()
 }
 
 
+void View::moveLeft( int flag )
+{
+    cursor()->moveLeft( flag );
+    emitCursorChanged();
+}
+
+void View::moveRight( int flag )
+{
+    cursor()->moveRight( flag );
+    emitCursorChanged();
+}
+
+void View::moveUp( int flag )
+{
+    cursor()->moveUp( flag );
+    emitCursorChanged();
+}
+
+void View::moveDown( int flag )
+{
+    cursor()->moveDown( flag );
+    emitCursorChanged();
+}
+
+
+void View::moveHome( int flag )
+{
+    cursor()->moveHome( flag );
+    emitCursorChanged();
+}
+
+void View::moveEnd( int flag )
+{
+    cursor()->moveEnd( flag );
+    emitCursorChanged();
+}
+
+
 void View::setSmallCursor(bool small)
 {
     smallCursor() = small;
@@ -281,6 +319,18 @@ bool View::isHome() const
 bool View::isEnd() const
 {
     return cursor()->isEnd();
+}
+
+void View::eraseSelection( Direction direction )
+{
+    DirectedRemove r( req_remove, direction );
+    container()->performRequest( &r );
+}
+
+void View::addText( QString str )
+{
+    TextRequest r( str );
+    container()->performRequest( &r );
 }
 
 void View::emitCursorChanged()

@@ -36,7 +36,8 @@ k_dcop:
     void addMediumSpace();
     void addThickSpace();
     void addQuadSpace();
-    void addDefaultBracket();
+    void addBracket( int left, int right );
+    void addParenthesis();
     void addSquareBracket();
     void addCurlyBracket();
     void addLineBracket();
@@ -46,7 +47,9 @@ k_dcop:
     void addProduct();
     void addSum();
     void addMatrix();
-
+    void addMatrix( uint rows, uint columns );
+    void addOneByTwoMatrix();
+    void addNameSequence();
 
     void addLowerLeftIndex();
     void addUpperLeftIndex();
@@ -56,7 +59,7 @@ k_dcop:
     void addGenericUpperIndex();
     void removeEnclosing();
     void makeGreek();
-    void insertSymbol();
+    void insertSymbol( QString name );
 
     void appendColumn();
     void insertColumn();
@@ -64,6 +67,23 @@ k_dcop:
     void appendRow();
     void insertRow();
     void removeRow();
+
+    void moveLeft( int flag );
+    void moveRight( int flag );
+    void moveUp( int flag );
+    void moveDown( int flag );
+
+    void moveHome( int flag );
+    void moveEnd( int flag );
+
+    /** @returns whether the cursor is at the first position. */
+    bool isHome() const;
+
+    /** @returns whether the cursor is at the last position. */
+    bool isEnd() const;
+
+    void eraseSelection( int direction );
+    void addText( QString str );
 
 private:
     KFormulaPartView *m_view;

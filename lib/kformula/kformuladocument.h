@@ -181,6 +181,8 @@ public slots:
     void addThickSpace();
     void addQuadSpace();
     void addDefaultBracket();
+    void addBracket( SymbolType left, SymbolType right );
+    void addParenthesis();
     void addSquareBracket();
     void addCurlyBracket();
     void addLineBracket();
@@ -189,8 +191,9 @@ public slots:
     void addIntegral();
     void addProduct();
     void addSum();
-    void addMatrix();
+    void addMatrix( uint rows=0, uint columns=0 );
     void addOneByTwoMatrix();
+    void addNameSequence();
     void addLowerLeftIndex();
     void addUpperLeftIndex();
     void addLowerRightIndex();
@@ -200,6 +203,7 @@ public slots:
     void removeEnclosing();
     void makeGreek();
     void insertSymbol();
+    void insertSymbol( QString name );
 
     void appendColumn();
     void insertColumn();

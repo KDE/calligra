@@ -840,13 +840,16 @@ Command* SequenceElement::buildCommand( Container* container, Request* request )
         return command;
     }
     case req_addMatrix: {
-        uint rows = 0, cols = 0;
-        MatrixDialog* dialog = new MatrixDialog( 0 );
-        if ( dialog->exec() ) {
-            rows = dialog->h;
-            cols = dialog->w;
+        MatrixRequest* mr = static_cast<MatrixRequest*>( request );
+        uint rows = mr->rows(), cols = mr->columns();
+        if ( ( rows == 0 ) || ( cols == 0 ) ) {
+            MatrixDialog* dialog = new MatrixDialog( 0 );
+            if ( dialog->exec() ) {
+                rows = dialog->h;
+                cols = dialog->w;
+            }
+            delete dialog;
         }
-        delete dialog;
         if ( ( rows != 0 ) && ( cols != 0 ) ) {
             KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add matrix" ), container );
             command->setElement( new MatrixElement( rows, cols ) );
@@ -1265,6 +1268,15 @@ Command* NameSequence::buildCommand( Container* container, Request* request )
             return command;
         }
     }
+    case req_addSpace:
+    case req_addIndex:
+    case req_addMatrix:
+    case req_addOneByTwoMatrix:
+    case req_addSymbol:
+    case req_addRoot:
+    case req_addFraction:
+    case req_addBracket:
+    case req_addNameSequence:
     default:
         break;
     }

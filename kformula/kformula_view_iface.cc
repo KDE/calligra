@@ -19,6 +19,7 @@
 
 #include "kformula_view_iface.h"
 #include <kformuladocument.h>
+#include <kformulaview.h>
 
 #include "kformula_view.h"
 #include "kformula_doc.h"
@@ -50,9 +51,15 @@ void KformulaViewIface::addQuadSpace()
     m_view->document()->getDocument()->addQuadSpace();
 }
 
-void KformulaViewIface::addDefaultBracket()
+void KformulaViewIface::addBracket( int left, int right )
 {
-    m_view->document()->getDocument()->addDefaultBracket();
+    m_view->document()->getDocument()->addBracket( static_cast<KFormula::SymbolType>( left ),
+                                                   static_cast<KFormula::SymbolType>( right ) );
+}
+
+void KformulaViewIface::addParenthesis()
+{
+    m_view->document()->getDocument()->addParenthesis();
 }
 
 void KformulaViewIface::addSquareBracket()
@@ -100,6 +107,21 @@ void KformulaViewIface::addMatrix()
     m_view->document()->getDocument()->addMatrix();
 }
 
+void KformulaViewIface::addMatrix( uint rows, uint columns )
+{
+    m_view->document()->getDocument()->addMatrix( rows, columns );
+}
+
+void KformulaViewIface::addOneByTwoMatrix()
+{
+    m_view->document()->getDocument()->addOneByTwoMatrix();
+}
+
+void KformulaViewIface::addNameSequence()
+{
+    m_view->document()->getDocument()->addNameSequence();
+}
+
 void KformulaViewIface::addLowerLeftIndex()
 {
     m_view->document()->getDocument()->addLowerLeftIndex();
@@ -140,9 +162,9 @@ void KformulaViewIface::makeGreek()
     m_view->document()->getDocument()->makeGreek();
 }
 
-void KformulaViewIface::insertSymbol()
+void KformulaViewIface::insertSymbol( QString name )
 {
-    m_view->document()->getDocument()->insertSymbol();
+    m_view->document()->getDocument()->insertSymbol( name );
 }
 
 void KformulaViewIface::appendColumn()
@@ -175,3 +197,52 @@ void KformulaViewIface::removeRow()
     m_view->document()->getDocument()->removeRow();
 }
 
+void KformulaViewIface::moveRight( int flag )
+{
+    m_view->formulaView()->moveRight( flag );
+}
+
+void KformulaViewIface::moveUp( int flag )
+{
+    m_view->formulaView()->moveUp( flag );
+}
+
+void KformulaViewIface::moveDown( int flag )
+{
+    m_view->formulaView()->moveDown( flag );
+}
+
+void KformulaViewIface::moveLeft( int flag )
+{
+    m_view->formulaView()->moveLeft( flag );
+}
+
+void KformulaViewIface::moveHome( int flag )
+{
+    m_view->formulaView()->moveHome( flag );
+}
+
+void KformulaViewIface::moveEnd( int flag )
+{
+    m_view->formulaView()->moveEnd( flag );
+}
+
+bool KformulaViewIface::isHome() const
+{
+    return m_view->formulaView()->isHome();
+}
+
+bool KformulaViewIface::isEnd() const
+{
+    return m_view->formulaView()->isEnd();
+}
+
+void KformulaViewIface::eraseSelection( int direction )
+{
+    m_view->formulaView()->eraseSelection( static_cast<KFormula::Direction>( direction ) );
+}
+
+void KformulaViewIface::addText( QString str )
+{
+    m_view->formulaView()->addText( str );
+}

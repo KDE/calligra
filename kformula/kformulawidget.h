@@ -59,6 +59,9 @@ public:
      */
     void setReadOnly(bool ro);
 
+    const KFormula::View* view() const { return &formulaView; }
+    KFormula::View* view() { return &formulaView; }
+
 public slots:
 
     void slotSelectAll();

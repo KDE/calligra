@@ -562,6 +562,22 @@ void Document::addDefaultBracket()
     }
 }
 
+void Document::addBracket( SymbolType left, SymbolType right )
+{
+    if (hasFormula()) {
+        BracketRequest r( left, right );
+        formula()->performRequest( &r );
+    }
+}
+
+void Document::addParenthesis()
+{
+    if (hasFormula()) {
+        BracketRequest r( LeftRoundBracket, RightRoundBracket );
+        formula()->performRequest( &r );
+    }
+}
+
 void Document::addSquareBracket()
 {
     if (hasFormula()) {
@@ -626,10 +642,10 @@ void Document::addSum()
     }
 }
 
-void Document::addMatrix()
+void Document::addMatrix( uint rows, uint columns )
 {
     if (hasFormula()) {
-        Request r( req_addMatrix );
+        MatrixRequest r( rows, columns );
         formula()->performRequest( &r );
     }
 }
@@ -642,6 +658,13 @@ void Document::addOneByTwoMatrix()
     }
 }
 
+void Document::addNameSequence()
+{
+    if (hasFormula()) {
+        Request r( req_addNameSequence );
+        formula()->performRequest( &r );
+    }
+}
 
 void Document::addLowerLeftIndex()
 {
@@ -720,6 +743,20 @@ void Document::insertSymbol()
             formula()->performRequest( &r );
         }
     }
+}
+
+void Document::insertSymbol( QString name )
+{
+    if ( hasFormula() && impl->contextStyle.symbolTable().contains( name ) ) {
+        QChar ch = impl->contextStyle.symbolTable().unicode( name );
+        if ( ch != QChar::null ) {
+            TextCharRequest r( ch, true );
+            formula()->performRequest( &r );
+            return;
+        }
+    }
+    TextRequest r( name );
+    formula()->performRequest( &r );
 }
 
 void Document::appendColumn()

@@ -30,6 +30,10 @@ class QPaintEvent;
 class QScrollView;
 class DCOPObject;
 
+namespace KFormula {
+    class View;
+}
+
 #include <koView.h>
 #include <qptrlist.h>
 
@@ -50,6 +54,9 @@ public:
     virtual void print( KPrinter &printer );
 
     KFormulaDoc* document() const { return m_pDoc; }
+
+    const KFormula::View* formulaView() const;
+    KFormula::View* formulaView();
 
 protected:
 

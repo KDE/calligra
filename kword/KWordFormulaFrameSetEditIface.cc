@@ -73,9 +73,16 @@ void KWordFormulaFrameSetEditIface::addQuadSpace()
     m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addQuadSpace();
 }
 
-void KWordFormulaFrameSetEditIface::addDefaultBracket()
+void KWordFormulaFrameSetEditIface::addBracket( int left, int right )
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addDefaultBracket();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()
+        ->addBracket( static_cast<KFormula::SymbolType>( left ),
+                      static_cast<KFormula::SymbolType>( right ) );
+}
+
+void KWordFormulaFrameSetEditIface::addParenthesis()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addParenthesis();
 }
 
 void KWordFormulaFrameSetEditIface::addSquareBracket()
@@ -123,6 +130,21 @@ void KWordFormulaFrameSetEditIface::addMatrix()
     m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addMatrix();
 }
 
+void KWordFormulaFrameSetEditIface::addMatrix( uint rows, uint columns )
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addMatrix( rows, columns );
+}
+
+void KWordFormulaFrameSetEditIface::addOneByTwoMatrix()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addOneByTwoMatrix();
+}
+
+void KWordFormulaFrameSetEditIface::addNameSequence()
+{
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addNameSequence();
+}
+
 void KWordFormulaFrameSetEditIface::addLowerLeftIndex()
 {
     m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->addLowerLeftIndex();
@@ -163,9 +185,9 @@ void KWordFormulaFrameSetEditIface::makeGreek()
     m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->makeGreek();
 }
 
-void KWordFormulaFrameSetEditIface::insertSymbol()
+void KWordFormulaFrameSetEditIface::insertSymbol( QString name )
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->insertSymbol();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->insertSymbol( name );
 }
 
 void KWordFormulaFrameSetEditIface::appendColumn()
@@ -198,3 +220,52 @@ void KWordFormulaFrameSetEditIface::removeRow()
     m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->removeRow();
 }
 
+void KWordFormulaFrameSetEditIface::moveLeft( int flag )
+{
+    m_framesetedit->getFormulaView()->moveLeft( flag );
+}
+
+void KWordFormulaFrameSetEditIface::moveRight( int flag )
+{
+    m_framesetedit->getFormulaView()->moveRight( flag );
+}
+
+void KWordFormulaFrameSetEditIface::moveUp( int flag )
+{
+    m_framesetedit->getFormulaView()->moveUp( flag );
+}
+
+void KWordFormulaFrameSetEditIface::moveDown( int flag )
+{
+    m_framesetedit->getFormulaView()->moveDown( flag );
+}
+
+void KWordFormulaFrameSetEditIface::moveHome( int flag )
+{
+    m_framesetedit->getFormulaView()->moveHome( flag );
+}
+
+void KWordFormulaFrameSetEditIface::moveEnd( int flag )
+{
+    m_framesetedit->getFormulaView()->moveEnd( flag );
+}
+
+bool KWordFormulaFrameSetEditIface::isHome() const
+{
+    return m_framesetedit->getFormulaView()->isHome();
+}
+
+bool KWordFormulaFrameSetEditIface::isEnd() const
+{
+    return m_framesetedit->getFormulaView()->isEnd();
+}
+
+void KWordFormulaFrameSetEditIface::eraseSelection( int direction )
+{
+    m_framesetedit->getFormulaView()->eraseSelection( static_cast<KFormula::Direction>( direction ) );
+}
+
+void KWordFormulaFrameSetEditIface::addText( QString str )
+{
+    m_framesetedit->getFormulaView()->addText( str );
+}
