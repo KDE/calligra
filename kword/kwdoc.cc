@@ -201,7 +201,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_bShowRuler = true;
     m_bShowStatusBar = true;
     m_bAllowAutoFormat = true;
-    m_pgUpDownMovesCaret = false;
+    m_pgUpDownMovesCaret = true;
     m_bShowScrollBar = true;
     m_cursorInProtectectedArea = true;
     m_bHasEndNotes = false;
@@ -383,7 +383,7 @@ void KWDocument::initConfig()
       setShowScrollBar( config->readBoolEntry( "ShowScrollBar", true ) );
       if ( isEmbedded() )
           m_bShowDocStruct = false; // off by default for embedded docs, but still toggleable
-      m_pgUpDownMovesCaret = config->readBoolEntry( "PgUpDownMovesCaret", false );
+      m_pgUpDownMovesCaret = config->readBoolEntry( "PgUpDownMovesCaret", true );
       m_bInsertDirectCursor= config->readBoolEntry( "InsertDirectCursor", false );
       m_globalLanguage=config->readEntry("language", KGlobal::locale()->language());
       m_bGlobalHyphenation=config->readBoolEntry("hyphenation", false);
