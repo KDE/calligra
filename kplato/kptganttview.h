@@ -59,6 +59,8 @@ class KPTGanttView : public QSplitter
     void clear();
     void print(KPrinter &printer);
 
+    void addTaskLink(KDGanttViewTaskLink *link);
+        
 public slots:
     void popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int);
 

@@ -35,6 +35,7 @@ class KPTRelation;
 class KPTPertCanvas;
 class KPTPertRelationItem;
 class KPTPertNodeItem;
+class KPTGanttView;
 class QPainter;
 
 class KPTPertNodeItem : public QCanvasPolygon
@@ -214,7 +215,7 @@ public:
     KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNode *node);
 
 	KPTNode *getNode() { return m_node; }
-    void insertRelations();
+    void insertRelations(KPTGanttView *view);
     KDGanttViewItem *find(KPTNode *node);
     KDGanttViewItem *find(KDGanttViewItem *item, KPTNode *node);
     KDGanttView *ganttView() const { return m_view; }
@@ -233,7 +234,7 @@ public:
     KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTTask *task);
 
 	KPTTask *getTask() const { return m_task; }
-    void insertRelations();
+    void insertRelations(KPTGanttView *view);
     KDGanttViewItem *find(KPTNode *node);
     KDGanttViewItem *find(KDGanttViewItem *item, KPTNode *node);
     KDGanttView *ganttView() const { return m_view; }
@@ -252,7 +253,7 @@ public:
     KPTGanttViewEventItem(KDGanttViewItem *parent, KPTTask *task);
 
 	KPTTask *getTask() { return m_task; }
-    void insertRelations();
+    void insertRelations(KPTGanttView *view);
     KDGanttViewItem *find(KPTNode *node);
     KDGanttViewItem *find(KDGanttViewItem *item, KPTNode *node);
     KDGanttView *ganttView() const { return m_view; }

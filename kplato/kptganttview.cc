@@ -87,6 +87,7 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
 
 	connect(m_gantt, SIGNAL(itemDoubleClicked(KDGanttViewItem*)), this, SLOT (slotItemDoubleClicked(KDGanttViewItem*)));
 
+    m_taskLinks.setAutoDelete(true);
 }
 
 void KPTGanttView::zoom(double /*zoom*/)

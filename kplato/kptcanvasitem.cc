@@ -22,6 +22,7 @@
 #include "kptrelation.h"
 #include "kptpertcanvas.h"
 #include "kpttask.h"
+#include "kptganttview.h"
 
 #include <qpainter.h>
 #include <qpointarray.h>
@@ -670,7 +671,7 @@ KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNod
         m_view = p->ganttView();
 }
 
-void KPTGanttViewSummaryItem::insertRelations()
+void KPTGanttViewSummaryItem::insertRelations(KPTGanttView *view)
 {
     //kdDebug()<<k_funcinfo<<endl;
 
@@ -680,7 +681,8 @@ void KPTGanttViewSummaryItem::insertRelations()
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
+            view->addTaskLink(link);
         }
     }
 }
@@ -741,7 +743,7 @@ KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTTask *tas
         m_view = p->ganttView();
 }
 
-void KPTGanttViewTaskItem::insertRelations()
+void KPTGanttViewTaskItem::insertRelations(KPTGanttView *view)
 {
     //kdDebug()<<k_funcinfo<<endl;
 
@@ -751,7 +753,8 @@ void KPTGanttViewTaskItem::insertRelations()
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
+            view->addTaskLink(link);
         }
     }
 }
@@ -813,7 +816,7 @@ KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttViewItem *parent, KPTTask *t
 }
 
 
-void KPTGanttViewEventItem::insertRelations()
+void KPTGanttViewEventItem::insertRelations(KPTGanttView *view)
 {
     //kdDebug()<<k_funcinfo<<endl;
 
@@ -823,7 +826,8 @@ void KPTGanttViewEventItem::insertRelations()
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child);
+            view->addTaskLink(link);
         }
     }
 }
