@@ -107,6 +107,8 @@ VGradientTool::eventFilter( QEvent* event )
 			view()->part()->addCommand( new VStrokeCmd( &view()->part()->document(), stroke ), true );
 		}
 
+		view()->selectionChanged();
+
 		m_isDragging = false;
 
 		return true;
