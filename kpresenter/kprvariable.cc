@@ -36,7 +36,9 @@ KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVari
     KPresenterDoc*m_doc=static_cast<KPresenterDoc*>(doc);
     KoVariable *var=0L;
     if(type ==VT_PGNUM)
+    {
         var = new KPrPgNumVariable( textdoc,subtype, coll->format( "NUMBER" ),this,m_doc  );
+    }
     else
         var = KoVariableCollection::createVariable( type, subtype,  coll,varFormat, textdoc,doc);
     return var;

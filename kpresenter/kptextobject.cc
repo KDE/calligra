@@ -1324,6 +1324,7 @@ void KPTextView::insertVariable( int type, int subtype )
         var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textObject()->textDocument(),doc);
 
     insertVariable( var );
+    doc->recalcPageNum();
 }
 
 void KPTextView::insertVariable( KoVariable *var )
