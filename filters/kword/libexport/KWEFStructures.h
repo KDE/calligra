@@ -133,6 +133,10 @@ class FrameAnchor
 
       QString name;
       int     type;
+      double  top;      // Frame top
+      double  bottom;   // frame bottom
+      double  left;     // frame left
+      double  right;    // frame right
 
       Picture picture;
       Table   table;

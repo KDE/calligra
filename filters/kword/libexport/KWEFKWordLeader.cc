@@ -140,6 +140,25 @@ static void ProcessImageKeyTag ( QDomNode         myNode,
 }
 
 
+static void ProcessFrameTag ( QDomNode myNode, void *tagData,
+    KWEFKWordLeader *leader )
+{
+    FrameAnchor* frameAnchor= (FrameAnchor*) tagData;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList
+        << AttrProcessing ( "runaround", NULL,      NULL                 )
+        << AttrProcessing ( "top",       "double",  &frameAnchor->top    )
+        << AttrProcessing ( "bottom",    "double",  &frameAnchor->bottom )
+        << AttrProcessing ( "left",      "double",  &frameAnchor->left   )
+        << AttrProcessing ( "right",     "double",  &frameAnchor->right  )
+        ;
+    ProcessAttributes (myNode, attrProcessingList);
+
+    AllowNoSubtags (myNode, leader);
+}
+
+
 static void ProcessImageTag ( QDomNode         myNode,
                               void            *tagData,
                               KWEFKWordLeader *leader )
@@ -223,8 +242,8 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                             QValueList<ParaData> cellParaList;
 
                             QValueList<TagProcessing> tagProcessingList;
-                            tagProcessingList << TagProcessing ( "FRAME",     NULL,                NULL                   )
-                                              << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &cellParaList );
+                            tagProcessingList << TagProcessing ( "FRAME",     ProcessFrameTag,     frameAnchor   )
+                                              << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, &cellParaList );
                             ProcessSubtags (myNode, tagProcessingList, leader);
 
                             frameAnchor->table.addCell (col, row, cellParaList);
@@ -263,8 +282,8 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 frameAnchor->type = 2;
 
                 QValueList<TagProcessing> tagProcessingList;
-                tagProcessingList << TagProcessing ( "FRAME", NULL,            NULL                                  )
-                                  << TagProcessing ( "IMAGE", ProcessImageTag, (void *) &frameAnchor->picture.key );
+                tagProcessingList << TagProcessing ( "FRAME", ProcessFrameTag, frameAnchor )
+                                  << TagProcessing ( "IMAGE", ProcessImageTag, &frameAnchor->picture.key );
                 ProcessSubtags (myNode, tagProcessingList, leader);
 
 #if 0
