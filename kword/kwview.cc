@@ -888,6 +888,7 @@ void KWView::updatePageInfo()
         m_sbPageLabel->setText( QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(m_doc->getPages())+' ' );
         slotUpdateRuler();
     }
+    setFrameStartEnd();
 }
 
 void KWView::slotUpdateRuler()
@@ -3220,12 +3221,18 @@ void KWView::slotFrameSetEditChanged()
     actionInsertExpression->setEnabled(state);
     actionInsertFrameBreak->setEnabled(state);
 
+    setFrameStartEnd();
+}
+
+void KWView::setFrameStartEnd()
+{
     // Set the "frame start" in the ruler (tabs are relative to that position)
-    if ( edit )
+    KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
+    if ( edit && edit->currentFrame() )
     {
-        QPoint p = m_doc->zoomPoint( edit->currentFrame()->topLeft() );
-        p = m_gui->canvasWidget()->viewMode()->normalToView( p );
-        m_gui->getHorzRuler()->setFrameStart( p.x() );
+        QRect r = m_doc->zoomRect( *edit->currentFrame() );
+        r = m_gui->canvasWidget()->viewMode()->normalToView( r );
+        m_gui->getHorzRuler()->setFrameStartEnd( r.left(), r.right() );
     }
 
 }

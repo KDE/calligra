@@ -290,6 +290,7 @@ protected:
 
     void setupActions();
     void createKWGUI();
+    void setFrameStartEnd();
 
     virtual void resizeEvent( QResizeEvent *e );
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
@@ -433,7 +434,7 @@ private:
     // Spell-checking
     struct {
 	KSpell *kspell;
-	int spellCurrFrameSetNum; 
+	int spellCurrFrameSetNum;
 	QList<KWTextFrameSet> textFramesets;
 	QStringList ignoreWord;
 	KMacroCommand * macroCmdSpellCheck;
