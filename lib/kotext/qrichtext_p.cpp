@@ -430,7 +430,8 @@ QString KoTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelle
     k += '/';
     k += QString::number( (int)S_SOLID ); // no double-underline in a "simple format"
     k += '/';
-    k += QString::null;
+    //k += QString::null; // spellcheck language
+    k += "/1";
     ////
     return k;
 }
