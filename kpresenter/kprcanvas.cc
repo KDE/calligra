@@ -775,7 +775,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
-        if(txtObj->contains( e->pos() ))
+        if(txtObj->contains( docPoint ))
         {
             m_currentTextObjectView->mouseReleaseEvent(  e, QPoint());
             mousePressed=false;
@@ -1090,7 +1090,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
-        if(txtObj->contains( e->pos() )&&mousePressed)
+        if(txtObj->contains( docPoint )&&mousePressed)
         {
             KoPoint pos=m_view->zoomHandler()->unzoomPoint(e->pos()) - txtObj->getOrig();
             m_currentTextObjectView->mouseMoveEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
@@ -1350,15 +1350,15 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
 {
     if(!m_view->koDocument()->isReadWrite())
         return;
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( e->pos()+QPoint(diffx(),diffy()) );
     if(m_currentTextObjectView)
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
-        if(txtObj->contains( e->pos() ))
+        if(txtObj->contains( /*e->pos()*/docPoint ))
         {
             KoPoint pos=m_view->zoomHandler()->unzoomPoint(e->pos()) - txtObj->getOrig();
             //pos=m_view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x(),pos.y()));
-
             m_currentTextObjectView->mouseDoubleClickEvent( e, m_view->zoomHandler()->zoomPoint(pos));
             return;
         }
@@ -1376,7 +1376,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     if ( (int)objectList().count() - 1 >= 0 ) {
 	for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
 	    kpobject = objectList().at( i );
-	    if ( kpobject->contains( QPoint( e->x(), e->y() ) ) ) {
+	    if ( kpobject->contains( docPoint ) ) {
 		if ( kpobject->getType() == OT_TEXT ) {
 		    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
                     if(m_currentTextObjectView)
@@ -4149,6 +4149,7 @@ void KPrCanvas::dragMoveEvent( QDragMoveEvent *e )
 void KPrCanvas::dropEvent( QDropEvent *e )
 {
     //disallow dropping objects outside the "page"
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( e->pos()+QPoint(diffx(),diffy()) );
     if ( !m_activePage->getZoomPageRect().contains(e->pos())/*!m_view->kPresenterDoc()->getPageRect( m_view->getCurrPgNum()-1, diffx(), diffy(), _presFakt ).contains(e->pos())*/)
         return;
 
