@@ -29,12 +29,6 @@ public:
 
 private:
 	VGradientDlg* m_dialog;
-
-	// input (mouse coordinates):
-	KoPoint m_fp;
-	KoPoint m_lp;
-
-	bool m_isDragging;
 };
 
 #endif

@@ -27,15 +27,9 @@ protected:
 	void setCursor( const QPoint & ) const;
 
 private:
-	// input (mouse coordinates):
-	KoPoint m_fp;
-	KoPoint m_lp;
-
 	double m_s1, m_s2;
 
 	VHandleNode m_activeNode;
-
-	bool m_isDragging;
 };
 
 #endif

@@ -20,8 +20,7 @@
 #include "vtransformcmd.h"
 
 
-VShearTool::VShearTool( KarbonView* view )
-	: VTool( view ), m_isDragging( false )
+VShearTool::VShearTool( KarbonView* view ) : VTool( view )
 {
 }
 

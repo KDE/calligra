@@ -30,7 +30,7 @@ VShapeTool::mousePressed( QMouseEvent *mouse_event )
 	m_fp.setY( mouse_event->pos().y() );
 	m_lp.setX( mouse_event->pos().x() );
 	m_lp.setY( mouse_event->pos().y() );
-		
+
 	// draw initial object:
 	recalcCoords();
 
@@ -42,18 +42,19 @@ VShapeTool::mousePressed( QMouseEvent *mouse_event )
 void
 VShapeTool::mouseMoved( QMouseEvent *mouse_event )
 {
-	if( !m_isDragging ) return;
+	if( m_isDragging )
+	{
+		// erase old object:
+		drawTemporaryObject();
 
-	// erase old object:
-	drawTemporaryObject();
+		m_lp.setX( mouse_event->pos().x() );
+		m_lp.setY( mouse_event->pos().y() );
 
-	m_lp.setX( mouse_event->pos().x() );
-	m_lp.setY( mouse_event->pos().y() );
+		recalcCoords();
 
-	recalcCoords();
-
-	// paint new object:
-	drawTemporaryObject();
+		// paint new object:
+		drawTemporaryObject();
+	}
 }
 
 void
@@ -151,79 +152,8 @@ VShapeTool::cancel() // ESC pressed
 	drawTemporaryObject();
 }
 
-
-bool
-VShapeTool::eventFilter( QEvent* event )
-{
-	if( event->type() == QEvent::MouseMove )
-	{
-		mouseMoved( static_cast<QMouseEvent *> ( event ) );
-		return true;
-	}
-
-	if( event->type() == QEvent::MouseButtonRelease )
-	{
-		mouseReleased( static_cast<QMouseEvent *> ( event ) );
-		return true;
-	}
-
-	// handle pressing of keys:
-	if( event->type() == QEvent::KeyPress )
-	{
-		QKeyEvent* key_event = static_cast<QKeyEvent*> ( event );
-
-		// cancel dragging with ESC-key:
-		if( key_event->key() == Qt::Key_Escape && m_isDragging )
-		{
-			cancel();
-			return true;
-		}
-
-		// if SHIFT is pressed, we want a square:
-		if( key_event->key() == Qt::Key_Shift && m_isDragging )
-		{
-			dragShiftPressed();
-			return true;
-		}
-
-		// if Ctrl is pressed, we want a centered path:
-		if ( key_event->key() == Qt::Key_Control && m_isDragging )
-		{
-			dragCtrlPressed();
-			return true;
-		}
-	}
-
-	// handle releasing of keys:
-	if( event->type() == QEvent::KeyRelease )
-	{
-		QKeyEvent* key_event = static_cast<QKeyEvent*> ( event );
-
-		if( key_event->key() == Qt::Key_Shift && m_isDragging )
-		{
-			dragShiftReleased();
-			return true;
-		}
-
-		if( key_event->key() == Qt::Key_Control && m_isDragging )
-		{
-			dragCtrlReleased();
-			return true;
-		}
-	}
-
-	// the whole story starts with this event:
-	if( event->type() == QEvent::MouseButtonPress )
-	{
-		mousePressed( static_cast<QMouseEvent *> ( event ) );
-		return true;
-	}
-
-	return false;
-}
-
 void
-VShapeTool::drawTemporaryObject() const
+VShapeTool::drawTemporaryObject()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
 	

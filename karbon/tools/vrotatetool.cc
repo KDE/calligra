@@ -25,7 +25,7 @@
 
 
 VRotateTool::VRotateTool( KarbonView* view )
-	: VTool( view ), m_isDragging( false )
+	: VTool( view )
 {
 }
 

@@ -32,13 +32,7 @@ private:
 	double m_s2;
 	KoPoint m_sp;
 
-	// input (mouse coordinates):
-	KoPoint m_fp;
-	KoPoint m_lp;
-
 	VHandleNode m_activeNode;
-
-	bool m_isDragging;
 };
 
 #endif

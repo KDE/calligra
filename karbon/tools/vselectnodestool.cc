@@ -24,7 +24,7 @@
 
 
 VSelectNodesTool::VSelectNodesTool( KarbonView* view )
-	: VTool( view ), m_state( normal ), m_isDragging( false )
+	: VTool( view ), m_state( normal )
 {
 }
 

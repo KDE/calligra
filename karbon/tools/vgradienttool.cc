@@ -19,8 +19,9 @@
 
 
 VGradientTool::VGradientTool( KarbonView* view )
-	: VTool( view ), m_isDragging( false )
+	: VTool( view )
 {
+	m_isDragging = false;
 	m_dialog = new VGradientDlg();
 	m_dialog->setGradientRepeat( VGradient::none );
 	m_dialog->setGradientType( VGradient::linear );

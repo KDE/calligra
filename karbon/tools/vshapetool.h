@@ -22,8 +22,6 @@ class VShapeTool : public VTool
 public:
 	VShapeTool( KarbonView* view, const QString& name, bool polar = false );
 
-	virtual bool eventFilter( QEvent* event );
-
 	virtual void showDialog() const {}
 
 	const QString& name() const { return m_name; }
@@ -45,7 +43,7 @@ protected:
 	virtual VPath* shape( bool decide = false ) const = 0;
 	
 	/// Draws the object while it is edited.
-	virtual void drawTemporaryObject() const;
+	virtual void drawTemporaryObject();
 
 	/// Output coordinates.
 	KoPoint m_p;
@@ -57,15 +55,10 @@ private:
 
 	QString m_name;
 	
-	/// Input coordinates.
-	KoPoint m_fp;
-	KoPoint m_lp;
-
 	/// Calculate wiidth/height or radius/angle?
 	bool m_isPolar;
 
 	/// States:
-	bool m_isDragging;
 	bool m_isSquare;
 	bool m_isCentered;
 };

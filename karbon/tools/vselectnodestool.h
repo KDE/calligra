@@ -26,12 +26,6 @@ protected:
 
 private:
 	enum { normal, dragging, moving } m_state;
-
-	// input (mouse coordinates):
-	KoPoint m_fp;
-	KoPoint m_lp;
-
-	bool m_isDragging;
 };
 
 #endif
