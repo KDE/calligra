@@ -6,7 +6,7 @@
 datadir = $(kde_datadir)/kivio/icons/locolor/16x16/actions
 
 data_DATA = arrow_back.xpm arrow_first.xpm arrow_forward.xpm arrow_last.xpm view_grid.xpm view_guidelines.xpm view_margins.xpm view_pageborder.xpm view_ruler.xpm add_stencil.xpm remove_stencil.xpm\
-pencolor.xpm textcolor.xpm fillcolor.xpm copy_stencil.xpm paste_stencil.xpm cut_stencil.xpm group_stencils.xpm ungroup_stencils.xpm font_bold.xpm font_italic.xpm font_under.xpm linewidth.xpm\
+copy_stencil.xpm paste_stencil.xpm cut_stencil.xpm group_stencils.xpm ungroup_stencils.xpm font_bold.xpm font_italic.xpm font_under.xpm linewidth.xpm\
 open_stencilset.png font_names.xpm font_size.xpm bring_stencil_to_front.xpm send_stencil_to_back.xpm guides_horizontal.xpm guides_vertical.xpm view_manager.xpm page_disabled.xpm page_enabled.xpm\
 zoom_disabled.xpm zoom_enabled.xpm item_rename.xpm item_add.xpm item_remove.xpm view_page.xpm\
 layer_add.xpm\
