@@ -139,8 +139,8 @@ void KoIconChooser::mousePressEvent(QMouseEvent *e)
   if(e->button() == LeftButton)
   {
     QPoint p = e->pos();
-    int row = rowAt(p.y());
-    int col = columnAt(p.x());
+    int row = rowAt(contentsY() + p.y());
+    int col = columnAt(contentsX() + p.x());
 
     KoIconItem *item = itemAt(row, col);
     if(item)
