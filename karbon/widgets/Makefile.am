@@ -21,10 +21,7 @@ noinst_HEADERS = \
 	vselecttoolbar.h \
 	vstatebutton.h \
 	vunitspinbox.h \
-	vtoolbox.h \
-	tkfloatspinbox.h \
-	tkunits.h \
-	tkfloatspinboxaction.h
+	vtoolbox.h
 
 libkarbonwidgets_la_SOURCES = \
 	dummy.cc \
@@ -38,10 +35,7 @@ libkarbonwidgets_la_SOURCES = \
 	vselecttoolbar.cc \
 	vstatebutton.cc \
 	vunitspinbox.cc \
-	vtoolbox.cc \
-	tkfloatspinbox.cpp \
-	tkunits.cpp \
-	tkfloatspinboxaction.cpp
+	vtoolbox.cc
 
 libkarbonwidgets_la_METASOURCES = \
 	AUTO
