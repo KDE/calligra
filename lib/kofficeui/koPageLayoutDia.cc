@@ -51,6 +51,7 @@ KoPagePreview::KoPagePreview( QWidget* parent, const char *name, const KoPageLay
 {
     setPageLayout( _layout );
     columns = 1;
+    setMinimumSize( 150, 150 );
 }
 
 /*====================== destructor ==============================*/
@@ -93,7 +94,7 @@ void KoPagePreview::drawContents( QPainter *painter )
     int y=static_cast<int>( ( height() - pgHeight ) * 0.5 );
     int w=static_cast<int>(pgWidth);
     int h=static_cast<int>(pgHeight);
-    painter->drawRect( x + 1, y + 1, w, h);
+    //painter->drawRect( x + 1, y + 1, w, h);
     painter->drawRect( x, y, w, h );
 
     painter->setBrush( QBrush( black, HorPattern ) );
@@ -289,31 +290,31 @@ void KoPageLayoutDia::setupTab1()
 {
     QWidget *tab1 = addPage(i18n( "Page Size && Margins" ));
 
-    QGridLayout *grid1 = new QGridLayout( tab1, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid1 = new QGridLayout( tab1, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *lpgUnit;
     if ( !( flags & DISABLE_UNIT ) ) {
         // ------------- unit _______________
         QWidget* unitFrame = new QWidget( tab1 );
-        grid1->addWidget( unitFrame, 0, 0 );
-        QLayout* unitLayout = new QHBoxLayout( unitFrame, 5 );
-        unitLayout->setAutoAdd( true );
+        grid1->addWidget( unitFrame, 0, 0, Qt::AlignLeft );
+        QBoxLayout* unitLayout = new QHBoxLayout( unitFrame, 5 );
 
         // label unit
         lpgUnit = new QLabel( i18n( "Unit:" ), unitFrame );
-        lpgUnit->setAlignment( Qt::AlignRight || Qt::AlignVCenter );
+        unitLayout->addWidget( lpgUnit, 0, Qt::AlignRight | Qt::AlignVCenter );
 
         // combo unit
         cpgUnit = new QComboBox( false, unitFrame, "cpgUnit" );
         cpgUnit->insertItem( i18n( "Millimeters (mm)" ) );
         cpgUnit->insertItem( i18n( "Points (pt)" ) );
         cpgUnit->insertItem( i18n( "Inches (in)" ) );
+        unitLayout->addWidget( cpgUnit, 0, Qt::AlignLeft | Qt::AlignVCenter );
         connect( cpgUnit, SIGNAL( activated( int ) ), this, SLOT( unitChanged( int ) ) );
     } else {
         QString str=KoUnit::unitDescription(m_unit);
 
         lpgUnit = new QLabel( i18n("All values are given in %1.").arg(str), tab1 );
-        grid1->addWidget( lpgUnit, 0, 0 );
+        grid1->addWidget( lpgUnit, 0, 0, Qt::AlignLeft );
     }
 
     // -------------- page size -----------------
@@ -321,36 +322,36 @@ void KoPageLayoutDia::setupTab1()
     grid1->addWidget( formatFrame, 1, 0 );
     QGridLayout *formatGrid = new QGridLayout( formatFrame, 3, 2, 
        2*KDialog::marginHint(), KDialog::spacingHint() );
+    formatGrid->setColStretch( 1, 1 );
 
-    // label format
+    // label page size
     QLabel *lpgFormat = new QLabel( i18n( "Size:" ), formatFrame );
-    formatGrid->addWidget( lpgFormat, 0, 0 );
+    formatGrid->addWidget( lpgFormat, 0, 0, Qt::AlignRight | Qt::AlignVCenter );
 
-    // combo format
+    // combo size
     cpgFormat = new QComboBox( false, formatFrame, "cpgFormat" );
-    cpgFormat->setAutoResize( false );
     cpgFormat->insertStringList( KoPageFormat::allFormats() );
-    formatGrid->addWidget( cpgFormat, 0, 1 );
+    formatGrid->addWidget( cpgFormat, 0, 1, Qt::AlignLeft | Qt::AlignVCenter );
     connect( cpgFormat, SIGNAL( activated( int ) ), this, SLOT( formatChanged( int ) ) );
 
     // label width
     QLabel *lpgWidth = new QLabel( i18n( "Width:" ), formatFrame );
-    formatGrid->addWidget( lpgWidth, 1, 0 );
+    formatGrid->addWidget( lpgWidth, 1, 0, Qt::AlignRight | Qt::AlignVCenter );
 
     // linedit width
     epgWidth = new KDoubleNumInput( formatFrame, "Width" );
-    formatGrid->addWidget( epgWidth, 1, 1 );
+    formatGrid->addWidget( epgWidth, 1, 1, Qt::AlignLeft | Qt::AlignVCenter );
     if ( layout.format != PG_CUSTOM )
         epgWidth->setEnabled( false );
     connect( epgWidth, SIGNAL( valueChanged(double) ), this, SLOT( widthChanged() ) );
 
     // label height
     QLabel *lpgHeight = new QLabel( i18n( "Height:" ), formatFrame );
-    formatGrid->addWidget( lpgHeight, 2, 0 );
+    formatGrid->addWidget( lpgHeight, 2, 0, Qt::AlignRight | Qt::AlignVCenter );
 
     // linedit height
     epgHeight = new KDoubleNumInput( formatFrame, "Height" );
-    formatGrid->addWidget( epgHeight, 2, 1 );
+    formatGrid->addWidget( epgHeight, 2, 1, Qt::AlignLeft | Qt::AlignVCenter );
     if ( layout.format != PG_CUSTOM )
         epgHeight->setEnabled( false );
     connect( epgHeight, SIGNAL( valueChanged(double ) ), this, SLOT( heightChanged() ) );
@@ -364,11 +365,14 @@ void KoPageLayoutDia::setupTab1()
 
     QLabel* lbPortrait = new QLabel( orientFrame );
     lbPortrait->setPixmap( QPixmap( UserIcon( "koPortrait" ) ) );
+    lbPortrait->setMaximumWidth( lbPortrait->pixmap()->width() );
     rbPortrait = new QRadioButton( i18n("Portrait"), orientFrame );
 
     QLabel* lbLandscape = new QLabel( orientFrame );
     lbLandscape->setPixmap( QPixmap( UserIcon( "koLandscape" ) ) );
+    lbLandscape->setMaximumWidth( lbLandscape->pixmap()->width() );
     rbLandscape = new QRadioButton( i18n("Landscape"), orientFrame );
+
 
     connect( rbPortrait, SIGNAL( clicked() ), this, SLOT( orientationChanged() ) );
     connect( rbLandscape, SIGNAL( clicked() ), this, SLOT( orientationChanged() ) );
@@ -376,37 +380,55 @@ void KoPageLayoutDia::setupTab1()
     // --------------- page margins ---------------
     QButtonGroup *marginsFrame = new QButtonGroup( i18n( "Margins" ), tab1 );
     grid1->addWidget( marginsFrame, 3, 0 );
-    QLayout *marginsLayout = new QGridLayout( marginsFrame, 4, 2, 
+    QGridLayout *marginsLayout = new QGridLayout( marginsFrame, 4, 2, 
        2*KDialog::marginHint(), KDialog::spacingHint() );
-    marginsLayout->setAutoAdd( true );
+    marginsLayout->setColStretch( 1, 1 );
 
     // left margin
-    new QLabel( i18n( "Left:" ), marginsFrame );
+    marginsLayout->addWidget( new QLabel( i18n( "Left:" ), marginsFrame ),
+       0, 0, Qt::AlignRight | Qt::AlignVCenter );
     ebrLeft = new KDoubleNumInput( marginsFrame, "Left" );
+    marginsLayout->addWidget( ebrLeft, 0, 1 );
     connect( ebrLeft, SIGNAL( valueChanged( double ) ), this, SLOT( leftChanged() ) );
     if ( !enableBorders ) ebrLeft->setEnabled( false );
 
     // right margin
-    new QLabel( i18n( "Right:" ), marginsFrame );
+    marginsLayout->addWidget( new QLabel( i18n( "Right:" ), marginsFrame ),
+       1, 0, Qt::AlignRight | Qt::AlignVCenter );
     ebrRight = new KDoubleNumInput( marginsFrame, "Right" );
+    marginsLayout->addWidget( ebrRight, 1, 1 );
     connect( ebrRight, SIGNAL( valueChanged( double ) ), this, SLOT( rightChanged() ) );
     if ( !enableBorders ) ebrRight->setEnabled( false );
 
     // top margin
-    new QLabel( i18n( "Top:" ), marginsFrame );
+    marginsLayout->addWidget( new QLabel( i18n( "Top:" ), marginsFrame ),
+       2, 0, Qt::AlignRight | Qt::AlignVCenter );
     ebrTop = new KDoubleNumInput( marginsFrame, "Top" );
+    marginsLayout->addWidget( ebrTop, 2, 1 );
     connect( ebrTop, SIGNAL( valueChanged( double ) ), this, SLOT( topChanged() ) );
     if ( !enableBorders ) ebrTop->setEnabled( false );
 
     // bottom margin
-    new QLabel( i18n( "Bottom:" ), marginsFrame );
+    marginsLayout->addWidget( new QLabel( i18n( "Bottom:" ), marginsFrame ),
+       3, 0, Qt::AlignRight | Qt::AlignVCenter );
     ebrBottom = new KDoubleNumInput( marginsFrame, "Bottom" );
+    marginsLayout->addWidget( ebrBottom, 3, 1 );
     connect( ebrBottom, SIGNAL( valueChanged( double ) ), this, SLOT( bottomChanged() ) );
     if ( !enableBorders ) ebrBottom->setEnabled( false );
 
     // ------------- preview -----------
     pgPreview = new KoPagePreview( tab1, "Preview", layout );
     grid1->addMultiCellWidget( pgPreview, 1, 3, 1, 1 );
+
+    // ------------- spacers -----------
+    QWidget* spacer1 = new QWidget( tab1 );
+    QWidget* spacer2 = new QWidget( tab1 );
+    spacer1->setSizePolicy( QSizePolicy( QSizePolicy::Expanding,
+       QSizePolicy::Expanding ) );
+    spacer2->setSizePolicy( QSizePolicy( QSizePolicy::Expanding,
+       QSizePolicy::Expanding ) );
+    grid1->addWidget( spacer1, 4, 0 );
+    grid1->addWidget( spacer2, 4, 1 );
 
     setValuesTab1();
     updatePreview( layout );
