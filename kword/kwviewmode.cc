@@ -63,7 +63,7 @@ void KWViewMode::drawRightShadow( QPainter * painter, const QRect & crect, const
 
 void KWViewMode::drawBottomShadow( QPainter * painter, const QRect & crect, const QRect & pageRect, int leftOffset )
 {
-    QRect shadowRect( pageRect.left() + leftOffset, pageRect.top() + 1, pageRect.width(), s_shadowOffset );
+    QRect shadowRect( pageRect.left() + leftOffset, pageRect.bottom() + 1, pageRect.width(), s_shadowOffset );
     shadowRect &= crect; // intersect
     if ( !shadowRect.isEmpty() )
         painter->fillRect( shadowRect,
@@ -130,7 +130,8 @@ QSize KWViewModePreview::contentsSize()
     int pages = doc->getPages();
     int rows = (pages-1) / m_pagesPerRow + 1;
     int hPages = rows > 1 ? m_pagesPerRow : pages;
-    return QSize( hPages * doc->paperWidth(), doc->pageTop( rows ) /* bottom of last row */ );
+    return QSize( m_spacing + hPages * ( doc->paperWidth() + m_spacing ),
+                  m_spacing + rows * ( doc->paperHeight() + m_spacing ) /* bottom of last row */ );
 }
 
 QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
@@ -147,8 +148,8 @@ QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
                 << " ptPaperHeight=" << doc->ptPaperHeight()
                 << " page=" << page << " row=" << row << " col=" << col
                 << " yInPagePt=" << yInPagePt << endl;*/
-    return QPoint( col * ( doc->paperWidth() + m_spacing ) + nPoint.x(),
-                   row * ( doc->paperHeight() + m_spacing ) + doc->zoomItY( yInPagePt ) );
+    return QPoint( m_spacing + col * ( doc->paperWidth() + m_spacing ) + nPoint.x(),
+                   m_spacing + row * ( doc->paperHeight() + m_spacing ) + doc->zoomItY( yInPagePt ) );
 }
 
 QPoint KWViewModePreview::viewToNormal( const QPoint & vPoint )
@@ -157,15 +158,33 @@ QPoint KWViewModePreview::viewToNormal( const QPoint & vPoint )
     KWDocument * doc = m_canvas->kWordDocument();
     int paperWidth = doc->paperWidth();
     int paperHeight = doc->paperHeight();
-    int col = static_cast<int>( vPoint.x() / ( paperWidth + m_spacing ) );
-    int xInPage = vPoint.x() - col * ( paperWidth + m_spacing );
-    int row = static_cast<int>( vPoint.y() / ( paperHeight + m_spacing ) );
-    int yInPage = vPoint.y() - row * ( paperHeight + m_spacing );
+    QPoint p( vPoint.x() - m_spacing, vPoint.y() - m_spacing );
+    int col = static_cast<int>( p.x() / ( paperWidth + m_spacing ) );
+    int xInPage = p.x() - col * ( paperWidth + m_spacing );
+    int row = static_cast<int>( p.y() / ( paperHeight + m_spacing ) );
+    int yInPage = p.y() - row * ( paperHeight + m_spacing );
     int page = row * m_pagesPerRow + col;
     return QPoint( xInPage, yInPage + doc->pageTop( page ) );
 }
 
 void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion )
 {
-    // TODO
+    KWDocument * doc = m_canvas->kWordDocument();
+    painter->save();
+    painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
+    painter->setBrush( Qt::NoBrush );
+    QRect pageRect;
+    int paperWidth = doc->paperWidth();
+    int paperHeight = doc->paperHeight();
+    for ( int page = 0; page < doc->getPages(); page++ )
+    {
+        int row = page / m_pagesPerRow;
+        int col = page % m_pagesPerRow;
+        QRect pageRect( m_spacing + col * ( paperWidth + m_spacing ),
+                        m_spacing + row * ( paperHeight + m_spacing ),
+                        paperWidth, paperHeight );
+        drawOnePageBorder( painter, crect, pageRect, emptySpaceRegion );
+        drawRightShadow( painter, crect, pageRect, s_shadowOffset );
+        drawBottomShadow( painter, crect, pageRect, s_shadowOffset );
+    }
 }
