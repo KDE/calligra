@@ -70,27 +70,27 @@ void KIvioViewIface::optionsDialog()
     view->optionsDialog();
 }
 
-bool KIvioViewIface::isSnapGuides()
+bool KIvioViewIface::isSnapGuides()const
 {
     return view->isSnapGuides();
 }
 
-bool KIvioViewIface::isShowGuides()
+bool KIvioViewIface::isShowGuides()const
 {
     return view->isShowGuides();
 }
 
-bool KIvioViewIface::isShowRulers()
+bool KIvioViewIface::isShowRulers()const
 {
     return view->isShowRulers();
 }
 
-bool KIvioViewIface::isShowPageBorders()
+bool KIvioViewIface::isShowPageBorders()const
 {
     return view->isShowPageBorders();
 }
 
-bool KIvioViewIface::isShowPageMargins()
+bool KIvioViewIface::isShowPageMargins()const
 {
     return view->isShowPageMargins();
 }
@@ -195,7 +195,7 @@ void KIvioViewIface::unselectAllStencils()
     view->unselectAllStencils();
 }
 
-int KIvioViewIface::lineWidth()
+int KIvioViewIface::lineWidth() const
 {
     return view->lineWidth();
 }

@@ -42,11 +42,11 @@ k_dcop:
     virtual void exportPage();
     virtual void optionsDialog();
 
-    virtual bool isSnapGuides();
-    virtual bool isShowGuides();
-    virtual bool isShowRulers();
-    virtual bool isShowPageBorders();
-    virtual bool isShowPageMargins();
+    virtual bool isSnapGuides()const;
+    virtual bool isShowGuides()const;
+    virtual bool isShowRulers()const;
+    virtual bool isShowPageBorders()const;
+    virtual bool isShowPageMargins()const;
 
 
     virtual int leftBorder() const;
@@ -76,7 +76,7 @@ k_dcop:
     virtual void selectAllStencils();
     virtual void unselectAllStencils();
 
-    virtual int lineWidth();
+    virtual int lineWidth()const;
 
 private:
     KivioView *view;
