@@ -501,7 +501,7 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 	else if( command == "font-family" )
 	{
 		QString family = params;
-		family.replace( '\'' ) , QChar( ' ' ) );
+		family.replace( '\'' , ' ' );
 		gc->font.setFamily( family );
 	}
 	else if( command == "font-size" )
@@ -674,9 +674,9 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			bool bFirst = true;
 
 			QString points = b.attribute( "points" ).simplifyWhiteSpace();
-			points.replace( ',' ), ' ' );
+			points.replace( ',', ' ' );
 			points.remove( '\r' );
-		        points.removr( '\n' );
+		        points.remove( '\n' );
 			QStringList pointList = QStringList::split( ' ', points );
 			for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); it++ )
 			{
