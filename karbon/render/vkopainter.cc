@@ -23,6 +23,7 @@
 #include <art_rgb_svp.h>
 #include <art_svp_intersect.h>
 #include <art_pathcode.h>
+#include <art_vpath_dash.h>
 
 #include <X11/Xlib.h>
 
@@ -195,7 +196,7 @@ VKoPainter::fillPath()
 	m_index = 0;
 
 	drawVPath( path );
-	art_free( path );
+	//art_free( path );
 }
 
 void
@@ -213,7 +214,7 @@ VKoPainter::strokePath()
 	m_index = 0;
 
 	drawVPath( path );
-	art_free( path );
+	//art_free( path );
 }
 
 void
@@ -238,8 +239,13 @@ VKoPainter::setPen( const QColor &c )
 }
 
 void
-VKoPainter::setPen( Qt::PenStyle /*style*/ )
+VKoPainter::setPen( Qt::PenStyle style )
 {
+	if( style == Qt::NoPen )
+	{
+		delete m_stroke;
+		m_stroke = 0L;
+	}
 }
 
 void
@@ -258,6 +264,11 @@ VKoPainter::setBrush( const QColor &c )
 void
 VKoPainter::setBrush( Qt::BrushStyle style )
 {
+	if( style == Qt::NoBrush )
+	{
+		delete m_fill;
+		m_fill = 0L;
+	}
 }
 
 void
@@ -321,7 +332,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	int b = 0;
 	int a = 0;
 	art_u32 fillColor;
-    // TODO : filling
+    // filling
 	if( m_fill && m_fill->type() == fill_fill )
 	{
 		m_fill->color().pseudoValues( r, g, b );
@@ -355,6 +366,25 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		a = qRound( 255 * m_stroke->color().opacity() );
 		strokeColor = ( 0 << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
 
+		double ratio = sqrt(pow(affine[0], 2) + pow(affine[3], 2)) / sqrt(2);
+		if( m_stroke->dashArray().count() > 0 )
+		{
+			// there are dashes to be rendered
+			ArtVpathDash dash;
+			dash.offset = m_stroke->dashOffset() * ratio;
+			dash.n_dash = m_stroke->dashArray().count();
+			double dashes[ dash.n_dash ];
+			for( int i = 0; i < dash.n_dash; i++ )
+				dashes[i] = m_stroke->dashArray()[i] * ratio;
+
+			dash.dash = dashes;
+			// get the dashed VPath and use that for the stroke render operation
+			ArtVpath *vec2 = art_vpath_dash( vec, &dash );
+			art_free( vec );
+
+			vec = vec2;
+			//delete dashes;
+		}
 		// caps translation karbon -> art
 		if( m_stroke->lineCap() == cap_butt )
 			capStyle = ART_PATH_STROKE_CAP_BUTT;
@@ -372,7 +402,6 @@ VKoPainter::drawVPath( ArtVpath *vec )
 			joinStyle = ART_PATH_STROKE_JOIN_BEVEL;
 
 		// zoom stroke width;
-		double ratio = sqrt(pow(affine[0], 2) + pow(affine[3], 2)) / sqrt(2);
 		strokeSvp = art_svp_vpath_stroke( vec, ART_PATH_STROKE_JOIN_ROUND/*joinStyle*/, capStyle, ratio * m_stroke->lineWidth(), 5.0, 0.25 );
 	}
 
@@ -389,6 +418,10 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		art_svp_free( fillSvp );
 	}
 
+	delete m_stroke;
 	m_stroke = 0L;
+	delete m_fill;
 	m_fill = 0L;
+
+	art_free( vec );
 }

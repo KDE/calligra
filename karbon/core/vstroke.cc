@@ -12,6 +12,9 @@ VStroke::VStroke( float width, const VLineCap cap, const VLineJoin join,
 	: m_lineWidth( width ), m_lineCap( cap ), m_lineJoin( join ),
 		m_miterLimit( miterLimit ), m_dashOffset( 0.0 )
 {
+	/*float f = 5;
+	m_dashArray.append( f );
+	m_dashArray.append( f );*/
 }
 
 void
