@@ -156,11 +156,11 @@ void KoStore::list()
 
   unsigned int size = 0;
   
-  map<string,Entry>::iterator it = m_map.begin();
+  map<string,Entry,less<string> >::iterator it = m_map.begin();
   for( ; it != m_map.end(); ++it )
   {
-    size += it->second.size;
-    cout << it->second.size << "\t" << it->second.flags << "\t" << it->second.mimetype << "\t" << it->second.name << endl;
+    size += (*it).second.size;
+    cout << (*it).second.size << "\t" << (*it).second.flags << "\t" << (*it).second.mimetype << "\t" << (*it).second.name << endl;
   }
 
   cout << "--------------------------------------------------------------------" << endl;
@@ -207,21 +207,21 @@ CORBA::Boolean KoStore::open( const char* _name, const char *_mime_type )
   { 
     kdebug( KDEBUG_INFO, 30002, "Opening for reading %c", _name );
     
-    map<string,Entry>::iterator it = m_map.find( _name );
+    map<string,Entry,less<string> >::iterator it = m_map.find( _name );
     if ( it == m_map.end() )
     {
       kdebug( KDEBUG_INFO, 30002, "Unknown filename %c", _name );
       return false;
     }
-    if ( _mime_type && strlen( _mime_type ) != 0 && it->second.mimetype != _mime_type )
+    if ( _mime_type && strlen( _mime_type ) != 0 && (*it).second.mimetype != _mime_type )
     {
       kdebug( KDEBUG_INFO, 30002, "Wrong mime_type in file %c", _name );
-      kdebug( KDEBUG_INFO, 30002, "Expected %c but got %c", _mime_type, it->second.mimetype.c_str() );
+      kdebug( KDEBUG_INFO, 30002, "Expected %c but got %c", _mime_type, (*it).second.mimetype.c_str() );
       return false;
     }
-    m_in.seekg( it->second.data );
+    m_in.seekg( (*it).second.data );
     m_readBytes = 0;
-    m_current = it->second;
+    m_current = (*it).second;
     m_in.clear();
   }
   else
@@ -251,6 +251,23 @@ void KoStore::close()
   }
 
   m_bIsOpen = false;
+}
+
+CORBA::Long KoStore::size()
+{
+  // We must be in read mode!
+  if ( !m_bIsOpen )
+  {
+    kdebug( KDEBUG_INFO, 30002, "KoStore: You must open before reading" );
+    return -1;
+  }
+  if ( m_mode != KOStore::Read )
+  {
+    kdebug( KDEBUG_INFO, 30002, "KoStore: Can not read from store that is opened for writing" );
+    return -1;
+  }
+
+  return (CORBA::Long)m_current.size;
 }
 
 KOStore::Data* KoStore::read( CORBA::ULong max )
@@ -399,82 +416,3 @@ bool KoStore::write( const char* _data, unsigned long _len )
   return true;
 }
 
-int istorestreambuffer::underflow ()
-{
-    // Leseposition vor Puffer-Ende ?
-    if (gptr() < egptr() )
-    {
-      return *gptr();
-    }
-
-    /* Anzahl Putback-Bereich ermitteln
-     *  - Anzahl bereits gelesener Zeichen
-     *  - maximal 4
-     */
-    int anzPutback;
-    anzPutback = gptr() - eback();
-    if (anzPutback > 4)
-    {
-      anzPutback = 4;
-    }
-
-    /* die bis zu vier vorher gelesenen Zeichen nach vorne
-     * in den Putback-Puffer (erste 4 Zeichen)
-     */
-    memcpy( puffer + ( 4 - anzPutback ), gptr()-anzPutback, anzPutback );
-
-    /* neue Zeichen lesen
-     */
-    long anz = 8192;
-    if ( !CORBA::is_nil( m_vStore ) )
-    {
-      KOStore::Data* p;
-      kdebug( KDEBUG_INFO, 30002, "--->read" );
-      p = m_vStore->read( pufferSize - 4 );
-      kdebug( KDEBUG_INFO, 30002, "<---" );
-      if ( !p )
-	return EOF;
-      anz = p->length();
-      for( int i = 0; i < anz; i++ )
-	puffer[ 4 + i ] = (char)((*p)[i]);
-      delete p;
-    }
-    else
-      anz = m_pStore->read( puffer + 4, pufferSize - 4 );
-    if ( anz <= 0 )
-    {
-      // Fehler oder EOF
-      return EOF;
-    }
-    else
-      kdebug( KDEBUG_INFO, 30002, "Read %i bytes", anz );
-     
-    /* Puffer-Zeiger neu setzen
-     */
-    setg (puffer+(4-anzPutback),   // Putback-Anfang
-	  puffer+4,                // Leseposition
-	  puffer+4+anz);           // Puffer-Ende
-    
-    // naechstes Zeichen zurueckliefern
-    unsigned char c = *((unsigned char*)gptr());
-    return c;
-    // return *gptr();
-}
-
-int ostorestreambuffer::emptybuffer()
-{
-    int anz = pptr()-pbase();
-    if ( !CORBA::is_nil( m_vStore ) )
-    {
-      KOStore::Data data;
-      data.length( anz );
-      for( int i = 0; i < anz; i++ )
-	  data[ i ] = m_buffer[ i ];
-      m_vStore->write( data );
-    }
-    else
-      m_pStore->write( m_buffer, anz );
-
-    pbump (-anz);    // Schreibzeiger entspr. zuruecksetzen
-    return anz;
-}
