@@ -35,7 +35,7 @@
 
 #include <klocale.h>
 #include <koUnit.h>
-
+#include <knuminput.h>
 
 /******************************************************************/
 /* class KoPagePreview                                            */
@@ -249,7 +249,7 @@ KoHeadFoot KoPageLayoutDia::getHeadFoot()
 KoColumns KoPageLayoutDia::getColumns()
 {
     cl.columns = nColumns->value();
-    cl.ptColumnSpacing = KoUnit::fromUserValue( nCSpacing->text(), m_unit  );
+    cl.ptColumnSpacing = KoUnit::ptFromUnit( nCSpacing->value(), m_unit  );
     return cl;
 }
 
@@ -263,8 +263,8 @@ KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
     else if ( rhEvenOdd->isChecked() )
         kwhf.header = HF_EO_DIFF;
 
-    kwhf.ptHeaderBodySpacing = KoUnit::fromUserValue( nHSpacing->text(), m_unit );
-    kwhf.ptFooterBodySpacing = KoUnit::fromUserValue( nFSpacing->text(), m_unit );
+    kwhf.ptHeaderBodySpacing = KoUnit::ptFromUnit( nHSpacing->value(), m_unit );
+    kwhf.ptFooterBodySpacing = KoUnit::ptFromUnit( nFSpacing->value(), m_unit );
 
     if ( rfSame->isChecked() )
         kwhf.footer = HF_SAME;
@@ -624,15 +624,10 @@ void KoPageLayoutDia::setupTab3()
     QLabel *lCSpacing = new QLabel( i18n("Column Spacing (%1):").arg(str), tab3 );
     grid3->addWidget( lCSpacing, 2, 0 );
 
-    nCSpacing = new QLineEdit( tab3, "" );
-    nCSpacing->setValidator( new KFloatValidator( 0,9999,true,nCSpacing ) );
-    nCSpacing->setText( i18n("0.00") );
-    nCSpacing->setMaxLength( 5 );
-    nCSpacing->setEchoMode( QLineEdit::Normal );
-    nCSpacing->setFrame( true );
+    nCSpacing = new KDoubleNumInput( tab3, "" );
     grid3->addWidget( nCSpacing, 3, 0 );
 
-    nCSpacing->setText( KoUnit::userValue( cl.ptColumnSpacing, m_unit ) );
+    nCSpacing->setValue( KoUnit::ptToUnit( cl.ptColumnSpacing, m_unit ) );
     connect( nCSpacing, SIGNAL( textChanged( const QString & ) ),
              this, SLOT( nSpaceChanged( const QString & ) ) );
 
@@ -689,15 +684,10 @@ void KoPageLayoutDia::setupTab4()
     lHSpacing->setAlignment( AlignRight | AlignVCenter );
     headerGrid->addWidget( lHSpacing, 4, 0 );
 
-    nHSpacing = new QLineEdit( gHeader, "" );
-    nHSpacing->setValidator( new KFloatValidator( 0,9999,true,nHSpacing ) );
-    nHSpacing->setText( i18n("0.00") );
-    nHSpacing->setMaxLength( 5 );
-    nHSpacing->setEchoMode( QLineEdit::Normal );
-    nHSpacing->setFrame( true );
+    nHSpacing = new KDoubleNumInput( gHeader, "" );
     headerGrid->addWidget( nHSpacing, 4, 1 );
 
-    nHSpacing->setText( KoUnit::userValue( kwhf.ptHeaderBodySpacing, m_unit ) );
+    nHSpacing->setValue( KoUnit::ptToUnit( kwhf.ptHeaderBodySpacing, m_unit ) );
 
     headerGrid->addColSpacing( 0, rhSame->width() / 2 );
     headerGrid->addColSpacing( 1, rhSame->width() / 2 );
@@ -746,16 +736,10 @@ void KoPageLayoutDia::setupTab4()
     lFSpacing->setAlignment( AlignRight | AlignVCenter );
     footerGrid->addWidget( lFSpacing, 4, 0 );
 
-    nFSpacing = new QLineEdit( gFooter, "" );
-    nFSpacing->setValidator( new KFloatValidator( 0,9999,true,nFSpacing ));
-    nFSpacing->setText( i18n("0.00") );
-    nFSpacing->setMaxLength( 5 );
-    nFSpacing->setEchoMode( QLineEdit::Normal );
-    nFSpacing->setFrame( true );
+    nFSpacing = new KDoubleNumInput( gFooter, "" );
     footerGrid->addWidget( nFSpacing, 4, 1 );
 
-    nFSpacing->setText( KoUnit::userValue( kwhf.ptFooterBodySpacing, m_unit ) );
-
+    nFSpacing->setValue(KoUnit::ptToUnit( kwhf.ptFooterBodySpacing, m_unit ) );
     footerGrid->addColSpacing( 0, rfSame->width() / 2 );
     footerGrid->addColSpacing( 1, rfSame->width() / 2 );
     footerGrid->addColSpacing( 0, rfFirst->width() / 2 );

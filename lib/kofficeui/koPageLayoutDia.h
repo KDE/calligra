@@ -36,6 +36,7 @@ class QComboBox;
 class QLineEdit;
 class QSpinBox;
 class QRadioButton;
+class KDoubleNumInput;
 
 enum { FORMAT_AND_BORDERS = 1, HEADER_AND_FOOTER = 2, COLUMNS = 4, DISABLE_BORDERS = 8,
        KW_HEADER_AND_FOOTER = 16, DISABLE_UNIT = 32 };
@@ -121,7 +122,7 @@ public:
     KoPageLayoutDia( QWidget* parent, const char* name,
 		     const KoPageLayout& layout,
 		     const KoHeadFoot& headfoot,
-		     const KoColumns& columns, 
+		     const KoColumns& columns,
 		     const KoKWHeaderFooter& kwheadfoot,
 		     int tabs, KoUnit::Unit unit );
 
@@ -184,9 +185,10 @@ protected:
     QLineEdit *eFootMid;
     QLineEdit *eFootRight;
     QSpinBox *nColumns;
-    QLineEdit *nCSpacing;
-    QLineEdit *nHSpacing;
-    QLineEdit *nFSpacing;
+    KDoubleNumInput *nCSpacing;
+
+    KDoubleNumInput *nHSpacing;
+    KDoubleNumInput *nFSpacing;
     QRadioButton *rhSame;
     QRadioButton *rhFirst;
     QRadioButton *rhEvenOdd;
