@@ -22,7 +22,7 @@ class KChartPart : public KoChart::Part
   virtual bool initDoc();
 
   virtual void setData( const KoChart::Data& data );
-  void showWizard();
+  bool showWizard();
   void initLabelAndLegend();
   void loadConfig(KConfig *conf);
   void saveConfig(KConfig *conf);
@@ -62,7 +62,7 @@ public:
     WizardExt( KoChart::Part *part )
         : KoChart::WizardExtension( part ) {};
 
-    virtual void show() { static_cast<KChartPart *>( part() )->showWizard(); }
+    virtual bool show() { return static_cast<KChartPart *>( part() )->showWizard(); }
 };
 
 #endif

@@ -128,11 +128,12 @@ void KChartPart::setData( const KoChart::Data& data )
 }
 
 
-void KChartPart::showWizard()
+bool KChartPart::showWizard()
 {
     KChartWizard* wizard = new KChartWizard( this, _parentWidget, "wizard" );
-    (void)wizard->exec();
+    bool ret = wizard->exec();
     delete wizard;
+    return ret;
 }
 
 void KChartPart::initLabelAndLegend()

@@ -7020,12 +7020,14 @@ void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
     ch->update();
     ch->chart()->setCanChangeValue( false  );
     // m_pDoc->insertChild( ch );
-    insertChild( ch );
+    //insertChild( ch );
 
     KoChart::WizardExtension * wiz = ch->chart()->wizardExtension();
 
-    if ( wiz )
-        wiz->show();
+    if ( wiz && wiz->show())
+        insertChild( ch );
+    else
+        delete ch;
 }
 
 void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
