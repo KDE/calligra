@@ -38,9 +38,6 @@ public:
 
 	const double& zoomFactor() { return m_canvas->zoomFactor(); }
 
-public slots:
-	void activateTool( int ID ); //tool chooser
-
 protected slots:
 	// editing:
 	void editCut();
@@ -69,6 +66,7 @@ protected slots:
 	void selectTool();
 	void rotateTool();
 	void scaleTool();
+	void shearTool();
 	void sinusTool();
 	void spiralTool();
 	void starTool();
@@ -101,6 +99,7 @@ private:
 	KToggleAction* m_selectToolAction;
 	KToggleAction* m_rotateToolAction;
 	KToggleAction* m_scaleToolAction;
+	KToggleAction* m_shearToolAction;
 	KToggleAction* m_sinusToolAction;
 	KToggleAction* m_spiralToolAction;
 	KToggleAction* m_starToolAction;
@@ -110,3 +109,4 @@ private:
 };
 
 #endif
+

@@ -24,6 +24,18 @@ private:
 	enum ButtonChoice { Select, Scale, Rotate, Shear, Ellipse, Rectangle, Roundrect, Polygon, Star, Sinus, Spiral };
 private slots:
 	void slotButton( int ID );
+signals:
+	// shape-tools:
+	void ellipseToolActivated();
+	void polygonToolActivated();
+	void rectangleToolActivated();
+	void roundRectToolActivated();
+	void selectToolActivated();
+	void rotateToolActivated();
+	void scaleToolActivated();
+	void sinusToolActivated();
+	void spiralToolActivated();
+	void starToolActivated();
 };
 
 #endif

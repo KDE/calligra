@@ -27,12 +27,14 @@
 #include "vmtool_select.h"
 #include "vmtool_rotate.h"
 #include "vmtool_scale.h"
+//#include "vmtool_shear.h"
 #include "vmcmd_delete.h"
 #include "vtoolcontainer.h"
 #include "vpainterfactory.h"
 #include "vpainter.h"
 
 #include <kdebug.h>
+#include <koMainWindow.h>
 
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
@@ -223,6 +225,14 @@ KarbonView::scaleTool()
 }
 
 void
+KarbonView::shearTool()
+{
+	/*s_currentTool = VMToolShear::instance( m_part );
+	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
+	m_shearToolAction->setChecked( true );*/
+}
+
+void
 KarbonView::sinusTool()
 {
 	s_currentTool = VCToolSinus::instance( m_part );
@@ -336,6 +346,9 @@ KarbonView::initActions()
 	m_scaleToolAction = new KToggleAction(
 		i18n( "&Scale Objects" ), "scale", 0, this,
 		SLOT( scaleTool() ), actionCollection(), "tool_scale" );
+	m_shearToolAction = new KToggleAction(
+		i18n( "&Shear Objects" ), "shear", 0, this,
+		SLOT( shearTool() ), actionCollection(), "tool_shear" );
 	m_spiralToolAction = new KToggleAction(
 		i18n( "S&piral" ), "spiral", 0, this,
 		SLOT( spiralTool() ), actionCollection(), "tool_spiral" );
@@ -375,7 +388,18 @@ KarbonView::initActions()
 	// zoom <-----
 
 	toolbox = new VToolContainer( this );
-	connect(toolbox->btngroup, SIGNAL(clicked(int)), this, SLOT(activateTool(int)));
+	connect(toolbox, SIGNAL(selectToolActivated()),		this, SLOT(selectTool()));
+	connect(toolbox, SIGNAL(scaleToolActivated()),		this, SLOT(scaleTool()));
+	connect(toolbox, SIGNAL(rotateToolActivated()),		this, SLOT(rotateTool()));
+	connect(toolbox, SIGNAL(shearToolActivated()),		this, SLOT(shearTool()));
+	connect(toolbox, SIGNAL(ellipseToolActivated()),	this, SLOT(ellipseTool()));
+	connect(toolbox, SIGNAL(rectangleToolActivated()),	this, SLOT(rectangleTool()));
+	connect(toolbox, SIGNAL(roundRectToolActivated()),	this, SLOT(roundRectTool()));
+	connect(toolbox, SIGNAL(polygonToolActivated()),	this, SLOT(polygonTool()));
+	connect(toolbox, SIGNAL(starToolActivated()),		this, SLOT(starTool()));
+	connect(toolbox, SIGNAL(sinusToolActivated()),		this, SLOT(sinusTool()));
+	connect(toolbox, SIGNAL(spiralToolActivated()),		this, SLOT(spiralTool()));
+	shell()->moveDockWindow( toolbox, Qt::DockLeft );
 	toolbox->show();
 }
 
@@ -395,45 +419,5 @@ KarbonView::eventFilter( QObject* object, QEvent* event )
 		return false;
 }
 
-void KarbonView::activateTool( int ID )
-{
-	enum ButtonChoice { Select, Scale, Rotate, Shear, Ellipse, Rectangle, Roundrect, Polygon, Star, Sinus, Spiral };
-	switch( ID )
-	{
-		case Select:
-			selectTool();
-			break;
-		case Scale:
-			scaleTool();
-			break;
-		case Rotate:
-			rotateTool();
-			break;
-		case Shear:
-			selectTool(); // no shear available yet !!!
-			break;
-		case Ellipse:
-			ellipseTool();
-			break;
-		case Rectangle:
-			rectangleTool();
-			break;
-		case Roundrect:
-			roundRectTool();
-			break;
-		case Polygon:
-			polygonTool();
-			break;
-		case Star:
-			starTool();
-			break;
-		case Sinus:
-			sinusTool();
-			break;
-		case Spiral:
-			spiralTool();
-			break;
-	}
-}
-
 #include "karbon_view.moc"
+
