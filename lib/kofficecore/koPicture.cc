@@ -42,7 +42,7 @@ KoPicture::~KoPicture(void)
 
 KoPicture::KoPicture(const KoPicture &other)
 {
-    // We need to use copy, because we want a real copy, not just a copy of the part of KoPictureBase
+    // We need to use newCopy, because we want a real copy, not just a copy of the part of KoPictureBase
     if (other.m_base)
         m_base=other.m_base->newCopy();
     else
@@ -162,6 +162,40 @@ bool KoPicture::loadWmf(QIODevice* io)
     }
 }
 
+bool KoPicture::loadXpm(QIODevice* io)
+{
+    kdDebug(30003) << "KoPicture::loadXpm" << endl;
+    if (!io)
+    {
+        kdError(30003) << "No QIODevice!" << endl;
+        return false;
+    }
+
+    clear();
+
+    // Old KPresenter XPM files have char(1) instead of some "
+    // Therefore we need to treat XPM separately
+
+    QByteArray array=io->readAll();
+
+    // As XPM files are normally only ASCII files, we can replace it without problems
+
+    int pos=0;
+
+    while ((pos=array.find(char(1),pos))!=-1)
+    {
+        array[pos]='"';
+    }
+
+    // Now that the XPM file is corrected, we need to load it.
+
+    m_base=new KoPictureImage();
+    m_base->setExtension("xpm");
+
+    QBuffer buffer(array);
+    return m_base->load(&buffer);
+}
+
 bool KoPicture::save(QIODevice* io)
 {
     if (!io)
@@ -210,7 +244,8 @@ bool KoPicture::load(QIODevice* io, const QString& extension)
 {
     kdDebug(30003) << "KoPicture::load(QIODevice*, const QString&) " << extension << endl;
     bool flag;
-    if (extension.lower()=="wmf")
+    QString ext=extension.lower();
+    if (ext=="wmf")
         flag=loadWmf(io);
     else
     {
@@ -260,4 +295,11 @@ void KoPicture::setSize(const QSize& size)
 {
     if (m_base)
         return m_base->setSize(size);
+}
+
+QPixmap KoPicture::generatePixmap(const QSize& size)
+{
+    if (m_base)
+        return m_base->generatePixmap(size);
+    return QPixmap();
 }

@@ -23,6 +23,9 @@
 #define koPictureCollection_h
 
 #include <qmap.h>
+#include <qdom.h>
+
+#include <koStore.h>
 
 #include "koPicture.h"
 
@@ -93,6 +96,14 @@ public:
      * @param prefix same as above (only used for old format support)
      */
     void readFromStore( KoStore * store, const StoreMap & storeMap, const QString &prefix );
+
+    /**
+     * @deprecated
+     * KPresenter uses dateTime.isValid() for images in the collection and
+     * !isValid() for images to be loaded from disk.
+     * This method handles both cases.
+     */
+    KoPicture findOrLoad(const QString& fileName, const QDateTime& dateTime);
 
 private:
     /**

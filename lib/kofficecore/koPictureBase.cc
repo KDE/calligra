@@ -20,6 +20,7 @@
 
 #include <qpainter.h>
 #include <qpicture.h>
+#include <qpixmap.h>
 
 #include <kdebug.h>
 
@@ -97,3 +98,7 @@ void KoPictureBase::setSize(const QSize& size)
     m_size=size;
 }
 
+QPixmap KoPictureBase::generatePixmap(const QSize&)
+{
+    return QPixmap();
+}

@@ -90,7 +90,7 @@ bool KoPictureImage::isNull(void) const
     return d->m_originalImage.isNull();
 }
 
-void KoPictureImage::scaleAndCreatePixmap(const QSize size, bool fastMode) const
+void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode) const
 {
     if ( !d )
         return;
@@ -225,4 +225,14 @@ QSize KoPictureImage::getOriginalSize(void) const
     if (!d)
         return QSize(0,0);
     return d->m_originalImage.size();
+}
+
+QPixmap KoPictureImage::generatePixmap(const QSize& size)
+{
+    if (d)
+    {
+        scaleAndCreatePixmap(size,true); // Alwas fast mode!
+        return d->m_cachedPixmap;
+    }
+    return QPixmap();
 }

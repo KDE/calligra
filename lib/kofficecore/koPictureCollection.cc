@@ -207,3 +207,12 @@ void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & store
             insertPicture(it.key(), picture);
     }
 }
+
+KoPicture KoPictureCollection::findOrLoad(const QString& fileName, const QDateTime& dateTime)
+{
+    if (dateTime.isValid())
+        return findPicture(KoPictureKey(fileName, dateTime) );
+    else
+        return loadPicture(fileName);
+}
+

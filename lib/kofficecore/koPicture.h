@@ -22,6 +22,7 @@
 
 #include <qstring.h>
 #include <qiodevice.h>
+#include <qpixmap.h>
 
 #include "koPictureKey.h"
 
@@ -29,8 +30,6 @@ class QPainter;
 class QSize;
 
 class KoPictureBase;
-
-// TODO: fix documentation
 
 /**
  * KoPicture is a container class
@@ -111,12 +110,35 @@ public:
      */
     void clearAndSetMode(const QString& newMode);
 
+    /**
+     * Reset the KoPicture (but not the key!)
+     */
     void clear(void);
 
     bool loadFromFile(const QString& fileName);
 
+    /**
+     * Load a potentially broken XPM file (for KPresenter)
+     */
+    bool loadXpm(QIODevice* io);
+    
+    /**
+     * @deprecated
+     * Returns a QPixmap from an image
+     * Returns an empty QPixmap if the KoPicture is not an image.
+     */
+    QPixmap generatePixmap(const QSize& size);
+
 protected:
+    /**
+     * @internal
+     * Load a WMF file (a .wmf file could be a QPicture file)
+     */
     bool loadWmf(QIODevice* io);
+    /**
+     * @internal
+     * Do a normal load
+     */
     bool load(QIODevice* io);
 
 protected:

@@ -87,9 +87,11 @@ public:
 
     virtual QSize getOriginalSize(void) const;
 
+    virtual QPixmap generatePixmap(const QSize& size);
+
 protected:
     QPixmap getPixmap(QImage& image);
-    void scaleAndCreatePixmap(const QSize size, bool fastMode=false) const;
+    void scaleAndCreatePixmap(const QSize& size, bool fastMode=false) const;
 
 private:
     KoPictureImagePrivate *d;

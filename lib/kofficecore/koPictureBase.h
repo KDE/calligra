@@ -84,6 +84,8 @@ public:
 
     virtual void setSize(const QSize& size);
 
+    virtual QPixmap generatePixmap(const QSize& size);
+
 protected:
     QSize m_size;
     QString m_extension;
