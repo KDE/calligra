@@ -949,7 +949,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KTempFile stickyTmpFile;
     stickyTmpFile.setAutoDelete( true );
     QFile* tmpStickyFile = stickyTmpFile.file();
-    KoXmlWriter stickyTmpWriter( tmpFile, 1 );
+    KoXmlWriter stickyTmpWriter( tmpStickyFile, 1 );
 
 
     contentTmpWriter.startElement( "office:body" );
@@ -1014,8 +1014,8 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     //todo fixme????
     tmpStickyFile->close();
-    saveOasisDocumentStyles( store, mainStyles, stickyTmpWriter );
-    //stickyTmpWriter.close();
+    saveOasisDocumentStyles( store, mainStyles, tmpStickyFile );
+    stickyTmpFile.close();
 
     if ( !store->close() ) // done with styles.xml
         return false;
@@ -1071,7 +1071,7 @@ void KPresenterDoc::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter
     contentTmpWriter.endElement();
 }
 
-void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, KoXmlWriter &stickyTmpWriter ) const
+void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* tmpStyckyFile ) const
 {
     QString pageLayoutName;
     KoStoreDevice stylesDev( store );
@@ -1140,7 +1140,7 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     stylesWriter.addAttribute( "style:name", "Standard" );
     stylesWriter.addAttribute( "style:page-layout-name", pageLayoutName );
     //save sticky object
-    //m_stickyPage->saveOasisStickyPage( store, stylesWriter , KoSavingContext& context, int & indexObj )
+    stylesWriter.addCompleteElement( tmpStyckyFile );
     stylesWriter.endElement();
     stylesWriter.endElement(); // office:master-style
 
