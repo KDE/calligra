@@ -1237,8 +1237,8 @@ void RTFImport::parsePicture( RTFProperty * )
 	picture.height		= 0;
 	picture.desiredWidth	= 0;
 	picture.desiredHeight	= 0;
-	picture.scalex		= 0;
-	picture.scaley		= 0;
+	picture.scalex		= 100; // Default is 100%
+	picture.scaley		= 100; // Default is 100%
 	picture.cropLeft	= 0;
 	picture.cropTop		= 0;
 	picture.cropRight	= 0;
