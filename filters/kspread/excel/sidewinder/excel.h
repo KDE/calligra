@@ -764,6 +764,7 @@ public:
     Normal = 0, 
     Superscript = 1,
     Subscript = 2 };
+    
   enum { 
     None = 0, 
     Single = 1, 
@@ -774,27 +775,118 @@ public:
   unsigned height() const;
   void setHeight( unsigned h );
   
+  /**
+   * Returns the name of font, e.g "Arial".
+   *
+   * \sa setFontName
+   */
   UString fontName() const;
-  void setFontName( const UString& fn );
   
+  /**
+   * Sets the name of the font.
+   *
+   * \sa fontName
+   */
+  void setFontName( const UString& fn );
+
+  // FIXME what is this font family ? index ?  
   unsigned fontFamily() const;
   void setFontFamily( unsigned f );
   
+  // FIXME and character set index ?
   unsigned characterSet() const;
   void setCharacterSet( unsigned s );
   
+  /**
+   * Returns index of the color of the font.
+   *
+   * \sa setColorIndex
+   */
   unsigned colorIndex() const;
+  
+  /**
+   * Sets the index of the color of the font.
+   *
+   * \sa colorIndex
+   */
   void setColorIndex( unsigned c );
   
+  /**
+   * Returns the boldness of the font. Standard values are 400 for normal
+   * and 700 for bold.
+   *
+   * \sa setBoldness
+   */
   unsigned boldness() const;
+  
+  /**
+   * Sets the boldness of the font. Standard values are 400 for normal
+   * and 700 for bold.
+   *
+   * \sa boldness
+   */
   void setBoldness( unsigned b );
+  
+  /**
+   * Returns true if italic has been set.
+   *
+   * \sa setItalic
+   */  
   bool italic() const;
+  
+  /**
+   * If i is true, italic is set on; otherwise italic is set off.
+   *
+   * \sa italic
+   */  
   void setItalic( bool i );
+  
+  /**
+   * Returns true if strikeout has been set.
+   *
+   * \sa setStrikeout
+   */
   bool strikeout() const;
+  
+  /**
+   * If s is true, strikeout is set on; otherwise strikeout is set off.
+   *
+   * \sa strikeout
+   */
   void setStrikeout( bool s );
+  
+  /**
+   * Returns Font::Superscript if superscript is set, or Font::Subscript
+   * if subscript is set, or Font::Normal in other case.
+   *
+   * \sa setScript
+   */
   unsigned script() const;
+  
+  /**
+   * Sets the superscript or subscript. If s is Font::Superscript, then
+   * superscript is set. If s is Font::Subscript, then subscript is set.
+   *
+   * \sa script
+   */
   void setScript( unsigned s );
+  
+  /**
+   * Returns the underline style of the font. Possible values are
+   * Font::None, Font::Single, Font::Double, Font::SingleAccounting and
+   * Font::DoubleAccounting.
+   *
+   * \sa setUnderline
+   */  
   unsigned underline() const;
+  
+  /**
+   * Sets the underline style of the font. Possible values are
+   * Font::None, Font::Single, Font::Double, Font::SingleAccounting and
+   * Font::DoubleAccounting.
+   *
+   * \sa underline
+   */  
   void setUnderline( unsigned u );
   
   /**
