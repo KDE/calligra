@@ -2,24 +2,15 @@
 
  Welcome to KWord's AbiWord import/export filter.
 
- The filter is licensed under the term of the General Public License Version 2.0.
-
  For now, this file is just a storage for some technical notes.
-
 
 2. AbiWord's Multiple File Formats
 
- AbiWord 0.7.12 can read different AbiWord file formats (from old to new):
-   - the "awml" format,
-   - the "anonymous" format,
-   - the "numbered" format,
-   - the "unnumbered" format,
-   - the "xml" format.
- 
- They are NOT official names; it is just how I have named them.
- 
- The older formats are XML-like, the "xml" format is in XML.
- 
+ AbiWord's file format has evolved in the time. The older file formats are
+ XML-like, the newer ones are in XML.
+
+ Here are a few versions (from oldest to newest):
+
    - The "awml" format starts with a tag <awml> and has no other header before.
 
    - The "anonymous" format is the same but the tag <awml> is now named
@@ -35,7 +26,16 @@
    special header after the XML declaration. Note: the encoding (e.g. UTF-8) is
    not always given.
 
- They may be also other variation of the file formats!
+   - The "fileformat 1.0" version: the <abiword> tag has an attribute fileformat
+   (set to 1.0)
+
+   - The "wrong doctype": a DOCTYPE was added with a wrong public type of:
+   "-//W3C//DTD ABW 1.0 Strict//EN". (Wrong is the W3C part! W3C has nothing to
+   do with AbiWord. AbiWord Bug #1882)
+
+ (They are NOT official names; it is just how I have named them.)
+
+ They may be also other variations of the file format!
  
  The AbiWord filter for KWord *must* be able to read all those formats. A user
  will not be happy if you tell him that his sub-version is not supported!
@@ -49,15 +49,12 @@
  Files in all those formats can be found in the source distribution of AbiWord
  (www.abisource.com), see in AbiWord's source code under the sub-directory
  test/wp and under its own sub-directories.
- 
- The good news is that for writing, we just need the "xml" file format,
- which is the current (AbiWord version 0.7.12)!
 
 3. A Few Problems
 
  AbiWord is still in development. Be careful that future file formats does not
  contain potential problems. At least they should not crash the import filter.
- 
+
  Abiword can only handle PNG images now. But the file format accepts any mime
  type. In future, it seems that even non-image object are also planned.
      
