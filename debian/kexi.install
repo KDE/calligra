@@ -69,3 +69,4 @@ usr/share/icons/hicolor/32x32/mimetypes/kexi.png
 usr/share/icons/hicolor/48x48/apps/kexi.png
 usr/share/icons/hicolor/48x48/mimetypes/kexi.png
 usr/share/services/kexi
+usr/share/services/keximysqlinterface.desktop

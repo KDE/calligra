@@ -1,7 +1,12 @@
 usr/bin/kpresenter
 usr/bin/kprconverter.pl
-usr/lib/kde3/libkpresenterpart.*
 usr/lib/kpresenter.*
+usr/lib/kde3/libkpresenterpart.la
+usr/lib/kde3/libkpresenterpart.so
+usr/lib/kde3/libgenerickofilter.la
+usr/lib/kde3/libgenerickofilter.so
+usr/lib/kde3/libooimpressimport.la
+usr/lib/kde3/libooimpressimport.so
 usr/share/applnk/Office/kpresenter.desktop
 usr/share/apps/kpresenter
 usr/share/icons/crystalsvg/16x16/apps/kpresenter.png
@@ -11,4 +16,6 @@ usr/share/doc/kde/HTML/en/kpresenter/*.bz2
 usr/share/doc/kde/HTML/en/kpresenter/*.docbook
 usr/share/doc/kde/HTML/en/kpresenter/*.png
 usr/share/doc/kde/HTML/en/kpresenter/common
+usr/share/services/generic_filter.desktop
+usr/share/services/kpresenter_ooimpress_import.desktop
 ../kpresenter.xpm usr/share/pixmaps

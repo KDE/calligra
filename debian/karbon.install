@@ -26,6 +26,8 @@ usr/lib/kde3/libkarbonepsimport.la
 usr/lib/kde3/libkarbonepsimport.so
 usr/lib/kde3/libkarbonkontourimport.la
 usr/lib/kde3/libkarbonkontourimport.so
+usr/lib/kde3/libkarbonmsodimport.la
+usr/lib/kde3/libkarbonmsodimport.so
 usr/lib/kde3/libkarbonpngexport.la
 usr/lib/kde3/libkarbonpngexport.so
 usr/lib/kde3/libkarbonsvgexport.la
@@ -47,7 +49,9 @@ usr/share/services/karbon_ai_import.desktop
 usr/share/services/karbon_eps_export.desktop
 usr/share/services/karbon_eps_import.desktop
 usr/share/services/karbon_kontour_import.desktop
+usr/share/services/karbon_msod_import.desktop
 usr/share/services/karbon_png_export.desktop
+usr/share/services/karbon_ps_import.desktop
 usr/share/services/karbon_svg_export.desktop
 usr/share/services/karbon_svg_import.desktop
 usr/share/services/karbon_xcf_export.desktop

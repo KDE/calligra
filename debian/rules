@@ -141,7 +141,7 @@ install: build
 	dh_install --sourcedir=debian/tmp --list-missing
 
 	# Don't override the openoffice.org mimelnk entries with our own.
-	rm -f debian/koffice-libs/usr/share/mimelnk/application/vnd.sun.xml.*.desktop
+	rm -f debian/koffice-data/usr/share/mimelnk/application/vnd.sun.xml.*.desktop
 
 	# Install standard documentation links.
 	for pkg in `dh_listpackages`; do \
@@ -178,7 +178,7 @@ binary-common:
 	  case "$$pkg" in \
 	    kivio ) \
 	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/CHANGELOG ;; \
-	    krita | kugar ) \
+	    kugar ) \
 	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/ChangeLog ;; \
 	    kchart | kexi | kpresenter | kspread | kword ) \
 	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/CHANGES ;; \

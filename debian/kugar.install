@@ -8,6 +8,8 @@ usr/lib/kde3/libkudesignerpart.la
 usr/lib/kde3/libkudesignerpart.so
 usr/lib/kde3/libkugarpart.la
 usr/lib/kde3/libkugarpart.so
+usr/lib/kde3/libkugarnopimport.la
+usr/lib/kde3/libkugarnopimport.so
 usr/share/applnk/Office/kugar.desktop
 usr/share/applnk/Office/kudesigner.desktop
 usr/share/apps/kudesigner
@@ -25,4 +27,5 @@ usr/share/icons/crystalsvg/32x32/mimetypes/kugardata.png
 usr/share/icons/crystalsvg/48x48/apps/kugar.png
 usr/share/icons/locolor/16x16/apps/kudesigner.png
 usr/share/icons/locolor/32x32/apps/kudesigner.png
+usr/share/services/kugar_kugar_import.desktop
 ../kugar.xpm usr/share/pixmaps
