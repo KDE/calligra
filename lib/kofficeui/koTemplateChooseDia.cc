@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-                 2000 Werner Trobin <trobin@kde.org>
+                 2000, 2001 Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@
 #include <qvbox.h>
 #include <qtabwidget.h>
 #include <qradiobutton.h>
+#include <qcombobox.h>
 
 #include <kdesktopfile.h>
 #include <klocale.h>
@@ -42,6 +43,8 @@
 #include <koTemplates.h>
 #include <kseparator.h>
 #include <krecentdocument.h>
+#include <kio/netaccess.h>
+#include <kstringhandler.h>
 
 #include <koTemplateChooseDia.h>
 
@@ -77,11 +80,14 @@ public:
 
     QRadioButton *m_rbTemplates;
     QRadioButton *m_rbFile;
+    QRadioButton *m_rbRecent;
     QRadioButton *m_rbEmpty;
     QPushButton *m_bFile;
+    QComboBox *m_recent;
 
     QTabWidget *m_tabs;
     QDict<MyIconCanvas> canvasDict;
+    QMap<QString, QString> recentFilesMap;
 };
 
 /******************************************************************/
@@ -162,13 +168,12 @@ KoTemplateChooseDia::DialogType KoTemplateChooseDia::getDialogType() {
 
 void KoTemplateChooseDia::setupDialog()
 {
-    QGridLayout *grid=new QGridLayout( d->m_mainwidget, 8, 1, KDialogBase::marginHint(),
+    QGridLayout *grid=new QGridLayout( d->m_mainwidget, 10, 1, KDialogBase::marginHint(),
                                        KDialogBase::spacingHint() );
     KSeparator *line;
 
     if ( d->m_dialogType==Everything ) {
         line = new KSeparator( QFrame::HLine, d->m_mainwidget );
-        line->setMaximumHeight( 20 );
         grid->addWidget( line, 0, 0 );
 
         d->m_rbTemplates = new QRadioButton( i18n( "Create new document from a &Template" ), d->m_mainwidget );
@@ -216,7 +221,6 @@ void KoTemplateChooseDia::setupDialog()
     }
 
     line = new KSeparator( QFrame::HLine, d->m_mainwidget );
-    line->setMaximumHeight( 20 );
     grid->addWidget( line, 3, 0 );
 
     if ( d->m_dialogType!=OnlyTemplates ) {
@@ -231,16 +235,52 @@ void KoTemplateChooseDia::setupDialog()
         connect( d->m_bFile, SIGNAL( clicked() ), this, SLOT( chooseFile() ) );
 
         line = new KSeparator( QFrame::HLine, d->m_mainwidget );
-        line->setMaximumHeight( 20 );
         grid->addWidget( line, 5, 0 );
+
+        row = new QHBoxLayout( grid );
+        d->m_rbRecent = new QRadioButton( i18n( "&Open a recent document" ), d->m_mainwidget );
+        connect( d->m_rbRecent, SIGNAL( clicked() ), this, SLOT( openRecent() ) );
+        row->addWidget(d->m_rbRecent);
+        row->addSpacing(30);
+        d->m_recent = new QComboBox( d->m_mainwidget, "recent files" );
+
+        QString oldGroup;
+        oldGroup=KGlobal::config()->group();
+        KGlobal::config()->setGroup( "RecentFiles" );
+
+        // read file list
+        QStringList lst;
+        int i=1;
+        QString key=QString( "File%1" ).arg( i );
+        QString value=KGlobal::config()->readEntry( key, QString::null );
+        QString squeezed=KStringHandler::csqueeze(value);
+        while( !squeezed.isNull() ) {
+            lst.append( squeezed );
+            d->recentFilesMap.insert(squeezed, value);
+            ++i;
+            key=QString( "File%1" ).arg( i );
+            value=KGlobal::config()->readEntry( key, QString::null );
+            squeezed=KStringHandler::csqueeze(value);
+        }
+
+        // set file
+        if( lst.isEmpty() )
+            lst.append( i18n("No recent files available") );
+        d->m_recent->insertStringList( lst );
+        KGlobal::config()->setGroup( oldGroup );
+
+        row->addWidget(d->m_recent);
+        connect( d->m_recent, SIGNAL( activated(int) ), this, SLOT( openRecent() ) );
+
+        line = new KSeparator( QFrame::HLine, d->m_mainwidget );
+        grid->addWidget( line, 7, 0 );
 
         d->m_rbEmpty = new QRadioButton( i18n( "Start with an &empty document" ), d->m_mainwidget );
         connect( d->m_rbEmpty, SIGNAL( clicked() ), this, SLOT( openEmpty() ) );
-        grid->addWidget( d->m_rbEmpty, 6, 0 );
+        grid->addWidget( d->m_rbEmpty, 8, 0 );
 
         line = new KSeparator( QFrame::HLine, d->m_mainwidget );
-        line->setMaximumHeight( 20 );
-        grid->addWidget( line, 7, 0 );
+        grid->addWidget( line, 9, 0 );
         openEmpty();
     }
 }
@@ -263,9 +303,10 @@ void KoTemplateChooseDia::openTemplate()
     if ( d->m_dialogType==Everything ) {
         d->m_rbTemplates->setChecked( true );
         d->m_rbFile->setChecked( false );
+        d->m_rbRecent->setChecked( false );
         d->m_rbEmpty->setChecked( false );
     }
-    enableButtonOK(true);
+    enableButtonOK( true );
 }
 
 /*================================================================*/
@@ -274,9 +315,26 @@ void KoTemplateChooseDia::openFile()
     if(d->m_dialogType!=NoTemplates)
         d->m_rbTemplates->setChecked( false );
     d->m_rbFile->setChecked( true );
+    d->m_rbRecent->setChecked( false );
     d->m_rbEmpty->setChecked( false );
+}
 
-    enableButtonOK( QFile::exists( d->m_file ) );
+
+/*================================================================*/
+void KoTemplateChooseDia::openRecent()
+{
+    if(d->m_dialogType!=NoTemplates)
+        d->m_rbTemplates->setChecked( false );
+    d->m_rbFile->setChecked( false );
+    d->m_rbRecent->setChecked( true );
+    d->m_rbEmpty->setChecked( false );
+    QString current=d->recentFilesMap[d->m_recent->currentText()];
+    if(current.startsWith("file:"))
+        d->m_file=current.mid(5);
+    else
+        d->m_file=current;
+    enableButtonOK( false ); // because of that async stuff
+    enableButtonOK( KIO::NetAccess::exists( KURL( d->m_file ) ) );
 }
 
 /*================================================================*/
@@ -285,6 +343,7 @@ void KoTemplateChooseDia::openEmpty()
     if(d->m_dialogType!=NoTemplates)
         d->m_rbTemplates->setChecked( false );
     d->m_rbFile->setChecked( false );
+    d->m_rbRecent->setChecked( false );
     d->m_rbEmpty->setChecked( true );
 
     enableButtonOK( true );
@@ -372,7 +431,7 @@ void KoTemplateChooseDia::ok() {
         d->m_templateName=t->name();
         d->m_fullTemplateName=t->file();
     }
-    else if ( d->m_dialogType!=OnlyTemplates && d->m_rbFile->isChecked() ) {
+    else if ( d->m_dialogType!=OnlyTemplates && (d->m_rbFile->isChecked() || d->m_rbRecent->isChecked()) ) {
         d->m_returnType = File;
         d->m_fullTemplateName = d->m_templateName = d->m_file;
     }
