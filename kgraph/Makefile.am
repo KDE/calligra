@@ -1,4 +1,6 @@
 
+AM_CPPFLAGS = -DQT_NO_ASCII_CAST -DQT_NO_COMPAT
+
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
 kgraph_LDFLAGS = $(KDE_RPATH)
