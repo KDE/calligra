@@ -80,7 +80,9 @@ public:
     KOSpell(QWidget *parent, const QString &caption,KOSpellConfig *kcs=0,
              bool modal = FALSE, bool _autocorrect =FALSE );
 
-    /**
+    KOSpell( KOSpellConfig *_ksc );
+
+     /**
      * Returns the status of KSpell.
      *
      * @see spellStatus()
@@ -397,8 +399,6 @@ protected:
     spellStatus m_status;
 
     bool usedialog;
-    bool texmode;
-    bool dlgon;
     bool personaldict;
     bool dialogwillsprocess;
     bool autoDelete;
@@ -420,16 +420,12 @@ protected:
     QString dlgreplacement;
 
     int dlgresult;
-    int trystart;
-    int maxtrystart;
     int lastpos;
     unsigned int totalpos;
     unsigned int lastline;
     unsigned int posinline;
     unsigned int lastlastline;
     int offset;
-    unsigned int curprog;
-
     void dialog (const QString & word, QStringList & sugg);
     QString replacement () const { return dlgreplacement; }
 
@@ -449,6 +445,8 @@ protected:
     bool initConfig();
     void changeSpellLanguage( int index );
     void testIgnoreWord( QString & word );
+
+    void initSpell(KOSpellConfig *_ksc);
 
 private slots:
     void slotSpellCheckerCorrected( const QString &, const QString &, unsigned int );

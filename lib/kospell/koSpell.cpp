@@ -77,99 +77,110 @@ public:
     path to ispell -- NO: ispell should be in $PATH
     */
 
+
+KOSpell::KOSpell( KOSpellConfig *_ksc )
+{
+    initSpell(_ksc);
+}
+
+void KOSpell::initSpell(KOSpellConfig *_ksc)
+{
+    d=new KOSpellPrivate;
+
+    d->m_bIgnoreUpperWords=false;
+    d->m_bIgnoreTitleCase=false;
+    autocorrect = false;
+    autoDelete = false;
+    modaldlg = false;
+    speller = 0L;
+    config = 0L;
+    offset = 0;
+    ksconfig=0;
+    ksdlg=0;
+    lastpos = -1;
+    //won't be using the dialog in ksconfig, just the option values
+    if (_ksc!=0)
+        ksconfig = new KOSpellConfig (*_ksc);
+    else
+        ksconfig = new KOSpellConfig;
+
+    codec = 0;
+    switch (ksconfig->encoding())
+    {
+    case KS_E_LATIN1:
+        codec = QTextCodec::codecForName("ISO 8859-1");
+        break;
+    case KS_E_LATIN2:
+        codec = QTextCodec::codecForName("ISO 8859-2");
+        break;
+    case KS_E_LATIN3:
+        codec = QTextCodec::codecForName("ISO 8859-3");
+        break;
+    case KS_E_LATIN4:
+        codec = QTextCodec::codecForName("ISO 8859-4");
+        break;
+    case KS_E_LATIN5:
+        codec = QTextCodec::codecForName("ISO 8859-5");
+        break;
+    case KS_E_LATIN7:
+        codec = QTextCodec::codecForName("ISO 8859-7");
+        break;
+    case KS_E_LATIN8:
+        codec = QTextCodec::codecForName("ISO 8859-8");
+        break;
+    case KS_E_LATIN9:
+        codec = QTextCodec::codecForName("ISO 8859-9");
+        break;
+    case KS_E_LATIN13:
+        codec = QTextCodec::codecForName("ISO 8859-13");
+        break;
+    case KS_E_LATIN15:
+        codec = QTextCodec::codecForName("ISO 8859-15");
+        break;
+    case KS_E_UTF8:
+        codec = QTextCodec::codecForName("UTF-8");
+        break;
+    case KS_E_KOI8R:
+        codec = QTextCodec::codecForName("KOI8-R");
+        break;
+    case KS_E_KOI8U:
+        codec = QTextCodec::codecForName("KOI8-U");
+        break;
+    case KS_E_CP1251:
+        codec = QTextCodec::codecForName("CP1251");
+        break;
+    default:
+        break;
+    }
+
+    kdDebug(750) << __FILE__ << ":" << __LINE__ << " Codec = " << (codec ? codec->name() : "<default>") << endl;
+
+    // copy ignore list from ksconfig
+    ignorelist += ksconfig->ignoreList();
+
+    replacelist += ksconfig->replaceAllList();
+    m_status = Starting;
+
+
+    personaldict=FALSE;
+    dlgresult=-1;
+
+    caption=QString::null;
+
+    parent=0L;
+}
+
 KOSpell::KOSpell (QWidget *_parent, const QString &_caption,
 		KOSpellConfig *_ksc,
 		bool _modal,  bool _autocorrect)
 {
-  d=new KOSpellPrivate;
+    initSpell(_ksc);
+    autocorrect = _autocorrect;
+    modaldlg = _modal;
+    caption=_caption;
+    parent=_parent;
 
-  d->m_bIgnoreUpperWords=false;
-  d->m_bIgnoreTitleCase=false;
-  autocorrect = _autocorrect;
-  autoDelete = false;
-  modaldlg = _modal;
-  speller = 0L;
-  config = 0L;
-  offset = 0;
-  ksconfig=0;
-  ksdlg=0;
-  lastpos = -1;
-  //won't be using the dialog in ksconfig, just the option values
-  if (_ksc!=0)
-    ksconfig = new KOSpellConfig (*_ksc);
-  else
-    ksconfig = new KOSpellConfig;
-
-  codec = 0;
-  switch (ksconfig->encoding())
-  {
-  case KS_E_LATIN1:
-     codec = QTextCodec::codecForName("ISO 8859-1");
-     break;
-  case KS_E_LATIN2:
-     codec = QTextCodec::codecForName("ISO 8859-2");
-     break;
-  case KS_E_LATIN3:
-      codec = QTextCodec::codecForName("ISO 8859-3");
-      break;
-  case KS_E_LATIN4:
-      codec = QTextCodec::codecForName("ISO 8859-4");
-      break;
-  case KS_E_LATIN5:
-      codec = QTextCodec::codecForName("ISO 8859-5");
-      break;
-  case KS_E_LATIN7:
-      codec = QTextCodec::codecForName("ISO 8859-7");
-      break;
-  case KS_E_LATIN8:
-      codec = QTextCodec::codecForName("ISO 8859-8");
-      break;
-  case KS_E_LATIN9:
-      codec = QTextCodec::codecForName("ISO 8859-9");
-      break;
-  case KS_E_LATIN13:
-      codec = QTextCodec::codecForName("ISO 8859-13");
-      break;
-  case KS_E_LATIN15:
-      codec = QTextCodec::codecForName("ISO 8859-15");
-      break;
-  case KS_E_UTF8:
-      codec = QTextCodec::codecForName("UTF-8");
-      break;
-  case KS_E_KOI8R:
-      codec = QTextCodec::codecForName("KOI8-R");
-      break;
-  case KS_E_KOI8U:
-      codec = QTextCodec::codecForName("KOI8-U");
-      break;
-  case KS_E_CP1251:
-      codec = QTextCodec::codecForName("CP1251");
-      break;
-  default:
-     break;
-  }
-
-  kdDebug(750) << __FILE__ << ":" << __LINE__ << " Codec = " << (codec ? codec->name() : "<default>") << endl;
-
-  // copy ignore list from ksconfig
-  ignorelist += ksconfig->ignoreList();
-
-  replacelist += ksconfig->replaceAllList();
-  texmode=dlgon=FALSE;
-  m_status = Starting;
-  curprog=0;
-
-
-  personaldict=FALSE;
-  dlgresult=-1;
-
-  caption=_caption;
-
-  parent=_parent;
-
-  trystart=0;
-  maxtrystart=2;
-  setUpDialog();
+    setUpDialog();
 }
 
 bool KOSpell::initConfig()
