@@ -323,7 +323,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
       if ( !right.isNull() )
         fright = right.text();
     }
-    setHeadFootLine( hleft.latin1(), hcenter.latin1(), hright.latin1(), fleft.latin1(), fcenter.latin1(), fright.latin1() );
+    setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
   }
 
   // In case of reload (e.g. from konqueror)
@@ -796,7 +796,7 @@ void KSpreadDoc::paperLayoutDlg()
 
     setPaperLayout( pl.mmLeft, pl.mmTop, pl.mmRight, pl.mmBottom, pl.format, pl.orientation );
 
-    setHeadFootLine( hf.headLeft.latin1(), hf.headMid.latin1(), hf.headRight.latin1(), hf.footLeft.latin1(), hf.footMid.latin1(), hf.footRight.latin1() );
+    setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
 }
 
 void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent )

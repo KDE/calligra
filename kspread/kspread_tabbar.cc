@@ -71,7 +71,7 @@ void KSpreadTabBar::removeTab( const QString& _text )
     int i = tabsList.findIndex( _text );
     if ( i == -1 )
     {
-        kdError(36001) << "ERROR: KSpreadTable '" << _text.local8Bit() << "' not found" << endl;
+        kdError(36001) << "ERROR: KSpreadTable '" << _text << "' not found" << endl;
         return;
     }
 
@@ -424,7 +424,8 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
     int i = 1;
     int x = 0;
     QString text;
-    const char *active_text = 0L;
+    //const char *active_text = 0L;
+    QString active_text = 0L;
 
     QStringList::Iterator it;
     for ( it = tabsList.begin(); it != tabsList.end(); ++it )
@@ -438,7 +439,7 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
             if ( x <= _ev->pos().x() && _ev->pos().y() <= x + 20 + text_width )
             {
                 activeTab = i;
-                active_text = text.latin1();
+                active_text = text ;//text.latin1();
             }
 
             x += 10 + text_width;

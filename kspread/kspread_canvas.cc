@@ -535,6 +535,9 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   if ( !m_pEditor )
     m_pView->updateEditWidget();
   updatePosWidget();
+
+   //XIM Position
+   setMicroFocusHint(xpos, ypos, 0, 16);
 }
 
 void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool make_select )
@@ -2170,8 +2173,8 @@ void KSpreadCanvas::updateChooseMarker( const QRect& _old, const QRect& _new )
   // ##### Torben: Clean up here!
   QString name_cell;
 
-  kdDebug(36001) << m_chooseStartTable->tableName().local8Bit() << ", "
-                 << table->tableName().local8Bit() << endl;
+  kdDebug(36001) << m_chooseStartTable->tableName() << ", "
+                 << table->tableName() << endl;
   if( m_chooseStartTable != table )
   {
     if ( _new.left() >= _new.right() && _new.top() >= _new.bottom() )
