@@ -158,24 +158,21 @@ bool KformEditorShell::newDocument()
   return true;
 }
 
-bool KformEditorShell::openDocument( const char *_url, const char *_format )
+bool KformEditorShell::openDocument( const char *_url )
 {
-  if ( _format == 0L || *_format == 0 )
-    _format = "application/x-kformeditor";
-
   if ( m_pDoc && m_pDoc->isEmpty() )
     releaseDocument();
   else if ( m_pDoc && !m_pDoc->isEmpty() )
   {
     KformEditorShell *s = new KformEditorShell();
     s->show();
-    return s->openDocument( _url, _format );
+    return s->openDocument( _url );
   }
 
   kdebug( KDEBUG_INFO, 0, "Creating new document" );
 
   m_pDoc = new KformEditorDoc;
-  if ( !m_pDoc->loadFromURL( _url, _format ) )
+  if ( !m_pDoc->loadFromURL( _url ) )
   {
     kdebug( KDEBUG_INFO, 0, "MK: nicht load from URL" );
     return false;
@@ -302,7 +299,7 @@ void KformEditorShell::slotFileOpen()
   if ( file.isNull() )
     return;
 
-  if ( !openDocument( file, "" ) )
+  if ( openDocument( file  ) )
   {
     QString tmp;
     tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );

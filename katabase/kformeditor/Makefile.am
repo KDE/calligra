@@ -60,6 +60,7 @@ METASOURCES = \
  widgetwrapper.moc
 
 idl_DATA = kformeditor.idl
+kformeditor.h: $(top_builddir)/lib/kofficecore/koffice.idl
 
 kdelnk_DATA = kformeditor.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
