@@ -1,5 +1,5 @@
-killustratoricondir = $(kde_datadir)/killustrator/icons
+killustratoricondir = $(kde_datadir)/kontour/icons
 killustratoricon_ICON = AUTO
 
-KDE_ICON = killustrator
+KDE_ICON = kontour
 
