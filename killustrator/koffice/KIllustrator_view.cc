@@ -28,6 +28,7 @@
 #include "KIllustrator_shell.h"
 #include "KIllustrator_view.h"
 #include "KIllustrator_doc.h"
+#include "KIllustrator_factory.h"
 #include "MainView.h"
 
 #include "QwViewport.h"
@@ -84,6 +85,8 @@
 #include <unistd.h>
 
 #include <koPartSelectDia.h>
+#include <kaction.h>
+#include <kcoloractions.h>
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 				    KIllustratorDocument* doc) :
@@ -130,11 +133,140 @@ KIllustratorView::~KIllustratorView()
 
 void KIllustratorView::createGUI()
 {
-  setupCanvas ();
-  setupPopups ();
-  setUndoStatus (false, false);
-  QObject::connect (&cmdHistory, SIGNAL(changed(bool, bool)),
-		    SLOT(setUndoStatus(bool, bool)));
+    setupCanvas ();
+    setupPopups ();
+    setUndoStatus (false, false);
+    QObject::connect (&cmdHistory, SIGNAL(changed(bool, bool)),
+		      SLOT(setUndoStatus(bool, bool)));
+
+    // File menu
+    m_import = new KAction( i18n("Import"), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
+    m_export = new KAction( i18n("Export"), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
+    m_docInfo = new KAction( i18n("Document Info"), 0, this, SLOT( slotDocumentInfo() ), actionCollection(), "documentInfo" );
+	
+    // Insert menu
+    m_insertBitmap = new KAction( i18n("Insert Bitmap"), 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
+    m_insertClipart = new KAction( i18n("Insert Clipart"), 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
+      
+    // Edit menu
+    m_copy = new KAction( i18n("Copy"), KIBarIcon("editcopy"), 0, this, SLOT( slotCopy() ), actionCollection(), "copy" );
+    m_paste = new KAction( i18n("Paste"), KIBarIcon("editpaste"), 0, this, SLOT( slotPaste() ), actionCollection(), "paste" );
+    m_cut = new KAction( i18n("Cut"), KIBarIcon("editcut"), 0, this, SLOT( slotCut() ), actionCollection(), "cut" );
+    m_undo = new KAction( i18n("Undo"), KIBarIcon("undo"), 0, this, SLOT( slotUndo() ), actionCollection(), "undo" );
+    m_redo = new KAction( i18n("Redo"), KIBarIcon("redo"), 0, this, SLOT( slotRedo() ), actionCollection(), "redo" );
+    m_duplicate = new KAction( i18n("Duplicate"), 0, this, SLOT( slotDuplicate() ), actionCollection(), "duplicate" );
+    m_delete = new KAction( i18n("Delete"), 0, this, SLOT( slotDelete() ), actionCollection(), "delete" );
+    m_selectAll = new KAction( i18n("Select All"), 0, this, SLOT( slotSelectAll() ), actionCollection(), "selectAll" );
+    m_properties = new KAction( i18n("Properties"), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
+	
+    // View menu
+    m_outline = new KToggleAction( i18n("Outline"), 0, actionCollection(), "outline" );
+    m_outline->setExclusiveGroup( "Outline" );
+    connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotOutline( bool ) ) );
+    m_normal = new KToggleAction( i18n("Normal"), 0, actionCollection(), "normal" );
+    m_normal->setExclusiveGroup( "Outline" );
+    connect( m_normal, SIGNAL( toggled( bool ) ), this, SLOT( slotNormal( bool ) ) );
+    m_layers = new KAction( i18n("Layers ..."), 0, this, SLOT( slotLayers() ), actionCollection(), "layers" );
+    m_showRuler = new KToggleAction( i18n("Show Ruler"), 0, actionCollection(), "showRuler" );
+    connect( m_showRuler, SIGNAL( toggled( bool ) ), this, SLOT( slotShowRuler( bool ) ) );
+    m_showGrid = new KToggleAction( i18n("Show Grid"), 0, actionCollection(), "showGrid" );
+    connect( m_showGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotShowGrid( bool ) ) );
+    m_showHelplines = new KToggleAction( i18n("Show Helplines"), 0, actionCollection(), "showHelplines" );
+    connect( m_showHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotShowHelplines( bool ) ) );
+      
+    // Layout menu
+    m_page = new KAction( i18n("Page ..."), 0, this, SLOT( slotPage() ), actionCollection(), "page" );
+    m_grid = new KAction( i18n("Grid ..."), 0, this, SLOT( slotGrid() ), actionCollection(), "grid" );
+    m_helplines = new KAction( i18n("Helplines ..."), 0, this, SLOT( slotHelplined() ), actionCollection(), "helplines" );
+    m_alignToGrid = new KAction( i18n("Align To Grid"), 0, this, SLOT( slotAlignToGrid() ), actionCollection(), "alignToGrid" );
+    m_alignToHelplines = new KAction( i18n("Align To Helplines"), 0, this, SLOT( slotAlignToHelplines() ), actionCollection(), "alignToHelplines" );
+	
+    // Transform menu
+    m_transformPosition = new KAction( i18n("Position ..."), 0, this, SLOT( slotTransformPosition() ), actionCollection(), "transformPosition" );
+    m_transformDimension = new KAction( i18n("Dimension ..."), 0, this, SLOT( slotTransformDimension() ), actionCollection(), "transformDimension" );
+    m_transformRotation = new KAction( i18n("Rotation ..."), 0, this, SLOT( slotTransformRotation() ), actionCollection(), "transformRotation" );
+    m_transformMirror = new KAction( i18n("Mirror ..."), 0, this, SLOT( slotTransformMirror() ), actionCollection(), "transformMirror" );
+  
+    // Arrange menu
+    m_distribute = new KAction( i18n("Align/Distribute ..."), 0, this, SLOT( slotDistribute() ), actionCollection(), "distribute" );
+    m_toFront = new KAction( i18n("To Front"), 0, this, SLOT( slotToFront() ), actionCollection(), "toFront" );
+    m_toBack = new KAction( i18n("To Back"), 0, this, SLOT( slotToBack() ), actionCollection(), "toBack" );
+    m_forwardOne = new KAction( i18n("Forward One"), 0, this, SLOT( slotForwardOne() ), actionCollection(), "forwardOne" );
+    m_backOne = new KAction( i18n("Back One"), 0, this, SLOT( slotBackOne() ), actionCollection(), "backOne" );
+    m_group = new KAction( i18n("Group"), 0, this, SLOT( slotGroup() ), actionCollection(), "group" );
+    m_ungroup = new KAction( i18n("Ungroup"), 0, this, SLOT( slotUngroup() ), actionCollection(), "ungroup" );
+    m_textAlongPath = new KAction( i18n("Text Along Path"), 0, this, SLOT( slotTextAlongPath() ), actionCollection(), "textAlongPath" );
+    m_convertToCurve = new KAction( i18n("Convert to Curve"), 0, this, SLOT( slotConvertToCurve() ), actionCollection(), "convertToCurve" );
+
+    // Effects menu
+    m_blend = new KAction( i18n("Blend ..."), 0, this, SLOT( slotBlend() ), actionCollection(), "blend" );
+    
+    // Extras menu
+    m_options = new KAction( i18n("Options ..."), 0, this, SLOT( slotOptions() ), actionCollection(), "options" );
+
+    // Colorbar action
+
+    QValueList<QColor> colorList;
+    colorList << white << red << green << blue << cyan << magenta << yellow
+	      << darkRed << darkGreen << darkBlue << darkCyan
+	      << darkMagenta << darkYellow << white << lightGray
+	      << gray << darkGray << black;
+
+    m_colorBar = new KColorBarAction( i18n( "Colorbar" ), 0,
+				      this,
+				      SLOT( slotBrushChosen( const QColor & ) ),
+				      SLOT( slotPenChosen( const QColor & ) ),
+				      colorList,
+				      actionCollection(), "colorbar" );
+
+    // Tools
+    m_selectTool = new KToggleAction( i18n("Select Tool"), KIBarIcon("selecttool"), 0, actionCollection(), "selectTool" );
+    m_selectTool->setExclusiveGroup( "Tools" );
+    connect( m_selectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotSelectTool( bool ) ) );
+    m_pointTool = new KToggleAction( i18n("Point Tool"), KIBarIcon("pointtool"), 0, actionCollection(), "pointTool" );
+    m_pointTool->setExclusiveGroup( "Tools" );
+    connect( m_pointTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPointTool( bool ) ) );
+    m_freehandTool = new KToggleAction( i18n("Freehand Tool"), KIBarIcon("freehandtool"), 0, actionCollection(), "freehandTool" );
+    m_freehandTool->setExclusiveGroup( "Tools" );
+    connect( m_freehandTool, SIGNAL( toggled( bool ) ), this, SLOT( slotFreehandTool( bool ) ) );
+    m_lineTool = new KToggleAction( i18n("Line Tool"), KIBarIcon("linetool"), 0, actionCollection(), "lineTool" );
+    m_lineTool->setExclusiveGroup( "Tools" );
+    connect( m_lineTool, SIGNAL( toggled( bool ) ), this, SLOT( slotLineTool( bool ) ) );
+    m_bezierTool = new KToggleAction( i18n("Bezier Tool"), KIBarIcon("beziertool"), 0, actionCollection(), "bezierTool" );
+    m_bezierTool->setExclusiveGroup( "Tools" );
+    connect( m_bezierTool, SIGNAL( toggled( bool ) ), this, SLOT( slotBezierTool( bool ) ) );
+    m_rectTool = new KToggleAction( i18n("Rect Tool"), KIBarIcon("recttool"), 0, actionCollection(), "rectTool" );
+    m_rectTool->setExclusiveGroup( "Tools" );
+    connect( m_rectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotRectTool( bool ) ) );
+    m_polygonTool = new KToggleAction( i18n("Polygon Tool"), KIBarIcon("polygontool"), 0, actionCollection(), "polygonTool" );
+    m_polygonTool->setExclusiveGroup( "Tools" );
+    connect( m_polygonTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPolygonTool( bool ) ) );
+    m_ellipseTool = new KToggleAction( i18n("Ellipse Tool"), KIBarIcon("ellipsetool"), 0, actionCollection(), "ellipseTool" );
+    m_ellipseTool->setExclusiveGroup( "Tools" );
+    connect( m_ellipseTool, SIGNAL( toggled( bool ) ), this, SLOT( slotEllipseTool( bool ) ) );
+    m_textTool = new KToggleAction( i18n("Text Tool"), KIBarIcon("texttool"), 0, actionCollection(), "textTool" );
+    m_textTool->setExclusiveGroup( "Tools" );
+    connect( m_textTool, SIGNAL( toggled( bool ) ), this, SLOT( slotTextTool( bool ) ) );
+    m_zoomTool = new KToggleAction( i18n("Zoom Tool"), KIBarIcon("zoomtool"), 0, actionCollection(), "zoomTool" );
+    m_zoomTool->setExclusiveGroup( "Tools" );
+    connect( m_zoomTool, SIGNAL( toggled( bool ) ), this, SLOT( slotZoomTool( bool ) ) );
+    
+    // Node Toolbar
+    m_moveNode = new KToggleAction( i18n("Move Node "), KIBarIcon("moveNode"), 0, actionCollection(), "moveNode" );
+    m_moveNode->setExclusiveGroup( "Node" );
+    connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotMoveNode( bool ) ) );
+    m_newNode = new KToggleAction( i18n("New Node "), KIBarIcon("newNode"), 0, actionCollection(), "newNode" );
+    m_newNode->setExclusiveGroup( "Node" );
+    connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotNewNode( bool ) ) );
+    m_deleteNode = new KToggleAction( i18n("Delete Node "), KIBarIcon("deleteNode"), 0, actionCollection(), "deleteNode" );
+    m_deleteNode->setExclusiveGroup( "Node" );
+    connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotDeleteNode( bool ) ) );
+    m_splitLine = new KToggleAction( i18n("Move Node "), KIBarIcon("split"), 0, actionCollection(), "splitLine" );
+    m_splitLine->setExclusiveGroup( "Node" );
+    connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotSplitLine( bool ) ) );
+    
+    // Disable node actions
+    slotPointTool( FALSE );
 }
 
 void KIllustratorView::setupPopups()
@@ -827,5 +959,68 @@ void KIllustratorView::insertPartSlot( KIllustratorChild *, GPart *)
 void KIllustratorView::changeChildGeometrySlot(KIllustratorChild *)
 {
 }
+
+void KIllustratorView::slotImport() { }
+void KIllustratorView::slotExport() { }
+void KIllustratorView::slotInsertBitmap() { }
+void KIllustratorView::slotInsertClipart() { }
+void KIllustratorView::slotCopy() { }
+void KIllustratorView::slotPaste() { }
+void KIllustratorView::slotCut() { }
+void KIllustratorView::slotUndo() { }
+void KIllustratorView::slotRedo() { }
+void KIllustratorView::slotDuplicate() { }
+void KIllustratorView::slotDelete() { }
+void KIllustratorView::slotSelectAll() { }
+void KIllustratorView::slotProperties() { }
+void KIllustratorView::slotOutline( bool ) { }
+void KIllustratorView::slotNormal( bool ) { }
+void KIllustratorView::slotShowRuler( bool ) { }
+void KIllustratorView::slotShowGrid( bool ) { }
+void KIllustratorView::slotShowHelplines( bool ) { }
+void KIllustratorView::slotPage() { }
+void KIllustratorView::slotGrid() { }
+void KIllustratorView::slotHelplines() { }
+void KIllustratorView::slotAlignToGrid() { }
+void KIllustratorView::slotAlignToHelplines() { }
+void KIllustratorView::slotTransformPosition() { }
+void KIllustratorView::slotTransformDimension() { }
+void KIllustratorView::slotTransformRotation() { }
+void KIllustratorView::slotTransformMirror() { }
+void KIllustratorView::slotDistribute() { }
+void KIllustratorView::slotToFront() { }
+void KIllustratorView::slotToBack() { }
+void KIllustratorView::slotForwardOne() { }
+void KIllustratorView::slotBackOne() { }
+void KIllustratorView::slotGroup() { }
+void KIllustratorView::slotUngroup() { }
+void KIllustratorView::slotTextAlongPath() { }
+void KIllustratorView::slotConvertToCurve() { }
+void KIllustratorView::slotBlend() { }
+void KIllustratorView::slotOptions() { }
+void KIllustratorView::slotBrushChosen( const QColor & ) { }
+void KIllustratorView::slotPenChosen( const QColor & ) { }
+void KIllustratorView::slotSelectTool( bool ) { }
+
+void KIllustratorView::slotPointTool( bool b )
+{
+    m_moveNode->setEnabled( b );
+    m_newNode->setEnabled( b );
+    m_deleteNode->setEnabled( b );
+    m_splitLine->setEnabled( b );
+}
+
+void KIllustratorView::slotFreehandTool( bool ) { }
+void KIllustratorView::slotLineTool( bool ) { }
+void KIllustratorView::slotBezierTool( bool ) { }
+void KIllustratorView::slotRectTool( bool ) { }
+void KIllustratorView::slotPolygonTool( bool ) { }
+void KIllustratorView::slotEllipseTool( bool ) { }
+void KIllustratorView::slotTextTool( bool ) { }
+void KIllustratorView::slotZoomTool( bool ) { }
+void KIllustratorView::slotMoveNode( bool ) { }
+void KIllustratorView::slotNewNode( bool ) { }
+void KIllustratorView::slotDeleteNode( bool ) { }
+void KIllustratorView::slotSplitLine( bool ) { }
 
 #include "KIllustrator_view.moc"

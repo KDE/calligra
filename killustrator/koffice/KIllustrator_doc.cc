@@ -191,13 +191,13 @@ Shell* KIllustratorDocument::createShell()
 void KIllustratorDocument::paintContent( QPainter& painter, const QRect& rect, bool transparent )
 {
     Rect r( (float)rect.x(), (float)rect.y(), (float)rect.width(), (float)rect.height() );
-    
+
     m_gdocument->drawContentsInRegion( painter, r );
 }
 
 QString KIllustratorDocument::configFile() const
 {
-    return readConfigFile( "killustrator.rc" );
+    return readConfigFile( "KIllustrator.rc" );
 }
 
 GDocument* KIllustratorDocument::gdoc()

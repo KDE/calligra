@@ -1,5 +1,11 @@
 <!DOCTYPE QConfig ><QConfig>
 <MenuBar>
+ <Menu name="File"><text>File</text>
+  <Action name="import"/>
+  <Action name="export"/>
+  <Separator/>
+  <Action name="documentInfo"/>
+ </Menu>
  <Menu name="Edit"><text>Edit</text>
   <Action name="undo"/>
   <Action name="redo"/>
@@ -7,6 +13,61 @@
   <Action name="cut"/>
   <Action name="copy"/>
   <Action name="paste"/>
+  <Separator/>
+  <Action name="duplicate"/>
+  <Action name="delete"/>
+  <Separator/>
+  <Action name="selectAll"/>
+  <Separator/>
+  <Menu name="Insert"><text>Insert</text>
+   <Action name="insertBitmap"/>
+   <Action name="insertClipart"/>
+  </Menu>
+  <Separator/>
+  <Action name="properties"/>
+ </Menu>
+ <Menu name="View"><text>View</text>
+  <Action name="outline"/>
+  <Action name="normal"/>
+  <Separator/>
+  <Action name="layers"/>
+  <Separator/>
+  <Action name="showRuler"/>
+  <Action name="showGrid"/>
+  <Action name="showHelplines"/>
+ </Menu>
+ <Menu name="Layout"><text>Layout</text>
+  <Action name="page"/>
+  <Action name="grid"/>
+  <Action name="helplines"/>
+  <Separator/>
+  <Action name="alignToGrid"/>
+  <Action name="alignToHelplines"/>
+ </Menu>
+ <Menu name="Arrange"><text>Arrange</text>
+  <Menu name="Transform"><text>Transform</text>
+   <Action name="transformPosition"/>
+   <Action name="transformDimension"/>
+   <Action name="transformRotation"/>
+   <Action name="transformMirror"/>
+  </Menu>
+  <Action name="distribute"/>
+  <Action name="toFront"/>
+  <Action name="toBack"/>
+  <Action name="forwardOne"/>
+  <Action name="backOne"/>
+  <Separator/>
+  <Action name="group"/>
+  <Action name="ungroup"/>
+  <Separator/>
+  <Action name="textAlongPath"/>
+  <Action name="convertToCurve"/>
+ </Menu>
+ <Menu name="Effects"><text>Effects</text>
+  <Action name="blend"/>
+ </Menu>
+ <Menu name="Options"><text>Options</text>
+  <Action name="options"/>
  </Menu>
 </MenuBar>
 <ToolBars>
@@ -16,6 +77,27 @@
   <Separator/>
   <Action name="cut"/>
   <Action name="copy"/>
+ </ToolBar>
+ <ToolBar position="right">
+  <Action name="colorbar"/>
+ </ToolBar>
+ <ToolBar position="left">
+  <Action name="selectTool"/>
+  <Action name="pointTool"/>
+  <Action name="freehandTool"/>
+  <Action name="lineTool"/>
+  <Action name="bezierTool"/>
+  <Action name="rectTool"/>
+  <Action name="polygonTool"/>
+  <Action name="ellipseTool"/>
+  <Action name="textTool"/>
+  <Action name="zoomTool"/>
+ </ToolBar>
+ <ToolBar position="left">
+  <Action name="moveNode"/>
+  <Action name="newNode"/>
+  <Action name="deleteNode"/>
+  <Action name="splitLine"/>
  </ToolBar>
 </ToolBars>
 <InPlaceEditing>

@@ -20,4 +20,6 @@ private:
     static KInstance* s_global;
 };
 
+#define KIBarIcon( x ) BarIcon( x, KIllustratorFactory::global() )
+
 #endif

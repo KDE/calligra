@@ -7,10 +7,9 @@
   <Action name="filesaveas"/>
   <Separator/>
   <Action name="fileprint"/>
-  <Separator/>
+  <Part/>
   <Action name="fileclose"/>
   <Action name="quit"/>
-  <Part/>
  </Menu>
  <Part/>
  <Menu name="Help"><text>Help</text>
