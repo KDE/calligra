@@ -313,7 +313,7 @@ void KPrPage::groupObjects()
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        if(it.current()->isSelected())
+        if(it.current()->isSelected() && (it.current()!= m_doc->header() && it.current()!= m_doc->footer()))
 	    objs.append( it.current() );
     }
 
