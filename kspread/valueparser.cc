@@ -23,9 +23,12 @@
 #include "kspread_cell.h"
 #include "kspread_locale.h"
 
+#include <kstaticdeleter.h>
+
 using namespace KSpread;
 
 ValueParser* ValueParser::_self = 0;
+static KStaticDeleter<ValueParser> sd;
 
 ValueParser::~ValueParser ()
 {
@@ -35,7 +38,7 @@ ValueParser::~ValueParser ()
 ValueParser * ValueParser::self ()
 {
   if (!_self)
-    _self = new ValueParser;
+    sd.setObject( _self, new ValueParser() );
   return _self;
 }
 
