@@ -41,7 +41,7 @@ Normal bugs
 #38494: scientific input in a formula is misinterpreted
 #39525: kspread: change angle is not fully undoable
 #39620: if statments not working with dates
-#39653: inconsitent behaviour when dragging the little black box in the cell corner   (Norbert)
+#39653: inconsitent behaviour when dragging the little black box in the cell corner   (Norbert - done beta2)
 #39719: KSpread: selection over page limits stops when not moving the mouse
 #40150: Precision problem in calculations
 #40303: semiColon separated data are not imported
@@ -53,7 +53,7 @@ Wishlist items
 #9881: Control of linebreak within multi-row cell
 #13007: KSpread printing - scaling not supported (not urgent, wishlist)
 #18545: kspread regexp in formula
-#18869: no decimals possible when inserting a series                                  (Norbert)
+#18869: no decimals possible when inserting a series                                  (Norbert - done beta2)
 #19678: Handling time/date
 #22685: feature request for kspread formula editor
 #23846: slow delete of large amounts of related KSpread
@@ -71,7 +71,7 @@ Wishlist items
 #27872: Needed auto-increase of cell height, when long dara in cell
 #28194: no matrix manipulation operations
 #28716: improved conditional cell attributes in kspread
-#28906: drag formula only downwards?                           (Norbert)
+#28906: drag formula only downwards?                           (Norbert - done beta2)
 #29419: KSpread chart dialog box too large
 #29524: Kspreads Formula editors tooltip should be changed
 #29598: Renaming tables in KSpread
@@ -94,7 +94,7 @@ Wishlist items
 #38495: selecting multiple non-adjecent columns is impossible
 #38739: request: option to scale pages to print to one page
 #38774: Improved word wrapping in KSpread cells
-#38828: no automatic date continuation (maybe not understandable)       (Norbert)
+#38828: no automatic date continuation (maybe not understandable)       (Norbert - done beta2)
 #39113: Wish: Named areas
 #39561: no mouse drag and drop of selections
 #39622: select area for print from kspread
@@ -105,15 +105,11 @@ Wishlist items
 Other things: (please add the things you are working on!)
 
 - Zoom
-- implement more Excel shortcuts like CTRL+Shift+!, *, ^, ...   (Norbert - almost done)
 - inserting data from text files
-- insert data from databases                                    (Norbert)
-- Styles                                                        (Norbert - almost done)
 - "Freeze/Unfreeze Panes", started but had some problems caused by the
         scrollbars, it works, but not very nice (not commited (Norbert))
 - AutoFormat
 - Script, Script-Editor (like VBA in Excel)
-- Filter, Autofilter                                             (Philipp, but will take long, haven't started yet)
 - Tools->Auditing:
 	Trace Precedents
 	Trace Dependants
@@ -127,16 +123,41 @@ Other things: (please add the things you are working on!)
 - Multible Operations (in Excel: "Data"->"Table")
 - more chart types
 - much more formulas (financial,...)
-- printing enhancements (show real page borders, fix preview, printing headers (Philipp, haven't started yet)
-        on each page, printing a selection only, ...)
-- AutoCompletion/AutoContinuation for dates, times, for values like:
-        "1,3,4,6", more Excel-like behavior                     (Norbert - almost done)
 - Scrollbar that supports jumping one row/column forward or back
 - Named areas (see below)
 - support "<>" as not equal (in addition to "!=")
-- other bug fixes                               (all, every time)
--
+- other bug fixes                               (everybody, every time)
 
+
+*********
+* Taken:
+*********
+
+
+Philipp
+=======
+
+- printing enhancements (show real page borders, fix preview, printing headers (Philipp, haven't started yet)
+        on each page, printing a selection only, ...)
+- Filter, Autofilter                                             (Philipp, but will take long, haven't started yet)
+
+
+Norbert
+=======
+
+- AutoCompletion/AutoContinuation for dates, times, for values like:
+        "1,3,4,6", more Excel-like behavior                     (Norbert - done beta2)
+- insert data from databases                                    (Norbert)
+- Styles                                                        (Norbert - almost done)
+- implement more Excel shortcuts like CTRL+Shift+!, *, ^, ...   (Norbert - almost done)
+  (see Todo-list below)
+
+
+
+***************************************************************************************
+
+Explanations to features:
+=========================
 
 Named areas:
 
@@ -222,5 +243,3 @@ Bug fix :
 Torbens TODO-List:
 ------------------
 - Write-Protect cells
-- Select a region. Then right click -> "Spell Checking".
-  All selected cells should be spell checked
