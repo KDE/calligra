@@ -13,7 +13,7 @@ section.cc
 
 noinst_HEADERS = winworddoc.h fib.h wordfilter.h \
 paragraph.h picture.h style.h stylesheet.h misc.h \
-section.h atrd.h sttbf.h bkl.h bkf.h
+section.h atrd.h sttbf.h bkl.h bkf.h ffn.h frd.h
 
 METASOURCES = AUTO
 

@@ -34,6 +34,8 @@
 #include <sttbf.h>
 #include <bkf.h>
 #include <bkl.h>
+#include <ffn.h>
+#include <frd.h>
 
 #include <kdebug.h>
 
@@ -102,6 +104,6 @@ private:
     // BKL
     unsigned long m_bklBase, m_bklCount;
 
-    STTBF m_grpXst, m_atnbkmk;
+    STTBF m_grpXst, m_atnbkmk, m_assocStrings;
 };
 #endif // WINWORDDOC_H

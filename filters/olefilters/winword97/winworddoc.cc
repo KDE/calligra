@@ -75,6 +75,13 @@ WinWordDoc::~WinWordDoc() {
         tmp=0L;
     }
     m_atnbkmk.extraData.clear();
+
+    m_assocStrings.stringList.clear();
+    for(QArray<unsigned char> *tmp=m_assocStrings.extraData.first(); tmp!=0L; tmp=m_assocStrings.extraData.next()) {
+        delete tmp;
+        tmp=0L;
+    }
+    m_assocStrings.extraData.clear();
 }
 
 const bool WinWordDoc::convert() {
@@ -90,6 +97,9 @@ const bool WinWordDoc::convert() {
     locateBKF();
     locateBKL();
     readCommentStuff();
+    sttbf(m_assocStrings, m_fib->fcSttbfAssoc, m_fib->lcbSttbfAssoc, m_table.data);
+
+    // FFN, FRD - TODO(?)
 
     if(m_fib->fComplex==0)
         convertSimple();
