@@ -5783,7 +5783,7 @@ void KWView::selectBookmark()
         KWBookMark * book = m_doc->bookMarkByName( bookName );
         if ( book )
         {
-            m_gui->canvasWidget()->editTextFrameSet( book->frameSet(), book->parag(), book->bookmarkIndex() );
+            m_gui->canvasWidget()->editTextFrameSet( book->frameSet(), book->parag(), book->bookmarkIndex(),true );
         }
     }
 }

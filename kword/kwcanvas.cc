@@ -1796,7 +1796,7 @@ void KWCanvas::editFrameSet( KWFrameSet * frameSet )
     emit updateRuler();
 }
 
-void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index )
+void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index , bool forceEdit)
 {
     if ( selectAllFrames( false ) )
         emit frameSelectedChanged();
@@ -1804,7 +1804,7 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
     KWTableFrameSet *table = fs->getGroupManager();
     bool emitChanged = checkCurrentEdit( table ? table : fs );
 
-    if ( emitChanged ) { // emitted after mousePressEvent [for tables]
+    if ( emitChanged || forceEdit) { // emitted after mousePressEvent [for tables]
         if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet()->type()==FT_TEXT ) {
             if ( !parag )
             {

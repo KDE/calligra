@@ -165,7 +165,9 @@ public:
     void inlinePictureStarted();
 
     void editFrameSet( KWFrameSet * frameSet );
-    void editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index );
+    // forceEdit : necessary otherwise we can move cursor into
+    //a frame which is edited
+    void editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index, bool forceEdit=false );
     bool checkCurrentEdit( KWFrameSet * fs , bool onlyText = false);
 
 
