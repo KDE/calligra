@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
    Copyright (c) 2001 IABG mbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
@@ -60,13 +60,10 @@ class TextFormatting
                          int     sz,
                          QColor  fg,
                          QColor  bg,
-                         int     v,
-                         QString ln,
-                         QString lh,
-                         bool    m   ) : fontName (f), italic (i), underline (u), strikeout (s),
+                         int     v   
+                                     ) : fontName (f), italic (i), underline (u), strikeout (s),
                                          weight (w), fontSize (sz), fgColor (fg), bgColor (bg),
-                                         verticalAlignment (v), linkName (ln), linkReference (lh),
-                                         missing (m) {}
+                                         verticalAlignment (v), missing (false) {}
 
         QString fontName;
 
@@ -80,8 +77,8 @@ class TextFormatting
         QColor  bgColor;
         int     verticalAlignment;
 
-        QString linkName;        // Name of link (attribute "linkName" of <LINK>)
-        QString linkReference;   // Reference of link (attribute "hrefName" of <LINK>)
+        QString linkName;        // Name of link (attribute "linkName" of <LINK>)  // DELETE!
+        QString linkReference;   // Reference of link (attribute "hrefName" of <LINK>) // DELETE!
 
         bool    missing;   // true if the FormatData does not correspond to a real <FORMAT> element
 };
@@ -135,7 +132,7 @@ class FrameAnchor
    public:
       FrameAnchor () {}
 
-      FrameAnchor ( QString n  ) : name (n), type (-1) {}
+      FrameAnchor ( const QString& n  ) : name (n), type (-1) {}
 
       QString name;
       int     type;
@@ -144,6 +141,15 @@ class FrameAnchor
       Table   table;
 };
 
+
+class VariableData
+{
+public:
+    VariableData () {}
+    VariableData ( const QString& text ) : m_text(text) {}
+public:
+    QString m_text;
+};
 
 class FormatData
 {
@@ -160,6 +166,10 @@ class FormatData
 
         FormatData ( int                   p,
                      int                   l,
+                     const VariableData &data  ) : id (1), pos (p), len (l), variable (data) {}
+
+        FormatData ( int                   p,
+                     int                   l,
                      const FrameAnchor    &t  ) : id (6), pos (p), len (l), frameAnchor (t) {}
 
         int            id;
@@ -168,6 +178,7 @@ class FormatData
 
         TextFormatting text;
         FrameAnchor    frameAnchor;
+        VariableData    variable;
 };
 
 

@@ -276,11 +276,124 @@ static void ProcessLinkTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
     ProcessAttributes (myNode, attrProcessingList);
 
 #if 0
-    kdDebug (30508) << "DEBUG: ProcessLinkTag (): " << linkData->name
-                    << " references to " << linkData->href << endl;
+    kdDebug(30508) << "ProcessLinkTag: " << linkData->name << " references to " << linkData->href << endl;
 #endif
 }
 
+struct TypeData
+{
+    QString m_key;
+    QString m_text;
+    int m_type;
+};
+
+static void ProcessTypeTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
+{
+    TypeData *typeData = (TypeData *) tagData;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("key",  "QString", &typeData->m_key ) );
+    attrProcessingList.append ( AttrProcessing ("type", "int",     &typeData->m_text) );
+    attrProcessingList.append ( AttrProcessing ("text", "QString", &typeData->m_type) );
+    ProcessAttributes (myNode, attrProcessingList);
+}
+
+
+static void SubProcessFormatOneTag(QDomNode myNode,
+    ValueListFormatData *formatDataList, int formatPos, int formatLen,
+    KWEFKWordLeader *leader)
+{
+    if ( formatPos == -1 || formatLen == -1 )
+    {
+        // We have no position and no length defined
+        // It can happen in a child of <STYLE>, just put secure values
+        formatPos=0;
+        formatLen=0;
+        kdDebug (30508) << "Missing formatting! Style?" << endl;
+    }
+    // TODO: use directly a FormatData or a TextFormatting instead of using temporary variables
+    QString  fontName;
+    bool     italic    = false;
+    bool     underline = false;
+    bool     strikeout = false;
+    int      weight    = 50;
+    int      fontSize  = -1;
+    QColor   fgColor;
+    QColor   bgColor;
+    int      verticalAlignment = 0;
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList
+        << TagProcessing ( "COLOR",               ProcessColorAttrTag,    (void *) &fgColor           )
+        << TagProcessing ( "FONT",                ProcessStringNameTag,   (void *) &fontName          )
+        << TagProcessing ( "SIZE",                ProcessIntValueTag,     (void *) &fontSize          )
+        << TagProcessing ( "WEIGHT",              ProcessIntValueTag,     (void *) &weight            )
+        << TagProcessing ( "ITALIC",              ProcessBoolIntValueTag, (void *) &italic            )
+        << TagProcessing ( "UNDERLINE",           ProcessBoolIntValueTag, (void *) &underline         )
+        << TagProcessing ( "STRIKEOUT",           ProcessBoolIntValueTag, (void *) &strikeout         )
+        << TagProcessing ( "CHARSET",             NULL,                   NULL                        )
+        << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     (void *) &verticalAlignment )
+        << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    (void *) &bgColor           )
+        ;
+
+        ProcessSubtags (myNode, tagProcessingList, leader);
+
+        (*formatDataList) << FormatData ( formatPos, formatLen,
+            TextFormatting ( fontName, italic, underline, strikeout, weight,
+            fontSize, fgColor, bgColor, verticalAlignment ) );
+}
+
+
+static void SubProcessFormatFourTag(QDomNode myNode,
+    ValueListFormatData *formatDataList, int formatPos, int formatLen,
+    KWEFKWordLeader *leader)
+{
+    if ( (formatPos == -1) || (formatLen == -1) )
+    {
+        // We have no position and no length defined
+        kdWarning(30508) << "Missing variable formatting!" << endl;
+        return;
+    }
+    FormatData formatData(4, formatPos, formatLen);
+    TypeData typeData;
+    LinkData linkData;
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList
+        << TagProcessing ( "TYPE",    ProcessTypeTag,         &typeData)
+        << TagProcessing ( "DATE",    NULL,                   NULL      )
+        << TagProcessing ( "LINK",    ProcessLinkTag,         &linkData )
+        ;
+    ProcessSubtags (myNode, tagProcessingList, leader);
+    (*formatDataList) << formatData;
+}
+
+
+static void SubProcessFormatSixTag(QDomNode myNode,
+    ValueListFormatData *formatDataList, int formatPos, int formatLen,
+    KWEFKWordLeader *leader)
+{
+    if ( formatPos != -1 && formatLen != -1 )
+    {
+        QString instance;
+
+        QValueList<TagProcessing> tagProcessingList;
+        // TODO: We can have all layout information as in regular texts
+        //       They simply apply to the table frames
+        //       FONT is just the first that we've come across so far
+        tagProcessingList << TagProcessing ( "FONT",   NULL,             NULL               )
+                            << TagProcessing ( "ANCHOR", ProcessAnchorTag, (void *) &instance );
+        ProcessSubtags (myNode, tagProcessingList, leader);
+#if 0
+        kdDebug (30508) << "DEBUG: Adding frame anchor " << instance << endl;
+#endif
+
+        (*formatDataList) << FormatData ( formatPos, formatLen, FrameAnchor (instance) );
+    }
+    else
+    {
+        kdWarning (30508) << "Missing or bad anchor formatting!" << endl;
+    }
+}
 
 static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
 {
@@ -298,82 +411,28 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
 
     switch ( formatId )
     {
-        case 1:   // regular texts
-            {
-                if ( formatPos == -1 || formatLen == -1 )
-                {
-                    // We have no position and no length defined
-                    // It can happen in a child of <STYLE>, just put secure values
-                    formatPos=0;
-                    formatLen=0;
-                    kdDebug (30508) << "Missing formatting! Style?" << endl;
-                }
-                // TODO: use directly a FormatData or a TextFormatting instead of using temporary variables
-                QString  fontName;
-                bool     italic    = false;
-                bool     underline = false;
-                bool     strikeout = false;
-                int      weight    = 50;
-                int      fontSize  = -1;
-                QColor   fgColor;
-                QColor   bgColor;
-                int      verticalAlignment = 0;
-                LinkData linkData;
-
-                QValueList<TagProcessing> tagProcessingList;
-                tagProcessingList 
-                                  << TagProcessing ( "COLOR",               ProcessColorAttrTag,    (void *) &fgColor           )
-                                  << TagProcessing ( "FONT",                ProcessStringNameTag,   (void *) &fontName          )
-                                  << TagProcessing ( "SIZE",                ProcessIntValueTag,     (void *) &fontSize          )
-                                  << TagProcessing ( "WEIGHT",              ProcessIntValueTag,     (void *) &weight            )
-                                  << TagProcessing ( "ITALIC",              ProcessBoolIntValueTag, (void *) &italic            )
-                                  << TagProcessing ( "UNDERLINE",           ProcessBoolIntValueTag, (void *) &underline         )
-                                  << TagProcessing ( "STRIKEOUT",           ProcessBoolIntValueTag, (void *) &strikeout         )
-                                  << TagProcessing ( "CHARSET",             NULL,                   NULL                        )
-                                  << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     (void *) &verticalAlignment )
-                                  << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    (void *) &bgColor           )
-                                  << TagProcessing ( "LINK",                ProcessLinkTag,         (void *) &linkData          )
-                                  ;
-                ProcessSubtags (myNode, tagProcessingList, leader);
-
-                (*formatDataList) << FormatData ( formatPos, formatLen,
-                                                  TextFormatting ( fontName, italic, underline, strikeout,
-                                                                   weight, fontSize, fgColor, bgColor,
-                                                                   verticalAlignment, linkData.name, linkData.href, false ) );
-
-                break;
-            }
-        case 6:   // anchors
-            if ( formatPos != -1 && formatLen != -1 )
-            {
-               QString instance;
-
-               QValueList<TagProcessing> tagProcessingList;
-               // TODO: We can have all layout information as in regular texts
-               //       They simply apply to the table frames
-               //       FONT is just the first that we've come across so far
-               tagProcessingList << TagProcessing ( "FONT",   NULL,             NULL               )
-                                 << TagProcessing ( "ANCHOR", ProcessAnchorTag, (void *) &instance );
-               ProcessSubtags (myNode, tagProcessingList, leader);
-
-#if 0
-               kdDebug (30508) << "DEBUG: Adding frame anchor " << instance << endl;
-#endif
-
-               (*formatDataList) << FormatData ( formatPos, formatLen, FrameAnchor (instance) );
-            }
-            else
-            {
-               kdWarning (30508) << "Missing or bad anchor formatting!" << endl;
-            }
+    case 1:   // regular texts
+        {
+            SubProcessFormatOneTag(myNode, formatDataList, formatPos, formatLen, leader);
             break;
-
-        case -1:
+        }
+    case 4:
+        {
+            SubProcessFormatFourTag(myNode, formatDataList, formatPos, formatLen, leader);
+            break;
+        }
+    case 6:   // anchors
+        {
+            SubProcessFormatSixTag(myNode, formatDataList, formatPos, formatLen, leader);
+            break;
+        }
+    case -1:
+        {
             kdWarning (30508) << "FORMAT attribute id value not set!" << endl;
             AllowNoSubtags (myNode, leader);
             break;
-
-        default:
+        }
+    default:
             kdWarning(30508) << "Unexpected FORMAT attribute id value " << formatId << " !" << endl;
             AllowNoSubtags (myNode, leader);
     }

@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
    Copyright (c) 2001 IABG mbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
@@ -51,31 +51,29 @@ void Table::addCell ( int                   c,
 void CreateMissingFormatData (QString &paraText, ValueListFormatData &paraFormatDataList)
 {
     ValueListFormatData::Iterator  paraFormatDataIt;
-    int lastPos;   // last position
+    int lastPos=0;   // last position
 
-    lastPos = 0;
-    paraFormatDataIt = paraFormatDataList.begin ();
-    while ( paraFormatDataIt != paraFormatDataList.end () )
+    for (paraFormatDataIt = paraFormatDataList.begin ();
+        paraFormatDataIt != paraFormatDataList.end ();
+        paraFormatDataIt++)
     {
         if ( (*paraFormatDataIt).pos > lastPos )
         {
 #if 0
-            kdError (30508) << "CreateMissingFormatData: lastPos = " << lastPos
+            kdDebug (30508) << "CreateMissingFormatData: lastPos = " << lastPos
                             << ", pos = " << (*paraFormatDataIt).pos
                             << ", len = " << (*paraFormatDataIt).len << " (bad)" << endl;
 #endif
 
             // We must add a FormatData
             paraFormatDataList.insert ( paraFormatDataIt,
-                                        FormatData ( lastPos, (*paraFormatDataIt).pos - lastPos,
-                                                     TextFormatting ( "", false, false, false, 0, -1,
-                                                                      QColor (), QColor (), 0, "", "", true ) ) );
+                FormatData ( 1, lastPos, (*paraFormatDataIt).pos - lastPos ) );
         }
 #if 0
         else
         {
-            kdError (30508) << "CreateMissingFormatData: lastPos = " << lastPos
-                            << ", pos = " << (*paraFormatDataIt).pos 
+            kdDebug (30508) << "CreateMissingFormatData: lastPos = " << lastPos
+                            << ", pos = " << (*paraFormatDataIt).pos
                             << ", len = " << (*paraFormatDataIt).len << " (ok)" << endl;
         }
 #endif
@@ -86,25 +84,23 @@ void CreateMissingFormatData (QString &paraText, ValueListFormatData &paraFormat
 
         lastPos = (*paraFormatDataIt).pos + (*paraFormatDataIt).len;
 
-        paraFormatDataIt++;
     }
 
     // Add the last one if needed
     if ( (int) paraText.length () > lastPos )
     {
 #if 0
-        kdError (30508) << "CreateMissingFormatData: lastPos = " << lastPos
+        kdDebug (30508) << "CreateMissingFormatData: lastPos = " << lastPos
                         << ", total len = " << paraText.length () << " (bad)" << endl;
 #endif
 
-        paraFormatDataList.append ( FormatData ( lastPos, paraText.length () - lastPos,
-                                                 TextFormatting ( "", false, false, false, 0, -1,
-                                                                  QColor (), QColor (), 0, "", "", true ) ) );
+        paraFormatDataList.append ( 
+            FormatData ( 1, lastPos, paraText.length () - lastPos ) );
     }
 #if 0
     else
     {
-        kdError (30508) << "CreateMissingFormatData: lastPos = " << lastPos
+        kdDebug (30508) << "CreateMissingFormatData: lastPos = " << lastPos
                         << ", total len = " << paraText.length () << " (ok)" << endl;
     }
 #endif
