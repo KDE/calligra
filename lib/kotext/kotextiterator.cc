@@ -94,7 +94,9 @@ void KoTextIterator::init( const QValueList<KoTextObject *> & lstObjects, KoText
         else // not from cursor.
         {
             m_firstParag = forw ? firstParag : lastParag;
-            m_lastIndex = forw ? firstIndex : lastIndex;
+            m_firstIndex = forw ? firstIndex : lastIndex;
+            m_lastParag = forw ? lastParag : firstParag;
+            m_lastIndex = forw ? lastIndex : firstIndex;
             m_currentTextObj = forw ? m_lstObjects.begin() : m_lstObjects.fromLast();
         }
     }
@@ -173,6 +175,7 @@ QString KoTextIterator::currentText() const
 
 QPair<int, QString> KoTextIterator::currentTextAndIndex() const
 {
+    Q_ASSERT( m_currentParag );
     QString str = m_currentParag->string()->toString();
     str.truncate( str.length() - 1 ); // damn trailing space
     bool forw = ! ( m_options & KFindDialog::FindBackwards );

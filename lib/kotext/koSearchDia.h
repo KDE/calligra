@@ -22,8 +22,12 @@
 #ifndef kosearchdia_h
 #define kosearchdia_h
 
-#include <koFind.h>
-#include <koReplace.h>
+#include <kfind.h>
+#include <kfinddialog.h>
+#include <kreplace.h>
+#include <kreplacedialog.h>
+#include "kotextiterator.h"
+
 #include <qcolor.h>
 #include <qstring.h>
 #include <qstringlist.h>
@@ -41,8 +45,7 @@ class KoTextView;
 class KoTextObject;
 class KCommand;
 class KoTextDocument;
-class KoTextFind;
-class KoTextReplace;
+class KoFindReplace;
 class KFontCombo;
 //
 // This class represents the KWord-specific search extension items, and also the
@@ -56,19 +59,19 @@ public:
 
     typedef enum
     {
-        Family = 1 * KoFindDialog::MinimumUserOption,
-        Color = 2 * KoFindDialog::MinimumUserOption,
-        Size = 4 * KoFindDialog::MinimumUserOption,
-        Bold = 8 * KoFindDialog::MinimumUserOption,
-        Italic = 16 * KoFindDialog::MinimumUserOption,
-        Underline = 32 * KoFindDialog::MinimumUserOption,
-        VertAlign = 64 * KoFindDialog::MinimumUserOption,
-        StrikeOut = 128 * KoFindDialog::MinimumUserOption,
-        BgColor = 256 *KoFindDialog::MinimumUserOption,
-        Shadow = 512 *KoFindDialog::MinimumUserOption,
-        WordByWord = 1024 *KoFindDialog::MinimumUserOption,
-        Attribute = 1024 *KoFindDialog::MinimumUserOption,
-        Language = 2048 *KoFindDialog::MinimumUserOption
+        Family = 1 * KFindDialog::MinimumUserOption,
+        Color = 2 * KFindDialog::MinimumUserOption,
+        Size = 4 * KFindDialog::MinimumUserOption,
+        Bold = 8 * KFindDialog::MinimumUserOption,
+        Italic = 16 * KFindDialog::MinimumUserOption,
+        Underline = 32 * KFindDialog::MinimumUserOption,
+        VertAlign = 64 * KFindDialog::MinimumUserOption,
+        StrikeOut = 128 * KFindDialog::MinimumUserOption,
+        BgColor = 256 * KFindDialog::MinimumUserOption,
+        Shadow = 512 * KFindDialog::MinimumUserOption,
+        WordByWord = 1024 * KFindDialog::MinimumUserOption,
+        Attribute = 2048 * KFindDialog::MinimumUserOption,
+        Language = 4096 * KFindDialog::MinimumUserOption
     } Options;
 
     KoSearchContext();
@@ -116,7 +119,7 @@ private:
 // This class is the KWord search dialog.
 //
 class KoSearchDia:
-    public KoFindDialog
+    public KFindDialog
 {
     Q_OBJECT
 
@@ -138,7 +141,7 @@ private:
 // This class is the kotext replace dialog.
 //
 class KoReplaceDia:
-    public KoReplaceDialog
+    public KReplaceDialog
 {
     Q_OBJECT
 
@@ -152,7 +155,7 @@ public:
         return m_replaceUI->context();
     }
     bool optionFindSelected() const { return m_findUI->optionSelected();}
-    bool optionSearchSelected() const { return m_replaceUI->optionSelected();}
+    bool optionReplaceSelected() const { return m_replaceUI->optionSelected();}
 protected slots:
     void slotOk();
 
@@ -163,82 +166,9 @@ private:
 };
 
 /**
- * This class implements the 'find' functionality ( the "search next, prompt" loop )
- * and the 'replace' functionality. Same class, to allow centralizing the code that
- * finds the framesets and paragraphs to look into.
+ * Reimplement KFind to provide our own validateMatch - for the formatting options
  */
-class KoFindReplace : public QObject
-{
-    Q_OBJECT
-public:
-    KoFindReplace( QWidget * parent, KoSearchDia * dialog, KoTextView *textView, const QPtrList<KoTextObject> & lstObject);
-    KoFindReplace( QWidget * parent, KoReplaceDia * dialog, KoTextView *textView, const QPtrList<KoTextObject> & lstObject);
-    ~KoFindReplace();
-
-    KoTextParag *currentParag() {
-        return m_currentParag;
-    }
-
-    bool isReplace() const { return m_replace != 0L; }
-
-    bool shouldRestart();
-
-    //int numMatches() const;
-    //int numReplacements() const;
-
-    /** Do the complete loop for find or replace. When it exits, we're done.
-     * Returns false if the user aborted the search/replace operation. */
-    bool proceed();
-
-    /** Bring to front (e.g. when menuitem called twice) */
-    void setActiveWindow();
-
-    /** Abort - when closing the view */
-    void abort();
-    bool aborted() const { return m_destroying; }
-
-    virtual void emitNewCommand(KCommand *) = 0;
-    virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdoc) = 0;
-
-    void changeListObject(const QPtrList<KoTextObject> & lstObject);
-
-    /** For KoTextFind and KoTextReplace */
-    bool validateMatch( const QString &text, int index, int matchedlength );
-
-protected:
-    bool findInTextObject( KoTextObject * textObj, KoTextParag * firstParag, int firstIndex,
-                           KoTextParag * lastParag, int lastIndex );
-    bool process( const QString &text );
-    void replaceWithAttribut( KoTextCursor * cursor, int index );
-    KMacroCommand* macroCommand();
-    long options() const;
-
-protected slots:
-    void highlight( const QString &text, int matchingIndex, int matchingLength, const QRect & );
-    void replace( const QString &text, int replacementIndex, int replacedLength,int searchLength, const QRect & );
-
-private:
-    // Only one of those two will be set
-    KoTextFind * m_find;
-    KoTextReplace * m_replace;
-
-    // Only one of those two will be set
-    KoSearchDia * m_findDlg;
-    KoReplaceDia * m_replaceDlg;
-
-    KoTextObject *m_currentTextObj;
-    KoTextParag *m_currentParag;
-    KMacroCommand *m_macroCmd;
-    int m_offset;
-    KoTextView *m_textView;
-    QPtrList<KoTextObject> m_lstObject;
-    bool m_destroying;
-};
-
-/**
- * Reimplement KoFind to provide our own validateMatch - for the formatting options
- */
-class KoTextFind : public KoFind
+class KoTextFind : public KFind
 {
     Q_OBJECT
 public:
@@ -252,7 +182,7 @@ private:
 /**
  * Reimplement KoReplace to provide our own validateMatch - for the formatting options
  */
-class KoTextReplace : public KoReplace
+class KoTextReplace : public KReplace
 {
     Q_OBJECT
 public:
@@ -263,6 +193,93 @@ private:
     KoFindReplace * m_findReplace;
 };
 
+/**
+ * This class implements the 'find' functionality ( the "search next, prompt" loop )
+ * and the 'replace' functionality. Same class, to allow centralizing the findNext() code.
+ */
+class KoFindReplace : public QObject
+{
+    Q_OBJECT
+public:
+    KoFindReplace( QWidget * parent, KoSearchDia * dialog, const QValueList<KoTextObject *> & lstObject, KoTextView* textView );
+    KoFindReplace( QWidget * parent, KoReplaceDia * dialog, const QValueList<KoTextObject *> & lstObject, KoTextView* textView );
+    ~KoFindReplace();
+
+    KoTextParag *currentParag() {
+        return m_textIterator.currentParag();
+    }
+
+    bool isReplace() const { return m_replace != 0L; }
+
+    bool shouldRestart();
+
+    //int numMatches() const;
+    //int numReplacements() const;
+
+    /** Look for the next match. Returns false if we're finished. */
+    bool findNext();
+
+    /** Look for the previous match. Returns false if we're finished. */
+    bool findPrevious();
+
+    /** Bring to front (e.g. when menuitem called twice) */
+    void setActiveWindow();
+
+    virtual void emitNewCommand(KCommand *) = 0;
+    /**
+     * Highlight a match.
+     */
+    virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdoc) = 0;
+
+    void changeListObject(const QValueList<KoTextObject *> & lstObject);
+
+    /** For KoTextFind and KoTextReplace */
+    bool validateMatch( const QString &text, int index, int matchedlength );
+
+protected:
+    void replaceWithAttribut( KoTextCursor * cursor, int index );
+    KMacroCommand* macroCommand();
+    long options() const;
+    void setOptions(long opt);
+    void removeHighlight();
+    bool needData() const { return m_find ? m_find->needData() : m_replace->needData(); }
+    void setData( const QString& data, int startPos = -1 ) {
+        if ( m_find ) m_find->setData( data, startPos );
+        else m_replace->setData( data, startPos );
+    }
+
+protected slots:
+    void slotFindNext();
+    void optionsChanged();
+    void dialogClosed();
+    void highlight( const QString &text, int matchingIndex, int matchingLength );
+    void replace( const QString &text, int replacementIndex, int replacedLength, int searchLength );
+
+private:
+    void connectFind( KFind* find );
+
+    // Only one of those two will be set
+    KoTextFind * m_find;
+    KoTextReplace * m_replace;
+
+    KoSearchContext m_searchContext;
+    KoSearchContext m_replaceContext;
+    bool m_searchContextEnabled;
+    bool m_doCounting;
+
+    KMacroCommand *m_macroCmd;
+    int m_offset;
+
+    KoTextIterator m_textIterator;
+
+    // For removing the last highlight
+    KoTextObject* m_lastTextObjectHighlighted;
+};
+
+/**
+ * The separate dialog that pops up to ask for which formatting options
+ * should be used to match text, or when replacing text.
+ */
 class KoFormatDia: public KDialogBase
 {
     Q_OBJECT

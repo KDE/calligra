@@ -1,3 +1,4 @@
+SUBDIRS = kohyphen
 INCLUDES= $(KOFFICECORE_INCLUDES) $(KOFFICEUI_INCLUDES) $(all_includes)
 
 lib_LTLIBRARIES = libkotext.la
@@ -10,11 +11,12 @@ libkotext_la_SOURCES = qcomplextext.cpp qrichtext.cpp qrichtext_p.cpp \
 	koChangeCaseDia.cc koStylist.cc koSearchDia.cc \
 	timedateformatwidget.ui timeformatwidget_impl.cc dateformatwidget_impl.cc \
 	KoTextViewIface.skel KoTextViewIface.cc koFontDia.cc koBgSpellCheck.cc \
-	koCommentDia.cc kospell.cc koCreateStyleDia.cc kotextcustomitem.cc koimportstyledia.cc
+	koCommentDia.cc kospell.cc koCreateStyleDia.cc kotextcustomitem.cc \
+	koimportstyledia.cc kotextiterator.cc
 
 libkotext_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 # We use kofficeui for koRect :)
-libkotext_la_LIBADD = $(LIB_KOFFICEUI) -lkspell
+libkotext_la_LIBADD = $(LIB_KOFFICEUI) -lkspell -lkutils
 
 METASOURCES = AUTO
 
