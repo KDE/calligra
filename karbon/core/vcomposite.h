@@ -41,7 +41,7 @@ typedef QPtrListIterator<VPath> VPathListIterator;
 
 
 /**
- * A composite path consisiting of one or many paths.
+ * A composite path consists of one or many subpaths.
  */
 
 class VComposite : public VObject
@@ -118,8 +118,15 @@ public:
 	bool arcTo(
 		const KoPoint& p1, const KoPoint& p2, double r );
 
+	/**
+	 * Creates a new subpath and makes it the current one.
+	 */
+	void end();
+
+	/**
+	 * Closes the current subpath and calls end().
+	 */
 	void close();
-	bool isClosed() const;
 
 	/**
 	 * Combines two composite paths. For example, the letter "O" is a combination
@@ -139,8 +146,6 @@ public:
 
 	const VPathList& paths() const
 		{ return m_paths; }
-
-	void clear() { m_paths.clear(); }
 
 	/// Applies an affine transformation.
 	virtual void transform( const QWMatrix& m );

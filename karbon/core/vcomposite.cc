@@ -169,23 +169,7 @@ VComposite::currentPoint() const
 bool
 VComposite::moveTo( const KoPoint& p )
 {
-	if( isClosed() ) return false;
-
-	// move "begin" when path is still empty:
-	if( m_paths.getLast()->moveTo( p ) )
-	{
-		return true;
-	}
-	// otherwise create a new subpath:
-	else
-	{
-		// add an initial path:
-		VPath* path = new VPath( this );
-		path->moveTo( p );
-		m_paths.append( path );
-	}
-
-	return false;
+	return m_paths.getLast()->moveTo( p );
 }
 
 bool
@@ -220,15 +204,22 @@ VComposite::arcTo( const KoPoint& p1, const KoPoint& p2, const double r )
 }
 
 void
+VComposite::end()
+{
+	// Don't end current subpath if it is empty.
+	if( m_paths.getLast()->isEmpty() )
+		return;
+
+	VPath* path = new VPath( this );
+	path->moveTo( currentPoint() );
+	m_paths.append( path );
+}
+
+void
 VComposite::close()
 {
 	m_paths.getLast()->close();
-}
-
-bool
-VComposite::isClosed() const
-{
-	return m_paths.getLast()->isClosed();
+	end();
 }
 
 void
@@ -290,9 +281,11 @@ VComposite::boundingBox() const
 	{
 		VPathListIterator itr( m_paths );
 		itr.toFirst();
+
 		m_boundingBox = itr.current() ? itr.current()->boundingBox() : KoRect();
-        for( ++itr; itr.current(); ++itr )
-            m_boundingBox |= itr.current()->boundingBox();
+
+		for( ++itr; itr.current(); ++itr )
+			m_boundingBox |= itr.current()->boundingBox();
 
 		if( !m_boundingBox.isNull() )
 		{

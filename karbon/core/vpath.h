@@ -75,6 +75,13 @@ public:
 	void revert();
 
 	/**
+	 * Returns true if the current path is "emtpy". That means that it has
+	 * zero or just one ( == "begin") segment.
+	 */
+	bool isEmpty() const
+		{ return count() <= 1; }
+
+	/**
 	 * Applies an affine transformation matrix to all segments.
 	 */
 	virtual void transform( const QWMatrix& m );

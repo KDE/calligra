@@ -343,7 +343,7 @@ VPath::arcTo(
 void
 VPath::close()
 {
-	// In the case the list is empty (which should actually never happen),
+	// In the case the list is absolutely empty (which should actually never happen),
 	// append a "begin" first, to avoid a crash:
 	if( count() == 0 )
 		append( new VSegment() );
@@ -431,8 +431,8 @@ VPath::counterClockwise() const
 void
 VPath::revert()
 {
-	// Catch case where the list is (nearly) empty (which should actually never happen):
-	if( count() <= 1 )
+	// Catch case where the list is "empty".
+	if( isEmpty() )
 		return;
 
 	VPath list( parent() );
@@ -497,6 +497,10 @@ VPath::transform( const QWMatrix& m )
 void
 VPath::save( QDomElement& element ) const
 {
+	// Don't save if the list is "empty".
+	if( isEmpty() )
+		return;
+
 	QDomElement me = element.ownerDocument().createElement( "PATH" );
 	element.appendChild( me );
 
