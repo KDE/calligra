@@ -1636,7 +1636,7 @@ void KWTextFrameSet::formatMore()
                             m_doc->updateAllFrames();
                             m_doc->invalidate();
                             if(theFrame->isSelected())
-                                 theFrame->updateResizeHandles();
+                              theFrame->updateResizeHandles();
                             // Can't call this directly, we might be in a paint event already
                             //m_doc->repaintAllViews();
                             QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );
@@ -1651,6 +1651,8 @@ void KWTextFrameSet::formatMore()
                         kdDebug(32002) << "KWTextFrameSet::formatMore setting bottom to " << newPosition << endl;
 #endif
                         theFrame->setBottom(newPosition);
+                        if(theFrame->isSelected())
+                            theFrame->updateResizeHandles();
                         if(theFrame->getFrameSet()->frameSetInfo() != KWFrameSet::FI_BODY)
                         {
                             m_doc->recalcFrames();
