@@ -535,19 +535,27 @@ don't put a </?xml...> at the end of the file!).
           0 = no underline
           1 or single = single underline
           double = double-underline.
+        styleline type of underline 
+                : solid, dash, dot, dashdot, dashdotdot
+        underlinecolor : color of underline line.
+
 -->
 <!ELEMENT UNDERLINE
     EMPTY>
 <!ATTLIST UNDERLINE
-    value CDATA #REQUIRED>
+    value CDATA #REQUIRED
+    styleline CDATA #REQUIRED
+    underlinecolor CDATA #REQUIRED>
 
 <!-- STRIKEOUT
         Value is either 0 or 1 with 1=true and 0=false
+        styleline style of strikeout line solid, dash, dot, dashdot, dashdotdot
 -->
 <!ELEMENT STRIKEOUT
     EMPTY>
 <!ATTLIST STRIKEOUT
-    value CDATA #REQUIRED>
+    value CDATA #REQUIRED
+    styleline CDATA #REQUIRED>
 
 <!-- VERTALIGN
             Super/sub script.

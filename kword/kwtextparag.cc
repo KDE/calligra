@@ -269,18 +269,14 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         QString strLineType=lineTypeToString( curFormat->lineType() );
         elem.setAttribute( "styleline", strLineType );
         if ( curFormat->textUnderlineColor().isValid() )
-        {
-            elem.setAttribute( "red", curFormat->textUnderlineColor().red() );
-            elem.setAttribute( "green", curFormat->textUnderlineColor().green() );
-            elem.setAttribute( "blue", curFormat->textUnderlineColor().blue() );
-        }
+            elem.setAttribute( "underlinecolor", curFormat->textUnderlineColor().name() );
     }
     if( !refFormat || curFormat->font().strikeOut() != refFormat->font().strikeOut() || curFormat->strikeOutType()!= refFormat->strikeOutType())
     {
         elem = doc.createElement( "STRIKEOUT" );
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->font().strikeOut()) );
-        QString strLineType=lineTypeToString( curFormat->lineType() );
+        QString strLineType=lineTypeToString( curFormat->strikeOutType() );
         elem.setAttribute( "styleline", strLineType );
     }
     // ######## Not needed in 3.0?
@@ -475,12 +471,9 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
             QString strLineType = elem.attribute("styleline");
             format.setLineType( stringToLineType( strLineType ));
         }
-        if ( elem.hasAttribute("red") && elem.hasAttribute("green") && elem.hasAttribute("blue"))
+        if ( elem.hasAttribute("underlinecolor"))
         {
-
-            QColor col( elem.attribute("red").toInt(),
-                        elem.attribute("green").toInt(),
-                        elem.attribute("blue").toInt() );
+            QColor col( QColor(elem.attribute("underlinecolor")));
             format.setTextUnderlineColor( col );
         }
     }
