@@ -543,3 +543,5 @@ Reggie, 21-22.11.1999:
 - Fixed drawiing frame + background of rotated cliparts
 - Fix in resizing embedded parts
 - Fix in setting cursor in page
+- Replacing or deleting selected text in the txtobj works now correctly
+  (cursor position is updated correctly)

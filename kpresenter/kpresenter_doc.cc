@@ -3026,11 +3026,8 @@ void KPresenterDoc::setRasters( unsigned int rx, unsigned int ry, bool _replace 
 /*=================== repaint all views =========================*/
 void KPresenterDoc::repaint( bool erase )
 {
-    qDebug("Repainting");
     View* view = firstView();
-    for( ; view; view = nextView() )
-    {
-	qDebug("-Repainting");
+    for( ; view; view = nextView() ) {
 	// I am doing a cast to KPresenterView here, since some austrian hacker :-)
 	// decided to overload the non virtual repaint method!
 	((KPresenterView*)view)->repaint( erase );
@@ -3043,8 +3040,7 @@ void KPresenterDoc::setUnit( KoUnit _unit, QString __unit )
     _pageLayout.unit = _unit;
 
     View* view = firstView();
-    for( ; view; view = nextView() )
-    {
+    for( ; view; view = nextView() ) {
 	((KPresenterView*)view)->getHRuler()->setUnit( __unit );
 	((KPresenterView*)view)->getVRuler()->setUnit( __unit );
     }
@@ -3056,8 +3052,7 @@ void KPresenterDoc::repaint( QRect rect )
     QRect r;
 	
     View* view = firstView();
-    for( ; view; view = nextView() )
-    {
+    for( ; view; view = nextView() ) {
 	r = rect;
 	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)view)->getDiffX(),
 			       r.y() - ((KPresenterView*)view)->getDiffY() ) );

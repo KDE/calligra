@@ -4046,8 +4046,29 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 	if ( drawSelection ) {
 	    if ( e->key() == Key_Return || e->key() == Key_Enter || e->key() == Key_Delete
 		 || e->key() == Key_Backspace || e->ascii() && e->ascii() > 31 ) {
+		int posAbs = QMIN( startCursor.positionAbs(), stopCursor.positionAbs() );
+		int parag = QMIN( startCursor.positionParagraph(), stopCursor.positionParagraph() );
+		int line = 0;
+		if ( startCursor.positionParagraph() < stopCursor.positionParagraph() )
+		    line = startCursor.positionLine();
+		else
+		    line = stopCursor.positionLine();
 		cutRegion();
 		_modified = true;
+		txtCursor->setPositionAbs( posAbs );
+		txtCursor->calcPos();
+		if ( txtCursor->positionLine() != line ||
+		    txtCursor->positionParagraph() != parag ) {
+		    int i = 0;
+		    while ( txtCursor->positionLine() > line || txtCursor->positionParagraph() > parag ) {
+			i++;
+			txtCursor->charBackward();
+			if ( i > 10 )
+			    break;
+		    }
+		    insertChar( QChar( ' ' ) );
+		    repaint( FALSE );
+		}
 		doDelete = false;
 	    }
 	    if ( e->key() != Key_Shift && e->key() != Key_Control && e->key() != Key_Alt &&
