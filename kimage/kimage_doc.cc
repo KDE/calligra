@@ -140,16 +140,16 @@ QString KImageDocument::configFile() const
     return readConfigFile( locate("data", "kimage/kimage.rc", KImageFactory::global()) );
 }
 
-bool KImageDocument::loadFromURL( const QString& _url )
+bool KImageDocument::loadFromURL( const KURL& _url )
 {
   cout << "KImageDocument::loadFromURL" << endl;
 
   // FIXME: crashes because of relative filenames
-  if( KImageIO::isSupported( KImageIO::mimeType( _url ) ) )
+  if( KImageIO::isSupported( KImageIO::mimeType( _url.url() ) ) )
   {
     initDoc();
 
-    if( !m_image.load( _url ) )
+    if( !m_image.load( _url.url() ) )
       return false;
 
     setModified( true );
@@ -342,7 +342,7 @@ bool KImageDocument::completeSaving( KoStore* _store )
   QString file = "image.bmp";
 
   if( !isStoredExtern() )
-    file = url() + "/" + file;
+    file = url().url() + "/" + file;
 
   if ( _store->open( file, "image/bmp" ) )
   {
@@ -439,7 +439,7 @@ bool KImageDocument::completeLoading( KoStore* _store )
   QString file = "image.bmp";
 
   if( !isStoredExtern() )
-    file = url() + "/" + file;
+    file = url().url() + "/" + file;
 
  if( _store->open( file, "" ) )
   {

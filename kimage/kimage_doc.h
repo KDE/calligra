@@ -39,7 +39,7 @@ public:
   KImageDocument( KoDocument* parent = 0, const char* name = 0 );
   ~KImageDocument();
 
-  virtual bool loadFromURL( const QString& );
+  virtual bool loadFromURL( const KURL& );
   virtual bool loadXML( const QDomDocument& doc, KoStore* store );
   virtual bool load( istream& in, KoStore* _store );
 
