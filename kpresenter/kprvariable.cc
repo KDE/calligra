@@ -40,8 +40,7 @@ KoVariable* KPrVariableCollection::loadOasisField( KoTextDocument* textdoc, cons
     const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
     if ( isTextNS )
     {
-        if (localName == "table-count"  ||
-                  localName == "object-count"  ||
+        if ( localName == "object-count"  ||
                   localName == "picture-count"  ||
                   localName == "paragraph-count"  ||
                   localName == "word-count"  ||
