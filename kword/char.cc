@@ -51,7 +51,6 @@ KWCharAnchor::KWCharAnchor() :
 KWCharAnchor::KWCharAnchor(const KWCharAnchor &original) :
     KWCharAttribute()
 {
-kdDebug() << "KWCharAnchor::KWCharAnchor(orig)" << endl;
     classId = ID_KWCharAnchor;
     anchored = original.anchored;
     origin = original.origin;
@@ -364,7 +363,6 @@ KWChar* KWString::split( unsigned int _pos )
         _data[ i - _pos ].c = _data_[ i ].c;
         _data[ i - _pos ].attrib = _data_[ i ].attrib;
     }
-
     __data = copy( _data, _len_ - _pos );
     resize( _pos );
     cache.truncate( _pos );
@@ -1059,8 +1057,6 @@ void freeChar( KWChar& _char, KWordDocument *_doc, bool allowRemoveFn )
             delete _char.attrib;
         } break;
         case ID_KWCharAnchor: {
-            // huh? (Werner)
-            //KWGroupManager *gm = (KWGroupManager *)_char.attrib;
             delete _char.attrib;
         } break;
         default: ; //assert( 0 );

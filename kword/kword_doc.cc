@@ -2337,8 +2337,6 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
                 int y = _fc.getPTY();
                 KWCharAnchor *a = ( KWCharAnchor* )text[ _fc.getTextPos() ].attrib;
 
-                // We might have moved. Signal this fact to the anchor.
-//kdDebug(32001) << "new x=" << x <<", new y="<<y<<endl;
                 a->setOrigin( QPoint( x, y ) );
 
                 // An anchor needs to be a zero-width object. We draw it as a
@@ -2557,6 +2555,10 @@ void KWordDocument::drawMarker( KWFormatContext &_fc, QPainter *_painter, int xO
 }
 
 /*================================================================*/
+/* Update all views of this document, area can be cleared 
+   before redrawing with the clean flag. (false=implied)
+   All views EXCEPT the argument _view are updated
+ */
 void KWordDocument::updateAllViews( KWordView *_view, bool _clear )
 {
     KWordView *viewPtr;

@@ -237,7 +237,6 @@ KWFrame::KWFrame(KWFrameSet *fs, const QRect &_rect )
 /*================================================================*/
 KWFrame::~KWFrame()
 {
-//kdDebug () << "KWFrame::~KWFrame " << this << endl;
     if ( handles && handles.size() >= 8 ) {
         for ( unsigned int i = 0; i < 8; ++i ) {
             if ( handles[ i ] )
@@ -704,7 +703,6 @@ void KWTextFrameSet::assign( KWTextFrameSet *fs )
 /*================================================================*/
 KWTextFrameSet::~KWTextFrameSet()
 {
-//kdDebug () << "KWTextFrameSet::~KWTextFrameSet " << this << endl;
     KWParag *p = getLastParag();
 
     while ( p != parags )
@@ -808,7 +806,7 @@ void KWTextFrameSet::update()
     }
     // sanity check. Keep this as long as things go wrong with frames.. TZ
     if(amount != frames.count())  {
-        kdDebug() << "ERROR: Found a problem with a frameset. One or more frames have been removed!" << endl;
+        kdDebug() << "ERROR: Found a problem with a frameset. " << amount - frames.count() << " frames have been removed!" << endl;
         kdDebug() << "       frame size: " << tmpFrame->x() << ","<< tmpFrame->y() << "," << tmpFrame->width() << "," << tmpFrame->height() << endl;
         if(grpMgr)
             kdDebug() << "       cell: " << grpMgr->getCell(this)->row << "," << grpMgr->getCell(this)->col << endl;
@@ -925,6 +923,10 @@ void KWTextFrameSet::splitParag( KWParag *_parag, unsigned int _pos )
     }
 
     _new->appendText( _string, len );
+    for (unsigned int i = 0; i < len; i++)
+        if (_string[i].attrib) delete _string[i].attrib;
+
+    free (_string);
 
     updateCounters();
 }
@@ -1260,7 +1262,6 @@ KWTextFrameSet *KWTextFrameSet::getCopy() {
 
 /*================================================================*/
 KWPictureFrameSet::~KWPictureFrameSet() {
-//kdDebug () << "KWPictureFrameSet::~KWPictureFrameSet " << this << endl;
     if(image) {
         image->decRef();
     }
@@ -2083,12 +2084,6 @@ KWGroupManager::KWGroupManager( const KWGroupManager &original ) :
             cell->cols = lCells.at(i)->cols;
             cell->frameSet= dynamic_cast<KWTextFrameSet*>(lCells.at(i)->frameSet)->getCopy();
             cell->frameSet->setGroupManager(this);
-            if ( anchored ) {
-                KWFrame *topLeftFrame = cell->frameSet->getFrame( 0 );
-
-                if (topLeftFrame)
-                    topLeftFrame->moveBy( origin.x(), origin.y() );
-            }
             cells.append( cell );
         }
     }
@@ -2099,7 +2094,6 @@ KWGroupManager::KWGroupManager( const KWGroupManager &original ) :
 
 /*================================================================*/
 KWGroupManager::~KWGroupManager() {
-//kdDebug () << "KWGroupManager::~KWGroupManager " << this << endl;
     if(doc) doc->delGroupManager(this, false);
     doc=0L;
 }
@@ -2562,9 +2556,9 @@ bool KWGroupManager::hasSelectedFrame()
 /*================================================================*/
 void KWGroupManager::moveBy( int dx, int dy )
 {
-    //kdDebug(32001) << "KWGroupManager::moveBy(" << dx << ", " << dy << ");" << endl;
     // Ignore the x-offset.
     dx = 0;
+    if(dy==0) return;
     for ( unsigned int i = 0; i < cells.count(); i++ )
         cells.at( i )->frameSet->getFrame( 0 )->moveBy( dx, dy );
 }
