@@ -298,9 +298,12 @@ void KSpreadCSVDialog::fillTable()
 
   row = column = 1;
   if (m_mode != Column)
+  {
+    m_mode = Column;
     m_data = QString(m_fileArray);
+    m_fileArray.resize(0);
+  }
 
-  m_fileArray.resize(0);
   QTextStream inputStream(m_data, IO_ReadOnly);
   inputStream.setEncoding(QTextStream::Locale);
 
