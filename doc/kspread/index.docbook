@@ -1162,7 +1162,7 @@ Link</guilabel> dialog when it is clicked. This could be, for example,
 <listitem><para>Clicking on a cell containing a <guilabel>Mail</guilabel> 
 link will open your email composer using the address entered in the 
 <guilabel>Email:</guilabel> text box as the To: address. For example 
-<userinput>anon@somewhere.com</userinput>.
+<userinput>anon@example.com</userinput>.
 </para></listitem>
 
 <listitem><para>A <guilabel>File</guilabel> link cell holds the path to 
