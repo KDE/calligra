@@ -1258,6 +1258,18 @@ bool KPTTask::isStartNode() const {
     return true;
 }
 
+const KPTDateTime &KPTTask::workStartTime() const {
+    if (m_requests)
+        return m_workStartTime;
+    return startTime();
+}
+
+const KPTDateTime &KPTTask::workEndTime() const {
+    if (m_requests)
+        return m_workEndTime;
+    return endTime();
+}
+
 KPTDateTime KPTTask::workStartAfter(const KPTDateTime &dt) {
     if (m_requests) {
         KPTDateTime t = m_requests->availableAfter(dt);

@@ -182,27 +182,43 @@ public:
     bool isEndNode() const;
     bool isStartNode() const;
     
-    /*
+    /**
+     * Return the time when work can actually start on this task.
+     * This will be the time assigned resources can start work in accordance
+     * with their calendar, or if no resources have been assigned,
+     * the scheduled starttime is used.
+     */
+    virtual const KPTDateTime &workStartTime() const;
+    
+    /**
+     * Return the time when work can actually finish on this task.
+     * This will be the time assigned resources can end work in accordance
+     * with their calendar, or if no resources have been assigned,
+     * the scheduled endtime is used.
+     */
+    virtual const KPTDateTime &workEndTime() const;
+    
+    /**
      * Return the the duration that an activity's start can be delayed 
      * without affecting the project completion date. 
      * An activity with positive float is not on the critical path.
      */
     KPTDuration positiveFloat();
-    /*
+    /**
      * Return the duration by which the duration of an activity or path 
      * has to be reduced in order to fullfill a timing constraint.
      */
     KPTDuration negativeFloat() { return KPTDuration(); }
-    /*
+    /**
      * Return the duration by which an activity can be delayed or extended 
      * without affecting the start of any succeeding activity.
      */
     KPTDuration freeFloat() { return KPTDuration(); }
-    /*
+    /**
      * Return the duration from Early Start to Late Start.
      */
     KPTDuration startFloat() { return KPTDuration(); }
-    /*
+    /**
      * Return the duration the task has at its finish  before a successor task starts.
      * This is the difference between the start time of the successor and
      * the finish time of this task.

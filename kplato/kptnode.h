@@ -392,9 +392,9 @@ public:
     KPTDateTime &earliestStartForward() { return m_earliestStartForward; }
     KPTDateTime &latestFinishBackward() { return m_latestFinishBackward; }
     
-    KPTDateTime &workStartTime() { return m_workStartTime; }
+    virtual const KPTDateTime &workStartTime() const { return m_workStartTime; }
     void setWorkStartTime(const KPTDateTime &dt) { m_workStartTime = dt; }
-    KPTDateTime &workEndTime() { return m_workEndTime; }
+    virtual const KPTDateTime &workEndTime() const { return m_workEndTime; }
     void setWorkEndTime(const KPTDateTime &dt) { m_workEndTime = dt; }
 
 protected:
