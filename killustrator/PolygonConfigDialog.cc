@@ -62,8 +62,8 @@ void PolygonConfigDialog::createWidget(QWidget* parent) {
     spinbox = new QSpinBox(3, 100, 1, parent);
     layout->addWidget(spinbox, 1, 1);
 
-    label = new QLabel(i18n("Sharpness:"), parent);
-    layout->addWidget(label, 2, 0);
+    sharpnessLabel = new QLabel(i18n("Sharpness:"), parent);
+    layout->addWidget(sharpnessLabel, 2, 0);
 
     slider = new QSlider(0, 100, 50, 0, QSlider::Horizontal, parent);
     slider->setLineStep(10);
@@ -110,6 +110,7 @@ void PolygonConfigDialog::setConcavePolygon (bool flag) {
     concaveButton->setChecked (flag);
     convexButton->setChecked (!flag);
     slider->setEnabled (flag);
+    sharpnessLabel->setEnabled(flag);
     if(flag)
         preview->slotConcavePolygon();
     else
@@ -118,10 +119,12 @@ void PolygonConfigDialog::setConcavePolygon (bool flag) {
 
 void PolygonConfigDialog::slotConcavePolygon () {
     slider->setEnabled (true);
+    sharpnessLabel->setEnabled(true);
 }
 
 void PolygonConfigDialog::slotConvexPolygon () {
     slider->setEnabled (false);
+    sharpnessLabel->setEnabled(false);
 }
 
 void PolygonConfigDialog::setupTool (PolygonTool* tool) {

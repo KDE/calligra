@@ -32,6 +32,7 @@ class QSlider;
 class QRadioButton;
 class PolygonTool;
 class PolygonPreview;
+class QLabel;
 
 class PolygonConfigDialog : public KDialogBase {
 
@@ -60,6 +61,7 @@ private slots:
 private:
     QSpinBox *spinbox;
     QSlider *slider;
+    QLabel *sharpnessLabel;
     QRadioButton *concaveButton, *convexButton;
     PolygonPreview *preview;
 };
