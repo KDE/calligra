@@ -1,8 +1,20 @@
+/*
+ *  koffice/filters/excel97/xmltree.h
+ *
+ *  Copyright (C) 1999 Percy Leonhardt
+ *
+ */
+
 #ifndef XMLTREE_H
 #define XMLTREE_H
 
 #include <qdom.h>
+#include <qarray.h>
+#include <qqueue.h>
 #include <qobject.h>
+
+const int BIFF_5_7 = 0x0500;
+const int BIFF_8 = 0x0600;
 
 class XMLTree : public QObject 
 {
@@ -14,6 +26,8 @@ public:
   ~XMLTree();
 
   const QString part();
+  const QDomElement getFont(Q_UINT16 xf);
+  const QDomElement getFormat(Q_UINT16 xf);
 
   bool _1904(Q_UINT16 size, QDataStream& body);
   bool _addin(Q_UINT16 size, QDataStream& body);
@@ -187,9 +201,47 @@ public:
   bool _xl5modify(Q_UINT16 size, QDataStream& body);
 
 private:
+  struct format_rec {
+    Q_UINT8 cch;
+    char* rgch;
+  };
+
+  struct font_rec {
+    Q_UINT16 dyHeight, 
+      grbit, 
+      icv, 
+      bls, 
+      sss;
+    Q_UINT8 uls, 
+      bFamily, 
+      bCharSet,
+      reserved,
+      cch;
+    char* rgch;
+  };
+
+  struct xf_rec {
+    Q_UINT16 ifnt,
+      ifmt,
+      info1,
+      info2,
+      info3,
+      info4,
+      info5,
+      info6,
+      info7;
+  };
+  
+  Q_UINT16 biff;
   QDomDocument *root;
-  QDomElement doc, paper, map, table[3];
-  int current;
+  QArray<format_rec*> formats;
+  QArray<font_rec*> fonts;
+  QArray<xf_rec*> xfs;
+  QQueue<format_rec> formats_q;
+  QQueue<font_rec> fonts_q;
+  QQueue<xf_rec> xfs_q;
+  QQueue<QDomElement> tables;
+  QDomElement doc, paper, map, *table;
 };
 
 #endif // XMLTREE_H

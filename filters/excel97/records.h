@@ -1,3 +1,10 @@
+/*
+ *  koffice/filters/excel97/records.h
+ *
+ *  Copyright (C) 1999 Percy Leonhardt
+ *
+ */
+
 #ifndef RECORDS_H
 #define RECORDS_H
 
@@ -24,8 +31,8 @@ record biff[] = {
   { 0x000d, &XMLTree::_calcmode },
   { 0x01b1, &XMLTree::_cf },
   { 0x01b0, &XMLTree::_condfmt },
-  { 0x0042, &XMLTree::_codename }, // 42?
-  { 0X0042, &XMLTree::_codepage }, // 42?
+  { 0x0042, &XMLTree::_codename }, 
+  { 0X0042, &XMLTree::_codepage }, 
   { 0x007d, &XMLTree::_colinfo },
   { 0x003c, &XMLTree::_cont },
   { 0x00a9, &XMLTree::_coordlist },
@@ -108,7 +115,7 @@ record biff[] = {
   { 0x000f, &XMLTree::_refmode },
   { 0x01b7, &XMLTree::_refreshall },
   { 0x0027, &XMLTree::_rightmargin },
-  { 0x007e, &XMLTree::_rk },
+  { 0x027e, &XMLTree::_rk },
   { 0x0208, &XMLTree::_row },
   { 0x00d6, &XMLTree::_rstring },
   { 0x005f, &XMLTree::_saverecalc },

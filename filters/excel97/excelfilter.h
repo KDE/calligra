@@ -1,3 +1,10 @@
+/*
+ *  koffice/filters/excel97/excelfilter.h
+ *
+ *  Copyright (C) 1999 Percy Leonhardt
+ *
+ */
+
 #ifndef EXCELFILTER_H
 #define EXCELFILTER_H
 
