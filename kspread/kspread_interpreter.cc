@@ -923,6 +923,37 @@ static bool kspreadfunc_right( KSContext& context )
     return true;
 }
 
+static bool kspreadfunc_upper( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkArgumentsCount( context, 1, "upper", true ) )
+	return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+	return false;
+    
+    QString tmp = args[0]->stringValue().upper();
+    context.setValue( new KSValue( tmp ) ); 	
+    return true;
+}
+
+static bool kspreadfunc_lower( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkArgumentsCount( context, 1, "lower", true ) )
+	return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+	return false;
+    
+    QString tmp = args[0]->stringValue().lower();
+    context.setValue( new KSValue( tmp ) ); 	
+    return true;
+}
+
+
 static bool kspreadfunc_mid( KSContext& context )
 {
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -1694,6 +1725,9 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "PERMUT", new KSValue( new KSBuiltinFunction( module,"PERMUT",kspreadfunc_arrang) ) );
   module->addObject( "BINO", new KSValue( new KSBuiltinFunction( module,"BINO",kspreadfunc_bino) ) );
   module->addObject( "INVBINO", new KSValue( new KSBuiltinFunction( module,"INVBINO",kspreadfunc_bino_inv) ) );
+  module->addObject( "lower", new KSValue( new KSBuiltinFunction( module,"lower",kspreadfunc_lower) ) );
+  module->addObject( "upper", new KSValue( new KSBuiltinFunction( module,"upper",kspreadfunc_upper) ) );
+
   return module;
 }
 

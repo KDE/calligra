@@ -314,3 +314,14 @@ Reduce memory to store condition.
 -----------------------------------------------------
 -Add new functions : NAND,NOR
 -Now you can "Underline"
+
+2000-02-22 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-bug fix
+
+2000-02-24 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add new functions upper and lower
+-Now "hide table" and "hide grid" are saving
+-Improved "kspread_dlg_show" 
+-Add shortcut 

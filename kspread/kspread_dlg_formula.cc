@@ -165,6 +165,8 @@ list_text+="len";
 list_text+="EXACT";
 list_text+="STXT";
 list_text+="REPT";
+list_text+="lower";
+list_text+="upper";
 
 QStringList list_date_time;
 list_date_time+="date";

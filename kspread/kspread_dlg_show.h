@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999, 2000 Montel Laurent <montell@club-internet.fr>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -38,7 +38,7 @@ public:
 public slots:
   void slotOk();
   void slotClose();
-
+  void slotDoubleClicked(QListBoxItem *);
 protected:
   KSpreadView* m_pView;
   

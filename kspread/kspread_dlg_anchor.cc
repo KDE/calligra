@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999, 2000 Montel Laurent <montell@club-internet.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,7 +29,7 @@
 #include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
-
+#include <kbuttonbox.h>
 
 
 KSpreadanchor::KSpreadanchor( KSpreadView* parent, const char* name,const QPoint &_marker)
@@ -41,38 +41,40 @@ KSpreadanchor::KSpreadanchor( KSpreadView* parent, const char* name,const QPoint
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
-  QGridLayout *lay2 = new QGridLayout( lay1,6,2 );
+  QVBoxLayout *lay2 = new QVBoxLayout( lay1); 
   lay2->setSpacing( 5 );
 
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( this);
 
-
-  lay2->addWidget(tmpQLabel,0,0);
+  lay2->addWidget(tmpQLabel);
   tmpQLabel->setText(i18n("Text"));
 
   text = new QLineEdit( this );
-  lay2->addWidget(text,1,0);
-
-
-  m_pOk = new QPushButton( i18n("Ok"), this );
-
-  lay2->addWidget(m_pOk,4,1);
-  m_pClose = new QPushButton( i18n("Close"), this );
-  lay2->addWidget(m_pClose,5,1);
+  lay2->addWidget(text);
 
   tmpQLabel = new QLabel( this);
-  lay2->addWidget(tmpQLabel,2,0);
+  lay2->addWidget(tmpQLabel);
   tmpQLabel->setText(i18n("Cell"));
   l_cell = new QLineEdit( this );
-  lay2->addWidget(l_cell,3,0);
+
+  lay2->addWidget(l_cell);
   l_cell->setText( "A1" );
 
   bold=new QCheckBox(i18n("Bold"),this);
-  lay2->addWidget(bold,4,0);
+
+  lay2->addWidget(bold);
   italic=new QCheckBox(i18n("Italic"),this);
-  lay2->addWidget(italic,5,0);
+
+  lay2->addWidget(italic);
   text->setFocus();
+  KButtonBox *bb = new KButtonBox( this );
+  bb->addStretch();
+  m_pOk = bb->addButton( i18n("OK") );
+  m_pOk->setDefault( TRUE );
+  m_pClose = bb->addButton( i18n( "Close" ) );
+  bb->layout();
+  lay2->addWidget( bb);
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
 

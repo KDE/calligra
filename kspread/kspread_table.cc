@@ -3749,7 +3749,8 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
 {
   QDomElement table = doc.createElement( "table" );
   table.setAttribute( "name", m_strName );
-
+  table.setAttribute( "grid", (int)showGrid);
+  table.setAttribute( "hide", (int)m_tableHide);
   // Save all cells.
   QIntDictIterator<KSpreadCell> it( m_dctCells );
   for ( ; it.current(); ++it )
@@ -3808,9 +3809,22 @@ bool KSpreadTable::isLoading()
 
 bool KSpreadTable::loadXML( const QDomElement& table )
 {
+  bool ok=false;
   m_strName = table.attribute( "name" );
   if ( m_strName.isEmpty() )
     return false;
+  if(table.hasAttribute("grid"))
+  	{
+  	showGrid = (int)table.attribute("grid").toInt( &ok );
+	 if ( !ok )
+	        return false;
+  	}
+  if(table.hasAttribute("hide"))
+  	{
+  	m_tableHide = (int)table.attribute("hide").toInt( &ok );
+	 if ( !ok )
+	        return false;
+  	}
 
   QDomNode n = table.firstChild();
   while( !n.isNull() )

@@ -32,7 +32,7 @@ void KSpreadScripts::updateList()
     list->clear();
     nameList.clear();
 
-    QString path( locate( "data", "/kspread/scripts/" ) );
+    QString path( locate( "data", "kspread/scripts/" ) );
 
     QDir d( path );
     d.setFilter( QDir::Files );

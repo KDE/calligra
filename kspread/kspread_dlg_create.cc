@@ -174,6 +174,25 @@ void KSpreadcreate::init()
   	edit[1]=type_double;
 
    }
+   else if( m_funcName=="lower" || m_funcName=="upper")
+   {
+        nb_param=1;
+        tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+        tmp_label->setText(i18n("Text"));
+        f_param = new QLineEdit( this );
+  	lay1->addWidget(f_param);
+
+  	exp_funct=m_funcName+"("+"String"+")";
+
+  	tmp_label = new QLabel( this);
+  	lay1->addWidget(tmp_label);
+  	tmp_label->setText(exp_funct);
+  	edit[0]=type_string;
+
+   }
+
+
    else if ( m_funcName=="sqrt" || m_funcName=="ln" || m_funcName=="log" || m_funcName=="exp" ||
 	     m_funcName=="fabs" || m_funcName=="floor" || m_funcName=="ceil" || m_funcName=="ENT" )
    {

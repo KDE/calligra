@@ -189,11 +189,11 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     // Handler for moving and resizing embedded parts
     (void)new ContainerHandler( this, m_pCanvas );
 
-    m_bold = new KToggleAction( i18n("Bold"), KSBarIcon("bold"), 0, actionCollection(), "bold");
+    m_bold = new KToggleAction( i18n("Bold"), KSBarIcon("bold"), CTRL + Key_B, actionCollection(), "bold");
     connect( m_bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
-    m_italic = new KToggleAction( i18n("Italic"), KSBarIcon("italic"), 0, actionCollection(), "italic");
+    m_italic = new KToggleAction( i18n("Italic"), KSBarIcon("italic"), CTRL + Key_I, actionCollection(), "italic");
     connect( m_italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
-    m_underline = new KToggleAction( i18n("Underline"), KSBarIcon("underline"), 0, actionCollection(), "underline");
+    m_underline = new KToggleAction( i18n("Underline"), KSBarIcon("underline"), CTRL + Key_U, actionCollection(), "underline");
     connect( m_underline, SIGNAL( toggled( bool ) ), this, SLOT( underline( bool ) ) );
 
     m_percent = new KToggleAction( i18n("Percent format"), KSBarIcon("percent"), 0, actionCollection(), "percent");
