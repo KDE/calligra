@@ -86,6 +86,13 @@ public slots:
 	void showSimpleConn();
 	void showAdvancedConn();
 	virtual void setFocus();
+	
+	/*! Hides helpers on the server based connection page
+	  (sometimes it's convenient not to have these):
+	- "Select existing database server's connection..." (label at the top)
+	- "Click "Back" button" (label at the bottom)
+	- "Back" button itself */
+	void hideHelpers();
 
 protected slots:
 	void slotConnectionItemExecuted(QListViewItem *item);

@@ -104,9 +104,6 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( const KexiDBConnectionSet& conn_
 		this,SLOT(slotConnectionItemExecuted(QListViewItem*)));
 }
 
-/*!  
- *  Destroys the object and frees any allocated resources
- */
 KexiConnSelectorWidget::~KexiConnSelectorWidget()
 {
 	delete d;
@@ -196,6 +193,13 @@ void KexiConnSelectorWidget::setFocus()
 		m_fileDlg->setFocus(); //m_fileDlg->locationWidget()->setFocus();
 	else
 		m_remote->list->setFocus();
+}
+
+void KexiConnSelectorWidget::hideHelpers()
+{
+	m_remote->label->hide();
+	m_remote->label_back->hide();
+	m_remote->btn_back->hide();
 }
 
 #include "KexiConnSelector.moc"
