@@ -106,6 +106,10 @@ DCOPObject* KPrPage::dcopObject()
     return dcop;
 }
 
+bool KPrPage::saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj )
+{
+    return true;
+}
 
 bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj )
 {

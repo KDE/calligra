@@ -1125,6 +1125,7 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     stylesWriter.startElement( "style:master-page" );
     stylesWriter.addAttribute( "style:name", "Standard" );
     stylesWriter.addAttribute( "style:page-layout-name", pageLayoutName );
+    //todo add code to save sticky object
     stylesWriter.endElement();
     stylesWriter.endElement(); // office:master-style
 

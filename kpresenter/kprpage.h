@@ -300,6 +300,7 @@ public:
 
     bool saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj );
     bool saveOasisNote( KoXmlWriter &xmlWriter );
+    bool saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj );
 
 
 protected:

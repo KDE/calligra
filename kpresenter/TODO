@@ -62,7 +62,6 @@ Done:
 Todo:
 -> save/load part element (necessary to modify koDocumentChild)
 -> save/load cubic/quadric/freehand object (define as svg object)
--> save/load sticky object
 
 Bugs:
 -> load text layout format (bug into kpresenter)
@@ -71,6 +70,7 @@ Bugs:
 
 In Progress:
 -> save/load animation group
+-> save/load sticky object
 
 Reginald Stadlbauer <reggie@kde.org>
 Laurent Montel <montel@kde.org>
