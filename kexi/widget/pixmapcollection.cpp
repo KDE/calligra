@@ -323,7 +323,8 @@ PixmapCollectionEditor::removeItem()
 void
 PixmapCollectionEditor::renameItem()
 {
-	m_iconView->currentItem()->rename();
+        if(m_iconView->currentItem())
+                m_iconView->currentItem()->rename();
 }
 
 void
@@ -397,6 +398,8 @@ PixmapCollectionChooser::PixmapCollectionChooser(PixmapCollection *collection, c
 QPixmap
 PixmapCollectionChooser::pixmap()
 {
+        if(! m_iconView->currentItem())
+                return QPixmap();
 	QString name = m_iconView->currentItem()->text();
 	return m_collection->getPixmap(name);
 }
@@ -404,7 +407,7 @@ PixmapCollectionChooser::pixmap()
 QString
 PixmapCollectionChooser::pixmapName()
 {
-	return m_iconView->currentItem()->text();
+	return m_iconView->currentItem() ? m_iconView->currentItem()->text() : QString("");
 }
 
 QPixmap
