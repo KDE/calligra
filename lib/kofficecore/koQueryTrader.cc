@@ -96,9 +96,12 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
-  kdDebug(30003) << "KoDocumentEntry::query " << _constr << " got " << max << " offers " << endl;
+  if ( max > 1 )
+    kdWarning(30003) << "KoDocumentEntry::query " << _constr << " got " << max << " offers!" << endl;
   for( unsigned int i = 0; i < max; i++ )
   {
+    kdDebug(3003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
+                  << "   library=" << (*it)->library() << endl;
     // Parse the service
     KoDocumentEntry d( *it );
 
