@@ -7,6 +7,7 @@
 #include <qcombobox.h>
 #include <qtextstream.h>
 #include <qbuttongroup.h>
+#include <qradiobutton.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -35,6 +36,8 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString seper
             this, SLOT(delimiterClicked(int)));
     connect(m_dialog->m_delimiterEdit, SIGNAL(returnPressed()),
             this, SLOT(returnPressed()));
+    connect(m_dialog->m_delimiterEdit, SIGNAL(textChanged ( const QString & )),
+            this, SLOT(textChanged ( const QString & ) ));
     connect(m_dialog->m_comboLine, SIGNAL(activated(const QString&)),
             this, SLOT(lineSelected(const QString&)));
     connect(m_dialog->m_comboQuote, SIGNAL(activated(const QString&)),
@@ -262,6 +265,11 @@ void CSVDialog::returnPressed()
 
     m_delimiter = m_dialog->m_delimiterEdit->text();
     fillTable();
+}
+
+void CSVDialog::textChanged ( const QString & )
+{
+    m_dialog->m_radioOther->setChecked ( true );
 }
 
 void CSVDialog::formatClicked(int id)

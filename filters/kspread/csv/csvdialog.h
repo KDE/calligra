@@ -39,6 +39,7 @@ private slots:
     void lineSelected(const QString& line);
     void textquoteSelected(const QString& mark);
     void currentCellChanged(int, int col);
+    void textChanged ( const QString & );
 };
 
 #endif
