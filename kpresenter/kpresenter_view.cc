@@ -3939,19 +3939,32 @@ void KPresenterView::doAutomaticScreenPres()
 
 void KPresenterView::updateReadWrite( bool readwrite )
 {
-#ifdef __GNUC__
-#warning TODO
-#endif
+    // First disable or enable everything
+    QValueList<KAction*> actions = actionCollection()->actions();
+    // Also grab actions from the document
+    actions += m_pKPresenterDoc->actionCollection()->actions();
+    QValueList<KAction*>::ConstIterator aIt = actions.begin();
+    QValueList<KAction*>::ConstIterator aEnd = actions.end();
+    for (; aIt != aEnd; ++aIt )
+        (*aIt)->setEnabled( readwrite );
+
+
     if ( !readwrite )
     {
-        QValueList<KAction *> actions = actionCollection()->actions();
-        QValueList<KAction *>::ConstIterator aIt = actions.begin();
-        QValueList<KAction *>::ConstIterator aEnd = actions.end();
-        for (; aIt != aEnd; ++aIt )
-            (*aIt)->setEnabled( readwrite );
         refreshPageButton();
         actionViewZoom->setEnabled( true );
     }
+    else
+    {
+        refreshPageButton();
+        objectSelectedChanged();
+
+        refreshCustomMenu();
+
+        // Correctly enable or disable undo/redo actions again
+        m_pKPresenterDoc->commandHistory()->updateActions();
+    }
+
 }
 
 /*======================== setup popup menus ===================*/
@@ -4814,6 +4827,7 @@ void KPresenterView::extraSpelling()
 {
     if (m_spell.kspell) return; // Already in progress
     m_spell.macroCmdSpellCheck=0L;
+    m_pKPresenterDoc->setReadWrite(false); // prevent editing text
     m_spell.firstSpellPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     m_spell.currentSpellPage=m_spell.firstSpellPage;
 
@@ -4902,6 +4916,7 @@ void KPresenterView::spellCheckerReady()
     {
         // Done
         m_spell.kspell->cleanUp();
+        m_pKPresenterDoc->setReadWrite(true);
         delete m_spell.kspell;
         m_spell.kspell = 0;
         m_spell.firstSpellPage=-1;
@@ -5006,6 +5021,7 @@ void KPresenterView::spellCheckerDone( const QString & )
     }
     else
     {
+        m_pKPresenterDoc->setReadWrite(true);
         m_spell.textObject.clear();
         if(m_spell.macroCmdSpellCheck)
             m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
@@ -5042,6 +5058,8 @@ void KPresenterView::spellCheckerFinished()
         m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
 
     m_spell.macroCmdSpellCheck=0L;
+
+    m_pKPresenterDoc->setReadWrite(true);
 
     KPTextView *edit=m_canvas->currentTextObjectView();
     if (edit)

@@ -398,7 +398,7 @@ public:
     QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
     void addIgnoreWordAll( const QString & );
     void clearIgnoreWordAll( );
-
+    KCommandHistory * commandHistory() { return m_commandHistory; }
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
