@@ -433,11 +433,11 @@ QString KoFilterManager::prepareExport( const QString & file, const char *_nativ
 
     d->mime_type=mimeType;   // needed for export_ :)
 
-    QString constr = "Export == '";
+    QString constr = "'";
     constr += mimeType;
-    constr += "' and Import == '";
+    constr += "' in Export and '";
     constr += _native_format;
-    constr += "'";
+    constr += "' in Import";
 
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
     if ( vec.isEmpty() )
