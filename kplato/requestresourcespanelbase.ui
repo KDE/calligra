@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>726</width>
-            <height>458</height>
+            <width>751</width>
+            <height>504</height>
         </rect>
     </property>
     <property name="caption">
@@ -33,25 +33,29 @@
                 </property>
                 <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>layout11</cstring>
+                        <cstring>layout5</cstring>
                     </property>
                     <grid>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QComboBox" row="1" column="0">
-                            <item>
-                                <property name="text">
-                                    <string>Work based</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Fixed duration</string>
-                                </property>
-                            </item>
+                        <widget class="QLabel" row="2" column="1">
                             <property name="name">
-                                <cstring>effortType</cstring>
+                                <cstring>textLabel5</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;p align="right"&gt;Pessimistic:&lt;/p&gt;</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>pessimisticValue</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>textLabel4_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;p align="right"&gt;Expected effort:&lt;/p&gt;</string>
                             </property>
                         </widget>
                         <widget class="QSpinBox" row="2" column="2">
@@ -68,60 +72,30 @@
                                 <number>99</number>
                             </property>
                         </widget>
-                        <widget class="QSpinBox" row="0" column="1">
+                        <widget class="QComboBox" row="1" column="0">
+                            <item>
+                                <property name="text">
+                                    <string>Work based</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Fixed duration</string>
+                                </property>
+                            </item>
                             <property name="name">
-                                <cstring>numDays</cstring>
-                            </property>
-                            <property name="suffix">
-                                <string>day(s)</string>
-                            </property>
-                            <property name="maxValue">
-                                <number>6</number>
+                                <cstring>effortType</cstring>
                             </property>
                         </widget>
-                        <widget class="QSpinBox" row="0" column="0">
+                        <widget class="QLabel" row="1" column="1">
                             <property name="name">
-                                <cstring>numWeeks</cstring>
-                            </property>
-                            <property name="suffix">
-                                <string>week(s)</string>
-                            </property>
-                            <property name="maxValue">
-                                <number>9999</number>
-                            </property>
-                            <property name="lineStep">
-                                <number>1</number>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="2" column="1">
-                            <property name="name">
-                                <cstring>textLabel5</cstring>
+                                <cstring>textLabel4</cstring>
                             </property>
                             <property name="text">
-                                <string>&lt;p align="right"&gt;Pessimistic:&lt;/p&gt;</string>
+                                <string>&lt;p align="right"&gt;Optimistic:&lt;/p&gt;</string>
                             </property>
                             <property name="buddy" stdset="0">
-                                <cstring>pessimisticValue</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QSpinBox" row="1" column="2">
-                            <property name="name">
                                 <cstring>optimisticValue</cstring>
-                            </property>
-                            <property name="prefix">
-                                <string></string>
-                            </property>
-                            <property name="suffix">
-                                <string>%</string>
-                            </property>
-                            <property name="maxValue">
-                                <number>0</number>
-                            </property>
-                            <property name="minValue">
-                                <number>-99</number>
-                            </property>
-                            <property name="value">
-                                <number>-99</number>
                             </property>
                         </widget>
                         <widget class="QComboBox" row="2" column="0">
@@ -144,34 +118,24 @@
                                 <cstring>risk</cstring>
                             </property>
                         </widget>
-                        <widget class="QSpinBox" row="0" column="2">
+                        <widget class="QSpinBox" row="1" column="2">
                             <property name="name">
-                                <cstring>numHours</cstring>
+                                <cstring>optimisticValue</cstring>
+                            </property>
+                            <property name="prefix">
+                                <string></string>
                             </property>
                             <property name="suffix">
-                                <string>:</string>
+                                <string>%</string>
                             </property>
                             <property name="maxValue">
-                                <number>23</number>
+                                <number>0</number>
                             </property>
-                        </widget>
-                        <widget class="QSpinBox" row="0" column="3">
-                            <property name="name">
-                                <cstring>numMinutes</cstring>
+                            <property name="minValue">
+                                <number>-99</number>
                             </property>
-                            <property name="maxValue">
-                                <number>59</number>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="1">
-                            <property name="name">
-                                <cstring>textLabel4</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&lt;p align="right"&gt;Optimistic:&lt;/p&gt;</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>optimisticValue</cstring>
+                            <property name="value">
+                                <number>-99</number>
                             </property>
                         </widget>
                     </grid>
@@ -181,6 +145,12 @@
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox22</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>GroupBoxPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
             </property>
             <property name="title">
                 <string>Resources</string>
@@ -302,5 +272,18 @@
         </widget>
     </vbox>
 </widget>
+<includes>
+    <include location="local" impldecl="in implementation">kptdurationwidget.h</include>
+    <include location="local" impldecl="in implementation">requestresourcespanelbase.ui.h</include>
+</includes>
+<forwards>
+    <forward>class KPTDurationWidget;</forward>
+</forwards>
+<variables>
+    <variable access="public">KPTDurationWidget *effort;</variable>
+</variables>
+<functions>
+    <function>init()</function>
+</functions>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -21,6 +21,7 @@
 #include "kpttask.h"
 #include "kptproject.h"
 #include "kptresource.h"
+#include "kptdurationwidget.h"
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -168,12 +169,7 @@ KPTRequestResourcesPanel::KPTRequestResourcesPanel
         groupChanged(item);
     }
 
-    int weeks=0, days=0, hours=0, minutes=0;
-    task.effort()->expectedEffort(&weeks, &days, &hours, &minutes);
-    numMinutes->setValue(minutes);
-    numHours->setValue(hours);
-    numDays->setValue(days);
-    numWeeks->setValue(weeks);
+    effort->setValue(task.effort()->expected());
 
     //TODO: calc optimistic/pessimistic
     optimisticValue->setValue(task.effort()->optimisticRatio());
@@ -181,17 +177,12 @@ KPTRequestResourcesPanel::KPTRequestResourcesPanel
 
     effortType->setCurrentItem(task.effort()->type());
 
-    numDays->setFocus();
-
     connect(groupList, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(groupChanged(QListViewItem*)));
     connect(resourceTable, SIGNAL(valueChanged(int, int)), this, SLOT(resourceChanged(int, int)));
     connect(numUnits, SIGNAL(valueChanged(int)), this, SLOT(unitsChanged(int)));
 
 
-    connect(numMinutes, SIGNAL(valueChanged(const QString&)), this, SLOT(sendChanged()));
-    connect(numHours, SIGNAL(valueChanged(const QString&)), this, SLOT(sendChanged()));
-    connect(numDays, SIGNAL(valueChanged(const QString&)), this, SLOT(sendChanged()));
-    connect(numWeeks, SIGNAL(valueChanged(const QString&)), this, SLOT(sendChanged()));
+    connect(effort, SIGNAL(valueChanged()), this, SLOT(sendChanged()));
     connect(effortType, SIGNAL(activated(int)), this, SLOT(sendChanged()));
     connect(optimisticValue, SIGNAL(valueChanged(int)), this, SLOT(sendChanged()));
     connect(pessimisticValue, SIGNAL(valueChanged(int)), this, SLOT(sendChanged()));
@@ -248,7 +239,7 @@ void KPTRequestResourcesPanel::slotOk() {
             item->ok(m_task);
     }
 
-    m_task.effort()->set(numWeeks->value(), numDays->value(), numHours->value(), numMinutes->value());
+    m_task.effort()->set(effort->value());
 
     switch(effortType->currentItem()) {
         case 0: // work based
