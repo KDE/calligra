@@ -268,7 +268,7 @@ QString KoFilterManager::import( const QString & _file, const char *_native_form
         mimeType = "text/plain";
     }
 
-    if ( mimeType == _native_format )
+    if ( mimeType == _native_format || mimeType == "application/x-gzip" || mimeType == "text/xml" )
     {
         return _file;
     }
