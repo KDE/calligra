@@ -26,8 +26,15 @@ WordFilter::~WordFilter() {
 const QString WordFilter::part() {
 
     if(ready && success)
-        // return real file from KWordDoc...
-        return FilterBase::part();  // just at the moment to keep the compiler quiet
+        return myKwd->kwdFile();
     else
         return FilterBase::part();
+}
+
+const bool WordFilter::filter() {
+    myDoc->convert();
+    myKwd->part(myDoc->part());
+    success=myDoc->isOk() & myKwd->isOk();
+    ready=true;
+    return success;
 }

@@ -20,7 +20,7 @@ tbd.h tc.h tlp.h wkb.h wordfilter.h paragraph.h picture.h style.h \
 stylesheet.h
 
 METASOURCES = wordfilter.moc stylesheet.moc paragraph.moc \
-picture.moc style.moc
+picture.moc
 
 service_DATA = ole_winword97_import.desktop
 servicedir = $(kde_servicesdir)

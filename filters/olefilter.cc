@@ -132,11 +132,6 @@ void OLEFilter::convert() {
             // connect SIGNALs&SLOTs
             connectCommon();
         }
-
-        // some more will be here, soon
-        // I'll have to read some additional OLE-Streams
-        // and look for information in them as the names
-        // are not unique!
         else
             node=list.next();
     } while(myFilter==0L && node!=0);
@@ -148,13 +143,9 @@ void OLEFilter::convert() {
         // connect SIGNALs&SLOTs
         connectCommon();
     }
-    success=myFilter->filter();      // do we really need that flag?
+    success=myFilter->filter();
 }
 
-// Reggie: Wenn Du diese Kommentare entfernst, tritt der Bug auf :(
-// Ich war mir nicht sicher, ob ein "connect" ausreichend ist - es sollte
-// eigentlich genügen. Ich habe nur in einer Datei in den libs "QObject::
-// connect" gesehen und dachte mir - schaden kann das nicht...
 void OLEFilter::connectCommon() {
 
     QObject::connect(myFilter, SIGNAL(signalSavePic(const char *, const char *,

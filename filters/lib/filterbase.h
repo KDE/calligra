@@ -2,6 +2,7 @@
 #define FILTERBASE_H
 
 #include <qobject.h>
+#include <qstring.h>
 #include <myfile.h>
 
 // Attention: The nameOUT Strings are allocated with new[] in the
@@ -15,8 +16,7 @@ public:
     virtual ~FilterBase() {}
 
     virtual const bool filter();
-    virtual const QString part();
-    virtual const QString extension() { return ".kwd"; }
+    virtual const QString part() { return QString(""); }
 
 signals:
     void signalSavePic(const char *data, const char *type, const unsigned long size,

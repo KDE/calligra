@@ -1,5 +1,4 @@
 #include <style.h>
-#include <style.moc>
 
 // Size codes for the CHPX and PAPX sprm records
 // Note: 0...variable length!
@@ -8,8 +7,7 @@ const unsigned char SPRM_Size[]= { 1, 1, 2, 4, 2, 2, 0, 3 };
 //////////////////////////////////////////////////////////////////////////////
 // CStyle - creates everything between <FORMAT> and </FORMAT>
 //////////////////////////////////////////////////////////////////////////////
-CStyle::CStyle(const myFile &main, const unsigned short &styleID, unsigned char id) :
-               QObject() {
+CStyle::CStyle(const myFile &main, const unsigned short &styleID, unsigned char id) {
 
     if(id>0 && id<6)
         _id=id;
@@ -105,7 +103,7 @@ CStyle::CStyle(const myFile &main, const unsigned short &styleID, unsigned char 
     }
 }
 
-CStyle::CStyle(const CStyle &rhs) : QObject() {
+CStyle::CStyle(const CStyle &rhs) {
 
     _id=rhs.id();
     _pos=rhs.pos();
@@ -236,7 +234,7 @@ CStyle::~CStyle() {
     }
 }
 
-void CStyle::applyCHPX(const long &fcGrpprl, const unsigned short &cb) {
+/*void CStyle::applyCHPX(const long &fcGrpprl, const unsigned short &cb) {
 
     unsigned short offset=0;
     unsigned short value, size;
@@ -293,6 +291,7 @@ void CStyle::applyCHPX(const long &fcGrpprl, const unsigned short &cb) {
         offset+=2+size;      // offset to next sprm
     }
 }
+*/
 
 void CStyle::setLayout(bool l) {
     onlyLayout=l;
@@ -524,7 +523,7 @@ void CStyle::footnoteRef(const QString &name) {
 // PStyle - creates everything between <LAYOUT> and </LAYOUT>
 //////////////////////////////////////////////////////////////////////////////
 PStyle::PStyle(const myFile &main, const unsigned short &styleID, const CStyle &cstyle) :
-               QObject(), _cstyle(cstyle) {
+               _cstyle(cstyle) {
 
     _styleID=styleID;
     _main=main;
@@ -555,7 +554,7 @@ PStyle::PStyle(const myFile &main, const unsigned short &styleID, const CStyle &
     _right=_top=_bottom=_left;
 }
 
-PStyle::PStyle(const PStyle &rhs) : QObject(), _cstyle(rhs.cstyle()) {
+PStyle::PStyle(const PStyle &rhs) : _cstyle(rhs.cstyle()) {
 
     _styleID=rhs.styleID();
     _layoutTag=rhs.layoutTag();
@@ -586,13 +585,6 @@ PStyle::PStyle(const PStyle &rhs) : QObject(), _cstyle(rhs.cstyle()) {
 
 PStyle::~PStyle() {
     _tabList.clear();
-}
-
-void PStyle::applyPAPX(const long &/*fcGrpprl*/, const unsigned short &/*cb*/) {
-}
-
-void PStyle::applyCHPX(const long &fcGrpprl, const unsigned short &cb) {
-    _cstyle.applyCHPX(fcGrpprl, cb);
 }
 
 const QString PStyle::layout() {

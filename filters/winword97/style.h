@@ -1,7 +1,6 @@
 #ifndef STYLE_H
 #define STYLE_H
 
-#include <qobject.h>
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <myfile.h>
@@ -16,16 +15,12 @@ struct myTAB {
     unsigned char type;
 };
 
-class CStyle : public QObject {
-
-    Q_OBJECT
+class CStyle {
 
 public:
     CStyle(const myFile &main, const unsigned short &styleID, unsigned char id=1);
     CStyle(const CStyle &rhs);
     ~CStyle();
-
-    void applyCHPX(const long &fcGrpprl, const unsigned short &cb);
 
     void setLayout(bool l=true);  // true->create only <FORMAT>, no <FORMAT id=...>
     const bool layout() const { return onlyLayout; }
@@ -154,9 +149,6 @@ public:
     void footnoteUnderline(const unsigned char &u) { if(_id==5 && u<2) data.footnote.underline=u; }
     void footnoteVertalign(const unsigned char &v) { if(_id==5 && v<3) data.footnote.vertalign=v; }
 
-signals:
-    void signalSavePic(unsigned long &fc);
-
 private:
     const CStyle &operator=(const CStyle &);     // don't assign CStyles :)
 
@@ -211,17 +203,12 @@ private:
 };
 
 
-class PStyle : public QObject {
-
-    Q_OBJECT
+class PStyle {
 
 public:
     PStyle(const myFile &main, const unsigned short &styleID, const CStyle &cstyle);
     PStyle(const PStyle &rhs);
     ~PStyle();
-
-    void applyPAPX(const long &fcGrpprl, const unsigned short &cb);
-    void applyCHPX(const long &fcGrpprl, const unsigned short &cb);
 
     const QString layout();  // return the <LAYOUT> or <STYLE>
 

@@ -15,6 +15,7 @@ WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
                        main(mainStream), data(dataStream) {
 
     success=true;
+    ready=false;
     fib=0L;
     readFIB();
 
@@ -45,6 +46,15 @@ WinWordDoc::~WinWordDoc() {
         delete fib;
         fib=0L;
     }
+}
+
+void WinWordDoc::convert() {
+    ready=true;
+    success=false;
+}
+
+const QString WinWordDoc::part() {
+    return QString("");
 }
 
 void WinWordDoc::FIBInfo() {

@@ -9,7 +9,9 @@ public:
     KWordDoc();
     ~KWordDoc();
 
-    const QString kwdFile() const { return kwd; }
+    void part(const QString &part);
+
+    const QString kwdFile();
     const bool isOk() const { return success; }
 
 private:
@@ -18,5 +20,6 @@ private:
 
     QString kwd;
     bool success;
+    bool ready;
 };
 #endif // KWORDDOC_H

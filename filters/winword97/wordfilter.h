@@ -31,7 +31,7 @@ public:
                const myFile &table1Stream, const myFile &dataStream);
     virtual ~WordFilter();
     virtual const QString part();
-    //virtual const bool filter();
+    virtual const bool filter();
 
 private:
     WordFilter(const WordFilter &);
