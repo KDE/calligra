@@ -2172,7 +2172,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             slotGotoPage(); break;
         case Key_Home:  // go to first page
             if ( slideListIterator != slideList.begin() ) {
-                gotoPage( 1 );
+                gotoPage( *slideList.begin() );
                 if ( !spManualSwitch() ) {
                     m_view->setCurrentTimer( 1 );
                     setNextPageTimer( true );
@@ -2181,7 +2181,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             break;
         case Key_End:  // go to last page
             if ( slideListIterator != slideList.end() ) {
-                gotoPage( slideList.count() );
+                gotoPage( *(--slideList.end()) );
                 if ( !spManualSwitch() ) {
                     m_view->setCurrentTimer( 1 );
                     setNextPageTimer( true );
