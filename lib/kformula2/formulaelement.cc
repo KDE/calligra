@@ -18,6 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <iostream>
 #include <qpainter.h>
 
 #include "contextstyle.h"
@@ -76,4 +77,42 @@ void FormulaElement::draw(QPainter& painter, ContextStyle& context)
 }
 
 
+QDomElement FormulaElement::getElementDom(QDomDocument *doc)
+{
+    QDomElement de = doc->createElement("FORMULA");
+    de.setAttribute("SIZE", size);
+    de.appendChild(SequenceElement::getElementDom(doc));
+    return de;
+}
 
+bool FormulaElement::buildFromDom(QDomElement *elem)
+{
+    // checking
+    if (elem == 0) {
+        cerr << "null document\n";
+        return false;
+    }
+    if (elem->tagName() != "FORMULA") {
+        cerr << "Wrong tag name " << elem->tagName() << "for FormulaElement.\n";
+        return false;
+    }
+
+    // get attributes
+    QString sizeStr = elem->attribute("SIZE");
+    if(!sizeStr.isNull()) {
+        size = sizeStr.toInt();
+    }
+
+    // read parent
+    QDomNode n = elem->firstChild();
+    if (n.isElement()) {
+        QDomElement e = n.toElement();
+        if (!SequenceElement::buildFromDom(&e)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    return true;
+}

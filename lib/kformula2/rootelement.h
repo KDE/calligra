@@ -138,9 +138,9 @@ public:
 
     ElementIndexPtr getIndex() { return ElementIndexPtr(new RootElementIndex(this)); }
 
-    
+    // Save&load
     virtual QDomElement getElementDom(QDomDocument *doc);
-    virtual void buildFromDom(QDomElement *elem);
+    virtual bool buildFromDom(QDomElement *elem);
      
 private:
 

@@ -29,10 +29,11 @@
 #include "basicelement.h"
 #include "elementindex.h"
 #include "contextstyle.h"
-#include "formulaelement.h"
+
 
 class BasicElement;
 class FormulaCursor;
+class FormulaElement;
 class QKeyEvent;
 class QPainter;
 class KFormulaCommand;
@@ -107,6 +108,10 @@ signals:
      */
     void elementWillVanish(BasicElement* element);
 
+    /**
+     * Tells the cursors that we have just loaded a new formula.
+     */
+    void formulaLoaded(FormulaElement*);
     
 public slots:    
 
@@ -195,7 +200,7 @@ private:
     /**
      * The element tree's root.
      */
-    FormulaElement rootElement;
+    FormulaElement* rootElement;
 
     /**
      * The style that should be used to draw the formula.

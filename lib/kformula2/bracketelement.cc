@@ -18,6 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <iostream>
 #include <qlist.h>
 #include <qpainter.h>
 #include <qpen.h>
@@ -259,14 +260,11 @@ Artwork* BracketElement::createBracket(char bracket)
 }
 
 
-
 QDomElement BracketElement::getElementDom(QDomDocument *doc)
 {
     QDomElement de=doc->createElement("BRACKET");
-    int sz=getRelativeSize();
-    if(sz!=0) {
-        de.setAttribute("SIZE",sz);
-    }
+    de.appendChild(BasicElement::getElementDom(doc));
+    
     QDomElement con=doc->createElement("CONTENT");
     con.appendChild(content->getElementDom(doc));
     de.appendChild(con);
@@ -277,44 +275,43 @@ QDomElement BracketElement::getElementDom(QDomDocument *doc)
 }
 
 
-void BracketElement::buildFromDom(QDomElement *elem)
+bool BracketElement::buildFromDom(QDomElement *elem)
 {
-    if(!elem) return;
+    // checking
+    if (elem->tagName() != "BRACKET") {
+        cerr << "Wrong tag name " << elem->tagName() << "for BracketElement.\n";
+        return false;
+    }
 
-//Only set size.
-    BasicElement::buildFromDom(elem);
+    // get attributes
+    QString leftStr = elem->attribute("LEFT");
+    if(!leftStr.isNull()) {
+        left->setType(static_cast<Artwork::SymbolType>(leftStr.toInt()));
+    }
+    QString rightStr = elem->attribute("RIGHT");
+    if(!rightStr.isNull()) {
+        right->setType(static_cast<Artwork::SymbolType>(rightStr.toInt()));
+    }
 
-#warning TODO bracket type attribute
-
+    // read parent
     QDomNode n = elem->firstChild();
-    while ( !n.isNull() ) {
-        if ( n.isElement() ) {
-             QDomElement e = n.toElement();
-	    // BasicElement *child=0;
-	     QString tag=e.tagName();
-	     tag=tag.upper();
-	
-	     QDomElement e1;
-	     QDomNode n1 = e.firstChild();
-	     while ( !n1.isNull() ) {
-    	 	 if ( n1.isElement() ) {
-                     e1 = n1.toElement();
-		     if(e1.tagName()=="SEQUENCE") //First sequence            
-		         break;
-		 }
-		 
-	         n1 = n1.nextSibling();
-	     }
-	     
-	     
-	     if(tag=="CONTENT") {
-		 content=new SequenceElement(this);
-		 content->buildFromDom(&e1);
-	     }
-	 }
-        
-        n = n.nextSibling();
-    }    
-    
+    if (n.isElement()) {
+        QDomElement e = n.toElement();
+        if (!BasicElement::buildFromDom(&e)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    n = n.nextSibling();
 
+    // read content
+    delete content;
+    content = buildChild(n, "CONTENT");
+    if (content == 0) {
+        cerr << "Empty content in BracketElement.\n";
+        return false;
+    }
+    return true;
 }

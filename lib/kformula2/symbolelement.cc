@@ -518,16 +518,14 @@ void SymbolElement::moveToLower(FormulaCursor* cursor, Direction direction)
 QDomElement SymbolElement::getElementDom(QDomDocument *doc)
 {
     QDomElement de=doc->createElement("SYMBOL");
-    int sz=getRelativeSize();
-    if(sz!=0) {
-        de.setAttribute("SIZE",sz);
-    }
+    de.appendChild(BasicElement::getElementDom(doc));
+
+    de.setAttribute("TYPE", symbol.getType());
+    
     QDomElement con=doc->createElement("CONTENT");
     con.appendChild(content->getElementDom(doc));
     de.appendChild(con);
 
-    de.setAttribute("TYPE","not yet implemented");
-    
     if(hasLower()) {
         QDomElement ind=doc->createElement("LOWER");
         ind.appendChild(lower->getElementDom(doc));
@@ -542,3 +540,51 @@ QDomElement SymbolElement::getElementDom(QDomDocument *doc)
 }
 
 
+bool SymbolElement::buildFromDom(QDomElement *elem)
+{
+    // checking
+    if (elem->tagName() != "SYMBOL") {
+        cerr << "Wrong tag name " << elem->tagName() << "for SymbolElement.\n";
+        return false;
+    }
+
+    // get attributes
+    QString typeStr = elem->attribute("TYPE");
+    if(!typeStr.isNull()) {
+        symbol.setType(static_cast<Artwork::SymbolType>(typeStr.toInt()));
+    }
+
+    // read parent
+    QDomNode n = elem->firstChild();
+    if (n.isElement()) {
+        QDomElement e = n.toElement();
+        if (!BasicElement::buildFromDom(&e)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    n = n.nextSibling();
+
+    // read content
+    delete content;
+    content = buildChild(n, "CONTENT");
+    if (content == 0) {
+        cerr << "Empty content in BracketElement.\n";
+        return false;
+    }
+    n = n.nextSibling();
+
+    lower = buildChild(n, "LOWER");
+    if (lower != 0) {
+        n = n.nextSibling();
+    }
+
+    upper = buildChild(n, "UPPER");
+    if (upper != 0) {
+        n = n.nextSibling();
+    }
+    
+    return true;
+}

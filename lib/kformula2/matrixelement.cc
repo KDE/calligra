@@ -18,6 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <iostream>
 #include <qarray.h>
 #include <qpainter.h>
 
@@ -26,7 +27,7 @@
 #include "sequenceelement.h"
 
 
-MatrixElement::MatrixElement(int rows, int columns, BasicElement* parent)
+MatrixElement::MatrixElement(uint rows, uint columns, BasicElement* parent)
     : BasicElement(parent)
 {
     for (uint r = 0; r < rows; r++) {
@@ -253,8 +254,8 @@ void MatrixElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         }
         else {
             bool linear = cursor->getLinearMovement();
-            int row = 0;
-            int column = 0;
+            uint row = 0;
+            uint column = 0;
             if (searchElement(from, row, column)) {
                 if (column > 0) {
                     getElement(row, column-1)->moveLeft(cursor, this);
@@ -289,8 +290,8 @@ void MatrixElement::moveRight(FormulaCursor* cursor, BasicElement* from)
         }
         else {
             bool linear = cursor->getLinearMovement();
-            int row = 0;
-            int column = 0;
+            uint row = 0;
+            uint column = 0;
             if (searchElement(from, row, column)) {
                 if (column < getColumns()-1) {
                     getElement(row, column+1)->moveRight(cursor, this);
@@ -324,8 +325,8 @@ void MatrixElement::moveUp(FormulaCursor* cursor, BasicElement* from)
             getElement(0, 0)->moveRight(cursor, this);
         }
         else {
-            int row = 0;
-            int column = 0;
+            uint row = 0;
+            uint column = 0;
             if (searchElement(from, row, column)) {
                 if (row > 0) {
                     getElement(row-1, column)->moveRight(cursor, this);
@@ -356,8 +357,8 @@ void MatrixElement::moveDown(FormulaCursor* cursor, BasicElement* from)
             getElement(0, 0)->moveRight(cursor, this);
         }
         else {
-            int row = 0;
-            int column = 0;
+            uint row = 0;
+            uint column = 0;
             if (searchElement(from, row, column)) {
                 if (row < getRows()-1) {
                     getElement(row+1, column)->moveRight(cursor, this);
@@ -383,7 +384,7 @@ void MatrixElement::goInside(FormulaCursor* cursor)
 }
 
 
-bool MatrixElement::searchElement(BasicElement* element, int& row, int& column)
+bool MatrixElement::searchElement(BasicElement* element, uint& row, uint& column)
 {
     uint rows = getRows();
     uint columns = getColumns();
@@ -402,15 +403,13 @@ bool MatrixElement::searchElement(BasicElement* element, int& row, int& column)
 QDomElement MatrixElement::getElementDom(QDomDocument *doc)
 {
     QDomElement de=doc->createElement("MATRIX");
-    int sz=getRelativeSize();
-    if(sz!=0) {
-         de.setAttribute("SIZE",sz);
-    }
+    de.appendChild(BasicElement::getElementDom(doc));
+
     uint rows = getRows();
     uint cols = getColumns();
    
     de.setAttribute("ROWS",rows);
-    de.setAttribute("COULMNS",cols); 
+    de.setAttribute("COLUMNS",cols); 
 
     for (uint i = 0; i < rows; i++) {
         for (uint j = 0; j < cols; j++) {
@@ -425,3 +424,69 @@ QDomElement MatrixElement::getElementDom(QDomDocument *doc)
 }
 
 
+bool MatrixElement::buildFromDom(QDomElement *elem)
+{
+    // checking
+    if (elem->tagName() != "MATRIX") {
+        cerr << "Wrong tag name " << elem->tagName() << "for MatrixElement.\n";
+        return false;
+    }
+
+    // get attributes
+    uint rows = 0;
+    QString rowStr = elem->attribute("ROWS");
+    if(!rowStr.isNull()) {
+        rows = rowStr.toInt();
+    }
+    if (rows == 0) {
+        cerr << "Rows <= 0 in MatrixElement.\n";
+        return false;
+    }
+    
+    QString columnStr = elem->attribute("COLUMNS");
+    uint cols = 0;
+    if(!columnStr.isNull()) {
+        cols = columnStr.toInt();
+    }
+    if (cols == 0) {
+        cerr << "Columns <= 0 in MatrixElement.\n";
+        return false;
+    }
+
+    // read parent
+    QDomNode n = elem->firstChild();
+    if (n.isElement()) {
+        QDomElement e = n.toElement();
+        if (!BasicElement::buildFromDom(&e)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    n = n.nextSibling();
+
+    // read content
+    content.clear();
+    for (uint r = 0; r < rows; r++) {
+        QList<SequenceElement>* list = new QList<SequenceElement>;
+        list->setAutoDelete(true);
+        content.append(list);
+        for (uint c = 0; c < cols; c++) {
+            if (n.isElement()) {
+                SequenceElement* element = new SequenceElement(this);
+                QDomElement e = n.toElement();
+                if (!element->buildFromDom(&e)) {
+                    delete element;
+                    return false;
+                }
+                list->append(element);
+            }
+            n = n.nextSibling();
+	}
+        if (n.isComment()) {
+            n = n.nextSibling();
+        }
+    }
+    return true;
+}

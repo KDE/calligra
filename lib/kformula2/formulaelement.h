@@ -71,10 +71,9 @@ public:
      */
     void draw(QPainter& painter, ContextStyle& context);
 
-
-    //Save&Load
- //   virtual QDomElement getElementDom();
-	
+    // Save&load
+    virtual QDomElement getElementDom(QDomDocument *doc);
+    virtual bool buildFromDom(QDomElement *elem);
     
 private:
 

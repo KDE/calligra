@@ -34,7 +34,7 @@ public:
 
     enum { contentPos, upperPos, lowerPos };
 
-    SymbolElement(Artwork::SymbolType type, BasicElement* parent = 0);
+    SymbolElement(Artwork::SymbolType type = Artwork::Empty, BasicElement* parent = 0);
     ~SymbolElement();
 
     /**
@@ -183,7 +183,9 @@ public:
     ElementIndexPtr getUpperIndex() { return ElementIndexPtr(new UpperIndex(this)); }
     ElementIndexPtr getLowerIndex() { return ElementIndexPtr(new LowerIndex(this)); }
 
+    // Save&load
     virtual QDomElement getElementDom(QDomDocument *doc);
+    virtual bool buildFromDom(QDomElement *elem);
      
 private:
 

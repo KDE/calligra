@@ -31,9 +31,11 @@
 class NumberElement : public TextElement {
 public:
 
-    NumberElement(QChar ch, BasicElement* parent = 0);
+    NumberElement(QChar ch = ' ', BasicElement* parent = 0);
 
+    // Save&load
     virtual QDomElement getElementDom(QDomDocument *doc);
+    virtual bool buildFromDom(QDomElement *elem);
 
 protected:
 

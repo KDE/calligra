@@ -18,10 +18,13 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <iostream>
+
 #include "contextstyle.h"
 #include "basicelement.h"
 #include "formulacursor.h"
 #include "sequenceelement.h"
+
 
 int BasicElement::evilDestructionCount = 0;
 
@@ -91,17 +94,47 @@ void BasicElement::goInside(FormulaCursor* cursor)
 
 QDomElement BasicElement::getElementDom(QDomDocument *doc)
 {
-    QDomElement de=doc->createElement("BASIC");
-   /* if(relativeSize!=0) {
-        de.setAttribute("SIZE",relativeSize);
-    }*/	    
+    QDomElement de = doc->createElement("BASIC");
+    if (relativeSize != 0) {
+        de.setAttribute("SIZE", relativeSize);
+    }	    
     return de;
 }
 
-void BasicElement::buildFromDom(QDomElement *elem)
+bool BasicElement::buildFromDom(QDomElement *elem)
 {
-    QString sizeStr=elem->attribute("SIZE");
-    if(!sizeStr.isNull()) 
+    if (elem->tagName() != "BASIC") {
+        cerr << "Wrong tag name " << elem->tagName() << "for BasicElement.\n";
+        return false;
+    }
+    QString sizeStr = elem->attribute("SIZE");
+    if(!sizeStr.isNull()) {
         setRelativeSize(sizeStr.toInt());
+    }
+    return true;
 }
 
+
+/**
+ * Returns a SequenceElement constructed from the nodes first child
+ * if the nodes name matches the given name.
+ */
+SequenceElement* BasicElement::buildChild(QDomNode& node, QString name)
+{
+    SequenceElement* child = 0;
+    if (node.isElement()) {
+        QDomElement e = node.toElement();
+        if (e.tagName().upper() == name) {
+            QDomNode nodeInner = e.firstChild();
+            if (nodeInner.isElement()) {
+                QDomElement element = nodeInner.toElement();
+                child = new SequenceElement(this);
+                if (!child->buildFromDom(&element)) {
+                    delete child;
+                    child = 0;
+                }
+            }
+        }
+    }
+    return child;
+}

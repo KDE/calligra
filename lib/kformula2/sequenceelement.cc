@@ -23,15 +23,19 @@
 
 #include <qpainter.h>
 
+#include "bracketelement.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
-#include "sequenceelement.h"
-#include "textelement.h"
+#include "fractionelement.h"
+#include "indexelement.h"
 #include "matrixelement.h"
-#include "rootelement.h"
-#include "operatorelement.h"
 #include "numberelement.h"
-#include "bracketelement.h"
+#include "operatorelement.h"
+#include "rootelement.h"
+#include "sequenceelement.h"
+#include "symbolelement.h"
+#include "textelement.h"
+
 
 SequenceElement::SequenceElement(BasicElement* parent)
     : BasicElement(parent)
@@ -572,11 +576,8 @@ void SequenceElement::selectAllChildren(FormulaCursor* cursor)
 QDomElement SequenceElement::getElementDom(QDomDocument *doc)
 {
     QDomElement de=doc->createElement("SEQUENCE");
-    int sz=getRelativeSize();
-    if(sz!=0) {
-         de.setAttribute("SIZE",sz);
-    }
-
+    de.appendChild(BasicElement::getElementDom(doc));
+    
     uint count = children.count();
     for (uint i = 0; i < count; i++) {
         QDomElement tmpEleDom=children.at(i)->getElementDom(doc);
@@ -586,56 +587,62 @@ QDomElement SequenceElement::getElementDom(QDomDocument *doc)
 }
 
 
-void SequenceElement::buildFromDom(QDomElement *elem)
+bool SequenceElement::buildFromDom(QDomElement *elem)
 {
-//Only set size.
-    if(!elem) return;
+    // checking
+    if (elem->tagName() != "SEQUENCE") {
+        cerr << "Wrong tag name " << elem->tagName() << "for SequenceElement.\n";
+        return false;
+    }
 
-    children.clear();
-    
-    BasicElement::buildFromDom(elem);
+    // get attributes
 
-
+    // read parent
     QDomNode n = elem->firstChild();
-    while ( !n.isNull() ) {
-        if ( n.isElement() ) {
-             QDomElement e = n.toElement();
-	     BasicElement *child=0;
-	     QString tag=e.tagName();
-	     tag=tag.upper();
-	     if(tag=="TEXT") 
-		 child=new TextElement(e.attribute("CHAR").at(0),this);
-	     else
-	     if(tag=="NUMBER")
-	         child=new NumberElement(e.attribute("CHAR").at(0),this);
-	     else
-	     if(tag=="OPERATOR")
-	         child=new OperatorElement(e.attribute("CHAR").at(0),this);
-	     else
-	     if(tag=="ROOT")
-	         child=new RootElement(this);
-	     else
-	     if(tag=="BRACKET")
-	         child=new BracketElement('(',')',this);
-	     else
-	     if(tag=="MATRIX")
-	         child=new MatrixElement(e.attribute("ROWS").toInt(),
-          	                        e.attribute("COLUMNS").toInt(),this);
-	     else
-	     if(tag=="SEQUENCE")
-	         child=new SequenceElement(this);
-	
-	     if(child) {
-	         child->buildFromDom(&e);
-		//How to add the child to the sequence ?
-		 children.append(child);				 
-	     }  
-	 }
-        
+    if (n.isElement()) {
+        QDomElement e = n.toElement();
+        if (!BasicElement::buildFromDom(&e)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    n = n.nextSibling();
+
+    // read content
+    while (!n.isNull()) {
+        if (n.isElement()) {
+            QDomElement e = n.toElement();
+            BasicElement* child = 0;
+            QString tag = e.tagName().upper();
+
+            if     (tag=="TEXT")     child=new TextElement();
+            else if(tag=="NUMBER")   child=new NumberElement();
+            else if(tag=="OPERATOR") child=new OperatorElement();
+            else if(tag=="ROOT")     child=new RootElement();
+            else if(tag=="BRACKET")  child=new BracketElement();
+            else if(tag=="MATRIX")   child=new MatrixElement();
+            else if(tag=="INDEX")    child=new IndexElement();
+            else if(tag=="FRACTION") child=new FractionElement();
+            else if(tag=="SYMBOL")   child=new SymbolElement();
+            else if(tag=="SEQUENCE") {
+                cerr << "malformed data: sequence inside sequence.\n";
+                return false;
+            }
+            
+            if (child != 0) {
+                child->setParent(this);
+                if (child->buildFromDom(&e)) {
+                    children.append(child);
+                }
+                else {
+                    delete child;
+                    return false;
+                }
+            }  
+        }
         n = n.nextSibling();
-    }    
-    
-
+    }
+    return true;
 }
-
-

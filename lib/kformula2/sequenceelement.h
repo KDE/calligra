@@ -185,10 +185,9 @@ public:
     
     //BasicElement* getChildAt(int pos);
 
-    //Save&load
+    // Save&load
     virtual QDomElement getElementDom(QDomDocument *doc);
-    
-    virtual void buildFromDom(QDomElement *elem);
+    virtual bool buildFromDom(QDomElement *elem);
 
     
     // debug

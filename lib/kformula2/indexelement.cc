@@ -18,6 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <iostream>
+
 #include "indexelement.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
@@ -809,16 +811,11 @@ void IndexElement::moveToLowerRight(FormulaCursor* cursor, Direction direction)
 QDomElement IndexElement::getElementDom(QDomDocument *doc)
 {
     QDomElement de=doc->createElement("INDEX");
-    int sz=getRelativeSize();
-    if(sz!=0) {
-        de.setAttribute("SIZE",sz);
-    }
-
+    de.appendChild(BasicElement::getElementDom(doc));
     
     QDomElement cont=doc->createElement("CONTENT");
     cont.appendChild(content->getElementDom(doc));
     de.appendChild(cont);
-     
 
     if (hasUpperLeft()) {
         QDomElement ind=doc->createElement("UPPERLEFT");
@@ -842,9 +839,61 @@ QDomElement IndexElement::getElementDom(QDomDocument *doc)
         de.appendChild(ind);
     }
   
-  
     return de;
 }
 
 
+bool IndexElement::buildFromDom(QDomElement *elem)
+{
+    // checking
+    if (elem->tagName() != "INDEX") {
+        cerr << "Wrong tag name " << elem->tagName() << "for IndexElement.\n";
+        return false;
+    }
 
+    // get attributes
+
+    // read parent
+    QDomNode n = elem->firstChild();
+    if (n.isElement()) {
+        QDomElement e = n.toElement();
+        if (!BasicElement::buildFromDom(&e)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    n = n.nextSibling();
+
+    // read content
+    delete content;
+    content = buildChild(n, "CONTENT");
+    if (content == 0) {
+        cerr << "Empty content in IndexElement.\n";
+        return false;
+    }
+    n = n.nextSibling();
+    
+    upperLeft = buildChild(n, "UPPERLEFT");
+    if (upperLeft != 0) {
+        n = n.nextSibling();
+    }
+
+    upperRight = buildChild(n, "UPPERRIGHT");
+    if (upperRight != 0) {
+        n = n.nextSibling();
+    }
+
+    lowerLeft = buildChild(n, "LOWERLEFT");
+    if (lowerLeft != 0) {
+        n = n.nextSibling();
+    }
+
+    lowerRight = buildChild(n, "LOWERRIGHT");
+    if (lowerRight != 0) {
+        n = n.nextSibling();
+    }
+
+    return true;
+}

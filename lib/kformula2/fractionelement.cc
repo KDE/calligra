@@ -18,6 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <iostream>
 #include <qpainter.h>
 
 #include "formulaelement.h"
@@ -328,19 +329,58 @@ void FractionElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 QDomElement FractionElement::getElementDom(QDomDocument *doc)
 {
     QDomElement de=doc->createElement("FRACTION");
-    int sz=getRelativeSize();
-    if(sz!=0) {
-        de.setAttribute("SIZE",sz);
-    }
+    de.appendChild(BasicElement::getElementDom(doc));
     
     QDomElement den=doc->createElement("NUMERATOR");
     den.appendChild(numerator->getElementDom(doc));
+    de.appendChild(den);
     
     QDomElement num=doc->createElement("DENOMINATOR");
     num.appendChild(denominator->getElementDom(doc));
-
-    de.appendChild(den);
     de.appendChild(num);
          
     return de;
+}
+
+
+bool FractionElement::buildFromDom(QDomElement *elem)
+{
+    // checking
+    if (elem->tagName() != "FRACTION") {
+        cerr << "Wrong tag name " << elem->tagName() << "for FractionElement.\n";
+        return false;
+    }
+
+    // get attributes
+
+    // read parent
+    QDomNode n = elem->firstChild();
+    if (n.isElement()) {
+        QDomElement e = n.toElement();
+        if (!BasicElement::buildFromDom(&e)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    n = n.nextSibling();
+
+    delete numerator;
+    numerator = buildChild(n, "NUMERATOR");
+    if (numerator == 0) {
+        cerr << "Empty numerator in FractionElement.\n";
+        return false;
+    }
+    n = n.nextSibling();
+
+    delete denominator;
+    denominator = buildChild(n, "DENOMINATOR");
+    if (denominator == 0) {
+        cerr << "Empty denominator in FractionElement.\n";
+        return false;
+    }
+    n = n.nextSibling();
+    
+    return true;
 }

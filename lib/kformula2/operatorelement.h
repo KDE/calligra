@@ -29,7 +29,7 @@
  */
 class OperatorElement : public TextElement {
 public:
-    OperatorElement(QChar ch, BasicElement* parent = 0);
+    OperatorElement(QChar ch = ' ', BasicElement* parent = 0);
 
     /**
      * Calculates our width and height and
@@ -44,7 +44,9 @@ public:
      */
     virtual void draw(QPainter& painter, ContextStyle& context, int parentSize, const QPoint& parentOrigin);
 
+    // Save&load
     virtual QDomElement getElementDom(QDomDocument *doc);
+    virtual bool buildFromDom(QDomElement *elem);
 
 protected:
 

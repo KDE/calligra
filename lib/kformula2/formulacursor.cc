@@ -491,6 +491,18 @@ void FormulaCursor::elementWillVanish(BasicElement* element)
 
 
 /**
+ * A new formula has been loaded. Our current element has to change.
+ */
+void FormulaCursor::formulaLoaded(FormulaElement* rootElement)
+{
+    current = rootElement;
+    setPos(0);
+    setMark(-1);
+    setSelection(false);
+}
+
+
+/**
  * Creates a new CursorData object that describes the cursor.
  * It's up to the caller to delete this object.
  */

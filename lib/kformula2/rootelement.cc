@@ -18,6 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <iostream>
 #include <qpainter.h>
 #include <qpen.h>
 
@@ -395,10 +396,8 @@ void RootElement::setToIndex(FormulaCursor* cursor)
 QDomElement RootElement::getElementDom(QDomDocument *doc)
 {
     QDomElement de=doc->createElement("ROOT");
-    int sz=getRelativeSize();
-    if(sz!=0) {
-        de.setAttribute("SIZE",sz);
-    }
+    de.appendChild(BasicElement::getElementDom(doc));
+
     QDomElement con=doc->createElement("CONTENT");
     con.appendChild(content->getElementDom(doc));
     de.appendChild(con);
@@ -409,55 +408,44 @@ QDomElement RootElement::getElementDom(QDomDocument *doc)
         de.appendChild(ind);
     }
 
-
     return de;
 }
 
-void RootElement::buildFromDom(QDomElement *elem)
+bool RootElement::buildFromDom(QDomElement *elem)
 {
-    if(!elem) return;
+    // checking
+    if (elem->tagName() != "ROOT") {
+        cerr << "Wrong tag name " << elem->tagName() << "for RootElement.\n";
+        return false;
+    }
 
-//Only set size.
-    BasicElement::buildFromDom(elem);
+    // get attributes
 
-
+    // read parent
     QDomNode n = elem->firstChild();
-    while ( !n.isNull() ) {
-        if ( n.isElement() ) {
-             QDomElement e = n.toElement();
-	    // BasicElement *child=0;
-	     QString tag=e.tagName();
-	     tag=tag.upper();
-	
-	     QDomElement e1;
-	     QDomNode n1 = e.firstChild();
-	     while ( !n1.isNull() ) {
-    	 	 if ( n1.isElement() ) {
-                     e1 = n1.toElement();
-		     if(e1.tagName()=="SEQUENCE") //First sequence            
-		         break;
-		 }
-		 
-	         n1 = n1.nextSibling();
-	     }
-	     
-	     
-	     if(tag=="CONTENT") {
-		 content=new SequenceElement(this);
-		 content->buildFromDom(&e1);
-	     }
-	     else
-	     if(tag=="INDEX") 
-	     {
-	         index=new SequenceElement(this);
-		 index->buildFromDom(&e1);
-	     }
-	 }
-        
-        n = n.nextSibling();
-    }    
+    if (n.isElement()) {
+        QDomElement e = n.toElement();
+        if (!BasicElement::buildFromDom(&e)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    n = n.nextSibling();
+
+    delete content;
+    content = buildChild(n, "CONTENT");
+    if (content == 0) {
+        cerr << "Empty content in RootElement.\n";
+        return false;
+    }
+    n = n.nextSibling();
     
+    index = buildChild(n, "INDEX");
+    if (index != 0) {
+        n = n.nextSibling();
+    }
 
+    return true;
 }
-          
-

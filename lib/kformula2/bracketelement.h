@@ -38,7 +38,7 @@ public:
 
     enum { contentPos };
 
-    BracketElement(char left, char right, BasicElement* parent = 0);
+    BracketElement(char left = ' ', char right = ' ', BasicElement* parent = 0);
     ~BracketElement();
 
     /**
@@ -115,10 +115,9 @@ public:
      */
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
    
-
+    // Save&load
     virtual QDomElement getElementDom(QDomDocument *doc);
-    virtual void buildFromDom(QDomElement *elem);
-     
+    virtual bool buildFromDom(QDomElement *elem);
     
 private:
 

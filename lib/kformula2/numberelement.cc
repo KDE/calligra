@@ -35,14 +35,32 @@ QFont NumberElement::getFont(ContextStyle& context)
 
 QDomElement NumberElement::getElementDom(QDomDocument *doc)
 {
-
     QDomElement de=doc->createElement("NUMBER");
-    int sz=getRelativeSize();
-    if(sz!=0) {
-        de.setAttribute("SIZE",sz);
-    }
-    //May be this is wrong
-    de.setAttribute("CHAR",QString(character));
+    de.appendChild(TextElement::getElementDom(doc));
     return de;
+}
 
+bool NumberElement::buildFromDom(QDomElement *elem)
+{
+    // checking
+    if (elem->tagName() != "NUMBER") {
+        cerr << "Wrong tag name " << elem->tagName() << "for NumberElement.\n";
+        return false;
+    }
+
+    // get attributes
+
+    // read parent
+    QDomNode n = elem->firstChild();
+    if (n.isElement()) {
+        QDomElement e = n.toElement();
+        if (!TextElement::buildFromDom(&e)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    n = n.nextSibling();
+    return true;
 }

@@ -210,7 +210,9 @@ public:
     ElementIndexPtr getUpperRight() { return ElementIndexPtr(new UpperRightIndex(this)); }
     ElementIndexPtr getLowerRight() { return ElementIndexPtr(new LowerRightIndex(this)); }
     
+    // Save&load
     virtual QDomElement getElementDom(QDomDocument *doc);
+    virtual bool buildFromDom(QDomElement *elem);
         
     // debug
     virtual ostream& output(ostream&);

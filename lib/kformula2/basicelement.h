@@ -265,7 +265,7 @@ public:
      * Set this element attribute, build children and 
      * call their buildFromDom.
      */
-    virtual void buildFromDom(QDomElement *elem);
+    virtual bool buildFromDom(QDomElement *elem);
 
     // debug
     virtual ostream& output(ostream&);
@@ -277,6 +277,14 @@ protected:
     void setHeight(int height) { size.setHeight(height); }
     
     void setMidline(int mline) { midline = mline; }
+
+    /**
+     * Returns a SequenceElement constructed from the nodes first child
+     * if the nodes name matches the given name.
+     *
+     * This is a service for all subclasses that contain children.
+     */
+    SequenceElement* buildChild(QDomNode& node, QString name);
     
 private:
 

@@ -33,7 +33,7 @@
 class TextElement : public BasicElement {
 public:
 
-    TextElement(QChar ch, BasicElement* parent = 0);
+    TextElement(QChar ch = ' ', BasicElement* parent = 0);
 
     
     // drawing
@@ -80,8 +80,9 @@ public:
      */
     virtual void moveRight(FormulaCursor* cursor, BasicElement* from);
 
-    //Save&load
+    // Save&load
     virtual QDomElement getElementDom(QDomDocument *doc);
+    virtual bool buildFromDom(QDomElement *elem);
     
     // debug
     virtual ostream& output(ostream&);
@@ -90,12 +91,12 @@ protected:
 
     virtual QFont getFont(ContextStyle& context);
     
+private:
+
     /**
      * Our content.
      */
     QChar character;
-
-private:
 
     /**
      * The position of our baseline.

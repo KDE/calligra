@@ -60,6 +60,32 @@ QFont OperatorElement::getFont(ContextStyle& context)
 
 QDomElement OperatorElement::getElementDom(QDomDocument *doc)
 {
-return TextElement::getElementDom(doc);
+    QDomElement de=doc->createElement("OPERATOR");
+    de.appendChild(TextElement::getElementDom(doc));
+    return de;
 }
 
+bool OperatorElement::buildFromDom(QDomElement *elem)
+{
+    // checking
+    if (elem->tagName() != "OPERATOR") {
+        cerr << "Wrong tag name " << elem->tagName() << "for OperatorElement.\n";
+        return false;
+    }
+
+    // get attributes
+
+    // read parent
+    QDomNode n = elem->firstChild();
+    if (n.isElement()) {
+        QDomElement e = n.toElement();
+        if (!TextElement::buildFromDom(&e)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    n = n.nextSibling();
+    return true;
+}

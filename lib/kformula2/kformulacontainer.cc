@@ -40,9 +40,10 @@
 #include "textelement.h"
 #include "kformulacommand.h"
 
+
 KFormulaContainer::KFormulaContainer()
-    : rootElement(this)
 {
+    rootElement = new FormulaElement(this);
     dirty = true;
     testDirty();
     undoStack.setAutoDelete(true);
@@ -51,14 +52,17 @@ KFormulaContainer::KFormulaContainer()
 
 KFormulaContainer::~KFormulaContainer()
 {
+    delete rootElement;
 }
 
 
 FormulaCursor* KFormulaContainer::createCursor()
 {
-    FormulaCursor* cursor = new FormulaCursor(&rootElement);
+    FormulaCursor* cursor = new FormulaCursor(rootElement);
     connect(this, SIGNAL(elementWillVanish(BasicElement*)),
             cursor, SLOT(elementWillVanish(BasicElement*)));
+    connect(this, SIGNAL(formulaLoaded(FormulaElement*)),
+            cursor, SLOT(formulaLoaded(FormulaElement*)));
     return cursor;
 }
 
@@ -92,7 +96,7 @@ void KFormulaContainer::changed()
  */
 void KFormulaContainer::draw(QPainter& painter)
 {
-    rootElement.draw(painter, context);
+    rootElement->draw(painter, context);
 }
 
 
@@ -335,7 +339,7 @@ void KFormulaContainer::replaceElementWithMainChild(FormulaCursor* cursor,
 void KFormulaContainer::undo()
 {
 
-    FormulaCursor tmpCursor(&rootElement);
+    FormulaCursor tmpCursor(rootElement);
     undo(&tmpCursor);
 
 }
@@ -356,7 +360,7 @@ void KFormulaContainer::undo(FormulaCursor *cursor)
 void KFormulaContainer::redo()
 {
 
-    FormulaCursor tmpCursor(&rootElement);
+    FormulaCursor tmpCursor(rootElement);
     redo(&tmpCursor);
 
 }
@@ -396,7 +400,7 @@ void KFormulaContainer::testDirty()
 {
     if (dirty) {
         dirty = false;
-        rootElement.calcSizes(context);
+        rootElement->calcSizes(context);
         emit formulaChanged();
     }
 }
@@ -404,17 +408,18 @@ void KFormulaContainer::testDirty()
 QDomDocument KFormulaContainer::domData()
 {
     QDomDocument doc("KFORMULA");
-    doc.appendChild(rootElement.getElementDom(&doc));
+    doc.appendChild(rootElement->getElementDom(&doc));
     return doc;
 }
 
 void KFormulaContainer::save(QString file)
 {
-	
     QFile f(file);
-    if(!f.open(IO_Truncate | IO_ReadWrite))
-    cerr << "Error" << endl;   
-   QCString data=domData().toCString();
+    if(!f.open(IO_Truncate | IO_ReadWrite)) {
+        cerr << "Error" << endl;
+        return;
+    }
+    QCString data=domData().toCString();
     cerr << (const char *)data << endl;    
   
     QTextStream str(&f);
@@ -424,21 +429,33 @@ void KFormulaContainer::save(QString file)
 
 void KFormulaContainer::load(QString file)
 {
-	
     QFile f(file);
-    if(!f.open(IO_ReadOnly))
-    cerr << "Error" << endl;   
+    if (!f.open(IO_ReadOnly)) {
+        cerr << "Error" << endl;
+        return;
+    }
     QDomDocument doc;
-    doc.setContent(&f);
+    if (!doc.setContent(&f)) {
+        f.close();
+        return;
+    }
     QDomElement fe = doc.firstChild().toElement();
-    rootElement.buildFromDom(&fe);
-    dirty = true;
-    testDirty();
-    cleanRedoStack();    
-    cleanUndoStack();    
+    if (!fe.isNull()) {
+        FormulaElement* root = new FormulaElement(this);
+        if (root->buildFromDom(&fe)) {
+            delete rootElement;
+            rootElement = root;
+            dirty = true;
+            testDirty();
+            cleanRedoStack();    
+            cleanUndoStack();
 
+            emit formulaLoaded(rootElement);
+        }
+        else {
+            delete root;
+            cerr << "Error constructing element tree." << endl;
+        }
+    }
     f.close();
-    
-//emit something to say the cursor we are new!
-
 }	

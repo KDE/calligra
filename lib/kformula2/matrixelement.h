@@ -32,7 +32,7 @@
 class MatrixElement : public BasicElement {
 public:
 
-    MatrixElement(int rows, int columns, BasicElement* parent = 0);
+    MatrixElement(uint rows = 1, uint columns = 1, BasicElement* parent = 0);
     ~MatrixElement();
 
     /**
@@ -108,9 +108,9 @@ public:
      */
     virtual void goInside(FormulaCursor* cursor);
 
-
+    // Save&load
     virtual QDomElement getElementDom(QDomDocument *doc);
-    
+    virtual bool buildFromDom(QDomElement *elem);
     
 private:
 
@@ -125,7 +125,7 @@ private:
      * row and column if found.
      * Returns true if the element was found. false otherwise.
      */
-    bool searchElement(BasicElement* element, int& row, int& column);
+    bool searchElement(BasicElement* element, uint& row, uint& column);
         
     /**
      * The elements we contain.

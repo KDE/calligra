@@ -119,15 +119,38 @@ void TextElement::moveRight(FormulaCursor* cursor, BasicElement*)
 
 QDomElement TextElement::getElementDom(QDomDocument *doc)
 {
-    
     QDomElement de=doc->createElement("TEXT");
-    int sz=getRelativeSize();
-    if(sz!=0) {
-        de.setAttribute("SIZE",sz);
-    }
-    //May be this is wrong
-    de.setAttribute("CHAR",QString(character));
+    de.appendChild(BasicElement::getElementDom(doc));
+    
+    de.setAttribute("CHAR", QString(character));
     return de;
 }
 
+bool TextElement::buildFromDom(QDomElement *elem)
+{
+    // checking
+    if (elem->tagName() != "TEXT") {
+        cerr << "Wrong tag name " << elem->tagName() << "for TextElement.\n";
+        return false;
+    }
 
+    // get attributes
+    QString charStr = elem->attribute("CHAR");
+    if(!charStr.isNull()) {
+        character = charStr.at(0);
+    }
+
+    // read parent
+    QDomNode n = elem->firstChild();
+    if (n.isElement()) {
+        QDomElement e = n.toElement();
+        if (!BasicElement::buildFromDom(&e)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    n = n.nextSibling();
+    return true;
+}

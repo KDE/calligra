@@ -272,6 +272,11 @@ public slots:
      */
     void elementWillVanish(BasicElement* element);
 
+    /**
+     * A new formula has been loaded. Our current element has to change.
+     */
+    void formulaLoaded(FormulaElement* rootElement);
+    
 private:
     
     /**

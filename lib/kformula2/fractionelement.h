@@ -125,13 +125,14 @@ public:
      */
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
-    //Save/load support
+    // Save&load
     /**
      * @return a QDomElement that contain as DomChildren the
      * children, and as attribute the attribute of this
      * element.
      */
     virtual QDomElement getElementDom(QDomDocument *doc);
+    virtual bool buildFromDom(QDomElement *elem);
     
 private:
 
