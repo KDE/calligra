@@ -4,7 +4,6 @@
 
 #include "vpath.h"
 #include "vpath_intersect.h"
-#include "vsegmenttools.h"
 
 #include <kdebug.h>
 

@@ -8,7 +8,6 @@
 
 #include "vsegment.h"
 #include "vsegmentlist.h"
-#include "vsegmenttools.h"
 
 #include <kdebug.h>
 
