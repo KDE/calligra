@@ -324,6 +324,11 @@ VObjectListViewItem::update()
 	// TODO: When the document will support page size, change the following line.
 	p.setZoomFactor( factor );
 	m_object->draw( &p );
+	p.setZoomFactor( 1 );
+	p.setWorldMatrix( QWMatrix() );
+	p.setPen( Qt::black );
+	p.setBrush( Qt::NoBrush );
+	p.drawRect( KoRect( 0, 0, 16, 16 ) );
 	p.end();
 
 	VSelectionDescription selectionDesc;
@@ -360,6 +365,11 @@ VLayerListViewItem::update()
 	// TODO: When the document will support page size, change the following line.
 	p.setZoomFactor( 16. / 800. );
 	m_layer->draw( &p );
+	p.setZoomFactor( 1 );
+	p.setWorldMatrix( QWMatrix() );
+	p.setPen( Qt::black );
+	p.setBrush( Qt::NoBrush );
+	p.drawRect( KoRect( 0, 0, 16, 16 ) );
 	p.end();
 
 	setOn( m_layer->selected() );
@@ -469,7 +479,7 @@ VLayersTab::slotSelectionChanged()
 		{
 			QListViewItemIterator it( m_layersListView );
 			bool found = false;
-		    while( !found && it.current() )
+			while( !found && dynamic_cast<VObjectListViewItem *>( it.current() ) )
 			{
 				if( dynamic_cast<VObjectListViewItem *>( it.current() ) &&
 					dynamic_cast<VObjectListViewItem *>( it.current() )->object() == itr.current() )
@@ -483,7 +493,7 @@ VLayersTab::slotSelectionChanged()
 			if( !found )
 			{
 				VLayerListViewItem *layerItem = dynamic_cast<VLayerListViewItem *>( m_layers[ m_document->activeLayer() ] );
-				if( !m_objects[ itr.current() ] )
+				if( layerItem && !m_objects[ itr.current() ] )
 					m_objects.insert( itr.current(), new VObjectListViewItem( layerItem, itr.current(), m_document, layerItem->childCount() ) );
 			}
 
