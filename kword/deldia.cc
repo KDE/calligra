@@ -25,6 +25,7 @@
 #include "kwview.h"
 #include "kwcanvas.h"
 
+#include <kdeversion.h>
 #include <klocale.h>
 
 #include <qlabel.h>
@@ -46,7 +47,12 @@ KWDeleteDia::KWDeleteDia( QWidget *parent, const char *name, KWTableFrameSet *_t
     m_toRemove.clear();
 
     setupTab1();
-    setButtonOK( KGuiItem( i18n("&Delete"), type == ROW ?
+#if KDE_IS_VERSION(3, 1, 90)
+    setButtonOK( KGuiItem( 
+#else
+    setButtonOKText( (
+#endif
+        i18n("&Delete"), type == ROW ?
     	i18n("Delete the row from the table.") :
     	i18n("Delete the column from the table.")) );
 
