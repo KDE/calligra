@@ -146,6 +146,9 @@ public slots:
      */
     virtual void slotFileQuit();
 
+    virtual void slotConfigureKeys();
+    virtual void slotConfigureToolbars();
+
     /**
      *  Shows an about dialog for the app.
      */

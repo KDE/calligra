@@ -15,6 +15,10 @@
   <Action name="file_quit" />
  </Menu>
  <Merge />
+ <Menu name="settings"><text>&amp;Settings</text>
+  <Action name="configurekeys"/>
+  <Action name="configuretoolbars"/>
+ </Menu>
  <Menu name="help"><text>&amp;Help</text>
   <Merge />
   <Action name="contents"/>

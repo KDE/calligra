@@ -50,6 +50,8 @@
 #include <kmimetype.h>
 #include <kstddirs.h>
 #include <kio/netaccess.h>
+#include <kkeydialog.h>
+#include <kedittoolbar.h>
 
 #include <kparts/partmanager.h>
 #include <kparts/plugin.h>
@@ -114,6 +116,12 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
     KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
     KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(), "file_quit" );
+
+    (void) new KAction( i18n( "Configure &Keys..." ), 0, this,
+      SLOT( slotConfigureKeys() ), actionCollection(), "configurekeys" );
+
+    (void) new KAction( i18n( "Configure Tool&bars..." ), 0, this,
+      SLOT( slotConfigureToolbars() ), actionCollection(), "configuretoolbars" );
 
     KHelpMenu * m_helpMenu = new KHelpMenu( this );
     KStdAction::helpContents( m_helpMenu, SLOT( appHelpActivated() ), actionCollection(), "contents" );
@@ -455,6 +463,17 @@ void KoMainWindow::slotFileQuit()
     // The style guide says: 'quit' closes the window.
     // (which it calls "Application", but this does not mean kapp->quit())
     close();
+}
+
+void KoMainWindow::slotConfigureKeys()
+{
+  KKeyDialog::configureKeys(actionCollection(), xmlFile());
+}
+
+void KoMainWindow::slotConfigureToolbars()
+{
+  KEditToolbar edit(factory());
+  edit.exec();
 }
 
 void KoMainWindow::slotHelpAbout()
