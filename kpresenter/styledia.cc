@@ -110,8 +110,8 @@ void PBPreview::drawContents( QPainter *painter )
 			   colorGroup().base() );
 	painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(), brush );
     } else if ( paintType == Gradient && gradient ) {
-	painter->drawPixmap( 0, 0 ,*gradient->getGradient());
         gradient->paint(painter,_zoomHandler);
+	painter->drawPixmap( 0, 0 ,*gradient->getGradient());
     }
 
     painter->restore();
