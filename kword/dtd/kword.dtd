@@ -704,9 +704,11 @@ don't put a </?xml...> at the end of the file!).
     dir (L|R) #IMPLIED>
 
 <!-- INDENTS
-        first: indent (pt) from the left border (of the frame) of the first line of a paragraph
         left: indent (pt) that is used for the other lines in a paragraph.
         right: indent (pt) on the right of all lines in the paragraph
+        first: indent (pt) from the left border (of the frame) of the first line of a paragraph.
+               This indent is added from the left indent (or substracted from the right indent
+               in a right-to-left paragraph).
 -->
 <!ELEMENT INDENTS
     EMPTY>
