@@ -6682,6 +6682,16 @@ void KSpreadView::handleDamages( const QValueList<Damage*>& damages )
         Damage* damage = *it;
         if( !damage ) continue;
 
+        if( damage->type() == Damage::Cell )
+        {
+            CellDamage* cd = static_cast<CellDamage*>( damage );
+            KSpreadCell* damagedCell = cd->cell();
+            KSpreadSheet* damagedSheet = damagedCell->sheet();
+            QRect drect( damagedCell->column(), damagedCell->row(), 1, 1 );
+            damagedSheet->setRegionPaintDirty( drect );
+            paintUpdates();
+        }      
+        
         if( damage->type() == Damage::Sheet )
         {
             SheetDamage* sd = static_cast<SheetDamage*>( damage );
