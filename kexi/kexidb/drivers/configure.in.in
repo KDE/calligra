@@ -3,18 +3,19 @@ dnl checks for MySQL
 dnl taken form KDEDB
 dnl ========================================
 
-AC_ARG_ENABLE(mysql, [  --enable-mysql              build MySQL-plugin [default=yes]],
+AC_ARG_ENABLE(mysql,
+	AC_HELP_STRING([--enable-mysql],[build MySQL-plugin [default=yes]]),
               mysql_plugin=$enableval, mysql_plugin=yes)
 
 AC_ARG_WITH(mysql_includes,
-[  --with-mysql-includes=DIR   use MySQL-includes installed in this directory ],
+AC_HELP_STRING([--with-mysql-includes=DIR],[use MySQL-includes installed in this directory]),
 [
   ac_mysql_incdir=$withval
 ], ac_mysql_incdir=/usr/local/include
 )
 
 AC_ARG_WITH(mysql_libraries,
-[  --with-mysql-libraries=DIR  use MySQL-libs installed in this directory ],
+AC_HELP_STRING([--with-mysql-libraries=DIR],[use MySQL-libs installed in this directory ]),
 [
   ac_mysql_libdir=$withval
 ], ac_mysql_libdir=/usr/local/lib
@@ -65,21 +66,23 @@ dnl ========================================
 dnl add configure-args
 dnl ========================================
 
-AC_ARG_ENABLE(pgsql, [  --enable-pgsql              build PostgreSQL-plugin [default=yes] ], pgsql_plugin=$enableval, pgsql_plugin=yes)
+AC_ARG_ENABLE(pgsql,
+AC_HELP_STRING([--enable-pgsql],[build PostgreSQL-plugin [default=yes]]),
+ pgsql_plugin=$enableval, pgsql_plugin=yes)
 
 dnl ========================================
 dnl Libpq header/library direcrories
 dnl ========================================
 
 AC_ARG_WITH(pgsqlincdir,
-[  --with-pgsql-includes=DIR   use PostgreSQL(libpq)-includes installed in this directory ],
+AC_HELP_STRING([--with-pgsql-includes=DIR],[use PostgreSQL(libpq)-includes installed in this directory ]),
 [
   ac_pgsql_incdir=$withval
 ], ac_pgsql_incdir=/usr/local/include
 )
 
 AC_ARG_WITH(pgsqllibdir,
-[  --with-pgsql-libraries=DIR  use PostgreSQL(libpq)-libraries installed in this directory ],
+AC_HELP_STRING([  --with-pgsql-libraries=DIR],[use PostgreSQL(libpq)-libraries installed in this directory ]),
 [
   ac_pgsql_libdir=$withval
 ], ac_pgsql_libdir=/usr/local/lib
@@ -90,14 +93,14 @@ dnl Libpqxx header/library direcrories
 dnl ========================================
 
 AC_ARG_WITH(pqxxsincdir,
-[  --with-pqxx-includes=DIR   use PostgreSQL(libpqxx)-includes installed in this directory ],
+AC_HELP_STRING([--with-pqxx-includes=DIR],[use PostgreSQL(libpqxx)-includes installed in this directory ]),
 [
   ac_ppqxx_incdir=$withval
 ], ac_pqxx_incdir=/usr/local/pqxx/include/pqxx
 )
 
 AC_ARG_WITH(pqxxlibdir,
-[  --with-pqxx-libraries=DIR  use PostgreSQL(libpqxx)-libraries installed in this directory ],
+AC_HELP_STRING([--with-pqxx-libraries=DIR],[use PostgreSQL(libpqxx)-libraries installed in this directory ]),
 [
   ac_pqxx_libdir=$withval
 ], ac_pqxx_libdir=/usr/local/pqxx/lib
