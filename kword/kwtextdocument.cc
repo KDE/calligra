@@ -52,6 +52,59 @@ QTextParag * KoTextDocument::createParag( QTextDocument *d, QTextParag *pr, QTex
     return new KoTextParag( d, pr, nx, updateIds );
 }
 
+bool KoTextDocument::visitSelection( int selectionId, KWParagVisitor* visitor, bool forward )
+{
+    QTextCursor c1 = selectionStartCursor( selectionId );
+    QTextCursor c2 = selectionEndCursor( selectionId );
+    if ( c1 == c2 )
+        return true;
+    return visitFromTo( c1.parag(), c1.index(), c2.parag(), c2.index(), visitor, forward );
+}
+
+bool KoTextDocument::visitDocument( KWParagVisitor *visitor, bool forward )
+{
+    return visitFromTo( firstParag(), 0, lastParag(), lastParag()->length()-1, visitor, forward );
+}
+
+bool KoTextDocument::visitFromTo( QTextParag *firstParag, int firstIndex, QTextParag* lastParag, int lastIndex, KWParagVisitor* visitor, bool forw )
+{
+    if ( firstParag == lastParag )
+    {
+        return visitor->visit( firstParag, firstIndex, lastIndex );
+    }
+    else
+    {
+        bool ret = true;
+        if ( forw )
+        {
+            // the -1 is for the trailing space
+            ret = visitor->visit( firstParag, firstIndex, firstParag->length() - 1 );
+            if (!ret) return false;
+        }
+        else
+        {
+            ret = visitor->visit( lastParag, 0, lastIndex );
+            if (!ret) return false;
+        }
+
+        QTextParag* currentParag = forw ? firstParag->next() : lastParag->prev();
+        QTextParag * endParag = forw ? lastParag : firstParag;
+        while ( currentParag && currentParag != endParag )
+        {
+            ret = visitor->visit( currentParag, 0, currentParag->length() - 1 );
+            if (!ret) return false;
+            currentParag = forw ? currentParag->next() : currentParag->prev();
+        }
+        ASSERT( currentParag );
+        ASSERT( endParag == currentParag );
+        if ( forw )
+            ret = visitor->visit( lastParag, 0, lastIndex );
+        else
+            ret = visitor->visit( currentParag, firstIndex, currentParag->length() - 1 );
+        return ret;
+    }
+}
+
 ////
 
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTextFormatCollection *fc )
@@ -121,7 +174,7 @@ void CustomItemsMap::deleteAll( KMacroCommand *macroCmd )
     {
         KWTextCustomItem * item = it.data();
         KCommand * itemCmd = item->deleteCommand();
-        if ( itemCmd )
+        if ( itemCmd && macroCmd )
         {
             macroCmd->addCommand( itemCmd );
             itemCmd->execute(); // the item-specific delete stuff hasn't been done

@@ -367,6 +367,31 @@ QTextCursor * KWPasteTextCommand::execute( QTextCursor *c )
     return c;
 }
 
+// Helper class for deleting all custom items
+// (KWTextFrameset::removeSelectedText and readFormats do that already,
+//  but with undo/redo, and copying all formatting etc.)
+class KWDeleteCustomItemVisitor : public KWParagVisitor // see kwtextdocument.h
+{
+public:
+    KWDeleteCustomItemVisitor() : KWParagVisitor() { }
+    virtual bool visit( QTextParag *parag, int start, int end )
+    {
+        kdDebug() << "KWPasteTextCommand::execute " << parag->paragId() << " " << start << " " << end << endl;
+        for ( int i = start ; i < end ; ++i )
+        {
+            QTextStringChar * ch = parag->at( i );
+            if ( ch->isCustom() )
+	    {
+	       KWTextCustomItem* item = static_cast<KWTextCustomItem *>( ch->customItem() );
+	       item->setDeleted( true );
+	       KCommand* itemCmd = item->deleteCommand();
+	       if ( itemCmd ) itemCmd->execute();
+	    }
+        }
+        return true;
+    }
+};
+
 QTextCursor * KWPasteTextCommand::unexecute( QTextCursor *c )
 {
     QTextParag *firstParag = doc->paragAt( m_parag );
@@ -386,6 +411,10 @@ QTextCursor * KWPasteTextCommand::unexecute( QTextCursor *c )
     cursor.setParag( lastParag );
     cursor.setIndex( m_lastIndex );
     doc->setSelectionEnd( QTextDocument::Temp, &cursor );
+    // Delete all custom items
+    KWDeleteCustomItemVisitor visitor;
+    static_cast<KoTextDocument *>(doc)->visitSelection( QTextDocument::Temp, &visitor );
+
     doc->removeSelectedText( QTextDocument::Temp, c /* sets c to the correct position */ );
 
     if ( m_idx == 0 )
@@ -408,7 +437,7 @@ void KWTextFormatCommand::resizeCustomItem()
     QTextParag *sp = doc->paragAt( startId );
     QTextParag *ep = doc->paragAt( endId );
     if ( !sp || !ep )
-	return;
+        return;
 
     QTextCursor start( doc );
     start.setParag( sp );
@@ -445,7 +474,7 @@ void KWTextFormatCommand::resizeCustomItem()
         QTextParag *p = start.parag()->next();
         while ( p && p != end.parag() )
         {
-	    text = p->string()->toString().left( p->length() - 1 );
+            text = p->string()->toString().left( p->length() - 1 );
             for ( i = 0; i < p->length(); ++i )
             {
                if( p->at(i)->isCustom())
@@ -472,7 +501,7 @@ QTextCursor *KWTextFormatCommand::execute( QTextCursor *c )
     QTextParag *sp = doc->paragAt( startId );
     QTextParag *ep = doc->paragAt( endId );
     if ( !sp || !ep )
-	return c;
+        return c;
 
     resizeCustomItem();
 
@@ -486,7 +515,7 @@ QTextCursor *KWTextFormatCommand::unexecute( QTextCursor *c )
     QTextParag *sp = doc->paragAt( startId );
     QTextParag *ep = doc->paragAt( endId );
     if ( !sp || !ep )
-	return c;
+        return c;
 
     resizeCustomItem();
 

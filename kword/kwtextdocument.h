@@ -28,6 +28,7 @@ class KWTextFormatCollection;
 class KCommand;
 class QDomElement;
 class KMacroCommand;
+class KWParagVisitor;
 
 /**
  * This is our QTextDocument reimplementation, to create KoTextParags instead of QTextParags,
@@ -47,6 +48,18 @@ public:
     // Return the zoom handler associated with this document.
     // (Usually the KWDocument, but a simple zoom handler in the paragdia preview)
     KoZoomHandler * zoomHandler() const { return m_zoomHandler; }
+
+    // Visit all the parts of a selection.
+    // Returns true, unless canceled. See KWParagVisitor.
+    bool visitSelection( int selectionId, KWParagVisitor *visitor, bool forward = true );
+
+    // Visit all paragraphs of the document.
+    // Returns true, unless canceled. See KWParagVisitor.
+    bool visitDocument( KWParagVisitor *visitor, bool forward = true );
+
+    // Visit the document between those two point.
+    // Returns true, unless canceled. See KWParagVisitor.
+    bool visitFromTo( QTextParag *firstParag, int firstIndex, QTextParag* lastParag, int lastIndex, KWParagVisitor* visitor, bool forw = true );
 
     // Used by ~KoTextParag to know if it should die quickly
     bool isDestroying() const { return m_bDestroying; }
@@ -81,6 +94,16 @@ protected:
     void init();
 private:
     KWTextFrameSet * m_textfs;
+};
+
+class KWParagVisitor
+{
+protected: // abstract base class
+    KWParagVisitor() {}
+    virtual ~KWParagVisitor() {}
+public:
+    // Visit the paragraph @p parag, from index @p start to index @p end
+    virtual bool visit( QTextParag *parag, int start, int end ) = 0;
 };
 
 /**

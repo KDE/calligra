@@ -40,6 +40,9 @@ KWAnchor::~KWAnchor()
 
 void KWAnchor::move( int x, int y )
 {
+    if ( m_deleted )
+        return;
+
     // This test isn't enough. paragy may have changed. Or anything else
     // It's up to moveFloatingFrame to check if it really moved.
     //if ( x != xpos || y != ypos )
@@ -66,8 +69,7 @@ void KWAnchor::move( int x, int y )
 
 void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
-    ASSERT( !m_deleted );
-    if ( m_deleted ) // can't happen !
+    if ( m_deleted )
         return;
 
     int paragy = paragraph()->rect().y();
