@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 		std::cout << "SQL> ";
 		getline(std::cin, cmd);
 		parser->parse(cmd.c_str());
-
+		parser->clear();
 	}
 }
 
