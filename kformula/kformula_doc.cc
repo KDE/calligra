@@ -131,7 +131,8 @@ void KFormulaDocument::addRootElement()
 	setActiveElement(theFirstElement);
   
     //If current Element is a Basic, change it into a Root
-    if (typeid(theActiveElement) == typeid(BasicElement)) {
+    if (typeid(*theActiveElement) == typeid(BasicElement)) {
+	warning("substitueted");
 	newElement = new RootElement(this);
 	theActiveElement->substituteElement(newElement);
 	delete theActiveElement;
@@ -158,7 +159,7 @@ void KFormulaDocument::addFractionElement(QString cont)
     if(theActiveElement==0L)
 	setActiveElement(theFirstElement);
   
-    if(typeid(theActiveElement) == typeid(BasicElement))  //If current Element is a Basic
+    if(typeid(*theActiveElement) == typeid(BasicElement))  //If current Element is a Basic
 	{					//It change it into a Root
 	    theActiveElement->substituteElement(newElement = new FractionElement(this));
 	    delete theActiveElement;
@@ -193,7 +194,7 @@ void KFormulaDocument::addMatrixElement(QString cont)
     if(theActiveElement==0L)
 	setActiveElement(theFirstElement);
   
-    if(typeid(theActiveElement) == typeid(BasicElement))  //If current Element is a Basic
+    if(typeid(*theActiveElement) == typeid(BasicElement))  //If current Element is a Basic
 	{					//It change it into a Root
 	    theActiveElement->substituteElement(newElement = new MatrixElement(this));
 	    delete theActiveElement;
@@ -226,7 +227,7 @@ void KFormulaDocument::addBracketElement(QString cont)
     if(theActiveElement==0L)
 	setActiveElement(theFirstElement);
   
-    if(typeid(theActiveElement) == typeid(BasicElement))  //If current Element is a Basic
+    if(typeid(*theActiveElement) == typeid(BasicElement))  //If current Element is a Basic
 	{					//It change it into a Bracket
 	    theActiveElement->substituteElement(newElement = new BracketElement(this));
 	    delete theActiveElement;
@@ -280,7 +281,7 @@ void KFormulaDocument::addTextElement()
     if(theActiveElement==0L)
 	setActiveElement(theFirstElement); 
 
-    if(typeid(theActiveElement) == typeid(BasicElement))  //see addRootElement()
+    if(typeid(*theActiveElement) == typeid(BasicElement))  //see addRootElement()
 	{
 	    theActiveElement->substituteElement(newElement = new TextElement(this));
 	    delete theActiveElement;
@@ -404,7 +405,7 @@ void KFormulaDocument::paintEvent( QPaintEvent *, QWidget *paintGround )
     thePainter->setPen( black );
     theFirstElement->checkSize();
     theFirstElement->draw(QPoint(0,0)-theFirstElement->getSize().topLeft());
-    if(theActiveElement && typeid(theActiveElement) == typeid(TextElement))
+    if(theActiveElement && typeid(*theActiveElement) == typeid(TextElement))
 	thePainter->drawWinFocusRect(theCursor);
     thePainter->end();
 }
