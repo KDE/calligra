@@ -77,6 +77,9 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, protected KexiPropert
 		*/
 		virtual void changeProperty(const QCString &property, const QVariant &value);
 
+		/*! Marks all properties as changed if \a set is true, or unchanged if \a set is false. */
+		void setAllChanged(bool set);
+
 		/* A name of this property buffer type, that is usable when
 		 we want to know if two property buffer objects have the same type.
 		 For example, \a type_name may be "KexiDB::Field::Integer" for property buffer

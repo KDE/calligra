@@ -41,8 +41,7 @@ KexiPropertyBuffer::~KexiPropertyBuffer()
 	emit destroying();
 }
 
-void
-KexiPropertyBuffer::changeProperty(const QCString &property, const QVariant &value)
+void KexiPropertyBuffer::changeProperty(const QCString &property, const QVariant &value)
 {
 	KexiProperty& prop = this->property(property);
 	if (prop.isNull())
@@ -76,8 +75,14 @@ KexiPropertyBuffer::changeProperty(const QCString &property, const QVariant &val
 	prop = value;
 }
 
-void
-KexiPropertyBuffer::add(KexiProperty *property)
+void KexiPropertyBuffer::setAllChanged(bool set)
+{
+	for (KexiProperty::DictIterator it(*this); it.current(); ++it) {
+		it.current()->setChanged(set);
+	}
+}
+
+void KexiPropertyBuffer::add(KexiProperty *property)
 {
 	property->m_buf = this;
 	insert(property->name(), property);
@@ -105,16 +110,14 @@ void KexiPropertyBuffer::debug()
 	}
 }
 
-void
-KexiPropertyBuffer::addCollectionPixmap(KexiProperty *prop, const QString pixmapName)
+void KexiPropertyBuffer::addCollectionPixmap(KexiProperty *prop, const QString pixmapName)
 {
 	if(!prop)  return;
 	prop->setPixmapName(pixmapName);
 	emit collectionItemChoosed(*this, *prop);
 }
 
-QString
-KexiPropertyBuffer::pixmapName(const char *name)
+QString KexiPropertyBuffer::pixmapName(const char *name)
 {
 	if(property(name))
 		return property(name).pixmapName();

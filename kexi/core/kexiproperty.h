@@ -53,6 +53,7 @@ class KEXICORE_EXPORT KexiProperty
 {
 	public:
 		typedef QAsciiDict<KexiProperty> Dict;
+		typedef QAsciiDictIterator<KexiProperty> DictIterator;
 		typedef QPtrList<KexiProperty> List;
 		typedef QPtrListIterator<KexiProperty> ListIterator;
 //		typedef QMap<QString,KexiProperty> Map;
@@ -184,7 +185,7 @@ class KEXICORE_EXPORT KexiProperty
 		//! \return true if this preperty value is changed.
 		bool changed() const;
 
-		/*! Marks this property as changed if \a set is true, or unchanged if \a set is true. */
+		/*! Marks this property as changed if \a set is true, or unchanged if \a set is false. */
 		void setChanged(bool set);
 
 		/*! \return visiblility of this property. Property can be hidden, what can usually mean that

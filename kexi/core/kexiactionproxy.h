@@ -35,8 +35,43 @@ class QSignal;
 class KAction;
 class KXMLGUIClient;
 class KAction_setEnabled_Helper;
+class KexiActionProxy;
 
-//! Acts as proxy for shared actions within the application.
+//! Abstract helper class used to connect shared actions from outside of shared-action-aware object.
+/*! Methods like KexiActionProxy::plugSharedAction() are not public, but
+ sometimes there's need for plugging an object that implements KexiActionProxy interface
+ from outside.
+ 
+ Reimplement KexiSharedActionConnector: do all needed connections in the constructor.
+
+ For example, with KexiQueryDesignerSQLEditor class we're using KTextEdit
+ (or KTextEditor::View) that's not shared-action-aware. So it's needed to conenct
+ e.g. "edit_undo" shared action to undo() slot, and so on. It is impelmented in more
+ generic way by implementing KTextEdit_SharedActionConnector class,
+ so the conenction can be reused many times by just allocating KTextEdit_SharedActionConnector 
+ object for any KTextEditor when required (not only within KexiQueryDesignerSQLEditor).
+*/
+//TODO add method for setAvailable()
+class KEXICORE_EXPORT KexiSharedActionConnector
+{
+	public:
+		/* Connects shared actions offered by \a proxy to \a obj. */
+		KexiSharedActionConnector(KexiActionProxy* proxy, QObject *obj);
+		~KexiSharedActionConnector();
+
+	protected:
+		void plugSharedAction(const char *action_name, const char *slot);
+
+		void plugSharedActionToExternalGUI(const char *action_name, KXMLGUIClient *client);
+
+		void plugSharedActionsToExternalGUI(
+			const QValueList<QCString>& action_names, KXMLGUIClient *client);
+
+		KexiActionProxy* m_proxy;
+		QObject *m_object;
+};
+
+//! An interface that acts as proxy for shared actions within the application.
 /*!
  For example, edit->copy action can be reused to copy different types of items.
  Availability and meaning of given action depends on the context, while
@@ -92,6 +127,9 @@ class KEXICORE_EXPORT KexiActionProxy
 
 		void plugSharedActionToExternalGUI(const char *action_name, KXMLGUIClient *client);
 
+		void plugSharedActionsToExternalGUI(
+			const QValueList<QCString>& action_names, KXMLGUIClient *client);
+
 		/*! Unplugs action named \a action_name from a widget \a w.
 		 \sa plugSharedAction(const char *action_name, QWidget* w) */
 		void unplugSharedAction(const char *action_name, QWidget* w);
@@ -140,10 +178,12 @@ class KEXICORE_EXPORT KexiActionProxy
 		//! For internal use by addActionProxyChild(). \a parent can be 0.
 		void setActionProxyParent_internal( KexiActionProxy* parent );
 
+		//! @internal
 		KexiActionProxy *m_focusedChild;
 
 	friend class KexiSharedActionHost;
 	friend class KAction_setEnabled_Helper;
+	friend class KexiSharedActionConnector;
 };
 
 #endif

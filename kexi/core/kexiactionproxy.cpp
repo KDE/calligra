@@ -45,6 +45,36 @@ void KAction_setEnabled_Helper::slotSetEnabled(bool enabled)
 
 //=======================
 
+KexiSharedActionConnector::KexiSharedActionConnector( KexiActionProxy* proxy, QObject *obj ) 
+ : m_proxy(proxy)
+ , m_object(obj)
+{
+}
+
+KexiSharedActionConnector::~KexiSharedActionConnector()
+{
+}
+
+void KexiSharedActionConnector::plugSharedAction(const char *action_name, const char *slot)
+{
+	m_proxy->plugSharedAction(action_name, m_object, slot);
+}
+
+void KexiSharedActionConnector::plugSharedActionToExternalGUI(
+	const char *action_name, KXMLGUIClient *client) 
+{
+	m_proxy->plugSharedActionToExternalGUI(action_name, client);
+}
+
+void KexiSharedActionConnector::plugSharedActionsToExternalGUI(
+	const QValueList<QCString>& action_names, KXMLGUIClient *client)
+{
+	m_proxy->plugSharedActionsToExternalGUI(action_names, client);
+}
+
+
+//=======================
+
 KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
  : m_host( host ? host : &KexiSharedActionHost::defaultHost() )
  , m_receiver(receiver)
@@ -146,6 +176,14 @@ void KexiActionProxy::plugSharedActionToExternalGUI(const char *action_name, KXM
 	setAvailable(a->name(), a->isEnabled());
 	//changes will be signaled
 	QObject::connect(a, SIGNAL(enabled(bool)), m_KAction_setEnabled_helper, SLOT(slotSetEnabled(bool)));
+}
+
+void KexiActionProxy::plugSharedActionsToExternalGUI(
+	const QValueList<QCString>& action_names, KXMLGUIClient *client)
+{
+	for (QValueList<QCString>::const_iterator it = action_names.constBegin(); it!=action_names.constEnd(); ++it) {
+		plugSharedActionToExternalGUI(*it, client);
+	}
 }
 
 bool KexiActionProxy::activateSharedAction(const char *action_name, bool alsoCheckInChildren)

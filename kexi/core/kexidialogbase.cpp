@@ -537,8 +537,12 @@ bool KexiDialogBase::removeDataBlock( QString & /*dataString*/, const QString& d
 
 void KexiDialogBase::activate()
 {
-	KMdiChildView::activate();
 	KexiViewBase *v = selectedView();
+	//kdDebug() << "focusWidget(): " << focusWidget()->name() << endl;
+	if (Kexi::hasParent( v, KMdiChildView::focusedChildWidget()))//focusWidget()))
+		KMdiChildView::activate();
+	else //ah, focused widget is not in this view, move focus:
+		v->setFocus();
 	if (v)
 		v->updateActions(true);
 //js: not neeed??	m_parentWindow->invalidateSharedActions(this);
