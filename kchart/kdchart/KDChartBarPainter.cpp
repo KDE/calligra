@@ -181,7 +181,7 @@ void KDChartBarPainter::paintData( QPainter* painter,
         }
 
 
-        uint datasetNum = QABS( ( chartDatasetEnd - chartDatasetStart ) + 1 );
+        uint datasetNum = ( chartDatasetEnd - chartDatasetStart ) + 1;
 
         // Number of values: If -1, use all values, otherwise use the
         // specified number of values.

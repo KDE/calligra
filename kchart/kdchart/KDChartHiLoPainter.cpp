@@ -156,7 +156,7 @@ void KDChartHiLoPainter::paintData( QPainter* painter,
                          : maxRowMinus1 );
     }
 
-    uint datasetNum = QABS( ( chartDatasetEnd - chartDatasetStart ) + 1 );
+    uint datasetNum = ( chartDatasetEnd - chartDatasetStart ) + 1;
 
     // We need to make sure that we have a certain number of
     // datasets, depending on the sub type to display.
