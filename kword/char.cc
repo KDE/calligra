@@ -50,7 +50,7 @@ KWString::KWString( QString _str, KWordDocument *_doc )
 	return;
     }
 
-    _len_ = strlen( _str );
+    _len_ = _str.length();
     _max_ = _len_;
 
     _data_ = alloc( _len_ );
@@ -138,7 +138,7 @@ void KWString::insert( unsigned int _pos, QString _text )
 {
     assert( _pos <= _len_ );
 
-    unsigned int nl = strlen( _text );
+    unsigned int nl = _text.length();
 
     unsigned int l = _len_;
 
