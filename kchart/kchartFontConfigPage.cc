@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kchartDataConfigPage.h"
+
 #include "kchartFontConfigPage.h"
 
 #include "kchartFontConfigPage.moc"
@@ -42,6 +42,36 @@ namespace std {}
 using namespace std;
 
 #include "kchart_params.h"
+
+
+class KChartFontListBoxItem : public QListBoxText
+{
+public:
+    KChartFontListBoxItem( QListBox* lb,  const QString& text = QString::null ) :
+        QListBoxText( lb,  text )  {}
+    KChartFontListBoxItem( const QString& text = QString::null ) :
+        QListBoxText( text )  {}
+
+    void setFont( const QFont& font )  {
+        _font = font;
+        listBox()->repaint();
+    }
+    QFont font() const {
+        return _font;
+    }
+
+protected:
+    void paint( QPainter* painter )  {
+        painter->save();
+        painter->setFont( _font );
+        QListBoxText::paint( painter );
+        painter->restore();
+    }
+
+private:
+    QFont _font;
+};
+
 
 namespace KChart
 {

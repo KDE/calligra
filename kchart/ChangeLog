@@ -1,3 +1,8 @@
+2005-03-03  Inge Wallin  <inge@lysator.liu.se>
+
+	* kchartFontConfigPage.cc (class KChartFontListBoxItem): Move from
+	kchartDataConfigPage.h.  That used to be an error.
+
 2005-02-25  Inge Wallin  <inge@lysator.liu.se>
 
 	Fix bug 99998:
