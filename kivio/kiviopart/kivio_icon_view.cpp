@@ -154,6 +154,7 @@ KivioIconView::KivioIconView( QWidget *parent, const char *name )
 
 KivioIconView::~KivioIconView()
 {
+    objList.remove(this);
     m_pCurDrag = NULL;
 }
 

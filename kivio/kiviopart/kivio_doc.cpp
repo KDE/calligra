@@ -60,6 +60,10 @@
 #include <qpixmap.h>
 
 #include <kstddirs.h>
+#include <kpopupmenu.h>
+#include <kmenubar.h>
+#include <kiconloader.h>
+#include <khelpmenu.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <koTemplateChooseDia.h>
@@ -740,4 +744,32 @@ void KivioDoc::updateView(KivioPage* page, bool modified)
   if (modified)
     setModified(true);
 }
+
+void KivioDoc::addShell(KoMainWindow *shell)
+{
+     kdDebug() << "addShell-----------------------------" << endl;
+  KoDocument::addShell(shell);
+
+  KPopupMenu* help = shell->customHelpMenu();
+  help->disconnectItem(KHelpMenu::menuAboutApp, 0, 0);
+  help->connectItem(KHelpMenu::menuAboutApp, this, SLOT(aboutKivio()));
+
+  help->insertSeparator();
+  help->insertItem(BarIcon("kivio"), i18n("Get Stencil Sets"), this, SLOT(aboutGetStencilSets()));
+
+  shell->menuBar()->insertItem(i18n("&Help"), help);
+}
+
+void KivioDoc::aboutKivio()
+{
+     kdDebug() << "aboutKivio" << endl;
+//  debug("aboutKivio");
+}
+
+void KivioDoc::aboutGetStencilSets()
+{
+     kdDebug() << "aboutGetStencilSets" << endl;
+//  debug("aboutGetStencilSets");
+}
+
 #include "kivio_doc.moc"

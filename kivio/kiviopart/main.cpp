@@ -20,10 +20,17 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
+#include <kiconloader.h>
 
 #include <dcopclient.h>
+
+#include <qlabel.h>
+#include <qapplication.h>
+#include <qdatetime.h>
+
 #include "kivio_factory.h"
 
+#include <unistd.h>
 
 static const KCmdLineOptions options[]=
 {
@@ -39,12 +46,40 @@ int main( int argc, char **argv )
 
     KoApplication app;
 
+    QLabel* splash = 0;
+    if ( bool showSplash = true ) {
+      QString icon;
+      int h = QTime::currentTime().hour();
+      if ( h >= 5 && h < 11 )
+        icon = "kiviosplash";
+      if ( h >= 11 && h < 17 )
+        icon = "kiviosplash";
+      if ( h >= 17 && h < 23 )
+        icon = "kiviosplash";
+      if ( h == 23 || h < 5 )
+        icon = "kiviosplash";
+
+      splash = new QLabel(0, "splash", Qt::WDestructiveClose | Qt::WStyle_Customize | Qt::WStyle_NoBorder);
+      splash->setFrameStyle(QFrame::WinPanel | QFrame::Raised);
+      splash->setPixmap(BarIcon(icon));
+      splash->adjustSize();
+      splash->setCaption( "Kivio by theKompany.com");
+      QRect r = QApplication::desktop()->geometry();
+      splash->move( r.center() - splash->rect().center() );
+      splash->show();
+      splash->repaint(false);
+      QApplication::flushX();
+    }
+
     app.dcopClient()->attach();
-    app.dcopClient()->registerAs( "kivio" );
+    app.dcopClient()->registerAs("kivio");
 
-    if (!app.start())
+    if (!app.start()) {
+      delete splash;
       return 1;
-
+    }
+    sleep(3);
+    delete splash;
     app.exec();
     return 0;
 }

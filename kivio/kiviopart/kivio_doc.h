@@ -40,6 +40,7 @@ class View;
 class QDomDocument;
 
 #include <koDocument.h>
+#include <koMainWindow.h>
 #include "kivio_grid_data.h"
 
 #include <iostream.h>
@@ -61,6 +62,8 @@ friend class KivioPage;
 public:
   KivioDoc( QWidget *parentWidget = 0, const char* widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
   ~KivioDoc();
+
+  virtual void addShell(KoMainWindow *shell);
 
   virtual QDomDocument saveXML();
 
@@ -130,6 +133,9 @@ public slots:
   void slotDeleteStencilSet( DragBarButton *, QWidget *, KivioStackBar * );
   void slotSelectionChanged();
   void setUnits(int);
+
+  void aboutKivio();
+  void aboutGetStencilSets();
 
 signals:
   void sig_selectionChanged();

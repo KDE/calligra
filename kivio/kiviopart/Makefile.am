@@ -156,3 +156,6 @@ rc_DATA = kivio.rc
 rcdir = $(kde_datadir)/kivio
 
 KDE_ICON = kivio
+
+splashdir = ${kde_datadir}/kivio/pics
+splash_DATA = kiviosplash.png
