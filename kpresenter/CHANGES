@@ -13,4 +13,5 @@ Changes after KPresenter 1.1
 - spell checking/search/find works on all page
 - Add "Show Presentation Duration"
 - Add dcop interface : now we can insert text, change text format, etc...
-
+- Add support for style
+- Add support for background spell checking
