@@ -170,9 +170,6 @@
                     <property name="text">
                         <string>&amp;Cancel</string>
                     </property>
-                    <property name="accel">
-                        <number>0</number>
-                    </property>
                 </widget>
             </hbox>
         </widget>
