@@ -5,7 +5,6 @@
 #ifndef __VCOMMAND_H__
 #define __VCOMMAND_H__
 
-#include <qvector.h>
 #include <kcommand.h>
 
 #include "karbon_part.h"
@@ -22,7 +21,6 @@ public:
 
 protected:
 	KarbonPart* m_part;
-	QVector<VObject> m_objects;
 };
 
 class VCommandHistory : public KCommandHistory

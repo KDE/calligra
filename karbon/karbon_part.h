@@ -31,14 +31,17 @@ public:
 
 	void addCommand( VCommand* cmd );
 
-	const QList<VLayer>& layers() { return m_layers; }
+	// sacrify constness for transparent access:
+	QList<VLayer>& layers() { return m_layers; }
 
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
 private:
+	// each graphical object lies on a layer:
 	QList<VLayer> m_layers;
 
+	// everybody loves undo/redo:
 	VCommandHistory * m_commandHistory;
 };
 

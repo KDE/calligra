@@ -13,7 +13,7 @@
 #include "karbon_view.h"
 
 // only for test-object:
-#include "vaffinemap.h"
+#include "vccmd_polygon.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -24,21 +24,9 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	// create a layer. we need at least one:
 	m_layers.append( new VLayer() );
 
-
 // <test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	VPath* path = new VPath();
-	path->moveTo( 200.0, 100.0 );
-	path->arcTo( 300.0, 100.0, 300.0, 200.0, 100.0 );
-	path->arcTo( 300.0, 300.0, 200.0, 300.0, 100.0 );
-	path->arcTo( 100.0, 300.0, 100.0, 200.0, 100.0 );
-	path->arcTo( 100.0, 100.0, 200.0, 100.0, 100.0 );
-//	path->lineTo( 100, 100 ).curve1To( 200, 200, 100, 200 );
-//	path->close();
-//	VAffineMap aff_map;
-//	aff_map.translate( 100.0, 100.0 );
-//	path->transform( aff_map );
-	m_layers.last()->objects().append( path );
-
+	VCCmdPolygon* cmd = new VCCmdPolygon( this, 100, 100, 50, 6 );
+	cmd->execute();
 // </test-object> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 }
 

@@ -22,7 +22,7 @@ public:
 	const bool& isVisible() const { return m_isVisible; }
 	const bool& isReadOnly() const { return m_isReadOnly; }
 
-	// note: not const, this is for the part
+	// sacrifying privacy, gaining transparent access:
 	QList<VObject>& objects() { return m_objects; }
 
 private:
