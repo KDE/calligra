@@ -1,13 +1,13 @@
    AC_LANG_SAVE
    AC_LANG_C
    dnl Check for aspell library
-   AC_CHECK_LIB(aspell, new_aspell_config, [LIBASPELL="-laspell"])
-   AC_CHECK_HEADER(aspell.h)
+   KDE_CHECK_LIB(aspell, new_aspell_config, [LIBASPELL="-laspell"])
+   KDE_CHECK_HEADER(aspell.h)
    if test -z "$ac_cv_header_aspell_h"; then
        echo ""
-       echo "Your libaspell is too old or not installed, I couldn't find aspell.h."
+       echo "I couldn't find aspell.h, part of the libaspell package."
        echo "You must download aspell >= 0.50.2"
-       echo "See http://aspell.net/. Spell-checking disabled."
+       echo "See http://aspell.net/ or use your distribution's packages for libaspell."
        echo ""
        LIBASPELL=""
        LIBKOSPELL=""
