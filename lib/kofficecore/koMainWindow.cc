@@ -616,7 +616,8 @@ void KoMainWindow::slotLoadCompleted()
 void KoMainWindow::slotLoadCanceled( const QString & errMsg )
 {
     kdDebug(30003) << "KoMainWindow::slotLoadCanceled" << endl;
-    KMessageBox::error( this, errMsg );
+    if ( !errMsg.isEmpty() ) // empty when canceled by user
+        KMessageBox::error( this, errMsg );
     // ... can't delete the document, it's the one who emitted the signal...
 
     KoDocument* newdoc = (KoDocument *)(sender());
