@@ -728,6 +728,9 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
         PAP_FLAG(PageBreakBefore); // 0x2407
         PAP_FLAG(InTable); // 0x2416
         PAP_FLAG(Ttp); // 0x2417
+        case sprmPWr: // 0x2423
+            MsWordGenerated::read(in + bytes, &m_pap.wr);
+            break;
         PAP_FLAG(NoAutoHyph); // 0x242A
         PAP_FLAG(Locked); // 0x2430
         PAP_FLAG(WidowControl); // 0x2431
@@ -763,6 +766,30 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
             MsWordGenerated::read(in + bytes, &tmp);
             m_tap.fTableHeader = tmp == 1;
             break;
+        case sprmPWHeightAbs: // 0x442B
+            // TBD: NYI
+            break;
+        case sprmPIstd: // 0x4600
+            MsWordGenerated::read(in + bytes, &m_pap.istd);
+            break;
+        case sprmPIlfo: // 0x460B
+            MsWordGenerated::read(in + bytes, &m_pap.ilfo);
+            break;
+        case sprmCHpsKern: // 0x484B
+            MsWordGenerated::read(in + bytes, &m_chp.hpsKern);
+            break;
+        case sprmCYsri: // 0x484E
+            MsWordGenerated::read(in + bytes, &m_chp.ysr);
+            break;
+        case sprmCRgLid0: // 0x486D
+            MsWordGenerated::read(in + bytes, &m_chp.lidDefault);
+            break;
+        case sprmCRgLid1: // 0x486E
+            MsWordGenerated::read(in + bytes, &m_chp.lidFE);
+            break;
+        case sprmCIstd: // 0x4A30
+            MsWordGenerated::read(in + bytes, &m_chp.istd);
+            break;
         case sprmCLid: // 0x4A41
             // TBD: "only used internally never stored".
             MsWordGenerated::read(in + bytes, &m_chp.lid);
@@ -778,27 +805,6 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
             break;
         case sprmCRgFtc2: // 0x4A51
             MsWordGenerated::read(in + bytes, &m_chp.ftcOther);
-            break;
-        case sprmPWHeightAbs: // 0x442B
-            // TBD: NYI
-            break;
-        case sprmPIstd: // 0x4600
-            MsWordGenerated::read(in + bytes, &m_pap.istd);
-            break;
-        case sprmPIlfo: // 0x460B
-            MsWordGenerated::read(in + bytes, &m_pap.ilfo);
-            break;
-        case sprmCHpsKern: // 0x484B
-            MsWordGenerated::read(in + bytes, &m_chp.hpsKern);
-            break;
-        case sprmCRgLid0: // 0x486D
-            MsWordGenerated::read(in + bytes, &m_chp.lidDefault);
-            break;
-        case sprmCRgLid1: // 0x486E
-            MsWordGenerated::read(in + bytes, &m_chp.lidFE);
-            break;
-        case sprmCIstd: // 0x4A30
-            MsWordGenerated::read(in + bytes, &m_chp.istd);
             break;
         case sprmPDyaLine: // 0x6412
             // TBD: NYI

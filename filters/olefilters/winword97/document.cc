@@ -431,7 +431,7 @@ void Document::Attributes::setRuns(
                                     drawingType,
                                     &drawingLength,
                                     &drawingData);
-	                delayData = 0L;
+                        delayData = 0L;
                     }
                     else
                     {
