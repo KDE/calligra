@@ -3991,15 +3991,20 @@ void KSpreadView::print( KPrinter &prt )
 
     print->print( painter, &prt );
 
-    painter.end();
-
-    m_pDoc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
-    m_pDoc->newZoomAndResolution( false, false );
-
     //Restore original orientation
     print->setPaperOrientation( _orient );
 
-    m_pCanvas->repaint();
+    m_pDoc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    m_pDoc->newZoomAndResolution( true, false );
+
+    // Repaint at correct zoom
+    m_pDoc->emitBeginOperation( false );
+    setZoom( oldZoom, false );
+    QRect r( m_pTable->visibleRect( m_pCanvas ) );
+    activeTable()->setRegionPaintDirty( r );
+    m_pDoc->emitEndOperation( r );
+
+    painter.end();
 }
 
 void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
