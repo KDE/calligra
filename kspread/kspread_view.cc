@@ -1892,10 +1892,11 @@ void KSpreadView::initialPosition()
     m_fillDown->setEnabled( false );
     m_fillLeft->setEnabled( false );
 
-    m_acceptRejectChanges->setEnabled( false );
-    m_filterChanges->setEnabled( false );
-    m_protectChanges->setEnabled( false );
-    m_commentChanges->setEnabled( false );
+    m_recordChanges->setChecked( m_pDoc->map()->changes() );
+    m_acceptRejectChanges->setEnabled( m_pDoc->map()->changes() );
+    m_filterChanges->setEnabled( m_pDoc->map()->changes() );
+    m_protectChanges->setEnabled( m_pDoc->map()->changes() );
+    m_commentChanges->setEnabled( m_pDoc->map()->changes() );
 
     m_insertChartFrame->setEnabled(false);
 

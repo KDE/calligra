@@ -10,7 +10,7 @@ libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_dlg_formula.cc digest.cc \
 	kspread_functions.cc kspread_dlg_csv.cc \
 	kspread_canvas.cc kspread_functions_helper.cc \
-	kspread_doc.cc \
+	kspread_doc.cc kspread_numformat.cc \
 	kspread_value.cc \
 	kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
 	kspread_autofill.cc kspread_interpreter.cc \

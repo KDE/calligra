@@ -104,11 +104,15 @@ class KSpreadChanges : public QObject
 
   void addChange( KSpreadSheet * table, KSpreadCell * cell, QPoint const & point,
                   QString const & oldFormat, QString const & oldValue, bool hasDepandancy = true );
+  void fillDependancyList();
 
   void saveXml( QDomDocument & doc, QDomElement & map );
   bool loadXml( QDomElement const & changes );
 
  private:
+  class ChangeRecord;
+  class RecordMap : public QMap<int, ChangeRecord *> {};
+
   class AuthorInfo
   {
    public:
@@ -146,7 +150,7 @@ class KSpreadChanges : public QObject
   class CellChange : public Change
   {
    public:    
-
+    CellChange() : Change(), cell( 0 ) {}
     ~CellChange();
 
 
@@ -173,18 +177,20 @@ class KSpreadChanges : public QObject
                   QPoint const & cellRef, Change * change );
     ~ChangeRecord();
 
-    bool loadXml( QDomElement & changes );
+    bool loadXml( QDomElement & changes, KSpreadMap * map, RecordMap & records );
     void saveXml( QDomDocument & doc, QDomElement & parent ) const;
 
     bool isDependant( KSpreadSheet const * const table, QPoint const & cell ) const;
     void addDependant( ChangeRecord * record, QPoint const & cellRef );
-    void addDependancy( ChangeRecord * record );
 
     void  setState( State state ) { m_state = state; }
     State state() const { return m_state; }
 
     int id() const { return m_id; }
     KSpreadSheet const * const table() const { return m_table; }
+
+    int dependancies() const { return m_dependancies; }
+    void increaseDependancyCounter() { ++m_dependancies; }
 
    private:
     friend class KSpreadAcceptDlg;
@@ -197,12 +203,10 @@ class KSpreadChanges : public QObject
     KSpreadSheet * m_table;
     QPoint         m_cell; // Rows: (0, row), Columns: (col, 0), Cells (>0, >0)
     Change *       m_change;
+    int            m_dependancies;
 
     QPtrList<ChangeRecord> m_dependants;
-    QPtrList<ChangeRecord> m_dependancies;
   };
-
-  class RecordMap : public QMap<int, ChangeRecord *> {};
 
   friend class KSpreadAcceptDlg;
   friend class KSpreadCommentDlg;

@@ -13,17 +13,17 @@
   <Action name="paste"/>
   <Action name="specialPaste"/>
   <Action name="insertCellCopy"/>
-  <Separator/>
-  <Action name="edit_find"/>
-  <Action name="edit_find_next"/>
-  <Action name="edit_find_last"/>
-  <Action name="edit_replace"/>
   <Menu name="Fill"><text>Fi&amp;ll</text>
         <Action name="fillDown"/>
         <Action name="fillRight"/>
         <Action name="fillUp"/>
         <Action name="fillLeft"/>
   </Menu>      
+  <Separator/>
+  <Action name="edit_find"/>
+  <Action name="edit_find_next"/>
+  <Action name="edit_find_last"/>
+  <Action name="edit_replace"/>
   <Menu name="Clear"><text>Clear</text>
         <Action name="cleartext"/>
         <Action name="clearcomment"/>

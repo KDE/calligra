@@ -194,6 +194,19 @@ bool KSpreadChanges::loadXml( QDomElement const & changes )
     n = n.nextSibling();
   }
 
+  RecordMap::iterator iter = m_changeRecords.begin();
+  RecordMap::iterator end  = m_changeRecords.end();
+  
+  while ( iter != end )
+  {
+    ChangeRecord * record = iter.data();
+
+    if ( record->dependancies() == 0 )
+      m_dependancyList.append( record );
+
+    ++iter;
+  }  
+
   return true;
 }
 
@@ -226,22 +239,53 @@ bool KSpreadChanges::loadAuthors( QDomElement const & authors )
 
 bool KSpreadChanges::loadChanges( QDomElement const & changes )
 {
-  QDomNode n = changes.firstChild();
-  while( !n.isNull() )
+  QDomElement e = changes.firstChild().toElement();
+  while( !e.isNull() )
   {
-    QDomElement e = n.toElement();
+    if ( !e.hasAttribute( "id" ) )
+    {
+      e = e.nextSibling().toElement();
+      continue;
+    }
+    bool ok = false;
+    int id = e.attribute( "id" ).toInt( &ok );
 
-    ChangeRecord * record = new ChangeRecord();
+    if ( ok )
+    {
+      ChangeRecord * record = m_changeRecords[id];
 
-    if ( record->loadXml( e ) )
-      m_changeRecords[ record->id() ] = record;
-    else
-      delete record;
+      if ( !record )
+        record = new ChangeRecord();
+      
+      if ( record->loadXml( e, m_map, m_changeRecords ) )
+        m_changeRecords[ record->id() ] = record;
+      else
+      {
+        delete record;
+        return false;
+      }
+    }
 
-    n = n.nextSibling();
+    e = e.nextSibling().toElement();
   }
 
   return true;
+}
+
+void KSpreadChanges::fillDependancyList()
+{
+  RecordMap::iterator iter = m_changeRecords.begin();
+  RecordMap::iterator end  = m_changeRecords.end();
+  
+  while ( iter != end )
+  {
+    ChangeRecord * record = iter.data();
+    
+    if ( record->dependancies() == 0 )
+      m_dependancyList.append( record );
+    
+    ++iter;
+  }
 }
 
 void KSpreadChanges::addChange( KSpreadSheet * table, KSpreadCell * cell, QPoint const & point,
@@ -316,6 +360,7 @@ QString KSpreadChanges::getAuthor( int id )
  */
 
 KSpreadChanges::ChangeRecord::ChangeRecord()
+  : m_dependancies( 0 )
 {
   m_dependants.setAutoDelete( false );
 }
@@ -323,10 +368,9 @@ KSpreadChanges::ChangeRecord::ChangeRecord()
 KSpreadChanges::ChangeRecord::ChangeRecord( int id, State state, ChangeType type, KSpreadSheet * table, 
                                             QPoint const & cellRef, Change * change )
   : m_id( id ), m_state( state ), m_type( type ), m_table ( table ),
-    m_cell( cellRef ), m_change( change )
+    m_cell( cellRef ), m_change( change ), m_dependancies( 0 )
 {
   m_dependants.setAutoDelete( false );
-  m_dependancies.setAutoDelete( false );
 }
 
 KSpreadChanges::ChangeRecord::~ChangeRecord()
@@ -370,8 +414,104 @@ void KSpreadChanges::ChangeRecord::saveXml( QDomDocument & doc, QDomElement & ch
   changes.appendChild( change );
 }
 
-bool KSpreadChanges::ChangeRecord::loadXml( QDomElement & changes )
+bool KSpreadChanges::ChangeRecord::loadXml( QDomElement & change, KSpreadMap * map, RecordMap & records )
 {
+  int y = 0;
+  int x = 0;
+  bool ok = false;
+  if ( change.hasAttribute( "y" ) )
+    y = change.attribute( "y" ).toInt( &ok );
+  else
+    return false;
+  if ( !ok ) return false;
+
+  if ( change.hasAttribute( "x" ) )
+    x = change.attribute( "x" ).toInt( &ok );
+  else
+    return false;
+  if ( !ok ) return false;
+
+  m_cell.setX( x );
+  m_cell.setY( y );
+
+  if ( change.hasAttribute( "id" ) )
+    y = change.attribute( "id" ).toInt( &ok );
+  else
+    return false;
+  if ( !ok ) return false;
+  
+  m_id = y;
+
+  if ( change.hasAttribute( "state" ) )
+    y = change.attribute( "state" ).toInt( &ok );
+  else
+    return false;
+  if ( !ok ) return false;
+  
+  m_state = (State) y;
+
+  if ( change.hasAttribute( "type" ) )
+    y = change.attribute( "type" ).toInt( &ok );
+  else
+    return false;
+  if ( !ok ) return false;
+  
+  m_type = (ChangeType) y;
+
+  if ( change.hasAttribute( "table" ) )
+  {
+    m_table = map->findTable( change.attribute( "table" ) );
+    if ( !m_table )
+      return false;
+  }
+  else
+    return false;
+
+  switch ( m_type )
+  {
+   case CELL:
+    {
+      QDomElement cell = change.namedItem( "cell" ).toElement();
+      if ( cell.isNull() )
+        return false;
+      CellChange * ch = new CellChange();
+      ch->loadXml( cell, m_table, m_cell );
+      
+      m_change = ch;
+    }
+    break;
+
+   default:
+    return false;
+  }
+
+  QDomElement dependant = change.namedItem( "dependant" ).toElement();
+  while ( !dependant.isNull() )
+  {
+    if ( dependant.tagName() == "dependant" )
+    {
+      int id = 0;
+      if ( dependant.hasAttribute( "id" ) )
+      {
+        bool ok = false;
+        id = dependant.attribute( "id" ).toInt( &ok );
+        if ( ok )
+        {
+          ChangeRecord * record = records[id];
+          if ( !record )
+          {
+            record = new ChangeRecord();
+            records[id] = record;
+          }
+          record->increaseDependancyCounter();
+          m_dependants.append( record );
+        }
+      }
+    }
+    dependant = dependant.nextSibling().toElement();
+  }
+  
+  return true;
 }
 
 bool KSpreadChanges::ChangeRecord::isDependant( KSpreadSheet const * const table, QPoint const & cell ) const
@@ -401,16 +541,10 @@ void KSpreadChanges::ChangeRecord::addDependant( ChangeRecord * record, QPoint c
     {
       added = true;
       it.current()->addDependant( record, cellRef );
-      record->addDependancy( it.current() );
     }
   }
   if ( !added )
     m_dependants.append( record );
-}
-
-void KSpreadChanges::ChangeRecord::addDependancy( ChangeRecord * record )
-{
-  m_dependancies.append( record );
 }
 
 /*
@@ -436,6 +570,7 @@ bool KSpreadChanges::CellChange::loadXml( QDomElement const & change,
                                           KSpreadSheet const * const table,
                                           QPoint const & cellRef )
 {
+  kdDebug() << "Loading CellChange object" << endl;
   bool ok = false;
   if ( change.hasAttribute( "author" ) )
   {
@@ -464,6 +599,10 @@ bool KSpreadChanges::CellChange::loadXml( QDomElement const & change,
   if ( change.hasAttribute( "oldValue" ) )
     oldValue = change.attribute( "oldValue" );
   else return false;
+
+  cell = table->cellAt( cellRef.x(), cellRef.y() );
+  if ( !cell )
+    return false;
 
   return true;
 }

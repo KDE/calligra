@@ -830,6 +830,9 @@ void KSpreadAcceptDlg::addChangeRecord( KListViewItem * element, KSpreadChanges:
 
 void KSpreadAcceptDlg::fillList()
 {
+  if ( m_changes->m_dependancyList.isEmpty() )
+    m_changes->fillDependancyList();
+
   kdDebug() << "Filling list" <<  endl;
   m_acceptElement = new KListViewItem( m_dialog->m_listView, i18n( " Accepted" ) );
   m_rejectElement = new KListViewItem( m_dialog->m_listView, i18n( " Rejected" ) );                         
