@@ -752,6 +752,12 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
     kdDebug(30508) << "Document written by " << editor << endl;
     kdDebug(30508) << "Document of syntax version " << leader->m_syntaxVersion << endl;
 
+    if ( leader->m_syntaxVersion == 1)
+    {
+        leader->m_oldSyntax = true; // Syntax 1 is old syntax
+    }
+    // ### TODO: check old syntax when syntax version was not defined
+
     leader->doOpenHead();
 
     // At first, process <SPELLCHECKIGNORELIST>, even if mostly it will not be needed

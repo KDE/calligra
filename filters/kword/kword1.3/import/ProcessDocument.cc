@@ -466,8 +466,8 @@ static void SubProcessFormatOneTag(QDomNode myNode,
         formatPos=0;
         formatLen=0;
 
-        // In syntax version 1 (KWord 0.8), the comment would be displayed for each paragraph, so do not show it.
-        if ( leader->m_syntaxVersion != 1 )
+        // In the old syntax (KWord 0.8), the comment would be displayed for each paragraph, so do not show it.
+        if ( ! leader->m_oldSyntax )
             kdDebug (30508) << "Missing formatting for <FORMAT> (style or syntax version 1 ?)" << endl;
     }
 
@@ -580,7 +580,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
     attrProcessingList << AttrProcessing ( "len", "int", (void *) &formatLen );
     ProcessAttributes (myNode, attrProcessingList);
 
-    if ( ( formatId == -1 ) && ( leader->m_syntaxVersion == 1 ) )
+    if ( ( formatId == -1 ) && ( leader->m_oldSyntax ) )
     {
         formatId = 1; // KWord 0.8 did not define it in <LAYOUT>
     }
@@ -678,7 +678,7 @@ static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, KWEFKWor
         << AttrProcessing ( "alignchar", "",       0 )
         ;
 
-    if ( leader->m_syntaxVersion == 1 )
+    if ( leader->m_oldSyntax )
     {
         // Avoid too many warning
         attrProcessingList
@@ -864,7 +864,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     tagProcessingList << TagProcessing ( "TABULATOR",    ProcessLayoutTabulatorTag,   &layout->tabulatorList       );
     tagProcessingList << TagProcessing ( "SHADOW",       ProcessShadowTag,            layout                       );
 
-    if ( leader->m_syntaxVersion == 1)
+    if ( leader->m_oldSyntax )
     {
         tagProcessingList << TagProcessing ( "FLOW", ProcessStringValueTag, &layout->alignment );
     }
@@ -875,7 +875,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
 
     ProcessSubtags (myNode, tagProcessingList, leader);
 
-    if ( leader->m_syntaxVersion == 1 )
+    if ( leader->m_oldSyntax )
     {
         if ( layout->alignment.isEmpty() )
         {

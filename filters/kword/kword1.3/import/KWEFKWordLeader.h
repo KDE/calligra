@@ -32,7 +32,7 @@
 class KWEFKWordLeader
 {
     public:
-        KWEFKWordLeader(void) : m_syntaxVersion(-1),m_chain(NULL), m_hType(0), m_fType(0) {}
+        KWEFKWordLeader(void) : m_syntaxVersion(-1), m_oldSyntax(false), m_chain(NULL), m_hType(0), m_fType(0) {}
         virtual ~KWEFKWordLeader(void) {}
 
     public:
@@ -86,6 +86,7 @@ class KWEFKWordLeader
 
     public:
         int m_syntaxVersion; // -1: unknown, 1: KWord 0.8, 2: KWord 1.1 & 1.2, 3: KWord 1.3
+        bool m_oldSyntax; // true if oldSyntax (KWord 0.8)
     private:
         KoFilterChain* m_chain;
         int m_hType, m_fType;
