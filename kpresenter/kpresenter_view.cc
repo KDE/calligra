@@ -1172,7 +1172,6 @@ void KPresenterView::extraPenBrush()
         styleDia->setObjectName( objectName );
     }
 
-#if MASTERPAGE
     if ( m_canvas->activePage()->masterPage() )
         styleDia->setSticky( STATE_OFF );
     else
@@ -1189,38 +1188,7 @@ void KPresenterView::extraPenBrush()
         styleDia->setKeepRatio( STATE_ON );
     else
         styleDia->setKeepRatio( STATE_OFF);
-#else
-    int nbStickyObjSelected = m_canvas->activePage()->masterPage()->numSelected();
-    int nbActivePageObjSelected = m_canvas->activePage()->numSelected();
-    if ( nbActivePageObjSelected >0 && nbStickyObjSelected>0)
-        styleDia->setSticky( STATE_UNDEF );
-    else if ( nbStickyObjSelected == 0)
-        styleDia->setSticky( STATE_OFF );
-    else if ( nbStickyObjSelected> 0 && nbActivePageObjSelected == 0)
-        styleDia->setSticky( STATE_ON );
 
-    bool result = m_canvas->getProtect( protect );
-    if ( m_canvas->differentProtect( result ) )
-        styleDia->setProtected(STATE_UNDEF);
-    else
-    {
-        if (result)
-            styleDia->setProtected( STATE_ON );
-        else
-            styleDia->setProtected( STATE_OFF );
-    }
-    result = m_canvas->getKeepRatio( keepRatio );
-    if ( m_canvas->differentKeepRatio( result ) )
-        styleDia->setKeepRatio(STATE_UNDEF);
-    else
-    {
-        if ( result )
-            styleDia->setKeepRatio( STATE_ON );
-        else
-            styleDia->setKeepRatio( STATE_OFF);
-    }
-
-#endif
     styleDia->setProtectContent( m_canvas->getProtectContent(protectContent));
 
     if ( state )
@@ -1933,6 +1901,7 @@ void KPresenterView::brushChosen()
     KPTextView *edit = m_canvas->currentTextObjectView();
     if ( !edit )
     {
+        //tz TODO remove macro, add parameter for command name in setBrush()
         KMacroCommand * macro= NULL;
         KCommand * cmd = NULL;
         QBrush newBrush( c );
@@ -1947,17 +1916,6 @@ void KPresenterView::brushChosen()
             macro->addCommand( cmd );
         }
 
-#if ! MASTERPAGE
-        cmd = m_canvas->activePage()->masterPage()->setBrush( newBrush, FT_BRUSH, QColor(), QColor(), BCT_PLAIN, false,
-                                                              0, 0, BrushCmd::BrushColor | BrushCmd::BrushStyle |
-                                                              BrushCmd::BrushGradientSelect );
-        if( cmd )
-        {
-            if ( !macro )
-                macro = new KMacroCommand( i18n( "Change Fill Color" ) );
-            macro->addCommand(cmd);
-        }
-#endif
 
         if( macro )
             m_pKPresenterDoc->addCommand( macro );
@@ -3321,9 +3279,7 @@ void KPresenterView::backOk( BackDia* backDia, bool takeGlobal )
     SetBackCmd *setBackCmd = new SetBackCmd( i18n( "Set Background" ),
                                              backDia->getBackGround(),
                                              page->background()->getBackGround(),
-#if MASTERPAGE
                                              backDia->useMasterBackground(),
-#endif
                                              takeGlobal, m_pKPresenterDoc,page);
     setBackCmd->execute();
     m_pKPresenterDoc->addCommand( setBackCmd );
@@ -3386,22 +3342,6 @@ void KPresenterView::styleOk()
 
             macro->addCommand(cmd);
         }
-
-#if ! MASTERPAGE
-        cmd = m_canvas->activePage()->masterPage()->setBrush( confBrushDia->getBrush(), confBrushDia->getFillType(),
-                                                              confBrushDia->getGColor1(), confBrushDia->getGColor2(),
-                                                              confBrushDia->getGType(), confBrushDia->getGUnbalanced(),
-                                                              confBrushDia->getGXFactor(), confBrushDia->getGYFactor(),
-                                                              confBrushDia->getBrushConfigChange() );
-
-        if(cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand(cmd);
-        }
-#endif
     }
 
     if ( !styleDia->protectNoChange() )
@@ -3430,24 +3370,6 @@ void KPresenterView::styleOk()
     // stick has to be done before the object name is set,
     // so that the name is set in the right page
     bool bSticky=styleDia->isSticky();
-#if !MASTERPAGE
-    if ( !styleDia->stickyNoChange())
-    {
-        bSticky=styleDia->isSticky();
-        //all sticky obj are sticky page => when sticky=false test sticky page
-        if(bSticky)
-            cmd=m_canvas->activePage()->stickyObj(bSticky,m_canvas->activePage() );
-        else
-            cmd = m_canvas->activePage()->masterPage()->stickyObj(bSticky,m_canvas->activePage());
-        if(cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand(cmd);
-        }
-    }
-#endif
 
     if ( styleDia->isOneObject())
     {
@@ -3507,19 +3429,6 @@ void KPresenterView::styleOk()
             macro->addCommand(cmd);
         }
 
-#if ! MASTERPAGE
-        cmd = m_canvas->activePage()->masterPage()->setPieSettings( confPieDia->getType(), confPieDia->getAngle(),
-                                                                    confPieDia->getLength(), confPieDia->getPieConfigChange() );
-
-        if(cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand(cmd);
-        }
-#endif
-
         updateObjectStatusBarItem();  //the type might have changed
     }
 
@@ -3536,20 +3445,6 @@ void KPresenterView::styleOk()
 
             macro->addCommand(cmd);
         }
-
-#if ! MASTERPAGE
-        cmd = m_canvas->activePage()->masterPage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
-                                                                        confPolygonDia->getCornersValue(),
-                                                                        confPolygonDia->getSharpnessValue(),
-                                                                        confPolygonDia->getPolygonConfigChange() );
-        if(cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand(cmd);
-        }
-#endif
     }
 
     if ((confPictureDia = styleDia->getConfPictureDia()))
@@ -3566,21 +3461,6 @@ void KPresenterView::styleOk()
 
             macro->addCommand( cmd );
         }
-
-#if ! MASTERPAGE
-        cmd = m_canvas->activePage()->masterPage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
-                                                                        confPictureDia->getPictureDepth(),
-                                                                        confPictureDia->getPictureSwapRGB(),
-                                                                        confPictureDia->getPictureGrayscal(),
-                                                                        confPictureDia->getPictureBright() );
-        if (cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand( cmd );
-        }
-#endif
     }
 
     if ((confRectDia = styleDia->getConfRectangleDia()))
@@ -3595,19 +3475,6 @@ void KPresenterView::styleOk()
 
             macro->addCommand(cmd);
         }
-
-#if ! MASTERPAGE
-        cmd = m_canvas->activePage()->masterPage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY(),
-                                                                     confRectDia->getRectangleConfigChange() );
-
-        if(cmd)
-        {
-            if ( !macro)
-                macro=new KMacroCommand(i18n( "Apply Properties" ) );
-
-            macro->addCommand(cmd);
-        }
-#endif
     }
 
     if(macro)
@@ -3692,55 +3559,19 @@ void KPresenterView::pgConfOk()
 void KPresenterView::rotateOk()
 {
     float _newAngle=rotateDia->angle();
-    KMacroCommand *macro=0L;
 
     KCommand *cmd=m_canvas->activePage()->rotateSelectedObjects(_newAngle);
-    if( cmd)
-    {
-        if ( !macro )
-            macro=new KMacroCommand(i18n( "Change Rotation" ));
-        macro->addCommand(cmd);
-    }
-#if ! MASTERPAGE
-    cmd = m_canvas->activePage()->masterPage()->rotateSelectedObjects( _newAngle );
-    if( cmd)
-    {
-        if ( !macro )
-            macro=new KMacroCommand(i18n( "Change Rotation" ));
-
-        macro->addCommand(cmd);
-    }
-#endif
-    if(macro)
-        kPresenterDoc()->addCommand(macro);
+    if( cmd )
+        kPresenterDoc()->addCommand( cmd );
 }
 
 void KPresenterView::shadowOk()
 {
-    KMacroCommand *macro=0L;
-
     KCommand *cmd=m_canvas->activePage()->shadowObj(shadowDia->shadowDirection(),
                                                     shadowDia->shadowDistance(),
                                                     shadowDia->shadowColor());
     if( cmd)
-    {
-        if ( !macro )
-            macro=new KMacroCommand(i18n( "Change Shadow" ));
-        macro->addCommand(cmd);
-    }
-#if ! MASTERPAGE
-    cmd = m_canvas->activePage()->masterPage()->shadowObj( shadowDia->shadowDirection(),
-                                                           shadowDia->shadowDistance(),
-                                                           shadowDia->shadowColor() );
-    if( cmd)
-    {
-        if ( !macro )
-            macro=new KMacroCommand(i18n( "Change Shadow" ));
-        macro->addCommand(cmd);
-    }
-#endif
-    if(macro)
-        kPresenterDoc()->addCommand(macro);
+        kPresenterDoc()->addCommand( cmd );
 }
 
 unsigned int KPresenterView::getCurrPgNum() const
@@ -4262,9 +4093,7 @@ void KPresenterView::setRanges()
 
 void KPresenterView::skipToPage( int num )
 {
-#if MASTERPAGE
     setEditMaster( false );
-#endif
     if ( num < 0 || num > static_cast<int>( m_pKPresenterDoc->getPageNums() ) - 1 || !m_canvas )
         return;
     m_canvas->exitEditMode();
@@ -4486,11 +4315,10 @@ bool KPresenterView::gotoPresPage( int pg )
 
 void KPresenterView::nextPage()
 {
-#if MASTERPAGE
     // don't move when on master
     if ( m_editMaster )
         return;
-#endif
+
     if ( currPg >= (int)m_pKPresenterDoc->getPageNums() - 1 )
         return;
 
@@ -4500,11 +4328,10 @@ void KPresenterView::nextPage()
 
 void KPresenterView::prevPage()
 {
-#if MASTERPAGE
     // don't move when on master
     if ( m_editMaster )
         return;
-#endif
+
     if ( currPg == 0 )
         return;
     skipToPage( currPg-1 );
@@ -4627,9 +4454,7 @@ void KPresenterView::viewShowNoteBar()
 
 void KPresenterView::viewSlideMaster()
 {
-#if MASTERPAGE
     setEditMaster( actionViewSlideMaster->isChecked() );
-#endif
 }
 
 void KPresenterView::setEditMaster( bool editMaster )
@@ -4994,19 +4819,6 @@ void KPresenterView::slotSpellCheck()
     {
         objects = spellAddTextObject();
         QPtrList<KPObject> lstObj;
-#if ! MASTERPAGE
-        m_pKPresenterDoc->masterPage()->getAllObjectSelectedList(lstObj, true);
-        QPtrListIterator<KPObject> it( lstObj );
-        for ( ; it.current() ; ++it )
-        {
-            if(it.current()->getType()==OT_TEXT)
-            {
-                KPTextObject* tmp = dynamic_cast<KPTextObject*>(it.current() );
-                if ( tmp && !tmp->isProtectContent())
-                    objects.append(tmp->textObject());
-            }
-        }
-#endif
     }
     m_spell.textIterator = new KoTextIterator( objects, edit, options );
     startKSpell();
@@ -6410,11 +6222,7 @@ void KPresenterView::openPopupMenuZoom( const QPoint & _point )
     if(!koDocument()->isReadWrite() || !factory())
         return;
     actionZoomSelectedObject->setEnabled( m_canvas->isOneObjectSelected());
-#if MASTERPAGE
     int nbObj = m_canvas->activePage()->objectList().count();
-#else
-    int nbObj = ( m_canvas->activePage()->masterPage()->objectList().count() - 2 ) + m_canvas->activePage()->objectList().count();
-#endif
     actionZoomAllObject->setEnabled( nbObj > 0);
     static_cast<QPopupMenu*>(factory()->container("zoom_popup",this))->popup(_point);
 }
@@ -6658,13 +6466,6 @@ void KPresenterView::applyAutoFormat()
     m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     m_initSwitchPage=m_switchPage;
     QPtrList<KoTextObject> list=m_canvas->activePage()->allTextObjects();
-#if ! MASTERPAGE
-    QPtrList<KoTextObject> list2 = m_canvas->activePage()->masterPage()->allTextObjects();
-    QPtrListIterator<KoTextObject> it( list2 );
-
-    for ( ; it.current() ; ++it )
-        list.append(it.current());
-#endif
 
     KCommand * cmd2 = applyAutoFormatToCurrentPage( list );
     if ( cmd2 )
@@ -7018,22 +6819,8 @@ void KPresenterView::imageEffect()
 
             KCommand *cmd=m_canvas->activePage()->setImageEffect(imageEffectDia->getEffect(), imageEffectDia->getParam1(),
                                                                  imageEffectDia->getParam2(), imageEffectDia->getParam3());
-            if (cmd) {
-                if (!macro)
-                    macro=new KMacroCommand(i18n("Change Image Effect"));
-                macro->addCommand(cmd);
-            }
-#if ! MASTERPAGE
-            cmd = m_canvas->activePage()->masterPage()->setImageEffect( imageEffectDia->getEffect(), imageEffectDia->getParam1(),
-                                                                        imageEffectDia->getParam2(), imageEffectDia->getParam3());
-            if (cmd) {
-                if (!macro)
-                    macro=new KMacroCommand(i18n("Change Image Effect"));
-                macro->addCommand(cmd);
-            }
-#endif
-            if (macro)
-                kPresenterDoc()->addCommand(macro);
+            if ( cmd )
+                kPresenterDoc()->addCommand( cmd );
         }
 
         delete imageEffectDia;
@@ -7086,22 +6873,13 @@ KCommand * KPresenterView::getPenCmd( const QString &name, QPen pen, LineEnd lb,
 {
     KMacroCommand * macro = NULL;
 
+    //tz TODO remove macro, add parameter for command name to setPen()
     KCommand * cmd = m_canvas->activePage()->setPen( pen, lb, le, flags );
     if( cmd )
     {
         macro = new KMacroCommand( name );
         macro->addCommand( cmd );
     }
-
-#if ! MASTERPAGE
-    cmd = m_canvas->activePage()->masterPage()->setPen( pen, lb, le, flags );
-    if( cmd )
-    {
-        if ( !macro )
-            macro = new KMacroCommand( name );
-        macro->addCommand( cmd );
-    }
-#endif
 
     return macro;
 }
