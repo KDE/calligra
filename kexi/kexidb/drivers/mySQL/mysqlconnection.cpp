@@ -56,7 +56,8 @@ bool MySqlConnection::drv_connect()
 		setError(ERR_ALREADY_CONNECTED,i18n("Connection has already been opened"));
 		return false;
 	}
-	m_mysql = mysql_init(m_mysql);
+	if (!(m_mysql = mysql_init(m_mysql)))
+		return false;
 
         KexiDBDrvDbg << "MySqlConnection::connect()" << endl;
 	QString socket;
@@ -86,12 +87,11 @@ bool MySqlConnection::drv_connect()
                 m_is_connected = true;
                 return true;
         }
-        else
-        {
-		drv_disconnect();
-                setError(ERR_DB_SPECIFIC,mysql_error(m_mysql));
-		return false;
-        }
+	
+	QString err = mysql_error(m_mysql); //store error msg, if any - can be destroyed after disconenct()
+	drv_disconnect();
+	setError(ERR_DB_SPECIFIC,err);
+	return false;
 }
 
 bool MySqlConnection::drv_disconnect()
