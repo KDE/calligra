@@ -106,7 +106,7 @@
 	<ToolBar name="Tools" position="left">
 		<Text>Toolbox</Text>
 	</ToolBar>
-	<ToolBar name="align_toolbar" fullWidth="false">
+	<ToolBar name="align_toolbar" hidden="true" fullWidth="false">
 		<Text>Align</Text>
 		<Action name="object_align_horizontal_left"/>
 		<Action name="object_align_horizontal_center"/>

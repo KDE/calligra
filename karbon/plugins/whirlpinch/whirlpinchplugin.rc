@@ -5,7 +5,7 @@
 		<Action name="path_whirlpinch"/>
 	</Menu>
 </MenuBar>
-<ToolBar name="Plugins" fullWidth="false">
+<ToolBar name="Plugins" hidden="true" fullWidth="false">
 	<Action name="path_whirlpinch"/>
 </ToolBar>
 </kpartplugin>

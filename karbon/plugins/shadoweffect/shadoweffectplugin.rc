@@ -5,7 +5,7 @@
 		<Action name="object_shadow"/>
 	</Menu>
 </MenuBar>
-<ToolBar name="Plugins" fullWidth="false">
+<ToolBar name="Plugins" hidden="true" fullWidth="false">
 	<Action name="object_shadow"/>
 </ToolBar>
 </kpartplugin>
