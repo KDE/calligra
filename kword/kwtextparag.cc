@@ -38,7 +38,7 @@ static KWTextParag * const INVALID_PARAG = (KWTextParag *)-1;
 Counter::Counter()
 {
     m_numbering = NUM_NONE;
-    m_style = STYLE_NUM;
+    m_style = STYLE_NONE;
     m_depth = 0;
     m_startNumber = 1;
     m_prefix = QString::null;
@@ -108,12 +108,6 @@ void Counter::load( QDomElement & element )
 {
     m_numbering = static_cast<Numbering>( element.attribute("numberingtype").toInt() );
     m_style = static_cast<Style>( element.attribute("type").toInt() );
-    // Catch old usage, and convert into new usage.
-    if ( m_style == STYLE_NONE )
-    {
-        m_numbering = NUM_NONE;
-        m_style = STYLE_NUM;
-    }
     m_depth = element.attribute("depth").toInt();
     m_customBullet.character = QChar( element.attribute("bullet").toInt() );
     m_prefix = correctQString( element.attribute("lefttext") );
@@ -200,6 +194,12 @@ int Counter::number( const KWTextParag *paragraph )
                     m_cache.number = m_startNumber;
                     break;
                 }
+            }
+            else
+            {
+                // There is no counter at all.
+                m_cache.number = m_startNumber;
+                break;
             }
             otherParagraph = static_cast<KWTextParag *>( otherParagraph->prev() );
         }
@@ -398,7 +398,8 @@ QString Counter::text( const KWTextParag *paragraph )
     switch ( style() )
     {
     case STYLE_NONE:
-        // Should not happen.
+        if ( m_numbering == NUM_LIST )
+            tmp = ' ';
         break;
     case STYLE_NUM:
         tmp.setNum( m_cache.number );

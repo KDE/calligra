@@ -676,36 +676,40 @@ void KWParagDia::setupTab4()
 
     // How should the numbers be displayed?
     gStyle = new QButtonGroup( i18n("Style"), tab );
-    QGridLayout *tgrid = new QGridLayout( gStyle, 1, 9, 15, 7 );
+    QGridLayout *tgrid = new QGridLayout( gStyle, 1, 10, 15, 7 );
+
+    tmp = new QRadioButton( i18n( "&None" ), gStyle );
+    tgrid->addMultiCellWidget( tmp, 0, 0, 0, 1 );
+    gStyle->insert( tmp, Counter::STYLE_NONE );
 
     tmp = new QRadioButton( i18n( "&Arabic Numbers ( 1, 2, 3, 4, ... )" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 0, 0, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, 1, 1, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_NUM );
 
     tmp = new QRadioButton( i18n( "L&ower Alphabetical ( a, b, c, d, ... )" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 1, 1, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, 2, 2, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_ALPHAB_L );
 
     tmp = new QRadioButton( i18n( "U&pper Alphabetical ( A, B, C, D, ... )" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 2, 2, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, 3, 3, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_ALPHAB_U );
 
     tmp = new QRadioButton( i18n( "&Lower Roman Numbers ( i, ii, iii, iv, ... )" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 3, 3, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, 4, 4, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_ROM_NUM_L );
 
     tmp = new QRadioButton( i18n( "&Upper Roman Numbers ( I, II, III, IV, ... )" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 4, 4, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, 5, 5, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_ROM_NUM_U );
 
     tmp = new QRadioButton( i18n( "&Custom" ), gStyle );
-    tgrid->addWidget( tmp, 5, 0 );
+    tgrid->addWidget( tmp, 6, 0 );
     gStyle->insert( tmp, Counter::STYLE_CUSTOM );
     tmp->setEnabled(false); // Not implemented
 
     eCustomNum = new QLineEdit( gStyle );
     eCustomNum->setEnabled( false );
-    tgrid->addWidget( eCustomNum, 5, 1 );
+    tgrid->addWidget( eCustomNum, 6, 1 );
     connect( tmp, SIGNAL( toggled(bool) ), eCustomNum, SLOT( setEnabled(bool) ));
     connect( eCustomNum, SIGNAL( textChanged(const QString&) ),
              this, SLOT( numCounterDefChanged(const QString&) ) );
@@ -722,27 +726,27 @@ void KWParagDia::setupTab4()
     QWhatsThis::add( eCustomNum, custcountwt );
 
     tmp = new QRadioButton( i18n( "&Disc Bullet" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 6, 6, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, 7, 7, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_DISCBULLET );
     rDisc = tmp;
 
     tmp = new QRadioButton( i18n( "&Square Bullet" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 7, 7, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, 8, 8, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_SQUAREBULLET );
     rSquare = tmp;
 
     tmp = new QRadioButton( i18n( "&Circle Bullet" ), gStyle );
-    tgrid->addMultiCellWidget( tmp, 8, 8, 0, 1 );
+    tgrid->addMultiCellWidget( tmp, 9, 9, 0, 1 );
     gStyle->insert( tmp, Counter::STYLE_CIRCLEBULLET );
     rCircle = tmp;
 
     tmp = new QRadioButton( i18n( "Custom Bullet" ), gStyle );
-    tgrid->addWidget( tmp, 9, 0 );
+    tgrid->addWidget( tmp, 10, 0 );
     gStyle->insert( tmp, Counter::STYLE_CUSTOMBULLET );
     rCustom = tmp;
 
     bBullets = new QPushButton( gStyle );
-    tgrid->addWidget( bBullets, 9, 1 );
+    tgrid->addWidget( bBullets, 10, 1 );
     connect( bBullets, SIGNAL( clicked() ), this, SLOT( numChangeBullet() ) );
 
     grid->addWidget( gStyle, 1, 0 );
