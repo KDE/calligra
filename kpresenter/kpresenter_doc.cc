@@ -1050,11 +1050,12 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter.startElement("office:settings");
     settingsWriter.startElement("config:config-item-set");
     settingsWriter.addAttribute("config:name", "view-settings");
-    KoUnit::saveOasis(&settingsWriter, m_unit);
+
     settingsWriter.startElement( "config:config-item-map-indexed" );
     settingsWriter.addAttribute( "config:name", "Views" );
     settingsWriter.startElement("config:config-item-map-entry" );
 
+    KoUnit::saveOasis(&settingsWriter, m_unit);
     saveOasisSettings( settingsWriter );
 
     settingsWriter.endElement(); //config:config-item-map-entry
@@ -1129,19 +1130,19 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 
 }
 
-bool KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
+void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
 {
     if ( settingsDoc.isNull() )
-        return true; //not a error some file doesn't have settings.xml
+        return; //not a error some file doesn't have settings.xml
 
     KoOasisSettings settings( settingsDoc );
     bool tmp = settings.selectItemSet( "view-settings" );
-    kdDebug()<<" settings : view-settings :"<<tmp<<endl;
+    //kdDebug()<<" settings : view-settings :"<<tmp<<endl;
 
     if ( tmp )
     {
         tmp = settings.selectItemMap( "Views" );
-        kdDebug()<<" View :"<<tmp<<endl;
+        //kdDebug()<<" View :"<<tmp<<endl;
         if ( tmp )
         {
             parseOasisHelpLine(  settings.parseConfigItemString( "SnapLinesDrawing" ) );
@@ -1150,49 +1151,9 @@ bool KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
             m_gridX = MM_TO_POINT( valx / 100.0 );
             int valy = settings.parseConfigItemInt( "GridFineHeight" );
             m_gridY = MM_TO_POINT( valy / 100.0 );
-
+            setUnit(KoUnit::unit(settings.parseConfigItemString("unit")));
         }
     }
-
-    return true;
-
-#if 0
-// Load application settings
-
-
-
-    if(!settingsDoc.isNull()) {
-        QDomElement contents = settingsDoc.documentElement();
-        body = contents.namedItem("office:settings").toElement();
-
-        if(body.isNull()) {
-            kdDebug(43000) << "No office:settings found!" << endl;
-            setErrorMessage(i18n("Invalid OASIS document. No office:settings tag found."));
-            return false;
-        }
-
-        node = body.firstChild();
-
-        while(!node.isNull()) {
-            if(node.nodeName() == "config:config-item-set") {
-                QDomNode tmp = node.firstChild();
-
-                while(!tmp.isNull()) {
-                    if(tmp.nodeName() == "config:config-item") {
-
-                        if(tmp.toElement().attribute("config:name") == "unit") {
-                            setUnit(KoUnit::loadOasis(tmp.toElement()));
-                        }
-                    }
-
-                    tmp = tmp.nextSibling();
-                }
-            }
-
-            node = node.nextSibling();
-        }
-    }
-#endif
 }
 
 void KPresenterDoc::parseOasisHelpLine( const QString &text )
