@@ -154,7 +154,9 @@ public:
     KoTabulatorList tabList() const { return m_layout.tabList(); }
     void setTabList( const KoTabulatorList &tabList );
 
-    void printRTDebug();
+#ifndef NDEBUG
+    void printRTDebug( int );
+#endif
 
 protected:
     // This is public in QTextParag but it should be internal to KWTextParag,
@@ -178,32 +180,6 @@ protected:
 private:
     QStyleSheetItem * m_item;
     KWParagLayout m_layout;
-};
-
-class KWTextFormatCollection;
-/**
- * This is our QTextDocument reimplementation, to create KWTextParag instead of QTextParags,
- * and to relate it to the text frameset it's in.
- */
-class KWTextDocument : public QTextDocument
-{
-    Q_OBJECT
-public:
-    KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTextFormatCollection *fc );
-    ~KWTextDocument();
-
-    virtual QTextParag * createParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE )
-    {
-        return new KWTextParag( d, pr, nx, updateIds );
-    }
-
-    KWTextFrameSet * textFrameSet() const { return m_textfs; }
-
-    // Used by ~KWTextParag to know if it should die quickly
-    bool isDestroying() const { return m_bDestroying; }
-private:
-    KWTextFrameSet * m_textfs;
-    bool m_bDestroying;
 };
 
 #endif

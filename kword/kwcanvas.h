@@ -44,6 +44,7 @@ using namespace Qt3;
 class QTimer;
 class KWGUI;
 class KWStyle;
+class KWAnchor;
 
 /**
  * Class: KWCanvas
@@ -122,17 +123,9 @@ public:
     KWTblCellSize tableHeightMode() { return m_table.height; }
     bool tableIsFloating() { return m_table.useAnchor; }
 
-    void setTableConfig( unsigned int rows, unsigned int cols,
-                         KWTblCellSize wid, KWTblCellSize hei,
-                         bool isFloating)
-    {
-        m_table.rows = rows;
-        m_table.cols = cols;
-        m_table.width = wid;
-        m_table.height = hei;
-        m_table.useAnchor = isFloating;
-    }
-
+    void createTable( unsigned int rows, unsigned int cols,
+                      KWTblCellSize wid, KWTblCellSize hei,
+                      bool isFloating );
     KWTableFrameSet * getTable();
 
     KWTableFrameSet *getCurrentTable() { return curTable; }
@@ -196,7 +189,11 @@ private:
      */
     void drawBorders( QPainter *painter, const QRect &crect );
 
-    void printRTDebug();
+    void drawMovingRect( QPainter & p );
+
+#ifndef NDEBUG
+    void printRTDebug( int );
+#endif
 
     KWDocument *doc;
     KWFrameSetEdit *m_currentFrameSetEdit;
@@ -214,16 +211,16 @@ private:
     KoDocumentEntry m_partEntry; // when inserting a part
 
     // Table creation support.
+    // Having this as a member variable allows to remember and reuse the last settings
     struct
     {
         unsigned int cols;
         unsigned int rows;
         KWTblCellSize width;
         KWTblCellSize height;
-
-        // Anchor support
         bool useAnchor;
     } m_table;
+    KWAnchor *m_anchor;
     KWTableFrameSet *curTable;
     KWFrameMoveCommand *cmdMoveFrame;
 };

@@ -94,40 +94,32 @@ void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize
     QGridLayout *grid = new QGridLayout( tab1, 9, 2, 15, 7 );
 
     lRows = new QLabel( i18n( "Number of Rows:" ), tab1 );
-    lRows->resize( lRows->sizeHint() );
     grid->addWidget( lRows, 0, 0 );
 
     nRows = new QSpinBox( 1, 128, 1, tab1 );
-    nRows->resize( nRows->sizeHint() );
     nRows->setValue( rows );
     grid->addWidget( nRows, 1, 0 );
 
     lCols = new QLabel( i18n( "Number of Columns:" ), tab1 );
-    lCols->resize( lCols->sizeHint() );
     grid->addWidget( lCols, 2, 0 );
 
     nCols = new QSpinBox( 1, 128, 1, tab1 );
-    nCols->resize( nCols->sizeHint() );
     nCols->setValue( cols );
     grid->addWidget( nCols, 3, 0 );
 
     lHei = new QLabel( i18n( "Cell Heights:" ), tab1 );
-    lHei->resize( lHei->sizeHint() );
     grid->addWidget( lHei, 4, 0 );
 
     cHei = new QComboBox( FALSE, tab1 );
-    cHei->resize( cHei->sizeHint() );
     cHei->insertItem( i18n( "Automatic" ) );
     cHei->insertItem( i18n( "Manual" ) );
     cHei->setCurrentItem( (int)hei );
     grid->addWidget( cHei, 5, 0 );
 
     lWid = new QLabel( i18n( "Cell Widths:" ), tab1 );
-    lWid->resize( lWid->sizeHint() );
     grid->addWidget( lWid, 6, 0 );
 
     cWid = new QComboBox( FALSE, tab1 );
-    cWid->resize( cWid->sizeHint() );
     cWid->insertItem( i18n( "Automatic" ) );
     cWid->insertItem( i18n( "Manual" ) );
     cWid->setCurrentItem( (int)wid );
@@ -139,10 +131,7 @@ void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize
 
     // Checkbox for floating/fixed location. The default is floating.
     cbIsFloating = new QCheckBox( i18n( "The table is floating" ), tab1 );
-    cbIsFloating->resize( cbIsFloating->sizeHint() );
-    cbIsFloating->setChecked( false );
-    //for the moment floating is not implemented
-    cbIsFloating->setEnabled(false);
+    cbIsFloating->setChecked( true );
 
     grid->addMultiCellWidget( cbIsFloating, 9, 9, 0, 2 );
 
@@ -194,11 +183,9 @@ void KWTableDia::setupTab2()
     QGridLayout *grid = new QGridLayout( tab2, 4, 3, 15, 7 );
 
     lStyles = new QLabel( i18n( "Styles" ), tab2 );
-    lStyles->resize( lStyles->sizeHint() );
     grid->addWidget( lStyles, 0, 0 );
 
     lbStyles = new QListBox( tab2 );
-    lbStyles->resize( lbStyles->sizeHint() );
     grid->addWidget( lbStyles, 1, 0 );
 
     preview2 = new QWidget( tab2 );
@@ -216,7 +203,6 @@ void KWTableDia::setupTab2()
 
     cbHeaderOnAllPages = new QCheckBox( i18n( "When a table flows over multiple pages, "
 					      "copy header to each page begin" ), tab2 );
-    cbHeaderOnAllPages->resize( cbHeaderOnAllPages->sizeHint() );
     grid->addMultiCellWidget( cbHeaderOnAllPages, 3, 3, 0, 2 );
 
     grid->addRowSpacing( 0, lStyles->height() );
@@ -253,31 +239,13 @@ void KWTableDia::readTableStyles()
 #endif
 }
 
-/*================================================================*/
-bool KWTableDia::insertTable()
-{
-    canvas->setTableConfig( nRows->value(), nCols->value(),
-			  (KWTblCellSize)cWid->currentItem(),
-			  (KWTblCellSize)cHei->currentItem(),
-                          cbIsFloating->isChecked() );
-    canvas->setMouseMode( MM_CREATE_TABLE );
-
-    return true;
-}
-
 void KWTableDia::slotOk()
 {
-    if (insertTable())
-    {
-        KDialogBase::slotOk();
-    }
-}
-
-/*================================================================*/
-void KWTableDia::slotCancel()
-{
-    canvas->setMouseMode( MM_EDIT );
-    KDialogBase::slotCancel();
+    canvas->createTable( nRows->value(), nCols->value(),
+                         (KWTblCellSize)cWid->currentItem(),
+                         (KWTblCellSize)cHei->currentItem(),
+                         cbIsFloating->isChecked() );
+    KDialogBase::slotOk();
 }
 
 /*================================================================*/

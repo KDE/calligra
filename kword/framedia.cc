@@ -32,6 +32,7 @@
 
 #include <qlineedit.h>
 #include <qcheckbox.h>
+#include <qcombobox.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qgroupbox.h>

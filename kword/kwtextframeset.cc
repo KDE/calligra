@@ -2016,6 +2016,16 @@ QRect KWTextFrameSet::paragRect( QTextParag * parag ) const
     return QRect( topLeft, bottomRight );
 }
 
+#ifndef NDEBUG
+void KWTextFrameSet::printRTDebug( int info )
+{
+    for (QTextParag * parag = textDocument()->firstParag(); parag ; parag = parag->next())
+    {
+        KWTextParag * p = static_cast<KWTextParag *>(parag);
+        p->printRTDebug( info );
+    }
+}
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 

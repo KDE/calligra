@@ -153,6 +153,7 @@ public slots:
     void viewEndNotes();
     void viewZoom( const QString &s );
 
+    void insertTable();
     void insertPicture();
     void insertPicture(const QString &filename);
     void insertSpecialChar();
@@ -182,7 +183,6 @@ public slots:
     void toolsEditFrame();
     void toolsCreateText();
     void toolsCreatePix();
-    void toolsTable();
     void toolsFormula();
     void toolsPart();
 
@@ -294,8 +294,6 @@ protected:
     KToggleAction *actionViewEndNotes;
     KSelectAction *actionViewZoom;
 
-    KAction *actionInsertPicture;
-    KAction *actionInsertSpecialChar;
     KAction *actionInsertFrameBreak;
     KAction *actionInsertFootEndNote;
     KAction *actionInsertContents;
@@ -312,7 +310,6 @@ protected:
     KToggleAction *actionToolsCreateText;
     KToggleAction *actionToolsCreatePix;
     KToggleAction *actionToolsCreateClip;
-    KToggleAction *actionToolsCreateTable;
     KToggleAction *actionToolsCreateFormula;
     KToggleAction *actionToolsCreatePart;
 

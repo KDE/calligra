@@ -46,6 +46,7 @@
   <Action name="view_zoom"/>
  </Menu>
  <Menu name="insert"><text>&amp;Insert</text>
+  <Action name="insert_table"/>
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
   <Separator/>
@@ -72,7 +73,6 @@
   <Separator/>
   <Action name="tools_createtext"/>
   <Action name="tools_createpix"/>
-  <Action name="tools_table"/>
   <Action name="tools_kspreadtable"/>
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
@@ -117,21 +117,21 @@
   <Action name="view_zoom"/>
 </ToolBar>
 <ToolBar hidden="true" fullWidth="false" name="insert_toolbar" position="top" ><Text>Insert</Text>
+  <Action name="insert_table"/>
   <Action name="insert_picture"/>
   <!-- Action name="insert_clipart"/>
   <Separator/>
   <Action name="insert_specialchar"/ -->
+  <Separator/>
+  <Action name="tools_createtext"/>
+  <Action name="tools_createpix"/>
+  <Action name="tools_kspreadtable"/>
+  <Action name="tools_formula"/>
+  <Action name="tools_part"/>
 </ToolBar>
 <ToolBar fullWidth="false" name="tools_toolbar" position="left"><Text>Tools</Text>
   <Action name="tools_edit"/>
   <Action name="tools_editframes"/>
-  <Separator/>
-  <Action name="tools_createtext"/>
-  <Action name="tools_createpix"/>
-  <Action name="tools_table"/>
-  <Action name="tools_kspreadtable"/>
-  <Action name="tools_formula"/>
-  <Action name="tools_part"/>
  </ToolBar>
 <ToolBar hidden="true" fullWidth="false" name="table_toolbar" position="top"><Text>Table</Text>
   <Action name="table_insrow"/>

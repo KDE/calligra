@@ -25,7 +25,8 @@
 #include "kwtableframeset.h"
 #include "kwdoc.h"
 #include "kwview.h"
-#include "kwtextparag.h"
+#include "kwtextdocument.h"
+#include "kwanchor.h"
 #include "framedia.h"
 #include "kwcommand.h"
 
@@ -54,6 +55,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     m_table.width = TblAuto;
     m_table.height = TblAuto;
     m_table.useAnchor = false;
+    m_anchor = 0L;
 
     curTable = 0L;
 
@@ -492,6 +494,24 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     }
 }
 
+// Called by KWTableDia
+void KWCanvas::createTable( unsigned int rows, unsigned int cols,
+                            KWTblCellSize wid, KWTblCellSize hei,
+                            bool isFloating )
+{
+    m_table.rows = rows;
+    m_table.cols = cols;
+    m_table.width = wid;
+    m_table.height = hei;
+    m_table.useAnchor = isFloating;
+    if ( isFloating && m_currentFrameSetEdit )
+    {
+        KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>(m_currentFrameSetEdit->frameSet());
+        m_anchor = new KWAnchor( fs->textDocument() );
+    }
+    setMouseMode( MM_CREATE_TABLE );
+}
+
 /*================================================================*/
 void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
 {
@@ -632,7 +652,10 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                                        static_cast<int>((my - oldMy) / doc->zoomedResolutionY()) );
                         // But not out of the page it was on initially
                         if ( doc->isOutOfPage( *frame, page ) )
+                        {
                             frame->setRect( oldRect.x(), oldRect.y(), oldRect.width(), oldRect.height() );
+                            QCursor::setPos( oldMx, oldMy );
+                        }
                         // Calculate new rectangle for this frame
                         QRect newRect( *frame );
                         // Repaing only the changed rects (oldRect U newRect)
@@ -716,24 +739,9 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
     p.setPen( black );
     p.setBrush( NoBrush );
 
-    if ( deleteMovingRect ) {
-#if 0
-        if ( m_table.useAnchor ) {
-            p.drawLine( anchor->getOrigin(), m_insRect.topLeft() );
-        }
-#endif
-        p.drawRect( doc->zoomRect( m_insRect ) );
-    }
-    else {
-#if 0
-        if ( m_table.useAnchor ) {
-            KWTableFrameSet *table;
-            table = new KWTableFrameSet( doc );
-            insertAnchor( table );
-            anchor = table;
-        }
-#endif
-    }
+    if ( deleteMovingRect )
+        drawMovingRect( p );
+
     // Resize the rectangle
     m_insRect.setWidth( m_insRect.width() + (mx - oldMx) / doc->zoomedResolutionX() );
     m_insRect.setHeight( m_insRect.height() + (my - oldMy) / doc->zoomedResolutionY() );
@@ -744,17 +752,24 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
     {
         m_insRect.setWidth( m_insRect.width() - (mx - oldMx) / doc->zoomedResolutionX() );
         m_insRect.setHeight( m_insRect.height() - (my - oldMy) / doc->zoomedResolutionY() );
+        QCursor::setPos( oldMx, oldMy );
     }
-#if 0
-    if ( m_table.useAnchor ) {
-        p.drawLine( anchor->getOrigin(), m_insRect.topLeft() );
-    }
-#endif
-    p.drawRect( doc->zoomRect( m_insRect ) );
+
+    drawMovingRect( p );
     p.end();
     oldMx = mx;
     oldMy = my;
-    deleteMovingRect = TRUE;
+    deleteMovingRect = true;
+}
+
+void KWCanvas::drawMovingRect( QPainter & p )
+{
+    if ( m_table.useAnchor ) {
+        p.setPen( QPen( black, 0, Qt::DashLine ) );
+        p.drawLine( m_anchor->origin(), doc->zoomPoint( m_insRect.topLeft() ) );
+    }
+    p.setPen( black );
+    p.drawRect( doc->zoomRect( m_insRect ) );
 }
 
 void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
@@ -924,34 +939,34 @@ void KWCanvas::mrCreateTable()
 {
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
-        if ( m_table.cols * minFrameWidth + m_insRect.x() > doc->paperWidth() )
-            {
-                KMessageBox::sorry(0, i18n("KWord is unable to insert the table because there\n"
-                                           "is not enough space available."));
-            }
+        if ( m_table.cols * minFrameWidth + m_insRect.x() > doc->ptPaperWidth() )
+        {
+            KMessageBox::sorry(0, i18n("KWord is unable to insert the table because there\n"
+                                       "is not enough space available."));
+        }
         else {
-            KWTableFrameSet *table;
+            KWTableFrameSet *table = new KWTableFrameSet( doc );
 
-            /*if ( m_table.useAnchor ) {
-                table = static_cast<KWTableFrameSet *>(anchor);
-                } else*/
-                table = new KWTableFrameSet( doc );
+            if ( m_table.useAnchor )
+            {
+                table->setAnchor( m_anchor );
+                m_anchor = 0L;
+            }
 
             QString _name;
-            int numTables=doc->getNumFrameSets();
-            bool found=true;
-            while(found) { // need a new name for the new table.
-                bool same = false;
-                _name.sprintf( "table_%d",numTables);
-                for ( unsigned int i = 0;!same && i < doc->getNumFrameSets(); ++i ) {
-                    if ( doc->getFrameSet( i )->getName() == _name ){
+            int numTables = doc->getNumFrameSets();
+            bool same;
+            do { // need a new name for the new table.
+                same = false;
+                _name.sprintf( "table_%d", numTables);
+                QListIterator<KWFrameSet> fit = doc->framesetsIterator();
+                for ( ; fit.current(); ++fit )
+                    if ( fit.current()->getName() == _name ) {
                         same = true;
                         break;
                     }
-                }
-                if (!same) found=false;
                 numTables++;
-            }
+            } while (same);
             table->setName( _name );
 
             // Create a set of cells with random-size frames.
@@ -977,6 +992,8 @@ void KWCanvas::mrCreateTable()
     }
     setMouseMode( MM_EDIT );
     m_table.useAnchor = false;
+    delete m_anchor;
+    m_anchor = 0L;
 }
 
 void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
@@ -1007,9 +1024,6 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
             case MM_CREATE_FORMULA:
                 mrCreateFormula();
                 break;
-            default:
-                //repaintAll(); ?
-                break;
         }
 
 	mousePressed = false;
@@ -1022,11 +1036,6 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
         case MM_EDIT:
             if ( m_currentFrameSetEdit )
                 m_currentFrameSetEdit->mouseDoubleClickEvent( e );
-            break;
-        case MM_EDIT_FRAME:
-            // TODO activate part/formula/... ?
-            // As easy as 1) create framesetedit for this frameset, 2) mouseDoubleClickEvent
-            // But then we are in the wrong mousemode, no ?
             break;
         default:
             break;
@@ -1499,18 +1508,6 @@ void KWCanvas::setMouseMode( MouseMode _mm )
         case MM_EDIT: {
             viewport()->setCursor( ibeamCursor );
             //mm_menu->setItemChecked( mm_edit, TRUE );
-#if 0
-            // Update UI
-            if ( !inKeyEvent ) {
-                setRulerFirstIndent( m_gui->getHorzRuler(), fc->getParag()->getParagLayout()->getFirstLineLeftIndent() );
-                setRulerLeftIndent( m_gui->getHorzRuler(), fc->getParag()->getParagLayout()->getLeftIndent() );
-                m_gui->getHorzRuler()->setFrameStart( doc->getFrameSet( fc->getFrameSet() - 1 )->
-                                                    getFrame( fc->getFrame() - 1 )->x() );
-                m_gui->getHorzRuler()->setTabList( fc->getParag()->getParagLayout()->getTabList() );
-                if ( doc->processingType() == KWDocument::DTP )
-                    setRuler2Frame( fc->getFrameSet() - 1, fc->getFrame() - 1 );
-            }
-#endif
         } break;
         case MM_EDIT_FRAME: {
             viewport()->setCursor( arrowCursor );
@@ -1673,10 +1670,19 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 // Debug keys
                 if ( ( keyev->state() & ControlButton ) && ( keyev->state() & ShiftButton ) )
                 {
-                    if ( keyev->key() == Key_P ) // 'P' -> paragraph debug
-                        printRTDebug();
-                    if ( keyev->key() == Key_F ) // 'F' -> frames debug
-                        doc->printDebug();
+                    switch ( keyev->key() ) {
+                        case Key_P: // 'P' -> paragraph debug
+                            printRTDebug( 0 );
+                            break;
+                        case Key_V: // 'V' -> verbose parag debug
+                            printRTDebug( 1 );
+                            break;
+                        case Key_F: // 'F' -> frames debug
+                            doc->printDebug();
+                            break;
+                        default:
+                            break;
+                    };
                     // For some reason 'T' doesn't work (maybe kxkb)
                 }
 #endif
@@ -1706,21 +1712,17 @@ void KWCanvas::updateCurrentFormat()
         edit->updateUI();
 }
 
-void KWCanvas::printRTDebug()
+#ifndef NDEBUG
+void KWCanvas::printRTDebug( int info )
 {
     KWTextFrameSet * textfs = 0L;
     if ( m_currentFrameSetEdit )
         textfs = dynamic_cast<KWTextFrameSet *>(m_currentFrameSetEdit->frameSet());
     if ( !textfs )
         textfs = dynamic_cast<KWTextFrameSet *>(doc->getFrameSet( 0 ) );
-    if ( !textfs )
-        return;
-    QTextDocument * textdoc = textfs->textDocument();
-    for (QTextParag * parag = textdoc->firstParag(); parag ; parag = parag->next())
-    {
-        KWTextParag * p = static_cast<KWTextParag *>(parag);
-        p->printRTDebug();
-    }
+    if ( textfs )
+        textfs->printRTDebug( info );
 }
+#endif
 
 #include "kwcanvas.moc"

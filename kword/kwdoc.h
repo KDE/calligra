@@ -33,29 +33,25 @@ class KWStyle;
 class KWFrame;
 class KWView;
 class KoDocumentEntry;
-
+class QPainter;
 class KSpellConfig;
+class KWAutoFormat;
+class KFormulaDocument;
+class KCommand;
+class KCommandHistory;
 
-#include <kformuladocument.h>
 #include <koDocument.h>
 #include <koGlobal.h>
 #include <koDocumentChild.h>
 
-#include "autoformat.h"
 #include "kwimage.h"
 #include "kwunit.h"
 
-#include <kcommand.h>
-
 #include <qlist.h>
 #include <qmap.h>
-#include <qpainter.h>
 #include <qstring.h>
-#include <qstrlist.h>
 #include <qstringlist.h>
 #include <qrect.h>
-
-#include <qrichtext_p.h>
 
 /******************************************************************/
 /* Class: KWChild                                              */
@@ -275,7 +271,7 @@ public:
 //    void setNoteType( KWFootNoteManager::NoteType nt ) { footNoteManager.setNoteType( nt ); }
 //    KWFootNoteManager::NoteType getNoteType() const { return footNoteManager.getNoteType(); }
 
-    KWAutoFormat &getAutoFormat() { return autoFormat; }
+    KWAutoFormat * getAutoFormat() { return m_autoFormat; }
 
     //void setPageLayoutChanged( bool c ) { pglChanged = c; }
 
@@ -347,8 +343,12 @@ public:
         return m_zoomedResolutionY * z;
     }
 
+    QPoint zoomPoint( const QPoint & p ) const {
+        return QPoint( zoomItX( p.x() ), zoomItY( p.y() ) );
+    }
     QRect zoomRect( const QRect & r ) const {
-        return QRect( zoomItX( r.x() ), zoomItY( r.y() ), zoomItX( r.width() ), zoomItY( r.height() ) );
+        return QRect( zoomItX( r.x() ), zoomItY( r.y() ),
+                      zoomItX( r.width() ), zoomItY( r.height() ) );
     }
 
     // useless method
@@ -394,7 +394,9 @@ public:
 
     void moveUpStyleTemplate ( const QString & _styleName);
 
+#ifndef NDEBUG
     void printDebug();
+#endif
 
     /** calls layout() on all framesets  */
     void layout();
@@ -476,10 +478,10 @@ private:
 
     QString unit;
 
-    KCommandHistory history;
+    KCommandHistory * m_commandHistory;
  //   QIntDict<KWVariableFormat> varFormats;
 //    KWFootNoteManager footNoteManager;
-    KWAutoFormat autoFormat;
+    KWAutoFormat * m_autoFormat;
 
     QString urlIntern;
     //bool pglChanged;
@@ -497,9 +499,6 @@ private:
     // Holds information about the table of contents
     KWContents *contents;
 
-    //KoMainWindow *tmpShell;
-    //QRect tmpShellSize;
-
     int m_zoom;
     double m_resolutionX;
     double m_resolutionY;
@@ -515,7 +514,7 @@ private:
     bool _viewFormattingChars, _viewFrameBorders, _viewTableGrid;
 
     // The document that is used by all formulas
-    KFormulaDocument formulaDocument;
+    KFormulaDocument* m_formulaDocument;
 };
 
 

@@ -18,6 +18,7 @@
 */
 
 #include "kwtextparag.h"
+#include "kwtextdocument.h"
 #include "kwutils.h"
 #include "kwstyle.h"
 #include "kwdoc.h"
@@ -734,43 +735,47 @@ void KWTextParag::setParagLayout( const KWParagLayout & layout )
     setStyleName( layout.styleName() );
 }
 
-
-void KWTextParag::printRTDebug()
+#ifndef NDEBUG
+void KWTextParag::printRTDebug( int info )
 {
     kdDebug() << "Paragraph " << this << "   (" << paragId() << ") ------------------ " << endl;
     if ( prev() && prev()->paragId() + 1 != paragId() )
         kdWarning() << "Previous paragraph " << prev() << " has ID " << prev()->paragId() << endl;
     /*
-    static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
-    QVector<QStyleSheetItem> vec = styleSheetItems();
-    for ( uint i = 0 ; i < vec.size() ; ++i )
-    {
-        QStyleSheetItem * item = vec[i];
-        kdDebug() << "  StyleSheet Item " << item << " '" << item->name() << "'" << endl;
-        kdDebug() << "        italic=" << item->fontItalic() << " underline=" << item->fontUnderline() << " fontSize=" << item->fontSize() << endl;
-        kdDebug() << "        align=" << item->alignment() << " leftMargin=" << item->margin(QStyleSheetItem::MarginLeft) << " rightMargin=" << item->margin(QStyleSheetItem::MarginRight) << " topMargin=" << item->margin(QStyleSheetItem::MarginTop) << " bottomMargin=" << item->margin(QStyleSheetItem::MarginBottom) << endl;
-        kdDebug() << "        displaymode=" << dm[item->displayMode()] << endl;
-    }*/
+      static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
+      QVector<QStyleSheetItem> vec = styleSheetItems();
+      for ( uint i = 0 ; i < vec.size() ; ++i )
+      {
+      QStyleSheetItem * item = vec[i];
+      kdDebug() << "  StyleSheet Item " << item << " '" << item->name() << "'" << endl;
+      kdDebug() << "        italic=" << item->fontItalic() << " underline=" << item->fontUnderline() << " fontSize=" << item->fontSize() << endl;
+      kdDebug() << "        align=" << item->alignment() << " leftMargin=" << item->margin(QStyleSheetItem::MarginLeft) << " rightMargin=" << item->margin(QStyleSheetItem::MarginRight) << " topMargin=" << item->margin(QStyleSheetItem::MarginTop) << " bottomMargin=" << item->margin(QStyleSheetItem::MarginBottom) << endl;
+      kdDebug() << "        displaymode=" << dm[item->displayMode()] << endl;
+      }*/
     kdDebug() << "  Style: " << styleName() << endl;
     kdDebug() << "  Text: '" << string()->toString() << "'" << endl;
     if ( counter() )
         kdDebug() << "  Counter style=" << counter()->style() << " depth=" << counter()->depth() << " text=" << m_layout.counter->text( this ) << " width=" << m_layout.counter->width( this ) << endl;
 
-    kdDebug() << "  Paragraph format=" << paragFormat() << "  fontsize:" << dynamic_cast<KWTextFormat *>(paragFormat())->pointSizeFloat() << endl;
-    /*
-    QTextString * s = string();
-    for ( int i = 0 ; i < s->length() ; ++i )
-        kdDebug() << i << ": '" << QString(s->at(i).c) << "'" << s->at(i).format()
-                  << " " << s->at(i).format()->key()
-            //<< " fontsize:" << dynamic_cast<KWTextFormat *>(s->at(i).format())->pointSizeFloat()
-                  << endl;*/
+    if ( info == 1 )
+    {
+        kdDebug() << "  Paragraph format=" << paragFormat() << " " << paragFormat()->key()
+                  << " fontsize:" << dynamic_cast<KWTextFormat *>(paragFormat())->pointSizeFloat() << endl;
+
+        QTextString * s = string();
+        for ( int i = 0 ; i < s->length() ; ++i )
+            kdDebug() << i << ": '" << QString(s->at(i).c) << "'" << s->at(i).format()
+                      << " " << s->at(i).format()->key()
+                //<< " fontsize:" << dynamic_cast<KWTextFormat *>(s->at(i).format())->pointSizeFloat()
+                      << endl;
+    }
 
     /*KoTabulatorList tabList = m_layout.tabList();
-    KoTabulatorList::Iterator it = tabList.begin();
-    for ( ; it != tabList.end() ; it++ )
-        kdDebug() << "Tab at: " << (*it).ptPos << endl;*/
+      KoTabulatorList::Iterator it = tabList.begin();
+      for ( ; it != tabList.end() ; it++ )
+      kdDebug() << "Tab at: " << (*it).ptPos << endl;*/
 }
-
+#endif
 
 //////////
 
@@ -1044,20 +1049,3 @@ void KWParagLayout::setStyleName( const QString &styleName )
 {
     m_styleName = styleName;
 }
-
-KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTextFormatCollection *fc )
-    : QTextDocument( p, fc ), m_textfs( textfs ), m_bDestroying( false )
-{
-    // QTextDocument::QTextDocument creates a parag, but too early for our createParag to get called !
-    // So we have to get rid of it.
-    clear( true );
-    // Using clear( false ) is a bit dangerous, since we don't always check cursor->parag() for != 0
-}
-
-KWTextDocument::~KWTextDocument()
-{
-    m_bDestroying = true;
-    clear( false );
-}
-
-#include "kwtextparag.moc"

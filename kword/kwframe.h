@@ -29,26 +29,25 @@
 #include <qlist.h>
 
 #include "border.h"
-#include <koMainWindow.h>
+//#include <koMainWindow.h>
 
-class KWFrame;
-class KWDocument;
-class KWChild;
-class KWView;
-class KWTableFrameSet;
 class KFormulaContainer;
 class KFormulaView;
-class KWResizeHandle;
+class KWAnchor;
 class KWCanvas;
-class QPoint;
-class QSize;
-class QCursor;
-class QRegion;
-class QPainter;
-class KWTextDocument;
-
+class KWChild;
 class KWDocument;
+class KWFrame;
 class KWFrameSet;
+class KWResizeHandle;
+class KWTableFrameSet;
+class KWTextDocument;
+class KWView;
+class QCursor;
+class QPainter;
+class QPoint;
+class QRegion;
+class QSize;
 
 /**
  * This class represents a single frame.
@@ -387,6 +386,9 @@ public:
     void setCurrent( int i ) { current = i; }
     int getCurrent() { return current; }
 
+    /** Make this frameset anchored (floating) */
+    void setAnchor( KWAnchor * anchor ) { m_anchor = anchor; /* TODO... */ }
+
     /** make this frameset part of a groupmanager
      * @see KWTableFrameSet
      */
@@ -438,7 +440,7 @@ protected:
     KWTableFrameSet *grpMgr;
     bool removeableHeader, visible;
     QString name;
-
+    KWAnchor * m_anchor;
 };
 
 /******************************************************************/

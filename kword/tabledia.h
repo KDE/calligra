@@ -70,7 +70,6 @@ public:
 		int rows, int cols, KWTblCellSize wid, KWTblCellSize hei );
 
 protected:
-    bool insertTable();
     void readTableStyles();
     void setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize hei );
     void setupTab2();
@@ -112,7 +111,6 @@ protected slots:
     void rowsChanged( int );
     void colsChanged( int );
     virtual void slotOk();
-    virtual void slotCancel();
 };
 
 #endif

@@ -23,7 +23,8 @@
 #include <qptrdict.h>
 #include "qrichtext_p.h"
 #include "kwframe.h"
-#include "kwtextparag.h"
+#include "kwtextparag.h" // for KWParagLayout
+#include "kwtextdocument.h"
 class KWStyle;
 class KWDrag;
 class KWDocument;
@@ -141,6 +142,10 @@ public:
     void applyStyleChange( const QString & changedStyle );
 
     void setTabList( QTextCursor * cursor,const KoTabulatorList & tabList );
+
+#ifndef NDEBUG
+    void printRTDebug( int );
+#endif
 
     virtual void layout();
 

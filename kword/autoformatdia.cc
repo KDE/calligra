@@ -50,10 +50,10 @@
 KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWDocument *_doc, KWCanvas *_canvas )
     : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel, Ok, parent, name, true),
       doc( _doc ),
-      oBegin( doc->getAutoFormat().getConfigTypographicQuotes().begin ),
-      oEnd( doc->getAutoFormat().getConfigTypographicQuotes().end ),
+      oBegin( doc->getAutoFormat()->getConfigTypographicQuotes().begin ),
+      oEnd( doc->getAutoFormat()->getConfigTypographicQuotes().end ),
       quotesChanged( false ),
-      m_autoFormat(doc->getAutoFormat())
+      m_autoFormat(*doc->getAutoFormat())
 {
     canvas = _canvas;
 
@@ -148,7 +148,7 @@ void KWAutoFormatDia::slotRemoveEntry()
 {
     if(entries->currentItem()!=0)
         {
-            doc->getAutoFormat().removeAutoFormatEntry(entries->currentItem()->text(0));
+            doc->getAutoFormat()->removeAutoFormatEntry(entries->currentItem()->text(0));
             refreshEntryList();
         }
 }
@@ -156,23 +156,23 @@ void KWAutoFormatDia::slotRemoveEntry()
 /*================================================================*/
 void KWAutoFormatDia::refreshEntryList()
 {
-    QMap< QString, KWAutoFormatEntry >::Iterator it =  doc->getAutoFormat().firstAutoFormatEntry();
+    QMap< QString, KWAutoFormatEntry >::Iterator it =  doc->getAutoFormat()->firstAutoFormatEntry();
     entries->clear();
-    for ( ; it != doc->getAutoFormat().lastAutoFormatEntry(); ++it )
+    for ( ; it != doc->getAutoFormat()->lastAutoFormatEntry(); ++it )
         ( void )new QListViewItem( entries, it.key(), it.data().getReplace() );
 }
 
 /*================================================================*/
 void KWAutoFormatDia::addEntryList(KWAutoFormatEntry &_autoEntry)
 {
-    doc->getAutoFormat().addAutoFormatEntry( _autoEntry );
+    doc->getAutoFormat()->addAutoFormatEntry( _autoEntry );
 }
 
 /*================================================================*/
 void KWAutoFormatDia::editEntryList(KWAutoFormatEntry &_autoEntry,const QString &_str)
 {
-    doc->getAutoFormat().removeAutoFormatEntry(_str);
-    doc->getAutoFormat().addAutoFormatEntry( _autoEntry );
+    doc->getAutoFormat()->removeAutoFormatEntry(_str);
+    doc->getAutoFormat()->addAutoFormatEntry( _autoEntry );
 }
 
 /*================================================================*/
@@ -218,14 +218,14 @@ bool KWAutoFormatDia::applyConfig()
     tq.replace = cbTypographicQuotes->isChecked();
     tq.begin = pbQuote1->text()[ 0 ];
     tq.end = pbQuote2->text()[ 0 ];
-    doc->getAutoFormat().configTypographicQuotes( tq );
+    doc->getAutoFormat()->configTypographicQuotes( tq );
 
-    doc->getAutoFormat().configUpperCase( cbUpperCase->isChecked() );
-    doc->getAutoFormat().configUpperUpper( cbUpperUpper->isChecked() );
+    doc->getAutoFormat()->configUpperCase( cbUpperCase->isChecked() );
+    doc->getAutoFormat()->configUpperUpper( cbUpperUpper->isChecked() );
 
-    doc->getAutoFormat().setEnabled( true );
+    doc->getAutoFormat()->setEnabled( true );
     doc->repaintAllViews();
-    doc->getAutoFormat().setEnabled( false );
+    doc->getAutoFormat()->setEnabled( false );
 
     return true;
 }

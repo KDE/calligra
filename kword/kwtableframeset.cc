@@ -28,7 +28,6 @@ DESCRIPTION
 
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc ) :
     KWFrameSet( doc )
- //: KWCharAnchor(), showHeaderOnAllPages( true ), hasTmpHeaders( false ), active( true )
 {
     m_rows = 0;
     m_cols = 0;
@@ -44,7 +43,6 @@ KWTableFrameSet::KWTableFrameSet( KWDocument *doc ) :
 /*================================================================*/
 KWTableFrameSet::KWTableFrameSet( KWTableFrameSet &original ) :
     KWFrameSet( original.m_doc )
-// : KWCharAnchor(original)
 {
     m_doc = original.m_doc;
     m_rows = original.m_rows;

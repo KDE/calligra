@@ -39,6 +39,8 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 
+#include <kformuladocument.h>
+
 #include <unistd.h>
 #include <math.h>
 
@@ -50,6 +52,7 @@
 #include "defs.h"
 #include "kwutils.h"
 #include "kwstyle.h"
+#include "autoformat.h"
 //#include "serialletter.h"
 #include "contents.h"
 #include "kwview.h"
@@ -157,10 +160,7 @@ QDomElement KWChild::save( QDomDocument& doc )
 KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
       unit( "mm" ), // footNoteManager( this ),
-      history( actionCollection(), false ),
-      autoFormat(this),
-      urlIntern(),
-      formulaDocument(actionCollection(), &history)
+      urlIntern()
 {
     m_lstViews.setAutoDelete( false );
     m_lstChildren.setAutoDelete( true );
@@ -174,6 +174,14 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     _viewFormattingChars = FALSE;
     _viewFrameBorders = TRUE;
     _viewTableGrid = TRUE;
+
+    m_autoFormat = new KWAutoFormat(this);
+
+    m_commandHistory = new KCommandHistory( actionCollection(), false );
+    connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
+    connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
+
+    m_formulaDocument = new KFormulaDocument(actionCollection(), m_commandHistory);
 
     setEmpty();
     setModified(false);
@@ -202,9 +210,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     syntaxVersion = CURRENT_SYNTAX_VERSION;
 
     m_pKSpellConfig=0;
-
-    connect( &history, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
-    connect( &history, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
     // Some simple import filters don't define any style,
     // so let's have a Standard style at least
@@ -777,6 +782,8 @@ void KWDocument::recalcFrames()
 KWDocument::~KWDocument()
 {
     delete contents;
+    delete m_autoFormat;
+    delete m_commandHistory;
 }
 
 /*================================================================*/
@@ -1165,10 +1172,10 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         emit sig_insertObject( ch, frameset );
     }
 
-    autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(C)", "©" ) );
-    autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(c)", "©" ) );
-    autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(R)", "®" ) );
-    autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(r)", "®" ) );
+    m_autoFormat->addAutoFormatEntry( KWAutoFormatEntry("(C)", "©" ) );
+    m_autoFormat->addAutoFormatEntry( KWAutoFormatEntry("(c)", "©" ) );
+    m_autoFormat->addAutoFormatEntry( KWAutoFormatEntry("(R)", "®" ) );
+    m_autoFormat->addAutoFormatEntry( KWAutoFormatEntry("(r)", "®" ) );
 
     // do some sanity checking on document.
     for (int i = getNumFrameSets()-1; i>-1; i--) {
@@ -1364,7 +1371,6 @@ void KWDocument::loadFrameSets( QDomElement framesets )
 
         switch ( frameType ) {
             case FT_TEXT: {
-                KWTextFrameSet *fs;
                 if ( !tableName.isEmpty() ) {
                     KWTableFrameSet *table = 0L;
                     for ( unsigned int i = 0; i < frames.count(); i++ ) {
@@ -1392,23 +1398,23 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                 }
                 else
                 {
-                    fs = new KWTextFrameSet( this );
+                    KWTextFrameSet *fs = new KWTextFrameSet( this );
                     fs->setVisible( _visible );
                     fs->setName( fsname );
                     fs->load( framesetElem );
                     fs->setFrameInfo( frameInfo );
                     fs->setIsRemoveableHeader( removeable );
                     addFrameSet( fs );
-                }
 
-                // Old file format had autoCreateNewFrame as a frameset attribute,
-                // and our templates still use that.
-                if ( framesetElem.hasAttribute( "autoCreateNewFrame" ) )
-                {
-                    FrameBehaviour behav = static_cast<FrameBehaviour>( framesetElem.attribute( "autoCreateNewFrame" ).toInt() );
-                    QListIterator<KWFrame> frameIt( fs->frameIterator() );
-                    for ( ; frameIt.current() ; ++frameIt ) // Apply it to all frames
-                        frameIt.current()->setFrameBehaviour( behav );
+                    // Old file format had autoCreateNewFrame as a frameset attribute,
+                    // and our templates still use that.
+                    if ( framesetElem.hasAttribute( "autoCreateNewFrame" ) )
+                    {
+                        FrameBehaviour behav = static_cast<FrameBehaviour>( framesetElem.attribute( "autoCreateNewFrame" ).toInt() );
+                        QListIterator<KWFrame> frameIt( fs->frameIterator() );
+                        for ( ; frameIt.current() ; ++frameIt ) // Apply it to all frames
+                            frameIt.current()->setFrameBehaviour( behav );
+                    }
                 }
             } break;
             case FT_PICTURE: {
@@ -1731,7 +1737,7 @@ void KWDocument::removeView( KoView *_view )
 
 void KWDocument::addShell( KoMainWindow *shell )
 {
-    connect( shell, SIGNAL( documentSaved() ), &history, SLOT( documentSaved() ) );
+    connect( shell, SIGNAL( documentSaved() ), m_commandHistory, SLOT( documentSaved() ) );
     KoDocument::addShell( shell );
 }
 
@@ -2413,7 +2419,7 @@ bool KWDocument::selection() {
 
 void KWDocument::addCommand( KCommand * cmd )
 {
-    history.addCommand( cmd, false );
+    m_commandHistory->addCommand( cmd, false );
     setModified( true );
 }
 
@@ -2440,6 +2446,7 @@ void KWDocument::setKSpellConfig(KSpellConfig _kspell)
   m_pKSpellConfig->setClient(_kspell.client());
 }
 
+#ifndef NDEBUG
 void KWDocument::printDebug() {
 
     static const char * typeFrameset[] = { "base", "txt", "pic", "part", "formula", "table","ERROR" };
@@ -2498,6 +2505,7 @@ void KWDocument::printDebug() {
     }
     */
 }
+#endif
 
 void KWDocument::layout()
 {
@@ -2508,7 +2516,7 @@ void KWDocument::layout()
 
 KFormulaDocument* KWDocument::getFormulaDocument()
 {
-    return &formulaDocument;
+    return m_formulaDocument;
 }
 
 

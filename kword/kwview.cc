@@ -84,6 +84,7 @@
 #include <kfontdialog.h>
 #include <kstddirs.h>
 #include <kparts/event.h>
+#include <kformuladocument.h>
 
 #include <stdlib.h>
 
@@ -123,7 +124,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     //QObject::connect( doc, SIGNAL( sig_insertObject( KWChild*, KWPartFrameSet* ) ),
     //                  this, SLOT( slotInsertObject( KWChild*, KWPartFrameSet* ) ) );
     QObject::connect( this, SIGNAL( embeddImage( const QString & ) ),
-                      this, SLOT( insertPicture( const QString & ) ) );
+                      this, SLOT( insertPicture( const QString & ) ) ); /////// # wrong one ! should create a picture frame (TODO)
     QObject::connect( doc, SIGNAL( sig_updateChildGeometry( KWChild* ) ),
                       this, SLOT( slotUpdateChildGeometry( KWChild* ) ) );
 
@@ -276,44 +277,61 @@ void KWView::setupActions()
     lst << "500%";
     actionViewZoom->setItems( lst );
     // -------------- Insert actions
-    actionInsertPicture = new KAction( i18n( "&Picture..." ), "picture", Key_F2,
-                                       this, SLOT( insertPicture() ),
-                                       actionCollection(), "insert_picture" );
+    (void) new KAction( i18n( "&Table" ), "table", 0,
+                        this, SLOT( insertTable() ),
+                        actionCollection(), "insert_table" );
 
-    actionInsertSpecialChar = new KAction( i18n( "&Special Character..." ), "char", ALT + SHIFT + Key_C,
-                                           this, SLOT( insertSpecialChar() ),
-                                           actionCollection(), "insert_specialchar" );
+    (void) new KAction( i18n( "&Picture As Character..." ), "picture", Key_F2,
+                        this, SLOT( insertPicture() ),
+                        actionCollection(), "insert_picture" );
+
+    (void) new KAction( i18n( "&Special Character..." ), "char",
+                        ALT + SHIFT + Key_C,
+                        this, SLOT( insertSpecialChar() ),
+                        actionCollection(), "insert_specialchar" );
 
     actionInsertFrameBreak = new KAction( i18n( "&Hard Frame Break" ), CTRL + Key_Return,
                                           this, SLOT( insertFrameBreak() ),
                                           actionCollection(), "insert_framebreak" );
+    actionInsertFrameBreak->setEnabled( false ); // ### TODO
+
     actionInsertFootEndNote = new KAction( i18n( "&Footnote or Endnote..." ), 0,
                                            this, SLOT( insertFootNoteEndNote() ),
                                            actionCollection(), "insert_footendnote" );
+    actionInsertFootEndNote->setEnabled( false ); // ### TODO
+
     actionInsertContents = new KAction( i18n( "&Table of Contents" ), 0,
                                         this, SLOT( insertContents() ),
                                         actionCollection(), "insert_contents" );
+
     actionInsertVarDateFix = new KAction( i18n( "Date (&fix)" ), 0,
                                           this, SLOT( insertVariableDateFix() ),
                                           actionCollection(), "insert_var_datefix" );
+    actionInsertVarDateFix->setEnabled( false );
     actionInsertVarDate = new KAction( i18n( "&Date (variable)" ), 0,
                                        this, SLOT( insertVariableDateVar() ),
                                        actionCollection(), "insert_var_datevar" );
+    actionInsertVarDate->setEnabled( false );
     actionInsertVarTimeFix = new KAction( i18n( "Time (&fix)" ), 0,
                                           this, SLOT( insertVariableTimeFix() ),
                                           actionCollection(), "insert_var_timefix" );
+    actionInsertVarTimeFix->setEnabled( false );
     actionInsertVarTime = new KAction( i18n( "&Time (variable)" ), 0,
                                        this, SLOT( insertVariableTimeVar() ),
                                        actionCollection(), "insert_var_timevar" );
+    actionInsertVarTime->setEnabled( false );
     actionInsertVarPgNum = new KAction( i18n( "&Page Number" ), 0,
                                         this, SLOT( insertVariablePageNum() ),
                                         actionCollection(), "insert_var_pgnum" );
+    actionInsertVarPgNum->setEnabled( false );
     actionInsertVarCustom = new KAction( i18n( "&Custom..." ), 0,
                                          this, SLOT( insertVariableCustom() ),
                                          actionCollection(), "insert_var_custom" );
+    actionInsertVarCustom->setEnabled( false );
     actionInsertVarSerialLetter = new KAction( i18n( "&Serial Letter..." ), 0,
                                                this, SLOT( insertVariableSerialLetter() ),
                                                actionCollection(), "insert_var_serialletter" );
+    actionInsertVarSerialLetter->setEnabled( false );
 
     // ---------------- Tools actions
     actionToolsEdit = new KToggleAction( i18n( "Edit &Text" ), "edittool", Key_F4,
@@ -332,10 +350,6 @@ void KWView::setupActions()
                                               this, SLOT( toolsCreatePix() ),
                                               actionCollection(), "tools_createpix" );
     actionToolsCreatePix->setExclusiveGroup( "tools" );
-    actionToolsCreateTable = new KToggleAction( i18n( "&Create Table" ), "table", Key_F9,
-                                                this, SLOT( toolsTable() ),
-                                                actionCollection(), "tools_table" );
-    actionToolsCreateTable->setExclusiveGroup( "tools" );
     actionToolsCreateFormula = new KToggleAction( i18n( "&Create Formula Frame" ), "formula", Key_F11,
                                                   this, SLOT( toolsFormula() ),
                                                   actionCollection(), "tools_formula" );
@@ -902,7 +916,7 @@ void KWView::setTool( MouseMode _mouseMode )
         actionToolsCreatePix->setChecked( TRUE );
         break;
     case MM_CREATE_TABLE:
-        actionToolsCreateTable->setChecked( TRUE );
+        //actionToolsCreateTable->setChecked( TRUE );
         break;
     case MM_CREATE_FORMULA:
         actionToolsCreateFormula->setChecked( TRUE );
@@ -1689,10 +1703,9 @@ void KWView::toolsCreatePix()
 }
 
 /*===============================================================*/
-void KWView::toolsTable()
+void KWView::insertTable()
 {
-    if ( !actionToolsCreateTable->isChecked() )
-        return;
+    // TODO enable this action only when editing a text frameset [for the anchor]
     KWTableDia *tableDia = new KWTableDia( this, "", gui->canvasWidget(), doc,
                                gui->canvasWidget()->tableRows(),
                                gui->canvasWidget()->tableCols(),

@@ -21,6 +21,7 @@
 #define autoformatdia_h
 
 #include <kdialogbase.h>
+#include "autoformat.h"
 
 class KWDocument;
 class KWPage;
@@ -88,7 +89,7 @@ protected slots:
     void chooseSpecialChar2();
 private:
     QLineEdit *lineEditFind;
-    QLineEdit *lineEditReplace;	
+    QLineEdit *lineEditReplace;
 
     QPushButton* m_pOk;
     QPushButton* m_pClose;
