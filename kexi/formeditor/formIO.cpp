@@ -43,10 +43,12 @@
 
 #include "formIO.h"
 
+typedef QPtrList<QWidget> WidgetList;
+
 namespace KFormDesigner {
 
 // Helper classes for sorting widgets before saving (because Designer is too stupid to put them in the right order)
-class HorWidgetList : public QObjectList
+class HorWidgetList : public WidgetList
 {
 	public:
 	HorWidgetList() {;}
@@ -63,7 +65,7 @@ class HorWidgetList : public QObjectList
 	}
 };
 
-class VerWidgetList : public QObjectList
+class VerWidgetList : public WidgetList
 {
 	public:
 	VerWidgetList() {;}
@@ -641,23 +643,20 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	}
 	else if(!item->children()->isEmpty())
 	{
-		QObjectList *list;
+		WidgetList *list;
 		if(layout.tagName() == "hbox")
 			list = new HorWidgetList();
 		else
 			list = new VerWidgetList();
 
 		for(ObjectTreeItem *objTree = item->children()->first(); objTree; objTree = item->children()->next())
-			list->append((QObject*)(objTree->widget()));
+			list->append(objTree->widget());
 		list->sort();
 
-		QObject *obj;
-		QObjectListIt it(*list);
-		while ((obj = it.current()) != 0)
+		for(QWidget *obj = list->first(); obj; obj = list->next())
 		{
 			ObjectTreeItem *tree = item->container()->form()->objectTree()->lookup(obj->name());
 			saveWidget(tree, layout, domDoc);
-			++it;
 		}
 		delete list;
 	}
@@ -727,7 +726,6 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 			loadLayout(n.toElement().tagName(), tree);
 			for(QDomNode m = n.toElement().firstChild(); !m.isNull(); m = m.nextSibling())
 			{
-				kdDebug() << "tagname is " << m.toElement().tagName() << endl;
 				if(m.toElement().tagName() == "property")
 				{
 					QString name = m.toElement().attribute("name");

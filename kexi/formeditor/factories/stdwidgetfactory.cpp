@@ -70,7 +70,7 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	else if(c == "QLineEdit")
 	{
 		QWidget *w = new QLineEdit(p, n);
-		((QLineEdit *)w)->setReadOnly(true);
+		//((QLineEdit *)w)->setReadOnly(true);
 		w->installEventFilter(container);
 		return w;
 	}

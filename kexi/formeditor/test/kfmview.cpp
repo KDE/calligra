@@ -28,7 +28,7 @@ KFMView::KFMView()
 	setCentralWidget(w);
 	w->show();
 
-	KFormDesigner::FormManager *manager = new KFormDesigner::FormManager(w, this, "manager");
+	manager = new KFormDesigner::FormManager(w, this, "manager");
 
 	//editor->show();
 
@@ -59,7 +59,8 @@ KFMView::KFMView()
 	KStdAction::cut(manager, SLOT(cutWidget()), actionCollection());
 	KStdAction::copy(manager, SLOT(copyWidget()), actionCollection());
 	KStdAction::paste(manager, SLOT(pasteWidget()), actionCollection());
-#if KDE_IS_VERSION(3,1,9) 
+	KStdAction::printPreview(this, SLOT(slotPreviewForm()), actionCollection());
+#if KDE_IS_VERSION(3,1,9)
 	KStdAction::clear(manager, SLOT(deleteWidget()), actionCollection());
 #else
 	//TODO
@@ -68,6 +69,13 @@ KFMView::KFMView()
 
 	createGUI("kfmui.rc", true);
 	setXMLFile("kfmui.rc", true);
+}
+
+void
+KFMView::slotPreviewForm()
+{
+	QWidget *widg = new QWidget(w);
+	manager->previewForm(manager->activeForm(), widg);
 }
 
 KFMView::~KFMView()

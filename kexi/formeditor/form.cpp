@@ -63,29 +63,19 @@ Form::createToplevel(QWidget *container, const QString &classname)
 
 	kdDebug() << "Form::createToplevel(): m_toplevel=" << m_toplevel << endl;
 }
-/*
-QWidget*
-Form::createInstance(QWidget *parent, bool e)
+
+void
+Form::setDesignMode(bool design)
 {
-    return NULL;//TMP!
+	m_design = design;
+	if(!design)
+	{
+		delete m_topTree;
+		m_topTree = 0;
+		delete m_toplevel;
+		m_toplevel = 0;
+	}
 }
-
-QWidget*
-Form::createEmptyInstance(const QString &c, QWidget *parent)
-{
-	kdDebug() << "Form::createEmptyInstance()" << endl;
-
-	QWidget *m = m_manager->lib()->createWidget(c, parent, "form1", 0);
-	if(!m)
-		return 0;
-
-	kdDebug() << "Form::createEmptyInstance() m=" << m << endl;
-	createToplevel(m);
-
-	m_topTree = new ObjectTree(c, m->name(), m);
-	m_toplevel->setObjectTree(m_topTree);
-	return m;
-}*/
 
 void
 Form::setCurrentWidget(QWidget *w)
@@ -316,7 +306,8 @@ Form::fixPos(QDomElement el)
 
 Form::~Form()
 {
-	delete m_topTree;
+	if(m_topTree)
+		delete m_topTree;
 	m_resizeHandles.setAutoDelete(false); // otherwise, it tries to delete widgets which doesn't exist anymore
 }
 

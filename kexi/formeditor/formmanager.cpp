@@ -129,38 +129,13 @@ FormManager::activeForm() const
 	return m_active;
 }
 
-/*
-Form*
-FormManager::activeForm()
-{
-	QWidget *wid = m_workspace->focusWidget();
-	Form *form;
-	for(form = m_forms.first(); form; form = m_forms.next())
-	{
-		if((form->toplevelContainer()->widget()->child(wid->name()))
-		 || wid == form->toplevelContainer()->widget())
-		 	kdDebug() << "active widget is " << form->objectTree()->name() << endl;
-	}
-
-	QWidget *w = m_workspace->activeWindow();
-
-	for(form = m_forms.first(); form; form = m_forms.next())
-	{
-		if(form->toplevelContainer()->widget() == w)
-		{
-			m_active = form;
-			return form;
-		}
-	}
-	m_active = m_forms.first();
-	return m_forms.first();
-}*/
-
 void
 FormManager::deleteForm(Form *form)
 {
-	kdDebug() << "removing form " << form->objectTree()->name() << endl;
-	m_forms.remove(form);
+	if(m_forms.find(form) == -1)
+		m_preview.remove(form);
+	else
+		m_forms.remove(form);
 }
 
 void
@@ -169,23 +144,6 @@ FormManager::setSelWidget(QWidget *w)
 	if(activeForm())
 		activeForm()->setSelWidget(w);
 }
-/*
-void
-FormManager::updateTreeView(QWidget *w)
-{
-	if(!m_treeview)
-		return;
-
-	Form *form;
-	for(form = m_forms.first(); form; form = m_forms.next())
-	{
-		if(form->toplevelContainer()->widget() == w)
-		{
-			m_treeview->setForm(form);
-			return;
-		}
-	}
-}*/
 
 void
 FormManager::createBlankForm()
@@ -303,6 +261,8 @@ FormManager::previewForm(Form *form, QWidget *container)
 	myform->createToplevel(container);
 	FormIO::loadFormFromDom(myform, container, domDoc);
 
+	myform->setDesignMode(false);
+	m_preview.append(myform);
 	container->show();
 }
 

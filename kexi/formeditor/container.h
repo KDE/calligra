@@ -77,22 +77,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		 */
 		void            setLayout(LayoutType type);
 
-	signals:
-		/**
-		 * this siganl gets emmited when the mode changes<br>
-		 * if e = true one can edit the form<br>
-		 * if e = false one can use the form (Not implemented yet)
-		 */
-		void		modeChanged(bool e);
-
 	public slots:
-		/**
-		 * use this function to toggle between editing and viewing mode.<br>
-		 * if e = true one can edit the form<br>
-		 * if e = false one can use the form (not implemented yet)
-		 */
-		void		setEditingMode(bool e);
-
 		//! \return The watched widget.
 		QWidget		*widget() { return m_container; }
 

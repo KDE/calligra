@@ -59,27 +59,11 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 */
 		void	createToplevel(QWidget *container, const QString &classname="QWidget");
 
-		/*
-		 * creates a toplevel widget using the library
-		 
-		QWidget* createToplevel(const QString &w, QWidget *parent=0, const char *name=0);
-		*/
 		/*!
 		 * \return the toplevel Container or 0 if there isn't any.
 		 */
 		Container			*toplevelContainer() const { return m_toplevel; }
 
-		/*
-		 * create an instance of this form by using
-		 * its Property- and WidgetBuffer
-		 * /param editmode = false you can't edit that form
-		 
-		QWidget			*createInstance(QWidget *parent, bool editmode);
-
-		 * creates an *empty* instance
-		 
-		QWidget			*createEmptyInstance(const QString &c="QWidget", QWidget *parent=0);
-		 */
 		//! \return a pointer to this form's ObjectTree.
 		ObjectTree		*objectTree() const { return m_topTree; }
 		//! \return the FormManager parent of this form.
@@ -90,7 +74,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		    and the widget's Container if it is itself a container.
 		 */
 		Container*		activeContainer();
-		/*! \return A pointer to the parent Container of the currently selected widget. It is the same as activeContainer() for 
+		/*! \return A pointer to the parent Container of the currently selected widget. It is the same as activeContainer() for
 		    a simple widget, but unlike this function it will also return the parent Container if the widget itself is a Container.
 		 */
 		Container*		parentContainer(QWidget *w=0);
@@ -104,18 +88,21 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 */
 		void			setInteractiveMode(bool interactive) { m_inter = interactive; }
 		/*! \return true if the Form is being updated by the user, ie the created widget were drawn on the Form.
-		    \return false if the Form is being updated by the program, ie the widget are created by FormIO, and so composed widgets 
+		    \return false if the Form is being updated by the program, ie the widget are created by FormIO, and so composed widgets
 		    should not be populated automatically (such as QTabWidget).
 		 */
 		bool			interactiveMode() const { return m_inter; }
+
+		void			setDesignMode(bool design);
+		bool			designMode() { return m_design; }
 
 		//! \return the x distance between two dots in the background.
 		static int		gridX() { return 10;}
 		//! \return the y distance between two dots in the background.
 		static int		gridY() { return 10;}
-		
+
 		/*! Pastes the widget represented by the QDomElement \a widg in the Form. \a widg is created by FormManager::saveWidget().\n
-		    If \a pos is null or not given, then the widget will be pasted in the actual Container, at the same position as 
+		    If \a pos is null or not given, then the widget will be pasted in the actual Container, at the same position as
 		    in its former parent widget. Otherwise, it is pasted at \a pos in the active Container (when the user used the context menu).
 		 */
 		void			pasteWidget(QDomElement &widg, QPoint pos=QPoint());
@@ -131,7 +118,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		void			setFilename(const QString &file) { m_filename = file; }
 
 	public slots:
-		/*! This slot is called when the name of a widget was changed in Property Editor. It renames the ObjectTreeItem 
+		/*! This slot is called when the name of a widget was changed in Property Editor. It renames the ObjectTreeItem
 		  associated to this widget.
 		 */
 		void			changeName(const QString &oldname, const QString &newname);
@@ -173,7 +160,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		QDomElement  fixPos(QDomElement el);
 		/*! Internal function used to fix the names of the widgets before pasting them. It prevents from pasting a widget with
 		  the same name as an actual widget. The child widgets are also fixed recursively.\n
-		  If the name of the widget ends with a number (eg "QLineEdit1"), the new name is just incremented by one (eg becomes "QLineEdit2"). 
+		  If the name of the widget ends with a number (eg "QLineEdit1"), the new name is just incremented by one (eg becomes "QLineEdit2").
 		  Otherwise, a "2" is just appended at the end of the name (eg "myWidget" becomes "myWidget2").
 		 */
 		void  fixNames(QDomElement el);
@@ -182,11 +169,12 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		FormManager		*m_manager;
 		Container		*m_toplevel;
 		ObjectTree		*m_topTree;
-		
+
 		QPtrList<QWidget>	m_selected;
 		QDict<ResizeHandleSet> m_resizeHandles;
 
 		bool			m_inter;
+		bool			m_design;
 		QString			m_filename;
 };
 

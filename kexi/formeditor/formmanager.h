@@ -61,8 +61,6 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  \return a QPtrList of the created actions.
 		 */
 		Actions createActions(KActionCollection *parent);
-		//void createForm(QWidget *toplevel);
-		//void loadForm(const QString &filename);
 
 		/*! Sets the external editors used by FormDesigner (as they may be docked). This function also connects
 		  appropriate signals and slots to ensure sync with the current Form.
@@ -171,6 +169,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		KexiPropertyEditor	*m_editor;
 		ObjectTreeView		*m_treeview;
 		QPtrList<Form>		m_forms;
+		QPtrList<Form>		m_preview;
 		int			m_count;
 		Form			*m_active;
 		QWidget			*m_parent;

@@ -341,11 +341,6 @@ Container::unSelectWidget(QWidget *w)
 	m_form->unSelectWidget(w);
 }
 
-void
-Container::setEditingMode(bool)
-{
-}
-
 Container*
 Container::toplevel()
 {
@@ -376,6 +371,7 @@ void
 Container::widgetDeleted()
 {
 	kdDebug() << "Deleting container : " << m_tree->name() << endl;
+	m_container = 0;
 	delete this;
 }
 
@@ -443,6 +439,8 @@ Container::createBoxLayout(WidgetList *list)
 
 Container::~Container()
 {
+	if(m_container)
+		m_container->removeEventFilter(this);
 }
 
 }

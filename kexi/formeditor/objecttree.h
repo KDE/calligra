@@ -54,7 +54,6 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		QWidget*	widget() const { return m_widget; }
 		ObjectTreeItem* parent() const { return m_parent; }
 		ObjectTreeC*	children() { return &m_children; }
-		//PropertyMap	properties() { return m_properties; }
 		QMap<QString, QVariant>* modifProp() { return &m_props;}
 		Container*	container() { return m_container;}
 

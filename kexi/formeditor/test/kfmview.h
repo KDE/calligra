@@ -9,8 +9,11 @@
  *
  * Lucijan Busch
  **/
- 
+
 class QWorkspace;
+namespace KFormDesigner {
+class FormManager;
+}
 
 class KFMView : public KMainWindow
 {
@@ -20,8 +23,12 @@ class KFMView : public KMainWindow
 		KFMView();
 		~KFMView();
 
+	public slots:
+		void slotPreviewForm();
+
 	private:
 		QWorkspace  *w;
+		KFormDesigner::FormManager *manager;
 };
 
 #endif
