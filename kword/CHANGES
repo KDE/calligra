@@ -139,3 +139,6 @@ Add dcop interface : now we can insert text, change text format, etc...
 Frame z-order ("Raise frame", "Lower frame")
 
 Add support for background spell checking
+
+Add support for manual completion (use CTL+T)
+
