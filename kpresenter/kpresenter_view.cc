@@ -6228,6 +6228,10 @@ void KPresenterView::slotObjectEditChanged()
     actionFormatParag->setEnabled(val);
     actionInsertVariable->setEnabled(val);
     actionTextInsertPageNum->setEnabled(val);
+    if ( edit )
+        actionBrushColor->setEnabled(val);
+    else
+        actionBrushColor->setEnabled(true);
 
 
     bool hasSelection = false ;
