@@ -945,7 +945,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 
 #ifdef Q_WS_WIN
 	int x = 1;
-	int y_offset = 1;
+	int y_offset = -1;
 #else
 	int x = 1;
 //	int y_offset = 2;
@@ -1063,10 +1063,10 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 //		case QVariant::Date:
 #ifdef Q_WS_WIN
 		x = 5;
-		y_offset = -1;
+//		y_offset = -1;
 #else
 		x = 5;
-		y_offset = 0;
+//		y_offset = 0;
 #endif
 //		QString s = "";
 
@@ -1097,10 +1097,10 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	else {//	default:
 #ifdef Q_WS_WIN
 		x = 5;
-		y_offset = -1;
+//		y_offset = -1;
 #else
 		x = 5;
-		y_offset = 0;
+//		y_offset = 0;
 #endif
 		if (!cell_value.isNull())
 			txt = cell_value.toString();
@@ -1116,7 +1116,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		QRect bound=fontMetrics().boundingRect(x, y_offset, w - (x+x), h, align, txt);
 		bound.setX(bound.x()-1);
 		bound.setY(0);
-		bound.setWidth(bound.width()+2);
+		bound.setWidth( QMIN( bound.width()+2, w - (x+x)+1 ) );
 		bound.setHeight(d->rowHeight-1);
 		if (viewport()->hasFocus())
 			p->fillRect(bound, colorGroup().highlight());
@@ -1146,7 +1146,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			p->setPen(colorGroup().highlightedText());
 		else
 			p->setPen(colorGroup().text());
-		p->drawText(x, y_offset, w - (x+x), h, align, txt);
+		p->drawText(x, y_offset, w - (x+x)- ((align&AlignLeft)?2:0)/*right space*/, h, align, txt);
 	}
 	p->setPen(pen);//restore
 }
@@ -1963,6 +1963,8 @@ void KexiTableView::setCursor(int row, int col/*=-1*/)
 		// cursor moved to other row: end of row editing
 		if (d->rowEditing && d->curRow != newrow) {
 			acceptRowEdit();
+			//update row number, because number of rows changed
+			newrow = QMIN( rows() - 1 + (isInsertingEnabled()?1:0), newrow);
 		}
 
 		//change position
@@ -2102,16 +2104,32 @@ void KexiTableView::acceptRowEdit()
 	acceptEditor();
 	kdDebug() << "EDIT ROW ACCEPTING..." << endl;
 
-	bool success;
+	bool success = false;
+//	bool inserting = d->pInsertItem && d->pInsertItem==d->pCurrentItem;
+
 	if (m_data->rowEditBuffer()->isEmpty()) {
-		success = true;
-		kdDebug() << "-- NOTHING TO ACCEPT!!!" << endl;
+		if (d->newRowEditing) {
+			cancelRowEdit();
+			kdDebug() << "-- NOTHING TO INSERT!!!" << endl;
+			return;
+		}
+		else {
+			success = true;
+			kdDebug() << "-- NOTHING TO ACCEPT!!!" << endl;
+		}
 	}
 	else {
-		//accept changes for this row:
-		kdDebug() << "-- ACCEPTING: " << endl;
-		m_data->rowEditBuffer()->debug();
-		success = m_data->saveRowChanges(*d->pCurrentItem);
+		if (d->newRowEditing) {
+			kdDebug() << "-- INSERTING: " << endl;
+			m_data->rowEditBuffer()->debug();
+			success = m_data->saveNewRow(*d->pCurrentItem);
+		}
+		else {
+			//accept changes for this row:
+			kdDebug() << "-- ACCEPTING: " << endl;
+			m_data->rowEditBuffer()->debug();
+			success = m_data->saveRowChanges(*d->pCurrentItem);
+		}
 	}
 
 	if (!success) {
@@ -2122,6 +2140,7 @@ void KexiTableView::acceptRowEdit()
 	//editing is finished:
 
 	d->rowEditing = false;
+	d->newRowEditing = false;
 	//indicate on the vheader that we are not editing
 	d->pVerticalHeader->setEditRow(-1);
 	//redraw
@@ -2507,20 +2526,7 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 				keyPressEvent(ke);
 				if (ke->isAccepted())
 					return true;
-/*					tabNext();
-					//TODO
-					return true;
-				} else if (ke->state()==ShiftButton) {
-					tabPrev();
-					//TODO
-					return true;
-				}*/
 			}
-/*			else if (ke->key()==Key_Enter || ke->key()==Key_Return) {
-				kdDebug() << "Enter pressed in editor" << endl;
-				acceptEditor();
-				return true;
-			}*/
 		}
 		else if (o==this || o==viewport()) {
 			keyPressEvent(ke);

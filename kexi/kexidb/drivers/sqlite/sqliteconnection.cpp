@@ -139,18 +139,6 @@ bool SQLiteConnection::drv_dropDatabase( const QString &dbName )
 	return true;
 }
 
-QString SQLiteConnection::escapeString(const QString& str) const
-{
-//	mysql_real_escape_string(m_mysql, escaped, str.local8Bit(), str.length());
-//	qstrcpy( target, str.local8Bit() );
-	return str;
-}
-
-QCString SQLiteConnection::escapeString(const QCString& str) const
-{
-	return str;
-}
-
 //CursorData* SQLiteConnection::drv_createCursor( const QString& statement )
 Cursor* SQLiteConnection::prepareQuery( const QString& statement, uint cursor_options )
 {
@@ -225,7 +213,8 @@ bool SQLiteConnection::drv_executeSQL( const QString& statement )
 {
 	KexiDBDrvDbg << "SQLiteConnection::drv_executeSQL(" << statement << ")" <<endl;
 	QCString st(statement.length()*2);
-	st = escapeString( statement.local8Bit() ); //?
+//	st = escapeString( statement.local8Bit() ); //?
+	st = statement.local8Bit();
 
 	d->res = sqlite_exec( 
 		d->data, 

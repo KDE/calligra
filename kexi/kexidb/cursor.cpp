@@ -423,9 +423,18 @@ bool Cursor::getNextRecord()
 
 bool Cursor::updateRow(RowData& data, RowEditBuffer& buf)
 {
+//TODO: doesn't update cursor's buffer YET!
 	if (!m_query)
 		return false;
 	return m_conn->updateRow(*m_query, data, buf);
+}
+
+bool Cursor::insertRow(RowData& data, RowEditBuffer& buf)
+{
+//TODO: doesn't update cursor's buffer YET!
+	if (!m_query)
+		return false;
+	return m_conn->insertRow(*m_query, data, buf);
 }
 
 QString Cursor::debugString() const

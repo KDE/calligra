@@ -178,12 +178,15 @@ public:
 	inline KexiDB::RowEditBuffer* rowEditBuffer() const { return m_pRowEditBuffer; }
 
 	bool saveRowChanges(KexiTableItem& item);
+	bool saveNewRow(KexiTableItem& item);
 
 protected:
 	virtual int compareItems(Item item1, Item item2);
-
 	int cmpStr(Item item1, Item item2);
 	int cmpInt(Item item1, Item item2);
+
+	//! internal: for saveRowChanges() and saveNewRow()
+	bool saveRow(KexiTableItem& item, bool insert);
 
 	int			m_key;
 	short		m_order;

@@ -307,17 +307,27 @@ void KexiTableViewData::updateRowEditBuffer(int colnum, QVariant newval)
 }
 
 //js TODO: if there can be multiple views for this data, we need multiple buffers!
-bool KexiTableViewData::saveRowChanges(KexiTableItem& item)
+bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert)
 {
-	if (!rowEditBuffer())
+	if (!m_pRowEditBuffer)
 		return false;
-	kdDebug() << "KexiTableViewData::saveRowChanges()..." << endl;
 	if (isDBAware()) {
-		if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() ))
-			return false;
+		if (insert) {
+/*			KexiDB::RowEditBuffer::DBMap b = m_pRowEditBuffer->simpleBuffer();
+			for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
+				sqlset += (it.key()->name() + "=" + valueToSQL(it.key(),it.data()));
+			}
+*/
+			if (!m_cursor->insertRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() ))
+				return false;
+		}
+		else {
+			if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() ))
+				return false;
+		}
 	}
 	else {//js UNTESTED!!! - not db-aware version
-		KexiDB::RowEditBuffer::SimpleMap b = rowEditBuffer()->simpleBuffer();
+		KexiDB::RowEditBuffer::SimpleMap b = m_pRowEditBuffer->simpleBuffer();
 		for (KexiDB::RowEditBuffer::SimpleMap::Iterator it = b.begin();it!=b.end();++it) {
 			uint i=0;
 			for (KexiTableViewColumn::ListIterator it2(columns);it2.current();++it2, i++) {
@@ -329,5 +339,17 @@ bool KexiTableViewData::saveRowChanges(KexiTableItem& item)
 		}
 	}
 	return true;
+}
+
+bool KexiTableViewData::saveRowChanges(KexiTableItem& item)
+{
+	kdDebug() << "KexiTableViewData::saveRowChanges()..." << endl;
+	return saveRow(item, false /*update*/);
+}
+
+bool KexiTableViewData::saveNewRow(KexiTableItem& item)
+{
+	kdDebug() << "KexiTableViewData::saveNewRow()..." << endl;
+	return saveRow(item, true /*insert*/);
 }
 

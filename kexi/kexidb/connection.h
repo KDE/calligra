@@ -259,8 +259,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		bool setAutoCommit(bool on);
 
 		/*! driver-specific string escaping */
-		virtual QString escapeString(const QString& str) const = 0;
-		virtual QCString escapeString(const QCString& str) const = 0;
+//js: MOVED TO Driver		virtual QString escapeString(const QString& str) const = 0;
+//		virtual QCString escapeString(const QCString& str) const = 0;
 		
 		/*! Prepares query described by raw \a statement. 
 		 \return opened cursor created for results of this query 
@@ -331,9 +331,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 used database. */
 		QuerySchema* querySchema( const int queryId );
 
-		QString valueToSQL( const Field::Type ftype, const QVariant& v ) const;
-
-		QString valueToSQL( const Field *field, const QVariant& v ) const;
+//js: MOVED TO Driver		QString valueToSQL( const Field::Type ftype, const QVariant& v ) const;
+//		QString valueToSQL( const Field *field, const QVariant& v ) const;
 
 		/*! Executes \a sql query and stores first record's data inside \a data.
 		 This is convenient method when we need only first recors from query result,
@@ -672,6 +671,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		KexiDB::TableSchema* setupTableSchema( const KexiDB::RowData &data );
 
 		bool updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf);
+
+		bool insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf);
 
 		/*! Allocates all needed table KexiDB system objects for kexi__* KexiDB liblary's
 		 system tables schema.

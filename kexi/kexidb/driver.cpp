@@ -163,5 +163,45 @@ bool Driver::isSystemObjectName( const QString& n ) const
 	return n.startsWith("kexi__");
 }
 
+QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
+{
+	if (v.isNull())
+		return "NULL";
+	switch (ftype) {
+		case Field::Byte:
+		case Field::ShortInteger:
+		case Field::Integer:
+		case Field::Float:
+		case Field::Double:
+		case Field::BigInteger:
+			return v.toString();
+//TODO: here special encoding method needed
+		case Field::Boolean:
+			return QString::number(v.toInt()); //0 or 1
+		case Field::Date:
+		case Field::Time:
+			return QString("\"")+v.toString()+"\"";
+		case Field::DateTime:
+			return QString("\"") + v.toDate().toString( Qt::ISODate ) + " " + v.toTime().toString( Qt::ISODate ) +"\"";
+		case Field::Text:
+		case Field::LongText: {
+			QString s = v.toString();
+			return escapeString(s); //QString("'")+s.replace( '"', "\\\"" ) + "'"; 
+		}
+		case Field::BLOB: {
+//TODO: here special encoding method needed
+			QString s = v.toString();
+			return escapeString(s); //QString("'")+v.toString()+"'";
+		}
+		case Field::InvalidType:
+			return "!INVALIDTYPE!";
+		default:
+			KexiDBDbg << "Connection_valueToSQL(): UNKNOWN!" << endl;
+			return QString::null;
+	}
+	return QString::null;
+}
+
+
 #include "driver.moc"
 

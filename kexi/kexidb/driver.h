@@ -27,6 +27,7 @@
 #include <qvaluevector.h>
 
 #include <kexidb/object.h>
+#include <kexidb/field.h>
 
 class KService;
 
@@ -156,6 +157,19 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		//! in implementation using KEXIDB_DRIVER macro (see driver_p.h)
 		virtual int versionMajor() const = 0;
 		virtual int versionMinor() const = 0;
+
+		//! Escapes and converts value \a v (for type \a ftype) 
+		//! to string representation required by SQL commands.
+		QString valueToSQL( uint ftype, const QVariant& v ) const;
+
+		//! Like above method, for \a field.
+		inline QString valueToSQL( const Field *field, const QVariant& v ) const {
+			return valueToSQL( (field ? field->type() : Field::InvalidType), v );
+		}
+
+		/*! driver-specific string escaping */
+		virtual QString escapeString(const QString& str) const = 0;
+		virtual QCString escapeString(const QCString& str) const = 0;
 
 	protected:
 		/*! For reimplemenation: creates and returns connection object 

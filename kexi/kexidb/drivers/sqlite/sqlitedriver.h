@@ -63,6 +63,9 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteDriver : public Driver
 		/*! \return false for this driver. */
 		virtual bool isSystemDatabaseName( const QString& ) const { return false; }
 
+		virtual QString escapeString(const QString& str) const;
+		virtual QCString escapeString(const QCString& str) const;
+
 	protected:
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
 

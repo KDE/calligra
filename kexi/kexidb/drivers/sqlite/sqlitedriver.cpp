@@ -100,5 +100,15 @@ bool SQLiteDriver::isSystemFieldName( const QString& n ) const
 		|| n.lower()=="oid";
 }
 
+QString SQLiteDriver::escapeString(const QString& str) const
+{
+	return QString("'")+QString(str).replace( '\'', "''" ) + "'";
+}
+
+QCString SQLiteDriver::escapeString(const QCString& str) const
+{
+	return QString("'")+QString(str).replace( '\'', "''" ).latin1() + "'";
+}
+
 #include "sqlitedriver.moc"
 

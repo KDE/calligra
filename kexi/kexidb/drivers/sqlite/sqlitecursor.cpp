@@ -23,6 +23,7 @@
 #include "sqliteconnection_p.h"
 
 #include <kexidb/error.h>
+#include <kexidb/driver.h>
 
 #include <assert.h>
 #include <string.h>
@@ -115,8 +116,10 @@ SQLiteCursor::~SQLiteCursor()
 
 bool SQLiteCursor::drv_open(const QString& statement)
 {
-	d->st.resize(statement.length()*2);
-	d->st = m_conn->escapeString( statement.local8Bit() );
+//	d->st.resize(statement.length()*2);
+	//TODO: decode
+	d->st = statement.local8Bit();
+//	d->st = m_conn->driver()->escapeString( statement.local8Bit() );
 
 	d->res = sqlite_compile(
 		d->data,

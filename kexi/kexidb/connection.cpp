@@ -613,7 +613,8 @@ QValueList<int> Connection::objectIds(int objType)
 	return list;*/
 }
 
-inline QString Connection_valueToSQL( const Field::Type ftype, const QVariant& v )
+#if 0
+inline QString Connection::internal_valueToSQL( Field::Type ftype, const QVariant& v )
 {
 	if (v.isNull())
 		return "NULL";
@@ -662,6 +663,7 @@ QString Connection::valueToSQL( const Field *field, const QVariant& v ) const
 	kdDebug() << "valueToSQL(" << (m_driver ? ( field ? m_driver->sqlTypeName(field->type()): "!field") : "??") << ", " << Connection_valueToSQL( (field ? field->type() : Field::InvalidType), v ) <<")" << endl;
 	return Connection_valueToSQL( (field ? field->type() : Field::InvalidType), v );
 }
+#endif
 
 QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema ) const
 {
@@ -697,7 +699,7 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 			if (!field->isAutoIncrement() && !field->isPrimaryKey() && field->isNotNull()) 
 				v += " NOT NULL"; //only add not null option if no autocommit is set
 			if (field->defaultValue().isValid())
-				v += QString(" DEFAULT ") + valueToSQL( field->m_type, field->m_defaultValue );
+				v += QString(" DEFAULT ") + m_driver->valueToSQL( field, field->m_defaultValue );
 		}
 		sql += v;
 	}
@@ -708,8 +710,8 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 //yeah, it is very efficient:
 #define C_A(a) , const QVariant& c ## a
 
-#define V_A0 valueToSQL( tableSchema.field(0)->type(), c0 )
-#define V_A(a) +","+valueToSQL( \
+#define V_A0 m_driver->valueToSQL( tableSchema.field(0), c0 )
+#define V_A(a) +","+m_driver->valueToSQL( \
 	tableSchema.field(a) ? tableSchema.field(a)->type() : Field::Text, c ## a )
 
 #define C_INS_REC(args, vals) \
@@ -736,8 +738,8 @@ C_INS_REC_ALL
 #undef V_A
 #undef C_INS_REC
 
-#define V_A0 value += valueToSQL( flist->first(), c0 );
-#define V_A( a ) value += ("," + valueToSQL( flist->next(), c ## a ));
+#define V_A0 value += m_driver->valueToSQL( flist->first(), c0 );
+#define V_A( a ) value += ("," + m_driver->valueToSQL( flist->next(), c ## a ));
 //#define V_ALAST( a ) valueToSQL( flist->last(), c ## a )
 
 #define C_INS_REC(args, vals) \
@@ -780,8 +782,8 @@ bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& va
 	while (f && (it!=values.end())) {
 		if (!s_val.isEmpty())
 			s_val += ",";
-		s_val += valueToSQL( f->type(), *it );
-		KexiDBDbg << "val" << i++ << ": " << valueToSQL( f->type(), *it ) << endl;
+		s_val += m_driver->valueToSQL( f, *it );
+		KexiDBDbg << "val" << i++ << ": " << m_driver->valueToSQL( f, *it ) << endl;
 		++it;
 		f=fields->next();
 	}
@@ -806,8 +808,8 @@ bool Connection::insertRecord(FieldList& fields, QValueList<QVariant>& values)
 	while (f && (it!=values.end())) {
 		if (!s_val.isEmpty())
 			s_val += ",";
-		s_val += valueToSQL( f->type(), *it );
-		KexiDBDbg << "val" << i++ << ": " << valueToSQL( f->type(), *it ) << endl;
+		s_val += m_driver->valueToSQL( f, *it );
+		KexiDBDbg << "val" << i++ << ": " << m_driver->valueToSQL( f, *it ) << endl;
 		++it;
 		f=flist->next();
 	}
@@ -1561,13 +1563,14 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 //js TODO: hmm, perhaps we can try to update without using PKEY?
 		return false;
 	}
-	//fetch the record:
+	//update the record:
 	QString sql = "UPDATE " + query.parentTable()->name() + " SET ";
 	QString sqlset, sqlwhere;
-	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=buf.dbBuffer().begin();it!=buf.dbBuffer().end();++it) {
+	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
+	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
 		if (!sqlset.isEmpty())
 			sqlset+=",";
-		sqlset += (it.key()->name() + "=" + valueToSQL(it.key(),it.data()));
+		sqlset += (it.key()->name() + "=" + m_driver->valueToSQL(it.key(),it.data()));
 	}
 	QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
 	if (pkey->fieldCount()>0) {
@@ -1582,7 +1585,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 				return false;
 			}
 			sqlwhere += ( it.current()->name() + "=" 
-				+ valueToSQL( it.current(), val ) );
+				+ m_driver->valueToSQL( it.current(), val ) );
 		}
 	}
 	sql += (sqlset + " WHERE " + sqlwhere);
@@ -1596,12 +1599,57 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	}
 	//success: now also assign new value in memory:
 	QMap<Field*,uint> fieldsOrder = query.fieldsOrder();
-	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=buf.dbBuffer().begin();it!=buf.dbBuffer().end();++it) {
+	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
 		data[ fieldsOrder[it.key()] ] = it.data();
 	}
 
 	return res;
 }
 
+bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf)
+{
+	KexiDBDrvDbg << "Connection::updateRow.." << endl;
+	//--get PKEY
+	if (buf.dbBuffer().isEmpty()) {
+		KexiDBDrvDbg << " -- NO CHANGES DATA!" << endl;
+		return true;
+	}
+	if (!query.parentTable()) {
+		KexiDBDrvDbg << " -- NO PARENT TABLE!" << endl;
+		return false;
+	}
+	IndexSchema *pkey = query.parentTable()->primaryKey();
+	if (!pkey || pkey->fields()->isEmpty())
+		KexiDBDrvDbg << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
+
+	//insert the record:
+	QString sql = "INSERT INTO " + query.parentTable()->name() + " (";
+	QString sqlcols, sqlvals;
+	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
+	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
+		if (!sqlcols.isEmpty()) {
+			sqlcols+=",";
+			sqlvals+=",";
+		}
+		sqlcols += it.key()->name();
+		sqlvals += m_driver->valueToSQL(it.key(),it.data());
+	}
+	sql += (sqlcols + ") VALUES (" + sqlvals + ")");
+	KexiDBDrvDbg << " -- SQL == " << sql << endl;
+
+	bool res = drv_executeSQL(sql);
+
+	if (!res) {
+//TODO: js: we would like to know a reason of failures...
+		return false;
+	}
+	//success: now also assign new value in memory:
+	QMap<Field*,uint> fieldsOrder = query.fieldsOrder();
+	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
+		data[ fieldsOrder[it.key()] ] = it.data();
+	}
+
+	return res;
+}
 
 #include "connection.moc"
