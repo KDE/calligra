@@ -93,7 +93,7 @@ void KexiFormPart::initInstanceActions()
 {
 #ifdef KEXI_SHOW_DEBUG_ACTIONS
 	new KAction(i18n("Show Form UI Code"), "compfile", CTRL+Key_U, m_manager, SLOT(showFormUICode()),
-		actionCollectionForMode(Kexi::AllViewModes), "show_form_ui");
+		actionCollectionForMode(Kexi::DesignViewMode), "show_form_ui");
 #endif
 
 	m_manager->createActions(actionCollectionForMode(Kexi::DesignViewMode));

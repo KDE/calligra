@@ -265,9 +265,12 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 bool KexiDBForm::eventFilter ( QObject * watched, QEvent * e )
 {
 	if (e->type()==QEvent::KeyPress && static_cast<QWidget*>(watched)) {
-		if (static_cast<QKeyEvent*>(e)->key() == Key_Tab
-			|| static_cast<QKeyEvent*>(e)->key() == Key_Backtab)
-		{
+		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+		const bool tab = ke->state() == Qt::NoButton && ke->key() == Key_Tab;
+		const bool backtab = ((ke->state() == Qt::NoButton || ke->state() == Qt::ShiftButton) && ke->key() == Key_Backtab)
+			|| (ke->state() == Qt::ShiftButton && ke->key() == Key_Tab);
+
+		if (tab || backtab) {
 			if (d->orderedFocusWidgetsIterator.current() != static_cast<QWidget*>(watched)) {
 				d->orderedFocusWidgetsIterator.toFirst();
 				while (d->orderedFocusWidgetsIterator.current() && d->orderedFocusWidgetsIterator.current()!=static_cast<QWidget*>(watched)) {
@@ -276,7 +279,7 @@ bool KexiDBForm::eventFilter ( QObject * watched, QEvent * e )
 				}
 			}
 			kdDebug() << watched->name() << endl;
-			if (static_cast<QKeyEvent*>(e)->key() == Key_Tab) {
+			if (tab) {
 				if (d->orderedFocusWidgets.first() && watched == d->orderedFocusWidgets.last()) {
 					d->orderedFocusWidgetsIterator.toFirst();
 				}
@@ -291,7 +294,7 @@ bool KexiDBForm::eventFilter ( QObject * watched, QEvent * e )
 				SET_FOCUS_USING_REASON(d->orderedFocusWidgetsIterator.current(), QFocusEvent::Tab);
 				kdDebug() << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
 				return true;
-			}	else if (static_cast<QKeyEvent*>(e)->key() == Key_BackTab) {
+			} else if (backtab) {
 				if (d->orderedFocusWidgets.last() && watched == d->orderedFocusWidgets.first()) {
 					d->orderedFocusWidgetsIterator.toLast();
 				}
