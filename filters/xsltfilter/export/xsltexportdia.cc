@@ -197,6 +197,7 @@ void XSLTExportDia::okSlot()
 	QByteArray array = _in->read(_in->size());
 	// use mkstemp, not tempname
 	char* temp = strdup("xsltXXXXXX");
+	mkstemp(temp);
 	QString tempFileName = QString(temp);
 	//QString tempFileName = tempnam(NULL, "xslt");
 	

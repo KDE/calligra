@@ -27,7 +27,6 @@
  */
 #include "xsltproc.h"
 
-
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif
@@ -74,67 +73,98 @@ xmlParserInputPtr xmlNoNetExternalEntityLoader(const char *URL,
 
 XSLTProc::XSLTProc(const char* fileIn, const char* fileOut, const char* xsltsheet)
 {
-	_fileIn = fileIn;
-	_fileOut = fileOut;
-	_stylesheet = xsltsheet;
+	_fileIn = strdup(fileIn);
+	_fileOut = strdup(fileOut);
+	_stylesheet = strdup(xsltsheet);
+	nbparams = 0;
+	debug = 0;
+	repeat = 0;
+	novalid = 0;
+	output = NULL;
 }
 
-static int debug = 0;
-static int repeat = 0;
-static int novalid = 0;
+XSLTProc::XSLTProc(QString fileIn, QString fileOut, QString xsltsheet)
+{
+	_fileIn = fileIn.latin1();
+	_fileOut = fileOut.latin1();
+	_stylesheet = xsltsheet.latin1();
+	nbparams = 0;
+	debug = 0;
+	repeat = 0;
+	novalid = 0;
+	output = NULL;
+}
 
-static const char *params[16 + 1];
-static int nbparams = 0;
-static const char *output = NULL;
+/*static int debug = 0;
+static int repeat = 0;
+static int novalid = 0;*/
+
+/*const char *XSLTProc::params[16 + 1];
+int XSLTProc::nbparams = 0;
+static const char *output = NULL;*/
 
 void
 XSLTProc::xsltProcess(xmlDocPtr doc, xsltStylesheetPtr cur, const char *filename)
 {
     xmlDocPtr res;
 
-    if (output == NULL) {
-	if (repeat) {
-	    int j;
+    if (output == NULL)
+	{
+		
+		if (repeat)
+		{
+		    int j;
 
-	    for (j = 1; j < repeat; j++) {
-		res = xsltApplyStylesheet(cur, doc, params);
-		xmlFreeDoc(res);
-		xmlFreeDoc(doc);
-		    doc = xmlParseFile(filename);
-	    }
-	}
-	    res = xsltApplyStylesheet(cur, doc, params);
-	xmlFreeDoc(doc);
-	if (res == NULL) {
-	    fprintf(stderr, "no result for %s\n", filename);
-	    return;
-	}
-#ifdef LIBXML_DEBUG_ENABLED
-	if (debug)
-	    xmlDebugDumpDocument(stdout, res);
-	else {
-#endif
-	    if (cur->methodURI == NULL) {
-		xsltSaveResultToFile(stdout, res, cur);
-	    } else {
-		if (xmlStrEqual
-		    (cur->method, (const xmlChar *) "xhtml")) {
-		    fprintf(stderr, "non standard output xhtml\n");
-		    xsltSaveResultToFile(stdout, res, cur);
-		} else {
-		    fprintf(stderr,
-			    "Unsupported non standard output %s\n",
-			    cur->method);
+		    for (j = 1; j < repeat; j++)
+			{
+				res = xsltApplyStylesheet(cur, doc, params);
+				xmlFreeDoc(res);
+				xmlFreeDoc(doc);
+			    doc = xmlParseFile(filename);
+		    }
 		}
-	    }
+	    res = xsltApplyStylesheet(cur, doc, params);
+		xmlFreeDoc(doc);
+	
+		if (res == NULL)
+		{
+		    fprintf(stderr, "no result for %s\n", filename);
+		    return;
+		}
 #ifdef LIBXML_DEBUG_ENABLED
-	}
+		if (debug)
+	    	xmlDebugDumpDocument(stdout, res);
+		else
+		{
 #endif
-
-	xmlFreeDoc(res);
-    } else {
-	xsltRunStylesheet(cur, doc, params, output, NULL, NULL);
-	xmlFreeDoc(doc);
+	    	if (cur->methodURI == NULL)
+			{
+				xsltSaveResultToFile(stdout, res, cur);
+		    }
+			else
+			{
+				if (xmlStrEqual
+				    (cur->method, (const xmlChar *) "xhtml"))
+				{
+				    fprintf(stderr, "non standard output xhtml\n");
+				    xsltSaveResultToFile(stdout, res, cur);
+				}
+				else
+				{
+				    fprintf(stderr,
+						    "Unsupported non standard output %s\n",
+						    cur->method);
+				}
+	    	}
+#ifdef LIBXML_DEBUG_ENABLED
+		}
+#endif
+		xmlFreeDoc(res);
+    }
+	else
+	{
+		xsltRunStylesheet(cur, doc, params, output, NULL, NULL);
+		xmlFreeDoc(doc);
     }
 }
 
@@ -168,6 +198,18 @@ XSLTProc::xsltProcess(xmlDocPtr doc, xsltStylesheetPtr cur, const char *filename
     printf("      --profile or --norman : dump profiling informations \n");
 }*/
 
+void XSLTProc::addParam(QString name, QString value)
+{
+	if(nbparams < NB_PARAMETER_MAX)
+	{
+		params[nbparams] = strdup(name.latin1());
+		params[nbparams + 1] = strdup(value.latin1());
+		fprintf(stderr, "%s => ", params[0]);
+		fprintf(stderr, "%s\n", params[1]);
+		nbparams = nbparams + 2;
+	}
+}
+
 int XSLTProc::parse()
 {
     int i;
@@ -190,8 +232,7 @@ int XSLTProc::parse()
 	novalid = novalid + 1;
 	output = _fileOut;
 	repeat = 20;
-	xsltMaxDepth = 1;
-	nbparams = 0;
+	xsltMaxDepth = 5;
     params[nbparams] = NULL;
 
     /*

@@ -20,6 +20,8 @@
 #ifndef __XSLTPROC_H__
 #define __XSLTPROC_H__
 
+#include <qstring.h>
+
 #include <libexslt/exslt.h>
 #include <libxslt/xsltconfig.h>
 #include <libxslt/xslt.h>
@@ -28,14 +30,21 @@
 #include <libxslt/xsltutils.h>
 #include <libxslt/extensions.h>
 
+#define NB_PARAMETER_MAX 16
+
 class XSLTProc
 {
 	const char* _fileIn;
 	const char* _fileOut;
 	const char* _stylesheet;
 
+	const char *params[NB_PARAMETER_MAX + 1];
+	int nbparams;
+	int debug;
+	int repeat;
+	int novalid;
+	const char *output;
 
-	
 	public:
 		/**
 		 * Create a new xslt processor 
@@ -44,11 +53,15 @@ class XSLTProc
 		 * @param stylesheet xsl file to convert fileIn in fileOut.
 		 */
     	XSLTProc(const char* fileIn, const char* fileOut, const char *stylesheet);
+    	
+		XSLTProc(QString fileIn, QString fileOut, QString stylesheet);
 
 		/**
 		 * Destroy the processor
 		 */
 	    virtual ~XSLTProc() {}
+
+		void addParam(QString name, QString value);
 
 		/** Process fileIn throught the stylesheet.
 		 * @return return 0 if no error occured
@@ -56,7 +69,7 @@ class XSLTProc
 		int parse();
 
 	private:
-		static void xsltProcess(xmlDocPtr doc, xsltStylesheetPtr cur,
+		void xsltProcess(xmlDocPtr doc, xsltStylesheetPtr cur,
 					const char *filename);
 };
 #endif /* __XSLTPROC_H__ */
