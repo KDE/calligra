@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=Karbon WMF Import Filter
+X-KDE-Export=application/x-karbon
+X-KDE-Import=image/x-wmf
+X-KDE-Weight=1
+X-KDE-Library=libwmfimport
+ServiceTypes=KOfficeFilter
