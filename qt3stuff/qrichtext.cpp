@@ -5375,7 +5375,7 @@ QTextFormat QTextFormat::makeTextFormat( const QStyleSheetItem *style, const QMa
 }
 
 QTextCustomItem::QTextCustomItem( QTextDocument *p )
-      :  xpos(0), ypos(-1), width(-1), height(0), parent( p )
+      :  xpos(0), ypos(-1), width(-1), height(0), parent( p ), parag(0)
 {
 }
 
