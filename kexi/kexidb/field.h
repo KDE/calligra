@@ -142,10 +142,10 @@ class KEXI_DB_EXPORT Field
 		//! Converts field \a type to QVariant equivalent as accurate as possible
 		static QVariant::Type variantType(int type);
 		//! \return \a type name
-		static inline QString typeName(int type);
+		static QString typeName(int type);
 
 		//! \return field name 
-		QString name() const;
+		inline QString name() const { return m_name; }
 		
 		/*! \return table schema of table that owns this field. */
 		virtual TableSchema* table() const;
@@ -165,9 +165,9 @@ class KEXI_DB_EXPORT Field
 		/*! @return true if the field is not allowed to be null */
 		inline bool isNotNull() const { return constraints() & NotNull; }
 
-		inline bool isNumericType() const;
+		inline bool isNumericType() const { return Field::isNumericType(m_type); }
 		static bool isNumericType(int type);
-		inline bool isTextType() const;
+		inline bool isTextType() const { return Field::isTextType(m_type); }
 		static bool isTextType(int type);
                         
 //js: we have m_table for this		/*!
@@ -183,16 +183,16 @@ class KEXI_DB_EXPORT Field
 			return variantType(m_type);
 		}
 
-		Type type() const;
-		inline QString typeName() const;
-		QVariant defaultValue() const;
+		inline Type type() const { return m_type; }
+		inline QString typeName() const { return Field::typeName(m_type); }
+		inline QVariant defaultValue() const { return m_defaultValue; }
 		
 		//! \return length of text is the field type is text
-		int length() const;
+		inline int length() const { return m_length; }
 		//! \retrun precision for numeric and other fields that have both length and precision
-		int precision() const; 
+		inline int precision() const { return m_precision; } 
 		//! \return the constraints defined for this field
-		int constraints() const;
+		inline int constraints() const { return m_constraints; }
 		//! \return order of this field in containing table (counting starts from 0)
 		//! (-1 if unspecified)
 		inline int order() const { return m_order; }
@@ -201,7 +201,8 @@ class KEXI_DB_EXPORT Field
 		//! \return halp text for this field
 		inline QString helpText() const { return m_help; }
 		
-		bool isUnsigned() const; //! if the type has the unsigned attribute
+		//! if the type has the unsigned attribute
+		inline bool isUnsigned() const { return m_options & Unsigned; }
 //		virtual bool isBinary() const;
 
 		void setType(Type t);
@@ -242,7 +243,7 @@ class KEXI_DB_EXPORT Field
 		/*! \return KexiDB::Expression object if the field value is a result expression. 
 		 Unless the expression is set with setExpresion(), it is null.
 		*/
-		KexiDB::Expression *expression() { return m_expr; }
+		inline KexiDB::Expression *expression() { return m_expr; }
 
 		/*! Sets expression data \a expr. If \a expr there was 
 		 already expression set, it is destroyed before new assignment.

@@ -188,11 +188,6 @@ QString Field::typeName(int type)
 #endif
 }
 
-bool Field::isNumericType() const
-{
-	return Field::isNumericType(m_type);
-}
-	
 bool Field::isNumericType( int type )
 {
 	switch (type) {
@@ -207,11 +202,6 @@ bool Field::isNumericType( int type )
 	return false;
 }
 
-bool Field::isTextType() const
-{
-	return Field::isTextType(m_type);
-}
-
 bool Field::isTextType( int type )
 {
 	switch (type) {
@@ -223,45 +213,10 @@ bool Field::isTextType( int type )
 	return false;
 }
 
-QString
-Field::name() const
-{
-	return m_name;
-}
-
 TableSchema*
 Field::table() const
 {
 	return static_cast<TableSchema*>(m_parent);
-}
-
-QString
-Field::typeName() const
-{
-	return typeName(m_type);
-}
-
-Field::Type
-Field::type() const
-{
-	return m_type;
-}
-
-QVariant
-Field::defaultValue() const
-{
-	return m_defaultValue;
-}
-
-int
-Field::length() const
-{
-	return m_length;
-}
-
-int Field::constraints() const
-{
-	return m_constraints;
 }
 
 /*QString
@@ -269,18 +224,6 @@ Field::references() const
 {
 	return m_reference;
 }*/
-
-int
-Field::precision() const
-{
-	return m_precision;
-}
-
-bool
-Field::isUnsigned() const
-{
-	return m_options & Unsigned;
-}
 
 /*
 bool
