@@ -290,7 +290,7 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
     if ( node->getType() == t_cell )
     {
       KSParseNodeExtraPoint* extra = new KSParseNodeExtraPoint( node->getStringLiteral(), m, t );
-      kdDebug(36002) << "-------- Got dep " << util_cellName( extra->point()->pos.x(), extra->point()->pos.y() ) << endl;
+      kdDebug(36001) << "-------- Got dep " << util_cellName( extra->point()->pos.x(), extra->point()->pos.y() ) << endl;
       KSpreadDependency* d = new KSpreadDependency(extra->point()->pos.x(), extra->point()->pos.y(),
 					       extra->point()->table);
       if (!d->Table())
@@ -373,7 +373,7 @@ static bool kspreadfunc_cell( KSContext& context )
     if ( it2 == line.end() )
       return FALSE;
 
-    kdDebug(36002) <<"x= "<<x<<endl;
+    kdDebug(36001) <<"x= "<<x<<endl;
     for( ; it != lines.end(); ++it )
     {
       const QValueList<KSValue::Ptr>& l = (*it)->listValue();

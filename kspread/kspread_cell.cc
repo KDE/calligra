@@ -1356,8 +1356,8 @@ void KSpreadCell::textSize( QPainter &_paint )
 {
     QFontMetrics fm = _paint.fontMetrics();
     // Horizontal text ?
-    int tmpAngle=getAngle(column(),row());
-    if( !verticalText(column(),row()) && !tmpAngle )
+    int tmpAngle=getAngle( column(), row() );
+    if( !verticalText( column(), row() ) && !tmpAngle )
     {
         m_iOutTextWidth = fm.width( m_strOutText );
 	int offsetFont=0;
@@ -1486,7 +1486,7 @@ bool KSpreadCell::calc(bool delay)
 {
   if ( testFlag(Flag_Progress) )
   {
-    kdError(36002) << "ERROR: Circle" << endl;
+    kdError(36001) << "ERROR: Circle" << endl;
     setFlag(Flag_Error);
     m_strFormulaOut = "####";
     m_dataType = StringData; // correct?
@@ -3189,7 +3189,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
     {
       if ( !makeFormula() )
       {
-	kdError(36002) << "ERROR: Syntax ERROR" << endl;
+	kdError(36001) << "ERROR: Syntax ERROR" << endl;
       }
     }
   }
@@ -3459,7 +3459,7 @@ void KSpreadCell::setValue( double _d )
 
 void KSpreadCell::update()
 {
-  kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " update" << endl;
+  kdDebug(36001) << util_cellName( m_iColumn, m_iRow ) << " update" << endl;
   KSpreadCell* cell = NULL;
   for ( cell = m_ObscuringCells.first(); cell != NULL;
         cell = m_ObscuringCells.next())
@@ -3484,7 +3484,7 @@ void KSpreadCell::updateDepending()
     return;
   }
 
-  kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " updateDepending" << endl;
+  kdDebug(36001) << util_cellName( m_iColumn, m_iRow ) << " updateDepending" << endl;
 
   KSpreadDependency* d = NULL;
 
@@ -3505,7 +3505,7 @@ void KSpreadCell::updateDepending()
 
   calc();
 
-  kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " updateDepending done" << endl;
+  kdDebug(36001) << util_cellName( m_iColumn, m_iRow ) << " updateDepending done" << endl;
 
   clearFlag(Flag_UpdatingDeps);
   updateChart();
@@ -4217,7 +4217,7 @@ bool KSpreadCell::loadCellData(QDomElement text, Operation op )
 
     if ( !m_pTable->isLoading() ) // i.e. when pasting
       if ( !makeFormula() )
-        kdError(36002) << "ERROR: Syntax ERROR" << endl;
+        kdError(36001) << "ERROR: Syntax ERROR" << endl;
   }
   else
   {
