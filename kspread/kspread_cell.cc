@@ -67,17 +67,17 @@ public:
     // At the moment, it's used to store hyperlink
     QSimpleRichText *QML;
 
-    // amount of additional cells 
+    // amount of additional cells
     int extraXCells;
     int extraYCells;
-    
+
     int mergedXCells;
     int mergedYCells;
-    
+
     // If a cell overlapps other cells, then we have the cells width stored here.
     // This value does not mean anything unless extraXCells is different from 0.
     double extraWidth;
-    
+
     // If a cell overlapps other cells, then we have the cells height stored here.
     // This value does not mean anything unless d->extra()->extraYCells is different from 0.
     double extraHeight;
@@ -87,7 +87,7 @@ public:
     // enlarged object. This means that we have to call this object in order
     // of painting it for example instead of painting 'this'.
     QValueList<KSpreadCell*> obscuringCells;
-           
+
     KSpreadConditions* conditions;
     KSpreadValidity * validity;
 
@@ -104,7 +104,7 @@ public:
     // This cell's row. If it is 0, this is the default cell and its row/column can
     // not be determined.
     int row;
-    
+
     // This cell's column. If it is 0, this is the default cell and its row/column can
     // not be determined.
     int column;
@@ -117,11 +117,11 @@ public:
 
     // Holds the user's input
     QString strText;
-    
-    // This is the text we want to display. Not necessarily the same as strText, 
+
+    // This is the text we want to display. Not necessarily the same as strText,
     // e.g. strText="1" and strOutText="1.00"
     QString strOutText;
-    
+
     // The parse tree of the real formula (e.g: "=A1*A2").
     KSParseNode* code;
 
@@ -135,7 +135,7 @@ public:
     double textY;
     double textWidth;
     double textHeight;
-   
+
     // result of "fm.ascent()" in makeLayout. used in offsetAlign.
     int fmAscent;
 
@@ -144,15 +144,15 @@ public:
 
     // list of cells that require this cell's value to be calculated
     QPtrList<KSpreadDependency> lstDependingOnMe;
-    
+
     KSpreadCell* nextCell;
     KSpreadCell* previousCell;
-    
+
     CellExtra* cellExtra;
-    
+
     CellPrivate();
     ~CellPrivate();
-    
+
     CellExtra* extra();
 };
 
@@ -163,19 +163,19 @@ CellPrivate::CellPrivate()
   content= KSpreadCell::Text;
   value = KSpreadValue::empty();
   code = 0;
-  
+
   textX = 0.0;
   textY = 0.0;
   textWidth = 0.0;
   textHeight = 0.0;
   fmAscent = 0;
-  
+
   nextCell = 0;
   previousCell = 0;
 
   lstDepends.setAutoDelete( true );
   lstDependingOnMe.setAutoDelete( true );
-  
+
   cellExtra = 0;
 }
 
@@ -200,7 +200,7 @@ CellExtra* CellPrivate::extra()
         cellExtra->extraHeight = 0.0;
         cellExtra->nbLines = 0;
     }
-    
+
     return cellExtra;
 }
 
@@ -217,7 +217,7 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
   d = new CellPrivate;
   d->row = _row;
   d->column = _column;
-  
+
   clearAllErrors();
 }
 
@@ -227,7 +227,7 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
   d = new CellPrivate;
   d->row = _row;
   d->column = _column;
-  
+
   clearAllErrors();
 }
 
@@ -238,7 +238,7 @@ KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _dep
   d->row = _row;
   d->column = _column;
   d->lstDependingOnMe = _deponme ;
-  
+
   clearAllErrors();
 }
 
@@ -376,24 +376,24 @@ void KSpreadCell::setValue( const KSpreadValue& v )
     m_pTable->setRegionPaintDirty(cellRect());
 }
 
-KSpreadCell* KSpreadCell::previousCell() const 
-{ 
+KSpreadCell* KSpreadCell::previousCell() const
+{
     return d->previousCell;
 }
 
 KSpreadCell* KSpreadCell::nextCell() const
-{ 
+{
     return d->nextCell;
 }
 
 void KSpreadCell::setPreviousCell( KSpreadCell* c )
-{ 
+{
     d->previousCell = c;
 }
 
 void KSpreadCell::setNextCell( KSpreadCell* c )
 {
-    d->nextCell = c; 
+    d->nextCell = c;
 }
 
 KSpreadValidity* KSpreadCell::getValidity( int newStruct  )
@@ -659,7 +659,7 @@ bool KSpreadCell::isObscuringForced() const
 
 QValueList<KSpreadCell*> KSpreadCell::obscuringCells() const
 {
-    return d->extra()->obscuringCells; 
+    return d->extra()->obscuringCells;
 }
 
 void KSpreadCell::clearObscuringCells()
@@ -4489,22 +4489,22 @@ int KSpreadCell::mergedYCells() const
 }
 
 int KSpreadCell::extraXCells() const
-{ 
+{
     return d->extra()->extraXCells;
 }
-    
-int KSpreadCell::extraYCells() const 
-{ 
+
+int KSpreadCell::extraYCells() const
+{
     return d->extra()->extraYCells;
 }
 
 double KSpreadCell::extraWidth() const
-{ 
+{
     return d->extra()->extraWidth;
 }
 
-double KSpreadCell::extraHeight() const 
-{ 
+double KSpreadCell::extraHeight() const
+{
     return d->extra()->extraHeight;
 }
 
@@ -5087,7 +5087,7 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
 bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )
 {
     QString text;
-    
+
     QDomElement textP = element.namedItem( "text:p" ).toElement();
     if ( !textP.isNull() )
     {
@@ -5096,7 +5096,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
 	{
 	  // something in <text:p>, e.g. links
 	  text = subText.text();
-	  
+
 	  if ( subText.hasAttribute( "xlink:href" ) )
 	    {
 	      QString link = subText.attribute( "xlink:href" );
@@ -5112,7 +5112,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
 	  setValue( text );
 	}
     }
-    
+
     // boolean value
     if( element.hasAttribute( "table:value-type" ) )
         if( element.attribute( "table:value-type" ) == "boolean" )
@@ -5123,24 +5123,26 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
                 bool value = val == "true";
                 setValue( value );
                 setCellText( value ? i18n("True") : i18n("False" ) );
-            }            
+            }
         }
-    
+
     // integer and floating-point value
     if( element.hasAttribute( "table:value-type" ) )
         if( element.attribute( "table:value-type" ) == "float" )
         {
             bool ok = false;
-            double value = element.attribute( "table:value" ).toDouble( &ok ); 
+            double value = element.attribute( "table:value" ).toDouble( &ok );
             if( ok ) setValue( value );
         }
 
     // currency value
     if( element.hasAttribute( "table:value-type" ) )
-        if( element.attribute( "table:value-type" ) == "currency" )
+    {
+        QString valuetype = element.attribute( "table:value-type" );
+        if( valuetype == "currency" )
         {
             bool ok = false;
-            double value = element.attribute( "table:value" ).toDouble( &ok ); 
+            double value = element.attribute( "table:value" ).toDouble( &ok );
             if( ok )
             {
                 setValue( value );
@@ -5148,20 +5150,17 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
                 setFormatType( KSpreadFormat::Money );
             }
         }
-
-    // number formatted as percentage
-    if( element.hasAttribute( "table:value-type" ) )
-        if( element.attribute( "table:value-type" ) == "percentage" )
+        else if( valuetype == "percentage" )
         {
             bool ok = false;
-            double value = element.attribute( "table:value" ).toDouble( &ok ); 
+            double value = element.attribute( "table:value" ).toDouble( &ok );
             if( ok )
             {
                 setValue( value );
                 setFormatType( KSpreadFormat::Percentage );
             }
-        }                    
-    
+        }
+    }
     // merged cells ?
     int colSpan = 1;
     int rowSpan = 1;
@@ -5179,7 +5178,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     }
     if ( colSpan > 1 || rowSpan > 1 )
         forceExtraCells( d->column, d->row, colSpan - 1, rowSpan - 1 );
-        
+
     // cell comment/annotation
     QDomElement annotationElement = element.namedItem( "office:annotation" ).toElement();
     if ( !annotationElement.isNull() )
@@ -5195,14 +5194,14 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
                     if( !comment.isEmpty() ) comment.append( '\n' );
                     comment.append( commentElement.text() );
                 }
-                    
+
             node = node.nextSibling();
         }
-        
+
         if( !comment.isEmpty() )
             setComment( comment );
     }
-    
+
     return true;
 }
 
@@ -5841,7 +5840,7 @@ KSpreadCell::~KSpreadCell()
         if ( cell )
             cell->unobscure(this);
     }
-    
+
     delete d;
 }
 
