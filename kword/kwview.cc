@@ -661,8 +661,14 @@ void KWView::setupActions()
     actionShowDocStruct = new KToggleAction( i18n( "Show doc structure" ), 0,
                                             this, SLOT( showDocStructure() ),
                                             actionCollection(), "show_docstruct" );
-}
 
+    // ------------------- Actions with a key binding and no GUI item
+    KAction* actSoftHyphen = new KAction( i18n( "Insert soft hyphen" ), CTRL+Key_Minus,
+                        this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
+    // Necessary for the actions that are not plugged anywhere
+    KAccel * accel = new KAccel( this );
+    actSoftHyphen->plugAccel( accel );
+}
 
 void KWView::refreshMenuExpression()
 {
@@ -999,16 +1005,28 @@ void KWView::clipboardDataChanged()
         return;
     }
     QMimeSource *data = QApplication::clipboard()->data();
-    //QTime dt;
-    //dt.start();
-    // if ( QImageDrag::canDecode( data ) )  is very very slow in Qt 2 (n*m roundtrips)
-    // Workaround...
+    bool providesImage, providesKWord;
+    checkClipboard( data, providesImage, providesKWord );
+    // Is there an image in the clipboard ?
+    if ( providesImage )
+        actionEditPaste->setEnabled( true );
+    else
+    {
+        // Is there kword XML in the clipboard ?
+        actionEditPaste->setEnabled( edit && providesKWord );
+    }
+}
+
+void KWView::checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWord )
+{
+    // QImageDrag::canDecode( data ) is very very slow in Qt 2 (n*m roundtrips)
+    // Workaround....
     QValueList<QCString> formats;
     const char* fmt;
     for (int i=0; (fmt = data->format(i)); i++)
         formats.append( QCString( fmt ) );
 
-    bool providesImage = false;
+    providesImage = false;
     QStrList fileFormats = QImageIO::inputFormats();
     for ( fileFormats.first() ; fileFormats.current() && !providesImage ; fileFormats.next() )
     {
@@ -1016,18 +1034,8 @@ void KWView::clipboardDataChanged()
         QCString type = "image/" + format.lower();
         providesImage = ( formats.findIndex( type ) != -1 );
     }
-
-    // Is there an image in the clipboard ?
-    if ( providesImage )
-        actionEditPaste->setEnabled( true );
-    else
-    {
-        // Is there kword XML in the clipboard ?
-        actionEditPaste->setEnabled( ( edit &&
-                                       formats.findIndex( KWTextDrag::selectionMimeType() ) != -1 )
-                                     || formats.findIndex( KWDrag::selectionMimeType() ) != -1 );
-    }
-    //kdDebug() << "KWView::clipboardDataChanged total time : " << (float)dt.elapsed()/1000.0 << " seconds" << endl;
+    providesKWord = formats.findIndex( KWTextDrag::selectionMimeType() ) != -1
+                 || formats.findIndex( KWDrag::selectionMimeType() ) != -1;
 }
 
 /*=========================== file print =======================*/
@@ -1414,17 +1422,21 @@ void KWView::editPaste()
     QMimeSource *data = QApplication::clipboard()->data();
     if ( data->provides( KWDrag::selectionMimeType() ) )
         m_gui->canvasWidget()->pasteFrames();
-    else if ( QImageDrag::canDecode( data ) )
-    {
+    else {
+        bool providesImage, providesKWord;
+        checkClipboard( data, providesImage, providesKWord );
+        if ( providesImage )
+        {
 
-        KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
-        m_gui->canvasWidget()->pasteImage( data, docPoint );
-    }
-    else
-    {
-        KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
-        if ( edit )
-            edit->paste();
+            KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
+            m_gui->canvasWidget()->pasteImage( data, docPoint );
+        }
+        else
+        {
+            KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
+            if ( edit )
+                edit->paste();
+        }
     }
 }
 
@@ -3727,6 +3739,13 @@ void KWView::showDocStructure()
 {
     m_doc->setShowDocStruct(actionShowDocStruct->isChecked());
     m_doc->reorganizeGUI();
+}
+
+void KWView::slotSoftHyphen()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertSoftHyphen();
 }
 
 /******************************************************************/

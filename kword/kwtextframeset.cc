@@ -2792,7 +2792,13 @@ void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
         textObject()->insert( cursor(), currentFormat(), _c, false /* no newline */, true, i18n("Insert Special Char") );
 }
 
-void  KWTextFrameSetEdit::insertExpression(const QString &_c)
+void KWTextFrameSetEdit::insertSoftHyphen()
+{
+    textObject()->insert( cursor(), currentFormat(), QChar(0xad) /* see QRichText */,
+                          false /* no newline */, true, i18n("Insert Soft Hyphen") );
+}
+
+void KWTextFrameSetEdit::insertExpression(const QString &_c)
 {
     if(textObject()->hasSelection() )
         frameSet()->kWordDocument()->addCommand(textObject()->replaceSelectionCommand(

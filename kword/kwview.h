@@ -150,6 +150,8 @@ public:
 
     QPopupMenu * popupMenu( const QString& name );
 
+    static void checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWord );
+
 public slots:
     void fileStatistics();
     void editCut();
@@ -289,12 +291,13 @@ public slots:
     void changeClipart();
 
     void configureHeaderFooter();
-
     void inlineFrame();
-
     void openLink();
-
     void showDocStructure();
+
+    void slotSoftHyphen();
+
+    // end of slots
 
 protected:
     void addVariableActions( int type, const QStringList & texts,
