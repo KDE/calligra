@@ -22,12 +22,18 @@
 #include <klocale.h>
 #include "kchart_aboutdata.h"
 
+using namespace KChart;
+
+namespace KChart
+{
 
 static const KCmdLineOptions options[]=
 {
 	{"+[file]", I18N_NOOP("File to open"),0},
 	KCmdLineLastOption
 };
+
+}  //namespace KChart
 
 
 extern "C" int kdemain( int argc, char **argv )

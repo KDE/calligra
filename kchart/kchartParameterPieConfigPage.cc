@@ -36,6 +36,9 @@
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params,
                                                             QWidget* parent ) :
     QWidget( parent ),_params( params )
@@ -100,3 +103,5 @@ void KChartParameterPieConfigPage::apply()
     _params->setThreeDShadowColors( drawShadowColor->isChecked());
     _params->setPieStart( angle->value() );
 }
+
+}  //KChart namespace

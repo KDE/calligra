@@ -27,6 +27,9 @@ class QSpinBox;
 class QCheckBox;
 class QLineEdit;
 
+namespace KChart
+{
+
 class KChartParams;
 
 class KChartParameterConfigPage : public QWidget
@@ -55,5 +58,7 @@ private:
     QLineEdit *ylabel2_fmt;
     QLineEdit *annotation;
 };
+
+}  //KChart namespace
 
 #endif

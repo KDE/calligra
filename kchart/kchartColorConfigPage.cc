@@ -33,6 +33,9 @@
 #include "kchart_params.h"
 #include <kdebug.h>
 
+namespace KChart
+{
+
 KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
                                               QWidget* parent, KoChart::Data *dat ) :
     QWidget( parent ),
@@ -226,3 +229,5 @@ void KChartColorConfigPage::apply()
         if(i<_params->maxDataColor())
             _params->setDataColor(i,extColor[i]);
 }
+
+}  //KChart namespace

@@ -23,6 +23,10 @@
 #include <kdialogbase.h>
 
 class QLineEdit;
+
+namespace KChart
+{
+
 class KChartView;
 class KChartParams;
 class KChartPageLayout : public KDialogBase
@@ -49,5 +53,7 @@ private:
 signals:
     void dataChanged();
 };
+
+}  //KChart namespace
 
 #endif

@@ -31,6 +31,9 @@
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 KChartComboPage::KChartComboPage( KChartParams* params,
                                   QWidget* parent ) :
     QWidget( parent ),_params( params )
@@ -131,3 +134,4 @@ void KChartComboPage::apply()
 #endif
 }
 
+}  //KChart namespace

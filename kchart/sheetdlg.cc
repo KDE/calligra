@@ -25,6 +25,9 @@
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 
+namespace KChart
+{
+
 const int SheetDlg::TABLE_SIZE = 16;
 
 SheetDlg::SheetDlg( QWidget *parent, const char *name )
@@ -171,6 +174,4 @@ void SheetDlg::resizeHandle( QSize s )
   ok->move(cancel->x() - 5 - ok->width(), height );
 }
 
-
-
-
+}  //namespace KChart

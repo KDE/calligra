@@ -42,6 +42,9 @@ using namespace std;
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 class KChartFontListBoxItem : public QListBoxText
 {
 public:
@@ -250,3 +253,5 @@ void KChartFontConfigPage::apply()
     // PENDING(khz) Add support for the other 16 possible hd/ft areas
 
 }
+
+}  //KChart namespace

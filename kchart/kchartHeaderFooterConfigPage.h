@@ -26,6 +26,9 @@
 class QLineEdit;
 class QPushButton;
 
+namespace KChart
+{
+
 class KChartParams;
 
 class KChartHeaderFooterConfigPage : public QWidget
@@ -61,5 +64,7 @@ private:
     QFont footerFont;
     QButton::ToggleState footerFontIsRelative;
 };
+
+}  //KChart namespace
 
 #endif

@@ -31,6 +31,9 @@ using namespace std;
 
 //#include "sheetdlg.h"
 
+namespace KChart
+{
+
 
 KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     : KoView( part, parent, name )
@@ -567,5 +570,6 @@ void KChartView::slotConfigPageLayout()
     delete dialog;
 }
 
+}  //KChart namespace
 
 #include "kchart_view.moc"

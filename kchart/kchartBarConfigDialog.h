@@ -23,6 +23,9 @@
 #include "kchartConfigDialog.h"
 #include "kchartDataEditor.h"
 
+namespace KChart
+{
+
 class KChartParams;
 class KChartBarConfigPage;
 
@@ -41,5 +44,7 @@ public slots:
 private:
     KChartBarConfigPage* _barpage;
 };
+
+}  //KChart namespace
 
 #endif

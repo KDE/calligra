@@ -32,6 +32,9 @@
 #include <klocale.h>
 #include <kdialog.h>
 
+namespace KChart
+{
+
 KChartBarConfigPage::KChartBarConfigPage( QWidget* parent ) :
     QWidget( parent, "Bar diagramm config page" )
 {
@@ -147,3 +150,4 @@ KChartBarConfigPage::KChartBarConfigPage( QWidget* parent ) :
 // 	return OnTop;
 // }
 
+}  //KChart namespace

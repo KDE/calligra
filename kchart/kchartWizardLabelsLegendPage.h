@@ -8,6 +8,10 @@ class QColor;
 class QPushButton;
 class QLineEdit;
 class QRadioButton;
+
+namespace KChart
+{
+
 class KChartPart;
 
 class KChartWizardLabelsLegendPage : public QWidget
@@ -78,5 +82,6 @@ private:
 
 };
 
+}  //KChart namespace
 
 #endif

@@ -1,3 +1,17 @@
+2005-01-07  Raphael Langerhorst <raphael-langerhorst@gmx.at>
+
+	Put all KChart classes into the KChart namespace
+	* KDChart classes not changed!
+	* QtTableView class not changed!
+
+2005-01-06  Raphael Langerhorst <raphael-langerhorst@gmx.at>
+
+	Improve Data Editor usability:
+	* sheet.cc: Add tooltips and what's this help.
+	* sheet.cc: Use a different color for first row and column
+	* sheetdlg.cc: Add tooltips and what's this help.
+	* sheetdlg.cc: Change order of widget initialization (better tab order).
+
 2004-11-16  Inge Wallin  <inge@lysator.liu.se>
 
 	Cleanup.

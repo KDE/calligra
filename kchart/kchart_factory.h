@@ -14,6 +14,8 @@
 class KInstance;
 class KAboutData;
 
+namespace KChart
+{
 
 class KChartFactory : public KoFactory
 {
@@ -38,5 +40,7 @@ private:
     static KInstance* s_global;
     static KAboutData *s_aboutData;
 };
+
+}  //namespace KChart
 
 #endif

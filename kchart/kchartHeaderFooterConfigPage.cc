@@ -31,6 +31,9 @@
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 KChartHeaderFooterConfigPage::KChartHeaderFooterConfigPage( KChartParams* params,
                                                       QWidget* parent ) :
     QWidget( parent ),_params( params )
@@ -167,3 +170,5 @@ void KChartHeaderFooterConfigPage::changeFooterFont()
             && QButton::NoChange != state )
         footerFontIsRelative = state;
 }
+
+}  //KChart namespace

@@ -29,6 +29,9 @@ class QLineEdit;
 class QListBox;
 class QPushButton;
 
+namespace KChart
+{
+
 class KChartParams;
 
 class KChartFontConfigPage : public QWidget
@@ -62,4 +65,7 @@ private:
     QButton::ToggleState legendIsRelative;
     KoChart::Data *data;
 };
+
+}  //KChart namespace
+
 #endif

@@ -13,6 +13,8 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 
+namespace KChart
+{
 
 K_EXPORT_COMPONENT_FACTORY( libkchartpart, KChartFactory )
 
@@ -75,5 +77,6 @@ KInstance* KChartFactory::global()
     return s_global;
 }
 
+}  //namespace KChart
 
 #include <kchart_factory.moc>

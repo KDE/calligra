@@ -10,9 +10,10 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-
 #include <qstring.h>
 
+namespace KChart
+{
 
 class ParsedArray
 {
@@ -67,5 +68,6 @@ private:
     } //Ugly
 };
 
+}  //namespace KChart
 
 #endif

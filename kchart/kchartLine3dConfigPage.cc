@@ -30,6 +30,9 @@
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
                                                           QWidget* parent ) :
     QWidget( parent ),_params( params )
@@ -121,3 +124,5 @@ void KChartLine3dConfigPage::apply()
     _params->setThreeDShadowColors( drawShadowColor->isChecked());
     _params->setLineWidth( lineWidth->value() );
 }
+
+}  //KChart namespace

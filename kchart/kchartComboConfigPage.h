@@ -24,6 +24,9 @@
 
 class QRadioButton;
 
+namespace KChart
+{
+
 class KChartParams;
 
 class KChartComboPage : public QWidget
@@ -42,5 +45,7 @@ private:
     QRadioButton *connecting;
     QRadioButton *icap;
 };
+
+}  //KChart namespace
 
 #endif

@@ -35,6 +35,9 @@
 
 #include "kchart_factory.h"
 
+namespace KChart
+{
+
 KChartHiloSubTypeChartPage::KChartHiloSubTypeChartPage( KChartParams* params,
                                                         QWidget* parent ) :
     KChartSubTypeChartPage(  params, parent )
@@ -419,3 +422,5 @@ void KChartPolarSubTypeChartPage::apply()
         kdDebug( 35001 ) << "Error in groupbutton" << endl;
     }
 }
+
+}  //KChart namespace

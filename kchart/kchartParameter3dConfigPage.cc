@@ -30,6 +30,9 @@
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
                                                           QWidget* parent ) :
     QWidget( parent ),_params( params )
@@ -104,3 +107,5 @@ void KChartParameter3dConfigPage::apply()
     _params->setThreeDBarDepth( depth->value() );
     _params->setThreeDShadowColors( drawShadowColor->isChecked());
 }
+
+}  //KChart namespace

@@ -24,6 +24,9 @@
 
 #include <qstring.h>
 
+namespace KChart
+{
+
 class KChartView;
 
 class KChartViewIface : public KoViewIface
@@ -55,5 +58,7 @@ private:
     KChartView *view;
 
 };
+
+}  //KChart namespace
 
 #endif

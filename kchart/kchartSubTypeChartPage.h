@@ -26,6 +26,10 @@
 class KDChartParams;
 class QLabel;
 class QRadioButton;
+
+namespace KChart
+{
+
 class KChartParams;
 
 class KChartSubTypeChartPage : public QWidget
@@ -143,5 +147,7 @@ private:
     QRadioButton* percent;
     QLabel* exampleLA;
 };
+
+}  //KChart namespace
 
 #endif

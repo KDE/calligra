@@ -14,6 +14,9 @@
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KChartPart* chart ) :
     QWidget( parent ),
     _chart( chart )
@@ -310,5 +313,6 @@ void KChartWizardLabelsLegendPage::apply(  )
     _chart->params()->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparams );
 }
 
+}  //KChart namespace
 
 #include "kchartWizardLabelsLegendPage.moc"

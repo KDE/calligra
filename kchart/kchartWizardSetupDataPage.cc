@@ -9,6 +9,9 @@
 #include <qbuttongroup.h>
 #include <qlabel.h>
 
+namespace KChart
+{
+
 KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
                                                                                                           KChartPart* chart) :
   QWidget( parent ),
@@ -125,6 +128,6 @@ void KChartWizardSetupDataPage::firstRowIsDescriptionToggled( bool )
                                                         rowdescript->isChecked() );
 }
 
-
+}  //namespace KChart
 
 #include "kchartWizardSetupDataPage.moc"

@@ -23,8 +23,12 @@
 #include <qwidget.h>
 #include <knuminput.h>
 
-class KChartParams;
 class QCheckBox;
+
+namespace KChart
+{
+
+class KChartParams;
 
 class KChartLine3dConfigPage : public QWidget
 {
@@ -45,5 +49,7 @@ private:
     KDoubleNumInput* depth;
     QCheckBox* line3d, *drawShadowColor;
 };
+
+}  //KChart namespace
 
 #endif

@@ -19,9 +19,10 @@
 #include <qpushbutton.h>
 #include <qcolor.h>
 
-
-
 #include "kchart_params.h"
+
+namespace KChart
+{
 
 KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
                                                       KChartPart* chart ) :
@@ -287,6 +288,6 @@ void KChartWizardSetupAxesPage::apply()
 //     }
 }
 
-
+}  //namespace KChart
 
 #include "kchartWizardSetupAxesPage.moc"

@@ -25,6 +25,9 @@
 #include "sheet.h"
 #include "sheet.moc"
 
+namespace KChart
+{
+
 
 Sheet::Sheet( QWidget *parent, const char *name, int _tableSize )
     :QWidget(parent,name)
@@ -304,3 +307,5 @@ void Sheet::resizeEvent( QResizeEvent * e )
     vert->setRange( 0, tableView->numRows() - tableView->numRowsVisible() );
     vert->setSteps( 1, tableView->numRowsVisible() );
 }
+
+}  //namespace KChart

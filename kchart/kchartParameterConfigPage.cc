@@ -33,6 +33,9 @@
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
                                                       QWidget* parent ) :
     QWidget( parent ),_params( params )
@@ -239,3 +242,5 @@ void KChartParameterConfigPage::apply()
     if( _params->chartType() == KDChartParams::Line )
         _params->setLineMarker(lineMarker->isChecked());
 }
+
+}  //KChart namespace

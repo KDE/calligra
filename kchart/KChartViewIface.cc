@@ -23,6 +23,9 @@
 
 #include <dcopclient.h>
 
+namespace KChart
+{
+
 KChartViewIface::KChartViewIface( KChartView *view_ )
     : KoViewIface( view_ )
 {
@@ -93,3 +96,5 @@ void KChartViewIface::configHeaderFooter()
 {
     view->slotConfigHeaderFooterChart();
 }
+
+}  //KChart namespace

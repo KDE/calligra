@@ -15,10 +15,14 @@
 
 #include <qwidget.h>
 
-class Sheet;
 class QSpinBox;
 class QLabel;
 class QPushButton;
+
+namespace KChart
+{
+
+class Sheet;
 
 class SheetDlg : public QWidget
 {
@@ -55,7 +59,6 @@ private:
   QSpinBox *usedrowsSB, *usedcolsSB;
 };
 
-
-
+}  //namespace KChart
 
 #endif

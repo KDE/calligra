@@ -13,6 +13,8 @@
 
 #include "parser.h"
 
+namespace KChart
+{
 
 ParsedArray::ParsedArray( int row, int col )
 {
@@ -266,3 +268,5 @@ ParsedArray::Type ParsedArray::parseRef( double &res )
     res = doubleVal(row, col);
     return type(row,col);
 }
+
+}  //namespace KChart

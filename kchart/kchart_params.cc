@@ -23,6 +23,8 @@
 #include <dcopobject.h>
 #include "kdchart/KDChartParams.h"
 
+namespace KChart
+{
 
 KChartParams::KChartParams()
     : KDChartParams()
@@ -45,3 +47,4 @@ DCOPObject* KChartParams::dcopObject()
     return m_dcop;
 }
 
+}  //KChart namespace

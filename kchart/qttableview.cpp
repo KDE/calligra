@@ -2270,5 +2270,4 @@ void QtTableView::updateTableSize()
     showOrHideScrollBars();
 }
 
-
 #endif

@@ -5,6 +5,9 @@
 
 class QLineEdit;
 
+namespace KChart
+{
+
 class KChartWizardSelectDataPage : public QWidget
 {
 friend class KChartWizard;
@@ -16,5 +19,6 @@ private:
   QLineEdit* rangeED;
 };
 
+}  //namespace KChart
 
 #endif

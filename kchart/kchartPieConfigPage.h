@@ -32,6 +32,9 @@ class QPushButton;
 class QFont;
 class QRadioButton;
 
+namespace KChart
+{
+
 class KChartParams;
 
 class KChartPieConfigPage : public QWidget
@@ -58,5 +61,7 @@ private:
     QMemArray<int> value;
     int pos;
 };
+
+}  //KChart namespace
 
 #endif

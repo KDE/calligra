@@ -20,6 +20,8 @@
 #include <qpainter.h>
 #include <qstringlist.h>
 
+namespace KChart
+{
 
 class SheetTable : public QtTableView
 {
@@ -82,5 +84,6 @@ private:
     bool         editable;
 };
 
+}  //namespace KChart
 
 #endif

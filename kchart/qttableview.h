@@ -22,7 +22,6 @@
 class QScrollBar;
 class QCornerSquare;
 
-
 class QtTableView : public QFrame
 {
     Q_OBJECT
@@ -242,7 +241,6 @@ inline void QtTableView::repaint( const QRect &r, bool erase )
 
 inline void QtTableView::updateScrollBars()
 { updateScrollBars( 0 ); }
-
 
 #endif // QT_NO_QTTABLEVIEW
 

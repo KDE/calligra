@@ -25,11 +25,15 @@
 #include <qbutton.h>
 #include <qlayout.h>
 
-class KChartParams;
 class QRadioButton;
 class QLineEdit;
 class KColorButton;
 class QPushButton;
+
+namespace KChart
+{
+
+class KChartParams;
 
 class KChartLegendConfigPage : public QWidget
 {
@@ -59,5 +63,7 @@ private:
                             const QString &toolTipText, const QString &icon,
                             int posY, int posX );
 };
+
+}  //KChart namespace
 
 #endif

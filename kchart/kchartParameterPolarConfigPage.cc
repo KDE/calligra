@@ -36,6 +36,9 @@
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 KChartParameterPolarConfigPage::KChartParameterPolarConfigPage( KChartParams* params,
                                                             QWidget* parent ) :
     QWidget( parent ),_params( params )
@@ -85,3 +88,5 @@ void KChartParameterPolarConfigPage::apply()
     _params->setPolarRotateCircularLabels(showCircularLabel->isChecked());
     _params->setPolarLineWidth(lineWidth->value());
 }
+
+}  //KChart namespace

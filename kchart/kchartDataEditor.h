@@ -6,6 +6,9 @@
 #include "sheetdlg.h"  
 #include <qstrlist.h>
 
+namespace KChart
+{
+
 class KChartParams;
 
 class kchartDataEditor : public KDialog 
@@ -31,5 +34,6 @@ private:
     QStringList *shortLabels;
 };
 
+}  //KChart namespace
 
 #endif

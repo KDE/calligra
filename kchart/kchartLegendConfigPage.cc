@@ -35,6 +35,9 @@
 #include "kchart_params.h"
 #include "kchart_factory.h"
 
+namespace KChart
+{
+
 
 KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
                                                 QWidget* parent ) :
@@ -254,3 +257,5 @@ QPushButton* KChartLegendConfigPage::addButton( QGridLayout* layout,
   layout->addWidget( button, posY, posX );
   return button;
 }
+
+}  //KChart namespace

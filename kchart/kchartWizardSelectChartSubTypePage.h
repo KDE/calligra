@@ -3,11 +3,15 @@
 
 #include <qradiobutton.h>
 
+#include "kchart_params.h"
+
 class QButtonGroup;
 class QPushButton;
-class KChartPart;
 
-#include "kchart_params.h"
+namespace KChart
+{
+
+class KChartPart;
 
 class KChartWizardSelectChartSubTypePage : public QWidget
 {
@@ -27,5 +31,6 @@ private:
   QRadioButton* percent;
 };
 
+}  //KChart namespace
 
 #endif

@@ -23,13 +23,17 @@
 #include <qwidget.h>
 #include <qpixmap.h>
 
-class KChartParams;
 class QSpinBox;
 class QRadioButton;
 class QComboBox;
 class QPixmap;
 class QListBox;
 class KColorButton;
+
+namespace KChart
+{
+
+class KChartParams;
 
 class KChartBackgroundPixmapConfigPage : public QWidget
 {
@@ -61,6 +65,8 @@ private:
     QPixmap wallPixmap;
     QListBox *regionList;
     KColorButton* _backgroundCB;	
-};	
+};
+
+}  //KChart namespace
 
 #endif

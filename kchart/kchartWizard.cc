@@ -17,6 +17,9 @@
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 KChartWizard::KChartWizard ( KChartPart* chart, QWidget *parent, const char* name,
                              bool modal, WFlags f ) :
     KWizard( parent, name, modal, f ),
@@ -160,5 +163,6 @@ void KChartWizard::emitNeedNewData( const char* area, int rowcol,
     emit needNewData( area, rowcol, firstRowIsLegend, firstColIsLabel );
 }
 
+}  //KChart namespace
 
 #include "kchartWizard.moc"

@@ -25,6 +25,10 @@
 #include "kchartcolorarray.h"
 #include "kchartDataEditor.h"
 class KListBox;
+
+namespace KChart
+{
+
 class KChartParams;
 
 // PENDING(kalle) Make this dynamic.
@@ -197,5 +201,6 @@ inline QColor KChartColorConfigPage::edgeColor() const
     return _edgeCB->color();
 }*/
 
+}  //KChart namespace
 
 #endif

@@ -5,6 +5,10 @@
 
 class QRadioButton;
 class QCheckBox;
+
+namespace KChart
+{
+
 class kchartWidget;
 class KChartPart;
 class KChartWizard;
@@ -32,5 +36,7 @@ private:
   QCheckBox* rowdescript;
   QCheckBox* coldescript;
 };
+
+}  //namespace KChart
 
 #endif

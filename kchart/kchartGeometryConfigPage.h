@@ -24,6 +24,9 @@
 
 class QLineEdit;
 
+namespace KChart
+{
+
 class KChartGeometryConfigPage : public QWidget
 {
     Q_OBJECT
@@ -34,6 +37,6 @@ class KChartGeometryConfigPage : public QWidget
  private:
 };
 
-
+}  //KChart namespace
 
 #endif

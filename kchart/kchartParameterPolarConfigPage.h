@@ -28,6 +28,9 @@ class QLineEdit;
 class QSpinBox;
 class QCheckBox;
 
+namespace KChart
+{
+
 class KChartParams;
 
 class KChartParameterPolarConfigPage : public QWidget
@@ -44,5 +47,7 @@ private:
     QCheckBox *showCircularLabel;
     QSpinBox *angle, *lineWidth;
 };
+
+}  //KChart namespace
 
 #endif

@@ -3,12 +3,16 @@
 
 #include <qwidget.h>
 
+#include "kchart_params.h"
+
 class QFrame;
 class QPushButton;
 class QButtonGroup;
-class KChartPart;
 
-#include "kchart_params.h"
+namespace KChart
+{
+
+class KChartPart;
 
 class KChartWizardSelectChartTypePage : public QWidget
 {
@@ -37,5 +41,6 @@ private:
   void addButton(const QString &name, const QString &icon_name, int type);
 };
 
+}  //namespace KChart
 
 #endif

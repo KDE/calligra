@@ -18,6 +18,9 @@
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget* parent,
                                                                         KChartPart* chart ) :
   QWidget( parent ),
@@ -171,5 +174,6 @@ void KChartWizardSelectChartSubTypePage::changeSubTypeName( KDChartParams::Chart
     }
 }
 
+}  //KChart namespace
 
 #include "kchartWizardSelectChartSubTypePage.moc"

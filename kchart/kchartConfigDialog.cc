@@ -44,6 +44,9 @@
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 KChartConfigDialog::KChartConfigDialog( KChartParams* params,
 					QWidget* parent, int flags,KoChart::Data *dat ) :
     QTabDialog( parent, "Chart config dialog", true ),
@@ -356,3 +359,4 @@ void KChartConfigDialog::init3dPage()
     }
 }
 
+}  //KChart namespace

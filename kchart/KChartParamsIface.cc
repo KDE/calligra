@@ -23,6 +23,9 @@
 
 #include <dcopclient.h>
 
+namespace KChart
+{
+
 KChartParamsIface::KChartParamsIface( KChartParams *params_ )
     : DCOPObject()
 {
@@ -457,3 +460,5 @@ bool KChartParamsIface::threeDShadowColors()
 {
     return params->threeDShadowColors();
 }
+
+}  //KChart namespace

@@ -20,6 +20,9 @@
 
 #include <kapplication.h>
 
+namespace KChart
+{
+
 SheetTable::SheetTable( int cols, int rows, QWidget *parent,
                           int flags, const char *name, bool _editable)
     :QtTableView(parent,name)
@@ -215,3 +218,4 @@ void SheetTable::scrollVert(int row )
     repaint();
 }
 
+}  //namespace KChart

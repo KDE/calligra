@@ -42,6 +42,9 @@
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams* params, QWidget* parent )
     : QWidget( parent, "KChartBackgroundPixmapConfigPage" ),
       _params( params )
@@ -354,3 +357,5 @@ void KChartBackgroundPixmapConfigPage::loadWallPaper()
     }
     wallWidget->setBackgroundPixmap( wallPixmap );
 }
+
+}  //KChart namespace

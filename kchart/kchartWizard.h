@@ -5,6 +5,9 @@
 #include "kwizard.h"
 #include "kchart_part.h"
 
+namespace KChart
+{
+
 class KChartPart;
 class KChartWizardSetupAxesPage;
 class KChartWizardLabelsLegendPage;
@@ -53,6 +56,8 @@ private:
   KChartWizardLabelsLegendPage* _labelslegendpage;
   KChartWizardSetupAxesPage* _axespage;
 };
+
+}  //KChart namespace
 
 #endif
 

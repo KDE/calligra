@@ -36,6 +36,8 @@ using namespace std;
 
 #include <qpainter.h>
 
+namespace KChart
+{
 
 KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
 			QObject* parent, const char* name,
@@ -1229,5 +1231,6 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
     return true;
 }
 
+}  //KChart namespace
 
 #include "kchart_part.moc"

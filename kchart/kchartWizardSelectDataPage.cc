@@ -6,6 +6,9 @@
 #include <qlineedit.h>
 #include <kdebug.h>
 
+namespace KChart
+{
+
 KChartWizardSelectDataPage::KChartWizardSelectDataPage( QWidget* parent ) :
   QWidget( parent )
 {
@@ -26,3 +29,5 @@ KChartWizardSelectDataPage::KChartWizardSelectDataPage( QWidget* parent ) :
 
   setMinimumSize( 600, 300 );
 }
+
+}  //namespace KChart

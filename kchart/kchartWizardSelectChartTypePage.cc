@@ -13,6 +13,9 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
+namespace KChart
+{
+
 void KChartWizardSelectChartTypePage::addButton(const QString &name,
                                                 const QString &icon_name,
                                                 int type)
@@ -94,5 +97,6 @@ void KChartWizardSelectChartTypePage::apply()
     _chart->params()->setChartType( _type );
 }
 
+}  //namespace KChart
 
 #include "kchartWizardSelectChartTypePage.moc"

@@ -35,6 +35,9 @@
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
                                           QWidget* parent ) :
     QWidget( parent ),_params( params )
@@ -187,3 +190,5 @@ void KChartPieConfigPage::apply()
 //     _params->explode.duplicate(value);
     _params->setExplodeFactor(((double)(explose->value()))/100);
 }
+
+}  //KChart namespace

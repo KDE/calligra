@@ -23,8 +23,12 @@
 
 #include <kapplication.h>
 
+namespace KChart
+{
 
 KChartGeometryConfigPage::KChartGeometryConfigPage( QWidget* parent ) :
     QWidget( parent )
 {
 }
+
+}  //KChart namespace

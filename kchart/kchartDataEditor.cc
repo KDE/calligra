@@ -6,6 +6,9 @@
 #include "kdchart/KDChartAxisParams.h"
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 #if 0
 kchartDataEditor::kchartDataEditor() :
     KDialog(0,"KChart Data Editor",true)
@@ -157,3 +160,4 @@ void kchartDataEditor::getXLabel( KChartParams* params )
     }
 }
 
+}  //KChart namespace

@@ -25,6 +25,9 @@
 class QRadioButton;
 class QLineEdit;
 
+namespace KChart
+{
+
 class KChartBarConfigPage : public QWidget
 {
     Q_OBJECT
@@ -57,6 +60,6 @@ class KChartBarConfigPage : public QWidget
 /* } */
 
 
-
+}  //KChart namespace
 
 #endif

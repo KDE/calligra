@@ -18,6 +18,8 @@
 #include "table.h"
 #include "parser.h"
 
+namespace KChart
+{
 
 class Sheet : public QWidget
 {
@@ -68,5 +70,6 @@ private:
   int           tableSize;
 };
 
+}  //namespace KChart
 
 #endif

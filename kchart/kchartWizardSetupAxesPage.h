@@ -8,9 +8,13 @@ class QColor;
 class QLineEdit;
 class QSpinBox;
 class QPushButton;
+class QCheckBox;
+
+namespace KChart
+{
+
 class KChartPart;
 class kchartWidget;
-class QCheckBox;
 
 class KChartWizardSetupAxesPage : public QWidget
 {
@@ -51,5 +55,7 @@ private:
   QColor colorGrid;
   QColor colorBorder;
 };
+
+}  //namespace KChart
 
 #endif

@@ -26,6 +26,9 @@
 #include <dcopref.h>
 #include <qstring.h>
 
+namespace KChart
+{
+
 class KChartParams;
 
 class KChartParamsIface : virtual public DCOPObject
@@ -150,5 +153,7 @@ private:
     KChartParams *params;
 
 };
+
+}  //KChart namespace
 
 #endif

@@ -9,6 +9,8 @@
 #include <koChart.h>
 #include <kconfig.h>
 
+namespace KChart
+{
 
 class KChartParams;
 
@@ -90,5 +92,7 @@ public:
 
     virtual bool show() { return static_cast<KChartPart *>( part() )->showWizard(); }
 };
+
+}  //KChart namespace
 
 #endif

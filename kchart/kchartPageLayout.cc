@@ -26,6 +26,9 @@
 #include <klocale.h>
 #include <qlabel.h>
 
+namespace KChart
+{
+
 KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, TRUE,i18n("Page Layout"),KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::User1 | KDialogBase::Apply , KDialogBase::Ok,true )
 {
@@ -100,3 +103,5 @@ void KChartPageLayout::slotReset()
     topBorder->setText(QString::number(oldGlobalLeadingTop));
     bottomBorder->setText(QString::number(oldGlobalLeadingBottom));
 }
+
+}  //KChart namespace

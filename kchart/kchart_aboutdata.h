@@ -24,6 +24,8 @@
 #include <klocale.h>
 #include <config.h>
 
+namespace KChart
+{
 
 static const char* description=I18N_NOOP("KOffice Chart Generator");
 static const char* version=VERSION;
@@ -41,5 +43,7 @@ KAboutData * newKChartAboutData()
     aboutData->addAuthor("Karl-Heinz Zimmer", 0, "khz@kde.org");
     return aboutData;
 }
+
+}  //namespace KChart
 
 #endif

@@ -24,6 +24,10 @@
 #include <qtabdialog.h>
 #include "kchartDataEditor.h"
 class KDChartParams;
+
+namespace KChart
+{
+
 class KChartColorConfigPage;
 class KChartParameterConfigPage;
 class KChartParameter3dConfigPage;
@@ -71,5 +75,7 @@ protected slots:
     virtual void apply();
     virtual void defaults();
 };
+
+}  //KChart namespace
 
 #endif

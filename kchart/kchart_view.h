@@ -14,10 +14,12 @@ class KAction;
 class KToggleAction;
 class QPaintEvent;
 
-class KChartPart;
-
 class DCOPObject;
 
+namespace KChart
+{
+
+class KChartPart;
 
 class KChartView : public KoView
 {
@@ -95,7 +97,6 @@ private:
     DCOPObject  *m_dcop;
 };
 
+}  //KChart namespace
 
 #endif
-
-

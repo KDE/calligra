@@ -27,6 +27,9 @@
 
 #include "kchart_params.h"
 
+namespace KChart
+{
+
 KChartBarConfigDialog::KChartBarConfigDialog( KChartParams* params,
 					      QWidget* parent, int flag, KoChart::Data *dat ) :
     KChartConfigDialog( params, parent, flag,dat  )
@@ -57,5 +60,4 @@ void KChartBarConfigDialog::defaults()
      //_barpage->setXAxisDistance( _params->_xbardist );
 }
 
-
-
+}  //KChart namespace

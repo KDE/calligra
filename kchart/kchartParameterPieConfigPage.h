@@ -29,6 +29,9 @@ class QLineEdit;
 class QSpinBox;
 class QCheckBox;
 
+namespace KChart
+{
+
 class KChartParams;
 
 class KChartParameterPieConfigPage : public QWidget
@@ -46,5 +49,7 @@ private:
     QCheckBox *pie3d,*drawShadowColor;
     QSpinBox *depth,*angle;
 };
+
+}  //KChart namespace
 
 #endif
