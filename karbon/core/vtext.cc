@@ -18,6 +18,7 @@
 */
 
 #include <qdom.h>
+#include <qfile.h>
 
 #include <kdebug.h>
 #include <koPoint.h>
@@ -38,6 +39,7 @@
 
 #include <freetype2/freetype/freetype.h>
 #include <fontconfig/fontconfig.h>
+
 
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H
@@ -446,7 +448,7 @@ VText::traceText()
 	// TODO : this lib should probably be a singleton (Rob)
 	FT_Library library;
 	FT_Init_FreeType( &library );
-	FT_Error error = FT_New_Face( library, filename.latin1(), id, &fontFace );
+	FT_Error error = FT_New_Face( library, QFile::encodeName(filename), id, &fontFace );
 
 	if( error )
 	{
@@ -638,7 +640,7 @@ VText::buildRequest( QString family, int weight, int slant, double size, int &id
 			return QString::null;
 		}
 
-		fileName = QString::fromLatin1( reinterpret_cast<const char *>( temp ) );
+		fileName = QFile::decodeName(reinterpret_cast<const char *>( temp ));
 
 		// Kill pattern
 		FcPatternDestroy( pattern );
