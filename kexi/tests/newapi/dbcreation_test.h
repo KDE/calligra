@@ -1,7 +1,7 @@
 int dbCreationTest()
 {
 	if (conn->databaseExists( db_name )) {
-		if (!conn->dropDatabase(  )) {
+		if (!conn->dropDatabase( db_name )) {
 			conn->debugError();
 			return 1;
 		}
