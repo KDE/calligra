@@ -53,6 +53,7 @@ VReplacingCmd::execute()
 		VObject* newObject;
 
 		VObjectListIterator itr( m_oldObjects->objects() );
+		VObjectList rejects;
 
 		for( ; itr.current(); ++itr )
 		{
@@ -74,12 +75,16 @@ VReplacingCmd::execute()
 			// No success.
 			else
 			{
-				// Don't consider this object in the future anymore.
-				m_oldObjects->take( *itr.current() );
-
+				rejects.append( itr.current() );
 				// Delete temporary object.
 				delete( newObject );
 			}
+		}
+		VObjectListIterator jtr( rejects );
+		for( ; jtr.current(); ++jtr )
+		{
+			// Don't consider this object in the future anymore.
+			m_oldObjects->take( *jtr.current() );
 		}
 	}
 
