@@ -22,12 +22,12 @@
 
 #include <KoDocumentIface.h>
 #include <dcopref.h>
-
+#include "KPresenterObjectIface.h"
 #include <qstring.h>
 #include <qcolor.h>
 class KPTextObject;
 
-class KPTextObjectIface :  virtual public DCOPObject
+class KPTextObjectIface : virtual public KPresenterObjectIface
 {
     K_DCOP
 public:
@@ -41,7 +41,6 @@ k_dcop:
     void recalcPageNum( );
 private:
     KPTextObject *m_textobject;
-
 };
 
 #endif

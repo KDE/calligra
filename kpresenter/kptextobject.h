@@ -148,7 +148,6 @@ private:
     KPresenterDoc *m_doc;
     bool drawEditRect, drawEmpty;
     KoParagLayout m_paragLayout;
-    DCOPObject *dcop;
 };
 
 

@@ -4956,9 +4956,9 @@ void KPrCanvas::drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint 
     p.setRasterOp( Qt::NotROP );
 
     double angle = 2 * M_PI / cornersValue;
-    int dx = QABS( startPoint.x () - endPoint.x () );
-    int dy = QABS( startPoint.y () - endPoint.y () );
-    double radius = ( dx > dy ? (double)dx / 2.0 : (double)dy / 2.0 );
+    double dx = QABS( startPoint.x () - endPoint.x () );
+    double dy = QABS( startPoint.y () - endPoint.y () );
+    double radius = ( dx > dy ? dx / 2.0 : dy / 2.0 );
 
     //xoff / yoff : coordinate of centre of the circle.
     double xoff = startPoint.x() + ( startPoint.x() < endPoint.x() ? radius : -radius );
