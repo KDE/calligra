@@ -133,6 +133,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wPixLabel->setPixmap("pixmaplabel");
 	wPixLabel->setClassName("MyPicLabel");
 	wPixLabel->setName(i18n("Picture Label"));
+	wPixLabel->setAlternateClassName("PictureLabel");
+	wPixLabel->setSavingName("PictureLabel");
 	wPixLabel->setNamePrefix(i18n("Widget name (see above)", "PictureLabel"));
 	wPixLabel->setDescription(i18n("A widget to display pixmaps"));
 	m_classes.append(wPixLabel);

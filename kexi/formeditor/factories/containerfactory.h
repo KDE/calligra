@@ -20,6 +20,13 @@
 #ifndef CONTAINERFACTORY_H
 #define CONTAINERFACTORY_H
 
+#if !KDE_IS_VERSION(3,1,9) //TMP
+# define KTabWidget QTabWidget
+#include <qtabwidget.h>
+#else
+#include <ktabwidget.h>
+#endif
+
 #include <kcommand.h>
 
 #include "widgetfactory.h"
@@ -91,6 +98,22 @@ class KFORMEDITOR_EXPORT Grid : public QFrame
 
 	protected:
 		bool  m_preview;
+};
+
+class KFORMEDITOR_EXPORT MyTabWidget : public KTabWidget
+{
+	Q_OBJECT
+
+	public:
+		MyTabWidget(QWidget *parent, const char *name)
+		 : KTabWidget(parent, name)
+		{}
+		~MyTabWidget() {;}
+
+		virtual QSize sizeHint() const
+		{
+			return size() + QSize(0, tabBar()->height());
+		}
 };
 
 //! A form embedded as a widget inside other form

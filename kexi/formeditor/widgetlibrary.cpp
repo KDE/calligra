@@ -69,8 +69,12 @@ WidgetLibrary::addFactory(WidgetFactory *f)
 	{
 //		kdDebug() << "WidgetLibrary::addFactory(): adding class " << w->className() << endl;
 		d->widgets.insert(w->className(), w);
-		if(!w->alternateClassName().isEmpty())
-			d->alternates.insert(w->alternateClassName(), w->className());
+		if(!w->alternateClassName().isEmpty()) {
+			QStringList l = QStringList::split("|", w->alternateClassName());
+			QStringList::ConstIterator endIt = l.constEnd();
+			for(QStringList::ConstIterator it = l.constBegin(); it != endIt; ++it)
+				d->alternates.insert(*it, w->className());
+		}
 	}
 }
 
@@ -208,6 +212,18 @@ WidgetLibrary::displayName(const QString &classname)
 {
 	if(d->widgets.find(classname))
 		return d->widgets[classname]->name();
+	else
+		return classname;
+}
+
+QString
+WidgetLibrary::savingName(const QString &classname)
+{
+	QString s;
+	if(d->widgets.find(classname))
+		s = d->widgets[classname]->savingName();
+	if(!s.isNull())
+		return s;
 	else
 		return classname;
 }

@@ -60,22 +60,17 @@ class KFORMEDITOR_EXPORT WidgetInfo
 
 		//! \return a pixmap associated with the widget
 		virtual QString	pixmap() const { return m_pixmap; }
-
 		//! \return the class name of a widget e.g. 'QLineEdit'
 		virtual QString	className() const { return m_class; }
-
 		/*! \return the name used to name widget, that will appear eg in scripts (must not contain spaces
 		  nor non-latin1 characters) */
 		virtual QString	namePrefix() const { return m_prefixName; }
 		//! \return the real name e.g. 'Line Edit', showed eg in ObjectTreeView
 		virtual QString	name() const { return m_name; }
-
 		virtual QString description() const { return m_desc; }
-
 		virtual QString  includeFile() const { return m_include; }
-
 		virtual QString  alternateClassName() const { return m_alternate; }
-
+		virtual QString  savingName() const { return m_saveName; }
 		virtual WidgetFactory *factory() const { return m_factory; }
 
 		void		setPixmap(const QString &p) { m_pixmap = p; }
@@ -85,9 +80,13 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		void		setDescription(const QString &desc) { m_desc = desc;}
 		/*! Sets the C++ include file corresponding to this class, that uic will need to add when creating the file. */
 		void		setInclude(const QString &include) { m_include = include;}
-		/*! Sets an alternate name for this class. If this name is found when loading a .ui file, the className()
-		 will be used instead. It allows to support both KDE and Qt versions of widget, without duplicating code. */
+		/*! Sets alternate names for this class. You can use a list of class names separated by '|'.
+		  If this name is found when loading a .ui file, the className() will be used instead.
+		   It allows to support both KDE and Qt versions of widget, without duplicating code. */
 		void		setAlternateClassName(const QString &alternate) { m_alternate = alternate; }
+		/*! Sets the name that will be written in the .ui file when saving. This name must be one of alternate
+		 names (or loading will be impossible).  */
+		void		setSavingName(const QString &saveName) { m_saveName = saveName; }
 
 	private:
 		QString		m_pixmap;
@@ -97,6 +96,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		QString		m_desc;
 		QString		m_include;
 		QString		m_alternate;
+		QString		m_saveName;
 		QGuardedPtr<WidgetFactory>	m_factory;
 
 };

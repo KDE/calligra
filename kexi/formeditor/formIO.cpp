@@ -834,6 +834,13 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		m_currentForm = item->container() ? item->container()->form() : item->parent()->container()->form();
 	}
 
+
+	WidgetLibrary *lib=0;
+	if(item->container())
+		lib = item->container()->form()->manager()->lib();
+	else
+		lib = item->parent()->container()->form()->manager()->lib();
+
 	// We create the "widget" element
 	QDomElement tclass = domDoc.createElement("widget");
 	parent.appendChild(tclass);
@@ -848,6 +855,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			tclass.setAttribute("colspan", item->gridColSpan());
 		}
 	}
+
 	if(!item->parent()) // Toplevel widget
 		tclass.setAttribute("class", "QWidget");
 	// For compatibility, HBox, VBox and Grid are saved as "QLayoutWidget"
@@ -856,7 +864,8 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	else if(item->widget()->isA("CustomWidget"))
 		tclass.setAttribute("class", item->className());
 	else // Normal widgets
-		tclass.setAttribute("class", item->widget()->className());
+		tclass.setAttribute("class", lib->savingName(item->widget()->className()) );
+
 	prop(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
 
 	// We don't want to save the geometry if the widget is inside a layout (so parent.tagName() == "grid" for example)
@@ -867,11 +876,6 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	if(item->widget()->inherits("QLabel") && ((QLabel*)item->widget())->buddy())
 		saveProperty(tclass, domDoc, "property", "buddy", ((QLabel*)item->widget())->buddy()->name());
 
-	WidgetLibrary *lib=0;
-	if(item->container())
-		lib = item->container()->form()->manager()->lib();
-	else
-		lib = item->parent()->container()->form()->manager()->lib();
 
 	// We save every property in the modifProp list of the ObjectTreeItem
 	QVariantMap *map = new QVariantMap( *(item->modifiedProperties()) );

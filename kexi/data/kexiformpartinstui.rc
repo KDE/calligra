@@ -3,6 +3,7 @@
 
 <MenuBar>
   <Menu name="edit">
+   <Action name="fompart_clear_contents"/>
    <Separator />
    <Action name="formpart_taborder"/>
    <Action name="formpart_adjust_size"/>
@@ -33,7 +34,7 @@
    <Action name="drag_connection"/>
    <Separator/>
    <Action name="library_widget_QGroupBox"/>
-   <Action name="library_widget_KTabWidget"/>
+   <Action name="library_widget_MyTabWidget"/>
    <Separator/>
    <Action name="library_widget_KexiSubForm"/>
    <Action name="library_widget_QLabel"/>

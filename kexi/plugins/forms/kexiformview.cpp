@@ -209,6 +209,8 @@ KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *nam
 		plugSharedAction("edit_cut", formPart()->manager(), SLOT(cutWidget()));
 		plugSharedAction("edit_paste", formPart()->manager(), SLOT(pasteWidget()));
 		plugSharedAction("edit_delete", formPart()->manager(), SLOT(deleteWidget()));
+		plugSharedAction("edit_select_all", formPart()->manager(), SLOT(selectAll()));
+		plugSharedAction("formpart_clear_contents", formPart()->manager(), SLOT(clearWidgetContent()));
 		plugSharedAction("edit_undo", formPart()->manager(), SLOT(undo()));
 		plugSharedAction("edit_redo", formPart()->manager(), SLOT(redo()));
 

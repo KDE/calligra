@@ -84,6 +84,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		QString  checkAlternateName(const QString &classname);
 		QString  icon(const QString &classname);
 		QString  includeFile(const QString &classname);
+		QString  savingName(const QString &classname);
 
 		void    startEditing(const QString &classname, QWidget *w, Container *container);
 		void    previewWidget(const QString &classname, QWidget *widget, Container *container);

@@ -367,8 +367,10 @@ AdjustSizeCommand::execute()
 		{
 			for(QWidget *w = list.first(); w; w = list.next()) {
 				ObjectTreeItem *item = m_form->objectTree()->lookup(w->name());
-				if(item && !item->children()->isEmpty())  // container
+				if(item && !item->children()->isEmpty()) { // container
 					w->resize(getSizeFromChildren(item));
+					w->resize(w->sizeHint()); // eg tabwidget adds the size of tabbar
+				}
 				else if(item && item->container()) // empty container
 					w->resize(item->container()->form()->gridX() * 5, item->container()->form()->gridY() * 5); // basic size
 				else
@@ -459,7 +461,7 @@ AdjustSizeCommand::getSizeFromChildren(ObjectTreeItem *item)
 		// get size for each container, and keep the biggest one
 		for(ObjectTreeItem *tree = item->children()->first(); tree; tree = item->children()->next())
 			s = s.expandedTo(getSizeFromChildren(tree));
-		return s + QSize(20, 20);
+		return s;
 	}
 
 	int tmpw = 0, tmph = 0;

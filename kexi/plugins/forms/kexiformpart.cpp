@@ -83,6 +83,7 @@ void KexiFormPart::initPartActions()
 void KexiFormPart::initInstanceActions()
 {
 	m_manager->createActions(actionCollectionForMode(Kexi::DesignViewMode));
+	createSharedAction(Kexi::DesignViewMode, i18n("Clear Widget Contents"), "editclear", 0, "formpart_clear_contents");
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order"), "tab_order", 0, "formpart_taborder");
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), "icons", 0, "formpart_pixmap_collection");
 	createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), "connections", 0, "formpart_connections");

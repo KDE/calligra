@@ -496,7 +496,6 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QWidget *ob
 
 	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(obj->name());
 
-	kdDebug() << "dddddddddddddddddddddddddddddddddddddddddddddddd  " << possibleValues.join("|") << endl;
 	if(!possibleValues.grep("AlignHCenter").empty())
 	{
 		// Create the horizontal alignment property

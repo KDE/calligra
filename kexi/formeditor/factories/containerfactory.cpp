@@ -23,6 +23,7 @@
 #include <qvaluevector.h>
 #include <qfileinfo.h>
 #include <qscrollview.h>
+#include <qtabbar.h>
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
@@ -42,13 +43,10 @@
 #include "widgetlibrary.h"
 
 #if !KDE_IS_VERSION(3,1,9) //TMP
-# define KTabWidget QTabWidget
 # define KInputDialog QInputDialog
-# include <qtabwidget.h>
 # include <qinputdialog.h>
 # include <qlineedit.h>
 #else
-# include <ktabwidget.h>
 # include <kinputdialog.h>
 #endif
 
@@ -156,7 +154,7 @@ InsertPageCommand::execute()
 	new KFormDesigner::Container(m_container, page, parent);
 
 	QString classname = parent->className();
-	if(classname == "KTabWidget")
+	if(classname == "MyTabWidget")
 	{
 		KTabWidget *tab = (KTabWidget *)parent;
 		QString n = i18n("Page %1").arg(tab->count() + 1);
@@ -189,7 +187,7 @@ InsertPageCommand::unexecute()
 	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_form);
 
 	QString classname = parent->className();
-	if(classname == "KTabWidget")
+	if(classname == "MyTabWidget")
 	{
 		KTabWidget *tab = (KTabWidget *)parent;
 		tab->removePage(page);
@@ -267,10 +265,11 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 
 	KFormDesigner::WidgetInfo *wTabWidget = new KFormDesigner::WidgetInfo(this);
 	wTabWidget->setPixmap("tabwidget");
-	wTabWidget->setClassName("KTabWidget");
+	wTabWidget->setClassName("MyTabWidget");
 	#if KDE_IS_VERSION(3,1,9) //TMP
-	wTabWidget->setAlternateClassName("QTabWidget");
+	wTabWidget->setAlternateClassName("KTabWidget|QTabWidget");
 	#endif
+	wTabWidget->setSavingName("KTabWidget");
 	wTabWidget->setInclude("ktabwidget.h");
 	wTabWidget->setName(i18n("Tab Widget"));
 	wTabWidget->setNamePrefix(i18n("TabWidget"));
@@ -358,10 +357,10 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		new KFormDesigner::Container(container, w, container);
 		return w;
 	}
-	else if(c == "KTabWidget")
+	else if(c == "MyTabWidget")
 	{
 		//MyTabWidget *tab = new MyTabWidget(p, n, container);
-		KTabWidget *tab = new KTabWidget(p, n);
+		MyTabWidget *tab = new MyTabWidget(p, n);
 #if KDE_IS_VERSION(3,1,9)
 		tab->setTabReorderingEnabled(true);
 #endif
@@ -468,7 +467,7 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 	m_widget = w;
 	m_container = container;
 
-	if((classname == "KTabWidget") || (w->parentWidget()->parentWidget()->inherits("QTabWidget")))
+	if((classname == "MyTabWidget") || (w->parentWidget()->parentWidget()->inherits("QTabWidget")))
 	{
 		if(w->parentWidget()->parentWidget()->inherits("QTabWidget"))
 		{

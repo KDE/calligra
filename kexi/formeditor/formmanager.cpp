@@ -682,6 +682,9 @@ FormManager::createSlotMenu(QWidget *w)
 void
 FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRemove*/)
 {
+	if(!activeForm() || !activeForm()->widget())
+		return;
+
 	bool multiple = (container->form()->selectedWidgets()->count() > 1);
 	bool enableRemove = (w != m_active->widget());
 	// We only enablelayout creation if more than one widget with the same parent are selected
@@ -913,7 +916,7 @@ FormManager::editTabOrder()
 void
 FormManager::slotStyle()
 {
-	if(!activeForm() || !activeForm()->objectTree())
+	if(!activeForm())
 		return;
 
 	KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
