@@ -435,12 +435,12 @@ public:
     KAction* help;
 
     // running calculation
-    KToggleAction* menuCalcMin;
-    KToggleAction* menuCalcMax;
-    KToggleAction* menuCalcAverage;
-    KToggleAction* menuCalcCount;
-    KToggleAction* menuCalcSum;
-    KToggleAction* menuCalcNone;
+    KToggleAction* calcNone;
+    KToggleAction* calcMin;
+    KToggleAction* calcMax;
+    KToggleAction* calcAverage;
+    KToggleAction* calcCount;
+    KToggleAction* calcSum;
 
     // scripts
     KActionMenu* scripts;
@@ -838,6 +838,45 @@ void ViewPrivate::initActions()
   actions->lastSheet = new KAction( i18n("Last Sheet"),
       0, view, SLOT( lastTable() ), ac, "lastTable");
   actions->lastSheet->setToolTip(i18n("Move to the last sheet."));
+
+  // -- running calculation actions --
+
+  actions->calcNone = new KToggleAction( i18n("None"), 0, ac, "menu_none");
+  QObject::connect( actions->calcNone, SIGNAL( toggled( bool ) ),
+      view, SLOT( menuCalc( bool ) ) );
+  actions->calcNone->setExclusiveGroup( "Calc" );
+  actions->calcNone->setToolTip(i18n("No calculation"));
+
+  actions->calcSum = new KToggleAction( i18n("Sum"), 0, ac, "menu_sum");
+  QObject::connect( actions->calcSum, SIGNAL( toggled( bool ) ),
+      view, SLOT( menuCalc( bool ) ) );
+  actions->calcSum->setExclusiveGroup( "Calc" );
+  actions->calcSum->setToolTip(i18n("Calculate using sum."));
+
+  actions->calcMin = new KToggleAction( i18n("Min"), 0, ac, "menu_min");
+  QObject::connect( actions->calcMin, SIGNAL( toggled( bool ) ),
+      view, SLOT( menuCalc( bool ) ) );
+  actions->calcMin->setExclusiveGroup( "Calc" );
+  actions->calcMin->setToolTip(i18n("Calculate using minimum."));
+
+  actions->calcMax = new KToggleAction( i18n("Max"), 0, ac, "menu_max");
+  QObject::connect( actions->calcMax, SIGNAL( toggled( bool ) ),
+      view, SLOT( menuCalc( bool ) ) );
+  actions->calcMax->setExclusiveGroup( "Calc" );
+  actions->calcMax->setToolTip(i18n("Calculate using maximum."));
+
+  actions->calcAverage = new KToggleAction( i18n("Average"), 0, ac, "menu_average");
+  QObject::connect( actions->calcAverage, SIGNAL( toggled( bool ) ),
+      view, SLOT( menuCalc( bool ) ) );
+  actions->calcAverage->setExclusiveGroup( "Calc" );
+  actions->calcAverage->setToolTip(i18n("Calculate using average."));
+
+  actions->calcCount = new KToggleAction( i18n("Count"), 0, ac, "menu_count");
+  QObject::connect( actions->calcCount, SIGNAL( toggled( bool ) ),
+      view, SLOT( menuCalc( bool ) ) );
+  actions->calcCount->setExclusiveGroup( "Calc" );
+  actions->calcCount->setToolTip(i18n("Calculate using the count."));
+
 }
 
 
@@ -979,7 +1018,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
         connect(m_sbCalcLabel ,SIGNAL(itemPressed( int )),this,SLOT(statusBarClicked(int)));
 
     d->initActions();
-    initializeCalcActions();
     initializeInsertActions();
     initializeEditActions();
     initializeAreaOperationActions();
@@ -1044,63 +1082,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     adjustActions( !m_pTable->isProtected() );
     adjustMapActions( !d->map->isProtected() );
 }
-
-
-void KSpreadView::initializeCalcActions()
-{
-  //menu calc
-  /*******************************/
-  d->actions->menuCalcSum = new KToggleAction( i18n("Sum"), 0, actionCollection(),
-                                     "menu_sum");
-  connect( d->actions->menuCalcSum, SIGNAL( toggled( bool ) ), this,
-           SLOT( menuCalc( bool ) ) );
-  d->actions->menuCalcSum->setExclusiveGroup( "Calc" );
-  d->actions->menuCalcSum->setToolTip(i18n("Calculate using sum."));
-
-  /*******************************/
-  d->actions->menuCalcMin = new KToggleAction( i18n("Min"), 0, actionCollection(),
-                                     "menu_min");
-  connect( d->actions->menuCalcMin, SIGNAL( toggled( bool ) ), this,
-           SLOT( menuCalc( bool ) ) );
-  d->actions->menuCalcMin->setExclusiveGroup( "Calc" );
-  d->actions->menuCalcMin->setToolTip(i18n("Calculate using minimum."));
-
-  /*******************************/
-  d->actions->menuCalcMax = new KToggleAction( i18n("Max"), 0, actionCollection(),
-                                     "menu_max");
-  connect( d->actions->menuCalcMax, SIGNAL( toggled( bool ) ), this,
-           SLOT( menuCalc( bool ) ) );
-  d->actions->menuCalcMax->setExclusiveGroup( "Calc" );
-  d->actions->menuCalcMax->setToolTip(i18n("Calculate using maximum."));
-
-  /*******************************/
-  d->actions->menuCalcAverage = new KToggleAction( i18n("Average"), 0, actionCollection(),
-                                         "menu_average");
-  connect( d->actions->menuCalcAverage, SIGNAL( toggled( bool ) ), this,
-           SLOT( menuCalc( bool ) ) );
-  d->actions->menuCalcAverage->setExclusiveGroup( "Calc" );
-  d->actions->menuCalcAverage->setToolTip(i18n("Calculate using average."));
-
-  /*******************************/
-  d->actions->menuCalcCount = new KToggleAction( i18n("Count"), 0, actionCollection(),
-                                       "menu_count");
-  connect( d->actions->menuCalcCount, SIGNAL( toggled( bool ) ), this,
-           SLOT( menuCalc( bool ) ) );
-  d->actions->menuCalcCount->setExclusiveGroup( "Calc" );
-  d->actions->menuCalcCount->setToolTip(i18n("Calculate using the count."));
-
-
-  /*******************************/
-  d->actions->menuCalcNone = new KToggleAction( i18n("None"), 0, actionCollection(),
-                                      "menu_none");
-  connect( d->actions->menuCalcNone, SIGNAL( toggled( bool ) ), this,
-           SLOT( menuCalc( bool ) ) );
-  d->actions->menuCalcNone->setExclusiveGroup( "Calc" );
-  d->actions->menuCalcNone->setToolTip(i18n("No calculation"));
-
-  /*******************************/
-}
-
 
 void KSpreadView::initializeInsertActions()
 {
@@ -1609,25 +1590,25 @@ void KSpreadView::initCalcMenu()
     switch( doc()->getTypeOfCalc())
     {
         case  SumOfNumber:
-            d->actions->menuCalcSum->setChecked(true);
+            d->actions->calcSum->setChecked(true);
             break;
         case  Min:
-            d->actions->menuCalcMin->setChecked(true);
+            d->actions->calcMin->setChecked(true);
             break;
         case  Max:
-            d->actions->menuCalcMax->setChecked(true);
+            d->actions->calcMax->setChecked(true);
             break;
         case  Average:
-            d->actions->menuCalcAverage->setChecked(true);
+            d->actions->calcAverage->setChecked(true);
             break;
         case  Count:
-            d->actions->menuCalcCount->setChecked(true);
+            d->actions->calcCount->setChecked(true);
             break;
         case  NoneCalc:
-            d->actions->menuCalcNone->setChecked(true);
+            d->actions->calcNone->setChecked(true);
             break;
         default :
-            d->actions->menuCalcSum->setChecked(true);
+            d->actions->calcSum->setChecked(true);
             break;
     }
 
@@ -4485,12 +4466,12 @@ void KSpreadView::adjustActions( bool mode )
   d->actions->increaseIndent->setEnabled( mode );
   d->actions->decreaseIndent->setEnabled( mode );
   d->actions->spellChecking->setEnabled( mode );
-  d->actions->menuCalcMin->setEnabled( mode );
-  d->actions->menuCalcMax->setEnabled( mode );
-  d->actions->menuCalcAverage->setEnabled( mode );
-  d->actions->menuCalcCount->setEnabled( mode );
-  d->actions->menuCalcSum->setEnabled( mode );
-  d->actions->menuCalcNone->setEnabled( mode );
+  d->actions->calcMin->setEnabled( mode );
+  d->actions->calcMax->setEnabled( mode );
+  d->actions->calcAverage->setEnabled( mode );
+  d->actions->calcCount->setEnabled( mode );
+  d->actions->calcSum->setEnabled( mode );
+  d->actions->calcNone->setEnabled( mode );
   d->actions->insertPart->setEnabled( mode );
   d->actions->createStyle->setEnabled( mode );
   d->actions->selectStyle->setEnabled( mode );
@@ -6544,27 +6525,27 @@ void KSpreadView::statusBarClicked(int _id)
 void KSpreadView::menuCalc( bool )
 {
   d->doc->emitBeginOperation(false);
-  if ( d->actions->menuCalcMin->isChecked() )
+  if ( d->actions->calcMin->isChecked() )
   {
     doc()->setTypeOfCalc( Min );
   }
-  else if ( d->actions->menuCalcMax->isChecked() )
+  else if ( d->actions->calcMax->isChecked() )
   {
     doc()->setTypeOfCalc( Max );
   }
-  else if ( d->actions->menuCalcCount->isChecked() )
+  else if ( d->actions->calcCount->isChecked() )
   {
     doc()->setTypeOfCalc( Count );
   }
-  else if ( d->actions->menuCalcAverage->isChecked() )
+  else if ( d->actions->calcAverage->isChecked() )
   {
     doc()->setTypeOfCalc( Average );
   }
-  else if ( d->actions->menuCalcSum->isChecked() )
+  else if ( d->actions->calcSum->isChecked() )
   {
     doc()->setTypeOfCalc( SumOfNumber );
   }
-  else if ( d->actions->menuCalcNone->isChecked() )
+  else if ( d->actions->calcNone->isChecked() )
     doc()->setTypeOfCalc( NoneCalc );
 
   resultOfCalc();

@@ -679,7 +679,6 @@ private:
   KSpreadInsertHandler* m_pInsertHandle;
 
   /* helper functions */
-  void initializeCalcActions();
   void initializeInsertActions();
   void initializeEditActions();
   void initializeAreaOperationActions();
