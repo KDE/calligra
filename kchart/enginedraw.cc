@@ -65,7 +65,7 @@ void draw_3d_line( QPainter*	p,
 		   QColor clr[],
 		   QColor clrshd[] )
 {
-    debug( "draw 3d line with color 0 = %d, %d, %d,\nshadow color 0 = %d, %d, %d,\ncolor 1 = %d, %d, %d,\nshadow color 1 = %d, %d, %d", clr[0].red(), clr[0].green(), clr[0].blue(), clrshd[0].red(), clrshd[0].green(), clrshd[0].blue(), clr[1].red(), clr[1].green(), clr[1].blue(), clrshd[1].red(), clrshd[1].green(), clrshd[1].blue() );
+    //debug( "draw 3d line with color 0 = %d, %d, %d,\nshadow color 0 = %d, %d, %d,\ncolor 1 = %d, %d, %d,\nshadow color 1 = %d, %d, %d", clr[0].red(), clr[0].green(), clr[0].blue(), clrshd[0].red(), clrshd[0].green(), clrshd[0].blue(), clr[1].red(), clr[1].green(), clr[1].blue(), clrshd[1].red(), clrshd[1].green(), clrshd[1].blue() );
 
 #define F(x,i)	(int)( (float)((x)-x1)*slope[i]+(float)y1[i] )
     float depth_slope  = xdepth==0? MAXFLOAT: (float)ydepth/(float)xdepth;

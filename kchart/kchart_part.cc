@@ -62,7 +62,7 @@ bool KChartPart::initDoc()
   return TRUE;
 }
 
-void KChartPart::initRandomData() 
+void KChartPart::initRandomData()
 {
      // fill cells
     int col,row;
@@ -79,37 +79,7 @@ void KChartPart::initRandomData()
 	  currentData.setCell(row,col,t);
 	 }
     }
-    if(params()->legend.isEmpty())
-    	{
-    	params()->legend+="KDE";
-    	params()->legend+="KOFFICE";
-    	params()->legend+="KCHART";
-    	params()->legend+="LINUX";
-    	}
-    if(params()->xlbl.isEmpty())	
-    	{
-    	params()->xlbl+="Year 2000";
-    	params()->xlbl+="Year 2001";
-    	params()->xlbl+="Year 2002";
-    	params()->xlbl+="Year 2003";
-	}
-	
-QArray<int> tmpExp(16);
-QArray<bool> tmpMissing(16);
 
-for(int i=0; i<16; ++i ) 
-  {
-  tmpExp[i]=0;
-  tmpMissing[i]=FALSE;
-  }
-if(params()->missing.isEmpty())
-	{
-  	params()->missing=tmpMissing;
-  	}
-if(params()->explode.isEmpty())
-	{
-  	params()->explode=tmpExp;
-	}
 }
 
 
@@ -208,8 +178,10 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
 	cerr << "Row " << row << "\n";
 	KChartValue t = currentData.cell(row, col);
 	QDomElement e = doc.createElement("cell");
-	e.setAttribute("value", t.value.toDouble());
-	  /*
+        e.setAttribute("hide", (int)_params->missing[currentData.cols()*col+row]);
+        e.setAttribute("dist", _params->explode[currentData.cols()*col+row]);
+        e.setAttribute("value", t.value.toDouble());
+        	  /*
 	  if ( e.isNull() )
 	      return e;
 	  */
@@ -304,12 +276,17 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
   graph.setAttribute("border",(int)_params->border);
   graph.setAttribute("transbg",(int)_params->transparent_bg);
   graph.setAttribute("xlabel",(int)_params->hasxlabel);
+  graph.setAttribute("line",(int)_params->label_line);
+  graph.setAttribute("percent",(int)_params->percent_labels);
+
   params.appendChild(graph);
   //graph params
   QDomElement graphparams = doc.createElement("graphparams");
   graphparams.setAttribute("depth3d",(double)_params->_3d_depth);
   graphparams.setAttribute("angle3d",(short)_params->_3d_angle);
   graphparams.setAttribute("barwidth",(short)_params->bar_width);
+  graphparams.setAttribute("colpie",(int)_params->colPie);
+  graphparams.setAttribute("labeldist",(int)_params->label_dist);
   params.appendChild(graphparams);
   //graph color
   QDomElement graphcolor = doc.createElement("graphcolor");
@@ -326,6 +303,38 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
   graphcolor.setAttribute( "ylabelcolor", _params->YLabelColor.name() );
   graphcolor.setAttribute( "ylabel2color", _params->YLabel2Color.name() );
   params.appendChild(graphcolor);
+
+
+  QDomElement legend = doc.createElement("legend");
+  chart.appendChild(legend);
+  legend.setAttribute("number",_params->legend.count());
+  for(QStringList::Iterator it = _params->legend.begin();it  != _params->legend.end();++it)
+        {
+        QDomElement name = doc.createElement( "name" );
+        name.appendChild( doc.createTextNode( *it ) );
+        legend.appendChild(name);
+        }
+
+  QDomElement xlbl = doc.createElement("xlbl");
+  chart.appendChild(xlbl);
+  xlbl.setAttribute("number",_params->xlbl.count());
+  for(QStringList::Iterator it = _params->xlbl.begin();it  != _params->xlbl.end();++it)
+        {
+        QDomElement label = doc.createElement( "label" );
+        label.appendChild( doc.createTextNode( *it ) );
+        xlbl.appendChild(label);
+        }
+
+  QDomElement extColor = doc.createElement("extcolor");
+  chart.appendChild(extColor);
+  extColor.setAttribute("number",_params->ExtColor.count());
+  for(unsigned int i=0;i<_params->ExtColor.count();i++)
+        {
+        QDomElement color = doc.createElement( "color" );
+        color.setAttribute( "name", _params->ExtColor.color(i).name() );
+        extColor.appendChild(color);
+        }
+
 
   cerr << "Ok, till here!!!";
   QBuffer buffer;
@@ -374,15 +383,21 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
   currentData.expand(rows, cols);
   cerr << "Expanded!";
   QDomNode n = data.firstChild();
+  QArray<int> tmpExp(rows*cols);
+  QArray<bool> tmpMissing(rows*cols);
 
-  for (int i=0; i!=rows; i++) {
-    for (int j=0; j!=cols; j++) {
-      if (n.isNull()) {
+  for (int i=0; i!=rows; i++)
+   {
+    for (int j=0; j!=cols; j++)
+     {
+      if (n.isNull())
+      {
 	qDebug("Some problems, there is less data than it should be!");
 	break;
       }
       QDomElement e = n.toElement();
-      if ( !e.isNull() && e.tagName() == "cell" ) {
+      if ( !e.isNull() && e.tagName() == "cell" )
+      {
 	  // add the cell to the corresponding place...
 	  double val = e.attribute("value").toDouble(&ok);
 	  if (!ok)  {  return false; }
@@ -392,10 +407,34 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
 	  t.value.setValue(val);
 	  // cerr << "Set cell for " << row << "," << col << "\n";
 	  currentData.setCell(i,j,t);
-	  n = n.nextSibling();
+          if ( e.hasAttribute( "hide" ) )
+                {
+	        tmpMissing[cols*j+i] = (bool)e.attribute("hide").toInt( &ok );
+	        if ( !ok )
+	                return false;
+                }
+         else
+                {
+                tmpMissing[cols*j+i] = false;
+                }
+         if ( e.hasAttribute( "dist" ) )
+                {
+	        tmpExp[cols*j+i] = e.attribute("dist").toInt( &ok );
+	        if ( !ok )
+	                return false;
+                }
+         else
+                {
+                tmpExp[cols*j+i] = 0;
+                }
+
+         n = n.nextSibling();
       }
     }
   }
+  _params->missing=tmpMissing;
+  _params->explode=tmpExp;
+
   QDomElement params = chart.namedItem( "params" ).toElement();
   if ( params.hasAttribute( "type" ) )
         {
@@ -559,6 +598,16 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
                 _params->hasxlabel=(bool) graph.attribute("xlabel").toInt( &ok );
                 if(!ok) return false;
                 }
+          if(graph.hasAttribute( "line"))
+                {
+                _params->label_line=(bool) graph.attribute("line").toInt( &ok );
+                if(!ok) return false;
+                }
+          if(graph.hasAttribute( "percent"))
+                {
+                _params->percent_labels=(KChartPercentType) graph.attribute("percent").toInt( &ok );
+                if(!ok) return false;
+                }
         }
   QDomElement graphparams = params.namedItem( "graphparams" ).toElement();
   if(!graphparams.isNull())
@@ -576,6 +625,16 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
          if(graphparams.hasAttribute( "barwidth" ))
                 {
                 _params->bar_width=graphparams.attribute("barwidth").toShort( &ok );
+                if(!ok) return false;
+                }
+         if(graphparams.hasAttribute( "colpie" ))
+                {
+                _params->colPie=graphparams.attribute("colpie").toInt( &ok );
+                if(!ok) return false;
+                }
+         if(graphparams.hasAttribute( "labeldist" ))
+                {
+                _params->label_dist=graphparams.attribute("labeldist").toInt( &ok );
                 if(!ok) return false;
                 }
         }
@@ -631,10 +690,89 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
                 _params->YLabel2Color= QColor( graphcolor.attribute( "ylabel2color" ) );
                 }
         }
+
+
+  QDomElement legend = chart.namedItem("legend").toElement();
+  if(!legend.isNull())
+  {
+  int number = legend.attribute("number").toInt(&ok);
+  if (!ok)  { return false; }
+  QDomNode name = legend.firstChild();
+  _params->legend.clear();
+  for (int i=0; i<number; i++)
+  {
+  if (name.isNull())
+        {
+	qDebug("Some problems, there is less data than it should be!");
+	break;
+        }
+   QDomElement element = name.toElement();
+   if ( !element.isNull() && element.tagName() == "name" )
+        {
+        QString t = element.text();
+        _params->legend+=t;
+        name = name.nextSibling();
+        }
+  }
+
+  }
+  QDomElement xlbl = chart.namedItem("xlbl").toElement();
+  if(!xlbl.isNull())
+  {
+  int number = xlbl.attribute("number").toInt(&ok);
+  if (!ok)  { return false; }
+  QDomNode label = xlbl.firstChild();
+  _params->xlbl.clear();
+  for (int i=0; i<number; i++)
+  {
+  if (label.isNull())
+        {
+	qDebug("Some problems, there is less data than it should be!");
+	break;
+        }
+   QDomElement element = label.toElement();
+   if ( !element.isNull() && element.tagName() == "label" )
+        {
+        QString t = element.text();
+        _params->xlbl+=t;
+        label = label.nextSibling();
+        }
+   }
+   }
+
+  QDomElement extcolor = chart.namedItem("extcolor").toElement();
+  if(!extcolor.isNull())
+  {
+  unsigned int number = extcolor.attribute("number").toInt(&ok);
+  if (!ok)  { return false; }
+  QDomNode color = extcolor.firstChild();
+
+  for (unsigned int i=0; i<number; i++)
+  {
+  if (color.isNull())
+        {
+	qDebug("Some problems, there is less data than it should be!");
+	break;
+        }
+   QDomElement element = color.toElement();
+   if ( !element.isNull())
+        {
+        if(element.hasAttribute( "name" ))
+                {
+                _params->ExtColor.setColor(i,QColor( element.attribute( "name" ) ));
+                }
+        color = color.nextSibling();
+        }
+   }
+   }
+
+
+
   return true;
 };
 
-bool KChartPart::load( istream& in, KoStore* store ) {
+bool KChartPart::load( istream& in, KoStore* store )
+{
   cerr << "kchart load colled\n";
   m_bLoading = true;
   _params = new KChartParameters;
@@ -660,7 +798,7 @@ bool KChartPart::load( istream& in, KoStore* store ) {
     //initDoc();
 
     buffer.close();
-    // init the parameters 
+    // init the parameters
     m_bLoading = false;
     return b;
 };
@@ -670,6 +808,9 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.22  2000/01/23 14:48:48  mlaurent
+ * Improved pie chart
+ *
  * Revision 1.21  2000/01/22 19:55:19  mlaurent
  * Add new page for config pie chart
  * Now pie chart works (a lot :( there are against bug)

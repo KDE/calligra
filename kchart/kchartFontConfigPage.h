@@ -14,6 +14,7 @@
 #include <qlistbox.h>
 #include <qpushbutton.h>
 #include <qfont.h>
+#include <kcolorbtn.h>
 #include "kchartparams.h"
 
 class KChartFontConfigPage : public QWidget
@@ -25,21 +26,24 @@ public:
     void init();
     void apply();
     void initList();
-    
+
 public slots:
- 
+    void changeIndex(int index);
     void changeLabelFont();
 private:
     KChartParameters* _params;
     QLineEdit *font;
     QListBox *list;
-    QPushButton *fontButton; 
+    QListBox *listColor;
+    QPushButton *fontButton;
+    KColorButton *colorButton;
     QFont title;
     QFont xtitle;
     QFont ytitle;
     QFont label;
     QFont yaxis;
-    QFont xaxis; 
+    QFont xaxis;
+    KChartColorArray extColor;
+    int indice;
 };
-
 #endif

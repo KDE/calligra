@@ -470,8 +470,8 @@ void kchartEngine::draw3DCombo() {
 	    p->drawPolygon( poly );
 	  }
 	
-	if( i < num_points &&
-	    CELLEXISTS(CLOSESET+j*3,i) ) {
+	if( i < num_points && CELLEXISTS(CLOSESET+j*3,i) ) 
+	{
 	  if( params->hlc_style & KCHARTHLCSTYLE_CLOSECONNECTED )	/* line from prev close */
 	    {
 	      set3dpoly( poly, PX(i-1), PX(i),

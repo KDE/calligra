@@ -146,7 +146,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 		if(!params->ylabel_fmt.isEmpty())
 			{
 			int len=params->ylabel_fmt.length();
-         		//remove %g 
+         		//remove %g
          		QString tmp=params->ylabel_fmt.right(len-3);
 			
 			strcat(ylbl_str,tmp);
@@ -356,28 +356,28 @@ void kchartEngine::drawShelfGrids() {
 }
 
 
-void kchartEngine::drawXTicks() 
+void kchartEngine::drawXTicks()
 {
   int num_xlbls = /* maximum x lables that'll fit */
     /* each xlbl + avg due to num_lf_xlbls */
     graphwidth /
     ( (GDC_xlabel_spacing==MAXSHORT?0:GDC_xlabel_spacing)+params->xAxisFontHeight() +
       (num_lf_xlbls*(params->xAxisFontHeight()-1))/num_points );
-  
+
   /*QColor labelcolor = params->XLabelColor== Qt::black ?
     LineColor: params->XLabelColor;*/
-  
+
   QColor labelcolor = params->XLabelColor;
 
-  for(int i=0; i<num_points+(params->do_bar()?2:0); ++i ) 
+  for(int i=0; i<num_points+(params->do_bar()?2:0); ++i )
   {
     if( (i%(1+num_points/num_xlbls) == 0) ||   // labels are regulated
 	(num_xlbls >= num_points)         ||
-	GDC_xlabel_spacing == MAXSHORT ) 
+	GDC_xlabel_spacing == MAXSHORT )
 	{
       int xi = params->do_bar()? i-1: i;
 
-      if( params->grid ) 
+      if( params->grid )
       {
 	int x1, x2, y1, y2;
 	// tics
@@ -385,7 +385,7 @@ void kchartEngine::drawXTicks()
 	p->setPen( GridColor );
 	p->drawLine( x1, y1, x1,  y1+2 );
 	setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:num_sets:1; // backmost
-	x2 = PX(i);		
+	x2 = PX(i);
 	y2 = PY(lowest);
 	p->setPen( GridColor );
 	p->drawLine( x1, y1, x2,  y2 );		// depth perspective
@@ -393,52 +393,52 @@ void kchartEngine::drawXTicks()
 	setno = 0;											// reset to foremost
       }
 
-      
-			if( !params->do_bar() || (i>0 && xi<num_points) )
-				  // no label stuff yet
-				  if( params->xaxis && params->hasxlabel ) 
-				  {
-				  cout <<"Nb point : "<<num_points<<"xi : "<<xi<<endl;
-				  // waiting for GDCImageStringUpNL()
-				  #define LBXH params->xAxisFontHeight()
-				  #define LBXW params->xAxisFontWidth()
-				  int		xlen = 0;
-				  short	xstrs_num = cnt_nl( params->xlbl[xi], &xlen );
-				  //   char	sub_xlbl[xlen+1];
-				  //  int		xlbl_strt = -1+ PX((float)i+(float)(do_bar?((float)num_points/(float)num_xlbls):0.0)) - (int)((float)(LBXH-2)*((float)xstrs_num/2.0));
-				  int		xlbl_strt = -1+ PX(i) - (int)((float)(LBXH-2)*((float)xstrs_num/2.0));
-				  QString currentfulllabel = params->xlbl[xi];
-				  xlen      = -1;
-				  xstrs_num = -1;
-				  int j = -1;
-				  QStringList sublabels = QStringList::split( '\n', currentfulllabel );
-				  for( QStringList::Iterator sublabelit = sublabels.begin();
-				  sublabelit != sublabels.end(); ++sublabelit ) 
-				  {
-				  ++xstrs_num;
-				  p->setFont( params->xAxisFont() );
-				  p->setPen( labelcolor );
-				  p->rotate( 90 );
-				  /*p->drawText( xlbl_strt + (LBXH-1)*xstrs_num,
-				  PY(lowest) + 2 + 1 + LBXW*xlen,
-				  (*sublabelit).latin1() );*/
-				  
-				  p->drawText(15+PY(lowest) + 2 + 1 + LBXW*xlen ,
-				  -(xlbl_strt + (LBXH-1)*xstrs_num),
-				  (*sublabelit).latin1() );
-				  p->rotate( -90 );
 
-				  }
-				  #undef LBXW
-				  #undef LBXH
-				  }
-      
+	if( !params->do_bar() || (i>0 && xi<num_points) )
+	        // no label stuff yet
+	         if( params->xaxis && params->hasxlabel )
+	          {
+	          // waiting for GDCImageStringUpNL()
+	          #define LBXH params->xAxisFontHeight()
+	          #define LBXW params->xAxisFontWidth()
+	          int xlen = 0;
+	          short	xstrs_num = cnt_nl( params->xlbl[xi], &xlen );
+	          //char sub_xlbl[xlen+1];
+	          //int	xlbl_strt = -1+ PX((float)i+(float)(do_bar?((float)num_points/(float)num_xlbls):0.0)) - (int)((float)(LBXH-2)*((float)xstrs_num/2.0));
+	          int xlbl_strt = -1+ PX(i) - (int)((float)(LBXH-2)*((float)xstrs_num/2.0));
+	          QString currentfulllabel = params->xlbl[xi];
+	          xlen = -1;
+	          xstrs_num = -1;
+	          int j = -1;
+	          QStringList sublabels = QStringList::split( '\n', currentfulllabel );
+	          for( QStringList::Iterator sublabelit = sublabels.begin();
+	                sublabelit != sublabels.end(); ++sublabelit )
+	                {
+	                ++xstrs_num;
+	                p->setFont( params->xAxisFont() );
+	                p->setPen( labelcolor );
+	                p->rotate( 90 );
+	                /*p->drawText( xlbl_strt + (LBXH-1)*xstrs_num,
+	                PY(lowest) + 2 + 1 + LBXW*xlen,
+	                (*sublabelit).latin1() );*/
+
+	                p->drawText(15+PY(lowest) + 2 + 1 + LBXW*xlen ,
+	                        -(xlbl_strt + (LBXH-1)*xstrs_num),
+	                        (*sublabelit).latin1() );
+	                        p->rotate( -90 );
+
+	                }
+	          #undef LBXW
+	          #undef LBXH
+	        }
+
     }
   }
 }
 
 
-void kchartEngine::drawVolumeGrids() {
+void kchartEngine::drawVolumeGrids()
+{
   int i;
   int setno;
   setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:

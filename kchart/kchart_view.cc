@@ -56,7 +56,7 @@ void KChartView::paintEvent( QPaintEvent* /*ev*/ )
     // Let the document do the drawing
     // PENDING(kalle) Do double-buffering if we are a widget
     //    part()->paintEverything( painter, ev->rect(), FALSE, this );
-    // paint everything 
+    // paint everything
     part()->paintEverything( painter, rect(), FALSE, this );
 
 
@@ -68,21 +68,21 @@ void KChartView::createTempData()
 {
     int row, col;
     int nbrow,nbcol;
-    
+
     KChartData *dat = ((KChartPart*)part())->data();
 
     // initialize some data, if there is none
     nbrow=4;
     nbcol=4;
-    if (dat->rows() == 0) 
+    if (dat->rows() == 0)
     {
 	cerr << "Initialize with some data!!!\n";
 	dat->expand(4,4);
 	for (row = 0;row < nbrow;row++)
-	    for (col = 0;col < nbcol;col++) 
+	    for (col = 0;col < nbcol;col++)
 	    {
 		//	  _widget->fillCell(row,col,row+col);
-		KChartValue t; 
+		KChartValue t;
 		t.exists= true;
 		t.value.setValue((double)row+col);
 		cerr << "Set cell for " << row << "," << col << "\n";
@@ -90,8 +90,45 @@ void KChartView::createTempData()
 	    }
 	//      _dlg->exec();
     }
-    
-        
+
+    KChartParameters *params = ((KChartPart*)part())->params();
+    if(params->legend.isEmpty())
+    	{
+        for(int i=0;i<dat->rows();i++)
+                {
+                QString tmp;
+                tmp="Legend "+tmp.setNum(i);
+                params->legend+=tmp;
+                }
+        }
+
+    if(params->xlbl.isEmpty())
+    	{
+        for(int i=0;i<dat->cols();i++)
+                {
+                QString tmp;
+                tmp="Year 200"+tmp.setNum(i);
+    	        params->xlbl+=tmp;
+                }
+    	}
+
+QArray<int> tmpExp(dat->cols()*dat->rows());
+QArray<bool> tmpMissing(dat->cols()*dat->rows());
+
+for(int i=0; i<(dat->cols()*dat->rows()); ++i )
+  {
+  tmpExp[i]=0;
+  tmpMissing[i]=FALSE;
+  }
+if(params->missing.isEmpty())
+	{
+  	params->missing=tmpMissing;
+  	}
+if(params->explode.isEmpty())
+	{
+  	params->explode=tmpExp;
+	}
+
 }
 
 
@@ -99,7 +136,7 @@ void KChartView::edit()
 {
   kchartDataEditor ed;
   KChartParameters* params=((KChartPart*)part())->params();
- 
+
   KChartData *dat = (( (KChartPart*)part())->data());
   ed.setData(dat);
   ed.setLegend(params->legend);
@@ -164,6 +201,7 @@ void KChartView::config()
     default:
 	qDebug( "Unknown chart type" );
     }
+    repaint();
 }
 
 

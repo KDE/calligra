@@ -67,3 +67,8 @@ But Pb for writing % in label for the moment it's not good
 2000-01-23 - Montel laurent <montell@club-internet.fr>
 ------------------------------------------------------
 -Improved pie chart and page config pie chart
+
+2000-01-28 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Improved save and load parameters (pie parameters, label ,legend ,extcolor)
+-Now you can choose color for data.
