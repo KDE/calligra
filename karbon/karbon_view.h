@@ -109,6 +109,7 @@ protected slots:
 	void spiralTool();
 	void starTool();
 	void textTool();
+	void gradTool();
 
 	// path:
 	void pathInsertKnots();
@@ -156,6 +157,7 @@ private:
 	KToggleAction* m_spiralToolAction;
 	KToggleAction* m_starToolAction;
 	KToggleAction* m_textToolAction;
+	KToggleAction* m_gradToolAction;
 
 	// text:
 	KFontAction *m_setFontFamily;

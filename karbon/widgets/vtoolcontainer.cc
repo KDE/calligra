@@ -128,6 +128,13 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( textToolActivated() ) );
 	btngroup->insert( button, Text );
 
+	button = new QToolButton( btngroup );
+	pixmap = BarIcon( "gradientdlg", KarbonFactory::instance() );
+	button->setPixmap( pixmap );
+	button->setToggleButton( true );
+	connect( button, SIGNAL( clicked() ), this, SIGNAL( gradToolActivated() ) );
+	btngroup->insert( button, Grad );
+
 	//dialog buttons
 	dlggroup = new QButtonGroup( 2, Horizontal, this );
 	dlggroup->setInsideSpacing( 2 );

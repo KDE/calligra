@@ -29,6 +29,7 @@
 #include "vsinustool.h"
 #include "vspiraltool.h"
 #include "vstartool.h"
+#include "vgradienttool.h"
 
 // commands:
 #include "vdeletecmd.h"
@@ -517,6 +518,21 @@ KarbonView::starTool()
 	}
 }
 
+void
+KarbonView::gradTool()
+{
+	if( shell()->rootView() == this )
+	{
+//		if( m_currentTool == VGradientTool::instance( m_part ) )
+//			( (VGradientTool *) m_currentTool )->showDialog();
+//		else
+//		{
+			m_currentTool = VGradientTool::instance( m_part );
+			m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+//		}
+	}
+}
+
 
 void
 KarbonView::pathInsertKnots()
@@ -753,6 +769,9 @@ KarbonView::initActions()
 	m_starToolAction = new KToggleAction(
 		i18n( "S&tar" ), "14_star", 0, this,
 		SLOT( starTool() ), actionCollection(), "tool_star" );
+	m_gradToolAction = new KToggleAction(
+		i18n( "G&radient" ), "14_star", 0, this,
+		SLOT( gradTool() ), actionCollection(), "tool_grad" );
 	m_textToolAction = new KToggleAction(
 		i18n( "Text" ), "14_text", 0, this,
 		SLOT( textTool() ), actionCollection(), "tool_text" );
@@ -767,6 +786,7 @@ KarbonView::initActions()
 	m_scaleToolAction->setExclusiveGroup( "Tools" );
 	m_spiralToolAction->setExclusiveGroup( "Tools" );
 	m_starToolAction->setExclusiveGroup( "Tools" );
+	m_gradToolAction->setExclusiveGroup( "Tools" );
 	m_textToolAction->setExclusiveGroup( "Tools" );
 	// tools <-----
 
@@ -890,6 +910,9 @@ KarbonView::initActions()
 	connect(
 		m_toolbox, SIGNAL( starToolActivated() ),
 		this, SLOT( starTool() ) );
+	connect(
+		m_toolbox, SIGNAL( gradToolActivated() ),
+		this, SLOT( gradTool() ) );
 	connect(
 		m_toolbox, SIGNAL( sinusToolActivated() ),
 		this, SLOT( sinusTool() ) );

@@ -50,12 +50,13 @@ signals:
 	void strokeActivated();
 	void strokeColorChanged( const QColor& );
 	void textToolActivated();
+	void gradToolActivated();
 
 private:
 	enum ButtonChoice
 	{
 		Select, Scale, Rotate, Shear, Ellipse, Rectangle,
-		Roundrect, Polygon, Star, Sinus, Spiral, Text
+		Roundrect, Polygon, Star, Sinus, Spiral, Text, Grad
 	};
 
 	enum DlgChoice { Outline, SolidFill, Gradient };
