@@ -2,7 +2,7 @@
 ####   Makefile.am generated automatically by KDEStudio   ####
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
-SUBDIRS = BasicFlowcharting 
+SUBDIRS = BasicFlowcharting Logic
 datadir = $(kde_datadir)/kivio/stencils/Flowcharting
 
 data_DATA = desc icon.xpm 
