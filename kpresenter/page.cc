@@ -1618,7 +1618,7 @@ void Page::doObjEffects()
 	    {
 	      _objList.append(kpobject);
 
-	      int x,y,w,h;
+	      int x = 0,y = 0,w = 0,h = 0;
 	      QRect br = kpobject->getBoundingRect(0,0);
 	      x = br.x(); y = br.y(); w = br.width(); h = br.height();
 
@@ -1699,7 +1699,7 @@ void Page::doObjEffects()
 		  kpobject = _objList.at(i);
 		  int _w =  kapp->desktop()->width() - (kpobject->getOrig().x() - diffx());
 		  int _h =  kapp->desktop()->height() - (kpobject->getOrig().y() - diffy());
-		  int ox,oy,ow,oh;
+		  int ox = 0,oy = 0,ow = 0,oh = 0;
 		  ox = kpobject->getOrig().x();
 		  oy = kpobject->getOrig().y();
 		  ow = kpobject->getSize().width();

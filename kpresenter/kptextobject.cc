@@ -48,7 +48,7 @@ void KPTextObject::save(ostream& out)
   out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;
   out << indent << "<SIZE width=\"" << ext.width() << "\" height=\"" << ext.height() << "\"/>" << endl;
   out << indent << "<SHADOW distance=\"" << shadowDistance << "\" direction=\""
-      << shadowDirection << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
+      << static_cast<int>(shadowDirection) << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
       << "\" blue=\"" << shadowColor.blue() << "\"/>" << endl;
   out << indent << "<EFFECTS effect=\"" << static_cast<int>(effect) << "\" effect2=\"" 
       << static_cast<int>(effect2) << "\"/>" << endl;
@@ -351,7 +351,7 @@ void KPTextObject::saveKTextObject(ostream& out)
   unsigned int i,j,k;
   QFont font;
 
-  out << otag << "<TEXTOBJ objType=\"" << ktextobject.objType() << "\">" << endl;
+  out << otag << "<TEXTOBJ objType=\"" << static_cast<int>(ktextobject.objType()) << "\">" << endl;
   out << indent << "<ENUMLISTTYPE type=\"" << ktextobject.enumListType().type << "\" before=\""
       << ktextobject.enumListType().before << "\" after=\"" << ktextobject.enumListType().after
       << "\" start=\"" << ktextobject.enumListType().start << "\" family=\"" 
@@ -372,7 +372,7 @@ void KPTextObject::saveKTextObject(ostream& out)
     {
       txtParagraph = ktextobject.paragraphAt(i);
 
-      out << otag << "<PARAGRAPH horzAlign=\"" << txtParagraph->horzAlign() << "\">" << endl; 
+      out << otag << "<PARAGRAPH horzAlign=\"" << static_cast<int>(txtParagraph->horzAlign()) << "\">" << endl; 
 
       for (j = 0;j < txtParagraph->lines();j++)
 	{
@@ -386,13 +386,13 @@ void KPTextObject::saveKTextObject(ostream& out)
 	      font = txtObj->font();
 	      
 	      out << otag << "<OBJ>" << endl;
-	      out << indent << "<TYPE value=\"" << txtObj->type() << "\"/>" << endl;
+	      out << indent << "<TYPE value=\"" << static_cast<int>(txtObj->type()) << "\"/>" << endl;
 	      out << indent << "<FONT family=\"" << font.family() << "\" pointSize=\""
 		  << font.pointSize() << "\" bold=\"" << font.bold() << "\" italic=\"" << font.italic()
 		  << "\" underline=\"" << font.underline() << "\"/>" << endl;
 	      out << indent << "<COLOR red=\"" << txtObj->color().red() << "\" green=\""
 		  << txtObj->color().green() << "\" blue=\"" << txtObj->color().blue() << "\"/>" << endl;
-	      out << indent << "<VERTALIGN value=\"" << txtObj->vertAlign() << "\"/>" << endl;
+	      out << indent << "<VERTALIGN value=\"" << static_cast<int>(txtObj->vertAlign()) << "\"/>" << endl;
 	      out << indent << "<TEXT value=\"" << txtObj->text() << "\"/>" << endl;
 	      out << etag << "</OBJ>" << endl;
 	    }

@@ -206,7 +206,7 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
   list->appendItem(i18n("Height"));
   list->changeItemPart(str,list->count() - 1,1);
 
-  str.sprintf("%g",_obj->getAngle);
+  str.sprintf("%g",_obj->getAngle());
   list->appendItem(i18n("Angle"));
   list->changeItemPart(str,list->count() - 1,1);
 

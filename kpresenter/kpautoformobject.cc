@@ -90,17 +90,17 @@ void KPAutoformObject::save(ostream& out)
   out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;
   out << indent << "<SIZE width=\"" << ext.width() << "\" height=\"" << ext.height() << "\"/>" << endl;
   out << indent << "<SHADOW distance=\"" << shadowDistance << "\" direction=\""
-      << shadowDirection << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
+      << static_cast<int>(shadowDirection) << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
       << "\" blue=\"" << shadowColor.blue() << "\"/>" << endl;
   out << indent << "<EFFECTS effect=\"" << static_cast<int>(effect) << "\" effect2=\"" 
       << static_cast<int>(effect2) << "\"/>" << endl;
   out << indent << "<PEN red=\"" << pen.color().red() << "\" green=\"" << pen.color().green()
       << "\" blue=\"" << pen.color().blue() << "\" width=\"" << pen.width()
-      << "\" style=\"" << pen.style() << "\"/>" << endl;
+      << "\" style=\"" << static_cast<int>(pen.style()) << "\"/>" << endl;
   out << indent << "<BRUSH red=\"" << brush.color().red() << "\" green=\"" << brush.color().green()
-      << "\" blue=\"" << brush.color().blue() << "\" style=\"" << brush.style() << "\"/>" << endl;
-  out << indent << "<LINEBEGIN value=\"" << lineBegin << "\"/>" << endl;
-  out << indent << "<LINEEND value=\"" << lineEnd << "\"/>" << endl;
+      << "\" blue=\"" << brush.color().blue() << "\" style=\"" << static_cast<int>(brush.style()) << "\"/>" << endl;
+  out << indent << "<LINEBEGIN value=\"" << static_cast<int>(lineBegin) << "\"/>" << endl;
+  out << indent << "<LINEEND value=\"" << static_cast<int>(lineEnd) << "\"/>" << endl;
   out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
   out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
 

@@ -873,8 +873,8 @@ public:
   /**
    * structure for enum list
    */
-  const int NUMBER = 1;
-  const int ALPHABETH = 2;
+  static const int NUMBER = 1;
+  static const int ALPHABETH = 2;
 
   struct EnumListType
   {
@@ -1939,51 +1939,51 @@ protected:
 
   //**************** constants ******************
   // HTML stuff
-  const char open_tag = '<';
-  const char close_tag = '>';
-  const char end_tag = '/';
-  const char comment_tag = '!';
+  static const char open_tag = '<';
+  static const char close_tag = '>';
+  static const char end_tag = '/';
+  static const char comment_tag = '!';
 
-  const char operator_assign = '=';
-  const char operator_plus = '+';
-  const char operator_minus = '-';
-  const char space = ' ';
+  static const char operator_assign = '=';
+  static const char operator_plus = '+';
+  static const char operator_minus = '-';
+  static const char space = ' ';
 
-  const char tag_html[] = "HTML";
-  const char tag_head[] = "HEAD";
-  const char tag_body[] = "BODY";
-  const char tag_font[] = "FONT";
-  const char tag_bold[] = "B";
-  const char tag_italic[] = "I";
-  const char tag_underline[] = "U";
-  const char tag_paragraph[] = "P";
-  const char tag_break[] = "BR";
-  const char tag_h1[] = "H1";
-  const char tag_h2[] = "H2";
-  const char tag_h3[] = "H3";
-  const char tag_h4[] = "H4";
-  const char tag_h5[] = "H5";
-  const char tag_h6[] = "H6";
-  const char tag_plain[] = "PLAIN";
-  const char tag_enumlist[] = "ENUM_LIST";
-  const char tag_unsortlist[] = "UNSORT_LIST";
+  static const char tag_html[] = "HTML";
+  static const char tag_head[] = "HEAD";
+  static const char tag_body[] = "BODY";
+  static const char tag_font[] = "FONT";
+  static const char tag_bold[] = "B";
+  static const char tag_italic[] = "I";
+  static const char tag_underline[] = "U";
+  static const char tag_paragraph[] = "P";
+  static const char tag_break[] = "BR";
+  static const char tag_h1[] = "H1";
+  static const char tag_h2[] = "H2";
+  static const char tag_h3[] = "H3";
+  static const char tag_h4[] = "H4";
+  static const char tag_h5[] = "H5";
+  static const char tag_h6[] = "H6";
+  static const char tag_plain[] = "PLAIN";
+  static const char tag_enumlist[] = "ENUM_LIST";
+  static const char tag_unsortlist[] = "UNSORT_LIST";
 
-  const char attrib_face[] = "FACE";
-  const char attrib_char[] = "CHAR";
-  const char attrib_start[] = "START";
-  const char attrib_before[] = "BEFORE";
-  const char attrib_after[] = "AFTER";
-  const char attrib_type[] = "TYPE";
-  const char attrib_size[] = "SIZE";
-  const char attrib_color[] = "COLOR";
-  const char attrib_align[] = "ALIGN";
-  const char attrib_bold[] = "BOLD";
-  const char attrib_italic[] = "ITALIC";
-  const char attrib_underline[] = "UNDERLINE";
+  static const char attrib_face[] = "FACE";
+  static const char attrib_char[] = "CHAR";
+  static const char attrib_start[] = "START";
+  static const char attrib_before[] = "BEFORE";
+  static const char attrib_after[] = "AFTER";
+  static const char attrib_type[] = "TYPE";
+  static const char attrib_size[] = "SIZE";
+  static const char attrib_color[] = "COLOR";
+  static const char attrib_align[] = "ALIGN";
+  static const char attrib_bold[] = "BOLD";
+  static const char attrib_italic[] = "ITALIC";
+  static const char attrib_underline[] = "UNDERLINE";
 
-  const char attrib_value_left[] = "LEFT";
-  const char attrib_value_center[] = "CENTER";
-  const char attrib_value_right[] = "RIGHT";
+  static const char attrib_value_left[] = "LEFT";
+  static const char attrib_value_center[] = "CENTER";
+  static const char attrib_value_right[] = "RIGHT";
 
 };
 #endif //KTEXTOBJECT_H

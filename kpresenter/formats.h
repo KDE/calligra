@@ -18,9 +18,9 @@ public:
   image_io_handler write_format; // NULL for internal formats
 
   // Constants for flags
-  const unsigned int InternalFormat= 1;
-  const unsigned int ReadFormat= 2;
-  const unsigned int WriteFormat= 4;
+  static const unsigned int InternalFormat= 1;
+  static const unsigned int ReadFormat= 2;
+  static const unsigned int WriteFormat= 4;
 };
 
 class FormatManager {

@@ -38,7 +38,7 @@ void KPClipartObject::save(ostream& out)
   out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;
   out << indent << "<SIZE width=\"" << ext.width() << "\" height=\"" << ext.height() << "\"/>" << endl;
   out << indent << "<SHADOW distance=\"" << shadowDistance << "\" direction=\""
-      << shadowDirection << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
+      << static_cast<int>(shadowDirection) << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
       << "\" blue=\"" << shadowColor.blue() << "\"/>" << endl;
   out << indent << "<EFFECTS effect=\"" << static_cast<int>(effect) << "\" effect2=\"" 
       << static_cast<int>(effect2) << "\"/>" << endl;

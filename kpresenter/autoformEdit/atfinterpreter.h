@@ -95,59 +95,59 @@ public:
 protected:
 
   // fields
-  const int ST_WIDTH    = 1;
-  const int ST_HEIGHT   = 2;
-  const int ST_VARIABLE = 3;
-  const int ST_NUMBER   = 4;
-  const int ST_OPERATOR = 5;
+  static const int ST_WIDTH    = 1;
+  static const int ST_HEIGHT   = 2;
+  static const int ST_VARIABLE = 3;
+  static const int ST_NUMBER   = 4;
+  static const int ST_OPERATOR = 5;
 
   // operators
-  const char OP_EQUAL   = '=';
-  const char OP_PLUS    = '+';
-  const char OP_MINUS   = '-';
-  const char OP_MULT    = '*';
-  const char OP_DIV     = '/';
-  const char COMMENT    = '#';
+  static const char OP_EQUAL   = '=';
+  static const char OP_PLUS    = '+';
+  static const char OP_MINUS   = '-';
+  static const char OP_MULT    = '*';
+  static const char OP_DIV     = '/';
+  static const char COMMENT    = '#';
 
   // block (structure) beginnings - ends
-  const char PNT_BG[]   = "POINT{";
-  const char X_BG[]     = "X{";
-  const char Y_BG[]     = "Y{";
-  const char ATTR_BG[]  = "ATTRIB{";
-  const char END[]       = "}";
+  static const char PNT_BG[]   = "POINT{";
+  static const char X_BG[]     = "X{";
+  static const char Y_BG[]     = "Y{";
+  static const char ATTR_BG[]  = "ATTRIB{";
+  static const char END[]       = "}";
 
   // allowed variables
-  const char VAR_1      = 'a';
-  const char VAR_2      = 'b';
-  const char VAR_3      = 'c';
-  const char VAR_4      = 'd';
-  const char VAR_5      = 'e';
-  const char VAR_6      = 'f';
-  const char VAR_X      = 'x';
-  const char VAR_Y      = 'y';
-  const char VAR_VARIA  = 'v';
-  const char VAR_PW     = 'p';
-  const char VAR_W      = 'w';
-  const char VAR_H      = 'h';
+  static const char VAR_1      = 'a';
+  static const char VAR_2      = 'b';
+  static const char VAR_3      = 'c';
+  static const char VAR_4      = 'd';
+  static const char VAR_5      = 'e';
+  static const char VAR_6      = 'f';
+  static const char VAR_X      = 'x';
+  static const char VAR_Y      = 'y';
+  static const char VAR_VARIA  = 'v';
+  static const char VAR_PW     = 'p';
+  static const char VAR_W      = 'w';
+  static const char VAR_H      = 'h';
 
   // level (depth) of the syntax
-  const int LEVEL_NULL  = 0;
-  const int LEVEL_POINT = 1;
-  const int LEVEL_X     = 2;
-  const int LEVEL_Y     = 3;
-  const int LEVEL_ATTR  = 4;
+  static const int LEVEL_NULL  = 0;
+  static const int LEVEL_POINT = 1;
+  static const int LEVEL_X     = 2;
+  static const int LEVEL_Y     = 3;
+  static const int LEVEL_ATTR  = 4;
 
   // numbers
-  const char NUM_0      = '0';
-  const char NUM_1      = '1';
-  const char NUM_2      = '2';
-  const char NUM_3      = '3';
-  const char NUM_4      = '4';
-  const char NUM_5      = '5';
-  const char NUM_6      = '6';
-  const char NUM_7      = '7';
-  const char NUM_8      = '8';
-  const char NUM_9      = '9';
+  static const char NUM_0      = '0';
+  static const char NUM_1      = '1';
+  static const char NUM_2      = '2';
+  static const char NUM_3      = '3';
+  static const char NUM_4      = '4';
+  static const char NUM_5      = '5';
+  static const char NUM_6      = '6';
+  static const char NUM_7      = '7';
+  static const char NUM_8      = '8';
+  static const char NUM_9      = '9';
 
   // structure of signs
   struct Sign

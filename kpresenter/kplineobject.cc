@@ -44,16 +44,16 @@ void KPLineObject::save(ostream& out)
   out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;
   out << indent << "<SIZE width=\"" << ext.width() << "\" height=\"" << ext.height() << "\"/>" << endl;
   out << indent << "<SHADOW distance=\"" << shadowDistance << "\" direction=\""
-      << shadowDirection << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
+      << static_cast<int>(shadowDirection) << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
       << "\" blue=\"" << shadowColor.blue() << "\"/>" << endl;
   out << indent << "<EFFECTS effect=\"" << static_cast<int>(effect) << "\" effect2=\"" 
       << static_cast<int>(effect2) << "\"/>" << endl;
   out << indent << "<PEN red=\"" << pen.color().red() << "\" green=\"" << pen.color().green()
       << "\" blue=\"" << pen.color().blue() << "\" width=\"" << pen.width()
-      << "\" style=\"" << pen.style() << "\"/>" << endl;
-  out << indent << "<LINETYPE value=\"" << lineType << "\"/>" << endl;
-  out << indent << "<LINEBEGIN value=\"" << lineBegin << "\"/>" << endl;
-  out << indent << "<LINEEND value=\"" << lineEnd << "\"/>" << endl;
+      << "\" style=\"" << static_cast<int>(pen.style()) << "\"/>" << endl;
+  out << indent << "<LINETYPE value=\"" << static_cast<int>(lineType) << "\"/>" << endl;
+  out << indent << "<LINEBEGIN value=\"" << static_cast<int>(lineBegin) << "\"/>" << endl;
+  out << indent << "<LINEEND value=\"" << static_cast<int>(lineEnd) << "\"/>" << endl;
   out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
   out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
 }
@@ -433,7 +433,8 @@ void KPLineObject::paint(QPainter* _painter)
 	  }
 	
 	_painter->setPen(pen);
-	_painter->drawLine(diff1.height() / 2,diff1.width() / 2,ow - diff2.height() / 2,oh - diff2.width() / 2);
+	_painter->drawLine(diff1.height() / 2 + _w,diff1.width() / 2 + _w,
+			   ow - diff2.height() / 2 - _w,oh - diff2.width() / 2 - _w);
       } break;
     case LT_LD_RU:
       {
@@ -467,7 +468,8 @@ void KPLineObject::paint(QPainter* _painter)
 	  }
 	
 	_painter->setPen(pen);
-	_painter->drawLine(diff1.height() / 2,oh - diff1.width() / 2,ow - diff2.height() / 2,diff2.width() / 2);
+	_painter->drawLine(diff1.height() / 2 + _w,oh - diff1.width() / 2 - _w,
+			   ow - diff2.height() / 2 - _w,diff2.width() / 2 + _w);
       } break;
     }
 }

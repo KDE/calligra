@@ -56,6 +56,7 @@ void KPGradient::paint()
 {
   int ncols = 4;
   int depth = QColor::numBitPlanes();
+  QColor _color1,_color2;
 
   QPainter painter;
   painter.begin(&pixmap);
@@ -80,10 +81,13 @@ void KPGradient::paint()
 
 	if (bcType == BCT_GHORZ)
 	  {
-	    QColor _c;
-	    _c = color1;
-	    color1 = color2;
-	    color2 = _c;
+	    _color1 = color2;
+	    _color2 = color1;
+	  }
+	else
+	  {
+	    _color1 = color1;
+	    _color2 = color2;
 	  }
 
 	QPixmap pmCrop;
@@ -103,12 +107,12 @@ void KPGradient::paint()
 	pmCrop.resize(30,ySize);
 	QImage image(30,ySize,32);
     
-	rca = color1.red();
-	gca = color1.green();
-	bca = color1.blue();
-	rDiff = color2.red() - color1.red();
-	gDiff = color2.green() - color1.green();
-	bDiff = color2.blue() - color1.blue();
+	rca = _color1.red();
+	gca = _color1.green();
+	bca = _color1.blue();
+	rDiff = _color2.red() - _color1.red();
+	gDiff = _color2.green() - _color1.green();
+	bDiff = _color2.blue() - _color1.blue();
     
 	for (int y = ySize - 1;y > 0;y--) 
 	  {

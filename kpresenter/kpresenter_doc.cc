@@ -215,8 +215,8 @@ bool KPresenterDocument_impl::save(ostream& out)
   out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
       << "\" mime=\"" << "application/x-kpresenter" << "\">" << endl;
   
-  out << otag << "<PAPER format=\"" << pageLayout().format << "\" width=\"" << pageLayout().width
-      << "\" height=\"" << pageLayout().height << "\" orientation=\"" << pageLayout().orientation << "\">" << endl;
+  out << otag << "<PAPER format=\"" << static_cast<int>(pageLayout().format) << "\" width=\"" << pageLayout().width
+      << "\" height=\"" << pageLayout().height << "\" orientation=\"" << static_cast<int>(pageLayout().orientation) << "\">" << endl;
   out << indent << "<PAPERBORDERS left=\"" << pageLayout().left << "\" top=\"" << pageLayout().top << "\" right=\"" << pageLayout().right
       << "\" bottom=\"" << pageLayout().bottom << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;

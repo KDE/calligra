@@ -4045,7 +4045,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
   char chr[11];
   int ry;
   QPixmap pix;
-  QPainter *p;
+  QPainter *p = 0;
 
   // get pointer to the paragraph, which should be drwan
   paragraphPtr = paragraphList.at(row);

@@ -44,8 +44,8 @@ class KEnumListDia : public QDialog
 
 public:
 
-  const int NUMBER = 1;
-  const int ALPHABETH = 2;
+  static const int NUMBER = 1;
+  static const int ALPHABETH = 2;
 
   // constructor - destructor
   KEnumListDia(QWidget*,const char*,int,QFont,QColor,QString,QString,int,QStrList); 

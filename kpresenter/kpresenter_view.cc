@@ -1252,7 +1252,7 @@ void KPresenterView_impl::slotMoveEnd(PartFrame_impl* _frame)
 /*=========== take changes for backgr dialog =====================*/
 void KPresenterView_impl::backOk(bool takeGlobal)
 {
-  unsigned int i;
+  unsigned int i = 0;
 
   if (!takeGlobal)
     {

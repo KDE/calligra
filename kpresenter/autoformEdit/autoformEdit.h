@@ -69,8 +69,8 @@ protected:
   int M_ECUT,M_ECOPY,M_EPASTE,M_EDELETE;
   int M_EINSPNT,M_E121;
   int M_HABOUTKPA,M_HABOUTKOFFICE,M_HABOUTKDE,M_HHELP;
-  const int ST_INFO  = 1;
-  const int T_RELATION = 1;
+  static const int ST_INFO  = 1;
+  static const int T_RELATION = 1;
 
   // ********** variables **********
 

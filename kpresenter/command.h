@@ -39,7 +39,7 @@ public:
     { return name; }
 
 protected:
-  Command()
+  Command() : name()
     {;}
 
   QString name;

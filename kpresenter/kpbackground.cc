@@ -206,13 +206,13 @@ void KPBackGround::restore()
 /*========================== save ================================*/
 void KPBackGround::save(ostream& out)
 {
-  out << indent << "<BACKTYPE value=\"" << backType << "\"/>" << endl; 
-  out << indent << "<BACKVIEW value=\"" << backView << "\"/>" << endl; 
+  out << indent << "<BACKTYPE value=\"" << static_cast<int>(backType) << "\"/>" << endl; 
+  out << indent << "<BACKVIEW value=\"" << static_cast<int>(backView) << "\"/>" << endl; 
   out << indent << "<BACKCOLOR1 red=\"" << backColor1.red() << "\" green=\"" 
       << backColor1.green() << "\" blue=\"" << backColor1.blue() << "\"/>" << endl; 
   out << indent << "<BACKCOLOR2 red=\"" << backColor2.red() << "\" green=\"" 
       << backColor2.green() << "\" blue=\"" << backColor2.blue() << "\"/>" << endl; 
-  out << indent << "<BCTYPE value=\"" << bcType << "\"/>" << endl; 
+  out << indent << "<BCTYPE value=\"" << static_cast<int>(bcType) << "\"/>" << endl; 
 
   if (!backPixFilename.isEmpty() && backType == BT_PICTURE)
     {
@@ -227,7 +227,7 @@ void KPBackGround::save(ostream& out)
   if (!backClipFilename.isEmpty() && backType == BT_CLIPART)
     out << indent << "<BACKCLIP filename=\"" << backClipFilename << "\"/>" << endl; 
   
-  out << indent << "<PGEFFECT value=\"" << pageEffect << "\"/>" << endl; 
+  out << indent << "<PGEFFECT value=\"" << static_cast<int>(pageEffect) << "\"/>" << endl; 
 }
 
 /*========================== load ================================*/
