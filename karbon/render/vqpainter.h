@@ -44,6 +44,7 @@ public:
 
 	// matrix manipulation
 	virtual void setWorldMatrix( const QWMatrix & );
+	virtual const QWMatrix worldMatrix();
 	virtual void setZoomFactor( double );
 	virtual double zoomFactor() { return m_zoomFactor; }
 
@@ -77,6 +78,7 @@ public:
 	virtual void setRasterOp( Qt::RasterOp );
 
 	virtual QPaintDevice *device() { return m_target; }
+
 private:
 	double m_zoomFactor;
 	unsigned int m_index;

@@ -54,6 +54,7 @@ public:
 
 	// matrix manipulation
 	virtual void setWorldMatrix( const QWMatrix & );
+	virtual const QWMatrix worldMatrix() { return m_matrix; }
 	virtual void setZoomFactor( double );
 	virtual double zoomFactor() { return m_zoomFactor; }
 

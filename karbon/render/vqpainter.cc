@@ -79,6 +79,12 @@ VQPainter::end()
 	m_painter->end();
 }
 
+const QWMatrix
+VQPainter::worldMatrix()
+{
+	return m_painter->worldMatrix();
+}
+
 void
 VQPainter::setWorldMatrix( const QWMatrix& mat )
 {
