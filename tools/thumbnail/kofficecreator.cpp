@@ -33,8 +33,8 @@
 #include <kparts/componentfactory.h>
 
 #include "kofficecreator.h"
-#include "../../lib/store/koStore.h"
-#include "../../lib/kofficecore/koDocument.h"
+#include <koStore.h>
+#include <koDocument.h>
 
 extern "C"
 {
@@ -56,15 +56,17 @@ KOfficeCreator::~KOfficeCreator()
 
 bool KOfficeCreator::create(const QString &path, int width, int height, QImage &img)
 {
-    KoStore store(path, KoStore::Read);
+    KoStore* store = KoStore::createStore(path, KoStore::Read);
 
-    if ( store.open( QString("preview.png") ) )
+    if ( store && store->open( QString("preview.png") ) )
     {
         // Hooray! No long delay for the user...
-        QByteArray bytes = store.read(store.size());
-        store.close();
+        QByteArray bytes = store->read(store->size());
+        store->close();
+	delete store;
         return img.loadFromData(bytes);
     }
+    delete store;
 
     QString mimetype = KMimeType::findByPath( path )->name();
 
