@@ -43,7 +43,6 @@
 #include <koTemplates.h>
 #include <kseparator.h>
 #include <krecentdocument.h>
-#include <kio/job.h>
 #include <kstringhandler.h>
 
 #include <koTemplateChooseDia.h>

@@ -24,6 +24,7 @@
 
 #include <kdialogbase.h>
 #include <kicondialog.h>
+#include <kio/job.h>
 
 class KoTemplateTree;
 class KoTemplateGroup;
