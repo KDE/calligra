@@ -301,9 +301,9 @@ QVariant::Type KexiProperty::type() const
 
 void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOldValue)
 {
-	kdDebug() << m_name << ": setValue('" << v.toString() << "' type=" << v.typeName() << ")" << endl;
+//	kdDebug() << m_name << ": setValue('" << v.toString() << "' type=" << v.typeName() << ")" << endl;
 	if (m_value.type() != v.type() && !m_value.isNull() && !v.isNull()) {
-		kdDebug() << "INCOMPAT TYPES! " <<m_value.typeName() <<" and " << v.typeName() << endl;
+		kdWarning() << "INCOMPATIBLE TYPES! " <<m_value.typeName() <<" and " << v.typeName() << endl;
 	}
 
 	//1. Check if the value should be changed
@@ -418,7 +418,7 @@ QString KexiProperty::valueText() const
 	//special case: return text
 	int idx = m_list->keys.findIndex( m_value.toString() );
 	if (idx<0) {
-		kdDebug() << "KexiProperty::value(): NO SUCH KEY '" << m_value.toString() << "'" << endl;
+		kdWarning() << "KexiProperty::value(): NO SUCH KEY '" << m_value.toString() << "'" << endl;
 		return m_value.toString();
 	}
 	return m_list->names[ idx ];
@@ -428,7 +428,7 @@ void KexiProperty::setChildValue(const QCString& childName, const QVariant &v, b
 {
 	KexiProperty * prop = child(childName);
 	if (!prop) {
-		kdDebug()<< "KexiProperty::setChildValue() NO SUCH CHILD: " << childName << endl;
+		kdWarning()<< "KexiProperty::setChildValue() NO SUCH CHILD: " << childName << endl;
 		return;
 	}
 	prop->setValue(v, saveOldValue);

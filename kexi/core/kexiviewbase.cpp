@@ -212,7 +212,7 @@ bool KexiViewBase::eventFilter( QObject *o, QEvent *e )
 			}
 			if (e->type()==QEvent::FocusOut) { // && focusWidget() && Kexi::hasParent( this, focusWidget())) { // && focusWidget()->inherits("KexiViewBase")) {
 //				kdDebug() << focusWidget()->className() << " " << focusWidget()->name()<< endl;
-				kdDebug() << o->className() << " " << o->name()<< endl;
+//				kdDebug() << o->className() << " " << o->name()<< endl;
 				KexiViewBase *v = Kexi::findParent<KexiViewBase>(o, "KexiViewBase") ;
 				if (v) {
 					while (v->m_parentView)

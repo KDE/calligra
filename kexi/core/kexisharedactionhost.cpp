@@ -108,7 +108,7 @@ void KexiSharedActionHost::updateActionAvailable(const char *action_name, bool a
 
 void KexiSharedActionHost::plugActionProxy(KexiActionProxy *proxy)
 {
-	kdDebug() << "KexiSharedActionHost::plugActionProxy():" << proxy->receiver()->name() << endl;
+//	kdDebug() << "KexiSharedActionHost::plugActionProxy():" << proxy->receiver()->name() << endl;
 	d->actionProxies.insert( proxy->receiver(), proxy );
 }
 
@@ -152,7 +152,7 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 		}
 //		a->setEnabled(p && p->isAvailable(a->name()));
 		a->setEnabled(avail);
-		kdDebug() << "Action " << a->name() << (avail ? " enabled." : " disabled.") << endl;
+//		kdDebug() << "Action " << a->name() << (avail ? " enabled." : " disabled.") << endl;
 	}
 }
 
