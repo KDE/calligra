@@ -99,12 +99,12 @@ void PBPreview::drawContents( QPainter *painter )
 			pen.color(), _w, 180.0,_zoomHandler );
 
 	if ( lineEnd != L_NORMAL )
-	    drawFigure( lineEnd, painter, KoPoint( contentsRect().width() - diff2.width() / 2,
+	    drawFigure( lineEnd, painter, KoPoint( _zoomHandler->unzoomItX(contentsRect().width()) - diff2.width() / 2,
 						  contentsRect().height() / 2 ), pen.color(), _w, 0.0,_zoomHandler );
 
 	painter->setPen( pen );
 	painter->drawLine( _zoomHandler->zoomItX (diff1.width() / 2), _zoomHandler->zoomItY (contentsRect().height() / 2),
-			  _zoomHandler->zoomItX (contentsRect().width() - diff2.width() / 2), _zoomHandler->zoomItY (contentsRect().height()/2) );
+			  contentsRect().width() - _zoomHandler->zoomItX (diff2.width() / 2), _zoomHandler->zoomItY (contentsRect().height()/2) );
 
     } else if ( paintType == Brush ) {
 	painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
