@@ -406,7 +406,7 @@ void ConfigureSpellPage::apply()
     config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
     config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
     config->writeEntry ("KSpell_Client",  _spellConfig->client());
-
+    m_spellConfigWidget->saveDictionary();
     KPresenterDoc* doc = m_pView->kPresenterDoc();
     doc->setKSpellConfig(*_spellConfig);
 

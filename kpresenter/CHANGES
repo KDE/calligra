@@ -136,3 +136,4 @@ Changes after KPresenter 1.2
 - Add autocorrection : "Capitalize name of days"
 - Add new font attribute : small caps
 - Now we can modify "ignore list"
+- Now we can modify personal dictonary

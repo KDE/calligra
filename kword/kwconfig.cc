@@ -203,6 +203,7 @@ void ConfigureSpellPage::apply()
   config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
   config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
   config->writeEntry ("KSpell_Client",  _spellConfig->client());
+  m_spellConfigWidget->saveDictionary();
   KWDocument* doc = m_pView->kWordDocument();
   doc->setKSpellConfig(*_spellConfig);
 

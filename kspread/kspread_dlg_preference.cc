@@ -937,6 +937,7 @@ void configureSpellPage::apply()
   config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
   config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
   config->writeEntry ("KSpell_Client",  _spellConfig->client());
+  m_spellConfigWidget->saveDictionary();
   KSpreadDoc* doc = m_pView->doc();
   doc->setKSpellConfig(*_spellConfig);
 

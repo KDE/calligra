@@ -47,13 +47,18 @@ public:
 
     KSpellConfig * spellConfig() const { return m_spellConfig; }
     void setDefault();
+    void saveDictionary();
 public slots:
     void slotClearIgnoreAllHistory();
+    void slotClearDictionary();
 private:
+    void initDictionaryListWord( );
     QCheckBox *m_dontCheckUpperWord;
     QCheckBox *m_dontCheckTitleCase;
     QCheckBox *m_cbBackgroundSpellCheck;
     KEditListBox *m_listignoreall;
+    KEditListBox *m_dictionary;
+    QPushButton *m_clearDictionary;
     QPushButton *m_clearIgnoreAllHistory;
     KSpellConfig *m_spellConfig;
 };
