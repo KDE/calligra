@@ -978,8 +978,8 @@ bool KoDocument::saveToStream( QIODevice * dev )
     QDomDocument doc = saveXML();
     // Save to buffer
     QCString s = doc.toCString(); // utf8 already
-    // Important: don't use s.length() here. It's slow, and dangerous (in case of a '\0' somewhere)
-    // The -1 is because we don't want to write the final \0.
+    // We use QCString::size()-1 here, not the official QCString::length
+    // It works here, as we are not modifying QCString as QByteArray
     int nwritten = dev->writeBlock( s.data(), s.size()-1 );
     if ( nwritten != (int)s.size()-1 )
         kdWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " << s.size()-1 << endl;
