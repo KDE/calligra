@@ -23,6 +23,7 @@
 //#include <stdio.h>
 
 #include <qcombobox.h>
+#include <qcursor.h>
 #include <qstringlist.h>
 #include <qdir.h>
 
@@ -101,6 +102,7 @@ XSLTImportDia::XSLTImportDia(KoStore* out, const QCString &format, QWidget* pare
 	}
 	
 	xsltList->insertStringList(_namesList);
+	kapp->restoreOverrideCursor();
 }
 
 /*
@@ -198,6 +200,7 @@ void XSLTImportDia::chooseCommonSlot()
  */
 void XSLTImportDia::okSlot()
 {
+  	kapp->setOverrideCursor(QCursor(Qt::WaitCursor));
 	hide();
 	if(_currentFile.url().isEmpty())
 		return;
