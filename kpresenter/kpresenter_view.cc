@@ -2129,6 +2129,7 @@ void KPresenterView_impl::resizeEvent(QResizeEvent *e)
       vert->hide();
       h_ruler->hide();
       v_ruler->hide();
+      page->move(0,0);
       page->resize(widget()->width(),widget()->height());
     }  
 }
