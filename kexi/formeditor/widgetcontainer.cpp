@@ -72,7 +72,7 @@ namespace KFormEditor {
 		}
 	}
 
-	WidgetContainer *WidgetContainer::topLevelContainer()
+	WidgetContainer *WidgetContainer::topLevelContainer() const
 	{
 		return m_topLevelContainer;
 	}
@@ -82,7 +82,7 @@ namespace KFormEditor {
 		return 10;
 	}
 
-	QWidget *WidgetContainer::pendingWidget(){return m_pendingWidget;}
+	QWidget *WidgetContainer::pendingWidget()const{return m_pendingWidget;}
 
 	void WidgetContainer::addInteractive(QWidget *widget)
 	{
@@ -117,15 +117,15 @@ namespace KFormEditor {
 			m_widgetRectEY = m_widgetRectBY;
 			m_widgetRectRequested = false;
 		} else
-		  if (m_topLevelContainer!=this) 
+		  if (m_topLevelContainer!=this)
 		{
 			kdDebug()<<"not toplevel -> what shall we do ?"<<endl;
 			if (m_topLevelContainer->pendingWidget())
 			{
 				kdDebug()<<"try to place a new widget"<<endl;
-				addInteractive(m_topLevelContainer->pendingWidget());			
+				addInteractive(m_topLevelContainer->pendingWidget());
 				mousePressEvent(ev);
-			} 
+			}
 			else
 			{
 				kdDebug()<<"Let the parent handle the mouse press event"<<endl;
@@ -230,7 +230,7 @@ namespace KFormEditor {
 				widgetwidth = m_pendingWidget->sizeHint().width();
 				widgetheight = m_pendingWidget->sizeHint().height();
 			}
-			
+
 			insertWidget(m_pendingWidget, QRect(m_widgetRectBX, m_widgetRectBY, widgetwidth, widgetheight ) );
 			m_widgetRectBX = 0;
 			m_widgetRectBY = 0;

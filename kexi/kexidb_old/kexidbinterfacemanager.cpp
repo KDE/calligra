@@ -38,14 +38,14 @@ KexiDBInterfaceManager::KexiDBInterfaceManager(QObject *parent, const char *name
 }
 
 KexiDB*
-KexiDBInterfaceManager::require(QString driver)
+KexiDBInterfaceManager::require(const QString &driver)
 {
 	kdDebug()<<"kexDBIface::require"<<endl;
 
 	if(!m_driverList.find(driver))
 		return 0;
 
-	kdDebug()<<"driver found in list"<<endl;		
+	kdDebug()<<"driver found in list"<<endl;
 	KexiDBDriver *d = m_driverList.find(driver);
 	if(d->loaded())
 	{
@@ -68,7 +68,7 @@ KexiDBInterfaceManager::lookupDrivers()
 	for(; it != tlist.end(); ++it)
 	{
 		KService::Ptr ptr = (*it);
-		
+
 		KexiDBDriver *driver = new KexiDBDriver(ptr->name());
 		driver->setService(*it);
 		m_driverList.insert(ptr->name(), driver);
@@ -77,9 +77,9 @@ KexiDBInterfaceManager::lookupDrivers()
 }
 
 void
-KexiDBInterfaceManager::load(QString driver)
+KexiDBInterfaceManager::load(const QString &driver)
 {
-	kdDebug() << "KexiDBInterfaceManager::load(): loading " << driver << endl; 
+	kdDebug() << "KexiDBInterfaceManager::load(): loading " << driver << endl;
 	if(m_driverList.find(driver))
 	{
 		KLibLoader *libLoader = KLibLoader::self();
@@ -93,7 +93,7 @@ KexiDBInterfaceManager::load(QString driver)
 				kdDebug() << "KexiDBInterfaceManager::load(): library: "<<d->service()->library()<<endl;
 				KexiDB *plugin = KParts::ComponentFactory::createInstanceFromService<KexiDB>(d->service(),
 					this, "driverPlugin", QStringList());
-				
+
 				if(plugin)
 				{
 					d->m_db = plugin;
@@ -109,18 +109,18 @@ QStringList
 KexiDBInterfaceManager::getDrivers() const
 {
 	QStringList result;
-	
+
 	for(QDictIterator<KexiDBDriver> it(m_driverList); it.current(); ++it)
 	{
 		KexiDBDriver *currentDriver = it;
 		result.append(currentDriver->driver());
 	}
-	
+
 	return result;
 }
 
 KexiDBDriver*
-KexiDBInterfaceManager::getDriverInfo(QString driver)
+KexiDBInterfaceManager::getDriverInfo(const QString &driver)
 {
 	KexiDBDriver *d = m_driverList.find(driver);
 	if(d)

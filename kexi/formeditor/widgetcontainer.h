@@ -38,40 +38,40 @@ namespace KFormEditor
 	{
 
 		Q_OBJECT
- 
-		public: 
+
+		public:
 			WidgetContainer(QWidget *parent=0, const char *name=0, QString identifier=QString::null);
 			~WidgetContainer();
-		
+
 			static int dotSpacing();
 
 			void addInteractive(QWidget *widget);
 			void registerSubContainer(WidgetContainer *cont);
-			
+
 		protected:
 			void setTopLevelContainer(WidgetContainer *tpc);
-			WidgetContainer *topLevelContainer();
+			WidgetContainer *topLevelContainer()const;
 			void paintEvent(QPaintEvent *ev);
 			void mouseMoveEvent(QMouseEvent *ev);
 			void mousePressEvent(QMouseEvent *ev);
 			void mouseReleaseEvent(QMouseEvent *ev);
 			void resizeEvent(QResizeEvent *ev);
-			
+
 			void insertWidget(QWidget *widget, const QRect &r);
 			void installEventFilterRecursive(QObject *obj);
 
 			void setResizeHandles(QWidget *m_activeWidget);
 			void activateWidget(QWidget *widget);
 
-			QWidget *pendingWidget();		
-		
+			QWidget *pendingWidget()const;
+
 			QPixmap	m_dotBg;
-		
+
 			int	m_dotSpacing;
 
 			bool	m_widgetRectRequested;
 			bool	m_widgetRect;
-	
+
 			int	m_widgetRectBX;
 			int	m_widgetRectBY;
 			int	m_widgetRectEX;

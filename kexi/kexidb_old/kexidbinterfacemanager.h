@@ -46,19 +46,19 @@ class KexiDBInterfaceManager : public QObject
 {
 	friend class KexiDB;
 	Q_OBJECT
-	
+
 	public:
 		KexiDBInterfaceManager(QObject *parent=0, const char *name=0);
 		~KexiDBInterfaceManager();
 
 		QStringList getDrivers() const;
-		KexiDBDriver *getDriverInfo(QString driver);
-		KexiDB *require(QString driver);
+		KexiDBDriver *getDriverInfo(const QString &driver);
+		KexiDB *require(const QString &driver);
 
 	protected:
-		void load(QString driver);
+		void load(const QString &driver);
 		void lookupDrivers();
-	
+
 		DriverList	m_driverList;
 //		KLibLoader	m_libLoader;
 };
