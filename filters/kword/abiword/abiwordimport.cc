@@ -30,6 +30,7 @@
 #include <qpicture.h>
 #include <qxml.h>
 #include <qdom.h>
+#include <qdatetime.h>
 
 #include <kdebug.h>
 #include <kmdcodec.h>
@@ -60,13 +61,15 @@ class StructureParser : public QXmlDefaultHandler
 {
 public:
     StructureParser(KoFilterChain* chain)
-        : m_pictureNumber(0), m_pictureFrameNumber(0)
+        : m_pictureNumber(0), m_pictureFrameNumber(0),
+        m_timepoint(QDateTime::currentDateTime(Qt::UTC))
     {
         createDocument();
         structureStack.setAutoDelete(true);
         StackItem *stackItem=new(StackItem);
         stackItem->elementType=ElementTypeBottom;
-        stackItem->stackElementText=mainFramesetElement;
+        stackItem->m_frameset=mainFramesetElement; // The default frame set.
+        stackItem->stackElementText=mainFramesetElement; // This is more for DEBUG
         structureStack.push(stackItem); //Security item (not to empty the stack)
     }
     virtual ~StructureParser()
@@ -115,6 +118,7 @@ private:
     uint m_pictureNumber;                   // unique: increment *before* use
     uint m_pictureFrameNumber;              // unique: increment *before* use
     QMap<QString,QString> m_metadataMap;    // Map for <m> elements
+    QDateTime m_timepoint;              // Date/time (for pictures)
 };
 
 // Element <c>
@@ -297,7 +301,7 @@ static bool EndElementA (StackItem* stackItem, StackItem* stackCurrent, QDomDocu
 // Element <p>
 
 bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
-    QDomDocument& mainDocument, QDomElement& mainFramesetElement,
+    QDomDocument& mainDocument,
     StyleDataMap& styleDataMap, const QXmlAttributes& attributes)
 {
     // We must prepare the style
@@ -322,9 +326,9 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
     }
 
     QDomElement elementText=stackCurrent->stackElementText;
-    //We use mainFramesetElement here not to be dependant that <section> has happened before
     QDomElement paragraphElementOut=mainDocument.createElement("PARAGRAPH");
-    mainFramesetElement.appendChild(paragraphElementOut);
+    stackCurrent->m_frameset.appendChild(paragraphElementOut);
+    
     QDomElement textElementOut=mainDocument.createElement("TEXT");
     paragraphElementOut.appendChild(textElementOut);
     QDomElement formatsPluralElementOut=mainDocument.createElement("FORMATS");
@@ -531,14 +535,13 @@ bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCu
 
     QDomElement key=mainDocument.createElement("KEY");
     key.setAttribute("filename",strDataId);
-    //As we have no date to set, set to the *nix epoch
-    key.setAttribute("year",1970);
-    key.setAttribute("month",1);
-    key.setAttribute("day",1);
-    key.setAttribute("hour",0);
-    key.setAttribute("minute",0);
-    key.setAttribute("second",0);
-    key.setAttribute("msec",0);
+    key.setAttribute("year",m_timepoint.date().year());
+    key.setAttribute("month",m_timepoint.date().month());
+    key.setAttribute("day",m_timepoint.date().day());
+    key.setAttribute("hour",m_timepoint.time().hour());
+    key.setAttribute("minute",m_timepoint.time().minute());
+    key.setAttribute("second",m_timepoint.time().second());
+    key.setAttribute("msec",m_timepoint.time().msec());
     element.appendChild(key);
 
     // Now use the image's frame set
@@ -653,14 +656,13 @@ bool StructureParser::EndElementD (StackItem* stackItem)
     QString strDataId=stackItem->fontName;  // AbiWord's data id
     QDomElement key=mainDocument.createElement("KEY");
     key.setAttribute("filename",strDataId);
-    //As we have no date to set, set to the *nix epoch
-    key.setAttribute("year",1970);
-    key.setAttribute("month",1);
-    key.setAttribute("day",1);
-    key.setAttribute("hour",0);
-    key.setAttribute("minute",0);
-    key.setAttribute("second",0);
-    key.setAttribute("msec",0);
+    key.setAttribute("year",m_timepoint.date().year());
+    key.setAttribute("month",m_timepoint.date().month());
+    key.setAttribute("day",m_timepoint.date().day());
+    key.setAttribute("hour",m_timepoint.time().hour());
+    key.setAttribute("minute",m_timepoint.time().minute());
+    key.setAttribute("second",m_timepoint.time().second());
+    key.setAttribute("msec",m_timepoint.time().msec());
     key.setAttribute("name",strStoreName);
     m_picturesElement.appendChild(key);
 
@@ -783,14 +785,14 @@ static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
 // <cbr> (forced column break, not supported)
 // <pbr> (forced page break)
 static bool StartElementPBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
-    QDomDocument& mainDocument, QDomElement& mainFramesetElement)
+    QDomDocument& mainDocument)
 {
     // We are sure to be the child of a <p> element
 
     // The following code is similar to the one in StartElementP
     // We use mainFramesetElement here not to be dependant that <section> has happened before
     QDomElement paragraphElementOut=mainDocument.createElement("PARAGRAPH");
-    mainFramesetElement.appendChild(paragraphElementOut);
+    stackCurrent->m_frameset.appendChild(paragraphElementOut);
     QDomElement textElementOut=mainDocument.createElement("TEXT");
     paragraphElementOut.appendChild(textElementOut);
     QDomElement formatsPluralElementOut=mainDocument.createElement("FORMATS");
@@ -961,7 +963,7 @@ bool StructureParser::complexForcedPageBreak(StackItem* stackItem)
 
     // Now we are a child of a <p> element!
 
-    bool success=StartElementPBR(stackItem,structureStack.current(),mainDocument,mainFramesetElement);
+    bool success=StartElementPBR(stackItem,structureStack.current(),mainDocument);
 
     // Now restore the stack
 
@@ -1076,7 +1078,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     else if ((name=="p")||(name=="P"))
     {
         success=StartElementP(stackItem,structureStack.current(),mainDocument,
-            mainFramesetElement,styleDataMap,attributes);
+            styleDataMap,attributes);
     }
     else if ((name=="section")||(name=="SECTION"))
     {
@@ -1105,7 +1107,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         else if (stackCurrent->elementType==ElementTypeParagraph)
         {
             kdWarning(30506) << "Forced column break found! Transforming to forced page break" << endl;
-            success=StartElementPBR(stackItem,stackCurrent,mainDocument,mainFramesetElement);
+            success=StartElementPBR(stackItem,stackCurrent,mainDocument);
         }
         else
         {
@@ -1125,7 +1127,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         }
         else if (stackCurrent->elementType==ElementTypeParagraph)
         {
-            success=StartElementPBR(stackItem,stackCurrent,mainDocument,mainFramesetElement);
+            success=StartElementPBR(stackItem,stackCurrent,mainDocument);
         }
         else
         {

@@ -72,6 +72,7 @@ public:
 public:
     QString itemName;   // Name of the tag (only for error purposes)
     StackItemElementType elementType;
+    QDomElement m_frameset; // current <FRAMESET>
     QDomElement stackElementParagraph; // <PARAGRAPH>
     QDomElement stackElementText; // <TEXT>
     QDomElement stackElementFormatsPlural; // <FORMATS>
