@@ -140,7 +140,7 @@
    <PARAGRAPH>
     <TEXT xml:space="preserve" >[  ] Urgent	[  ] For Review	[  ] Please Comment	[  ] Please reply	[  ] Please Recycle</TEXT>
     <FORMATS>
-     <FORMAT id="1" pos="0" len="81" >
+     <FORMAT id="1" pos="0" len="85" >
       <SIZE value="12" />
      </FORMAT>
     </FORMATS>
