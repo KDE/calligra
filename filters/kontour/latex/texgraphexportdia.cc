@@ -32,7 +32,7 @@
    License version 2.
 */
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <texgraphexportdia.h>
 #include <texgraphexportdia.moc>
 #include "kdebug.h"
