@@ -16,7 +16,7 @@ libkchartcore_la_SOURCES = \
 
 libkchartcore_la_LIBADD = -lkdecore -lqt -lXext -lX11
 libkchartcore_la_LDFLAGS = $(all_libraries) -version-info 1:0:0
-include_HEADERS = KChart.h KChartTypes.h KChartColorArray.h KChartData.h
+include_HEADERS = KChart.h KChartTypes.h KChartColorArray.h KChartData.h KChartWidget.h
 
 SUFFIXES = .h .moc
 

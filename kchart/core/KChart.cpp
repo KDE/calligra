@@ -20,6 +20,23 @@
 KChart::KChart( KChartType type ) :
   _charttype( type )
 {
+  _cp = 0;
+  setChartType( type );
+}
+
+
+KChart::~KChart()
+{
+  delete _cp;
+}
+
+
+void KChart::setChartType( KChartType charttype )
+{
+  _charttype = charttype;
+
+  delete _cp;
+
   // Create a chart painter object of the appropriate type
   switch( _charttype ) {
   case Bars:
@@ -47,19 +64,6 @@ KChart::KChart( KChartType type ) :
 	KDEBUG( KDEBUG_WARN, 34001, "Unknown chart type selected, choosing bars" );
 	_cp = new KChartBarsPainter( this );
   };
-}
-
-
-KChart::~KChart()
-{
-  delete _cp;
-}
-
-
-void KChart::setChartType( KChartType charttype )
-{
-  _charttype = charttype;
-  debug( "Sorry, not implemented: KChart::setChartType\n" );
 }
 
 KChartType KChart::chartType() const

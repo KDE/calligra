@@ -8,12 +8,23 @@ KChartWidget::KChartWidget( KChartType charttype, QWidget* parent,
 							const char* name, WFlags f ) :
 	QWidget( parent, name,f )
 {
+  _externalchart = false;
   _chart = new KChart( charttype );
+}
+
+
+KChartWidget::KChartWidget( KChart* chart, QWidget* parent,
+							const char* name, WFlags f ) :
+  QWidget( parent, name, f )
+{
+  _externalchart = true;
+  _chart = chart;
 }
 
 
 KChartWidget::~KChartWidget()
 {
+  if( !_externalchart )
 	delete _chart;
 }
 
