@@ -233,6 +233,11 @@
                 <title xml:lang="en_us">Quattro Pro</title>
                 <stat import="twostars" export="none"/>
             </filter>
+            <filter id="kspread_opencalc">
+                <title xml:lang="en_us">OpenCalc</title>
+                <contact href="mailto:nandres@web.de">Norbert Andres</contact>
+                <stat import="planned" export="planned"/>
+            </filter>
         </application>
 
         <application id="kpresenter">
