@@ -400,7 +400,10 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
             painter.save();
             QPen pen( cg.color( QColorGroup::Highlight ) ); // ## maybe make configurable ?
             painter.setPen( pen );
-            if ( hardFrameBreakAfter() )
+            //draw hardframebreak (string) if it is the last line
+            //in paragraph before we draw "frame Break"
+            //several time.
+            if ( hardFrameBreakAfter()&& lineY( lines()-1 )==lastY)
             {
                 QTextFormat format = *lastFormat;
                 format.setColor( pen.color() );
