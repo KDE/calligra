@@ -4646,6 +4646,7 @@ void KPresenterView::spellCheckerReady()
         m_spell.firstSpellPage=-1;
         if(m_spell.macroCmdSpellCheck)
             m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
+        m_spell.macroCmdSpellCheck=0L;
     }
     else
     {
@@ -4747,6 +4748,7 @@ void KPresenterView::spellCheckerDone( const QString & )
         m_ignoreWord.clear();
         if(m_spell.macroCmdSpellCheck)
             m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
+        m_spell.macroCmdSpellCheck=0L;
     }
 }
 
@@ -4778,6 +4780,8 @@ void KPresenterView::spellCheckerFinished()
     m_ignoreWord.clear();
     if(m_spell.macroCmdSpellCheck)
         m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
+
+    m_spell.macroCmdSpellCheck=0L;
 
     KPTextView *edit=m_canvas->currentTextObjectView();
     if (edit)
