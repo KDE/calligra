@@ -45,8 +45,8 @@ public:
     KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent=0, const char* _name=0);
     virtual ~KFormulaPartView();
 
-    virtual void setupPrinter( QPrinter &printer );
-    virtual void print( QPrinter &printer );
+    virtual void setupPrinter( KPrinter &printer );
+    virtual void print( KPrinter &printer );
     
 public slots:
 

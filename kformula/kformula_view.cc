@@ -19,7 +19,7 @@
 */
 
 // has to be included first
-#include <qprinter.h>
+#include <kprinter.h>
 
 #include <qpainter.h>
 #include <qpopupmenu.h>
@@ -855,11 +855,11 @@ void KFormulaPartView::generalFont()
     kdDebug(39001) <<"Slot generalFont\n";
 }
 
-void KFormulaPartView::setupPrinter(QPrinter&)
+void KFormulaView::setupPrinter(KPrinter&)
 {
 }
 
-void KFormulaPartView::print(QPrinter& printer)
+void KFormulaView::print(KPrinter& printer)
 {
     m_pDoc->getFormula()->print(printer);
 }
