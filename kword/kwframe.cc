@@ -1079,8 +1079,14 @@ void KWFrameSet::updateFrames()
 	fIt.current()->sortFramesBelow();
     }
 
-
-
+    // Remove frames that were left over. This happens at least when you switch from landscape to portrait.
+    while( ( frames.count() - m_framesInPage.size() ) > 0 )
+    {
+        KWFrame *frame = frames.last();
+        if (frame)
+            delFrame( frame );
+    }
+    
     if ( isFloating() )
     {
         //kdDebug() << "KWFrameSet::updateFrames " << getName() << " is floating" << endl;
