@@ -472,22 +472,22 @@ void KWDocStructTree::setup()
     setSorting( -1 );
 
     embedded = new KWDocStructRootItem( this, doc, KWDocStructRootItem::Embedded, gui );
-    QListViewItem *item = new QListViewItem( embedded, "Empty" );
+    QListViewItem *item = new QListViewItem( embedded, i18n ("Empty" ) );
 
     cliparts = new KWDocStructRootItem( this, doc, KWDocStructRootItem::Cliparts, gui );
-    item = new QListViewItem( cliparts, "Empty" );
+    item = new QListViewItem( cliparts, i18n( "Empty" ) );
 
     pictures = new KWDocStructRootItem( this, doc, KWDocStructRootItem::Pictures, gui );
-    item = new QListViewItem( pictures, "Empty" );
+    item = new QListViewItem( pictures, i18n ("Empty" ) );
 
     tables = new KWDocStructRootItem( this, doc, KWDocStructRootItem::Tables, gui );
-    item = new QListViewItem( tables, "Empty" );
+    item = new QListViewItem( tables, i18n ("Empty" ) );
 
     textfrms = new KWDocStructRootItem( this, doc, KWDocStructRootItem::TextFrames, gui );
-    item = new QListViewItem( textfrms, "Empty" );
+    item = new QListViewItem( textfrms, i18n ("Empty" ) );
 
     arrangement = new KWDocStructRootItem( this, doc, KWDocStructRootItem::Arrangement, gui );
-    item = new QListViewItem( arrangement, i18n( "Empty" ) );
+    item = new QListViewItem( arrangement, i18n ( "Empty" ) );
 }
 
 /******************************************************************/
