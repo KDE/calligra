@@ -435,114 +435,55 @@ void KSpreadDoc::addTable( KSpreadTable *_table )
   emit sig_addTable( _table );
 }
 
+
+void KSpreadDoc::replaceHeadFootLineMacro ( QString &_text, const QString &_search, const QString &_replace )
+{
+    if ( _search != _replace )
+        _text.replace ( QRegExp( "<" + _search + ">" ), "<" + _replace + ">" );
+}
+
+
 QString KSpreadDoc::localizeHeadFootLine ( const QString &_text )
 {
-    QString tmp;
-    QString localText;
-    QString internalText;
+    QString tmp = _text;
 
-    tmp = _text;
-
-    localText = i18n("<page>");
-    internalText = "<page>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( internalText ), localText );
-
-    localText = i18n("<file>");
-    internalText = "<file>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( internalText ), localText );
-
-    localText = i18n("<name>");
-    internalText = "<name>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( internalText ), localText );
-
-    localText = i18n("<time>");
-    internalText = "<time>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( internalText ), localText );
-
-    localText = i18n("<date>");
-    internalText = "<date>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( internalText ), localText );
-
-    localText = i18n("<author>");
-    internalText = "<author>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( internalText ), localText );
-
-    localText = i18n("<email>");
-    internalText = "<email>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( internalText ), localText );
-
-    localText = i18n("<org>");
-    internalText = "<org>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( internalText ), localText );
-
-    localText = i18n("<table>");
-    internalText = "<table>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( internalText ), localText );
+    /*
+      i18n:
+      Please use the same words (even upper/lower case) as in
+      KoPageLayoutDia.cc function setupTab2(), without the brakets "<" and ">"
+    */
+    replaceHeadFootLineMacro ( tmp, "page",   i18n("page") );
+    replaceHeadFootLineMacro ( tmp, "file",   i18n("file") );
+    replaceHeadFootLineMacro ( tmp, "name",   i18n("name") );
+    replaceHeadFootLineMacro ( tmp, "time",   i18n("time") );
+    replaceHeadFootLineMacro ( tmp, "date",   i18n("date") );
+    replaceHeadFootLineMacro ( tmp, "author", i18n("author") );
+    replaceHeadFootLineMacro ( tmp, "email",  i18n("email") );
+    replaceHeadFootLineMacro ( tmp, "org",    i18n("org") );
+    replaceHeadFootLineMacro ( tmp, "table",  i18n("table") );
 
     return tmp;
 }
 
+
 QString KSpreadDoc::delocalizeHeadFootLine ( const QString &_text )
 {
-    QString tmp;
-    QString localText;
-    QString internalText;
+    QString tmp = _text;
 
-    tmp = _text;
-
-    localText = i18n("<page>");
-    internalText = "<page>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( localText ), internalText );
-
-    localText = i18n("<file>");
-    internalText = "<file>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( localText ), internalText );
-
-    localText = i18n("<name>");
-    internalText = "<name>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( localText ), internalText );
-
-    localText = i18n("<time>");
-    internalText = "<time>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( localText ), internalText );
-
-    localText = i18n("<date>");
-    internalText = "<date>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( localText ), internalText );
-
-    localText = i18n("<author>");
-    internalText = "<author>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( localText ), internalText );
-
-    localText = i18n("<email>");
-    internalText = "<email>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( localText ), internalText );
-
-    localText = i18n("<org>");
-    internalText = "<org>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( localText ), internalText );
-
-    localText = i18n("<table>");
-    internalText = "<table>";
-    if ( localText != internalText )
-        tmp.replace ( QRegExp( localText ), internalText );
+    /*
+      i18n:
+      Please use the same words (even upper/lower case) as in
+      KoPageLayoutDia.cc function setupTab2(), without the brakets "<" and ">"
+    */
+    replaceHeadFootLineMacro ( tmp, i18n("page"),   "page" );
+    replaceHeadFootLineMacro ( tmp, i18n("file"),   "file" );
+    replaceHeadFootLineMacro ( tmp, i18n("name"),   "name" );
+    replaceHeadFootLineMacro ( tmp, i18n("time"),   "time" );
+    replaceHeadFootLineMacro ( tmp, i18n("date"),   "date" );
+    replaceHeadFootLineMacro ( tmp, i18n("author"), "author" );
+    replaceHeadFootLineMacro ( tmp, i18n("email"),  "email" );
+    replaceHeadFootLineMacro ( tmp, i18n("org"),    "org" );
+    replaceHeadFootLineMacro ( tmp, i18n("table"),  "table" );
 
     return tmp;
 }

@@ -195,7 +195,20 @@ public:
   QString footMid() { if ( m_footMid.isNull() ) return ""; return m_footMid; }
   QString footRight() { if ( m_footRight.isNull() ) return ""; return m_footRight; }
 
+  /**
+   * Replaces in _text all _search text parts by _replace text parts.
+   * Included is a test to not change if _search == _replace.
+   * The arguments should not include neither the beginning "<" nor the leading ">", this is already
+   * included internally.
+   */
+  void replaceHeadFootLineMacro ( QString &_text, const QString &_search, const QString &_replace );
+  /**
+   * Replaces in _text all page macros by the i18n-version of the macros
+   */
   QString localizeHeadFootLine ( const QString &_text );
+  /**
+   * Replaces in _text all i18n-versions of the page macros by the internal version of the macros
+   */
   QString delocalizeHeadFootLine ( const QString &_text );
 
   void setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
