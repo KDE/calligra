@@ -1,0 +1,7 @@
+?package(koffice-libs):\
+	needs=x11\
+	section=Apps/Tools\
+	title="KOffice Workspace"\
+	command=koshell\
+	icon=""
+

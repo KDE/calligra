@@ -1,7 +1,7 @@
-libkoml 1 
-libkstore 1 
-libkofficecore 1 
-libkodocinfopropspage 0 
-libkofficeui 1 
-libkoscript 1 
-libkformula 3 
+libkoml 1 koffice-libs
+libkstore 1 koffice-libs
+libkofficecore 1 koffice-libs
+libkodocinfopropspage 0 koffice-libs
+libkofficeui 1 koffice-libs
+libkoscript 1 koffice-libs
+libkformula 3 koffice-libs

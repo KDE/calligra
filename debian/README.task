@@ -1,0 +1,13 @@
+task-kde	   --  a metapackage for KDE
+task-kde-dev       --  a metapackage for developing KDE Applications
+----------------------------------------------------------------------------
+ 
+This package is a meta-package, meaning that its purpose is to contain
+dependencies for a complete, Debian-based environment for KDE.  
+ 
+This package also carries optional 'Recommends' and/or 'Suggests'
+package suggestions.  The packages listed are suggested for
+installation, but not required.
+ 
+Please file a wishlist bug against the package if you feel there are
+additional packages that ought to be included with this meta-package.    

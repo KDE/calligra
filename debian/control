@@ -5,18 +5,92 @@ Priority: optional
 Maintainer: Ivan E. Moore II <rkrusty@debian.org>
 Standards-Version: 3.1.1
 
-Package: koffice
+Package: koffice-libs
 Architecture: any
 Section: x11
 Depends: ${shlibs:Depends}
 Suggests: kdebase
+Description: KDE Office Suite (Common libraries and binaries)
+ KDE Office Suite 
+ .
+ This package contains all common architecture specific files.
+
+Package: koffice-common
+Architecture: all
+Section: x11
+Depends: koffice-libs
+Suggests: kdebase, kchart, kspread, killustrator, kpresenter
+Description: KDE Office Suite (Common files)
+ KDE Office Suite
+ .
+ This package contains all common non-architecture specific files.
+
+Package: task-koffice
+Architecture: all
+Section: x11
+Depends: koffice-libs, koffice-common, kchart, kword, kspread, killustrator, kpresenter
+Suggests: kdebase
 Description: KDE Office Suite
  KDE Office Suite
+ . 
+ This Task depends on each of the following KOffice components:
+ .
+ kchart, kspread, killustrator, kpresenter, and kword
+
+Package: kchart
+Architecture: any
+Section: x11
+Depends: ${shlibs:Depends}, koffice-libs, koffice-common
+Suggests: kdebase
+Description: KDE Office Suite - KChart
+ KDE Office Suite - KChart
+ .
+ A Graphical Chart program based on QT and KDE
+
+Package: kspread
+Architecture: any
+Section: x11
+Depends: ${shlibs:Depends}, koffice-libs, koffice-common
+Suggests: kdebase
+Description: KDE Office Suite - KSpread
+ KDE Office Suite - KSpread
+ .
+ A Spreadsheet program based on QT and KDE
+
+Package: killustrator
+Architecture: any
+Section: x11
+Depends: ${shlibs:Depends}, koffice-libs, koffice-common
+Suggests: kdebase
+Description: KDE Office Suite - KIllustrator
+ KDE Office Suite - KIllustrator
+ .
+ A Vector Graphics Tool based on QT and KDE
+
+Package: kpresenter
+Architecture: any
+Section: x11
+Depends: ${shlibs:Depends}, koffice-libs, koffice-common
+Suggests: kdebase
+Description: KDE Office Suite - KPresenter
+ KDE Office Suite - KPresenter
+ .
+ A Presentation program based on QT and KDE
+
+Package: kword
+Architecture: any
+Section: x11
+Depends: ${shlibs:Depends}, koffice-libs, koffice-common
+Suggests: kdebase
+Description: KDE Office Suite - KWord
+ KDE Office Suite - KWord
+ .
+ A Professional Text editor based on QT and KDE
 
 Package: koffice-dev
 Architecture: any
 Section: devel
-Depends: koffice (= ${Source-Version}), kdelibs3-dev
+Depends: koffice-libs (= ${Source-Version}), kdelibs3-dev
 Description: Core libraries for KOffice (Development files)
  Core libraries for Koffice (Development files)
 

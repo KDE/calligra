@@ -1,9 +1,10 @@
-koffice (2.0-20000907-0) unstable; urgency=low
+koffice (2.0-20000909-0) unstable; urgency=low
 
   * More upstream fixes
   * Compiled against new qt2.2
+  * Breaking up into individual packages
 
- -- Ivan E. Moore II <rkrusty@debian.org>  Thu, 07 Sep 2000 04:00:00 -0700
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sat, 09 Sep 2000 04:00:00 -0700
 
 koffice (2.0-20000827-0) experimental; urgency=low
  
