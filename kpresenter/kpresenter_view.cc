@@ -2158,8 +2158,10 @@ void KPresenterView::rotateOk()
 	if ( kpobject->isSelected() ) {
 	    tmp = new RotateCmd::RotateValues;
 	    tmp->angle = kpobject->getAngle();
-            if(tmp->angle!= _newAngle)
+
+            if(!newAngle &&tmp->angle!= _newAngle)
                 newAngle=true;
+
 	    _oldRotate.append( tmp );
 	    _objects.append( kpobject );
 	}
@@ -2179,6 +2181,7 @@ void KPresenterView::rotateOk()
 /*=================== shadow dialog ok ==========================*/
 void KPresenterView::shadowOk()
 {
+    bool newShadow=false;
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
     QList<ShadowCmd::ShadowValues> _oldShadow;
@@ -2198,12 +2201,18 @@ void KPresenterView::shadowOk()
 	    tmp->shadowDirection = kpobject->getShadowDirection();
 	    tmp->shadowDistance = kpobject->getShadowDistance();
 	    tmp->shadowColor = kpobject->getShadowColor();
+
+            if(!newShadow &&( tmp->shadowDirection!=_newShadow.shadowDirection
+               || tmp->shadowDistance!=_newShadow.shadowDistance
+               || tmp->shadowColor!=_newShadow.shadowColor))
+                newShadow=true;
+
 	    _oldShadow.append( tmp );
 	    _objects.append( kpobject );
 	}
     }
 
-    if ( !_objects.isEmpty() ) {
+    if ( !_objects.isEmpty() && newShadow ) {
 	ShadowCmd *shadowCmd = new ShadowCmd( i18n( "Change Shadow" ),
 					      _oldShadow, _newShadow, _objects, kPresenterDoc() );
 	kPresenterDoc()->commands()->addCommand( shadowCmd );
