@@ -240,18 +240,13 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
     }
     if( !refFormat || curFormat->color() != refFormat->color() )
     {
-        elem = doc.createElement( "COLOR" );
-        formatElem.appendChild( elem );
         if ( curFormat->color().isValid() )
         {
+            elem = doc.createElement( "COLOR" );
+            formatElem.appendChild( elem );
             elem.setAttribute( "red", curFormat->color().red() );
             elem.setAttribute( "green", curFormat->color().green() );
             elem.setAttribute( "blue", curFormat->color().blue() );
-        } else
-        {
-            elem.setAttribute( "red", -1 );
-            elem.setAttribute( "green", -1 );
-            elem.setAttribute( "blue", -1 );
         }
     }
     if( !refFormat || curFormat->font().family() != refFormat->font().family() )
@@ -332,26 +327,23 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
     }
     if( !refFormat || curFormat->textBackgroundColor() != refFormat->textBackgroundColor() )
     {
-        elem = doc.createElement( "TEXTBACKGROUNDCOLOR" );
-        formatElem.appendChild( elem );
-        if ( curFormat->textBackgroundColor().isValid() )
+        if ( curFormat->textBackgroundColor().isValid())
         {
+            elem = doc.createElement( "TEXTBACKGROUNDCOLOR" );
+            formatElem.appendChild( elem );
             elem.setAttribute( "red", curFormat->textBackgroundColor().red() );
             elem.setAttribute( "green", curFormat->textBackgroundColor().green() );
             elem.setAttribute( "blue", curFormat->textBackgroundColor().blue() );
-        } else
-        {
-            elem.setAttribute( "red", -1 );
-            elem.setAttribute( "green", -1 );
-            elem.setAttribute( "blue", -1 );
         }
     }
-
     if( !refFormat || curFormat->shadowText() != refFormat->shadowText())
     {
-        elem = doc.createElement( "SHADOWTEXT" );
-        formatElem.appendChild( elem );
-        elem.setAttribute( "value", static_cast<int>(curFormat->shadowText()) );
+        if ( !curFormat->shadowText())
+        {
+            elem = doc.createElement( "SHADOWTEXT" );
+            formatElem.appendChild( elem );
+            elem.setAttribute( "value", static_cast<int>(curFormat->shadowText()) );
+        }
     }
     if( !refFormat || curFormat->offsetFromBaseLine() != refFormat->offsetFromBaseLine())
     {
