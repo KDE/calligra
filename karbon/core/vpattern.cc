@@ -121,12 +121,12 @@ VPattern::transform( const QWMatrix &m )
 
 QPixmap& VPattern::pixmap() const
 {
-	return m_pixmap;
+	return (QPixmap&)m_pixmap;
 }
 
 QPixmap& VPattern::thumbPixmap() const
 {
-	return m_pixmapThumb;
+	return (QPixmap&)m_pixmapThumb;
 }
 
 
