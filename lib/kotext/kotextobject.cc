@@ -840,10 +840,15 @@ KCommand *KoTextObject::applyStyleCommand( KoTextCursor * cursor, const KoStyle 
 
 void KoTextObject::applyStyleChange( KoStyleChangeDefMap changed )
 {
-    /*kdDebug(32500) << "KoTextObject::applyStyleChange " << changedStyle->name()
-                     << " paragLayoutChanged=" << paragLayoutChanged
-                     << " formatChanged=" << formatChanged
-                     << endl;*/
+#if 0 //#ifndef NDEBUG
+    kdDebug(32500) << "KoTextObject::applyStyleChange " << changed.count() << " styles." << endl;
+    for( KoStyleChangeDefMap::const_iterator it = changed.begin(); it != changed.end(); ++it ) {
+        kdDebug(32500) << " " << it.key()->name()
+                       << " paragLayoutChanged=" << (*it).paragLayoutChanged
+                       << " formatChanged=" << (*it).formatChanged
+                       << endl;
+    }
+#endif
 
     KoTextParag *p = textdoc->firstParag();
     while ( p ) {
@@ -862,47 +867,15 @@ void KoTextObject::applyStyleChange( KoStyleChangeDefMap changed )
                 cursor.setParag( p );
                 cursor.setIndex( 0 );
                 //kdDebug(32500) << "KoTextObject::applyStyleChange applying to paragraph " << p << " " << p->paragId() << endl;
-#if 0
-                KoStyle styleApplied=*style;
-                if ( (m_doc->applyStyleChangeMask() & KWDocument::U_BORDER) == 0)
-                {
-                    styleApplied.paragLayout().leftBorder=p->leftBorder();
-                    styleApplied.paragLayout().rightBorder=p->rightBorder();
-                    styleApplied.paragLayout().topBorder=p->topBorder();
-                    styleApplied.paragLayout().bottomBorder=p->bottomBorder();
-                }
-                if ( (m_doc->applyStyleChangeMask() & KWDocument::U_ALIGN )==0)
-                {
-                    styleApplied.setAlign(p->alignment());
-                }
-                if ( (m_doc->applyStyleChangeMask() & KWDocument::U_NUMBERING)==0 )
-                {
-                    styleApplied.paragLayout().counter=*(p->counter());
-                }
-                if ( (m_doc->applyStyleChangeMask() & KWDocument::U_COLOR)==0 )
-                {
-                    styleApplied.format().setColor(p->paragFormat()->color());
-                }
-                if ( (m_doc->applyStyleChangeMask() & KWDocument::U_TABS)==0 )
-                {
-                    styleApplied.paragLayout().setTabList(p->tabList());
-                }
-                if ( (m_doc->applyStyleChangeMask() & KWDocument::U_INDENT)==0 )
-                {
-                    styleApplied.paragLayout().lineSpacing=p->kwLineSpacing();
-                    styleApplied.paragLayout().margins[QStyleSheetItem::MarginLeft]=p->margin(QStyleSheetItem::MarginLeft);
-                    styleApplied.paragLayout().margins[QStyleSheetItem::MarginRight]=p->margin(QStyleSheetItem::MarginRight);
-                    styleApplied.paragLayout().margins[QStyleSheetItem::MarginFirstLine]=p->margin(QStyleSheetItem::MarginFirstLine);
-                    styleApplied.paragLayout().margins[QStyleSheetItem::MarginBottom]=p->margin(QStyleSheetItem::MarginBottom);
-                    styleApplied.paragLayout().margins[QStyleSheetItem::MarginTop]=p->margin(QStyleSheetItem::MarginTop);
-                }
-#endif
                 applyStyle( &cursor, it.key(),
                             -1, // A selection we can't possibly have
                             (*it).paragLayoutChanged, (*it).formatChanged,
                             false, false ); // don't create undo/redo, not interactive
             }
+        } else {
+            //kdDebug(32500) << "KoTextObject::applyStyleChange leaving paragraph unchanged: " << p << " " << p->paragId() << endl;
         }
+
         p = p->next();
     }
     setLastFormattedParag( textdoc->firstParag() );
