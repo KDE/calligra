@@ -95,12 +95,12 @@ public:
 	/**
 	 * Sets document width.
 	 */
-	void setWidth( double width ) { m_width = width; }
+	void setWidth( double width ) { m_width = width; m_boundingBox.setWidth( width ); }
 
 	/**
 	 * Sets document height.
 	 */
-	void setHeight( double height ) { m_height = height; }
+	void setHeight( double height ) { m_height = height; m_boundingBox.setHeight( height ); }
 
 
 	const QString& unitName()
