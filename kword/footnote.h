@@ -19,14 +19,9 @@
 #include <qlist.h>
 #include <qpainter.h>
 
-#include <iostream>
 #include <koStream.h>
-#include <koIMR.h>
-#include <komlMime.h>
-#include <strstream>
-#include <fstream>
-#include <unistd.h>
 
+#include <iostream>
 #include <string>
 
 class KWFootNote;
@@ -41,40 +36,40 @@ class KWParag;
 class KWFootNoteManager
 {
 public:
-  enum NoteType {FootNotes,EndNotes};
+	enum NoteType {FootNotes,EndNotes};
 
-  KWFootNoteManager(KWordDocument *_doc);
+	KWFootNoteManager(KWordDocument *_doc);
 
-  int getStart() { return start; }
-  void setStart(int s) { start = s; recalc(); }
+	int getStart() { return start; }
+	void setStart(int s) { start = s; recalc(); }
 
-  void recalc();
+	void recalc();
 
-  int findStart(KWFormatContext *_fc,QPainter &p);
+	int findStart(KWFormatContext *_fc,QPainter &p);
 
-  bool showFootNotesSuperscript() { return superscript; }
-  void setShowFootNotesSuperscript(bool _s) { superscript = _s; }
+	bool showFootNotesSuperscript() { return superscript; }
+	void setShowFootNotesSuperscript(bool _s) { superscript = _s; }
 
-  void insertFootNote(KWFootNote *fn);
-  void removeFootNote(KWFootNote *fn);
-  void insertFootNoteInternal(KWFootNote *fn)
-  { footNotes.append(fn); }
-  
-  NoteType getNoteType() { return noteType; }
-  void setNoteType(NoteType nt) { noteType = nt; }
+	void insertFootNote(KWFootNote *fn);
+	void removeFootNote(KWFootNote *fn);
+	void insertFootNoteInternal(KWFootNote *fn)
+	{ footNotes.append(fn); }
 
-  void save(ostream &out);
-  void load(KOMLParser&,vector<KOMLAttrib>&);
+	NoteType getNoteType() { return noteType; }
+	void setNoteType(NoteType nt) { noteType = nt; }
+
+	void save(ostream &out);
+	void load(KOMLParser&,vector<KOMLAttrib>&);
 
 protected:
-  void addFootNoteText(KWFootNote *fn);
+	void addFootNoteText(KWFootNote *fn);
 
-  KWordDocument *doc;
-  int start;
-  QList<KWFootNote> footNotes;
-  bool superscript;
-  NoteType noteType;
-  QString firstParag;
+	KWordDocument *doc;
+	int start;
+	QList<KWFootNote> footNotes;
+	bool superscript;
+	NoteType noteType;
+	QString firstParag;
 
 };
 
@@ -85,50 +80,50 @@ protected:
 class KWFootNote
 {
 public:
-  struct KWFootNoteInternal
-  {
-    int from;
-    int to;
-    QString space;
-  };
+	struct KWFootNoteInternal
+	{
+		int from;
+		int to;
+		QString space;
+	};
 
-  KWFootNote(KWordDocument *_doc,QList<KWFootNoteInternal> *_parts);
+	KWFootNote(KWordDocument *_doc,QList<KWFootNoteInternal> *_parts);
 
-  KWFootNote *copy() { return new KWFootNote(doc,new QList<KWFootNoteInternal>(parts)); }
+	KWFootNote *copy() { return new KWFootNote(doc,new QList<KWFootNoteInternal>(parts)); }
 
-  int getStart() { return start; }
-  int getEnd() { return end; }
+	int getStart() { return start; }
+	int getEnd() { return end; }
 
-  QString getText() { return text; }
+	QString getText() { return text; }
 
-  /**
-   * returns new end
-   */
-  int setStart(int _start);
+	/**
+	 * returns new end
+	 */
+	int setStart(int _start);
 
-  void setBefore(const QString &_before) { before = _before; }
-  void setAfter(const QString &_after) { after = _after; }
+	void setBefore(const QString &_before) { before = _before; }
+	void setAfter(const QString &_after) { after = _after; }
 
-  void setParag(KWParag *_parag);
-  QString getParag() { return parag; }
+	void setParag(KWParag *_parag);
+	QString getParag() { return parag; }
 
-  void updateDescription(int _start);
-  void makeTempNames();
-  void updateNames();
+	void updateDescription(int _start);
+	void makeTempNames();
+	void updateNames();
 
-  void destroy();
+	void destroy();
 
-  void save(ostream &out);
-  void load(string name,string tag,KOMLParser &parser,vector<KOMLAttrib>& lst);
+	void save(ostream &out);
+	void load(string name,string tag,KOMLParser &parser,vector<KOMLAttrib>& lst);
 
 protected:
-  void makeText();
+	void makeText();
 
-  KWordDocument *doc;
-  int start,end;
-  QList<KWFootNoteInternal> parts;
-  QString before,after,text;
-  QString parag;
+	KWordDocument *doc;
+	int start,end;
+	QList<KWFootNoteInternal> parts;
+	QString before,after,text;
+	QString parag;
 
 };
 

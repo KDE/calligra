@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -16,22 +16,15 @@
 #ifndef deldia_h
 #define deldia_h
 
-#include <stdlib.h>
-
 #include <qtabdialog.h>
-#include <qwidget.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qevent.h>
-#include <qspinbox.h>
-#include <qradiobutton.h>
-#include <qbuttongroup.h>
-#include <qpainter.h>
 
 class KWGroupManager;
 class KWordDocument;
 class KWPage;
+class QWidget;
+class QGridLayout;
+class QLabel;
+class QSpinBox;
 
 /******************************************************************/
 /* Class: KWDeleteDia                                             */
@@ -39,28 +32,28 @@ class KWPage;
 
 class KWDeleteDia : public QTabDialog
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
-  enum DeleteType {ROW,COL};
-  KWDeleteDia(QWidget *parent,const char *name,KWGroupManager *_grpMgr,KWordDocument *_doc,DeleteType _type,KWPage *_page);
+	enum DeleteType {ROW,COL};
+	KWDeleteDia(QWidget *parent,const char *name,KWGroupManager *_grpMgr,KWordDocument *_doc,DeleteType _type,KWPage *_page);
 
 protected:
-  void setupTab1();
-  void closeEvent(QCloseEvent *e) { emit cancelButtonPressed(); }
+	void setupTab1();
+	void closeEvent(QCloseEvent *e) { emit cancelButtonPressed(); }
 
-  QWidget *tab1;
-  QGridLayout *grid1;
-  QLabel *rc;
-  QSpinBox *value;
+	QWidget *tab1;
+	QGridLayout *grid1;
+	QLabel *rc;
+	QSpinBox *value;
 
-  KWGroupManager *grpMgr;
-  KWordDocument *doc;
-  DeleteType type;
-  KWPage *page;
+	KWGroupManager *grpMgr;
+	KWordDocument *doc;
+	DeleteType type;
+	KWPage *page;
 
 protected slots:
-  void doDelete();
+	void doDelete();
 
 };
 

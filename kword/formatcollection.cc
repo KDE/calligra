@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -15,6 +15,10 @@
 
 #include "formatcollection.h"
 #include "kword_doc.h"
+#include "font.h"
+
+#include <qcolor.h>
+#include <qfont.h>
 
 /******************************************************************/
 /* Class: KWFormatCollection                                      */
@@ -22,75 +26,75 @@
 
 /*================================================================*/
 KWFormatCollection::KWFormatCollection(KWordDocument *_doc)
-  : formats(1999,true,true)
+	: formats(1999,true,true)
 {
-  formats.setAutoDelete(true);
-  doc = _doc;
+	formats.setAutoDelete(true);
+	doc = _doc;
 }
 
 /*================================================================*/
 KWFormatCollection::~KWFormatCollection()
 {
-  formats.clear();
+	formats.clear();
 }
 
 /*================================================================*/
 KWFormat *KWFormatCollection::getFormat(const KWFormat &_format)
 {
-  QString key = generateKey(_format);
+	QString key = generateKey(_format);
 
-  KWFormat *format = findFormat(key);
-  if (format)
+	KWFormat *format = findFormat(key);
+	if (format)
     {
-      format->incRef();
-      return format;
+		format->incRef();
+		return format;
     }
-  else
-    return insertFormat(key,_format);
+	else
+		return insertFormat(key,_format);
 }
 
 /*================================================================*/
 void KWFormatCollection::removeFormat(KWFormat *_format)
 {
-  QString key = generateKey(*_format);
+	QString key = generateKey(*_format);
 
-  formats.remove(key);
+	formats.remove(key);
 }
 
 /*================================================================*/
 QString KWFormatCollection::generateKey(const KWFormat &_format)
 {
-  QString key;
+	QString key;
 
-  // Key: BIU-Fontname-Fontsize-red-gree-blue
-  // e.g. B**-Times-12-255-40-32
-  key.sprintf("%c%c%c-%s-%d-%d-%d-%d-%d",
-	      (_format.getWeight() == QFont::Bold ? 'B' : '*'),
-	      (_format.getItalic() == 1 ? 'I' : '*'),
-	      (_format.getUnderline() == 1 ? 'U' : '*'),
-	      _format.getUserFont()->getFontName().data(),
-	      _format.getPTFontSize(),_format.getColor().red(),
-	      _format.getColor().green(),_format.getColor().blue(),
-	      _format.getVertAlign());
+	// Key: BIU-Fontname-Fontsize-red-gree-blue
+	// e.g. B**-Times-12-255-40-32
+	key.sprintf("%c%c%c-%s-%d-%d-%d-%d-%d",
+				(_format.getWeight() == QFont::Bold ? 'B' : '*'),
+				(_format.getItalic() == 1 ? 'I' : '*'),
+				(_format.getUnderline() == 1 ? 'U' : '*'),
+				_format.getUserFont()->getFontName().data(),
+				_format.getPTFontSize(),_format.getColor().red(),
+				_format.getColor().green(),_format.getColor().blue(),
+				_format.getVertAlign());
 
-  return key;
+	return key;
 }
 
 /*================================================================*/
 KWFormat *KWFormatCollection::findFormat(QString _key)
 {
-  return formats.find(_key.data());
+	return formats.find(_key.data());
 }
 
 /*================================================================*/
 KWFormat *KWFormatCollection::insertFormat(QString _key,const KWFormat &_format)
 {
-  KWFormat *format = new KWFormat(doc,_format);
-  
-  formats.insert(_key.data(),format);
-  format->incRef();
+	KWFormat *format = new KWFormat(doc,_format);
 
-  return format;
+	formats.insert(_key.data(),format);
+	format->incRef();
+
+	return format;
 }
 
 

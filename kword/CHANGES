@@ -1183,3 +1183,9 @@ Reggie, 12.5.1999:
 - Fixed and improved Drag'n'Drop
 - Fixed a problem with blinking cursor
 - Implemented configuration class for advanced autocorrection
+
+Reggie, 14.5.1999:
+------------------
+- Big code cleanups:
+  - As my coding style was hard to read I started using a better one
+  - Fixed includes (Only really neccessary headers are included in the .h files)

@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -18,8 +18,8 @@
 /*================================================================*/
 QString makeRomanNumber(int n)
 {
-  return QString(RNThousands[(n / 1000)] +
-		 RNHundreds[(n / 100) % 10] +
-		 RNTens[(n / 10) % 10] +
-		 RNUnits[(n) % 10]);
+	return QString(RNThousands[(n / 1000)] +
+				   RNHundreds[(n / 100) % 10] +
+				   RNTens[(n / 10) % 10] +
+				   RNUnits[(n) % 10]);
 }

@@ -33,54 +33,54 @@ class KWString;
 class KWAutoFormatEntry
 {
 public:
-  KWAutoFormatEntry();
+	KWAutoFormatEntry();
 
-  void setFind(const QString &str);
-  void setReplace(const QString &str);
-  void setCheckFamily(bool b);
-  void setCheckColor(bool b);
-  void setCheckSize(bool b);
-  void setCheckBold(bool b);
-  void setCheckItalic(bool b);
-  void setCheckUnderline(bool b);
-  void setCheckVertAlign(bool b);
-  void setFamily(const QString &str);
-  void setColor(const QColor &c);
-  void setSize(int size);
-  void setBold(bool b);
-  void setItalic(bool b);
-  void setUnderline(bool b);
-  void setVertAlign(KWFormat::VertAlign va);
-  
-  
-  QString getFind();
-  QString getReplace();
-  bool getCheckFamily();
-  bool getCheckColor();
-  bool getCheckSize();
-  bool getCheckBold();
-  bool getCheckItalic();
-  bool getCheckUnderline();
-  bool getCheckVertAlign();
-  QString getFamily();
-  QColor getColor();
-  int getSize();
-  bool getBold();
-  bool getItalic();
-  bool getUnderline();
-  bool getVertAlign();
+	void setFind(const QString &str);
+	void setReplace(const QString &str);
+	void setCheckFamily(bool b);
+	void setCheckColor(bool b);
+	void setCheckSize(bool b);
+	void setCheckBold(bool b);
+	void setCheckItalic(bool b);
+	void setCheckUnderline(bool b);
+	void setCheckVertAlign(bool b);
+	void setFamily(const QString &str);
+	void setColor(const QColor &c);
+	void setSize(int size);
+	void setBold(bool b);
+	void setItalic(bool b);
+	void setUnderline(bool b);
+	void setVertAlign(KWFormat::VertAlign va);
 
-  bool isValid()
-  { return !find.isEmpty() && !replace.isEmpty(); }
-  
+
+	QString getFind();
+	QString getReplace();
+	bool getCheckFamily();
+	bool getCheckColor();
+	bool getCheckSize();
+	bool getCheckBold();
+	bool getCheckItalic();
+	bool getCheckUnderline();
+	bool getCheckVertAlign();
+	QString getFamily();
+	QColor getColor();
+	int getSize();
+	bool getBold();
+	bool getItalic();
+	bool getUnderline();
+	bool getVertAlign();
+
+	bool isValid()
+	{ return !find.isEmpty() && !replace.isEmpty(); }
+
 protected:
-  QString find,replace;
-  bool checkFamily,checkColor,checkSize,checkBold,checkItalic,checkUnderline,checkVertAlign;
-  QString family;
-  QColor color;
-  int size;
-  bool bold,italic,underline;
-  KWFormat::VertAlign vertAlign;
+	QString find,replace;
+	bool checkFamily,checkColor,checkSize,checkBold,checkItalic,checkUnderline,checkVertAlign;
+	QString family;
+	QColor color;
+	int size;
+	bool bold,italic,underline;
+	KWFormat::VertAlign vertAlign;
 
 };
 
@@ -91,56 +91,56 @@ protected:
 class KWAutoFormat
 {
 public:
-  struct TypographicQuotes
-  {
-    TypographicQuotes() : begin('»'), end('«'), replace(true)
-    {}
+	struct TypographicQuotes
+	{
+		TypographicQuotes() : begin('»'), end('«'), replace(true)
+		{}
 
-    QChar begin,end;
-    bool replace;
-  };
+		QChar begin,end;
+		bool replace;
+	};
 
-  enum AutoformatType {AT_TypographicQuotes,AT_UpperCase,AT_UpperUpper};
+	enum AutoformatType {AT_TypographicQuotes,AT_UpperCase,AT_UpperUpper};
 
-  struct AutoformatInfo
-  {
-    QChar c;
-    AutoformatType type;
-  };
+	struct AutoformatInfo
+	{
+		QChar c;
+		AutoformatType type;
+	};
 
-  KWAutoFormat(KWordDocument *_doc);
+	KWAutoFormat(KWordDocument *_doc);
 
-  void startAutoFormat(KWParag *parag,KWFormatContext *fc);
-  bool doAutoFormat(KWParag *parag,KWFormatContext *fc);
-  void endAutoFormat(KWParag *parag,KWFormatContext *fc);
-  bool doTypographicQuotes(KWParag *parag,KWFormatContext *fc);
-  bool doUpperCase(KWParag *parag,KWFormatContext *fc);
+	void startAutoFormat(KWParag *parag,KWFormatContext *fc);
+	bool doAutoFormat(KWParag *parag,KWFormatContext *fc);
+	void endAutoFormat(KWParag *parag,KWFormatContext *fc);
+	bool doTypographicQuotes(KWParag *parag,KWFormatContext *fc);
+	bool doUpperCase(KWParag *parag,KWFormatContext *fc);
 
-  void setEnabled(bool e) { enabled = e; }
-  bool isEnabled() { return enabled; }
+	void setEnabled(bool e) { enabled = e; }
+	bool isEnabled() { return enabled; }
 
-  void configTypographicQuotes(TypographicQuotes _tq);
-  void configUpperCase(bool _uc);
-  void configUpperUpper(bool _uu);
+	void configTypographicQuotes(TypographicQuotes _tq);
+	void configUpperCase(bool _uc);
+	void configUpperUpper(bool _uu);
 
-  TypographicQuotes getConfigTypographicQuotes()
-  { return typographicQuotes; }
-  bool getConfigUpperCase()
-  { return convertUpperCase; }
-  bool getConfigUpperUpper()
-  { return convertUpperUpper; }
+	TypographicQuotes getConfigTypographicQuotes()
+	{ return typographicQuotes; }
+	bool getConfigUpperCase()
+	{ return convertUpperCase; }
+	bool getConfigUpperUpper()
+	{ return convertUpperUpper; }
 
-  static bool isUpper(const QChar &c);
-  static bool isLower(const QChar &c);
-  static bool isMark(const QChar &c);
+	static bool isUpper(const QChar &c);
+	static bool isLower(const QChar &c);
+	static bool isMark(const QChar &c);
 
 protected:
-  KWordDocument *doc;
-  TypographicQuotes typographicQuotes;
-  bool enabled;
-  KWString *tmpBuffer;
-  bool lastWasDotSpace,convertUpperCase;
-  bool lastWasUpper,convertUpperUpper;
+	KWordDocument *doc;
+	TypographicQuotes typographicQuotes;
+	bool enabled;
+	KWString *tmpBuffer;
+	bool lastWasDotSpace,convertUpperCase;
+	bool lastWasUpper,convertUpperUpper;
 
 };
 

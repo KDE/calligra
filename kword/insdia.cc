@@ -16,10 +16,22 @@
 #include "kword_doc.h"
 #include "frame.h"
 #include "kword_page.h"
-
 #include "insdia.h"
-#include <klocale.h>
 #include "insdia.moc"
+
+#include <klocale.h>
+
+#include <qwidget.h>
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qstring.h>
+#include <qevent.h>
+#include <qspinbox.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
+#include <qpainter.h>
+
+#include <stdlib.h>
 
 /******************************************************************/
 /* Class: KWInsertDia                                             */
@@ -27,105 +39,105 @@
 
 /*================================================================*/
 KWInsertDia::KWInsertDia(QWidget *parent,const char *name,KWGroupManager *_grpMgr,KWordDocument *_doc,InsertType _type,KWPage *_page)
-  : QTabDialog(parent,name,true)
+	: QTabDialog(parent,name,true)
 {
-  type = _type;
-  grpMgr = _grpMgr;
-  doc = _doc;
-  page = _page;
+	type = _type;
+	grpMgr = _grpMgr;
+	doc = _doc;
+	page = _page;
 
-  setupTab1();
+	setupTab1();
 
-  setCancelButton(i18n("Cancel"));
-  setOkButton(i18n("OK"));
+	setCancelButton(i18n("Cancel"));
+	setOkButton(i18n("OK"));
 
-  resize(300,250);
+	resize(300,250);
 }
 
 /*================================================================*/
 void KWInsertDia::setupTab1()
 {
-  tab1 = new QWidget(this);
+	tab1 = new QWidget(this);
 
-  grid1 = new QGridLayout(tab1,3,1,15,7);
+	grid1 = new QGridLayout(tab1,3,1,15,7);
 
-  QButtonGroup *grp = new QButtonGroup(type == ROW ? i18n("Insert new Row") : i18n("Insert New Column"),tab1);
-  grp->setExclusive(true);
+	QButtonGroup *grp = new QButtonGroup(type == ROW ? i18n("Insert new Row") : i18n("Insert New Column"),tab1);
+	grp->setExclusive(true);
 
-  grid2 = new QGridLayout(grp,3,1,7,7);
+	grid2 = new QGridLayout(grp,3,1,7,7);
 
-  rBefore = new QRadioButton(i18n("Before"),grp);
-  rBefore->resize(rBefore->sizeHint());
-  grp->insert(rBefore);
-  grid2->addWidget(rBefore,1,0);
+	rBefore = new QRadioButton(i18n("Before"),grp);
+	rBefore->resize(rBefore->sizeHint());
+	grp->insert(rBefore);
+	grid2->addWidget(rBefore,1,0);
 
-  rAfter = new QRadioButton(i18n("After"),grp);
-  rAfter->resize(rAfter->sizeHint());
-  grp->insert(rAfter);
-  grid2->addWidget(rAfter,2,0);
-  rAfter->setChecked(true);
+	rAfter = new QRadioButton(i18n("After"),grp);
+	rAfter->resize(rAfter->sizeHint());
+	grp->insert(rAfter);
+	grid2->addWidget(rAfter,2,0);
+	rAfter->setChecked(true);
 
-  grid2->addRowSpacing(0,7);
-  grid2->addRowSpacing(1,rBefore->height());
-  grid2->addRowSpacing(2,rAfter->height());
-  grid2->setRowStretch(0,0);
-  grid2->setRowStretch(1,0);
-  grid2->setRowStretch(1,0);
+	grid2->addRowSpacing(0,7);
+	grid2->addRowSpacing(1,rBefore->height());
+	grid2->addRowSpacing(2,rAfter->height());
+	grid2->setRowStretch(0,0);
+	grid2->setRowStretch(1,0);
+	grid2->setRowStretch(1,0);
 
-  grid2->addColSpacing(0,rBefore->width());
-  grid2->addColSpacing(0,rAfter->width());
-  grid2->setColStretch(0,1);
+	grid2->addColSpacing(0,rBefore->width());
+	grid2->addColSpacing(0,rAfter->width());
+	grid2->setColStretch(0,1);
 
-  grid2->activate();
+	grid2->activate();
 
-  grid1->addWidget(grp,0,0);
+	grid1->addWidget(grp,0,0);
 
-  rc = new QLabel(type == ROW ? i18n("Row:") : i18n("Column:"),tab1);
-  rc->resize(rc->sizeHint());
-  rc->setAlignment(AlignLeft | AlignBottom);
-  grid1->addWidget(rc,1,0);
+	rc = new QLabel(type == ROW ? i18n("Row:") : i18n("Column:"),tab1);
+	rc->resize(rc->sizeHint());
+	rc->setAlignment(AlignLeft | AlignBottom);
+	grid1->addWidget(rc,1,0);
 
-  value = new QSpinBox(1,type == ROW ? grpMgr->getRows() : grpMgr->getCols(),1,tab1);
-  value->resize(value->sizeHint());
-  value->setValue(type == ROW ? grpMgr->getRows() : grpMgr->getCols());
-  grid1->addWidget(value,2,0);
+	value = new QSpinBox(1,type == ROW ? grpMgr->getRows() : grpMgr->getCols(),1,tab1);
+	value->resize(value->sizeHint());
+	value->setValue(type == ROW ? grpMgr->getRows() : grpMgr->getCols());
+	grid1->addWidget(value,2,0);
 
-  grid1->addRowSpacing(0,grp->height());
-  grid1->addRowSpacing(1,rc->height());
-  grid1->addRowSpacing(2,value->height());
-  grid1->setRowStretch(0,0);
-  grid1->setRowStretch(1,1);
-  grid1->setRowStretch(2,0);
+	grid1->addRowSpacing(0,grp->height());
+	grid1->addRowSpacing(1,rc->height());
+	grid1->addRowSpacing(2,value->height());
+	grid1->setRowStretch(0,0);
+	grid1->setRowStretch(1,1);
+	grid1->setRowStretch(2,0);
 
-  grid1->addColSpacing(0,grp->width());
-  grid1->addColSpacing(0,rc->width());
-  grid1->addColSpacing(0,value->width());
-  grid1->setColStretch(0,1);
+	grid1->addColSpacing(0,grp->width());
+	grid1->addColSpacing(0,rc->width());
+	grid1->addColSpacing(0,value->width());
+	grid1->setColStretch(0,1);
 
-  grid1->activate();
+	grid1->activate();
 
-  addTab(tab1,type == ROW ? i18n("Insert Row") : i18n("Insert Column"));
+	addTab(tab1,type == ROW ? i18n("Insert Row") : i18n("Insert Column"));
 
-  connect(this,SIGNAL(applyButtonPressed()),this,SLOT(doInsert()));
+	connect(this,SIGNAL(applyButtonPressed()),this,SLOT(doInsert()));
 
-  resize(minimumSize());
+	resize(minimumSize());
 }
 
 /*================================================================*/
 void KWInsertDia::doInsert()
 {
-  QPainter p;
-  p.begin(page);
+	QPainter p;
+	p.begin(page);
 
-  if (type == ROW)
-    grpMgr->insertRow(value->value() - (rBefore->isChecked() ? 1 : 0),p);
-  else
-    grpMgr->insertCol(value->value() - (rBefore->isChecked() ? 1 : 0));
+	if (type == ROW)
+		grpMgr->insertRow(value->value() - (rBefore->isChecked() ? 1 : 0),p);
+	else
+		grpMgr->insertCol(value->value() - (rBefore->isChecked() ? 1 : 0));
 
-  p.end();
+	p.end();
 
-  doc->recalcFrames();
-  doc->updateAllFrames();
-  doc->updateAllViews(0L);
-  page->recalcCursor();
+	doc->recalcFrames();
+	doc->updateAllFrames();
+	doc->updateAllViews(0L);
+	page->recalcCursor();
 }

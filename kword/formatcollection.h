@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -19,9 +19,7 @@
 #include "format.h"
 
 #include <qdict.h>
-#include <qfont.h>
 #include <qstring.h>
-#include <qcolor.h>
 
 class KWordDocument;
 
@@ -32,22 +30,22 @@ class KWordDocument;
 class KWFormatCollection
 {
 public:
-  KWFormatCollection(KWordDocument *_doc);
-  ~KWFormatCollection();
+	KWFormatCollection(KWordDocument *_doc);
+	~KWFormatCollection();
 
-  KWFormat *getFormat(const KWFormat &_format);
-  void removeFormat(KWFormat *_format);
+	KWFormat *getFormat(const KWFormat &_format);
+	void removeFormat(KWFormat *_format);
 
-  QString generateKey(KWFormat *_format)
+	QString generateKey(KWFormat *_format)
     { return generateKey(*_format); }
-  
-protected:
-  QString generateKey(const KWFormat &_format);
-  KWFormat *findFormat(QString _key);
-  KWFormat *insertFormat(QString _key,const KWFormat &_format);
 
-  QDict<KWFormat> formats;
-  KWordDocument *doc;
+protected:
+	QString generateKey(const KWFormat &_format);
+	KWFormat *findFormat(QString _key);
+	KWFormat *insertFormat(QString _key,const KWFormat &_format);
+
+	QDict<KWFormat> formats;
+	KWordDocument *doc;
 };
 
 #endif

@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -19,9 +19,8 @@
 #include "image.h"
 
 #include <qdict.h>
-#include <qfont.h>
 #include <qstring.h>
-#include <qcolor.h>
+
 #include <ksize.h>
 
 class KWordDocument;
@@ -33,26 +32,26 @@ class KWordDocument;
 class KWImageCollection
 {
 public:
-  KWImageCollection(KWordDocument *_doc);
-  ~KWImageCollection();
+	KWImageCollection(KWordDocument *_doc);
+	~KWImageCollection();
 
-  KWImage *getImage(KWImage &_image,QString &key);
-  KWImage *getImage(KWImage &_image,QString &key,KSize _imgSize);
-  void removeImage(KWImage *_image);
+	KWImage *getImage(KWImage &_image,QString &key);
+	KWImage *getImage(KWImage &_image,QString &key,KSize _imgSize);
+	void removeImage(KWImage *_image);
 
-  QString generateKey(KWImage *_image)
+	QString generateKey(KWImage *_image)
     { return generateKey(*_image); }
-  
-  KWImage *findImage(QString _key);
+
+	KWImage *findImage(QString _key);
 
 protected:
-  QString generateKey(KWImage &_image);
-  QString generateKey(KWImage &_image,KSize _imgSize);
-  KWImage *insertImage(QString _key,KWImage &_format);
-  KWImage *insertImage(QString _key,KWImage &_format,KSize _imgSize);
+	QString generateKey(KWImage &_image);
+	QString generateKey(KWImage &_image,KSize _imgSize);
+	KWImage *insertImage(QString _key,KWImage &_format);
+	KWImage *insertImage(QString _key,KWImage &_format,KSize _imgSize);
 
-  QDict<KWImage> images;
-  KWordDocument *doc;
+	QDict<KWImage> images;
+	KWordDocument *doc;
 
 };
 

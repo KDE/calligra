@@ -13,67 +13,90 @@
 #include "kcharselectdia.h"
 #include "kcharselectdia.moc"
 
+#include <qpushbutton.h>
+#include <qlayout.h>
+#include <qstrlist.h>
+#include <qlist.h>
+
+#include <kbuttonbox.h>
+#include <kapp.h>
+#include <kcharselect.h>
+
+#include <stdio.h>
+
 /******************************************************************/
 /* class KCharSelectDia                                           */
 /******************************************************************/
 
 /*================================================================*/
 KCharSelectDia::KCharSelectDia(QWidget *parent,const char *name,const QChar &_chr,const QString &_font,bool _enableFont)
-  : QDialog(parent,name,true)
+	: QDialog(parent,name,true)
 {
-  setCaption("Select a character");
+	setCaption("Select a character");
 
-  grid = new QGridLayout(this,3,1,15,7);
+	grid = new QGridLayout(this,3,1,15,7);
 
-  charSelect = new KCharSelect(this,"",_font,_chr);
-  charSelect->resize(charSelect->sizeHint());
-  charSelect->enableFontCombo(_enableFont);
-  grid->addWidget(charSelect,0,0);
+	charSelect = new KCharSelect(this,"",_font,_chr);
+	charSelect->resize(charSelect->sizeHint());
+	charSelect->enableFontCombo(_enableFont);
+	grid->addWidget(charSelect,0,0);
 
-  grid->addWidget(new QWidget(this),1,0);
+	grid->addWidget(new QWidget(this),1,0);
 
-  bbox = new KButtonBox(this,KButtonBox::HORIZONTAL,7);
-  bbox->addStretch(20);
-  bOk = bbox->addButton("OK");
-  bOk->setAutoRepeat(false);
-  bOk->setAutoResize(false);
-  bOk->setAutoDefault(true);
-  bOk->setDefault(true);
-  connect(bOk,SIGNAL(clicked()),SLOT(accept()));
-  bCancel = bbox->addButton("Cancel");
-  connect(bCancel,SIGNAL(clicked()),SLOT(reject()));
-  bbox->layout();
-  grid->addWidget(bbox,2,0);
+	bbox = new KButtonBox(this,KButtonBox::HORIZONTAL,7);
+	bbox->addStretch(20);
+	bOk = bbox->addButton("OK");
+	bOk->setAutoRepeat(false);
+	bOk->setAutoResize(false);
+	bOk->setAutoDefault(true);
+	bOk->setDefault(true);
+	connect(bOk,SIGNAL(clicked()),SLOT(accept()));
+	bCancel = bbox->addButton("Cancel");
+	connect(bCancel,SIGNAL(clicked()),SLOT(reject()));
+	bbox->layout();
+	grid->addWidget(bbox,2,0);
 
-  grid->addColSpacing(0,charSelect->width());
+	grid->addColSpacing(0,charSelect->width());
 
-  grid->addRowSpacing(0,charSelect->height());
-  grid->addRowSpacing(1,0);
-  grid->addRowSpacing(2,bCancel->height());
-  grid->setRowStretch(0,0);
-  grid->setRowStretch(1,1);
-  grid->setRowStretch(2,0);
+	grid->addRowSpacing(0,charSelect->height());
+	grid->addRowSpacing(1,0);
+	grid->addRowSpacing(2,bCancel->height());
+	grid->setRowStretch(0,0);
+	grid->setRowStretch(1,1);
+	grid->setRowStretch(2,0);
 
-  grid->activate();
+	grid->activate();
 
-  charSelect->setFocus();
+	charSelect->setFocus();
 }
 
 /*================================================================*/
 bool KCharSelectDia::selectChar(QString &_font,QChar &_chr,bool _enableFont)
 {
-  bool res = false;
+	bool res = false;
 
-  KCharSelectDia *dlg = new KCharSelectDia(0L,"Select Character",_chr,_font,_enableFont);
-  
-  if (dlg->exec() == QDialog::Accepted)
+	KCharSelectDia *dlg = new KCharSelectDia(0L,"Select Character",_chr,_font,_enableFont);
+
+	if (dlg->exec() == QDialog::Accepted)
     {
-      _font = dlg->font();
-      _chr = dlg->chr();
-      res = true;
+		_font = dlg->font();
+		_chr = dlg->chr();
+		res = true;
     }
 
-  delete dlg;
+	delete dlg;
 
-  return res;
+	return res;
+}
+
+/*================================================================*/
+QChar KCharSelectDia::chr() 
+{ 
+	return charSelect->chr(); 
+}
+
+/*================================================================*/
+QString KCharSelectDia::font() 
+{ 
+	return charSelect->font(); 
 }

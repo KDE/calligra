@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -18,23 +18,19 @@
 
 #include <koApplication.h>
 
-#include "kword_doc.h"
-#include "kword_shell.h"
-#include "formats.h"
-
 /******************************************************************/
 /* Class: KWordApp                                                */
 /******************************************************************/
 
 class KWordApp : public KoApplication
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
-  KWordApp(int &argc,char** argv);
-  ~KWordApp();
-  
-  virtual void start();
+	KWordApp(int &argc,char** argv);
+	~KWordApp();
+
+	virtual void start();
 };
 
 #endif
