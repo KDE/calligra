@@ -54,7 +54,7 @@
 #include "stdwidgetfactory.h"
 
 // Some widgets subclass to allow event filtering and some other things
-MyPicLabel::MyPicLabel(const QPixmap &pix, QWidget *parent, const char *name)
+KexiPictureLabel::KexiPictureLabel(const QPixmap &pix, QWidget *parent, const char *name)
  : QLabel(parent, name)
 {
 	setPixmap(pix);
@@ -62,7 +62,7 @@ MyPicLabel::MyPicLabel(const QPixmap &pix, QWidget *parent, const char *name)
 }
 
 bool
-MyPicLabel::setProperty(const char *name, const QVariant &value)
+KexiPictureLabel::setProperty(const char *name, const QVariant &value)
 {
 	if(QString(name) == "pixmap")
 		resize(value.toPixmap().height(), value.toPixmap().width());
@@ -131,11 +131,11 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 
 	KFormDesigner::WidgetInfo *wPixLabel = new KFormDesigner::WidgetInfo(this);
 	wPixLabel->setPixmap("pixmaplabel");
-	wPixLabel->setClassName("MyPicLabel");
+	wPixLabel->setClassName("KexiPictureLabel");
 	wPixLabel->setName(i18n("Picture Label"));
 	wPixLabel->addAlternateClassName("QLabel");
-	wPixLabel->setSavingName("MyPicLabel");
-	wPixLabel->setNamePrefix(i18n("Widget name (see above)", "MyPicLabel"));
+	wPixLabel->setSavingName("KexiPictureLabel");
+	wPixLabel->setNamePrefix(i18n("Widget name (see above)", "PictureLabel"));
 	wPixLabel->setDescription(i18n("A widget to display pixmaps"));
 	m_classes.append(wPixLabel);
 
@@ -304,8 +304,8 @@ StdWidgetFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 
 	if(c == "QLabel")
 		w = new QLabel(/*i18n("Label")*/text, p, n);
-	else if(c == "MyPicLabel")
-		w = new MyPicLabel(DesktopIcon("image"), p, n);
+	else if(c == "KexiPictureLabel")
+		w = new KexiPictureLabel(DesktopIcon("image"), p, n);
 
 	else if(c == "KLineEdit")
 	{
@@ -755,7 +755,7 @@ StdWidgetFactory::showProperty(const QString &classname, QWidget *, const QStrin
 	{
 		return Spring::showProperty(property);
 	}
-	else if(classname == "MyPicLabel")
+	else if(classname == "KexiPictureLabel")
 	{
 		if((property == "text") || (property == "indent") || (property == "textFormat") || (property == "font") || (property == "alignment"))
 			return false;
@@ -782,7 +782,7 @@ StdWidgetFactory::autoSaveProperties(const QString &classname)
 		l << "text";
 	if(classname == "KPushButton")
 		l << "text";
-	else if(classname == "MyPicLabel")
+	else if(classname == "KexiPictureLabel")
 		l << "pixmap";
 	else if(classname == "KComboBox")
 		l << "list_items";

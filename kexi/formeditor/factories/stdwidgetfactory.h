@@ -25,13 +25,13 @@
 #include "widgetfactory.h"
 #include "container.h"
 
-class KFORMEDITOR_EXPORT MyPicLabel : public QLabel
+class KFORMEDITOR_EXPORT KexiPictureLabel : public QLabel
 {
 	Q_OBJECT
 
 	public:
-		MyPicLabel(const QPixmap &pix, QWidget *parent, const char *name);
-		~MyPicLabel(){;}
+		KexiPictureLabel(const QPixmap &pix, QWidget *parent, const char *name);
+		~KexiPictureLabel(){;}
 
 		virtual bool setProperty(const char *name, const QVariant &value);
 };
