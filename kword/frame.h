@@ -185,6 +185,7 @@ public:
   void setAutoCreateNewFrame(bool _auto) { autoCreateNewFrame = _auto; }
 
   void updateCounters();
+  void updateAllStyles();
 
 protected:
   virtual void init();

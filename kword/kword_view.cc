@@ -242,8 +242,10 @@ CORBA::Boolean KWordView::printDlg()
 }
 
 /*================================================================*/
-void KWordView::setFormat( KWFormat &_format, bool _check = true, bool _update_page = true )
+void KWordView::setFormat(KWFormat &_format,bool _check = true,bool _update_page = true)
 {
+  if (_check && _format == format) return;
+
   format = _format;
 
   if (_format.getUserFont()->getFontName())
@@ -636,11 +638,13 @@ void KWordView::extraStylist()
 {
   if (styleManager)
     {
+      QObject::disconnect(styleManager,SIGNAL(applyButtonPressed()),this,SLOT(styleManagerOk()));
       styleManager->close();
       delete styleManager;
       styleManager = 0;
     }
   styleManager = new KWStyleManager(0,m_pKWordDoc,fontList);
+  QObject::connect(styleManager,SIGNAL(applyButtonPressed()),this,SLOT(styleManagerOk()));
   styleManager->setCaption(i18n("KWord - Stylist"));
   styleManager->show();
 }
@@ -703,6 +707,8 @@ void KWordView::helpAboutKDE()
 void KWordView::textStyleSelected(const char *style)
 {
   gui->getPaperWidget()->applyStyle(style);
+  format = m_pKWordDoc->findParagLayout(style)->getFormat();
+  gui->getPaperWidget()->formatChanged(format);
 }
 
 /*======================= text size selected  ===================*/
@@ -717,7 +723,7 @@ void KWordView::textSizeSelected(const char *size)
 void KWordView::textFontSelected(const char *font)
 {
   tbFont.setFamily(font);
-  format.setUserFont(new KWUserFont(m_pKWordDoc,font));
+  format.setUserFont(m_pKWordDoc->findUserFont(font));
   gui->getPaperWidget()->formatChanged(format);
 }
 
@@ -1684,6 +1690,12 @@ void KWordView::paragDiaOk()
   gui->getPaperWidget()->setParagBottomBorder(paragDia->getBottomBorder());
   gui->getPaperWidget()->setCounter(paragDia->getCounter());
   setFlow(paragDia->getFlow());
+}
+
+/*================================================================*/
+void KWordView::styleManagerOk()
+{ 
+  m_pKWordDoc->updateAllStyles(); 
 }
 
 /*================================================================*/

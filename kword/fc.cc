@@ -928,7 +928,7 @@ void KWFormatContext::makeCounterLayout(QPainter &_painter)
   format.apply(parag->getParagLayout()->getFormat());
   if (parag->getParagLayout()->getCounterType() == KWParagLayout::CT_BULLET)
     format.setUserFont(document->findUserFont(parag->getParagLayout()->getBulletFont()));
-  KWDisplayFont *font = loadFont(document);
+  KWDisplayFont *font = format.loadFont(document);
   
   counterText = parag->getCounterText();
 

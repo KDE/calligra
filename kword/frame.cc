@@ -648,6 +648,20 @@ void KWTextFrameSet::updateCounters()
     }
 }
 
+/*================================================================*/
+void KWTextFrameSet::updateAllStyles()
+{
+  KWParag *p = parags;
+
+  while (p)
+    {
+      p->applyStyle(p->getParagLayout()->getName());
+      p = p->getNext();
+    }
+
+  updateCounters();
+}
+
 /******************************************************************/
 /* Class: KWPictureFrameSet                                       */
 /******************************************************************/

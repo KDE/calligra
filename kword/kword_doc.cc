@@ -80,7 +80,7 @@ KWordDocument::KWordDocument()
 
   m_bEmpty = true;
   applyStyleTemplate = 0;
-  applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY | U_COLOR | U_BORDER | U_INDENT | U_NUMBERING | U_ALIGN;
+  applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT | U_NUMBERING | U_ALIGN;
 }
 
 /*================================================================*/
@@ -286,12 +286,16 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   pageLayout.ptBottom = MM_TO_POINT(DEFAULT_BOTTOM_BORDER);  
   pageLayout.unit = PG_MM;
 
-  defaultUserFont = new KWUserFont(this,"times");
+  defaultUserFont = findUserFont("times");
   defaultParagLayout = new KWParagLayout(this);
   defaultParagLayout->setName("Standard");
   defaultParagLayout->setCounterType(KWParagLayout::CT_NONE);
   defaultParagLayout->setCounterDepth(0);
     
+  KWFormat f(this);
+  f.setUserFont(findUserFont("helvetica"));
+  f.setWeight(75);
+  f.setPTFontSize(24);
   KWParagLayout *lay = new KWParagLayout(this);
   lay->setName("Head 1");
   lay->setFollowingParagLayout("Standard");
@@ -300,7 +304,9 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   lay->setStartCounter("1");
   lay->setCounterRightText(".");
   lay->setNumberingType(KWParagLayout::NT_CHAPTER);
+  lay->setFormat(f);
 
+  f.setPTFontSize(16);
   lay = new KWParagLayout(this);
   lay->setName("Head 2");
   lay->setFollowingParagLayout("Standard");
@@ -309,7 +315,9 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   lay->setStartCounter("1");
   lay->setCounterRightText(".");
   lay->setNumberingType(KWParagLayout::NT_CHAPTER);
+  lay->setFormat(f);
 
+  f.setPTFontSize(12);
   lay = new KWParagLayout(this);
   lay->setName("Head 3");
   lay->setFollowingParagLayout("Standard");
@@ -318,6 +326,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   lay->setStartCounter("1");
   lay->setCounterRightText(".");
   lay->setNumberingType(KWParagLayout::NT_CHAPTER);
+  lay->setFormat(f);
 
   lay = new KWParagLayout(this);
   lay->setName("Enumerated List");
@@ -749,18 +758,19 @@ QPen KWordDocument::setBorderPen(KWParagLayout::Border _brd)
 /*================================================================*/
 KWUserFont* KWordDocument::findUserFont(QString _userfontname)
 {
-  KWUserFont* font;
+  KWUserFont* font = 0L;
   for (font = userFontList.first();font != 0L;font = userFontList.next())
     if (font->getFontName() == _userfontname)
       return font;
   
-  return 0L;
+  font = new KWUserFont(this,_userfontname);
+  return font;
 }
 
 /*================================================================*/
 KWDisplayFont* KWordDocument::findDisplayFont(KWUserFont* _font,unsigned int _size,int _weight,bool _italic,bool _underline)
 {
-  KWDisplayFont* font;
+  KWDisplayFont* font = 0L;
   for (font = displayFontList.first();font != 0L;font = displayFontList.next())
     {
       if (font->getUserFont() == _font && font->getPTSize() == _size &&
@@ -768,7 +778,8 @@ KWDisplayFont* KWordDocument::findDisplayFont(KWUserFont* _font,unsigned int _si
 	return font;
     }
   
-  return 0L;
+  font = new KWDisplayFont(this,_font,_size,_weight,_italic,_underline);
+  return font;
 }
 
 /*================================================================*/
@@ -1130,6 +1141,21 @@ void KWordDocument::drawAllBorders(QPainter *_painter = 0)
 	    }
 	}
     }
+}
+
+/*================================================================*/
+void KWordDocument::updateAllStyles()
+{
+  KWFrameSet *frameSet = 0L;
+
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      frameSet = getFrameSet(i);
+      if (frameSet->getFrameType() == FT_TEXT)
+	dynamic_cast<KWTextFrameSet*>(frameSet)->updateAllStyles();
+    }
+
+  updateAllViews(0L);
 }
 
 /*================================================================*/

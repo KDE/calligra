@@ -99,17 +99,16 @@ void KWFormat::setDefaults( KWordDocument *_doc )
 
 KWDisplayFont* KWFormat::loadFont( KWordDocument *_doc )
 {
-    KWDisplayFont *font = _doc->findDisplayFont( userFont, ptFontSize, weight, italic, underline );
-    if ( font )
-	return font;
+  KWDisplayFont *font = _doc->findDisplayFont( userFont, ptFontSize, weight, italic, underline );
+  return font;
 
-    KWUserFont* uf = userFont;
-    if ( !uf )
-      uf = _doc->getDefaultUserFont(); 
-    assert( uf );
+//     KWUserFont* uf = userFont;
+//     if ( !uf )
+//       uf = _doc->getDefaultUserFont(); 
+//     assert( uf );
     
-    font = new KWDisplayFont( _doc, uf, ptFontSize, weight, italic, underline );
-    return font;
+//     font = new KWDisplayFont( _doc, uf, ptFontSize, weight, italic, underline );
+//     return font;
 }
 
 void KWFormat::apply( KWFormat &_format )
@@ -213,8 +212,8 @@ void KWFormat::load(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument *_d
 	    {
 	      if ((*it).m_strName == "name")
 		{
-		  if (userFont) delete userFont;
-		  userFont = new KWUserFont(_doc,(*it).m_strValue.c_str());
+		  //if (userFont) delete userFont;
+		  userFont = _doc->findUserFont((*it).m_strValue.c_str());
 		}
 	    }
 	}

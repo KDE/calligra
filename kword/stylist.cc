@@ -91,8 +91,10 @@ void KWStyleManager::setupTab2()
 
   cFont = new QComboBox(false,tab2);
   cFont->insertItem(i18n("Don't update Fonts"));
-  cFont->insertItem(i18n("Update Font Families only"));
-  cFont->insertItem(i18n("Update Font Families and Attributes"));
+  cFont->insertItem(i18n("Update Font Families of same sized Fonts"));
+  cFont->insertItem(i18n("Update Font Families of all sized Fonts"));
+  cFont->insertItem(i18n("Update Font Families and Attributes of same sized Fonts"));
+  cFont->insertItem(i18n("Update Font Families and Attributes of all sized Fonts"));
   cFont->resize(cFont->sizeHint());
   grid2->addWidget(cFont,0,0);
 
@@ -147,10 +149,14 @@ void KWStyleManager::setupTab2()
 
   addTab(tab2,i18n("Update Configuration"));
 
-  if (doc->getApplyStyleTemplate() & KWordDocument::U_FONT_FAMILY)
+  if (doc->getApplyStyleTemplate() & KWordDocument::U_FONT_FAMILY_SAME_SIZE)
     cFont->setCurrentItem(1);
-  if (doc->getApplyStyleTemplate() & KWordDocument::U_FONT_ALL)
+  if (doc->getApplyStyleTemplate() & KWordDocument::U_FONT_FAMILY_ALL_SIZE)
     cFont->setCurrentItem(2);
+  if (doc->getApplyStyleTemplate() & KWordDocument::U_FONT_ALL_SAME_SIZE)
+    cFont->setCurrentItem(3);
+  if (doc->getApplyStyleTemplate() & KWordDocument::U_FONT_ALL_ALL_SIZE)
+    cFont->setCurrentItem(4);
   if (doc->getApplyStyleTemplate() & KWordDocument::U_COLOR)
     cColor->setCurrentItem(1);
   if (doc->getApplyStyleTemplate() & KWordDocument::U_INDENT)
@@ -183,9 +189,13 @@ void KWStyleManager::apply()
   int f = 0;
   
   if (cFont->currentItem() == 1)
-    f = f | KWordDocument::U_FONT_FAMILY;
+    f = f | KWordDocument::U_FONT_FAMILY_SAME_SIZE;
   else if (cFont->currentItem() == 2)
-    f = f | KWordDocument::U_FONT_ALL;
+    f = f | KWordDocument::U_FONT_FAMILY_ALL_SIZE;
+  else if (cFont->currentItem() == 3)
+    f = f | KWordDocument::U_FONT_ALL_SAME_SIZE;
+  else if (cFont->currentItem() == 4)
+    f = f | KWordDocument::U_FONT_ALL_ALL_SIZE;
 
   if (cColor->currentItem() == 1)
     f = f | KWordDocument::U_COLOR;
@@ -261,10 +271,11 @@ void KWStyleEditor::setupTab1()
   grid1 = new QGridLayout(tab1,3,1,15,7);
 
   nwid = new QWidget(tab1);
-  grid2 = new QGridLayout(nwid,1,2,15,7);
+  grid2 = new QGridLayout(nwid,3,2,15,7);
 
   lName = new QLabel(i18n("Name:"),nwid);
   lName->resize(lName->sizeHint());
+  lName->setAlignment(AlignRight | AlignVCenter);
   grid2->addWidget(lName,0,0);
 
   eName = new QLineEdit(nwid);
@@ -281,11 +292,35 @@ void KWStyleEditor::setupTab1()
       style->getName() == QString(i18n("Alphabetical List")))
     eName->setEnabled(false);
 
+  lFollowing = new QLabel(i18n("Following Style Template:"),nwid);
+  lFollowing->resize(lFollowing->sizeHint());
+  lFollowing->setAlignment(AlignRight | AlignVCenter);
+  grid2->addWidget(lFollowing,1,0);
+
+  cFollowing = new QComboBox(false,nwid);
+  for (unsigned int i = 0;i < doc->paragLayoutList.count();i++)
+    {
+      cFollowing->insertItem(doc->paragLayoutList.at(i)->getName());
+      if (doc->paragLayoutList.at(i)->getName() == style->getFollowingParagLayout())
+	cFollowing->setCurrentItem(i);
+    }
+  cFollowing->resize(cFollowing->sizeHint());
+  grid2->addWidget(cFollowing,1,1);
+  connect(cFollowing,SIGNAL(activated(const char*)),this,SLOT(fplChanged(const char*)));
+
   grid2->addRowSpacing(0,lName->height());
   grid2->addRowSpacing(0,eName->height());
+  grid2->addRowSpacing(1,lFollowing->height());
+  grid2->addRowSpacing(1,cFollowing->height());
+  grid2->setRowStretch(0,0);
+  grid2->setRowStretch(0,0);
+  grid2->setRowStretch(2,1);
 
   grid2->addColSpacing(0,lName->width());
+  grid2->addColSpacing(0,lFollowing->width());
   grid2->addColSpacing(1,eName->width());
+  grid2->addColSpacing(1,cFollowing->width());
+  grid2->setColStretch(0,0);
   grid2->setColStretch(1,1);
   
   grid2->activate();
@@ -341,7 +376,7 @@ void KWStyleEditor::changeFont()
 
   if (KFontDialog::getFont(f))
     {
-      style->getFormat().setUserFont(new KWUserFont(doc,f.family()));
+      style->getFormat().setUserFont(doc->findUserFont(f.family()));
       style->getFormat().setPTFontSize(f.pointSize());
       style->getFormat().setWeight(f.bold() ? 75 : 50);
       style->getFormat().setItalic(static_cast<int>(f.italic()));

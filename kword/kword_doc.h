@@ -93,13 +93,15 @@ public:
   virtual void cleanUp();
 
   enum ProcessingType {WP = 0,DTP = 1};
-  const int U_FONT_FAMILY = 1;
-  const int U_FONT_ALL = 2;
+  const int U_FONT_FAMILY_SAME_SIZE = 1;
+  const int U_FONT_ALL_SAME_SIZE = 2;
   const int U_COLOR = 4;
   const int U_INDENT = 8;
   const int U_BORDER = 16;
   const int U_ALIGN = 32;
   const int U_NUMBERING = 64;
+  const int U_FONT_FAMILY_ALL_SIZE = 128;
+  const int U_FONT_ALL_ALL_SIZE = 256;
   
 protected:
   virtual bool hasToWriteMultipart();
@@ -319,6 +321,8 @@ public:
 
   int getApplyStyleTemplate() { return applyStyleTemplate; }
   void setApplyStyleTemplate(int _f) { applyStyleTemplate = _f; }
+
+  void updateAllStyles();
 
 signals:
   void sig_imageModified();

@@ -172,6 +172,7 @@ public slots:
   void slotGeometryEnd( KoFrame*);
   void slotMoveEnd( KoFrame*);
   void paragDiaOk();
+  void styleManagerOk();
   void openPageLayoutDia()
     { formatPage(); }
   void newPageLayout(KoPageLayout _layout);

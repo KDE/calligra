@@ -114,8 +114,9 @@ protected:
   QPushButton *bFont,*bColor,*bSpacing,*bAlign,*bBorders,*bNumbering;
   KButtonBox *bButtonBox;
   KWStylePreview *preview;
-  QLabel *lName;
+  QLabel *lName,*lFollowing;
   QLineEdit *eName;
+  QComboBox *cFollowing;
 
   KWParagLayout *style,*ostyle;
   KWordDocument *doc;
@@ -134,6 +135,7 @@ protected slots:
   void changeNumbering();
   void paragDiaOk();
   void apply();
+  void fplChanged(const char* n) { style->setFollowingParagLayout(QString(n)); }
 
 };
 

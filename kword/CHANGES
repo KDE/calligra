@@ -380,3 +380,10 @@ Reggie, 22.11.1998:
 - Modifying style templates in the stylist works - but the text doesn't get updated at the moment (this will come)
   The style template stuff starts working now - there are still lots of bugs and problems in it on which I will
   work tomorrow.
+
+Reggie, 22.11.1998:
+-------------------
+- Fixed some code which produced memory leaks
+- The following style template (parag layout) can be defined
+- Applying/Updating style templates much works better now (but I have still to do some stuff here)
+- More internal work (esp. fixes) with style templates

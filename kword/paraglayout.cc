@@ -21,6 +21,7 @@ KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true)
     counter.counterLeftText = "";
     counter.counterRightText = "";
     followingParagLayout = "Standard";
+    name = "Standard";
     ptLineSpacing = 0;
     counter.startCounter = "0";
     counter.numberingType = NT_LIST;
@@ -86,6 +87,11 @@ void KWParagLayout::setFollowingParagLayout(QString _name)
   followingParagLayout = _name;
 }
 
+void KWParagLayout::setFormat(KWFormat &_f)
+{
+  format = _f;
+}
+
 void KWParagLayout::save(ostream &out)
 {
   out << indent << "<NAME value=\"" << name << "\"/>" << endl;
@@ -106,6 +112,9 @@ void KWParagLayout::save(ostream &out)
       << top.color.blue() << "\" style=\"" << static_cast<int>(top.style) << "\" width=\"" << top.ptWidth << "\"/>" << endl; 
   out << indent << "<BOTTOMBORDER red=\"" << bottom.color.red() << "\" green=\"" << bottom.color.green() << "\" blue=\""
       << bottom.color.blue() << "\" style=\"" << static_cast<int>(bottom.style) << "\" width=\"" << bottom.ptWidth << "\"/>" << endl; 
+  out << otag << "<FORMAT>" << endl;
+  format.save(out);
+  out << etag << "</FORMAT> " << endl;
 }
 
 void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
@@ -130,7 +139,7 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       // following parag layout
-      if (_name == "FOLLOWING")
+      else if (_name == "FOLLOWING")
 	{
 	  KOMLParser::parseTag(tag.c_str(),_name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -337,6 +346,16 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	      else if ((*it).m_strName == "width")
 		top.ptWidth = atoi((*it).m_strValue.c_str());
 	    }
+	}
+
+      else if (_name == "FORMAT")
+	{
+	  KOMLParser::parseTag(tag.c_str(),_name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	    }
+	  format.load(parser,lst,document);
 	}
 
       else
