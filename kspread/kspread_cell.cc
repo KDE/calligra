@@ -152,6 +152,7 @@ public:
     CellExtra* cellExtra;
     
     CellPrivate();
+    ~CellPrivate();
     
     CellExtra* extra();
 };
@@ -177,6 +178,11 @@ CellPrivate::CellPrivate()
   lstDependingOnMe.setAutoDelete( true );
   
   cellExtra = 0;
+}
+
+CellPrivate::~CellPrivate()
+{
+    delete cellExtra;
 }
 
 CellExtra* CellPrivate::extra()
