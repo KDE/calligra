@@ -527,7 +527,7 @@ void KoAutoFormatDia::setupTab3()
     m_pListView->addColumn( i18n( "Find" ) );
     m_pListView->addColumn( i18n( "Replace" ) );
     m_pListView->setAllColumnsShowFocus( true );
-    grid->addMultiCellWidget( m_pListView, 3, 3, 0, 5 );
+    grid->addMultiCellWidget( m_pListView, 4, 4, 0, 5 );
 
     connect(m_pListView, SIGNAL(doubleClicked ( QListViewItem * )),
              SLOT(slotEditEntry()) );
@@ -539,6 +539,10 @@ void KoAutoFormatDia::setupTab3()
 
     connect(pbRemove,SIGNAL(clicked()), SLOT(slotRemoveEntry()));
 
+    pbChangeFormat= new QPushButton( i18n( "Change Format" ), tab3 );
+    grid->addWidget( pbChangeFormat, 4, 6, Qt::AlignTop );
+
+    connect( pbChangeFormat, SIGNAL(clicked()), SLOT(slotChangeTextFormatEntry()));
     grid->setRowStretch( 2, 1 );
 
     pbRemove->setEnabled(false);
@@ -591,6 +595,10 @@ void KoAutoFormatDia::initTab4()
     twoUpperLetter->setAutoInclude( m_docAutoFormat->getConfigIncludeTwoUpperUpperLetterException() );
 }
 
+void KoAutoFormatDia::slotChangeTextFormatEntry()
+{
+    //todo
+}
 
 void KoAutoFormatDia::slotRemoveEntry()
 {
@@ -885,6 +893,23 @@ KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name,
     slotResetConf();
     setInitialSize( QSize( 500, 500 ) );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotResetConf()));
+    changeButtonStatus();
+}
+
+void KoCompletionDia::changeButtonStatus()
+{
+    bool state = cbAllowCompletion->isChecked();
+    cbAppendSpace->setEnabled( state );
+    cbAddCompletionWord->setEnabled( state );
+    pbRemoveCompletionEntry->setEnabled( state );
+    pbSaveCompletionEntry->setEnabled( state );
+    pbAddCompletionEntry->setEnabled( state );
+    m_lbListCompletion->setEnabled( state );
+    m_minWordLength->setEnabled( state );
+    m_maxNbWordCompletion->setEnabled( state );
+
+    state = state && (m_lbListCompletion->count()!=0 && !m_lbListCompletion->currentText().isEmpty());
+    pbRemoveCompletionEntry->setEnabled( state );
 }
 
 void KoCompletionDia::setup()
@@ -892,6 +917,7 @@ void KoCompletionDia::setup()
     QVBox *page = makeVBoxMainWidget();
     cbAllowCompletion = new QCheckBox( page );
     cbAllowCompletion->setText( i18n( "E&nable completion" ) );
+    connect(cbAllowCompletion, SIGNAL(toggled ( bool )), this, SLOT( changeButtonStatus()));
     // TODO whatsthis or text, to tell about the key to use for autocompletion....
     cbAddCompletionWord = new QCheckBox( page );
     cbAddCompletionWord->setText( i18n( "&Automatically add new words to completion list" ) );
@@ -937,6 +963,7 @@ void KoCompletionDia::slotResetConf()
     m_minWordLength->setValue ( m_docAutoFormat->getConfigMinWordLength() );
     m_maxNbWordCompletion->setValue ( m_docAutoFormat->getConfigNbMaxCompletionWord() );
     cbAppendSpace->setChecked( m_autoFormat.getConfigAppendSpace() );
+    changeButtonStatus();
 }
 
 void KoCompletionDia::slotSaveCompletionEntry()

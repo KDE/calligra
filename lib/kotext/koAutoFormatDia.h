@@ -116,7 +116,7 @@ protected:
                 *pbSpecialChar1, *pbSpecialChar2, *pbBulletStyle, *pbDefaultBulletStyle;
 
     QPushButton *pbSimpleQuote1, *pbSimpleQuote2, *pbSimpleDefault;
-
+    QPushButton *pbChangeFormat;
     KCharSelect *charselect;
     KoAutoFormatLineEdit *m_find, *m_replace;
     KListView *m_pListView;
@@ -155,7 +155,7 @@ protected slots:
     void slotAddEntry();
     void chooseBulletStyle();
     void defaultBulletStyle();
-
+    void slotChangeTextFormatEntry();
     void slotResetConf();
 
 };
@@ -174,10 +174,9 @@ protected slots:
     void slotAddCompletionEntry();
     void slotResetConf();
     bool applyConfig();
-
+    void changeButtonStatus();
 protected:
     void setup();
-
     KoAutoFormat m_autoFormat; // The copy we're working on
     KoAutoFormat * m_docAutoFormat; // Pointer to the real one (in KWDocument)
     QStringList m_listCompletion; // The copy of the completion items - don't use m_autoFormat.getCompletion()!
