@@ -219,10 +219,12 @@ public:
 
     KPTextObject *header() { return _header; }
     KPTextObject *footer() { return _footer; }
-    bool hasHeader() { return _hasHeader; }
-    bool hasFooter() { return _hasFooter; }
+    bool hasHeader()const { return _hasHeader; }
+    bool hasFooter()const { return _hasFooter; }
     void setHeader( bool b );
     void setFooter( bool b );
+
+    bool isHeaderFooter(const KPObject *obj)const;
 
     // Returns true if the slide pgNum (0 based)
     bool isSlideSelected( int pgNum) ;

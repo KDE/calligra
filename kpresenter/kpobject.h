@@ -39,6 +39,7 @@ class QDomDocumentFragment;
 class QDomDocument;
 class QDomElement;
 class KoZoomHandler;
+class KPresenterDoc;
 
 /******************************************************************/
 /* Class: KPObject                                                */
@@ -180,7 +181,7 @@ public:
 
     virtual bool contains( const KoPoint &_point,KoZoomHandler *_zoomHandler  ) const;
     virtual bool intersects( const KoRect & _rect,KoZoomHandler *_zoomHandler  ) const;
-    virtual QCursor getCursor( const KoPoint &_point, ModifyType &_modType, KoZoomHandler *_zoomHandler ) const;
+    virtual QCursor getCursor( const KoPoint &_point, ModifyType &_modType, KPresenterDoc *doc ) const;
 
     KoRect rotateRectObject(KoZoomHandler *_zoomHandler ) const;
     void rotateObject(QPainter *paint,KoZoomHandler *_zoomHandler);

@@ -37,6 +37,7 @@
 #include <koSize.h>
 #include <koPoint.h>
 #include <kdebug.h>
+#include "kpresenter_doc.h"
 
 /******************************************************************/
 /* Class: KPObject                                                */
@@ -392,7 +393,7 @@ bool KPObject::intersects( const KoRect &_rect,KoZoomHandler *_zoomHandler ) con
 }
 
 /*======================== get cursor ============================*/
-QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KoZoomHandler *_zoomHandler ) const
+QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPresenterDoc *doc ) const
 {
     double px = _point.x();
     double py = _point.y();
@@ -401,7 +402,8 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KoZoom
     double oy = orig.y();
     double ow = ext.width();
     double oh = ext.height();
-
+    bool headerFooter=doc->isHeaderFooter(this);
+    KoZoomHandler *_zoomHandler=doc->zoomHandler();
     KoRect r( ox, oy, ow, oh );
     if ( angle != 0.0 )
     {
@@ -467,7 +469,10 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KoZoom
         return Qt::sizeFDiagCursor;
     }
 
-    _modType = MT_MOVE;
+    //header footer can't move
+    if(!headerFooter)
+        _modType = MT_MOVE;
+
     return Qt::sizeAllCursor;
 }
 

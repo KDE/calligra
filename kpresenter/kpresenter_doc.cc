@@ -2215,4 +2215,9 @@ KPrPage * KPresenterDoc::stickyPage()
     return m_stickyPage;
 }
 
+bool KPresenterDoc::isHeaderFooter(const KPObject *obj) const
+{
+    return (obj==_header || obj==_footer);
+}
+
 #include <kpresenter_doc.moc>
