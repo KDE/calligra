@@ -1093,6 +1093,8 @@ void KWDeleteTableCommand::execute()
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();
+    doc->updateRulerFrameStartEnd();
+
 }
 
 void KWDeleteTableCommand::unexecute()
@@ -1104,6 +1106,7 @@ void KWDeleteTableCommand::unexecute()
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();
+    doc->updateRulerFrameStartEnd();
 }
 
 
