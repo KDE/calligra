@@ -219,6 +219,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_delete = new KAction( i18n("Delete"), 0, this, SLOT( deleteSelection() ), actionCollection(), "delete" );
     m_clear = new KAction( i18n("Clear"), 0, this, SLOT( clearSelection() ), actionCollection(), "clear" );
     m_adjust = new KAction( i18n("Adjust row and column"), 0, this, SLOT( adjust() ), actionCollection(), "adjust" );
+    m_default = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ), actionCollection(), "default" );
     m_undo = new KAction( i18n("Undo"), KSBarIcon("undo"), 0, this, SLOT( undo() ), actionCollection(), "undo" );
     m_redo = new KAction( i18n("Redo"), KSBarIcon("redo"), 0, this, SLOT( redo() ), actionCollection(), "redo" );
     m_paperLayout = new KAction( i18n("Paper Layout"), 0, this, SLOT( paperLayoutDlg() ), actionCollection(), "paperLayout" );
@@ -1811,7 +1812,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_delete->plug( m_pPopupMenu );
     m_clear->plug( m_pPopupMenu );
     m_adjust->plug( m_pPopupMenu );
-
+    m_default->plug( m_pPopupMenu );
     /* m_pPopupMenu->insertItem( i18n("Layout"), this, SLOT( layoutDlg() ) );
     m_pPopupMenu->insertItem( i18n("Copy"), this, SLOT( slotCopy() ) );
     m_pPopupMenu->insertItem( i18n("Cut"), this, SLOT( slotCut() ) );
@@ -1945,6 +1946,14 @@ void KSpreadView::clearSelection()
     m_pTable->clearSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 
     updateEditWidget();
+}
+
+void KSpreadView::defaultSelection()
+{
+  ASSERT( m_pTable );
+  m_pTable->defaultSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+
+  updateEditWidget();
 }
 
 void KSpreadView::slotInsert()

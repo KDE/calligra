@@ -154,6 +154,7 @@ public slots:
     void undo();
     void redo();
     void adjust();
+    void defaultSelection();
     void paperLayoutDlg();
     void insertObject();
     void editGlobalScripts();
@@ -409,6 +410,7 @@ private:
     KAction* m_autoSum;
     KToggleAction* m_showPageBorders;
     QActionMenu* m_scripts;
+    KAction* m_default;
     
     /**
      * Pointer to the last popup menu.

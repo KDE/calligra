@@ -279,9 +279,9 @@ int ColumnLayout::width( KSpreadCanvas *_canvas )
 
 QDomElement ColumnLayout::save( QDomDocument& doc )
 {
-  QDomElement col = doc.createElement( "col" );
+  QDomElement col = doc.createElement( "column" );
   col.setAttribute( "width", m_fWidth );
-  col.setAttribute( "col", m_iColumn );
+  col.setAttribute( "column", m_iColumn );
 
   return col;
 }
@@ -295,7 +295,7 @@ bool ColumnLayout::load( const QDomElement& col )
     if ( !ok ) return false;
   }
 
-  m_iColumn = col.attribute( "col" ).toInt( &ok );
+  m_iColumn = col.attribute( "column" ).toInt( &ok );
   if ( !ok ) return false;
 
   // Validation

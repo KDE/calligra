@@ -103,6 +103,7 @@ void KSpreadCell::copyLayout( int _column, int _row )
   KSpreadCell *o = m_pTable->cellAt( _column, _row );
 
   setAlign( o->align() );
+  setAlignY( o->alignY());
   setTextFont( o->textFont() );
   setTextColor( o->textColor() );
   setBgColor( o->bgColor( _column, _row) );
@@ -138,6 +139,7 @@ void KSpreadCell::copyAll( KSpreadCell *cell)
 
   setText(cell->text());
   setAlign( cell->align() );
+  setAlignY( cell->alignY());
   setTextFont( cell->textFont() );
   setTextColor( cell->textColor() );
   setBgColor( cell->bgColor( ) );
@@ -162,6 +164,39 @@ void KSpreadCell::copyAll( KSpreadCell *cell)
   setFloatColor( cell->floatColor() );
   setFaktor( cell->faktor() );
   setMultiRow( cell->multiRow() );
+
+}
+
+void KSpreadCell::defaultStyle()
+{
+  setBottomBorderStyle( Qt::NoPen );
+  setBottomBorderColor( Qt::black );
+  setBottomBorderWidth( 1 );
+  setRightBorderStyle( Qt::NoPen );
+  setRightBorderColor( Qt::black );
+  setRightBorderWidth( 1 );
+  setLeftBorderStyle( Qt::NoPen );
+  setLeftBorderColor( Qt::black );
+  setLeftBorderWidth( 1 );
+  setTopBorderStyle( Qt::NoPen );
+  setTopBorderColor( Qt::black );
+  setTopBorderWidth( 1 );
+  setFallDiagonalStyle( Qt::NoPen );
+  setFallDiagonalColor( Qt::black );
+  setFallDiagonalWidth( 1 );
+  setGoUpDiagonalStyle(Qt::NoPen );
+  setGoUpDiagonalColor( Qt::black );
+  setGoUpDiagonalWidth( 1 );
+  setAlign( KSpreadCell::Undefined );
+  setAlignY( KSpreadCell::Middle );
+  QFont font( "Times", 12 );
+  m_textFont = font;
+  setTextColor( Qt::black );
+  setBgColor( Qt::white );
+  setFaktor( 1 );
+  setPrecision( 0 );
+  setPostfix( "" );
+  setPrefix( "" );
 
 }
 

@@ -363,6 +363,7 @@ public:
     void cutSelection( const QPoint &_marker );
     void clearSelection(const QPoint &_marker );
     void paste( const QPoint &_marker, PasteMode=Normal, Operation=OverWrite );
+    void defaultSelection(const QPoint &_marker );
 
     bool replace( const QPoint &_marker,QString _find,QString _replace );
     void onlyRow( SortingOrder = Increase );

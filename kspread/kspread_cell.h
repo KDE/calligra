@@ -513,6 +513,8 @@ public:
      */
     bool makeFormular();
 
+
+    void defaultStyle();
 protected:
 
     /**
