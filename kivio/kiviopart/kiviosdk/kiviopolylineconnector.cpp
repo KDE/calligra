@@ -113,7 +113,37 @@ namespace Kivio {
       i++;
     }
     
+    KoPoint startVec = m_points[1] - m_points[0];
+    KoPoint endVec = m_points.last() - m_points[m_points.count() - 2];
+    double startLen = startVec.manhattanLength();
+    double endLen = endVec.manhattanLength();
+    
+    if(startLen) {
+      startVec.setX(startVec.x() / startLen);
+      startVec.setY(startVec.y() / startLen);
+      QPoint p = pa[0];
+      p.setX(p.x() + (startVec.x() * zoom->zoomItX(m_startArrow->cut())));
+      p.setY(p.y() + (startVec.y() * zoom->zoomItY(m_startArrow->cut())));
+    }
+
+    if(endLen) {
+      endVec.setX(endVec.x() / endLen);
+      endVec.setY(endVec.y() / endLen);
+      QPoint p = pa[m_points.count() - 1];
+      p.setX(p.x() + (endVec.x() * zoom->zoomItX(m_endArrow->cut())));
+      p.setY(p.y() + (endVec.y() * zoom->zoomItY(m_endArrow->cut())));
+    }
+        
     painter->drawPolyline(pa);
+    painter->setBGColor(m_pFillStyle->color());
+    
+    if(startLen) {
+      m_startArrow->paint(painter, m_points[0].x(), m_points[0].y(), -startVec.x(), -startVec.y(), zoom);
+    }
+    
+    if(endLen) {
+      m_endArrow->paint(painter, m_points.last().x(), m_points.last().y(), endVec.x(), endVec.y(), zoom);
+    }
   }
   
   void PolyLineConnector::paintOutline(KivioIntraStencilData* data)
