@@ -1059,7 +1059,7 @@ void KWSplitCellCommand::execute()
     kdDebug() << "KWSplitCellCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
-
+    kdDebug()<<"split Cell m_colBegin :"<<m_colBegin<<" m_colEnd :"<<m_colEnd<<" m_rowBegin :"<<m_rowBegin<<" m_colEnd :"<<m_colEnd<<endl;
     m_pTable->splitCell(m_rowEnd, m_colEnd,m_colBegin,m_rowBegin);
     doc->frameSelectedChanged();
     doc->updateAllFrames();
@@ -1072,9 +1072,11 @@ void KWSplitCellCommand::unexecute()
     kdDebug() << "KWSplitCellCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
-    //laurent
-    //m_colEnd =m_colEnd-1 value give by splitcelldialogbox
-    m_pTable->joinCells(m_colBegin,m_rowBegin,m_colEnd-1,m_rowEnd-1);
+
+    //kdDebug()<<"Join Cell m_colBegin :"<<m_colBegin<<" m_colEnd :"<<m_colBegin+m_colEnd-1<<" m_rowBegin :"<<m_rowBegin<<" m_rowEnd :"<<m_rowBegin+m_rowEnd-1<<endl;
+
+    m_pTable->joinCells(m_colBegin,m_rowBegin,m_colEnd+m_colBegin-1,m_rowBegin+m_rowEnd-1);
+
     doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
