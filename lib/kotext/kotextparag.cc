@@ -501,7 +501,7 @@ int KoTextParag::nextTab( int chnum, int x )
         int i = 0;
         while ( tArray[ i ] ) {
             //kdDebug() << "KoTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type " << m_layout.tabList()[i].type << endl;
-            if ( tArray[ i ] >= x ) {
+            if ( tArray[ i ] > x ) {
                 int type = m_layout.tabList()[i].type;
                 switch ( type ) {
                 case T_RIGHT:
