@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1999 - 2003 The KSpread Team
+                             www.koffice.org/kspread
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -579,24 +581,12 @@ void KSpreadSheet::fillSequence( QPtrList<KSpreadCell>& _srcList,
 
 double getDiff(KSpreadCell * cell1, KSpreadCell * cell2, AutoFillSequenceItem::Type type)
 {
-  if (type == AutoFillSequenceItem::FLOAT)
-  {
+  // note: date and time difference can be calculated as
+  // the difference of the serial number
+  if( (type == AutoFillSequenceItem::FLOAT) ||
+      (type == AutoFillSequenceItem::DATE) ||
+      (type == AutoFillSequenceItem::TIME) )
     return ( cell2->value().asFloat() - cell1->value().asFloat() );
-  }
-  else if (type == AutoFillSequenceItem::DATE)
-  {
-    QDate date1 = cell1->valueDate();
-    QDate date2 = cell2->valueDate();
-
-    return (double) date1.daysTo(date2);
-  }
-  else if (type == AutoFillSequenceItem::TIME)
-  {
-    QTime time1 = cell1->valueTime();
-    QTime time2 = cell2->valueTime();
-
-    return (double) time1.secsTo(time2);
-  }
   else
     return 0.0;
 }
@@ -626,29 +616,28 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
     KSpreadCell * cell = _srcList.first();
     KSpreadCell * cell2 = _srcList.next();
 
-    if ( cell->value().isNumber() )
-      type = AutoFillSequenceItem::FLOAT;
-    else if ( cell->isDate() )
+    if ( cell->isDate() )
       type = AutoFillSequenceItem::DATE;
     else if ( cell->isTime() )
       type = AutoFillSequenceItem::TIME;
+    else if ( cell->value().isNumber() )
+      type = AutoFillSequenceItem::FLOAT;
     else
       return false; // Cannot happen du to if condition
 
     while ( cell && cell2 )
     {
+
       // check if both cells contain the same type
-      if ( ( cell2->value().isNumber() && type != AutoFillSequenceItem::FLOAT )
+      if ( ( !cell2->value().isNumber() )
            || ( cell2->isDate() && type != AutoFillSequenceItem::DATE )
-           || ( cell2->isTime() && type != AutoFillSequenceItem::TIME )
-           || (!cell2->value().isNumber() && !cell2->isDate() && !cell2->isTime()) )
+           || ( cell2->isTime() && type != AutoFillSequenceItem::TIME ) )
       {
         count = 0;
         ok = false;
         break;
       }
 
-      // get a delta (days, seconds or just a diff)
       double delta = getDiff(cell, cell2, type);
 
       if (count < 1)
@@ -693,8 +682,6 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
     if (count > 0 && (tmpcount > 0 || count == 1))
     {
       double initDouble=0.0;
-      QDate  initDate;
-      QTime  initTime;
 
       KSpreadCell * dest;
       KSpreadCell * src;
@@ -705,30 +692,25 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
         dest = _destList.first();
         src  = _srcList.last();
 
-        if (type == AutoFillSequenceItem::FLOAT)
+        if( (type == AutoFillSequenceItem::FLOAT) ||
+            (type == AutoFillSequenceItem::DATE) ||
+            (type == AutoFillSequenceItem::TIME) )
           initDouble = src->value().asFloat();
-        else if (type == AutoFillSequenceItem::DATE)
-          initDate = src->valueDate();
-        else if (type == AutoFillSequenceItem::TIME)
-          initTime = src->valueTime();
       }
       else
       {
         dest = _destList.last();
         src  = _srcList.first();
 
-        if (type == AutoFillSequenceItem::FLOAT)
+        if( (type == AutoFillSequenceItem::FLOAT) ||
+            (type == AutoFillSequenceItem::DATE) ||
+            (type == AutoFillSequenceItem::TIME) )
           initDouble = src->value().asFloat();
-        else if (type == AutoFillSequenceItem::DATE)
-          initDate = src->valueDate();
-        else if (type == AutoFillSequenceItem::TIME)
-          initTime = src->valueTime();
 
         i   *= -1;
       }
 
       QString res;
-
       // copy all the data
       while (dest)
       {
@@ -743,7 +725,9 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
             i += count;
         }
 
-        if (type == AutoFillSequenceItem::FLOAT)
+        if( (type == AutoFillSequenceItem::FLOAT) ||
+            (type == AutoFillSequenceItem::DATE) ||
+            (type == AutoFillSequenceItem::TIME) )
         {
           if (down)
             initDouble += diff->at( i );
@@ -751,26 +735,6 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
             initDouble -= diff->at( i );
 
           res.sprintf("%f", initDouble );
-        }
-        else if (type == AutoFillSequenceItem::DATE)
-        {
-          int n = (int) diff->at( i );
-
-          if (!down)
-            n *= -1;
-
-          initDate = initDate.addDays( n );
-          res = initDate.toString("dd.MM.yyyy");
-        }
-        else if (type == AutoFillSequenceItem::TIME)
-        {
-          int n = (int) diff->at( i );
-
-          if (!down)
-            n *= -1;
-
-          initTime = initTime.addSecs( n );
-          res = initTime.toString();
         }
 
         dest->setCellText( res, true );
