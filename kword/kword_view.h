@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
-/* Version: 0.0.1                                                 */
-/* Author: Reginald Stadlbauer, Torben Weis                       */
-/* E-Mail: reggie@kde.org, weis@kde.org                           */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998	  */
+/* Version: 0.0.1						  */
+/* Author: Reginald Stadlbauer, Torben Weis			  */
+/* E-Mail: reggie@kde.org, weis@kde.org				  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: View (header)                                          */
+/* Module: View (header)					  */
 /******************************************************************/
 
 #ifndef kword_view_h
@@ -26,8 +26,6 @@
 #include <qbrush.h>
 #include <qstringlist.h>
 #include <qstrlist.h>
-
-#include <knewpanner.h>
 
 #include "kword.h"
 #include "format.h"
@@ -59,9 +57,10 @@ class KWTableDia;
 class KWDocStruct;
 class KSpell;
 class QScrollView;
+class QSplitter;
 
 /******************************************************************/
-/* Class: KWordFrame                                              */
+/* Class: KWordFrame						  */
 /******************************************************************/
 
 class KWordFrame : public KoFrame
@@ -83,12 +82,12 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWordView                                               */
+/* Class: KWordView						  */
 /******************************************************************/
 
 class KWordView : public QWidget,
-                  virtual public KoViewIf,
-                  virtual public KWord::KWordView_skel
+		  virtual public KoViewIf,
+		  virtual public KWord::KWordView_skel
 {
     Q_OBJECT
 
@@ -116,7 +115,6 @@ public:
     virtual void viewTableGrid();
     virtual void viewHeader();
     virtual void viewFooter();
-    virtual void viewDocStruct();
     virtual void viewFootNotes();
     virtual void viewEndNotes();
 
@@ -211,7 +209,7 @@ public:
     virtual void setFlow( KWParagLayout::Flow _flow );
     virtual void setLineSpacing( int _spc );
     virtual void setParagBorders( KWParagLayout::Border _left, KWParagLayout::Border _right,
-                                  KWParagLayout::Border _top, KWParagLayout::Border _bottom );
+				  KWParagLayout::Border _top, KWParagLayout::Border _bottom );
 
     KWordGUI *getGUI() { return gui; }
     void uncheckAllTools();
@@ -239,8 +237,7 @@ public slots:
     void slotMoveEnd( KoFrame* );
     void paragDiaOk();
     void styleManagerOk();
-    void openPageLayoutDia()
-    { formatPage(); }
+    void openPageLayoutDia()  { formatPage(); }
     void newPageLayout( KoPageLayout _layout );
     void spellCheckerReady();
     void spellCheckerMisspelling( char*, QStrList*, unsigned );
@@ -251,11 +248,11 @@ public slots:
     void clipboardDataChanged();
 
 protected:
-    // C++
+// C++
     virtual void init();
-    // IDL
+// IDL
     virtual bool event( const char* _event, const CORBA::Any& _value );
-    // C++
+// C++
     bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
     bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
 
@@ -282,7 +279,7 @@ protected:
 
     bool m_bUnderConstruction;
 
-    // edit menu
+// edit menu
     OpenPartsUI::Menu_var m_vMenuEdit;
     CORBA::Long m_idMenuEdit_Undo;
     CORBA::Long m_idMenuEdit_Redo;
@@ -294,7 +291,7 @@ protected:
     CORBA::Long m_idMenuEdit_DeleteFrame;
     CORBA::Long m_idMenuEdit_ReconnectFrame;
 
-    // view menu
+// view menu
     OpenPartsUI::Menu_var m_vMenuView;
     CORBA::Long m_idMenuView_NewView;
     CORBA::Long m_idMenuView_FormattingChars;
@@ -302,11 +299,10 @@ protected:
     CORBA::Long m_idMenuView_TableGrid;
     CORBA::Long m_idMenuView_Header;
     CORBA::Long m_idMenuView_Footer;
-    CORBA::Long m_idMenuView_DocStruct;
     CORBA::Long m_idMenuView_FootNotes;
     CORBA::Long m_idMenuView_EndNotes;
 
-    // insert menu
+// insert menu
     OpenPartsUI::Menu_var m_vMenuInsert;
     CORBA::Long m_idMenuInsert_Picture;
     CORBA::Long m_idMenuInsert_Clipart;
@@ -322,7 +318,7 @@ protected:
     CORBA::Long m_idMenuInsert_VariableOther;
     CORBA::Long m_idMenuInsert_FootNoteEndNote;
 
-    // format menu
+// format menu
     OpenPartsUI::Menu_var m_vMenuFormat;
     CORBA::Long m_idMenuFormat_Font;
     CORBA::Long m_idMenuFormat_Color;
@@ -332,14 +328,14 @@ protected:
     CORBA::Long m_idMenuFormat_Style;
     CORBA::Long m_idMenuFormat_FrameSet;
 
-    // extra menu
+// extra menu
     OpenPartsUI::Menu_var m_vMenuExtra;
     CORBA::Long m_idMenuExtra_Spelling;
     CORBA::Long m_idMenuExtra_AutoFormat;
     CORBA::Long m_idMenuExtra_Stylist;
     CORBA::Long m_idMenuExtra_Options;
 
-    // tools menu
+// tools menu
     OpenPartsUI::Menu_var m_vMenuTools;
     CORBA::Long m_idMenuTools_Edit;
     CORBA::Long m_idMenuTools_EditFrame;
@@ -521,25 +517,8 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWordGUI                                                */
+/* Class: KWordGUI						  */
 /******************************************************************/
-
-class KExtPanner : public KNewPanner
-{
-    Q_OBJECT
-
-public:
-    KExtPanner( QWidget *parent = 0, const char *name = 0, Orientation orient = Vertical, Units units = Percent, int pos = 50 )
-        : KNewPanner( parent, name, orient, units, pos ) {}
-
-protected:
-    void resizeEvent( QResizeEvent *e )
-    { KNewPanner::resizeEvent( e ); emit pannerResized(); }
-
-signals:
-    void pannerResized();
-
-};
 
 class KWordGUI : public QWidget
 {
@@ -568,8 +547,6 @@ public:
     KWDocStruct *getDocStruct()
     { return docStruct; }
 
-    void showDocStruct( bool __show );
-
     void keyEvent( QKeyEvent *e )
     { keyPressEvent( e ); }
 
@@ -595,7 +572,7 @@ protected:
     KWordView *view;
     KoTabChooser *tabChooser;
     KWDocStruct *docStruct;
-    KExtPanner *panner;
+    QSplitter *panner;
     QWidget *left;
     bool _showStruct;
 

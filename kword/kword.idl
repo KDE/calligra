@@ -18,14 +18,13 @@ module KWord
       slot void editFind();
       slot void editDeleteFrame();
       slot void editReconnectFrame();
-      
+
       slot void newView();
       slot void viewFormattingChars();
       slot void viewFrameBorders();
       slot void viewTableGrid();
       slot void viewHeader();
       slot void viewFooter();
-      slot void viewDocStruct();
       slot void viewFootNotes();
       slot void viewEndNotes();
 
@@ -72,7 +71,7 @@ module KWord
       slot void tableSplitCells();
       slot void tableUngroupTable();
       slot void tableDelete();
-      
+
       slot void helpContents();
       slot void helpAbout();
       slot void helpAboutKOffice();
