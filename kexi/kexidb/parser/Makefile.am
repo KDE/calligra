@@ -1,7 +1,7 @@
 include $(top_srcdir)/kexi/Makefile.global
 
 lib_LTLIBRARIES = libkexidbparser.la
-libkexidbparser_la_SOURCES = sqlscanner.cpp sqlparser.cpp parser.cpp
+libkexidbparser_la_SOURCES = sqlscanner.cpp sqlparser.cpp parser.cpp parser_p.cpp
 libkexidbparser_la_LIBADD = $(LIB_KPARTS) $(LIB_KDEUI) ../libkexidb.la
 libkexidbparser_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
