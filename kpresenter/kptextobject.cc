@@ -238,6 +238,17 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    QDomElement e = parser.currentElement();
  	    ktextobject.document()->setLineSpacing( e.attribute( "lineSpacing" ).toInt() );
  	    ktextobject.document()->setParagSpacing( e.attribute( "paragSpacing" ).toInt() );
+ 	    ktextobject.document()->setMargin( e.attribute( "margin" ).toInt() );
+	    KTextEditDocument::TextSettings settings = ktextobject.document()->textSettings();
+	    settings.bulletColor[0] = QColor( e.attribute( "bulletColor1", Qt::black.name() ) );
+	    settings.bulletColor[1] = QColor( e.attribute( "bulletColor2", Qt::black.name() ) );
+	    settings.bulletColor[2] = QColor( e.attribute( "bulletColor3", Qt::black.name() ) );
+	    settings.bulletColor[3] = QColor( e.attribute( "bulletColor4", Qt::black.name() ) );
+	    settings.bulletType[0] = (KTextEditDocument::Bullet)e.attribute( "bulletType1", 0 ).toInt();
+	    settings.bulletType[1] = (KTextEditDocument::Bullet)e.attribute( "bulletType2", 0 ).toInt();
+	    settings.bulletType[2] = (KTextEditDocument::Bullet)e.attribute( "bulletType3", 0 ).toInt();
+	    settings.bulletType[3] = (KTextEditDocument::Bullet)e.attribute( "bulletType4", 0 ).toInt();
+	    ktextobject.document()->setTextSettings( settings );
 	    QString type = e.attribute( "objType" );
 	    int t = -1;
 	    if ( !type.isEmpty() ) {
@@ -246,7 +257,7 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 		if ( type == "2" )
 		    t = KTextEdit::BulletList;
 	    }
-	    
+	
 	    loadKTextObject( e, t );
 	}
 
@@ -546,9 +557,20 @@ void KPTextObject::extendObject2Contents( KPresenterView */*view*/ )
 void KPTextObject::saveKTextObject( QTextStream& out )
 {
     KTextEditParag *parag = ktextobject.document()->firstParag();
-    out << otag << "<TEXTOBJ lineSpacing=\""
-	<< ktextobject.document()->lineSpacing() << "\" paragSpacing=\""
-	<< ktextobject.document()->paragSpacing() << "\">" << endl;
+    KTextEditDocument::TextSettings textSettings = ktextobject.document()->textSettings();
+    out << otag 
+	<< "<TEXTOBJ lineSpacing=\"" << ktextobject.document()->lineSpacing() 
+	<< "\" paragSpacing=\"" << ktextobject.document()->paragSpacing()
+	<< "\" margin=\"" << ktextobject.document()->margin()
+	<< "\" bulletType1=\"" << (int)textSettings.bulletType[0]
+	<< "\" bulletType2=\"" << (int)textSettings.bulletType[1]
+	<< "\" bulletType3=\"" << (int)textSettings.bulletType[2]
+	<< "\" bulletType4=\"" << (int)textSettings.bulletType[3]
+	<< "\" bulletColor1=\"" << textSettings.bulletColor[0].name()
+	<< "\" bulletColor2=\"" << textSettings.bulletColor[1].name()
+	<< "\" bulletColor3=\"" << textSettings.bulletColor[2].name()
+	<< "\" bulletColor4=\"" << textSettings.bulletColor[3].name()
+	<< "\">" << endl;
     while ( parag ) {
 	out << otag << "<P align=\"" << parag->alignment()
 	    << "\" type=\"" << (int)parag->type()
@@ -651,7 +673,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
 	if ( !lastParag->length() == 0 )
 	    lastParag = new KTextEditParag( ktextobject.document(), lastParag, 0 );
     }
-    
+
     settings.lineSpacing = lineSpacing;
     settings.paragSpacing = paragSpacing;
     ktextobject.document()->setTextSettings( settings );

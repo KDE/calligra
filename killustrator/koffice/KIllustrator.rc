@@ -73,7 +73,7 @@
   <Action name="options"/>
  </Menu>
 </MenuBar>
-<ToolBar name="edit"><Text>Edit</Text>
+<ToolBar fillWidth="false" name="edit"><Text>Edit</Text>
   <Action name="undo"/>
   <Action name="redo"/>
   <Separator/>
@@ -82,10 +82,10 @@
   <Action name="cut"/>
   <Action name="copy"/>
 </ToolBar>
-<ToolBar name="colorbar" position="right"><Text>Color</Text>
+<ToolBar fillWidth="false" name="colorbar" position="right"><Text>Color</Text>
   <Action name="colorbar"/>
 </ToolBar>
-<ToolBar name="tools" position="left"><Text>Tools</Text>
+<ToolBar fillWidth="false" name="tools" position="left"><Text>Tools</Text>
   <Action name="selectTool"/>
   <Action name="pointTool"/>
   <Action name="freehandTool"/>
@@ -97,7 +97,7 @@
   <Action name="textTool"/>
   <Action name="zoomTool"/>
 </ToolBar>
-<ToolBar name="nodes" position="left"><Text>Nodes</Text>
+<ToolBar fillWidth="false" name="nodes" position="left"><Text>Nodes</Text>
   <Action name="moveNode"/>
   <Action name="newNode"/>
   <Action name="deleteNode"/>
@@ -113,8 +113,8 @@
    <Action name="about"/>
   </Menu>
  </MenuBar>
- <ToolBars>
-  <ToolBar>
+ <ToolBar fillWidth="false">
+  <ToolBar fillWidth="false">
    <Action name="about"/>
   </ToolBar>
  </ToolBars>

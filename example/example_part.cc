@@ -34,7 +34,7 @@ KoMainWindow* ExamplePart::createShell()
     return shell;
 }
 
-bool ExamplePart::loadXML( const QDomDocument & )
+bool ExamplePart::loadXML( QIODevice *, const QDomDocument & )
 {
     // TODO load the document from the QDomDocument
     return true;

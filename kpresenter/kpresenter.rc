@@ -121,7 +121,7 @@
   <Action name="screen_presstruct"/>
  </Menu>
 </MenuBar>
-<ToolBar name="editToolBar" position="right"><Text>Edit</Text>
+<ToolBar name="editToolBar" position="right" fullWidth="false"><Text>Edit</Text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
@@ -131,14 +131,14 @@
   <Separator/>
   <Action name="edit_delete"/>
 </ToolBar>
-<ToolBar name="insertToolBar" position="left"><Text>Insert</Text>
+<ToolBar name="insertToolBar" position="left" fullWidth="false"><Text>Insert</Text>
   <Action name="insertToolBar"/>
   <Action name="insert_page"/>
   <Separator/>
   <Action name="insert_picture"/>
   <Action name="insert_clipart"/>
 </ToolBar>
-<ToolBar name="toolsToolBar" position="top"><Text>Tools</Text>
+<ToolBar name="toolsToolBar" position="top" fullWidth="false"><Text>Tools</Text>
   <Action name="tools_mouse"/>
   <Action name="tools_line"/>
   <Action name="tools_rectangle"/>
@@ -151,7 +151,7 @@
   <Action name="tools_formula"/>
   <Action name="tools_object"/>
 </ToolBar>
-<ToolBar name="textToolBar" position="bottom"><Text>Text</Text>
+<ToolBar name="textToolBar" position="bottom" fullWidth="false"><Text>Text</Text>
   <Action name="text_fontsize"/>
   <Action name="text_fontfamily"/>
   <Separator/>
@@ -174,7 +174,7 @@
   <Separator/>
   <Action name="text_inspgnum"/>
 </ToolBar>
-<ToolBar name="extraToolBar" position="left"><Text>Extra</Text>
+<ToolBar name="extraToolBar" position="left" fullWidth="false"><Text>Extra</Text>
   <Action name="extra_penbrush"/>
   <Action name="extra_configpie"/>
   <Action name="extra_configrect"/>
@@ -193,7 +193,7 @@
   <Separator/>
   <Action name="extra_webpres"/>
 </ToolBar>
-<ToolBar name="screenToolBar" position="top"><Text>Screen</Text>
+<ToolBar name="screenToolBar" position="top" fullWidth="false"><Text>Screen</Text>
   <Action name="screen_assigneffect"/>
   <Separator/>
   <Action name="screen_start"/>
@@ -206,7 +206,7 @@
   <Action name="screen_pencolor"/>
   <Action name="screen_penwidth"/>
 </ToolBar>
-<ToolBar name="colorBar" position="right"><Text>Color</Text>
+<ToolBar name="colorBar" position="right" fullWidth="false"><Text>Color</Text>
   <Action name="colorbar"/>
 </ToolBar>
 </kpartgui>
