@@ -122,7 +122,7 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	setCaption( caption );
 
 	//PRIMITIVE!! data setting:
-	const char **cd = m_cursor->recordData();
+//	const char **cd = m_cursor->recordData();
 
 	const int fcount = m_cursor->fieldCount();
 	m_cursor->moveFirst();
