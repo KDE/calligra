@@ -2428,76 +2428,139 @@ void KSpreadTable::removeRow( int row,int nbRow,bool makeUndo )
     emit sig_updateView( this );
 }
 
-void KSpreadTable::hideRow( int _row,int nbRow )
+void KSpreadTable::hideRow( int _row,int nbRow, QValueList<int>_list )
 {
     m_pDoc->setModified( true );
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        KSpreadUndoHideRow *undo = new KSpreadUndoHideRow( m_pDoc, this, _row,nbRow );
-        m_pDoc->undoBuffer()->appendUndo( undo  );
+      KSpreadUndoHideRow *undo ;
+      if(nbRow!=-1) 
+	undo= new KSpreadUndoHideRow( m_pDoc, this, _row,nbRow );
+      else
+	undo= new KSpreadUndoHideRow( m_pDoc, this, _row,nbRow,_list );
+      m_pDoc->undoBuffer()->appendUndo( undo  );
     }
 
-    for(int i=0;i<=nbRow;i++)
-        {
-        RowLayout *rl=nonDefaultRowLayout(_row+i);
-        rl->setHide(true);
-        }
+    if(nbRow!=-1)
+      {
+	for(int i=0;i<=nbRow;i++)
+	  {
+	    RowLayout *rl=nonDefaultRowLayout(_row+i);
+	    rl->setHide(true);
+	  }
+      }
+    else
+      {
+	QValueList<int>::Iterator it;
+	for( it = _list.begin(); it != _list.end(); ++it )
+	  {
+	    RowLayout *rl=nonDefaultRowLayout(*it);
+	    rl->setHide(true);
+	  }
+      }
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
 }
 
-void KSpreadTable::showRow( int _row,int nbRow )
+void KSpreadTable::showRow( int _row,int nbRow,QValueList<int>_list )
 {
     m_pDoc->setModified( true );
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        KSpreadUndoShowRow *undo = new KSpreadUndoShowRow( m_pDoc, this, _row,nbRow );
-        m_pDoc->undoBuffer()->appendUndo( undo  );
+      KSpreadUndoShowRow *undo;
+      if(nbRow!=-1)
+        undo = new KSpreadUndoShowRow( m_pDoc, this, _row,nbRow );
+      else
+	undo = new KSpreadUndoShowRow( m_pDoc, this, _row,nbRow,_list );
+      m_pDoc->undoBuffer()->appendUndo( undo  );
     }
-
-    for(int i=0;i<=nbRow;i++)
-        {
-        RowLayout *rl=nonDefaultRowLayout(_row+i);
-        rl->setHide(false);
-        }
+    if(nbRow!=-1)
+      {
+	for(int i=0;i<=nbRow;i++)
+	  {
+	    RowLayout *rl=nonDefaultRowLayout(_row+i);
+	    rl->setHide(false);
+	  }
+      }
+    else
+      {
+	QValueList<int>::Iterator it;
+	for( it = _list.begin(); it != _list.end(); ++it )
+	  {
+	    RowLayout *rl=nonDefaultRowLayout(*it);
+	    rl->setHide(false);
+	  }
+      }
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
 }
 
 
-void KSpreadTable::hideColumn( int _col,int nbCol )
+void KSpreadTable::hideColumn( int _col,int nbCol,QValueList<int>_list )
 {
    m_pDoc->setModified( true );
 
    if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        KSpreadUndoHideColumn *undo = new KSpreadUndoHideColumn( m_pDoc, this, _col,nbCol );
+        KSpreadUndoHideColumn *undo;
+	if(nbCol!=-1)
+	  undo= new KSpreadUndoHideColumn( m_pDoc, this, _col,nbCol );
+	else
+	  undo= new KSpreadUndoHideColumn( m_pDoc, this, _col,nbCol,_list );
         m_pDoc->undoBuffer()->appendUndo( undo  );
     }
-
-   for(int i=0;i<=nbCol;i++)
-        {
-        ColumnLayout *cl=nonDefaultColumnLayout(_col+i);
-        cl->setHide(true);
-        }
+   if(nbCol!=-1)
+     {
+       for(int i=0;i<=nbCol;i++)
+	 {
+	   ColumnLayout *cl=nonDefaultColumnLayout(_col+i);
+	   cl->setHide(true);
+	 }
+     }
+   else
+     {
+       QValueList<int>::Iterator it;
+       for( it = _list.begin(); it != _list.end(); ++it )
+	 {
+	   ColumnLayout *cl=nonDefaultColumnLayout(*it);
+	   cl->setHide(true);
+	 }
+      }
    emit sig_updateHBorder( this );
    emit sig_updateView( this );
 }
 
-void KSpreadTable::showColumn( int _col,int nbCol )
+void KSpreadTable::showColumn( int _col,int nbCol,QValueList<int>_list )
 {
    m_pDoc->setModified( true );
    if ( !m_pDoc->undoBuffer()->isLocked() )
-    {
-        KSpreadUndoShowColumn *undo = new KSpreadUndoShowColumn( m_pDoc, this, _col,nbCol );
-        m_pDoc->undoBuffer()->appendUndo( undo  );
+     {
+       KSpreadUndoShowColumn *undo;
+      if(nbCol!=-1)
+        undo = new KSpreadUndoShowColumn( m_pDoc, this, _col,nbCol );
+      else
+	undo = new KSpreadUndoShowColumn( m_pDoc, this, _col,nbCol,_list );
+      m_pDoc->undoBuffer()->appendUndo( undo  );
     }
 
-   for(int i=0;i<=nbCol;i++)
-        {
-        ColumnLayout *cl=nonDefaultColumnLayout(_col+i);
-        cl->setHide(false);
-        }
+   if(nbCol!=-1)
+     {
+       for(int i=0;i<=nbCol;i++)
+	 {
+	   ColumnLayout *cl=nonDefaultColumnLayout(_col+i);
+	   cl->setHide(false);
+	 }
+     }
+   else
+     {
+       QValueList<int>::Iterator it;
+       for( it = _list.begin(); it != _list.end(); ++it )
+	 {
+	   ColumnLayout *cl=nonDefaultColumnLayout(*it);
+	   cl->setHide(false);
+	 }
+
+     }
    emit sig_updateHBorder( this );
    emit sig_updateView( this );
 }

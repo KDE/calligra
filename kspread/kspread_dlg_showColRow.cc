@@ -103,6 +103,8 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
     {
       m_pOk->setEnabled(false);
     }
+  //selection multiple
+  list->setSelectionMode(QListBox::Multi);
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
@@ -117,17 +119,23 @@ void KSpreadShowColRow::slotDoubleClicked(QListBoxItem *)
 
 void KSpreadShowColRow::slotOk()
 {
-  int num=list->currentItem();
+
+  QValueList<int>listSelected;
+  for(unsigned int i=0;i<list->count();i++)
+    {
+      if(list->isSelected(i))
+	listSelected.append(*listInt.at(i));
+    }
   if( typeShow==Column)
     {
-      if(num!=-1)
-	m_pView->activeTable()->showColumn(*listInt.at(num));
+      if(listSelected.count()!=0)
+	m_pView->activeTable()->showColumn(0,-1,listSelected);
     }
   if( typeShow==Row)
     {
-      if(num!=-1)
-	m_pView->activeTable()->showRow(*listInt.at(num));
-    }
+      if(listSelected.count()!=0)
+	m_pView->activeTable()->showRow(0,-1,listSelected);
+    } 
   accept();
 }
 

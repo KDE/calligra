@@ -355,14 +355,17 @@ void KSpreadUndoInsertRow::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoHideRow::KSpreadUndoHideRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row, int _nbRow ) :
+KSpreadUndoHideRow::KSpreadUndoHideRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row, int _nbRow , QValueList<int>_listRow) :
     KSpreadUndoAction( _doc )
 {
     title=i18n("Hide row(s)");
     m_tableName = _table->tableName();
     m_iRow= _row;
     m_iNbRow=_nbRow;
-    createList( listRow ,_table );
+    if(m_iNbRow!=-1)
+      createList( listRow ,_table );
+    else
+      listRow=QValueList<int>(_listRow);
 }
 
 KSpreadUndoHideRow::~KSpreadUndoHideRow()
@@ -387,11 +390,7 @@ void KSpreadUndoHideRow::undo()
 	return;
 
     doc()->undoBuffer()->lock();
-    QValueList<int>::Iterator it;
-    for( it = listRow.begin(); it != listRow.end(); ++it )
-        table->showRow( (*it) );
-
-
+    table->showRow( 0,-1,listRow );
     doc()->undoBuffer()->unlock();
 }
 
@@ -402,10 +401,7 @@ void KSpreadUndoHideRow::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-    QValueList<int>::Iterator it;
-    for( it = listRow.begin(); it != listRow.end(); ++it )
-        table->hideRow( (*it) );
-
+    table->hideRow(0,-1, listRow );
     doc()->undoBuffer()->unlock();
 }
 
@@ -415,14 +411,17 @@ void KSpreadUndoHideRow::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoHideColumn::KSpreadUndoHideColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _nbCol ) :
+KSpreadUndoHideColumn::KSpreadUndoHideColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _nbCol, QValueList<int>_listCol ) :
     KSpreadUndoAction( _doc )
 {
     title=i18n("Hide column(s)");
     m_tableName = _table->tableName();
     m_iColumn= _column;
     m_iNbCol=_nbCol;
-    createList( listCol ,_table );
+    if(m_iNbCol!=-1)
+      createList( listCol ,_table );
+    else
+      listCol=QValueList<int>(_listCol);
 }
 
 KSpreadUndoHideColumn::~KSpreadUndoHideColumn()
@@ -433,13 +432,11 @@ void KSpreadUndoHideColumn::createList( QValueList<int>&list,KSpreadTable *tab )
 {
 ColumnLayout *cl;
 for(int i=m_iColumn;i<=(m_iColumn+m_iNbCol);i++)
-        {
-        cl= tab->nonDefaultColumnLayout( i );
-        if(!cl->isHide())
-                list.append(cl->column());
-        }
-
-
+  {
+    cl= tab->nonDefaultColumnLayout( i );
+    if(!cl->isHide())
+      list.append(cl->column());
+  }
 }
 
 void KSpreadUndoHideColumn::undo()
@@ -449,11 +446,7 @@ void KSpreadUndoHideColumn::undo()
 	return;
 
     doc()->undoBuffer()->lock();
-    QValueList<int>::Iterator it;
-    for( it = listCol.begin(); it != listCol.end(); ++it )
-        table->showColumn( (*it) );
-
-
+    table->showColumn(0,-1,listCol);
     doc()->undoBuffer()->unlock();
 }
 
@@ -464,10 +457,7 @@ void KSpreadUndoHideColumn::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-    QValueList<int>::Iterator it;
-    for( it = listCol.begin(); it != listCol.end(); ++it )
-        table->hideColumn( (*it) );
-
+    table->hideColumn(0,-1,listCol);
     doc()->undoBuffer()->unlock();
 }
 
@@ -477,14 +467,17 @@ void KSpreadUndoHideColumn::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoShowRow::KSpreadUndoShowRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row, int _nbRow ) :
+KSpreadUndoShowRow::KSpreadUndoShowRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row, int _nbRow, QValueList<int>_listRow ) :
     KSpreadUndoAction( _doc )
 {
     title=i18n("Show row(s)");
     m_tableName = _table->tableName();
     m_iRow= _row;
     m_iNbRow=_nbRow;
-    createList( listRow ,_table );
+    if(m_iNbRow!=-1)
+      createList( listRow ,_table );
+    else
+      listRow=QValueList<int>(_listRow);
 }
 
 KSpreadUndoShowRow::~KSpreadUndoShowRow()
@@ -509,10 +502,7 @@ void KSpreadUndoShowRow::undo()
 	return;
 
     doc()->undoBuffer()->lock();
-    QValueList<int>::Iterator it;
-    for( it = listRow.begin(); it != listRow.end(); ++it )
-        table->hideRow( (*it) );
-
+    table->hideRow(0,-1,listRow);
     doc()->undoBuffer()->unlock();
 }
 
@@ -523,10 +513,7 @@ void KSpreadUndoShowRow::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-    QValueList<int>::Iterator it;
-    for( it = listRow.begin(); it != listRow.end(); ++it )
-        table->showRow( (*it) );
-
+    table->showRow(0,-1,listRow);
     doc()->undoBuffer()->unlock();
 }
 
@@ -536,14 +523,17 @@ void KSpreadUndoShowRow::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoShowColumn::KSpreadUndoShowColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _nbCol ) :
+KSpreadUndoShowColumn::KSpreadUndoShowColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _nbCol,QValueList<int>_listCol ) :
     KSpreadUndoAction( _doc )
 {
     title=i18n("Show column(s)");
     m_tableName = _table->tableName();
     m_iColumn= _column;
     m_iNbCol=_nbCol;
-    createList( listCol ,_table );
+    if(m_iNbCol!=-1)
+      createList( listCol ,_table );
+    else
+      listCol=QValueList<int>(_listCol);
 }
 
 KSpreadUndoShowColumn::~KSpreadUndoShowColumn()
@@ -554,12 +544,12 @@ void KSpreadUndoShowColumn::createList( QValueList<int>&list,KSpreadTable *tab )
 {
 ColumnLayout *cl;
 for(int i=m_iColumn;i<=(m_iColumn+m_iNbCol);i++)
-        {
-        cl= tab->nonDefaultColumnLayout( i );
-        if(cl->isHide())
-                list.append(cl->column());
-        }
-
+  {
+    cl= tab->nonDefaultColumnLayout( i );
+    if(cl->isHide())
+      list.append(cl->column());
+  }
+ 
 }
 
 void KSpreadUndoShowColumn::undo()
@@ -568,10 +558,8 @@ void KSpreadUndoShowColumn::undo()
     if ( !table )
 	return;
 
-    doc()->undoBuffer()->lock();
-    QValueList<int>::Iterator it;
-    for( it = listCol.begin(); it != listCol.end(); ++it )
-        table->hideColumn( (*it) );
+    doc()->undoBuffer()->lock();          
+    table->hideColumn( 0,-1,listCol );
     doc()->undoBuffer()->unlock();
 }
 
@@ -582,10 +570,7 @@ void KSpreadUndoShowColumn::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-    QValueList<int>::Iterator it;
-    for( it = listCol.begin(); it != listCol.end(); ++it )
-        table->showColumn( (*it) );
-
+    table->showColumn(0,-1,listCol);
     doc()->undoBuffer()->unlock();
 }
 

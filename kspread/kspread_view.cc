@@ -1428,7 +1428,7 @@ void KSpreadView::cutSelection()
         return;
 
     m_pTable->cutSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-
+    resultOfCalc();
     updateEditWidget();
 }
 
@@ -1444,6 +1444,7 @@ void KSpreadView::paste()
     m_pTable->paste( QPoint( r.left(),r.top() ) );
     if(m_pTable->getAutoCalc())
         m_pTable->recalc(true);
+    resultOfCalc();
     updateEditWidget();
 }
 
@@ -1457,6 +1458,7 @@ void KSpreadView::specialPaste()
     {
     if(m_pTable->getAutoCalc())
         m_pTable->recalc(true);
+    resultOfCalc();
     updateEditWidget();
     }
 }
@@ -2175,7 +2177,7 @@ void KSpreadView::deleteSelection()
     ASSERT( m_pTable );
 
     m_pTable->deleteSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-
+    resultOfCalc();
     updateEditWidget();
 }
 
@@ -2693,10 +2695,11 @@ void KSpreadView::resultOfCalc()
   int nbCell=0;
 QRect n = activeTable()->selectionRect();
  QRect tmpRect(n);
-    if(n.left()==0)
-        tmpRect.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow(),
-                        m_pCanvas->markerColumn(), m_pCanvas->markerRow());
- if(tmpRect.bottom()==0x7FFF)
+ if(n.left()==0)
+   tmpRect.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow(),
+		      m_pCanvas->markerColumn(), m_pCanvas->markerRow()); 
+ MethodOfCalc tmpMethod=m_pDoc->getTypeOfCalc() ;
+if(tmpRect.bottom()==0x7FFF)
    {
      KSpreadCell* c = activeTable()->firstCell();
      for( ;c; c = c->nextCell() )
@@ -2707,7 +2710,7 @@ QRect n = activeTable()->selectionRect();
 	   {
 	     if(c->isValue())
 	       {
-		 switch( m_pDoc->getTypeOfCalc())
+		 switch(tmpMethod)
 		   {
 		   case Sum:
 		     result+=c->valueDouble();		 
@@ -2748,7 +2751,7 @@ QRect n = activeTable()->selectionRect();
 	   {
 	     if(c->isValue())
 	       {
-		 switch( m_pDoc->getTypeOfCalc())
+		 switch(tmpMethod )
 		   {
 		   case Sum:
 		     result+=c->valueDouble();		 
@@ -2786,7 +2789,7 @@ QRect n = activeTable()->selectionRect();
 	   KSpreadCell *cell = activeTable()->cellAt( i, j );
 	   if(!cell->isDefault() && cell->isValue())
 	     {
-		 switch( m_pDoc->getTypeOfCalc())
+		 switch(tmpMethod )
 		   {
 		   case Sum:
 		     result+=cell->valueDouble();		 
@@ -2816,7 +2819,7 @@ QRect n = activeTable()->selectionRect();
 	 }
    }
  QString tmp;
- switch( m_pDoc->getTypeOfCalc())
+ switch(tmpMethod )
    {
    case Sum:
      tmp=i18n(" Sum: %1").arg(result);		 

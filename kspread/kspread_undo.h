@@ -155,7 +155,7 @@ protected:
 class KSpreadUndoHideColumn : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoHideColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0 );
+    KSpreadUndoHideColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0, QValueList<int>listCol=QValueList<int>() );
     virtual ~KSpreadUndoHideColumn();
 
     virtual void undo();
@@ -172,7 +172,7 @@ protected:
 class KSpreadUndoHideRow : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoHideRow( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0 );
+    KSpreadUndoHideRow( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0, QValueList<int>_listRow=QValueList<int>() );
     virtual ~KSpreadUndoHideRow();
 
     virtual void undo();
@@ -189,7 +189,7 @@ protected:
 class KSpreadUndoShowColumn : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoShowColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0 );
+    KSpreadUndoShowColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0, QValueList<int>_list=QValueList<int>() );
     virtual ~KSpreadUndoShowColumn();
 
     virtual void undo();
@@ -206,7 +206,7 @@ protected:
 class KSpreadUndoShowRow : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoShowRow( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0 );
+    KSpreadUndoShowRow( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0, QValueList<int>list=QValueList<int>() );
     virtual ~KSpreadUndoShowRow();
 
     virtual void undo();
