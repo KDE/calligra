@@ -58,9 +58,9 @@ KInstance* ExampleFactory::global()
             "(c) 1998-2000, Torben Weis");
         aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
 
-        
-        s_global = new KInstance(aboutData);
+        s_global = new KInstance( aboutData );
     }
+    
     return s_global;
 }
 

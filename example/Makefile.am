@@ -2,7 +2,7 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
 example_LDFLAGS = $(KDE_RPATH) 
-example_LDADD = ../lib/kofficeui/libkofficeui.la 
+example_LDADD = ../lib/kofficeui/libkofficeui.la ./libexample.la 
 
 libexample_la_LDFLAGS = -module -avoid-version
 
@@ -33,6 +33,3 @@ kdemimedir = $(kde_mimedir)/application
 
 rc_DATA = example.rc
 rcdir = $(kde_datadir)/example
-
-# SUBDIRS =  . plugins pics dtd toolbar
-
