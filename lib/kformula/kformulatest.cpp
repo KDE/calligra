@@ -1,6 +1,6 @@
 #include <kformulaedit.h>
 #include <kformulatoolbar.h>
-#include <ktmainwindow.h>
+#include <kmainwindow.h>
 #include <kapp.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -13,7 +13,7 @@ int main( int argc, char **argv )
 {
     KApplication a( argc, argv, "KFormulaTest" );
 
-    KTMainWindow w;
+    KMainWindow w(0);
     w.resize( 640, 480 );
 
     KFormulaToolBar bar(&w);
@@ -21,7 +21,7 @@ int main( int argc, char **argv )
     QWidget tmp(&w);
     QVBoxLayout l(&tmp, 10);
 
-    w.setView(&tmp);
+    w.setCentralWidget(&tmp);
 
     QAccel ac(&w);
 
@@ -39,10 +39,6 @@ int main( int argc, char **argv )
     l.addWidget(&lab, 0);
 
     bar.connectToFormula(&x);
-
-    w.addToolBar(&bar);
-
-    w.enableToolBar();
 
     a.setMainWidget( &w );
     x.setFocus();
