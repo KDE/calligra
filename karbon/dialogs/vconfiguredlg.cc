@@ -23,21 +23,15 @@
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlineedit.h>
 #include <qvbox.h>
 #include <qvgroupbox.h>
 #include <qcombobox.h>
 
-#include <kapplication.h>
-#include <kcolorbutton.h>
+#include <kiconloader.h>
 #include <kconfig.h>
 #include <kdialogbase.h>
-#include <kiconloader.h>
-#include <klineedit.h>
 #include <klocale.h>
 #include <knuminput.h>
-#include <knumvalidator.h>
-#include <kspell.h>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
@@ -103,25 +97,16 @@ void VConfigureDlg::slotDefault()
 
 
 VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
-		QWidget* parent, char* name )
-		: QWidget( parent, name )
+		QVBox* box, char* name )
+		: QObject( box->parent(), name )
 {
 	m_view = view;
 	m_config = KarbonFactory::instance()->config();
 
-	QVBoxLayout *box = new QVBoxLayout( this );
-	box->setMargin( 5 );
-	box->setSpacing( 10 );
-
 	m_oldRecentFiles = 10;
 	bool oldShowStatusBar = true;
 
-	QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
-	tmpQGroupBox->setTitle( i18n( "Interface" ) );
-
-	QVBoxLayout* lay1 = new QVBoxLayout( tmpQGroupBox );
-	lay1->setMargin( 20 );
-	lay1->setSpacing( 10 );
+	QVGroupBox* tmpQGroupBox = new QVGroupBox( i18n( "Interface" ), box );
 
 	if( m_config->hasGroup( "Interface" ) )
 	{
@@ -136,15 +121,10 @@ VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
 
 	m_showStatusBar = new QCheckBox( i18n( "Show status bar" ), tmpQGroupBox );
 	m_showStatusBar->setChecked( oldShowStatusBar );
-	lay1->addWidget( m_showStatusBar );
 
 	m_recentFiles = new KIntNumInput( m_oldRecentFiles, tmpQGroupBox );
 	m_recentFiles->setRange( 1, 20, 1 );
 	m_recentFiles->setLabel( i18n( "Number of recent file:" ) );
-
-	lay1->addWidget( m_recentFiles );
-
-	box->addWidget( tmpQGroupBox );
 }
 
 void VConfigInterfacePage::apply()

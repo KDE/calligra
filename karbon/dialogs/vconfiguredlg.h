@@ -24,22 +24,19 @@
 #include <kdialogbase.h>
 
 class KarbonView;
-class KColorButton;
 class KConfig;
 class KIntNumInput;
-class KLineEdit;
-class KSpellConfig;
 class QCheckBox;
 class QComboBox;
 
 
-class VConfigInterfacePage : public QWidget
+class VConfigInterfacePage : public QObject
 {
 	Q_OBJECT
 
 public:
 	VConfigInterfacePage(
-		KarbonView* view, QWidget* parent = 0L, char* name = 0L );
+		KarbonView* view, QVBox *box = 0L, char* name = 0L );
 
 	void apply();
 
