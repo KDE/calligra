@@ -220,88 +220,90 @@ void KPBackGround::loadStandardBackgroundOasis( KoOasisContext & context, QDomEl
                 kdDebug()<<"gradient \n";
                 QString styleback = properties.attribute( "draw:fill-gradient-name" );
                 QDomElement *draw = context.oasisStyles().drawStyles()[styleback];
-                if ( draw )
+                loadOasisBackGroundGradient( draw );
+            }
+        }
+    }
+}
+
+void KPBackGround::loadOasisBackGroundGradient(QDomElement *draw )
+{
+    if ( draw )
+    {
+        //kdDebug()<<" draw style : name :"<<style<<endl;
+        setBackColor1( QColor( draw->attribute( "draw:start-color" ) ) );
+        setBackColor2( QColor( draw->attribute( "draw:end-color" ) ) );
+        setBackColorType( BCT_PLAIN );
+        setBackType(BT_COLOR);
+        QString type = draw->attribute( "draw:style" );
+        if ( type == "linear" )
+        {
+            int angle = draw->attribute( "draw:angle" ).toInt() / 10;
+
+            // make sure the angle is between 0 and 359
+            angle = abs( angle );
+            angle -= ( (int) ( angle / 360 ) ) * 360;
+
+            // What we are trying to do here is to find out if the given
+            // angle belongs to a horizontal, vertical or diagonal gradient.
+            int lower, upper, nearAngle = 0;
+            for ( lower = 0, upper = 45; upper < 360; lower += 45, upper += 45 )
+            {
+                if ( upper >= angle )
                 {
-                    kdDebug()<<" draw style : name :"<<style<<endl;
-                    setBackColor1( QColor( draw->attribute( "draw:start-color" ) ) );
-                    setBackColor2( QColor( draw->attribute( "draw:end-color" ) ) );
-                    setBackColorType( BCT_PLAIN );
-                    setBackType(BT_COLOR);
-
-
-//                QDomElement bcType = doc.createElement( "BCTYPE" );
-                    QString type = draw->attribute( "draw:style" );
-                    if ( type == "linear" )
-                    {
-                        int angle = draw->attribute( "draw:angle" ).toInt() / 10;
-
-                        // make sure the angle is between 0 and 359
-                        angle = abs( angle );
-                        angle -= ( (int) ( angle / 360 ) ) * 360;
-
-                        // What we are trying to do here is to find out if the given
-                        // angle belongs to a horizontal, vertical or diagonal gradient.
-                        int lower, upper, nearAngle = 0;
-                        for ( lower = 0, upper = 45; upper < 360; lower += 45, upper += 45 )
-                        {
-                            if ( upper >= angle )
-                            {
-                                int distanceToUpper = abs( angle - upper );
-                                int distanceToLower = abs( angle - lower );
-                                nearAngle = distanceToUpper > distanceToLower ? lower : upper;
-                                break;
-                            }
-                        }
-
-                        // nearAngle should now be one of: 0, 45, 90, 135, 180...
-                        if ( nearAngle == 0 || nearAngle == 180 )
-                            setBackColorType(BCT_GHORZ);
-                        else if ( nearAngle == 90 || nearAngle == 270 )
-                            setBackColorType(BCT_GVERT);
-                        else if ( nearAngle == 45 || nearAngle == 225 )
-                            setBackColorType(BCT_GDIAGONAL1);
-                        else if ( nearAngle == 135 || nearAngle == 315 )
-                            setBackColorType(BCT_GDIAGONAL2);
-                    }
-                    else if ( type == "radial" || type == "ellipsoid" )
-                        setBackColorType(BCT_GCIRCLE);
-                    else if ( type == "square" || type == "rectangular" )
-                        setBackColorType(BCT_GRECT);
-                    else if ( type == "axial" )
-                        setBackColorType(BCT_GPIPECROSS);
-
-
-                    // Hard to map between x- and y-center settings of ooimpress
-                    // and (un-)balanced settings of kpresenter. Let's try it.
-                    int x, y;
-                    if ( draw->hasAttribute( "draw:cx" ) )
-                        x = draw->attribute( "draw:cx" ).remove( '%' ).toInt();
-                    else
-                        x = 50;
-
-                    if ( draw->hasAttribute( "draw:cy" ) )
-                        y = draw->attribute( "draw:cy" ).remove( '%' ).toInt();
-                    else
-                        y = 50;
-
-                    if ( x == 50 && y == 50 )
-                    {
-                        unbalanced=0;
-                        setBackUnbalanced(false);
-                        setBackXFactor(100);
-                        setBackYFactor(100);
-                    }
-                    else
-                    {
-                        unbalanced=1;
-                        setBackUnbalanced(true);
-
-                        // map 0 - 100% to -200 - 200
-                        setBackXFactor(( 4 * x - 200 ));
-                        setBackYFactor(( 4 * y - 200 ));
-                    }
+                    int distanceToUpper = abs( angle - upper );
+                    int distanceToLower = abs( angle - lower );
+                    nearAngle = distanceToUpper > distanceToLower ? lower : upper;
+                    break;
                 }
             }
+
+            // nearAngle should now be one of: 0, 45, 90, 135, 180...
+            if ( nearAngle == 0 || nearAngle == 180 )
+                setBackColorType(BCT_GHORZ);
+            else if ( nearAngle == 90 || nearAngle == 270 )
+                setBackColorType(BCT_GVERT);
+            else if ( nearAngle == 45 || nearAngle == 225 )
+                setBackColorType(BCT_GDIAGONAL1);
+            else if ( nearAngle == 135 || nearAngle == 315 )
+                setBackColorType(BCT_GDIAGONAL2);
+        }
+        else if ( type == "radial" || type == "ellipsoid" )
+            setBackColorType(BCT_GCIRCLE);
+        else if ( type == "square" || type == "rectangular" )
+            setBackColorType(BCT_GRECT);
+        else if ( type == "axial" )
+            setBackColorType(BCT_GPIPECROSS);
+
+
+        // Hard to map between x- and y-center settings of ooimpress
+        // and (un-)balanced settings of kpresenter. Let's try it.
+        int x, y;
+        if ( draw->hasAttribute( "draw:cx" ) )
+            x = draw->attribute( "draw:cx" ).remove( '%' ).toInt();
+        else
+            x = 50;
+
+        if ( draw->hasAttribute( "draw:cy" ) )
+            y = draw->attribute( "draw:cy" ).remove( '%' ).toInt();
+        else
+            y = 50;
+
+        if ( x == 50 && y == 50 )
+        {
+            unbalanced=0;
+            setBackUnbalanced(false);
+            setBackXFactor(100);
+            setBackYFactor(100);
+        }
+        else
+        {
+            unbalanced=1;
+            setBackUnbalanced(true);
+
+            // map 0 - 100% to -200 - 200
+            setBackXFactor(( 4 * x - 200 ));
+            setBackYFactor(( 4 * y - 200 ));
         }
     }
 }
@@ -329,87 +331,7 @@ void KPBackGround::loadOasis(KoOasisContext & context )
             kdDebug()<<"gradient \n";
             QString style = styleStack.attribute( "draw:fill-gradient-name" );
             QDomElement *draw = context.oasisStyles().drawStyles()[style];
-            if ( draw )
-            {
-                kdDebug()<<" draw style : name :"<<style<<endl;
-                setBackColor1( QColor( draw->attribute( "draw:start-color" ) ) );
-                setBackColor2( QColor( draw->attribute( "draw:end-color" ) ) );
-                setBackColorType( BCT_PLAIN );
-                setBackType(BT_COLOR);
-
-
-//                QDomElement bcType = doc.createElement( "BCTYPE" );
-                QString type = draw->attribute( "draw:style" );
-                if ( type == "linear" )
-                {
-                    int angle = draw->attribute( "draw:angle" ).toInt() / 10;
-
-                    // make sure the angle is between 0 and 359
-                    angle = abs( angle );
-                    angle -= ( (int) ( angle / 360 ) ) * 360;
-
-                    // What we are trying to do here is to find out if the given
-                    // angle belongs to a horizontal, vertical or diagonal gradient.
-                    int lower, upper, nearAngle = 0;
-                    for ( lower = 0, upper = 45; upper < 360; lower += 45, upper += 45 )
-                    {
-                        if ( upper >= angle )
-                        {
-                            int distanceToUpper = abs( angle - upper );
-                            int distanceToLower = abs( angle - lower );
-                            nearAngle = distanceToUpper > distanceToLower ? lower : upper;
-                            break;
-                        }
-                    }
-
-                    // nearAngle should now be one of: 0, 45, 90, 135, 180...
-                    if ( nearAngle == 0 || nearAngle == 180 )
-                        setBackColorType(BCT_GHORZ);
-                    else if ( nearAngle == 90 || nearAngle == 270 )
-                        setBackColorType(BCT_GVERT);
-                    else if ( nearAngle == 45 || nearAngle == 225 )
-                        setBackColorType(BCT_GDIAGONAL1);
-                    else if ( nearAngle == 135 || nearAngle == 315 )
-                        setBackColorType(BCT_GDIAGONAL2);
-                }
-                else if ( type == "radial" || type == "ellipsoid" )
-                    setBackColorType(BCT_GCIRCLE);
-                else if ( type == "square" || type == "rectangular" )
-                    setBackColorType(BCT_GRECT);
-                else if ( type == "axial" )
-                    setBackColorType(BCT_GPIPECROSS);
-
-
-                // Hard to map between x- and y-center settings of ooimpress
-                // and (un-)balanced settings of kpresenter. Let's try it.
-                int x, y;
-                if ( draw->hasAttribute( "draw:cx" ) )
-                    x = draw->attribute( "draw:cx" ).remove( '%' ).toInt();
-                else
-                    x = 50;
-
-                if ( draw->hasAttribute( "draw:cy" ) )
-                    y = draw->attribute( "draw:cy" ).remove( '%' ).toInt();
-                else
-                    y = 50;
-
-                if ( x == 50 && y == 50 )
-                {
-                    unbalanced=0;
-                    setBackUnbalanced(false);
-                    setBackXFactor(100);
-                    setBackYFactor(100);
-                }
-                else
-                {
-                    unbalanced=1;
-                    setBackUnbalanced(true);
-
-                    // map 0 - 100% to -200 - 200
-                    setBackXFactor(( 4 * x - 200 ));
-                    setBackYFactor(( 4 * y - 200 ));
-                }
-            }
+            loadOasisBackGroundGradient( draw );
         }
     }
     if ( styleStack.hasAttribute("presentation:transition-style"))

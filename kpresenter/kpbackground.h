@@ -136,6 +136,7 @@ protected:
 
     KoPictureCollection *pictureCollection() const;
     KPGradientCollection *gradientCollection() const;
+    void loadOasisBackGroundGradient(QDomElement *draw );
 
 private:
     BackType backType;
