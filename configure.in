@@ -198,6 +198,7 @@ AC_OUTPUT( \
 	lib/koml/Makefile \
 	lib/store/Makefile \
 	filters/Makefile \
+        filters/lib/Makefile \
 	filters/excel97/Makefile \
 	filters/powerpoint97/Makefile \
 	filters/winword97/Makefile \
