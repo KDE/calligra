@@ -72,7 +72,9 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
         return KoFilter::FileNotFound;
     }
 
-    KFormula::Document* doc = new KFormula::Document( kapp->sessionConfig() );
+    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( kapp->config(), 0 );
+    KFormula::Document* doc = new KFormula::Document;
+    wrapper->document( doc );
     KFormula::Container* formula = doc->createFormula();
     if ( !doc->loadXML( dom ) ) {
         kdError() << "Failed." << endl;
@@ -86,7 +88,7 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
     f.close();
 
     delete formula;
-    delete doc;
+    delete wrapper;
 
     return KoFilter::OK;
 }

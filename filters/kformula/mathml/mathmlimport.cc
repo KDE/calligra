@@ -67,13 +67,16 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
     }
     f.close();
 
-    KFormula::Document* doc = new KFormula::Document( kapp->sessionConfig() );
+    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( kapp->config(), 0 );
+    KFormula::Document* doc = new KFormula::Document;
+    wrapper->document( doc );
     KFormula::Container* formula = doc->createFormula();
 
     //formula->loadMathML( m_chain->inputFile() );
     f.setName( m_chain->inputFile() );
     if ( !f.open( IO_ReadOnly ) ) {
         KMessageBox::error( 0, i18n( "Failed to open file" ), i18n( "Mathml Import Error" ) );
+        delete wrapper;
         return KoFilter::FileNotFound;
     }
 
@@ -81,6 +84,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
     if ( !mathML.setContent( &f, false ) ) {
         QApplication::restoreOverrideCursor();
         KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "Mathml Import Error" ) );
+        delete wrapper;
         return KoFilter::WrongFormat;
     }
     f.close();
@@ -95,7 +99,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
     // The -1 is because we don't want to write the final \0.
     int nwritten = dev.writeBlock( s.data(), s.size()-1 );
     if ( nwritten != (int)s.size()-1 )
-        kdWarning( KFormula::DEBUGID ) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " << s.size()-1 << endl;
+        kdWarning() << "wrote " << nwritten << "   - expected " << s.size()-1 << endl;
     if ( nwritten != (int)s.size()-1 ) {
         KMessageBox::error( 0, i18n( "Failed to write formula" ), i18n( "Mathml Import Error" ) );
     }
@@ -103,6 +107,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
     out->close();
     delete out;
 
+    delete wrapper;
     return KoFilter::OK;
 }
 

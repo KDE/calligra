@@ -27,7 +27,7 @@ class KDoubleNumInput;
 
 namespace KFormula {
     class Container;
-    class Document;
+    class DocumentWrapper;
 }
 
 #include <qdom.h>
@@ -68,8 +68,8 @@ private:
     QString _fileOut;
     QByteArray _arrayOut;
 
-    KFormula::Document* doc;
     KFormula::Container* formula;
+    KFormula::DocumentWrapper* wrapper;
 
     QCheckBox* proportional;
     KIntNumInput* widthEdit;

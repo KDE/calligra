@@ -165,14 +165,18 @@ void Formula::generate(QTextStream &out)
 
    	// a new KFormula::Document for every formula is not the best idea.
 	// better to have only one such beast for the whole document.
-	KFormula::Document formulaDoc( kapp->sessionConfig() );
+        KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( kapp->config(), 0 );
+        KFormula::Document* formulaDoc = new KFormula::Document;
+        wrapper->document( formulaDoc );
 
-	KFormula::Container* formula = formulaDoc.createFormula();
+	KFormula::Container* formula = formulaDoc->createFormula();
 	if ( !formula->load( doc.documentElement () ) ) {
 		kdError() << "Failed." << endl;
 	}
 
  	out << "$" << formula->texString() << "$";
         delete formula;
+
+        delete wrapper;
 }
 
