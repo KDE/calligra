@@ -14,6 +14,7 @@ class KColorPatch;
 class KoMainWindow;
 class KoView;
 class KarbonPart;
+class KIntNumInput;
 class VColorSlider;
 
 class VColorDlg : public QDockWindow
@@ -31,6 +32,7 @@ private:
 	VColorSlider *mRedSlider;
 	VColorSlider *mGreenSlider;
 	VColorSlider *mBlueSlider;
+	KIntNumInput* mOpacity;
 	enum ButtonChoice { Outline, Fill };
 	KarbonPart *m_part;
 	
