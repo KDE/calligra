@@ -120,7 +120,7 @@ void KChartFontConfigPage::initList()
 }
 
 
-void KChartFontConfigPage::changeIndex(uint newindex)
+void KChartFontConfigPage::changeIndex(int newindex)
 {
     if(index>_params->maxDataColor())
         colorButton->setEnabled(false);

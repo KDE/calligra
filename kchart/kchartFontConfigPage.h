@@ -28,7 +28,7 @@ public:
     void initList();
 
 public slots:
-    void changeIndex(uint index);
+    void changeIndex(int index);
     void changeLabelFont();
 private:
     KChartParams* _params;
