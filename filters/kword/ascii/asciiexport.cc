@@ -1,3 +1,5 @@
+// $Header$
+
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
@@ -44,14 +46,15 @@ public:
     virtual bool doCloseFile(void); // Close file in normal conditions
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
-    virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
+    virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
+        const ValueListFormatData& paraFormatDataList);
 public:
     inline bool isUTF8 (void) const { return m_utf8; }
     inline void setUTF8 (const bool flag ) { m_utf8=flag; }
     inline QString getEndOfLine(void) const {return m_eol;}
     inline void setEndOfLine(const QString& str) {m_eol=str;}
 private:
-    void ProcessParagraphData (const QString& paraText, ValueListFormatData& paraFormatDataList);
+    void ProcessParagraphData (const QString& paraText, const ValueListFormatData& paraFormatDataList);
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
@@ -123,11 +126,11 @@ bool ASCIIWorker::doCloseDocument(void)
 // out to the export file.
 
 void ASCIIWorker::ProcessParagraphData (const QString& paraText,
-    ValueListFormatData& paraFormatDataList)
+    const ValueListFormatData& paraFormatDataList)
 {
     if ( paraText.length () > 0 )
     {
-        ValueListFormatData::Iterator  paraFormatDataIt;
+        ValueListFormatData::ConstIterator  paraFormatDataIt;
 
         for ( paraFormatDataIt = paraFormatDataList.begin ();
               paraFormatDataIt != paraFormatDataList.end ();
@@ -140,7 +143,8 @@ void ASCIIWorker::ProcessParagraphData (const QString& paraText,
     *m_streamOut << m_eol; // Write end of line
 }
 
-bool ASCIIWorker::doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList)
+bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& layout,
+    const ValueListFormatData& paraFormatDataList)
 {
     kdDebug(30503) << "Entering ASCIIWorker::doFullParagraph" << endl;
     
