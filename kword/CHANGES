@@ -1168,3 +1168,7 @@ Reggie, 3.5.1999:
 Reggie, 4.5.1999:
 -----------------
 - Use libqimageio if present
+- Improvements in the KWString class
+- Started with a user defineable autocorrection functionality
+  (type in (c) and see what happens :-))
+- Fix when template loading goes wrong

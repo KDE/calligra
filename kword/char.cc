@@ -230,6 +230,12 @@ void KWString::insert(unsigned int _pos,KWCharFootNote *_fn)
 }
 
 /*================================================================*/
+void KWString::clear()
+{
+  remove(0,size());
+}
+
+/*================================================================*/
 bool KWString::remove(unsigned int _pos,unsigned int _len = 1)
 {
   if (_pos + _len <= _len_ && (int)_pos >= 0)
@@ -259,6 +265,12 @@ KWChar* KWString::split(unsigned int _pos)
   __data = copy(_data,_len_ - _pos);
   resize(_pos);
   return __data;
+}
+
+/*================================================================*/
+QString KWString::toString()
+{
+  return toString(0,size());
 }
 
 /*================================================================*/

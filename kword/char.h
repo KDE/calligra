@@ -210,6 +210,7 @@ public:
   KWChar* data()
   { return _data_; }
 
+  QString toString();
   QString toString(unsigned int _pos,unsigned int _len);
   void saveFormat(ostream &out);
   void loadFormat(KOMLParser &parser,vector<KOMLAttrib> &lst,KWordDocument *_doc,KWTextFrameSet *_frameset);
@@ -224,6 +225,8 @@ public:
   QString decoded();
   QCString utf8(bool _decoded = true);
 
+  void clear();
+  
 protected:
   KWChar* alloc(unsigned int _size);
   void free(KWChar* _data,unsigned int _len);

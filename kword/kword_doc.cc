@@ -137,24 +137,25 @@ CORBA::Boolean KWordDocument::init()
     {
       QFileInfo fileInfo(_template);
       QString fileName(fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kwt");
-      loadTemplate(fileName.data());
+      return loadTemplate(fileName.data());
     }
   else if (ret == KoTemplateChooseDia::File)
     {
       QString fileName(_template);
-      loadTemplate(fileName.data());
+      bool ok = loadTemplate(fileName.data());
       _loaded = true;
       setURL(fileName);
+      return ok;
     }
   else if (ret == KoTemplateChooseDia::Empty)
     {
       QString fileName(_globalTemplatePath + "Wordprocessing/PlainText.kwt");
-      loadTemplate(fileName.data());
+      return loadTemplate(fileName.data());
     }
   else
     return false;
 
-  return true;
+  return false;
 }
 
 /*================================================================*/
@@ -1060,7 +1061,7 @@ bool KWordDocument::loadXML(KOMLParser& parser,KOStore::Store_ptr)
   bool _first_footer = false,_even_footer = false,_odd_footer = false;
   bool _first_header = false,_even_header = false,_odd_header = false;
   bool _footnotes;
-  
+
   for (unsigned int k = 0;k < getNumFrameSets();k++)
     {
       if (getFrameSet(k)->getFrameInfo() == FI_FIRST_HEADER) _first_header = true;
@@ -1150,7 +1151,7 @@ bool KWordDocument::loadXML(KOMLParser& parser,KOStore::Store_ptr)
       fs->setAutoCreateNewFrame(true);
       fs->setVisible(false);
     }
-  
+
   for (unsigned int i = 0;i < getNumGroupManagers();i++)
     {
       if (getGroupManager(i)->isActive())

@@ -1548,7 +1548,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
   editModeChanged(e);
   doc->getAutoFormat().setEnabled(true);
-  
+
   // if we are in a table and CTRL-Return was pressed
   if ((e->key() == Key_Return || e->key() == Key_Return) && (e->state() & ControlButton) &&
       doc->getFrameSet(fc->getFrameSet() - 1)->getGroupManager())

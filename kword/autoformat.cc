@@ -18,6 +18,7 @@
 #include "kword_doc.h"
 #include "fc.h"
 #include "char.h"
+#include "parag.h"
 
 /******************************************************************/
 /* Class: KWAutoFormatEntry                                       */
@@ -69,8 +70,20 @@ bool KWAutoFormat::doAutoFormat(KWParag *parag,KWFormatContext *fc)
   if (!enabled)
     return false;
 
-  tmpBuffer->append(parag->getKWString()->data()[fc->getTextPos()]);
+  if (parag->getKWString()->data()[fc->getTextPos()].c == QChar('(') ||
+      tmpBuffer->size() > 0)
+    tmpBuffer->append(parag->getKWString()->data()[fc->getTextPos()]);
 
+  if (tmpBuffer->toString() == QString("(c)"))
+    {
+      KWFormat format;
+      format = *(dynamic_cast<KWCharFormat*>(parag->getKWString()->data()[fc->getTextPos()].attrib)->getFormat());
+      parag->getKWString()->remove(fc->getTextPos() - 2,3);
+      parag->insertText(fc->getTextPos() - 2," © ");
+      parag->setFormat(fc->getTextPos() - 2,3,format);
+      tmpBuffer->clear();
+    }
+      
   return false;
 }
 
