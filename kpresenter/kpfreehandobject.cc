@@ -19,7 +19,7 @@
 
 #include <kpfreehandobject.h>
 #include <kpresenter_utils.h>
-#include <kozoomhandler.h>²
+#include <kozoomhandler.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qdom.h>
