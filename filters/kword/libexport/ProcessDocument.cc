@@ -108,7 +108,7 @@ void ProcessDocumentInfoTag ( QDomNode myNode, void *tagData,
 // (which it can choose to ignore). Currently implemented is
 // processing for the following tags and attributes:
 //
-// TODO: make this list again up-to-date
+// TODO: make this list up-to-date
 //
 // DOC
 //   FRAMESETS
@@ -393,6 +393,16 @@ static void ProcessVertAlignTag (QDomNode myNode, void* formatDataPtr , QString&
     formatData->verticalAlignment=value;
 }
 
+static void ProcessLinkTag (QDomNode myNode, void* formatDataPtr , QString&, KWEFKWordLeader*)
+{
+    FormatData* formatData = (FormatData*) formatDataPtr;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("linkName", "QString", (void *) &formatData->linkName) );
+    attrProcessingList.append ( AttrProcessing ("hrefName", "QString", (void *) &formatData->linkReference) );
+    ProcessAttributes (myNode, attrProcessingList);
+}
+
 static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, KWEFKWordLeader* exportFilter)
 {
     FormatData *formatData = (FormatData*) tagData;
@@ -428,7 +438,7 @@ static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, K
     tagProcessingList.append ( TagProcessing ( "COLOR",     ProcessColorTag,    (void*) formatData ) );
     tagProcessingList.append ( TagProcessing ( "VERTALIGN", ProcessVertAlignTag,(void*) formatData ) );
     tagProcessingList.append ( TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessTextBackGroundColorTag, (void*) formatData ) );
-    tagProcessingList.append ( TagProcessing ( "LINK",      NULL,               NULL));
+    tagProcessingList.append ( TagProcessing ( "LINK",      ProcessLinkTag,     (void*) formatData ));
 
     QString strDummy;
 

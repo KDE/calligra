@@ -51,6 +51,9 @@ class FormatData
         { init(); }
 
         QString fontName;
+        
+        QString linkName; // Name of link (attribute "linkName" of <LINK>)
+        QString linkReference; // Reference of link (attribute "hrefName" of <LINK>)
 
         int  pos; // Start of text to which this format applies
         int  len; // Len of text to which this format applies
