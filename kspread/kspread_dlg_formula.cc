@@ -21,6 +21,7 @@
 
 
 #include "kspread_dlg_formula.h"
+#include "kspread_dlg_assistant.h"
 #include "kspread_view.h"
 #include "kspread_canvas.h"
 #include <kapp.h>
@@ -28,6 +29,7 @@
 #include <qstringlist.h>
 #include <qlayout.h>
 #include <kbuttonbox.h>
+
 
 
 KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
@@ -56,7 +58,13 @@ KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
   m_pClose = bb->addButton( i18n( "Close" ) );
   bb->layout();
   lay1->addWidget( bb );
-  
+
+  assistant=new QCheckBox("Assistant",this);
+  assistant->setGeometry(20,270,20,20);
+  assistant->setEnabled(false);
+  label=new QLabel(i18n("Assistant"),this);
+  label->setGeometry(50,270,50,20);
+  label->setEnabled(false);
   type_formula->insertItem(i18n("All"));
   type_formula->insertItem(i18n("Statistic"));
   type_formula->insertItem(i18n("Trigonometric"));
@@ -82,6 +90,29 @@ void KSpreaddlgformula::slotOk()
 
   if ( m_pView->activeTable() != 0L )
     {
+    	if(assistant->isChecked() && (math=="variante" || math =="mult" || math =="average" || math =="sum" || math =="max" || math =="min"))
+    		{
+    	
+    		if(m_pView->editWidget()->isActivate() )
+    			{
+    			math=m_pView->editWidget()->text()+math;
+    			KSpreadassistant* dlg=new KSpreadassistant(m_pView,"Kassistant",math);
+    			dlg->show();
+    			}
+    		if(m_pView->canvasWidget()->pointeur() != 0)
+			{
+	    		if(m_pView->canvasWidget()->EditorisActivate())
+	    			{
+	    			math=m_pView->canvasWidget()->editEditor()+math;
+	    			KSpreadassistant* dlg=new KSpreadassistant(m_pView,"Kassistant",math);
+    				dlg->show();
+	    			}
+	    		}
+	    		
+    		
+    		}
+    	else
+    	{
      	QString name_function;
      	QString string;
      	int pos;
@@ -114,7 +145,7 @@ void KSpreaddlgformula::slotOk()
 	    	m_pView->canvasWidget()->setPosEditor(pos);
 	    }
 	}
-     	
+     	}
     }
   accept();
 }
@@ -137,7 +168,17 @@ if ( m_pView->activeTable() != 0L )
 
 void KSpreaddlgformula::slotselected_formula(const QString & string)
 {
-
+if(string=="variante" || string =="mult" || string =="average" || string =="sum" || string =="max" || string =="min")
+	{
+	label->setEnabled(true);
+	assistant->setEnabled(true);
+	}
+else
+	{
+	label->setEnabled(false);
+	assistant->setEnabled(false);
+	}
+	
 }
 void KSpreaddlgformula::slotselected(const QString & string)
 {

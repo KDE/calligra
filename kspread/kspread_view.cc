@@ -57,6 +57,7 @@
 #include "kspread_view.h"
 #include "kspread_dlg_formula.h"
 
+
 /*****************************************************************************
  *
  * KSpreadView
@@ -891,6 +892,7 @@ if ( m_pTable != 0L )
     		}
     }
 }
+
 QString KSpreadView::colorToPixString( QColor c, PType _type )
 {
     int r, g, b;
@@ -972,6 +974,7 @@ QString KSpreadView::colorToPixString( QColor c, PType _type )
 	pix += "\"                     \",\n";
 	pix += "\"                     \";\n";
     } break;
+
     }
 
     return QString( pix );
