@@ -13,6 +13,9 @@
 #include <ktabctl.h>
 #include <stdlib.h>
 #include "matrixwidget.h"
+#include <qcombobox.h>
+#include <qbuttongroup.h>
+
 /*
 Matrix Setup Dialog
 */
