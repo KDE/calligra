@@ -99,7 +99,7 @@
         <Type range="true">Int</Type>
       </Parameter>
       <Help>
-	<Text>The LCD() function returns the largest common denominator for two or more integer values. This function</Text>
+	<Text>The LCD() function returns the largest common denominator for two or more integer values.</Text>
         <Text>This function is obsolete and will be removed in a later version of KSpread. It is provided only for compatibility. Please use the GCD function instead.</Text>
 	<Syntax>LCD(value; value)</Syntax>
       </Help>
