@@ -20,6 +20,20 @@
 #ifndef defs_h
 #define defs_h
 
+/** 
+  * A relation between 2 nodes (represented with a @ref KPTRelation) states 
+  * that one is dependent on the other. When scheduling a node in time we look
+  * at the timespan of the parent node to schedule the child node. 
+  * 
+  * <ul>
+  *   <li><b>START_ON_DATE</b>     
+  *   <li><b>FINISH_BY_DATE</b>    
+  *   <li><b>WORK_BETWEEN_DATES</b>
+  *   <li><b>MILESTONE</b>         
+  *   <li><b>PERCENT_OF_PROJECT</b>
+  *  </ul>
+  */
+
 enum TimingType {
   START_ON_DATE=0,
   FINISH_BY_DATE=1,
@@ -27,9 +41,17 @@ enum TimingType {
   MILESTONE=3,
   PERCENT_OF_PROJECT=4 };
 
+/** 
+  * A @ref KPTRelation is one of these types.
+  * <ul>
+  *   <li> <b>FINISH_START</b>  = child node cannot start until this node has finished 
+  *   <li> <b>FINISH_FINISH</b> = child node cannot finish until this node has finished
+  *   <li> <b>START_START</b>   = child node cannot start until this node has started
+  * </ul>
+  */
 enum TimingRelation {
-  FINISH_START=0,   // child node cannot start until this node has finished 
-  FINISH_FINISH=1,  // child node cannot finish until this node has finished
-  START_START=2 };  // child node cannot start until this node has started
+  FINISH_START=0,
+  FINISH_FINISH=1,
+  START_START=2 };
 
 #endif

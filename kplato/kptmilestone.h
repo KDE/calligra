@@ -26,8 +26,7 @@
 class KPTResourceGroup;
 
 /**
- * This class represents any node in the project, a node can be a project to a subproject and any task.
- * This class is basically an abstract interface to make the design more OO.
+ * This class is a 0-time node which is dependent on any number of other nodes. 
  */
 class KPTMilestone : public KPTNode {
     public:

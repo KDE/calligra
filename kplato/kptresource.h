@@ -46,16 +46,15 @@ class KPTResourceGroup {
 	      const QString &name() const {return m_name;}
 	
 	      /** Manage the resources in this list
-	        * At some point we will have to look at not mixing types of resources
+	        * <p>At some point we will have to look at not mixing types of resources
 	        * (e.g. you can't add a person to a list of computers
 	        *
-	        * Risks must always be associated with a resource, so there is no option
-	        * to manipulate risks seperately
+	        * <p>Risks must always be associated with a resource, so there is no option
+	        * to manipulate risks (@ref KPTRisk) seperately
 	        */
-	
 	      void addResource(KPTResource*, KPTRisk*);
-        void insertResource( unsigned int index, KPTResource *resource );
-        void removeResource( KPTResource *resource );
+          void insertResource( unsigned int index, KPTResource *resource );
+          void removeResource( KPTResource *resource );
 	      void removeResource(int);
 
 	      KPTResource* getResource(int);
@@ -64,10 +63,20 @@ class KPTResourceGroup {
 	      /** Manage the dependent resources.  This is a list of the resource
 	        * groups that must have available resources for this resource to
 	        * perform the work
+            * <p>see also @ref getRequiredResource, @ref getRequiredResource
 	        */
-	
 	      void addRequiredResource(KPTResourceGroup*);
+	      /** Manage the dependent resources.  This is a list of the resource
+	        * groups that must have available resources for this resource to
+	        * perform the work
+            * <p>see also @ref addRequiredResource, @ref getRequiredResource
+	        */
 	      KPTResourceGroup* getRequiredResource(int);
+	      /** Manage the dependent resources.  This is a list of the resource
+	        * groups that must have available resources for this resource to
+	        * perform the work
+            * <p>see also @ref getRequiredResource, @ref addRequiredResource
+	        */
 	      void removeRequiredResource(int);
 	
     private:
@@ -77,6 +86,15 @@ class KPTResourceGroup {
         QList<KPTResourceGroup> m_requires;
 };
 
+/**
+  * Any resource that is used by a task. A resource can be a worker, or maybe wood.
+  * If the resources is a worker or a piece of equiment which can be reused but 
+  * can only be used by one node in time, then we can use the scheduling methods of the 
+  * resource to schedule the resource available time for the project.
+  * The Idea is that all nodes which need this resource point to it and the scheduling
+  * code (partly implemented here) schedules the actual usage.
+  * See also @ref KPTResourceGroup
+  */
 class KPTResource {
     public:
 
@@ -105,6 +123,10 @@ class KPTResource {
         QList<KPTDuration> m_workingHours;
 };
 
+/**
+  * A resource (@ref KPTResource) can be scheduled to be used at any time, this is represented
+  * internally with KPTAppointments
+  */
 class KPTAppointment {
     public:
         KPTAppointment(KPTDuration startTime, KPTDuration duration, KPTResource *resource, KPTTask *taskNode=0);

@@ -133,6 +133,11 @@ class KPTNode {
         KPTEffort* m_effort;
 };
 
+/** 
+  * Any @ref KPTNode will store how much time it takes to complete the node (typically a @ref KPTTask)
+  * in the traditional scheduling software the effort which is needed to complete the node is not simply
+  * a timespan but is stored as an optimistic, a pessimistic and an expected timespan.
+  */
 class KPTEffort {
 
     public:

@@ -38,8 +38,10 @@ KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingR
 KPTRelation::~KPTRelation() {
 }
 
-void KPTRelation::timingType(TimingType tt) {
+void KPTRelation::setTimingType(TimingType tt) {
+    m_timingType=tt;
 }
-void KPTRelation::timingRelation(TimingRelation tr) {
+void KPTRelation::setTimingRelation(TimingRelation tr) {
+    m_timingRelation=tr;
 }
 

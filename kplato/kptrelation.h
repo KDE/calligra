@@ -24,7 +24,13 @@
 #include "defs.h"
 
 class KPTNode;
-
+/**
+  * The relation class couples a 2 nodes together which are dependent on each other.
+  * If for example you have a project to build a house, the node that represents the 
+  * adding of the roof is dependent on the node that represents the building of the walls.
+  * The roof can't be put up if the walls are not there yet.
+  * We actually have a number of TimingRelations so this relation can be used in different manners.
+  */
 class KPTRelation {
     public:
 
@@ -32,9 +38,9 @@ class KPTRelation {
         KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt=START_ON_DATE, TimingRelation tr=FINISH_START);
         ~KPTRelation();
 
-        void timingType(TimingType );
+        void setTimingType(TimingType );
         TimingType timingType() { return m_timingType; }
-        void timingRelation(TimingRelation );
+        void setTimingRelation(TimingRelation );
         TimingRelation timingRelation() { return m_timingRelation; }
 
         /** returns the lag.

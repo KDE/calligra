@@ -25,7 +25,8 @@
 class KPTDuration;
 
 /**
- * This class is a wrapper class for the QDateTime class
+ * The duration class can be used to store a timespan in a convenient format. 
+ * The timespan can be in length in many many hours down to miliseconds.
  */
 class KPTDuration {
     public:

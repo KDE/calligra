@@ -27,6 +27,10 @@
 
 class KPTResource;
 
+/** 
+  * A task in the scheduling software is represented by this class. A task can be anything
+  * from 'build house' to 'drill hole' It will always mean an activity.
+  */
 class KPTTask : public KPTNode {
     public:
 

@@ -26,6 +26,10 @@
 
 class KPTResource;
 
+/** 
+  *  KPTProject is the main node in a project, it contains child nodes and possibly sub-projects. 
+  *  a sub-project is just another instantion of this node however.
+  */
 class KPTProject : public KPTNode {
     public:
 
