@@ -55,7 +55,6 @@
 #include "HelplineDialog.h"
 #include "TransformationDialog.h"
 #include "LayerDialog.h"
-#include "ScriptDialog.h"
 #include "PStateManager.h"
 #include "ExportFilter.h"
 #include "GroupCmd.h"
@@ -104,7 +103,6 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     mainWidget = 0L;
     viewport = 0L;
     layerDialog = 0L;
-    scriptDialog = 0L;
     objMenu = 0L;
     // restore default settings
     PStateManager::instance ();
@@ -484,7 +482,7 @@ void KIllustratorView::resizeEvent (QResizeEvent* )
     }
 }
 
-void KIllustratorView::updateReadWrite( bool readwrite )
+void KIllustratorView::updateReadWrite( bool /*readwrite*/ )
 {
 #ifdef __GNUC__
 #warning TODO

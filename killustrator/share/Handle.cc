@@ -24,6 +24,7 @@
 
 #include <Handle.h>
 #include <Painter.h>
+#include <qpainter.h>
 
 Handle::Handle () {
   mode = HMode_Default;

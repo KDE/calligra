@@ -25,6 +25,7 @@
 
 #include <qpointarray.h>
 #include <qdom.h>
+#include <qpainter.h>
 #include <klocale.h>
 
 #include <GradientShape.h>

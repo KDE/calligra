@@ -22,7 +22,7 @@
 */
 
 #include <qdom.h>
-//#include <stdlib.h>
+#include <qbrush.h>
 #include <math.h>
 #include <time.h>
 #include <utility>

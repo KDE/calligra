@@ -26,6 +26,7 @@
 #define GText_h_
 
 #include <GObject.h>
+#include <qfont.h>
 
 class GTextState;
 class QFontMetrics;

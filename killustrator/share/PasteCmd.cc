@@ -24,14 +24,15 @@
 
 #include <PasteCmd.h>
 
-#include <iostream.h>
-#include <strstream.h>
+#include <qstring.h>
 #include <qclipboard.h>
-#include <klocale.h>
 
-#include "GDocument.h"
-#include "GObject.h"
-#include "GText.h"
+#include <klocale.h>
+#include <kapp.h>
+
+#include <GDocument.h>
+#include <GObject.h>
+#include <GText.h>
 
 PasteCmd::PasteCmd (GDocument* doc)
   : Command(i18n("Paste"))
@@ -47,38 +48,36 @@ PasteCmd::~PasteCmd () {
 
 void PasteCmd::execute () {
 
-    // FIXME (Werner)
-    /*
     for (list<GObject*>::iterator it = objects.begin ();
-	 it != objects.end (); it++)
-	(*it)->unref ();
+         it != objects.end (); it++)
+        (*it)->unref ();
     objects.clear ();
-    const char* buf = QApplication::clipboard ()->text ();
-    if (::strlen (buf)) {
-      if (::strncmp (buf, "<?xml", 5) == 0) {
-	// KIllustrator objects
-	QWMatrix m;
-	m.translate (10, 10);
-	
-	istrstream is (buf);
-	document->insertFromXml (is, objects);
-	document->unselectAllObjects ();
-	for (list<GObject*>::iterator it = objects.begin ();
-	     it != objects.end (); it++) {
-	  (*it)->ref ();
-	  (*it)->transform (m, true);
-	  document->selectObject (*it);
-	}
-      }
-      else {
-	// plain text
-	GText *tobj = new GText ();
-	tobj->setText (buf);
-	objects.push_back (tobj);
-	document->insertObject (tobj);
-      }
+    QString buf = QApplication::clipboard ()->text ();
+    if (!buf.isEmpty()) {
+        if (buf.left(5)=="<?xml") {
+            // KIllustrator objects
+            QWMatrix m;
+            m.translate (10, 10);
+
+            QDomDocument d;
+            d.setContent(buf);
+            document->insertFromXml (d, objects);
+            document->unselectAllObjects ();
+            for (list<GObject*>::iterator it = objects.begin ();
+                 it != objects.end (); it++) {
+                (*it)->ref ();
+                (*it)->transform (m, true);
+                document->selectObject (*it);
+            }
+        }
+        else {
+            // plain text
+            GText *tobj = new GText ();
+            tobj->setText (buf);
+            objects.push_back (tobj);
+            document->insertObject (tobj);
+        }
     }
-    */
 }
 
 void PasteCmd::unexecute () {

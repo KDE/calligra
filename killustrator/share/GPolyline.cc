@@ -24,6 +24,7 @@
 #include <GPolyline.h>
 
 #include <qdom.h>
+#include <qpainter.h>
 #include <klocale.h>
 
 #include <GCurve.h>

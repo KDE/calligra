@@ -29,6 +29,7 @@
 
 #include <qdom.h>
 #include <qpointarray.h>
+#include <qpainter.h>
 #include <klocale.h>
 
 #define DELTA 0.05

@@ -67,7 +67,6 @@ class Canvas;
 class GDocument;
 class QwViewport;
 class LayerDialog;
-class ScriptDialog;
 class ToolController;
 class Canvas;
 class Ruler;
@@ -282,7 +281,6 @@ protected:
   Canvas *canvas;
   Ruler *hRuler, *vRuler;
   LayerDialog *layerDialog;
-  ScriptDialog *scriptDialog;
   QWidget *mainWidget;
   QGridLayout *grid;
   CommandHistory cmdHistory;

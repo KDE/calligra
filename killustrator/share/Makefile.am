@@ -33,7 +33,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 Arrow.h Painter.h LineStyle.h \
 		 TransformationDialog.h \
 		 MainView.h PStateManager.h OptionDialog.h \
-		 Preview.h units.h UnitBox.h ScriptDialog.h \
+		 Preview.h units.h UnitBox.h \
 		 GLayer.h LayerDialog.h LayerView.h \
 		 Gradient.h GradientShape.h \
 		 BrushCells.h PathTextTool.h \
@@ -41,7 +41,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 GCurve.h ToCurveCmd.h BlendDialog.h BlendCmd.h \
 		 StartupScreen.h filter_utils.h
 
-libkillu_la_SOURCES = ScriptDialog.cc Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
+libkillu_la_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  PathTextTool.cc GOval.cc GClipart.cc GBezier.cc GPixmap.cc \
 			  GText.cc GGroup.cc Tool.cc PolylineTool.cc \
 			  FreeHandTool.cc \

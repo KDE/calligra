@@ -6,7 +6,7 @@
                      Steffen Thorhauer (thorhaue@iti.cs.uni-magdeburg.de)
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -14,14 +14,16 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-#include "Painter.h"
+#include <Painter.h>
+#include <qpainter.h>
+#include <Coord.h>
 
 #define DELTA 0.05
 
@@ -37,21 +39,21 @@ void Painter::drawEllipse (QPainter& p, float x, float y, float w, float h) {
   p.drawEllipse (round (x), round (y), round (w), round (h));
 }
 
-void Painter::drawArc (QPainter& p, float x, float y, float w, float h, 
-		       float a, float alen) {
+void Painter::drawArc (QPainter& p, float x, float y, float w, float h,
+                       float a, float alen) {
   p.drawArc (round (x), round (y), round (w), round (h),
-		     round (a), round (alen));
+                     round (a), round (alen));
 }
 
-void Painter::drawPie (QPainter& p, float x, float y, float w, float h, 
-		       float a, float alen) {
+void Painter::drawPie (QPainter& p, float x, float y, float w, float h,
+                       float a, float alen) {
   p.drawPie (round (x), round (y), round (w), round (h),
-	     round (a), round (alen));
+             round (a), round (alen));
 }
 
 void Painter::drawBezier (QPainter& p, QList<Coord>& points, int index) {
     float th,th2,th3;
-    float t,t2,t3;      
+    float t,t2,t3;
     int x0,y0,x1,y1;
     int i0=index;
     int i1=index+1;
@@ -59,10 +61,10 @@ void Painter::drawBezier (QPainter& p, QList<Coord>& points, int index) {
     int i3=index+3;
 
       x1 = (int)points.at (i0)->x();
-      y1 = (int)points.at (i0)->y();   
+      y1 = (int)points.at (i0)->y();
       for(t = 0; t < 1.01; t += DELTA) {
         x0 = x1;
-        y0 = y1;      
+        y0 = y1;
         th = 1 - t;
         t2= t*t;
         t3 = t2*t;
@@ -70,7 +72,7 @@ void Painter::drawBezier (QPainter& p, QList<Coord>& points, int index) {
         th3 = th2*th;
         x1 = (int) (th3* +(int)points.at (i0)->x() +
            3*t*th2*(int)points.at (i1)->x() +
-           3*t2*th*(int)points.at (i2)->x() + 
+           3*t2*th*(int)points.at (i2)->x() +
            t3*(int)points.at (i3)->x());
        y1 = (int) (th3* +(int)points.at (i0)->y() +
            3*t*th2*(int)points.at (i1)->y() +
@@ -79,4 +81,4 @@ void Painter::drawBezier (QPainter& p, QList<Coord>& points, int index) {
         p.drawLine(x0, y0, x1, y1);
       }
 
-} 
+}

@@ -28,6 +28,7 @@
 
 #include <qdom.h>
 #include <qstring.h>
+#include <qpainter.h>
 #include <klocale.h>
 
 GOval::GOval (bool cFlag) : circleFlag (cFlag) {

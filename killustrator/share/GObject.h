@@ -26,6 +26,8 @@
 #define GObject_h_
 
 #include <qobject.h>
+#include <qwmatrix.h>
+
 #include <Gradient.h>
 #include <Coord.h>
 #include <GradientShape.h>
