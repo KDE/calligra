@@ -7,10 +7,11 @@
 
 #include "vcommand.h"
 #include "vpath.h"
-#include "vpoint.h"
 
 #include "karbon_part.h"
 #include "karbon_view.h"
+
+#include "vccmd_polygon.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -26,9 +27,9 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 KarbonPart::~KarbonPart()
 {
 	// delete all layers:
-	QListIterator<VLayer> i( m_layers );
-	for ( ; i.current() ; ++i )
-		delete( i.current() );
+	QPtrListIterator<VLayer> itr( m_layers );
+	for ( ; itr.current() ; ++itr )
+		delete( itr.current() );
 
 	// delete the command-history:
 	delete m_commandHistory;
@@ -37,6 +38,9 @@ KarbonPart::~KarbonPart()
 bool
 KarbonPart::initDoc()
 {
+	VCCmdPolygon p( this, 100, 100, 50, 5 );
+	p.execute();
+
 	// If nothing is loaded, do initialize here
 	return true;
 }
@@ -82,11 +86,12 @@ KarbonPart::addCommand( VCommand* cmd )
 void
 KarbonPart::repaintAllViews( bool erase )
 {
-	QListIterator<KoView> i( views() );
-	for ( ; i.current() ; ++i )
+	QPtrListIterator<KoView> itr( views() );
+	for ( ; itr.current() ; ++itr )
 // TODO: any better solution for this?
-//		static_cast<KarbonView*> ( i.current() )->canvasWidget()->repaintAll( erase );
- 		static_cast<KarbonView*> ( i.current() )->canvasWidget()->repaintAll( true );
+//		static_cast<KarbonView*> ( itr.current() )->canvasWidget()->repaintAll(
+// erase );
+ 		static_cast<KarbonView*> ( itr.current() )->canvasWidget()->repaintAll( true );
 }
 
 

@@ -5,7 +5,6 @@
 #include "vccmd_sinus.h"	// command
 #include "vcdlg_sinus.h"	// dialog
 #include "vctool_sinus.h"
-#include "vpoint.h"
 
 VCToolSinus* VCToolSinus::s_instance = 0L;
 
@@ -76,29 +75,20 @@ VCToolSinus::eventFilter( KarbonView* view, QEvent* event )
 			// we didnt drag => show a config-dialog:
 			if ( m_dialog->exec() )
 			{
-				// temp vpoint (zoomFactor):
-				VPoint tl;
-				tl.setFromQPoint( m_fp, view->zoomFactor() );
-
 				m_periods = m_dialog->valuePeriods();
 
 				m_part->addCommand(
 					new VCCmdSinus( m_part,
-						tl.x(), tl.y(),
-						tl.x() + m_dialog->valueWidth(),
-						tl.y() + m_dialog->valueHeight(), m_periods ) );
+						m_fp.x(), m_fp.y(),
+						m_fp.x() + m_dialog->valueWidth(),
+						m_fp.y() + m_dialog->valueHeight(), m_periods ) );
 			}
 		}
 		else
 		{
-			// temp vpoints (zoomFactor):
-			VPoint tl;
-			VPoint br;
-			tl.setFromQPoint( m_tl, view->zoomFactor() );
-			br.setFromQPoint( m_br, view->zoomFactor() );
-
 			m_part->addCommand(
-				new VCCmdSinus( m_part, tl.x(), tl.y(), br.x(), br.y(), m_periods ) );
+				new VCCmdSinus( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y(), m_periods )
+ );
 		}
 
 		return true;

@@ -2,11 +2,10 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#include <math.h>
-
 #include <klocale.h>
+#include <math.h>
+#include <qwmatrix.h>
 
-#include "vaffinemap.h"
 #include "vccmd_star.h"
 #include "vglobal.h"
 #include "vpath.h"
@@ -64,9 +63,9 @@ VCCmdStar::createPath()
 	path->close();
 
 	// translate path to center:
-	VAffineMap aff_map;
-	aff_map.translate( m_centerX, m_centerY );
-	path->transform( aff_map );
+	QWMatrix m;
+	m.translate( m_centerX, m_centerY );
+	path->transform( m );
 
 	return path;
 }

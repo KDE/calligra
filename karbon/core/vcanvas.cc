@@ -39,7 +39,7 @@ VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 void
 VCanvas::drawDocument( QPainter* painter, const QRect& rect )
 {
-	QListIterator<VLayer> i = m_part->layers();
+	QPtrListIterator<VLayer> i = m_part->layers();
 	for ( ; i.current(); ++i )
 		if ( i.current()->isVisible() )
 			i.current()->draw( *painter, rect, m_zoomFactor );

@@ -3,8 +3,8 @@
 */
 
 #include <klocale.h>
+#include <qwmatrix.h>
 
-#include "vaffinemap.h"
 #include "vccmd_sinus.h"
 #include "vglobal.h"
 #include "vpath.h"
@@ -86,10 +86,10 @@ VCCmdSinus::createPath()
 	double h = m_tlY - m_brY;
 
 	// translate path and scale:
-	VAffineMap aff_map;
-	aff_map.scale( w/m_periods, h*0.5 );
-	aff_map.translate( m_tlX, m_brY + h*0.5 );
-	path->transform( aff_map );
+	QWMatrix m;
+	m.scale( w/m_periods, h*0.5 );
+	m.translate( m_tlX, m_brY + h*0.5 );
+	path->transform( m );
 
 	return path;
 }

@@ -3,8 +3,8 @@
 */
 
 #include <klocale.h>
+#include <qwmatrix.h>
 
-#include "vaffinemap.h"
 #include "vccmd_ellipse.h"
 #include "vpath.h"
 
@@ -73,10 +73,10 @@ VCCmdEllipse::createPath()
 	double h = m_tlY - m_brY;
 
 	// translate path and scale:
-	VAffineMap aff_map;
-	aff_map.scale( w, h );
-	aff_map.translate( m_tlX + w*0.5, m_brY + h*0.5 );
-	path->transform( aff_map );
+	QWMatrix m;
+	m.scale( w, h );
+	m.translate( m_tlX + w*0.5, m_brY + h*0.5 );
+	path->transform( m );
 
 	return path;
 }

@@ -5,7 +5,7 @@
 #ifndef __KARBON_PART_H__
 #define __KARBON_PART_H__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <koDocument.h>
 
 #include "vlayer.h"
@@ -36,7 +36,7 @@ public:
 	void addCommand( VCommand* cmd );
 
 	// read-only access to layers:
-	const QList<VLayer>& layers() const { return m_layers; }
+	const QPtrList<VLayer>& layers() const { return m_layers; }
 	// sacrifying privatness:
 	VLayer* activeLayer() const { return m_activeLayer; }
 
@@ -48,7 +48,7 @@ protected:
 
 private:
 	// each graphical object lies on a layer:
-	QList<VLayer> m_layers;
+	QPtrList<VLayer> m_layers;
 	// the active/current layer:
 	VLayer* m_activeLayer;
 

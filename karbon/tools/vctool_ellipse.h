@@ -12,7 +12,6 @@
 #include "karbon_view.h"
 #include "vccmd_ellipse.h"
 #include "vpath.h"
-#include "vpoint.h"
 #include "vtool.h"
 
 class KarbonPart;
@@ -116,13 +115,9 @@ VCToolEllipse::drawTemporaryObject( KarbonView* view )
 		// an ellipse with height/width==1 vanishes. that's why we use
 		// VCCmdEllipse::createPath. this is a bit slower.
 
-		// temporary VPoint (zoomFactor handling):
-		VPoint br;
-		br.setFromQPoint( m_width, m_height, view->zoomFactor() );
-
 		// let the command create the necessary qpointarray for us:
 		VCCmdEllipse* cmd =
-			new VCCmdEllipse( m_part, 0.0, 0.0, br.x(), br.y() );
+			new VCCmdEllipse( m_part, 0.0, 0.0, m_width, m_height );
 
 		VPath* path = cmd->createPath();
 

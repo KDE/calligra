@@ -5,7 +5,6 @@
 #include "vccmd_rectangle.h"	// command
 #include "vcdlg_rectangle.h"	// dialog
 #include "vctool_rectangle.h"
-#include "vpoint.h"
 
 VCToolRectangle* VCToolRectangle::s_instance = 0L;
 
@@ -75,27 +74,17 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 			// we didnt drag => show a config-dialog:
 			if ( m_dialog->exec() )
 			{
-				// temp vpoint (zoomFactor):
-				VPoint tl;
-				tl.setFromQPoint( m_fp, view->zoomFactor() );
-
 				m_part->addCommand(
 					new VCCmdRectangle( m_part,
-						tl.x(), tl.y(),
-						tl.x() + m_dialog->valueWidth(),
-						tl.y() + m_dialog->valueHeight() ) );
+						m_fp.x(), m_fp.y(),
+						m_fp.x() + m_dialog->valueWidth(),
+						m_fp.y() + m_dialog->valueHeight() ) );
 			}
 		}
 		else
 		{
-			// temp vpoints (zoomFactor):
-			VPoint tl;
-			VPoint br;
-			tl.setFromQPoint( m_tl, view->zoomFactor() );
-			br.setFromQPoint( m_br, view->zoomFactor() );
-
 			m_part->addCommand(
-				new VCCmdRectangle( m_part, tl.x(), tl.y(), br.x(), br.y() ) );
+				new VCCmdRectangle( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y() ) );
 		}
 
 		return true;

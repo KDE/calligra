@@ -5,8 +5,8 @@
 #include <math.h>
 
 #include <klocale.h>
+#include <qwmatrix.h>
 
-#include "vaffinemap.h"
 #include "vccmd_polygon.h"
 #include "vglobal.h"
 #include "vpath.h"
@@ -60,9 +60,9 @@ VCCmdPolygon::createPath()
 	path->close();
 
 	// translate path to center:
-	VAffineMap aff_map;
-	aff_map.translate( m_centerX, m_centerY );
-	path->transform( aff_map );
+	QWMatrix m;
+	m.translate( m_centerX, m_centerY );
+	path->transform( m );
 
 	return path;
 }

@@ -11,7 +11,6 @@
 #include "karbon_view.h"
 #include "vccmd_roundrect.h"
 #include "vpath.h"
-#include "vpoint.h"
 #include "vtool.h"
 
 class KarbonPart;
@@ -99,17 +98,12 @@ VCToolRoundRect::drawTemporaryObject( KarbonView* view )
 	painter.setPen( Qt::black );
 	painter.setRasterOp( Qt::NotROP );
 
-	// Qt's drawRoundRect() behaves differntely, that's why we have
+	// Qt's drawRoundRect() behaves differently, that's why we have
 	// to take the long way home here.
-
-	VPoint tl;
-	VPoint br;
-	tl.setFromQPoint( m_tl, view->zoomFactor() );
-	br.setFromQPoint( m_br, view->zoomFactor() );
 
 	// let the command create the necessary qpointarray for us:
 	VCCmdRoundRect* cmd =
-		new VCCmdRoundRect( m_part, tl.x(), tl.y(), br.x(), br.y(), m_round );
+		new VCCmdRoundRect( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y(), m_round );
 
 	VPath* path = cmd->createPath();
 

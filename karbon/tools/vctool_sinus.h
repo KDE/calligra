@@ -11,7 +11,6 @@
 #include "karbon_view.h"
 #include "vccmd_sinus.h"
 #include "vpath.h"
-#include "vpoint.h"
 #include "vtool.h"
 
 class KarbonPart;
@@ -102,14 +101,9 @@ VCToolSinus::drawTemporaryObject( KarbonView* view )
 	// Qt's drawRoundRect() behaves differntely, that's why we have
 	// to take the long way home here.
 
-	VPoint tl;
-	VPoint br;
-	tl.setFromQPoint( m_tl, view->zoomFactor() );
-	br.setFromQPoint( m_br, view->zoomFactor() );
-
 	// let the command create the necessary qpointarray for us:
 	VCCmdSinus* cmd =
-		new VCCmdSinus( m_part, tl.x(), tl.y(), br.x(), br.y(), m_periods );
+		new VCCmdSinus( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y(), m_periods );
 
 	VPath* path = cmd->createPath();
 

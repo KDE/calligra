@@ -5,7 +5,6 @@
 #include "vccmd_roundrect.h"	// command
 #include "vcdlg_roundrect.h"	// dialog
 #include "vctool_roundrect.h"
-#include "vpoint.h"
 
 VCToolRoundRect* VCToolRoundRect::s_instance = 0L;
 
@@ -76,29 +75,20 @@ VCToolRoundRect::eventFilter( KarbonView* view, QEvent* event )
 			// we didnt drag => show a config-dialog:
 			if ( m_dialog->exec() )
 			{
-				// temp vpoint (zoomFactor):
-				VPoint tl;
-				tl.setFromQPoint( m_fp, view->zoomFactor() );
-
 				m_round = m_dialog->valueRound();
 
 				m_part->addCommand(
 					new VCCmdRoundRect( m_part,
-						tl.x(), tl.y(),
-						tl.x() + m_dialog->valueWidth(),
-						tl.y() + m_dialog->valueHeight(), m_round ) );
+						m_fp.x(), m_fp.y(),
+						m_fp.x() + m_dialog->valueWidth(),
+						m_fp.y() + m_dialog->valueHeight(), m_round ) );
 			}
 		}
 		else
 		{
-			// temp vpoints (zoomFactor):
-			VPoint tl;
-			VPoint br;
-			tl.setFromQPoint( m_tl, view->zoomFactor() );
-			br.setFromQPoint( m_br, view->zoomFactor() );
-
 			m_part->addCommand(
-				new VCCmdRoundRect( m_part, tl.x(), tl.y(), br.x(), br.y(), m_round ) );
+				new VCCmdRoundRect( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y(), m_round
+ ) );
 		}
 
 		return true;

@@ -5,7 +5,7 @@
 #ifndef __VLAYER_H__
 #define __VLAYER_H__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 #include "vobject.h"
 
@@ -25,10 +25,10 @@ public:
 	const bool& isReadOnly() const { return m_isReadOnly; }
 
 	// read-only access to objects:
-	const QList<VObject>& objects() const { return m_objects; }
+	const QPtrList<VObject>& objects() const { return m_objects; }
 
 private:
-	QList<VObject> m_objects;
+	QPtrList<VObject> m_objects;
 	QString m_name;
 	bool m_isVisible;
 	bool m_isReadOnly;

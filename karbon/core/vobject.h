@@ -5,12 +5,12 @@
 #ifndef __VOBJECT_H__
 #define __VOBJECT_H__
 
-#include "vrect.h"
+#include "koRect.h"
 #include "vtool.h"
 
 class QPainter;
+class QWMatrix;
 
-class VAffineMap;
 class VCommand;
 
 // The base class for all karbon objects.
@@ -27,16 +27,16 @@ public:
 
 	virtual VCommand* accept( VTool& tool ) { return tool.manipulate( this ); }
 
-	virtual VObject& transform( const VAffineMap& affMap ) = 0;
+	virtual VObject& transform( const QWMatrix& m ) = 0;
 
-	const VRect& boundingBox() const { return m_boundingBox; }
+	const KoRect& boundingBox() const { return m_boundingBox; }
 
 	// the "m_isDeleted" flag is needed e.g to be able to undo deletion of objects:
 	void setDeleted( bool flag = true ) { m_isDeleted = flag; }
 	bool isDeleted() { return m_isDeleted; }
 
 protected:
-	VRect m_boundingBox;
+	KoRect m_boundingBox;
 
 private:
 	bool m_isDeleted;

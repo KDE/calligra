@@ -9,7 +9,6 @@
 #include <qpoint.h>
 
 #include "karbon_view.h"
-#include "vpoint.h"
 #include "vtool.h"
 
 class KarbonPart;
