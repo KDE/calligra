@@ -244,23 +244,23 @@ bool WinWordDoc::convert()
 
 void WinWordDoc::encode(QString &text)
 {
-  // When encoding the stored form of text to its run-time form,
-  // be sure to do the conversion for "&amp;" to "&" first to avoid
-  // accidentally converting user text into one of the other escape
-  // sequences.
+    // When encoding the stored form of text to its run-time form,
+    // be sure to do the conversion for "&amp;" to "&" first to avoid
+    // accidentally converting user text into one of the other escape
+    // sequences.
 
-  text.replace(QRegExp("&"), "&amp;");
-  text.replace(QRegExp("<"), "&lt;");
+    text.replace(QRegExp("&"), "&amp;");
+    text.replace(QRegExp("<"), "&lt;");
 
-  // Strictly, there is no need to encode >, but we do so to for safety.
+    // Strictly, there is no need to encode >, but we do so to for safety.
 
-  text.replace(QRegExp(">"), "&gt;");
+    text.replace(QRegExp(">"), "&gt;");
 
-  // Strictly, there is no need to encode " or ', but we do so to allow
-  // them to co-exist!
+    // Strictly, there is no need to encode " or ', but we do so to allow
+    // them to co-exist!
 
-  text.replace(QRegExp("\""), "&quot;");
-  text.replace(QRegExp("'"), "&apos;");
+    text.replace(QRegExp("\""), "&quot;");
+    text.replace(QRegExp("'"), "&apos;");
 }
 
 QString WinWordDoc::generateBorder(
@@ -355,16 +355,13 @@ QString WinWordDoc::generateFormats(
         {
             const MsWordGenerated::CHP *chp = static_cast<Format *>(run.data())->values->getChp();
 
-            if (run->end > run->start)
-            {
-                formats.append("<FORMAT id=\"1\" pos=\"");
-                formats.append(QString::number(run->start));
-                formats.append("\" len=\"");
-                formats.append(QString::number(run->end - run->start - 1));
-                formats.append("\">\n");
-                formats.append(generateFormat(chp));
-                formats.append("</FORMAT>\n");
-            }
+            formats.append("<FORMAT id=\"1\" pos=\"");
+            formats.append(QString::number(run->start));
+            formats.append("\" len=\"");
+            formats.append(QString::number(run->end - run->start));
+            formats.append("\">\n");
+            formats.append(generateFormat(chp));
+            formats.append("</FORMAT>\n");
         }
         else
         if (typeid(Image) == typeid(*run))

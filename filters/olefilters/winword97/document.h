@@ -286,9 +286,6 @@ private:
     unsigned m_characterPosition;
     unsigned m_imageNumber;
 
-    QString cleanText(
-        const QString &text);
-
     // Override the base class functions.
 
     void gotParagraph(

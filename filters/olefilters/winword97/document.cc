@@ -46,20 +46,6 @@ Document::~Document()
 {
 }
 
-// Paragrpahs end with a control character that we want to suppress.
-QString Document::cleanText(
-    const QString &text)
-{
-    QString cleantext = text;
-    unsigned length = cleantext.length() - 1;
-    QChar last = cleantext[length];
-
-    if ((last == QChar('\r')) ||
-        (last == QChar('\a')))
-        cleantext.truncate(length);
-    return cleantext;
-}
-
 // Return the name of a font. We have to convert the Microsoft font names to something that
 // might just be present under X11.
 QString Document::getFont(unsigned fc)
@@ -107,7 +93,7 @@ void Document::gotParagraph(
     const CHPXarray &chpxs)
 {
     Attributes attributes(this, pap);
-    QString cleantext = cleanText(text);
+    QString cleantext = text;
 
     attributes.setRuns(cleantext, chpxs);
     gotParagraph(cleantext, attributes);
@@ -120,7 +106,7 @@ void Document::gotHeadingParagraph(
     const CHPXarray &chpxs)
 {
     Attributes attributes(this, pap);
-    QString cleantext = cleanText(text);
+    QString cleantext = text;
 
     attributes.setRuns(cleantext, chpxs);
     gotHeadingParagraph(cleantext, attributes);
@@ -133,7 +119,7 @@ void Document::gotListParagraph(
     const CHPXarray &chpxs)
 {
     Attributes attributes(this, pap);
-    QString cleantext = cleanText(text);
+    QString cleantext = text;
 
     attributes.setRuns(cleantext, chpxs);
     gotListParagraph(cleantext, attributes);
@@ -165,7 +151,7 @@ void Document::gotTableRow(
     for (i = 0; i < row.itcMac; i++)
     {
         Attributes *attributes = new Attributes(this, styles[i]);
-        QString cleantext = cleanText(texts[i]);
+        QString cleantext = texts[i];
 
         attributes->setRuns(cleantext, chpxs[i]);
         outStyles.append(attributes);
@@ -328,9 +314,10 @@ void Document::Attributes::setRuns(
     } specialChars;
     CHPXarray chpxs = originalChpxs;
     unsigned runs;
+    unsigned i;
 
     runs = chpxs.size();
-    for (unsigned i = 0; i < runs; i++)
+    for (i = 0; i < runs; i++)
     {
         Properties exceptionStyle(m_baseStyle);
         const CHP *chp;
@@ -520,5 +507,17 @@ void Document::Attributes::setRuns(
             run = format;
         }
         m_runs.append( KSharedPtr<Run>( run ) );
+    }
+
+    // Paragraphs end with a control character that we want to suppress.
+
+    unsigned length = text.length() - 1;
+    QChar last = text[length];
+
+    if ((last == QChar('\r')) ||
+        (last == QChar('\a')))
+    {
+        text.truncate(length);
+        m_runs[chpxs.size()-1]->end--;
     }
 }
