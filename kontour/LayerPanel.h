@@ -35,28 +35,44 @@ class GLayer;
 class QPushButton;
 class QGridLayout;
 
-class PageTreeItem : public QListViewItem
+class TreeItem : public QListViewItem
 {
 public:
-  PageTreeItem(QListView *parent, GPage *p);
-  virtual ~PageTreeItem();
+  TreeItem(QListView *parent);
+  TreeItem(QListViewItem *parent);
 
-  void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);
-//  virtual QString key( int, bool ) const;
-private:
-  GPage *page;
+  virtual void select() = 0;
 };
 
-class LayerTreeItem : public QListViewItem
+class PageTreeItem : public TreeItem
 {
 public:
-  LayerTreeItem(QListViewItem *parent, GLayer *l);
-  virtual ~LayerTreeItem();
+  PageTreeItem(QListView *parent, GPage *aGPage);
 
+  GPage *page() const {return mGPage; }
+
+  void select();
+  void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);
+//  virtual QString key( int, bool ) const;
+protected:
+  void activate();
+
+private:
+  GPage *mGPage;
+};
+
+class LayerTreeItem : public TreeItem
+{
+public:
+  LayerTreeItem(QListViewItem *parent, GLayer *aGLayer);
+
+  GLayer *layer() const {return mGLayer; }
+
+  void select();
   void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);
 //  virtual QString key( int, bool ) const;
 private:
-  GLayer *layer;
+  GLayer *mGLayer;
 };
 
 class LayerView : public QListView
@@ -65,7 +81,14 @@ class LayerView : public QListView
 public:
   LayerView(GDocument *aGDoc, QWidget *parent = 0, const char *name = 0);
   virtual ~LayerView();
+
+  GDocument *document() const {return mGDoc; }
+
   void updateView();
+
+private slots:
+  void slotDoubleClicked(QListViewItem *item);  
+
 private:
   GDocument *mGDoc;
 };

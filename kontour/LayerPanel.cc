@@ -28,9 +28,11 @@
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
+#include <qheader.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 #include "kontour_doc.h"
 #include "kontour_factory.h"
@@ -38,14 +40,26 @@
 #include "GPage.h"
 #include "GLayer.h"
 
-PageTreeItem::PageTreeItem( QListView *parent, GPage* p):
-QListViewItem(parent),page(p)
+TreeItem::TreeItem(QListView *parent):
+QListViewItem(parent)
 {
-  setHeight(16);
 }
 
-PageTreeItem::~PageTreeItem()
+TreeItem::TreeItem(QListViewItem *parent):
+QListViewItem(parent)
 {
+}
+
+PageTreeItem::PageTreeItem( QListView *parent, GPage *aGPage):
+TreeItem(parent)
+{
+  mGPage = aGPage;
+//  setHeight(16);
+}
+
+void PageTreeItem::select()
+{
+  page()->document()->activePage(page());
 }
 
 void PageTreeItem::paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align)
@@ -61,7 +75,7 @@ void PageTreeItem::paintCell(QPainter *p, const QColorGroup &cg, int column, int
   else
     p->fillRect(0, 0, width,height(),cg.base());
 
-  if(page->document()->activePage() == page)
+  if(page()->document()->activePage() == page())
   {
     p->save();
     p->setPen(QPen(red));
@@ -69,16 +83,22 @@ void PageTreeItem::paintCell(QPainter *p, const QColorGroup &cg, int column, int
     p->restore();
   }
   p->drawRect(2, 2, 16, 16); // TODO image
-  p->drawText(19, 0, width, height(), align | AlignVCenter, page->name(), -1);
+  p->drawText(19, 0, width, height(), align | AlignVCenter, page()->name(), -1);
 }
 
-LayerTreeItem::LayerTreeItem( QListViewItem *parent, GLayer* l):
-QListViewItem(parent),layer(l)
+void PageTreeItem::activate()
 {
-  setHeight(16);
+  kdDebug(38000) << "ACTIVATE" << endl;
 }
 
-LayerTreeItem::~LayerTreeItem()
+LayerTreeItem::LayerTreeItem( QListViewItem *parent, GLayer *aGLayer):
+TreeItem(parent)
+{
+  mGLayer = aGLayer;
+//  setHeight(16);
+}
+
+void LayerTreeItem::select()
 {
 }
 
@@ -95,7 +115,7 @@ void LayerTreeItem::paintCell(QPainter *p, const QColorGroup &cg, int column, in
   else
     p->fillRect(0, 0, width,height(), cg.base());
 
-  p->drawText( 1, 0, width, height(), align | AlignVCenter, layer->name(), -1);
+  p->drawText( 1, 0, width, height(), align | AlignVCenter, layer()->name(), -1);
 }
 
 
@@ -104,9 +124,13 @@ QListView(parent, name)
 {
   mGDoc = aGDoc;
   addColumn("Pages", 200);
+  header()->hide();
   setShowSortIndicator(false);
   setMinimumWidth(200);
   setAcceptDrops(true);
+
+  connect(this, SIGNAL(doubleClicked(QListViewItem *)), SLOT(slotDoubleClicked(QListViewItem *)));
+
   updateView();
 }
 
@@ -123,6 +147,12 @@ void LayerView::updateView()
     for(QPtrListIterator<GLayer> itt(((GPage *)it)->getLayers()); itt.current(); ++itt)
       new LayerTreeItem((QListViewItem*)p, (GLayer *)itt);
   }
+}
+
+void LayerView::slotDoubleClicked(QListViewItem *item)
+{
+  TreeItem *titem = (TreeItem *)item;
+  titem->select();
 }
 
 LayerPanel::LayerPanel(GDocument *aGDoc, QWidget *parent, const char *name):
