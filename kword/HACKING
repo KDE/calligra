@@ -1,0 +1,206 @@
+This is a very preliminary outline of the files and directories in kword.
+
+MISC FILES:
+
+   DESIGN
+   DEBUG
+   TODO
+   bidi.txt
+
+DIRECTORIES:
+
+   dtd:
+      the DTD definition for the 
+      kword file format
+
+   pics:
+      application icons
+
+   demos:
+      various example files for kword
+      another interesting place for such
+      files is the kofficetests module 
+      in kde cvs
+
+   expression:
+      contains expression.xml
+
+   filters:
+      currently only contains "mif"
+      has been deprecated in favour of ../filters
+
+   toolbar:
+      various images for the toolbars
+
+   mailmerge: 
+      source to allow merging of a (large)
+      number of email addresses into 
+      a single document
+
+   templates:
+      various  page layout templates
+
+FILES:
+
+   *IFace.{cc,h} files are for the dcop interface
+
+   misc app stuff:
+      main.cc                             - 
+      kwaboutdata.h                       - 
+      kword.rc                            - ui layout xml
+      kword.desktop                       -
+
+   main document data structures:
+      defs.h                              - various global definitions - FrameSetType, TypeStructDocItem
+
+      kwdoc.cc                            - classes: command history, child, 
+                                                     document - config, defaults, load, save, frames helpers,
+                                                                and almost everything else that links doc with ui
+      kwdoc.h                             -
+
+   configuration handler:
+      kwconfig.cc                         - config ui
+      kwconfig.h                          -
+
+   core:
+      kwfactory.cc                        - part factory + about data
+      kwfactory.h                         -
+
+   commands:
+      kwcommand.cc                        - base classes for undo / redo
+                                            _lots_ of handlers - core editing functionality?
+      kwcommand.h                         -
+
+   misc ui:
+      kwdrag.cc                           - drag & drop classes - encodedData(mime)
+      kwdrag.h                            -
+
+      resizehandles.cc                    - ui helper - resize handles
+      resizehandles.h                     -
+
+   core/ui
+
+      app:
+
+         kwcanvas.cc                      - canvas event handler
+                                          & lots of helpers
+         kwcanvas.h                       -
+
+         kwview.cc                        - actions / toolbars
+                                          & doc stats
+         kwview.h                         -
+
+      painting:
+
+         kwtextparag.cc                      - actual painting code 
+                                             & load and saving of xml
+                                             & paragraph formatting / layout
+         kwtextparag.h                       -
+
+         kwtextdocument.cc                   - KoTextDocument reimplimentation
+         kwtextdocument.h                    -
+
+         kwanchor.cc                      - painting stuff?
+         kwanchor.h                       -
+
+         kwanchorpos.h                    -
+
+      view mode:
+         kwviewmode.cc                       - "page mode" / "preview mode" 
+         kwviewmode.h                        -
+
+      doc outline:
+         docstruct.cc                     - gui for overall document structure
+         docstruct.h                      -
+
+      styles:
+         stylenames.cc                    -
+
+         stylist.cc                       - dialog
+         stylist.h                        -
+
+      tables:
+         kwtableframeset.cc               ­
+         kwtableframeset.h                -
+
+         dialogs:
+
+            tabledia.cc                      - table insertion dialog
+            tabledia.h                       -
+
+            deldia.cc                        - table row/column deletion dialog
+            deldia.h                         -
+
+            insdia.cc                        - table row/column insertion dialog
+            insdia.h                         -
+
+            splitcellsdia.cc                 - cell splitting dialog 
+            splitcellsdia.h                  -
+
+      frames:
+         kwtextframeset.cc                -
+         kwtextframeset.h                 -
+
+         kwframe.cc                       -
+         kwframe.h                        -
+
+         framedia.cc                      - dialog
+         framedia.h                       -
+
+      pics:
+         kwtextimage.cc                   -
+         kwtextimage.h                    -
+
+         kwinsertpicdia.cc                - dialog
+         kwinsertpicdia.h                 -
+
+   core features:
+
+      footnotes:
+         footnote.cc                      -
+         footnote.h                       -
+
+         footnotedia.cc                   - dialog
+         footnotedia.h                    -
+
+      background spell checking:
+         kwbgspellcheck.cc                -
+         kwbgspellcheck.h                 -
+
+      contents: (index?)
+         contents.cc                      - ??
+         contents.h                       -
+
+      search:
+         searchdia.cc                     -
+         searchdia.h                      -
+
+   esoteric features:
+
+      mailmerge:
+         mailmerge.cc                     -
+         mailmerge.h                      -
+
+         mailmerge_actions.cc             -
+         mailmerge_actions.h              -
+
+         kwordmailmergedatabaseiface.cc   -
+
+         mailmerge_interface.cc
+         mailmerge_interface.h            - dcop
+         mailmerge_interface_skel.cc
+
+         kwmailmerge.desktop
+
+      expressions:
+         kweditpersonnalexpressiondia.cc  -
+         kweditpersonnalexpressiondia.h   -
+
+      variables:
+         variable.cc                      -
+         variable.h                       -
+
+   misc wierd files: ;-)
+      kwstyle.h                           - 
+      dummy.cc                            - 
+
