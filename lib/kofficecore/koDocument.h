@@ -433,6 +433,8 @@ signals:
 
 protected:
 
+  QString autoSaveFile( const QString & path ) const;
+
   virtual KoView *createViewInstance( QWidget *parent, const char *name ) = 0;
 
   /**

@@ -254,8 +254,9 @@ bool KoDocument::saveFile()
     if ( ret )
     {
         // Eliminate any auto-save file
-        if ( QFile::exists( m_file + ".autosave" ) )
-            unlink( QFile::encodeName( m_file + ".autosave" ) );
+        QString asf = autoSaveFile( m_file );
+        if ( QFile::exists( asf ) )
+            unlink( QFile::encodeName( asf ) );
     }
   }
 
@@ -278,7 +279,7 @@ void KoDocument::slotAutoSave()
     if ( !m_file.isEmpty() && isModified() )
     {
         // TODO temporary message in statusbar ?
-        /*bool ret =*/ saveNativeFormat( m_file + ".autosave" );
+        /*bool ret =*/ saveNativeFormat( autoSaveFile( m_file ) );
         setModified( true );
     }
 }
@@ -653,6 +654,15 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
   return true;
 }
 
+QString KoDocument::autoSaveFile( const QString & path ) const
+{
+    KURL url( path );
+    ASSERT( url.isLocalFile() );
+    QString dir = url.directory(false);
+    QString filename = url.filename();
+    return dir + '.' + filename + ".autosave";
+}
+
 bool KoDocument::openURL( const KURL & _url )
 {
   // Reimplemented, to add a check for autosave files
@@ -665,17 +675,19 @@ bool KoDocument::openURL( const KURL & _url )
   if ( url.isLocalFile() )
   {
     QString file = url.path();
-    if ( QFile::exists( file + ".autosave" ) )
+    QString asf = autoSaveFile( file );
+    if ( QFile::exists( asf ) )
     {
       // ## TODO compare timestamps ?
       int res = KMessageBox::warningYesNoCancel( widget(),
             i18n( "An autosaved file exists for this document.\nDo you want to open it instead ?" ));
       switch(res) {
       case KMessageBox::Yes :
-        url.setPath( file + ".autosave" );
+        url.setPath( asf );
         autosaveOpened = true;
         break;
       case KMessageBox::No :
+        unlink( QFile::encodeName( asf ) );
         break;
       default: // Cancel
         return false;
