@@ -59,7 +59,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name, type_resi
 		for( i=selection.top()+1; i<=selection.bottom(); i++ )
 			if( size != m_pView->activeTable()->rowLayout(i)->dblHeight( m_pView->canvasWidget() ) )
 				equals = false;
-		label = i18n("Height");
+		label = i18n("Height:");
                 tmpCheck += QString(" %1 %2").arg(KoUnit::ptToUnit( heightOfRow, m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
 		break;
 	case resize_column:
@@ -70,7 +70,7 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name, type_resi
 			if( size != m_pView->activeTable()->columnLayout(i)->dblWidth( m_pView->canvasWidget() ) )
 				equals = false;
 
-		label = i18n("Width");
+		label = i18n("Width:");
 		tmpCheck += QString(" %1 %2").arg(KoUnit::ptToUnit( colWidth, m_pView->doc()->getUnit() )).arg(m_pView->doc()->getUnitName());
 		break;
 	default :

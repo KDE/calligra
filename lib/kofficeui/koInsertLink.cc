@@ -165,7 +165,7 @@ internetLinkPage::internetLinkPage( QWidget *parent , char *name  )
   tmpQLabel = new QLabel( this);
   lay2->addWidget(tmpQLabel);
 
-  tmpQLabel->setText(i18n("Internet Address:"));
+  tmpQLabel->setText(i18n("Internet address:"));
   m_hrefName = new QLineEdit( this );
 
   lay2->addWidget(m_hrefName);

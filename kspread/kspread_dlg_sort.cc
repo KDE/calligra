@@ -66,7 +66,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
     = new QGridLayout( m_page1, 1, 1, 11, 6, "page1Layout");
 
   QGroupBox * sort1Box = new QGroupBox( m_page1, "sort1Box" );
-  sort1Box->setTitle( i18n( "Sort by" ) );
+  sort1Box->setTitle( i18n( "Sort By" ) );
   sort1Box->setColumnLayout(0, Qt::Vertical );
   sort1Box->layout()->setSpacing( 6 );
   sort1Box->layout()->setMargin( 11 );
@@ -84,7 +84,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   page1Layout->addWidget( sort1Box, 0, 0 );
 
   QGroupBox * sort2Box = new QGroupBox( m_page1, "sort2Box" );
-  sort2Box->setTitle( i18n( "Then by" ) );
+  sort2Box->setTitle( i18n( "Then By" ) );
   sort2Box->setColumnLayout(0, Qt::Vertical );
   sort2Box->layout()->setSpacing( 6 );
   sort2Box->layout()->setMargin( 11 );
@@ -103,7 +103,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   page1Layout->addWidget( sort2Box, 1, 0 );
 
   QGroupBox * sort3Box = new QGroupBox( m_page1, "sort3Box" );
-  sort3Box->setTitle( i18n( "Then by" ) );
+  sort3Box->setTitle( i18n( "Then By" ) );
   sort3Box->setColumnLayout(0, Qt::Vertical );
   sort3Box->layout()->setSpacing( 6 );
   sort3Box->layout()->setMargin( 11 );
@@ -122,7 +122,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   sort3BoxLayout->addWidget( m_sortOrder3 );
 
   page1Layout->addWidget( sort3Box, 2, 0 );
-  m_tabWidget->insertTab( m_page1, i18n( "Sort criteria" ) );
+  m_tabWidget->insertTab( m_page1, i18n( "Sort Criteria" ) );
 
 
   // options page
@@ -131,7 +131,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   QGridLayout * page2Layout = new QGridLayout( m_page2, 1, 1, 11, 6, "page2Layout");
 
   QGroupBox * firstKeyBox = new QGroupBox( m_page2, "firstKeyBox" );
-  firstKeyBox->setTitle( i18n( "First key" ) );
+  firstKeyBox->setTitle( i18n( "First Key" ) );
   firstKeyBox->setColumnLayout(0, Qt::Vertical );
   firstKeyBox->layout()->setSpacing( 6 );
   firstKeyBox->layout()->setMargin( 11 );
@@ -181,7 +181,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   page2Layout->addMultiCellWidget( m_firstRowHeader, 3, 3, 0, 1 );
 
   QGroupBox * resultToBox = new QGroupBox( m_page2, "resultToBox" );
-  resultToBox->setTitle( i18n( "Put results to" ) );
+  resultToBox->setTitle( i18n( "Put Results To" ) );
   resultToBox->setColumnLayout(0, Qt::Vertical );
   resultToBox->layout()->setSpacing( 6 );
   resultToBox->layout()->setMargin( 11 );

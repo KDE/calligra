@@ -1221,7 +1221,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         } break;
         case MT_MOVE: {
             if ( firstX != mx || firstY != my ) {
-                KMacroCommand *macro=new KMacroCommand(i18n("Move object(s)"));
+                KMacroCommand *macro=new KMacroCommand(i18n("Move Object(s)"));
                 bool cmdCreate=false;
                 int x=(mx - firstX);
                 int y=(my - firstY);
@@ -1252,7 +1252,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             if ( !resizeObjNum ) break;
 	    kpobject = resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object up" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Up" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
@@ -1266,7 +1266,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 	    if ( !resizeObjNum ) break;
 	    kpobject =  resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object down" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Down" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
@@ -1279,7 +1279,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 	    if ( !resizeObjNum ) break;
 	    kpobject = resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Left" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
@@ -1294,7 +1294,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 	    kpobject =  resizeObjNum ;
 
             if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Right" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
@@ -1308,7 +1308,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             if ( !resizeObjNum ) break;
 	    kpobject = resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left up" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Left Up" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
@@ -1322,7 +1322,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 	    if ( !resizeObjNum ) break;
 	    kpobject =  resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left and down" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Left and Down" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
@@ -1336,7 +1336,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             if ( !resizeObjNum ) break;
 	    kpobject =  resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right and up" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Right and Up" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
@@ -1350,7 +1350,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 	    if ( !resizeObjNum ) break;
 	    kpobject = resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right and down" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Right and Down" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
@@ -2284,7 +2284,7 @@ void KPrCanvas::keyReleaseEvent( QKeyEvent *e )
             {
                 if ( !e->isAutoRepeat() )
                 {
-                    KMacroCommand *macro=new KMacroCommand(i18n("Move object(s)"));
+                    KMacroCommand *macro=new KMacroCommand(i18n("Move Object(s)"));
                     bool cmdCreate=false;
                     int x=(m_view->zoomHandler()->zoomItX(m_boundingRect.x()) - firstX);
                     int y=(m_view->zoomHandler()->zoomItY(m_boundingRect.y()) - firstY);
@@ -2491,7 +2491,7 @@ void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript, b
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change text font") );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change Text Font") );
     QPtrListIterator<KoTextFormatInterface> it( lst );
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setFontCommand( font, _subscript, _superscript, _doubleUnderline, col, backGroundColor, flags );
@@ -2729,7 +2729,7 @@ void KPrCanvas::setTextDepthPlus()
     double indent = m_view->kPresenterDoc()->getIndentValue();
     double newVal = leftMargin + indent;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Increase paragraph depth") );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Increase Paragraph Depth") );
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginLeft, newVal);
         if ( cmd )
@@ -2753,7 +2753,7 @@ void KPrCanvas::setTextDepthMinus()
     double indent = m_view->kPresenterDoc()->getIndentValue();
     QPtrListIterator<KoTextFormatInterface> it( lst );
     double newVal = leftMargin - indent;
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Increase paragraph depth") );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Increase Paragraph Depth") );
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ));
         if ( cmd )
@@ -2776,7 +2776,7 @@ void KPrCanvas::setNewFirstIndent(double _firstIndent)
         index=lst.first()->currentParagLayoutFormat()->margins[QStyleSheetItem::MarginLeft];
     QPtrListIterator<KoTextFormatInterface> it( lst );
     double val = _firstIndent - index;
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change first line indent") );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change First Line Indent") );
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginFirstLine, val);
         if ( cmd )
@@ -2790,7 +2790,7 @@ void KPrCanvas::setNewLeftIndent(double _leftIndent)
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change left indent") );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change Left Indent") );
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginLeft, _leftIndent);
         if ( cmd )
@@ -2804,7 +2804,7 @@ void KPrCanvas::setNewRightIndent(double _rightIndent)
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change right indent") );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change Right Indent") );
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginRight, _rightIndent);
         if ( cmd )
@@ -2818,7 +2818,7 @@ void KPrCanvas::setTextCounter(KoParagCounter counter)
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change paragraph type") );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change Paragraph Type") );
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setCounterCommand(counter );
         if ( cmd )
@@ -5852,7 +5852,7 @@ void KPrCanvas::copyObjs()
 /*================================================================*/
 void KPrCanvas::deleteObjs()
 {
-    KMacroCommand *macro=new KMacroCommand(i18n( "Delete object(s)" ));
+    KMacroCommand *macro=new KMacroCommand(i18n( "Delete Object(s)" ));
     bool macroCreate=false;
     KCommand *cmd=m_activePage->deleteObjs();
     if( cmd)
@@ -6163,7 +6163,7 @@ void KPrCanvas::scalePixmapToBeOrigIn( const KoSize &currentSize, const KoSize &
     double w = pgSize.width() * faktX;
     double h = pgSize.height() * faktY;
 
-    ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Scale Picture to be shown 1:1 in presentation mode" ),
+    ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Scale Picture to be Shown 1:1 in Presentation Mode" ),
                                           KoPoint( 0, 0 ), KoSize( w - currentSize.width(), h - currentSize.height() ),
                                           obj, m_view->kPresenterDoc() );
     resizeCmd->execute();
@@ -6263,7 +6263,7 @@ void KPrCanvas::moveObject( int x, int y, bool key )
     scrollCanvas(boundingRect);
 
     KoPoint _move=m_boundingRect.topLeft()-boundingRect.topLeft();
-    KMacroCommand *macro=new KMacroCommand(i18n( "Move object(s)" ));
+    KMacroCommand *macro=new KMacroCommand(i18n( "Move Object(s)" ));
     bool macroCreate=false;
     KCommand *cmd=m_activePage->moveObject(m_view,_move,key);
     if( cmd && key)
@@ -6996,7 +6996,7 @@ void KPrCanvas::textContentsToHeight()
     if ( lst.isEmpty() )
         return;
     QPtrListIterator<KPTextObject> it( lst );
-    KMacroCommand * macro = new KMacroCommand(i18n("Extend text contents to height"));
+    KMacroCommand * macro = new KMacroCommand(i18n("Extend Text Contents to Height"));
     bool createMacro=false;
     for ( ; it.current() ; ++it ) {
         KCommand *cmd= it.current()->textContentsToHeight();
@@ -7022,7 +7022,7 @@ void KPrCanvas::textObjectToContents()
     if ( lst.isEmpty() )
         return;
     QPtrListIterator<KPTextObject> it( lst );
-    KMacroCommand * macro = new KMacroCommand(i18n("Extend text to contents"));
+    KMacroCommand * macro = new KMacroCommand(i18n("Extend Text to Contents"));
     bool createMacro=false;
     for ( ; it.current() ; ++it ) {
         KCommand *cmd= it.current()->textObjectToContents();
@@ -7216,7 +7216,7 @@ bool KPrCanvas::checkCurrentTextEdit( KPTextObject * textObj )
 
 void KPrCanvas::alignObjLeft()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) left" ));
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align Object(s) Left" ));
     bool createMacro=false;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
@@ -7241,7 +7241,7 @@ void KPrCanvas::alignObjLeft()
 
 void KPrCanvas::alignObjCenterH()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) centered (horizontal)"));
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align Object(s) Centered (horizontal)"));
     bool createMacro=false;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
@@ -7266,7 +7266,7 @@ void KPrCanvas::alignObjCenterH()
 
 void KPrCanvas::alignObjRight()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) right" ));
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align Object(s) Right" ));
     bool createMacro=false;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
@@ -7292,7 +7292,7 @@ void KPrCanvas::alignObjRight()
 
 void KPrCanvas::alignObjTop()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) top" ));
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align Object(s) Top" ));
     bool createMacro=false;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
@@ -7318,7 +7318,7 @@ void KPrCanvas::alignObjTop()
 
 void KPrCanvas::alignObjCenterV()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) center / vertical" ));
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align Object(s) Center / Vertical" ));
     bool createMacro=false;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
@@ -7344,7 +7344,7 @@ void KPrCanvas::alignObjCenterV()
 
 void KPrCanvas::alignObjBottom()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) bottom" ));
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align Object(s) Bottom" ));
     bool createMacro=false;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();

@@ -42,7 +42,7 @@ KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &
   int size=-(cell->getAngle(marker.x(), marker.y()));
   m_pSize2=new KIntNumInput(size, page, 10);
   m_pSize2->setRange(-90, 90, 1);
-  m_pSize2->setLabel(i18n("Angle"));
+  m_pSize2->setLabel(i18n("Angle:"));
   m_pSize2->setSuffix(" °");
   lay1->addWidget(m_pSize2);
   m_pDefault=new QCheckBox(i18n("Default (0Â°)"),page);

@@ -64,7 +64,7 @@ void KWResizeTableDia::setupTab1()
         value->setValue( type == ROW ? table->getRows() : table->getCols() );
     else
         value->setValue( type == ROW ? (rowSelected+1) : (colSelected+1) );
-    rc = new QLabel( type == ROW ? i18n( "Height:(%1)" ).arg(doc->getUnitName()) : i18n( "Width:(%1)" ).arg(doc->getUnitName()), page );
+    rc = new QLabel( type == ROW ? i18n( "Height (%1):" ).arg(doc->getUnitName()) : i18n( "Width (%1):" ).arg(doc->getUnitName()), page );
     position= new KDoubleNumInput( page );
     slotValueChanged( value->value());
 }

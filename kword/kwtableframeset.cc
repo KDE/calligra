@@ -129,12 +129,12 @@ QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
 
 KCommand * KWTableFrameSet::anchoredObjectCreateCommand( int /*frameNum*/ )
 {
-    return new KWCreateTableCommand( i18n("Create table"), this );
+    return new KWCreateTableCommand( i18n("Create Table"), this );
 }
 
 KCommand * KWTableFrameSet::anchoredObjectDeleteCommand( int /*frameNum*/ )
 {
-    return new KWDeleteTableCommand( i18n("Delete table"), this );
+    return new KWDeleteTableCommand( i18n("Delete Table"), this );
 }
 
 KWAnchor * KWTableFrameSet::createAnchor( KoTextDocument *txt, int frameNum )

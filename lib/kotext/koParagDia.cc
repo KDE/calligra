@@ -97,7 +97,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     grid->addWidget( spnStart, 1, 2);
 
     QLabel *lDepth = new QLabel( gStyle, "lDepth" );
-    lDepth->setText( i18n( "Depth" ) );
+    lDepth->setText( i18n( "Depth:" ) );
     if ( displayDepth )
         grid->addWidget( lDepth, 2, 1);
     else

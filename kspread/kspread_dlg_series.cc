@@ -73,7 +73,7 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   QButtonGroup* gb = new QButtonGroup( i18n("Parameters"), page );
   QGridLayout *grid2 = new QGridLayout(gb,2,4,15,7);
 
-  QLabel *tmplabel = new QLabel( i18n( "Start value" ), gb );
+  QLabel *tmplabel = new QLabel( i18n( "Start value:" ), gb );
   tmplabel->resize( tmplabel->sizeHint() );
   grid2->addWidget(tmplabel,0,0);
 
@@ -82,7 +82,7 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   grid2->addWidget(start,1,0);
   start->setValidator( new KFloatValidator( 0, 0, true, start ) );
 
-  tmplabel = new QLabel( i18n( "End value" ), gb );
+  tmplabel = new QLabel( i18n( "End value:" ), gb );
   tmplabel->resize( tmplabel->sizeHint() );
   grid2->addWidget(tmplabel,0,1);
 
@@ -91,7 +91,7 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   grid2->addWidget(end,1,1);
   end->setValidator( new KFloatValidator( 0, 0, true, end ) );
 
-  tmplabel = new QLabel( i18n( "Step" ), gb );
+  tmplabel = new QLabel( i18n( "Step:" ), gb );
   tmplabel->resize( tmplabel->sizeHint() );
   grid2->addWidget(tmplabel,0,2);
 

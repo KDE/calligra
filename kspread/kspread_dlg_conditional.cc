@@ -297,14 +297,14 @@ KSpreadconditional::KSpreadconditional( KSpreadView * parent, const char * name,
   setMainWidget(page);
 
   QGridLayout *grid1 = new QGridLayout(page, 4, 1, 15, 7);
-  conditionals[0] = new KSpreadWidgetconditional(page, i18n("First condition"));
+  conditionals[0] = new KSpreadWidgetconditional(page, i18n("First Condition"));
   grid1->addWidget(conditionals[0], 0, 0);
 
   conditionals[1] = new KSpreadWidgetconditional(page,
-						 i18n("Second condition"));
+						 i18n("Second Condition"));
   grid1->addWidget(conditionals[1], 1, 0);
 
-  conditionals[2] = new KSpreadWidgetconditional(page,i18n("Third condition"));
+  conditionals[2] = new KSpreadWidgetconditional(page,i18n("Third Condition"));
   grid1->addWidget(conditionals[2], 2, 0);
 
   init();

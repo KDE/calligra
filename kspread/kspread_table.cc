@@ -1226,7 +1226,7 @@ struct SetSelectionFontWorker : public KSpreadTable::CellWorkerTypeA
     SetSelectionFontWorker( const char *font, int size, signed char bold, signed char italic,signed char underline, signed char strike )
 	: _font( font ), _size( size ), _bold( bold ), _italic( italic ), _underline( underline ), _strike( strike ) { }
 
-    QString getUndoTitle() { return i18n("Change font"); }
+    QString getUndoTitle() { return i18n("Change Font"); }
     bool testCondition( RowLayout* rw ) {
         return ( rw->hasProperty( KSpreadCell::PFont ) );
     }
@@ -1297,7 +1297,7 @@ struct SetSelectionSizeWorker : public KSpreadTable::CellWorkerTypeA {
     int _size, size;
     SetSelectionSizeWorker( int __size, int size2 ) : _size( __size ), size( size2 ) { }
 
-    QString getUndoTitle() { return i18n("Change font"); }
+    QString getUndoTitle() { return i18n("Change Font"); }
     bool testCondition( RowLayout* rw ) {
         return ( rw->hasProperty( KSpreadCell::PFont ) );
     }
@@ -1423,7 +1423,7 @@ struct SetSelectionCommentWorker : public KSpreadTable::CellWorker {
     SetSelectionCommentWorker( QString comment ) : KSpreadTable::CellWorker( ), _comment( comment ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
-        QString title=i18n("Add comment");
+        QString title=i18n("Add Comment");
 	return new KSpreadUndoCellLayout( doc, table, r, title );
     }
     bool testCondition( KSpreadCell* cell ) {
@@ -1447,7 +1447,7 @@ struct SetSelectionAngleWorker : public KSpreadTable::CellWorkerTypeA {
     int _value;
     SetSelectionAngleWorker( int value ) : _value( value ) { }
 
-    QString getUndoTitle() { return i18n("Change angle"); }
+    QString getUndoTitle() { return i18n("Change Angle"); }
     bool testCondition( RowLayout* rw ) {
         return ( rw->hasProperty( KSpreadCell::PAngle ) );
     }
@@ -1486,7 +1486,7 @@ struct SetSelectionRemoveCommentWorker : public KSpreadTable::CellWorker {
     SetSelectionRemoveCommentWorker( ) : KSpreadTable::CellWorker( false ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
-        QString title=i18n("Remove comment");
+        QString title=i18n("Remove Comment");
 	return new KSpreadUndoCellLayout( doc, table, r, title );
     }
     bool testCondition( KSpreadCell* cell ) {
@@ -1510,7 +1510,7 @@ struct SetSelectionTextColorWorker : public KSpreadTable::CellWorkerTypeA {
     const QColor& tb_Color;
     SetSelectionTextColorWorker( const QColor& _tb_Color ) : tb_Color( _tb_Color ) { }
 
-    QString getUndoTitle() { return i18n("Change text color"); }
+    QString getUndoTitle() { return i18n("Change Text Color"); }
     bool testCondition( RowLayout* rw ) {
         return ( rw->hasProperty( KSpreadCell::PTextPen ) );
     }
@@ -1547,7 +1547,7 @@ struct SetSelectionBgColorWorker : public KSpreadTable::CellWorkerTypeA {
     const QColor& bg_Color;
     SetSelectionBgColorWorker( const QColor& _bg_Color ) : bg_Color( _bg_Color ) { }
 
-    QString getUndoTitle() { return i18n("Change background color"); }
+    QString getUndoTitle() { return i18n("Change Background Color"); }
     bool testCondition( RowLayout* rw ) {
         return ( rw->hasProperty( KSpreadCell::PBackgroundColor ) );
     }
@@ -1585,7 +1585,7 @@ struct SetSelectionBorderColorWorker : public KSpreadTable::CellWorker {
     SetSelectionBorderColorWorker( const QColor& _bd_Color ) : KSpreadTable::CellWorker( false ), bd_Color( _bd_Color ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
-        QString title=i18n("Change border color");
+        QString title=i18n("Change Border Color");
 	return new KSpreadUndoCellLayout( doc, table, r, title );
     }
     bool testCondition( KSpreadCell* cell ) {
@@ -1873,7 +1873,7 @@ struct SetSelectionPercentWorker : public KSpreadTable::CellWorkerTypeA {
     bool b;
     SetSelectionPercentWorker( bool _b ) : b( _b ) { }
 
-    QString getUndoTitle() { return i18n("Format percent"); }
+    QString getUndoTitle() { return i18n("Format Percent"); }
     bool testCondition( RowLayout* rw ) {
         return ( rw->hasProperty( KSpreadCell::PFactor ) );
     }
@@ -2716,7 +2716,7 @@ void KSpreadTable::borderBottom( const QPoint &/*_marker */,const QColor &_color
   {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-      QString title = i18n("Change border");
+      QString title = i18n("Change Border");
       KSpreadUndoCellLayout * undo = new KSpreadUndoCellLayout( m_pDoc, this, r, title );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
@@ -2759,7 +2759,7 @@ void KSpreadTable::borderBottom( const QPoint &/*_marker */,const QColor &_color
   {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-      QString title=i18n("Change border");
+      QString title=i18n("Change Border");
       KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
@@ -2793,7 +2793,7 @@ void KSpreadTable::borderRight( const QPoint &/* _marker */,const QColor &_color
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-      QString title = i18n("Change border");
+      QString title = i18n("Change Border");
       KSpreadUndoCellLayout * undo = new KSpreadUndoCellLayout( m_pDoc, this,
                                                                 r, title );
       m_pDoc->undoBuffer()->appendUndo( undo );
@@ -2861,7 +2861,7 @@ void KSpreadTable::borderRight( const QPoint &/* _marker */,const QColor &_color
   {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-      QString title=i18n("Change border");
+      QString title=i18n("Change Border");
       KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
       m_pDoc->undoBuffer()->appendUndo( undo );
     }
@@ -2880,7 +2880,7 @@ void KSpreadTable::borderRight( const QPoint &/* _marker */,const QColor &_color
 
 void KSpreadTable::borderLeft( const QPoint &/*_marker*/, const QColor &_color )
 {
-  QString title = i18n("Change border");
+  QString title = i18n("Change Border");
   QRect r( m_rctSelection );
 
   QPen pen( _color,1,SolidLine);
@@ -2978,7 +2978,7 @@ void KSpreadTable::borderTop( const QPoint &/*_marker*/,const QColor &_color )
    */
   QRect r( m_rctSelection );
 
-  QString title = i18n("Change border");
+  QString title = i18n("Change Border");
   QPen pen( _color, 1, SolidLine);
   // Complete rows selected ?
   if ( isRowSelected() )
@@ -3047,7 +3047,7 @@ void KSpreadTable::borderOutline( const QPoint &/*_marker*/,const QColor &_color
 
   if ( !m_pDoc->undoBuffer()->isLocked() )
   {
-    QString title = i18n("Change border");
+    QString title = i18n("Change Border");
     KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this,
                                                              r,title );
     m_pDoc->undoBuffer()->appendUndo( undo );
@@ -3185,7 +3185,7 @@ struct SetSelectionBorderAllWorker : public KSpreadTable::CellWorkerTypeA {
     QPen pen;
     SetSelectionBorderAllWorker( const QColor& color ) : pen( color, 1, QPen::SolidLine ) { }
 
-    QString getUndoTitle() { return i18n("Change border"); }
+    QString getUndoTitle() { return i18n("Change Border"); }
     bool testCondition( RowLayout* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PRightBorder )
 		 || rw->hasProperty( KSpreadCell::PLeftBorder )
@@ -3237,7 +3237,7 @@ void KSpreadTable::borderAll( const QPoint &_marker,const QColor &_color )
 struct SetSelectionBorderRemoveWorker : public KSpreadTable::CellWorkerTypeA {
     QPen pen;
     SetSelectionBorderRemoveWorker() : pen( Qt::black, 1, Qt::NoPen  ) { }
-    QString getUndoTitle() { return i18n("Change border"); }
+    QString getUndoTitle() { return i18n("Change Border"); }
     bool testCondition( RowLayout* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PRightBorder )
 		 || rw->hasProperty( KSpreadCell::PLeftBorder )
@@ -4457,7 +4457,7 @@ void KSpreadTable::setSelectionMultiRow( const QPoint &_marker, bool enable )
 struct SetSelectionAlignWorker : public KSpreadTable::CellWorkerTypeA {
     KSpreadLayout::Align _align;
     SetSelectionAlignWorker( KSpreadLayout::Align align ) : _align( align ) { }
-    QString getUndoTitle() { return i18n("Change horizontal alignment"); }
+    QString getUndoTitle() { return i18n("Change Horizontal Alignment"); }
     bool testCondition( RowLayout* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PAlign ) );
     }
@@ -4494,7 +4494,7 @@ void KSpreadTable::setSelectionAlign( const QPoint &_marker, KSpreadLayout::Alig
 struct SetSelectionAlignYWorker : public KSpreadTable::CellWorkerTypeA {
     KSpreadLayout::AlignY _alignY;
     SetSelectionAlignYWorker( KSpreadLayout::AlignY alignY ) : _alignY( alignY ) { }
-    QString getUndoTitle() { return i18n("Change vertical alignment"); }
+    QString getUndoTitle() { return i18n("Change Vertical Alignment"); }
     bool testCondition( RowLayout* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PAlignY ) );
     }
@@ -4533,7 +4533,7 @@ struct SetSelectionPrecisionWorker : public KSpreadTable::CellWorker {
     SetSelectionPrecisionWorker( int delta ) : KSpreadTable::CellWorker( ), _delta( delta ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
-        QString title=i18n("Change precision");
+        QString title=i18n("Change Precision");
 	return new KSpreadUndoCellLayout( doc, table, r, title );
     }
     bool testCondition( KSpreadCell* cell ) {
@@ -4560,7 +4560,7 @@ struct SetSelectionMoneyFormatWorker : public KSpreadTable::CellWorkerTypeA {
     bool b;
     KSpreadDoc *m_pDoc;
     SetSelectionMoneyFormatWorker( bool _b,KSpreadDoc* _doc ) : b( _b ), m_pDoc(_doc) { }
-    QString getUndoTitle() { return i18n("Format money"); }
+    QString getUndoTitle() { return i18n("Format Money"); }
     bool testCondition( RowLayout* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PFormatType )
 		 || rw->hasProperty( KSpreadCell::PPrecision )
@@ -4609,7 +4609,7 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker, bool b )
 struct IncreaseIndentWorker : public KSpreadTable::CellWorkerTypeA {
     int tmpIndent, valIndent;
     IncreaseIndentWorker( int _tmpIndent, int _valIndent ) : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
-    QString getUndoTitle() { return i18n("Increase indent"); }
+    QString getUndoTitle() { return i18n("Increase Indent"); }
     bool testCondition( RowLayout* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PIndent ) );
     }
@@ -4662,7 +4662,7 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
 struct DecreaseIndentWorker : public KSpreadTable::CellWorkerTypeA {
     int tmpIndent, valIndent;
     DecreaseIndentWorker( int _tmpIndent, int _valIndent ) : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
-    QString getUndoTitle() { return i18n("Decrease indent"); }
+    QString getUndoTitle() { return i18n("Decrease Indent"); }
     bool testCondition( RowLayout* rw ) {
 	return ( rw->hasProperty( KSpreadCell::PIndent ) );
     }
@@ -5014,7 +5014,7 @@ struct DefaultSelectionWorker : public KSpreadTable::CellWorker {
     DefaultSelectionWorker( ) : KSpreadTable::CellWorker( true, false, true ) { }
 
     class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
-        QString title=i18n("Default parameters");
+        QString title=i18n("Default Parameters");
 	return new KSpreadUndoCellLayout( doc, table, r, title );
     }
     bool testCondition( KSpreadCell* ) {

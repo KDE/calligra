@@ -28,7 +28,7 @@
 #include <klocale.h>
 
 KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, unsigned int numrows, unsigned int numcols)
-    : KDialogBase( Plain, i18n("Split cell"), Ok | Cancel, Ok, parent, name, true)
+    : KDialogBase( Plain, i18n("Split Cell"), Ok | Cancel, Ok, parent, name, true)
 {
     m_cols= numcols;
     m_rows= numrows;
@@ -38,14 +38,14 @@ KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, unsigned int 
     QWidget *page = plainPage();
     QGridLayout *grid = new QGridLayout( page, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    QLabel *lRows = new QLabel( i18n( "Number of Rows:" ), page );
+    QLabel *lRows = new QLabel( i18n( "Number of rows:" ), page );
     grid->addWidget( lRows, 0, 0 );
 
     nRows = new QSpinBox( 1, 128, 1, page );
     nRows->setValue( m_rows );
     grid->addWidget( nRows, 1, 0 );
 
-    QLabel *lCols = new QLabel( i18n( "Number of Columns:" ), page );
+    QLabel *lCols = new QLabel( i18n( "Number of columns:" ), page );
     grid->addWidget( lCols, 2, 0 );
 
     nCols = new QSpinBox( 1, 128, 1, page );

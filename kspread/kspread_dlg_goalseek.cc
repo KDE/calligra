@@ -50,7 +50,7 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
     setName( "KSpreadGoalSeekDlg" );
 
   resize( 458, 153 );
-  setCaption( i18n( "Goal seek" ) );
+  setCaption( i18n( "Goal Seek" ) );
   setSizeGripEnabled( true );
 
   KSpreadGoalSeekDlgLayout = new QGridLayout( this, 1, 1, 11, 6, "KSpreadGoalSeekDlgLayout");
@@ -61,7 +61,7 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   m_startFrameLayout = new QGridLayout( m_startFrame, 1, 1, 11, 6, "m_startFrameLayout");
 
   QLabel * TextLabel4 = new QLabel( m_startFrame, "TextLabel4" );
-  TextLabel4->setText( i18n( "to value" ) );
+  TextLabel4->setText( i18n( "To value:" ) );
   m_startFrameLayout->addWidget( TextLabel4, 1, 0 );
 
   m_targetValueEdit = new QLineEdit( m_startFrame, "m_targetValueEdit" );
@@ -75,12 +75,12 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   m_startFrameLayout->addWidget( m_sourceEdit, 2, 1 );
 
   QLabel * TextLabel5 = new QLabel( m_startFrame, "TextLabel5" );
-  TextLabel5->setText( i18n( "by changing cell" ) );
+  TextLabel5->setText( i18n( "By changing cell:" ) );
 
   m_startFrameLayout->addWidget( TextLabel5, 2, 0 );
 
   QLabel * TextLabel3 = new QLabel( m_startFrame, "TextLabel3" );
-  TextLabel3->setText( i18n( "Set cell" ) );
+  TextLabel3->setText( i18n( "Set cell:" ) );
 
   m_startFrameLayout->addWidget( TextLabel3, 0, 0 );
   KSpreadGoalSeekDlgLayout->addWidget( m_startFrame, 0, 0 );

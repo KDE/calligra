@@ -491,7 +491,7 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
 {
     //kdDebug() << "setup tab 2 text runaround"<<endl;
 
-    tab2 = addPage( i18n( "Text run around" ) );
+    tab2 = addPage( i18n( "Text Run Around" ) );
 
     QVBoxLayout *form1Layout = new QVBoxLayout( tab2, 11, 6, "tab2Layout");
 
@@ -607,7 +607,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
      * then the new connection should be made.
      */
     //kdDebug() << "setup tab 3 frameSet"<<endl;
-    tab3 = addPage( i18n( "Connect text frames" ) );
+    tab3 = addPage( i18n( "Connect Text Frames" ) );
 
     QVBoxLayout *form1Layout = new QVBoxLayout( tab3, 11, 6);
 
@@ -914,7 +914,7 @@ void KWFrameDia::setupTab5()
     brushPreview=new KWBrushStylePreview(tab5);
     grid5->addMultiCellWidget(brushPreview,row,5,1,1);
 
-    QLabel *l = new QLabel( i18n( "Background Color:" ), tab5 );
+    QLabel *l = new QLabel( i18n( "Background color:" ), tab5 );
 
     grid5->addWidget(l,row++,0);
 
@@ -925,7 +925,7 @@ void KWFrameDia::setupTab5()
 	     this, SLOT( updateBrushConfiguration() ) );
 
 
-    l = new QLabel( i18n( "Background Style:" ), tab5 );
+    l = new QLabel( i18n( "Background style:" ), tab5 );
     grid5->addWidget(l,row++,0);
 
     brushStyle = new QComboBox( false,tab5, "BStyle" );
@@ -1267,9 +1267,9 @@ bool KWFrameDia::applyChanges()
         } else if(rExistingFrameset->isChecked()) { // rename and/or reconnect a new frameset for this frame.
             if(fs->getName() != frameSetItem->text( 1 )) { // rename FS.
                 if(!macroCmd)
-                    macroCmd = new KMacroCommand( i18n("Rename frameset") );
+                    macroCmd = new KMacroCommand( i18n("Rename Frameset") );
                 // Rename frameset
-                KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Rename frameset"), fs, KWFrameSetPropertyCommand::FSP_NAME, frameSetItem->text( 1 ));
+                KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Rename Frameset"), fs, KWFrameSetPropertyCommand::FSP_NAME, frameSetItem->text( 1 ));
                 macroCmd->addCommand(cmd);
                 cmd->execute();
             }
@@ -1528,8 +1528,8 @@ bool KWFrameDia::applyChanges()
 
             doc->addFrameSet( _frameSet );
             if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Create text frame") );
-            KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create text frame"), frame) ;
+                macroCmd = new KMacroCommand( i18n("Create Text Frame") );
+            KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create Text Frame"), frame) ;
             macroCmd->addCommand(cmd);
         }
     }

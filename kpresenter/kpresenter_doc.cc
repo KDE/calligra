@@ -2017,7 +2017,7 @@ void KPresenterDoc::deletePage( int _page )
     kdDebug(33001) << "KPresenterDoc::deletePage " << _page << endl;
     //m_pageList.at(_page)->deletePage();
 
-    KPrDeletePageCmd *cmd=new KPrDeletePageCmd(i18n("Delete page"),_page,m_pageList.at(_page),this);
+    KPrDeletePageCmd *cmd=new KPrDeletePageCmd(i18n("Delete Page"),_page,m_pageList.at(_page),this);
     cmd->execute();
     addCommand(cmd);
 }
@@ -2134,7 +2134,7 @@ void KPresenterDoc::savePage( const QString &file, int pgnum )
 /*====================== replace objects =========================*/
 void KPresenterDoc::replaceObjs( bool createUndoRedo )
 {
-    KMacroCommand * macroCmd = new KMacroCommand( i18n("Set new options") );
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Set new Options") );
     bool addMacroCommand=false;
     QPtrListIterator<KPrPage> oIt(m_pageList);
     for (; oIt.current(); ++oIt )
@@ -2342,7 +2342,7 @@ QPixmap KPresenterDoc::generatePreview( const QSize& size )
 void KPresenterDoc::movePage( int from, int to )
 {
     kdDebug(33001) << "KPresenterDoc::movePage from=" << from << " to=" << to << endl;
-    KPrMovePageCmd *cmd=new KPrMovePageCmd( i18n("Move page"),from,to, m_pageList.at(from) ,this );
+    KPrMovePageCmd *cmd=new KPrMovePageCmd( i18n("Move Page"),from,to, m_pageList.at(from) ,this );
     cmd->execute();
     addCommand(cmd);
 }
@@ -2364,7 +2364,7 @@ void KPresenterDoc::copyPage( int from, int to )
 
     loadNativeFormat( tempFile.name() );
 
-    KPrInsertPageCmd *cmd=new KPrInsertPageCmd(i18n("Duplicate page") ,to, newpage, this );
+    KPrInsertPageCmd *cmd=new KPrInsertPageCmd(i18n("Duplicate Page") ,to, newpage, this );
     cmd->execute();
     addCommand(cmd);
 
@@ -2395,7 +2395,7 @@ void KPresenterDoc::pastePage( const QMimeSource * data, int pgnum )
     KURL::List lst;
     if ( KURLDrag::decode( data, lst ) && !lst.isEmpty() )
     {
-        insertNewPage(i18n("Paste page"),  pgnum, IP_BEFORE, FALSE, lst.first().path() );
+        insertNewPage(i18n("Paste Page"),  pgnum, IP_BEFORE, FALSE, lst.first().path() );
         //selectPage( pgnum, true /* should be part of the file ? */ );
     }
 }

@@ -1734,7 +1734,7 @@ void KPresenterView::slotCounterStyleSelected()
         QPtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
         QPtrListIterator<KoTextFormatInterface> it( lst );
         bool createmacro=false;
-        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change list type") );
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change List Type") );
         for ( ; it.current() ; ++it )
         {
             KCommand *cmd = it.current()->setCounterCommand( c );
@@ -4596,7 +4596,7 @@ void KPresenterView::changeLink()
                     if( ref != oldhref || link!=oldLinkName)
                     {
 
-                        KPrChangeLinkVariable*cmd=new KPrChangeLinkVariable( i18n("Change link"), m_pKPresenterDoc,oldhref, ref, oldLinkName,link, var);
+                        KPrChangeLinkVariable*cmd=new KPrChangeLinkVariable( i18n("Change Link"), m_pKPresenterDoc,oldhref, ref, oldLinkName,link, var);
                         cmd->execute();
                         m_pKPresenterDoc->addCommand(cmd);
                     }
@@ -4837,7 +4837,7 @@ void KPresenterView::spellCheckerCorrected( const QString &old, const QString &c
     cursor.setParag( p );
     cursor.setIndex( pos );
     if(!m_spell.macroCmdSpellCheck)
-        m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct misspelled word"));
+        m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct Misspelled Word"));
     m_spell.macroCmdSpellCheck->addCommand(textobj->textObject()->replaceSelectionCommand(
         &cursor, corr, KoTextObject::HighlightSelection, QString::null ));
 }
@@ -4981,7 +4981,7 @@ void KPresenterView::slotApplyParag()
     KPTextView *edit=m_canvas->currentTextObjectView();
     if( !edit )
         return;
-    KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph settings" ) );
+    KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
     KCommand *cmd=0L;
     bool changed=false;
     if(m_paragDlg->isLeftMarginChanged())
@@ -5222,8 +5222,8 @@ void KPresenterView::editCustomVars()
                 if(((KoCustomVariable*)it.current())->value()!=*(listOldCustomValue.at(i)))
                 {
                     if(!macroCommand)
-                        macroCommand = new KMacroCommand( i18n( "Change custom variable" ) );
-                    KPrChangeCustomVariableValue *cmd=new KPrChangeCustomVariableValue(i18n( "Change custom variable" ),m_pKPresenterDoc,*(listOldCustomValue.at(i)), ((KoCustomVariable*)it.current())->value() ,((KoCustomVariable*)it.current()));
+                        macroCommand = new KMacroCommand( i18n( "Change Custom Variable" ) );
+                    KPrChangeCustomVariableValue *cmd=new KPrChangeCustomVariableValue(i18n( "Change Custom Variable" ),m_pKPresenterDoc,*(listOldCustomValue.at(i)), ((KoCustomVariable*)it.current())->value() ,((KoCustomVariable*)it.current()));
                     macroCommand->addCommand(cmd);
                 }
                 i++;
@@ -5354,7 +5354,7 @@ void KPresenterView::changeCaseOfText()
     KoChangeCaseDia *caseDia=new KoChangeCaseDia( this,"change case" );
     if(caseDia->exec())
     {
-        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change case of text") );
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change Case of Text") );
         for ( ; it.current() ; ++it )
         {
             KCommand *cmd = it.current()->setChangeCaseOfTextCommand(caseDia->getTypeOfCase());
@@ -5477,8 +5477,8 @@ void KPresenterView::changeZoomMenu( int zoom )
     QStringList lst;
     if(zoom>0)
     {
-	if( lst.contains( i18n( "Zoom to width" ) ) == 0 )
-	    lst << i18n( "Zoom to width" );
+	if( lst.contains( i18n( "Zoom to Width" ) ) == 0 )
+	    lst << i18n( "Zoom to Width" );
         if( lst.contains( i18n( "Zoom to Whole Page" ) )==0)
             lst << i18n( "Zoom to Whole Page" );
         QValueList<int> list;
@@ -5507,7 +5507,7 @@ void KPresenterView::changeZoomMenu( int zoom )
     }
     else
     {
-          lst << i18n( "Zoom to width" );
+          lst << i18n( "Zoom to Width" );
           lst << i18n( "Zoom to Whole Page" );
           lst << "33%";
           lst << "50%";
@@ -5543,7 +5543,7 @@ void KPresenterView::viewZoom( const QString &s )
     QString z( s );
     bool ok=false;
     int zoom = 0;
-    if ( z == i18n("Zoom to width") )
+    if ( z == i18n("Zoom to Width") )
     {
         zoom = qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth ) );
         ok = true;
@@ -5784,7 +5784,7 @@ void KPresenterView::textStyleSelected( int index )
             return; // nope, no frames are selected.
         // yes, indeed frames are selected.
         QPtrListIterator<KPTextObject> it( selectedFrames );
-        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply style to frame") : i18n("Apply style to frames"));
+        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply Style to Frame") : i18n("Apply Style to Frames"));
         for ( ; it.current() ; ++it )
         {
             KoTextObject *textObject = it.current()->textObject();

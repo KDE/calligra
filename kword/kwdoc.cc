@@ -1947,7 +1947,7 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
     frameset->addFrame( frame );
     addFrameSet( frameset );
 
-    KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n("Create a part frame"), frame);
+    KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n("Create Part Frame"), frame);
     addCommand(cmd);
 
     emit sig_insertObject( ch, frameset );
@@ -2814,7 +2814,7 @@ void KWDocument::deleteTable( KWTableFrameSet *table )
     }
     else
     {
-        KWDeleteTableCommand *cmd = new KWDeleteTableCommand( i18n("Delete table"), table );
+        KWDeleteTableCommand *cmd = new KWDeleteTableCommand( i18n("Delete Table"), table );
         addCommand( cmd );
         cmd->execute();
     }
@@ -2829,23 +2829,23 @@ void KWDocument::deleteFrame( KWFrame * frame )
     TypeStructDocItem docItem = (TypeStructDocItem) 0;
     switch (fs->type() ) {
     case FT_TEXT:
-        cmdName=i18n("Delete text frame");
+        cmdName=i18n("Delete Text Frame");
         docItem=TextFrames;
         break;
     case FT_FORMULA:
-        cmdName=i18n("Delete formula frame");
+        cmdName=i18n("Delete Formula Frame");
         docItem=FormulaFrames;
         break;
     case FT_PICTURE:
-        cmdName=i18n("Delete picture frame");
+        cmdName=i18n("Delete Picture Frame");
         docItem=Pictures;
         break;
     case FT_CLIPART:
-        cmdName=i18n("Delete picture frame"); // TODO "Delete clipart frame" after msg freeze
+        cmdName=i18n("Delete Picture Frame"); // TODO "Delete clipart frame" after msg freeze
         docItem=Cliparts;
         break;
     case FT_PART:
-        cmdName=i18n("Delete object frame");
+        cmdName=i18n("Delete Object Frame");
         docItem=Embedded;
         break;
     case FT_TABLE:
@@ -2900,7 +2900,7 @@ void KWDocument::deleteSeveralFrame()
             }
             else
             {
-                KWDeleteTableCommand *cmd = new KWDeleteTableCommand( i18n("Delete table"), table );
+                KWDeleteTableCommand *cmd = new KWDeleteTableCommand( i18n("Delete Table"), table );
                 addCommand( cmd );
                 cmd->execute();
                 macroCmd->addCommand(cmd);
@@ -2927,7 +2927,7 @@ void KWDocument::deleteSeveralFrame()
             }
             else
             {
-                KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand( i18n("Delete frame"), tmp );
+                KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand( i18n("Delete Frame"), tmp );
                 addCommand( cmd );
                 cmd->execute();
                 macroCmd->addCommand(cmd);

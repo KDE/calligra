@@ -49,7 +49,7 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( this, "Label_1" );
   grid1->addWidget(tmpQLabel,0,0);
-  tmpQLabel->setText( i18n("Function") );
+  tmpQLabel->setText( i18n("Function:") );
 
   m_pFunction = new QComboBox( this );
   grid1->addWidget(m_pFunction,1,0);
@@ -64,7 +64,7 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   m_pFunction->insertItem( i18n("Variance"), Var );
 
   tmpQLabel = new QLabel( this, "Label_1" );
-  tmpQLabel->setText( i18n("Reference") );
+  tmpQLabel->setText( i18n("Reference:") );
   grid1->addWidget(tmpQLabel,2,0);
 
   m_pRef = new QLineEdit( this );
@@ -72,7 +72,7 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
 
   tmpQLabel = new QLabel( this, "Label_1" );
   grid1->addWidget(tmpQLabel,4,0);
-  tmpQLabel->setText( i18n("Entered References") );
+  tmpQLabel->setText( i18n("Entered References:") );
 
   m_pRefs = new QListBox( this );
   grid1->addMultiCellWidget( m_pRefs,5,8,0,0);

@@ -397,7 +397,7 @@ void KWView::setupActions()
 
 
     // -------------- View menu
-    actionViewTextMode = new KToggleAction( i18n( "Text mode" ), 0,
+    actionViewTextMode = new KToggleAction( i18n( "Text Mode" ), 0,
                                             this, SLOT( viewTextMode() ),
                                             actionCollection(), "view_textmode" );
     actionViewTextMode->setToolTip( i18n( "Text mode." ) );
@@ -634,7 +634,7 @@ void KWView::setupActions()
     actionFormatUnderline = new KToggleAction( i18n( "&Underline" ), "text_under", CTRL + Key_U,
                                            this, SLOT( textUnderline() ),
                                            actionCollection(), "format_underline" );
-    actionFormatStrikeOut = new KToggleAction( i18n( "&Strike out" ), "text_strike", 0 ,
+    actionFormatStrikeOut = new KToggleAction( i18n( "&Strike Out" ), "text_strike", 0 ,
                                            this, SLOT( textStrikeOut() ),
                                            actionCollection(), "format_strike" );
 
@@ -911,7 +911,7 @@ void KWView::setupActions()
     actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
                                         this, SLOT( editCustomVars() ),
                                         actionCollection(), "edit_customvars" );
-    actionApplyAutoFormat= new KAction( i18n( "Apply autoFormat" ), 0,
+    actionApplyAutoFormat= new KAction( i18n( "Apply AutoFormat" ), 0,
                                         this, SLOT( applyAutoFormat() ),
                                         actionCollection(), "apply_autoformat" );
 
@@ -2130,8 +2130,8 @@ void KWView::editCustomVars()
                 if(((KoCustomVariable*)it.current())->value()!=*(listOldCustomValue.at(i)))
                 {
                     if(!macroCommand)
-                        macroCommand = new KMacroCommand( i18n( "Change custom variable" ) );
-                    KWChangeCustomVariableValue *cmd=new KWChangeCustomVariableValue(i18n( "Change custom variable" ),m_doc,*(listOldCustomValue.at(i)), ((KoCustomVariable*)it.current())->value() ,((KoCustomVariable*)it.current()));
+                        macroCommand = new KMacroCommand( i18n( "Change Custom Variable" ) );
+                    KWChangeCustomVariableValue *cmd=new KWChangeCustomVariableValue(i18n( "Change Custom Variable" ),m_doc,*(listOldCustomValue.at(i)), ((KoCustomVariable*)it.current())->value() ,((KoCustomVariable*)it.current()));
                     macroCommand->addCommand(cmd);
                 }
                 i++;
@@ -2716,7 +2716,7 @@ void KWView::slotApplyFont()
     int flags = m_fontDlg->changedFlags();
     if ( flags )
     {
-        KMacroCommand *globalCmd = new KMacroCommand(i18n("Change font"));
+        KMacroCommand *globalCmd = new KMacroCommand(i18n("Change Font"));
         QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
         QPtrListIterator<KoTextFormatInterface> it( lst );
         for ( ; it.current() ; ++it )
@@ -2782,7 +2782,7 @@ void KWView::slotApplyParag()
     KWTextFrameSetEdit *edit = currentTextEdit();
     if( !edit)
         return;
-    KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph settings" ) );
+    KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
     KCommand *cmd=0L;
     bool changed=false;
     if(m_paragDlg->isLeftMarginChanged())
@@ -3356,7 +3356,7 @@ void KWView::textStyleSelected( int index )
             return; // nope, no frames are selected.
         // yes, indeed frames are selected.
         QPtrListIterator<KWFrame> it( selectedFrames );
-        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply style to frame") : i18n("Apply style to frames"));
+        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply Style to Frame") : i18n("Apply Style to Frames"));
         for ( ; it.current() ; ++it )
         {
             KWFrame *curFrame = it.current();
@@ -3414,7 +3414,7 @@ void KWView::textFontSelected( const QString & font )
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change text font") );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change Text Font") );
     for ( ; it.current() ; ++it )
     {
         KCommand *cmd = it.current()->setFamilyCommand( font );
@@ -3696,7 +3696,7 @@ void KWView::slotCounterStyleSelected()
         QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
         QPtrListIterator<KoTextFormatInterface> it( lst );
         bool createmacro=false;
-        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change list type") );
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change List Type") );
         for ( ; it.current() ; ++it )
         {
             KCommand *cmd = it.current()->setCounterCommand( c );
@@ -3766,7 +3766,7 @@ void KWView::changeCaseOfText()
     KoChangeCaseDia *caseDia=new KoChangeCaseDia( this,"change case" );
     if(caseDia->exec())
     {
-        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change case of text") );
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change Case of Text") );
         for ( ; it.current() ; ++it )
         {
             KCommand *cmd = it.current()->setChangeCaseOfTextCommand(caseDia->getTypeOfCase());
@@ -4320,7 +4320,7 @@ void KWView::spellCheckerCorrected( const QString &old, const QString &corr, uns
     cursor.setParag( p );
     cursor.setIndex( pos );
     if(!m_spell.macroCmdSpellCheck)
-        m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct misspelled word"));
+        m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct Misspelled Word"));
     m_spell.macroCmdSpellCheck->addCommand(fs->textObject()->replaceSelectionCommand(
         &cursor, corr, KoTextObject::HighlightSelection, QString::null ));
 }
@@ -4673,7 +4673,7 @@ void KWView::changePicture()
     oldFile=frameset->image().getKey().filename();
     if ( KWInsertPicDia::selectPictureDia(file, KWInsertPicDia::SelectImage , oldFile ) )
     {
-         KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change picture"), FrameIndex(frame), oldFile, file, true ) ;
+         KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change Picture"), FrameIndex(frame), oldFile, file, true ) ;
 
         frameset->loadImage( file, m_doc->zoomRect( *frame ).size() );
         m_doc->frameChanged( frame );
@@ -4691,7 +4691,7 @@ void KWView::changeClipart()
     if ( KWInsertPicDia::selectPictureDia(file, KWInsertPicDia::SelectClipart, oldFile ) )
     {
 
-        KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change clipart"), FrameIndex( frame ), oldFile, file, false ) ;
+        KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change Clipart"), FrameIndex( frame ), oldFile, file, false ) ;
 
         frameset->loadClipart( file );
         m_doc->frameChanged( frame );
@@ -4804,7 +4804,7 @@ void KWView::changeLink()
                 {
                     if( ref != oldhref || link!=oldLinkName)
                     {
-                        KWChangeLinkVariable*cmd=new KWChangeLinkVariable( i18n("Change link"), m_doc,oldhref, ref, oldLinkName,link, var);
+                        KWChangeLinkVariable*cmd=new KWChangeLinkVariable( i18n("Change Link"), m_doc,oldhref, ref, oldLinkName,link, var);
                         cmd->execute();
                         m_doc->addCommand(cmd);
                     }

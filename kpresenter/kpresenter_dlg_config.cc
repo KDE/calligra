@@ -499,10 +499,10 @@ void ConfigureMiscPage::apply()
     {
         if(!macroCmd)
         {
-            macroCmd=new KMacroCommand(i18n("Change display link command"));
+            macroCmd=new KMacroCommand(i18n("Change Display Link Command"));
         }
 
-        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand( i18n("Change display link command"), doc, b_new ,b, KPrChangeVariableSettingsCommand::VS_DISPLAYLINK);
+        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand( i18n("Change Display Link Command"), doc, b_new ,b, KPrChangeVariableSettingsCommand::VS_DISPLAYLINK);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
@@ -512,9 +512,9 @@ void ConfigureMiscPage::apply()
     {
         if(!macroCmd)
         {
-            macroCmd=new KMacroCommand(i18n("Change display link command"));
+            macroCmd=new KMacroCommand(i18n("Change Display Link Command"));
         }
-        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->underlineLink() ,b, KPrChangeVariableSettingsCommand::VS_UNDERLINELINK);
+        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand( i18n("Change Display Link Command"), doc, doc->getVariableCollection()->variableSetting()->underlineLink() ,b, KPrChangeVariableSettingsCommand::VS_UNDERLINELINK);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
@@ -524,9 +524,9 @@ void ConfigureMiscPage::apply()
     {
         if(!macroCmd)
         {
-            macroCmd=new KMacroCommand(i18n("Change display link command"));
+            macroCmd=new KMacroCommand(i18n("Change Display Link Command"));
         }
-        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand( i18n("Change display link command"), doc, doc->getVariableCollection()->variableSetting()->displayComment() ,b, KPrChangeVariableSettingsCommand::VS_DISPLAYCOMMENT);
+        KPrChangeVariableSettingsCommand *cmd=new KPrChangeVariableSettingsCommand( i18n("Change Display Link Command"), doc, doc->getVariableCollection()->variableSetting()->displayComment() ,b, KPrChangeVariableSettingsCommand::VS_DISPLAYCOMMENT);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
@@ -639,7 +639,7 @@ void ConfigureDefaultDocPage::apply()
     int newStartingPage=m_variableNumberOffset->text().toInt();
     if(newStartingPage!=m_oldStartingPage)
     {
-        KPrChangeStartingPageCommand *cmd = new KPrChangeStartingPageCommand( i18n("Change starting page number"), doc, m_oldStartingPage,newStartingPage );
+        KPrChangeStartingPageCommand *cmd = new KPrChangeStartingPageCommand( i18n("Change Starting Page Number"), doc, m_oldStartingPage,newStartingPage );
         cmd->execute();
         doc->addCommand(cmd);
         m_oldStartingPage=newStartingPage;

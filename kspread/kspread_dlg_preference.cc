@@ -712,7 +712,7 @@ colorParameters::colorParameters( KSpreadView* _view,QVBox *box , char *name )
 
   QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Color"), box, "GroupBox" );
 
-  QLabel *label = new QLabel(i18n("&Grid Color:"), tmpQGroupBox,"label20" );
+  QLabel *label = new QLabel(i18n("&Grid color:"), tmpQGroupBox,"label20" );
 
   gridColor = new KColorButton( tmpQGroupBox );
   label->setBuddy(gridColor);
@@ -725,7 +725,7 @@ colorParameters::colorParameters( KSpreadView* _view,QVBox *box , char *name )
     _pbColor = config->readColorEntry("PageBorderColor", &_pbColor);
   }
 
-  QLabel * label2 = new QLabel( i18n("&Page Borders:"), tmpQGroupBox, "label21" );
+  QLabel * label2 = new QLabel( i18n("&Page borders:"), tmpQGroupBox, "label21" );
   pageBorderColor = new KColorButton( tmpQGroupBox );
   label2->setBuddy(pageBorderColor);
   pageBorderColor->setColor(_pbColor);

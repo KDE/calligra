@@ -55,7 +55,7 @@ void KWDeleteDia::setupTab1()
     tab1 = plainPage();
     grid1 = new QGridLayout( tab1, 4, 1, 0, spacingHint() );
 
-    rc = new QLabel( type == ROW ? i18n( "Delete Row:" ) : i18n( "Delete Column:" ), tab1 );
+    rc = new QLabel( type == ROW ? i18n( "Delete row:" ) : i18n( "Delete column:" ), tab1 );
     rc->resize( rc->sizeHint() );
     rc->setAlignment( AlignLeft | AlignBottom );
     grid1->addWidget( rc, 1, 0 );
@@ -88,14 +88,14 @@ bool KWDeleteDia::doDelete()
     unsigned int remove= value->value() - 1;
     if ( type == ROW )
     {
-        KWRemoveRowCommand *cmd = new KWRemoveRowCommand( i18n("Remove row"), table, remove);
+        KWRemoveRowCommand *cmd = new KWRemoveRowCommand( i18n("Remove Row"), table, remove);
         cmd->execute();
         doc->addCommand(cmd);
         //table->deleteRow( value->value() - 1 );
     }
     else
     {
-        KWRemoveColumnCommand *cmd = new KWRemoveColumnCommand( i18n("Remove column"), table, remove);
+        KWRemoveColumnCommand *cmd = new KWRemoveColumnCommand( i18n("Remove Column"), table, remove);
         cmd->execute();
         doc->addCommand(cmd);
         //table->deleteCol( value->value() - 1 );

@@ -852,7 +852,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     QLabel* tmpQLabel;
     tmpQLabel = new QLabel( box, "Label_1" );
     grid->addWidget(tmpQLabel,2,0);
-    tmpQLabel->setText( i18n("Postfix") );
+    tmpQLabel->setText( i18n("Postfix:") );
 
     if ( dlg->postfix.isNull() )
         postfix->setText( "########" );
@@ -861,11 +861,11 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
     tmpQLabel = new QLabel( box, "Label_2" );
     grid->addWidget(tmpQLabel,0,0);
-    tmpQLabel->setText( i18n("Prefix") );
+    tmpQLabel->setText( i18n("Prefix:") );
 
     tmpQLabel = new QLabel( box, "Label_3" );
     grid->addWidget(tmpQLabel,1,0);
-    tmpQLabel->setText( i18n("Precision") );
+    tmpQLabel->setText( i18n("Precision:") );
 
     if ( dlg->prefix.isNull() )
         prefix->setText( "########" );
@@ -881,7 +881,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
     tmpQLabel = new QLabel( box, "Label_4" );
     grid->addWidget(tmpQLabel,0,2);
-    tmpQLabel->setText( i18n("Format") );
+    tmpQLabel->setText( i18n("Format:") );
 
 
     if ( !dlg->bFloatFormat || !dlg->bFloatColor )
@@ -917,10 +917,10 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     fraction=new QRadioButton(i18n("Fraction"),grp);
     grid->addWidget(fraction,4,0);
 
-    date=new QRadioButton(i18n("Date Format"),grp);
+    date=new QRadioButton(i18n("Date format"),grp);
     grid->addWidget(date,5,0);
 
-    time=new QRadioButton(i18n("Time Format"),grp);
+    time=new QRadioButton(i18n("Time format"),grp);
     grid->addWidget(time,6,0);
 
     textFormat=new QRadioButton(i18n("Text"),grp);
@@ -1851,7 +1851,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   grid2->addWidget(weight_label,2,1);
 
   QLabel *tmpQLabel = new QLabel( box1, "Label_1" );
-  tmpQLabel->setText( i18n("Text Color") );
+  tmpQLabel->setText( i18n("Text color:") );
   grid2->addWidget(tmpQLabel,4,1);
 
   textColorButton = new KColorButton( box1, "textColor" );
@@ -2859,7 +2859,7 @@ void CellLayoutPageBorder::InitializeGrids()
   grid2->addWidget(color,6,1);
 
   QLabel *tmpQLabel = new QLabel( tmpQGroupBox, "Label_6" );
-  tmpQLabel->setText( i18n("Color") );
+  tmpQLabel->setText( i18n("Color:") );
   grid2->addWidget(tmpQLabel,6,0);
 
   /* tack on the 'customize' border pattern selector */
@@ -3954,7 +3954,7 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     grid3->addWidget(color,0,1);
 
     QLabel *tmpQLabel = new QLabel( tmpQGroupBox, "Label_1" );
-    tmpQLabel->setText( i18n("Color") );
+    tmpQLabel->setText( i18n("Color:") );
     grid3->addWidget(tmpQLabel,0,0);
 
     grid2->addMultiCell(grid3,5,5,0,2);
@@ -3963,7 +3963,7 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 
     tmpQLabel = new QLabel( tmpQGroupBox, "Label_2" );
     grid3->addWidget(tmpQLabel,0,0);
-    tmpQLabel->setText( i18n("Background Color") );
+    tmpQLabel->setText( i18n("Background color:") );
 
     bgColorButton = new KColorButton( tmpQGroupBox, "ColorButton" );
     grid3->addWidget(bgColorButton,0,1);

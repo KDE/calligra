@@ -142,7 +142,7 @@ KCommand * KPrPage::deleteObjs( bool _add )
         }
     }
     if ( _add &&_objects.count() > 0 ) {
-        deleteCmd = new DeleteCmd( i18n( "Delete object(s)" ), _objects, m_doc,this );
+        deleteCmd = new DeleteCmd( i18n( "Delete Object(s)" ), _objects, m_doc,this );
         deleteCmd->execute();
     }
     else
@@ -1317,7 +1317,7 @@ KCommand * KPrPage::alignObjsLeft(const KoRect &rect)
 
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) left" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Object(s) Left" ), _diffs, _objects, m_doc );
         moveByCmd2->execute();
     }
     else
@@ -1363,7 +1363,7 @@ KCommand * KPrPage::alignObjsCenterH(const KoRect &rect)
     }
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) centered (horizontal)" ),
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Object(s) Centered (horizontal)" ),
                                                  _diffs, _objects, m_doc );
         moveByCmd2->execute();
     }
@@ -1406,7 +1406,7 @@ KCommand * KPrPage::alignObjsRight(const KoRect &rect)
     }
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) right" ), _diffs, _objects, m_doc);
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Object(s) Right" ), _diffs, _objects, m_doc);
         moveByCmd2->execute();
     }
     else
@@ -1451,7 +1451,7 @@ KCommand *KPrPage::alignObjsTop(const KoRect &rect)
     }
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) top" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Object(s) Top" ), _diffs, _objects, m_doc );
         moveByCmd2->execute();
     }
     else
@@ -1497,7 +1497,7 @@ KCommand * KPrPage::alignObjsCenterV(const KoRect &rect)
     }
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) center / vertical" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Object(s) Center / Vertical" ), _diffs, _objects, m_doc );
         moveByCmd2->execute();
     }
     else
@@ -1539,7 +1539,7 @@ KCommand * KPrPage::alignObjsBottom(const KoRect &rect)
 
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) bottom" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Object(s) Bottom" ), _diffs, _objects, m_doc );
         moveByCmd2->execute();
     }
     else
@@ -2828,7 +2828,7 @@ void KPrPage::changePicture( const QString & filename )
             KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>( it.current() );
             if( obj)
             {
-                ChgPixCmd *chgPixCmd = new ChgPixCmd( i18n( "Change pixmap" ), dynamic_cast<KPPixmapObject*>( it.current() ),pix, m_doc,this );
+                ChgPixCmd *chgPixCmd = new ChgPixCmd( i18n( "Change Pixmap" ), dynamic_cast<KPPixmapObject*>( it.current() ),pix, m_doc,this );
                 chgPixCmd->execute();
                 m_doc->addCommand( chgPixCmd );
             }
@@ -2853,7 +2853,7 @@ void KPrPage::changeClipart( const QString & filename )
             KPClipartObject* obj=dynamic_cast<KPClipartObject*>( it.current() );
             if (obj )
             {
-                ChgClipCmd *chgClipCmd = new ChgClipCmd( i18n( "Change clipart" ),
+                ChgClipCmd *chgClipCmd = new ChgClipCmd( i18n( "Change Clipart" ),
                                                          dynamic_cast<KPClipartObject*>( it.current() ),
                                                          dynamic_cast<KPClipartObject*>( it.current() )->getKey(),
                                                          clipart.getKey(), m_doc);
@@ -3138,7 +3138,7 @@ KCommand * KPrPage::replaceObjs( bool createUndoRedo, double _orastX,double _ora
 	_objects.append( kpobject );
     }
 
-    SetOptionsCmd *setOptionsCmd = new SetOptionsCmd( i18n( "Set new options" ), _diffs, _objects, m_doc->getGridX(), m_doc->getGridY(),_orastX, _orastY, _txtBackCol, _otxtBackCol, m_doc );
+    SetOptionsCmd *setOptionsCmd = new SetOptionsCmd( i18n( "Set new Options" ), _diffs, _objects, m_doc->getGridX(), m_doc->getGridY(),_orastX, _orastY, _txtBackCol, _otxtBackCol, m_doc );
     if ( createUndoRedo )
         return setOptionsCmd;
 
@@ -3452,7 +3452,7 @@ KCommand *KPrPage::moveObject(KPresenterView *_view,int diffx,int diffy)
         }
     }
     if(createCommand)
-        moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
+        moveByCmd = new MoveByCmd( i18n( "Move Object(s)" ),
                                    KoPoint( _view->zoomHandler()->unzoomItX (diffx),_view->zoomHandler()->unzoomItY( diffy) ),
                                    _objects, m_doc,this );
     return moveByCmd;
@@ -3489,7 +3489,7 @@ KCommand *KPrPage::moveObject(KPresenterView *m_view,const KoPoint &_move,bool k
     }
 
     if ( key && !_objects.isEmpty()) {
-        moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
+        moveByCmd = new MoveByCmd( i18n( "Move Object(s)" ),
                                    KoPoint( _move ),
                                    _objects, m_doc,this );
     }
@@ -3573,7 +3573,7 @@ KCommand *KPrPage::stickyObj(bool _sticky, KPrPage * currentPage)
 
     if ( !_objects.isEmpty() )
     {
-        stickyCmd = new KPrStickyObjCommand( i18n( "Sticky object" ),
+        stickyCmd = new KPrStickyObjCommand( i18n( "Sticky Object" ),
                                              _objects,_sticky, currentPage, m_doc );
 	stickyCmd->execute();
     }

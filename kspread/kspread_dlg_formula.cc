@@ -494,7 +494,7 @@ static void showEntry( QLineEdit* edit, QLabel* label, KSpreadFunctionDescriptio
 {
     edit->show();
 
-    label->setText( desc->param( param ).helpText() );
+    label->setText( desc->param( param ).helpText()+":" );
     label->show();
     KSpreadParameterType elementType = desc->param( param ).type();
     KFloatValidator *validate=0L;

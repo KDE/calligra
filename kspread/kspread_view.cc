@@ -775,7 +775,7 @@ void KSpreadView::initializeCellPropertyActions()
                            actionCollection(), "default" );
   m_default->setToolTip(i18n("Resets to the default format."));
 
-  m_bgColor = new TKSelectColorAction( i18n("Background color"),
+  m_bgColor = new TKSelectColorAction( i18n("Background Color"),
                                        TKSelectColorAction::FillColor,
                                        actionCollection(), "backgroundColor",
                                        true );
@@ -1607,7 +1607,7 @@ void KSpreadView::spellCheckerCorrected( const QString & old, const QString & co
 
   // TODO ?:
   //  if(!m_spell.macroCmdSpellCheck)
-  //    m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct misspelled word"));
+  //    m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct Misspelled Word"));
   //  m_spell.macroCmdSpellCheck->addCommand(textobj->textObject()->replaceSelectionCommand(&cursor, corr, KoTextObject::HighlightSelection, QString::null ));
 }
 

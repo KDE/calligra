@@ -1987,7 +1987,7 @@ KCommand * KWTextFrameSet::pasteKWord( KoTextCursor * cursor, const QCString & d
 void KWTextFrameSet::insertTOC( KoTextCursor * cursor )
 {
     m_textobj->emitHideCursor();
-    KMacroCommand * macroCmd = new KMacroCommand( i18n("Insert Table Of Contents") );
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Insert Table of Contents") );
 
     // Remove old TOC
 

@@ -78,21 +78,21 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
 
     QGridLayout *grid = new QGridLayout( tab1, 9, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    lRows = new QLabel( i18n( "Number of Rows:" ), tab1 );
+    lRows = new QLabel( i18n( "Number of rows:" ), tab1 );
     grid->addWidget( lRows, 0, 0 );
 
     nRows = new QSpinBox( 1, 128, 1, tab1 );
     nRows->setValue( rows );
     grid->addWidget( nRows, 1, 0 );
 
-    lCols = new QLabel( i18n( "Number of Columns:" ), tab1 );
+    lCols = new QLabel( i18n( "Number of columns:" ), tab1 );
     grid->addWidget( lCols, 2, 0 );
 
     nCols = new QSpinBox( 1, 128, 1, tab1 );
     nCols->setValue( cols );
     grid->addWidget( nCols, 3, 0 );
 
-    lHei = new QLabel( i18n( "Cell Heights:" ), tab1 );
+    lHei = new QLabel( i18n( "Cell heights:" ), tab1 );
     grid->addWidget( lHei, 4, 0 );
 
     cHei = new QComboBox( FALSE, tab1 );
@@ -101,7 +101,7 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
     cHei->setCurrentItem( (int)hei );
     grid->addWidget( cHei, 5, 0 );
 
-    lWid = new QLabel( i18n( "Cell Widths:" ), tab1 );
+    lWid = new QLabel( i18n( "Cell widths:" ), tab1 );
     grid->addWidget( lWid, 6, 0 );
 
     cWid = new QComboBox( FALSE, tab1 );

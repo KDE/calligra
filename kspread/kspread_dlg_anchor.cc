@@ -126,7 +126,7 @@ internetAnchor::internetAnchor( KSpreadView* _view,QWidget *parent , char *name 
 
   tmpQLabel = new QLabel( this);
   lay2->addWidget(tmpQLabel);
-  tmpQLabel->setText(i18n("Internet Address:"));
+  tmpQLabel->setText(i18n("Internet address:"));
   l_internet = new QLineEdit( this );
 
   lay2->addWidget(l_internet);
@@ -150,7 +150,7 @@ QString internetAnchor::apply()
 {
   if( l_internet->text().isEmpty() || text->text().isEmpty() )
     {
-	KMessageBox::error( this, i18n("Area Text or cell is empty!") );
+	KMessageBox::error( this, i18n("Area text or cell is empty!") );
 	return QString();
     }
   return createLink();
