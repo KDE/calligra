@@ -305,6 +305,7 @@ protected slots:
     void slotAlignCharChanged( const QString &_text );
     void newClicked();
     void deleteClicked();
+    void deleteAllClicked();
     void setActiveItem(int selected);
     void updateAlign(int selected);
     void updateFilling(int selected);
@@ -331,6 +332,7 @@ protected:
     QLineEdit* eWidth;
     QPushButton* bNew;
     QPushButton* bDelete;
+    QPushButton* bDeleteAll;
 
     KoTabulatorList m_tabList;
     KoUnit::Unit m_unit;

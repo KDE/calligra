@@ -1425,7 +1425,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
 
     lstTabs = new QListBox( this);
     lstTabs->insertItem( "mytabvalue" );
-    lstTabs->setMaximumSize( QSize( 200, 32767 ) );
+    lstTabs->setMaximumSize( QSize( 300, 32767 ) );
     Layout13->addWidget( lstTabs );
 
     editLayout = new QVBoxLayout;
@@ -1560,6 +1560,11 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     bDelete = new QPushButton( this);
     bDelete->setText( i18n( "Delete" ) );
     Layout4->addWidget( bDelete );
+
+    bDeleteAll = new QPushButton( this);
+    bDeleteAll->setText( i18n( "Delete All" ) );
+    Layout4->addWidget( bDeleteAll );
+
     QSpacerItem* spacer_5 = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     Layout4->addItem( spacer_5 );
     Form1Layout->addLayout( Layout4 );
@@ -1569,6 +1574,7 @@ KoParagTabulatorsWidget::KoParagTabulatorsWidget( KoUnit::Unit unit, double fram
     connect(sAlignChar,SIGNAL(textChanged( const QString & )), this, SLOT(slotAlignCharChanged( const QString & )));
     connect(bNew,SIGNAL(clicked ()),this,SLOT(newClicked()));
     connect(bDelete,SIGNAL(clicked ()),this,SLOT(deleteClicked()));
+    connect(bDeleteAll,SIGNAL(clicked ()),this,SLOT(deleteAllClicked()));
     connect(bgAlign,SIGNAL(clicked (int)),this,SLOT(updateAlign(int)));
     connect(cFilling,SIGNAL(activated (int)),this,SLOT(updateFilling(int)));
     connect(eWidth,SIGNAL(textChanged ( const QString & ) ),this,SLOT(updateWidth()));
@@ -1635,11 +1641,26 @@ void KoParagTabulatorsWidget::deleteClicked() {
     if(lstTabs->count() >0) {
         lstTabs->setCurrentItem(QMIN(static_cast<unsigned int>(selected), lstTabs->count()-1 ));
     } else {
+        bDeleteAll->setEnabled(false);
         bDelete->setEnabled(false);
-        gPosition->setEnabled(false);;
-        bgAlign->setEnabled(false);;
-        gTabLeader->setEnabled(false);;
+        gPosition->setEnabled(false);
+        bgAlign->setEnabled(false);
+        gTabLeader->setEnabled(false);
     }
+}
+
+void KoParagTabulatorsWidget::deleteAllClicked()
+{
+    noSignals=true;
+    sTabPos->clear();
+    noSignals=false;
+    lstTabs->clear();
+    m_tabList.clear();
+    bDeleteAll->setEnabled(false);
+    bDelete->setEnabled(false);
+    gPosition->setEnabled(false);
+    bgAlign->setEnabled(false);
+    gTabLeader->setEnabled(false);
 }
 
 void KoParagTabulatorsWidget::setActiveItem(int selected) {
@@ -1674,6 +1695,7 @@ void KoParagTabulatorsWidget::setActiveItem(int selected) {
     eWidth->setText( KoUnit::userValue( selectedTab->ptWidth, m_unit ) );
     sTabPos->setText( tabToString(selectedTab));
     bDelete->setEnabled(true);
+    bDeleteAll->setEnabled(true);
     gPosition->setEnabled(true);;
     bgAlign->setEnabled(true);;
     gTabLeader->setEnabled(true);;
@@ -1763,9 +1785,10 @@ void KoParagTabulatorsWidget::display( const KoParagLayout &lay ) {
         lstTabs->setCurrentItem(0);
     else {
         bDelete->setEnabled(false);
-        gPosition->setEnabled(false);;
-        bgAlign->setEnabled(false);;
-        gTabLeader->setEnabled(false);;
+        bDeleteAll->setEnabled(false);
+        gPosition->setEnabled(false);
+        bgAlign->setEnabled(false);
+        gTabLeader->setEnabled(false);
     }
 }
 
@@ -2195,7 +2218,7 @@ KoParagDia::KoParagDia( QWidget* parent, const char* name,
         m_shadowWidget=new KoParagShadowWidget( page, "shadow" );
     }
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
-    setInitialSize( QSize(600, 500) );
+    setInitialSize( QSize(630, 500) );
 }
 
 KoParagDia::~KoParagDia()
