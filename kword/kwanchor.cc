@@ -117,7 +117,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     // Convert crect to view coords
     QRect crect = fs->currentViewMode()->normalToView( zh->zoomRect( crectPt ) );
     // and add 1 to right and bottom, to avoid rounding errors (and due to qrect semantics)
-    crect.rBottom() += 1;
+    crect.rBottom() += 2; // HACK: 1 doesn't do it, it leaves a white line along window borders
     crect.rRight() += 1;
 #ifdef DEBUG_DRAWING
     kdDebug() << "               crect in view coordinates (pixel) : " << DEBUGRECT( crect ) << endl;
