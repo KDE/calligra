@@ -146,14 +146,16 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   viewGrid->addWidget(m_pDockManager, 0, 0);
 
   // Load any already-loaded stencils into the stencil dock
-  KivioStencilSpawnerSet *pSet;
-  pSet = m_pDoc->spawnerSets()->first();
-  while( pSet )
+  if( m_pDoc->isReadWrite() ) // only if not embedded in Konqueror
   {
-    addSpawnerToStackBar( pSet );
-    pSet = m_pDoc->spawnerSets()->next();
+    KivioStencilSpawnerSet *pSet;
+    pSet = m_pDoc->spawnerSets()->first();
+    while( pSet )
+    {
+      addSpawnerToStackBar( pSet );
+      pSet = m_pDoc->spawnerSets()->next();
+    }
   }
-
   // A widget to hold the entire right side (old view)
   QWidget *pRightSide = new QWidget(m_pDockManager);
   m_pDockManager->setView(pRightSide);
