@@ -3849,6 +3849,28 @@ void KSpreadTable::deleteCells( const QRect& rect )
     // A list of all cells we want to delete.
     QStack<KSpreadCell> cellStack;
 
+    QRect tmpRect;
+    bool extraCell=false;
+    if(rect.width()==1 && rect.height()==1)
+        {
+        KSpreadCell *cell = nonDefaultCell( rect.x(), rect.y() );
+        if(cell->isForceExtraCells())
+                {
+                extraCell=true;
+                tmpRect=rect;
+                }
+        }
+    else if(rect.contains(m_marker.x(),m_marker.y())
+    &&m_rctSelection.left()==0)
+        {
+        KSpreadCell *cell = nonDefaultCell( m_marker.x(),m_marker.y() );
+        if(cell->isForceExtraCells())
+                {
+                extraCell=true;
+                tmpRect=QRect(m_marker.x(),m_marker.y(),1,1);
+                }
+        }
+
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
     {
@@ -3881,6 +3903,12 @@ void KSpreadTable::deleteCells( const QRect& rect )
     for( ;c; c = c->nextCell() )
         if ( c->isForceExtraCells() && !c->isDefault() )
             c->forceExtraCells( c->column(), c->row(), c->extraXCells(), c->extraYCells() );
+
+    if(extraCell)
+        {
+        setSelection(tmpRect);
+        unselect();
+        }
 
     m_pDoc->setModified( true );
 
