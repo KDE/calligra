@@ -45,6 +45,13 @@
 #include <kwcommand.h>
 #include <kformulaconfigpage.h>
 
+// little helper stolen from kmail
+// (Note: KDialogBase should have version of the methods that take a QString for the icon name)
+static inline QPixmap loadIcon( const char * name ) {
+  return KGlobal::instance()->iconLoader()
+    ->loadIcon( QString::fromLatin1(name), KIcon::NoGroup, KIcon::SizeMedium );
+}
+
 KWConfig::KWConfig( KWView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KWord") ,
 		KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
@@ -52,24 +59,24 @@ KWConfig::KWConfig( KWView* parent )
 
 {
   QVBox *page = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
-                        BarIcon("spellcheck", KIcon::SizeMedium) );
+                        loadIcon("spellcheck") );
   m_spellPage=new ConfigureSpellPage(parent, page);
 
   QVBox *page2 = addVBoxPage( i18n("Interface"), i18n("Interface Settings"),
-                              BarIcon("interfaceconfig", KIcon::SizeMedium) );
+                              loadIcon("configure") );
   m_interfacePage=new ConfigureInterfacePage(parent, page2);
 
   QVBox *page3 = addVBoxPage( i18n("Misc"), i18n("Misc Settings"),
-                              BarIcon("miscconfig", KIcon::SizeMedium) );
+                              loadIcon("misc") );
   m_miscPage=new ConfigureMiscPage(parent, page3);
 
   QVBox *page4 = addVBoxPage( i18n("Document"), i18n("Document Settings"),
-                              BarIcon("documentdefaults", KIcon::SizeMedium) );
+                              loadIcon("misc_doc") );
 
   m_defaultDocPage=new ConfigureDefaultDocPage(parent, page4);
 
   QVBox *page5 = addVBoxPage( i18n("Formula"), i18n("Formula Defaults"),
-                              BarIcon("kformula", KIcon::SizeMedium) );
+                              loadIcon("kformula") );
   m_formulaPage=new KFormula::ConfigurePage( parent->kWordDocument()->getFormulaDocument(),
                                              this, KWFactory::global()->config(), page5 );
 
