@@ -874,7 +874,7 @@ QString KSpreadCell::encodeFormula( bool _era, int _col, int _row )
                             erg += QString( "$%1" ).arg( col );
                         else
                             if (_era)
-                                erg += QString( "§%1" ).arg( col );
+                                erg += QChar(0xA7) + QString( "%1" ).arg( col );
                             else
                                 erg += QString( "#%1" ).arg( col - _col );
 
@@ -882,7 +882,7 @@ QString KSpreadCell::encodeFormula( bool _era, int _col, int _row )
                             erg += QString( "$%1#").arg( row );
                         else
                             if (_era)
-                                erg += QString( "§%1#" ).arg( row );
+                                erg += QChar(0xA7) + QString( "%1#" ).arg( row );
                             else
                                 erg += QString( "#%1#" ).arg( row - _row );
                     }
@@ -937,16 +937,19 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
             if ( pos < length )
                 erg += _text[pos++];
         }
-        else if ( _text[pos] == '#' || _text[pos] == '$' || _text[pos] == '§')
+        else if ( _text[pos] == '#' || _text[pos] == '$' || _text[pos] == QChar(0xA7))
         {
             bool abs1 = FALSE;
             bool abs2 = FALSE;
             bool era1 = FALSE; // if 1st is relative but encoded absolutely
             bool era2 = FALSE;
-            switch ( _text[pos++] ) {
-                case '$': abs1 = TRUE; break ;
-                case '§': era1 = TRUE; break ;
-            }
+    
+            QChar _t = _text[pos++];
+            if ( _t == '$' )
+                abs1 = TRUE;
+            else if ( _t == QChar(0xA7) )
+                era1 = TRUE;
+
             int col = 0;
             unsigned int oldPos = pos;
             while ( pos < length && ( _text[pos].isDigit() || _text[pos] == '-' ) ) ++pos;
@@ -955,10 +958,13 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
             if ( !abs1 && !era1 )
                 col += _col;
             // Skip '#' or '$'
-            switch ( _text[pos++] ) {
-                case '$': abs2 = TRUE; break ;
-                case '§': era2 = TRUE; break ;
-            }
+    
+            _t = _text[pos++];
+            if ( _t == '$' )
+                 abs2 = TRUE;
+            else if ( _t == QChar(0xA7) )
+                 era2 = TRUE;
+
             int row = 0;
             oldPos = pos;
             while ( pos < length && ( _text[pos].isDigit() || _text[pos] == '-' ) ) ++pos;
