@@ -20,6 +20,7 @@
 #include "vglobal.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
+#include "vselection.h"
 
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
@@ -187,13 +188,17 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
 {
 	kdDebug() << "**** part->paintContent()" << endl;
+	painter.eraseRect( rect );
 	VPainterFactory *painterFactory = new VPainterFactory;
 	painterFactory->setPainter( painter.device(), rect.width(), rect.height() );
 	VPainter *p = painterFactory->painter();
 	//VPainter *p = new VKoPainter( painter.device() );
 	p->begin();
 	p->setZoomFactor( 1.0 );
+	kdDebug() << painter.worldMatrix().dx() << endl;
+	p->setWorldMatrix( painter.worldMatrix() );
 
+	m_doc.selection()->clear();
 	QPtrListIterator<VLayer> itr( m_doc.layers() );
 	for( ; itr.current(); ++itr )
 		//if( itr.current()->visible() )

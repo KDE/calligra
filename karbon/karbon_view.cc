@@ -1019,6 +1019,9 @@ KarbonView::initActions()
 				this, SLOT( selectionChanged() ) );
 		connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ),
 				this, SLOT( selectionChanged() ) );
+#if KDE_VERSION >= 305
+		//new KWidgetAction( m_strokeFillPreview, i18n(""), 0, this, SLOT( ), actionCollection(), "preview" );
+#endif
 		shell()->toolBar( "Toolbox" )->insertWidget( 10, 30, m_strokeFillPreview );
 		m_strokeFillPreview->update( part()->document().defaultStroke(), part()->document().defaultFill() );
 	}
