@@ -379,6 +379,7 @@ void KexiTableView::setNavRowCount(int newrows)
 
 void KexiTableView::setData( KexiTableViewData *data, bool owner )
 {
+	const bool theSameData = m_data && m_data==data;
 	if (m_owner && m_data && m_data!=data/*don't destroy if it's the same*/) {
 		kdDebug(44021) << "KexiTableView::setData(): destroying old data (owned)" << endl;
 		delete m_data; //destroy old data
@@ -394,7 +395,10 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 		m_owner = owner;
 		kdDebug(44021) << "KexiTableView::setData(): using shared data" << endl;
 		//add columns
-		d->pTopHeader->setUpdatesEnabled(false);
+//		d->pTopHeader->setUpdatesEnabled(false);
+		while(d->pTopHeader->count()>0)
+			d->pTopHeader->removeLabel(0);
+
 		{
 			for (KexiTableViewColumn::ListIterator it(m_data->columns);
 				it.current(); ++it) 
@@ -408,14 +412,17 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 				}
 			}
 		}
-		d->pTopHeader->setUpdatesEnabled(true);
+
+//		d->pTopHeader->setUpdatesEnabled(true);
 		//add rows
 //		triggerUpdate();
 		d->pVerticalHeader->addLabels(m_data->count());
 	}
 	
-	connect(m_data, SIGNAL(refreshRequested()), this, SLOT(slotRefreshRequested()));
-	connect(m_data, SIGNAL(destroying()), this, SLOT(slotDataDestroying()));
+	if (!theSameData) {
+		connect(m_data, SIGNAL(refreshRequested()), this, SLOT(slotRefreshRequested()));
+		connect(m_data, SIGNAL(destroying()), this, SLOT(slotDataDestroying()));
+	}
 
 	if (!data) {
 		clearData();
@@ -445,8 +452,8 @@ void KexiTableView::initDataContents()
 	//set current row:
 	d->pCurrentItem = 0;
 	int curRow = -1, curCol = -1;
-	d->curRow = -1;
-	d->curCol = -1;
+//	d->curRow = -1;
+//	d->curCol = -1;
 	if (m_data->columnsCount()>0) {
 		if (rows()>0) {
 			d->pCurrentItem = m_data->first();
@@ -679,6 +686,14 @@ void KexiTableView::slotRefreshRequested()
 	acceptRowEdit();
 	d->pVerticalHeader->clear();
 
+	if (d->curCol>=0 && d->curCol<columns()) {
+		//find the editor for this column
+		KexiTableEdit *edit = editor( d->curCol );
+		if (edit) {
+			edit->hideFocus();
+		}
+	}
+//	setCursor(-1, -1, true);
 	d->clearVariables();
 	d->pVerticalHeader->setCurrentRow(-1);
 	d->initDataContentsOnShow = true;
@@ -2449,8 +2464,7 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 	int newrow = row;
 	int newcol = col;
 
-		if(rows() <= 0)
-	{
+	if(rows() <= 0) {
 		d->pVerticalHeader->setCurrentRow(-1);
 		if (isInsertingEnabled()) {
 			d->pCurrentItem=d->pInsertItem;

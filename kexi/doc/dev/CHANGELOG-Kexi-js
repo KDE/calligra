@@ -309,6 +309,11 @@ HOT TODO:
 
 CC_MAIL: dkite@shaw.ca
 
+2004-06-15
+TableView, Alter Table
+- Table Cell Editor's Focus is cleared on slotRefreshRequested()
+- fixed columns recreating on data resetting for a table
+
 2004-06-14
 Core/Parts
 - For all parts: Instance GUI Clients are now splitted for per-view 

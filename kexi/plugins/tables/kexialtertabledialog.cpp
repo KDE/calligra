@@ -82,11 +82,11 @@ void KexiAlterTableDialog::init()
 	KexiDB::Field *f = new KexiDB::Field(i18n("Data type"), KexiDB::Field::Enum);
 //		KexiDB::Field::NotEmpty | KexiDB::Field::NotNull);
 	QValueVector<QString> types(KexiDB::Field::LastTypeGroup);
-	int maxTypeNameTextWidth = 0;
+	m_maxTypeNameTextWidth = 0;
 	QFontMetrics fm(font());
 	for (int i=1; i<=KexiDB::Field::LastTypeGroup; i++) {
 		types[i-1] = KexiDB::Field::typeGroupName(i);
-		maxTypeNameTextWidth = QMAX(maxTypeNameTextWidth, fm.width(types[i-1]));
+		m_maxTypeNameTextWidth = QMAX(m_maxTypeNameTextWidth, fm.width(types[i-1]));
 	}
 	f->setEnumHints(types);
 
@@ -105,10 +105,11 @@ void KexiAlterTableDialog::init()
 //	box->addWidget(m_view);
 
 	m_view->setSpreadSheetMode();
+#if 0 //moved down
 	m_view->adjustColumnWidthToContents(0); //adjust column width
-//	m_view->adjustColumnWidthToContents(1); //adjust column width
 	m_view->setColumnWidth(1, maxTypeNameTextWidth + 2*m_view->rowHeight());
 	m_view->setColumnStretchEnabled( true, 2 ); //last column occupies the rest of the area
+#endif
 
 //	setFocusProxy(m_view);
 
@@ -193,6 +194,10 @@ void KexiAlterTableDialog::initData()
 	kdDebug() << "KexiAlterTableDialog::init(): vector contains " << m_buffers->size() << " items" << endl;
 
 	m_view->setData(m_data);
+
+	m_view->adjustColumnWidthToContents(0); //adjust column width
+	m_view->setColumnWidth(1, m_maxTypeNameTextWidth + 2*m_view->rowHeight());
+	m_view->setColumnStretchEnabled( true, 2 ); //last column occupies the rest of the area
 }
 
 static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiPropertyBuffer& buf)

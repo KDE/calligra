@@ -127,6 +127,9 @@ class KexiAlterTableDialog : public KexiDataTable
 //		                                     //!< assigned for property buffers
 		int m_row; //!< used to know if a new row is selected in slotCellSelected()
 //		bool m_currentBufferCleared : 1;
+
+		//internal
+		int m_maxTypeNameTextWidth;
 };
 
 #endif
