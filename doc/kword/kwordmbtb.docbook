@@ -1356,7 +1356,7 @@ here</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>STUFF........</action>For more on tables, <link
+<para><action>Converts a table into a grid of individual frames.</action>These individual frames are not connected and can be moved independently around the screen.  For more on tables, <link
 linkend="tables">click here</link>.</para>
 </listitem>
 </varlistentry>

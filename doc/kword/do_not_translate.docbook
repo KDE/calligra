@@ -37,7 +37,7 @@
 <row><entry></entry></row>
 
 <row><entry>DG: Editing your Document </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Selecting Text </entry><entry>Needs Updates</entry></row>
+<row><entry></entry><entry>Selecting Text </entry><entry>Done</entry></row>
 <row><entry></entry><entry>Using Multiple Views </entry><entry>Not Written</entry></row>
 <row><entry></entry><entry>Undo/Redo </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>Cut/Copy/Paste and the Clipboard </entry><entry>Needs Updates</entry></row>
@@ -86,7 +86,7 @@
 <row><entry>The Menu Items/Tool Bars </entry><entry></entry><entry></entry></row>
 <row><entry></entry><entry>Introduction to Menu Bars and Tool Bars </entry><entry>Done</entry></row>
 <row><entry></entry><entry>Hiding, Changing, and Moving Tool Bars </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Basic Menu Bar </entry><entry>Done except for description of "Ungroup Table", Custom Variables, </entry></row>
+<row><entry></entry><entry>Basic Menu Bar </entry><entry>Done except for description of Custom Variables</entry></row>
 <row><entry></entry><entry>Formatting ToolBar </entry><entry>Done</entry></row>
 <row><entry></entry><entry>File Toolbar </entry><entry>Done</entry></row>
 <row><entry></entry><entry>Insert Toolbar </entry><entry>Done</entry></row>

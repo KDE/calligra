@@ -12,16 +12,7 @@ section</link>.</para>
 <para>For many editing and formatting functions in &kword;, you will
 want to perform a certain action (bold face, underline,&etc;) to a
 certain section of text, not the document as a whole. You specify which
-text you want by selecting (highlighting) text.</para>
-
-<para>Selected text has a dark background to seperate it from unselected
-text. You select text by designating a start and an end point.  All the
-text in between the start and end point is selected text.</para>
-
-<note>
-<para>The <quote>endpoint</quote> can be located before the start point.
-The text will not be in reverse order.</para>
-</note>
+text you want to alter by selecting (highlighting) the text you want changed.</para>
 
 <screenshot>
 <mediaobject>
@@ -30,22 +21,18 @@ The text will not be in reverse order.</para>
 </mediaobject>
 </screenshot>
 
-<para>Selected text has a black background to seperate it from
+<para>Selected text has a dark background to seperate it from
 unselected text. You select text by designating a start and an end
 point.  All the text in between the start and end point is selected
 text.</para>
 
-<note>
-<para>The <quote>endpoint</quote> can be located before the start point.
-The text will not be reversed.</para>
-</note>
-
-<para>You can select text with either the mouse or the keyboard. </para>
+<para>You can select text with either the <link linkend="select-with-keyboard">keyboard</link> or the <link linkend="select-with-mouse">mouse</link>. </para>
 
 <sect2 id="select-with-keyboard">
 <title>Using The Keyboard</title>
 
-<informaltable frame="none"><tgroup cols="2" align="left">
+<informaltable><tgroup cols="2" align="left">
+<thead><row><entry align="center">Key Combination</entry><entry align="left">Function</entry></row></thead>
 <tbody>
 <row><entry align="center"><keycombo action="simul">&Shift;<keycap>Left Arrow</keycap></keycombo></entry><entry>Move selection one character to the left.</entry></row>
 <row><entry align="center"><keycombo action="simul">&Shift;<keycap>Right Arrow</keycap></keycombo></entry><entry>Move selection one character to the Right.</entry></row>
@@ -71,8 +58,41 @@ button, the start and endpoints will become fixed.</para>
 
 <sect1 id="views">
 <title>Using Multiple Views</title>
-
+<sect2 id="views-intro">
+<title>Introduction</title>
 <para></para>
+<para></para>
+<para></para>
+<para></para>
+<para></para>
+<para></para>
+
+
+
+
+
+</sect2>
+<sect2 id="views-new">
+<title>Creating a new view</title>
+<para></para>
+</sect2>
+<sect2 id="views-split">
+<title>Splitting the current view into two seperate views. </title>
+<para></para>
+</sect2>
+<sect2 id="views-split-orientation">
+<title>Changing the split view orientation </title>
+<para></para>
+</sect2>
+<sect2 id="views-remove">
+<title>Remove View </title>
+<para></para>
+</sect2>
+<sect2 id="views-close">
+<title>Close all views </title>
+<para></para>
+</sect2>
+
 
 </sect1>
 
