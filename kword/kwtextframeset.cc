@@ -470,7 +470,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         {
 #ifdef DEBUG_CURSOR
             // for debug only!
-            //p->fillRect( clip, QBrush( Qt::red ) );
+            //p->fillRect( clip, QBrush( Qt::red, QBrush::Dense3Pattern ) );
 #endif
 
             bool wasChanged = cursor->parag()->hasChanged();
@@ -480,7 +480,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             p->setClipRegion( reg );
             // translate to qrt coords - after setting the clip region !
             // see internalToNormalWithHint
-            p->translate( viewFrameRect.left(), viewFrameRect.top() - frame->internalY() );
+            p->translate( viewFrameRect.left(), viewFrameRect.top() - m_doc->layoutUnitToPixelY( frame->internalY() ) );
             p->setBrushOrigin( p->brushOrigin().x() + viewFrameRect.left(), p->brushOrigin().y() + viewFrameRect.top() - frame->internalY() );
 
             // The settings come from this frame
