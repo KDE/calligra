@@ -92,7 +92,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		virtual QSize sizeHint() const;
 
 		//! \return editor item named with \a name or null if such item not found
-		KexiPropertyEditorItem* item(const QString& name) const { return m_items[name]; }
+		KexiPropertyEditorItem* item(const QString& name) const { return m_items[name.ascii()]; }
 
 	signals:
 		/*! This signal is emitted when a property value has changed, ie when the user presses Enter or when another item
