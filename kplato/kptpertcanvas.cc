@@ -200,6 +200,8 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
         }
         case QEvent::MidButton:
             break;
+		default:
+			break;
     }
 }
 
