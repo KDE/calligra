@@ -278,13 +278,21 @@ void StyleDia::setupTab2()
     l->setFixedHeight( l->sizeHint().height() );
 
     chooseBStyle = new QComboBox( false, brushConfig, "BStyle" );
+    // xgettext:no-c-format
     chooseBStyle->insertItem( i18n( "100% fill Pattern" ) );
+    // xgettext:no-c-format
     chooseBStyle->insertItem( i18n( "94% fill Pattern" ) );
+    // xgettext:no-c-format
     chooseBStyle->insertItem( i18n( "88% fill Pattern" ) );
+    // xgettext:no-c-format
     chooseBStyle->insertItem( i18n( "63% fill Pattern" ) );
+    // xgettext:no-c-format
     chooseBStyle->insertItem( i18n( "50% fill Pattern" ) );
+    // xgettext:no-c-format
     chooseBStyle->insertItem( i18n( "37% fill Pattern" ) );
+    // xgettext:no-c-format
     chooseBStyle->insertItem( i18n( "12% fill Pattern" ) );
+    // xgettext:no-c-format
     chooseBStyle->insertItem( i18n( "6% fill Pattern" ) );
     chooseBStyle->insertItem( i18n( "Horizontal Lines" ) );
     chooseBStyle->insertItem( i18n( "Vertical Lines" ) );
