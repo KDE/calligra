@@ -1704,8 +1704,20 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
                 p.drawLine( m_dragStartPoint, m_dragEndPoint ); //
-                m_dragEndPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
-                                         ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                int posX = ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx();
+                int posY = ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy();
+                if ( e->state() & ShiftButton )
+                {
+                    int witdh = QABS( posX -m_dragStartPoint.x() );
+                    int height = QABS( posY - m_dragStartPoint.y() );
+                    if ( witdh > height )
+                        posY = m_dragStartPoint.y();
+                    else if ( witdh < height )
+                        posX = m_dragStartPoint.x();
+                }
+
+
+                m_dragEndPoint = QPoint( posX, posY);
                 m_dragEndPoint=limitOfPoint(m_dragEndPoint);
 
                 p.drawLine( m_dragStartPoint, m_dragEndPoint );
