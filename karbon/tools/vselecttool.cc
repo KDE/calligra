@@ -241,11 +241,11 @@ VSelectTool::mouseDragRelease()
 				 new VTranslateCmd(
 					&view()->part()->document(),
 					abs( int( m_distx ) ) >= abs( int( m_disty ) ) ? qRound( m_distx ) : 0,
-					abs( int( m_distx ) ) <= abs( int( m_disty ) ) ? qRound( m_disty ) : 0 ),
+					abs( int( m_distx ) ) <= abs( int( m_disty ) ) ? qRound( m_disty ) : 0, altPressed() ),
 				true );
 		else
 			view()->part()->addCommand(
-				new VTranslateCmd( &view()->part()->document(), qRound( m_distx ), qRound( m_disty ) ),
+				new VTranslateCmd( &view()->part()->document(), qRound( m_distx ), qRound( m_disty ), altPressed() ),
 				true );
 	}
 	else if( m_state == scaling )

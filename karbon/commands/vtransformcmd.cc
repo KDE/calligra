@@ -34,23 +34,38 @@
 
 #include <kdebug.h>
 
-VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat )
-	: VCommand( doc, i18n( "Transform Objects" ) ), m_mat( mat )
+VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat, bool duplicate )
+	: VCommand( doc, i18n( "Transform Objects" ) ), m_mat( mat ), m_duplicate( duplicate )
 {
 	m_selection = ( document() && document()->selection() )
 		? document()->selection()->clone()
 		: new VSelection();
 
-	if( !m_selection || m_selection->objects().count() == 1 )
+	if( m_duplicate )
+	{
+		if( !m_selection || m_selection->objects().count() == 1 )
+			setName( i18n( "Duplicate Object" ) );
+		else
+			setName( i18n( "Duplicate Objects" ) );
+	}
+	else if( !m_selection || m_selection->objects().count() == 1 )
 		setName( i18n( "Transform Object" ) );
 }
 
-VTransformCmd::VTransformCmd( VDocument *doc, const QString& name, const QString& icon )
-		: VCommand( doc, name, icon )
+VTransformCmd::VTransformCmd( VDocument *doc, const QString& name, const QString& icon, bool duplicate )
+		: VCommand( doc, name, icon ), m_duplicate( duplicate )
 {
 	m_selection = ( document() && document()->selection() )
 		? document()->selection()->clone()
 		: new VSelection();
+
+	if( m_duplicate )
+	{
+		if( !m_selection || m_selection->objects().count() == 1 )
+			setName( i18n( "Duplicate Object" ) );
+		else
+			setName( i18n( "Duplicate Objects" ) );
+	}
 }
 
 VTransformCmd::~VTransformCmd()
@@ -68,9 +83,27 @@ VTransformCmd::execute()
 			: new VSelection();
 	VObjectListIterator itr( m_selection->objects() );
 
-	for( ; itr.current() ; ++itr )
+	if( m_duplicate )
 	{
-		visit( *itr.current() );
+		// clone original objects, add duplicates to document, transform and select them
+		VObject *copy = 0L;
+		for( ; itr.current() ; ++itr )
+		{
+			copy = itr.current()->clone();
+			visit( *copy );
+			document()->append( copy );
+			document()->selection()->take( *itr.current() );
+			document()->selection()->append( copy );
+			m_duplicates.append( copy );
+		}
+	}
+	else
+	{
+		// transform objects
+		for( ; itr.current() ; ++itr )
+		{
+			visit( *itr.current() );
+		}
 	}
 
 	setSuccess( true );
@@ -82,13 +115,33 @@ VTransformCmd::unexecute()
 	// inverting the matrix should undo the affine transformation
 	m_mat = m_mat.invert();
 
-	VObjectListIterator itr( m_selection->objects() );
-
-	for( ; itr.current() ; ++itr )
+	if( m_duplicate )
 	{
-		visit( *itr.current() );
-	}
+		// remove duplicated objects
+		VObjectListIterator itr( m_duplicates );
+		for( ; itr.current() ; ++itr )
+		{
+			document()->selection()->take( *itr.current() );
+			itr.current()->setState( VObject::deleted );
+		}
+		VObjectListIterator jtr( m_selection->objects() );
 
+		// add original selection objects to new selection
+		for( ; jtr.current() ; ++jtr )
+		{
+			document()->selection()->append( jtr.current() );
+		}
+	}
+	else
+	{
+		// move objects back to original position
+		VObjectListIterator itr( m_selection->objects() );
+
+		for( ; itr.current() ; ++itr )
+		{
+			visit( *itr.current() );
+		}
+	}
 	// reset
 	m_mat = m_mat.invert();
 	delete( m_selection );
@@ -149,8 +202,8 @@ VTransformCmd::visitVImage( VImage &img )
 	img.transform( m_mat );
 }
 
-VTranslateCmd::VTranslateCmd( VDocument *doc, double d1, double d2 )
-		: VTransformCmd( doc, i18n( "Translate Objects" ), "14_select" )
+VTranslateCmd::VTranslateCmd( VDocument *doc, double d1, double d2, bool duplicate )
+		: VTransformCmd( doc, i18n( "Translate Objects" ), "14_select", duplicate )
 {
 	if( !m_selection || m_selection->objects().count() == 1 )
 		setName( i18n( "Translate Object" ) );

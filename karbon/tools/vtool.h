@@ -186,6 +186,8 @@ protected:
 
 	bool ctrlPressed() const { return m_ctrlPressed; }
 
+	bool altPressed() const { return m_altPressed; }
+
 private:
 	/**
 	 * The view the tool acts upon.
@@ -221,6 +223,11 @@ private:
 	 * Indicates if ctrl is pressed.
 	 */
 	bool m_ctrlPressed;
+
+	/**
+	 * Indicates if Alt is pressed.
+	 */
+	bool m_altPressed;
 };
 
 #endif

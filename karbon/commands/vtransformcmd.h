@@ -22,6 +22,7 @@
 #define __VTRANSFORMCMD_H__
 
 #include "vcommand.h"
+#include "vgroup.h"
 
 // Transform object(s) with a specified matrix and allow undo.
 
@@ -36,7 +37,7 @@ class VSelection;
 class VTransformCmd : public VCommand
 {
 public:
-	VTransformCmd( VDocument *doc, const QWMatrix& mat );
+	VTransformCmd( VDocument *doc, const QWMatrix& mat, bool duplicate = false );
 	virtual ~VTransformCmd();
 
 	virtual void execute();
@@ -53,18 +54,21 @@ public:
 	}
 
 protected:
-	VTransformCmd( VDocument *doc, const QString& name, const QString& icon );
+	VTransformCmd( VDocument *doc, const QString& name, const QString& icon, bool duplicate = false );
 
 	VSelection* m_selection;
+	VObjectList m_duplicates;
 
 	QWMatrix m_mat;
+
+	bool m_duplicate;
 };
 
 
 class VTranslateCmd : public VTransformCmd
 {
 public:
-	VTranslateCmd( VDocument *doc, double d1, double d2 );
+	VTranslateCmd( VDocument *doc, double d1, double d2, bool duplicate = false );
 };
 
 

@@ -37,6 +37,7 @@ VTool::VTool( KarbonView *view, const char* ) : m_view( view )
 	m_isDragging		= false;
 	m_shiftPressed		= false;
 	m_ctrlPressed		= false;
+	m_altPressed		= false;
 }
 
 VTool::~VTool()
@@ -187,6 +188,13 @@ VTool::keyEvent( QEvent* event )
 				return true;
 			}
 		}
+
+		// 
+		if( keyEvent->key() == Qt::Key_Alt )
+		{
+			m_altPressed = true;
+			return true;
+		}
 	}
 
 	// Key release events:
@@ -215,6 +223,12 @@ VTool::keyEvent( QEvent* event )
 
 				return true;
 			}
+		}
+
+		if( keyEvent->key() == Qt::Key_Alt )
+		{
+			m_altPressed = false;
+			return true;
 		}
 
 		if( key == Qt::Key_Left || key == Qt::Key_Right || key == Qt::Key_Up || key == Qt::Key_Down )
