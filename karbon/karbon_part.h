@@ -25,8 +25,8 @@
 
 #include "karbon_part_base.h"
 #include <koUnit.h>
-#include <kofficemacros.h>
 #include "vdocument.h"
+#include "koffice_export.h"
 
 class DCOPObject;
 class KoRect;
@@ -41,7 +41,7 @@ class VCommandHistory;
  * Finally a dcop interface is set up here.
  */
 
-class KDE_EXPORT KarbonPart : public KarbonPartBase
+class KARBONCOMMON_EXPORT KarbonPart : public KarbonPartBase
 {
 	Q_OBJECT
 public:

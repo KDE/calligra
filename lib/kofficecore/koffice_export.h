@@ -1,6 +1,6 @@
 /*
     This file is part of kofficecore
-    Copyright (c) 2005 Koffice Team
+    Copyright (c) 2005 KOffice Team
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -25,22 +25,11 @@
 
 #include <kdeversion.h>
  
-#if KDE_IS_VERSION(3,3,90)
+/* Uncomment when -fvisibility support is finished */
+#if 0 /* KDE_IS_VERSION(3,3,90) */
  
 #include <kdemacros.h>
  
-#define KOFFICECORE_EXPORT
-#define KOFFICEUI_EXPORT
-#define KOTEXT_EXPORT
-#define KOFORMULA_EXPORT
-#define KOSTORE_EXPORT
-#define KOWMF_EXPORT
-#define KOSCRIPT_EXPORT
-#define KOPAINTER_EXPORT
-#define KSPREAD_EXPORT
-#define KFORMULA_EXPORT
-
-/*
 #define KOFFICECORE_EXPORT KDE_EXPORT
 #define KOFFICEUI_EXPORT KDE_EXPORT
 #define KOTEXT_EXPORT KDE_EXPORT
@@ -51,7 +40,11 @@
 #define KOPAINTER_EXPORT KDE_EXPORT 
 #define KSPREAD_EXPORT KDE_EXPORT
 #define KFORMULA_EXPORT KDE_EXPORT
-*/
+
+#define KARBONCOMMON_EXPORT KDE_EXPORT
+#define KARBONBASE_EXPORT KDE_EXPORT
+#define KSPREAD_EXPORT KDE_EXPORT
+
 #else
 #define KOFFICECORE_EXPORT
 #define KOFFICEUI_EXPORT
@@ -63,5 +56,9 @@
 #define KOPAINTER_EXPORT
 #define KSPREAD_EXPORT
 #define KFORMULA_EXPORT
+
+#define KARBONCOMMON_EXPORT
+#define KARBONBASE_EXPORT
+#define KSPREAD_EXPORT
 #endif
-#endif
+#endif /* _KOFFICE_EXPORT_H */
