@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 2000, 2001 David Faure <david@mandrakesoft.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -26,14 +27,15 @@
 #include "koshell_shell.h"
 
 static const char* description=I18N_NOOP("KOffice Workspace");
-static const char* version="0.3";
+static const char* version="1.1 (beta3)";
 
 int main( int argc, char **argv )
 {
   KAboutData * aboutData = new KAboutData( "koshell", I18N_NOOP("KOffice Workspace"),
      version, description, KAboutData::License_GPL,
        "(c) 1998-2001, Torben Weis");
-  aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
+  aboutData->addAuthor("Torben Weis", 0, "weis@kde.org");
+  aboutData->addAuthor("David Faure", 0, "david@mandrakesoft.com");
 
   KCmdLineArgs::init( argc, argv, aboutData );
   //KCmdLineArgs::addCmdLineOptions( options );
