@@ -37,14 +37,14 @@ class KEXI_DB_EXPORT FieldList
 	public:
 		unsigned int fieldCount() const;
 		/*! Adds field at the and of field list. */
-		virtual void addField(Field *field);
+		virtual FieldList& addField(Field *field);
 		/*! \return field #id or NULL if there is no such a field. */
 		KexiDB::Field* field(unsigned int id);
 
 		Field::ListIterator fieldsIterator() { return Field::ListIterator(m_fields); }
 
-		const QString& name() const;
-		void setName(const QString& name);
+//		const QString& name() const;
+//		void setName(const QString& name);
 
 		/*! Removes all fields from the list, clears name. */
 		virtual void clear();
@@ -53,11 +53,11 @@ class KEXI_DB_EXPORT FieldList
 
 		virtual void debug();
 	protected:
-		FieldList(const QString& name = QString::null );
+		FieldList();
 		virtual ~FieldList();
 
 	//js	QStringList m_primaryKeys;
-		QString m_name;
+//		QString m_name;
 		Field::List m_fields;
 
 //	friend class Connection;

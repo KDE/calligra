@@ -102,10 +102,15 @@ class KEXI_DB_EXPORT Cursor: public Object
 		bool reopen();
 		/*! \return number of fields available for this cursor. */
 		uint fieldCount() { return m_fieldCount; }
-		virtual QVariant value(int i) = 0;
+		virtual QVariant value(int i) const = 0;
 
 		/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
 		virtual const char ** recordData() = 0;
+		
+		/*! Puts current record's data into \a data (makes a deep copy).
+		 This have unspecified behaviour if the cursor is not at valid record.
+		 Note: For reimplementation in driver's code. */
+		virtual void storeCurrentRecord(RecordData &data) = 0;
 
 	protected:
 		/*! Cursor will operate on \a conn */

@@ -165,13 +165,15 @@ bool SQLiteCursor::drv_getNextRecord()
 				&m_data->curr_coldata,
 				&m_data->curr_colname);
 
-			if (m_data->curr_coldata) {
-				for (int i=0;i<m_fieldCount;i++) {
-					KexiDBDrvDbg<<"col."<< i<<": "<< m_data->curr_colname[i]<<" "<< m_data->curr_colname[m_fieldCount+i]
-					 << " = " << (m_data->curr_coldata[i] ? QString::fromLocal8Bit(m_data->curr_coldata[i]) : "(NULL)") <<endl;
-				}
-			}
 			if (res==SQLITE_ROW) {//we have the record
+
+				if (m_data->curr_coldata) {
+					for (int i=0;i<m_fieldCount;i++) {
+						KexiDBDrvDbg<<"col."<< i<<": "<< m_data->curr_colname[i]<<" "<< m_data->curr_colname[m_fieldCount+i]
+						<< " = " << (m_data->curr_coldata[i] ? QString::fromLocal8Bit(m_data->curr_coldata[i]) : "(NULL)") <<endl;
+					}
+				}
+							
 				if (m_options & Buffered) {
 					//store this record's values in the buffer
 					if (!m_data->cols_pointers_mem_size)
@@ -300,8 +302,22 @@ const char ** SQLiteCursor::recordData()
 	return m_data->curr_coldata;
 }
 
+void SQLiteCursor::storeCurrentRecord(RecordData &data)
+{
+	if (!m_data)
+		return;
+	const char **col = m_data->curr_coldata;
+	data.reserve(m_fieldCount);
+    for( int i=0; i<m_fieldCount; i++, col++ ) {
+		KexiDBDrvDbg << "SQLiteCursor::storeCurrentRecord(): col=" << (col ? *col : 0) << endl;
+		data[i] = QVariant( *col );
+	}
+//	for (int i=0; i<m_fieldCount; i++) {
+//		data[i]
+//	}
+}
 
-QVariant SQLiteCursor::value(int i)
+QVariant SQLiteCursor::value(int i) const
 {
 //	if (i > (m_data->curr_cols-1)) //range checking
 	if (i > (m_fieldCount-1)) //range checking

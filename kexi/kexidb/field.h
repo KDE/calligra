@@ -30,7 +30,7 @@ namespace KexiDB {
 /*! KexiDB::Field provides information about single database field.
 */
 
-class Table;
+class TableSchema;
 
 class KEXI_DB_EXPORT Field
 {
@@ -117,7 +117,7 @@ class KEXI_DB_EXPORT Field
 		typedef QPtrList<Field> List;
 		typedef QPtrListIterator<Field> ListIterator;
 
-		Field(Table *table);
+		Field(TableSchema *tableSchema);
 		Field();
 
 		Field(const QString& name, Type ctype,
@@ -134,7 +134,7 @@ class KEXI_DB_EXPORT Field
 
 		virtual QString		name() const;
 //		virtual QString		table() const;
-		virtual Table*		table() const;
+		virtual TableSchema*		table() const;
 
 		/*!
 		 *	@returns true if the field is autoincrement (e.g. integer/numeric)
@@ -180,7 +180,7 @@ class KEXI_DB_EXPORT Field
 
 		void setType(Type t);
 //		void setTable(const QString& t);
-		void setTable(Table *table);
+		void setTable(TableSchema *table);
 		void setName(const QString& n);
 		void setColumnType(Type t);
 		void setConstraints(int c);
@@ -205,7 +205,7 @@ class KEXI_DB_EXPORT Field
 
 	private:
 //		QString m_table;
-		Table *m_table;
+		TableSchema *m_table;
 		QString m_name;
 		QString m_reference;
 		Type m_type;
@@ -219,7 +219,7 @@ class KEXI_DB_EXPORT Field
 		QString m_help;
 
 	friend class Connection;
-	friend class Table;
+	friend class TableSchema;
 };
 
 } //namespace KexiDB

@@ -25,34 +25,35 @@
 #include <qstring.h>
 
 #include <kexidb/fieldlist.h>
+#include <kexidb/schemadata.h>
 #include <kexidb/index.h>
 
 namespace KexiDB {
 
 class Connection;
 
-/*! KexiDB::Table provides information about native database table 
+/*! KexiDB::TableSchema provides information about native database table 
 	that can be stored using SQL database engine. 
-	
-	In most cases this class is used internally, while KexiDB::TableDef 
+*/	
+/*OLD:	In most cases this class is used internally, while KexiDB::TableDef 
 	is visible for the users. 
 	Use KexiDB::TableDef subclass to get more rich structure (meta data) 
 	that is extension of KexiDB::Table.
 */
 
-class KEXI_DB_EXPORT Table : public FieldList
+class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 {
 	public:
-		Table(const QString & name);
-		Table();
-		virtual ~Table();
+		TableSchema(const QString & name);
+		TableSchema();
+		virtual ~TableSchema();
 //		const QString& name() const;
 //		void setName(const QString& name);
 		QStringList primaryKeys() const;
 		bool hasPrimaryKeys() const;
-		virtual void addField(KexiDB::Field* field);
+		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
 
-		int id() { return m_id; }
+//		int id() { return m_id; }
 //		Field::List::iterator fields() { return m_fields.begin(); }
 //js		void addPrimaryKey(const QString& key);
 
@@ -68,13 +69,13 @@ class KEXI_DB_EXPORT Table : public FieldList
 		Connection* connection();
 	protected:
 		/*! Automatically retrieves table schema via connection. */
-		Table(const QString & name, Connection *conn);
+		TableSchema(Connection *conn, const QString & name = QString::null);
 
 	//js	QStringList m_primaryKeys;
 //		Field::List m_fields;
-		Index::List m_indices;
+		IndexSchema::List m_indices;
 
-		int m_id; //! unique identifier used in kexi__tables for this table
+//		int m_id; //! unique identifier used in kexi__tables for this table
 
 		Connection *m_conn;
 

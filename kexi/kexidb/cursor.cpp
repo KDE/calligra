@@ -271,3 +271,4 @@ void Cursor::clearBuffer()
 		return;
 	drv_clearBuffer();
 }
+

@@ -14,10 +14,14 @@
 		return 1;
 	}
 
-	KexiDB::Table *t = conn->tableSchema( "persons" );
+	KexiDB::TableSchema *t = conn->tableSchema( "persons" );
 	if (t)
 		t->debug();
+	else
+		kdDebug() << "!persons" << endl;
 	t = conn->tableSchema( "cars" );
 	if (t)
 		t->debug();
+	else
+		kdDebug() << "!cars" << endl;
 

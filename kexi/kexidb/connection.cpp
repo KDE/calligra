@@ -17,7 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "connection.h"
+#include <kexidb/connection.h>
+#include <kexidb/schemadata.h>
+
 #include "error.h"
 #include "connectiondata.h"
 #include "driver.h"
@@ -43,9 +45,15 @@ Connection::Connection( Driver *driver, const ConnectionData &conn_data )
 	,m_transaction(false)
 {
 	m_tables.setAutoDelete(true);
+	m_queries_byname.setAutoDelete(false);
+	m_queries.setAutoDelete(true);
+	m_tables_byname.setAutoDelete(false);
 	m_cursors.setAutoDelete(true);
-	//reasonable sizes
+	//reasonable sizes: TODO
 	m_tables.resize(101);
+	m_queries.resize(101);
+	m_tables_byname.resize(101);
+	m_queries_byname.resize(101);
 	m_cursors.resize(101);
 }
 
@@ -91,8 +99,9 @@ bool Connection::disconnect()
 	
 	//delete own cursors:
 	m_cursors.clear();
-	//delete own table schemas
+	//delete own schemas
 	m_tables.clear();
+	m_queries.clear();
 
 	if (!closeDatabase())
 		return false;
@@ -176,6 +185,9 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 	return drv_databaseExists(dbName, ignoreErrors);
 }
 
+/*! See doc/dev/kexidb_issues.txt document, chapter "Table schema, query schema, etc. storage"
+ for database schema documentation (detailed description of kexi__* 'system' tables).
+*/
 bool Connection::createDatabase( const QString &dbName )
 {
 	if (!checkConnected())
@@ -207,31 +219,49 @@ bool Connection::createDatabase( const QString &dbName )
 	Transaction trans(this);
 	if (error())
 		return false;
-	//create system tables
-	KexiDB::Table t_tables("kexi__tables");
-	t_tables.addField( new Field("t_id", Field::Integer, Field::PrimaryKey | Field::AutoInc, Field::Unsigned) );
-	t_tables.addField( new  Field("t_name", Field::Text) );
-	if (!drv_createTable( t_tables ))
+	//-create system tables
+	KexiDB::TableSchema t_objects("kexi__objects");
+	t_objects.addField( new Field("o_id", Field::Integer, Field::PrimaryKey | Field::AutoInc, Field::Unsigned) )
+	.addField( new Field("o_type", Field::Byte, 0, Field::Unsigned) )
+	.addField( new Field("o_name", Field::Text) )
+	.addField( new Field("o_caption", Field::Text ) )
+	.addField( new Field("o_help", Field::LongText ) );
+	if (!drv_createTable( t_objects ))
 		return false;
 
-	KexiDB::Table t_fields("kexi__fields");
-	t_fields.addField( new Field("t_id", Field::Integer, 0, Field::Unsigned) );
-	t_fields.addField( new Field("f_type", Field::Byte, 0, Field::Unsigned) );
-	t_fields.addField( new Field("f_name", Field::Text ) );
-	t_fields.addField( new Field("f_length", Field::Integer ) );
-	t_fields.addField( new Field("f_precision", Field::Integer ) );
-	t_fields.addField( new Field("f_constraints", Field::Integer ) );
-	t_fields.addField( new Field("f_options", Field::Integer ) );
-	t_fields.addField( new Field("f_default", Field::Text ) );
-//	t_fields.addField( Field("f_notnull", Field::Boolean ) );
-//	t_fields.addField( Field("f_required", Field::Boolean ) );
-//	t_fields.addField( Field("f_auto", Field::Boolean ) );
+	KexiDB::TableSchema t_fields("kexi__fields");
+	t_fields.addField( new Field("t_id", Field::Integer, 0, Field::Unsigned) )
+	.addField( new Field("f_type", Field::Byte, 0, Field::Unsigned) )
+	.addField( new Field("f_name", Field::Text ) )
+	.addField( new Field("f_length", Field::Integer ) )
+	.addField( new Field("f_precision", Field::Integer ) )
+	.addField( new Field("f_constraints", Field::Integer ) )
+	.addField( new Field("f_options", Field::Integer ) )
+	.addField( new Field("f_default", Field::Text ) )
 	//these are additional properties:
-	t_fields.addField( new Field("f_order", Field::Integer ) );
-	t_fields.addField( new Field("f_caption", Field::Text ) );
-	t_fields.addField( new Field("f_help", Field::LongText ) );
+	.addField( new Field("f_order", Field::Integer ) )
+	.addField( new Field("f_caption", Field::Text ) )
+	.addField( new Field("f_help", Field::LongText ) );
 	if (!drv_createTable( t_fields ))
 		return false;
+
+	KexiDB::TableSchema t_querydata("kexi__querydata");
+	t_querydata.addField( new Field("q_id", Field::Integer, 0, Field::Unsigned) )
+	.addField( new Field("q_sql", Field::LongText ) )
+	.addField( new Field("q_valid", Field::Boolean ) );
+	if (!drv_createTable( t_querydata ))
+		return false;
+
+	KexiDB::TableSchema t_db("kexi__db");
+	t_db.addField( new Field("db_property", Field::Text, Field::NoConstraints, Field::NoOptions, 32 ) )
+	.addField( new Field("db_value", Field::LongText ) );
+	if (!drv_createTable( t_db ))
+		return false;
+
+	//insert KexiDB version info:
+	//property="kexidb_major_ver", value=<major_version>
+	//property="kexidb_minor_ver", value=<minor_version>
+	//TODO(js)
 
 	commitTransaction();
 	return true;
@@ -310,22 +340,55 @@ bool Connection::dropDatabase( const QString &dbName )
 QStringList Connection::tableNames()
 {
 	QStringList list;
-	if(!isConnected())
+	
+	if (!isDatabaseUsed())
 		return list;
 
-	Cursor *c = executeQuery("select * from kexi__tables", KexiDB::Cursor::Buffered);
-
-	if(!c)
+	Cursor *c = executeQuery(QString("select * from kexi__objects where o_type=%1").arg(KexiDB::TableObjectType));
+	if (!c)
 		return list;
-
-	for(c->moveFirst(); !c->eof(); c->moveNext())
+	for (c->moveFirst(); !c->eof(); c->moveNext())
 	{
-		list.append(c->value(1).toString());
+		list.append(c->value(2).toString()); //kexi__objects.o_name
 	}
 
 	deleteCursor(c);
 
 	return list;
+}
+
+QValueList<int> Connection::queryIds()
+{
+	return objectIds(KexiDB::QueryObjectType);
+}
+
+QValueList<int> Connection::objectIds(int objType)
+{
+	QValueList<int> list;
+	
+	if (!isDatabaseUsed())
+		return list;
+
+	Cursor *c = executeQuery(QString("select * from kexi__objects where o_type=%1").arg(objType));
+	if (!c)
+		return list;
+	for (c->moveFirst(); !c->eof(); c->moveNext())
+	{
+		list.append(c->value(0).toInt()); //kexi__objects.o_id
+	}
+
+	deleteCursor(c);
+
+	return list;
+	
+/*	switch (objType) {
+	case KexiDB::TableObject:
+		return tableNames();
+	case KexiDB::QueryObject:
+		return queryNames();
+	default: ;
+	}
+	return list;*/
 }
 
 QString Connection::valueToSQL( const Field::Type ftype, QVariant& v )
@@ -359,11 +422,11 @@ QString Connection::valueToSQL( const Field::Type ftype, QVariant& v )
 	return QString::null;
 }
 
-QString Connection::createTableStatement( const KexiDB::Table& table )
+QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema )
 {
-	QString sql = "CREATE TABLE " + table.name() + " (";
+	QString sql = "CREATE TABLE " + tableSchema.name() + " (";
 	bool first=true;
-	Field::ListIterator it( table.m_fields );
+	Field::ListIterator it( tableSchema.m_fields );
 	Field *field;
 	for (;(field = it.current())!=0; ++it) {
 		if (first)
@@ -389,9 +452,15 @@ QString Connection::createTableStatement( const KexiDB::Table& table )
 	return sql;
 }
 
-bool Connection::drv_createTable( const KexiDB::Table& table )
+QString Connection::queryStatement( const KexiDB::QuerySchema& querySchema )
 {
-	QString sql = createTableStatement(table);
+	//todo
+	return QString::null;
+}
+
+bool Connection::drv_createTable( const KexiDB::TableSchema& tableSchema )
+{
+	QString sql = createTableStatement(tableSchema);
 	KexiDBDbg<<"******** "<<sql<<endl;
 	return drv_executeSQL(sql);
 }
@@ -488,63 +557,97 @@ bool Connection::deleteCursor(Cursor *cursor)
 	return ret;
 }
 
-Table* Connection::tableSchema( const QString& tableName )
+bool Connection::setupObjectSchemaData( const KexiDB::RecordData &data, SchemaData &sdata )
 {
-	Table *t = m_tables[tableName];
-	if (t)
-		return t;
 	//not found: retrieve schema
-	KexiDB::Cursor *cursor;
-	if (!(cursor = executeQuery( QString("select * from kexi__tables where t_name='%1'").arg(tableName) )))
-		return 0;
+/*	KexiDB::Cursor *cursor;
+	if (!(cursor = executeQuery( QString("select * from kexi__objects where o_id='%1'").arg(objId) )))
+		return false;
 	if (!cursor->moveFirst()) {
 		deleteCursor(cursor);
-		return 0;
-	}
+		return false;
+	}*/
+	//if (!ok) {
+		//deleteCursor(cursor);
+		//return 0;
+//	}
 	bool ok;
-	int t_id = cursor->value(0).toInt(&ok);
+	sdata.m_id = data[0].toInt(&ok);
 	if (!ok) {
+		return false;
+	}
+	sdata.m_name = data[2].toString();
+	sdata.m_caption = data[3].toString();
+	sdata.m_helpText = data[4].toString();
+	
+	KexiDBDbg<<"@@@ Connection::setupObjectSchemaData() == " << sdata.schemaDataDebugString() << endl;
+	return true;
+}
+
+bool Connection::querySingleRecord(QString sql, KexiDB::RecordData &data)
+{
+	KexiDB::Cursor *cursor;
+	if (!(cursor = executeQuery( sql )))
+		return false;
+	if (!cursor->moveFirst() || cursor->eof()) {
 		deleteCursor(cursor);
+		return false;
+	}
+	cursor->storeCurrentRecord(data);
+	return deleteCursor(cursor);
+}
+
+KexiDB::TableSchema* Connection::setupTableSchema( const KexiDB::RecordData &data )//KexiDB::Cursor *table_cur )
+{
+	TableSchema *t = new TableSchema( this );
+	if (!setupObjectSchemaData( data, *t )) {
+		delete t;
 		return 0;
 	}
-	t = new Table( tableName, this );
-	t->m_id = t_id;
-	KexiDBDbg<<"@@@ t_id=="<<t->m_id<<" t_name="<<cursor->value(1).asCString()<<endl;
-
-	deleteCursor(cursor);
-
+/*	if (!deleteCursor(table_cur)) {
+		delete t;
+		return 0;
+	}*/
+	
+	KexiDB::Cursor *cursor;
 	if (!(cursor = executeQuery( QString("select * from kexi__fields where t_id='%1' order by f_order").arg(t->m_id) )))
 		return 0;
 	if (!cursor->moveFirst()) {
 		deleteCursor(cursor);
 		return 0;
 	}
+	bool ok;
 	while (!cursor->eof()) {
-		KexiDBDbg<<"@@@ t_name=="<<cursor->value(2).asCString()<<endl;
+		KexiDBDbg<<"@@@ f_name=="<<cursor->value(2).asCString()<<endl;
 
 		int f_type = cursor->value(1).toInt(&ok);
 		if (!ok) { 
 			deleteCursor(cursor);
+			delete t;
 			return 0;
 		}
 		int f_len = cursor->value(3).toInt(&ok);
 		if (!ok) {
 			deleteCursor(cursor);
+			delete t;
 			return 0;
 		}
 		int f_prec = cursor->value(4).toInt(&ok);
 		if (!ok) {
 			deleteCursor(cursor);
+			delete t;
 			return 0;
 		}
 		int f_constr = cursor->value(5).toInt(&ok);
 		if (!ok) {
 			deleteCursor(cursor);
+			delete t;
 			return 0;
 		}
 		int f_opts = cursor->value(6).toInt(&ok);
 		if (!ok) {
 			deleteCursor(cursor);
+			delete t;
 			return 0;
 		}
 		
@@ -561,9 +664,86 @@ Table* Connection::tableSchema( const QString& tableName )
 		delete t;
 		return 0;
 	}
-
-	m_tables.insert(tableName, t);
+	//store locally:
+	m_tables.insert(t->m_id, t);
+	m_tables_byname.insert(t->m_name.lower(), t);
 	return t;
+}
+
+TableSchema* Connection::tableSchema( const QString& tableName )
+{
+	QString m_tableName = tableName.lower();
+	TableSchema *t = m_tables_byname[m_tableName];
+	if (t)
+		return t;
+
+/*	KexiDB::Cursor *cursor;
+	if (!(cursor = executeQuery( QString("select * from kexi__objects where o_name='%1'").arg(m_tableName) )))
+		return false;
+	if (!cursor->moveFirst() || cursor->eof()) {
+		deleteCursor(cursor);
+		return 0;
+	}*/
+	//not found: retrieve schema
+	RecordData data;
+	if (!querySingleRecord(QString("select * from kexi__objects where o_name='%1'").arg(m_tableName), data))
+		return 0;
+	
+	return setupTableSchema(data);//cursor);
+}
+
+TableSchema* Connection::tableSchema( const int tableId )
+{
+	TableSchema *t = m_tables[tableId];
+	if (t)
+		return t;
+	//not found: retrieve schema
+	RecordData data;
+	if (!querySingleRecord(QString("select * from kexi__objects where o_id='%1'").arg(tableId), data))
+		return 0;
+	
+	return setupTableSchema(data);
+}
+
+QuerySchema* Connection::querySchema( const int queryId )
+{
+	QuerySchema *q = m_queries[queryId];
+	if (q)
+		return q;
+	//not found: retrieve schema
+	RecordData data;
+
+	if (!querySingleRecord(QString("select * from kexi__objects where o_id='%1'").arg(queryId), data))
+		return 0;
+
+	q = new QuerySchema( this );
+	if (!setupObjectSchemaData( data, *q )) {
+		delete q;
+		return 0;
+	}
+	
+	//TODO: retrieve rest of query schema............
+	
+
+//	KexiDB::Cursor *cursor;
+//	if (!(cursor = executeQuery( QString("select * from kexi__objects where o_id='%1'").arg(queryId) )))
+//		return 0;
+//	if (!cursor->moveFirst()) {
+//		deleteCursor(cursor);
+//		return 0;
+//	}
+//	bool ok;
+//	int q_id = cursor->value(0).toInt(&ok);
+//	if (!ok || q_id!=queryId) {
+//		deleteCursor(cursor);
+//		return 0;
+//	}
+//	q = new QuerySchema( q_id, this );
+//	q->m_id = q_id;
+//	KexiDBDbg<<"@@@ t_id=="<<t->m_id<<" t_name="<<cursor->value(1).asCString()<<endl;
+	m_queries.insert(q->m_id, q);
+	m_queries_byname.insert(q->m_name, q);
+	return q;	
 }
 
 #include "connection.moc"

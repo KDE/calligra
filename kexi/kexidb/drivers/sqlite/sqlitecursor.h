@@ -51,12 +51,14 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteCursor : public Cursor
 //		bool eof();
 		/*! \return current internal position of the query. */
 //		int at();
-		virtual QVariant value(int i);
+		virtual QVariant value(int i) const;
 
 		/*! [PROTOTYPE] \return internal buffer data. */
 //TODO		virtual const char *** bufferData()
 		/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
 		virtual const char ** recordData();
+
+		virtual void storeCurrentRecord(RecordData &data);
 
 	protected:
 		/*! Cursor will operate on \a conn */

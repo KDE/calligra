@@ -42,8 +42,15 @@ public:
         virtual bool drv_getPrevRecord();
 	virtual QVariant value(int);
 
+	//TODO:
+	virtual QVariant value(int i) const { return QVariant(); }
+
+	//TODO:
 	/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
 	virtual const char ** recordData() { return 0; }
+
+	//TODO:
+	virtual void storeCurrentRecord(RecordData &data) {}
 
 private:
 	MYSQL_RES *m_res;	

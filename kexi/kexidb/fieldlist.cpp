@@ -23,8 +23,8 @@
 
 using namespace KexiDB;
 
-FieldList::FieldList(const QString& name)
-	: m_name(name)
+FieldList::FieldList(/*const QString& name*/)
+//	: m_name(name)
 {
 	m_fields.setAutoDelete( true );
 }
@@ -35,14 +35,15 @@ FieldList::~FieldList()
 
 void FieldList::clear()
 {
-	m_name = QString::null;
+//	m_name = QString::null;
 	m_fields.clear();
 }
 
-void FieldList::addField(KexiDB::Field *field)
+FieldList& FieldList::addField(KexiDB::Field *field)
 {
 //	field.setTable(m_name);
 	m_fields.append(field);
+	return *this;
 }
 /*
 void Table::addPrimaryKey(const QString& key)
@@ -61,15 +62,16 @@ bool Table::hasPrimaryKeys() const
 }
 */
 
-const QString& FieldList::name() const
-{
-	return m_name;
-}
+//moved to SchemaData
+//const QString& FieldList::name() const
+//{
+//	return m_name;
+//}
 
-void FieldList::setName(const QString& name)
-{
-	m_name=name;
-}
+//void FieldList::setName(const QString& name)
+//{
+//	m_name=name;
+//}
 
 KexiDB::Field* FieldList::field(unsigned int id)
 {

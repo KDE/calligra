@@ -43,9 +43,9 @@ Field::Field()
 }
 
 
-Field::Field(Table *table)
+Field::Field(TableSchema *tableSchema)
 {
-	m_table = table;
+	m_table = tableSchema;
 	m_name = "";
 	setConstraints(NoConstraints);
 	m_reference = "";
@@ -197,7 +197,7 @@ Field::name() const
 	return m_name;
 }
 
-Table*
+TableSchema*
 Field::table() const
 {
 	return m_table;
@@ -264,9 +264,9 @@ Field::binary() const
 }*/
 
 void
-Field::setTable(Table *table)
+Field::setTable(TableSchema *tableSchema)
 {
-	m_table = table;
+	m_table = tableSchema;
 }
 
 void

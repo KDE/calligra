@@ -27,75 +27,71 @@
 
 using namespace KexiDB;
 
-Query::Query(const QString& name)
-	: FieldList(name)
-	, m_id(0)
+QuerySchema::QuerySchema()
+	: FieldList()
+	, SchemaData()
 	, m_conn(0)
 	, m_parent_table(0)
 {
+	m_type = KexiDB::QueryObjectType;
 //	m_indices.setAutoDelete( true );
 }
 
-Query::Query()
+QuerySchema::QuerySchema(TableSchema* tableSchema)
 	: FieldList()
-	, m_name("")
-	, m_id(0)
+	, SchemaData()
 	, m_conn(0)
-	, m_parent_table(0)
+	, m_parent_table(tableSchema)
 {
-}
-
-Query::Query(Table* table, const QString & name)
-	: FieldList(name)
-	, m_id(0)
-	, m_conn(0)
-	, m_parent_table(table)
-{
+	m_type = KexiDB::QueryObjectType;
 	assert(m_parent_table);
 	if (!m_parent_table) {
 		m_name = QString::null;
 		return;
 	}
-	//parent table
-	if (m_name.isEmpty()) //inherit name from a table
-		m_name = m_parent_table->name();
-	
+	//defaults:
+	//inherit name from a table
+	m_name = m_parent_table->name();
+	//inherit caption from a table
+	m_caption = m_parent_table->caption();
 }
 
-Query::~Query()
+QuerySchema::~QuerySchema()
 {
 }
 
-void Query::clear()
+void QuerySchema::clear()
 {
 	FieldList::clear();
+	SchemaData::clear();
 	m_parent_table = 0;
 	m_conn = 0;
 }
 
-void Query::addField(KexiDB::Field* field)
+KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
 {
 	FieldList::addField(field);
 	//Check for auto-generated indices:
 
 	//TODO?
+	return *this;
 }
 
-Query::Query(const QString & name, Connection *conn)
-	: m_name( name )
+QuerySchema::QuerySchema(Connection *conn)
+	: FieldList()
 	, m_conn( conn )
 {
 	assert(conn);
 }
 
-Connection* Query::connection()
+Connection* QuerySchema::connection()
 {
 	return m_conn;
 }
 
-void Query::debug()
+void QuerySchema::debug()
 {
-	KexiDBDbg << "QUERY " << m_name << endl;
+	KexiDBDbg << "QUERY " << schemaDataDebugString() << endl;
 	FieldList::debug();
 }
 

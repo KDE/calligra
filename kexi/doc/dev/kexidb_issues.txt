@@ -111,12 +111,14 @@ kexi__db
 	db_value varchar
 	
 //Predefined properties stored in kexi__db:
-property="version", value=<version>
+property="kexidb_major_ver", value=<major_version>
 	Where: <version> is a string containing integer in textual form that denotes 
-	KexiDB implementation version used to create or update this database.
+	KexiDB implementation major version used to create or update this database.
 	This property is useful for KexiDB library and applications to denote 
 	what KexiDB features could be available. This ensures backward compatibility
 	and (at least in some cases) -- forward compatibility.
+property="kexidb_minor_ver", value=<minor_version>
+	like above -- minor KexiDB version
 
 		
 -----------------------------------------------------------------

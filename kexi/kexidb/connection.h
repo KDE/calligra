@@ -22,18 +22,31 @@
 
 #include <qobject.h>
 #include <qstringlist.h>
+#include <qintdict.h>
 #include <qdict.h>
 #include <qptrdict.h>
+#include <qvaluevector.h>
 
 #include <kexidb/object.h>
 
 #include <kexidb/connectiondata.h>
 #include <kexidb/table.h>
+#include <kexidb/query.h>
 
 namespace KexiDB {
 
 class Cursor;
 class Driver;
+
+/*! Object types set like table or query. */
+enum ObjectTypes {
+	UnknownObjectType = -1, //helper
+	AnyObjectType = 0, //helper
+	TableObjectType = 1,
+	QueryObjectType = 2
+};
+
+typedef QValueVector<QVariant> RecordData;
 
 /*! This class represents database connection established with given database source.
 */
@@ -60,9 +73,14 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			\return true if successfull. */
 		bool connect();
 
-		/*! return if connection is properly estableshed. */
+		/*! \return true, if connection is properly estableshed. */
 		bool isConnected() { return m_is_connected; }
 
+		/*! \return true, both if connection is properly estableshed
+		 and any database within this connection is properly used
+		 with useDatabase(). */
+		bool isDatabaseUsed() { return m_is_connected && m_usedDatabase.isEmpty(); }
+		
 		/*! Disconnects to driver with given parameters. 
 			\return true if successfull. */
 		bool disconnect();
@@ -106,8 +124,23 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! Drop database with name \a dbName, using this connection. */
 		bool dropDatabase( const QString &dbName = QString::null );
 
-		/*! \return names of all database tables (except system tables). */
+		/*! \return names of all table schema names stored in currently 
+		 used database. */
 		QStringList tableNames();
+		
+		/*! \return ids of all table schema names stored in currently 
+		 used database. These ids can be later used as argument for tableSchema().
+		 This is a shortcut for objectIds(TableObjectType). */
+		QValueList<int> tableIds();
+
+		/*! \return ids of all database query schemas stored in currently 
+		 used database. These ids can be later used as argument for querySchema().
+		 This is a shortcut for objectIds(TableObjectType). */
+		QValueList<int> queryIds();
+
+		/*! \return names of all schemas of object with \a objType type 
+		 that are stored in currently used database. */
+		QValueList<int> objectIds(int objType);
 
 		bool beginTransaction();
 		bool commitTransaction();
@@ -143,10 +176,25 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 \returns true if cursor is properly closed before deletion. */
 		bool deleteCursor(Cursor *cursor);
 
-		/*! \return schema of \a tablename table retrieved using connection. */
-		Table* tableSchema( const QString& tableName );
+		/*! \return schema of a table pointed by \a tableId, retrieved from currently 
+		 used database. The schema is cached inside connection, 
+		 so retrieval is performed only once, on demand. */
+		TableSchema* tableSchema( const int tableId );
+		/*! \return schema of a table pointed by \a tableName, retrieved from currently 
+		 used database. \sa tableSchema( const int tableId ) */
+		TableSchema* tableSchema( const QString& tableName );
+		
+		/*! \return schema of \a tablename table retrieved from currently 
+		 used database. */
+		QuerySchema* querySchema( const int queryId );
 
 		QString valueToSQL( const Field::Type ftype, QVariant& v );
+
+		/*! Executes \a sql query and stores first record's data inside \a data.
+		 This is convenient method when we need only first recors from query result,
+		 or when we know that query result has only one record.
+		 \return true if query was successfully executed and first record has been found. */
+		bool querySingleRecord(QString sql, KexiDB::RecordData &data);
 
 	protected:
 		/*! Used by Driver */
@@ -199,9 +247,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			anymore. */
 		virtual bool drv_dropDatabase( const QString &dbName = QString::null ) = 0;
 
-		QString createTableStatement( const KexiDB::Table& table );
+		QString createTableStatement( const KexiDB::TableSchema& tableSchema );
 
-		virtual bool drv_createTable( const KexiDB::Table& table );
+		QString queryStatement( const KexiDB::QuerySchema& querySchema );
+
+		virtual bool drv_createTable( const KexiDB::TableSchema& tableSchema );
 		/* Executes query \a statement and returns resulting rows 
 			(used mostly for SELECT query). */
 //		virtual bool drv_executeQuery( const QString& statement ) = 0;
@@ -224,6 +274,15 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			if not: error message is set up and false returned */
 		bool checkConnected();
 
+		/*! Setups schema data for object that owns sdata (e.g. table, query)
+			using \a cursor opened on 'kexi__objects' table, pointing to a record
+			corresponding to given object. */
+		bool setupObjectSchemaData( const KexiDB::RecordData &data, SchemaData &sdata );
+//		bool setupObjectSchemaData( const KexiDB::Cursor *cursor, SchemaData *sdata );
+		/*! Setups full table schema for table \a t using 'kexi__*' system tables. 
+			Used internally by tableSchema() methods. */
+		KexiDB::TableSchema* setupTableSchema( const KexiDB::RecordData &data );//KexiDB::Cursor *table_cur );
+
 		Driver *m_driver;
 		ConnectionData m_data;
 		QString m_name;
@@ -232,8 +291,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		QString m_usedDatabase; //! database name that is opened now
 
-		//! tables schemas retrieved on demand with tableSchema()
-		QDict<Table> m_tables;
+		//! Table schemas retrieved on demand with tableSchema()
+		QIntDict<TableSchema> m_tables;
+		QDict<TableSchema> m_tables_byname;
+		QIntDict<QuerySchema> m_queries;
+		QDict<QuerySchema> m_queries_byname;
 
 		//! cursors created for this connection
 		QPtrDict<KexiDB::Cursor> m_cursors;

@@ -14,6 +14,8 @@ win32 {
   $$QKWLIB/kparts$$KDELIB_SUFFIX \
   $$QKWLIB/kexicore$$KEXILIB_SUFFIX
 
+QMAKE_CXXFLAGS += $(KEXI_OPTIONS)
+
 # test specific:
  LIBS += \
 	$$QKWLIB/kexidb$$KEXILIB_SUFFIX
