@@ -170,7 +170,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
         r.setLeft( d->oldMx );
     r.setTop( 0 );
     if ( !d->whileMovingBorderRight )
-        r.setRight( -diffx + d->frameEnd );
+        r.setWidth(d->frameEnd-frameStart);
     else
         r.setRight( d->oldMx );
     r.setBottom( height() );
