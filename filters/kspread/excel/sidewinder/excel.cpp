@@ -466,6 +466,9 @@ Record* Record::create( unsigned type )
   else if( type == FontRecord::id )
     record = new FontRecord();
     
+  else if( type == HeaderRecord::id )
+    record = new HeaderRecord();
+    
   else if( type == LabelRecord::id )
     record = new LabelRecord();
     
@@ -1641,6 +1644,52 @@ void LabelRecord::dump( std::ostream& out ) const
   out << "    Label : " << label().ascii() << std::endl;
 }
 
+// ========== HEADER ========== 
+
+const unsigned int HeaderRecord::id = 0x0014;
+
+class HeaderRecord::Private
+{
+public:
+  UString header;
+};
+
+HeaderRecord::HeaderRecord():
+  Record()
+{
+  d = new HeaderRecord::Private();
+}
+
+HeaderRecord::~HeaderRecord()
+{
+  delete d;
+}
+
+UString HeaderRecord::header() const
+{
+  return d->header;
+}
+
+void HeaderRecord::setHeader( const UString& header )
+{
+  d->header = header;
+}
+
+void HeaderRecord::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 2 ) return;
+  
+  UString header = ( version() >= Excel97 ) ?
+    EString::fromUnicodeString( data, size ).str() :
+    EString::fromByteString( data, false, size ).str();
+  setHeader( header );
+}
+
+void HeaderRecord::dump( std::ostream& out ) const
+{
+  out << "HEADER" << std::endl;
+  out << " header: " << header().ascii() << std::endl;
+}
 
 // ========== LABELSST ========== 
 

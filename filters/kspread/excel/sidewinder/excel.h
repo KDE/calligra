@@ -1368,6 +1368,61 @@ private:
 };
 
 /**
+  Class HeaderRecord holds information about sheet header.
+  
+ */
+class HeaderRecord : public Record
+{
+public:
+
+  static const unsigned int id;
+
+  /**
+   * Creates a new Header record.
+   */
+  HeaderRecord();
+  
+  /**
+   * Destroy the record.
+   */
+  ~HeaderRecord();
+  
+  /**
+   * Gets the header.
+   */
+  UString header() const;
+  
+  /**
+   * Sets the header.
+   */
+  void setHeader( const UString& h );
+  
+  /**
+   \reimpl
+   */
+  virtual void setData( unsigned size, const unsigned char* data );
+
+  /**
+   \reimpl
+   */
+  virtual const char* name(){ return "HEADER"; }
+
+  /**
+   \reimpl
+   */
+  virtual void dump( std::ostream& out ) const;
+
+private:
+  // no copy or assign
+  HeaderRecord( const HeaderRecord& );
+  HeaderRecord& operator=( const HeaderRecord& );
+
+  class Private;
+  Private* d;
+};
+
+
+/**
   Class LabelRecord represents a cell that contains a string.
    
   In Excel 97 and later version, it is replaced by LabelSSTRecord. However,
