@@ -786,8 +786,6 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                             var->load( varElem );
                             KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(),doc->globalLanguage(), doc->globalHyphenation() );
                             setCustomItem( index, var, document()->formatCollection()->format( &f ) );
-
-                            var->recalc();
                         }
                         if(len>1) {
                             removePosList.append(index+1);

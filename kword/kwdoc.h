@@ -252,6 +252,8 @@ public:
      */
     void eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush );
 
+    virtual void setEmpty();
+
     virtual void addView( KoView *_view );
     virtual void removeView( KoView *_view );
 

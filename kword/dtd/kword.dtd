@@ -268,7 +268,9 @@ don't put a </?xml...> at the end of the file!).
             underlinelink:          Underline links by default (true/false)
             displaycomment:         Display comment (true/false)
             displayfieldcode:       Display the name of the variables if true (instead of their value)
-
+            lastPrintingDate:       Last printing date, in ISO-8601 format
+            creationDate:           Creation date of the document, in ISO-8601 format
+            modificationDate:       Modification date of the document, in ISO-8601 format
 -->
 <!ELEMENT VARIABLESETTINGS
     EMPTY>
@@ -277,7 +279,10 @@ don't put a </?xml...> at the end of the file!).
     displaylink CDATA #IMPLIED
     underlinelink CDATA #IMPLIED
     displaycomment CDATA #IMPLIED
-    displayfieldcode CDATA #IMPLIED>
+    displayfieldcode CDATA #IMPLIED
+    lastPrintingDate CDATA #IMPLIED
+    creationDate CDATA #IMPLIED
+    modificationDate CDATA #IMPLIED>
 
 
 <!--    Contains general attributes for footnote.

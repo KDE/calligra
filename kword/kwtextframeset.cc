@@ -546,21 +546,21 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
             KWPgNumVariable * var = dynamic_cast<KWPgNumVariable *>( cit.current() );
             if ( var && !var->isDeleted() )
             {
-                if ( var->subtype() == KWPgNumVariable::VST_PGNUM_CURRENT )
+                if ( var->subType() == KWPgNumVariable::VST_PGNUM_CURRENT )
                 {
                     //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNum()+1
                     //          << " and invalidating parag " << var->paragraph() << endl;
                     var->setPgNum( theFrame->pageNum()  + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
                 }
-                else if ( var->subtype() == KWPgNumVariable::VST_CURRENT_SECTION )
+                else if ( var->subType() == KWPgNumVariable::VST_CURRENT_SECTION )
                 {
                     var->setSectionTitle( kWordDocument()->sectionTitle( theFrame->pageNum() ) );
                 }
-                else if ( var->subtype() == KWPgNumVariable::VST_PGNUM_PREVIOUS )
+                else if ( var->subType() == KWPgNumVariable::VST_PGNUM_PREVIOUS )
                 {
                     var->setPgNum( QMAX(theFrame->pageNum()-1,0)   + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
                 }
-                else if ( var->subtype() == KWPgNumVariable::VST_PGNUM_NEXT )
+                else if ( var->subType() == KWPgNumVariable::VST_PGNUM_NEXT )
                 {
                     var->setPgNum( QMIN(theFrame->pageNum()+1, theFrame->pageNum()+1)  + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
                 }
@@ -3617,7 +3617,7 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
         }
     }
     else
-        var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textFrameSet()->textDocument(),doc, 0);
+        var = doc->getVariableCollection()->createVariable( type, subtype, doc->variableFormatCollection(), 0L, textFrameSet()->textDocument(), doc, 0);
     if ( var)
         insertVariable( var, 0L /*means currentFormat()*/, true, refreshCustomMenu);
 }
@@ -3637,9 +3637,6 @@ void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /
         textObject()->insert( cursor(), format, KoTextObject::customItemChar(),
                                 false, removeSelectedText, i18n("Insert Variable"),
                                 customItemsMap );
-        var->recalc();
-        cursor()->parag()->invalidate(0);
-        cursor()->parag()->setChanged( true );
         frameSet()->kWordDocument()->slotRepaintChanged( frameSet() );
         if ( var->type()==VT_CUSTOM && refreshCustomMenu)
             frameSet()->kWordDocument()->refreshMenuCustomVariable();
@@ -3792,7 +3789,7 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     doc->getVariableCollection()->setVariableSelected(variable());
     if ( variable() )
     {
-        variableList = variable()->actionList();
+        variableList = doc->getVariableCollection()->popupActionList();
     }
 
     if( variableList.count()>0)

@@ -23,6 +23,7 @@
 
 #include <kwdoc.h>
 #include <koparagcounter.h>
+#include <kotextdocument.h>
 #include "kwstyle.h"
 #include "kwframestylemanager.h"
 #include "kwstylemanager.h"

@@ -1771,8 +1771,8 @@ void KWView::print( KPrinter &prt )
         m_doc->getVariableCollection()->recalcVariables(VT_MAILMERGE);
 
     painter.end(); // this is what triggers the printing
-    m_doc->getVariableCollection()->variableSetting()->setLastPrint(QDate::currentDate());
-    m_doc->recalcVariables(  VT_DATE );
+    m_doc->getVariableCollection()->variableSetting()->setLastPrintingDate(QDateTime::currentDateTime());
+    m_doc->recalcVariables( VT_DATE );
 }
 
 void KWView::showFormat( const KoTextFormat &currentFormat )
@@ -5214,7 +5214,7 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     if(!table)
     {
-        QPtrList<KAction> actionList= QPtrList<KAction>();
+        QPtrList<KAction> actionList;
 
         int nbFrame=m_doc->getSelectedFrames().count();
         KActionSeparator *separator=new KActionSeparator();
@@ -6353,7 +6353,7 @@ void KWView::openDocStructurePopupMenu( const QPoint &_p, KWFrameSet *frameset)
 {
     if(!koDocument()->isReadWrite() )
         return;
-    QPtrList<KAction> actionList= QPtrList<KAction>();
+    QPtrList<KAction> actionList;
 
     bool state = (frameset->type()==FT_TEXT || frameset->type()==FT_TABLE || frameset->type()==FT_FORMULA );
     if ( state )

@@ -276,9 +276,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
     connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
-    setEmpty();
-    setModified(false);
-
     //styleMask = U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT |
     //                     U_NUMBERING | U_ALIGN | U_TABS | U_SMART;
     m_headerVisible = false;
@@ -288,7 +285,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_initialEditing = 0L;
     m_bufPixmap = 0L;
     m_varFormatCollection = new KoVariableFormatCollection;
-    m_varColl=new KWVariableCollection(new KWVariableSettings() );
+    m_varColl = new KWVariableCollection( new KWVariableSettings(), m_varFormatCollection );
 
     m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection );
 
@@ -309,6 +306,9 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
         new KFormula::DocumentWrapper( instance()->config(),
                                        actionCollection(),
                                        m_commandHistory );
+
+    setEmpty();
+    setModified(false);
 
     initConfig();
 
@@ -576,14 +576,14 @@ bool KWDocument::initDoc()
     QString _template;
 
     bool ok = FALSE;
-    
+
     KoTemplateChooseDia::DialogType dlgtype;
     if (KoApplication::isStarting())
 	    dlgtype = KoTemplateChooseDia::Everything;
     else
 	    dlgtype = KoTemplateChooseDia::OnlyTemplates;
-    
-    
+
+
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
         KWFactory::global(), _template, "application/x-kword", "*.kwd", i18n("KWord"),
         dlgtype, "kword_template");
@@ -2295,6 +2295,9 @@ void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroComm
 
 QDomDocument KWDocument::saveXML()
 {
+    m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
+    recalcVariables( VT_DATE );
+    recalcVariables( VT_TIME ); // for "current time"
     QDomDocument doc = createDomDocument( "DOC", CURRENT_DTD_VERSION );
     QDomElement kwdoc = doc.documentElement();
     kwdoc.setAttribute( "editor", "KWord" );
@@ -2395,8 +2398,6 @@ QDomDocument KWDocument::saveXML()
             }
         }
     }
-    getVariableCollection()->variableSetting()->setCreateFile(QDate::currentDate());
-    getVariableCollection()->variableSetting()->setModifyFile(QDate::currentDate());
     getVariableCollection()->variableSetting()->save(kwdoc );
 
     QDomElement framesets = doc.createElement( "FRAMESETS" );
@@ -2498,8 +2499,6 @@ QDomDocument KWDocument::saveXML()
 
     // Save embedded objects
     saveEmbeddedObjects( kwdoc, children() );
-    //necessary to recalcvariable date because new we are MODIFY/CREATE FILE date
-    recalcVariables(  VT_DATE );
     return doc;
 }
 
@@ -3738,6 +3737,7 @@ void KWDocument::recalcVariables( int type )
 #endif
 }
 
+// TODO pass list of textdocuments as argument
 void KWDocument::slotRepaintVariable()
 {
     QPtrListIterator<KWFrameSet> it = framesetsIterator();
@@ -4869,6 +4869,13 @@ void KWDocument::addWordToDictionary( const QString & word)
     {
         m_bgSpellCheck->addPersonalDictonary( word );
     }
+}
+
+void KWDocument::setEmpty()
+{
+    KoDocument::setEmpty();
+    // Whether loaded from template or from empty doc: this is a new one -> set creation date
+    m_varColl->variableSetting()->setCreationDate(QDateTime::currentDateTime());
 }
 
 #include "kwdoc.moc"

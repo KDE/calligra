@@ -21,6 +21,7 @@
 #define kwtextdocument_h
 
 #include "qrichtext_p.h"
+#include <kotextdocument.h>
 
 class KWTextFrameSet;
 class KoTextFormatCollection;
