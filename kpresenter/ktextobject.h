@@ -1529,6 +1529,21 @@ public:
    */
   void getPara(int &pos,int &line,int &para);
 
+  /**
+   * Returns text cursor.
+   */
+  TxtCursor* getCursor() {return txtCursor;}
+
+  /**
+   * Toggles modified status.
+   */
+  void toggleModified(bool m) {_modified = m;}
+  
+  /**
+   * Returns modified status.
+   */
+  bool isModified() {return _modified;}
+
 signals:
 
   /**
@@ -1577,8 +1592,8 @@ protected:
 
   void paintCell(class QPainter*,int,int);
   void paintEvent(QPaintEvent *);
-  void focusInEvent(QFocusEvent*) {};
-  void focusOutEvent(QFocusEvent*) {};
+  void focusInEvent(QFocusEvent*);
+  void focusOutEvent(QFocusEvent*);
   
   int cellWidth(int);
   int cellHeight(int);
@@ -1694,6 +1709,8 @@ protected:
   bool composerMode;
   QColor _quoted_color,_normal_color;
   QFont _quoted_font,_normal_font;
+
+  bool _modified;
 
   QPopupMenu *rbMenu;
 

@@ -1252,6 +1252,8 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
   setObjType(ot);
 
   createRBMenu();
+
+  _modified = false;
 }
 
 /*===================== set objecttype ===========================*/
@@ -1741,7 +1743,8 @@ void KTextObject::saveHTML(QString filename,bool clean=false)
 
 /*======================== add text ==============================*/
 void KTextObject::addText(QString text,QFont font,QColor color,
-			  bool newParagraph=false,TxtParagraph::HorzAlign align=TxtParagraph::LEFT,bool _recalc=true,bool htmlMode=false)
+			  bool newParagraph=false,TxtParagraph::HorzAlign align=TxtParagraph::LEFT,
+			  bool _recalc=true,bool htmlMode=false)
 {
   TxtObj *txtObj;
   TxtParagraph *txtParagraph;
@@ -3556,7 +3559,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 		      txtCursor->positionInLine() <= chars+len)
 		    {
 		      c1.setX(x + p->fontMetrics().width(objPtr->text().left(txtCursor->positionInLine()-chars)));
-		      c1.setY(!drawPic? 0 : y);
+		      c1.setY(!drawPic ? 0 : y);
 		      c2.setX(c1.x());
 		      c2.setY((!drawPic ? 0 : y) + linePtr->height());
 		    }
@@ -3579,7 +3582,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 			}
 		      txtCursor->setXPos(c1.x());
 		      rowYPos(row,&ry);
-		      txtCursor->setYPos(c1.y() + ry);
+		      txtCursor->setYPos(y + ry);
 		      txtCursor->setHeight(c2.y() - c1.y());
 		      p->setPen(QPen(black,1,SolidLine));
 		      if (p->font().italic()) c1.setX(c1.x() + (int)(((float)linePtr->height() / 3.732)));
@@ -3645,6 +3648,24 @@ void KTextObject::paintEvent(QPaintEvent *e)
       p.drawRect(0,totalHeight(),width(),height()-totalHeight());
       p.end();
     }
+}
+
+/*====================== focus in event ==========================*/
+void KTextObject::focusInEvent(QFocusEvent*)
+{
+//   setShowCursor(true);
+//   if (txtCursor)
+//     updateCell(txtCursor->positionParagraph(),0,false);
+//   debug("focus in");
+}
+
+/*===================== focus out event ==========================*/
+void KTextObject::focusOutEvent(QFocusEvent*)
+{
+//   setShowCursor(true);
+//   if (txtCursor)
+//     updateCell(txtCursor->positionParagraph(),0,false);
+//   debug("focus out");
 }
 
 /*====================== return cell width =======================*/
@@ -3751,6 +3772,7 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 	case Key_Down: { txtCursor->lineDown(); cursorChanged = true;} break;
 	case Key_Return: case Key_Enter:
 	  {
+	    _modified = true;
 	    splitParagraph();
 	    drawBelow = true;
 	    drawAbove = true;
@@ -3758,6 +3780,7 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 	  } break;
 	case Key_Backspace:
 	  {
+	    _modified = true;
 	    if (kbackspace())
 	      drawBelow = true;
 	    else
@@ -3769,6 +3792,7 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 	  } break;
 	case Key_Delete:
 	  {
+	    _modified = true;
 	    if (kdelete())
 	      drawBelow = true;
 	    else
@@ -3782,6 +3806,7 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 	  {
 	    if (e->ascii() && e->ascii() > 31)
 	      {
+		_modified = true;
 		if (insertChar(e->ascii()))
 		  drawBelow = true;
 		else
