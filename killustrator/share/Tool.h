@@ -36,7 +36,7 @@ class ToolController;
 
 class Tool
 {
-   friend ToolController;
+   friend class ToolController;
 protected:
   Tool (CommandHistory* chist);
 
