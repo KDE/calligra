@@ -19,22 +19,23 @@ class VColorSlider : public QWidget
 {
     Q_OBJECT
 public:
-    VColorSlider(QWidget *parent=0, const char *name=0);
+    VColorSlider( QWidget *parent=0, const char *name=0 );
+    VColorSlider( const QString &, const QColor &, const QColor &, int, int, int, QWidget *parent=0, const char *name=0 );
     ~VColorSlider();
 
 public slots:
-    virtual void setLabel(const QString &);
-    virtual void setColors(const QColor &, const QColor &);
-    virtual void setValue( int & );
-    virtual void setMinValue ( int & );
-    virtual void setMaxValue ( int & );
+    virtual void setLabel( const QString & );
+    virtual void setColors( const QColor &, const QColor & );
+    virtual void setValue( int );
+    virtual void setMinValue( int );
+    virtual void setMaxValue( int );
+    int value();
 
 private:
 	void init();
 	QLabel *mLabel;
 	QSpinBox *mSpinBox;
 	KGradientSelector *mSelector;
-
 };
 
 #endif

@@ -8,20 +8,41 @@
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <kselect.h>
+#include <qlayout.h>
 
 #include "vcolorslider.h"
 
-VColorSlider::VColorSlider(QWidget *parent, const char *name)
-    : QWidget(parent, name)
+VColorSlider::VColorSlider( QWidget *parent, const char *name )
+    : QWidget( parent, name )
 {
 	init();
 }
 
+// Label, left color, right color, min, max, value ...
+VColorSlider::VColorSlider( const QString &label, const QColor &col1, const QColor &col2, int min, int max, int value, QWidget *parent, const char *name )
+    : QWidget( parent, name )
+{
+	init();
+	setLabel( label );
+	setColors( col1, col2 );
+	setMinValue( min );
+	setMaxValue( max );
+	setValue( value );
+}
+
 void VColorSlider::init()
 {
+	QHBoxLayout *layout = new QHBoxLayout( this, 3 );
 	mLabel = new QLabel ( this );
-	mSpinBox = new QSpinBox ( this );
 	mSelector = new KGradientSelector( KSelector::Horizontal, this );
+	mSpinBox = new QSpinBox ( this );
+	layout->addWidget( mLabel );
+	layout->addWidget( mSelector );
+	layout->addWidget( mSpinBox );
+	setValue(0);
+	setMinValue(0);
+	setMaxValue(255);
+	layout->activate();
 }
 
 // Sets the description of the slider
@@ -37,22 +58,27 @@ void VColorSlider::setColors( const QColor &color1, const QColor &color2 )
 }
 
 //Sets the value of the spinbox (and the value of the vcolorslider)
-void VColorSlider::setValue( int &value )
+void VColorSlider::setValue( int value )
 {
-	mSpinBox->setValue ( value );
-	mSelector->setValue ( value );
+	mSpinBox->setValue( value );
+	mSelector->setValue( value );
 }
 
-void VColorSlider::setMinValue ( int &value )
+void VColorSlider::setMinValue( int value )
 {
-	mSpinBox->setMinValue ( value );
-	mSelector->setMinValue ( value );
+	mSpinBox->setMinValue( value );
+	mSelector->setMinValue( value );
 }
 
-void VColorSlider::setMaxValue ( int &value )
+void VColorSlider::setMaxValue( int value )
 {
-	mSpinBox->setMaxValue ( value );
-	mSelector->setMaxValue ( value );
+	mSpinBox->setMaxValue( value );
+	mSelector->setMaxValue( value );
+}
+
+int VColorSlider::value()
+{
+	return( mSpinBox->value() );
 }
 
 VColorSlider::~VColorSlider() { }
