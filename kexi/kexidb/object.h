@@ -42,6 +42,11 @@ class KEXI_DB_EXPORT Object
 			else: 0. */
 		int errorNum() { return m_errno; }
 
+		//! \return previous server result number, for error displaying purposes.
+		int previousServerResult() const { return m_previousServerResultNum; }
+
+		QString previousServerResultName() const { return m_previousServerResultName; }
+
 		/*! Sends errorMsg() to debug output. */
 		void debugError();
 
@@ -122,6 +127,11 @@ class KEXI_DB_EXPORT Object
 		int m_errno;
 		bool m_hasError;
 		QString m_errMsg;
+
+		//! previous server result number, for error displaying purposes.
+		int m_previousServerResultNum, m_previousServerResultNum2;
+		//! previous server result name, for error displaying purposes.
+		QString m_previousServerResultName, m_previousServerResultName2;
 
 		class Private;
 		Private *d; //!< for future extensions

@@ -27,13 +27,21 @@ using namespace KexiDB;
 
 
 Object::Object()
-: d(0) //empty
+: m_previousServerResultNum(0)
+, m_previousServerResultNum2(0)
+, d(0) //empty
 {
 	clearError();
 }
 
 void Object::setError( int code, const QString &msg )
 {
+	m_previousServerResultNum = m_previousServerResultNum2;
+	m_previousServerResultName = m_previousServerResultName2;
+	m_previousServerResultNum2 = serverResult();
+	m_previousServerResultName2 = serverResultName();
+	KexiDBDbg << "Object ERROR: " << m_previousServerResultNum2 << ": " << m_previousServerResultName2 <<endl;
+
 	m_errno=code;
 	if (m_errno==ERR_OTHER && msg.isNull())
 		m_errMsg = i18n("Unspecified error encountered");
@@ -44,6 +52,12 @@ void Object::setError( int code, const QString &msg )
 
 void Object::setError( const QString &msg )
 {
+	m_previousServerResultNum = m_previousServerResultNum2;
+	m_previousServerResultName = m_previousServerResultName2;
+	m_previousServerResultNum2 = serverResult();
+	m_previousServerResultName2 = serverResultName();
+	KexiDBDbg << "Object ERROR: " << m_previousServerResultNum2 << ": " << m_previousServerResultName2 <<endl;
+
 	m_errno=ERR_OTHER;
 	m_errMsg = msg;
 	m_hasError = true;
@@ -51,6 +65,12 @@ void Object::setError( const QString &msg )
 
 void Object::setError( KexiDB::Object *obj )
 {
+	m_previousServerResultNum = m_previousServerResultNum2;
+	m_previousServerResultName = m_previousServerResultName2;
+	m_previousServerResultNum2 = serverResult();
+	m_previousServerResultName2 = serverResultName();
+	KexiDBDbg << "Object ERROR: " << m_previousServerResultNum2 << ": " << m_previousServerResultName2 <<endl;
+
 	if (obj) {
 		m_errno = obj->errorNum();
 		m_errMsg = obj->errorMsg();

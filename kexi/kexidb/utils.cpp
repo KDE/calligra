@@ -105,6 +105,9 @@ void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
 			return;
 		}
 	}
+	if (dynamic_cast<Connection*>(obj)) {
+		conn = dynamic_cast<Connection*>(obj);
+	}
 	if (!obj || !obj->error())
 		return;
 	//lower level message is added th the details, if there is alread message specified
@@ -117,11 +120,20 @@ void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
 		details += "<p><b><nobr>" +i18n("Message from server:") + "</nobr></b><br>" + obj->serverErrorMsg();
 	if (conn && !conn->recentSQLString().isEmpty())
 		details += "<p><b><nobr>" +i18n("SQL statement:") + "</nobr></b><br>" + conn->recentSQLString();
-	QString resname = obj->serverResultName();
-	if (!resname.isEmpty())
-		details += (QString("<p><b><nobr>")+i18n("Server result name:")+"</nobr></b><br>"+resname);
+	int serverResult;
+	QString serverResultName;
+	if (obj->serverResult()!=0) {
+		serverResult = obj->serverResult();
+		serverResultName = obj->serverResultName();
+	}
+	else {
+		serverResult = obj->previousServerResult();
+		serverResultName = obj->previousServerResultName();
+	}
+	if (!serverResultName.isEmpty())
+		details += (QString("<p><b><nobr>")+i18n("Server result name:")+"</nobr></b><br>"+serverResultName);
 	if (!details.isEmpty()) {
-		details += (QString("<p><b><nobr>")+i18n("Result number:")+"</nobr></b><br>"+QString::number(obj->serverResult()));
+		details += (QString("<p><b><nobr>")+i18n("Server result number:")+"</nobr></b><br>"+QString::number(serverResult));
 	}
 }
 

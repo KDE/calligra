@@ -919,6 +919,7 @@ bool Connection::executeSQL( const QString& statement )
 {
 	m_sql = statement; //remember for error handling
 	if (!drv_executeSQL( m_sql )) {
+		m_errorSql = statement;
 		setError(ERR_SQL_EXECUTION_ERROR, i18n("Error while executing SQL statement."));
 		return false;
 	}
@@ -1012,11 +1013,6 @@ QString Connection::selectStatement( KexiDB::TableSchema& tableSchema ) const
 	return selectStatement( *tableSchema.query() );
 }
 
-#define createTable_ERR \
-	{ KexiDBDbg << "Connection::createTable(): ERROR!" <<endl; \
-	  rollbackAutoCommitTransaction(trans); \
-	  return false; }
-
 Field* Connection::findSystemFieldName(KexiDB::FieldList* fieldlist)
 {
 	Field *f = fieldlist->fields()->first();
@@ -1047,6 +1043,12 @@ int Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const KexiD
 {
 	return lastInsertedAutoIncValue(aiFieldName,table.name());
 }
+
+#define createTable_ERR \
+	{ KexiDBDbg << "Connection::createTable(): ERROR!" <<endl; \
+	  rollbackAutoCommitTransaction(trans); \
+	  setError( errorNum(), i18n("Creating table failed.") + " " + errorMsg()); \
+	  return false; }
 
 bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExisting )
 {
@@ -1538,6 +1540,7 @@ bool Connection::setAutoCommit(bool on)
 
 TransactionData* Connection::drv_beginTransaction()
 {
+	QString old_sql = m_sql; //don't 
 	if (!executeSQL( "BEGIN" ))
 		return 0;
 	return new TransactionData(this);

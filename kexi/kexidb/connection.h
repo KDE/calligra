@@ -561,8 +561,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		QString selectStatement( QuerySchema& querySchema ) const;
 
 		/*! \return sql string of actually executed SQL statement,
-		 usually using drv_executeSQL(). */
-		const QString recentSQLString() const { return m_sql; }
+		 usually using drv_executeSQL(). If there was error during executing SQL statement, 
+		 before, that string is returned instead. */
+		const QString recentSQLString() const { return m_errorSql.isEmpty() ? m_sql : m_errorSql; }
 
 		/*! Stores object's schema data (id, name, caption, help text)
 		 described by \a sdata on the backend. 
@@ -867,8 +868,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 //		ConnectionInternal* m_internal;
 
 		//! used to store of actually executed SQL statement
-		QString m_sql; 
-	
+		QString m_sql, m_errorSql;
+
 	friend class KexiDB::Driver;
 	friend class KexiDB::Cursor;
 	friend class KexiDB::TableSchema; //!< for removeMe()
