@@ -71,17 +71,14 @@ static QString debug_indent;
 
 static double scale_factor( double v )
 {
-    return v;
+    return v/QPaintDevice::x11AppDpiY();
 }
 
-static bool is_printer( QPainter * )
+static bool is_printer( QPainter *p )
 {
-    return FALSE;
-#if 0
-    if ( !p || !p->device() )
+    //if ( !p || !p->device() )
 	return FALSE;
-    return p->device()->devType() == QInternal::Printer;
-#endif
+    //return p->device()->devType() == QInternal::Printer;
 }
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2434,10 +2431,10 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 
     painter->setBrushOrigin( -ir.x(), -ir.y() );
 
-    if ( useDoubleBuffer ) {
-	painter->fillRect( QRect( 0, 0, ir.width(), ir.height() ),
-		       cg.brush( QColorGroup::Base ) );
-    } else {
+    painter->fillRect( QRect( 0, 0, ir.width(), ir.height() ),
+                       cg.brush( QColorGroup::Base ) );
+
+    if ( !useDoubleBuffer ) {
 	if ( cursor && cursor->parag() == parag ) {
 	    painter->fillRect( QRect( parag->at( cursor->index() )->x, 0, 2, ir.height() ),
 			       cg.brush( QColorGroup::Base ) );
