@@ -94,7 +94,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                                      "polarchart");
     m_chartpolar->setExclusiveGroup( "charttypes" );
 
-    m_chartbw = new KToggleAction( i18n("&Bo&x && Whisker"), "bw", 0, this,
+    m_chartbw = new KToggleAction( i18n("Bo&x && Whisker"), "bw", 0, this,
                                      SLOT( bwChart() ), actionCollection(),
                                      "bwchart");
     m_chartbw->setExclusiveGroup( "charttypes" );
