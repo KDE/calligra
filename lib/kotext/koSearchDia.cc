@@ -521,6 +521,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_underlineItem->insertItem( i18n( "Without" ), -1 );
     m_underlineItem->insertItem( i18n( "Simple" ), -1 );
     m_underlineItem->insertItem( i18n( "Double" ), -1 );
+    m_underlineItem->insertItem( i18n( "Simple Bold" ), -1 );
     m_underlineItem->setCurrentItem( (int)m_ctx->m_underline );
 
     m_checkStrikeOut= new QCheckBox( i18n( "Strikeout:" ), page);
