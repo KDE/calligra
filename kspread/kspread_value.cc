@@ -342,10 +342,10 @@ QDateTime KSpreadValue::asDateTime() const
 // get the value as date
 QDate KSpreadValue::asDate() const
 {
-  QDate dt( 1899, 12, 31 );
+  QDate dt( 1899, 12, 30 );
 
   double f = asFloat();
-  if( f > 1.0 ) dt = dt.addDays( (int) f-1 );
+  dt = dt.addDays( (int) f );
   
   return dt;
 }
