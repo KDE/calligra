@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -37,20 +36,20 @@
 
 /*!
   \internal
-*/
+  */
 struct KDChartDataRegion
 {
     KDChartDataRegion( QRegion reg, uint r, uint c, uint ch )
-        {
-            region = reg;
-            row    = r;
-            col    = c;
-            chart  = ch;
-            negative = false; // default value (useful if value is a string)
-            points.resize( 9 );
-            startAngle = 1440;
-            angleLen   =    1;
-        }
+    {
+        region = reg;
+        row    = r;
+        col    = c;
+        chart  = ch;
+        negative = false; // default value (useful if value is a string)
+        points.resize( 9 );
+        startAngle = 1440;
+        angleLen   =    1;
+    }
 
     QRegion region;
 
@@ -60,7 +59,7 @@ struct KDChartDataRegion
     // we store the following additional anchor information:
 
     QPointArray points;  // stores 9 elements: one for each
-                         // value of KDChartEnums::PositionFlag
+    // value of KDChartEnums::PositionFlag
 
     int startAngle; // Note: 5760 makes a full circle, 2880 is left 'corner'.
     int angleLen;

@@ -26,39 +26,47 @@
  ** licensing are not clear to you.
  **
  **********************************************************************/
-#ifndef __KDCHARTRINGPAINTER_H__
-#define __KDCHARTRINGPAINTER_H__
+#ifndef __KDCHARTVECTORSERIES_H__
+#define __KDCHARTVECTORSERIES_H__
 
-#include <KDChartPainter.h>
-#include <KDChartTable.h>
+// A single data series abstracted.
+// Is included in a DataSeriesBag.
+// Will be a base class for other series objects, such as DataVectorSeries,
+// and my DataQuerySeries.
+//
+// Requirements:
+// - Implement a QValueVector interface
 
-class KDChartParams;
+#include "KDChartBaseSeries.h"
+#include "KDChartData.h"
+#if COMPAT_QT_VERSION >= 0x030000
+#include <qvaluevector.h>
+#else
+#include <qarray.h>
+#endif
+class KDChartSeriesCollection;
 
-class KDChartRingPainter : public KDChartPainter
+
+
+class KDChartVectorSeries : public KDChartBaseSeries, 
+#if COMPAT_QT_VERSION >= 0x030000
+    public QValueVector<KDChartData>
+#else
+    public QArray<KDChartData>
+#endif
 {
-    friend class KDChartPainter;
-    protected:
-    KDChartRingPainter( KDChartParams* params );
-    virtual ~KDChartRingPainter();
+    public:
+        virtual ~KDChartVectorSeries();
 
-    virtual void paintData( QPainter* painter, 
-            KDChartTableDataBase* data,
-            bool paint2nd,
-            KDChartDataRegionList* regions = 0 );
-    void drawOneSegment( QPainter* painter,
-            uint outerRadius, uint innerRadius,
-            double startAngle, double angles,
-            uint dataset, uint value, uint chart,
-            bool explode,
-            KDChartDataRegionList* regions = 0 );
+        virtual uint rows() const;
+        virtual const KDChartData& cell( uint row ) const;
+        virtual void setCell( uint row, const KDChartData& element);
+        virtual void expand( uint rows );
 
-    virtual QString fallbackLegendText( uint dataset ) const;
-    virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;
-
-    QRect _position;
-    int _size;
-    int _numValues; // PENDING(kalle) Move to base class
-}
-;
+        // methods modelled on the TableBase methods, but these
+        // inherit from BaseSeries.
+        virtual double maxValue( int coordinate, bool &ok ) const;
+        virtual double minValue( int coordinate, bool &ok ) const;
+};
 
 #endif

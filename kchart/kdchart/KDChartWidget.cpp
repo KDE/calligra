@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -38,34 +37,34 @@
 #include <qpainter.h>
 
 /**
-   \class KDChartWidget KDChartWidget.h
+  \class KDChartWidget KDChartWidget.h
 
-   \brief The entry point into the charting that most people will want
-   to use.
+  \brief The entry point into the charting that most people will want
+  to use.
 
-   Simply create a KChartWidget in your application and put it where
-   you want in your widget hierarchy and create a KChartParams object
-   that specifies how the chart should be drawn.
-*/
+  Simply create a KChartWidget in your application and put it where
+  you want in your widget hierarchy and create a KChartParams object
+  that specifies how the chart should be drawn.
+  */
 
 
 /**
-   Constructor. Stores the chart parameters.
+  Default Constructor.
 
-   \param params the specification of the chart
-   \param data the data to be displayed as a chart
-   \param parent the widget parent; passed on to QWidget
-   \param the widget name; passed on to QWidget
-*/
+  Sets params and data pointers to zero, you should call setParams
+  and setData before using this chart otherwise only a simple
+  default bar chart will be shown.
 
-KDChartWidget::KDChartWidget( KDChartParams* params,
-                              KDChartTableDataBase* data,
-                              QWidget* parent, const char* name ) :
-    QWidget( parent, name ),
-    _params( params ),
-    _data( data ),
+  \param parent the widget parent; passed on to QWidget
+  \param the widget name; passed on to QWidget
+  */
+
+KDChartWidget::KDChartWidget( QWidget* parent, const char* name ) :
+QWidget( parent, name ),
+    _params( 0 ),
+    _data( 0 ),
     _activeData( false ),
-    _mousePressedOnRegion( 0 )
+_mousePressedOnRegion( 0 )
 {
     _dataRegions.setAutoDelete( true );
     setDoubleBuffered( true );
@@ -73,8 +72,31 @@ KDChartWidget::KDChartWidget( KDChartParams* params,
 
 
 /**
-   Destructor.
-*/
+  Constructor. Stores the chart parameters.
+
+  \param params the specification of the chart
+  \param data the data to be displayed as a chart
+  \param parent the widget parent; passed on to QWidget
+  \param the widget name; passed on to QWidget
+  */
+
+KDChartWidget::KDChartWidget( KDChartParams* params,
+        KDChartTableDataBase* data,
+        QWidget* parent, const char* name ) :
+QWidget( parent, name ),
+    _params( params ),
+    _data( data ),
+    _activeData( false ),
+_mousePressedOnRegion( 0 )
+{
+    _dataRegions.setAutoDelete( true );
+    setDoubleBuffered( true );
+}
+
+
+/**
+  Destructor.
+  */
 KDChartWidget::~KDChartWidget()
 {
     // delete any regions that might still be registered
@@ -82,13 +104,13 @@ KDChartWidget::~KDChartWidget()
 }
 
 void KDChartWidget::paintTo( QPainter& painter,
-                             const QRect* rect )
+        const QRect* rect )
 {
     KDChart::paint( &painter, _params, _data, &_dataRegions, rect );
 }
 
 void KDChartWidget::print( QPainter& painter,
-                           const QRect* rect )
+        const QRect* rect )
 {
     bool oldOpt=true;
     if( _params ){
@@ -121,8 +143,8 @@ void KDChartWidget::paintEvent( QPaintEvent* event )
 
 
 /**
-   \internal
-*/
+  \internal
+  */
 void KDChartWidget::mousePressEvent( QMouseEvent* event )
 {
     if ( !_activeData )
@@ -137,13 +159,13 @@ void KDChartWidget::mousePressEvent( QMouseEvent* event )
             _mousePressedOnRegion = current;
             if ( event->button() == LeftButton )
                 emit dataLeftPressed( current->row,
-                                      current->col );
+                        current->col );
             else if ( event->button() == MidButton )
                 emit dataMiddlePressed( current->row,
-                                        current->col );
+                        current->col );
             else
                 emit dataRightPressed( current->row,
-                                       current->col );
+                        current->col );
             break;
         }
     }
@@ -151,8 +173,8 @@ void KDChartWidget::mousePressEvent( QMouseEvent* event )
 
 
 /**
-   \internal
-*/
+  \internal
+  */
 void KDChartWidget::mouseReleaseEvent( QMouseEvent* event )
 {
     if ( !_activeData )
@@ -165,22 +187,22 @@ void KDChartWidget::mouseReleaseEvent( QMouseEvent* event )
         if ( current->region.contains( event->pos() ) ) {
             if ( event->button() == LeftButton ) {
                 emit dataLeftReleased( current->row,
-                                       current->col );
+                        current->col );
                 if ( _mousePressedOnRegion == current )
                     emit dataLeftClicked( current->row,
-                                          current->col );
+                            current->col );
             } else if ( event->button() == MidButton ) {
                 emit dataMiddleReleased( current->row,
-                                         current->col );
+                        current->col );
                 if ( _mousePressedOnRegion == current )
                     emit dataMiddleClicked( current->row,
-                                            current->col );
+                            current->col );
             } else {
                 emit dataRightReleased( current->row,
-                                        current->col );
+                        current->col );
                 if ( _mousePressedOnRegion == current )
                     emit dataRightClicked( current->row,
-                                           current->col );
+                            current->col );
             }
         }
     }
@@ -188,8 +210,8 @@ void KDChartWidget::mouseReleaseEvent( QMouseEvent* event )
 
 
 /**
-   \internal
-*/
+  \internal
+  */
 void KDChartWidget::resizeEvent( QResizeEvent* /*event*/ )
 {
     // if we use double-buffering, resize the buffer to the new size,
@@ -200,21 +222,21 @@ void KDChartWidget::resizeEvent( QResizeEvent* /*event*/ )
 
 
 /**
-   If \a active is true, this widget reports mouse presses, releases
-   and clicks on the data segments it displays. This can slow down the
-   display process, so this is turned off by default.
+  If \a active is true, this widget reports mouse presses, releases
+  and clicks on the data segments it displays. This can slow down the
+  display process, so this is turned off by default.
 
-   If active data reporting is turned on when the widget is already
-   shown, data will be reported after the next repaint(). Call
-   repaint() explicitly if necessary.
+  If active data reporting is turned on when the widget is already
+  shown, data will be reported after the next repaint(). Call
+  repaint() explicitly if necessary.
 
-   Active data is currently supported for bar, pie, and line charts
-   (the latter only with markers, as trying to hit the line would be
-   too difficult for the user anyway).
+  Active data is currently supported for bar, pie, and line charts
+  (the latter only with markers, as trying to hit the line would be
+  too difficult for the user anyway).
 
-   \param active if true, the widget reports mouse events
-   \sa isActiveData()
-*/
+  \param active if true, the widget reports mouse events
+  \sa isActiveData()
+  */
 void KDChartWidget::setActiveData( bool active )
 {
     _activeData = active;
@@ -222,13 +244,13 @@ void KDChartWidget::setActiveData( bool active )
 
 
 /**
-   Returns true if the widget is configured to report mouse
-   events. The default is not to report mouse events.
+  Returns true if the widget is configured to report mouse
+  events. The default is not to report mouse events.
 
-   \return true if the widget is configured to report mouse events,
-   false otherwise
-   \sa setActiveData()
-*/
+  \return true if the widget is configured to report mouse events,
+  false otherwise
+  \sa setActiveData()
+  */
 bool KDChartWidget::isActiveData() const
 {
     return _activeData;
@@ -236,18 +258,18 @@ bool KDChartWidget::isActiveData() const
 
 
 /**
-   If \a doublebuffered is true, the widget will double-buffer
-   everything while drawing which reduces flicker a lot, but requires
-   more memory as an off-screen buffer of the same size as the widget
-   needs to be kept around. However, in most cases, it is worth
-   spending the extra memory. Double-buffering is on by
-   default. Turning double-buffering on or off does not trigger a
-   repaint.
+  If \a doublebuffered is true, the widget will double-buffer
+  everything while drawing which reduces flicker a lot, but requires
+  more memory as an off-screen buffer of the same size as the widget
+  needs to be kept around. However, in most cases, it is worth
+  spending the extra memory. Double-buffering is on by
+  default. Turning double-buffering on or off does not trigger a
+  repaint.
 
-   \param doublebuffered if true, turns double-buffering on, if false,
-   turns double-buffering off
-   \sa isDoubleBuffered
-*/
+  \param doublebuffered if true, turns double-buffering on, if false,
+  turns double-buffering off
+  \sa isDoubleBuffered
+  */
 void KDChartWidget::setDoubleBuffered( bool doublebuffered )
 {
     _doubleBuffered = doublebuffered;
@@ -264,11 +286,11 @@ void KDChartWidget::setDoubleBuffered( bool doublebuffered )
 
 
 /**
-   Returns whether the widget uses double-buffering for drawing. See
-   \a setDoubleBuffered() for an explanation of double-buffering.
+  Returns whether the widget uses double-buffering for drawing. See
+  \a setDoubleBuffered() for an explanation of double-buffering.
 
-   \return true if double-buffering is turned on, false otherwise
-*/
+  \return true if double-buffering is turned on, false otherwise
+  */
 bool KDChartWidget::isDoubleBuffered() const
 {
     return _doubleBuffered;
@@ -276,34 +298,34 @@ bool KDChartWidget::isDoubleBuffered() const
 
 
 /**
-   Set an entire new parameter set.
-   (Normally you might prefer modifying the existing parameters
-   rather than specifying a new set.)
-*/
+  Set an entire new parameter set.
+  (Normally you might prefer modifying the existing parameters
+  rather than specifying a new set.)
+  */
 void KDChartWidget::setParams( KDChartParams* params )
 {
     _params = params;
 }
 
 /**
-   Set an entire new data table.
-*/
+  Set an entire new data table.
+  */
 void KDChartWidget::setData( KDChartTableDataBase* data )
 {
     _data = data;
 }
 
 /**
-   Returns a pointer to the current parameter set.
-*/
+  Returns a pointer to the current parameter set.
+  */
 KDChartParams* KDChartWidget::params() const
 {
     return _params;
 }
 
 /**
-   Returns a pointer to the current data table.
-*/
+  Returns a pointer to the current data table.
+  */
 KDChartTableDataBase* KDChartWidget::data() const
 {
     return _data;

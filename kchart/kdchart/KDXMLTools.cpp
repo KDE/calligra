@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -36,7 +35,7 @@
 namespace KDXML {
 
     void createBoolNode( QDomDocument& doc, QDomNode& parent,
-                         const QString& elementName, bool value )
+            const QString& elementName, bool value )
     {
         QDomElement newElement =
             doc.createElement( elementName );
@@ -49,7 +48,7 @@ namespace KDXML {
 
 
     void createSizeNode( QDomDocument& doc, QDomNode& parent,
-                         const QString& elementName, const QSize& value )
+            const QString& elementName, const QSize& value )
     {
         QDomElement newElement =
             doc.createElement( elementName );
@@ -60,7 +59,7 @@ namespace KDXML {
 
 
     void createIntNode( QDomDocument& doc, QDomNode& parent,
-                        const QString& elementName, int value )
+            const QString& elementName, int value )
     {
         QDomElement newElement =
             doc.createElement( elementName );
@@ -72,7 +71,7 @@ namespace KDXML {
 
 
     void createDoubleNode( QDomDocument& doc, QDomNode& parent,
-                           const QString& elementName, double value )
+            const QString& elementName, double value )
     {
         QDomElement newElement =
             doc.createElement( elementName );
@@ -84,8 +83,8 @@ namespace KDXML {
 
 
     void createStringNode( QDomDocument& doc, QDomNode& parent,
-                           const QString& elementName,
-                           const QString& text )
+            const QString& elementName,
+            const QString& text )
     {
         QDomElement newElement =
             doc.createElement( elementName );
@@ -97,35 +96,35 @@ namespace KDXML {
 
 
     void createColorNode( QDomDocument& doc, QDomNode& parent,
-                          const QString& elementName, const QColor& color )
+            const QString& elementName, const QColor& color )
     {
         QDomElement colorElement = doc.createElement( elementName );
         parent.appendChild( colorElement );
         colorElement.setAttribute( "Red",
-                                   QString::number( color.red() ) );
+                QString::number( color.red() ) );
         colorElement.setAttribute( "Green",
-                                   QString::number( color.green() ) );
+                QString::number( color.green() ) );
         colorElement.setAttribute( "Blue",
-                                   QString::number( color.blue() ) );
+                QString::number( color.blue() ) );
     }
 
 
     void createBrushNode( QDomDocument& doc, QDomNode& parent,
-                          const QString& elementName, const QBrush& brush )
+            const QString& elementName, const QBrush& brush )
 
     {
         QDomElement brushElement = doc.createElement( elementName );
         parent.appendChild( brushElement );
         createColorNode( doc, brushElement, "Color", brush.color() );
         createStringNode( doc, brushElement, "Style",
-                          KDXML::brushStyleToString( brush.style() ) );
+                KDXML::brushStyleToString( brush.style() ) );
         if( brush.style() == Qt::CustomPattern && brush.pixmap() )
             createPixmapNode( doc, brushElement, "Pixmap", *brush.pixmap() );
     }
 
 
     void createPixmapNode( QDomDocument& doc, QDomNode& parent,
-                           const QString& elementName, const QPixmap& pixmap )
+            const QString& elementName, const QPixmap& pixmap )
     {
         QDomElement pixmapElement = doc.createElement( elementName );
         parent.appendChild( pixmapElement );
@@ -163,7 +162,7 @@ namespace KDXML {
 
 
     void createRectNode( QDomDocument& doc, QDomNode& parent,
-                         const QString& elementName, const QRect& rect )
+            const QString& elementName, const QRect& rect )
     {
         QDomElement rectElement = doc.createElement( elementName );
         parent.appendChild( rectElement );
@@ -187,14 +186,14 @@ namespace KDXML {
 
 
     void createStringListNodes( QDomDocument& doc, QDomNode& parent,
-                                const QString& elementName,
-                                const QStringList* list )
+            const QString& elementName,
+            const QStringList* list )
     {
         if( !list )
             return;
 
         for( QStringList::ConstIterator it = list->begin();
-             it != list->end(); ++it ) {
+                it != list->end(); ++it ) {
             QDomElement element = doc.createElement( elementName );
             parent.appendChild( element );
             QDomText elementContent = doc.createTextNode( *it );
@@ -204,7 +203,7 @@ namespace KDXML {
 
 
     void createFontNode( QDomDocument& doc, QDomNode& parent,
-                         const QString& elementName, const QFont& font )
+            const QString& elementName, const QFont& font )
     {
         QDomElement fontElement = doc.createElement( elementName );
         parent.appendChild( fontElement );
@@ -220,7 +219,7 @@ namespace KDXML {
 
 
     void createPenNode( QDomDocument& doc, QDomNode& parent,
-                        const QString& elementName, const QPen& pen )
+            const QString& elementName, const QPen& pen )
     {
         QDomElement penElement = doc.createElement( elementName );
         parent.appendChild( penElement );
@@ -231,8 +230,8 @@ namespace KDXML {
 
 
     void createDateTimeNode( QDomDocument& doc, QDomNode& parent,
-                             const QString& elementName,
-                             const QDateTime& datetime )
+            const QString& elementName, 
+            const QDateTime& datetime )
     {
         QDomElement dateTimeElement = doc.createElement( elementName );
         parent.appendChild( dateTimeElement );
@@ -242,7 +241,7 @@ namespace KDXML {
 
 
     void createDateNode( QDomDocument& doc, QDomNode& parent,
-                         const QString& elementName, const QDate& date )
+            const QString& elementName, const QDate& date )
     {
         QDomElement dateElement = doc.createElement( elementName );
         parent.appendChild( dateElement );
@@ -253,38 +252,38 @@ namespace KDXML {
 
 
     void createTimeNode( QDomDocument& doc, QDomNode& parent,
-                         const QString& elementName, const QTime& time )
+            const QString& elementName, const QTime& time )
     {
         QDomElement timeElement = doc.createElement( elementName );
         parent.appendChild( timeElement );
         timeElement.setAttribute( "Hour",
-                                  QString::number( time.hour() ) );
+                QString::number( time.hour() ) );
         timeElement.setAttribute( "Minute",
-                                  QString::number( time.minute() ) );
+                QString::number( time.minute() ) );
         timeElement.setAttribute( "Second",
-                                  QString::number( time.second() ) );
+                QString::number( time.second() ) );
         timeElement.setAttribute( "Millisecond",
-                                  QString::number( time.msec() ) );
+                QString::number( time.msec() ) );
     }
 
 
     QString penStyleToString( Qt::PenStyle style )
     {
         switch( style ) {
-        case Qt::NoPen:
-            return "NoPen";
-        case Qt::SolidLine:
-            return "SolidLine";
-        case Qt::DashLine:
-            return "DashLine";
-        case Qt::DotLine:
-            return "DotLine";
-        case Qt::DashDotLine:
-            return "DashDotLine";
-        case Qt::DashDotDotLine:
-            return "DashDotDotLine";
-        default: // should not happen
-            return "SolidLine";
+            case Qt::NoPen:
+                return "NoPen";
+            case Qt::SolidLine:
+                return "SolidLine";
+            case Qt::DashLine:
+                return "DashLine";
+            case Qt::DotLine:
+                return "DotLine";
+            case Qt::DashDotLine:
+                return "DashDotLine";
+            case Qt::DashDotDotLine:
+                return "DashDotDotLine";
+            default: // should not happen
+                return "SolidLine";
         }
     }
 
@@ -294,38 +293,38 @@ namespace KDXML {
     {
         // PENDING(kalle) Support custom patterns
         switch( style ) {
-        case Qt::NoBrush:
-            return "NoBrush";
-        case Qt::SolidPattern:
-            return "SolidPattern";
-        case Qt::Dense1Pattern:
-            return "Dense1Pattern";
-        case Qt::Dense2Pattern:
-            return "Dense2Pattern";
-        case Qt::Dense3Pattern:
-            return "Dense3Pattern";
-        case Qt::Dense4Pattern:
-            return "Dense4Pattern";
-        case Qt::Dense5Pattern:
-            return "Dense5Pattern";
-        case Qt::Dense6Pattern:
-            return "Dense6Pattern";
-        case Qt::Dense7Pattern:
-            return "Dense7Pattern";
-        case Qt::HorPattern:
-            return "HorPattern";
-        case Qt::VerPattern:
-            return "VerPattern";
-        case Qt::CrossPattern:
-            return "CrossPattern";
-        case Qt::BDiagPattern:
-            return "BDiagPattern";
-        case Qt::FDiagPattern:
-            return "FDiagPattern";
-        case Qt::DiagCrossPattern:
-            return "DiagCrossPattern";
-        default: // should not happen (but can for a custom pattern)
-            return "SolidPattern";
+            case Qt::NoBrush:
+                return "NoBrush";
+            case Qt::SolidPattern:
+                return "SolidPattern";
+            case Qt::Dense1Pattern:
+                return "Dense1Pattern";
+            case Qt::Dense2Pattern:
+                return "Dense2Pattern";
+            case Qt::Dense3Pattern:
+                return "Dense3Pattern";
+            case Qt::Dense4Pattern:
+                return "Dense4Pattern";
+            case Qt::Dense5Pattern:
+                return "Dense5Pattern";
+            case Qt::Dense6Pattern:
+                return "Dense6Pattern";
+            case Qt::Dense7Pattern:
+                return "Dense7Pattern";
+            case Qt::HorPattern:
+                return "HorPattern";
+            case Qt::VerPattern:
+                return "VerPattern";
+            case Qt::CrossPattern:
+                return "CrossPattern";
+            case Qt::BDiagPattern:
+                return "BDiagPattern";
+            case Qt::FDiagPattern:
+                return "FDiagPattern";
+            case Qt::DiagCrossPattern:
+                return "DiagCrossPattern";
+            default: // should not happen (but can for a custom pattern)
+                return "SolidPattern";
         }
     }
 
@@ -504,7 +503,7 @@ namespace KDXML {
                     tempLength = tempData.length() * 5;
                 QByteArray baunzip( tempLength );
                 ::uncompress( (uchar*) baunzip.data(), (ulong*)&tempLength,
-                              (uchar*) ba, tempData.length()/2 );
+                        (uchar*) ba, tempData.length()/2 );
                 QImage image;
                 image.loadFromData( (const uchar*)baunzip.data(), tempLength, "XPM" );
 
@@ -781,4 +780,4 @@ namespace KDXML {
             return Qt::SolidPattern;
     }
 
-}
+};

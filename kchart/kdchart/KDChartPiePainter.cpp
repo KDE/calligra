@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -35,27 +34,25 @@
 #include <qvaluestack.h>
 #include <qmessagebox.h>
 
-#include <klocale.h>
-
 #define DEGTORAD(d) (d)*M_PI/180
 
 #include <math.h>
 
 /**
-   \class KDChartPiePainter KDChartPiePainter.h
+  \class KDChartPiePainter KDChartPiePainter.h
 
-   \brief A chart painter implementation that can paint pie charts.
+  \brief A chart painter implementation that can paint pie charts.
 
-   PENDING(kalle) Write more documentation.
-*/
+  PENDING(kalle) Write more documentation.
+  */
 
 /**
-   Constructor. Sets up internal data structures as necessary.
+  Constructor. Sets up internal data structures as necessary.
 
-   \param params the KDChartParams structure that defines the chart
-*/
-KDChartPiePainter::KDChartPiePainter( KDChartParams* params ) :
-    KDChartPainter( params )
+  \param params the KDChartParams structure that defines the chart
+  */
+    KDChartPiePainter::KDChartPiePainter( KDChartParams* params ) :
+KDChartPainter( params )
 {
     // This constructor intentionally left blank so far; we cannot setup the
     // geometry yet since we do not know the size of the painter.
@@ -63,8 +60,8 @@ KDChartPiePainter::KDChartPiePainter( KDChartParams* params ) :
 
 
 /**
-   Destructor.
-*/
+  Destructor.
+  */
 KDChartPiePainter::~KDChartPiePainter()
 {
     // intentionally left blank
@@ -72,18 +69,18 @@ KDChartPiePainter::~KDChartPiePainter()
 
 
 /**
-   Paints the actual data area.
+  Paints the actual data area.
 
-   \param painter the QPainter onto which the chart should be painted
-   \param data the data that will be displayed as a chart
-   \param paint2nd specifies whether the main chart or the additional chart is to be drawn now
-   \param regions a pointer to a list of regions that will be filled
-   with regions representing the data segments, if not null
-*/
+  \param painter the QPainter onto which the chart should be painted
+  \param data the data that will be displayed as a chart
+  \param paint2nd specifies whether the main chart or the additional chart is to be drawn now
+  \param regions a pointer to a list of regions that will be filled
+  with regions representing the data segments, if not null
+  */
 void KDChartPiePainter::paintData( QPainter* painter,
-                                   KDChartTableDataBase* data,
-                                   bool paint2nd,
-                                   KDChartDataRegionList* regions )
+        KDChartTableDataBase* data,
+        bool paint2nd,
+        KDChartDataRegionList* regions )
 {
     uint chart = paint2nd ? 1 : 0;
 
@@ -102,8 +99,8 @@ void KDChartPiePainter::paintData( QPainter* painter,
     // find which dataset to paint
     uint dataset;
     if ( !params()->findDataset( KDChartParams::DataEntry
-                                 ,
-                                 dataset, dataset ) ) {
+                ,
+                dataset, dataset ) ) {
         return ; // nothing to draw
     }
 
@@ -159,8 +156,8 @@ void KDChartPiePainter::paintData( QPainter* painter,
         int y = ( _dataRect.height() == height ) ? 0 : ( ( _dataRect.height() - height - sizeFor3DEffect ) / 2 );
 
         _position = QRect( _dataRect.left() + x, _dataRect.top() + y,
-                           _size, height );
-        //	_position.moveBy( _dataRect.left(), _dataRect.top() );
+                _size, height );
+        //  _position.moveBy( _dataRect.left(), _dataRect.top() );
     }
 
     double sum = data->rowAbsSum( dataset );
@@ -227,7 +224,7 @@ void KDChartPiePainter::paintData( QPainter* painter,
     // pie is there
     while ( !todostack.isEmpty() &&
             !( ( todostack.count() == 1 ) &&
-               ( ( todostack.top() == frontmostpie ) ) ) ) {
+                ( ( todostack.top() == frontmostpie ) ) ) ) {
         // The while loop cannot be cancelled if frontmostpie is on
         // top of the stack, but this is also backmostpie (can happen
         // when one of the pies covers more than 1/2 of the circle. In
@@ -264,8 +261,8 @@ void KDChartPiePainter::paintData( QPainter* painter,
 
         // When we get here, we can just draw the pie and proceed.
         drawOnePie( painter, data, dataset, currentpie, chart,
-                    sizeFor3DEffect,
-                    regions );
+                sizeFor3DEffect,
+                regions );
 
         // Mark the pie just drawn as done.
         donelist.append( currentpie );
@@ -283,27 +280,27 @@ void KDChartPiePainter::paintData( QPainter* painter,
 
     // now only the frontmost pie is left to draw
     drawOnePie( painter, data, dataset, frontmostpie, chart,
-                sizeFor3DEffect,
-                regions );
+            sizeFor3DEffect,
+            regions );
 }
 
 
 
 /**
-   Internal method that draws one of the pies in a pie chart.
+  Internal method that draws one of the pies in a pie chart.
 
-   \param painter the QPainter to draw in
-   \param dataset the dataset to draw the pie for
-   \param pie the pie to draw
-   \param the chart to draw the pie in
-   \param regions a pointer to a list of regions that will be filled
-   with regions representing the data segments, if not null
-*/
+  \param painter the QPainter to draw in
+  \param dataset the dataset to draw the pie for
+  \param pie the pie to draw
+  \param the chart to draw the pie in
+  \param regions a pointer to a list of regions that will be filled
+  with regions representing the data segments, if not null
+  */
 void KDChartPiePainter::drawOnePie( QPainter* painter,
-                                    KDChartTableDataBase* /*data*/,
-                                    uint dataset, uint pie, uint chart,
-                                    uint threeDPieHeight,
-                                    KDChartDataRegionList* regions )
+        KDChartTableDataBase* /*data*/,
+        uint dataset, uint pie, uint chart,
+        uint threeDPieHeight,
+        KDChartDataRegionList* regions )
 {
     // Is there anything to draw at all?
     int angleLen = _angleLens[ ( int ) pie ];
@@ -320,7 +317,7 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
             // need to compute a new position for each or some of the pie
             QValueList<int> explodeList = params()->explodeValues();
             if( explodeList.count() == 0 || // nothing on list, explode all
-                explodeList.find( pie ) != explodeList.end() ) {
+                    explodeList.find( pie ) != explodeList.end() ) {
                 double explodeAngle = ( startAngle + angleLen / 2 ) / 16;
                 double explodeAngleRad = DEGTORAD( explodeAngle );
                 double cosAngle = cos( explodeAngleRad );
@@ -346,8 +343,8 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
         // otherwise partly hide the pie itself.
         if ( params()->threeDPies() ) {
             draw3DEffect( painter, drawPosition, dataset, pie, chart,
-                          threeDPieHeight,
-                          params()->explode(), region );
+                    threeDPieHeight,
+                    params()->explode(), region );
         }
 
         painter->setBrush( params()->dataColor( pie ) );
@@ -357,12 +354,12 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
             if ( regions ) {
                 QPointArray hitregion;
                 hitregion.makeEllipse( drawPosition.x(), drawPosition.y(),
-                                       drawPosition.width(),
-                                       drawPosition.height() );
+                        drawPosition.width(),
+                        drawPosition.height() );
                 datReg = new KDChartDataRegion( region->unite( QRegion( hitregion ) ),
-                                                dataset,
-                                                pie,
-                                                chart );
+                        dataset,
+                        pie,
+                        chart );
                 datReg->points[ KDChartEnums::PosCenter ]
                     = drawPosition.center();
                 datReg->points[ KDChartEnums::PosCenterRight ]
@@ -390,16 +387,16 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
             if ( regions ) {
                 QPointArray hitregion;
                 hitregion.makeArc( drawPosition.x(), drawPosition.y(),
-                                   drawPosition.width(),
-                                   drawPosition.height(),
-                                   ( int ) startAngle, ( int ) angleLen );
+                        drawPosition.width(),
+                        drawPosition.height(),
+                        ( int ) startAngle, ( int ) angleLen );
                 hitregion.resize( hitregion.size() + 1 );
                 hitregion.setPoint( hitregion.size() - 1,
-                                    drawPosition.center() );
+                        drawPosition.center() );
                 datReg = new KDChartDataRegion( region->unite( QRegion( hitregion ) ),
-                                                dataset,
-                                                pie,
-                                                chart );
+                        dataset,
+                        pie,
+                        chart );
 
                 datReg->points[ KDChartEnums::PosTopLeft ]
                     = pointOnCircle( drawPosition, startAngle + angleLen );
@@ -416,19 +413,19 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
 
                 datReg->points[ KDChartEnums::PosCenterLeft ]
                     = QPoint( (   datReg->points[ KDChartEnums::PosTopLeft      ].x()
-                                  + datReg->points[ KDChartEnums::PosBottomLeft   ].x() ) / 2,
-                              (   datReg->points[ KDChartEnums::PosTopLeft      ].y()
-                                  + datReg->points[ KDChartEnums::PosBottomLeft   ].y() ) / 2 );
+                                + datReg->points[ KDChartEnums::PosBottomLeft   ].x() ) / 2,
+                            (   datReg->points[ KDChartEnums::PosTopLeft      ].y()
+                                + datReg->points[ KDChartEnums::PosBottomLeft   ].y() ) / 2 );
                 datReg->points[ KDChartEnums::PosCenter ]
                     = QPoint( (   datReg->points[ KDChartEnums::PosTopCenter    ].x()
-                                  + datReg->points[ KDChartEnums::PosBottomCenter ].x() ) / 2,
-                              (   datReg->points[ KDChartEnums::PosTopCenter    ].y()
-                                  + datReg->points[ KDChartEnums::PosBottomCenter ].y() ) / 2 );
+                                + datReg->points[ KDChartEnums::PosBottomCenter ].x() ) / 2,
+                            (   datReg->points[ KDChartEnums::PosTopCenter    ].y()
+                                + datReg->points[ KDChartEnums::PosBottomCenter ].y() ) / 2 );
                 datReg->points[ KDChartEnums::PosCenterRight ]
                     = QPoint( (   datReg->points[ KDChartEnums::PosTopRight     ].x()
-                                  + datReg->points[ KDChartEnums::PosBottomRight  ].x() ) / 2,
-                              (   datReg->points[ KDChartEnums::PosTopRight     ].y()
-                                  + datReg->points[ KDChartEnums::PosBottomRight  ].y() ) / 2 );
+                                + datReg->points[ KDChartEnums::PosBottomRight  ].x() ) / 2,
+                            (   datReg->points[ KDChartEnums::PosTopRight     ].y()
+                                + datReg->points[ KDChartEnums::PosBottomRight  ].y() ) / 2 );
 
                 datReg->startAngle = startAngle;
                 datReg->angleLen   = angleLen;
@@ -440,23 +437,23 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
 
 
 /**
-   Internal method that draws the shadow creating the 3D effect of a pie
+  Internal method that draws the shadow creating the 3D effect of a pie
 
-   \param painter the QPainter to draw in
-   \param rect the position to draw at
-   \param dataset the dataset to draw the pie for
-   \param pie the pie to draw the shadow for
-   \param the chart to draw the pie in
-   \param threeDHeight the height of the shadow
-   \param regions a pointer to a list of regions that will be filled
-   with regions representing the data segments, if not null
-*/
+  \param painter the QPainter to draw in
+  \param rect the position to draw at
+  \param dataset the dataset to draw the pie for
+  \param pie the pie to draw the shadow for
+  \param the chart to draw the pie in
+  \param threeDHeight the height of the shadow
+  \param regions a pointer to a list of regions that will be filled
+  with regions representing the data segments, if not null
+  */
 void KDChartPiePainter::draw3DEffect( QPainter* painter,
-                                      const QRect& drawPosition,
-                                      uint dataset, uint pie, uint chart,
-                                      uint threeDHeight,
-                                      bool /*explode*/,
-                                      QRegion* region )
+        const QRect& drawPosition,
+        uint dataset, uint pie, uint chart,
+        uint threeDHeight,
+        bool /*explode*/,
+        QRegion* region )
 {
     // NOTE: We cannot optimize away drawing some of the effects (even
     // when not exploding), because some of the pies might be left out
@@ -467,7 +464,7 @@ void KDChartPiePainter::draw3DEffect( QPainter* painter,
     // No need to save the brush, will be changed on return from this
     // method anyway.
     painter->setBrush( QBrush( params()->dataShadow1Color( pie ),
-                               params()->shadowPattern() ) );
+                params()->shadowPattern() ) );
 
     int startAngle = _startAngles[ ( int ) pie ];
     int endAngle = startAngle + _angleLens[ ( int ) pie ];
@@ -482,157 +479,157 @@ void KDChartPiePainter::draw3DEffect( QPainter* painter,
     //int centerY = drawPosition.center().y();
 
     if ( startAngle == endAngle ||
-         startAngle == endAngle - 5760 ) { // full circle
+            startAngle == endAngle - 5760 ) { // full circle
         drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                              threeDHeight, 2880, 5760, region );
+                threeDHeight, 2880, 5760, region );
     } else if ( startAngle <= 90 * 16 ) {
         if ( endAngle <= 90 * 16 ) {
             if ( startAngle <= endAngle ) {
                 /// starts and ends in first quadrant, less than 1/4
                 drawStraightEffectSegment( painter, drawPosition, dataset,
-                                           pie, chart, threeDHeight, startAngle,
-                                           region );
+                        pie, chart, threeDHeight, startAngle,
+                        region );
             } else {
                 /// starts and ends in first quadrant, more than 3/4
                 drawStraightEffectSegment( painter, drawPosition, dataset,
-                                           pie, chart, threeDHeight, startAngle,
-                                           region );
+                        pie, chart, threeDHeight, startAngle,
+                        region );
                 drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                      threeDHeight, 2880, 5760, region );
+                        threeDHeight, 2880, 5760, region );
             }
         } else if ( endAngle <= 180 * 16 ) {
             /// starts in first quadrant, ends in second quadrant,
             /// less than 1/2
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                       threeDHeight, startAngle, region );
+                    threeDHeight, startAngle, region );
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                       threeDHeight, endAngle, region );
+                    threeDHeight, endAngle, region );
         } else if ( endAngle <= 270 * 16 ) {
             /// starts in first quadrant, ends in third quadrant
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                       threeDHeight, startAngle,
-                                       region );
+                    threeDHeight, startAngle,
+                    region );
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                       threeDHeight, endAngle, region );
+                    threeDHeight, endAngle, region );
             drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                  threeDHeight, 2880, endAngle, region );
+                    threeDHeight, 2880, endAngle, region );
         } else { // 270*16 < endAngle < 360*16
             /// starts in first quadrant, ends in fourth quadrant,
             /// more than 3/4
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                       threeDHeight, startAngle, region );
+                    threeDHeight, startAngle, region );
             drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                  threeDHeight, 2880, endAngle, region );
+                    threeDHeight, 2880, endAngle, region );
         }
     } else if ( startAngle <= 180 * 16 ) {
         if ( endAngle <= 90 * 16 ) {
             drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                  threeDHeight, 2880, 5760, region );
+                    threeDHeight, 2880, 5760, region );
         } else if ( endAngle <= 180 * 16 ) {
             if ( startAngle <= endAngle ) {
                 /// starts in second quadrant, ends in second
                 /// quadrant, less than 1/4
                 drawStraightEffectSegment( painter, drawPosition, dataset,
-                                           pie, chart, threeDHeight, endAngle,
-                                           region );
+                        pie, chart, threeDHeight, endAngle,
+                        region );
             } else {
                 /// starts in second quadrant, ends in second
                 /// quadrant, more than 1/4
                 drawStraightEffectSegment( painter, drawPosition, dataset,
-                                           pie, chart, threeDHeight, endAngle,
-                                           region );
+                        pie, chart, threeDHeight, endAngle,
+                        region );
                 drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                      threeDHeight, 2880, 5760, region );
+                        threeDHeight, 2880, 5760, region );
             }
         } else if ( endAngle <= 270 * 16 ) {
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                       threeDHeight, endAngle, region );
+                    threeDHeight, endAngle, region );
             drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                  threeDHeight, 2880, endAngle, region );
+                    threeDHeight, 2880, endAngle, region );
         } else { // 270*16 < endAngle < 360*16
             drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                  threeDHeight, 2880, endAngle, region );
+                    threeDHeight, 2880, endAngle, region );
         }
     } else if ( startAngle <= 270 * 16 ) {
         if ( endAngle <= 90 * 16 ) {
             drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                  threeDHeight, startAngle, 5760, region );
+                    threeDHeight, startAngle, 5760, region );
         } else if ( endAngle <= 180 * 16 ) {
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                       threeDHeight, endAngle, region );
+                    threeDHeight, endAngle, region );
             drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                  threeDHeight, startAngle, 5760, region );
+                    threeDHeight, startAngle, 5760, region );
         } else if ( endAngle <= 270 * 16 ) {
             if ( startAngle <= endAngle ) {
                 /// starts in third quadrant, ends in third quadrant,
                 /// less than 1/4
                 drawStraightEffectSegment( painter, drawPosition, dataset,
-                                           pie, chart, threeDHeight, endAngle,
-                                           region );
+                        pie, chart, threeDHeight, endAngle,
+                        region );
                 drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                      threeDHeight, startAngle, endAngle,
-                                      region );
+                        threeDHeight, startAngle, endAngle,
+                        region );
             } else {
                 /// starts in third quadrant, ends in third quadrant,
                 /// more than 3/4
                 drawStraightEffectSegment( painter, drawPosition, dataset,
-                                           pie, chart, threeDHeight, endAngle,
-                                           region );
+                        pie, chart, threeDHeight, endAngle,
+                        region );
                 drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                      threeDHeight, 2880, endAngle,
-                                      region );
+                        threeDHeight, 2880, endAngle,
+                        region );
                 drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                      threeDHeight, startAngle, 5760,
-                                      region );
+                        threeDHeight, startAngle, 5760,
+                        region );
             }
         } else { // 270*16 < endAngle < 360*16
             drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                  threeDHeight, startAngle, endAngle,
-                                  region );
+                    threeDHeight, startAngle, endAngle,
+                    region );
         }
     } else { // 270*16 < startAngle < 360*16
         if ( endAngle <= 90 * 16 ) {
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                       threeDHeight, startAngle, region );
+                    threeDHeight, startAngle, region );
             drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                  threeDHeight, startAngle, 5760, region );
+                    threeDHeight, startAngle, 5760, region );
         } else if ( endAngle <= 180 * 16 ) {
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                       threeDHeight, startAngle, region );
+                    threeDHeight, startAngle, region );
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                       threeDHeight, endAngle, region );
+                    threeDHeight, endAngle, region );
             drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                  threeDHeight, startAngle, 5760, region );
+                    threeDHeight, startAngle, 5760, region );
         } else if ( endAngle <= 270 * 16 ) {
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                       threeDHeight, startAngle, region );
+                    threeDHeight, startAngle, region );
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                       threeDHeight, endAngle, region );
+                    threeDHeight, endAngle, region );
             drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                  threeDHeight, 2880, endAngle, region );
+                    threeDHeight, 2880, endAngle, region );
             drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                  threeDHeight, startAngle, 5760, region );
+                    threeDHeight, startAngle, 5760, region );
         } else { // 270*16 < endAngle < 360*16
             if ( startAngle <= endAngle ) {
                 /// starts in fourth quadrant, ends in fourth
                 /// quadrant, less than 1/4
                 drawStraightEffectSegment( painter, drawPosition, dataset,
-                                           pie, chart, threeDHeight, startAngle,
-                                           region );
+                        pie, chart, threeDHeight, startAngle,
+                        region );
                 drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                      threeDHeight, startAngle, endAngle,
-                                      region );
+                        threeDHeight, startAngle, endAngle,
+                        region );
             } else {
                 /// starts in fourth quadrant, ends in fourth
                 /// quadrant, more than 3/4
                 drawStraightEffectSegment( painter, drawPosition, dataset,
-                                           pie, chart, threeDHeight, startAngle,
-                                           region );
+                        pie, chart, threeDHeight, startAngle,
+                        region );
                 drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                      threeDHeight, startAngle, 5760,
-                                      region );
+                        threeDHeight, startAngle, 5760,
+                        region );
                 drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                                      threeDHeight, 2880, endAngle, region );
+                        threeDHeight, 2880, endAngle, region );
             }
         }
     }
@@ -640,21 +637,21 @@ void KDChartPiePainter::draw3DEffect( QPainter* painter,
 
 
 /**
-   Internal method that draws a segment with a straight 3D effect
+  Internal method that draws a segment with a straight 3D effect
 
-   \param painter the QPainter to draw in
-   \param rect the position to draw at
-   \param threeDHeight the height of the shadow
-   \param angle the angle of the segment
-   \param regions a pointer to a list of regions that will be filled
-   with regions representing the data segments, if not null
-*/
+  \param painter the QPainter to draw in
+  \param rect the position to draw at
+  \param threeDHeight the height of the shadow
+  \param angle the angle of the segment
+  \param regions a pointer to a list of regions that will be filled
+  with regions representing the data segments, if not null
+  */
 void KDChartPiePainter::drawStraightEffectSegment( QPainter* painter,
-                                                   const QRect& rect,
-                                                   uint /*dataset*/, uint /*pie*/, uint /*chart*/,
-                                                   int threeDHeight,
-                                                   int angle,
-                                                   QRegion* region )
+        const QRect& rect,
+        uint /*dataset*/, uint /*pie*/, uint /*chart*/,
+        int threeDHeight,
+        int angle,
+        QRegion* region )
 {
     QPoint center = rect.center();
     QPointArray points( 4 );
@@ -663,7 +660,7 @@ void KDChartPiePainter::drawStraightEffectSegment( QPainter* painter,
     points.setPoint( 1, circlePoint );
     points.setPoint( 2, circlePoint.x(), circlePoint.y() + threeDHeight );
     points.setPoint( 3, center.x(),
-                     center.y() + threeDHeight );
+            center.y() + threeDHeight );
     painter->drawPolygon( points );
     if ( region )
         *region += QRegion( points );
@@ -671,29 +668,29 @@ void KDChartPiePainter::drawStraightEffectSegment( QPainter* painter,
 
 
 /**
-   Internal method that draws a segment with an arc 3D effect
+  Internal method that draws a segment with an arc 3D effect
 
-   \param painter the QPainter to draw in
-   \param rect the position to draw at
-   \param threeDHeight the height of the shadow
-   \param startAngle the starting angle of the segment
-   \param endAngle the ending angle of the segment
-   \param regions a pointer to a list of regions that will be filled
-   with regions representing the data segments, if not null
-*/
+  \param painter the QPainter to draw in
+  \param rect the position to draw at
+  \param threeDHeight the height of the shadow
+  \param startAngle the starting angle of the segment
+  \param endAngle the ending angle of the segment
+  \param regions a pointer to a list of regions that will be filled
+  with regions representing the data segments, if not null
+  */
 void KDChartPiePainter::drawArcEffectSegment( QPainter* painter,
-                                              const QRect& rect,
-                                              uint /*dataset*/, uint /*pie*/, uint /*chart*/,
-                                              int threeDHeight,
-                                              int startAngle,
-                                              int endAngle,
-                                              QRegion* region )
+        const QRect& rect,
+        uint /*dataset*/, uint /*pie*/, uint /*chart*/,
+        int threeDHeight,
+        int startAngle,
+        int endAngle,
+        QRegion* region )
 {
     // Start with getting the points for the inner arc.
     QPointArray collect;
     collect.makeArc( rect.x(), rect.y(),
-                     rect.width(), rect.height(),
-                     startAngle, endAngle - startAngle + 1 );
+            rect.width(), rect.height(),
+            startAngle, endAngle - startAngle + 1 );
 
     // Now copy these arcs again into the same array, but in the
     // opposite direction and moved down by the 3D height.
@@ -711,18 +708,18 @@ void KDChartPiePainter::drawArcEffectSegment( QPainter* painter,
 
 
 /**
-   Internal method that finds the pie that is located at the position
-   specified by \c angle.
+  Internal method that finds the pie that is located at the position
+  specified by \c angle.
 
-   \param angle the angle at which to search for a pie
-   \return the number of the pie found
-*/
+  \param angle the angle at which to search for a pie
+  \return the number of the pie found
+  */
 uint KDChartPiePainter::findPieAt( int angle )
 {
     for ( int i = 0; i < _numValues; i++ ) {
         int endseg = _startAngles[ i ] + _angleLens[ i ];
         if ( ( _startAngles[ i ] <= angle ) &&
-             ( endseg >= angle ) )
+                ( endseg >= angle ) )
             // found!
             return i;
     }
@@ -733,12 +730,12 @@ uint KDChartPiePainter::findPieAt( int angle )
 
 
 /**
-   Internal method that finds the pie that is located to the left of
-   the pie specified by \c pie.
+  Internal method that finds the pie that is located to the left of
+  the pie specified by \c pie.
 
-   \param pie the pie to start the search from
-   \return the number of the pie to the left of \c pie
-*/
+  \param pie the pie to start the search from
+  \return the number of the pie to the left of \c pie
+  */
 uint KDChartPiePainter::findLeftPie( uint pie )
 {
     if ( pie == 0 )
@@ -753,12 +750,12 @@ uint KDChartPiePainter::findLeftPie( uint pie )
 
 
 /**
-   Internal method that finds the pie that is located to the right of
-   the pie specified by \c pie.
+  Internal method that finds the pie that is located to the right of
+  the pie specified by \c pie.
 
-   \param pie the pie to start the search from
-   \return the number of the pie to the right of \c pie
-*/
+  \param pie the pie to start the search from
+  \return the number of the pie to the right of \c pie
+  */
 uint KDChartPiePainter::findRightPie( uint pie )
 {
     int rightpie = pie + 1;
@@ -769,32 +766,32 @@ uint KDChartPiePainter::findRightPie( uint pie )
 
 
 /**
-   This method is a specialization that returns a fallback legend text
-   appropriate for pies that do not have more than one dataset
+  This method is a specialization that returns a fallback legend text
+  appropriate for pies that do not have more than one dataset
 
-   This method is only used when automatic legends are used, because
-   manual and first-column legends do not need fallback texts.
+  This method is only used when automatic legends are used, because
+  manual and first-column legends do not need fallback texts.
 
-   \param uint dataset the dataset number for which to generate a
-   fallback text
-   \return the fallback text to use for describing the specified
-   dataset in the legend
-*/
+  \param uint dataset the dataset number for which to generate a
+  fallback text
+  \return the fallback text to use for describing the specified
+  dataset in the legend
+  */
 QString KDChartPiePainter::fallbackLegendText( uint dataset ) const
 {
-    return i18n( "Item %1" ).arg( dataset + 1 );
+    return QObject::tr( "Item " ) + QString::number( dataset + 1 );
 }
 
 
 /**
-   This methods returns the number of elements to be shown in the
-   legend in case fallback texts are used.
+  This methods returns the number of elements to be shown in the
+  legend in case fallback texts are used.
 
-   This method is only used when automatic legends are used, because
-   manual and first-column legends do not need fallback texts.
+  This method is only used when automatic legends are used, because
+  manual and first-column legends do not need fallback texts.
 
-   \return the number of fallback texts to use
-*/
+  \return the number of fallback texts to use
+  */
 uint KDChartPiePainter::numLegendFallbackTexts( KDChartTableDataBase* data ) const
 {
     return data->usedCols();

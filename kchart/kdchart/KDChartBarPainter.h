@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -40,16 +39,16 @@ class KDChartParams;
 class KDChartBarPainter : public KDChartAxesPainter, public Qt
 {
     friend class KDChartPainter;
-protected:
+    protected:
     KDChartBarPainter( KDChartParams* params );
     virtual ~KDChartBarPainter();
 
     /*
-      virtual void paintData( QPainter* painter,
-      KDChartTableDataBase* data,
-      bool paint2nd,
-      KDChartDataRegionList* regions );
-    */
+       virtual void paintData( QPainter* painter, 
+       KDChartTableDataBase* data,
+       bool paint2nd,
+       KDChartDataRegionList* regions );
+       */
     virtual bool isNormalMode() const;
     virtual int clipShiftUp( bool normalMode, double areaWidthP1000 ) const;
     virtual void specificPaintData( QPainter* painter,
@@ -70,7 +69,7 @@ protected:
                                     uint chartDatasetEnd,
                                     uint datasetStart,
                                     uint datasetEnd );
-private:
+    private:
     void initMyPainter( QPainter* painter );
     void shiftMyPainter( double dx, double dy );
     void shiftMyPainterBack();

@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -47,56 +46,56 @@ struct KDDrawTextRegionAndTrueRect
 
 class KDDrawText
 {
-public:
-    static void drawRotatedText( QPainter* painter,
-                                 float  degrees,
-                                 QPoint anchor,
-                                 const QString& text,
-                                 const QFont* font = 0,
-                                 int align = Qt::AlignLeft | Qt::AlignTop,
-                                 // useful for debugging of your layout:
-                                 bool showAnchor    = false,
-                                 const QFontMetrics* fontMet = 0,
-                                 bool noFirstrotate = false,
-                                 bool noBackrotate  = false,
-                                 KDDrawTextRegionAndTrueRect* infos = 0,
-                                 bool optimizeOutputForScreen = false );
+    public:
+        static void drawRotatedText( QPainter* painter,
+                float  degrees,
+                QPoint anchor,
+                const QString& text,
+                const QFont* font = 0,
+                int align = Qt::AlignLeft | Qt::AlignTop,
+                // useful for debugging of your layout:
+                bool showAnchor    = false,
+                const QFontMetrics* fontMet = 0,
+                bool noFirstrotate = false,
+                bool noBackrotate  = false,
+                KDDrawTextRegionAndTrueRect* infos = 0,
+                bool optimizeOutputForScreen = false );
 
-    static KDDrawTextRegionAndTrueRect measureRotatedText(
-        QPainter* painter,
-        float  degrees,
-        QPoint anchor,
-        const QString& text,
-        const QFont* font,
-        int align,
-        const QFontMetrics* fontMet,
-        bool noFirstrotate,
-        bool noBackrotate,
-        int addPercentOfHeightToRegion );
+        static KDDrawTextRegionAndTrueRect measureRotatedText(
+                QPainter* painter,
+                float  degrees,
+                QPoint anchor,
+                const QString& text,
+                const QFont* font,
+                int align,
+                const QFontMetrics* fontMet,
+                bool noFirstrotate,
+                bool noBackrotate,
+                int addPercentOfHeightToRegion );
 
-private:
-    static void drawRotatedTxt( QPainter* painter,
-                                bool optimizeOutputForScreen,
-                                float  degrees,
-                                QPoint anchor,
-                                const QString& text,
-                                const QFont* font  = 0,
-                                int align = Qt::AlignLeft | Qt::AlignTop,
-                                // usefull for debugging of your layout:
-                                bool showAnchor    = false,
-                                // speed-up parameters
-                                // used internally by drawCircleText()
-                                // to avoid duplicate calculation
-                                int txtWidth       = INT_MAX,
-                                int txtHeight      = INT_MAX,
-                                const QFontMetrics* fontMet = 0,
-                                // additional speed-up parameters used by KDChart
-                                bool calculateOnly = false,
-                                bool doNotCalculate= false,
-                                bool noFirstrotate = false,
-                                bool noBackrotate  = false,
-                                KDDrawTextRegionAndTrueRect* infos = 0,
-                                int addPercentOfHeightToRegion = 0 );
+    private:
+        static void drawRotatedTxt( QPainter* painter,
+                bool optimizeOutputForScreen,
+                float  degrees,
+                QPoint anchor,
+                const QString& text,
+                const QFont* font  = 0,
+                int align = Qt::AlignLeft | Qt::AlignTop,
+                // usefull for debugging of your layout:
+                bool showAnchor    = false,
+                // speed-up parameters
+                // used internally by drawCircleText()
+                // to avoid duplicate calculation
+                int txtWidth       = INT_MAX,
+                int txtHeight      = INT_MAX,
+                const QFontMetrics* fontMet = 0,
+                // additional speed-up parameters used by KDChart
+                bool calculateOnly = false,
+                bool doNotCalculate= false,
+                bool noFirstrotate = false,
+                bool noBackrotate  = false,
+                KDDrawTextRegionAndTrueRect* infos = 0,
+                int addPercentOfHeightToRegion = 0 );
 
 };
 

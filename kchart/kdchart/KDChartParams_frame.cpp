@@ -1,6 +1,6 @@
 /* -*- Mode: C++ -*-
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -31,20 +31,20 @@
 
 
 /**
-   \class KDChartParams::KDChartFrameSettings KDChartParams.h
+  \class KDChartParams::KDChartFrameSettings KDChartParams.h
 
-   Stores the frame settings for one of the chart areas:
-   \li frame (consisting of edges, corners, background, shadow)
-   \li distance of frame to inner area
-   \li distance of frame to surrounding parts of the chart
+  Stores the frame settings for one of the chart areas:
+  \li frame (consisting of edges, corners, background, shadow)
+  \li distance of frame to inner area
+  \li distance of frame to surrounding parts of the chart
 
-   \sa setSimpleFrame, setFrame, frameSettings
-*/
+  \sa setSimpleFrame, setFrame, frameSettings
+  */
 
 
 /**
-   Constructor. Setting default values.
-*/
+  Constructor. Setting default values.
+  */
 KDChartParams::KDChartFrameSettings::KDChartFrameSettings()
 {
     _dataRow = 0;
@@ -61,62 +61,62 @@ KDChartParams::KDChartFrameSettings::KDChartFrameSettings()
 
 
 /**
-   Constructor.
+  Constructor.
 
-   \param outerGap Distance between the frame and the surrounding parts of the chart.
-   \param innerGap Distance between the frame and inner area.
-   \param addFrameWidthToLayout If true, shrink inner area so the area AND its frame will occupy
-   the same space of the chart as the area would occupy if no frame were drawn.
-   If false, the frame is drawn around the area without taking care not to override other
-   content of the chart.
-   \param frame The frame settings to be used for this area. The values of this parameter
-   will be copied into a KDFrame object stored internally in this KDChartFrameSettings so
-   it is save to use the same KDFrame object for specifying the settings of more than one area.
-*/
+  \param outerGap Distance between the frame and the surrounding parts of the chart.
+  \param innerGap Distance between the frame and inner area.
+  \param addFrameWidthToLayout If true, shrink inner area so the area AND its frame will occupy
+  the same space of the chart as the area would occupy if no frame were drawn.
+  If false, the frame is drawn around the area without taking care not to override other
+  content of the chart.
+  \param frame The frame settings to be used for this area. The values of this parameter
+  will be copied into a KDFrame object stored internally in this KDChartFrameSettings so
+  it is save to use the same KDFrame object for specifying the settings of more than one area.
+  */
 KDChartParams::KDChartFrameSettings::KDChartFrameSettings(
-    uint           dataRow,
-    uint           dataCol,
-    uint           data3rd,
-    const KDFrame& frame,
-    int            outerGapX,
-    int            outerGapY,
-    int            innerGapX,
-    int            innerGapY,
-    bool           addFrameWidthToLayout,
-    bool           addFrameHeightToLayout )
-    : _dataRow( dataRow ),
-      _dataCol( dataCol ),
-      _data3rd( data3rd ),
-      _frame( frame ),
-      _outerGapX( outerGapX ),
-      _outerGapY( outerGapY ),
-      _innerGapX( innerGapX ),
-      _innerGapY( innerGapY ),
-      _addFrameWidthToLayout(  addFrameWidthToLayout ),
-      _addFrameHeightToLayout( addFrameHeightToLayout )
+        uint           dataRow,
+        uint           dataCol,
+        uint           data3rd,
+        const KDFrame& frame,
+        int            outerGapX,
+        int            outerGapY,
+        int            innerGapX,
+        int            innerGapY,
+        bool           addFrameWidthToLayout,
+        bool           addFrameHeightToLayout )
+  : _dataRow( dataRow ),
+    _dataCol( dataCol ),
+    _data3rd( data3rd ),
+    _frame( frame ),
+    _outerGapX( outerGapX ),
+    _outerGapY( outerGapY ),
+    _innerGapX( innerGapX ),
+    _innerGapY( innerGapY ),
+    _addFrameWidthToLayout(  addFrameWidthToLayout ),
+_addFrameHeightToLayout( addFrameHeightToLayout )
 {}
 
 
 
 /**
-   Destructor. Only defined to have it virtual.
-*/
+  Destructor. Only defined to have it virtual.
+  */
 KDChartParams::KDChartFrameSettings::~KDChartFrameSettings()
 {
     // Intentionally left blank for now.
 }
 
 /**
-   Reads data from a DOM element node that represents a frame
-   settings object and fills a KDChartFrameSettings object
-   with the data.
+  Reads data from a DOM element node that represents a frame
+  settings object and fills a KDChartFrameSettings object
+  with the data.
 
-   \param element the DOM element to read from
-   \param settings the frame settings object to read the data into
-*/
+  \param element the DOM element to read from
+  \param settings the frame settings object to read the data into
+  */
 bool KDChartParams::KDChartFrameSettings::readFrameSettingsNode( const QDomElement& element,
-                                                                 KDChartFrameSettings& settings,
-                                                                 uint& areaId )
+        KDChartFrameSettings& settings,
+        uint& areaId )
 {
     bool ok = true;
     KDFrame tempFrame;
@@ -181,100 +181,100 @@ bool KDChartParams::KDChartFrameSettings::readFrameSettingsNode( const QDomEleme
 
 
 /**
-   \fn const KDFrame& KDChartParams::KDChartFrameSettings::frame() const
+  \fn const KDFrame& KDChartParams::KDChartFrameSettings::frame() const
 
-   Return the KDFrame object used for drawing this areas frame.
-*/
-
-
-/**
-   \fn int KDChartParams::KDChartFrameSettings::innerGapX() const
-
-   Return the X-distance between the frame and the inner area.
-*/
-
-/**
-   \fn int KDChartParams::KDChartFrameSettings::innerGapY() const
-
-   Return the Y-distance between the frame and the inner area.
-*/
-
-/**
-   \fn int KDChartParams::KDChartFrameSettings::outerGapX() const
-
-   Return the X-distance between the frame and the surrounding parts of the chart.
-*/
-
-/**
-   \fn int KDChartParams::KDChartFrameSettings::outerGapY() const
-
-   Return the Y-distance between the frame and the surrounding parts of the chart.
-*/
-
-/**
-   \fn bool KDChartParams::KDChartFrameSettings::addFrameWidthToLayout() const
-
-   Return whether the inner area will shrink the area AND its frame will occupy
-   the same space of the chart as the area would occupy if no frame were drawn.
-   If false, the frame is drawn around the area without taking care not to override other
-   content of the chart.
-
-   \sa addFrameHeightToLayout
-*/
+  Return the KDFrame object used for drawing this areas frame.
+  */
 
 
 /**
-   \fn bool KDChartParams::KDChartFrameSettings::addFrameHeightToLayout() const
+  \fn int KDChartParams::KDChartFrameSettings::innerGapX() const
 
-   Return whether the inner area will shrink the area AND its frame will occupy
-   the same space of the chart as the area would occupy if no frame were drawn.
-   If false, the frame is drawn around the area without taking care not to override other
-   content of the chart.
+  Return the X-distance between the frame and the inner area.
+  */
 
-   \sa addFrameWidthToLayout
-*/
+/**
+  \fn int KDChartParams::KDChartFrameSettings::innerGapY() const
+
+  Return the Y-distance between the frame and the inner area.
+  */
+
+/**
+  \fn int KDChartParams::KDChartFrameSettings::outerGapX() const
+
+  Return the X-distance between the frame and the surrounding parts of the chart.
+  */
+
+/**
+  \fn int KDChartParams::KDChartFrameSettings::outerGapY() const
+
+  Return the Y-distance between the frame and the surrounding parts of the chart.
+  */
+
+/**
+  \fn bool KDChartParams::KDChartFrameSettings::addFrameWidthToLayout() const
+
+  Return whether the inner area will shrink the area AND its frame will occupy
+  the same space of the chart as the area would occupy if no frame were drawn.
+  If false, the frame is drawn around the area without taking care not to override other
+  content of the chart.
+
+  \sa addFrameHeightToLayout
+  */
+
+
+/**
+  \fn bool KDChartParams::KDChartFrameSettings::addFrameHeightToLayout() const
+
+  Return whether the inner area will shrink the area AND its frame will occupy
+  the same space of the chart as the area would occupy if no frame were drawn.
+  If false, the frame is drawn around the area without taking care not to override other
+  content of the chart.
+
+  \sa addFrameWidthToLayout
+  */
 
 
 
 /**
-   Creates a DOM element node that represents a frame settings
-   object for use in a DOM document.
+  Creates a DOM element node that represents a frame settings
+  object for use in a DOM document.
 
-   \param document the DOM document to which the node will belong
-   \param parent the parent node to which the new node will be appended
-   \param elementName the name of the new node
-   \param settings the frame settings to be represented
-*/
+  \param document the DOM document to which the node will belong
+  \param parent the parent node to which the new node will be appended
+  \param elementName the name of the new node
+  \param settings the frame settings to be represented
+  */
 void KDChartParams::KDChartFrameSettings::createFrameSettingsNode( QDomDocument& document,
-                                                                   QDomNode& parent,
-                                                                   const QString& elementName,
-                                                                   const KDChartParams::KDChartFrameSettings* settings,
-                                                                   uint areaId )
+        QDomNode& parent,
+        const QString& elementName,
+        const KDChartParams::KDChartFrameSettings* settings,
+        uint areaId )
 {
     QDomElement frameSettingsElement = document.createElement( elementName );
     parent.appendChild( frameSettingsElement );
     KDFrame::createFrameNode( document, frameSettingsElement, "Frame",
-                              settings->_frame );
+            settings->_frame );
     KDXML::createIntNode( document, frameSettingsElement, "AreaId",
-                          areaId );
+            areaId );
     KDXML::createIntNode( document, frameSettingsElement, "DataRow",
-                          settings->_dataRow );
+            settings->_dataRow );
     KDXML::createIntNode( document, frameSettingsElement, "DataCol",
-                          settings->_dataCol );
+            settings->_dataCol );
     KDXML::createIntNode( document, frameSettingsElement, "Data3rd",
-                          settings->_data3rd );
+            settings->_data3rd );
     KDXML::createIntNode( document, frameSettingsElement, "OuterGapX",
-                          settings->_outerGapX );
+            settings->_outerGapX );
     KDXML::createIntNode( document, frameSettingsElement, "OuterGapY",
-                          settings->_outerGapY );
+            settings->_outerGapY );
     KDXML::createIntNode( document, frameSettingsElement, "InnerGapX",
-                          settings->_innerGapX );
+            settings->_innerGapX );
     KDXML::createIntNode( document, frameSettingsElement, "InnerGapY",
-                          settings->_innerGapY );
+            settings->_innerGapY );
     KDXML::createBoolNode( document, frameSettingsElement,
-                           "AddFrameWidthToLayout",
-                           settings->_addFrameWidthToLayout );
+            "AddFrameWidthToLayout",
+            settings->_addFrameWidthToLayout );
     KDXML::createBoolNode( document, frameSettingsElement,
-                           "AddFrameHeightToLayout",
-                           settings->_addFrameHeightToLayout );
+            "AddFrameHeightToLayout",
+            settings->_addFrameHeightToLayout );
 }

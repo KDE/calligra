@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -27,9 +26,13 @@
  ** licensing are not clear to you.
  **
  **********************************************************************/
+#if defined KDAB_EVAL
+#include "../evaldialog/evaldialog.h"
+#endif
+
 /**
-   \dontinclude KDChartPainter.h
-*/
+  \dontinclude KDChartPainter.h
+  */
 #include <KDChart.h>
 #include <KDChartPainter.h>
 #include <KDChartParams.h>
@@ -38,14 +41,14 @@
 #include <qglobal.h>
 
 /**
-   \class KDChart KDChart.h
+  \class KDChart KDChart.h
 
-   \brief Provides a single entry-point to the charting engine for
-   applications that wish to provide their own QPainter.
+  \brief Provides a single entry-point to the charting engine for
+  applications that wish to provide their own QPainter.
 
-   It is not useful to instantiate this class as it only contains one
-   static method.
-*/
+  It is not useful to instantiate this class as it only contains one
+  static method.
+  */
 
 KDChartParams* KDChart::oldParams = 0;
 KDChartPainter* KDChart::cpainter = 0;
@@ -54,52 +57,56 @@ KDChartParams::ChartType KDChart::cpainterType = KDChartParams::NoType;
 KDChartParams::ChartType KDChart::cpainterType2 = KDChartParams::NoType;
 
 /**
-   A global function that cleans up possible KDChartPainter objects at
-   application shutdown.
-*/
+  A global function that cleans up possible KDChartPainter objects at
+  application shutdown.
+  */
 void cleanupPainter();
 
 
 bool hasCartesianAxes( KDChartParams::ChartType chartType )
 {
     switch( chartType ){
-    case KDChartParams::NoType:     return false;
-    case KDChartParams::Bar:        return true;
-    case KDChartParams::Line:       return true;
-    case KDChartParams::Area:       return true;
-    case KDChartParams::Pie:        return false;
-    case KDChartParams::HiLo:       return true;
-    case KDChartParams::Ring:       return false;
-    case KDChartParams::Polar:      return false; // Polar axes are NO cartesian axes!
-    case KDChartParams::BoxWhisker: return true;
-    default:
-        qDebug("\n\n\n\nKDCHART ERROR: Type missing in KDChart.cpp hasCartesianAxes()\n"
-               "=============================================================\n"
-               "=============================================================\n\n\n\n");
+        case KDChartParams::NoType:     return false;
+        case KDChartParams::Bar:        return true;
+        case KDChartParams::Line:       return true;
+        case KDChartParams::Area:       return true;
+        case KDChartParams::Pie:        return false;
+        case KDChartParams::HiLo:       return true;
+        case KDChartParams::Ring:       return false;
+        case KDChartParams::Polar:      return false; // Polar axes are NO cartesian axes!
+        case KDChartParams::BoxWhisker: return true;
+        default:
+                                        qDebug("\n\n\n\nKDCHART ERROR: Type missing in KDChart.cpp hasCartesianAxes()\n"
+                                                "=============================================================\n"
+                                                "=============================================================\n\n\n\n");
     }
     return false;
 }
 
 
 /**
-   Paints a chart with the specified parameters on the specified
-   painter.
+  Paints a chart with the specified parameters on the specified
+  painter.
 
-   \param painter the QPainter onto which the chart should be painted
-   \param params the parameters defining the chart
-   \param data the data that should be displayed as a chart
-   \param regions if not null, this points to a
-   KDChartDataRegionList that will be filled with the regions
-   of the data segments. This information is needed internally for both
-   recognizing the data segment when reporting mouse clicks and
-   for finding the correct position to draw the respective data value texts.
-*/
+  \param painter the QPainter onto which the chart should be painted
+  \param params the parameters defining the chart
+  \param data the data that should be displayed as a chart
+  \param regions if not null, this points to a
+  KDChartDataRegionList that will be filled with the regions
+  of the data segments. This information is needed internally for both
+  recognizing the data segment when reporting mouse clicks and
+  for finding the correct position to draw the respective data value texts.
+  */
 void KDChart::paint( QPainter*              painter,
                      KDChartParams*         paraParams,
                      KDChartTableDataBase*  paraData,
                      KDChartDataRegionList* regions,
                      const QRect*           rect )
 {
+#if defined KDAB_EVAL
+    EvalDialog::checkEvalLicense( "KD Chart" );
+#endif
+
     // don't crash due to memory problems when running on windows
 #ifdef Q_WS_WIN
     QPixmap::setDefaultOptimization(QPixmap::MemoryOptim);
@@ -164,7 +171,7 @@ void KDChart::paint( QPainter*              painter,
                              a chart painter */
         // create a new painter
         if( hasCartesianAxes( params->chartType() )
-            && hasCartesianAxes( params->additionalChartType() ) ){
+                && hasCartesianAxes( params->additionalChartType() ) ){
             cpainter2 = KDChartPainter::create( params, true );
             cpainterType2 = params->additionalChartType();
         }else{
@@ -200,22 +207,22 @@ void KDChart::paint( QPainter*              painter,
 
 
 /**
-   Paints a chart with the specified parameters on the specified
-   painter which should use a QPrinter as it's output device.
+  Paints a chart with the specified parameters on the specified
+  painter which should use a QPrinter as it's output device.
 
-   This method is provided for your convenience, it behaves
-   like the paint method described above but additionally
-   it takes care for the output mode flag: Before painting is
-   started the internal optimizeOutputForScreen flag is set
-   to FALSE and after painting is done it is restored to
-   it's previous value.
+  This method is provided for your convenience, it behaves
+  like the paint method described above but additionally
+  it takes care for the output mode flag: Before painting is
+  started the internal optimizeOutputForScreen flag is set
+  to FALSE and after painting is done it is restored to
+  it's previous value.
 
-   \sa paint
-*/
+  \sa paint
+  */
 void KDChart::print( QPainter* painter, KDChartParams* params,
-                     KDChartTableDataBase* data,
-                     KDChartDataRegionList* regions,
-                     const QRect* rect )
+        KDChartTableDataBase* data,
+        KDChartDataRegionList* regions,
+        const QRect* rect )
 {
     bool oldOpt=true;
     if( params ){
@@ -229,9 +236,9 @@ void KDChart::print( QPainter* painter, KDChartParams* params,
 
 
 /*
-  This method is called at application shut-down and cleans up the
-  last created painter.
-*/
+   This method is called at application shut-down and cleans up the
+   last created painter.
+   */
 void cleanupPainter()
 {
     delete KDChart::cpainter;

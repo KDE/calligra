@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -40,44 +39,44 @@ class KDChartLinesPainter : public KDChartAxesPainter
 {
     friend class KDChartPainter;
 
-protected:
+    protected:
     KDChartLinesPainter( KDChartParams* params );
     virtual ~KDChartLinesPainter();
 
-    virtual void paintData( QPainter* painter,
-                            KDChartTableDataBase* data,
-                            bool paint2nd,
-                            KDChartDataRegionList* regions = 0 );
+    virtual void paintData( QPainter* painter, 
+            KDChartTableDataBase* data,
+            bool paint2nd,
+            KDChartDataRegionList* regions = 0 );
     virtual bool isNormalMode() const;
     virtual int clipShiftUp( bool, double ) const;
     virtual void specificPaintData( QPainter* painter,
-                                    const QRect& ourClipRect,
-                                    KDChartTableDataBase* data,
-                                    KDChartDataRegionList* regions,
-                                    const KDChartAxisParams* axisPara,
-                                    bool bNormalMode,
-                                    uint chart,
-                                    double logWidth,
-                                    double areaWidthP1000,
-                                    double logHeight,
-                                    double axisYOffset,
-                                    double minColumnValue,
-                                    double maxColumnValue,
-                                    double columnValueDistance,
-                                    uint chartDatasetStart,
-                                    uint chartDatasetEnd,
-                                    uint datasetStart,
-                                    uint datasetEnd );
+            const QRect& ourClipRect,
+            KDChartTableDataBase* data,
+            KDChartDataRegionList* regions,
+            const KDChartAxisParams* axisPara,
+            bool bNormalMode,
+            uint chart,
+            double logWidth,
+            double areaWidthP1000,
+            double logHeight,
+            double axisYOffset,
+            double minColumnValue,
+            double maxColumnValue,
+            double columnValueDistance,
+            uint chartDatasetStart,
+            uint chartDatasetEnd,
+            uint datasetStart,
+            uint datasetEnd );
 
     void paintDataInternal( QPainter* painter,
-                            KDChartTableDataBase* data,
-                            bool centerThePoints,
-                            bool drawMarkers,
-                            bool isArea,
-                            bool paint2nd,
-                            KDChartDataRegionList* regions = 0 );
+            KDChartTableDataBase* data,
+            bool centerThePoints,
+            bool drawMarkers,
+            bool isArea,
+            bool paint2nd,
+            KDChartDataRegionList* regions = 0 );
     QPoint project( int x, int y, int z );
-private:
+    private:
     KDChartParams::ChartType mChartType;
     bool mCenterThePoints;
     bool mDrawMarkers;

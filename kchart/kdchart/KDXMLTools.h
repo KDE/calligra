@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -50,39 +49,39 @@ namespace KDXML {
     Qt::BrushStyle stringToBrushStyle( const QString& style );
 
     void createBoolNode( QDomDocument& doc, QDomNode& parent,
-                         const QString& elementName, bool value );
+            const QString& elementName, bool value );
     void createSizeNode( QDomDocument& doc, QDomNode& parent,
-                         const QString& elementName, const QSize& value );
+            const QString& elementName, const QSize& value );
     void createIntNode( QDomDocument& doc, QDomNode& parent,
-                        const QString& elementName, int value );
+            const QString& elementName, int value );
     void createDoubleNode( QDomDocument& doc, QDomNode& parent,
-                           const QString& elementName, double value );
+            const QString& elementName, double value );
     void createStringNode( QDomDocument& doc, QDomNode& parent,
-                           const QString& elementName,
-                           const QString& text );
+            const QString& elementName,
+            const QString& text );
     void createColorNode( QDomDocument& doc, QDomNode& parent,
-                          const QString& elementName, const QColor& color );
+            const QString& elementName, const QColor& color );
     void createBrushNode( QDomDocument& doc, QDomNode& parent,
-                          const QString& elementName, const QBrush& brush );
+            const QString& elementName, const QBrush& brush );
     void createPixmapNode( QDomDocument& doc, QDomNode& parent,
-                           const QString& elementName, const QPixmap& pixmap );
+            const QString& elementName, const QPixmap& pixmap );
     void createRectNode( QDomDocument& doc, QDomNode& parent,
-                         const QString& elementName, const QRect& rect );
+            const QString& elementName, const QRect& rect );
     void createStringListNodes( QDomDocument& doc, QDomNode& parent,
-                                const QString& elementName,
-                                const QStringList* thelist ); // PCH: This is required to avoid MSVC compiler warnings and errors.
+            const QString& elementName,
+            const QStringList* thelist ); // PCH: This is required to avoid MSVC compiler warnings and errors.
     void createFontNode( QDomDocument& doc, QDomNode& parent,
-                         const QString& elementName, const QFont& font );
+            const QString& elementName, const QFont& font );
 
     void createPenNode( QDomDocument& doc, QDomNode& parent,
-                        const QString& elementName, const QPen& pen );
+            const QString& elementName, const QPen& pen );
     void createDateTimeNode( QDomDocument& doc, QDomNode& parent,
-                             const QString& elementName,
-                             const QDateTime& datetime );
+            const QString& elementName, 
+            const QDateTime& datetime );
     void createDateNode( QDomDocument& doc, QDomNode& parent,
-                         const QString& elementName, const QDate& date );
+            const QString& elementName, const QDate& date );
     void createTimeNode( QDomDocument& doc, QDomNode& parent,
-                         const QString& elementName, const QTime& time );
+            const QString& elementName, const QTime& time );
     bool readIntNode( const QDomElement& element, int& value );
     bool readStringNode( const QDomElement& element, QString& value );
     bool readDoubleNode( const QDomElement& element, double& value );
@@ -97,5 +96,5 @@ namespace KDXML {
     bool readDateTimeNode( const QDomElement& element, QDateTime& datetime );
     bool readDateNode( const QDomElement& element, QDate& date );
     bool readTimeNode( const QDomElement& element, QTime& time );
-}
+};
 #endif

@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -38,33 +37,33 @@ class KDChartParams;
 class KDChartPiePainter : public KDChartPainter
 {
     friend class KDChartPainter;
-protected:
+    protected:
     KDChartPiePainter( KDChartParams* params );
     virtual ~KDChartPiePainter();
 
-    virtual void paintData( QPainter* painter,
-                            KDChartTableDataBase* data,
-                            bool paint2nd,
-                            KDChartDataRegionList* regions = 0 );
-    virtual void drawOnePie( QPainter* painter,
-                             KDChartTableDataBase* data,
-                             uint dataset, uint pie, uint chart,
-                             uint threeDPieHeight,
-                             KDChartDataRegionList* regions = 0 );
+    virtual void paintData( QPainter* painter, 
+            KDChartTableDataBase* data,
+            bool paint2nd,
+            KDChartDataRegionList* regions = 0 );
+    virtual void drawOnePie( QPainter* painter, 
+            KDChartTableDataBase* data,
+            uint dataset, uint pie, uint chart,
+            uint threeDPieHeight,
+            KDChartDataRegionList* regions = 0 );
     virtual void draw3DEffect( QPainter* painter, const QRect& drawPosition,
-                               uint dataset, uint pie, uint chart,
-                               uint threeDPieHeight,
-                               bool explode,
-                               QRegion* region = 0 );
+            uint dataset, uint pie, uint chart,
+            uint threeDPieHeight,
+            bool explode,
+            QRegion* region = 0 );
     void drawStraightEffectSegment( QPainter* painter, const QRect& rect,
-                                    uint dataset, uint pie, uint chart,
-                                    int threeDHeight, int angle,
-                                    QRegion* region = 0 );
+            uint dataset, uint pie, uint chart,
+            int threeDHeight, int angle,
+            QRegion* region = 0 );
     void drawArcEffectSegment( QPainter* painter, const QRect& rect,
-                               uint dataset, uint pie, uint chart,
-                               int threeDHeight, int startAngle,
-                               int endAngle,
-                               QRegion* region = 0 );
+            uint dataset, uint pie, uint chart,
+            int threeDHeight, int startAngle,
+            int endAngle,
+            QRegion* region = 0 );
 
     virtual QString fallbackLegendText( uint dataset ) const;
     virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;

@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -37,24 +36,24 @@ KDFrameProfileSection::~KDFrameProfileSection()
 
 
 void KDFrameProfileSection::createFrameProfileSectionNode( QDomDocument& document,
-							   QDomNode& parent,
-							   const QString& elementName,
-							   const KDFrameProfileSection* section )
+        QDomNode& parent,
+        const QString& elementName,
+        const KDFrameProfileSection* section )
 
 {
     QDomElement sectionElement = document.createElement( elementName );
     parent.appendChild( sectionElement );
     KDXML::createStringNode( document, sectionElement, "Direction",
-                             KDFrameProfileSection::directionToString( section->_direction ) );
+            KDFrameProfileSection::directionToString( section->_direction ) );
     KDXML::createStringNode( document, sectionElement, "Curvature",
-                             KDFrameProfileSection::curvatureToString( section->_curvature ) );
+            KDFrameProfileSection::curvatureToString( section->_curvature ) );
     KDXML::createIntNode( document, sectionElement, "Width", section->_width );
     KDXML::createPenNode( document, sectionElement, "Style", section->_pen );
 }
 
 
 bool KDFrameProfileSection::readFrameProfileSectionNode( const QDomElement& element,
-                                                         KDFrameProfileSection* section )
+        KDFrameProfileSection* section )
 {
     bool ok = true;
     Direction tempDirection = DirPlain;
@@ -67,13 +66,13 @@ bool KDFrameProfileSection::readFrameProfileSectionNode( const QDomElement& elem
         if( !element.isNull() ) { // was really an element
             QString tagName = element.tagName();
             if( tagName == "Direction" ) {
-		QString value;
+                QString value;
                 ok = ok & KDXML::readStringNode( element, value );
-		tempDirection = stringToDirection( value );
+                tempDirection = stringToDirection( value );
             } else if( tagName == "Curvature" ) {
-		QString value;
+                QString value;
                 ok = ok & KDXML::readStringNode( element, value );
-		tempCurvature = stringToCurvature( value );
+                tempCurvature = stringToCurvature( value );
             } else if( tagName == "Width" ) {
                 ok = ok & KDXML::readIntNode( element, tempWidth );
             } else if( tagName == "Pen" ) {
@@ -86,10 +85,10 @@ bool KDFrameProfileSection::readFrameProfileSectionNode( const QDomElement& elem
     }
 
     if( ok ) {
-	section->_direction = tempDirection;
-	section->_curvature = tempCurvature;
-	section->_width = tempWidth;
-	section->_pen = tempPen;
+        section->_direction = tempDirection;
+        section->_curvature = tempCurvature;
+        section->_width = tempWidth;
+        section->_pen = tempPen;
     }
 
     return ok;

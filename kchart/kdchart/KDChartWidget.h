@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -39,11 +38,11 @@
 
 
 /**
-   \file KDChartWidget.h
+  \file KDChartWidget.h
 
-   \brief Provids the entry point into the charting that most
-   people will want to use.
-*/
+  \brief Provids the entry point into the charting that most
+  people will want to use.
+  */
 
 class KDChartParams;
 
@@ -51,9 +50,10 @@ class KDChartWidget : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY( bool activeData READ isActiveData WRITE setActiveData )
-        Q_PROPERTY( bool doubleBuffered READ isDoubleBuffered WRITE setDoubleBuffered )
+    Q_PROPERTY( bool doubleBuffered READ isDoubleBuffered WRITE setDoubleBuffered )
 
-        public:
+public:
+    KDChartWidget( QWidget* parent = 0, const char* name = 0 );
     KDChartWidget( KDChartParams* params,
                    KDChartTableDataBase* data,
                    QWidget* parent = 0, const char* name = 0 );

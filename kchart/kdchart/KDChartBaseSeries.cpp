@@ -26,39 +26,6 @@
  ** licensing are not clear to you.
  **
  **********************************************************************/
-#ifndef __KDCHARTRINGPAINTER_H__
-#define __KDCHARTRINGPAINTER_H__
 
-#include <KDChartPainter.h>
-#include <KDChartTable.h>
 
-class KDChartParams;
-
-class KDChartRingPainter : public KDChartPainter
-{
-    friend class KDChartPainter;
-    protected:
-    KDChartRingPainter( KDChartParams* params );
-    virtual ~KDChartRingPainter();
-
-    virtual void paintData( QPainter* painter, 
-            KDChartTableDataBase* data,
-            bool paint2nd,
-            KDChartDataRegionList* regions = 0 );
-    void drawOneSegment( QPainter* painter,
-            uint outerRadius, uint innerRadius,
-            double startAngle, double angles,
-            uint dataset, uint value, uint chart,
-            bool explode,
-            KDChartDataRegionList* regions = 0 );
-
-    virtual QString fallbackLegendText( uint dataset ) const;
-    virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;
-
-    QRect _position;
-    int _size;
-    int _numValues; // PENDING(kalle) Move to base class
-}
-;
-
-#endif
+#include "KDChartBaseSeries.h"

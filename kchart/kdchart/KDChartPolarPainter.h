@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -38,33 +37,33 @@ class KDChartPolarPainter : public KDChartPainter
 {
     friend class KDChartPainter;
 
-protected:
+    protected:
     KDChartPolarPainter( KDChartParams* params );
     virtual ~KDChartPolarPainter();
 
-    virtual void paintData( QPainter* painter,
-                            KDChartTableDataBase* data,
-                            bool paint2nd,
-                            KDChartDataRegionList* regions = 0 );
+    virtual void paintData( QPainter* painter, 
+            KDChartTableDataBase* data,
+            bool paint2nd,
+            KDChartDataRegionList* regions = 0 );
     void drawMarker( QPainter* painter,
-                     KDChartParams::PolarMarkerStyle style,
-                     const QColor& color, const QPoint& p,
-                     uint dataset, uint value, uint chart,
-                     double minSizeP1000,
-                     QRegion & region );
+            KDChartParams::PolarMarkerStyle style,
+            const QColor& color, const QPoint& p,
+            uint dataset, uint value, uint chart,
+            double minSizeP1000,
+            QRegion & region );
     virtual QString fallbackLegendText( uint dataset ) const;
     virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;
 
-private:
+    private:
     QPoint polarToXY( int radius, int angle );
     void paintCircularAxisLabel( QPainter* painter,
-                                 bool rotate,
-                                 int txtAngle,
-                                 QPoint center,
-                                 double currentRadiusPPU,
-                                 const QString& txt,
-                                 int align,
-                                 int step );
+            bool rotate,
+            int txtAngle,
+            QPoint center,
+            double currentRadiusPPU,
+            const QString& txt,
+            int align,
+            int step );
 };
 
 #endif

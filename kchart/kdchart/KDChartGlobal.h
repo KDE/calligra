@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -34,16 +33,16 @@
 
 #include <float.h>
 
-#if defined( Q_WS_X11 ) || defined( Q_WS_MACX )
-#include <limits.h>
+#if defined(unix) || defined(Q_WS_MAC)
+#include  <limits.h>
 #else
-#define MINDOUBLE DBL_MIN
+#define  MINDOUBLE DBL_MIN
 #endif
 
 
 /* \file KDChartGlobal.h
    \brief Definition of global macros.
-*/
+   */
 
 
 

@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -39,238 +38,238 @@
 
 class KDChartVectorTablePrivate : public QShared
 {
-public:
-    KDChartVectorTablePrivate() : QShared() {
-        row_count = 0;
-        col_count = 0;
-    }
+    public:
+        KDChartVectorTablePrivate() : QShared() {
+            row_count = 0;
+            col_count = 0;
+        }
 
-    KDChartVectorTablePrivate( uint _rows, uint _cols ) : QShared() {
-        matrix.resize( _rows * _cols, KDChartData() );
-        col_count = _cols;
-        row_count = _rows;
-    }
+        KDChartVectorTablePrivate( uint _rows, uint _cols ) : QShared() {
+            matrix.resize( _rows * _cols, KDChartData() );
+            col_count = _cols;
+            row_count = _rows;
+        }
 
-    KDChartVectorTablePrivate( const KDChartVectorTablePrivate& _t ) :
-        QShared(),
+        KDChartVectorTablePrivate( const KDChartVectorTablePrivate& _t ) :
+            QShared(),
         matrix( _t.matrix ),
         col_count( _t.col_count ),
         row_count( _t.row_count ) {}
 
-    ~KDChartVectorTablePrivate() {}
+        ~KDChartVectorTablePrivate() {}
 
-    void expand( uint _rows, uint _cols ) {
-        // Save the old table
-        QValueVector<KDChartData> save( matrix );
+        void expand( uint _rows, uint _cols ) {
+            // Save the old table
+            QValueVector<KDChartData> save( matrix );
 
-        // Delete old data, then resize
-        matrix.resize( 0 );
-        matrix.resize( _rows * _cols, KDChartData() );
+            // Delete old data, then resize
+            matrix.resize( 0 );
+            matrix.resize( _rows * _cols, KDChartData() );
 
-        // Copy over the old data
-        for( uint row = 0; row < QMIN( row_count, _rows ); row++ )
-            for( uint col = 0; col < QMIN( col_count, _cols ); col++ )
-                matrix[ row * _cols + col ] = save[ row * col_count + col ];
+            // Copy over the old data
+            for( uint row = 0; row < QMIN( row_count, _rows ); row++ )
+                for( uint col = 0; col < QMIN( col_count, _cols ); col++ )
+                    matrix[ row * _cols + col ] = save[ row * col_count + col ];
 
-        // set the new counts
-        col_count = _cols;
-        row_count = _rows;
-    }
+            // set the new counts
+            col_count = _cols;
+            row_count = _rows;
+        }
 
-    KDChartData& cell( uint _row, uint _col ) {
-        Q_ASSERT( _row < row_count  );
-        Q_ASSERT( _col < col_count );
-        return matrix[ static_cast < int > ( _row * col_count + _col ) ];
-    }
-    const KDChartData& cell( uint _row, uint _col ) const {
-        Q_ASSERT( _row < row_count  );
-        Q_ASSERT( _col < col_count );
-        return matrix[ static_cast < int > ( _row * col_count + _col ) ];
-    }
-    void setCell( uint _row, uint _col, const KDChartData& _element ) {
-        Q_ASSERT( _row < row_count  );
-        Q_ASSERT( _col < col_count );
-        matrix[ static_cast < int > ( _row * col_count + _col ) ] = _element;
-    }
+        KDChartData& cell( uint _row, uint _col ) {
+            Q_ASSERT( _row < row_count  );
+            Q_ASSERT( _col < col_count );
+            return matrix[ static_cast < int > ( _row * col_count + _col ) ];
+        }
+        const KDChartData& cell( uint _row, uint _col ) const {
+            Q_ASSERT( _row < row_count  );
+            Q_ASSERT( _col < col_count );
+            return matrix[ static_cast < int > ( _row * col_count + _col ) ];
+        }
+        void setCell( uint _row, uint _col, const KDChartData& _element ) {
+            Q_ASSERT( _row < row_count  );
+            Q_ASSERT( _col < col_count );
+            matrix[ static_cast < int > ( _row * col_count + _col ) ] = _element;
+        }
 
-    void clearCell( uint _row, uint _col ) {
-        Q_ASSERT( _row < row_count  );
-        Q_ASSERT( _col < col_count );
-        matrix[ static_cast < int > ( _row * col_count + _col ) ].clearValue();
-    }
+        void clearCell( uint _row, uint _col ) {
+            Q_ASSERT( _row < row_count  );
+            Q_ASSERT( _col < col_count );
+            matrix[ static_cast < int > ( _row * col_count + _col ) ].clearValue();
+        }
 
-    void clearAllCells() {
-        for ( uint r = 0; r < row_count; ++r )
-            for ( uint c = 0; c < col_count; ++c )
-                matrix[ static_cast < int > ( r * col_count + c ) ].clearValue();
-    }
+        void clearAllCells() {
+            for ( uint r = 0; r < row_count; ++r )
+                for ( uint c = 0; c < col_count; ++c )
+                    matrix[ static_cast < int > ( r * col_count + c ) ].clearValue();
+        }
 
-    QValueVector<KDChartData> matrix;
+        QValueVector<KDChartData> matrix;
 
-    uint col_count;
-    uint row_count;
+        uint col_count;
+        uint row_count;
 };
 
 
 class KDChartVectorTableData : public KDChartTableDataBase
 {
-private:
-    typedef KDChartVectorTablePrivate Priv;
-    uint _usedRows, _usedCols;
+    private:
+        typedef KDChartVectorTablePrivate Priv;
+        uint _usedRows, _usedCols;
 
-public:
-    /**
-     * Typedefs
-     */
-    typedef QValueVector<KDChartData>::iterator Iterator;
-    typedef QValueVector<KDChartData>::const_iterator ConstIterator;
+    public:
+        /**
+         * Typedefs
+         */
+        typedef QValueVector<KDChartData>::iterator Iterator;
+        typedef QValueVector<KDChartData>::const_iterator ConstIterator;
 
-    typedef QValueVector<int>::iterator RowIterator;
-    typedef QValueVector<int>::const_iterator ConstRowIterator;
+        typedef QValueVector<int>::iterator RowIterator;
+        typedef QValueVector<int>::const_iterator ConstRowIterator;
 
-    typedef QValueVector<int>::iterator ColIterator;
-    typedef QValueVector<int>::const_iterator ConstColIterator;
+        typedef QValueVector<int>::iterator ColIterator;
+        typedef QValueVector<int>::const_iterator ConstColIterator;
 
-    /**
-     * API
-     */
-    KDChartVectorTableData() :
-        KDChartTableDataBase() {
-        sh = new Priv;
-        _usedCols = 0;
-        _usedRows = 0;
-    }
-    KDChartVectorTableData( uint _rows, uint _cols ) :
-        KDChartTableDataBase() {
-        sh = new Priv( _rows, _cols );
-        _usedRows = _rows;
-        _usedCols = _cols;
-    }
+        /**
+         * API
+         */
+        KDChartVectorTableData() :
+            KDChartTableDataBase() {
+                sh = new Priv;
+                _usedCols = 0;
+                _usedRows = 0;
+            }
+        KDChartVectorTableData( uint _rows, uint _cols ) :
+            KDChartTableDataBase() {
+                sh = new Priv( _rows, _cols );
+                _usedRows = _rows;
+                _usedCols = _cols;
+            }
 
-    KDChartVectorTableData( const KDChartVectorTableData& _t ) :
-        KDChartTableDataBase( _t ) {
-        _usedRows = _t._usedRows;
-        _usedCols = _t._usedCols;
-        sh = _t.sh;
-        sh->ref();
-        setSorted( _t.sorted() );
-    }
+        KDChartVectorTableData( const KDChartVectorTableData& _t ) :
+            KDChartTableDataBase( _t ) {
+                _usedRows = _t._usedRows;
+                _usedCols = _t._usedCols;
+                sh = _t.sh;
+                sh->ref();
+                setSorted( _t.sorted() );
+            }
 
-    virtual ~KDChartVectorTableData() {
-        if ( sh->deref() )
-            delete sh;
-    }
-
-    KDChartVectorTableData& operator=( const KDChartVectorTableData& t ) {
-        if ( &t == this )
-            return * this;
-        _usedRows = t._usedRows;
-        _usedCols = t._usedCols;
-        t.sh->ref();
-        if ( sh->deref() )
-            delete sh;
-        sh = t.sh;
-        setSorted( t.sorted() );
-        return *this;
-    }
-
-    Iterator begin() {
-        return sh->matrix.begin();
-    }
-
-    ConstIterator begin() const {
-        return sh->matrix.begin();
-    }
-
-    Iterator end() {
-        return sh->matrix.end();
-    }
-
-    ConstIterator end() const {
-        return sh->matrix.end();
-    }
-
-    bool isEmpty() const {
-        return ( sh->col_count == 0 && sh->row_count == 0 );
-    }
-
-    uint cols() const {
-        return sh->col_count;
-    }
-
-    uint rows() const {
-        return sh->row_count;
-    }
-
-    KDChartData& cell( uint _row, uint _col ) {
-        detach();
-        return sh->cell( _row, _col );
-    }
-
-    const KDChartData& cell( uint _row, uint _col ) const {
-        return sh->cell( _row, _col );
-    }
-
-    void setCell( uint _row, uint _col, const KDChartData& _element ) {
-        detach();
-        sh->setCell( _row, _col, _element );
-    }
-
-    void clearCell( uint _row, uint _col ) {
-        detach();
-        sh->clearCell( _row, _col );
-    }
-
-    void clearAllCells() {
-        detach();
-        sh->clearAllCells();
-    }
-
-    void expand( uint _rows, uint _cols ) {
-        detach();
-        sh->expand( _rows, _cols );
-        _usedRows = _rows;
-        _usedCols = _cols;
-    }
-
-    void setUsedRows( uint _rows ) {
-        Q_ASSERT( _rows <= rows() );
-        if( _usedRows < _rows )
-            setSorted( false );
-        _usedRows = _rows;
-    }
-
-    uint usedRows() const {
-        return _usedRows;
-    }
-
-    void setUsedCols( uint _cols ) {
-        Q_ASSERT( _cols <= cols() );
-        if( _usedCols < _cols )
-            setSorted( false );
-        _usedCols = _cols;
-    }
-
-    uint usedCols() const {
-        return _usedCols;
-    }
-
-private:
-    /**
-     * Helpers
-     */
-    void detach() {
-        if ( sh->count > 1 ) {
-            sh->deref();
-            sh = new Priv( *sh );
+        virtual ~KDChartVectorTableData() {
+            if ( sh->deref() )
+                delete sh;
         }
-        setSorted( false );
-    }
 
-    /**
-     * Variables
-     */
-    Priv* sh;
+        KDChartVectorTableData& operator=( const KDChartVectorTableData& t ) {
+            if ( &t == this )
+                return * this;
+            _usedRows = t._usedRows;
+            _usedCols = t._usedCols;
+            t.sh->ref();
+            if ( sh->deref() )
+                delete sh;
+            sh = t.sh;
+            setSorted( t.sorted() );
+            return *this;
+        }
+
+        Iterator begin() {
+            return sh->matrix.begin();
+        }
+
+        ConstIterator begin() const {
+            return sh->matrix.begin();
+        }
+
+        Iterator end() {
+            return sh->matrix.end();
+        }
+
+        ConstIterator end() const {
+            return sh->matrix.end();
+        }
+
+        bool isEmpty() const {
+            return ( sh->col_count == 0 && sh->row_count == 0 );
+        }
+
+        uint cols() const {
+            return sh->col_count;
+        }
+
+        uint rows() const {
+            return sh->row_count;
+        }
+
+        KDChartData& cell( uint _row, uint _col ) {
+            detach();
+            return sh->cell( _row, _col );
+        }
+
+        const KDChartData& cell( uint _row, uint _col ) const {
+            return sh->cell( _row, _col );
+        }
+
+        void setCell( uint _row, uint _col, const KDChartData& _element ) {
+            detach();
+            sh->setCell( _row, _col, _element );
+        }
+
+        void clearCell( uint _row, uint _col ) {
+            detach();
+            sh->clearCell( _row, _col );
+        }
+
+        void clearAllCells() {
+            detach();
+            sh->clearAllCells();
+        }
+
+        void expand( uint _rows, uint _cols ) {
+            detach();
+            sh->expand( _rows, _cols );
+            _usedRows = _rows;
+            _usedCols = _cols;
+        }
+
+        void setUsedRows( uint _rows ) {
+            Q_ASSERT( _rows <= rows() );
+            if( _usedRows < _rows )
+                setSorted( false );
+            _usedRows = _rows;
+        }
+
+        uint usedRows() const {
+            return _usedRows;
+        }
+
+        void setUsedCols( uint _cols ) {
+            Q_ASSERT( _cols <= cols() );
+            if( _usedCols < _cols )
+                setSorted( false );
+            _usedCols = _cols;
+        }
+
+        uint usedCols() const {
+            return _usedCols;
+        }
+
+    private:
+        /**
+         * Helpers
+         */
+        void detach() {
+            if ( sh->count > 1 ) {
+                sh->deref();
+                sh = new Priv( *sh );
+            }
+            setSorted( false );
+        }
+
+        /**
+         * Variables
+         */
+        Priv* sh;
 };
 
 #endif

@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -37,23 +36,23 @@
 #include "KDChartGlobal.h"
 
 /**
-   This exception is thrown when it is attempted to create a chart of
-   non-registered user-defined type.
-*/
+  This exception is thrown when it is attempted to create a chart of
+  non-registered user-defined type.
+  */
 class KDChartUnknownTypeException
 {
-public:
-    KDChartUnknownTypeException( const QString& type ) :
-        _type( type )
-        {}
+    public:
+        KDChartUnknownTypeException( const QString& type ) :
+            _type( type )
+            {}
 
-    QString type() const
+        QString type() const
         {
             return _type;
         }
 
-private:
-    QString _type;
+    private:
+        QString _type;
 };
 
 #endif

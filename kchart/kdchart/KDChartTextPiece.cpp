@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -128,9 +127,9 @@ int KDChartTextPiece::fontLeading() const
 
 
 void KDChartTextPiece::draw( QPainter *p, int x, int y,
-                             const QRect& clipRect,
-                             const QColor& color,
-                             const QBrush* paper ) const
+        const QRect& clipRect,
+        const QColor& color,
+        const QBrush* paper ) const
 {
     if( _isRichText ) {
         QColorGroup cg;
@@ -151,9 +150,9 @@ void KDChartTextPiece::draw( QPainter *p, int x, int y,
 
 
 void KDChartTextPiece::draw( QPainter *p, int x, int y,
-                             const QRegion& clipRegion,
-                             const QColor& color,
-                             const QBrush* paper ) const
+        const QRegion& clipRegion,
+        const QColor& color,
+        const QBrush* paper ) const
 {
     if( _isRichText ) {
         QColorGroup cg;

@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -42,14 +41,14 @@
 class KDChartParams;
 
 /** \file KDChartAxisParams.h
-    \brief Provide access to the chart axis parameters.
+  \brief Provide access to the chart axis parameters.
 
-    Use the KDChartAxisParams class to modify parameters of one axis each.
-*/
+  Use the KDChartAxisParams class to modify parameters of one axis each.
+  */
 
 class KDChartAxisParams : public QObject
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
 
@@ -268,7 +267,7 @@ public:
     void setLabelTextsFormDataRow( int row, LabelsFromDataRow mode );
     LabelsFromDataRow axisLabelTextsFormDataRow() const { return _takeLabelsFromDataRow; }
     int labelTextsDataRow() const { return _labelTextsDataRow; }
-    void setAxisLabelStringLists( QStringList* axisLabelStringList,
+    void setAxisLabelStringLists( QStringList*   axisLabelStringList,
                                   QStringList*   axisShortLabelStringList,
                                   const QString& valueStart = QString::null,
                                   const QString& valueEnd   = QString::null );
@@ -280,6 +279,25 @@ public:
     void setAxisLabelTexts( const QStringList* axisLabelTexts );
     void setAxisLabelTextsDirty( bool axisLabelTextsDirty ) { _axisLabelTextsDirty = axisLabelTextsDirty; }
     bool axisLabelTextsDirty() const { return _axisLabelTextsDirty; }
+    void setAxisLabelsCalc( int divPow10 = 0,
+                            int digitsBehindComma = AXIS_LABELS_AUTO_DIGITS );
+    int axisLabelsDivPow10()          const { return _axisLabelsDivPow10; }
+    int axisLabelsDigitsBehindComma() const { return _axisDigitsBehindComma; }
+    void setAxisLabelsRadix( const QString& decimalPoint,
+                             const QString& thousandsPoint );
+    QString axisLabelsDecimalPoint()   const { return _axisLabelsDecimalPoint; }
+    QString axisLabelsThousandsPoint() const { return _axisLabelsThousandsPoint; }
+    void setAxisLabelsFormat( const QString& prefix = "",
+                              const QString& postfix = "",
+                              const int&     totalLen = 0,
+                              const QChar&   padFill = ' ',
+                              const bool&    blockAlign = true );
+    QString axisLabelsPrefix()         const { return _axisLabelsPrefix; }
+    QString axisLabelsPostfix()        const { return _axisLabelsPostfix; }
+    int axisLabelsTotalLen()           const { return _axisLabelsTotalLen; }
+    QChar axisLabelsPadFill()          const { return _axisLabelsPadFill; }
+    bool axisLabelsBlockAlign()        const { return _axisLabelsBlockAlign; }
+
     void setAxisFirstLabelText( const QString& axisFirstLabelText = QString() );
     void setAxisLastLabelText(  const QString& axisLastLabelText  = QString() );
     QString axisFirstLabelText() const { return _axisFirstLabelText; }
@@ -321,9 +339,9 @@ private:
     int _axisTrueLineWidth;
     QColor _axisLineColor;
 
-    bool _axisShowGrid;
-    QColor _axisGridColor;
-    int _axisGridLineWidth;
+    bool     _axisShowGrid;
+    QColor   _axisGridColor;
+    int      _axisGridLineWidth;
     PenStyle _axisGridStyle;
 
     bool     _axisShowSubDelimiters;
@@ -370,6 +388,15 @@ private:
     bool _axisLabelTextsDirty;
     QString _axisFirstLabelText;
     QString _axisLastLabelText;
+
+    int _axisLabelsDivPow10;
+    QString _axisLabelsDecimalPoint;
+    QString _axisLabelsThousandsPoint;
+    QString _axisLabelsPrefix;
+    QString _axisLabelsPostfix;
+    int     _axisLabelsTotalLen;
+    QChar   _axisLabelsPadFill;
+    bool    _axisLabelsBlockAlign;
 };
 
 #endif

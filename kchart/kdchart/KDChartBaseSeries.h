@@ -26,39 +26,34 @@
  ** licensing are not clear to you.
  **
  **********************************************************************/
-#ifndef __KDCHARTRINGPAINTER_H__
-#define __KDCHARTRINGPAINTER_H__
+#ifndef __KDCHARTBASESERIES_H__
+#define __KDCHARTBASESERIES_H__
 
-#include <KDChartPainter.h>
-#include <KDChartTable.h>
+// A single data series abstracted.
+// Is included in a DataSeriesBag.
+// Will be a base class for other series objects, such as DataVectorSeries,
+// and my DataQuerySeries.
+//
+// Requirements:
+// - Able to handle its own parameters, colours, legend texts, etc.
+// - Able to hide/show itself.
+// - Almost completely abstract, so we can inherit it from other classes.
+//   Implement things like hide and show here tho.
 
-class KDChartParams;
+#include "KDChartData.h"
 
-class KDChartRingPainter : public KDChartPainter
+class KDChartBaseSeries
 {
-    friend class KDChartPainter;
-    protected:
-    KDChartRingPainter( KDChartParams* params );
-    virtual ~KDChartRingPainter();
+    public:
+        virtual uint rows() const = 0;
+        virtual const KDChartData& cell( uint row ) const = 0;
+        virtual void setCell( uint row, const KDChartData& element) = 0;
+        virtual void expand( uint rows ) = 0;
 
-    virtual void paintData( QPainter* painter, 
-            KDChartTableDataBase* data,
-            bool paint2nd,
-            KDChartDataRegionList* regions = 0 );
-    void drawOneSegment( QPainter* painter,
-            uint outerRadius, uint innerRadius,
-            double startAngle, double angles,
-            uint dataset, uint value, uint chart,
-            bool explode,
-            KDChartDataRegionList* regions = 0 );
+        // methods modelled on the TableBase methods.
+        virtual double maxValue( int coordinate, bool &ok ) const = 0;
+        virtual double minValue( int coordinate, bool &ok ) const = 0;
+};
 
-    virtual QString fallbackLegendText( uint dataset ) const;
-    virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;
-
-    QRect _position;
-    int _size;
-    int _numValues; // PENDING(kalle) Move to base class
-}
-;
 
 #endif

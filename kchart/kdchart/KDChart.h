@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -38,12 +37,12 @@
 
 
 /** \file KDChart.h
-    \brief Definition of a single entry-point to the charting engine for
-    applications that wish to provide their own QPainter.
+  \brief Definition of a single entry-point to the charting engine for
+  applications that wish to provide their own QPainter.
 
-    It is not useful to instantiate the KDChart class as it contains static
-    methods only.
-*/
+  It is not useful to instantiate the KDChart class as it contains static
+  methods only.
+  */
 
 class KDChartPainter;
 class QPainter;
@@ -53,15 +52,15 @@ class KDChart
 {
     friend void cleanupPainter();
 
-public:
+    public:
     static void paint( QPainter*, KDChartParams*, KDChartTableDataBase*,
-                       KDChartDataRegionList* regions = 0,
-                       const QRect* rect = 0 );
+            KDChartDataRegionList* regions = 0,
+            const QRect* rect = 0 );
     static void print( QPainter*, KDChartParams*, KDChartTableDataBase*,
-                       KDChartDataRegionList* regions = 0,
-                       const QRect* rect = 0 );
+            KDChartDataRegionList* regions = 0,
+            const QRect* rect = 0 );
 
-private:
+    private:
     KDChart(); // prevent instantiations
 
     static KDChartParams* oldParams;

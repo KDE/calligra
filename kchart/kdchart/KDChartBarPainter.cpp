@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -35,16 +34,16 @@
 #include <stdlib.h>
 
 /**
-   \class KDChartBarPainter KDChartBarPainter.h
+  \class KDChartBarPainter KDChartBarPainter.h
 
-   \brief A chart painter implementation that can paint bar charts.
-*/
+  \brief A chart painter implementation that can paint bar charts.
+  */
 
 /**
-   Constructor. Sets up internal data structures as necessary.
+  Constructor. Sets up internal data structures as necessary.
 
-   \param params the KDChartParams structure that defines the chart
-*/
+  \param params the KDChartParams structure that defines the chart
+  */
 KDChartBarPainter::KDChartBarPainter( KDChartParams* params ) :
     KDChartAxesPainter( params )
 {
@@ -54,8 +53,8 @@ KDChartBarPainter::KDChartBarPainter( KDChartParams* params ) :
 
 
 /**
-   Destructor.
-*/
+  Destructor.
+  */
 KDChartBarPainter::~KDChartBarPainter()
 {
     // intentionally left blank
@@ -68,7 +67,8 @@ bool KDChartBarPainter::isNormalMode() const
 
 int KDChartBarPainter::clipShiftUp( bool normalMode, double areaWidthP1000 ) const
 {
-    return   ( normalMode && !_bThreeDBars )
+    const bool bThreeDBars = params()->threeDBars() || (KDChartParams::BarMultiRows == params()->barChartSubType());
+    return   ( normalMode && !bThreeDBars )
         ? static_cast < int > ( areaWidthP1000 * 16.0 )
         : 0;
 }
@@ -101,23 +101,23 @@ void KDChartBarPainter::shiftMyPainterBack()
 
 
 void KDChartBarPainter::specificPaintData( QPainter* painter,
-                                           const QRect& ourClipRect,
-                                           KDChartTableDataBase* data,
-                                           KDChartDataRegionList* regions,
-                                           const KDChartAxisParams* ordinatePara,
-                                           bool bNormalMode,
-                                           uint chart,
-                                           double logWidth,
-                                           double areaWidthP1000,
-                                           double logHeight,
-                                           double axisYOffset,
-                                           double minColumnValue,
-                                           double maxColumnValue,
-                                           double columnValueDistance,
-                                           uint chartDatasetStart,
-                                           uint chartDatasetEnd,
-                                           uint datasetStart,
-                                           uint datasetEnd )
+        const QRect& ourClipRect,
+        KDChartTableDataBase* data,
+        KDChartDataRegionList* regions,
+        const KDChartAxisParams* ordinatePara,
+        bool bNormalMode,
+        uint chart,
+        double logWidth,
+        double areaWidthP1000,
+        double logHeight,
+        double axisYOffset,
+        double minColumnValue,
+        double maxColumnValue,
+        double columnValueDistance,
+        uint chartDatasetStart,
+        uint chartDatasetEnd,
+        uint datasetStart,
+        uint datasetEnd )
 {
     if( !data ) return;
 
@@ -163,54 +163,54 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
         numValues = data->usedCols();
 
     double datasetGap = bMultiRows
-                        ? 0.0
-                        : params()->datasetGap()
-                        * ( params()->datasetGapIsRelative()
-                            ? areaWidthP1000
-                            : 1.0 );
+        ? 0.0
+        : params()->datasetGap()
+          * (   params()->datasetGapIsRelative()
+              ? areaWidthP1000
+              : 1.0 );
     double valueBlockGap = bMultiRows
-                           ? 0.0
-                           : params()->valueBlockGap()
-                           * ( params()->valueBlockGapIsRelative()
-                               ? areaWidthP1000
-                               : 1.0 );
+        ? 0.0
+        : params()->valueBlockGap()
+          * (   params()->valueBlockGapIsRelative()
+              ? areaWidthP1000
+              : 1.0 );
 
     // This is the same for all three bar types except for multi-bar Surface charts.
     double spaceBetweenValueBlocks = bMultiRows
-                                     ? 0.0
-                                     : valueBlockGap * numValues;
+        ? 0.0
+        : valueBlockGap * numValues;
 
     // Set some geometry values that apply to bar charts only
     double totalNumberOfBars = 0.0;
     double spaceBetweenDatasets = 0.0;
     switch ( params()->barChartSubType() ) {
-    case KDChartParams::BarNormal: {
-        totalNumberOfBars = numChartDataEntryDatasets * numValues;
-        spaceBetweenDatasets = datasetGap
-                               * ( totalNumberOfBars - numValues );
-        break;
-    }
-    case KDChartParams::BarStacked:
-    case KDChartParams::BarPercent:
-    case KDChartParams::BarMultiRows:
-        totalNumberOfBars = numValues;
-        spaceBetweenDatasets = 0; // always 0 when stacked/percent/multi-rows
-        break;
-    default:
-        qFatal( "Unsupported bar chart type" );
+        case KDChartParams::BarNormal: {
+                                           totalNumberOfBars = numChartDataEntryDatasets * numValues;
+                                           spaceBetweenDatasets = datasetGap
+                                               * ( totalNumberOfBars - numValues );
+                                           break;
+                                       }
+        case KDChartParams::BarStacked:
+        case KDChartParams::BarPercent:
+        case KDChartParams::BarMultiRows:
+                                       totalNumberOfBars = numValues;
+                                       spaceBetweenDatasets = 0; // always 0 when stacked/percent/multi-rows
+                                       break;
+        default:
+                                       qFatal( "Unsupported bar chart type" );
     };
 
     const double barWidth =
-        (   logWidth
+          (   logWidth
             - spaceBetweenValueBlocks
             - spaceBetweenDatasets ) / totalNumberOfBars;
     const double sideBarWidth = _bThreeDBars
-                                ? ( barWidth - barWidth / (1.0 + params()->cosThreeDBarAngle()) ) *
-                                params()->threeDBarDepth()
-                                : 0.0;
+        ? ( barWidth - barWidth / (1.0 + params()->cosThreeDBarAngle()) ) *
+          params()->threeDBarDepth()
+        : 0.0;
     const double frontBarWidth = _bThreeDBars && !bMultiRows
-                                 ? barWidth - sideBarWidth
-                                 : barWidth;
+        ? barWidth - sideBarWidth
+        : barWidth;
     const double sideBarHeight = sideBarWidth;
 
     double pixelsPerUnit = 0.0;
@@ -231,15 +231,15 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
         else
             zeroXAxisI = ( logHeight - sideBarHeight ) / 2.0;
     } else {
-        zeroXAxisI =   logHeight
-                       - ordinatePara->axisZeroLineStartY()
-                       + _dataRect.y();
+        zeroXAxisI = logHeight
+            - ordinatePara->axisZeroLineStartY()
+            + _dataRect.y();
     }
 
     double shiftUpperBars =    (params()->barChartSubType() != KDChartParams::BarPercent)
-                               && (ordinatePara->axisTrueLineWidth() % 2)
-                               ? 1.0
-                               : 0.0;
+                            && (ordinatePara->axisTrueLineWidth() % 2)
+                            ? 1.0
+                            : 0.0;
 
     // Initializing drawing positions
     double yposPositivesStart = logHeight;
@@ -262,15 +262,15 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
         double yposNegatives = yposNegativesStart;
 
         double totalThreeDBarWidth = bMultiRows
-                                     ? barWidth + sideBarWidth
-                                     : barWidth;
+            ? barWidth + sideBarWidth
+            : barWidth;
 
         double nShiftX = bMultiRows
-                         ? sideBarWidth
-                         : 0.0;
+            ? sideBarWidth
+            : 0.0;
         double nShiftY = bMultiRows
-                         ? sideBarHeight
-                         : 0.0;
+            ? sideBarHeight
+            : 0.0;
 
         double valueTotal = 0.0; // valueTotal is used for percent bars only
 
@@ -304,7 +304,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                         minValueInThisColumn = QMIN( minValueInThisColumn, cellValue );
                         if( params()->barChartSubType() == KDChartParams::BarPercent )
                             valueTotal += cellValue;
-                        //qDebug("a");
+    //qDebug("a");
                     }
                 }
             }
@@ -315,12 +315,12 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
             // iterate over all datasets of this chart:
             // (but draw only the bars of this axis)
             for ( uint dataset = bMultiRows
-                                 ? chartDatasetEnd
-                                 : chartDatasetStart;
+                  ? chartDatasetEnd
+                  : chartDatasetStart;
                   dataset >= chartDatasetStart && dataset <= chartDatasetEnd;
                   bMultiRows
-                                 ? --dataset
-                                 : ++dataset ) {
+                  ? --dataset
+                  : ++dataset ) {
                 //qDebug("value   %u    dataset   %u   logHeight %f", value,dataset,logHeight);
 
                 const bool bDataEntrySourceMode
@@ -329,7 +329,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                 const KDChartData& cell = data->cell( dataset, value );
 
                 if ( cell.isDouble() ) {
-                    //qDebug("b");
+    //qDebug("b");
                     // there is a numeric value
                     double cellValue;
                     if( ordinateIsLogarithmic )
@@ -341,7 +341,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                     if ( params()->barChartSubType() == KDChartParams::BarPercent )
                         //     barHeight = ( cellValue / valueTotal ) * logHeight;
                         barHeight =   ( cellValue / valueTotal )
-                                      * fabs( zeroXAxisI - logHeight + sideBarHeight );
+                            * fabs( zeroXAxisI - logHeight + sideBarHeight );
                     else{
                         barHeight = pixelsPerUnit * cellValue;
                         if( 0.0 <= barHeight )
@@ -358,14 +358,18 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                     // draw only the bars belonging to the axis
                     // which we are processing currently
                     if( dataset >= datasetStart && dataset <= datasetEnd ) {
-                        //qDebug("b2");
+    //qDebug("b2");
 
                         // calculate Abscissa axis value, if there are X coordinates
                         // ---------------------------------------------------------
                         bool skipMe = false;
-                        if( ai.bCellsHaveSeveralCoordinates )
+                        if( ai.bCellsHaveSeveralCoordinates ){
                             skipMe = !calculateAbscissaAxisValue( cell, ai, 0,
                                                                   xpos );
+                            // adjust bar position to have it horizontally centered to the point
+                            if( ai.bAbscissaHasTrueAxisDtValues && cell.isDateTime( 2 ) )
+                              xpos -= frontBarWidth / 2.0;
+                        }
 
                         if( !skipMe ){
                             // Configure colors
@@ -377,10 +381,10 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                             const KDChartParams::LineMarkerStyle
                                 defaultMarkerStyle = params()->lineMarkerStyle( dataset );
                             const QPen defaultPen(   params()->lineColor().isValid()
-                                                     ? params()->lineColor()
-                                                     : params()->dataColor( dataset ),
-                                                     params()->lineWidth(),
-                                                     params()->lineStyle() );
+                                                ? params()->lineColor()
+                                                : params()->dataColor( dataset ),
+                                                params()->lineWidth(),
+                                                params()->lineStyle() );
 
                             // --------------------------------------------------------
                             // determine any 'extra' properties assigned to this cell
@@ -400,8 +404,8 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                                     if( propSet.hasOwnBarColor( iDummy, myBarColor ) ){
                                         // adjust the shadow colors
                                         params()->calculateShadowColors( myBarColor,
-                                                                         myShadow1Color,
-                                                                         myShadow2Color );
+                                                                        myShadow1Color,
+                                                                        myShadow2Color );
                                     }
                                 }
                             }
@@ -459,60 +463,60 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                                                 logHeight/1000.0,
                                                 bDrawExtraLinesInFront );
                                         }else if( bShowThisBar ){
-                                            if( params()->drawSolidExcessArrows() ) {
-                                                // Draw solid excess arrows
-                                                QPointArray points( 5 );
-                                                points.setPoint( 0, frontX1, static_cast<int>( yZero ) );
-                                                points.setPoint( 1, frontX2, static_cast<int>( yZero ) );
+                                        if( params()->drawSolidExcessArrows() ) {
+                                            // Draw solid excess arrows
+                                            QPointArray points( 5 );
+                                            points.setPoint( 0, frontX1, static_cast<int>( yZero ) );
+                                            points.setPoint( 1, frontX2, static_cast<int>( yZero ) );
                                                 points.setPoint( 2, frontX2, static_cast<int>( yZero + height1 - 3.0 * delta + 2 * yArrowGap ) );
                                                 points.setPoint( 3, xm, static_cast<int>( yZero + height1 + 2 * yArrowGap ) );
                                                 points.setPoint( 4, frontX1, static_cast<int>( yZero + height1 - 3.0 * delta + 2 * yArrowGap ) );
-                                                painter->drawPolygon( points );
+                                            painter->drawPolygon( points );
 
-                                                // Don't use points for drawing after this!
-                                                if( region ) {
-                                                    points.translate( _dataRect.x(), _dataRect.y() );
-                                                    *region += QRegion( points );
-                                                }
-                                            } else {
-                                                // Draw split excess arrows
-                                                QPointArray points( 5 );
-                                                points.setPoint( 0, frontX1, static_cast<int>( yZero ) );
-                                                points.setPoint( 1, frontX2, static_cast<int>( yZero ) );
-                                                points.setPoint( 2, frontX2, static_cast<int>( yZero + height1 - 3.0 * delta ) );
-                                                points.setPoint( 3, xm, static_cast<int>( yZero + height1 ) );
-                                                points.setPoint( 4, frontX1, static_cast<int>( yZero + height1 - 3.0 * delta ) );
-                                                painter->drawPolygon( points );
-                                                // Don't use points for drawing after this!
-                                                if ( region ) {
-                                                    points.translate( _dataRect.x(), _dataRect.y() );
-                                                    *region += QRegion( points );
-                                                }
-
-                                                QPointArray points2( 6 );
-                                                points2.setPoint( 0, frontX1, static_cast<int>( yZero + height1 - 3.0 * delta ) );
-                                                points2.setPoint( 1, xm, static_cast<int>( yZero + height1 ) );
-                                                points2.setPoint( 2, frontX2, static_cast<int>( yZero + height1 - 3.0 * delta ) );
-                                                points2.setPoint( 3, frontX2, static_cast<int>( yZero + height1 - 3.75 * delta ) );
-                                                points2.setPoint( 4, xm, static_cast<int>( yZero + height1 - 0.75 * delta ) );
-                                                points2.setPoint( 5, frontX1, static_cast<int>( yZero + height1 - 3.75 * delta ) );
-                                                points2.translate( 0, yArrowGap );
-                                                painter->drawPolygon( points2 );
-                                                if ( region ) {
-                                                    QPointArray points2cpy( points2 );
-                                                    points2cpy.detach();
-                                                    points2cpy.translate( _dataRect.x(),
-                                                                          _dataRect.y() );
-                                                    *region += QRegion( points2cpy );
-                                                }
-                                                points2.translate( 0, yArrowGap );
-                                                painter->drawPolygon( points2 );
-                                                // Don't use points2 for drawing after this!
-                                                if ( region ) {
-                                                    points2.translate( _dataRect.x(), _dataRect.y() );
-                                                    *region += QRegion( points2 );
-                                                }
+                                            // Don't use points for drawing after this!
+                                            if( region ) {
+                                            points.translate( _dataRect.x(), _dataRect.y() );
+                                            *region += QRegion( points );
                                             }
+                                        } else {
+                                            // Draw split excess arrows
+                                            QPointArray points( 5 );
+                                            points.setPoint( 0, frontX1, static_cast<int>( yZero ) );
+                                            points.setPoint( 1, frontX2, static_cast<int>( yZero ) );
+                                            points.setPoint( 2, frontX2, static_cast<int>( yZero + height1 - 3.0 * delta ) );
+                                            points.setPoint( 3, xm,      static_cast<int>( yZero + height1 ) );
+                                            points.setPoint( 4, frontX1, static_cast<int>( yZero + height1 - 3.0 * delta ) );
+                                            painter->drawPolygon( points );
+                                            // Don't use points for drawing after this!
+                                            if ( region ) {
+                                                points.translate( _dataRect.x(), _dataRect.y() );
+                                                *region += QRegion( points );
+                                            }
+
+                                            QPointArray points2( 6 );
+                                            points2.setPoint( 0, frontX1, static_cast<int>( yZero + height1 - 3.0 * delta ) );
+                                            points2.setPoint( 1, xm,      static_cast<int>( yZero + height1 ) );
+                                            points2.setPoint( 2, frontX2, static_cast<int>( yZero + height1 - 3.0 * delta ) );
+                                            points2.setPoint( 3, frontX2, static_cast<int>( yZero + height1 - 3.75 * delta ) );
+                                            points2.setPoint( 4, xm,      static_cast<int>( yZero + height1 - 0.75 * delta ) );
+                                            points2.setPoint( 5, frontX1, static_cast<int>( yZero + height1 - 3.75 * delta ) );
+                                            points2.translate( 0, yArrowGap );
+                                            painter->drawPolygon( points2 );
+                                            if ( region ) {
+                                                QPointArray points2cpy( points2 );
+                                                points2cpy.detach();
+                                                points2cpy.translate( _dataRect.x(),
+                                                        _dataRect.y() );
+                                                *region += QRegion( points2cpy );
+                                            }
+                                            points2.translate( 0, yArrowGap );
+                                            painter->drawPolygon( points2 );
+                                            // Don't use points2 for drawing after this!
+                                            if ( region ) {
+                                                points2.translate( _dataRect.x(), _dataRect.y() );
+                                                *region += QRegion( points2 );
+                                            }
+                                        }
                                         }
                                         painter->setClipRect( ourClipRect );
                                     } else {
@@ -526,9 +530,9 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                                         frontX1 = static_cast<int>( xpos );
                                         frontX2 = static_cast < int > ( xpos + frontBarWidth );
                                         QPoint pt1( frontX1,
-                                                    static_cast < int > ( pt1Y ) );
+                                                static_cast < int > ( pt1Y ) );
                                         QPoint pt2( frontX2,
-                                                    static_cast < int > ( yZero ) );
+                                                static_cast < int > ( yZero ) );
                                         if( pt2.y() < pt1Y ) {
                                             pt1.setY( pt2.y() );
                                             pt2.setY( static_cast<int>( pt1Y ) );
@@ -554,7 +558,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                                                 bDrawExtraLinesInFront );
                                         }else if( bShowThisBar ){
                                             QSize siz( pt2.x() - pt1.x() + 1,
-                                                       pt2.y() - pt1.y() );
+                                                    pt2.y() - pt1.y() );
                                             QRect rect( pt1, siz );
                                             painter->drawRect( rect );
 
@@ -574,7 +578,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                                     if ( tooHigh && bNormalMode ) {
                                         double delta   = -0.0125 * logHeight;
                                         double height  = -1.0 * static_cast < int > ( yZero )
-                                                         -2.0 * delta;
+                                                        -2.0 * delta;
                                         double height1 = height + -3.0 * delta;
                                         int yArrowGap = static_cast < int > ( 2.5 * delta );
                                         frontX1 = static_cast<int>( xpos );
@@ -597,76 +601,76 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                                                 logHeight/1000.0,
                                                 bDrawExtraLinesInFront );
                                         }else if( bShowThisBar ){
-                                            if( params()->drawSolidExcessArrows() ) {
-                                                // Draw solid excess arrows
-                                                QPointArray points( 5 );
-                                                points.setPoint( 0, frontX1, static_cast<int>( yZero ) );
-                                                points.setPoint( 1, frontX2, static_cast<int>( yZero ) );
+                                        if( params()->drawSolidExcessArrows() ) {
+                                            // Draw solid excess arrows
+                                            QPointArray points( 5 );
+                                            points.setPoint( 0, frontX1, static_cast<int>( yZero ) );
+                                            points.setPoint( 1, frontX2, static_cast<int>( yZero ) );
                                                 points.setPoint( 2, frontX2, static_cast<int>( yZero + height1 - 3.0 * delta + 2 * yArrowGap ) );
                                                 points.setPoint( 3, xm, static_cast<int>( yZero + height1 + 2 * yArrowGap ) );
                                                 points.setPoint( 4, frontX1, static_cast<int>( yZero + height1 - 3.0 * delta + 2 * yArrowGap ) );
-                                                painter->drawPolygon( points );
+                                            painter->drawPolygon( points );
 
-                                                // Don't use points for drawing after this!
-                                                if( region ) {
-                                                    points.translate( _dataRect.x(), _dataRect.y() );
-                                                    *region += QRegion( points );
-                                                }
-                                            } else {
-                                                // Draw split excess arrows (default)
-                                                QPointArray points( 5 );
-                                                points.setPoint( 0, frontX1, static_cast<int>( yZero ) );
-                                                points.setPoint( 1, frontX2, static_cast<int>( yZero ) );
-                                                points.setPoint( 2, frontX2, static_cast<int>( yZero + height1 - 3.0 * delta ) );
-                                                points.setPoint( 3, xm, static_cast<int>( yZero + height1 ) );
-                                                points.setPoint( 4, frontX1, static_cast<int>( yZero + height1 - 3.0 * delta ) );
-                                                painter->drawPolygon( points );
-
-                                                // Don't use points for drawing after this!
-                                                if ( region ) {
-                                                    points.translate( _dataRect.x(), _dataRect.y() );
-                                                    *region += QRegion( points );
-                                                }
-
-                                                QPointArray points2( 6 );
-                                                points2.setPoint( 0, frontX1, static_cast<int>( yZero + height1 - 3.0 * delta ) );
-                                                points2.setPoint( 1, xm, static_cast<int>( yZero + height1 ) );
-                                                points2.setPoint( 2, frontX2, static_cast<int>( yZero + height1 - 3.0 * delta ) );
-                                                points2.setPoint( 3, frontX2, static_cast<int>( yZero + height1 - 3.75 * delta ) );
-                                                points2.setPoint( 4, xm, static_cast<int>( yZero + height1 - 0.75 * delta ) );
-                                                points2.setPoint( 5, frontX1, static_cast<int>( yZero + height1 - 3.75 * delta ) );
-                                                points2.translate( 0, yArrowGap );
-                                                painter->drawPolygon( points2 );
-                                                if ( region ) {
-                                                    QPointArray points2cpy( points2 );
-                                                    points2cpy.detach();
-                                                    points2cpy.translate( _dataRect.x(),
-                                                                          _dataRect.y() );
-                                                    *region += QRegion( points2cpy );
-                                                }
-                                                points2.translate( 0, yArrowGap );
-                                                painter->drawPolygon( points2 );
-
-                                                // Don't use points2 for drawing after this!
-                                                if ( region ) {
-                                                    points2.translate( _dataRect.x(), _dataRect.y() );
-                                                    *region += QRegion( points2 );
-                                                }
+                                            // Don't use points for drawing after this!
+                                            if( region ) {
+                                            points.translate( _dataRect.x(), _dataRect.y() );
+                                            *region += QRegion( points );
                                             }
+                                        } else {
+                                            // Draw split excess arrows (default)
+                                            QPointArray points( 5 );
+                                            points.setPoint( 0, frontX1, static_cast<int>( yZero ) );
+                                            points.setPoint( 1, frontX2, static_cast<int>( yZero ) );
+                                            points.setPoint( 2, frontX2, static_cast<int>( yZero + height1 - 3.0 * delta ) );
+                                            points.setPoint( 3, xm,      static_cast<int>( yZero + height1 ) );
+                                            points.setPoint( 4, frontX1, static_cast<int>( yZero + height1 - 3.0 * delta ) );
+                                            painter->drawPolygon( points );
+
+                                            // Don't use points for drawing after this!
+                                            if ( region ) {
+                                                points.translate( _dataRect.x(), _dataRect.y() );
+                                                *region += QRegion( points );
+                                            }
+
+                                            QPointArray points2( 6 );
+                                            points2.setPoint( 0, frontX1, static_cast<int>( yZero + height1 - 3.0 * delta ) );
+                                            points2.setPoint( 1, xm,      static_cast<int>( yZero + height1 ) );
+                                            points2.setPoint( 2, frontX2, static_cast<int>( yZero + height1 - 3.0 * delta ) );
+                                            points2.setPoint( 3, frontX2, static_cast<int>( yZero + height1 - 3.75 * delta ) );
+                                            points2.setPoint( 4, xm,      static_cast<int>( yZero + height1 - 0.75 * delta ) );
+                                            points2.setPoint( 5, frontX1, static_cast<int>( yZero + height1 - 3.75 * delta ) );
+                                            points2.translate( 0, yArrowGap );
+                                            painter->drawPolygon( points2 );
+                                            if ( region ) {
+                                                QPointArray points2cpy( points2 );
+                                                points2cpy.detach();
+                                                points2cpy.translate( _dataRect.x(),
+                                                        _dataRect.y() );
+                                                *region += QRegion( points2cpy );
+                                            }
+                                            points2.translate( 0, yArrowGap );
+                                            painter->drawPolygon( points2 );
+
+                                            // Don't use points2 for drawing after this!
+                                            if ( region ) {
+                                                points2.translate( _dataRect.x(), _dataRect.y() );
+                                                *region += QRegion( points2 );
+                                            }
+                                        }
                                         }
                                         painter->setClipRect( ourClipRect );
                                     } else {
                                         //bool fromBottom = bNormalMode && !_bThreeDBars;
                                         double y0 = yposPositives - zeroXAxisI;
                                         double pt1Y =   y0
-                                                        - barHeight;
+                                            - barHeight;
                                         frontX1 = static_cast<int>( xpos );
                                         frontX2 = static_cast < int > ( xpos + frontBarWidth );
                                         QPoint pt1( frontX1,
-                                                    static_cast < int > ( pt1Y ) );
+                                                static_cast < int > ( pt1Y ) );
                                         QPoint pt2( frontX2,
-                                                    static_cast < int >
-                                                    ( y0 + shiftUpperBars ) );
+                                                static_cast < int >
+                                                ( y0 + shiftUpperBars ) );
                                         if( pt2.y() < pt1Y ) {
                                             pt1.setY( pt2.y() );
                                             pt2.setY( static_cast<int>( pt1Y ) );
@@ -692,7 +696,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                                                 bDrawExtraLinesInFront );
                                         }else if( bShowThisBar ){
                                             QSize siz( pt2.x() - pt1.x() + 1,
-                                                       pt2.y() - pt1.y() );
+                                                    pt2.y() - pt1.y() );
                                             QRect rect( pt1, siz );
                                             painter->drawRect( rect );
 
@@ -711,43 +715,43 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                                     QPointArray points( 4 );
                                     if ( barHeight < 0 ) {
                                         points.setPoint( 0,
-                                                         frontX2-1,
-                                                         QMIN( static_cast<int>( yposNegatives - zeroXAxisI ),
-                                                               maxY ) );
+                                            frontX2-1,
+                                            QMIN( static_cast<int>( yposNegatives - zeroXAxisI ),
+                                                maxY ) );
                                         points.setPoint( 1,
-                                                         frontX2-1,
-                                                         QMIN( static_cast<int>( yposNegatives - zeroXAxisI - barHeight ),
-                                                               maxY ) );
+                                            frontX2-1,
+                                            QMIN( static_cast<int>( yposNegatives - zeroXAxisI - barHeight ),
+                                                maxY ) );
                                         points.setPoint( 2,
                                                          static_cast<int>( frontX1 + totalThreeDBarWidth ),
-                                                         QMIN( static_cast<int>( yposNegatives - zeroXAxisI - barHeight - sideBarHeight ),
-                                                               maxY ) );
+                                            QMIN( static_cast<int>( yposNegatives - zeroXAxisI - barHeight - sideBarHeight ),
+                                                maxY ) );
                                         points.setPoint( 3,
                                                          static_cast<int>( frontX1 + totalThreeDBarWidth ),
-                                                         QMIN( static_cast<int>( yposNegatives - zeroXAxisI - sideBarHeight ),
-                                                               maxY ) );
+                                            QMIN( static_cast<int>( yposNegatives - zeroXAxisI - sideBarHeight ),
+                                                maxY ) );
                                     } else {
-                                        //qDebug("yposPositives: %f", yposPositives);
-                                        //qDebug("zeroXAxisI:    %f", zeroXAxisI);
-                                        //qDebug("barHeight:     %f", barHeight);
-                                        //qDebug("sideBarHeight: %f", sideBarHeight);
-                                        //qDebug("totalThreeDBarWidth: %f", totalThreeDBarWidth);
+            //qDebug("yposPositives: %f", yposPositives);
+            //qDebug("zeroXAxisI:    %f", zeroXAxisI);
+            //qDebug("barHeight:     %f", barHeight);
+            //qDebug("sideBarHeight: %f", sideBarHeight);
+            //qDebug("totalThreeDBarWidth: %f", totalThreeDBarWidth);
                                         points.setPoint( 0,
-                                                         frontX2-1,
-                                                         QMAX( static_cast<int>( yposPositives - zeroXAxisI ),
-                                                               0 ) );
+                                            frontX2-1,
+                                            QMAX( static_cast<int>( yposPositives - zeroXAxisI ),
+                                                0 ) );
                                         points.setPoint( 1,
-                                                         frontX2-1,
-                                                         QMAX( static_cast<int>( yposPositives - zeroXAxisI - barHeight ),
-                                                               0 ) );
+                                            frontX2-1,
+                                            QMAX( static_cast<int>( yposPositives - zeroXAxisI - barHeight ),
+                                                0 ) );
                                         points.setPoint( 2,
                                                          static_cast<int>( frontX1 + totalThreeDBarWidth ),
-                                                         QMAX( static_cast<int>( yposPositives - zeroXAxisI - barHeight - sideBarHeight ),
-                                                               0 ) );
+                                            QMAX( static_cast<int>( yposPositives - zeroXAxisI - barHeight - sideBarHeight ),
+                                                0 ) );
                                         points.setPoint( 3,
                                                          static_cast<int>( frontX1 + totalThreeDBarWidth ),
-                                                         QMAX( static_cast<int>( yposPositives - zeroXAxisI - sideBarHeight ),
-                                                               0 ) );
+                                            QMAX( static_cast<int>( yposPositives - zeroXAxisI - sideBarHeight ),
+                                                0 ) );
                                     }
 
                                     if ( myShadow2Color.isValid() )
@@ -756,46 +760,46 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                                         painter->setBrush( NoBrush );
                                     painter->drawPolygon( points );
                                     if ( region ) {
-                                        //qDebug("g");
+            //qDebug("g");
                                         QPointArray points2cpy( points.copy() );
-                                        //qDebug("g2");
+            //qDebug("g2");
                                         points2cpy.translate( _dataRect.x(), _dataRect.y() );
-                                        //qDebug("dataRect XY: %i / %i",_dataRect.x(), _dataRect.y());
-                                        //qDebug("g3");
+            //qDebug("dataRect XY: %i / %i",_dataRect.x(), _dataRect.y());
+            //qDebug("g3");
                                         *region += QRegion( points2cpy );
-                                        //qDebug("g4");
+            //qDebug("g4");
                                     }
 
                                     // drawing the top, but only for the topmost piece for stacked and percent
                                     if ( bNormalMode || bMultiRows ||
-                                         // For stacked and percent bars, there are three ways to determine
-                                         // the top:
-                                         // 1. all values are negative: the top is the one in the first dataset
-                                         ( maxValueInThisColumn <= 0.0 && dataset == 0 ) ||
-                                         // 2. all values are positive: the top is the one in the last dataset
-                                         ( minValueInThisColumn >= 0.0 && dataset == datasetEnd ) ||
-                                         // 3. some values are positive, some negative:
-                                         // the top is the one in the last positive
-                                         // dataset value
-                                         ( dataset == lastPositive ) ) {
+                                            // For stacked and percent bars, there are three ways to determine
+                                            // the top:
+                                            // 1. all values are negative: the top is the one in the first dataset
+                                            ( maxValueInThisColumn <= 0.0 && dataset == 0 ) ||
+                                            // 2. all values are positive: the top is the one in the last dataset
+                                            ( minValueInThisColumn >= 0.0 && dataset == datasetEnd ) ||
+                                            // 3. some values are positive, some negative:
+                                            // the top is the one in the last positive
+                                            // dataset value
+                                            ( dataset == lastPositive ) ) {
                                         if ( barHeight < 0 ) {
                                             points.setPoint( 0, frontX1,
-                                                             static_cast<int>( yposNegatives - zeroXAxisI ) );
+                                                    static_cast<int>( yposNegatives - zeroXAxisI ) );
                                             points.setPoint( 1, static_cast<int>( frontX1 + sideBarWidth ),
-                                                             static_cast<int>( yposNegatives - zeroXAxisI - sideBarHeight ) );
+                                                    static_cast<int>( yposNegatives - zeroXAxisI - sideBarHeight ) );
                                             points.setPoint( 2, static_cast<int>( frontX1 + totalThreeDBarWidth - 1 ),
-                                                             static_cast<int>( yposNegatives - zeroXAxisI - sideBarHeight ) );
+                                                    static_cast<int>( yposNegatives - zeroXAxisI - sideBarHeight ) );
                                             points.setPoint( 3, frontX2-1,
-                                                             static_cast<int>( yposNegatives - zeroXAxisI ) );
+                                                    static_cast<int>( yposNegatives - zeroXAxisI ) );
                                         } else {
                                             points.setPoint( 0, frontX1,
-                                                             static_cast<int>( yposPositives - zeroXAxisI - barHeight ) );
+                                                    static_cast<int>( yposPositives - zeroXAxisI - barHeight ) );
                                             points.setPoint( 1, static_cast<int>( frontX1 + sideBarWidth ),
-                                                             static_cast<int>( yposPositives - zeroXAxisI - barHeight - sideBarHeight ) );
+                                                    static_cast<int>( yposPositives - zeroXAxisI - barHeight - sideBarHeight ) );
                                             points.setPoint( 2, static_cast<int>( frontX1 + totalThreeDBarWidth - 1 ),
-                                                             static_cast<int>( yposPositives - zeroXAxisI - barHeight - sideBarHeight ) );
+                                                    static_cast<int>( yposPositives - zeroXAxisI - barHeight - sideBarHeight ) );
                                             points.setPoint( 3, frontX2-1,
-                                                             static_cast<int>( yposPositives - zeroXAxisI - barHeight ) );
+                                                    static_cast<int>( yposPositives - zeroXAxisI - barHeight ) );
                                         }
                                         if ( barHeight < 0 )
                                             painter->setBrush( bMultiRows ? myBarColor : black );
@@ -812,7 +816,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                                     }
                                 }//if ( _bThreeDBars )
 
-                                if ( regions && region ) {
+                                if( regions && region ) {
                                     if( bShowThisBar && !bDrawExtraLines )
                                         regions->append( new KDChartDataRegion( *region, dataset, value, chart ) );
                                     delete region;
@@ -825,7 +829,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 
                     // Vertical advancement in stacked or percent only if there was a value
                     if ( params()->barChartSubType() == KDChartParams::BarStacked ||
-                         params()->barChartSubType() == KDChartParams::BarPercent )
+                            params()->barChartSubType() == KDChartParams::BarPercent )
                         if ( barHeight < 0.0 )
                             yposNegatives -= barHeight;
                         else
@@ -837,8 +841,8 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                 // advance only if the next dataset has DataEntry mode
                 bool bAdvanceToNextValue =
                     (    bMultiRows ? (dataset == chartDatasetStart) : (dataset == chartDatasetEnd)
-                         || (    params()->chartSourceMode( bMultiRows ? dataset-1 : dataset+1 )
-                                 == KDChartParams::DataEntry ) );
+                      || (    params()->chartSourceMode( bMultiRows ? dataset-1 : dataset+1 )
+                           == KDChartParams::DataEntry ) );
                 // Advance to next value; only for normal bars
                 if ( bNormalMode ) {
                     if( bAdvanceToNextValue )

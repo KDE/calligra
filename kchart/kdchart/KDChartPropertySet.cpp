@@ -1,6 +1,6 @@
 /* -*- Mode: C++ -*-
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -35,14 +35,14 @@
 #include <stdlib.h>
 
 /**
-   \file KDChartPropertySet.cpp
+  \file KDChartPropertySet.cpp
 
-   \brief Implementation of property settings of a single KDChart data cell.
-*/
+  \brief Implementation of property settings of a single KDChart data cell.
+  */
 
 /**
-   Copy Constructor.
-*/
+  Copy Constructor.
+  */
 KDChartPropertySet& KDChartPropertySet::operator=( const KDChartPropertySet& R )
 {
     mOwnID = R.mOwnID;
@@ -64,7 +64,7 @@ KDChartPropertySet& KDChartPropertySet::operator=( const KDChartPropertySet& R )
     mIdExtraMarkersColor = R.mIdExtraMarkersColor; mExtraMarkersColor = R.mExtraMarkersColor;
     mIdExtraMarkersStyle = R.mIdExtraMarkersStyle; mExtraMarkersStyle = R.mExtraMarkersStyle;
     return *this;
-}
+};
 
 
 void KDChartPropertySet::fillValueMembersWithDummyValues()
@@ -137,9 +137,9 @@ QDomElement KDChartPropertySet::saveXML(QDomDocument& doc) const
     QDomElement specMarkerStElem = doc.createElement(   "ExtraMarkersStyle" );
     propertySetElement.appendChild( specMarkerStElem );
     specMarkerStElem.setAttribute("Style",
-                                  KDChartParams::lineMarkerStyleToString(    (KDChartParams::LineMarkerStyle)mExtraMarkersStyle));
+            KDChartParams::lineMarkerStyleToString(    (KDChartParams::LineMarkerStyle)mExtraMarkersStyle));
     return propertySetElement;
-}
+};
 
 bool KDChartPropertySet::loadXML( const QDomElement& element, KDChartPropertySet& set )
 {
@@ -165,115 +165,115 @@ bool KDChartPropertySet::loadXML( const QDomElement& element, KDChartPropertySet
                         if( KDXML::readStringNode( element, s ) )
                             set.mName = s;
                     } else
-                        // normal bar properties:
+                    // normal bar properties:
                         if( tagName == "IDShowBar" ) {
-                            if( KDXML::readIntNode( element, i ) )
-                                set.mIdShowBar = i;
-                        } else if( tagName ==   "ShowBar" ) {
-                            if( KDXML::readBoolNode( element, bValue ) )
-                                set.mShowBar = bValue;
-                        } else if( tagName == "IDBarColor" ) {
-                            if( KDXML::readIntNode( element, i ) )
-                                set.mIdBarColor = i;
-                        } else if( tagName ==   "BarColor" ) {
-                            if( KDXML::readColorNode( element, color ) )
-                                set.mBarColor = color;
-                        } else
-                            // normal line properties:
-                            if( tagName == "IDLineWidth" ) {
-                                if( KDXML::readIntNode( element, i ) )
-                                    set.mIdLineWidth = i;
-                            } else if( tagName ==   "LineWidth" ) {
-                                if( KDXML::readIntNode( element, i ) )
-                                    set.mLineWidth = i;
-                            } else if( tagName == "IDLineColor" ) {
-                                if( KDXML::readIntNode( element, i ) )
-                                    set.mIdLineColor = i;
-                            } else if( tagName ==   "LineColor" ) {
-                                if( KDXML::readColorNode( element, color ) )
-                                    set.mLineColor = color;
-                            } else if( tagName == "IDLineStyle" ) {
-                                if( KDXML::readIntNode( element, i ) )
-                                    set.mIdLineStyle = i;
-                            } else if( tagName ==   "LineStyle" ) {
-                                if( element.hasAttribute( "Style" ) )
-                                    set.mLineStyle = KDXML::stringToPenStyle( element.attribute( "Style" ) );
-                            } else
-                                // normal marker properties:
-                                if( tagName == "IDShowMarker" ) {
-                                    if( KDXML::readIntNode( element, i ) )
-                                        set.mIdShowMarker = i;
-                                } else if( tagName ==   "ShowMarker" ) {
-                                    if( KDXML::readBoolNode( element, bValue ) )
-                                        set.mShowMarker = bValue;
-                                } else
-                                    // extra lines:
-                                    if( tagName == "IDExtraLinesAlign" ) {
-                                        if( KDXML::readIntNode( element, i ) )
-                                            set.mIdExtraLinesAlign = i;
-                                    } else if( tagName ==   "ExtraLinesAlign" ) {
-                                        if( KDXML::readIntNode( element, i ) )
-                                            set.mExtraLinesAlign = i;
-                                    } else if( tagName == "IDExtraLinesInFront" ) {
-                                        if( KDXML::readIntNode( element, i ) )
-                                            set.mIdExtraLinesInFront = i;
-                                    } else if( tagName ==   "ExtraLinesInFront" ) {
-                                        if( KDXML::readBoolNode( element, bValue ) )
-                                            set.mExtraLinesInFront = bValue;
-                                    } else if( tagName == "IDExtraLinesLength" ) {
-                                        if( KDXML::readIntNode( element, i ) )
-                                            set.mIdExtraLinesLength = i;
-                                    } else if( tagName ==   "ExtraLinesLength" ) {
-                                        if( KDXML::readIntNode( element, i ) )
-                                            set.mExtraLinesLength = i;
-                                    } else if( tagName == "IDExtraLinesWidth" ) {
-                                        if( KDXML::readIntNode( element, i ) )
-                                            set.mIdExtraLinesWidth = i;
-                                    } else if( tagName ==   "ExtraLinesWidth" ) {
-                                        if( KDXML::readIntNode( element, i ) )
-                                            set.mExtraLinesWidth = i;
-                                    } else if( tagName == "IDExtraLinesColor" ) {
-                                        if( KDXML::readIntNode( element, i ) )
-                                            set.mIdExtraLinesColor = i;
-                                    } else if( tagName ==   "ExtraLinesColor" ) {
-                                        if( KDXML::readColorNode( element, color ) )
-                                            set.mExtraLinesColor = color;
-                                    } else if( tagName == "IDExtraLinesStyle" ) {
-                                        if( KDXML::readIntNode( element, i ) )
-                                            set.mIdExtraLinesStyle = i;
-                                    } else if( tagName ==   "ExtraLinesStyle" ) {
-                                        if( element.hasAttribute( "Style" ) )
-                                            set.mExtraLinesStyle = KDXML::stringToPenStyle( element.attribute( "Style" ) );
-                                    } else
-                                        // extra markers:
-                                        if( tagName == "IDExtraMarkersAlign" ) {
-                                            if( KDXML::readIntNode( element, i ) )
-                                                set.mIdExtraMarkersAlign = i;
-                                        } else if( tagName ==   "ExtraMarkersAlign" ) {
-                                            if( KDXML::readIntNode( element, i ) )
-                                                set.mExtraMarkersAlign = i;
-                                        } else if( tagName == "IDExtraMarkersSize" ) {
-                                            if( KDXML::readIntNode( element, i ) )
-                                                set.mIdExtraMarkersSize = i;
-                                        } else if( tagName ==   "ExtraMarkersSize" ) {
-                                            if( KDXML::readSizeNode( element, size ) )
-                                                set.mExtraMarkersSize = size;
-                                        } else if( tagName == "IDExtraMarkersColor" ) {
-                                            if( KDXML::readIntNode( element, i ) )
-                                                set.mIdExtraMarkersColor = i;
-                                        } else if( tagName ==   "ExtraMarkersColor" ) {
-                                            if( KDXML::readColorNode( element, color ) )
-                                                set.mExtraMarkersColor = color;
-                                        } else if( tagName == "IDExtraMarkersStyle" ) {
-                                            if( KDXML::readIntNode( element, i ) )
-                                                set.mIdExtraMarkersStyle = i;
-                                        } else if( tagName ==   "ExtraMarkersStyle" ) {
-                                            if( element.hasAttribute( "Style" ) )
-                                                set.mExtraMarkersStyle
-                                                    = KDChartParams::stringToLineMarkerStyle( element.attribute( "Style" ) );
-                                        } else {
-                                            qDebug( "Unknown subelement of KDChartPropertySet found: %s", tagName.latin1() );
-                                        }
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdShowBar = i;
+                    } else if( tagName ==   "ShowBar" ) {
+                        if( KDXML::readBoolNode( element, bValue ) )
+                            set.mShowBar = bValue;
+                    } else if( tagName == "IDBarColor" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdBarColor = i;
+                    } else if( tagName ==   "BarColor" ) {
+                        if( KDXML::readColorNode( element, color ) )
+                            set.mBarColor = color;
+                    } else
+                    // normal line properties:
+                        if( tagName == "IDLineWidth" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdLineWidth = i;
+                    } else if( tagName ==   "LineWidth" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mLineWidth = i;
+                    } else if( tagName == "IDLineColor" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdLineColor = i;
+                    } else if( tagName ==   "LineColor" ) {
+                        if( KDXML::readColorNode( element, color ) )
+                            set.mLineColor = color;
+                    } else if( tagName == "IDLineStyle" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdLineStyle = i;
+                    } else if( tagName ==   "LineStyle" ) {
+                        if( element.hasAttribute( "Style" ) )
+                            set.mLineStyle = KDXML::stringToPenStyle( element.attribute( "Style" ) );
+                    } else
+                        // normal marker properties:
+                        if( tagName == "IDShowMarker" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdShowMarker = i;
+                    } else if( tagName ==   "ShowMarker" ) {
+                        if( KDXML::readBoolNode( element, bValue ) )
+                            set.mShowMarker = bValue;
+                    } else
+                        // extra lines:
+                        if( tagName == "IDExtraLinesAlign" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdExtraLinesAlign = i;
+                    } else if( tagName ==   "ExtraLinesAlign" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mExtraLinesAlign = i;
+                    } else if( tagName == "IDExtraLinesInFront" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdExtraLinesInFront = i;
+                    } else if( tagName ==   "ExtraLinesInFront" ) {
+                        if( KDXML::readBoolNode( element, bValue ) )
+                            set.mExtraLinesInFront = bValue;
+                    } else if( tagName == "IDExtraLinesLength" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdExtraLinesLength = i;
+                    } else if( tagName ==   "ExtraLinesLength" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mExtraLinesLength = i;
+                    } else if( tagName == "IDExtraLinesWidth" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdExtraLinesWidth = i;
+                    } else if( tagName ==   "ExtraLinesWidth" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mExtraLinesWidth = i;
+                    } else if( tagName == "IDExtraLinesColor" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdExtraLinesColor = i;
+                    } else if( tagName ==   "ExtraLinesColor" ) {
+                        if( KDXML::readColorNode( element, color ) )
+                            set.mExtraLinesColor = color;
+                    } else if( tagName == "IDExtraLinesStyle" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdExtraLinesStyle = i;
+                    } else if( tagName ==   "ExtraLinesStyle" ) {
+                        if( element.hasAttribute( "Style" ) )
+                            set.mExtraLinesStyle = KDXML::stringToPenStyle( element.attribute( "Style" ) );
+                    } else
+                        // extra markers:
+                        if( tagName == "IDExtraMarkersAlign" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdExtraMarkersAlign = i;
+                    } else if( tagName ==   "ExtraMarkersAlign" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mExtraMarkersAlign = i;
+                    } else if( tagName == "IDExtraMarkersSize" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdExtraMarkersSize = i;
+                    } else if( tagName ==   "ExtraMarkersSize" ) {
+                        if( KDXML::readSizeNode( element, size ) )
+                            set.mExtraMarkersSize = size;
+                    } else if( tagName == "IDExtraMarkersColor" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdExtraMarkersColor = i;
+                    } else if( tagName ==   "ExtraMarkersColor" ) {
+                        if( KDXML::readColorNode( element, color ) )
+                            set.mExtraMarkersColor = color;
+                    } else if( tagName == "IDExtraMarkersStyle" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdExtraMarkersStyle = i;
+                    } else if( tagName ==   "ExtraMarkersStyle" ) {
+                        if( element.hasAttribute( "Style" ) )
+                            set.mExtraMarkersStyle
+                                = KDChartParams::stringToLineMarkerStyle( element.attribute( "Style" ) );
+                    } else {
+                        qDebug( "Unknown subelement of KDChartPropertySet found: %s", tagName.latin1() );
+                    }
                 }
                 node = node.nextSibling();
             }

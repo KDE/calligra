@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -31,7 +30,7 @@
 #include <qbitmap.h>
 #include <qpixmap.h>
 #include <math.h>
-#include <limits.h>
+#include <climits>
 
 #include <KDDrawText.h>
 
@@ -40,88 +39,88 @@
 #endif
 
 void KDDrawText::drawRotatedText( QPainter* painter,
-                                  float  degrees,
-                                  QPoint anchor,
-                                  const QString& text,
-                                  const QFont* font,
-                                  int align,
-                                  bool showAnchor,
-                                  const QFontMetrics* fontMet,
-                                  bool noFirstrotate,
-                                  bool noBackrotate,
-                                  KDDrawTextRegionAndTrueRect* infos,
-                                  bool optimizeOutputForScreen )
+        float  degrees,
+        QPoint anchor,
+        const QString& text,
+        const QFont* font,
+        int align,
+        bool showAnchor,
+        const QFontMetrics* fontMet,
+        bool noFirstrotate,
+        bool noBackrotate,
+        KDDrawTextRegionAndTrueRect* infos,
+        bool optimizeOutputForScreen )
 {
     drawRotatedTxt( painter,
-                    optimizeOutputForScreen,
-                    degrees,
-                    anchor,
-                    text,
-                    font,
-                    align,
-                    showAnchor,
-                    INT_MAX,
-                    INT_MAX,
-                    fontMet,
-                    false,
-                    0 != infos,
-                    noFirstrotate,
-                    noBackrotate,
-                    infos );
+            optimizeOutputForScreen,
+            degrees,
+            anchor,
+            text,
+            font,
+            align,
+            showAnchor,
+            INT_MAX,
+            INT_MAX,
+            fontMet,
+            false,
+            0 != infos,
+            noFirstrotate,
+            noBackrotate,
+            infos );
 }
 
 
 KDDrawTextRegionAndTrueRect KDDrawText::measureRotatedText(
-    QPainter* painter,
-    float  degrees,
-    QPoint anchor,
-    const QString& text,
-    const QFont* font,
-    int align,
-    const QFontMetrics* fontMet,
-    bool noFirstrotate,
-    bool noBackrotate,
-    int addPercentOfHeightToRegion )
+        QPainter* painter,
+        float  degrees,
+        QPoint anchor,
+        const QString& text,
+        const QFont* font,
+        int align,
+        const QFontMetrics* fontMet,
+        bool noFirstrotate,
+        bool noBackrotate,
+        int addPercentOfHeightToRegion )
 {
     KDDrawTextRegionAndTrueRect infos;
     drawRotatedTxt( painter,
-                    false,
-                    degrees,
-                    anchor,
-                    text,
-                    font,
-                    align,
-                    false,
-                    INT_MAX,
-                    INT_MAX,
-                    fontMet,
-                    true,
-                    false,
-                    noFirstrotate,
-                    noBackrotate,
-                    &infos,
-                    addPercentOfHeightToRegion );
+            false,
+            degrees,
+            anchor,
+            text,
+            font,
+            align,
+            false,
+            INT_MAX,
+            INT_MAX,
+            fontMet,
+            true,
+            false,
+            noFirstrotate,
+            noBackrotate,
+            &infos,
+            addPercentOfHeightToRegion );
     return infos;
 }
 
 
 void KDDrawText::drawRotatedTxt( QPainter* painter,
-                                 bool optimizeOutputForScreen,
-                                 float  degrees,
-                                 QPoint anchor,
-                                 const QString& text,
-                                 const QFont* font,
-                                 int align,
-                                 bool showAnchor,
-                                 int txtWidth,
-                                 int txtHeight,
-                                 const QFontMetrics* fontMet,
-                                 bool calculateOnly,
-                                 bool doNotCalculate,
-                                 bool noFirstrotate,
-                                 bool noBackrotate,
-                                 KDDrawTextRegionAndTrueRect* infos,
-                                 int addPercentOfHeightToRegion )
+        bool optimizeOutputForScreen,
+        float  degrees,
+        QPoint anchor,
+        const QString& text,
+        const QFont* font,
+        int align,
+        bool showAnchor,
+        int txtWidth,
+        int txtHeight,
+        const QFontMetrics* fontMet,
+        bool calculateOnly,
+        bool doNotCalculate,
+        bool noFirstrotate,
+        bool noBackrotate,
+        KDDrawTextRegionAndTrueRect* infos,
+        int addPercentOfHeightToRegion )
 {
 //qDebug("\nanchor: "+QString::number(anchor.x())
 //             +" / "+QString::number(anchor.y()));
@@ -151,8 +150,8 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
     else
     {
         QFontMetrics* pFM = fontMet
-                            ? (QFontMetrics*)fontMet
-                            : new QFontMetrics( painter->font() );
+            ? (QFontMetrics*)fontMet
+            : new QFontMetrics( painter->font() );
         int nLF = text.contains('\n');
         if( INT_MAX == txtWidth ) {
             if( nLF ){
@@ -203,33 +202,33 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
 //             +" / "+QString::number(y));
     if( !useInfos && !optimizeOutputForScreen ) {
         switch( align & ( Qt::AlignLeft | Qt::AlignRight | Qt::AlignHCenter ) ) {
-        case Qt::AlignLeft:
-            break;
-        case Qt::AlignRight:
-            x -= txtWidth;
-            break;
-        case Qt::AlignHCenter:
-            x -= txtWidth - txtWidth/2;
-            break;
+            case Qt::AlignLeft:
+                break;
+            case Qt::AlignRight:
+                x -= txtWidth;
+                break;
+            case Qt::AlignHCenter:
+                x -= txtWidth - txtWidth/2;
+                break;
         }
         switch( align & ( Qt::AlignTop | Qt::AlignBottom | Qt::AlignVCenter ) ) {
-        case Qt::AlignTop:
-            break;
-        case Qt::AlignBottom:
-            y -= txtHeight;
-            break;
-        case Qt::AlignVCenter:
-            y -= txtHeight/2;
-            break;
+            case Qt::AlignTop:
+                break;
+            case Qt::AlignBottom:
+                y -= txtHeight;
+                break;
+            case Qt::AlignVCenter:
+                y -= txtHeight/2;
+                break;
         }
     }
     if( infos && !useInfos ) {
         infos->x = x;
         infos->y = y;
         QRect rect( painter->boundingRect( x, y,
-                                           txtWidth, txtHeight,
-                                           Qt::AlignLeft + Qt::AlignTop,
-                                           text ) );
+                    txtWidth, txtHeight,
+                    Qt::AlignLeft + Qt::AlignTop,
+                    text ) );
         QPoint topLeft(     painter->xForm( rect.topLeft()     ) );
         QPoint topRight(    painter->xForm( rect.topRight()    ) );
         QPoint bottomRight( painter->xForm( rect.bottomRight() ) );
@@ -237,9 +236,9 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
         int additor = addPercentOfHeightToRegion * txtHeight / 100;
         QPointArray points;
         points.setPoints( 4, topLeft.x()-additor,     topLeft.y()-additor,
-                          topRight.x()+additor,    topRight.y()-additor,
-                          bottomRight.x()+additor, bottomRight.y()+additor,
-                          bottomLeft.x()-additor,  bottomLeft.y()+additor );
+                topRight.x()+additor,    topRight.y()-additor,
+                bottomRight.x()+additor, bottomRight.y()+additor,
+                bottomLeft.x()-additor,  bottomLeft.y()+additor );
         infos->region = QRegion( points );
     }
 
@@ -331,21 +330,21 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
             }
 
             /*
-              painter->setPen( QColor( Qt::black ) );
-              painter->drawLine( x-13,  y,    x+13,  y    );
-              painter->drawLine( x,     y-13, x,     y+13 );
-              painter->setPen( QColor( Qt::blue ) );
-              painter->drawLine( x+pTopLeft.x()-3,   y+pTopLeft.y(),   x+pTopLeft.x()+3,   y+pTopLeft.y()   );
-              painter->drawLine( x+pTopLeft.x(),     y+pTopLeft.y()-3, x+pTopLeft.x(),     y+pTopLeft.y()+3 );
-              painter->setPen( QColor( Qt::red ) );
-              painter->drawLine( x+pTopRight.x()-3,   y+pTopRight.y(),   x+pTopRight.x()+3,   y+pTopRight.y()   );
-              painter->drawLine( x+pTopRight.x(),     y+pTopRight.y()-3, x+pTopRight.x(),     y+pTopRight.y()+3 );
-              painter->setPen( QColor( Qt::green ) );
-              painter->drawLine( x+pBotLeft.x()-3,   y+pBotLeft.y(),   x+pBotLeft.x()+3,   y+pBotLeft.y()   );
-              painter->drawLine( x+pBotLeft.x(),     y+pBotLeft.y()-3, x+pBotLeft.x(),     y+pBotLeft.y()+3 );
-              painter->setPen( QColor( Qt::yellow ) );
-              painter->drawLine( x+pBotRight.x()-3,   y+pBotRight.y(),   x+pBotRight.x()+3,   y+pBotRight.y()   );
-              painter->drawLine( x+pBotRight.x(),     y+pBotRight.y()-3, x+pBotRight.x(),     y+pBotRight.y()+3 );
+            painter->setPen( QColor( Qt::black ) );
+            painter->drawLine( x-13,  y,    x+13,  y    );
+            painter->drawLine( x,     y-13, x,     y+13 );
+            painter->setPen( QColor( Qt::blue ) );
+            painter->drawLine( x+pTopLeft.x()-3,   y+pTopLeft.y(),   x+pTopLeft.x()+3,   y+pTopLeft.y()   );
+            painter->drawLine( x+pTopLeft.x(),     y+pTopLeft.y()-3, x+pTopLeft.x(),     y+pTopLeft.y()+3 );
+            painter->setPen( QColor( Qt::red ) );
+            painter->drawLine( x+pTopRight.x()-3,   y+pTopRight.y(),   x+pTopRight.x()+3,   y+pTopRight.y()   );
+            painter->drawLine( x+pTopRight.x(),     y+pTopRight.y()-3, x+pTopRight.x(),     y+pTopRight.y()+3 );
+            painter->setPen( QColor( Qt::green ) );
+            painter->drawLine( x+pBotLeft.x()-3,   y+pBotLeft.y(),   x+pBotLeft.x()+3,   y+pBotLeft.y()   );
+            painter->drawLine( x+pBotLeft.x(),     y+pBotLeft.y()-3, x+pBotLeft.x(),     y+pBotLeft.y()+3 );
+            painter->setPen( QColor( Qt::yellow ) );
+            painter->drawLine( x+pBotRight.x()-3,   y+pBotRight.y(),   x+pBotRight.x()+3,   y+pBotRight.y()   );
+            painter->drawLine( x+pBotRight.x(),     y+pBotRight.y()-3, x+pBotRight.x(),     y+pBotRight.y()+3 );
             */
 
             // The horizontal and vertical alignment together define one of
@@ -355,54 +354,54 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
 
             QPoint pixPoint;
             switch( hAlign ) {
-            case Qt::AlignLeft:
-                switch( vAlign ) {
-                case Qt::AlignTop:
-                    pixPoint = pTopLeft;
+                case Qt::AlignLeft:
+                    switch( vAlign ) {
+                        case Qt::AlignTop:
+                            pixPoint = pTopLeft;
+                            break;
+                        case Qt::AlignBottom:
+                            pixPoint = pBotLeft;
+                            break;
+                        case Qt::AlignVCenter:
+                        default:
+                            pixPoint = QPoint( (pTopLeft.x() + pBotLeft.x()) / 2,
+                                               (pTopLeft.y() + pBotLeft.y()) / 2 );
+                            break;
+                    }
                     break;
-                case Qt::AlignBottom:
-                    pixPoint = pBotLeft;
+                case Qt::AlignRight:
+                    switch( vAlign ) {
+                        case Qt::AlignTop:
+                            pixPoint = pTopRight;
+                            break;
+                        case Qt::AlignBottom:
+                            pixPoint = pBotRight;
+                            break;
+                        case Qt::AlignVCenter:
+                        default:
+                            pixPoint = QPoint( (pTopRight.x() + pBotRight.x()) / 2,
+                                               (pTopRight.y() + pBotRight.y()) / 2 );
+                            break;
+                    }
                     break;
-                case Qt::AlignVCenter:
+                case Qt::AlignHCenter:
                 default:
-                    pixPoint = QPoint( (pTopLeft.x() + pBotLeft.x()) / 2,
-                                       (pTopLeft.y() + pBotLeft.y()) / 2 );
+                    switch( vAlign ) {
+                        case Qt::AlignTop:
+                            pixPoint = QPoint( (pTopLeft.x() + pTopRight.x()) / 2,
+                                               (pTopLeft.y() + pTopRight.y()) / 2 );
+                            break;
+                        case Qt::AlignBottom:
+                            pixPoint = QPoint( (pBotLeft.x() + pBotRight.x()) / 2,
+                                               (pBotLeft.y() + pBotRight.y()) / 2 );
+                            break;
+                        case Qt::AlignVCenter:
+                        default:
+                            pixPoint = QPoint( (pTopLeft.x() + pBotRight.x()) / 2,
+                                               (pTopLeft.y() + pBotRight.y()) / 2 );
+                            break;
+                    }
                     break;
-                }
-                break;
-            case Qt::AlignRight:
-                switch( vAlign ) {
-                case Qt::AlignTop:
-                    pixPoint = pTopRight;
-                    break;
-                case Qt::AlignBottom:
-                    pixPoint = pBotRight;
-                    break;
-                case Qt::AlignVCenter:
-                default:
-                    pixPoint = QPoint( (pTopRight.x() + pBotRight.x()) / 2,
-                                       (pTopRight.y() + pBotRight.y()) / 2 );
-                    break;
-                }
-                break;
-            case Qt::AlignHCenter:
-            default:
-                switch( vAlign ) {
-                case Qt::AlignTop:
-                    pixPoint = QPoint( (pTopLeft.x() + pTopRight.x()) / 2,
-                                       (pTopLeft.y() + pTopRight.y()) / 2 );
-                    break;
-                case Qt::AlignBottom:
-                    pixPoint = QPoint( (pBotLeft.x() + pBotRight.x()) / 2,
-                                       (pBotLeft.y() + pBotRight.y()) / 2 );
-                    break;
-                case Qt::AlignVCenter:
-                default:
-                    pixPoint = QPoint( (pTopLeft.x() + pBotRight.x()) / 2,
-                                       (pTopLeft.y() + pBotRight.y()) / 2 );
-                    break;
-                }
-                break;
             }
 //qDebug("2.:     (x / y) : "+QString::number(x)
 //             +" / "+QString::number(y));

@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -36,134 +35,134 @@
 #include <limits.h>
 
 /**
-   \file KDChartTableBase.h
+  \file KDChartTableBase.h
 
-   \brief Provides a table class holding all data values
-   that are to be used in a chart.
-*/
+  \brief Provides a table class holding all data values
+  that are to be used in a chart.
+  */
 
 
 /**
-   \brief Encapsulates all data values that are to be used in a chart.
+  \brief Encapsulates all data values that are to be used in a chart.
 
-   \note To create your data table you would <em>not</em> use a
-   \c KDChartTableDataBase but instantiate the class \c KDChartTableData.
-   The \c KDChartTableData class is an auxiliary class: depending on your
-   Qt version it will be mapped onto a \c KDChartVectorTableData or onto
-   a \c KDChartListTableData both of which are derived from
-   \c KDChartTableDataBase and implement all of its functions.
-   Thus you would create a table of 3 datasets with 25 cells each like this:
-   \verbatim
+  \note To create your data table you would <em>not</em> use a
+  \c KDChartTableDataBase but instantiate the class \c KDChartTableData.
+  The \c KDChartTableData class is an auxiliary class: depending on your
+  Qt version it will be mapped onto a \c KDChartVectorTableData or onto
+  a \c KDChartListTableData both of which are derived from
+  \c KDChartTableDataBase and implement all of its functions.
+  Thus you would create a table of 3 datasets with 25 cells each like this:
+  \verbatim
 
-   KDChartTableData myData( 3, 25 );
+        KDChartTableData myData( 3, 25 );
 
-   \endverbatim
+  \endverbatim
 
-   Data values are of type KDChartData.
+  Data values are of type KDChartData.
 
-   You may adjust or modify your table like this:
+  You may adjust or modify your table like this:
 
-   \li Entering the data can be done either manually using \c setCell()
-   or by passing a QTable to the \c importFromQTable() function.
+  \li Entering the data can be done either manually using \c setCell()
+  or by passing a QTable to the \c importFromQTable() function.
 
-   \li Performance of KD Chart can be increased by specifying the number
-   of rows and or the number of columns actually used: \c setUsedRows()
-   and/or \c setUsedCols() prevents KD Chart from iterating over thousands
-   of empty rows/cols that might follow your data cells in case your
-   table is much bigger than needed.
+  \li Performance of KD Chart can be increased by specifying the number
+  of rows and or the number of columns actually used: \c setUsedRows()
+  and/or \c setUsedCols() prevents KD Chart from iterating over thousands
+  of empty rows/cols that might follow your data cells in case your
+  table is much bigger than needed.
 
-   \li In case you want to increase your table's size without using the
-   data stored in it please call the \c expand() function with the new
-   total number of rows and cells.
+  \li In case you want to increase your table's size without using the
+  data stored in it please call the \c expand() function with the new
+  total number of rows and cells.
 
-   \li Accessing one data cell is possible by the \c cell() method,
-   see the KDChartData documentation for details on the available functions,
-   e.g. you might assign a special property set ID to all cells with a
-   future absicssa axis value:
-   \verbatim
+  \li Accessing one data cell is possible by the \c cell() method,
+  see the KDChartData documentation for details on the available functions,
+  e.g. you might assign a special property set ID to all cells with a
+  future absicssa axis value:
+  \verbatim
 
-   const QDateTime currentTime( QDateTime::currentDateTime() );
-   for( int iCell = 0;  iCell < usedValues;  ++iCell ){
-   KDChartData& cell = myData.cell( 0, iCell );
-   // assign special property set ID if X value is in the future
-   if( cell.isDateTime( 2 ) && cell.dateTimeValue( 2 ) > currentTime )
-   cell.setPropertySet( idProp_FutureValues );
-   }
+    const QDateTime currentTime( QDateTime::currentDateTime() );
+    for( int iCell = 0;  iCell < usedValues;  ++iCell ){
+        KDChartData& cell = myData.cell( 0, iCell );
+        // assign special property set ID if X value is in the future
+        if( cell.isDateTime( 2 ) && cell.dateTimeValue( 2 ) > currentTime )
+            cell.setPropertySet( idProp_FutureValues );
+    }
 
-   \endverbatim
+  \endverbatim
 
-   \note All of the other functions provided by KDChartTableDataBase are
-   either used internally by KD Chart or they are const methods
-   returning some usefull figures like the sum of all values in a row...
-*/
+  \note All of the other functions provided by KDChartTableDataBase are
+  either used internally by KD Chart or they are const methods
+  returning some usefull figures like the sum of all values in a row...
+  */
 class KDChartTableDataBase
 {
-public:
-    KDChartTableDataBase() : _sorted(false) {}
-    virtual ~KDChartTableDataBase() {}
+    public:
+        KDChartTableDataBase() : _sorted(false) {}
+        virtual ~KDChartTableDataBase() {}
 
-    // PCH: I need these to be virtual so I can override them!
-    // Other methods should also be virtual, but this is the
-    // MINIMUM I need right now.
-    virtual double maxValue( int coordinate=1 ) const;
-    virtual double minValue( int coordinate=1 ) const;
+        // PCH: I need these to be virtual so I can override them!
+        // Other methods should also be virtual, but this is the
+        // MINIMUM I need right now.
+        virtual double maxValue( int coordinate=1 ) const;
+        virtual double minValue( int coordinate=1 ) const;
 
-    QDateTime maxDtValue( int coordinate=1 ) const;
-    QDateTime minDtValue( int coordinate=1 ) const;
-    double maxColSum() const;
-    double minColSum() const;
-    double maxColSum( uint row, uint row2 ) const;
-    double minColSum( uint row, uint row2 ) const;
-    double colSum( uint col ) const;
-    double colAbsSum( uint col ) const;
-    double maxRowSum() const;
-    double minRowSum() const;
-    double rowSum( uint row ) const;
-    double rowAbsSum( uint row ) const;
-    double maxInColumn( uint col ) const;
-    double minInColumn( uint col ) const;
-    double maxInRow( uint row ) const;
-    double minInRow( uint row ) const;
-    double maxInRows( uint row, uint row2, int coordinate=1 ) const;
-    double minInRows( uint row, uint row2, int coordinate=1 ) const;
-    QDateTime maxDtInRows( uint row, uint row2, int coordinate=1 ) const;
-    QDateTime minDtInRows( uint row, uint row2, int coordinate=1 ) const;
-    uint lastPositiveCellInColumn( uint col ) const;
-    bool cellsHaveSeveralCoordinates(KDChartData::ValueType* type2Ref) const;
-    bool cellsHaveSeveralCoordinates(uint row1=0, uint row2=UINT_MAX,
-                                     KDChartData::ValueType* type2Ref=NULL) const;
-    KDChartData::ValueType cellsValueType( uint row1=0, uint row2=UINT_MAX,
-                                           int coordinate=1 ) const;
-    KDChartData::ValueType cellsValueType( int coordinate=1 ) const;
-    void importFromQTable( QTable* table );
-    void setSorted(bool sorted);
-    bool sorted() const;
-    virtual uint rows() const = 0;
-    virtual uint cols() const = 0;
-    virtual void setUsedRows( uint _rows ) = 0;
-    virtual uint usedRows() const = 0;
-    virtual void setUsedCols( uint _cols ) = 0;
-    virtual uint usedCols() const = 0;
-    virtual void setCell( uint _row, uint _col,
-                          const KDChartData& _element ) = 0;
-    virtual const KDChartData& cell( uint _row, uint _col ) const = 0;
-    virtual void expand( uint _rows, uint _cols ) = 0;
-private:
-    bool _sorted;
+        QDateTime maxDtValue( int coordinate=1 ) const;
+        QDateTime minDtValue( int coordinate=1 ) const;
+        double maxColSum() const;
+        double minColSum() const;
+        double maxColSum( uint row, uint row2 ) const;
+        double minColSum( uint row, uint row2 ) const;
+        double colSum( uint col ) const;
+        double colAbsSum( uint col ) const;
+        double maxRowSum() const;
+        double minRowSum() const;
+        double rowSum( uint row ) const;
+        double rowAbsSum( uint row ) const;
+        double maxInColumn( uint col ) const;
+        double minInColumn( uint col ) const;
+        double maxInRow( uint row ) const;
+        double minInRow( uint row ) const;
+        double maxInRows( uint row, uint row2, int coordinate=1 ) const;
+        double minInRows( uint row, uint row2, int coordinate=1 ) const;
+        QDateTime maxDtInRows( uint row, uint row2, int coordinate=1 ) const;
+        QDateTime minDtInRows( uint row, uint row2, int coordinate=1 ) const;
+        uint lastPositiveCellInColumn( uint col ) const;
+        bool cellsHaveSeveralCoordinates(KDChartData::ValueType* type2Ref) const;
+        bool cellsHaveSeveralCoordinates(uint row1=0, uint row2=UINT_MAX,
+                KDChartData::ValueType* type2Ref=NULL) const;
+        KDChartData::ValueType cellsValueType( uint row1=0, uint row2=UINT_MAX,
+                int coordinate=1 ) const;
+        KDChartData::ValueType cellsValueType( int coordinate=1 ) const;
+        void importFromQTable( QTable* table );
+        void setSorted(bool sorted);
+        bool sorted() const;
+        virtual uint rows() const = 0;
+        virtual uint cols() const = 0;
+        virtual void setUsedRows( uint _rows ) = 0;
+        virtual uint usedRows() const = 0;
+        virtual void setUsedCols( uint _cols ) = 0;
+        virtual uint usedCols() const = 0;
+        virtual void setCell( uint _row, uint _col,
+                const KDChartData& _element ) = 0;
+        virtual const KDChartData& cell( uint _row, uint _col ) const = 0;
+        virtual void expand( uint _rows, uint _cols ) = 0;
+    private:
+        bool _sorted;
 };
 
 
 inline bool KDChartTableDataBase::cellsHaveSeveralCoordinates(
-    KDChartData::ValueType* type2Ref ) const
+        KDChartData::ValueType* type2Ref ) const
 {
     return cellsHaveSeveralCoordinates( 0, UINT_MAX, type2Ref );
 }
 
 
 inline bool KDChartTableDataBase::cellsHaveSeveralCoordinates(
-    uint row1,
-    uint row2,
-    KDChartData::ValueType* type2Ref ) const
+        uint row1,
+        uint row2,
+        KDChartData::ValueType* type2Ref ) const
 {
     // return true if all wanted datasets have at least two coordinates
     // stored in all of their cells - BUT only if these coordinates are
@@ -175,14 +174,14 @@ inline bool KDChartTableDataBase::cellsHaveSeveralCoordinates(
         severalCoordinates = false;
         KDChartData::ValueType testType = KDChartData::NoValue;
         uint r2 = (UINT_MAX == row2)
-                  ? (usedRows()-1)
-                  : QMIN( row2, usedRows()-1 );
+            ? (usedRows()-1)
+            : QMIN( row2, usedRows()-1 );
         for ( uint row = row1; row <= r2; ++row ){
             for ( uint col = 0; col < usedCols(); ++col ){
                 const KDChartData& d = cell( row, col );
                 if( d.hasValue( 2 ) ){
                     if( (KDChartData::NoValue != testType) &&
-                        (d.valueType( 2 )     != testType) ){
+                            (d.valueType( 2 )     != testType) ){
                         severalCoordinates = false;
                         break;
                     }else{
@@ -203,13 +202,13 @@ inline bool KDChartTableDataBase::cellsHaveSeveralCoordinates(
 
 
 inline KDChartData::ValueType KDChartTableDataBase::cellsValueType(
-    uint row1,
-    uint row2,
-    int coordinate ) const
+        uint row1,
+        uint row2,
+        int coordinate ) const
 {
     uint r2 = (UINT_MAX == row2)
-              ? (usedRows()-1)
-              : QMIN( row2, usedRows()-1 );
+        ? (usedRows()-1)
+        : QMIN( row2, usedRows()-1 );
     for ( uint row = row1; row <= r2; ++row )
         for ( uint col = 0; col < usedCols(); ++col ) {
             const KDChartData& d = cell( row, col );
@@ -221,7 +220,7 @@ inline KDChartData::ValueType KDChartTableDataBase::cellsValueType(
 
 
 inline KDChartData::ValueType KDChartTableDataBase::cellsValueType(
-    int coordinate ) const
+        int coordinate ) const
 {
     return cellsValueType( 0, UINT_MAX, coordinate );
 }
@@ -628,7 +627,7 @@ inline double KDChartTableDataBase::minInRows( uint row, uint row2, int coordina
 
 
 inline QDateTime KDChartTableDataBase::maxDtInRows( uint row, uint row2,
-                                                    int coordinate ) const
+        int coordinate ) const
 {
     QDateTime maxValue = QDateTime( QDate(1970,1,1) );
     bool bStart = true;
@@ -658,7 +657,7 @@ inline QDateTime KDChartTableDataBase::maxDtInRows( uint row, uint row2,
 
 
 inline QDateTime KDChartTableDataBase::minDtInRows( uint row, uint row2,
-                                                    int coordinate ) const
+        int coordinate ) const
 {
     QDateTime minValue = QDateTime( QDate(1970,1,1) );
     bool bStart = true;
@@ -702,7 +701,7 @@ inline uint KDChartTableDataBase::lastPositiveCellInColumn( uint col ) const
 inline void KDChartTableDataBase::importFromQTable( QTable* table )
 {
     if( table->numRows() > (int)rows() ||
-        table->numCols() > (int)cols() )
+            table->numCols() > (int)cols() )
         expand( table->numRows(), table->numCols() );
     setUsedRows( table->numRows() );
     setUsedCols( table->numCols() );

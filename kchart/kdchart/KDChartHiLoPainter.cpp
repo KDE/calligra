@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -36,18 +35,18 @@
 #include <stdlib.h>
 
 /**
-   \class KDChartHiLoPainter KDChartHiLoPainter.h
+  \class KDChartHiLoPainter KDChartHiLoPainter.h
 
-   \brief A chart painter implementation that can paint HiLo charts.
-*/
+  \brief A chart painter implementation that can paint HiLo charts.
+  */
 
 /**
-   Constructor. Sets up internal data structures as necessary.
+  Constructor. Sets up internal data structures as necessary.
 
-   \param params the KDChartParams structure that defines the chart
-*/
-KDChartHiLoPainter::KDChartHiLoPainter( KDChartParams* params ) :
-    KDChartAxesPainter( params )
+  \param params the KDChartParams structure that defines the chart
+  */
+    KDChartHiLoPainter::KDChartHiLoPainter( KDChartParams* params ) :
+KDChartAxesPainter( params )
 {
     // This constructor intentionally left blank so far; we cannot setup the
     // geometry yet since we do not know the size of the painter.
@@ -55,8 +54,8 @@ KDChartHiLoPainter::KDChartHiLoPainter( KDChartParams* params ) :
 
 
 /**
-   Destructor.
-*/
+  Destructor.
+  */
 KDChartHiLoPainter::~KDChartHiLoPainter()
 {
     // intentionally left blank
@@ -64,18 +63,18 @@ KDChartHiLoPainter::~KDChartHiLoPainter()
 
 
 /**
-   This method is a specialization that returns a fallback legend text
-   appropriate for HiLo that do not have the same notion of a dataset like
-   e.g. bars.
+  This method is a specialization that returns a fallback legend text
+  appropriate for HiLo that do not have the same notion of a dataset like
+  e.g. bars.
 
-   This method is only used when automatic legends are used, because
-   manual and first-column legends do not need fallback texts.
+  This method is only used when automatic legends are used, because
+  manual and first-column legends do not need fallback texts.
 
-   \param uint dataset the dataset number for which to generate a
-   fallback text
-   \return the fallback text to use for describing the specified
-   dataset in the legend
-*/
+  \param uint dataset the dataset number for which to generate a
+  fallback text
+  \return the fallback text to use for describing the specified
+  dataset in the legend
+  */
 QString KDChartHiLoPainter::fallbackLegendText( uint dataset ) const
 {
     return QObject::tr( "Value " ) + QString::number( dataset + 1 );
@@ -83,14 +82,14 @@ QString KDChartHiLoPainter::fallbackLegendText( uint dataset ) const
 
 
 /**
-   This methods returns the number of elements to be shown in the
-   legend in case fallback texts are used.
+  This methods returns the number of elements to be shown in the
+  legend in case fallback texts are used.
 
-   This method is only used when automatic legends are used, because
-   manual and first-column legends do not need fallback texts.
+  This method is only used when automatic legends are used, because
+  manual and first-column legends do not need fallback texts.
 
-   \return the number of fallback texts to use
-*/
+  \return the number of fallback texts to use
+  */
 uint KDChartHiLoPainter::numLegendFallbackTexts( KDChartTableDataBase* data ) const
 {
     return data->usedRows();
@@ -108,23 +107,23 @@ int KDChartHiLoPainter::clipShiftUp( bool, double ) const
 }
 
 void KDChartHiLoPainter::specificPaintData( QPainter* painter,
-                                            const QRect& ourClipRect,
-                                            KDChartTableDataBase* data,
-                                            KDChartDataRegionList* /*regions*/,
-                                            const KDChartAxisParams* axisPara,
-                                            bool /*bNormalMode*/,
-                                            uint /*chart*/,
-                                            double logWidth,
-                                            double areaWidthP1000,
-                                            double logHeight,
-                                            double axisYOffset,
-                                            double /*minColumnValue*/,
-                                            double /*maxColumnValue*/,
-                                            double /*columnValueDistance*/,
-                                            uint chartDatasetStart,
-                                            uint chartDatasetEnd,
-                                            uint datasetStart,
-                                            uint datasetEnd )
+        const QRect& ourClipRect,
+        KDChartTableDataBase* data,
+        KDChartDataRegionList* /*regions*/,
+        const KDChartAxisParams* axisPara,
+        bool /*bNormalMode*/,
+        uint /*chart*/,
+        double logWidth,
+        double areaWidthP1000,
+        double logHeight,
+        double axisYOffset,
+        double /*minColumnValue*/,
+        double /*maxColumnValue*/,
+        double /*columnValueDistance*/,
+        uint chartDatasetStart,
+        uint chartDatasetEnd,
+        uint datasetStart,
+        uint datasetEnd )
 {
     double areaHeightP1000 = logHeight / 1000.0;
     double averageValueP1000 = ( areaWidthP1000 + areaHeightP1000 ) / 2.0;
@@ -170,14 +169,14 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
 
     // Loop over the datasets, draw one "stock" line for each series.
     for ( uint dataset  = chartDatasetStart;
-          dataset <= chartDatasetEnd;
-          ++dataset ) {
+            dataset <= chartDatasetEnd;
+            ++dataset ) {
         // The first and the second col are always high and low; we sort them
         // accordingly.
         if( dataset >= datasetStart &&
-            dataset <= datasetEnd &&
-            data->cell( dataset, 0 ).isDouble() &&
-            data->cell( dataset, 1 ).isDouble() ) {
+                dataset <= datasetEnd &&
+                data->cell( dataset, 0 ).isDouble() &&
+                data->cell( dataset, 1 ).isDouble() ) {
             double cellValue1 = data->cell( dataset, 0 ).doubleValue();
             double cellValue2 = data->cell( dataset, 1 ).doubleValue();
             double lowValue = QMIN( cellValue1, cellValue2 );
@@ -186,10 +185,10 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
             double highDrawValue = highValue * pixelsPerUnit;
 
             painter->setPen( QPen( params()->dataColor( dataset ),
-                                   nLineWidth ) );
+                             nLineWidth ) );
             // draw line from low to high
             int xpos = static_cast<int>(
-                pointDist * ( (double)(dataset-chartDatasetStart) + 0.5 ) );
+                        pointDist * ( (double)(dataset-chartDatasetStart) + 0.5 ) );
             int lowYPos  = static_cast<int>( zeroXAxisI - lowDrawValue );
             int highYPos = static_cast<int>( zeroXAxisI - highDrawValue );
 
@@ -203,7 +202,7 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
             // later when drawing the low and high labels
             bool hasOpen = false, hasClose = false;
             double openValue = 0.0, openDrawValue = 0.0,
-                  closeValue = 0.0, closeDrawValue = 0.0;
+            closeValue = 0.0, closeDrawValue = 0.0;
 
             // if we have an open/close chart, show the open value
             if( params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) {
@@ -213,9 +212,9 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                     openValue = data->cell( dataset, 2 ).doubleValue();
                     openDrawValue = openValue * pixelsPerUnit;
                     painter->drawLine( xpos - openCloseTickLength,
-                                       static_cast<int>( zeroXAxisI - openDrawValue ),
-                                       xpos,
-                                       static_cast<int>( zeroXAxisI - openDrawValue ) );
+                            static_cast<int>( zeroXAxisI - openDrawValue ),
+                            xpos,
+                            static_cast<int>( zeroXAxisI - openDrawValue ) );
                 }
             }
 
@@ -229,13 +228,13 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                   data->cell( dataset, 3 ).isDouble() ) ) {
                 hasClose = true;
                 closeValue = ( params()->hiLoChartSubType() == KDChartParams::HiLoClose ) ?
-                             data->cell( dataset, 2 ).doubleValue() :
-                             data->cell( dataset, 3 ).doubleValue();
+                    data->cell( dataset, 2 ).doubleValue() :
+                    data->cell( dataset, 3 ).doubleValue();
                 closeDrawValue = closeValue * pixelsPerUnit;
                 painter->drawLine( xpos,
-                                   static_cast<int>( zeroXAxisI - closeDrawValue ),
-                                   xpos + openCloseTickLength,
-                                   static_cast<int>( zeroXAxisI - closeDrawValue ) );
+                        static_cast<int>( zeroXAxisI - closeDrawValue ),
+                        xpos + openCloseTickLength,
+                        static_cast<int>( zeroXAxisI - closeDrawValue ) );
             }
 
             // Draw the low value, if requested.
@@ -245,11 +244,11 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                 if ( params()->hiLoChartLowValuesUseFontRelSize() ) {
                     int nTxtHeight =
                         static_cast < int > ( params()->hiLoChartLowValuesFontRelSize()
-                                              * averageValueP1000 );
+                                * averageValueP1000 );
                     theFont.setPointSizeFloat( nTxtHeight );
                 }
                 KDChartTextPiece lowText( QString::number( lowValue ),
-                                          theFont );
+                        theFont );
                 int width = lowText.width();
                 int height = lowText.height();
 
@@ -269,9 +268,9 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                         // that we can put the low value to the left.
                         valX = xpos - width - nLineWidth;
                         valY = static_cast<int>(zeroXAxisI)
-                               - lowYPos
-                               + height/2
-                               + nLineWidth/2;
+                                - lowYPos
+                                + height/2
+                                + nLineWidth/2;
                     } else
                         ; // no way to draw it (really?)
                 }
@@ -288,11 +287,11 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                 if ( params()->hiLoChartHighValuesUseFontRelSize() ) {
                     int nTxtHeight =
                         static_cast < int > ( params()->hiLoChartHighValuesFontRelSize()
-                                              * averageValueP1000 );
+                                * averageValueP1000 );
                     theFont.setPointSizeFloat( nTxtHeight );
                 }
                 KDChartTextPiece highText( QString::number( highValue ),
-                                           theFont );
+                        theFont );
                 int width = highText.width();
                 int height = highText.height();
 
@@ -310,9 +309,9 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                         // that we can put the high value to the right.
                         valX = xpos + nLineWidth;
                         valY = static_cast<int>(zeroXAxisI)
-                               - highYPos
-                               + height/2
-                               - nLineWidth/2;
+                                - highYPos
+                                + height/2
+                                - nLineWidth/2;
                     } else
                         ; // no way to draw it (really?)
                 }
@@ -324,17 +323,17 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
 
             // Draw the open value, if requested.
             if( params()->hiLoChartPrintOpenValues() &&
-                params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) {
+                    params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) {
                 // PENDING(kalle) Number formatting?
                 QFont theFont( params()->hiLoChartOpenValuesFont() );
                 if ( params()->hiLoChartOpenValuesUseFontRelSize() ) {
                     int nTxtHeight =
                         static_cast < int > ( params()->hiLoChartOpenValuesFontRelSize()
-                                              * averageValueP1000 );
+                                * averageValueP1000 );
                     theFont.setPointSizeFloat( nTxtHeight );
                 }
                 KDChartTextPiece openText( QString::number( openValue ),
-                                           theFont );
+                        theFont );
                 int width = openText.width();
                 int height = openText.height();
 
@@ -344,26 +343,26 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                 valX = xpos - openCloseTickLength - width;
                 valY = (int)openDrawValue + ( height / 2 );
                 openText.draw( painter,
-                               valX, static_cast<int>( zeroXAxisI - valY ),
-                               ourClipRect,
-                               params()->hiLoChartOpenValuesColor() );
+                        valX, static_cast<int>( zeroXAxisI - valY ),
+                        ourClipRect,
+                        params()->hiLoChartOpenValuesColor() );
             }
 
             // Draw the close value, if requested.
             if( params()->hiLoChartPrintCloseValues() &&
-                ( params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose
-                  ||
-                  params()->hiLoChartSubType() == KDChartParams::HiLoClose ) ) {
+                    ( params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose
+                      ||
+                      params()->hiLoChartSubType() == KDChartParams::HiLoClose ) ) {
                 // PENDING(kalle) Number formatting?
                 QFont theFont( params()->hiLoChartCloseValuesFont() );
                 if ( params()->hiLoChartCloseValuesUseFontRelSize() ) {
                     int nTxtHeight =
                         static_cast < int > ( params()->hiLoChartCloseValuesFontRelSize()
-                                              * averageValueP1000 );
+                                * averageValueP1000 );
                     theFont.setPointSizeFloat( nTxtHeight );
                 }
                 KDChartTextPiece closeText( QString::number( closeValue ),
-                                            theFont );
+                        theFont );
                 //int width = closeText.width();
                 int height = closeText.height();
 
@@ -373,9 +372,9 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                 valX = xpos + openCloseTickLength;
                 valY = (int)closeDrawValue + ( height / 2 );
                 closeText.draw( painter,
-                                valX, static_cast<int>( zeroXAxisI - valY ),
-                                ourClipRect,
-                                params()->hiLoChartCloseValuesColor() );
+                        valX, static_cast<int>( zeroXAxisI - valY ),
+                        ourClipRect,
+                        params()->hiLoChartCloseValuesColor() );
             }
 
         } else

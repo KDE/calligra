@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -61,13 +60,13 @@
 #endif
 
 /** \file KDChartParams.h
-    \brief Header for all common chart parameters.
+  \brief Header for all common chart parameters.
 
-    This file is used to access all chart parameters except of the
-    axis settings which you will find in \c KDChartAxisParams.h
+  This file is used to access all chart parameters except of the
+  axis settings which you will find in \c KDChartAxisParams.h
 
-    \see KDChartAxisParams.h
-*/
+  \see KDChartAxisParams.h
+  */
 
 
 typedef QMap < int, KDChartPropertySet > KDChartPropertySetList;
@@ -77,207 +76,207 @@ class KDChartParams : public QObject
 {
     Q_OBJECT
 
-public:
-    // GENERAL
+    public:
+        // GENERAL
 
-    static const uint KDCHART_ALL_AXES;
-    static const uint KDCHART_NO_AXIS;
-    static const uint KDCHART_ALL_DATASETS;
-    static const uint KDCHART_NO_DATASET;
-    static const uint KDCHART_UNKNOWN_CHART;
-    static const uint KDCHART_ALL_CHARTS;
-    static const uint KDCHART_NO_CHART;
+        static const uint KDCHART_ALL_AXES;
+        static const uint KDCHART_NO_AXIS;
+        static const uint KDCHART_ALL_DATASETS;
+        static const uint KDCHART_NO_DATASET;
+        static const uint KDCHART_UNKNOWN_CHART;
+        static const uint KDCHART_ALL_CHARTS;
+        static const uint KDCHART_NO_CHART;
 
-    static const int DATA_VALUE_AUTO_DIGITS;
+        static const int DATA_VALUE_AUTO_DIGITS;
 
-    static const int SAGITTAL_ROTATION;
-    static const int TANGENTIAL_ROTATION;
+        static const int SAGITTAL_ROTATION;
+        static const int TANGENTIAL_ROTATION;
 
-    static const int KDCHART_PROPSET_NORMAL_DATA;
-    static const int KDCHART_PROPSET_TRANSPARENT_DATA;
-    static const int KDCHART_PROPSET_HORI_LINE;
-    static const int KDCHART_PROPSET_VERT_LINE;
+        static const int KDCHART_PROPSET_NORMAL_DATA;
+        static const int KDCHART_PROPSET_TRANSPARENT_DATA;
+        static const int KDCHART_PROPSET_HORI_LINE;
+        static const int KDCHART_PROPSET_VERT_LINE;
 
-    static QColor* const DATA_VALUE_AUTO_COLOR;
+        static QColor* const DATA_VALUE_AUTO_COLOR;
 
-    static const int KDCHART_CNT_ORDINATES;
+        static const int KDCHART_CNT_ORDINATES;
 
 
-    /* we must keep this wrongly spelled value for backward compatibility reasons */
-    static const int SAGGITAL_ROTATION;
+        /* we must keep this wrongly spelled value for backward compatibility reasons */
+        static const int SAGGITAL_ROTATION;
 
 
 #define MAX_POLAR_DELIMS_AND_LABELS_POS 8
 #define KDCHART_MAX_AXES 12
 
 
-    void setOptimizeOutputForScreen( bool screenOutput )
+        void setOptimizeOutputForScreen( bool screenOutput )
         {
             _optimizeOutputForScreen = screenOutput;
         }
 
 
-    bool optimizeOutputForScreen() const
+        bool optimizeOutputForScreen() const
         {
             return _optimizeOutputForScreen;
         }
 
-    void setGlobalLeading( int left, int top, int right, int bottom );
+        void setGlobalLeading( int left, int top, int right, int bottom );
 
-    void setGlobalLeadingLeft( int leading )
+        void setGlobalLeadingLeft( int leading )
         {
             _globalLeadingLeft = leading;
             emit changed();
         }
-    void setGlobalLeadingTop( int leading )
+        void setGlobalLeadingTop( int leading )
         {
             _globalLeadingTop = leading;
             emit changed();
         }
-    void setGlobalLeadingRight( int leading )
+        void setGlobalLeadingRight( int leading )
         {
             _globalLeadingRight = leading;
             emit changed();
         }
-    void setGlobalLeadingBottom( int leading )
+        void setGlobalLeadingBottom( int leading )
         {
             _globalLeadingBottom = leading;
             emit changed();
         }
-    int globalLeadingLeft() const
+        int globalLeadingLeft() const
         {
             return _globalLeadingLeft;
         }
-    int globalLeadingTop() const
+        int globalLeadingTop() const
         {
             return _globalLeadingTop;
         }
-    int globalLeadingRight() const
+        int globalLeadingRight() const
         {
             return _globalLeadingRight;
         }
-    int globalLeadingBottom() const
+        int globalLeadingBottom() const
         {
             return _globalLeadingBottom;
         }
 
-    int registerProperties( KDChartPropertySet& rSet );
-    bool setProperties( int id, KDChartPropertySet& rSet );
-    bool removeProperties( int id );
-    bool properties( int id, KDChartPropertySet& rSet ) const;
-    bool calculateProperties( int startId, KDChartPropertySet& rSet ) const;
-    class KDChartFrameSettings
-    {
-    public:
-        KDChartFrameSettings();
-        KDChartFrameSettings( uint           dataRow,
-                              uint           dataCol,
-                              uint           data3rd,
-                              const KDFrame& frame,
-                              int            outerGapX,
-                              int            outerGapY,
-                              int            innerGapX,
-                              int            innerGapY,
-                              bool           addFrameWidthToLayout  = true,
-                              bool           addFrameHeightToLayout = true );
+        int registerProperties( KDChartPropertySet& rSet );
+        bool setProperties( int id, KDChartPropertySet& rSet );
+        bool removeProperties( int id );
+        bool properties( int id, KDChartPropertySet& rSet ) const;
+        bool calculateProperties( int startId, KDChartPropertySet& rSet ) const;
+        class KDChartFrameSettings
+        {
+            public:
+                KDChartFrameSettings();
+                KDChartFrameSettings( uint           dataRow,
+                                      uint           dataCol,
+                                      uint           data3rd,
+                                      const KDFrame& frame,
+                                      int            outerGapX,
+                                      int            outerGapY,
+                                      int            innerGapX,
+                                      int            innerGapY,
+                                      bool           addFrameWidthToLayout  = true,
+                                      bool           addFrameHeightToLayout = true );
 
-        uint dataRow() const
-            {
-                return _dataRow;
-            }
-        uint dataCol() const
-            {
-                return _dataCol;
-            }
-        uint data3rd() const
-            {
-                return _data3rd;
-            }
-
-
-        const KDFrame* framePtr() const
-            {
-                return &_frame;
-            }
+                uint dataRow() const
+                {
+                    return _dataRow;
+                }
+                uint dataCol() const
+                {
+                    return _dataCol;
+                }
+                uint data3rd() const
+                {
+                    return _data3rd;
+                }
 
 
-        const KDFrame& frame() const
-            {
-                return _frame;
-            }
+                const KDFrame* framePtr() const
+                {
+                    return &_frame;
+                }
 
 
-        int innerGapX() const
-            {
-                return _innerGapX;
-            }
+                const KDFrame& frame() const
+                {
+                    return _frame;
+                }
 
 
-        int innerGapY() const
-            {
-                return _innerGapY;
-            }
+                int innerGapX() const
+                {
+                    return _innerGapX;
+                }
 
 
-        int outerGapX() const
-            {
-                return _outerGapX;
-            }
+                int innerGapY() const
+                {
+                    return _innerGapY;
+                }
 
 
-        int outerGapY() const
-            {
-                return _outerGapY;
-            }
+                int outerGapX() const
+                {
+                    return _outerGapX;
+                }
 
 
-        bool addFrameWidthToLayout() const
-            {
-                return _addFrameWidthToLayout;
-            }
+                int outerGapY() const
+                {
+                    return _outerGapY;
+                }
 
 
-        bool addFrameHeightToLayout() const
-            {
-                return _addFrameHeightToLayout;
-            }
+                bool addFrameWidthToLayout() const
+                {
+                    return _addFrameWidthToLayout;
+                }
 
 
-        virtual ~KDChartFrameSettings();
+                bool addFrameHeightToLayout() const
+                {
+                    return _addFrameHeightToLayout;
+                }
 
 
-        static void createFrameSettingsNode( QDomDocument& document,
-                                             QDomNode& parent,
-                                             const QString& elementName,
-                                             const KDChartFrameSettings* settings,
-                                             uint areaId );
-
-        static bool readFrameSettingsNode( const QDomElement& element,
-                                           KDChartFrameSettings& settings,
-                                           uint& areaId );
-
-    private:
-        uint    _dataRow;
-        uint    _dataCol;
-        uint    _data3rd;
-        KDFrame _frame;
-        int     _outerGapX;
-        int     _outerGapY;
-        int     _innerGapX;
-        int     _innerGapY;
-        bool    _addFrameWidthToLayout;
-        bool    _addFrameHeightToLayout;
-    };
+                virtual ~KDChartFrameSettings();
 
 
-    void setFrame( uint           area,
-                   const KDFrame& frame,
-                   int            outerGapX,
-                   int            outerGapY,
-                   int            innerGapX,
-                   int            innerGapY,
-                   bool           addFrameWidthToLayout = true,
-                   bool           addFrameHeightToLayout = true )
+                static void createFrameSettingsNode( QDomDocument& document,
+                        QDomNode& parent,
+                        const QString& elementName,
+                        const KDChartFrameSettings* settings,
+                        uint areaId );
+
+                static bool readFrameSettingsNode( const QDomElement& element,
+                        KDChartFrameSettings& settings,
+                        uint& areaId );
+
+            private:
+                uint    _dataRow;
+                uint    _dataCol;
+                uint    _data3rd;
+                KDFrame _frame;
+                int     _outerGapX;
+                int     _outerGapY;
+                int     _innerGapX;
+                int     _innerGapY;
+                bool    _addFrameWidthToLayout;
+                bool    _addFrameHeightToLayout;
+        };
+
+
+        void setFrame( uint           area,
+                       const KDFrame& frame,
+                       int            outerGapX,
+                       int            outerGapY,
+                       int            innerGapX,
+                       int            innerGapY,
+                       bool           addFrameWidthToLayout = true,
+                       bool           addFrameHeightToLayout = true )
         {
             _areaMap.insert( QString( "%1/-----/-----/-----" ).arg( area, 5 ),
                              KDChartFrameSettings( 0,0,0,
@@ -293,22 +292,22 @@ public:
 
 
 
-    void setSimpleFrame( uint        area,
-                         int      outerGapX = 0,
-                         int      outerGapY = 0,
-                         int      innerGapX = 0,
-                         int      innerGapY = 0,
-                         bool     addFrameWidthToLayout = true,
-                         bool     addFrameHeightToLayout = true,
-                         KDFrame::SimpleFrame simpleFrame  = KDFrame::FrameFlat,
-                         int                  lineWidth    = 1,
-                         int                  midLineWidth = 0,
-                         QPen                 pen          = QPen(),
-                         QBrush               background   = QBrush( Qt::NoBrush ),
-                         const QPixmap*          backPixmap     = 0, // no pixmap
-                         KDFrame::BackPixmapMode backPixmapMode = KDFrame::PixStretched,
-                         int                  shadowWidth  = 0,
-                         KDFrame::CornerName  sunPos       = KDFrame::CornerTopLeft )
+        void setSimpleFrame( uint        area,
+                             int         outerGapX = 0,
+                             int         outerGapY = 0,
+                             int         innerGapX = 0,
+                             int         innerGapY = 0,
+                             bool        addFrameWidthToLayout      = true,
+                             bool        addFrameHeightToLayout     = true,
+                             KDFrame::SimpleFrame    simpleFrame    = KDFrame::FrameFlat,
+                             int                     lineWidth      = 1,
+                             int                     midLineWidth   = 0,
+                             QPen                    pen            = QPen(),
+                             QBrush                  background     = QBrush( Qt::NoBrush ),
+                             const QPixmap*          backPixmap     = 0, // no pixmap
+                             KDFrame::BackPixmapMode backPixmapMode = KDFrame::PixStretched,
+                             int                     shadowWidth    = 0,
+                             KDFrame::CornerName     sunPos         = KDFrame::CornerTopLeft )
         {
             _areaMap.insert(
                 QString( "%1/-----/-----/-----" ).arg( area, 5 ),
@@ -334,26 +333,26 @@ public:
         }
 
 
-    void setDataRegionFrame( uint dataRow,
-                             uint dataCol,
-                             uint, // important: we ignore the data3rd parameter for now!
-                             int         innerGapX = 0,
-                             int         innerGapY = 0,
-                             bool        addFrameWidthToLayout      = true,
-                             bool        addFrameHeightToLayout     = true,
-                             KDFrame::SimpleFrame    simpleFrame    = KDFrame::FrameFlat,
-                             int                     lineWidth      = 1,
-                             int                     midLineWidth   = 0,
-                             QPen                    pen            = QPen(),
-                             int                     shadowWidth    = 0,
-                             KDFrame::CornerName     sunPos         = KDFrame::CornerTopLeft )
+        void setDataRegionFrame( uint dataRow,
+                                 uint dataCol,
+                                 uint, // important: we ignore the data3rd parameter for now!
+                                 int  innerGapX = 0,
+                                 int  innerGapY = 0,
+                                 bool addFrameWidthToLayout      = true,
+                                 bool addFrameHeightToLayout     = true,
+                                 KDFrame::SimpleFrame    simpleFrame    = KDFrame::FrameFlat,
+                                 int                     lineWidth      = 1,
+                                 int                     midLineWidth   = 0,
+                                 QPen                    pen            = QPen(),
+                                 int                     shadowWidth    = 0,
+                                 KDFrame::CornerName     sunPos         = KDFrame::CornerTopLeft )
         {
             _areaMap.insert(
                 QString( "%1/%2/%3/%4" )
-                .arg( KDChartEnums::AreaChartDataRegion, 5 )
-                .arg( dataRow, 5 )
-                .arg( dataCol, 5 )
-                .arg( 0, 5 ),//data3rd, 5 ),
+                                .arg( KDChartEnums::AreaChartDataRegion, 5 )
+                                .arg( dataRow, 5 )
+                                .arg( dataCol, 5 )
+                                .arg( 0, 5 ),//data3rd, 5 ),
                 KDChartFrameSettings(
                     dataRow,
                     dataCol,
@@ -378,202 +377,202 @@ public:
         }
 
 
-    const KDChartFrameSettings* frameSettings( uint area,
-                                               bool& bFound,
-                                               int* pIterIdx=0 ) const;
+        const KDChartFrameSettings* frameSettings( uint area,
+                                                   bool& bFound,
+                                                   int* pIterIdx=0 ) const;
 
-    const KDChartFrameSettings* nextFrameSettings( bool& bFound,
-                                                   int* pIterIdx ) const;
+        const KDChartFrameSettings* nextFrameSettings( bool& bFound,
+                                                       int* pIterIdx ) const;
 
 
-    typedef QMap < uint, KDChartCustomBox > CustomBoxMap;
+        typedef QMap < uint, KDChartCustomBox > CustomBoxMap;
 
-    uint insertCustomBox( const KDChartCustomBox & box );
-    bool removeCustomBox( const uint & idx );
+        uint insertCustomBox( const KDChartCustomBox & box );
+        bool removeCustomBox( const uint & idx );
 
-    void removeAllCustomBoxes()
+        void removeAllCustomBoxes()
         {
             emit changed();
             _customBoxMap.clear();
         }
 
-    KDChartCustomBox* customBoxRef( uint box );
-    const KDChartCustomBox* customBox( uint box ) const;
-    uint maxCustomBoxIdx() const;
+        KDChartCustomBox* customBoxRef( uint box );
+        const KDChartCustomBox* customBox( uint box ) const;
+        uint maxCustomBoxIdx() const;
 
 
-    enum ChartType { NoType, Bar, Line, Area, Pie, HiLo, Ring, Polar, BoxWhisker };
+        enum ChartType { NoType, Bar, Line, Area, Pie, HiLo, Ring, Polar, BoxWhisker };
 
-    void setChartType( ChartType chartType );
-    ChartType chartType() const
+        void setChartType( ChartType chartType );
+        ChartType chartType() const
         {
             return _chartType;
         }
 
 
-    static QString chartTypeToString( ChartType type );
-    static ChartType stringToChartType( const QString& string );
+        static QString chartTypeToString( ChartType type );
+        static ChartType stringToChartType( const QString& string );
 
-    void setAdditionalChartType( ChartType chartType );
-    ChartType additionalChartType() const
+        void setAdditionalChartType( ChartType chartType );
+        ChartType additionalChartType() const
         {
             return _additionalChartType;
         }
 
 
-    enum SourceMode {
-        UnknownMode      = 0,
-        DontUse          = 1,
-        DataEntry        = 2,
-        AxisLabel        = 3,
-        LegendText       = 4,
-        ExtraLinesAnchor = 5,
-        Last_SourceMode  = ExtraLinesAnchor };
+        enum SourceMode {
+                UnknownMode      = 0,
+                DontUse          = 1,
+                DataEntry        = 2,
+                AxisLabel        = 3,
+                LegendText       = 4,
+                ExtraLinesAnchor = 5,
+                Last_SourceMode  = ExtraLinesAnchor };
 
-    void setChartSourceMode( SourceMode mode,
-                             uint dataset,
-                             uint dataset2 = KDCHART_NO_DATASET,
-                             uint chart = 0 );
+        void setChartSourceMode( SourceMode mode,
+                uint dataset,
+                uint dataset2 = KDCHART_NO_DATASET,
+                uint chart = 0 );
 
-    static QString chartSourceModeToString( const SourceMode& mode );
-    static SourceMode stringToChartSourceMode( const QString& string );
+        static QString chartSourceModeToString( const SourceMode& mode );
+        static SourceMode stringToChartSourceMode( const QString& string );
 
 
-    bool neverUsedSetChartSourceMode() const
+        bool neverUsedSetChartSourceMode() const
         {
             return !_setChartSourceModeWasUsed;
         }
 
-    SourceMode chartSourceMode( uint dataset,
-                                uint dataset2 = KDCHART_NO_DATASET,
-                                uint* chart = 0 ) const;
+        SourceMode chartSourceMode( uint dataset,
+                uint dataset2 = KDCHART_NO_DATASET,
+                uint* chart = 0 ) const;
 
-    bool findDataset( SourceMode mode,
-                      uint& dataset,
-                      uint& dataset2,
-                      uint chart = 0 ) const;
+        bool findDataset( SourceMode mode,
+                          uint& dataset,
+                          uint& dataset2,
+                          uint chart = 0 ) const;
 
-    bool findDatasets( SourceMode mode1,
-                       SourceMode mode2,
-                       uint& dataset,
-                       uint& dataset2,
-                       uint chart = 0 ) const;
+        bool findDatasets( SourceMode mode1,
+                           SourceMode mode2,
+                           uint& dataset,
+                           uint& dataset2,
+                           uint chart = 0 ) const;
 
-    uint maxDatasetSourceMode() const
+        uint maxDatasetSourceMode() const
         {
             return _maxDatasetSourceMode;
         }
 
 
-    void setDefaultAxesTypes();
-    void activateDefaultAxes();
+        void setDefaultAxesTypes();
+        void activateDefaultAxes();
 
 
-    void setNumValues( uint numValues )
+        void setNumValues( uint numValues )
         {
             _numValues = numValues;
             emit changed();
         }
 
 
-    int numValues() const
+        int numValues() const
         {
             return _numValues;
         }
 
 
-    void calculateShadowColors( QColor color,
-                                QColor& shadow1,
-                                QColor& shadow2 ) const;
+        void calculateShadowColors( QColor color,
+                                    QColor& shadow1,
+                                    QColor& shadow2 ) const;
 
-    void setDataColor( uint dataset, QColor color );
-    QColor dataColor( uint dataset ) const;
+        void setDataColor( uint dataset, QColor color );
+        QColor dataColor( uint dataset ) const;
 
-    void setDataDefaultColors();
-    void setDataRainbowColors();
-    void setDataSubduedColors( bool ordered = false );
+        void setDataDefaultColors();
+        void setDataRainbowColors();
+        void setDataSubduedColors( bool ordered = false );
 
 
-    void setShadowBrightnessFactor( double factor )
+        void setShadowBrightnessFactor( double factor )
         {
             _shadowBrightnessFactor = factor;
             recomputeShadowColors();
             emit changed();
         }
 
-    double shadowBrightnessFactor() const
+        double shadowBrightnessFactor() const
         {
             return _shadowBrightnessFactor;
         }
 
 
-    void setShadowPattern( Qt::BrushStyle style ) {
-        _shadowPattern = style;
-        emit changed();
-    }
+        void setShadowPattern( Qt::BrushStyle style ) {
+            _shadowPattern = style;
+            emit changed();
+        }
 
-    Qt::BrushStyle shadowPattern() const {
-        return _shadowPattern;
-    }
+        Qt::BrushStyle shadowPattern() const {
+            return _shadowPattern;
+        }
 
 
-    void setOutlineDataColor( QColor color )
+        void setOutlineDataColor( QColor color )
         {
             _outlineDataColor = color;
             emit changed();
         }
 
 
-    QColor outlineDataColor() const
+        QColor outlineDataColor() const
         {
             return _outlineDataColor;
         }
 
 
-    void setOutlineDataLineWidth( uint width )
+        void setOutlineDataLineWidth( uint width )
         {
             _outlineDataLineWidth = width;
             emit changed();
         }
 
-    uint outlineDataLineWidth() const
+        uint outlineDataLineWidth() const
         {
             return _outlineDataLineWidth;
         }
 
 
-    void setOutlineDataLineStyle( PenStyle style )
+        void setOutlineDataLineStyle( PenStyle style )
         {
             _outlineDataLineStyle = style;
             emit changed();
         }
 
-    PenStyle outlineDataLineStyle() const
+        PenStyle outlineDataLineStyle() const
         {
             return _outlineDataLineStyle;
         }
 
 
-    uint maxDataColor() const
+        uint maxDataColor() const
         {
             return _maxDatasetColor;
         }
 
 
-    void setThreeDShadowColors( bool shadow )
+        void setThreeDShadowColors( bool shadow )
         {
             _threeDShadowColors = shadow;
             emit changed();
         }
 
 
-    bool threeDShadowColors() const
+        bool threeDShadowColors() const
         {
             return _threeDShadowColors;
         }
 
 
-    static int roundVal( double d )
+        static int roundVal( double d )
         {
             double fr;
             double i=0.0; // initialization necessary for Borland C++
@@ -585,683 +584,683 @@ public:
         }
 
 
-    void setPrintDataValues( bool active,
-                             uint chart = KDCHART_ALL_CHARTS,
-                             int divPow10 = 0,
-                             int digitsBehindComma = DATA_VALUE_AUTO_DIGITS,
-                             QFont* font   = 0,
-                             uint size     = UINT_MAX, //  <-- makes us use the *default* font params
-                             //                                by IGNORING settings of
-                             //      the following parameters!
-                             QColor* color = DATA_VALUE_AUTO_COLOR,
-                             KDChartEnums::PositionFlag negativePosition = KDChartEnums::PosCenter,
-                             uint negativeAlign    = Qt::AlignCenter,
-                             int  negativeDeltaX   =    0,
-                             int  negativeDeltaY   =    0,
-                             int  negativeRotation =    0,
-                             KDChartEnums::PositionFlag positivePosition = KDChartEnums::PosCenter,
-                             uint positiveAlign    = Qt::AlignCenter,
-                             int  positiveDeltaX   =    0,
-                             int  positiveDeltaY   =    0,
-                             int  positiveRotation =    0,
-                             KDChartEnums::TextLayoutPolicy policy = KDChartEnums::LayoutPolicyRotate );
+        void setPrintDataValues( bool active,
+                                 uint chart = KDCHART_ALL_CHARTS,
+                                 int divPow10 = 0,
+                                 int digitsBehindComma = DATA_VALUE_AUTO_DIGITS,
+                                 QFont* font   = 0,
+                                 uint size     = UINT_MAX, //  <-- makes us use the *default* font params
+                                 //                                by IGNORING settings of
+                                 //                                the following parameters!
+                                 QColor* color = DATA_VALUE_AUTO_COLOR,
+                                 KDChartEnums::PositionFlag negativePosition = KDChartEnums::PosCenter,
+                                 uint negativeAlign    = Qt::AlignCenter,
+                                 int  negativeDeltaX   =    0,
+                                 int  negativeDeltaY   =    0,
+                                 int  negativeRotation =    0,
+                                 KDChartEnums::PositionFlag positivePosition = KDChartEnums::PosCenter,
+                                 uint positiveAlign    = Qt::AlignCenter,
+                                 int  positiveDeltaX   =    0,
+                                 int  positiveDeltaY   =    0,
+                                 int  positiveRotation =    0,
+                                 KDChartEnums::TextLayoutPolicy policy = KDChartEnums::LayoutPolicyRotate );
 
-    void setDataValuesCalc( int divPow10 = 0,
-                            int digitsBehindComma = DATA_VALUE_AUTO_DIGITS,
-                            uint chart = KDCHART_ALL_CHARTS );
-    void setDataValuesFont( QFont* font,
-                            uint size  = UINT_MAX,
-                            uint chart = KDCHART_ALL_CHARTS );
-    void setDataValuesPlacing( KDChartEnums::PositionFlag position,
-                               uint align,
-                               int  deltaX,
-                               int  deltaY,
-                               int  rotation,
-                               bool specifyingPositiveValues = true,
-                               uint chart = KDCHART_ALL_CHARTS );
-    void setDataValuesColors( const QColor* color = DATA_VALUE_AUTO_COLOR,
-                              const QBrush& background = Qt::NoBrush,
-                              uint chart = KDCHART_ALL_CHARTS );
-    void setDataValuesPolicy( KDChartEnums::TextLayoutPolicy policy = KDChartEnums::LayoutPolicyRotate,
-                              uint chart = KDCHART_ALL_CHARTS );
+        void setDataValuesCalc( int divPow10 = 0,
+                                int digitsBehindComma = DATA_VALUE_AUTO_DIGITS,
+                                uint chart = KDCHART_ALL_CHARTS );
+        void setDataValuesFont( QFont* font,
+                                uint size  = UINT_MAX,
+                                uint chart = KDCHART_ALL_CHARTS );
+        void setDataValuesPlacing( KDChartEnums::PositionFlag position,
+                                   uint align,
+                                   int  deltaX,
+                                   int  deltaY,
+                                   int  rotation,
+                                   bool specifyingPositiveValues = true,
+                                   uint chart = KDCHART_ALL_CHARTS );
+        void setDataValuesColors( const QColor* color = DATA_VALUE_AUTO_COLOR,
+                                  const QBrush& background = Qt::NoBrush,
+                                  uint chart = KDCHART_ALL_CHARTS );
+        void setDataValuesPolicy( KDChartEnums::TextLayoutPolicy policy = KDChartEnums::LayoutPolicyRotate,
+                                  uint chart = KDCHART_ALL_CHARTS );
 
-    void setDataValuesShowInfinite( bool dataValuesShowInfinite = true,
-                                    uint chart = KDCHART_ALL_CHARTS );
+        void setDataValuesShowInfinite( bool dataValuesShowInfinite = true,
+                                        uint chart = KDCHART_ALL_CHARTS );
 
-    void setPrintDataValuesWithDefaultFontParams( uint chart = KDCHART_ALL_CHARTS,
-                                                  bool callSetPrintDataValues = true );
+        void setPrintDataValuesWithDefaultFontParams( uint chart = KDCHART_ALL_CHARTS,
+                                                      bool callSetPrintDataValues = true );
 
-    void setAllowOverlappingDataValueTexts( bool allow )
+        void setAllowOverlappingDataValueTexts( bool allow )
         {
             _allowOverlappingDataValueTexts = allow;
         }
 
 
-    bool allowOverlappingDataValueTexts() const
+        bool allowOverlappingDataValueTexts() const
         {
             return _allowOverlappingDataValueTexts;
         }
 
-    bool printDataValuesWithDefaultFontParams( uint chart ) const
+        bool printDataValuesWithDefaultFontParams( uint chart ) const
         {
             return chart ? _printDataValuesSettings2._useDefaultFontParams
                 : _printDataValuesSettings._useDefaultFontParams;
         }
 
-    bool printDataValues( uint chart ) const
+        bool printDataValues( uint chart ) const
         {
             return chart ? _printDataValuesSettings2._printDataValues
                 : _printDataValuesSettings._printDataValues;
         }
 
 
-    int dataValuesDivPow10( uint chart ) const
+        int dataValuesDivPow10( uint chart ) const
         {
             return chart ? _printDataValuesSettings2._divPow10
                 : _printDataValuesSettings._divPow10;
         }
 
 
-    int dataValuesDigitsBehindComma( uint chart ) const
+        int dataValuesDigitsBehindComma( uint chart ) const
         {
             return chart ? _printDataValuesSettings2._digitsBehindComma
                 : _printDataValuesSettings._digitsBehindComma;
         }
 
 
-    QFont dataValuesFont( uint chart ) const
+        QFont dataValuesFont( uint chart ) const
         {
             return chart ? _printDataValuesSettings2._dataValuesFont
                 : _printDataValuesSettings._dataValuesFont;
         }
 
 
-    bool dataValuesUseFontRelSize( uint chart ) const
+        bool dataValuesUseFontRelSize( uint chart ) const
         {
             return chart ? _printDataValuesSettings2._dataValuesUseFontRelSize
                 : _printDataValuesSettings._dataValuesUseFontRelSize;
         }
 
 
-    int dataValuesFontRelSize( uint chart ) const
+        int dataValuesFontRelSize( uint chart ) const
         {
             return chart ? _printDataValuesSettings2._dataValuesFontRelSize
                 : _printDataValuesSettings._dataValuesFontRelSize;
         }
 
 
-    QColor dataValuesColor( uint chart ) const
+        QColor dataValuesColor( uint chart ) const
         {
             return chart ? _printDataValuesSettings2._dataValuesColor
                 : _printDataValuesSettings._dataValuesColor;
         }
 
 
-    QBrush dataValuesBackground( uint chart ) const
+        QBrush dataValuesBackground( uint chart ) const
         {
             return chart ? _printDataValuesSettings2._dataValuesBrush
-                : _printDataValuesSettings._dataValuesBrush;
+                         : _printDataValuesSettings._dataValuesBrush;
         }
 
 
-    bool dataValuesAutoColor( uint chart ) const
+        bool dataValuesAutoColor( uint chart ) const
         {
             return chart ? _printDataValuesSettings2._dataValuesAutoColor
                 : _printDataValuesSettings._dataValuesAutoColor;
         }
 
 
-    KDChartEnums::PositionFlag dataValuesAnchorPosition( uint chart,
-                                                         bool negative ) const;
-    uint dataValuesAnchorAlign( uint chart, bool negative ) const;
-    int dataValuesAnchorDeltaX( uint chart, bool negative ) const;
-    int dataValuesAnchorDeltaY( uint chart, bool negative ) const;
-    int dataValuesRotation( uint chart, bool negative ) const;
+        KDChartEnums::PositionFlag dataValuesAnchorPosition( uint chart,
+                bool negative ) const;
+        uint dataValuesAnchorAlign( uint chart, bool negative ) const;
+        int dataValuesAnchorDeltaX( uint chart, bool negative ) const;
+        int dataValuesAnchorDeltaY( uint chart, bool negative ) const;
+        int dataValuesRotation( uint chart, bool negative ) const;
 
 
-    KDChartEnums::TextLayoutPolicy dataValuesLayoutPolicy( uint chart ) const
+        KDChartEnums::TextLayoutPolicy dataValuesLayoutPolicy( uint chart ) const
         {
             return chart ? _printDataValuesSettings2._dataValuesLayoutPolicy
                 : _printDataValuesSettings._dataValuesLayoutPolicy;
         }
 
 
-    bool dataValuesShowInfinite( uint chart ) const
+        bool dataValuesShowInfinite( uint chart ) const
         {
             return chart ? _printDataValuesSettings2._dataValuesShowInfinite
                 : _printDataValuesSettings._dataValuesShowInfinite;
         }
 
 
-    // for backward compatibility we may NOT remove these functions:
-    void setPrintDataValuesColor( uint chart = KDCHART_ALL_CHARTS,
-                                  const QColor* color = DATA_VALUE_AUTO_COLOR );
-    void setPrintDataValuesFontRelSize( uint chart, uint size );
+        // for backward compatibility we may NOT remove these functions:
+        void setPrintDataValuesColor( uint chart = KDCHART_ALL_CHARTS,
+                                      const QColor* color = DATA_VALUE_AUTO_COLOR );
+        void setPrintDataValuesFontRelSize( uint chart, uint size );
 
 
 
-    // END GENERAL
+        // END GENERAL
 
 
 
 
-    // BAR CHART-SPECIFIC
-    enum BarChartSubType { BarNormal, BarStacked, BarPercent, BarMultiRows };
+        // BAR CHART-SPECIFIC
+        enum BarChartSubType { BarNormal, BarStacked, BarPercent, BarMultiRows };
 
-    void setBarChartSubType( BarChartSubType barChartSubType )
+        void setBarChartSubType( BarChartSubType barChartSubType )
         {
             _barChartSubType = barChartSubType;
             emit changed();
         }
 
-    BarChartSubType barChartSubType() const
+        BarChartSubType barChartSubType() const
         {
             return _barChartSubType;
         }
 
-    static QString barChartSubTypeToString( BarChartSubType type );
-    static BarChartSubType stringToBarChartSubType( const QString& string );
+        static QString barChartSubTypeToString( BarChartSubType type );
+        static BarChartSubType stringToBarChartSubType( const QString& string );
 
-    void setThreeDBars( bool threeDBars )
+        void setThreeDBars( bool threeDBars )
         {
             _threeDBars = threeDBars;
             emit changed();
         }
 
-    bool threeDBars() const
+        bool threeDBars() const
         {
             return _threeDBars;
         }
 
 
-    void setThreeDBarsShadowColors( bool shadow )
+        void setThreeDBarsShadowColors( bool shadow )
         {
             _threeDShadowColors = shadow;
             emit changed();
         }
 
 
-    bool threeDBarsShadowColors() const
+        bool threeDBarsShadowColors() const
         {
             return _threeDShadowColors;
         }
 
 
-    QColor dataShadow1Color( uint dataset ) const;
-    QColor dataShadow2Color( uint dataset ) const;
+        QColor dataShadow1Color( uint dataset ) const;
+        QColor dataShadow2Color( uint dataset ) const;
 
 
-    void setThreeDBarAngle( uint angle );
-    uint threeDBarAngle() const
+        void setThreeDBarAngle( uint angle );
+        uint threeDBarAngle() const
         {
             return _threeDBarAngle;
         }
 
 
-    double cosThreeDBarAngle() const
+        double cosThreeDBarAngle() const
         {
             return _cosThreeDBarAngle;
         }
 
 
-    void setThreeDBarDepth( double depth )
+        void setThreeDBarDepth( double depth )
         {
             _threeDBarDepth = depth;
             emit changed();
         }
 
 
-    double threeDBarDepth() const
+        double threeDBarDepth() const
         {
             return _threeDBarDepth;
         }
 
 
-    void setDatasetGap( int gap )
+        void setDatasetGap( int gap )
         {
             _datasetGap = gap;
             emit changed();
         }
 
-    int datasetGap() const
+        int datasetGap() const
         {
             return _datasetGap;
         }
 
 
-    void setDatasetGapIsRelative( bool gapIsRelative )
+        void setDatasetGapIsRelative( bool gapIsRelative )
         {
             _datasetGapIsRelative = gapIsRelative;
             emit changed();
         }
 
-    bool datasetGapIsRelative() const
+        bool datasetGapIsRelative() const
         {
             return _datasetGapIsRelative;
         }
 
 
-    void setValueBlockGap( int gap )
+        void setValueBlockGap( int gap )
         {
             _valueBlockGap = gap;
             emit changed();
         }
 
-    int valueBlockGap() const
+        int valueBlockGap() const
         {
             return _valueBlockGap;
         }
 
 
-    void setValueBlockGapIsRelative( bool gapIsRelative )
+        void setValueBlockGapIsRelative( bool gapIsRelative )
         {
             _valueBlockGapIsRelative = gapIsRelative;
             emit changed();
         }
 
-    bool valueBlockGapIsRelative() const
+        bool valueBlockGapIsRelative() const
         {
             return _valueBlockGapIsRelative;
         }
 
-    void setDrawSolidExcessArrows( bool solidArrows ) {
-        _solidExcessArrows = solidArrows;
-        emit changed();
-    }
+        void setDrawSolidExcessArrows( bool solidArrows ) {
+            _solidExcessArrows = solidArrows;
+            emit changed();
+        }
 
-    bool drawSolidExcessArrows() const
+        bool drawSolidExcessArrows() const
         {
             return _solidExcessArrows;
         }
 
-    // END BAR CHART-SPECIFIC
+        // END BAR CHART-SPECIFIC
 
 
-    // LINE/AREA CHART-SPECIFIC
-    enum LineChartSubType { LineNormal, LineStacked, LinePercent };
+        // LINE/AREA CHART-SPECIFIC
+        enum LineChartSubType { LineNormal, LineStacked, LinePercent };
 
-    void setLineChartSubType( LineChartSubType lineChartSubType )
+        void setLineChartSubType( LineChartSubType lineChartSubType )
         {
             _lineChartSubType = lineChartSubType;
             emit changed();
         }
 
-    LineChartSubType lineChartSubType() const
+        LineChartSubType lineChartSubType() const
         {
             return _lineChartSubType;
         }
 
 
-    static LineChartSubType stringToLineChartSubType( const QString& string );
-    static QString lineChartSubTypeToString( LineChartSubType type );
+        static LineChartSubType stringToLineChartSubType( const QString& string );
+        static QString lineChartSubTypeToString( LineChartSubType type );
 
 
-    void setLineMarker( bool marker )
+        void setLineMarker( bool marker )
         {
             _lineMarker = marker;
             emit changed();
         }
 
-    bool lineMarker() const
+        bool lineMarker() const
         {
             return _lineMarker;
         }
 
-    enum LineMarkerStyle { LineMarkerCircle  = 0,
-                           LineMarkerSquare  = 1,
-                           LineMarkerDiamond = 2,
-                           LineMarker1Pixel  = 3,
-                           LineMarker4Pixels = 4,
-                           LineMarkerRing    = 5,
-                           LineMarkerCross   = 6 };
+        enum LineMarkerStyle { LineMarkerCircle  = 0,
+            LineMarkerSquare  = 1,
+            LineMarkerDiamond = 2,
+            LineMarker1Pixel  = 3,
+            LineMarker4Pixels = 4,
+            LineMarkerRing    = 5,
+            LineMarkerCross   = 6 };
 
-    void setLineMarkerStyle( uint dataset, LineMarkerStyle style );
-    LineMarkerStyle lineMarkerStyle( uint dataset ) const;
-
-
-    static QString lineMarkerStyleToString( LineMarkerStyle style );
-    static QString lineMarkerStyleToStringTr( LineMarkerStyle style );
-    static LineMarkerStyle stringToLineMarkerStyle( const QString& string );
-    static LineMarkerStyle stringToLineMarkerStyleTr( const QString& string );
-
-    typedef QMap<uint,LineMarkerStyle> LineMarkerStyleMap;
-
-    void setLineMarkerStyles( LineMarkerStyleMap map );
-
-    LineMarkerStyleMap lineMarkerStyles() const {
-        return _lineMarkerStyles;
-    }
+        void setLineMarkerStyle( uint dataset, LineMarkerStyle style );
+        LineMarkerStyle lineMarkerStyle( uint dataset ) const;
 
 
-    uint maxDatasetLineMarkerStyle() const
+        static QString lineMarkerStyleToString( LineMarkerStyle style );
+        static QString lineMarkerStyleToStringTr( LineMarkerStyle style );
+        static LineMarkerStyle stringToLineMarkerStyle( const QString& string );
+        static LineMarkerStyle stringToLineMarkerStyleTr( const QString& string );
+
+        typedef QMap<uint,LineMarkerStyle> LineMarkerStyleMap;
+
+        void setLineMarkerStyles( LineMarkerStyleMap map );
+
+        LineMarkerStyleMap lineMarkerStyles() const {
+            return _lineMarkerStyles;
+        }
+
+
+        uint maxDatasetLineMarkerStyle() const
         {
             return _maxDatasetLineMarkerStyle;
         }
 
 
-    void setLineMarkerSize( QSize size )
+        void setLineMarkerSize( QSize size )
         {
             _lineMarkerSize = size;
             emit changed();
         }
 
-    QSize lineMarkerSize() const
+        QSize lineMarkerSize() const
         {
             return _lineMarkerSize;
         }
 
-    void setLineWidth( int width )
+        void setLineWidth( int width )
         {
             _lineWidth = width;
             emit changed();
         }
 
-    int lineWidth() const
+        int lineWidth() const
         {
             return _lineWidth;
         }
 
 
-    void setLineColor( QColor color = QColor() )
+        void setLineColor( QColor color = QColor() )
         {
             _lineColor = color;
             emit changed();
         }
 
-    QColor lineColor() const
+        QColor lineColor() const
         {
             return _lineColor;
         }
 
-    void setLineStyle( PenStyle style )
+        void setLineStyle( PenStyle style )
         {
             _lineStyle = style;
             emit changed();
         }
 
-    PenStyle lineStyle() const
+        PenStyle lineStyle() const
         {
             return _lineStyle;
         }
 
 
-    void setThreeDLines( bool threeD ) {
-        _threeDLines = threeD;
-        emit changed();
-    }
+        void setThreeDLines( bool threeD ) {
+            _threeDLines = threeD;
+            emit changed();
+        }
 
 
-    bool threeDLines() const {
-        return _threeDLines;
-    }
+        bool threeDLines() const {
+            return _threeDLines;
+        }
 
 
-    void setThreeDLineDepth( int depth ) {
-        _threeDLineDepth = depth;
-        emit changed();
-    }
+        void setThreeDLineDepth( int depth ) {
+            _threeDLineDepth = depth;
+            emit changed();
+        }
 
 
-    int threeDLineDepth() const {
-        return _threeDLineDepth;
-    }
+        int threeDLineDepth() const {
+            return _threeDLineDepth;
+        }
 
 
-    // NOTE: documentation of this function is temporary disabled.
-    // Feature is currently not supported, will be implemented
-    // by future versions of KDChart
-    void setThreeDLineXRotation( int degrees ) {
-        _threeDLineXRotation = degrees;
-        emit changed();
-    }
+        // NOTE: documentation of this function is temporary disabled.
+        // Feature is currently not supported, will be implemented
+        // by future versions of KDChart
+        void setThreeDLineXRotation( int degrees ) {
+            _threeDLineXRotation = degrees;
+            emit changed();
+        }
 
 
-    // NOTE: documentation of this function is temporary disabled.
-    // Feature is currently not supported, will be implemented
-    // by future versions of KDChart
-    int threeDLineXRotation() const {
-        return _threeDLineXRotation;
-    }
+        // NOTE: documentation of this function is temporary disabled.
+        // Feature is currently not supported, will be implemented
+        // by future versions of KDChart
+        int threeDLineXRotation() const {
+            return _threeDLineXRotation;
+        }
 
 
-    // NOTE: documentation of this function is temporary disabled.
-    // Feature is currently not supported, will be implemented
-    // by future versions of KDChart
-    void setThreeDLineYRotation( int degrees ) {
-        _threeDLineYRotation = degrees;
-        emit changed();
-    }
+        // NOTE: documentation of this function is temporary disabled.
+        // Feature is currently not supported, will be implemented
+        // by future versions of KDChart
+        void setThreeDLineYRotation( int degrees ) {
+            _threeDLineYRotation = degrees;
+            emit changed();
+        }
 
 
-    // NOTE: documentation of this function is temporary disabled.
-    // Feature is currently not supported, will be implemented
-    // by future versions of KDChart
-    int threeDLineYRotation() const {
-        return _threeDLineYRotation;
-    }
+        // NOTE: documentation of this function is temporary disabled.
+        // Feature is currently not supported, will be implemented
+        // by future versions of KDChart
+        int threeDLineYRotation() const {
+            return _threeDLineYRotation;
+        }
 
 
-    enum AreaChartSubType { AreaNormal, AreaStacked, AreaPercent };
+        enum AreaChartSubType { AreaNormal, AreaStacked, AreaPercent };
 
 
-    void setAreaChartSubType( AreaChartSubType areaChartSubType )
+        void setAreaChartSubType( AreaChartSubType areaChartSubType )
         {
             _areaChartSubType = areaChartSubType;
             // activate default data value text settings for this chart type
             if(    printDataValues( 0 )
-                   && printDataValuesWithDefaultFontParams( 0 ) )
+                && printDataValuesWithDefaultFontParams( 0 ) )
                 setPrintDataValues( true, 0 );
             emit changed();
         }
 
 
-    AreaChartSubType areaChartSubType() const
+        AreaChartSubType areaChartSubType() const
         {
             return _areaChartSubType;
         }
 
 
-    static QString areaChartSubTypeToString( AreaChartSubType type );
-    static AreaChartSubType stringToAreaChartSubType( const QString& string );
+        static QString areaChartSubTypeToString( AreaChartSubType type );
+        static AreaChartSubType stringToAreaChartSubType( const QString& string );
 
 
-    enum AreaLocation { AreaAbove, AreaBelow };
+        enum AreaLocation { AreaAbove, AreaBelow };
 
-    void setAreaLocation( AreaLocation location )
+        void setAreaLocation( AreaLocation location )
         {
             _areaLocation = location;
             emit changed();
         }
 
-    AreaLocation areaLocation() const
+        AreaLocation areaLocation() const
         {
             return _areaLocation;
         }
 
 
-    static QString areaLocationToString( AreaLocation type );
-    static AreaLocation stringToAreaLocation( const QString& string );
+        static QString areaLocationToString( AreaLocation type );
+        static AreaLocation stringToAreaLocation( const QString& string );
 
-    // END LINE/AREA CHART-SPECIFIC
+        // END LINE/AREA CHART-SPECIFIC
 
-    // POLAR CHART-SPECIFIC
-    enum PolarChartSubType { PolarNormal, PolarStacked, PolarPercent };
+        // POLAR CHART-SPECIFIC
+        enum PolarChartSubType { PolarNormal, PolarStacked, PolarPercent };
 
-    void setPolarChartSubType( PolarChartSubType polarChartSubType )
+        void setPolarChartSubType( PolarChartSubType polarChartSubType )
         {
             _polarChartSubType = polarChartSubType;
             emit changed();
         }
 
-    PolarChartSubType polarChartSubType() const
+        PolarChartSubType polarChartSubType() const
         {
             return _polarChartSubType;
         }
 
 
-    static PolarChartSubType stringToPolarChartSubType( const QString& string );
-    static QString polarChartSubTypeToString( PolarChartSubType type );
+        static PolarChartSubType stringToPolarChartSubType( const QString& string );
+        static QString polarChartSubTypeToString( PolarChartSubType type );
 
-    void setPolarMarker( bool marker )
+        void setPolarMarker( bool marker )
         {
             _polarMarker = marker;
             emit changed();
         }
 
-    bool polarMarker() const
+        bool polarMarker() const
         {
             return _polarMarker;
         }
 
-    enum PolarMarkerStyle { PolarMarkerCircle, PolarMarkerSquare,
-			    PolarMarkerDiamond };
+        enum PolarMarkerStyle { PolarMarkerCircle, PolarMarkerSquare,
+                                PolarMarkerDiamond };
 
-    void setPolarMarkerStyle( uint dataset, PolarMarkerStyle style );
-    PolarMarkerStyle polarMarkerStyle( uint dataset ) const;
-    static QString polarMarkerStyleToString( PolarMarkerStyle style );
-    static QString polarMarkerStyleToStringTr( PolarMarkerStyle style );
-    static PolarMarkerStyle stringToPolarMarkerStyle( const QString& string );
-    static PolarMarkerStyle stringToPolarMarkerStyleTr( const QString& string );
+        void setPolarMarkerStyle( uint dataset, PolarMarkerStyle style );
+        PolarMarkerStyle polarMarkerStyle( uint dataset ) const;
+        static QString polarMarkerStyleToString( PolarMarkerStyle style );
+        static QString polarMarkerStyleToStringTr( PolarMarkerStyle style );
+        static PolarMarkerStyle stringToPolarMarkerStyle( const QString& string );
+        static PolarMarkerStyle stringToPolarMarkerStyleTr( const QString& string );
 
-    typedef QMap<uint,PolarMarkerStyle> PolarMarkerStyleMap;
+        typedef QMap<uint,PolarMarkerStyle> PolarMarkerStyleMap;
 
-    void setPolarMarkerStyles( PolarMarkerStyleMap map );
+        void setPolarMarkerStyles( PolarMarkerStyleMap map );
 
-    PolarMarkerStyleMap polarMarkerStyles() const {
-        return _polarMarkerStyles;
-    }
+        PolarMarkerStyleMap polarMarkerStyles() const {
+            return _polarMarkerStyles;
+        }
 
-    uint maxDatasetPolarMarkerStyle() const
+        uint maxDatasetPolarMarkerStyle() const
         {
             return _maxDatasetPolarMarkerStyle;
         }
 
-    void setPolarMarkerSize( QSize size = QSize( -40, -40 ) )
+        void setPolarMarkerSize( QSize size = QSize( -40, -40 ) )
         {
             _polarMarkerSize = size;
             emit changed();
         }
 
-    QSize polarMarkerSize() const
+        QSize polarMarkerSize() const
         {
             return _polarMarkerSize;
         }
 
-    void setPolarLineWidth( int width = -3 )
+        void setPolarLineWidth( int width = -3 )
         {
             _polarLineWidth = width;
             emit changed();
         }
 
-    int polarLineWidth() const
+        int polarLineWidth() const
         {
             return _polarLineWidth;
         }
 
 
-    void setPolarZeroDegreePos( int degrees )
+        void setPolarZeroDegreePos( int degrees )
         {
             _polarZeroDegreePos = degrees;
         }
 
-    int polarZeroDegreePos() const
+        int polarZeroDegreePos() const
         {
             return _polarZeroDegreePos;
         }
 
 
-    void setPolarRotateCircularLabels( bool rotateCircularLabels )
+        void setPolarRotateCircularLabels( bool rotateCircularLabels )
         {
             _polarRotateCircularLabels = rotateCircularLabels;
         }
 
-    bool polarRotateCircularLabels() const
+        bool polarRotateCircularLabels() const
         {
             return _polarRotateCircularLabels;
         }
 
-    void setPolarDelimsAndLabelsAtPos( KDChartEnums::PositionFlag pos,
-                                       bool showDelimiters,
-                                       bool showLabels );
-    bool polarDelimAtPos( KDChartEnums::PositionFlag pos ) const;
-    bool polarLabelsAtPos( KDChartEnums::PositionFlag pos ) const;
+        void setPolarDelimsAndLabelsAtPos( KDChartEnums::PositionFlag pos,
+                bool showDelimiters,
+                bool showLabels );
+        bool polarDelimAtPos( KDChartEnums::PositionFlag pos ) const;
+        bool polarLabelsAtPos( KDChartEnums::PositionFlag pos ) const;
 
-    // END POLAR CHART-SPECIFIC
+        // END POLAR CHART-SPECIFIC
 
 
-    // PIE/RING CHART-SPECIFIC
+        // PIE/RING CHART-SPECIFIC
 
-    void setExplode( bool explode )
+        void setExplode( bool explode )
         {
             _explode = explode;
             emit changed();
         }
 
-    bool explode() const
+        bool explode() const
         {
             return _explode;
         }
 
 
-    void setExplodeValues( QValueList<int> explodeList ) {
-        _explodeList = explodeList;
-        emit changed();
-    }
+        void setExplodeValues( QValueList<int> explodeList ) {
+            _explodeList = explodeList;
+            emit changed();
+        }
 
 
-    QValueList<int> explodeValues() const {
-        return _explodeList;
-    }
+        QValueList<int> explodeValues() const {
+            return _explodeList;
+        }
 
-    typedef QMap<int,double> ExplodeFactorsMap;
+        typedef QMap<int,double> ExplodeFactorsMap;
 
-    void setExplodeFactors( ExplodeFactorsMap factors ) {
-        _explodeFactors = factors;
-        emit changed();
-    }
-
-
-    ExplodeFactorsMap explodeFactors() const {
-        return _explodeFactors;
-    }
+        void setExplodeFactors( ExplodeFactorsMap factors ) {
+            _explodeFactors = factors;
+            emit changed();
+        }
 
 
-    void setExplodeFactor( double factor )
+        ExplodeFactorsMap explodeFactors() const {
+            return _explodeFactors;
+        }
+
+
+        void setExplodeFactor( double factor )
         {
             _explodeFactor = factor;
             emit changed();
         }
 
-    double explodeFactor() const
+        double explodeFactor() const
         {
             return _explodeFactor;
         }
 
 
-    void setThreeDPies( bool threeDPies )
+        void setThreeDPies( bool threeDPies )
         {
             _threeDPies = threeDPies;
             emit changed();
         }
 
-    bool threeDPies() const
+        bool threeDPies() const
         {
             return _threeDPies;
         }
 
 
-    void setThreeDPieHeight( int pixels )
+        void setThreeDPieHeight( int pixels )
         {
             _threeDPieHeight = pixels;
             emit changed();
         }
 
-    int threeDPieHeight() const
+        int threeDPieHeight() const
         {
             return _threeDPieHeight;
         }
 
-    void setPieStart( int degrees )
+        void setPieStart( int degrees )
         {
             while ( degrees < 0 )
                 degrees += 360;
@@ -1273,12 +1272,12 @@ public:
         }
 
 
-    int pieStart() const
+        int pieStart() const
         {
             return _pieStart;
         }
 
-    void setRingStart( int degrees )
+        void setRingStart( int degrees )
         {
             while ( degrees < 0 )
                 degrees += 360;
@@ -1290,416 +1289,416 @@ public:
         }
 
 
-    int ringStart() const
+        int ringStart() const
         {
             return _ringStart;
         }
 
-    void setRelativeRingThickness( bool relativeThickness ) {
-        _relativeRingThickness = relativeThickness;
+        void setRelativeRingThickness( bool relativeThickness ) {
+            _relativeRingThickness = relativeThickness;
 
-        emit changed();
-    }
-
-
-    bool relativeRingThickness() const {
-        return _relativeRingThickness;
-    }
-
-    // END PIE/RING CHART-SPECIFIC
+            emit changed();
+        }
 
 
-    // HI/LO CHART-SPECIFIC
-    enum HiLoChartSubType { HiLoNormal, HiLoSimple = HiLoNormal,
-                            HiLoClose, HiLoOpenClose };
+        bool relativeRingThickness() const {
+            return _relativeRingThickness;
+        }
 
-    void setHiLoChartSubType( HiLoChartSubType hiLoChartSubType )
+        // END PIE/RING CHART-SPECIFIC
+
+
+        // HI/LO CHART-SPECIFIC
+        enum HiLoChartSubType { HiLoNormal, HiLoSimple = HiLoNormal,
+                                HiLoClose, HiLoOpenClose };
+
+        void setHiLoChartSubType( HiLoChartSubType hiLoChartSubType )
         {
             _hiLoChartSubType = hiLoChartSubType;
             emit changed();
         }
 
-    HiLoChartSubType hiLoChartSubType() const
+        HiLoChartSubType hiLoChartSubType() const
         {
             return _hiLoChartSubType;
         }
 
-    static QString hiLoChartSubTypeToString( HiLoChartSubType type );
-    static HiLoChartSubType stringToHiLoChartSubType( const QString& string );
-    void setHiLoChartPrintLowValues( bool active,
-                                     QFont* font = 0,
-                                     int size = 14,
-                                     QColor* color = 0 );
+        static QString hiLoChartSubTypeToString( HiLoChartSubType type );
+        static HiLoChartSubType stringToHiLoChartSubType( const QString& string );
+        void setHiLoChartPrintLowValues( bool active,
+                QFont* font = 0,
+                int size = 14,
+                QColor* color = 0 );
 
-    bool hiLoChartPrintLowValues() const
+        bool hiLoChartPrintLowValues() const
         {
             return _hiLoChartPrintLowValues;
         }
 
 
-    QFont hiLoChartLowValuesFont() const
+        QFont hiLoChartLowValuesFont() const
         {
             return _hiLoChartLowValuesFont;
         }
 
 
-    bool hiLoChartLowValuesUseFontRelSize() const
+        bool hiLoChartLowValuesUseFontRelSize() const
         {
             return _hiLoChartLowValuesUseFontRelSize;
         }
 
 
-    int hiLoChartLowValuesFontRelSize() const
+        int hiLoChartLowValuesFontRelSize() const
         {
             return _hiLoChartLowValuesFontRelSize;
         }
 
 
-    QColor hiLoChartLowValuesColor() const
+        QColor hiLoChartLowValuesColor() const
         {
             return _hiLoChartLowValuesColor;
         }
 
-    void setHiLoChartPrintHighValues( bool active,
-                                      QFont* font = 0,
-                                      int size = 14,
-                                      QColor* color = 0 );
+        void setHiLoChartPrintHighValues( bool active,
+                QFont* font = 0,
+                int size = 14,
+                QColor* color = 0 );
 
 
-    bool hiLoChartPrintHighValues() const
+        bool hiLoChartPrintHighValues() const
         {
             return _hiLoChartPrintHighValues;
         }
 
 
-    QFont hiLoChartHighValuesFont() const
+        QFont hiLoChartHighValuesFont() const
         {
             return _hiLoChartHighValuesFont;
         }
 
 
-    bool hiLoChartHighValuesUseFontRelSize() const
+        bool hiLoChartHighValuesUseFontRelSize() const
         {
             return _hiLoChartHighValuesUseFontRelSize;
         }
 
 
-    int hiLoChartHighValuesFontRelSize() const
+        int hiLoChartHighValuesFontRelSize() const
         {
             return _hiLoChartHighValuesFontRelSize;
         }
 
 
-    QColor hiLoChartHighValuesColor() const
+        QColor hiLoChartHighValuesColor() const
         {
             return _hiLoChartHighValuesColor;
         }
 
-    void setHiLoChartPrintOpenValues( bool active,
-                                      QFont* font = 0,
-                                      uint size = 14,
-                                      QColor* color = 0 );
+        void setHiLoChartPrintOpenValues( bool active,
+                QFont* font = 0,
+                uint size = 14,
+                QColor* color = 0 );
 
-    bool hiLoChartPrintOpenValues() const
+        bool hiLoChartPrintOpenValues() const
         {
             return _hiLoChartPrintOpenValues;
         }
 
 
-    QFont hiLoChartOpenValuesFont() const
+        QFont hiLoChartOpenValuesFont() const
         {
             return _hiLoChartOpenValuesFont;
         }
 
 
-    bool hiLoChartOpenValuesUseFontRelSize() const
+        bool hiLoChartOpenValuesUseFontRelSize() const
         {
             return _hiLoChartOpenValuesUseFontRelSize;
         }
 
 
-    int hiLoChartOpenValuesFontRelSize() const
+        int hiLoChartOpenValuesFontRelSize() const
         {
             return _hiLoChartOpenValuesFontRelSize;
         }
 
 
-    QColor hiLoChartOpenValuesColor() const
+        QColor hiLoChartOpenValuesColor() const
         {
             return _hiLoChartOpenValuesColor;
         }
 
-    void setHiLoChartPrintCloseValues( bool active,
-                                       QFont* font = 0,
-                                       int size = 14,
-                                       QColor* color = 0 );
+        void setHiLoChartPrintCloseValues( bool active,
+                QFont* font = 0,
+                int size = 14,
+                QColor* color = 0 );
 
-    bool hiLoChartPrintCloseValues() const
+        bool hiLoChartPrintCloseValues() const
         {
             return _hiLoChartPrintCloseValues;
         }
 
 
-    QFont hiLoChartCloseValuesFont() const
+        QFont hiLoChartCloseValuesFont() const
         {
             return _hiLoChartCloseValuesFont;
         }
 
 
-    bool hiLoChartCloseValuesUseFontRelSize() const
+        bool hiLoChartCloseValuesUseFontRelSize() const
         {
             return _hiLoChartCloseValuesUseFontRelSize;
         }
 
 
-    int hiLoChartCloseValuesFontRelSize() const
+        int hiLoChartCloseValuesFontRelSize() const
         {
             return _hiLoChartCloseValuesFontRelSize;
         }
 
 
-    QColor hiLoChartCloseValuesColor() const
+        QColor hiLoChartCloseValuesColor() const
         {
             return _hiLoChartCloseValuesColor;
         }
 
 
-    void setHiLoChartPrintFirstValues( bool active,
-                                       QFont* font = 0,
-                                       uint size = 14,
-                                       QColor* color = 0 )
+        void setHiLoChartPrintFirstValues( bool active,
+                QFont* font = 0,
+                uint size = 14,
+                QColor* color = 0 )
         {
             setHiLoChartPrintOpenValues( active, font, size, color );
         }
 
-    bool hiLoChartPrintFirstValues() const
+        bool hiLoChartPrintFirstValues() const
         {
             return hiLoChartPrintOpenValues();
         }
 
 
-    QFont hiLoChartFirstValuesFont() const
+        QFont hiLoChartFirstValuesFont() const
         {
             return hiLoChartOpenValuesFont();
         }
 
 
-    bool hiLoChartFirstValuesUseFontRelSize() const
+        bool hiLoChartFirstValuesUseFontRelSize() const
         {
             return hiLoChartOpenValuesUseFontRelSize();
         }
 
-    int hiLoChartFirstValuesFontRelSize() const
+        int hiLoChartFirstValuesFontRelSize() const
         {
             return hiLoChartOpenValuesFontRelSize();
         }
 
-    QColor hiLoChartFirstValuesColor() const
+        QColor hiLoChartFirstValuesColor() const
         {
             return hiLoChartOpenValuesColor();
         }
 
-    void setHiLoChartPrintLastValues( bool active,
-                                      QFont* font = 0,
-                                      int size = 14,
-                                      QColor* color = 0 )
+        void setHiLoChartPrintLastValues( bool active,
+                QFont* font = 0,
+                int size = 14,
+                QColor* color = 0 )
         {
             setHiLoChartPrintCloseValues( active, font, size, color );
         }
 
-    bool hiLoChartPrintLastValues() const
+        bool hiLoChartPrintLastValues() const
         {
             return hiLoChartPrintCloseValues();
         }
 
-    QFont hiLoChartLastValuesFont() const
+        QFont hiLoChartLastValuesFont() const
         {
             return hiLoChartCloseValuesFont();
         }
 
-    bool hiLoChartLastValuesUseFontRelSize() const
+        bool hiLoChartLastValuesUseFontRelSize() const
         {
             return hiLoChartCloseValuesUseFontRelSize();
         }
 
-    int hiLoChartLastValuesFontRelSize() const
+        int hiLoChartLastValuesFontRelSize() const
         {
             return hiLoChartCloseValuesFontRelSize();
         }
 
-    QColor hiLoChartLastValuesColor() const
+        QColor hiLoChartLastValuesColor() const
         {
             return hiLoChartCloseValuesColor();
         }
 
 
-    // END HI/LO CHART-SPECIFIC
+        // END HI/LO CHART-SPECIFIC
 
 
 
-    // BOX WHISKER CHART-SPECIFIC
-    enum BWChartSubType { BWNormal, BWSimple = BWNormal };
+        // BOX WHISKER CHART-SPECIFIC
+        enum BWChartSubType { BWNormal, BWSimple = BWNormal };
 
-    enum BWStatVal {                  BWStatValSTART,
-                                      UpperOuterFence = BWStatValSTART,  // first value stored in array
-                                      UpperInnerFence,
-                                      Quartile3,
-                                      Median,
-                                      Quartile1,
-                                      LowerInnerFence,
-                                      LowerOuterFence,
-                                      MaxValue,
-                                      MeanValue,
-                                      MinValue,
-                                      BWStatValEND = MinValue,          // last value stored in array
-                                      //  extra values - not stored in the array:
-                                      BWStatValOffEndValue,  // the number of array values
-                                      BWStatValALL,          // special flag reprsenting *all* array values
-                                      BWStatValUNKNOWN };    // to be returned when value is undefined
+        enum BWStatVal {                  BWStatValSTART,
+                        UpperOuterFence = BWStatValSTART,  // first value stored in array
+                        UpperInnerFence,
+                        Quartile3,
+                        Median,
+                        Quartile1,
+                        LowerInnerFence,
+                        LowerOuterFence,
+                        MaxValue,
+                        MeanValue,
+                        MinValue,
+                        BWStatValEND = MinValue,          // last value stored in array
+                        //  extra values - not stored in the array:
+                        BWStatValOffEndValue,  // the number of array values
+                        BWStatValALL,          // special flag reprsenting *all* array values
+                        BWStatValUNKNOWN };    // to be returned when value is undefined
 
-    void setBWChartSubType( BWChartSubType bWChartSubType )
+        void setBWChartSubType( BWChartSubType bWChartSubType )
         {
             _BWChartSubType = bWChartSubType;
             emit changed();
         }
 
-    BWChartSubType bWChartSubType() const
+        BWChartSubType bWChartSubType() const
         {
             return _BWChartSubType;
         }
 
-    static QString bWChartSubTypeToString( BWChartSubType type );
-    static BWChartSubType stringToBWChartSubType( const QString& string );
-    static QString bWChartStatValToString( BWStatVal type );
-    static BWStatVal stringToBWChartStatVal( const QString& string );
+        static QString bWChartSubTypeToString( BWChartSubType type );
+        static BWChartSubType stringToBWChartSubType( const QString& string );
+        static QString bWChartStatValToString( BWStatVal type );
+        static BWStatVal stringToBWChartStatVal( const QString& string );
 
-    void setBWChartFences( double upperInner, double lowerInner,
-                           double upperOuter, double lowerOuter );
-    void bWChartFences( double& upperInner, double& lowerInner,
-                        double& upperOuter, double& lowerOuter ) const;
+        void setBWChartFences( double upperInner, double lowerInner,
+                double upperOuter, double lowerOuter );
+        void bWChartFences( double& upperInner, double& lowerInner,
+                double& upperOuter, double& lowerOuter ) const;
 
-    void setBWChartBrush( const QBrush& bWChartBrush )
+        void setBWChartBrush( const QBrush& bWChartBrush )
         {
             _BWChartBrush = bWChartBrush;
             emit changed();
         }
 
-    QBrush bWChartBrush() const
+        QBrush bWChartBrush() const
         {
             return _BWChartBrush;
         }
 
-    void setBWChartOutValMarkerSize( int size )
+        void setBWChartOutValMarkerSize( int size )
         {
             _BWChartOutValMarkerSize = size;
         }
 
 
-    int bWChartOutValMarkerSize() const
+        int bWChartOutValMarkerSize() const
         {
             return _BWChartOutValMarkerSize;
         }
 
-    void setBWChartPrintStatistics( BWStatVal statValue,
-                                    bool active,
-                                    QFont* font = 0,
-                                    int size = 24,
-                                    QColor* color = 0,
-                                    QBrush* brush = 0 );
+        void setBWChartPrintStatistics( BWStatVal statValue,
+                bool active,
+                QFont* font = 0,
+                int size = 24,
+                QColor* color = 0,
+                QBrush* brush = 0 );
 
-    bool bWChartPrintStatistics( BWStatVal statValue ) const
+        bool bWChartPrintStatistics( BWStatVal statValue ) const
         {
             return _BWChartStatistics[ statValue ].active;
         }
 
 
-    QFont bWChartStatisticsFont( BWStatVal statValue ) const
+        QFont bWChartStatisticsFont( BWStatVal statValue ) const
         {
             return _BWChartStatistics[ statValue ].font;
         }
 
 
-    bool bWChartStatisticsUseRelSize( BWStatVal statValue ) const
+        bool bWChartStatisticsUseRelSize( BWStatVal statValue ) const
         {
             return _BWChartStatistics[ statValue ].useRelSize;
         }
 
 
-    int bWChartStatisticsFontRelSize( BWStatVal statValue ) const
+        int bWChartStatisticsFontRelSize( BWStatVal statValue ) const
         {
             return _BWChartStatistics[ statValue ].relSize;
         }
 
 
-    QColor bWChartStatisticsColor( BWStatVal statValue ) const
+        QColor bWChartStatisticsColor( BWStatVal statValue ) const
         {
             return _BWChartStatistics[ statValue ].color;
         }
 
-    QBrush bWChartStatisticsBrush( BWStatVal statValue ) const
+        QBrush bWChartStatisticsBrush( BWStatVal statValue ) const
         {
             return _BWChartStatistics[ statValue ].brush;
         }
 
 
 
-    // LEGENDS
+        // LEGENDS
 
-    enum LegendPosition { NoLegend, LegendTop, LegendBottom,
-                          LegendLeft, LegendRight,
-                          LegendTopLeft,
-                          LegendTopLeftTop,
-                          LegendTopLeftLeft,
-                          LegendTopRight,
-                          LegendTopRightTop,
-                          LegendTopRightRight,
-                          LegendBottomLeft,
-                          LegendBottomLeftBottom,
-                          LegendBottomLeftLeft,
-                          LegendBottomRight,
-                          LegendBottomRightBottom,
-                          LegendBottomRightRight
-    };
+        enum LegendPosition { NoLegend, LegendTop, LegendBottom,
+            LegendLeft, LegendRight,
+            LegendTopLeft,
+            LegendTopLeftTop,
+            LegendTopLeftLeft,
+            LegendTopRight,
+            LegendTopRightTop,
+            LegendTopRightRight,
+            LegendBottomLeft,
+            LegendBottomLeftBottom,
+            LegendBottomLeftLeft,
+            LegendBottomRight,
+            LegendBottomRightBottom,
+            LegendBottomRightRight
+        };
 
 
-    void setLegendPosition( LegendPosition position )
+        void setLegendPosition( LegendPosition position )
         {
             _legendPosition = position;
             emit changed();
         }
 
-    LegendPosition legendPosition() const
+        LegendPosition legendPosition() const
         {
             return _legendPosition;
         }
 
 
-    static QString legendPositionToString( LegendPosition pos );
-    static LegendPosition stringToLegendPosition( const QString& string );
+        static QString legendPositionToString( LegendPosition pos );
+        static LegendPosition stringToLegendPosition( const QString& string );
 
-    enum LegendSource { LegendManual, LegendFirstColumn, LegendAutomatic };
+        enum LegendSource { LegendManual, LegendFirstColumn, LegendAutomatic };
 
-    void setLegendSource( LegendSource source )
+        void setLegendSource( LegendSource source )
         {
             _legendSource = source;
             emit changed();
         }
 
-    LegendSource legendSource() const
+        LegendSource legendSource() const
         {
             return _legendSource;
         }
 
-    static QString legendSourceToString( LegendSource source );
-    static LegendSource stringToLegendSource( const QString& string );
+        static QString legendSourceToString( LegendSource source );
+        static LegendSource stringToLegendSource( const QString& string );
 
-    void setLegendText( uint dataset, const QString& text )
+        void setLegendText( uint dataset, const QString& text )
         {
             _legendText[ dataset ] = text;
             emit changed();
         }
 
-    QString legendText( uint dataset ) const
+        QString legendText( uint dataset ) const
         {
             if( _legendText.find( dataset ) != _legendText.end() )
                 return _legendText[ dataset ];
@@ -1708,136 +1707,136 @@ public:
         }
 
 
-    void setLegendTextColor( const QColor& color )
+        void setLegendTextColor( const QColor& color )
         {
             _legendTextColor = color;
             emit changed();
         }
 
 
-    QColor legendTextColor() const
+        QColor legendTextColor() const
         {
             return _legendTextColor;
         }
 
 
-    void setLegendFont( const QFont& font, bool useFontSize )
+        void setLegendFont( const QFont& font, bool useFontSize )
         {
             _legendFont = font;
             _legendFontUseRelSize = ! useFontSize;
             emit changed();
         }
 
-    QFont legendFont() const
+        QFont legendFont() const
         {
             return _legendFont;
         }
 
 
-    void setLegendFontUseRelSize( bool legendFontUseRelSize )
+        void setLegendFontUseRelSize( bool legendFontUseRelSize )
         {
             _legendFontUseRelSize = legendFontUseRelSize;
             emit changed();
         }
 
-    bool legendFontUseRelSize() const
+        bool legendFontUseRelSize() const
         {
             return _legendFontUseRelSize;
         }
 
-    void setLegendFontRelSize( int legendFontRelSize )
+        void setLegendFontRelSize( int legendFontRelSize )
         {
             _legendFontRelSize = legendFontRelSize;
             emit changed();
         }
 
-    int legendFontRelSize() const
+        int legendFontRelSize() const
         {
             return _legendFontRelSize;
         }
 
 
-    void setLegendTitleText( const QString& text )
+        void setLegendTitleText( const QString& text )
         {
             _legendTitleText = text;
             emit changed();
         }
 
 
-    QString legendTitleText() const
+        QString legendTitleText() const
         {
             return _legendTitleText;
         }
 
 
-    void setLegendTitleTextColor( const QColor& color )
+        void setLegendTitleTextColor( const QColor& color )
         {
             _legendTitleTextColor = color;
             emit changed();
         }
 
 
-    QColor legendTitleTextColor() const
+        QColor legendTitleTextColor() const
         {
             return _legendTitleTextColor;
         }
 
 
 
-    void setLegendTitleFont( const QFont& font, bool useFontSize )
+        void setLegendTitleFont( const QFont& font, bool useFontSize )
         {
             _legendTitleFont = font;
             _legendTitleFontUseRelSize = ! useFontSize;
             emit changed();
         }
 
-    QFont legendTitleFont() const
+        QFont legendTitleFont() const
         {
             return _legendTitleFont;
         }
 
 
-    void setLegendTitleFontUseRelSize( bool legendTitleFontUseRelSize )
+        void setLegendTitleFontUseRelSize( bool legendTitleFontUseRelSize )
         {
             _legendTitleFontUseRelSize = legendTitleFontUseRelSize;
             emit changed();
         }
 
-    bool legendTitleFontUseRelSize() const
+        bool legendTitleFontUseRelSize() const
         {
             return _legendTitleFontUseRelSize;
         }
 
-    void setLegendTitleFontRelSize( int legendTitleFontRelSize )
+        void setLegendTitleFontRelSize( int legendTitleFontRelSize )
         {
             _legendTitleFontRelSize = legendTitleFontRelSize;
             emit changed();
         }
 
-    int legendTitleFontRelSize() const
+        int legendTitleFontRelSize() const
         {
             return _legendTitleFontRelSize;
         }
 
 
-    void setLegendSpacing( uint space )
+        void setLegendSpacing( uint space )
         {
             _legendSpacing = space;
         }
 
 
-    uint legendSpacing() const
+        uint legendSpacing() const
         {
             return _legendSpacing;
         }
 
-    // END LEGENDS
+        // END LEGENDS
 
 
 
-    // AXES
+        // AXES
 
-    void setAxisType( uint n, const KDChartAxisParams::AxisType axisType )
+        void setAxisType( uint n, const KDChartAxisParams::AxisType axisType )
         {
             if ( n < KDCHART_MAX_AXES ) {
                 _axisSettings[ n ].params.setAxisType( axisType );
@@ -1845,8 +1844,8 @@ public:
             }
         }
 
-    void setAxisVisible( uint n,
-                         const bool axisVisible )
+        void setAxisVisible( uint n,
+                const bool axisVisible )
         {
             if ( n < KDCHART_MAX_AXES ) {
                 _axisSettings[ n ].params.setAxisVisible( axisVisible );
@@ -1854,33 +1853,33 @@ public:
             }
         }
 
-    bool axisVisible( uint n ) const
+        bool axisVisible( uint n ) const
         {
             return n < KDCHART_MAX_AXES ? _axisSettings[ n ].params.axisVisible()
                 : false;
         }
 
-    void setAxisShowGrid( uint n,
-                          bool axisShowGrid );
-    bool showGrid() const;
-    void setAxisDatasets( uint n,
-                          uint dataset,
-                          uint dataset2 = KDCHART_NO_DATASET,
-                          uint chart = 0 );
-    bool axisDatasets( uint n,
-                       uint& dataset,
-                       uint& dataset2,
-                       uint& chart ) const;
+        void setAxisShowGrid( uint n,
+                bool axisShowGrid );
+        bool showGrid() const;
+        void setAxisDatasets( uint n,
+                uint dataset,
+                uint dataset2 = KDCHART_NO_DATASET,
+                uint chart = 0 );
+        bool axisDatasets( uint n,
+                uint& dataset,
+                uint& dataset2,
+                uint& chart ) const;
 
 #if COMPAT_QT_VERSION >= 0x030000
-    typedef QValueVector<uint> AxesArray;
+        typedef QValueVector<uint> AxesArray;
 #else
-    typedef QArray<uint> AxesArray;
+        typedef QArray<uint> AxesArray;
 #endif
 
-    bool chartAxes( uint chart, uint& cnt, AxesArray& axes ) const;
+        bool chartAxes( uint chart, uint& cnt, AxesArray& axes ) const;
 
-    void setAxisArea( const uint n, const QRect& areaRect )
+        void setAxisArea( const uint n, const QRect& areaRect )
         {
             if ( n < KDCHART_MAX_AXES ) {
                 _axisSettings[ n ].params.setAxisTrueAreaRect( areaRect );
@@ -1888,589 +1887,589 @@ public:
             }
         }
 
-    void setAxisLabelsTouchEdges( uint n, bool axisLabelsTouchEdges )
+        void setAxisLabelsTouchEdges( uint n, bool axisLabelsTouchEdges )
         {
             _axisSettings[ n ].params.setAxisLabelsTouchEdges(
-                axisLabelsTouchEdges );
+                    axisLabelsTouchEdges );
             emit changed();
         }
 
-    void setAxisLabelsVisible( uint n,
-                               bool axisLabelsVisible )
+        void setAxisLabelsVisible( uint n,
+                bool axisLabelsVisible )
         {
             if ( n < KDCHART_MAX_AXES )
                 _axisSettings[ n ].params.setAxisLabelsVisible( axisLabelsVisible );
         }
 
-    void setAxisLabelsFont( uint n,
-                            QFont axisLabelsFont,
-                            int axisLabelsFontSize = 0,
-                            QColor axisLabelsColor = Qt::black );
+        void setAxisLabelsFont( uint n,
+                                QFont axisLabelsFont,
+                                int axisLabelsFontSize = 0,
+                                QColor axisLabelsColor = Qt::black );
 
-    void setAxisLabelTextParams( uint n,
-                                 bool axisSteadyValueCalc = true,
-                                 KDChartData axisValueStart = KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
-                                 KDChartData axisValueEnd   = KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
-                                 double axisValueDelta      = KDChartAxisParams::AXIS_LABELS_AUTO_DELTA,
-                                 int axisDigitsBehindComma  = KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS,
-                                 int axisMaxEmptyInnerSpan = 67,
-                                 KDChartAxisParams::LabelsFromDataRow takeLabelsFromDataRow
-                                 = KDChartAxisParams::LabelsFromDataRowNo,
-                                 int labelTextsDataRow = 0,
-                                 QStringList* axisLabelStringList = 0,
-                                 QStringList* axisShortLabelsStringList = 0 )
+        void setAxisLabelTextParams( uint n,
+            bool axisSteadyValueCalc   = true,
+            KDChartData axisValueStart = KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
+            KDChartData axisValueEnd   = KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
+            double axisValueDelta      = KDChartAxisParams::AXIS_LABELS_AUTO_DELTA,
+            int axisDigitsBehindComma  = KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS,
+            int axisMaxEmptyInnerSpan  = 67,
+            KDChartAxisParams::LabelsFromDataRow takeLabelsFromDataRow
+                                       = KDChartAxisParams::LabelsFromDataRowNo,
+            int labelTextsDataRow      = 0,
+            QStringList* axisLabelStringList = 0,
+            QStringList* axisShortLabelsStringList = 0 )
         {
             _axisSettings[ n ].params.setAxisValues(
-                axisSteadyValueCalc,
-                axisValueStart,
-                axisValueEnd,
-                axisValueDelta,
-                axisDigitsBehindComma,
-                axisMaxEmptyInnerSpan,
-                takeLabelsFromDataRow,
-                labelTextsDataRow,
-                axisLabelStringList,
-                axisShortLabelsStringList );
+                    axisSteadyValueCalc,
+                    axisValueStart,
+                    axisValueEnd,
+                    axisValueDelta,
+                    axisDigitsBehindComma,
+                    axisMaxEmptyInnerSpan,
+                    takeLabelsFromDataRow,
+                    labelTextsDataRow,
+                    axisLabelStringList,
+                    axisShortLabelsStringList );
             emit changed();
         }
 
 
-    void setAxisLabelStringParams( uint n,
-                                   QStringList*   axisLabelStringList,
-                                   QStringList*   axisShortLabelStringList,
-                                   const QString& valueStart = QString::null,
-                                   const QString& valueEnd   = QString::null );
+        void setAxisLabelStringParams( uint n,
+                QStringList*   axisLabelStringList,
+                QStringList*   axisShortLabelStringList,
+                const QString& valueStart = QString::null,
+                const QString& valueEnd   = QString::null );
 
 
-    void setAxisParams( uint n,
-                        const KDChartAxisParams& axisParams );
+        void setAxisParams( uint n,
+                const KDChartAxisParams& axisParams );
 
-    const KDChartAxisParams& axisParams( uint n ) const
+        const KDChartAxisParams& axisParams( uint n ) const
         {
             return n < KDCHART_MAX_AXES ? _axisSettings[ n ].params
                 : _axisSettings[ KDCHART_MAX_AXES ].params;
         }
 
-    // some convenience functions refering to the first KDChartCustomBox
-    // that is anchored to the axis n.
-    bool findFirstAxisCustomBoxID(   uint n, uint& boxID ) const;
-    void setAxisTitle(               uint n, const QString& axisTitle );
-    QString axisTitle(               uint n ) const;
-    void setAxisTitleColor(          uint n, QColor axisTitleColor );
-    QColor axisTitleColor(           uint n ) const;
-    void setAxisTitleFont(           uint n, QFont axisTitleFont );
-    QFont axisTitleFont(             uint n ) const;
-    void setAxisTitleFontUseRelSize( uint n, bool useRelSize );
-    bool axisTitleFontUseRelSize(    uint n ) const;
-    void setAxisTitleFontRelSize(    uint n, int axisTitleFontRelSize );
-    int axisTitleFontRelSize(        uint n ) const;
+        // some convenience functions refering to the first KDChartCustomBox
+        // that is anchored to the axis n.
+        bool findFirstAxisCustomBoxID(   uint n, uint& boxID ) const;
+        void setAxisTitle(               uint n, const QString& axisTitle );
+        QString axisTitle(               uint n ) const;
+        void setAxisTitleColor(          uint n, QColor axisTitleColor );
+        QColor axisTitleColor(           uint n ) const;
+        void setAxisTitleFont(           uint n, QFont axisTitleFont );
+        QFont axisTitleFont(             uint n ) const;
+        void setAxisTitleFontUseRelSize( uint n, bool useRelSize );
+        bool axisTitleFontUseRelSize(    uint n ) const;
+        void setAxisTitleFontRelSize(    uint n, int axisTitleFontRelSize );
+        int axisTitleFontRelSize(        uint n ) const;
 
-    // END AXES
-
-
-    // HEADERS/FOOTERS
+        // END AXES
 
 
-    /*
-      READ before changing/enhancing the following enum
-      =================================================
-
-      Please note: The following enum is made in a way that
-      sections with smaller Y values come first.
-      Thus one can construct a loop itterating over theHdFtPos values
-      and so going from the top of the screen toiwards the bottom...
-
-      Also please note that extending this enum shound NOT break the
-      tripple groups (numbers 0/1/2, 3/4/5, and 6/7/8) since the
-      algorithms in
-      KDChartPainter::setupGeometry() and
-      KDChartPainter::paintHeaderFooter() rely on this schema.
-      Also don't forget to always update the auxiliary values
-      HdFtPosSTART, HdFtPosHeadersSTART,
-      HdFtPosHeadersEND, HdFtPosFootersSTART,
-      HdFtPosFootersEND, and HdFtPosEND muessen - these are used
-      fpr other itarators...
-    */
-    enum HdFtPos{ // start of all sections
-        HdFtPosSTART = 0,
-
-        // headers:
-        HdFtPosHeadersSTART  = 0,
-        // top-most headers
-        HdFtPosHeaders0START = 0,
-        HdFtPosHeader0       = 0,
-        HdFtPosHeader0L = 1,
-        HdFtPosHeader0R      = 2,
-        HdFtPosHeaders0END   = 2,
-        // normal ( == middle ) headers
-        HdFtPosHeaders1START = 3,
-        HdFtPosHeader        = 3,        // center
-        HdFtPosHeaderL = 4,              // left
-        HdFtPosHeaderR       = 5,        // right
-        HdFtPosHeaders1END   = 5,
-        // bottom headers
-        HdFtPosHeaders2START = 6,
-        HdFtPosHeader2       = 6,
-        HdFtPosHeader2L = 7,
-        HdFtPosHeader2R      = 8,
-        HdFtPosHeaders2END   = 8,
-
-        HdFtPosHeadersEND = 8,
-
-        // footers:
-        HdFtPosFootersSTART = 9,
-        // normal ( == middle ) footers
-        HdFtPosFooters1START =  9,
-        HdFtPosFooter        =  9,
-        HdFtPosFooterL = 10,
-        HdFtPosFooterR       = 11,
-        HdFtPosFooters1END   = 11,
-        // bottom footers
-        HdFtPosFooters2START = 12,
-        HdFtPosFooter2       = 12,
-        HdFtPosFooter2L = 13,
-        HdFtPosFooter2R      = 14,
-        HdFtPosFooters2END   = 14,
-        // top-most footers
-        HdFtPosFooters0START = 15,
-        HdFtPosFooter0       = 15,
-        HdFtPosFooter0L = 16,
-        HdFtPosFooter0R      = 17,
-        HdFtPosFooters0END   = 17,
-
-        HdFtPosFootersEND = 17,
-
-        HdFtPosEND = 17 };
+        // HEADERS/FOOTERS
 
 
-    void setHeaderFooterText( uint pos, const QString& text );
-    QString headerFooterText( uint pos ) const;
-    const QRect& headerFooterRect( uint pos ) const;
-    void setHeaderFooterColor( uint pos, const QColor color );
-    QColor headerFooterColor( uint pos ) const;
-    void setHeaderFooterFont( uint pos, const QFont& font,
-                              bool fontUseRelSize,
-                              int fontRelSize );
-    QFont headerFooterFont( uint pos ) const;
-    bool headerFooterFontUseRelSize( uint pos ) const;
-    int headerFooterFontRelSize( uint pos ) const;
+        /*
+        READ before changing/enhancing the following enum
+        =================================================
+
+        Please note: The following enum is made in a way that
+        sections with smaller Y values come first.
+        Thus one can construct a loop itterating over theHdFtPos values
+        and so going from the top of the screen toiwards the bottom...
+
+        Also please note that extending this enum shound NOT break the
+        tripple groups (numbers 0/1/2, 3/4/5, and 6/7/8) since the
+        algorithms in
+        KDChartPainter::setupGeometry() and
+        KDChartPainter::paintHeaderFooter() rely on this schema.
+        Also don't forget to always update the auxiliary values
+        HdFtPosSTART, HdFtPosHeadersSTART,
+        HdFtPosHeadersEND, HdFtPosFootersSTART,
+        HdFtPosFootersEND, and HdFtPosEND muessen - these are used
+        fpr other itarators...
+        */
+        enum HdFtPos{ // start of all sections
+            HdFtPosSTART = 0,
+
+            // headers:
+            HdFtPosHeadersSTART  = 0,
+            // top-most headers
+            HdFtPosHeaders0START = 0,
+            HdFtPosHeader0       = 0,
+            HdFtPosHeader0L = 1,
+            HdFtPosHeader0R      = 2,
+            HdFtPosHeaders0END   = 2,
+            // normal ( == middle ) headers
+            HdFtPosHeaders1START = 3,
+            HdFtPosHeader        = 3,        // center
+            HdFtPosHeaderL = 4,              // left
+            HdFtPosHeaderR       = 5,        // right
+            HdFtPosHeaders1END   = 5,
+            // bottom headers
+            HdFtPosHeaders2START = 6,
+            HdFtPosHeader2       = 6,
+            HdFtPosHeader2L = 7,
+            HdFtPosHeader2R      = 8,
+            HdFtPosHeaders2END   = 8,
+
+            HdFtPosHeadersEND = 8,
+
+            // footers:
+            HdFtPosFootersSTART = 9,
+            // normal ( == middle ) footers
+            HdFtPosFooters1START =  9,
+            HdFtPosFooter        =  9,
+            HdFtPosFooterL = 10,
+            HdFtPosFooterR       = 11,
+            HdFtPosFooters1END   = 11,
+            // bottom footers
+            HdFtPosFooters2START = 12,
+            HdFtPosFooter2       = 12,
+            HdFtPosFooter2L = 13,
+            HdFtPosFooter2R      = 14,
+            HdFtPosFooters2END   = 14,
+            // top-most footers
+            HdFtPosFooters0START = 15,
+            HdFtPosFooter0       = 15,
+            HdFtPosFooter0L = 16,
+            HdFtPosFooter0R      = 17,
+            HdFtPosFooters0END   = 17,
+
+            HdFtPosFootersEND = 17,
+
+            HdFtPosEND = 17 };
 
 
-    // quick&dirty functions: access Header, Header2 and Footer
-    //                        without having to specify the HdFtPos
-    //
-    // This may be convenient for specifying simple charts with
-    // up to two centered header(s) and up to one centered footer.
+        void setHeaderFooterText( uint pos, const QString& text );
+        QString headerFooterText( uint pos ) const;
+        const QRect& headerFooterRect( uint pos ) const;
+        void setHeaderFooterColor( uint pos, const QColor color );
+        QColor headerFooterColor( uint pos ) const;
+        void setHeaderFooterFont( uint pos, const QFont& font,
+                bool fontUseRelSize,
+                int fontRelSize );
+        QFont headerFooterFont( uint pos ) const;
+        bool headerFooterFontUseRelSize( uint pos ) const;
+        int headerFooterFontRelSize( uint pos ) const;
 
 
-    void setHeader1Text( const QString& text )
+        // quick&dirty functions: access Header, Header2 and Footer
+        //                        without having to specify the HdFtPos
+        //
+        // This may be convenient for specifying simple charts with
+        // up to two centered header(s) and up to one centered footer.
+
+
+        void setHeader1Text( const QString& text )
         {
             _hdFtParams[ HdFtPosHeader ]._text = text;
             emit changed();
         }
 
 
-    QString header1Text() const
+        QString header1Text() const
         {
             return _hdFtParams[ HdFtPosHeader ]._text;
         }
 
-    void setHeader1Font( const QFont& font )
+        void setHeader1Font( const QFont& font )
         {
             _hdFtParams[ HdFtPosHeader ]._font = font;
             emit changed();
         }
 
 
-    QFont header1Font() const
+        QFont header1Font() const
         {
             return _hdFtParams[ HdFtPosHeader ]._font;
         }
 
-    void setHeader2Text( const QString& text )
+        void setHeader2Text( const QString& text )
         {
             _hdFtParams[ HdFtPosHeader2 ]._text = text;
             emit changed();
         }
 
 
-    QString header2Text() const
+        QString header2Text() const
         {
             return _hdFtParams[ HdFtPosHeader2 ]._text;
         }
 
-    void setHeader2Font( const QFont& font )
+        void setHeader2Font( const QFont& font )
         {
             _hdFtParams[ HdFtPosHeader2 ]._font = font;
             emit changed();
         }
 
 
-    QFont header2Font() const
+        QFont header2Font() const
         {
             return _hdFtParams[ HdFtPosHeader2 ]._font;
         }
 
 
 
-    void setFooterText( const QString& text )
+        void setFooterText( const QString& text )
         {
             _hdFtParams[ HdFtPosFooter ]._text = text;
             emit changed();
         }
 
 
-    QString footerText() const
+        QString footerText() const
         {
             return _hdFtParams[ HdFtPosFooter ]._text;
         }
 
-    void setFooterFont( const QFont& font )
+        void setFooterFont( const QFont& font )
         {
             _hdFtParams[ HdFtPosFooter ]._font = font;
             emit changed();
         }
 
 
-    QFont footerFont() const
+        QFont footerFont() const
         {
             return _hdFtParams[ HdFtPosFooter ]._font;
         }
 
 
-    /**
-       \internal
-    */
-    void __internalStoreHdFtRect( int pos, QRect rect )
+        /**
+        \internal
+        */
+        void __internalStoreHdFtRect( int pos, QRect rect )
         {
             if ( 0 <= pos && HdFtPosEND >= pos )
                 _hdFtParams[ pos ].setRect( rect );
         }
 
 
-    // END HEADERS/FOOTERS
+        // END HEADERS/FOOTERS
 
 
 
 
-    KDChartParams();
-    virtual ~KDChartParams();
+        KDChartParams();
+        virtual ~KDChartParams();
 
-    bool loadXML( const QDomDocument& doc );
-    QDomDocument saveXML( bool withPI = true ) const;
+        bool loadXML( const QDomDocument& doc );
+        QDomDocument saveXML( bool withPI = true ) const;
 
-    friend QTextStream& operator<<( QTextStream& s, const KDChartParams& p );
-    friend QTextStream& operator>>( QTextStream& s, KDChartParams& p );
+        friend QTextStream& operator<<( QTextStream& s, const KDChartParams& p );
+        friend QTextStream& operator>>( QTextStream& s, KDChartParams& p );
 
-    static void createChartValueNode( QDomDocument& doc, QDomNode& parent,
-                                      const QString& elementName,
-                                      const KDChartData& data );
-    static void createColorMapNode( QDomDocument& doc, QDomNode& parent,
-                                    const QString& elementName,
-                                    const QMap< uint, QColor >& map );
-    static void createDoubleMapNode( QDomDocument& doc, QDomNode& parent,
-                                     const QString& elementName,
-                                     const QMap< int, double >& map );
-    static void createChartFontNode( QDomDocument& doc, QDomNode& parent,
-                                     const QString& elementName,
-                                     const QFont& font, bool useRelFont,
-                                     int relFont );
-    static bool readColorMapNode( const QDomElement& element,
-                                  QMap<uint,QColor>* map );
-    static bool readDoubleMapNode( const QDomElement& element,
-                                   QMap<int,double>* map );
-    static bool readChartFontNode( const QDomElement& element, QFont& font,
-                                   bool& useRelFont, int& relFontSize );
-    static bool readChartValueNode( const QDomElement& element,
-                                    KDChartData& value );
+        static void createChartValueNode( QDomDocument& doc, QDomNode& parent,
+                const QString& elementName,
+                const KDChartData& data );
+        static void createColorMapNode( QDomDocument& doc, QDomNode& parent,
+                const QString& elementName,
+                const QMap< uint, QColor >& map );
+        static void createDoubleMapNode( QDomDocument& doc, QDomNode& parent,
+                const QString& elementName,
+                const QMap< int, double >& map );
+        static void createChartFontNode( QDomDocument& doc, QDomNode& parent,
+                const QString& elementName,
+                const QFont& font, bool useRelFont,
+                int relFont );
+        static bool readColorMapNode( const QDomElement& element,
+                QMap<uint,QColor>* map );
+        static bool readDoubleMapNode( const QDomElement& element,
+                QMap<int,double>* map );
+        static bool readChartFontNode( const QDomElement& element, QFont& font,
+                bool& useRelFont, int& relFontSize );
+        static bool readChartValueNode( const QDomElement& element,
+                KDChartData& value );
 
 
 signals:
-    void changed();
+        void changed();
 
 
-private:
-    void recomputeShadowColors();
-    void insertDefaultAxisTitleBox( uint n,
-                                    bool setTitle,       const QString& axisTitle,
-                                    bool setColor,       const QColor& axisTitleColor,
-                                    bool setFont,        const QFont& axisTitleFont,
-                                    bool setFontUseRel,  bool useFontSize,
-                                    bool setFontRelSize, int axisTitleFontRelSize );
-
-    static QColor _internalPointer_DataValueAutoColor;
-
-    bool _optimizeOutputForScreen;
-    int _globalLeadingLeft;
-    int _globalLeadingTop;
-    int _globalLeadingRight;
-    int _globalLeadingBottom;
-    ChartType _chartType;
-    ChartType _additionalChartType;
-    int _numValues;
-    QFont _defaultFont;
-
-    typedef QMap < QString, KDChartFrameSettings > AreaMap;
-    AreaMap _areaMap;
-
-    CustomBoxMap _customBoxMap;
-    QRect _noRect;
-    KDFrame _noFrame;
-
-    KDChartFrameSettings _noFrameSettings;
-
-    class ModeAndChart
-    {
-    public:
-        ModeAndChart()
-            : _mode( UnknownMode ), _chart( KDCHART_NO_CHART )
-            {}
-        ModeAndChart( SourceMode mode, uint chart )
-            : _mode( mode ), _chart( chart )
-            {}
-
-        SourceMode mode() const
-            {
-                return _mode;
-            };
-        uint chart() const
-            {
-                return _chart;
-            };
-
-        void setMode( SourceMode mode )
-            {
-                _mode = mode;
-            };
-        void setChart( uint chart )
-            {
-                _chart = chart;
-            };
     private:
-        SourceMode _mode;
-        uint _chart;
-    };
+        void recomputeShadowColors();
+        void insertDefaultAxisTitleBox( uint n,
+                                        bool setTitle,       const QString& axisTitle,
+                                        bool setColor,       const QColor& axisTitleColor,
+                                        bool setFont,        const QFont& axisTitleFont,
+                                        bool setFontUseRel,  bool useFontSize,
+                                        bool setFontRelSize, int axisTitleFontRelSize );
 
-    typedef QMap < uint, ModeAndChart > ModeAndChartMap;
-    ModeAndChartMap _dataSourceModeAndChart;
-    bool _setChartSourceModeWasUsed;
-    QMap < uint, QColor > _dataColors;
-    uint _maxDatasetSourceMode;
-    KDChartPropertySetList _propertySetList;
-    double _shadowBrightnessFactor;
-    Qt::BrushStyle _shadowPattern;
-    bool _threeDShadowColors;
-    uint _maxDatasetColor;
-    QMap < uint, QColor > _dataColorsShadow1;
-    QMap < uint, QColor > _dataColorsShadow2;
-    QColor _outlineDataColor;
-    uint _outlineDataLineWidth;
-    PenStyle _outlineDataLineStyle;
+        static QColor _internalPointer_DataValueAutoColor;
 
+        bool _optimizeOutputForScreen;
+        int _globalLeadingLeft;
+        int _globalLeadingTop;
+        int _globalLeadingRight;
+        int _globalLeadingBottom;
+        ChartType _chartType;
+        ChartType _additionalChartType;
+        int _numValues;
+        QFont _defaultFont;
 
-    struct PrintDataValuesSettings {
-        bool _printDataValues;
-        int _divPow10;
-        int _digitsBehindComma;
-        QFont _dataValuesFont;
-        bool _dataValuesUseFontRelSize;
-        int _dataValuesFontRelSize;
-        QColor _dataValuesColor;
-        QBrush _dataValuesBrush;
-        bool _dataValuesAutoColor;
-        KDChartEnums::PositionFlag _dataValuesAnchorNegativePosition;
-        uint _dataValuesAnchorNegativeAlign;
-        int _dataValuesAnchorNegativeDeltaX;
-        int _dataValuesAnchorNegativeDeltaY;
-        int _dataValuesNegativeRotation;
-        KDChartEnums::PositionFlag _dataValuesAnchorPositivePosition;
-        uint _dataValuesAnchorPositiveAlign;
-        int _dataValuesAnchorPositiveDeltaX;
-        int _dataValuesAnchorPositiveDeltaY;
-        int _dataValuesPositiveRotation;
-        KDChartEnums::TextLayoutPolicy _dataValuesLayoutPolicy;
-        bool _dataValuesShowInfinite;
+        typedef QMap < QString, KDChartFrameSettings > AreaMap;
+        AreaMap _areaMap;
 
-        bool _useDefaultFontParams;  // internal flag, do NOT store it!
-    };
-    PrintDataValuesSettings _printDataValuesSettings;
-    PrintDataValuesSettings _printDataValuesSettings2;
+        CustomBoxMap _customBoxMap;
+        QRect _noRect;
+        KDFrame _noFrame;
 
-    bool _allowOverlappingDataValueTexts;
-    BarChartSubType _barChartSubType;
-    bool _threeDBars;
-    int _threeDBarAngle;
-    double _threeDBarDepth;
-    double _cosThreeDBarAngle;
-    int _datasetGap;
-    bool _datasetGapIsRelative;
-    int _valueBlockGap;
-    bool _valueBlockGapIsRelative;
-    bool _solidExcessArrows;
+        KDChartFrameSettings _noFrameSettings;
 
-    // LINES/AREAS-specific
-    LineChartSubType _lineChartSubType;
-    bool _threeDLines;
-    int _threeDLineDepth;
-    int _threeDLineXRotation;
-    int _threeDLineYRotation;
-    bool _lineMarker;
-    LineMarkerStyleMap _lineMarkerStyles;
-    uint _maxDatasetLineMarkerStyle;
-    QSize _lineMarkerSize;
-    QColor _lineColor;
-    int _lineWidth;
-    PenStyle _lineStyle;
-    AreaChartSubType _areaChartSubType;
-    AreaLocation _areaLocation;
+        class ModeAndChart
+        {
+            public:
+                ModeAndChart()
+                    : _mode( UnknownMode ), _chart( KDCHART_NO_CHART )
+                    {}
+                ModeAndChart( SourceMode mode, uint chart )
+                    : _mode( mode ), _chart( chart )
+                    {}
 
+                SourceMode mode() const
+                {
+                    return _mode;
+                };
+                uint chart() const
+                {
+                    return _chart;
+                };
 
-    // POLAR-specific
-    PolarChartSubType _polarChartSubType;
-    bool _polarMarker;
-    PolarMarkerStyleMap _polarMarkerStyles;
-    uint _maxDatasetPolarMarkerStyle;
-    QSize _polarMarkerSize;
-    int _polarLineWidth;
-    int _polarZeroDegreePos;
-    bool _polarRotateCircularLabels;
-    struct _polarDelimsAndLabelStruct {
-        bool showDelimiters;
-        bool showLabels;
-    };
-    _polarDelimsAndLabelStruct _polarDelimsAndLabels[ 1 + MAX_POLAR_DELIMS_AND_LABELS_POS ];
+                void setMode( SourceMode mode )
+                {
+                    _mode = mode;
+                };
+                void setChart( uint chart )
+                {
+                    _chart = chart;
+                };
+            private:
+                SourceMode _mode;
+                uint _chart;
+        };
+
+        typedef QMap < uint, ModeAndChart > ModeAndChartMap;
+        ModeAndChartMap _dataSourceModeAndChart;
+        bool _setChartSourceModeWasUsed;
+        QMap < uint, QColor > _dataColors;
+        uint _maxDatasetSourceMode;
+        KDChartPropertySetList _propertySetList;
+        double _shadowBrightnessFactor;
+        Qt::BrushStyle _shadowPattern;
+        bool _threeDShadowColors;
+        uint _maxDatasetColor;
+        QMap < uint, QColor > _dataColorsShadow1;
+        QMap < uint, QColor > _dataColorsShadow2;
+        QColor _outlineDataColor;
+        uint _outlineDataLineWidth;
+        PenStyle _outlineDataLineStyle;
 
 
+        struct PrintDataValuesSettings {
+            bool _printDataValues;
+            int _divPow10;
+            int _digitsBehindComma;
+            QFont _dataValuesFont;
+            bool _dataValuesUseFontRelSize;
+            int _dataValuesFontRelSize;
+            QColor _dataValuesColor;
+            QBrush _dataValuesBrush;
+            bool _dataValuesAutoColor;
+            KDChartEnums::PositionFlag _dataValuesAnchorNegativePosition;
+            uint _dataValuesAnchorNegativeAlign;
+            int _dataValuesAnchorNegativeDeltaX;
+            int _dataValuesAnchorNegativeDeltaY;
+            int _dataValuesNegativeRotation;
+            KDChartEnums::PositionFlag _dataValuesAnchorPositivePosition;
+            uint _dataValuesAnchorPositiveAlign;
+            int _dataValuesAnchorPositiveDeltaX;
+            int _dataValuesAnchorPositiveDeltaY;
+            int _dataValuesPositiveRotation;
+            KDChartEnums::TextLayoutPolicy _dataValuesLayoutPolicy;
+            bool _dataValuesShowInfinite;
 
-    // PIES/RINGS
-    bool _explode;
-    double _explodeFactor;
-    ExplodeFactorsMap _explodeFactors;
-    QValueList<int> _explodeList;
-    bool _threeDPies;
-    int _threeDPieHeight;
-    int _pieStart;
-    int _ringStart;
-    bool _relativeRingThickness;
+            bool _useDefaultFontParams;  // internal flag, do NOT store it!
+        };
+        PrintDataValuesSettings _printDataValuesSettings;
+        PrintDataValuesSettings _printDataValuesSettings2;
 
+        bool _allowOverlappingDataValueTexts;
+        BarChartSubType _barChartSubType;
+        bool _threeDBars;
+        int _threeDBarAngle;
+        double _threeDBarDepth;
+        double _cosThreeDBarAngle;
+        int _datasetGap;
+        bool _datasetGapIsRelative;
+        int _valueBlockGap;
+        bool _valueBlockGapIsRelative;
+        bool _solidExcessArrows;
 
-    // HI-LO CHARTS
-
-    HiLoChartSubType _hiLoChartSubType;
-    bool _hiLoChartPrintLowValues;
-    QFont _hiLoChartLowValuesFont;
-    bool _hiLoChartLowValuesUseFontRelSize;
-    int _hiLoChartLowValuesFontRelSize;
-    QColor _hiLoChartLowValuesColor;
-    bool _hiLoChartPrintHighValues;
-    QFont _hiLoChartHighValuesFont;
-    bool _hiLoChartHighValuesUseFontRelSize;
-    int _hiLoChartHighValuesFontRelSize;
-    QColor _hiLoChartHighValuesColor;
-    bool _hiLoChartPrintOpenValues;
-    QFont _hiLoChartOpenValuesFont;
-    bool _hiLoChartOpenValuesUseFontRelSize;
-    int _hiLoChartOpenValuesFontRelSize;
-    QColor _hiLoChartOpenValuesColor;
-    bool _hiLoChartPrintCloseValues;
-    QFont _hiLoChartCloseValuesFont;
-    bool _hiLoChartCloseValuesUseFontRelSize;
-    int _hiLoChartCloseValuesFontRelSize;
-    QColor _hiLoChartCloseValuesColor;
-
-
-
-    // BOX AND WHISKER CHARTS
-
-    BWChartSubType _BWChartSubType;
-
-    struct BWChartStatistics {
-        double value;
-        int    y;
-        bool   active;
-        QFont  font;
-        bool   useRelSize;
-        int    relSize;
-        QColor color;
-        QBrush brush;
-    };
-    BWChartStatistics _BWChartStatistics[ BWStatValOffEndValue ];
-    double _BWChartFenceUpperInner;
-    double _BWChartFenceLowerInner;
-    double _BWChartFenceUpperOuter;
-    double _BWChartFenceLowerOuter;
-    int _BWChartOutValMarkerSize;
-    QBrush _BWChartBrush;
+        // LINES/AREAS-specific
+        LineChartSubType _lineChartSubType;
+        bool _threeDLines;
+        int _threeDLineDepth;
+        int _threeDLineXRotation;
+        int _threeDLineYRotation;
+        bool _lineMarker;
+        LineMarkerStyleMap _lineMarkerStyles;
+        uint _maxDatasetLineMarkerStyle;
+        QSize _lineMarkerSize;
+        QColor _lineColor;
+        int _lineWidth;
+        PenStyle _lineStyle;
+        AreaChartSubType _areaChartSubType;
+        AreaLocation _areaLocation;
 
 
-    // LEGENDS
+        // POLAR-specific
+        PolarChartSubType _polarChartSubType;
+        bool _polarMarker;
+        PolarMarkerStyleMap _polarMarkerStyles;
+        uint _maxDatasetPolarMarkerStyle;
+        QSize _polarMarkerSize;
+        int _polarLineWidth;
+        int _polarZeroDegreePos;
+        bool _polarRotateCircularLabels;
+        struct _polarDelimsAndLabelStruct {
+            bool showDelimiters;
+            bool showLabels;
+        };
+        _polarDelimsAndLabelStruct _polarDelimsAndLabels[ 1 + MAX_POLAR_DELIMS_AND_LABELS_POS ];
 
-    LegendPosition _legendPosition;
-    LegendSource _legendSource;
-    QMap < int, QString > _legendText;
-    QColor _legendTextColor;
-    QFont _legendFont;
-    bool _legendFontUseRelSize;
-    int _legendFontRelSize;
-    QString _legendTitleText;
-    QColor _legendTitleTextColor;
-    QFont _legendTitleFont;
-    bool _legendTitleFontUseRelSize;
-    int _legendTitleFontRelSize;
-    uint _legendSpacing;
 
 
-    // AXES (private)
-    struct AxisSettings
-    {
-        uint dataset;
-        uint dataset2;
-        uint chart;
-        KDChartAxisParams params;
-        AxisSettings()
+        // PIES/RINGS
+        bool _explode;
+        double _explodeFactor;
+        ExplodeFactorsMap _explodeFactors;
+        QValueList<int> _explodeList;
+        bool _threeDPies;
+        int _threeDPieHeight;
+        int _pieStart;
+        int _ringStart;
+        bool _relativeRingThickness;
+
+
+        // HI-LO CHARTS
+
+        HiLoChartSubType _hiLoChartSubType;
+        bool _hiLoChartPrintLowValues;
+        QFont _hiLoChartLowValuesFont;
+        bool _hiLoChartLowValuesUseFontRelSize;
+        int _hiLoChartLowValuesFontRelSize;
+        QColor _hiLoChartLowValuesColor;
+        bool _hiLoChartPrintHighValues;
+        QFont _hiLoChartHighValuesFont;
+        bool _hiLoChartHighValuesUseFontRelSize;
+        int _hiLoChartHighValuesFontRelSize;
+        QColor _hiLoChartHighValuesColor;
+        bool _hiLoChartPrintOpenValues;
+        QFont _hiLoChartOpenValuesFont;
+        bool _hiLoChartOpenValuesUseFontRelSize;
+        int _hiLoChartOpenValuesFontRelSize;
+        QColor _hiLoChartOpenValuesColor;
+        bool _hiLoChartPrintCloseValues;
+        QFont _hiLoChartCloseValuesFont;
+        bool _hiLoChartCloseValuesUseFontRelSize;
+        int _hiLoChartCloseValuesFontRelSize;
+        QColor _hiLoChartCloseValuesColor;
+
+
+
+        // BOX AND WHISKER CHARTS
+
+        BWChartSubType _BWChartSubType;
+
+        struct BWChartStatistics {
+            double value;
+            int    y;
+            bool   active;
+            QFont  font;
+            bool   useRelSize;
+            int    relSize;
+            QColor color;
+            QBrush brush;
+        };
+        BWChartStatistics _BWChartStatistics[ BWStatValOffEndValue ];
+        double _BWChartFenceUpperInner;
+        double _BWChartFenceLowerInner;
+        double _BWChartFenceUpperOuter;
+        double _BWChartFenceLowerOuter;
+        int _BWChartOutValMarkerSize;
+        QBrush _BWChartBrush;
+
+
+        // LEGENDS
+
+        LegendPosition _legendPosition;
+        LegendSource _legendSource;
+        QMap < int, QString > _legendText;
+        QColor _legendTextColor;
+        QFont _legendFont;
+        bool _legendFontUseRelSize;
+        int _legendFontRelSize;
+        QString _legendTitleText;
+        QColor _legendTitleTextColor;
+        QFont _legendTitleFont;
+        bool _legendTitleFontUseRelSize;
+        int _legendTitleFontRelSize;
+        uint _legendSpacing;
+
+
+        // AXES (private)
+        struct AxisSettings
+        {
+            uint dataset;
+            uint dataset2;
+            uint chart;
+            KDChartAxisParams params;
+            AxisSettings()
             {
                 dataset = KDCHART_NO_DATASET;
                 dataset2 = KDCHART_NO_DATASET;
                 chart = KDCHART_NO_CHART;
             }
-    };
+        };
 
-    // 13 == KDCHART_MAX_AXES + 1
-    AxisSettings _axisSettings[ 13 ];
-    // END AXES (private)
+        // 13 == KDCHART_MAX_AXES + 1
+        AxisSettings _axisSettings[ 13 ];
+        // END AXES (private)
 
 
-    // HEADER/FOOTER (private)
+        // HEADER/FOOTER (private)
 
-    struct HdFtParams
-    {
-        QString _text;
-        QColor _color;
-        QFont _font;
-        bool _fontUseRelSize;
-        int _fontRelSize;
-        HdFtParams()
+        struct HdFtParams
+        {
+            QString _text;
+            QColor _color;
+            QFont _font;
+            bool _fontUseRelSize;
+            int _fontRelSize;
+            HdFtParams()
             {
                 _color = QColor( Qt::black );
                 _font = QFont( "helvetica", 10, QFont::Normal, false );
                 _fontUseRelSize = true;
                 _fontRelSize = 8; // per default quite small
             }
-        void setRect( QRect rect )
+            void setRect( QRect rect )
             {
                 _rect = rect;
             }
-        const QRect& rect() const
+            const QRect& rect() const
             {
                 return _rect;
             }
-    private:
-        // temporary data that are NOT to be stored within sessions:
-        QRect _rect;
-    };
+            private:
+            // temporary data that are NOT to be stored within sessions:
+            QRect _rect;
+        };
 
-    HdFtParams _hdFtParams[ HdFtPosEND + 1 ];
-    // END HEADER/FOOTER (private)
+        HdFtParams _hdFtParams[ HdFtPosEND + 1 ];
+        // END HEADER/FOOTER (private)
 };
 
 

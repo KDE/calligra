@@ -26,39 +26,45 @@
  ** licensing are not clear to you.
  **
  **********************************************************************/
-#ifndef __KDCHARTRINGPAINTER_H__
-#define __KDCHARTRINGPAINTER_H__
+#ifndef __KDCHARTPLANESERIES_H__
+#define __KDCHARTPLANESERIES_H__
 
-#include <KDChartPainter.h>
-#include <KDChartTable.h>
 
-class KDChartParams;
+#include "KDChartBaseSeries.h"
+#include "KDChartData.h"
 
-class KDChartRingPainter : public KDChartPainter
+
+class KDChartPlaneSeries : public KDChartBaseSeries
 {
-    friend class KDChartPainter;
+    public:
+        KDChartPlaneSeries( bool isX = false, double location = 0 );
+        virtual ~KDChartPlaneSeries();
+
+        virtual uint rows() const;
+        virtual const KDChartData& cell( uint row ) const;
+        virtual void setCell( uint row, const KDChartData& element);
+        virtual void expand( uint rows );
+
+
+        // methods modelled on the TableBase methods, but these
+        // inherit from BaseSeries.
+        virtual double maxValue( int coordinate, bool &ok ) const;
+        virtual double minValue( int coordinate, bool &ok ) const;
+
+
+        // NOW for our special API.
+        virtual bool isXAxis() const;
+        virtual double location() const;
+
+        virtual void setXAxis( bool isX );  // if false, its a y axis plane
+        virtual void setLocation( double location );
+
     protected:
-    KDChartRingPainter( KDChartParams* params );
-    virtual ~KDChartRingPainter();
+        bool _isX;
+        double _location;
+        KDChartData _start, _stop;
+        virtual void update();
+};
 
-    virtual void paintData( QPainter* painter, 
-            KDChartTableDataBase* data,
-            bool paint2nd,
-            KDChartDataRegionList* regions = 0 );
-    void drawOneSegment( QPainter* painter,
-            uint outerRadius, uint innerRadius,
-            double startAngle, double angles,
-            uint dataset, uint value, uint chart,
-            bool explode,
-            KDChartDataRegionList* regions = 0 );
-
-    virtual QString fallbackLegendText( uint dataset ) const;
-    virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;
-
-    QRect _position;
-    int _size;
-    int _numValues; // PENDING(kalle) Move to base class
-}
-;
 
 #endif

@@ -1,6 +1,6 @@
 /* -*- Mode: C++ -*-
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -38,23 +38,21 @@
 #define QMemArray QArray
 #endif
 
-#include <klocale.h>
-
 #include <stdlib.h>
 
 /**
-   \class KDChartBWPainter KDChartBWPainter.h
+  \class KDChartBWPainter KDChartBWPainter.h
 
-   \brief A chart painter implementation that can paint Box&Whisker charts.
-*/
+  \brief A chart painter implementation that can paint Box&Whisker charts.
+  */
 
 /**
-   Constructor. Sets up internal data structures as necessary.
+  Constructor. Sets up internal data structures as necessary.
 
-   \param params the KDChartParams structure that defines the chart
-*/
-KDChartBWPainter::KDChartBWPainter( KDChartParams* params ) :
-    KDChartAxesPainter( params )
+  \param params the KDChartParams structure that defines the chart
+  */
+    KDChartBWPainter::KDChartBWPainter( KDChartParams* params ) :
+KDChartAxesPainter( params )
 {
     // This constructor intentionally left blank so far; we cannot setup the
     // geometry yet since we do not know the size of the painter.
@@ -62,8 +60,8 @@ KDChartBWPainter::KDChartBWPainter( KDChartParams* params ) :
 
 
 /**
-   Destructor.
-*/
+  Destructor.
+  */
 KDChartBWPainter::~KDChartBWPainter()
 {
     // intentionally left blank
@@ -92,7 +90,7 @@ void quicksort( QMemArray<double>& a, int lo, int hi )
 
 // The following function returns the number of used cells containing a double.
 int KDChartBWPainter::calculateStats( KDChartTableDataBase& data,
-                                      uint dataset )
+        uint dataset )
 {
     const uint nMax = data.usedCols();
     int nUsed = 0;
@@ -113,7 +111,7 @@ int KDChartBWPainter::calculateStats( KDChartTableDataBase& data,
             if( data.cell(dataset, i).isDouble(1) ){
                 values[nUsed] = data.cell(dataset, i).doubleValue(1);
                 if(    nUsed // skip 1st value
-                       && last > values[nUsed] )
+                        && last > values[nUsed] )
                     sorted = false;
                 last = values[nUsed];
                 sum += last;
@@ -168,20 +166,20 @@ int KDChartBWPainter::calculateStats( KDChartTableDataBase& data,
         // find upper quartile
         if( bOdd2 ){
             stats[ KDChartParams::Quartile3 ] = values[ nLastQ3 ];
-        }
+}
         else{
             //qDebug("  "+QString::number(nLastQ3)+"  "+QString::number(KDChartParams::Quartile3)
             //      +"  "+QString::number(nUsed)+"  "+QString::number(QMIN(nLastQ3+1, nUsed-1)));
             stats[ KDChartParams::Quartile3 ] =
                 (values[ nLastQ3 ] + values[ QMIN(nLastQ3+1, nUsed-1) ]) /2;
-        }
+}
         // find the interquartile range (IQR)
         double iqr = stats[ KDChartParams::Quartile3 ] - stats[ KDChartParams::Quartile1 ];
 
         // calculate the fences
         double upperInner, lowerInner, upperOuter, lowerOuter;
         params()->bWChartFences( upperInner, lowerInner,
-                                 upperOuter, lowerOuter );
+                upperOuter, lowerOuter );
         stats[ KDChartParams::UpperInnerFence ] =
             stats[ KDChartParams::Quartile3 ] + iqr * upperInner;
         stats[ KDChartParams::LowerInnerFence ] =
@@ -196,33 +194,33 @@ int KDChartBWPainter::calculateStats( KDChartTableDataBase& data,
 
 
 /**
-   This method is a specialization that returns a fallback legend text
-   appropriate for BW that do not have the same notion of a dataset like
-   e.g. bars.
+  This method is a specialization that returns a fallback legend text
+  appropriate for BW that do not have the same notion of a dataset like
+  e.g. bars.
 
-   This method is only used when automatic legends are used, because
-   manual and first-column legends do not need fallback texts.
+  This method is only used when automatic legends are used, because
+  manual and first-column legends do not need fallback texts.
 
-   \param uint dataset the dataset number for which to generate a
-   fallback text
-   \return the fallback text to use for describing the specified
-   dataset in the legend
-*/
+  \param uint dataset the dataset number for which to generate a
+  fallback text
+  \return the fallback text to use for describing the specified
+  dataset in the legend
+  */
 QString KDChartBWPainter::fallbackLegendText( uint dataset ) const
 {
-    return i18n( "Series %1" ).arg( dataset + 1 );
+    return QObject::tr( "Series " ) + QString::number( dataset + 1 );
 }
 
 
 /**
-   This methods returns the number of elements to be shown in the
-   legend in case fallback texts are used.
+  This methods returns the number of elements to be shown in the
+  legend in case fallback texts are used.
 
-   This method is only used when automatic legends are used, because
-   manual and first-column legends do not need fallback texts.
+  This method is only used when automatic legends are used, because
+  manual and first-column legends do not need fallback texts.
 
-   \return the number of fallback texts to use
-*/
+  \return the number of fallback texts to use
+  */
 uint KDChartBWPainter::numLegendFallbackTexts( KDChartTableDataBase* data ) const
 {
     return data->usedRows();
@@ -240,33 +238,33 @@ int KDChartBWPainter::clipShiftUp( bool, double ) const
 }
 
 /**
-   Paints the actual data area and registers the region for the data
-   points if \a regions is not 0.
+  Paints the actual data area and registers the region for the data
+  points if \a regions is not 0.
 
-   \param painter the QPainter onto which the chart should be painted
-   \param data the data that will be displayed as a chart
-   \param paint2nd specifies whether the main chart or the additional chart is to be drawn now
-   \param regions a pointer to a list of regions that will be filled
-   with regions representing the data segments, if not null
-*/
+  \param painter the QPainter onto which the chart should be painted
+  \param data the data that will be displayed as a chart
+  \param paint2nd specifies whether the main chart or the additional chart is to be drawn now
+  \param regions a pointer to a list of regions that will be filled
+  with regions representing the data segments, if not null
+  */
 void KDChartBWPainter::specificPaintData( QPainter* painter,
-                                          const QRect& ourClipRect,
-                                          KDChartTableDataBase* data,
-                                          KDChartDataRegionList* /*regions*/,
-                                          const KDChartAxisParams* axisPara,
-                                          bool /*bNormalMode*/,
-                                          uint /*chart*/,
-                                          double logWidth,
-                                          double /*areaWidthP1000*/,
-                                          double logHeight,
-                                          double /*axisYOffset*/,
-                                          double /*minColumnValue*/,
-                                          double /*maxColumnValue*/,
-                                          double /*columnValueDistance*/,
-                                          uint chartDatasetStart,
-                                          uint chartDatasetEnd,
-                                          uint datasetStart,
-                                          uint datasetEnd )
+        const QRect& ourClipRect,
+        KDChartTableDataBase* data,
+        KDChartDataRegionList* /*regions*/,
+        const KDChartAxisParams* axisPara,
+        bool /*bNormalMode*/,
+        uint /*chart*/,
+        double logWidth,
+        double /*areaWidthP1000*/,
+        double logHeight,
+        double /*axisYOffset*/,
+        double /*minColumnValue*/,
+        double /*maxColumnValue*/,
+        double /*columnValueDistance*/,
+        uint chartDatasetStart,
+        uint chartDatasetEnd,
+        uint datasetStart,
+        uint datasetEnd )
 {
     //double areaHeightP1000 = logHeight / 1000.0;
 
@@ -291,12 +289,12 @@ void KDChartBWPainter::specificPaintData( QPainter* painter,
 
     // Loop over the datasets, draw one box and whisker shape for each series.
     for ( uint dataset  = chartDatasetStart;
-          dataset <= chartDatasetEnd;
-          ++dataset ) {
+            dataset <= chartDatasetEnd;
+            ++dataset ) {
 
         if( dataset >= datasetStart &&
-            dataset <= datasetEnd &&
-            0 < calculateStats( *data, dataset ) ) {
+                dataset <= datasetEnd &&
+                0 < calculateStats( *data, dataset ) ) {
             const QColor color( params()->dataColor( dataset ) );
             // transform calculated values
             double drawUOF = stats[ KDChartParams::UpperOuterFence ] * pixelsPerUnit;
@@ -331,38 +329,38 @@ void KDChartBWPainter::specificPaintData( QPainter* painter,
             // draw the box
             int boxWidthD2 = boxWidth / 2;
             int xPos = static_cast<int>(
-                pointDist * ( (double)(dataset - chartDatasetStart) + 0.5 )
-                - lineWidth / 2);
+                    pointDist * ( (double)(dataset - chartDatasetStart) + 0.5 )
+                    - lineWidth / 2);
             painter->drawRect( xPos - boxWidthD2,
-                               static_cast<int>( zeroXAxisI - drawQu3 ),
-                               boxWidth,
-                               static_cast<int>( drawQu3 - drawQu1) + 1 );
+                    static_cast<int>( zeroXAxisI - drawQu3 ),
+                    boxWidth,
+                    static_cast<int>( drawQu3 - drawQu1) + 1 );
             // draw the median
             painter->drawLine( xPos - boxWidthD2,
-                               static_cast<int>( zeroXAxisI - drawMed ),
-                               xPos - boxWidthD2 + boxWidth,
-                               static_cast<int>( zeroXAxisI - drawMed ) );
+                    static_cast<int>( zeroXAxisI - drawMed ),
+                    xPos - boxWidthD2 + boxWidth,
+                    static_cast<int>( zeroXAxisI - drawMed ) );
             // draw the whisker
             painter->drawLine( xPos - boxWidthD2,
-                               static_cast<int>( zeroXAxisI - drawUWhisker ),
-                               xPos - boxWidthD2 + boxWidth,
-                               static_cast<int>( zeroXAxisI - drawUWhisker ) );
+                    static_cast<int>( zeroXAxisI - drawUWhisker ),
+                    xPos - boxWidthD2 + boxWidth,
+                    static_cast<int>( zeroXAxisI - drawUWhisker ) );
             painter->drawLine( xPos,
-                               static_cast<int>( zeroXAxisI - drawUWhisker ),
-                               xPos,
-                               static_cast<int>( zeroXAxisI - drawQu3 ) );
+                    static_cast<int>( zeroXAxisI - drawUWhisker ),
+                    xPos,
+                    static_cast<int>( zeroXAxisI - drawQu3 ) );
             painter->drawLine( xPos - boxWidthD2,
-                               static_cast<int>( zeroXAxisI - drawLWhisker ),
-                               xPos - boxWidthD2 + boxWidth,
-                               static_cast<int>( zeroXAxisI - drawLWhisker ) );
+                    static_cast<int>( zeroXAxisI - drawLWhisker ),
+                    xPos - boxWidthD2 + boxWidth,
+                    static_cast<int>( zeroXAxisI - drawLWhisker ) );
             painter->drawLine( xPos,
-                               static_cast<int>( zeroXAxisI - drawLWhisker ),
-                               xPos,
-                               static_cast<int>( zeroXAxisI - drawQu1 ) );
+                    static_cast<int>( zeroXAxisI - drawLWhisker ),
+                    xPos,
+                    static_cast<int>( zeroXAxisI - drawQu1 ) );
             // draw the values
             int xPos2 = static_cast<int>(
-                pointDist * ( (double)(dataset - chartDatasetStart) + 0.5 )
-                - lineWidthD2 / 2);
+                    pointDist * ( (double)(dataset - chartDatasetStart) + 0.5 )
+                    - lineWidthD2 / 2);
             int markWidthD2 =  QMAX(markWidth / 2, 2);
             int markWidthD25 = QMAX(static_cast<int>( 0.85 * markWidth / 2.0), 2);
             int markWidthD35 = QMAX(static_cast<int>( 0.85 * markWidth / 3.0), 2);
@@ -373,40 +371,40 @@ void KDChartBWPainter::specificPaintData( QPainter* painter,
                 for( uint i=0; i<nMax; ++i)
                     if( data->cell(dataset, i).isDouble(1) ) {
                         drawVal = static_cast<int>( pixelsPerUnit *
-                                                    data->cell(dataset, i).doubleValue(1) );
+                                data->cell(dataset, i).doubleValue(1) );
                         if( drawLOF > drawVal || drawUOF < drawVal ) {
                             painter->setPen( Qt::NoPen );
                             painter->drawChord( xPos2 - markWidthD2,
-                                                static_cast<int>(zeroXAxisI - drawVal) - markWidthD2,
-                                                markWidth,
-                                                markWidth,
-                                                0, 5760 );
+                                    static_cast<int>(zeroXAxisI - drawVal) - markWidthD2,
+                                    markWidth,
+                                    markWidth,
+                                    0, 5760 );
                             painter->setPen( QPen( color, lineWidthD2 ) );
                             painter->drawArc( xPos2 - markWidthD2,
-                                              static_cast<int>(zeroXAxisI - drawVal) - markWidthD2,
-                                              markWidth,
-                                              markWidth,
-                                              0, 5760 );
+                                    static_cast<int>(zeroXAxisI - drawVal) - markWidthD2,
+                                    markWidth,
+                                    markWidth,
+                                    0, 5760 );
                         } else if( drawLIF > drawVal || drawUIF < drawVal ) {
                             painter->setPen( Qt::NoPen );
                             painter->drawChord( xPos2 - markWidthD2,
-                                                static_cast<int>( zeroXAxisI - drawVal) - markWidthD2,
-                                                markWidth,
-                                                markWidth,
-                                                0, 5760 );
+                                    static_cast<int>( zeroXAxisI - drawVal) - markWidthD2,
+                                    markWidth,
+                                    markWidth,
+                                    0, 5760 );
                             painter->setPen( QPen( color, lineWidthD2 ) );
                             painter->drawLine( xPos2,
-                                               static_cast<int>(zeroXAxisI - drawVal) - markWidthD2,
-                                               xPos2,
-                                               static_cast<int>(zeroXAxisI - drawVal) + markWidthD2 );
+                                    static_cast<int>(zeroXAxisI - drawVal) - markWidthD2,
+                                    xPos2,
+                                    static_cast<int>(zeroXAxisI - drawVal) + markWidthD2 );
                             painter->drawLine( xPos2 - markWidthD25,
-                                               static_cast<int>(zeroXAxisI - drawVal) - markWidthD35,
-                                               xPos2 + markWidthD25,
-                                               static_cast<int>(zeroXAxisI - drawVal) + markWidthD35 );
+                                    static_cast<int>(zeroXAxisI - drawVal) - markWidthD35,
+                                    xPos2 + markWidthD25,
+                                    static_cast<int>(zeroXAxisI - drawVal) + markWidthD35 );
                             painter->drawLine( xPos2 + markWidthD25,
-                                               static_cast<int>(zeroXAxisI - drawVal) - markWidthD35,
-                                               xPos2 - markWidthD25,
-                                               static_cast<int>(zeroXAxisI - drawVal) + markWidthD35 );
+                                    static_cast<int>(zeroXAxisI - drawVal) - markWidthD35,
+                                    xPos2 - markWidthD25,
+                                    static_cast<int>(zeroXAxisI - drawVal) + markWidthD35 );
                         }
                     }
             }
@@ -414,16 +412,16 @@ void KDChartBWPainter::specificPaintData( QPainter* painter,
             bool evenLineWidthD2 = floor( ((double)lineWidthD2)/2.0 ) == ((double)lineWidthD2)/2.0;
             painter->setPen( params()->bWChartBrush().color() );
             painter->drawChord( xPos2 - markWidthD2-1 - (evenLineWidthD2 ? 0 : 1),
-                                static_cast<int>( zeroXAxisI - drawMean ) - markWidthD2 - 1,
-                                markWidthD2*2 + (evenLineWidthD2 ? 2 : 3),
-                                markWidthD2*2 + (evenLineWidthD2 ? 2 : 3),
-                                0, 5760 );
+                    static_cast<int>( zeroXAxisI - drawMean ) - markWidthD2 - 1,
+                    markWidthD2*2 + (evenLineWidthD2 ? 2 : 3),
+                    markWidthD2*2 + (evenLineWidthD2 ? 2 : 3),
+                    0, 5760 );
             if( noBrush ) {
                 // use different color brightness for the Mean marker
                 int h,s,v;
                 color.hsv(&h,&s,&v);
                 painter->setPen( QPen( 128 > v ? color.light(150) : color.dark(150),
-                                       lineWidthD2 ) );
+                            lineWidthD2 ) );
             } else
                 painter->setPen( QPen( color, lineWidthD2 ) );
             painter->drawLine( xPos2 - markWidthD2 - (evenLineWidthD2 ? 0 : 1),
@@ -438,39 +436,39 @@ void KDChartBWPainter::specificPaintData( QPainter* painter,
             // draw the statistical value texts
             painter->setPen( Qt::NoPen );
             for( int ii =  KDChartParams::BWStatValSTART;
-                 ii <= KDChartParams::BWStatValEND;
-                 ++ii ){
+                    ii <= KDChartParams::BWStatValEND;
+                    ++ii ){
                 KDChartParams::BWStatVal i = (KDChartParams::BWStatVal)ii;
                 if( params()->bWChartPrintStatistics( i ) ) {
                     QFont statFont( params()->bWChartStatisticsFont( i ) );
                     float nTxtHeight = statFont.pointSizeFloat();
                     if ( params()->bWChartStatisticsUseRelSize( i ) ) {
                         nTxtHeight = params()->bWChartStatisticsFontRelSize( i )
-                                     * boxWidth / 100;
+                            * boxWidth / 100;
                         statFont.setPointSizeFloat( nTxtHeight );
                     }
                     double drawStat = pixelsPerUnit * stats[i];
                     KDChartTextPiece statText( QString::number( stats[i] ),
-                                               statFont );
+                            statFont );
                     int tw = statText.width();
                     int xDelta = (    KDChartParams::MaxValue  == i
-                                      || KDChartParams::MeanValue == i
-                                      || KDChartParams::MinValue  == i )
-                                 ? -1 * (tw + static_cast<int>( 1.3*boxWidthD2 ))
-                                 : static_cast<int>( 1.3*boxWidthD2 );
+                            || KDChartParams::MeanValue == i
+                            || KDChartParams::MinValue  == i )
+                        ? -1 * (tw + static_cast<int>( 1.3*boxWidthD2 ))
+                        : static_cast<int>( 1.3*boxWidthD2 );
                     QBrush brush( params()->bWChartStatisticsBrush( i ) );
                     painter->setBrush( brush );
                     int y = static_cast<int>( zeroXAxisI - drawStat - nTxtHeight/2);
                     painter->drawRect( xPos + xDelta - 1,
-                                       y,
-                                       tw + 2,
+                            y,
+                            tw + 2,
                                        static_cast<int>( QMAX(nTxtHeight, 8) + 1 ) );
                     statText.draw( painter,
-                                   xPos + xDelta,
-                                   y,
-                                   ourClipRect,
-                                   params()->bWChartStatisticsColor( i ),
-                                   0 );
+                            xPos + xDelta,
+                            y,
+                            ourClipRect,
+                            params()->bWChartStatisticsColor( i ),
+                            0 );
                 }
             }
 

@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -238,20 +237,20 @@ void KDChartCustomBox::paint( QPainter* painter,
 
 
 void KDChartCustomBox::createCustomBoxNode( QDomDocument& document,
-					    QDomNode& parent,
-					    const QString& elementName,
-					    const KDChartCustomBox* custombox )
+        QDomNode& parent,
+        const QString& elementName,
+        const KDChartCustomBox* custombox )
 {
     QDomElement customBoxElement = document.createElement( elementName );
     parent.appendChild( customBoxElement );
     KDXML::createIntNode( document, parent, "Rotation", custombox->_rotation );
     KDXML::createStringNode( document, parent, "ContentText",
-			     custombox->_content.text() );
+            custombox->_content.text() );
     KDXML::createFontNode( document, parent, "ContentFont",
-			   custombox->_content.font() );
+            custombox->_content.font() );
     KDXML::createIntNode( document, parent, "FontSize", custombox->_fontSize );
     KDXML::createBoolNode( document, parent, "FontScaleGlobal",
-			   custombox->_fontScaleGlobal );
+            custombox->_fontScaleGlobal );
     KDXML::createIntNode( document, parent, "DeltaX", custombox->_deltaX );
     KDXML::createIntNode( document, parent, "DeltaY", custombox->_deltaY );
     KDXML::createIntNode( document, parent, "Width", custombox->_width );
@@ -259,26 +258,26 @@ void KDChartCustomBox::createCustomBoxNode( QDomDocument& document,
     KDXML::createColorNode( document, parent, "Color", custombox->_color );
     KDXML::createBrushNode( document, parent, "Paper", custombox->_paper );
     KDXML::createIntNode( document, parent, "AnchorArea",
-			  custombox->_anchorArea );
+            custombox->_anchorArea );
     KDXML::createStringNode( document, parent, "AnchorPos",
-			     KDChartEnums::positionFlagToString( custombox->_anchorPos ) );
+            KDChartEnums::positionFlagToString( custombox->_anchorPos ) );
     KDXML::createIntNode( document, parent, "AnchorAlign",
-			  custombox->_anchorAlign );
+            custombox->_anchorAlign );
     KDXML::createIntNode( document, parent, "DataRow",
-			  custombox->_dataRow );
+            custombox->_dataRow );
     KDXML::createIntNode( document, parent, "DataCol",
-			  custombox->_dataCol );
+            custombox->_dataCol );
     KDXML::createIntNode( document, parent, "Data3rd",
-			  custombox->_data3rd );
+            custombox->_data3rd );
     KDXML::createIntNode( document, parent, "DeltaAlign",
-                          custombox->_deltaAlign );
+            custombox->_deltaAlign );
     KDXML::createBoolNode( document, parent, "DeltaScaleGlobal",
-                           custombox->_deltaScaleGlobal );
+            custombox->_deltaScaleGlobal );
 }
 
 
 bool KDChartCustomBox::readCustomBoxNode( const QDomElement& element,
-                                          KDChartCustomBox& custombox )
+        KDChartCustomBox& custombox )
 {
     bool ok = true;
     QString tempContentText;
@@ -287,8 +286,8 @@ bool KDChartCustomBox::readCustomBoxNode( const QDomElement& element,
     int tempDeltaAlign = AlignAuto; // must be initialized too: new parameter
     bool tempDeltaScaleGlobal = true;   // must be initialized too: new parameter
     int tempFontSize, tempDeltaX, tempDeltaY,
-        tempWidth, tempHeight, tempAnchorArea, tempAnchorAlign,
-        tempDataRow, tempDataCol, tempData3rd;
+    tempWidth, tempHeight, tempAnchorArea, tempAnchorAlign,
+    tempDataRow, tempDataCol, tempData3rd;
     bool tempFontScaleGlobal;
     QColor tempColor;
     QBrush tempPaper;
@@ -323,9 +322,9 @@ bool KDChartCustomBox::readCustomBoxNode( const QDomElement& element,
             } else if( tagName == "AnchorArea" ) {
                 ok = ok & KDXML::readIntNode( element, tempAnchorArea );
             } else if( tagName == "AnchorPos" ) {
-		QString value;
+                QString value;
                 ok = ok & KDXML::readStringNode( element, value );
-		tempAnchorPos = KDChartEnums::stringToPositionFlag( value );
+                tempAnchorPos = KDChartEnums::stringToPositionFlag( value );
             } else if( tagName == "AnchorAlign" ) {
                 ok = ok & KDXML::readIntNode( element, tempAnchorAlign );
             } else if( tagName == "DataRow" ) {
@@ -346,23 +345,23 @@ bool KDChartCustomBox::readCustomBoxNode( const QDomElement& element,
     }
 
     if( ok ) {
-	custombox._content = KDChartTextPiece( tempContentText,
-					       tempContentFont );
+        custombox._content = KDChartTextPiece( tempContentText,
+                tempContentFont );
         custombox._rotation = tempRotation;
-	custombox._fontSize = tempFontSize;
-	custombox._fontScaleGlobal = tempFontScaleGlobal;
-	custombox._deltaX = tempDeltaX;
-	custombox._deltaY = tempDeltaY;
-	custombox._width = tempWidth;
-	custombox._height = tempHeight;
-	custombox._color = tempColor;
-	custombox._paper = tempPaper;
-	custombox._anchorArea = tempAnchorArea;
-	custombox._anchorPos = tempAnchorPos;
-	custombox._anchorAlign = tempAnchorAlign;
-	custombox._dataRow = tempDataRow;
-	custombox._dataCol = tempDataCol;
-	custombox._data3rd = tempData3rd;
+        custombox._fontSize = tempFontSize;
+        custombox._fontScaleGlobal = tempFontScaleGlobal;
+        custombox._deltaX = tempDeltaX;
+        custombox._deltaY = tempDeltaY;
+        custombox._width = tempWidth;
+        custombox._height = tempHeight;
+        custombox._color = tempColor;
+        custombox._paper = tempPaper;
+        custombox._anchorArea = tempAnchorArea;
+        custombox._anchorPos = tempAnchorPos;
+        custombox._anchorAlign = tempAnchorAlign;
+        custombox._dataRow = tempDataRow;
+        custombox._dataCol = tempDataCol;
+        custombox._data3rd = tempData3rd;
         custombox._deltaAlign       = tempDeltaAlign;
         custombox._deltaScaleGlobal = tempDeltaScaleGlobal;
     }

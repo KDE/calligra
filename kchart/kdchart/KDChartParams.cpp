@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -38,20 +37,18 @@
 #include "KDChartParams.moc"
 #endif
 
-#include <klocale.h>
-
 class KDChartData;
 
 //#include <qdom.h>
 
 /**
-   \class KDChartParams KDChartParams.h
-   \brief Bundles the display parameters of a chart.
+  \class KDChartParams KDChartParams.h
+  \brief Bundles the display parameters of a chart.
 
-   Bundles all parameters of a chart including the type except the
-   actual data displayed. Serializing an object of this type plus the
-   data displayed is enough to be able to recreate the chart later.
-*/
+  Bundles all parameters of a chart including the type except the
+  actual data displayed. Serializing an object of this type plus the
+  data displayed is enough to be able to recreate the chart later.
+  */
 
 
 const uint KDChartParams::KDCHART_ALL_AXES = UINT_MAX-1;
@@ -85,8 +82,8 @@ const int KDChartParams::SAGGITAL_ROTATION = INT_MAX;
 
 
 /**
-   Constructor. Defines default values.
-*/
+  Constructor. Defines default values.
+  */
 KDChartParams::KDChartParams()
 {
     // GENERAL
@@ -212,7 +209,7 @@ KDChartParams::KDChartParams()
     /* temporary disabled:
        setThreeDLineXRotation( 30 );
        setThreeDLineYRotation( 30 );
-    */
+       */
     setThreeDLineXRotation( 15 );
     setThreeDLineYRotation( 15 );
 
@@ -268,7 +265,7 @@ KDChartParams::KDChartParams()
        setPolarDelimsAndLabelsAtPos( KDChartEnums::PosBottomCenter, true, true  );
        setPolarDelimsAndLabelsAtPos( KDChartEnums::PosBottomLeft,   true, true );
        setPolarDelimsAndLabelsAtPos( KDChartEnums::PosCenterLeft,   true, true );
-    */
+       */
 
 
     // END POLAR CHART-SPECIFIC
@@ -326,7 +323,7 @@ KDChartParams::KDChartParams()
     //                                 the printable area height and width
     setLegendFontRelSize( 22 );
     // the default legend title is "Legend"
-    setLegendTitleText( i18n( "Legend" ) );
+    setLegendTitleText( tr( "Legend" ) );
     // legend title is drawn in black by default
     setLegendTitleTextColor( Qt::black );
     // legend title font size is calculated dynamically, but ignore
@@ -361,42 +358,42 @@ KDChartParams::KDChartParams()
     int relFtSize  = 24;
     int relFt2Size = 16;
     setHeaderFooterFont( KDChartParams::HdFtPosHeader0,
-                         defaultHdFtFont, true, relHd0Size );
+            defaultHdFtFont, true, relHd0Size );
     setHeaderFooterFont( KDChartParams::HdFtPosHeader0L,
-                         defaultHdFtFont, true, relHd0Size );
+            defaultHdFtFont, true, relHd0Size );
     setHeaderFooterFont( KDChartParams::HdFtPosHeader0R,
-                         defaultHdFtFont, true, relHd0Size );
+            defaultHdFtFont, true, relHd0Size );
     setHeaderFooterFont( KDChartParams::HdFtPosHeader,
-                         defaultHdFtFont, true, relHdSize );
+            defaultHdFtFont, true, relHdSize );
     setHeaderFooterFont( KDChartParams::HdFtPosHeaderL,
-                         defaultHdFtFont, true, relHdSize );
+            defaultHdFtFont, true, relHdSize );
     setHeaderFooterFont( KDChartParams::HdFtPosHeaderR,
-                         defaultHdFtFont, true, relHdSize );
+            defaultHdFtFont, true, relHdSize );
     setHeaderFooterFont( KDChartParams::HdFtPosHeader2,
-                         defaultHdFtFont, true, relHd2Size );
+            defaultHdFtFont, true, relHd2Size );
     setHeaderFooterFont( KDChartParams::HdFtPosHeader2L,
-                         defaultHdFtFont, true, relHd2Size );
+            defaultHdFtFont, true, relHd2Size );
     setHeaderFooterFont( KDChartParams::HdFtPosHeader2R,
-                         defaultHdFtFont, true, relHd2Size );
+            defaultHdFtFont, true, relHd2Size );
 
     setHeaderFooterFont( KDChartParams::HdFtPosFooter0,
-                         defaultHdFtFont, true, relFt0Size );
+            defaultHdFtFont, true, relFt0Size );
     setHeaderFooterFont( KDChartParams::HdFtPosFooter0L,
-                         defaultHdFtFont, true, relFt0Size );
+            defaultHdFtFont, true, relFt0Size );
     setHeaderFooterFont( KDChartParams::HdFtPosFooter0R,
-                         defaultHdFtFont, true, relFt0Size );
+            defaultHdFtFont, true, relFt0Size );
     setHeaderFooterFont( KDChartParams::HdFtPosFooter,
-                         defaultHdFtFont, true, relFtSize );
+            defaultHdFtFont, true, relFtSize );
     setHeaderFooterFont( KDChartParams::HdFtPosFooterL,
-                         defaultHdFtFont, true, relFtSize );
+            defaultHdFtFont, true, relFtSize );
     setHeaderFooterFont( KDChartParams::HdFtPosFooterR,
-                         defaultHdFtFont, true, relFtSize );
+            defaultHdFtFont, true, relFtSize );
     setHeaderFooterFont( KDChartParams::HdFtPosFooter2,
-                         defaultHdFtFont, true, relFt2Size );
+            defaultHdFtFont, true, relFt2Size );
     setHeaderFooterFont( KDChartParams::HdFtPosFooter2L,
-                         defaultHdFtFont, true, relFt2Size );
+            defaultHdFtFont, true, relFt2Size );
     setHeaderFooterFont( KDChartParams::HdFtPosFooter2R,
-                         defaultHdFtFont, true, relFt2Size );
+            defaultHdFtFont, true, relFt2Size );
     // END HEADERS/FOOTERS
 
     // PROPERTY SETS
@@ -420,8 +417,8 @@ KDChartParams::KDChartParams()
 
 
 /**
-   Destructor. Only defined to have it virtual.
-*/
+  Destructor. Only defined to have it virtual.
+  */
 KDChartParams::~KDChartParams()
 {
     // Intentionally left blank for now.
@@ -431,32 +428,32 @@ KDChartParams::~KDChartParams()
 // GENERAL
 /** @name General parameters.
 
-These methods set general parameters that apply to several or all chart types.
-*/
+  These methods set general parameters that apply to several or all chart types.
+  */
 //@{
 
 
 /**
-   Stores a new property set: data are stored by value so you may
-   use your \c aSet instance for other purpose later...
+  Stores a new property set: data are stored by value so you may
+  use your \c aSet instance for other purpose later...
 
-   \returns The property set's ID to be used for later retrieving
-   the property information by calling the properties() function
-   or for assigning these properties to a data cell - either in the
-   KDChartData constructor or by calling KDChartData::setPropertySet().
+  \returns The property set's ID to be used for later retrieving
+  the property information by calling the properties() function
+  or for assigning these properties to a data cell - either in the
+  KDChartData constructor or by calling KDChartData::setPropertySet().
 
-   \note The property set's ID may also be retrieved by calling
-   <b>set.id()</b> after calling registerProperties( set )
+  \note The property set's ID may also be retrieved by calling
+  <b>set.id()</b> after calling registerProperties( set )
 
-   \note The predefined (build-in) property ids (like KDCHART_PROPSET_NORMAL_DATA
-   and KDCHART_PROPSET_TRANSPARENT_DATA) must not be registered
-   but should be used without further initialization.
+  \note The predefined (build-in) property ids (like KDCHART_PROPSET_NORMAL_DATA
+  and KDCHART_PROPSET_TRANSPARENT_DATA) must not be registered
+  but should be used without further initialization.
 
-   \sa KDCHART_PROPSET_NORMAL_DATA, KDCHART_PROPSET_TRANSPARENT_DATA
-   \sa KDCHART_PROPSET_HORI_LINE, KDCHART_PROPSET_VERT_LINE
-   \sa KDChartData::setPropertySet
-   \sa removeProperties
-*/
+  \sa KDCHART_PROPSET_NORMAL_DATA, KDCHART_PROPSET_TRANSPARENT_DATA
+  \sa KDCHART_PROPSET_HORI_LINE, KDCHART_PROPSET_VERT_LINE
+  \sa KDChartData::setPropertySet
+  \sa removeProperties
+  */
 int KDChartParams::registerProperties( KDChartPropertySet& rSet )
 {
     rSet.mOwnID = _propertySetList.count();
@@ -465,23 +462,23 @@ int KDChartParams::registerProperties( KDChartPropertySet& rSet )
 }
 
 /**
-   Overwrites a property set with a new property set.
+  Overwrites a property set with a new property set.
 
-   \note This function might also be used to initialy store
-   a property set using a specific ID number, but note
-   that another property set having the same number
-   would be replaced by this property set automatically. Therefor
-   in general it is better to use the registerProperties function
-   to initially obtain a unique ID number for your new property set.
+  \note This function might also be used to initialy store
+  a property set using a specific ID number, but note
+  that another property set having the same number
+  would be replaced by this property set automatically. Therefor
+  in general it is better to use the registerProperties function
+  to initially obtain a unique ID number for your new property set.
 
-   \returns TRUE if the property set had been stored before,
-   or FALSE if the set was now stored initially.
+  \returns TRUE if the property set had been stored before,
+  or FALSE if the set was now stored initially.
 
-   \sa KDCHART_PROPSET_TRANSPARENT_DATA
-   \sa KDCHART_PROPSET_HORI_LINE, KDCHART_PROPSET_VERT_LINE
-   \sa KDChartData::setPropertySet
-   \sa removeProperties
-*/
+  \sa KDCHART_PROPSET_TRANSPARENT_DATA
+  \sa KDCHART_PROPSET_HORI_LINE, KDCHART_PROPSET_VERT_LINE
+  \sa KDChartData::setPropertySet
+  \sa removeProperties
+  */
 bool KDChartParams::setProperties( int id, KDChartPropertySet& rSet )
 {
     rSet.mOwnID = id;
@@ -494,19 +491,19 @@ bool KDChartParams::setProperties( int id, KDChartPropertySet& rSet )
 }
 
 /**
-   Removes a property set from the registry
-   that was registered via registerProperties().
+  Removes a property set from the registry
+  that was registered via registerProperties().
 
-   \note It is not possible to remove the build-in default property set:
-   function calls using KDChartParams::KDCHART_PROPSET_NORMAL_DATA as ID
-   will be ignored.
+  \note It is not possible to remove the build-in default property set:
+  function calls using KDChartParams::KDCHART_PROPSET_NORMAL_DATA as ID
+  will be ignored.
 
-   \returns TRUE if the property set was found and removed, or FALSE
-   if the set was not found or KDChartParams::KDCHART_PROPSET_NORMAL_DATA
-   was specified as ID value.
+  \returns TRUE if the property set was found and removed, or FALSE
+  if the set was not found or KDChartParams::KDCHART_PROPSET_NORMAL_DATA
+  was specified as ID value.
 
-   \sa registerProperties, setProperties
-*/
+  \sa registerProperties, setProperties
+  */
 bool KDChartParams::removeProperties( int id )
 {
     // Removing the default property set is not allowed!
@@ -521,26 +518,26 @@ bool KDChartParams::removeProperties( int id )
 
 
 /**
-   Retrieves the values specified for a property set that
-   was stored by registerProperties().
+  Retrieves the values specified for a property set that
+  was stored by registerProperties().
 
-   Use this function to retrieve the exact specification
-   of a property set.
+  Use this function to retrieve the exact specification
+  of a property set.
 
-   Don't use this function to retrieve the properties that are
-   valid for a given data cell but use KDChartParams::calculateProperties()
-   instead.
+  Don't use this function to retrieve the properties that are
+  valid for a given data cell but use KDChartParams::calculateProperties()
+  instead.
 
-   \note This function does <b>not</b> return a pointer
-   to the property set itself but a copy of the data
-   stored therein. To change a stored property set
-   you may use the setProperties() function.
+  \note This function does <b>not</b> return a pointer
+  to the property set itself but a copy of the data
+  stored therein. To change a stored property set
+  you may use the setProperties() function.
 
-   \returns TRUE if the property set was found, FALSE
-   if it no property set was registred with this ID.
+  \returns TRUE if the property set was found, FALSE
+  if it no property set was registred with this ID.
 
-   \sa registerProperties, KDChartData::setPropertySet
-*/
+  \sa registerProperties, KDChartData::setPropertySet
+  */
 bool KDChartParams::properties( int id, KDChartPropertySet& rSet ) const
 {
     bool found = _propertySetList.find( id ) != _propertySetList.end();
@@ -551,25 +548,28 @@ bool KDChartParams::properties( int id, KDChartPropertySet& rSet ) const
 
 
 /**
-   Retrieves the values that correspond to a property set by
-   reading this set's properties and obtaining other property
-   set's values if necessary (according to ID numbers that might
-   be stored in the property set).
+  Retrieves the values that correspond to a property set by
+  reading this set's properties and obtaining other property
+  set's values if necessary (according to ID numbers that might
+  be stored in the property set).
 
-   Use this function to retrieve the properties that are
-   valid for a given data cell.
+  Use this function to retrieve the properties that are
+  valid for a given data cell.
 
-   Don't use this function to retrieve the exact specification
-   of a property set but use KDChartParams::properties() instead.
+  Don't use this function to retrieve the exact specification
+  of a property set but use KDChartParams::properties() instead.
 
-   \returns TRUE if the property set was found, FALSE
-   if it no property set was registred with this ID.
+  \returns TRUE if the property set was found, FALSE
+  if it no property set was registred with this ID.
 
-   \sa registerProperties, KDChartData::setPropertySet
-*/
+  \sa registerProperties, KDChartData::setPropertySet
+  */
 bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet ) const
 {
     KDChartPropertySet startSet;
+
+    rSet = startSet; // reset all properties of rSet to the default !!
+
     bool bOk = properties(startId, startSet);
     if( bOk ){
         int          lineWidth;
@@ -770,197 +770,197 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
 
 
 /**
-   \fn int KDChartParams::roundVal(double)
+  \fn int KDChartParams::roundVal(double)
 
-   Returns the parameter \c d rounded to the nearest integer.
-*/
+  Returns the parameter \c d rounded to the nearest integer.
+  */
 
 
 
 /**
-   Specifies if and how a chart will print the data value texts near
-   their respective entries.
+  Specifies if and how a chart will print the data value texts near
+  their respective entries.
 
-   Data value texts will be printed immediately after drawing all of
-   the chart data points (or bars, lines,...) but before drawing the
-   legend and before drawing any custom boxes.  If more than one chart
-   ist to be drawn (sharing the same data area) printing of the data
-   text values will take place after drawing all of the last charts
-   data points, this enables us to see the texts even if their
-   respective data representations are covered by the second charts
-   drawings. The same covering/colliding problem might occur with Area
-   charts if one area is (partially) covering another area.  In such
-   cases you might either want to specify an appropriate
-   TextLayoutPolicy for getting a better looking result or specify an
-   other text color for data value texts of the second chart since by
-   default the first chart has black texts while the second chart
-   shows its data value texts in dark blue color.
+  Data value texts will be printed immediately after drawing all of
+  the chart data points (or bars, lines,...) but before drawing the
+  legend and before drawing any custom boxes.  If more than one chart
+  ist to be drawn (sharing the same data area) printing of the data
+  text values will take place after drawing all of the last charts
+  data points, this enables us to see the texts even if their
+  respective data representations are covered by the second charts
+  drawings. The same covering/colliding problem might occur with Area
+  charts if one area is (partially) covering another area.  In such
+  cases you might either want to specify an appropriate
+  TextLayoutPolicy for getting a better looking result or specify an
+  other text color for data value texts of the second chart since by
+  default the first chart has black texts while the second chart
+  shows its data value texts in dark blue color.
 
-   \note Only used if chartType() is <b>neither HiLo nor
-   BoxWhisker</b>. To specify printing of data values in a HiLo chart
-   please use setHiLoChartPrintLowValues, setHiLoChartPrintHighValues,
-   setHiLoChartPrintOpenValues, setHiLoChartPrintCloseValues. To
-   specify printing of data values in a BoxWhisker chart please use
-   setBWChartPrintStatistics.
+  \note Only used if chartType() is <b>neither HiLo nor
+  BoxWhisker</b>. To specify printing of data values in a HiLo chart
+  please use setHiLoChartPrintLowValues, setHiLoChartPrintHighValues,
+  setHiLoChartPrintOpenValues, setHiLoChartPrintCloseValues. To
+  specify printing of data values in a BoxWhisker chart please use
+  setBWChartPrintStatistics.
 
-   Calling <b>setPrintDataValues( false )</b> will <b>deactivate</b>
-   printing of the values.
+  Calling <b>setPrintDataValues( false )</b> will <b>deactivate</b>
+  printing of the values.
 
-   Calling setPrintDataValuesWithDefaultFontParams( chart ) will
-   <b>reset</b> the respective font size and colour and position
-   parameters (but not the QFont itself) and <b>activate</b> printing
-   of the values for the \c chart speficied (or for all charts by
-   using \c KDChartParams::KDCHART_ALL_CHARTS, resp.).
+  Calling setPrintDataValuesWithDefaultFontParams( chart ) will
+  <b>reset</b> the respective font size and colour and position
+  parameters (but not the QFont itself) and <b>activate</b> printing
+  of the values for the \c chart speficied (or for all charts by
+  using \c KDChartParams::KDCHART_ALL_CHARTS, resp.).
 
-   \param active specifies whether the value texts are to be printed or not.
-   \param chart The number of the chart: 0 for the first chart, 1 for
-   the second chart in case there are two charts to be drawn sharing the
-   same data area.  Use the special value KDChartParams::KDCHART_ALL_CHARTS
-   to specify that your settings are to be taken for both charts.
-   \param divPow10 The power of 10 which the data value is to be divided by.
-   A value of 2 means divide by 100, a value of  -3 means multiply by 1000,
-   and 0 (by definition) would result in multiplying by 1.
-   \param digitsBehindComma The number of digits to show behind the comma,
-   to have this calculated automatically just use the default value
-   KDChartParams::DATA_VALUE_AUTO_DIGITS.
-   \param font a Pointer to the font to be used, if zero the default data value
-   texts font will be taken (this is a Times font since small Times digits are
-   clearer than small Helvetica digits).
+  \param active specifies whether the value texts are to be printed or not.
+  \param chart The number of the chart: 0 for the first chart, 1 for
+  the second chart in case there are two charts to be drawn sharing the
+  same data area.  Use the special value KDChartParams::KDCHART_ALL_CHARTS
+  to specify that your settings are to be taken for both charts.
+  \param divPow10 The power of 10 which the data value is to be divided by.
+  A value of 2 means divide by 100, a value of  -3 means multiply by 1000,
+  and 0 (by definition) would result in multiplying by 1.
+  \param digitsBehindComma The number of digits to show behind the comma,
+  to have this calculated automatically just use the default value
+  KDChartParams::DATA_VALUE_AUTO_DIGITS.
+  \param font a Pointer to the font to be used, if zero the default data value
+  texts font will be taken (this is a Times font since small Times digits are
+  clearer than small Helvetica digits).
 
-   Changing of one or more of <b>the following parameters</b>
-   automatically de-activates all future font parameter adjustments
-   that would otherwise take place after each call of setChartType (or
-   setAdditionalChartType, resp.).  To re-enable this usefull feature
-   you may call setPrintDataValuesWithDefaultFontParams at any time
-   afterwards.
+  Changing of one or more of <b>the following parameters</b>
+  automatically de-activates all future font parameter adjustments
+  that would otherwise take place after each call of setChartType (or
+  setAdditionalChartType, resp.).  To re-enable this usefull feature
+  you may call setPrintDataValuesWithDefaultFontParams at any time
+  afterwards.
 
-   \param size (in per mille of the chart width) the dynamic size of
-   the font to be used. If this parameter is zero the size of the
-   \c font is used instead - regardless of the size of the chart!
-   You may use setPrintDataValuesFontRelSize to change this parameter setting
-   without affecting the other ones.
-   \param color the color to be used when printing the values.
-   To have the color calculated automatically - useful when printing
-   inside the bars (or pie slices, areas, ... resp.) - please use
-   \c DATA_VALUE_AUTO_COLOR instead of a QColor*.
-   You may use setPrintDataValuesColor to change this parameter setting
-   without affecting the other ones.
+  \param size (in per mille of the chart width) the dynamic size of
+  the font to be used. If this parameter is zero the size of the
+  \c font is used instead - regardless of the size of the chart!
+  You may use setPrintDataValuesFontRelSize to change this parameter setting
+  without affecting the other ones.
+  \param color the color to be used when printing the values.
+  To have the color calculated automatically - useful when printing
+  inside the bars (or pie slices, areas, ... resp.) - please use
+  \c DATA_VALUE_AUTO_COLOR instead of a QColor*.
+  You may use setPrintDataValuesColor to change this parameter setting
+  without affecting the other ones.
 
-   The following parameters apply to values less than zero only:
+  The following parameters apply to values less than zero only:
 
-   \param negativePosition The anchor position which the text is to be
-   aligned to.
-   \param negativeAlign The way how the text is to be aligned to the anchor.
-   This must be a reasonable combination of Qt::AlignmentFlags.
-   \param negativeDeltaX The X distance between the <b>anchor
-   point</b> -- specified by \c negativePosition (or \c
-   positivePosition, resp.) -- and the internal <b>alignment point</b>
-   of the text -- specified by \c negativeAlign (or \c positiveAlign,
-   resp.). <b>Note: </b> For better compatibility to the dynamic font
-   size this parameter is interpreted as being a per-cent value of the
-   used font height.  If greater 0, the X position is increased, if
-   less than 0, it is reduced. Actual font size and thus also this
-   delta value are calculated dynamically before painting based on the
-   size of the chart and the specification made via parameter \c size.
+  \param negativePosition The anchor position which the text is to be
+aligned to.
+\param negativeAlign The way how the text is to be aligned to the anchor.
+This must be a reasonable combination of Qt::AlignmentFlags.
+\param negativeDeltaX The X distance between the <b>anchor
+point</b> -- specified by \c negativePosition (or \c
+        positivePosition, resp.) -- and the internal <b>alignment point</b>
+of the text -- specified by \c negativeAlign (or \c positiveAlign,
+        resp.). <b>Note: </b> For better compatibility to the dynamic font
+size this parameter is interpreted as being a per-cent value of the
+used font height.  If greater 0, the X position is increased, if
+less than 0, it is reduced. Actual font size and thus also this
+delta value are calculated dynamically before painting based on the
+size of the chart and the specification made via parameter \c size.
 
-   \param negativeDeltaY The Y distance between the <b>anchor
-   point</b> -- specified by \c negativePosition (or \c
-   positivePosition, resp.) -- and the internal <b>alignment point</b>
-   of the text -- specified by \c negativeAlign (or \c positiveAlign,
-   resp.).  <b>Note: </b> For better compatibility to the dynamic font
-   size this parameter is interpreted as being a per-cent value of the
-   used font height.  If greater 0, the Y position is increased, if
-   less than 0, it is reduced. Actual font size and thus also this
-   delta value are calculated dynamically before painting based on the
-   size of the chart and the specification made via parameter \c size.
-   \param negativeRotation The amount of degrees (using a circle of
-   360 degrees) taken to rotate the text. Positive values rotate
-   clockwise, negative values rotate counter-clockwise.  There are two
-   special values that you might find usefull for Pie charts or for
-   Ring charts: \c KDChartParams::SAGGITAL_ROTATION and \c
-   KDChartParams::TANGENTIAL_ROTATION both leading to individual
-   calculation of appropriate rotation for each data value.  Rotation
-   will be performed around the internal <b>alignment point</b> of the
-   text -- specified by \c negativeAlign (or \c positiveAlign, resp.).
+\param negativeDeltaY The Y distance between the <b>anchor
+point</b> -- specified by \c negativePosition (or \c
+        positivePosition, resp.) -- and the internal <b>alignment point</b>
+of the text -- specified by \c negativeAlign (or \c positiveAlign,
+        resp.).  <b>Note: </b> For better compatibility to the dynamic font
+size this parameter is interpreted as being a per-cent value of the
+used font height.  If greater 0, the Y position is increased, if
+less than 0, it is reduced. Actual font size and thus also this
+delta value are calculated dynamically before painting based on the
+size of the chart and the specification made via parameter \c size.
+\param negativeRotation The amount of degrees (using a circle of
+        360 degrees) taken to rotate the text. Positive values rotate
+clockwise, negative values rotate counter-clockwise.  There are two
+special values that you might find usefull for Pie charts or for
+Ring charts: \c KDChartParams::SAGGITAL_ROTATION and \c
+KDChartParams::TANGENTIAL_ROTATION both leading to individual
+calculation of appropriate rotation for each data value.  Rotation
+will be performed around the internal <b>alignment point</b> of the
+text -- specified by \c negativeAlign (or \c positiveAlign, resp.).
 
-   The following parameters apply to values greater than zero or equal zero:
+The following parameters apply to values greater than zero or equal zero:
 
-   \param positivePosition The anchor position which the text is to be
-   aligned to.
-   \param positiveAlign The way how the text is to be aligned to the anchor.
-   This must be a reasonable combination of Qt::AlignmentFlags.
-   \param negativeDeltaX The X distance between the <b>anchor
-   point</b> -- specified by \c negativePosition (or \c
-   positivePosition, resp.) -- and the internal <b>alignment point</b>
-   of the text -- specified by \c negativeAlign (or \c positiveAlign,
-   resp.).  <b>Note: </b> For better compatibility to the dynamic font
-   size this parameter is interpreted as being a per-cent value of the
-   used font height.  If greater 0, the X position is increased, if
-   less than 0, it is reduced. Actual font size and thus also this
-   delta value are calculated dynamically before painting based on the
-   size of the chart and the specification made via parameter \c size.
-   \param positiveDeltaY The Y distance between the <b>anchor
-   point</b> -- specified by \c negativePosition (or \c
-   positivePosition, resp.) -- and the internal <b>alignment point</b>
-   of the text -- specified by \c negativeAlign (or \c positiveAlign,
-   resp.).  <b>Note: </b> For better compatibility to the dynamic font
-   size this parameter is interpreted as being a per-cent value of the
-   used font height.  If greater 0, the Y position is increased, if
-   less than 0, it is reduced. Actual font size and thus also this
-   delta value are calculated dynamically before painting based on the
-   size of the chart and the specification made via parameter \c size.
-   \param positiveRotation The amount of degrees (using a circle of
-   360 degrees) taken to rotate the text. Positive values rotate
-   clockwise, negative values rotate counter-clockwise.  There are two
-   special values that you might find usefull for Pie charts or for
-   Ring charts: \c KDChartParams::SAGGITAL_ROTATION and \c
-   KDChartParams::TANGENTIAL_ROTATION both leading to individual
-   calculation of appropriate rotation for each data value.  Rotation
-   will be performed around the internal <b>alignment point</b> of the
-   text -- specified by \c negativeAlign (or \c positiveAlign, resp.).
+\param positivePosition The anchor position which the text is to be
+aligned to.
+\param positiveAlign The way how the text is to be aligned to the anchor.
+This must be a reasonable combination of Qt::AlignmentFlags.
+\param negativeDeltaX The X distance between the <b>anchor
+point</b> -- specified by \c negativePosition (or \c
+        positivePosition, resp.) -- and the internal <b>alignment point</b>
+of the text -- specified by \c negativeAlign (or \c positiveAlign,
+        resp.).  <b>Note: </b> For better compatibility to the dynamic font
+size this parameter is interpreted as being a per-cent value of the
+used font height.  If greater 0, the X position is increased, if
+less than 0, it is reduced. Actual font size and thus also this
+delta value are calculated dynamically before painting based on the
+size of the chart and the specification made via parameter \c size.
+\param positiveDeltaY The Y distance between the <b>anchor
+point</b> -- specified by \c negativePosition (or \c
+        positivePosition, resp.) -- and the internal <b>alignment point</b>
+of the text -- specified by \c negativeAlign (or \c positiveAlign,
+        resp.).  <b>Note: </b> For better compatibility to the dynamic font
+size this parameter is interpreted as being a per-cent value of the
+used font height.  If greater 0, the Y position is increased, if
+less than 0, it is reduced. Actual font size and thus also this
+delta value are calculated dynamically before painting based on the
+size of the chart and the specification made via parameter \c size.
+\param positiveRotation The amount of degrees (using a circle of
+        360 degrees) taken to rotate the text. Positive values rotate
+clockwise, negative values rotate counter-clockwise.  There are two
+special values that you might find usefull for Pie charts or for
+Ring charts: \c KDChartParams::SAGGITAL_ROTATION and \c
+KDChartParams::TANGENTIAL_ROTATION both leading to individual
+calculation of appropriate rotation for each data value.  Rotation
+will be performed around the internal <b>alignment point</b> of the
+text -- specified by \c negativeAlign (or \c positiveAlign, resp.).
 
-   \param layoutPolicy The way to handle too narrow space conflicts:
-   what to do if a data text covers a neighboring data text (or a
-   neighboring data area, resp.).
+\param layoutPolicy The way to handle too narrow space conflicts:
+what to do if a data text covers a neighboring data text (or a
+        neighboring data area, resp.).
 
-   \sa printDataValues
-   \sa setPrintDataValuesWithDefaultFontParams, printDataValuesWithDefaultFontParams
-   \sa setPrintDataValuesFontRelSize, setPrintDataValuesColor
-   \sa dataValuesDivPow10
-   \sa dataValuesDigitsBehindComma
-   \sa dataValuesFontUseRelSize
-   \sa dataValuesFontRelSize
-   \sa dataValuesFontColor
-   \sa dataValuesAnchorPosition
-   \sa dataValuesAnchorAlign
-   \sa dataValuesAnchorDeltaX
-   \sa dataValuesAnchorDeltaY
-   \sa dataValuesRotation
-   \sa dataValuesLayoutPolicy
+\sa printDataValues
+\sa setPrintDataValuesWithDefaultFontParams, printDataValuesWithDefaultFontParams
+\sa setPrintDataValuesFontRelSize, setPrintDataValuesColor
+\sa dataValuesDivPow10
+\sa dataValuesDigitsBehindComma
+\sa dataValuesFontUseRelSize
+\sa dataValuesFontRelSize
+\sa dataValuesFontColor
+\sa dataValuesAnchorPosition
+\sa dataValuesAnchorAlign
+\sa dataValuesAnchorDeltaX
+\sa dataValuesAnchorDeltaY
+\sa dataValuesRotation
+\sa dataValuesLayoutPolicy
 */
 void KDChartParams::setPrintDataValues( bool active,
-                                        uint chart,
-                                        int divPow10,
-                                        int digitsBehindComma,
-                                        QFont* font,
-                                        uint size,
-                                        QColor* color,
-                                        KDChartEnums::PositionFlag negativePosition,
-                                        uint negativeAlign,
-                                        int  negativeDeltaX,
-                                        int  negativeDeltaY,
-                                        int  negativeRotation,
-                                        KDChartEnums::PositionFlag positivePosition,
-                                        uint positiveAlign,
-                                        int  positiveDeltaX,
-                                        int  positiveDeltaY,
-                                        int  positiveRotation,
-                                        KDChartEnums::TextLayoutPolicy policy )
+        uint chart,
+        int divPow10,
+        int digitsBehindComma,
+        QFont* font,
+        uint size,
+        QColor* color,
+        KDChartEnums::PositionFlag negativePosition,
+        uint negativeAlign,
+        int  negativeDeltaX,
+        int  negativeDeltaY,
+        int  negativeRotation,
+        KDChartEnums::PositionFlag positivePosition,
+        uint positiveAlign,
+        int  positiveDeltaX,
+        int  positiveDeltaY,
+        int  positiveRotation,
+        KDChartEnums::TextLayoutPolicy policy )
 {
     uint count = (KDCHART_ALL_CHARTS == chart) ? 2 : 1;
     PrintDataValuesSettings * settings =    (( 1 < count ) || ( 0 == chart ))
-                                            ? &_printDataValuesSettings
-                                            : &_printDataValuesSettings2;
+        ? &_printDataValuesSettings
+        : &_printDataValuesSettings2;
     for ( uint i = 0; i < count; ++i ) {
         settings->_printDataValues   = active;
         settings->_divPow10          = divPow10;
@@ -968,7 +968,7 @@ void KDChartParams::setPrintDataValues( bool active,
 
         const ChartType cType
             = (    ( 1  < count  &&  i )
-                   || ( 1 == count  &&  0 < chart  &&  chart < 1000 ) )
+                    || ( 1 == count  &&  0 < chart  &&  chart < 1000 ) )
             ? additionalChartType()
             : chartType();
 
@@ -976,184 +976,184 @@ void KDChartParams::setPrintDataValues( bool active,
         if ( UINT_MAX == size ) {
             finished = true;
             switch ( cType ) {
-            case NoType:
-            case Bar: {
-                if ( font )
-                    settings->_dataValuesFont = *font;
-                else
-                    settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
-                settings->_dataValuesUseFontRelSize = true;
-                settings->_dataValuesFontRelSize = 22;
-                settings->_dataValuesAutoColor            = false;  //  !!!
-                settings->_dataValuesColor = QColor( Qt::darkBlue );
-                settings->_dataValuesBrush = QBrush( Qt::NoBrush );
-                // for values below zero:
-                settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosBottomRight;
-                settings->_dataValuesAnchorNegativeAlign    = Qt::AlignBottom + Qt::AlignRight;
-                settings->_dataValuesAnchorNegativeDeltaX   =  20;
-                settings->_dataValuesAnchorNegativeDeltaY   =  55;
-                settings->_dataValuesNegativeRotation       = 300;
-                // for values greater/equal zero:
-                settings->_dataValuesAnchorPositivePosition = KDChartEnums::PosTopLeft;
-                settings->_dataValuesAnchorPositiveAlign    = Qt::AlignTop + Qt::AlignLeft;
-                settings->_dataValuesAnchorPositiveDeltaX   = - 20;
-                settings->_dataValuesAnchorPositiveDeltaY   = - 65;
-                settings->_dataValuesPositiveRotation       =  300;
+                case NoType:
+                case Bar: {
+                              if ( font )
+                                  settings->_dataValuesFont = *font;
+                              else
+                                  settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
+                              settings->_dataValuesUseFontRelSize = true;
+                              settings->_dataValuesFontRelSize = 22;
+                              settings->_dataValuesAutoColor            = false;  //  !!!
+                              settings->_dataValuesColor = QColor( Qt::darkBlue );
+                              settings->_dataValuesBrush = QBrush( Qt::NoBrush );
+                              // for values below zero:
+                              settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosBottomRight;
+                              settings->_dataValuesAnchorNegativeAlign    = Qt::AlignBottom + Qt::AlignRight;
+                              settings->_dataValuesAnchorNegativeDeltaX   =  20;
+                              settings->_dataValuesAnchorNegativeDeltaY   =  55;
+                              settings->_dataValuesNegativeRotation       = 300;
+                              // for values greater/equal zero:
+                              settings->_dataValuesAnchorPositivePosition = KDChartEnums::PosTopLeft;
+                              settings->_dataValuesAnchorPositiveAlign    = Qt::AlignTop + Qt::AlignLeft;
+                              settings->_dataValuesAnchorPositiveDeltaX   = - 20;
+                              settings->_dataValuesAnchorPositiveDeltaY   = - 65;
+                              settings->_dataValuesPositiveRotation       =  300;
 
-                settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyRotate;
-            }
-                break;
-            case Line: {
-                if ( font )
-                    settings->_dataValuesFont = *font;
-                else
-                    settings->_dataValuesFont = QFont( "times", 1, QFont::Normal );
-                settings->_dataValuesUseFontRelSize = true;
-                settings->_dataValuesFontRelSize = 22;
-                settings->_dataValuesAutoColor            = false;  //  !!!
-                settings->_dataValuesColor = QColor( Qt::darkBlue );
-                settings->_dataValuesBrush = QBrush( Qt::NoBrush );
-                // for values below zero:
-                settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosBottomCenter;
-                settings->_dataValuesAnchorNegativeAlign    = Qt::AlignTop + Qt::AlignHCenter;
-                settings->_dataValuesAnchorNegativeDeltaX   =   0;
-                settings->_dataValuesAnchorNegativeDeltaY   =   0;
-                settings->_dataValuesNegativeRotation       =   0;
-                // for values greater/equal zero:
-                settings->_dataValuesAnchorPositivePosition = KDChartEnums::PosTopCenter;
-                settings->_dataValuesAnchorPositiveAlign    = Qt::AlignBottom + Qt::AlignHCenter;
-                settings->_dataValuesAnchorPositiveDeltaX   =    0;
-                settings->_dataValuesAnchorPositiveDeltaY   =    0;
-                settings->_dataValuesPositiveRotation       =    0;
+                              settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyRotate;
+                          }
+                          break;
+                case Line: {
+                               if ( font )
+                                   settings->_dataValuesFont = *font;
+                               else
+                                   settings->_dataValuesFont = QFont( "times", 1, QFont::Normal );
+                               settings->_dataValuesUseFontRelSize = true;
+                               settings->_dataValuesFontRelSize = 22;
+                               settings->_dataValuesAutoColor            = false;  //  !!!
+                               settings->_dataValuesColor = QColor( Qt::darkBlue );
+                               settings->_dataValuesBrush = QBrush( Qt::NoBrush );
+                               // for values below zero:
+                               settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosBottomCenter;
+                               settings->_dataValuesAnchorNegativeAlign    = Qt::AlignTop + Qt::AlignHCenter;
+                               settings->_dataValuesAnchorNegativeDeltaX   =   0;
+                               settings->_dataValuesAnchorNegativeDeltaY   =   0;
+                               settings->_dataValuesNegativeRotation       =   0;
+                               // for values greater/equal zero:
+                               settings->_dataValuesAnchorPositivePosition = KDChartEnums::PosTopCenter;
+                               settings->_dataValuesAnchorPositiveAlign    = Qt::AlignBottom + Qt::AlignHCenter;
+                               settings->_dataValuesAnchorPositiveDeltaX   =    0;
+                               settings->_dataValuesAnchorPositiveDeltaY   =    0;
+                               settings->_dataValuesPositiveRotation       =    0;
 
-                settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyRotate;
-            }
-                break;
-            case Area: {
-                if ( font )
-                    settings->_dataValuesFont = *font;
-                else
-                    settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
-                settings->_dataValuesUseFontRelSize = true;
-                settings->_dataValuesFontRelSize = 29;
-                settings->_dataValuesAutoColor            = true;  //  !!!
-                settings->_dataValuesColor = QColor( Qt::black );
-                settings->_dataValuesBrush = QBrush( Qt::white );
+                               settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyRotate;
+                           }
+                           break;
+                case Area: {
+                               if ( font )
+                                   settings->_dataValuesFont = *font;
+                               else
+                                   settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
+                               settings->_dataValuesUseFontRelSize = true;
+                               settings->_dataValuesFontRelSize = 29;
+                               settings->_dataValuesAutoColor              = true;  //  !!!
+                               settings->_dataValuesColor = QColor( Qt::black );
+                               settings->_dataValuesBrush = QBrush( Qt::white );
 
-                bool bShowOutside = areaChartSubType() == AreaNormal;
-                // for values below zero:
-                settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosBottomCenter;
-                settings->_dataValuesAnchorNegativeAlign    = Qt::AlignHCenter
-                                                              + (bShowOutside ? Qt::AlignTop : Qt::AlignBottom);
-                settings->_dataValuesAnchorNegativeDeltaX   =   0;
-                settings->_dataValuesAnchorNegativeDeltaY   = bShowOutside ? 20 : -35;
-                settings->_dataValuesNegativeRotation       =   0;
-                // for values greater/equal zero:
-                settings->_dataValuesAnchorPositivePosition = KDChartEnums::PosTopCenter;
-                settings->_dataValuesAnchorPositiveAlign    = Qt::AlignHCenter
-                                                              + (bShowOutside ? Qt::AlignBottom : Qt::AlignTop);
-                settings->_dataValuesAnchorPositiveDeltaX   =    0;
-                settings->_dataValuesAnchorPositiveDeltaY   = bShowOutside ? -20 : 35;
-                settings->_dataValuesPositiveRotation       =    0;
+                               bool bShowOutside = areaChartSubType() == AreaNormal;
+                               // for values below zero:
+                               settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosBottomCenter;
+                               settings->_dataValuesAnchorNegativeAlign    = Qt::AlignHCenter
+                                                            + (bShowOutside ? Qt::AlignTop : Qt::AlignBottom);
+                               settings->_dataValuesAnchorNegativeDeltaX   =   0;
+                               settings->_dataValuesAnchorNegativeDeltaY   = bShowOutside ? 20 : -35;
+                               settings->_dataValuesNegativeRotation       =   0;
+                               // for values greater/equal zero:
+                               settings->_dataValuesAnchorPositivePosition = KDChartEnums::PosTopCenter;
+                               settings->_dataValuesAnchorPositiveAlign    = Qt::AlignHCenter
+                                                            + (bShowOutside ? Qt::AlignBottom : Qt::AlignTop);
+                               settings->_dataValuesAnchorPositiveDeltaX   =   0;
+                               settings->_dataValuesAnchorPositiveDeltaY   = bShowOutside ? -20 : 35;
+                               settings->_dataValuesPositiveRotation       =   0;
 
-                settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyRotate;
-            }
-                break;
-            case HiLo:
-            case BoxWhisker:
-                // settings are not defined here because HiLo and BW charts
-                // are *not* set up using setPrintDataValues()
-                // but by using their own methods
-                break;
-            case Pie: {
-                if ( font )
-                    settings->_dataValuesFont = *font;
-                else
-                    settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
-                settings->_dataValuesUseFontRelSize = true;
-                settings->_dataValuesFontRelSize = 35;
-                settings->_dataValuesAutoColor            = true;  //  !!!
-                settings->_dataValuesColor = QColor( Qt::black );
-                settings->_dataValuesBrush = QBrush( Qt::NoBrush );
-                // for values below zero:
-                settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosTopCenter;
-                settings->_dataValuesAnchorNegativeAlign    = Qt::AlignTop + Qt::AlignHCenter;
-                settings->_dataValuesAnchorNegativeDeltaX   =  0;
-                settings->_dataValuesAnchorNegativeDeltaY   = 50;
-                settings->_dataValuesNegativeRotation       = TANGENTIAL_ROTATION;
-                // for values greater/equal zero:
-                settings->_dataValuesAnchorPositivePosition = KDChartEnums::PosTopCenter;
-                settings->_dataValuesAnchorPositiveAlign    = Qt::AlignTop + Qt::AlignHCenter;
-                settings->_dataValuesAnchorPositiveDeltaX   =  0;
-                settings->_dataValuesAnchorPositiveDeltaY   = 50;
-                settings->_dataValuesPositiveRotation       = TANGENTIAL_ROTATION;
+                               settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyRotate;
+                           }
+                           break;
+                case HiLo:
+                case BoxWhisker:
+                           // settings are not defined here because HiLo and BW charts
+                           // are *not* set up using setPrintDataValues()
+                           // but by using their own methods
+                           break;
+                case Pie: {
+                              if ( font )
+                                  settings->_dataValuesFont = *font;
+                              else
+                                  settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
+                              settings->_dataValuesUseFontRelSize = true;
+                              settings->_dataValuesFontRelSize = 35;
+                              settings->_dataValuesAutoColor            = true;  //  !!!
+                              settings->_dataValuesColor = QColor( Qt::black );
+                              settings->_dataValuesBrush = QBrush( Qt::NoBrush );
+                              // for values below zero:
+                              settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosTopCenter;
+                              settings->_dataValuesAnchorNegativeAlign    = Qt::AlignTop + Qt::AlignHCenter;
+                              settings->_dataValuesAnchorNegativeDeltaX   =  0;
+                              settings->_dataValuesAnchorNegativeDeltaY   = 50;
+                              settings->_dataValuesNegativeRotation       = TANGENTIAL_ROTATION;
+                              // for values greater/equal zero:
+                              settings->_dataValuesAnchorPositivePosition = KDChartEnums::PosTopCenter;
+                              settings->_dataValuesAnchorPositiveAlign    = Qt::AlignTop + Qt::AlignHCenter;
+                              settings->_dataValuesAnchorPositiveDeltaX   =  0;
+                              settings->_dataValuesAnchorPositiveDeltaY   = 50;
+                              settings->_dataValuesPositiveRotation       = TANGENTIAL_ROTATION;
 
-                settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyRotate;
-            }
-                break;
-            case Ring: {
-                if ( font )
-                    settings->_dataValuesFont = *font;
-                else
-                    settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
-                settings->_dataValuesUseFontRelSize = true;
-                settings->_dataValuesFontRelSize = 35;
-                settings->_dataValuesAutoColor            = true;  //  !!!
-                settings->_dataValuesColor = QColor( Qt::black );
-                settings->_dataValuesBrush = QBrush( Qt::NoBrush );
-                // for values below zero:
-                settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosCenter;
-                settings->_dataValuesAnchorNegativeAlign    = Qt::AlignCenter;
-                settings->_dataValuesAnchorNegativeDeltaX   = 0;
-                settings->_dataValuesAnchorNegativeDeltaY   = 10;
-                settings->_dataValuesNegativeRotation       = TANGENTIAL_ROTATION;
-                // for values greater/equal zero:
-                settings->_dataValuesAnchorPositivePosition = KDChartEnums::PosCenter;
-                settings->_dataValuesAnchorPositiveAlign    = Qt::AlignCenter;
-                settings->_dataValuesAnchorPositiveDeltaX   = 0;
-                settings->_dataValuesAnchorPositiveDeltaY   = 10;
-                settings->_dataValuesPositiveRotation       = TANGENTIAL_ROTATION;
+                              settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyRotate;
+                          }
+                          break;
+                case Ring: {
+                               if ( font )
+                                   settings->_dataValuesFont = *font;
+                               else
+                                   settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
+                               settings->_dataValuesUseFontRelSize = true;
+                               settings->_dataValuesFontRelSize = 35;
+                               settings->_dataValuesAutoColor            = true;  //  !!!
+                               settings->_dataValuesColor = QColor( Qt::black );
+                               settings->_dataValuesBrush = QBrush( Qt::NoBrush );
+                               // for values below zero:
+                               settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosCenter;
+                               settings->_dataValuesAnchorNegativeAlign    = Qt::AlignCenter;
+                               settings->_dataValuesAnchorNegativeDeltaX   = 0;
+                               settings->_dataValuesAnchorNegativeDeltaY   = 10;
+                               settings->_dataValuesNegativeRotation       = TANGENTIAL_ROTATION;
+                               // for values greater/equal zero:
+                               settings->_dataValuesAnchorPositivePosition = KDChartEnums::PosCenter;
+                               settings->_dataValuesAnchorPositiveAlign    = Qt::AlignCenter;
+                               settings->_dataValuesAnchorPositiveDeltaX   = 0;
+                               settings->_dataValuesAnchorPositiveDeltaY   = 10;
+                               settings->_dataValuesPositiveRotation       = TANGENTIAL_ROTATION;
 
-                settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyRotate;
-            }
-                break;
+                               settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyRotate;
+                           }
+                           break;
 
-            case Polar: {
-                settings->_dataValuesFontRelSize = 26;
-                /*if ( font )
-                  settings->_dataValuesFont = *font;
-                  else
-                  settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
-                  settings->_dataValuesUseFontRelSize = true;
-                  settings->_dataValuesFontRelSize = 20;
-                  settings->_dataValuesAutoColor   = polarMarker();  //  !!!
-                  settings->_dataValuesColor = QColor( Qt::black );
-                  settings->_dataValuesBrush = QBrush( Qt::NoBrush );
+                case Polar: {
+                              settings->_dataValuesFontRelSize = 26;
+                                /*if ( font )
+                                  settings->_dataValuesFont = *font;
+                                  else
+                                  settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
+                                  settings->_dataValuesUseFontRelSize = true;
+                                  settings->_dataValuesFontRelSize = 20;
+                                  settings->_dataValuesAutoColor   = polarMarker();  //  !!!
+                                  settings->_dataValuesColor = QColor( Qt::black );
+                                  settings->_dataValuesBrush = QBrush( Qt::NoBrush );
 
-                  // for values below zero:
-                  settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosCenter;
-                  settings->_dataValuesAnchorNegativeAlign    = Qt::AlignCenter;
-                  settings->_dataValuesAnchorNegativeDeltaX   = 0;
-                  settings->_dataValuesAnchorNegativeDeltaY   = 0;
-                  settings->_dataValuesNegativeRotation       = 0;
-                  // for values greater/equal zero:
-                  settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosCenter;
-                  settings->_dataValuesAnchorNegativeAlign    = Qt::AlignCenter;
-                  settings->_dataValuesAnchorNegativeDeltaX   = 0;
-                  settings->_dataValuesAnchorNegativeDeltaY   = 0;
-                  settings->_dataValuesNegativeRotation       = 0;
+                                // for values below zero:
+                                settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosCenter;
+                                settings->_dataValuesAnchorNegativeAlign    = Qt::AlignCenter;
+                                settings->_dataValuesAnchorNegativeDeltaX   = 0;
+                                settings->_dataValuesAnchorNegativeDeltaY   = 0;
+                                settings->_dataValuesNegativeRotation       = 0;
+                                // for values greater/equal zero:
+                                settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosCenter;
+                                settings->_dataValuesAnchorNegativeAlign    = Qt::AlignCenter;
+                                settings->_dataValuesAnchorNegativeDeltaX   = 0;
+                                settings->_dataValuesAnchorNegativeDeltaY   = 0;
+                                settings->_dataValuesNegativeRotation       = 0;
 
-                  settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyShrinkFontSize;
-                */
-                setDefaultAxesTypes();
-                finished = false;  // use build-in default params, see KDChartParams.h::setPrintDataValues()
-            }
-                break;
+                                settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyShrinkFontSize;
+                                */
+                                setDefaultAxesTypes();
+                                finished = false;  // use build-in default params, see KDChartParams.h::setPrintDataValues()
+                            }
+                            break;
 
-            default: {
-                qDebug( "IMPLEMENTATION ERROR: Unknown chartType in setPrintDataValues()" );
-                finished = false;  // use build-in default params, see KDChartParams.h::setPrintDataValues()
-            }
+                default: {
+                             qDebug( "IMPLEMENTATION ERROR: Unknown chartType in setPrintDataValues()" );
+                             finished = false;  // use build-in default params, see KDChartParams.h::setPrintDataValues()
+                         }
             }
         }
         if ( !finished ) {
@@ -1168,8 +1168,8 @@ void KDChartParams::setPrintDataValues( bool active,
             settings->_dataValuesUseFontRelSize = ( 0 < theSize );
             settings->_dataValuesFontRelSize = theSize;
             if (    DATA_VALUE_AUTO_COLOR == color
-                    && ( Polar != cType || polarMarker() ) ) {
-                settings->_dataValuesAutoColor            = true;  //  !!!
+                 && ( Polar != cType || polarMarker() ) ) {
+                settings->_dataValuesAutoColor = true;  //  !!!
                 settings->_dataValuesColor = QColor( Qt::black );
             }
             else {
@@ -1204,125 +1204,125 @@ void KDChartParams::setPrintDataValues( bool active,
 
 
 /**
-   \enum KDChartParams::SourceMode
+  \enum KDChartParams::SourceMode
 
-   The chart source mode.
-   Use \c setChartSourceMode to specify if and how any data
-   should be taken into account for a given chart.
+  The chart source mode.
+  Use \c setChartSourceMode to specify if and how any data
+  should be taken into account for a given chart.
 
-   \sa setChartSourceMode, chartSourceMode, setAdditionalChartType
-*/
+  \sa setChartSourceMode, chartSourceMode, setAdditionalChartType
+  */
 
 
 /**
-   Specifies the chart source mode of one or more datasets.
-   Use this to specify if and how any data should be taken
-   into account for a given chart. You may call this function
-   multiple times to specify how the different datasets are to
-   be used. Number of datasets is only limited by the data that
-   you actually provide to the chart widget. Usage of this method
-   is mandatory when specifying combinations of more than one
-   chart (e.g. via \c setAdditionalChartType() ).
+  Specifies the chart source mode of one or more datasets.
+  Use this to specify if and how any data should be taken
+  into account for a given chart. You may call this function
+  multiple times to specify how the different datasets are to
+  be used. Number of datasets is only limited by the data that
+  you actually provide to the chart widget. Usage of this method
+  is mandatory when specifying combinations of more than one
+  chart (e.g. via \c setAdditionalChartType() ).
 
-   \note If specifying <b>more than one dataset</b> for the very
-   same chart and the same source mode make sure they form
-   a contiguous <b>series</b>.<br>
-   It is not possible to use dataset 0..3 as DataEntry, dataset
-   4 as AxisLabel and again dataset 5..6 as DataEntry for the
-   very same chart!<br>
-   Of course you could specify 0..3 as DataEntry for chart 0
-   while 5..6 would contain the data entries for chart 1
-   when specifying a widget showing two charts.
+  \note If specifying <b>more than one dataset</b> for the very
+  same chart and the same source mode make sure they form
+  a contiguous <b>series</b>.<br>
+  It is not possible to use dataset 0..3 as DataEntry, dataset
+  4 as AxisLabel and again dataset 5..6 as DataEntry for the
+  very same chart!<br>
+  Of course you could specify 0..3 as DataEntry for chart 0
+  while 5..6 would contain the data entries for chart 1
+  when specifying a widget showing two charts.
 
-   <b>Also note:</b><br>
-   Whenever you use \c setChartSourceMode() make sure not to
-   forget any of the datasets which you want to define: not
-   specifying a dataset would result in it being ignored.<br>
-   So the rule is: either don't call setChartSourceMode() at all
-   or call it for each dataset!
+  <b>Also note:</b><br>
+  Whenever you use \c setChartSourceMode() make sure not to
+  forget any of the datasets which you want to define: not
+  specifying a dataset would result in it being ignored.<br>
+  So the rule is: either don't call setChartSourceMode() at all
+  or call it for each dataset!
 
-   To quickly clear all such settings just might want to call
-   <b>setChartSourceMode( UnknownMode, KDCHART_ALL_DATASETS );</b>
-   without specifying a dataset number and without specifying
-   a chart number.<br>
-   However this KDCHART_ALL_DATASETS may only be used to
-   <b>clear</b> SourceMode settings - but not for defining the
-   SourceMode for all datasets - the above mentioned combination
-   with <b>UnknownMode</b> is the only way how to use
-   <b>KDCHART_ALL_DATASETS</b> here!
+  To quickly clear all such settings just might want to call
+  <b>setChartSourceMode( UnknownMode, KDCHART_ALL_DATASETS );</b>
+  without specifying a dataset number and without specifying
+  a chart number.<br>
+  However this KDCHART_ALL_DATASETS may only be used to
+  <b>clear</b> SourceMode settings - but not for defining the
+  SourceMode for all datasets - the above mentioned combination
+  with <b>UnknownMode</b> is the only way how to use
+  <b>KDCHART_ALL_DATASETS</b> here!
 
-   <b>Examples:</b>
+  <b>Examples:</b>
 
-   \verbatim
-   setChartSourceMode( DataEntry, 2 );
-   \endverbatim
-   This would specify a simple chart obtaining its values from dataset 2.
+  \verbatim
+  setChartSourceMode( DataEntry, 2 );
+  \endverbatim
+  This would specify a simple chart obtaining its values from dataset 2.
 
-   \verbatim
-   setChartSourceMode( DataEntry, 0, 0, 0 );
-   setChartSourceMode( DataEntry, 3, 3, 1 );
-   \endverbatim
-   This would specify a two chart widget - the 1st obtaining its values
-   from dataset 0 and the 2nd taking the values from dataset 3.
+  \verbatim
+  setChartSourceMode( DataEntry, 0, 0, 0 );
+  setChartSourceMode( DataEntry, 3, 3, 1 );
+  \endverbatim
+  This would specify a two chart widget - the 1st obtaining its values
+  from dataset 0 and the 2nd taking the values from dataset 3.
 
-   \verbatim
-   setChartSourceMode( LegendText,       1,  1, 0 );
-   setChartSourceMode( AxisLabel,        2,  2, 0 );
-   setChartSourceMode( DataEntry,        3,  6, 0 );
-   setChartSourceMode( ExtraLinesAnchor, 7,  7, 0 );
-   setChartSourceMode( LegendText,       8,  8, 1 );
-   setChartSourceMode( AxisLabel,        9,  9, 1 );
-   setChartSourceMode( DataEntry,       10, 13, 1 );
-   \endverbatim
-   This would specify a two chart widget - the 1st obtaining its values
-   from datasets 3..6 and the 2nd taking the values from datasets 10..13.
-   Their respective legends and axes would take their values from
-   datasets 1 and 2 (or 8 and 9, resp.).
-   Additionally the 1st chart would use dataset 7 to determine the
-   horizontal (or vertical, resp.) position of any extra lines
-   that might be specified by KDChartPropertySet IDs assigned to
-   the cells in dataset 7.
+  \verbatim
+  setChartSourceMode( LegendText,       1,  1, 0 );
+  setChartSourceMode( AxisLabel,        2,  2, 0 );
+  setChartSourceMode( DataEntry,        3,  6, 0 );
+  setChartSourceMode( ExtraLinesAnchor, 7,  7, 0 );
+  setChartSourceMode( LegendText,       8,  8, 1 );
+  setChartSourceMode( AxisLabel,        9,  9, 1 );
+  setChartSourceMode( DataEntry,       10, 13, 1 );
+  \endverbatim
+  This would specify a two chart widget - the 1st obtaining its values
+  from datasets 3..6 and the 2nd taking the values from datasets 10..13.
+  Their respective legends and axes would take their values from
+  datasets 1 and 2 (or 8 and 9, resp.).
+  Additionally the 1st chart would use dataset 7 to determine the
+  horizontal (or vertical, resp.) position of any extra lines
+  that might be specified by KDChartPropertySet IDs assigned to
+  the cells in dataset 7.
 
-   \note If source mode is ExtraLinesAnchor all cells
-   of the respective datset will be ignored when the normal
-   cell representations (e.g. Bars or Lines) are drawn - these
-   cells will <em>only</em> be used as anchor points for any
-   extra lines that are specified with these cell's property sets.
+  \note If source mode is ExtraLinesAnchor all cells
+  of the respective datset will be ignored when the normal
+  cell representations (e.g. Bars or Lines) are drawn - these
+  cells will <em>only</em> be used as anchor points for any
+  extra lines that are specified with these cell's property sets.
 
-   When specifying \c ExtraLinesAnchor for more than one dataset
-   of the same chart make sure they form a contiguous row
-   <b>together</b> with the \c DataEntry dataset(s): e.g
-   you may use datasets 3..8 for DataEntry cells and datasets
-   9..10 for ExtraLinesAnchor cells.
-   All datasets with mode DataEntry or ExtraLinesAnchor are taken
-   into account for calculation of the axes ranges and delimiters.
+  When specifying \c ExtraLinesAnchor for more than one dataset
+  of the same chart make sure they form a contiguous row
+  <b>together</b> with the \c DataEntry dataset(s): e.g
+  you may use datasets 3..8 for DataEntry cells and datasets
+  9..10 for ExtraLinesAnchor cells.
+  All datasets with mode DataEntry or ExtraLinesAnchor are taken
+  into account for calculation of the axes ranges and delimiters.
 
-   <P>
+  <P>
 
-   \param mode the way how to use information stored in this dataset.
-   \param dataset the dataset number to be used (or ignored, resp.).
-   Use \c KDCHART_ALL_DATASETS to indicate that information given
-   applies to all of the datasets.
-   \param dataset2 a second dataset number to be taken into account
-   (or ignored, resp.). Use this one together with the \dataset
-   param to specify a range of datasets.
-   \param chart the chart taking into account this dataset.
-   Use this parameter only if more than one chart is to be displayed.
-   By using KDCHART_ALL_CHARTS here you may specify that the dataset
-   (or the range of datasets, resp.) is to be taken into account for
-   all of the charts displayed.
+  \param mode the way how to use information stored in this dataset.
+  \param dataset the dataset number to be used (or ignored, resp.).
+  Use \c KDCHART_ALL_DATASETS to indicate that information given
+  applies to all of the datasets.
+  \param dataset2 a second dataset number to be taken into account
+  (or ignored, resp.). Use this one together with the \dataset
+param to specify a range of datasets.
+\param chart the chart taking into account this dataset.
+Use this parameter only if more than one chart is to be displayed.
+By using KDCHART_ALL_CHARTS here you may specify that the dataset
+(or the range of datasets, resp.) is to be taken into account for
+all of the charts displayed.
 
-   \sa SourceMode, chartSourceMode, findDataset
-   \sa maxDatasetSourceMode, setAdditionalChartType
+\sa SourceMode, chartSourceMode, findDataset
+\sa maxDatasetSourceMode, setAdditionalChartType
 */
 void KDChartParams::setChartSourceMode( SourceMode mode,
-                                        uint dataset,
-                                        uint dataset2,
-                                        uint chart )
+        uint dataset,
+        uint dataset2,
+        uint chart )
 {
     if ( KDCHART_NO_DATASET != dataset
-         && KDCHART_ALL_DATASETS != dataset
-         && KDCHART_ALL_DATASETS != dataset2 ) {
+            && KDCHART_ALL_DATASETS != dataset
+            && KDCHART_ALL_DATASETS != dataset2 ) {
         uint i;
         uint last = ( KDCHART_NO_DATASET == dataset2 ) ? dataset : dataset2;
         for ( i = dataset; i <= last; ++i )
@@ -1339,47 +1339,47 @@ void KDChartParams::setChartSourceMode( SourceMode mode,
 
 
 /**
-   Retrieves usage information of a given dataset or a range of
-   datasets.
+  Retrieves usage information of a given dataset or a range of
+  datasets.
 
-   \note If you specify a range of datasets and not all of them
-   share the same SourceMode the return value will be \c UnknownMode
-   whereas in case of the dataset(s) not being used it will be \c DontUse.
-   Accordingly if you provide a chart pointer and not all the
-   datasets share the same chart the chart pointer will receive
-   the value KDCHART_UNKNOWN_CHART.<br>
+  \note If you specify a range of datasets and not all of them
+  share the same SourceMode the return value will be \c UnknownMode
+  whereas in case of the dataset(s) not being used it will be \c DontUse.
+  Accordingly if you provide a chart pointer and not all the
+  datasets share the same chart the chart pointer will receive
+  the value KDCHART_UNKNOWN_CHART.<br>
 
-   <b>Also note:</b>
-   If \c setChartSourceMode() was not used at all
-   chartSourceMode() will return <b>DataEntry</b> no matter what
-   dataset number is specified.
+  <b>Also note:</b>
+  If \c setChartSourceMode() was not used at all
+  chartSourceMode() will return <b>DataEntry</b> no matter what
+  dataset number is specified.
 
-   <p>
+  <p>
 
-   \param dataset the dataset number to be looked at.
-   Use \c KDCHART_ALL_DATASETS to find out if all of the datasets share
-   the very same SourceMode.
-   \param dataset2 a second dataset number.
-   Use this one together with the \dataset param to look at a range of
-   datasets and find out if all of them share the very same SourceMode.
-   \param chart If this parameter points to an int the method will
-   provide you with the chart number that this dataset (or this range
-   of datasets, resp.) is taken into account for.
+  \param dataset the dataset number to be looked at.
+  Use \c KDCHART_ALL_DATASETS to find out if all of the datasets share
+  the very same SourceMode.
+  \param dataset2 a second dataset number.
+  Use this one together with the \dataset param to look at a range of
+  datasets and find out if all of them share the very same SourceMode.
+  \param chart If this parameter points to an int the method will
+  provide you with the chart number that this dataset (or this range
+  of datasets, resp.) is taken into account for.
 
-   \sa SourceMode, setChartSourceMode, setAdditionalChartType
-   \sa maxDatasetSourceMode, findDataset
-*/
+  \sa SourceMode, setChartSourceMode, setAdditionalChartType
+  \sa maxDatasetSourceMode, findDataset
+  */
 KDChartParams::SourceMode KDChartParams::chartSourceMode( uint dataset,
-                                                          uint dataset2,
-                                                          uint* pChart ) const
+        uint dataset2,
+        uint* pChart ) const
 {
     uint chart = KDCHART_UNKNOWN_CHART;
     SourceMode mode = UnknownMode;
 
     if ( _setChartSourceModeWasUsed ) {
         if (    dataset <= _maxDatasetSourceMode
-                && (    KDCHART_NO_DATASET == dataset2
-                        || dataset2 <= _maxDatasetSourceMode ) ) {
+             && (    KDCHART_NO_DATASET == dataset2
+                  || dataset2 <= _maxDatasetSourceMode ) ) {
 
             uint a, b;
             if ( KDCHART_ALL_DATASETS == dataset ) {
@@ -1392,9 +1392,9 @@ KDChartParams::SourceMode KDChartParams::chartSourceMode( uint dataset,
 
             bool bStart = true;
             ModeAndChartMap::ConstIterator it;
-            for ( it = _dataSourceModeAndChart.find( a );
-                  ( it != _dataSourceModeAndChart.end() ) && ( it.key() <= b );
-                  ++it ) {
+            for( it = _dataSourceModeAndChart.find( a );
+                 ( it != _dataSourceModeAndChart.end() ) && ( it.key() <= b );
+                 ++it ){
                 if ( bStart ) {
                     mode = it.data().mode();
                     chart = it.data().chart();
@@ -1418,37 +1418,37 @@ KDChartParams::SourceMode KDChartParams::chartSourceMode( uint dataset,
 
 
 /**
-   Retrieves the dataset number or a range of datasets
-   being used with a given SourceMode for a given chart
-   or KDCHART_NO_DATASET if no dataset was specified for
-   that mode and that chart.
+  Retrieves the dataset number or a range of datasets
+  being used with a given SourceMode for a given chart
+  or KDCHART_NO_DATASET if no dataset was specified for
+  that mode and that chart.
 
-   \note If \c setChartSourceMode() was not used at all
-   findDataset() will return true and set the dataset
-   to KDCHART_ALL_DATASETS when called for SourceMode
-   <b>DataEntry</b>. All other SourceModes will return false then.
+  \note If \c setChartSourceMode() was not used at all
+  findDataset() will return true and set the dataset
+  to KDCHART_ALL_DATASETS when called for SourceMode
+  <b>DataEntry</b>. All other SourceModes will return false then.
 
-   \return True if at least one dataset was found.
+  \return True if at least one dataset was found.
 
-   \param mode the SourceMode to search for.
-   \param dataset the dataset number found (or the first
-   dataset number in case a series of datasets was found, resp.)
-   \param dataset2 the dataset number found (or the last
-   dataset number in case a series of datasets was found, resp.)
-   <b>Hint:</b> You may give the same variable both for
-   dataset and for dataset2, e.g. this makes sense in case you
-   are sure that findDataset will find only one dataset anyway.
-   \param chart the chart number that the dataset (or this range
-   of datasets, resp.) must have been defined for. If this is missing
-   findDataset assumes you are looking for datasets of the first chart.
+  \param mode the SourceMode to search for.
+  \param dataset the dataset number found (or the first
+  dataset number in case a series of datasets was found, resp.)
+  \param dataset2 the dataset number found (or the last
+  dataset number in case a series of datasets was found, resp.)
+  <b>Hint:</b> You may give the same variable both for
+  dataset and for dataset2, e.g. this makes sense in case you
+  are sure that findDataset will find only one dataset anyway.
+  \param chart the chart number that the dataset (or this range
+  of datasets, resp.) must have been defined for. If this is missing
+  findDataset assumes you are looking for datasets of the first chart.
 
-   \sa findDatasets, SourceMode, setChartSourceMode, chartSourceMode
-   \sa maxDatasetSourceMode, setAdditionalChartType
-*/
+  \sa findDatasets, SourceMode, setChartSourceMode, chartSourceMode
+  \sa maxDatasetSourceMode, setAdditionalChartType
+  */
 bool KDChartParams::findDataset( SourceMode mode,
-                                 uint& dataset,
-                                 uint& dataset2,
-                                 uint chart ) const
+        uint& dataset,
+        uint& dataset2,
+        uint chart ) const
 {
     bool res = false;
     dataset  = KDCHART_NO_DATASET;
@@ -1457,10 +1457,10 @@ bool KDChartParams::findDataset( SourceMode mode,
         bool bStart = true;
         ModeAndChartMap::ConstIterator it;
         for ( it = _dataSourceModeAndChart.begin();
-              it != _dataSourceModeAndChart.end(); ++it ) {
+                it != _dataSourceModeAndChart.end(); ++it ) {
             if (    ( it.data().mode() == mode )
                     && (    ( KDCHART_ALL_CHARTS == chart )
-                            || ( it.data().chart()  == chart ) ) ) {
+                        || ( it.data().chart()  == chart ) ) ) {
                 if ( bStart ) {
                     dataset = it.key();
                     bStart = false;
@@ -1480,41 +1480,41 @@ bool KDChartParams::findDataset( SourceMode mode,
 
 
 /**
-   Retrieves the dataset number or a range of datasets
-   being used with one of two given SourceModes
-   for a given chart or KDCHART_NO_DATASET
-   if no dataset was specified for that mode and that chart.
+  Retrieves the dataset number or a range of datasets
+  being used with one of two given SourceModes
+  for a given chart or KDCHART_NO_DATASET
+  if no dataset was specified for that mode and that chart.
 
-   If \c setChartSourceMode() was not used at all
-   findDataset() will return true and set the dataset
-   to KDCHART_ALL_DATASETS when either \c modeA or \c modeB
-   is <b>DataEntry</b>. All other SourceModes will return
-   false then.
+  If \c setChartSourceMode() was not used at all
+  findDataset() will return true and set the dataset
+  to KDCHART_ALL_DATASETS when either \c modeA or \c modeB
+  is <b>DataEntry</b>. All other SourceModes will return
+  false then.
 
-   \note If the found datasets do <em>not</em> form a
-   <b>contiguous series</b> the return value will be false
-   and the value of \c dataset will be KDCHART_NO_DATASET
-   and a comment will be written to stderr
-   (if KDChart was compiled in debug mode).
+  \note If the found datasets do <em>not</em> form a
+  <b>contiguous series</b> the return value will be false
+  and the value of \c dataset will be KDCHART_NO_DATASET
+  and a comment will be written to stderr
+  (if KDChart was compiled in debug mode).
 
-   \return True if at least one dataset was found.
+  \return True if at least one dataset was found.
 
-   \param modeA one of the SourceModes to search for.
-   \param modeB the other one of the two SourceModes to search for.
-   \param dataset the dataset number found (or the first
-   dataset number in case a series of datasets was found, resp.)
-   \param dataset2 the dataset number found (or the last
-   dataset number in case a series of datasets was found, resp.)
-   <b>Hint:</b> You may give the same variable both for
-   dataset and for dataset2, e.g. this makes sense in case you
-   are sure that findDataset will find only one dataset anyway.
-   \param chart the chart number that the dataset (or this range
-   of datasets, resp.) must have been defined for. If this is missing
-   findDataset assumes you are looking for datasets of the first chart.
+  \param modeA one of the SourceModes to search for.
+  \param modeB the other one of the two SourceModes to search for.
+  \param dataset the dataset number found (or the first
+  dataset number in case a series of datasets was found, resp.)
+  \param dataset2 the dataset number found (or the last
+  dataset number in case a series of datasets was found, resp.)
+  <b>Hint:</b> You may give the same variable both for
+  dataset and for dataset2, e.g. this makes sense in case you
+  are sure that findDataset will find only one dataset anyway.
+  \param chart the chart number that the dataset (or this range
+  of datasets, resp.) must have been defined for. If this is missing
+  findDataset assumes you are looking for datasets of the first chart.
 
-   \sa findDataset, SourceMode, setChartSourceMode, chartSourceMode
-   \sa maxDatasetSourceMode, setAdditionalChartType
-*/
+  \sa findDataset, SourceMode, setChartSourceMode, chartSourceMode
+  \sa maxDatasetSourceMode, setAdditionalChartType
+  */
 bool KDChartParams::findDatasets( SourceMode modeA,
                                   SourceMode modeB,
                                   uint& dataset,
@@ -1529,7 +1529,7 @@ bool KDChartParams::findDatasets( SourceMode modeA,
     bool foundB = findDataset( modeB, dsB1, dsB2, chart );
     if( foundA || foundB ){
         if( dsA1 == KDCHART_ALL_DATASETS || dsB1 == KDCHART_ALL_DATASETS ){
-            dataset = KDCHART_ALL_DATASETS;
+            dataset  = KDCHART_ALL_DATASETS;
             dataset2 = KDCHART_ALL_DATASETS;
             res = true;
         }else{
@@ -1553,28 +1553,28 @@ bool KDChartParams::findDatasets( SourceMode modeA,
 
 
 /**
-   Specifies a color for a dataset. Note that if you define a color for a
-   dataset but not for a dataset with a lower number (and there is neither
-   a default value), the color for that dataset with the lower number will
-   be undefined. If you do not want any color, pass an invalid color
-   (i.e. a default-constructed QColor object). This is only useful
-   for chart types that have an outline (like bars or pies),
-   because you would not see anything otherwise.<br>
-   In charts that can only display one dataset (like pies), the specified
-   colors are used for the different values instead.
+  Specifies a color for a dataset. Note that if you define a color for a
+  dataset but not for a dataset with a lower number (and there is neither
+  a default value), the color for that dataset with the lower number will
+  be undefined. If you do not want any color, pass an invalid color
+  (i.e. a default-constructed QColor object). This is only useful
+  for chart types that have an outline (like bars or pies),
+  because you would not see anything otherwise.<br>
+  In charts that can only display one dataset (like pies), the specified
+  colors are used for the different values instead.
 
-   \param dataset the number of the dataset (or value for pies and similar
-   charts) for which the color is specified
-   \param color the color to use for this dataset/value
-   \sa setDataDefaultColors, setDataRainbowColors, setDataSubduedColors
-   \sa dataColor, maxDataColor
-*/
+  \param dataset the number of the dataset (or value for pies and similar
+  charts) for which the color is specified
+  \param color the color to use for this dataset/value
+  \sa setDataDefaultColors, setDataRainbowColors, setDataSubduedColors
+  \sa dataColor, maxDataColor
+  */
 void KDChartParams::setDataColor( uint dataset, QColor color )
 {
     QColor shadow1;
     QColor shadow2;
     calculateShadowColors( color, shadow1, shadow2 );
-    _dataColors[ dataset ] = color;
+    _dataColors[        dataset ] = color;
     _dataColorsShadow1[ dataset ] = shadow1;
     _dataColorsShadow2[ dataset ] = shadow2;
     _maxDatasetColor = QMAX( _maxDatasetColor, dataset );
@@ -1583,14 +1583,14 @@ void KDChartParams::setDataColor( uint dataset, QColor color )
 }
 
 /**
-   Specifies KD Chart's default colors for the datasets 0..11.
+  Specifies KD Chart's default colors for the datasets 0..11.
 
-   This method may be usefull to re-set the colors after changing the
-   colors of the datasets.
+  This method may be usefull to re-set the colors after changing the
+  colors of the datasets.
 
-   \sa setDataColor, setDataRainbowColors, setDataSubduedColors
-   \sa dataColor, maxDataColor
-*/
+  \sa setDataColor, setDataRainbowColors, setDataSubduedColors
+  \sa dataColor, maxDataColor
+  */
 void KDChartParams::setDataDefaultColors()
 {
     setDataColor(  0, red );
@@ -1608,15 +1608,15 @@ void KDChartParams::setDataDefaultColors()
 }
 
 /**
-   Specifies a set of eight rainbow-like colors for the datasets 0..7
-   and sets the lighter versions of this colors to datasets 8..15.
+  Specifies a set of eight rainbow-like colors for the datasets 0..7
+  and sets the lighter versions of this colors to datasets 8..15.
 
-   This is a convenience method setting colors that look best on
-   a dark gray or black background.
+  This is a convenience method setting colors that look best on
+  a dark gray or black background.
 
-   \sa setDataColor, setDataDefaultColors, setDataSubduedColors
-   \sa dataColor, maxDataColor
-*/
+  \sa setDataColor, setDataDefaultColors, setDataSubduedColors
+  \sa dataColor, maxDataColor
+  */
 void KDChartParams::setDataRainbowColors()
 {
     setDataColor(  0, QColor(255,  0,196) );
@@ -1629,47 +1629,47 @@ void KDChartParams::setDataRainbowColors()
     setDataColor(  7, QColor(160,  0,255) );
     for( int i=8; i<16; ++i )
         setDataColor( i, dataColor(i-8).light() );
-}
+};
 
 /**
-   Specifies a set of eighteen subdued colors for the datasets 0..17.
+  Specifies a set of eighteen subdued colors for the datasets 0..17.
 
-   This is a convenience method setting colors that is ideal for
-   area charts since the dark data value texts can be easily
-   read when printed onto such background colors.
+  This is a convenience method setting colors that is ideal for
+  area charts since the dark data value texts can be easily
+  read when printed onto such background colors.
 
-   \param ordered if true all eighteen colors will be set according
-   to their appearance in the color circle, if false they will be
-   arranged in a logical order making it very easy ti distinguish
-   two neighboring colors. Set this parameter to true if you want
-   your neighboring colors look quite similiar, the default is false.
+  \param ordered if true all eighteen colors will be set according
+  to their appearance in the color circle, if false they will be
+  arranged in a logical order making it very easy ti distinguish
+  two neighboring colors. Set this parameter to true if you want
+  your neighboring colors look quite similiar, the default is false.
 
-   \sa setDataColor, setDataDefaultColors, setDataRainbowColors
-   \sa dataColor, maxDataColor
-*/
+  \sa setDataColor, setDataDefaultColors, setDataRainbowColors
+  \sa dataColor, maxDataColor
+  */
 void KDChartParams::setDataSubduedColors( bool ordered )
 {
-    static const int NUM_SUBDUEDCOLORS = 18;
-    static const QColor SUBDUEDCOLORS[ NUM_SUBDUEDCOLORS ] = {
-        QColor( 0xe0,0x7f,0x70 ),
-        QColor( 0xe2,0xa5,0x6f ),
-        QColor( 0xe0,0xc9,0x70 ),
-        QColor( 0xd1,0xe0,0x70 ),
-        QColor( 0xac,0xe0,0x70 ),
-        QColor( 0x86,0xe0,0x70 ),
-        QColor( 0x70,0xe0,0x7f ),
-        QColor( 0x70,0xe0,0xa4 ),
-        QColor( 0x70,0xe0,0xc9 ),
-        QColor( 0x70,0xd1,0xe0 ),
-        QColor( 0x70,0xac,0xe0 ),
-        QColor( 0x70,0x86,0xe0 ),
-        QColor( 0x7f,0x70,0xe0 ),
-        QColor( 0xa4,0x70,0xe0 ),
-        QColor( 0xc9,0x70,0xe0 ),
-        QColor( 0xe0,0x70,0xd1 ),
-        QColor( 0xe0,0x70,0xac ),
-        QColor( 0xe0,0x70,0x86 ),
-    };
+static const int NUM_SUBDUEDCOLORS = 18;
+static const QColor SUBDUEDCOLORS[ NUM_SUBDUEDCOLORS ] = {
+    QColor( 0xe0,0x7f,0x70 ),
+    QColor( 0xe2,0xa5,0x6f ),
+    QColor( 0xe0,0xc9,0x70 ),
+    QColor( 0xd1,0xe0,0x70 ),
+    QColor( 0xac,0xe0,0x70 ),
+    QColor( 0x86,0xe0,0x70 ),
+    QColor( 0x70,0xe0,0x7f ),
+    QColor( 0x70,0xe0,0xa4 ),
+    QColor( 0x70,0xe0,0xc9 ),
+    QColor( 0x70,0xd1,0xe0 ),
+    QColor( 0x70,0xac,0xe0 ),
+    QColor( 0x70,0x86,0xe0 ),
+    QColor( 0x7f,0x70,0xe0 ),
+    QColor( 0xa4,0x70,0xe0 ),
+    QColor( 0xc9,0x70,0xe0 ),
+    QColor( 0xe0,0x70,0xd1 ),
+    QColor( 0xe0,0x70,0xac ),
+    QColor( 0xe0,0x70,0x86 ),
+};
     if( ordered )
         for(int i=0; i<NUM_SUBDUEDCOLORS; ++i)
             setDataColor( i, SUBDUEDCOLORS[i] );
@@ -1693,7 +1693,7 @@ void KDChartParams::setDataSubduedColors( bool ordered )
         setDataColor(16, SUBDUEDCOLORS[ 8] );
         setDataColor(17, SUBDUEDCOLORS[13] );
     }
-}
+};
 
 
 void KDChartParams::calculateShadowColors( QColor color,
@@ -1725,16 +1725,16 @@ void KDChartParams::calculateShadowColors( QColor color,
 
 
 /**
-   Returns the color for a dataset. If no color has been defined for this
-   dataset and none for a higher dataset either, the number will be mapped
-   to the range of defined colors. If no color has been defined for this
-   dataset, but at least one for a higher dataset, the return value of
-   this method is undefined.
+  Returns the color for a dataset. If no color has been defined for this
+  dataset and none for a higher dataset either, the number will be mapped
+  to the range of defined colors. If no color has been defined for this
+  dataset, but at least one for a higher dataset, the return value of
+  this method is undefined.
 
-   \param dataset the number of the dataset for which to return the color
-   \return the color for this dataset
-   \sa setDataColor, maxDataColor
-*/
+  \param dataset the number of the dataset for which to return the color
+  \return the color for this dataset
+  \sa setDataColor, maxDataColor
+  */
 QColor KDChartParams::dataColor( uint dataset ) const
 {
     uint index = dataset % (_maxDatasetColor+1);
@@ -1746,18 +1746,18 @@ QColor KDChartParams::dataColor( uint dataset ) const
 
 
 /**
-   Recomputes the shadow colors by iterating over all configured
-   data colors and reassigning the data colors with exactly the
-   same values which in turn triggers computation of the shadow
-   colors. Expensive if many data colors are set, but performance
-   is OK for typical cases.
-*/
+  Recomputes the shadow colors by iterating over all configured
+  data colors and reassigning the data colors with exactly the
+  same values which in turn triggers computation of the shadow
+  colors. Expensive if many data colors are set, but performance
+  is OK for typical cases.
+  */
 void KDChartParams::recomputeShadowColors()
 {
     // Simply reassign the available colors; this will trigger
     // recomputation of the shadow colors.
     for( QMap<uint,QColor>::Iterator it = _dataColors.begin();
-         it != _dataColors.end(); ++it ) {
+            it != _dataColors.end(); ++it ) {
         setDataColor( it.key(), it.data() );
     }
 }
@@ -1766,18 +1766,18 @@ void KDChartParams::recomputeShadowColors()
 
 
 /**
-   Returns the first shadow color for a dataset. This is the color that
-   is used to draw the top bars with 3D effects. It is somewhat
-   darker than the original data color.  If no color has been defined for this
-   dataset and none for a higher dataset either, the number will be mapped
-   to the range of defined colors. If no color has been defined for this
-   dataset, but at least one for a higher dataset, the return value of
-   this method is undefined.
+  Returns the first shadow color for a dataset. This is the color that
+  is used to draw the top bars with 3D effects. It is somewhat
+  darker than the original data color.  If no color has been defined for this
+  dataset and none for a higher dataset either, the number will be mapped
+  to the range of defined colors. If no color has been defined for this
+  dataset, but at least one for a higher dataset, the return value of
+  this method is undefined.
 
-   \param dataset the number of the dataset for which to return the color
-   \return the color for this dataset
-   \sa setDataColor, maxDataColor, dataShadow2Color
-*/
+  \param dataset the number of the dataset for which to return the color
+  \return the color for this dataset
+  \sa setDataColor, maxDataColor, dataShadow2Color
+  */
 QColor KDChartParams::dataShadow1Color( uint dataset ) const
 {
     uint index = dataset % _maxDatasetColor;
@@ -1795,18 +1795,18 @@ QColor KDChartParams::dataShadow1Color( uint dataset ) const
 
 
 /**
-   Returns the second shadow color for a dataset. This is the color that
-   is used to draw the sides of bars with 3D effects. It is
-   darker than the original data color.  If no color has been defined for this
-   dataset and none for a higher dataset either, the number will be mapped
-   to the range of defined colors. If no color has been defined for this
-   dataset, but at least one for a higher dataset, the return value of
-   this method is undefined.
+  Returns the second shadow color for a dataset. This is the color that
+  is used to draw the sides of bars with 3D effects. It is
+  darker than the original data color.  If no color has been defined for this
+  dataset and none for a higher dataset either, the number will be mapped
+  to the range of defined colors. If no color has been defined for this
+  dataset, but at least one for a higher dataset, the return value of
+  this method is undefined.
 
-   \param dataset the number of the dataset for which to return the color
-   \return the color for this dataset
-   \sa setDataColor, maxDataColor, dataShadow1Color
-*/
+  \param dataset the number of the dataset for which to return the color
+  \return the color for this dataset
+  \sa setDataColor, maxDataColor, dataShadow1Color
+  */
 QColor KDChartParams::dataShadow2Color( uint dataset ) const
 {
     uint index = dataset % _maxDatasetColor;
@@ -1824,16 +1824,16 @@ QColor KDChartParams::dataShadow2Color( uint dataset ) const
 
 
 /**
-   Set the default axis types for all the axes the user might activate for this chart:
-   \li Pie charts by default have no axes at all
-   \li Bar/Line/Area charts may have up to 8 axes (up to 2 at each side of the chart)
-   \li charts representing 3-dimensional data may have up to 12 axes
+  Set the default axis types for all the axes the user might activate for this chart:
+  \li Pie charts by default have no axes at all
+  \li Bar/Line/Area charts may have up to 8 axes (up to 2 at each side of the chart)
+  \li charts representing 3-dimensional data may have up to 12 axes
 
-   \note This function also specifies the default way how to calculate
-   the axis labels: abscissa starts with zero and counts by 1, ordinate
-   is calculating the labels automatically based upon the values found in
-   the associated dataset(s).
-*/
+  \note This function also specifies the default way how to calculate
+  the axis labels: abscissa starts with zero and counts by 1, ordinate
+  is calculating the labels automatically based upon the values found in
+  the associated dataset(s).
+  */
 void KDChartParams::setDefaultAxesTypes()
 {
     // reset types of all axes
@@ -1847,198 +1847,198 @@ void KDChartParams::setDefaultAxesTypes()
     // Bar charts and line charts look better with their abscissa labels
     // in the respective middle positions below each bar (or point, resp.)
     for ( i = KDChartAxisParams::AxisPosSTART;
-          i <= KDChartAxisParams::AxisPosEND; ++i )
+            i <= KDChartAxisParams::AxisPosEND; ++i )
         switch ( i ) {
             // abscissa axes:
-        case KDChartAxisParams::AxisPosBottom:
-        case KDChartAxisParams::AxisPosTop:
-        case KDChartAxisParams::AxisPosBottom2:
-        case KDChartAxisParams::AxisPosTop2:
-            setAxisLabelsTouchEdges( i, Area == chartType() );
-            break;
-            // ordinate axes:
-        case KDChartAxisParams::AxisPosLeft:
-        case KDChartAxisParams::AxisPosRight:
-        case KDChartAxisParams::AxisPosLeft2:
-        case KDChartAxisParams::AxisPosRight2:
-            setAxisLabelsTouchEdges( i, true ); //Polar != chartType() );
-            break;
-            // additional axes for charts representing 3-dimensional data:
-        case KDChartAxisParams::AxisPosLowerRightEdge:
-        case KDChartAxisParams::AxisPosLowerLeftEdge:
-        case KDChartAxisParams::AxisPosLowerRightEdge2:
-        case KDChartAxisParams::AxisPosLowerLeftEdge2:
-            setAxisLabelsTouchEdges( i, false );
-            break;
-        default: {
-            qDebug( "IMPLEMENTATION ERROR: axis type missing in KDChartParams::setDefaultAxesTypes()" );
-            Q_ASSERT( !this );
-        }
+            case KDChartAxisParams::AxisPosBottom:
+            case KDChartAxisParams::AxisPosTop:
+            case KDChartAxisParams::AxisPosBottom2:
+            case KDChartAxisParams::AxisPosTop2:
+                setAxisLabelsTouchEdges( i, Area == chartType() );
+                break;
+                // ordinate axes:
+            case KDChartAxisParams::AxisPosLeft:
+            case KDChartAxisParams::AxisPosRight:
+            case KDChartAxisParams::AxisPosLeft2:
+            case KDChartAxisParams::AxisPosRight2:
+                setAxisLabelsTouchEdges( i, true ); //Polar != chartType() );
+                break;
+                // additional axes for charts representing 3-dimensional data:
+            case KDChartAxisParams::AxisPosLowerRightEdge:
+            case KDChartAxisParams::AxisPosLowerLeftEdge:
+            case KDChartAxisParams::AxisPosLowerRightEdge2:
+            case KDChartAxisParams::AxisPosLowerLeftEdge2:
+                setAxisLabelsTouchEdges( i, false );
+                break;
+            default: {
+                         qDebug( "IMPLEMENTATION ERROR: axis type missing in KDChartParams::setDefaultAxesTypes()" );
+                         Q_ASSERT( !this );
+                     }
         }
 
     // set default axis types according to chart type
     switch ( chartType() ) {
-    case NoType:
-        break;
-    case Bar:
-    case Line:
-    case Area:
-        // default axes
-        setAxisType( KDChartAxisParams::AxisPosBottom,
-                     KDChartAxisParams::AxisTypeEAST );
-        setAxisShowGrid( KDChartAxisParams::AxisPosBottom,
-                         true );
-        setAxisType( KDChartAxisParams::AxisPosLeft,
-                     KDChartAxisParams::AxisTypeNORTH );
-        setAxisShowGrid( KDChartAxisParams::AxisPosLeft,
-                         true );
-        // 'other side' axes
-        setAxisType( KDChartAxisParams::AxisPosTop,
-                     KDChartAxisParams::AxisTypeEAST );
-        setAxisType( KDChartAxisParams::AxisPosRight,
-                     KDChartAxisParams::AxisTypeNORTH );
-        // additional, 2nd axes
-        setAxisType( KDChartAxisParams::AxisPosBottom2,
-                     KDChartAxisParams::AxisTypeEAST );
-        setAxisType( KDChartAxisParams::AxisPosLeft2,
-                     KDChartAxisParams::AxisTypeNORTH );
-        // additional, 2nd axes for 'other' sides
-        setAxisType( KDChartAxisParams::AxisPosTop2,
-                     KDChartAxisParams::AxisTypeEAST );
-        setAxisType( KDChartAxisParams::AxisPosRight2,
-                     KDChartAxisParams::AxisTypeNORTH );
+        case NoType:
+            break;
+        case Bar:
+        case Line:
+        case Area:
+            // default axes
+            setAxisType( KDChartAxisParams::AxisPosBottom,
+                    KDChartAxisParams::AxisTypeEAST );
+            setAxisShowGrid( KDChartAxisParams::AxisPosBottom,
+                    true );
+            setAxisType( KDChartAxisParams::AxisPosLeft,
+                    KDChartAxisParams::AxisTypeNORTH );
+            setAxisShowGrid( KDChartAxisParams::AxisPosLeft,
+                    true );
+            // 'other side' axes
+            setAxisType( KDChartAxisParams::AxisPosTop,
+                    KDChartAxisParams::AxisTypeEAST );
+            setAxisType( KDChartAxisParams::AxisPosRight,
+                    KDChartAxisParams::AxisTypeNORTH );
+            // additional, 2nd axes
+            setAxisType( KDChartAxisParams::AxisPosBottom2,
+                    KDChartAxisParams::AxisTypeEAST );
+            setAxisType( KDChartAxisParams::AxisPosLeft2,
+                    KDChartAxisParams::AxisTypeNORTH );
+            // additional, 2nd axes for 'other' sides
+            setAxisType( KDChartAxisParams::AxisPosTop2,
+                    KDChartAxisParams::AxisTypeEAST );
+            setAxisType( KDChartAxisParams::AxisPosRight2,
+                    KDChartAxisParams::AxisTypeNORTH );
 
-        // Specify default numbering information
-        // for all 'non-ordinate' axes (this are the X axes):
-        //
-        // axisSteadyValueCalc flag is set to false
-        // Start value 1
-        // End value   following the number of entries
-        //             in the associated dataset(s)
-        // Delta value 1.0
-        // and dont show any Digits behind the comma.
-        setAxisLabelTextParams( KDChartAxisParams::AxisPosBottom, false,
-                                1.0,
-                                KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
-                                1.0, 0 );
-        setAxisLabelTextParams( KDChartAxisParams::AxisPosTop, false,
-                                1.0,
-                                KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
-                                1.0, 0 );
-        setAxisLabelTextParams( KDChartAxisParams::AxisPosBottom2, false,
-                                1.0,
-                                KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
-                                1.0, 0 );
-        setAxisLabelTextParams( KDChartAxisParams::AxisPosTop2, false,
-                                1.0,
-                                KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
-                                1.0, 0 );
+            // Specify default numbering information
+            // for all 'non-ordinate' axes (this are the X axes):
+            //
+            // axisSteadyValueCalc flag is set to false
+            // Start value 1
+            // End value   following the number of entries
+            //             in the associated dataset(s)
+            // Delta value 1.0
+            // and dont show any Digits behind the comma.
+            setAxisLabelTextParams( KDChartAxisParams::AxisPosBottom, false,
+                    1.0,
+                    KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
+                    1.0, 0 );
+            setAxisLabelTextParams( KDChartAxisParams::AxisPosTop, false,
+                    1.0,
+                    KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
+                    1.0, 0 );
+            setAxisLabelTextParams( KDChartAxisParams::AxisPosBottom2, false,
+                    1.0,
+                    KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
+                    1.0, 0 );
+            setAxisLabelTextParams( KDChartAxisParams::AxisPosTop2, false,
+                    1.0,
+                    KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
+                    1.0, 0 );
 
-        // no need to specify numbering information for
-        // the ordinate-axes since the default auto-calc
-        // feature is fine for here.
+            // no need to specify numbering information for
+            // the ordinate-axes since the default auto-calc
+            // feature is fine for here.
 
-        break;
+            break;
 
-        // Code for charts representing 3-dimensional data.
+            // Code for charts representing 3-dimensional data.
 
-        /*
+            /*
 
-        //   ( not active since there are no such charts yet )
+            //   ( not active since there are no such charts yet )
 
-        case KDChartParams::BarMatrix:
-        // default axes
-        setAxisType( KDChartAxisParams::AxisPosBottom,
-        KDChartAxisParams::AxisTypeEAST );
-        setAxisType( KDChartAxisParams::AxisPosLowerRightEdge,
-        KDChartAxisParams::AxisTypeNORTH );
-        setAxisType( KDChartAxisParams::AxisPosLeft,
-        KDChartAxisParams::AxisTypeUP );
-        // 'other side' axes
-        setAxisType( KDChartAxisParams::AxisPosTop,
-        KDChartAxisParams::AxisTypeEAST );
-        setAxisType( KDChartAxisParams::AxisPosLowerLeftEdge,
-        KDChartAxisParams::AxisTypeNORTH );
-        setAxisType( KDChartAxisParams::AxisPosRight,
-        KDChartAxisParams::AxisTypeUP );
-        // additional, 2nd axes
-        setAxisType( KDChartAxisParams::AxisPosBottom2,
-        KDChartAxisParams::AxisTypeEAST );
-        setAxisType( KDChartAxisParams::AxisPosLowerRightEdge2,
-        KDChartAxisParams::AxisTypeNORTH );
-        setAxisType( KDChartAxisParams::AxisPosLeft2,
-        KDChartAxisParams::AxisTypeUP );
-        // additional, 2nd axes for 'other' sides
-        setAxisType( KDChartAxisParams::AxisPosTop2,
-        KDChartAxisParams::AxisTypeEAST );
-        setAxisType( KDChartAxisParams::AxisPosLowerLeftEdge2,
-        KDChartAxisParams::AxisTypeNORTH );
-        setAxisType( KDChartAxisParams::AxisPosRight2,
-        KDChartAxisParams::AxisTypeUP );
+            case KDChartParams::BarMatrix:
+            // default axes
+            setAxisType( KDChartAxisParams::AxisPosBottom,
+            KDChartAxisParams::AxisTypeEAST );
+            setAxisType( KDChartAxisParams::AxisPosLowerRightEdge,
+            KDChartAxisParams::AxisTypeNORTH );
+            setAxisType( KDChartAxisParams::AxisPosLeft,
+            KDChartAxisParams::AxisTypeUP );
+            // 'other side' axes
+            setAxisType( KDChartAxisParams::AxisPosTop,
+            KDChartAxisParams::AxisTypeEAST );
+            setAxisType( KDChartAxisParams::AxisPosLowerLeftEdge,
+            KDChartAxisParams::AxisTypeNORTH );
+            setAxisType( KDChartAxisParams::AxisPosRight,
+            KDChartAxisParams::AxisTypeUP );
+            // additional, 2nd axes
+            setAxisType( KDChartAxisParams::AxisPosBottom2,
+            KDChartAxisParams::AxisTypeEAST );
+            setAxisType( KDChartAxisParams::AxisPosLowerRightEdge2,
+            KDChartAxisParams::AxisTypeNORTH );
+            setAxisType( KDChartAxisParams::AxisPosLeft2,
+            KDChartAxisParams::AxisTypeUP );
+            // additional, 2nd axes for 'other' sides
+            setAxisType( KDChartAxisParams::AxisPosTop2,
+            KDChartAxisParams::AxisTypeEAST );
+            setAxisType( KDChartAxisParams::AxisPosLowerLeftEdge2,
+            KDChartAxisParams::AxisTypeNORTH );
+            setAxisType( KDChartAxisParams::AxisPosRight2,
+            KDChartAxisParams::AxisTypeUP );
 
-        // Specify default numbering information
-        // for all 'non-ordinate' axes (this are the X and the Y axes):
-        // Start vaule 1
-        // End value   following the number of entries
-        //             in the associated dataset(s)
-        // Delta value 1.0
-        // and don't show any Digits behind the comma.
-        setAxisLabelTextParams( KDChartAxisParams::AxisPosBottom,  false,
-        1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
-        setAxisLabelTextParams( KDChartAxisParams::AxisPosTop,     false,
-        1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
-        setAxisLabelTextParams( KDChartAxisParams::AxisPosLowerRightEdge,
-        false,
-        1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
-        setAxisLabelTextParams( KDChartAxisParams::AxisPosLowerLeftEdge,
-        false,
-        1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
-        setAxisLabelTextParams( KDChartAxisParams::AxisPosBottom2, false,
-        1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
-        setAxisLabelTextParams( KDChartAxisParams::AxisPosTop2,    false,
-        1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
-        setAxisLabelTextParams(KDChartAxisParams::AxisPosLowerRightEdge2,
-        false,
-        1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
-        setAxisLabelTextParams( KDChartAxisParams::AxisPosLowerLeftEdge2,
-        false,
-        1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            // Specify default numbering information
+            // for all 'non-ordinate' axes (this are the X and the Y axes):
+            // Start vaule 1
+            // End value   following the number of entries
+            //             in the associated dataset(s)
+            // Delta value 1.0
+            // and don't show any Digits behind the comma.
+            setAxisLabelTextParams( KDChartAxisParams::AxisPosBottom,  false,
+            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            setAxisLabelTextParams( KDChartAxisParams::AxisPosTop,     false,
+            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            setAxisLabelTextParams( KDChartAxisParams::AxisPosLowerRightEdge,
+            false,
+            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            setAxisLabelTextParams( KDChartAxisParams::AxisPosLowerLeftEdge,
+            false,
+            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            setAxisLabelTextParams( KDChartAxisParams::AxisPosBottom2, false,
+            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            setAxisLabelTextParams( KDChartAxisParams::AxisPosTop2,    false,
+            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            setAxisLabelTextParams(KDChartAxisParams::AxisPosLowerRightEdge2,
+            false,
+            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            setAxisLabelTextParams( KDChartAxisParams::AxisPosLowerLeftEdge2,
+            false,
+            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
 
-        false,
-        1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            false,
+            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
 
-        // no need to specify numbering information for
-        // the ordinate-axes since the default auto-calc
-        // feature is fine for here.
+            // no need to specify numbering information for
+            // the ordinate-axes since the default auto-calc
+            // feature is fine for here.
 
-        break;
-        */
+            break;
+            */
 
-    case KDChartParams::Pie:
-    case KDChartParams::Ring:
-        // by default there are no axes defined for pie and ring charts
-        break;
-    case KDChartParams::Polar:
-        setAxisType( KDChartAxisParams::AxisPosSaggital,
-                     KDChartAxisParams::AxisTypeEAST );
-        setAxisType( KDChartAxisParams::AxisPosCircular,
-                     KDChartAxisParams::AxisTypeNORTH );
-        setAxisLabelsVisible( KDChartAxisParams::AxisPosSaggital, true );
-        setAxisLabelsFont(    KDChartAxisParams::AxisPosSaggital,
-                              QFont( "helvetica", 1, QFont::Bold ),
-                              -40,
-                              Qt::darkBlue );
-        setAxisLabelsVisible( KDChartAxisParams::AxisPosCircular, true );
-        setAxisLabelsFont(    KDChartAxisParams::AxisPosCircular,
-                              QFont( "helvetica", 1, QFont::Bold ),
-                              -29,
-                              Qt::darkBlue );
-        setPolarRotateCircularLabels( false );
-        break;
-    default: {
-        qDebug( "IMPLEMENTATION ERROR: type missing in KDChartParams::setDefaultAxesTypes()" );
-        Q_ASSERT( !this );
-    }
+        case KDChartParams::Pie:
+        case KDChartParams::Ring:
+            // by default there are no axes defined for pie and ring charts
+            break;
+        case KDChartParams::Polar:
+            setAxisType( KDChartAxisParams::AxisPosSaggital,
+                    KDChartAxisParams::AxisTypeEAST );
+            setAxisType( KDChartAxisParams::AxisPosCircular,
+                    KDChartAxisParams::AxisTypeNORTH );
+            setAxisLabelsVisible( KDChartAxisParams::AxisPosSaggital, true );
+            setAxisLabelsFont( KDChartAxisParams::AxisPosSaggital,
+                               QFont( "helvetica", 1, QFont::Bold ),
+                               -40,
+                               Qt::darkBlue );
+            setAxisLabelsVisible( KDChartAxisParams::AxisPosCircular, true );
+            setAxisLabelsFont( KDChartAxisParams::AxisPosCircular,
+                               QFont( "helvetica", 1, QFont::Bold ),
+                               -29,
+                               Qt::darkBlue );
+            setPolarRotateCircularLabels( false );
+            break;
+        default: {
+                     qDebug( "IMPLEMENTATION ERROR: type missing in KDChartParams::setDefaultAxesTypes()" );
+                     Q_ASSERT( !this );
+                 }
     }
 
     emit changed();
@@ -2046,11 +2046,11 @@ void KDChartParams::setDefaultAxesTypes()
 
 
 /**
-   activate the default axis types for this chart:
-   \li Pie charts by default have no axes at all
-   \li Bar/Line/Area by default have 2 axes: the abscissa and the ordinate
-   \li charts representing 3-dimensional data by default have 3 axes
-*/
+  activate the default axis types for this chart:
+  \li Pie charts by default have no axes at all
+  \li Bar/Line/Area by default have 2 axes: the abscissa and the ordinate
+  \li charts representing 3-dimensional data by default have 3 axes
+  */
 void KDChartParams::activateDefaultAxes()
 {
     // deactivate all axes: specifying KDCHART_NO_DATASET will
@@ -2059,57 +2059,57 @@ void KDChartParams::activateDefaultAxes()
         setAxisDatasets( i, KDCHART_NO_DATASET );
 
     switch ( chartType() ) {
-    case NoType:
-        break;
-    case Bar:
-    case Line:
-    case Area:
-        setAxisVisible( KDChartAxisParams::AxisPosBottom, true );
-        setAxisDatasets( KDChartAxisParams::AxisPosBottom, KDCHART_ALL_DATASETS );
-        setAxisVisible( KDChartAxisParams::AxisPosLeft, true );
-        setAxisDatasets( KDChartAxisParams::AxisPosLeft, KDCHART_ALL_DATASETS );
-        /* test:
-           setAxisVisible( KDChartAxisParams::AxisPosTop,    true );
-           setAxisDatasets(KDChartAxisParams::AxisPosTop,    KDCHART_ALL_DATASETS );
-           setAxisVisible( KDChartAxisParams::AxisPosRight,  true );
-           setAxisDatasets(KDChartAxisParams::AxisPosRight,  KDCHART_ALL_DATASETS );
+        case NoType:
+            break;
+        case Bar:
+        case Line:
+        case Area:
+            setAxisVisible( KDChartAxisParams::AxisPosBottom, true );
+            setAxisDatasets( KDChartAxisParams::AxisPosBottom, KDCHART_ALL_DATASETS );
+            setAxisVisible( KDChartAxisParams::AxisPosLeft, true );
+            setAxisDatasets( KDChartAxisParams::AxisPosLeft, KDCHART_ALL_DATASETS );
+            /* test:
+               setAxisVisible( KDChartAxisParams::AxisPosTop,    true );
+               setAxisDatasets(KDChartAxisParams::AxisPosTop,    KDCHART_ALL_DATASETS );
+               setAxisVisible( KDChartAxisParams::AxisPosRight,  true );
+               setAxisDatasets(KDChartAxisParams::AxisPosRight,  KDCHART_ALL_DATASETS );
 
-           setAxisVisible( KDChartAxisParams::AxisPosBottom2, true );
-           setAxisDatasets(KDChartAxisParams::AxisPosBottom2, KDCHART_ALL_DATASETS );
-           setAxisVisible( KDChartAxisParams::AxisPosLeft2,   true );
-           setAxisDatasets(KDChartAxisParams::AxisPosLeft2,   KDCHART_ALL_DATASETS );
+               setAxisVisible( KDChartAxisParams::AxisPosBottom2, true );
+               setAxisDatasets(KDChartAxisParams::AxisPosBottom2, KDCHART_ALL_DATASETS );
+               setAxisVisible( KDChartAxisParams::AxisPosLeft2,   true );
+               setAxisDatasets(KDChartAxisParams::AxisPosLeft2,   KDCHART_ALL_DATASETS );
 
-           setAxisVisible( KDChartAxisParams::AxisPosTop2,    true );
-           setAxisDatasets(KDChartAxisParams::AxisPosTop2,    KDCHART_ALL_DATASETS );
-           setAxisVisible( KDChartAxisParams::AxisPosRight2,  true );
-           setAxisDatasets(KDChartAxisParams::AxisPosRight2,  KDCHART_ALL_DATASETS );
-        */
-        break;
-        // Code for charts representing 3-dimensional data.
+               setAxisVisible( KDChartAxisParams::AxisPosTop2,    true );
+               setAxisDatasets(KDChartAxisParams::AxisPosTop2,    KDCHART_ALL_DATASETS );
+               setAxisVisible( KDChartAxisParams::AxisPosRight2,  true );
+               setAxisDatasets(KDChartAxisParams::AxisPosRight2,  KDCHART_ALL_DATASETS );
+               */
+            break;
+            // Code for charts representing 3-dimensional data.
 
-        /*
+            /*
 
-        //   ( not active since there are no such charts yet )
+            //   ( not active since there are no such charts yet )
 
-        case KDChartParams::BarMatrix:
-        setAxisVisible( KDChartAxisParams::AxisPosBottom,         true );
-        setAxisDatasets(KDChartAxisParams::AxisPosBottom, KDCHART_ALL_DATASETS );
-        setAxisVisible( KDChartAxisParams::AxisPosLeft,           true );
-        setAxisDatasets(KDChartAxisParams::AxisPosLeft,   KDCHART_ALL_DATASETS );
-        setAxisVisible( KDChartAxisParams::AxisPosLowerRightEdge, true );
-        setAxisDatasets(KDChartAxisParams::AxisPosLowerRightEdge,
-        KDCHART_ALL_DATASETS);
-        break;
-        */
-    case KDChartParams::Pie:
-    case KDChartParams::Ring:
-    case KDChartParams::Polar:
-        // by default there are no axes defined for pie, ring, and polar charts
-        break;
-    default: {
-        qDebug( "IMPLEMENTATION ERROR: type missing in KDChartParams::activateDefaultAxes()" );
-        Q_ASSERT( !this );
-    }
+            case KDChartParams::BarMatrix:
+            setAxisVisible( KDChartAxisParams::AxisPosBottom,         true );
+            setAxisDatasets(KDChartAxisParams::AxisPosBottom, KDCHART_ALL_DATASETS );
+            setAxisVisible( KDChartAxisParams::AxisPosLeft,           true );
+            setAxisDatasets(KDChartAxisParams::AxisPosLeft,   KDCHART_ALL_DATASETS );
+            setAxisVisible( KDChartAxisParams::AxisPosLowerRightEdge, true );
+            setAxisDatasets(KDChartAxisParams::AxisPosLowerRightEdge,
+            KDCHART_ALL_DATASETS);
+            break;
+            */
+        case KDChartParams::Pie:
+        case KDChartParams::Ring:
+        case KDChartParams::Polar:
+            // by default there are no axes defined for pie, ring, and polar charts
+            break;
+        default: {
+                     qDebug( "IMPLEMENTATION ERROR: type missing in KDChartParams::activateDefaultAxes()" );
+                     Q_ASSERT( !this );
+                 }
     }
 }
 
@@ -2121,44 +2121,44 @@ void KDChartParams::activateDefaultAxes()
 
 
 /**
-   \fn KDChartParams::setOptimizeOutputForScreen(bool)
+  \fn KDChartParams::setOptimizeOutputForScreen(bool)
 
-   Specify whether drawing should be optimized for (low resolution)
-   screen output or whether other routines should be used to obtain
-   best quality when using a printer.
+  Specify whether drawing should be optimized for (low resolution)
+  screen output or whether other routines should be used to obtain
+  best quality when using a printer.
 
-   \note The default of this flag is TRUE, so make sure to deactivate
-   it before painting your KDChart onto a QPrinter device!
+  \note The default of this flag is TRUE, so make sure to deactivate
+  it before painting your KDChart onto a QPrinter device!
 
-   \note This setting is NOT stored together with the other parameters,
-   it is recommended to set the flag each time when the drawing targed
-   (printer or screen, resp) is changed.
+  \note This setting is NOT stored together with the other parameters,
+  it is recommended to set the flag each time when the drawing targed
+  (printer or screen, resp) is changed.
 
-   \sa optimizeOutputForScreen
-*/
-
-
-/**
-   \fn bool KDChartParams::optimizeOutputForScreen() const
-   Returns whether drawing is optimized for (low resolution)
-   screen output (this is the default) or whether other routines
-   are used to obtain best quality when using a printer.
-
-   \sa setOptimizeOutputForScreen
-*/
+  \sa optimizeOutputForScreen
+  */
 
 
 /**
-   Specifies the distance between the chart and the left border of the
-   painter area.  If \c leading is a negative value it is interpreted
-   as per-mille value of the painter area, the true offset will then
-   be calculated dynamically at drawing time.
+  \fn bool KDChartParams::optimizeOutputForScreen() const
+  Returns whether drawing is optimized for (low resolution)
+  screen output (this is the default) or whether other routines
+  are used to obtain best quality when using a printer.
 
-   \sa setGlobalLeading, setGlobalLeadingTop, setGlobalLeadingRight,
-   setGlobalLeadingBottom
-   \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight,
-   globalLeadingBottom
-*/
+  \sa setOptimizeOutputForScreen
+  */
+
+
+/**
+  Specifies the distance between the chart and the left border of the
+  painter area.  If \c leading is a negative value it is interpreted
+  as per-mille value of the painter area, the true offset will then
+  be calculated dynamically at drawing time.
+
+  \sa setGlobalLeading, setGlobalLeadingTop, setGlobalLeadingRight,
+  setGlobalLeadingBottom
+  \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight,
+  globalLeadingBottom
+  */
 void KDChartParams::setGlobalLeading( int left, int top, int right, int bottom )
 {
     _globalLeadingLeft   = left;
@@ -2170,253 +2170,253 @@ void KDChartParams::setGlobalLeading( int left, int top, int right, int bottom )
 
 
 /**
-   \fn void KDChartParams::setGlobalLeadingLeft( int )
+  \fn void KDChartParams::setGlobalLeadingLeft( int )
 
-   Specifies the distance between the chart and the left border of the
-   painter area.  If \c leading is a negative value it is interpreted
-   as per-mille value of the painter area, the true offset will then
-   be calculated dynamically at drawing time.
+  Specifies the distance between the chart and the left border of the
+  painter area.  If \c leading is a negative value it is interpreted
+  as per-mille value of the painter area, the true offset will then
+  be calculated dynamically at drawing time.
 
-   \sa setGlobalLeading, setGlobalLeadingTop, setGlobalLeadingRight,
-   setGlobalLeadingBottom
-   \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight,
-   globalLeadingBottom
-*/
-
-
-/**
-   \fn void KDChartParams::setGlobalLeadingTop( int )
-
-   Specifies the distance between the chart and the upper border of
-   the painter area. If \c leading is a negative value it is
-   interpreted as per-mille value of the painter area, the true offset
-   will then be calculated dynamically at drawing time.
-
-   \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingRight,
-   setGlobalLeadingBottom
-   \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight,
-   globalLeadingBottom
-*/
+  \sa setGlobalLeading, setGlobalLeadingTop, setGlobalLeadingRight,
+  setGlobalLeadingBottom
+  \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight,
+  globalLeadingBottom
+  */
 
 
 /**
-   \fn void KDChartParams::setGlobalLeadingRight( int )
+  \fn void KDChartParams::setGlobalLeadingTop( int )
 
-   Specifies the distance between the chart and the right border
-   of the painter area.  If \c leading is a negative value it is
-   interpreted as per-mille value of the painter area, the true
-   offset will then be calculated dynamically at drawing time.
+  Specifies the distance between the chart and the upper border of
+  the painter area. If \c leading is a negative value it is
+  interpreted as per-mille value of the painter area, the true offset
+  will then be calculated dynamically at drawing time.
 
-   \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop,
-   setGlobalLeadingBottom
-   \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight,
-   globalLeadingBottom
-*/
-
-
-/**
-   \fn void KDChartParams::setGlobalLeadingBottom( int )
-
-   Specifies the distance between the chart and the lower border of
-   the painter area.  If \c leading is a negative value it is
-   interpreted as per-mille value of the painter area, the true offset
-   will then be calculated dynamically at drawing time.
-
-   \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop,
-   setGlobalLeadingRight
-   \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight,
-   globalLeadingBottom
-*/
+  \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingRight,
+  setGlobalLeadingBottom
+  \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight,
+  globalLeadingBottom
+  */
 
 
 /**
-   \fn int KDChartParams::globalLeadingLeft() const
+  \fn void KDChartParams::setGlobalLeadingRight( int )
 
-   Return the distance between the chart and the left border of the
-   painter area.  If \c leading is a negative value it is interpreted
-   as per-mille value of the painter area, the true offset will then
-   be calculated dynamically at drawing time.
+  Specifies the distance between the chart and the right border
+  of the painter area.  If \c leading is a negative value it is
+  interpreted as per-mille value of the painter area, the true
+  offset will then be calculated dynamically at drawing time.
 
-   \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop,
-   setGlobalLeadingRight, setGlobalLeadingBottom
-   \sa globalLeadingTop, globalLeadingRight, globalLeadingBottom
-*/
-
-
-/**
-   \fn KDChartParams::globalLeadingTop() const
-
-   Return the distance between the chart and the upper border of the
-   painter area.  If \c leading is a negative value it is interpreted
-   as per-mille value of the painter area, the true offset will then
-   be calculated dynamically at drawing time.
-
-   \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop,
-   setGlobalLeadingRight, setGlobalLeadingBottom
-   \sa globalLeadingLeft, globalLeadingRight, globalLeadingBottom
-*/
+  \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop,
+  setGlobalLeadingBottom
+  \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight,
+  globalLeadingBottom
+  */
 
 
 /**
-   \fn KDChartParams::globalLeadingRight() const
+  \fn void KDChartParams::setGlobalLeadingBottom( int )
 
-   Return the distance between the chart and the right border of the
-   painter area.  If \c leading is a negative value it is interpreted
-   as per-mille value of the painter area, the true offset will then
-   be calculated dynamically at drawing time.
+  Specifies the distance between the chart and the lower border of
+  the painter area.  If \c leading is a negative value it is
+  interpreted as per-mille value of the painter area, the true offset
+  will then be calculated dynamically at drawing time.
 
-   \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop,
-   setGlobalLeadingRight, setGlobalLeadingBottom
-   \sa globalLeadingLeft, globalLeadingTop, globalLeadingBottom
-*/
-
-
-/**
-   \fn int KDChartParams::globalLeadingBottom() const
-
-   Return the distance between the chart and the lower border of the
-   painter area.  If \c leading is a negative value it is interpreted
-   as per-mille value of the painter area, the true offset will then
-   be calculated dynamically at drawing time.
-
-   \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop,
-   setGlobalLeadingRight, setGlobalLeadingBottom
-   \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight
-*/
+  \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop,
+  setGlobalLeadingRight
+  \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight,
+  globalLeadingBottom
+  */
 
 
 /**
-   \fn void KDChartParams::setFrame( uint, const KDFrame&, int, int,
-   int, int, bool, bool )
+  \fn int KDChartParams::globalLeadingLeft() const
 
-   \ifnot v200
-   \deprecated Feature scheduled for future release, at present not implemented.
-   \else
-   Specify the frame settings to be used for one of the chart areas.
+  Return the distance between the chart and the left border of the
+  painter area.  If \c leading is a negative value it is interpreted
+  as per-mille value of the painter area, the true offset will then
+  be calculated dynamically at drawing time.
 
-   The names and the meaning of the areas are explained with the enum
-   AreaName.  The KDFrame class is explained in detail here: KDFrame
-   <b>Note however:</b> The \c innerRect settings of this KDFrame will
-   be ignored since position and size of this frame will be calculated
-   dynamically based upon the AreaName!
-
-   \param area The area to be surrounded by a frame.
-   \param outerGap The distance between the frame and the surrounding
-   parts of the chart.
-   \param innerGap The distance between the frame and the inner area.
-   \param addFrameWidthToLayout Specifies whether the inner area will
-   shrink the area AND its frame will occupy the same space of the
-   chart as the area would occupy if no frame were drawn. If false,
-   the frame is drawn around the area without taking care not to
-   override other content of the chart.
-
-   \note An easier way to specify a frame setting is selecting a pre-defined
-   setting using the setSimpleFrame methode.
-
-   \sa setSimpleFrame, frameSettings
-   \endif
-*/
-
-/**
-   \fn void KDChartParams::setSimpleFrame( uint, int, int, int, int,
-   bool, bool, KDFrame::SimpleFrame, int, int, QPen, QBrush, const
-   QPixmap*, KDFrame::BackPixmapMode, int, KDFrame::CornerName )
-
-   Select a pre-defined frame setting to be used for one of the chart areas.
-
-   \param area The area to be surrounded by a frame.
-   \param outerGap The distance between the frame and the surrounding
-   parts of the chart.
-   \param innerGap The distance between the frame and the inner area.
-   \if v200
-   \param addFrameWidthToLayout Specifies whether the inner area will
-   shrink the area AND its frame will occupy the same space of the
-   chart as the area would occupy if no frame were drawn. If false,
-   the frame is drawn around the area without taking care not to
-   override other content of the chart.
-
-   The parameters specifying the pre-defined frame settings are
-   defined here: KDFrame::setSimpleFrame.
-   \sa setFrame, frameSettings
-   \else
-   \param addFrameWidthToLayout For internal use - must be \c true.
-   \param addFrameHeightToLayout For internal use - must be \c true.
-   \param simpleFrame For internal use - must be \c KDFrame::FrameFlat.
-   \param lineWidth For internal use - must be \c 1.
-   \param midLineWidth For internal use - must be \c 0.
-   \param pen The pen to be used for drawing the four frame border lines.
-   \param background The brush to be used for painting the frame background.
-   \param backPixmap The picture to be displayed as background image
-   of the frame.
-   \param backPixmapMode The way how backPixmap is to be modified to
-   fill the frame, these are possible:
-   \li \c KDFrame::PixCentered Image will not be scaled nor stretched
-   but shown in original size.
-   \li \c KDFrame::PixScaled Image will be scaled until it's height or
-   it's width match the frame's height (or width, resp.) - whichever
-   comes first - but image proportions will be preserved.
-   \li \c KDFrame::PixStretched Image will be stretched to have the
-   same height and the same width as the frame - normally this results
-   in changing the original image proportions.
-   \param shadowWidth For internal use - do not set this parameter or
-   set it to \c 0.
-   \param sunPos For internal use - do not set this parameter or set
-   it to \c KDFrame::CornerTopLeft.
-   \endif
-*/
+  \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop,
+  setGlobalLeadingRight, setGlobalLeadingBottom
+  \sa globalLeadingTop, globalLeadingRight, globalLeadingBottom
+  */
 
 
 /**
-   \fn void KDChartParams::setDataRegionFrame( uint, uint, uint, int, int, int, int,
-   bool, bool, KDFrame::SimpleFrame, int, int, QPen, QBrush, const
-   QPixmap*, KDFrame::BackPixmapMode, int, KDFrame::CornerName )
+  \fn KDChartParams::globalLeadingTop() const
 
-   Select a pre-defined frame setting to be used for one of the data representations
-   (e.g. to have the frame surrounding one of the bars in a Bar chart).
+  Return the distance between the chart and the upper border of the
+  painter area.  If \c leading is a negative value it is interpreted
+  as per-mille value of the painter area, the true offset will then
+  be calculated dynamically at drawing time.
 
-   \note KDChart currently supports specifying data frames without background only,
-   it is not possible to draw a special background behind a data representation.
-
-   \param dataRow The table row of the cell to be surrounded by a frame.
-   \param dataCol The table column of the cell.
-   \param data3rd The third table coordinate of the cell (parameter not used, its value will be ignored, set to 0, reserved for future use).
-   \param innerGap The distance between the frame and the inner area.
-   \if v200
-   \param addFrameWidthToLayout Specifies whether the inner area will
-   shrink the area AND its frame will occupy the same space of the
-   chart as the area would occupy if no frame were drawn. If false,
-   the frame is drawn around the area without taking care not to
-   override other content of the chart.
-
-   The parameters specifying the pre-defined frame settings are
-   defined here: KDFrame::setSimpleFrame.
-   \sa setFrame, frameSettings
-   \else
-   \param addFrameWidthToLayout For internal use - must be \c true.
-   \param addFrameHeightToLayout For internal use - must be \c true.
-   \param simpleFrame For internal use - must be \c KDFrame::FrameFlat.
-   \param lineWidth For internal use - must be \c 1.
-   \param midLineWidth For internal use - must be \c 0.
-   \param pen The pen to be used for drawing the four frame border lines.
-   \param shadowWidth For internal use - do not set this parameter or
-   set it to \c 0.
-   \param sunPos For internal use - do not set this parameter or set
-   it to \c KDFrame::CornerTopLeft.
-   \endif
-*/
+  \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop,
+  setGlobalLeadingRight, setGlobalLeadingBottom
+  \sa globalLeadingLeft, globalLeadingRight, globalLeadingBottom
+  */
 
 
 /**
-   \var KDChartParams::CustomBoxMap
+  \fn KDChartParams::globalLeadingRight() const
 
-   The type that stores the custom boxes in a chart.
-*/
+  Return the distance between the chart and the right border of the
+  painter area.  If \c leading is a negative value it is interpreted
+  as per-mille value of the painter area, the true offset will then
+  be calculated dynamically at drawing time.
+
+  \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop,
+  setGlobalLeadingRight, setGlobalLeadingBottom
+  \sa globalLeadingLeft, globalLeadingTop, globalLeadingBottom
+  */
+
 
 /**
-   Return the frame settings of one of the chart areas.
+  \fn int KDChartParams::globalLeadingBottom() const
 
-   \sa nextFrameSettings, setSimpleFrame, setFrame
-*/
+  Return the distance between the chart and the lower border of the
+  painter area.  If \c leading is a negative value it is interpreted
+  as per-mille value of the painter area, the true offset will then
+  be calculated dynamically at drawing time.
+
+  \sa setGlobalLeading, setGlobalLeadingLeft, setGlobalLeadingTop,
+  setGlobalLeadingRight, setGlobalLeadingBottom
+  \sa globalLeadingLeft, globalLeadingTop, globalLeadingRight
+  */
+
+
+/**
+  \fn void KDChartParams::setFrame( uint, const KDFrame&, int, int,
+  int, int, bool, bool )
+
+  \ifnot v200
+  \deprecated Feature scheduled for future release, at present not implemented.
+  \else
+  Specify the frame settings to be used for one of the chart areas.
+
+  The names and the meaning of the areas are explained with the enum
+  AreaName.  The KDFrame class is explained in detail here: KDFrame
+  <b>Note however:</b> The \c innerRect settings of this KDFrame will
+  be ignored since position and size of this frame will be calculated
+  dynamically based upon the AreaName!
+
+  \param area The area to be surrounded by a frame.
+  \param outerGap The distance between the frame and the surrounding
+  parts of the chart.
+  \param innerGap The distance between the frame and the inner area.
+  \param addFrameWidthToLayout Specifies whether the inner area will
+  shrink the area AND its frame will occupy the same space of the
+  chart as the area would occupy if no frame were drawn. If false,
+  the frame is drawn around the area without taking care not to
+  override other content of the chart.
+
+  \note An easier way to specify a frame setting is selecting a pre-defined
+  setting using the setSimpleFrame methode.
+
+  \sa setSimpleFrame, frameSettings
+  \endif
+  */
+
+/**
+  \fn void KDChartParams::setSimpleFrame( uint, int, int, int, int,
+  bool, bool, KDFrame::SimpleFrame, int, int, QPen, QBrush, const
+  QPixmap*, KDFrame::BackPixmapMode, int, KDFrame::CornerName )
+
+  Select a pre-defined frame setting to be used for one of the chart areas.
+
+  \param area The area to be surrounded by a frame.
+  \param outerGap The distance between the frame and the surrounding
+  parts of the chart.
+  \param innerGap The distance between the frame and the inner area.
+  \if v200
+  \param addFrameWidthToLayout Specifies whether the inner area will
+  shrink the area AND its frame will occupy the same space of the
+  chart as the area would occupy if no frame were drawn. If false,
+  the frame is drawn around the area without taking care not to
+  override other content of the chart.
+
+  The parameters specifying the pre-defined frame settings are
+  defined here: KDFrame::setSimpleFrame.
+  \sa setFrame, frameSettings
+  \else
+  \param addFrameWidthToLayout For internal use - must be \c true.
+  \param addFrameHeightToLayout For internal use - must be \c true.
+  \param simpleFrame For internal use - must be \c KDFrame::FrameFlat.
+  \param lineWidth For internal use - must be \c 1.
+  \param midLineWidth For internal use - must be \c 0.
+  \param pen The pen to be used for drawing the four frame border lines.
+  \param background The brush to be used for painting the frame background.
+  \param backPixmap The picture to be displayed as background image
+  of the frame.
+  \param backPixmapMode The way how backPixmap is to be modified to
+  fill the frame, these are possible:
+  \li \c KDFrame::PixCentered Image will not be scaled nor stretched
+  but shown in original size.
+  \li \c KDFrame::PixScaled Image will be scaled until it's height or
+  it's width match the frame's height (or width, resp.) - whichever
+  comes first - but image proportions will be preserved.
+  \li \c KDFrame::PixStretched Image will be stretched to have the
+  same height and the same width as the frame - normally this results
+  in changing the original image proportions.
+  \param shadowWidth For internal use - do not set this parameter or
+  set it to \c 0.
+  \param sunPos For internal use - do not set this parameter or set
+  it to \c KDFrame::CornerTopLeft.
+  \endif
+  */
+
+
+/**
+  \fn void KDChartParams::setDataRegionFrame( uint, uint, uint, int, int, int, int,
+  bool, bool, KDFrame::SimpleFrame, int, int, QPen, QBrush, const
+  QPixmap*, KDFrame::BackPixmapMode, int, KDFrame::CornerName )
+
+  Select a pre-defined frame setting to be used for one of the data representations
+  (e.g. to have the frame surrounding one of the bars in a Bar chart).
+
+  \note KDChart currently supports specifying data frames without background only,
+        it is not possible to draw a special background behind a data representation.
+
+  \param dataRow The table row of the cell to be surrounded by a frame.
+  \param dataCol The table column of the cell.
+  \param data3rd The third table coordinate of the cell (parameter not used, its value will be ignored, set to 0, reserved for future use).
+  \param innerGap The distance between the frame and the inner area.
+  \if v200
+  \param addFrameWidthToLayout Specifies whether the inner area will
+  shrink the area AND its frame will occupy the same space of the
+  chart as the area would occupy if no frame were drawn. If false,
+  the frame is drawn around the area without taking care not to
+  override other content of the chart.
+
+  The parameters specifying the pre-defined frame settings are
+  defined here: KDFrame::setSimpleFrame.
+  \sa setFrame, frameSettings
+  \else
+  \param addFrameWidthToLayout For internal use - must be \c true.
+  \param addFrameHeightToLayout For internal use - must be \c true.
+  \param simpleFrame For internal use - must be \c KDFrame::FrameFlat.
+  \param lineWidth For internal use - must be \c 1.
+  \param midLineWidth For internal use - must be \c 0.
+  \param pen The pen to be used for drawing the four frame border lines.
+  \param shadowWidth For internal use - do not set this parameter or
+  set it to \c 0.
+  \param sunPos For internal use - do not set this parameter or set
+  it to \c KDFrame::CornerTopLeft.
+  \endif
+  */
+
+
+/**
+  \var KDChartParams::CustomBoxMap
+
+  The type that stores the custom boxes in a chart.
+  */
+
+/**
+  Return the frame settings of one of the chart areas.
+
+  \sa nextFrameSettings, setSimpleFrame, setFrame
+  */
 const KDChartParams::KDChartFrameSettings* KDChartParams::frameSettings( uint area,
                                                                          bool& bFound,
                                                                          int* pIterIdx ) const
@@ -2444,12 +2444,12 @@ const KDChartParams::KDChartFrameSettings* KDChartParams::frameSettings( uint ar
 
 
 /**
-   Return the next frame settings specified for the same area type
-   as the frame that was retrieved by previous calls of \c frameSettings()
-   or \c nextFrameSettings().
+  Return the next frame settings specified for the same area type
+  as the frame that was retrieved by previous calls of \c frameSettings()
+  or \c nextFrameSettings().
 
-   \sa setDataRegionFrame, frameSettings
-*/
+  \sa setDataRegionFrame, frameSettings
+  */
 const KDChartParams::KDChartFrameSettings* KDChartParams::nextFrameSettings( bool& bFound,
                                                                              int* pIterIdx ) const
 {
@@ -2479,12 +2479,12 @@ const KDChartParams::KDChartFrameSettings* KDChartParams::nextFrameSettings( boo
 
 
 /**
-   Add a new custom box to the list of boxes.
-   To remove this box from the list lateron just call removeCustomBox
-   with the index that was returned by insertCustomBox.
+  Add a new custom box to the list of boxes.
+  To remove this box from the list lateron just call removeCustomBox
+  with the index that was returned by insertCustomBox.
 
-   \sa removeCustomBox, removeAllCustomBoxes, customBox, maxCustomBoxIdx
-*/
+  \sa removeCustomBox, removeAllCustomBoxes, customBox, maxCustomBoxIdx
+  */
 uint KDChartParams::insertCustomBox( const KDChartCustomBox & box )
 {
     uint maxIndex = maxCustomBoxIdx();
@@ -2502,12 +2502,12 @@ uint KDChartParams::insertCustomBox( const KDChartCustomBox & box )
 
 
 /**
-   Remove a custom box from the list of boxes.
-   Please fill in the index parameter with the value
-   that was returned by insertCustomBox.
+  Remove a custom box from the list of boxes.
+  Please fill in the index parameter with the value
+  that was returned by insertCustomBox.
 
-   \sa removeAllCustomBoxes, insertCustomBox, customBox, maxCustomBoxIdx
-*/
+  \sa removeAllCustomBoxes, insertCustomBox, customBox, maxCustomBoxIdx
+  */
 bool KDChartParams::removeCustomBox( const uint & idx )
 {
     CustomBoxMap::Iterator it;
@@ -2521,21 +2521,21 @@ bool KDChartParams::removeCustomBox( const uint & idx )
 
 
 /**
-   \fn void KDChartParams::removeAllCustomBoxes()
-   Remove all custom boxes from the list of boxes.
+  \fn void KDChartParams::removeAllCustomBoxes()
+  Remove all custom boxes from the list of boxes.
 
-   \sa removeCustomBox, insertCustomBox, customBox, maxCustomBoxIdx
-*/
+  \sa removeCustomBox, insertCustomBox, customBox, maxCustomBoxIdx
+  */
 
 
 /**
-   Retrieve a const pointer to a custom box from the list.
-   You may fill in the index parameter with the value
-   that was returned by insertCustomBox, or you may use a numerical value,
-   e.g. when iterating from zero up to maxCustomBoxIdx().
+  Retrieve a const pointer to a custom box from the list.
+  You may fill in the index parameter with the value
+  that was returned by insertCustomBox, or you may use a numerical value,
+  e.g. when iterating from zero up to maxCustomBoxIdx().
 
-   \sa insertCustomBox customBoxRef, removeCustomBox, removeAllCustomBoxes, maxCustomBoxIdx
-*/
+  \sa insertCustomBox customBoxRef, removeCustomBox, removeAllCustomBoxes, maxCustomBoxIdx
+  */
 const KDChartCustomBox* KDChartParams::customBox( uint box ) const
 {
     CustomBoxMap::ConstIterator it;
@@ -2547,16 +2547,16 @@ const KDChartCustomBox* KDChartParams::customBox( uint box ) const
 }
 
 /**
-   Retrieve a non-const pointer to a  custom box from the list.
-   You may fill in the index parameter with the value
-   that was returned by insertCustomBox, or you may use a numerical value,
-   e.g. when iterating from zero up to maxCustomBoxIdx().
+  Retrieve a non-const pointer to a  custom box from the list.
+  You may fill in the index parameter with the value
+  that was returned by insertCustomBox, or you may use a numerical value,
+  e.g. when iterating from zero up to maxCustomBoxIdx().
 
-   \note The reference returned by this method may be used to directly
-   modify the properties of the respective box.
+  \note The reference returned by this method may be used to directly
+  modify the properties of the respective box.
 
-   \sa insertCustomBox customBox, removeCustomBox, removeAllCustomBoxes, maxCustomBoxIdx
-*/
+  \sa insertCustomBox customBox, removeCustomBox, removeAllCustomBoxes, maxCustomBoxIdx
+  */
 KDChartCustomBox* KDChartParams::customBoxRef( uint box )
 {
     CustomBoxMap::Iterator it;
@@ -2565,13 +2565,13 @@ KDChartCustomBox* KDChartParams::customBoxRef( uint box )
         return 0;
     else
         return &it.data();
-}
+};
 
 /**
-   Retrieve the number of custom boxes
+  Retrieve the number of custom boxes
 
-   \sa insertCustomBox, removeCustomBox, removeAllCustomBoxes, customBox
-*/
+  \sa insertCustomBox, removeCustomBox, removeAllCustomBoxes, customBox
+  */
 uint KDChartParams::maxCustomBoxIdx() const
 {
     uint cnt( _customBoxMap.count() );
@@ -2587,51 +2587,51 @@ uint KDChartParams::maxCustomBoxIdx() const
 }
 
 /**
-   \enum KDChartParams::ChartType
+  \enum KDChartParams::ChartType
 
-   The chart type. Covers only built-in chart types.
+  The chart type. Covers only built-in chart types.
 
-   \sa setChartType, chartType
-   \sa setAdditionalChartType, additionalChartType,
-   \sa setChartSourceMode
-*/
+  \sa setChartType, chartType
+  \sa setAdditionalChartType, additionalChartType,
+  \sa setChartSourceMode
+  */
 
 
 /**
-   Specifies the chart type. The default is bar charts (Bar).
+  Specifies the chart type. The default is bar charts (Bar).
 
-   \note Allways call this <b>before</b> specifying other
-   axis properties and before calling \c setAdditionalChartType().<br>
-   \c setChartType() deactivates the right axis and also sets the
-   axisLabelsTouchEdges back to their default for all bottom and
-   top axes.
+  \note Allways call this <b>before</b> specifying other
+  axis properties and before calling \c setAdditionalChartType().<br>
+  \c setChartType() deactivates the right axis and also sets the
+  axisLabelsTouchEdges back to their default for all bottom and
+  top axes.
 
-   \note Calling setChartType() results in changing the default data value
-   texts font settings (i.e. the font size, colour, position, but not the
-   QFont itself) <b>if</b> these parameters were not changed by
-   setPrintDataValues().
-   In order to re-activate this automatical adjustment of font settings
-   even after you have changed them manually you may call
-   setPrintDataValuesWithDefaultFontParams().
-   \li When calling setPrintDataValuesWithDefaultFontParams()
-   <b>before</b> calling setChartType() make sure you set the
-   \c callSetPrintDataValues parameter to \c false.
-   \li When calling setPrintDataValuesWithDefaultFontParams()
-   <b>after</b> calling setChartType() you may set the \c
-   callSetPrintDataValues parameter to \c true <b>or</b> you may call
-   setPrintDataValues() yourself after calling
-   setPrintDataValuesWithDefaultFontParams() to specify additional
-   parameters.
+  \note Calling setChartType() results in changing the default data value
+  texts font settings (i.e. the font size, colour, position, but not the
+  QFont itself) <b>if</b> these parameters were not changed by
+  setPrintDataValues().
+  In order to re-activate this automatical adjustment of font settings
+  even after you have changed them manually you may call
+  setPrintDataValuesWithDefaultFontParams().
+  \li When calling setPrintDataValuesWithDefaultFontParams()
+  <b>before</b> calling setChartType() make sure you set the
+  \c callSetPrintDataValues parameter to \c false.
+  \li When calling setPrintDataValuesWithDefaultFontParams()
+  <b>after</b> calling setChartType() you may set the \c
+  callSetPrintDataValues parameter to \c true <b>or</b> you may call
+  setPrintDataValues() yourself after calling
+  setPrintDataValuesWithDefaultFontParams() to specify additional
+  parameters.
 
-   \param chartType the chart type to use
-   \sa chartType, ChartType
-   \sa setAdditionalChartType, additionalChartType,
-   \sa setBarChartSubType, barChartSubType
-   \sa setLineChartSubType, lineChartSubType
-   \sa setPolarChartSubType, polarChartSubType
-   \sa setChartSourceMode, chartSourceMode
-   \sa setAxisLabelsTouchEdges
-*/
+  \param chartType the chart type to use
+  \sa chartType, ChartType
+  \sa setAdditionalChartType, additionalChartType,
+  \sa setBarChartSubType, barChartSubType
+  \sa setLineChartSubType, lineChartSubType
+  \sa setPolarChartSubType, polarChartSubType
+  \sa setChartSourceMode, chartSourceMode
+  \sa setAxisLabelsTouchEdges
+  */
 void KDChartParams::setChartType( ChartType chartType )
 {
     _chartType = chartType;
@@ -2647,116 +2647,116 @@ void KDChartParams::setChartType( ChartType chartType )
     // in the respective middle positions below each bar (or point, resp.)
     bool bAbscissaAxisLabelsTouchEdges = ( Area == chartType );
     setAxisLabelsTouchEdges( KDChartAxisParams::AxisPosBottom,
-                             bAbscissaAxisLabelsTouchEdges );
+            bAbscissaAxisLabelsTouchEdges );
     setAxisLabelsTouchEdges( KDChartAxisParams::AxisPosTop,
-                             bAbscissaAxisLabelsTouchEdges );
+            bAbscissaAxisLabelsTouchEdges );
     setAxisLabelsTouchEdges( KDChartAxisParams::AxisPosBottom2,
-                             bAbscissaAxisLabelsTouchEdges );
+            bAbscissaAxisLabelsTouchEdges );
     setAxisLabelsTouchEdges( KDChartAxisParams::AxisPosTop2,
-                             bAbscissaAxisLabelsTouchEdges );
+            bAbscissaAxisLabelsTouchEdges );
     // activate default data value text settings for this chart type
     if (    printDataValues( 0 )
-            && printDataValuesWithDefaultFontParams( 0 ) )
+         && printDataValuesWithDefaultFontParams( 0 ) )
         setPrintDataValues( true, 0 );
     emit changed();
 }
 
 
 /**
-   \fn KDChartParams::ChartType KDChartParams::chartType() const
+  \fn KDChartParams::ChartType KDChartParams::chartType() const
 
-   Returns the chart type configured in this params object.
+  Returns the chart type configured in this params object.
 
-   \return the chart type configured in this params object.
-   \sa setChartType, ChartType
-   \sa setAdditionalChartType, additionalChartType,
-   \sa setBarChartSubType, barChartSubType
-   \sa setLineChartSubType, lineChartSubType
-   \sa setPolarChartSubType, polarChartSubType
-   \sa setChartSourceMode, chartSourceMode
-*/
+  \return the chart type configured in this params object.
+  \sa setChartType, ChartType
+  \sa setAdditionalChartType, additionalChartType,
+  \sa setBarChartSubType, barChartSubType
+  \sa setLineChartSubType, lineChartSubType
+  \sa setPolarChartSubType, polarChartSubType
+  \sa setChartSourceMode, chartSourceMode
+  */
 
 
 
 /**
-   Specifies the additional chart type.
-   The default is no additional chart (NoType).
-   The additional chart will have <b>no grid</b> so either make sure you
-   specify the chart that should have a grid via \c setChartType() and
-   the other one as additional chart or specify the grid manually if you
-   need one for the additional chart too.
+  Specifies the additional chart type.
+  The default is no additional chart (NoType).
+  The additional chart will have <b>no grid</b> so either make sure you
+  specify the chart that should have a grid via \c setChartType() and
+  the other one as additional chart or specify the grid manually if you
+  need one for the additional chart too.
 
-   The additional chart uses the same abscissa axis as the main chart,
-   but cannot change the abscissa settings: the abscissa range and step width
-   is determined according to the main chart's values.
+  The additional chart uses the same abscissa axis as the main chart,
+  but cannot change the abscissa settings: the abscissa range and step width
+  is determined according to the main chart's values.
 
-   You may combine all different types of cartesian charts
-   (== Bar, Line, HiLo, ..., but not Polar, Pie, ...)
-   so e.g. the following combinations are possible:<br>
+  You may combine all different types of cartesian charts
+  (== Bar, Line, HiLo, ..., but not Polar, Pie, ...)
+  so e.g. the following combinations are possible:<br>
 
-   \verbatim
-   setChartType( KDChartParams::Bar );
-   setAdditionalChartType( KDChartParams::Line );
-   \endverbatim
-   or
-   \verbatim
-   setChartType( KDChartParams::Line );
-   setAdditionalChartType( KDChartParams::HiLo );
-   \endverbatim
-   or
-   \verbatim
-   setChartType( KDChartParams::Bar );
-   setAdditionalChartType( KDChartParams::Bar );
-   ...
-   \endverbatim
+  \verbatim
+  setChartType( KDChartParams::Bar );
+  setAdditionalChartType( KDChartParams::Line );
+  \endverbatim
+  or
+  \verbatim
+  setChartType( KDChartParams::Line );
+  setAdditionalChartType( KDChartParams::HiLo );
+  \endverbatim
+  or
+  \verbatim
+  setChartType( KDChartParams::Bar );
+  setAdditionalChartType( KDChartParams::Bar );
+  ...
+  \endverbatim
 
-   \note When defining multiple charts it is mandatory to
-   call \c setChartSourceMode() for specifying the dataset(s)
-   and their respective charts after calling \c setAdditionalChartType(),
-   also it is recommended to call \c setAxisDatasets() for all
-   axes to be used by the different datasets - otherwise the
-   default setting will be used (all datasets except the last
-   one match the left axis, the last dataset matches the right axis),
-   so e.g. your code to have a bar chart for datasets 0..2 (using the
-   left axis) and a line chart for datasets 3..4 (using the right axis)
-   could look like this:
+  \note When defining multiple charts it is mandatory to
+  call \c setChartSourceMode() for specifying the dataset(s)
+  and their respective charts after calling \c setAdditionalChartType(),
+  also it is recommended to call \c setAxisDatasets() for all
+  axes to be used by the different datasets - otherwise the
+  default setting will be used (all datasets except the last
+  one match the left axis, the last dataset matches the right axis),
+  so e.g. your code to have a bar chart for datasets 0..2 (using the
+  left axis) and a line chart for datasets 3..4 (using the right axis)
+  could look like this:
 
-   \verbatim
-   setChartType( KDChartParams::Bar );
-   setAdditionalChartType( KDChartParams::Line );
-   setChartSourceMode( KDChartParams::DataEntry,     0,2, 0 );
-   setChartSourceMode( KDChartParams::DataEntry,     3,4, 1 );
-   setAxisDatasets( KDChartAxisParams::AxisPosLeft,  0,2, 0 );
-   setAxisDatasets( KDChartAxisParams::AxisPosRight, 3,4, 1 );
-   \endverbatim
+  \verbatim
+  setChartType( KDChartParams::Bar );
+  setAdditionalChartType( KDChartParams::Line );
+  setChartSourceMode( KDChartParams::DataEntry,     0,2, 0 );
+  setChartSourceMode( KDChartParams::DataEntry,     3,4, 1 );
+  setAxisDatasets( KDChartAxisParams::AxisPosLeft,  0,2, 0 );
+  setAxisDatasets( KDChartAxisParams::AxisPosRight, 3,4, 1 );
+  \endverbatim
 
-   \note In case you DON'T want to use the right axis but the left axis #2
-   make sure to reset the dataset assignment that is automatically done for
-   the right axis. Doing this will also clear the visibility flag of the
-   right axis that is automatically set by setAdditionalChartType()
-   implicitely assuming that the additional chart will use the right axis,
-   so there is no need to explicitely call setAxisVisible( false ) for
-   the right axis: specifying KDCHART_NO_DATASET is enough to disable it.
-   e.g. in the example shown above you would replace the
-   last line by these ones:
+  \note In case you DON'T want to use the right axis but the left axis #2
+  make sure to reset the dataset assignment that is automatically done for
+  the right axis. Doing this will also clear the visibility flag of the
+  right axis that is automatically set by setAdditionalChartType()
+  implicitely assuming that the additional chart will use the right axis,
+  so there is no need to explicitely call setAxisVisible( false ) for
+  the right axis: specifying KDCHART_NO_DATASET is enough to disable it.
+  e.g. in the example shown above you would replace the
+  last line by these ones:
 
-   \verbatim
-   setAxisDatasets( KDChartAxisParams::AxisPosLeft2, 3,4, 1 );
-   setAxisDatasets( KDChartAxisParams::AxisPosRight,
-   KDChartParams::KDCHART_NO_DATASET );
-   \endverbatim
+  \verbatim
+  setAxisDatasets( KDChartAxisParams::AxisPosLeft2, 3,4, 1 );
+  setAxisDatasets( KDChartAxisParams::AxisPosRight,
+  KDChartParams::KDCHART_NO_DATASET );
+  \endverbatim
 
-   Often your additional chart will look better when not overlapping with
-   the first chart, specifying different y-positions for the charts
-   is possible by \c KDChartAxisParams::setAxisUseAvailableSpace(),
-   e.g. like this:
+  Often your additional chart will look better when not overlapping with
+  the first chart, specifying different y-positions for the charts
+  is possible by \c KDChartAxisParams::setAxisUseAvailableSpace(),
+  e.g. like this:
 
-   \verbatim
+\verbatim
 // specify which amount of the available space
 // is to be used by the first y-axis:
 
 KDChartAxisParams pa(
-_p->axisParams( KDChartAxisParams::AxisPosLeft ) );
+        _p->axisParams( KDChartAxisParams::AxisPosLeft ) );
 pa.setAxisUseAvailableSpace( 0, -499 );
 _p->setAxisParams( KDChartAxisParams::AxisPosLeft, pa );
 
@@ -2774,20 +2774,20 @@ _p->setAxisParams( KDChartAxisParams::AxisPosLeft2, pa );
 \sa <br>chartType, ChartType
 \sa setBarChartSubType, barChartSubType
 \sa setLineChartSubType, lineChartSubType
-*/
+    */
 void KDChartParams::setAdditionalChartType( ChartType chartType )
 {
     _additionalChartType = chartType;
     if ( KDChartParams::NoType == chartType ) {
         setAxisDatasets( KDChartAxisParams::AxisPosRight,
-                         KDCHART_NO_DATASET );
+                KDCHART_NO_DATASET );
     } else {
         setAxisDatasets( KDChartAxisParams::AxisPosRight,
-                         KDCHART_ALL_DATASETS,
-                         KDCHART_ALL_DATASETS,
-                         1 );
+                KDCHART_ALL_DATASETS,
+                KDCHART_ALL_DATASETS,
+                1 );
         if(   printDataValues( 1 )
-              && printDataValuesWithDefaultFontParams( 1 ) )
+             && printDataValuesWithDefaultFontParams( 1 ) )
             setPrintDataValues( true, 1 );
     }
     emit changed();
@@ -2795,263 +2795,263 @@ void KDChartParams::setAdditionalChartType( ChartType chartType )
 
 
 /**
-   \fn void KDChartParams::ChartType KDChartParams::additionalChartType() const
+  \fn void KDChartParams::ChartType KDChartParams::additionalChartType() const
 
-   Returns the additional chart type configured in this params object.
+  Returns the additional chart type configured in this params object.
 
-   \return the additional chart type configured in this params object.
-   \sa setAdditionalChartType, setChartSourceMode, chartSourceMode
-   \sa <br>setChartType, ChartType
-   \sa setBarChartSubType, barChartSubType
-   \sa setLineChartSubType, lineChartSubType
-*/
-
-
-
-/**
-   \fn bool KDChartParams::neverUsedSetChartSourceMode() const
-
-   Retrieves whether setChartSourceMode() was called or not
-*/
-
+  \return the additional chart type configured in this params object.
+  \sa setAdditionalChartType, setChartSourceMode, chartSourceMode
+  \sa <br>setChartType, ChartType
+  \sa setBarChartSubType, barChartSubType
+  \sa setLineChartSubType, lineChartSubType
+  */
 
 
 
 /**
-   \fn uint KDChartParams::maxDatasetSourceMode() const
+  \fn bool KDChartParams::neverUsedSetChartSourceMode() const
 
-   Returns the number of the highest dataset for which a SourceMode has been
-   defined.
+  Retrieves whether setChartSourceMode() was called or not
+  */
 
-   \return the number of the highest dataset for which a SourceMode has been
-   defined.
-   \sa setChartSourceMode, chartSourceMode, findDataset
-*/
 
-/**
-   \fn void KDChartParams::setNumValues( uint )
-
-   Specifies how many of the values should be shown. -1 means all
-   available values.
-
-   \param numValues the number of values to be shown
-   \sa numValues
-*/
-
-/**
-   \fn int KDChartParams::numValues() const
-
-   Returns how many of the values should be shown. -1 means all
-   available values.
-
-   \return the number of values to be shown
-   \sa setNumValues
-*/
 
 
 /**
-   \fn void KDChartParams::setShadowBrightnessFactor( double factor )
+  \fn uint KDChartParams::maxDatasetSourceMode() const
 
-   Specifies a factor to be used to adjust the
-   built-in brightness of shadow colors in
-   3-dimensional drawings like e.g. 3D Bar charts.
+  Returns the number of the highest dataset for which a SourceMode has been
+  defined.
 
-   \param factor a factor that is to be taken into account for internal
-   calculation of shadow colors. By specifying values greater 1.0 you
-   may lighten the shadows until the most intensive brightness is
-   reached, while values smaller than 1.0 will darken the shadows until
-   the respective colors are black.
+  \return the number of the highest dataset for which a SourceMode has been
+  defined.
+  \sa setChartSourceMode, chartSourceMode, findDataset
+  */
 
-   \sa shadowBrightnessFactor
-*/
+/**
+  \fn void KDChartParams::setNumValues( uint )
+
+  Specifies how many of the values should be shown. -1 means all
+  available values.
+
+  \param numValues the number of values to be shown
+  \sa numValues
+  */
+
+/**
+  \fn int KDChartParams::numValues() const
+
+  Returns how many of the values should be shown. -1 means all
+  available values.
+
+  \return the number of values to be shown
+  \sa setNumValues
+  */
 
 
 /**
-   \fn double KDChartParams::shadowBrightnessFactor() const
+  \fn void KDChartParams::setShadowBrightnessFactor( double factor )
 
-   Returns a factor to be used to adjust the
-   built-in brightness of shadow colors in
-   3-dimensional drawings like e.g. 3D Bar charts.
+  Specifies a factor to be used to adjust the
+  built-in brightness of shadow colors in
+  3-dimensional drawings like e.g. 3D Bar charts.
 
-   \return a factor that is to be taken into account for internal
-   calculation of shadow colors.
+  \param factor a factor that is to be taken into account for internal
+  calculation of shadow colors. By specifying values greater 1.0 you
+  may lighten the shadows until the most intensive brightness is
+  reached, while values smaller than 1.0 will darken the shadows until
+  the respective colors are black.
 
-   \sa setShadowBrightnessFactor
-*/
-
-
-/**
-   \fn void KDChartParams::setShadowPattern( Qt::BrushStyle style )
-
-   Specifies a filling style for filling the shadow areas in
-   3-dimensional drawings like 3D bar charts. The default is to
-   fill with a solid color, the color is determined with \a
-   setThreeDShadowColors.
-
-   \param style the fill style to use
-   \sa shadowPattern(), setThreeDShadowColors(),
-   threeDShadowColors()
-*/
+  \sa shadowBrightnessFactor
+  */
 
 
 /**
-   \fn Qt::BrushStyle KDChartParams::shadowPattern() const
+  \fn double KDChartParams::shadowBrightnessFactor() const
 
-   Returns the filling style used for filling the shadow areas in
-   3-dimensional drawings like 3D bar charts. The default is to
-   fill with a solid color, the fill color can be queried with \a
-   threeDShadowColors().
+  Returns a factor to be used to adjust the
+  built-in brightness of shadow colors in
+  3-dimensional drawings like e.g. 3D Bar charts.
 
-   \return the fill style used
-   \sa setShadowPattern(), setThreeDShadowColors(),
-   threeDShadowColors()
-*/
+  \return a factor that is to be taken into account for internal
+  calculation of shadow colors.
 
-/**
-   \fn void KDChartParams::setOutlineDataColor( QColor color )
-
-   Specifies a color for the outlines of data displays. The default is
-   black.
-
-   \param color the color to use for the outlines
-   \sa outlineDataColor
-*/
+  \sa setShadowBrightnessFactor
+  */
 
 
 /**
-   \fn QColor KDChartParams::outlineDataColor() const
+  \fn void KDChartParams::setShadowPattern( Qt::BrushStyle style )
 
-   Returns the color for the outlines of data displays.
+  Specifies a filling style for filling the shadow areas in
+  3-dimensional drawings like 3D bar charts. The default is to
+  fill with a solid color, the color is determined with \a
+  setThreeDShadowColors.
 
-   \return the outline color
-   \sa setOutlineDataColor
-*/
-
-
-/**
-   \fn void KDChartParams::setOutlineDataLineWidth( uint width )
-
-   Specifies the width of the outlines of data displays. The default is 1
-   pixel.
-
-   \param width the line width to use for the outlines
-   \sa outlineDataLineWidth
-*/
+  \param style the fill style to use
+  \sa shadowPattern(), setThreeDShadowColors(),
+  threeDShadowColors()
+  */
 
 
 /**
-   \fn uint KDChartParams::outlineDataLineWidth() const
+  \fn Qt::BrushStyle KDChartParams::shadowPattern() const
 
-   Returns the width of the outlines of data displays.
+  Returns the filling style used for filling the shadow areas in
+  3-dimensional drawings like 3D bar charts. The default is to
+  fill with a solid color, the fill color can be queried with \a
+  threeDShadowColors().
 
-   \param style the line width that is used for outlines
-   \sa setOutlineDataLineWidth
-*/
+  \return the fill style used
+  \sa setShadowPattern(), setThreeDShadowColors(),
+  threeDShadowColors()
+  */
+
+/**
+  \fn void KDChartParams::setOutlineDataColor( QColor color )
+
+  Specifies a color for the outlines of data displays. The default is
+  black.
+
+  \param color the color to use for the outlines
+  \sa outlineDataColor
+  */
 
 
 /**
-   \fn void KDChartParams::setOutlineDataLineStyle( PenStyle style )
+  \fn QColor KDChartParams::outlineDataColor() const
 
-   Specifies the line style of the outlines of data displays. The default
-   is a solid line. Warning: On Windows 95/98, the style setting (other
-   than NoPen and SolidLine) has no effect for lines with width greater
-   than 1, due to a bug in the operating system.
+  Returns the color for the outlines of data displays.
 
-   \param width the line style to use for the outlines
-   \sa outlineDataLineStyle
-*/
+  \return the outline color
+  \sa setOutlineDataColor
+  */
 
 
 /**
-   \fn PenStyle KDChartParams::outlineDataLineStyle() const
+  \fn void KDChartParams::setOutlineDataLineWidth( uint width )
 
-   Returns the style of the outlines of data displays.
+  Specifies the width of the outlines of data displays. The default is 1
+  pixel.
 
-   \param style the line style that is used for outlines
-   \sa setOutlineDataLineStyle
-*/
-
-
-/**
-   \fn uint KDChartParams::maxDataColor() const
-
-   Returns the number of the highest dataset for which a color has been
-   defined.
-
-   \return the number of the highest dataset for which a color has been
-   defined.
-   \sa setDataColor, dataColor
-*/
+  \param width the line width to use for the outlines
+  \sa outlineDataLineWidth
+  */
 
 
 /**
-   \fn void KDChartParams::setThreeDShadowColors( bool shadow )
+  \fn uint KDChartParams::outlineDataLineWidth() const
 
-   Specifies whether the engine should draw the sides and tops of
-   3D effects in shadowed versions of the data colors (the
-   default) or in the data colors themselves. Only used with 3D
-   effects in charts that support these.
+  Returns the width of the outlines of data displays.
 
-   \param shadow true for shadowed colors, false for original colors
-   \sa threeDShadowColors
-*/
+  \param style the line width that is used for outlines
+  \sa setOutlineDataLineWidth
+  */
 
 
 /**
-   \fn bool KDChartParams::threeDShadowColors() const
+  \fn void KDChartParams::setOutlineDataLineStyle( PenStyle style )
 
-   Returns whether the engine should draw the sides and tops of 3D effects in
-   shadowed versions of the data colors or in the data colors
-   themselves. Only used with 3D effects in charts that
-   support these. The default is true.
+  Specifies the line style of the outlines of data displays. The default
+  is a solid line. Warning: On Windows 95/98, the style setting (other
+  than NoPen and SolidLine) has no effect for lines with width greater
+  than 1, due to a bug in the operating system.
 
-   \return true if shadowed colors are used for 3D effects
-   \sa setThreeDShadowColors
-*/
-
-
-/**
-   \fn void KDChartParams::setAllowOverlappingDataValueTexts( bool allow )
-
-   Specifies whether a data value text may be drawn even if it's
-   region intersects with another data value text's region.
-
-   By default this is FALSE to prevent ugly mutual overwriting of
-   data value texts and to speed up drawing of cahrts containing
-   thousands of data points.
-*/
+  \param width the line style to use for the outlines
+  \sa outlineDataLineStyle
+  */
 
 
 /**
-   \fn bool KDChartParams::allowOverlappingDataValueTexts() const
+  \fn PenStyle KDChartParams::outlineDataLineStyle() const
 
-   Returns whether a data value text may be drawn even if it's region
-   intersects with another data value text's region.
+  Returns the style of the outlines of data displays.
 
-   By default this is FALSE to prevent ugly mutual overwriting of data
-   value texts and to speed up drawing of cahrts containing thousands
-   of data points.
-*/
+  \param style the line style that is used for outlines
+  \sa setOutlineDataLineStyle
+  */
 
 
 /**
-   Specifies how the data value text figures are modified before printing.
+  \fn uint KDChartParams::maxDataColor() const
 
-   This methode is provided for your convenience, to learn how to set the
-   other text parameters please have a look at setPrintDataValues.
+  Returns the number of the highest dataset for which a color has been
+  defined.
 
-   \sa printDataValuesWithDefaultFontParams, setPrintDataValues
-   \sa dataValuesColor
-   \sa setPrintDataValuesFontRelSize setPrintDataValuesBackground
-*/
+  \return the number of the highest dataset for which a color has been
+  defined.
+  \sa setDataColor, dataColor
+  */
+
+
+/**
+  \fn void KDChartParams::setThreeDShadowColors( bool shadow )
+
+  Specifies whether the engine should draw the sides and tops of
+  3D effects in shadowed versions of the data colors (the
+  default) or in the data colors themselves. Only used with 3D
+  effects in charts that support these.
+
+  \param shadow true for shadowed colors, false for original colors
+  \sa threeDShadowColors
+  */
+
+
+/**
+  \fn bool KDChartParams::threeDShadowColors() const
+
+  Returns whether the engine should draw the sides and tops of 3D effects in
+  shadowed versions of the data colors or in the data colors
+  themselves. Only used with 3D effects in charts that
+  support these. The default is true.
+
+  \return true if shadowed colors are used for 3D effects
+  \sa setThreeDShadowColors
+  */
+
+
+/**
+  \fn void KDChartParams::setAllowOverlappingDataValueTexts( bool allow )
+
+  Specifies whether a data value text may be drawn even if it's
+  region intersects with another data value text's region.
+
+  By default this is FALSE to prevent ugly mutual overwriting of
+  data value texts and to speed up drawing of cahrts containing
+  thousands of data points.
+  */
+
+
+/**
+  \fn bool KDChartParams::allowOverlappingDataValueTexts() const
+
+  Returns whether a data value text may be drawn even if it's region
+  intersects with another data value text's region.
+
+  By default this is FALSE to prevent ugly mutual overwriting of data
+  value texts and to speed up drawing of cahrts containing thousands
+  of data points.
+  */
+
+
+/**
+  Specifies how the data value text figures are modified before printing.
+
+  This methode is provided for your convenience, to learn how to set the
+  other text parameters please have a look at setPrintDataValues.
+
+  \sa printDataValuesWithDefaultFontParams, setPrintDataValues
+  \sa dataValuesColor
+  \sa setPrintDataValuesFontRelSize setPrintDataValuesBackground
+  */
 void KDChartParams::setDataValuesCalc( int divPow10,
                                        int digitsBehindComma,
                                        uint chart )
 {
     uint count = (KDCHART_ALL_CHARTS == chart) ? 2 : 1;
     PrintDataValuesSettings * settings =    (( 1 < count ) || ( 0 == chart ))
-                                            ? &_printDataValuesSettings
-                                            : &_printDataValuesSettings2;
+        ? &_printDataValuesSettings
+        : &_printDataValuesSettings2;
     for ( uint i = 0; i < count; ++i ) {
         settings->_divPow10 = divPow10;
         settings->_digitsBehindComma = digitsBehindComma;
@@ -3062,23 +3062,23 @@ void KDChartParams::setDataValuesCalc( int divPow10,
 }
 
 /**
-   Specifies the font to be used for printing the data value texts.
+  Specifies the font to be used for printing the data value texts.
 
-   This methode is provided for your convenience, to learn how to set the
-   other text parameters please have a look at setPrintDataValues.
+  This methode is provided for your convenience, to learn how to set the
+  other text parameters please have a look at setPrintDataValues.
 
-   \sa printDataValuesWithDefaultFontParams, setPrintDataValues
-   \sa dataValuesColor
-   \sa setPrintDataValuesFontRelSize setPrintDataValuesBackground
-*/
+  \sa printDataValuesWithDefaultFontParams, setPrintDataValues
+  \sa dataValuesColor
+  \sa setPrintDataValuesFontRelSize setPrintDataValuesBackground
+  */
 void KDChartParams::setDataValuesFont( QFont* font,
                                        uint size,
                                        uint chart )
 {
     uint count = (KDCHART_ALL_CHARTS == chart) ? 2 : 1;
     PrintDataValuesSettings * settings =    (( 1 < count ) || ( 0 == chart ))
-                                            ? &_printDataValuesSettings
-                                            : &_printDataValuesSettings2;
+        ? &_printDataValuesSettings
+        : &_printDataValuesSettings2;
     for ( uint i = 0; i < count; ++i ) {
         settings->_useDefaultFontParams = false;
         if( font )
@@ -3094,15 +3094,15 @@ void KDChartParams::setDataValuesFont( QFont* font,
 }
 
 /**
-   Specifies the position and rotation of the data value texts to be printed.
+  Specifies the position and rotation of the data value texts to be printed.
 
-   This methode is provided for your convenience, to learn how to set the
-   other text parameters please have a look at setPrintDataValues.
+  This methode is provided for your convenience, to learn how to set the
+  other text parameters please have a look at setPrintDataValues.
 
-   \sa printDataValuesWithDefaultFontParams, setPrintDataValues
-   \sa dataValuesColor
-   \sa setPrintDataValuesFontRelSize setPrintDataValuesBackground
-*/
+  \sa printDataValuesWithDefaultFontParams, setPrintDataValues
+  \sa dataValuesColor
+  \sa setPrintDataValuesFontRelSize setPrintDataValuesBackground
+  */
 void KDChartParams::setDataValuesPlacing( KDChartEnums::PositionFlag position,
                                           uint align,
                                           int  deltaX,
@@ -3113,8 +3113,8 @@ void KDChartParams::setDataValuesPlacing( KDChartEnums::PositionFlag position,
 {
     uint count = (KDCHART_ALL_CHARTS == chart) ? 2 : 1;
     PrintDataValuesSettings * settings =    (( 1 < count ) || ( 0 == chart ))
-                                            ? &_printDataValuesSettings
-                                            : &_printDataValuesSettings2;
+        ? &_printDataValuesSettings
+        : &_printDataValuesSettings2;
     for ( uint i = 0; i < count; ++i ) {
         if( specifyingPositiveValues ){
             // for values greater/equal zero:
@@ -3138,28 +3138,28 @@ void KDChartParams::setDataValuesPlacing( KDChartEnums::PositionFlag position,
 }
 
 /**
-   Specifies the text color and background brush to be used for
-   printing the data value texts.
+  Specifies the text color and background brush to be used for
+  printing the data value texts.
 
-   To have the color calculated automatically - useful when printing
-   inside the bars (or pie slices, areas, ... resp.) - please use
-   \c DATA_VALUE_AUTO_COLOR instead of a QColor*.
+  To have the color calculated automatically - useful when printing
+  inside the bars (or pie slices, areas, ... resp.) - please use
+  \c DATA_VALUE_AUTO_COLOR instead of a QColor*.
 
-   Setting the background is normally not needed since reasonable
-   settings are done by default: Area charts have a white background
-   behind the data value texts while all other chart types use no
-   special background (the value is Qt::NoBrush then).
+  Setting the background is normally not needed since reasonable
+  settings are done by default: Area charts have a white background
+  behind the data value texts while all other chart types use no
+  special background (the value is Qt::NoBrush then).
 
-   In case you want to use it to remove the extra background from
-   your Area chart's data value texts you should consider changing
-   the dataset colors as well: an idea might be trying the subdued
-   colorset by calling \c setSubduedColors().
+  In case you want to use it to remove the extra background from
+  your Area chart's data value texts you should consider changing
+  the dataset colors as well: an idea might be trying the subdued
+  colorset by calling \c setSubduedColors().
 
-   \sa printDataValuesWithDefaultFontParams
-   \sa setPrintDataValues
-   \sa dataValuesColor
-   \sa setPrintDataValuesFontRelSize
-*/
+  \sa printDataValuesWithDefaultFontParams
+  \sa setPrintDataValues
+  \sa dataValuesColor
+  \sa setPrintDataValuesFontRelSize
+  */
 void KDChartParams::setDataValuesColors( const QColor* color,
                                          const QBrush& background,
                                          uint chart )
@@ -3170,8 +3170,8 @@ void KDChartParams::setDataValuesColors( const QColor* color,
     // now store the background
     uint count = (KDCHART_ALL_CHARTS == chart) ? 2 : 1;
     PrintDataValuesSettings * settings =    (( 1 < count ) || ( 0 == chart ))
-                                            ? &_printDataValuesSettings
-                                            : &_printDataValuesSettings2;
+        ? &_printDataValuesSettings
+        : &_printDataValuesSettings2;
     for ( uint i = 0; i < count; ++i ) {
         settings->_dataValuesBrush = background;
         if ( 0 < chart )
@@ -3188,8 +3188,8 @@ void KDChartParams::setDataValuesPolicy(
 {
     uint count = (KDCHART_ALL_CHARTS == chart) ? 2 : 1;
     PrintDataValuesSettings * settings =    (( 1 < count ) || ( 0 == chart ))
-                                            ? &_printDataValuesSettings
-                                            : &_printDataValuesSettings2;
+        ? &_printDataValuesSettings
+        : &_printDataValuesSettings2;
     for ( uint i = 0; i < count; ++i ) {
         settings->_dataValuesLayoutPolicy = policy;
         if ( 0 < chart )
@@ -3200,24 +3200,24 @@ void KDChartParams::setDataValuesPolicy(
 
 
 /**
-   Specifies whether data value texts should be printed even if the
-   value is KDChartData::POS_INFINITE (or KDChartData::NEG_INFINITE).
+  Specifies whether data value texts should be printed even if the
+  value is KDChartData::POS_INFINITE (or KDChartData::NEG_INFINITE).
 
-   Printing of an infinite symbol (lemniskate) is done by default,
-   ou may use this function to disable it.
+  Printing of an infinite symbol (lemniskate) is done by default,
+  ou may use this function to disable it.
 
-   \sa printDataValuesWithDefaultFontParams
-   \sa setPrintDataValues
-   \sa dataValuesColor
-   \sa setPrintDataValuesFontRelSize
-*/
+  \sa printDataValuesWithDefaultFontParams
+  \sa setPrintDataValues
+  \sa dataValuesColor
+  \sa setPrintDataValuesFontRelSize
+  */
 void KDChartParams::setDataValuesShowInfinite( bool dataValuesShowInfinite,
                                                uint chart)
 {
     uint count = (KDCHART_ALL_CHARTS == chart) ? 2 : 1;
     PrintDataValuesSettings * settings =    (( 1 < count ) || ( 0 == chart ))
-                                            ? &_printDataValuesSettings
-                                            : &_printDataValuesSettings2;
+        ? &_printDataValuesSettings
+        : &_printDataValuesSettings2;
     for ( uint i = 0; i < count; ++i ) {
         settings->_dataValuesShowInfinite = dataValuesShowInfinite;
         if ( 0 < chart )
@@ -3232,8 +3232,8 @@ void KDChartParams::setPrintDataValuesColor( uint chart, const QColor* color )
 {
     uint count = (KDCHART_ALL_CHARTS == chart) ? 2 : 1;
     PrintDataValuesSettings * settings =    (( 1 < count ) || ( 0 == chart ))
-                                            ? &_printDataValuesSettings
-                                            : &_printDataValuesSettings2;
+        ? &_printDataValuesSettings
+        : &_printDataValuesSettings2;
     for ( uint i = 0; i < count; ++i ) {
         if ( DATA_VALUE_AUTO_COLOR == color ) {
             settings->_dataValuesAutoColor            = true;  //  !!!
@@ -3255,22 +3255,22 @@ void KDChartParams::setPrintDataValuesColor( uint chart, const QColor* color )
 
 
 /**
-   Specifies the dynamic font size to be used for printing the data
-   value texts.  To change settings for all charts specify \c
-   KDChartParams::KDCHART_ALL_CHARTS as \chart parameter.
+  Specifies the dynamic font size to be used for printing the data
+  value texts.  To change settings for all charts specify \c
+  KDChartParams::KDCHART_ALL_CHARTS as \chart parameter.
 
-   This methode is provided for your convenience, to learn how to set the
-   other text parameters please have a look at setPrintDataValues.
+  This methode is provided for your convenience, to learn how to set the
+  other text parameters please have a look at setPrintDataValues.
 
-   \sa printDataValuesWithDefaultFontParams, setPrintDataValues
-   \sa setPrintdataValuesColor, dataValuesFontRelSize
-*/
+  \sa printDataValuesWithDefaultFontParams, setPrintDataValues
+  \sa setPrintdataValuesColor, dataValuesFontRelSize
+  */
 void KDChartParams::setPrintDataValuesFontRelSize( uint chart, uint size )
 {
     uint count = (KDCHART_ALL_CHARTS == chart) ? 2 : 1;
     PrintDataValuesSettings * settings =    (( 1 < count ) || ( 0 == chart ))
-                                            ? &_printDataValuesSettings
-                                            : &_printDataValuesSettings2;
+        ? &_printDataValuesSettings
+        : &_printDataValuesSettings2;
     uint theSize( UINT_MAX == size ? 22 : size );
     for ( uint i = 0; i < count; ++i ) {
         settings->_dataValuesUseFontRelSize = ( 0 < theSize );
@@ -3283,30 +3283,30 @@ void KDChartParams::setPrintDataValuesFontRelSize( uint chart, uint size )
 
 
 /**
-   Specifies that data value texts are to be printed with default font
-   parameters.  Calling this methode results in resetting the
-   respective font size and colour and position parameters but not the
-   QFont itself.  By setting \c callSetPrintDataValues to true you
-   select general enabling of text printing, when doing so it is
-   <b>not</b> neccessary to call setPrintDataValues() after calling
-   setPrintDataValuesWithDefaultFontParams().
+  Specifies that data value texts are to be printed with default font
+  parameters.  Calling this methode results in resetting the
+  respective font size and colour and position parameters but not the
+  QFont itself.  By setting \c callSetPrintDataValues to true you
+  select general enabling of text printing, when doing so it is
+  <b>not</b> neccessary to call setPrintDataValues() after calling
+  setPrintDataValuesWithDefaultFontParams().
 
-   \note If you want to call setChartType() after calling
-   setPrintDataValuesWithDefaultFontParams() you should set the \c
-   callSetPrintDataValues parameter to false to prevent
-   setPrintDataValues() from being called twice since it is called
-   internally each time you call setChartType() <b>if</b> the default
-   font params are to be set.
+  \note If you want to call setChartType() after calling
+  setPrintDataValuesWithDefaultFontParams() you should set the \c
+  callSetPrintDataValues parameter to false to prevent
+  setPrintDataValues() from being called twice since it is called
+  internally each time you call setChartType() <b>if</b> the default
+  font params are to be set.
 
-   \sa printDataValuesWithDefaultFontParams, setPrintDataValues
-*/
+  \sa printDataValuesWithDefaultFontParams, setPrintDataValues
+  */
 void KDChartParams::setPrintDataValuesWithDefaultFontParams( uint chart,
-                                                             bool callSetPrintDataValues )
+        bool callSetPrintDataValues )
 {
     uint count = (KDCHART_ALL_CHARTS == chart) ? 2 : 1;
     PrintDataValuesSettings * settings =    (( 1 < count ) || ( 0 == chart ))
-                                            ? &_printDataValuesSettings
-                                            : &_printDataValuesSettings2;
+        ? &_printDataValuesSettings
+        : &_printDataValuesSettings2;
     for ( uint i = 0; i < count; ++i ) {
         settings->_printDataValues      = true;
         settings->_useDefaultFontParams = true;
@@ -3319,139 +3319,139 @@ void KDChartParams::setPrintDataValuesWithDefaultFontParams( uint chart,
 
 
 /**
-   \fn bool KDChartParams::printDataValuesWithDefaultFontParams( uint chart ) const
+  \fn bool KDChartParams::printDataValuesWithDefaultFontParams( uint chart ) const
 
-   Retrieves whether data value texts are to be printed with
-   non-default font parameters or not - <b>when</b> text printing is
-   active.
+  Retrieves whether data value texts are to be printed with
+  non-default font parameters or not - <b>when</b> text printing is
+  active.
 
-   \note You might also want to call printDataValues to see if text
-   printing is active since this default flag remains set in
-   background even when printing has been de-activated.
+  \note You might also want to call printDataValues to see if text
+  printing is active since this default flag remains set in
+  background even when printing has been de-activated.
 
-   \sa setPrintDataValuesWithDefaultFontParams, printDataValues
-*/
-
-
-/**
-   \fn bool KDChartParams::printDataValues( uint chart ) const
-
-   Returns whether the data values will be printed near their
-   respective entries.
-
-   \param chart The number of the chart: 0 for the first chart, 1 for
-   the second chart in case there are two charts to be drawn sharing the
-   same data area.
-
-   \return whether the data values will be printed near their
-   respective entries.
-
-   \sa setPrintDataValues
-*/
+  \sa setPrintDataValuesWithDefaultFontParams, printDataValues
+  */
 
 
 /**
-   \fn QFont KDChartParams::dataValuesFont( uint chart ) const
+  \fn bool KDChartParams::printDataValues( uint chart ) const
 
-   Returns the font to be used for printing the data values
+  Returns whether the data values will be printed near their
+  respective entries.
 
-   \param chart The number of the chart: 0 for the first chart, 1 for
-   the second chart in case there are two charts to be drawn sharing the
-   same data area.
+  \param chart The number of the chart: 0 for the first chart, 1 for
+  the second chart in case there are two charts to be drawn sharing the
+  same data area.
 
-   \returns the font to be used for printing the data values
+  \return whether the data values will be printed near their
+  respective entries.
 
-   \sa setPrintDataValues
-*/
-
-
-/**
-   \fn bool KDChartParams::dataValuesUseFontRelSize( uint chart ) const
-
-   Returns whether the font size to be used for printing the
-   data values is calculated dynamically.
-
-   \param chart The number of the chart: 0 for the first chart, 1 for
-   the second chart in case there are two charts to be drawn sharing the
-   same data area.
-
-   \return whether the font size to be used for printing the
-   data values is calculated dynamically.
-
-   \sa setPrintDataValues, setPrintDataValuesFontRelSize
-*/
+  \sa setPrintDataValues
+  */
 
 
 /**
-   \fn int KDChartParams::dataValuesFontRelSize( uint chart ) const
+  \fn QFont KDChartParams::dataValuesFont( uint chart ) const
 
-   Returns the relative size (in per mille of the chart width)
-   of font size to be used for printing the
-   data values.
+  Returns the font to be used for printing the data values
 
-   \param chart The number of the chart: 0 for the first chart, 1 for
-   the second chart in case there are two charts to be drawn sharing the
-   same data area.
+  \param chart The number of the chart: 0 for the first chart, 1 for
+  the second chart in case there are two charts to be drawn sharing the
+  same data area.
 
-   \return the relative size (in per mille of the chart width)
-   of font size to be used for printing the
-   data values.
+  \returns the font to be used for printing the data values
 
-   \sa setPrintDataValues, setPrintDataValuesFontRelSize
-*/
+  \sa setPrintDataValues
+  */
 
 
 /**
-   \fn QColor KDChartParams::dataValuesColor( uint chart ) const
+  \fn bool KDChartParams::dataValuesUseFontRelSize( uint chart ) const
 
-   Returns the colour of the font to be used for printing the
-   data values.
+  Returns whether the font size to be used for printing the
+  data values is calculated dynamically.
 
-   \param chart The number of the chart: 0 for the first chart, 1 for
-   the second chart in case there are two charts to be drawn sharing the
-   same data area.
+  \param chart The number of the chart: 0 for the first chart, 1 for
+  the second chart in case there are two charts to be drawn sharing the
+  same data area.
 
-   \return the colour of the font to be used for printing the
-   data values.
+  \return whether the font size to be used for printing the
+  data values is calculated dynamically.
 
-   \sa setPrintDataValues, setPrintDataValuesColor
-*/
-
-
-/**
-   \fn bool KDChartParams::dataValuesAutoColor( uint chart ) const
-
-   Returns whether the font to be used for printing the data values
-   texts shall have automatically calculated colors fitting to their
-   respectivs data representations.
-
-   \param chart The number of the chart: 0 for the first chart, 1 for
-   the second chart in case there are two charts to be drawn sharing the
-   same data area.
-
-   \return whether the font to be used for printing the data values texts
-   shall have automatically calculated colors fitting to their respectivs data representations.
-
-   \sa setPrintDataValues
-*/
+  \sa setPrintDataValues, setPrintDataValuesFontRelSize
+  */
 
 
 /**
-   Returns the anchor position which the text is to be aligned to.
+  \fn int KDChartParams::dataValuesFontRelSize( uint chart ) const
 
-   \param chart The number of the chart: 0 for the first chart, 1 for
-   the second chart in case there are two charts to be drawn sharing the
-   same data area.
+  Returns the relative size (in per mille of the chart width)
+  of font size to be used for printing the
+  data values.
 
-   \param negative If true the return value is only valid for data
-   values less than zero, if false it applies to data values greater
-   or equal to zero.
+  \param chart The number of the chart: 0 for the first chart, 1 for
+  the second chart in case there are two charts to be drawn sharing the
+  same data area.
 
-   \returns the anchor position which the text is to be aligned to in case of
-   the value being less than zero.
+  \return the relative size (in per mille of the chart width)
+  of font size to be used for printing the
+  data values.
 
-   \sa setPrintDataValues
-*/
+  \sa setPrintDataValues, setPrintDataValuesFontRelSize
+  */
+
+
+/**
+  \fn QColor KDChartParams::dataValuesColor( uint chart ) const
+
+  Returns the colour of the font to be used for printing the
+  data values.
+
+  \param chart The number of the chart: 0 for the first chart, 1 for
+  the second chart in case there are two charts to be drawn sharing the
+  same data area.
+
+  \return the colour of the font to be used for printing the
+  data values.
+
+  \sa setPrintDataValues, setPrintDataValuesColor
+  */
+
+
+/**
+  \fn bool KDChartParams::dataValuesAutoColor( uint chart ) const
+
+  Returns whether the font to be used for printing the data values
+  texts shall have automatically calculated colors fitting to their
+  respectivs data representations.
+
+  \param chart The number of the chart: 0 for the first chart, 1 for
+  the second chart in case there are two charts to be drawn sharing the
+  same data area.
+
+  \return whether the font to be used for printing the data values texts
+  shall have automatically calculated colors fitting to their respectivs data representations.
+
+  \sa setPrintDataValues
+  */
+
+
+/**
+  Returns the anchor position which the text is to be aligned to.
+
+  \param chart The number of the chart: 0 for the first chart, 1 for
+  the second chart in case there are two charts to be drawn sharing the
+  same data area.
+
+  \param negative If true the return value is only valid for data
+  values less than zero, if false it applies to data values greater
+  or equal to zero.
+
+  \returns the anchor position which the text is to be aligned to in case of
+  the value being less than zero.
+
+  \sa setPrintDataValues
+  */
 KDChartEnums::PositionFlag KDChartParams::dataValuesAnchorPosition( uint chart, bool negative ) const
 {
     if ( negative )
@@ -3464,23 +3464,23 @@ KDChartEnums::PositionFlag KDChartParams::dataValuesAnchorPosition( uint chart, 
 
 
 /**
-   Returns the way how the text is to be aligned to the anchor.
+  Returns the way how the text is to be aligned to the anchor.
 
-   This must be a reasonable combination of Qt::AlignmentFlags.
+  This must be a reasonable combination of Qt::AlignmentFlags.
 
-   \param chart The number of the chart: 0 for the first chart, 1 for
-   the second chart in case there are two charts to be drawn sharing the
-   same data area.
+  \param chart The number of the chart: 0 for the first chart, 1 for
+  the second chart in case there are two charts to be drawn sharing the
+  same data area.
 
-   \param negative If true the return value is only valid for data
-   values less than zero, if false it applies to data values greater
-   or equal to zero.
+  \param negative If true the return value is only valid for data
+  values less than zero, if false it applies to data values greater
+  or equal to zero.
 
-   \returns the way how the text is to be aligned to the anchor in case of
-   the value being less than zero.
+  \returns the way how the text is to be aligned to the anchor in case of
+  the value being less than zero.
 
-   \sa setPrintDataValues
-*/
+  \sa setPrintDataValues
+  */
 uint KDChartParams::dataValuesAnchorAlign( uint chart, bool negative ) const
 {
     if ( negative )
@@ -3493,26 +3493,26 @@ uint KDChartParams::dataValuesAnchorAlign( uint chart, bool negative ) const
 
 
 /**
-   Returns the X distance between the text and its anchor.
+  Returns the X distance between the text and its anchor.
 
-   \note For better compatibility to the dynamic font size,
-   this parameter is <b>always</b> interpreted as being a per-mille
-   value of the logical width of the drawing area. If greater 0, the X
-   position is increased, if less than 0, it is reduced, this is
-   calculated dynamically before painting.
+  \note For better compatibility to the dynamic font size,
+  this parameter is <b>always</b> interpreted as being a per-mille
+  value of the logical width of the drawing area. If greater 0, the X
+  position is increased, if less than 0, it is reduced, this is
+  calculated dynamically before painting.
 
-   \param chart The number of the chart: 0 for the first chart, 1 for
-   the second chart in case there are two charts to be drawn sharing the
-   same data area.
+  \param chart The number of the chart: 0 for the first chart, 1 for
+  the second chart in case there are two charts to be drawn sharing the
+  same data area.
 
-   \param negative If true the return value is only valid for data
-   values less than zero, if false it applies to data values greater
-   or equal to zero.
+  \param negative If true the return value is only valid for data
+  values less than zero, if false it applies to data values greater
+  or equal to zero.
 
-   \returns the X distance between the text and its anchor.
+  \returns the X distance between the text and its anchor.
 
-   \sa setPrintDataValues
-*/
+  \sa setPrintDataValues
+  */
 int KDChartParams::dataValuesAnchorDeltaX( uint chart, bool negative ) const
 {
     if ( negative )
@@ -3525,26 +3525,26 @@ int KDChartParams::dataValuesAnchorDeltaX( uint chart, bool negative ) const
 
 
 /**
-   Returns the Y distance between the text and its anchor.
+  Returns the Y distance between the text and its anchor.
 
-   \note For better compatibility to the dynamic font size this
-   parameter is <b>always</b> interpreted as being a per-mille value
-   of the logical width of the drawing area. If greater 0, the Y
-   position is increased, if less than 0, it is reduced, this is
-   calculated dynamically before painting.
+  \note For better compatibility to the dynamic font size this
+  parameter is <b>always</b> interpreted as being a per-mille value
+  of the logical width of the drawing area. If greater 0, the Y
+  position is increased, if less than 0, it is reduced, this is
+  calculated dynamically before painting.
 
-   \param chart The number of the chart: 0 for the first chart, 1 for
-   the second chart in case there are two charts to be drawn sharing the
-   same data area.
+  \param chart The number of the chart: 0 for the first chart, 1 for
+  the second chart in case there are two charts to be drawn sharing the
+  same data area.
 
-   \param negative If true the return value is only valid for data
-   values less than zero, if false it applies to data values greater
-   or equal to zero.
+  \param negative If true the return value is only valid for data
+  values less than zero, if false it applies to data values greater
+  or equal to zero.
 
-   \returns the Y distance between the text and its anchor.
+  \returns the Y distance between the text and its anchor.
 
-   \sa setPrintDataValues
-*/
+  \sa setPrintDataValues
+  */
 int KDChartParams::dataValuesAnchorDeltaY( uint chart, bool negative ) const
 {
     if ( negative )
@@ -3557,22 +3557,22 @@ int KDChartParams::dataValuesAnchorDeltaY( uint chart, bool negative ) const
 
 
 /**
-   Returns the amount of degrees (using a circle of 360 degrees) taken to
-   rotate the text. Positive values rotate clockwise, negative values rotate counter-clockwise.
+  Returns the amount of degrees (using a circle of 360 degrees) taken to
+  rotate the text. Positive values rotate clockwise, negative values rotate counter-clockwise.
 
-   \param chart The number of the chart: 0 for the first chart, 1 for
-   the second chart in case there are two charts to be drawn sharing the
-   same data area.
+  \param chart The number of the chart: 0 for the first chart, 1 for
+  the second chart in case there are two charts to be drawn sharing the
+  same data area.
 
-   \param negative If true the return value is only valid for data
-   values less than zero, if false it applies to data values greater
-   or equal to zero.
+  \param negative If true the return value is only valid for data
+  values less than zero, if false it applies to data values greater
+  or equal to zero.
 
-   \returns the amount of degrees (using a circle of 360 degrees) taken to
-   rotate the text.
+  \returns the amount of degrees (using a circle of 360 degrees) taken to
+  rotate the text.
 
-   \sa setPrintDataValues
-*/
+  \sa setPrintDataValues
+  */
 int KDChartParams::dataValuesRotation( uint chart, bool negative ) const
 {
     if ( negative )
@@ -3585,93 +3585,93 @@ int KDChartParams::dataValuesRotation( uint chart, bool negative ) const
 
 
 /**
-   \fn KDChartEnums::TextLayoutPolicy KDChartParams::dataValuesLayoutPolicy( uint chart ) const
+  \fn KDChartEnums::TextLayoutPolicy KDChartParams::dataValuesLayoutPolicy( uint chart ) const
 
-   Returns the way to handle too narrow space conflicts: what to do if
-   a data text covers a neighboring data text (or a neighboring data
-   area, resp.).
+  Returns the way to handle too narrow space conflicts: what to do if
+  a data text covers a neighboring data text (or a neighboring data
+  area, resp.).
 
-   \note A layout policy different from LayoutJustOverwrite from does
-   not mean that this policy is followed in any case. Rather than
-   giving up when the selected policy does not result in a good layout
-   the program will automatically try the next policy: if
-   LayoutPolicyRotate did not succeed LayoutPolicyShiftVertically will
-   be tried, if this did not succeed either
-   LayoutPolicyShiftHorizontally will be tried.
+  \note A layout policy different from LayoutJustOverwrite from does
+  not mean that this policy is followed in any case. Rather than
+  giving up when the selected policy does not result in a good layout
+  the program will automatically try the next policy: if
+  LayoutPolicyRotate did not succeed LayoutPolicyShiftVertically will
+  be tried, if this did not succeed either
+  LayoutPolicyShiftHorizontally will be tried.
 
-   \param chart The number of the chart: 0 for the first chart, 1 for
-   the second chart in case there are two charts to be drawn sharing the
-   same data area.
+  \param chart The number of the chart: 0 for the first chart, 1 for
+  the second chart in case there are two charts to be drawn sharing the
+  same data area.
 
-   \returns the way to handle too narrow space conflicts.
+  \returns the way to handle too narrow space conflicts.
 
-   \sa setPrintDataValues
-*/
-
-/**
-   \fn void KDChartParams::changed()
-
-   This signal is emitted when any of the chart parameters has changed.
-*/
+  \sa setPrintDataValues
+  */
 
 /**
-   \var const uint KDCHART_MAX_AXES
+  \fn void KDChartParams::changed()
 
-   Charts have up to 12 axes:
-   up to two axes on both sides for X, Y
-   and Z (if data is 3-dimensional). This constant is located here and
-   in KDChartAxisParams, because one KDChartAxisParams object
-   describes only one axis.
-*/
+  This signal is emitted when any of the chart parameters has changed.
+  */
 
 /**
-   \var static const int KDChartParams::KDCHART_PROPSET_NORMAL_DATA;
+  \var const uint KDCHART_MAX_AXES
 
-   Default (built-in) property ID, used for data cells
-   without any special properties.
-
-   Use this IDs <b>without</b> previously defining a respective
-   set of properties via KDChartParams::registerProperties(...).
-
-   \note While (in theory) it <b>is</b> possible to assign special
-   property values to this build-in property set this normally might not
-   a very good idea since these values would apply to every(!) data cell
-   that has no other property set assigned.  Such general changes
-   would rather be done calling KDChartParam's main functions, e.g. you
-   would invoke KDChartParams::setLineMarker(true) instead of changing
-   the normal-data property set.
-
-   \sa KDCHART_PROPSET_TRANSPARENT_DATA
-   \sa KDCHART_PROPSET_HORI_LINE, KDCHART_PROPSET_VERT_LINE
-   \sa KDChartData::setPropertySet
-   \sa KDChartParams::registerProperties, KDChartParams::setProperties, KDChartParams::properties
-*/
+  Charts have up to 12 axes:
+  up to two axes on both sides for X, Y
+  and Z (if data is 3-dimensional). This constant is located here and
+  in KDChartAxisParams, because one KDChartAxisParams object
+  describes only one axis.
+  */
 
 /**
-   \var static const int KDChartParams::KDCHART_PROPSET_TRANSPARENT_DATA;
+  \var static const int KDChartParams::KDCHART_PROPSET_NORMAL_DATA;
 
-   Predefined (build-in) property ID. used to specify a cell that should be displayed
-   using a null pen: neither the data representation nor
-   the connecting line to the next point will be shown,
-   but the line will be drawn using line style Qt::NoPen.
+  Default (built-in) property ID, used for data cells
+  without any special properties.
 
-   Use this IDs <b>without</b> previously defining a respective
-   set of properties via KDChartParams::registerProperties(...).
+  Use this IDs <b>without</b> previously defining a respective
+  set of properties via KDChartParams::registerProperties(...).
 
-   \note: Assigning this property to a data cell will result in the
-   cell being invisible: there will be no marker for this point and
-   there will be a 'gap' in this dataset's line from the point to the next one.
-   In case you want to change this default behavior,
-   use KDChartParams::setProperties(),
-   e.g. the following piece of code still has an invisible line while now
-   enabeling showing of the marker - but only if it was set active by
-   KDChartParams::setLineMarker(true).
+  \note While (in theory) it <b>is</b> possible to assign special
+  property values to this build-in property set this normally might not
+  a very good idea since these values would apply to every(!) data cell
+  that has no other property set assigned.  Such general changes
+  would rather be done calling KDChartParam's main functions, e.g. you
+  would invoke KDChartParams::setLineMarker(true) instead of changing
+  the normal-data property set.
 
-   \verbatim
-   KDChartPropertySet transpProps;
-   bool bDummy;
-   if( properties(KDChartParams::KDCHART_PROPSET_TRANSPARENT_DATA,
-   transpProps) ){
+  \sa KDCHART_PROPSET_TRANSPARENT_DATA
+  \sa KDCHART_PROPSET_HORI_LINE, KDCHART_PROPSET_VERT_LINE
+  \sa KDChartData::setPropertySet
+  \sa KDChartParams::registerProperties, KDChartParams::setProperties, KDChartParams::properties
+  */
+
+/**
+  \var static const int KDChartParams::KDCHART_PROPSET_TRANSPARENT_DATA;
+
+  Predefined (build-in) property ID. used to specify a cell that should be displayed
+  using a null pen: neither the data representation nor
+  the connecting line to the next point will be shown,
+  but the line will be drawn using line style Qt::NoPen.
+
+  Use this IDs <b>without</b> previously defining a respective
+  set of properties via KDChartParams::registerProperties(...).
+
+  \note: Assigning this property to a data cell will result in the
+  cell being invisible: there will be no marker for this point and
+  there will be a 'gap' in this dataset's line from the point to the next one.
+  In case you want to change this default behavior,
+  use KDChartParams::setProperties(),
+  e.g. the following piece of code still has an invisible line while now
+  enabeling showing of the marker - but only if it was set active by
+  KDChartParams::setLineMarker(true).
+
+  \verbatim
+  KDChartPropertySet transpProps;
+  bool bDummy;
+  if( properties(KDChartParams::KDCHART_PROPSET_TRANSPARENT_DATA,
+  transpProps) ){
 // build-in property was found, let's modify it a bit:
 transpProps.setShowMarker(
 KDChartParams::KDCHART_PROPSET_NORMAL_DATA, bDummy );
@@ -3703,30 +3703,30 @@ see the second example given with \c KDChartParams::KDCHART_PROPSET_VERT_LINE.
 */
 
 /**
-   \var static const int KDChartParams::KDCHART_PROPSET_HORI_LINE;
+  \var static const int KDChartParams::KDCHART_PROPSET_HORI_LINE;
 
-   Predefined (build-in) property ID. may be used to specify a special cell
-   which is not part of the normal data but to be used for positioning
-   a separate horizontal line.
-   Data display will be surpressed for this point: neither the data
-   representation nor the connecting line to the next point will
-   be shown, actually the point will remain invisible but a horizontal
-   line will be drawn instead: using line style Qt::DotLine and the
-   respective dataset's line color.
+  Predefined (build-in) property ID. may be used to specify a special cell
+  which is not part of the normal data but to be used for positioning
+  a separate horizontal line.
+  Data display will be surpressed for this point: neither the data
+  representation nor the connecting line to the next point will
+  be shown, actually the point will remain invisible but a horizontal
+  line will be drawn instead: using line style Qt::DotLine and the
+  respective dataset's line color.
 
-   Use this IDs <b>without</b> previously defining a respective
-   set of properties via KDChartParams::registerProperties(...).
+  Use this IDs <b>without</b> previously defining a respective
+  set of properties via KDChartParams::registerProperties(...).
 
-   In case you want to change this default behavior,
-   use KDChartParams::setProperties(),
-   e.g. the following piece of code still has an invisible line and
-   also does not show the point's marker while now showing two
-   separate markers at the horizontal line's start and end.
+  In case you want to change this default behavior,
+  use KDChartParams::setProperties(),
+  e.g. the following piece of code still has an invisible line and
+  also does not show the point's marker while now showing two
+  separate markers at the horizontal line's start and end.
 
-   \verbatim
-   KDChartPropertySet horiProps;
-   if( properties(KDChartParams::KDCHART_PROPSET_HORI_LINE,
-   horiProps) ){
+  \verbatim
+  KDChartPropertySet horiProps;
+  if( properties(KDChartParams::KDCHART_PROPSET_HORI_LINE,
+  horiProps) ){
 // build-in property was found, let's modify it a bit:
 horiProps.setExtraMarkersAlign(
 KDChartPropertySet::OwnID,
@@ -3763,33 +3763,33 @@ see the second example given with \c KDChartParams::KDCHART_PROPSET_VERT_LINE.
 */
 
 /**
-   \var static const int KDChartParams::KDCHART_PROPSET_VERT_LINE;
+  \var static const int KDChartParams::KDCHART_PROPSET_VERT_LINE;
 
-   Predefined (build-in) property ID. may be used to specify a special cell
-   which is not part of the normal data but to be used for positioning
-   a separate vertical line.
-   Data display will be surpressed for this point: neither the data
-   representation nor the connecting line to the next point will
-   be shown, actually the point will remain invisible but a vertical
-   line will be drawn instead: using line style Qt::DotLine and the
-   respective dataset's line color.
+  Predefined (build-in) property ID. may be used to specify a special cell
+  which is not part of the normal data but to be used for positioning
+  a separate vertical line.
+  Data display will be surpressed for this point: neither the data
+  representation nor the connecting line to the next point will
+  be shown, actually the point will remain invisible but a vertical
+  line will be drawn instead: using line style Qt::DotLine and the
+  respective dataset's line color.
 
-   Use this IDs <b>without</b> previously defining a respective
-   set of properties via KDChartParams::registerProperties(...).
+  Use this IDs <b>without</b> previously defining a respective
+  set of properties via KDChartParams::registerProperties(...).
 
-   In case you want to change this default behavior,
-   use KDChartParams::setProperties(),
-   e.g. the following piece of code still has an invisible line and
-   also does not show the point's marker while now showing a
-   separate marker at the top end of the vertical line which
-   will <b>not</b> run across the complete data area but start
-   on the respective point's Y position and go to the top edge
-   of the chart's area.
+  In case you want to change this default behavior,
+  use KDChartParams::setProperties(),
+  e.g. the following piece of code still has an invisible line and
+  also does not show the point's marker while now showing a
+  separate marker at the top end of the vertical line which
+  will <b>not</b> run across the complete data area but start
+  on the respective point's Y position and go to the top edge
+  of the chart's area.
 
-   \verbatim
-   KDChartPropertySet vertProps;
-   if( properties(KDChartParams::KDCHART_PROPSET_VERT_LINE,
-   vertProps) ){
+  \verbatim
+  KDChartPropertySet vertProps;
+  if( properties(KDChartParams::KDCHART_PROPSET_VERT_LINE,
+  vertProps) ){
 // build-in property was found, let's modify it a bit:
 vertProps.setExtraMarkersAlign(
 KDChartPropertySet::OwnID, Qt::AlignTop );
@@ -3835,22 +3835,22 @@ KDChartPropertySet::OwnID,
 -2 );
 dataWithTopLineProps.setExtraLinesColor(
 KDChartPropertySet::OwnID,
-Qt::red );
+    Qt::red );
 dataWithTopLineProps.setExtraLinesStyle(
-KDChartPropertySet::OwnID,
-Qt::SolidLine );
+        KDChartPropertySet::OwnID,
+        Qt::SolidLine );
 dataWithTopLineProps.setExtraMarkersAlign(
-KDChartPropertySet::OwnID,
-Qt::AlignTop );
+        KDChartPropertySet::OwnID,
+        Qt::AlignTop );
 dataWithTopLineProps.setExtraMarkersSize(
-KDChartPropertySet::OwnID,
-QSize(-10, -10) );
+        KDChartPropertySet::OwnID,
+        QSize(-10, -10) );
 dataWithTopLineProps.setExtraMarkersColor(
-KDChartPropertySet::OwnID,
-Qt::darkRed );
+        KDChartPropertySet::OwnID,
+        Qt::darkRed );
 dataWithTopLineProps.setExtraMarkersStyle(
-KDChartPropertySet::OwnID,
-KDChartParams::LineMarkerCircle );
+        KDChartPropertySet::OwnID,
+        KDChartParams::LineMarkerCircle );
 int idDataWithTopLineProps
 = registerProperties( dataWithTopLineProps );
 // 2. assign this property set
@@ -3869,9 +3869,9 @@ d->cell( 2, 5 ).setPropertySet( idDataWithTopLineProps );
 
 
 /**
-   Our charts may have up to 4 ordinate axes:
-   2 left ones and 2 right ones
-*/
+  Our charts may have up to 4 ordinate axes:
+  2 left ones and 2 right ones
+  */
 const int KDChartParams::KDCHART_CNT_ORDINATES = 4;
 
 //@}
@@ -3880,105 +3880,105 @@ const int KDChartParams::KDCHART_CNT_ORDINATES = 4;
 // START BARCHART
 /** @name Barchart-specific methods.
 
-These methods query and set barchart-specific parameters.
-*/
+  These methods query and set barchart-specific parameters.
+  */
 //@{
 
 /**
-   \enum KDChartParams::BarChartSubType
+  \enum KDChartParams::BarChartSubType
 
-   The bar subtype. Only used when chartType() == Bar
+  The bar subtype. Only used when chartType() == Bar
 
-   \sa setBarChartSubType, barChartSubType
-*/
-
-
-/**
-   \fn void KDChartParams::setBarChartSubType( BarChartSubType barChartSubType )
-   Specifies the bar chart subtype. Only used if chartType() ==
-   Bar
-
-   \param barChartSubType the bar chart subtype
-   \sa barChartSubType, BarChartSubType, setChartType, chartType
-*/
+  \sa setBarChartSubType, barChartSubType
+  */
 
 
 /**
-   \fn KDChartParams::BarChartSubType KDChartParams::barChartSubType() const
+  \fn void KDChartParams::setBarChartSubType( BarChartSubType barChartSubType )
+  Specifies the bar chart subtype. Only used if chartType() ==
+  Bar
 
-   Returns the bar chart subtype. Only used if chartType() ==
-   Bar.
+  \param barChartSubType the bar chart subtype
+  \sa barChartSubType, BarChartSubType, setChartType, chartType
+  */
 
-   \return the bar chart sub type
-   \sa setBarChartSubType, BarChartSubType, setChartType, chartType
-*/
+
+/**
+  \fn KDChartParams::BarChartSubType KDChartParams::barChartSubType() const
+
+  Returns the bar chart subtype. Only used if chartType() ==
+  Bar.
+
+  \return the bar chart sub type
+  \sa setBarChartSubType, BarChartSubType, setChartType, chartType
+  */
 
 
 
 /**
-   \fn void KDChartParams::setThreeDBars( bool threeDBars )
+  \fn void KDChartParams::setThreeDBars( bool threeDBars )
 
-   Specifies whether the engine should draw the bars in 3D. Only
-   used if chartType() == Bar.
+  Specifies whether the engine should draw the bars in 3D. Only
+  used if chartType() == Bar.
 
-   \param threeDBars true if bars should be drawn with a 3D effect
-   \sa threeDBars, setThreeDBarAngle, threeDBarAngle
-*/
-
-
-/**
-   \fn bool KDChartParams::threeDBars() const
-
-   Returns whether the engine should draw any bars in 3D. Only
-   used if chartType() == Bar.
-
-   \return true if bars should be draws with a 3D effect, false
-   otherwise
-   \sa setThreeDBars, threeDBarAngle, setThreeDBarAngle
-*/
-
-/**
-   \fn void KDChartParams::setThreeDBarsShadowColors( bool shadow )
-   \obsolete
-   Specifies whether the engine should draw the sides and tops of 3D bars
-   in shadowed versions of the data colors or in the data colors
-   themselves. Only used if chartType() == Bar and threeDBars() ==
-   true. The default is true.
-
-   This method is obsolete; use setThreeDShadowColors instead
-
-   \param shadow true for shadowed colors, false for original colors
-   \sa setThreeDShadowColors
-*/
-
-/**
-   \fn bool KDChartParams::threeDBarsShadowColors() const
-
-   \obsolete
-   Returns whether the engine should draw the sides and tops of 3D bars in
-   shadowed versions of the data colors or in the data colors
-   themselves. Only used if chartType() == Bar and threeDBars() ==
-   true. The default is true.
-
-   This method is obsolete; use threeDShadowColors instead
-
-   \return true if bars use shadowed colors for 3D effects
-   \sa setThreeDBarsShadowColors
-*/
+  \param threeDBars true if bars should be drawn with a 3D effect
+  \sa threeDBars, setThreeDBarAngle, threeDBarAngle
+  */
 
 
 /**
-   Specifies the angle used for 3D bars. Only used if chartType()
-   == Bar and threeDBars() == true.
+  \fn bool KDChartParams::threeDBars() const
 
-   \param angle the angle in degrees. The default (and most useful
-   value) is 45. Angle can be between 0 and 90, all other values
-   are ignored. Values close to 0 or close to 90 may look
-   strange, depending on the resolution of the output device.
-   \sa setThreeDBars, threeDBars
-   \sa threeDBarAngle, cosThreeDBarAngle
-   \sa setThreeDBarDepth, threeDBarDepth
-*/
+  Returns whether the engine should draw any bars in 3D. Only
+  used if chartType() == Bar.
+
+  \return true if bars should be draws with a 3D effect, false
+  otherwise
+  \sa setThreeDBars, threeDBarAngle, setThreeDBarAngle
+  */
+
+/**
+  \fn void KDChartParams::setThreeDBarsShadowColors( bool shadow )
+  \obsolete
+  Specifies whether the engine should draw the sides and tops of 3D bars
+  in shadowed versions of the data colors or in the data colors
+  themselves. Only used if chartType() == Bar and threeDBars() ==
+  true. The default is true.
+
+  This method is obsolete; use setThreeDShadowColors instead
+
+  \param shadow true for shadowed colors, false for original colors
+  \sa setThreeDShadowColors
+  */
+
+/**
+  \fn bool KDChartParams::threeDBarsShadowColors() const
+
+  \obsolete
+  Returns whether the engine should draw the sides and tops of 3D bars in
+  shadowed versions of the data colors or in the data colors
+  themselves. Only used if chartType() == Bar and threeDBars() ==
+  true. The default is true.
+
+  This method is obsolete; use threeDShadowColors instead
+
+  \return true if bars use shadowed colors for 3D effects
+  \sa setThreeDBarsShadowColors
+  */
+
+
+/**
+  Specifies the angle used for 3D bars. Only used if chartType()
+  == Bar and threeDBars() == true.
+
+  \param angle the angle in degrees. The default (and most useful
+  value) is 45. Angle can be between 0 and 90, all other values
+  are ignored. Values close to 0 or close to 90 may look
+  strange, depending on the resolution of the output device.
+  \sa setThreeDBars, threeDBars
+  \sa threeDBarAngle, cosThreeDBarAngle
+  \sa setThreeDBarDepth, threeDBarDepth
+  */
 void KDChartParams::setThreeDBarAngle( uint angle )
 {
     if ( angle > 90 )  /* since angle is an uint, we do not need to
@@ -3993,145 +3993,145 @@ void KDChartParams::setThreeDBarAngle( uint angle )
 
 
 /**
-   \fn uint KDChartParams::threeDBarAngle() const
+  \fn uint KDChartParams::threeDBarAngle() const
 
-   Returns the angle in degrees used for 3D bars. Only used if chartType() ==
-   Bar and threeDBars() == true.
+  Returns the angle in degrees used for 3D bars. Only used if chartType() ==
+  Bar and threeDBars() == true.
 
-   \return the angle in degrees used for 3D bars, always between 0 and 90.
-   \sa setThreeDBars, threeDBars
-   \sa setThreeDBarAngle, cosThreeDBarAngle
-   \sa setThreeDBarDepth, threeDBarDepth
-*/
-
-
-/**
-   \fn double KDChartParams::cosThreeDBarAngle() const
-
-   Returns the cosine in rad of the angle used for 3D bars. Only used
-   if chartType() == Bar and threeDBars() == true.
-
-   \return the cosine in rad of the angle used for 3D bars, always
-   between 0 and 90.  \sa setThreeDBars, threeDBars \sa
-   setThreeDBarAngle, threeDBarAngle \sa setThreeDBarDepth,
-   threeDBarDepth
-*/
+  \return the angle in degrees used for 3D bars, always between 0 and 90.
+  \sa setThreeDBars, threeDBars
+  \sa setThreeDBarAngle, cosThreeDBarAngle
+  \sa setThreeDBarDepth, threeDBarDepth
+  */
 
 
 /**
-   \fn void KDChartParams::setThreeDBarDepth( double depth )
+  \fn double KDChartParams::cosThreeDBarAngle() const
 
-   Specifies the depth of the 3D Effect used for 3D bars.
-   Only used if chartType() == Bar and threeDBars() == true.
+  Returns the cosine in rad of the angle used for 3D bars. Only used
+  if chartType() == Bar and threeDBars() == true.
 
-   \param depth the depth of the 3D Effect in relation to
-   the bar width. The default (and most useful) value of
-   1.0 may be used to specify bars with square basis.
-   \sa threeDBarDepth
-   \sa setThreeDBars,     threeDBars
-   \sa setThreeDBarAngle, threeDBarAngle, cosThreeDBarAngle
-*/
+  \return the cosine in rad of the angle used for 3D bars, always
+  between 0 and 90.  \sa setThreeDBars, threeDBars \sa
+  setThreeDBarAngle, threeDBarAngle \sa setThreeDBarDepth,
+  threeDBarDepth
+  */
 
 
 /**
-   \fn double KDChartParams::threeDBarDepth() const
+  \fn void KDChartParams::setThreeDBarDepth( double depth )
 
-   Returns the depth of the 3D Effect used for 3D bars.
-   Only used if chartType() == Bar and threeDBars() == true.
+  Specifies the depth of the 3D Effect used for 3D bars.
+  Only used if chartType() == Bar and threeDBars() == true.
 
-   \return the depth of the 3D Effect in relation to the bar width.
-   \sa setThreeDBarDepth
-   \sa setThreeDBars,     threeDBars
-   \sa setThreeDBarAngle, threeDBarAngle, cosThreeDBarAngle
-*/
-
-
-/**
-   \fn void KDChartParams::setDatasetGap( int gap )
-
-   Specifies the number of pixels between two dataset values.
-
-   \note Use negative values for overlaps, use \c
-   setDatasetGapIsRelative to specify that the \gap
-   value is a per mille value of the chart data area width.
-
-   The default is 6 per mille of the data area of the chart.
-
-   \param gap the number of pixels between two dataset values.
-   \sa datasetGap
-   \sa datasetGapIsRelative, setDatasetGapIsRelative
-*/
+  \param depth the depth of the 3D Effect in relation to
+  the bar width. The default (and most useful) value of
+  1.0 may be used to specify bars with square basis.
+  \sa threeDBarDepth
+  \sa setThreeDBars,     threeDBars
+  \sa setThreeDBarAngle, threeDBarAngle, cosThreeDBarAngle
+  */
 
 
 /**
-   \fn int KDChartParams::datasetGap() const
+  \fn double KDChartParams::threeDBarDepth() const
 
-   Returns the number of pixels between two dataset values.
+  Returns the depth of the 3D Effect used for 3D bars.
+  Only used if chartType() == Bar and threeDBars() == true.
 
-   \note Negative values signify overlaps, use \c datasetGapIsRelative
-   to find out if the \datasetGap value is a per mille value of the
-   chart data area width.
-
-   \return the number of pixels between two dataset values.
-   \sa setDatasetGap
-   \sa datasetGapIsRelative, setDatasetGapIsRelative
-*/
+  \return the depth of the 3D Effect in relation to the bar width.
+  \sa setThreeDBarDepth
+  \sa setThreeDBars,     threeDBars
+  \sa setThreeDBarAngle, threeDBarAngle, cosThreeDBarAngle
+  */
 
 
 /**
-   \fn void KDChartParams::setDatasetGapIsRelative( bool gapIsRelative )
+  \fn void KDChartParams::setDatasetGap( int gap )
 
-   Specifies if the value set by \c setDatasetGap is a
-   per mille value of the chart data area width.
+  Specifies the number of pixels between two dataset values.
 
-   \param gapIsRelative specifies if the value set by \c setDatasetGap
-   is a per mille value of the chart data area width.
-   \sa datasetGapIsRelative, datasetGap, setDatasetGap
-*/
+  \note Use negative values for overlaps, use \c
+  setDatasetGapIsRelative to specify that the \gap
+  value is a per mille value of the chart data area width.
 
+  The default is 6 per mille of the data area of the chart.
 
-/**
-   \fn bool KDChartParams::datasetGapIsRelative() const
-
-   Returns if the value set by \c setDatasetGap
-   is a per mille value of the chart data area width.
-
-   \return if the value set by \c setDatasetGap
-   is a per mille value of the chart data area width.
-   \sa setDatasetGap, setDatasetGapIsRelative, datasetGap, setDatasetGap
-*/
+  \param gap the number of pixels between two dataset values.
+  \sa datasetGap
+  \sa datasetGapIsRelative, setDatasetGapIsRelative
+  */
 
 
 /**
-   \fn void KDChartParams::setValueBlockGap( int gap )
+  \fn int KDChartParams::datasetGap() const
 
-   Specifies the number of pixels between each value block.
+  Returns the number of pixels between two dataset values.
 
-   \note Use negative values for overlaps (which might look strange),
-   use \c setValueBlockGapIsRelative to specify that the \gap
-   value is a per mille value of the chart data area width.
+  \note Negative values signify overlaps, use \c datasetGapIsRelative
+  to find out if the \datasetGap value is a per mille value of the
+  chart data area width.
 
-   The default is 15 per mille of the data area of the chart.
-
-   \param gap the number of pixels between each value block.
-   \sa valueBlockGap
-   \sa valueBlockGapIsRelative, setValueBlockGapIsRelative
-*/
+  \return the number of pixels between two dataset values.
+  \sa setDatasetGap
+  \sa datasetGapIsRelative, setDatasetGapIsRelative
+  */
 
 
 /**
-   \fn int KDChartParams::valueBlockGap() const
+  \fn void KDChartParams::setDatasetGapIsRelative( bool gapIsRelative )
 
-   Returns the number of pixels between each value block.
+  Specifies if the value set by \c setDatasetGap is a
+  per mille value of the chart data area width.
 
-   \note Negative values signify overlaps, use \c valueBlockGapIsRelative
-   to find out if the \valueBlockGap value is a per mille value of the
-   chart data area width.
+  \param gapIsRelative specifies if the value set by \c setDatasetGap
+  is a per mille value of the chart data area width.
+  \sa datasetGapIsRelative, datasetGap, setDatasetGap
+  */
 
-   \return the number of pixels between each value block.
-   \sa valueBlockGap
-   \sa valueBlockGapIsRelative, setValueBlockGapIsRelative
-*/
+
+/**
+  \fn bool KDChartParams::datasetGapIsRelative() const
+
+  Returns if the value set by \c setDatasetGap
+  is a per mille value of the chart data area width.
+
+  \return if the value set by \c setDatasetGap
+  is a per mille value of the chart data area width.
+  \sa setDatasetGap, setDatasetGapIsRelative, datasetGap, setDatasetGap
+  */
+
+
+/**
+  \fn void KDChartParams::setValueBlockGap( int gap )
+
+  Specifies the number of pixels between each value block.
+
+  \note Use negative values for overlaps (which might look strange),
+  use \c setValueBlockGapIsRelative to specify that the \gap
+  value is a per mille value of the chart data area width.
+
+  The default is 15 per mille of the data area of the chart.
+
+  \param gap the number of pixels between each value block.
+  \sa valueBlockGap
+  \sa valueBlockGapIsRelative, setValueBlockGapIsRelative
+  */
+
+
+/**
+  \fn int KDChartParams::valueBlockGap() const
+
+  Returns the number of pixels between each value block.
+
+  \note Negative values signify overlaps, use \c valueBlockGapIsRelative
+  to find out if the \valueBlockGap value is a per mille value of the
+  chart data area width.
+
+  \return the number of pixels between each value block.
+  \sa valueBlockGap
+  \sa valueBlockGapIsRelative, setValueBlockGapIsRelative
+  */
 
 
 /**
@@ -4172,28 +4172,28 @@ void KDChartParams::setThreeDBarAngle( uint angle )
 
 
 /**
-   \fn void KDChartParams::setValueBlockGapIsRelative( bool gapIsRelative )
+  \fn void KDChartParams::setValueBlockGapIsRelative( bool gapIsRelative )
 
-   Specifies if the value set by \c setValueBlockGap is a
-   per mille value of the chart data area width.
+  Specifies if the value set by \c setValueBlockGap is a
+  per mille value of the chart data area width.
 
-   \param gapIsRelative specifies if the value set by \c setValueBlockGap
-   is a per mille value of the chart data area width.
-   \sa valueBlockGapIsRelative, valueBlockGap, setValueBlockGap
-*/
+  \param gapIsRelative specifies if the value set by \c setValueBlockGap
+  is a per mille value of the chart data area width.
+  \sa valueBlockGapIsRelative, valueBlockGap, setValueBlockGap
+  */
 
 
 /**
-   \fn bool KDChartParams::valueBlockGapIsRelative() const
+  \fn bool KDChartParams::valueBlockGapIsRelative() const
 
-   Returns if the value set by \c setValueBlockGap
-   is a per mille value of the chart data area width.
+  Returns if the value set by \c setValueBlockGap
+  is a per mille value of the chart data area width.
 
-   \return if the value set by \c setValueBlockGap
-   is a per mille value of the chart data area width.
-   \sa setValueBlockGapIsRelative, setValueBlockGap, valueBlockGap
-   \sa setValueBlockGap
-*/
+  \return if the value set by \c setValueBlockGap
+  is a per mille value of the chart data area width.
+  \sa setValueBlockGapIsRelative, setValueBlockGap, valueBlockGap
+  \sa setValueBlockGap
+  */
 
 
 //@}
@@ -4202,115 +4202,115 @@ void KDChartParams::setThreeDBarAngle( uint angle )
 // START LINECHART
 /** @name Line and area chart-specific methods.
 
-These methods query and set line and area chart-specific parameters.
-*/
+  These methods query and set line and area chart-specific parameters.
+  */
 //@{
 
 /**
-   \enum KDChartParams::LineChartSubType
+  \enum KDChartParams::LineChartSubType
 
-   The line subtype. Only used when chartType == Line
+  The line subtype. Only used when chartType == Line
 
-   \sa setLineChartSubType, lineChartSubType
-*/
-
-
-/**
-   \fn void KDChartParams::setLineChartSubType( LineChartSubType lineChartSubType )
-
-   Specifies the line chart subtype. Only used if chartType() ==
-   Line. The default is LineNormal.
-
-   \param lineChartSubType the line chart subtype
-   \sa lineChartSubType, LineChartSubType, setChartType, chartType
-*/
+  \sa setLineChartSubType, lineChartSubType
+  */
 
 
 /**
-   \fn KDChartParams::LineChartSubType KDChartParams::lineChartSubType() const
+  \fn void KDChartParams::setLineChartSubType( LineChartSubType lineChartSubType )
 
-   Returns the line chart subtype. Only used if chartType() ==
-   Line.
+  Specifies the line chart subtype. Only used if chartType() ==
+  Line. The default is LineNormal.
 
-   \return the line chart sub type
-   \sa setLineChartSubType, LineChartSubType, setChartType, chartType
-*/
+  \param lineChartSubType the line chart subtype
+  \sa lineChartSubType, LineChartSubType, setChartType, chartType
+  */
+
+
+/**
+  \fn KDChartParams::LineChartSubType KDChartParams::lineChartSubType() const
+
+  Returns the line chart subtype. Only used if chartType() ==
+  Line.
+
+  \return the line chart sub type
+  \sa setLineChartSubType, LineChartSubType, setChartType, chartType
+  */
 
 
 
 /**
-   \fn void KDChartParams::setLineMarker( bool marker )
+  \fn void KDChartParams::setLineMarker( bool marker )
 
-   Specifies whether there should be a marker at each data
-   point. Only used if chartType() == Line and if threeDLines() ==
-   false. The default is not to draw markers.
+  Specifies whether there should be a marker at each data
+  point. Only used if chartType() == Line and if threeDLines() ==
+  false. The default is not to draw markers.
 
-   \note Use the setLineMarkerStyle function to specify the shape
-   of the markers, use the setLineWidth function to set the
-   width of the lines connecting the markers (or to surpress
-   drawing of such lines, resp.)
+  \note Use the setLineMarkerStyle function to specify the shape
+  of the markers, use the setLineWidth function to set the
+  width of the lines connecting the markers (or to surpress
+  drawing of such lines, resp.)
 
-   \param marker true if markers should be drawn
-   \sa setLineMarker, setLineMarkerSize
-   \sa setLineMarkerStyle, setLineColor, setLineWidth, setLineStyle
-*/
-
-
-/**
-   \fn bool KDChartParams::lineMarker() const
-
-   Returns whether line markers should be drawn at each data
-   point. Only used if chartType() == Line and if threeDLines() ==
-   false.
-
-   \return true if markers should be drawn.
-*/
+  \param marker true if markers should be drawn
+  \sa setLineMarker, setLineMarkerSize
+  \sa setLineMarkerStyle, setLineColor, setLineWidth, setLineStyle
+  */
 
 
 /**
-   \enum KDChartParams::LineMarkerStyle
+  \fn bool KDChartParams::lineMarker() const
 
-   The available line marker styles.
-*/
+  Returns whether line markers should be drawn at each data
+  point. Only used if chartType() == Line and if threeDLines() ==
+  false.
+
+  \return true if markers should be drawn.
+  */
 
 
 /**
-   Specifies the line marker to be used for a dataset. Only used if
-   chartType() == Line and lineMarker() == true. If you specify a
-   marker for a dataset, but not for a dataset with a lower
-   value, then the marker for the dataset with the lower value
-   will be undefined unless it was previously defined. The default
-   is a circle for the first dataset, a square for the second, a
-   diamond for the third and undefined for all subsequent
-   datasets.
+  \enum KDChartParams::LineMarkerStyle
 
-   \note Extra marker styles LineMarker1Pixel and LineMarker4Pixels
-   are intended for drawing charts representing large numbers
-   of data cells, when using these styles it might be a good
-   idea to set the line width to zero. This would surpress
-   drawing of the lines resulting in drawing the markers only.
+  The available line marker styles.
+  */
 
-   \param dataset the dataset for which to set the line marker
-   \param style the style to set for the specified dataset
-   \sa LineMarkerStyle, lineMarkerStyle, setLineMarkerSize
-   \sa setLineColor, setLineWidth, setLineStyle
-*/
+
+/**
+  Specifies the line marker to be used for a dataset. Only used if
+  chartType() == Line and lineMarker() == true. If you specify a
+  marker for a dataset, but not for a dataset with a lower
+  value, then the marker for the dataset with the lower value
+  will be undefined unless it was previously defined. The default
+  is a circle for the first dataset, a square for the second, a
+  diamond for the third and undefined for all subsequent
+  datasets.
+
+  \note Extra marker styles LineMarker1Pixel and LineMarker4Pixels
+  are intended for drawing charts representing large numbers
+  of data cells, when using these styles it might be a good
+  idea to set the line width to zero. This would surpress
+  drawing of the lines resulting in drawing the markers only.
+
+  \param dataset the dataset for which to set the line marker
+  \param style the style to set for the specified dataset
+  \sa LineMarkerStyle, lineMarkerStyle, setLineMarkerSize
+  \sa setLineColor, setLineWidth, setLineStyle
+  */
 void KDChartParams::setLineMarkerStyle( uint dataset, LineMarkerStyle style )
 {
     _lineMarkerStyles[ dataset ] = style;
     _maxDatasetLineMarkerStyle = QMAX( dataset,
-                                       _maxDatasetLineMarkerStyle );
+            _maxDatasetLineMarkerStyle );
     emit changed();
 }
 
 /**
-   Returns the marker to be used for a dataset. Only used if
-   chartType() == Line and lineMarker() == true.
+  Returns the marker to be used for a dataset. Only used if
+  chartType() == Line and lineMarker() == true.
 
-   \param dataset the dataset for which to return the line marker
-   \return the line marker for the specified data set
-   \sa LineMarkerStyle, setLineMarkerStyle
-*/
+  \param dataset the dataset for which to return the line marker
+  \return the line marker for the specified data set
+  \sa LineMarkerStyle, setLineMarkerStyle
+  */
 KDChartParams::LineMarkerStyle KDChartParams::lineMarkerStyle( uint dataset ) const
 {
     if( _lineMarkerStyles.find( dataset ) != _lineMarkerStyles.end() )
@@ -4323,372 +4323,372 @@ KDChartParams::LineMarkerStyle KDChartParams::lineMarkerStyle( uint dataset ) co
 
 
 /**
-   \var KDChartParams::LineMarkerStyleMap;
+  \var KDChartParams::LineMarkerStyleMap;
 
-   The type of the storage structure for line marker styles. You
-   should normally not need to use this.
-*/
+  The type of the storage structure for line marker styles. You
+  should normally not need to use this.
+  */
 
 
 /**
-   Sets a whole map of line marker styles. You can use this for
-   assigning many line marker styles at the same time, but
-   typically it is better to set them individually with \a
-   setLineMarkerStyle().
+  Sets a whole map of line marker styles. You can use this for
+  assigning many line marker styles at the same time, but
+  typically it is better to set them individually with \a
+  setLineMarkerStyle().
 
-   \param map the map of styles
-   \sa lineMarkerStyles, setLineMarker, setLineMarkerStyle, setLineMarkerSize
-   \sa setLineColor, setLineWidth, setLineStyle
-*/
+  \param map the map of styles
+  \sa lineMarkerStyles, setLineMarker, setLineMarkerStyle, setLineMarkerSize
+  \sa setLineColor, setLineWidth, setLineStyle
+  */
 void KDChartParams::setLineMarkerStyles( LineMarkerStyleMap map ) {
     _lineMarkerStyles = map;
     // update _maxDatasetLineMarkerStyle
     uint maxDataset = 0;
     for( LineMarkerStyleMap::ConstIterator it = _lineMarkerStyles.begin();
-         it != _lineMarkerStyles.end(); ++it )
+            it != _lineMarkerStyles.end(); ++it )
         maxDataset = QMAX( maxDataset, it.key() );
     _maxDatasetLineMarkerStyle = maxDataset;
 }
 
 
 /**
-   \fn KDChartParams::LineMarkerStyleMap KDChartParams::lineMarkerStyles() const
+  \fn KDChartParams::LineMarkerStyleMap KDChartParams::lineMarkerStyles() const
 
-   Returns the whole map of line marker styles. You will typically
-   not need this. You can query individual line marker styles by
-   calling \a lineMarkerStyle().
+  Returns the whole map of line marker styles. You will typically
+  not need this. You can query individual line marker styles by
+  calling \a lineMarkerStyle().
 
-   \return the map of styles
-   \sa lineMarkerStyle, setLineMarkerStyles
-*/
-
-
-/**
-   \fn uint KDChartParams::maxDatasetLineMarkerStyle() const
-
-
-   Returns the highest dataset for which a line marker style has been
-   defined. Not all datasets with a lower number necessarily have
-   a defined line marker.
-
-   \return the highest dataset with a defined line marker
-   \sa LineMarkerStyle, setLineMarkerStyle, lineMarkerStyle
-*/
+  \return the map of styles
+  \sa lineMarkerStyle, setLineMarkerStyles
+  */
 
 
 /**
-   \fn void KDChartParams::setLineMarkerSize( QSize size )
+  \fn uint KDChartParams::maxDatasetLineMarkerStyle() const
 
-   Specifies the sizes of line markers. Only used if chartType() == Line
-   and lineMarker() == true. The default is 6x6.
 
-   Negative values of \c size.width() and/or \c size.height() will
-   be  interpreted as per-mille value of the chart's drawing area,
-   the true marker width (or height, resp.) will then be calculated
-   dynamically depending on the actual chart size.
+  Returns the highest dataset for which a line marker style has been
+  defined. Not all datasets with a lower number necessarily have
+  a defined line marker.
 
-   \param size the size of the line marker in pixels
-   \sa lineMarkerSize, setLineMarker, setLineMarkerStyle
-   \sa setLineColor, setLineWidth, setLineStyle
-*/
+  \return the highest dataset with a defined line marker
+  \sa LineMarkerStyle, setLineMarkerStyle, lineMarkerStyle
+  */
 
 
 /**
-   \fn QSize KDChartParams::lineMarkerSize() const
+  \fn void KDChartParams::setLineMarkerSize( QSize size )
 
-   Returns the sizes of line markers. Only used if chartType() == Line and
-   lineMarker() == true.
+  Specifies the sizes of line markers. Only used if chartType() == Line
+  and lineMarker() == true. The default is 6x6.
 
-   \return the size of the line marker in pixels
-   \sa setLineMarkerSize
-*/
+  Negative values of \c size.width() and/or \c size.height() will
+  be  interpreted as per-mille value of the chart's drawing area,
+  the true marker width (or height, resp.) will then be calculated
+  dynamically depending on the actual chart size.
 
-
-/**
-   \fn void KDChartParams::setLineWidth( int width )
-
-   Specifies the width for lines in line charts. Default is 1.
-   Only used if threeDLines() == false.
-
-   If \c width is negative it is interpreted as per-mille
-   value of the chart's drawing area, the true line width
-   will then be calculated dynamically depending on the
-   actual chart size.
-
-   \note Set the line width to zero to surpress drawing of the lines
-   but do not forget to call setLineMarker( true ) and specify an
-   appropriate marker style to have the data points drawn.
-
-   \param width the new width
-   \sa lineWidth, setLineColor, setLineStyle
-   \sa setLineMarker, setLineMarkerSize, setLineMarkerStyle
-*/
+  \param size the size of the line marker in pixels
+  \sa lineMarkerSize, setLineMarker, setLineMarkerStyle
+  \sa setLineColor, setLineWidth, setLineStyle
+  */
 
 
 /**
-   \fn int KDChartParams::lineWidth() const
+  \fn QSize KDChartParams::lineMarkerSize() const
 
-   Returns the line width of the lines in line charts.
+  Returns the sizes of line markers. Only used if chartType() == Line and
+  lineMarker() == true.
 
-   \return the line width of lines in line charts
-   \sa lineWidth
-*/
-
-
-/**
-   \fn void KDChartParams::setLineColor( QColor color = QColor() )
-
-   Specifies the color of the lines in line charts. By default
-   line chart lines are drawn in the color specified by the
-   respective setDataColor function, to reset your chart to
-   this default just call setLineColor() without specifying a
-   parameter.
-
-   \note Setting the line color to a special value is usefull to
-   visualize gaps in a normally very narrow series of data values.
-
-   e.g. You might want to specify setLineMarkerStyle( i, LineMarker4Pixels )
-   or even setLineMarkerStyle( i, LineMarker1Pixel ) and have your
-   marker dots normally form a contiguous line without the need of
-   any connecting lines except at the places where missing data
-   values would interrupt the 'line'. Using setLineColor( Qt::darkGray)
-   could make your chart more readable in such cases.
-
-   \param color of the lines in line charts
-   \sa lineColor, setLineWidth, setLineStyle
-   \sa setLineMarker, setLineMarkerSize, setLineMarkerStyle
-*/
+  \return the size of the line marker in pixels
+  \sa setLineMarkerSize
+  */
 
 
 /**
-   \fn QColor KDChartParams::lineColor() const
+  \fn void KDChartParams::setLineWidth( int width )
 
-   Returns the color of the lines in line charts.
+  Specifies the width for lines in line charts. Default is 1.
+  Only used if threeDLines() == false.
 
-   \return the color of the lines in line charts
-   \sa setLineColor
-*/
+  If \c width is negative it is interpreted as per-mille
+  value of the chart's drawing area, the true line width
+  will then be calculated dynamically depending on the
+  actual chart size.
 
+  \note Set the line width to zero to surpress drawing of the lines
+  but do not forget to call setLineMarker( true ) and specify an
+  appropriate marker style to have the data points drawn.
 
-/**
-   \fn void KDChartParams::setLineStyle( PenStyle style )
-
-   Specifies the line style of the lines in line charts. The default
-   is a solid line. Warning: On Windows 95/98, the style setting (other
-   than NoPen and SolidLine) has no effect for lines with width greater
-   than 1, due to a bug in the operating system.
-
-   \param width the line style of the lines in line charts
-   \sa lineStyle, setLineWidth, setLineColor
-   \sa setLineMarker, setLineMarkerSize, setLineMarkerStyle
-*/
+  \param width the new width
+  \sa lineWidth, setLineColor, setLineStyle
+  \sa setLineMarker, setLineMarkerSize, setLineMarkerStyle
+  */
 
 
 /**
-   \fn KDChartParams::PenStyle KDChartParams::lineStyle() const
+  \fn int KDChartParams::lineWidth() const
 
-   Returns the line style of the lines in line charts.
+  Returns the line width of the lines in line charts.
 
-   \param line style of the lines in line charts
-   \sa setLineStyle
-*/
+  \return the line width of lines in line charts
+  \sa lineWidth
+  */
 
 
 /**
-   \fn void KDChartParams::setThreeDLines( bool threeD )
+  \fn void KDChartParams::setLineColor( QColor color = QColor() )
 
-   Specifies whether lines should be drawn three-dimensionally or
-   not. The default is to draw two-dimensionally. Only used if
-   chartType() == Line.
+  Specifies the color of the lines in line charts. By default
+  line chart lines are drawn in the color specified by the
+  respective setDataColor function, to reset your chart to
+  this default just call setLineColor() without specifying a
+  parameter.
 
-   \param threeD if true, draw three-dimensionally, otherwise draw
-   two-dimensionally.
-   \sa threeDLines(), setThreeDLineDepth(), threeDLineDepth(),
+  \note Setting the line color to a special value is usefull to
+  visualize gaps in a normally very narrow series of data values.
+
+  e.g. You might want to specify setLineMarkerStyle( i, LineMarker4Pixels )
+  or even setLineMarkerStyle( i, LineMarker1Pixel ) and have your
+  marker dots normally form a contiguous line without the need of
+  any connecting lines except at the places where missing data
+  values would interrupt the 'line'. Using setLineColor( Qt::darkGray)
+  could make your chart more readable in such cases.
+
+  \param color of the lines in line charts
+  \sa lineColor, setLineWidth, setLineStyle
+  \sa setLineMarker, setLineMarkerSize, setLineMarkerStyle
+  */
+
+
+/**
+  \fn QColor KDChartParams::lineColor() const
+
+  Returns the color of the lines in line charts.
+
+  \return the color of the lines in line charts
+  \sa setLineColor
+  */
+
+
+/**
+  \fn void KDChartParams::setLineStyle( PenStyle style )
+
+  Specifies the line style of the lines in line charts. The default
+  is a solid line. Warning: On Windows 95/98, the style setting (other
+  than NoPen and SolidLine) has no effect for lines with width greater
+  than 1, due to a bug in the operating system.
+
+  \param width the line style of the lines in line charts
+  \sa lineStyle, setLineWidth, setLineColor
+  \sa setLineMarker, setLineMarkerSize, setLineMarkerStyle
+  */
+
+
+/**
+  \fn KDChartParams::PenStyle KDChartParams::lineStyle() const
+
+  Returns the line style of the lines in line charts.
+
+  \param line style of the lines in line charts
+  \sa setLineStyle
+  */
+
+
+/**
+  \fn void KDChartParams::setThreeDLines( bool threeD )
+
+  Specifies whether lines should be drawn three-dimensionally or
+  not. The default is to draw two-dimensionally. Only used if
+  chartType() == Line.
+
+  \param threeD if true, draw three-dimensionally, otherwise draw
+  two-dimensionally.
+  \sa threeDLines(), setThreeDLineDepth(), threeDLineDepth(),
 //   setThreeDLineXRotation(), threeDLineXRotation(),
 //   setThreeDLineYRotation(), threeDLineYRotation()
 */
 
 
 /**
-   \fn bool KDChartParams::threeDLines() const
+  \fn bool KDChartParams::threeDLines() const
 
-   Returns whether lines are drawn three-dimensionally or not. The
-   default is to draw two-dimensionally. Only used if chartType() ==
-   Line.
+  Returns whether lines are drawn three-dimensionally or not. The
+  default is to draw two-dimensionally. Only used if chartType() ==
+  Line.
 
-   \return true if lines are drawn three-dimensionally, false
-   otherwise.
-   \sa setThreeDLines(), setThreeDLineDepth(), threeDLineDepth(),
+  \return true if lines are drawn three-dimensionally, false
+  otherwise.
+  \sa setThreeDLines(), setThreeDLineDepth(), threeDLineDepth(),
 //   setThreeDLineXRotation(), threeDLineXRotation(),
 //   setThreeDLineYRotation(), threeDLineYRotation()
 */
 
 
 /**
-   \fn void KDChartParams::setThreeDLineDepth( int depth )
+  \fn void KDChartParams::setThreeDLineDepth( int depth )
 
-   Specifies the depth of 3D lines (the "width" in Z
-   direction). Only used if chartType() == Line and threeDLines() ==
-   true. The default is 20 pixels.
+  Specifies the depth of 3D lines (the "width" in Z
+  direction). Only used if chartType() == Line and threeDLines() ==
+  true. The default is 20 pixels.
 
-   \param depth the depth in pixels
-   \sa setThreeDLines(), threeDLines(), threeDLineDepth()
-*/
-
-
-/**
-   \fn int KDChartParams::threeDLineDepth() const
-
-   Returns the depth of 3D lines (the "width" in Z direction). Only
-   used if chartType() == Line and threeDLines() == true. The
-   default is 20 pixels.
-
-   \return the depth in pixels
-   \sa setThreeDLines(), threeDLines(), setThreeDLineDepth()
-*/
+  \param depth the depth in pixels
+  \sa setThreeDLines(), threeDLines(), threeDLineDepth()
+  */
 
 
 /**
-   \fn void KDChartParams::setThreeDLineXRotation( int degrees )
+  \fn int KDChartParams::threeDLineDepth() const
 
-   \deprecated Feature scheduled for future release, at present not implemented.
-*/
-/*
+  Returns the depth of 3D lines (the "width" in Z direction). Only
+  used if chartType() == Line and threeDLines() == true. The
+  default is 20 pixels.
+
+  \return the depth in pixels
+  \sa setThreeDLines(), threeDLines(), setThreeDLineDepth()
+  */
+
+
+/**
   \fn void KDChartParams::setThreeDLineXRotation( int degrees )
 
-  Specifies the rotation around the X axis in degrees. The value
-  may be between 0 and 90. Only used if chartType() == Line and
-  threeDLines() == true. The default is 30 degrees. If 0 degrees is
-  specified for both the X and the Y rotation, the lines will look
-  like 2D lines.
+  \deprecated Feature scheduled for future release, at present not implemented.
+  */
+/*
+   \fn void KDChartParams::setThreeDLineXRotation( int degrees )
 
-  \param rotation the rotation in degrees. Must be between 0 and
-  90.
-  \sa setThreeDLines(), threeDLines(), threeDLineXRotation()
-*/
+   Specifies the rotation around the X axis in degrees. The value
+   may be between 0 and 90. Only used if chartType() == Line and
+   threeDLines() == true. The default is 30 degrees. If 0 degrees is
+   specified for both the X and the Y rotation, the lines will look
+   like 2D lines.
+
+   \param rotation the rotation in degrees. Must be between 0 and
+   90.
+   \sa setThreeDLines(), threeDLines(), threeDLineXRotation()
+   */
 
 
 
 /**
-   \fn int KDChartParams::threeDLineXRotation() const
-
-   \deprecated Feature scheduled for future release, at present not implemented.
-*/
-/*
   \fn int KDChartParams::threeDLineXRotation() const
 
-  Returns the rotation around the X axis in degrees. The value may
-  be between 0 and 90. Only used if chartType() == Line and
-  threeDLines() == true. The default is 30 degrees.
+  \deprecated Feature scheduled for future release, at present not implemented.
+  */
+/*
+   \fn int KDChartParams::threeDLineXRotation() const
 
-  \return the rotation in degrees. Is always between 0 and 90.
-*/
+   Returns the rotation around the X axis in degrees. The value may
+   be between 0 and 90. Only used if chartType() == Line and
+   threeDLines() == true. The default is 30 degrees.
+
+   \return the rotation in degrees. Is always between 0 and 90.
+   */
 
 
 /**
-   \fn void KDChartParams::setThreeDLineYRotation( int degrees )
-
-   \deprecated Feature scheduled for future release, at present not implemented.
-*/
-/*
   \fn void KDChartParams::setThreeDLineYRotation( int degrees )
 
-  Specifies the rotation around the Y axis in degrees. The value
-  may be between 0 and 90. Only used if chartType() == Line and
-  threeDLines() == true. The default is 30 degrees. If 0 degrees is
-  specified for both the X and the Y rotation, the lines will look
-  like 2D lines.
+  \deprecated Feature scheduled for future release, at present not implemented.
+  */
+/*
+   \fn void KDChartParams::setThreeDLineYRotation( int degrees )
 
-  \param rotation the rotation in degrees. Must be between 0 and
-  90.
-  \sa setThreeDLines(), threeDLines(), threeDLineYRotation()
-*/
+   Specifies the rotation around the Y axis in degrees. The value
+   may be between 0 and 90. Only used if chartType() == Line and
+   threeDLines() == true. The default is 30 degrees. If 0 degrees is
+   specified for both the X and the Y rotation, the lines will look
+   like 2D lines.
+
+   \param rotation the rotation in degrees. Must be between 0 and
+   90.
+   \sa setThreeDLines(), threeDLines(), threeDLineYRotation()
+   */
 
 /**
-   \fn int KDChartParams::threeDLineYRotation() const
-
-   \deprecated Feature scheduled for future release, at present not implemented.
-*/
-/*
   \fn int KDChartParams::threeDLineYRotation() const
 
-  Returns the rotation around the X axis in degrees. The value may
-  be between 0 and 90. Only used if chartType() == Line and
-  threeDLines() == true. The default is 30 degrees.
+  \deprecated Feature scheduled for future release, at present not implemented.
+  */
+/*
+   \fn int KDChartParams::threeDLineYRotation() const
 
-  \return the rotation in degrees. Is always between 0 and 90.
-*/
+   Returns the rotation around the X axis in degrees. The value may
+   be between 0 and 90. Only used if chartType() == Line and
+   threeDLines() == true. The default is 30 degrees.
 
-
-/**
-   \enum KDChartParams::AreaChartSubType
-
-   The area subtype. Only used when chartType == Area
-
-   \sa setAreaChartSubType, areaChartSubType
-*/
+   \return the rotation in degrees. Is always between 0 and 90.
+   */
 
 
 /**
-   \fn void KDChartParams::setAreaChartSubType( AreaChartSubType areaChartSubType )
+  \enum KDChartParams::AreaChartSubType
 
-   Specifies the area chart subtype. Only used if chartType() ==
-   Area. The default is AreaNormal.
+  The area subtype. Only used when chartType == Area
 
-   \param areaChartSubType the area chart subtype
-   \sa areaChartSubType, AreaChartSubType, setChartType, chartType
-*/
+  \sa setAreaChartSubType, areaChartSubType
+  */
 
 
 /**
-   \fn KDChartParams::AreaChartSubType KDChartParams::areaChartSubType() const
+  \fn void KDChartParams::setAreaChartSubType( AreaChartSubType areaChartSubType )
 
+  Specifies the area chart subtype. Only used if chartType() ==
+  Area. The default is AreaNormal.
 
-   Returns the area chart subtype. Only used if chartType() ==
-   Area.
-
-   \return the area chart sub type
-   \sa setAreaChartSubType, AreaChartSubType, setChartType, chartType
-*/
-
-
-/**
-   \enum KDChartParams::AreaLocation
-
-   Specifies whether the area above the value points or below the
-   value points should be filled. The default is to fill below the
-   value points.
-
-   \sa setAreaLocation(), areaLocation()
-*/
+  \param areaChartSubType the area chart subtype
+  \sa areaChartSubType, AreaChartSubType, setChartType, chartType
+  */
 
 
 /**
-   \fn void KDChartParams::setAreaLocation( AreaLocation location )
+  \fn KDChartParams::AreaChartSubType KDChartParams::areaChartSubType() const
 
-   Specifies whether the area above or below the value points
-   should be filled. The default is to fill below the value
-   points.
 
-   This setting is <em>not</em> used with percent areas
-   (i.e. areaChartSubType() == AreaPercent), because these always
-   cover the whole chart.
+  Returns the area chart subtype. Only used if chartType() ==
+  Area.
 
-   \param location whether to fill above or below the value points
-   \sa AreaLocation, areaLocation()
-*/
+  \return the area chart sub type
+  \sa setAreaChartSubType, AreaChartSubType, setChartType, chartType
+  */
 
 
 /**
-   \fn KDChartParams::AreaLocation KDChartParams::areaLocation() const
+  \enum KDChartParams::AreaLocation
 
-   Returns whether the area above or below the value points is
-   filled.
+  Specifies whether the area above the value points or below the
+  value points should be filled. The default is to fill below the
+  value points.
 
-   \return whether the area above or below the value points is
-   filled.
-   \sa AreaLocation, setAreaLocation()
-*/
+  \sa setAreaLocation(), areaLocation()
+  */
+
+
+/**
+  \fn void KDChartParams::setAreaLocation( AreaLocation location )
+
+  Specifies whether the area above or below the value points
+  should be filled. The default is to fill below the value
+  points.
+
+  This setting is <em>not</em> used with percent areas
+  (i.e. areaChartSubType() == AreaPercent), because these always
+  cover the whole chart.
+
+  \param location whether to fill above or below the value points
+  \sa AreaLocation, areaLocation()
+  */
+
+
+/**
+  \fn KDChartParams::AreaLocation KDChartParams::areaLocation() const
+
+  Returns whether the area above or below the value points is
+  filled.
+
+  \return whether the area above or below the value points is
+  filled.
+  \sa AreaLocation, setAreaLocation()
+  */
 
 
 //@}
@@ -4697,100 +4697,100 @@ void KDChartParams::setLineMarkerStyles( LineMarkerStyleMap map ) {
 // START POLARCHART
 /** @name Polar chart-specific methods.
 
-These methods query and set polar chart-specific parameters.
-*/
+  These methods query and set polar chart-specific parameters.
+  */
 //@{
 
 
 /**
-   \enum KDChartParams::PolarChartSubType
+  \enum KDChartParams::PolarChartSubType
 
-   The polar subtype. Only used when chartType == Polar
+  The polar subtype. Only used when chartType == Polar
 
-   \sa setPolarChartSubType, polarChartSubType
-*/
-
-
-/**
-   \fn void KDChartParams::setPolarChartSubType( PolarChartSubType polarChartSubType )
-
-   Specifies the polar chart subtype. Only used if chartType() ==
-   Polar. The default is PolarNormal.
-
-   \param polarChartSubType the polar chart subtype
-   \sa polarChartSubType, PolarChartSubType, setChartType, chartType
-*/
+  \sa setPolarChartSubType, polarChartSubType
+  */
 
 
 /**
-   \fn KDChartParams::PolarChartSubType KDChartParams::polarChartSubType() const
+  \fn void KDChartParams::setPolarChartSubType( PolarChartSubType polarChartSubType )
 
-   Returns the polar chart subtype. Only used if chartType() ==
-   Polar.
+  Specifies the polar chart subtype. Only used if chartType() ==
+  Polar. The default is PolarNormal.
 
-   \return the polar chart sub type
-   \sa setPolarChartSubType, PolarChartSubType, setChartType, chartType
-*/
-
-
-/**
-   \fn void KDChartParams::setPolarMarker( bool marker )
-
-   Specifies whether there should be a marker at each data
-   point. Only used if chartType() == Polar. The default is not to
-   draw markers.
-
-   \param marker true if markers should be drawn
-*/
+  \param polarChartSubType the polar chart subtype
+  \sa polarChartSubType, PolarChartSubType, setChartType, chartType
+  */
 
 
 /**
-   \fn bool KDChartParams::polarMarker() const
+  \fn KDChartParams::PolarChartSubType KDChartParams::polarChartSubType() const
 
-   Returns whether polar markers should be drawn at each data
-   point. Only used if chartType() == Polar.
+  Returns the polar chart subtype. Only used if chartType() ==
+  Polar.
 
-   \return true if markers should be drawn.
-*/
-
-
-/**
-   \enum KDChartParams::PolarMarkerStyle
-
-   The available polar marker styles.
-*/
+  \return the polar chart sub type
+  \sa setPolarChartSubType, PolarChartSubType, setChartType, chartType
+  */
 
 
 /**
-   Specifies the polar marker to be used for a dataset. Only used if
-   chartType() == Polar and polarMarker() == true. If you specify a
-   marker for a dataset, but not for a dataset with a lower
-   value, then the marker for the dataset with the lower value
-   will be undefined unless it was previously defined. The default
-   is a circle for the first dataset, a square for the second, a
-   diamond for the third and undefined for all subsequent
-   datasets.
+  \fn void KDChartParams::setPolarMarker( bool marker )
 
-   \param dataset the dataset for which to set the polar marker
-   \param style the style to set for the specified dataset
-   \sa PolarMarkerStyle, polarMarkerStyle
-*/
+  Specifies whether there should be a marker at each data
+  point. Only used if chartType() == Polar. The default is not to
+  draw markers.
+
+  \param marker true if markers should be drawn
+  */
+
+
+/**
+  \fn bool KDChartParams::polarMarker() const
+
+  Returns whether polar markers should be drawn at each data
+  point. Only used if chartType() == Polar.
+
+  \return true if markers should be drawn.
+  */
+
+
+/**
+  \enum KDChartParams::PolarMarkerStyle
+
+  The available polar marker styles.
+  */
+
+
+/**
+  Specifies the polar marker to be used for a dataset. Only used if
+  chartType() == Polar and polarMarker() == true. If you specify a
+  marker for a dataset, but not for a dataset with a lower
+  value, then the marker for the dataset with the lower value
+  will be undefined unless it was previously defined. The default
+  is a circle for the first dataset, a square for the second, a
+  diamond for the third and undefined for all subsequent
+  datasets.
+
+  \param dataset the dataset for which to set the polar marker
+  \param style the style to set for the specified dataset
+  \sa PolarMarkerStyle, polarMarkerStyle
+  */
 void KDChartParams::setPolarMarkerStyle( uint dataset, PolarMarkerStyle style )
 {
     _polarMarkerStyles[ dataset ] = style;
     _maxDatasetPolarMarkerStyle = QMAX( dataset,
-                                        _maxDatasetPolarMarkerStyle );
+            _maxDatasetPolarMarkerStyle );
     emit changed();
 }
 
 /**
-   Returns the marker to be used for a dataset. Only used if
-   chartType() == Polar and polarMarker() == true.
+  Returns the marker to be used for a dataset. Only used if
+  chartType() == Polar and polarMarker() == true.
 
-   \param dataset the dataset for which to return the polar marker
-   \return the polar marker for the specified data set
-   \sa PolarMarkerStyle, setPolarMarkerStyle
-*/
+  \param dataset the dataset for which to return the polar marker
+  \return the polar marker for the specified data set
+  \sa PolarMarkerStyle, setPolarMarkerStyle
+  */
 KDChartParams::PolarMarkerStyle KDChartParams::polarMarkerStyle( uint dataset ) const
 {
     if( _polarMarkerStyles.find( dataset ) != _polarMarkerStyles.end() )
@@ -4801,154 +4801,154 @@ KDChartParams::PolarMarkerStyle KDChartParams::polarMarkerStyle( uint dataset ) 
 
 
 /**
-   \var KDChartParams::PolarMarkerStyleMap
+  \var KDChartParams::PolarMarkerStyleMap
 
-   The type of the storage structure for polar marker styles. You
-   should normally not need to use this.
-*/
+  The type of the storage structure for polar marker styles. You
+  should normally not need to use this.
+  */
 
 
 
 /**
-   Sets a whole map of polar marker styles. You can use this for
-   assigning many polar marker styles at the same time, but
-   typically it is better to set them individually with \a
-   setPolarMarkerStyle().
+  Sets a whole map of polar marker styles. You can use this for
+  assigning many polar marker styles at the same time, but
+  typically it is better to set them individually with \a
+  setPolarMarkerStyle().
 
-   \param map the map of styles
-   \sa polarMarkerStyles(), setPolarMarkerStyle()
-*/
+  \param map the map of styles
+  \sa polarMarkerStyles(), setPolarMarkerStyle()
+  */
 void KDChartParams::setPolarMarkerStyles( PolarMarkerStyleMap map ) {
     _polarMarkerStyles = map;
     // update _maxDatasetPolarMarkerStyle
     uint maxDataset = 0;
     for( PolarMarkerStyleMap::ConstIterator it = _polarMarkerStyles.begin();
-         it != _polarMarkerStyles.end(); ++it )
+            it != _polarMarkerStyles.end(); ++it )
         maxDataset = QMAX( maxDataset, it.key() );
     _maxDatasetPolarMarkerStyle = maxDataset;
 }
 
 
 /**
-   \fn KDChartParams::PolarMarkerStyleMap KDChartParams::polarMarkerStyles() const
+  \fn KDChartParams::PolarMarkerStyleMap KDChartParams::polarMarkerStyles() const
 
-   Returns the whole map of polar marker styles. You will usually
-   not need this. You can query individual polar marker styles by
-   calling \a polarMarkerStyle().
+  Returns the whole map of polar marker styles. You will usually
+  not need this. You can query individual polar marker styles by
+  calling \a polarMarkerStyle().
 
-   \return the map of styles
-   \sa polarMarkerStyle(), setPolarMarkerStyles()
-*/
-
-
-/**
-   \fn uint KDChartParams::maxDatasetPolarMarkerStyle() const
-
-   Returns the highest dataset for which a polar marker style has been
-   defined. Not all datasets with a lower number necessarily have
-   a defined polar marker.
-
-   \return the highest dataset with a defined polar marker
-   \sa PolarMarkerStyle, setPolarMarkerStyle, polarMarkerStyle
-*/
+  \return the map of styles
+  \sa polarMarkerStyle(), setPolarMarkerStyles()
+  */
 
 
 /**
-   \fn void KDChartParams::setPolarMarkerSize( QSize )
+  \fn uint KDChartParams::maxDatasetPolarMarkerStyle() const
 
-   Specifies the sizes of polar markers. Only used if chartType() == Polar
-   and polarMarker() == true. The default is -40 x -40.
+  Returns the highest dataset for which a polar marker style has been
+  defined. Not all datasets with a lower number necessarily have
+  a defined polar marker.
 
-   \param size the size of the polar marker in pixels, if negative this is a
-   per mille value of the chart min. size (the chart width or height, depending
-   what is smaller), if positive the value is taken as absolute number of pixels.
-
-   \sa polarMarkerSize
-*/
+  \return the highest dataset with a defined polar marker
+  \sa PolarMarkerStyle, setPolarMarkerStyle, polarMarkerStyle
+  */
 
 
 /**
-   \fn QSize KDChartParams::polarMarkerSize() const
+  \fn void KDChartParams::setPolarMarkerSize( QSize )
 
-   Returns the sizes of polar markers. Only used if chartType() ==
-   Polar and polarMarker() == true.
+  Specifies the sizes of polar markers. Only used if chartType() == Polar
+  and polarMarker() == true. The default is -40 x -40.
 
-   \return the size of the polar marker in pixels
-   \sa setPolarMarkerSize
-*/
+  \param size the size of the polar marker in pixels, if negative this is a
+  per mille value of the chart min. size (the chart width or height, depending
+  what is smaller), if positive the value is taken as absolute number of pixels.
 
-
-/**
-   \fn void KDChartParams::setPolarLineWidth( int width )
-
-   Specifies the width for lines in polar charts. Default is -3.
-
-   \param width the new width
-   \sa polarLineWidth
-*/
+  \sa polarMarkerSize
+  */
 
 
 /**
-   \fn int KDChartParams::polarLineWidth() const
+  \fn QSize KDChartParams::polarMarkerSize() const
 
-   Returns the line width of the lines in polar charts.
+  Returns the sizes of polar markers. Only used if chartType() ==
+  Polar and polarMarker() == true.
 
-   \return the line width of lines in polar charts
-   \sa setPolarLineWidth
-*/
-
-
-/**
-   \fn void KDChartParams::setPolarZeroDegreePos( int degrees )
-
-   Specifies the zero degree position in polar charts.
-
-   Use this function to have the zero degree point on a position
-   different from the right side of the circle. Valid parameters
-   are -359..359.
-
-   \sa polarZeroDegreePos
-*/
+  \return the size of the polar marker in pixels
+  \sa setPolarMarkerSize
+  */
 
 
 /**
-   \fn int KDChartParams::polarZeroDegreePos() const
+  \fn void KDChartParams::setPolarLineWidth( int width )
 
-   Returns the zero degree position in polar charts.
+  Specifies the width for lines in polar charts. Default is -3.
 
-   \sa setPolarZeroDegreePos
-*/
-
-
-/**
-   \fn void KDChartParams::setPolarRotateCircularLabels( bool rotateCircularLabels )
-
-   Specifies whether to rotate circular labels in polar charts.
-
-   \sa polarRotateCircularLabels, setPolarDelimsAndLabelsAtPos
-*/
+  \param width the new width
+  \sa polarLineWidth
+  */
 
 
 /**
-   \fn bool KDChartParams::polarRotateCircularLabels() const
+  \fn int KDChartParams::polarLineWidth() const
 
-   Returns whether circular labels will be rotated in polar charts.
+  Returns the line width of the lines in polar charts.
 
-   \sa setPolarRotateCircularLabels, polarDelimAtPos, polarLabelsAtPos
-*/
+  \return the line width of lines in polar charts
+  \sa setPolarLineWidth
+  */
 
 
 /**
-   Specifies whether to show circular delimiters and labels at a given
-   position in polar charts.
+  \fn void KDChartParams::setPolarZeroDegreePos( int degrees )
 
-   \note Value \c KDChartEnums::PosCenter will be ignored.
+  Specifies the zero degree position in polar charts.
 
-   \sa setPolarRotateCircularLabels, polarDelimAtPos, polarLabelsAtPos
-*/
+  Use this function to have the zero degree point on a position
+  different from the right side of the circle. Valid parameters
+  are -359..359.
+
+  \sa polarZeroDegreePos
+  */
+
+
+/**
+  \fn int KDChartParams::polarZeroDegreePos() const
+
+  Returns the zero degree position in polar charts.
+
+  \sa setPolarZeroDegreePos
+  */
+
+
+/**
+  \fn void KDChartParams::setPolarRotateCircularLabels( bool rotateCircularLabels )
+
+  Specifies whether to rotate circular labels in polar charts.
+
+  \sa polarRotateCircularLabels, setPolarDelimsAndLabelsAtPos
+  */
+
+
+/**
+  \fn bool KDChartParams::polarRotateCircularLabels() const
+
+  Returns whether circular labels will be rotated in polar charts.
+
+  \sa setPolarRotateCircularLabels, polarDelimAtPos, polarLabelsAtPos
+  */
+
+
+/**
+  Specifies whether to show circular delimiters and labels at a given
+  position in polar charts.
+
+  \note Value \c KDChartEnums::PosCenter will be ignored.
+
+  \sa setPolarRotateCircularLabels, polarDelimAtPos, polarLabelsAtPos
+  */
 void KDChartParams::setPolarDelimsAndLabelsAtPos( KDChartEnums::PositionFlag pos,
-                                                  bool showDelimiters,
-                                                  bool showLabels )
+        bool showDelimiters,
+        bool showLabels )
 {
     if( MAX_POLAR_DELIMS_AND_LABELS_POS >= pos ) {
         _polarDelimsAndLabels[ pos ].showDelimiters = showDelimiters;
@@ -4957,11 +4957,11 @@ void KDChartParams::setPolarDelimsAndLabelsAtPos( KDChartEnums::PositionFlag pos
 }
 
 /**
-   Returns whether to show circular delimiters at a given
-   position in polar charts.
+  Returns whether to show circular delimiters at a given
+  position in polar charts.
 
-   \sa polarRotateCircularLabels, setPolarDelimAndLabelsPos, polarLabelsAtPos
-*/
+  \sa polarRotateCircularLabels, setPolarDelimAndLabelsPos, polarLabelsAtPos
+  */
 bool KDChartParams::polarDelimAtPos( KDChartEnums::PositionFlag pos ) const
 {
     if( MAX_POLAR_DELIMS_AND_LABELS_POS >= pos )
@@ -4971,11 +4971,11 @@ bool KDChartParams::polarDelimAtPos( KDChartEnums::PositionFlag pos ) const
 }
 
 /**
-   Returns whether to show circular labels at a given
-   position in polar charts.
+  Returns whether to show circular labels at a given
+  position in polar charts.
 
-   \sa polarRotateCircularLabels, setPolarDelimAndLabelsPos, polarDelimAtPos
-*/
+  \sa polarRotateCircularLabels, setPolarDelimAndLabelsPos, polarDelimAtPos
+  */
 bool KDChartParams::polarLabelsAtPos( KDChartEnums::PositionFlag pos ) const
 {
     if( MAX_POLAR_DELIMS_AND_LABELS_POS >= pos )
@@ -4992,294 +4992,294 @@ bool KDChartParams::polarLabelsAtPos( KDChartEnums::PositionFlag pos ) const
 // START RING/PIECHART
 /** @name Ring and pie chart-specific methods.
 
-These methods query and set ring and pie chart-specific parameters.
-*/
+  These methods query and set ring and pie chart-specific parameters.
+  */
 //@{
 
 /**
-   \fn void KDChartParams::setExplode( bool explode )
+  \fn void KDChartParams::setExplode( bool explode )
 
-   Specifies whether the pie chart or ring chart should be
-   exploding (all pies or ring segments are slightly displaced
-   from the center) or not. The default is not to explode. Only
-   used if chartType() == Pie or chartType() == Ring.
+  Specifies whether the pie chart or ring chart should be
+  exploding (all pies or ring segments are slightly displaced
+  from the center) or not. The default is not to explode. Only
+  used if chartType() == Pie or chartType() == Ring.
 
-   Note that calling this method by passing true turns on
-   exploding for all segments. You can turn exploding on and off
-   for individual segments by calling setExplodeValues() and also
-   change the explode factors by calling setExplodeFactor() or
-   setExplodeFactors().
+  Note that calling this method by passing true turns on
+  exploding for all segments. You can turn exploding on and off
+  for individual segments by calling setExplodeValues() and also
+  change the explode factors by calling setExplodeFactor() or
+  setExplodeFactors().
 
-   Note that in ring charts, only the outermost ring is
-   exploded. Also note that exploding rings are only useful if
-   none of the values in the outermost dataset covers more than
-   1/4 of the ring, otherwise the exploded ring will look funny.
+  Note that in ring charts, only the outermost ring is
+  exploded. Also note that exploding rings are only useful if
+  none of the values in the outermost dataset covers more than
+  1/4 of the ring, otherwise the exploded ring will look funny.
 
-   \param explode true if the pie or ring should be exploding,
-   false otherwise
-   \sa exploding(), setExplodeFactor(), explodeFactor(),
-   setExplodeFactors(), explodeFactors(), setExplodeValues(),
-   explodeValues()
+  \param explode true if the pie or ring should be exploding,
+  false otherwise
+  \sa exploding(), setExplodeFactor(), explodeFactor(),
+  setExplodeFactors(), explodeFactors(), setExplodeValues(),
+  explodeValues()
+  */
+
+
+/**
+  \fn bool KDChartParams::explode() const
+
+  Returns whether the pie or ring chart should be exploding or not
+
+  \return true if the pie should be exploding
+  \sa setExplode, setExplodeFactor(), explodeFactor(),
+  setExplodeFactors(), explodeFactors(), setExplodeValues(),
+  explodeValues()
+  */
+
+
+/**
+  \fn void KDChartParams::setExplodeValues( QValueList<int> explodeList )
+
+  Specifies which values to explode. Explosion of values only
+  happens if setExplode( true ) has been called. Normally, all
+  values are exploded (all values on the outer ring in the case of a
+  ring chart). With this function, you have a finer control about
+  the explosion. You can specify the values that should be exploded
+  by their position. Passing an empty list here turns on explosion
+  for all pies or ring segments (but only if explosion is turned on
+  in general).
+
+  To repeat: Setting anything here has no effect if setExplode( true )
+  is not called. You can, however, set any values here even if explosion is
+  not turned on; they will be saved in case explosion will be turned on in
+  the future and then be valid automatically.
+
+  The explode factor, i.e., the amount with which a segment is moved
+  from the center can either be set for all segments with
+  \a setExplodeFactor() or for individual segments with
+  \a setExplodeFactors(). The default is 10%.
+
+  \param explodeList the list of positions in the displayed dataset that
+  should be drawn in an exploded position. Pass an empty list here to
+  explode all values.
+  \sa setExplode(), explode(), setExplodeFactor(), explodeFactor(),
+  explodeValues(), setExplodeFactors(), explodeFactors()
+  */
+
+
+/**
+  \fn QValueList<int> KDChartParams::explodeValues() const
+
+  Returns which values are exploded in a pie or ring chart. For a detailed
+  explanation of this feature, please see \a setExplodeValues().
+
+  \return the list of values that are exploded
+  \sa setExplode(), explode(), setExplodeFactor(), explodeFactor(),
+  setExplodeValues()
+  */
+
+
+/**
+  \fn void KDChartParams::setExplodeFactors( QMap<int,double> factors )
+
+  Specifies the explode factors for each segment in percent,
+  i.e. how much an exploded pie or ring segment is displaced from
+  the center. The factor is given as a double value between 0 and 1;
+  0.1 means 10%. Only used if chartType() == Pie or chartType() ==
+  Ring and explode() == true.
+
+  Segments that are not contained in the map specified here will
+  have the default explode factor of 10%, if exploding is turned on
+  for them at all. This also means that passing an empty list to
+  this method does not turn off exploding in general; use \a
+  setExplode( false ) for that.
+
+Note: This method has no immediate effect if setExplode( true )
+has not been called. It is, however, possible to preset explode
+factors and then turn on exploding later.
+
+Note: Besides giving a segment an explode factor and turning on
+exploding in general, you also need to specify to explode a
+certain segment by calling \a setExplodeValues(). This gives maximum
+flexibility as it allows you to preset explode factors and then
+explode or not not explode a segment at leisure - at the expense
+of one more method call.
+
+\param factors the list of explode factors
+\sa setExplode(), explode(), setExplodeValues(), explodeValues(),
+setExplodeFactor(), explodeFactor(), explodeFactors()
 */
 
 
 /**
-   \fn bool KDChartParams::explode() const
+  \fn QMap<int,double> KDChartParams::explodeFactors() const {
 
-   Returns whether the pie or ring chart should be exploding or not
+  Returns the list of explode factors. Each explode factor in the
+  list corresponds to the segment at the same position.
 
-   \return true if the pie should be exploding
-   \sa setExplode, setExplodeFactor(), explodeFactor(),
-   setExplodeFactors(), explodeFactors(), setExplodeValues(),
-   explodeValues()
-*/
-
-
-/**
-   \fn void KDChartParams::setExplodeValues( QValueList<int> explodeList )
-
-   Specifies which values to explode. Explosion of values only
-   happens if setExplode( true ) has been called. Normally, all
-   values are exploded (all values on the outer ring in the case of a
-   ring chart). With this function, you have a finer control about
-   the explosion. You can specify the values that should be exploded
-   by their position. Passing an empty list here turns on explosion
-   for all pies or ring segments (but only if explosion is turned on
-   in general).
-
-   To repeat: Setting anything here has no effect if setExplode( true )
-   is not called. You can, however, set any values here even if explosion is
-   not turned on; they will be saved in case explosion will be turned on in
-   the future and then be valid automatically.
-
-   The explode factor, i.e., the amount with which a segment is moved
-   from the center can either be set for all segments with
-   \a setExplodeFactor() or for individual segments with
-   \a setExplodeFactors(). The default is 10%.
-
-   \param explodeList the list of positions in the displayed dataset that
-   should be drawn in an exploded position. Pass an empty list here to
-   explode all values.
-   \sa setExplode(), explode(), setExplodeFactor(), explodeFactor(),
-   explodeValues(), setExplodeFactors(), explodeFactors()
-*/
+  \return the list of explode factors
+  \sa setExplode(), explode(), setExplodeValues(), explodeValues(),
+  setExplodeFactor(), explodeFactor(), setExplodeFactors()
+  */
 
 
 /**
-   \fn QValueList<int> KDChartParams::explodeValues() const
+  \fn void KDChartParams::setExplodeFactor( double factor )
 
-   Returns which values are exploded in a pie or ring chart. For a detailed
-   explanation of this feature, please see \a setExplodeValues().
+  Specifies the explode factor in percent, i.e. how much an
+  exploded pie or ring segment is displaced from the center. The
+  factor is given as a double value between 0 and 1; 0.1 means
+  10% and is the default. Only used if
+  chartType() == Pie or chartType() == Ring and explode() == true.
 
-   \return the list of values that are exploded
-   \sa setExplode(), explode(), setExplodeFactor(), explodeFactor(),
-   setExplodeValues()
-*/
+  Note that this method sets the explode factor for all segments
+  that are exploded but for which no more specific explode factor
+  has been set with \a setExplodeFactors(). Thus, to make the value
+  specified here the default value, you can pass an empty list to
+  \a setExplodeFactors() (which also is the default).
 
-
-/**
-   \fn void KDChartParams::setExplodeFactors( QMap<int,double> factors )
-
-   Specifies the explode factors for each segment in percent,
-   i.e. how much an exploded pie or ring segment is displaced from
-   the center. The factor is given as a double value between 0 and 1;
-   0.1 means 10%. Only used if chartType() == Pie or chartType() ==
-   Ring and explode() == true.
-
-   Segments that are not contained in the map specified here will
-   have the default explode factor of 10%, if exploding is turned on
-   for them at all. This also means that passing an empty list to
-   this method does not turn off exploding in general; use \a
-   setExplode( false ) for that.
-
-   Note: This method has no immediate effect if setExplode( true )
-   has not been called. It is, however, possible to preset explode
-   factors and then turn on exploding later.
-
-   Note: Besides giving a segment an explode factor and turning on
-   exploding in general, you also need to specify to explode a
-   certain segment by calling \a setExplodeValues(). This gives maximum
-   flexibility as it allows you to preset explode factors and then
-   explode or not not explode a segment at leisure - at the expense
-   of one more method call.
-
-   \param factors the list of explode factors
-   \sa setExplode(), explode(), setExplodeValues(), explodeValues(),
-   setExplodeFactor(), explodeFactor(), explodeFactors()
-*/
+  \param factor the explode factor
+  \sa setExplode(), explode(), explodeFactor(),
+  setExplodeValues(), explodeValues(), setExplodeFactors(),
+  explodeFactors()
+  */
 
 
 /**
-   \fn QMap<int,double> KDChartParams::explodeFactors() const {
+  \fn double KDChartParams::explodeFactor() const
 
-   Returns the list of explode factors. Each explode factor in the
-   list corresponds to the segment at the same position.
+  Returns the default explode factor, i.e., the explode factor
+  used for those segments which should be exploded but for which
+  no more specific explode factor has been set. See \a
+  setExplodeFactor() for an explanation of the value.
 
-   \return the list of explode factors
-   \sa setExplode(), explode(), setExplodeValues(), explodeValues(),
-   setExplodeFactor(), explodeFactor(), setExplodeFactors()
-*/
-
-
-/**
-   \fn void KDChartParams::setExplodeFactor( double factor )
-
-   Specifies the explode factor in percent, i.e. how much an
-   exploded pie or ring segment is displaced from the center. The
-   factor is given as a double value between 0 and 1; 0.1 means
-   10% and is the default. Only used if
-   chartType() == Pie or chartType() == Ring and explode() == true.
-
-   Note that this method sets the explode factor for all segments
-   that are exploded but for which no more specific explode factor
-   has been set with \a setExplodeFactors(). Thus, to make the value
-   specified here the default value, you can pass an empty list to
-   \a setExplodeFactors() (which also is the default).
-
-   \param factor the explode factor
-   \sa setExplode(), explode(), explodeFactor(),
-   setExplodeValues(), explodeValues(), setExplodeFactors(),
-   explodeFactors()
-*/
+  \return the explode factor
+  \sa setExplodeFactor(), setExplode(), explode()
+  */
 
 
 /**
-   \fn double KDChartParams::explodeFactor() const
+  \fn void KDChartParams::setThreeDPies( bool threeDPies )
 
-   Returns the default explode factor, i.e., the explode factor
-   used for those segments which should be exploded but for which
-   no more specific explode factor has been set. See \a
-   setExplodeFactor() for an explanation of the value.
+  Specifies whether the engine should draw the pies in 3D. Only
+  used if chartType() == Pie.
 
-   \return the explode factor
-   \sa setExplodeFactor(), setExplode(), explode()
-*/
+  \param threeDPies true if pies should be drawn with a 3D effect
+  \sa threeDPies(), setThreeDPieHeight(), threeDPieHeight()
+  */
 
 
 /**
-   \fn void KDChartParams::setThreeDPies( bool threeDPies )
+  \fn bool KDChartParams::threeDPies() const
 
-   Specifies whether the engine should draw the pies in 3D. Only
-   used if chartType() == Pie.
+  Returns whether the engine should draw any pies in 3D. Only
+  used if chartType() == Pie.
 
-   \param threeDPies true if pies should be drawn with a 3D effect
-   \sa threeDPies(), setThreeDPieHeight(), threeDPieHeight()
-*/
-
-
-/**
-   \fn bool KDChartParams::threeDPies() const
-
-   Returns whether the engine should draw any pies in 3D. Only
-   used if chartType() == Pie.
-
-   \return true if pies should be drawn with a 3D effect, false
-   otherwise
-   \sa setThreeDPies(), threeDPieHeight(), setThreeDPieHeight()
-*/
+  \return true if pies should be drawn with a 3D effect, false
+  otherwise
+  \sa setThreeDPies(), threeDPieHeight(), setThreeDPieHeight()
+  */
 
 
 /**
-   \fn void KDChartParams::setThreeDPieHeight( int pixels )
+  \fn void KDChartParams::setThreeDPieHeight( int pixels )
 
-   Specifies the height of the 3D effect for pies in pixels. Only used if
-   chartType() == Pie and threeDPies() == true. Negative values are
-   interpreted relative to the height of the pie where -100 means
-   that the 3D effect has the same height as the pie itself; values
-   smaller than -25 are hardly useful. Positive values are
-   interpreted as absolute sizes in pixels. The default is an
-   absolute value of 20 pixels.
+  Specifies the height of the 3D effect for pies in pixels. Only used if
+  chartType() == Pie and threeDPies() == true. Negative values are
+  interpreted relative to the height of the pie where -100 means
+  that the 3D effect has the same height as the pie itself; values
+  smaller than -25 are hardly useful. Positive values are
+  interpreted as absolute sizes in pixels. The default is an
+  absolute value of 20 pixels.
 
-   \param height the height of the 3D effect in pixels
-   \sa threeDHeight(), setThreeDPies(), threeDPies()
-*/
-
-
-/**
-   \fn int KDChartParams::threeDPieHeight() const
-
-   Returns the height of the 3D effect for pies in pixels. See \a
-   setThreeDPieHeight for the interpretation of the value.
-
-   \return the height of the 3D effect in pixels
-   \sa setThreeDPieHeight(), setThreeDPies(), threeDPies()
-*/
+  \param height the height of the 3D effect in pixels
+  \sa threeDHeight(), setThreeDPies(), threeDPies()
+  */
 
 
 /**
-   \fn void KDChartParams::setPieStart( int degrees )
+  \fn int KDChartParams::threeDPieHeight() const
 
-   Specifies the starting point of the pie circle. The default is the 3 o'
-   clock position which equals to 0. Positive values are angles in degrees
-   counterclockwise, negative values are angles in degrees
-   clockwise. All values will be normalized to [0;360[.
+  Returns the height of the 3D effect for pies in pixels. See \a
+  setThreeDPieHeight for the interpretation of the value.
 
-   \param degrees the starting point in degrees
-   \sa pieStart()
-*/
+  \return the height of the 3D effect in pixels
+  \sa setThreeDPieHeight(), setThreeDPies(), threeDPies()
+  */
 
 
 /**
-   \fn int KDChartParams::pieStart() const
+  \fn void KDChartParams::setPieStart( int degrees )
 
-   Returns the starting point of the pie circle. See \a setPieStart() for
-   the interpretation of these values. The return value is
-   always in the interval [0;360[
+  Specifies the starting point of the pie circle. The default is the 3 o'
+  clock position which equals to 0. Positive values are angles in degrees
+  counterclockwise, negative values are angles in degrees
+  clockwise. All values will be normalized to [0;360[.
 
-   \return the starting point of the pie circle in degrees
-   \sa setPieStart()
-*/
-
-
-/**
-   \fn void KDChartParams::setRingStart( int degrees )
-
-   Specifies the starting point of the ring circle. The default is the 3 o'
-   clock position which equals to 0. Positive values are angles in degrees
-   counterclockwise, negative values are angles in degrees
-   clockwise. All values will be normalized to [0;360[.
-
-   \param degrees the starting point in degrees
-   \sa pieStart()
-*/
+  \param degrees the starting point in degrees
+  \sa pieStart()
+  */
 
 
 /**
-   \fn int KDChartParams::ringStart() const
+  \fn int KDChartParams::pieStart() const
 
-   Returns the starting point of the ring circle. See \a
-   setRingStart() for the interpretation of these values. The
-   return value is always in the interval [0;360[
+  Returns the starting point of the pie circle. See \a setPieStart() for
+  the interpretation of these values. The return value is
+  always in the interval [0;360[
 
-   \return the starting point of the ring circle in degrees
-   \sa setRingStart()
-*/
-
-
-/**
-   \fn void KDChartParams::setRelativeRingThickness( bool relativeThickness )
-
-   Specifies whether the ring thickness should be relative to the sum of the
-   values in the dataset that the ring represents. The default is to have all
-   the rings with the same thickness which itself depends on the size of the
-   chart and the number of rings.
-
-   \param relativeThickness if true, ring thickness is relative, if false, it
-   is constant.
-   \sa relativeThickness()
-*/
+  \return the starting point of the pie circle in degrees
+  \sa setPieStart()
+  */
 
 
 /**
-   \fn bool KDChartParams::relativeRingThickness() const
+  \fn void KDChartParams::setRingStart( int degrees )
 
-   Returns whether the ring thickness is relative to the sum of values in the
-   dataset that the ring represents, or whether the ring thickness should be
-   constant.
+  Specifies the starting point of the ring circle. The default is the 3 o'
+  clock position which equals to 0. Positive values are angles in degrees
+  counterclockwise, negative values are angles in degrees
+  clockwise. All values will be normalized to [0;360[.
 
-   \return true if thickness is relative, false if it is constant
-   \sa setRelativeRingThickness()
-*/
+  \param degrees the starting point in degrees
+  \sa pieStart()
+  */
+
+
+/**
+  \fn int KDChartParams::ringStart() const
+
+  Returns the starting point of the ring circle. See \a
+  setRingStart() for the interpretation of these values. The
+  return value is always in the interval [0;360[
+
+  \return the starting point of the ring circle in degrees
+  \sa setRingStart()
+  */
+
+
+/**
+  \fn void KDChartParams::setRelativeRingThickness( bool relativeThickness )
+
+  Specifies whether the ring thickness should be relative to the sum of the
+  values in the dataset that the ring represents. The default is to have all
+  the rings with the same thickness which itself depends on the size of the
+  chart and the number of rings.
+
+  \param relativeThickness if true, ring thickness is relative, if false, it
+  is constant.
+  \sa relativeThickness()
+  */
+
+
+/**
+  \fn bool KDChartParams::relativeRingThickness() const
+
+  Returns whether the ring thickness is relative to the sum of values in the
+  dataset that the ring represents, or whether the ring thickness should be
+  constant.
+
+  \return true if thickness is relative, false if it is constant
+  \sa setRelativeRingThickness()
+  */
 
 
 
@@ -5289,67 +5289,67 @@ These methods query and set ring and pie chart-specific parameters.
 // START HILO CHART
 /** @name Hi-lo chart-specific methods.
 
-These methods query and set hi-lo chart-specific parameters.
-*/
+  These methods query and set hi-lo chart-specific parameters.
+  */
 //@{
 
 /**
-   \enum KDChartParams::HiLoChartSubType
+  \enum KDChartParams::HiLoChartSubType
 
-   The HiLo subtype. Only used when chartType == HiLo
+  The HiLo subtype. Only used when chartType == HiLo
 
-   \sa setHiLoChartSubType, hiLoChartSubType
-*/
-
-/**
-   \fn void KDChartParams::setHiLoChartSubType( HiLoChartSubType hiLoChartSubType )
-
-   Specifies the HiLo chart subtype. Only used if chartType() ==
-   HiLo
-
-   \param hiLoChartSubType the HiLo chart subtype
-   \sa hiLoChartSubType, HiLoChartSubType, setChartType, chartType
-*/
-
+  \sa setHiLoChartSubType, hiLoChartSubType
+  */
 
 /**
-   \fn KDChartParams::HiLoChartSubType KDChartParams::hiLoChartSubType() const
+  \fn void KDChartParams::setHiLoChartSubType( HiLoChartSubType hiLoChartSubType )
 
-   Returns the HiLo chart subtype. Only used if chartType() ==
-   HiLo.
+  Specifies the HiLo chart subtype. Only used if chartType() ==
+  HiLo
 
-   \return the HiLo chart sub type
-   \sa setHiLoChartSubType, HiLoChartSubType, setChartType, chartType
-*/
+  \param hiLoChartSubType the HiLo chart subtype
+  \sa hiLoChartSubType, HiLoChartSubType, setChartType, chartType
+  */
 
 
 /**
-   Specifies if and how a HiLo chart will print the Low
-   values below their respective entries. Only used if chartType() == HiLo
+  \fn KDChartParams::HiLoChartSubType KDChartParams::hiLoChartSubType() const
 
-   \note <b>setHiLoChartPrintLowValues( false )</b> will
-   deactivate printing of Low values.
+  Returns the HiLo chart subtype. Only used if chartType() ==
+  HiLo.
 
-   \param active specifies whether the values are to be printed or not.
-   \param font a Pointer to the font to be used.
-   \param size (in per mille of the chart width) the dynamic size of
-   the font to be used. If this parameter is zero the size of the
-   \c font is used instead - regardless of the size of the chart!
-   \param color the color to be used when printing the values.
-   \sa setChartType, chartType
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setHiLoChartPrintHighValues
-   \sa hiLoChartPrintLowValues, hiLoChartPrintLowValues
-   \sa hiLoChartLowValuesFontColor, hiLoChartLowValuesFontColor
-   \sa hiLoChartLowValuesFontUseRelSize, hiLoChartLowValuesFontUseRelSize
-   \sa hiLoChartLowValuesFontRelSize, hiLoChartLowValuesFontRelSize
-   \sa hiLoChartPrintHighValues, hiLoChartPrintHighValues
-   \sa hiLoChartHighValuesFontColor, hiLoChartHighValuesFontColor
-   \sa hiLoChartHighValuesFontUseRelSize, hiLoChartHighValuesFontUseRelSize
-   \sa hiLoChartHighValuesFontRelSize, hiLoChartHighValuesFontRelSize
-*/
+  \return the HiLo chart sub type
+  \sa setHiLoChartSubType, HiLoChartSubType, setChartType, chartType
+  */
+
+
+/**
+  Specifies if and how a HiLo chart will print the Low
+  values below their respective entries. Only used if chartType() == HiLo
+
+  \note <b>setHiLoChartPrintLowValues( false )</b> will
+  deactivate printing of Low values.
+
+  \param active specifies whether the values are to be printed or not.
+  \param font a Pointer to the font to be used.
+  \param size (in per mille of the chart width) the dynamic size of
+  the font to be used. If this parameter is zero the size of the
+  \c font is used instead - regardless of the size of the chart!
+  \param color the color to be used when printing the values.
+  \sa setChartType, chartType
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setHiLoChartPrintHighValues
+  \sa hiLoChartPrintLowValues, hiLoChartPrintLowValues
+  \sa hiLoChartLowValuesFontColor, hiLoChartLowValuesFontColor
+  \sa hiLoChartLowValuesFontUseRelSize, hiLoChartLowValuesFontUseRelSize
+  \sa hiLoChartLowValuesFontRelSize, hiLoChartLowValuesFontRelSize
+  \sa hiLoChartPrintHighValues, hiLoChartPrintHighValues
+  \sa hiLoChartHighValuesFontColor, hiLoChartHighValuesFontColor
+  \sa hiLoChartHighValuesFontUseRelSize, hiLoChartHighValuesFontUseRelSize
+  \sa hiLoChartHighValuesFontRelSize, hiLoChartHighValuesFontRelSize
+  */
 void KDChartParams::setHiLoChartPrintLowValues( bool active, QFont* font,
-                                                int size, QColor* color )
+        int size, QColor* color )
 {
     _hiLoChartPrintLowValues = active;
     if ( font )
@@ -5367,112 +5367,112 @@ void KDChartParams::setHiLoChartPrintLowValues( bool active, QFont* font,
 
 
 /**
-   \fn bool KDChartParams::hiLoChartPrintLowValues() const
+  \fn bool KDChartParams::hiLoChartPrintLowValues() const
 
-   Returns whether the low values
-   will be printed under their respective entries.
+  Returns whether the low values
+  will be printed under their respective entries.
 
-   \return whether the low values
-   will be printed under their respective entries.
+  \return whether the low values
+  will be printed under their respective entries.
 
-   \sa setHiLoChartPrintLowValues, setHiLoChartPrintHighValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
-
-
-/**
-   \fn QFont KDChartParams::hiLoChartLowValuesFont() const
-
-   Returns the font to be used for printing the
-   low values
-
-   \returns the font to be used for printing the
-   low values
-
-   \sa setHiLoChartPrintLowValues, setHiLoChartPrintHighValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setHiLoChartPrintLowValues, setHiLoChartPrintHighValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   \fn bool KDChartParams::hiLoChartLowValuesUseFontRelSize() const
+  \fn QFont KDChartParams::hiLoChartLowValuesFont() const
 
-   Returns whether the font size to be used for printing the
-   low values is calculated dynamically.
+  Returns the font to be used for printing the
+  low values
 
-   \return whether the font size to be used for printing the
-   low values is calculated dynamically.
+  \returns the font to be used for printing the
+  low values
 
-   \sa setHiLoChartPrintLowValues, setHiLoChartPrintHighValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
-
-
-/**
-   \fn int KDChartParams::hiLoChartLowValuesFontRelSize() const
-
-   Returns the relative size (in per mille of the chart width)
-   of font size to be used for printing the
-   low values.
-
-   \return the relative size (in per mille of the chart width)
-   of font size to be used for printing the
-   low values.
-
-   \sa setHiLoChartPrintLowValues, setHiLoChartPrintHighValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setHiLoChartPrintLowValues, setHiLoChartPrintHighValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   \fn QColor KDChartParams::hiLoChartLowValuesColor() const
+  \fn bool KDChartParams::hiLoChartLowValuesUseFontRelSize() const
 
-   Returns the colour of the font size to be used for printing the
-   low values.
+  Returns whether the font size to be used for printing the
+  low values is calculated dynamically.
 
-   \return the colour of the font size to be used for printing the
-   low values.
+  \return whether the font size to be used for printing the
+  low values is calculated dynamically.
 
-   \sa setHiLoChartPrintLowValues, setHiLoChartPrintHighValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setHiLoChartPrintLowValues, setHiLoChartPrintHighValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   Specifies if and how a HiLo chart will print the High
-   values below their respective entries.
-   Only used if chartType() == HiLo
+  \fn int KDChartParams::hiLoChartLowValuesFontRelSize() const
 
-   \note <b>setHiLoChartPrintHighValues( false )</b> will
-   deactivate printing of High values.
+  Returns the relative size (in per mille of the chart width)
+  of font size to be used for printing the
+  low values.
 
-   \param active specifies whether the values are to be printed or not.
-   \param font specifies a Pointer to the font to be used.
-   \param size (in per mille of the chart width) specifies the
-   dynamic size of the font to be used. If this parameter is zero
-   the size of the
-   \c font is used instead - regardless of the size of the chart!
-   \param specifies the color the color to be used when printing
-   the values.
-   \sa setHiLoChartPrintLowValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-   \sa hiLoChartPrintHighValues, hiLoChartPrintHighValues
-   \sa hiLoChartHighValuesFontColor, hiLoChartHighValuesFontColor
-   \sa hiLoChartHighValuesFontUseRelSize, hiLoChartHighValuesFontUseRelSize
-   \sa hiLoChartHighValuesFontRelSize, hiLoChartHighValuesFontRelSize
-   \sa hiLoChartPrintLowValues, hiLoChartPrintLowValues
-   \sa hiLoChartLowValuesFontColor, hiLoChartLowValuesFontColor
-   \sa hiLoChartLowValuesFontUseRelSize, hiLoChartLowValuesFontUseRelSize
-   \sa hiLoChartLowValuesFontRelSize, hiLoChartLowValuesFontRelSize
-*/
+  \return the relative size (in per mille of the chart width)
+  of font size to be used for printing the
+  low values.
+
+  \sa setHiLoChartPrintLowValues, setHiLoChartPrintHighValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
+
+
+/**
+  \fn QColor KDChartParams::hiLoChartLowValuesColor() const
+
+  Returns the colour of the font size to be used for printing the
+  low values.
+
+  \return the colour of the font size to be used for printing the
+  low values.
+
+  \sa setHiLoChartPrintLowValues, setHiLoChartPrintHighValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
+
+
+/**
+  Specifies if and how a HiLo chart will print the High
+  values below their respective entries.
+  Only used if chartType() == HiLo
+
+  \note <b>setHiLoChartPrintHighValues( false )</b> will
+  deactivate printing of High values.
+
+  \param active specifies whether the values are to be printed or not.
+  \param font specifies a Pointer to the font to be used.
+  \param size (in per mille of the chart width) specifies the
+  dynamic size of the font to be used. If this parameter is zero
+  the size of the
+  \c font is used instead - regardless of the size of the chart!
+  \param specifies the color the color to be used when printing
+  the values.
+  \sa setHiLoChartPrintLowValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  \sa hiLoChartPrintHighValues, hiLoChartPrintHighValues
+  \sa hiLoChartHighValuesFontColor, hiLoChartHighValuesFontColor
+  \sa hiLoChartHighValuesFontUseRelSize, hiLoChartHighValuesFontUseRelSize
+  \sa hiLoChartHighValuesFontRelSize, hiLoChartHighValuesFontRelSize
+  \sa hiLoChartPrintLowValues, hiLoChartPrintLowValues
+  \sa hiLoChartLowValuesFontColor, hiLoChartLowValuesFontColor
+  \sa hiLoChartLowValuesFontUseRelSize, hiLoChartLowValuesFontUseRelSize
+  \sa hiLoChartLowValuesFontRelSize, hiLoChartLowValuesFontRelSize
+  */
 void KDChartParams::setHiLoChartPrintHighValues( bool active, QFont* font,
-                                                 int size, QColor* color )
+        int size, QColor* color )
 {
     _hiLoChartPrintHighValues = active;
     if ( font )
@@ -5490,111 +5490,111 @@ void KDChartParams::setHiLoChartPrintHighValues( bool active, QFont* font,
 
 
 /**
-   \fn bool KDChartParams::hiLoChartPrintHighValues() const
+  \fn bool KDChartParams::hiLoChartPrintHighValues() const
 
-   Returns whether the high values
-   will be printed under their respective entries.
+  Returns whether the high values
+  will be printed under their respective entries.
 
-   \return whether the high values
-   will be printed under their respective entries.
+  \return whether the high values
+  will be printed under their respective entries.
 
-   \sa setHiLoChartPrintHighValues, setHiLoChartPrintLowValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
-
-
-/**
-   \fn QFont KDChartParams::hiLoChartHighValuesFont() const
-
-   Returns the font to be used for printing the
-   high values.
-
-   \returns the font to be used for printing the
-   high values.
-
-   \sa setHiLoChartPrintHighValues, setHiLoChartPrintLowValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setHiLoChartPrintHighValues, setHiLoChartPrintLowValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   \fn bool KDChartParams::hiLoChartHighValuesUseFontRelSize() const
+  \fn QFont KDChartParams::hiLoChartHighValuesFont() const
 
-   Returns whether the font size to be used for printing the
-   high values is calculated dynamically.
+  Returns the font to be used for printing the
+  high values.
 
-   \return whether the font size to be used for printing the
-   high values is calculated dynamically.
+  \returns the font to be used for printing the
+  high values.
 
-   \sa setHiLoChartPrintHighValues, setHiLoChartPrintLowValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
-
-
-/**
-   \fn int KDChartParams::hiLoChartHighValuesFontRelSize() const
-
-   Returns the relative size (in per mille of the chart width)
-   of font size to be used for printing the
-   high values.
-
-   \return the relative size (in per mille of the chart width)
-   of font size to be used for printing the
-   high values.
-
-   \sa setHiLoChartPrintHighValues, setHiLoChartPrintHighValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setHiLoChartPrintHighValues, setHiLoChartPrintLowValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   \fn QColor KDChartParams::hiLoChartHighValuesColor() const
+  \fn bool KDChartParams::hiLoChartHighValuesUseFontRelSize() const
 
-   Returns the colour of the font size to be used for printing the
-   high values.
+  Returns whether the font size to be used for printing the
+  high values is calculated dynamically.
 
-   \return the colour of the font size to be used for printing the
-   high values.
+  \return whether the font size to be used for printing the
+  high values is calculated dynamically.
 
-   \sa setHiLoChartPrintHighValues, setHiLoChartPrintLowValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setHiLoChartPrintHighValues, setHiLoChartPrintLowValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   Specifies if and how a HiLo chart will print the Open values
-   below their respective entries.
-   Only used if chartType() == HiLo and if the HiLo chart sub type
-   shows open values.
+  \fn int KDChartParams::hiLoChartHighValuesFontRelSize() const
 
-   \note <b>setHiLoChartPrintOpenValues( false )</b> will
-   deactivate printing of Open values.
+  Returns the relative size (in per mille of the chart width)
+  of font size to be used for printing the
+  high values.
 
-   \param active specifies whether the values are to be printed or not.
-   \param font a Pointer to the font to be used.
-   \param size (in per mille of the chart width) the dynamic size of
-   the font to be used. If this parameter is zero the size of the
-   \c font is used instead - regardless of the size of the chart!
-   \param color the color to be used when printing the values.
-   \sa setHiLoChartPrintCloseValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-   \sa hiLoChartPrintOpenValues, hiLoChartPrintOpenValues
-   \sa hiLoChartOpenValuesFontColor, hiLoChartOpenValuesFontColor
-   \sa hiLoChartOpenValuesFontUseRelSize, hiLoChartOpenValuesFontUseRelSize
-   \sa hiLoChartOpenValuesFontRelSize, hiLoChartOpenValuesFontRelSize
-   \sa hiLoChartPrintCloseValues, hiLoChartPrintCloseValues
-   \sa hiLoChartCloseValuesFontColor, hiLoChartCloseValuesFontColor
-   \sa hiLoChartCloseValuesFontUseRelSize, hiLoChartCloseValuesFontUseRelSize
-   \sa hiLoChartCloseValuesFontRelSize, hiLoChartCloseValuesFontRelSize
-*/
+  \return the relative size (in per mille of the chart width)
+  of font size to be used for printing the
+  high values.
+
+  \sa setHiLoChartPrintHighValues, setHiLoChartPrintHighValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
+
+
+/**
+  \fn QColor KDChartParams::hiLoChartHighValuesColor() const
+
+  Returns the colour of the font size to be used for printing the
+  high values.
+
+  \return the colour of the font size to be used for printing the
+  high values.
+
+  \sa setHiLoChartPrintHighValues, setHiLoChartPrintLowValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
+
+
+/**
+  Specifies if and how a HiLo chart will print the Open values
+  below their respective entries.
+  Only used if chartType() == HiLo and if the HiLo chart sub type
+  shows open values.
+
+  \note <b>setHiLoChartPrintOpenValues( false )</b> will
+  deactivate printing of Open values.
+
+  \param active specifies whether the values are to be printed or not.
+  \param font a Pointer to the font to be used.
+  \param size (in per mille of the chart width) the dynamic size of
+  the font to be used. If this parameter is zero the size of the
+  \c font is used instead - regardless of the size of the chart!
+  \param color the color to be used when printing the values.
+  \sa setHiLoChartPrintCloseValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  \sa hiLoChartPrintOpenValues, hiLoChartPrintOpenValues
+  \sa hiLoChartOpenValuesFontColor, hiLoChartOpenValuesFontColor
+  \sa hiLoChartOpenValuesFontUseRelSize, hiLoChartOpenValuesFontUseRelSize
+  \sa hiLoChartOpenValuesFontRelSize, hiLoChartOpenValuesFontRelSize
+  \sa hiLoChartPrintCloseValues, hiLoChartPrintCloseValues
+  \sa hiLoChartCloseValuesFontColor, hiLoChartCloseValuesFontColor
+  \sa hiLoChartCloseValuesFontUseRelSize, hiLoChartCloseValuesFontUseRelSize
+  \sa hiLoChartCloseValuesFontRelSize, hiLoChartCloseValuesFontRelSize
+  */
 void KDChartParams::setHiLoChartPrintOpenValues( bool active, QFont* font,
-                                                 uint size, QColor* color )
+        uint size, QColor* color )
 {
     _hiLoChartPrintOpenValues = active;
     if ( font )
@@ -5612,109 +5612,109 @@ void KDChartParams::setHiLoChartPrintOpenValues( bool active, QFont* font,
 
 
 /**
-   \fn bool KDChartParams::hiLoChartPrintOpenValues() const
+  \fn bool KDChartParams::hiLoChartPrintOpenValues() const
 
-   Returns whether the open values will be printed under their
-   respective entries.
+  Returns whether the open values will be printed under their
+  respective entries.
 
-   \return whether the open values will be printed under their
-   respective entries.
+  \return whether the open values will be printed under their
+  respective entries.
 
-   \sa setHiLoChartPrintOpenValues, setHiLoChartPrintCloseValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
-
-
-/**
-   \fn QFont KDChartParams::hiLoChartOpenValuesFont() const
-
-   Returns the font to be used for printing the
-   open values.
-
-   \returns the font to be used for printing the
-   open values.
-
-   \sa setHiLoChartPrintOpenValues, setHiLoChartPrintCloseValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setHiLoChartPrintOpenValues, setHiLoChartPrintCloseValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   \fn bool KDChartParams::hiLoChartOpenValuesUseFontRelSize() const
+  \fn QFont KDChartParams::hiLoChartOpenValuesFont() const
 
-   Returns whether the font size to be used for printing the
-   open values is calculated dynamically.
+  Returns the font to be used for printing the
+  open values.
 
-   \return whether the font size to be used for printing the
-   open values is calculated dynamically.
+  \returns the font to be used for printing the
+  open values.
 
-   \sa setHiLoChartPrintOpenValues, setHiLoChartPrintCloseValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
-
-
-/**
-   \fn int KDChartParams::hiLoChartOpenValuesFontRelSize() const
-
-   Returns the relative size (in per mille of the chart width)
-   of font size to be used for printing the open values.
-
-   \return the relative size (in per mille of the chart width) of
-   font size to be used for printing the open values.
-
-   \sa setHiLoChartPrintOpenValues, setHiLoChartPrintCloseValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setHiLoChartPrintOpenValues, setHiLoChartPrintCloseValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   \fn QColor KDChartParams::hiLoChartOpenValuesColor() const
+  \fn bool KDChartParams::hiLoChartOpenValuesUseFontRelSize() const
 
-   Returns the colour of the font size to be used for printing the
-   open values.
+  Returns whether the font size to be used for printing the
+  open values is calculated dynamically.
 
-   \return the colour of the font size to be used for printing the
-   open values.
+  \return whether the font size to be used for printing the
+  open values is calculated dynamically.
 
-   \sa setHiLoChartPrintOpenValues, setHiLoChartPrintCloseValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setHiLoChartPrintOpenValues, setHiLoChartPrintCloseValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   Specifies if and how a HiLo chart will print the Close
-   values next to their respective entries.
-   Only used if chartType() == HiLo and the HiLo chart sub type
-   contains Close values.
+  \fn int KDChartParams::hiLoChartOpenValuesFontRelSize() const
 
-   \note <b>setHiLoChartPrintCloseValues( false )</b> will
-   deactivate printing of Close values.
+  Returns the relative size (in per mille of the chart width)
+  of font size to be used for printing the open values.
 
-   \param active specifies whether the values are to be printed or not.
-   \param font specifies a Pointer to the font to be used.
-   \param size (in per mille of the chart width) specifies the dynamic size of
-   the font to be used. If this parameter is zero the size of the
-   \c font is used instead - regardless of the size of the chart!
-   \param specifies the color the color to be used when printing the values.
-   \sa setHiLoChartPrintOpenValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-   \sa hiLoChartPrintCloseValues, hiLoChartPrintCloseValues
-   \sa hiLoChartCloseValuesFontColor, hiLoChartCloseValuesFontColor
-   \sa hiLoChartCloseValuesFontUseRelSize, hiLoChartCloseValuesFontUseRelSize
-   \sa hiLoChartCloseValuesFontRelSize, hiLoChartCloseValuesFontRelSize
-   \sa hiLoChartPrintOpenValues, hiLoChartPrintOpenValues
-   \sa hiLoChartOpenValuesFontColor, hiLoChartOpenValuesFontColor
-   \sa hiLoChartOpenValuesFontUseRelSize, hiLoChartOpenValuesFontUseRelSize
-   \sa hiLoChartOpenValuesFontRelSize, hiLoChartOpenValuesFontRelSize
-*/
+  \return the relative size (in per mille of the chart width) of
+  font size to be used for printing the open values.
+
+  \sa setHiLoChartPrintOpenValues, setHiLoChartPrintCloseValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
+
+
+/**
+  \fn QColor KDChartParams::hiLoChartOpenValuesColor() const
+
+  Returns the colour of the font size to be used for printing the
+  open values.
+
+  \return the colour of the font size to be used for printing the
+  open values.
+
+  \sa setHiLoChartPrintOpenValues, setHiLoChartPrintCloseValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
+
+
+/**
+  Specifies if and how a HiLo chart will print the Close
+  values next to their respective entries.
+  Only used if chartType() == HiLo and the HiLo chart sub type
+  contains Close values.
+
+  \note <b>setHiLoChartPrintCloseValues( false )</b> will
+  deactivate printing of Close values.
+
+  \param active specifies whether the values are to be printed or not.
+  \param font specifies a Pointer to the font to be used.
+  \param size (in per mille of the chart width) specifies the dynamic size of
+  the font to be used. If this parameter is zero the size of the
+  \c font is used instead - regardless of the size of the chart!
+  \param specifies the color the color to be used when printing the values.
+  \sa setHiLoChartPrintOpenValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  \sa hiLoChartPrintCloseValues, hiLoChartPrintCloseValues
+  \sa hiLoChartCloseValuesFontColor, hiLoChartCloseValuesFontColor
+  \sa hiLoChartCloseValuesFontUseRelSize, hiLoChartCloseValuesFontUseRelSize
+  \sa hiLoChartCloseValuesFontRelSize, hiLoChartCloseValuesFontRelSize
+  \sa hiLoChartPrintOpenValues, hiLoChartPrintOpenValues
+  \sa hiLoChartOpenValuesFontColor, hiLoChartOpenValuesFontColor
+  \sa hiLoChartOpenValuesFontUseRelSize, hiLoChartOpenValuesFontUseRelSize
+  \sa hiLoChartOpenValuesFontRelSize, hiLoChartOpenValuesFontRelSize
+  */
 void KDChartParams::setHiLoChartPrintCloseValues( bool active, QFont* font,
-                                                  int size, QColor* color )
+        int size, QColor* color )
 {
     _hiLoChartPrintCloseValues = active;
     if ( font )
@@ -5731,194 +5731,194 @@ void KDChartParams::setHiLoChartPrintCloseValues( bool active, QFont* font,
 }
 
 /**
-   \fn bool KDChartParams::hiLoChartPrintCloseValues() const
+  \fn bool KDChartParams::hiLoChartPrintCloseValues() const
 
-   Returns whether the close values will be printed under their
-   respective entries.
+  Returns whether the close values will be printed under their
+  respective entries.
 
-   \return whether the close values will be printed under their
-   respective entries.
+  \return whether the close values will be printed under their
+  respective entries.
 
-   \sa setHiLoChartPrintCloseValues, setHiLoChartPrintOpenValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
-
-
-/**
-   \fn QFont KDChartParams::hiLoChartCloseValuesFont() const
-
-   Returns the font to be used for printing the close values.
-
-   \returns the font to be used for printing the close values.
-
-   \sa setHiLoChartPrintCloseValues, setHiLoChartPrintOpenValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setHiLoChartPrintCloseValues, setHiLoChartPrintOpenValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   \fn bool KDChartParams::hiLoChartCloseValuesUseFontRelSize() const
+  \fn QFont KDChartParams::hiLoChartCloseValuesFont() const
 
-   Returns whether the font size to be used for printing the close
-   values is calculated dynamically.
+  Returns the font to be used for printing the close values.
 
-   \return whether the font size to be used for printing the close
-   values is calculated dynamically.
+  \returns the font to be used for printing the close values.
 
-   \sa setHiLoChartPrintCloseValues, setHiLoChartPrintOpenValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setHiLoChartPrintCloseValues, setHiLoChartPrintOpenValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   \fn int KDChartParams::hiLoChartCloseValuesFontRelSize() const
-   Returns the relative size (in per mille of the chart width) of
-   font size to be used for printing the close values.
+  \fn bool KDChartParams::hiLoChartCloseValuesUseFontRelSize() const
 
-   \return the relative size (in per mille of the chart width) of
-   font size to be used for printing the close values.
+  Returns whether the font size to be used for printing the close
+  values is calculated dynamically.
 
-   \sa setHiLoChartPrintCloseValues, setHiLoChartPrintOpenValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
+  \return whether the font size to be used for printing the close
+  values is calculated dynamically.
 
-
-/**
-   \fn QColor KDChartParams::hiLoChartCloseValuesColor() const
-
-   Returns the colour of the font size to be used for printing the
-   close values.
-
-   \return the colour of the font size to be used for printing the
-   close values.
-
-   \sa setHiLoChartPrintCloseValues, setHiLoChartPrintOpenValues
-   \sa setHiLoChartSubType, hiLoChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setHiLoChartPrintCloseValues, setHiLoChartPrintOpenValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   \fn void KDChartParams::setHiLoChartPrintFirstValues( bool, QFont*, uint, QColor* )
+  \fn int KDChartParams::hiLoChartCloseValuesFontRelSize() const
+  Returns the relative size (in per mille of the chart width) of
+  font size to be used for printing the close values.
 
-   \obsolete
+  \return the relative size (in per mille of the chart width) of
+  font size to be used for printing the close values.
 
-   This method is obsolete; use \a setHiLoChartPrintOpenValues().
-*/
-
-
-/**
-   \fn bool KDChartParams::hiLoChartPrintFirstValues() const
-
-   \obsolete
-
-   This method is obsolete; use \a hiLoChartPrintOpenValues()
-   instead.
-*/
+  \sa setHiLoChartPrintCloseValues, setHiLoChartPrintOpenValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   \fn QFont KDChartParams::hiLoChartFirstValuesFont() const
+  \fn QColor KDChartParams::hiLoChartCloseValuesColor() const
 
-   \obsolete
+  Returns the colour of the font size to be used for printing the
+  close values.
 
-   This method is obsolete; use \a hiLoChartOpenValuesFont()
-   instead.
-*/
+  \return the colour of the font size to be used for printing the
+  close values.
 
-
-/**
-   \fn bool KDChartParams::hiLoChartFirstValuesUseFontRelSize() const
-
-   \obsolete
-
-   This method is obsolete; use \a
-   hiLoChartOpenValuesUseFontRelSize() instead.
-*/
+  \sa setHiLoChartPrintCloseValues, setHiLoChartPrintOpenValues
+  \sa setHiLoChartSubType, hiLoChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   \fn int KDChartParams::hiLoChartFirstValuesFontRelSize() const
+  \fn void KDChartParams::setHiLoChartPrintFirstValues( bool, QFont*, uint, QColor* )
 
-   \obsolete
+  \obsolete
 
-   This method is obsolete; use \a
-   hiLoChartOpenValuesFontRelSize() instead.
-*/
-
-
-/**
-   \fn QColor KDChartParams::hiLoChartFirstValuesColor() const
-
-   \obsolete
-
-   This method is obsolete; use \a hiLoChartOpenValuesColor()
-   instead.
-*/
+  This method is obsolete; use \a setHiLoChartPrintOpenValues().
+  */
 
 
 /**
-   \fn void KDChartParams::setHiLoChartPrintLastValues( bool, QFont*, int, QColor* )
+  \fn bool KDChartParams::hiLoChartPrintFirstValues() const
 
-   \obsolete
+  \obsolete
 
-   This method is obsolete; use \a setHiLoChartPrintCloseValues()
-   instead.
-*/
-
-
-/**
-   \fn bool KDChartParams::hiLoChartPrintLastValues() const
-
-   \obsolete
-
-   This method is obsolete; use \a hiLoChartPrintCloseValues()
-   instead.
-*/
+  This method is obsolete; use \a hiLoChartPrintOpenValues()
+  instead.
+  */
 
 
 /**
-   \fn QFont KDChartParams::hiLoChartLastValuesFont() const
+  \fn QFont KDChartParams::hiLoChartFirstValuesFont() const
 
-   \obsolete
+  \obsolete
 
-   This method is obsolete; use \a hiLoChartCloseValuesFont()
-   instead.
-*/
-
-
-/**
-   \fn bool KDChartParams::hiLoChartLastValuesUseFontRelSize() const
-
-   \obsolete
-
-   This method is obsolete; use \a hiLoChartCloseValuesUseFontRelSize()
-   instead.
-*/
+  This method is obsolete; use \a hiLoChartOpenValuesFont()
+  instead.
+  */
 
 
 /**
-   \fn int KDChartParams::hiLoChartLastValuesFontRelSize() const
+  \fn bool KDChartParams::hiLoChartFirstValuesUseFontRelSize() const
 
-   \obsolete
+  \obsolete
 
-   This method is obsolete; use \a hiLoChartCloseValuesFontRelSize()
-   instead.
-*/
+  This method is obsolete; use \a
+  hiLoChartOpenValuesUseFontRelSize() instead.
+  */
 
 
 /**
-   \fn QColor KDChartParams::hiLoChartLastValuesColor() const
+  \fn int KDChartParams::hiLoChartFirstValuesFontRelSize() const
 
-   \obsolete
+  \obsolete
 
-   This method is obsolete; use \a hiLoChartCloseValuesColor()
-   instead.
-*/
+  This method is obsolete; use \a
+  hiLoChartOpenValuesFontRelSize() instead.
+  */
+
+
+/**
+  \fn QColor KDChartParams::hiLoChartFirstValuesColor() const
+
+  \obsolete
+
+  This method is obsolete; use \a hiLoChartOpenValuesColor()
+  instead.
+  */
+
+
+/**
+  \fn void KDChartParams::setHiLoChartPrintLastValues( bool, QFont*, int, QColor* )
+
+  \obsolete
+
+  This method is obsolete; use \a setHiLoChartPrintCloseValues()
+  instead.
+  */
+
+
+/**
+  \fn bool KDChartParams::hiLoChartPrintLastValues() const
+
+  \obsolete
+
+  This method is obsolete; use \a hiLoChartPrintCloseValues()
+  instead.
+  */
+
+
+/**
+  \fn QFont KDChartParams::hiLoChartLastValuesFont() const
+
+  \obsolete
+
+  This method is obsolete; use \a hiLoChartCloseValuesFont()
+  instead.
+  */
+
+
+/**
+  \fn bool KDChartParams::hiLoChartLastValuesUseFontRelSize() const
+
+  \obsolete
+
+  This method is obsolete; use \a hiLoChartCloseValuesUseFontRelSize()
+  instead.
+  */
+
+
+/**
+  \fn int KDChartParams::hiLoChartLastValuesFontRelSize() const
+
+  \obsolete
+
+  This method is obsolete; use \a hiLoChartCloseValuesFontRelSize()
+  instead.
+  */
+
+
+/**
+  \fn QColor KDChartParams::hiLoChartLastValuesColor() const
+
+  \obsolete
+
+  This method is obsolete; use \a hiLoChartCloseValuesColor()
+  instead.
+  */
 
 
 
@@ -5928,67 +5928,67 @@ void KDChartParams::setHiLoChartPrintCloseValues( bool active, QFont* font,
 // START BOX/WHISKER CHART
 /** @name Box-and-whisker chart-specific methods.
 
-These methods query and set box-and-whisker chart-specific parameters.
-*/
+  These methods query and set box-and-whisker chart-specific parameters.
+  */
 //@{
 
 /**
-   \enum KDChartParams::BWChartSubType
+  \enum KDChartParams::BWChartSubType
 
-   The BoxWhisker subtype. Only used when chartType == BoxWhisker
+  The BoxWhisker subtype. Only used when chartType == BoxWhisker
 
-   \sa setBWChartSubType, bWChartSubType
-*/
-
-
-/**
-   \enum KDChartParams::BWStatVal
-
-   The different statistical values that can be printed into or
-   asked from a Box and Whisker chart. Only used when chartType == BoxWhisker
-
-   \sa setBWChartSubType, bWChartSubType
-*/               // use the following syntax to avoid warnings:
+  \sa setBWChartSubType, bWChartSubType
+  */
 
 
 /**
-   \fn void KDChartParams::setBWChartSubType( BWChartSubType bWChartSubType )
+  \enum KDChartParams::BWStatVal
 
-   Specifies the BoxWhisker chart subtype. Only used if chartType() ==
-   BoxWhisker
+  The different statistical values that can be printed into or
+  asked from a Box and Whisker chart. Only used when chartType == BoxWhisker
 
-   \param bWChartSubType the BoxWhisker chart subtype
-   \sa bWChartSubType, BWChartSubType, setChartType, chartType
-*/
-
-
-/**
-   \fn KDChartParams::BWChartSubType KDChartParams::bWChartSubType() const
-
-   Returns the BoxWhisker chart subtype. Only used if chartType() ==
-   BoxWhisker.
-
-   \return the BoxWhisker chart sub type
-   \sa setBWChartSubType, BWChartSubType, setChartType, chartType
-*/
-
+  \sa setBWChartSubType, bWChartSubType
+  */               // use the following syntax to avoid warnings:
 
 
 /**
-   Specifies the factors to be used to calculate the position of
-   the inner (or outer, resp.) fences.
+  \fn void KDChartParams::setBWChartSubType( BWChartSubType bWChartSubType )
 
-   Default values for both inner fences are 1.5 times the
-   interquartile range from the corresponding quartile,
-   for both outer fences default is 3.0 times the IQR.
+  Specifies the BoxWhisker chart subtype. Only used if chartType() ==
+  BoxWhisker
 
-   \sa bWChartFences
-   \sa setBWChartOutValMarkerSize, setBWChartPrintStatistics
-   \sa setBWChartSubType, bWChartSubType
-   \sa setChartType, chartType
-*/
+  \param bWChartSubType the BoxWhisker chart subtype
+  \sa bWChartSubType, BWChartSubType, setChartType, chartType
+  */
+
+
+/**
+  \fn KDChartParams::BWChartSubType KDChartParams::bWChartSubType() const
+
+  Returns the BoxWhisker chart subtype. Only used if chartType() ==
+  BoxWhisker.
+
+  \return the BoxWhisker chart sub type
+  \sa setBWChartSubType, BWChartSubType, setChartType, chartType
+  */
+
+
+
+/**
+  Specifies the factors to be used to calculate the position of
+  the inner (or outer, resp.) fences.
+
+  Default values for both inner fences are 1.5 times the
+  interquartile range from the corresponding quartile,
+  for both outer fences default is 3.0 times the IQR.
+
+  \sa bWChartFences
+  \sa setBWChartOutValMarkerSize, setBWChartPrintStatistics
+  \sa setBWChartSubType, bWChartSubType
+  \sa setChartType, chartType
+  */
 void KDChartParams::setBWChartFences( double upperInner, double lowerInner,
-                                      double upperOuter, double lowerOuter )
+        double upperOuter, double lowerOuter )
 {
     _BWChartFenceUpperInner = upperInner;
     _BWChartFenceLowerInner = lowerInner;
@@ -5996,16 +5996,16 @@ void KDChartParams::setBWChartFences( double upperInner, double lowerInner,
     _BWChartFenceLowerOuter = lowerOuter;
 }
 /**
-   Retrievs the factors to be used to calculate the position of
-   the inner (or outer, resp.) fences.
+  Retrievs the factors to be used to calculate the position of
+  the inner (or outer, resp.) fences.
 
-   \sa setBWChartFences
-   \sa setBWChartOutValMarkerSize, setBWChartPrintStatistics
-   \sa setBWChartSubType, bWChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setBWChartFences
+  \sa setBWChartOutValMarkerSize, setBWChartPrintStatistics
+  \sa setBWChartSubType, bWChartSubType
+  \sa setChartType, chartType
+  */
 void KDChartParams::bWChartFences( double& upperInner, double& lowerInner,
-                                   double& upperOuter, double& lowerOuter ) const
+        double& upperOuter, double& lowerOuter ) const
 {
     upperInner = _BWChartFenceUpperInner;
     lowerInner = _BWChartFenceLowerInner;
@@ -6015,101 +6015,101 @@ void KDChartParams::bWChartFences( double& upperInner, double& lowerInner,
 
 
 /**
-   \fn void KDChartParams::setBWChartBrush( const QBrush& bWChartBrush )
+  \fn void KDChartParams::setBWChartBrush( const QBrush& bWChartBrush )
 
-   Specifies the brush to be used to fill the BoxWhisker charts.
+  Specifies the brush to be used to fill the BoxWhisker charts.
 
-   \param bWChartBrush the brush to be used
-   \sa bWChartBrush, setChartType, chartType
-*/
-
-
-/**
-   \fn QBrush KDChartParams::bWChartBrush() const
-
-   Returns the brush to be used to fill the BoxWhisker charts.
-
-   \return the brush to be used
-   \sa setBWChartBrush, setChartType, chartType
-*/
+  \param bWChartBrush the brush to be used
+  \sa bWChartBrush, setChartType, chartType
+  */
 
 
 /**
-   \fn void KDChartParams::setBWChartOutValMarkerSize( int size )
+  \fn QBrush KDChartParams::bWChartBrush() const
 
-   Specifies how big outlier markers (representing the values outside
-   the inner fences) will be drawn.
+  Returns the brush to be used to fill the BoxWhisker charts.
 
-   When specifying a value different from 0 the chart will show the outlier
-   markers in the respective size, use zero to disable showing the outliers,
-   use negative values to have the marker size calculated dynamically
-   (in percent of the current boxes' width).  Thus marker sizes will be
-   recalculated after modification of either the number of boxes
-   or the size of the entire chart.
-
-   \note Shapes of the outlier markers depend on their distance to the
-   respective fence: circles are used to represent near outside values
-   while asteriscs indicate far outside values (the ones outside the
-   outer fence), you may use setBWChartFences() to specify the factor
-   to be used to calculate the value of the inner and outer fence.
-
-   \sa bWChartOutValMarkerSize
-   \sa setBWChartFences, setBWChartPrintStatistics
-   \sa setBWChartSubType, bWChartSubType
-   \sa setChartType, chartType
-*/
+  \return the brush to be used
+  \sa setBWChartBrush, setChartType, chartType
+  */
 
 
 /**
-   \fn int KDChartParams::bWChartOutValMarkerSize() const
+  \fn void KDChartParams::setBWChartOutValMarkerSize( int size )
 
-   Returns how big outlier markers (representing the values outside
-   the inner fences) will be drawn.
+  Specifies how big outlier markers (representing the values outside
+  the inner fences) will be drawn.
 
-   \return how big outside value markers will be drawn, zero means
-   they will be invisible, negative values indicate that the size
-   is calculated dynamically based upon the current boxes' width.
+  When specifying a value different from 0 the chart will show the outlier
+  markers in the respective size, use zero to disable showing the outliers,
+  use negative values to have the marker size calculated dynamically
+  (in percent of the current boxes' width).  Thus marker sizes will be
+  recalculated after modification of either the number of boxes
+  or the size of the entire chart.
 
-   \sa setBWChartOutValMarkerSize
-   \sa setBWChartFences, setBWChartPrintStatistics
-   \sa setBWChartSubType, bWChartSubType
-   \sa setChartType, chartType
-*/
+  \note Shapes of the outlier markers depend on their distance to the
+  respective fence: circles are used to represent near outside values
+  while asteriscs indicate far outside values (the ones outside the
+  outer fence), you may use setBWChartFences() to specify the factor
+  to be used to calculate the value of the inner and outer fence.
+
+  \sa bWChartOutValMarkerSize
+  \sa setBWChartFences, setBWChartPrintStatistics
+  \sa setBWChartSubType, bWChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   Specifies if and how a BoxWhisker chart will print the
-   respective statistical values near to the drawing.
-   Only used if chartType() == BoxWhisker
+  \fn int KDChartParams::bWChartOutValMarkerSize() const
 
-   \note <b>setBWChartPrintStatistics( BWStatVal, false )</b> will
-   deactivate printing of the respective statistical values.
+  Returns how big outlier markers (representing the values outside
+  the inner fences) will be drawn.
 
-   \param statValue specifies the statistical value to be set, use
-   BWStatValALL to define equal settings for all
-   of the statistical values.
-   \param active specifies whether the values are to be printed or not.
-   \param font a Pointer to the font to be used.
-   \param size (relative to the boxes' width) the dynamic size of
-   the font to be used. If this parameter is zero the size of the
-   \c font is used instead - regardless of the size of the chart
-   and regardless of the number of boxes!
-   \param color the color to be used when printing the values.
-   \param brush the brush to be used to fill the text's area before printing
-   \sa setChartType
-   \sa setBWChartSubType
-   \sa bWChartPrintStatistics
-   \sa bWChartStatisticsColor,
-   \sa bWChartStatisticsBrush,
-   \sa bWChartStatisticsFontUseRelSize
-   \sa bWChartStatisticsFontRelSize
-*/
+  \return how big outside value markers will be drawn, zero means
+  they will be invisible, negative values indicate that the size
+  is calculated dynamically based upon the current boxes' width.
+
+  \sa setBWChartOutValMarkerSize
+  \sa setBWChartFences, setBWChartPrintStatistics
+  \sa setBWChartSubType, bWChartSubType
+  \sa setChartType, chartType
+  */
+
+
+/**
+  Specifies if and how a BoxWhisker chart will print the
+  respective statistical values near to the drawing.
+  Only used if chartType() == BoxWhisker
+
+  \note <b>setBWChartPrintStatistics( BWStatVal, false )</b> will
+  deactivate printing of the respective statistical values.
+
+  \param statValue specifies the statistical value to be set, use
+  BWStatValALL to define equal settings for all
+  of the statistical values.
+  \param active specifies whether the values are to be printed or not.
+  \param font a Pointer to the font to be used.
+  \param size (relative to the boxes' width) the dynamic size of
+  the font to be used. If this parameter is zero the size of the
+  \c font is used instead - regardless of the size of the chart
+  and regardless of the number of boxes!
+  \param color the color to be used when printing the values.
+  \param brush the brush to be used to fill the text's area before printing
+  \sa setChartType
+  \sa setBWChartSubType
+  \sa bWChartPrintStatistics
+  \sa bWChartStatisticsColor,
+  \sa bWChartStatisticsBrush,
+  \sa bWChartStatisticsFontUseRelSize
+  \sa bWChartStatisticsFontRelSize
+  */
 void KDChartParams::setBWChartPrintStatistics( BWStatVal statValue,
-                                               bool active,
-                                               QFont* font,
-                                               int size,
-                                               QColor* color,
-                                               QBrush* brush )
+        bool active,
+        QFont* font,
+        int size,
+        QColor* color,
+        QBrush* brush )
 {
     BWStatVal statValA = (BWStatValALL == statValue) ? BWStatValSTART : statValue;
     BWStatVal statValZ = (BWStatValALL == statValue) ? BWStatValEND   : statValue;
@@ -6135,91 +6135,91 @@ void KDChartParams::setBWChartPrintStatistics( BWStatVal statValue,
 
 
 /**
-   \fn bool KDChartParams::bWChartPrintStatistics( BWStatVal statValue ) const
+  \fn bool KDChartParams::bWChartPrintStatistics( BWStatVal statValue ) const
 
-   Returns whether the respective statistical values
-   will be printed near to the drawing.
+  Returns whether the respective statistical values
+  will be printed near to the drawing.
 
-   \return whether the respective statistical values
-   will be printed near to the drawing.
+  \return whether the respective statistical values
+  will be printed near to the drawing.
 
-   \sa setBWChartPrintStatistics
-   \sa setBWChartSubType, bWChartSubType
-   \sa setChartType, chartType
-*/
-
-
-/**
-   \fn QFont KDChartParams::bWChartStatisticsFont( BWStatVal statValue ) const
-
-   Returns the font to be used for printing the respective statistical values
-
-   \returns the font to be used for printing the respective statistical values
-
-   \sa setBWChartPrintStatistics
-   \sa setBWChartSubType, bWChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setBWChartPrintStatistics
+  \sa setBWChartSubType, bWChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   \fn bool KDChartParams::bWChartStatisticsUseRelSize( BWStatVal statValue ) const
+  \fn QFont KDChartParams::bWChartStatisticsFont( BWStatVal statValue ) const
 
-   Returns whether the font size to be used for printing the respective statistical values
-   is calculated dynamically.
+  Returns the font to be used for printing the respective statistical values
 
-   \returns whether the font size to be used for printing the respective statistical values
-   is calculated dynamically.
+  \returns the font to be used for printing the respective statistical values
 
-   \sa setBWChartPrintStatistics
-   \sa setBWChartSubType, bWChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setBWChartPrintStatistics
+  \sa setBWChartSubType, bWChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   \fn int KDChartParams::bWChartStatisticsFontRelSize( BWStatVal statValue ) const
+  \fn bool KDChartParams::bWChartStatisticsUseRelSize( BWStatVal statValue ) const
 
-   Returns the relative size (in per mille of the chart width)
-   of the font to be used for printing the respective statistical values.
+  Returns whether the font size to be used for printing the respective statistical values
+  is calculated dynamically.
 
-   \returns the relative size (in per mille of the chart width)
-   of the font to be used for printing the respective statistical values.
+  \returns whether the font size to be used for printing the respective statistical values
+  is calculated dynamically.
 
-   \sa setBWChartPrintStatistics
-   \sa setBWChartSubType, bWChartSubType
-   \sa setChartType, chartType
-*/
-
-
-/**
-   \fn QColor KDChartParams::bWChartStatisticsColor( BWStatVal statValue ) const
-
-   Returns the colour
-   of the font to be used for printing the respective statistical values.
-
-   \returns the colour
-   of the font to be used for printing the respective statistical values.
-
-   \sa setBWChartPrintStatistics
-   \sa setBWChartSubType, bWChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setBWChartPrintStatistics
+  \sa setBWChartSubType, bWChartSubType
+  \sa setChartType, chartType
+  */
 
 
 /**
-   \fn QBrush KDChartParams::bWChartStatisticsBrush( BWStatVal statValue ) const
+  \fn int KDChartParams::bWChartStatisticsFontRelSize( BWStatVal statValue ) const
 
-   Returns the brush used
-   to fill the text's area before printing the respective statistical values.
+  Returns the relative size (in per mille of the chart width)
+  of the font to be used for printing the respective statistical values.
 
-   \returns the brush used
-   to fill the text's area before printing the respective statistical values.
+  \returns the relative size (in per mille of the chart width)
+  of the font to be used for printing the respective statistical values.
 
-   \sa setBWChartPrintStatistics
-   \sa setBWChartSubType, bWChartSubType
-   \sa setChartType, chartType
-*/
+  \sa setBWChartPrintStatistics
+  \sa setBWChartSubType, bWChartSubType
+  \sa setChartType, chartType
+  */
+
+
+/**
+  \fn QColor KDChartParams::bWChartStatisticsColor( BWStatVal statValue ) const
+
+  Returns the colour
+  of the font to be used for printing the respective statistical values.
+
+  \returns the colour
+  of the font to be used for printing the respective statistical values.
+
+  \sa setBWChartPrintStatistics
+  \sa setBWChartSubType, bWChartSubType
+  \sa setChartType, chartType
+  */
+
+
+/**
+  \fn QBrush KDChartParams::bWChartStatisticsBrush( BWStatVal statValue ) const
+
+  Returns the brush used
+  to fill the text's area before printing the respective statistical values.
+
+  \returns the brush used
+  to fill the text's area before printing the respective statistical values.
+
+  \sa setBWChartPrintStatistics
+  \sa setBWChartSubType, bWChartSubType
+  \sa setChartType, chartType
+  */
 
 
 //@}
@@ -6228,358 +6228,358 @@ void KDChartParams::setBWChartPrintStatistics( BWStatVal statValue,
 // START LEGENDS
 /** @name Legend methods.
 
-These methods query and set legend parameters.
-*/
+  These methods query and set legend parameters.
+  */
 //@{
 
 /**
-   \enum KDChartParams::LegendPosition
+  \enum KDChartParams::LegendPosition
 
-   The possible positions for a legend. NoLegend turns legend display
-   off.
+  The possible positions for a legend. NoLegend turns legend display
+  off.
 
-   \sa setLegendPosition, legendPosition
-*/
-
-
-/**
-   \fn void KDChartParams::setLegendPosition( LegendPosition position )
-
-   Specifies where the legend should be shown. NoLegend turns legend
-   display off. The default is LegendRight which positions the legend
-   right to the data display.
-
-   \param the position for the legend
-   \sa LegendPosition, legendPosition
-*/
+  \sa setLegendPosition, legendPosition
+  */
 
 
 /**
-   \fn KDChartParams::LegendPosition KDChartParams::legendPosition() const
+  \fn void KDChartParams::setLegendPosition( LegendPosition position )
 
-   Returns where the legend will be shown.
+  Specifies where the legend should be shown. NoLegend turns legend
+  display off. The default is LegendRight which positions the legend
+  right to the data display.
 
-   \return where the legend will be shown
-   \sa LegendPosition, setLegendPosition
-*/
-
-
-
-/**
-   \enum KDChartParams::LegendSource
-
-   The possible ways for getting the legend text. Available are:
-   <ul>
-   <li>Manual - Uses texts set with setLegendText(); if no text is set for
-   a dataset, the legend text will be empty.
-   <li>FirstColumn - Uses values from the first column, no matter what
-   this contains.
-   <li>Automatic - Tries first to use values from the first column; if
-   this does not contain any string values, tries to use values set
-   manually with setLegendText(). If there are no values set manually
-   either, resolves to standard texts like Series 1, Series 2, .... This
-   is the default.
-   </ul>
-   \sa setLegendSource, legendSource, setLegendText, legendText
-*/
+  \param the position for the legend
+  \sa LegendPosition, legendPosition
+  */
 
 
 /**
-   \fn void KDChartParams::setLegendSource( LegendSource source )
+  \fn KDChartParams::LegendPosition KDChartParams::legendPosition() const
 
-   Specifies where the legend text is coming from. See LegendSource for an
-   explanation of the possible values.
+  Returns where the legend will be shown.
 
-   \param source the source of the legend texts
-   \sa legendSource, LegendSource, setLegendText, legendText
-*/
-
-
-/**
-   \fn LegendSource KDChartParams::legendSource() const
-
-   Returns where the legend text is coming from. See LegendSource for an
-   explanation of the possible return values.
-
-   \return where the legend text is coming from
-   \sa LegendSource, setLegendSource, setLegendText, legendText
-*/
+  \return where the legend will be shown
+  \sa LegendPosition, setLegendPosition
+  */
 
 
 
 /**
-   \fn void KDChartParams::setLegendText( uint dataset, const QString& text )
+  \enum KDChartParams::LegendSource
 
-   Manually specifies a legend text for a certain dataset. This is only
-   used if legendSource() == Manual or if legendSource() == Automatic and
-   it is not possible to retrieve values from the first column.
-
-   \param dataset the dataset for which to set the legend text
-   \param the legend text to be set for a given dataset
-   \sa LegendSource, setLegendSource, legendSource, legendText
-*/
-
-
-/**
-   \fn QString KDChartParams::legendText( uint dataset ) const
-
-   Returns the manually specified legend text for a given dataset.
-
-   \return the manually specified legend text for the specified dataset
-   \sa setLegendText, LegendSource, setLegendSource, legendSource
-*/
+  The possible ways for getting the legend text. Available are:
+  <ul>
+  <li>Manual - Uses texts set with setLegendText(); if no text is set for
+  a dataset, the legend text will be empty.
+  <li>FirstColumn - Uses values from the first column, no matter what
+  this contains.
+  <li>Automatic - Tries first to use values from the first column; if
+  this does not contain any string values, tries to use values set
+  manually with setLegendText(). If there are no values set manually
+  either, resolves to standard texts like Series 1, Series 2, .... This
+  is the default.
+  </ul>
+  \sa setLegendSource, legendSource, setLegendText, legendText
+  */
 
 
 /**
-   \fn void KDChartParams::setLegendTextColor( const QColor& color )
+  \fn void KDChartParams::setLegendSource( LegendSource source )
 
-   Specifies the color to be used for the legend texts. The
-   default is black.
+  Specifies where the legend text is coming from. See LegendSource for an
+  explanation of the possible values.
 
-   \param color the color to be used for the legend texts
-   \sa legendTextColor(), setLegendTitleTextColor()
-*/
-
-
-/**
-   \fn QColor KDChartParams::legendTextColor() const
-
-   Returns the color in which the legend texts are drawn. The
-   default is black.
-
-   \return the color in which the legend texts are drawn
-   \sa setLegendTextColor(), legendTitleTextColor()
-*/
+  \param source the source of the legend texts
+  \sa legendSource, LegendSource, setLegendText, legendText
+  */
 
 
 /**
-   \fn void KDChartParams::setLegendFont( const QFont& font, bool useFontSize )
+  \fn LegendSource KDChartParams::legendSource() const
 
-   Specifies the font in which the legend texts are drawn. The default is a
-   10pt helvetica font.
+  Returns where the legend text is coming from. See LegendSource for an
+  explanation of the possible return values.
 
-   \note The font size will be ignored if \c useFontSize is false,
-   in this case the font size will be calculated dynamically using
-   the value stored by you calling setLegendFontRelSize().
-
-   \param font the font to draw the legend texts in
-   \sa setLegendFontUseRelSize, legendFont
-*/
-
-
-/**
-   \fn QFont KDChartParams::legendFont() const
-
-   Returns the font in which the legend texts are drawn.
-
-   \return the font in which the legend texts are drawn
-   \sa setLegendFont, setLegendFontUseRelSize
-*/
-
-
-/**
-   \fn void KDChartParams::setLegendFontUseRelSize( bool legendFontUseRelSize )
-
-   Specifies whether the legend shall be drawn
-   using relative font size.
-
-   \param legendFontUseRelSize whether legend shall be drawn
-   using relative font size.
-   If true the absolute value of the value set by \c
-   setLegendFontRelSize is per thousand
-   of of the average value of the printable area height and width.
-   This will make the legend look nice even if scaled to very
-   different size.
-
-   \sa setLegendFontRelSize, setAxisLabelsFont
-*/
-
-
-/**
-   \fn bool KDChartParams::legendFontUseRelSize() const
-
-   Returns whether the legend font size is used.
-
-   \return whether the fix legend font size is used.
-   \sa setLegendFontRelSize, setLegendFont
-*/
-
-
-/**
-   \fn void KDChartParams::setLegendFontRelSize( int legendFontRelSize )
-
-   Specifies the legend relative font size.
-
-   \param legendFontRelSize the relative legend size.
-   If this value unequals zero the absolute value is per thousand
-   of of the average value of the printable area height and width.
-   This will make the legend look nice even if scaled to very
-   different size.
-
-   \sa setLegendFontUseRelSize, setLegendFont
-*/
-
-
-/**
-   \fn int KDChartParams::legendFontRelSize() const
-
-   Returns the relative legend font size.
-
-   \return the relative legend font size.
-   \sa setLegendFontRelSize, setLegendFontUseRelSize
-*/
-
-
-/**
-   \fn void KDChartParams::setLegendTitleText( const QString& text )
-
-   Specifies a text to be shown as the title of the legend. The
-   default is "Legend" (possibly localized). To turn off the
-   legend title completely, pass an empty string.
-
-   \param text the text to use as the legend title
-   \sa legendTitleText(), setLegendTitleFont(),
-   setLegendTitleFontUseRelSize()
-*/
-
+  \return where the legend text is coming from
+  \sa LegendSource, setLegendSource, setLegendText, legendText
+  */
 
 
 
 /**
-   \fn QString KDChartParams::legendTitleText() const
+  \fn void KDChartParams::setLegendText( uint dataset, const QString& text )
 
-   Returns the text that is shown as the title of the legend.
+  Manually specifies a legend text for a certain dataset. This is only
+  used if legendSource() == Manual or if legendSource() == Automatic and
+  it is not possible to retrieve values from the first column.
 
-   \return the text that is used as the legend title
-   \sa setLegendTitleText(), legendTitleFont(),
-   legendTitleFontUseRelSize()
-*/
-
-
-/**
-   \fn void KDChartParams::setLegendTitleTextColor( const QColor& color )
-
-   Specifies the color to be used for the legend title. The
-   default is black. Note that this color is only the default when
-   rich text is used; tags in the rich text might change the color.
-
-   \param color the color to be used for the legend title
-   \sa legendTitleTextColor(), setLegendTextColor()
-*/
+  \param dataset the dataset for which to set the legend text
+  \param the legend text to be set for a given dataset
+  \sa LegendSource, setLegendSource, legendSource, legendText
+  */
 
 
 /**
-   \fn QColor KDChartParams::legendTitleTextColor() const
+  \fn QString KDChartParams::legendText( uint dataset ) const
 
-   Returns the color in which the legend title is drawn. The
-   default is black.
+  Returns the manually specified legend text for a given dataset.
 
-   \return the color in which the legend title is drawn
-   \sa setLegendTitleTextColor(), legendTextColor()
-*/
-
-
-/**
-   \fn void KDChartParams::setLegendTitleFont( const QFont& font, bool useFontSize )
-
-   Specifies the font in which the legend title (if any) is drawn. The
-   default is a 12pt helvetica font.
-
-   \note The font size will be ignored if \c useFontSize is false,
-   in this case the font size will be calculated dynamically using
-   the value stored by you calling setLegendFontRelSize().
-
-   \param font the font to draw the legend texts in
-   \sa setLegendTitleFontUseRelSize, legendTitleFont
-*/
+  \return the manually specified legend text for the specified dataset
+  \sa setLegendText, LegendSource, setLegendSource, legendSource
+  */
 
 
 /**
-   \fn QFont KDChartParams::legendTitleFont() const
+  \fn void KDChartParams::setLegendTextColor( const QColor& color )
 
-   Returns the font in which the legend title (if any) is drawn.
+  Specifies the color to be used for the legend texts. The
+  default is black.
 
-   \return the font in which the legend texts are drawn
-   \sa setLegendTitleFont, setLegendTitleFontUseRelSize
-*/
-
-
-/**
-   \fn void KDChartParams::setLegendTitleFontUseRelSize( bool legendTitleFontUseRelSize )
-
-
-   Specifies whether the legend title (if any) shall be drawn using
-   relative font size.
-
-   \param legendTitleFontUseRelSize whether the legend title shall
-   be drawn using relative font size.
-   If true the absolute value of the value set by \c
-   setLegendTitleFontRelSize is per thousandth of the average
-   value of the printable area height and width.
-   This will make the legend title look nice even if scaled to a very
-   different size.
-
-   \sa setLegendTitleFontRelSize, setAxisLabelsFont
-*/
+  \param color the color to be used for the legend texts
+  \sa legendTextColor(), setLegendTitleTextColor()
+  */
 
 
 /**
-   \fn bool KDChartParams::legendTitleFontUseRelSize() const
+  \fn QColor KDChartParams::legendTextColor() const
 
-   Returns whether the legend title font size is used.
+  Returns the color in which the legend texts are drawn. The
+  default is black.
 
-   \return whether the fixed legend title font size is used.
-   \sa setLegendTitleFontRelSize, setLegendTitleFont
-*/
-
-
-/**
-   \fn void KDChartParams::setLegendTitleFontRelSize( int legendTitleFontRelSize )
-
-
-   Specifies the legend title relative font size.
-
-   \param legendTitleFontRelSize the relative legend size.
-   If this value unequals zero the absolute value is per thousand
-   of of the average value of the printable area height and width.
-   This will make the legend title look nice even if scaled to a very
-   different size.
-
-   \sa setLegendTitleFontUseRelSize, setLegendTitleFont
-*/
+  \return the color in which the legend texts are drawn
+  \sa setLegendTextColor(), legendTitleTextColor()
+  */
 
 
 /**
-   \fn int KDChartParams::legendTitleFontRelSize() const
+  \fn void KDChartParams::setLegendFont( const QFont& font, bool useFontSize )
 
-   Returns the relative legend title font size.
+  Specifies the font in which the legend texts are drawn. The default is a
+  10pt helvetica font.
 
-   \return the relative legend title font size.
-   \sa setLegendTitleFontRelSize, setLegendTitleFontUseRelSize
-*/
+  \note The font size will be ignored if \c useFontSize is false,
+  in this case the font size will be calculated dynamically using
+  the value stored by you calling setLegendFontRelSize().
 
-
-/**
-   \fn void KDChartParams::setLegendSpacing( uint space )
-
-   Specifies how much space in pixels there should be between the legend
-   and the data display. The default is 20 pixels.
-
-   \param space the space in pixels between the legend and the data
-   display
-   \sa legendSpacing
-*/
+  \param font the font to draw the legend texts in
+  \sa setLegendFontUseRelSize, legendFont
+  */
 
 
 /**
-   \fn uint KDChartParams::legendSpacing() const
+  \fn QFont KDChartParams::legendFont() const
 
-   Returns how much space in pixels there is between the legend and the
-   data display.
+  Returns the font in which the legend texts are drawn.
 
-   \return the space in pixels between the legend and the data display
-   \sa setLegendSpacing
-*/
+  \return the font in which the legend texts are drawn
+  \sa setLegendFont, setLegendFontUseRelSize
+  */
+
+
+/**
+  \fn void KDChartParams::setLegendFontUseRelSize( bool legendFontUseRelSize )
+
+  Specifies whether the legend shall be drawn
+  using relative font size.
+
+  \param legendFontUseRelSize whether legend shall be drawn
+  using relative font size.
+  If true the absolute value of the value set by \c
+  setLegendFontRelSize is per thousand
+  of of the average value of the printable area height and width.
+  This will make the legend look nice even if scaled to very
+  different size.
+
+  \sa setLegendFontRelSize, setAxisLabelsFont
+  */
+
+
+/**
+  \fn bool KDChartParams::legendFontUseRelSize() const
+
+  Returns whether the legend font size is used.
+
+  \return whether the fix legend font size is used.
+  \sa setLegendFontRelSize, setLegendFont
+  */
+
+
+/**
+  \fn void KDChartParams::setLegendFontRelSize( int legendFontRelSize )
+
+  Specifies the legend relative font size.
+
+  \param legendFontRelSize the relative legend size.
+  If this value unequals zero the absolute value is per thousand
+  of of the average value of the printable area height and width.
+  This will make the legend look nice even if scaled to very
+  different size.
+
+  \sa setLegendFontUseRelSize, setLegendFont
+  */
+
+
+/**
+  \fn int KDChartParams::legendFontRelSize() const
+
+  Returns the relative legend font size.
+
+  \return the relative legend font size.
+  \sa setLegendFontRelSize, setLegendFontUseRelSize
+  */
+
+
+/**
+  \fn void KDChartParams::setLegendTitleText( const QString& text )
+
+  Specifies a text to be shown as the title of the legend. The
+  default is "Legend" (possibly localized). To turn off the
+  legend title completely, pass an empty string.
+
+  \param text the text to use as the legend title
+  \sa legendTitleText(), setLegendTitleFont(),
+  setLegendTitleFontUseRelSize()
+  */
+
+
+
+
+/** 
+  \fn QString KDChartParams::legendTitleText() const
+
+  Returns the text that is shown as the title of the legend.
+
+  \return the text that is used as the legend title
+  \sa setLegendTitleText(), legendTitleFont(),
+  legendTitleFontUseRelSize()
+  */
+
+
+/**
+  \fn void KDChartParams::setLegendTitleTextColor( const QColor& color )
+
+  Specifies the color to be used for the legend title. The
+  default is black. Note that this color is only the default when
+  rich text is used; tags in the rich text might change the color.
+
+  \param color the color to be used for the legend title
+  \sa legendTitleTextColor(), setLegendTextColor()
+  */
+
+
+/**
+  \fn QColor KDChartParams::legendTitleTextColor() const
+
+  Returns the color in which the legend title is drawn. The
+  default is black.
+
+  \return the color in which the legend title is drawn
+  \sa setLegendTitleTextColor(), legendTextColor()
+  */
+
+
+/**
+  \fn void KDChartParams::setLegendTitleFont( const QFont& font, bool useFontSize )
+
+  Specifies the font in which the legend title (if any) is drawn. The
+  default is a 12pt helvetica font.
+
+  \note The font size will be ignored if \c useFontSize is false,
+  in this case the font size will be calculated dynamically using
+  the value stored by you calling setLegendFontRelSize().
+
+  \param font the font to draw the legend texts in
+  \sa setLegendTitleFontUseRelSize, legendTitleFont
+  */
+
+
+/**
+  \fn QFont KDChartParams::legendTitleFont() const
+
+  Returns the font in which the legend title (if any) is drawn.
+
+  \return the font in which the legend texts are drawn
+  \sa setLegendTitleFont, setLegendTitleFontUseRelSize
+  */
+
+
+/**
+  \fn void KDChartParams::setLegendTitleFontUseRelSize( bool legendTitleFontUseRelSize )
+
+
+  Specifies whether the legend title (if any) shall be drawn using
+  relative font size.
+
+  \param legendTitleFontUseRelSize whether the legend title shall
+  be drawn using relative font size.
+  If true the absolute value of the value set by \c
+  setLegendTitleFontRelSize is per thousandth of the average
+  value of the printable area height and width.
+  This will make the legend title look nice even if scaled to a very
+  different size.
+
+  \sa setLegendTitleFontRelSize, setAxisLabelsFont
+  */
+
+
+/**
+  \fn bool KDChartParams::legendTitleFontUseRelSize() const
+
+  Returns whether the legend title font size is used.
+
+  \return whether the fixed legend title font size is used.
+  \sa setLegendTitleFontRelSize, setLegendTitleFont
+  */
+
+
+/**
+  \fn void KDChartParams::setLegendTitleFontRelSize( int legendTitleFontRelSize )
+
+
+  Specifies the legend title relative font size.
+
+  \param legendTitleFontRelSize the relative legend size.
+  If this value unequals zero the absolute value is per thousand
+  of of the average value of the printable area height and width.
+  This will make the legend title look nice even if scaled to a very
+  different size.
+
+  \sa setLegendTitleFontUseRelSize, setLegendTitleFont
+  */
+
+
+/**
+  \fn int KDChartParams::legendTitleFontRelSize() const
+
+  Returns the relative legend title font size.
+
+  \return the relative legend title font size.
+  \sa setLegendTitleFontRelSize, setLegendTitleFontUseRelSize
+  */
+
+
+/**
+  \fn void KDChartParams::setLegendSpacing( uint space )
+
+  Specifies how much space in pixels there should be between the legend
+  and the data display. The default is 20 pixels.
+
+  \param space the space in pixels between the legend and the data
+  display
+  \sa legendSpacing
+  */
+
+
+/**
+  \fn uint KDChartParams::legendSpacing() const
+
+  Returns how much space in pixels there is between the legend and the
+  data display.
+
+  \return the space in pixels between the legend and the data display
+  \sa setLegendSpacing
+  */
 
 //@}
 // END LEGENDS
@@ -6587,56 +6587,56 @@ These methods query and set legend parameters.
 // START AXES
 /** @name Axis methods.
 
-These methods query and set axis parameters.
-*/
+  These methods query and set axis parameters.
+  */
 //@{
 
 /**
-   \fn void KDChartParams::setAxisType( uint n, const KDChartAxisParams::AxisType axisType )
+  \fn void KDChartParams::setAxisType( uint n, const KDChartAxisParams::AxisType axisType )
 
-   Specifies the axis type.
+  Specifies the axis type.
 
-   \param n the number of the axis settings to be modified
-   \param axisType the type of the axis.
-   \sa axisVisible
-*/
-
-
-/**
-   \fn void KDChartParams::setAxisVisible( uint n, const bool axisVisible )
-
-   Specifies if the axis will be drawn. The default is false.
-
-   \param n the number of the axis settings to be modified
-   \param axisVisible set true to make visible the respective axis.
-   \sa axisVisible
-*/
+  \param n the number of the axis settings to be modified
+  \param axisType the type of the axis.
+  \sa axisVisible
+  */
 
 
 /**
-   \fn bool KDChartParams::axisVisible( uint n ) const
+  \fn void KDChartParams::setAxisVisible( uint n, const bool axisVisible )
 
-   Returns if the axis will be drawn.
+  Specifies if the axis will be drawn. The default is false.
 
-   \return if the axis is visible or not.
-   \sa setAxisVisible
-*/
+  \param n the number of the axis settings to be modified
+  \param axisVisible set true to make visible the respective axis.
+  \sa axisVisible
+  */
 
 
 /**
-   Specifies whether a grid should be drawn at the chart data area.
+  \fn bool KDChartParams::axisVisible( uint n ) const
 
-   The grid will show a solid line for each delimiter.
-   (or a line with a pattern defined by \c KDChartAxisParams::setAxisGridStyle(), resp.)
+  Returns if the axis will be drawn.
 
-   \note If true and axisShowSubDelimiters is also true the grid
-   will show a thin dotted line for each sub-delimiter.
-   (or a line with a pattern defined by \c KDChartAxisParams::setAxisGridSubStyle(), resp.)
+  \return if the axis is visible or not.
+  \sa setAxisVisible
+  */
 
-   \param n the number of the axis for which to specify whether a grid should be drawn.
-   \param axisShowGrid if true a grid will be drawn on the chart data area.
-   \sa axisShowGrid, setAxisGridStyle, setAxisGridSubStyle
-*/
+
+/**
+  Specifies whether a grid should be drawn at the chart data area.
+
+  The grid will show a solid line for each delimiter.
+  (or a line with a pattern defined by \c KDChartAxisParams::setAxisGridStyle(), resp.)
+
+  \note If true and axisShowSubDelimiters is also true the grid
+  will show a thin dotted line for each sub-delimiter.
+  (or a line with a pattern defined by \c KDChartAxisParams::setAxisGridSubStyle(), resp.)
+
+  \param n the number of the axis for which to specify whether a grid should be drawn.
+  \param axisShowGrid if true a grid will be drawn on the chart data area.
+  \sa axisShowGrid, setAxisGridStyle, setAxisGridSubStyle
+  */
 void KDChartParams::setAxisShowGrid( uint n, bool axisShowGrid )
 {
     if ( n < KDCHART_MAX_AXES ) {
@@ -6646,58 +6646,58 @@ void KDChartParams::setAxisShowGrid( uint n, bool axisShowGrid )
 }
 
 /**
-   Returns if any grid will be drawn at the data area.
+  Returns if any grid will be drawn at the data area.
 
-   \return if any grid will be drawn at the data area.
-   \sa KDChartAxisParams::setAxisShowGrid
-*/
+  \return if any grid will be drawn at the data area.
+  \sa KDChartAxisParams::setAxisShowGrid
+  */
 bool KDChartParams::showGrid() const
 {
     for ( uint i = 0; i < KDCHART_MAX_AXES; ++i ) {
         if ( _axisSettings[ i ].params.axisVisible()
-             && _axisSettings[ i ].params.axisShowGrid() )
+                && _axisSettings[ i ].params.axisShowGrid() )
             return true;
     }
     return false;
 }
 
 /**
-   Specifies which data are to be represented by a given axis.<br>
-   If you specify a valid dataset-number for parameter dataset
-   you may use the same number or a greater number for
-   parameter dataset2 to specify a range of contiguous series
-   of datasets.<br>
-   If you specify <b>KDCHART_ALL_DATASETS</b> for dataset
-   the value of dataset2 does not matter.<br>
-   By setting the \c chart parameter you may specify which chart is
-   represented by the axis, you may use this when displaying
-   more than one chart in the same widget.
+  Specifies which data are to be represented by a given axis.<br>
+  If you specify a valid dataset-number for parameter dataset
+  you may use the same number or a greater number for
+  parameter dataset2 to specify a range of contiguous series
+  of datasets.<br>
+  If you specify <b>KDCHART_ALL_DATASETS</b> for dataset
+  the value of dataset2 does not matter.<br>
+  By setting the \c chart parameter you may specify which chart is
+  represented by the axis, you may use this when displaying
+  more than one chart in the same widget.
 
-   Calling setAxisDataset() with a dataset number will automatically set
-   the visability flag of the respective axis (or axes, resp.) while calling
-   it with KDCHART_NO_DATASET will clear the visibility flag so there is no
-   need to explicitely call \c setAxisVisible() after calling setAxisDatasets().
+  Calling setAxisDataset() with a dataset number will automatically set
+  the visability flag of the respective axis (or axes, resp.) while calling
+  it with KDCHART_NO_DATASET will clear the visibility flag so there is no
+  need to explicitely call \c setAxisVisible() after calling setAxisDatasets().
 
-   \note If you specify \c KDCHART_ALL_DATASETS the axis will
-   represent all the datasets with SourceMode DataEntry
-   (see \c setChartSourceMode for explanation) that have been
-   specified for this chart.<br>
+  \note If you specify \c KDCHART_ALL_DATASETS the axis will
+  represent all the datasets with SourceMode DataEntry
+  (see \c setChartSourceMode for explanation) that have been
+  specified for this chart.<br>
 
-   \param n the number of the axis for which to specify the dataset(s)
-   \param dataset the dataset represented by axis \c n
+  \param n the number of the axis for which to specify the dataset(s)
+  \param dataset the dataset represented by axis \c n
 
-   \sa axisDatasets, chartAxes, setChartSourceMode, setAdditionalChartType
-*/
+  \sa axisDatasets, chartAxes, setChartSourceMode, setAdditionalChartType
+  */
 void KDChartParams::setAxisDatasets( uint n, uint dataset,
-                                     uint dataset2,
-                                     uint chart )
+        uint dataset2,
+        uint chart )
 {
     uint a1 = ( KDCHART_ALL_AXES == n )
-              ? 0
-              : QMIN( n, KDCHART_MAX_AXES-1 );
+        ? 0
+        : QMIN( n, KDCHART_MAX_AXES-1 );
     uint a2 = ( KDCHART_ALL_AXES == n )
-              ? KDCHART_MAX_AXES-1
-              : QMIN( n, KDCHART_MAX_AXES-1 );
+        ? KDCHART_MAX_AXES-1
+        : QMIN( n, KDCHART_MAX_AXES-1 );
     for( uint i = a1;  i <= a2;  ++i ) {
         _axisSettings[ i ].params.setAxisVisible( KDCHART_NO_DATASET != dataset );
         _axisSettings[ i ].dataset = dataset;
@@ -6714,18 +6714,18 @@ void KDChartParams::setAxisDatasets( uint n, uint dataset,
 }
 
 /**
-   Returns which data are to be represented by a given axis.
-   ( see explanation given with \c setAxisDatasets() )
+  Returns which data are to be represented by a given axis.
+  ( see explanation given with \c setAxisDatasets() )
 
-   \param n the axis for which to return the dataset number(s)
-   \param dataset the starting number of the series of datasets represented by axis \c n or KDCHART_ALL_DATASETS
-   \param dataset2 the end number of the series of datasets
-   \param chart the chart represented by axis \c n
-   \return true if a valid axis number was specified by parameter n
-   \sa setAxisDataset, chartAxes
-*/
+  \param n the axis for which to return the dataset number(s)
+  \param dataset the starting number of the series of datasets represented by axis \c n or KDCHART_ALL_DATASETS
+  \param dataset2 the end number of the series of datasets
+  \param chart the chart represented by axis \c n
+  \return true if a valid axis number was specified by parameter n
+  \sa setAxisDataset, chartAxes
+  */
 bool KDChartParams::axisDatasets( uint n, uint& dataset,
-                                  uint& dataset2, uint& chart ) const
+        uint& dataset2, uint& chart ) const
 {
     bool bOk = ( n < KDCHART_MAX_AXES );
     if ( bOk ) {
@@ -6738,21 +6738,21 @@ bool KDChartParams::axisDatasets( uint n, uint& dataset,
 
 
 /**
-   Returns which ORDINATE axis(axes) is(are) representing a given chart.
-   This will look for the following axes: AxisPosLeft, AxisPosRight,
-   AxisPosLeft2, AxisPosRight2.
+  Returns which ORDINATE axis(axes) is(are) representing a given chart.
+  This will look for the following axes: AxisPosLeft, AxisPosRight,
+  AxisPosLeft2, AxisPosRight2.
 
-   It is allowed to specify the same variable as axis1, axis2, axis3,
-   axis4 - when doing this you will get the last axis number that was
-   found for this chart.  In case you are sure there is only one axis
-   per chart you may act that way.
+  It is allowed to specify the same variable as axis1, axis2, axis3,
+  axis4 - when doing this you will get the last axis number that was
+  found for this chart.  In case you are sure there is only one axis
+  per chart you may act that way.
 
-   \param chart the chart for which to return the axis number(s)
-   \param cnt the count of axis numbers returned
-   \param axes on return, a vector with the numbers of the axes
-   \return true if at least one axis is representing the chart \c chart
-   \sa setAxisDataset, axisDataset
-*/
+  \param chart the chart for which to return the axis number(s)
+  \param cnt the count of axis numbers returned
+  \param axes on return, a vector with the numbers of the axes
+  \return true if at least one axis is representing the chart \c chart
+  \sa setAxisDataset, axisDataset
+  */
 bool KDChartParams::chartAxes( uint chart, uint& cnt, AxesArray& axes ) const
 {
     cnt = 0;
@@ -6763,9 +6763,9 @@ bool KDChartParams::chartAxes( uint chart, uint& cnt, AxesArray& axes ) const
     for ( uint i = 0; i < KDCHART_MAX_AXES; ++i ) {
         if (    chart == _axisSettings[ i ].chart
                 && (    KDChartAxisParams::AxisPosLeft   == i
-                        || KDChartAxisParams::AxisPosRight  == i
-                        || KDChartAxisParams::AxisPosLeft2  == i
-                        || KDChartAxisParams::AxisPosRight2 == i ) ) {
+                    || KDChartAxisParams::AxisPosRight  == i
+                    || KDChartAxisParams::AxisPosLeft2  == i
+                    || KDChartAxisParams::AxisPosRight2 == i ) ) {
             for( int j = 0;  j < KDCHART_CNT_ORDINATES;  ++j ) {
                 if( KDCHART_NO_AXIS == axes[ j ] || axes[ j ] == i ) {
                     if( KDCHART_NO_AXIS == axes[ j ] ) {
@@ -6784,74 +6784,74 @@ bool KDChartParams::chartAxes( uint chart, uint& cnt, AxesArray& axes ) const
 
 
 /**
-   \fn void KDChartParams::setAxisArea( const uint n, const QRect& areaRect )
+  \fn void KDChartParams::setAxisArea( const uint n, const QRect& areaRect )
 
-   Specifies the true axis area rectangle.
+  Specifies the true axis area rectangle.
 
-   \param axisAreaMax the true axis area rectangle
-   as it was calculated and drawn.
+  \param axisAreaMax the true axis area rectangle
+  as it was calculated and drawn.
 
-   \note Do <b>not call</b> this function unless you are knowing
-   exactly what you are doing. \c setAxisTrueAreaRect is normally
-   reserved for internal usage by methods calculating the area
-   size based upon \c axisAreaMin and \c axisAreaMax. Thus the
-   signal \c changed() is not sended here.
+  \note Do <b>not call</b> this function unless you are knowing
+  exactly what you are doing. \c setAxisTrueAreaRect is normally
+  reserved for internal usage by methods calculating the area
+  size based upon \c axisAreaMin and \c axisAreaMax. Thus the
+  signal \c changed() is not sended here.
 
-   \sa axisAreaMax, axisAreaMin, setAxisAreaMode, setAxisAreaMin
-   \sa setAxisArea
-*/
-
-
-/**
-   \fn void KDChartParams::setAxisLabelsTouchEdges( uint n, bool axisLabelsTouchEdges )
-
-   Specifies whether the axis labels start and end at the
-   edges of the charts instead being positioned in the
-   middle of the first data point (or the last one, resp.)
-
-   \note If you decide to call setAxisLabelsTouchEdges() to
-   override the default settings of abscissa axes
-   (AxisPosBottom, AxisPosTop, AxisPosBottom2, AxisPosTop2)
-   make sure to call it again each time you have called
-   setChartType() since your settings will be overwritten
-   when changing the chart type.
-
-   \param axisLabelsTouchEdges if the axis labels start and end at
-   the edges of the charts instead being positioned in the
-   middle of the first data point (or the last one, resp.)
-
-   \sa axisLabelsTouchEdges
-*/
+  \sa axisAreaMax, axisAreaMin, setAxisAreaMode, setAxisAreaMin
+  \sa setAxisArea
+  */
 
 
 /**
-   \fn void KDChartParams::setAxisLabelsVisible( uint n, bool axisLabelsVisible )
+  \fn void KDChartParams::setAxisLabelsTouchEdges( uint n, bool axisLabelsTouchEdges )
 
-   Specifies whether the axis labels of an axis are to be shown.
+  Specifies whether the axis labels start and end at the
+  edges of the charts instead being positioned in the
+  middle of the first data point (or the last one, resp.)
 
-   \param axisLabelsVisible if true the labels of this axis will be drawn.
+  \note If you decide to call setAxisLabelsTouchEdges() to
+  override the default settings of abscissa axes
+  (AxisPosBottom, AxisPosTop, AxisPosBottom2, AxisPosTop2)
+  make sure to call it again each time you have called
+  setChartType() since your settings will be overwritten
+  when changing the chart type.
 
-   \sa setAxisLabelsFont
-*/
+  \param axisLabelsTouchEdges if the axis labels start and end at
+  the edges of the charts instead being positioned in the
+  middle of the first data point (or the last one, resp.)
+
+  \sa axisLabelsTouchEdges
+  */
 
 
 /**
-   Specifies the axis labels font for one axis.
+  \fn void KDChartParams::setAxisLabelsVisible( uint n, bool axisLabelsVisible )
 
-   \note The font size will be ignored if \c axisLabelsFontSize is not zero,
-   in this case the font size will be calculated dynamically using
-   the value axisLabelsFontSize.
+  Specifies whether the axis labels of an axis are to be shown.
 
-   \param axisLabelsFont the font to be used for the axis' labels.
-   \param axisLabelsFontSize the (fixed or relative) axis font size.
-   If this value is less than zero the absolute value is per thousand
-   of the average value of the printable area height and width
-   to be used. This will make the axis look the same even if scaled
-   to very different size.
-   \param axisLabelsColor the axis labels colour.
+  \param axisLabelsVisible if true the labels of this axis will be drawn.
 
-   \sa setAxisLabelsVisible
-*/
+  \sa setAxisLabelsFont
+  */
+
+
+/**
+  Specifies the axis labels font for one axis.
+
+  \note The font size will be ignored if \c axisLabelsFontSize is not zero,
+  in this case the font size will be calculated dynamically using
+  the value axisLabelsFontSize.
+
+  \param axisLabelsFont the font to be used for the axis' labels.
+  \param axisLabelsFontSize the (fixed or relative) axis font size.
+  If this value is less than zero the absolute value is per thousand
+  of the average value of the printable area height and width
+  to be used. This will make the axis look the same even if scaled
+  to very different size.
+  \param axisLabelsColor the axis labels colour.
+
+  \sa setAxisLabelsVisible
+  */
 void KDChartParams::setAxisLabelsFont( uint n,
                                        QFont axisLabelsFont,
                                        int axisLabelsFontSize,
@@ -6876,79 +6876,79 @@ void KDChartParams::setAxisLabelsFont( uint n,
 
 
 /**
-   \fn void KDChartParams::setAxisLabelTextParams( uint n, bool axisSteadyValueCalc,
-   KDChartData axisValueStart, KDChartData axisValueEnd,
-   double axisValueDelta, int axisDigitsBehindComma,
-   int axisMaxEmptyInnerSpan,
-   KDChartAxisParams::LabelsFromDataRow takeLabelsFromDataRow,
-   int labelTextsDataRow, QStringList* axisLabelStringList,
-   QStringList* axisShortLabelsStringList )
+  \fn void KDChartParams::setAxisLabelTextParams( uint n, bool axisSteadyValueCalc,
+  KDChartData axisValueStart, KDChartData axisValueEnd,
+  double axisValueDelta, int axisDigitsBehindComma,
+  int axisMaxEmptyInnerSpan,
+  KDChartAxisParams::LabelsFromDataRow takeLabelsFromDataRow,
+  int labelTextsDataRow, QStringList* axisLabelStringList,
+  QStringList* axisShortLabelsStringList )
 
-   Specifies the label text parameters for one axis.
+  Specifies the label text parameters for one axis.
 
-   \sa KDChartAxisParams::setAxisLabelTextParams
-*/
+  \sa KDChartAxisParams::setAxisLabelTextParams
+  */
 
 
 /**
-   Specifies a \c QStringList which the axis label texts for one
-   axis are to be taken from, the optional short-labels parameter
-   (if not zero) may be used to specify an alternative list of
-   strings that are to be displayed in case the axis area size
-   is too small for showing the full-length names.
+  Specifies a \c QStringList which the axis label texts for one
+  axis are to be taken from, the optional short-labels parameter
+  (if not zero) may be used to specify an alternative list of
+  strings that are to be displayed in case the axis area size
+  is too small for showing the full-length names.
 
-   \note Normally axis labeling starts with the list's first string
-   and end with its last string, but by specifying a start and an
-   end value as additional parameters you can make KDChart repeat
-   the strings between these two values only, as shown here:
+  \note Normally axis labeling starts with the list's first string
+  and end with its last string, but by specifying a start and an
+  end value as additional parameters you can make KDChart repeat
+  the strings between these two values only, as shown here:
 
-   \verbatim
-   QStringList abscissaNames;
-   abscissaNames << "Sunday" << "Monday" << "Tuesday" << "Wednesday"
-   << "Thursday" << "Friday" << "Saturday";
-   QStringList abscissaShortNames;
-   abscissaShortNames << "Sun" << "Mon" << "Tue" << "Wed"
-   << "Thu" << "Fri" << "Sat";
+  \verbatim
+  QStringList abscissaNames;
+  abscissaNames << "Sunday" << "Monday" << "Tuesday" << "Wednesday"
+  << "Thursday" << "Friday" << "Saturday";
+  QStringList abscissaShortNames;
+  abscissaShortNames << "Sun" << "Mon" << "Tue" << "Wed"
+  << "Thu" << "Fri" << "Sat";
 
-   setAxisLabelStringParams( KDChartAxisParams::AxisPosBottom,
-   &names, &shortNames,
-   "Monday", "Friday")
-   \endverbatim
+  setAxisLabelStringParams( KDChartAxisParams::AxisPosBottom,
+  &names, &shortNames,
+  "Monday", "Friday")
+  \endverbatim
 
 
-   \param n the ID of the axis
-   \param QStringList* axisLabelStringList points to the list of labels to be displayed
-   \param  QStringList* axisShortLabelStringList points to
-   an alternative list of short names to be displayed if the long labels take too much place
-   \param QString valueStart ( default null ) the label to begin with
-   \param QString valueEnd ( default null ) the label to end with
+  \param n the ID of the axis
+  \param QStringList* axisLabelStringList points to the list of labels to be displayed
+  \param  QStringList* axisShortLabelStringList points to
+  an alternative list of short names to be displayed if the long labels take too much place
+  \param QString valueStart ( default null ) the label to begin with
+  \param QString valueEnd ( default null ) the label to end with
 
-   \sa KDChartAxisParams::setAxisLabelStringLists
-*/
+  \sa KDChartAxisParams::setAxisLabelStringLists
+  */
 void KDChartParams::setAxisLabelStringParams( uint n,
-                                              QStringList*   axisLabelStringList,
-                                              QStringList*   axisShortLabelStringList,
-                                              const QString& valueStart,
-                                              const QString& valueEnd )
+        QStringList*   axisLabelStringList,
+        QStringList*   axisShortLabelStringList,
+        const QString& valueStart,
+        const QString& valueEnd )
 {
     if ( n < KDCHART_MAX_AXES ) {
         _axisSettings[ n ].params.setAxisLabelStringLists( axisLabelStringList,
-                                                           axisShortLabelStringList,
-                                                           valueStart,
-                                                           valueEnd );
+                axisShortLabelStringList,
+                valueStart,
+                valueEnd );
         emit changed();
     }
 }
 
 
 /**
-   Specifies the parameters for one axis.
+  Specifies the parameters for one axis.
 
-   \param axisParams the axis parameters to be used.
-   \sa axisParams, AxisParams
-*/
+  \param axisParams the axis parameters to be used.
+  \sa axisParams, AxisParams
+  */
 void KDChartParams::setAxisParams( uint n,
-                                   const KDChartAxisParams& axisParams )
+        const KDChartAxisParams& axisParams )
 {
     if ( n < KDCHART_MAX_AXES ) {
         _axisSettings[ n ].params = axisParams;
@@ -6958,14 +6958,14 @@ void KDChartParams::setAxisParams( uint n,
 
 
 /**
-   \fn const KDChartAxisParams& KDChartParams::axisParams( uint n ) const
+  \fn const KDChartAxisParams& KDChartParams::axisParams( uint n ) const
 
-   Returns the parameters that are currently defined for axis n.
+  Returns the parameters that are currently defined for axis n.
 
-   \return all the parameters defined for axis n. If called with invalid
-   value for \c n it returns the default axis parameters.
-   \sa setAxisParams, AxisParams
-*/
+  \return all the parameters defined for axis n. If called with invalid
+  value for \c n it returns the default axis parameters.
+  \sa setAxisParams, AxisParams
+  */
 
 
 //@}
@@ -6975,75 +6975,75 @@ void KDChartParams::setAxisParams( uint n,
 
 /** @name Header and footer methods.
 
-These methods query and set header and footer parameters.
+  These methods query and set header and footer parameters.
 
-The names of the Header and Footer sections.
+  The names of the Header and Footer sections.
 
-You may use up to 9 header and/or up to 9 footer sections.
+  You may use up to 9 header and/or up to 9 footer sections.
 
-\li Up to three <b>leading headers</b> ( \c HdFtPosHeader0 , \c
-HdFtPosHeader0L , \c HdFtPosHeader0R ) may be drawn at the very upper
-edge of the printable area. <br>
-You might want to use those sections to show some marginal information
-like department name, print date, page number... <br>
-<b>Note:</b> Those headers <b>share the same area</b> so make sure to
-specify propper horizontal alignment for each section when using more than
-one of them. By default \c HdFtPosHeader0 has centered alignement,
-\c HdFtPosHeader0L is aligned to the left and \c HdFtPosHeader0R to the
-right side. All of them are vertically aligned to the bottom, you may
-change this at your own risk: the resulting output might look strange. <br>
-<b>also note:</b> Alignment to bottom here means their baselines are
-horizontally adjusted to each other when more than one of them is used - it
-does <b>not</b> mean the <b>lowest pixel positions</b> of their output will
-be at the very same y coordinate since those might vary depending from the
-font size and or the font size you have specified for each of the sections.
+  \li Up to three <b>leading headers</b> ( \c HdFtPosHeader0 , \c
+  HdFtPosHeader0L , \c HdFtPosHeader0R ) may be drawn at the very upper
+  edge of the printable area. <br>
+  You might want to use those sections to show some marginal information
+  like department name, print date, page number... <br>
+  <b>Note:</b> Those headers <b>share the same area</b> so make sure to
+  specify propper horizontal alignment for each section when using more than
+  one of them. By default \c HdFtPosHeader0 has centered alignement,
+  \c HdFtPosHeader0L is aligned to the left and \c HdFtPosHeader0R to the
+  right side. All of them are vertically aligned to the bottom, you may
+  change this at your own risk: the resulting output might look strange. <br>
+  <b>also note:</b> Alignment to bottom here means their baselines are
+  horizontally adjusted to each other when more than one of them is used - it
+  does <b>not</b> mean the <b>lowest pixel positions</b> of their output will
+  be at the very same y coordinate since those might vary depending from the
+  font size and or the font size you have specified for each of the sections.
 
-\li Up to three <b>main headers</b> ( \c HdFtPosHeader , \c
-HdFtPosHeaderL , \c HdFtPosHeaderR ) may be drawn under the
-leading header(s). <br>
-You could use this headers to show the main information such as project name,
-chart title or period of time (e.g. census year). <br>
-Like their counterparts they share the same part of the printable area so the
-restrictions regarding alignment mentioned above apply also to these three
-sections.
+  \li Up to three <b>main headers</b> ( \c HdFtPosHeader , \c
+  HdFtPosHeaderL , \c HdFtPosHeaderR ) may be drawn under the
+  leading header(s). <br>
+  You could use this headers to show the main information such as project name,
+  chart title or period of time (e.g. census year). <br>
+  Like their counterparts they share the same part of the printable area so the
+  restrictions regarding alignment mentioned above apply also to these three
+  sections.
 
-\li Up to three <b>additional headers</b> ( \c HdFtPosHeader2 , \c
-HdFtPosHeader2L , \c HdFtPosHeader2R ) may be drawn under the main
-header(s). <br>
-This headers could show additional information such as project phase, chart
-sub-title or sub-period of time (e.g. census quarter-year). <br>
-Like their counterparts they share the same part of the printable area so the
-restrictions regarding alignment mentioned above apply also to these three
-sections.
+  \li Up to three <b>additional headers</b> ( \c HdFtPosHeader2 , \c
+  HdFtPosHeader2L , \c HdFtPosHeader2R ) may be drawn under the main
+  header(s). <br>
+  This headers could show additional information such as project phase, chart
+  sub-title or sub-period of time (e.g. census quarter-year). <br>
+  Like their counterparts they share the same part of the printable area so the
+  restrictions regarding alignment mentioned above apply also to these three
+  sections.
 
-<p>
+  <p>
 
-\li Up to three <b>main footers</b> ( \c HdFtPosFooter , \c
-HdFtPosFooterL , \c HdFtPosFooterR ) may be drawn under the chart data
-area (or the legend that might be shown below that area, resp.). <br>
-You might want to use these footers instead of (or additional to) the
-main header(s) for showing the main information... <br>
-Like their header-counterparts they share the same part of the printable area
-so the restrictions regarding alignment mentioned above apply also to these
-three sections.
+  \li Up to three <b>main footers</b> ( \c HdFtPosFooter , \c
+  HdFtPosFooterL , \c HdFtPosFooterR ) may be drawn under the chart data
+  area (or the legend that might be shown below that area, resp.). <br>
+  You might want to use these footers instead of (or additional to) the
+  main header(s) for showing the main information... <br>
+  Like their header-counterparts they share the same part of the printable area
+  so the restrictions regarding alignment mentioned above apply also to these
+  three sections.
 
-\li Up to three <b>additional footers</b> ( \c HdFtPosFooter2 , \c
-HdFtPosFooter2L , \c HdFtPosHeader2R ) may be drawn under the main
-footer(s). <br>
-This footers could show additional information instead of (or additional to)
-the additional header(s). <br>
-Like their counterparts they share the same part of the printable area so the
-restrictions regarding alignment mentioned above apply also to these three
-sections.
+  \li Up to three <b>additional footers</b> ( \c HdFtPosFooter2 , \c
+  HdFtPosFooter2L , \c HdFtPosHeader2R ) may be drawn under the main
+  footer(s). <br>
+  This footers could show additional information instead of (or additional to)
+  the additional header(s). <br>
+  Like their counterparts they share the same part of the printable area so the
+  restrictions regarding alignment mentioned above apply also to these three
+  sections.
 
-\li Up to three <b>trailing footers</b> ( \c HdFtPosFooter0 , \c
-HdFtPosFooter0L , \c HdFtPosFooter0R ) may be drawn at the very lower
-edge of the printable area: <b>under</b> the other footer sections <br>
-You might want to use those sections to show some marginal information
-instead of (or additional to) the leading header(s). <br>
-Like their counterparts they share the same part of the printable area so the
-restrictions regarding alignment mentioned above apply also to these three
-sections.
+  \li Up to three <b>trailing footers</b> ( \c HdFtPosFooter0 , \c
+  HdFtPosFooter0L , \c HdFtPosFooter0R ) may be drawn at the very lower
+  edge of the printable area: <b>under</b> the other footer sections <br>
+  You might want to use those sections to show some marginal information
+  instead of (or additional to) the leading header(s). <br>
+  Like their counterparts they share the same part of the printable area so the
+  restrictions regarding alignment mentioned above apply also to these three
+  sections.
 
 \note The names \c HdFtPosHeader or \c HdFtPosFooter are the basic names also returned by \c basicAxisPos.
 
@@ -7059,179 +7059,179 @@ sections.
 
 
 /**
-   \enum KDChartParams::HdFtPos
+  \enum KDChartParams::HdFtPos
 
-   This enum lists the positions that headers and footers can take.
-*/
-
-
-/**
-   \enum KDChartParams::HdFtPosSTART,
-
-   start of all sections
-*/
-
-/**
-   \enum KDChartParams::HdFtPosHeadersSTART
-
-   start of header sections
-*/
-
-/**
-   \enum KDChartParams::HdFtPosHeader0
-
-   leading header (at the very top of the printable area)
-*/
-
-/**
-   \enum KDChartParams::HdFtPosHeader0L
-
-   another leading header, by default left-aligned
-*/
-
-/**
-   \enum KDChartParams::HdFtPosHeader0R
-
-   yet another leading header, by default right-aligned
-*/
-
-/**
-   \enum KDChartParams::HdFtPosHeader
-
-   main header (below the leading header)
-*/
-
-/**
-   \enum KDChartParams::HdFtPosHeaderL
-
-   another main header, by default left-aligned
-*/
-
-/**
-   \enum KDChartParams::HdFtPosHeaderR
-
-   yet another main header, by default right-aligned
-*/
-
-/**
-   \enum KDChartParams::HdFtPosHeader2
-
-   additional header (below the main header)
-*/
-
-/**
-   \enum KDChartParams::HdFtPosHeader2L
-
-   another additional header, by default left-aligned
-*/
-
-/**
-   \enum KDChartParams::HdFtPosHeader2R
-
-   yet another additional header, by default right-aligned
-*/
-
-/**
-   \enum KDChartParams::HdFtPosHeadersEND
-
-   end of header sections
-*/
-
-/**
-   \enum KDChartParams::HdFtPosFootersSTART
-
-   start of footer sections
-*/
+  This enum lists the positions that headers and footers can take.
+  */
 
 
 /**
-   \enum KDChartParams::HdFtPosFooter
+  \enum KDChartParams::HdFtPosSTART,
 
-   main footer (below the data area or the bottom legend (if any), resp.)
-*/
-
-/**
-   \enum KDChartParams::HdFtPosFooterL
-
-   another main footer, by default left-aligned
-*/
+  start of all sections
+  */
 
 /**
-   \enum KDChartParams::HdFtPosFooterR
+  \enum KDChartParams::HdFtPosHeadersSTART
 
-   yet another main footer, by default right-aligned
-*/
+  start of header sections
+  */
+
+/**
+  \enum KDChartParams::HdFtPosHeader0
+
+  leading header (at the very top of the printable area)
+  */
+
+/**
+  \enum KDChartParams::HdFtPosHeader0L
+
+  another leading header, by default left-aligned
+  */
+
+/**
+  \enum KDChartParams::HdFtPosHeader0R
+
+  yet another leading header, by default right-aligned
+  */
+
+/**
+  \enum KDChartParams::HdFtPosHeader
+
+  main header (below the leading header)
+  */
+
+/**
+  \enum KDChartParams::HdFtPosHeaderL
+
+  another main header, by default left-aligned
+  */
+
+/**
+  \enum KDChartParams::HdFtPosHeaderR
+
+  yet another main header, by default right-aligned   
+  */
+
+/**
+  \enum KDChartParams::HdFtPosHeader2
+
+  additional header (below the main header)
+  */
+
+/**
+  \enum KDChartParams::HdFtPosHeader2L
+
+  another additional header, by default left-aligned
+  */
+
+/**
+  \enum KDChartParams::HdFtPosHeader2R
+
+  yet another additional header, by default right-aligned   
+  */
+
+/**
+  \enum KDChartParams::HdFtPosHeadersEND
+
+  end of header sections
+  */
+
+/**
+  \enum KDChartParams::HdFtPosFootersSTART
+
+  start of footer sections
+  */
 
 
 /**
-   \enum KDChartParams::HdFtPosFooter2
+  \enum KDChartParams::HdFtPosFooter
 
-   additional footer (below the main footer)
-*/
-
-/**
-   \enum KDChartParams::HdFtPosFooter2L
-
-   another additional footer, by default left-aligned
-*/
+  main footer (below the data area or the bottom legend (if any), resp.)
+  */
 
 /**
-   \enum KDChartParams::HdFtPosFooter2R
+  \enum KDChartParams::HdFtPosFooterL
 
-   yet another additional footer, by default right-aligned
-*/
-
-
-/**
-   \enum KDChartParams::HdFtPosFooter0
-
-   trailing footer (below the additional footer)
-*/
+  another main footer, by default left-aligned
+  */
 
 /**
-   \enum KDChartParams::HdFtPosFooter0L
+  \enum KDChartParams::HdFtPosFooterR
 
-   another trailing footer, by default left-aligned
-*/
-
-/**
-   \enum KDChartParams::HdFtPosFooter0R
-
-   yet another trailing footer, by default right-aligned
-*/
-
-/**
-   \enum KDChartParams::HdFtPosFootersEND
-
-   end of footer sections
-*/
-
-/**
-   \enum KDChartParams::HdFtPosEND
-
-   end of all sections
-*/
+  yet another main footer, by default right-aligned
+  */
 
 
 /**
-   Specifies the text to be displayed in the header (or footer, resp.)
-   section specified by \c pos.
-   The default is not to display any header text nor footer text.
+  \enum KDChartParams::HdFtPosFooter2
 
-   \note To learn about the different header (or footer, resp.)
-   sections please see information given at \c HdFtPos enum explanation.
+  additional footer (below the main footer)
+  */
 
-   \param pos the section in which the text is to be shown
-   \param text the text to be shown
-   \sa HdFtPos, headerFooterText()
-   \sa setHeaderFooterFont,           headerFooterFont
-   \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
-   \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
-   \sa setHeader1Text(), header1Text()
-   \sa setHeader2Text(), header2Text()
-   \sa setFooterText(),  footerText()
-*/
-    void KDChartParams::setHeaderFooterText( uint pos, const QString& text )
+/**
+  \enum KDChartParams::HdFtPosFooter2L
+
+  another additional footer, by default left-aligned
+  */
+
+/**
+  \enum KDChartParams::HdFtPosFooter2R
+
+  yet another additional footer, by default right-aligned
+  */
+
+
+/**
+  \enum KDChartParams::HdFtPosFooter0
+
+  trailing footer (below the additional footer)
+  */
+
+/**
+  \enum KDChartParams::HdFtPosFooter0L
+
+  another trailing footer, by default left-aligned
+  */
+
+/**
+  \enum KDChartParams::HdFtPosFooter0R
+
+  yet another trailing footer, by default right-aligned
+  */
+
+/**
+  \enum KDChartParams::HdFtPosFootersEND
+
+  end of footer sections
+  */
+
+/**
+  \enum KDChartParams::HdFtPosEND
+
+  end of all sections
+  */
+
+
+/**
+  Specifies the text to be displayed in the header (or footer, resp.)
+  section specified by \c pos.
+  The default is not to display any header text nor footer text.
+
+  \note To learn about the different header (or footer, resp.)
+  sections please see information given at \c HdFtPos enum explanation.
+
+  \param pos the section in which the text is to be shown
+  \param text the text to be shown
+  \sa HdFtPos, headerFooterText()
+  \sa setHeaderFooterFont,           headerFooterFont
+  \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
+  \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
+  \sa setHeader1Text(), header1Text()
+  \sa setHeader2Text(), header2Text()
+  \sa setFooterText(),  footerText()
+  */
+void KDChartParams::setHeaderFooterText( uint pos, const QString& text )
 {
     if ( HdFtPosEND >= pos ) {
         _hdFtParams[ pos ]._text = text;
@@ -7241,22 +7241,22 @@ sections.
 
 
 /**
-   Returns the text that is displayed in the header (or footer, resp.)
-   section specified by \c pos.
+  Returns the text that is displayed in the header (or footer, resp.)
+  section specified by \c pos.
 
-   \note To learn about the different header (or footer, resp.)
-   sections please see information given at \c HdFtPos enum explanation.
+  \note To learn about the different header (or footer, resp.)
+  sections please see information given at \c HdFtPos enum explanation.
 
-   \param pos the section for which to return the text
-   \return the displayed text
-   \sa HdFtPos, setHeaderFooterText()
-   \sa setHeaderFooterFont,           headerFooterFont
-   \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
-   \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
-   \sa setHeader1Text(), header1Text()
-   \sa setHeader2Text(), header2Text()
-   \sa setFooterText(),  footerText()
-*/
+  \param pos the section for which to return the text
+  \return the displayed text
+  \sa HdFtPos, setHeaderFooterText()
+  \sa setHeaderFooterFont,           headerFooterFont
+  \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
+  \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
+  \sa setHeader1Text(), header1Text()
+  \sa setHeader2Text(), header2Text()
+  \sa setFooterText(),  footerText()
+  */
 QString KDChartParams::headerFooterText( uint pos ) const
 {
     if ( HdFtPosEND >= pos )
@@ -7268,10 +7268,10 @@ QString KDChartParams::headerFooterText( uint pos ) const
 
 
 /**
-   \note This methode for internal use.
-   Return the position and size of one header/footer area.
-   <b>Will return valid data only if called after KDChartPainter::setupGeometry()!</b>
-*/
+  \note This methode for internal use.
+  Return the position and size of one header/footer area.
+  <b>Will return valid data only if called after KDChartPainter::setupGeometry()!</b>
+  */
 const QRect& KDChartParams::headerFooterRect( uint pos ) const
 {
     if ( HdFtPosEND >= pos )
@@ -7282,23 +7282,23 @@ const QRect& KDChartParams::headerFooterRect( uint pos ) const
 
 
 /**
-   Specifies the colour to be used for the header text (or footer text, resp.)
-   of the header/footer section specified by \c pos.
-   The default colour is <b>QColor( Qt::black )</b>.
+  Specifies the colour to be used for the header text (or footer text, resp.)
+  of the header/footer section specified by \c pos.
+  The default colour is <b>QColor( Qt::black )</b>.
 
-   \note To learn about the different header (or footer, resp.)
-   sections please see information given at \c HdFtPos enum explanation.
+  \note To learn about the different header (or footer, resp.)
+  sections please see information given at \c HdFtPos enum explanation.
 
-   \param pos the section for which the colour is to be changed
-   \param color the text colour to be used
-   \sa HdFtPos, headerFooterText()
-   \sa setHeaderFooterFont,           headerFooterFont
-   \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
-   \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
-   \sa setHeader1Text(), header1Text()
-   \sa setHeader2Text(), header2Text()
-   \sa setFooterText(),  footerText()
-*/
+  \param pos the section for which the colour is to be changed
+  \param color the text colour to be used
+  \sa HdFtPos, headerFooterText()
+  \sa setHeaderFooterFont,           headerFooterFont
+  \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
+  \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
+  \sa setHeader1Text(), header1Text()
+  \sa setHeader2Text(), header2Text()
+  \sa setFooterText(),  footerText()
+  */
 void KDChartParams::setHeaderFooterColor( uint pos, const QColor color )
 {
     if ( HdFtPosEND >= pos ) {
@@ -7309,22 +7309,22 @@ void KDChartParams::setHeaderFooterColor( uint pos, const QColor color )
 
 
 /**
-   Returns the colour used for the header text (or footer text, resp.)
-   of the header/footer section specified by \c pos.
+  Returns the colour used for the header text (or footer text, resp.)
+  of the header/footer section specified by \c pos.
 
-   \note To learn about the different header (or footer, resp.)
-   sections please see information given at \c HdFtPos enum explanation.
+  \note To learn about the different header (or footer, resp.)
+  sections please see information given at \c HdFtPos enum explanation.
 
-   \param pos the section for which to return the text colour
-   \return the text colour
-   \sa HdFtPos, setHeaderFooterText()
-   \sa setHeaderFooterFont,           headerFooterFont
-   \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
-   \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
-   \sa setHeader1Text(), header1Text()
-   \sa setHeader2Text(), header2Text()
-   \sa setFooterText(),  footerText()
-*/
+  \param pos the section for which to return the text colour
+  \return the text colour
+  \sa HdFtPos, setHeaderFooterText()
+  \sa setHeaderFooterFont,           headerFooterFont
+  \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
+  \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
+  \sa setHeader1Text(), header1Text()
+  \sa setHeader2Text(), header2Text()
+  \sa setFooterText(),  footerText()
+  */
 QColor KDChartParams::headerFooterColor( uint pos ) const
 {
     if ( HdFtPosEND >= pos )
@@ -7335,29 +7335,29 @@ QColor KDChartParams::headerFooterColor( uint pos ) const
 
 
 /**
-   Specifies the font to be used in the header (or footer,
-   resp.) section specified by \c pos..
-   The default is a 14pt Helvetica font.
+  Specifies the font to be used in the header (or footer,
+  resp.) section specified by \c pos..
+  The default is a 14pt Helvetica font.
 
-   \note To learn about the different header (or footer, resp.)
-   sections please see information given at \c HdFtPos enum explanation.
+  \note To learn about the different header (or footer, resp.)
+  sections please see information given at \c HdFtPos enum explanation.
 
-   \param pos the section in which the font is to be used
-   \param font the font to use
-   \sa HdFtPos, setHeaderFooterText(), headerFooterText()
-   \sa headerFooterFont()
-   \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
-   \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
-   \sa setHeader1Font(), header1Font()
-   \sa setHeader2Font(), header2Font()
-   \sa setFooterFont(),  footerFont()
-   \sa setHeader1Text(), header1Text()
-   \sa setHeader2Text(), header2Text()
-   \sa setFooterText(),  footerText()
-*/
+  \param pos the section in which the font is to be used
+  \param font the font to use
+  \sa HdFtPos, setHeaderFooterText(), headerFooterText()
+  \sa headerFooterFont()
+  \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
+  \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
+  \sa setHeader1Font(), header1Font()
+  \sa setHeader2Font(), header2Font()
+  \sa setFooterFont(),  footerFont()
+  \sa setHeader1Text(), header1Text()
+  \sa setHeader2Text(), header2Text()
+  \sa setFooterText(),  footerText()
+  */
 void KDChartParams::setHeaderFooterFont( uint pos, const QFont& font,
-                                         bool fontUseRelSize,
-                                         int fontRelSize )
+        bool fontUseRelSize,
+        int fontRelSize )
 {
     if ( HdFtPosEND >= pos ) {
         _hdFtParams[ pos ]._font = font;
@@ -7369,25 +7369,25 @@ void KDChartParams::setHeaderFooterFont( uint pos, const QFont& font,
 
 
 /**
-   Returns the font used in the header (or footer, resp.)
-   section specified by \c pos.
+  Returns the font used in the header (or footer, resp.)
+  section specified by \c pos.
 
-   \note To learn about the different header (or footer, resp.)
-   sections please see information given at \c HdFtPos enum explanation.
+  \note To learn about the different header (or footer, resp.)
+  sections please see information given at \c HdFtPos enum explanation.
 
-   \param pos the section for which to return the font
-   \return the used font
-   \sa HdFtPos, setHeaderFooterText(), headerFooterText()
-   \sa setHeaderFooterFont()
-   \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
-   \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
-   \sa setHeader1Font(), header1Font()
-   \sa setHeader2Font(), header2Font()
-   \sa setFooterFont(),  footerFont()
-   \sa setHeader1Text(), header1Text()
-   \sa setHeader2Text(), header2Text()
-   \sa setFooterText(),  footerText()
-*/
+  \param pos the section for which to return the font
+  \return the used font
+  \sa HdFtPos, setHeaderFooterText(), headerFooterText()
+  \sa setHeaderFooterFont()
+  \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
+  \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
+  \sa setHeader1Font(), header1Font()
+  \sa setHeader2Font(), header2Font()
+  \sa setFooterFont(),  footerFont()
+  \sa setHeader1Text(), header1Text()
+  \sa setHeader2Text(), header2Text()
+  \sa setFooterText(),  footerText()
+  */
 QFont KDChartParams::headerFooterFont( uint pos ) const
 {
     if ( HdFtPosEND >= pos )
@@ -7398,25 +7398,25 @@ QFont KDChartParams::headerFooterFont( uint pos ) const
 
 
 /**
-   Returns is the font size used in the header (or footer, resp.)
-   section specified by \c pos will be calculated dynamically.
+  Returns is the font size used in the header (or footer, resp.)
+  section specified by \c pos will be calculated dynamically.
 
-   \note To learn about the different header (or footer, resp.)
-   sections please see information given at \c HdFtPos enum explanation.
+  \note To learn about the different header (or footer, resp.)
+  sections please see information given at \c HdFtPos enum explanation.
 
-   \param pos the section for which to return the font calculation flag
-   \return the font calculation flag
-   \sa HdFtPos, setHeaderFooterText(), headerFooterText()
-   \sa setHeaderFooterFont()
-   \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
-   \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
-   \sa setHeader1Font(), header1Font()
-   \sa setHeader2Font(), header2Font()
-   \sa setFooterFont(),  footerFont()
-   \sa setHeader1Text(), header1Text()
-   \sa setHeader2Text(), header2Text()
-   \sa setFooterText(),  footerText()
-*/
+  \param pos the section for which to return the font calculation flag
+  \return the font calculation flag
+  \sa HdFtPos, setHeaderFooterText(), headerFooterText()
+  \sa setHeaderFooterFont()
+  \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
+  \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
+  \sa setHeader1Font(), header1Font()
+  \sa setHeader2Font(), header2Font()
+  \sa setFooterFont(),  footerFont()
+  \sa setHeader1Text(), header1Text()
+  \sa setHeader2Text(), header2Text()
+  \sa setFooterText(),  footerText()
+  */
 bool KDChartParams::headerFooterFontUseRelSize( uint pos ) const
 {
     if ( HdFtPosEND >= pos )
@@ -7427,26 +7427,26 @@ bool KDChartParams::headerFooterFontUseRelSize( uint pos ) const
 
 
 /**
-   Returns the factor used for dynamical calculation of
-   the font size of the text in the header (or footer, resp.)
-   section specified by \c pos.
+  Returns the factor used for dynamical calculation of
+  the font size of the text in the header (or footer, resp.)
+  section specified by \c pos.
 
-   \note To learn about the different header (or footer, resp.)
-   sections please see information given at \c HdFtPos enum explanation.
+  \note To learn about the different header (or footer, resp.)
+  sections please see information given at \c HdFtPos enum explanation.
 
-   \param pos the section for which to return the font size factor
-   \return the font size factor
-   \sa HdFtPos, setHeaderFooterText(), headerFooterText()
-   \sa setHeaderFooterFont()
-   \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
-   \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
-   \sa setHeader1Font(), header1Font()
-   \sa setHeader2Font(), header2Font()
-   \sa setFooterFont(),  footerFont()
-   \sa setHeader1Text(), header1Text()
-   \sa setHeader2Text(), header2Text()
-   \sa setFooterText(),  footerText()
-*/
+  \param pos the section for which to return the font size factor
+  \return the font size factor
+  \sa HdFtPos, setHeaderFooterText(), headerFooterText()
+  \sa setHeaderFooterFont()
+  \sa setHeaderFooterFontUseRelSize, headerFooterFontUseRelSize
+  \sa setHeaderFooterFontRelSize,    headerFooterFontRelSize
+  \sa setHeader1Font(), header1Font()
+  \sa setHeader2Font(), header2Font()
+  \sa setFooterFont(),  footerFont()
+  \sa setHeader1Text(), header1Text()
+  \sa setHeader2Text(), header2Text()
+  \sa setFooterText(),  footerText()
+  */
 int KDChartParams::headerFooterFontRelSize( uint pos ) const
 {
     if ( HdFtPosEND >= pos )
@@ -7457,323 +7457,323 @@ int KDChartParams::headerFooterFontRelSize( uint pos ) const
 
 
 /**
-   \fn void KDChartParams::setHeader1Text( const QString& text )
+  \fn void KDChartParams::setHeader1Text( const QString& text )
 
-   Specifies the text to be displayed as the first header line. The
-   default is not to display any header text.
+  Specifies the text to be displayed as the first header line. The
+  default is not to display any header text.
 
-   \note This function provided for convenience only. <br>
-   To gain the <b>full</b> benefits of the header/footer management
-   please consider learning about the different header (or footer,
-   resp.) sections, see information given at \c HdFtPos enum
-   explanation. <br>
-   The 'better' way to specify content and settings of headers or
-   footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
-   , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
-   resp.) while specifying the appropriate \c HdFtPos. <br>
-   The canonical way to retrieve settings and content of headers or
-   footers is to call \c headerFooterText (or \c headerFooterFont ,
-   \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
+  \note This function provided for convenience only. <br>
+  To gain the <b>full</b> benefits of the header/footer management
+  please consider learning about the different header (or footer,
+  resp.) sections, see information given at \c HdFtPos enum
+  explanation. <br>
+  The 'better' way to specify content and settings of headers or
+  footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
+  , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
+  resp.) while specifying the appropriate \c HdFtPos. <br>
+  The canonical way to retrieve settings and content of headers or
+  footers is to call \c headerFooterText (or \c headerFooterFont ,
+  \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
 
-   \param text the text to display
-   \sa HdFtPos, setHeaderFooterText(), headerFooterText()
-   \sa header2Text(), setHeader1Text(), header1Text(), setFooterText(),
-   footerText()
-*/
-
-
-/**
-   \fn QString KDChartParams::header1Text() const
-
-   Returns the text that is displayed as the first header line.
-
-   \note This function provided for convenience only. <br>
-   To gain the <b>full</b> benefits of the header/footer management
-   please consider learning about the different header (or footer,
-   resp.) sections, see information given at \c HdFtPos enum
-   explanation. <br>
-   The 'better' way to specify content and settings of headers or
-   footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
-   , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
-   resp.) while specifying the appropriate \c HdFtPos. <br>
-   The canonical way to retrieve settings and content of headers or
-   footers is to call \c headerFooterText (or \c headerFooterFont ,
-   \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
-
-   \return the displayed text
-   \sa HdFtPos, setHeaderFooterText(), headerFooterText()
-   \sa setHeader2Text(), setHeader1Text(), header1Text()
-   \sa setFooterText(), footerText()
-*/
+  \param text the text to display
+  \sa HdFtPos, setHeaderFooterText(), headerFooterText()
+  \sa header2Text(), setHeader1Text(), header1Text(), setFooterText(),
+  footerText()
+  */
 
 
 /**
-   \fn void KDChartParams::setHeader1Font( const QFont& font )
+  \fn QString KDChartParams::header1Text() const
 
-   Specifies the font to be used for displaying the first header line.
-   The default is a 14pt Helvetica font.
+  Returns the text that is displayed as the first header line.
 
-   \note This function provided for convenience only. <br>
-   To gain the <b>full</b> benefits of the header/footer management
-   please consider learning about the different header (or footer,
-   resp.) sections, see information given at \c HdFtPos enum
-   explanation. <br>
-   The 'better' way to specify content and settings of headers or
-   footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
-   , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
-   resp.) while specifying the appropriate \c HdFtPos. <br>
-   The canonical way to retrieve settings and content of headers or
-   footers is to call \c headerFooterText (or \c headerFooterFont ,
-   \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
+  \note This function provided for convenience only. <br>
+  To gain the <b>full</b> benefits of the header/footer management
+  please consider learning about the different header (or footer,
+  resp.) sections, see information given at \c HdFtPos enum
+  explanation. <br>
+  The 'better' way to specify content and settings of headers or
+  footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
+  , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
+  resp.) while specifying the appropriate \c HdFtPos. <br>
+  The canonical way to retrieve settings and content of headers or
+  footers is to call \c headerFooterText (or \c headerFooterFont ,
+  \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
 
-   \param font the font to use
-   \sa HdFtPos, setHeaderFooterFont(), headerFooterFont()
-   \sa setHeaderFooterFontUseRelSize(), headerFooterFontUseRelSize()
-   \sa setHeaderFooterFontRelSize(), headerFooterFontRelSize()
-   \sa header2Font(), setHeader2Text(), header2Text()
-   \sa setHeader1Font(), header1Font()
-   \sa setFooterFont(), footerFont()
-*/
+  \return the displayed text
+  \sa HdFtPos, setHeaderFooterText(), headerFooterText()
+  \sa setHeader2Text(), setHeader1Text(), header1Text()
+  \sa setFooterText(), footerText()
+  */
 
 
 /**
-   \fn QFont KDChartParams::header1Font() const
+  \fn void KDChartParams::setHeader1Font( const QFont& font )
 
-   Returns the font used for displaying the second header line.
+  Specifies the font to be used for displaying the first header line.
+  The default is a 14pt Helvetica font.
 
-   \note This function provided for convenience only. <br>
-   To gain the <b>full</b> benefits of the header/footer management
-   please consider learning about the different header (or footer,
-   resp.) sections, see information given at \c HdFtPos enum
-   explanation. <br>
-   The 'better' way to specify content and settings of headers or
-   footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
-   , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
-   resp.) while specifying the appropriate \c HdFtPos. <br>
-   The canonical way to retrieve settings and content of headers or
-   footers is to call \c headerFooterText (or \c headerFooterFont ,
-   \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
+  \note This function provided for convenience only. <br>
+  To gain the <b>full</b> benefits of the header/footer management
+  please consider learning about the different header (or footer,
+  resp.) sections, see information given at \c HdFtPos enum
+  explanation. <br>
+  The 'better' way to specify content and settings of headers or
+  footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
+  , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
+  resp.) while specifying the appropriate \c HdFtPos. <br>
+  The canonical way to retrieve settings and content of headers or
+  footers is to call \c headerFooterText (or \c headerFooterFont ,
+  \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
 
-   \return the used font
-   \sa HdFtPos, setHeaderFooterFont(), headerFooterFont()
-   \sa setHeaderFooterFontUseRelSize(), headerFooterFontUseRelSize()
-   \sa setHeaderFooterFontRelSize(), headerFooterFontRelSize()
-   \sa setHeader2Font(), setHeader2Text(), header2Text(),
-   setHeader1Font(), header1Font(), setFooterFont(), footerFont()
-*/
-
-
-/**
-   \fn void KDChartParams::setHeader2Text( const QString& text )
-
-   Specifies the text to be displayed as the second header line. The
-   default is not to display any header text.
-
-   \note This function provided for convenience only. <br>
-   To gain the <b>full</b> benefits of the header/footer management
-   please consider learning about the different header (or footer,
-   resp.) sections, see information given at \c HdFtPos enum
-   explanation. <br>
-   The 'better' way to specify content and settings of headers or
-   footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
-   , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
-   resp.) while specifying the appropriate \c HdFtPos. <br>
-   The canonical way to retrieve settings and content of headers or
-   footers is to call \c headerFooterText (or \c headerFooterFont ,
-   \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
-
-   \param text the text to display
-   \sa HdFtPos, setHeaderFooterText(), headerFooterText()
-   \sa header2Text(), setHeader1Text(), header1Text(), setFooterText(),
-   footerText()
-*/
+  \param font the font to use
+  \sa HdFtPos, setHeaderFooterFont(), headerFooterFont()
+  \sa setHeaderFooterFontUseRelSize(), headerFooterFontUseRelSize()
+  \sa setHeaderFooterFontRelSize(), headerFooterFontRelSize()
+  \sa header2Font(), setHeader2Text(), header2Text()
+  \sa setHeader1Font(), header1Font()
+  \sa setFooterFont(), footerFont()
+  */
 
 
 /**
-   \fn QString KDChartParams::header2Text() const
+  \fn QFont KDChartParams::header1Font() const
 
-   Returns the text that is displayed as the second header line.
+  Returns the font used for displaying the second header line.
 
-   \note This function provided for convenience only. <br>
-   To gain the <b>full</b> benefits of the header/footer management
-   please consider learning about the different header (or footer,
-   resp.) sections, see information given at \c HdFtPos enum
-   explanation. <br>
-   The 'better' way to specify content and settings of headers or
-   footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
-   , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
-   resp.) while specifying the appropriate \c HdFtPos. <br>
-   The canonical way to retrieve settings and content of headers or
-   footers is to call \c headerFooterText (or \c headerFooterFont ,
-   \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
+  \note This function provided for convenience only. <br>
+  To gain the <b>full</b> benefits of the header/footer management
+  please consider learning about the different header (or footer,
+  resp.) sections, see information given at \c HdFtPos enum
+  explanation. <br>
+  The 'better' way to specify content and settings of headers or
+  footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
+  , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
+  resp.) while specifying the appropriate \c HdFtPos. <br>
+  The canonical way to retrieve settings and content of headers or
+  footers is to call \c headerFooterText (or \c headerFooterFont ,
+  \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
 
-   \return the displayed text
-   \sa HdFtPos, setHeaderFooterText(), headerFooterText()
-   \sa setHeader2Text(), setHeader1Text(), header1Text(), setFooterText(),
-   footerText()
-*/
-
-
-/**
-   \fn void KDChartParams::setHeader2Font( const QFont& font )
-
-   Specifies the font to be used for displaying the second header line. The
-   default is a 12pt Helvetica font.
-
-   \note This function provided for convenience only. <br>
-   To gain the <b>full</b> benefits of the header/footer management
-   please consider learning about the different header (or footer,
-   resp.) sections, see information given at \c HdFtPos enum
-   explanation. <br>
-   The 'better' way to specify content and settings of headers or
-   footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
-   , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
-   resp.) while specifying the appropriate \c HdFtPos. <br>
-   The canonical way to retrieve settings and content of headers or
-   footers is to call \c headerFooterText (or \c headerFooterFont ,
-   \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
-
-   \param font the font to use
-   \sa HdFtPos, setHeaderFooterFont(), headerFooterFont()
-   \sa setHeaderFooterFontUseRelSize(), headerFooterFontUseRelSize()
-   \sa setHeaderFooterFontRelSize(), headerFooterFontRelSize()
-   \sa header2Font(), setHeader2Text(), header2Text(), setHeader1Font(), header1Font(),
-   setFooterFont(), footerFont()
-*/
-
+  \return the used font
+  \sa HdFtPos, setHeaderFooterFont(), headerFooterFont()
+  \sa setHeaderFooterFontUseRelSize(), headerFooterFontUseRelSize()
+  \sa setHeaderFooterFontRelSize(), headerFooterFontRelSize()
+  \sa setHeader2Font(), setHeader2Text(), header2Text(),
+  setHeader1Font(), header1Font(), setFooterFont(), footerFont()
+  */
 
 
 /**
-   \fn QFont KDChartParams::header2Font() const
+  \fn void KDChartParams::setHeader2Text( const QString& text )
 
-   Returns the font used for displaying the second header line.
+  Specifies the text to be displayed as the second header line. The
+  default is not to display any header text.
 
-   \note This function provided for convenience only. <br>
-   To gain the <b>full</b> benefits of the header/footer management
-   please consider learning about the different header (or footer,
-   resp.) sections, see information given at \c HdFtPos enum
-   explanation. <br>
-   The 'better' way to specify content and settings of headers or
-   footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
-   , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
-   resp.) while specifying the appropriate \c HdFtPos. <br>
-   The canonical way to retrieve settings and content of headers or
-   footers is to call \c headerFooterText (or \c headerFooterFont ,
-   \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
+  \note This function provided for convenience only. <br>
+  To gain the <b>full</b> benefits of the header/footer management
+  please consider learning about the different header (or footer,
+  resp.) sections, see information given at \c HdFtPos enum
+  explanation. <br>
+  The 'better' way to specify content and settings of headers or
+  footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
+  , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
+  resp.) while specifying the appropriate \c HdFtPos. <br>
+  The canonical way to retrieve settings and content of headers or
+  footers is to call \c headerFooterText (or \c headerFooterFont ,
+  \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
 
-   \return the used font
-   \sa HdFtPos, setHeaderFooterFont(), headerFooterFont()
-   \sa setHeaderFooterFontUseRelSize(), headerFooterFontUseRelSize()
-   \sa setHeaderFooterFontRelSize(), headerFooterFontRelSize()
-   \sa setHeader2Font(), setHeader2Text(), header2Text(),
-   setHeader1Font(), header1Font(), setFooterFont(), footerFont()
-*/
-
-
-/**
-   \fn void KDChartParams::setFooterText( const QString& text )
-
-   Specifies the text to be displayed as the footer line. The
-   default is not to display any footer text.
-
-   \note This function provided for convenience only. <br>
-   To gain the <b>full</b> benefits of the header/footer management
-   please consider learning about the different header (or footer,
-   resp.) sections, see information given at \c HdFtPos enum
-   explanation. <br>
-   The 'better' way to specify content and settings of headers or
-   footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
-   , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
-   resp.) while specifying the appropriate \c HdFtPos. <br>
-   The canonical way to retrieve settings and content of headers or
-   footers is to call \c headerFooterText (or \c headerFooterFont ,
-   \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
-
-   \param text the text to display
-   \sa HdFtPos, setHeaderFooterText(), headerFooterText()
-   \sa footerText(), setHeader1Text(), header1Text(), setHeader2Text(),
-   header2Text()
-*/
+  \param text the text to display
+  \sa HdFtPos, setHeaderFooterText(), headerFooterText()
+  \sa header2Text(), setHeader1Text(), header1Text(), setFooterText(),
+  footerText()
+  */
 
 
 /**
-   \fn QString KDChartParams::footerText() const
+  \fn QString KDChartParams::header2Text() const
 
-   Returns the text that is displayed as the footer line.
+  Returns the text that is displayed as the second header line.
 
-   \note This function provided for convenience only. <br>
-   To gain the <b>full</b> benefits of the header/footer management
-   please consider learning about the different header (or footer,
-   resp.) sections, see information given at \c HdFtPos enum
-   explanation. <br>
-   The 'better' way to specify content and settings of headers or
-   footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
-   , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
-   resp.) while specifying the appropriate \c HdFtPos. <br>
-   The canonical way to retrieve settings and content of headers or
-   footers is to call \c headerFooterText (or \c headerFooterFont ,
-   \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
+  \note This function provided for convenience only. <br>
+  To gain the <b>full</b> benefits of the header/footer management
+  please consider learning about the different header (or footer,
+  resp.) sections, see information given at \c HdFtPos enum
+  explanation. <br>
+  The 'better' way to specify content and settings of headers or
+  footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
+  , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
+  resp.) while specifying the appropriate \c HdFtPos. <br>
+  The canonical way to retrieve settings and content of headers or
+  footers is to call \c headerFooterText (or \c headerFooterFont ,
+  \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
 
-   \return the displayed text
-   \sa HdFtPos, setHeaderFooterText(), headerFooterText()
-   \sa setFooterText(), setHeader1Text(), header1Text(), setHeader2Text(),
-   header2Text()
-*/
-
-
-/**
-   \fn void KDChartParams::setFooterFont( const QFont& font )
-
-   Specifies the font to be used for displaying the footer line. The
-   default is a 12pt Helvetica font.
-
-   \note This function provided for convenience only. <br>
-   To gain the <b>full</b> benefits of the header/footer management
-   please consider learning about the different header (or footer,
-   resp.) sections, see information given at \c HdFtPos enum
-   explanation. <br>
-   The 'better' way to specify content and settings of headers or
-   footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
-   , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
-   resp.) while specifying the appropriate \c HdFtPos. <br>
-   The canonical way to retrieve settings and content of headers or
-   footers is to call \c headerFooterText (or \c headerFooterFont ,
-   \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
-
-   \param font the font to use
-   \sa HdFtPos, setHeaderFooterFont(), headerFooterFont()
-   \sa setHeaderFooterFontUseRelSize(), headerFooterFontUseRelSize()
-   \sa setHeaderFooterFontRelSize(), headerFooterFontRelSize()
-   \sa footerFont(), setFooterText(), footerText(), setHeader1Font(), header1Font(),
-   setHeader2Font(), header2Font()
-*/
+  \return the displayed text
+  \sa HdFtPos, setHeaderFooterText(), headerFooterText()
+  \sa setHeader2Text(), setHeader1Text(), header1Text(), setFooterText(),
+  footerText()
+  */
 
 
 /**
-   \fn QFont KDChartParams::footerFont() const
+  \fn void KDChartParams::setHeader2Font( const QFont& font )
 
-   Returns the font used for displaying the footer line.
+  Specifies the font to be used for displaying the second header line. The
+  default is a 12pt Helvetica font.
 
-   \note This function provided for convenience only. <br>
-   To gain the <b>full</b> benefits of the header/footer management
-   please consider learning about the different header (or footer,
-   resp.) sections, see information given at \c HdFtPos enum
-   explanation. <br>
-   The 'better' way to specify content and settings of headers or
-   footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
-   , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
-   resp.) while specifying the appropriate \c HdFtPos. <br>
-   The canonical way to retrieve settings and content of headers or
-   footers is to call \c headerFooterText (or \c headerFooterFont ,
-   \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
+  \note This function provided for convenience only. <br>
+  To gain the <b>full</b> benefits of the header/footer management
+  please consider learning about the different header (or footer,
+  resp.) sections, see information given at \c HdFtPos enum
+  explanation. <br>
+  The 'better' way to specify content and settings of headers or
+  footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
+  , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
+  resp.) while specifying the appropriate \c HdFtPos. <br>
+  The canonical way to retrieve settings and content of headers or
+  footers is to call \c headerFooterText (or \c headerFooterFont ,
+  \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
 
-   \return the used font
-   \sa HdFtPos, setHeaderFooterFont(), headerFooterFont()
-   \sa setHeaderFooterFontUseRelSize(), headerFooterFontUseRelSize()
-   \sa setHeaderFooterFontRelSize(), headerFooterFontRelSize()
-   \sa setFooterFont(), setFooterText(), footerText(),
-   setHeader1Font(), header1Font(), setHeader2Font(), header2Font()
-*/
+  \param font the font to use
+  \sa HdFtPos, setHeaderFooterFont(), headerFooterFont()
+  \sa setHeaderFooterFontUseRelSize(), headerFooterFontUseRelSize()
+  \sa setHeaderFooterFontRelSize(), headerFooterFontRelSize()
+  \sa header2Font(), setHeader2Text(), header2Text(), setHeader1Font(), header1Font(),
+  setFooterFont(), footerFont()
+  */
+
+
+
+/**
+  \fn QFont KDChartParams::header2Font() const
+
+  Returns the font used for displaying the second header line.
+
+  \note This function provided for convenience only. <br>
+  To gain the <b>full</b> benefits of the header/footer management
+  please consider learning about the different header (or footer,
+  resp.) sections, see information given at \c HdFtPos enum
+  explanation. <br>
+  The 'better' way to specify content and settings of headers or
+  footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
+  , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
+  resp.) while specifying the appropriate \c HdFtPos. <br>
+  The canonical way to retrieve settings and content of headers or
+  footers is to call \c headerFooterText (or \c headerFooterFont ,
+  \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
+
+  \return the used font
+  \sa HdFtPos, setHeaderFooterFont(), headerFooterFont()
+  \sa setHeaderFooterFontUseRelSize(), headerFooterFontUseRelSize()
+  \sa setHeaderFooterFontRelSize(), headerFooterFontRelSize()
+  \sa setHeader2Font(), setHeader2Text(), header2Text(),
+  setHeader1Font(), header1Font(), setFooterFont(), footerFont()
+  */
+
+
+/**
+  \fn void KDChartParams::setFooterText( const QString& text )
+
+  Specifies the text to be displayed as the footer line. The
+  default is not to display any footer text.
+
+  \note This function provided for convenience only. <br>
+  To gain the <b>full</b> benefits of the header/footer management
+  please consider learning about the different header (or footer,
+  resp.) sections, see information given at \c HdFtPos enum
+  explanation. <br>
+  The 'better' way to specify content and settings of headers or
+  footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
+  , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
+  resp.) while specifying the appropriate \c HdFtPos. <br>
+  The canonical way to retrieve settings and content of headers or
+  footers is to call \c headerFooterText (or \c headerFooterFont ,
+  \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
+
+  \param text the text to display
+  \sa HdFtPos, setHeaderFooterText(), headerFooterText()
+  \sa footerText(), setHeader1Text(), header1Text(), setHeader2Text(),
+  header2Text()
+  */
+
+
+/**
+  \fn QString KDChartParams::footerText() const
+
+  Returns the text that is displayed as the footer line.
+
+  \note This function provided for convenience only. <br>
+  To gain the <b>full</b> benefits of the header/footer management
+  please consider learning about the different header (or footer,
+  resp.) sections, see information given at \c HdFtPos enum
+  explanation. <br>
+  The 'better' way to specify content and settings of headers or
+  footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
+  , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
+  resp.) while specifying the appropriate \c HdFtPos. <br>
+  The canonical way to retrieve settings and content of headers or
+  footers is to call \c headerFooterText (or \c headerFooterFont ,
+  \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
+
+  \return the displayed text
+  \sa HdFtPos, setHeaderFooterText(), headerFooterText()
+  \sa setFooterText(), setHeader1Text(), header1Text(), setHeader2Text(),
+  header2Text()
+  */
+
+
+/**
+  \fn void KDChartParams::setFooterFont( const QFont& font )
+
+  Specifies the font to be used for displaying the footer line. The
+  default is a 12pt Helvetica font.
+
+  \note This function provided for convenience only. <br>
+  To gain the <b>full</b> benefits of the header/footer management
+  please consider learning about the different header (or footer,
+  resp.) sections, see information given at \c HdFtPos enum
+  explanation. <br>
+  The 'better' way to specify content and settings of headers or
+  footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
+  , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
+  resp.) while specifying the appropriate \c HdFtPos. <br>
+  The canonical way to retrieve settings and content of headers or
+  footers is to call \c headerFooterText (or \c headerFooterFont ,
+  \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
+
+  \param font the font to use
+  \sa HdFtPos, setHeaderFooterFont(), headerFooterFont()
+  \sa setHeaderFooterFontUseRelSize(), headerFooterFontUseRelSize()
+  \sa setHeaderFooterFontRelSize(), headerFooterFontRelSize()
+  \sa footerFont(), setFooterText(), footerText(), setHeader1Font(), header1Font(),
+  setHeader2Font(), header2Font()
+  */
+
+
+/**
+  \fn QFont KDChartParams::footerFont() const
+
+  Returns the font used for displaying the footer line.
+
+  \note This function provided for convenience only. <br>
+  To gain the <b>full</b> benefits of the header/footer management
+  please consider learning about the different header (or footer,
+  resp.) sections, see information given at \c HdFtPos enum
+  explanation. <br>
+  The 'better' way to specify content and settings of headers or
+  footers is to call \c setHeaderFooterText ( or \c setHeaderFooterFont
+  , \c setHeaderFooterFontUseRelSize , \c setHeaderFooterFontRelSize ,
+  resp.) while specifying the appropriate \c HdFtPos. <br>
+  The canonical way to retrieve settings and content of headers or
+  footers is to call \c headerFooterText (or \c headerFooterFont ,
+  \c headerFooterFontUseRelSize , \c headerFooterFontRelSize, resp.).
+
+  \return the used font
+  \sa HdFtPos, setHeaderFooterFont(), headerFooterFont()
+  \sa setHeaderFooterFontUseRelSize(), headerFooterFontUseRelSize()
+  \sa setHeaderFooterFontRelSize(), headerFooterFontRelSize()
+  \sa setFooterFont(), setFooterText(), footerText(),
+  setHeader1Font(), header1Font(), setHeader2Font(), header2Font()
+  */
 
 
 //@}
@@ -7783,887 +7783,887 @@ int KDChartParams::headerFooterFontRelSize( uint pos ) const
 
 // PRIVATE VARIABLES
 /**
-   \var int KDChartParams::_globalLeadingLeft;
-   Stores the distance between the chart and the left border of the painter area.
-*/
+  \var int KDChartParams::_globalLeadingLeft;
+  Stores the distance between the chart and the left border of the painter area.
+  */
 
 /**
-   \var int KDChartParams::_globalLeadingTop;
+  \var int KDChartParams::_globalLeadingTop;
 
-   Stores the distance between the chart and the upper border of the painter area.
-*/
-
-
-/**
-   \var int KDChartParams::_globalLeadingRight;
-
-   Stores the distance between the chart and the left border of the painter area.
-*/
+  Stores the distance between the chart and the upper border of the painter area.
+  */
 
 
 /**
-   \var int KDChartParams::_globalLeadingBottom;
+  \var int KDChartParams::_globalLeadingRight;
 
-   Stores the distance between the chart and the right border of the painter area.
-*/
-
-/**
-   \var ChartType KDChartParams::_chartType;
-
-   Stores the chart type.
-*/
-
-/**
-   \var ChartType KDChartParams::_additionalChartType;
-
-   Stores the additional chart type.
-*/
-
-/**
-   \var int KDChartParams::_numValues;
-
-   Stores how many of the values should be shown. -1 means all
-   available values.
-*/
-
-/**
-   \var QFont KDChartParams::_defaultFont;
-
-   Stores our default font used for many different purposes.
-*/
-
-/**
-   \var KDChartParams::AreaMap
-
-   The type used for storing the frame settings for all of the chart areas.
-*/
-
-/**
-   \var AreaMap KDChartParams::_areaMap;
-   Stores the frame settings for all of the chart areas.
-*/
-
-/**
-   \var CustomBoxMap KDChartParams::_customBoxMap;
-
-   Stores the settings for all of the custom boxes.
-*/
+  Stores the distance between the chart and the left border of the painter area.
+  */
 
 
 /**
-   \var QRect KDChartParams::_noRect;
+  \var int KDChartParams::_globalLeadingBottom;
 
-   Stores an empty rectangle.
-*/
-
-/**
-   \var KDFrame KDChartParams::_noFrame;
-
-   Stores the default frame settings: no border, no corners, no background.
-*/
+  Stores the distance between the chart and the right border of the painter area.
+  */
 
 /**
-   \var KDChartFrameSettings KDChartParams::_noFrameSettings;
+  \var ChartType KDChartParams::_chartType;
 
-   Stores the default area settings: no frame, no inner gap, no outer gap.
-*/
-
-
-/**
-   \class KDChartParams::ModeAndChart
-
-   Stores the SourceMode and the chart(s) for one dataset.
-*/
-
+  Stores the chart type.
+  */
 
 /**
-   \var ModeAndChartMap KDChartParams::_dataSourceModeAndChart;
+  \var ChartType KDChartParams::_additionalChartType;
 
-   Stores the SourceMode and the chart(s) for the datasets.
-*/
-
-/**
-   \var typedef KDChartParams::ModeAndChartMap
-
-   The type used for storing the source mode and charts of the datasets
-*/
-
+  Stores the additional chart type.
+  */
 
 /**
-   \var bool KDChartParams::_setChartSourceModeWasUsed;
+  \var int KDChartParams::_numValues;
 
-   Stores whether setChartSourceMode() was called or not
-*/
-
-/**
-   \var QMap < uint, QColor > KDChartParams::_dataColors;
-
-   Stores the colors for the datasets.
-*/
+  Stores how many of the values should be shown. -1 means all
+  available values.
+  */
 
 /**
-   \var uint KDChartParams::_maxDatasetSourceMode;
+  \var QFont KDChartParams::_defaultFont;
 
-   Stores the highest dataset number for which a SourceMode has been
-   defined. Note that if you define a value for a dataset but not for a
-   dataset with a lower number (and there is neither a default value), the
-   source mode for that dataset with the lower number will be undefined.
-*/
+  Stores our default font used for many different purposes.
+  */
+
+/**
+  \var KDChartParams::AreaMap
+
+  The type used for storing the frame settings for all of the chart areas.
+  */
+
+/**
+  \var AreaMap KDChartParams::_areaMap;
+  Stores the frame settings for all of the chart areas.
+  */
+
+/**
+  \var CustomBoxMap KDChartParams::_customBoxMap;
+
+  Stores the settings for all of the custom boxes.
+  */
 
 
 /**
-   \var KDChartPropertySetList KDChartParams::_propertySetList;
+  \var QRect KDChartParams::_noRect;
 
-   Stores all property-sets that were defined.
-   Each of these sets may be assigned to an individual cell.
-*/
+  Stores an empty rectangle.
+  */
+
+/**
+  \var KDFrame KDChartParams::_noFrame;
+
+  Stores the default frame settings: no border, no corners, no background.
+  */
+
+/**
+  \var KDChartFrameSettings KDChartParams::_noFrameSettings;
+
+  Stores the default area settings: no frame, no inner gap, no outer gap.
+  */
 
 
 /**
-   \var double KDChartParams::_shadowBrightnessFactor;
+  \class KDChartParams::ModeAndChart
 
-   Stores a factor to be used to adjust the
-   built-in brightness of shadow colors in
-   3-dimensional drawings like e.g. 3D bar charts.
-*/
+  Stores the SourceMode and the chart(s) for one dataset.
+  */
 
 
 /**
-   \var Qt::BrushStyle KDChartParams::_shadowPattern;
+  \var ModeAndChartMap KDChartParams::_dataSourceModeAndChart;
 
-   Stores a fill style to be used for filling shadow area in
-   3-dimensional drawings like e.g. 3D bar charts.
-*/
+  Stores the SourceMode and the chart(s) for the datasets.
+  */
 
 /**
-   \var bool KDChartParams::_threeDShadowColors;
+  \var typedef KDChartParams::ModeAndChartMap
 
-   Stores  whether shadowed colors are used for 3D effects. Only used
-   for 3D effects in charts that support these.
-*/
+  The type used for storing the source mode and charts of the datasets
+  */
 
 
 /**
-   \var uint KDChartParams::_maxDatasetColor;
+  \var bool KDChartParams::_setChartSourceModeWasUsed;
 
-   Stores the highest dataset number for which a color has been
-   defined. Note that if you define a value for a dataset but not for a
-   dataset with a lower number (and there is neither a default value), the
-   color for that dataset with the lower number will be undefined.
-*/
+  Stores whether setChartSourceMode() was called or not
+  */
 
 /**
-   \var QMap < uint, QColor > KDChartParams::_dataColorsShadow1;
+  \var QMap < uint, QColor > KDChartParams::_dataColors;
 
-   Stores the shadow colors that are somewhat darker than the colors in
-   _dataColors.
-*/
-
-/**
-   \var QMap < uint, QColor > KDChartParams::_dataColorsShadow2;
-
-   Stores the shadow colors that are even more darker than the colors in
-   _dataColorsShadow1;
-*/
+  Stores the colors for the datasets.
+  */
 
 /**
-   \var QColor KDChartParams::_outlineDataColor;
+  \var uint KDChartParams::_maxDatasetSourceMode;
 
-   Stores the color to be used for outlines of data displays.
-*/
-
-/**
-   \var uint KDChartParams::_outlineDataLineWidth;
-
-   Stores the line width to be used for outlines of data displays.
-*/
-
-/**
-   \var PenStyle KDChartParams::_outlineDataLineStyle;
-
-   Stores the line style to be used for outlines of data displays.
-*/
-
+  Stores the highest dataset number for which a SourceMode has been
+  defined. Note that if you define a value for a dataset but not for a
+  dataset with a lower number (and there is neither a default value), the
+  source mode for that dataset with the lower number will be undefined.
+  */
 
 
 /**
-   \struct PrintValueDataSettings KDChartParams.h
+  \var KDChartPropertySetList KDChartParams::_propertySetList;
 
-   Stores if and how a chart will print the data values near their
-   respective entries.
-*/
-
-
-/**
-   \var PrintDataValuesSettings KDChartParams::_printDataValuesSettings;
-
-   Stores if and how the FIRST chart will print the data values
-   near their respective entries.
-*/
-
-/**
-   \var PrintDataValuesSettings KDChartParams::_printDataValuesSettings2;
-
-   Stores if and how the SECOND chart will print the data values
-   near their respective entries, in case two charts are to be
-   drawn sharing the same data area.
-*/
-
-/**
-   \var bool KDChartParams::_allowOverlappingDataValueTexts;
-
-   Stores whether a data value may be drawn near it's respective entry
-   even if it's region intersects with another data value text's region.
-
-   By default this is FALSE to prevent ugly mutual overwriting of data
-   value texts and to speed up drawing of cahrts containing thousands
-   of data points.
-*/
+  Stores all property-sets that were defined.
+  Each of these sets may be assigned to an individual cell.
+  */
 
 
 /**
-   \var BarChartSubType KDChartParams::_barChartSubType;
+  \var double KDChartParams::_shadowBrightnessFactor;
 
-   Stores the bar chart subtype. Only used when chartType() ==
-   Bar
-*/
-
-/**
-   \var bool KDChartParams::_threeDBars;
-
-   Stores whether the engine should draw the bars in 3D. Only
-   used if chartType() == Bar.
-*/
-
-/**
-   \var int KDChartParams::_threeDBarAngle;
-
-   Stores the angle used for 3D display. Only used if
-   threeDBars == true.
-*/
-
-/**
-   \var double KDChartParams::_threeDBarDepth;
-
-   Stores the depth of the 3D Effect used for 3D bars
-   in relation to the bar width.
-   Only used if chartType() == Bar and threeDBars() == true.
-*/
+  Stores a factor to be used to adjust the
+  built-in brightness of shadow colors in
+  3-dimensional drawings like e.g. 3D bar charts.
+  */
 
 
 /**
-   \var double KDChartParams::_cosThreeDBarAngle;
+  \var Qt::BrushStyle KDChartParams::_shadowPattern;
 
-   The cosine in rad of the angle for 3D display. Only used if
-   threeDBars == true.
-*/
-
-/**
-   \var int KDChartParams::_datasetGap;
-
-   Stores the number of pixels between two dataset values.
-*/
+  Stores a fill style to be used for filling shadow area in
+  3-dimensional drawings like e.g. 3D bar charts.
+  */
 
 /**
-   \var bool KDChartParams::_datasetGapIsRelative;
+  \var bool KDChartParams::_threeDShadowColors;
 
-   Stores if the value set by \c setDatasetGap
-   is a per mille value of the chart data area width.
-*/
+  Stores  whether shadowed colors are used for 3D effects. Only used
+  for 3D effects in charts that support these.
+  */
 
-/**
-   \var int KDChartParams::_valueBlockGap;
-
-   Stores the number of pixels between each value block.
-*/
 
 /**
-   \var bool KDChartParams::_valueBlockGapIsRelative;
+  \var uint KDChartParams::_maxDatasetColor;
 
-   Stores if the value set by \c setValueBlockGap
-   is a per mille value of the chart data area width.
-*/
+  Stores the highest dataset number for which a color has been
+  defined. Note that if you define a value for a dataset but not for a
+  dataset with a lower number (and there is neither a default value), the
+  color for that dataset with the lower number will be undefined.
+  */
+
+/**
+  \var QMap < uint, QColor > KDChartParams::_dataColorsShadow1;
+
+  Stores the shadow colors that are somewhat darker than the colors in
+  _dataColors.
+  */
+
+/**
+  \var QMap < uint, QColor > KDChartParams::_dataColorsShadow2;
+
+  Stores the shadow colors that are even more darker than the colors in
+  _dataColorsShadow1;
+  */
+
+/**
+  \var QColor KDChartParams::_outlineDataColor;
+
+  Stores the color to be used for outlines of data displays.
+  */
+
+/**
+  \var uint KDChartParams::_outlineDataLineWidth;
+
+  Stores the line width to be used for outlines of data displays.
+  */
+
+/**
+  \var PenStyle KDChartParams::_outlineDataLineStyle;
+
+  Stores the line style to be used for outlines of data displays.
+  */
+
+
+
+/**
+  \struct PrintValueDataSettings KDChartParams.h
+
+  Stores if and how a chart will print the data values near their
+  respective entries.
+  */
+
+
+/**
+  \var PrintDataValuesSettings KDChartParams::_printDataValuesSettings;
+
+  Stores if and how the FIRST chart will print the data values
+  near their respective entries.
+  */
+
+/**
+  \var PrintDataValuesSettings KDChartParams::_printDataValuesSettings2;
+
+  Stores if and how the SECOND chart will print the data values
+  near their respective entries, in case two charts are to be
+  drawn sharing the same data area.
+  */
+
+/**
+  \var bool KDChartParams::_allowOverlappingDataValueTexts;
+
+  Stores whether a data value may be drawn near it's respective entry
+  even if it's region intersects with another data value text's region.
+
+  By default this is FALSE to prevent ugly mutual overwriting of data
+  value texts and to speed up drawing of cahrts containing thousands
+  of data points.
+  */
+
+
+/**
+  \var BarChartSubType KDChartParams::_barChartSubType;
+
+  Stores the bar chart subtype. Only used when chartType() ==
+  Bar
+  */
+
+/**
+  \var bool KDChartParams::_threeDBars;
+
+  Stores whether the engine should draw the bars in 3D. Only
+  used if chartType() == Bar.
+  */
+
+/**
+  \var int KDChartParams::_threeDBarAngle;
+
+  Stores the angle used for 3D display. Only used if
+  threeDBars == true.
+  */
+
+/**
+  \var double KDChartParams::_threeDBarDepth;
+
+  Stores the depth of the 3D Effect used for 3D bars
+  in relation to the bar width.
+  Only used if chartType() == Bar and threeDBars() == true.
+  */
+
+
+/**
+  \var double KDChartParams::_cosThreeDBarAngle;
+
+  The cosine in rad of the angle for 3D display. Only used if
+  threeDBars == true.
+  */
+
+/**
+  \var int KDChartParams::_datasetGap;
+
+  Stores the number of pixels between two dataset values.
+  */
+
+/**
+  \var bool KDChartParams::_datasetGapIsRelative;
+
+  Stores if the value set by \c setDatasetGap
+  is a per mille value of the chart data area width.
+  */
+
+/**
+  \var int KDChartParams::_valueBlockGap;
+
+  Stores the number of pixels between each value block.
+  */
+
+/**
+  \var bool KDChartParams::_valueBlockGapIsRelative;
+
+  Stores if the value set by \c setValueBlockGap
+  is a per mille value of the chart data area width.
+  */
 
 /// LINES/AREAS-specific
 /**
-   \var LineChartSubType KDChartParams::_lineChartSubType;
+  \var LineChartSubType KDChartParams::_lineChartSubType;
 
-   Stores the line chart subtype. Only used when chartType() ==
-   Line
-*/
-
-/**
-   \var bool KDChartParams::_threeDLines;
-
-   Stores whether 3D lines should be drawn.
-*/
-
+  Stores the line chart subtype. Only used when chartType() ==
+  Line
+  */
 
 /**
-   \var int KDChartParams::_threeDLineDepth;
+  \var bool KDChartParams::_threeDLines;
 
-   Stores the depth of 3D lines.
-*/
+  Stores whether 3D lines should be drawn.
+  */
+
+
+/**
+  \var int KDChartParams::_threeDLineDepth;
+
+  Stores the depth of 3D lines.
+  */
 
 
 // documentation of this member variable temporary disabled:
 // Feature is currently not supported, will be implemented
 // by future versions of KDChart
 /*
-  \var int KDChartParams::_threeDLineXRotation;
+   \var int KDChartParams::_threeDLineXRotation;
 
-  Stores the X rotation of 3D lines.
-*/
+   Stores the X rotation of 3D lines.
+   */
 
 
 // documentation of this member variable temporary disabled:
 // Feature is currently not supported, will be implemented
 // by future versions of KDChart
 /*
-  \var int KDChartParams::_threeDLineYRotation;
+   \var int KDChartParams::_threeDLineYRotation;
 
-  Stores the Y rotation of 3D lines.
-*/
-
-
-/**
-   \var bool KDChartParams::_lineMarker;
-
-   Stores whether line markers should be drawn. Only used when
-   chartType() == Line.
-*/
+   Stores the Y rotation of 3D lines.
+   */
 
 
 /**
-   \var LineMarkerStyleMap KDChartParams::_lineMarkerStyles;
+  \var bool KDChartParams::_lineMarker;
 
-   Stores the styles of the line makers
-*/
-
-/**
-   \var uint KDChartParams::_maxDatasetLineMarkerStyle;
-
-   Stores the highest dataset number for which a line marker has been
-   defined. Note that if you define a value for a dataset but not for a
-   dataset with a lower number (and there is neither a default value), the
-   line marker for that dataset with the lower number will be undefined.
-*/
-
-/**
-   \var QSize KDChartParams::_lineMarkerSize;
-
-   Stores the size of the line markers.
-*/
+  Stores whether line markers should be drawn. Only used when
+  chartType() == Line.
+  */
 
 
 /**
-   \var QColor KDChartParams::_lineColor;
+  \var LineMarkerStyleMap KDChartParams::_lineMarkerStyles;
 
-   Stores the color of lines in line charts.
-*/
-
-/**
-   \var int KDChartParams::_lineWidth;
-
-   Stores the line width of lines in line charts.
-*/
+  Stores the styles of the line makers
+  */
 
 /**
-   \var PenStyle KDChartParams::_lineStyle;
+  \var uint KDChartParams::_maxDatasetLineMarkerStyle;
 
-   Stores the line style of lines in line charts.
-*/
+  Stores the highest dataset number for which a line marker has been
+  defined. Note that if you define a value for a dataset but not for a
+  dataset with a lower number (and there is neither a default value), the
+  line marker for that dataset with the lower number will be undefined.
+  */
 
 /**
-   \var AreaChartSubType KDChartParams::_areaChartSubType;
+  \var QSize KDChartParams::_lineMarkerSize;
 
-   Stores  the area chart subtype. Only used when chartType() ==
-   Area
-*/
+  Stores the size of the line markers.
+  */
 
 
 /**
-   \var AreaLocation KDChartParams::_areaLocation;
+  \var QColor KDChartParams::_lineColor;
 
-   Stores  whether the area above or below the value points should
-   be filled.
-*/
+  Stores the color of lines in line charts.
+  */
+
+/**
+  \var int KDChartParams::_lineWidth;
+
+  Stores the line width of lines in line charts.
+  */
+
+/**
+  \var PenStyle KDChartParams::_lineStyle;
+
+  Stores the line style of lines in line charts.
+  */
+
+/**
+  \var AreaChartSubType KDChartParams::_areaChartSubType;
+
+  Stores  the area chart subtype. Only used when chartType() ==
+  Area
+  */
+
+
+/**
+  \var AreaLocation KDChartParams::_areaLocation;
+
+  Stores  whether the area above or below the value points should
+  be filled.
+  */
 
 
 /// POLAR-specific
 /**
-   \var PolarChartSubType KDChartParams::_polarChartSubType;
+  \var PolarChartSubType KDChartParams::_polarChartSubType;
 
-   Stores  the polar chart subtype. Only used when chartType() ==
-   Polar
-*/
-
-/**
-   \var bool KDChartParams::_polarMarker;
-
-   Stores  whether polar markers should be drawn. Only used when
-   chartType() == Polar.
-*/
+  Stores  the polar chart subtype. Only used when chartType() ==
+  Polar
+  */
 
 /**
-   \var PolarMarkerStyleMap KDChartParams::_polarMarkerStyles;
+  \var bool KDChartParams::_polarMarker;
 
-   Stores the styles of the markers in a polar char.
-*/
-
-/**
-   \var uint KDChartParams::_maxDatasetPolarMarkerStyle;
-
-   Stores the highest dataset number for which a polar marker has been
-   defined. Note that if you define a value for a dataset but not for a
-   dataset with a lower number (and there is neither a default value), the
-   polar marker for that dataset with the lower number will be undefined.
-*/
+  Stores  whether polar markers should be drawn. Only used when
+  chartType() == Polar.
+  */
 
 /**
-   \var QSize KDChartParams::_polarMarkerSize;
+  \var PolarMarkerStyleMap KDChartParams::_polarMarkerStyles;
 
-   Stores the size of the polar markers.
-*/
-
+  Stores the styles of the markers in a polar char.
+  */
 
 /**
-   \var int KDChartParams::_polarLineWidth;
+  \var uint KDChartParams::_maxDatasetPolarMarkerStyle;
 
-   Stores the line width of lines in polar charts.
-*/
+  Stores the highest dataset number for which a polar marker has been
+  defined. Note that if you define a value for a dataset but not for a
+  dataset with a lower number (and there is neither a default value), the
+  polar marker for that dataset with the lower number will be undefined.
+  */
+
+/**
+  \var QSize KDChartParams::_polarMarkerSize;
+
+  Stores the size of the polar markers.
+  */
 
 
 /**
-   \var int KDChartParams::_polarZeroDegreePos;
+  \var int KDChartParams::_polarLineWidth;
 
-   Stores the zero degree position in polar charts.
-*/
+  Stores the line width of lines in polar charts.
+  */
+
+
+/**
+  \var int KDChartParams::_polarZeroDegreePos;
+
+  Stores the zero degree position in polar charts.
+  */
 
 
 /**
-   \var bool KDChartParams::_polarRotateCircularLabels;
+  \var bool KDChartParams::_polarRotateCircularLabels;
 
-   Stores whether to rotate circular labels in polar charts.
-*/
-
-/**
-   \struct KDChartParams::_polarDelimsAndLabelStruct KDChartParams.h
-
-   Stores whether to show circular delimiters and/or labels
-   at a given position in polar charts.
-*/
+  Stores whether to rotate circular labels in polar charts.
+  */
 
 /**
-   \var _polarDelimsAndLabelStruct KDChartParams::_polarDelimsAndLabels[ 1 + MAX_POLAR_DELIMS_AND_LABELS_POS ];
+  \struct KDChartParams::_polarDelimsAndLabelStruct KDChartParams.h
 
-   Stores where to show circular delimiters and labels in polar charts.
-*/
+  Stores whether to show circular delimiters and/or labels
+  at a given position in polar charts.
+  */
+
+/**
+  \var _polarDelimsAndLabelStruct KDChartParams::_polarDelimsAndLabels[ 1 + MAX_POLAR_DELIMS_AND_LABELS_POS ];
+
+  Stores where to show circular delimiters and labels in polar charts.
+  */
 
 
 
 // PIES/RINGS
 /**
-   \var bool KDChartParams::_explode;
+  \var bool KDChartParams::_explode;
 
-   Stores whether pies or ring segments are drawn exploding.
-*/
-
-/**
-   \var double KDChartParams::_explodeFactor;
-
-   Stores the default explode factor of pie or ring segments.
-*/
+  Stores whether pies or ring segments are drawn exploding.
+  */
 
 /**
-   \var QMap<int,double> KDChartParams::_explodeFactors;
+  \var double KDChartParams::_explodeFactor;
 
-   Stores the list of segment-specific explode factors of pie or
-   ring segments.
-*/
-
-/**
-   \var QValueList<int> KDChartParams::_explodeList;
-
-   Stores the list of pies or ring segments to explode.
-*/
+  Stores the default explode factor of pie or ring segments.
+  */
 
 /**
-   \var bool KDChartParams::_threeDPies;
+  \var QMap<int,double> KDChartParams::_explodeFactors;
 
-   Stores whether pies will have a 3D effect.
-*/
-
-/**
-   \var int KDChartParams::_threeDPieHeight;
-
-   Stores the height of the pie 3D effect.
-*/
+  Stores the list of segment-specific explode factors of pie or
+  ring segments.
+  */
 
 /**
-   \var int KDChartParams::_pieStart;
+  \var QValueList<int> KDChartParams::_explodeList;
 
-   Stores the starting point of the pie circle.
-*/
-
-/**
-   \var int KDChartParams::_ringStart;
-
-   Stores the starting point of the ring circle.
-*/
+  Stores the list of pies or ring segments to explode.
+  */
 
 /**
-   \var bool KDChartParams::_relativeRingThickness;
+  \var bool KDChartParams::_threeDPies;
 
-   Stores whether the ring thickness is relativ or constant.
-*/
+  Stores whether pies will have a 3D effect.
+  */
+
+/**
+  \var int KDChartParams::_threeDPieHeight;
+
+  Stores the height of the pie 3D effect.
+  */
+
+/**
+  \var int KDChartParams::_pieStart;
+
+  Stores the starting point of the pie circle.
+  */
+
+/**
+  \var int KDChartParams::_ringStart;
+
+  Stores the starting point of the ring circle.
+  */
+
+/**
+  \var bool KDChartParams::_relativeRingThickness;
+
+  Stores whether the ring thickness is relativ or constant.
+  */
 
 
 // HI-LO CHARTS
 
 /**
-   \var HiLoChartSubType KDChartParams::_hiLoChartSubType;
+  \var HiLoChartSubType KDChartParams::_hiLoChartSubType;
 
-   Stores the HiLo subtype.
-*/
-
-/**
-   \var bool KDChartParams::_hiLoChartPrintLowValues;
-
-   Stores whether the low values
-   will be printed under their respective entries.
-*/
-
+  Stores the HiLo subtype.
+  */
 
 /**
-   \var QFont KDChartParams::_hiLoChartLowValuesFont;
+  \var bool KDChartParams::_hiLoChartPrintLowValues;
 
-   Stores the font to be used for printing the low values.
-*/
+  Stores whether the low values
+  will be printed under their respective entries.
+  */
 
 
 /**
-   \var bool KDChartParams::_hiLoChartLowValuesUseFontRelSize;
+  \var QFont KDChartParams::_hiLoChartLowValuesFont;
 
-   Stores whether the font size to be used for printing the low
-   values is calculated dynamically.
-*/
-
-
-/**
-   \var int KDChartParams::_hiLoChartLowValuesFontRelSize;
-
-   Stores the relative size (in per mille of the chart width) of
-   font size to be used for printing the low values.
-*/
+  Stores the font to be used for printing the low values.
+  */
 
 
 /**
-   \var QColor KDChartParams::_hiLoChartLowValuesColor;
+  \var bool KDChartParams::_hiLoChartLowValuesUseFontRelSize;
 
-   Stores the colour of the font size to be used for printing the
-   low values.
-*/
-
-/**
-   \var bool KDChartParams::_hiLoChartPrintHighValues;
-
-   Stores whether the high values will be printed under their
-   respective entries.
-*/
+  Stores whether the font size to be used for printing the low
+  values is calculated dynamically.
+  */
 
 
 /**
-   \var QFont KDChartParams::_hiLoChartHighValuesFont;
+  \var int KDChartParams::_hiLoChartLowValuesFontRelSize;
 
-   Stores the font to be used for printing the high values.
-*/
-
-
-/**
-   \var bool KDChartParams::_hiLoChartHighValuesUseFontRelSize;
-
-   Stores whether the font size to be used for printing the high
-   values is calculated dynamically.
-*/
+  Stores the relative size (in per mille of the chart width) of
+  font size to be used for printing the low values.
+  */
 
 
 /**
-   \var int KDChartParams::_hiLoChartHighValuesFontRelSize;
+  \var QColor KDChartParams::_hiLoChartLowValuesColor;
 
-   Stores the relative size (in per mille of the chart width) of
-   font size to be used for printing the high values.
-*/
+  Stores the colour of the font size to be used for printing the
+  low values.
+  */
+
+/**
+  \var bool KDChartParams::_hiLoChartPrintHighValues;
+
+  Stores whether the high values will be printed under their
+  respective entries.
+  */
 
 
 /**
-   \var QColor KDChartParams::_hiLoChartHighValuesColor;
+  \var QFont KDChartParams::_hiLoChartHighValuesFont;
 
-   Stores the colour of the font size to be used for printing the
-   high values.
-*/
-
-/**
-   \var bool KDChartParams::_hiLoChartPrintOpenValues;
-
-   Stores whether the open values
-   will be printed under their respective entries.
-*/
+  Stores the font to be used for printing the high values.
+  */
 
 
 /**
-   \var QFont KDChartParams::_hiLoChartOpenValuesFont;
+  \var bool KDChartParams::_hiLoChartHighValuesUseFontRelSize;
 
-   Stores the font to be used for printing the open values.
-*/
-
-
-/**
-   \var bool KDChartParams::_hiLoChartOpenValuesUseFontRelSize;
-
-   Stores whether the font size to be used for printing the open
-   values is calculated dynamically.
-*/
+  Stores whether the font size to be used for printing the high
+  values is calculated dynamically.
+  */
 
 
 /**
-   \var int KDChartParams::_hiLoChartOpenValuesFontRelSize;
+  \var int KDChartParams::_hiLoChartHighValuesFontRelSize;
 
-   Stores the relative size (in per mille of the chart width) of
-   font size to be used for printing the open values.
-*/
-
-
-/**
-   \var QColor KDChartParams::_hiLoChartOpenValuesColor;
-
-   Stores the colour of the font size to be used for printing the
-   open values.
-*/
-
-/**
-   \var bool KDChartParams::_hiLoChartPrintCloseValues;
-
-   Stores whether the close values will be printed under their
-   respective entries.
-*/
+  Stores the relative size (in per mille of the chart width) of
+  font size to be used for printing the high values.
+  */
 
 
 /**
-   \var QFont KDChartParams::_hiLoChartCloseValuesFont;
+  \var QColor KDChartParams::_hiLoChartHighValuesColor;
 
-   Stores the font to be used for printing the close values.
-*/
+  Stores the colour of the font size to be used for printing the
+  high values.
+  */
+
+/**
+  \var bool KDChartParams::_hiLoChartPrintOpenValues;
+
+  Stores whether the open values
+  will be printed under their respective entries.
+  */
 
 
 /**
-   \var bool KDChartParams::_hiLoChartCloseValuesUseFontRelSize;
+  \var QFont KDChartParams::_hiLoChartOpenValuesFont;
 
-   Stores whether the font size to be used for printing the close
-   values is calculated dynamically.
-*/
-
-
-/**
-   \var int KDChartParams::_hiLoChartCloseValuesFontRelSize;
-
-   Stores the relative size (in per mille of the chart width) of
-   font size to be used for printing the close values.
-*/
+  Stores the font to be used for printing the open values.
+  */
 
 
 /**
-   \var QColor KDChartParams::_hiLoChartCloseValuesColor;
+  \var bool KDChartParams::_hiLoChartOpenValuesUseFontRelSize;
 
-   Stores the colour of the font size to be used for printing the
-   close values.
-*/
-
-
-/**
-   \var BWChartSubType KDChartParams::_BWChartSubType;
-
-   Stores the Box And Whisker subtype.
-*/
-
-/**
-   \struct BWChartStatistics KDChartParams.h
-
-   Stores the statistical data for a box-and-whisker chart
-*/
-
-/**
-   \var BWChartStatistics KDChartParams::_BWChartStatistics[ BWStatValOffEndValue ];
-
-   Stores whether and how the statistical data
-   will be printed near the drawing.
-*/
-
-/**
-   \var double KDChartParams::_BWChartFenceUpperInner;
-   \var double KDChartParams::_BWChartFenceLowerInner;
-   \var double KDChartParams::_BWChartFenceUpperOuter;
-   \var double KDChartParams::_BWChartFenceLowerOuter;
-
-   Stores the factors to be used to calculate the width of
-   the inner and outer fences.
-*/
-
-/**
-   \var int KDChartParams::_BWChartOutValMarkerSize;
-
-   Stores the size (or the negative size factor, resp.) of
-   the markers representing the outliers.
-*/
+  Stores whether the font size to be used for printing the open
+  values is calculated dynamically.
+  */
 
 
 /**
-   \var QBrush KDChartParams::_BWChartBrush;
+  \var int KDChartParams::_hiLoChartOpenValuesFontRelSize;
 
-   Stores the brush to be used.
-*/
-
-/**
-   \var LegendPosition KDChartParams::_legendPosition;
-
-   Stores the legend position.
-*/
-
-/**
-   \var LegendSource KDChartParams::_legendSource;
-
-   Stores the legend source.
-*/
-
-/**
-   \var QMap < int, QString > KDChartParams::_legendText;
-
-   Stores the manually set legend texts.
-*/
+  Stores the relative size (in per mille of the chart width) of
+  font size to be used for printing the open values.
+  */
 
 
 /**
-   \var QColor KDChartParams::_legendTextColor;
+  \var QColor KDChartParams::_hiLoChartOpenValuesColor;
 
-   Stores the color for drawing the legend texts.
-*/
-
-/**
-   \var QFont KDChartParams::_legendFont;
-
-   Stores the font for drawing the legends.
-*/
+  Stores the colour of the font size to be used for printing the
+  open values.
+  */
 
 /**
-   \var bool KDChartParams::_legendFontUseRelSize;
+  \var bool KDChartParams::_hiLoChartPrintCloseValues;
 
-   Stores  whether the size of the legend font is to be calculated
-   on a relative basis.
-
-   \sa setLegendFontUseRelSize, setLegendFontRelSize
-   \sa setLegendFont
-*/
-
-/**
-   \var int KDChartParams::_legendFontRelSize;
-
-   Stores  the per mille basis for calculating the relative
-   legend font size.
-
-   \sa setLegendFontRelSize, setLegendFontUseRelSize
-   \sa setLegendFont
-*/
+  Stores whether the close values will be printed under their
+  respective entries.
+  */
 
 
 /**
-   \var QString KDChartParams::_legendTitleText;
+  \var QFont KDChartParams::_hiLoChartCloseValuesFont;
 
-   Stores the legend title text.
-*/
-
-
-/**
-   \var QColor KDChartParams::_legendTitleTextColor;
-
-   Stores the color for drawing the legend title.
-*/
+  Stores the font to be used for printing the close values.
+  */
 
 
 /**
-   \var QFont KDChartParams::_legendTitleFont;
+  \var bool KDChartParams::_hiLoChartCloseValuesUseFontRelSize;
 
-   Stores the font for drawing the legend title.
-*/
-
-/**
-   \var bool KDChartParams::_legendTitleFontUseRelSize;
-
-   Stores  whether the size of the legend title font is to be
-   calculated on a relative basis.
-
-   \sa setLegendTitleFontUseRelSize, setLegendTitleFontRelSize
-   \sa setLegendTitleFont
-*/
-
-/**
-   \var int KDChartParams::_legendTitleFontRelSize;
-
-   Stores  the per mille basis for calculating the relative
-   legend title font size.
-
-   \sa setLegendTitleFontRelSize, setLegendTitleFontUseRelSize
-   \sa setLegendTitleFont
-*/
+  Stores whether the font size to be used for printing the close
+  values is calculated dynamically.
+  */
 
 
 /**
-   \var uint KDChartParams::_legendSpacing;
+  \var int KDChartParams::_hiLoChartCloseValuesFontRelSize;
 
-   Stores the number of pixels between the legend and the data display
-*/
-
-
-/**
-   \struct KDChartParams::AxisSettings KDChartParams.h
-
-   Stores  all the settings of all the axis \em plus one more
-   parameter set containing the build-in defauls axis settings.
-*/
-
-/**
-   \var KDChartParams::_axisSettings
-
-   Stores the settings for each of the possible thirteen axes
-*/
-
+  Stores the relative size (in per mille of the chart width) of
+  font size to be used for printing the close values.
+  */
 
 
 /**
-   \struct HdFtParams KDChartParams.h
+  \var QColor KDChartParams::_hiLoChartCloseValuesColor;
 
-   Stores  all the settings of all the header sections
-   and all the footer sections.
-*/
+  Stores the colour of the font size to be used for printing the
+  close values.
+  */
+
+
+/**
+  \var BWChartSubType KDChartParams::_BWChartSubType;
+
+  Stores the Box And Whisker subtype.
+  */
+
+/** 
+  \struct BWChartStatistics KDChartParams.h
+
+  Stores the statistical data for a box-and-whisker chart
+  */
+
+/**
+  \var BWChartStatistics KDChartParams::_BWChartStatistics[ BWStatValOffEndValue ];
+
+  Stores whether and how the statistical data
+  will be printed near the drawing.
+  */
+
+/**
+  \var double KDChartParams::_BWChartFenceUpperInner;
+  \var double KDChartParams::_BWChartFenceLowerInner;
+  \var double KDChartParams::_BWChartFenceUpperOuter;
+  \var double KDChartParams::_BWChartFenceLowerOuter;
+
+  Stores the factors to be used to calculate the width of
+  the inner and outer fences.
+  */
+
+/**
+  \var int KDChartParams::_BWChartOutValMarkerSize;
+
+  Stores the size (or the negative size factor, resp.) of
+  the markers representing the outliers.
+  */
+
+
+/**
+  \var QBrush KDChartParams::_BWChartBrush;
+
+  Stores the brush to be used.
+  */
+
+/**
+  \var LegendPosition KDChartParams::_legendPosition;
+
+  Stores the legend position.
+  */
+
+/**
+  \var LegendSource KDChartParams::_legendSource;
+
+  Stores the legend source.
+  */
+
+/**
+  \var QMap < int, QString > KDChartParams::_legendText;
+
+  Stores the manually set legend texts.
+  */
+
+
+/**
+  \var QColor KDChartParams::_legendTextColor;
+
+  Stores the color for drawing the legend texts.
+  */
+
+/**
+  \var QFont KDChartParams::_legendFont;
+
+  Stores the font for drawing the legends.
+  */
+
+/**
+  \var bool KDChartParams::_legendFontUseRelSize;
+
+  Stores  whether the size of the legend font is to be calculated
+  on a relative basis.
+
+  \sa setLegendFontUseRelSize, setLegendFontRelSize
+  \sa setLegendFont
+  */
+
+/**
+  \var int KDChartParams::_legendFontRelSize;
+
+  Stores  the per mille basis for calculating the relative
+  legend font size.
+
+  \sa setLegendFontRelSize, setLegendFontUseRelSize
+  \sa setLegendFont
+  */
+
+
+/**
+  \var QString KDChartParams::_legendTitleText;
+
+  Stores the legend title text.
+  */
+
+
+/**
+  \var QColor KDChartParams::_legendTitleTextColor;
+
+  Stores the color for drawing the legend title.
+  */
+
+
+/**
+  \var QFont KDChartParams::_legendTitleFont;
+
+  Stores the font for drawing the legend title.
+  */
+
+/**
+  \var bool KDChartParams::_legendTitleFontUseRelSize;
+
+  Stores  whether the size of the legend title font is to be
+  calculated on a relative basis.
+
+  \sa setLegendTitleFontUseRelSize, setLegendTitleFontRelSize
+  \sa setLegendTitleFont
+  */
+
+/**
+  \var int KDChartParams::_legendTitleFontRelSize;
+
+  Stores  the per mille basis for calculating the relative
+  legend title font size.
+
+  \sa setLegendTitleFontRelSize, setLegendTitleFontUseRelSize
+  \sa setLegendTitleFont
+  */
+
+
+/**
+  \var uint KDChartParams::_legendSpacing;
+
+  Stores the number of pixels between the legend and the data display
+  */
+
+
+/**
+  \struct KDChartParams::AxisSettings KDChartParams.h
+
+  Stores  all the settings of all the axis \em plus one more
+  parameter set containing the build-in defauls axis settings.
+  */
+
+/**
+  \var KDChartParams::_axisSettings
+
+  Stores the settings for each of the possible thirteen axes
+  */
 
 
 
 /**
-   Retrieves the ID of the first KDChartCustomBox that is anchored at axis \c n.
+  \struct HdFtParams KDChartParams.h
 
-   By default this box is used for the default axis title text: it is created
-   (or modified, resp.) by calling one of the axis title convenience functions
-   setAxisTitleColor or setAxisTitleFont or setAxisTitleFontUseRelSize or setAxisTitleFontRelSize.
+  Stores  all the settings of all the header sections
+  and all the footer sections.
+  */
 
-   \note If you have specified another custom box manually that is anchored to this axis
-   before (or instead of, resp.) calling one of the convenience functions mentioned above
-   your custom box will become the default axis title text box: you then can access/modify
-   its properties using these convenience functions.
 
-   \return TRUE if a KDChartCustomBox was found that is anchored to axis \c n.
-   \param n the axis number, this could be KDChartAxisParams::AxisPosLeft or KDChartAxisParams::AxisPosBottom...
-   \param boxID will obtain the respective KDChartCustomBox's ID if return value is TRUE, otherwise the parameter's value remains unchanged.
-   \sa setAxisTitle, setAxisTitleColor, setAxisTitleFont, setAxisTitleFontUseRelSize, setAxisTitleFontRelSize
-*/
+
+/**
+  Retrieves the ID of the first KDChartCustomBox that is anchored at axis \c n.
+
+  By default this box is used for the default axis title text: it is created
+  (or modified, resp.) by calling one of the axis title convenience functions
+  setAxisTitleColor or setAxisTitleFont or setAxisTitleFontUseRelSize or setAxisTitleFontRelSize.
+
+  \note If you have specified another custom box manually that is anchored to this axis
+  before (or instead of, resp.) calling one of the convenience functions mentioned above
+  your custom box will become the default axis title text box: you then can access/modify
+  its properties using these convenience functions.
+
+  \return TRUE if a KDChartCustomBox was found that is anchored to axis \c n.
+  \param n the axis number, this could be KDChartAxisParams::AxisPosLeft or KDChartAxisParams::AxisPosBottom...
+  \param boxID will obtain the respective KDChartCustomBox's ID if return value is TRUE, otherwise the parameter's value remains unchanged.
+  \sa setAxisTitle, setAxisTitleColor, setAxisTitleFont, setAxisTitleFontUseRelSize, setAxisTitleFontRelSize
+  */
 bool KDChartParams::findFirstAxisCustomBoxID( uint n, uint& boxID ) const
 {
     if( _customBoxMap.count() ){
@@ -8676,7 +8676,7 @@ bool KDChartParams::findFirstAxisCustomBoxID( uint n, uint& boxID ) const
         }
     }
     return false;
-}
+};
 
 void KDChartParams::insertDefaultAxisTitleBox( uint n,
                                                bool setTitle,          const QString& axisTitle,
@@ -8689,17 +8689,17 @@ void KDChartParams::insertDefaultAxisTitleBox( uint n,
     bool bHorz = false;
     bool b3rd  = false;
     switch( KDChartAxisParams::basicAxisPos( n ) ){
-    case KDChartAxisParams::AxisPosLeft:
-    case KDChartAxisParams::AxisPosRight:
-        bVert = true;
-        break;
-    case KDChartAxisParams::AxisPosTop:
-    case KDChartAxisParams::AxisPosBottom:
-        bHorz = true;
-        break;
-    default:
-        b3rd = true;
-        break;
+        case KDChartAxisParams::AxisPosLeft:
+        case KDChartAxisParams::AxisPosRight:
+            bVert = true;
+            break;
+        case KDChartAxisParams::AxisPosTop:
+        case KDChartAxisParams::AxisPosBottom:
+            bHorz = true;
+            break;
+        default:
+            b3rd = true;
+            break;
     }
     const QString defaultString("<qt><center> </center></qt>");
     const QFont defaultFont( "helvetica", 6, QFont::Normal, false );
@@ -8729,17 +8729,17 @@ void KDChartParams::insertDefaultAxisTitleBox( uint n,
                           0,0,0,
                           bVert ? Qt::AlignBottom + Qt::AlignRight : Qt::AlignTop + Qt::AlignHCenter,
                           false ) );
-}
+};
 
 /**
-   Specifies the default axis title text.
+  Specifies the default axis title text.
 
-   \note This is a convenience function accessing the first KDChartCustomBox that is anchored at axis \c n.
+  \note This is a convenience function accessing the first KDChartCustomBox that is anchored at axis \c n.
 
-   \param axisTitle the axis title text
-   \sa setAxisTitleColor,setAxisTitleFont,setAxisTitleFontUseRelSize, setAxisTitleFontRelSize
-   \sa axisTitle, axisTitleColor, axisTitleFont, axisTitleFontUseRelSize, axisTitleFontRelSize
-*/
+  \param axisTitle the axis title text
+  \sa setAxisTitleColor,setAxisTitleFont,setAxisTitleFontUseRelSize, setAxisTitleFontRelSize
+  \sa axisTitle, axisTitleColor, axisTitleFont, axisTitleFontUseRelSize, axisTitleFontRelSize
+  */
 void KDChartParams::setAxisTitle( uint n, const QString& axisTitle )
 {
     bool bDone = false;
@@ -8762,11 +8762,11 @@ void KDChartParams::setAxisTitle( uint n, const QString& axisTitle )
     emit changed();
 }
 /**
-   Returns the default axis title text
+  Returns the default axis title text
 
-   \return the axis title text.
-   \sa setAxisTitle
-*/
+  \return the axis title text.
+  \sa setAxisTitle
+  */
 QString KDChartParams::axisTitle( uint n ) const
 {
     uint boxID;
@@ -8779,12 +8779,12 @@ QString KDChartParams::axisTitle( uint n ) const
 }
 
 /**
-   Specifies the color of the default axis title text.
+  Specifies the color of the default axis title text.
 
-   \param axisTitleColor the color of the axis title text
-   \sa setAxisTitle, setAxisTitleFont,setAxisTitleFontUseRelSize, setAxisTitleFontRelSize
-   \sa axisTitle, axisTitleColor, axisTitleFont, axisTitleFontUseRelSize, axisTitleFontRelSize
-*/
+  \param axisTitleColor the color of the axis title text
+  \sa setAxisTitle, setAxisTitleFont,setAxisTitleFontUseRelSize, setAxisTitleFontRelSize
+  \sa axisTitle, axisTitleColor, axisTitleFont, axisTitleFontUseRelSize, axisTitleFontRelSize
+  */
 void  KDChartParams::setAxisTitleColor( uint n, QColor axisTitleColor )
 {
     bool bDone = false;
@@ -8806,11 +8806,11 @@ void  KDChartParams::setAxisTitleColor( uint n, QColor axisTitleColor )
     emit changed();
 }
 /**
-   Returns the color of the default axis title text
+  Returns the color of the default axis title text
 
-   \return the color of the axis title text.
-   \sa setAxisTitleColor
-*/
+  \return the color of the axis title text.
+  \sa setAxisTitleColor
+  */
 QColor KDChartParams::axisTitleColor( uint n ) const
 {
     uint boxID;
@@ -8823,14 +8823,14 @@ QColor KDChartParams::axisTitleColor( uint n ) const
 }
 
 /**
-   Specifies the font and the size of the default axis title text.
+  Specifies the font and the size of the default axis title text.
 
-   \param axisTitleFont the font of the axis title text
-   \param useFontSize flag indicating whether the font's size is to be used
-   \param axisTitleFontRelSize the size to be used if \c useFontSize is false, this is interpreted as per mil value of the printable area size
-   \sa setAxisTitle, setAxisTitleColor,setAxisTitleFontUseRelSize, setAxisTitleFontRelSize
-   \sa axisTitle, axisTitleColor, axisTitleFont, axisTitleFontUseRelSize, axisTitleFontRelSize
-*/
+  \param axisTitleFont the font of the axis title text
+  \param useFontSize flag indicating whether the font's size is to be used
+  \param axisTitleFontRelSize the size to be used if \c useFontSize is false, this is interpreted as per mil value of the printable area size
+  \sa setAxisTitle, setAxisTitleColor,setAxisTitleFontUseRelSize, setAxisTitleFontRelSize
+  \sa axisTitle, axisTitleColor, axisTitleFont, axisTitleFontUseRelSize, axisTitleFontRelSize
+  */
 void  KDChartParams::setAxisTitleFont( uint n,
                                        QFont axisTitleFont )
 {
@@ -8854,11 +8854,11 @@ void  KDChartParams::setAxisTitleFont( uint n,
     emit changed();
 }
 /**
-   Returns the font of the default axis title text.
+  Returns the font of the default axis title text.
 
-   \return the axis title's font.
-   \sa setAxisTitleFont
-*/
+  \return the axis title's font.
+  \sa setAxisTitleFont
+  */
 QFont KDChartParams::axisTitleFont( uint n ) const
 {
     uint boxID;
@@ -8871,12 +8871,12 @@ QFont KDChartParams::axisTitleFont( uint n ) const
 }
 
 /**
-   Specifies whether the fixed size of the the default axis title text's font.
+  Specifies whether the fixed size of the the default axis title text's font.
 
-   \param axisTitleFontUseRelSize flag indicating whether the font's size is to be used or the size specified via setAxisTitleFontRelSize.
-   \sa setAxisTitle, setAxisTitleColor,setAxisTitleFont, setAxisTitleFontRelSize
-   \sa axisTitle, axisTitleColor, axisTitleFont, axisTitleFontUseRelSize, axisTitleFontRelSize
-*/
+  \param axisTitleFontUseRelSize flag indicating whether the font's size is to be used or the size specified via setAxisTitleFontRelSize.
+  \sa setAxisTitle, setAxisTitleColor,setAxisTitleFont, setAxisTitleFontRelSize
+  \sa axisTitle, axisTitleColor, axisTitleFont, axisTitleFontUseRelSize, axisTitleFontRelSize
+  */
 void  KDChartParams::setAxisTitleFontUseRelSize( uint n,
                                                  bool axisTitleFontUseRelSize )
 {
@@ -8900,11 +8900,11 @@ void  KDChartParams::setAxisTitleFontUseRelSize( uint n,
     emit changed();
 }
 /**
-   Returns whether the fix font size is used for the default axis title text.
+  Returns whether the fix font size is used for the default axis title text.
 
-   \return whether the fix axis title font size is used.
-   \sa setAxisTitleFontUseRelSize
-*/
+  \return whether the fix axis title font size is used.
+  \sa setAxisTitleFontUseRelSize
+  */
 bool KDChartParams::axisTitleFontUseRelSize( uint n ) const
 {
     uint boxID;
@@ -8917,14 +8917,14 @@ bool KDChartParams::axisTitleFontUseRelSize( uint n ) const
 }
 
 /**
-   Specifies whether a relative size to be used for the default axis title text instead of the fixed size of the font.
+  Specifies whether a relative size to be used for the default axis title text instead of the fixed size of the font.
 
-   Calling this function implicitely sets this axis's \c axisTitleFontUseRelSize flag to TRUE.
+  Calling this function implicitely sets this axis's \c axisTitleFontUseRelSize flag to TRUE.
 
-   \param axisTitleFontRelSize the size to be used, this is interpreted as per mil value of the printable area size.
-   \sa setAxisTitle, setAxisTitleColor,setAxisTitleFont, setAxisTitleFontUseRelSize
-   \sa axisTitle, axisTitleColor, axisTitleFont, axisTitleFontUseRelSize, axisTitleFontRelSize
-*/
+  \param axisTitleFontRelSize the size to be used, this is interpreted as per mil value of the printable area size.
+  \sa setAxisTitle, setAxisTitleColor,setAxisTitleFont, setAxisTitleFontUseRelSize
+  \sa axisTitle, axisTitleColor, axisTitleFont, axisTitleFontUseRelSize, axisTitleFontRelSize
+  */
 void  KDChartParams::setAxisTitleFontRelSize( uint n,
                                               int axisTitleFontRelSize )
 {
@@ -8947,12 +8947,12 @@ void  KDChartParams::setAxisTitleFontRelSize( uint n,
     emit changed();
 }
 /**
-   Returns the relative size of the default axis title text, should
-   be ignored if \c axisTitleFontUseRelSize returns false.
+  Returns the relative size of the default axis title text, should
+  be ignored if \c axisTitleFontUseRelSize returns false.
 
-   \return the axis title's relative font size.
-   \sa setAxisTitleFontRelSize
-*/
+  \return the axis title's relative font size.
+  \sa setAxisTitleFontRelSize
+  */
 int KDChartParams::axisTitleFontRelSize( uint n ) const
 {
     uint boxID;

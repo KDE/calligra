@@ -1,7 +1,6 @@
 /* -*- Mode: C++ -*-
-   $Id$
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -37,13 +36,13 @@
 #include "KDChartGlobal.h"
 
 /**
-   This exception is thrown when there is not enough space for
-   drawing all selected parts of a chart.
-*/
+  This exception is thrown when there is not enough space for
+  drawing all selected parts of a chart.
+  */
 class KDChartNotEnoughSpaceException
 {
-public:
-    KDChartNotEnoughSpaceException();
+    public:
+        KDChartNotEnoughSpaceException();
 };
 
 #endif

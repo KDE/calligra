@@ -1,6 +1,6 @@
 /* -*- Mode: C++ -*-
    KDChart - a multi-platform charting engine
-*/
+   */
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -40,34 +40,34 @@ class KDChartParams;
 class KDChartBWPainter : public KDChartAxesPainter, public Qt
 {
     friend class KDChartPainter;
-protected:
+    protected:
     KDChartBWPainter( KDChartParams* params );
     virtual ~KDChartBWPainter();
 
     virtual bool isNormalMode() const;
     virtual int clipShiftUp( bool, double ) const;
     virtual void specificPaintData( QPainter* painter,
-                                    const QRect& ourClipRect,
-                                    KDChartTableDataBase* data,
-                                    KDChartDataRegionList* regions,
-                                    const KDChartAxisParams* axisPara,
-                                    bool bNormalMode,
-                                    uint chart,
-                                    double logWidth,
-                                    double areaWidthP1000,
-                                    double logHeight,
-                                    double axisYOffset,
-                                    double minColumnValue,
-                                    double maxColumnValue,
-                                    double columnValueDistance,
-                                    uint chartDatasetStart,
-                                    uint chartDatasetEnd,
-                                    uint datasetStart,
-                                    uint datasetEnd );
+            const QRect& ourClipRect,
+            KDChartTableDataBase* data,
+            KDChartDataRegionList* regions,
+            const KDChartAxisParams* axisPara,
+            bool bNormalMode,
+            uint chart,
+            double logWidth,
+            double areaWidthP1000,
+            double logHeight,
+            double axisYOffset,
+            double minColumnValue,
+            double maxColumnValue,
+            double columnValueDistance,
+            uint chartDatasetStart,
+            uint chartDatasetEnd,
+            uint datasetStart,
+            uint datasetEnd );
 
     virtual QString fallbackLegendText( uint dataset ) const;
     virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;
-private:
+    private:
     int calculateStats( KDChartTableDataBase&, uint );// returns number of used cells containing a double
     double stats[   KDChartParams::BWStatValOffEndValue]; // y cordinates
     int nFirstQ1, nLastQ1, nFirstQ3, nLastQ3;
