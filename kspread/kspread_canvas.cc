@@ -836,8 +836,6 @@ void KSpreadCanvas::processClickSelectionHandle(QMouseEvent *event)
   return;
 }
 
-#define DBGRCT(name, x)    kdDebug(36001) << (name) << " " << (x).left() << "," << (x).top() << "," \
-                   << (x).right() << "," << (x).bottom() << endl;
 
 void KSpreadCanvas::extendCurrentSelection(QPoint cell)
 {
@@ -865,27 +863,6 @@ void KSpreadCanvas::extendCurrentSelection(QPoint cell)
     /* the selection simply becomes a box with the anchor and given cell as
        opposite corners
     */
-/*
-    DBGRCT("selectionAnchor", selectionAnchor);
-    DBGRCT("newCellArea", newCellArea);
-    int left, top, right, bottom;
-    left = QMIN(selectionAnchor.left(), newCellArea.left());
-    top = QMIN(selectionAnchor.top(), newCellArea.top());
-    right = QMAX(selectionAnchor.right(), newCellArea.right());
-    bottom = QMAX(selectionAnchor.bottom(), newCellArea.bottom());
-    QRect newSelection(QPoint(left, top), QPoint(right, bottom));
-
-    if (newSelection.width() == 1 && newSelection.height() == 1)
-    {
-      KSpreadCell* testCell = table->cellAt(newSelection.topLeft());
-      newSelection.setRight(newSelection.left() + testCell->extraXCells());
-      newSelection.setBottom(newSelection.top() + testCell->extraYCells());
-    }
-
-    DBGRCT("newSelection", newSelection);
-
-    selectionInfo()->setSelection(newSelection, cell, table);
-*/
     selectionInfo()->setSelection(cell, selectionInfo()->selectionAnchor(),
                                   table);
   }
@@ -2560,12 +2537,81 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
   if ( !table )
     return;
 
+  QValueList<QRect> cellRegions;
 
-  /* since the marker/selection border extends into neighboring cells, we
-     want to calculate all the cells bordering these regions.
-  */
-  ExtendRectBorder(area1);
-  ExtendRectBorder(area2);
+  /* let's try to only paint where the selection is actually changing*/
+  bool newLeft   = area1.left() != area2.left();
+  bool newTop    = area1.top() != area2.top();
+  bool newRight  = area1.right() != area2.right();
+  bool newBottom = area1.bottom() != area2.bottom();
+  bool topLeftSame = !newLeft && !newTop;
+  bool topRightSame = !newTop && !newRight;
+  bool bottomLeftSame = !newLeft && !newBottom;
+  bool bottomRightSame = !newBottom && !newRight;
+
+
+  if (!topLeftSame && !topRightSame && !bottomLeftSame && !bottomRightSame)
+  {
+    /* the two areas are not related. */
+    /* since the marker/selection border extends into neighboring cells, we
+       want to calculate all the cells bordering these regions.
+    */
+    ExtendRectBorder(area1);
+    ExtendRectBorder(area2);
+    cellRegions.append(area1);
+    cellRegions.append(area2);
+  }
+  else
+  {
+    /* at least one corner is the same -- let's only paint the extension
+       on corners that are not the same
+    */
+
+    /* first, calculate some numbers that we'll use a few times */
+    int farLeft = QMIN(area1.left(), area2.left());
+    if (farLeft != 1) farLeft--;
+    int innerLeft = QMAX(area1.left(), area2.left());
+    if (innerLeft != KS_colMax) innerLeft++;
+
+    int farTop = QMIN(area1.top(), area2.top());
+    if (farTop != 1) farTop--;
+    int innerTop = QMAX(area1.top(), area2.top());
+    if (innerTop != KS_rowMax) innerTop++;
+
+    int farRight = QMAX(area1.right(), area2.right());
+    if (farRight != KS_colMax) farRight++;
+    int innerRight = QMIN(area1.right(), area2.right());
+    if (innerRight != 1) innerRight--;
+
+    int farBottom = QMAX(area1.bottom(), area2.bottom());
+    if (farBottom!= KS_rowMax) farBottom++;
+    int innerBottom = QMIN(area1.bottom(), area2.bottom());
+    if (innerBottom != 1) innerBottom--;
+
+    if (newLeft)
+    {
+      cellRegions.append(QRect(QPoint(farLeft, farTop),
+                               QPoint(innerLeft, farBottom)));
+    }
+
+    if (newTop)
+    {
+      cellRegions.append(QRect(QPoint(farLeft, farTop),
+                               QPoint(farRight, innerTop)));
+    }
+
+    if (newRight)
+    {
+      cellRegions.append(QRect(QPoint(innerRight, farTop),
+                               QPoint(farRight, farBottom)));
+    }
+
+    if (newBottom)
+    {
+      cellRegions.append(QRect(QPoint(farLeft, innerBottom),
+                               QPoint(farRight, farBottom)));
+    }
+  }
 
   /* Prepare the painter */
   QPainter painter( this );
@@ -2591,9 +2637,6 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
   if ( view.height() < height() )
     view.setHeight( height() );
 
-  QValueList<QRect> cellRegions;
-  cellRegions.append(area1);
-  cellRegions.append(area2);
 
   m_pDoc->paintCellRegions(painter, view, m_pView, cellRegions, table, true);
   painter.restore();
