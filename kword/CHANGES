@@ -1071,3 +1071,7 @@ Reggie, 11.4.1999:
 - A footnote/endnote description paragraph can't be deleted
 - footnotes/endnotes don't loose connections to the footnote/endnote description paragraphs
   after sorting them anymore
+
+Reggie, 12.4.1999:
+------------------
+- Paragraph information and name (if required) gets saved and loaded now

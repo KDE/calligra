@@ -292,6 +292,9 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 void KWParag::save(ostream &out)
 {
   out << indent << "<TEXT>" << text.decoded().ascii() << "</TEXT>" << endl;
+  if (info == PI_FOOTNOTE)
+    out << indent << "<NAME name=\"" << paragName.ascii() << "\"/>" << endl;
+  out << indent << "<INFO info=\"" << static_cast<int>(info) << "\"/>" << endl;
   out << indent << "<HARDBRK frame=\"" << static_cast<int>(hardBreak) << "\"/>" << endl;
   out << otag << "<FORMATS>" << endl;
   text.saveFormat(out);
@@ -301,6 +304,7 @@ void KWParag::save(ostream &out)
   out << etag << "</LAYOUT>" << endl;
 }
 
+/*================================================================*/
 void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string tag;
@@ -344,6 +348,30 @@ void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	    {
 	      if ((*it).m_strName == "frame")
 		hardBreak = static_cast<bool>(atoi((*it).m_strValue.c_str()));
+	    }
+	}
+
+      // info
+      else if (name == "INFO")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "info")
+		info = static_cast<Info>(atoi((*it).m_strValue.c_str()));
+	    }
+	}
+
+      // name
+      else if (name == "NAME")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "name")
+		paragName = (*it).m_strValue.c_str();
 	    }
 	}
 
