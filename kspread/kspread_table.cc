@@ -43,7 +43,6 @@
 #include <kglobal.h>
 
 #include "kspread_table.h"
-#include "kspread_view.h"
 #include "kspread_undo.h"
 #include "kspread_map.h"
 #include "kspread_util.h"
@@ -3817,6 +3816,7 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
   table.setAttribute( "name", m_strName );
   table.setAttribute( "grid", (int)showGrid);
   table.setAttribute( "hide", (int)m_tableHide);
+
   // Save all cells.
   QIntDictIterator<KSpreadCell> it( m_dctCells );
   for ( ; it.current(); ++it )

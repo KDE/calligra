@@ -1,8 +1,8 @@
 <!--	$Id$
 
 		This is an XML document type definition (DTD) for the KSpread
-		document format. 
-		Written by Kalle Dalheimer <kalle@kde.org> with (obviously) input from 
+		document format.
+		Written by Kalle Dalheimer <kalle@kde.org> with (obviously) input from
 		KSpread's author Torben Weis <weis@kde.org>.
 
 		Please report all bugs to Kalle and Torben at the above addresses.
@@ -10,7 +10,7 @@
 		
 
 
-<!--	A KSpread document consists of a paper description and a map that 
+<!--	A KSpread document consists of a paper description and a map that
 		contains the table data.
 
 		Attributes:
@@ -26,7 +26,7 @@
                 editor CDATA #IMPLIED
                 mime   CDATA "application/x-kspread">
 
-<!--	Describes the page format. Can have no or one PAPERBORDERS child that 
+<!--	Describes the page format. Can have no or one PAPERBORDERS child that
 		describes the margins.
 
 		Attributes:
@@ -92,8 +92,15 @@
 
 
 <!--	Contains the table data for the various tables.
+
+	Attributes:
+        activeTable allows to set the active table
+        markerColumn and markerRow allow to set the active cell
 -->
 <!ELEMENT MAP (TABLE)*>
+<!ATTLIST MAP  activeTable    CDATA #IMPLIED
+               markerColumn   CDATA #IMPLIED
+               markerRow      CDATA #IMPLIED>
 
 <!--	Contains the data in one table or embedded objects.
 

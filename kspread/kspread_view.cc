@@ -181,9 +181,13 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
 	addTable( tbl );
-    //activate first table which is not hiding
+    tbl = m_pDoc->map()->initialActiveTable();
+    if (tbl)
+      setActiveTable(tbl);
+    else
+      //activate first table which is not hiding
+      setActiveTable(m_pDoc->map()->findTable(m_pTabBar->listshow().first()));
 
-    setActiveTable(m_pDoc->map()->findTable(m_pTabBar->listshow().first()));
     QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadTable* ) ), SLOT( slotAddTable( KSpreadTable* ) ) );
 
     // Handler for moving and resizing embedded parts
@@ -345,6 +349,15 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     // just before.
     connect( this, SIGNAL( childActivated( KoDocumentChild* ) ),
 	     this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
+
+    // Set the initial position for the marker as store in the XML file,
+    // (1,1) otherwise
+    int col = m_pDoc->map()->initialMarkerColumn();
+    if ( col <= 0 ) col = 1;
+    int row = m_pDoc->map()->initialMarkerRow();
+    if ( row <= 0 ) row = 1;
+    m_pCanvas->gotoLocation( col, row );
+
 }
 
 KSpreadView::~KSpreadView()
@@ -640,7 +653,7 @@ void KSpreadView::updateEditWidget()
     m_underline->setChecked( cell->textFontUnderline() );
     m_textColor->setColor( cell->textColor() );
     m_bgColor->setColor( cell->bgColor() );
-    		
+
     if ( cell->align() == KSpreadLayout::Left )
 	m_alignLeft->setChecked( TRUE );
     else if ( cell->align() == KSpreadLayout::Right )
@@ -2456,18 +2469,18 @@ DCOPObject* KSpreadView::dcopObject()
 
 QWidget *KSpreadView::canvas()
 {
-  return canvasWidget(); 
+  return canvasWidget();
 }
 
 int KSpreadView::canvasXOffset() const
 {
-  return canvasWidget()->xOffset(); 
+  return canvasWidget()->xOffset();
 }
 
 int KSpreadView::canvasYOffset() const
 {
-  return canvasWidget()->yOffset(); 
-} 
+  return canvasWidget()->yOffset();
+}
 
 #include "kspread_view.moc"
 

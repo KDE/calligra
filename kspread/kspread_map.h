@@ -85,6 +85,10 @@ public:
 
   KSpreadTable* findTable( const QString & _name );
 
+  KSpreadTable* initialActiveTable() { return m_initialActiveTable; }
+  int initialMarkerColumn() { return m_initialMarkerColumn; }
+  int initialMarkerRow() { return m_initialMarkerRow; }
+
   /**
    * Use the @ref #nextTable function to get all the other tables.
    * Attention: Function is not reentrant.
@@ -130,6 +134,13 @@ private:
    * Pointer to the part which holds this map.
    */
   KSpreadDoc *m_pDoc;
+
+  /**
+   * Set from the XML
+   */
+  KSpreadTable * m_initialActiveTable;
+  int m_initialMarkerColumn;
+  int m_initialMarkerRow;
 
   DCOPObject* m_dcop;
 };

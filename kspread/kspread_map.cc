@@ -23,6 +23,9 @@
 
 #include "kspread_map.h"
 #include "kspread_doc.h"
+#include "kspread_view.h"
+#include "kspread_canvas.h"
+#include "kspread_table.h"
 #include "kspread_util.h"
 
 #include "KSpreadMapIface.h"
@@ -35,6 +38,7 @@ KSpreadMap::KSpreadMap( KSpreadDoc *_doc, const char* name )
 {
   m_pDoc = _doc;
   m_dcop = 0;
+  m_initialActiveTable = 0L;
 
   m_lstTables.setAutoDelete( true );
 }
@@ -86,6 +90,12 @@ void KSpreadMap::moveTable( const char* _from, const char* _to, bool _before )
 QDomElement KSpreadMap::save( QDomDocument& doc )
 {
   QDomElement mymap = doc.createElement( "map" );
+  // Save visual info for the first view, such as active table and active cell
+  // It looks like a hack, but reopening a document creates only one view anyway (David)
+  KSpreadCanvas * canvas = static_cast<KSpreadView*>(this->doc()->firstView())->canvasWidget();
+  mymap.setAttribute( "activeTable", canvas->activeTable()->name() );
+  mymap.setAttribute( "markerColumn", canvas->markerColumn() );
+  mymap.setAttribute( "markerRow", canvas->markerRow() );
 
   QListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
@@ -101,6 +111,9 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
 
 bool KSpreadMap::loadXML( const QDomElement& mymap )
 {
+  QString activeTable = mymap.attribute( "activeTable" );
+  m_initialMarkerColumn = mymap.attribute( "markerColumn" ).toInt();
+  m_initialMarkerRow = mymap.attribute( "markerRow" ).toInt();
   QDomNode n = mymap.firstChild();
   while( !n.isNull() )
   {
@@ -113,6 +126,12 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
 	return false;
     }
     n = n.nextSibling();
+  }
+
+  if (!activeTable.isEmpty())
+  {
+    // Used by KSpreadView's constructor
+    m_initialActiveTable = findTable( activeTable );
   }
 
   return true;
