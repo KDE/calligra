@@ -1,4 +1,5 @@
 Find these opcodes
 -----------------------
 
-None!
+ole-excel: WARNING: invokeHandler: unsupported opcode: 0xef operands: 6
+ole-excel: WARNING: invokeHandler: unsupported opcode: 0xc0 operands: 0
