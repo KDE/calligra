@@ -129,6 +129,7 @@ void Canvas::showGrid (bool flag) {
   if (gridIsOn != flag) {
     gridIsOn = flag;
     updateView ();
+    emit gridStatusChanged ();
     saveGridProperties ();
   }
 }
@@ -593,6 +594,7 @@ const vector<float>& Canvas::getVertHelplines () const {
 
 void Canvas::alignToHelplines (bool flag) {
   helplinesSnapIsOn = flag;
+  emit gridStatusChanged ();
   document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
 }
 
@@ -604,6 +606,7 @@ void Canvas::showHelplines (bool flag) {
   if (helplinesAreOn != flag) {
     helplinesAreOn = flag;
     updateView ();
+    emit gridStatusChanged ();
     saveGridProperties ();
   }
 }
