@@ -212,64 +212,129 @@ void KPObject::saveOasisObjectStyle( KoGenStyle &styleobjectauto )
 
 bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int objectId )
 {
-    if ( effect == EF_NONE )
+    if ( effect == EF_NONE && effect3==EF3_NONE)
         return false;
-    animation.startElement( "presentation:show-shape" );
-    animation.addAttribute( "draw:shape-id", objectId );
-    switch( effect )
+    if ( effect != EF_NONE )
     {
-    case EF_NONE:
-        break;
-    case EF_COME_RIGHT:
-        animation.addAttribute( "presentation:effect", "move" );
-        animation.addAttribute( "presentation:direction", "from-right" );
-        break;
-    case EF_COME_LEFT:
-        animation.addAttribute( "presentation:effect", "move" );
-        animation.addAttribute( "presentation:direction", "from-left" );
-        break;
-    case EF_COME_TOP:
-        animation.addAttribute( "presentation:effect", "move" );
-        animation.addAttribute( "presentation:direction", "from-top" );
-        break;
-    case EF_COME_BOTTOM:
-        animation.addAttribute( "presentation:effect", "move" );
-        animation.addAttribute( "presentation:direction", "from-bottom" );
-        break;
-    case EF_COME_RIGHT_TOP:
-        animation.addAttribute( "presentation:effect", "move" );
-        animation.addAttribute( "presentation:direction", "from-upper-right" );
-        break;
-    case EF_COME_RIGHT_BOTTOM:
-        animation.addAttribute( "presentation:effect", "move" );
-        animation.addAttribute( "presentation:direction", "from-lower-right" );
-        break;
-    case EF_COME_LEFT_TOP:
-        animation.addAttribute( "presentation:effect", "move" );
-        animation.addAttribute( "presentation:direction", "from-upper-left" );
-        break;
-    case EF_COME_LEFT_BOTTOM:
-        animation.addAttribute( "presentation:effect", "move" );
-        animation.addAttribute( "presentation:direction", "from-lower-left" );
-        break;
-    case EF_WIPE_LEFT:
-        animation.addAttribute( "presentation:effect", "fade" );
-        animation.addAttribute( "presentation:direction", "from-left" );
-        break;
-    case EF_WIPE_RIGHT:
-        animation.addAttribute( "presentation:effect", "fade" );
-        animation.addAttribute( "presentation:direction", "from-right" );
-        break;
-    case EF_WIPE_TOP:
-        animation.addAttribute( "presentation:effect", "fade" );
-        animation.addAttribute( "presentation:direction", "from-top" );
-        break;
-    case EF_WIPE_BOTTOM:
-        animation.addAttribute( "presentation:effect", "fade" );
-        animation.addAttribute( "presentation:direction", "from-bottom" );
-        break;
+        animation.startElement( "presentation:show-shape" );
+        animation.addAttribute( "draw:shape-id", objectId );
+        switch( effect )
+        {
+        case EF_NONE:
+            break;
+        case EF_COME_RIGHT:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-right" );
+            break;
+        case EF_COME_LEFT:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-left" );
+            break;
+        case EF_COME_TOP:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-top" );
+            break;
+        case EF_COME_BOTTOM:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-bottom" );
+            break;
+        case EF_COME_RIGHT_TOP:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-upper-right" );
+            break;
+        case EF_COME_RIGHT_BOTTOM:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-lower-right" );
+            break;
+        case EF_COME_LEFT_TOP:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-upper-left" );
+            break;
+        case EF_COME_LEFT_BOTTOM:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-lower-left" );
+            break;
+        case EF_WIPE_LEFT:
+            animation.addAttribute( "presentation:effect", "fade" );
+            animation.addAttribute( "presentation:direction", "from-left" );
+            break;
+        case EF_WIPE_RIGHT:
+            animation.addAttribute( "presentation:effect", "fade" );
+            animation.addAttribute( "presentation:direction", "from-right" );
+            break;
+        case EF_WIPE_TOP:
+            animation.addAttribute( "presentation:effect", "fade" );
+            animation.addAttribute( "presentation:direction", "from-top" );
+            break;
+        case EF_WIPE_BOTTOM:
+            animation.addAttribute( "presentation:effect", "fade" );
+            animation.addAttribute( "presentation:direction", "from-bottom" );
+            break;
+        }
+        animation.endElement();
     }
-    animation.endElement();
+
+
+    //FIXME oo doesn't support hide animation object
+    if ( effect3 != EF3_NONE )
+    {
+        animation.startElement( "presentation:hide-shape" );
+        animation.addAttribute( "draw:shape-id", objectId );
+        switch( effect3 )
+        {
+        case EF3_NONE:
+            break;
+        case EF3_GO_RIGHT:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-right" );
+            break;
+        case EF3_GO_LEFT:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-left" );
+            break;
+        case EF3_GO_TOP:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-top" );
+            break;
+        case EF3_GO_BOTTOM:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-bottom" );
+            break;
+        case EF3_GO_RIGHT_TOP:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-upper-right" );
+            break;
+        case EF3_GO_RIGHT_BOTTOM:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-lower-right" );
+            break;
+        case EF3_GO_LEFT_TOP:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-upper-left" );
+            break;
+        case EF3_GO_LEFT_BOTTOM:
+            animation.addAttribute( "presentation:effect", "move" );
+            animation.addAttribute( "presentation:direction", "from-lower-left" );
+            break;
+        case EF3_WIPE_LEFT:
+            animation.addAttribute( "presentation:effect", "fade" );
+            animation.addAttribute( "presentation:direction", "from-left" );
+            break;
+        case EF3_WIPE_RIGHT:
+            animation.addAttribute( "presentation:effect", "fade" );
+            animation.addAttribute( "presentation:direction", "from-right" );
+            break;
+        case EF3_WIPE_TOP:
+            animation.addAttribute( "presentation:effect", "fade" );
+            animation.addAttribute( "presentation:direction", "from-top" );
+            break;
+        case EF3_WIPE_BOTTOM:
+            animation.addAttribute( "presentation:effect", "fade" );
+            animation.addAttribute( "presentation:direction", "from-bottom" );
+            break;
+        }
+        animation.endElement();
+    }
     return true;
 }
 
