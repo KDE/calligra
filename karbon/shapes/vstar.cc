@@ -111,7 +111,14 @@ VStar::VStar( VObject* parent,
 					p3.setY( innerRadius * sin( nextInnerAngle ) +
 						sin( angle + inAngle + VGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
 
-					curveTo( p2, p3, p );
+					if( m_type == gear )
+					{
+						lineTo( p2 );
+						lineTo( p3 );
+						lineTo( p );
+					}
+					else
+						curveTo( p2, p3, p );
 				}
 			}
 
@@ -132,7 +139,14 @@ VStar::VStar( VObject* parent,
 				p3.setY( outerRadius * sin( nextOuterAngle ) +
 					sin( angle + VGlobal::twopi / edges * ( i + 1.0 ) ) * outerRoundness );
 
-				curveTo( p2, p3, p );
+				if( m_type == gear )
+				{
+					lineTo( p2 );
+					lineTo( p3 );
+					lineTo( p );
+				}
+				else
+					curveTo( p2, p3, p );
 			}
 		}
 	}

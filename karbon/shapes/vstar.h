@@ -33,7 +33,8 @@ public:
 		wheel,
 		polygon,
 		framed_star,
-		star
+		star,
+		gear
 	};
 	VStar( VObject* parent,
 		const KoPoint& center, double outerRadius, double innerRadius,

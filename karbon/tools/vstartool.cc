@@ -42,6 +42,7 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 	m_type->insertItem( i18n( "Polygon" ), VStar::polygon );
 	m_type->insertItem( i18n( "Framed Star" ), VStar::framed_star);
 	m_type->insertItem( i18n( "Star" ), VStar::star );
+	m_type->insertItem( i18n( "Gear" ), VStar::gear );
 	connect( m_type, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
 
 	// add width/height-input:
@@ -136,7 +137,7 @@ VStarOptionsWidget::innerAngle() const
 void
 VStarOptionsWidget::typeChanged( int type )
 {
-	m_innerR->setEnabled( type == VStar::star_outline || type == VStar::framed_star );
+	m_innerR->setEnabled( type == VStar::star_outline || type == VStar::framed_star || type == VStar::gear );
 	m_innerAngle->setEnabled( type == VStar::star || type == VStar::star_outline || type == VStar::framed_star );
 }
 
