@@ -683,7 +683,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 
     for (QMap<QString,int>::ConstIterator it=debugUnknownKeywords.begin();
         it!=debugUnknownKeywords.end();it++)
-        kdDebug(30515) << "Unknown keyword: " << it.key() << " * " << it.data() << endl;
+        kdDebug(30515) << "Unknown keyword: " << QString( "%1" ).arg( it.data(), 4 )  << " * " << it.key() << endl;
 
     return KoFilter::OK;
 }
@@ -1101,6 +1101,7 @@ void RTFImport::insertTabDef( RTFProperty * )
 
 void RTFImport::insertUTF8( int ch )
 {
+    kdDebug(30515) << "insertUTF8: " << ch << endl;
     char buf[4];
     char *text = buf;
     char *tk = token.text;
@@ -1144,6 +1145,7 @@ void RTFImport::insertSymbol( RTFProperty *property )
 
 void RTFImport::insertHexSymbol( RTFProperty * )
 {
+    kdDebug(30515) << "insertHexSymbol: " << token.value << endl;
     // Be careful, the value given in \' could be only one byte of a multi-byte character.
     // So it cannot be assumed that it will result in one character.
     char tmpch[2] = {token.value, '\0'};
