@@ -671,7 +671,7 @@ protected slots:
     void slotApplyFont();
     void slotApplyParag();
     void slotObjectEditChanged();
-
+    void slotChangeCutState(bool );
 // end of protected slots
 protected:
 
