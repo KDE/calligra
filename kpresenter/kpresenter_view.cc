@@ -1454,6 +1454,7 @@ void KPresenterView::textBold()
 
 void KPresenterView::textStrikeOut()
 {
+    tbFont.setUnderline( !tbFont.underline() );
     page->setTextStrikeOut(actionFormatStrikeOut->isChecked());
 }
 
@@ -3980,7 +3981,6 @@ void KPresenterView::insertLink()
 
 void KPresenterView::showFormat( const KoTextFormat &currentFormat )
 {
-    kdDebug()<<"showFormat( const KoTextFormat &currentFormat )\n";
     actionTextFontFamily->setFont( currentFormat.font().family() );
     actionTextFontSize->setFontSize( currentFormat.font().pointSize() );
     actionTextBold->setChecked( currentFormat.font().bold());
