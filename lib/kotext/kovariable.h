@@ -490,6 +490,7 @@ public:
     virtual void saveVariable( QDomElement &parentElem );
     virtual int correctValue() const { return m_correctTime;}
     virtual void load( QDomElement &elem );
+    virtual void loadOasis( const QDomElement &elem, KoOasisContext& context );
 
     virtual QStringList subTypeText();
     virtual void setVariableSubType( short int subtype )
@@ -525,6 +526,7 @@ public:
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
+    virtual void loadOasis( const QDomElement &elem, KoOasisContext& context );
 
     QString name() const { return m_varValue.toString(); }
     virtual void recalc();
@@ -564,6 +566,7 @@ public:
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
+    virtual void loadOasis( const QDomElement &elem, KoOasisContext& context );
     virtual QString fieldCode();
 
     virtual void recalc();
@@ -603,6 +606,7 @@ public:
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
+    virtual void loadOasis( const QDomElement &elem, KoOasisContext& context );
 
     virtual QString text(bool realValue=false);
     QString name() const { return m_varValue.toString(); }
@@ -645,6 +649,7 @@ public:
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
+    virtual void loadOasis( const QDomElement &elem, KoOasisContext& context );
 protected:
     short int m_subtype;
 };
@@ -663,6 +668,7 @@ public:
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
+    virtual void loadOasis( const QDomElement &elem, KoOasisContext& context );
 
     virtual QString text(bool realValue=false);
     QString value() const { return m_varValue.toString(); }
@@ -695,6 +701,7 @@ public:
 
     virtual void saveVariable( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
+    virtual void loadOasis( const QDomElement &elem, KoOasisContext& context );
 
     virtual QString text(bool realValue=false);
     QString note() const { return m_varValue.toString(); }

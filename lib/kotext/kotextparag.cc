@@ -1698,40 +1698,23 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
             textData = '\n';
             //shouldWriteFormat=true;
         }
-        else if ( textFoo &&
-                  (afterText == "date" // fields
-                   || afterText == "print-time"
-                   || afterText == "print-date"
-                   || afterText == "creation-time"
-                   || afterText == "creation-date"
-                   || afterText == "modification-time"
-                   || afterText == "modification-date"
-                   || afterText == "time"
-                   || afterText == "page-number"
-                   || afterText == "file-name"
-                   || afterText == "author-name"
-                   || afterText == "author-initials"
-                   || afterText == "subject"
-                   || afterText == "title"
-                   || afterText == "description"
-                   || afterText == "variable-set"
-                   || afterText == "page-variable-get"
-                   || afterText == "user-defined" ) )
-            // TODO in kotext: text:printed-by, initial-creator
+        else if ( textFoo )
         {
+            // Check if it's a variable
             KoVariable* var = context.variableCollection()->loadOasisField( textDocument(), ts, context );
-            if ( var ) {
+            if ( var )
+            {
                 textData = "#";     // field placeholder
                 customItem = var;
             }
-        }
-        else
-        {
-            bool handled = textDocument()->loadSpanTag( ts, context, textData );
-            if ( !handled )
+            else
             {
-                kdWarning(32500) << "Ignoring tag " << ts.tagName() << endl;
-                continue;
+                bool handled = textDocument()->loadSpanTag( ts, context, textData );
+                if ( !handled )
+                {
+                    kdWarning(32500) << "Ignoring tag " << ts.tagName() << endl;
+                    continue;
+                }
             }
         }
 

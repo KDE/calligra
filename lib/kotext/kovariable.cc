@@ -192,7 +192,7 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
 #else
     tmp.replace("PPPP", KGlobal::locale()->monthNamePossessive(month, false)); //long possessive month name
     tmp.replace("PPP",  KGlobal::locale()->monthNamePossessive(month, true));  //short possessive month name
-#endif    
+#endif
     return tmp;
 }
 
@@ -682,10 +682,11 @@ KoVariable * KoVariableCollection::createVariable( int type, short int subtype, 
 
 KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context )
 {
-    const QString tagName (tag.tagName());
+    Q_ASSERT( tag.tagName().startsWith( "text:" ) ); // checked by caller
+    const QString tagName( tag.tagName() );
+    const QCString afterText = tagName.latin1() + 5;
     QString key;
     int type = -1;
-//    int subtype = -1;
 
     if ( tagName.endsWith( "date" ) || tagName.endsWith( "time" ) )
     {
@@ -696,139 +697,54 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
         if ( it != map.end() )
             dateFormat = (*it);
 
-        if ( tagName.endsWith( "date" ) )
+        // Only text:time is a pure time (the data behind is only h/m/s)
+        // Whereas print-time/creation-time etc. are actually related to a date/time value.
+        if ( afterText == "time" )
         {
-            key = "DATE" + dateFormat;
-            type = VT_DATE;
-        }
-        else // ends with "time"
-        {
-            key = "TIME" + dateFormat;
             type = VT_TIME;
+            key = "TIME" + dateFormat;
         }
-
-            // VT_TIME:
-#if 0
-
-            // Use QDateTime to work around a possible problem of QTime::FromString in Qt 3.2.2
-            QDateTime dt(QDateTime::fromString(elem.attribute("text:time-value"), Qt::ISODate));
-
-            bool fixed = (elem.hasAttribute("text:fixed") && elem.attribute("text:fixed")=="true");
-
-            if (!dt.isValid()) {
-                dt = QDateTime::currentDateTime(); // OOo docs say so :)
-                fixed = false;
-            }
-
-            const QTime time(dt.time());
-            timeElement.setAttribute("fix", fixed ? 1 : 0);
-            timeElement.setAttribute("hour", time.hour());
-            timeElement.setAttribute("minute", time.minute());
-            timeElement.setAttribute("second", time.second());
-            /*if (elem.hasAttribute("text:time-adjust"))
-              timeElem.setAttribute("correct", elem.attribute("text:time-adjust"));*/ // ### TODO
-#endif
-
-#if 0
-
-            // more VT_DATE:
-        else if ( tagName == "text:print-time"
-                  || tagName == "text:print-date"
-                  || tagName == "text:creation-time"
-                  || tagName == "text:creation-date"
-                  || tagName == "text:modification-time"
-                  || tagName == "text:modification-date" )
+        else
         {
-
-            if ( tagName.startsWith( "text:print" ) )
-                subtype = VST_DATE_LAST_PRINTING;
-            else if ( tagName.startsWith( "text:creation" ) )
-                subtype = VST_DATE_CREATE_FILE;
-            else if ( tagName.startsWith( "text:modification" ) )
-                subtype = VST_DATE_MODIFY_FILE;
-            // We do NOT include the date value here. It will be retrieved from
-            // meta.xml
-            dateElement.setAttribute("subtype", subtype);
-            if (elem.hasAttribute("text:date-adjust"))
-                dateElement.setAttribute("correct", elem.attribute("text:date-adjust"));
+            type = VT_DATE;
+            key = "DATE" + dateFormat;
         }
-#endif
-    }// end of date/time variables
-    else if (tagName == "text:page-number")
+    }
+    else if (afterText == "page-number")
     {
-#if 0
-        subtype = VST_PGNUM_CURRENT;
-
-        if (elem.hasAttribute("text:select-page"))
-        {
-            const QString select = elem.attribute("text:select-page");
-
-            if (select == "previous")
-                subtype = VST_PGNUM_PREVIOUS;
-            else if (select == "next")
-                subtype = VST_PGNUM_NEXT;
-            else
-                subtype = VST_PGNUM_CURRENT;
-        }
-
-        pgnumElement.setAttribute("subtype", subtype);
-        pgnumElement.setAttribute("value", elem.text());
-#endif
-        key = "NUMBER";
         type = VT_PGNUM;
+        key = "NUMBER";
     }
-    else if (tagName == "text:file-name")
+    else if (afterText == "chapter")
     {
-#if 0
-        subtype = VST_PATHFILENAME;
-
-        if (elem.hasAttribute("text:display"))
-        {
-            const QString display = elem.attribute("text:display");
-
-            if (display == "path")
-                subtype = VST_DIRECTORYNAME;
-            else if (display == "name")
-                subtype = VST_FILENAMEWITHOUTEXTENSION;
-            else if (display == "name-and-extension")
-                subtype = VST_FILENAME;
-            else
-                subtype = VST_PATHFILENAME;
-        }
-
-        fieldElement.setAttribute("subtype", subtype);
-        fieldElement.setAttribute("value", elem.text());
-#endif
+        type = VT_PGNUM;
         key = "STRING";
-        type = VT_FIELD;
     }
-    else if (tagName == "text:author-name"
-             || tagName == "text:author-initials"
-             || tagName == "text:subject"
-             || tagName == "text:title"
-             || tagName == "text:description"
+    else if (afterText == "file-name")
+    {
+        type = VT_FIELD;
+        key = "STRING";
+    }
+    else if (afterText == "author-name"
+             || afterText == "author-initials"
+             || afterText == "subject"
+             || afterText == "title"
+             || afterText == "description")
+    {
+        type = VT_FIELD;
+        key = "STRING";
+    }
+    else if ( tagName.startsWith( "text:sender-" )
+              && afterText != "sender-firstname" // not supported
+              && afterText != "sender-lastname" // not supported
+              && afterText != "sender-initials" // not supported
         )
     {
-#if 0
-        subtype = VST_AUTHORNAME;
-
-        if (tagName == "text:author-initials")
-            subtype = VST_INITIAL;
-        else if ( tagName == "text:subject" ) // TODO in kword
-            subtype = VST_TITLE;
-        else if ( tagName == "text:title" )
-            subtype = VST_TITLE;
-        else if ( tagName == "text:description" )
-            subtype = VST_ABSTRACT;
-
-        authorElem.setAttribute("subtype", subtype);
-        authorElem.setAttribute("value", elem.text());
-#endif
-        key = "STRING";
         type = VT_FIELD;
+        key = "STRING";
     }
-    else if ( tagName == "text:variable-set"
-              || tagName == "text:user-defined" )
+    else if ( afterText == "variable-set"
+              || afterText == "user-defined" )
     {
         // We treat both the same. For OO the difference is that
         // - variable-set is related to variable-decls (defined in <body>);
@@ -844,20 +760,15 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
     }
     else
     {
-        kdWarning(30518) << "Unsupported field " << tagName << endl;
+        // Not an error. It's simply not a variable tag (the caller doesn't check for that)
         return 0;
     }
-// TODO tagName == "text:page-variable-get", "initial-creator" and many more
+// TODO afterText == "page-variable-get", "initial-creator" and many more
 // TODO VT_MAILMERGE
 
 //    const int type = typeElem.attribute( "type" ).toInt();
     KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_formatCollection->format( key.latin1() );
     // If varFormat is 0 (no key specified), the default format will be used.
-#if 0
-    int correct = 0;
-    if (typeElem.hasAttribute( "correct" ))
-        correct = typeElem.attribute("correct").toInt();
-#endif
 
     KoVariable* var = createVariable( type, -1, m_formatCollection, varFormat, textdoc, context.koDocument(), 0 /*correct*/, true );
     var->loadOasis( tag, context );
@@ -1148,27 +1059,24 @@ void KoDateVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
     const QString tagName( elem.tagName() );
     if ( tagName == "text:date" ) // current (or fixed) date
     {
-        m_subtype = VST_DATE_CURRENT;
-
         // Standard form of the date is in text:date-value. Example: 2004-01-21T10:57:05
         QDateTime dt(QDate::fromString(elem.attribute("text:date-value"), Qt::ISODate));
 
         bool fixed = (elem.hasAttribute("text:fixed") && elem.attribute("text:fixed")=="true");
         if (!dt.isValid())
             fixed = false; // OOo docs say so: not valid = current datetime
-        if ( fixed ) {
-            m_subtype = VST_DATE_FIX;
+        if ( fixed )
             m_varValue = QVariant( dt );
-        }
-        m_correctDate = elem.attribute("text:date-adjust").toInt();
+        m_subtype = fixed ? VST_DATE_FIX : VST_DATE_CURRENT;
     }
+    // For all those the value of the date will be retrieved from meta.xml
     else if ( tagName.startsWith( "text:print" ) )
         m_subtype = VST_DATE_LAST_PRINTING;
     else if ( tagName.startsWith( "text:creation" ) )
         m_subtype = VST_DATE_CREATE_FILE;
     else if ( tagName.startsWith( "text:modification" ) )
         m_subtype = VST_DATE_MODIFY_FILE;
-
+    m_correctDate = elem.attribute( "text:date-adjust" ).toInt();
 }
 
 QStringList KoDateVariable::actionTexts()
@@ -1338,6 +1246,25 @@ void KoTimeVariable::load( QDomElement& elem )
         }
         m_subtype = fix ? VST_TIME_FIX : VST_TIME_CURRENT;
         m_correctTime = correct;
+    }
+}
+
+void KoTimeVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+{
+    const QString tagName( elem.tagName() );
+    Q_ASSERT( tagName == "text:time" ); // caller checked for it
+    if ( tagName == "text:time" ) // current (or fixed) time
+    {
+        // Use QDateTime to work around a possible problem of QTime::fromString in Qt 3.2.2
+        QDateTime dt(QDateTime::fromString(elem.attribute("text:time-value"), Qt::ISODate));
+
+        bool fixed = (elem.hasAttribute("text:fixed") && elem.attribute("text:fixed")=="true");
+        if (!dt.isValid())
+            fixed = false; // OOo docs say so: not valid = current datetime
+        if ( fixed )
+            m_varValue = QVariant( dt.time() );
+        m_subtype = fixed ? VST_TIME_FIX : VST_TIME_CURRENT;
+        m_correctTime = elem.attribute( "text:time-adjust" ).toInt();
     }
 }
 
@@ -1585,6 +1512,32 @@ void KoPgNumVariable::load( QDomElement& elem )
             m_varValue = QVariant(pgNumElem.attribute("value"));
     }
 }
+void KoPgNumVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+{
+    const QCString afterText( elem.tagName().latin1() + 5 );
+    if (afterText == "page-number") {
+        m_subtype = VST_PGNUM_CURRENT;
+
+        if (elem.hasAttribute("text:select-page"))
+        {
+            const QString select = elem.attribute("text:select-page");
+            if (select == "previous")
+                m_subtype = VST_PGNUM_PREVIOUS;
+            else if (select == "next")
+                m_subtype = VST_PGNUM_NEXT;
+        }
+        // Missing: fixed, page adjustment, formatting style
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( afterText == "chapter" )
+    {
+        m_subtype = VST_CURRENT_SECTION;
+        m_varValue = QVariant( elem.text() );
+        // text:display attribute can be name, number (i.e. with prefix/suffix),
+        // number-and-name, plain-number-and-name, plain-number
+        // TODO: a special format class for this, so that it can be easily switched using the RMB
+    }
+}
 
 QStringList KoPgNumVariable::actionTexts()
 {
@@ -1706,6 +1659,63 @@ void KoFieldVariable::load( QDomElement& elem )
         m_varValue = QVariant( e.attribute( "value" ) );
     } else
         kdWarning() << "FIELD element not found !" << endl;
+}
+
+void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+{
+    const QCString afterText( elem.tagName().latin1() + 5 );
+    if (afterText == "file-name") {
+        const QCString display = elem.attribute("text:display").latin1();
+        if (display == "path")
+            m_subtype = VST_DIRECTORYNAME;
+        else if (display == "name")
+            m_subtype = VST_FILENAMEWITHOUTEXTENSION;
+        else if (display == "name-and-extension")
+            m_subtype = VST_FILENAME;
+        else
+            m_subtype = VST_PATHFILENAME;
+    }
+    else if ( afterText == "author-name" )
+        m_subtype = VST_AUTHORNAME;
+    else if (afterText == "author-initials")
+        m_subtype = VST_INITIAL;
+    else if ( afterText == "subject" )
+        m_subtype = VST_TITLE; // TODO separate variable
+    else if ( afterText == "title" )
+        m_subtype = VST_TITLE;
+    else if ( afterText == "description" )
+        m_subtype = VST_ABSTRACT;
+
+    else if ( afterText == "sender-company" )
+        m_subtype = VST_COMPANYNAME;
+    else if ( afterText == "sender-firstname" )
+        ; // ## This is different from author-name, but the notion of 'sender' is unclear...
+    else if ( afterText == "sender-lastname" )
+        ; // ## This is different from author-name, but the notion of 'sender' is unclear...
+    else if ( afterText == "sender-initials" )
+        ; // ## This is different from author-initials, but the notion of 'sender' is unclear...
+    else if ( afterText == "sender-street" )
+        m_subtype = VST_STREET;
+    else if ( afterText == "sender-country" )
+        m_subtype = VST_COUNTRY;
+    else if ( afterText == "sender-postal-code" )
+        m_subtype = VST_POSTAL_CODE;
+    else if ( afterText == "sender-city" )
+        m_subtype = VST_CITY;
+    else if ( afterText == "sender-title" )
+        m_subtype = VST_AUTHORTITLE; // Small hack (it's supposed to be about the sender, not about the author)
+    else if ( afterText == "sender-position" )
+        m_subtype = VST_AUTHORTITLE; // TODO separate variable
+    else if ( afterText == "sender-phone-private" )
+        m_subtype = VST_TELEPHONE;
+    else if ( afterText == "sender-phone-work" )
+        m_subtype = VST_TELEPHONE; // ### TODO separate type
+    else if ( afterText == "sender-fax" )
+        m_subtype = VST_FAX;
+    else if ( afterText == "sender-email" )
+        m_subtype = VST_EMAIL;
+
+    m_varValue = QVariant( elem.text() );
 }
 
 void KoFieldVariable::recalc()
@@ -2048,4 +2058,24 @@ void KoPgNumVariable::setSectionTitle( const QString& _title )
         title = i18n("<None>"); // TODO after msg freeze: <No title>
     }
     m_varValue = QVariant( title );
+}
+
+void KoCustomVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+{
+    // TODO
+}
+
+void KoMailMergeVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+{
+    // TODO
+}
+
+void KoLinkVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+{
+    // TODO
+}
+
+void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+{
+    // TODO
 }
