@@ -443,7 +443,7 @@ SvgImport::getCoord( const char *ptr, double &number )
 }
 
 void
-SvgImport::parsePath( VComposite *path, const QDomElement &e )
+SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 {
 	QString d = e.attribute( "d" );
 
@@ -454,9 +454,10 @@ SvgImport::parsePath( VComposite *path, const QDomElement &e )
 		const char *ptr = d.latin1();
 		const char *end = d.latin1() + d.length() + 1;
 
-		double curx, cury, tox, toy, x1, y1, x2, y2, rx, ry, angle;
-		bool largeArc, sweep, relative;
-		char command = *(ptr++);
+		double curx, cury, tox, toy, x1, y1, x2, y2;
+		bool relative;
+		VPath *path = 0L;
+		char command = *(ptr++), lastCommand = ' ';
 
 		curx = cury = 0.0;
 		while( ptr < end )
@@ -466,6 +467,7 @@ SvgImport::parsePath( VComposite *path, const QDomElement &e )
 
 			relative = false;
 
+			cout << "Command : " << command << endl;
 			switch( command )
 			{
 				case 'm':
@@ -478,6 +480,14 @@ SvgImport::parsePath( VComposite *path, const QDomElement &e )
 					curx = relative ? curx + tox : tox;
 					cury = relative ? cury + toy : toy;
 
+					if( path )
+					{
+						obj->combinePath( *path );
+						delete path;
+					}
+					path = new VPath( 0L );
+					//if( lastCommand == 'z' || lastCommand == 'Z' )
+					//	path->close();
 					path->moveTo( KoPoint( curx, cury ) );
 					break;
 				}
@@ -526,6 +536,9 @@ SvgImport::parsePath( VComposite *path, const QDomElement &e )
 				case 'Z':
 				{
 					path->close();
+					obj->combinePath( *path );
+					delete path;
+					path = 0;
 					break;
 				}
 				case 'c':
@@ -549,37 +562,43 @@ SvgImport::parsePath( VComposite *path, const QDomElement &e )
 
 					break;
 				}
-				/*case 's':
+				case 's':
 					relative = true;
 				case 'S':
 				{
-					ptr = getCoord(ptr, x2);
-					ptr = getCoord(ptr, y2);
-					ptr = getCoord(ptr, tox);
-					ptr = getCoord(ptr, toy);
+					ptr = getCoord( ptr, x2 );
+					ptr = getCoord( ptr, y2 );
+					ptr = getCoord( ptr, tox );
+					ptr = getCoord( ptr, toy );
 
 					if(relative)
-						pathSegList()->appendItem(createSVGPathSegCurvetoCubicSmoothRel(tox, toy, x2, y2));
+						path->curve1To( KoPoint( curx + x2, cury + y2 ),
+									   KoPoint( curx + tox, cury + toy ) );
 					else
-						pathSegList()->appendItem(createSVGPathSegCurvetoCubicSmoothAbs(tox, toy, x2, y2));
+						path->curve1To( KoPoint( x2, y2 ), KoPoint( tox, toy ) );
+					curx = relative ? curx + tox : tox;
+					cury = relative ? cury + toy : toy;
 					break;
 				}
 				case 'q':
 					relative = true;
 				case 'Q':
 				{
-					ptr = getCoord(ptr, x1);
-					ptr = getCoord(ptr, y1);
-					ptr = getCoord(ptr, tox);
-					ptr = getCoord(ptr, toy);
+					ptr = getCoord( ptr, x1 );
+					ptr = getCoord( ptr, y1 );
+					ptr = getCoord( ptr, tox );
+					ptr = getCoord( ptr, toy );
 
 					if(relative)
-						pathSegList()->appendItem(createSVGPathSegCurvetoQuadraticRel(tox, toy, x1, y1));
+						path->curve2To( KoPoint( curx + x1, cury + y1 ),
+									   KoPoint( curx + tox, cury + toy ) );
 					else
-						pathSegList()->appendItem(createSVGPathSegCurvetoQuadraticAbs(tox, toy, x1, y1));
+						path->curve2To( KoPoint( x1, y1 ), KoPoint( tox, toy ) );
+					curx = relative ? curx + tox : tox;
+					cury = relative ? cury + toy : toy;
 					break;
 				}
-				case 't':
+				/*case 't':
 					relative = true;
 				case 'T':
 				{
@@ -596,6 +615,8 @@ SvgImport::parsePath( VComposite *path, const QDomElement &e )
 					relative = true;
 				case 'A':
 				{
+					bool largeArc, sweep;
+					double rx, ry, angle;
 					ptr = getCoord(ptr, rx);
 					ptr = getCoord(ptr, ry);
 					ptr = getCoord(ptr, angle);
@@ -618,6 +639,8 @@ SvgImport::parsePath( VComposite *path, const QDomElement &e )
 				}*/
 			}
 
+			lastCommand = command;
+
 			if(*ptr == '+' || *ptr == '-' || (*ptr >= '0' && *ptr <= '9'))
 			{
 				// there are still coords in this command
@@ -628,6 +651,7 @@ SvgImport::parsePath( VComposite *path, const QDomElement &e )
 			}
 			else
 				command = *(ptr++);
+
 		}
 	}
 }
