@@ -18,6 +18,7 @@
 
 */
 
+#include <qcursor.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
@@ -55,7 +56,7 @@ VImageTool::contextHelp()
 void
 VImageTool::activate()
 {
-	//view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
 QString
