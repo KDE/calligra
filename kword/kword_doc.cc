@@ -56,12 +56,12 @@
 /******************************************************************/
 
 /*================================================================*/
-KWordChild::KWordChild( KWordDocument *_wdoc, const KRect& _rect, KOffice::Document_ptr _doc, int diffx, int diffy )
+KWordChild::KWordChild( KWordDocument *_wdoc, const QRect& _rect, KOffice::Document_ptr _doc, int diffx, int diffy )
     : KoDocumentChild( _rect, _doc )
 {
     m_pKWordDoc = _wdoc;
     m_rDoc = KOffice::Document::_duplicate( _doc );
-    setGeometry( KRect( _rect.left() + diffx, _rect.top() + diffy, _rect.width(), _rect.height() ) );
+    setGeometry( QRect( _rect.left() + diffx, _rect.top() + diffy, _rect.width(), _rect.height() ) );
 }
 
 /*================================================================*/
@@ -1183,7 +1183,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     for ( ch = m_lstChildren.first(); ch != 0; ch = m_lstChildren.next() )
     {
         KWPartFrameSet *frameset = new KWPartFrameSet( this, ch );
-        KRect r = ch->geometry();
+        QRect r = ch->geometry();
         KWFrame *frame = new KWFrame( r.x(), r.y(), r.width(), r.height() );
         frameset->addFrame( frame );
         addFrameSet( frameset );
@@ -1562,7 +1562,7 @@ OpenParts::View_ptr KWordDocument::createView()
 }
 
 /*================================================================*/
-void KWordDocument::insertObject( const KRect& _rect, KoDocumentEntry& _e, int diffx, int diffy )
+void KWordDocument::insertObject( const QRect& _rect, KoDocumentEntry& _e, int diffx, int diffy )
 {
     KOffice::Document_var doc = imr_createDoc( _e );
     if ( CORBA::is_nil( doc ) )
@@ -1594,7 +1594,7 @@ void KWordDocument::insertChild( KWordChild *_child )
 }
 
 /*================================================================*/
-void KWordDocument::changeChildGeometry( KWordChild *_child, const KRect& _rect )
+void KWordDocument::changeChildGeometry( KWordChild *_child, const QRect& _rect )
 {
     _child->setGeometry( _rect );
 
@@ -1902,7 +1902,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
             {
             case ID_KWCharImage:
             {
-                _painter.drawImage( KPoint( tmpPTPos - xOffset, _fc.getPTY() - yOffset +
+                _painter.drawImage( QPoint( tmpPTPos - xOffset, _fc.getPTY() - yOffset +
                                             ( ( _fc.getLineHeight() - _fc.getParag()->getParagLayout()->getLineSpacing().pt() )
                                               - ( ( KWCharImage* )text[ _fc.getTextPos() ].attrib )->getImage()->height() ) ),
                                     *( ( KWCharImage* )text[ _fc.getTextPos() ].attrib )->getImage() );
@@ -2090,7 +2090,7 @@ void KWordDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, 
 {
     KWFrameSet *frameset = 0;
     KWFrame *tmp;
-    KRect frame;
+    QRect frame;
 
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ )
     {
@@ -2114,16 +2114,16 @@ void KWordDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, 
             }
 
             tmp = frameset->getFrame( j );
-            frame = KRect( tmp->x() - xOffset - 1, tmp->y() - yOffset - 1, tmp->width() + 2, tmp->height() + 2 );
+            frame = QRect( tmp->x() - xOffset - 1, tmp->y() - yOffset - 1, tmp->width() + 2, tmp->height() + 2 );
 
-            //if ( !frame.intersects( KRect( xOffset, yOffset, _w, _h ) ) ) continue;
+            //if ( !frame.intersects( QRect( xOffset, yOffset, _w, _h ) ) ) continue;
 
             if ( isAHeader( frameset->getFrameInfo() ) || isAFooter( frameset->getFrameInfo() ) )
                 tmp = frameset->getFrame( 0 );
             else
                 tmp = frameset->getFrame( j );
 
-            _painter.fillRect( KRect( frame.x(), frame.y(), frame.width() - ( isRight ? 1 : 0 ),
+            _painter.fillRect( QRect( frame.x(), frame.y(), frame.width() - ( isRight ? 1 : 0 ),
                                       frame.height() - ( isBottom ? 1 : 0 ) ), tmp->getBackgroundColor() );
 
             if ( tmp->getLeftBorder().ptWidth > 0 && tmp->getLeftBorder().color != tmp->getBackgroundColor().color() )
@@ -2943,7 +2943,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 void KWordDocument::appendPage( unsigned int _page, QPainter &_painter )
 {
     pages++;
-    KRect pageRect( 0, _page * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
+    QRect pageRect( 0, _page * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
 
     QList<KWFrame> frameList;
     frameList.setAutoDelete( false );
@@ -3193,7 +3193,7 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
     for ( i = 0; i < static_cast<unsigned int>( pages ); i++ )
     {
         kapp->processEvents();
-        KRect pageRect( 0, i * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
+        QRect pageRect( 0, i * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
         unsigned int minus = 0;
         if ( i + 1 > static_cast<unsigned int>( printer->fromPage() ) ) printer->newPage();
         printBorders( *painter, 0, i * getPTPaperHeight(), getPTPaperWidth(), getPTPaperHeight() );
@@ -3215,7 +3215,7 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
                 KWFrame *frame = picFS->getFrame( 0 );
                 if ( !frame->intersects( pageRect ) ) break;
 
-                KSize _size = QSize( frame->width(), frame->height() );
+                QSize _size = QSize( frame->width(), frame->height() );
                 if ( _size != picFS->getImage()->size() )
                     picFS->setSize( _size );
 
@@ -3231,7 +3231,7 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
                 QPicture *pic = partFS->getPicture();
 
                 painter->save();
-                KRect r = painter->viewport();
+                QRect r = painter->viewport();
                 painter->setViewport( frame->x(), frame->y() - i * getPTPaperHeight(), r.width(), r.height() );
                 if ( pic ) painter->drawPicture( *pic );
                 painter->setViewport( r );
@@ -3337,7 +3337,7 @@ void KWordDocument::updateAllFrames()
         {
             if ( mgrs.findRef( frameset->getGroupManager() ) == -1 )
             {
-                KRect r = frameset->getGroupManager()->getBoundingRect();
+                QRect r = frameset->getGroupManager()->getBoundingRect();
                 KWFrame *frm = new KWFrame( r.x(), r.y(), r.width(), r.height() );
                 _frames.append( frm );
                 del.append( frm );
@@ -3362,9 +3362,9 @@ void KWordDocument::updateAllFrames()
             if ( i == j ) continue;
 
             frame2 = _frames.at( j );
-            if ( frame1->intersects( KRect( frame2->x(), frame2->y(), frame2->width(), frame2->height() ) ) )
+            if ( frame1->intersects( QRect( frame2->x(), frame2->y(), frame2->width(), frame2->height() ) ) )
             {
-                KRect r = QRect( frame2->x(), frame2->y(), frame2->width(), frame2->height() );
+                QRect r = QRect( frame2->x(), frame2->y(), frame2->width(), frame2->height() );
                 if ( r.left() > frame1->left() || r.top() > frame1->top() || r.right() < frame1->right() || r.bottom() < frame1->bottom() )
                 {
                     if ( r.left() < frame1->left() ) r.setLeft( frame1->left() );
@@ -3508,7 +3508,7 @@ bool KWordDocument::canResize( KWFrameSet *frameset, KWFrame *frame, int page, i
         {
             // a footer has to moved a bit to the top before he gets resized
             if ( isAFooter( frameset->getFrameInfo() ) )
-                frame->moveTopLeft( KPoint( 0, frame->y() - diff ) );
+                frame->moveTopLeft( QPoint( 0, frame->y() - diff ) );
             return true;
         }
     }

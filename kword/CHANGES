@@ -1250,4 +1250,6 @@ Reggie, 3.6.1999:
   paste/drop text at the beginning of a very long document,
   but I'll optimize that one day too :-)
 
-
+Reggie, 5.6.1999:
+-----------------
+- KRect/KPoint/KSize -> QRect/QPoint/QSize

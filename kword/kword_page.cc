@@ -17,7 +17,7 @@
 #include <kapp.h>
 #include <kmimemagic.h>
 #include <klocale.h>
-#include <kpoint.h>
+#include <qpoint.h>
 
 #include <koRuler.h>
 #include <koPartSelectDia.h>
@@ -338,10 +338,10 @@ void KWPage::mouseMoveEvent( QMouseEvent *e )
                                         p.drawRect( frame->x() - xOffset, frame->y() - yOffset, frame->width(), frame->height() );
                                     frame->moveBy( mx - oldMx, my - oldMy );
                                     if ( frame->x() < 0 ||
-                                         frame->y() < getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
+                                         frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
                                          static_cast<int>( ptPaperHeight() ) ||
                                          frame->right() > static_cast<int>( ptPaperWidth() ) ||
-                                         frame->bottom() > ( getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
+                                         frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
                                          static_cast<int>( ptPaperHeight() ) )
                                         frame->moveBy( oldMx - mx, oldMy - my );
                                     p.drawRect( frame->x() - xOffset, frame->y() - yOffset, frame->width(), frame->height() );
@@ -409,10 +409,10 @@ void KWPage::mouseMoveEvent( QMouseEvent *e )
                     frame->setHeight( frame->height() + ( oldMy - my ) );
                     frame->moveBy( 0, my - oldMy );
                     if ( frame->x() < 0 ||
-                         frame->y() < getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
+                         frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->right() > static_cast<int>( ptPaperWidth() ) ||
-                         frame->bottom() > ( getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
+                         frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() )
                     {
@@ -425,10 +425,10 @@ void KWPage::mouseMoveEvent( QMouseEvent *e )
                     if ( isAFooter( doc->getFrameSet( frameset )->getFrameInfo() ) ) break;
                     frame->setHeight( frame->height() + ( my - oldMy ) );
                     if ( frame->x() < 0 ||
-                         frame->y() < getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
+                         frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->right() > static_cast<int>( ptPaperWidth() ) ||
-                         frame->bottom() > ( getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
+                         frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() )
                         frame->setHeight( frame->height() - ( my - oldMy ) );
@@ -465,10 +465,10 @@ void KWPage::mouseMoveEvent( QMouseEvent *e )
                     frame->setWidth( frame->width() + ( oldMx - mx ) );
                     frame->moveBy( mx - oldMx, 0 );
                     if ( frame->x() < 0 ||
-                         frame->y() < getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
+                         frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->right() > static_cast<int>( ptPaperWidth() ) ||
-                         frame->bottom() > ( getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
+                         frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() )
                     {
@@ -480,10 +480,10 @@ void KWPage::mouseMoveEvent( QMouseEvent *e )
                 {
                     frame->setWidth( frame->width() + ( mx - oldMx ) );
                     if ( frame->x() < 0 ||
-                         frame->y() < getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
+                         frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->right() > static_cast<int>( ptPaperWidth() ) ||
-                         frame->bottom() > ( getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
+                         frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() )
                         frame->setWidth( frame->width() - ( mx - oldMx ) );
@@ -517,10 +517,10 @@ void KWPage::mouseMoveEvent( QMouseEvent *e )
                     frame->setHeight( frame->height() + ( oldMy - my ) );
                     frame->moveBy( mx - oldMx, my - oldMy );
                     if ( frame->x() < 0 ||
-                         frame->y() < getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
+                         frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->right() > static_cast<int>( ptPaperWidth() ) ||
-                         frame->bottom() > ( getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
+                         frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() )
                     {
@@ -534,10 +534,10 @@ void KWPage::mouseMoveEvent( QMouseEvent *e )
                     frame->setWidth( frame->width() + ( mx - oldMx ) );
                     frame->setHeight( frame->height() + ( my - oldMy ) );
                     if ( frame->x() < 0 ||
-                         frame->y() < getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
+                         frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->right() > static_cast<int>( ptPaperWidth() ) ||
-                         frame->bottom() > ( getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
+                         frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() )
                     {
@@ -571,10 +571,10 @@ void KWPage::mouseMoveEvent( QMouseEvent *e )
                     frame->setHeight( frame->height() + ( oldMy - my ) );
                     frame->moveBy( 0, my - oldMy );
                     if ( frame->x() < 0 ||
-                         frame->y() < getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
+                         frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->right() > static_cast<int>( ptPaperWidth() ) ||
-                         frame->bottom() > ( getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
+                         frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() )
                     {
@@ -589,10 +589,10 @@ void KWPage::mouseMoveEvent( QMouseEvent *e )
                     frame->setHeight( frame->height() + ( my - oldMy ) );
                     frame->moveBy( mx - oldMx, 0 );
                     if ( frame->x() < 0 ||
-                         frame->y() < getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
+                         frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->right() > static_cast<int>( ptPaperWidth() ) ||
-                         frame->bottom() > ( getPageOfRect( KRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
+                         frame->bottom() > ( getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) + 1 ) *
                          static_cast<int>( ptPaperHeight() ) ||
                          frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX() )
                     {
@@ -632,10 +632,10 @@ void KWPage::mouseMoveEvent( QMouseEvent *e )
             insRect.setHeight( insRect.height() + my - oldMy );
 
             if ( insRect.normalize().x() + static_cast<int>( xOffset ) < 0 || insRect.normalize().y() + static_cast<int>( yOffset ) <
-                 getPageOfRect( KRect( insRect.normalize().x() + static_cast<int>( xOffset ), insRect.normalize().y() + static_cast<int>( yOffset ),
+                 getPageOfRect( QRect( insRect.normalize().x() + static_cast<int>( xOffset ), insRect.normalize().y() + static_cast<int>( yOffset ),
                                        insRect.normalize().width(), insRect.normalize().height() ) ) * static_cast<int>( ptPaperHeight() ) ||
                  insRect.normalize().right() + static_cast<int>( xOffset ) > static_cast<int>( ptPaperWidth() ) ||
-                 insRect.normalize().bottom() + static_cast<int>( yOffset ) > ( getPageOfRect( KRect( insRect.normalize().x() +
+                 insRect.normalize().bottom() + static_cast<int>( yOffset ) > ( getPageOfRect( QRect( insRect.normalize().x() +
                                                                                                       static_cast<int>( xOffset ),
                                                                                                       insRect.normalize().y() + static_cast<int>( yOffset ),
                                                                                                       insRect.normalize().width(), insRect.normalize().height() ) ) + 1 ) *
@@ -850,7 +850,7 @@ void KWPage::mousePressEvent( QMouseEvent *e )
             oldMx = mx;
             my = ( my / doc->getRastX() ) * doc->getRastY();
             oldMy = my;
-            insRect = KRect( mx, my, 0, 0 );
+            insRect = QRect( mx, my, 0, 0 );
             deleteMovingRect = false;
         } break;
         case MM_CREATE_PIX:
@@ -864,7 +864,7 @@ void KWPage::mousePressEvent( QMouseEvent *e )
                 oldMx = mx;
                 my = ( my / doc->getRastX() ) * doc->getRastY();
                 oldMy = my;
-                insRect = KRect( mx, my, 0, 0 );
+                insRect = QRect( mx, my, 0, 0 );
                 deleteMovingRect = false;
                 doRaster = false;
                 QCursor::setPos( mapToGlobal( QPoint( mx + _pix.width(), my + _pix.height() ) ) );
@@ -911,7 +911,7 @@ void KWPage::mousePressEvent( QMouseEvent *e )
         }
         if ( doc->getFrameSet( mx, my ) == -1 )
         {
-            KPoint pnt( QCursor::pos() );
+            QPoint pnt( QCursor::pos() );
             mm_menu->popup( pnt );
         }
         else
@@ -925,7 +925,7 @@ void KWPage::mousePressEvent( QMouseEvent *e )
                 if ( doc->selectFrame( mx, my ) == 1 && !( e->state() & ControlButton || e->state() & ShiftButton ) ) doc->deSelectAllFrames();
                 doc->selectFrame( mx, my );
                 repaint( false );
-                KPoint pnt( QCursor::pos() );
+                QPoint pnt( QCursor::pos() );
                 frame_edit_menu->popup( pnt );
             } break;
             default: break;
@@ -1047,7 +1047,7 @@ void KWPage::mouseReleaseEvent( QMouseEvent *e )
         if ( insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY() && !pixmap_name.isEmpty() )
         {
             KWPictureFrameSet *frameset = new KWPictureFrameSet( doc );
-            frameset->setFileName( pixmap_name, KSize( insRect.width(), insRect.height() ) );
+            frameset->setFileName( pixmap_name, QSize( insRect.width(), insRect.height() ) );
             insRect = insRect.normalize();
             KWFrame *frame = new KWFrame( insRect.x() + xOffset, insRect.y() + yOffset, insRect.width(), insRect.height() );
             frameset->addFrame( frame );
@@ -1543,7 +1543,7 @@ void KWPage::paintEvent( QPaintEvent* e )
         {
             KWPictureFrameSet *picFS = dynamic_cast<KWPictureFrameSet*>( doc->getFrameSet( i ) );
             KWFrame *frame = picFS->getFrame( 0 );
-            KSize _size = QSize( frame->width(), frame->height() );
+            QSize _size = QSize( frame->width(), frame->height() );
 
             if ( _size != picFS->getImage()->size() )
                 picFS->setSize( _size );
@@ -1579,7 +1579,7 @@ void KWPage::paintEvent( QPaintEvent* e )
             }
 
             painter.save();
-            KRect r = painter.viewport();
+            QRect r = painter.viewport();
             painter.setViewport( frame->x() - xOffset, frame->y() - yOffset, r.width(), r.height() );
             if ( pic ) painter.drawPicture( *pic );
             painter.setViewport( r );
@@ -1630,9 +1630,9 @@ void KWPage::paintEvent( QPaintEvent* e )
                 KWParag *p = 0L;
 
                 KWFrameSet *fs = doc->getFrameSet( i );
-                KRect r = KRect( e->rect().x() + xOffset, e->rect().y() + yOffset,
+                QRect r = QRect( e->rect().x() + xOffset, e->rect().y() + yOffset,
                                  e->rect().width(), e->rect().height() );
-                KRect v = KRect( e->rect().x() + xOffset, e->rect().y() + yOffset,
+                QRect v = QRect( e->rect().x() + xOffset, e->rect().y() + yOffset,
                                  e->rect().width(), e->rect().height() );
 
                 while ( true )
@@ -2234,7 +2234,7 @@ void KWPage::keyPressEvent( QKeyEvent *e )
             unsigned int _hei = frameSet->getFrame( paintfc.getFrame() - 1 )->height() -
                 ( _y - frameSet->getFrame( paintfc.getFrame() - 1 )->y() );
             painter.fillRect( _x, _y, _wid, _hei, QBrush( frameSet->getFrame( paintfc.getFrame() - 1 )->getBackgroundColor() ) );
-            drawBuffer( KRect( _x, _y, _wid, _hei ) );
+            drawBuffer( QRect( _x, _y, _wid, _hei ) );
             painter.restore();
         }
 
@@ -2394,7 +2394,7 @@ void KWPage::keyPressEvent( QKeyEvent *e )
                 ( _y - frameSet->getFrame( paintfc.getFrame() - 1 )->y() );
             painter.fillRect( _x, _y, _wid, _hei,
                               doc->getFrameSet( paintfc.getFrameSet() - 1 )->getFrame( paintfc.getFrame() - 1 )->getBackgroundColor() );
-            drawBuffer( KRect( _x, _y, _wid, _hei ) );
+            drawBuffer( QRect( _x, _y, _wid, _hei ) );
             painter.restore();
         }
 
@@ -2470,7 +2470,7 @@ void KWPage::keyPressEvent( QKeyEvent *e )
                               doc->getFrameSet( paintfc.getFrameSet() - 1 )->getFrame( paintfc.getFrame() - 1 )->getBackgroundColor() );
             if ( doc->printLine( paintfc, painter, xOffset, yOffset, width(), height(), gui->getView()->getViewFormattingChars() ) )
             {
-                drawBuffer( KRect( _x + frameSet->getFrame( paintfc.getFrame() - 1 )->getLeftIndent( paintfc.getPTY(), paintfc.getLineHeight() ),
+                drawBuffer( QRect( _x + frameSet->getFrame( paintfc.getFrame() - 1 )->getLeftIndent( paintfc.getPTY(), paintfc.getLineHeight() ),
                                    paintfc.getPTY() - yOffset,
                                    _wid - frameSet->getFrame( paintfc.getFrame() - 1 )->getLeftIndent( paintfc.getPTY(),
                                                                                                        paintfc.getLineHeight() ) -
@@ -2554,7 +2554,7 @@ void KWPage::keyPressEvent( QKeyEvent *e )
                                   doc->getFrameSet( paintfc.getFrameSet() - 1 )->getFrame( paintfc.getFrame() - 1 )->getBackgroundColor() );
                 if ( doc->printLine( paintfc, painter, xOffset, yOffset, width(), height(), gui->getView()->getViewFormattingChars() ) )
                 {
-                    drawBuffer( KRect( _x + frameSet->getFrame( paintfc.getFrame() - 1 )->getLeftIndent( paintfc.getPTY(), paintfc.getLineHeight() ),
+                    drawBuffer( QRect( _x + frameSet->getFrame( paintfc.getFrame() - 1 )->getLeftIndent( paintfc.getPTY(), paintfc.getLineHeight() ),
                                        paintfc.getPTY() - yOffset,
                                        _wid - frameSet->getFrame( paintfc.getFrame() - 1 )->getLeftIndent( paintfc.getPTY(),
                                                                                                            paintfc.getLineHeight() ) -
@@ -2875,7 +2875,7 @@ void KWPage::drawBuffer()
 }
 
 /*================================================================*/
-void KWPage::drawBuffer( KRect _rect )
+void KWPage::drawBuffer( QRect _rect )
 {
     bitBlt( this, _rect.x(), _rect.y(), &buffer, _rect.x(), _rect.y(), _rect.width(), _rect.height() );
 }
@@ -2888,14 +2888,14 @@ void KWPage::copyBuffer()
 }
 
 /*================================================================*/
-void KWPage::drawBorders( QPainter &_painter, KRect v_area )
+void KWPage::drawBorders( QPainter &_painter, QRect v_area )
 {
     _painter.save();
     _painter.setBrush( NoBrush );
 
     KWFrameSet *frameset = 0;
     KWFrame *tmp;
-    KRect frame;
+    QRect frame;
     bool should_draw;
 
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ )
@@ -2925,7 +2925,7 @@ void KWPage::drawBorders( QPainter &_painter, KRect v_area )
             if ( static_cast<int>( i ) == hiliteFrameSet )
                 _painter.setPen( blue );
             else if ( !gui->getView()->getViewFrameBorders() ) should_draw = false;
-            frame = KRect( tmp->x() - xOffset - 1, tmp->y() - yOffset - 1, tmp->width() + 2, tmp->height() + 2 );
+            frame = QRect( tmp->x() - xOffset - 1, tmp->y() - yOffset - 1, tmp->width() + 2, tmp->height() + 2 );
 
             if ( v_area.intersects( frame ) && should_draw && !frameset->getGroupManager() )
                 _painter.drawRect( frame );
@@ -3015,7 +3015,7 @@ void KWPage::drawBorders( QPainter &_painter, KRect v_area )
 
     for ( int k = 0; k < doc->getPages(); k++ )
     {
-        KRect tmp2 = KRect( -xOffset, ( k * doc->getPTPaperHeight() ) - yOffset, doc->getPTPaperWidth(), doc->getPTPaperHeight() );
+        QRect tmp2 = QRect( -xOffset, ( k * doc->getPTPaperHeight() ) - yOffset, doc->getPTPaperWidth(), doc->getPTPaperHeight() );
         if ( v_area.intersects( tmp2 ) )
             _painter.drawRect( tmp2 );
     }
@@ -3062,7 +3062,7 @@ void KWPage::setRuler2Frame( unsigned int _frameset, unsigned int _frame )
     unsigned int page = 0;
     for ( int i = 0; i < doc->getPages(); i++ )
     {
-        if ( frame->intersects( KRect( 0, i * ptPaperHeight(), ptPaperWidth(), ptPaperHeight() ) ) )
+        if ( frame->intersects( QRect( 0, i * ptPaperHeight(), ptPaperWidth(), ptPaperHeight() ) ) )
         {
             page = i;
             break;
@@ -3205,11 +3205,11 @@ void KWPage::mmUncheckAll()
 }
 
 /*================================================================*/
-int KWPage::getPageOfRect( KRect _rect )
+int KWPage::getPageOfRect( QRect _rect )
 {
     for ( int i = 0; i < doc->getPages(); i++ )
     {
-        if ( _rect.intersects( KRect( 0, i * ptPaperHeight(), ptPaperWidth(), ptPaperHeight() ) ) )
+        if ( _rect.intersects( QRect( 0, i * ptPaperHeight(), ptPaperWidth(), ptPaperHeight() ) ) )
             return i;
     }
 
@@ -4143,8 +4143,8 @@ void KWPage::repaintTableHeaders( KWGroupManager *grpMgr )
         painter.begin( &buffer );
     }
 
-    KRect r = grpMgr->getBoundingRect();
-    r = KRect( r.x() - yOffset, r.y() - yOffset, r.width(), r.height() );
+    QRect r = grpMgr->getBoundingRect();
+    r = QRect( r.x() - yOffset, r.y() - yOffset, r.width(), r.height() );
     painter.setClipRect( r );
     KWTextFrameSet *fs;
 
@@ -4260,7 +4260,7 @@ void KWPage::startDrag()
     QClipboard *cb = QApplication::clipboard();
     drag->setKWord( cb->data()->encodedData( MIME_TYPE ) );
     drag->setPlain( cb->data()->encodedData( "text/plain" ) );
-    //drag->setPixmap( ICON( "txt.xpm" ), KPoint( 10, 10 ) );
+    //drag->setPixmap( ICON( "txt.xpm" ), QPoint( 10, 10 ) );
     drag->dragCopy();
 }
 
@@ -4406,7 +4406,7 @@ void KWPage::dropEvent( QDropEvent *e )
 
         pix.save( filename, "XPM" );
         KWPictureFrameSet *frameset = new KWPictureFrameSet( doc );
-        frameset->setFileName( filename, KSize( pix.width(), pix.height() ) );
+        frameset->setFileName( filename, QSize( pix.width(), pix.height() ) );
         KWFrame *frame = new KWFrame( e->pos().x() + xOffset, e->pos().y() + yOffset, pix.width(), pix.height() );
         frameset->addFrame( frame );
         doc->addFrameSet( frameset );
@@ -4440,7 +4440,7 @@ void KWPage::dropEvent( QDropEvent *e )
 //      {
 //        QPixmap pix( filename );
 //        KWPictureFrameSet *frameset = new KWPictureFrameSet( doc );
-//        frameset->setFileName( filename, KSize( pix.width(), pix.height() ) );
+//        frameset->setFileName( filename, QSize( pix.width(), pix.height() ) );
 //        KWFrame *frame = new KWFrame( e->pos().x() + xOffset, e->pos().y() + yOffset, pix.width(), pix.height() );
 //        frameset->addFrame( frame );
 //        doc->addFrameSet( frameset );

@@ -50,7 +50,7 @@
 
 /*================================================================*/
 KWFrame::KWFrame()
-    : KRect(), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
+    : QRect(), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
 {
     runAround = RA_NO;
     intersections.setAutoDelete( true );
@@ -74,8 +74,8 @@ KWFrame::KWFrame()
 }
 
 /*================================================================*/
-KWFrame::KWFrame( const KPoint &topleft, const QPoint &bottomright )
-    : KRect( topleft, bottomright ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
+KWFrame::KWFrame( const QPoint &topleft, const QPoint &bottomright )
+    : QRect( topleft, bottomright ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
 {
     runAround = RA_NO;
     intersections.setAutoDelete( true );
@@ -98,8 +98,8 @@ KWFrame::KWFrame( const KPoint &topleft, const QPoint &bottomright )
 }
 
 /*================================================================*/
-KWFrame::KWFrame( const KPoint &topleft, const KSize &size )
-    : KRect( topleft, size ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
+KWFrame::KWFrame( const QPoint &topleft, const QSize &size )
+    : QRect( topleft, size ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
 {
     runAround = RA_NO;
     intersections.setAutoDelete( true );
@@ -123,7 +123,7 @@ KWFrame::KWFrame( const KPoint &topleft, const KSize &size )
 
 /*================================================================*/
 KWFrame::KWFrame( int left, int top, int width, int height )
-    : KRect( left, top, width, height ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
+    : QRect( left, top, width, height ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
 {
     runAround = RA_NO;
     intersections.setAutoDelete( true );
@@ -147,7 +147,7 @@ KWFrame::KWFrame( int left, int top, int width, int height )
 
 /*================================================================*/
 KWFrame::KWFrame( int left, int top, int width, int height, RunAround _ra, KWUnit _gap )
-    : KRect( left, top, width, height ), runAroundGap( _gap ), intersections(), bleft(), bright(), btop(), bbottom()
+    : QRect( left, top, width, height ), runAroundGap( _gap ), intersections(), bleft(), bright(), btop(), bbottom()
 {
     runAround = _ra;
     intersections.setAutoDelete( true );
@@ -171,7 +171,7 @@ KWFrame::KWFrame( int left, int top, int width, int height, RunAround _ra, KWUni
 
 /*================================================================*/
 KWFrame::KWFrame( const QRect &_rect )
-    : KRect( _rect ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
+    : QRect( _rect ), runAroundGap( 1.0 ), intersections(), bleft(), bright(), btop(), bbottom()
 {
     runAround = RA_NO;
     intersections.setAutoDelete( true );
@@ -194,9 +194,9 @@ KWFrame::KWFrame( const QRect &_rect )
 }
 
 /*================================================================*/
-void KWFrame::addIntersect( KRect &_r )
+void KWFrame::addIntersect( QRect &_r )
 {
-    intersections.append( new KRect( _r.x(), _r.y(), _r.width(), _r.height() ) );
+    intersections.append( new QRect( _r.x(), _r.y(), _r.width(), _r.height() ) );
 }
 
 /*================================================================*/
@@ -205,13 +205,13 @@ int KWFrame::getLeftIndent( int _y, int _h )
     if ( runAround == RA_NO || intersections.isEmpty() ) return 0;
 
     int _left = 0;
-    KRect rect;
+    QRect rect;
 
     for ( unsigned int i = 0; i < intersections.count(); i++ )
     {
         rect = *intersections.at( i );
 
-        if ( rect.intersects( KRect( left(), _y, width(), _h ) ) )
+        if ( rect.intersects( QRect( left(), _y, width(), _h ) ) )
         {
             if ( rect.left() == left() )
                 _left = max(_left,static_cast<int>(rect.width() + runAroundGap.pt()));
@@ -227,13 +227,13 @@ int KWFrame::getRightIndent( int _y, int _h )
     if ( runAround == RA_NO || intersections.isEmpty() ) return 0;
 
     int _right = 0;
-    KRect rect;
+    QRect rect;
 
     for ( unsigned int i = 0; i < intersections.count(); i++ )
     {
         rect = *intersections.at( i );
 
-        if ( rect.intersects( KRect( left(), _y, width(), _h ) ) )
+        if ( rect.intersects( QRect( left(), _y, width(), _h ) ) )
         {
             if ( rect.right() == right() )
                 _right = max(_right,static_cast<int>(rect.width() + runAroundGap.pt()));
@@ -246,14 +246,14 @@ int KWFrame::getRightIndent( int _y, int _h )
 /*================================================================*/
 unsigned int KWFrame::getNextFreeYPos( unsigned int _y, unsigned int _h )
 {
-    KRect rect;
+    QRect rect;
     unsigned int __y = _y;
 
     for ( unsigned int i = 0; i < intersections.count(); i++ )
     {
         rect = *intersections.at( i );
 
-        if ( rect.intersects( KRect( 0, _y, INT_MAX, _h ) ) )
+        if ( rect.intersects( QRect( 0, _y, INT_MAX, _h ) ) )
             __y = __y == _y ? rect.bottom() : min(static_cast<int>(__y),rect.bottom());
     }
 
@@ -425,7 +425,7 @@ int KWFrameSet::getFrame( int _x, int _y )
 {
     for ( unsigned int i = 0; i < getNumFrames(); i++ )
     {
-        if ( getFrame( i )->contains( KPoint( _x, _y ) ) ) return i;
+        if ( getFrame( i )->contains( QPoint( _x, _y ) ) ) return i;
     }
     return -1;
 }
@@ -441,7 +441,7 @@ bool KWFrameSet::contains( unsigned int mx, unsigned int my )
 {
     for ( unsigned int i = 0; i < frames.count(); i++ )
     {
-        if ( frames.at( i )->contains( KPoint( mx, my ) ) ) return true;
+        if ( frames.at( i )->contains( QPoint( mx, my ) ) ) return true;
     }
 
     return false;
@@ -452,7 +452,7 @@ int KWFrameSet::selectFrame( unsigned int mx, unsigned int my )
 {
     for ( unsigned int i = 0; i < frames.count(); i++ )
     {
-        if ( frames.at( i )->contains( KPoint( mx, my ) ) )
+        if ( frames.at( i )->contains( QPoint( mx, my ) ) )
         {
             int r = 1;
             if ( frames.at( i )->isSelected() ) r = 2;
@@ -468,7 +468,7 @@ void KWFrameSet::deSelectFrame( unsigned int mx, unsigned int my )
 {
     for ( unsigned int i = 0; i < frames.count(); i++ )
     {
-        if ( frames.at( i )->contains( KPoint( mx, my ) ) )
+        if ( frames.at( i )->contains( QPoint( mx, my ) ) )
             frames.at( i )->setSelected( false );
     }
 }
@@ -522,7 +522,7 @@ void KWFrameSet::save( ostream &out )
 }
 
 /*================================================================*/
-int KWFrameSet::getNext( KRect _rect )
+int KWFrameSet::getNext( QRect _rect )
 {
     for ( unsigned int i = 0; i < frames.count(); i++ )
     {
@@ -639,10 +639,10 @@ void KWTextFrameSet::update()
     QList<FrameList> frameList;
     frameList.setAutoDelete( true );
 
-    KRect pageRect;
+    QRect pageRect;
     for ( unsigned int i = 0; i < static_cast<unsigned int>( doc->getPages() + 1 ); i++ )
     {
-        pageRect = KRect( 0, i * doc->getPTPaperHeight(), doc->getPTPaperWidth(), doc->getPTPaperHeight() );
+        pageRect = QRect( 0, i * doc->getPTPaperHeight(), doc->getPTPaperWidth(), doc->getPTPaperHeight() );
 
         FrameList *l = new FrameList();
         l->setAutoDelete( false );
@@ -1210,7 +1210,7 @@ void KWPictureFrameSet::setFileName( QString _filename )
 }
 
 /*================================================================*/
-void KWPictureFrameSet::setFileName( QString _filename, KSize _imgSize )
+void KWPictureFrameSet::setFileName( QString _filename, QSize _imgSize )
 {
     if ( image )
     {
@@ -1227,7 +1227,7 @@ void KWPictureFrameSet::setFileName( QString _filename, KSize _imgSize )
 }
 
 /*================================================================*/
-void KWPictureFrameSet::setSize( KSize _imgSize )
+void KWPictureFrameSet::setSize( QSize _imgSize )
 {
     if ( image && _imgSize == image->size() ) return;
 
@@ -1610,7 +1610,7 @@ void KWGroupManager::recalcCols()
         unsigned int j = 0;
         for ( j = 0; j < rows; j++ )
         {
-            getFrameSet( j, i )->getFrame( 0 )->moveTopLeft( KPoint( x, getFrameSet( j, i )->getFrame( 0 )->y() ) );
+            getFrameSet( j, i )->getFrame( 0 )->moveTopLeft( QPoint( x, getFrameSet( j, i )->getFrame( 0 )->y() ) );
             getFrameSet( j, i )->update();
         }
         x = getFrameSet( 0, i )->getFrame( 0 )->right() + 3;
@@ -1722,7 +1722,7 @@ void KWGroupManager::recalcRows( QPainter &_painter )
                 f1->getFrame( 0 )->setHeight( f2->getFrame( 0 )->height() );
             }
 
-            getFrameSet( j, i )->getFrame( 0 )->moveTopLeft( KPoint( getFrameSet( j, i )->getFrame( 0 )->x(), y ) );
+            getFrameSet( j, i )->getFrame( 0 )->moveTopLeft( QPoint( getFrameSet( j, i )->getFrame( 0 )->x(), y ) );
             getFrameSet( j, i )->update();
         }
 
@@ -1780,17 +1780,17 @@ void KWGroupManager::recalcRows( QPainter &_painter )
 }
 
 /*================================================================*/
-KRect KWGroupManager::getBoundingRect()
+QRect KWGroupManager::getBoundingRect()
 {
-    KRect r1, r2;
+    QRect r1, r2;
     KWFrame *first = getFrameSet( 0, 0 )->getFrame( 0 );
     KWFrame *last = getFrameSet( rows - 1, cols - 1 )->getFrame( 0 );
 
-    r1 = KRect( first->x(), first->y(), first->width(), first->height() );
-    r2 = KRect( last->x(), last->y(), last->width(), last->height() );
+    r1 = QRect( first->x(), first->y(), first->width(), first->height() );
+    r2 = QRect( last->x(), last->y(), last->width(), last->height() );
 
     r1 = r1.unite( r2 );
-    return KRect( r1 );
+    return QRect( r1 );
 }
 
 /*================================================================*/

@@ -51,7 +51,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, const char* name, KWFrame *_frame, KWor
     frame = _frame;
     if ( frame )
     {
-        KRect r = frame->normalize();
+        QRect r = frame->normalize();
         frame->setRect( r.x(), r.y(), r.width(), r.height() );
     }
 

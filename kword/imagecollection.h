@@ -21,7 +21,7 @@
 #include <qdict.h>
 #include <qstring.h>
 
-#include <ksize.h>
+#include <qsize.h>
 
 class KWordDocument;
 
@@ -36,7 +36,7 @@ public:
     ~KWImageCollection();
 
     KWImage *getImage( KWImage &_image, QString &key );
-    KWImage *getImage( KWImage &_image, QString &key, KSize _imgSize );
+    KWImage *getImage( KWImage &_image, QString &key, QSize _imgSize );
     void removeImage( KWImage *_image );
 
     QString generateKey( KWImage *_image )
@@ -49,9 +49,9 @@ public:
     
 protected:
     QString generateKey( KWImage &_image );
-    QString generateKey( KWImage &_image, KSize _imgSize );
+    QString generateKey( KWImage &_image, QSize _imgSize );
     KWImage *insertImage( QString _key, KWImage &_format );
-    KWImage *insertImage( QString _key, KWImage &_format, KSize _imgSize );
+    KWImage *insertImage( QString _key, KWImage &_format, QSize _imgSize );
 
     QDict<KWImage> images;
     KWordDocument *doc;

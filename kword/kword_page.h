@@ -148,11 +148,11 @@ public:
     void recalcWholeText( bool _cursor = false, bool _fast = false );
     void recalcWholeText( KWParag *start, unsigned int fs );
     void footerHeaderDisappeared();
-    void drawBorders( QPainter &_painter, KRect v_area );
+    void drawBorders( QPainter &_painter, QRect v_area );
     void drawFrameSelection( QPainter &_painter, KWFrame *_frame );
     void setRuler2Frame( unsigned int _frameset, unsigned int _frame );
     void setMouseMode( MouseMode _mm );
-    int getPageOfRect( KRect _rect );
+    int getPageOfRect( QRect _rect );
     void setHilitFrameSet( int _f )
     { hiliteFrameSet = _f; repaint( false ); }
 
@@ -249,7 +249,7 @@ protected:
     void calcVisiblePages();
 
     void drawBuffer();
-    void drawBuffer( KRect _rect );
+    void drawBuffer( QRect _rect );
     void copyBuffer();
     void setupMenus();
     void mmUncheckAll();
@@ -316,7 +316,7 @@ protected:
     int hiliteFrameSet;
 
     KWFrameDia *frameDia;
-    KRect insRect;
+    QRect insRect;
 
     bool redrawAllWhileScrolling, doRaster;
     QString pixmap_name;

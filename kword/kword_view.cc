@@ -61,7 +61,7 @@
 #include <kapp.h>
 #include <kfiledialog.h>
 #include <klocale.h>
-#include <krect.h>
+#include <qrect.h>
 #include <kspell.h>
 #include <kcolordlg.h>
 #include <kiconloader.h>
@@ -2927,14 +2927,14 @@ void KWordView::slotInsertObject( KWordChild *_child, KWPartFrameSet *_kwpf )
     catch ( OpenParts::Document::MultipleViewsNotSupported &_ex )
     {
         // HACK
-        printf( "void KWordView::slotInsertObject( const KRect& _rect, OPParts::Document_ptr _doc )\n" );
+        printf( "void KWordView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )\n" );
         printf( "Could not create view\n" );
         exit( 1 );
     }
 
     if ( CORBA::is_nil( v ) )
     {
-        printf( "void KWordView::slotInsertObject( const KRect& _rect, OPParts::Document_ptr _doc )\n" );
+        printf( "void KWordView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )\n" );
         printf( "return value is 0L\n" );
         exit( 1 );
     }

@@ -16,9 +16,9 @@
 #ifndef frame_h
 #define frame_h
 
-#include <krect.h>
-#include <kpoint.h>
-#include <ksize.h>
+#include <qrect.h>
+#include <qpoint.h>
+#include <qsize.h>
 
 #include <qlist.h>
 #include <qcursor.h>
@@ -48,12 +48,12 @@ enum RunAround {RA_NO = 0, RA_BOUNDINGRECT = 1, RA_CONTUR = 2};
 /* Class: KWFrame                                                 */
 /******************************************************************/
 
-class KWFrame : public KRect
+class KWFrame : public QRect
 {
 public:
     KWFrame();
-    KWFrame( const KPoint &topleft, const QPoint &bottomright );
-    KWFrame( const KPoint &topleft, const KSize &size );
+    KWFrame( const QPoint &topleft, const QPoint &bottomright );
+    KWFrame( const QPoint &topleft, const QSize &size );
     KWFrame( int left, int top, int width, int height );
     KWFrame( int left, int top, int width, int height, RunAround _ra, KWUnit _gap );
     KWFrame( const QRect &_rect );
@@ -66,7 +66,7 @@ public:
     bool isSelected()
     { return selected; }
 
-    void addIntersect( KRect &_r );
+    void addIntersect( QRect &_r );
     void clearIntersects()
     { intersections.clear(); }
 
@@ -131,7 +131,7 @@ protected:
     bool mostRight;
     int pageNum;
 
-    QList<KRect> intersections;
+    QList<QRect> intersections;
 
     KWParagLayout::Border brd_left, brd_right, brd_top, brd_bottom;
     QBrush backgroundColor;
@@ -190,7 +190,7 @@ public:
 
     virtual void save( ostream &out );
 
-    int getNext( KRect _rect );
+    int getNext( QRect _rect );
     int getPageOfFrame( int i ) { return frames.at( i )->getPageNum(); }
 
     void setCurrent( int i ) { current = i; }
@@ -302,8 +302,8 @@ public:
     virtual void setImage( KWImage *_image )
     { image = _image; }
     void setFileName( QString _filename );
-    void setFileName( QString _filename, KSize _imgSize );
-    void setSize( KSize _imgSize );
+    void setFileName( QString _filename, QSize _imgSize );
+    void setSize( QSize _imgSize );
 
     virtual KWImage* getImage()
     { return image; }
@@ -391,7 +391,7 @@ public:
     unsigned int getRows() { return rows; }
     unsigned int getCols() { return cols; }
 
-    KRect getBoundingRect();
+    QRect getBoundingRect();
 
     unsigned int getNumCells() { return cells.count(); }
     Cell *getCell( int i ) { return cells.at( i ); }

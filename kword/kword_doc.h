@@ -45,7 +45,7 @@ class QPrinter;
 #include <qstrlist.h>
 #include <qintdict.h>
 
-#include <krect.h>
+#include <qrect.h>
 
 /******************************************************************/
 /* Class: KWordChild                                              */
@@ -54,7 +54,7 @@ class QPrinter;
 class KWordChild : public KoDocumentChild
 {
 public:
-    KWordChild( KWordDocument *_wdoc, const KRect& _rect, KOffice::Document_ptr _doc, int diffx, int diffy );
+    KWordChild( KWordDocument *_wdoc, const QRect& _rect, KOffice::Document_ptr _doc, int diffx, int diffy );
     KWordChild( KWordDocument *_wdoc );
     ~KWordChild();
 
@@ -138,8 +138,8 @@ public:
     virtual void addView( KWordView *_view );
     virtual void removeView( KWordView *_view );
 
-    virtual void insertObject( const KRect& _rect, KoDocumentEntry& _e, int diffx, int diffy );
-    virtual void changeChildGeometry( KWordChild *_child, const KRect& );
+    virtual void insertObject( const QRect& _rect, KoDocumentEntry& _e, int diffx, int diffy );
+    virtual void changeChildGeometry( KWordChild *_child, const QRect& );
 
     virtual QListIterator<KWordChild> childIterator();
 
