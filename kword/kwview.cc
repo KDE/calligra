@@ -1479,6 +1479,7 @@ void KWView::updateReadWrite( bool readwrite )
         actionViewFootNotes->setEnabled( true );
         actionViewEndNotes->setEnabled( true );
         actionViewZoom->setEnabled( true );
+        actionInsertNote->setEnabled( true );
         actionAllowAutoFormat->setEnabled( true );
         KAction* newView = actionCollection()->action("view_newview");
         if (newView) newView->setEnabled( true );
@@ -4136,6 +4137,7 @@ void KWView::slotFrameSetEditChanged()
 
     bool state = (edit != 0L) && rw;
     actionEditSelectAll->setEnabled(state);
+    actionInsertNote->setEnabled( state );
     actionFormatDefault->setEnabled( rw);
     actionFormatFont->setEnabled( rw );
     actionFormatFontSize->setEnabled( rw );
