@@ -30,6 +30,7 @@ class QVBox;
 class QHBox;
 class KCharSelect;
 class QListView;
+class QLineEdit;
 
 /******************************************************************/
 /* Class: KWAutoFormatDia                                         */
@@ -41,11 +42,13 @@ class KWAutoFormatDia : public KDialogBase
 
 public:
     KWAutoFormatDia( QWidget *parent, const char *name, KWDocument *_doc, KWCanvas *_canvas );
-
+    void addEntryList(KWAutoFormatEntry &_autoEntry);
+    void editEntryList(KWAutoFormatEntry &_autoEntry,const QString &_str);
 protected:
     bool applyConfig();
     void setupTab1();
     void setupTab2();
+    void refreshEntryList();
 
     QWidget *tab1;
     QWidget *tab2;
@@ -63,11 +66,37 @@ protected:
 protected slots:
     virtual void slotOk();
     void slotRemoveEntry();
+    void slotEditEntry();
     void chooseQuote1();
     void chooseQuote2();
-
+    void slotAddEntry();
 };
 
+/******************************************************************/
+/* Class: KWAutoFormatEditDia                                     */
+/******************************************************************/
+class KWAutoFormatEditDia : public QDialog
+{
+    Q_OBJECT
+public:
+    KWAutoFormatEditDia( KWAutoFormatDia *parent, const char *name, const QString &title,const QString &findStr,const QString &replaceStr, bool _replaceEntry=false,const QString &_str="" );
+
+protected slots:
+    void slotOk();
+    void slotCancel();
+    void chooseSpecialChar1();
+    void chooseSpecialChar2();
+private:
+    QLineEdit *lineEditFind;
+    QLineEdit *lineEditReplace;	
+
+    QPushButton* m_pOk;
+    QPushButton* m_pClose;
+    QPushButton *pbSpecialChar1, *pbSpecialChar2;
+    KWAutoFormatDia *parentWidget;
+    bool replaceEntry;
+    QString replaceEntryString;
+};
 #endif
 
 
