@@ -228,7 +228,7 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	QPtrListIterator<VLayer> itr( m_doc.layers() );
 	for( ; itr.current(); ++itr )
 		//if( itr.current()->visible() )
-			itr.current()->draw( p, KoRect::fromQRect( rect ) );
+			itr.current()->draw( p, &KoRect::fromQRect( rect ) );
 
 	p->end();
 	delete painterFactory;

@@ -105,7 +105,7 @@ drawNode( VPainter* painter, const KoPoint& p, int width, double zoomFactor )
 }
 
 void
-VPath::draw( VPainter *painter, const KoRect& rect ) const
+VPath::draw( VPainter* painter, const KoRect* rect ) const
 {
 	if(
 		state() == deleted ||
@@ -117,7 +117,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 
 	double zoomFactor = painter->zoomFactor();
 
-	if( zoomFactor != 1.0 && !rect.intersects( boundingBox() ) )
+	if( rect && !rect->intersects( boundingBox() ) )
 		return;
 
 	painter->save();

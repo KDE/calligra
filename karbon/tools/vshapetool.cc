@@ -56,7 +56,7 @@ VShapeTool::draw()
 
 	VPath* path = shape();
 	path->setState( VPath::edit );
-	path->draw( painter, path->boundingBox() );
+	path->draw( painter, &path->boundingBox() );
 	delete( path );
 }
 

@@ -41,7 +41,7 @@ public:
 	VText( const VText& text );
 	virtual ~VText();
 
-	virtual void draw( VPainter *painter, const KoRect& rect ) const;
+	virtual void draw( VPainter* painter, const KoRect* rect = 0L ) const;
 
 	virtual void transform( const QWMatrix& m, bool selectedSubObjects = false );
 

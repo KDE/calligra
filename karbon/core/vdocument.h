@@ -54,7 +54,7 @@ public:
 
 	virtual ~VDocument();
 
-	virtual void draw( VPainter* painter, const KoRect& rect ) const;
+	virtual void draw( VPainter* painter, const KoRect* rect ) const;
 
 	// TODO
 	virtual void transform( const QWMatrix& )

@@ -44,7 +44,7 @@ public:
 
 	virtual ~VLayer();
 
-	virtual void draw( VPainter *painter, const KoRect& rect ) const;
+	virtual void draw( VPainter *painter, const KoRect* rect = 0L ) const;
 
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );

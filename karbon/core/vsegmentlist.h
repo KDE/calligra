@@ -71,9 +71,6 @@ public:
 	 */
 	void revert();
 
-
-	virtual void draw( VPainter*, const KoRect& ) {}
-
 	/**
 	 * Applies an affine transformation matrix to all segments.
 	 */

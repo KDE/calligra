@@ -66,7 +66,7 @@ public:
 	 * @param rect represents the visible rectangular area. If this object doesnt
 	 *             intersect with this area it is not drawn.
 	 */
-	virtual void draw( VPainter* /*painter*/, const KoRect& /*rect*/ ) const {}
+	virtual void draw( VPainter* /*painter*/, const KoRect* /*rect*/ = 0L ) const {}
 
 	/**
 	 * Transform the object according to the given matrix.

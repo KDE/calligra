@@ -61,7 +61,7 @@ VGroup::~VGroup()
 }
 
 void
-VGroup::draw( VPainter* painter, const KoRect& rect ) const
+VGroup::draw( VPainter* painter, const KoRect* rect ) const
 {
 	if(
 		state() == deleted ||

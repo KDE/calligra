@@ -114,7 +114,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		p->setWorldMatrix( mat );*/
 		setYMirroring( false );
 
-		m_part->document().draw( p, r );
+		m_part->document().draw( p, &r );
 
 		m_bScrolling = false;
 
@@ -157,7 +157,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjec
 		p->setWorldMatrix( mat ); */
 		setYMirroring( false );
 
-		m_part->document().draw( p, KoRect::fromQRect( rect ) );
+		m_part->document().draw( p, &KoRect::fromQRect( rect ) );
 
 		p->end();
 	}

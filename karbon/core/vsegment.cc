@@ -73,6 +73,8 @@ VSegment::VSegment( VSegmentType type )
 	m_nodeEdited[1] = false;
 	m_nodeEdited[2] = false;
 
+	m_state = normal;
+
 	m_type = type;
 	m_ctrlPointFixing = none;
 	m_smooth = false;
@@ -97,6 +99,8 @@ VSegment::VSegment( const VSegment& segment )
 	m_nodeEdited[1] = segment.m_nodeEdited[1];
 	m_nodeEdited[2] = segment.m_nodeEdited[2];
 
+	m_state = normal;
+
 	m_type = segment.m_type;
 	m_ctrlPointFixing = segment.m_ctrlPointFixing;
 	m_smooth = segment.m_smooth;
@@ -105,6 +109,9 @@ VSegment::VSegment( const VSegment& segment )
 void
 VSegment::draw( VPainter* painter ) const
 {
+	if( m_state == deleted )
+		return;
+
 	if( type() == curve )
 	{
 		painter->curveTo( ctrlPoint1(), ctrlPoint2(), knot() );

@@ -266,7 +266,7 @@ KarbonView::print( KPrinter &printer )
 	QPtrListIterator<VLayer> i = m_part->document().layers();
 	for ( ; i.current(); ++i )
 		//if ( i.current()->visible() )
-			i.current()->draw( &p, KoRect::fromQRect( QRect( 0, 0, width(), height() ) ) );
+			i.current()->draw( &p, &KoRect::fromQRect( QRect( 0, 0, width(), height() ) ) );
 
 	p.end();
 }

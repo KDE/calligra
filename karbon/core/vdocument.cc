@@ -55,7 +55,7 @@ VDocument::~VDocument()
 }
 
 void
-VDocument::draw( VPainter *painter, const KoRect& rect ) const
+VDocument::draw( VPainter *painter, const KoRect* rect ) const
 {
 	QPtrListIterator<VLayer> itr = m_layers;
 

@@ -66,7 +66,7 @@ VRotateTool::draw()
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
 	{
-		itr.current()->draw( painter, itr.current()->boundingBox() );
+		itr.current()->draw( painter, &itr.current()->boundingBox() );
 	}
 
 	painter->setZoomFactor( 1.0 );

@@ -47,7 +47,7 @@ VLayer::~VLayer()
 }
 
 void
-VLayer::draw( VPainter* painter, const KoRect& rect ) const
+VLayer::draw( VPainter* painter, const KoRect* rect ) const
 {
 	if(
 		state() == deleted ||

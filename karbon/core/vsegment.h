@@ -66,9 +66,17 @@ public:
 		second = 2
 	};
 
+	enum VState
+	{
+		normal,
+		deleted
+	};
 
 	VSegment( VSegmentType type = begin );
 	VSegment( const VSegment& segment );
+
+	void setState( VState state ) { m_state = state; }
+	VState state() const { return m_state; }
 
 	void draw( VPainter* painter ) const;
 
@@ -262,6 +270,8 @@ private:
 
 	VSegment* m_prev;
 	VSegment* m_next;
+
+	VState m_state;
 
 	VSegmentType m_type;
 	VCtrlPointFixing m_ctrlPointFixing;
