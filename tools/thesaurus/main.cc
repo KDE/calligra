@@ -105,7 +105,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
 
     // fixme: remove this to add the language selection feature
     // Don't forget to update the documentation!
-    m_lang->hide();
+    //m_lang->hide();
 
     connect(m_back, SIGNAL(clicked()), this, SLOT(slotBack()));
     connect(m_forward, SIGNAL(clicked()), this, SLOT(slotForward()));
