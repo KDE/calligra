@@ -73,8 +73,8 @@ KImageShopView::KImageShopView( QWidget* _parent, const char* _name, KImageShopD
   m_pHRuler = 0L;
   m_pVRuler = 0L;
   m_ZoomFactor = 1;
-  m_fg = QColor(255,255,255);
-  m_bg = QColor(0,0,0);
+  m_fg = KColor(255,255,255);
+  m_bg = KColor(0,0,0);
 
   QObject::connect(m_pDoc, SIGNAL(sigUpdateView(const QRect&)), this, SLOT(slotUpdateView(const QRect&)));
 }
@@ -384,8 +384,6 @@ void KImageShopView::createGUI()
   //m_pColorDialog->move(100, 20);
   //m_pColorDialog->show();
   //addDialog(m_pColorDialog);
-
-  resizeEvent(0L);
 }
 
 void KImageShopView::setupScrollbars()
@@ -934,12 +932,12 @@ void KImageShopView::changeRedo( QString _text, bool _enable )
   }
 }
 
-void  KImageShopView::slotSetFGColor(const QColor& c)
+void  KImageShopView::slotSetFGColor(const KColor& c)
 {
   m_fg = c;
 }
 
-void  KImageShopView::slotSetBGColor(const QColor& c)
+void  KImageShopView::slotSetBGColor(const KColor& c)
 {
   m_bg = c;
 }

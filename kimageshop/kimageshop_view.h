@@ -22,7 +22,7 @@
 #ifndef __kimageshop_view_h__
 #define __kimageshop_view_h__
 
-#include <qcolor.h>
+#include <kcolor.h>
 #include <qwidget.h>
 
 #include <opMenu.h>
@@ -96,8 +96,8 @@ public slots:
   void scrollV(int);
 
   void slotSetZoomFactor(float);
-  void slotSetFGColor(const QColor&);
-  void slotSetBGColor(const QColor&);
+  void slotSetFGColor(const KColor&);
+  void slotSetBGColor(const KColor&);
   void slotSetBrush(const Brush *);
   
   virtual void slotEditUndo();
@@ -195,7 +195,7 @@ private:
   BrushDialog 	*m_pBrushDialog;
   const BrushesWidget *m_pBrushChooser;
   ColorDialog   *m_pColorDialog;
-  QColor        m_fg, m_bg;
+  KColor        m_fg, m_bg;
   float         m_ZoomFactor;
 };
 

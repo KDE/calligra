@@ -22,15 +22,27 @@
 
 KFloatingDialogOwner::KFloatingDialogOwner()
 {
-  fdList.setAutoDelete(false);
+  m_fdList.setAutoDelete(false);
 }
 
 void KFloatingDialogOwner::addDialog(KFloatingDialog *d)
 {
-  fdList.append(d);
+  m_fdList.append(d);
 }
 
 void KFloatingDialogOwner::removeDialog(KFloatingDialog *d)
 {
-  fdList.removeRef(d);
+  m_fdList.removeRef(d);
+}
+
+void KFloatingDialogOwner::alignRight(int width, int height)
+{
+  int count = m_fdList.count();
+
+  QListIterator<KFloatingDialog> it(m_fdList);
+  for( ; it.current(); ++it )
+    {
+      KFloatingDialog *current = it.current();
+      current->move(width- current->width(), current->y());
+    }
 }

@@ -32,8 +32,10 @@ class KFloatingDialogOwner
   void addDialog(KFloatingDialog*);
   void removeDialog(KFloatingDialog*);
 
+  void alignRight(int width, int height);
+
  protected:
-  QList <KFloatingDialog> fdList;
+  QList <KFloatingDialog> m_fdList;
  
 };
 

@@ -44,30 +44,31 @@ class KFloatingDialog : public QFrame
   KFloatingDialog(QWidget *parent = 0, const char* _name = 0);
   ~KFloatingDialog();
 
-  enum TitleLook { plain, gradient, pixmap };
-
   // usable client space:
   int _left() { return FRAMEBORDER; }
   int _top() { return TITLE_HEIGHT; }
   int _width() { return width() - 2*FRAMEBORDER; }
   int _height() { return height() - TITLE_HEIGHT - FRAMEBORDER; }
 
-  void setActive(bool);
   void setShaded(bool);
   void setDocked(bool);
+
+  void setBaseWidget(QWidget *);
+
+  bool shaded() { return m_shaded; }
+  bool docked() { return m_docked; }
 
  public slots:
   void slotClose();
   void slotMinimize();
   void slotDock();
   
- signals:
-  void sigActivated();
-
  protected:
   virtual void paintEvent(QPaintEvent *);
   virtual void resizeEvent(QResizeEvent *);
   virtual void leaveEvent(QEvent *);
+  virtual void focusInEvent(QFocusEvent *);
+  virtual void focusOutEvent(QFocusEvent *);
   virtual void mousePressEvent(QMouseEvent *);
   virtual void mouseMoveEvent(QMouseEvent *);
   virtual void mouseReleaseEvent(QMouseEvent *);
@@ -77,30 +78,35 @@ class KFloatingDialog : public QFrame
   const QRect bottomRect() { return QRect(FRAMEBORDER, height()-FRAMEBORDER, width()-2*FRAMEBORDER, FRAMEBORDER); }
   const QRect rightRect() { return QRect(width()-FRAMEBORDER, FRAMEBORDER, FRAMEBORDER, height() - 2*FRAMEBORDER); }
   const QRect lowerRightRect() { return QRect(width()-FRAMEBORDER, height()-FRAMEBORDER , FRAMEBORDER, FRAMEBORDER); }
+
+  void readSettings();
   
  protected:
+  enum TitleLook { plain, gradient, pixmap };
   enum resizeMode { horizontal, vertical, diagonal };
+
+ private:
   bool     m_dragging;
   bool     m_resizing;
   bool     m_shaded;
   bool     m_cursor;
   bool     m_docked;
-  bool     m_active;
 
   QColor   m_activeBlend, m_inactiveBlend;
   KPixmap  m_activeShadePm, m_inactiveShadePm;
   QPixmap  *m_pActivePm, *m_pInactivePm;
 
-  TitleLook                   m_titleLook;
+  TitleLook                               m_titleLook;
   KPixmapEffect::GradientType m_gradientType;
 
-  
-  QPoint   m_start;
+  QPoint   m_pos;
+  QPoint   m_oldSize;
   QPoint   m_dockedPos;
   int      m_unshadedHeight;
   int      m_resizeMode;
 
   QWidget  *m_pParent;
+  QWidget  *m_pBase;
   QPushButton *m_pCloseButton, *m_pDockButton, *m_pMinButton;
 };
 
