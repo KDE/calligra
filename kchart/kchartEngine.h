@@ -21,6 +21,9 @@ public:
   void drawAnnotation();
   void drawThumbnails();
   void drawScatter();
+  void drawBackgroundImage();
+  void prepareColors();
+  void drawGridAndLabels(bool do_ylbl_fractions);
 
   inline bool CELLEXISTS( int row, int col ) {
     return  data->cell(row,col).exists;

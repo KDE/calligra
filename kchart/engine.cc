@@ -320,262 +320,31 @@ int kchartEngine::out_graph() {
     //	ArrowUColor    = gdImageColorAllocate( im,    0, 0xFF, 0 );
     if( params->annotation )
 		AnnoteColor = params->annotation->color;
-    qDebug("before bgimage");
 
 
     /* attempt to import optional background image */
     // PENDING(kalle) Put back in
     if( GDC_BGImage ) {
-		debug( "Sorry, not implemented: background images" );
-#ifdef SUPPORT_BACKGROUND_IMAGES
-		FILE	*in = fopen(GDC_BGImage, "rb");
-		if( !in ) {
-			; // Cant load background image, drop it
-		}
-		else {
-			if( bg_img = gdImageCreateFromGif(in) ) {					// =
-				int	bgxpos = gdImageSX(bg_img)<imagewidth?  imageheight/2 - gdImageSX(bg_img)/2:  0,
-					bgypos = gdImageSY(bg_img)<imageheight? imageheight/2 - gdImageSY(bg_img)/2: 0;
-		
-		
-				if( gdImageSX(bg_img) > imagewidth ||				// resize only if too big
-					gdImageSY(bg_img) > imageheight ) {				//  [and center]
-					gdImageCopyResized( im, bg_img,				// dst, src
-										bgxpos, bgypos,			// dstX, dstY
-										0, 0,					// srcX, srcY
-										imagewidth, imageheight,	// dstW, dstH
-										imagewidth, imageheight );	// srcW, srcH
-				} else											// just center
-					gdImageCopy( im, bg_img,					// dst, src
-								 bgxpos, bgypos,				// dstX, dstY
-								 0, 0,							// srcX, srcY
-								 imagewidth, imageheight );			// W, H
-			}
-			fclose(in);
-		}
-#endif
+      qDebug("before bgimage");
+      drawBackgroundImage();
     }
-    qDebug("Color settings coming!");
-    for(int j=0; j<num_sets; ++j )
-      for(int i=0; i<num_points; ++i )
-	if( params->ExtColor.count() ) {			
-	  cerr << "Ext color\n";
-	  // changed by me, BL
-	  //QColor ext_clr = params->ExtColor.color( num_points*j+i );			
-	  QColor ext_clr = params->ExtColor.color( (num_points*j+i) % params->ExtColor.count());
-	  ExtColor[j][i]            = ext_clr;
-	  if( params->threeD() )
-	    ExtColorShd[j][i]     = QColor( ext_clr.red() / 2, ext_clr.green() / 2, ext_clr.blue() / 2 );
-	}
-	else if( params->SetColor.count() ) {
-	  QColor set_clr = params->SetColor.color( j );
-	  ExtColor[j][i]     = QColor( set_clr );
-	  if( params->threeD() )
-	    ExtColorShd[j][i] = QColor( set_clr.red() / 2, set_clr.green() / 2, set_clr.blue() / 2 );
-	}
-	else {
-	  ExtColor[j][i]     = PlotColor;
-	  if( params->threeD() )
-	    ExtColorShd[j][i] = QColor( params->PlotColor.red() / 2, params->PlotColor.green() / 2, params->PlotColor.blue() / 2 );
-	}
-			
 
+    qDebug("Color settings coming!");
+    prepareColors();
     // PENDING(kalle) Do some sophisticated things that involve QPixmap::createHeuristicMask
-	// or Matthias' stuff from bwin
+    // or Matthias' stuff from bwin
     qDebug("before transparent bg");
     if( params->transparent_bg )
-		debug( "Sorry, transparent backgrounds are not supported yet." );
-	//     if( params->transparent_bg )
-	// 	gdImageColorTransparent( im, BGColor );
-
-	qDebug( "done handling background images" );
-
-
-	titleText();
-
-
-    qDebug( "start drawing" );
-
+      debug( "Sorry, transparent backgrounds are not supported yet." );
+    //     if( params->transparent_bg )
+    // 	gdImageColorTransparent( im, BGColor );
+    qDebug( "Title text is coming" );   
+    titleText();
+    qDebug( "start drawing, first the grids" );
+    //    drawGridAndLabels(do_ylbl_fractions);
+    qDebug("more advanced grids");
     /* ----- start drawing ----- */
-    /* ----- backmost first - grid & labels ----- */
-    if( params->grid || params->yaxis ){	/* grid lines & y label(s) */
-		float	tmp_y = lowest;
-		QColor labelcolor = params->YLabelColor== Qt::black ?
-			LineColor: params->YLabelColor;
-		QColor label2color = params->YLabel2Color== Qt::black ?
-			VolColor: params->YLabel2Color;
-	
-		/* step from lowest to highest puting in labels and grid at interval points */
-		/* since now "odd" intervals may be requested, try to step starting at 0,   */
-		/* if lowest < 0 < highest                                                  */
-		for(int i=-1; i<=1; i+=2 ) { // -1, 1
-			if( i == -1 )	
-				if( lowest >= 0.0 ) //	all pos plotting
-					continue;
-				else
-					tmp_y = MIN( 0, highest ); // step down to lowest
-		
-			if( i == 1 )	
-				if( highest <= 0.0 ) //	all neg plotting
-					continue;
-				else
-					tmp_y = MAX( 0, lowest ); // step up to highest
-		
-		
-			//			if( !(highest > 0 && lowest < 0) )					// doesn't straddle 0
-			//				{
-			//				if( i == -1 )									// only do once: normal
-			//					continue;
-			//				}
-			//			else
-			//				tmp_y = 0;
-		
-			do {	// while( (tmp_y (+-)= ylbl_interval) < [highest,lowest] )
-				int		n, d, w;
-				char	*price_to_str( float, int*, int*, int*, const char* );
-				char	nmrtr[3+1], dmntr[3+1], whole[8];
-				char	all_whole = ylbl_interval<1.0? FALSE: TRUE;
-			
-				char	*ylbl_str = price_to_str( tmp_y,&n,&d,&w,
-												  do_ylbl_fractions? QString::null: params->ylabel_fmt );
-				if( do_ylbl_fractions )	{
-					sprintf( nmrtr, "%d", n );
-					sprintf( dmntr, "%d", d );
-					sprintf( whole, "%d", w );
-				}
 
-				// qDebug( "drawing 1" );
-		
-				if( params->grid ) {
-					int	x1, x2, y1, y2;
-					// int	gridline_clr = tmp_y == 0.0? LineColor: GridColor;
-					// tics
-					x1 = PX(0);		y1 = PY(tmp_y);
-					p->setPen( GridColor );
-					p->drawLine( x1-2, y1, x1, y1 );
-					setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
-				num_sets:
-					1;			// backmost
-					x2 = PX(0);		y2 = PY(tmp_y);						// w/ new setno
-					p->setPen( GridColor );
-					p->drawLine( x1, y1, x2, y2 );		// depth for 3Ds
-					p->setPen( GridColor );
-					p->drawLine( x2, y2, PX(num_points-1+(params->do_bar()?2:0)), y2 );
-					setno = 0;											// set back to foremost
-				}
-				
-				// qDebug( "drawing 2" );
-
-				// PENDING(kalle) Originally, here was always used one
-				// font smaller than params->yAxisFont. Do that again?
-				if( params->yaxis )
-					if( do_ylbl_fractions ) {
-						if( w || (!w && !n && !d) ) {
-							p->setPen( labelcolor );
-							p->setFont( params->yAxisFont() );
-							p->drawText( PX(0)-2-strlen(whole)*params->yAxisFontWidth()
-										 - ( (!all_whole)?
-											 (strlen(nmrtr)*params->yAxisFontWidth() +
-											  params->yAxisFontWidth() +
-											  strlen(nmrtr)*params->yAxisFontWidth()) :
-											 1 ),
-										 PY(tmp_y)-params->yAxisFontHeight()/2,
-										 whole );
-						}
-
-						// qDebug( "drawing 3" );
-
-						// PENDING( original uses a 1 step smaller
-						// font here. Do that, too?
-						if( n )	{
-							p->setPen( labelcolor );
-							p->setFont( params->yAxisFont() );
-							p->drawText( PX(0)-2-strlen(nmrtr)*params->yAxisFontWidth()
-										 -params->yAxisFontWidth()
-										 -strlen(nmrtr)*params->yAxisFontWidth() + 1,
-										 PY(tmp_y)-params->yAxisFontHeight()/2 + 1,
-										 nmrtr );
-							p->drawText( PX(0)-2-params->yAxisFontWidth()
-										 -strlen(nmrtr)*params->yAxisFontWidth(),
-										 PY(tmp_y)-params->yAxisFontHeight()/2,
-										 "/" );
-							p->drawText( PX(0)-2-strlen(nmrtr)*params->yAxisFontWidth() - 2,
-										 PY(tmp_y)-params->yAxisFontHeight()/2 + 3,
-										 dmntr );
-						}
-					} else {
-						p->setPen( labelcolor );
-						p->setFont( params->yAxisFont() );
-						p->drawText( PX(0)-2-strlen(ylbl_str)*params->yAxisFontWidth(),
-									 PY(tmp_y)-params->yAxisFontHeight()/2,
-									 ylbl_str );
-					}
-
-				// qDebug( "drawing 4" );
-			
-				if( params->do_vol() && params->yaxis2 ) {
-					char	vylbl[16];
-					/* opposite of PV(y) */
-					sprintf( vylbl,
-							 !params->ylabel2_fmt.isEmpty()? params->ylabel2_fmt: QString( "%.0f" ),
-							 ((float)(PY(tmp_y)+(setno*ydepth_3D)-vyorig))/vyscl );
-			
-					setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
-				num_sets:
-					1; // backmost
-					p->setPen( GridColor );
-					p->drawLine( PX(num_points-1+(params->do_bar()?2:0)), PY(tmp_y),
-								 PX(num_points-1+(params->do_bar()?2:0))+3, PY(tmp_y) );
-					if( atof(vylbl) == 0.0 )									/* rounding can cause -0 */
-						strcpy( vylbl, "0" );
-					p->setPen( label2color );
-					p->setFont( params->yAxisFont() );
-					p->drawText( PX(num_points-1+(params->do_bar()?2:0))+6,
-								 PY(tmp_y)-params->yAxisFontHeight()/2,
-								 vylbl );
-					setno = 0;
-				}
-			}
-			while( ((i>0) && ((tmp_y += ylbl_interval) < highest)) ||
-				   ((i<0) && ((tmp_y -= ylbl_interval) > lowest)) );
-		}
-
-		// qDebug( "drawing 5" );
-
-		/* catch last (bottom) grid line - specific to an "off" requested interval */
-		if( params->grid && params->threeD() ) {
-			setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
-		num_sets:
-			1;			// backmost
-			p->setPen( GridColor );
-			p->drawLine( PX(0), PY(lowest), PX(num_points-1+(params->do_bar()?2:0)), PY(lowest) );
-			setno = 0;											// set back to foremost
-		}
-	
-		/* vy axis title */
-		if( params->do_vol() && !params->ytitle2.isEmpty() ) {
-			QColor	titlecolor = params->YTitle2Color== Qt::black ?
-				VolColor: params->YTitle2Color;
-			// PENDING(kalle) Check whether this really prints correctly
-			p->setFont( params->yTitleFont() );
-			p->setPen( titlecolor );
-			p->rotate( 90 );
-			p->drawText( imagewidth-(1+params->yTitleFontHeight()),
-						 params->ytitle2.length()*params->yTitleFontWidth()/2 +
-						 grapheight/2, params->ytitle2 );
-			p->rotate( -90 );
-		}
-	
-		/* y axis title */
-		if( params->yaxis && !params->ytitle.isEmpty() ) {
-			int	ytit_len = params->ytitle.length()*params->yTitleFontWidth();
-			QColor	titlecolor = params->YTitleColor==Qt::black?
-				PlotColor: params->YTitleColor;
-			p->setPen( titlecolor );
-			p->setFont( params->yTitleFont() );
-			p->drawText( 0, imageheight/2 + ytit_len/2, params->ytitle );
-		}
-    }
 
     /* interviening set grids */
     /*  0 < setno < num_sets   non-inclusive, they've already been covered */
