@@ -191,6 +191,10 @@ void KChartParameterConfigPage::init()
     //     xlabel->setChecked(_params->hasxlabel);
     //     shelf->setChecked(_params->shelf);
 
+
+    xaxis->setChecked(_params->axisVisible(KDChartAxisParams::AxisPosBottom));
+    yaxis->setChecked(_params->axisVisible(KDChartAxisParams::AxisPosLeft));
+
     llabel->setChecked(_params->legendPosition()!=KDChartParams::NoLegend);
 
 //     if( _params->chartType() == KDChartParams::Line ) {
@@ -254,6 +258,9 @@ void KChartParameterConfigPage::apply()
 {
 
     _params->setLegendPosition(llabel->isChecked() ? KDChartParams::LegendRight : KDChartParams::NoLegend);
+
+    _params->setAxisVisible(KDChartAxisParams::AxisPosBottom,xaxis->isChecked());
+    _params->setAxisVisible(KDChartAxisParams::AxisPosLeft,yaxis->isChecked());
 
 // PENDING(kalle) Adapt this
     //     _params->grid=grid->isChecked();
