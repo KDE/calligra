@@ -128,9 +128,16 @@ KInstance *KexiDialogBase::instance() {
 }*/
 
 void KexiDialogBase::registerDialog() {
+	if (m_isRegistered)
+		return;
 	m_parentWindow->registerChild(this);
 	m_isRegistered=true;
-	m_parentWindow->addWindow((KMdiChildView *)this);
+	if ( m_parentWindow->mdiMode() == KMdi::ToplevelMode ) {
+		m_parentWindow->addWindow( (KMdiChildView *)this, KMdi::Detach );
+		m_parentWindow->detachWindow((KMdiChildView *)this, true);
+	}
+	else
+		m_parentWindow->addWindow((KMdiChildView *)this);
 //later	show();
 //	m_parentWindow->activeWindowChanged(this);
 }
