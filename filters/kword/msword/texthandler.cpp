@@ -216,10 +216,14 @@ void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Wo
         case 10:
             underline.setAttribute( "styleline", "dashdotdot" );
             break;
+        case 11: // wave
+            underline.setAttribute( "styleline", "wave" );
+            break;
+        case 5: // hidden - This makes no sense as an underline property!
+            val = "0";
+            break;
         case 1: // single
-        case 2: // by word - TODO in kword
-        case 5: // hidden - WTH is that?
-        case 11: // wave - not in kword
+        case 2: // by word - TODO
         default:
             underline.setAttribute( "styleline", "solid" );
         };
@@ -243,6 +247,14 @@ void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Wo
         format.appendChild( strikeout );
     }
 
+    // font attribute (uppercase, lowercase (not in MSWord), small caps)
+    if ( !refChp || refChp->fCaps != chp->fCaps )
+    {
+        QDomElement fontAttrib( mainDocument().createElement( "FONTATTRIBUTE" ) );
+        fontAttrib.setAttribute( "value", chp->fCaps ? "uppercase" : "none" );
+        // TODO in KWord: small caps
+        format.appendChild( fontAttrib );
+    }
     if ( !refChp || refChp->iss != chp->iss ) { // superscript/subscript
         QDomElement vertAlign( mainDocument().createElement( "VERTALIGN" ) );
         // Obviously the values are reversed between the two file formats :)
