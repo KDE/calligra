@@ -16,7 +16,6 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#define __KEXIDB__
 
 #include <kexidb/connection.h>
 #include <kexidb/drivermanager.h>
@@ -43,6 +42,10 @@ pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringLi
 	m_features = SingleTransactions | CursorForward | CursorBackward;
 
 	beh->UNSIGNED_TYPE_KEYWORD = "";
+	beh->ROW_ID_FIELD_NAME = "oid";
+	beh->SPECIAL_AUTO_INCREMENT_DEF = true;
+	beh->AUTO_INCREMENT_FIELD_OPTION = "serial";
+	beh->ALWAYS_AVAILABLE_DATABASE_NAME = "template1";
 
 	m_typeNames[Field::Byte]="CHAR";
 	m_typeNames[Field::ShortInteger]="SMALLINT";
@@ -71,13 +74,13 @@ pqxxSqlDriver::drv_createConnection( ConnectionData &conn_data )
 	return new pqxxSqlConnection( this, conn_data );
 }
 
-bool pqxxSqlDriver::isSystemObjectName( const QString& n )
+bool pqxxSqlDriver::isSystemObjectName( const QString& n ) const
 {
 	return false;
 	//return n.lower().startsWith("sqlite_");
 }
 
-bool pqxxSqlDriver::isSystemFieldName( const QString& n )
+bool pqxxSqlDriver::isSystemFieldName( const QString& n ) const
 {
 	return false;
 	//return n.lower()=="_rowid_";

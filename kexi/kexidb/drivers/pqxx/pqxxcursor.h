@@ -23,7 +23,7 @@ class pqxxSqlCursor: public Cursor {
 public:
 	pqxxSqlCursor(Connection* conn, const QString& statement = QString::null, uint options = NoOptions );
 	~pqxxSqlCursor();
-        virtual bool drv_open();
+        virtual bool drv_open(const QString& statement);
         virtual bool drv_close();
         virtual bool drv_moveFirst();
         virtual bool drv_getNextRecord();

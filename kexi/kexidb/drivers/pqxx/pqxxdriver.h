@@ -19,8 +19,8 @@ class KEXI_DB_EXPORT pqxxSqlDriver : public Driver
 		pqxxSqlDriver( QObject *parent, const char *name, const QStringList &args = QStringList() );
 		~pqxxSqlDriver();
 
-		virtual bool isSystemObjectName( const QString& n );
-		virtual bool isSystemFieldName( const QString& n );
+		virtual bool isSystemObjectName( const QString& n )const;
+		virtual bool isSystemFieldName( const QString& n )const;
 
 	protected:
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );

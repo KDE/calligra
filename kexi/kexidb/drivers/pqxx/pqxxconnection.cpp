@@ -22,9 +22,7 @@ using namespace KexiDB;
 pqxxSqlConnection::pqxxSqlConnection(Driver *driver, const ConnectionData &conn_data)
         :Connection(driver,conn_data)
         ,m_pqxxsql(0), m_res(0), m_trans(0)
-{
-    m_is_connected = false;
-}
+{}
 
 //==================================================================================
 //Do any tidying up before the object is deleted
@@ -37,8 +35,13 @@ pqxxSqlConnection::~pqxxSqlConnection()
 //
 Cursor* pqxxSqlConnection::prepareQuery( const QString& statement,  uint cursor_options)
 {
-return new pqxxSqlCursor(this, statement, cursor_options);
+    return new pqxxSqlCursor(this, statement, cursor_options);
 }
+
+//==================================================================================
+//
+Cursor* pqxxSqlConnection::prepareQuery( QuerySchema& query, uint cursor_options)
+{}
 
 //==================================================================================
 //
@@ -86,6 +89,7 @@ bool pqxxSqlConnection::drv_getDatabasesList( QStringList &list )
 {
     kdDebug() << "pqxxSqlConnection::drv_getDatabaseList" << endl;
 
+    /*
     if(!isConnected())
     {
         kdDebug() << "pqxxSqlConnection::drv_getDatabaseList: Not connected" << endl;
@@ -94,7 +98,7 @@ bool pqxxSqlConnection::drv_getDatabasesList( QStringList &list )
             return false;
         }
     }
-
+*/
     if (drv_executeSQL("SELECT datname FROM pg_database WHERE datallowconn = TRUE"))
     {
         std::string N;
@@ -102,7 +106,6 @@ bool pqxxSqlConnection::drv_getDatabasesList( QStringList &list )
         {
             // Read value of column 0 into a string N
             c[0].to(N);
-
             // Copy the result into the return list
             list << QString::fromLatin1 (N.c_str());
         }
@@ -119,7 +122,7 @@ bool pqxxSqlConnection::drv_createDatabase( const QString &dbName )
     kdDebug() << "pqxxSqlConnection::drv_createDatabase: " << dbName << endl;
 
     if (drv_executeSQL("CREATE DATABASE " + escapeName(dbName)))
-    	return true;
+        return true;
 
     return false;
 }
@@ -134,15 +137,18 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName )
     QString socket;
     QStringList sockets;
 
+    //I'll trust that kexi wont try and use if already in use
+    /*
     if (isConnected())
     {
-	if(!drv_closeDatabase())
-	{
+    if(!drv_closeDatabase())
+    {
         	setError(ERR_ALREADY_CONNECTED,i18n("Connection has already been opened and couldnt disconnect"));
         	return false;
-	}
+    }
     }
 
+    */
     if (m_data.hostName.isEmpty() || m_data.hostName == "localhost")
     {
         if (m_data.fileName().isEmpty())
@@ -185,7 +191,7 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName )
     try
     {
         m_pqxxsql = new pqxx::connection( conninfo.latin1() );
-        m_is_connected=true;
+        m_usedDatabase = dbName;
         return true;
     }
     catch(const std::exception &e)
@@ -206,7 +212,6 @@ bool pqxxSqlConnection::drv_closeDatabase()
     {
         delete m_pqxxsql;
         m_pqxxsql = 0;
-        m_is_connected = false;
         return true;
     }
     else
@@ -217,16 +222,16 @@ bool pqxxSqlConnection::drv_closeDatabase()
 }
 
 //==================================================================================
-//
+//Drops the given database
 bool pqxxSqlConnection::drv_dropDatabase( const QString &dbName )
 {
     kdDebug() << "pqxxSqlConnection::drv_dropDatabase: " << dbName << endl;
 
+    //FIXME Maybe should check that dbname is no the currentdb
     if (drv_executeSQL("DROP DATABASE " + escapeName(dbName)))
-    	return true;
+        return true;
 
     return false;
-
 }
 
 //==================================================================================
@@ -234,13 +239,11 @@ bool pqxxSqlConnection::drv_dropDatabase( const QString &dbName )
 bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
 {
     kdDebug() << "pqxxSqlConnection::drv_executeSQL: " << statement << endl;
+    bool ok;
 
+    ok = false;
     // Clear the last result information...
     clearResultInfo ();
-
-    //Exit if we are not connected
-    if (!m_is_connected)
-        return false;
 
     try
     {
@@ -254,39 +257,15 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
         m_trans->commit();
 
         //If all went well then return true, errors picked up by the catch block
-        return true;
+        ok = true;
     }
     catch (const std::exception &e)
     {
         //If an error ocurred then put the error description into _dbError
         setError(ERR_DB_SPECIFIC,e.what());
         kdDebug() << "pqxxSqlConnection::drv_executeSQL:exception - " << e.what() << endl;
-        return false;
     }
-}
-
-//==================================================================================
-//Check if a database exists
-bool pqxxSqlConnection::drv_databaseExists( const QString &dbName )
-{
-    kdDebug() << "pqxxSqlConnection::drv_databaseExists: " << dbName << endl;
-    QStringList databases;
-
-    if (drv_getDatabasesList(databases))
-    {
-        for (QStringList::iterator it = databases.begin(); it != databases.end() ; ++it)
-        {
-            kdDebug() << *it << endl;
-            if (*it == dbName)
-                return true;
-        }
-
-    }
-    else
-    {
-        kdDebug() << "pqxxSqlConnection::drv_databaseExists:Could not get list of databases" << endl;
-    }
-    return false;
+    return ok;
 }
 
 //Private Functions I Need
@@ -307,12 +286,35 @@ void pqxxSqlConnection::clearResultInfo ()
 }
 
 //==================================================================================
-//We cannot trust m_is_connected as it is set in conection.cpp
-bool pqxxSqlConnection::isConnected()
+//Return the oid of the last insert - only works if sql was insert of 1 row
+Q_ULLONG pqxxSqlConnection::drv_lastInsertRowID()
 {
-    if((!m_pqxxsql) || (!m_pqxxsql->is_open()))
+    if (m_res)
     {
-        return false;
+        pqxx::oid theOid = m_res->inserted_oid();
+
+        if (theOid != pqxx::oid_none)
+        {
+            return Q_ULLONG(theOid);
+        }
+        else
+        {
+            return 0;
+        }
     }
-    return true;
+    else
+    {
+        return 0;
+    }
+}
+
+//==================================================================================
+//Return true if currently connected to a database, ignoring the m_is_connected falg.
+bool pqxxSqlConnection::drv_isDatabaseUsed() const
+{
+    if (m_pqxxsql->is_open())
+    {
+        return true;
+    }
+    return false;
 }
