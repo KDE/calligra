@@ -1551,6 +1551,26 @@ bool KWFrameDia::applyChanges()
                     macroCmd->addCommand(cmd);
                 }
             }
+            else
+            {
+                for(KWFrame *f=allFrames.first();f; f=allFrames.next())
+                {
+                    KWTextFrameSet * frm=dynamic_cast<KWTextFrameSet *>( f->frameSet() );
+                    if ( frm )
+                    {
+                        if(frm->textObject()->protectContent()!=cbProtectContent->isChecked())
+                        {
+                            if(!macroCmd)
+                                macroCmd = new KMacroCommand( i18n("Protect Content") );
+                            KWProtectContentCommand * cmd = new KWProtectContentCommand( i18n("Protect Content"), frm,cbProtectContent->isChecked() );
+                            cmd->execute();
+                            macroCmd->addCommand(cmd);
+                        }
+                    }
+
+                }
+            }
+
         }
         // NewFrameBehavior
         bool update=true;
