@@ -6,6 +6,9 @@ Text editor : fix Home, End, ....
    selecting several lines : first line gets unselected
    paragraph spacing doesn't apply to several paragraphs selected together
 Assigning a pen to an image (in order to draw a border around it) doesn't work
+Insert a picture (F2), then change it on the hard disk, remove the picture from
+ kpresenter, and try to insert it again : it gets cached, and the old one gets inserted.
+ Only workaround : renaming the file.
 
 MISSING FEATURES :
 ==================
