@@ -483,6 +483,8 @@ void PropertyEditor::applyPressed ()
       tinfo.mask = GText::TextInfo::Font | GText::TextInfo::Align;
       tinfo.font = fontChooser->font ();
       oinfo.color = penColorBttn->color ();
+      oinfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style;
+      oinfo.style = Qt::SolidLine;
       if (textAlign[0]->isOn ())
          tinfo.align = GText::TextInfo::AlignLeft;
       else if (textAlign[1]->isOn ())

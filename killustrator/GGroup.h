@@ -36,6 +36,8 @@ public:
   GGroup (const GGroup& obj);
   ~GGroup ();
 
+  virtual void restoreState (GOState* state);
+
   void addObject (GObject* obj);
 
   virtual void draw (QPainter& p, bool withBasePoints = false,

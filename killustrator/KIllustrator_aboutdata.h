@@ -29,19 +29,21 @@
 #include <klocale.h>
 
 static const char* description=I18N_NOOP("KOffice Illustration Tool");
-static const char* version="0.8 beta2";
+static const char* version="0.8 beta3";
 
 KAboutData * newKIllustratorAboutData()
 {
-    KAboutData * aboutData = new KAboutData ("killustrator",
+  KAboutData * aboutData = new KAboutData ("killustrator",
                                              I18N_NOOP("KIllustrator"),
                                              version, description,
                                              KAboutData::License_GPL,
-                                             "(c) 1998-2001, Kai-Uwe Sattler", 0, 
+                                             "(c) 1998-2001, The KIllustrator Team", 0, 
 					     "http://www.koffice.org/killustrator/");
-    aboutData->addAuthor("Kai-Uwe Sattler", 0, "kus@iti.cs.uni-magdeburg.de");
-    aboutData->addAuthor("Igor Janssen", 0, "rm@linux.ru.net");
-    return aboutData;
+  aboutData->addAuthor("Kai-Uwe Sattler", 0, "kus@iti.cs.uni-magdeburg.de");
+  aboutData->addAuthor("Igor Janssen", 0, "rm@linux.ru.net");
+  aboutData->addAuthor("Alexander Neundrof", 0, "neundrof@kde.org");
+  aboutData->addAuthor("Rob Buis", 0, "rwlbuis@wanadoo.nl");
+  return aboutData;
 }
 
 #endif

@@ -539,8 +539,8 @@ void Canvas::updateRegion (const Rect& reg)
   // compute the clipping region
   QWMatrix m;
 
-  QRect clip = m.map (QRect (int (r.left ()*zoomFactor + m_relativePaperArea.left()), int (r.top ()*zoomFactor + m_relativePaperArea.top()),
-                             int (r.width ()), int (r.height ())));
+  QRect clip = m.map (QRect (int (r.left()*zoomFactor + m_relativePaperArea.left()), int (r.top()*zoomFactor + m_relativePaperArea.top()),
+                             int (r.width()*zoomFactor), int (r.height()*zoomFactor)));
 
   //kdDebug(0) << "("<< clip.left() << "," << clip.top() << ")-(" << clip.right() << "," << r.bottom() << ")" << endl;
 

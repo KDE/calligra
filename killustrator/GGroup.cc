@@ -29,6 +29,16 @@
 #include <iostream.h>
 #include "GDocument.h"
 
+void GGroup::restoreState (GOState* state) {
+  tMatrix = state->matrix;
+  iMatrix = tMatrix.invert ();
+  tmpMatrix = tMatrix;
+  //setFillInfo (state->fInfo);
+  //setOutlineInfo (state->oInfo);
+
+  updateRegion ();
+}
+
 GGroup::GGroup (GDocument *doc)
 :GObject(doc)
 {

@@ -621,7 +621,7 @@ void KIllustratorView::popupForSelection ()
       m_backOne->plug( objMenu );
       objMenu->insertSeparator ();
       m_properties->plug( objMenu );
-   };
+   }
    objMenu->popup( QCursor::pos () );
 }
 
@@ -633,14 +633,10 @@ void KIllustratorView::popupForRulers()
    if (!rulerMenu)
    {
       rulerMenu = new KPopupMenu();
-      kdDebug() << "create"<<endl;
       m_showGrid->plug(rulerMenu);
       m_showHelplines->plug(rulerMenu);
-      //m_setupGrid->plug(rulerMenu);
-      //m_setupHelplines->plug(rulerMenu);
       m_alignToGrid->plug(rulerMenu);
       m_alignToHelplines->plug(rulerMenu);
-      kdDebug() << "added"<<endl;
    }
    rulerMenu->popup( QCursor::pos () );
 }
@@ -651,7 +647,7 @@ void KIllustratorView::resetTools(Tool::ToolID id)
    {
       m_selectTool->setChecked( true );
       tcontroller->toolSelected( Tool::ToolSelect);
-   };
+   }
    //m_selectTool->setEnabled( true );
 }
 
@@ -1106,10 +1102,10 @@ bool KIllustratorView::eventFilter(QObject *o, QEvent *e)
       {
          m_selectTool->setChecked(true);
          slotSelectTool(true);
-      };
-   };
+      }
+   }
    return false;
-};
+}
 
 void KIllustratorView::slotPointTool(bool b)
 {
@@ -1130,8 +1126,8 @@ void KIllustratorView::toolActivated(Tool::ToolID id, bool b )
       {
          slotMoveNode( true );
          m_moveNode->setChecked(true);
-      };
-   };
+      }
+   }
 }
 
 void KIllustratorView::slotFreehandTool( bool b )
@@ -1351,7 +1347,7 @@ void KIllustratorView::createLayerPanel(bool calledFromAction)
    slotLayersPanel(false);
    if (calledFromAction)
       mLayerDockBase->makeVisible(calledFromAction);
-};
+}
 
 
 #include <KIllustrator_view.moc>

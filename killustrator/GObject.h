@@ -46,6 +46,7 @@
 
 #define RAD_FACTOR 180.0 / M_PI
 
+class GGroup;
 class GOState;
 class GLayer;
 class GCurve;
@@ -416,6 +417,7 @@ protected:
 
 class GOState {
     friend class GObject;
+    friend class GGroup;
 protected:
     GOState () : rcount (1) {}
 
