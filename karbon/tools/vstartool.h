@@ -33,6 +33,35 @@ class KIntSpinBox;
 class KComboBox;
 class KarbonPart;
 
+class VStarOptionsWidget : public QGroupBox
+{
+Q_OBJECT
+public:
+	VStarOptionsWidget( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
+
+	void refreshUnit();
+
+	int edges() const;
+	double innerRadius() const;
+	double outerRadius() const;
+	uint type() const;
+	void setEdges( int );
+	void setInnerRadius( double );
+	void setOuterRadius( double );
+
+public slots:
+	void typeChanged( int );
+
+private:
+	KoUnitDoubleSpinBox	*m_innerR;
+	KoUnitDoubleSpinBox	*m_outerR;
+	KIntSpinBox			*m_edges;
+	KComboBox			*m_type;
+	KarbonPart			*m_part;
+	QLabel				*m_innerRLabel;
+	QLabel				*m_outerRLabel;
+};
+
 class VStarTool : public VShapeTool
 {
 public:
@@ -50,31 +79,6 @@ public:
 	virtual void arrowKeyReleased( Qt::Key );
 
 private:
-	class VStarOptionsWidget : public QGroupBox
-	{
-	public:
-		VStarOptionsWidget( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
-
-		void refreshUnit();
-
-		int edges() const;
-		double innerRadius() const;
-		double outerRadius() const;
-		uint type() const;
-		void setEdges( int );
-		void setInnerRadius( double );
-		void setOuterRadius( double );
-
-	private:
-		KoUnitDoubleSpinBox	*m_innerR;
-		KoUnitDoubleSpinBox	*m_outerR;
-		KIntSpinBox			*m_edges;
-		KComboBox			*m_type;
-		KarbonPart			*m_part;
-		QLabel				*m_innerRLabel;
-		QLabel				*m_outerRLabel;
-	};
-
 	VStarOptionsWidget* m_optionsWidget;
 };
 

@@ -31,7 +31,7 @@
 #include "koUnitWidgets.h"
 
 
-VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
+VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
 {
 	new QLabel( i18n( "Orientation:" ), this );
@@ -41,6 +41,7 @@ VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* pa
 	m_type->insertItem( i18n( "Wheel" ), 2 );
 	m_type->insertItem( i18n( "Polygon" ), 3 );
 	m_type->insertItem( i18n( "Framed Star" ), 4 );
+	connect( m_type, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
 
 	// add width/height-input:
 	m_outerRLabel = new QLabel( i18n( "Outer radius:" ), this );
@@ -48,6 +49,8 @@ VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* pa
 
 	m_innerRLabel = new QLabel( i18n( "Inner radius:" ), this );
 	m_innerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 25.0, KoUnit::U_MM );
+
+	typeChanged( 0 );
 
 	refreshUnit();
 
@@ -60,52 +63,59 @@ VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* pa
 }
 
 void
-VStarTool::VStarOptionsWidget::refreshUnit()
+VStarOptionsWidget::refreshUnit()
 {
 	m_outerR->setUnit( m_part->unit() );
 	m_innerR->setUnit( m_part->unit() );
 }
 
 void
-VStarTool::VStarOptionsWidget::setEdges( int v )
+VStarOptionsWidget::setEdges( int v )
 {
 	m_edges->setValue( v );
 }
 
 void 
-VStarTool::VStarOptionsWidget::setInnerRadius( double v )
+VStarOptionsWidget::setInnerRadius( double v )
 {
 	m_innerR->changeValue( v );
 }
 
 void
-VStarTool::VStarOptionsWidget::setOuterRadius( double v )
+VStarOptionsWidget::setOuterRadius( double v )
 {
 	m_outerR->changeValue( v );
 }
 
 int
-VStarTool::VStarOptionsWidget::edges() const
+VStarOptionsWidget::edges() const
 {
 	return m_edges->value();
 }
 
 double 
-VStarTool::VStarOptionsWidget::innerRadius() const
+VStarOptionsWidget::innerRadius() const
 {
 	return m_innerR->value();
 }
 
 double
-VStarTool::VStarOptionsWidget::outerRadius() const
+VStarOptionsWidget::outerRadius() const
 {
 	return m_outerR->value();
 }
 
 uint
-VStarTool::VStarOptionsWidget::type() const
+VStarOptionsWidget::type() const
 {
 	return m_type->currentItem();
+}
+
+void
+VStarOptionsWidget::typeChanged( int type )
+{
+	kdDebug() << "type : " << type << endl;
+	m_innerR->setEnabled( type == VStar::star_outline || type == VStar::framed_star );
 }
 
 VStarTool::VStarTool( KarbonView* view )
@@ -171,3 +181,4 @@ VStarTool::shape( bool interactive ) const
 				m_d2, (VStar::VStarType)m_optionsWidget->type() );
 }
 
+#include "vstartool.moc"
