@@ -61,7 +61,7 @@ public:
 
     /**
      * Start the XML document.
-     * This writes out the <?xml?> tag with utf8 encoding, and the DOCTYPE.
+     * This writes out the \<?xml?\> tag with utf8 encoding, and the DOCTYPE.
      * @param rootElemName the name of the root element, used in the DOCTYPE tag.
      * @param publicId the public identifier, e.g. "-//OpenOffice.org//DTD OfficeDocument 1.0//EN"
      * @param systemId the system identifier, e.g. "office.dtd" or a full URL to it.
@@ -135,7 +135,7 @@ public:
     /**
      * Adds a text node as a child of the current element.
      * This is appends the litteral content of @p str to the contents of the element.
-     * E.g. addTextNode( "foo" ) inside a <p> element gives <p>foo</p>,
+     * E.g. addTextNode( "foo" ) inside a \<p\> element gives \<p\>foo\</p\>,
      * and startElement( "b" ); endElement( "b" ); addTextNode( "foo" ) gives <p><b/>foo</p>
      */
     void addTextNode( const char* cstr );
@@ -154,8 +154,8 @@ private:
         Tag( const char* t = 0 ) : tagName( t ), hasChildren( false ),
                                    openingTagClosed( false ), lastChildIsText( false ) {}
         const char* tagName;
-        bool hasChildren; // element or text children
-        bool openingTagClosed; // true once the '>' in <tag a="b"> is written out
+        bool hasChildren; ///< element or text children
+        bool openingTagClosed; ///< true once the '\>' in \<tag a="b"\> is written out
         bool lastChildIsText;
     };
 
