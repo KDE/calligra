@@ -420,7 +420,7 @@ protected:
     void _repaint( const QRect &r );
     void _repaint( KPObject *o );
 
-    void printPage( QPainter*, int pageNum ) const;
+    void printPage( QPainter*, int pageNum );
     void doObjEffects();
     void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );
 

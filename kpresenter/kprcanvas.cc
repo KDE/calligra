@@ -3426,7 +3426,10 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom, bool forceRea
     //draw sticky object
     //the numbers for the sticky page have to be recalculated
     KPrPage* saveActivePage = m_activePage;
-    setActivePage(m_view->kPresenterDoc()->pageList().at(currPresPage-1));
+    KPresenterDoc *doc = m_view->kPresenterDoc();
+    doc->displayActivePage( doc->pageList().at( currPresPage-1 ) );
+    setActivePage(doc->pageList().at( currPresPage - 1 ) );
+    //setActivePage(m_view->kPresenterDoc()->pageList().at(currPresPage-1));
     drawAllObjectsInPage( &p, stickyPage()->objectList() );
     setActivePage( saveActivePage );
 
@@ -3462,14 +3465,18 @@ void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix ) const
     p.end();
 }
 
-void KPrCanvas::printPage( QPainter* painter, int pageNum ) const
+void KPrCanvas::printPage( QPainter* painter, int pageNum ) 
 {
     //kdDebug(33001) << "KPrCanvas::printPage" << endl;
-    KPrPage* page = m_view->kPresenterDoc()->pageList().at(pageNum);
-    QRect rect = page->getZoomPageRect();
-// TODO set current page to "page" ?
+    KPrPage* saveActivePage = m_activePage;
+    KPresenterDoc *doc = m_view->kPresenterDoc();
+    KPrPage* page = doc->pageList().at( pageNum );
+    QRect rect = page->getZoomPageRect();  
+    doc->displayActivePage( page );
+    setActivePage( page );
     drawBackground( painter, rect );
     drawObjects( painter, rect, false, SM_NONE, false/*no specific effects*/ );
+    setActivePage( saveActivePage );
 }
 
 void KPrCanvas::doObjEffects()
