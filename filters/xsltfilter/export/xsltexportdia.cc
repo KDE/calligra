@@ -246,8 +246,7 @@ void XSLTExportDia::okSlot()
         temp.close();
 
 	kdDebug() << stylesheet << endl;
-	XSLTProc* xsltproc = new XSLTProc(temp.name(), QFile::encodeName( _fileOut ),
-                                          stylesheet.latin1());
+	XSLTProc* xsltproc = new XSLTProc(temp.name(), _fileOut, stylesheet);
 	xsltproc->parse();
 
 	delete xsltproc;
