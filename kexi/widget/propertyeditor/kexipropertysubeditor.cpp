@@ -80,6 +80,9 @@ KexiPropertySubEditor::setWidget(QWidget *w)
 	m_childWidget = w;
 	setFocusProxy(m_childWidget);
 	m_childWidget->installEventFilter(this);
+//	if (m_childWidget->inherits("QFrame")) {
+//		static_cast<QFrame*>(m_childWidget)->setFrameStyle( QFrame::Box | QFrame::Plain );
+//	}
 }
 
 QVariant

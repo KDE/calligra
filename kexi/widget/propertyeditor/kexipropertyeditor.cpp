@@ -64,7 +64,7 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 	setShowSortIndicator(false);
 	setTooltipColumn(0);
 	setSorting(0);
-//	setItemMargin(3);
+	setItemMargin(3);
 	header()->setMovingEnabled( false );
 }
 
