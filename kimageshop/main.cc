@@ -20,12 +20,11 @@
 #include <dcopclient.h>
 
 #include <klocale.h>
-#include <kaboutdata.h>
 #include <kcmdlineargs.h>
-
 #include <koApplication.h>
 
-static const char *description=I18N_NOOP("A Koffice Bitmapped Image & Painting Program");
+#include "core/kis_aboutdata.h"
+
 
 static const KCmdLineOptions options[] =
 {
@@ -35,15 +34,7 @@ static const KCmdLineOptions options[] =
 
 int main( int argc, char **argv )
 {
-    KAboutData aboutData( "krayon", I18N_NOOP("Krayon"),
-        "0.0.1", description, KAboutData::License_GPL, "(c) 1999, Michael Koch",
-	0, "http://koffice.kde.org/kimageshop/" );
-    aboutData.addAuthor("Matthias Elter", 0, "me@kde.org");
-    aboutData.addAuthor("Carsten Pfeiffer", 0, "carpdjih@cetus.zrz.tu-berlin.de");
-    aboutData.addAuthor("Michael Koch", 0, "koch@kde.org");
-    aboutData.addAuthor("John Califf",0, "jcaliff@compuzone.net"); 
-    aboutData.addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
-    KCmdLineArgs::init( argc, argv, &aboutData );
+    KCmdLineArgs::init( argc, argv, newKrayonAboutData() );
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;
@@ -51,8 +42,8 @@ int main( int argc, char **argv )
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "krayon" );
 
-    app.start();
+    if (!app.start())
+        return 1;
     app.exec();
-
     return 0;
 }

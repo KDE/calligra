@@ -22,10 +22,10 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstddirs.h>
-#include <kaboutdata.h>
 #include <kiconloader.h>
 
 #include "kis_factory.h"
+#include "kis_aboutdata.h"
 #include "kis_pluginserver.h"
 #include "kis_resourceserver.h"
 #include "kis_doc.h"
@@ -47,24 +47,16 @@ KisResourceServer* KisFactory::s_rserver = 0;
 KisFactory::KisFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
-    s_aboutData = new KAboutData( "krayon",
-	I18N_NOOP("Krayon"),
-	"0.1.0",
-	I18N_NOOP("KOffice image manipulation application."),
-	KAboutData::License_GPL,
-	"(c) 1999-2000 The Krayon team.",
-	"",
-	"http://koffice.kde.org",
-	"submit@bugs.kde.org");
+    s_aboutData = newKrayonAboutData();
 
     (void)global();
     s_pserver = new KisPluginServer;
     s_rserver = new KisResourceServer;
 
-    QString FileName = locateLocal("kis", "krayon.log", s_global);  
+    QString FileName = locateLocal("kis", "krayon.log", s_global);
     const char *latinFileName = FileName.latin1();
     KisLog::setLogFile(latinFileName);
-  
+
     log() << "Starting Krayon" << endl;
 }
 
@@ -84,13 +76,13 @@ KisFactory::~KisFactory()
     Create the document
 */
 
-KParts::Part* KisFactory::createPart( QWidget *parentWidget, 
-    const char *widgetName, QObject* parent, 
+KParts::Part* KisFactory::createPart( QWidget *parentWidget,
+    const char *widgetName, QObject* parent,
     const char* name, const char* classname, const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-    KisDoc *doc = new KisDoc( parentWidget, 
+    KisDoc *doc = new KisDoc( parentWidget,
         widgetName, parent, name, !bWantKoDocument );
 
     if ( !bWantKoDocument )

@@ -1,7 +1,7 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
-lib_LTLIBRARIES = libkrayonpart.la krayon.la
 ## The part
+kde_module_LTLIBRARIES = libkrayonpart.la
 libkrayonpart_la_SOURCES = dummy.cc
 
 libkrayonpart_la_LDFLAGS = $(KDE_PLUGIN)
@@ -10,9 +10,10 @@ libkrayonpart_la_LIBADD = core/libkiscore.la ui/libkisui.la tools/libkistools.la
 METASOURCES = AUTO
 
 ## The kdeinit loadable module
+lib_LTLIBRARIES = krayon.la
 krayon_la_SOURCES = main.cc
 krayon_la_LDFLAGS = $(all_libraries) -avoid-version -module
-krayon_la_LIBADD = libkrayonpart.la
+krayon_la_LIBADD = ../lib/kofficecore/libkofficecore.la
 
 ## The executable
 bin_PROGRAMS = krayon
@@ -35,5 +36,4 @@ rc_DATA = krayon.rc
 SUBDIRS = core tools ui . dtd plugins data pics
 
 messages: rc.cpp
-	$(XGETTEXT) rc.cpp *.cc */*.cc -o $(podir)/krayon.pot
-
+	$(XGETTEXT) rc.cpp *.cc */*.cc core/kis_aboutdata.h -o $(podir)/krayon.pot
