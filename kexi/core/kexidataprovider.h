@@ -9,7 +9,7 @@
 class KexiDBRecord;
 
 
-#define KEXIDATAPROVIDER(obj) (static_cast<KexDataProvider*>(obj->qt_cast("KexiDataProvider")))
+#define KEXIDATAPROVIDER(obj) ((obj)?static_cast<KexiDataProvider*>((obj)->qt_cast("KexiDataProvider")):0)
 
 //Interface KexiDataProvider
 class KexiDataProvider

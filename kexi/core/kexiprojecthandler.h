@@ -81,7 +81,9 @@ class KexiProjectHandler : public QObject
 		KexiProject *kexiProject();
 
 		static QString localIdentifier(const QString &globalIdentifier);
+		static QString handlerNameFromGlobalIdentifier(const QString &globalIdentifier);
 		QString globalIdentifier(const QString &localIdentifier);
+	
 	signals:
 		void itemListChanged(KexiProjectHandler*);
 

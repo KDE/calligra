@@ -103,4 +103,12 @@ QString KexiProjectHandler::globalIdentifier(const QString &localIdentifier)
 	return mime()+"/"+localIdentifier;
 }
 
+QString KexiProjectHandler::handlerNameFromGlobalIdentifier(const QString &globalIdentifier)
+{
+	if (!globalIdentifier.startsWith("kexi/")) return QString();
+	QString tmp=globalIdentifier.right(globalIdentifier.length()-globalIdentifier.find("/")-1);
+	return "kexi/"+tmp.left(tmp.find("/"));
+
+}
+
 #include "kexiprojecthandler.moc"
