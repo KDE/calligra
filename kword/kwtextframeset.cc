@@ -56,7 +56,9 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     m_availableHeight = -1;
     m_origFontSizes.setAutoDelete(true);
     textdoc = new KWTextDocument( this, 0, new KWTextFormatCollection( _doc ) );
-    textdoc->setFormatter( new QTextFormatterBreakWords );
+    QTextFormatter * formatter = new QTextFormatterBreakWords;
+    formatter->setAllowBreakInWords( true ); // Necessary for lines without a single space
+    textdoc->setFormatter( formatter );
     textdoc->setFlow( this );
     textdoc->setVerticalBreak( true );              // get QTextFlow methods to be called
     textdoc->setAddMargins( true );                 // top margin and bottom are added, not max'ed

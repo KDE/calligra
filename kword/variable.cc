@@ -105,9 +105,9 @@ void KWVariable::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch
     int bl, _y;
     KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
     int index = parag->findCustomItem( this );
-    kdDebug() << "KWVariable::draw index=" << index << " x=" << x << " y=" << y << endl;
+    //kdDebug() << "KWVariable::draw index=" << index << " x=" << x << " y=" << y << endl;
     parag->lineHeightOfChar( index, &bl, &_y );
-    kdDebug() << "KWVariable::draw bl=" << bl << " _y=" << _y << endl;
+    //kdDebug() << "KWVariable::draw bl=" << bl << " _y=" << _y << endl;
     p->drawText( x, y /*+ _y*/ + bl, text() );
     p->restore();
 }
