@@ -62,6 +62,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_maxlen( 0 ),
       m_minCompletionWordLength( 5 ),
       m_nbMaxCompletionWord( 500 ),
+      m_addCompletionWord(true),
       m_ignoreUpperCase(false)
 {
     m_listCompletion=new KCompletion();
@@ -119,6 +120,7 @@ void KoAutoFormat::readConfig()
     m_completionAppendSpace = config.readBoolEntry( "CompletionAppendSpace", false );
     m_minCompletionWordLength = config.readUnsignedNumEntry( "CompletionMinWordLength", 5 );
     m_nbMaxCompletionWord = config.readUnsignedNumEntry( "NbMaxCompletionWord", 100 );
+    m_addCompletionWord = config.readBoolEntry( "AddCompletionWord", true );
 
 
     Q_ASSERT( m_entries.isEmpty() ); // readConfig is only called once...
@@ -214,6 +216,7 @@ void KoAutoFormat::saveConfig()
     config.writeEntry( "CompletionAppendSpace", m_completionAppendSpace );
     config.writeEntry( "CompletionMinWordLength", m_minCompletionWordLength);
     config.writeEntry( "NbMaxCompletionWord", m_nbMaxCompletionWord);
+    config.writeEntry( "AddCompletionWord", m_addCompletionWord );
 
     config.setGroup( "AutoFormatEntries" );
     KoAutoFormatEntryMap::Iterator it = m_entries.begin();
@@ -393,7 +396,8 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
     if ( ( ch.isSpace() || ch.isPunct() ) && index > 0 )
     {
         QString lastWord = getLastWord(parag, index);
-        if( m_listCompletion->items().count() < m_nbMaxCompletionWord && lastWord.length()>= m_minCompletionWordLength )
+        if( m_addCompletionWord && m_listCompletion->items().count() < m_nbMaxCompletionWord
+            && lastWord.length()>= m_minCompletionWordLength )
             m_listCompletion->addItem( lastWord );
 
         detectStartOfLink(lastWord);
@@ -1000,6 +1004,11 @@ void KoAutoFormat::configNbMaxCompletionWord( uint val )
     m_nbMaxCompletionWord = val;
 }
 
+
+void KoAutoFormat::configAddCompletionWord( bool b )
+{
+    m_addCompletionWord= b;
+}
 
 bool KoAutoFormat::isUpper( const QChar &c )
 {

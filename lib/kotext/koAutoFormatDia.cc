@@ -405,6 +405,11 @@ void KoAutoFormatDia::setupTab5()
     cbAllowAutoCompletion->resize( cbAllowAutoCompletion->sizeHint() );
     cbAllowAutoCompletion->setChecked( m_autoFormat.getConfigAutoCompletion());
 
+    cbAddCompletionWord = new QCheckBox( tab5 );
+    cbAddCompletionWord->setText( i18n( "Add Completion word" ) );
+    cbAddCompletionWord->resize( cbAddCompletionWord->sizeHint() );
+    cbAddCompletionWord->setChecked( m_autoFormat.getConfigAddCompletionWord());
+
     m_listCompletion = new QListBox( tab5 );
     QStringList list=m_autoFormat.listCompletion();
     m_listCompletion->insertStringList(list);
@@ -629,6 +634,7 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->configAppendSpace( cbAppendSpace->isChecked() );
     m_docAutoFormat->configMinWordLength( m_minWordLength->value() );
     m_docAutoFormat->configNbMaxCompletionWord( m_maxNbWordCompletion->value () );
+    m_docAutoFormat->configAddCompletionWord( cbAddCompletionWord->isChecked());
 
     // Save to config file
     m_docAutoFormat->saveConfig();

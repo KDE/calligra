@@ -105,7 +105,7 @@ protected:
     QWidget *tab5;
 
     QCheckBox *cbTypographicSimpleQuotes, *cbTypographicDoubleQuotes,*cbUpperCase, *cbUpperUpper, *cbDetectUrl,
-        *cbBackgroundSpellCheck, *cbAdvancedAutoCorrection,*cbIgnoreDoubleSpace , *cbRemoveSpaceBeginEndLine, *cbUseBulletStyle, *cbAutoChangeFormat, *cbAutoReplaceNumber, *cbUseNumberStyle, *cbAllowAutoCompletion, *cbAppendSpace;
+        *cbBackgroundSpellCheck, *cbAdvancedAutoCorrection,*cbIgnoreDoubleSpace , *cbRemoveSpaceBeginEndLine, *cbUseBulletStyle, *cbAutoChangeFormat, *cbAutoReplaceNumber, *cbUseNumberStyle, *cbAllowAutoCompletion, *cbAppendSpace, *cbAddCompletionWord;
     QPushButton *pbDoubleQuote1, *pbDoubleQuote2, /**pbEdit,*/ *pbRemove, *pbAdd, *pbDoubleDefault,
                 *pbSpecialChar1, *pbSpecialChar2, *pbBulletStyle, *pbDefaultBulletStyle;
 

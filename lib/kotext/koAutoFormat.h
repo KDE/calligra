@@ -130,6 +130,8 @@ public:
 
     void configNbMaxCompletionWord( uint val );
 
+    void configAddCompletionWord( bool b );
+
     TypographicQuotes getConfigTypographicSimpleQuotes() const
     { return m_typographicSimpleQuotes; }
 
@@ -177,6 +179,9 @@ public:
 
     uint getConfigNbMaxCompletionWord() const
     { return m_nbMaxCompletionWord; }
+
+    bool getConfigAddCompletionWord() const
+    { return m_addCompletionWord; }
 
     // Add/remove entries, called by the dialog
     void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
@@ -256,6 +261,8 @@ private:
     bool m_useAutoNumberStyle;
     bool m_autoCompletion;
     bool m_completionAppendSpace;
+    bool m_addCompletionWord;
+
     QChar bulletStyle;
 
     TypographicQuotes m_typographicSimpleQuotes;
