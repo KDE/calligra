@@ -219,30 +219,41 @@ public:
       footnotePara(other.footnotePara) {}
 public:
     /**
-     * Set parameters of a <LINK> element
+     * Set parameters of a LINK element
      */
     void setLink(const QString& linkName, const QString& hrefName);
     QString getLinkName(void) const; // Name of link (attribute "linkName" of <LINK>)
     QString getHrefName(void) const; // Reference of link (attribute "hrefName" of <LINK>)
     /**
-     * Set parameters of a <PGNUM> element
+     * Set parameters of a PGNUM element
      */
     void setPgNum(const QString& subtype, const QString& value);
     bool isPageNumber(void) const;
     bool isPageCount(void) const;
-    /*
-     * Set parameters of a <FIELD> element
+    /**
+     * Set parameters of a FIELD element
      */
     void setField(const QString& subtype, const QString& value);
     QString getFieldName(void) const;
     QString getFieldValue(void) const;
-    /*
-     * Set parameters of a <FOOTNOTE> element
+    /**
+     * Set parameters of a FOOTNOTE element
      */
     void setFootnote(bool automatic, const QString& value, QValueList<ParaData>* para);
     bool getFootnoteAuto(void) const;
     QString getFootnoteValue(void) const;
     QValueList<ParaData>* getFootnotePara(void) const;
+
+    /**
+     * Set generic variable data
+     * @since 1.3.1, 1.4
+     */
+    void setGenericData( const QString& key, const QString& data );
+    /**
+     * Get generic variable data
+     * @since 1.3.1, 1.4
+     */
+    QString getGenericData( const QString& key ) const;
 
     QString m_key;
     QString m_text;
