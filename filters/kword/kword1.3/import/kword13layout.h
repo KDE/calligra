@@ -7,6 +7,8 @@ class QTextStream;
 #include <qstring.h>
 #include <qmap.h>
 
+#include "kword13formatone.h"
+
 /**
  * Layout or style
  */
@@ -20,6 +22,7 @@ public:
     void xmldump( QTextStream& iostream );
 
 public:
+    KWord13FormatOne m_format; ///< Character format properties
     QMap<QString,QString> m_layoutProperties;
     bool m_outline;
     QString m_name; ///< Name of the style (either the used one or the one currently being defined)

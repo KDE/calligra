@@ -23,5 +23,7 @@ void KWord13Layout::xmldump( QTextStream& iostream )
         iostream << "     <param key=\"" << it.key() << "\" data=\"" << EscapeXmlDump( it.data() ) << "\"/>\n";
     }
     
+    m_format.xmldump( iostream );
+    
     iostream << "    </layout>\n";
 }
