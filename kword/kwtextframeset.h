@@ -224,8 +224,10 @@ public:
     /** reimplemented from KoTextParag, adjusts y and returns the shift. */
     virtual int adjustFlow( int y, int w, int h );
 
-    /** Called by KWTextFrameSet. Implements page breaking, breaking around frames, etc. */
+    /** Called by KWTextFormatter. Implements page breaking, breaking around frames, etc. */
     int formatVertically( KoTextParag *parag, const QRect& rect );
+    /** Called by KWTextFormatter::postFormat() */
+    void fixParagWidth( KWTextParag* parag );
 
     /** Make sure this paragraph is formatted
      * If formatting happens, the afterFormatting signal will only be emitted if emitAfterFormatting is true.
@@ -306,7 +308,6 @@ protected:
     void slotAfterFormattingTooMuchSpace( int bottom, bool* abort );
     void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakBegin, int* breakEnd, KoTextParag* parag );
     bool checkVerticalBreak( int & yp, int & h, KoTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
-    void fixParagWidth( KWTextParag* parag );
     void frameResized( KWFrame *theFrame, bool invalidateLayout );
     double footerHeaderSizeMax( KWFrame *theFrame );
     double footNoteSize( KWFrame *theFrame );

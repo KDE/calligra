@@ -81,12 +81,13 @@ public:
 
     virtual void join( KoTextParag *parag );
 protected:
-    virtual void drawFormattingChars( QPainter &painter, const QString &s, int start, int len,
-                                      int startX, int lastY, int baseLine, int h, // in LU
-                                      int startX_pix, int lastY_pix, int baseLine_pix, int bw, int h_pix, // in pixels
+    virtual void drawFormattingChars( QPainter &painter, int start, int len,
+                                      int lastY_pix, int baseLine_pix, int h_pix, // in pixels
                                       bool drawSelections,
-                                      KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
-                                      const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line );
+                                      KoTextFormat *lastFormat, const QMemArray<int> &selectionStarts,
+                                      const QMemArray<int> &selectionEnds, const QColorGroup &cg,
+                                      bool rightToLeft, int line, KoZoomHandler* zh,
+                                      int whichFormattingChars );
 
 };
 

@@ -82,6 +82,10 @@ public:
     {
         return m_textfs->formatVertically( parag, parag->rect() );
     }
+    virtual void postFormat( KoTextParag* parag )
+    {
+        m_textfs->fixParagWidth( static_cast<KWTextParag *>( parag ) );
+    }
 private:
     KWTextFrameSet *m_textfs;
 };
@@ -1240,7 +1244,6 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
     KWTextParag *parag = static_cast<KWTextParag *>( _parag );
     if ( !m_doc->viewMode()->shouldFormatVertically() )
     {
-        fixParagWidth( parag );
         return 0;
     }
 
@@ -1371,9 +1374,6 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
 
     if ( parag )
     {
-        // We also use verticalBreak as a hook into the formatting algo, to fix the parag width if necessary.
-        fixParagWidth( parag );
-
         if ( hp != oldHeight )
             parag->setHeight( hp );
         if ( yp != oldY ) {
@@ -1411,11 +1411,8 @@ void KWTextFrameSet::fixParagWidth( KWTextParag* parag )
             int width = refFontMetrics.width( str );
             parag->setWidth( parag->rect().width() + width ); // TODO QMIN( textDocument()->width(), ... ) ?
         }
-        else if ( parag->lineStartList().count() == 1 ) // don't use lines() here, parag not formatted yet
-        {
-            KoTextFormat * lastFormat = parag->at( parag->length() - 1 )->format();
-            parag->setWidth( parag->rect().width() + lastFormat->width('x') );
-        }
+        else // default KoTextFormatter implementation
+            parag->fixParagWidth( true );
     }
 }
 
