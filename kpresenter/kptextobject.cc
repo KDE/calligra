@@ -551,7 +551,6 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
 
 QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFormat , QDomDocument &doc)
 {
-    kdDebug()<<" QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFormat , QDomDocument &doc)**************\n";
     QDomElement element=doc.createElement(tagTEXT);
 
     saveFormat ( element, lastFormat );
@@ -2141,7 +2140,6 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
         }
         else
         {
-            kdDebug()<<" ebtre !!!!!!!!!!!!! :"<<tmpText<<endl;
             if ( !lastFormat || c.format()->key() != lastFormat->key() ) {
                 if ( lastFormat )
                     paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
