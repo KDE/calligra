@@ -9,15 +9,3 @@ if test -z "$LIBFREETYPE_LIBS"; then
   echo ""
   all_tests=bad
 fi
-
-if test "$all_tests" = "bad"; then
-  echo ""
-  echo "Please remove the file config.cache after installing any libraries"
-  echo "so that configure will find them next time."
-  echo ""
-else
-  echo ""
-  echo "Good - your configure finished. Start make now"
-  echo ""
-fi
-
