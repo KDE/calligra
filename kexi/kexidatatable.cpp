@@ -53,11 +53,11 @@ KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name)
 	m_tableView->m_editOnDubleClick = true;
 	m_statusBar = new QStatusBar(this);
 
-	QLabel *lSearch = new QLabel("Search: ", this);
+	QLabel *lSearch = new QLabel(i18n("Search:"), this);
 	m_search = new QLineEdit("", this);
 	connect(m_search, SIGNAL(textChanged(const QString &)), this, SLOT(slotSearchChanged(const QString &)));
 
-	setCaption(i18n(caption + " - table"));
+	setCaption(i18n("%1 - Table").arg(caption));
 
 	g->addWidget(lSearch,			0,	0);
 	g->addWidget(m_search,			0,	1);

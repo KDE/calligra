@@ -58,7 +58,7 @@ KexiAlterTable::KexiAlterTable(QWidget *parent, QString table, const char *name)
 	m_view->addColumn(i18n("Auto Increment"), QVariant::Bool, true);
 
 	connect(m_view, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
-	setCaption(i18n(m_table + " - Table Editor"));
+	setCaption(i18n("%1 - Table Editor").arg(m_table));
 	registerAs(DocumentWindow);
 	kdDebug() << "Ready" << endl;
 	initTable();
