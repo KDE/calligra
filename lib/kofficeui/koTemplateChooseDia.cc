@@ -222,6 +222,9 @@ void KoTemplateChooseDia::currentChanged(const QString &)
 /*================================================================*/
 void KoTemplateChooseDia::chosen()
 {
+	
+    ok->setEnabled(false);	
+
 	if (onlyTemplates || !onlyTemplates && rbTemplates->isChecked())
     {
 		returnType = Template;
