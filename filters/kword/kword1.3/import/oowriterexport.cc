@@ -43,7 +43,7 @@
 
 class OOWRITERExportFactory : KGenericFactory<OOWRITERExport, KoFilter>
 {
-public: // ### TODO: load correct .po file
+public:
     OOWRITERExportFactory(void) : KGenericFactory<OOWRITERExport, KoFilter> ("kwordkword1dot3import")
     {}
 
