@@ -81,7 +81,7 @@ QDomElement KSpreadLocale::save( QDomDocument& doc ) const
     if ( _positivePrefixCurrencySymbol )
 	element.setAttribute( "positivePrefixCurrencySymbol", "True" );
     else
-	element.setAttribute( "positivePrefixCurrencySymbol", "True" );
+	element.setAttribute( "positivePrefixCurrencySymbol", "False" );
     if ( _negativePrefixCurrencySymbol )
 	element.setAttribute( "negativePrefixCurrencySymbol", "True" );
     else
