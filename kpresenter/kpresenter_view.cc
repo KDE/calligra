@@ -208,13 +208,14 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     splitter = 0;
     pageBase = 0;
     sticky = FALSE;
+    page = 0L;
 
     m_pKPresenterDoc = _doc;
 
     createGUI();
 
     setKeyCompression( true );
-    
+
     connect(this, SIGNAL(embeddImage(const QString &)), SLOT(insertPicture(const QString &)));
 }
 
@@ -650,7 +651,7 @@ void KPresenterView::toolsObject()
 
     KoDocumentEntry pe = KoPartSelectDia::selectPart();
     if ( pe.isEmpty() ) {
-	page->setToolEditMode( TEM_MOUSE );	
+	page->setToolEditMode( TEM_MOUSE );
 	return;
     }
 
@@ -1628,8 +1629,6 @@ void KPresenterView::createGUI()
         //splitter->setResizeMode( sidebar, QSplitter::FollowSizeHint );
         //splitter->setResizeMode( pageBase, QSplitter::Stretch );
         splitter->setResizeMode( sidebar, QSplitter::KeepSize );
-        sidebar->setCurrentItem( sidebar->firstChild() );
-        sidebar->setSelected( sidebar->firstChild(), TRUE );
     }
 
     // setup page
@@ -1657,6 +1656,12 @@ void KPresenterView::createGUI()
 
     pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
     pgPrev->setEnabled( currPg > 0 );
+
+    if ( sidebar )
+    {
+        sidebar->setCurrentItem( sidebar->firstChild() );
+        sidebar->setSelected( sidebar->firstChild(), TRUE );
+    }
 }
 
 /*=============================================================*/
@@ -2416,7 +2421,7 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
 
     file = url.path();
 
-    if ( !file.isEmpty() ) 
+    if ( !file.isEmpty() )
       m_pKPresenterDoc->changePicture( file, xOffset, yOffset );
 }
 
@@ -2735,7 +2740,7 @@ void KPresenterView::setRanges()
 /*==============================================================*/
 void KPresenterView::skipToPage( int num )
 {
-    if ( num < 0 || num > static_cast<int>( m_pKPresenterDoc->getPageNums() ) - 1 || m_pKPresenterDoc->isEmbedded() )
+    if ( num < 0 || num > static_cast<int>( m_pKPresenterDoc->getPageNums() ) - 1 || m_pKPresenterDoc->isEmbedded() || !page )
 	return;
 
     page->exitEditMode();
