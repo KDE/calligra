@@ -260,6 +260,11 @@ void KoAutoFormatDia::setupTab1()
     cbUseNumberStyle->resize( cbUseNumberStyle->sizeHint() );
     ( void )new QWidget( tab1 );
 
+    cbAutoSuperScript = new QCheckBox( tab1 );
+    cbAutoSuperScript->setText( i18n("Replace 1st... with 1^st"));
+    cbAutoSuperScript->resize( cbAutoSuperScript->sizeHint() );
+    ( void )new QWidget( tab1 );
+
     cbUseBulletStyle=new QCheckBox( tab1 );
     cbUseBulletStyle->setText( i18n( "Use lists-formatting for bulletted paragraphs" ) );
     QWhatsThis::add( cbUseBulletStyle, i18n("When typing '*' or '-' in front of a paragraph, automatically convert the paragraph to use that list-style. Using a list-style formatting means that a correct bullet is used to draw the list.") );
@@ -298,6 +303,8 @@ void KoAutoFormatDia::initTab1()
     cbUseNumberStyle->setChecked( m_autoFormat.getConfigAutoNumberStyle());
     cbUseBulletStyle->setChecked( m_autoFormat.getConfigUseBulletSyle());
     pbBulletStyle->setText( bulletStyle );
+
+    cbAutoSuperScript->setChecked( m_autoFormat.getConfigAutoSuperScript());
 }
 
 void KoAutoFormatDia::setupTab2()
@@ -649,6 +656,8 @@ bool KoAutoFormatDia::applyConfig()
 
     m_docAutoFormat->configAutoReplaceNumber( cbAutoReplaceNumber->isChecked());
     m_docAutoFormat->configAutoNumberStyle(cbUseNumberStyle->isChecked());
+
+    m_docAutoFormat->configAutoSuperScript ( cbAutoSuperScript->isChecked() );
 
     // Second tab
     m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );

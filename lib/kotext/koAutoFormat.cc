@@ -64,11 +64,13 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_includeAbbreviation(false),
       m_ignoreUpperCase(false),
       m_bAutoFormatActive(true),
+      m_bAutoSuperScript( false ),
       m_bulletStyle(),
       m_typographicSimpleQuotes(),
       m_typographicDoubleQuotes(),
       m_listCompletion( new KCompletion ),
       m_entries(),
+      m_superScriptEntries(),
       m_upperCaseExceptions(),
       m_twoUpperLetterException(),
       m_maxFindLength( 0 ),
@@ -101,11 +103,13 @@ KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
       m_includeAbbreviation( format.m_includeAbbreviation ),
       m_ignoreUpperCase( format.m_ignoreUpperCase ),
       m_bAutoFormatActive( format.m_bAutoFormatActive ),
+      m_bAutoSuperScript( format.m_bAutoSuperScript ),
       m_bulletStyle( format.m_bulletStyle ),
       m_typographicSimpleQuotes( format.m_typographicSimpleQuotes ),
       m_typographicDoubleQuotes( format.m_typographicDoubleQuotes ),
       m_listCompletion( 0L ), // don't copy it!
       m_entries( format.m_entries ),
+      m_superScriptEntries ( format.m_superScriptEntries ),
       m_upperCaseExceptions( format.m_upperCaseExceptions ),
       m_twoUpperLetterException( format.m_twoUpperLetterException ),
       m_maxFindLength( format.m_maxFindLength ),
@@ -175,6 +179,7 @@ void KoAutoFormat::readConfig()
                                   && !begin.isEmpty()
                                   && !end.isEmpty();
 
+    m_bAutoSuperScript = config.readBoolEntry( "AutoSuperScript", false );
 
     config.setGroup( "completion" );
     m_completion = config.readBoolEntry( "completion", false );
@@ -238,6 +243,18 @@ void KoAutoFormat::readConfig()
               m_twoUpperLetterException+= nl.item(i).toElement().attribute("exception");
           }
       }
+
+      QDomElement superScript = de.namedItem( "SuperScript" ).toElement();
+      if(!superScript.isNull())
+      {
+          QDomNodeList nl = superScript.childNodes();
+          for(uint i = 0; i < nl.count() ; i++) {
+              //bug in qmap we overwrite = false doesn't work
+              //so we can't add multiple "othernb"
+              m_superScriptEntries.insert( nl.item(i).toElement().attribute("find"), KoAutoFormatEntry(nl.item(i).toElement().attribute("super")),FALSE );
+          }
+      }
+
     }
     xmlFile.close();
     buildMaxLen();
@@ -277,12 +294,16 @@ void KoAutoFormat::saveConfig()
 
     config.writeEntry( "AutoNumberStyle", m_useAutoNumberStyle );
 
+    config.writeEntry( "AutoSuperScript", m_bAutoSuperScript );
+
     config.setGroup( "completion" );
     config.writeEntry( "completion", m_completion );
     config.writeEntry( "CompletionAppendSpace", m_completionAppendSpace );
     config.writeEntry( "CompletionMinWordLength", m_minCompletionWordLength);
     config.writeEntry( "NbMaxCompletionWord", m_nbMaxCompletionWord);
     config.writeEntry( "AddCompletionWord", m_addCompletionWord );
+
+
 
     config.setGroup( "AutoFormatEntries" );
     KoAutoFormatEntryMap::Iterator it = m_entries.begin();
@@ -327,6 +348,19 @@ void KoAutoFormat::saveConfig()
 	twoUpper.appendChild(data);
     }
     begin.appendChild(twoUpper);
+
+    QDomElement super;
+    super = doc.createElement("SuperScript");
+    KoAutoFormatEntryMap::Iterator it2 = m_superScriptEntries.begin();
+    for ( ; it2 != m_superScriptEntries.end() ; ++it2 )
+    {
+	data = doc.createElement("superscript");
+	data.setAttribute("find", it2.key());
+	data.setAttribute("super", it2.data().replace());
+	super.appendChild(data);
+    }
+    begin.appendChild(super);
+
 
     QFile f(locateLocal("data", "koffice/autocorrect/"+klocale.languageList().front() + ".xml",m_doc->instance()));
     if(!f.open(IO_WriteOnly)) {
@@ -512,6 +546,10 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
             txtObj->emitNewCommand( macro );
         else
             delete macro;
+
+        if( m_bAutoSuperScript )
+            doAutoSuperScript( textEditCursor, parag, newPos, lastWord, txtObj  );
+
 
     }
     if ( ch == '"' && m_typographicDoubleQuotes.replace )
@@ -1092,6 +1130,58 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor, KoTe
         delete macroCmd;
 }
 
+void KoAutoFormat::doAutoSuperScript( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj )
+{
+    KoAutoFormatEntryMap::Iterator it = m_superScriptEntries.begin();
+    bool found = false;
+    QString replace;
+    for ( ; it != m_superScriptEntries.end() ; ++it )
+    {
+        if( it.key()==word)
+        {
+            replace = it.data().replace();
+            found = true;
+            break;
+        }
+        else if ( it.key()=="othernb")
+        {
+            QString tmp = it.data().replace();
+            int pos = word.find( tmp );
+            if( pos != -1)
+            {
+                if( pos + tmp.length() == word.length())
+                {
+                    bool ok;
+                    word.left( pos ).toInt( &ok);
+                    if( ok )
+                    {
+                        replace = tmp;
+                        found = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    if (found )
+    {
+        KoTextDocument * textdoc = parag->textDocument();
+
+        int start = index - replace.length();
+        KoTextFormat * lastFormat = parag->at( start )->format();
+        KoTextFormat * newFormat = new KoTextFormat(*lastFormat);
+        KoTextCursor cursor( parag->document() );
+
+        cursor.setParag( parag );
+        cursor.setIndex( start );
+        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        cursor.setIndex( start + word.length() -1 );
+        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+        newFormat->setVAlign(KoTextFormat::AlignSuperScript);
+        txtObj->emitNewCommand( txtObj->setFormatCommand( textEditCursor, 0L, newFormat, KoTextFormat::VAlign , false,KoTextObject::HighlightSelection  ));
+    }
+}
+
 bool KoAutoFormat::doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch )
 {
     if( m_ignoreDoubleSpace && ch==' ' && index >=  0 )
@@ -1243,4 +1333,9 @@ void KoAutoFormat::configIncludeTwoUpperUpperLetterException( bool b)
 void KoAutoFormat::configIncludeAbbreviation( bool b )
 {
     m_includeAbbreviation = b;
+}
+
+void KoAutoFormat::configAutoSuperScript( bool b )
+{
+    m_bAutoSuperScript = b;
 }

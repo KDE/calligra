@@ -139,6 +139,8 @@ public:
 
     void configIncludeAbbreviation( bool b );
 
+    void configAutoSuperScript( bool b );
+
     TypographicQuotes getConfigTypographicSimpleQuotes() const
     { return m_typographicSimpleQuotes; }
 
@@ -195,6 +197,10 @@ public:
 
     bool getConfigIncludeAbbreviation() const
     { return m_includeAbbreviation; }
+
+    bool getConfigAutoSuperScript(  ) const
+    { return m_bAutoSuperScript; }
+
 
     // Add/remove entries, called by the dialog
     void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
@@ -263,6 +269,9 @@ protected:
 
     void doAutoIncludeUpperUpper(KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
     void doAutoIncludeAbbreviation(KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
+
+    void doAutoSuperScript( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
+
 private:
     void detectStartOfLink(const QString &word);
     void autoFormatIsActive();
@@ -285,6 +294,8 @@ private:
     bool m_ignoreUpperCase;
     bool m_bAutoFormatActive;
 
+    bool m_bAutoSuperScript;
+
     QChar m_bulletStyle;
 
     TypographicQuotes m_typographicSimpleQuotes;
@@ -294,6 +305,8 @@ private:
     KCompletion *m_listCompletion;
     typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;
     KoAutoFormatEntryMap m_entries;
+
+    KoAutoFormatEntryMap m_superScriptEntries;
 
     QStringList m_upperCaseExceptions;
     QStringList m_twoUpperLetterException;
