@@ -13,6 +13,7 @@ class KWordDocument;
 #include "kword_utils.h"
 #include "searchdia.h"
 #include "variable.h"
+#include "footnote.h"
 
 #include <assert.h>
 #include <iostream>
@@ -135,6 +136,7 @@ public:
   void insertText(unsigned int _pos,QString _text);
   void insertText(unsigned int _pos,KWString *_text);
   void insertVariable(unsigned int _pos,KWVariable *_var);
+  void insertFootNote(unsigned int _pos,KWFootNote *_fn);
   void insertPictureAsChar(unsigned int _pos,QString _filename);
   void insertTab(unsigned int _pos);
   void appendText(KWChar *_text,unsigned int _len);

@@ -692,8 +692,8 @@ void KWFormatContext::cursorGotoPixelInLine(unsigned int mx,unsigned int my,QPai
 KWCharAttribute* KWFormatContext::getObjectType(unsigned int mx,unsigned int my,QPainter &_painter)
 {
   KWFormatContext fc(document,frameSet);
-  fc = *this;
-  
+  //fc = *this;
+
   fc.cursorGotoPixelLine(mx,my,_painter);
 
   if (isCursorAtLineEnd()) return 0L;
@@ -711,7 +711,7 @@ KWCharAttribute* KWFormatContext::getObjectType(unsigned int mx,unsigned int my,
 	}
       oldDist = dist;
     }
-  
+
   return fc.getParag()->getKWString()->data()[fc.getTextPos()].attrib;
 }
 

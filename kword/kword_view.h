@@ -127,7 +127,9 @@ public:
   virtual void viewHeader();
   virtual void viewFooter();
   virtual void viewDocStruct();
-
+  virtual void viewFootNotes();
+  virtual void viewEndNotes();
+  
   virtual void insertPicture();
   virtual void insertClipart();
   virtual void insertSpecialChar();
@@ -138,7 +140,8 @@ public:
   virtual void insertVariableTimeVar();
   virtual void insertVariablePageNum();
   virtual void insertVariableOther();
-
+  virtual void insertFootNoteEndNote();
+  
   virtual void formatFont();
   virtual void formatColor();
   virtual void formatParagraph();
@@ -304,7 +307,9 @@ protected:
   CORBA::Long m_idMenuView_Header;
   CORBA::Long m_idMenuView_Footer;
   CORBA::Long m_idMenuView_DocStruct;
-
+  CORBA::Long m_idMenuView_FootNotes;
+  CORBA::Long m_idMenuView_EndNotes;
+  
   // insert menu
   OpenPartsUI::Menu_var m_vMenuInsert;
   CORBA::Long m_idMenuInsert_Picture;
@@ -319,6 +324,7 @@ protected:
   CORBA::Long m_idMenuInsert_VariableTimeVar;
   CORBA::Long m_idMenuInsert_VariablePageNum;
   CORBA::Long m_idMenuInsert_VariableOther;
+  CORBA::Long m_idMenuInsert_FootNoteEndNote;
 
   // format menu
   OpenPartsUI::Menu_var m_vMenuFormat;
@@ -514,7 +520,7 @@ protected:
   static const int ID_TABLE_DELROW = 48;
   static const int ID_TABLE_INSCOL = 49;
   static const int ID_TABLE_DELCOL = 50;
-  
+
 };
 
 /******************************************************************/

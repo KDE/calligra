@@ -860,6 +860,20 @@ void KWordView::viewDocStruct()
 }
 
 /*===============================================================*/
+void KWordView::viewFootNotes()
+{
+
+  sendFocusEvent();
+}
+
+/*===============================================================*/
+void KWordView::viewEndNotes()
+{
+
+  sendFocusEvent();
+}
+
+/*===============================================================*/
 void KWordView::insertPicture()
 {
   QString file = KFilePreviewDialog::getOpenFileName(QString::null,
@@ -946,6 +960,13 @@ void KWordView::insertVariablePageNum()
 
 /*===============================================================*/
 void KWordView::insertVariableOther()
+{
+
+  sendFocusEvent();
+}
+
+/*===============================================================*/
+void KWordView::insertFootNoteEndNote()
 {
 
   sendFocusEvent();
@@ -1853,6 +1874,9 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuView_Footer = m_vMenuView->insertItem4( i18n("F&ooter"), this, "viewFooter", 0, -1, -1 );
   m_vMenuView->insertSeparator(-1);
   m_idMenuView_DocStruct = m_vMenuView->insertItem4( i18n("&Document Structure"), this, "viewDocStruct", 0, -1, -1 );
+  m_vMenuView->insertSeparator(-1);
+  m_idMenuView_FootNotes = m_vMenuView->insertItem4( i18n("&Footnotes"), this, "viewFootNotes", 0, -1, -1 );
+  m_idMenuView_EndNotes = m_vMenuView->insertItem4( i18n("&Endnotes"), this, "viewEndNotes", 0, -1, -1 );
 
   m_vMenuView->setCheckable(true);
   m_vMenuView->setItemChecked(m_idMenuView_FrameBorders,true);
@@ -1860,6 +1884,8 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuView->setItemChecked(m_idMenuView_Header,m_pKWordDoc->hasHeader());
   m_vMenuView->setItemChecked(m_idMenuView_Footer,m_pKWordDoc->hasFooter());
   m_vMenuView->setItemChecked(m_idMenuView_DocStruct,false);
+  m_vMenuView->setItemChecked(m_idMenuView_FootNotes,false);
+  m_vMenuView->setItemChecked(m_idMenuView_EndNotes,true);
 
   // insert menu
   _menubar->insertMenu( i18n( "&Insert" ), m_vMenuInsert, -1, -1 );
@@ -1881,6 +1907,10 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuInsert->insertSeparator(-1);
 
   m_vMenuInsert->insertItem8( i18n("&Variable"), m_vMenuInsert_Variable, -1, -1 );
+
+  m_vMenuInsert->insertSeparator(-1);
+
+  m_idMenuInsert_FootNoteEndNote = m_vMenuInsert->insertItem4(i18n("&Footnote/Endnote..."),this,"insertFootNoteEndNote", 0, -1, -1 );
 
   m_idMenuInsert_VariableDateFix = m_vMenuInsert_Variable->insertItem4(i18n("Date (fix)"), this,"insertVariableDateFix", 0, -1, -1 );
   m_idMenuInsert_VariableDateVar = m_vMenuInsert_Variable->insertItem4(i18n("Date (variable)"), this,"insertVariableDateVar", 0, -1, -1 );

@@ -1006,3 +1006,7 @@ Reggie, 29.3.1999:
 - Implemented splitting cells - this means you can only split a joined
   cell yet, no "normal" cells. I'll improve that later.
 - Prepeared everything for context sensitive right button menus
+
+Reggie, 1.4.1999:
+-----------------
+- Started implementing footnotes and endnotes

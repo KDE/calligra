@@ -4,8 +4,6 @@ LDFLAGS	= -g $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = $(KOFFICE_LIBS) -lkspell -lkparts -lkpartsui -lkom $(LIB_KIO) \
 	$(LIB_KFILE) $(LIB_KIMGIO)  $(LIBMICO)
 
-CXXFLAGS += -g
-
 ####### Files
 
 bin_PROGRAMS = kword.bin
@@ -15,14 +13,14 @@ kword_bin_SOURCES = char.cc kword_main.cc kword_doc.cc kword_view.cc kword.cc kw
 		formatcollection.cc paragdia.cc imagecollection.cc image.cc \
 		formats.cc frame.cc framedia.cc stylist.cc kcharselect.cc kcharselectdia.cc \
 		kword_utils.cc searchdia.cc preview.cc tabledia.cc insdia.cc deldia.cc variable.cc \
-		docstruct.cc kword_undo.cc clipbrd_dnd.cc
+		docstruct.cc kword_undo.cc clipbrd_dnd.cc footnote.cc
 
 noinst_HEADERS = char.h kword_main.h kword_doc.h kword_view.h kword.h kword_shell.h \
 		fc.h font.h format.h kword_page.h parag.h paraglayout.h \
 		formatcollection.h paragdia.h imagecollection.h image.h \
 		formats.h frame.h framedia.h stylist.h  kcharselect.h kcharselectdia.h \
 		kword_utils.h searchdia.h preview.h tabledia.h insdia.h deldia.h variable.h \
-		docstruct.h kword_undo.h clipbrd_dnd.h
+		docstruct.h kword_undo.h clipbrd_dnd.h footnote.h
 
 METASOURCES =	kword_main.moc kword_view.moc kword_doc.moc kword_shell.moc paragdia.moc \
 		kword_page.moc framedia.moc stylist.moc kcharselect.moc kcharselectdia.moc \

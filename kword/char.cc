@@ -182,6 +182,21 @@ void KWString::insert(unsigned int _pos,KWCharVariable *_var)
   _data_[ _pos ].attrib = _var;
 }
 
+void KWString::insert(unsigned int _pos,KWCharFootNote *_fn)
+{
+  assert(_pos <= _len_);
+
+  unsigned int l = _len_;
+
+  resize(_len_ + 1);
+
+  if (_pos < l)
+    memmove(_data_ + _pos + 1,_data_ + _pos,sizeof(KWChar) * (l - _pos));
+
+  _data_[ _pos ].c = 0;
+  _data_[ _pos ].attrib = _fn;
+}
+
 bool KWString::remove( unsigned int _pos,unsigned int _len = 1 )
 {
   if (_pos + _len <= _len_ && (int)_pos >= 0)
@@ -373,7 +388,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 		    VariableType vart;
 		    KWVariable *var = 0L;
 		    KWCharVariable *v = 0L;
-		      
+		
 		    while (parser.open(0L,tag))
 		      {
 			KOMLParser::parseTag(tag.c_str(),name,lst);
@@ -428,7 +443,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 			    if (var)
 			      var->load(name,tag,lst);
 			  }
-				    
+				
 			if (!parser.close(tag))
 			  {
 			    cerr << "ERR: Closing Child" << endl;
@@ -441,7 +456,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 	      _load = false;
 	    }
 	}
-      
+
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;
@@ -521,6 +536,14 @@ KWChar* KWString::copy(KWChar *_data,unsigned int _len)
 		KWCharFormat *attrib = dynamic_cast<KWCharVariable*>(_data[i].attrib);
 		attrib->getFormat()->incRef();
 		KWCharVariable *f = new KWCharVariable(dynamic_cast<KWCharVariable*>(_data[i].attrib)->getVar()->copy());
+		f->setFormat(attrib->getFormat());
+		__data[i].attrib = f;
+	      } break;
+	    case ID_KWCharFootNote:
+	      {
+		KWCharFootNote *attrib = dynamic_cast<KWCharFootNote*>(_data[i].attrib);
+		attrib->getFormat()->incRef();
+		KWCharFootNote *f = new KWCharFootNote(dynamic_cast<KWCharFootNote*>(_data[i].attrib)->getFootNote()->copy());
 		f->setFormat(attrib->getFormat());
 		__data[i].attrib = f;
 	      } break;

@@ -24,6 +24,8 @@ module KWord
       slot void viewHeader();
       slot void viewFooter();
       slot void viewDocStruct();
+      slot void viewFootNotes();
+      slot void viewEndNotes();
 
       slot void insertPicture();
       slot void insertClipart();
@@ -35,6 +37,7 @@ module KWord
       slot void insertVariableTimeVar();
       slot void insertVariablePageNum();
       slot void insertVariableOther();
+      slot void insertFootNoteEndNote();
 
       slot void formatFont();
       slot void formatColor();

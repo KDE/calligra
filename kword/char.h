@@ -5,6 +5,7 @@
 #include "image.h"
 #include "searchdia.h"
 #include "variable.h"
+#include "footnote.h"
 
 #include <qimage.h>
 #include <qstring.h>
@@ -17,7 +18,8 @@
 class KWordDocument;
 class KWTextFrameSet;
 
-enum ClassIDs {ID_KWCharNone = 0,ID_KWCharFormat = 1,ID_KWCharImage = 2,ID_KWCharTab = 3,ID_KWCharVariable = 4};
+enum ClassIDs {ID_KWCharNone = 0,ID_KWCharFormat = 1,ID_KWCharImage = 2,ID_KWCharTab = 3,ID_KWCharVariable = 4,
+	       ID_KWCharFootNote = 5};
 
 class KWCharAttribute
 {
@@ -77,9 +79,6 @@ public:
     { image->save(out); }
 
 protected:
-  // We need the image because it has full resolution and
-  // color depths. The pixmap may be reduced in both aspects
-  // depending on the resolution and color depth of the display.
   KWImage *image;
 
 };
@@ -101,8 +100,8 @@ public:
 
   KWVariable *getVar() { return var; }
 
-  virtual void save(ostream &out) { 
-    var->save(out); 
+  virtual void save(ostream &out) {
+    var->save(out);
     out << otag << "<FRMAT>" << endl;
     KWCharFormat::save(out);
     out << etag << "</FRMAT>" << endl;
@@ -113,7 +112,30 @@ protected:
 
 };
 
-// Be prepared for unicode
+class KWCharFootNote : public KWCharFormat
+{
+public:
+  KWCharFootNote(KWFootNote *_fn) : KWCharFormat() { fn = _fn; classId = ID_KWCharFootNote; }
+  ~KWCharFootNote() { if (fn) delete fn; if (format) format->decRef(); format = 0L; }
+
+  QString getText() { return QString(); }
+
+  KWFootNote *getFootNote() { return fn; }
+  
+  virtual void save(ostream &out) {
+    //fn->save(out);
+    out << otag << "<FRMAT>" << endl;
+    KWCharFormat::save(out);
+    out << etag << "</FRMAT>" << endl;
+  }
+
+protected:
+  KWFootNote *fn;
+
+};
+
+// Torben: Be prepared for unicode
+// Reggie: Now we support unicode :-))
 #define kwchar QChar
 
 struct KWChar
@@ -145,6 +167,7 @@ public:
   void insert(unsigned int _pos,KWCharImage *_image);
   void insert(unsigned int _pos,KWCharTab *_tab);
   void insert(unsigned int _pos,KWCharVariable *_var);
+  void insert(unsigned int _pos,KWCharFootNote *_fn);
   void resize(unsigned int _size,bool del = true);
   bool remove(unsigned int _pos,unsigned int _len = 1);
   KWChar* split(unsigned int _pos);
