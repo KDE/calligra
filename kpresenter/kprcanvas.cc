@@ -1145,6 +1145,27 @@ KoRect KPrCanvas::objectSelectedBoundingRect() const
     return objBoundingRect;
 }
 
+KoRect KPrCanvas::getAlignBoundingRect() const
+{
+    KoRect boundingRect;
+  
+    for ( int i = 0; i < 2; ++i )
+    {
+        QPtrListIterator<KPObject> it( i == 0 ? activePage()->objectList() : stickyPage()->objectList() );
+        for ( ; it.current() ; ++it )
+        {
+            if ( it.current() == m_view->kPresenterDoc()->header() || 
+                 it.current() == m_view->kPresenterDoc()->footer() )
+                continue;
+
+            if( it.current()->isSelected() && !it.current()->isProtect() ) {
+                boundingRect |= it.current()->getRealRect();
+            }
+        }
+    }
+    return boundingRect;
+}
+
 void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 {
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
@@ -6359,7 +6380,7 @@ void KPrCanvas::alignObjLeft()
     KMacroCommand *macro= 0L;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
-    KoRect rect = (numberOfObjectSelected() > 1) ? objectSelectedBoundingRect() : activePage()->getPageRect();
+    KoRect rect = (numberOfObjectSelected() > 1) ? getAlignBoundingRect() : activePage()->getPageRect();
     cmd=activePage()->alignObjsLeft(rect);
     if(cmd)
     {
@@ -6384,7 +6405,7 @@ void KPrCanvas::alignObjCenterH()
     KMacroCommand *macro= 0L;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
-    KoRect rect = (numberOfObjectSelected() > 1) ? objectSelectedBoundingRect() : activePage()->getPageRect();
+    KoRect rect = (numberOfObjectSelected() > 1) ? getAlignBoundingRect() : activePage()->getPageRect();
     cmd=activePage()->alignObjsCenterH(rect);
     if(cmd)
     {
@@ -6408,7 +6429,7 @@ void KPrCanvas::alignObjRight()
     KMacroCommand *macro= 0L;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
-    KoRect rect = (numberOfObjectSelected() > 1) ? objectSelectedBoundingRect() : activePage()->getPageRect();
+    KoRect rect = (numberOfObjectSelected() > 1) ? getAlignBoundingRect() : activePage()->getPageRect();
 
     cmd=activePage()->alignObjsRight(rect);
     if(cmd)
@@ -6435,7 +6456,7 @@ void KPrCanvas::alignObjTop()
     KMacroCommand *macro= new KMacroCommand(i18n( "Align Objects Top" ));
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
-    KoRect rect = (numberOfObjectSelected() > 1) ? objectSelectedBoundingRect() : activePage()->getPageRect();
+    KoRect rect = (numberOfObjectSelected() > 1) ? getAlignBoundingRect() : activePage()->getPageRect();
 
     cmd=activePage()->alignObjsTop(rect);
     if(cmd)
@@ -6460,7 +6481,7 @@ void KPrCanvas::alignObjCenterV()
     KMacroCommand *macro= 0L;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
-    KoRect rect = (numberOfObjectSelected() > 1) ? objectSelectedBoundingRect() : activePage()->getPageRect();
+    KoRect rect = (numberOfObjectSelected() > 1) ? getAlignBoundingRect() : activePage()->getPageRect();
 
     cmd=activePage()->alignObjsCenterV(rect);
     if(cmd)
@@ -6486,7 +6507,7 @@ void KPrCanvas::alignObjBottom()
     KMacroCommand *macro=0L;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();
-    KoRect rect = (numberOfObjectSelected() > 1) ? objectSelectedBoundingRect() : activePage()->getPageRect();
+    KoRect rect = (numberOfObjectSelected() > 1) ? getAlignBoundingRect() : activePage()->getPageRect();
 
     cmd=activePage()->alignObjsBottom(rect);
     if(cmd)

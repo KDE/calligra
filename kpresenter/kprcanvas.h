@@ -459,6 +459,9 @@ protected:
 
     void moveHelpPoint( const QPoint & newPos );
     void scrollCanvas(const KoRect& oldPos);
+    
+    KoRect getAlignBoundingRect() const;
+
 private:
     QValueList<int> pages(const QString &range) const;
     bool pagesHelper(const QString &chunk, QValueList<int> &list) const;
