@@ -23,8 +23,15 @@
 KWDWriter::KWDWriter(KoStore *store){
 	_store=store;
 	_doc= new QDomDocument("DOC");
+	_docinfo = new QDomDocument("document-info");
 
 	_doc->appendChild( _doc->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+	_docinfo->appendChild( _docinfo->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+
+	QDomElement infodoc = _docinfo->createElement( "document-info" );
+	_docinfoMain=infodoc;
+	_docinfo->appendChild(infodoc);
+
 	tableNo=1;
 	QDomElement kwdoc = _doc->createElement( "DOC" );
 	kwdoc.setAttribute( "editor", "HTML Import Filter" );
@@ -60,7 +67,8 @@ KWDWriter::KWDWriter(KoStore *store){
     QDomElement framesets = _doc->createElement("FRAMESETS");
     kwdoc.appendChild(framesets);
     QDomElement rootframeset = addFrameSet(framesets);
-    QDomElement mainframe= addFrame(rootframeset);
+    _mainFrameset=rootframeset;
+    QDomElement mainframe= addFrame(rootframeset,QRect(28,28,539,757));
 
     QDomElement styles=_doc->createElement("STYLES");
     kwdoc.appendChild(styles);
@@ -89,8 +97,24 @@ KWDWriter::KWDWriter(KoStore *store){
 
 }
 
+
 int KWDWriter::createTable() {
  return tableNo++;
+}
+
+void KWDWriter::createDocInfo(QString author, QString title) {
+	QDomElement authorTag=_docinfo->createElement("author");
+	QDomElement aboutTag=_docinfo->createElement("about");
+	QDomElement fullNameTag=_docinfo->createElement("full-name");
+	QDomText titleText=_docinfo->createTextNode(title);
+	QDomText authorText=_docinfo->createTextNode(author);
+	fullNameTag.appendChild(authorText);
+	authorTag.appendChild(fullNameTag);
+	QDomElement titleTag=_docinfo->createElement("title");
+	titleTag.appendChild(titleText);
+	aboutTag.appendChild(titleTag);
+	_docinfoMain.appendChild(authorTag);
+	_docinfoMain.appendChild(aboutTag);
 }
 
 
@@ -105,13 +129,15 @@ QDomElement KWDWriter::createInline(QDomElement paragraph, QDomElement toInline)
  addText(paragraph,"#",6); // the anchor.
 }
 
+
 QDomElement KWDWriter::currentLayout(QDomElement paragraph) {
 	return paragraph.elementsByTagName("LAYOUT").item(0).toElement();
 }
 
 
+
 QDomElement KWDWriter::createTableCell(int tableno, int nrow,
-				int ncol, int colspan, int x, int y, int right, int bottom) {
+				int ncol, int colspan, QRect rect) {
 	QDomElement parent=docroot().elementsByTagName("FRAMESETS").item(0).toElement();
 
 	QDomElement fs=addFrameSet(parent,1,0,
@@ -123,8 +149,7 @@ QDomElement KWDWriter::createTableCell(int tableno, int nrow,
 	fs.setAttribute("cols",colspan); // FIXME do colspan in finishTable
 					 // so we don't have to give it as an argument
 	fs.setAttribute("rows",1);	// FIXME support rowspan ?
-	addFrame(fs,0/*runaround*/,0/*copy*/,
-		y,x,bottom,right); // FIXME
+	addFrame(fs,rect);
 	return fs;
 }
 
@@ -144,13 +169,24 @@ QDomElement KWDWriter::fetchTableCell(int tableno, int rowno, int colno) {
 #define MAX(x,y) ((x > y) ? x : y)
 #define MIN(x,y) ((x < y) ? x : y)
 
-void KWDWriter::finishTable(int tableno,int x, int y, int w, int h) {
+void KWDWriter::finishTable(int tableno) {
+	finishTable(tableno,QRect(-1,-1,-1,-1));
+}
+
+
+void KWDWriter::finishTable(int tableno,QRect rect) {
 	int ncols=0;
 	int nrows=0;
+
+	int x=rect.x();
+	int y=rect.y();
+	int w=rect.width();
+	int h=rect.height();
+
 	QDomNodeList nl=docroot().elementsByTagName("FRAMESET");
 	   //FIXME calculate nrows and stuff.
 	   //and add empty cells for missing ones.
-	
+
 	// first, see how big the table is (cols & rows)
 	for (unsigned i=0;i<nl.count();i++) {
 	    QDomElement k=nl.item(i).toElement();
@@ -168,10 +204,10 @@ void KWDWriter::finishTable(int tableno,int x, int y, int w, int h) {
 	int step_x=(w-x)/ncols;
 	int step_y=(h-y)/nrows;
 	
-	
+
 	// then, let's create the missing cells and resize them if needed.
 	bool must_resize=false;
-	if (w>0) must_resize=true;
+	if (x>0) must_resize=true;
 	while (currow < nrows) {
 	   curcol=0;
 	   while (curcol < ncols) {
@@ -179,17 +215,19 @@ void KWDWriter::finishTable(int tableno,int x, int y, int w, int h) {
 	      if (e.isNull()) {
 	              // a missing cell !
 	              qWarning(QString("creating %1 %2").arg(currow).arg(curcol).latin1());
-	              createTableCell(tableno,currow,curcol,1,x+step_x*curcol,y+step_y*currow,step_x,step_y);
+	              createTableCell(tableno,currow,curcol,1,
+		      			QRect(x+step_x*curcol,y+step_y*currow,step_x,step_y)
+				);
 	              // fixme: what to do if we don't have to resize ?
 	      }
-	
+
 	      // resize this one FIXME optimize this routine
 	      if (must_resize == true) {
 	      QDomElement ee=e.firstChild().toElement(); // the frame in the frameset
 	          int cs=e.attribute("cols").toInt();
 	          int rs=e.attribute("cols").toInt();
 	          qWarning("resizing");
-	          addRect(ee,x+step_x*curcol,0,step_x*cs,step_y*rs);
+	          addRect(ee,QRect(x+step_x*curcol,0,step_x*cs,step_y*rs));
 	      }
 	      if (curcol==0) currow_inc=e.attribute("rows").toInt();
 	      curcol +=e.attribute("cols").toInt();
@@ -205,14 +243,17 @@ void KWDWriter::finishTable(int tableno,int x, int y, int w, int h) {
 
 QDomElement KWDWriter::addFrameSet(QDomElement parent, int frametype,
 				   int frameinfo, QString name, int visible) {
+
 	QDomElement frameset=_doc->createElement("FRAMESET");
 	parent.appendChild(frameset);
 	frameset.setAttribute("frameType",frametype);
 	frameset.setAttribute("frameInfo",frameinfo);
+
 	if (!name.isNull())
 		frameset.setAttribute("name",name);
 	else
 		frameset.setAttribute("name","Text-frameset 1");
+
 	frameset.setAttribute("visible",visible);
 	return frameset;
 }
@@ -236,6 +277,18 @@ void KWDWriter::setLayout(QDomElement paragraph, QDomElement layout) {
 }
 
 
+QRect getRect(QDomElement frameset) {
+	// returns the rect of the first frame.
+	QDomElement frame=frameset.elementsByTagName("FRAME").item(0).toElement();
+	return QRect(frame.attribute("left").toInt(),
+		     frame.attribute("top").toInt(),
+		     frame.attribute("right").toInt()-frame.attribute("left").toInt(),
+		     frame.attribute("bottom").toInt()-frame.attribute("top").toInt()
+		     );
+
+}
+
+
 QDomElement KWDWriter::addParagraph(QDomElement parent, QDomElement layoutToClone) {
 
 	QDomElement paragraph=_doc->createElement("PARAGRAPH");
@@ -247,12 +300,10 @@ QDomElement KWDWriter::addParagraph(QDomElement parent, QDomElement layoutToClon
 	else {
 		layout=layoutToClone.cloneNode().toElement();
 	}
-	//QDomElement format=_doc->createElement("FORMAT");
 	QDomElement text=_doc->createElement("TEXT");
 	QDomText t=_doc->createTextNode(QString(""));
 	text.appendChild(t);
 	paragraph.appendChild(formats);
-	//formats.appendChild(format);
 	paragraph.appendChild(text);
 	parent.appendChild(paragraph);
 	paragraph.appendChild(layout);
@@ -309,7 +360,6 @@ void KWDWriter::addText(QDomElement paragraph, QString text, int format_id) {
 	if (temp.isNull()) { qWarning("no text"); exit(0); }
 	int oldLength=currentText.data().length();
 	currentText.setData(currentText.data()+text);
-	//qWarning(currentText.data());
 	int newLength=text.length();
 	QDomElement lastformat=currentFormat(paragraph,true);
 	lastformat.setAttribute("id",format_id);
@@ -329,7 +379,6 @@ QDomElement KWDWriter::startFormat(QDomElement paragraph) {
         if (paragraph.isNull()) { qWarning("startFormat on empty paragraph"); exit(0); }
 	QDomElement format=_doc->createElement("FORMAT");
 	paragraph.elementsByTagName("FORMATS").item(0).appendChild(format);
-	//formatAttribute(paragraph,"SIZE","VALUE","12"); // FIXME hack hack hack
 	return format;
 }
 
@@ -373,23 +422,23 @@ void KWDWriter::cleanUpParagraph(QDomElement paragraph) {
 	for (QDomElement k=e.firstChild().toElement();!k.isNull();k=k.nextSibling().toElement()) {
 	     if (k.attribute("len",QString::null) == QString::null) {
 	         e.removeChild(k);
-	         cleanUpParagraph(paragraph); // sloooow
+	         cleanUpParagraph(paragraph);
 	         return;
 	     }
 	}
 }
 
 
-QDomElement KWDWriter::addFrame(QDomElement frameset, int runaround, int copy,
-                                int top, int left, int bottom, int right,
-                                int newFrameBehaviour, int runaroundGap ) {
+QDomElement KWDWriter::addFrame(QDomElement frameset, QRect rect, int runaround, int copy,
+                                int newFrameBehaviour, int runaroundGap
+				 ) {
 	QDomElement frame = _doc->createElement("FRAME");
 	frameset.appendChild(frame);
 	frame.setAttribute("runaround",runaround);
 	frame.setAttribute("copy",copy);
 	frame.setAttribute("newFrameBehaviour",newFrameBehaviour);
 	frame.setAttribute("runaroundGap",runaroundGap);
-	addRect(frame,left,top,right-left,bottom-top);
+	addRect(frame,rect);
 	return frame;
 }
 
@@ -400,18 +449,28 @@ QDomElement KWDWriter::docroot() {
 bool KWDWriter::writeDoc() {
 	QCString str=_doc->toCString();
 	qWarning(str);
+
 	if (!_store->open("root")) {
-	    qWarning("warning, cannot open root in store");
 	    return false;
+	} else {
+		_store->write((const char *)str, str.length());
+		_store->close();
 	}
-	_store->write((const char *)str, str.length());
-	_store->close();
+
+	if (!_store->open("documentinfo.xml")) {
+		qWarning("WARNING: unable to write out doc info. continuing anyway");
+	} else {
+		str=_docinfo->toCString();
+		_store->write((const char *)str, str.length());
+		_store->close();
+	}
+
 	return true;
 }
 
 
-QDomElement KWDWriter::currentFrameset() {
-	return _doc->elementsByTagName("FRAMESETS").item(0).lastChild().toElement();
+QDomElement KWDWriter::mainFrameset() {
+	return _mainFrameset;
 }
 
 
@@ -422,16 +481,6 @@ void KWDWriter::addRect(QDomElement e,QRect rect) {
      e.setAttribute("right",rect.right());
 }
 
-void KWDWriter::addRect(QDomElement e,int x, int y, int w, int h) {
-	addRect(e,QRect(x,y,w,h));
-}
-
-
-
-QDomElement KWDWriter::currentParagraph(QDomElement frameset) {
-	QDomNodeList e=frameset.elementsByTagName("FRAMESET");
-	return e.item(e.length()-1).toElement(); // FIXME
-}
 
 
 

@@ -59,7 +59,7 @@ private:
 	void parseNode(DOM::Node n);
         bool parseTag(DOM::Element e);
         void parseStyle(DOM::Element e);
-
+	void parse_head(DOM::Element e);
         HTMLReader_state *state();
         HTMLReader_state *pushNewState();
         void popState();

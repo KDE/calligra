@@ -33,13 +33,13 @@ public:
 	KWDWriter(KoStore *store);
 	~KWDWriter();
 
-	
+
 	/**
 	 * writes the document to the koStore
 	 **/
 	bool writeDoc();
-	
-	
+
+
 	/**
 	 * adds a frameset to parent FIXME
 	 **/
@@ -51,55 +51,57 @@ public:
 	 **/
 	int createTable();
 
-	
+
 	/**
 	 * creates a table cell
 	 **/
 	QDomElement createTableCell(int tableno, int nrow,
-				int ncol, int colspan, int x, int y, int right, int bottom);
-	
-				
-				
+				int ncol, int colspan, QRect rect);
+
+
+
 	/**
 	 * fetches the cell of a table
-	 **/			
+	 **/
 	QDomElement fetchTableCell(int tableno, int rowno, int colno);
 
-	
+
 	/**
 	 * finishes a table
 	 * if the arguments x,y,w,h are given, each cell is resized to have a 'right'
 	 * table. otherwise, the cell sizes are not touched.
 	 **/
-	void finishTable(int tableno, int x=-1, int y=-1, int w=-1, int h=-1);
-	
+	void finishTable(int tableno, QRect rect);
+	void finishTable(int tableno);
+
 	/**
 	 * inlines something in a paragraph
 	 * @parm paragraph: the paragraph the anchor should be placed in
 	 * @parm toInLline: the element that should be inlined
 	 **/
 	QDomElement createInline(QDomElement paragraph, QDomElement toInline);
-	
-	
+
+
 	/**
 	 *
 	 **/
 	QDomElement currentLayout(QDomElement paragraph);
-	
+
 	/**
 	 * adds a frame to frameset FIXME
 	 **/
-	QDomElement addFrame(QDomElement frameset, int runaround=0, int copy=0,
-                                int top=42, int left=28, int bottom=799, int right=567,
-                                int newFrameBehaviour=0, int runaroundGap=2 );
-	
-	
+	QDomElement addFrame(QDomElement frameset, QRect rect, int runaround=0, int copy=0,
+                                //int top=42, int left=28, int bottom=799, int right=567,
+                                int newFrameBehaviour=0, int runaroundGap=2
+				);
+
+
 	/**
 	 * adds a paragraph
 	 **/
 	QDomElement addParagraph(QDomElement parent);
 	QDomElement addParagraph(QDomElement parent, QDomElement layout);
-	
+
 	/**
 	 * adds/changes an attribute to/of the current format
 	 **/
@@ -129,25 +131,42 @@ public:
 	 * FIXME: find a better solution
 	 **/
 	 void cleanUpParagraph(QDomElement paragraph);
-	
+
 	/**
 	 * adds some text to the current format in this paragraph
 	 **/
 	void addText(QDomElement paragraph, QString text, int format_id=1);
-	
+
 	/**
 	 * returns the current format
 	 * if start_new_one is true, a new format will be started if needed
 	 **/
 	QDomElement currentFormat(QDomElement paragraph, bool start_new_one=false);
-	
+
 	/**
-	 * FIXME: remove these
+	 * copy the given layout, and set it as layout of the given paragraph
 	 **/
-        QDomElement currentFrameset();
-        QDomElement currentParagraph(QDomElement frameset);
 	void setLayout(QDomElement paragraph, QDomElement layout);
+
+	/**
+	 * returns the text of this paragraph.
+	 **/
 	QString getText(QDomElement paragraph);
+
+	/**
+	 * returns the rectangle of the first frame of this frameset
+	 **/
+	QRect getRect(QDomElement frameset);
+
+	/**
+	 * returns the 'main' frameset of this document.
+	 **/
+        QDomElement mainFrameset();
+
+	/**
+	 * mark document as being written by author, and having title title
+	 **/
+	void createDocInfo(QString author, QString title);
 
         /**
          * returns the document root
@@ -159,13 +178,15 @@ private:
 	/**
 	 * creates a rectangle
 	 **/
-	void addRect(QDomElement e,int x, int y, int w, int h);
 	void addRect(QDomElement e, QRect rect);
 
        	
 protected:
 	KoStore *_store;
+	QDomElement _mainFrameset;
 	QDomDocument *_doc;
+	QDomDocument *_docinfo;
+	QDomElement _docinfoMain;
 	int tableNo;
 	
 };

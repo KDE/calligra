@@ -70,7 +70,7 @@ bool KHTMLReader::filter(KURL url) {
 HTMLReader_state *KHTMLReader::state() {
 	if (_state.count() == 0) {
 		HTMLReader_state *s=new HTMLReader_state;
-		s->frameset=_writer->currentFrameset();
+		s->frameset=_writer->mainFrameset();
 		s->paragraph = _writer->addParagraph(s->frameset);
 		s->format=_writer->currentFormat(s->paragraph,true);
 		s->layout=_writer->currentLayout(s->paragraph);
@@ -101,8 +101,6 @@ void KHTMLReader::popState() {
 	   of a (kword) "tag" we have to copy some things over from the closed tag:
 	   	- the paragraph (after a </B>, we still are in the same paragraph, but
 			inside the <B></B> , there might have been a <BR>)
-		- BUT the layout of the paragraph should NOT be copied over FIXME: this is
-			my fault, and sucks. better replace it or document it.
 	   if we go back into another frameset, we start a new paragraph.
 	 **/
 	if (s->frameset == state()->frameset)
@@ -137,12 +135,21 @@ void KHTMLReader::completed() {
 	DOM::Node docbody=list.item(0);
 
 	if (docbody.isNull()) {
-		qWarning("no body");
+		qWarning("no <BODY>, giving up");
 		_it_worked=false;
 		return;
 	}
 
+
 	parseNode(docbody);
+
+	list = doc.getElementsByTagName("head");
+	DOM::Node dochead=list.item(0);
+	if (!dochead.isNull())
+		parse_head(dochead);
+	else
+		qWarning("WARNING: no html <HEAD> section");
+
 	_writer->cleanUpParagraph(state()->paragraph);
         _it_worked=_writer->writeDoc();
 }
@@ -182,6 +189,16 @@ void KHTMLReader::parseNode(DOM::Node node) {
 
 }
 
+void KHTMLReader::parse_head(DOM::Element e) {
+	for (DOM::Element items=e.firstChild();!items.isNull();items=items.nextSibling()) {
+		if (items.tagName().string().lower() == "title") {
+			DOM::Text t=items.firstChild();
+			if (!t.isNull()) {
+				_writer->createDocInfo("HTML import filter",t.data().string());
+			}
+		}
+	}
+}
 
 #define _PP(x) {if (e.tagName().lower() == #x) return parse_##x(e);}
 #define _PF(x,a,b,c) {if (e.tagName().lower() == #x) { _writer->formatAttribute(state()->paragraph, #a,#b,#c); return true;}}
@@ -360,8 +377,7 @@ bool KHTMLReader::parse_table(DOM::Element e) {
 
 			    	pushNewState();
 	 	    	    	QRect colrect=cols.getRect();
-	 	    	    	state()->frameset=_writer->createTableCell(tableno,nrow,ncol,1,colrect.left(),colrect.top(),
-	 	    	     		colrect.right(),colrect.bottom());
+	 	    	    	state()->frameset=_writer->createTableCell(tableno,nrow,ncol,1,colrect);
 	 	    	     	state()->frameset.firstChild().toElement().setAttribute("bkRed",bgcolor.red());
 	 	    	     	state()->frameset.firstChild().toElement().setAttribute("bkGreen",bgcolor.green());
 	 	    	     	state()->frameset.firstChild().toElement().setAttribute("bkBlue",bgcolor.blue());
@@ -446,7 +462,7 @@ bool KHTMLReader::parse_ul(DOM::Element e) {
         for (DOM::Element items=e.firstChild();!items.isNull();items=items.nextSibling()) {
                   if (items.tagName().string().lower() == "li") {
                   	pushNewState();
-                  		startNewLayout();//Paragraph();
+                  		startNewLayout();
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","1");
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext",".");
                   		if (e.tagName().string().lower() == "ol")
