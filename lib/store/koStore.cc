@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include <stdio.h>
 #include <assert.h>
@@ -28,7 +28,7 @@ KoStore::KoStore( const char* _filename, KOStore::Mode _mode )
   m_bIsOpen = false;
   m_mode = _mode;
   m_id = 0;
-  
+
   if ( _mode == KOStore::Write )
   {
     m_out.open( _filename, ios::out | ios::trunc );
@@ -48,7 +48,7 @@ KoStore::KoStore( const char* _filename, KOStore::Mode _mode )
     }
 
     m_in.close();
-    
+
     m_out.open( _filename, ios::out | ios::in );
     m_out.seekp( 0, ios::end );
   }
@@ -62,7 +62,7 @@ KoStore::KoStore( const char* _filename, KOStore::Mode _mode )
     {
       Entry e;
       if ( readHeader( e ) )
-      {  
+      {
 	m_in.seekg( e.size, ios::cur );
 	m_map[ e.name ] = e;
       }
@@ -75,7 +75,7 @@ KoStore::KoStore( const char* _filename, KOStore::Mode _mode )
 KoStore::~KoStore()
 {
   kdebug( KDEBUG_INFO, 30002, "###################### DESTRUCTOR ####################" );
-  
+
   if ( m_mode == KOStore::Write )
   {
     m_out.close();
@@ -102,7 +102,7 @@ unsigned long KoStore::readHeader( KoStore::Entry& _entry )
   unsigned long len = getULong();
   if ( m_in.eof() )
     return 0L;
-  
+
   _entry.size = getULong();
   _entry.flags = getULong();
 
@@ -121,7 +121,7 @@ unsigned long KoStore::readHeader( KoStore::Entry& _entry )
 
   return len;
 }
-  
+
 void KoStore::putULong( unsigned long x )
 {
   int n;
@@ -138,7 +138,7 @@ unsigned long KoStore::getULong()
   x += ( (unsigned long)m_in.get() ) << 8;
   x += ( (unsigned long)m_in.get() ) << 16;
   x += ( (unsigned long)m_in.get() ) << 24;
-  
+
   return x;
 }
 
@@ -155,7 +155,7 @@ void KoStore::list()
   cout << "--------------------------------------------------------------------" << endl;
 
   unsigned int size = 0;
-  
+
   map<string,Entry,less<string> >::iterator it = m_map.begin();
   for( ; it != m_map.end(); ++it )
   {
@@ -174,19 +174,19 @@ CORBA::Boolean KoStore::open( const char* _name, const char *_mime_type )
     kdebug( KDEBUG_INFO, 30002, "KoStore: File is already opened" );
     return false;
   }
-    
+
   if ( !_mime_type && m_mode != KOStore::Read )
   {
     kdebug( KDEBUG_INFO, 30002, "KoStore: Mimetype omitted while opening entry %c for writing", _name );
     return false;
   }
-  
+
   if ( strlen( _name ) > 512 )
   {
     kdebug( KDEBUG_INFO, 30002, "KoStore: Filename %c is too long", _name );
     return false;
   }
-  
+
   if ( m_mode == KOStore::Write || m_mode == KOStore::Append )
   {
     if ( m_map.find( _name ) != m_map.end() )
@@ -194,19 +194,20 @@ CORBA::Boolean KoStore::open( const char* _name, const char *_mime_type )
       kdebug( KDEBUG_INFO, 30002, "KoStore: Duplicate filename %c", _name );
       return false;
     }
-    
+
     m_current.pos = m_out.tellp();
     m_current.name = _name;
     m_current.mimetype = _mime_type;
     m_current.flags = 0;
+    m_current.data = m_out.tellp();
+    m_current.size = 0;
     // We will write this header again later once we know the size
     writeHeader( m_current );
-    m_current.data = m_out.tellp();
   }
   else if ( m_mode == KOStore::Read )
-  { 
+  {
     kdebug( KDEBUG_INFO, 30002, "Opening for reading %c", _name );
-    
+
     map<string,Entry,less<string> >::iterator it = m_map.find( _name );
     if ( it == m_map.end() )
     {
@@ -226,7 +227,7 @@ CORBA::Boolean KoStore::open( const char* _name, const char *_mime_type )
   }
   else
     assert( 0 );
-  
+
   m_bIsOpen = true;
 
   return true;
@@ -235,7 +236,7 @@ CORBA::Boolean KoStore::open( const char* _name, const char *_mime_type )
 void KoStore::close()
 {
   kdebug( KDEBUG_INFO, 30002, "CLOSED" );
-  
+
   if ( !m_bIsOpen )
   {
     kdebug( KDEBUG_INFO, 30002, "KoStore: You must open before closing" );
@@ -288,14 +289,14 @@ KOStore::Data* KoStore::read( CORBA::ULong max )
     data->length( 0 );
     return data;
   }
-  
+
   if ( m_in.eof() )
   {
     kdebug( KDEBUG_INFO, 30002, "EOF" );
     data->length( 0 );
     return data;
   }
-  
+
   if ( max > m_current.size - m_readBytes )
     max = m_current.size - m_readBytes;
   if ( max == 0 )
@@ -304,7 +305,7 @@ KOStore::Data* KoStore::read( CORBA::ULong max )
     data->length( 0 );
     return data;
   }
-  
+
   unsigned char *p = new unsigned char[ max ];
   m_in.read( p, max );
   unsigned int len = m_in.gcount();
@@ -314,7 +315,7 @@ KOStore::Data* KoStore::read( CORBA::ULong max )
     data->length( 0 );
     return data;
   }
-  
+
   m_readBytes += max;
   data->length( max );
   for( unsigned int i = 0; i < max; i++ )
@@ -322,7 +323,7 @@ KOStore::Data* KoStore::read( CORBA::ULong max )
   delete [] p;
 
   kdebug( KDEBUG_INFO, 30002, "...KOStore::Data* KoStore::read( CORBA::ULong max )" );
-  
+
   return data;
 }
 
@@ -338,15 +339,15 @@ long KoStore::read( char *_buffer, unsigned long _len )
     kdebug( KDEBUG_INFO, 30002, "KoStore: Can not read from store that is opened for writing" );
     return -1;
   }
-  
+
   if ( m_in.eof() )
     return 0;
-  
+
   if ( _len > m_current.size - m_readBytes )
     _len = m_current.size - m_readBytes;
   if ( _len == 0 )
     return 0;
-  
+
   m_in.read( _buffer, _len );
   unsigned int len = m_in.gcount();
   if ( len != _len )
@@ -354,9 +355,9 @@ long KoStore::read( char *_buffer, unsigned long _len )
     kdebug( KDEBUG_INFO, 30002, "KoStore: Error while reading" );
     return -1;
   }
-  
+
   m_readBytes += len;
-  
+
   return len;
 }
 
@@ -377,10 +378,10 @@ CORBA::Boolean KoStore::write( const KOStore::Data& data )
   unsigned char *p = new unsigned char[ len ];
   for( int i = 0; i < len; i++ )
     p[i] = data[i];
-    
+
   m_out.write( p, len );
   m_current.size += len;
-  
+
   delete [] p;
 
   if ( m_out.bad() )
@@ -388,7 +389,7 @@ CORBA::Boolean KoStore::write( const KOStore::Data& data )
     kdebug( KDEBUG_INFO, 30002, "KoStore: Error while writing" );
     return false;
   }
-  
+
   return true;
 }
 
