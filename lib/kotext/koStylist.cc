@@ -326,7 +326,6 @@ void KoStyleManager::updateFollowingStyle( KoStyle *s )
 {
     for ( KoStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next() )
     {
-        kdDebug()<<" on tourne !!!!!!!!!!!\n";
         if ( p->followingStyle() == s)
             p->setFollowingStyle(p);
     }
