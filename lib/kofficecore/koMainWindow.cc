@@ -154,7 +154,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::reportBug( m_helpMenu, SLOT( reportBug() ), actionCollection(), "report_bug" );
 
     d->m_splitter=new QSplitter(Qt::Vertical, this, "funky-splitter");
-    setView( d->m_splitter );
+    setCentralWidget( d->m_splitter );
 
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
     d->m_veryHackyActionList.append(new KAction(i18n("&Close All Views"), 0, this,
