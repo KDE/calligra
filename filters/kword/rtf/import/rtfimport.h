@@ -132,7 +132,7 @@ struct RTFFormat
     int font, fontSize, baseline;
     int color, bgcolor;
     int uc;
-    bool underline, underlined, bold, italic, strike, striked, hidden, caps;
+    bool underline, underlined, bold, italic, strike, striked, hidden, caps, smallCaps;
     bool underlineDash, underlineThick, underlineDot, underlineDashDot, underlineDashDotDot, underlineWordByWord;
 };
 

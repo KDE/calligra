@@ -180,6 +180,7 @@ static RTFProperty propertyTable[] =
 	MEMBER(	0L,		"s",		setNumericProperty,	state.layout.style, 0 ),
 	MEMBER(	0L,		"sa",		setNumericProperty,	state.layout.spaceAfter, 0 ),
 	MEMBER(	0L,		"sb",		setNumericProperty,	state.layout.spaceBefore, 0 ),
+	MEMBER(	0L,		"scaps",		setToggleProperty,	state.format.smallCaps, 0 ),
 	PROP(	"Text",		"sect",		insertPageBreak,	0L, 0 ),
 	PROP(	0L,		"sectd",	setSectionDefaults,	0L, 0 ),
 	MEMBER(	0L,		"sl",		setNumericProperty,	state.layout.spaceBetween, 0 ),
@@ -724,6 +725,7 @@ void RTFImport::setPlainFormatting( RTFProperty * )
     format.striked	= false;
     format.hidden	= false;
     format.caps		= false;
+    format.smallCaps	= false;
 
     format.underline		= false;
     format.underlined		= false;
@@ -1863,12 +1865,14 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
 	    node.setAttribute( "value", vertAlign );
 	    node.closeNode( "VERTALIGN" );
 	}
-	if (!baseFormat || format.fmt.caps != baseFormat->caps)
+	if (!baseFormat || format.fmt.caps != baseFormat->caps || format.fmt.smallCaps != baseFormat->smallCaps)
 	{
 	    node.addNode( "FONTATTRIBUTE" );
             QCString fontattr;
             if ( format.fmt.caps )
                 fontattr="uppercase";
+            else if ( format.fmt.smallCaps )
+                fontattr="smallcaps";
             else
                 fontattr="none";
 	    node.setAttribute( "value", fontattr );
