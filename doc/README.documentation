@@ -20,11 +20,8 @@ Ben Lamb <kde@zurgy.org>
 Tasks:
 KWord		Mike; german transl. Axel
 KPresenter	Krishna
-KIllustrator	Hagen Hoepfner (German version, right now doesn't have time)
 KSpread		Pam
 KChart		
-KImage		Daniel
-KImageShop
 Kivio		Ben
 KOffice/general Jost
 
@@ -40,7 +37,3 @@ What if I haven't got CVS access?
 Send it to Mike or Jost. We'll check it in for you. BTW, please
 send us only the parts of the documentation you've written/changed
 as this makes it easier for us to merge your work with our work.
-
-
-
-
