@@ -17,6 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "csvdialog.h"
+
 #include <csvimport.h>
 #include <qmessagebox.h>
 #include <kmessagebox.h>
@@ -37,9 +39,8 @@ CSVFilter::CSVFilter(KoFilter *parent, const char*name) :
 
 bool CSVFilter::filterImport(const QString &file, KoDocument *document,
                          const QString &from, const QString &to,
-                         const QString &config) {
-    bool bSuccess=true;
-
+                         const QString &config)
+{
     kdDebug(30501) << "here we go... " << document->className() << endl;
 
     if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
@@ -71,121 +72,57 @@ bool CSVFilter::filterImport(const QString &file, KoDocument *document,
         return false;
     }
 
-    QTextStream inputStream(&in);
-    QChar csv_delimiter;
+    QString csv_delimiter = QString::null;
+    if (config != QString::null)
+        csv_delimiter = config[0];
 
-    // is there a config info or do we have to use a dialog box?
-    if(config!=QString::null) {
-        kdDebug(30501) << "CSVFilter::CSVFilter(): config found... " << config << endl;
-        csv_delimiter=QChar(config[0]);
-    }
-    else {
-        QString firstLine = inputStream.readLine();
-        firstLine.truncate(100);
-        switch (QMessageBox::information( 0L, i18n( "Information needed" ),
-                                  i18n( "What is the separator used in this file ? First line is \n%1" ).arg(firstLine),
-                                  i18n( "Comma" ), i18n( "Semicolon" ), i18n( "Tabulator" ) )) {
-            case 2:
-                csv_delimiter = '\t';
-                break;
-            case 1:
-                csv_delimiter = ';';
-                break;
-            default:
-                csv_delimiter = ','; // "Comma" chosen or Escape typed
-        }
-        // Now rewind to the beginning of the file
-        in.at(0);
-    }
+    QByteArray inputFile(in.size());
+    in.readBlock(inputFile.data(), in.size());
+    in.close();
 
+    CSVDialog *dialog = new CSVDialog(0L, inputFile, csv_delimiter);
+    if (!dialog->exec())
+        return false;
+
+    KSpreadCell *cell;
     KSpreadTable *table=ksdoc->createTable();
     ksdoc->addTable(table);
-    int row=1, column=1;
 
-    QChar x;
-    enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_NORMAL_FIELD } state = S_START;
-    QString field = "";
-    int step=in.size()/50;
-    int value=0;
-    int i=0;
+    int numRows = dialog->getRows();
+    int numCols = dialog->getCols();
+    int step = 100 / numRows * numCols;
+    int value = 0;
+
     emit sigProgress(value);
 
-    while ( !inputStream.eof() && bSuccess==true )
-    {
-        ++i;
-        if(i>step) {
-            kdDebug() << "emitted" << endl;
-            i=0;
-            value+=2;
-            emit sigProgress(value);
-        }
-        inputStream >> x; // read one char
-
-        if (x == '\r') inputStream >> x; // eat '\r', to handle DOS/LOSEDOWS files correctly
-        switch (state)
+    for (int row = 0; row < numRows; ++row)
+        for (int col = 0; col < numCols; ++col)
         {
-            case S_START :
-                if (x == '"') state = S_QUOTED_FIELD;
-                else if (x == csv_delimiter)
-                    ++column;
-                else if (x == '\n')  {
-                    ++row;
-                    column=1;
-                }
-                else
-                {
-                    field += x;
-                    state = S_NORMAL_FIELD;
-                }
+            value += step;
+            emit sigProgress(value);
+            table->setText(row + 1, col + 1, dialog->getText(row, col), false);
+            cell = table->cellAt(col + 1, row + 1);
+
+            switch (dialog->getHeader(col))
+            {
+            case CSVDialog::TEXT:
                 break;
-            case S_QUOTED_FIELD :
-                if (x == '"') state = S_MAYBE_END_OF_QUOTED_FIELD;
-                else field += x;
+            case CSVDialog::NUMBER:
+                cell->setFormatNumber(KSpreadCell::Number);
+                cell->setPrecision(2);
                 break;
-            case S_MAYBE_END_OF_QUOTED_FIELD :
-                if (x == '"')
-                {
-		  field += x;
-                    state = S_QUOTED_FIELD;
-                } else if (x == csv_delimiter || x == '\n')
-                {
-                    table->setText(row, column, field, false);
-                    field = "";
-                    if (x == '\n') {
-                        ++row;
-                        column=1;
-                    }
-                    else
-                        ++column;
-                    state = S_START;
-                } else
-                { // This field wasn't quoted. It was "blah"something
-                    state = S_NORMAL_FIELD;
-                    field.prepend('"');
-                    field += '"';
-                    field += x;
-                }
+            case CSVDialog::DATE:
+                cell->setFormatNumber(KSpreadCell::ShortDate);
                 break;
-            case S_NORMAL_FIELD :
-                if (x == csv_delimiter || x == '\n')
-                {
-                    table->setText(row, column, field, false);
-                    field = "";
-                    if (x == '\n') {
-                        ++row;
-                        column=1;
-                    }
-                    else
-                        ++column;
-                    state = S_START;
-                }
-                else
-                    field += x;
+            case CSVDialog::CURRENCY:
+                cell->setFormatNumber(KSpreadCell::Money);
+                break;
+            }
         }
-    }
+
     emit sigProgress(100);
-    in.close();
-    return bSuccess;
+    delete dialog;
+    return true;
 }
 
 #include <csvimport.moc>

@@ -8,7 +8,8 @@ INCLUDES= -I$(srcdir) -I$(top_srcdir)/kspread $(KOFFICE_INCLUDES) \
 kde_module_LTLIBRARIES = libcsvimport.la libcsvfilterdia.la \
 libcsvexport.la
 
-libcsvimport_la_SOURCES = csvimport.cc xmltree.cc csvimport_factory.cc
+libcsvimport_la_SOURCES = csvimport.cc xmltree.cc csvimport_factory.cc \
+                          csvdialog.cpp dialogui.ui 
 libcsvimport_la_LDFLAGS	= -module -avoid-version -no-undefined
 libcsvimport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la
 
