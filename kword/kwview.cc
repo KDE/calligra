@@ -5921,6 +5921,14 @@ void KWView::importStyle()
     }
 }
 
+void KWView::testAndCloseAllFrameSetProtectedContent()
+{
+    KWTextFrameSetEdit* edit = currentTextEdit();
+    if ( edit && edit->textFrameSet()->protectContent()) {
+        m_doc->terminateEditing( edit->frameSet());
+    }
+}
+
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */
 /******************************************************************/

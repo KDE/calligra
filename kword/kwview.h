@@ -173,7 +173,7 @@ public:
     void changeFootNoteMenuItem( bool b);
     void insertFile(const QString & path);
     void configureSpellChecker();
-
+    void testAndCloseAllFrameSetProtectedContent();
 public slots:
     void fileStatistics();
     void editCut();
