@@ -963,6 +963,7 @@ bool KSpreadDatabaseDlg::optionsDoNext()
     if ( ( m_operatorValue_1->text().find('*') != -1 )
          || ( m_operatorValue_1->text().find('?') != -1 ) )
     {
+      // xgettext: no-c-format
       int res = KMessageBox::warningYesNo( this, i18n("'*' or '?' are not valid wildcards in SQL. "
                                                       "The proper replacements are '%' or '_'. Do you want to replace them?") );
 
@@ -976,6 +977,7 @@ bool KSpreadDatabaseDlg::optionsDoNext()
     if ( ( m_operatorValue_2->text().find('*') != -1 )
          || ( m_operatorValue_2->text().find('?') != -1 ) )
     {
+      // xgettext: no-c-format
       int res = KMessageBox::warningYesNo( this, i18n("'*' or '?' are not valid wildcards in SQL. "
                                                       "The proper replacements are '%' or '_'. Do you want to replace them?") );
 
@@ -989,6 +991,7 @@ bool KSpreadDatabaseDlg::optionsDoNext()
     if ( ( m_operatorValue_3->text().find('*') != -1 )
          || ( m_operatorValue_3->text().find('?') != -1 ) )
     {
+      // xgettext: no-c-format
       int res = KMessageBox::warningYesNo( this, i18n("'*' or '?' are not valid wildcards in SQL. "
                                                       "The proper replacements are '%' or '_'. Do you want to replace them?") );
 
