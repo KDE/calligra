@@ -1108,7 +1108,6 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             {
               kspread_cell->setBackGroundBrushStyle(Qt::HorPattern);
               /* 7 Horizontal Stripe */
-              1;
             }
             else if (shade == "8")
             {
@@ -1225,7 +1224,6 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
             else if (halign_string == "16")
             {
               /* Fill: No equivalent in Kspread. */
-              1;
             }
             else if (halign_string == "32")
             {
