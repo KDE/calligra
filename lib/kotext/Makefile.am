@@ -1,4 +1,4 @@
-INCLUDES= $(KOFFICEUI_INCLUDES) $(KOFFICECORE_INCLUDES) $(all_includes)
+INCLUDES= $(KOFFICECORE_INCLUDES) $(KOFFICEUI_INCLUDES) $(all_includes)
 
 lib_LTLIBRARIES = libkotext.la
 libkotext_la_SOURCES = qcomplextext.cpp qrichtext.cpp qrichtext_p.cpp \
@@ -11,7 +11,7 @@ libkotext_la_SOURCES = qcomplextext.cpp qrichtext.cpp qrichtext_p.cpp \
 	koChangeCaseDia.cc koStylist.cc koSearchDia.cc \
 	timedateformatwidget.ui timeformatwidget_impl.cc dateformatwidget_impl.cc \
 	KoTextViewIface.skel KoTextViewIface.cc
-libkotext_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
+libkotext_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 # We use kofficeui for koRect :)
 libkotext_la_LIBADD = $(LIB_KOFFICEUI)
 

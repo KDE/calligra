@@ -9,7 +9,7 @@ libkofficecore_la_LIBADD  = $(LIB_KSTORE) $(LIB_KWMF) $(LIB_KPARTS) \
 ####### Files
 
 lib_LTLIBRARIES = libkofficecore.la 
-kde_module_LTLIBRARIES = libkodocinfopropspage.la
+kde_module_LTLIBRARIES = kodocinfopropspage.la
 
 libkofficecore_la_SOURCES = koDocument.cc \
 	koFilterManager.cc \
@@ -24,8 +24,7 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	KoApplicationIface.cc KoApplicationIface.skel \
 	KoDocumentIface.cc KoDocumentIface.skel KoViewIface.cc KoViewIface.skel \
 	KoMainWindowIface.cc KoMainWindowIface.skel
-
-libkofficecore_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
+libkofficecore_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 
 include_HEADERS = koFilter.h \
 	koDocument.h \
@@ -40,9 +39,9 @@ include_HEADERS = koFilter.h \
 
 noinst_HEADERS = koDocument_p.h koFilterChain.h
 
-libkodocinfopropspage_la_SOURCES = koDocInfoPropsFactory.cc
-libkodocinfopropspage_la_LIBADD = ./libkofficecore.la
-libkodocinfopropspage_la_LDFLAGS = $(all_libraries) -module -no-undefined -avoid-version
+kodocinfopropspage_la_SOURCES = koDocInfoPropsFactory.cc
+kodocinfopropspage_la_LIBADD = ./libkofficecore.la
+kodocinfopropspage_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 
 METASOURCES = AUTO
 
