@@ -866,7 +866,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
 
 void KWTextParag::setParagLayout( const KWParagLayout & layout, int flags )
 {
-    kdDebug() << "KWTextParag::setParagLayout flags=" << flags << endl;
+    //kdDebug() << "KWTextParag::setParagLayout flags=" << flags << endl;
     if ( flags & KWParagLayout::Alignment )
         setAlign( layout.alignment );
     if ( flags & KWParagLayout::Margins )

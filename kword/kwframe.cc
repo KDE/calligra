@@ -799,8 +799,8 @@ void KWFrameSet::save( QDomElement &parentElem )
         if(frame->getFrameBehaviour()!=AutoCreateNewFrame)
             frameElem.setAttribute( "autoCreateNewFrame", static_cast<int>( frame->getFrameBehaviour()) );
 
-        if(frame->getNewFrameBehaviour()!=Reconnect)
-            frameElem.setAttribute( "newFrameBehaviour", static_cast<int>( frame->getNewFrameBehaviour()) );
+        //if(frame->getNewFrameBehaviour()!=Reconnect) // always save this one, since the default value depends on the type of frame, etc.
+        frameElem.setAttribute( "newFrameBehaviour", static_cast<int>( frame->getNewFrameBehaviour()) );
 
         if(frame->getSheetSide()!= AnySide)
             frameElem.setAttribute( "sheetSide", static_cast<int>( frame->getSheetSide()) );
@@ -887,7 +887,9 @@ void KWFrameSet::load( QDomElement &attributes )
             double tpt = frameElem.attribute( "btoppt" ).toDouble();
             double bpt = frameElem.attribute( "bbottompt" ).toDouble();
             FrameBehaviour autoCreateNewValue = static_cast<FrameBehaviour>( KWDocument::getAttribute( frameElem, "autoCreateNewFrame", AutoCreateNewFrame ) );
-            NewFrameBehaviour newFrameBehaviour = static_cast<NewFrameBehaviour>( KWDocument::getAttribute( frameElem, "newFrameBehaviour", Reconnect ) );
+            // Old documents had no "NewFrameBehaviour" for footers/headers -> default to Copy.
+            NewFrameBehaviour defaultValue = ( isAHeader() || isAFooter() ) ? Copy : Reconnect;
+            NewFrameBehaviour newFrameBehaviour = static_cast<NewFrameBehaviour>( KWDocument::getAttribute( frameElem, "newFrameBehaviour", defaultValue ) );
             sheetSide = static_cast<SheetSide>( KWDocument::getAttribute( frameElem, "sheetSide", AnySide ) );
 
             KWFrame * frame = new KWFrame(this, rect.x(), rect.y(), rect.width(), rect.height(), runaround, runAroundGap );

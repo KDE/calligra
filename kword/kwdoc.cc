@@ -1346,9 +1346,9 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                     }
                     KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, _row, _col, fsname );
                     cell->setVisible( _visible );
-                    cell->load( framesetElem );
                     cell->setFrameInfo( frameInfo );
                     cell->setIsRemoveableHeader( removeable );
+                    cell->load( framesetElem );
                     cell->m_rows = _rows;
                     cell->m_cols = _cols;
                 }
@@ -1356,13 +1356,12 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                 {
                     KWTextFrameSet *fs = new KWTextFrameSet( this, fsname );
                     fs->setVisible( _visible );
-                    fs->load( framesetElem );
                     fs->setFrameInfo( frameInfo );
                     fs->setIsRemoveableHeader( removeable );
+                    fs->load( framesetElem );
                     frames.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
 
-                    // Old file format had autoCreateNewFrame as a frameset attribute,
-                    // and our templates still use that.
+                    // Old file format had autoCreateNewFrame as a frameset attribute
                     if ( framesetElem.hasAttribute( "autoCreateNewFrame" ) )
                     {
                         FrameBehaviour behav = static_cast<FrameBehaviour>( framesetElem.attribute( "autoCreateNewFrame" ).toInt() );
@@ -1374,14 +1373,14 @@ void KWDocument::loadFrameSets( QDomElement framesets )
             } break;
             case FT_PICTURE: {
                 KWPictureFrameSet *fs = new KWPictureFrameSet( this, fsname );
-                fs->load( framesetElem );
                 fs->setFrameInfo( frameInfo );
+                fs->load( framesetElem );
                 frames.append( fs );
             } break;
             case FT_FORMULA: {
                 KWFormulaFrameSet *fs = new KWFormulaFrameSet( this, fsname );
-                fs->load( framesetElem );
                 fs->setFrameInfo( frameInfo );
+                fs->load( framesetElem );
                 frames.append( fs );
             } break;
             default: break;
@@ -1750,9 +1749,11 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clear
 
         for ( int k = 0; k < getPages(); k++ )
         {
-            int pagetop = pageTop( k );
             // using paperHeight() leads to rounding problems ( one pixel between two pages, belonging to none of them )
-            QRect pageRect( 0, pagetop, paperWidth(), pageTop( k+1 ) - pagetop );
+            int pagetop = pageTop( k );
+            int pagewidth = paperWidth();
+            int pageheight = pageTop( k+1 ) - pagetop;
+            QRect pageRect( 0, pagetop, pagewidth, pageheight );
             if ( crect.intersects( pageRect ) )
             {
                 //kdDebug() << "KWDocument::drawBorders drawing page rect " << DEBUGRECT( pageRect ) << endl;
@@ -1776,7 +1777,7 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clear
                     }
 
                     // The empty space to clear up inside this page
-                    QRegion emptySpaceRegion = region.intersect( pageRect );
+                    QRegion emptySpaceRegion = region.intersect( pageRect ).intersect( crect );
 
                     // Translate emptySpaceRegion in device coordinates
                     // ( ARGL why on earth isn't QPainter::setClipRegion in transformed coordinate system ?? )
@@ -1794,6 +1795,23 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clear
                     //kdDebug() << "KWDocument::drawBorders clearEmptySpace in " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
                     painter->fillRect( emptySpaceRegion.boundingRect(), QApplication::palette().active().brush( QColorGroup::Base ) ); // Well, Midlight looks great but isn't WYSIWYG
                     painter->restore();
+                }
+            }
+            if ( !embedded && crect.right() > pagewidth )
+            {
+                // Now take care of the area on the right of the page
+                QRect rightArea( pagewidth, pagetop, crect.right() - pagewidth + 1, pageheight );
+                QRect repaintRect = rightArea.intersect( crect );
+                if ( !repaintRect.isEmpty() )
+                {
+                    painter->fillRect( repaintRect,
+                                       QApplication::palette().active().brush( QColorGroup::Mid ) );
+                    const int offset = 3;
+                    // Draw a shadow
+                    int topOffset = ( k==0 ) ? offset : 0; // leave a few pixels on top, only for first page
+                    QRect shadowRect( rightArea.left(), rightArea.top() + topOffset, offset, pageheight - topOffset );
+                    painter->fillRect( shadowRect.intersect( repaintRect ),
+                                       QApplication::palette().active().brush( QColorGroup::Shadow ) );
                 }
             }
         }
