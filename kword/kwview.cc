@@ -5382,7 +5382,6 @@ void KWView::spellCheckerDone( const QString & )
     delete m_spell.kspell;
     m_spell.kspell = 0;
 #endif
-    kdDebug()<<" result != KS_CANCEL :"<<(result != KS_CANCEL)<<" result != KS_STOP :"<<(result != KS_STOP)<<endl;
     if ( result != KS_CANCEL && result != KS_STOP )
     {
         if ( m_spell.bSpellSelection )
@@ -5391,6 +5390,10 @@ void KWView::spellCheckerDone( const QString & )
                                      i18n("SpellCheck selection finished."),
                                      i18n("Spell checking"));
             m_doc->setReadWrite(true);
+#ifdef HAVE_LIBASPELL
+            delete m_spell.kospell;
+            m_spell.kospell = 0;
+#endif
             clearSpellChecker();
         }
         else
