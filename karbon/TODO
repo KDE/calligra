@@ -1,7 +1,6 @@
 -	mirror coordinate-system so origin is bottom-left
 -	rotate/scale/shear tool dont work
 -	remove temporary solution for vpath::intersects()
--	reintroduce whirl
 -	painting (NotROP) while shape creation isnt good. creation should instead
 	insert a temporary object (state "edit") right from the start.
 	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
