@@ -1867,6 +1867,12 @@ void KWFrameSet::setZOrder()
         fit.current()->setZOrder( m_doc->maxZOrder( fit.current()->pageNum(m_doc) ) + 1 );
 }
 
+void KWFrameSet::setName( const QString &_name )
+{
+    m_name = _name;
+    m_doc->updateFrameStatusBarItem();
+}
+
 #ifndef NDEBUG
 void KWFrameSet::printDebug()
 {

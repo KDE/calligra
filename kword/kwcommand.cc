@@ -957,70 +957,28 @@ void KWFramePropertiesCommand::unexecute()
 }
 
 
-KWFrameSetPropertyCommand::KWFrameSetPropertyCommand( const QString &name, KWFrameSet *frameset, Property prop, const QString& value ) :
+KWFrameSetInlineCommand::KWFrameSetInlineCommand( const QString &name, KWFrameSet *frameset, bool value ) :
     KNamedCommand(name),
     m_pFrameSet( frameset ),
-    m_property( prop ),
     m_value( value )
 {
-    switch ( m_property ) {
-    case FSP_NAME:
-        m_oldValue = m_pFrameSet->getName();
-        break;
-    case FSP_FLOATING:
-        m_oldValue = m_pFrameSet->isFloating() ? "true" : "false";
-        break;
-    case FSP_KEEPASPECTRATION:
-        m_oldValue = static_cast<KWPictureFrameSet*>(m_pFrameSet)->keepAspectRatio() ? "keepRatio" : "dontKeepRatio";
-        break;
-    case FSP_PROTECTSIZE:
-        m_oldValue = m_pFrameSet->isProtectSize() ? "true" : "false";
-        break;
-    }
+    m_oldValue = m_pFrameSet->isFloating();
 }
 
-void KWFrameSetPropertyCommand::setValue( const QString &value )
+void KWFrameSetInlineCommand::setValue( bool value )
 {
-    kdDebug() << "KWFrameSetPropertyCommand::execute" << endl;
-    switch ( m_property ) {
-    case FSP_NAME:
-        m_pFrameSet->setName( value );
-        break;
-    case FSP_FLOATING:
-        if ( value == "true" )
-        {
-            // Make frame(set) floating
-            m_pFrameSet->setFloating();
-            // ## We might want to store a list of anchors in the command, and reuse them
-            // in execute/unexecute. Currently setFixed forgets the anchors and setFloating recreates new ones...
-        }
-        else if(value == "false")
-        {
-            // Make frame(set) non-floating
-            m_pFrameSet->setFixed();
-        }
-    case FSP_KEEPASPECTRATION:
-        if( value == "keepRatio")
-        {
-            KWPictureFrameSet * frameSet=dynamic_cast<KWPictureFrameSet*>(m_pFrameSet);
-            if(frameSet)
-                frameSet->setKeepAspectRatio( true );
-        }
-        else if( value=="dontKeepRatio")
-        {
-            KWPictureFrameSet * frameSet=dynamic_cast<KWPictureFrameSet*>(m_pFrameSet);
-            if(frameSet)
-                frameSet->setKeepAspectRatio( false );
-        }
-        break;
-    case FSP_PROTECTSIZE:
-        if( value == "true")
-            m_pFrameSet->setProtectSize( true );
-        else
-            m_pFrameSet->setProtectSize( false );
-        m_pFrameSet->kWordDocument()->repaintResizeHandles();
-        m_pFrameSet->kWordDocument()->updateCursorType();
-        break;
+    kdDebug() << "KWFrameSetInlineCommand::execute" << endl;
+    if ( value )
+    {
+        // Make frame(set) floating
+        m_pFrameSet->setFloating();
+        // ## We might want to store a list of anchors in the command, and reuse them
+        // in execute/unexecute. Currently setFixed forgets the anchors and setFloating recreates new ones...
+    }
+    else
+    {
+        // Make frame(set) non-floating
+        m_pFrameSet->setFixed();
     }
 
     m_pFrameSet->kWordDocument()->updateResizeHandles();
@@ -1030,12 +988,12 @@ void KWFrameSetPropertyCommand::setValue( const QString &value )
     m_pFrameSet->kWordDocument()->updateRulerFrameStartEnd();
 }
 
-void KWFrameSetPropertyCommand::execute()
+void KWFrameSetInlineCommand::execute()
 {
     setValue( m_value );
 }
 
-void KWFrameSetPropertyCommand::unexecute()
+void KWFrameSetInlineCommand::unexecute()
 {
     setValue( m_oldValue );
 }

@@ -361,26 +361,24 @@ protected:
 };
 
 /**
- * This command changes one property of a frameset.
+ * This command makes a frameset floating and non-floating
  */
-class KWFrameSetPropertyCommand : public KNamedCommand
+class KWFrameSetInlineCommand : public KNamedCommand
 {
 public:
-    enum Property { FSP_NAME, FSP_FLOATING, FSP_KEEPASPECTRATION, FSP_PROTECTSIZE };
-    KWFrameSetPropertyCommand( const QString &name, KWFrameSet *frameset,
-		               Property prop, const QString & value );
-    ~KWFrameSetPropertyCommand() {}
+    KWFrameSetInlineCommand( const QString &name, KWFrameSet *frameset,
+                             bool value );
+    ~KWFrameSetInlineCommand() {}
 
     void execute();
     void unexecute();
 
 protected:
-    void setValue( const QString &value );
+    void setValue( bool value );
 
     KWFrameSet* m_pFrameSet;
-    Property m_property;
-    QString m_value;
-    QString m_oldValue;
+    bool m_value;
+    bool m_oldValue;
 };
 
 ///////////////////////////////layout command///////////////////////////

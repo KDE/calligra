@@ -24,8 +24,10 @@
 #include "defs.h"
 #include "kwcommand.h"
 #include "kwtableframeset.h"
-#include <knuminput.h>
 
+#include <koSetPropCommand.h>
+
+#include <knuminput.h>
 #include <klocale.h>
 #include <kiconloader.h>
 
@@ -1483,7 +1485,8 @@ bool KWFrameDia::applyChanges()
                 if(!macroCmd)
                     macroCmd = new KMacroCommand( i18n("Rename Frameset") );
                 // Rename frameset
-                KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Rename Frameset"), fs, KWFrameSetPropertyCommand::FSP_NAME, frameSetItem->text( 1 ));
+                typedef KoSetPropCommand<QString, KWFrameSet, &KWFrameSet::setName> FramesetNameCommand;
+                FramesetNameCommand* cmd = new FramesetNameCommand( fs, i18n( "Rename Frameset" ), fs->getName(), frameSetItem->text( 1 ) );
                 macroCmd->addCommand(cmd);
                 cmd->execute();
             }
@@ -1645,13 +1648,15 @@ bool KWFrameDia::applyChanges()
 #endif
             ))
         {
+            typedef KoSetBasicPropCommand<bool, KWPictureFrameSet, &KWPictureFrameSet::setKeepAspectRatio> FramesetSetKeepAspectRatioCommand;
             if(frame) {
                 KWPictureFrameSet * frm=static_cast<KWPictureFrameSet *>( frame->frameSet() );
                 if(frm->keepAspectRatio()!=cbAspectRatio->isChecked())
                 {
                     if(!macroCmd)
                         macroCmd = new KMacroCommand( i18n("Frame Properties") );
-                    KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null,frame->frameSet(), KWFrameSetPropertyCommand::FSP_KEEPASPECTRATION, cbAspectRatio->isChecked()? "keepRatio" : "dontKeepRatio" );
+                    FramesetSetKeepAspectRatioCommand* cmd = new FramesetSetKeepAspectRatioCommand( frm, QString::null, frm->keepAspectRatio(), cbAspectRatio->isChecked() );
+
                     cmd->execute();
 
                     macroCmd->addCommand(cmd);
@@ -1664,7 +1669,8 @@ bool KWFrameDia::applyChanges()
                         {
                             if(!macroCmd)
                                 macroCmd = new KMacroCommand( i18n("Frame Properties") );
-                            KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null,fs, KWFrameSetPropertyCommand::FSP_KEEPASPECTRATION, cbAspectRatio->isChecked()? "keepRatio" : "dontKeepRatio" );
+                            FramesetSetKeepAspectRatioCommand* cmd = new FramesetSetKeepAspectRatioCommand( fs, QString::null, fs->keepAspectRatio(), cbAspectRatio->isChecked() );
+
                             cmd->execute();
 
                             macroCmd->addCommand(cmd);
@@ -1830,7 +1836,7 @@ bool KWFrameDia::applyChanges()
                 KoPoint oldPos = f->topLeft();
 
                 // turn non-floating frame into floating frame
-                KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null, parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "true" );
+                KWFrameSetInlineCommand *cmd = new KWFrameSetInlineCommand( QString::null, parentFs, true );
                 cmd->execute();
 
                 frameindexList.append( FrameIndex( f ) );
@@ -1846,15 +1852,16 @@ bool KWFrameDia::applyChanges()
                 if(!macroCmd)
                     macroCmd = new KMacroCommand( i18n("Make Frameset Non-Inline") );
                 // turn floating-frame into non-floating frame
-                KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null, parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "false" );
+                KWFrameSetInlineCommand *cmd = new KWFrameSetInlineCommand( QString::null, parentFs, false );
                 macroCmd->addCommand(cmd);
                 cmd->execute();
             }
-            if ( parentFs->isProtectSize() != protectSize->isChecked() )
+            if ( fs->isProtectSize() != protectSize->isChecked() )
             {
                 if(!macroCmd)
                     macroCmd = new KMacroCommand( i18n("Protect Size") );
-                KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null, fs, KWFrameSetPropertyCommand::FSP_PROTECTSIZE, protectSize->isChecked()? "true" : "false" );
+                typedef KoSetBasicPropCommand<bool, KWFrameSet, &KWFrameSet::setProtectSize> FramesetSetProtectSizeCommand;
+                FramesetSetProtectSizeCommand* cmd = new FramesetSetProtectSizeCommand( fs, QString::null, fs->isProtectSize(), protectSize->isChecked() );
                 macroCmd->addCommand(cmd);
                 cmd->execute();
 

@@ -4132,7 +4132,7 @@ void KWView::tableUngroupTable()
 
     if ( table->isFloating() )
     {
-        KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null, table, KWFrameSetPropertyCommand::FSP_FLOATING, "false" );
+        KWFrameSetInlineCommand *cmd = new KWFrameSetInlineCommand( QString::null, table, false );
         macroCmd->addCommand(cmd);
     }
 
@@ -5940,7 +5940,7 @@ void KWView::inlineFrame()
 
         KoPoint initialPos = frame->topLeft();
         // turn non-floating frame into floating frame
-        KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make Frameset Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "true" );
+        KWFrameSetInlineCommand *cmd = new KWFrameSetInlineCommand( i18n("Make Frameset Inline"), parentFs, true );
         cmd->execute();
 
         frameindexList.append( FrameIndex( frame ) );
@@ -5954,7 +5954,7 @@ void KWView::inlineFrame()
     }
     else
     {
-        KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make Frameset Non-Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "false" );
+        KWFrameSetInlineCommand *cmd = new KWFrameSetInlineCommand( i18n("Make Frameset Non-Inline"), parentFs, false );
         m_doc->addCommand(cmd);
         cmd->execute();
     }

@@ -773,7 +773,7 @@ public:
 
     /** get/set frameset name. For tables in particular, this _must_ be unique */
     QString getName() const { return m_name; }
-    void setName( const QString &_name ) { m_name = _name; }
+    void setName( const QString &_name );
 
     /** set frameBehavior on all frames, see KWFrame for specifics */
     void setFrameBehavior( KWFrame::FrameBehavior fb );
