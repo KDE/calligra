@@ -53,6 +53,11 @@ k_dcop:
     void setMoveToValue(const QString & move);
     QString moveToValue()const;
 
+    void setTypeOfCalc( const QString & calc );
+    QString typeOfCalc() const;
+
+
+
 private:
     KSpreadDoc* doc;
 };

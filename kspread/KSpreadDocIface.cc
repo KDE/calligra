@@ -7,6 +7,7 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <qcolor.h>
+#include <kdebug.h>
 
 KSpreadDocIface::KSpreadDocIface( KSpreadDoc* _doc )
     : KoDocumentIface( _doc )
@@ -192,4 +193,49 @@ void KSpreadDocIface::setMoveToValue(const QString & move)
         doc->setMoveToValue(KSpread::Left);
     else if ( move.lower()=="right")
         doc->setMoveToValue(KSpread::Right);
+}
+
+void KSpreadDocIface::setTypeOfCalc( const QString & calc )
+{
+    if ( calc.lower()=="sum")
+        doc->setTypeOfCalc(SumOfNumber );
+    else if ( calc.lower()=="min")
+        doc->setTypeOfCalc( Min );
+    else if ( calc.lower()=="max")
+        doc->setTypeOfCalc(Max );
+    else if ( calc.lower()=="average")
+        doc->setTypeOfCalc(Average );
+    else if ( calc.lower()=="count")
+        doc->setTypeOfCalc(Count );
+    else if ( calc.lower()=="none")
+        doc->setTypeOfCalc(NoneCalc );
+    else
+        kdDebug()<<"Error in setTypeOfCalc( const QString & calc ) :"<<calc<<endl;
+    doc->refreshInterface();
+}
+
+QString KSpreadDocIface::typeOfCalc() const
+{
+    switch( doc->getTypeOfCalc() )
+    {
+    case SumOfNumber:
+        return QString("sum");
+        break;
+    case Min:
+        return QString("min");
+        break;
+    case Max:
+        return QString("max");
+        break;
+    case Average:
+        return QString("average");
+        break;
+    case Count:
+        return QString("count");
+        break;
+    case NoneCalc:
+    default:
+       return QString("none");
+       break;
+    }
 }
