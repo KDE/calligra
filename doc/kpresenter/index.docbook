@@ -25,7 +25,7 @@
 <address><email>neil@nlucock.freeserve.co.uk</email></address>
 </affiliation>
 </author>
-
+	
 <author>
 <firstname>Krishna</firstname>
 <surname>Tateneni</surname>
@@ -70,91 +70,12 @@ productivity applications.
 
 </bookinfo>
 
-<chapter id="todo">
-<title>To Be Done In This Manual</title>
-
-<para>
-There is a <emphasis>lot</emphasis> to be done in the &kpresenter;
-manual. The below list is not necessarily complete, and does not follow
-any particular order.
-</para>
-
-<itemizedlist>
-<listitem>
-<para>
-Flesh out the introduction by describing presentations software
-and the features of &kpresenter; in particular.
-</para>
-</listitem>
-
-<listitem>
-<para>
-Add a <quote>What should I read?</quote> section to the introduction.
-</para>
-</listitem>
-
-<listitem>
-<para>
-Expand the tutorial. Introduce more features to the new user.
-</para>
-</listitem>
-
-<listitem>
-<para>
-Write the <link linkend="screen-description">&kpresenter; Screen</link> chapter.
-</para>
-</listitem>
-
-<listitem>
-<para>
-Create an outline for the <link linkend="guides">Detailed Guides</link>
-chapter(s).
-</para>
-</listitem>
-
-<listitem>
-<para>
-Come up with a set of questions for the <link linkend="q-and-a">Q and
-A</link> chapter. 
-</para>
-</listitem>
-
-<listitem>
-<para>
-Write the <link linkend="options">&kpresenter; Options</link> chapter.
-</para>
-</listitem>
-
-<listitem>
-<para>
-Write the tool bars/menu items chapter.
-</para>
-</listitem>
-
-<listitem>
-<para>Describe Opening Screen</para>
-</listitem>
-
-<listitem>
-<para>Write a quick start guide for those familiar with presentation
-software and who just need an orientation of &kpresenter;'s
-interface</para>
-<para>If possible, do similar for some other common presentation
-softwares</para>
-</listitem>
-
-<listitem>
-<para>Write about the export to HTML function</para>
-</listitem>
-
-</itemizedlist>
-
-
-
-</chapter>
-
 <chapter id="introduction">
 <title>Introduction</title>
+
+<important> <para>Please check <ulink
+url="http://docs.kde.org/en/HEAD/koffice/kpresenter/">http://docs.kde.org</ulink>
+for updated versions of this document.</para></important>
 
 <para>
 &kpresenter; is the presentations program in the &koffice; productivity
@@ -206,9 +127,11 @@ suite. The components of &koffice; are:
 </itemizedlist>
 
 <para>
-&koffice; is a free (or open-source) software project which is released
-under the terms of the <acronym>GNU</acronym> General Public License.
+&koffice; is a free (or open-source) software project which is
+released under the terms of the <acronym>GNU</acronym> General Public
+License.
 </para>
+
 </chapter>
 
 &tutorial;
@@ -288,11 +211,10 @@ Percy Leonhardt <email>percy@eris23.de</email>
 </listitem>
 </itemizedlist>
 
-<para>Current documentation is maintained by and copyright Neil Lucock
-<email>neil@nlucock.freeserve.co.uk</email></para>
-
 <para>
-Documentation based on the work copyright 1999-2000 by Krishna Tateneni. 
+Documentation based on the work copyright 1999-2000 by Krishna
+Tateneni.  Portions are copyright 2000-2002 Neil Lucock
+<email>neil@nlucock.freeserve.co.uk</email>
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
