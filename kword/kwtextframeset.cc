@@ -3250,7 +3250,7 @@ void KWFootNoteFrameSet::setCounterText( const QString& text )
     Q_ASSERT( parag );
     if ( parag ) {
         KoParagCounter counter;
-        counter.setNumbering( KoParagCounter::NUM_FIXEDTEXT );
+        counter.setNumbering( KoParagCounter::NUM_FOOTNOTE );
         counter.setPrefix( text );
         counter.setSuffix( QString::null );
         parag->setCounter( counter );
