@@ -1180,14 +1180,17 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) con
 void KWTextFrameSet::printDebug()
 {
     KWFrameSet::printDebug();
-    kdDebug() << "QTextDocument width = " << textdoc->width() << endl;
-    kdDebug() << " -- Frames in page array -- " << endl;
-    for ( uint i = 0 ; i < m_framesInPage.size() ; ++i )
+    if ( !isDeleted() )
     {
-        QListIterator<KWFrame> it( *m_framesInPage[i] );
-        for ( ; it.current() ; ++it )
-            kdDebug() << i + m_firstPage << ": " << it.current() << "   " << DEBUGRECT( *it.current() )
-                      << " internalY=" << it.current()->internalY() << endl;
+        kdDebug() << "QTextDocument width = " << textdoc->width() << endl;
+        kdDebug() << " -- Frames in page array -- " << endl;
+        for ( uint i = 0 ; i < m_framesInPage.size() ; ++i )
+        {
+            QListIterator<KWFrame> it( *m_framesInPage[i] );
+            for ( ; it.current() ; ++it )
+                kdDebug() << i + m_firstPage << ": " << it.current() << "   " << DEBUGRECT( *it.current() )
+                          << " internalY=" << it.current()->internalY() << endl;
+        }
     }
 }
 #endif

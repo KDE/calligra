@@ -33,6 +33,10 @@ KoTextDocument::KoTextDocument( KoZoomHandler * zoomHandler, QTextDocument *p, K
     formatter->setAllowBreakInWords( true ); // Necessary for lines without a single space
     setFormatter( formatter );
 
+    setY( 0 );
+    setLeftMargin( 0 );
+    setRightMargin( 0 );
+
     // TODO clear(true) here if kpresenter uses kotextdocument directly,
     // otherwise in the derived constructor [virtual method call is the problem]
 }
