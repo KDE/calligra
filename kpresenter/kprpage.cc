@@ -1305,8 +1305,10 @@ void KPrPage::insertClipart( const QString &filename )
     kdDebug(33001) << "KPresenterDoc::insertClipart key=" << key.toString() << endl;
 
     KPClipartObject *kpclipartobject = new KPClipartObject(m_doc->getClipartCollection() , key );
-    kpclipartobject->setOrig( ( (  10 ) / m_doc->rastX() ) * m_doc->rastX(), ( (  10 ) / m_doc->rastY() ) * m_doc->rastY() );
-    kpclipartobject->setSize( 150, 150 );
+    double x=m_doc->zoomHandler()->unzoomItX(10)/m_doc->zoomHandler()->unzoomItX(m_doc->rastX())*m_doc->zoomHandler()->unzoomItX(m_doc->rastX());
+    double y=m_doc->zoomHandler()->unzoomItY(10)/m_doc->zoomHandler()->unzoomItY(m_doc->rastY())*m_doc->zoomHandler()->unzoomItY(m_doc->rastY());
+    kpclipartobject->setOrig( x, y);
+    kpclipartobject->setSize( m_doc->zoomHandler()->unzoomItX(150), m_doc->zoomHandler()->unzoomItY(150) );
     kpclipartobject->setSelected( true );
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, m_doc,this );
@@ -2294,7 +2296,10 @@ void KPrPage::insertPicture( const QString &filename, int _x , int _y )
 {
     KPImageKey key = m_doc->getImageCollection()->loadImage( filename ).key();
     KPPixmapObject *kppixmapobject = new KPPixmapObject(m_doc->getImageCollection() , key );
-    kppixmapobject->setOrig( (   _x  / m_doc->rastX() ) * m_doc->rastX(), ( _y  / m_doc->rastY() ) * m_doc->rastY() );
+    double x=m_doc->zoomHandler()->unzoomItX(_x);
+    double y=m_doc->zoomHandler()->unzoomItY(_y);
+
+    kppixmapobject->setOrig( (   x  / m_doc->zoomHandler()->unzoomItX(m_doc->rastX()) ) * m_doc->zoomHandler()->unzoomItX(m_doc->rastX()), ( y  / m_doc->zoomHandler()->unzoomItY(m_doc->rastY()) ) * m_doc->zoomHandler()->unzoomItY(m_doc->rastY() ));
     kppixmapobject->setSelected( true );
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, m_doc,this );

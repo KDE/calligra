@@ -263,7 +263,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
             _painter->drawRect( _zoomHandler->zoomItX(ox + penw), _zoomHandler->zoomItY(oy + penw), _zoomHandler->zoomItX(ext.width() - 2 * penw), _zoomHandler->zoomItY(ext.height() - 2 * penw) );
         else
             _painter->drawPixmap( _zoomHandler->zoomItX(ox + penw), _zoomHandler->zoomItY(oy + penw), *gradient->getGradient(),
-                                  0, 0, ow - 2 * penw, oh - 2 * penw );
+                                  0, 0, _zoomHandler->zoomItX(ow - 2 * penw), _zoomHandler->zoomItY(oh - 2 * penw) );
 
         if( scaleImage ) {
             // draw high resolution image
@@ -306,7 +306,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
                                 _zoomHandler->zoomItX(ext.width() - 2 * penw), _zoomHandler->zoomItY(ext.height() - 2 * penw) );
         else
             _painter->drawPixmap( _zoomHandler->zoomItX(rr.left() + pixXPos + penw), _zoomHandler->zoomItY(rr.top() + pixYPos + penw),
-                                  *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+                                  *gradient->getGradient(), 0, 0, _zoomHandler->zoomItX(ow - 2 * penw), _zoomHandler->zoomItY(oh - 2 * penw) );
 
         // create mapping to image space
        	QWMatrix oldMapping = _painter->worldMatrix();
