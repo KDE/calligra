@@ -29,6 +29,7 @@
 #include "kptpertview.h"
 #include "kptreportview.h"
 #include "kptdatetime.h"
+#include "kptcommand.h"
 
 #include "kptresourceview.h"
 #include "kptresourcedialog.h"
@@ -317,8 +318,12 @@ void KPTView::slotAddSubTask() {
 		KPTNode *currNode = currentTask();
 		if (currNode)
         {
-			// currNode->addChildNode(node); let the project handle this
-			getProject().addSubTask( node, currNode );
+            KMacroCommand *m = dia->buildCommand();
+            m->execute();
+            delete m;
+            KPTSubtaskAddCmd *cmd = new KPTSubtaskAddCmd(getProject(), node, currNode, i18n("Add subtask"));
+            cmd->execute();
+            getPart()->addCommand(cmd);
     		slotUpdate(true);
 			return;
 	    }
@@ -337,8 +342,12 @@ void KPTView::slotAddTask() {
 		KPTNode* currNode = currentTask();
 		if (currNode)
         {
-			// currNode->addChildNode(node); let the project handle this
-			getProject().addTask( node, currNode );
+            KMacroCommand *m = dia->buildCommand();
+            m->execute();
+            delete m;
+            KPTTaskAddCmd *cmd = new KPTTaskAddCmd(getProject(), node, currNode, i18n("Add task"));
+            cmd->execute();
+            getPart()->addCommand(cmd);
     		slotUpdate(true);
 			return;
 	    }
@@ -362,7 +371,12 @@ void KPTView::slotAddMilestone() {
 		KPTNode *currNode = currentTask();
 		if (currNode)
         {
-			getProject().addTask( node, currNode );
+            KMacroCommand *m = dia->buildCommand();
+            m->execute();
+            delete m;
+            KPTTaskAddCmd *cmd = new KPTTaskAddCmd(getProject(), node, currNode, i18n("Add milestone"));
+            cmd->execute();
+            getPart()->addCommand(cmd);
     		slotUpdate(true);
 			return;
 	    }
@@ -456,8 +470,9 @@ void KPTView::slotDeleteTask()
 
 	KPTNode* task = currentTask();
 
-	// tell the model to do the work for us
-	getProject().deleteTask( task );
+    KPTNodeDeleteCmd *cmd = new KPTNodeDeleteCmd(task, i18n("Delete task"));
+    cmd->execute();
+    getPart()->addCommand(cmd);
 
 	// display the changes
 	slotUpdate(true);

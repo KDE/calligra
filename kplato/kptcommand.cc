@@ -57,6 +57,47 @@ void KPTCalendarDeleteCmd::unexecute() {
 }
 
 
+KPTNodeAddCmd::KPTNodeAddCmd(KPTProject &project, KPTNode *node, KPTNode *position,  QString name)
+    : KNamedCommand(name),
+      m_node(node) {
+    node->setDeleted(true);
+}
+
+void KPTNodeAddCmd::execute() {
+    m_node->setDeleted(false);
+}
+
+void KPTNodeAddCmd::unexecute() {
+    m_node->setDeleted(true);
+}
+
+
+KPTNodeDeleteCmd::KPTNodeDeleteCmd(KPTNode *node, QString name)
+    : KNamedCommand(name),
+      m_node(node) {
+}
+
+void KPTNodeDeleteCmd::execute() {
+    m_node->setDeleted(true);
+}
+
+void KPTNodeDeleteCmd::unexecute() {
+    m_node->setDeleted(false);
+}
+
+
+KPTTaskAddCmd::KPTTaskAddCmd(KPTProject &project, KPTNode *node, KPTNode *position,  QString name)
+    : KPTNodeAddCmd(project, node, position, name) {
+    project.addTask(node, position);
+}
+
+
+KPTSubtaskAddCmd::KPTSubtaskAddCmd(KPTProject &project, KPTNode *node, KPTNode *position,  QString name)
+    : KPTNodeAddCmd(project, node, position, name) {
+    project.addSubTask(node, position);
+}
+
+
 KPTNodeModifyNameCmd::KPTNodeModifyNameCmd(KPTNode &node, QString nodename, QString name)
     : KNamedCommand(name),
       m_node(node),

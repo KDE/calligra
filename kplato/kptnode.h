@@ -309,6 +309,10 @@ public:
 
     virtual QPtrList<KPTAppointment> appointments(const KPTNode *node);
 
+    virtual bool isDeleted() const { return m_deleted; }
+    virtual void setDeleted(bool on) { m_deleted = on; }
+    bool allChildrenDeleted() const;
+    
 protected:
     /**
      * For pert/cpm it is useful to have a hidden start node for each
@@ -452,6 +456,7 @@ protected:
 
     bool m_resourceOverbooked;
 
+    bool m_deleted;
 
 #ifndef NDEBUG
 public:

@@ -50,6 +50,7 @@ void KPTNode::init() {
     m_effort = 0;
     m_resourceOverbooked = false;
     m_resourceError = false;
+    m_deleted = false;
 }
 
 KPTNode *KPTNode::projectNode() {
@@ -469,6 +470,15 @@ QString KPTNode::constraintToString() const {
         return QString("MustFinishOn");
 
     return QString();
+}
+
+bool KPTNode::allChildrenDeleted() const {
+    QPtrListIterator<KPTNode> it = m_nodes;
+    for (; it.current(); ++it) {
+        if (!it.current()->isDeleted())
+            return false;
+    }
+    return true;
 }
 
 ////////////////////////////////////   KPTEffort   ////////////////////////////////////////////

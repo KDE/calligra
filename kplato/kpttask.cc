@@ -47,7 +47,7 @@ KPTTask::~KPTTask() {
 }
 
 int KPTTask::type() const {
-	if ( numChildren() > 0) {
+	if ( numChildren() > 0 && !allChildrenDeleted()) {
 	  return KPTNode::Type_Summarytask;
 	}
 	else if ( 0 == effort()->expected().duration() ) {
@@ -410,6 +410,8 @@ bool KPTTask::load(QDomElement &element) {
 
 
 void KPTTask::save(QDomElement &element)  {
+    if (isDeleted())
+        return;
     QDomElement me = element.ownerDocument().createElement("task");
     element.appendChild(me);
 

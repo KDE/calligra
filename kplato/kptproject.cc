@@ -399,6 +399,8 @@ bool KPTProject::load(QDomElement &element) {
 
 
 void KPTProject::save(QDomElement &element)  {
+    if (isDeleted())
+        return;
     QDomElement me = element.ownerDocument().createElement("project");
     element.appendChild(me);
 
@@ -566,16 +568,7 @@ void KPTProject::deleteTask( KPTNode* task )
 		return;
 	}
 
-	// we have to tell the parent that we want to delete one of its children
-	KPTNode* parentNode = task->getParent();
-	if ( parentNode ) {
-		parentNode->delChildNode( task, true );
-	}
-	else {
-		// the only nodes that do not have a parent are those that are
-		// directly owned by the project
-		delChildNode( task, true );
-	}
+    task->setDeleted(true);
 }
 
 void KPTProject::indentTask( KPTNode* task )

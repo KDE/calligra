@@ -50,6 +50,41 @@ private:
     KPTCalendar *m_cal;
 };
 
+class KPTNodeAddCmd : public KNamedCommand
+{
+public:
+    KPTNodeAddCmd(KPTProject &project, KPTNode *node, KPTNode *position, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode *m_node;
+};
+
+class KPTNodeDeleteCmd : public KNamedCommand
+{
+public:
+    KPTNodeDeleteCmd(KPTNode *node, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode *m_node;
+};
+
+class KPTTaskAddCmd : public KPTNodeAddCmd
+{
+public:
+    KPTTaskAddCmd(KPTProject &project, KPTNode *node, KPTNode *position,  QString name=0);
+};
+
+class KPTSubtaskAddCmd : public KPTNodeAddCmd
+{
+public:
+    KPTSubtaskAddCmd(KPTProject &project, KPTNode *node, KPTNode *position,  QString name=0);
+};
+
+
 class KPTNodeModifyNameCmd : public KNamedCommand
 {
 public:

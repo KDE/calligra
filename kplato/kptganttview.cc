@@ -107,6 +107,8 @@ void KPTGanttView::draw(KPTProject &project)
 
 void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &parentNode)
 {
+    if (parentNode.isDeleted())
+        return;
 	QPtrListIterator<KPTNode> nit(parentNode.childNodeIterator());
 	for ( nit.toLast(); nit.current(); --nit )
 	{
@@ -133,6 +135,8 @@ void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &par
 
 void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode *node)
 {
+    if (node->isDeleted())
+        return;
 	KPTDateTime *time = node->getStartTime();
 	KPTDuration *dur = node->getExpectedDuration();
     if (*dur == KPTDuration::zeroDuration)
@@ -158,6 +162,8 @@ void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode *node
 
 void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *node)
 {
+    if (node->isDeleted())
+        return;
 	KPTDateTime *time = node->getStartTime();
 	KPTDuration *dur = node->getExpectedDuration();
     if (*dur == KPTDuration::zeroDuration)
@@ -183,6 +189,8 @@ void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *n
 
 void KPTGanttView::drawSummaryTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 {
+    if (task->isDeleted())
+        return;
 	KPTDateTime *time = task->getStartTime();
 	KPTDuration *dur = task->getExpectedDuration();
     if (*dur == KPTDuration::zeroDuration)
@@ -208,6 +216,8 @@ void KPTGanttView::drawSummaryTask(KDGanttViewSummaryItem *parentItem, KPTTask *
 
 void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 {
+    if (task->isDeleted())
+        return;
 	KPTDateTime *time = task->getStartTime();
 	KPTDuration *dur = task->getExpectedDuration();
     if (*dur == KPTDuration::zeroDuration)
@@ -236,6 +246,8 @@ void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 
 void KPTGanttView::drawMilestone(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 {
+    if (task->isDeleted())
+        return;
 	KPTDateTime *time = task->getStartTime();
 	KPTGanttViewEventItem *item;
 	if ( parentItem ) {
