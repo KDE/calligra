@@ -1215,8 +1215,8 @@ bool KoDocument::loadNativeFormat( const QString & file )
             kdError (30003) << "Parsing Error! Aborting! (in KoDocument::loadNativeFormat (QFile))" << endl
                             << "  Line: " << errorLine << " Column: " << errorColumn << endl
                             << "  Message: " << errorMsg << endl;
-            d->lastErrorMessage = i18n( "Parsing error in file at line %1, column %2" )
-                                  .arg( errorLine ).arg( errorColumn );
+            d->lastErrorMessage = i18n( "parsing error in the main document at line %1, column %2\nError message: %3" )
+                                  .arg( errorLine ).arg( errorColumn ).arg( errorMsg );
             res=false;
         }
 
@@ -1249,8 +1249,8 @@ bool KoDocument::loadNativeFormat( const QString & file )
                 kdError (30003) << "Parsing Error! Aborting! (in KoDocument::loadNativeFormat (KoStore))" << endl
                                 << "  Line: " << errorLine << " Column: " << errorColumn << endl
                                 << "  Message: " << errorMsg << endl;
-                d->lastErrorMessage = i18n( "Parsing error in file at line %1, column %2" )
-                                      .arg( errorLine ).arg( errorColumn );
+                d->lastErrorMessage = i18n( "parsing error in the main document at line %1, column %2\nError message: %3" )
+                                      .arg( errorLine ).arg( errorColumn ).arg( errorMsg );
                 delete store;
                 QApplication::restoreOverrideCursor();
                 return false;
