@@ -205,7 +205,6 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     QString suffix = KoUnit::unitName( unit ).prepend(' ');
     gridX=new KDoubleNumInput( KoUnit::userValue( ptGridX, unit ), tmpQGroupBox );
     gridX->setRange(0.1, 50, 0.1);
-//    gridX->setFormat( "%.1f" );
     gridX->setPrecision (1);
     gridX->setSuffix( suffix );
     gridX->setLabel(i18n("X grid space"));
@@ -213,7 +212,6 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 
     gridY=new KDoubleNumInput( KoUnit::userValue( ptGridY, unit ), tmpQGroupBox );
     gridY->setRange(0.1, 50, 0.1);
-//    gridY->setFormat( "%.1f" );
     gridY->setPrecision(1);
     gridY->setLabel(i18n("Y grid space"));
     gridY->setSuffix( suffix );
@@ -222,7 +220,6 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     double val = KoUnit::userValue( ptIndent, unit );
     indent = new KDoubleNumInput( val, tmpQGroupBox );
     indent->setRange(0.1, 50, 0.1);
-//    indent->setFormat( "%.1f" );
     indent->setPrecision(1);
     indent->setSuffix( suffix );
     indent->setLabel(i18n("Paragraph indent by toolbar buttons"));
@@ -359,7 +356,6 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     QString suffix = unitType.prepend(' ');
     columnSpacing=new KDoubleNumInput( KoUnit::userValue( ptColumnSpacing, unit ), tmpQGroupBox );
     columnSpacing->setRange(0.1, 50, 0.1);
-//    columnSpacing->setFormat( "%.1f" );
     columnSpacing->setPrecision(1);
     columnSpacing->setSuffix( suffix );
     columnSpacing->setLabel(i18n("Default Column Spacing:"));
