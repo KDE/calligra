@@ -6848,15 +6848,15 @@ void KSpreadSheet::convertObscuringBorders()
 
 void KSpreadSheet::setRegionPaintDirty(QRect const & region)
 {
-  QValueList<QRect>::iterator it = m_paintDirtyList.begin();
+  QValueList<QRect>::iterator it  = m_paintDirtyList.begin();
+  QValueList<QRect>::iterator end = m_paintDirtyList.end();
 
-  while (it != m_paintDirtyList.end())
+  while ( it != end )
   {
-    if ((*it).contains(region))
-    {
+    if ( (*it).contains( region ) )
       return;
-    }
-    it++;
+
+    ++it;
   }
 
   m_paintDirtyList.append(region);
