@@ -86,3 +86,4 @@ Crashes:
 - Fixed crash when we cancel insert time/date variable.
 - Fixed crash when we duplicate page and there was an embedded document.
 - Fixed crash when we split view and we try to open menu when factory() is null
+- Fixed crash when we didn't select a slide and try to launch presentation
