@@ -39,6 +39,8 @@
 #include <qdom.h>
 
 #include <kdebug.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 
 #include <koGlobal.h>
 #include <koStore.h>
@@ -974,7 +976,10 @@ static bool ParseFile ( QIODevice* subFile, QDomDocument& doc)
         kdError (30508) << "Parsing Error! Aborting! (in ParseFile)" << endl
             << "  Line: " << errorLine << " Column: " << errorColumn << endl
             << "  Message: " << errorMsg << endl;
-        // TODO: user message
+        // ### TODO: the error is in which sub-file?
+        KMessageBox::error( 0L, i18n("An error has occurred while parsing the KWord file.\nAt line: %1, column %2\nError message: %3")
+            .arg( errorLine ).arg( errorColumn ).arg(i18n( "QXml", errorMsg.utf8() ) ),
+            i18n("KWord Export Filter Library"), 0 );
         return false;
     }
     return true;
