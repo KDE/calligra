@@ -43,7 +43,9 @@ private:
     void prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
     void writePageLayout( QDomDocument& mainDocument, const QString& masterPageName );
     void parseList( QDomDocument& doc, const QDomElement& list, QDomElement& currentFramesetElement );
-    void applyListStyle( QDomDocument& doc, QDomElement& layoutElement );
+    bool pushListLevelStyle( const QString& listStyleName, int level );
+    bool pushListLevelStyle( const QString& listStyleName, QDomElement& fullListStyle, int level );
+    void applyListStyle( QDomDocument& doc, QDomElement& layoutElement, const QDomElement& paragraph );
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& paragraph );
     void parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent, QDomElement& kwordParagraph, QDomElement& kwordFormats, QString& paragraphText, uint& pos);
     // Reads from m_styleStack, writes the text properties to parentElement
@@ -82,9 +84,12 @@ private:
     QDict<QDomElement>   m_listStyles;
 
     StyleStack m_styleStack;
+    QDomElement m_defaultStyle;
     ListStyleStack m_listStyleStack;
+    QDomElement m_outlineStyle;
     bool m_insideOrderedList;
     bool m_nextItemIsListItem; // only the first elem inside list-item is numbered
+    int m_restartNumbering;
     QString m_currentMasterPage;
 
     uint m_pictureNumber; // Number of the picture (increment *before* use)

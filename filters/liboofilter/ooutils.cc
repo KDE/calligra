@@ -82,9 +82,11 @@ void OoUtils::importIndents( QDomElement& parentElement, const StyleStack& style
         double marginLeft = KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ) );
         double marginRight = KoUnit::parseValue( styleStack.attribute( "fo:margin-right" ) );
         double first = 0;
-        if (styleStack.hasAttribute("style:auto-text-indent")) // style:auto-text-indent takes precedence
-            // ### It has another meaning, no?
-            first = KoUnit::parseValue( styleStack.attribute("style:auto-text-indent"));
+        if (styleStack.attribute("style:auto-text-indent") == "true") // style:auto-text-indent takes precedence
+            // ### "indented by a value that is based on the current font size"
+            // ### and "requires margin-left and margin-right
+            // ### but how much is the indent?
+            first = 10;
         else if (styleStack.hasAttribute("fo:text-indent"))
             first = KoUnit::parseValue( styleStack.attribute("fo:text-indent"));
 
