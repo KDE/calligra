@@ -48,7 +48,7 @@ KexiPropertyBuffer::changeProperty(const QString &property, const QVariant &valu
 
 	if (prop->value() != value) {
 		prop->setValue(value);
-		emit propertyChanged(property, value);
+		emit propertyChanged(*this, *prop);
 	}
 }
 
