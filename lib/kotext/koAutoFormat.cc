@@ -689,6 +689,22 @@ QDomElement KoAutoFormat::saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QD
                 break;
             }
         }
+        if ( tmp->m_optionsMask & KoSearchContext::Attribute )
+        {
+            switch( tmp->m_attribute )
+            {
+            case KoTextFormat::ATT_NONE:
+                data.setAttribute("FONTATTRIBUTE", "none");
+                break;
+            case KoTextFormat::ATT_UPPER:
+                data.setAttribute("FONTATTRIBUTE", "upper");
+                break;
+            case KoTextFormat::ATT_LOWER:
+                data.setAttribute("FONTATTRIBUTE", "lower");
+                break;
+            }
+        }
+
         if ( tmp->m_optionsMask & KoSearchContext::VertAlign)
         {
             data.setAttribute( "VERTALIGN", static_cast<int>(tmp->m_vertAlign) );
@@ -1952,5 +1968,11 @@ void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat
             format->setVAlign(formatOptions->m_vertAlign);
             flags |=KoTextFormat::VAlign;
         }
+        if ( formatOptions->m_optionsMask & KoSearchContext::Attribute)
+        {
+            format->setAttributeFont(formatOptions->m_attribute);
+            flags |= KoTextFormat::Attribute;
+        }
+
     }
 }

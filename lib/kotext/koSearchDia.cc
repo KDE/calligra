@@ -539,7 +539,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
     connect( this, SIGNAL( user2Clicked() ), this, SLOT(slotClear()));
 
-    QGridLayout *m_grid = new QGridLayout( page, 13, 2, 0, 6 );
+    QGridLayout *m_grid = new QGridLayout( page, 14, 2, 0, 6 );
     m_checkFamily = new QCheckBox( i18n( "Family:" ),page  );
     m_checkSize = new QCheckBox( i18n( "Size:" ), page );
     m_checkColor = new QCheckBox( i18n( "Color:" ), page );
@@ -565,6 +565,14 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_strikeOutItem->insertItem( i18n( "Double" ), -1 );
     m_strikeOutItem->insertItem( i18n( "Simple Bold" ), -1 );
     m_strikeOutItem->setCurrentItem( (int)m_ctx->m_strikeOut );
+
+
+    m_checkFontAttribute = new QCheckBox( i18n( "Attribute:" ), page);
+    m_fontAttributeItem = new QComboBox( page );
+    m_fontAttributeItem->insertItem( i18n("Without"), -1 );
+    m_fontAttributeItem->insertItem( i18n("Uppercase"), -1 );
+    m_fontAttributeItem->insertItem( i18n("LowerCase"), -1 );
+    m_fontAttributeItem->setCurrentItem( (int)m_ctx->m_attribute );
 
 
     m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment:" ), page );
@@ -625,7 +633,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_grid->addWidget( m_checkVertAlign, 9, 0 );
     m_grid->addWidget( m_checkShadow, 10, 0 );
     m_grid->addWidget( m_checkWordByWord, 11, 0 );
-
+    m_grid->addWidget( m_checkFontAttribute, 12, 0 );
 
     m_grid->addWidget( m_familyItem, 1, 1 );
     m_grid->addWidget( m_sizeItem, 2, 1 );
@@ -641,8 +649,10 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     m_grid->addWidget( grpShadow, 10, 1 );
     m_grid->addWidget( grpWordByWord, 11, 1 );
 
+    m_grid->addWidget( m_fontAttributeItem, 12, 1);
+
     KSeparator *tmpSep = new KSeparator( page );
-    m_grid->addMultiCellWidget( tmpSep, 12, 12, 0, 1 );
+    m_grid->addMultiCellWidget( tmpSep, 13, 13, 0, 1 );
 
     // signals and slots connections
     QObject::connect( m_checkFamily, SIGNAL( toggled( bool ) ), m_familyItem, SLOT( setEnabled( bool ) ) );
@@ -655,6 +665,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     QObject::connect( m_checkStrikeOut, SIGNAL( toggled( bool ) ), m_strikeOutItem, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkShadow, SIGNAL( toggled( bool ) ), m_shadowYes, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkWordByWord, SIGNAL( toggled( bool ) ), m_wordByWordYes, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkFontAttribute, SIGNAL( toggled( bool ) ), m_fontAttributeItem, SLOT( setEnabled( bool ) ) );
 
 
 
@@ -719,6 +730,11 @@ void KoFormatDia::slotReset()
 
     m_checkVertAlign->setChecked( m_ctx->m_optionsMask & KoSearchContext::VertAlign );
     m_vertAlignItem->setEnabled(m_checkVertAlign->isChecked());
+
+    m_checkFontAttribute->setChecked( m_ctx->m_optionsMask & KoSearchContext::Attribute );
+    m_fontAttributeItem->setEnabled(m_checkFontAttribute->isChecked());
+
+
 
     if (m_ctx->m_options & KoSearchContext::Bold)
         m_boldYes->setChecked( true );
@@ -788,6 +804,7 @@ void KoFormatDia::ctxOptions( )
     m_ctx->m_vertAlign = (KoTextFormat::VerticalAlignment)m_vertAlignItem->currentItem();
     m_ctx->m_underline = (KoTextFormat::UnderlineLineType)m_underlineItem->currentItem();
     m_ctx->m_strikeOut = (KoTextFormat::StrikeOutLineType)m_strikeOutItem->currentItem();
+    m_ctx->m_attribute = ( KoTextFormat::AttributeStyle)m_fontAttributeItem->currentItem();
     m_ctx->m_options = options;
 }
 
@@ -862,6 +879,12 @@ bool KoFindReplace::validateMatch( const QString & /*text*/, int index, int matc
         if ( searchContext->m_optionsMask & KoSearchContext::VertAlign)
         {
             if ( format->vAlign() != searchContext->m_vertAlign )
+                return false;
+        }
+
+        if ( searchContext->m_optionsMask & KoSearchContext::Attribute)
+        {
+            if ( format->attributeFont() != searchContext->m_attribute )
                 return false;
         }
 

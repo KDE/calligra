@@ -66,8 +66,8 @@ public:
         StrikeOut = 128 * KoFindDialog::MinimumUserOption,
         BgColor = 256 *KoFindDialog::MinimumUserOption,
         Shadow = 512 *KoFindDialog::MinimumUserOption,
-        WordByWord = 1024 *KoFindDialog::MinimumUserOption
-
+        WordByWord = 1024 *KoFindDialog::MinimumUserOption,
+        Attribute = 1024 *KoFindDialog::MinimumUserOption
     } Options;
 
     KoSearchContext();
@@ -80,6 +80,7 @@ public:
     KoTextFormat::VerticalAlignment m_vertAlign;
     KoTextFormat::UnderlineLineType m_underline;
     KoTextFormat::StrikeOutLineType m_strikeOut;
+    KoTextFormat::AttributeStyle m_attribute;
 
     QStringList m_strings; // history
     long m_optionsMask;
@@ -283,6 +284,8 @@ private:
     QCheckBox *m_checkUnderline;
     QCheckBox *m_checkVertAlign;
     QCheckBox *m_checkStrikeOut;
+    QCheckBox *m_checkFontAttribute;
+
     KFontCombo *m_familyItem;
     QSpinBox *m_sizeItem;
     KColorButton *m_colorItem;
@@ -299,7 +302,7 @@ private:
     QComboBox *m_vertAlignItem;
     QComboBox *m_underlineItem;
     QComboBox *m_strikeOutItem;
-
+    QComboBox *m_fontAttributeItem;
     KoSearchContext *m_ctx;
 };
 
