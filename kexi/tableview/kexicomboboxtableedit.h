@@ -90,6 +90,8 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 
 		virtual void init(const QString& /*add*/);
 
+		virtual bool eventFilter( QObject *o, QEvent *e );
+
 //		KComboBox *m_combo;
 //		KLineEdit *m_lineedit; //!< the same as m_view
 		KPushButton *m_button;

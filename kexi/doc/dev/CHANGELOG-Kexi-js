@@ -320,7 +320,13 @@ TODO: reuse KexiNameWidget in KexiNewProjectWizard!
 
 CC_MAIL: dkite@shaw.ca
 
-
+2004-03-10
+Table View
+	-Combo box editor: after new row selecting (not hightlighting) editing is accepted
+	-setFilteringEnabled() added
+Alter Table Dialog
+	-
+	
 2004-03-09
 Main Window : some top level polishing
 	-most tooltips/what's this  added for actions

@@ -3060,6 +3060,16 @@ void KexiTableView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int
 	}
 }
 
+void KexiTableView::setFilteringEnabled(bool set)
+{
+	d->filteringEnabled = set;
+}
+
+bool KexiTableView::filteringEnabled() const
+{
+	return d->filteringEnabled;
+}
+
 int KexiTableView::validRowNumber(const QString& text)
 {
 	bool ok=true;

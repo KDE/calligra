@@ -183,6 +183,12 @@ public:
 	/*! Enables or disables the context menu for the view. */
 	void setContextMenuEnabled(bool set);
 	
+	/*! Enables or disables filtering. Filtering is enabled by default. */
+	void setFilteringEnabled(bool set);
+
+	/*! \return true is filtering is enabled. */
+	bool filteringEnabled() const;
+		
 	int currentColumn() const;
 	int currentRow() const;
 

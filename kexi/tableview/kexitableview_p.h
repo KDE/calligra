@@ -134,6 +134,9 @@ class KexiTableViewPrivate
 	 True by default. */
 	bool contextMenuEnabled : 1;
 
+	/*! true if filtering is enabled for the view. */
+	bool filteringEnabled : 1;
+	
 	/*! used to force single skip keyPress event. */
 	bool skipKeyPress : 1;
 	

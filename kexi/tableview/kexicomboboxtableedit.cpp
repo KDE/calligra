@@ -246,6 +246,7 @@ void KexiComboBoxTableEdit::showPopup()
 
 		m_popup->setFocusProxy( m_lineedit );
 		m_popup->tableView()->setFocusProxy( m_lineedit );
+		m_popup->installEventFilter(this);
 
 //		m_popup->tableView()->selectRow(m_origValue.toInt());//update selection
 		if (m_origValue.isNull())
@@ -289,6 +290,7 @@ void KexiComboBoxTableEdit::slotRowAccepted(KexiTableItem * item, int /*row*/)
 	//..nothing to do?
 //	emit acceptRequested();
 	slotItemSelected(item);
+	emit acceptRequested();
 }
 
 bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
@@ -354,6 +356,14 @@ int KexiComboBoxTableEdit::widthForValue( QVariant &val, QFontMetrics &fm )
 	if (!ok)
 		return KEXITV_MINIMUM_COLUMN_WIDTH;
 	return fm.width( txt );
+}
+
+bool KexiComboBoxTableEdit::eventFilter( QObject *o, QEvent *e )
+{
+	if (e->type()==QEvent::MouseButtonPress) {
+		kdDebug() <<"??" <<endl;
+	}
+	return false;
 }
 
 //======================================================

@@ -47,6 +47,7 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	isSortingEnabled = true;
 	navigatorEnabled = true;
 	contextMenuEnabled = true;
+	filteringEnabled = true;
 	navPanel = 0;
 	skipKeyPress = false;
 	vScrollBarValueChanged_enabled = true;
