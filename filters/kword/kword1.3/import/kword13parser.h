@@ -31,8 +31,6 @@ class KWord13Frameset;
 class KWord13Layout;
 class KWord13Format;
 
-// ### TODO: stackItem and friends should be renamed to become unique (see AbiWord import filter), as Doxygen cannot handle multiple classes with the same name.
-
 /**
  * Type of element
  *
