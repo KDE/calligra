@@ -46,7 +46,7 @@ bool SVGExport::filter( const QString &fileIn, const QString &fileOut,
         kdWarning( 30514 ) << "Invalid mimetypes " << to << " " << from << endl;
         return false;
     }
-    
+
     KoStore koStoreIn( fileIn, KoStore::Read );
     if( !koStoreIn.open( "root" ) )
     {
@@ -184,7 +184,7 @@ void SVGExport::exportRect( QDomElement &docNodeOut, const QDomElement &docNodeI
     rect.setAttribute( "rx", roundness );
     rect.setAttribute( "ry", roundness );
 
-    QList<Coord> coords;
+    QPtrList<Coord> coords;
     coords.setAutoDelete( true );
     coords = getPoints( docNodeIn.namedItem( "polyline" ).toElement() );
     exportGObject( rect, docNodeIn.namedItem( "polyline" ).namedItem( "gobject" ).toElement() );
@@ -194,12 +194,12 @@ void SVGExport::exportRect( QDomElement &docNodeOut, const QDomElement &docNodeI
 void SVGExport::exportPolygon( QDomElement &docNodeOut, const QDomElement &docNodeIn ) {
     QDomElement poly = docNodeOut.ownerDocument().createElement( "polygon" );
 
-    QList<Coord> coords;
+    QPtrList<Coord> coords;
     coords.setAutoDelete( true );
     coords = getPoints( docNodeIn.namedItem( "polyline" ).toElement() );
     QString s;
     for( unsigned int i = 0; i < coords.count(); i++ ) {
-        s += QString::number( coords.at( i )->x() ) + "," + 
+        s += QString::number( coords.at( i )->x() ) + "," +
 	     QString::number( coords.at( i )->y() ) + " ";
     }
     poly.setAttribute( "points", s );
@@ -212,12 +212,12 @@ void SVGExport::exportPolyline( QDomElement &docNodeOut, const QDomElement &docN
     //poly.setAttribute( "width",  docNodeIn.attribute( "width" ) );
     //poly.setAttribute( "height", docNodeIn.attribute( "height" ) );
 
-    QList<Coord> coords;
+    QPtrList<Coord> coords;
     coords.setAutoDelete( true );
     coords = getPoints( docNodeIn );
     QString s;
     for( unsigned int i = 0; i < coords.count(); i++ ) {
-        s += QString::number( coords.at( i )->x() ) + "," + 
+        s += QString::number( coords.at( i )->x() ) + "," +
 	     QString::number( coords.at( i )->y() ) + " ";
     }
     poly.setAttribute( "points", s );
@@ -249,12 +249,12 @@ void SVGExport::exportEllipse( QDomElement &docNodeOut, const QDomElement &docNo
 void SVGExport::exportBezier( QDomElement &docNodeOut, const QDomElement &docNodeIn ) {
     QDomElement bezier = docNodeOut.ownerDocument().createElement( "path" );
 
-    QList<Coord> coords;
+    QPtrList<Coord> coords;
     coords.setAutoDelete( true );
     coords = getPoints( docNodeIn.namedItem( "polyline" ).toElement() );
     QString s;
     bool bClosed = false;
-    s = "M " + QString::number( coords.at( 1 )->x() ) + " " + 
+    s = "M " + QString::number( coords.at( 1 )->x() ) + " " +
                QString::number( coords.at( 1 )->y() ) + " ";
     unsigned int i = 2;
     while( i < coords.count() - 2 ) {
@@ -263,14 +263,14 @@ void SVGExport::exportBezier( QDomElement &docNodeOut, const QDomElement &docNod
 	cout << "coord : " << (float)(coords.at( i + 1 )->x()) << " == " << (float)FLT_MAX << endl;
         if( (coords.at( i )->x() == (float)FLT_MAX) || (coords.at( i + 1 )->x() == (float)FLT_MAX) ){
 	    s += "L ";
-	    s += QString::number( coords.at( i + 2 )->x() ) + " " + 
+	    s += QString::number( coords.at( i + 2 )->x() ) + " " +
 	         QString::number( coords.at( i + 2 )->y() ) + " ";
 	}
 	else
 	{*/
             s += "C ";
             for( int n = 0; n < 3; n++ ) {
-                s += QString::number( coords.at( i + n )->x() ) + " " + 
+                s += QString::number( coords.at( i + n )->x() ) + " " +
 	             QString::number( coords.at( i + n )->y() ) + " ";
             }
             i += 3;
@@ -293,7 +293,7 @@ void SVGExport::exportCurve( QDomElement &docNodeOut, const QDomElement &docNode
     bool bClosed = false;
     bool first = true;
     float startx=0.0, starty=0.0;
-    QList<Coord> coords;
+    QPtrList<Coord> coords;
     coords.setAutoDelete( true );
     QDomNodeList list = docNodeIn.childNodes();
 
@@ -335,9 +335,9 @@ void SVGExport::exportCurve( QDomElement &docNodeOut, const QDomElement &docNode
     docNodeOut.appendChild( curve );
 }
 
-QList<Coord> SVGExport::getSegments( const QDomElement &docNodeIn )
+QPtrList<Coord> SVGExport::getSegments( const QDomElement &docNodeIn )
 {
-    QList<Coord> temp;
+    QPtrList<Coord> temp;
     int kind = docNodeIn.attribute( "kind" ).toInt();
     QDomNodeList list = docNodeIn.childNodes( );
 
@@ -354,9 +354,9 @@ QList<Coord> SVGExport::getSegments( const QDomElement &docNodeIn )
    return temp;
 }
 
-QList<Coord> SVGExport::getPoints( const QDomElement &docNodeIn )
+QPtrList<Coord> SVGExport::getPoints( const QDomElement &docNodeIn )
 {
-    QList<Coord> temp;
+    QPtrList<Coord> temp;
     QDomNodeList list = docNodeIn.childNodes( );
     for( unsigned int i = 0 ; i < list.count() - 1 ; i++ )
          temp.append( createPoint( list.item( i ).toElement() ) );
@@ -366,8 +366,8 @@ QList<Coord> SVGExport::getPoints( const QDomElement &docNodeIn )
 
 Coord *SVGExport::createPoint( const QDomElement &docNodeIn )
 {
-    return new Coord( docNodeIn.attribute( "x" ).toFloat(), 
-                      docNodeIn.attribute( "y" ).toFloat() );                           
+    return new Coord( docNodeIn.attribute( "x" ).toFloat(),
+                      docNodeIn.attribute( "y" ).toFloat() );
 }
 
 void SVGExport::exportGObject( QDomElement &docNodeOut, const QDomElement &docNodeIn, bool bClosed ) {
@@ -388,16 +388,16 @@ void SVGExport::exportGObject( QDomElement &docNodeOut, const QDomElement &docNo
         s += docNodeIn.attribute( "strokecolor" ) + ";";
     s += "stroke-width:" + docNodeIn.attribute( "linewidth" );
     docNodeOut.setAttribute( "style", s );
-    
+
     exportTransform( docNodeOut, docNodeIn.namedItem( "matrix" ).toElement() );
 }
 
 void SVGExport::exportTransform( QDomElement &docNodeOut, const QDomElement &docNodeIn ) {
     QString s;
-    s += "matrix(" + docNodeIn.attribute( "m11" ) + " " + 
+    s += "matrix(" + docNodeIn.attribute( "m11" ) + " " +
                      docNodeIn.attribute( "m12" ) + " " +
-                     docNodeIn.attribute( "m21" ) + " " + 
-		     docNodeIn.attribute( "m22" ) + " " + 
+                     docNodeIn.attribute( "m21" ) + " " +
+		     docNodeIn.attribute( "m22" ) + " " +
 		     docNodeIn.attribute( "dx" )  + " " +
 		     docNodeIn.attribute( "dy" )  + ")";
     docNodeOut.setAttribute( "transform", s );
@@ -413,7 +413,7 @@ void SVGExport::exportPixmap( QDomElement &docNodeOut, const QDomElement &docNod
 void SVGExport::exportText( QDomElement &docNodeOut, const QDomElement &docNodeIn ) {
     QStringList list;
     kdDebug() << "Text: " << docNodeIn.text() << endl;
-    int pos1 = 0, pos2; 
+    int pos1 = 0, pos2;
     QString s = docNodeIn.text();
     // Note : had to use this code from GText since splitting does not work, see below.
     do {
@@ -426,7 +426,7 @@ void SVGExport::exportText( QDomElement &docNodeOut, const QDomElement &docNodeI
         else {
             if ( s.length() - pos1 == 0 )
             break;
- 
+
           QString sub = s.mid( pos1, s.length () - pos1 );
           list.append( sub );
         }
@@ -490,7 +490,7 @@ void SVGExport::addTextStyleAttribute( QDomElement &docNodeOut,
         s += docNodeIn.attribute( "strokecolor" ) + ";";
     }
     s += "font-style:" + QString( font.italic() ? "italic" : "normal" );
-    
+
     docNodeOut.setAttribute( "style", s );
     exportTransform( docNodeOut, docNodeIn.namedItem( "matrix" ).toElement() );
 }

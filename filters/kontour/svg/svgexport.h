@@ -21,7 +21,7 @@
 #define SVGEXPORT_TEST_H
 
 #include <koFilter.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class QDomElement;
 class Coord;
@@ -49,8 +49,8 @@ private:
   void exportEllipse( QDomElement &docNodeOut, const QDomElement &docNodeIn );
   void exportBezier( QDomElement &docNodeOut, const QDomElement &docNodeIn );  
   void exportCurve( QDomElement &docNodeOut, const QDomElement &docNodeIn );
-  QList<Coord> getSegments( const QDomElement &docNodeIn );
-  QList<Coord> getPoints( const QDomElement &docNodeIn );
+  QPtrList<Coord> getSegments( const QDomElement &docNodeIn );
+  QPtrList<Coord> getPoints( const QDomElement &docNodeIn );
   Coord *createPoint( const QDomElement &docNodeIn );
   void exportGroup( QDomElement &docNodeOut, const QDomElement &docNodeIn );
   void exportPixmap( QDomElement &docNodeOut, const QDomElement &docNodeIn );

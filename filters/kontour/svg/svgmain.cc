@@ -43,32 +43,32 @@ SVGGraphicElement::~SVGGraphicElement()
 }
 
 
-void SVGElement::setParent( SVGComposite *par) { 
+void SVGElement::setParent( SVGComposite *par) {
    parent = par;
    if( parent )
-       _ownerSVGElement = ( parent->type() == "svg" ) ? (SVGSVGElement *)parent : NULL;    
+       _ownerSVGElement = ( parent->type() == "svg" ) ? (SVGSVGElement *)parent : NULL;
 };
 
 
-void SVGElement::setAttributes( const QXmlAttributes& atts ) { 
+void SVGElement::setAttributes( const QXmlAttributes& atts ) {
     setId( atts.value( "id" ) );
 };
 
 
-void SVGGraphicElement::setParent( SVGComposite *par) { 
+void SVGGraphicElement::setParent( SVGComposite *par) {
    SVGElement::setParent( par );
    if( parent )
         styleCopy( *parent );
 };
 
 
-void SVGGraphicElement::setAttributes( const QXmlAttributes& atts ) { 
+void SVGGraphicElement::setAttributes( const QXmlAttributes& atts ) {
     SVGElement::setAttributes( atts );
     transform = atts.value( "transform" );
     style = atts.value("style");
 };
 
-    
+
 SVGComposite::SVGComposite( SVGComposite *par ) //: SVGElement( par )
 {
     setParent( par );
@@ -78,7 +78,7 @@ SVGComposite::SVGComposite( SVGComposite *par ) //: SVGElement( par )
 
 
 SVGComposite::~SVGComposite() {
-    QListIterator<SVGElement> it( children );
+    QPtrListIterator<SVGElement> it( children );
     for( ;it.current() ; ++it ) {
         delete it.current();
     }
@@ -91,14 +91,14 @@ void SVGComposite::setAttributes( const QXmlAttributes& atts ) {
     style = atts.value( "style" );
 
     setStyleProperties( 0 );
-    
+
     if( parent ) parent->addObject( this );
 }
 
 
 GObject *SVGComposite::build() {
     kdDebug() << " Doing : " << children.count() << " children." << endl;
-    QListIterator<SVGElement> it( children );
+    QPtrListIterator<SVGElement> it( children );
     GObject *obj;
     for( ;it.current() ; ++it ) {
         obj = it.current()->build();
@@ -107,7 +107,7 @@ GObject *SVGComposite::build() {
 
     if( !hasIdentifier() )
     {
-        QListIterator<SVGElement> it( children );
+        QPtrListIterator<SVGElement> it( children );
         for( ;it.current() ; ++it ) {
             if( !it.current()->hasIdentifier() )
 	        delete it.current();
@@ -118,7 +118,7 @@ GObject *SVGComposite::build() {
     {
         performTransformations( group );
         transform = "";
-    }    
+    }
     return group;
 }
 

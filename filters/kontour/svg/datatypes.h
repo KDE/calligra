@@ -23,7 +23,7 @@ DESCRIPTION
 #ifndef DATATYPES_H
 #define DATATYPES_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 #include <qpainter.h>
 
@@ -46,7 +46,7 @@ public:
 private:
     unsigned long _numberOfItems;
 protected:
-    QList<SVGListItem> list;
+    QPtrList<SVGListItem> list;
 };
 
 

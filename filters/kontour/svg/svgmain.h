@@ -23,7 +23,7 @@ DESCRIPTION
 #ifndef SVGMAIN_H
 #define SVGMAIN_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qxml.h>
 #include "datatypes.h"
 #include "transform.h"
@@ -82,7 +82,7 @@ public:
     virtual void addContent( const QString & ) {};
 protected:
     GGroup *group;
-    QList<SVGElement> children;
+    QPtrList<SVGElement> children;
     
     friend class SVGTextElement;
 };
