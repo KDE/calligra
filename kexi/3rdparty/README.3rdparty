@@ -8,3 +8,6 @@ kexisql/ - database engine implementation taken "as-is" from SQLite project (www
 	   by Kexi programmers from-version-to-version without notice. "original"
 	   SQLite db implementation library won't be in conflict with kexisql lib 
 	   (we use other naming).
+
+uuid/ - unique number generator from e2fsprogs, used for creating unique 
+	identifers across databases and for local objects

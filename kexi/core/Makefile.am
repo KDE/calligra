@@ -12,12 +12,13 @@ libkexicore_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 	kexicontexthelp.cpp kexidatasourcedlg.cpp \
 	kexidatasourcecombobox.cpp kexieventhandler.cpp kexisettings.cpp \
 	kexiworkspaceSDI.cpp \
-	kexipartitemaction.cpp kexiprojectconnectiondata.cpp
+	kexipartitemaction.cpp kexiprojectconnectiondata.cpp kexiuuid.cpp kexiidentifier.cpp
 
 
 
 libkexicore_la_LDFLAGS = $(all_libraries) -Wnounresolved -no-undefined
-libkexicore_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  ../kexidb/libkexidb.la ./filters/libkexifilter.la
+libkexicore_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  ../kexidb/libkexidb.la ./filters/libkexifilter.la \
+	../3rdparty/uuid/libkexiuuid.la
 #../formeditor/libkformeditor.la
 
 SUBDIRS = filters . projectWizard
@@ -43,7 +44,8 @@ SUBDIRS = filters . projectWizard
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
 # set the include path for X, qt and KDE
-INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core/projectWizard $(all_includes)
+INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core/projectWizard \
+	-I$(top_srcdir)/kexi/3rdparty/uuid $(all_includes) 
 
 METASOURCES = AUTO
 

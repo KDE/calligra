@@ -20,11 +20,10 @@
 #include "kexiprojecthandleritem.h"
 
 KexiProjectHandlerItem::KexiProjectHandlerItem(KexiProjectHandler *item_handler, 
- const QString& item_ident, const QString& item_mime, const QString& item_title)
- : QObject(item_handler, item_ident.latin1())
+ const KexiIdentifier& ident, const QString& item_title)
+ : QObject(item_handler, ident.objectPath().utf8())
+	, KexiIdentifier(ident)
 	, m_handler(item_handler)
-	, m_ident(item_ident)
-	, m_mime(item_mime)
 	, m_title(item_title)
 {
 
@@ -39,19 +38,19 @@ KexiProjectHandlerItem::handler()
 QString
 KexiProjectHandlerItem::identifier()
 {
-	return m_ident;
+	return objectID().asString();
 }
 
 QString
 KexiProjectHandlerItem::mime()
 {
-	return m_mime;
+	return objectLocation();
 }
 
 QString
 KexiProjectHandlerItem::fullIdentifier()
 {
-	return m_mime+"/"+m_ident;
+	return objectPath();
 }
 
 QString

@@ -24,6 +24,7 @@
 #include <qguardedptr.h>
 
 #include "kexiprojecthandler.h"
+#include "kexiidentifier.h"
 
 /*! Project Handler Item stores 
 	- KexiProjectHandler
@@ -31,13 +32,13 @@
 	- mime type name
 	- title (visible hight leve name, eg. table or query title)
 */
-class KEXICORE_EXPORT KexiProjectHandlerItem : public QObject
+class KEXICORE_EXPORT KexiProjectHandlerItem : public QObject, public KexiIdentifier
 {
 	Q_OBJECT
 
 	public:
-		KexiProjectHandlerItem(KexiProjectHandler *item_handler, const QString& item_ident, 
-		 const QString& item_mime, const QString& item_title);
+		KexiProjectHandlerItem(KexiProjectHandler *item_handler,const KexiIdentifier& ident,
+		const QString& item_title);
 		~KexiProjectHandlerItem();
 
 		KexiProjectHandler	*handler();
@@ -48,8 +49,6 @@ class KEXICORE_EXPORT KexiProjectHandlerItem : public QObject
 
 	private:
 		QGuardedPtr<KexiProjectHandler> m_handler;
-		QString 	m_ident;
-		QString 	m_mime;
 		QString 	m_title;
 };
 

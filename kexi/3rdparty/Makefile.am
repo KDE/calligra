@@ -1,1 +1,1 @@
-SUBDIRS = kexisql
+SUBDIRS = kexisql uuid
