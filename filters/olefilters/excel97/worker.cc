@@ -1451,7 +1451,9 @@ bool Worker::op_number(Q_UINT32, QDataStream &body)
 	e.setAttribute("column", column+1);
 
 	QDomElement text = m_root->createElement("text");
-	text.appendChild(m_root->createTextNode(s));
+	text.setAttribute("outStr", s);
+	text.setAttribute("dataType","Num");
+	text.appendChild(m_root->createTextNode(QString::number(value)));
 	e.appendChild(text);
 	if( m_table ) m_table->appendChild(e);
 
