@@ -54,7 +54,7 @@ VStrokeFillPreview::VStrokeFillPreview(
 		: QFrame( parent, name ), m_part( part )
 {
 	setFocusPolicy( QWidget::NoFocus );
-	setFrameShape( QFrame::GroupBoxPanel );
+	setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
 	installEventFilter( this );
 
 	m_pixmap.resize( 50, 50 );
