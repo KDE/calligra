@@ -48,17 +48,17 @@ class TextZone: public TextFormat
 		/**
 		 *  Creates a new instance of TextZone.
 		 *
-		 * @param Para which is the parent class.
+		 * @param para which is the parent class.
 		 */
 		TextZone(Para *para = 0);
 		/**
 		 *
 		 * Creates a new instance of TextZOne.
 		 *
-		 * @param QStrign the text in this zone.
-		 * @param Para which is the parent class.
+		 * @param text the text in this zone.
+		 * @param para which is the parent class.
 		 */
-		TextZone(QString, Para *para = 0);
+		TextZone(QString text, Para *para = 0);
 
 		/* 
 		 * Destructor

@@ -2541,7 +2541,7 @@ void RTFImport::finishTable()
 /**
  * Write out part (file inside the store).
  * @param name the internal name of the part
- * @param array the data to write
+ * @param node the data to write
  */
 void RTFImport::writeOutPart( const char *name, const DomNode& node )
 {

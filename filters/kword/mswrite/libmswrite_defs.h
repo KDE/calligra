@@ -240,7 +240,7 @@ namespace MSWrite
 		 * memory block specified by @param cache, instead of from user defined
 		 * functions (which probably read from a file).
 		 *
-		 * setting @param cache to NULL stops the Device from reading from the
+		 * setting @p cache to NULL stops the Device from reading from the
 		 * last memory block specified.
 		 *
 		 */

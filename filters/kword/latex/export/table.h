@@ -59,9 +59,9 @@ class Table: public QPtrList<Element>, public Element
 		/**
 		 * Creates a new instance of Table.
 		 *
-		 * @param The group manager.
+		 * @param grpMng The group manager.
 		 */
-		Table(QString);
+		Table(QString grpMng);
 
 		/* 
 		 * Destructor

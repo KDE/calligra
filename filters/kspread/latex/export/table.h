@@ -155,21 +155,22 @@ class Table: public XmlParser, Config
 		 * @param col Cell column.
 		 * @param row Row cell.
 		 */
-		Cell* searchCell(int,int);
+		Cell* searchCell(int col,int row);
 		
 		/**
 		 * Return one specific column which describe the format of the column.
 		 * 
 		 * @param col the column.
 		 */
-		Column* searchColumn(int);
+		Column* searchColumn(int col);
 
 		/**
 		 * Return one specific row which describe the format of the row.
 		 *
 		 * @param row The row number.
 		 */
-		Row* searchRow(int);
+		Row* searchRow(int row);
+                
 		void     analyse (const QDomNode);
 		void     analysePaper (const QDomNode);
 		void     generate  (QTextStream&);

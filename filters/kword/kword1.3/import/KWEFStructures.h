@@ -364,7 +364,7 @@ public:
 };
 
 /**
-  * Tabulator (see also <TABULATOR> element in KWord's DTD)
+  * Tabulator (see also \<TABULATOR\> element in KWord's DTD)
   */
 class TabulatorData
 {

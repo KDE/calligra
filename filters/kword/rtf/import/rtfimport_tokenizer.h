@@ -16,7 +16,7 @@
 #include <qfile.h>
 
 
-// This class represents the tokenizer and the token
+/// This class represents the tokenizer and the token
 class RTFTokenizer
 {
 public:
@@ -45,7 +45,7 @@ public:
     bool hasParam;
 
 public:
-    /// Binary data (of \bin keyword)
+    /// Binary data (of \\bin keyword)
     QByteArray binaryData;
 
     // tokenizer (private) data

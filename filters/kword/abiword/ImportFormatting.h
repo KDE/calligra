@@ -82,7 +82,7 @@ public:
     QDomElement stackElementParagraph; ///< \<PARAGRAPH\>
     QDomElement stackElementText; ///< \<TEXT\>
     QDomElement stackElementFormatsPlural; ///< \<FORMATS\>
-    QString     fontName; ///< font name but for <d>: name
+    QString     fontName; ///< font name but for \<d\>: name
     int         fontSize;
     int         pos; ///< Position
     bool        italic;

@@ -53,10 +53,10 @@ class VariableZone: public VariableFormat
 		/**
 		 * Creates a new instance of TextZOne.
 		 *
-		 * @param QStrign the text in this zone.
-		 * @param Para which is the parent class.
+		 * @param text the text in this zone.
+		 * @param para which is the parent class.
 		 */
-		VariableZone(QString, Para* para);
+		VariableZone(QString text, Para* para);
 
 		/* ==== Destructor ==== */
 		virtual ~VariableZone();
