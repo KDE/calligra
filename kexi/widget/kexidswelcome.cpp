@@ -37,7 +37,7 @@ KexiDSWelcome::KexiDSWelcome(KexiDataSourceWizard *parent)
 	m_wiz = parent;
 	KexiDSPixmap *pic = new KexiDSPixmap(this);
 
-	QLabel *lText = new QLabel(i18n("Kexi can help you creating %2 using Datasources in allmost no time with the \"%1 Wizard\""), this);
+	QLabel *lText = new QLabel(i18n("Kexi can help you creating %2 using Datasources in almost no time with the \"%1 Wizard\""), this);
 	lText->setAlignment(AlignTop | AlignLeft | WordBreak);
 	QCheckBox *useWizard = new QCheckBox(i18n("Create %1 using the \"%1 Wizard\""), this);
 	connect(useWizard, SIGNAL(toggled(bool)), this, SLOT(setUseWizard(bool)));
