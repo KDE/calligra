@@ -2123,13 +2123,10 @@ void KWView::tableUngroupTable()
     }
     else
     {
-        int result;
-        result = KMessageBox::warningContinueCancel(this,
-                                                    i18n("Ungrouping a table can not be undone.\n"
-                                                         "Are you sure you want to ungroup the table?"),
-                                                    i18n("Ungroup Table"), i18n("&Ungroup"));
-        if (result == KMessageBox::Continue)
-            gui->canvasWidget()->ungroupTable(table);
+        KWUngroupTableCommand *cmd = new KWUngroupTableCommand( i18n("Ungroup Table"), doc, table ) ;
+        doc->addCommand( cmd );
+        cmd->execute();
+        gui->canvasWidget()->repaintAll();
     }
 }
 

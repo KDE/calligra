@@ -2555,8 +2555,8 @@ KWTextFrameSetEdit::~KWTextFrameSetEdit()
 void KWTextFrameSetEdit::terminate()
 {
     textFrameSet()->clearUndoRedoInfo();
-    textDocument()->removeSelection( QTextDocument::Standard );
-    textFrameSet()->selectionChangedNotify();
+    if ( textDocument()->removeSelection( QTextDocument::Standard ) )
+        textFrameSet()->selectionChangedNotify();
     hideCursor();
     disconnect( frameSet(), SIGNAL( selectionChanged(bool) ), m_canvas, SIGNAL( selectionChanged(bool) ) );
 }

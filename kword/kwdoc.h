@@ -476,11 +476,11 @@ public:
     // make zoom, add header, add footer etc...
     void updateResizeHandles();
 
+    // Tell all views to stop editing this frameset, if they were doing so
+    void terminateEditing( KWFrameSet * frameSet )
+    { emit sig_terminateEditing( frameSet ); }
+
     void refreshDocStructure(FrameType);
-
-    void frameSetEditChanged();
-
-    void deleteFrameSetEditTable( KWTableFrameSet *_table );
 
     // Convert a color into a color to be displayed for it
     // (when using color schemes, we still want to print black on white)
@@ -495,7 +495,7 @@ signals:
     void pageNumChanged();
 
     void docStructureChanged(TypeStructDocItem);
-    void currentFrameSetEditChanged();
+    void sig_terminateEditing( KWFrameSet * fs );
 
 public slots:
     void slotRepaintChanged( KWFrameSet * frameset );

@@ -2418,11 +2418,12 @@ void KWDocument::addFrameSet( KWFrameSet *f, bool finalize /*= true*/ )
 
 void KWDocument::delFrameSet( KWFrameSet *f, bool deleteit)
 {
-  if (deleteit)
-    frames.remove( f );
-  else
-    frames.take( frames.find(f) );
-  setModified( true );
+    emit sig_terminateEditing( f );
+    if (deleteit)
+        frames.remove( f );
+    else
+        frames.take( frames.find(f) );
+    setModified( true );
 }
 
 // Returns 0-based page number where rect is (in fact its topleft corner).
@@ -2614,21 +2615,6 @@ QColor KWDocument::defaultBgColor( QPainter * painter )
     if ( painter->device()->devType() == QInternal::Printer )
         return Qt::white;
     return QApplication::palette().color( QPalette::Active, QColorGroup::Base );
-}
-
-
-void KWDocument::frameSetEditChanged()
-{
-    emit currentFrameSetEditChanged();
-}
-
-
-void KWDocument::deleteFrameSetEditTable( KWTableFrameSet *_table )
-{
-   QListIterator<KWView> it( m_lstViews );
-   for ( ; it.current() ; ++it )
-       it.current()->getGUI()->canvasWidget()->deleteFrameSetEditTable(_table );
-   emit currentFrameSetEditChanged();
 }
 
 

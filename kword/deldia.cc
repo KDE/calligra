@@ -87,8 +87,8 @@ void KWDeleteDia::setupTab1()
 
 bool KWDeleteDia::doDelete()
 {
-    canvas->deleteFrameSetEditTable(table);
-     if ( type == ROW )
+    doc->terminateEditing(table);
+    if ( type == ROW )
         table->deleteRow( value->value() - 1 );
     else
         table->deleteCol( value->value() - 1 );

@@ -138,13 +138,6 @@ public:
     void deleteTable( KWTableFrameSet *groupManager );
     void deleteFrame( KWFrame * frame );
 
-    //ungroup table
-    void ungroupTable(KWTableFrameSet *table);
-
-    //delete currentFrameSetEdit when you remove table
-    //column, row. Otherwise kword crashs.
-    void deleteFrameSetEditTable( KWTableFrameSet *table );
-
     //move canvas to show point dPoint (in doc coordinates)
     void scrollToOffset( const KoPoint & dPoint );
 
@@ -192,22 +185,28 @@ protected:
 
     KWTableFrameSet * createTable(); // uses m_insRect and m_table to create the table
 
+    void terminateCurrentEdit();
+
 signals:
     // Emitted when the current frameset edit changes
     void currentFrameSetEditChanged();
     // Emitted by the current frameset edit when its selection changes
     void selectionChanged( bool hasSelection );
-    //Emitted when Mouse Mode changed
+    // Emitted when Mouse Mode changed
     void currentMouseModeChanged(MouseMode newMouseMode);
-    //emit when you selected a other frame (disable/enable table button)
+    // Emitted when frames have been selected or unselected (to disable/enable the UI in kwview)
     void frameSelectedChanged();
-    //emit when you want to refresh docstruct
+    // Emitted when the document structure has changed
+    // ### DF: IMHO this should be only emitted by KWDocument (e.g. addFrameSet)
     void docStructChanged(TypeStructDocItem _type);
 
 private slots:
     void slotContentsMoving( int, int );
     void slotNewContentsSize();
     void doAutoScroll();
+
+    //Terminate editing this frameset, if we were editing it.
+    void terminateEditing( KWFrameSet *fs );
 
 private:
     /**

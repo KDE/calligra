@@ -81,6 +81,10 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
 
     connect( doc, SIGNAL( newContentsSize() ),
              this, SLOT( slotNewContentsSize() ) );
+
+    connect( doc, SIGNAL( sig_terminateEditing( KWFrameSet * ) ),
+             this, SLOT( terminateEditing( KWFrameSet * ) ) );
+
     slotNewContentsSize();
 
     // Create the current frameset-edit last, to have everything ready for it
@@ -398,16 +402,12 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         case MM_EDIT:
         {
             KWFrameSet *fs = doc->getFrameSet( docPoint.x(), docPoint.y() );
-            bool emitChanged = false; // to emit only once
+
+
+            bool emitChanged = false; // to emit after mousePressEvent
             if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
-            {
-                // Terminate edition of that frameset
-                m_currentFrameSetEdit->terminate();
-                delete m_currentFrameSetEdit;
-                m_currentFrameSetEdit = 0L;
-                emitChanged = true;
-                repaintAll();
-            }
+                terminateCurrentEdit();
+
             // Edit the frameset under the mouse, if any
             if ( fs && !m_currentFrameSetEdit )
             {
@@ -1552,17 +1552,19 @@ void KWCanvas::deleteTable( KWTableFrameSet *table )
     cmd->execute();
 }
 
-void KWCanvas::deleteFrameSetEditTable( KWTableFrameSet *table )
+void KWCanvas::terminateCurrentEdit()
 {
-    if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() == table )
-    {
-        // Terminate edition of that frameset
-        m_currentFrameSetEdit->terminate();
-        delete m_currentFrameSetEdit;
-        m_currentFrameSetEdit = 0L;
-        emit currentFrameSetEditChanged();
-        repaintAll();
-    }
+    m_currentFrameSetEdit->terminate();
+    delete m_currentFrameSetEdit;
+    m_currentFrameSetEdit = 0L;
+    emit currentFrameSetEditChanged();
+    repaintAll();
+}
+
+void KWCanvas::terminateEditing( KWFrameSet *fs )
+{
+    if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() == fs )
+        terminateCurrentEdit();
 }
 
 void KWCanvas::setMouseMode( MouseMode newMouseMode )
@@ -1576,13 +1578,7 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
         {
             // Terminate edition of current frameset
             if ( m_currentFrameSetEdit )
-            {
-                m_currentFrameSetEdit->terminate();
-                delete m_currentFrameSetEdit;
-                m_currentFrameSetEdit = 0L;
-                emit currentFrameSetEditChanged();
-                repaintAll();
-            }
+                terminateCurrentEdit();
         } else if ( doc->isReadWrite() )
         {
             ASSERT( !m_currentFrameSetEdit );
@@ -1607,8 +1603,6 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
     }
 
     m_mouseMode = newMouseMode;
-    //mmUncheckAll();
-    //m_gui->getView()->setTool( m_mouseMode );
     emit currentMouseModeChanged(m_mouseMode);
 
     switch ( m_mouseMode ) {
@@ -1617,35 +1611,18 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
                 viewport()->setCursor( ibeamCursor );
             //else
             //viewport()->setCursor( arrowCursor );
-            //mm_menu->setItemChecked( mm_edit, TRUE );
         } break;
-        case MM_EDIT_FRAME: {
+        case MM_EDIT_FRAME:
             viewport()->setCursor( arrowCursor );
-            //mm_menu->setItemChecked( mm_edit_frame, TRUE );
-        } break;
-        case MM_CREATE_TEXT: {
+        break;
+        case MM_CREATE_TEXT:
+        case MM_CREATE_PIX:
+        case MM_CREATE_TABLE:
+        case MM_CREATE_FORMULA:
+        case MM_CREATE_PART:
             viewport()->setCursor( crossCursor );
-            //mm_menu->setItemChecked( mm_create_text, TRUE );
-        } break;
-        case MM_CREATE_PIX: {
-            viewport()->setCursor( crossCursor );
-            //mm_menu->setItemChecked( mm_create_pix, TRUE );
-        } break;
-        case MM_CREATE_TABLE: {
-            viewport()->setCursor( crossCursor );
-            //mm_menu->setItemChecked( mm_create_table, TRUE );
-        } break;
-        case MM_CREATE_FORMULA: {
-            viewport()->setCursor( crossCursor );
-            //mm_menu->setItemChecked( mm_create_formula, TRUE );
-        } break;
-        case MM_CREATE_PART: {
-            viewport()->setCursor( crossCursor );
-            //mm_menu->setItemChecked( mm_create_part, TRUE );
-        } break;
+            break;
     }
-
-    //repaintAll(); ?
 }
 
 void KWCanvas::contentsDragEnterEvent( QDragEnterEvent *e )
@@ -1829,16 +1806,6 @@ void KWCanvas::updateCurrentFormat()
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
     if ( edit )
         edit->updateUI();
-}
-
-void KWCanvas::ungroupTable(KWTableFrameSet *table)
-{
-    deleteFrameSetEditTable(table);
-    KWUngroupTableCommand *cmd = new KWUngroupTableCommand( i18n("Ungroup Table"), doc, table ) ;
-    doc->addCommand( cmd );
-    cmd->execute();
-    emit currentFrameSetEditChanged();
-    repaintAll();
 }
 
 #ifndef NDEBUG

@@ -747,7 +747,6 @@ void KWUngroupTableCommand::execute()
     // create items in text item in docstruct
     m_pDoc->refreshDocStructure(FT_TEXT);
     m_pDoc->refreshDocStructure(FT_TABLE);
-    m_pDoc->deleteFrameSetEditTable( m_pTable );
 }
 
 void KWUngroupTableCommand::unexecute()
@@ -766,7 +765,6 @@ void KWUngroupTableCommand::unexecute()
     m_pDoc->addFrameSet(m_pTable);
     m_pDoc->refreshDocStructure(FT_TEXT);
     m_pDoc->refreshDocStructure(FT_TABLE);
-    m_pDoc->deleteFrameSetEditTable( m_pTable );
 }
 
 
@@ -780,7 +778,6 @@ KWDeleteTableCommand::KWDeleteTableCommand( const QString &name, KWDocument *_do
 void KWDeleteTableCommand::execute()
 {
     m_pDoc->deSelectAllFrames();
-    m_pDoc->deleteFrameSetEditTable( m_pTable );
     m_pDoc->delFrameSet(m_pTable,false);
     m_pDoc->refreshDocStructure(FT_TABLE);
     m_pDoc->updateAllFrames();
@@ -793,7 +790,6 @@ void KWDeleteTableCommand::unexecute()
     ASSERT(m_pTable);
     m_pDoc->addFrameSet(m_pTable);
     m_pDoc->refreshDocStructure(FT_TABLE);
-    m_pDoc->deleteFrameSetEditTable( m_pTable );
     m_pDoc->updateAllFrames();
     m_pDoc->layout();
     m_pDoc->repaintAllViews();
@@ -809,7 +805,6 @@ KWCreateTableCommand::KWCreateTableCommand( const QString &name, KWDocument *_do
 
 void KWCreateTableCommand::execute()
 {
-    m_pDoc->deleteFrameSetEditTable( m_pTable );
     m_pDoc->addFrameSet(m_pTable);
     m_pDoc->refreshDocStructure(FT_TABLE);
     m_pDoc->updateAllFrames();
@@ -823,7 +818,6 @@ void KWCreateTableCommand::unexecute()
     m_pDoc->deSelectAllFrames();
     m_pDoc->delFrameSet(m_pTable,false);
     m_pDoc->refreshDocStructure(FT_TABLE);
-    m_pDoc->deleteFrameSetEditTable( m_pTable );
     m_pDoc->updateAllFrames();
     m_pDoc->layout();
     m_pDoc->repaintAllViews();
