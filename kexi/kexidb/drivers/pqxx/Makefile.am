@@ -2,8 +2,7 @@ include $(top_srcdir)/kexi/Makefile.global
 
 kde_module_LTLIBRARIES = kexidb_pqxxsqldriver.la
 
-##### FIXME: hardcoded paths are NOT a good idea. Write a configure check!
-INCLUDES = -I$(srcdir)/../../.. $(all_includes) -I/usr/local/pqxx/include -I/usr/local/pgsql/include
+INCLUDES = -I$(srcdir)/../../.. $(all_includes) -I$(PG_INCDIR) -I$(PQXX_INCDIR)
 
 kexidb_pqxxsqldriver_la_METASOURCES = AUTO
 
@@ -11,7 +10,7 @@ kexidb_pqxxsqldriver_la_SOURCES = pqxxdriver.cpp pqxxcursor.cpp pqxxconnection.c
 
 kexidb_pqxxsqldriver_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) -lpqxx ../../libkexidb.la
 
-kexidb_pqxxsqldriver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) -L/usr/local/pqxx/lib -no-undefined
+kexidb_pqxxsqldriver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) -L$(PQXX_LIBDIR) -L$(PG_LIBDIR) -no-undefined
 
 kde_services_DATA = kexidb_pqxxsqldriver.desktop
 
