@@ -99,6 +99,7 @@ bool Cursor::close()
 //	m_beforeFirst = false;
 	m_afterLast = false;
 	m_readAhead = false;
+	m_fieldCount = 0;
 	m_at = -1;
 
 	kdDebug()<<"Cursor::close() == "<<ret<<endl;
