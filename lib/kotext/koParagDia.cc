@@ -114,12 +114,13 @@ void KPagePreview::drawContents( QPainter* p )
     int _x = ( width() - wid ) / 5;
     int _y = ( height() - hei ) / 5;
 
-    int dl = static_cast<int>( left / 5 );
-    int dr = static_cast<int>( right / 5 );
-    //first+left because firstlineIndent is relative to leftIndent
-    int df = static_cast<int>( (first+left) / 5 );
+    int dl = convert(left);
+    int dr = convert(right);
 
-    int spc = static_cast<int>( spacing / 15 );
+    //first+left because firstlineIndent is relative to leftIndent
+    int df = convert(first) + dl;
+
+    int spc = convert(spacing);
 
     // draw page
     p->setPen( QPen( black ) );
@@ -154,6 +155,15 @@ void KPagePreview::drawContents( QPainter* p )
                      static_cast<int>( before / 2 ) + static_cast<int>( after / 2 ),
                      wid - 12 - ( ( i / 4 ) * 4 == i ? 50 : 0 ), 6 );
 
+}
+
+int KPagePreview::convert(double input) { 
+    if(input < 1) return 0;
+    if(input <= 5) return 3;
+    if(input <= 10) return 4 + static_cast<int>( (input-5) / 2.5 );
+    if(input <= 20) return 6 + static_cast<int>( (input-10) / 4 );
+    if(input <= 100) return 10 + static_cast<int>( (input-20) / 8 );
+    return static_cast<int>( input / 5);
 }
 
 /******************************************************************/

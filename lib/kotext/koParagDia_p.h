@@ -77,6 +77,7 @@ public:
 
 protected:
     void drawContents( QPainter* );
+    int convert(double input);
 
     double left, right, first, spacing, before, after;
 
