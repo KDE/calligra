@@ -216,11 +216,11 @@ void KChartWizardSetupAxesPage::paintEvent( QPaintEvent *)
     if(chart3d) {
         angle->setEnabled(true);
         depth->setEnabled(true);
-        barWidth->setEnabled(true);
+        //barWidth->setEnabled(true);
     } else {
         angle->setEnabled(false);
         depth->setEnabled(false);
-        barWidth->setEnabled(false);
+        //barWidth->setEnabled(false);
     }
 }
 
