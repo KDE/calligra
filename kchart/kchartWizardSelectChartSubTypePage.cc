@@ -43,6 +43,8 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
           _chart->params()->barChartSubType() == KDChartParams::BarNormal ) ||
         ( _chart->params()->chartType() == KDChartParams::Line &&
           _chart->params()->lineChartSubType() == KDChartParams::LineNormal ) ||
+        ( _chart->params()->chartType() == KDChartParams::Polar &&
+          _chart->params()->polarChartSubType() == KDChartParams::PolarNormal ) ||
         ( _chart->params()->chartType() == KDChartParams::Area &&
           _chart->params()->areaChartSubType() == KDChartParams::AreaNormal ) )
         normal->setChecked( true );
@@ -50,6 +52,8 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
           _chart->params()->barChartSubType() == KDChartParams::BarStacked ) ||
         ( _chart->params()->chartType() == KDChartParams::Line &&
           _chart->params()->lineChartSubType() == KDChartParams::LineStacked ) ||
+             ( _chart->params()->chartType() == KDChartParams::Polar &&
+               _chart->params()->polarChartSubType() == KDChartParams::PolarStacked ) ||
         ( _chart->params()->chartType() == KDChartParams::Area &&
           _chart->params()->areaChartSubType() == KDChartParams::AreaStacked ) )
         stacked->setChecked( true );
@@ -57,6 +61,8 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
           _chart->params()->barChartSubType() == KDChartParams::BarPercent ) ||
         ( _chart->params()->chartType() == KDChartParams::Line &&
           _chart->params()->lineChartSubType() == KDChartParams::LinePercent ) ||
+             ( _chart->params()->chartType() == KDChartParams::Polar &&
+               _chart->params()->polarChartSubType() == KDChartParams::PolarPercent ) ||
         ( _chart->params()->chartType() == KDChartParams::Area &&
           _chart->params()->areaChartSubType() == KDChartParams::AreaPercent ) )
         percent->setChecked( true );
@@ -100,6 +106,8 @@ void KChartWizardSelectChartSubTypePage::apply()
             case KDChartParams::HiLo:
                 _chart->params()->setHiLoChartSubType(KDChartParams::HiLoNormal);
                 break;
+            case KDChartParams::Polar:
+                _chart->params()->setPolarChartSubType( KDChartParams::PolarNormal );
             default:
                 kdDebug( 35001 ) << "Error in group button\n";
             }
@@ -117,6 +125,9 @@ void KChartWizardSelectChartSubTypePage::apply()
             case KDChartParams::HiLo:
                 _chart->params()->setHiLoChartSubType( KDChartParams::HiLoClose);
                 break;
+            case KDChartParams::Polar:
+                _chart->params()->setPolarChartSubType( KDChartParams::PolarStacked );
+                break;
             default:
                 kdDebug( 35001 ) << "Error in group button\n";
             }
@@ -133,6 +144,9 @@ void KChartWizardSelectChartSubTypePage::apply()
                 break;
             case KDChartParams::HiLo:
                 _chart->params()->setHiLoChartSubType( KDChartParams::HiLoOpenClose);
+                break;
+            case KDChartParams::Polar:
+                _chart->params()->setPolarChartSubType( KDChartParams::PolarPercent );
                 break;
             default:
                 kdDebug( 35001 ) << "Error in group button\n";

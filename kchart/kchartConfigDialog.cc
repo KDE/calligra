@@ -288,6 +288,10 @@ void KChartConfigDialog::init3dPage()
         _subTypePage = new KChartHiloSubTypeChartPage( _params, this );
         addTab( _subTypePage, i18n( "Chart &Subtype" ) );
         break;
+    case KDChartParams::Polar:
+        _subTypePage = new KChartPolarSubTypeChartPage( _params, this );
+        addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+        break;
     default:
         ; // do nothing
     }

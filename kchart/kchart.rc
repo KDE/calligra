@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart" version="7">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart" version="8">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="wizard"/>
@@ -22,6 +22,7 @@
  <Action name="barschart"/>
  <Action name="hilochart"/>
  <Action name="ringchart"/>
+ <Action name="polarchart"/>
 </ToolBar>
 <Menu name="action_popup">
  <Action name="config"/>

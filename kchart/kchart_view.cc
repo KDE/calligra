@@ -86,6 +86,11 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                                      "ringchart");
     m_chartring->setExclusiveGroup( "charttypes" );
 
+    m_chartpolar = new KToggleAction( i18n("&Polar"), "polar", 0, this,
+                                     SLOT( polarChart() ), actionCollection(),
+                                     "polarchart");
+    m_chartpolar->setExclusiveGroup( "charttypes" );
+
 
     m_colorConfig = new KAction( i18n( "&Configure colors" ), 0,
                             this, SLOT( slotConfigColor() ),
@@ -248,6 +253,9 @@ void KChartView::updateGuiTypeOfChart()
     case KDChartParams::Ring:
       m_chartring->setChecked(true);
       break;
+    case KDChartParams::Polar:
+        m_chartpolar->setChecked(true);
+        break;
     default:
       //todo
       break;
@@ -390,6 +398,19 @@ void KChartView::ringChart()
 
 }
 
+void KChartView::polarChart()
+{
+    if( m_chartpolar->isChecked() )
+    {
+        KDChartParams* params = ((KChartPart*)koDocument())->params();
+        params->setChartType( KDChartParams::Polar );
+        params->setPolarChartSubType( KDChartParams::PolarNormal );
+        repaint();
+    }
+    else
+        m_chartpolar->setChecked( true ); // always one has to be checked !
+}
+
 void KChartView::mousePressEvent ( QMouseEvent *e )
 {
     if(!koDocument()->isReadWrite() )
@@ -430,7 +451,8 @@ void KChartView::updateButton()
     bool state=(params->chartType()==KDChartParams::Bar ||
                 params->chartType()==KDChartParams::Area ||
                 params->chartType()==KDChartParams::Line ||
-                params->chartType()==KDChartParams::HiLo);
+                params->chartType()==KDChartParams::HiLo ||
+                params->chartType()==KDChartParams::Polar);
     m_subTypeChartConfig->setEnabled(state);
 }
 

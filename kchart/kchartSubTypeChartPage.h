@@ -109,5 +109,24 @@ private:
     QLabel* exampleLA;
 };
 
+class KChartPolarSubTypeChartPage : public KChartSubTypeChartPage
+{
+    Q_OBJECT
+
+public:
+    KChartPolarSubTypeChartPage( KChartParams* params,
+                                QWidget* parent );
+    virtual void init();
+    virtual void apply();
+
+private slots:
+    void slotChangeSubType( int type );
+
+private:
+    QRadioButton* normal;
+    QRadioButton* stacked;
+    QRadioButton* percent;
+    QLabel* exampleLA;
+};
 
 #endif
