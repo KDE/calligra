@@ -1974,6 +1974,8 @@ void KPresenterView::createGUI()
                       this, SLOT( updateSideBarItem( int ) ) );
     QObject::connect( page, SIGNAL( objectSelectedChanged()),
                       this, SLOT( objectSelectedChanged()));
+    QObject::connect( page, SIGNAL( mouseWheelEvent( QWheelEvent* ) ),
+                      this, SLOT( getPageMouseWheelEvent( QWheelEvent* ) ) );
 
     // setup GUI
     setupActions();
@@ -3025,7 +3027,7 @@ void KPresenterView::dropEvent( QDropEvent *e )
 }
 
 /*===============================================================*/
-void KPresenterView::wheelEvent( QWheelEvent *e )
+void KPresenterView::getPageMouseWheelEvent( QWheelEvent *e )
 {
   QApplication::sendEvent( vert, e );
 }

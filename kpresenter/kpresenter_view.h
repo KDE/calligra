@@ -434,6 +434,8 @@ protected slots:
 
     void doAutomaticScreenPres();
 
+    void getPageMouseWheelEvent( QWheelEvent *e );
+
 
 protected:
 
@@ -447,7 +449,6 @@ protected:
     virtual void dropEvent( QDropEvent *e );
 
     virtual void keyPressEvent( QKeyEvent* );
-    virtual void wheelEvent( QWheelEvent *e );
 
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 

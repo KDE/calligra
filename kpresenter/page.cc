@@ -1165,6 +1165,8 @@ void Page::wheelEvent( QWheelEvent *e )
             view->screenPrev();
         e->accept();
     }
+    else if ( editMode )
+        emit mouseWheelEvent( e );
 }
 
 

@@ -179,6 +179,8 @@ signals:
     void stopPres();
     void objectSelectedChanged();
 
+    void mouseWheelEvent( QWheelEvent * );
+
 protected:
 
     struct PicCache
