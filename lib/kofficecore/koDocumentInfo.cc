@@ -60,7 +60,7 @@ bool KoDocumentInfo::load( const QDomDocument& doc )
 
 bool KoDocumentInfo::loadOasis( const QDomDocument& metaDoc )
 {
-    kdDebug()<<" metaDoc.toString() :"<<metaDoc.toString()<<endl;
+    //kdDebug()<<" metaDoc.toString() :"<<metaDoc.toString()<<endl;
     QStringList lst = pages();
     QStringList::ConstIterator it = lst.begin();
     for( ; it != lst.end(); ++it )
