@@ -276,6 +276,23 @@ static void ProcessTypeTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
 }
 
 
+static void AppendTagProcessingFormatOne(QValueList<TagProcessing>& tagProcessingList, FormatData& formatData)
+{
+    tagProcessingList
+        << TagProcessing ( "COLOR",               ProcessColorAttrTag,    &formatData.text.fgColor           )
+        << TagProcessing ( "FONT",                ProcessStringNameTag,   &formatData.text.fontName          )
+        << TagProcessing ( "SIZE",                ProcessIntValueTag,     &formatData.text.fontSize          )
+        << TagProcessing ( "WEIGHT",              ProcessIntValueTag,     &formatData.text.weight            )
+        << TagProcessing ( "ITALIC",              ProcessBoolIntValueTag, &formatData.text.italic            )
+        << TagProcessing ( "UNDERLINE",           ProcessBoolIntValueTag, &formatData.text.underline         )
+        << TagProcessing ( "STRIKEOUT",           ProcessBoolIntValueTag, &formatData.text.strikeout         )
+        << TagProcessing ( "CHARSET",             NULL,                   NULL                               )
+        << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     &formatData.text.verticalAlignment )
+        << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    &formatData.text.bgColor           )
+        ;
+}
+
+
 static void SubProcessFormatOneTag(QDomNode myNode,
     ValueListFormatData *formatDataList, int formatPos, int formatLen,
     KWEFKWordLeader *leader)
@@ -288,36 +305,14 @@ static void SubProcessFormatOneTag(QDomNode myNode,
         formatLen=0;
         kdDebug (30508) << "Missing formatting! Style?" << endl;
     }
-    // TODO: use directly a FormatData or a TextFormatting instead of using temporary variables
-    QString  fontName;
-    bool     italic    = false;
-    bool     underline = false;
-    bool     strikeout = false;
-    int      weight    = 50;
-    int      fontSize  = -1;
-    QColor   fgColor;
-    QColor   bgColor;
-    int      verticalAlignment = 0;
+
+    FormatData formatData(1, formatPos, formatLen);
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList
-        << TagProcessing ( "COLOR",               ProcessColorAttrTag,    (void *) &fgColor           )
-        << TagProcessing ( "FONT",                ProcessStringNameTag,   (void *) &fontName          )
-        << TagProcessing ( "SIZE",                ProcessIntValueTag,     (void *) &fontSize          )
-        << TagProcessing ( "WEIGHT",              ProcessIntValueTag,     (void *) &weight            )
-        << TagProcessing ( "ITALIC",              ProcessBoolIntValueTag, (void *) &italic            )
-        << TagProcessing ( "UNDERLINE",           ProcessBoolIntValueTag, (void *) &underline         )
-        << TagProcessing ( "STRIKEOUT",           ProcessBoolIntValueTag, (void *) &strikeout         )
-        << TagProcessing ( "CHARSET",             NULL,                   NULL                        )
-        << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     (void *) &verticalAlignment )
-        << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    (void *) &bgColor           )
-        ;
+    AppendTagProcessingFormatOne(tagProcessingList,formatData);
+    ProcessSubtags (myNode, tagProcessingList, leader);
 
-        ProcessSubtags (myNode, tagProcessingList, leader);
-
-        (*formatDataList) << FormatData ( formatPos, formatLen,
-            TextFormatting ( fontName, italic, underline, strikeout, weight,
-            fontSize, fgColor, bgColor, verticalAlignment ) );
+    (*formatDataList) << formatData;
 }
 
 
@@ -335,11 +330,19 @@ static void SubProcessFormatFourTag(QDomNode myNode,
     TypeData typeData;
     LinkData linkData;
     QValueList<TagProcessing> tagProcessingList;
+    // "TYPE|PGNUM|DATE|TIME|CUSTOM|SERIALLETTER|FIELD|LINK"
     tagProcessingList
-        << TagProcessing ( "TYPE",    ProcessTypeTag,         &typeData )
-        << TagProcessing ( "DATE",    NULL,                   NULL      )
-        << TagProcessing ( "LINK",    ProcessLinkTag,         &linkData )
+        << TagProcessing ( "TYPE",          ProcessTypeTag,         &typeData )
+        << TagProcessing ( "PGNUM",         NULL,                   NULL      )
+        << TagProcessing ( "DATE",          NULL,                   NULL      )
+        << TagProcessing ( "TIME",          NULL,                   NULL      )
+        << TagProcessing ( "CUSTOM",        NULL,                   NULL      )
+        << TagProcessing ( "SERIALLETTER",  NULL,                   NULL      )
+        << TagProcessing ( "FIELD",         NULL,                   NULL      )
+        << TagProcessing ( "LINK",          ProcessLinkTag,         &linkData )
         ;
+    // As variables can have a formating too, we have to process formating
+    AppendTagProcessingFormatOne(tagProcessingList,formatData);
     ProcessSubtags (myNode, tagProcessingList, leader);
 
     formatData.variable.m_key=typeData.m_key;
@@ -347,7 +350,7 @@ static void SubProcessFormatFourTag(QDomNode myNode,
     formatData.variable.m_type=typeData.m_type;
     formatData.variable.m_linkName=linkData.name;
     formatData.variable.m_hrefName=linkData.href;
-    
+
     (*formatDataList) << formatData;
 }
 

@@ -48,9 +48,12 @@
 class TextFormatting
 {
     public:
-        TextFormatting () : italic (false), underline (false), strikeout (false),
-                            weight (50), fontSize (0), verticalAlignment (0),
-                            missing (true) {}
+        TextFormatting(): italic (false), underline (false), strikeout (false),
+            weight (50), fontSize (0), verticalAlignment (0), missing (true) {}
+
+        TextFormatting(const bool newMissing) : italic (false),
+            underline (false), strikeout (false), weight (50), fontSize (0),
+            verticalAlignment (0), missing (newMissing) {}
 
         TextFormatting ( QString f,
                          bool    i,
@@ -158,32 +161,26 @@ public:
 
 class FormatData
 {
-    public:
-        FormatData () : id (-1), pos (-1), len (-1) {}
+public:
+    FormatData ()
+        : id (-1), pos (-1), len (-1), text(true) {}
 
-        FormatData ( int i,
-                     int p,
-                     int l  ) : id (i), pos (p), len (l) {}
+    FormatData ( const int p, const int l, const bool missing  )
+        : id (1), pos (p), len (l), text(missing) {}
 
-        FormatData ( int                   p,
-                     int                   l,
-                     const TextFormatting &t  ) : id (1), pos (p), len (l), text (t) {}
+    FormatData ( const int i, const int p, const int l  )
+        : id (i), pos (p), len (l), text(false) {}
 
-        FormatData ( int                   p,
-                     int                   l,
-                     const VariableData &data  ) : id (1), pos (p), len (l), variable (data) {}
+    FormatData ( const int p, const int l, const FrameAnchor& t )
+        : id (6), pos (p), len (l), frameAnchor (t) {}
+public:
+    int id;
+    int pos;    // Start of text to which this format applies
+    int len;
 
-        FormatData ( int                   p,
-                     int                   l,
-                     const FrameAnchor    &t  ) : id (6), pos (p), len (l), frameAnchor (t) {}
-
-        int            id;
-        int            pos;   // Start of text to which this format applies
-        int            len;
-
-        TextFormatting text;
-        FrameAnchor    frameAnchor;
-        VariableData    variable;
+    TextFormatting  text;
+    FrameAnchor     frameAnchor;
+    VariableData    variable;
 };
 
 
