@@ -49,6 +49,8 @@ QString
 VZoomTool::contextHelp()
 {
 	QString s = i18n( "<qt><b>Zoom tool:</b><br>" );
+	s += i18n( "<i>Click and drag</i> to zoom into a rectangular area.<br>" );
+	s += i18n( "<i>Zoom using arrow keys</i><br>Zoom into/out of canvas using arrow up/down." );
 	return s;
 }
 
