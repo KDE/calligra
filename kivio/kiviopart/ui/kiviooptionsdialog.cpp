@@ -100,11 +100,11 @@ void KivioOptionsDialog::initPage()
   QFrame* page = addPage(i18n("Page"), i18n("Page Settings"),
     kapp->iconLoader()->loadIcon("empty", KIcon::Toolbar, 32));
   m_pageIndex = pageIndex(page);
-  
+
   KivioView* view = static_cast<KivioView*>(parent());
   KoUnit::Unit unit = convToKoUnit(view->doc()->units());
   m_layout = view->doc()->config()->globalDefaultPageLayout();
-  
+
   QLabel* unitLbl = new QLabel(i18n("Default &units:"), page);
   m_unitCombo = new QComboBox(page);
   m_unitCombo->insertStringList(KoUnit::listOfUnitName());
@@ -125,7 +125,7 @@ void KivioOptionsDialog::initPage()
   m_marginsChBox->setChecked(view->isShowPageMargins());
   m_rulersChBox = new QCheckBox(i18n("Show page &rulers"), page);
   m_rulersChBox->setChecked(view->isShowRulers());
-  
+
   QGridLayout* gl = new QGridLayout(page);
   gl->setSpacing(KDialog::spacingHint());
   gl->addWidget(unitLbl, 0, 0);
@@ -137,7 +137,7 @@ void KivioOptionsDialog::initPage()
   gl->addMultiCellWidget(m_marginsChBox, 3, 3, 0, 2);
   gl->addMultiCellWidget(m_rulersChBox, 4, 4, 0, 2);
   gl->addMultiCell(new QSpacerItem(0, 0), 5, 5, 0, 2);
-  
+
   connect(layoutBtn, SIGNAL(clicked()), SLOT(pageLayoutDlg()));
   connect(m_unitCombo, SIGNAL(activated(int)), SLOT(unitChanged(int)));
 }
@@ -147,7 +147,7 @@ void KivioOptionsDialog::initStencil()
   QFrame* page = addPage(i18n("Stencils Bar"), i18n("Stencils Bar Settings"),
     kapp->iconLoader()->loadIcon("stencils", KIcon::Toolbar, 32));
   m_stencilIndex = pageIndex(page);
-  
+
   KivioIconViewVisual v = static_cast<KivioView*>(parent())->doc()->
     config()->stencilsBarVisual();
 
@@ -162,7 +162,7 @@ void KivioOptionsDialog::initStencil()
   grp->hide();
   grp->insert(m_bgColorRBtn);
   grp->insert(m_bgPicRBtn);
-  
+
   QGridLayout* gl = new QGridLayout(page);
   gl->setSpacing(KDialog::spacingHint());
   gl->addWidget(m_bgColorRBtn, 0, 0);
@@ -178,7 +178,7 @@ void KivioOptionsDialog::initGrid()
   QFrame* page = addPage(i18n("Grid"), i18n("Grid Settings"),
     kapp->iconLoader()->loadIcon("grid", KIcon::Toolbar, 32));
   m_gridIndex = pageIndex(page);
-  
+
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
   KivioGridData d = static_cast<KivioView*>(parent())->doc()->grid();
   double pgw = KoUnit::ptToUnit(m_layout.ptWidth, unit);
@@ -191,7 +191,7 @@ void KivioOptionsDialog::initGrid()
     Kivio::convToKoUnit(d.freq.unit)), unit);
   double sh = KoUnit::ptToUnit(KoUnit::ptFromUnit(d.snap.h,
     Kivio::convToKoUnit(d.freq.unit)), unit);
-  
+
   m_gridChBox = new QCheckBox(i18n("Show &grid"), page);
   m_gridChBox->setChecked(d.isShow);
   m_snapChBox = new QCheckBox(i18n("Snap to g&rid"), page);
@@ -228,7 +228,7 @@ void KivioOptionsDialog::initGrid()
   gl->addMultiCellWidget(spacingGrp, 3, 3, 0, 2);
   gl->addMultiCellWidget(snapGrp, 4, 4, 0, 2);
   gl->addMultiCell(new QSpacerItem(0, 0), 5, 5, 0, 2);
-  
+
   connect(m_spaceHorizUSpin, SIGNAL(valueChanged(double)), SLOT(setMaxHorizSnap(double)));
   connect(m_spaceVertUSpin, SIGNAL(valueChanged(double)), SLOT(setMaxVertSnap(double)));
 }
@@ -238,12 +238,12 @@ void KivioOptionsDialog::initGuides()
   QFrame* page = addPage(i18n("Guide Lines"), i18n("Guide Line Settings"),
     kapp->iconLoader()->loadIcon("guides", KIcon::Toolbar, 32));
   m_guidesIndex = pageIndex(page);
-  
+
   KivioView* view = static_cast<KivioView*>(parent());
   QTabWidget* tabs = new QTabWidget(page);
   QWidget* managerTab = new QWidget(tabs);
   QWidget* lookTab = new QWidget(tabs);
-  
+
   // Guide manager
   m_guideList = new KListView(managerTab);
   m_guideList->addColumn(i18n("Orientation"));
@@ -252,9 +252,9 @@ void KivioOptionsDialog::initGuides()
   m_guideList->setFullWidth(true);
   m_guideList->setAllColumnsShowFocus(true);
   KPushButton* newBtn = new KPushButton(kapp->iconLoader()->
-    loadIcon("filenew", KIcon::Small, 16), "", managerTab);
+    loadIcon("filenew", KIcon::Small, 16), i18n("Add"), managerTab);
   KPushButton* delBtn = new KPushButton(kapp->iconLoader()->
-    loadIcon("editdelete", KIcon::Small, 16), "", managerTab);
+    loadIcon("editdelete", KIcon::Small, 16), i18n("Remove"), managerTab);
   m_propertiesGrp = new QGroupBox(i18n("Guide Line Properties"), managerTab);
   m_propertiesGrp->setEnabled(false);
   m_orientHorizRBtn = new QRadioButton(i18n("&Horizontal"), m_propertiesGrp);
@@ -268,7 +268,7 @@ void KivioOptionsDialog::initGuides()
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
   m_posUSpin = new KoUnitDoubleSpinBox(m_propertiesGrp, 0.0, 0.0, 0.0, unit);
   posLbl->setBuddy(m_posUSpin);
-  
+
   QGridLayout* pgl = new QGridLayout(m_propertiesGrp);
   pgl->setSpacing(KDialog::spacingHint());
   pgl->setMargin(KDialog::marginHint());
@@ -276,7 +276,7 @@ void KivioOptionsDialog::initGuides()
   pgl->addMultiCellWidget(m_orientVertRBtn, 1, 1, 0, 1);
   pgl->addWidget(posLbl, 2, 0);
   pgl->addWidget(m_posUSpin, 2, 1);
-  
+
   QGridLayout* mgl = new QGridLayout(managerTab);
   mgl->setSpacing(KDialog::spacingHint());
   mgl->setMargin(KDialog::marginHint());
@@ -285,7 +285,7 @@ void KivioOptionsDialog::initGuides()
   mgl->addWidget(delBtn, 2, 1);
   mgl->addWidget(m_propertiesGrp, 0, 2);
   mgl->addItem(new QSpacerItem(0, 0), 1, 2);
-  
+
   // Look&Feel
   m_guidesChBox = new QCheckBox(i18n("&Show guides"), lookTab);
   m_guidesChBox->setChecked(view->isShowGuides());
@@ -297,7 +297,7 @@ void KivioOptionsDialog::initGuides()
   QLabel* guideSelColorLbl = new QLabel(i18n("S&elected guide color:"), lookTab);
   m_guideSelColorBtn = new KColorButton(lookTab);
   guideSelColorLbl->setBuddy(m_guideSelColorBtn);
-  
+
   QGridLayout* lgl = new QGridLayout(lookTab);
   lgl->setSpacing(KDialog::spacingHint());
   lgl->setMargin(KDialog::marginHint());
@@ -308,21 +308,21 @@ void KivioOptionsDialog::initGuides()
   lgl->addWidget(guideSelColorLbl, 3, 0);
   lgl->addWidget(m_guideSelColorBtn, 3, 1);
   lgl->addMultiCell(new QSpacerItem(0, 0), 4, 4, 0, 1);
-  
+
   tabs->addTab(managerTab, i18n("&Manager"));
   tabs->addTab(lookTab, i18n("&Look And Feel"));
 
   QGridLayout* gl = new QGridLayout(page);
   gl->setSpacing(KDialog::spacingHint());
   gl->addWidget(tabs, 0, 0);
-  
+
   connect(m_guideList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(
     guideSelectionChanged(QListViewItem*)));
   connect(m_posUSpin, SIGNAL(valueChanged(double)), SLOT(changePos(double)));
   connect(m_orientHorizRBtn, SIGNAL(toggled(bool)), SLOT(guideHoriz(bool)));
   connect(newBtn, SIGNAL(clicked()), SLOT(addGuide()));
   connect(delBtn, SIGNAL(clicked()), SLOT(delGuide()));
-  
+
   fillGuideList();
 }
 
@@ -374,14 +374,14 @@ void KivioOptionsDialog::applyGuides()
   gl->selectAll();
   gl->removeSelected();
   QListViewItemIterator it(m_guideList);
-  
+
   while (it.current()) {
     KivioGuideLineData* data = static_cast<GuidesListViewItem*>(it.current())->
       guideData();
     ++it;
     gl->add(data->position(), data->orientation());
   }
-  
+
   view->canvasWidget()->paintGuides();
 }
 
@@ -437,7 +437,7 @@ void KivioOptionsDialog::pageLayoutDlg()
   KoHeadFoot headfoot;
   int tabs = FORMAT_AND_BORDERS | DISABLE_UNIT;
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  
+
   if(KoPageLayoutDia::pageLayout(m_layout, headfoot, tabs, unit))
   {
     setLayoutText(m_layout);
@@ -454,7 +454,7 @@ void KivioOptionsDialog::unitChanged(int u)
   m_spaceVertUSpin->setUnit(unit);
   m_posUSpin->setUnit(unit);
   QListViewItemIterator it(m_guideList);
-  
+
   while (it.current()) {
     GuidesListViewItem* item = static_cast<GuidesListViewItem*>(it.current());
     ++it;
@@ -520,7 +520,7 @@ void KivioOptionsDialog::fillGuideList()
     guideLines()->guides();
   list.sort();
   m_guideList->clear();
-  
+
   for(KivioGuideLineData* d = list.first(); d; d = list.next()) {
     (void*) new GuidesListViewItem(m_guideList, d, unit);
   }
@@ -535,32 +535,32 @@ void KivioOptionsDialog::guideSelectionChanged(QListViewItem* li)
     m_posUSpin->setValue(0.0);
     return;
   }
-  
+
   m_propertiesGrp->setEnabled(true);
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
   KivioGuideLineData* data = static_cast<GuidesListViewItem*>(li)->guideData();
-  
+
   m_orientHorizRBtn->setChecked(data->orientation() == Qt::Horizontal);
   m_orientVertRBtn->setChecked(data->orientation() != Qt::Horizontal);
-  
+
   double max = KoUnit::ptToUnit(m_layout.ptWidth, unit);
-  
+
   if(data->orientation() != Qt::Horizontal) {
     max = KoUnit::ptToUnit(m_layout.ptHeight, unit);
   }
-  
+
   m_posUSpin->setMaxValue(max);
-  m_posUSpin->setValue(KoUnit::ptToUnit(data->position(), unit));  
+  m_posUSpin->setValue(KoUnit::ptToUnit(data->position(), unit));
 }
 
 void KivioOptionsDialog::changePos(double p)
 {
   GuidesListViewItem* li = static_cast<GuidesListViewItem*>(m_guideList->selectedItems().getLast());
-  
+
   if(!li) {
     return;
   }
-  
+
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
   li->setPosition(p, unit);
 }
@@ -568,11 +568,11 @@ void KivioOptionsDialog::changePos(double p)
 void KivioOptionsDialog::guideHoriz(bool h)
 {
   GuidesListViewItem* li = static_cast<GuidesListViewItem*>(m_guideList->selectedItems().getLast());
-  
+
   if(!li) {
     return;
   }
-  
+
   if(h) {
     li->setOrientation(Qt::Horizontal);
   } else {
@@ -589,7 +589,7 @@ void KivioOptionsDialog::addGuide()
 void KivioOptionsDialog::delGuide()
 {
   QListViewItemIterator it(m_guideList);
-  
+
   while (it.current()) {
     QListViewItem *item = it.current();
     ++it;
