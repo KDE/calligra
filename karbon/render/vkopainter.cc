@@ -60,6 +60,9 @@
 #include <koPoint.h>
 #include <koRect.h>
 
+#define INITIAL_ALLOC	300
+#define ALLOC_INCREMENT	100
+
 VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h ) : VPainter( target, w, h ), m_target( target )
 {
 	kdDebug() << "w : " << w << endl;
@@ -197,21 +200,31 @@ VKoPainter::setZoomFactor( double zoomFactor )
 	m_zoomFactor = zoomFactor;
 }
 
+void
+VKoPainter::ensureSpace( unsigned int newindex )
+{
+	if( m_index == 0 )
+	{
+		if( !m_path )
+			m_path = art_new( ArtBpath, INITIAL_ALLOC );
+		m_alloccount = INITIAL_ALLOC;
+	}
+	else if( newindex > m_alloccount )
+	{
+		m_alloccount += ALLOC_INCREMENT;
+		m_path = art_renew( m_path, ArtBpath, m_alloccount );
+	}
+}
+
 void 
 VKoPainter::moveTo( const KoPoint &p )
 {
-	if( m_index == 0)
-	{
-		if( !m_path )
-			m_path = art_new( ArtBpath, 500 );
+	ensureSpace( m_index + 1 );
 
-		m_path[ m_index ].code = ART_MOVETO;
-	}
-	else
-		m_path[ m_index ].code = ART_MOVETO;
+	m_path[ m_index ].code = ART_MOVETO;
 
-	m_path[ m_index ].x3	= p.x() * m_zoomFactor;
-	m_path[ m_index ].y3	= p.y() * m_zoomFactor;
+	m_path[ m_index ].x3 = p.x() * m_zoomFactor;
+	m_path[ m_index ].y3 = p.y() * m_zoomFactor;
 
 	m_index++;
 }
@@ -219,6 +232,8 @@ VKoPainter::moveTo( const KoPoint &p )
 void 
 VKoPainter::lineTo( const KoPoint &p )
 {
+	ensureSpace( m_index + 1 );
+
 	m_path[ m_index ].code = ART_LINETO;
 	m_path[ m_index ].x3	= p.x() * m_zoomFactor;
 	m_path[ m_index ].y3	= p.y() * m_zoomFactor;
@@ -229,6 +244,8 @@ VKoPainter::lineTo( const KoPoint &p )
 void
 VKoPainter::curveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
 {
+	ensureSpace( m_index + 1 );
+
 	m_path[ m_index ].code = ART_CURVETO;
 	m_path[ m_index ].x1	= p1.x() * m_zoomFactor;
 	m_path[ m_index ].y1	= p1.y() * m_zoomFactor;
@@ -266,6 +283,8 @@ VKoPainter::fillPath()
     if( find != -1 && ( m_path[ find ].x3 != m_path[ m_index - 1 ].x3 ||
 						m_path[ find ].y3 != m_path[ m_index - 1 ].y3 ) )
 	{
+		ensureSpace( m_index + 1 );
+
 		m_path[ m_index ].code = ART_LINETO;
 		m_path[ m_index ].x3	= m_path[ find ].x3;
 		m_path[ m_index ].y3	= m_path[ find ].y3;

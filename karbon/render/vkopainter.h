@@ -95,10 +95,12 @@ private:
 	_ArtGradientStop *buildStopArray( VGradient &gradient, int & );
 	void clampToViewport( const _ArtSVP &, int &, int &, int &, int & );
 	void clampToViewport( int &, int &, int &, int & );
+	void ensureSpace( unsigned int );
 
 private:
 	struct _ArtBpath *m_path;
 	unsigned int m_index;
+	unsigned int m_alloccount;
 	unsigned char *m_buffer;
 	QPaintDevice *m_target;
 	unsigned int m_width;
