@@ -271,7 +271,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     return true;
 }
 
-void RTFWorker::formatTextParagraph(const QString& strText,
+QString RTFWorker::formatTextParagraph(const QString& strText,
     const FormatData& formatOrigin, const FormatData& format)
 {
     QString strEscaped(escapeRtfText(strText));
@@ -287,16 +287,16 @@ void RTFWorker::formatTextParagraph(const QString& strText,
     if (!format.text.missing)
     {
         // Opening elements
-        openSpan(formatOrigin,format);
+        strEscaped+=openSpan(formatOrigin,format);
     }
-
-    m_textBody += strEscaped;
 
     if (!format.text.missing)
     {
         // Closing elements
-        closeSpan(formatOrigin,format);
+        strEscaped+=closeSpan(formatOrigin,format);
     }
+
+    return strEscaped;
 }
 
 QString RTFWorker::ProcessParagraphData ( const QString &paraText,
@@ -307,8 +307,8 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
     if (paraText.isEmpty())
     {
         // ### TODO: verify if a paragragh can be empty in RTF
-        openParagraph(layout);
-        closeParagraph(layout);
+        str=openParagraph(str,layout,m_inTable);
+        str=closeParagraph(str,layout);
     }
     else
     {
@@ -327,19 +327,19 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                 // For normal text, we need an opened paragraph
                 if (paragraphNotOpened)
                 {
-                    openParagraph(layout);
+                    str=openParagraph(str,layout,m_inTable);
                     paragraphNotOpened=false;
                 }
                 //Retrieve text
                 partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
-                formatTextParagraph(partialText,layout.formatData,*paraFormatDataIt);
+                str+=formatTextParagraph(partialText,layout.formatData,*paraFormatDataIt);
             }
             else if (4==(*paraFormatDataIt).id)
             {
                 // For variables, we need an opened paragraph
                 if (paragraphNotOpened)
                 {
-                    openParagraph(layout);
+                    str=openParagraph(str,layout,m_inTable);
                     paragraphNotOpened=false;
                 }
                 if (0==(*paraFormatDataIt).variable.m_type) // variable date
@@ -404,6 +404,25 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                     str += escapeRtfText((*paraFormatDataIt).variable.getLinkName());
                     str += "}}}";
                 }
+                else if (11==(*paraFormatDataIt).variable.m_type)
+                {
+                    // Footnote
+                    QValueList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
+                    if( paraList )
+                    {
+                        QString fstr;
+                        QValueList<ParaData>::ConstIterator it;
+                        for (it=paraList->begin();it!=paraList->end();it++)
+                            fstr += ProcessParagraphData( (*it).text, (*it).layout,(*it).formattingList);
+                        str += "{\\super \\chftn ";
+                        str += "{\\footnote ";
+                        str += "{\\super \\chftn ";
+                        str += fstr;
+                        str += " }";
+                        str += " }";
+                        str += " }";
+                    }
+                }
                 else
                 {
                     // Generic variable
@@ -419,7 +438,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                 if (!paragraphNotOpened)
                 {
                     // The paragraph was opened, so close it.
-                    closeParagraph(layout);
+                    str=closeParagraph(str,layout);
                 }
 
                 if (6==(*paraFormatDataIt).frameAnchor.type)
@@ -443,7 +462,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
         if (!paragraphNotOpened)
         {
             // The paragraph was opened, so close it.
-            closeParagraph(layout);
+            str=closeParagraph(str,layout);
         }
     }
 
@@ -757,55 +776,67 @@ bool RTFWorker::doCloseTextFrameSet(void)
     return true;
 }
 
-void RTFWorker::openParagraph(const LayoutData& layout)
+QString RTFWorker::openParagraph(const QString& str, const LayoutData& layout, bool inTable)
 {
-    m_textBody += "\\pard";
-    if (m_inTable)
-        m_textBody += "\\intbl";
-    m_textBody += "\\plain{";
+    QString result = str;
+
+    result += "\\pard";
+    if (inTable)
+        result += "\\intbl";
+    result += "\\plain{";
+
     LayoutData styleLayout;
-    m_textBody += lookupStyle(layout.styleName, styleLayout);
-    m_textBody += layoutToRtf(styleLayout,layout,true);
+    result += lookupStyle(layout.styleName, styleLayout);
+    result += layoutToRtf(styleLayout,layout,true);
 
     if ( 1==layout.formatData.text.verticalAlignment )
     {
-        m_textBody += "\\sub"; //Subscript
+        result += "\\sub"; //Subscript
     }
     else if ( 2==layout.formatData.text.verticalAlignment )
     {
-        m_textBody += "\\super"; //Superscript
+        result += "\\super"; //Superscript
     }
-    m_textBody += " ";
+    result += " ";
+
+    return result;
 }
 
-void RTFWorker::closeParagraph(const LayoutData& /*layout*/)
+QString RTFWorker::closeParagraph(const QString& str, const LayoutData& /*layout*/)
 {
-    m_textBody += m_eol;
-    m_textBody += "\\par";
+    QString result = str;
 
-    m_textBody += "}";
+    result += m_eol;
+    result += "\\par";
+    result += "}";
+    return result;
 }
 
-void RTFWorker::openSpan(const FormatData& formatOrigin, const FormatData& format)
+QString RTFWorker::openSpan(const FormatData& formatOrigin, const FormatData& format)
 {
-    m_textBody += "{";
-    m_textBody += textFormatToRtf(formatOrigin.text,format.text,false);
+    QString result;
+
+    result += "{";
+    result += textFormatToRtf(formatOrigin.text,format.text,false);
 
     if ( 1==format.text.verticalAlignment )
     {
-        m_textBody += "\\sub"; //Subscript
+        result += "\\sub"; //Subscript
     }
     else if ( 2==format.text.verticalAlignment )
     {
-        m_textBody += "\\super"; //Superscript
+        result += "\\super"; //Superscript
     }
 
-    m_textBody += " ";
+    result += " ";
+    return result;
 }
 
-void RTFWorker::closeSpan(const FormatData& formatOrigin, const FormatData& format)
+QString RTFWorker::closeSpan(const FormatData& , const FormatData& )
 {
-    m_textBody += "}";
+    QString result;
+    result += "}";
+    return result;
 }
 
 QString RTFWorker::getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)

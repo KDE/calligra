@@ -62,14 +62,14 @@ public:
 
 private:
     QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
-    void openParagraph(const LayoutData& layout);
-    void closeParagraph(const LayoutData& layout);
-    void openSpan(const FormatData& formatOrigin, const FormatData& format);
-    void closeSpan(const FormatData& formatOrigin, const FormatData& format);
+    QString openParagraph(const QString& str, const LayoutData& layout, bool inTable=false);
+    QString closeParagraph(const QString& str, const LayoutData& layout);
+    QString openSpan(const FormatData& formatOrigin, const FormatData& format);
+    QString closeSpan(const FormatData& formatOrigin, const FormatData& format);
     QString escapeRtfText ( const QString& text ) const;
     QString ProcessParagraphData ( const QString &paraText,
         const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
-    void formatTextParagraph(const QString& strText,
+    QString formatTextParagraph(const QString& strText,
         const FormatData& formatOrigin, const FormatData& format);
     bool makeTable(const FrameAnchor& anchor);
     bool convertUnknownImage(QByteArray& unknownImage, QByteArray& image);
