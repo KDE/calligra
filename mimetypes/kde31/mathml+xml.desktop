@@ -1,0 +1,17 @@
+[Desktop Entry]
+Comment=MathML Document
+Comment[da]=MathML-dokument
+Comment[el]=Έγγραφο MathML
+Comment[es]=Documento de MathML
+Comment[hu]=MathML dokumentum
+Comment[lv]=MathML Dokuments
+Comment[pt]=Documento MathML
+Comment[pt_BR]=Documento MathML
+Comment[ru]=Документ MathML
+Comment[sv]=MathML-dokument
+Comment[zh_CN]=MathML 文档
+Hidden=false
+Icon=html
+MimeType=application/mathml+xml
+Patterns=*.mml;*.MML
+Type=MimeType
