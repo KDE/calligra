@@ -229,7 +229,7 @@ double KPTextObject::load(const QDomElement &element)
 void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 			  bool drawingShadow, bool drawContour )
 {
-    paint( _painter, _zoomHandler, false, 0L, true, drawingShadow );
+    paint( _painter, _zoomHandler, false, 0L, true, drawingShadow,drawContour );
 }
 
 // Special method for drawing a text object that is being edited
@@ -241,34 +241,50 @@ void KPTextObject::paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
     if ( angle != 0 )
         rotateObject(_painter,_zoomHandler);
-    paint( _painter, _zoomHandler, onlyChanged, cursor, resetChanged, false );
+    paint( _painter, _zoomHandler, onlyChanged, cursor, resetChanged, false,false );
     _painter->restore();
 }
 
 // Common functionality for the above 2 methods
 void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                          bool onlyChanged, QTextCursor* cursor, bool resetChanged,
-                         bool drawingShadow )
+                         bool drawingShadow,bool drawContour )
 {
+    double ow = ext.width();
+    double oh = ext.height();
+    double pw = pen.width() / 2;
+
+    if ( drawContour ) {
+	QPen pen3( Qt::black, 1, Qt::DotLine );
+	_painter->setPen( pen3 );
+        _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow), _zoomHandler->zoomItY( oh) );
+
+	return;
+    }
+
     _painter->save();
     //kdDebug() << "KPTextObject::paint cliprect:" << DEBUGRECT(_zoomHandler->zoomRect( getBoundingRect( _zoomHandler ) )) << endl;
     //setupClipRegion( _painter, _zoomHandler->zoomRect( getBoundingRect( _zoomHandler ) ) );
     //kdDebug() << "Painting text object at " << ox << "," << oy << ":" << m_textobj->textDocument()->text() << endl;
 
+    QPen pen2(pen);
+    pen2.setWidth(_zoomHandler->zoomItX(pen.width()));
+    _painter->setPen( pen2 );
+
     _painter->setPen( pen );
     _painter->setBrush( brush );
 
     // Handle the rotation, draw the background/border, then call drawText()
-    int penw = pen.width() / 2;
+
     if ( fillType == FT_BRUSH || !gradient ) {
         /// #### Port this to KoBorder, see e.g. kword/kwframe.cc:590
         // (so that the border gets drawn OUTSIDE of the object area)
-        _painter->drawRect( penw, penw, _zoomHandler->zoomItX( ext.width() - 2 * penw), _zoomHandler->zoomItY( ext.height() - 2 * penw) );
+        _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX( ow - 2 * pw), _zoomHandler->zoomItY( oh - 2 * pw) );
     }
     else if ( !drawingShadow ) {
         QSize size( _zoomHandler->zoomSize( ext ) );
         gradient->setSize( size );
-        _painter->drawPixmap( penw, penw, gradient->pixmap(), 0, 0, _zoomHandler->zoomItX( ext.width() - 2 * penw ), _zoomHandler->zoomItY( ext.height() - 2 * penw ) );
+        _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), gradient->pixmap(), 0, 0, _zoomHandler->zoomItX( ow - 2 * pw ), _zoomHandler->zoomItY( oh - 2 * pw ) );
     }
     drawText( _painter, _zoomHandler, onlyChanged, cursor, resetChanged );
     _painter->restore();
@@ -283,7 +299,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
         _painter->setPen( QPen( Qt::black, 1, Qt::DotLine ) );
         _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect( 0, 0, _zoomHandler->zoomItX(ext.width()), _zoomHandler->zoomItY( ext.height()) );
+        _painter->drawRect( 0, 0, _zoomHandler->zoomItX(ow), _zoomHandler->zoomItY( oh) );
 
         _painter->restore();
     }

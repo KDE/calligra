@@ -84,7 +84,7 @@ public:
 
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 			bool drawingShadow, bool drawContour );
-    void paint( QPainter *_painter, KoZoomHandler*_zoomHandler, bool onlyChanged, QTextCursor* cursor, bool resetChanged, bool drawingShadow );
+    void paint( QPainter *_painter, KoZoomHandler*_zoomHandler, bool onlyChanged, QTextCursor* cursor, bool resetChanged, bool drawingShadow,bool drawContour );
     void paintEdited( QPainter *_painter, KoZoomHandler*_zoomHandler,
                       bool onlyChanged, QTextCursor* cursor, bool resetChanged );
 
