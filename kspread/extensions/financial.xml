@@ -249,6 +249,7 @@ is the number of periods over which the asset is depreciated. SLN
 divides the cost evenly over the life of an asset.</Text>
 	<Syntax>SLN(cost; salvage value; life)</Syntax>
 	<Example>SLN(10000;700;10) equals 930</Example>
+        <Related>SYD</Related>
       </Help>
     </Function>
 
@@ -275,6 +276,7 @@ divides the cost evenly over the life of an asset.</Text>
 	<Text>The SYD() function will calculate the sum-of-years digits depreciation for an asset based on its cost, salvage value, anticipated life, and a particular period. This method accelerates the rate of the depreciation, so that more depreciation expense occurs in earlier periods than in later ones. The depreciable cost is the actual cost minus the salvage value. The useful life is the number of periods (typically years) over with the asset is depreciated.</Text>
 	<Syntax>SYD(cost; salvage value; life; period)</Syntax>
 	<Example>SYD(5000; 200; 5; 2) equals 1280</Example>
+        <Related>SLN</Related>
       </Help>
     </Function>
 
