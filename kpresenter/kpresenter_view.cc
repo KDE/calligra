@@ -5863,7 +5863,7 @@ void KPresenterView::slotHRulerDoubleClicked( double ptpos )
 
 void KPresenterView::slotHRulerDoubleClicked()
 {
-    if ( getHRuler()->flags() & KoRuler::F_TABS )
+    if ( m_canvas && m_canvas->currentTextObjectView() && (getHRuler()->flags() & KoRuler::F_TABS) )
         formatParagraph();
     else
         openPageLayoutDia();
