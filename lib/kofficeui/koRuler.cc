@@ -50,7 +50,7 @@ public:
     KoTabulator removeTab;     // Do we have to remove a certain tab in the DC Event?
     KoTabulator currTab;
     QPopupMenu *rb_menu;
-    int mMM, mPT, mINCH, mCM, mRemoveTab, mPageLayout; // menu item ids
+    int mRemoveTab, mPageLayout; // menu item ids
     int frameEnd;
     double i_right;
     bool m_bReadWrite;
@@ -220,12 +220,9 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 
     // Draw the numbers
     double dist = lineDistance();
-    int j = 0;
     int maxwidth = 0;
     for ( double i = 0.0;i <= (double)totalw;i += dist ) {
-        str=QString::number(j++);
-        if ( m_unit == KoUnit::U_PT && j!=1)
-            str+="00";
+        str = QString::number( KoUnit::ptToUnit( i / m_zoom, m_unit ) );
         int textwidth = fm.width( str );
         p.drawText( qRound(i) - diffx - qRound(textwidth * 0.5),
                     qRound(( height() - fm.height() ) * 0.5),
@@ -343,7 +340,6 @@ void KoRuler::drawVertical( QPainter *_painter )
 
     int totalh = qRound( zoomIt(layout.ptHeight) );
     if ( ( diffy >= 0 && totalh > diffy ) || ( diffy < 0 && diffy + totalh >= 0 ) ) {
-        int j = 0;
         QString str;
         QFont font; // Use the global KDE font. Let's hope it's appropriate.
         font.setPointSize( 8 ); // Hardcode the size? (Werner)
@@ -371,9 +367,7 @@ void KoRuler::drawVertical( QPainter *_painter )
         double dist = lineDistance();
         int maxheight = 0;
         for ( double i = 0.0;i <= (double)totalh;i += dist ) {
-            str=QString::number(j++);
-            if ( m_unit == KoUnit::U_PT && j!=1 )
-                str+="00";
+            str = QString::number( KoUnit::ptToUnit( i / m_zoom, m_unit ) );
             int textheight = fm.height();
             maxheight = QMAX( maxheight, textheight );
             p.drawText( qRound(( width() - fm.width( str ) ) * 0.5),
@@ -918,40 +912,26 @@ void KoRuler::setupMenu()
 {
     d->rb_menu = new QPopupMenu();
     Q_CHECK_PTR( d->rb_menu );
-    d->mMM = d->rb_menu->insertItem( KoUnit::unitDescription( KoUnit::U_MM ),
-				     this, SLOT( rbMM() ) );
-    d->mPT = d->rb_menu->insertItem( KoUnit::unitDescription( KoUnit::U_PT ),
-				     this, SLOT( rbPT() ) );
-    d->mINCH = d->rb_menu->insertItem( KoUnit::unitDescription( KoUnit::U_INCH ),
-				       this, SLOT( rbINCH() ) );
-    d->mCM = d->rb_menu->insertItem( KoUnit::unitDescription( KoUnit::U_CM ),
-				       this, SLOT( rbCM() ) );
+    for ( uint i = 0 ; i < KoUnit::U_LASTUNIT ; ++i )
+    {
+        KoUnit::Unit unit = static_cast<KoUnit::Unit>( i );
+        d->rb_menu->insertItem( KoUnit::unitDescription( unit ), i /*as id*/ );
+        if ( m_unit == unit )
+            d->rb_menu->setItemChecked( i, true );
+    }
+    connect( d->rb_menu, SIGNAL( activated( int ) ), SLOT( slotMenuActivated( int ) ) );
 
     d->rb_menu->insertSeparator();
     d->mPageLayout=d->rb_menu->insertItem(i18n("Page Layout..."), this, SLOT(pageLayoutDia()));
     d->rb_menu->insertSeparator();
     d->mRemoveTab=d->rb_menu->insertItem(i18n("Remove Tabulator"), this, SLOT(rbRemoveTab()));
-    int uid = d->mMM;
-    if ( m_unit == KoUnit::U_MM )
-	uid = d->mMM;
-    else if ( m_unit == KoUnit::U_PT )
-	uid = d->mPT;
-    else if ( m_unit == KoUnit::U_INCH )
-	uid = d->mINCH;
-    else if ( m_unit == KoUnit::U_CM )
-	uid = d->mCM;
-
-    d->rb_menu->setItemChecked( uid, true );
     d->rb_menu->setItemEnabled( d->mRemoveTab, false );
 }
 
 void KoRuler::uncheckMenu()
 {
-    d->rb_menu->setItemChecked( d->mMM, false );
-    d->rb_menu->setItemChecked( d->mPT, false );
-    d->rb_menu->setItemChecked( d->mINCH, false );
-    d->rb_menu->setItemChecked( d->mCM, false );
-
+    for ( uint i = 0 ; i < KoUnit::U_LASTUNIT ; ++i )
+        d->rb_menu->setItemChecked( i, false );
 }
 
 void KoRuler::setUnit( const QString& _unit )
@@ -963,20 +943,7 @@ void KoRuler::setUnit( KoUnit::Unit unit )
 {
     m_unit = unit;
     uncheckMenu();
-    switch ( m_unit ) {
-    case KoUnit::U_MM:
-        d->rb_menu->setItemChecked( d->mMM, true );
-        break;
-    case KoUnit::U_PT:
-        d->rb_menu->setItemChecked( d->mPT, true );
-        break;
-    case KoUnit::U_INCH:
-        d->rb_menu->setItemChecked( d->mINCH, true );
-        break;
-    case KoUnit::U_CM:
-        d->rb_menu->setItemChecked( d->mCM, true );
-        break;
-    }
+    d->rb_menu->setItemChecked( m_unit, true );
     update();
 }
 
@@ -1090,6 +1057,16 @@ double KoRuler::unZoomItRtl( int pixValue ) const
 {
     int frameWidth = d->frameEnd - frameStart;
     return d->rtl ? ( unZoomIt( (double)(frameWidth - pixValue) ) ) : unZoomIt( (double)pixValue );
+}
+
+void KoRuler::slotMenuActivated( int i )
+{
+    if ( i >= 0 && i < KoUnit::U_LASTUNIT )
+    {
+        KoUnit::Unit unit = static_cast<KoUnit::Unit>(i);
+        setUnit( unit );
+        emit unitChanged( KoUnit::unitName( unit ) );
+    }
 }
 
 #include "koRuler.moc"

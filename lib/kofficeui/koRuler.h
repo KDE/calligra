@@ -293,10 +293,7 @@ private:
     double gridSize;
 
 protected slots:
-    void rbPT() { setUnit( KoUnit::U_PT ); emit unitChanged( "pt" ); }
-    void rbMM() { setUnit( KoUnit::U_MM ); emit unitChanged( "mm" ); }
-    void rbINCH() { setUnit( KoUnit::U_INCH ); emit unitChanged( "inch" ); }
-    void rbCM() { setUnit( KoUnit::U_CM ); emit unitChanged("cm" );}
+    void slotMenuActivated( int i );
     void pageLayoutDia() { emit doubleClicked()/*openPageLayoutDia()*/; }
     void rbRemoveTab();
 
