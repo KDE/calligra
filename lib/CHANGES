@@ -22,6 +22,7 @@ KoText:
 - Background spellchecking works again
 - Fixed crash during background spellchecking (refcounting of formats)
 - Fixed hyphenation checkbox not correctly set in font dialog
+- Fixed wrong hyphenation in many cases, due to wrong word sent to hyphenation engine
 - Font dialog usability: turn radiobuttons superscript/subscript into
   checkboxes to make it possible to deactivate both.
 - Usability in style dialog: when creating a new style, select it as the

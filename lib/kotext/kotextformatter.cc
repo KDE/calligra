@@ -336,7 +336,7 @@ bool KoTextFormatterCore::format()
                 // Breaking after i isn't possible, i is too far already
                 int maxlen = i - wordStart; // we can't accept to break after maxlen
                 QString word = string->mid( wordStart, maxlen );
-                int wordEnd = i + 1;
+                int wordEnd = i;
                 // but we need to compose the entire word, to hyphenate it
                 while ( wordEnd < len && !settings->isBreakable( string, wordEnd ) ) {
                     word += string->at(wordEnd).c;
