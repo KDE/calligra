@@ -129,14 +129,16 @@ struct KWDocument::InitialEditing {
 KWBookMark::KWBookMark(const QString &_name)
     : m_name(_name),
       m_parag(0L),
-      m_frameSet(0L)
+      m_frameSet(0L),
+      m_index( 0 )
 {
 }
 
-KWBookMark::KWBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet)
+KWBookMark::KWBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos)
     : m_name(_name),
       m_parag(_parag),
-      m_frameSet(_frameSet)
+      m_frameSet(_frameSet),
+      m_index( _pos )
 {
 }
 
@@ -3912,9 +3914,9 @@ void KWDocument::setCursorInProtectedArea( bool b )
     m_cursorInProtectectedArea=b;
 }
 
-void KWDocument::insertBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet)
+void KWDocument::insertBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos)
 {
-    KWBookMark *book =new KWBookMark( _name, _parag, _frameSet);
+    KWBookMark *book =new KWBookMark( _name, _parag, _frameSet, _pos);
     m_bookmarkList.append( book );
 }
 

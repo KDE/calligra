@@ -81,6 +81,8 @@ KWSelectBookmarkDia::KWSelectBookmarkDia( const QStringList & _list, QWidget *pa
     m_bookmarkList = new QListBox( page );
     m_bookmarkList->insertStringList(_list);
     connect(m_bookmarkList,  SIGNAL( selectionChanged ()), this, SLOT(slotSelectionChanged()));
+    connect(m_bookmarkList,  SIGNAL(doubleClicked ( QListBoxItem * )), this, SLOT(slotOk()));
+
     setFocus();
     enableButtonOK( false );
     resize( 300, 200);
@@ -93,6 +95,7 @@ QString KWSelectBookmarkDia::bookmarkSelected()const
 
 void KWSelectBookmarkDia::slotSelectionChanged()
 {
+    enableButtonOK( !m_bookmarkList->currentText().isEmpty() );
 }
 
 #include "kwcreatebookmarkdia.moc"

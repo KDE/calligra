@@ -1060,10 +1060,10 @@ void KWView::setupActions()
                                             actionCollection(), "select_frameset" );
 
 
-    actionAddBookmark= new KAction( i18n( "Add Bookmark" ), 0,
+    actionAddBookmark= new KAction( i18n( "Add Bookmark..." ), 0,
                                             this, SLOT( addBookmark() ),
                                             actionCollection(), "add_bookmark" );
-    actionSelectBookmark= new KAction( i18n( "Select Bookmark" ), 0,
+    actionSelectBookmark= new KAction( i18n( "Select Bookmark..." ), 0,
                                             this, SLOT( selectBookmark() ),
                                             actionCollection(), "select_bookmark" );
 
@@ -5770,18 +5770,22 @@ void KWView::addBookmark()
         KWCreateBookmarkDia dia( m_doc->listOfBookmarkName(), this, 0 );
         if ( dia.exec() ) {
             QString bookName = dia.bookmarkName();
+            m_doc->insertBookMark(bookName, static_cast<KWTextParag*>(edit->cursor()->parag()), edit->textFrameSet(), edit->cursor()->index());
         }
     }
 }
 
 void KWView::selectBookmark()
 {
-
     KWSelectBookmarkDia dia( m_doc->listOfBookmarkName(), this, 0 );
     if ( dia.exec() ) {
         QString bookName = dia.bookmarkSelected();
+        KWBookMark * book = m_doc->bookMarkByName( bookName );
+        if ( book )
+        {
+            m_gui->canvasWidget()->editTextFrameSet( book->frameSet(), book->parag(), book->bookmarkIndex() );
+        }
     }
-
 }
 
 /******************************************************************/
