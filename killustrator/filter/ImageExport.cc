@@ -99,7 +99,11 @@ bool ImageExport::exportToFile (GDocument* doc) {
   //kdDebug()<<"export: box.w=="<<box.width()<<" box.h=="<<box.height()<<endl;
   if (pixmap == 0L)
     return false;
-  bitBlt (pixmap, 0, 0, buffer, qRound (box.x ()), qRound (box.y ()),
+  int sx=qRound (box.x ());
+  int sy=qRound (box.y ());
+  if (sx>0) sx--;
+  if (sy>0) sy--;
+  bitBlt (pixmap, 0, 0, buffer, sx, sy,
           qRound (box.width ())+1, qRound (box.height ())+1);
   delete buffer;
 
