@@ -378,6 +378,7 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
 
 void KWCanvas::keyPressEvent( QKeyEvent *e )
 {
+    kdDebug() << "KWCanvas::keyPressEvent" << endl;
     if( !doc->isReadWrite()) {
         switch( e->key() ) {
         case Key_Down:
@@ -411,10 +412,7 @@ void KWCanvas::keyPressEvent( QKeyEvent *e )
         return;
     }
     if ( m_currentFrameSetEdit && m_mouseMode==MM_EDIT )
-        {
-            m_currentFrameSetEdit->keyPressEvent( e );
-            m_gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
-        }
+        m_currentFrameSetEdit->keyPressEvent( e );
 }
 
 void KWCanvas::mpEditFrame( QMouseEvent *e, int mx, int my ) // mouse press in edit-frame mode
@@ -1575,6 +1573,12 @@ void KWCanvas::deleteTable( KWGroupManager *groupManager )
 {
     if ( !groupManager )
         return;
+    if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() == groupManager )
+    {
+        // Terminate edition of that frameset
+        delete m_currentFrameSetEdit;
+        m_currentFrameSetEdit = 0L;
+    }
     // ## TODO undo/redo support
     doc->delGroupManager( groupManager );
     doc->updateAllFrames();
