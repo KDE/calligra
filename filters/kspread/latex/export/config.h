@@ -1,7 +1,7 @@
 /*
 ** Header file for inclusion with kword_xml2latex.c
 **
-** Copyright (C) 2002, 2003 Robert JACOLIN
+** Copyright (C) 2002 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -19,8 +19,8 @@
 **
 */
 
-#ifndef __KWORD_LATEX_CONFIG_H__
-#define __KWORD_LATEX_CONFIG_H__
+#ifndef __LATEX_CONFIG_H__
+#define __LATEX_CONFIG_H__
 
 #include <qtextstream.h>
 #include <qstringlist.h>
@@ -41,6 +41,7 @@ class Config
 	bool _isEmbeded;
 	QString _class;
 	QString _quality;
+	int _defaultFontSize;
 	
 	/* Pictures tab */
 	bool _convertPictures;
@@ -80,6 +81,7 @@ class Config
 		bool isEmbeded() const { return _isEmbeded; }
 		QString getClass() const { return _class; }
 		QString getQuality() const { return _quality; }
+		int getDefaultFontSize() const { return _defaultFontSize; }
 
 		bool convertPictures() const { return _convertPictures; }
 		QString getPicturesDir() const { return _picturesDir; }
@@ -114,6 +116,7 @@ class Config
 		 * latex document. */
 		void setClass(QString lclass) { _class = lclass; }
 		void setQuality(QString quality) { _quality = quality; }
+		void setDefaultFontSize(int size) { _defaultFontSize = size; }
 
 		void convertPictures(bool state) { _convertPictures = state; }
 		void setPicturesDir(QString dir) { _picturesDir = dir; }
@@ -149,4 +152,4 @@ class Config
 
 };
 
-#endif /* __KWORD_LATEX_CONFIG_H__ */
+#endif /* __LATEX_CONFIG_H__ */

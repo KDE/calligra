@@ -38,6 +38,7 @@
 #include <kdebug.h>
 #include <koFilterManager.h>
 #include <kcombobox.h>
+#include <knuminput.h>
 
 #include <dcopclient.h>
 
@@ -56,7 +57,7 @@
  */
 KSpreadLatexExportDiaImpl::KSpreadLatexExportDiaImpl(KoStore* in, QWidget* parent, 
 		const char* name_, bool modal, WFlags fl )
-    : KSpreadLatexExportDia( parent, name_, modal, fl ),
+    : LatexExportDia( parent, name_, modal, fl ),
 						DCOPObject("LatexFilterConfigDia"), _in( in )
 {
 	int i = 0;
@@ -103,6 +104,7 @@ KSpreadLatexExportDiaImpl::~KSpreadLatexExportDiaImpl()
 void KSpreadLatexExportDiaImpl::reject()
 {
 	kdDebug() << "Export cancelled" << endl;
+	QDialog::reject();
 }
 
 /**
@@ -125,6 +127,7 @@ void KSpreadLatexExportDiaImpl::accept()
 		config-> useLatexStyle();
 	config->setClass(classComboBox->currentText());
 	config->setQuality(qualityComboBox->currentText());
+	config->setDefaultFontSize(defaultFontSize->value());
 	
 	/* Pictures tab */
 	if(pictureCheckBox->isChecked())

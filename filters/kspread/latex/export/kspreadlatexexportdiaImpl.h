@@ -20,7 +20,7 @@
 #ifndef __KSPREADLATEXEXPORTDIA_H__
 #define __KSPREADLATEXEXPORTDIA_H__
 
-#include <kspreadlatexexportdia.h>
+#include <latexexportdia.h>
 #include <qstringlist.h>
 #include <kurl.h>
 
@@ -29,7 +29,7 @@
 class KoStore;
 class KConfig;
 
-class KSpreadLatexExportDiaImpl : public KSpreadLatexExportDia, public DCOPObject
+class KSpreadLatexExportDiaImpl : public LatexExportDia, public DCOPObject
 {
     Q_OBJECT
 
