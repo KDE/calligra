@@ -191,10 +191,16 @@ static void ProcessFramesetTag ( QDomNode        myNode,
         case 1:
             if ( grpMgr.isEmpty () )
             {
-                QValueList<TagProcessing> tagProcessingList;
-                tagProcessingList << TagProcessing ( "FRAME",     NULL,                NULL              )
-                                  << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) paraList );
-                ProcessSubtags (myNode, tagProcessingList, leader);
+                // As we do not support anything else than normal text, process only normal text.
+                // TODO: Treat the other types of frames (frameType)
+                if (!frameInfo)
+                {
+                    // Normal Text
+                    QValueList<TagProcessing> tagProcessingList;
+                    tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+                    tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) paraList ));
+                    ProcessSubtags (myNode, tagProcessingList, leader);
+                }
             }
             else
             {
