@@ -7439,7 +7439,7 @@ void KSpreadTable::paperLayoutDlg()
                 }
             }
 
-            if ( error ) KMessageBox::information( 0, i18n( "Repeated columss range wrong, changes are ignored.\nMust be in format column:column (eg. B:C)" ) );
+            if ( error ) KMessageBox::information( 0, i18n( "Repeated columns range wrong, changes are ignored.\nMust be in format column:column (eg. B:C)" ) );
         }
 
         if ( tmpRepeatRows.isEmpty() )

@@ -210,7 +210,7 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The COUNTIF function returns the number of cells in the given range that meet the given criteria.</Text>
+	<Text>The COUNTIF() function returns the number of cells in the given range that meet the given criteria.</Text>
 	<Syntax>COUNTIF(range;criteria)</Syntax>
 	<Example>COUNTIF(A2:A3;"14") returns 1 if A1 is -4 and A2 is 14</Example>
 	<Related>COUNT</Related>
@@ -240,7 +240,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The FACTDOUBLE() function calculates the double factorial of a number, i.e., x!!".</Text>
+	<Text>The FACTDOUBLE() function calculates the double factorial of a number, i.e. x!!".</Text>
 	<Syntax>FACTDOUBLE(number)</Syntax>
 	<Example>FACTDOUBLE(6) returns 48</Example>
 	<Example>FACTDOUBLE(7) returns 105</Example>

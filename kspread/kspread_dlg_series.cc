@@ -61,12 +61,12 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   linear = new QRadioButton( i18n("Linear (2,4,6,...)"), gb2 );
   QWhatsThis::add(linear, i18n("Generate a series from 'start' to 'end' and for each step add "
      "the value provided in step. This creates a series where each value "
-     "is 'step' larger then the value before it.") );
+     "is 'step' larger than the value before it.") );
   geometric = new QRadioButton( i18n("Geometric (2,4,8,...)"), gb2 );
   QWhatsThis::add(geometric, i18n("Generate a series from 'start' to 'end' and for each step multiply "
-     "the value with the value provided in step. Using a step of 5 gets you a list like "
-      "5, 25, 125, 625 since 5 times 5 (step) equals 25, and that times 5 equals 125 "
-      "which multiplied by the same step-value of 5 leads to 625.") );
+     "the value with the value provided in step. Using a step of 5 produces a list like: "
+      "5, 25, 125, 625 since 5 multiplied by 5 (step) equals 25, and that multiplied by 5 equals 125, "
+      "which multiplied by the same step-value of 5 equals 625.") );
 
   linear->setChecked(true);
 
