@@ -52,14 +52,14 @@ public slots:
   void slotShowCMYK();
   void slotShowLAB();
   void slotShowGrey();
+  void slotChangeColor(const KoColor &c);
+  void slotChangeColor(const QColor &c);
 
 signals:
   void colorChanged(const KoColor &c);
 
 protected slots:
   void slotChangeXY(int h, int s);
-  void slotChangeColor(const KoColor &c);
-  void slotChangeColor(const QColor &c);
 
 private:
   KoColor           mColor;
