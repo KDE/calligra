@@ -8,7 +8,7 @@ main
 	l.text = "Edit me";
 	p = QPushButton( w );
 	p.text = "Dialog";
-		bg = QButtonGroup( dlg );
+		bg = QHButtonGroup( w );
 		r1 = QRadioButton( bg );
 		r1.text = "Radio Button";
 		r2 = QRadioButton( bg );
@@ -34,6 +34,7 @@ main
 	layout2 = QHBoxLayout( w );
 	layout1.addWidget( l );
 	layout1.addWidget( p );
+	layout1.addWidget( bg );
 	layout1.addLayout( layout2 );
 	layout2.addWidget( la );
 	layout2.addWidget( combo );

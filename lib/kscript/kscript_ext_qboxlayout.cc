@@ -105,9 +105,8 @@ bool KSObject_QBoxLayout::ksQBoxLayout_addLayout( KSContext& context )
 
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-// Torben: how should I check for types I can't get with checkType? (ie QBoxLayout?)
-//  if ( !checkType( context, args[0], KS_Qt_Object::WidgetType ) )
-//      return false;
+  if ( !KSObject_QBoxLayout::convert( args[0] ) )
+      return false;
 
   OBJECT->addLayout( KSObject_QBoxLayout::convert( args[0] ) );
 

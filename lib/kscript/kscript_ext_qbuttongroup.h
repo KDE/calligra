@@ -33,4 +33,52 @@ public:
   void setObject( QObject* obj );
 };
 
+class KSClass_QVButtonGroup : public KSClass_QButtonGroup
+{
+public:
+  KSClass_QVButtonGroup( KSModule*, const char* name = "QVButtonGroup" );
+
+protected:
+  virtual KSScriptObject* createObject( KSClass* c );
+};
+
+class KSObject_QVButtonGroup : public KSObject_QButtonGroup
+{
+public:
+  KSObject_QVButtonGroup( KSClass* );
+
+  bool ksQVButtonGroup( KSContext& );
+    
+  KSValue::Ptr member( KSContext& context, const QString& name );
+  bool setMember( KSContext& context, const QString& name, const KSValue::Ptr& v );
+
+  bool inherits( const char* name ) { return ( strcmp( name, "KSObject_QVButtonGroup" ) == 0 || KSObject_QButtonGroup::inherits( name ) ); }
+  
+  void setObject( QObject* obj );
+};
+
+class KSClass_QHButtonGroup : public KSClass_QButtonGroup
+{
+public:
+  KSClass_QHButtonGroup( KSModule*, const char* name = "QHButtonGroup" );
+
+protected:
+  virtual KSScriptObject* createObject( KSClass* c );
+};
+
+class KSObject_QHButtonGroup : public KSObject_QButtonGroup
+{
+public:
+  KSObject_QHButtonGroup( KSClass* );
+
+  bool ksQHButtonGroup( KSContext& );
+    
+  KSValue::Ptr member( KSContext& context, const QString& name );
+  bool setMember( KSContext& context, const QString& name, const KSValue::Ptr& v );
+
+  bool inherits( const char* name ) { return ( strcmp( name, "KSObject_QHButtonGroup" ) == 0 || KSObject_QButtonGroup::inherits( name ) ); }
+  
+  void setObject( QObject* obj );
+};
+
 #endif

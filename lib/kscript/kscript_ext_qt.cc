@@ -40,6 +40,8 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
   module->addObject( "QVBoxLayout", new KSValue( new KSClass_QVBoxLayout( module ) ) );
   module->addObject( "QHBoxLayout", new KSValue( new KSClass_QHBoxLayout( module ) ) );
   module->addObject( "QButtonGroup", new KSValue( new KSClass_QButtonGroup( module ) ) );
+  module->addObject( "QVButtonGroup", new KSValue( new KSClass_QVButtonGroup( module ) ) );
+  module->addObject( "QHButtonGroup", new KSValue( new KSClass_QHButtonGroup( module ) ) );
   module->addObject( "QRect", new KSValue( new KSQt::Rect( module, "QRect" ) ) );
   module->addObject( "QPoint", new KSValue( new KSQt::Point( module, "QPoint" ) ) );
   module->addObject( "QSize", new KSValue( new KSQt::Size( module, "QSize" ) ) );
