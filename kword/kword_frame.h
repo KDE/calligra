@@ -52,34 +52,54 @@ const unsigned int minFrameWidth=18;
 const unsigned int minFrameHeight=20;
 const unsigned int tableCellSpacing=3;
 
-/* Runaround types */
+/** Runaround types
+* RA_NO = No run around, all text is just printed.
+* RA_BOUNDINGRECT = run around the square of this frame.
+* RA_SKIP = stop running text on the whole horizontal space this frame occupies.
+*/
 enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_SKIP = 2 };
 
-/* what should happen when the frame is full */
+/** what should happen when the frame is full */
 enum FrameBehaviour { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
 
-/* types of behaviours for creating a followup frame on new page */
+/** types of behaviours for creating a followup frame on new page */
 enum NewFrameBehaviour { Reconnect=0, NoFollowup=1, Copy=2 };
 
-/* this frame will only be copied to: */
+/** This frame will only be copied to: 
+*   AnySide, OddSide or EvenSide
+*/
 enum SheetSide { AnySide=0, OddSide=1, EvenSide=2};
 
-/* The different types of framesets */
+/** The different types of framesets
+* FT_BASE = unused <br>
+* FT_TEXT = text only, this is the only frameset that can have multiple frames. <br>
+* FT_PICTURE = One frame with a picture<br>
+* FT_PART = one frame with an embedded part, can be a spreadsheet to a kword doc.<br>
+* FT_FORMULA = one frame with an embedded formula frame. This is semi-native
+*/
 enum FrameType { FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART = 3, FT_FORMULA = 4 };
 
-/* The different types of textFramesets */
+/** The different types of textFramesets (that TEXT is important here!)
+* FI_BODY = normal text frames.<br>
+* FI_FIRST_HEADER = Header on page 1<br>
+* FI_ODD_HEADER = header on any odd page (can be including page 1)<br>
+* FI_EVEN_HEADER = header on any even page<br>
+* FI_FIRST_FOOTER = footer on page 1<br>
+* FI_ODD_FOOTER = footer on any odd page (can be including page 1)<br>
+* FI_EVEN_FOOTER = footer on any even page<br>
+* FI_FOOTNOTE = a footnote frame.
+*/
 enum FrameInfo { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3,
                  FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6,
                  FI_FOOTNOTE = 7 };
 
-/******************************************************************
- * Class: KWFrame
+/** 
  * This class represents a single frame.
  * A frame will belong to a frameset which states its contents.
  * A frame will NOT have contents the frameset will store that. 
  * A frame is really just a square that is used to place the content
  * of a frameset.
- ******************************************************************/
+ */
 
 class KWFrame : public QRect
 {
@@ -97,14 +117,27 @@ public:
     /* destructor */
     virtual ~KWFrame();
 
-    /* a frame can be selected by the user clicking on it. The frame 
+    /** a frame can be selected by the user clicking on it. The frame 
        remembers if it is selected */
     void setSelected( bool _selected ) { selected = _selected; }
     bool isSelected() { return selected; }
 
     /* Run around stuff */
+    /** add an intersection to the list of intersections of this frame. 
+    * A frame can intersect another frame, since we don't want to print
+    * such comments on top of each other we keep a list of intersections and use that 
+    * together with runaround setting to decide which of the 2 frames can use that space.
+    * @param QRect the intersecting rectangle (can be a frame)
+    */
     void addIntersect( QRect &_r );
+
+    /** Returns if this frame has any intersections 
+    * @return boolean true if we have intersections.
+    */
     bool hasIntersections() { return !intersections.isEmpty(); }
+
+    /** Removes all intersections
+    */
     void clearIntersects() { intersections.clear(); emptyRegionDirty = TRUE; }
 
     QRegion getEmptyRegion( bool useCached = TRUE );
@@ -113,9 +146,20 @@ public:
 
     QCursor getMouseCursor( int mx, int my, bool table );
 
-    /* Calculate the left indent we have to make for a free spot to render in */
+    /** Calculate the left indent we have to make for a free spot to render in.
+    * The test will be limited to a square (mostly one line) inside the frame. The 
+    * y provides the offset, the h the height of the line.
+    * @param y absolute y coordinate. The y coordinate from where we wil start to test.
+    * @param h height. The height in which we will test.
+    */
     int getLeftIndent( int y, int h );
-    /* Calculate the left indent we have to make for a free spot to render in */
+
+    /** Calculate the right indent we have to make for a free spot to render in.
+    * The test will be limited to a square (mostly one line) inside the frame. The 
+    * y provides the offset, the h the height of the line.
+    * @param y absolute y coordinate. The y coordinate from where we wil start to test.
+    * @param h height. The height in which we will test.
+    */
     int getRightIndent( int y, int h );
 
     KWUnit getRunAroundGap() { return runAroundGap; }
@@ -174,18 +218,25 @@ public:
     QBrush getBackgroundColor() { return backgroundColor; }
     void setBackgroundColor( QBrush _color ) { backgroundColor = _color; }
 
-    /* border size */
+    /** set left border size */
     void setBLeft( KWUnit b ) { bleft = b; }
+    /** set right border size */
     void setBRight( KWUnit b ) { bright = b; }
+    /** set top border size */
     void setBTop( KWUnit b ) { btop = b; }
+    /** set bottom border size */
     void setBBottom( KWUnit b ) { bbottom = b; }
 
+    /** get left border size */
     KWUnit getBLeft() { return bleft; }
+    /** get right border size */
     KWUnit getBRight() { return bright; }
+    /** get top border size */
     KWUnit getBTop() { return btop; }
+    /** get bottom border size */
     KWUnit getBBottom() { return bbottom; }
 
-    /* returns a copy of self */
+    /** returns a copy of self */
     KWFrame *getCopy();
 
 protected:
@@ -214,18 +265,18 @@ private:
     KWFrameSet *frameSet;
 };
 
-/******************************************************************
+/**
  * Class: KWFrameSet
  * Base type, a frameset holds content as well as frames to show that 
  * content.
  * The different types of content are implemented in the different
  * types of frameSet implementations (see below)
- ******************************************************************/
-
+ * @see KWTextFrameSet, KWPartFramSet, KWPictureFrameSet, 
+ *      KWPartFrameSet, KWFormulaFrameSet
+ */ 
 class KWFrameSet
 {
 public:
-
 
     // constructor
     KWFrameSet( KWordDocument *_doc );
@@ -242,7 +293,7 @@ public:
     virtual void delFrame( unsigned int _num );
     virtual void delFrame( KWFrame *frm, bool remove = TRUE );
 
-    // retrieve frame from x and y coords (absolute coords)
+    /** retrieve frame from x and y coords (absolute coords) */
     virtual int getFrame( int _x, int _y );
     virtual KWFrame *getFrame( unsigned int _num );
     virtual int getFrameFromPtr( KWFrame *frame );
@@ -251,31 +302,26 @@ public:
     virtual bool isPTYInFrame( unsigned int /*_frame*/, unsigned int /*_ypos */ )
         { return true; }
 
-    // reshuffle frames to text is always displayed from top-left down and then right.
+    /** reshuffle frames so text is always displayed from top-left down and then right. */
     virtual void update() {; }
 
-/*
-    // remove all frames
-    virtual void clear()
-    { frames.clear(); } */
-
-    // returns true if we have a frame occupying that position
+    /** returns true if we have a frame occupying that position */
     virtual bool contains( unsigned int mx, unsigned int my );
 
     /**
-     * Return 1, if a frame gets selected which was not selected before,
-     * 2, if a frame gets selected which was already selected
+     * Return 1, if a frame gets selected which was not selected before,<br>
+     * 2, if a frame gets selected which was already selected<br>
      * Also select the frame if simulate==false.
      */
     virtual int selectFrame( unsigned int mx, unsigned int my, bool simulate = false );
     virtual void deSelectFrame( unsigned int mx, unsigned int my );
     virtual QCursor getMouseCursor( unsigned int mx, unsigned int my );
 
-    /* create XML to describe yourself */
+    /** create XML to describe yourself */
     virtual void save( QTextStream&out );
 
     int getNext( QRect _rect );
-    // returns page number of the numbered frame 
+    /** returns page number of the numbered frame */
     int getPageOfFrame( int i ) { return frames.at( i )->getPageNum(); }
 
     KWordDocument* getDocument() {return doc;}
@@ -284,20 +330,23 @@ public:
     void setCurrent( int i ) { current = i; }
     int getCurrent() { return current; }
 
-    // make this frameset part of a groupmanager
+    /** make this frameset part of a groupmanager
+     * @see KWGroupManager
+     */
     void setGroupManager( KWGroupManager *gm ) { grpMgr = gm; }
     KWGroupManager *getGroupManager() { return grpMgr; }
 
-    // table headers can created by the groupmanager, we store the fact that
-    // it is here.
+    /** table headers can created by the groupmanager, we store the fact that
+     this is one in here. */
     void setIsRemoveableHeader( bool _h ) { removeableHeader = _h; }
     bool isRemoveableHeader() { return removeableHeader; }
 
-    // returns if one of our frames has been selected.
+    /** returns if one of our frames has been selected. */
     bool hasSelectedFrame();
 
-    // returns the visibility of the frameset.
+    /** returns the visibility of the frameset. */
     bool isVisible() { return visible; }
+    /** get the visibility of the frameset. */
     void setVisible( bool v ) { visible = v; }
 
     QString getName() const { return name; }
@@ -321,11 +370,11 @@ protected:
 };
 
 
-/******************************************************************
+/**
  * Class: KWTextFrameSet
  * Contains text in the form of paragraphs and frames to display 
  * that text
- ******************************************************************/
+ */
 
 class KWTextFrameSet : public KWFrameSet
 {
@@ -339,7 +388,7 @@ public:
 
     virtual FrameType getFrameType() { return FT_TEXT; }
 
-    // reshuffle frames to text is always displayed from top-left down and then right.
+    /** reshuffle frames so text is always displayed from top-left down and then right. */
     virtual void update();
 
     /**
@@ -369,10 +418,10 @@ public:
     // stupid updating of all styles.
     void updateAllStyles();
 
-    // returns a deep copy of self (and all it contains)
+    /** returns a deep copy of self (and all it contains) */
     KWTextFrameSet *getCopy();
 
-    // this function is optimized for framesets in tables and doesn't work for other purposes
+    /** this function is optimized for framesets in tables and doesn't work for other purposes */
     void assign( KWTextFrameSet *fs );
 
 protected:
@@ -491,20 +540,20 @@ protected:
 
 };
 
-/******************************************************************/
-/* Class: KWGroupManager                                          */
-/*                                                                */
-/* This class implements tables by acting as the manager for      */
-/* the frame(set)s which make up the table cells (hence share a   */
-/* common grpMgr attribute.                                       */
-/*                                                                */
-/* A table can be anchored, in which case its frame(set)s are     */
-/* located relative to the Y position of the anchor.              */
-/* We have a cell structure which contains one frameset, because  */
-/* of the nature of the table this frameset will always hold      */
-/* excectly one frame. Therefor the term Cell, frameSet and frame */
-/* can be used to describe the same thing; one table-cell         */
-/******************************************************************/
+/**
+ * Class: KWGroupManager
+ *
+ * This class implements tables by acting as the manager fo
+ * the frame(set)s which make up the table cells (hence share a
+ * common grpMgr attribute.
+ *
+ * A table can be anchored, in which case its frame(set)s are
+ * located relative to the Y position of the anchor.
+ * We have a cell structure which contains one frameset, because
+ * of the nature of the table this frameset will always hold
+ * excectly one frame. Therefor the term Cell, frameSet and frame
+ * can be used to describe the same thing; one table-cell
+ */
 
 class KWGroupManager: public KWCharAnchor
 {
@@ -527,91 +576,101 @@ public:
     void addFrameSet( KWFrameSet *fs, unsigned int row, unsigned int col );
     KWFrameSet *getFrameSet( unsigned int row, unsigned int col );
 
-    // first row and auto-added rows are the table headers.
+    /** first row and auto-added rows are the table headers. 
+    * @returns if this frameset is either one.
+    */
     bool isTableHeader( KWFrameSet *fs );
 
-    // put all the frames in the right spots.
+    /** put all the frames in the right location. */
     void init( unsigned int x, unsigned int y,
                unsigned int width, unsigned int height,
                KWTblCellSize wid, KWTblCellSize hei );
-    // announce all frames to the document
+    /** announce all frames to the document */
     void init();
-    // resize and position all cells
+    /** resize and position all cells */
     void recalcCols();
     void recalcRows();
 
-    // returns the number of rows
+    /** returns the number of rows */
     unsigned int getRows() { return rows; }
-    // returns the number of columns
+    /** returns the number of columns */
     unsigned int getCols() { return cols; }
 
-    // returns a QRect which outlines the whole of the table.
+    /** returns a QRect which outlines the whole of the table. */
     QRect getBoundingRect();
 
-    // returns the number of cells the table contains, this includes 
-    // temporary headers.
+    /** returns the number of cells the table contains, this includes 
+     * temporary headers. */
     unsigned int getNumCells() { return cells.count(); }
 
-    // returns a specific table cell.
+    /** returns a specific table cell. */
     Cell *getCell( int i ) { return cells.at( i ); }
+    /** returns a specific table cell. */
     Cell *getCell( unsigned int row, unsigned int col );
+    /** returns a specific table cell. */
     Cell *getCell( KWFrameSet * );
 
-    // returns the fact if one cell (==frame) has been selected
+    /** returns the fact if one cell (==frame) has been selected */
     bool hasSelectedFrame();
 
-    // deselect all frames
+    /** deselect all frames */
     void deselectAll();
 
-    // move the whole of the table, this is mainly for anchored frames.
+    /** move the whole of the table, this is mainly for anchored frames. */
     void moveBy( int dx, int dy );
+    /** point the outlines of all the cells */
     void drawAllRects( QPainter &p, int xOffset, int yOffset );
 
-    // sets the name of the table, this _must_ be a unique name!
+    /** sets the name of the table, this _must_ be a unique name! */
     void setName( QString _name ) { name = _name; }
     QString getName() { return name; }
 
-    // select all frames from the first selected to the argument frameset.
+    /** select all frames from the first selected to the argument frameset. */
     void selectUntil( KWFrameSet *fs);
     bool getFirstSelected(unsigned int &row, unsigned int &col );
+    /** Return true if exactly one frame is selected. The parameters row
+    *  and col will receive the values of the active row and col.<br>
+    *  When no frame or more then one frame is selected row and col will
+    *  stay unchanged (and false is returned).
+    */
     bool isOneSelected( unsigned int &row, unsigned int &col );
 
-    // insert a row of new cells
+    /** insert a row of new cells, use the getCols() call to decide how many cells are created */
     void insertRow( unsigned int _idx, bool _recalc = true, bool _removeable = false );
-    // insert a column of new cells
+    /** insert a column of new cells use the getRows() call to decide how many cells are created */
     void insertCol( unsigned int _idx );
 
-    // remove all the cells in a certain row
+    /** remove all the cells in a certain row */
     void deleteRow( unsigned int _idx, bool _recalc = true );
-    // remove all the cells in a certain col
+    /** remove all the cells in a certain col */
     void deleteCol( unsigned int _idx );
 
     // the boolean actually works, but is not saved (to xml) yet :(
     void setShowHeaderOnAllPages( bool s ) { showHeaderOnAllPages = s; }
     bool getShowHeaderOnAllPages() { return showHeaderOnAllPages; }
 
-    // redraw temp headers. 
+    /** redraw contents of temp headers. */
     void updateTempHeaders();
     bool hasTempHeaders() { return hasTmpHeaders; }
 
-    // release the constrains of the table and allow all frames to be 
-    // edited apart from each other. (ps. there is no way back..)
+    /** release the constrains of the table and allow all frames to be 
+     * edited apart from each other. (ps. there is no way back..) */
     void ungroup();
 
     bool isActive() { return active; }
 
-    // merge cells to one cell.
+    /** merge cells to one cell. Will loose all text not in top-left cell */
     bool joinCells();
-    // split selected cell into a number of cells
+    /** split selected cell into a number of cells */
     bool splitCell(unsigned int intoRows, unsigned int intoCols);
 
-    // display formatting information
+    /** display formatting information */
     void viewFormatting( QPainter &painter, int zoom );
-    // do a number of complex tests to test the validity of the table. Missing/duplicate cells 
-    // and wrong values will be detected (and corrected)
+    /** do a number of complex tests to test the validity of the table. Missing/duplicate cells 
+    * and wrong values will be detected (and corrected) */
     void validate();
 
-    // Prerender the whole table to resize the table cells so all text will fitt.
+    /** Prerender the whole table to resize the table cells so all text will fit. */
     void preRender();
 
     QString anchorType();
