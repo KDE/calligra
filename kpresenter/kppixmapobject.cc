@@ -161,8 +161,7 @@ void KPPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto )
         //oo impress between -100% and 100%
         int val =  m_ie_par1.toInt();
         val = ( int )( ( double )val*100.0/255.0 );
-        QString str = QString::number( val )+"%";
-        styleobjectauto.addProperty( "draw:contrast", str );
+        styleobjectauto.addProperty( "draw:contrast", convertValueToPercent( val ) );
     }
     break;
     case IE_NORMALIZE:
@@ -213,7 +212,6 @@ bool KPPixmapObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context
     xmlWriter.addAttribute( "xlink:show", "embed" );
     xmlWriter.addAttribute( "xlink:actuate", "onLoad" );
     xmlWriter.addAttribute( "xlink:href", "#"+ imageCollection->getOasisFileName(image) );
-//xlink:href="#Pictures/100000000000030E00000203A35860EF.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad
 
     xmlWriter.endElement();
     return true;
@@ -367,7 +365,6 @@ void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & cont
         imageCollection->insertPicture( key, image );
     }
     // ### TODO: load remote file
-//todo load picture settings.
 }
 
 
