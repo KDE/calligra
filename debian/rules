@@ -89,7 +89,7 @@ binary-arch: build install
 	dh_installchangelogs -pkoshell
 	dh_installchangelogs -pkillustrator
 	dh_installchangelogs -pkchart kchart/CHANGES
-	dh_installchangelogs -kivio kivio/CHANGELOG
+	dh_installchangelogs -pkivio kivio/CHANGELOG
 	dh_installchangelogs -pkformula
 	dh_installchangelogs -pkoffice-dev
 	dh_installmime
