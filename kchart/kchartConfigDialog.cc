@@ -16,6 +16,7 @@
 #include "kchartParameterConfigPage.h"
 #include "kchartPieConfigPage.h"
 #include "kchartParameter3dConfigPage.h"
+#include "kchartLegendConfigPage.h"
 
 #include <kapp.h>
 #include <klocale.h>
@@ -93,6 +94,10 @@ KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
         //         _hlcChart=new KChartComboPage(_params,this);
 //         addTab( _hlcChart, i18n( "HLC Chart" ) );
     }
+
+
+    _parameterLegend = new KChartLegendConfigPage(_params,this );
+    addTab( _parameterLegend,i18n("Legend"));
 
     //init
     defaults();
@@ -178,6 +183,7 @@ void KChartConfigDialog::apply()
         //     for( uint i = 0; i < NUMDATACOLORS; i++ )
         // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
     }
+    _parameterLegend->apply();
 }
 
 void KChartConfigDialog::defaults()
@@ -226,6 +232,7 @@ void KChartConfigDialog::defaults()
     }
 
     _backgroundpixpage->init();
+    _parameterLegend->init();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 //      	_colorpage->setDataColor( i, _params->dataColor( i ) );
 }
@@ -243,6 +250,9 @@ void KChartConfigDialog::setCurrentPage( int page )
         break;
     case KC_BACK:
         showPage( _backgroundpixpage);
+        break;
+    case KC_LEGEND:
+        showPage( _parameterLegend);
         break;
     default:
         break;

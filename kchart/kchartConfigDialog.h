@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
 
@@ -19,13 +17,14 @@ class KChartPieConfigPage;
 class KChartSubTypeChartPage;
 class KChartComboPage;
 class KChartBackgroundPixmapConfigPage;
+class KChartLegendConfigPage;
 
 class KChartConfigDialog : public QTabDialog
 {
     Q_OBJECT
 
 public:
-    enum { KC_FONT = 1, KC_COLORS = 2, KC_BACK = 4 };
+    enum { KC_FONT = 1, KC_COLORS = 2, KC_BACK = 4, KC_LEGEND=8 };
     KChartConfigDialog( KDChartParams* params,
                         QWidget* parent, int flags );
 
@@ -45,6 +44,7 @@ protected:
     KChartSubTypeChartPage *_subTypePage;
 	KChartBackgroundPixmapConfigPage* _backgroundpixpage;
     KChartComboPage *_hlcChart;
+    KChartLegendConfigPage *_parameterLegend;
 protected slots:
     virtual void apply();
     virtual void defaults();

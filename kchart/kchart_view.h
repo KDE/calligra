@@ -47,7 +47,7 @@ public slots:
       void slotConfigBack();
       void slotConfigFont();
       void slotConfigColor();
-
+      void slotConfigLegend();
 protected:
     void paintEvent( QPaintEvent* );
 
@@ -66,6 +66,7 @@ private:
     KAction *m_colorConfig;
     KAction* m_fontConfig;
     KAction* m_backConfig;
+    KAction* m_legendConfig;
     KToggleAction* m_chartpie;
     KToggleAction* m_chartareas;
     KToggleAction* m_chartbars;

@@ -99,6 +99,10 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                             this, SLOT( slotConfigBack() ),
                             actionCollection(), "back_config" );
 
+    m_legendConfig = new KAction( i18n( "&Configure legend" ), 0,
+                            this, SLOT( slotConfigLegend() ),
+                            actionCollection(), "legend_config" );
+
     // initialize the configuration
     //    loadConfig();
 
@@ -380,5 +384,11 @@ void KChartView::slotConfigBack()
 {
     config(KChartConfigDialog::KC_BACK);
 }
+
+void KChartView::slotConfigLegend()
+{
+   config(KChartConfigDialog::KC_LEGEND);
+}
+
 
 #include "kchart_view.moc"

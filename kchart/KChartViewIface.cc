@@ -53,7 +53,13 @@ void KChartViewIface::configureFont()
 {
     view->slotConfigFont();
 }
+
 void KChartViewIface::configureColor()
 {
     view->slotConfigColor();
+}
+
+void KChartViewIface::configureLegend()
+{
+    view->slotConfigLegend();
 }
