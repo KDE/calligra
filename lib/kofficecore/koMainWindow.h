@@ -32,6 +32,12 @@ class KoMainWindowIf;
 class KoDocument;
 class KoViewIf;
 
+/**
+ * This class is used to represent a main window
+ * of a KOffice component. Each main window contains
+ * a menubar and some toolbars. In addition it has
+ * a @ref KoFrame which embeds the @ref KoView.
+ */
 class KoMainWindow : public OPMainWindow
 {
   Q_OBJECT
@@ -39,10 +45,28 @@ public:
   KoMainWindow( const char *_name = 0L );
   ~KoMainWindow();
 
+  /**
+   * @return a pointer to the CORBA interface of the base class.
+   */
   virtual OPMainWindowIf* interface();
+  /**
+   * @return a pointer to the CORBA interface. By default the window
+   *         does not offer a CORBA interface, but calling this function
+   *         creates one.
+   */
   virtual KoMainWindowIf* koInterface();
 
+  /**
+   * Creates the file menu. Overload if you need your own one.
+   * This function is called whenever some other view gets focus
+   * since this means an update of the complete menubar.
+   */
   virtual void createFileMenu( OPMenuBar* );
+  /**
+   * Creates the help menu. Overload if you need your own one.
+   * This function is called whenever some other view gets focus
+   * since this means an update of the complete menubar.
+   */
   virtual void createHelpMenu( OPMenuBar* );
 
   virtual void setRootPart( unsigned long _part_id );
@@ -53,12 +77,28 @@ public:
   virtual KOffice::Document_ptr document() = 0L;
   virtual KOffice::View_ptr view() = 0L;
 
-  KoFrame *getFrame() { return m_pFrame; }
+  /**
+   * @return the frame used in this window.
+   */
+  KoFrame *frame() { return m_pFrame; }
 
+  /**
+   * Create a new empty document and show it.
+   *
+   * @return TRUE on success.
+   */
   virtual bool newDocument() { return false; };
-  virtual bool openDocument( const char*, const char* ) { return false; };
+  /**
+   * Load the desired document and show it.
+   *
+   * @return TRUE on success.
+   */
+  virtual bool openDocument( const char* /* _filename */, const char* /* _format */ ) { return false; };
   
 protected slots:
+  /**
+   * Called if the activated part changes.
+   */
   virtual void slotActivePartChanged( unsigned long _new_part_id, unsigned long _old_opart_id );
 
   virtual void slotFileNew();
@@ -83,12 +123,18 @@ protected:
   int m_idMenuFile_Quit;
   int m_idMenuHelp_About;
 
+  /**
+   * Ids for the toolbar buttons.
+   */
   enum { TOOLBAR_NEW, TOOLBAR_OPEN, TOOLBAR_SAVE, TOOLBAR_PRINT };
 
   KoFrame* m_pFrame;
   KoMainWindowIf* m_pKoInterface;
 };
 
+/**
+ * The CORBA interface for @ref KoMainWindow.
+ */
 class KoMainWindowIf : virtual public OPMainWindowIf,
 		       virtual public KOffice::MainWindow_skel
 {
@@ -97,8 +143,15 @@ public:
   ~KoMainWindowIf();
 
   // IDL
-  virtual void setMarkedPart( OpenParts::Id id );		
+  virtual void setMarkedPart( OpenParts::Id id );
+  /**
+   * The document attached to the window. This is NOT always the document
+   * which has the focus.
+   */
   virtual KOffice::Document_ptr document();
+  /**
+   * The view of @ref #document.
+   */
   virtual KOffice::View_ptr view();
   virtual CORBA::Boolean partClicked( OpenParts::Id _part_id, CORBA::Long _button );
   

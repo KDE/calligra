@@ -23,13 +23,33 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qpixmap.h>
-#include <vector>
+#include <qvaluelist.h>
 
-#include <CORBA.h>
+// Some forward declarations
+namespace KOffice
+{
+  class Document;
+  typedef Document *Document_ptr;
+};
 
+namespace CORBA
+{
+  class Object;
+  typedef Object* Object_ptr;
+};
+
+/**
+ * Represents an available component.
+ */
 class KoComponentEntry
 {
 public:
+  KoComponentEntry() { reference = 0; }
+  /**
+   * Releases the @ref #reference.
+   */
+  virtual ~KoComponentEntry();
+
   QString comment;
   QString name;
   QString exec;
@@ -37,36 +57,107 @@ public:
   QStringList repoID;
   QPixmap miniIcon;
   QPixmap icon;
-  CORBA::Object_var reference;
+  /**
+   * Reference to the components factory. It is a virtual reference.
+   * That means that the component is started when the
+   * first function call is invoked on this reference.
+   */
+  CORBA::Object_ptr reference;
+
+  bool isEmpty() const { return name.isEmpty(); }
 };
 
+/**
+ * Represents an available koffice component
+ * that supports the document interface.
+ */
 class KoDocumentEntry : public KoComponentEntry
 {
 public:
   KoDocumentEntry() { }
   KoDocumentEntry( const KoComponentEntry& _e );
-  
+  ~KoDocumentEntry() { }
+
+  /**
+   * Mimetypes which this document can handle.
+   */
   QStringList mimeTypes;
 
-  bool supportsMimeType( const char *_m ) { return ( mimeTypes.find( _m ) != mimeTypes.end() ); }
+  /**
+   * @return TRUE if the document can handle the
+   *         requested mimetype.
+   */
+  bool supportsMimeType( const char *_m ) const { return ( mimeTypes.find( _m ) != mimeTypes.end() ); }
+
+  /**
+   * Uses the factory of the component (@ref #reference) to create
+   * a document. If that is not possible, the user gets an error dialog
+   * and 0 is returned.
+   */
+  KOffice::Document_ptr createDoc();
+
+  /**
+   * This function will query KDED to find all available components.
+   *
+   * @param _constr is a constraint expression as used by KDEDs trader interface.
+   *                You can use it to set additional restrictions on the available
+   *                components.
+   * @param _count is the amount of query results we are interested in.
+   */
+  static QValueList<KoDocumentEntry> query( const char *_constr = "", int _count = 1 );
+  /**
+   * This is only a convenience function.
+   *
+   * @return a document entry for the KOffice component that supports
+   *         the requested mimetype and fits the user best.
+   */
+  static KoDocumentEntry queryByMimeType( const char *mimetype );
 };
 
+/**
+ * Represents an available filter.
+ */
 class KoFilterEntry : public KoComponentEntry
 {
 public:
   KoFilterEntry() { }
   KoFilterEntry( const KoComponentEntry& _e );
+  ~KoFilterEntry() { }
 
+  /**
+   * The imported mimetype.
+   */
   QString import;
+  /**
+   * Comment regarding the imported data format.
+   */
   QString importDescription;
+  /**
+   * The exported mimetype.
+   */
   QString export;
+  /**
+   * Comment regarding the exported data format.
+   */
   QString exportDescription;
 
-  bool imports( const char *_m ) { return ( import.find( _m ) != -1 ); }
-  bool exports( const char *_m ) { return ( export.find( _m ) != -1 ); }
-};
+  /**
+   * @return TRUE if the filter can imports the requested mimetype.
+   */
+  bool imports( const char *_m ) const { return ( import.find( _m ) != -1 ); }
+  /**
+   * @return TRUE if the filter can exports the requested mimetype.
+   */
+  bool exports( const char *_m ) const { return ( export.find( _m ) != -1 ); }
 
-vector<KoDocumentEntry> koQueryDocuments( const char *_constr = "", int _count = 100 );
-vector<KoFilterEntry> koQueryFilters( const char *_constr = "", int _count = 100 );
+  /**
+   * This function will query KDED to find all available filters.
+   *
+   * @param _constr is a constraint expression as used by KDEDs trader interface.
+   *                You can use it to set additional restrictions on the available
+   *                components.
+   */
+  static QValueList<KoFilterEntry> query( const char *_constr = "", int _count = 100 );
+};
 
 #endif

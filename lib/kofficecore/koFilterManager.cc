@@ -49,7 +49,6 @@ KoFilterManager* KoFilterManager::self()
   return s_pSelf;
 }
 
-vector<KoFilterEntry> koQueryFilters( const char *_constr , int _count );
 KRegistry * registry = 0L;
 
 QString KoFilterManager::fileSelectorList( Direction direction, const char *_format,
@@ -64,7 +63,7 @@ QString KoFilterManager::fileSelectorList( Direction direction, const char *_for
     constr = "Import == '";
   constr += _format;
   constr += "'";
-  vector<KoFilterEntry> vec = koQueryFilters( constr );
+  QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
 
   if (!registry)
   {
@@ -85,7 +84,7 @@ QString KoFilterManager::fileSelectorList( Direction direction, const char *_for
     ret += ")";
   }
 
-  for( unsigned int i = 0; i < vec.size(); ++i )
+  for( unsigned int i = 0; i < vec.count(); ++i )
   {
     KMimeType *t;
     QString mime;
@@ -170,8 +169,8 @@ QString KoFilterManager::import( const char* _url, const char *_native_format )
   constr += mimeType;
   constr += "'";
 
-  vector<KoFilterEntry> vec = koQueryFilters( constr );
-  if ( vec.size() == 0 )
+  QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
+  if ( vec.isEmpty() )
   {
     QString tmp;
     tmp.sprintf( i18n("Could not import file of type\n%s"), t->mimeType().ascii() );

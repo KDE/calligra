@@ -30,6 +30,10 @@
 class KoFrame;
 class KoViewIf;
 
+/**
+ * Used internally to represent the resize handles
+ * of the frame.
+ */
 class KoFrameResize : public QWidget
 {
   Q_OBJECT
@@ -49,6 +53,10 @@ protected:
   KoFrame *m_pFrame;
 };
 
+/**
+ * Used internally to represent the move handles of
+ * the frame.
+ */
 class KoFrameMove : public QWidget
 {
   Q_OBJECT
@@ -70,6 +78,14 @@ protected:
   KoFrame *m_pFrame;
 };
 
+/**
+ * The KoFrame can embed another KOffice Component. In detail it
+ * embeds a @ref KoView. That means that you can have one embedded
+ * document but many KoFrames where each KoFrame embeds one KoView
+ * of the document.
+ *
+ * @author Torben Weis
+ */
 class KoFrame : public OPFrame,
 		virtual public KOMBase,
 		virtual public KOffice::Frame_skel
@@ -80,6 +96,9 @@ class KoFrame : public OPFrame,
   Q_OBJECT
 public:
   // C++
+  /**
+   * A frame is just a usual Qt widget with some magic inside :-)
+   */
   KoFrame( QWidget *_parent = 0L, const char *_name = 0L );
   /**
    * The Destructor calls @ref #detach automatically. After that the controls 'destroy'
@@ -101,18 +120,46 @@ public:
    */
   virtual bool attachView( KOffice::View_ptr _view );
   /**
+   * Use this function if the KoView and the KoFrame run in
+   * the same process. Reparenting and all this stuff is
+   * skipped in this case.
+   *
    * @return true if the function was successfull.
    *
    * @see OPFrame::attachLocal
    */
   virtual bool attachLocalView( KoViewIf* _view );
   virtual void attach( QPicture * );
+  /**
+   * Forget about the embedded view and free all related
+   * resources.
+   */
   virtual void detach();
   
   // C++
+  /**
+   * Tells how many pixels the part needs on the
+   * left when it gets keyboard focus. This space
+   * is needed for extra rulers and stuff.
+   */
   virtual CORBA::ULong leftGUISize();
+  /**
+   * Tells how many pixels the part needs on the
+   * right when it gets keyboard focus. This space
+   * is needed for extra rulers and stuff.
+   */
   virtual CORBA::ULong rightGUISize();
+  /**
+   * Tells how many pixels the part needs on the
+   * top when it gets keyboard focus. This space
+   * is needed for extra rulers and stuff.
+   */
   virtual CORBA::ULong topGUISize();
+  /**
+   * Tells how many pixels the part needs on the
+   * bottom when it gets keyboard focus. This space
+   * is needed for extra rulers and stuff.
+   */
   virtual CORBA::ULong bottomGUISize();
 
   // C++

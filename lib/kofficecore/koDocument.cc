@@ -21,8 +21,8 @@
 #include <strstream>
 
 #include "koDocument.h"
-#include "koIMR.h"
 #include "koStream.h"
+#include "koQueryTypes.h"
 
 #include <komlWriter.h>
 #include <komlMime.h>
@@ -197,25 +197,25 @@ bool KoDocumentChild::loadDocument( KOStore::Store_ptr _store, const char *_form
 
   kdebug( KDEBUG_INFO, 30003, "Trying to load %c", m_strURL.ascii() );
   KURL u( m_strURL );
-  if ( strcmp( u.protocol(), "store" ) != 0 )
-  {
-    m_rDoc = imr_createDocByMimeType( m_strMimeType );
-    if ( CORBA::is_nil( m_rDoc ) )
-    {
-      kdebug( KDEBUG_INFO, 30003, "ERROR: Could not create child document" );
-      return false;
-    }
-    return m_rDoc->loadFromURL( m_strURL, _format );
-  }
 
-  m_rDoc = imr_createDocByMimeType( m_strMimeType );
-  if ( CORBA::is_nil( m_rDoc ) )
+  KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_strMimeType );
+  if ( e.isEmpty() )
   {
-    kdebug( KDEBUG_INFO, 30003, "ERROR: Could not create child document with mime type %c", m_strMimeType.ascii() );
+    kdebug( KDEBUG_INFO, 30003, "ERROR: Could not create child document" );
     return false;
   }
 
-  return m_rDoc->loadFromStore( _store, m_strURL );
+  m_rDoc = e.createDoc();
+  if ( CORBA::is_nil( m_rDoc ) )
+  {
+    kdebug( KDEBUG_INFO, 30003, "ERROR: Could not create child document" );
+    return false;
+  }
+
+  if ( strcmp( u.protocol(), "store" ) == 0 )
+    return m_rDoc->loadFromStore( _store, m_strURL );
+
+  return m_rDoc->loadFromURL( m_strURL, _format );
 }
 
 bool KoDocumentChild::save( ostream& out )
