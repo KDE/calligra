@@ -32,8 +32,8 @@
 /* class KCharSelectDia                                           */
 /******************************************************************/
 
-KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _enableFont )
-    : KDialogBase( Plain, i18n("Select a character"), Ok | Cancel, Ok , parent, name, true )
+KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _enableFont , bool _modal)
+    : KDialogBase( Plain, i18n("Select a character"), Ok | Cancel, Ok , parent, name, _modal )
 {
     initDialog(_chr,_font,_enableFont);
 
@@ -42,8 +42,8 @@ KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, const QChar &
 
 }
 
-KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, const QString &_font, const QChar &_chr )
-    : KDialogBase( Plain, i18n("Select a character"), User1 | Cancel, User1 , parent, name, true )
+KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, const QString &_font, const QChar &_chr, bool _modal )
+    : KDialogBase( Plain, i18n("Select a character"), User1 | Cancel, User1 , parent, name, _modal )
 {
     initDialog(_chr,_font,true);
 

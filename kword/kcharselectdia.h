@@ -40,10 +40,10 @@ class KCharSelectDia : public KDialogBase
 public:
 
     // constructor - destructor
-    KCharSelectDia( QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _enableFont );
+    KCharSelectDia( QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _enableFont, bool _modal=true );
 
     //constructor when you want to insert multi char
-    KCharSelectDia( QWidget *parent, const char *name, const QString &_font, const QChar &_chr );
+    KCharSelectDia( QWidget *parent, const char *name, const QString &_font, const QChar &_chr, bool _modal=true );
 
     // select char dialog
     static bool selectChar( QString &_font, QChar &_chr, bool _enableFont = true );

@@ -57,6 +57,8 @@ class KFontAction;
 class KColorAction;
 class KWTextFrameSetEdit;
 class TKSelectColorAction;
+class KCharSelectDia;
+
 namespace Qt3 {
 class QTextFormat;
 class QTextParag;
@@ -409,6 +411,7 @@ private:
 
     QList<KAction> m_actionList; // for the kodatatools
 
+    KCharSelectDia *m_specialCharDlg;
     KWGUI *m_gui;
 
     KWSearchContext *searchEntry, *replaceEntry;

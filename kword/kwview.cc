@@ -115,6 +115,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     m_border.common.ptWidth = 1;
     m_currentPage = 0;
     m_actionList.setAutoDelete( true );
+    m_specialCharDlg=0L;
     searchEntry = 0L;
     replaceEntry = 0L;
     backColor = QBrush( white );
@@ -1754,11 +1755,16 @@ void KWView::insertSpecialChar()
         return;
     QString f = edit->textFontFamily();
     QChar c=' ';
-    KCharSelectDia *dlg=new KCharSelectDia( this, "insert special char", f,c );
-    connect(dlg,SIGNAL(insertChar(QChar,const QString &)),this,SLOT(slotSpecialChar(QChar,const QString &)));
-    dlg->show();
-    delete dlg;
-
+    if (m_specialCharDlg==0)
+    {
+        m_specialCharDlg=new KCharSelectDia( this, "insert special char", f,c,false );
+        connect(m_specialCharDlg,SIGNAL(insertChar(QChar,const QString &)),this,SLOT(slotSpecialChar(QChar,const QString &)));
+    };
+//    KCharSelectDia *dlg=new KCharSelectDia( this, "insert special char", f,c );
+//    connect(dlg,SIGNAL(insertChar(QChar,const QString &)),this,SLOT(slotSpecialChar(QChar,const QString &)));
+//    dlg->show();
+//    delete dlg;
+    m_specialCharDlg->show();
 }
 
 void KWView::slotSpecialChar(QChar c, const QString &_font)
