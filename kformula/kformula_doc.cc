@@ -55,6 +55,7 @@ KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject*
 
     history = new KCommandHistory(actionCollection());
     formula = new KFormulaContainer(*history);
+    formula->createActions(actionCollection());
 
     // the modify flag
     connect(history, SIGNAL(commandExecuted()), this, SLOT(commandExecuted()));

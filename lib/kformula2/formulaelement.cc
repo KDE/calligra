@@ -39,7 +39,7 @@ FormulaElement::FormulaElement(KFormulaContainer* container)
 BasicElement* FormulaElement::goToPos(FormulaCursor* cursor, const QPoint& point)
 {
     bool handled = false;
-    BasicElement* element = SequenceElement::goToPos(cursor, handled, point, QPoint());
+    BasicElement* element = inherited::goToPos(cursor, handled, point, QPoint());
     if (element == 0) {
         //if ((point.x() > getWidth()) || (point.y() > getHeight())) {
             cursor->setTo(this, countChildren());
@@ -65,7 +65,7 @@ void FormulaElement::changed()
  */
 void FormulaElement::calcSizes(ContextStyle& context)
 {
-    SequenceElement::calcSizes(context, size);
+    inherited::calcSizes(context, size);
 }
 
 /**
@@ -73,7 +73,7 @@ void FormulaElement::calcSizes(ContextStyle& context)
  */
 void FormulaElement::draw(QPainter& painter, ContextStyle& context)
 {
-    SequenceElement::draw(painter, context, size, QPoint());
+    inherited::draw(painter, context, size, QPoint());
 }
 
 
@@ -82,7 +82,7 @@ void FormulaElement::draw(QPainter& painter, ContextStyle& context)
  */
 void FormulaElement::writeDom(QDomElement& element)
 {
-    SequenceElement::writeDom(element);
+    inherited::writeDom(element);
     element.setAttribute("SIZE", size);
 }
     
@@ -92,7 +92,7 @@ void FormulaElement::writeDom(QDomElement& element)
  */
 bool FormulaElement::readAttributesFromDom(QDomElement& element)
 {
-    if (!SequenceElement::readAttributesFromDom(element)) {
+    if (!inherited::readAttributesFromDom(element)) {
         return false;
     }
     QString sizeStr = element.attribute("SIZE");
@@ -109,5 +109,5 @@ bool FormulaElement::readAttributesFromDom(QDomElement& element)
  */
 bool FormulaElement::readContentFromDom(QDomNode& node)
 {
-    return SequenceElement::readContentFromDom(node);
+    return inherited::readContentFromDom(node);
 }

@@ -42,6 +42,6 @@ Ctrl-D, Ctrl-R          remove enclosing element
 Text, numbers and operators are supported as well.
 
 Please note that the key bindings are for testing only. The library
-is meant to be used with KActions but doesn't contain any itself.
+is meant to be used with KActions. Look at KFormulaContainer::createActions.
 
 See DESIGN to know the structure of the formulas

@@ -216,13 +216,6 @@ public:
     ElementIndexPtr getIndex(int position);
 
     
-    // Save&load
-    //virtual QDomElement getElementDom(QDomDocument *doc);
-    //virtual bool buildFromDom(QDomElement *elem);
-        
-    // debug
-    virtual ostream& output(ostream&);
-
 protected:
 
     //Save/load support

@@ -35,6 +35,7 @@ class KFormulaContainer;
  * The only element that has no parent.
  */
 class FormulaElement : public SequenceElement {
+    typedef SequenceElement inherited;
 public:
 
     FormulaElement(KFormulaContainer* container);

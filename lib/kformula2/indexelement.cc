@@ -46,31 +46,6 @@ IndexElement::~IndexElement()
     delete lowerRight;
 }
 
-ostream& IndexElement::output(ostream& stream)
-{
-    stream << "IndexElement {\n";
-    BasicElement::output(stream) << endl;
-    stream << "content: ";
-    content->output(stream) << endl;
-    if (hasUpperLeft()) {
-        stream << "upperLeft: ";
-        upperLeft->output(stream) << endl;
-    }
-    if (hasLowerLeft()) {
-        stream << "lowerLeft: ";
-        lowerLeft->output(stream) << endl;
-    }
-    if (hasUpperRight()) {
-        stream << "upperRight: ";
-        upperRight->output(stream) << endl;
-    }
-    if (hasLowerRight()) {
-        stream << "lowerRight: ";
-        lowerRight->output(stream) << endl;
-    }
-    stream << '}';
-    return stream;
-}
 
 /**
  * Returns the element the point is in.

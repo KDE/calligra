@@ -132,14 +132,14 @@ public:
      * the element `from'. Searches for a cursor position inside
      * this element or to the left of it.
      */
-    virtual void moveLeft(FormulaCursor* cursor, BasicElement* from) = 0;
+    virtual void moveLeft(FormulaCursor* cursor, BasicElement* from);
 
     /**
      * Enters this element while moving to the right starting inside
      * the element `from'. Searches for a cursor position inside
      * this element or to the right of it.
      */
-    virtual void moveRight(FormulaCursor* cursor, BasicElement* from) = 0;
+    virtual void moveRight(FormulaCursor* cursor, BasicElement* from);
 
     /**
      * Enters this element while moving up starting inside
@@ -287,7 +287,6 @@ public:
     bool buildFromDom(QDomElement& element);
 
     // debug
-    virtual ostream& output(ostream&);
     static int getEvilDestructionCount() { return evilDestructionCount; }
     
 protected:

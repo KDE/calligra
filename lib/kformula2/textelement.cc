@@ -35,13 +35,6 @@ TextElement::TextElement(QChar ch, BasicElement* parent)
 }
 
 
-ostream& TextElement::output(ostream& stream)
-{
-    stream << "TextElement: " << character << ", ";
-    BasicElement::output(stream);
-    return stream;
-}
-
 /**
  * Calculates our width and height and
  * our children's parentPosition.
@@ -98,35 +91,6 @@ void TextElement::draw(QPainter& painter, ContextStyle& context,
 QFont TextElement::getFont(ContextStyle& context)
 {
     return context.getDefaultFont();
-}
-
-
-// navigation
-// 
-// The elements are responsible to handle cursor movement themselves.
-// To do this they need to know the direction the cursor moves and
-// the element it comes from.
-//
-// The cursor might be in normal or in selection mode.
-
-/**
- * Enters this element while moving to the left starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or to the left of it.
- */
-void TextElement::moveLeft(FormulaCursor* cursor, BasicElement*)
-{
-    getParent()->moveLeft(cursor, this);
-}
-
-/**
- * Enters this element while moving to the right starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or to the right of it.
- */
-void TextElement::moveRight(FormulaCursor* cursor, BasicElement*)
-{
-    getParent()->moveRight(cursor, this);
 }
 
 

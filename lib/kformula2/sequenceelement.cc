@@ -48,19 +48,6 @@ SequenceElement::~SequenceElement()
 {
 }
 
-ostream& SequenceElement::output(ostream& stream)
-{
-    stream << "SequenceElement {\n";
-    BasicElement::output(stream) << endl;
-    uint count = children.count();
-    for (uint i = 0; i < count; i++) {
-        children.at(i)->output(stream);
-        stream << '\n';
-    }
-    stream << '}';
-    return stream;
-}
-
 
 /**
  * Returns the element the point is in.
@@ -135,10 +122,7 @@ void SequenceElement::calcSizes(ContextStyle& context, int parentSize)
         setHeight(toMidline+fromMidline);
         setMidline(toMidline);
 
-        for (uint i = 0; i < count; i++) {
-            BasicElement* child = children.at(i);
-            child->setY(getMidline() - child->getMidline());
-        }
+        setChildrenPositions();
     }
     else {
         setWidth(10);
@@ -146,6 +130,17 @@ void SequenceElement::calcSizes(ContextStyle& context, int parentSize)
         setMidline(5);
     }
 }
+
+
+void SequenceElement::setChildrenPositions()
+{
+    uint count = children.count();
+    for (uint i = 0; i < count; i++) {
+        BasicElement* child = children.at(i);
+        child->setY(getMidline() - child->getMidline());
+    }
+}
+
 
 /**
  * Draws the whole element including its children.
@@ -185,50 +180,61 @@ void SequenceElement::draw(QPainter& painter, ContextStyle& context,
 void SequenceElement::drawCursor(FormulaCursor* cursor, QPainter& painter)
 {
     QPoint point = widgetPos();
-    int height = getHeight();
-
-    int posX;
     uint pos = cursor->getPos();
-    if (pos < children.count()) {
-        posX = children.at(pos)->getX();
+
+    if (cursor->isSelection()) {
+        uint mark = cursor->getMark();
+        drawSelectionCursor(painter, point, pos, mark);
+    }
+    else {
+        drawSingleCursor(painter, point, pos);
+    }
+
+    int posX = getChildPosition(pos);
+    cursor->cursorPoint.setX(point.x()+posX);
+    cursor->cursorPoint.setY(point.y()+getHeight()/2);
+}
+
+
+void SequenceElement::drawSelectionCursor(QPainter& painter, QPoint& point, uint pos, uint mark)
+{
+    int posX = getChildPosition(pos);
+    int markX = getChildPosition(mark);
+    int height = getHeight();
+    int x = QMIN(posX, markX);
+    int width = abs(posX - markX);
+    painter.setRasterOp(Qt::XorROP);
+    painter.fillRect(point.x()+x, point.y()-2, width, height+4, Qt::white);
+    painter.setRasterOp(Qt::CopyROP);
+}
+
+void SequenceElement::drawSingleCursor(QPainter& painter, QPoint& point, uint pos)
+{
+    int posX = getChildPosition(pos);
+    int height = getHeight();
+    painter.setRasterOp(Qt::XorROP);
+    painter.setPen(Qt::white);
+    painter.drawLine(point.x()+posX, point.y()-2,
+                     point.x()+posX, point.y()+height+2);
+    painter.drawLine(point.x(), point.y()+height+3,
+                     point.x()+getWidth(), point.y()+height+3);
+    painter.setRasterOp(Qt::CopyROP);
+}
+
+
+int SequenceElement::getChildPosition(uint child)
+{
+    if (child < children.count()) {
+        return children.at(child)->getX();
     }
     else {
         if (children.count() > 0) {
-            posX = getWidth();
+            return children.at(child-1)->getX() + children.at(child-1)->getWidth();
         }
         else {
-            posX = 2;
+            return 2;
         }
     }
-
-    if (cursor->isSelection()) {
-        int markX;
-        uint mark = cursor->getMark();
-        if (mark < children.count()) {
-            markX = children.at(mark)->getX();
-        }
-        else {
-            markX = getWidth();
-        }
-        
-        int x = QMIN(posX, markX);
-        int width = abs(posX - markX);
-        painter.setRasterOp(Qt::XorROP);
-        painter.fillRect(point.x()+x, point.y()-2, width, height+4, Qt::white);
-        painter.setRasterOp(Qt::CopyROP);
-    }
-    else {
-        painter.setRasterOp(Qt::XorROP);
-        painter.setPen(Qt::white);
-        painter.drawLine(point.x()+posX, point.y()-2,
-                         point.x()+posX, point.y()+height+2);
-        painter.drawLine(point.x(), point.y()+height+3,
-                         point.x()+getWidth(), point.y()+height+3);
-        painter.setRasterOp(Qt::CopyROP);
-    }
-    
-    cursor->cursorPoint.setX(point.x()+posX);
-    cursor->cursorPoint.setY(point.y()+height/2);
 }
 
 
@@ -598,20 +604,7 @@ bool SequenceElement::buildChildrenFromDom(QList<BasicElement>& list, QDomNode n
             BasicElement* child = 0;
             QString tag = e.tagName().upper();
 
-            if     (tag=="TEXT")     child=new TextElement();
-            else if(tag=="NUMBER")   child=new NumberElement();
-            else if(tag=="OPERATOR") child=new OperatorElement();
-            else if(tag=="ROOT")     child=new RootElement();
-            else if(tag=="BRACKET")  child=new BracketElement();
-            else if(tag=="MATRIX")   child=new MatrixElement();
-            else if(tag=="INDEX")    child=new IndexElement();
-            else if(tag=="FRACTION") child=new FractionElement();
-            else if(tag=="SYMBOL")   child=new SymbolElement();
-            else if(tag=="SEQUENCE") {
-                cerr << "malformed data: sequence inside sequence.\n";
-                return false;
-            }
-            
+            child = createElement(tag);
             if (child != 0) {
                 child->setParent(this);
                 if (child->buildFromDom(e)) {
@@ -622,12 +615,33 @@ bool SequenceElement::buildChildrenFromDom(QList<BasicElement>& list, QDomNode n
                     return false;
                 }
             }
+            else {
+                return false;
+            }
         }
         n = n.nextSibling();
     }
     return true;
 }
 
+
+BasicElement* SequenceElement::createElement(QString type)
+{
+    if      (type == "TEXT")     return new TextElement();
+    else if (type == "NUMBER")   return new NumberElement();
+    else if (type == "OPERATOR") return new OperatorElement();
+    else if (type == "ROOT")     return new RootElement();
+    else if (type == "BRACKET")  return new BracketElement();
+    else if (type == "MATRIX")   return new MatrixElement();
+    else if (type == "INDEX")    return new IndexElement();
+    else if (type == "FRACTION") return new FractionElement();
+    else if (type == "SYMBOL")   return new SymbolElement();
+    else if (type == "SEQUENCE") {
+        cerr << "malformed data: sequence inside sequence.\n";
+        return 0;
+    }
+    return 0;
+}
 
 /**
  * Appends our attributes to the dom element.

@@ -57,36 +57,6 @@ public:
     virtual void draw(QPainter& painter, ContextStyle& context,
                       int parentSize, const QPoint& parentOrigin);
 
-    
-    // navigation
-    // 
-    // The elements are responsible to handle cursor movement themselves.
-    // To do this they need to know the direction the cursor moves and
-    // the element it comes from.
-    //
-    // The cursor might be in normal or in selection mode.
-    
-    /**
-     * Enters this element while moving to the left starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or to the left of it.
-     */
-    virtual void moveLeft(FormulaCursor* cursor, BasicElement* from);
-
-    /**
-     * Enters this element while moving to the right starting inside
-     * the element `from'. Searches for a cursor position inside
-     * this element or to the right of it.
-     */
-    virtual void moveRight(FormulaCursor* cursor, BasicElement* from);
-
-    // Save&load
-    //virtual QDomElement getElementDom(QDomDocument *doc);
-    //virtual bool buildFromDom(QDomElement *elem);
-    
-    // debug
-    virtual ostream& output(ostream&);
-
 protected:
 
     //Save/load support

@@ -42,6 +42,7 @@ class KFormulaContainer;
  * to move the cursor around. To edit the formula use the document.
  */
 class KFormulaWidget : public QWidget {
+    friend class KFormulaContainer;
     Q_OBJECT
 
 public:
@@ -59,6 +60,7 @@ public:
      * right bracket.
      */
     void setRightBracket(char right) { rightBracket = right; }
+
 
     /**
      * @returns the point inside the formula widget where the cursor is.
@@ -146,6 +148,16 @@ protected:
     
 private:
 
+    /**
+     * The char to be used for the default left bracket.
+     */
+    char getLeftBracket() const { return leftBracket; }
+    
+    /**
+     * The char to be used for the default right bracket.
+     */
+    char getRightBracket() const { return rightBracket; }
+    
     /**
      * Tell everybody that our cursor has changed if so.
      */

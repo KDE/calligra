@@ -92,8 +92,6 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
         return;
     }
     
-    document->setActiveCursor(cursor);
-    
     QChar ch = event->text().at(0);
     if (ch.isPrint()) {
         int latin1 = ch.latin1();
@@ -174,6 +172,9 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
         case Qt::Key_End:
             slotMoveEnd(flag);
             break;
+        case Qt::Key_Return:
+            document->addLineBreak();
+            break;
         default:
             if (state & Qt::ControlButton) {
                 switch (event->key()) {
@@ -196,7 +197,7 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
 void KFormulaWidget::focusInEvent(QFocusEvent*)
 {
     //cerr << "void KFormulaWidget::focusInEvent(QFocusEvent*)\n";
-    document->setActiveCursor(cursor);
+    document->setActiveView(this);
     showCursor();
     cursorHasChanged = true;
     emitCursorChanged();
@@ -205,6 +206,7 @@ void KFormulaWidget::focusInEvent(QFocusEvent*)
 void KFormulaWidget::focusOutEvent(QFocusEvent*)
 {
     //cerr << "void KFormulaWidget::focusOutEvent(QFocusEvent*)\n";
+    document->setActiveView(0);
     hideCursor();
     cursorHasChanged = true;
     emitCursorChanged();

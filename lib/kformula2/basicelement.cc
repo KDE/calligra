@@ -41,15 +41,6 @@ BasicElement::~BasicElement()
     evilDestructionCount--;
 }
 
-ostream& BasicElement::output(ostream& stream)
-{
-    return stream << "BasicElement: "
-                  << position.x() << ", "
-                  << position.y() << ", "
-                  << size.width() << ", "
-                  << size.height();
-}
-
 
 /**
  * Returns the element the point is in.
@@ -91,6 +82,28 @@ void BasicElement::goInside(FormulaCursor* cursor)
     if (mainChild != 0) {
         mainChild->goInside(cursor);
     }
+}
+
+
+/**
+ * Enters this element while moving to the left starting inside
+ * the element `from'. Searches for a cursor position inside
+ * this element or to the left of it.
+ */
+void BasicElement::moveLeft(FormulaCursor* cursor, BasicElement*)
+{
+    getParent()->moveLeft(cursor, this);
+}
+
+
+/**
+ * Enters this element while moving to the right starting inside
+ * the element `from'. Searches for a cursor position inside
+ * this element or to the right of it.
+ */
+void BasicElement::moveRight(FormulaCursor* cursor, BasicElement*)
+{
+    getParent()->moveRight(cursor, this);
 }
 
 

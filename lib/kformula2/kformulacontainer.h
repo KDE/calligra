@@ -51,6 +51,7 @@ class QWidget;
  * The document. Provides everything to edit the formula.
  */
 class KFormulaContainer : public QObject {
+    friend class KFormulaMimeSource;
     Q_OBJECT
 
 public:
@@ -125,17 +126,18 @@ public:
      */
     void print(QPrinter& printer);
 
-    
+
+    /**
+     * @returns the cursor to be used for editing.
+     */
     FormulaCursor* getActiveCursor() { return activeCursor; }
 
     /**
-     * Sets the cursor that is to be used for any editing.
-     * It's the views responsibility to set its cursor
-     * before it triggers an action.
-     * Normally a view sets the active cursor if it gets the focus.
+     * Tells the formula that a view got the focus and might want to
+     * edit the formula.
      */
-    void setActiveCursor(FormulaCursor* cursor) { activeCursor = cursor; }
-
+    void setActiveView(KFormulaWidget* view);
+    
     /**
      * @returns the formula's size.
      */
@@ -150,6 +152,27 @@ public:
      * @returns true if there is no element.
      */
     bool isEmpty();
+
+    /**
+     * Creates the standard formula actions and puts them into
+     * the collection.
+     */
+    void createActions(KActionCollection* collection);
+
+    KAction* getAddBracketAction()       { return addBracketAction; }
+    KAction* getAddFractionAction()      { return addFractionAction; }
+    KAction* getAddRootAction()          { return addRootAction; }
+    KAction* getAddSumAction()           { return addSumAction; }
+    KAction* getAddProductAction()       { return addProductAction; }
+    KAction* getAddIntegralAction()      { return addIntegralAction; }
+    KAction* getAddMatrixAction()        { return addMatrixAction; }
+    KAction* getAddUpperLeftAction()     { return addUpperLeftAction; }
+    KAction* getAddLowerLeftAction()     { return addLowerLeftAction; }
+    KAction* getAddUpperRightAction()    { return addUpperRightAction; }
+    KAction* getAddLowerRightAction()    { return addLowerRightAction; }
+    KAction* getAddGenericUpperAction()  { return addGenericUpperAction; }
+    KAction* getAddGenericLowerAction()  { return addGenericLowerAction; }
+    KAction* getRemoveEnclosingAction()  { return removeEnclosingAction; }
     
 signals:
 
@@ -187,7 +210,10 @@ public slots:
     void addNumber(QChar ch);
     void addOperator(QChar ch);
 
+    void addLineBreak();
+
     void addBracket(char left, char right);
+    void addDefaultBracket();
     void addSquareBracket() { addBracket('[', ']'); }
     void addCurlyBracket()  { addBracket('{', '}'); }
     void addLineBracket()   { addBracket('|', '|'); }
@@ -207,7 +233,7 @@ public slots:
     /**
      * Asks for a matrix size and inserts it.
      */
-    void addMatrix(QWidget* parent);
+    void addMatrix();
 
     /**
      * Adds the lower left index of the current IndexElement.
@@ -244,9 +270,9 @@ public slots:
     void addGenericUpperIndex();
     
     void remove(BasicElement::Direction = BasicElement::beforeCursor);
-    void removeForward() { remove(BasicElement::afterCursor); }
     
     void replaceElementWithMainChild(BasicElement::Direction = BasicElement::beforeCursor);
+    void removeEnclosing() { replaceElementWithMainChild(); }
 
     /**
      * Undo and move the undone command to the redo stack
@@ -287,7 +313,24 @@ private:
      */
     void removeSelection();
 
+    /**
+     * Sets the cursor that is to be used for any editing.
+     *
+     * The active cursor might 0. In this case you must not
+     * request any change from the formula.
+     */
+    void setActiveCursor(FormulaCursor* cursor) { activeCursor = cursor; }
     
+    /**
+     * @returns true if there is a cursor.
+     */
+    bool hasValidCursor() const { return activeCursor != 0; }
+
+    /**
+     * @returns true if there is a view.
+     */
+    bool hasValidView() const { return activeView != 0; }
+
     /**
      * If true we need to recalc the formula.
      */
@@ -310,12 +353,35 @@ private:
     FormulaCursor* activeCursor;
     
     /**
+     * The active formula view.
+     */
+    KFormulaWidget* activeView;
+    
+    /**
      * Our undo stack. We don't own it. The stack belongs to
      * our parent and might contain not formula related commands
      * as well.
      */
     KCommandHistory& history;
 
+    
+    // We know our actions, maybe a client is interessted...
+    
+    KAction* addBracketAction;
+    KAction* addFractionAction;
+    KAction* addRootAction;
+    KAction* addSumAction;
+    KAction* addProductAction;
+    KAction* addIntegralAction;
+    KAction* addMatrixAction;
+    KAction* addUpperLeftAction;
+    KAction* addLowerLeftAction;
+    KAction* addUpperRightAction;
+    KAction* addLowerRightAction;
+    KAction* addGenericUpperAction;
+    KAction* addGenericLowerAction;
+    KAction* removeEnclosingAction;
+    
     // debug
     friend class TestFormulaCursor;
     friend class TestIndexElement;

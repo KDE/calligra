@@ -102,25 +102,6 @@ protected:
 
 protected slots:
 
-    void cut();
-    void copy();
-    void paste();
-
-    void addIntegral();
-    void addSum();
-    void addProduct();
-    void addRoot();
-    void addFraction();
-    void addBracket();
-    void addMatrix();
-    void addUpperLeft();
-    void addLowerLeft();
-    void addUpperRight();
-    void addLowerRight();
-    void addUpperIndex();
-    void addLowerIndex();
-    void removeEnclosing();
-
     void cursorChanged(bool visible, bool selecting);
 
 private:

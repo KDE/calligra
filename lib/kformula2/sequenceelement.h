@@ -131,16 +131,6 @@ public:
     // children
 
     /**
-     * Removes the child. If this was the main child this element might
-     * request its own removal.
-     * The cursor is the one that caused the removal. It has to be moved
-     * to the place any user expects the cursor after that particular
-     * element has been removed.
-     */
-    //virtual void removeChild(FormulaCursor* cursor, BasicElement* child);
-
-
-    /**
      * Inserts all new children at the cursor position. Places the
      * cursor according to the direction. The inserted elements will
      * be selected.
@@ -183,12 +173,6 @@ public:
      */
     void selectAllChildren(FormulaCursor* cursor);
     
-    //BasicElement* getChildAt(int pos);
-
-    // Save&load
-    //virtual QDomElement getElementDom(QDomDocument *doc);
-    //virtual bool buildFromDom(QDomElement *elem);
-
     /**
      * Stores the given childrens dom in the element.
      */
@@ -201,9 +185,6 @@ public:
      */
     bool buildChildrenFromDom(QList<BasicElement>& list, QDomNode n);
     
-    
-    // debug
-    virtual ostream& output(ostream&);
 
 protected:
 
@@ -231,6 +212,53 @@ protected:
      * Returns false if it failed.
      */
     virtual bool readContentFromDom(QDomNode& node);
+
+    /**
+     * Sets the childrens' positions after their size has been
+     * calculated.
+     *
+     * @see #calcSizes
+     */
+    virtual void setChildrenPositions();
+
+    /**
+     * Creates a new element with the given type.
+     *
+     * @param type the desired type of the element
+     */
+    virtual BasicElement* createElement(QString type);
+
+    /**
+     * @returns the child at position i.
+     */
+    BasicElement* getChild(uint i) { return children.at(i); }
+
+    /**
+     * draws the cursor if it is in selection mode.
+     *
+     * @param painter the painter
+     * @param point the elements upper left corner corner
+     * @param pos the position the cursor points to
+     * @param mark the position the mark points to
+     */
+    virtual void drawSelectionCursor(QPainter& painter, QPoint& point,
+                                     uint pos, uint mark);
+
+    /**
+     * draws the cursor if it is not selecting.
+     *
+     * @param painter the painter
+     * @param point the elements upper left corner corner
+     * @param pos the position the cursor points to
+     */
+    virtual void drawSingleCursor(QPainter& painter, QPoint& point, uint pos);
+
+    /**
+     * @returns the position where the child starts.
+     *
+     * @param child the child's number
+     */
+    int getChildPosition(uint child);
     
 private:
 

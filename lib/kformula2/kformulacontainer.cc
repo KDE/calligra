@@ -27,8 +27,11 @@
 #include <qstring.h>
 #include <qtextstream.h>
 
+#include <kaction.h>
 #include <klocale.h>
+#include <kstdaction.h>
 
+#include "MatrixDialog.h"
 #include "bracketelement.h"
 #include "contextstyle.h"
 #include "formulacursor.h"
@@ -46,7 +49,6 @@
 #include "sequenceelement.h"
 #include "symbolelement.h"
 #include "textelement.h"
-#include "MatrixDialog.h"
 
 
 KFormulaContainer::KFormulaContainer(KCommandHistory& _history)
@@ -88,6 +90,18 @@ void KFormulaContainer::changed()
     dirty = true;
 }
 
+/**
+ * Tells the formula that a view got the focus and might want to
+ * edit the formula.
+ */
+void KFormulaContainer::setActiveView(KFormulaWidget* view)
+{
+    activeView = view;
+    if (view != 0) {
+        setActiveCursor(view->getCursor());
+    }
+}
+
 void KFormulaContainer::testDirty()
 {
     if (dirty) {
@@ -103,6 +117,82 @@ bool KFormulaContainer::isEmpty()
 }
 
 
+void KFormulaContainer::createActions(KActionCollection* collection)
+{
+    addIntegralAction = new KAction(i18n("Add/change to integral"),
+                                    "mini-integral",
+                                    CTRL + Key_6,
+                                    this, SLOT(addIntegral()),
+                                    collection, "addintegral");
+    addSumAction      = new KAction(i18n("Add/change to sum"),
+                                    "mini-sum",
+                                    CTRL + Key_7,
+                                    this, SLOT(addSum()),
+                                    collection, "addsum");
+    addProductAction  = new KAction(i18n("Add/change to product"),
+                                    "mini-product",
+                                    CTRL + Key_4,
+                                    this, SLOT(addProduct()),
+                                    collection, "addproduct");
+    addRootAction     = new KAction(i18n("Add/change to root"),
+                                    "mini-root",
+                                    CTRL + Key_2,
+                                    this, SLOT(addRoot()),
+                                    collection, "addroot");
+    addFractionAction = new KAction(i18n("Add/change to fraction"),
+                                    "mini-frac",
+                                    CTRL + Key_3,
+                                    this, SLOT(addFraction()),
+                                    collection, "addfrac");
+    addBracketAction  = new KAction(i18n("Add/change to bracket"),
+                                    "mini-bra",
+                                    CTRL + Key_5,
+                                    this, SLOT(addDefaultBracket()),
+                                    collection,"addbra");
+
+    addMatrixAction   = new KAction(i18n("Add matrix"),
+                                    "matrix",
+                                    CTRL + Key_8,
+                                    this, SLOT(addMatrix()),
+                                    collection, "addmatrix");
+
+    addUpperLeftAction  = new KAction(i18n("Add upper left index"),
+                                      "index3",
+                                      0,
+                                      this, SLOT(addUpperLeftIndex()),
+                                      collection, "addupperleft");
+    addLowerLeftAction  = new KAction(i18n("Add lower left index"),
+                                      "index2",
+                                      0,
+                                      this, SLOT(addLowerLeftIndex()),
+                                      collection, "addlowerleft");
+    addUpperRightAction = new KAction(i18n("Add upper right index"),
+                                      "index1",
+                                      0,
+                                      this, SLOT(addUpperRightIndex()),
+                                      collection, "addupperright");
+    addLowerRightAction = new KAction(i18n("Add lower right index"),
+                                      "index0",
+                                      0,
+                                      this, SLOT(addLowerRightIndex()),
+                                      collection, "addlowerright");
+
+    addGenericUpperAction = new KAction(i18n("Add upper index"),
+                                      CTRL + Key_U,
+                                      this, SLOT(addGenericUpperIndex()),
+                                      collection, "addupperindex");
+    addGenericLowerAction = new KAction(i18n("Add lower index"),
+                                      CTRL + Key_L,
+                                      this, SLOT(addGenericLowerIndex()),
+                                      collection, "addlowerindex");
+
+    removeEnclosingAction = new KAction(i18n("Remove enclosing element"),
+                                        CTRL + Key_R,
+                                        this, SLOT(removeEnclosing()),
+                                        collection, "removeenclosing");
+}
+
+
 /**
  * Draws the whole thing.
  */
@@ -114,6 +204,8 @@ void KFormulaContainer::draw(QPainter& painter)
 
 void KFormulaContainer::addText(QChar ch)
 {
+    if (!hasValidCursor())
+        return;
     removeSelection();
     KFCAdd* command = new KFCAdd(i18n("Add text"), this);
     command->addElement(new TextElement(ch));
@@ -122,6 +214,8 @@ void KFormulaContainer::addText(QChar ch)
 
 void KFormulaContainer::addNumber(QChar ch)
 {
+    if (!hasValidCursor())
+        return;
     removeSelection();
     KFCAdd* command = new KFCAdd(i18n("Add number"), this);
     command->addElement(new NumberElement(ch));
@@ -130,21 +224,41 @@ void KFormulaContainer::addNumber(QChar ch)
 
 void KFormulaContainer::addOperator(QChar ch)
 {
+    if (!hasValidCursor())
+        return;
     removeSelection();
     KFCAdd* command = new KFCAdd(i18n("Add operator"), this);
     command->addElement(new OperatorElement(ch));
     execute(command);
 }
 
+void KFormulaContainer::addLineBreak()
+{
+    if (!hasValidCursor())
+        return;
+    // Not supported right now.
+}
+
 void KFormulaContainer::addBracket(char left, char right)
 {
+    if (!hasValidCursor())
+        return;
     KFCAddReplacing* command = new KFCAddReplacing(i18n("Add bracket"), this);
     command->setElement(new BracketElement(left, right));
     execute(command);
 }
 
+void KFormulaContainer::addDefaultBracket()
+{
+    if (!hasValidView())
+        return;
+    addBracket(activeView->getLeftBracket(), activeView->getRightBracket());
+}
+
 void KFormulaContainer::addFraction()
 {
+    if (!hasValidCursor())
+        return;
     KFCAddReplacing* command = new KFCAddReplacing(i18n("Add fraction"), this);
     command->setElement(new FractionElement());
     execute(command);
@@ -153,6 +267,8 @@ void KFormulaContainer::addFraction()
 
 void KFormulaContainer::addRoot()
 {
+    if (!hasValidCursor())
+        return;
     KFCAddReplacing* command = new KFCAddReplacing(i18n("Add root"), this);
     command->setElement(new RootElement());
     execute(command);
@@ -161,6 +277,8 @@ void KFormulaContainer::addRoot()
 
 void KFormulaContainer::addSymbol(SymbolType type)
 {
+    if (!hasValidCursor())
+        return;
     KFCAddReplacing* command = new KFCAddReplacing(i18n("Add symbol"), this);
     command->setElement(new SymbolElement(type));
     execute(command);
@@ -168,14 +286,18 @@ void KFormulaContainer::addSymbol(SymbolType type)
 
 void KFormulaContainer::addMatrix(int rows, int columns)
 {
+    if (!hasValidCursor())
+        return;
     removeSelection();
     KFCAddMatrix* command = new KFCAddMatrix(this, rows, columns);
     execute(command);
 }
 
-void KFormulaContainer::addMatrix(QWidget* parent)
+void KFormulaContainer::addMatrix()
 {
-    MatrixDialog* dialog = new MatrixDialog(parent);
+    if (!hasValidView())
+        return;
+    MatrixDialog* dialog = new MatrixDialog(activeView);
     if (dialog->exec()) {
         uint rows = dialog->w;
         uint cols = dialog->h;
@@ -186,6 +308,8 @@ void KFormulaContainer::addMatrix(QWidget* parent)
 
 void KFormulaContainer::addLowerLeftIndex()
 {
+    if (!hasValidCursor())
+        return;
     FormulaCursor* cursor = getActiveCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
@@ -205,6 +329,8 @@ void KFormulaContainer::addLowerLeftIndex()
 
 void KFormulaContainer::addUpperLeftIndex()
 {
+    if (!hasValidCursor())
+        return;
     FormulaCursor* cursor = getActiveCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
@@ -223,6 +349,8 @@ void KFormulaContainer::addUpperLeftIndex()
 
 void KFormulaContainer::addLowerRightIndex()
 {
+    if (!hasValidCursor())
+        return;
     FormulaCursor* cursor = getActiveCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
@@ -241,6 +369,8 @@ void KFormulaContainer::addLowerRightIndex()
 
 void KFormulaContainer::addUpperRightIndex()
 {
+    if (!hasValidCursor())
+        return;
     FormulaCursor* cursor = getActiveCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
@@ -264,6 +394,8 @@ void KFormulaContainer::addUpperRightIndex()
  */
 void KFormulaContainer::addGenericLowerIndex()
 {
+    if (!hasValidCursor())
+        return;
     FormulaCursor* cursor = getActiveCursor();
     SymbolElement* symbol = cursor->getActiveSymbolElement();
     if (symbol != 0) {
@@ -283,6 +415,8 @@ void KFormulaContainer::addGenericLowerIndex()
  */
 void KFormulaContainer::addGenericUpperIndex()
 {
+    if (!hasValidCursor())
+        return;
     FormulaCursor* cursor = getActiveCursor();
     SymbolElement* symbol = cursor->getActiveSymbolElement();
     if (symbol != 0) {
@@ -321,6 +455,8 @@ void KFormulaContainer::addGenericIndex(FormulaCursor* cursor, ElementIndexPtr i
 
 void KFormulaContainer::remove(BasicElement::Direction direction)
 {
+    if (!hasValidCursor())
+        return;
     KFCRemove* command = new KFCRemove(this, direction);
     execute(command);
 }
@@ -328,6 +464,8 @@ void KFormulaContainer::remove(BasicElement::Direction direction)
 
 void KFormulaContainer::replaceElementWithMainChild(BasicElement::Direction direction)
 {
+    if (!hasValidCursor())
+        return;
     FormulaCursor* cursor = getActiveCursor();
     if (!cursor->isSelection()) {
         KFCRemoveEnclosing* command = new KFCRemoveEnclosing(this, direction);
@@ -338,6 +476,8 @@ void KFormulaContainer::replaceElementWithMainChild(BasicElement::Direction dire
 
 void KFormulaContainer::paste()
 {
+    if (!hasValidCursor())
+        return;
     QClipboard* clipboard = QApplication::clipboard();
     const QMimeSource* source = clipboard->data();
     if (source->provides("application/x-kformula")) {
@@ -364,6 +504,8 @@ void KFormulaContainer::paste()
 
 void KFormulaContainer::copy()
 {
+    if (!hasValidCursor())
+        return;
     FormulaCursor* cursor = getActiveCursor();
     QDomDocument formula = cursor->copy();
     QClipboard* clipboard = QApplication::clipboard();
@@ -372,6 +514,8 @@ void KFormulaContainer::copy()
 
 void KFormulaContainer::cut()
 {
+    if (!hasValidCursor())
+        return;
     FormulaCursor* cursor = getActiveCursor();
     if (cursor->isSelection()) {
         copy();
