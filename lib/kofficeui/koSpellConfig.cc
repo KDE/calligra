@@ -63,7 +63,7 @@ KoSpellConfigWidget::KoSpellConfigWidget( QWidget *_parent, KOSpellConfig *_conf
 
     tab->addTab(tmpQGroupBox, i18n("General"));
 
-    QVGroupBox* tmpQGroupBox2 = new QVGroupBox( i18n("Ignore All List"), tab, "GroupBox2" );
+    QVBox* tmpQGroupBox2 = new QVBox( tab, "GroupBox2" );
     m_listignoreall =  new KEditListBox( i18n("Word"),
                                     tmpQGroupBox2, "list_ignoreall" , false,
                                     KEditListBox::Add|KEditListBox::Remove );
@@ -71,10 +71,10 @@ KoSpellConfigWidget::KoSpellConfigWidget( QWidget *_parent, KOSpellConfig *_conf
     m_clearIgnoreAllHistory= new QPushButton( i18n("Clear Ignore All Word History"),tmpQGroupBox2);
     connect( m_clearIgnoreAllHistory, SIGNAL(clicked()),this, SLOT(slotClearIgnoreAllHistory()));
 
-    tab->addTab(tmpQGroupBox2, i18n("IgnoreAll"));
+    tab->addTab(tmpQGroupBox2, i18n( "Ignore All List" ) );
 
 
-    QVGroupBox* tmpQGroupBox3 = new QVGroupBox( i18n("Personal Dictionary"), tab, "GroupBox3" );
+    QVBox* tmpQGroupBox3 = new QVBox( tab, "GroupBox3" );
     m_dictionary =  new KEditListBox( i18n("Word"),
                                       tmpQGroupBox3, "dictionary" , false,
                                       KEditListBox::Add|KEditListBox::Remove );
