@@ -669,6 +669,8 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
             QDomElement elemPoint = point.firstChild().toElement();
             unsigned int index = 0;
             QString listOfPoint;
+            int maxX=0;
+            int maxY=0;
             while ( !elemPoint.isNull() ) {
                 if ( elemPoint.tagName() == "Point" ) {
                     int tmpX = 0;
@@ -681,11 +683,15 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
                         listOfPoint += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
                     else
                         listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
+                    maxX = QMAX( maxX, tmpX );
+                    maxY = QMAX( maxY, tmpY );
+
                     //points.putPoints( index, 1, tmpX,tmpY );
                 }
                 elemPoint = elemPoint.nextSibling().toElement();
             }
             target.setAttribute( "draw:points", listOfPoint );
+            target.setAttribute( "svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
         }
     }
 }
