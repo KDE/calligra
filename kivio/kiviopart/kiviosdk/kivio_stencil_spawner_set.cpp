@@ -203,7 +203,7 @@ QString KivioStencilSpawnerSet::readTitle( const QString &dir )
   }
 
   if(title.isEmpty()) {
-    title = i18n( "Stencils", origTitle.latin1() );
+    title = i18n( "Stencils", origTitle.utf8() );
   }
   
   return title;
