@@ -45,6 +45,8 @@ CqlDB::CqlDB(QObject *parent, const char *name, const QStringList &)
 		cerr << ex << endl;
 		m_db = 0;
 	}
+	
+	kdDebug() << "CqlDB::CqlDB(): handle:" << m_db << endl;
 }
 
 QString
@@ -90,12 +92,22 @@ CqlDB::query(QString statement)
 
 	QString rs(statement + ";");
 
-	kdDebug() << "CqlDB::query() query:" << rs << endl;
+	kdDebug() << "CqlDB::query() query: " << rs << endl;
+	try
+	{
+		m_db->declareCursor(rs.latin1());
+	}
+	catch(CqlException& ex)
+	{
+		cerr << ex << endl;
+	}
 
-	m_db->declareCursor(rs.latin1());
+	kdDebug() << "CqlDB::query() query executed" << endl;
 
-	Cursor *cursor = new Cursor(*m_db);
-	cursor->open();
+
+//	Cursor *cursor = new Cursor(*m_db);
+//	kdDebug() << "CqlDB::query() dbg0: " << cursor << ":" << m_db << endl;
+//	cursor->open();
 	kdDebug() << "CqlDB::query(): cursor created" << endl;
 
 	return true;
