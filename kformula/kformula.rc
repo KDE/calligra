@@ -53,7 +53,6 @@
 -->
 
   <Action name="formula_insertsymbol"/>
-  <Action name="formula_syntaxhighlighting"/>
  </Menu>
 <!--
  <Menu name="Font"><text>Font</text>
@@ -71,6 +70,10 @@
   </Menu>
  </Menu>
 -->
+ <Menu name="settings"><text>&amp;Settings</text>
+  <Action name="formula_syntaxhighlighting"/>
+  <Separator/>
+ </Menu>
 
 </MenuBar>
 
