@@ -74,7 +74,6 @@ class QButton;
 
 #include <koView.h>
 #include <koDocument.h>
-#include <koDataTool.h>
 
 class KivioView : public KoView
 { Q_OBJECT
