@@ -2172,7 +2172,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             slotGotoPage(); break;
         case Key_Home:  // go to first page
             if ( slideListIterator != slideList.begin() ) {
-                gotoPage( *slideList.begin() );
+                presGotoFirstPage();
                 if ( !spManualSwitch() ) {
                     m_view->setCurrentTimer( 1 );
                     setNextPageTimer( true );
@@ -4960,6 +4960,11 @@ void KPrCanvas::gotoPage( int pg )
         setFocus();
         m_view->refreshPageButton();
     }
+}
+
+void KPrCanvas::presGotoFirstPage()
+{
+    gotoPage( *slideList.begin() );
 }
 
 KPTextObject* KPrCanvas::kpTxtObj() const

@@ -3981,7 +3981,7 @@ void KPresenterView::doAutomaticScreenPres()
         return;
     else if ( !continuePres && kPresenterDoc()->spInfiniteLoop() ) {
         continuePres = true;
-        m_canvas->gotoPage( 1 ); // return to first page.
+        m_canvas->presGotoFirstPage(); // return to first page.
         setCurrentTimer( 1 );
         m_canvas->setNextPageTimer( true );
     }

@@ -152,6 +152,13 @@ public:
 
     void gotoPage( int pg );
 
+    /**
+     * Go to first slide of presentation.
+     * Used in presentation mode.
+     */
+    void presGotoFirstPage();
+
+
     KPrPage* activePage() const;
 
     bool oneObjectTextExist() const;
