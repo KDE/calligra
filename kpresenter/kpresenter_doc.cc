@@ -1988,7 +1988,7 @@ void KPresenterDoc::setHeader( bool b )
     _hasHeader = b;
     _header->setDrawEditRect( b );
     _header->setDrawEmpty( b );
-
+    setModified(true);
     repaint(_hasHeader);
 }
 
@@ -1998,7 +1998,7 @@ void KPresenterDoc::setFooter( bool b )
     _hasFooter = b;
     _footer->setDrawEditRect( b );
     _footer->setDrawEmpty( b );
-
+    setModified(true);
     repaint(_footer);
 }
 
