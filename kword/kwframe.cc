@@ -2283,7 +2283,7 @@ void KWPictureFrameSet::loadOasis( const QDomElement& frame, const QDomElement& 
 
     m_doc->pictureCollection()->insertPicture( key, m_picture );
     context.styleStack().save();
-    context.fillStyleStack( frame, "draw:style-name" ); // get the style for the graphics element
+    context.fillStyleStack( frame, KoXmlNS::draw, "style-name" ); // get the style for the graphics element
     loadOasisFrame( frame, context );
     context.styleStack().restore();
 }

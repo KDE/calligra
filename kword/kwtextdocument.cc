@@ -80,21 +80,22 @@ void KWTextDocument::loadOasisTOC( const QDomElement& tag, KoOasisContext& conte
     //}
 
     QDomElement tocIndexBody = KoDom::namedItemNS( tag, KoXmlNS::text, "index-body" );
-    for ( QDomNode n(tocIndexBody.firstChild()); !n.isNull(); n = n.nextSibling() )
+    QDomElement t;
+    forEachElement( t, tocIndexBody )
     {
         context.styleStack().save();
-        QDomElement t = n.toElement();
-        QString tagName = t.tagName();
+        const QString localName = t.localName();
         QDomElement e;
-        if ( tagName == "text:index-title" ) {
+        bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
+        if ( isTextNS && localName == "index-title" ) {
             lastParagraph = loadOasisText( t, context, lastParagraph, styleColl, nextParagraph ); // recurse again
-        } else if ( tagName == "text:p" ) {
-            context.fillStyleStack( t, "text:style-name" );
+        } else if ( isTextNS && localName == "p" ) {
+            context.fillStyleStack( t, KoXmlNS::text, "style-name" );
             lastParagraph = createParag( this, lastParagraph, nextParagraph );
             uint pos = 0;
             lastParagraph->loadOasis( t, context, styleColl, pos );
         } else
-            kdWarning() << "OASIS TOC loading: unknown tag " << tagName << " found in text:index-body" << endl;
+            kdWarning() << "OASIS TOC loading: unknown tag " << t.tagName() << " found in index-body" << endl;
         context.styleStack().restore();
     }
 
@@ -103,15 +104,18 @@ void KWTextDocument::loadOasisTOC( const QDomElement& tag, KoOasisContext& conte
 
 KWFrame* KWTextDocument::loadFrame( const QDomElement& tag, KoOasisContext& context )
 {
-    for ( QDomNode child = tag.firstChild(); !child.isNull(); child = child.nextSibling() ) {
-        QDomElement elem = child.toElement();
-        QCString tagName = elem.tagName().latin1();
-        if ( tagName == "draw:text-box" )
+    QDomElement elem;
+    forEachElement( elem, tag )
+    {
+        if ( elem.namespaceURI() != KoXmlNS::draw )
+            continue;
+        const QString localName = elem.localName();
+        if ( localName == "text-box" )
         {
             kdDebug()<<" append text-box\n";
             return m_textfs->loadOasisTextBox( tag, elem, context );
         }
-        else if ( tagName == "draw:image" )
+        else if ( localName == "image" )
         {
             KWFrameSet* fs = new KWPictureFrameSet( m_textfs->kWordDocument(), tag, elem, context );
             m_textfs->kWordDocument()->addFrameSet( fs, false );
@@ -125,15 +129,15 @@ bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& c
                                        KoTextParag* & lastParagraph, KoStyleCollection* styleColl,
                                        KoTextParag* nextParagraph )
 {
-    QCString tagName( tag.tagName().latin1() );
-    if ( tagName == "draw:frame" )
+    const QString localName( tag.localName() );
+    if ( localName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
     {
         KWFrame* frame = loadFrame( tag, context );
         if ( frame )
             return true;
     }
 #if 0 // TODO OASIS table:table
-    else if ( tagName == "table:table" )
+    else if ( localName == "table" && tag.namespaceURI() == KoXmlNS::table )
     {
         //todo
         parseTable(tag, currentFramesetElement);
@@ -141,11 +145,12 @@ bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& c
         return true;
     }
 #endif
-    else if ( tagName == "text:table-of-content" )
+    else if ( localName == "table-of-content" && tag.namespaceURI() == KoXmlNS::text )
     {
         loadOasisTOC( tag, context, lastParagraph, styleColl, nextParagraph );
         return true;
     }
+
     return false;
 }
 
@@ -162,10 +167,10 @@ void KWTextDocument::loadOasisFootnote( const QDomElement& tag, KoOasisContext& 
                                         KoTextCustomItem* & customItem )
 {
     const QString frameName( tag.attributeNS( KoXmlNS::text, "id", QString::null) );
-    const QString tagName( tag.tagName() );
-    QDomElement citationElem = tag.namedItem( tagName + "-citation" ).toElement();
+    const QString localName( tag.localName() );
+    const QDomElement citationElem = tag.namedItem( localName + "-citation" ).toElement();
 
-    bool endnote = tagName == "text:endnote";
+    bool endnote = localName == "endnote" && tag.namespaceURI() == KoXmlNS::text;
 
     QString label = citationElem.attributeNS( KoXmlNS::text, "label", QString::null );
     bool autoNumbered = label.isEmpty();
@@ -179,7 +184,7 @@ void KWTextDocument::loadOasisFootnote( const QDomElement& tag, KoOasisContext& 
     fs->createInitialFrame( 0 ); // we don't know the page number...
 
     // Parse contents into the frameset
-    QDomElement bodyElem = tag.namedItem( tagName + "-body" ).toElement();
+    const QDomElement bodyElem = KoDom::namedItemNS( tag, KoXmlNS::text, QCString( localName.latin1() ) + "-body" ).toElement();
     fs->loadOasisContent( bodyElem, context );
 }
 
@@ -187,26 +192,26 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                                   KoTextParag* parag, uint pos,
                                   QString& textData, KoTextCustomItem* & customItem )
 {
-    const QString tagName( tag.tagName() );
-    const bool textFoo = tagName.startsWith( "text:" );
-    kdDebug(32500) << "KWTextDocument::loadSpanTag: " << tagName << endl;
+    const QString localName( tag.localName() );
+    const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
+    kdDebug(32500) << "KWTextDocument::loadSpanTag: " << localName << endl;
 
-    if ( textFoo )
+    if ( isTextNS )
     {
-        if ( tagName == "text:a" )
+        if ( localName == "a" )
         {
             QString href( tag.attributeNS( KoXmlNS::xlink, "href", QString::null) );
             if ( href.startsWith("#") )
             {
                 context.styleStack().save();
                 // We have a reference to a bookmark (### TODO)
-                // As we do not support it now, treat it as a <text:span> without formatting
+                // As we do not support it now, treat it as a <span> without formatting
                 parag->loadOasisSpan( tag, context, pos ); // recurse
                 context.styleStack().restore();
             }
             else
             {
-                // The text is contained in a text:span inside the text:a element. In theory
+                // The text is contained in a <span> inside the <a> element. In theory
                 // we could have multiple spans there, but OO ensures that there is always only one,
                 // splitting the hyperlink if necessary (at format changes).
                 // Note that we ignore the formatting of the span.
@@ -218,7 +223,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                     // The save/restore of the stack is done by the caller (KoTextParag::loadOasisSpan)
                     // This allows to use the span's format for the variable.
                     //kdDebug(32500) << "filling stack with " << spanElem.attributeNS( KoXmlNS::text, "style-name", QString::null ) << endl;
-                    context.fillStyleStack( spanElem, "text:style-name" );
+                    context.fillStyleStack( spanElem, KoXmlNS::text, "style-name" );
                     text = spanElem.text();
                 }
                 textData = KoTextObject::customItemChar(); // hyperlink placeholder
@@ -230,20 +235,20 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
             }
             return true;
         }
-        else if ( tagName == "text:bookmark" ) // this is an empty element
+        else if ( localName == "bookmark" ) // this is an empty element
         {
             // the number of <PARAGRAPH> tags in the frameset element is the parag id
             // (-1 for starting at 0, +1 since not written yet)
             appendBookmark( parag, pos, parag, pos, tag.attributeNS( KoXmlNS::text, "name", QString::null ) );
             return true;
         }
-        else if ( tagName == "text:bookmark-start" ) {
+        else if ( localName == "bookmark-start" ) {
             KWLoadingInfo* loadingInfo = m_textfs->kWordDocument()->loadingInfo();
             loadingInfo->m_bookmarkStarts.insert( tag.attributeNS( KoXmlNS::text, "name", QString::null ),
                                                   KWLoadingInfo::BookmarkStart( this, parag, pos ) );
             return true;
         }
-        else if ( textFoo && tagName == "text:bookmark-end" ) {
+        else if ( localName == "bookmark-end" ) {
             KWLoadingInfo* loadingInfo = m_textfs->kWordDocument()->loadingInfo();
             QString bkName = tag.attributeNS( KoXmlNS::text, "name", QString::null );
             KWLoadingInfo::BookmarkStartsMap::iterator it = loadingInfo->m_bookmarkStarts.find( bkName );
@@ -261,16 +266,16 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
             }
             return true;
         }
-        else if ( tagName == "text:footnote" || tagName == "text:endnote" )
+        else if ( localName == "footnote" || localName == "endnote" )
         {
             textData = KoTextObject::customItemChar(); // anchor placeholder
             loadOasisFootnote( tag, context, customItem );
             return true;
         }
     }
-    else // non "text:" tags
+    else // not in the "text" namespace
     {
-        if ( tagName == "draw:frame" )
+        if ( tag.namespaceURI() == KoXmlNS::draw && localName == "frame" )
         {
             KWFrame* frame = loadFrame( tag, context );
             if ( frame )

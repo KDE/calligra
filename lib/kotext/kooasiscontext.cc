@@ -36,14 +36,6 @@ void KoOasisContext::fillStyleStack( const QDomElement& object, const char* nsUR
         addStyles( m_styles.styles()[object.attributeNS( nsURI, attrName, QString::null )] );
 }
 
-void KoOasisContext::fillStyleStack( const QDomElement& object, const QString& attrName )
-{
-    // find all styles associated with an object and push them on the stack
-    // OoImpressImport has more tests here, but I don't think they're relevant to OoWriterImport
-    if ( object.hasAttribute( attrName ) )
-        addStyles( m_styles.styles()[object.attribute( attrName )] );
-}
-
 void KoOasisContext::addStyles( const QDomElement* style )
 {
     // this recursive function is necessary as parent styles can have parents themselves

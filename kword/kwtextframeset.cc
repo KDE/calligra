@@ -1831,7 +1831,7 @@ KWFrame* KWTextFrameSet::loadOasisTextBox( const QDomElement& frameTag, const QD
         frame = fs->loadOasis( frameTag, tag, context );
     } else { // Adding frame to existing frameset
         context.styleStack().save();
-        context.fillStyleStack( frameTag, "draw:style-name" ); // get the style for the graphics element
+        context.fillStyleStack( frameTag, KoXmlNS::draw, "style-name" ); // get the style for the graphics element
         frame = fs->loadOasisFrame( frameTag, context );
         context.styleStack().restore();
     }
@@ -1852,7 +1852,7 @@ void KWTextFrameSet::loadOasisContent( const QDomElement &bodyElem, KoOasisConte
 KWFrame* KWTextFrameSet::loadOasis( const QDomElement& frameTag, const QDomElement &tag, KoOasisContext& context )
 {
     context.styleStack().save();
-    context.fillStyleStack( frameTag, "draw:style-name" ); // get the style for the graphics element
+    context.fillStyleStack( frameTag, KoXmlNS::draw, "style-name" ); // get the style for the graphics element
     KWFrame* frame = loadOasisFrame( frameTag, context );
 
     // Load overflow behavior (OASIS 14.27.27, not in OO-1.1 DTD). This is here since it's only for text framesets.

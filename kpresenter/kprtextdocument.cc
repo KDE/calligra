@@ -75,7 +75,7 @@ bool KPrTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& conte
                     // The save/restore of the stack is done by the caller (KoTextParag::loadOasisSpan)
                     // This allows to use the span's format for the variable.
                     //kdDebug(32500) << "filling stack with " << spanElem.attributeNS( KoXmlNS::text, "style-name", QString::null ) << endl;
-                    context.fillStyleStack( spanElem, "text:style-name" );
+                    context.fillStyleStack( spanElem, KoXmlNS::text, "style-name" );
                     text = spanElem.text();
                 }
                 textData = '#'; // hyperlink placeholder
