@@ -76,7 +76,20 @@ AC_SUBST(KOFFICE_INCLUDES)
 
 dnl Check for PostgreSQL-headers
 dnl if present compile Katabase
-AC_CHECK_HEADERS(pgsql/libpq++.h)
+
+dnl check: /usr/include/pgsql/libpq++.h
+AC_CHECK_HEADER(pgsql/libpgtcl.h, katabase_has_postgres_headers=yes)
+dnl cannot check for libpq++.h because of the plusplus.
+dnl check: /usr/lib/pgsql/include/libpq++.h
+dnl need another check for suse (libpq++.h located in /usr/lib/pgsql/include/libpq++.h, very ugly!!!)
+if test "x$katabase_has_postgres_headers" = "xyes"; then
+  KATABASE_DIR='katabase'
+else
+  AC_MSG_WARN(you don't have libpq++.h somewhere. 
+Please install PostgreSQL-Headers to compile and install Katabase.)
+  KATABASE_DIR=''
+fi
+AC_SUBST(KATABASE_DIR)
 
 dnl add here all your Makefiles. These are created by configure
 AC_OUTPUT( \

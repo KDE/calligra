@@ -1,5 +1,5 @@
 
-SUBDIRS = lib katabase kspread kpresenter kword kformula kdiagramm killustrator kimage kimageshop filters tools plugins servicetypes koshell pics
+SUBDIRS = lib $(KATABASE_DIR) kspread kpresenter kword kformula kdiagramm killustrator kimage kimageshop filters tools plugins servicetypes koshell pics
 
 AUTOMAKE_OPTIONS = foreign # 1.4
 
