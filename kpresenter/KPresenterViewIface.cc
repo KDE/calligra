@@ -75,10 +75,6 @@ void KPresenterViewIface::editReplace()
     view->editReplace();
 }
 
-void KPresenterViewIface::editHeaderFooter()
-{
-    view->editHeaderFooter();
-}
 
 void KPresenterViewIface::newView()
 {

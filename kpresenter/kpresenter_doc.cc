@@ -20,7 +20,6 @@
 #include <kpresenter_doc.h>
 #include <kpresenter_view.h>
 #include "kprcanvas.h"
-#include <footer_header.h>
 #include <kplineobject.h>
 #include <kprectobject.h>
 #include <kpellipseobject.h>
@@ -197,15 +196,12 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     raiseAndLowerObject = false;
 
     _header = new KPTextObject( this );
-    _header->setDrawEditRect( true );
+    _header->setDrawEditRect( false );
     _footer = new KPTextObject( this );
     _footer->setDrawEditRect( false );
     _footer->setDrawEmpty( false );
-    _header->setDrawEmpty( true );
+    _header->setDrawEmpty( false );
 
-    headerFooterEdit = new KPFooterHeaderEditor( this );
-    headerFooterEdit->setCaption( i18n( "KPresenter - Header/Footer Editor" ) );
-    headerFooterEdit->hide();
 
     saveOnlyPage = -1;
     m_maxRecentFiles = 10;
@@ -311,6 +307,10 @@ void KPresenterDoc::initConfig()
     zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     newZoomAndResolution(false,false);
 
+    //add header/footer in stickyPage
+    m_stickyPage->appendObject(_header);
+    m_stickyPage->appendObject(_footer);
+
 }
 
 KoStyle* KPresenterDoc::standardStyle()
@@ -333,12 +333,11 @@ KPresenterDoc::~KPresenterDoc()
     if(isReadWrite())
         saveConfig();
     //_commands.clear(); // done before deleting the objectlist (e.g. for lowraicmd)
-    headerFooterEdit->allowClose();
-    delete headerFooterEdit;
-
+    //Be carefull !!!!!! don't delete this pointer delete in stickypage
+#if 0
     delete _header;
     delete _footer;
-
+#endif
     delete m_standardStyle;
 
     delete m_commandHistory;
@@ -884,7 +883,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             if ( _clean || !hasHeader() ) {
                 if(elem.hasAttribute("show")) {
                     setHeader(static_cast<bool>(elem.attribute("show").toInt()));
+#if 0
                     headerFooterEdit->setShowHeader( hasHeader() );
+#endif
                 }
                 _header->load(elem);
             }
@@ -892,7 +893,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             if ( _clean || !hasFooter() ) {
                 if(elem.hasAttribute("show")) {
                     setFooter( static_cast<bool>(elem.attribute("show").toInt() ) );
+#if 0
                     headerFooterEdit->setShowFooter( hasFooter() );
+#endif
                 }
                 _footer->load(elem);
             }

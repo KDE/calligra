@@ -43,7 +43,6 @@ k_dcop:
     virtual void editDelPage();
     virtual void editFind();
     virtual void editReplace();
-    virtual void editHeaderFooter();
 
     // view menu
     virtual void newView();

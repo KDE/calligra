@@ -221,7 +221,6 @@ public:
     bool hasFooter() { return _hasFooter; }
     void setHeader( bool b );
     void setFooter( bool b );
-    KPFooterHeaderEditor *getHeaderFooterEdit() { return headerFooterEdit; }
 
     // Returns true if the slide pgNum (0 based)
     bool isSlideSelected( int pgNum) ;
@@ -387,7 +386,6 @@ protected:
 
     KPTextObject *_header, *_footer;
     bool _hasHeader, _hasFooter;
-    KPFooterHeaderEditor *headerFooterEdit;
 
     QMap<KoImageKey, QString> * m_pixmapMap;
 

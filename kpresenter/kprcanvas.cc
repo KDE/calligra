@@ -38,7 +38,6 @@
 #include "kprcanvas.moc"
 
 #include <kpresenter_view.h>
-#include <footer_header.h>
 #include <qwmf.h>
 #include <kpbackground.h>
 #include <kpclipartobject.h>
@@ -2107,7 +2106,6 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
 
     currPresPage = (unsigned int) -1; // force gotoPage to do something
     gotoPage( *slideListIterator );
-    doc->getHeaderFooterEdit()->updateSizes();
     kdDebug(33001) << "Page::startScreenPresentation - done" << endl;
 }
 

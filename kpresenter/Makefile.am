@@ -17,7 +17,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	kppixmapobject.cc kppieobject.cc kppartobject.cc kpgroupobject.cc \
 	kpbackground.cc kpclipartcollection.cc kpgradient.cc \
 	kpgradientcollection.cc \
-	gotopage.cc footer_header.cc \
+	gotopage.cc \
 	kpresenter_factory.cc \
 	KPresenterDocIface.skel KPresenterDocIface.cc \
 	KPresenterViewIface.skel KPresenterViewIface.cc\
@@ -69,7 +69,7 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		kpbackground.h kpclipartcollection.h kpgradient.h \
 		kpimage.h kpgradientcollection.h \
 		gotopage.h webpresentation.h \
-		footer_header.h kpresenter_factory.h kpresenter_aboutdata.h \
+		kpresenter_factory.h kpresenter_aboutdata.h \
 		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
 		KPresenterPageIface.h sidebar.h  kpresenter_dlg_config.h \
 		kprvariable.h kprdrag.h notebar.h kprtextdocument.h kpfreehandobject.h \

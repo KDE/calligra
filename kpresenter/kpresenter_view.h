@@ -136,7 +136,6 @@ public slots:
     void editCopyPage();
     void editDuplicatePage();
     void editDelPage();
-    void editHeaderFooter();
     void editFind();
     void editReplace();
 
@@ -652,7 +651,6 @@ private:
     KAction *actionEditSelectAll;
     KAction *actionEditDuplicatePage;
     KAction *actionEditDelPage;
-    KAction *actionEditHeaderFooter;
 
     KToggleAction *actionViewShowSideBar;
     KToggleAction *actionViewShowNoteBar;

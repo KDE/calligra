@@ -64,7 +64,6 @@
 
 #include <kpresenter_view.h>
 #include <webpresentation.h>
-#include <footer_header.h>
 #include <kptextobject.h>
 
 #include <klocale.h>
@@ -322,10 +321,6 @@ DCOPObject* KPresenterView::dcopObject()
 /*======================= destructor ============================*/
 KPresenterView::~KPresenterView()
 {
-    //close header/footer dialogbox when kpresenter is embedded
-    //into other programm, and it's desactivated
-    if(m_pKPresenterDoc->getHeaderFooterEdit())
-        m_pKPresenterDoc->getHeaderFooterEdit()->slotCloseDia();
     if(sidebar) {
         KConfig *config=KGlobal::config();
         config->setGroup("Global");
@@ -555,13 +550,6 @@ void KPresenterView::editDelPage()
     currPg = QMIN( currPg, (int)m_pKPresenterDoc->getPageNums() - 1 );
     skipToPage( currPg );
     updateSideBarMenu();
-}
-
-/*===============================================================*/
-void KPresenterView::editHeaderFooter()
-{
-    m_canvas->setToolEditMode( TEM_MOUSE );
-    m_pKPresenterDoc->getHeaderFooterEdit()->show();
 }
 
 /*====================== insert a new page ======================*/
@@ -2437,10 +2425,6 @@ void KPresenterView::setupActions()
 
     actionEditSearch=KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
     actionEditReplace=KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
-
-    actionEditHeaderFooter = new KAction( i18n( "&Header/Footer..." ), 0,
-					  this, SLOT( editHeaderFooter() ),
-					  actionCollection(), "edit_headerfooter" );
 
     // ---------------- View actions
 
