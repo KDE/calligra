@@ -134,7 +134,7 @@ public:
     // Free object handle
     void deleteObject( Q_UINT32 size, QDataStream& stream );
     /* create an empty object in the object list */
-    void createEmptyObject( Q_UINT32 size, QDataStream& stream );
+    void createEmptyObject();
     // create a logical brush
     void createBrushIndirect( Q_UINT32 size, QDataStream& stream );
     // create a logical pen
@@ -143,17 +143,34 @@ public:
     void createFontIndirect( Q_UINT32 size, QDataStream& stream );
 
     /****************** misc *******************/
-    // function unimplemented
-    void notyet( Q_UINT32, QDataStream& stream );
-    void region( Q_UINT32, QDataStream& stream );
-    void palette( Q_UINT32, QDataStream& stream );
-    
     // end of meta file
     void end( Q_UINT32, QDataStream& stream );
 
     /** Calculate header checksum */
     static Q_UINT16 calcCheckSum( WmfPlaceableHeader* );
 
+    // function unimplemented
+    void notyet( Q_UINT32, QDataStream& stream );
+    void region( Q_UINT32, QDataStream& stream );
+    void palette( Q_UINT32, QDataStream& stream );
+    void escape( Q_UINT32, QDataStream& stream );
+    void setRelAbs( Q_UINT32, QDataStream& stream );
+    void setMapMode( Q_UINT32, QDataStream& stream );
+    void extFloodFill( Q_UINT32, QDataStream& stream );
+    void startDoc( Q_UINT32, QDataStream& stream );
+    void startPage( Q_UINT32, QDataStream& stream );
+    void endDoc( Q_UINT32, QDataStream& stream );
+    void endPage( Q_UINT32, QDataStream& stream );
+    void resetDC( Q_UINT32, QDataStream& stream );
+    void bitBlt( Q_UINT32, QDataStream& stream );
+    void setDibToDev( Q_UINT32, QDataStream& stream );
+    void createBrush( Q_UINT32, QDataStream& stream );
+    void createPatternBrush( Q_UINT32, QDataStream& stream );
+    void createBitmap( Q_UINT32, QDataStream& stream );
+    void createBitmapIndirect( Q_UINT32, QDataStream& stream );
+    void createPalette( Q_UINT32, QDataStream& stream );
+    void createRegion( Q_UINT32, QDataStream& stream );
+    
 private:
     //-----------------------------------------------------------------------------
     // Utilities and conversion Wmf -> Qt
@@ -228,11 +245,11 @@ private:
       { &KoWmfReadPrivate::end }, // 0
       { &KoWmfReadPrivate::setBkColor }, // 1
       { &KoWmfReadPrivate::setBkMode }, // 2
-      { &KoWmfReadPrivate::notyet }, // 3
+      { &KoWmfReadPrivate::setMapMode }, // 3
       { &KoWmfReadPrivate::setRop }, // 4
-      { &KoWmfReadPrivate::notyet }, // 5
+      { &KoWmfReadPrivate::setRelAbs }, // 5
       { &KoWmfReadPrivate::setPolyFillMode }, // 6
-      { &KoWmfReadPrivate::SetStretchBltMode }, // 7 notyet
+      { &KoWmfReadPrivate::SetStretchBltMode }, // 7 
       { &KoWmfReadPrivate::notyet }, // 8
       { &KoWmfReadPrivate::setTextColor }, // 9
       { &KoWmfReadPrivate::ScaleWindowExt }, // 10
@@ -259,30 +276,30 @@ private:
       { &KoWmfReadPrivate::setPixel }, // 31
       { &KoWmfReadPrivate::notyet }, // 32
       { &KoWmfReadPrivate::textOut }, // 33
-      { &KoWmfReadPrivate::notyet }, // 34
+      { &KoWmfReadPrivate::bitBlt }, // 34
       { &KoWmfReadPrivate::notyet }, // 35
       { &KoWmfReadPrivate::polygon }, // 36
       { &KoWmfReadPrivate::polyline }, // 37
-      { &KoWmfReadPrivate::notyet }, // 38
-      { &KoWmfReadPrivate::restoreDC }, // 29
-      { &KoWmfReadPrivate::region }, // 40 notyet
-      { &KoWmfReadPrivate::region }, // 41 notyet
-      { &KoWmfReadPrivate::region }, // 42 notyet
-      { &KoWmfReadPrivate::region }, // 43 notyet
-      { &KoWmfReadPrivate::region }, // 44 notyet
+      { &KoWmfReadPrivate::escape }, // 38
+      { &KoWmfReadPrivate::restoreDC }, // 39
+      { &KoWmfReadPrivate::region }, // 40 
+      { &KoWmfReadPrivate::region }, // 41 
+      { &KoWmfReadPrivate::region }, // 42 
+      { &KoWmfReadPrivate::region }, // 43 
+      { &KoWmfReadPrivate::region }, // 44 
       { &KoWmfReadPrivate::selectObject }, // 45
       { &KoWmfReadPrivate::setTextAlign }, // 46
       { 0 }, // 47
       { &KoWmfReadPrivate::chord }, // 48
-      { &KoWmfReadPrivate::notyet }, // 49 notyet
+      { &KoWmfReadPrivate::notyet }, // 49 
       { &KoWmfReadPrivate::extTextOut }, // 50
-      { &KoWmfReadPrivate::notyet }, // 51 SetDibToDev
-      { &KoWmfReadPrivate::palette }, // 52 notyet
-      { &KoWmfReadPrivate::palette }, // 53 notyet
-      { &KoWmfReadPrivate::palette }, // 54 notyet
-      { &KoWmfReadPrivate::palette }, // 55 notyet
+      { &KoWmfReadPrivate::setDibToDev }, // 51 
+      { &KoWmfReadPrivate::palette }, // 52
+      { &KoWmfReadPrivate::palette }, // 53
+      { &KoWmfReadPrivate::palette }, // 54 
+      { &KoWmfReadPrivate::palette }, // 55 
       { &KoWmfReadPrivate::polyPolygon }, // 56
-      { &KoWmfReadPrivate::palette }, // 57 notyet
+      { &KoWmfReadPrivate::palette }, // 57 
       { 0 }, // 58
       { 0 }, // 59
       { 0 }, // 60
@@ -297,24 +314,47 @@ private:
       { 0 }, // 69
       { 0 }, // 70
       { 0 }, // 71
-      { &KoWmfReadPrivate::notyet }, // 72 notyet
-      // 0x48 last function until 0xF0
-      { &KoWmfReadPrivate::deleteObject }, // 73
+      { &KoWmfReadPrivate::extFloodFill }, // 72
+      { 0 }, // 73
       { 0 }, // 74
       { 0 }, // 75
-      { 0 }, // 76
-      { 0 }, // 77
+      { &KoWmfReadPrivate::resetDC }, // 76
+      { &KoWmfReadPrivate::startDoc }, // 77
       { 0 }, // 78
-      { 0 }, // 79
-      { &KoWmfReadPrivate::createEmptyObject }, // 80
+      { &KoWmfReadPrivate::startPage }, // 79
+      { &KoWmfReadPrivate::endPage }, // 80
       { 0 }, // 81
-      { &KoWmfReadPrivate::createEmptyObject }, // 82
-      { &KoWmfReadPrivate::createPenIndirect }, // 83
-      { &KoWmfReadPrivate::createFontIndirect }, // 84
-      { &KoWmfReadPrivate::createBrushIndirect }, //85
-      { 0 }, //86
+      { 0 }, // 82
+      { 0 }, // 83
+      { 0 }, // 84
+      { 0 }, // 85
+      { 0 }, // 86
       { 0 }, // 87
-      { &KoWmfReadPrivate::createEmptyObject } // 88
+      { 0 }, // 88
+      { 0 }, // 89
+      { 0 }, // 90
+      { 0 }, // 91
+      { 0 }, // 92
+      { 0 }, // 93
+      { &KoWmfReadPrivate::endDoc }, // 94
+      { 0 }, // 95
+      // 0x5F last function until 0xF0
+      { &KoWmfReadPrivate::deleteObject }, // 96
+      { 0 }, // 97
+      { 0 }, // 98
+      { 0 }, // 99
+      { 0 }, // 100
+      { 0 }, // 101
+      { 0 }, // 102
+      { &KoWmfReadPrivate::createPalette }, // 103
+      { &KoWmfReadPrivate::createBrush }, // 104
+      { &KoWmfReadPrivate::createPatternBrush }, // 105
+      { &KoWmfReadPrivate::createPenIndirect }, // 106
+      { &KoWmfReadPrivate::createFontIndirect }, // 107
+      { &KoWmfReadPrivate::createBrushIndirect }, //108
+      { &KoWmfReadPrivate::createBitmapIndirect }, //109
+      { &KoWmfReadPrivate::createBitmap }, // 110
+      { &KoWmfReadPrivate::createRegion } // 111
     };
 
 

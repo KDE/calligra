@@ -79,7 +79,13 @@ bool KoWmfWrite::begin() {
         d->mSt << (Q_UINT32)0;
     }
 
-    // initialize a stack with 4 objects
+    // initialize the stack of objects
+    // Pen
+    d->mSt << (Q_UINT32)8 << (Q_UINT16)0x02FA;
+    d->mSt << (Q_UINT16)5 << (Q_UINT16)0 << (Q_UINT16)0 << (Q_UINT32)0;
+    // Brush
+    d->mSt << (Q_UINT32)7 << (Q_UINT16)0x02FC;
+    d->mSt << (Q_UINT16)1 << (Q_UINT32)0 << (Q_UINT16)0;
     for ( int i=0 ; i < 4 ; i++ ) {
         d->mSt << (Q_UINT32)8 << (Q_UINT16)0x02FA << (Q_UINT16)0 << (Q_UINT32)0 << (Q_UINT32)0;
     }
@@ -110,7 +116,7 @@ bool KoWmfWrite::end() {
     d->mSt << (Q_INT16)d->mBBox.left() << (Q_INT16)d->mBBox.top() << (Q_INT16)d->mBBox.right() << (Q_INT16)d->mBBox.bottom();
     d->mSt << (Q_UINT16)d->mDpi << (Q_UINT32)0 << checksum;
     d->mSt << (Q_UINT16)1 << (Q_UINT16)9 << (Q_UINT16)0x300 << (Q_UINT32)(d->mFileOut.size()/2);
-    d->mSt << (Q_UINT16)4 << (Q_UINT32)d->mMaxRecordSize << (Q_UINT16)0;
+    d->mSt << (Q_UINT16)6 << (Q_UINT32)d->mMaxRecordSize << (Q_UINT16)0;
 
     d->mFileOut.close();
     
@@ -132,8 +138,11 @@ void KoWmfWrite::setPen( const QPen &pen ) {
     int style;
     int max = sizeof(koWmfStylePen) / sizeof(Qt::SolidLine);
 
+    // we can't delete an object currently selected
+    // select another object
+    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x012D << (Q_UINT16)0;
     // delete object
-    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x01f0 << (Q_UINT16)1;
+    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x01f0 << (Q_UINT16)2;
 
     for ( style=0 ; style < max ; style++ ) {
         if ( koWmfStylePen[ style ] == pen.style() ) break;
@@ -146,7 +155,7 @@ void KoWmfWrite::setPen( const QPen &pen ) {
     d->mSt << (Q_UINT16)style << (Q_UINT16)pen.width() << (Q_UINT16)0 << (Q_UINT32)winColor( pen.color() );
 
     // select object
-    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x012D << (Q_UINT16)1;
+    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x012D << (Q_UINT16)2;
 }
 
 
@@ -154,8 +163,11 @@ void KoWmfWrite::setBrush( const QBrush &brush ) {
     int style;
     int max = sizeof(koWmfStyleBrush) / sizeof(Qt::NoBrush);
 
+    // we can't delete an object currently selected
+    // select another object
+    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x012D << (Q_UINT16)1;
     // delete object
-    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x01f0 << (Q_UINT16)2;
+    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x01f0 << (Q_UINT16)3;
 
     for ( style=0 ; style < max ; style++ ) {
         if ( koWmfStyleBrush[ style ] == brush.style() ) break;
@@ -168,7 +180,7 @@ void KoWmfWrite::setBrush( const QBrush &brush ) {
     d->mSt << (Q_UINT16)style << (Q_UINT32)winColor( brush.color() ) << (Q_UINT16)0;
 
     // select object
-    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x012D << (Q_UINT16)2;
+    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x012D << (Q_UINT16)3;
 }
 
 
@@ -199,10 +211,10 @@ void KoWmfWrite::setWindow( int left, int top, int width, int height ) {
     d->mBBox.setRect( left, top, width, height );
 
     // windowOrg
-    d->mSt << (Q_UINT32)5 << (Q_UINT16)0x020D << (Q_UINT16)top << (Q_UINT16)left;
+    d->mSt << (Q_UINT32)5 << (Q_UINT16)0x020B << (Q_UINT16)top << (Q_UINT16)left;
 
     // windowExt
-    d->mSt << (Q_UINT32)5 << (Q_UINT16)0x020E << (Q_UINT16)height << (Q_UINT16)width;
+    d->mSt << (Q_UINT32)5 << (Q_UINT16)0x020C << (Q_UINT16)height << (Q_UINT16)width;
 }
 
 
@@ -334,26 +346,29 @@ void KoWmfWrite::drawPolygon( const QPointArray &pa, bool  ) {
 }
 
 
-void KoWmfWrite::drawPolyPolygon( int numberPoly, const QPointArray pa[], bool  ) {
+void KoWmfWrite::drawPolyPolygon( QPtrList<QPointArray>& listPa, bool ) {
+
+    QPointArray *pa;
     int sizeArrayPoly = 0;
 
-    for ( int i=0 ; i < numberPoly ; i++ ) {
-        sizeArrayPoly += (pa[ i ].size() * 2);
+    for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
+        sizeArrayPoly += (pa->size() * 2);
     }
-    int size = 4 + numberPoly + sizeArrayPoly;
-    d->mSt << (Q_UINT32)size << (Q_UINT16)0x0538 << (Q_UINT16)numberPoly;
+    int size = 4 + listPa.count() + sizeArrayPoly;
+    d->mSt << (Q_UINT32)size << (Q_UINT16)0x0538 << (Q_UINT16)listPa.count();
 
     // number of point for each Polygon
-    for ( int i=0 ; i < numberPoly ; i++ ) {
-        d->mSt << (Q_UINT16)pa[ i ].size();
+    for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
+        d->mSt << (Q_UINT16)pa->size();
     }
 
     // list of points
-    for ( int i=0 ; i < numberPoly ; i++ ) {
-        pointArray( pa[ i ] );
+    for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
+        pointArray( *pa );
     }
 
     d->mMaxRecordSize = QMAX( d->mMaxRecordSize, size );
+
 }
 
 

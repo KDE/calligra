@@ -27,6 +27,8 @@
 #include <qimage.h>
 #include <qwmatrix.h>
 #include <qstring.h>
+#include <qptrlist.h>
+#include <qpointarray.h>
 
 class KoWmfReadPrivate;
 
@@ -130,9 +132,8 @@ public:
     virtual void  drawPolyline( const QPointArray &pa ) = 0;
     virtual void  drawPolygon( const QPointArray &pa, bool winding=FALSE ) = 0;
     // drawPolyPolygon draw the XOR of a list of polygons
-    // pa : a table of polygon
-    // numberPoly : the number of polygons in the table
-    virtual void  drawPolyPolygon( int numberPoly, const QPointArray pa[], bool winding=FALSE ) = 0;
+    // listPa : list of polygons
+    virtual void  drawPolyPolygon( QPtrList<QPointArray>& listPa, bool winding=FALSE ) = 0;
     virtual void  drawImage( int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 ) = 0;
 
     // Text drawing functions

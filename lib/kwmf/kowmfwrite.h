@@ -28,6 +28,8 @@
 #include <qstring.h>
 #include <qwmatrix.h>
 #include <qimage.h>
+#include <qptrlist.h>
+#include <qpointarray.h>
 
 class KoWmfWritePrivate;
 
@@ -103,9 +105,8 @@ public:
     void  drawPolyline( const QPointArray& pa );
     void  drawPolygon( const QPointArray& pa, bool winding=FALSE );
     // drawPolyPolygon draw the XOR of a list of polygons
-    // tabpa : a table of polygon
-    // numberPoly : the number of polygons in the table
-    void  drawPolyPolygon( int numberPoly, const QPointArray pa[], bool winding=FALSE );
+    // listPa : list of polygons
+    void  drawPolyPolygon( QPtrList<QPointArray>& listPa, bool winding=FALSE );
     void  drawImage( int left, int top, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
 
     // Text drawing functions

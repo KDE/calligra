@@ -253,16 +253,16 @@ void KoWmfPaint::drawPolygon( const QPointArray &pa, bool winding ) {
 }
 
 
-void KoWmfPaint::drawPolyPolygon( int numberPoly, const QPointArray pa[], bool winding ) {
-    int i;
+void KoWmfPaint::drawPolyPolygon( QPtrList<QPointArray>& listPa, bool winding ) {
+    QPointArray *pa;
     
     mPainter.save();
     QBrush brush = mPainter.brush();
 
     // define clipping region
-    QRegion region; 
-    for ( i=0 ; i < numberPoly ; i++ ) {
-        region = region.eor( pa[i] );
+    QRegion region;
+    for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
+        region = region.eor( *pa );
     }
     mPainter.setClipRegion( region, QPainter::CoordPainter );
 
@@ -275,8 +275,8 @@ void KoWmfPaint::drawPolyPolygon( int numberPoly, const QPointArray pa[], bool w
     mPainter.setClipping( false );
     if ( mPainter.pen().style() != Qt::NoPen ) {
         mPainter.setBrush( Qt::NoBrush );
-        for ( i=0 ; i < numberPoly ; i++ ) {
-            mPainter.drawPolygon( pa[i], winding );
+        for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
+            mPainter.drawPolygon( *pa, winding );
         }
     }
 

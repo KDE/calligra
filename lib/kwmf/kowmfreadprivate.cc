@@ -22,6 +22,7 @@
 #include <qfileinfo.h>
 #include <qimage.h>
 #include <qwmatrix.h>
+#include <qptrlist.h>
 #include <qpointarray.h>
 #include <qdatastream.h>
 #include <kdebug.h>
@@ -86,7 +87,6 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
     mStandard = false;
     mPlaceable = false;
     mEnhanced = false;
-
 
     //----- Read placeable metafile header
     st >> pheader.key;
@@ -273,10 +273,10 @@ bool KoWmfReadPrivate::play( KoWmfRead* readWmf )
              * lower 8 digits of the function => entry in the table
              */
             numFunction &= 0xFF;
-            if ( numFunction > 0x48 ) {
-                numFunction -= 0xA7;
+            if ( numFunction > 0x5F ) {
+                numFunction -= 0x90;
             }
-            if ( (numFunction > 88) || (koWmfFunc[ numFunction ].method == 0) ) {
+            if ( (numFunction > 111) || (koWmfFunc[ numFunction ].method == 0) ) {
                 // function outside WMF specification
                 kdDebug() << "KoWmfReadPrivate::paint : BROKEN WMF file" << endl;
                 mValid = false;    
@@ -338,7 +338,7 @@ void KoWmfReadPrivate::setWindowOrg( Q_UINT32, QDataStream& stream )
 //    kdDebug() << "Org : (" << left << ", "  << top << ")  " << endl;
 }
 
-/*  TODO : analyse the consequence of negative width and height
+/*  TODO : deeper look in negative width and height
 */
 
 void KoWmfReadPrivate::setWindowExt( Q_UINT32, QDataStream& stream )
@@ -429,25 +429,26 @@ void KoWmfReadPrivate::polygon( Q_UINT32, QDataStream& stream )
 void KoWmfReadPrivate::polyPolygon( Q_UINT32, QDataStream& stream )
 {
     Q_UINT16 numberPoly;
+    Q_UINT16 sizePoly;
+    QPtrList<QPointArray> listPa;
 
     stream >> numberPoly;
-    Q_UINT16 *numberPoint = new Q_UINT16[ numberPoly ];
-    QPointArray *pa = new QPointArray[ numberPoly ];
+    
+    listPa.setAutoDelete( true );
     for ( int i=0 ; i < numberPoly ; i++ ) {
-        stream >> numberPoint[i];
+        stream >> sizePoly;
+        listPa.append( new QPointArray( sizePoly ) );
     }
 
     // list of point array
-    for ( int i=0 ; i < numberPoly ; i++ ) {
-        pa[i].resize( numberPoint[i] );
-        pointArray( stream, pa[i] );
+    QPointArray *pa;
+    for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
+        pointArray( stream, *pa );
     }
 
     // draw polygon's
-    mReadWmf->drawPolyPolygon( numberPoly, pa, mWinding );
-
-    delete[] pa;
-    delete[] numberPoint;
+    mReadWmf->drawPolyPolygon( listPa, mWinding );
+    listPa.clear();
 }
 
 
@@ -672,15 +673,17 @@ void KoWmfReadPrivate::setTextAlign( Q_UINT32, QDataStream& stream )
 
 void KoWmfReadPrivate::textOut( Q_UINT32, QDataStream& )
 {
-/*  TODO: implementation 'textOut()'
-*/
+    if ( mNbrFunc ) {
+        kdDebug() << "textOut : unimplemented " << endl;
+    }
 }
 
 
 void KoWmfReadPrivate::extTextOut( Q_UINT32 , QDataStream&  )
 {
-/*  TODO: implementation 'exttextOut()'
-*/
+    if ( mNbrFunc ) {
+        kdDebug() << "extTextOut : unimplemented " << endl;
+    }
 }
 
 
@@ -690,8 +693,9 @@ void KoWmfReadPrivate::extTextOut( Q_UINT32 , QDataStream&  )
 
 void KoWmfReadPrivate::SetStretchBltMode( Q_UINT32, QDataStream& )
 {
-// TODO
-//    kdDebug() << "KoWmfReadPrivate::SetStretchBltMode : NOT IMPLEMENTED " << endl;
+    if ( mNbrFunc ) {
+        kdDebug() << "SetStretchBltMode : unimplemented " << endl;
+    }
 }
 
 
@@ -845,14 +849,12 @@ void KoWmfReadPrivate::deleteObject( Q_UINT32, QDataStream& stream )
 }
 
 
-void KoWmfReadPrivate::createEmptyObject( Q_UINT32, QDataStream& )
+void KoWmfReadPrivate::createEmptyObject()
 {
     // allocation of an empty object (to keep object counting in sync)
     KoWmfPenHandle* handle = new KoWmfPenHandle;
 
-    if ( addHandle( handle ) ) {
-        kdDebug() << "KoWmfReadPrivate: unimplemented createObject " << endl;
-    }
+    addHandle( handle );
 }
 
 
@@ -953,21 +955,169 @@ void KoWmfReadPrivate::createFontIndirect( Q_UINT32 size, QDataStream& stream )
 //-----------------------------------------------------------------------------
 // Misc functions
 
-void KoWmfReadPrivate::notyet( Q_UINT32, QDataStream& )
-{
-}
-void KoWmfReadPrivate::region( Q_UINT32, QDataStream& )
-{
-//    kdDebug() << "KoWmfReadPrivate::region : NOT IMPLEMENTED " << endl;
-}
-void KoWmfReadPrivate::palette( Q_UINT32, QDataStream& )
-{
-//    kdDebug() << "KoWmfReadPrivate::palatte : NOT IMPLEMENTED " << endl;
-}
-
 void KoWmfReadPrivate::end( Q_UINT32, QDataStream& )
 {
 }
+
+Q_UINT16 KoWmfReadPrivate::calcCheckSum( WmfPlaceableHeader* apmfh )
+{
+    Q_UINT16*  lpWord;
+    Q_UINT16   wResult, i;
+
+    // Start with the first word
+    wResult = *( lpWord = ( Q_UINT16* )( apmfh ) );
+    // XOR in each of the other 9 words
+    for( i=1; i<=9; i++ )
+    {
+        wResult ^= lpWord[ i ];
+    }
+    return wResult;
+}
+
+
+void KoWmfReadPrivate::notyet( Q_UINT32, QDataStream& )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::region( Q_UINT32, QDataStream& )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "region : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::palette( Q_UINT32, QDataStream& )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "palette : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::escape( Q_UINT32, QDataStream& )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "escape : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::setRelAbs( Q_UINT32, QDataStream& )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "setRelAbs : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::setMapMode( Q_UINT32, QDataStream& )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "setMapMode : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::extFloodFill( Q_UINT32, QDataStream&  )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "extFloodFill : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::startDoc( Q_UINT32, QDataStream&  )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "startDoc : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::startPage( Q_UINT32, QDataStream&  )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "startPage : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::endDoc( Q_UINT32, QDataStream&  )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "endDoc : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::endPage( Q_UINT32, QDataStream&  )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "endPage : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::resetDC( Q_UINT32, QDataStream&  )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "resetDC : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::bitBlt( Q_UINT32, QDataStream&  )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "bitBlt : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::setDibToDev( Q_UINT32, QDataStream&  )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "setDibToDev : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::createBrush( Q_UINT32, QDataStream&  )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "createBrush : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::createPatternBrush( Q_UINT32, QDataStream&  )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "createPatternBrush : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::createBitmap( Q_UINT32, QDataStream&  )
+{
+    if ( mNbrFunc ) {
+        kdDebug() << "createBitmap : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::createBitmapIndirect( Q_UINT32, QDataStream&  )
+{
+    createEmptyObject();
+    if ( mNbrFunc ) {
+        kdDebug() << "createBitmapIndirect : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::createPalette( Q_UINT32, QDataStream&  )
+{
+    createEmptyObject();
+    if ( mNbrFunc ) {
+        kdDebug() << "createPalette : unimplemented " << endl;
+    }
+}
+
+void KoWmfReadPrivate::createRegion( Q_UINT32, QDataStream&  )
+{
+    createEmptyObject();
+    if ( mNbrFunc ) {
+        kdDebug() << "createRegion : unimplemented " << endl;
+    }
+}
+
 
 
 //-----------------------------------------------------------------------------
@@ -1003,22 +1153,6 @@ void KoWmfReadPrivate::deleteHandle( int idx )
     else {
         kdDebug() << "KoWmfReadPrivate::deletehandle() : bad index number" << endl;
     }
-}
-
-
-Q_UINT16 KoWmfReadPrivate::calcCheckSum( WmfPlaceableHeader* apmfh )
-{
-    Q_UINT16*  lpWord;
-    Q_UINT16   wResult, i;
-
-    // Start with the first word
-    wResult = *( lpWord = ( Q_UINT16* )( apmfh ) );
-    // XOR in each of the other 9 words
-    for( i=1; i<=9; i++ )
-    {
-        wResult ^= lpWord[ i ];
-    }
-    return wResult;
 }
 
 
