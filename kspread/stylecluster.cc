@@ -308,7 +308,7 @@ void StyleCluster::simplify(  QValueStack<StyleClusterQuad**> path ) {
 
   
   if((*current_node)->numChildren() == 4) { //we can simplify - all children in the quad are pointing to use.
-    (*current_node)->m_type == StyleClusterQuad::Simple;
+    (*current_node)->m_type = StyleClusterQuad::Simple;
 	  
     if(!last_node) {
       return;
@@ -328,7 +328,7 @@ void StyleCluster::simplify(  QValueStack<StyleClusterQuad**> path ) {
       //The style in the parent is different, but we are the only one using that style
       last_node->setStyle( (*current_node)->getStyle() );
       delete (*current_node);
-      *current_node = 0;
+      (*current_node) = 0;
       simplify(path);
     } else {
       //The style in the parent is different, and it has children using that style, so there is nothing we can do.
@@ -357,6 +357,7 @@ StyleClusterQuad* StyleCluster::lookupNode(int x, int y) {
   {
     last_node = current_node;
     half_quad_size /= 2;
+    kdDebug() << "Looking up size " << half_quad_size << endl;
     if( x - x_offset < half_quad_size ) {
       if( y - y_offset < half_quad_size ) {
         current_node = current_node->m_topLeft;

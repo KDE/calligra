@@ -121,14 +121,17 @@ void StyleClusterTester::run()
   stylecluster.insert(1000,2000, m_sheet->doc()->styleManager()->defaultStyle());
   CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(1000,2000)); 
   
- /*
+ 
   stylecluster.insert(0,0, style1);
+  kdDebug() << "1. Insert done" << endl;
   stylecluster.insert(1,0, style1);
+  kdDebug() << "2. Insert done" << endl;
   stylecluster.insert(0,1, style1);
-  CHECK_FAILS_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
-  stylecluster.insert(1,1, style1);
+  kdDebug() << "3. Insert done" << endl;
+//  CHECK_FAILS_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
+//  stylecluster.insert(1,1, style1);
   
-  CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
+/*  CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
   CHECK_QUAD(stylecluster.lookupNode(1,0), stylecluster.lookupNode(1,1));
 
   CHECK_STYLE(stylecluster.lookup(0,0), *style1);
@@ -136,8 +139,8 @@ void StyleClusterTester::run()
   CHECK_STYLE(stylecluster.lookup(1,0), *style1);
   CHECK_STYLE(stylecluster.lookup(1,1), *style1);
   CHECK_STYLE(stylecluster.lookup(0,2), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
-
 */
+
 
 
 }
