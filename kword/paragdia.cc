@@ -20,8 +20,8 @@
 #include "paragdia.h"
 #include "paragdia_p.h"
 #include "kwdoc.h"
-#include "counter.h"
-#include "defs.h"
+//#include "defs.h"
+#include <koparagcounter.h>
 
 #include <qbrush.h>
 #include <qbuttongroup.h>
@@ -96,13 +96,13 @@ QString KWSpinBox::mapValueToText( int value )
         case NUM:
             return QString::number(value);
         case ALPHAB_L:
-            return makeAlphaLowerNumber( value );
+            return KoParagCounter::makeAlphaLowerNumber( value );
         case ALPHAB_U:
-            return makeAlphaUpperNumber( value );
+            return KoParagCounter::makeAlphaUpperNumber( value );
         case ROM_NUM_L:
-            return makeRomanNumber( value );
+            return KoParagCounter::makeRomanNumber( value );
         case ROM_NUM_U:
-            return makeRomanNumber( value ).upper();
+            return KoParagCounter::makeRomanNumber( value ).upper();
         case NONE:
         default:
             return QString::null;
@@ -300,7 +300,7 @@ void KWBorderPreview::drawContents( QPainter* painter )
     }
 }
 
-QPen KWBorderPreview::setBorderPen( Border _brd )
+QPen KWBorderPreview::setBorderPen( KoBorder _brd )
 {
     QPen pen( black, 1, SolidLine );
 
@@ -308,19 +308,19 @@ QPen KWBorderPreview::setBorderPen( Border _brd )
     pen.setColor( _brd.color );
 
     switch ( _brd.style ) {
-    case Border::SOLID:
+    case KoBorder::SOLID:
         pen.setStyle( SolidLine );
         break;
-    case Border::DASH:
+    case KoBorder::DASH:
         pen.setStyle( DashLine );
         break;
-    case Border::DOT:
+    case KoBorder::DOT:
         pen.setStyle( DotLine );
         break;
-    case Border::DASH_DOT:
+    case KoBorder::DASH_DOT:
         pen.setStyle( DashDotLine );
         break;
-    case Border::DASH_DOT_DOT:
+    case KoBorder::DASH_DOT_DOT:
         pen.setStyle( DashDotDotLine );
         break;
     }
@@ -354,7 +354,7 @@ void KWNumPreview::setCounter( const KoParagCounter & counter )
     repaint( true );
 }
 
-void KWNumPreview::setStyle( KWStyle * style )
+void KWNumPreview::setStyle( KoStyle * style )
 {
     KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
     parag->setStyle( style );
@@ -829,11 +829,11 @@ KWParagBorderWidget::KWParagBorderWidget( QWidget * parent, const char * name )
     grid->addWidget( lStyle, 0, 0 );
 
     cStyle = new QComboBox( false, this );
-    cStyle->insertItem( Border::getStyle( Border::SOLID ) );
-    cStyle->insertItem( Border::getStyle( Border::DASH ) );
-    cStyle->insertItem( Border::getStyle( Border::DOT ) );
-    cStyle->insertItem( Border::getStyle( Border::DASH_DOT ) );
-    cStyle->insertItem( Border::getStyle( Border::DASH_DOT_DOT ) );
+    cStyle->insertItem( KoBorder::getStyle( KoBorder::SOLID ) );
+    cStyle->insertItem( KoBorder::getStyle( KoBorder::DASH ) );
+    cStyle->insertItem( KoBorder::getStyle( KoBorder::DOT ) );
+    cStyle->insertItem( KoBorder::getStyle( KoBorder::DASH_DOT ) );
+    cStyle->insertItem( KoBorder::getStyle( KoBorder::DASH_DOT_DOT ) );
     grid->addWidget( cStyle, 1, 0 );
     //connect( cStyle, SIGNAL( activated( const QString & ) ), this, SLOT( brdStyleChanged( const QString & ) ) );
 
@@ -924,11 +924,11 @@ void KWParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
     {
         if( (  ((int)m_topBorder.ptWidth != cWidth->currentText().toInt()) ||(m_topBorder.color != bColor->color() )
-               ||(m_topBorder.style!=Border::getStyle(cStyle->currentText()) )) && bTop->isOn() )
+               ||(m_topBorder.style!=KoBorder::getStyle(cStyle->currentText()) )) && bTop->isOn() )
         {
             m_topBorder.ptWidth = cWidth->currentText().toInt();
             m_topBorder.color = QColor( bColor->color() );
-            m_topBorder.style=Border::getStyle(cStyle->currentText());
+            m_topBorder.style = KoBorder::getStyle(cStyle->currentText());
             prev3->setTopBorder( m_topBorder );
         }
         else
@@ -938,11 +938,11 @@ void KWParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
     {
         if( (  ((int)m_bottomBorder.ptWidth != cWidth->currentText().toInt()) ||(m_bottomBorder.color != bColor->color() )
-               ||(m_bottomBorder.style!=Border::getStyle(cStyle->currentText()) )) && bBottom->isOn() )
+               ||(m_bottomBorder.style!=KoBorder::getStyle(cStyle->currentText()) )) && bBottom->isOn() )
         {
             m_bottomBorder.ptWidth = cWidth->currentText().toInt();
             m_bottomBorder.color = QColor( bColor->color() );
-            m_bottomBorder.style=Border::getStyle(cStyle->currentText());
+            m_bottomBorder.style=KoBorder::getStyle(cStyle->currentText());
             prev3->setBottomBorder( m_bottomBorder );
         }
         else
@@ -954,11 +954,11 @@ void KWParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
     {
 
         if( (  ((int)m_leftBorder.ptWidth != cWidth->currentText().toInt()) ||(m_leftBorder.color != bColor->color() )
-               ||(m_leftBorder.style!=Border::getStyle(cStyle->currentText()) )) && bLeft->isOn() )
+               ||(m_leftBorder.style!=KoBorder::getStyle(cStyle->currentText()) )) && bLeft->isOn() )
         {
             m_leftBorder.ptWidth = cWidth->currentText().toInt();
             m_leftBorder.color = QColor( bColor->color() );
-            m_leftBorder.style=Border::getStyle(cStyle->currentText());
+            m_leftBorder.style=KoBorder::getStyle(cStyle->currentText());
             prev3->setLeftBorder( m_leftBorder );
         }
         else
@@ -969,11 +969,11 @@ void KWParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
     {
 
         if( (  ((int)m_rightBorder.ptWidth != cWidth->currentText().toInt()) ||(m_rightBorder.color != bColor->color() )
-               ||(m_rightBorder.style!=Border::getStyle(cStyle->currentText()) )) && bRight->isOn() )
+               ||(m_rightBorder.style!=KoBorder::getStyle(cStyle->currentText()) )) && bRight->isOn() )
         {
             m_rightBorder.ptWidth = cWidth->currentText().toInt();
             m_rightBorder.color = bColor->color();
-            m_rightBorder.style=Border::getStyle(cStyle->currentText());
+            m_rightBorder.style=KoBorder::getStyle(cStyle->currentText());
             prev3->setRightBorder( m_rightBorder );
         }
         else
@@ -1003,7 +1003,7 @@ void KWParagBorderWidget::brdLeftToggled( bool _on )
     else {
         m_leftBorder.ptWidth = cWidth->currentText().toInt();
         m_leftBorder.color = bColor->color();
-        m_leftBorder.style= Border::getStyle( cStyle->currentText() );
+        m_leftBorder.style= KoBorder::getStyle( cStyle->currentText() );
     }
     prev3->setLeftBorder( m_leftBorder );
 }
@@ -1015,7 +1015,7 @@ void KWParagBorderWidget::brdRightToggled( bool _on )
     else {
         m_rightBorder.ptWidth = cWidth->currentText().toInt();
         m_rightBorder.color = bColor->color();
-        m_rightBorder.style= Border::getStyle( cStyle->currentText() );
+        m_rightBorder.style= KoBorder::getStyle( cStyle->currentText() );
     }
     prev3->setRightBorder( m_rightBorder );
 }
@@ -1027,7 +1027,7 @@ void KWParagBorderWidget::brdTopToggled( bool _on )
     else {
         m_topBorder.ptWidth = cWidth->currentText().toInt();
         m_topBorder.color = bColor->color();
-        m_topBorder.style= Border::getStyle( cStyle->currentText() );
+        m_topBorder.style= KoBorder::getStyle( cStyle->currentText() );
     }
     prev3->setTopBorder( m_topBorder );
 }
@@ -1039,7 +1039,7 @@ void KWParagBorderWidget::brdBottomToggled( bool _on )
     else {
         m_bottomBorder.ptWidth = cWidth->currentText().toInt();
         m_bottomBorder.color = bColor->color();
-        m_bottomBorder.style=Border::getStyle(cStyle->currentText());
+        m_bottomBorder.style=KoBorder::getStyle(cStyle->currentText());
     }
     prev3->setBottomBorder( m_bottomBorder );
 }
@@ -1115,8 +1115,8 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
             ,  KoParagCounter::STYLE_CIRCLEBULLET , true));
     stylesList.append( new StyleRepresenter(i18n( "Custom Bullet" )
             ,  KoParagCounter::STYLE_CUSTOMBULLET , true));
-    stylesList.append( new StyleRepresenter(i18n( "None" ) , KoParagCounter::STYLE_NONE));
 
+    stylesList.append( new StyleRepresenter(i18n( "None" ) , KoParagCounter::STYLE_NONE));
     lstStyle = new QListBox( gStyle, "styleListBox" );
     fillStyleCombo();
     layout8->addWidget( lstStyle );
@@ -1207,7 +1207,8 @@ void KWParagCounterWidget::fillStyleCombo(KoParagCounter::Numbering type) {
         if(style.current()->style() == KoParagCounter::STYLE_NONE) {
             if(type == KoParagCounter::NUM_NONE)
                 lstStyle->insertItem( style.current()->name() );
-        } else if(type == KoParagCounter::NUM_LIST || !style.current()->listStyle())
+        }
+        else if(type == KoParagCounter::NUM_LIST || !style.current()->listStyle())
             if(type != KoParagCounter::NUM_NONE)
                 lstStyle->insertItem( style.current()->name() );
         ++style;
@@ -1302,10 +1303,16 @@ void KWParagCounterWidget::numTypeChanged( int nType ) {
 }
 
 void KWParagCounterWidget::display( const KWParagLayout & lay ) {
+    KoParagCounter::Style style =KoParagCounter::STYLE_NONE;
     if ( lay.counter )
+    {
+        style=lay.counter->style();
         m_counter = *lay.counter;
+    }
     else
+    {
         m_counter = KoParagCounter();
+    }
     preview->setCounter( m_counter );
     preview->setStyle(lay.style);
     styleBuffer = 999;
@@ -1314,9 +1321,9 @@ void KWParagCounterWidget::display( const KWParagLayout & lay ) {
     numTypeChanged( m_counter.numbering() );
 
     unsigned int i;
-    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != m_counter.style(); i++);
-    lstStyle->setCurrentItem(i);
 
+    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != style/*m_counter.style()*/; i++);
+    lstStyle->setCurrentItem(i);
     bCustom->setText( m_counter.customBulletCharacter() );
     if ( !m_counter.customBulletFont().isEmpty() )
         bCustom->setFont( QFont( m_counter.customBulletFont() ) );
@@ -1358,21 +1365,8 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, QWidget * p
     eTabPos->setValidator( new QDoubleValidator( eTabPos ) );
     grid->addWidget( eTabPos, 1, 0 );
 
-    // ## move to KWUnit
-    QString unitText;
-    switch ( m_unit )
-    {
-        case KWUnit::U_MM:
-            unitText=i18n("Millimeters (mm)");
-            break;
-        case KWUnit::U_INCH:
-            unitText=i18n("Inches (inch)");
-            break;
-        case KWUnit::U_PT:
-        default:
-            unitText=i18n("Points (pt)" );
-    }
-    lTab->setText(i18n( "1 is a unit name", "Tabulator positions are given in %1" ).arg(unitText));
+    QString unitDescription = KWUnit::unitDescription( m_unit );
+    lTab->setText(i18n( "1 is a unit name", "Tabulator positions are given in %1" ).arg(unitDescription));
 
     KButtonBox * bbTabs = new KButtonBox( this );
     bAdd = bbTabs->addButton( i18n( "Add" ), false );

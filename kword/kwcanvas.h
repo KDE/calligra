@@ -83,11 +83,11 @@ public:
 
     // --
     // frame border
-    void setLeftFrameBorder( Border _frmBrd, bool _b );
-    void setRightFrameBorder( Border _frmBrd, bool _b );
-    void setTopFrameBorder( Border _frmBrd, bool _b );
-    void setBottomFrameBorder( Border _frmBrd, bool _b );
-    void setOutlineFrameBorder( Border _frmBrd, bool _b );
+    void setLeftFrameBorder( KoBorder _frmBrd, bool _b );
+    void setRightFrameBorder( KoBorder _frmBrd, bool _b );
+    void setTopFrameBorder( KoBorder _frmBrd, bool _b );
+    void setBottomFrameBorder( KoBorder _frmBrd, bool _b );
+    void setOutlineFrameBorder( KoBorder _frmBrd, bool _b );
 
     void setFrameBackgroundColor( const QBrush &backColor );
 

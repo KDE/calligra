@@ -31,7 +31,7 @@
 
 #include "kwchangecasedia.h"
 #include "kwview.h"
-#include "defs.h"
+#include "kwtextframeset.h"
 
 
 KWChangeCaseDia::KWChangeCaseDia( QWidget *parent, const char *name )
@@ -56,17 +56,17 @@ KWChangeCaseDia::KWChangeCaseDia( QWidget *parent, const char *name )
 
 }
 
-TypeOfCase KWChangeCaseDia::getTypeOfCase()
+int KWChangeCaseDia::getTypeOfCase()
 {
-    TypeOfCase type=UpperCase;
+    KWTextFrameSet::TypeOfCase type=KWTextFrameSet::UpperCase;
     if( m_upperCase->isChecked())
-        type=UpperCase;
+        type=KWTextFrameSet::UpperCase;
     else if(m_lowerCase->isChecked())
-        type=LowerCase;
+        type=KWTextFrameSet::LowerCase;
     else if(m_titleCase->isChecked())
-        type=TitleCase;
+        type=KWTextFrameSet::TitleCase;
     else if( m_toggleCase->isChecked())
-        type=ToggleCase;
+        type=KWTextFrameSet::ToggleCase;
     return type;
 }
 

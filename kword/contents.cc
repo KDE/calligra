@@ -18,16 +18,19 @@
 */
 
 #include <qlist.h>
-
+#include "kwstyle.h"
 #include <koRuler.h>
+#include <koparagcounter.h>
+#include <kotextobject.h>
 
 #include "contents.h"
 #include "kwdoc.h"
 #include "kwframe.h"
 #include "kwstyle.h"
 #include "kwcommand.h"
-#include "counter.h"
 #include "kwtextframeset.h"
+#include "kwtextdocument.h"
+#include "kwtextparag.h"
 
 #include <kcommand.h>
 #include <klocale.h>
@@ -101,8 +104,8 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
         KWTextParag * p = mapIt.data();    // Parag in the body
 
         // Find page number for paragraph
-        QPoint pt;
-        KWFrame * frame = fs->internalToNormal( QPoint(0, p->rect().top()), pt );
+        KoPoint pt;
+        KWFrame * frame = fs->internalToDocument( QPoint(0, p->rect().top()), pt );
         if ( frame ) // let's be safe
         {
             parag->append( "\t" );
@@ -113,7 +116,7 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
         int depth = p->counter()->depth();    // we checked for p->counter() before putting in the map
         KWStyle * tocStyle = findOrCreateTOCStyle( fs, depth );
         parag->setParagLayout( tocStyle->paragLayout() );
-        KWTextFormat * newFormat = fs->zoomFormatFont( & tocStyle->format() );
+        KWTextFormat * newFormat = fs->textObject()->zoomFormatFont( & tocStyle->format() );
         parag->setFormat( 0, parag->string()->length(), newFormat );
     }
     // The setParagLayout ruined it, so here it is again :)
@@ -133,7 +136,7 @@ QTextCursor *KWInsertTOCCommand::unexecute( QTextCursor *c )
 
 QTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMacroCommand * /*macroCmd*/ )
 {
-    KWTextDocument * textdoc = fs->textDocument();
+    KoTextDocument * textdoc = fs->textDocument();
     // Remove existing table of contents, based on the style
     QTextCursor start( textdoc );
     QTextCursor end( textdoc );
@@ -232,12 +235,12 @@ KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int dept
         style->format().setPointSize( depth==-1 ? 20 : depth==0 ? 16 : 12 );
         if ( depth == -1 )
         {
-            style->paragLayout().topBorder = Border( Qt::black, Border::SOLID, 1 );
-            style->paragLayout().bottomBorder = Border( Qt::black, Border::SOLID, 1 );
+            style->paragLayout().topBorder = KoBorder( Qt::black, KoBorder::SOLID, 1 );
+            style->paragLayout().bottomBorder = KoBorder( Qt::black, KoBorder::SOLID, 1 );
             // Old kword had only top and bottom. But borders are drawn differently now
             // (not the whole line anymore), so we need the 4 borders.
-            style->paragLayout().leftBorder = Border( Qt::black, Border::SOLID, 1 );
-            style->paragLayout().rightBorder = Border( Qt::black, Border::SOLID, 1 );
+            style->paragLayout().leftBorder = KoBorder( Qt::black, KoBorder::SOLID, 1 );
+            style->paragLayout().rightBorder = KoBorder( Qt::black, KoBorder::SOLID, 1 );
             style->paragLayout().alignment = Qt::AlignCenter;
         }
         else

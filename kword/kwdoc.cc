@@ -157,7 +157,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     setInstance( KWFactory::global(), false );
 
-    m_gridX = m_gridY = 10;
+    m_gridX = m_gridY = 10.0;
     m_indent = MM_TO_POINT( 10.0 );
 
     m_iNbPagePerRow = 4;
@@ -196,13 +196,19 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_pixmapMap = 0L;
     m_clipartMap = 0L;
     m_pasteFramesetsMap = 0L;
+    m_varFormatCollection = new KWVariableFormatCollection;
 
-    slDataBase = new KWSerialLetterDataBase( this );
+    m_slDataBase = new KWSerialLetterDataBase( this );
     slRecordNum = -1;
 
     // Get default font from KDE
     m_defaultFont = KGlobalSettings::generalFont();
     KGlobal::charsets()->setQFont(m_defaultFont, KGlobal::locale()->charset());
+
+    // Layout text at 1440 DPI
+    setPtToLayoutUnitFactor( 20 );
+
+    m_defaultFont.setPointSize( ptToLayoutUnit( m_defaultFont.pointSize() ) );
 
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;
     m_pKSpellConfig=0;
@@ -223,6 +229,8 @@ KWDocument::~KWDocument()
     delete m_autoFormat;
     delete m_formulaDocument;
     delete m_commandHistory;
+    delete m_varFormatCollection;
+    delete m_slDataBase;
 }
 
 void KWDocument::initConfig()
@@ -246,8 +254,8 @@ void KWDocument::initConfig()
   if(config->hasGroup("Interface" ) )
   {
       config->setGroup( "Interface" );
-      setGridY(config->readNumEntry("GridY",10));
-      setGridX(config->readNumEntry("GridX",10));
+      setGridY(config->readDoubleNumEntry("GridY",10.0));
+      setGridX(config->readDoubleNumEntry("GridX",10.0));
       // Config-file value in mm, default 10 pt
       double indent = MM_TO_POINT( config->readDoubleNumEntry("Indent", POINT_TO_MM(10.0) ) );
       setIndentValue(indent);
@@ -987,7 +995,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_pageHeaderFooter.mmHeaderBodySpacing = POINT_TO_MM( 10 );
     m_pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
 
-    m_mapVariableFormats.clear();
+    m_varFormatCollection->clear();
 
     m_pages = 1;
 
@@ -1126,7 +1134,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 /*
         else if ( name == "SERIALL" ) {
             parser.parseTag( tag, name, lst );
-            slDataBase->load( parser, lst );
+            m_slDataBase->load( parser, lst );
         } */
 
     emit sigProgress(15);
@@ -1191,8 +1199,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     bool _first_footer = FALSE, _even_footer = FALSE, _odd_footer = FALSE;
     bool _first_header = FALSE, _even_header = FALSE, _odd_header = FALSE;
-    //bool _footnotes = FALSE;
-    KWFrameSet * footNotesFS = 0L;
+    bool _footnotes = FALSE;
 
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -1204,14 +1211,9 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         case KWFrameSet::FI_FIRST_FOOTER: _first_footer = TRUE; break;
         case KWFrameSet::FI_EVEN_FOOTER: _odd_footer = TRUE; break;
         case KWFrameSet::FI_ODD_FOOTER: _even_footer = TRUE; break;
-        case KWFrameSet::FI_FOOTNOTE: footNotesFS = fit.current(); /* _footnotes = TRUE; */ break;
+        case KWFrameSet::FI_FOOTNOTE: _footnotes = TRUE; break;
         default: break;
         }
-    }
-    // Not implemented currently -> remove all frames, to avoid problems
-    if ( footNotesFS )
-    {
-	footNotesFS->deleteAllFrames();
     }
 
     // create defaults if they were not in the input file.
@@ -1287,7 +1289,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         frames.append( fs );
     }
 
-#if 0
     if ( !_footnotes ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Footnotes" ) );
         fs->setFrameSetInfo( KWFrameSet::FI_FOOTNOTE );
@@ -1302,7 +1303,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         frames.append( fs );
         fs->setVisible( FALSE );
     }
-#endif
 
 #if 0 // already done !
     KWChild *ch = 0L;
@@ -1407,7 +1407,31 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
 
-        KWStyle *sty = new KWStyle( styleElem, this, m_defaultFont );
+        KWStyle *sty = new KWStyle( QString::null );
+        // Load the paraglayout from the <STYLE> element
+        KoParagLayout lay = KWTextParag::loadParagLayout( styleElem, this, false );
+        // This way, KWTextParag::setParagLayout also sets the style pointer, to this style
+        lay.style = sty;
+        sty->paragLayout() = lay;
+
+        QDomElement nameElem = styleElem.namedItem("NAME").toElement();
+        if ( !nameElem.isNull() )
+        {
+            sty->setName( nameElem.attribute("value") );
+            //kdDebug() << "KWStyle created " << this << " name=" << m_name << endl;
+        } else
+            kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
+
+        // followingStyle is set by KWDocument::loadStyleTemplates after loading all the styles
+        sty->setFollowingStyle( sty );
+
+        QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
+        if ( !formatElem.isNull() )
+            sty->format() = KWTextParag::loadFormat( formatElem, 0L, defaultFont(), this );
+        else
+            kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
+
+        // Style created, now let's try to add it
 
         sty = addStyleTemplate( sty );
 
@@ -1453,38 +1477,6 @@ void KWDocument::removeStyleTemplate ( KWStyle *style ) {
     if( m_styleList.removeRef(style)) {
         // Remember to delete this style when deleting the document
         m_deletedStyles.append(style);
-    }
-}
-
-void KWDocument::moveDownStyleTemplate ( const QString & _styleName )
-{
-    unsigned int pos = 0;
-    for ( KWStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next(), ++pos )
-    {
-        if ( p->name() == _styleName )
-        {
-            KWStyle * next = m_styleList.at(pos+1);
-            if (!next) return;
-            // We have "p" "next" and we want "next" "p"
-            m_styleList.insert( pos, next ); // "next", "p", "next"
-            m_styleList.take( pos+2 );       // Remove last "next"
-            return;
-        }
-    }
-}
-
-void KWDocument::moveUpStyleTemplate ( const QString & _styleName )
-{
-    unsigned int pos = 0;
-    for ( KWStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next(), ++pos )
-    {
-        if ( p->name() == _styleName )
-        {
-            // We have "prev" "p" and we want "p" "prev"
-            m_styleList.insert( pos-1, p ); // "p" "prev" "p"
-            m_styleList.take( pos+1 );      // Remove last "p"
-            return;
-        }
     }
 }
 
@@ -1877,7 +1869,7 @@ QDomDocument KWDocument::saveXML()
     QDomElement styles = doc.createElement( "STYLES" );
     kwdoc.appendChild( styles );
     for ( KWStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
-        p->save( styles );
+        saveStyle( p, styles, this );
 
     // Save the PIXMAPS list
     QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
@@ -1904,7 +1896,7 @@ QDomDocument KWDocument::saveXML()
 
 /*
     out << otag << "<SERIALL>" << endl;
-    slDataBase->save( out );
+    m_slDataBase->save( out );
     out << etag << "</SERIALL>" << endl; */
 
     // Write "OBJECT" tag for every child
@@ -1934,10 +1926,31 @@ QDomDocument KWDocument::saveXML()
     return doc;
 }
 
+void KWDocument::saveStyle( KWStyle *sty, QDomElement parentElem, KoZoomHandler* zh )
+{
+    QDomDocument doc = parentElem.ownerDocument();
+    QDomElement styleElem = doc.createElement( "STYLE" );
+    parentElem.appendChild( styleElem );
+
+    KWTextParag::saveParagLayout( sty->paragLayout(), styleElem );
+
+    if ( sty->followingStyle() )
+    {
+        QDomElement element = doc.createElement( "FOLLOWING" );
+        styleElem.appendChild( element );
+        element.setAttribute( "name", sty->followingStyle()->name() );
+    }
+
+    QDomElement formatElem = KWTextParag::saveFormat( doc, &sty->format(), 0L, 0, 0, zh );
+    styleElem.appendChild( formatElem );
+}
+
 bool KWDocument::completeSaving( KoStore *_store )
 {
     if ( !_store )
         return TRUE;
+
+    QString u = KURL( url() ).path();
 
     QValueList<KoImageKey> saveImages;
     QValueList<KoClipartKey> saveCliparts;
@@ -2437,13 +2450,15 @@ void KWDocument::frameChanged( KWFrame * frame, KWView * view )
     }
     repaintAllViewsExcept( view );
     updateRulerFrameStartEnd();
+    if ( frame && frame->isSelected() )
+        updateFrameStatusBarItem();
 }
 
 void KWDocument::framesChanged( const QList<KWFrame> & frames, KWView * view )
 {
     //kdDebug() << "KWDocument::framesChanged" << endl;
     updateAllFrames();
-    updateRulerFrameStartEnd();
+    // Is there at least one frame with a text runaround set ?
     QListIterator<KWFrame> it( frames );
     for ( ; it.current() ; ++it )
         if ( it.current()->runAround() != KWFrame::RA_NO )
@@ -2452,7 +2467,15 @@ void KWDocument::framesChanged( const QList<KWFrame> & frames, KWView * view )
             layout();
             //kdDebug() << "KWDocument::framesChanged ->repaintAllViewsExcept" << endl;
             repaintAllViewsExcept( view );
-            return;
+            break;
+        }
+    updateRulerFrameStartEnd();
+    // Is at least one frame selected ?
+    QListIterator<KWFrame> it2( frames );
+    for ( ; it2.current() ; ++it2 )
+        if ( it2.current()->isSelected() ) {
+            updateFrameStatusBarItem();
+            break;
         }
 }
 
@@ -2463,6 +2486,9 @@ void KWDocument::setHeaderVisible( bool h )
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameSet = fit.current();
+        //Laurent I don't break this loop when I found a header
+        //because there is several header (FI_FIRST_HEADER, FI_ODD_HEADER etc...
+        //if we break it we can't hide all custom in all header
         if ( frameSet->isAHeader() )
             static_cast<KWTextFrameSet*>(frameSet)->hideCustomItems(h);
     }
@@ -2479,8 +2505,9 @@ void KWDocument::setFooterVisible( bool f )
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameSet = fit.current();
-        //don't break loop because there is some header/footer
-        // (odd, even etc...) If we break it it doesn't work
+         //Laurent I don't break this loop when I found a header
+        //because there is several footer (FI_FIRST_FOOTER, FI_ODD_FOOTER etc...
+        //if we break it we can't hide all custom in all header
         if ( frameSet->isAFooter() )
             static_cast<KWTextFrameSet*>(frameSet)->hideCustomItems(f);
     }
@@ -2551,42 +2578,6 @@ void KWDocument::addAnchorRequest( const QString &framesetName, const KWAnchorPo
     m_anchorRequests.insert( framesetName, anchorPos );
 }
 
-KWVariableFormat * KWDocument::variableFormat( int type )
-{
-    // Look into the map
-    QMap<int,KWVariableFormat*>::Iterator it = m_mapVariableFormats.find( type );
-    if ( it != m_mapVariableFormats.end() )
-    {
-        return it.data();
-    }
-    else
-    {
-        KWVariableFormat * format = 0L;
-        // The formats are created on demand.
-        // TODO save those that have settings
-        switch( type )
-        {
-            case VF_DATE:
-                format = new KWVariableDateFormat();
-                break;
-            case VF_TIME:
-                format = new KWVariableTimeFormat();
-                break;
-            case VF_NUM:
-                format = new KWVariableNumberFormat();
-                break;
-            case VF_STRING:
-                format = new KWVariableStringFormat();
-                break;
-            default:
-                break;
-        }
-        if ( format )
-            m_mapVariableFormats.insert( type, format );
-        return format;
-    }
-}
-
 void KWDocument::registerVariable( KWVariable *var )
 {
     if ( !var )
@@ -2622,7 +2613,7 @@ void KWDocument::recalcVariables( int type )
                 kdDebug() << "KWDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
                 parag->invalidate( 0 );
                 parag->setChanged( true );
-                KWTextFrameSet * textfs = it.current()->textDocument()->textFrameSet();
+                KWTextFrameSet * textfs = static_cast<KWTextDocument *>(it.current()->textDocument())->textFrameSet();
                 if ( toRepaint.findRef( textfs ) == -1 )
                     toRepaint.append( textfs );
             }
@@ -2642,11 +2633,6 @@ QString KWDocument::getVariableValue( const QString &name ) const
     if ( !varValues.contains( name ) )
         return i18n( "No value" );
     return varValues[ name ];
-}
-
-KWSerialLetterDataBase *KWDocument::getSerialLetterDataBase() const
-{
-    return slDataBase;
 }
 
 int KWDocument::getSerialLetterRecord() const
@@ -2837,6 +2823,7 @@ void KWDocument::deleteTable( KWTableFrameSet *table )
 void KWDocument::deleteFrame( KWFrame * frame )
 {
     KWFrameSet * fs = frame->getFrameSet();
+    kdDebug() << "KWDocument::deleteFrame frame=" << frame << " fs=" << fs << endl;
     frame->setSelected(false);
     QString cmdName;
     TypeStructDocItem docItem = (TypeStructDocItem) 0;
@@ -3006,21 +2993,6 @@ void KWDocument::refreshDocStructure(FrameSetType _type)
     emit docStructureChanged(typeItemDocStructure(_type));
 }
 
-QColor KWDocument::resolveTextColor( const QColor & col, QPainter * painter )
-{
-    if (col.isValid())
-        return col;
-
-    return defaultTextColor( painter );
-}
-
-QColor KWDocument::defaultTextColor( QPainter * painter )
-{
-    if ( painter->device()->devType() == QInternal::Printer )
-        return Qt::black;
-    return QApplication::palette().color( QPalette::Active, QColorGroup::Text );
-}
-
 QColor KWDocument::resolveBgColor( const QColor & col, QPainter * painter )
 {
     if (col.isValid())
@@ -3075,6 +3047,13 @@ void KWDocument::updateRulerFrameStartEnd()
     QListIterator<KWView> it( m_lstViews );
     for ( ; it.current() ; ++it )
         it.current()->slotUpdateRuler();
+}
+
+void KWDocument::updateFrameStatusBarItem()
+{
+    QListIterator<KWView> it( m_lstViews );
+    for ( ; it.current() ; ++it )
+        it.current()->updateFrameStatusBarItem();
 }
 
 #include "kwdoc.moc"

@@ -29,7 +29,8 @@ class KWSerialLetterDataBase;
 class KWFrameSet;
 class KWTableFrameSet;
 class KWPartFrameSet;
-class KWStyle;
+class KoStyle;
+#define KWStyle KoStyle
 class KWFrame;
 class KWView;
 class KWViewMode;
@@ -41,7 +42,7 @@ class KWAutoFormat;
 class KCommand;
 class KCommandHistory;
 class KWVariable;
-class KWVariableFormat;
+class KWVariableFormatCollection;
 
 class QFont;
 class QStringList;
@@ -56,7 +57,7 @@ namespace KFormula {
 #include <koGlobal.h>
 #include <koDocumentChild.h>
 #include <koClipartCollection.h>
-#include "kwzoomhandler.h"
+#include <kozoomhandler.h>
 #include "kwimage.h"
 #include "kwanchorpos.h"
 #include "kwunit.h"
@@ -99,6 +100,7 @@ public:
     ~KWDocument();
 
     enum ProcessingType {WP = 0, DTP = 1};
+    /*
     static const int U_FONT_FAMILY_SAME_SIZE = 1;
     static const int U_FONT_ALL_SAME_SIZE = 2;
     static const int U_COLOR = 4;
@@ -110,6 +112,7 @@ public:
     static const int U_FONT_ALL_ALL_SIZE = 256;
     static const int U_TABS = 512;
     static const int U_SMART = 1024;
+    */
 
     static const int CURRENT_SYNTAX_VERSION = 2;
 
@@ -249,6 +252,7 @@ public:
 
     KWImageCollection *imageCollection() { return &m_imageCollection; }
     KoClipartCollection *clipartCollection() { return &m_clipartCollection; }
+    KWVariableFormatCollection *variableFormatCollection() { return m_varFormatCollection; }
 
     QList <KWView> getAllViews() { return m_lstViews; }
 
@@ -265,10 +269,10 @@ public:
     void updateAllFrames();
 
     // The grid is in _pt_ now
-    int gridX() { return m_gridX; }
-    int gridY() { return m_gridY; }
-    void setGridX(int _gridx) { m_gridX = _gridx; }
-    void setGridY(int _gridy) { m_gridY = _gridy; }
+    double gridX() { return m_gridX; }
+    double gridY() { return m_gridY; }
+    void setGridX(double _gridx) { m_gridX = _gridx; }
+    void setGridY(double _gridy) { m_gridY = _gridy; }
 
     // Currently unused. Not sure we want to go that way, now that we have
     // paragLayoutChanged and formatChanged in applyStyleChange.
@@ -324,11 +328,6 @@ public:
     void loadEmbedded( QDomElement embedded );
 
     /**
-     * Find or create a format for this type of variable
-     * (date, time etc.)
-     */
-    KWVariableFormat * variableFormat( int type );
-    /**
      * A custom variable (i.e. value set by the user)
      * was inserted into the text -> register it
      */
@@ -352,7 +351,7 @@ public:
     void setVariableValue( const QString &name, const QString &value );
     QString getVariableValue( const QString &name ) const;
 
-    KWSerialLetterDataBase *getSerialLetterDataBase() const;
+    KWSerialLetterDataBase *getSerialLetterDataBase() const { return m_slDataBase; }
     int getSerialLetterRecord() const;
     void setSerialLetterRecord( int r );
 
@@ -405,10 +404,6 @@ public:
     KWStyle* addStyleTemplate( KWStyle *style );
 
     void removeStyleTemplate ( KWStyle *style );
-
-    void moveDownStyleTemplate ( const QString & _styleName );
-
-    void moveUpStyleTemplate ( const QString & _styleName );
 
 #ifndef NDEBUG
     void printDebug();
@@ -486,9 +481,11 @@ public:
     bool isTOC(){return m_hasTOC;}
 
     void updateRulerFrameStartEnd();
+    void updateFrameStatusBarItem();
 
-    // Convert a color into a color to be displayed for it
-    // (when using color schemes, we still want to print black on white)
+    /** Convert a color into a color to be displayed for it
+     * (when using color schemes, we still want to print black on white).
+     * See also KoTextFormat::defaultTextColor. */
     static QColor resolveTextColor( const QColor & col, QPainter * painter );
     static QColor defaultTextColor( QPainter * painter );
     static QColor resolveBgColor( const QColor & col, QPainter * painter );
@@ -524,6 +521,9 @@ protected:
 
     void loadFrameSets( QDomElement framesets );
     void loadStyleTemplates( QDomElement styles );
+    /** Create a style from a saved document */
+    KWStyle* loadStyle( QDomElement & styleElem, KWDocument * doc, const QFont & defaultFont );
+    void saveStyle( KWStyle *sty, QDomElement parentElem, KoZoomHandler* zh );
 
     void newZoomAndResolution( bool updateViews, bool forPrint );
 
@@ -555,7 +555,7 @@ private:
     int m_pages;
 
     ProcessingType m_processingType;
-    int m_gridX, m_gridY;
+    double m_gridX, m_gridY;
 
     //int styleMask;
 
@@ -577,10 +577,10 @@ private:
 
     QMap<QString,QString> * m_pasteFramesetsMap;
 
-    QMap<int, KWVariableFormat*> m_mapVariableFormats;
+    KWVariableFormatCollection *m_varFormatCollection;
     QList<KWVariable> variables;
     QMap< QString, QString > varValues;
-    KWSerialLetterDataBase *slDataBase;
+    KWSerialLetterDataBase *m_slDataBase;
     int slRecordNum;
 
     // When a document is written out, the syntax version in use will be recorded. When read back

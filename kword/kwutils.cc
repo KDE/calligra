@@ -19,18 +19,6 @@
 
 #include "kwutils.h"
 #include <kdebug.h>
-const QCString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
-const QCString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
-const QCString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
-const QCString RNThousands[] = {"", "m", "mm", "mmm"};
-
-QString makeRomanNumber( int n )
-{
-    return QString::fromLatin1( RNThousands[ ( n / 1000 ) ] +
-                                RNHundreds[ ( n / 100 ) % 10 ] +
-                                RNTens[ ( n / 10 ) % 10 ] +
-                                RNUnits[ ( n ) % 10 ] );
-}
 
 QString correctQString( const QString &str )
 {
@@ -40,35 +28,3 @@ QString correctQString( const QString &str )
     return str;
 }
 
-QString correctQString( const char *str )
-{
-    return correctQString( QString( str ) );
-}
-
-QString makeAlphaUpperNumber( int n )
-{
-    QString tmp;
-    char bottomDigit;
-    while ( n > 26 )
-    {
-        bottomDigit = (n-1) % 26;
-        n = (n-1) / 26;
-        tmp.prepend( QChar( 'A' + bottomDigit  ) );
-    }
-    tmp.prepend( QChar( 'A' + n -1 ) );
-    return tmp;
-}
-
-QString makeAlphaLowerNumber( int n )
-{
-    QString tmp;
-    char bottomDigit;
-    while ( n > 26 )
-    {
-        bottomDigit = (n-1) % 26;
-        n = (n-1) / 26;
-        tmp.prepend( QChar( 'a' + bottomDigit  ) );
-    }
-    tmp.prepend( QChar( 'a' + n - 1 ) );
-    return tmp;
-}

@@ -92,38 +92,18 @@ bool KWDeleteDia::doDelete()
     if ( type == ROW )
     {
         KWRemoveRowCommand *cmd = new KWRemoveRowCommand( i18n("Remove row"), table, remove);
-         cmd->execute();
-         doc->addCommand(cmd);
+        cmd->execute();
+        doc->addCommand(cmd);
         //table->deleteRow( value->value() - 1 );
     }
     else
     {
-         KWRemoveColumnCommand *cmd = new KWRemoveColumnCommand( i18n("Remove column"), table, remove);
+        KWRemoveColumnCommand *cmd = new KWRemoveColumnCommand( i18n("Remove column"), table, remove);
         cmd->execute();
         doc->addCommand(cmd);
         //table->deleteCol( value->value() - 1 );
     }
 
-
-
-#if 0
-    QPainter p;
-    p.begin( canvas );
-
-    if ( type == ROW )
-        table->deleteRow( value->value() - 1 );
-    else
-        table->deleteCol( value->value() - 1 );
-
-    canvas->getCursor()->setFrameSet( doc->getFrameSetNum( table->getFrameSet( 0, 0 ) ) + 1 );
-    doc->drawMarker( *canvas->getCursor(), &p, canvas->contentsX(), canvas->contentsY() );
-    canvas->getCursor()->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( canvas->getCursor()->getFrameSet() - 1 ) )->getFirstParag(), true );
-    canvas->getCursor()->gotoStartOfParag();
-    canvas->getCursor()->cursorGotoLineStart();
-    p.end();
-
-    canvas->recalcCursor();
-#endif
     return true;
 }
 

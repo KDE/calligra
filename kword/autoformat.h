@@ -28,7 +28,7 @@
 #include <qvector.h>
 
 class KWDocument;
-class KWTextParag;
+class KoTextParag;
 namespace Qt3 {
     class QTextCursor;
 }
@@ -70,9 +70,12 @@ public:
      * Called by KWTextFrameSetEdit when a character (@p ch) has been inserted
      * into @p parag, at the given @p index.
      */
-    void doAutoFormat( QTextCursor* cursor, KWTextParag *parag, int index, QChar ch );
+    void doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
 
-    static QString getLastWord(KWTextParag *parag, int index);
+    /**
+     * Helper method, returns the last word before parag,index
+     */
+    static QString getLastWord( KoTextParag *parag, int index );
 
     //void setEnabled( bool e ) { m_enabled = e; }
     //bool isEnabled() { return m_enabled; }
@@ -138,10 +141,10 @@ public:
     static bool isSeparator( const QChar &c );
 
 protected:
-    bool doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *parag, int index );
-    void doUpperCase( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word );
-    void doSpellCheck( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word );
-    void doTypographicQuotes( QTextCursor* textEditCursor, KWTextParag *parag, int index );
+    bool doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *parag, int index );
+    void doUpperCase( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word );
+    void doSpellCheck( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word );
+    void doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag *parag, int index );
     void buildMaxLen();
 
 private:

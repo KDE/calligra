@@ -25,7 +25,8 @@
 #include "docstruct.moc"
 #include "kwtextframeset.h"
 #include "kwtableframeset.h"
-#include "counter.h"
+#include <koparagcounter.h>
+#include "kwtextdocument.h"
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -61,9 +62,10 @@ void KWDocStructParagItem::slotDoubleClicked( QListViewItem *_item )
     {
         KWTextFrameSet * fs = parag->kwTextDocument()->textFrameSet();
         QPoint iPoint = parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
-        QPoint cPoint;
-        fs->internalToNormal( iPoint, cPoint );
-        gui->canvasWidget()->scrollToOffset( fs->kWordDocument()->unzoomPoint( cPoint ) );
+        KoPoint dPoint;
+        fs->internalToDocument( iPoint, dPoint );
+        QPoint nPoint = fs->kWordDocument()->zoomPoint( dPoint );
+        gui->canvasWidget()->scrollToOffset( fs->kWordDocument()->unzoomPoint( nPoint ) );
     }
 }
 

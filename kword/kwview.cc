@@ -37,7 +37,7 @@
 
 
 #include "autoformatdia.h"
-#include "counter.h"
+#include <koparagcounter.h>
 #include "defs.h"
 #include "deldia.h"
 #include "docstruct.h"
@@ -51,7 +51,6 @@
 #include "kwdoc.h"
 #include "kwdrag.h"
 #include "kweditpersonnalexpressiondia.h"
-#include "kwformat.h"
 #include "kwframe.h"
 #include "kwinsertpicdia.h"
 #include "kwstyle.h"
@@ -67,6 +66,7 @@
 #include "tabledia.h"
 #include "variable.h"
 #include "variabledlgs.h"
+#include <kotextformat.h>
 
 #include <koMainWindow.h>
 #include <koDocument.h>
@@ -75,6 +75,7 @@
 #include <koTemplateCreateDia.h>
 #include <koPartSelectAction.h>
 #include <koFrame.h>
+#include <kotextobject.h>
 
 #include <ktempfile.h>
 #include <kapp.h>
@@ -105,16 +106,15 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     m_gui = 0;
     m_spell.kspell = 0;
     m_border.left.color = white;
-    m_border.left.style = Border::SOLID;
+    m_border.left.style = KoBorder::SOLID;
     m_border.left.ptWidth = 0;
     m_border.right = m_border.left;
     m_border.top = m_border.left;
     m_border.bottom = m_border.left;
     m_border.common.color = black;
-    m_border.common.style = Border::SOLID;
+    m_border.common.style = KoBorder::SOLID;
     m_border.common.ptWidth = 1;
     m_currentPage = 0;
-    m_actionList.setAutoDelete( true );
     m_specialCharDlg=0L;
     searchEntry = 0L;
     replaceEntry = 0L;
@@ -227,6 +227,7 @@ void KWView::clearSelection()
     delete m_specialCharDlg;
 }
 
+
 void KWView::changeNbOfRecentFiles(int _nb)
 {
     if ( shell() ) // 0 when embedded into konq !
@@ -312,7 +313,7 @@ void KWView::setupActions()
     */
 
     // -------------- View menu
-    actionViewTextMode = new KToggleAction( /*i18n TODO*/( "Text mode" ), 0,
+    actionViewTextMode = new KToggleAction( i18n( "Text mode" ), 0,
                                             this, SLOT( viewTextMode() ),
                                             actionCollection(), "view_textmode" );
     actionViewTextMode->setExclusiveGroup( "viewmodes" );
@@ -422,7 +423,7 @@ void KWView::setupActions()
                                        actionCollection(), "tools_formula" );
 
     (void) new KAction( i18n( "&Table..." ), "inline_table",
-                        Key_F5 ,
+                        Key_F5,
                         this, SLOT( insertTable() ),
                         actionCollection(), "insert_table" );
 
@@ -559,11 +560,11 @@ void KWView::setupActions()
     actionBorderStyle->setComboWidth( 30 );
 
     QStringList lst;
-    lst << Border::getStyle( Border::SOLID );
-    lst << Border::getStyle( Border::DASH );
-    lst << Border::getStyle( Border::DOT );
-    lst << Border::getStyle( Border::DASH_DOT );
-    lst << Border::getStyle( Border::DASH_DOT_DOT );
+    lst << KoBorder::getStyle( KoBorder::SOLID );
+    lst << KoBorder::getStyle( KoBorder::DASH );
+    lst << KoBorder::getStyle( KoBorder::DOT );
+    lst << KoBorder::getStyle( KoBorder::DASH_DOT );
+    lst << KoBorder::getStyle( KoBorder::DASH_DOT_DOT );
     actionBorderStyle->setItems( lst );
     actionBorderWidth = new KSelectAction( i18n( "Border Width" ), 0,
                                                  actionCollection(), "border_width" );
@@ -1158,7 +1159,7 @@ void KWView::print( KPrinter &prt )
     m_doc->repaintAllViews();
 }
 
-void KWView::showFormat( const QTextFormat &currentFormat )
+void KWView::showFormat( const KoTextFormat &currentFormat )
 {
     // update the gui with the current format.
     //kdDebug() << "KWView::setFormat font family=" << currentFormat.font().family() << endl;
@@ -1196,13 +1197,14 @@ void KWView::showFormat( const QTextFormat &currentFormat )
 
 }
 
-void KWView::showRulerIndent( double _leftMargin, double _firstLine )
+void KWView::showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin )
 {
   KoRuler * hRuler = m_gui ? m_gui->getHorzRuler() : 0;
   if ( hRuler )
   {
       hRuler->setFirstIndent( KWUnit::userValue( _firstLine + _leftMargin, m_doc->getUnit() ) );
       hRuler->setLeftIndent( KWUnit::userValue( _leftMargin, m_doc->getUnit() ) );
+      hRuler->setRightIndent( KWUnit::userValue( _rightMargin, m_doc->getUnit() ) );
       actionFormatDecreaseIndent->setEnabled( _leftMargin>0);
   }
 }
@@ -1230,14 +1232,14 @@ void KWView::showCounter( KoParagCounter &c )
     actionFormatList->setChecked( c.numbering() == KoParagCounter::NUM_LIST );
 }
 
-void KWView::showFrameBorders( Border _left, Border _right,
-                               Border _top, Border _bottom )
+void KWView::showFrameBorders( const KoBorder& _left, const KoBorder& _right,
+                               const KoBorder& _top, const KoBorder& _bottom )
 {
     showParagBorders( _left, _right, _top, _bottom );
 }
 
-void KWView::showParagBorders( Border left, Border right,
-                               Border top, Border bottom )
+void KWView::showParagBorders( const KoBorder& left, const KoBorder& right,
+                               const KoBorder& top, const KoBorder& bottom )
 {
     if ( m_border.left != left || m_border.right != right || m_border.top != top || m_border.bottom != bottom )
     {
@@ -1824,7 +1826,7 @@ void KWView::setZoom( int zoom, bool updateViews )
     m_doc->updateZoomRuler();
 
     // Also set the zoom in KoView (for embedded views)
-    kdDebug() << "KWView::showZoom setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
+    //kdDebug() << "KWView::showZoom setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
     KoView::setZoom( m_doc->zoomedResolutionY() /* KoView only supports one zoom */ );
 }
 
@@ -2028,7 +2030,7 @@ void KWView::formatParagraph()
         paragDia->setCaption( i18n( "Paragraph settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
-        KWParagLayout lay = static_cast<KWTextParag *>(edit->getCursor()->parag())->paragLayout();
+        KWParagLayout lay = static_cast<KWTextParag *>(edit->cursor()->parag())->paragLayout();
         paragDia->setParagLayout( lay );
         if(!paragDia->exec())
             return;
@@ -2053,10 +2055,9 @@ void KWView::formatParagraph()
             if(cmd)
             {
                 macroCommand->addCommand(cmd);
-                //koRuler doesn't support setRightIndent
-                //m_gui->gEthorzrule()->setRightIndent( KWUnit::userValue( paragDia->rightIndent(), m_doc->getUnit() ) );
                 changed=true;
             }
+            m_gui->getHorzRuler()->setRightIndent( KWUnit::userValue( paragDia->rightIndent(), m_doc->getUnit() ) );
         }
         if(paragDia->isSpaceBeforeChanged())
         {
@@ -2337,8 +2338,8 @@ void KWView::insertFormula()
         // Strange, seems we need this - hmm, do we, still ?
         // There was a bug in KWFormulaFrameSet::slotFormulaChanged that could
         // have been the cause of this. Maybe we don't need this any longer.
-        //edit->getCursor()->parag()->invalidate( 0 ); // and that's done by KWTextParag::setCustomItem. Hmm.
-        //edit->getCursor()->parag()->setChanged( true );
+        //edit->cursor()->parag()->invalidate( 0 ); // and that's done by KWTextParag::setCustomItem. Hmm.
+        //edit->cursor()->parag()->setChanged( true );
         //m_doc->slotRepaintChanged( edit->frameSet() );
         m_doc->refreshDocStructure(FT_FORMULA);
     }
@@ -2522,7 +2523,7 @@ void KWView::tableUngroupTable()
 
     if ( table->isFloating() )
     {
-        KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( QString::null, table, false ) ;
+        KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null, table, KWFrameSetPropertyCommand::FSP_FLOATING, "false" );
         macroCmd->addCommand(cmd);
     }
 
@@ -2715,7 +2716,7 @@ void KWView::changeCaseOfText()
     KWChangeCaseDia *caseDia=new KWChangeCaseDia( this,"change case" );
     if(caseDia->exec())
     {
-        edit->changeCaseOfText(caseDia->getTypeOfCase());
+        edit->changeCaseOfText((KWTextFrameSet::TypeOfCase)caseDia->getTypeOfCase());
     }
     delete caseDia;
 }
@@ -2853,7 +2854,7 @@ void KWView::borderWidth( const QString &width )
 
 void KWView::borderStyle( const QString &style )
 {
-    m_border.common.style = Border::getStyle( style );
+    m_border.common.style = KoBorder::getStyle( style );
     m_border.left.style = m_border.common.style;
     m_border.right.style = m_border.common.style;
     m_border.top.style = m_border.common.style;
@@ -3008,33 +3009,29 @@ void KWView::newLeftIndent( double _leftIndent)
     }
 }
 
+void KWView::newRightIndent( double _rightIndent)
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if (edit)
+    {
+        KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginRight, _rightIndent );
+        if(cmd)
+            m_doc->addCommand(cmd);
+    }
+}
+
+QPopupMenu * KWView::popupMenu( const QString& name )
+{
+    ASSERT(factory());
+    if ( factory() )
+        return ((QPopupMenu*)factory()->container( name, this ));
+    return 0L;
+}
+
 void KWView::openPopupMenuInsideFrame( KWFrame* frame, const QPoint & _point )
 {
-    QString menuName = frame->getFrameSet()->getPopupName();
-    if(!menuName.isEmpty())
-    {
-        ASSERT(factory());
-        if ( factory() )
-        {
-            QPopupMenu * popup = ((QPopupMenu*)factory()->container(menuName,this));
-            ASSERT(popup);
-            if (popup)
-            {
-                KWTextFrameSetEdit * textedit = currentTextEdit();
-                if (textedit)
-                {
-                    // Removed previous stuff
-                    unplugActionList( "datatools" );
-                    m_actionList.clear();
-                    m_actionList = textedit->dataToolActionList();
-                    kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << m_actionList.count() << " actions" << endl;
-                    plugActionList( "datatools", m_actionList );
-                    popup->popup(_point); // using exec() here breaks the spellcheck tool (event loop pb)
-                } else
-                    popup->popup(_point);
-            }
-        }
-    }
+    frame->getFrameSet()->showPopup( frame, m_gui->canvasWidget()->currentFrameSetEdit(),
+                                     this, _point );
 }
 
 void KWView::openPopupMenuChangeAction( const QPoint & _point )
@@ -3179,8 +3176,8 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
     cursor.setIndex( pos );
     if(!m_spell.macroCmdSpellCheck)
         m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct misspelled word"));
-    m_spell.macroCmdSpellCheck->addCommand(fs->replaceSelectionCommand(
-        &cursor, corr, KWTextFrameSet::HighlightSelection, QString::null ));
+    m_spell.macroCmdSpellCheck->addCommand(fs->textObject()->replaceSelectionCommand(
+        &cursor, corr, KoTextObject::HighlightSelection, QString::null ));
 }
 
 void KWView::spellCheckerDone( const QString & )
@@ -3313,7 +3310,10 @@ void KWView::slotUpdateRuler()
     KWFrame * frame = 0L;
     // Use the currently edited (fallback: the first selected) frame
     if ( edit && edit->currentFrame() )
+    {
         frame = edit->currentFrame();
+        m_gui->getHorzRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
+    }
     else
         frame = m_doc->getFirstSelectedFrame();
     if ( frame )
@@ -3380,7 +3380,7 @@ void KWView::frameSelectedChanged()
 
     actionEditCopy->setEnabled( nbFrame >= 1 );
 
-
+    m_gui->getHorzRuler()->changeFlags(0);
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     actionTableJoinCells->setEnabled( table && (nbFrame>1));
 
@@ -3497,6 +3497,7 @@ KWGUI::KWGUI( QWidget *parent, KWView *_view )
 
     connect( r_horz, SIGNAL( newLeftIndent( double ) ), view, SLOT( newLeftIndent( double ) ) );
     connect( r_horz, SIGNAL( newFirstIndent( double ) ), view, SLOT( newFirstIndent( double ) ) );
+    connect( r_horz, SIGNAL( newRightIndent( double ) ), view, SLOT( newRightIndent( double ) ) );
 
     connect( r_horz, SIGNAL( openPageLayoutDia() ), view, SLOT( formatPage() ) );
     connect( r_horz, SIGNAL( unitChanged( QString ) ), this, SLOT( unitChanged( QString ) ) );

@@ -24,7 +24,7 @@
 #include <qpalette.h>
 #include <qpainter.h>
 #include <kdebug.h>
-#include "kwzoomhandler.h"
+#include <kozoomhandler.h>
 #include "kwdoc.h"
 
 Border::Border()

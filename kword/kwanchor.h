@@ -30,12 +30,10 @@ class KWFrameSet;
  * It never appears as such. It is as big as the frame it is related to,
  * so that the frame is effectively inline in the text.
  */
-class KWAnchor : public KWTextCustomItem
+class KWAnchor : public KoTextCustomItem
 {
 public:
-    // We store the frame as frameset+framenum for undo/redo purposes
-    // and as an abstract way to represent a frame so that it doesn't have
-    // to be an actual KWFrame for tables.
+    // frameNum will disappear...
     KWAnchor( KWTextDocument *textdoc, KWFrameSet * frameset, int frameNum );
     ~KWAnchor();
 
@@ -43,7 +41,7 @@ public:
     KWFrameSet * frameSet() const { return m_frameset; }
     int frameNum() const { return m_frameNum; }
 
-    // Return the size of the item, i.e. the size of the frame (zoomed)
+    /** Return the size of the item, i.e. the size of the frame (zoomed) */
     QSize size() const;
 
     virtual void resize();
@@ -55,7 +53,7 @@ public:
     virtual int minimumWidth() const { return size().width(); }
     virtual int ascent() const;
 
-    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool /*selected*/ );
+    virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool /*selected*/ , const QFont & /*customItemFont*/, int /*offset*/);
 
     virtual KCommand * createCommand();
     virtual KCommand * deleteCommand();

@@ -27,7 +27,7 @@
 #include <qdom.h>
 
 KWAnchor::KWAnchor( KWTextDocument *textdoc, KWFrameSet * frameset, int frameNum )
-    : KWTextCustomItem( textdoc ),
+    : KoTextCustomItem( textdoc ),
       m_frameset( frameset ),
       m_frameNum( frameNum )
 {
@@ -50,34 +50,36 @@ void KWAnchor::move( int x, int y )
     int paragy = paragraph()->rect().y();
     xpos = x;
     ypos = y;
-    //kdDebug() << this << " KWAnchor::move " << x << "," << y << " paragy=" << paragy << endl;
-    KWTextFrameSet * fs = textDocument()->textFrameSet();
-    QPoint nPoint;
-    if ( fs->internalToNormal( QPoint( x, y+paragy ), nPoint ) )
+    kdDebug() << this << " KWAnchor::move " << x << "," << y << " paragy=" << paragy << endl;
+    KoZoomHandler * zh = textDocument()->zoomHandler();
+
+    KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
+    KoPoint dPoint;
+    if ( fs->internalToDocument( QPoint( x, y+paragy ), dPoint ) )
     {
         //kdDebug(32001) << "KWAnchor::move moving frame to [zoomed pos] " << nPoint.x() << "," << nPoint.y() << endl;
         // Move the frame to position nPoint.
-        m_frameset->moveFloatingFrame( m_frameNum, nPoint );
+        m_frameset->moveFloatingFrame( m_frameNum, dPoint );
     } else
     {
         // This can happen if the page hasn't been created yet
-        kdDebug(32001) << "KWAnchor::move internalToNormal returned 0L for " << x << ", " << y+paragy << endl;
+        kdDebug(32001) << "KWAnchor::move internalToDocument returned 0L for " << x << ", " << y+paragy << endl;
     }
 }
 
 //#define DEBUG_DRAWING
 
-void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
+void KWAnchor::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected,const QFont & /*customItemFont*/, int /*offset*/ )
 {
     if ( m_deleted )
         return;
 
-    int paragy = paragraph()->rect().y();
+    KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
+    int paragy = fs->kWordDocument()->layoutUnitToPixelY( paragraph()->rect().y() );
 #ifdef DEBUG_DRAWING
     kdDebug(32001) << "KWAnchor::draw " << x << "," << y << " paragy=" << paragy
                    << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
 #endif
-    KWTextFrameSet * fs = textDocument()->textFrameSet();
 
     if ( x != xpos || y != ypos ) { // shouldn't happen I guess ?
         kdDebug() << "rectifying position to " << x << "," << y << endl;
@@ -96,7 +98,10 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     kdDebug() << "KWAnchor::draw crect ( in internal coords ) = " << DEBUGRECT( crect ) << endl;
 #endif
     QPoint cnPoint = crect.topLeft(); //fallback
-    if ( ! fs->internalToNormal/*WithHint*/( crect.topLeft(), cnPoint/*, frameTopLeft*/ ) )
+    KoPoint dPoint;
+    if ( fs->internalToDocument( crect.topLeft(), dPoint ) )
+        cnPoint = fs->kWordDocument()->zoomPoint( dPoint );
+    else
         kdDebug() << "KWAnchor::draw internalToNormal returned 0L for topLeft of crect!" << endl;
 #ifdef DEBUG_DRAWING
     kdDebug() << "KWAnchor::draw cnPoint in normal coordinates " << cnPoint.x() << "," << cnPoint.y() << endl;
@@ -106,13 +111,13 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     crect.setLeft( cnPoint.x() );
     crect.setTop( cnPoint.y() );
     QPoint brnPoint; // bottom right in normal coords
-    if ( fs->internalToNormal/*WithHint*/( crect.bottomRight(), brnPoint/*, frameTopLeft*/ ) )
+    if ( fs->internalToDocument( crect.bottomRight(), dPoint ) )
     {
+        brnPoint = fs->kWordDocument()->zoomPoint( dPoint );
 #ifdef DEBUG_DRAWING
         kdDebug() << "KWAnchor::draw brnPoint in normal coordinates " << brnPoint.x() << "," << brnPoint.y() << endl;
 #endif
         brnPoint = fs->currentViewMode()->normalToView( brnPoint );
-        //kdDebug() << "KWAnchor::draw brnPoint in view coordinates " << brnPoint.x() << "," << brnPoint.y() << endl;
         crect.setRight( brnPoint.x() );
         crect.setBottom( brnPoint.y() );
     }
@@ -142,8 +147,9 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     // and make painter go back to view coord system
     // (this is exactly the opposite of the code in KWFrameSet::drawContents)
     QPoint iPoint;
-    if ( fs->normalToInternal( frameTopLeft, iPoint ) )
+    if ( fs->internalToDocument( frameTopLeft, dPoint ) )
     {
+        iPoint = fs->kWordDocument()->zoomPoint( dPoint );
         QPoint vPoint = fs->currentViewMode()->normalToView( frameTopLeft );
 #ifdef DEBUG_DRAWING
         kdDebug() << "KWAnchor::draw vPoint=" << vPoint.x() << "," << vPoint.y()
@@ -220,8 +226,8 @@ void KWAnchor::setDeleted( bool b )
     if ( b )
         m_frameset->setAnchored( 0L );
     else
-        m_frameset->setAnchored( textDocument()->textFrameSet() );
-    KWTextCustomItem::setDeleted( b );
+        m_frameset->setAnchored( static_cast<KWTextDocument *>(textDocument())->textFrameSet() );
+    KoTextCustomItem::setDeleted( b );
 }
 
 void KWAnchor::save( QDomElement &formatElem )

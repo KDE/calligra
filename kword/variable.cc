@@ -22,6 +22,7 @@
 #include "kwdoc.h"
 #include "koDocumentInfo.h"
 #include "kwtextframeset.h"
+#include "kwtextparag.h"
 #include "kwutils.h"
 #include "serialletter.h"
 
@@ -30,24 +31,53 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-QString KWVariableDateFormat::convert( const QDate & date )
+QString KWVariableDateFormat::convert( const QDate & date ) const
 {
-    return KGlobal::locale()->formatDate( date );
+    return KGlobal::locale()->formatDate( date, m_bShort );
 }
 
-QString KWVariableTimeFormat::convert( const QTime & time )
+QCString KWVariableDateFormat::key() const
+{
+    return QCString("DATE") + (m_bShort ? '1' : '0');
+}
+
+void KWVariableDateFormat::load( const QCString &key )
+{
+    QCString params( key.mid( 4 ) );
+    if ( !params.isEmpty() )
+        m_bShort = (params[0] == '1');
+    // TODO else: use the last setting ?  (useful for the interactive case)
+}
+
+QString KWVariableTimeFormat::convert( const QTime & time ) const
 {
     return KGlobal::locale()->formatTime( time );
 }
 
-QString KWVariableStringFormat::convert( const QString & string )
+QCString KWVariableTimeFormat::key() const
+{
+    return "TIME";
+}
+
+QString KWVariableStringFormat::convert( const QString & string ) const
 {
     return string;
 }
 
-QString KWVariableNumberFormat::convert( int value /*double ? QVariant ?*/ )
+QCString KWVariableStringFormat::key() const
+{
+    return "STRING";
+    // TODO prefix & suffix
+}
+
+QString KWVariableNumberFormat::convert( int value /*double ? QVariant ?*/ ) const
 {
     return QString::number( value );
+}
+
+QCString KWVariableNumberFormat::key() const
+{
+    return "NUMBER";
 }
 
 /* for the prefix+suffix string format
@@ -57,11 +87,48 @@ QString KWVariableNumberFormat::convert( int value /*double ? QVariant ?*/ )
     return QString( str );
 */
 
+
+KWVariableFormatCollection::KWVariableFormatCollection()
+{
+    m_dict.setAutoDelete( true );
+}
+
+KWVariableFormat * KWVariableFormatCollection::format( const QCString &key )
+{
+    KWVariableFormat *f = m_dict[ key.data() ];
+    if (f)
+        return f;
+    else
+        return createFormat( key );
+}
+
+KWVariableFormat * KWVariableFormatCollection::createFormat( const QCString &key )
+{
+    KWVariableFormat * format = 0L;
+    // The first 4 chars identify the class
+    QCString type = key.left(4);
+    if ( type == "DATE" )
+        format = new KWVariableDateFormat();
+    else if ( type == "TIME" )
+        format = new KWVariableTimeFormat();
+    else if ( type == "NUMB" ) // this type of programming makes me numb ;)
+        format = new KWVariableNumberFormat();
+    else if ( type == "STRI" )
+        format = new KWVariableStringFormat();
+
+    if ( format )
+    {
+        format->load( key );
+        m_dict.insert( format->key() /* not 'key', it could be incomplete */, format );
+    }
+    return format;
+}
+
 /******************************************************************/
 /* Class: KWVariable                                              */
 /******************************************************************/
 KWVariable::KWVariable( KWTextFrameSet *fs, KWVariableFormat *varFormat )
-    : KWTextCustomItem( fs->textDocument() )
+    : KoTextCustomItem( fs->kwTextDocument() )
 {
     m_varFormat = varFormat;
     m_doc = fs->kWordDocument();
@@ -79,21 +146,27 @@ void KWVariable::resize()
     if ( m_deleted )
         return;
     QTextFormat *fmt = format();
+     KoZoomHandler * zh = textDocument()->zoomHandler();
     QString txt = text();
     width = 0;
     for ( int i = 0 ; i < (int)txt.length() ; ++i )
-        width += fmt->width( txt, i );
-    height = fmt->height();
-    kdDebug() << "KWVariable::resize text=" << txt << " width=" << width << endl;
+        width += zh->layoutUnitToPixelX(fmt->width( txt, i ));
+    height = zh->layoutUnitToPixelY(fmt->height());
+    //kdDebug() << "Before KWVariable::resize text=" << txt << " width=" << width << endl;
 }
 
-void KWVariable::draw( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected )
+void KWVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const QFont & customItemFont, int offset )
 {
     QTextFormat * f = format();
+    KoZoomHandler * zh = textDocument()->zoomHandler();
     int bl, _y;
     KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
     //kdDebug() << "KWVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
     int h = parag->lineHeightOfChar( index(), &bl, &_y );
+
+    h = zh->layoutUnitToPixelY( _y, h );
+    bl = zh->layoutUnitToPixelY( _y, bl );
+    // unused _y = zh->layoutUnitToPixelY( _y );
 
     p->save();
     p->setPen( QPen( f->color() ) );
@@ -107,25 +180,11 @@ void KWVariable::draw( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*
         p->setPen( QPen( cg.color( QColorGroup::Highlight ), 0, Qt::DotLine ) );
         p->drawRect( x, y, width, h );
     }
-    p->setFont( f->font() );
-    int offset=0;
-    //code from qt3stuff
-    if ( f->vAlign() == QTextFormat::AlignSuperScript )
-    {
-        QFont tmpFont( p->font() );
-        tmpFont.setPointSize( ( tmpFont.pointSize() * 2 ) / 3 );
-        p->setFont( tmpFont );
-        offset=- ( h - p->fontMetrics().height() );
-    }
-    else if ( f->vAlign() == QTextFormat::AlignSubScript )
-    {
-        QFont tmpFont( p->font() );
-        tmpFont.setPointSize( ( tmpFont.pointSize() * 2 ) / 3 );
-        p->setFont( tmpFont );
-    }
 
-    //kdDebug() << "KWVariable::draw bl=" << bl << " _y=" << _y << endl;
-    p->drawText( x, y /*+ _y*/ + bl+offset, text() );
+    p->setFont( customItemFont );
+
+    //kdDebug() << "KWVariable::draw bl=" << bl << << endl;
+    p->drawText( x, y + bl + offset, text() );
     p->restore();
 }
 
@@ -136,6 +195,7 @@ void KWVariable::save( QDomElement &formatElem )
     QDomElement typeElem = formatElem.ownerDocument().createElement( "TYPE" );
     formatElem.appendChild( typeElem );
     typeElem.setAttribute( "type", static_cast<int>( type() ) );
+    typeElem.setAttribute( "key", m_varFormat->key() );
 }
 
 void KWVariable::load( QDomElement & )
@@ -143,40 +203,61 @@ void KWVariable::load( QDomElement & )
 }
 
 //static
-KWVariable * KWVariable::createVariable( int type, int subtype, KWTextFrameSet * textFrameSet )
+KWVariable * KWVariable::createVariable( int type, int subtype, KWTextFrameSet * textFrameSet, KWVariableFormat *varFormat )
 {
-    KWDocument * doc = textFrameSet->kWordDocument();
-    KWVariableFormat * varFormat = 0L;
+    if ( varFormat == 0L )
+    {
+        KWVariableFormatCollection * coll = textFrameSet->kWordDocument()->variableFormatCollection();
+        // Get the default format for this variable (this method is only called in the interactive case, not when loading)
+        switch ( type ) {
+        case VT_DATE:
+            varFormat = coll->format( "DATE" );
+            break;
+        case VT_TIME:
+            varFormat = coll->format( "TIME" );
+            break;
+        case VT_PGNUM:
+            varFormat = coll->format( "NUMBER" );
+            break;
+        case VT_FIELD:
+            varFormat = coll->format( "STRING" );
+            break;
+        case VT_CUSTOM:
+            varFormat = coll->format( "STRING" );
+            break;
+        case VT_SERIALLETTER:
+            varFormat = coll->format( "STRING" );
+            break;
+        }
+    }
+    ASSERT( varFormat );
+    if ( varFormat == 0L ) // still 0 ? Impossible!
+        return 0L ;
+
     KWVariable * var = 0L;
     switch ( type ) {
         case VT_DATE:
-            varFormat = doc->variableFormat( VF_DATE );
             var = new KWDateVariable( textFrameSet, subtype, varFormat );
             break;
         case VT_TIME:
-            varFormat = doc->variableFormat( VF_TIME );
             var = new KWTimeVariable( textFrameSet, subtype, varFormat );
             break;
         case VT_PGNUM:
-            varFormat = doc->variableFormat( VF_NUM );
             var = new KWPgNumVariable( textFrameSet, subtype, varFormat );
             break;
         case VT_FIELD:
-            varFormat = doc->variableFormat( VF_STRING );
             var = new KWFieldVariable( textFrameSet, subtype, varFormat );
             break;
         case VT_CUSTOM:
-            varFormat = doc->variableFormat( VF_STRING );
             var = new KWCustomVariable( textFrameSet, QString::null, varFormat );
             break;
         case VT_SERIALLETTER:
-            varFormat = doc->variableFormat( VF_STRING );
             var = new KWSerialLetterVariable( textFrameSet, QString::null, varFormat );
             break;
     }
+    ASSERT( var );
     return var;
 }
-
 
 /******************************************************************/
 /* Class: KWDateVariable                                          */
@@ -580,3 +661,4 @@ QStringList KWFieldVariable::actionTexts()
     lst << i18n( "Document Abstract" );
     return lst;
 }
+

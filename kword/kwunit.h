@@ -92,6 +92,8 @@ public:
         if ( _unit == U_INCH ) return "inch";
         return "pt";
     }
+    // Get the full (translated) description of a unit
+    static QString unitDescription( Unit _unit );
 };
 
 #endif

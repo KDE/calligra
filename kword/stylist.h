@@ -67,6 +67,9 @@ protected:
     QComboBox *m_styleCombo;
     QPushButton *m_deleteButton;
     QPushButton *m_newButton;
+    QPushButton *m_moveUpButton;
+    QPushButton *m_moveDownButton;
+
     KWStylePreview *preview;
 
     KWStyle *m_currentStyle;
@@ -83,6 +86,8 @@ protected slots:
     void switchTabs();
     void addStyle();
     void deleteStyle();
+    void moveUpStyle();
+    void moveDownStyle();
     void renameStyle(const QString &);
 protected:
     void addTab( KWStyleManagerTab * tab );

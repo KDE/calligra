@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
-    : KWTextCustomItem( textdoc ), place( PlaceInline )
+    : KoTextCustomItem( textdoc ), place( PlaceInline )
 {
     KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
     if ( !filename.isEmpty() )
@@ -59,7 +59,7 @@ void KWTextImage::resize()
     }
 }
 
-void KWTextImage::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
+void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected , const QFont & /*customItemFont*/, int /*offset*/)
 {
     if ( placement() != PlaceInline ) {
         x = xpos;

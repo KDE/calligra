@@ -18,6 +18,7 @@
 */
 
 #include "kwviewmode.h"
+#include <kotextdocument.h>
 #include "kwcanvas.h"
 #include "kwdoc.h"
 #include <kdebug.h>
@@ -238,7 +239,7 @@ QPoint KWViewModeText::normalToView( const QPoint & nPoint )
     else
     {
         QPoint iPoint;
-        if ( textfs->normalToInternal( nPoint, iPoint, true ) )
+        if ( textfs->documentToInternal( textfs->kWordDocument()->unzoomPoint( nPoint ), iPoint, true ) )
             return iPoint;
         else
         {
@@ -256,9 +257,9 @@ QPoint KWViewModeText::viewToNormal( const QPoint & vPoint )
         return vPoint;
     else
     {
-        QPoint nPoint;
-        if ( textfs->internalToNormal( vPoint, nPoint ) )
-            return nPoint;
+        KoPoint dPoint;
+        if ( textfs->internalToDocument( vPoint, dPoint ) )
+            return textfs->kWordDocument()->zoomPoint( dPoint );
         else
         {
             kdWarning() << "KWViewModeText: internalToNormal returned 0L for "

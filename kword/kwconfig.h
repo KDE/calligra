@@ -30,11 +30,11 @@ class KSpellConfig;
 class KConfig;
 class QComboBox;
 
-class configureSpellPage : public QObject
+class ConfigureSpellPage : public QObject
 {
     Q_OBJECT
 public:
-    configureSpellPage( KWView *_view, QVBox *box, char *name = 0 );
+    ConfigureSpellPage( KWView *_view, QVBox *box, char *name = 0 );
     void apply();
     void slotDefault();
 private:
@@ -45,16 +45,16 @@ private:
     KConfig* config;
 };
 
-class configureInterfacePage : public QObject
+class ConfigureInterfacePage : public QObject
 {
     Q_OBJECT
 public:
-    configureInterfacePage( KWView *_view, QVBox *box, char *name = 0 );
+    ConfigureInterfacePage( KWView *_view, QVBox *box, char *name = 0 );
     void apply();
     void slotDefault();
 private:
     KWView* m_pView;
-    KIntNumInput* gridX,*gridY;
+    KDoubleNumInput* gridX,*gridY;
     KDoubleNumInput* indent;
     KIntNumInput* recentFiles;
     KIntNumInput* autoSave;
@@ -65,11 +65,11 @@ private:
     KIntNumInput *m_nbPagePerRow;
 };
 
-class configureMiscPage : public QObject
+class ConfigureMiscPage : public QObject
 {
     Q_OBJECT
 public:
-    configureMiscPage( KWView *_view, QVBox *box, char *name = 0 );
+    ConfigureMiscPage( KWView *_view, QVBox *box, char *name = 0 );
     void apply();
     void slotDefault();
 private:
@@ -88,9 +88,9 @@ public slots:
     void slotApply();
     void slotDefault();
 private:
-    configureSpellPage *_spellPage;
-    configureInterfacePage *_interfacePage;
-    configureMiscPage *_miscPage;
+    ConfigureSpellPage *_spellPage;
+    ConfigureInterfacePage *_interfacePage;
+    ConfigureMiscPage *_miscPage;
 };
 
 

@@ -216,6 +216,8 @@
  <Action name="format_frameset"/>
  <Action name="edit_delframe"/>
  <Separator/> 
+ <Action name="border_backgroundcolor"/>
+ <Separator/> 
  <Action name="edit_cut"/>
  <Action name="edit_copy"/>
  <Action name="edit_paste"/>

@@ -343,16 +343,17 @@ KWSerialLetterEditorList::KWSerialLetterEditorList( QWidget *parent, KWSerialLet
 
 KWSerialLetterEditorList::~KWSerialLetterEditorList()
 {
-    if ( currentRecord != -1 ) {
-        QListViewItemIterator lit( this );
-        QMap< QString, QString >::ConstIterator it = db->getRecordEntries().begin();
-        for ( ; it != db->getRecordEntries().end(); ++it ) {
-            QListViewItem *item = 0;
-            item = lit.current();
-            ++lit;
-            if (item)
-                db->setValue( it.key(), item->text( 1 ), currentRecord );
-        }
+    if ( currentRecord == -1 )
+        return;
+
+    QListViewItemIterator lit( this );
+    QMap< QString, QString >::ConstIterator it = db->getRecordEntries().begin();
+    for ( ; it != db->getRecordEntries().end(); ++it ) {
+        QListViewItem *item = 0;
+        item = lit.current();
+        ++lit;
+        if ( currentRecord != -1 && item )
+            db->setValue( it.key(), item->text( 1 ), currentRecord );
     }
 }
 

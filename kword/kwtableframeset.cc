@@ -31,6 +31,8 @@ DESCRIPTION
 #include "kwcommand.h"
 #include "kwviewmode.h"
 #include "kwview.h"
+#include <kotextobject.h> // for customItemChar !
+#include <qpopupmenu.h>
 
 // I changed this to 1 because it fixes cell border drawing in the normal case
 // and because e.g. msword has no big cell-spacing by default.
@@ -103,22 +105,20 @@ void KWTableFrameSet::updateFrames()
     KWFrameSet::updateFrames();
 }
 
-void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const QPoint &position )
+void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &position )
 {
     Cell * cell = getCell( 0, 0 );
     ASSERT( cell );
     if ( !cell ) return;
     KoPoint currentPos = cell->getFrame( 0 )->topLeft();
-    QPoint pos( position );
+    KoPoint pos( position );
     // position includes the border, we need to adjust accordingly
-    pos.rx() += Border::zoomWidthX( cell->getFrame( 0 )->leftBorder().ptWidth, m_doc, 1 );
-    pos.ry() += Border::zoomWidthY( cell->getFrame( 0 )->topBorder().ptWidth, m_doc, 1 );
-    // Now we can unzoom
-    KoPoint kopos = m_doc->unzoomPoint( pos );
-    if ( currentPos != kopos )
+    pos.rx() += cell->getFrame( 0 )->leftBorder().ptWidth;
+    pos.ry() += cell->getFrame( 0 )->topBorder().ptWidth;
+    if ( currentPos != pos )
     {
-        kdDebug() << "KWTableFrameSet::moveFloatingFrame " << kopos.x() << "," << kopos.y() << endl;
-        KoPoint offset = kopos - currentPos;
+        kdDebug() << "KWTableFrameSet::moveFloatingFrame " << pos.x() << "," << pos.y() << endl;
+        KoPoint offset = pos - currentPos;
         moveBy( offset.x(), offset.y() );
 
         // Recalc all "frames on top" everywhere
@@ -140,6 +140,8 @@ QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
     QSize sz = outerRect.size();
     ASSERT( m_anchorTextFs );
     // Need to convert back to internal coords (in case of page breaking)
+#warning TODO
+#if 0
     QPoint iPoint;
     if ( m_anchorTextFs->normalToInternal( outerRect.topLeft(), iPoint ) )
     {
@@ -154,6 +156,7 @@ QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
             sz = outerRect.size();
         }
     }
+#endif
 
     // TODO: in theory, we'd need to take the max of the borders of each cell
     // on the outside rect, to find the global rect needed. Well, if we assume constant
@@ -162,10 +165,10 @@ QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
     KWFrame * lastCell = m_cells.getLast()->getFrame( 0 );
     if ( firstCell && lastCell )
     {
-        sz.rwidth() += Border::zoomWidthX( firstCell->leftBorder().ptWidth, m_doc, 1 )
-                       + Border::zoomWidthX( lastCell->rightBorder().ptWidth, m_doc, 1 );
-        sz.rheight() += Border::zoomWidthY( firstCell->topBorder().ptWidth, m_doc, 1 )
-                        + Border::zoomWidthY( lastCell->bottomBorder().ptWidth, m_doc, 1 );
+        sz.rwidth() += KoBorder::zoomWidthX( firstCell->leftBorder().ptWidth, m_doc, 1 )
+                       + KoBorder::zoomWidthX( lastCell->rightBorder().ptWidth, m_doc, 1 );
+        sz.rheight() += KoBorder::zoomWidthY( firstCell->topBorder().ptWidth, m_doc, 1 )
+                        + KoBorder::zoomWidthY( lastCell->bottomBorder().ptWidth, m_doc, 1 );
     }
     return sz;
 }
@@ -193,9 +196,9 @@ void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeH
     //if ( !m_anchor )
     {
         // Anchor this frame, after the previous one
-        KWAnchor * anchor = createAnchor( m_anchorTextFs->textDocument(), 0 );
+        KWAnchor * anchor = createAnchor( m_anchorTextFs->kwTextDocument(), 0 );
         if ( !placeHolderExists )
-            parag->insert( index, KWTextFrameSet::customItemChar() );
+            parag->insert( index, KoTextObject::customItemChar() );
         parag->setCustomItem( index, anchor, 0 );
         kdDebug() << "KWTableFrameSet::createAnchors setting anchor" << endl;
     }
@@ -448,7 +451,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
         Cell *cell;
         double coordinate;
 
-        if(activeCell->getFrame(0)->isSelected()) 
+        if(activeCell->getFrame(0)->isSelected())
             activeCell->getFrame(0)->setMinFrameHeight(activeCell->getFrame(0)->height());
         // find old coord.
         coordinate=activeCell->getFrame(0)->top();
@@ -1633,22 +1636,22 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
         const int minborder = 1;
 
         // ###### We'll need some code to ensure that this->rightborder == cell_on_right->leftborder etc.
-        Border topBorder = frame->topBorder();
-        Border bottomBorder = frame->bottomBorder();
-        Border leftBorder = frame->leftBorder();
-        Border rightBorder = frame->rightBorder();
-        int topBorderWidth = Border::zoomWidthY( topBorder.ptWidth, m_doc, minborder );
-        int bottomBorderWidth = Border::zoomWidthY( bottomBorder.ptWidth, m_doc, minborder );
-        int leftBorderWidth = Border::zoomWidthX( leftBorder.ptWidth, m_doc, minborder );
-        int rightBorderWidth = Border::zoomWidthX( rightBorder.ptWidth, m_doc, minborder );
+        KoBorder topBorder = frame->topBorder();
+        KoBorder bottomBorder = frame->bottomBorder();
+        KoBorder leftBorder = frame->leftBorder();
+        KoBorder rightBorder = frame->rightBorder();
+        int topBorderWidth = KoBorder::zoomWidthY( topBorder.ptWidth, m_doc, minborder );
+        int bottomBorderWidth = KoBorder::zoomWidthY( bottomBorder.ptWidth, m_doc, minborder );
+        int leftBorderWidth = KoBorder::zoomWidthX( leftBorder.ptWidth, m_doc, minborder );
+        int rightBorderWidth = KoBorder::zoomWidthX( rightBorder.ptWidth, m_doc, minborder );
 
-        QColor defaultColor = KWDocument::defaultTextColor( &painter );
+        QColor defaultColor = KoTextFormat::defaultTextColor( &painter );
 
         if ( topOfPage )  // draw top only for 1st row on every page.
             if ( topBorderWidth > 0 )
             {
                 if ( topBorder.ptWidth > 0 )
-                    painter.setPen( Border::borderPen( topBorder, topBorderWidth, defaultColor ) );
+                    painter.setPen( KoBorder::borderPen( topBorder, topBorderWidth, defaultColor ) );
                 else
                     painter.setPen( defaultPen );
                 int y = rect.top() - topBorderWidth + topBorderWidth/2;
@@ -1657,7 +1660,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
         if ( bottomBorderWidth > 0 )
         {
             if ( bottomBorder.ptWidth > 0 )
-                painter.setPen( Border::borderPen( bottomBorder, bottomBorderWidth, defaultColor ) );
+                painter.setPen( KoBorder::borderPen( bottomBorder, bottomBorderWidth, defaultColor ) );
             else
                 painter.setPen( defaultPen );
             int y = rect.bottom() + bottomBorderWidth - bottomBorderWidth/2;
@@ -1667,7 +1670,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
             if ( leftBorderWidth > 0 )
             {
                 if ( leftBorder.ptWidth > 0 )
-                    painter.setPen( Border::borderPen( leftBorder, leftBorderWidth, defaultColor ) );
+                    painter.setPen( KoBorder::borderPen( leftBorder, leftBorderWidth, defaultColor ) );
                 else
                     painter.setPen( defaultPen );
                 int x = rect.left() - leftBorderWidth + leftBorderWidth/2;
@@ -1676,7 +1679,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
         if ( rightBorderWidth > 0 )
         {
             if ( rightBorder.ptWidth > 0 )
-                painter.setPen( Border::borderPen( rightBorder, rightBorderWidth, defaultColor ) );
+                painter.setPen( KoBorder::borderPen( rightBorder, rightBorderWidth, defaultColor ) );
             else
                 painter.setPen( defaultPen );
             int x = rect.right() + rightBorderWidth - rightBorderWidth/2;
@@ -1758,7 +1761,7 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
     QString autoName = cell->getName();
     kdDebug() << "KWTableFrameSet::loadCell autoName=" << autoName << endl;
     cell->load( framesetElem, loadFrames );
-    if(cell->getFrame(0)) 
+    if(cell->getFrame(0))
         cell->getFrame(0)->setMinFrameHeight(cell->getFrame(0)->height());
     if ( !useNames )
         cell->setName( autoName );
@@ -1941,7 +1944,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
         switch( e->key() ) {
             case QKeyEvent::Key_Up:
             {
-                if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->getCursor()->parag()->prev())
+                if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->cursor()->parag()->prev())
                 {
                     KWTableFrameSet* tableFrame=tableFrameSet();
                     if ( cell->m_col > 0 )
@@ -1955,7 +1958,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
             break;
             case QKeyEvent::Key_Down:
             {
-                if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->getCursor()->parag()->next())
+                if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->cursor()->parag()->next())
                 {
                     KWTableFrameSet* tableFrame=tableFrameSet();
                     if ( cell->m_col+cell->m_cols < tableFrame->getCols()  )
@@ -1973,6 +1976,21 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
         setCurrentCell( fs );
     else
         m_currentCell->keyPressEvent( e );
+}
+
+void KWTableFrameSet::showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *view, const QPoint &point )
+{
+    KWTextFrameSetEdit * textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);
+    ASSERT( textedit ); // is it correct that this is always set ?
+    if (textedit)
+        textedit->showPopup( frame, view, point );
+    else
+    {
+        QPopupMenu * popup = view->popupMenu("text_popup");
+        ASSERT(popup);
+        if (popup)
+            popup->popup( point );
+    }
 }
 
 #include "kwtableframeset.moc"

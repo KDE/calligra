@@ -22,7 +22,7 @@
 
 class KWTextFrameSet;
 class KMacroCommand;
-class KWStyle;
+class KoStyle;
 #include <qrichtext_p.h>
 using namespace Qt3;
 
@@ -43,7 +43,7 @@ public:
 
 protected:
     // Find or create a toc style
-    static KWStyle * findOrCreateTOCStyle( KWTextFrameSet *fs, int depth );
+    static KoStyle * findOrCreateTOCStyle( KWTextFrameSet *fs, int depth );
 
     int m_paragId;
 };

@@ -41,6 +41,7 @@
 #include "kwdoc.h"
 #include "kwcanvas.h"
 #include "kwviewmode.h"
+#include <float.h>
 
 KWConfig::KWConfig( KWView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KWord") ,
@@ -50,15 +51,15 @@ KWConfig::KWConfig( KWView* parent )
 {
   QVBox *page = addVBoxPage( i18n("Spelling"), i18n("Spell checker behavior"),
                         BarIcon("spellcheck", KIcon::SizeMedium) );
-  _spellPage=new configureSpellPage(parent, page);
+  _spellPage=new ConfigureSpellPage(parent, page);
 
   QVBox *page2 = addVBoxPage( i18n("Interface"), i18n("Interface"),
                               BarIcon("misc", KIcon::SizeMedium) );
-  _interfacePage=new configureInterfacePage(parent, page2);
+  _interfacePage=new ConfigureInterfacePage(parent, page2);
 
    QVBox *page3 = addVBoxPage( i18n("Misc"), i18n("Misc"),
                               BarIcon("misc", KIcon::SizeMedium) );
-  _miscPage=new configureMiscPage(parent, page3);
+  _miscPage=new ConfigureMiscPage(parent, page3);
 
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 }
@@ -88,7 +89,7 @@ void KWConfig::slotDefault()
     }
 }
 
-configureSpellPage::configureSpellPage( KWView *_view, QVBox *box, char *name )
+ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
     : QObject( box->parent(), name )
 {
   m_pView=_view;
@@ -117,7 +118,7 @@ configureSpellPage::configureSpellPage( KWView *_view, QVBox *box, char *name )
 #endif
 }
 
-void configureSpellPage::apply()
+void ConfigureSpellPage::apply()
 {
   config->setGroup( "KSpell kword" );
   config->writeEntry ("KSpell_NoRootAffix",(int) _spellConfig->noRootAffix ());
@@ -140,7 +141,7 @@ void configureSpellPage::apply()
 #endif
 }
 
-void configureSpellPage::slotDefault()
+void ConfigureSpellPage::slotDefault()
 {
     _spellConfig->setNoRootAffix( 0);
     _spellConfig->setRunTogether(0);
@@ -154,7 +155,7 @@ void configureSpellPage::slotDefault()
 #endif
 }
 
-configureInterfacePage::configureInterfacePage( KWView *_view, QVBox *box, char *name )
+ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char *name )
  : QObject( box->parent(), name )
 {
     m_pView=_view;
@@ -171,11 +172,10 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QVBox *box, char 
     lay1->setMargin( KDialog::marginHint() );
     lay1->setSpacing( KDialog::spacingHint() );
 
-    // ### m_ is for member variables !
-    int m_iGridX=10;
-    int m_iGridY=10;
+    double ptGridX=10.0;
+    double ptGridY=10.0;
     double ptIndent = MM_TO_POINT(10.0);
-    bool m_bShowRuler=true;
+    bool bShowRuler=true;
 
     oldNbRecentFiles=10;
     oldAutoSaveValue=KoDocument::defaultAutoSave() / 60;
@@ -183,25 +183,25 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QVBox *box, char 
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
-        m_iGridX=config->readNumEntry("GridX",m_iGridX);
-        m_iGridY=config->readNumEntry("GridY",m_iGridY);
-        ptIndent = config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0));
+        ptGridX=config->readDoubleNumEntry("GridX", ptGridX);
+        ptGridY=config->readDoubleNumEntry("GridY", ptGridY);
+        ptIndent = config->readDoubleNumEntry("Indent", ptIndent);
         oldNbRecentFiles=config->readNumEntry("NbRecentFile",oldNbRecentFiles);
-        m_bShowRuler=config->readBoolEntry("Rulers",true);
+        bShowRuler=config->readBoolEntry("Rulers",true);
         oldAutoSaveValue=config->readNumEntry("AutoSave",oldAutoSaveValue);
         nbPagePerRow=config->readNumEntry("nbPagePerRow",nbPagePerRow);
     }
 
 
     showRuler= new QCheckBox(i18n("Show rulers"),tmpQGroupBox);
-    showRuler->setChecked(m_bShowRuler);
+    showRuler->setChecked(bShowRuler);
     lay1->addWidget(showRuler);
 
     autoSave = new KIntNumInput( oldAutoSaveValue, tmpQGroupBox );
     autoSave->setRange(0, 60, 1);
     autoSave->setLabel(i18n("Auto save (min):"));
     autoSave->setSpecialValueText(i18n("No auto save"));
-    autoSave->setSuffix(i18n("min"));
+    autoSave->setSuffix(i18n(" min"));
 
     lay1->addWidget(autoSave);
 
@@ -211,36 +211,27 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QVBox *box, char 
 
     lay1->addWidget(recentFiles);
 
-    gridX=new KIntNumInput( m_iGridX, tmpQGroupBox );
-    gridX->setRange(1, 50, 1);
+    QString suffix = KWUnit::unitName( unit ).prepend(' ');
+    gridX=new KDoubleNumInput( KWUnit::userValue( ptGridX, unit ), tmpQGroupBox );
+    gridX->setRange(0.1, 50, 0.1);
+    gridX->setFormat( "%.1f" );
+    gridX->setSuffix( suffix );
     gridX->setLabel(i18n("X grid space"));
     lay1->addWidget(gridX);
 
-    gridY=new KIntNumInput(m_iGridY, tmpQGroupBox );
-    gridY->setRange(1, 50, 1);
+    gridY=new KDoubleNumInput( KWUnit::userValue( ptGridY, unit ), tmpQGroupBox );
+    gridY->setRange(0.1, 50, 0.1);
+    gridY->setFormat( "%.1f" );
     gridY->setLabel(i18n("Y grid space"));
+    gridY->setSuffix( suffix );
     lay1->addWidget(gridY);
-
-    // ### move this to KWUnit
-    QString unitText;
-    switch ( unit )
-      {
-      case KWUnit::U_MM:
-	unitText=i18n("Millimeters (mm)");
-	break;
-      case KWUnit::U_INCH:
-	unitText=i18n("Inches (inch)");
-	break;
-      case KWUnit::U_PT:
-      default:
-	unitText=i18n("points (pt)" );
-      }
 
     double val = KWUnit::userValue( ptIndent, unit );
     indent = new KDoubleNumInput( val, tmpQGroupBox );
-    indent->setRange(1, 50, 0.1);
+    indent->setRange(0.1, 50, 0.1);
     indent->setFormat( "%.1f" );
-    indent->setLabel(i18n("1 is a unit name", "Indent in %1").arg(unitText));
+    indent->setSuffix( suffix );
+    indent->setLabel(i18n("Paragraph indent by toolbar buttons"));
 
     lay1->addWidget(indent);
 
@@ -253,30 +244,32 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QVBox *box, char 
     //box->addWidget( tmpQGroupBox);
 }
 
-void configureInterfacePage::apply()
+void ConfigureInterfacePage::apply()
 {
-    int valX=gridX->value();
-    int valY=gridY->value();
+    KWDocument * doc = m_pView->kWordDocument();
+    double valX=KWUnit::fromUserValue( gridX->value(), doc->getUnit() );
+    //kdDebug() << "ConfigureInterfacePage::apply gridX->value()=" << gridX->value() << " valX=" << valX << endl;
+    double valY=KWUnit::fromUserValue( gridY->value(), doc->getUnit() );
     int nbRecent=recentFiles->value();
     bool ruler=showRuler->isChecked();
-    KWDocument * doc = m_pView->kWordDocument();
 
     config->setGroup( "Interface" );
     if(valX!=doc->gridX())
     {
-        config->writeEntry( "GridX",valX );
+        //kdDebug() << "ConfigureInterfacePage::apply writing gridX=" << valX << endl;
+        config->writeEntry( "GridX", valX, true, false, 'g', DBL_DIG /* 6 is not enough */ );
         doc->setGridX(valX);
     }
     if(valY!=doc->gridY())
     {
-        config->writeEntry( "GridY",valY );
+        config->writeEntry( "GridY", valY, true, false, 'g', DBL_DIG /* 6 is not enough */ );
         doc->setGridY(valY);
     }
 
     double newIndent = KWUnit::fromUserValue( indent->value(), doc->getUnit() );
     if( newIndent != doc->getIndentValue() )
     {
-        config->writeEntry( "Indent", newIndent );
+        config->writeEntry( "Indent", newIndent, true, false, 'g', DBL_DIG /* 6 is not enough */ );
         doc->setIndentValue( newIndent );
     }
     if(nbRecent!=oldNbRecentFiles)
@@ -307,12 +300,12 @@ void configureInterfacePage::apply()
     }
 }
 
-void configureInterfacePage::slotDefault()
+void ConfigureInterfacePage::slotDefault()
 {
-    gridX->setValue(10);
-    gridY->setValue(10);
-    m_nbPagePerRow->setValue(4);
     KWDocument * doc = m_pView->kWordDocument();
+    gridX->setValue( KWUnit::userValue( 10, doc->getUnit() ) );
+    gridY->setValue( KWUnit::userValue( 10, doc->getUnit() ) );
+    m_nbPagePerRow->setValue(4);
     double newIndent = KWUnit::userValue( MM_TO_POINT( 10 ), doc->getUnit() );
     indent->setValue( newIndent );
     recentFiles->setValue(10);
@@ -321,7 +314,7 @@ void configureInterfacePage::slotDefault()
 }
 
 
-configureMiscPage::configureMiscPage( KWView *_view, QVBox *box, char *name )
+ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
  : QObject( box->parent(), name )
 {
     m_pView=_view;
@@ -343,9 +336,9 @@ configureMiscPage::configureMiscPage( KWView *_view, QVBox *box, char *name )
     grid->addWidget(unitLabel,0,0);
 
     QStringList listUnit;
-    listUnit<<i18n("Millimeters (mm)");
-    listUnit<<i18n("Inches (inch)");
-    listUnit<<i18n("points (pt)" );
+    listUnit << KWUnit::unitDescription( KWUnit::U_MM );
+    listUnit << KWUnit::unitDescription( KWUnit::U_INCH );
+    listUnit << KWUnit::unitDescription( KWUnit::U_PT );
     m_unit = new QComboBox( tmpQGroupBox );
     m_unit->insertStringList(listUnit);
     m_oldUnit=0;
@@ -367,9 +360,8 @@ configureMiscPage::configureMiscPage( KWView *_view, QVBox *box, char *name )
 
 }
 
-void configureMiscPage::apply()
+void ConfigureMiscPage::apply()
 {
-    KWDocument * doc = m_pView->kWordDocument();
     config->setGroup( "Misc" );
     if(m_oldUnit!=m_unit->currentItem())
     {
@@ -391,7 +383,7 @@ void configureMiscPage::apply()
     }
 }
 
-void configureMiscPage::slotDefault()
+void ConfigureMiscPage::slotDefault()
 {
     //todo
 }

@@ -17,22 +17,21 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qgroupbox.h>
-
 #include "fontdia.h"
 #include "kwdoc.h"
+#include <kotextformat.h>
 
 #include <kapp.h>
 #include <kcolordialog.h>
 #include <kfontdialog.h>
 #include <kbuttonbox.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include <qlayout.h>
 #include <qdialog.h>
 #include <qvbox.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kwformat.h>
+#include <qgroupbox.h>
 
 KWFontChooser::KWFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript )
     : QWidget( parent, name )
@@ -113,7 +112,7 @@ void KWFontChooser::slotFontChanged(const QFont & f)
         m_changedFlags |= QTextFormat::Size;
     kdDebug() << "KWFontChooser::slotFontChanged newcharset=" << f.charSet() << " oldcharset=" << m_newFont.charSet() << endl;
     if ( f.charSet() != m_newFont.charSet() )
-        m_changedFlags |= KWTextFormat::CharSet;
+        m_changedFlags |= KoTextFormat::CharSet;
     kdDebug() << "KWFontChooser::slotFontChanged m_changedFlags=" << m_changedFlags << endl;
     m_newFont = f;
 }
@@ -129,7 +128,7 @@ void KWFontChooser::slotStrikeOutClicked()
 {
     m_newFont.setStrikeOut(m_strikeOut->isChecked());
     m_chooseFont->setFont(m_newFont);
-    m_changedFlags |= KWTextFormat::StrikeOut;
+    m_changedFlags |= KoTextFormat::StrikeOut;
 }
 
 void KWFontChooser::slotSubScriptClicked()

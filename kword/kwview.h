@@ -23,7 +23,7 @@
 #include <koprinter.h>
 #include <qbrush.h>
 
-#include "border.h"
+#include "koborder.h"
 #include "defs.h"
 #include "kwtextparag.h"
 
@@ -78,16 +78,16 @@ public:
 
     // Those methods update the UI (from the given formatting info)
     // They do NOT do anything to the text
-    void showFormat( const QTextFormat &currentFormat );
+    void showFormat( const KoTextFormat &currentFormat );
     void showAlign( int align );
     void showCounter( KoParagCounter &c );
-    void showParagBorders( Border _left, Border _right,
-                          Border _top, Border _bottom );
-    void showFrameBorders( Border _left, Border _right,
-                          Border _top, Border _bottom );
+    void showParagBorders( const KoBorder& _left, const KoBorder& _right,
+                          const KoBorder& _top, const KoBorder& _bottom );
+    void showFrameBorders( const KoBorder& _left, const KoBorder& _right,
+                          const KoBorder& _top, const KoBorder& _bottom );
 
     void showStyle( const QString & styleName );
-    void showRulerIndent( double _leftMargin, double _firstLine );
+    void showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin );
     void showZoom( int zoom ); // show a zoom value in the combo
     void setZoom( int zoom, bool updateViews ); // change the zoom value
 
@@ -145,8 +145,9 @@ public:
     void refreshMenuExpression();
 
     void deleteFrame(bool _warning=true);
-
     void clearSelection();
+
+    QPopupMenu * popupMenu( const QString& name );
 
 public slots:
     void fileStatistics();
@@ -241,6 +242,7 @@ public slots:
     void newPageLayout( KoPageLayout _layout );
     void newLeftIndent( double _leftIndent);
     void newFirstIndent( double _firstIndent);
+    void newRightIndent( double _rightIndent);
 
     void spellCheckerReady();
     void spellCheckerMisspelling( QString, QStringList*, unsigned );
@@ -386,11 +388,11 @@ private:
     TKSelectColorAction *actionBackgroundColor;
     struct
     {
-        Border left;    // Values specific to left border.
-        Border right;   // right.
-        Border top;     // top.
-        Border bottom;  // bottom.
-        Border common;  // Value common to left, right top and bottom borders.
+        KoBorder left;    // Values specific to left border.
+        KoBorder right;   // right.
+        KoBorder top;     // top.
+        KoBorder bottom;  // bottom.
+        KoBorder common;  // Value common to left, right top and bottom borders.
     } m_border;
 
     KAction *actionTableDelRow;
@@ -411,8 +413,6 @@ private:
     KAction *actionEditPersonnalExpr;
 
     KAction *actionConfigure;
-
-    QList<KAction> m_actionList; // for the kodatatools
 
     KCharSelectDia *m_specialCharDlg;
     KWGUI *m_gui;

@@ -24,7 +24,7 @@
 #include <qlist.h>
 
 #include "defs.h"
-#include "border.h"
+#include "koborder.h"
 
 class KWCanvas;
 class KWDocument;
@@ -96,11 +96,11 @@ protected:
     struct TableStyle {
         bool hasHeader, hasFirstCol;
 
-        Border hTop, hBottom, hRight, hLeft;
+        KoBorder hTop, hBottom, hRight, hLeft;
         QBrush hBack;
-        Border frTop, frBottom, frRigfrt, frLeft;
+        KoBorder frTop, frBottom, frRigfrt, frLeft;
         QBrush frBack;
-        Border bTop, bBottom, bRigbt, bLeft;
+        KoBorder bTop, bBottom, bRigbt, bLeft;
         QBrush bBack;
     };
 

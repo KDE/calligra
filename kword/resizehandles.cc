@@ -31,6 +31,8 @@
 KWResizeHandle::KWResizeHandle( KWCanvas * p, Direction d, KWFrame *frm )
     : QWidget( p->viewport() ), m_canvas( p ), direction( d ), frame( frm )
 {
+    //kdDebug() << "KWResizeHandle::KWResizeHandle this=" << this << " frame=" << frm << endl;
+    ASSERT( frame );
     mousePressed = FALSE;
     setMouseTracking( TRUE );
     //setBackgroundMode( PaletteHighlight );
@@ -67,6 +69,11 @@ KWResizeHandle::KWResizeHandle( KWCanvas * p, Direction d, KWFrame *frm )
 
     updateGeometry();
     show();
+}
+
+KWResizeHandle::~KWResizeHandle()
+{
+    //kdDebug() << "KWResizeHandle::~KWResizeHandle " << this << endl;
 }
 
 void KWResizeHandle::mouseMoveEvent( QMouseEvent *e )

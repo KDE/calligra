@@ -58,11 +58,13 @@ Coordinate systems
 Just a quick note, to be expanded later.
  
 Document (pt values, in double, KoPoint, KoRect.)
- |
- |--KWDocument::zoom*
- |
-Zoomed coordinates (pixel values, in int, QPoint, QRect) 
-This is also called the "Normal" coordinate system.
+This is called the "Document" coordinate system.
+ |               |
+ |               |--KWDocument::zoom*
+ |               |
+ |               V
+ |    Zoomed coordinates (pixel values, in int, QPoint, QRect) 
+ |    This is also called the "Normal" coordinate system.
  |         |
  |         |--KWViewMode::normalToView
  |         V
@@ -73,11 +75,10 @@ This is also called the "Normal" coordinate system.
  |
  | And for text framesets, there's also :
  |
- |--KWTextFrameSet::normalToInternal
+ |--KWTextFrameSet::documentToInternal
  V
-Internal coordinates (pixel values for QRT)
- 
+Internal coordinates (the coordinates given to QRT - in "layout units")
+
 This last transformation doesn't depend on the view-mode arrangement,
-it's only about going from the frameset coord to the qrt internal coord,
-both being "one page below another".
- 
+nor on the zoom. It's only about going from the frameset coord to the
+qrt internal coord (i.e. going to a coord system that is internal to the train).

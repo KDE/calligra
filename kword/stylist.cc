@@ -46,7 +46,7 @@
 #include <kcolordlg.h>
 #include <klocale.h>
 #include <kwtextdocument.h>
-
+#include <kiconloader.h>
 #include <kdebug.h>
 
 /******************************************************************/
@@ -100,7 +100,6 @@ KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc )
     newTab = new KWStyleParagTab( m_tabs );
     newTab->setWidget( new KWParagTabulatorsWidget( unit, newTab ) );
     addTab( newTab );
-
     m_stylesList->setCurrentItem( 0 );
     noSignals=false;
     switchStyle();
@@ -132,17 +131,29 @@ void KWStyleManager::setupWidget()
 
     frame1Layout->addMultiCellWidget( m_stylesList, 0, 0, 0, 1 );
 
+
+    m_moveUpButton = new QPushButton( frame1, "moveUpButton" );
+    m_moveUpButton->setPixmap( BarIcon( "up", KIcon::SizeSmall ) );
+    connect( m_moveUpButton, SIGNAL( clicked() ), this, SLOT( moveUpStyle() ) );
+    frame1Layout->addWidget( m_moveUpButton, 1, 1 );
+
+    m_moveDownButton = new QPushButton( frame1, "moveDownButton" );
+    m_moveDownButton->setPixmap( BarIcon( "down", KIcon::SizeSmall ) );
+    connect( m_moveDownButton, SIGNAL( clicked() ), this, SLOT( moveDownStyle() ) );
+    frame1Layout->addWidget( m_moveDownButton, 1, 0 );
+
+
     m_deleteButton = new QPushButton( frame1, "deleteButton" );
     m_deleteButton->setText( i18n( "&Delete" ) );
     connect( m_deleteButton, SIGNAL( clicked() ), this, SLOT( deleteStyle() ) );
 
-    frame1Layout->addWidget( m_deleteButton, 1, 1 );
+    frame1Layout->addWidget( m_deleteButton, 2, 1 );
 
     m_newButton = new QPushButton( frame1, "newButton" );
     m_newButton->setText( i18n( "New" ) );
     connect( m_newButton, SIGNAL( clicked() ), this, SLOT( addStyle() ) );
 
-    frame1Layout->addWidget( m_newButton, 1, 0 );
+    frame1Layout->addWidget( m_newButton, 2, 0 );
 
     m_tabs = new QTabWidget( frame1 );
     frame1Layout->addMultiCellWidget( m_tabs, 0, 1, 2, 2 );
@@ -237,6 +248,11 @@ int KWStyleManager::styleIndex( int pos ) {
         ++p;
     }
     kdWarning() << "KWStyleManager::styleIndex no style found at pos " << pos << endl;
+
+#ifdef __GNUC_
+#warning implement undo/redo
+#endif
+
     return 0;
 }
 
@@ -262,6 +278,10 @@ void KWStyleManager::updateGUI() {
 
     // update delete button (can't delete first style);
     m_deleteButton->setEnabled(m_stylesList->currentItem() != 0);
+
+    m_moveUpButton->setEnabled(m_stylesList->currentItem() != 0);
+    m_moveDownButton->setEnabled(m_stylesList->currentItem()!=(int)m_stylesList->count()-1);
+
     updatePreview();
 }
 
@@ -327,6 +347,67 @@ void KWStyleManager::deleteStyle() {
     m_stylesList->setSelected( m_stylesList->currentItem(), true );
 }
 
+void KWStyleManager::moveUpStyle()
+{
+    unsigned int pos = 0;
+    QString currentStyleName=m_stylesList->currentText ();
+    for ( KWStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next(), ++pos )
+    {
+        if ( p->name() == currentStyleName )
+        {
+            // We have "prev" "p" and we want "p" "prev"
+            m_changedStyles.insert( pos-1, p ); // "p" "prev" "p"
+            m_changedStyles.take( pos+1 );      // Remove last "p"
+            break;
+        }
+    }
+    pos=m_stylesList->currentItem();
+    noSignals=true;
+    m_stylesList->changeItem( m_stylesList->text ( pos-1 ),pos);
+    m_styleCombo->changeItem( m_stylesList->text ( pos-1 ),pos);
+
+    m_stylesList->changeItem( currentStyleName ,pos-1);
+    m_styleCombo->changeItem( currentStyleName ,pos-1);
+
+    m_stylesList->setCurrentItem( m_stylesList->currentItem() );
+    noSignals=false;
+
+    m_moveUpButton->setEnabled(m_stylesList->currentItem() != 0);
+    m_moveDownButton->setEnabled(m_stylesList->currentItem()!=(int)m_stylesList->count()-1);
+    updateGUI();
+}
+
+void KWStyleManager::moveDownStyle()
+{
+    unsigned int pos = 0;
+    QString currentStyleName=m_stylesList->currentText ();
+    for ( KWStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next(), ++pos )
+    {
+        if ( p->name() == currentStyleName )
+        {
+            KWStyle * next = m_changedStyles.at(pos+1);
+            if (!next) return;
+            // We have "p" "next" and we want "next" "p"
+            m_changedStyles.insert( pos, next ); // "next", "p", "next"
+            m_changedStyles.take( pos+2 );       // Remove last "next"
+            break;
+        }
+    }
+
+    pos=m_stylesList->currentItem();
+    noSignals=true;
+    m_stylesList->changeItem( m_stylesList->text ( pos+1 ),pos);
+    m_styleCombo->changeItem( m_stylesList->text ( pos+1 ),pos);
+    m_stylesList->changeItem( currentStyleName ,pos+1);
+    m_styleCombo->changeItem( currentStyleName ,pos+1);
+    m_stylesList->setCurrentItem( m_stylesList->currentItem() );
+    noSignals=false;
+
+    m_moveUpButton->setEnabled(m_stylesList->currentItem() != 0);
+    m_moveDownButton->setEnabled(m_stylesList->currentItem()!=(int)m_stylesList->count()-1);
+    updateGUI();
+}
+
 void KWStyleManager::slotOk() {
     save();
     apply();
@@ -341,13 +422,11 @@ void KWStyleManager::slotApply() {
 
 void KWStyleManager::apply() {
     noSignals=true;
-    bool docIsChanged=false;
     for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
         if(m_origStyles.at(i) == 0) {           // newly added style
             kdDebug() << "adding new " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
             KWStyle *tmp = m_doc->addStyleTemplate(m_changedStyles.take(i));
             m_changedStyles.insert(i, tmp);
-            docIsChanged=true;
         } else if(m_changedStyles.at(i) == 0) { // deleted style
             kdDebug() << "deleting orig " << m_origStyles.at(i)->name() << " (" << i << ")" << endl;
 
@@ -355,7 +434,6 @@ void KWStyleManager::apply() {
             m_doc->applyStyleChange( orig, -1, -1 );
             m_doc->removeStyleTemplate( orig );
             // Note that the style is never deleted (we'll need it for undo/redo purposes)
-            docIsChanged=true;
 
         } else if(m_changedStyles.at(i) != m_origStyles.at(i)) {
             kdDebug() << "update style " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
@@ -365,11 +443,6 @@ void KWStyleManager::apply() {
 
             int paragLayoutChanged = orig->paragLayout().compare( changed->paragLayout() );
             int formatChanged = orig->format().compare( changed->format() );
-
-            bool followingStyleChanged=(orig->followingStyle()!=changed->followingStyle());
-            if(formatChanged || paragLayoutChanged ||followingStyleChanged ||orig->name().compare(changed->name())!=0)
-                docIsChanged=true;
-
             //kdDebug() << "old format " << orig->format().key() << " pointsize " << orig->format().pointSizeFloat() << endl;
             //kdDebug() << "new format " << changed->format().key() << " pointsize " << changed->format().pointSizeFloat() << endl;
 
@@ -383,10 +456,7 @@ void KWStyleManager::apply() {
          //     kdDebug() << "has not changed " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
     }
 
-    if(docIsChanged) {
-        m_doc->updateAllStyleLists();
-        m_doc->setModified(true);
-    }
+    m_doc->updateAllStyleLists();
     noSignals=false;
 }
 

@@ -24,7 +24,7 @@
 // to reduce compile-time dependencies.
 
 #include <qgroupbox.h>
-#include "counter.h"
+#include <koparagcounter.h>
 #include <qspinbox.h>
 class QWidget;
 class QPainter;
@@ -116,21 +116,21 @@ public:
     KWBorderPreview( QWidget*, const char* = 0L );
     ~KWBorderPreview() {}
 
-    Border leftBorder() { return m_leftBorder; }
-    void setLeftBorder( Border _leftBorder ) { m_leftBorder = _leftBorder; repaint( true ); }
-    Border rightBorder() { return m_rightBorder; }
-    void setRightBorder( Border _rightBorder ) { m_rightBorder = _rightBorder; repaint( true ); }
-    Border topBorder() { return m_topBorder; }
-    void setTopBorder( Border _topBorder ) { m_topBorder = _topBorder; repaint( true ); }
-    Border bottomBorder() { return m_bottomBorder; }
-    void setBottomBorder( Border _bottomBorder ) { m_bottomBorder = _bottomBorder; repaint( true ); }
+    KoBorder leftBorder() { return m_leftBorder; }
+    void setLeftBorder( KoBorder _leftBorder ) { m_leftBorder = _leftBorder; repaint( true ); }
+    KoBorder rightBorder() { return m_rightBorder; }
+    void setRightBorder( KoBorder _rightBorder ) { m_rightBorder = _rightBorder; repaint( true ); }
+    KoBorder topBorder() { return m_topBorder; }
+    void setTopBorder( KoBorder _topBorder ) { m_topBorder = _topBorder; repaint( true ); }
+    KoBorder bottomBorder() { return m_bottomBorder; }
+    void setBottomBorder( KoBorder _bottomBorder ) { m_bottomBorder = _bottomBorder; repaint( true ); }
 
 protected:
     virtual void mousePressEvent( QMouseEvent* _ev );
     void drawContents( QPainter* );
-    QPen setBorderPen( Border _brd );
+    QPen setBorderPen( KoBorder _brd );
 
-    Border m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
+    KoBorder m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
 signals:
     void choosearea(QMouseEvent * _ev);
 
@@ -149,7 +149,7 @@ public:
     ~KWNumPreview();
 
     void setCounter( const KoParagCounter & counter );
-    void setStyle(KWStyle *style);
+    void setStyle(KoStyle *style);
 
 protected:
     void drawContents( QPainter* );

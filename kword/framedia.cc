@@ -25,6 +25,7 @@
 #include "defs.h"
 #include "kwcommand.h"
 #include "kwtableframeset.h"
+#include <kotextdocument.h>
 
 #include <klocale.h>
 #include <kapp.h>
@@ -502,8 +503,6 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     connect(eFrameSetName, SIGNAL(textChanged ( const QString & )),this,SLOT(textNameFrameChanged ( const QString & )));
 
     grid3->addWidget( row, 2, 0 );
-
-    connectListSelected( lFrameSList->firstChild() );
 }
 
 void KWFrameDia::textNameFrameChanged ( const QString &text )
@@ -1006,7 +1005,10 @@ bool KWFrameDia::applyChanges()
         else
         {
             // Rename frameset
-            frame->getFrameSet()->setName( name );
+            KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Rename frameset"), frame->getFrameSet(), KWFrameSetPropertyCommand::FSP_NAME, name );
+            doc->addCommand(cmd);
+	    cmd->execute();
+            //frame->getFrameSet()->setName( name );
         }
     }
 
@@ -1061,7 +1063,7 @@ bool KWFrameDia::applyChanges()
             move->sizeOfBegin=frame->normalize();
 
             // turn non-floating frame into floating frame
-            KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( i18n("Make FrameSet Inline"), parentFs, true );
+            KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make FrameSet Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "true" );
             cmd->execute();
 
             move->sizeOfEnd=frame->normalize();
@@ -1079,7 +1081,7 @@ bool KWFrameDia::applyChanges()
             if(!macroCmd)
                 macroCmd = new KMacroCommand( i18n("Make FrameSet Non-Inline") );
             // turn floating-frame into non-floating frame
-            KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( i18n("Make FrameSet Non-Inline"), parentFs, false );
+            KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make FrameSet Non-Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "false" );
             macroCmd->addCommand(cmd);
             cmd->execute();
         }
@@ -1097,22 +1099,22 @@ bool KWFrameDia::applyChanges()
                 double pw = KWUnit::fromUserValue( QMAX( sw->text().toDouble(), 0 ), doc->getUnit() );
                 double ph = KWUnit::fromUserValue( QMAX( sh->text().toDouble(), 0 ), doc->getUnit() );
 
-                FrameIndex index( frame );
-                FrameResizeStruct tmpResize;
-                tmpResize.sizeOfBegin = frame->normalize();
                 KoRect rect( px, py, pw, ph );
                 if( !doc->isOutOfPage( rect , frame->pageNum() ) )
+                {
+                    FrameIndex index( frame );
+                    FrameResizeStruct tmpResize;
+                    tmpResize.sizeOfBegin = frame->normalize();
                     frame->setRect( px, py, pw, ph );
+                    tmpResize.sizeOfEnd = frame->normalize();
+                    if(!macroCmd)
+                        macroCmd = new KMacroCommand( i18n("Resize Frame") );
+
+                    KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), index, tmpResize ) ;
+                    macroCmd->addCommand(cmd);
+                    doc->frameChanged( frame );
+                }
                 // else TODO message box after 1.1
-
-                // TODO apply page limits?
-                tmpResize.sizeOfEnd = frame->normalize();
-                if(!macroCmd)
-                    macroCmd = new KMacroCommand( i18n("Resize Frame") );
-
-                KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), index, tmpResize ) ;
-                macroCmd->addCommand(cmd);
-                doc->frameChanged( frame );
             }
         }
 

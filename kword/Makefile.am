@@ -1,35 +1,35 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) \
-	-I$(top_srcdir)/qt3stuff $(all_includes)
+INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula \
+	$(KOTEXT_INCLUDES) $(all_includes)
 
 ## The part
 kde_module_LTLIBRARIES = libkwordpart.la 
 libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
-                kwviewmode.cc kwzoomhandler.cc \
-		kwtextparag.cc kwstyle.cc kwformat.cc kwtextdocument.cc \
+                kwviewmode.cc \
+		kwtextparag.cc kwtextdocument.cc \
 		kwframe.cc kwtextframeset.cc \
                 kwtableframeset.cc kwtextimage.cc kwanchor.cc \
                 kwdrag.cc kwconfig.cc \
 		paragdia.cc searchdia.cc \
 		framedia.cc kcharselectdia.cc kwutils.cc preview.cc \
                 tabledia.cc insdia.cc deldia.cc docstruct.cc \
-                contents.cc counter.cc stylist.cc \
-                border.cc resizehandles.cc kwcommand.cc \
+                contents.cc stylist.cc \
+                resizehandles.cc kwcommand.cc \
 		autoformat.cc autoformatdia.cc fontdia.cc \
 		variable.cc variabledlgs.cc serialletter.cc \
 		kwchangecasedia.cc kweditpersonnalexpressiondia.cc \
-		splitcellsdia.cc kwinsertpicdia.cc
+		splitcellsdia.cc kwinsertpicdia.cc kwunit.cc
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KFORMULA) ../qt3stuff/libqt3stuff.la -lkspell
+libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell
 libkwordpart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = kword.la
 kword_la_SOURCES = main.cc
 kword_la_LDFLAGS = $(all_libraries) -avoid-version -module
-kword_la_LIBADD = $(LIB_KOFFICECORE)
+kword_la_LIBADD = ../lib/kofficecore/libkofficecore.la
 
 ## The executable
 bin_PROGRAMS = kword

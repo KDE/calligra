@@ -28,7 +28,9 @@
 #include "kwtextframeset.h"
 #include "kwanchor.h"
 #include "resizehandles.h"
+#include <kotextobject.h> // for customItemChar!
 #include <qpicture.h>
+#include <qpopupmenu.h>
 
 #include <kformulacontainer.h>
 #include <kformuladocument.h>
@@ -36,6 +38,7 @@
 
 #include <kcursor.h>
 #include <kdebug.h>
+#include <float.h>
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -44,8 +47,9 @@
 KWFrame::KWFrame(KWFrame * frame)
 {
     handles.setAutoDelete(true);
-    m_minFrameHeight=0;
+    //kdDebug() << "KWFrame::KWFrame this=" << this << " frame=" << frame << endl;
     copySettings( frame );
+    m_minFrameHeight=0;
 }
 
 KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double height, RunAround _ra, double _gap )
@@ -65,10 +69,10 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       selected( false ),
       m_internalY( 0 ),
       backgroundColor( QBrush( QColor() ) ), // valid brush with invalid color ( default )
-      brd_left( QColor(), Border::SOLID, 0 ),
-      brd_right( QColor(), Border::SOLID, 0 ),
-      brd_top( QColor(), Border::SOLID, 0 ),
-      brd_bottom( QColor(), Border::SOLID, 0 ),
+      brd_left( QColor(), KoBorder::SOLID, 0 ),
+      brd_right( QColor(), KoBorder::SOLID, 0 ),
+      brd_top( QColor(), KoBorder::SOLID, 0 ),
+      brd_bottom( QColor(), KoBorder::SOLID, 0 ),
       frameSet( fs )
 {
     //kdDebug() << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
@@ -142,7 +146,6 @@ KWFrame *KWFrame::getCopy() {
 
 void KWFrame::copySettings(KWFrame *frm)
 {
-    //kdDebug() << "KWFrame::copySettings this=" << this << " frm=" << frm << endl;
     //necessary to reapply these parameters
     setFrameSet( frm->getFrameSet() );
     setRect(frm->x(), frm->y(), frm->width(), frm->height());
@@ -170,6 +173,7 @@ void KWFrame::copySettings(KWFrame *frm)
 
 // Insert all resize handles
 void KWFrame::createResizeHandles() {
+    removeResizeHandles();
     QList <KWView> pages = getFrameSet()->kWordDocument()->getAllViews();
     for (int i=pages.count() -1; i >= 0; i--)
         createResizeHandlesForPage(pages.at(i)->getGUI()->canvasWidget());
@@ -196,6 +200,7 @@ void KWFrame::removeResizeHandlesForPage(KWCanvas *canvas) {
 
 // remove all resizeHandles
 void KWFrame::removeResizeHandles() {
+    //kdDebug() << this << " KWFrame::removeResizeHandles " << handles.count() << " handles" << endl;
     handles.clear();
 }
 
@@ -221,9 +226,9 @@ void KWFrame::updateRulerHandles(){
 
 void KWFrame::setSelected( bool _selected )
 {
+    //kdDebug() << this << " KWFrame::setSelected " << _selected << endl;
     bool s = selected;
     selected = _selected;
-    //kdDebug() << "KWFrame::setSelected(" << _selected << ") - was selected:" << s << endl;
     if ( selected )
         createResizeHandles();
     else if ( s )
@@ -234,10 +239,10 @@ QRect KWFrame::outerRect() const
 {
     KWDocument *doc = getFrameSet()->kWordDocument();
     QRect outerRect( doc->zoomRect( *this ) );
-    outerRect.rLeft() -= Border::zoomWidthX( brd_left.ptWidth, doc, 1 );
-    outerRect.rTop() -= Border::zoomWidthY( brd_top.ptWidth, doc, 1 );
-    outerRect.rRight() += Border::zoomWidthX( brd_right.ptWidth, doc, 1 );
-    outerRect.rBottom() += Border::zoomWidthY( brd_bottom.ptWidth, doc, 1 );
+    outerRect.rLeft() -= KoBorder::zoomWidthX( brd_left.ptWidth, doc, 1 );
+    outerRect.rTop() -= KoBorder::zoomWidthY( brd_top.ptWidth, doc, 1 );
+    outerRect.rRight() += KoBorder::zoomWidthX( brd_right.ptWidth, doc, 1 );
+    outerRect.rBottom() += KoBorder::zoomWidthY( brd_bottom.ptWidth, doc, 1 );
     return outerRect;
 }
 
@@ -249,19 +254,21 @@ KoRect KWFrame::outerKoRect() const
     outerRect.rTop() -= brd_top.ptWidth;
     outerRect.rRight() += brd_right.ptWidth;
     outerRect.rBottom() += brd_bottom.ptWidth;*/
-    outerRect.rLeft() -= Border::zoomWidthX( brd_left.ptWidth, doc, 1 ) / doc->zoomedResolutionX();
-    outerRect.rTop() -= Border::zoomWidthY( brd_top.ptWidth, doc, 1 ) / doc->zoomedResolutionY();
-    outerRect.rRight() += Border::zoomWidthX( brd_right.ptWidth, doc, 1 ) / doc->zoomedResolutionX();
-    outerRect.rBottom() += Border::zoomWidthY( brd_bottom.ptWidth, doc, 1 ) / doc->zoomedResolutionY();
+    outerRect.rLeft() -= KoBorder::zoomWidthX( brd_left.ptWidth, doc, 1 ) / doc->zoomedResolutionX();
+    outerRect.rTop() -= KoBorder::zoomWidthY( brd_top.ptWidth, doc, 1 ) / doc->zoomedResolutionY();
+    outerRect.rRight() += KoBorder::zoomWidthX( brd_right.ptWidth, doc, 1 ) / doc->zoomedResolutionX();
+    outerRect.rBottom() += KoBorder::zoomWidthY( brd_bottom.ptWidth, doc, 1 ) / doc->zoomedResolutionY();
     return outerRect;
 }
 
 void KWFrame::save( QDomElement &frameElem )
 {
-    frameElem.setAttribute( "left", left() );
-    frameElem.setAttribute( "top", top() );
-    frameElem.setAttribute( "right", right() );
-    frameElem.setAttribute( "bottom", bottom() );
+    // setAttribute( double ) uses a default precision of 6, and this seems
+    // to be 6 digits, even like '123.123' !
+    frameElem.setAttribute( "left", QString::number( left(), 'g', DBL_DIG ) );
+    frameElem.setAttribute( "top", QString::number( top(), 'g', DBL_DIG ) );
+    frameElem.setAttribute( "right", QString::number( right(), 'g', DBL_DIG ) );
+    frameElem.setAttribute( "bottom", QString::number( bottom(), 'g', DBL_DIG ) );
 
     if(runAround()!=RA_NO)
         frameElem.setAttribute( "runaround", static_cast<int>( runAround() ) );
@@ -278,7 +285,7 @@ void KWFrame::save( QDomElement &frameElem )
         frameElem.setAttribute( "lGreen", leftBorder().color.green() );
         frameElem.setAttribute( "lBlue", leftBorder().color.blue() );
     }
-    if(leftBorder().style != Border::SOLID)
+    if(leftBorder().style != KoBorder::SOLID)
         frameElem.setAttribute( "lStyle", static_cast<int>( leftBorder().style ) );
 
     if(rightBorder().ptWidth!=0)
@@ -290,7 +297,7 @@ void KWFrame::save( QDomElement &frameElem )
         frameElem.setAttribute( "rGreen", rightBorder().color.green() );
         frameElem.setAttribute( "rBlue", rightBorder().color.blue() );
     }
-    if(rightBorder().style != Border::SOLID)
+    if(rightBorder().style != KoBorder::SOLID)
         frameElem.setAttribute( "rStyle", static_cast<int>( rightBorder().style ) );
 
     if(topBorder().ptWidth!=0)
@@ -302,7 +309,7 @@ void KWFrame::save( QDomElement &frameElem )
         frameElem.setAttribute( "tGreen", topBorder().color.green() );
         frameElem.setAttribute( "tBlue", topBorder().color.blue() );
     }
-    if(topBorder().style != Border::SOLID)
+    if(topBorder().style != KoBorder::SOLID)
         frameElem.setAttribute( "tStyle", static_cast<int>( topBorder().style ) );
 
     if(bottomBorder().ptWidth!=0) {
@@ -313,7 +320,7 @@ void KWFrame::save( QDomElement &frameElem )
         frameElem.setAttribute( "bGreen", bottomBorder().color.green() );
         frameElem.setAttribute( "bBlue", bottomBorder().color.blue() );
     }
-    if(bottomBorder().style != Border::SOLID)
+    if(bottomBorder().style != KoBorder::SOLID)
         frameElem.setAttribute( "bStyle", static_cast<int>( bottomBorder().style ) );
 
     if(getBackgroundColor().color().isValid())
@@ -359,7 +366,7 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
     NewFrameBehaviour defaultValue = headerOrFooter ? Copy : Reconnect;
     newFrameBehaviour = static_cast<NewFrameBehaviour>( KWDocument::getAttribute( frameElem, "newFrameBehaviour", defaultValue ) );
 
-    Border l, r, t, b;
+    KoBorder l, r, t, b;
     l.ptWidth = KWDocument::getAttribute( frameElem, "lWidth", 0.0 );
     r.ptWidth = KWDocument::getAttribute( frameElem, "rWidth", 0.0 );
     t.ptWidth = KWDocument::getAttribute( frameElem, "tWidth", 0.0 );
@@ -384,10 +391,10 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
             KWDocument::getAttribute( frameElem, "bRed", 0 ),
             KWDocument::getAttribute( frameElem, "bGreen", 0 ),
             KWDocument::getAttribute( frameElem, "bBlue", 0 ) );
-    l.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "lStyle", Border::SOLID ) );
-    r.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "rStyle", Border::SOLID ) );
-    t.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "tStyle", Border::SOLID ) );
-    b.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "bStyle", Border::SOLID ) );
+    l.style = static_cast<KoBorder::BorderStyle>( KWDocument::getAttribute( frameElem, "lStyle", KoBorder::SOLID ) );
+    r.style = static_cast<KoBorder::BorderStyle>( KWDocument::getAttribute( frameElem, "rStyle", KoBorder::SOLID ) );
+    t.style = static_cast<KoBorder::BorderStyle>( KWDocument::getAttribute( frameElem, "tStyle", KoBorder::SOLID ) );
+    b.style = static_cast<KoBorder::BorderStyle>( KWDocument::getAttribute( frameElem, "bStyle", KoBorder::SOLID ) );
     QColor c;
     if ( frameElem.hasAttribute("bkRed") )
         c.setRgb(
@@ -456,7 +463,7 @@ void KWFrameSet::delFrame( unsigned int _num )
 
 void KWFrameSet::delFrame( KWFrame *frm, bool remove )
 {
-    //kdDebug() << "KWFrameSet::delFrame " << frm << " " << remove << endl;
+    kdDebug() << "KWFrameSet::delFrame " << frm << " " << remove << endl;
     int _num = frames.findRef( frm );
     ASSERT( _num != -1 );
     if ( _num == -1 )
@@ -471,6 +478,7 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
     }
     else
         frames.remove( _num );
+
 
     updateFrames();
 }
@@ -547,10 +555,10 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
     // Borders should be drawn _outside_ of the frame area
     // otherwise the frames will erase the border when painting themselves.
 
-    Border::drawBorders( *painter, m_doc, frameRect,
-                         settingsFrame->leftBorder(), settingsFrame->rightBorder(),
-                         settingsFrame->topBorder(), settingsFrame->bottomBorder(),
-                         1, viewSetting );
+    KoBorder::drawBorders( *painter, m_doc, frameRect,
+                           settingsFrame->leftBorder(), settingsFrame->rightBorder(),
+                           settingsFrame->topBorder(), settingsFrame->bottomBorder(),
+                           1, viewSetting );
     painter->restore();
 }
 
@@ -566,9 +574,9 @@ void KWFrameSet::setFloating()
 
         QTextParag* parag = 0L;
         int index = 0;
-        QPoint cPoint( m_doc->zoomPoint( frames.first()->topLeft() ) );
-        kdDebug() << "KWFrameSet::setFloating looking for pos at " << cPoint.x() << " " << cPoint.y() << endl;
-        frameSet->findPosition( cPoint, parag, index );
+        KoPoint dPoint( frames.first()->topLeft() );
+        kdDebug() << "KWFrameSet::setFloating looking for pos at " << dPoint.x() << " " << dPoint.y() << endl;
+        frameSet->findPosition( dPoint, parag, index );
         // Create anchor. TODO: refcount the anchors!
         setAnchored( frameSet, parag->paragId(), index );
         frameSet->layout();
@@ -625,9 +633,7 @@ void KWFrameSet::setFixed()
 
 KWAnchor * KWFrameSet::createAnchor( KWTextDocument * textdoc, int frameNum )
 {
-    //KWFrame * frame = getFrame( frameNum );
     KWAnchor * anchor = new KWAnchor( textdoc, this, frameNum );
-    //frame->setAnchor( anchor );
     return anchor;
 }
 
@@ -641,9 +647,9 @@ void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolder
         //if ( ! frameIt.current()->anchor() )
         {
             // Anchor this frame, after the previous one
-            KWAnchor * anchor = createAnchor( m_anchorTextFs->textDocument(), getFrameFromPtr( frameIt.current() ) );
+            KWAnchor * anchor = createAnchor( m_anchorTextFs->kwTextDocument(), getFrameFromPtr( frameIt.current() ) );
             if ( !placeHolderExists )
-                parag->insert( index, KWTextFrameSet::customItemChar() );
+                parag->insert( index, KoTextObject::customItemChar() );
             parag->setCustomItem( index, anchor, 0 );
         }
     }
@@ -689,22 +695,20 @@ void KWFrameSet::deleteAnchors()
     emit repaintChanged( textfs );
 }
 
-void KWFrameSet::moveFloatingFrame( int frameNum, const QPoint &position )
+void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 {
     KWFrame * frame = frames.at( frameNum );
     ASSERT( frame );
     if ( !frame ) return;
 
-    QPoint pos( position );
+    KoPoint pos( position );
     // position includes the border, we need to adjust accordingly
-    pos.rx() += Border::zoomWidthX( frame->leftBorder().ptWidth, m_doc, 1 );
-    pos.ry() += Border::zoomWidthY( frame->topBorder().ptWidth, m_doc, 1 );
-    // Now we can unzoom
-    KoPoint kopos = m_doc->unzoomPoint( pos );
-    if ( frame->topLeft() != kopos )
+    pos.rx() += frame->leftBorder().ptWidth;
+    pos.ry() += frame->topBorder().ptWidth;
+    if ( frame->topLeft() != pos )
     {
-        kdDebug() << "KWFrameSet::moveFloatingFrame " << kopos.x() << "," << kopos.y() << endl;
-        frame->moveTopLeft( kopos );
+        kdDebug() << "KWFrameSet::moveFloatingFrame " << pos.x() << "," << pos.y() << endl;
+        frame->moveTopLeft( pos );
         kWordDocument()->updateAllFrames();
         if ( frame->isSelected() )
             frame->updateResizeHandles();
@@ -1221,6 +1225,14 @@ bool KWFrameSet::canRemovePage( int num )
         }
     }
     return true;
+}
+
+void KWFrameSet::showPopup( KWFrame *, KWFrameSetEdit *, KWView *view, const QPoint &point )
+{
+    QPopupMenu * popup = view->popupMenu("frame_popup");
+    ASSERT(popup);
+    if (popup)
+        popup->popup( point );
 }
 
 #ifndef NDEBUG
@@ -1836,6 +1848,14 @@ int KWFormulaFrameSet::floatingFrameBaseline( int /*frameNum*/ )
         return formula->baseline();
     }
     return -1;
+}
+
+void KWFormulaFrameSet::showPopup( KWFrame *, KWFrameSetEdit *, KWView *view, const QPoint &point )
+{
+    QPopupMenu * popup = view->popupMenu("Formula");
+    ASSERT(popup);
+    if (popup)
+        popup->popup( point );
 }
 
 

@@ -37,7 +37,10 @@
 #include "kwcanvas.h"
 #include "kwdoc.h"
 #include "kwtextframeset.h"
-#include "kwformat.h"
+#include <kotextformat.h>
+#include <kotextdocument.h>
+#include <kotextobject.h>
+#include <kcommand.h>
 
 KWSearchContext::KWSearchContext()
 {
@@ -297,8 +300,8 @@ void KWFindReplace::proceed()
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_canvas->currentFrameSetEdit());
     if ( edit && ( m_options & KoFindDialog::FromCursor ) )
     {
-        firstParag = edit->getCursor()->parag();
-        firstIndex = edit->getCursor()->index();
+        firstParag = edit->cursor()->parag();
+        firstIndex = edit->cursor()->index();
         firstFrameSet = static_cast<KWTextFrameSet *>(edit->frameSet());
     } // no else here !
 
@@ -433,8 +436,8 @@ void KWFindReplace::replace( const QString &, int matchingIndex,
     QTextCursor cursor( textdoc );
     cursor.setParag( m_currentParag );
     cursor.setIndex( index );
-    m_macroCmd->addCommand(m_currentFrameSet->replaceSelectionCommand(
-        &cursor, m_replaceDlg->replacement(), KWTextFrameSet::HighlightSelection, QString::null ));
+    m_macroCmd->addCommand(m_currentFrameSet->textObject()->replaceSelectionCommand(
+        &cursor, m_replaceDlg->replacement(), KoTextObject::HighlightSelection, QString::null ));
 }
 
 #include "searchdia.moc"

@@ -234,7 +234,7 @@ public:
 
     virtual void updateFrames();
 
-    virtual void moveFloatingFrame( int frameNum, const QPoint &position );
+    virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
     virtual QSize floatingFrameSize( int frameNum );
     /** Store command for creating an anchored object */
     virtual KCommand * anchoredObjectCreateCommand( int frameNum );
@@ -244,7 +244,7 @@ public:
 
     virtual bool canRemovePage( int num );
 
-    virtual QString getPopupName() { return "text_popup"; }
+    void showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *view, const QPoint &point );
 
 #ifndef NDEBUG
     virtual void printDebug( KWFrame * frame );

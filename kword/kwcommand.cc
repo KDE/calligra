@@ -23,229 +23,12 @@
 #include "kwtextframeset.h"
 #include "kwtableframeset.h"
 #include "kwanchor.h"
+#include <kotextobject.h>
 
 #include <qrichtext_p.h>
+using namespace Qt3;
 #include <kdebug.h>
 
-// This is automatically called by KCommandHistory's redo action when redo is activated
-void KWTextCommand::execute()
-{
-    m_textfs->redo();
-}
-
-// This is automatically called by KCommandHistory's undo action when undo is activated
-void KWTextCommand::unexecute()
-{
-    m_textfs->undo();
-}
-
-KWTextDeleteCommand::KWTextDeleteCommand(
-    QTextDocument *d, int i, int idx, const QArray<QTextStringChar> &str,
-    const CustomItemsMap & customItemsMap,
-    const QValueList<KWParagLayout> &oldParagLayouts )
-    : QTextDeleteCommand( d, i, idx, str,
-                          QValueList< QVector<QStyleSheetItem> >(),
-                          QValueList<QStyleSheetItem::ListStyle>(),
-                          QArray<int>() ),
-      m_oldParagLayouts( oldParagLayouts ),
-      m_customItemsMap( customItemsMap )
-{
-    // Note that we don't pass aligns and liststyles to QTextDeleteCommand.
-    // We'll handle them here, as part of the rest, since they are in the paraglayouts
-}
-
-QTextCursor * KWTextDeleteCommand::execute( QTextCursor *c )
-{
-    QTextParag *s = doc ? doc->paragAt( id ) : parag;
-    if ( !s ) {
-        qWarning( "can't locate parag at %d, last parag: %d", id, doc->lastParag()->paragId() );
-        return 0;
-    }
-    cursor.setParag( s );
-    cursor.setIndex( index );
-    int len = text.size();
-    // Detach from custom items. They are already in the map, and we don't
-    // want them to be deleted
-    for ( int i = 0; i < len; ++i )
-    {
-        QTextStringChar * ch = cursor.parag()->at( cursor.index() );
-        if ( ch->isCustom() )
-        {
-            static_cast<KWTextCustomItem *>( ch->customItem() )->setDeleted( true );
-            static_cast<KWTextParag*>(cursor.parag())->removeCustomItem(cursor.index());
-        }
-        cursor.gotoRight();
-    }
-
-    return QTextDeleteCommand::execute(c);
-}
-
-QTextCursor * KWTextDeleteCommand::unexecute( QTextCursor *c )
-{
-    // Let QRichText re-create the text and formatting
-    QTextCursor * cr = QTextDeleteCommand::unexecute(c);
-
-    QTextParag *s = doc ? doc->paragAt( id ) : parag;
-    if ( !s ) {
-        qWarning( "can't locate parag at %d, last parag: %d", id, doc->lastParag()->paragId() );
-        return 0;
-    }
-    cursor.setParag( s );
-    cursor.setIndex( index );
-    // Set any custom item that we had
-    m_customItemsMap.insertItems( cursor, text.size() );
-
-    // Now restore the parag layouts (i.e. KWord specific stuff)
-    QValueList<KWParagLayout>::Iterator lit = m_oldParagLayouts.begin();
-    kdDebug() << "KWTextDeleteCommand::unexecute " << m_oldParagLayouts.count() << " parag layouts. First parag=" << s->paragId() << endl;
-    ASSERT( id == s->paragId() );
-    QTextParag *p = s;
-    while ( p ) {
-        if ( lit != m_oldParagLayouts.end() )
-        {
-            kdDebug() << "KWTextDeleteCommand::unexecute applying paraglayout to parag " << p->paragId() << endl;
-            static_cast<KWTextParag*>(p)->setParagLayout( *lit );
-        }
-        else
-            break;
-        //if ( s == cr->parag() )
-        //    break;
-        p = p->next();
-        ++lit;
-    }
-    return cr;
-}
-
-KWTextParagCommand::KWTextParagCommand( QTextDocument *d, int fParag, int lParag,
-                                        const QValueList<KWParagLayout> &oldParagLayouts,
-                                        KWParagLayout newParagLayout,
-                                        int flags,
-                                        QStyleSheetItem::Margin margin )
-    : QTextCommand( d ), firstParag( fParag ), lastParag( lParag ), m_oldParagLayouts( oldParagLayouts ),
-      m_newParagLayout( newParagLayout ), m_flags( flags ), m_margin( margin )
-{
-}
-
-QTextCursor * KWTextParagCommand::execute( QTextCursor *c )
-{
-    //kdDebug() << "KWTextParagCommand::execute" << endl;
-    KWTextParag *p = static_cast<KWTextParag *>(doc->paragAt( firstParag ));
-    if ( !p )
-    {
-        kdWarning() << "KWTextParagCommand::execute paragraph " << firstParag << "not found" << endl;
-        return c;
-    }
-    while ( p ) {
-        if ( ( m_flags & KWParagLayout::Margins ) && m_margin != (QStyleSheetItem::Margin)-1 ) // all
-            p->setMargin( static_cast<QStyleSheetItem::Margin>(m_margin), m_newParagLayout.margins[m_margin] );
-        else
-        {
-            p->setParagLayout( m_newParagLayout, m_flags );
-        }
-        if ( p->paragId() == lastParag )
-            break;
-        p = static_cast<KWTextParag *>(p->next());
-    }
-    //kdDebug() << "KWTextParagCommand::execute done" << endl;
-    // Set cursor to end of selection. Like in QTextFormatCommand::[un]execute...
-    c->setParag( p );
-    c->setIndex( p->length()-1 );
-    return c;
-}
-
-QTextCursor * KWTextParagCommand::unexecute( QTextCursor *c )
-{
-    KWTextParag *p = static_cast<KWTextParag *>(doc->paragAt( firstParag ));
-    if ( !p )
-    {
-        kdDebug() << "KWTextParagCommand::unexecute paragraph " << firstParag << "not found" << endl;
-        return c;
-    }
-    QValueList<KWParagLayout>::Iterator lit = m_oldParagLayouts.begin();
-    while ( p ) {
-        if ( lit == m_oldParagLayouts.end() )
-        {
-            kdDebug() << "KWTextParagCommand::unexecute m_oldParagLayouts not big enough!" << endl;
-            break;
-        }
-        if ( m_flags & KWParagLayout::Margins && m_margin != (QStyleSheetItem::Margin)-1 ) // just one
-            p->setMargin( static_cast<QStyleSheetItem::Margin>(m_margin), (*lit).margins[m_margin] );
-        else
-        {
-            p->setParagLayout( *lit, m_flags );
-        }
-        if ( p->paragId() == lastParag )
-            break;
-        p = static_cast<KWTextParag *>(p->next());
-        ++lit;
-    }
-    // Set cursor to end of selection. Like in QTextFormatCommand::[un]execute...
-    c->setParag( p );
-    c->setIndex( p->length()-1 );
-    return c;
-}
-
-//////////
-
-KWParagFormatCommand::KWParagFormatCommand( QTextDocument *d, int fParag, int lParag,
-                                                          const QValueList<QTextFormat *> &oldFormats,
-                                                          QTextFormat * newFormat )
-    : QTextCommand( d ), firstParag( fParag ), lastParag( lParag ), m_oldFormats( oldFormats ),
-      m_newFormat( newFormat )
-{
-    QValueList<QTextFormat *>::Iterator lit = m_oldFormats.begin();
-    for ( ; lit != m_oldFormats.end() ; ++lit )
-        (*lit)->addRef();
-}
-
-KWParagFormatCommand::~KWParagFormatCommand()
-{
-    QValueList<QTextFormat *>::Iterator lit = m_oldFormats.begin();
-    for ( ; lit != m_oldFormats.end() ; ++lit )
-        (*lit)->removeRef();
-}
-
-QTextCursor * KWParagFormatCommand::execute( QTextCursor *c )
-{
-    KWTextParag *p = static_cast<KWTextParag *>(doc->paragAt( firstParag ));
-    if ( !p )
-    {
-        kdDebug() << "KWTextParagCommand::execute paragraph " << firstParag << "not found" << endl;
-        return c;
-    }
-    while ( p ) {
-        p->setFormat( m_newFormat );
-        p->invalidate(0);
-        if ( p->paragId() == lastParag )
-            break;
-        p = static_cast<KWTextParag *>(p->next());
-    }
-    return c;
-}
-
-QTextCursor * KWParagFormatCommand::unexecute( QTextCursor *c )
-{
-    QTextParag *p = doc->paragAt( firstParag );
-    if ( !p )
-    {
-        kdDebug() << "KWParagFormatCommand::unexecute paragraph " << firstParag << "not found" << endl;
-        return c;
-    }
-    QValueList<QTextFormat *>::Iterator lit = m_oldFormats.begin();
-    while ( p ) {
-        if ( lit == m_oldFormats.end() )
-        {
-            kdDebug() << "KWParagFormatCommand::unexecute m_oldFormats not big enough!" << endl;
-            break;
-        }
-        p->setFormat( (*lit) );
-        if ( p->paragId() == lastParag )
-            break;
-        p = p->next();
-        ++lit;
-    }
-    return c;
-}
 
 KWPasteTextCommand::KWPasteTextCommand( QTextDocument *d, int parag, int idx,
                                 const QCString & data )
@@ -327,7 +110,7 @@ QTextCursor * KWPasteTextCommand::execute( QTextCursor *c )
                 QDomElement formatElem = layout.namedItem( "FORMAT" ).toElement();
                 if ( !formatElem.isNull() )
                 {
-                    QTextFormat f = parag->loadFormat( formatElem, 0L, QFont() );
+                    QTextFormat f = parag->loadFormat( formatElem, 0L, QFont(), textFs->kWordDocument() );
                     QTextFormat * defaultFormat = doc->formatCollection()->format( &f );
                     // Last paragraph (i.e. only one in all) : some of the text might be from before the paste
                     int endIndex = (item == count-1) ? c->index() : parag->string()->length() - 1;
@@ -370,10 +153,10 @@ QTextCursor * KWPasteTextCommand::execute( QTextCursor *c )
 // Helper class for deleting all custom items
 // (KWTextFrameset::removeSelectedText and readFormats do that already,
 //  but with undo/redo, and copying all formatting etc.)
-class KWDeleteCustomItemVisitor : public KWParagVisitor // see kwtextdocument.h
+class KWDeleteCustomItemVisitor : public KoParagVisitor // see kwtextdocument.h
 {
 public:
-    KWDeleteCustomItemVisitor() : KWParagVisitor() { }
+    KWDeleteCustomItemVisitor() : KoParagVisitor() { }
     virtual bool visit( QTextParag *parag, int start, int end )
     {
         kdDebug() << "KWPasteTextCommand::execute " << parag->paragId() << " " << start << " " << end << endl;
@@ -382,7 +165,7 @@ public:
             QTextStringChar * ch = parag->at( i );
             if ( ch->isCustom() )
 	    {
-	       KWTextCustomItem* item = static_cast<KWTextCustomItem *>( ch->customItem() );
+	       KoTextCustomItem* item = static_cast<KoTextCustomItem *>( ch->customItem() );
 	       item->setDeleted( true );
 	       KCommand* itemCmd = item->deleteCommand();
 	       if ( itemCmd ) itemCmd->execute();
@@ -422,106 +205,6 @@ QTextCursor * KWPasteTextCommand::unexecute( QTextCursor *c )
     return c;
 }
 
-KWTextFormatCommand::KWTextFormatCommand(QTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<QTextStringChar> &old, QTextFormat *f, int fl )
-    : QTextFormatCommand(d, sid, sidx, eid, eidx, old, f, fl)
-{
-}
-
-
-KWTextFormatCommand::~KWTextFormatCommand()
-{
-}
-
-void KWTextFormatCommand::resizeCustomItem()
-{
-    QTextParag *sp = doc->paragAt( startId );
-    QTextParag *ep = doc->paragAt( endId );
-    if ( !sp || !ep )
-        return;
-
-    QTextCursor start( doc );
-    start.setParag( sp );
-    start.setIndex( startIndex );
-    QTextCursor end( doc );
-    end.setParag( ep );
-    end.setIndex( endIndex );
-
-    doc->setSelectionStart( QTextDocument::Temp, &start );
-    doc->setSelectionEnd( QTextDocument::Temp, &end );
-
-
-    if ( start.parag() == end.parag() )
-    {
-        QString text = start.parag()->string()->toString().mid( start.index(), end.index() - start.index() );
-        for ( int i = start.index(); i < end.index(); ++i )
-        {
-            if( start.parag()->at(i)->isCustom())
-            {
-                static_cast<KWTextCustomItem *>( start.parag()->at(i)->customItem() )->resize();
-            }
-        }
-    }
-    else
-    {
-        int i;
-        QString text = start.parag()->string()->toString().mid( start.index(), start.parag()->length() - 1 - start.index() );
-        for ( i = start.index(); i < start.parag()->length(); ++i )
-            if( start.parag()->at(i)->isCustom())
-            {
-                static_cast<KWTextCustomItem *>( start.parag()->at(i)->customItem() )->resize();
-            }
-
-        QTextParag *p = start.parag()->next();
-        while ( p && p != end.parag() )
-        {
-            text = p->string()->toString().left( p->length() - 1 );
-            for ( i = 0; i < p->length(); ++i )
-            {
-               if( p->at(i)->isCustom())
-               {
-                   static_cast<KWTextCustomItem *>(p->at(i)->customItem() )->resize();
-               }
-            }
-            p = p->next();
-        }
-        text = end.parag()->string()->toString().left( end.index() );
-        for ( i = 0; i < end.index(); ++i )
-        {
-            if( end.parag()->at(i)->isCustom())
-            {
-                static_cast<KWTextCustomItem *>( end.parag()->at(i)->customItem() )->resize();
-            }
-        }
-    }
-}
-
-QTextCursor *KWTextFormatCommand::execute( QTextCursor *c )
-{
-    QTextCursor *tmp=QTextFormatCommand::execute( c );
-    QTextParag *sp = doc->paragAt( startId );
-    QTextParag *ep = doc->paragAt( endId );
-    if ( !sp || !ep )
-        return c;
-
-    resizeCustomItem();
-
-    return tmp;
-}
-
-QTextCursor *KWTextFormatCommand::unexecute( QTextCursor *c )
-{
-    QTextCursor*tmp= QTextFormatCommand::unexecute( c );
-
-    QTextParag *sp = doc->paragAt( startId );
-    QTextParag *ep = doc->paragAt( endId );
-    if ( !sp || !ep )
-        return c;
-
-    resizeCustomItem();
-
-    return tmp;
-}
-
 
 ////////////////////////// Frame commands ////////////////////////////////
 
@@ -531,7 +214,7 @@ FrameIndex::FrameIndex( KWFrame *frame )
     m_iFrameIndex=m_pFrameSet->getFrameFromPtr(frame);
 }
 
-KWFrameBorderCommand::KWFrameBorderCommand( const QString &name, QList<FrameIndex> &_listFrameIndex, QList<FrameBorderTypeStruct> &_frameTypeBorder,const Border & _newBorder):
+KWFrameBorderCommand::KWFrameBorderCommand( const QString &name, QList<FrameIndex> &_listFrameIndex, QList<FrameBorderTypeStruct> &_frameTypeBorder,const KoBorder & _newBorder):
     KCommand(name),
     m_indexFrame(_listFrameIndex),
     m_oldBorderFrameType(_frameTypeBorder),
@@ -751,9 +434,7 @@ void KWFramePartMoveCommand::execute()
 void KWFramePartMoveCommand::unexecute()
 {
     KWFrameSet *frameSet =m_indexFrame.m_pFrameSet;
-    ASSERT( frameSet );
     KWFrame *frame=frameSet->getFrame(m_indexFrame.m_iFrameIndex);
-    ASSERT( frame );
     frame->setCoords(m_frameMove.sizeOfBegin.left(),m_frameMove.sizeOfBegin.top(),m_frameMove.sizeOfBegin.right(),m_frameMove.sizeOfBegin.bottom());
 
     KWDocument * doc = frameSet->kWordDocument();
@@ -900,27 +581,43 @@ void KWFramePropertiesCommand::unexecute()
 }
 
 
-KWFrameSetFloatingCommand::KWFrameSetFloatingCommand( const QString &name, KWFrameSet *frameset, bool floating ) :
+KWFrameSetPropertyCommand::KWFrameSetPropertyCommand( const QString &name, KWFrameSet *frameset, Property prop, const QString& value ) :
     KCommand(name),
     m_pFrameSet( frameset ),
-    m_bFloating( floating )
+    m_property( prop ),
+    m_value( value )
 {
+    switch ( m_property ) {
+    case FSP_NAME:
+        m_oldValue = m_pFrameSet->getName();
+        break;
+    case FSP_FLOATING:
+        m_oldValue = m_pFrameSet->isFloating() ? "true" : "false";
+        break;
+    }
 }
 
-void KWFrameSetFloatingCommand::execute()
+void KWFrameSetPropertyCommand::setValue( const QString &value )
 {
-    kdDebug() << "KWFrameSetFloatingCommand::execute" << endl;
-    if ( m_bFloating )
-    {
-        // Make frame(set) floating
-        m_pFrameSet->setFloating();
-        // ## We might want to store a list of anchors in the command, and reuse them
-        // in execute/unexecute. Currently setFixed forgets the anchors and setFloating recreates new ones...
-    }
-    else
-    {
-        // Make frame(set) non-floating
-        m_pFrameSet->setFixed();
+    kdDebug() << "KWFrameSetPropertyCommand::execute" << endl;
+    switch ( m_property ) {
+    case FSP_NAME:
+        m_pFrameSet->setName( value );
+        break;
+    case FSP_FLOATING:
+        if ( value == "true" )
+        {
+            // Make frame(set) floating
+            m_pFrameSet->setFloating();
+            // ## We might want to store a list of anchors in the command, and reuse them
+            // in execute/unexecute. Currently setFixed forgets the anchors and setFloating recreates new ones...
+        }
+        else
+        {
+            // Make frame(set) non-floating
+            m_pFrameSet->setFixed();
+        }
+        break;
     }
     m_pFrameSet->kWordDocument()->updateAllFrames();
     m_pFrameSet->kWordDocument()->repaintAllViews();
@@ -928,23 +625,14 @@ void KWFrameSetFloatingCommand::execute()
     m_pFrameSet->kWordDocument()->updateResizeHandles();
 }
 
-void KWFrameSetFloatingCommand::unexecute()
+void KWFrameSetPropertyCommand::execute()
 {
-    kdDebug() << "KWFrameSetFloatingCommand::unexecute" << endl;
-    if ( !m_bFloating )
-    {
-        // Make frame(set) floating again
-        m_pFrameSet->setFloating();
-    }
-    else
-    {
-        // Make frame(set) non-floating again
-        m_pFrameSet->setFixed();
-    }
-    m_pFrameSet->kWordDocument()->updateAllFrames();
-    m_pFrameSet->kWordDocument()->repaintAllViews();
-    m_pFrameSet->kWordDocument()->updateRulerFrameStartEnd();
-    m_pFrameSet->kWordDocument()->updateResizeHandles();
+    setValue( m_value );
+}
+
+void KWFrameSetPropertyCommand::unexecute()
+{
+    setValue( m_oldValue );
 }
 
 KWPageLayoutCommand::KWPageLayoutCommand( const QString &name,KWDocument *_doc,pageLayout &_oldLayout, pageLayout &_newLayout  ) :
@@ -984,6 +672,7 @@ KWDeleteFrameCommand::~KWDeleteFrameCommand()
     delete m_copyFrame;
 }
 
+
 void KWDeleteFrameCommand::execute()
 {
     KWFrameSet *frameSet = m_frameIndex.m_pFrameSet;
@@ -1008,7 +697,7 @@ void KWDeleteFrameCommand::unexecute()
 
     KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>( frameSet );
     if ( textfs )
-        textfs->formatMore();
+        textfs->textObject()->formatMore();
 
     frameSet->kWordDocument()->frameChanged( frame );
     frameSet->kWordDocument()->refreshDocStructure(frameSet->type());

@@ -28,7 +28,7 @@
 #include <qdict.h>
 
 #include "kwtextparag.h"
-#include "counter.h"
+#include <koparagcounter.h>
 
 class KButtonBox;
 class KColorButton;
@@ -173,10 +173,10 @@ public:
     //virtual bool isModified();
     virtual QString tabName();
 
-    Border leftBorder() const { return m_leftBorder; }
-    Border rightBorder() const { return m_rightBorder; }
-    Border topBorder() const { return m_topBorder; }
-    Border bottomBorder() const { return m_bottomBorder; }
+    KoBorder leftBorder() const { return m_leftBorder; }
+    KoBorder rightBorder() const { return m_rightBorder; }
+    KoBorder topBorder() const { return m_topBorder; }
+    KoBorder bottomBorder() const { return m_bottomBorder; }
 
 protected:
     void updateBorders();
@@ -195,7 +195,7 @@ private:
     QComboBox *cWidth, *cStyle;
     QPushButton *bLeft, *bRight, *bTop, *bBottom;
     KColorButton *bColor;
-    Border m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
+    KoBorder m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
     KWBorderPreview *prev3;
 };
 
@@ -342,10 +342,10 @@ public:
     int align() const { return m_alignWidget->align(); }
 
     // tab 3
-    Border leftBorder() const { return m_borderWidget->leftBorder(); }
-    Border rightBorder() const { return m_borderWidget->rightBorder(); }
-    Border topBorder() const { return m_borderWidget->topBorder(); }
-    Border bottomBorder() const { return m_borderWidget->bottomBorder(); }
+    KoBorder leftBorder() const { return m_borderWidget->leftBorder(); }
+    KoBorder rightBorder() const { return m_borderWidget->rightBorder(); }
+    KoBorder topBorder() const { return m_borderWidget->topBorder(); }
+    KoBorder bottomBorder() const { return m_borderWidget->bottomBorder(); }
 
     // tab 4
     const KoParagCounter & counter() const { return m_counterWidget->counter(); }

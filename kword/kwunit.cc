@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C)  2001 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C) 2001 David Faure <david@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,28 +17,21 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KWChangeCaseDia__
-#define __KWChangeCaseDia__
+#include <koGlobal.h>
+#include "kwunit.h"
+#include <klocale.h>
 
-#include <kdialogbase.h>
-#include "defs.h"
-
-class QRadioButton;
-class QPushButton;
-
-class KWChangeCaseDia : public KDialogBase
+QString KWUnit::unitDescription( Unit _unit )
 {
-    Q_OBJECT
-public:
-    KWChangeCaseDia( QWidget *parent, const char *name );
-
-    int /*TypeOfCase*/ getTypeOfCase();
-
-protected:
-    QRadioButton *m_upperCase;
-    QRadioButton *m_titleCase;
-    QRadioButton *m_lowerCase;
-    QRadioButton *m_toggleCase;
-};
-
-#endif
+    switch ( _unit )
+    {
+    case KWUnit::U_MM:
+        return i18n("Millimeters (mm)");
+    case KWUnit::U_INCH:
+        return i18n("Inches (inch)");
+    case KWUnit::U_PT:
+        return i18n("Points (pt)" );
+    default:
+        return i18n("Error!");
+    }
+}

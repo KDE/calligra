@@ -22,14 +22,7 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
-#include <kwtextdocument.h>
-class KWDocument;
-class KWVariable;
-class QDomElement;
-namespace Qt3 {
-class QTextFormat;
-}
-using namespace Qt3;
+#include <qasciidict.h>
 
 // Always add new types at the _end_ of this list.
 // (and update KWView::setupActions)
@@ -51,47 +44,91 @@ class KWVariableFormat
 public:
     KWVariableFormat() {}
     virtual ~KWVariableFormat() {}
-    // TODO load,save...
+    /** Return a key describing this format.
+     * Used for the flyweight pattern in KWVariableFormatCollection
+     */
+    virtual QCString key() const = 0;
+    /** Create a format from this key.
+     */
+    virtual void load( const QCString &key ) = 0;
 };
 
 class KWVariableDateFormat : public KWVariableFormat
 {
 public:
-    KWVariableDateFormat() : KWVariableFormat() {}
-    QString convert( const QDate & date );
-    // TODO various date formats.
+    KWVariableDateFormat() : KWVariableFormat() { m_bShort = false; }
+    QString convert( const QDate & date ) const;
+    virtual QCString key() const;
+    virtual void load( const QCString &key );
+    // TODO custom date formats
+private:
+    bool m_bShort;
 };
 
 class KWVariableTimeFormat : public KWVariableFormat
 {
 public:
     KWVariableTimeFormat() : KWVariableFormat() {}
-    QString convert( const QTime & time );
-    // TODO various time formats.
+    QString convert( const QTime & time ) const;
+    virtual QCString key() const;
+    virtual void load( const QCString & /*key*/ ) {}
+    // TODO custom time formats
 };
 
 class KWVariableStringFormat : public KWVariableFormat
 {
 public:
     KWVariableStringFormat() : KWVariableFormat() {}
-    QString convert( const QString & string );
+    QString convert( const QString & string ) const;
+    virtual QCString key() const;
+    virtual void load( const QCString & /*key*/ ) {}
 };
 
 class KWVariableNumberFormat : public KWVariableFormat
 {
 public:
     KWVariableNumberFormat() : KWVariableFormat() {}
-    QString convert( int number );
+    QString convert( int number ) const;
+    virtual QCString key() const;
+    virtual void load( const QCString & /*key*/ ) {}
 };
 
-/* TODO find a name :)
+/**
+ * The collection of formats for variables.
+ * Example: date (short or long), time, string (prefix/suffix), number (prefix/suffix, decimals?)...
+ * Implements the flyweight pattern to share formats and create them on demand.
+ * Each KWDocument holds a KWVariableFormatCollection.
+ */
+class KWVariableFormatCollection
+{
+public:
+    KWVariableFormatCollection();
+
+    /**
+     * Forget (and erase) all the formats this collection knows about
+     */
+    void clear() { m_dict.clear(); }
+
+    /**
+     * Find or create the format for the given @p key
+     */
+    KWVariableFormat *format( const QCString &key );
+
+protected:
+    KWVariableFormat *createFormat( const QCString &key );
+
+private:
+    QAsciiDict<KWVariableFormat> m_dict;
+};
+
+/* TODO find a way to integrate with all other formats !
    and add a UI for it
    class ... : public KWVariableFormat
 {
 public:
     ...() { pre = "-"; post = "-"; }
 
-    virtual QString convert( KWVariable *_var );
+    virtual QString convert( KWVariable *_var ) const;
 
     // Needs a UI !
     void setPre( const QString &_pre ) { pre = _pre; }
@@ -106,14 +143,19 @@ protected:
 
 // ----------------------------------------------------------------------------------------------
 
-#include <qrichtext_p.h>
-using namespace Qt3;
+#include <kwtextdocument.h>
+class KWDocument;
+class KWVariable;
+class QDomElement;
+namespace Qt3 {
+class QTextFormat;
+}
 
 /**
  * A KWVariable is a custom item, i.e. considered as a single character.
  * KWVariable is the abstract base class.
  */
-class KWVariable : public KWTextCustomItem
+class KWVariable : public KoTextCustomItem
 {
 public:
     KWVariable( KWTextFrameSet *fs, KWVariableFormat *varFormat );
@@ -126,7 +168,7 @@ public:
     virtual void resize();
     virtual int widthHint() const { return width; }
     virtual int minimumWidth() const { return width; }
-    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
+    virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const QFont & customItemFont, int offset);
 
     void setVariableFormat( KWVariableFormat *_varFormat, bool _deleteOld = false )
     { if ( _deleteOld && m_varFormat ) delete m_varFormat; m_varFormat = _varFormat; }
@@ -147,7 +189,11 @@ public:
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
-    static KWVariable * createVariable( int type, int subtype, KWTextFrameSet * textFrameSet );
+    /**
+     * Create a variable, from its @p type and @p subtype.
+     * When @p varFormat is 0, the variable is created with its default format.
+     */
+    static KWVariable * createVariable( int type, int subtype, KWTextFrameSet * textFrameSet, KWVariableFormat * varFormat );
 
 protected:
     KWDocument *m_doc;

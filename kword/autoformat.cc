@@ -28,6 +28,7 @@
 #include <kconfig.h>
 #include <qrichtext_p.h>
 #include <qvector.h>
+#include <kotextobject.h>
 
 
 /******************************************************************/
@@ -125,7 +126,7 @@ void KWAutoFormat::saveConfig()
     config->sync();
 }
 
-QString KWAutoFormat::getLastWord(KWTextParag *parag, int index)
+QString KWAutoFormat::getLastWord(KoTextParag *parag, int index)
 {
     QString lastWord;
     QTextString *s = parag->string();
@@ -139,7 +140,7 @@ QString KWAutoFormat::getLastWord(KWTextParag *parag, int index)
     return lastWord;
 }
 
-void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag, int index, QChar ch )
+void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag, int index, QChar ch )
 {
     if ( !m_configRead )
         readConfig();
@@ -156,7 +157,7 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
     {
         if ( index > 0 )
         {
-            QString lastWord=getLastWord(parag, index);
+            QString lastWord = getLastWord(parag, index);
             //kdDebug() << "KWAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
             if ( !doAutoCorrect( textEditCursor, parag, index ) )
             {
@@ -172,7 +173,7 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
     }
 }
 
-bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *parag, int index )
+bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *parag, int index )
 {
     // Prepare an array with words of different lengths, all terminating at "index".
     // Obviously only full words are put into the array
@@ -195,6 +196,7 @@ bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *para
                 break;
         }
     }
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(parag->textDocument());
     // Now for each entry in the autocorrect list, look if
     // the word of the same size in wordArray matches.
     // This allows an o(n) behaviour instead of an o(n^2).
@@ -203,25 +205,24 @@ bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *para
         KWAutoFormatEntryMap::ConstIterator it = m_entries.find(wordArray[i]);
         if ( wordArray[i]!=0 && it!=m_entries.end() )
         {
-            KWTextDocument * textdoc = parag->kwTextDocument();
             unsigned int length = wordArray[i].length();
             int start = index - length;
             QTextCursor cursor( parag->document() );
             cursor.setParag( parag );
             cursor.setIndex( start );
-            textdoc->setSelectionStart( KWTextFrameSet::HighlightSelection, &cursor );
+            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setIndex( start + length );
-            textdoc->setSelectionEnd( KWTextFrameSet::HighlightSelection, &cursor );
+            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
 
             KWTextFrameSet * textfs = textdoc->textFrameSet();
-            m_doc->addCommand(textfs->replaceSelectionCommand( textEditCursor, it.data().replace(),
-                                      KWTextFrameSet::HighlightSelection,
+            m_doc->addCommand(textfs->textObject()->replaceSelectionCommand( textEditCursor, it.data().replace(),
+                                      KoTextObject::HighlightSelection,
                                       i18n("Autocorrect word") ));
             // The space/tab/CR that we inserted is still there but delete/insert moved the cursor
             // -> go right
-            textfs->emitHideCursor();
+            textfs->textObject()->emitHideCursor();
             textEditCursor->gotoRight();
-            textfs->emitShowCursor();
+            textfs->textObject()->emitShowCursor();
             delete [] wordArray;
             return true;
         }
@@ -230,16 +231,16 @@ bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *para
     return false;
 }
 
-void KWAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KWTextParag *parag, int index )
+void KWAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag *parag, int index )
 {
     kdDebug() << "KWAutoFormat::doTypographicQuotes" << endl;
-    KWTextDocument * textdoc = parag->kwTextDocument();
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(parag->textDocument());
     QTextCursor cursor( parag->document() );
     cursor.setParag( parag );
     cursor.setIndex( index );
-    textdoc->setSelectionStart( KWTextFrameSet::HighlightSelection, &cursor );
+    textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
     cursor.setIndex( index + 1 );
-    textdoc->setSelectionEnd( KWTextFrameSet::HighlightSelection, &cursor );
+    textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
 
     // Need to determine if we want a starting or ending quote.
     // I see two solutions: either simply alternate, or depend on leading space.
@@ -251,15 +252,15 @@ void KWAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KWTextParag
         replacement = m_typographicQuotes.begin;
 
     KWTextFrameSet * textfs = textdoc->textFrameSet();
-    m_doc->addCommand (textfs->replaceSelectionCommand( textEditCursor, replacement,
-                              KWTextFrameSet::HighlightSelection,
+    m_doc->addCommand (textfs->textObject()->replaceSelectionCommand( textEditCursor, replacement,
+                              KoTextObject::HighlightSelection,
                               i18n("Typographic quote") ));
 }
 
-void KWAutoFormat::doUpperCase( QTextCursor *textEditCursor, KWTextParag *parag,
+void KWAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *parag,
                                 int index, const QString & word )
 {
-    KWTextDocument * textdoc = parag->kwTextDocument();
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(parag->textDocument());
     unsigned int length = word.length();
     int start = index - length;
     QTextCursor backCursor( parag->document() );
@@ -289,7 +290,7 @@ void KWAutoFormat::doUpperCase( QTextCursor *textEditCursor, KWTextParag *parag,
         if ( beginningOfSentence )
         {
             QChar punct = backCursor.parag()->at( backCursor.index() )->c;
-            QString text = getLastWord( static_cast<KWTextParag*>( backCursor.parag() ), backCursor.index() )
+            QString text = getLastWord( static_cast<KoTextParag*>( backCursor.parag() ), backCursor.index() )
                            + punct;
             // text has the word at the end of the 'sentence', including the termination. Example: "Mr."
             beginningOfSentence = (upperCaseExceptions.findIndex(text)==-1); // Ok if we can't find it
@@ -300,13 +301,13 @@ void KWAutoFormat::doUpperCase( QTextCursor *textEditCursor, KWTextParag *parag,
             QTextCursor cursor( parag->document() );
             cursor.setParag( parag );
             cursor.setIndex( start );
-            textdoc->setSelectionStart( KWTextFrameSet::HighlightSelection, &cursor );
+            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setIndex( start + 1 );
-            textdoc->setSelectionEnd( KWTextFrameSet::HighlightSelection, &cursor );
+            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
 
             KWTextFrameSet * textfs = textdoc->textFrameSet();
-            m_doc->addCommand(textfs->replaceSelectionCommand( textEditCursor, QString( firstChar.upper() ),
-                                      KWTextFrameSet::HighlightSelection,
+            m_doc->addCommand(textfs->textObject()->replaceSelectionCommand( textEditCursor, QString( firstChar.upper() ),
+                                      KoTextObject::HighlightSelection,
                                       i18n("Autocorrect (capitalize first letter)") ));
             bNeedMove = true;
         }
@@ -326,14 +327,14 @@ void KWAutoFormat::doUpperCase( QTextCursor *textEditCursor, KWTextParag *parag,
                 QTextCursor cursor( parag->document() );
                 cursor.setParag( parag );
                 cursor.setIndex( start + 1 ); // After all the first letter's fine, so only change the second letter
-                textdoc->setSelectionStart( KWTextFrameSet::HighlightSelection, &cursor );
+                textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
                 cursor.setIndex( start + 2 );
-                textdoc->setSelectionEnd( KWTextFrameSet::HighlightSelection, &cursor );
+                textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
 
                 QString replacement = word[1].lower();
                 KWTextFrameSet * textfs = textdoc->textFrameSet();
-                m_doc->addCommand(textfs->replaceSelectionCommand( textEditCursor, replacement,
-                                          KWTextFrameSet::HighlightSelection,
+                m_doc->addCommand(textfs->textObject()->replaceSelectionCommand( textEditCursor, replacement,
+                                          KoTextObject::HighlightSelection,
                                           i18n("Autocorrect uppercase-uppercase") )); // hard to describe....
                 bNeedMove = true;
             }
@@ -343,15 +344,15 @@ void KWAutoFormat::doUpperCase( QTextCursor *textEditCursor, KWTextParag *parag,
     {
         // Back to where we were
         KWTextFrameSet * textfs = textdoc->textFrameSet();
-        textfs->emitHideCursor();
+        textfs->textObject()->emitHideCursor();
         textEditCursor->setParag( parag );
         textEditCursor->setIndex( index );
         textEditCursor->gotoRight(); // not the same thing as index+1, in case of CR
-        textfs->emitShowCursor();
+        textfs->textObject()->emitShowCursor();
     }
 }
 
-void KWAutoFormat::doSpellCheck( QTextCursor *,KWTextParag */*parag*/, int /*index*/, const QString & /*word*/ )
+void KWAutoFormat::doSpellCheck( QTextCursor *,KoTextParag */*parag*/, int /*index*/, const QString & /*word*/ )
 {
 #if 0
     if ( !enabled || !doc->onLineSpellCheck() )

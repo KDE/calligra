@@ -27,7 +27,7 @@
 #include <qbrush.h>
 #include <qlist.h>
 #include "kwstyle.h"
-#include "border.h"
+#include "koborder.h"
 
 namespace KFormula {
     class KFormulaContainer;
@@ -136,15 +136,15 @@ public:
     int pageNum() const;
 
     /* All borders can be custom drawn with their own colors etc. */
-    const Border &leftBorder() const { return brd_left; }
-    const Border &rightBorder() const { return brd_right; }
-    const Border &topBorder() const { return brd_top; }
-    const Border &bottomBorder() const { return brd_bottom; }
+    const KoBorder &leftBorder() const { return brd_left; }
+    const KoBorder &rightBorder() const { return brd_right; }
+    const KoBorder &topBorder() const { return brd_top; }
+    const KoBorder &bottomBorder() const { return brd_bottom; }
 
-    void setLeftBorder( Border _brd ) { brd_left = _brd; }
-    void setRightBorder( Border _brd ) { brd_right = _brd; }
-    void setTopBorder( Border _brd ) { brd_top = _brd; }
-    void setBottomBorder( Border _brd ) { brd_bottom = _brd; }
+    void setLeftBorder( KoBorder _brd ) { brd_left = _brd; }
+    void setRightBorder( KoBorder _brd ) { brd_right = _brd; }
+    void setTopBorder( KoBorder _brd ) { brd_top = _brd; }
+    void setBottomBorder( KoBorder _brd ) { brd_bottom = _brd; }
 
     /** Return the _zoomed_ rectangle for this frame, including the border - for drawing */
     QRect outerRect() const;
@@ -214,7 +214,7 @@ private:
     double m_minFrameHeight;
 
     QBrush backgroundColor;
-    Border brd_left, brd_right, brd_top, brd_bottom;
+    KoBorder brd_left, brd_right, brd_top, brd_bottom;
 
     QList<KWResizeHandle> handles;
     KWFrameSet *frameSet;
@@ -433,8 +433,14 @@ public:
 
     virtual bool getMouseCursor( const QPoint &nPoint, bool controlPressed, QCursor & cursor );
 
-    /** which popup (from the XML file) should be shown when right-clicking inside this frame */
-    virtual QString getPopupName() = 0;
+    /** Show a popup menu - called when right-clicking inside a frame of this frameset.
+     * The default implementation shows "frame_popup".
+     * @param frame the frame which was clicked. Always one of ours.
+     * @param edit the current edit object. Either 0L or our own edit object (usually).
+     * @param view the view - we use it to get the popupmenu by name
+     * @param point the mouse position (at which to show the menu)
+     */
+    virtual void showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *view, const QPoint &point );
 
     /** save to XML - when saving */
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true ) = 0;
@@ -493,7 +499,7 @@ public:
 
     /** Move the frame frameNum to the given position - this is called when
         the frame is anchored and the anchor moves (see KWAnchor). */
-    virtual void moveFloatingFrame( int frameNum, const QPoint &position );
+    virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
     /** Get the [zoomed] size of the "floating frame" identified by frameNum.
         By default a real frame but not for tables. */
     virtual QSize floatingFrameSize( int frameNum );
@@ -612,9 +618,6 @@ public:
 
     virtual KWFrame *frameByBorder( const QPoint & nPoint );
 
-    // RMB -> normal frame popup
-    virtual QString getPopupName() { return "frame_popup"; }
-
     bool keepAspectRatio() const { return m_keepAspectRatio; }
     void setKeepAspectRatio( bool b ) { m_keepAspectRatio = b; }
 protected:
@@ -652,9 +655,6 @@ public:
     virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
 
     virtual KWFrame *frameByBorder( const QPoint & nPoint );
-
-    // RMB -> normal frame popup
-    virtual QString getPopupName() { return "frame_popup"; }
 protected:
     KoClipart m_clipart;
 };
@@ -688,10 +688,6 @@ public:
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
-
-    // RMB -> normal frame popup
-    virtual QString getPopupName() { return "frame_popup"; }
-
 
 protected:
     KWChild *m_child;
@@ -756,7 +752,7 @@ public:
 
     virtual int floatingFrameBaseline( int /*frameNum*/ );
 
-    virtual QString getPopupName() { return "Formula";}
+    void showPopup( KWFrame *, KWFrameSetEdit *, KWView *view, const QPoint &point );
 
 protected slots:
 

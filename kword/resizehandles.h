@@ -46,6 +46,7 @@ public:
     };
 
     KWResizeHandle( KWCanvas *p, Direction d, KWFrame *frm );
+    virtual ~KWResizeHandle();
     void updateGeometry();
     KWCanvas *getCanvas() const { return m_canvas; }
 

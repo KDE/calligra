@@ -26,7 +26,7 @@
 /**
  * This class is used by "Insert Picture", i.e. having an image inline in a paragraph.
  */
-class KWTextImage : public KWTextCustomItem
+class KWTextImage : public KoTextCustomItem
 {
 public:
     /**
@@ -47,7 +47,7 @@ public:
     void setImage( const KWImage &image );
     KWImage image() const { return m_image; }
 
-    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
+    virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected , const QFont & customItemFont, int offset );
 
     // Save to XML
     virtual void save( QDomElement & formatElem );

@@ -72,7 +72,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
 
     m_scrollTimer = new QTimer( this );
     connect( m_scrollTimer, SIGNAL( timeout() ),
-	     this, SLOT( doAutoScroll() ) );
+             this, SLOT( doAutoScroll() ) );
 
     viewport()->setFocusProxy( this );
     viewport()->setFocusPolicy( WheelFocus );
@@ -440,7 +440,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
 
     if ( e->button() == LeftButton )
-	m_mousePressed = true;
+        m_mousePressed = true;
 
     // Only edit-mode (and only LMB) allowed on read-only documents (to select text)
     if ( !m_doc->isReadWrite() && ( m_mouseMode != MM_EDIT || e->button() != LeftButton ) )
@@ -673,7 +673,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     // Check if frame was really resized because otherwise no repaint is needed
     if( newLeft != frame->left() || newRight != frame->right() || newTop != frame->top() || newBottom != frame->bottom() )
     {
-	// Keep copy of old rectangle, for repaint()
+        // Keep copy of old rectangle, for repaint()
         QRect oldRect = m_viewMode->normalToView( frame->outerRect() );
 
         frame->setLeft(newLeft);
@@ -727,8 +727,12 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
 
 void KWCanvas::applyGrid( KoPoint &p )
 {
-    p.setX( static_cast<int>( p.x() / m_doc->gridX() ) * m_doc->gridX() );
-    p.setY( static_cast<int>( p.y() / m_doc->gridY() ) * m_doc->gridY() );
+    // The 1e-10 here is a workaround for some weird division problem.
+    // 360.00062366 / 2.83465058 gives 127 'exactly' when shown as a double,
+    // but when casting into an int, we get 126. In fact it's 127 - 5.64e-15 !
+    // This is a problem when calling applyGrid twice, we get 1 less than the time before.
+    p.setX( static_cast<int>( p.x() / m_doc->gridX() + 1e-10 ) * m_doc->gridX() );
+    p.setY( static_cast<int>( p.y() / m_doc->gridY() + 1e-10 ) * m_doc->gridY() );
 }
 
 void KWCanvas::applyAspectRatio( double ratio, KoRect& insRect )
@@ -757,9 +761,14 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     KoPoint p( m_boundingRect.topLeft() );
     //kdDebug() << "KWCanvas::mmEditFrameMove hotspot.x=" << m_hotSpot.x() << endl;
     p.setX( docPoint.x() - m_hotSpot.x() );
+    //kdDebug() << "mmEditFrameMove: x (pixel)=" << DEBUGDOUBLE( normalPoint.x() )
+    //          << " docPoint.x()=" << DEBUGDOUBLE( docPoint.x() )
+    //          << " m_hotSpot.x()=" << DEBUGDOUBLE( m_hotSpot.x() ) << endl;
+    //          << " p.x=" << DEBUGDOUBLE( p.x() ) << endl;
     if ( !shiftPressed ) // Shift disables the grid
         applyGrid( p );
-    //kdDebug() << "KWCanvas::mmEditFrameMove p.x is now " << p.x() << endl;
+    //kdDebug() << "KWCanvas::mmEditFrameMove p.x is now " << DEBUGDOUBLE( p.x() )
+    //          << " (" << DEBUGDOUBLE( KWUnit::toMM( p.x() ) ) << " mm)" << endl;
     m_boundingRect.moveTopLeft( p );
     //kdDebug() << "KWCanvas::mmEditFrameMove boundingrect now " << DEBUGRECT(m_boundingRect) << endl;
     // But not out of the margins
@@ -778,6 +787,8 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     p.setY( docPoint.y() - m_hotSpot.y() );
     if ( !shiftPressed ) // Shift disables the grid
         applyGrid( p );
+    //kdDebug() << "       (grid again) p.x is now " << DEBUGDOUBLE( p.x() )
+    //          << " (" << DEBUGDOUBLE( KWUnit::toMM( p.x() ) ) << " mm)" << endl;
     m_boundingRect.moveTopLeft( p );
     // -- Don't limit to the current page. Let the user move a frame between pages --
     // But we still want to limit to 0 - lastPage
@@ -812,10 +823,13 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
         m_boundingRect.moveTopLeft( p );
     }
 
+    if( m_boundingRect.topLeft() == oldBoundingRect.topLeft() )
+        return; // nothing happende (probably due to the grid)
+
     /*kdDebug() << "boundingRect moved by " << m_boundingRect.left() - oldBoundingRect.left() << ","
-              << m_boundingRect.top() - oldBoundingRect.top() << endl;
-    kdDebug() << " boundingX+hotspotX=" << m_boundingRect.left() + m_hotSpot.x() << endl;
-    kdDebug() << " docPoint.x()=" << docPoint.x() << endl;*/
+      << m_boundingRect.top() - oldBoundingRect.top() << endl;
+      kdDebug() << " boundingX+hotspotX=" << m_boundingRect.left() + m_hotSpot.x() << endl;
+      kdDebug() << " docPoint.x()=" << docPoint.x() << endl;*/
 
     QList<KWTableFrameSet> tablesMoved;
     tablesMoved.setAutoDelete( FALSE );
@@ -838,24 +852,22 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame *frame = frameIt.current();
-            if( m_boundingRect.x() != oldBoundingRect.x() || m_boundingRect.y() != oldBoundingRect.y() ) {
-                if ( frame->isSelected() ) {
-                    if ( frameset->type() == FT_TABLE ) {
-                        if ( tablesMoved.findRef( static_cast<KWTableFrameSet *> (frameset) ) == -1 )
-                            tablesMoved.append( static_cast<KWTableFrameSet *> (frameset));
-                    } else {
-                        QRect oldRect( m_viewMode->normalToView( frame->outerRect() ) );
-                        // Move the frame
-                        frame->moveTopLeft( frame->topLeft() + _move );
-                        // Calculate new rectangle for this frame
-                        QRect newRect( frame->outerRect() );
+            if ( frame->isSelected() ) {
+                if ( frameset->type() == FT_TABLE ) {
+                    if ( tablesMoved.findRef( static_cast<KWTableFrameSet *> (frameset) ) == -1 )
+                        tablesMoved.append( static_cast<KWTableFrameSet *> (frameset));
+                } else {
+                    QRect oldRect( m_viewMode->normalToView( frame->outerRect() ) );
+                    // Move the frame
+                    frame->moveTopLeft( frame->topLeft() + _move );
+                    // Calculate new rectangle for this frame
+                    QRect newRect( frame->outerRect() );
 
-                        QRect frameRect( m_viewMode->normalToView( newRect ) );
-                        // Repaint only the changed rects (oldRect U newRect)
-                        repaintRegion += QRegion(oldRect).unite(frameRect).boundingRect();
-                        // Move resize handles to new position
-                        frame->updateResizeHandles();
-                    }
+                    QRect frameRect( m_viewMode->normalToView( newRect ) );
+                    // Repaint only the changed rects (oldRect U newRect)
+                    repaintRegion += QRegion(oldRect).unite(frameRect).boundingRect();
+                    // Move resize handles to new position
+                    frame->updateResizeHandles();
                 }
             }
         }
@@ -960,7 +972,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
     if ( m_mousePressed ) {
 
-	//doAutoScroll();
+        //doAutoScroll();
 
         switch ( m_mouseMode ) {
             case MM_EDIT:
@@ -1226,7 +1238,7 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
                 break;
         }
 
-	m_mousePressed = false;
+        m_mousePressed = false;
     }
 }
 
@@ -1248,7 +1260,7 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
     m_mousePressed = true; // needed for the dbl-click + move feature.
 }
 
-void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
+void KWCanvas::setLeftFrameBorder( KoBorder _frmBrd, bool _b )
 {
     QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
@@ -1298,7 +1310,7 @@ void KWCanvas::setLeftFrameBorder( Border _frmBrd, bool _b )
     }
 }
 
-void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
+void KWCanvas::setRightFrameBorder( KoBorder _frmBrd, bool _b )
 {
     QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
@@ -1347,7 +1359,7 @@ void KWCanvas::setRightFrameBorder( Border _frmBrd, bool _b )
     }
 }
 
-void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
+void KWCanvas::setTopFrameBorder( KoBorder _frmBrd, bool _b )
 {
     QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
@@ -1396,7 +1408,7 @@ void KWCanvas::setTopFrameBorder( Border _frmBrd, bool _b )
     }
 }
 
-void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
+void KWCanvas::setBottomFrameBorder( KoBorder _frmBrd, bool _b )
 {
     QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
@@ -1444,7 +1456,7 @@ void KWCanvas::setBottomFrameBorder( Border _frmBrd, bool _b )
     }
 }
 
-void KWCanvas::setOutlineFrameBorder( Border _frmBrd, bool _b )
+void KWCanvas::setOutlineFrameBorder( KoBorder _frmBrd, bool _b )
 {
     QList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
     if (selectedFrames.count() == 0)
@@ -1876,7 +1888,7 @@ void KWCanvas::doAutoScroll()
     if ( !m_mousePressed )
     {
         m_scrollTimer->stop();
-	return;
+        return;
     }
 
     // This code comes from khtml
@@ -1905,6 +1917,7 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
     //kdDebug() << "KWCanvas::slotContentsMoving cx=" << cx << " cy=" << cy << endl;
     //kdDebug() << " visibleWidth()=" << visibleWidth() << " visibleHeight()=" << visibleHeight() << endl;
     // Update our "formatted paragraphs needs" in the text framesets
+    ///////////////// TODO: use allTextFramesets for nested text framesets
     QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -1993,10 +2006,10 @@ QPoint KWCanvas::pageCorner()
 bool KWCanvas::eventFilter( QObject *o, QEvent *e )
 {
     if ( !o || !e )
-	return TRUE;
+        return TRUE;
 
     if ( o == this || o == viewport() ) {
-	switch ( e->type() ) {
+        switch ( e->type() ) {
             case QEvent::FocusIn:
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusInEvent();
@@ -2065,7 +2078,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
             break;
             default:
                 break;
-	}
+        }
     }
 
     return QScrollView::eventFilter( o, e );
