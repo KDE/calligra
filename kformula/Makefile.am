@@ -5,7 +5,7 @@ KDE_CXXFLAGS = $(USE_RTTI)
 ####### Files
 
 bin_PROGRAMS = kformula
-lib_LTLIBRARIES = kformula.la libkformulapart.la
+lib_LTLIBRARIES = kformulamain.la libkformulapart.la
 
 libkformulapart_la_SOURCES = kformula_doc.cc \
 	kformula_view.cc kformula_factory.cc BasicElement.cc \
@@ -15,13 +15,13 @@ libkformulapart_la_LDFLAGS = -module -avoid-version -no-undefined
 libkformulapart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
 libkformulapart_la_METASOURCES = AUTO
 
-kformula_la_SOURCES = main.cc
-kformula_la_LDFLAGS = $(all_libraries) -module -avoid-version
-kformula_la_LIBADD = libkformulapart.la
+kformulamain_la_SOURCES = main.cc
+kformulamain_la_LDFLAGS = $(all_libraries) -module -avoid-version
+kformulamain_la_LIBADD = libkformulapart.la
 
 kformula_SOURCES = dummy.cc
 kformula_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kformula_LDADD = kformula.la
+kformula_LDADD = kformulamain.la
 
 dummy.cc:
 	echo > dummy.cc
