@@ -2357,7 +2357,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   {
     bool highlighted = ( selection.left() != 0 && y >= selection.top() && 
                       y <= selection.bottom() );
-    bool selected = ( highlighted && selection.bottom() == 0x7FFF );
+    bool selected = ( highlighted && selection.right() == 0x7FFF );
 
     RowLayout *row_lay = table->rowLayout( y );
 
