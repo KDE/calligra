@@ -35,6 +35,15 @@
 			<Action name="object_move_down"/>
 			<Action name="object_move_tobottom"/>
 		</Menu>
+		<Menu name="object_align">
+			<text>&amp;Align</text>
+			<Action name="object_align_horizontal_left"/>
+			<Action name="object_align_horizontal_center"/>
+			<Action name="object_align_horizontal_right"/>
+			<Action name="object_align_vertical_top"/>
+			<Action name="object_align_vertical_center"/>
+			<Action name="object_align_vertical_bottom"/>
+		</Menu>
 		<Action name="selection_group"/>
 		<Action name="selection_ungroup"/>
 	</Menu>
