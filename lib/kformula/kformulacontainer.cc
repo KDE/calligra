@@ -520,18 +520,20 @@ void Container::saveMathML( QTextStream& stream, bool oasisFormat )
 {
     if ( !oasisFormat )
     {
+        // ### TODO: Are we really using MathML 2.0 or would be MathMl 1.01 enough (like for OO)?
         QDomDocumentType dt = QDomImplementation().createDocumentType( "math",
                                                                        "-//W3C//DTD MathML 2.0//EN",
                                                                        "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd");
         QDomDocument doc( dt );
+        doc.insertBefore( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ), doc.documentElement() );
         rootElement()->writeMathML( doc, doc, oasisFormat );
-        doc.save( stream, 2 );
+        stream << doc;
     }
     else
     {
         QDomDocument doc;
         rootElement()->writeMathML( doc, doc, oasisFormat );
-        doc.save( stream, 2 );
+        stream << doc;
     }
 }
 
