@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Patterns=*.csv;*.CSV;
+Name=killustrator RTF Export Filter
+Export=text/rtf
+ExportDescription=RTF
+Implemented=file
+X-KDE-Library=librtfexport
+ServiceTypes=KOfficeFilter
