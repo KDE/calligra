@@ -13,7 +13,7 @@ ExampleView::ExampleView( ExamplePart* part, QWidget* parent, const char* name )
 {
     setInstance( ExampleFactory::global() );
     setXMLFile( "example.rc" );
-    m_cut = new KAction( i18n("&Cut"), QIconSet(ExampleBarIcon("editcut")), 0, this, SLOT( cut() ),
+    m_cut = new KAction( i18n("&Cut"), "editcut", 0, this, SLOT( cut() ),
 			 actionCollection(), "cut");
 }
 

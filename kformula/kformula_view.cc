@@ -59,61 +59,61 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
 
 
     actionEditUndo = new KAction( i18n( "No Undo possible" ),
-				     KFormulaBarIcon( "undo" ), 
+				     "undo", 
 				     ALT + Key_Z,
 				     this, SLOT( addText() ),
 				     actionCollection(), "edit_undo" );
 
     actionElement_AddElement_T = new KAction(i18n( "Add/change to simple text" ),
-					KFormulaBarIcon("mini-xy"),
+					"mini-xy",
 					 CTRL + Key_1 ,
 					this,SLOT(addText()),
 					actionCollection(),"addtext");
 
     actionElement_AddElement_R = new KAction(i18n( "Add/change to root" ),
-					KFormulaBarIcon("mini-root"),
+					"mini-root",
 					 CTRL + Key_2 ,
 					this,SLOT(addRoot()),
 					actionCollection(),"addroot");
 
     actionElement_AddElement_F = new KAction(i18n( "Add/change to fraction" ),
-					KFormulaBarIcon("mini-frac"),
+					"mini-frac",
 					 CTRL + Key_3 ,
 					this,SLOT(addFraction()),
 					actionCollection(),"addfrac");
 
     actionElement_AddElement_V = new KAction(i18n( "Add/change to vertical space" ),
-					KFormulaBarIcon("mini-vspace"),
+					"mini-vspace",
 					 CTRL + Key_4 ,
 					this,SLOT(addVertSpace()),
 					actionCollection(),"addvspace");
 
     actionElement_AddElement_B = new KAction(i18n( "Add/change to bracket" ),
-					KFormulaBarIcon("mini-bra"),
+					"mini-bra",
 					 CTRL + Key_5 ,
 					this,SLOT(addBracket()),
 					actionCollection(),"addbra");
 
     actionElement_AddElement_I = new KAction(i18n( "Add/change to integral" ),
-					KFormulaBarIcon("mini-integral"),
+					"mini-integral",
 					 CTRL + Key_6 ,
 					this,SLOT(addIntegral()),
 					actionCollection(),"addintegral");
 
     actionElement_AddElement_S = new KAction(i18n( "Add/change to symbol" ),
-					KFormulaBarIcon("mini-symbol"),
+					"mini-symbol",
 					 CTRL + Key_7 ,
 					this,SLOT(addSymbol()),
 					actionCollection(),"addsymbol");
 
     actionElement_AddElement_M = new KAction(i18n( "Add/change to matrix" ),
-					KFormulaBarIcon("matrix"),
+					"matrix",
 					 CTRL + Key_8 ,
 					this,SLOT(addMatrix()),
 					actionCollection(),"addmatrix");
 
     actionElement_AddElement_L = new KAction(i18n( "Add index at pos..." ),
-					KFormulaBarIcon("index"),
+					"index",
 					 CTRL + Key_9 ,
 					this,SLOT(indexList()),
 					actionCollection(),"addindex");
@@ -126,26 +126,26 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
 					actionCollection(),"textsize");
 
     actionElement_Text_Bold = new KToggleAction(i18n( "Bold" ),
-					KFormulaBarIcon("bold"),
+					"bold",
 					 CTRL + Key_B ,
 					this,SLOT(fontSwitch()),
 					actionCollection(),"textbold");
 
     actionElement_Text_Italic = new KToggleAction(i18n( "Italic" ),
-					KFormulaBarIcon("italic"),
+					"italic",
 					 CTRL + Key_I ,
 					this,SLOT(fontSwitch()),
 					actionCollection(),"textitalic");
 
     actionElement_Text_Under = new KToggleAction(i18n( "Underlined" ),
-					KFormulaBarIcon("underl"),
+					"underl",
 					 CTRL + Key_U ,
 					this,SLOT(fontSwitch()),
 					actionCollection(),"textunder");
 
 
     actionElement_Font_Element = new KToggleAction(i18n( "Resize element" ),
-					KFormulaBarIcon("elementsw"),
+					"elementsw",
 					 CTRL + ALT + Key_E ,
 					this,SLOT(fontSwitch()),
 					actionCollection(),"fontelement");
@@ -153,19 +153,19 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
     //actionElement_Font_Element->setEnabled(false);
 
     actionElement_Font_Child = new KToggleAction(i18n( "Resize children" ),
-					KFormulaBarIcon("childrensw"),
+					"childrensw",
 					 CTRL + ALT + Key_C ,
 					this,SLOT(fontSwitch()),
 					actionCollection(),"fontchild");
 
     actionElement_Font_Index = new KToggleAction(i18n( "Resize index" ),
-					KFormulaBarIcon("indexsw"),
+					"indexsw",
 					 CTRL + ALT + Key_I ,
 					this,SLOT(fontSwitch()),
 					actionCollection(),"fontindex");
 
     actionElement_Font_Next = new KToggleAction(i18n( "Resize next" ),
-					KFormulaBarIcon("nextsw"),
+					"nextsw",
 					 CTRL + ALT + Key_N ,
 					this,SLOT(fontSwitch()),
 					actionCollection(),"fontnext");
@@ -173,7 +173,7 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
     // ************************* Text *********************
 
     actionElement_Text_Split = new KAction(i18n( "Split text" ),
-					KFormulaBarIcon("split"),
+					"split",
 					 CTRL + Key_0 ,
 					this,SLOT(textSplit()),
 					actionCollection(),"textsplit");
@@ -181,7 +181,7 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
     // ************************** Root ********************
 
     actionElement_Root_Index = new KAction(i18n( "Root index" ),
-					KFormulaBarIcon("rootindex"),
+					"rootindex",
 					 CTRL + Key_0 ,
 					this,SLOT(addTopLeftIndex()),
 					actionCollection(),"rootindex");
@@ -239,7 +239,7 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
     // ************************** Fraction ********************
 
     actionElement_Fraction_VA_M = new KToggleAction(i18n( "Middle align" ),
-					KFormulaBarIcon("midalign"),
+					"midalign",
 					 0 ,
 					this,SLOT(fractionAlignM()),
 					actionCollection(),"fracmiddle");
@@ -247,7 +247,7 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
 //   ((KToggleAction *)actionElement_Fraction_VA_M)->setExclusiveGroup("FractionVa");
 
     actionElement_Fraction_VA_U = new KToggleAction(i18n( "Numerator align" ),
-					KFormulaBarIcon("upalign"),
+					"upalign",
 					 0 ,
 					this,SLOT(fractionAlignU()),
 					actionCollection(),"fracup");
@@ -255,7 +255,7 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
   // ((KToggleAction *)actionElement_Fraction_VA_U)->setExclusiveGroup("FractionVa");
 
     actionElement_Fraction_VA_D = new KToggleAction(i18n( "Denominator align" ),
-					KFormulaBarIcon("downalign"),
+					"downalign",
 					 0 ,
 					this,SLOT(fractionAlignD()),
 					actionCollection(),"fracdown");
@@ -263,7 +263,7 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
   // ((KToggleAction *)actionElement_Fraction_VA_D)->setExclusiveGroup("FractionVa");
 
     actionElement_Fraction_HA_C = new KToggleAction(i18n( "Center align" ),
-					KFormulaBarIcon("centralign"),
+					"centralign",
 					 0 ,
 					this,SLOT(fractionAlignC()),
 					actionCollection(),"fraccenter");
@@ -271,7 +271,7 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
   // ((KToggleAction *)actionElement_Fraction_HA_C)->setExclusiveGroup("FractionHa");
 
     actionElement_Fraction_HA_L = new KToggleAction(i18n( "Left align" ),
-					KFormulaBarIcon("leftalign"),
+					"leftalign",
 					 0 ,
 					this,SLOT(fractionAlignL()),
 					actionCollection(),"fracleft");
@@ -279,7 +279,7 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
   // ((KToggleAction *)actionElement_Fraction_HA_L)->setExclusiveGroup("FractionHa");
 
     actionElement_Fraction_HA_R = new KToggleAction(i18n( "Right align" ),
-					KFormulaBarIcon("rightalign"),
+					"rightalign",
 					 0 ,
 					this,SLOT(fractionAlignR()),
 					actionCollection(),"fracright");
@@ -288,60 +288,60 @@ KFormulaView::KFormulaView( KFormulaDoc* _doc, QWidget* _parent, const char* _na
   // ((KToggleAction *)actionElement_Fraction_HA_R)->setExclusiveGroup("FractionHa");
 
     actionElement_Fraction_MidLine = new KToggleAction(i18n( "Draw midline" ),
-					KFormulaBarIcon("midline"),
+					"midline",
 					 0 ,
 					this,SLOT(toggleMidline()),
 					actionCollection(),"fracmidline");
 
     actionElement_Fraction_Far = new KAction(i18n( "More distant" ),
-					KFormulaBarIcon("far"),
+					"far",
 					 0 ,
 					this,SLOT(fracyionDistMore()),
 					actionCollection(),"fracfar");
 
     actionElement_Fraction_Near = new KAction(i18n( "Less distant" ),
-					KFormulaBarIcon("near"),
+					"near",
 					 0 ,
 					this,SLOT(fracyionDistLess()),
 					actionCollection(),"fracnear");
 
 
     actionElement_Integral_Lower = new KAction(i18n( "Low limit" ),
-					KFormulaBarIcon("Ilower"),
+					"Ilower",
 					 0 ,
 					this,SLOT(integralLower()),
 					actionCollection(),"ilower");
 
     actionElement_Integral_Higher = new KAction(i18n( "Hi limit" ),
-					KFormulaBarIcon("Ihigher"),
+					"Ihigher",
 					 0 ,
 					this,SLOT(integralHigher()),
 					actionCollection(),"ihigher");
 
     actionElement_Matrix_Set = new KAction(i18n( "Matrix setup" ),
-					KFormulaBarIcon("matrix"),
+					"matrix",
 					 0 ,
 					this,SLOT(matrixSet()),
 					actionCollection(),"matrixset");
 
     actionElement_Matrix_Ins_Row = new KAction(i18n( "Insert row" ),
-					KFormulaBarIcon("insrow"),
+					"insrow",
 					 0 ,
 					this,SLOT(matrixInsRow()),
 					actionCollection(),"matrixinsrow");
     actionElement_Matrix_Ins_Col = new KAction(i18n( "Insert col" ),
-					KFormulaBarIcon("inscol"),
+					"inscol",
 					 0 ,
 					this,SLOT(matrixInsCol()),
 					actionCollection(),"matrixinscol");
 
     actionElement_Matrix_Rem_Row = new KAction(i18n( "Remove row" ),
-					KFormulaBarIcon("remrow"),
+					"remrow",
 					 0 ,
 					this,SLOT(matrixRemRow()),
 					actionCollection(),"matrixremrow");
     actionElement_Matrix_Rem_Col = new KAction(i18n( "Remove col" ),
-					KFormulaBarIcon("remcol"),
+					"remcol",
 					 0 ,
 					this,SLOT(matrixRemCol()),
 					actionCollection(),"matrixremcol");

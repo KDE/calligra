@@ -195,31 +195,31 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     // Handler for moving and resizing embedded parts
     (void)new ContainerHandler( this, m_pCanvas );
 
-    m_bold = new KToggleAction( i18n("Bold"), KSBarIcon("bold"), CTRL + Key_B, actionCollection(), "bold");
+    m_bold = new KToggleAction( i18n("Bold"), "bold"), CTRL + Key_B, actionCollection(), "bold";
     connect( m_bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
-    m_italic = new KToggleAction( i18n("Italic"), KSBarIcon("italic"), CTRL + Key_I, actionCollection(), "italic");
+    m_italic = new KToggleAction( i18n("Italic"), "italic"), CTRL + Key_I, actionCollection(), "italic";
     connect( m_italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
-    m_underline = new KToggleAction( i18n("Underline"), KSBarIcon("underline"), CTRL + Key_U, actionCollection(), "underline");
+    m_underline = new KToggleAction( i18n("Underline"), "underline"), CTRL + Key_U, actionCollection(), "underline";
     connect( m_underline, SIGNAL( toggled( bool ) ), this, SLOT( underline( bool ) ) );
 
-    m_percent = new KToggleAction( i18n("Percent format"), KSBarIcon("percent"), 0, actionCollection(), "percent");
+    m_percent = new KToggleAction( i18n("Percent format"), "percent"), 0, actionCollection(), "percent";
     connect( m_percent, SIGNAL( toggled( bool ) ), this, SLOT( percent( bool ) ) );
-    m_precplus = new KAction( i18n("Increase precision"), KSBarIcon("precplus"), 0, this,
+    m_precplus = new KAction( i18n("Increase precision"), "precplus", 0, this,
 			      SLOT( precisionPlus() ), actionCollection(), "precplus");
-    m_precminus = new KAction( i18n("Decrease precision"), KSBarIcon("precminus"), 0, this,
+    m_precminus = new KAction( i18n("Decrease precision"), "precminus", 0, this,
 			      SLOT( precisionMinus() ), actionCollection(), "precminus");
-    m_money = new KToggleAction( i18n("Money format"), KSBarIcon("money"), 0, actionCollection(), "money");
+    m_money = new KToggleAction( i18n("Money format"), "money"), 0, actionCollection(), "money";
     connect( m_money, SIGNAL( toggled( bool ) ), this, SLOT( moneyFormat( bool ) ) );
-    m_alignLeft = new KToggleAction( i18n("Align left"), KSBarIcon("left"), 0, actionCollection(), "left");
+    m_alignLeft = new KToggleAction( i18n("Align left"), "left"), 0, actionCollection(), "left";
     connect( m_alignLeft, SIGNAL( toggled( bool ) ), this, SLOT( alignLeft( bool ) ) );
     m_alignLeft->setExclusiveGroup( "Align" );
-    m_alignCenter = new KToggleAction( i18n("Align center"), KSBarIcon("center"), 0, actionCollection(), "center");
+    m_alignCenter = new KToggleAction( i18n("Align center"), "center"), 0, actionCollection(), "center";
     connect( m_alignCenter, SIGNAL( toggled( bool ) ), this, SLOT( alignCenter( bool ) ) );
     m_alignCenter->setExclusiveGroup( "Align" );
-    m_alignRight = new KToggleAction( i18n("Align right"), KSBarIcon("right"), 0, actionCollection(), "right");
+    m_alignRight = new KToggleAction( i18n("Align right"), "right"), 0, actionCollection(), "right";
     connect( m_alignRight, SIGNAL( toggled( bool ) ), this, SLOT( alignRight( bool ) ) );
     m_alignRight->setExclusiveGroup( "Align" );
-    m_transform = new KAction( i18n("Transform object..."), KSBarIcon("rotate"), 0, this, SLOT( transformPart() ),
+    m_transform = new KAction( i18n("Transform object..."), "rotate", 0, this, SLOT( transformPart() ),
 			       actionCollection(), "transform" );
     m_transform->setEnabled( FALSE );
     connect( m_transform, SIGNAL( activated() ), this, SLOT( transformPart() ) );
@@ -260,47 +260,47 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_sort = new KAction( i18n("Sort"), 0, this, SLOT( sort() ), actionCollection(), "sort" );
     m_consolidate = new KAction( i18n("Consolidate..."), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
     //m_help = new KAction( i18n("KSpread Help..."), 0, this, SLOT( help() ), actionCollection(), "help" );
-    m_multiRow = new KToggleAction( i18n("Multi Row"), KSBarIcon("multirow"), 0, actionCollection(), "multiRow" );
+    m_multiRow = new KToggleAction( i18n("Multi Row"), "multirow", 0, actionCollection(), "multiRow" );
     connect( m_multiRow, SIGNAL( toggled( bool ) ), this, SLOT( multiRow( bool ) ) );
     m_selectFont = new KFontAction( i18n("Select Font"), 0, actionCollection(), "selectFont" );
     connect( m_selectFont, SIGNAL( activated( const QString& ) ), this, SLOT( fontSelected( const QString& ) ) );
     m_selectFontSize = new KFontSizeAction( i18n("Select Font Size"), 0, actionCollection(), "selectFontSize" );
     connect( m_selectFontSize, SIGNAL( fontSizeChanged( int ) ), this, SLOT( fontSizeSelected( int ) ) );
-    m_deleteColumn = new KAction( i18n("Delete Column"), KSBarIcon("colout"), 0, this, SLOT( deleteColumn() ),
+    m_deleteColumn = new KAction( i18n("Delete Column"), "colout", 0, this, SLOT( deleteColumn() ),
 				  actionCollection(), "deleteColumn" );
-    m_deleteRow = new KAction( i18n("Delete Row"), KSBarIcon("rowout"), 0, this, SLOT( deleteRow() ),
+    m_deleteRow = new KAction( i18n("Delete Row"), "rowout", 0, this, SLOT( deleteRow() ),
 			       actionCollection(), "deleteRow" );
-    m_insertColumn = new KAction( i18n("Insert Column"), KSBarIcon("colin"), 0, this, SLOT( insertColumn() ),
+    m_insertColumn = new KAction( i18n("Insert Column"), "colin", 0, this, SLOT( insertColumn() ),
 				  actionCollection(), "insertColumn" );
-    m_insertRow = new KAction( i18n("Insert Row"), KSBarIcon("rowin"), 0, this, SLOT( insertRow() ),
+    m_insertRow = new KAction( i18n("Insert Row"), "rowin", 0, this, SLOT( insertRow() ),
 			       actionCollection(), "insertRow" );
     m_cellLayout = new KAction( i18n("Cell Layout..."), CTRL + Key_L, this, SLOT( layoutDlg() ),
 			       actionCollection(), "cellLayout" );
-    m_formulaPower = new KAction( i18n("Formula Power"), KSBarIcon("rsup"), 0, this, SLOT( formulaPower() ),
+    m_formulaPower = new KAction( i18n("Formula Power"), "rsup", 0, this, SLOT( formulaPower() ),
 				actionCollection(), "formulaPower" );
-    m_formulaSubscript = new KAction( i18n("Formula Subscript"), KSBarIcon("rsub"), 0, this, SLOT( formulaSubscript() ),
+    m_formulaSubscript = new KAction( i18n("Formula Subscript"), "rsub", 0, this, SLOT( formulaSubscript() ),
 				      actionCollection(), "formulaSubscript" );
-    m_formulaParantheses = new KAction( i18n("Formula Parentheses"), KSBarIcon("paren"), 0, this, SLOT( formulaParentheses() ),
+    m_formulaParantheses = new KAction( i18n("Formula Parentheses"), "paren", 0, this, SLOT( formulaParentheses() ),
 					actionCollection(), "formulaParentheses" );
-    m_formulaAbsValue = new KAction( i18n("Formula Abs Value"), KSBarIcon("abs"), 0, this, SLOT( formulaAbsValue() ),
+    m_formulaAbsValue = new KAction( i18n("Formula Abs Value"), "abs", 0, this, SLOT( formulaAbsValue() ),
 				     actionCollection(), "formulaAbsValue" );
-    m_formulaBrackets = new KAction( i18n("Formula Brackets"), KSBarIcon("brackets"), 0, this, SLOT( formulaBrackets() ),
+    m_formulaBrackets = new KAction( i18n("Formula Brackets"), "brackets", 0, this, SLOT( formulaBrackets() ),
 				     actionCollection(), "formulaBrackets" );
-    m_formulaFraction = new KAction( i18n("Formula Fraction"), KSBarIcon("frac"), 0, this, SLOT( formulaFraction() ),
+    m_formulaFraction = new KAction( i18n("Formula Fraction"), "frac", 0, this, SLOT( formulaFraction() ),
 				     actionCollection(), "formulaFraction" );
-    m_formulaRoot = new KAction( i18n("Formula Root"), KSBarIcon("sqrt"), 0, this, SLOT( formulaRoot() ),
+    m_formulaRoot = new KAction( i18n("Formula Root"), "sqrt", 0, this, SLOT( formulaRoot() ),
 				 actionCollection(), "formulaRoot" );
-    m_formulaIntegral = new KAction( i18n("Formula Integral"), KSBarIcon("int"), 0, this, SLOT( formulaIntegral() ),
+    m_formulaIntegral = new KAction( i18n("Formula Integral"), "int", 0, this, SLOT( formulaIntegral() ),
 				     actionCollection(), "formulaIntegral" );
-    m_formulaMatrix = new KAction( i18n("Formula Matrix"), KSBarIcon("matrix"), 0, this, SLOT( formulaMatrix() ),
+    m_formulaMatrix = new KAction( i18n("Formula Matrix"), "matrix", 0, this, SLOT( formulaMatrix() ),
 				   actionCollection(), "formulaMatrix" );
-    m_formulaLeftSuper = new KAction( i18n("Formula Left Super"), KSBarIcon("lsup"), 0, this, SLOT( formulaLeftSuper() ),
+    m_formulaLeftSuper = new KAction( i18n("Formula Left Super"), "lsup", 0, this, SLOT( formulaLeftSuper() ),
 				      actionCollection(), "formulaLeftSuper" );
-    m_formulaLeftSub = new KAction( i18n("Formula Left Sub"), KSBarIcon("lsub"), 0, this, SLOT( formulaLeftSub() ),
+    m_formulaLeftSub = new KAction( i18n("Formula Left Sub"), "lsub", 0, this, SLOT( formulaLeftSub() ),
 				    actionCollection(), "formulaLeftSub" );
-    m_formulaSum = new KAction( i18n("Formula Sum"), KSBarIcon("sum"), 0, this, SLOT( formulaSum() ),
+    m_formulaSum = new KAction( i18n("Formula Sum"), "sum", 0, this, SLOT( formulaSum() ),
 				actionCollection(), "formulaSum" );
-    m_formulaProduct = new KAction( i18n("Formula Product"), KSBarIcon("prod"), 0, this, SLOT( formulaProduct() ),
+    m_formulaProduct = new KAction( i18n("Formula Product"), "prod", 0, this, SLOT( formulaProduct() ),
 				    actionCollection(), "formulaProduct");
     m_formulaSelection = new KSelectAction( i18n("Formula Selection"), 0, actionCollection(), "formulaSelection" );
     QStringList lst;
@@ -313,32 +313,32 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 	     this, SLOT( formulaSelection( const QString& ) ) );
 
     // Insert menu
-    (void) new KAction( i18n("Formula..."), KSBarIcon("sum"), 0, this, SLOT( insertFormula() ),
+    (void) new KAction( i18n("Formula..."), "sum", 0, this, SLOT( insertFormula() ),
                         actionCollection(), "insertFormula" );
     (void) new KAction( i18n("Series..."), 0, this, SLOT( series() ), actionCollection(), "series" );
     (void) new KAction( i18n("Anchor..."), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
-    (void) new KAction( i18n("Object..."), KSBarIcon("parts"), 0, this, SLOT( insertObject() ),
+    (void) new KAction( i18n("Object..."), "parts", 0, this, SLOT( insertObject() ),
                         actionCollection(), "insertPart");
-    (void) new KAction( i18n("Chart"), KSBarIcon("chart"), 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
+    (void) new KAction( i18n("Chart"), "chart", 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
 
-    m_autoSum = new KAction( i18n("AutoSum"), KSBarIcon("black-sum"), 0, this, SLOT( autoSum() ),
+    m_autoSum = new KAction( i18n("AutoSum"), "black-sum", 0, this, SLOT( autoSum() ),
                              actionCollection(), "autoSum" );
-    m_sortDec = new KAction( i18n("Sort descreasing"), KSBarIcon("sort_decrease"), 0, this, SLOT( sortDec() ),
+    m_sortDec = new KAction( i18n("Sort descreasing"), "sort_decrease", 0, this, SLOT( sortDec() ),
                              actionCollection(), "sortDec" );
-    m_sortInc = new KAction( i18n("Sort increasing"), KSBarIcon("sort_incr"), 0, this, SLOT( sortInc() ),
+    m_sortInc = new KAction( i18n("Sort increasing"), "sort_incr", 0, this, SLOT( sortInc() ),
                              actionCollection(), "sortInc" );
     m_textColor = new KColorAction( i18n("Text color"), KColorAction::TextColor, 0, this, SLOT( changeTextColor() ),
 			       actionCollection(), "textColor" );
     m_bgColor = new KColorAction( i18n("Background color"), KColorAction::BackgroundColor, 0, this, SLOT( changeBackgroundColor() ),
 			       actionCollection(), "backgroundColor" );
-    m_function = new KAction( i18n("Function"), KSBarIcon("funct"), 0, this, SLOT( funct() ), actionCollection(), "function" );
-    m_borderLeft = new KAction( i18n("Border left"), KSBarIcon("borderleft"), 0, this, SLOT( borderLeft() ), actionCollection(), "borderLeft" );
-    m_borderRight = new KAction( i18n("Border Right"), KSBarIcon("borderright"), 0, this, SLOT( borderRight() ), actionCollection(), "borderRight" );
-    m_borderTop = new KAction( i18n("Border Top"), KSBarIcon("bordertop"), 0, this, SLOT( borderTop() ), actionCollection(), "borderTop" );
-    m_borderBottom = new KAction( i18n("Border Bottom"), KSBarIcon("borderbottom"), 0, this, SLOT( borderBottom() ), actionCollection(), "borderBottom" );
-    m_borderAll = new KAction( i18n("All borders"), KSBarIcon("borderall"), 0, this, SLOT( borderAll() ), actionCollection(), "borderAll" );
-    m_borderRemove = new KAction( i18n("Remove Borders"), KSBarIcon("borderremove"), 0, this, SLOT( borderRemove() ), actionCollection(), "borderRemove" );
-    m_borderOutline = new KAction( i18n("Border Outline"), KSBarIcon("borderoutline"), 0, this, SLOT( borderOutline() ), actionCollection(), "borderOutline" );
+    m_function = new KAction( i18n("Function"), "funct", 0, this, SLOT( funct() ), actionCollection(), "function" );
+    m_borderLeft = new KAction( i18n("Border left"), "borderleft", 0, this, SLOT( borderLeft() ), actionCollection(), "borderLeft" );
+    m_borderRight = new KAction( i18n("Border Right"), "borderright", 0, this, SLOT( borderRight() ), actionCollection(), "borderRight" );
+    m_borderTop = new KAction( i18n("Border Top"), "bordertop", 0, this, SLOT( borderTop() ), actionCollection(), "borderTop" );
+    m_borderBottom = new KAction( i18n("Border Bottom"), "borderbottom", 0, this, SLOT( borderBottom() ), actionCollection(), "borderBottom" );
+    m_borderAll = new KAction( i18n("All borders"), "borderall", 0, this, SLOT( borderAll() ), actionCollection(), "borderAll" );
+    m_borderRemove = new KAction( i18n("Remove Borders"), "borderremove", 0, this, SLOT( borderRemove() ), actionCollection(), "borderRemove" );
+    m_borderOutline = new KAction( i18n("Border Outline"), "borderoutline", 0, this, SLOT( borderOutline() ), actionCollection(), "borderOutline" );
     m_borderColor = new KColorAction( i18n("Border Color"), KColorAction:: FrameColor, 0, this, SLOT( changeBorderColor() ),
 			       actionCollection(), "borderColor" );
     m_tableFormat = new KAction( i18n("Table Style..."), 0, this, SLOT( tableFormat() ), actionCollection(), "tableFormat" );

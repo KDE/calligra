@@ -54,8 +54,8 @@ KImageView::KImageView( KImageDocument* _doc, QWidget* _parent, const char* _nam
   QObject::connect( _doc, SIGNAL( sigUpdateView() ), this, SLOT( slotUpdateView() ) );
 
   // edit actions
-  m_undo  = new KAction( i18n( "&Undo" ), KImageBarIcon( "undo" ), 0, this, SLOT( undo() ), actionCollection(), "undo" );
-  m_redo  = new KAction( i18n( "&Redo" ), KImageBarIcon( "redo" ), 0, this, SLOT( redo() ), actionCollection(), "redo" );
+  m_undo  = new KAction( i18n( "&Undo" ), "undo", 0, this, SLOT( undo() ), actionCollection(), "undo" );
+  m_redo  = new KAction( i18n( "&Redo" ), "redo", 0, this, SLOT( redo() ), actionCollection(), "redo" );
   m_import = new KAction( i18n( "&Import image..." ), 0, this, SLOT( editImportImage() ), actionCollection(), "editImportImage" );
   m_export = new KAction( i18n( "&Export image..." ), 0, this, SLOT( editExportImage() ), actionCollection(), "editExportImage" );
   m_pageSetup   = new KAction( i18n( "Page &layout..." ), 0, this, SLOT( editPageLayout() ), actionCollection(), "editPageLayout" );
@@ -63,9 +63,9 @@ KImageView::KImageView( KImageDocument* _doc, QWidget* _parent, const char* _nam
 
   // view actions
   m_viewFactor      = new KAction( i18n( "&Zoom view..." ), 0, this, SLOT( viewZoomFactor() ), actionCollection(), "viewZoomFactor" );
-  m_fitToView       = new KAction( i18n( "&Fit image to view" ), KImageBarIcon( "fittoview" ), 0, this, SLOT( viewFitToView() ), actionCollection(), "viewFitToView" );
-  m_fitWithProps    = new KAction( i18n( "&Fit image to view props" ), KImageBarIcon( "fitwithprops" ), 0, this, SLOT( viewFitWithProportions() ), actionCollection(), "viewFitWithProportions" );
-  m_original        = new KAction( i18n( "&Original size" ), KImageBarIcon( "originalsize" ), 0, this, SLOT( viewOriginalSize() ), actionCollection(), "viewOriginalSize" );
+  m_fitToView       = new KAction( i18n( "&Fit image to view" ), "fittoview", 0, this, SLOT( viewFitToView() ), actionCollection(), "viewFitToView" );
+  m_fitWithProps    = new KAction( i18n( "&Fit image to view props" ), "fitwithprops", 0, this, SLOT( viewFitWithProportions() ), actionCollection(), "viewFitWithProportions" );
+  m_original        = new KAction( i18n( "&Original size" ), "originalsize", 0, this, SLOT( viewOriginalSize() ), actionCollection(), "viewOriginalSize" );
   m_center          = new KAction( i18n( "&Center image" ), 0, this, SLOT( viewCentered() ), actionCollection(), "viewCentered" );
   m_scrollbars      = new KAction( i18n( "&Scrollbars" ), 0, this, SLOT( viewScrollbars() ), actionCollection(), "viewScrollbars" );
   m_info            = new KAction( i18n( "&Informations..." ), 0, this, SLOT( viewInformations() ), actionCollection(), "viewInformations" );

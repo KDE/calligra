@@ -227,22 +227,22 @@ void KWordView::setupActions()
 {
     // -------------- Edit actions
 
-    actionEditUndo = new KAction( i18n( "No Undo possible" ), KWBarIcon( "undo" ), ALT + Key_Backspace,
+    actionEditUndo = new KAction( i18n( "No Undo possible" ), "undo", ALT + Key_Backspace,
 				  this, SLOT( editUndo() ),
 				  actionCollection(), "edit_undo" );
-    actionEditRedo = new KAction( i18n( "No Redo possible" ), KWBarIcon( "redo" ), 0,
+    actionEditRedo = new KAction( i18n( "No Redo possible" ), "redo", 0,
 				  this, SLOT( editRedo() ),
 				  actionCollection(), "edit_redo" );
-    actionEditCut = new KAction( i18n( "&Cut" ), KWBarIcon( "editcut" ), CTRL + Key_X,
+    actionEditCut = new KAction( i18n( "&Cut" ), "editcut", CTRL + Key_X,
 				 this, SLOT( editCut() ),
 				 actionCollection(), "edit_cut" );
-    actionEditCopy = new KAction( i18n( "C&opy" ), KWBarIcon( "editcopy" ), CTRL + Key_C,
+    actionEditCopy = new KAction( i18n( "C&opy" ), "editcopy", CTRL + Key_C,
 				  this, SLOT( editCopy() ),
 				  actionCollection(), "edit_copy" );
-    actionEditPaste = new KAction( i18n( "&Paste" ), KWBarIcon( "editpaste" ), CTRL + Key_V,
+    actionEditPaste = new KAction( i18n( "&Paste" ), "editpaste", CTRL + Key_V,
 				   this, SLOT( editPaste() ),
 				   actionCollection(), "edit_paste" );
-    actionEditFind = new KAction( i18n( "&Find and Replace..." ), KWBarIcon( "kwsearch" ), CTRL + Key_F,
+    actionEditFind = new KAction( i18n( "&Find and Replace..." ), "kwsearch", CTRL + Key_F,
 				  this, SLOT( editFind() ),
 				  actionCollection(), "edit_find" );
     actionEditSelectAll = new KAction( i18n( "&Select all" ), ALT + Key_A,
@@ -305,13 +305,13 @@ void KWordView::setupActions()
     lst << "500%";
     ( (KSelectAction*)actionViewZoom )->setItems( lst );
     // -------------- Insert actions
-    actionInsertPicture = new KAction( i18n( "&Picture..." ), KWBarIcon( "picture" ), Key_F2,
+    actionInsertPicture = new KAction( i18n( "&Picture..." ), "picture", Key_F2,
 				       this, SLOT( insertPicture() ),
 				       actionCollection(), "insert_picture" );
-    actionInsertClipart = new KAction( i18n( "&Clipart..." ), KWBarIcon( "clipart" ), Key_F3,
+    actionInsertClipart = new KAction( i18n( "&Clipart..." ), "clipart", Key_F3,
 				       this, SLOT( insertClipart() ),
 				       actionCollection(), "insert_clipart" );
-    actionInsertSpecialChar = new KAction( i18n( "&Special Character..." ), KWBarIcon( "char" ), ALT + SHIFT + Key_C,
+    actionInsertSpecialChar = new KAction( i18n( "&Special Character..." ), "char", ALT + SHIFT + Key_C,
 					   this, SLOT( insertSpecialChar() ),
 					   actionCollection(), "insert_specialchar" );
     actionInsertFrameBreak = new KAction( i18n( "&Hard Frame Break" ), CTRL + Key_Return,
@@ -346,39 +346,39 @@ void KWordView::setupActions()
 					       actionCollection(), "insert_var_serialletter" );
 
     // ---------------- Tools actions
-    actionToolsEdit = new KToggleAction( i18n( "Edit &Text" ), KWBarIcon( "edittool" ), Key_F4,
+    actionToolsEdit = new KToggleAction( i18n( "Edit &Text" ), "edittool", Key_F4,
 					 this, SLOT( toolsEdit() ),
 					 actionCollection(), "tools_edit" );
     ( (KToggleAction*)actionToolsEdit )->setExclusiveGroup( "tools" );
-    actionToolsEditFrames = new KToggleAction( i18n( "Edit &Frames" ), KWBarIcon( "editframetool" ), Key_F5,
+    actionToolsEditFrames = new KToggleAction( i18n( "Edit &Frames" ), "editframetool", Key_F5,
 					       this, SLOT( toolsEditFrame() ),
 					       actionCollection(), "tools_editframes" );
     ( (KToggleAction*)actionToolsEditFrames )->setExclusiveGroup( "tools" );
-    actionToolsCreateText = new KToggleAction( i18n( "&Create Text Frame" ), KWBarIcon( "textframetool" ), Key_F6,
+    actionToolsCreateText = new KToggleAction( i18n( "&Create Text Frame" ), "textframetool", Key_F6,
 					       this, SLOT( toolsCreateText() ),
 					       actionCollection(), "tools_createtext" );
     ( (KToggleAction*)actionToolsCreateText )->setExclusiveGroup( "tools" );
-    actionToolsCreatePix = new KToggleAction( i18n( "&Create Picture Frame" ), KWBarIcon( "picframetool" ), Key_F7,
+    actionToolsCreatePix = new KToggleAction( i18n( "&Create Picture Frame" ), "picframetool", Key_F7,
 					      this, SLOT( toolsCreatePix() ),
 					      actionCollection(), "tools_createpix" );
     ( (KToggleAction*)actionToolsCreatePix )->setExclusiveGroup( "tools" );
-    actionToolsCreateClip = new KToggleAction( i18n( "&Create Clipart Frame" ), KWBarIcon( "clipart" ), Key_F8,
+    actionToolsCreateClip = new KToggleAction( i18n( "&Create Clipart Frame" ), "clipart", Key_F8,
 					       this, SLOT( toolsClipart() ),
 					       actionCollection(), "tools_createclip" );
     ( (KToggleAction*)actionToolsCreateClip )->setExclusiveGroup( "tools" );
-    actionToolsCreateTable = new KToggleAction( i18n( "&Create Table" ), KWBarIcon( "table" ), Key_F9,
+    actionToolsCreateTable = new KToggleAction( i18n( "&Create Table" ), "table", Key_F9,
 						this, SLOT( toolsTable() ),
 						actionCollection(), "tools_table" );
     ( (KToggleAction*)actionToolsCreateTable )->setExclusiveGroup( "tools" );
-    actionToolsCreateKSpreadTable = new KToggleAction( i18n( "&Create KSpread Table Frame" ), KWBarIcon( "table" ), Key_F10,
+    actionToolsCreateKSpreadTable = new KToggleAction( i18n( "&Create KSpread Table Frame" ), "table", Key_F10,
 						       this, SLOT( toolsKSpreadTable() ),
 						       actionCollection(), "tools_kspreadtable" );
     ( (KToggleAction*)actionToolsCreateKSpreadTable )->setExclusiveGroup( "tools" );
-    actionToolsCreateFormula = new KToggleAction( i18n( "&Create Formula Frame" ), KWBarIcon( "formula" ), Key_F11,
+    actionToolsCreateFormula = new KToggleAction( i18n( "&Create Formula Frame" ), "formula", Key_F11,
 						  this, SLOT( toolsFormula() ),
 						  actionCollection(), "tools_formula" );
     ( (KToggleAction*)actionToolsCreateFormula )->setExclusiveGroup( "tools" );
-    actionToolsCreatePart = new KToggleAction( i18n( "&Create Part Frame" ), KWBarIcon( "parts" ), Key_F12,
+    actionToolsCreatePart = new KToggleAction( i18n( "&Create Part Frame" ), "parts", Key_F12,
 					       this, SLOT( toolsPart() ),
 					       actionCollection(), "tools_part" );
     ( (KToggleAction*)actionToolsCreatePart )->setExclusiveGroup( "tools" );
@@ -417,29 +417,29 @@ void KWordView::setupActions()
  	lst << m_pKWordDoc->paragLayoutList.at( i )->getName();
     styleList = lst;
     ( (KSelectAction*)actionFormatStyle )->setItems( lst );
-    actionFormatBold = new KToggleAction( i18n( "&Bold" ), KWBarIcon( "bold" ), CTRL + Key_B,
+    actionFormatBold = new KToggleAction( i18n( "&Bold" ), "bold", CTRL + Key_B,
 					   this, SLOT( textBold() ),
 					   actionCollection(), "format_bold" );
-    actionFormatItalic = new KToggleAction( i18n( "&Italic" ), KWBarIcon( "italic" ), CTRL + Key_I,
+    actionFormatItalic = new KToggleAction( i18n( "&Italic" ), "italic", CTRL + Key_I,
 					   this, SLOT( textItalic() ),
 					   actionCollection(), "format_italic" );
-    actionFormatUnderline = new KToggleAction( i18n( "&Underline" ), KWBarIcon( "underl" ), CTRL + Key_U,
+    actionFormatUnderline = new KToggleAction( i18n( "&Underline" ), "underl", CTRL + Key_U,
 					   this, SLOT( textUnderline() ),
 					   actionCollection(), "format_underline" );
-    actionFormatAlignLeft = new KToggleAction( i18n( "Align &Left" ), KWBarIcon( "alignLeft" ), ALT + Key_L,
+    actionFormatAlignLeft = new KToggleAction( i18n( "Align &Left" ), "alignLeft", ALT + Key_L,
 				       this, SLOT( textAlignLeft() ),
 				       actionCollection(), "format_alignleft" );
     ( (KToggleAction*)actionFormatAlignLeft )->setExclusiveGroup( "align" );
     ( (KToggleAction*)actionFormatAlignLeft )->setChecked( TRUE );
-    actionFormatAlignCenter = new KToggleAction( i18n( "Align &Center" ), KWBarIcon( "alignCenter" ), ALT + Key_C,
+    actionFormatAlignCenter = new KToggleAction( i18n( "Align &Center" ), "alignCenter", ALT + Key_C,
 					 this, SLOT( textAlignCenter() ),
 					 actionCollection(), "format_aligncenter" );
     ( (KToggleAction*)actionFormatAlignCenter )->setExclusiveGroup( "align" );
-    actionFormatAlignRight = new KToggleAction( i18n( "Align &Right" ), KWBarIcon( "alignRight" ), ALT + Key_R,
+    actionFormatAlignRight = new KToggleAction( i18n( "Align &Right" ), "alignRight", ALT + Key_R,
 					this, SLOT( textAlignRight() ),
 					actionCollection(), "format_alignright" );
     ( (KToggleAction*)actionFormatAlignRight )->setExclusiveGroup( "align" );
-    actionFormatAlignBlock = new KToggleAction( i18n( "Align &Block" ), KWBarIcon( "alignBlock" ), ALT + Key_B,
+    actionFormatAlignBlock = new KToggleAction( i18n( "Align &Block" ), "alignBlock", ALT + Key_B,
 					this, SLOT( textAlignBlock() ),
 					actionCollection(), "format_alignblock" );
     ( (KToggleAction*)actionFormatAlignBlock )->setExclusiveGroup( "align" );
@@ -451,32 +451,32 @@ void KWordView::setupActions()
     for ( unsigned int i = 0; i <= 10; i++ )
  	lst << QString( "%1" ).arg( i );
     ( (KSelectAction*)actionFormatLineSpacing )->setItems( lst );
-    actionFormatEnumList = new KToggleAction( i18n( "Enumerated List" ), KWBarIcon( "enumList" ), 0,
+    actionFormatEnumList = new KToggleAction( i18n( "Enumerated List" ), "enumList", 0,
 					      this, SLOT( textEnumList() ),
 					      actionCollection(), "format_enumlist" );
     ( (KToggleAction*)actionFormatEnumList )->setExclusiveGroup( "style" );
-    actionFormatUnsortList = new KToggleAction( i18n( "Bullet List" ), KWBarIcon( "unsortedList" ), 0,
+    actionFormatUnsortList = new KToggleAction( i18n( "Bullet List" ), "unsortedList", 0,
 					      this, SLOT( textUnsortList() ),
 					      actionCollection(), "format_unsortlist" );
     ( (KToggleAction*)actionFormatUnsortList )->setExclusiveGroup( "style" );
-    actionFormatSuper = new KToggleAction( i18n( "Superscript" ), KWBarIcon( "super" ), 0,
+    actionFormatSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
 					      this, SLOT( textSuperScript() ),
 					      actionCollection(), "format_super" );
     ( (KToggleAction*)actionFormatSuper )->setExclusiveGroup( "valign" );
-    actionFormatSub = new KToggleAction( i18n( "Subscript" ), KWBarIcon( "sub" ), 0,
+    actionFormatSub = new KToggleAction( i18n( "Subscript" ), "sub", 0,
 					      this, SLOT( textSubScript() ),
 					      actionCollection(), "format_sub" );
     ( (KToggleAction*)actionFormatSub )->setExclusiveGroup( "valign" );
-    actionFormatBrdLeft = new KToggleAction( i18n( "Paragraph Border Left" ), KWBarIcon( "borderleft" ), 0,
+    actionFormatBrdLeft = new KToggleAction( i18n( "Paragraph Border Left" ), "borderleft", 0,
 					     this, SLOT( textBorderLeft() ),
 					     actionCollection(), "format_brdleft" );
-    actionFormatBrdRight = new KToggleAction( i18n( "Paragraph Border Right" ), KWBarIcon( "borderright" ), 0,
+    actionFormatBrdRight = new KToggleAction( i18n( "Paragraph Border Right" ), "borderright", 0,
 					     this, SLOT( textBorderRight() ),
 					     actionCollection(), "format_brdright" );
-    actionFormatBrdTop = new KToggleAction( i18n( "Paragraph Border Top" ), KWBarIcon( "bordertop" ), 0,
+    actionFormatBrdTop = new KToggleAction( i18n( "Paragraph Border Top" ), "bordertop", 0,
 					     this, SLOT( textBorderTop() ),
 					     actionCollection(), "format_brdtop" );
-    actionFormatBrdBottom = new KToggleAction( i18n( "Paragraph Border Bottom" ), KWBarIcon( "borderbottom" ), 0,
+    actionFormatBrdBottom = new KToggleAction( i18n( "Paragraph Border Bottom" ), "borderbottom", 0,
 					       this, SLOT( textBorderBottom() ),
 					     actionCollection(), "format_brdbottom" );
     actionFormatBrdColor = new KColorAction( i18n( "Paragraph Border Color" ), KColorAction::FrameColor, 0,
@@ -504,16 +504,16 @@ void KWordView::setupActions()
 
     // ---------------------------- frame toolbar actions
 
-    actionFrameBrdLeft = new KToggleAction( i18n( "Frame Border Left" ), KWBarIcon( "borderleft" ), 0,
+    actionFrameBrdLeft = new KToggleAction( i18n( "Frame Border Left" ), "borderleft", 0,
 					     this, SLOT( frameBorderLeft() ),
 					     actionCollection(), "frame_brdleft" );
-    actionFrameBrdRight = new KToggleAction( i18n( "Frame Border Right" ), KWBarIcon( "borderright" ), 0,
+    actionFrameBrdRight = new KToggleAction( i18n( "Frame Border Right" ), "borderright", 0,
 					     this, SLOT( frameBorderRight() ),
 					     actionCollection(), "frame_brdright" );
-    actionFrameBrdTop = new KToggleAction( i18n( "Frame Border Top" ), KWBarIcon( "bordertop" ), 0,
+    actionFrameBrdTop = new KToggleAction( i18n( "Frame Border Top" ), "bordertop", 0,
 					     this, SLOT( frameBorderTop() ),
 					     actionCollection(), "frame_brdtop" );
-    actionFrameBrdBottom = new KToggleAction( i18n( "Frame Border Bottom" ), KWBarIcon( "borderbottom" ), 0,
+    actionFrameBrdBottom = new KToggleAction( i18n( "Frame Border Bottom" ), "borderbottom", 0,
 					       this, SLOT( frameBorderBottom() ),
 					     actionCollection(), "frame_brdbottom" );
     actionFrameBrdColor = new KColorAction( i18n( "Frame Border Color" ), KColorAction::FrameColor, 0,
@@ -538,58 +538,58 @@ void KWordView::setupActions()
 
     // ---------------------- formula toolbar actions
 
-    actionFormulaPower = new KAction( i18n( "Power" ), KWBarIcon( "rsup" ), 0,
+    actionFormulaPower = new KAction( i18n( "Power" ), "rsup", 0,
 				      this, SLOT( formulaPower() ),
 				      actionCollection(), "formula_power" );
-    actionFormulaSubscript = new KAction( i18n( "Subscript" ), KWBarIcon("rsub" ), 0,
+    actionFormulaSubscript = new KAction( i18n( "Subscript" ), "rsub" , 0,
 				      this, SLOT( formulaSubscript() ),
 				      actionCollection(), "formula_subscript" );
-    actionFormulaParentheses = new KAction( i18n( "Parentheses" ), KWBarIcon("paren" ), 0,
+    actionFormulaParentheses = new KAction( i18n( "Parentheses" ), "paren" , 0,
 				      this, SLOT( formulaParentheses() ),
 				      actionCollection(), "formula_parentheses" );
-    actionFormulaAbs = new KAction( i18n( "Absolute Value" ), KWBarIcon( "abs" ), 0,
+    actionFormulaAbs = new KAction( i18n( "Absolute Value" ), "abs", 0,
 				    this, SLOT( formulaAbsValue() ),
 				      actionCollection(), "formula_abs" );
-    actionFormulaBrackets = new KAction( i18n( "Brackets" ), KWBarIcon( "brackets" ), 0,
+    actionFormulaBrackets = new KAction( i18n( "Brackets" ), "brackets", 0,
 				      this, SLOT( formulaBrackets() ),
 				      actionCollection(), "formula_brackets" );
-    actionFormulaFraction = new KAction( i18n( "Fraction" ), KWBarIcon( "frac" ), 0,
+    actionFormulaFraction = new KAction( i18n( "Fraction" ), "frac", 0,
 					 this, SLOT( formulaFraction() ),
 				      actionCollection(), "formula_fraction" );
-    actionFormulaRoot = new KAction( i18n( "Root" ), KWBarIcon( "sqrt" ), 0,
+    actionFormulaRoot = new KAction( i18n( "Root" ), "sqrt", 0,
 					 this, SLOT( formulaRoot() ),
 				     actionCollection(), "formula_root" );
-    actionFormulaIntegral = new KAction( i18n( "Integral" ), KWBarIcon( "int" ), 0,
+    actionFormulaIntegral = new KAction( i18n( "Integral" ), "int", 0,
 					 this, SLOT( formulaIntegral() ),
 				      actionCollection(), "formula_integral" );
-    actionFormulaMatrix = new KAction( i18n( "Matrix" ), KWBarIcon( "matrix" ), 0,
+    actionFormulaMatrix = new KAction( i18n( "Matrix" ), "matrix", 0,
 					 this, SLOT( formulaMatrix() ),
 				      actionCollection(), "formula_matrix" );
-    actionFormulaLeftSuper = new KAction( i18n( "Left Superscript" ), KWBarIcon("lsup" ), 0,
+    actionFormulaLeftSuper = new KAction( i18n( "Left Superscript" ), "lsup" , 0,
 					 this, SLOT( formulaLeftSuper() ),
 				      actionCollection(), "formula_leftsup" );
-    actionFormulaLeftSub = new KAction( i18n( "Left Subscript" ), KWBarIcon("lsub" ), 0,
+    actionFormulaLeftSub = new KAction( i18n( "Left Subscript" ), "lsub" , 0,
 					 this, SLOT( formulaLeftSub() ),
 				      actionCollection(), "formula_leftsub" );
-    actionFormulaProduct = new KAction( i18n( "Formula Product" ), KWBarIcon( "prod" ), 0,
+    actionFormulaProduct = new KAction( i18n( "Formula Product" ), "prod", 0,
 					 this, SLOT( formulaProduct() ),
 				      actionCollection(), "formula_product" );
-    actionFormulaSum = new KAction( i18n( "Formula Sum" ), KWBarIcon( "sum" ), 0,
+    actionFormulaSum = new KAction( i18n( "Formula Sum" ), "sum", 0,
 					 this, SLOT( formulaSum() ),
 				      actionCollection(), "formula_sum" );
 
     // ---------------------- Table actions
 
-    actionTableInsertRow = new KAction( i18n( "&Insert Row..." ), KWBarIcon( "rowin" ), 0,
+    actionTableInsertRow = new KAction( i18n( "&Insert Row..." ), "rowin", 0,
 			       this, SLOT( tableInsertRow() ),
 			       actionCollection(), "table_insrow" );
-    actionTableInsertCol = new KAction( i18n( "&Insert Column..." ), KWBarIcon( "colin" ), 0,
+    actionTableInsertCol = new KAction( i18n( "&Insert Column..." ), "colin", 0,
 			       this, SLOT( tableInsertCol() ),
 			       actionCollection(), "table_inscol" );
-    actionTableDelRow = new KAction( i18n( "&Delete Row..." ), KWBarIcon( "rowout" ), 0,
+    actionTableDelRow = new KAction( i18n( "&Delete Row..." ), "rowout", 0,
 				     this, SLOT( tableDeleteRow() ),
 				     actionCollection(), "table_delrow" );
-    actionTableDelCol = new KAction( i18n( "&Delete Column..." ), KWBarIcon( "colout" ), 0,
+    actionTableDelCol = new KAction( i18n( "&Delete Column..." ), "colout", 0,
 			       this, SLOT( tableDeleteCol() ),
 				     actionCollection(), "table_delcol" );
     actionTableJoinCells = new KAction( i18n( "&Join Cells" ), 0,
@@ -607,7 +607,7 @@ void KWordView::setupActions()
 
     // ---------------------- Extra actions
 
-    actionExtraSpellCheck = new KAction( i18n( "&Spell Checking..." ), KWBarIcon( "spellcheck" ), 0,
+    actionExtraSpellCheck = new KAction( i18n( "&Spell Checking..." ), "spellcheck", 0,
 					 this, SLOT( extraSpelling() ),
 					 actionCollection(), "extra_spellcheck" );
     actionExtraAutocorrection = new KAction( i18n( "&Autocorrection..." ), 0,

@@ -278,69 +278,69 @@ void KisView::setupActions()
 
   // view actions
 
-  new KAction( i18n("Zoom &in"), KISBarIcon("viewmag+"), 0, this,
+  new KAction( i18n("Zoom &in"), "viewmag+", 0, this,
                SLOT( zoom_in() ), actionCollection(), "zoom_in" );
 
-  new KAction( i18n("Zoom &out"), KISBarIcon("viewmag-"), 0, this,
+  new KAction( i18n("Zoom &out"), "viewmag-", 0, this,
                SLOT( zoom_out() ), actionCollection(), "zoom_out" );
 
   m_dialog_gradient = new KToggleAction( i18n("&Gradient Dialog"),
-										 KISBarIcon("gradient_dialog"), 0, this,
+										 "gradient_dialog", 0, this,
 				   SLOT( dialog_gradient() ),actionCollection(), "dialog_gradient");
   m_dialog_gradienteditor = new KToggleAction( i18n("Gradient &Editor"),
-											   KISBarIcon("gradienteditor_dialog"),
+											   "gradienteditor_dialog",
 											   0, this, SLOT( dialog_gradienteditor() ),
 											   actionCollection(), "dialog_gradienteditor");
 
   // tool actions
 
   m_tool_select_rect = new KToggleAction( i18n( "&Rectangular select" ),
-										  KISBarIcon( "rectangular" ), 0, this,
+										  "rectangular", 0, this,
 										  SLOT( tool_select_rect() ), actionCollection(), "tool_select_rect" );
   m_tool_select_rect->setExclusiveGroup( "tools" );
 
-  m_tool_select_polygon = new KToggleAction( i18n( "&Polygon select" ), KISBarIcon( "rectangular" ), 0, this,
+  m_tool_select_polygon = new KToggleAction( i18n( "&Polygon select" ), "rectangular" , 0, this,
                              SLOT( tool_select_rect() ), actionCollection(), "tool_select_polygon" );
   m_tool_select_polygon->setExclusiveGroup( "tools" );
 
-  m_tool_move = new KToggleAction( i18n("&Move tool"), KISBarIcon("move"), 0, this,
+  m_tool_move = new KToggleAction( i18n("&Move tool"), "move", 0, this,
 			     SLOT( tool_move() ),actionCollection(), "tool_move");
   m_tool_move->setExclusiveGroup( "tools" );
 
-  m_tool_zoom = new KToggleAction( i18n("&Zoom tool"), KISBarIcon("zoom"), 0, this,
+  m_tool_zoom = new KToggleAction( i18n("&Zoom tool"), "zoom", 0, this,
 			     SLOT( tool_zoom() ),actionCollection(), "tool_zoom");
   m_tool_zoom->setExclusiveGroup( "tools" );
 
-  m_tool_draw = new KToggleAction( i18n("&Draw simple figure"), KISBarIcon("pencil"), 0, this,
+  m_tool_draw = new KToggleAction( i18n("&Draw simple figure"), "pencil", 0, this,
 			      SLOT( tool_pen() ),actionCollection(), "tool_draw_figure");
   m_tool_draw->setExclusiveGroup( "tools" );
 
-  m_tool_pen = new KToggleAction( i18n("&Pen tool"), KISBarIcon("pencil"), 0, this,
+  m_tool_pen = new KToggleAction( i18n("&Pen tool"), "pencil", 0, this,
 			      SLOT( tool_pen() ),actionCollection(), "tool_pen");
   m_tool_pen->setExclusiveGroup( "tools" );
 
-  m_tool_brush = new KToggleAction( i18n("&Brush tool"), KISBarIcon("paintbrush"), 0, this,
+  m_tool_brush = new KToggleAction( i18n("&Brush tool"), "paintbrush", 0, this,
 			      SLOT( tool_brush() ),actionCollection(), "tool_brush");
   m_tool_brush->setExclusiveGroup( "tools" );
 
-  m_tool_airbrush = new KToggleAction( i18n("&Airbrush tool"), KISBarIcon("airbrush"), 0, this,
+  m_tool_airbrush = new KToggleAction( i18n("&Airbrush tool"), "airbrush", 0, this,
 				       SLOT( tool_airbrush() ),actionCollection(), "tool_airbrush");
   m_tool_airbrush->setExclusiveGroup( "tools" );
   m_tool_airbrush->setEnabled( false );
 
-  m_tool_fill = new KToggleAction( i18n("&Filler tool"), KISBarIcon("airbrush"), 0, this,
+  m_tool_fill = new KToggleAction( i18n("&Filler tool"), "airbrush", 0, this,
 				       SLOT( tool_airbrush() ),actionCollection(), "tool_fill");
   m_tool_fill->setExclusiveGroup( "tools" );
 
-  m_tool_eraser = new KToggleAction( i18n("&Eraser tool"), KISBarIcon("eraser"), 0, this,
+  m_tool_eraser = new KToggleAction( i18n("&Eraser tool"), "eraser", 0, this,
 			      SLOT( tool_eraser() ),actionCollection(), "tool_eraser");
   m_tool_eraser->setExclusiveGroup( "tools" );
 
-  m_tool_colorpicker = new KToggleAction( i18n("&Color picker"), KISBarIcon("colorpicker"), 0, this,
+  m_tool_colorpicker = new KToggleAction( i18n("&Color picker"), "colorpicker", 0, this,
 			      SLOT( tool_colorpicker() ),actionCollection(), "tool_colorpicker");
   m_tool_colorpicker->setExclusiveGroup( "tools" );
 
-  m_tool_gradient = new KToggleAction( i18n("&Gradient tool"), KISBarIcon("gradient"), 0, this,
+  m_tool_gradient = new KToggleAction( i18n("&Gradient tool"), "gradient", 0, this,
   				 SLOT( tool_gradient() ),actionCollection(), "tool_gradient");
   m_tool_gradient->setExclusiveGroup( "tools" );
 

@@ -157,11 +157,11 @@ void KIllustratorView::createGUI()
     m_insertClipart = new KAction( i18n("Insert Clipart..."), 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
 
     // Edit menu
-    m_copy = new KAction( i18n("Copy"), KIBarIcon("editcopy"), 0, this, SLOT( slotCopy() ), actionCollection(), "copy" );
-    m_paste = new KAction( i18n("Paste"), KIBarIcon("editpaste"), 0, this, SLOT( slotPaste() ), actionCollection(), "paste" );
-    m_cut = new KAction( i18n("Cut"), KIBarIcon("editcut"), 0, this, SLOT( slotCut() ), actionCollection(), "cut" );
-    m_undo = new KAction( i18n("Undo"), KIBarIcon("undo"), 0, this, SLOT( slotUndo() ), actionCollection(), "undo" );
-    m_redo = new KAction( i18n("Redo"), KIBarIcon("redo"), 0, this, SLOT( slotRedo() ), actionCollection(), "redo" );
+    m_copy = new KAction( i18n("Copy"), "editcopy", 0, this, SLOT( slotCopy() ), actionCollection(), "copy" );
+    m_paste = new KAction( i18n("Paste"), "editpaste", 0, this, SLOT( slotPaste() ), actionCollection(), "paste" );
+    m_cut = new KAction( i18n("Cut"), "editcut", 0, this, SLOT( slotCut() ), actionCollection(), "cut" );
+    m_undo = new KAction( i18n("Undo"), "undo", 0, this, SLOT( slotUndo() ), actionCollection(), "undo" );
+    m_redo = new KAction( i18n("Redo"), "redo", 0, this, SLOT( slotRedo() ), actionCollection(), "redo" );
     m_duplicate = new KAction( i18n("Duplicate"), 0, this, SLOT( slotDuplicate() ), actionCollection(), "duplicate" );
     m_delete = new KAction( i18n("Delete"), 0, this, SLOT( slotDelete() ), actionCollection(), "delete" );
     m_selectAll = new KAction( i18n("Select All"), 0, this, SLOT( slotSelectAll() ), actionCollection(), "selectAll" );
@@ -230,48 +230,48 @@ void KIllustratorView::createGUI()
 				      actionCollection(), "colorbar" );
 
     // Tools
-    m_selectTool = new KToggleAction( i18n("Select Tool"), KIBarIcon("selecttool"), 0, actionCollection(), "selectTool" );
+    m_selectTool = new KToggleAction( i18n("Select Tool"), "selecttool", 0, actionCollection(), "selectTool" );
     m_selectTool->setExclusiveGroup( "Tools" );
     connect( m_selectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotSelectTool( bool ) ) );
-    m_pointTool = new KToggleAction( i18n("Point Tool"), KIBarIcon("pointtool"), 0, actionCollection(), "pointTool" );
+    m_pointTool = new KToggleAction( i18n("Point Tool"), "pointtool", 0, actionCollection(), "pointTool" );
     m_pointTool->setExclusiveGroup( "Tools" );
     connect( m_pointTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPointTool( bool ) ) );
-    m_freehandTool = new KToggleAction( i18n("Freehand Tool"), KIBarIcon("freehandtool"), 0, actionCollection(), "freehandTool" );
+    m_freehandTool = new KToggleAction( i18n("Freehand Tool"), "freehandtool", 0, actionCollection(), "freehandTool" );
     m_freehandTool->setExclusiveGroup( "Tools" );
     connect( m_freehandTool, SIGNAL( toggled( bool ) ), this, SLOT( slotFreehandTool( bool ) ) );
-    m_lineTool = new KToggleAction( i18n("Line Tool"), KIBarIcon("linetool"), 0, actionCollection(), "lineTool" );
+    m_lineTool = new KToggleAction( i18n("Line Tool"), "linetool", 0, actionCollection(), "lineTool" );
     m_lineTool->setExclusiveGroup( "Tools" );
     connect( m_lineTool, SIGNAL( toggled( bool ) ), this, SLOT( slotLineTool( bool ) ) );
-    m_bezierTool = new KToggleAction( i18n("Bezier Tool"), KIBarIcon("beziertool"), 0, actionCollection(), "bezierTool" );
+    m_bezierTool = new KToggleAction( i18n("Bezier Tool"), "beziertool", 0, actionCollection(), "bezierTool" );
     m_bezierTool->setExclusiveGroup( "Tools" );
     connect( m_bezierTool, SIGNAL( toggled( bool ) ), this, SLOT( slotBezierTool( bool ) ) );
-    m_rectTool = new KToggleAction( i18n("Rect Tool"), KIBarIcon("recttool"), 0, actionCollection(), "rectTool" );
+    m_rectTool = new KToggleAction( i18n("Rect Tool"), "recttool", 0, actionCollection(), "rectTool" );
     m_rectTool->setExclusiveGroup( "Tools" );
     connect( m_rectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotRectTool( bool ) ) );
-    m_polygonTool = new KToggleAction( i18n("Polygon Tool"), KIBarIcon("polygontool"), 0, actionCollection(), "polygonTool" );
+    m_polygonTool = new KToggleAction( i18n("Polygon Tool"), "polygontool", 0, actionCollection(), "polygonTool" );
     m_polygonTool->setExclusiveGroup( "Tools" );
     connect( m_polygonTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPolygonTool( bool ) ) );
-    m_ellipseTool = new KToggleAction( i18n("Ellipse Tool"), KIBarIcon("ellipsetool"), 0, actionCollection(), "ellipseTool" );
+    m_ellipseTool = new KToggleAction( i18n("Ellipse Tool"), "ellipsetool", 0, actionCollection(), "ellipseTool" );
     m_ellipseTool->setExclusiveGroup( "Tools" );
     connect( m_ellipseTool, SIGNAL( toggled( bool ) ), this, SLOT( slotEllipseTool( bool ) ) );
-    m_textTool = new KToggleAction( i18n("Text Tool"), KIBarIcon("texttool"), 0, actionCollection(), "textTool" );
+    m_textTool = new KToggleAction( i18n("Text Tool"), "texttool", 0, actionCollection(), "textTool" );
     m_textTool->setExclusiveGroup( "Tools" );
     connect( m_textTool, SIGNAL( toggled( bool ) ), this, SLOT( slotTextTool( bool ) ) );
-    m_zoomTool = new KToggleAction( i18n("Zoom Tool"), KIBarIcon("zoomtool"), 0, actionCollection(), "zoomTool" );
+    m_zoomTool = new KToggleAction( i18n("Zoom Tool"), "zoomtool", 0, actionCollection(), "zoomTool" );
     m_zoomTool->setExclusiveGroup( "Tools" );
     connect( m_zoomTool, SIGNAL( toggled( bool ) ), this, SLOT( slotZoomTool( bool ) ) );
 
     // Node Toolbar
-    m_moveNode = new KToggleAction( i18n("Move Node "), KIBarIcon("moveNode"), 0, actionCollection(), "moveNode" );
+    m_moveNode = new KToggleAction( i18n("Move Node "), "moveNode", 0, actionCollection(), "moveNode" );
     m_moveNode->setExclusiveGroup( "Node" );
     connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotMoveNode( bool ) ) );
-    m_newNode = new KToggleAction( i18n("New Node "), KIBarIcon("newNode"), 0, actionCollection(), "newNode" );
+    m_newNode = new KToggleAction( i18n("New Node "), "newNode", 0, actionCollection(), "newNode" );
     m_newNode->setExclusiveGroup( "Node" );
     connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotNewNode( bool ) ) );
-    m_deleteNode = new KToggleAction( i18n("Delete Node "), KIBarIcon("deleteNode"), 0, actionCollection(), "deleteNode" );
+    m_deleteNode = new KToggleAction( i18n("Delete Node "), "deleteNode", 0, actionCollection(), "deleteNode" );
     m_deleteNode->setExclusiveGroup( "Node" );
     connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotDeleteNode( bool ) ) );
-    m_splitLine = new KToggleAction( i18n("Move Node "), KIBarIcon("split"), 0, actionCollection(), "splitLine" );
+    m_splitLine = new KToggleAction( i18n("Move Node "), "split", 0, actionCollection(), "splitLine" );
     m_splitLine->setExclusiveGroup( "Node" );
     connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotSplitLine( bool ) ) );
 

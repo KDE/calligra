@@ -29,41 +29,41 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     setXMLFile( "kchart.rc" );
 
     m_wizard = new KAction( tr("Customize with &wizard"),
-			    KChartBarIcon("wizard"), 0,
+			    "wizard", 0,
 			    this, SLOT( wizard() ),
 			    actionCollection(), "wizard");
-    m_edit = new KAction( tr("&Edit data"), KChartBarIcon("pencil"), 0,
+    m_edit = new KAction( tr("&Edit data"), "pencil", 0,
 			 this, SLOT( edit() ),
                          actionCollection(), "edit");
     m_config = new KAction( tr( "&Config" ), KChartBarIcon( "options" ), 0,
 			    this, SLOT( config() ),
 			    actionCollection(), "config" );
-    m_loadconfig = new KAction( tr("Load config"), KChartBarIcon("loadconfig"),
+    m_loadconfig = new KAction( tr("Load config"), "loadconfig",
 				0,
 				this, SLOT( loadConfig() ),
 				actionCollection(), "loadconfig");
-    m_saveconfig = new KAction( tr("Save config"), KChartBarIcon("saveconfig"),
+    m_saveconfig = new KAction( tr("Save config"), "saveconfig",
 				0,
 				this, SLOT( saveConfig() ),
 				actionCollection(), "saveconfig");
-    m_defaultconfig = new KAction( tr("By default"), KChartBarIcon("defaultconfig"),
+    m_defaultconfig = new KAction( tr("By default"), "defaultconfig",
 				0,
 				this, SLOT( defaultConfig() ),
 				actionCollection(), "defaultconfig");
 
-    m_chartpie = new KAction( tr("Pie"), KChartBarIcon("cakes"),
+    m_chartpie = new KAction( tr("Pie"), "cakes",
 				0,
 				this, SLOT( pieChart() ),
 				actionCollection(), "piechart");
-    m_chartline = new KAction( tr("Line"), KChartBarIcon("lines"),
+    m_chartline = new KAction( tr("Line"), "lines",
 				0,
 				this, SLOT( lineChart() ),
 				actionCollection(), "linechart");
-    m_chartareas = new KAction( tr("Areas"), KChartBarIcon("areas"),
+    m_chartareas = new KAction( tr("Areas"), "areas",
 				0,
 				this, SLOT( areasChart() ),
 				actionCollection(), "areaschart");
-    m_chartbars = new KAction( tr("Bars"), KChartBarIcon("bars"),
+    m_chartbars = new KAction( tr("Bars"), "bars",
  				0,
 				this, SLOT( barsChart() ),
 				actionCollection(), "barschart");
