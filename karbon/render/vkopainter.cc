@@ -41,6 +41,7 @@ VKoPainter::VKoPainter( QWidget *target, int w, int h ) : VPainter( target, w, h
 	m_height= ( h > 0 ) ? h : target->height();
 	m_buffer = 0L;
 	m_path = 0L;
+	m_index = 0;
 	resize( m_width, m_height );
 	clear();
 
@@ -115,14 +116,16 @@ VKoPainter::setZoomFactor( double zoomFactor )
 void 
 VKoPainter::moveTo( const KoPoint &p )
 {
-	if( m_path )
-		art_free( m_path );
+	if( m_index == 0)
+	{
+		if( !m_path )
+			m_path = art_new( ArtBpath, 100 );
 
-	m_path = art_new( ArtBpath, 100 );
+		m_path[ m_index ].code = ART_MOVETO;
+	}
+	else
+		m_path[ m_index ].code = ART_MOVETO_OPEN;
 
-	m_index = 0;
-
-	m_path[ m_index ].code = ART_MOVETO;
 	m_path[ m_index ].x3	= p.x() * m_zoomFactor;
 	m_path[ m_index ].y3	= p.y() * m_zoomFactor;
 
@@ -156,21 +159,36 @@ VKoPainter::curveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
 void
 VKoPainter::fillPath()
 {
+	// find begin of last subpath
+    int find = -1;
+    for( int i = m_index; i >= 0; i-- )
+    {
+        if( m_path[i].code == ART_MOVETO_OPEN || m_path[i].code == ART_MOVETO )
+        {
+            find = i;
+            break;
+        }
+	}
+
 	// for now, always close
-	m_path[ m_index ].code = ART_LINETO;
-	m_path[ m_index ].x3	= m_path[ 0 ].x3;
-	m_path[ m_index ].y3	= m_path[ 0 ].y3;
+    if( find != -1 )
+	{
+		m_path[ m_index ].code = ART_LINETO;
+		m_path[ m_index ].x3	= m_path[ find ].x3;
+		m_path[ m_index ].y3	= m_path[ find ].y3;
 
-	m_index++;
+		m_index++;
+	}
 
-	//if( m_path[ m_index ].code != ART_END)
-		m_path[ m_index ].code = ART_END;
+	m_path[ m_index ].code = ART_END;
 
 	ArtVpath *path;
 	path = art_bez_path_to_vec( m_path , 0.25 );
 
 	delete m_stroke;
 	m_stroke = 0L;
+
+	m_index = 0;
 
 	drawVPath( path );
 	art_free( path );
@@ -187,6 +205,8 @@ VKoPainter::strokePath()
 
 	delete m_fill;
 	m_fill = 0L;
+
+	m_index = 0;
 
 	drawVPath( path );
 	art_free( path );
