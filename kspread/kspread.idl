@@ -47,8 +47,90 @@ module KSpread
 		slot void consolidate();
 	};
 
+	interface Table;
+	typedef sequence<Table> TableSeq;
+
+	struct Range
+	{
+		unsigned long left;
+		unsigned long top;
+		unsigned long right;
+		unsigned long bottom;
+		string table;
+	};
+
+	struct Cell
+	{
+		unsigned long x;
+		unsigned long y;
+		string table;
+	};
+
+	exception NoNumericValue
+	{
+		Cell cell;
+	};
+
+	exception MalformedExpression
+	{
+		string expr;
+	};
+
+	exception DifferentTables
+	{
+		string table1;
+		string table2;
+	};
+
+	exception UnknownTable
+	{
+		string table;
+	};
+
+	exception NoActiveSelection
+	{
+	};
+
+	interface Book
+	{
+		TableSeq tables();
+		Table table( in string name );		
+	};
+
+	interface Table
+	{		
+		Book book();
+
+		Range range( in unsigned long left, in unsigned long top,
+			     in unsigned long right, in unsigned long bottom );
+		Range rangeFromString( in string str ) raises( MalformedExpression );
+		Range rangeFromCells( in Cell topleft, in Cell bottomright );
+
+		Cell cellFromString( in string str ) raises( MalformedExpression );
+
+		void setValue( in Cell cell, in double value );
+		void setStringValue( in Cell cell, in string value );
+
+		double value( in Cell cell ) raises ( NoNumericValue );
+		string stringValue( in Cell cell );
+
+		void insertColumn( in unsigned long col );
+		void insertRow( in unsigned long row );
+		void deleteColumn( in unsigned long col );
+		void deleteRow( in unsigned long row );
+
+		void setSelection( in Range sel );
+		Range selection();
+		void copySelection();
+		void cutSelection();
+		void pasteSelection( in Cell cell );
+
+		boolean isEmpty( in unsigned long x, in unsigned long y );
+	};
+
 	interface Document : KOffice::Document, KOffice::Print
 	{
+		Book book();
 	};
 
 	interface DocumentFactory : KOffice::DocumentFactory

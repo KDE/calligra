@@ -60,7 +60,9 @@ public:
 
   // IDL
   virtual CORBA::Boolean init();
-  
+
+  virtual KSpread::Book_ptr book();
+
   /**
    * Wrapper for @ref #createSpreadView
    */

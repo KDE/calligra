@@ -128,9 +128,9 @@ PyObject * xcl_SetCell( PyObject*, PyObject *args)
 
 PyObject * xcl_ParseRange( PyObject*, PyObject *args)
 {
-  const char* range;
+  /* const char* range;
   int docid;
-  int tabelid;
+  int tabelid; */
   /*
   if ( !PyArg_ParseTuple( args, "iis", &docid, &tableid, &range ) )
   {
@@ -217,6 +217,9 @@ KSpreadDoc::KSpreadDoc()
   m_bModified = FALSE;
   
   m_lstViews.setAutoDelete( false );
+
+  CORBA::String_var tmp = opapp_orb->object_to_string( this );
+  cout << "DOC=" << tmp.in() << endl;
 }
 
 CORBA::Boolean KSpreadDoc::init()
@@ -245,6 +248,11 @@ void KSpreadDoc::cleanUp()
   m_lstAllChildren.clear();
 
   KoDocument::cleanUp();
+}
+
+KSpread::Book_ptr KSpreadDoc::book()
+{
+  return KSpread::Book::_duplicate( m_pMap );
 }
 
 void KSpreadDoc::removeView( KSpreadView* _view )
@@ -756,21 +764,11 @@ void KSpreadDoc::initPython()
     m_pPython = new KSpreadPythonModule( t2, docId() );
     m_pPython->registerMethods( xcl_methods );
 
-    QString d = kapp->kde_datadir().copy();
-    d += "/kspread/scripts/xcllib.py";
-    assert( access( d, R_OK ) >= 0 );
-    m_pPython->runFile( d );
-
-    d = kapp->kde_datadir().copy();
-    d += "/kspread/scripts/classes.py";
-    assert( access( d, R_OK ) >= 0 );
-    m_pPython->runFile( d );
-
-    string path = kapp->localkdedir().data();
-    path += "/share/apps/kspread/scripts";
-
     DIR *dp = 0L;
     struct dirent *ep;
+
+    string path = kapp->kde_datadir().data();
+    path += "/kspread/scripts";
 
     dp = opendir( path.c_str() );
     if ( dp == 0L )
@@ -786,8 +784,42 @@ void KSpreadDoc::initPython()
 	   f[ f.size() - 1 ] != '%' && f[ f.size() - 1 ] != '~' )
       {  
 	cerr << "Executing " << f << endl;
-	m_pPython->runFile( f.c_str() );
-	cerr << "Done" << endl;
+	int res = m_pPython->runFile( f.c_str() );
+	cerr << "Done result=" << res << endl;
+      }
+    }
+
+    closedir( dp );
+
+    /* QString d = kapp->kde_datadir().copy();
+    d += "/kspread/scripts/xcllib.py";
+    assert( access( d, R_OK ) >= 0 );
+    m_pPython->runFile( d );
+
+    d = kapp->kde_datadir().copy();
+    d += "/kspread/scripts/classes.py";
+    assert( access( d, R_OK ) >= 0 );
+    m_pPython->runFile( d ); */
+
+    path = kapp->localkdedir().data();
+    path += "/share/apps/kspread/scripts";
+
+    dp = opendir( path.c_str() );
+    if ( dp == 0L )
+      return;
+    
+    while ( ( ep = readdir( dp ) ) != 0L )
+    {  
+      string f = path;
+      f += "/";
+      f += ep->d_name;
+      struct stat buff;
+      if ( f != "." && f != ".." && ( stat( f.c_str(), &buff ) == 0 ) && S_ISREG( buff.st_mode ) &&
+	   f[ f.size() - 1 ] != '%' && f[ f.size() - 1 ] != '~' )
+      {  
+	cerr << "Executing " << f << endl;
+	int res = m_pPython->runFile( f.c_str() );
+	cerr << "Done result=" << res << endl;
       }
     }
 

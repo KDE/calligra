@@ -1,7 +1,14 @@
+#include <qprinter.h>
+#include "kspread_table.h"
+#include "kspread_doc.h"
+#include "kspread_map.h"
 #include "kspread_python.h"
 
 #include <assert.h>
 #include <iostream>
+
+#include <qstring.h>
+#include <kapp.h>
 
 KPythonModule::KPythonModule( const char *_name )
 {
@@ -16,13 +23,26 @@ KPythonModule::KPythonModule( const char *_name )
   
   PyDict_SetItemString( m_pDict, "__dummy__", Py_None );
   PyDict_SetItemString( m_pDict, "__builtins__", PyEval_GetBuiltins() );
+
+  QString tmp = "import sys\n";
+  runCodeStr( PY_STATEMENT, (char*)tmp.data() );
+  tmp += "sys.path = [ \"";
+  tmp += kapp->kde_bindir().data();
+  tmp += "/../include/python\", \"";
+  tmp += kapp->kde_bindir().data();
+  tmp += "/../lib\", ] + sys.path\n";
+  runCodeStr( PY_STATEMENT, (char*)tmp.data() );
+  tmp = "from KSpread import *\n";
+  runCodeStr( PY_STATEMENT, (char*)tmp.data() );
 }
 
 int KPythonModule::runCodeStr( StringModes mode, char *code, char *resfmt, void *cresult )
 {
     PyObject *presult = PyRun_String( code, ( mode == PY_EXPRESSION ? eval_input : file_input ),
 				      m_pDict, m_pDict );
-    
+    if ( presult == 0L )
+	  PyErr_Print();
+   
     if ( mode == PY_STATEMENT )
     {
 	int result = ( presult == NULL ? -1 : 0 );
@@ -85,6 +105,26 @@ KSpreadPythonModule::KSpreadPythonModule( const char *_name, int _doc_id ) : KPy
   Py_DECREF( o );
 }
 
+bool KSpreadPythonModule::setContext( KSpreadTable* _table )
+{
+  CORBA::String_var str = opapp_orb->object_to_string( _table );
+  PyObject* obj = Py_BuildValue( "s", str.in() );
+  PyObject_SetAttrString( m_pModule, "tableIOR", obj );
+  Py_DECREF( obj );
+
+  str = opapp_orb->object_to_string( _table->map() );
+  obj = Py_BuildValue( "s", str.in() );
+  PyObject_SetAttrString( m_pModule, "bookIOR", obj );
+  Py_DECREF( obj );
+
+  str = opapp_orb->object_to_string( _table->doc() );
+  obj = Py_BuildValue( "s", str.in() );
+  PyObject_SetAttrString( m_pModule, "docIOR", obj );
+  Py_DECREF( obj );
+
+  return true;
+}
+
 bool KSpreadPythonModule::setContext( int _map_id, int _table_id )
 {
   QString buffer;
@@ -141,7 +181,8 @@ PyObject* KSpreadPythonModule::eval( const char* _cmd )
 	    PyArg_Parse( e3, "s", &str3 );
 
 	printf("Traceback:\n%s\n%s\n%s\n",str1,str2,str3);
-	
+
+	PyErr_Print();
 	PyErr_Clear();
 	
 	return 0L;

@@ -250,7 +250,7 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::typeKeyPressed& _event )
   // Flag that indicates wether we make a selection right now
   bool make_select = FALSE;
   
-  QRect selection( m_pTable->selection() );
+  QRect selection( m_pTable->selectionRect() );
   
   // Are we making a selection right now ? Go thru this only if no selection is made
   // or if we neither selected complete rows nor columns.
@@ -1104,7 +1104,7 @@ void KSpreadView::insertChart( const QRect& _geometry )
 
   cerr << "USING component " << vec[0].name << endl;
   
-  m_pTable->insertChart( _geometry, vec[0], m_pTable->selection() );
+  m_pTable->insertChart( _geometry, vec[0], m_pTable->selectionRect() );
 }
 
 void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
@@ -1559,7 +1559,7 @@ void KSpreadView::slotDelete()
 
 void KSpreadView::slotLayoutDlg()
 {
-  QRect selection( m_pTable->selection() );
+  QRect selection( m_pTable->selectionRect() );
 
   hideMarker();
 
@@ -1819,7 +1819,7 @@ void KSpreadView::drawMarker( QPainter * _painter )
   int xpos;
   int ypos;    
   int w, h;
-  QRect selection( m_pTable->selection() );
+  QRect selection( m_pTable->selectionRect() );
     // printf("selection: %i %i %i\n",selection.left(), selection.right(), selection.bottom() );
     
   if ( selection.left() == 0 || selection.right() == 0x7fff || selection.bottom() == 0x7fff )
@@ -2170,7 +2170,7 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view ) : QWidget( 
 
 void KSpreadCanvas::setAction( Actions _act )
 {
-  QRect selection( m_pView->activeTable()->selection() );
+  QRect selection( m_pView->activeTable()->selectionRect() );
   
   if ( _act == InsertChart )
   {    
@@ -2199,7 +2199,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   if ( !table )
     return;
 
-  QRect selection( table->selection() );
+  QRect selection( table->selectionRect() );
   
   if ( m_eMouseAction == ChildGeometry )
   {
@@ -2410,7 +2410,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
 
   m_pView->hideMarker();
   
-  QRect selection( table->selection() );
+  QRect selection( table->selectionRect() );
   
   // m_pView->canvasWidget()->setMouseTracking( FALSE );
   // The user started the drag in the lower right corner of the marker ?
@@ -2431,7 +2431,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
 	obj->forceExtraCells( mouseStartColumn, mouseStartRow, 
 			      selection.right() - selection.left(), 
 			      selection.bottom() - selection.top() ); */
-    table->autofill( m_rctAutoFillSrc, table->selection() );
+    table->autofill( m_rctAutoFillSrc, table->selectionRect() );
 	
     m_pView->doc()->setModified( TRUE );
     selection.setCoords( 0, 0, 0, 0 );
@@ -2494,7 +2494,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   }
 #endif
 
-  QRect selection( table->selection() );
+  QRect selection( table->selectionRect() );
   
   // Get the position and size of the marker/marked-area
   int xpos;
@@ -2925,7 +2925,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     int tmp;
     int hit_row = table->topRow( _ev->pos().y(), tmp, m_pView );
     m_iSelectionAnchor = hit_row;
-    QRect selection( table->selection() );
+    QRect selection( table->selectionRect() );
     selection.setCoords( 1, hit_row, 0x7FFF, hit_row );
     m_pView->vBorderWidget()->update();
     table->setSelection( selection );
@@ -2986,7 +2986,7 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   {
     int y = 0;
     int row = table->topRow( _ev->pos().y(), y, m_pView );
-    QRect selection = table->selection();
+    QRect selection = table->selectionRect();
     
     if ( row < m_iSelectionAnchor )
     {
@@ -3055,7 +3055,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   int top_row = table->topRow( _ev->rect().y(), ypos, m_pView );
   int bottom_row = table->bottomRow( _ev->rect().bottom(), m_pView );
 
-  QRect selection( table->selection() );
+  QRect selection( table->selectionRect() );
   
   for ( int y = top_row; y <= bottom_row; y++ )
   {
@@ -3207,7 +3207,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   {
     int x = 0;
     int col = table->leftColumn( _ev->pos().x(), x, m_pView );
-    QRect r = table->selection();
+    QRect r = table->selectionRect();
 
     if ( col < m_iSelectionAnchor )
     {
@@ -3272,7 +3272,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   int left_col = table->leftColumn( _ev->rect().x(), xpos, m_pView );
   int right_col = table->rightColumn( _ev->rect().right(), m_pView );
 
-  QRect selection( table->selection() );
+  QRect selection( table->selectionRect() );
   
   for ( int x = left_col; x <= right_col; x++ )
   {

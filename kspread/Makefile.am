@@ -2,7 +2,7 @@ INCLUDES  = $(PYTHONINC) $(MICO_INCLUDES) -I../lib/store -I../lib/koml -I../lib/
 LDFLAGS   = $(all_libraries) $(PYTHONLIB) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = ../lib/kofficeui/libkofficeui.la ../lib/kofficecore/libkofficecore.la \
 	../lib/koml/libkoml.la ../lib/store/libkstore.la -lkparts -lkpartsui \
-	-lkom -lkio -lkdeutil $(LIBMICO) $(LIBPYTHON) $(LIB_KFILE) 
+	-lkom -lkio -lkdeutil $(LIBMICO) $(LIBPYTHON) -lpykde -lpymico $(LIB_KFILE) 
 
 ####### Files
 
@@ -15,7 +15,7 @@ kspread_bin_SOURCES = kmetaedit.cc kspread_emacs.cc kspread_main.cc \
 	kspread_layout.cc kspread_map.cc kspread_dlg_layout.cc \
 	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc \
 	chart.cc kspread_calc.cc y.tab.c lex.yy.c dep.tab.c lex.dep.c \
-	kspread_dlg_cons.cc datatools.cc
+	kspread_dlg_cons.cc datatools.cc kspread_util.cc
 
 noinst_HEADERS = kmetaedit.h kspread_emacs.h kspread_main.cc \
 	kspread_shell.h kspread_doc.h \
@@ -24,7 +24,7 @@ noinst_HEADERS = kmetaedit.h kspread_emacs.h kspread_main.cc \
 	kspread_layout.h kspread_map.h kspread_dlg_layout.h \
 	kspread_dlg_scripts.h kspread_table.h kspread_cell.h \
 	chart.h y.tab.h dep.tab.h kspread_calc.h kspread_dlg_cons.h \
-	datatools.h
+	datatools.h kspread_util.h
 
 SRCMETA = kspread_main.moc kspread_shell.moc kspread_doc.moc \
 	kspread_view.moc kspread_tabbar.moc \
@@ -41,6 +41,9 @@ kdelnkdir = $(kde_datadir)/koffice/partlnk
 
 kdemime_DATA = x-kspread.kdelnk
 kdemimedir = $(kde_mimedir)/application
+
+py_DATA = KSpread.py KOffice.py KOStore.py OpenPartsUI.py OpenParts.py KOM.py
+pydir = $(kde_includes)/python
 
 SUBDIRS = pics scripts dtd filters
 
@@ -93,4 +96,11 @@ kspread_tabbar.cc: kspread.h kspread_tabbar.moc
 kspread_table.cc: kspread.h kspread_table.moc
 kspread_view.cc: kspread.h kspread_view.moc kspread_table.h chart.h
 kspread_table.h: chart.h
-
+kspread_util.h: kspread.h
+KOM.py: KSpread.py
+KOStore.py: KSpread.py
+KOffice.py: KSpread.py
+OpenParts.py: KSpread.py
+OpenPartsUI.py: KSpread.py
+KSpread.py: kspread.idl $(kde_bindir)/pyidl
+	$(kde_bindir)/pyidl "-I$(idldir) kspread.idl"

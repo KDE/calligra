@@ -6,7 +6,7 @@
 
 #include <qstring.h>
 
-class KSpreadDoc;
+class KSpreadTable;
 
 void pythonInit( int argc, char** argv );
 
@@ -37,10 +37,12 @@ protected:
 class KSpreadPythonModule : public KPythonModule
 {
 public:
-    KSpreadPythonModule( const char *_name, int _doc_id );
+  KSpreadPythonModule( const char *_name, int _doc_id );
 
-    bool setContext( int _map_id, int _table_id );
-    PyObject* eval( const char* _cmd );
+  bool setContext( int _map_id, int _table_id );
+  PyObject* eval( const char* _cmd );
+
+  bool setContext( KSpreadTable* _table );
 };
 
 #endif

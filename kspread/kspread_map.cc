@@ -251,6 +251,28 @@ bool KSpreadMap::load( KorbSession *korb, OBJECT o_map )
 }
 */
 
+KSpread::TableSeq* KSpreadMap::tables()
+{
+  KSpread::TableSeq* seq = new KSpread::TableSeq;
+  seq->length( m_lstTables.count() );
+
+  KSpreadTable *t;
+  int i = 0;
+  for ( t = m_lstTables.first(); t != 0L; t = m_lstTables.next() )
+    (*seq)[i++] = KSpread::Table::_duplicate( t );
+    
+  return seq;
+}
+
+KSpread::Table_ptr KSpreadMap::table( const char* _name )
+{
+  KSpreadTable *t = findTable( _name );
+  if ( t == 0L )
+    return 0L;
+  
+  return KSpread::Table::_duplicate( t );
+}
+
 KSpreadTable* KSpreadMap::findTable( const char *_name )
 {
     KSpreadTable *t;

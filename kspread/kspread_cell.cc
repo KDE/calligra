@@ -191,7 +191,7 @@ void KSpreadCell::clicked()
   if ( m_strAction.isEmpty() )
     return;
 
-  if ( !m_pTable->doc()->pythonModule()->setContext( m_pTable->map()->mapId(), m_pTable->id() ) )
+  if ( !m_pTable->doc()->pythonModule()->setContext( m_pTable ) )
   {
     cerr << "Could not set context" << endl;
     return;
@@ -1015,7 +1015,7 @@ void KSpreadCell::paintEvent( KSpreadView *_view, const QRect& _rect, QPainter &
 void KSpreadCell::paintEvent( KSpreadView *_view, const QRect& _rect, QPainter &_painter, int _tx, int _ty,
 			      int _col, int _row, ColumnLayout *cl, RowLayout *rl, QRect *_prect )
 {
-  bool selected = m_pTable->selection().contains( QPoint( _col, _row ) );
+  bool selected = m_pTable->selectionRect().contains( QPoint( _col, _row ) );
     
   if ( m_pObscuringCell )
   {

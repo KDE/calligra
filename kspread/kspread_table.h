@@ -37,6 +37,7 @@ class QPainter;
 #include "kspread_layout.h"
 #include "kspread_cell.h"
 #include "kspread_dlg_layout.h"
+#include "kspread.h"
 
 #include <chart.h>
 
@@ -155,7 +156,8 @@ protected:
 
 /**
  */
-class KSpreadTable : public QObject
+class KSpreadTable : public QObject,
+		     virtual public KSpread::Table_skel
 {
     friend KSpreadCell;
   
@@ -165,6 +167,44 @@ public:
     KSpreadTable( KSpreadDoc *_doc, const char *_name );
     ~KSpreadTable();
 
+    // IDL
+    virtual KSpread::Book_ptr book();
+    virtual KSpread::Range* range( CORBA::ULong left, CORBA::ULong top,
+				  CORBA::ULong right, CORBA::ULong bottom );
+    virtual KSpread::Range* rangeFromString( const char* str );
+    virtual KSpread::Range* rangeFromCells( const KSpread::Cell& topleft,
+					   const KSpread::Cell& bottomright );
+    virtual KSpread::Cell* cellFromString( const char* str );
+    virtual void setValue( const KSpread::Cell& cell, CORBA::Double value );
+    virtual void setStringValue( const KSpread::Cell& cell, const char* value );
+    virtual CORBA::Double value( const KSpread::Cell& cell );
+    virtual char* stringValue( const KSpread::Cell& cell );
+    /**
+     * Deletes the column '_column' and redraws the table.
+     */
+    virtual void deleteColumn( CORBA::ULong col );
+    /**
+     * Moves all columns which are >= _column one position to the right and
+     * inserts a new and empty column. After this the table is redrawn.
+     */
+    virtual void insertColumn( CORBA::ULong col );
+    /**
+     * Deletes the row '_ow' and redraws the table.
+     */
+    virtual void deleteRow( CORBA::ULong row );
+    /**
+     * Moves all rows which are >= _row one position down and
+     * inserts a new and empty row. After this the table is redrawn.
+     */
+    virtual void insertRow( CORBA::ULong row );
+    virtual void setSelection( const KSpread::Range& sel );
+    virtual KSpread::Range* selection();
+    virtual void copySelection();
+    virtual void cutSelection();
+    virtual void pasteSelection( const KSpread::Cell& cell );
+    virtual CORBA::Boolean isEmpty( CORBA::ULong x, CORBA::ULong y );
+
+    // C++
     virtual bool save( ostream& );
     virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
     virtual bool loadChildren( KOStore::Store_ptr _store );
@@ -250,7 +290,7 @@ public:
      */
     const char *name() { return m_strName.data(); }
   
-    QRect& selection() { return m_rctSelection; }
+    QRect& selectionRect() { return m_rctSelection; }
     void setSelection( const QRect &_rect );
       
     void setSelectionFont( const QPoint &_marker, const char *_font = 0L, int _size = -1,
@@ -332,25 +372,6 @@ public:
      * A convenience function that finds a table by its name.
      */
     KSpreadTable *findTable( const char *_name );
-
-    /**
-     * Deletes the column '_column' and redraws the table.
-     */
-    void deleteColumn( int _column );
-    /**
-     * Moves all columns which are >= _column one position to the right and
-     * inserts a new and empty column. After this the table is redrawn.
-     */
-    void insertColumn( int _column );
-    /**
-     * Deletes the row '_ow' and redraws the table.
-     */
-    void deleteRow( int _row );
-    /**
-     * Moves all rows which are >= _row one position down and
-     * inserts a new and empty row. After this the table is redrawn.
-     */
-    void insertRow( int _row );
 
     /**
      * Used by Undo.
