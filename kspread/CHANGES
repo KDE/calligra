@@ -489,3 +489,8 @@ Replace all QMessageBox by KMessageBox
 =>replace A B C ... by 1 2 3 ... 
 -Add function equalize row and equalize column
 =>used width ou height max
+
+2000-05-11 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now when you resize row or column you can show its size.
+-Add new help formula in kspread_dlg_formula.

@@ -499,6 +499,7 @@ protected:
      * Last position of the mouse.
      */
     int m_iResizePos;
+    QLabel *size;
 };
 
 /**
@@ -526,6 +527,7 @@ protected:
     bool m_bResize;
     int m_iResizeAnchor;
     int m_iResizePos;
+    QLabel *size;
 };
 
 #endif

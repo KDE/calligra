@@ -1874,7 +1874,7 @@ KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSprea
 
   m_pView = _view;
   m_pCanvas = _canvas;
-
+  size=0;
   setBackgroundMode( PaletteBackground );
   setMouseTracking( TRUE );
   m_bResize = FALSE;
@@ -1917,6 +1917,14 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     int tmp;
     m_iResizeAnchor = table->topRow( _ev->pos().y() - 3, tmp, m_pCanvas );
     m_iResizePos = _ev->pos().y();
+
+    QString tmpSize;
+    int y = table->rowPos( m_iResizeAnchor, m_pCanvas );
+    size=new QLabel(m_pCanvas);
+    size->setText(tmpSize.setNum(m_iResizePos-y));
+    size->setGeometry(3,y+3,20,15);
+    size->setBackgroundColor( yellow );
+    size->show();
   }
   else
   {
@@ -1963,6 +1971,8 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
       rl->setHeight( 20, m_pCanvas );
     else
       rl->setHeight( _ev->pos().y() - y, m_pCanvas );
+    delete size;
+    size=0;
   }
 
   m_bSelection = FALSE;
@@ -2051,6 +2061,19 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
       m_iResizePos = y + twenty;
     painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
     painter.end();
+    QString tmp;
+    if(!size)
+    	{
+    	size=new QLabel(m_pCanvas);
+    	size->setText(tmp.setNum(m_iResizePos-y));
+    	size->setGeometry(3,y+3,20,15);
+    	size->setBackgroundColor( yellow );
+    	size->show();
+    	}
+    else
+    	{
+    	size->setText(tmp.setNum(m_iResizePos-y));
+    	}
   }
   // The button is pressed and we are selecting ?
   else if ( m_bSelection )
@@ -2220,6 +2243,15 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     int tmp;
     m_iResizeAnchor = table->leftColumn( _ev->pos().x() - 3, tmp, m_pCanvas );
     m_iResizePos = _ev->pos().x();
+    
+    int x = table->columnPos( m_iResizeAnchor, m_pCanvas );
+    QString tmpSize;
+    size=new QLabel(m_pCanvas);
+    size->setGeometry(x+3,3,20,15);
+    size->setBackgroundColor( yellow );
+    size->setAlignment(Qt::AlignVCenter);
+    size->setText(tmpSize.setNum(_ev->pos().x()-x));
+    size->show();
   }
   else
   {
@@ -2262,6 +2294,8 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
       cl->setWidth( 20, m_pCanvas );
     else
       cl->setWidth( _ev->pos().x() - x, m_pCanvas );
+    delete size;
+    size=0;
   }
 
   m_bSelection = FALSE;
@@ -2382,6 +2416,20 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
       m_iResizePos = x + twenty;
     painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
     painter.end();
+    QString tmpSize;
+    if(!size)
+    	{
+    	size=new QLabel(m_pCanvas);
+    	size->setGeometry(x+3,3,20,15);
+    	size->setBackgroundColor( yellow );
+    	size->setAlignment(Qt::AlignVCenter);
+    	size->setText(tmpSize.setNum(m_iResizePos-x));
+    	size->show();
+    	}
+    else
+    	{
+    	size->setText(tmpSize.setNum(m_iResizePos-x));
+    	}
   }
   else if ( m_bSelection )
   {

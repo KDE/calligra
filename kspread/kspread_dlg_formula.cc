@@ -828,6 +828,78 @@ void KSpreadDlgFormula::changeFunction()
                 tmp1+="tan(0.7) equals 0.84228838.\ntan(0) equals 0.";
                 tmp.help=tmp1;
 		}
+	else if( m_funcName=="acos")
+		{
+		tmp1=i18n("The  acos() function returns the arc cosine\nin radians and the value is mathematically\ndefined to be between 0 and PI(inclusive).\n");
+	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="acos(0.8) equals 0.6435011.\nacos(0) equals 1.57079633.";
+                tmp.help=tmp1;
+		}
+	else if( m_funcName=="asin")
+		{
+		tmp1=i18n("The  asin() function returns the arc sine\nin radians and the value is mathematically\ndefined to be between -PI/2 and PI/2(inclusive).\n");
+	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="asin(0.8) equals 0.92729522.\nasin(0) equals 0.";
+                tmp.help=tmp1;
+		}
+	else if( m_funcName=="atan")
+		{
+		tmp1=i18n("The  atan() function returns the arc tangent\nin radians and the value is mathematically\ndefined to be between -PI/2 and PI/2(inclusive).\n");
+	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="atan(0.8) equals 0.67474094.\natan(0) equals 0.";
+                tmp.help=tmp1;
+		}
+	else if( m_funcName=="cosh")
+		{
+		tmp1=i18n("The  cosh()  function  returns the hyperbolic\ncosine of x,which is defined\nmathematically as (exp(x) + exp(-x)) / 2.\n");
+	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="cosh(0.8) equals 1.33743495.\ncosh(0) equals 1.";
+                tmp.help=tmp1;
+		}
+	else if( m_funcName=="sinh")
+		{
+		tmp1=i18n("The  sinh()  function  returns the hyperbolic\nsine of x,which is defined\nmathematically as (exp(x) - exp(-x)) / 2.\n");
+	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="sinh(0.8) equals 0.88810598.\nsinh(0) equals 0.";
+                tmp.help=tmp1;
+		}
+	else if( m_funcName=="tanh")
+		{
+		tmp1=i18n("The  tanh()  function  returns the hyperbolic\ntangent of x,which is defined\nmathematically as sinh(x)/cosh(x).\n");
+	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="tanh(0.8) equals 0.66403677.\ntanh(0) equals 0.";
+                tmp.help=tmp1;
+		}
+	else if( m_funcName=="acosh")
+		{
+		tmp1=i18n("The  acosh()  function  calculates \nthe inverse hyperbolic cosine of x;\nthat is the value whose hyperbolic\ncosine  is x.   If  x  is less\nthan 1.0, acosh() returns not-a-number\n(NaN) and errno is set.\n");
+	        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="acosh(5) equals 2.29243167.\nacosh(0) equals nan.";
+                tmp.help=tmp1;
+		}
+	else if( m_funcName=="asinh")
+		{
+		tmp1=i18n("The  asinh()  function  calculates\nthe inverse hyperbolic sine\n of x; that is the value whose\nhyperbolic sine is x.\n");
+		tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="asinh(0.8) equals 0.73266826.\nasinh(0) equals 0.";
+                tmp.help=tmp1;
+		}
+	else if( m_funcName=="atanh")
+		{
+		tmp1=i18n(" The  atanh()  function  calculates\nthe inverse hyperbolic tangent of x;\nthat is the value whose  hyperbolic\ntangent is  x.If  the  absolute value\n of x is greater than 1.0,acosh()\n returns not-a-number (NaN)\nand errno is set.\n"); 
+		tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="atanh(0.8) equals 1.09861229.\natanh(0) equals 0.";
+                tmp.help=tmp1;
+		}
 	else
 		tmp.help=i18n("Help");
   	tmp.firstElementType=type_double;
@@ -864,9 +936,45 @@ void KSpreadDlgFormula::changeFunction()
     {
         tmp.nb_param=1;
         tmp.firstElementLabel=i18n("Double");
-        tmp.help=m_funcName+"("+"Double"+")";
-
+	QString tmp1;
         tmp.firstElementType=type_double;
+        if(m_funcName=="ln")
+        	{
+        	tmp1=i18n("The ln() function returns the\nnatural logarithm of x.\n");
+		tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="ln(0.8) equals -0.22314355.\nln(0) equals -inf.";
+                tmp.help=tmp1;
+                }
+         else if(m_funcName=="log")
+        	{
+        	tmp1=i18n("The log() function returns\nthe base-10 logarithm of x.\n");
+		tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="log(0.8) equals -0.09691001.\nlog(0) equals -inf.";
+                tmp.help=tmp1;
+                }
+	else if(m_funcName=="sqrt")
+        	{
+        	tmp1=i18n("The  sqrt()  function returns\nthe non-negative square root\n of x.It fails and sets errno to\nEDOM, if x is  negative.\n");
+		tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="sqrt(9) equals 3.\nsqrt(-9) equals nan.";
+                tmp.help=tmp1;
+                }
+	else if(m_funcName=="exp")
+        	{
+        	tmp1=i18n("The exp() function returns\nthe value of e (the  base\nof natural logarithms)\nraised to the power of x.\n");
+        	tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
+	        tmp1+=i18n("Example : \n");
+                tmp1+="sqrt(9) equals 3.\nsqrt(-9) equals nan.";
+                tmp.help=tmp1;
+                }
+        else
+        	{
+        	tmp.help=m_funcName+"("+"Double"+")\n";
+        	}
+
     }
     else if (m_funcName=="ISLOGIC"||m_funcName=="ISTEXT"||m_funcName=="ISNUM")
     {
