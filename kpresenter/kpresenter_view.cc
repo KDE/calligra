@@ -2626,6 +2626,13 @@ void KPresenterView::objectSelectedChanged()
     actionFormatSub->setEnabled(isText);
     actionIncreaseFontSize->setEnabled(isText);
     actionDecreaseFontSize->setEnabled(isText);
+    if ( !page->applicableTextInterfaces().isEmpty() )
+    {
+        KoTextFormat format =*(page->applicableTextInterfaces().first()->currentFormat());
+        //unzoom font
+        format.setPointSize( KoTextZoomHandler::layoutUnitToPt( format.font().pointSize() ) );
+        showFormat( format );
+    }
 
     KPTextView *edit=page->currentTextObjectView();
     bool val=edit && isText;
