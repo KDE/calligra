@@ -13,6 +13,8 @@ public:
 public slots:
     void updateLabel();
     void comboActivated();
+    void slotPersonalizeChanged(bool b);
+    void slotDefaultValueChanged(const QString & );
 };
 
 #endif // TIMEFORMATWIDGET_H

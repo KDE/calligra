@@ -290,12 +290,12 @@ KoVariable * KoVariable::createVariable( int type, int subtype, KoVariableFormat
     QCString string;
     KDialogBase* dialog;
     QWidget* widget;
-	QStringList stringList;
-	QStringList pstringList;
-	KAboutData* kad=new KAboutData("koffice", "KOffice Library", "");
-	KConfig * config;
-	KInstance* instance;
-	int count=1, noe=5, nope=5;
+    QStringList stringList;
+    QStringList pstringList;
+    KAboutData* kad=new KAboutData("koffice", "KOffice Library", "");
+    KConfig * config;
+    KInstance* instance;
+    int count=1, noe=5, nope=5;
     if ( varFormat == 0L )
     {
         // Get the default format for this variable (this method is only called in the interactive case, not when loading)

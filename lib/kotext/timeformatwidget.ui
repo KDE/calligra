@@ -9,13 +9,13 @@
             <x>0</x>
             <y>0</y>
             <width>260</width>
-            <height>130</height>
+            <height>223</height>
         </rect>
     </property>
     <property name="minimumSize">
         <size>
             <width>260</width>
-            <height>130</height>
+            <height>180</height>
         </size>
     </property>
     <property name="baseSize">
@@ -30,98 +30,131 @@
     </property>
     <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>Layout7</cstring>
+            <cstring>Layout3</cstring>
         </property>
         <property name="geometry">
             <rect>
                 <x>10</x>
-                <y>10</y>
-                <width>240</width>
-                <height>110</height>
+                <y>20</y>
+                <width>230</width>
+                <height>190</height>
             </rect>
         </property>
         <vbox>
             <property name="name">
                 <cstring>unnamed</cstring>
-        </property>
+            </property>
             <property name="margin">
                 <number>0</number>
-        </property>
+            </property>
             <property name="spacing">
-                <number>15</number>
-        </property>
+                <number>6</number>
+            </property>
             <widget class="QComboBox">
-        <property name="name">
+                <item>
+                    <property name="text">
+                        <string>hh:mm</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>hh:mm:ss</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>hh:mm AP</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>hh:mm:ss AP</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>ComboBox3</cstring>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>CheckBox1</cstring>
+                </property>
+                <property name="text">
+                    <string>Personalize</string>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <property name="name">
                     <cstring>combo1</cstring>
-        </property>
+                </property>
                 <property name="editable">
                     <bool>true</bool>
-        </property>
+                </property>
             </widget>
             <widget class="QLayoutWidget">
                 <property name="name">
                     <cstring>Layout5</cstring>
-        </property>
+                </property>
                 <hbox>
-            <property name="name">
+                    <property name="name">
                         <cstring>unnamed</cstring>
-            </property>
+                    </property>
                     <property name="margin">
                         <number>0</number>
-            </property>
+                    </property>
                     <property name="spacing">
                         <number>6</number>
-            </property>
+                    </property>
                     <widget class="QLabel">
-            <property name="name">
+                        <property name="name">
                             <cstring>TextLabel1</cstring>
-            </property>
-            <property name="text">
+                        </property>
+                        <property name="text">
                             <string>Insert:</string>
-            </property>
-        </widget>
+                        </property>
+                    </widget>
                     <widget class="QComboBox">
                         <item>
                             <property name="text">
                                 <string>Hour</string>
-            </property>
+                            </property>
                         </item>
                         <item>
                             <property name="text">
                                 <string>Hour (2 digit)</string>
-            </property>
+                            </property>
                         </item>
                         <item>
                             <property name="text">
                                 <string>Minute</string>
-            </property>
+                            </property>
                         </item>
                         <item>
                             <property name="text">
                                 <string>Minute (2 digit)</string>
-            </property>
+                            </property>
                         </item>
                         <item>
-            <property name="text">
+                            <property name="text">
                                 <string>Second</string>
-            </property>
+                            </property>
                         </item>
-        <item>
-            <property name="text">
+                        <item>
+                            <property name="text">
                                 <string>am/pm</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
                                 <string>AM/PM</string>
-            </property>
-        </item>
-        <property name="name">
+                            </property>
+                        </item>
+                        <property name="name">
                             <cstring>combo2</cstring>
-        </property>
+                        </property>
                         <property name="currentItem">
                             <number>0</number>
-        </property>
+                        </property>
                     </widget>
                 </hbox>
             </widget>
@@ -134,7 +167,7 @@
                 </property>
                 <property name="textFormat">
                     <enum>PlainText</enum>
-        </property>
+                </property>
                 <property name="indent">
                     <number>5</number>
                 </property>
@@ -142,6 +175,29 @@
         </vbox>
     </widget>
 </widget>
+<customwidgets>
+    <customwidget>
+        <class>QWidget</class>
+        <header location="global">qwidget.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>1</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="XPM.GZ" length="646">789c6dd2c10ac2300c00d07bbf2234b7229d1be245fc04c5a3201e4615f430059d0711ff5ddb2e6bb236ec90eed134cb5a19d8ef36602af5ecdbfeeac05dda0798d3abebde87e3faa374d3807fa0d633a52d38d8de6f679fe33fc776e196f53cd010188256a3600a292882096246517815ca99884606e18044a3a40d91824820924265a7923a2e8bcd05f33db1173e002913175f2a6be6d3294871a2d95fa00e8a94ee017b69d339d90df1e77c57ea072ede6758</data>
+    </image>
+</images>
 <connections>
     <connection>
         <sender>combo1</sender>
@@ -159,6 +215,9 @@
 <tabstops>
     <tabstop>combo1</tabstop>
 </tabstops>
+<includes>
+    <include location="local" impldecl="in implementation">timeformatwidget.ui.h</include>
+</includes>
 <slots>
     <slot>comboActivated()</slot>
     <slot>updateLabel()</slot>
