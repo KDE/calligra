@@ -10,17 +10,16 @@ METASOURCES = AUTO
 
 
 parser:
-	lex -osqlscanner.cpp sqlscanner.l
-	bison -dv sqlparser.y
-	echo '#include <field.h>' > sqlparser.h
-	echo '#include "parser.h"' >> sqlparser.h
-	echo '#include "sqltypes.h"' >> sqlparser.h
-	echo '' >> sqlparser.h
-	echo 'bool parseData(KexiDB::Parser *p, const char *data);' >> sqlparser.h
-	cat sqlparser.tab.h >> sqlparser.h
-
-	cat sqlparser.tab.c > sqlparser.cpp
-
+	cd $(srcdir); \
+	lex -osqlscanner.cpp sqlscanner.l; \
+	bison -dv sqlparser.y; \
+	echo '#include <field.h>' > sqlparser.h; \
+	echo '#include "parser.h"' >> sqlparser.h; \
+	echo '#include "sqltypes.h"' >> sqlparser.h; \
+	echo '' >> sqlparser.h; \
+	echo 'bool parseData(KexiDB::Parser *p, const char *data);' >> sqlparser.h; \
+	cat sqlparser.tab.h >> sqlparser.h; \
+	cat sqlparser.tab.c > sqlparser.cpp; \
 	rm -f sqlparser.tab.h sqlparser.tab.c
 
 coffie:
@@ -28,3 +27,5 @@ coffie:
 	sleep 5
 
 KDE_OPTIONS=nofinal
+.PHONY: parser coffie
+

@@ -964,7 +964,7 @@ Select ColViews
 			t_e = dynamic_cast<VariableExpr*>(e);
 		}
 		assert(t_e);
-		QString tname = t_e->name.latin1();
+		QCString tname = t_e->name.latin1();
 		KexiDB::TableSchema *s = parser->db()->tableSchema(tname);
 		if(!s) {
 			setError(i18n("Field List Error"), 
