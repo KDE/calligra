@@ -116,8 +116,8 @@ public:
 
     // background
     void setBackColor( unsigned int, QColor, QColor, BCType, bool, int, int );
-    void setBackPixFilename( unsigned int, QString );
-    void setBackClipFilename( unsigned int, QString );
+    void setBackPixmap( unsigned int pageNum, const KPImageKey & key );
+    void setBackClipFilename( unsigned int pageNum, QString backClip );
     void setBackView( unsigned int, BackView );
     void setBackType( unsigned int, BackType );
     bool setPenBrush( QPen, QBrush, LineEnd, LineEnd, FillType, QColor, QColor, BCType,
@@ -131,9 +131,10 @@ public:
     bool setBrushColor( QColor, bool );
     BackType getBackType( unsigned int );
     BackView getBackView( unsigned int );
-    QString getBackPixFilename( unsigned int );
+    //QString getBackPixFilename( unsigned int );
+    KoImageKey getBackPixKey( unsigned int );
+    //QDateTime getBackPixLastModified( unsigned int );
     QString getBackClipFilename( unsigned int );
-    QDateTime getBackPixLastModified( unsigned int );
     QDateTime getBackClipLastModified( unsigned int );
     QColor getBackColor1( unsigned int );
     QColor getBackColor2( unsigned int );
@@ -167,8 +168,8 @@ public:
     // insert/change objects
     void insertPicture( QString, int, int, int _x = 10, int _y = 10 );
     void insertClipart( QString, int, int );
-    void changePicture( QString, int, int );
-    void changeClipart( QString, int, int );
+    void changePicture( const QString & );
+    void changeClipart( const QString & );
     void insertLine( QRect, QPen, LineEnd, LineEnd, LineType, int, int );
     void insertRectangle( QRect, QPen, QBrush, FillType, QColor, QColor, BCType, int, int, bool ,int, int, int, int );
     void insertCircleOrEllipse( QRect, QPen, QBrush, FillType, QColor, QColor, BCType, bool ,int, int, int, int );
@@ -382,9 +383,10 @@ protected:
     bool _hasHeader, _hasFooter;
     KPFooterHeaderEditor *headerFooterEdit;
 
-    QValueList<KPImageKey> pixmapCollectionKeys;
+    QMap<KoImageKey, QString> * m_pixmapMap;
+
     QValueList<KPClipartCollection::Key> clipartCollectionKeys;
-    QStringList pixmapCollectionNames, clipartCollectionNames;
+    QStringList clipartCollectionNames;
     KoPageLayout __pgLayout;
     int lastObj;
 

@@ -70,9 +70,6 @@ public:
     void setBackClipFilename(  const QString &_filename, QDateTime _lastModified );
     void setPageEffect( PageEffect _pageEffect )
     { pageEffect = _pageEffect; }
-    KPImageKey getKey() const
-    { return backImage.key(); }
-
 
     void setBgSize( QSize _size, bool visible = true );
 
@@ -86,10 +83,13 @@ public:
     { return backColor2; }
     BCType getBackColorType() const
     { return bcType; }
-    QString getBackPixFilename() const
-    { return backImage.key().filename; }
+    KPImageKey getBackPixKey() const
+    { return backImage.key(); }
+    KPClipartCollection::Key getBackClipKey() const
+    { return clipKey; }
     QString getBackClipFilename() const
     { return clipKey.filename; }
+
     PageEffect getPageEffect() const
     { return pageEffect; }
     bool getBackUnbalanced() const

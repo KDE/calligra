@@ -82,8 +82,10 @@ public:
     QColor getBackColor2() const;
     BCType getBackColorType() const;
     BackType getBackType() const;
-    QString getBackPixFilename() const;
-    QString getBackClipFilename() const;
+    QString getBackPixFilename() const { return chosenPic; }
+    QDateTime getBackPixLastModified() const { return picLastModified; }
+    QString getBackClipFilename() const { return chosenClip; }
+    QDateTime getBackClipLastModified() const { return clipLastModified; }
     BackView getBackView() const;
     bool getBackUnbalanced() const;
     int getBackXFactor() const;

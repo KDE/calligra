@@ -790,18 +790,18 @@ void KPresenterView::extraBackground()
 	delete backDia;
 	backDia = 0;
     }
-    backDia = new BackDia( this, "InfoDia", m_pKPresenterDoc->getBackType( getCurrPgNum() - 1 ),
-			   m_pKPresenterDoc->getBackColor1( getCurrPgNum() - 1 ),
-			   m_pKPresenterDoc->getBackColor2( getCurrPgNum() - 1 ),
-			   m_pKPresenterDoc->getBackColorType( getCurrPgNum() - 1 ),
-			   m_pKPresenterDoc->getBackPixFilename( getCurrPgNum() - 1 ),
-			   m_pKPresenterDoc->getBackPixLastModified( getCurrPgNum() - 1 ),
-			   m_pKPresenterDoc->getBackClipFilename( getCurrPgNum() - 1 ),
-			   m_pKPresenterDoc->getBackClipLastModified( getCurrPgNum() - 1 ),
-			   m_pKPresenterDoc->getBackView( getCurrPgNum() - 1 ),
-			   m_pKPresenterDoc->getBackUnbalanced( getCurrPgNum() - 1 ),
-			   m_pKPresenterDoc->getBackXFactor( getCurrPgNum() - 1 ),
-			   m_pKPresenterDoc->getBackYFactor( getCurrPgNum() - 1 ),
+    backDia = new BackDia( this, "InfoDia", m_pKPresenterDoc->getBackType( currPg ),
+			   m_pKPresenterDoc->getBackColor1( currPg ),
+			   m_pKPresenterDoc->getBackColor2( currPg ),
+			   m_pKPresenterDoc->getBackColorType( currPg ),
+			   m_pKPresenterDoc->getBackPixKey( currPg ).filename(),
+                           m_pKPresenterDoc->getBackPixKey( currPg ).lastModified(),
+			   m_pKPresenterDoc->getBackClipFilename( currPg ),
+			   m_pKPresenterDoc->getBackClipLastModified( currPg ),
+			   m_pKPresenterDoc->getBackView( currPg ),
+			   m_pKPresenterDoc->getBackUnbalanced( currPg ),
+			   m_pKPresenterDoc->getBackXFactor( currPg ),
+			   m_pKPresenterDoc->getBackYFactor( currPg ),
 			   m_pKPresenterDoc );
     backDia->setCaption( i18n( "KPresenter - Page Background" ) );
     QObject::connect( backDia, SIGNAL( backOk( bool ) ), this, SLOT( backOk( bool ) ) );
@@ -2052,18 +2052,21 @@ void KPresenterView::backOk( bool takeGlobal )
 					     backDia->getBackColor2(), backDia->getBackColorType(),
 					     backDia->getBackUnbalanced(),
 					     backDia->getBackXFactor(), backDia->getBackYFactor(),
-					     backDia->getBackPixFilename(), backDia->getBackClipFilename(),
+					     KPImageKey( backDia->getBackPixFilename(),
+                                                         backDia->getBackPixLastModified() ),
+                                             backDia->getBackClipFilename(),
+                                             // todo backDia->getBackClipLastModified(),
 					     backDia->getBackView(), backDia->getBackType(),
-					     m_pKPresenterDoc->getBackColor1( getCurrPgNum() - 1 ),
-					     m_pKPresenterDoc->getBackColor2( getCurrPgNum() - 1 ),
-					     m_pKPresenterDoc->getBackColorType( getCurrPgNum() - 1 ),
-					     m_pKPresenterDoc->getBackUnbalanced( getCurrPgNum() - 1 ),
-					     m_pKPresenterDoc->getBackXFactor( getCurrPgNum() - 1 ),
-					     m_pKPresenterDoc->getBackYFactor( getCurrPgNum() - 1 ),
-					     m_pKPresenterDoc->getBackPixFilename( getCurrPgNum() - 1 ),
-					     m_pKPresenterDoc->getBackClipFilename( getCurrPgNum() - 1 ),
-					     m_pKPresenterDoc->getBackView( getCurrPgNum() - 1 ),
-					     m_pKPresenterDoc->getBackType( getCurrPgNum() - 1 ),
+					     m_pKPresenterDoc->getBackColor1( currPg ),
+					     m_pKPresenterDoc->getBackColor2( currPg ),
+					     m_pKPresenterDoc->getBackColorType( currPg ),
+					     m_pKPresenterDoc->getBackUnbalanced( currPg ),
+					     m_pKPresenterDoc->getBackXFactor( currPg ),
+					     m_pKPresenterDoc->getBackYFactor( currPg ),
+					     m_pKPresenterDoc->getBackPixKey( currPg ),
+					     m_pKPresenterDoc->getBackClipFilename( currPg ),
+					     m_pKPresenterDoc->getBackView( currPg ),
+					     m_pKPresenterDoc->getBackType( currPg ),
 					     takeGlobal, getCurrPgNum(), m_pKPresenterDoc );
     setBackCmd->execute();
     m_pKPresenterDoc->commands()->addCommand( setBackCmd );
@@ -2370,7 +2373,7 @@ void KPresenterView::repaint( QRect r, bool erase )
 }
 
 /*====================== change pciture =========================*/
-void KPresenterView::changePicture( unsigned int, const QString & filename )
+void KPresenterView::changePicture( const QString & filename )
 {
     //url = KFileDialog::getImageOpenURL(); lukas: put this back in KDE 3.0
 
@@ -2390,11 +2393,11 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
         return;
 
     if ( !file.isEmpty() )
-      m_pKPresenterDoc->changePicture( file, xOffset, yOffset );
+      m_pKPresenterDoc->changePicture( file );
 }
 
 /*====================== change clipart =========================*/
-void KPresenterView::changeClipart( unsigned int, QString filename )
+void KPresenterView::changeClipart( const QString & filename )
 {
     KFileDialog fd( filename, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Select new Clipart"));
@@ -2412,7 +2415,7 @@ void KPresenterView::changeClipart( unsigned int, QString filename )
         return;
 
     if ( !file.isEmpty() )
-        m_pKPresenterDoc->changeClipart( file, xOffset, yOffset );
+        m_pKPresenterDoc->changeClipart( file );
 }
 
 /*====================== resize event ===========================*/

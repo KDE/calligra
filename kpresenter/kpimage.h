@@ -25,55 +25,25 @@
 class QDomElement;
 class QDomDocument;
 
-struct KPImageKey
-{
-    KPImageKey()
-        : filename(), lastModified()
-        {}
+// At the moment those classes are equivalent.
+// But keeping a different name in kpresenter is a good idea,
+// in case we need to extend KoImage later.
+typedef KoImage KPImage;
+typedef KoImageKey KPImageKey;
 
-    KPImageKey( const QString &fn, const QDateTime &mod )
-        : filename( fn ), lastModified( mod )
-        {}
-    KPImageKey( const KPImageKey &key )
-        : filename( key.filename ), lastModified( key.lastModified )
-        {}
-
-    KPImageKey &operator=( const KPImageKey &key ) {
-        filename = key.filename;
-        lastModified = key.lastModified;
-        return *this;
-    }
-
-    bool operator==( const KPImageKey &key ) const {
-        return ( key.filename == filename &&
-                 key.lastModified == lastModified );
-    }
-
-    bool operator<( const KPImageKey &key ) const {
-        return key.toString() < toString();
-    }
-
-    QString toString() const {
-        return QString::fromLatin1( "%1_%2" ).arg( filename ).arg( lastModified.toString() );
-    }
-
-    QDomElement saveXML( QDomDocument &doc );
-    void setAttributes( QDomElement &elem );
-    void loadAttributes( const QDomElement &elem, const QDate &dDate, const QTime &dTime );
-
-    QString filename;
-    QDateTime lastModified;
-};
-
-class KPImageCollection : public KoImageCollection<KPImageKey>
+class KPImageCollection : public KoImageCollection
 {
 public:
     KPImageCollection()
         { m_tmpDate = QDate::currentDate(); m_tmpTime = QTime::currentTime(); }
 
-    KoImage<KPImageKey> loadImage( const KPImageKey &key );
+    // KPresenter uses dateTime.isValid() for images in the collection and
+    // !isValid() for images to be loaded from disk.
+    // This method handles both cases.
+    KPImage findOrLoad( const QString & fileName, const QDateTime & dateTime );
 
-    KoImage<KPImageKey> loadImage( const KPImageKey &key, const QString &rawData );
+    // Special support for XPMs
+    KPImage loadXPMImage( const KPImageKey &key, const QString &rawData );
 
     // this is ugly, but it was in KPPixmapCollection
     QDate tmpDate() const { return m_tmpDate; }
@@ -83,7 +53,5 @@ private:
     QDate m_tmpDate;
     QTime m_tmpTime;
 };
-
-typedef KPImageCollection::Image KPImage;
 
 #endif

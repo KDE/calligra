@@ -231,8 +231,8 @@ public:
     void repaint( QRect, bool );
 
     // properties
-    void changePicture( unsigned int, const QString & );
-    void changeClipart( unsigned int, QString );
+    void changePicture( const QString & );
+    void changeClipart( const QString & );
 
     Page* getPage() {return page; }
 

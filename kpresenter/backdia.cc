@@ -350,18 +350,6 @@ BCType BackDia::getBackColorType() const
 }
 
 /*=============================================================*/
-QString BackDia::getBackPixFilename() const
-{
-    return chosenPic;
-}
-
-/*=============================================================*/
-QString BackDia::getBackClipFilename() const
-{
-    return chosenClip;
-}
-
-/*=============================================================*/
 bool BackDia::getBackUnbalanced() const
 {
     return unbalanced->isChecked();

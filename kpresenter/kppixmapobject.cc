@@ -45,23 +45,16 @@ KPPixmapObject::KPPixmapObject( KPImageCollection *_imageCollection )
 }
 
 /*================== overloaded constructor ======================*/
-KPPixmapObject::KPPixmapObject( KPImageCollection *_imageCollection, const QString &_filename,
-                                QDateTime _lastModified )
+KPPixmapObject::KPPixmapObject( KPImageCollection *_imageCollection, const KPImageKey & key )
     : KP2DObject()
 {
     imageCollection = _imageCollection;
-
-    if ( !_lastModified.isValid() )
-    {
-        QFileInfo inf( _filename );
-        _lastModified = inf.lastModified();
-    }
 
     ext = orig_size;
     brush = Qt::NoBrush;
     pen = QPen( Qt::black, 1, Qt::NoPen );
 
-    setPixmap( _filename, _lastModified );
+    setPixmap( key );
 }
 
 /*================================================================*/
@@ -101,15 +94,9 @@ void KPPixmapObject::resizeBy( int _dx, int _dy )
 }
 
 /*================================================================*/
-void KPPixmapObject::setPixmap( const QString &_filename, QDateTime _lastModified, const QSize &/*_size*/ )
+void KPPixmapObject::setPixmap( const KPImageKey & key, const QSize &/*_size*/ )
 {
-    if ( !_lastModified.isValid() )
-    {
-        QFileInfo inf( _filename );
-        _lastModified = inf.lastModified();
-    }
-
-    image = imageCollection->loadImage( KPImageKey( _filename, _lastModified ) );
+    image = imageCollection->findImage( key );
 
     if ( ext == orig_size )
         ext = image.size();
@@ -123,7 +110,7 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc);
     QDomElement elem=doc.createElement("KEY");
-    image.key().setAttributes(elem);
+    image.key().saveAttributes(elem);
     fragment.appendChild(elem);
     return fragment;
 }
@@ -140,7 +127,6 @@ void KPPixmapObject::load(const QDomElement &element)
     }
     else {
         // try to find a PIXMAP tag if the KEY is not available...
-        KPImageKey key;
         e=element.namedItem("PIXMAP").toElement();
         if(!e.isNull()) {
             bool openPic = true;
@@ -163,14 +149,16 @@ void KPPixmapObject::load(const QDomElement &element)
                     _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );
                 }
             }
-            key.filename = _fileName;
-            key.lastModified.setDate( imageCollection->tmpDate() );
-            key.lastModified.setTime( imageCollection->tmpTime() );
 
             if ( openPic )
-                image = imageCollection->loadImage( key );
+                // !! this loads it from the disk (unless it's in the image collection already)
+                image = imageCollection->loadImage( _fileName );
             else
-                image = imageCollection->loadImage( key, _data );
+            {
+                QDateTime dateTime( imageCollection->tmpDate(), imageCollection->tmpTime() );
+                KPImageKey key( _fileName, dateTime );
+                image = imageCollection->loadXPMImage( key, _data );
+            }
 
             if ( ext == orig_size )
                 ext = image.size();

@@ -57,7 +57,7 @@ int KPresenterBackgroundIface::getBackColorType()
 
 QString KPresenterBackgroundIface::getBackPixFilename()
 {
-    return back->getBackPixFilename();
+    return back->getBackPixKey().filename();
 }
 
 QString KPresenterBackgroundIface::getBackClipFilename()

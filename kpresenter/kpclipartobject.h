@@ -48,7 +48,7 @@ public:
 
     virtual ObjType getType() const
     { return OT_CLIPART; }
-    virtual QString getFileName() const
+    QString getFileName() const
     { return key.filename; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc );

@@ -1603,7 +1603,7 @@ void Page::chPic()
         kpobject = objectList()->at( i );
         if ( kpobject->isSelected() && kpobject->getType() == OT_PICTURE )
         {
-            view->changePicture( i, dynamic_cast<KPPixmapObject*>( kpobject )->getFileName() );
+            view->changePicture( dynamic_cast<KPPixmapObject*>( kpobject )->getFileName() );
             break;
         }
     }
@@ -1619,7 +1619,7 @@ void Page::chClip()
         kpobject = objectList()->at( i );
         if ( kpobject->isSelected() && kpobject->getType() == OT_CLIPART )
         {
-            view->changeClipart( i, dynamic_cast<KPClipartObject*>( kpobject )->getFileName() );
+            view->changeClipart( dynamic_cast<KPClipartObject*>( kpobject )->getFileName() );
             break;
         }
     }

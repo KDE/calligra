@@ -38,9 +38,7 @@ class KPPixmapObject : public KP2DObject
 
 public:
     KPPixmapObject( KPImageCollection *_imageCollection );
-    KPPixmapObject( KPImageCollection *_imageCollection,
-                    const QString &_filename,
-                    QDateTime _lastModified );
+    KPPixmapObject( KPImageCollection *_imageCollection, const KPImageKey & key );
     virtual ~KPPixmapObject() {}
 
     KPPixmapObject &operator=( const KPPixmapObject & );
@@ -50,16 +48,18 @@ public:
     { setSize( _size.width(), _size.height() ); }
     virtual void resizeBy( int _dx, int _dy );
 
-    virtual QString getFileName() const
-    { return image.key().filename; }
-    virtual KPImageKey getKey() const
+    // Only used as a default value in the filedialog, in changePicture
+    // Don't use for anything else
+    QString getFileName() const
+    { return image.key().filename(); }
+
+    KPImageKey getKey() const
     { return image.key(); }
 
-    void setPixmap( const QString &_filename, QDateTime _lastModified )
-    { setPixmap( _filename, _lastModified, orig_size ); }
-    void setPixmap( const QString &_filename, QDateTime _lastModified, const QSize &_size );
+    void setPixmap( const KPImageKey & key, const QSize &_size = orig_size );
+
     void reload()
-    { setPixmap( image.key().filename, image.key().lastModified, ext ); }
+    { setPixmap( image.key(), ext ); }
 
     virtual ObjType getType() const
     { return OT_PICTURE; }

@@ -28,10 +28,10 @@
 /*======================== constructor ===========================*/
 SetBackCmd::SetBackCmd( QString _name, QColor _backColor1, QColor _backColor2, BCType _bcType,
 			bool _backUnbalanced, int _backXFactor, int _backYFactor,
-			QString _backPix, QString _backClip, BackView _backView, BackType _backType,
+			const KoImageKey & _backPix, QString _backClip, BackView _backView, BackType _backType,
 			QColor _oldBackColor1, QColor _oldBackColor2, BCType _oldBcType,
 			bool _oldBackUnbalanced, int _oldBackXFactor, int _oldBackYFactor,
-			QString _oldBackPix, QString _oldBackClip, BackView _oldBackView, BackType _oldBackType,
+			const KoImageKey & _oldBackPix, QString _oldBackClip, BackView _oldBackView, BackType _oldBackType,
 			bool _takeGlobal, int _currPgNum, KPresenterDoc *_doc )
     : Command( _name ), backColor1( _backColor1 ), backColor2( _backColor2 ), unbalanced( _backUnbalanced ),
       xfactor( _backXFactor ), yfactor( _backYFactor ), backPix( _backPix ), backClip( _backClip ),
@@ -57,7 +57,7 @@ void SetBackCmd::execute()
 			   unbalanced, xfactor, yfactor );
 	doc->setBackType( currPgNum - 1, backType );
 	doc->setBackView( currPgNum - 1, backView );
-	doc->setBackPixFilename( currPgNum - 1, backPix );
+	doc->setBackPixmap( currPgNum - 1, backPix );
 	doc->setBackClipFilename( currPgNum - 1, backClip );
 	doc->restoreBackground( currPgNum - 1 );
     } else {
@@ -67,7 +67,7 @@ void SetBackCmd::execute()
 			       unbalanced, xfactor, yfactor );
 	    doc->setBackType( i, backType );
 	    doc->setBackView( i, backView );
-	    doc->setBackPixFilename( i, backPix );
+	    doc->setBackPixmap( i, backPix );
 	    doc->setBackClipFilename( i, backClip );
 	}
 
@@ -86,7 +86,7 @@ void SetBackCmd::unexecute()
 			   oldUnbalanced, oldXFactor, oldYFactor );
 	doc->setBackType( currPgNum - 1, oldBackType );
 	doc->setBackView( currPgNum - 1, oldBackView );
-	doc->setBackPixFilename( currPgNum - 1, oldBackPix );
+	doc->setBackPixmap( currPgNum - 1, oldBackPix );
 	doc->setBackClipFilename( currPgNum - 1, oldBackClip );
 	doc->restoreBackground( currPgNum - 1 );
     } else {
@@ -96,7 +96,7 @@ void SetBackCmd::unexecute()
 			       oldUnbalanced, oldXFactor, oldYFactor );
 	    doc->setBackType( i, oldBackType );
 	    doc->setBackView( i, oldBackView );
-	    doc->setBackPixFilename( i, oldBackPix );
+	    doc->setBackPixmap( i, oldBackPix );
 	    doc->setBackClipFilename( i, oldBackClip );
 	}
 

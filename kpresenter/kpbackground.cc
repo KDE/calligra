@@ -68,12 +68,6 @@ void KPBackGround::setBackPixmap( const QString &_filename, QDateTime _lastModif
     if ( backType != BT_PICTURE )
         return;
 
-    if ( !_lastModified.isValid() )
-    {
-        QFileInfo inf( _filename );
-        _lastModified = inf.lastModified();
-    }
-
     QSize pixSize;
     switch ( backView )
     {
@@ -83,8 +77,7 @@ void KPBackGround::setBackPixmap( const QString &_filename, QDateTime _lastModif
         break;
     }
 
-    backImage = imageCollection->loadImage( KPImageKey( _filename, _lastModified ) );
-
+    backImage = imageCollection->findOrLoad( _filename, _lastModified );
     if ( pixSize == orig_size )
         pixSize = backImage.size();
 
@@ -150,7 +143,7 @@ void KPBackGround::draw( QPainter *_painter, QPoint _offset, bool _drawBorders )
 void KPBackGround::restore()
 {
     if ( backType == BT_PICTURE )
-        setBackPixmap( backImage.key().filename, backImage.key().lastModified );
+        setBackPixmap( backImage.key().filename(), backImage.key().lastModified() );
 
     if ( backType == BT_CLIPART )
 	setBackClipFilename( clipKey.filename, clipKey.lastModified );
@@ -203,7 +196,11 @@ QDomElement KPBackGround::save( QDomDocument &doc )
     page.appendChild(element);
 
     if ( !backImage.isNull() && backType == BT_PICTURE )
-        page.appendChild(backImage.key().saveXML(doc));
+    {
+        QDomElement elem = doc.createElement( "BACKPIXKEY" );
+        backImage.key().saveAttributes( elem );
+        page.appendChild( elem );
+    }
 
     if ( picture && backType == BT_CLIPART )
         page.appendChild(clipKey.saveXML(doc));
@@ -311,14 +308,15 @@ void KPBackGround::load( const QDomElement &element )
                     _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );
                 }
             }
-            key.filename = _fileName;
-            key.lastModified.setDate( imageCollection->tmpDate() );
-            key.lastModified.setTime( imageCollection->tmpTime() );
-
             if ( openPic )
-                backImage = imageCollection->loadImage( key );
+                // !! this loads it from the disk (unless it's in the image collection already)
+                backImage = imageCollection->loadImage( _fileName );
             else
-                backImage = imageCollection->loadImage( key, _data );
+            {
+                QDateTime dateTime( imageCollection->tmpDate(), imageCollection->tmpTime() );
+                KPImageKey key( _fileName, dateTime );
+                backImage = imageCollection->loadXPMImage( key, _data );
+            }
 
             if ( ext == orig_size )
                 ext = backImage.size();
