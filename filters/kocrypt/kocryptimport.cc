@@ -162,7 +162,6 @@ QFile outf(fileOut);
     }
 
 kdDebug() << "First loop is done." << endl;
-
     // read in the rest of the file and decode
     while (fsize > 0) {
       inf.readBlock(p, blocksize);

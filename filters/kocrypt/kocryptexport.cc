@@ -144,6 +144,7 @@ int rc;
 
        // if we ran out of data already (!?!?) append random data.
        cursize += rc;
+       shortness = cursize % blocksize;
        while (shortness) {
           p[cursize++] = (char) (rand()%0x100);
           shortness--;
