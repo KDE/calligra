@@ -926,7 +926,7 @@ void KWord13OasisGenerator::writeMetaXml(void)
     // According to OASIS spec section 3.1.1, it has to follow section 14.43 of RFC 2616
     writer.startElement( "meta:generator" );
     QString strVersion;
-    strVersion += "KWord-OOWriter-Export-Filter/";
+    strVersion += "KWord-OneDotThree-Import-Filter/";
     strVersion += QString( "$Revision$" ).mid( 10 ).remove( '$' ).stripWhiteSpace();
     strVersion = " KOffice/";
     strVersion += KOFFICE_VERSION_STRING;
