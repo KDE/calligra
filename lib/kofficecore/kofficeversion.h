@@ -17,15 +17,13 @@
     Boston, MA 02111-1307, USA.
 */
 
-// $Id$
-
 #ifndef _KOFFICE_VERSION_H_
 #define _KOFFICE_VERSION_H_
 
-#define KOFFICE_VERSION_STRING "1.3.2"
+#define KOFFICE_VERSION_STRING "1.3.3"
 #define KOFFICE_VERSION_MAJOR 1
 #define KOFFICE_VERSION_MINOR 3
-#define KOFFICE_VERSION_RELEASE 2
+#define KOFFICE_VERSION_RELEASE 3
 #define KOFFICE_MAKE_VERSION( a,b,c ) (((a) << 16) | ((b) << 8) | (c))
 
 #define KOFFICE_VERSION \
