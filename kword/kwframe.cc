@@ -986,7 +986,6 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                    << endl;
 #endif
     m_currentDrawnCanvas = canvas;
-
     QPtrListIterator<KWFrame> frameIt( frameIterator() );
     KWFrame * lastRealFrame = 0L;
     double lastRealFrameTop = 0;
@@ -1002,6 +1001,9 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
 
         QRect r(crect);
         QRect normalFrameRect( m_doc->zoomRect( *frame ) );
+        normalFrameRect.setTop( normalFrameRect.top()+m_doc->zoomItY(frame->bTop()));
+        normalFrameRect.setBottom( normalFrameRect.bottom()-m_doc->zoomItY(frame->bBottom()));
+
         QRect frameRect( viewMode->normalToView( normalFrameRect ) );
         r = r.intersect( frameRect );
 #ifdef DEBUG_DRAW
