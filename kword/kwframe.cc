@@ -1923,6 +1923,7 @@ KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString
     : KWFrameSet( _doc )
 {
     m_child = _child;
+    m_child->setPartFrameSet( this );
     kdDebug(32001) << "KWPartFrameSet::KWPartFrameSet" << endl;
     if ( name.isEmpty() )
         m_name = _doc->generateFramesetName( i18n( "Object %1" ) );

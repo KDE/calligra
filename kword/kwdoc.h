@@ -82,10 +82,10 @@ class KoTextParag;
 #include <qfont.h>
 #include <qvaluevector.h>
 
+class KWPartFrameSet;
 /******************************************************************/
 /* Class: KWChild                                              */
 /******************************************************************/
-
 class KWChild : public KoDocumentChild
 {
 public:
@@ -96,9 +96,13 @@ public:
     KWDocument* parent()const
     { return m_pKWordDoc; }
 
+    void setPartFrameSet( KWPartFrameSet* fs ) { m_partFrameSet = fs; }
+
+    virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
+
 protected:
     KWDocument *m_pKWordDoc;
-
+    KWPartFrameSet *m_partFrameSet;
 };
 
 struct bookMark

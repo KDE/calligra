@@ -67,17 +67,25 @@ static const char * CURRENT_DTD_VERSION = "1.1";
 /******************************************************************/
 
 KWChild::KWChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc )
-    : KoDocumentChild( _wdoc, _doc, _rect )
+    : KoDocumentChild( _wdoc, _doc, _rect ), m_partFrameSet( 0L )
 {
 }
 
 KWChild::KWChild( KWDocument *_wdoc )
-    : KoDocumentChild( _wdoc )
+    : KoDocumentChild( _wdoc ), m_partFrameSet( 0L )
 {
 }
 
 KWChild::~KWChild()
 {
+}
+
+KoDocument* KWChild::hitTest( const QPoint& p, const QWMatrix& _matrix )
+{
+    Q_ASSERT( m_partFrameSet );
+    if ( m_partFrameSet && m_partFrameSet->isDeleted() )
+        return 0L;
+    return KoDocumentChild::hitTest( p, _matrix );
 }
 
 /******************************************************************/
