@@ -106,7 +106,7 @@ struct RTFPicture
     int scalex, scaley;
     int nibble;
     bool scaled;
-    /// \blipuid
+    /// \\blipuid
     QString identifier;
 };
 
@@ -269,9 +269,16 @@ public:
     void insertTableRow( RTFProperty * = 0L );
     void insertCellDef( RTFProperty * );
     void insertTabDef( RTFProperty * );
+    /**
+     * Inserts a single (Unicode) character in UTF8 format.
+     * @param ch the character to write to the current destination
+     */
     void insertUTF8( int ch );
+    /// Insert special character (as plain text).
     void insertSymbol( RTFProperty *property );
+    /// Insert special character (hexadecimal escape value).
     void insertHexSymbol( RTFProperty * );
+    /// Insert unicode character (keyword \\u).
     void insertUnicodeSymbol( RTFProperty * );
     void insertDateTime( RTFProperty *property );
     void insertPageNumber( RTFProperty * );

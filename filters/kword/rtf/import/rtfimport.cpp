@@ -90,7 +90,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"}",		insertSymbol,		0L, '}' ),
 	PROP(	0L,		"~",		insertSymbol,		0L, 0x00a0 ),
 	PROP(	0L,		"-",		insertSymbol,		0L, 0x00ad ),
-	PROP(	0L,		"adjustright",	ignoreKeyword,		0L, 0 ), // Not supported, KWord has no gird
+	PROP(	0L,		"adjustright",	ignoreKeyword,		0L, 0 ), // Not supported, KWord has no grid
 	PROP(	0L,		"ansi",	setAnsiCodepage,		0L, 0 ),
 	PROP(	0L,		"ansicpg",	setCodepage,		0L, 0 ),
 	MEMBER(	0L,		"b",		setToggleProperty,	state.format.bold, 0 ),
@@ -400,7 +400,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     kdDebug(30515) << "UTF-8 asked, given: " << (utf8TextCodec?utf8TextCodec->name():QString("-none-")) << endl;
 
     // There is no default encoding in RTF, it must be always declared. (But beware of buggy files!)
-    textCodec=QTextCodec::codecForName("CP 1252"); // Or IBM 435 ?
+    textCodec=QTextCodec::codecForName("CP 1252"); // Or IBM 437 ?
     kdDebug(30515) << "CP 1252 asked, given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
 
     // Parse RTF document
@@ -1105,10 +1105,6 @@ void RTFImport::insertTabDef( RTFProperty * )
     tab.leader		= RTFTab::None;
 }
 
-/**
- * Inserts a single (unicode) character in UTF8 format.
- * @param ch the character to write to the current destination
- */
 void RTFImport::insertUTF8( int ch )
 {
     char buf[4];
@@ -1120,6 +1116,7 @@ void RTFImport::insertUTF8( int ch )
     // We do not test if the character is not allowed in XML:
     // - it will be done later
     // - list definitions need to use char(1), char(2)...
+    // ### FIXME: for high Unicode values, RTF uses negative values
     if (ch > 0x007f)
     {
         if (ch > 0x07ff)
@@ -1146,20 +1143,14 @@ void RTFImport::insertUTF8( int ch )
     token.text = tk;
 }
 
-/**
- * Insert special character (as plain text).
- */
 void RTFImport::insertSymbol( RTFProperty *property )
 {
     insertUTF8( property->value );
 }
 
-/**
- * Insert special character (hexadecimal escape value).
- */
 void RTFImport::insertHexSymbol( RTFProperty * )
 {
-    // Be careful, the value gicen in \' could be only one part of a multi-byte character.
+    // Be careful, the value given in \' could be only one byte of a multi-byte character.
     // So it cannot be assumed that it will result in one character.
     char tmpch[2] = {token.value, '\0'};
 
@@ -1172,9 +1163,6 @@ void RTFImport::insertHexSymbol( RTFProperty * )
     token.text = tk;
 }
 
-/**
- * Insert unicode character.
- */
 void RTFImport::insertUnicodeSymbol( RTFProperty * )
 {
     const int ch = token.value;
