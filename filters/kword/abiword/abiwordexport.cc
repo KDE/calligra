@@ -1,7 +1,7 @@
-// $Header$
+//
 
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -811,13 +811,13 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
     }
 
     if ((layout.marginBottom>=0.0)
-        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
+        && ( force || ( layoutOrigin.marginBottom != layout.marginBottom ) ) )
     {
        props += QString("margin-bottom:%1pt; ").arg(layout.marginBottom);
     }
 
     if ((layout.marginTop>=0.0)
-        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
+        && ( force || ( layoutOrigin.marginTop != layout.marginTop ) ) )
     {
        props += QString("margin-top:%1pt; ").arg(layout.marginTop);
     }

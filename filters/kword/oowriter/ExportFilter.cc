@@ -1048,7 +1048,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
     styleKey += ',';
 
     if ((layout.marginBottom>=0.0)
-        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
+        && ( force || ( layoutOrigin.marginBottom != layout.marginBottom ) ) )
     {
        props += QString("fo:margin-bottom=\"%1pt\" ").arg(layout.marginBottom);
        styleKey += QString::number(layout.marginBottom);
@@ -1057,7 +1057,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
     styleKey += ',';
 
     if ((layout.marginTop>=0.0)
-        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
+        && ( force || ( layoutOrigin.marginTop != layout.marginTop ) ) )
     {
        props += QString("fo:margin-top=\"%1pt\" ").arg(layout.marginTop);
        styleKey += QString::number(layout.marginTop);
