@@ -14,7 +14,7 @@
    <printrepeatrows bottom="0" top="0" />
    <cell row="9" column="3" >
     <format brushstyle="0" brushcolor="#ff0000" bgcolor="#cccccc" alignY="2" format="0" faktor="1" precision="1" align="4" >
-     <font size="12" family="Helvetica" bold="yes" weight="75" italic="yes" />
+     <font bold="yes" weight="75" italic="yes" />
      <pen width="0" style="1" color="#000000" />
      <left-border>
       <pen width="1" style="1" color="#000000" />
@@ -38,7 +38,7 @@
    </cell>
    <cell row="5" column="3" >
     <format brushstyle="0" brushcolor="#ff0000" bgcolor="#ffffff" alignY="2" format="0" faktor="1" precision="2" align="4" >
-     <font size="10" family="Helvetica" bold="yes" weight="75" />
+     <font size="10" bold="yes" weight="75" />
      <pen width="0" style="1" color="#000000" />
      <left-border>
       <pen width="1" style="1" color="#000000" />
@@ -57,7 +57,7 @@
    </cell>
    <cell row="7" column="3" >
     <format>
-     <font size="10" family="Helvetica" bold="yes" weight="75" />
+     <font size="10" bold="yes" weight="75" />
      <left-border>
       <pen width="1" style="1" color="#000000" />
      </left-border>
@@ -83,7 +83,7 @@
    </cell>
    <cell row="3" column="3" >
     <format>
-     <font size="10" family="Helvetica" bold="yes" weight="75" />
+     <font size="10" bold="yes" weight="75" />
      <left-border>
       <pen width="1" style="1" color="#000000" />
      </left-border>
@@ -105,7 +105,7 @@
    </cell>
    <cell row="1" column="1" >
     <format>
-     <font size="16" family="Helvetica" bold="yes" weight="75" italic="yes" />
+     <font size="16" bold="yes" weight="75" italic="yes" />
     </format>
     <text dataType="Str" >Body Mass Index (BMI) Calculator</text>
    </cell>

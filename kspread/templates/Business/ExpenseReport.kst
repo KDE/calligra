@@ -51,36 +51,36 @@
    </cell>
    <cell row="28" column="7" >
     <format>
-     <font size="10" family="Helvetica" weight="50" italic="yes" />
+     <font weight="50" italic="yes" />
     </format>
     <text dataType="Str" >Date</text>
    </cell>
    <cell row="28" column="6" >
     <format>
-     <font size="10" family="Helvetica" weight="50" italic="yes" />
+     <font weight="50" italic="yes" />
     </format>
    </cell>
    <cell row="28" column="5" >
     <format>
-     <font size="10" family="Helvetica" weight="50" italic="yes" />
+     <font weight="50" italic="yes" />
     </format>
     <text dataType="Str" >Approved by</text>
    </cell>
    <cell row="28" column="3" >
     <format>
-     <font size="10" family="Helvetica" weight="50" italic="yes" />
+     <font weight="50" italic="yes" />
     </format>
     <text dataType="Str" >Date</text>
    </cell>
    <cell row="28" column="2" >
     <format>
-     <font size="10" family="Helvetica" weight="50" italic="yes" />
+     <font weight="50" italic="yes" />
     </format>
     <text dataType="Str" >Prepared by</text>
    </cell>
    <cell row="1" column="3" >
     <format brushstyle="0" brushcolor="#ff0000" float="3" alignY="2" format="0" floatcolor="2" faktor="1" indent="0" precision="-1" angle="0" align="4" >
-     <font size="18" family="Helvetica" bold="yes" weight="75" />
+     <font size="18" bold="yes" weight="75" />
      <left-border>
       <pen width="0" style="0" color="#000000" />
      </left-border>
@@ -104,7 +104,7 @@
    </cell>
    <cell row="4" column="1" >
     <format>
-     <font size="10" family="Helvetica" bold="yes" weight="75" italic="yes" />
+     <font bold="yes" weight="75" italic="yes" />
      <bottom-border>
       <pen width="1" style="1" color="#000000" />
      </bottom-border>
@@ -113,7 +113,7 @@
    </cell>
    <cell row="4" column="2" >
     <format>
-     <font size="10" family="Helvetica" bold="yes" weight="75" italic="yes" />
+     <font bold="yes" weight="75" italic="yes" />
      <bottom-border>
       <pen width="1" style="1" color="#000000" />
      </bottom-border>
@@ -121,7 +121,7 @@
    </cell>
    <cell row="4" column="3" >
     <format>
-     <font size="10" family="Helvetica" bold="yes" weight="75" italic="yes" />
+     <font bold="yes" weight="75" italic="yes" />
      <bottom-border>
       <pen width="1" style="1" color="#000000" />
      </bottom-border>
@@ -229,7 +229,7 @@
    </cell>
    <cell row="4" column="7" >
     <format>
-     <font size="10" family="Helvetica" bold="yes" weight="75" italic="yes" />
+     <font bold="yes" weight="75" italic="yes" />
      <bottom-border>
       <pen width="1" style="1" color="#000000" />
      </bottom-border>
@@ -246,7 +246,7 @@
    </cell>
    <cell row="4" column="8" >
     <format>
-     <font size="10" family="Helvetica" bold="yes" weight="75" italic="yes" />
+     <font bold="yes" weight="75" italic="yes" />
      <bottom-border>
       <pen width="1" style="1" color="#000000" />
      </bottom-border>
@@ -268,7 +268,7 @@
    </cell>
    <cell row="22" column="4" >
     <format brushstyle="0" brushcolor="#ff0000" float="3" alignY="2" format="0" floatcolor="2" faktor="1" indent="0" precision="-1" angle="0" align="4" >
-     <font size="10" family="Helvetica" weight="50" />
+     <font weight="50" />
      <left-border>
       <pen width="0" style="0" color="#000000" />
      </left-border>
@@ -417,7 +417,7 @@
    </cell>
    <cell row="22" column="5" >
     <format brushstyle="0" brushcolor="#ff0000" float="3" alignY="2" format="0" floatcolor="2" faktor="1" indent="0" precision="-1" angle="0" align="4" >
-     <font size="10" family="Helvetica" weight="50" />
+     <font weight="50" />
      <left-border>
       <pen width="0" style="0" color="#000000" />
      </left-border>
@@ -454,7 +454,7 @@
    </cell>
    <cell row="22" column="6" >
     <format brushstyle="0" brushcolor="#ff0000" float="3" alignY="2" format="0" floatcolor="2" faktor="1" indent="0" precision="-1" angle="0" align="4" >
-     <font size="10" family="Helvetica" weight="50" />
+     <font weight="50" />
      <left-border>
       <pen width="0" style="0" color="#000000" />
      </left-border>
@@ -603,7 +603,7 @@
    </cell>
    <cell row="22" column="7" >
     <format brushstyle="0" brushcolor="#ff0000" float="3" alignY="2" format="0" floatcolor="2" faktor="1" indent="0" precision="-1" angle="0" align="3" >
-     <font size="10" family="Helvetica" weight="50" />
+     <font weight="50" />
      <left-border>
       <pen width="1" style="1" color="#000000" />
      </left-border>
@@ -653,7 +653,7 @@
    </cell>
    <cell row="22" column="8" >
     <format>
-     <font size="10" family="Helvetica" bold="yes" weight="75" />
+     <font bold="yes" weight="75" />
      <left-border>
       <pen width="1" style="1" color="#000000" />
      </left-border>
@@ -804,7 +804,7 @@
    </cell>
    <cell row="24" column="8" >
     <format>
-     <font size="10" family="Helvetica" bold="yes" weight="75" />
+     <font bold="yes" weight="75" />
      <left-border>
       <pen width="1" style="1" color="#000000" />
      </left-border>
@@ -1052,7 +1052,7 @@
    </cell>
    <cell row="2" column="3" >
     <format brushstyle="0" brushcolor="#ff0000" float="3" alignY="2" format="0" floatcolor="2" faktor="1" indent="0" precision="-1" angle="0" align="4" >
-     <font size="18" family="Helvetica" weight="50" />
+     <font size="18" weight="50" />
      <left-border>
       <pen width="0" style="0" color="#000000" />
      </left-border>
