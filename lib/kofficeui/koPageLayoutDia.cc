@@ -406,7 +406,7 @@ void KoPageLayoutDia::setupTab1()
 
     // ------------- preview -----------
     pgPreview = new KoPagePreview( tab1, "Preview", layout );
-    grid1->addMultiCellWidget( pgPreview, 1, 4, 1, 1 );
+    grid1->addMultiCellWidget( pgPreview, 1, 3, 1, 1 );
 
     setValuesTab1();
     updatePreview( layout );
@@ -433,13 +433,25 @@ void KoPageLayoutDia::setValuesTab1()
     pgPreview->setPageLayout( layout );
 }
 
-void KoPageLayoutDia::setValuesTab1Helper() {
+void KoPageLayoutDia::setValuesTab1Helper() 
+{
     epgWidth->setValue( KoUnit::ptToUnit( layout.ptWidth, m_unit ) );
+    epgWidth->setSuffix( KoUnit::unitName( m_unit ) );
+
     epgHeight->setValue( KoUnit::ptToUnit( layout.ptHeight, m_unit ) );
+    epgHeight->setSuffix( KoUnit::unitName( m_unit ) );
+
     ebrLeft->setValue( KoUnit::ptToUnit( layout.ptLeft, m_unit ) );
+    ebrLeft->setSuffix( KoUnit::unitName( m_unit ) );
+
     ebrRight->setValue( KoUnit::ptToUnit( layout.ptRight, m_unit ) );
+    ebrRight->setSuffix( KoUnit::unitName( m_unit ) );
+
     ebrTop->setValue( KoUnit::ptToUnit( layout.ptTop, m_unit ) );
+    ebrTop->setSuffix( KoUnit::unitName( m_unit ) );
+
     ebrBottom->setValue( KoUnit::ptToUnit( layout.ptBottom, m_unit ) );
+    ebrBottom->setSuffix( KoUnit::unitName( m_unit ) );
 }
 
 /*================ setup header and footer tab ===================*/
