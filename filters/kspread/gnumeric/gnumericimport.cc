@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1999 David Faure <faure@kde.org>
+   Copyright (C) 2005 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -901,11 +902,11 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
       if ( !repeate.isEmpty() )
       {
           KSpreadRange range(repeate);
-          kdDebug()<<" repeate :"<<repeate<<"range. ::start row : "<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ()<<endl;
+          //kdDebug()<<" repeate :"<<repeate<<"range. ::start row : "<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ()<<endl;
           table->print()->setPrintRepeatRows( qMakePair( range.startRow (),range.endRow ()) );
       }
   }
-  //TODO fix pb KSpreadPoint::init: row value too high (row: 65536)
+
   QDomElement repeateRow( printInfo.namedItem("gmr:repeat_left").toElement() );
   if ( !repeateRow.isNull() )
   {
@@ -915,17 +916,10 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
           //fix row too high
           repeate = repeate.replace( "65536", "32500" );
           KSpreadRange range(repeate);
-          kdDebug()<<" repeate :"<<repeate<<"range. ::start row : "<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ()<<endl;
+          //kdDebug()<<" repeate :"<<repeate<<"range. ::start row : "<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ()<<endl;
           table->print()->setPrintRepeatColumns( qMakePair( range.startCol (),range.endCol ()) );
       }
   }
-
-  //Repeate column/row
-  //<gmr:repeat_top value="A1:IV5"/>
-  //<gmr:repeat_left value="B1:D65536"/>
-  //<printrepeatcolumns right="2" left="1" />
-  //<printrepeatrows bottom="4" top="1" />
-
 
   QDomElement orient( printInfo.namedItem("gmr:orientation").toElement() );
   if ( !orient.isNull() )
@@ -1395,6 +1389,41 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
               if ( !validation_element.isNull() )
               {
                   kdDebug(30521)<<" Cell validation \n";
+                  KSpreadValidity* kspread_validity = kspread_cell->getValidity();
+                  if ( validation_element.hasAttribute( "AllowBlank" ) && validation_element.attribute( "AllowBlank" )=="true" )
+                  {
+                      kspread_validity->allowEmptyCell=true;
+                  }
+                  if ( validation_element.hasAttribute( "Title" ))
+                  {
+                      kspread_validity->title=validation_element.attribute( "Title" );
+                  }
+                  if ( validation_element.hasAttribute( "Message" ))
+                  {
+                      kspread_validity->message=validation_element.attribute( "Message" );
+                  }
+                  if ( validation_element.hasAttribute( "Style" ) )
+                  {
+                      int value = validation_element.attribute( "Style" ).toInt();
+                      switch( value )
+                      {
+                      case 0:
+                          kspread_validity->displayMessage=false;
+                          break;
+                      case 1:
+                          kspread_validity->m_action=Stop;
+                          break;
+                      case 2:
+                          kspread_validity->m_action=Warning;
+                          break;
+                      case 3:
+                          kspread_validity->m_action=Information;
+                          break;
+                      default:
+                          kdDebug()<<" Error in validation style :"<<value<<endl;
+                          break;
+                      }
+                  }
 
                   //<gmr:Validation Style="0" Type="1" Operator="0" AllowBlank="true" UseDropdown="false">
                   //<gmr:Expression0>745</gmr:Expression0>

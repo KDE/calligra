@@ -248,20 +248,26 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, KSpreadCell 
     val.setAttribute( "Title", kspread_validity->title );
     val.setAttribute( "Message", kspread_validity->message );
     val.setAttribute( "AllowBlank", kspread_validity->allowEmptyCell ? "true":"false" );
-    switch( kspread_validity->m_action )
-    {
-    case Stop:
-        val.setAttribute("Style", "1" );
-        break;
-    case Warning:
-        val.setAttribute("Style", "2" );
-        break;
-    case Information:
-        val.setAttribute("Style", "3" );
-        break;
-    }
     if ( !kspread_validity->displayMessage )
+    {
         val.setAttribute("Style", "0" );
+    }
+    else
+    {
+        switch( kspread_validity->m_action )
+        {
+        case Stop:
+            val.setAttribute("Style", "1" );
+            break;
+        case Warning:
+            val.setAttribute("Style", "2" );
+            break;
+        case Information:
+            val.setAttribute("Style", "3" );
+            break;
+        }
+    }
+
     switch( kspread_validity->m_cond )
     {
     case None:
