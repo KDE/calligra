@@ -252,12 +252,11 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_paSaveAs = KStdAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
     d->m_paPrint = KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
     d->m_paPrintPreview = KStdAction::printPreview( this, SLOT( slotFilePrintPreview() ), actionCollection(), "file_print_preview" );
+    d->m_sendfile = KStdAction::mail( this, SLOT( slotEmailFile() ), actionCollection(), "file_send_file");
+
     d->m_paCloseFile = KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
     KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(), "file_quit" );
 
-    d->m_sendfile = new KAction( i18n( "Send File..."), "mail_send", 0,
-                    this, SLOT( slotEmailFile() ),
-                    actionCollection(), "file_send_file");
     d->m_reloadfile = new KAction( i18n( "Reload"), 0,
                     this, SLOT( slotReloadFile() ),
                     actionCollection(), "file_reload_file");
