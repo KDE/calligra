@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,8 +38,14 @@ AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
 
     kapp->restoreOverrideCursor();
 
-    m_dialog->comboBoxEncoding->insertStringList(KGlobal::charsets()->availableEncodingNames());
-    //m_dialog->comboBoxEncoding->insertStringList(KGlobal::charsets()->descriptiveEncodingNames());
+    QStringList encodings(KGlobal::charsets()->availableEncodingNames());
+    // Add a few non-standard encodings
+    encodings << "Apple Roman"; // Apple 
+    encodings << "IBM 850" << "IBM 866"; // MS DOS
+    encodings << "CP 1258"; // Windows
+
+    m_dialog->comboBoxEncoding->insertStringList(encodings);
+    //m_dialog->comboBoxEncoding->insertStringList(encodings);
 
     resize(size()); // Is this right?
 
