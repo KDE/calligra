@@ -6648,8 +6648,10 @@ void KWView::importStyle()
         {
             followStyle.insert( style.current()->translatedName(), style.current()->followingStyle()->translatedName());
             m_doc->styleCollection()->addStyleTemplate(new KWStyle(*style.current()));
-            m_doc->setModified( true );
         }
+        if ( style.count() > 0 )
+            m_doc->setModified( true );
+
         m_doc->updateAllStyleLists();
 
         QMapIterator<QString, QString> itFollow = followStyle.begin();
