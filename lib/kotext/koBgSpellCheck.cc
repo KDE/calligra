@@ -263,7 +263,7 @@ void KoBgSpellCheck::spellCheckerMisspelling(const QString &old, int pos )
     kdDebug(32500) << "KoBgSpellCheck::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
 #endif
     KoTextObject * fs = m_bgSpell.currentTextObj;
-    Q_ASSERT( fs );
+    //Q_ASSERT( fs );
     if ( !fs ) return;
     KoTextParag* parag = m_bgSpell.currentParag;
     if ( !parag ) return;
