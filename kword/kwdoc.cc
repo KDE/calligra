@@ -165,6 +165,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     _viewFrameBorders = TRUE;
     _viewTableGrid = TRUE;
 
+    m_bDontCheckMajWord=false;
+
     m_autoFormat = new KWAutoFormat(this);
 
     m_commandHistory = new KWCommandHistory( this );

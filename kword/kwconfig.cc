@@ -87,6 +87,17 @@ configureSpellPage::configureSpellPage( KWView *_view, QWidget *parent , char *n
   QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1,15,7);
   _spellConfig  = new KSpellConfig(tmpQGroupBox, 0L, m_pView->kWordDocument()->getKSpellConfig(), false );
   grid1->addWidget(_spellConfig,0,0);
+#if 0
+  _dontCheckUpperWord= new QCheckBox(i18n("Don't check Maj word:"),tmpQGroupBox);
+  grid1->addWidget(_dontCheckUpperWord,1,0);
+
+  if( config->hasGroup("KSpell kword") )
+    {
+        config->setGroup( "KSpell kword" );
+        _dontCheckUpperWord->setChecked(config->readBoolEntry("KSpell_dont_check_maj",false));
+    }
+  _dontCheckUpperWord->setEnabled(false);
+#endif
   box->addWidget( tmpQGroupBox);
 }
 
@@ -99,7 +110,13 @@ void configureSpellPage::apply()
   config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
   config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
   config->writeEntry ("KSpell_Client",  _spellConfig->client());
+
   m_pView->kWordDocument()->setKSpellConfig(*_spellConfig);
+
+#if 0
+   config->writeEntry ("KSpell_dont_check_maj",(int)_dontCheckUpperWord->isChecked());
+  m_pView->kWordDocument()->setDontCheckMajWord(true);
+#endif
 }
 
 void configureSpellPage::slotDefault()
@@ -110,6 +127,9 @@ void configureSpellPage::slotDefault()
     _spellConfig->setDictFromList( FALSE);
     _spellConfig->setEncoding (KS_E_ASCII);
     _spellConfig->setClient (KS_CLIENT_ISPELL);
+#if 0
+    _dontCheckUpperWord->setChecked(false);
+#endif
 }
 
 configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent , char *name )

@@ -287,6 +287,7 @@ protected:
 
     void startKSpell();
 
+    QStringList ignoreWord();
 private:
     KWDocument *m_doc;
 

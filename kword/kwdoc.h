@@ -460,6 +460,9 @@ public:
     bool getViewTableGrid() { return _viewTableGrid; }
     void setViewTableGrid(bool _b) { _viewTableGrid=_b;}
 
+    bool getDontCheckMajWord() { return m_bDontCheckMajWord; }
+    void setDontCheckMajWord(bool _b) { m_bDontCheckMajWord=_b;}
+
     // in pt
     double getIndentValue() { return m_indent; }
     void setIndentValue(double _ind) { m_indent=_ind; }
@@ -605,6 +608,8 @@ private:
     bool m_bShowRuler;
 
     int m_iNbPagePerRow;
+
+    bool m_bDontCheckMajWord;
 };
 
 
