@@ -679,9 +679,9 @@ void KoStylePreview::drawContents( QPainter *painter )
     // Center vertically, but not horizontally, to keep the parag alignment working,
     textRect.moveTopLeft( QPoint( whiteRect.x(),
                                   whiteRect.y() + ( whiteRect.height() - textRect.height() ) / 2 ) );
-    // Some white pixels on each side
+    // Move it from the left border a little
     textRect.rLeft() += 4;
-    textRect.rRight() -= 4;
+    textRect.rRight() += 4;
     //kdDebug(32500) << "KoStylePreview::drawContents textRect=" << DEBUGRECT(textRect)
     //          << " textSize=" << textSize.width() << "," << textSize.height() << endl;
     painter->setClipRect( textRect.intersect( whiteRect ) );
