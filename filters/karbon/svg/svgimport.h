@@ -46,8 +46,8 @@ protected:
 		{
 			stroke.setType( VStroke::none ); // default is no stroke
 		}
-		VFill	fill;
-		VStroke	stroke;
+		VFill		fill;
+		VStroke		stroke;
 	};
 
 	void parseGroup( VGroup *, const QDomElement & );

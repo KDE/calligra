@@ -152,12 +152,12 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			int width = b.attribute( "width" ).toInt();
 			int height = b.attribute( "height" ).toInt();
 			VObject *rect = new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
-			//QDomElement object = b.namedItem( "polyline" ).namedItem( "gobject" ).toElement();
-			//parseGObject( rect, object );
+			parseStyle( rect, b );
 			if( grp )
 				grp->append( rect );
 			else
 				m_document.append( rect );
+			m_gc.pop();
 		}
 		else if( b.tagName() == "ellipse" )
 		{
@@ -169,11 +169,12 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			double top	= b.attribute( "cy" ).toDouble() + ( ry / 2.0 );
 			// Append the ellipse to the document
 			VObject *ellipse = new VEllipse( 0L, KoPoint( left, top ), rx * 2.0, ry * 2.0 );
-			//parseGObject( ellipse, object );
+			parseStyle( ellipse, b );
 			if( grp )
 				grp->append( ellipse );
 			else
 				m_document.append( ellipse );
+			m_gc.pop();
 		}
 		else if( b.tagName() == "circle" )
 		{
@@ -182,11 +183,12 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			double top	= b.attribute( "cy" ).toDouble() + ( r / 2.0 );
 			// Append the ellipse to the document
 			VObject *circle = new VEllipse( 0L, KoPoint( left, top ), r * 2.0, r * 2.0 );
-			//parseGObject( circle, object );
+			parseStyle( circle, b );
 			if( grp )
 				grp->append( circle );
 			else
 				m_document.append( circle );
+			m_gc.pop();
 		}
 		else if( b.tagName() == "polyline" || b.tagName() == "polygon" )
 		{
