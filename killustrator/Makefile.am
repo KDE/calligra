@@ -18,8 +18,9 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/killustrator
 rc_DATA = KIllustrator.rc
 
+lib_LTLIBRARIES = libkillustratorpart.la killustrator.la
+
 ## The kdeinit loadable module
-lib_LTLIBRARIES = killustrator.la
 killustrator_la_SOURCES = main.cc
 killustrator_la_LDFLAGS = $(all_libraries) -avoid-version -module
 killustrator_la_LIBADD = libkillustratorpart.la
@@ -34,7 +35,6 @@ dummy.cc:
 	echo > dummy.cc
 
 ## The part
-lib_LTLIBRARIES = libkillustratorpart.la
 libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
         KIllustrator_view.cc \
         InsertPartTool.cc GPart.cc KIllustrator_factory.cc \

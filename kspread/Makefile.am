@@ -2,8 +2,8 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) \
 -I$(top_srcdir)/lib/koscript -I$(top_builddir)/lib/koscript -I$(top_srcdir)/lib/kformula \
 -I$(top_srcdir)/interfaces $(all_includes)
 
+lib_LTLIBRARIES = libkspreadpart.la kspread.la
 ## The part
-lib_LTLIBRARIES = libkspreadpart.la
 libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_dlg_formula.cc \
 	kspread_functions.cc \
@@ -36,7 +36,6 @@ libkspreadpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la ../lib/koscr
 libkspreadpart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
-lib_LTLIBRARIES = kspread.la
 kspread_la_SOURCES = main.cc
 kspread_la_LDFLAGS = $(all_libraries) -avoid-version -module
 kspread_la_LIBADD = libkspreadpart.la 

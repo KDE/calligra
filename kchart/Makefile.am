@@ -1,7 +1,7 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(top_srcdir)/interfaces -I$(interfacedir) $(all_includes)
 
+lib_LTLIBRARIES = libkchartpart.la kchart.la
 ## The part
-lib_LTLIBRARIES = libkchartpart.la
 libkchartpart_la_SOURCES = kchart_part.cc \
 	kchart_view.cc kchart_factory.cc \
 	engine.cc \
@@ -47,7 +47,6 @@ libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
                           $(top_builddir)/lib/kofficeui/libkofficeui.la
 
 ## The kdeinit loadable module
-lib_LTLIBRARIES = kchart.la
 kchart_la_SOURCES = main.cc
 kchart_la_LDFLAGS = $(all_libraries) -avoid-version -module
 kchart_la_LIBADD = libkchartpart.la

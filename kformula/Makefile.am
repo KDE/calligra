@@ -2,8 +2,8 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula2 -I$(interfacedir) $(all_includes)
 KDE_CXXFLAGS = $(USE_RTTI)
 
+lib_LTLIBRARIES = libkformulapart.la kformulamain.la
 ## The part
-lib_LTLIBRARIES = libkformulapart.la
 libkformulapart_la_SOURCES = kformula_doc.cc \
 	kformula_view.cc kformula_factory.cc \
 	matrixwidget.cc
@@ -12,7 +12,6 @@ libkformulapart_la_LIBADD = ../lib/kofficeui/libkofficeui.la ../lib/kformula2/li
 libkformulapart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
-lib_LTLIBRARIES = kformulamain.la
 kformulamain_la_SOURCES = main.cc
 kformulamain_la_LDFLAGS = $(all_libraries) -module -avoid-version
 kformulamain_la_LIBADD = libkformulapart.la

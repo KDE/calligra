@@ -3,8 +3,8 @@ AM_CPPFLAGS = -DQT_NO_CAST_ASCII
 
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
+lib_LTLIBRARIES = libgraphitepart.la graphite.la
 ## The part
-lib_LTLIBRARIES = libgraphitepart.la
 libgraphitepart_la_SOURCES = graphitepart.cc \
     graphiteview.cc graphitefactory.cc gobject.cc \
     gcanvas.cc gobjectfactory.cc gline.cc \
@@ -16,7 +16,6 @@ libgraphitepart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
 libgraphitepart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
-lib_LTLIBRARIES = graphite.la
 graphite_la_SOURCES = main.cc
 graphite_la_LDFLAGS = $(all_libraries) -module -avoid-version
 graphite_la_LIBADD = libgraphitepart.la
