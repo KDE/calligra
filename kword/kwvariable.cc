@@ -231,7 +231,9 @@ KWFootNoteVariable::KWFootNoteVariable( KoTextDocument *textdoc, KoVariableForma
     : KoVariable( textdoc, varFormat, varColl ),
       m_doc(doc),
       m_frameset( 0L ),
-      m_numberingType( Auto )
+      m_numberingType( Auto ),
+      m_num( -1 ),
+      m_numDisplay( -1 )
 {
     m_varValue = QVariant( QString::null );
 }
