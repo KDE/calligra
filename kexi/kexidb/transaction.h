@@ -26,7 +26,7 @@ namespace KexiDB {
 
 /*! Helper class for using inside methods for given connection. 
 	Starts the transaction on ctor and rollbacks on destruction.
-	If transaction is commited or rolled back outside this class 
+	If transaction is committed or rolled back outside this class 
 	in the meantime, nothing happens on destruction.
 */
 class KEXI_DB_EXPORT Transaction

@@ -443,7 +443,7 @@ KexiQueryDesignerGuiEditor::slotItemSelected(KexiTableItem *)
 	{
             emit contextHelp(i18n("Queries"),
                              // xgettext:no-c-format
-                             i18n("Folowing conditions are possible:<br>\n"
+                             i18n("Following conditions are possible:<br>\n"
                                   "<font size=\"-1\">\n"
                                   "<table width=\"95%\"><tr><td><font size=\"-1\">= 'abc'</td>\n"
                                   "<td><font size=\"-1\">matches string <i>abc</i></td></tr>\n"
