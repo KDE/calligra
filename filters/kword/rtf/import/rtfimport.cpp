@@ -114,6 +114,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"cellx",	insertCellDef,		0L, 0 ),
 	MEMBER(	0L,		"cf",		setNumericProperty,	state.format.color, 0 ),
 	PROP(	0L,		"chdate",	insertDateTime,		0L, TRUE ),
+	PROP(	0L,		"chpgn",	insertPageNumber,		0L, 0 ),
 	PROP(	0L,		"chtime",	insertDateTime,		0L, FALSE ),
 	MEMBER(	0L,		"clbrdrb",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[3]) ),
 	MEMBER(	0L,		"clbrdrl",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[0]) ),
@@ -1451,6 +1452,19 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     frameSets.addKey( dt, rawFileName.utf8() );
     frameSets.closeNode( "PICTURE" );
     frameSets.closeNode( "FRAMESET" );
+}
+
+/**
+ * Insert a pagenumber field
+ */
+void RTFImport::insertPageNumber( RTFProperty * )
+{
+    DomNode node;
+    node.addNode( "PGNUM" );
+    node.setAttribute( "subtype", 0 );
+    node.setAttribute( "value", 0 );
+    node.closeNode("PGNUM");
+    addVariable( node, 4, "NUMBER", &state.format);
 }
 
 /**

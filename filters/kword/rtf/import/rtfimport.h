@@ -244,6 +244,7 @@ public:
     void insertHexSymbol( RTFProperty * );
     void insertUnicodeSymbol( RTFProperty * );
     void insertDateTime( RTFProperty *property );
+    void insertPageNumber( RTFProperty * );
     void parseBlipUid( RTFProperty* );
     void parseField( RTFProperty* );
     void parseFldinst( RTFProperty* );
