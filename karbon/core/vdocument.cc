@@ -125,17 +125,14 @@ VDocument::append( VObject* object )
 	m_activeLayer->append( object );
 }
 
-QDomDocument
-VDocument::saveXML() const
+void
+VDocument::saveXML( QDomDocument &doc ) const
 {
-	QDomDocument doc;
-	QDomElement me = doc.createElement( "DOC" );
-	doc.appendChild( me );
+	QDomElement me = doc.documentElement();
 
 	// TODO : add paper size/orientation storing code here
 	// maybe we need to provide it as param or member var? (Rob)
 	save( me );
-	return doc;
 }
 
 void

@@ -156,7 +156,9 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 QDomDocument
 KarbonPart::saveXML()
 {
-	return m_doc.saveXML();
+	QDomDocument doc = createDomDocument( "DOC", CURRENT_DTD_VERSION );
+	m_doc.saveXML( doc );
+	return doc;
 }
 
 void
@@ -201,20 +203,18 @@ KarbonPart::repaintAllViews( bool repaint )
 {
 	QPtrListIterator<KoView> itr( views() );
 	for( ; itr.current() ; ++itr )
-	{
 		static_cast<KarbonView*>( itr.current() )->canvasWidget()->repaintAll( repaint );
-	}
 }
 
 
 void
 KarbonPart::paintContent( QPainter& painter, const QRect& rect,
-	bool /*transparent*/, double zoomX, double zoomY )
+	bool /*transparent*/, double zoomX, double /*zoomY*/ )
 {
 	kdDebug() << "**** part->paintContent()" << endl;
 	painter.eraseRect( rect );
 	VPainterFactory *painterFactory = new VPainterFactory;
-	QPaintDeviceMetrics metrics( painter.device() );
+	//QPaintDeviceMetrics metrics( painter.device() );
 	painterFactory->setPainter( painter.device(), rect.width(), rect.height() );
 	VPainter *p = painterFactory->painter();
 	//VPainter *p = new VKoPainter( painter.device() );
