@@ -473,7 +473,7 @@ bool KWmf::parse(
         stream >> eheader.szlDevice;
         stream >> eheader.szlMillimeters;
 
-        kdError(s_area) << "WMF Extended Header NOT YET IMPLEMENTED, SORRY.";
+        kdError(s_area) << "WMF Extended Header NOT YET IMPLEMENTED, SORRY." << endl;
         /*
         if (mSingleStep)
         {
