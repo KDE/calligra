@@ -23,6 +23,7 @@
 #include <qobjectlist.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <koApplication.h>
 
 /*****************************************
  *
@@ -201,15 +202,15 @@ KoDocumentInfoAuthor::KoDocumentInfoAuthor( KoDocumentInfo* info )
 
 void KoDocumentInfoAuthor::initParameters()
 {
-    KConfig config( "kofficerc" );
-    if ( config.hasGroup( "Author" ) ) {
-        config.setGroup( "Author" );
-        m_telephone=config.readEntry( "telephone" );
-        m_fax=config.readEntry( "fax" );
-        m_country=config.readEntry( "country" );
-        m_postalCode=config.readEntry( "postal-code" );
-        m_city=config.readEntry( "city" );
-        m_street=config.readEntry( "street" );
+    KConfig* config = KOAPP->kofficeConfig();
+    if ( config->hasGroup( "Author" ) ) {
+        KConfigGroupSaver cgs( config, "Author" );
+        m_telephone=config->readEntry( "telephone" );
+        m_fax=config->readEntry( "fax" );
+        m_country=config->readEntry( "country" );
+        m_postalCode=config->readEntry( "postal-code" );
+        m_city=config->readEntry( "city" );
+        m_street=config->readEntry( "street" );
     }
 }
 

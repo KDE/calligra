@@ -26,7 +26,7 @@ using namespace std;
 
 #define KOAPP ((KoApplication *)KApplication::kApplication())
 
-class KoApplicationIface;
+class KoApplicationPrivate;
 
 /**
  *  Base class for all KOffice apps
@@ -76,10 +76,21 @@ public:
      * @return true if the application is starting
      */
     static bool isStarting();
+
+    /**
+     * @return the global KConfig object around kofficerc.
+     * kofficerc is used for KOffice-wide settings, from totally unrelated classes,
+     * so this is the centralization of the KConfig object so that the file is
+     * parsed only once
+     */
+    KConfig* kofficeConfig();
+
 private:
     bool initHack();
-    KoApplicationIface *m_appIface;  // to avoid a leak
+    KoApplicationPrivate* d;
     static bool m_starting ; // is the application starting or not
+    class ResetStarting;
+    friend class ResetStarting;
 };
 
 #endif

@@ -44,9 +44,24 @@ static const KCmdLineOptions options[]=
 	{0,0,0}
 };
 
+bool KoApplication::m_starting = true;
+
+class KoApplicationPrivate
+{
+public:
+    KoApplicationPrivate()  {
+        m_appIface = 0L;
+        m_kofficeConfig = 0L;
+    }
+    KoApplicationIface *m_appIface;  // to avoid a leak
+    KConfig* m_kofficeConfig;
+};
+
 KoApplication::KoApplication()
         : KApplication( initHack() )
 {
+    d = new KoApplicationPrivate;
+
     // Install the libkoffice* translations
     KGlobal::locale()->insertCatalogue("koffice");
 
@@ -59,10 +74,10 @@ KoApplication::KoApplication()
     KGlobal::iconLoader()->addAppDir("koffice");
 
     // Prepare a DCOP interface
-    m_appIface=new KoApplicationIface();  // avoid the leak
-    dcopClient()->setDefaultObject( m_appIface->objId() );
+    d->m_appIface = new KoApplicationIface;
+    dcopClient()->setDefaultObject( d->m_appIface->objId() );
 
-    //m_starting = 1;
+    m_starting = true;
 }
 
 // This gets called before entering KApplication::KApplication
@@ -72,8 +87,20 @@ bool KoApplication::initHack()
     return true;
 }
 
+// Small helper for start() so that we don't forget to reset m_starting before a return
+class KoApplication::ResetStarting
+{
+public:
+    ~ResetStarting()  {
+        KoApplication::m_starting = false;
+    }
+};
+
 bool KoApplication::start()
 {
+    ResetStarting resetStarting; // reset m_starting to false when we're done
+    Q_UNUSED( resetStarting );
+
     // Find out about the mimetype which is natively supported
     // by this application.
     QCString nativeFormat = KoDocument::readNativeFormatMimeType();
@@ -204,19 +231,24 @@ bool KoApplication::start()
 
 KoApplication::~KoApplication()
 {
-    delete m_appIface;
+    delete d->m_kofficeConfig;
+    delete d->m_appIface;
+    delete d;
 }
 
 bool KoApplication::isStarting()
 {
-    if (KoApplication::m_starting)
-    {
-	KoApplication::m_starting = false;
-        return true;
-    }
-    return false;
+    return KoApplication::m_starting;
 }
 
-bool KoApplication::m_starting = true;
+KConfig* KoApplication::kofficeConfig()
+{
+    if ( !d->m_kofficeConfig ) {
+        qDebug("kofficeConfig - start");
+        d->m_kofficeConfig = new KConfig( "kofficerc" );
+        qDebug("kofficeConfig - end");
+    }
+    return d->m_kofficeConfig;
+}
 
 #include <koApplication.moc>

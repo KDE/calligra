@@ -21,6 +21,7 @@
 
 #include <koDocumentInfoDlg.h>
 #include <koDocumentInfo.h>
+#include <koApplication.h>
 
 #include <sys/stat.h>
 #include <unistd.h>
@@ -165,7 +166,7 @@ void KoDocumentInfoDlg::loadFromKABC()
   phone = addr.phoneNumber( KABC::PhoneNumber::Fax );
   d->m_leFax->setText( phone.number() );
 
-  KABC::Address a = addr.address( KABC::Address::Home ); 
+  KABC::Address a = addr.address( KABC::Address::Home );
   d->m_leCountry->setText( a.country() );
   d->m_lePostalCode->setText( a.postalCode() );
   d->m_leCity->setText( a.locality() );
@@ -335,14 +336,15 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
   authorInfo->setCity( d->m_leCity->text() );
   authorInfo->setStreet( d->m_leStreet->text() );
 
-  KConfig config("kofficerc");
-  config.setGroup( "Author" );
-  config.writeEntry("telephone", d->m_leTelephone->text());
-  config.writeEntry("fax", d->m_leFax->text());
-  config.writeEntry("country",d->m_leCountry->text());
-  config.writeEntry("postal-code",d->m_lePostalCode->text());
-  config.writeEntry("city",  d->m_leCity->text());
-  config.writeEntry("street", d->m_leStreet->text());
+  KConfig* config = KOAPP->kofficeConfig();
+  KConfigGroupSaver cgs( config, "Author" );
+  config->writeEntry("telephone", d->m_leTelephone->text());
+  config->writeEntry("fax", d->m_leFax->text());
+  config->writeEntry("country",d->m_leCountry->text());
+  config->writeEntry("postal-code",d->m_lePostalCode->text());
+  config->writeEntry("city",  d->m_leCity->text());
+  config->writeEntry("street", d->m_leStreet->text());
+  config->sync();
 }
 
 void KoDocumentInfoDlg::save( KoDocumentInfoAbout *aboutInfo )

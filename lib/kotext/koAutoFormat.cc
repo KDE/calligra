@@ -41,6 +41,7 @@
 #include <koSearchDia.h>
 #include <kozoomhandler.h>
 #include <koGlobal.h>
+#include <koApplication.h>
 
 KoAutoFormatEntry::KoAutoFormatEntry(const QString& replace)
     : m_replace( replace )
@@ -185,9 +186,9 @@ KoAutoFormat::~KoAutoFormat()
 
 void KoAutoFormat::loadListOfWordCompletion()
 {
-    KConfig config("kofficerc");
-    KConfigGroupSaver cgs( &config, "Completion Word" );
-    m_listCompletion->insertItems(config.readListEntry( "list" ));
+    KConfig* config = KOAPP->kofficeConfig();
+    KConfigGroupSaver cgs( config, "Completion Word" );
+    m_listCompletion->insertItems(config->readListEntry( "list" ));
 }
 
 void KoAutoFormat::readConfig(bool force)
