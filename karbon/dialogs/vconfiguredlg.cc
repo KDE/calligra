@@ -66,6 +66,7 @@ VConfigureDlg::VConfigureDlg( KarbonView* parent )
 			   BarIcon( "grid", KIcon::SizeMedium ) );
 
 	m_gridPage = new VConfigGridPage( parent, page );
+
 	connect( m_miscPage, SIGNAL( unitChanged( int ) ), m_gridPage, SLOT( slotUnitChanged( int ) ) );
 
 	page = addVBoxPage(
@@ -73,7 +74,6 @@ VConfigureDlg::VConfigureDlg( KarbonView* parent )
 			   BarIcon( "document", KIcon::SizeMedium ) );
 
 	m_defaultDocPage = new VConfigDefaultPage( parent, page );
-
 	connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
 }
 
@@ -330,7 +330,7 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, QVBox* page, char* name )
 	m_snapVertUSpin = new KoUnitDoubleSpinBox( snapGrp, 0.0, fh, 0.1, sh, unit );
 	snapVertLbl->setBuddy( m_snapVertUSpin );
 
-	QGridLayout* gl = new QGridLayout( page );
+	QGridLayout* gl = new QGridLayout();
 	gl->setSpacing( KDialog::spacingHint() );
 	gl->addMultiCellWidget( m_gridChBox, 0, 0, 0, 2 );
 	gl->addMultiCellWidget( m_snapChBox, 1, 1, 0, 2 );
