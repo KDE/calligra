@@ -92,6 +92,23 @@ protected:
 };
 
 /******************************************************************/
+/* class KWBorderPreview                                          */
+/******************************************************************/
+
+class KWBorderPreview : public QGroupBox
+{
+  Q_OBJECT
+
+public:
+  KWBorderPreview(QWidget*,const char*);
+  ~KWBorderPreview() {}
+  
+protected:
+  void drawContents(QPainter*);
+
+};
+
+/******************************************************************/
 /* Class: KWParagDia                                              */
 /******************************************************************/
 
@@ -103,8 +120,9 @@ public:
   const int PD_SPACING = 1;
   const int PD_FLOW = 2;
   const int PD_BORDERS = 4;
+  const int PD_NUMBERING = 8;
 
-  KWParagDia(QWidget*,const char*,int _flags = PD_SPACING | PD_FLOW | PD_BORDERS);
+  KWParagDia(QWidget*,const char*,int _flags = PD_SPACING | PD_FLOW | PD_BORDERS | PD_NUMBERING);
   ~KWParagDia();              
 
   int getFlags() { return flags; }
@@ -135,10 +153,11 @@ public:
 protected:
   void setupTab1();
   void setupTab2();
+  void setupTab3();
   void clearFlows();
 
-  QWidget *tab1,*tab2;
-  QGridLayout *grid1,*grid2,*indentGrid,*spacingGrid,*pSpaceGrid;
+  QWidget *tab1,*tab2,*tab3;
+  QGridLayout *grid1,*grid2,*grid3,*indentGrid,*spacingGrid,*pSpaceGrid;
   KRestrictedLine *eLeft,*eRight,*eFirstLine,*eSpacing,*eBefore,*eAfter;
   QLabel *lLeft,*lRight,*lFirstLine,*lBefore,*lAfter,*lFlow;
   QGroupBox *indentFrame,*spacingFrame,*pSpaceFrame;

@@ -157,11 +157,27 @@ void KWPagePreview2::drawContents(QPainter* p)
 }
 
 /******************************************************************/
+/* class KWBorderPreview                                          */
+/******************************************************************/
+
+/*================================================================*/
+KWBorderPreview::KWBorderPreview(QWidget* parent,const char* name)
+  : QGroupBox(i18n("Preview"),parent,name)
+{
+}
+
+/*================================================================*/
+void KWBorderPreview::drawContents(QPainter* p)
+{
+}
+
+
+/******************************************************************/
 /* Class: KWParagDia                                              */
 /******************************************************************/
 
 /*================================================================*/
-KWParagDia::KWParagDia(QWidget* parent,const char* name,int _flags = PD_SPACING | PD_FLOW | PD_BORDERS)
+KWParagDia::KWParagDia(QWidget* parent,const char* name,int _flags = PD_SPACING | PD_FLOW | PD_BORDERS | PD_NUMBERING)
   : QTabDialog(parent,name,true)
 {
   flags = _flags;
@@ -170,6 +186,8 @@ KWParagDia::KWParagDia(QWidget* parent,const char* name,int _flags = PD_SPACING 
     setupTab1();
   if (_flags & PD_FLOW)
     setupTab2();
+  if (_flags & PD_BORDERS)
+    setupTab3();
 
   setCancelButton(i18n("Cancel"));
   setOkButton(i18n("OK"));
@@ -497,6 +515,18 @@ void KWParagDia::setupTab2()
   grid2->activate();
 
   addTab(tab2,i18n("Flows"));
+}
+
+/*================================================================*/
+void KWParagDia::setupTab3()
+{
+  tab3 = new QWidget(this);
+
+  grid3 = new QGridLayout(tab3,4,2,15,7);
+
+  grid3->activate();
+
+  addTab(tab3,i18n("Borders"));
 }
 
 /*================================================================*/

@@ -53,9 +53,7 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCou
   if (_fromStart)
     {
       // Offset from the top of the page
-      //ptY = document->getPTTopBorder();
       ptY = document->getFrameSet(frameSet - 1)->getFrame(0)->top();
-      //column = 1;
       frame = 1;
       page = 1;
       

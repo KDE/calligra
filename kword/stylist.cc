@@ -110,6 +110,7 @@ void KWStylePreview::drawContents(QPainter *painter)
   QFontMetrics fm(font());
 
   painter->fillRect(r.x() + fm.width('W'),r.y() + fm.height(),r.width() - 2 * fm.width('W'),r.height() - 2 * fm.height(),white);
+  painter->setClipRect(r.x() + fm.width('W'),r.y() + fm.height(),r.width() - 2 * fm.width('W'),r.height() - 2 * fm.height());
 
   QFont f(style->getFormat().getUserFont()->getFontName(),style->getFormat().getPTFontSize());
   f.setBold(style->getFormat().getWeight() == 75 ? true : false);
@@ -121,10 +122,11 @@ void KWStylePreview::drawContents(QPainter *painter)
   painter->setPen(QPen(c));
   painter->setFont(f);
 
-  int y = fm.height();
-  fm = QFontMetrics(painter->font());
-  y += ((height() - 2 * y) - fm.height()) / 2;
-  painter->drawText(20,y + fm.ascent(),i18n("KWord, KOffice's Wordprocessor"));
+  fm = QFontMetrics(f);
+  int y = height() / 2 - fm.height() / 2;
+
+  painter->drawText(20 + style->getPTFirstLineLeftIndent() + style->getPTLeftIndent(),
+		    y,fm.width(i18n("KWord, KOffice's Wordprocessor")),fm.height(),0,i18n("KWord, KOffice's Wordprocessor"));
 }
 
 /******************************************************************/
