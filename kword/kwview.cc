@@ -405,11 +405,11 @@ void KWView::setupActions()
     actionLowerFrame->setToolTip( i18n( "Lower the currently selected frame so that it disappears under any frame that overlaps it" ) );
     actionLowerFrame->setWhatsThis( i18n( "Lower the currently selected frame so that it disappears under any frame that overlaps it. If multiple frames are selected they are all lowered in turn." ) );
 
-    actionBringToFront= new KAction( i18n( "Bring to Front" ), "bring_tofront",
+    actionBringToFront= new KAction( i18n( "Bring to Front" ), "bring_forward",
                                           0, this, SLOT( bringToFront() ),
                                           actionCollection(), "bring_tofront_frame" );
 
-    actionSendBackward= new KAction( i18n( "Send to Back" ), "send_toback",
+    actionSendBackward= new KAction( i18n( "Send to Back" ), "send_backward",
                                           0, this, SLOT( sendToBack() ),
                                           actionCollection(), "send_toback_frame" );
 
@@ -2219,10 +2219,8 @@ void KWView::editCustomVariable()
                 m_doc->recalcVariables( VT_CUSTOM );
                 if( var->value() != oldvalue )
                 {
-                    KMacroCommand * macroCommand = new KMacroCommand( i18n( "Change Custom Variable" ) );
                     KWChangeCustomVariableValue *cmd=new KWChangeCustomVariableValue(i18n( "Change Custom Variable" ),m_doc, oldvalue, var->value(), var );
-                    macroCommand->addCommand(cmd);
-                    m_doc->addCommand(macroCommand);
+                    m_doc->addCommand(cmd);
                 }
             }
         }
