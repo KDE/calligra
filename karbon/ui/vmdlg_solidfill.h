@@ -6,7 +6,7 @@
 #ifndef __VMDLGSOLIDFILL_H__
 #define __VMDLGSOLIDFILL_H__
 
-#include <qtabdialog.h>
+#include <kdialogbase.h>
 
 class QColor;
 class QSpinBox;
@@ -16,7 +16,7 @@ class KColorPatch;
 class KarbonPart;
 class KIntNumInput;
 
-class VMDlgSolidFill : public QTabDialog
+class VMDlgSolidFill : public KDialogBase
 {
 	Q_OBJECT
 public:

@@ -9,6 +9,7 @@
 #include <klocale.h>
 
 #include <qlayout.h>
+#include <qtabwidget.h>
 #include <kcolordialog.h>
 #include <qlabel.h>
 #include <knuminput.h>
@@ -19,13 +20,12 @@
 
 #include <kdebug.h>
 
-VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ), m_part( part )
+VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : KDialogBase ( 0L, 0, true, i18n( "Uniform Color" ), KDialogBase::Ok | KDialogBase::Cancel ), m_part( part )
 {
-	setCaption(i18n( "Uniform Color" ));
-	setCancelButton();
 	QGridLayout *mainLayout;
 
-	mRGBWidget = new QWidget( this );
+	QTabWidget *mTabWidget = new QTabWidget( this );
+	mRGBWidget = new QWidget( mTabWidget );
 	mainLayout = new QGridLayout(mRGBWidget, 3, 3);
 	mColorSelector = new KHSSelector( mRGBWidget );
 	mColorSelector->setMinimumHeight(165);
@@ -81,7 +81,7 @@ VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ),
 	connect( mSaturation, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	connect( mValue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	mainLayout->addWidget( cgroupbox, 1, 2);
-	
+
 	//--->Opacity
 	QGroupBox* ogroupBox = new QGroupBox(1, Vertical, i18n("Opacity"), mRGBWidget);
 	mOpacity = new KIntNumInput(100, ogroupBox);
@@ -93,10 +93,12 @@ VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ),
 	mainLayout->setSpacing(2);
 	mainLayout->setMargin(5);
 
-	connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( slotApplyButtonPressed() ) );
+	connect( this, SIGNAL( okClicked() ), this, SLOT( slotApplyButtonPressed() ) );
 
 	mainLayout->activate();
-	addTab(mRGBWidget, i18n("RGB"));
+
+	mTabWidget->addTab(mRGBWidget, i18n("RGB"));
+	setMainWidget( mTabWidget );
 	setFixedSize(baseSize());
 
 	mRed->setValue( color.red() );
