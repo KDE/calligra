@@ -47,6 +47,7 @@
 #include <qheader.h>
 #include <kmessagebox.h>
 #include <qvalidator.h>
+#include <knumvalidator.h>
 
 #include <stdlib.h>
 #include <limits.h>
@@ -319,10 +320,10 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
         // init for sideheads.
         sideWidth->setText("0");
-        sideWidth->setValidator( new QDoubleValidator( sideWidth) );
+        sideWidth->setValidator( new KFloatValidator(0,9999, sideWidth) );
 
         sideGap->setText("0");
-        sideGap->setValidator( new QDoubleValidator( sideGap) );
+        sideGap->setValidator( new KFloatValidator(0,9999, sideGap) );
         // add rest of sidehead init..
     }
 
@@ -386,7 +387,7 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
     grid2->addWidget( lRGap, 1, 0 );
 
     eRGap = new QLineEdit( tab2 );
-    eRGap->setValidator( new QDoubleValidator( eRGap ) );
+    eRGap->setValidator( new KFloatValidator(0,9999, eRGap ) );
     eRGap->setText( "0.00" );
     eRGap->setMaxLength( 5 );
     eRGap->setEchoMode( QLineEdit::Normal );
@@ -675,14 +676,14 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     smt->setText( QString::number( QMAX(0.00,KWUnit::userValue( t, doc->getUnit() ) ) ));
     smb->setText( QString::number( QMAX(0.00,KWUnit::userValue( b, doc->getUnit() ) ) ));
 
-    sx->setValidator( new QDoubleValidator( sx ) );
-    sy->setValidator( new QDoubleValidator( sy ) );
-    smb->setValidator( new QDoubleValidator( smb ) );
-    sml->setValidator( new QDoubleValidator( sml ) );
-    smr->setValidator( new QDoubleValidator( smr ) );
-    smt->setValidator( new QDoubleValidator( smt ) );
-    sh->setValidator( new QDoubleValidator( sh ) );
-    sw->setValidator( new QDoubleValidator( sw ) );
+    sx->setValidator( new KFloatValidator( 0,9999,sx ) );
+    sy->setValidator( new KFloatValidator( 0,9999,sy ) );
+    smb->setValidator( new KFloatValidator( 0,9999,smb ) );
+    sml->setValidator( new KFloatValidator( 0,9999,sml ) );
+    smr->setValidator( new KFloatValidator( 0,9999,smr ) );
+    smt->setValidator( new KFloatValidator( 0,9999,smt ) );
+    sh->setValidator( new KFloatValidator( 0,9999,sh ) );
+    sw->setValidator( new KFloatValidator( 0,9999,sw ) );
 
     bool disable = false;
     if ( doc->isOnlyOneFrameSelected() )

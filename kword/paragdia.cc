@@ -58,6 +58,7 @@
 #include <kwutils.h>
 #include <kwstyle.h>
 #include "kwtextdocument.h"
+#include <knumvalidator.h>
 
 KWSpinBox::KWSpinBox( QWidget * parent, const char * name )
     : QSpinBox(parent,name)
@@ -479,7 +480,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     spacingGrid->addWidget( cSpacing, 1, 0 );
 
     eSpacing = new QLineEdit( spacingFrame );
-    eSpacing->setValidator( new QDoubleValidator( eSpacing ) );
+    eSpacing->setValidator( new KFloatValidator(0,9999, eSpacing ) );
     eSpacing->setText( i18n("0") );
     eSpacing->setMaxLength( 2 );
     eSpacing->setEchoMode( QLineEdit::Normal );
@@ -506,7 +507,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     pSpaceGrid->addWidget( lBefore, 1, 0 );
 
     eBefore = new QLineEdit( pSpaceFrame );
-    eBefore->setValidator( new QDoubleValidator( eBefore ) );
+    eBefore->setValidator( new KFloatValidator( 0,9999,eBefore ) );
     eBefore->setText( i18n("0.00") );
     eBefore->setMaxLength( 5 );
     eBefore->setEchoMode( QLineEdit::Normal );
@@ -519,7 +520,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     pSpaceGrid->addWidget( lAfter, 2, 0 );
 
     eAfter = new QLineEdit( pSpaceFrame );
-    eAfter->setValidator( new QDoubleValidator( eAfter ) );
+    eAfter->setValidator( new KFloatValidator(0,9999, eAfter ) );
     eAfter->setText( i18n("0.00") );
     eAfter->setMaxLength( 5 );
     eAfter->setEchoMode( QLineEdit::Normal );
