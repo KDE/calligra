@@ -1058,7 +1058,9 @@ void KWFrameSet::updateFrames()
 	                        {
 
         	                        fIt.current()->addFrameOnTop( frameMaybeOnTop );
-                	        } else {
+                                } else
+	                        if ( parentFrame->zOrder() > frameMaybeOnTop->zOrder() )
+                	        {
 					fIt.current()->addFrameBelow( frameMaybeOnTop );
 				}
                         }
