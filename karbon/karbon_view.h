@@ -25,7 +25,7 @@
 #include <config.h>
 #endif
 
-#include <koView.h>
+#include "karbon_view_base.h"
 #include <ksharedptr.h>
 #include <kxmlguibuilder.h>
 #include <koUnit.h>
@@ -65,7 +65,7 @@ class VTool;
 class VToolFactory;
 class VToolBox;
 
-class KarbonView : public KoView, public KXMLGUIBuilder
+class KarbonView : public KarbonViewBase, public KXMLGUIBuilder
 {
 	Q_OBJECT
 
@@ -82,29 +82,17 @@ public:
 	bool mouseEvent( QMouseEvent* event, const KoPoint & );
 	bool keyEvent( QEvent* event );
 
-	virtual QWidget* canvas()
-	{
-		return m_canvas;
-	}
+	virtual QWidget* canvas() { return m_canvas; }
 
-	VCanvas* canvasWidget() const
-	{
-		return m_canvas;
-	}
+	VCanvas* canvasWidget() const { return m_canvas; }
 
-	VPainterFactory* painterFactory() const
-	{
-		return m_painterFactory;
-	}
+	virtual VPainterFactory* painterFactory() const { return m_painterFactory; }
+
+	KarbonPart* part() const { return (KarbonPart *)m_part; }
 
 	// printing support, override from KoView
 	virtual void setupPrinter( KPrinter &printer );
 	virtual void print( KPrinter& printer );
-
-	KarbonPart* part() const
-	{
-		return m_part;
-	}
 
 	KoContextHelpAction* contextHelpAction() const
 	{
@@ -128,7 +116,7 @@ public:
 	void setUnit( KoUnit::Unit _unit );
 
 	// manage tools
-	void registerTool( VTool * );
+	virtual void registerTool( VTool * );
 
 public slots:
 	// editing:
@@ -199,7 +187,6 @@ protected:
 private:
 	void initActions();
 
-	KarbonPart* m_part;
 	VCanvas* m_canvas;
 
 	VPainterFactory* m_painterFactory;

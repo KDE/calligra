@@ -24,7 +24,7 @@
 
 #include <qptrlist.h>
 
-#include <koDocument.h>
+#include "karbon_part_base.h"
 #include <koUnit.h>
 
 #include "vcolor.h"
@@ -45,7 +45,7 @@ class VCommandHistory;
  * Finally a dcop interface is set up here.
  */
 
-class KarbonPart : public KoDocument
+class KarbonPart : public KarbonPartBase
 {
 	Q_OBJECT
 	Q_PROPERTY( int maxRecentFiles READ maxRecentFiles )
@@ -67,17 +67,14 @@ public:
 
 	virtual DCOPObject* dcopObject();
 
-	// access static document:
-	VDocument& document()
-	{
-		return m_doc;
-	}
-
 	/// insert a new vobject
 	void insertObject( VObject* object );
 
 	/// insert a command into the undo/redo-history:
 	void addCommand( VCommand* cmd, bool repaint = false );
+
+	// access static document:
+	VDocument& document() { return m_doc; }
 
 	// Clear history.
 	void clearHistory();
@@ -132,7 +129,6 @@ protected:
 
 private:
 	VDocument m_doc;					/// store non-visual doc info
-
 	VCommandHistory* m_commandHistory;	/// maintain a command history for undo/redo
 
 	bool m_bShowStatusBar;				/// enable/disable status bar in attached view(s)

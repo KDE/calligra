@@ -24,15 +24,15 @@
 #include <kdialogbase.h>
 #include <commands/vreplacingcmd.h>
 
-class KarbonView;
+class KarbonViewBase;
 class VRoundCornersDlg;
 
 class VRoundCornersPlugin : public KParts::Plugin
 {
 	Q_OBJECT
 public:
-	VRoundCornersPlugin( KarbonView *parent, const char* name, const QStringList & );
-	virtual ~VRoundCornersPlugin() {}
+	VRoundCornersPlugin( KarbonViewBase *parent, const char* name, const QStringList & );
+	virtual ~VRoundCornersPlugin();
 
 private slots:
 	void slotRoundCorners();

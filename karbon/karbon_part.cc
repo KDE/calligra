@@ -47,7 +47,7 @@
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 						QObject* parent, const char* name, bool singleViewMode )
-		: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
+		: KarbonPartBase( parentWidget, widgetName, parent, name, singleViewMode )
 {
 	setInstance( KarbonFactory::instance(), false );
 	m_bShowStatusBar = true;

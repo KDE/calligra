@@ -20,18 +20,18 @@
 #ifndef __FLATTENPATHPLUGIN_H__
 #define __FLATTENPATHPLUGIN_H__
 
-#include <kparts/plugin.h>
+#include <core/vkarbonplugin.h>
 #include <kdialogbase.h>
 #include <commands/vreplacingcmd.h>
 
-class KarbonView;
+class KarbonViewBase;
 class VFlattenDlg;
 
-class FlattenPathPlugin : public KParts::Plugin
+class FlattenPathPlugin : public VKarbonPlugin
 {
 	Q_OBJECT
 public:
-	FlattenPathPlugin( KarbonView *parent, const char* name, const QStringList & );
+	FlattenPathPlugin( KarbonViewBase *parent, const char* name, const QStringList & );
 	virtual ~FlattenPathPlugin() {}
 
 private slots:

@@ -25,13 +25,13 @@
 #include <commands/vreplacingcmd.h>
 
 class VInsertKnotsDlg;
-class KarbonView;
+class KarbonViewBase;
 
 class InsertKnotsPlugin : public KParts::Plugin
 {
 	Q_OBJECT
 public:
-	InsertKnotsPlugin( KarbonView *parent, const char* name, const QStringList & );
+	InsertKnotsPlugin( KarbonViewBase *parent, const char* name, const QStringList & );
 	virtual ~InsertKnotsPlugin() {}
 
 private slots:

@@ -92,7 +92,7 @@
 
 
 KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
-		: KoView( p, parent, name ), KXMLGUIBuilder( shell() ), m_part( p )
+		: KarbonViewBase( p, parent, name ), KXMLGUIBuilder( shell() )
 {
 	m_toolbox = 0L;
 	m_currentTool = 0L;
@@ -190,7 +190,7 @@ void
 KarbonView::registerTool( VTool *tool )
 {
 	if( !m_toolbox )
-		m_toolbox = new VToolBox( m_part, mainWindow(), "toolbox" );
+		m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "toolbox" );
 	m_toolbox->registerTool( tool );
 	m_currentTool = tool;
 }
@@ -201,7 +201,7 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 	if( element.attribute( "name" ) == "toolbox" )
 	{
 		if( !m_toolbox )
-			m_toolbox = new VToolBox( m_part, mainWindow(), "toolbox" );
+			m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "toolbox" );
 		connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
 
 		if( shell() )

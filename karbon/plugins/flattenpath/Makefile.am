@@ -3,7 +3,10 @@ INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/karbon  -I$(top_srcdir)/karbon/co
 kde_module_LTLIBRARIES = karbon_flattenpathplugin.la
 
 karbon_flattenpathplugin_la_SOURCES = flattenpathplugin.cc
-karbon_flattenpathplugin_la_LIBADD = ../../libkarbonpart.la $(LIB_KPARTS)
+karbon_flattenpathplugin_la_LIBADD = $(LIB_KPARTS) $(LIB_KOFFICEUI) \
+									../../core/libkarboncore.la \
+									../../libkarbonbase.la
+
 karbon_flattenpathplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 
 datadir   = $(kde_datadir)/karbon/kpartplugins

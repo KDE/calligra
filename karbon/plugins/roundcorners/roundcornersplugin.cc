@@ -19,8 +19,8 @@
 
 #include "roundcornersplugin.h"
 #include "klocale.h"
-#include <karbon_view.h>
-#include <karbon_part.h>
+#include <karbon_view_base.h>
+#include <karbon_part_base.h>
 #include <core/vpath.h>
 #include <core/vsegment.h>
 #include <kgenericfactory.h>
@@ -31,10 +31,10 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-typedef KGenericFactory<VRoundCornersPlugin, KarbonView> VRoundCornersPluginFactory;
+typedef KGenericFactory<VRoundCornersPlugin, KarbonViewBase> VRoundCornersPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_roundcornersplugin, VRoundCornersPluginFactory( "karbonroundcornersplugin" ) );
 
-VRoundCornersPlugin::VRoundCornersPlugin( KarbonView *parent, const char* name, const QStringList & ) : Plugin( parent, name )
+VRoundCornersPlugin::VRoundCornersPlugin( KarbonViewBase *parent, const char* name, const QStringList & ) : Plugin( parent, name )
 {
 	new KAction(
 		i18n( "&Round Corners" ), 0, 0, this,
@@ -44,10 +44,14 @@ VRoundCornersPlugin::VRoundCornersPlugin( KarbonView *parent, const char* name, 
 	m_roundCornersDlg->setRadius( 10.0 );
 }
 
+VRoundCornersPlugin::~VRoundCornersPlugin()
+{
+}
+
 void
 VRoundCornersPlugin::slotRoundCorners()
 {
-	KarbonPart *part = ((KarbonView *)parent())->part();
+	KarbonPartBase *part = ((KarbonViewBase *)parent())->part();
 	if( part && m_roundCornersDlg->exec() )
 		part->addCommand( new VRoundCornersCmd( &part->document(), m_roundCornersDlg->radius() ), true );
 }

@@ -10,12 +10,12 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/widgets \
 	$(all_includes)
 
-SUBDIRS = core shapes widgets dialogs dockers commands render visitors tools . plugins data pics
+SUBDIRS = commands visitors core shapes widgets dialogs dockers render tools . plugins data pics
 
 bin_PROGRAMS = karbon
 
 lib_LTLIBRARIES = karbon.la
-kde_module_LTLIBRARIES = libkarbonpart.la
+kde_module_LTLIBRARIES = libkarbonbase.la libkarbonpart.la
 
 libkarbonpart_la_SOURCES = \
 	karbon_factory.cc \
@@ -27,8 +27,15 @@ libkarbonpart_la_SOURCES = \
 	karbon_view_iface.cc \
 	karbon_view_iface.skel
 
-libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN) -no-undefined
-libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT)  $(LIB_KOPAINTER) \
+libkarbonbase_la_SOURCES = \
+	karbon_view_base.cc \
+	karbon_part_base.cc
+
+libkarbonbase_la_LDFLAGS = $(KDE_PLUGIN) 
+libkarbonbase_la_LIBADD = $(LIB_KOFFICEUI)
+
+libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN) 
+libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOPAINTER) \
 	tools/libkarbontools.la \
 	dockers/libkarbondockers.la \
 	dialogs/libkarbondialogs.la \
@@ -36,8 +43,7 @@ libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT)  $(LIB_KOPAINTER) \
 	render/libvpainter.la \
 	shapes/libkarbonshapes.la \
 	core/libkarboncore.la \
-	commands/libkarboncommands.la \
-	visitors/libkarbonvisitors.la 
+	libkarbonbase.la
 
 libkarbonpart_la_METASOURCES = AUTO
 
@@ -54,8 +60,10 @@ dummy.cc:
 
 noinst_HEADERS = \
 	karbon_factory.h \
+	karbon_part_base.h \
 	karbon_part.h \
 	karbon_part_iface.h \
+	karbon_view_base.h \
 	karbon_view.h
 
 messages: rc.cpp

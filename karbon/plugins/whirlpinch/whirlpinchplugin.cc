@@ -20,8 +20,8 @@
 #include <core/vselection.h>
 #include "whirlpinchplugin.h"
 #include "klocale.h"
-#include <karbon_view.h>
-#include <karbon_part.h>
+#include <karbon_view_base.h>
+#include <karbon_part_base.h>
 #include <kgenericfactory.h>
 #include <core/vdocument.h>
 #include <core/vcomposite.h>
@@ -37,10 +37,10 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-typedef KGenericFactory<WhirlPinchPlugin, KarbonView> WhirlPinchPluginFactory;
+typedef KGenericFactory<WhirlPinchPlugin, KarbonViewBase> WhirlPinchPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_whirlpinchplugin, WhirlPinchPluginFactory( "karbonwhirlpinchplugin" ) );
 
-WhirlPinchPlugin::WhirlPinchPlugin( KarbonView *parent, const char* name, const QStringList & ) : Plugin( parent, name )
+WhirlPinchPlugin::WhirlPinchPlugin( KarbonViewBase *parent, const char* name, const QStringList & ) : Plugin( parent, name )
 {
 	new KAction(
 		i18n( "&Whirl/Pinch" ), 0, 0, this,
@@ -55,7 +55,7 @@ WhirlPinchPlugin::WhirlPinchPlugin( KarbonView *parent, const char* name, const 
 void
 WhirlPinchPlugin::slotWhirlPinch()
 {
-	KarbonPart *part = ((KarbonView *)parent())->part();
+	KarbonPartBase *part = ((KarbonViewBase *)parent())->part();
 	if( part && m_whirlPinchDlg->exec() )
 		part->addCommand( new VWhirlPinchCmd( &part->document(), m_whirlPinchDlg->angle(), m_whirlPinchDlg->pinch(), m_whirlPinchDlg->radius() ), true );
 }
