@@ -1210,6 +1210,8 @@ void KSpreadView::slotTableRemoved( KSpreadTable *_t )
         if((*it).table_name==m_tableName)
                 doc()->removeArea((*it).ref_name);
   }
+  m_pHorzScrollBar->setValue(activeTable()->getScrollPosX());
+  m_pVertScrollBar->setValue(activeTable()->getScrollPosY());
 
 }
 
@@ -1270,13 +1272,15 @@ void KSpreadView::changeTable( const QString& _name )
         return;
     }
     m_pCanvas->closeEditor();
-
+    activeTable()->setScrollPosX(m_pHorzScrollBar->value());
+    activeTable()->setScrollPosY(m_pVertScrollBar->value());
     setActiveTable( t,false );
 
     t->setActiveTable();
 
     updateEditWidget();
-
+    m_pHorzScrollBar->setValue(t->getScrollPosX());
+    m_pVertScrollBar->setValue(t->getScrollPosY());
     //refresh toggle button
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders() );
 }
@@ -1306,6 +1310,8 @@ void KSpreadView::insertTable()
   m_pCanvas->closeEditor();
   KSpreadTable *t = m_pDoc->createTable();
   m_pDoc->addTable( t );
+  m_pHorzScrollBar->setValue(t->getScrollPosX());
+  m_pVertScrollBar->setValue(t->getScrollPosY());
   updateEditWidget();
 }
 

@@ -518,6 +518,14 @@ public:
     void setActiveTable();
     QPoint getOldPos() {return m_oldPos;}
 
+    int getScrollPosX() {return m_iScrollPosX;}
+    void setScrollPosX( int _scrollX) { m_iScrollPosX=_scrollX;}
+
+    int getScrollPosY() {return m_iScrollPosY;}
+    void setScrollPosY( int _scrollY) { m_iScrollPosY=_scrollY;}
+
+
+
     QRect selectionCellMerged(const QRect &_sel);
     /**
      * Change name of reference when the user inserts or removes a column,
@@ -892,7 +900,10 @@ protected:
     QBrush m_emptyBrush;
     QColor m_emptyColor;
 
-     QPoint m_oldPos;
+    QPoint m_oldPos;
+    int m_iScrollPosX;
+    int m_iScrollPosY;
+
 };
 
 #endif

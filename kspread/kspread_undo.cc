@@ -437,22 +437,69 @@ KSpreadUndoCellLayout::KSpreadUndoCellLayout( KSpreadDoc *_doc, KSpreadTable *_t
 {
   m_rctRect = _selection;
   m_tableName = _table->tableName();
-  m_lstLayouts.setAutoDelete( TRUE );
 
   copyLayout( m_lstLayouts, _table );
 }
 
-void KSpreadUndoCellLayout::copyLayout( QList<KSpreadLayout> &list, KSpreadTable* table )
+void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> &list, KSpreadTable* table )
 {
     list.clear();
 
-    for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
-	for ( int x = m_rctRect.left(); x <= m_rctRect.right(); x++ )
-	{
-	    KSpreadLayout *l = new KSpreadLayout( table );
-	    l->copy( *(table->cellAt( x, y )) );
-	    list.append( l );
-	}
+    if( m_rctRect.bottom()==0x7FFF)
+    {
+        KSpreadCell* c = table->firstCell();
+        for( ; c; c = c->nextCell() )
+        {
+            int col = c->column();
+            if ( m_rctRect.left() <= col && m_rctRect.right() >= col
+            &&!c->isObscuringForced())
+            {
+                layoutCell tmplayout;
+                tmplayout.col=c->column();
+                tmplayout.row=c->row();
+                tmplayout.l=new KSpreadLayout( table );
+                tmplayout.l->copy( *(table->cellAt( c->column(), c->row() )) );
+                list.append(tmplayout);
+            }
+
+        }
+    }
+    else if(m_rctRect.right()==0x7FFF)
+    {
+
+        KSpreadCell* c = table->firstCell();
+        for( ; c; c = c->nextCell() )
+        {
+        int row = c->row();
+        if ( m_rctRect.top() <= row && m_rctRect.bottom() >= row
+        &&!c->isObscuringForced())
+                {
+                layoutCell tmplayout;
+                tmplayout.col=c->column();
+                tmplayout.row=c->row();
+                tmplayout.l=new KSpreadLayout( table );
+                tmplayout.l->copy( *(table->cellAt( c->column(), c->row())) );
+                list.append(tmplayout);
+                }
+        }
+    }
+    else
+    {
+        for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
+	        for ( int x = m_rctRect.left(); x <= m_rctRect.right(); x++ )
+                {
+                KSpreadCell *cell = table->nonDefaultCell( x, y );
+                if(!cell->isObscured())
+                        {
+                        layoutCell tmplayout;
+                        tmplayout.col=x;
+                        tmplayout.row=y;
+                        tmplayout.l=new KSpreadLayout( table );
+                        tmplayout.l->copy( *(table->cellAt( x, y )) );
+                        list.append(tmplayout);
+                        }
+                }
+     }
 }
 
 KSpreadUndoCellLayout::~KSpreadUndoCellLayout()
@@ -469,19 +516,15 @@ void KSpreadUndoCellLayout::undo()
 
     copyLayout( m_lstRedoLayouts, table );
 
-    KSpreadLayout *l;
-    l = m_lstLayouts.first();
-
-    for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
-	for ( int x = m_rctRect.left(); x <= m_rctRect.right(); x++ )
-	{
-	    KSpreadCell *cell = table->nonDefaultCell( x, y );
-	    cell->copy( *l );
+    QValueList<layoutCell>::Iterator it2;
+    for ( it2 = m_lstLayouts.begin(); it2 != m_lstLayouts.end(); ++it2 )
+        {
+            KSpreadCell *cell = table->nonDefaultCell( (*it2).col,(*it2).row );
+	    cell->copy( *(*it2).l );
 	    cell->setLayoutDirtyFlag();
 	    cell->setDisplayDirtyFlag();
-	    table->updateCell( cell, x, y );
-	    l = m_lstLayouts.next();
-	}
+	    table->updateCell( cell, (*it2).col, (*it2).row );
+        }
     table->updateView(m_rctRect);
     doc()->undoBuffer()->unlock();
 }
@@ -494,19 +537,15 @@ void KSpreadUndoCellLayout::redo()
 
     doc()->undoBuffer()->lock();
 
-    KSpreadLayout *l;
-    l = m_lstRedoLayouts.first();
-
-    for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
-	for ( int x = m_rctRect.left(); x <= m_rctRect.right(); x++ )
-	{
-	    KSpreadCell *cell = table->nonDefaultCell( x, y );
-	    cell->copy( *l );
+    QValueList<layoutCell>::Iterator it2;
+    for ( it2 = m_lstRedoLayouts.begin(); it2 != m_lstRedoLayouts.end(); ++it2 )
+        {
+            KSpreadCell *cell = table->nonDefaultCell( (*it2).col,(*it2).row );
+	    cell->copy( *(*it2).l );
 	    cell->setLayoutDirtyFlag();
 	    cell->setDisplayDirtyFlag();
-	    table->updateCell( cell, x, y );
-	    l = m_lstRedoLayouts.next();
-	}
+	    table->updateCell( cell, (*it2).col, (*it2).row );
+        }
     table->updateView(m_rctRect);
     doc()->undoBuffer()->unlock();
 }

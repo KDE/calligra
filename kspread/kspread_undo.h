@@ -50,6 +50,12 @@ int row;
 int col;
 QString text;
 };
+
+struct layoutCell {
+int row;
+int col;
+KSpreadLayout *l;
+};
 /**
  * Abstract base class. Every undo/redo action must
  * derive from this class.
@@ -154,12 +160,12 @@ public:
     virtual void undo();
     virtual void redo();
 
-    void copyLayout( QList<KSpreadLayout> &list, KSpreadTable* table );
+    void copyLayout( QValueList<layoutCell> &list, KSpreadTable* table );
 
 protected:
     QRect m_rctRect;
-    QList<KSpreadLayout> m_lstLayouts;
-    QList<KSpreadLayout> m_lstRedoLayouts;
+    QValueList<layoutCell> m_lstLayouts;
+    QValueList<layoutCell> m_lstRedoLayouts;
     QString m_tableName;
 };
 
