@@ -301,10 +301,10 @@ void KPTextObject::drawText( QPainter* _painter, bool onlyChanged, QTextCursor* 
         {
         case EF2T_PARA:
             kdDebug(33001) << "KPTextObject::draw onlyCurrStep=" << onlyCurrStep << " subPresStep=" << subPresStep << endl;
-            drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
+            drawParags( _painter, cg, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
             break;
         default:
-            Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
+            /*Qt3::QTextParag * lastFormatted =*/ textDocument()->drawWYSIWYG(
                 _painter, r.x(), r.y(), r.width(), r.height(),
                 cg, m_doc->zoomHandler(), // TODO (long term) the view's zoomHandler
                 onlyChanged, cursor != 0, cursor, resetChanged );
@@ -313,11 +313,20 @@ void KPTextObject::drawText( QPainter* _painter, bool onlyChanged, QTextCursor* 
     else
     {
         //kdDebug() << "KPTextObject::drawText r=" << DEBUGRECT(r) << endl;
-        Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
+        /*Qt3::QTextParag * lastFormatted = */ textDocument()->drawWYSIWYG(
             _painter, r.x(), r.y(), r.width(), r.height(),
             cg, m_doc->zoomHandler(), // TODO (long term) the view's zoomHandler
             onlyChanged, cursor != 0, cursor, resetChanged );
     }
+}
+
+int KPTextObject::getSubPresSteps() const
+{
+    int paragraphs = 0;
+    Qt3::QTextParag * parag = m_textobj->textDocument()->firstParag();
+    for ( ; parag ; parag = parag->next() )
+        paragraphs++;
+    return paragraphs;
 }
 
 /*========================= zoom =================================*/
@@ -840,26 +849,35 @@ void KPTextObject::recalcPageNum( KPresenterDoc *doc )
 #endif
 }
 
-void KPTextObject::drawParags( QPainter *p, int /*from*/, int /*to*/ )
+void KPTextObject::drawParags( QPainter *painter, const QColorGroup& cg, int from, int to )
 {
-#if 0
+    // The fast and difficult way would be to call drawParagWYSIWYG
+    // only on the paragraphs to be drawn. Then we have duplicate quite some code
+    // (or lose double-buffering).
+    // Easy (and not so slow) way:
+    // we call KoTextDocument::drawWYSIWYG with a cliprect.
+    Q_ASSERT( from <= to );
     int i = 0;
-    KTextEditParag *parag = ktextobject.document()->firstParag();
+    QRect r( 0, 0, ext.width(), ext.height() );
+    Qt3::QTextParag *parag = textDocument()->firstParag();
     while ( parag ) {
         if ( !parag->isValid() )
             parag->format();
-
-        p->translate( 0, parag->rect().y() );
-        if ( i >= from && i <= to )
-            parag->paint( *p, ktextobject.colorGroup(), 0, FALSE );
-        p->translate( 0, -parag->rect().y() );
-        parag = parag->next();
-
+        if ( i == from ) {
+            r.setTop( m_doc->zoomHandler()->layoutUnitToPixelY( parag->rect().top() ) );
+        }
+        if ( i == to ) {
+            r.setBottom( m_doc->zoomHandler()->layoutUnitToPixelY( parag->rect().bottom() ) );
+            break;
+        }
         ++i;
-        if ( i > to )
-            return;
+        parag = parag->next();
     }
-#endif
+
+    textDocument()->drawWYSIWYG(
+        painter, r.x(), r.y(), r.width(), r.height(),
+        cg, m_doc->zoomHandler(), // TODO (long term) the view's zoomHandler
+        false /*onlyChanged*/, false /*cursor != 0*/, 0 /*cursor*/ /*, resetChanged*/ );
 }
 
 void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, Page* page )

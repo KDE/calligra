@@ -69,6 +69,7 @@ public:
     { return drawEditRect; }
     virtual bool getDrawEmpty() const
     { return drawEmpty; }
+    virtual int getSubPresSteps() const;
 
     void setShadowParameter(int _distance,ShadowDirection _direction,QColor _color);
 
@@ -123,7 +124,7 @@ protected:
 
     virtual void loadKTextObject( const QDomElement &e, int type );
     void drawText( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
-    void drawParags( QPainter *p, int from, int to );
+    void drawParags( QPainter *p, const QColorGroup& cg, int from, int to );
     void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
 
 protected slots:

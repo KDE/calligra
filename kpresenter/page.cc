@@ -2124,8 +2124,7 @@ void Page::stopScreenPresentation()
 /*========================== next ================================*/
 bool Page::pNext( bool )
 {
-    bool addSubPres = false;
-    bool clearSubPres = false;
+    //bool clearSubPres = false;
 
     goingBack = false;
 
@@ -2140,25 +2139,14 @@ bool Page::pNext( bool )
              && kpobject->getPresNum() == static_cast<int>( currPresStep )
              && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE )
         {
-            if ( static_cast<int>( subPresStep ) < kpobject->getSubPresSteps() )
+            if ( static_cast<int>( subPresStep + 1 ) < kpobject->getSubPresSteps() )
             {
-                addSubPres = true;
-                kdDebug(33001) << "Page::pNext adding subpres" << endl;
+                kdDebug(33001) << "Page::pNext addSubPres subPresStep is now " << subPresStep+1 << endl;
+                subPresStep++;
+                doObjEffects();
+                return false;
             }
-            else
-                clearSubPres = true;
         }
-
-        if ( addSubPres )
-        {
-            kdDebug(33001) << "Page::pNext addSubPres subPresStep is now " << subPresStep+1 << endl;
-            subPresStep++;
-            doObjEffects();
-            return false;
-        }
-
-        if ( clearSubPres )           // not sure what that's for (the bool)
-            subPresStep = 0;
     }
 
     // Then try to see if there is still one step to do in the current page
@@ -2166,6 +2154,7 @@ bool Page::pNext( bool )
     {
         QValueList<int>::ConstIterator it = presStepList.find( currPresStep );
         currPresStep = *( ++it );
+        subPresStep = 0;
         //kdDebug(33001) << "Page::pNext setting currPresStep to " << currPresStep << endl;
 
         if ( currPresStep == 0 )
@@ -2196,6 +2185,7 @@ bool Page::pNext( bool )
         drawPageInPix( _pix1, diffy() );
 
         currPresPage = *( ++slideListIterator );
+        subPresStep = 0;
         kdDebug(33001) << "Page::pNext going to page " << currPresPage << endl;
 
         tmpObjs.clear();
