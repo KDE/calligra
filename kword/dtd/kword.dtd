@@ -117,8 +117,9 @@
         Attributes:     
 
         right, leftm, top, bottom: absolute coordinates in pt
-        runaround: 1 if text should run around overalpping frames, 
-         2 if text should not run around overlapping frames (only for text frames)
+        runaround: 0 = No run around 1 =  frame repels text in overlapping frames, 
+         2 = Text in overlapping frames will avoid the complete horizontal space of this 
+         frame.
         runaroundGap: when runaround is 1 specify here the distance between overlapping 
          frames and runaround text
         frameInfo: 1 = normal text, 2 = header for first page, 3 = header for odd pages,
