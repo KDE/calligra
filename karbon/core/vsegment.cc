@@ -486,6 +486,7 @@ VSegment::linesIntersect(
 void
 VSegment::transform( const QWMatrix& m )
 {
+	// only transform if node is selected
 	if( m_isSelected[ 0 ] )
 		setCtrlPoint1( m_point[ 0].transform( m ) );
 	if( m_isSelected[ 1 ] )
@@ -497,6 +498,7 @@ VSegment::transform( const QWMatrix& m )
 void
 VSegment::selectNode()
 {
+	// reset the node selection
 	m_isSelected[ 0 ] = m_isSelected[ 1 ] = m_isSelected[ 2 ] = true;
 }
 

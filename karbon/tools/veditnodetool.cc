@@ -44,9 +44,9 @@ VEditNodeTool::activate()
 }
 
 void
-VEditNodeTool::setCursor( const QPoint &p ) const
+VEditNodeTool::setCursor( const KoPoint &p ) const
 {
-	if( view()->part()->document().selection()->selectNode( KoPoint( p ) ) )
+	if( view()->part()->document().selection()->selectNode( p ) )
 		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::CrossCursor ) );
 	else
 		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
@@ -118,7 +118,10 @@ VEditNodeTool::eventFilter( QEvent* event )
 	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 	QPoint lp = view()->canvasWidget()->viewportToContents( mouse_event->pos() );
 	if( !m_isDragging )
-		setCursor( lp );
+	{
+		KoPoint lpp = KoPoint( lp.x() / view()->zoom(), lp.y() / view()->zoom() );
+		setCursor( lpp );
+	}
 
 	if ( event->type() == QEvent::MouseMove && m_isDragging )
 	{

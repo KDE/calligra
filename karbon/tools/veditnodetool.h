@@ -23,7 +23,7 @@ public:
 	void drawTemporaryObject();
 
 protected:
-	void setCursor( const QPoint & ) const;
+	void setCursor( const KoPoint & ) const;
 
 private:
 	enum { normal, moving } m_state;
