@@ -59,7 +59,7 @@ void VPolylineTool::activate()
 
 void VPolylineTool::deactivate()
 {
-	draw();
+	//draw();
 	
 	bezierPoints.removeLast();
 	bezierPoints.removeLast();
