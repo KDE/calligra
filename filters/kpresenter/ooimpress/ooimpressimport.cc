@@ -337,7 +337,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         m_styleStack.clear(); // remove all styles
         fillStyleStack( dp );
         m_styleStack.save();
-
+        int pagePos = dp.attribute( "draw:id" ).toInt() - 1;
         // take care of a possible page background or slide transition or sound
         if ( m_styleStack.hasAttribute( "draw:fill" )
              || m_styleStack.hasAttribute( "presentation:transition-style" ))
