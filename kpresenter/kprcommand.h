@@ -707,7 +707,7 @@ protected:
 class KPrInsertPageCmd : public KNamedCommand
 {
 public:
-    KPrInsertPageCmd( const QString &name, int currentPageNum, InsertPos pos, 
+    KPrInsertPageCmd( const QString &name, int currentPageNum, InsertPos pos,
                       KPrPage *page, KPresenterDoc *doc );
     ~KPrInsertPageCmd();
 
@@ -732,24 +732,6 @@ protected:
     KPresenterDoc *m_doc;
     int m_oldPosition;
     int m_newPosition;
-};
-
-class KPrPasteTextCommand : public KoTextDocCommand
-{
-public:
-    KPrPasteTextCommand( KoTextDocument *d, int parag, int idx,
-                         const QCString & data );
-    ~KPrPasteTextCommand() {}
-    KoTextCursor *execute( KoTextCursor *c );
-    KoTextCursor *unexecute( KoTextCursor *c );
-protected:
-    int m_parag;
-    int m_idx;
-    QCString m_data;
-    // filled in by execute(), for unexecute()
-    int m_lastParag;
-    int m_lastIndex;
-    KoParagLayout m_oldParagLayout;
 };
 
 /**
