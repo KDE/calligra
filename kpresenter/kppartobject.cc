@@ -45,6 +45,7 @@ KPPartObject::KPPartObject( KPresenterChild *_child )
 /*================================================================*/
 KPPartObject &KPPartObject::operator=( const KPPartObject & )
 {
+    return *this;
 }
 
 /*======================== draw ==================================*/

@@ -110,7 +110,7 @@ int KformViewerDoc::viewCount()
   return m_lstViews.count();
 }
 
-bool KformViewerDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
+bool KformViewerDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr  )
 {
   kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );
 
@@ -203,7 +203,7 @@ bool KformViewerDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
   return true;
 }
 
-bool KformViewerDoc::completeLoading( KOStore::Store_ptr _store )
+bool KformViewerDoc::completeLoading( KOStore::Store_ptr  )
 {
   kdebug( KDEBUG_INFO, 0, "------------------------ COMPLETION DONE --------------------" );
 
@@ -225,13 +225,13 @@ bool KformViewerDoc::completeLoading( KOStore::Store_ptr _store )
   return true;
 }
 
-void KformViewerDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
-		      CORBA::Float _scale )
+void KformViewerDoc::draw( QPaintDevice* , CORBA::Long _width, CORBA::Long _height,
+		      CORBA::Float  )
 {
   kdebug( KDEBUG_INFO, 0, "DRAWING w=%li h=%li", _width, _height );
 }
 
-bool KformViewerDoc::openDocument( const char *_filename, const char *_format )
+bool KformViewerDoc::openDocument( const char *, const char * )
 {
   emit sigUpdateView();
 

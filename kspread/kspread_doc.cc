@@ -529,6 +529,7 @@ QString KSpreadDoc::paperFormatString()
     }
 
     assert( 0 );
+    return QString::null;
 }
 
 const char* KSpreadDoc::orientationString()
@@ -542,6 +543,7 @@ const char* KSpreadDoc::orientationString()
     }
 
     assert( 0 );
+    return 0;
 }
 
 QString KSpreadDoc::completeHeading( const char *_data, int _page, const char *_table )

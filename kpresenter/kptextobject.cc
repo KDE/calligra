@@ -561,7 +561,7 @@ void KPTextObject::zoomOrig()
 }
 
 /*================================================================*/
-void KPTextObject::extendObject2Contents( KPresenterView *view )
+void KPTextObject::extendObject2Contents( KPresenterView */*view*/ )
 {
     QSize s( ktextobject.neededSize() );
 

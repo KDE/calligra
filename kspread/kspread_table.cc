@@ -54,6 +54,7 @@
 #include <torben.h>
 
 #include <strstream.h>
+#include <kautoarray.h>
 
 /*****************************************************************************
  *
@@ -1228,7 +1229,7 @@ void KSpreadTable::insertRow( CORBA::ULong _row )
     m_dctCells.setAutoDelete( FALSE );
     m_dctRows.setAutoDelete( FALSE );
 
-    KSpreadCell* (list[m_dctCells.count() ]);
+    kauto_array<KSpreadCell*> list(m_dctCells.count());
     CORBA::ULong count = 0;
     // Find the last row
     QIntDictIterator<KSpreadCell> it( m_dctCells );
@@ -1257,7 +1258,7 @@ void KSpreadTable::insertRow( CORBA::ULong _row )
       }
     }
 
-    RowLayout* (list2[ m_dctRows.count() ]);
+    kauto_array<RowLayout*> list2(m_dctRows.count());
     count = 0;
     QIntDictIterator<RowLayout> it2( m_dctRows );
     max_row = 1;
@@ -1322,7 +1323,7 @@ void KSpreadTable::deleteRow( CORBA::ULong _row )
 	}
     }
 
-    KSpreadCell* (list[ m_dctCells.count() ]);
+    kauto_array<KSpreadCell*> list( m_dctCells.count());
     int count = 0;
     // Find last row
     it.toFirst();
@@ -1369,7 +1370,7 @@ void KSpreadTable::deleteRow( CORBA::ULong _row )
 	}
     }
 
-    RowLayout* (list2[ m_dctRows.count() ]);
+    kauto_array<RowLayout*> list2( m_dctRows.count());
     count = 0;
     // Find last RowLayout
     it2.toFirst();
@@ -1418,7 +1419,7 @@ void KSpreadTable::insertColumn( CORBA::ULong _column )
     m_dctCells.setAutoDelete( FALSE );
     m_dctColumns.setAutoDelete( FALSE );
 
-    KSpreadCell* (list[ m_dctCells.count() ]);
+    kauto_array<KSpreadCell*> list( m_dctCells.count());
     CORBA::ULong count = 0;
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     // Determine right most column
@@ -1448,7 +1449,7 @@ void KSpreadTable::insertColumn( CORBA::ULong _column )
       }
     }
 
-    ColumnLayout* (list2[ m_dctColumns.count() ]);
+    kauto_array<ColumnLayout*> list2(m_dctColumns.count());
     count = 0;
     // Find right most ColumnLayout
     QIntDictIterator<ColumnLayout> it2( m_dctColumns );
@@ -1514,7 +1515,7 @@ void KSpreadTable::deleteColumn( CORBA::ULong _column )
 	}
     }
 
-    KSpreadCell* (list[ m_dctCells.count() ]);
+    kauto_array<KSpreadCell*> list( m_dctCells.count());
     int count = 0;
     // Find right most cell
     it.toFirst();
@@ -1560,7 +1561,7 @@ void KSpreadTable::deleteColumn( CORBA::ULong _column )
 	}
     }
 
-    ColumnLayout* (list2[ m_dctColumns.count() ]);
+    kauto_array<ColumnLayout*> list2(m_dctColumns.count());
     count = 0;
     // Move ColumnLayouts
     it2.toFirst();

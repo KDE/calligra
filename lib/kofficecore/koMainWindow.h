@@ -56,7 +56,7 @@ public:
   KoFrame *getFrame() { return m_pFrame; }
 
   virtual bool newDocument() { return false; };
-  virtual bool openDocument( const char* _filename, const char* _format ) { return false; };
+  virtual bool openDocument( const char*, const char* ) { return false; };
   
 protected slots:
   virtual void slotActivePartChanged( unsigned long _new_part_id, unsigned long _old_opart_id );

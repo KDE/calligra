@@ -132,7 +132,7 @@ void KoMainWindow::setRootPart( KoViewIf* _view )
   m_pFrame->attachLocalView( _view );
 }
 
-void KoMainWindow::slotActivePartChanged( unsigned long _new_part_id, unsigned long _old_part_id )
+void KoMainWindow::slotActivePartChanged( unsigned long _new_part_id, unsigned long /* _old_part_id */ )
 {
   menuBarManager()->clear();
   toolBarManager()->clear();

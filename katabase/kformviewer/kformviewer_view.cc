@@ -47,7 +47,7 @@
  *****************************************************************************/
 
 KformViewerView::KformViewerView( QWidget* _parent, const char* _name, KformViewerDoc* _doc )
-  : QScrollView( _parent )
+  : QScrollView( _parent, _name )
   , KoViewIf( _doc )
   , OPViewIf( _doc )
   , KformViewer::View_skel()
@@ -223,7 +223,7 @@ void KformViewerView::slotUpdateView()
   QScrollView::update();
 }
 
-void KformViewerView::drawContentsOffset( QPainter * p, int offsetx, int offsety, int clipx, int clipy, int clipw, int cliph )
+void KformViewerView::drawContentsOffset( QPainter * p, int offsetx, int offsety, int , int , int , int )
 {
   if( m_pDoc && !m_pDoc->isEmpty() )
   {
@@ -233,7 +233,7 @@ void KformViewerView::drawContentsOffset( QPainter * p, int offsetx, int offsety
   }                                                                                                 
 }
 
-void KformViewerView::paintEvent( QPaintEvent *_ev )
+void KformViewerView::paintEvent( QPaintEvent * )
 {
 }
 

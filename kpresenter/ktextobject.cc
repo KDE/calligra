@@ -2337,7 +2337,7 @@ void KTextObject::addText( QString text, QFont font, QColor color,
 }
 
 /*======================= parse HTML =============================*/
-void KTextObject::parseHTML( QString text )
+void KTextObject::parseHTML( QString )
 {
 //   clear();
 

@@ -79,7 +79,7 @@ KoComponentEntry koParseComponentProperties( KTrader::ServicePtr service )
  *
  *******************************************************************/
   
-vector<KoDocumentEntry> koQueryDocuments( const char *_constr, int _count )
+vector<KoDocumentEntry> koQueryDocuments( const char *_constr, int /*_count*/ )
 {
   vector<KoDocumentEntry> lst;
 
@@ -149,7 +149,7 @@ KoFilterEntry koParseFilterProperties( KTrader::ServicePtr service )
   return e;
 }
 
-vector<KoFilterEntry> koQueryFilters( const char *_constr, int _count )
+vector<KoFilterEntry> koQueryFilters( const char *_constr, int /*_count*/ )
 {
   vector<KoFilterEntry> lst;
 

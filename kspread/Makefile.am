@@ -42,7 +42,7 @@ kdelnkdir = $(kde_appsdir)/KOffice
 kdemime_DATA = x-kspread.kdelnk
 kdemimedir = $(kde_mimedir)/application
 
-SUBDIRS =  pics dtd toolbar
+SUBDIRS =  . pics dtd toolbar
 
 chart.idl: $(interfacedir)/chart.idl
 	-rm -f chart.idl

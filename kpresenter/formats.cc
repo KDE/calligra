@@ -50,7 +50,7 @@ static FormatRecord formatlist[]= {
         "PNM",
         0,
         "*.pbm *.pgm *.ppm",
-        0, 0
+        0, 0,
     }
 };
 

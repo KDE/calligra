@@ -63,7 +63,7 @@ idl_DATA =	kpresenter.idl
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
 
-SUBDIRS = autoformEdit autoforms pics toolbar templates dtd slideshow
+SUBDIRS = autoformEdit . autoforms pics toolbar templates dtd slideshow
 
 messages:
 	$(XGETTEXT) -C -ki18n -ktranslate -x $(includedir)/kde.pot */*.cc *.cc *.h && mv messages.po ../po/kpresenter.pot

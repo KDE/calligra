@@ -168,7 +168,7 @@ int func1( const char *_name, double _arg, double* _res );
  * Called from YACC if a function has to be avaulated in a
  * boolean environment.
  */
-int funcBool( const char* _name, void* _args, char* _res )
+int funcBool( const char* , void* , char* )
 {
   return -1;
 }
