@@ -115,13 +115,20 @@ void kchartDataEditor::getXLabel( KDChartParams* params )
     KDChartAxisParams bottomparms = params->axisParams( KDChartAxisParams::AxisPosBottom );
     static QStringList longlabels, shortlabels;
     longlabels.clear(); shortlabels.clear();
+    bool empty=true;
     for( int col = 0; col < _widget->cols(); col++ ) {
         if( ! (col >= _widget->usedCols()) ) {
+            if(empty && !_widget->getX( col ).isEmpty())
+                empty=false;
             longlabels << _widget->getX( col );
             shortlabels << _widget->getX( col ).left( 3 );
         }
     }
-    bottomparms.setAxisLabelStringLists( &longlabels, &shortlabels );
-    params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
+    //don't change default value if xlabel entry is empty.
+    if(!empty)
+    {
+        bottomparms.setAxisLabelStringLists( &longlabels, &shortlabels );
+        params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
+    }
 }
 

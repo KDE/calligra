@@ -189,11 +189,19 @@ void KChartView::edit()
     for(int i =0;i<dat->rows();i++)
         lst<<params->legendText( i );
     ed.setLegend(lst);
+
+    KDChartAxisParams bottomparms = params->axisParams( KDChartAxisParams::AxisPosBottom );
+    if(bottomparms.axisLabelStringList())
+    {
+        QStringList lstLabel(*bottomparms.axisLabelStringList());
+        ed.setXLabel( lstLabel );
+    }
     if( ed.exec() != QDialog::Accepted ) {
         return;
     }
     ed.getData(dat);
     ed.getLegend(params);
+    ed.getXLabel(params );
     kdDebug(35001)<<"***After calling editor: cols ="<<dat->cols()<<" , rows = "<<dat->rows()<<" , usedCols = "<<dat->usedCols()<<"  usedRows = "<<dat->usedRows()<<endl;
     repaint();
 }
