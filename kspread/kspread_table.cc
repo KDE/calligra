@@ -1595,7 +1595,6 @@ void KSpreadTable::setSeries( QPoint _marker, double start, double end, double s
 
   /* now we're going to actually loop through and set the values */
   double incr;
-  kdDebug()<<" increment !!!!!!!!!!!!!!!! \n";
   if (step >= 0 && start < end)
   {
     for ( incr = start; incr <= end; )
@@ -1728,7 +1727,12 @@ void KSpreadTable::setSeries( QPoint _marker, double start, double end, double s
         incr = incr + step;
       else if (type == Geometric)
       {
+
         incr = incr * step;
+        //a step = 1 into geometric serie is not good
+        //we don't increase value => infini loop
+        if (step == 1)
+            return;
       }
       else
       {
