@@ -257,7 +257,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     objStartY = 0;
     setPageLayout( m_pageLayout );
     _presPen = QPen( red, 3, SolidLine );
-    presSpeed = 2;
     ignoreSticky = TRUE;
     raiseAndLowerObject = false;
 
@@ -592,7 +591,8 @@ QDomDocument KPresenterDoc::saveXML()
     element.setAttribute("value", _spManualSwitch);
     presenter.appendChild(element);
     element=doc.createElement("PRESSPEED");
-    element.setAttribute("value", static_cast<int>( presSpeed ));
+//TODO FIXME !!!!!!!!!!
+//element.setAttribute("value", static_cast<int>( presSpeed ));
     presenter.appendChild(element);
     element=doc.createElement("SHOWPRESENTATIONDURATION");
     element.setAttribute("value", _showPresentationDuration);
@@ -714,12 +714,23 @@ void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDom
 
 }
 
-void KPresenterDoc::compatibityPresSpeed()
+void KPresenterDoc::compatibilityPresSpeed()
 {
-    //todo when we save with old format create compatibility
-    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
-        //TODO move presSpeed to m_infoLoading (use just for loading)
-        m_pageList.at(i)->background()->setPresSpeed( presSpeed );
+    if ( m_loadingInfo )
+    {
+        int newValue = 5;
+        if ( m_loadingInfo->presSpeed < 3 )
+            newValue = 1;
+        else if ( m_loadingInfo->presSpeed < 7 )
+            newValue = 5;
+        else
+            newValue = 10;
+        //todo when we save with old format create compatibility
+        for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
+            m_pageList.at(i)->background()->setPresSpeed( newValue );
+        }
+        delete m_loadingInfo;
+        m_loadingInfo = 0L;
     }
 }
 
@@ -1486,6 +1497,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 {
     QTime dt;
     dt.start();
+    m_loadingInfo = new KPRLoadingInfo;
 
     ignoreSticky = FALSE;
     bool b=false;
@@ -1851,7 +1863,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         } else if(elem.tagName()=="PRESSPEED") {
             if(_clean) {
                 if(elem.hasAttribute("value"))
-                    presSpeed = static_cast<PresSpeed>(elem.attribute("value").toInt());
+                    m_loadingInfo->presSpeed = elem.attribute("value").toInt();
             }
         } else if(elem.tagName()=="MANUALSWITCH") {
             if(_clean) {
@@ -2444,7 +2456,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
             setPageLayout( m_pageLayout );
     }
 
-    compatibityPresSpeed();
+    compatibilityPresSpeed();
 
     emit sigProgress( 100 );
     recalcVariables( VT_FIELD );

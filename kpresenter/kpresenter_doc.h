@@ -544,7 +544,7 @@ protected:
     void saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter );
 
     //we move presSpeed to each table => compatibility with old file format
-    void compatibityPresSpeed();
+    void compatibilityPresSpeed();
 
     // ************ variables ************
 
@@ -560,8 +560,6 @@ protected:
 
     bool _clean;
     int objStartY, objStartNum;
-
-    PresSpeed presSpeed;
 
     QPen _presPen;
 
