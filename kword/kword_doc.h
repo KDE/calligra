@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
-/* Version: 0.0.1                                                 */
-/* Author: Reginald Stadlbauer, Torben Weis                       */
-/* E-Mail: reggie@kde.org, weis@kde.org                           */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998	  */
+/* Version: 0.0.1						  */
+/* Author: Reginald Stadlbauer, Torben Weis			  */
+/* E-Mail: reggie@kde.org, weis@kde.org				  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Document (header)                                      */
+/* Module: Document (header)					  */
 /******************************************************************/
 
 #ifndef kword_doc_h
@@ -51,7 +51,7 @@ class KWPictureFrameSet;
 #include <qdict.h>
 
 /******************************************************************/
-/* Class: KWordChild                                              */
+/* Class: KWordChild						  */
 /******************************************************************/
 
 class KWordChild : public KoDocumentChild
@@ -70,13 +70,13 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWordDocument                                           */
+/* Class: KWordDocument						  */
 /******************************************************************/
 
 class KWordDocument : public QObject,
-                      virtual public KoDocument,
-                      virtual public KoPrintExt,
-                      virtual public KWord::KWordDocument_skel
+		      virtual public KoDocument,
+		      virtual public KoPrintExt,
+		      virtual public KWord::KWordDocument_skel
 {
     Q_OBJECT
 
@@ -146,9 +146,6 @@ public:
 
     virtual QListIterator<KWordChild> childIterator();
 
-    /**
-     * Sets the paper size and recalculates the papers width and height.
-     */
     void setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf );
 
     void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf )
@@ -163,58 +160,28 @@ public:
     void delFrameSet( KWFrameSet *f )
     { frames.remove( f ); }
 
-    /**
-     * Returns the first parag of the frameset <i>_num</i>.
-     */
     KWParag *getFirstParag( unsigned int _num ) {
-        if ( frames.at( _num )->getFrameType() == FT_TEXT )
-            return dynamic_cast<KWTextFrameSet*>( frames.at( _num ) )->getFirstParag();
-        else
-            return 0L;
+	if ( frames.at( _num )->getFrameType() == FT_TEXT )
+	    return dynamic_cast<KWTextFrameSet*>( frames.at( _num ) )->getFirstParag();
+	else
+	    return 0L;
     }
 
-    /**
-     * @return the default user font.
-     *
-     * @see KWUserFont
-     */
     KWUserFont* getDefaultUserFont()
-    { return defaultUserFont; }
+    { return defaultUserFont;  }	
     KWParagLayout *getDefaultParagLayout()
     { return defaultParagLayout; }
-
-    /**
-     * List of all available user fonts
-     */
+    
     QList<KWUserFont> userFontList;
 
-    /**
-     * List of all available display fonts
-     */
     QList<KWDisplayFont> displayFontList;
 
-    /**
-     * List of all available parag layouts.
-     */
     QList<KWParagLayout> paragLayoutList;
 
-    /**
-     * @return a pointer to the user font with the given name or 0L if not found.
-     *
-     * @see KWUserFont
-     */
     KWUserFont* findUserFont( QString _fontname );
 
-    /**
-     * @return a display font matching the criteriums or 0L if none is found.
-     */
     KWDisplayFont* findDisplayFont( KWUserFont* _font, unsigned int _size, int _weight, bool _italic, bool _underline );
 
-    /**
-     * @return a pointer to the parag with the given name or 0L if not found.
-     *
-     * @see KWParagLayout
-     */
     KWParagLayout* findParagLayout( QString _name );
 
     KWParag* findFirstParagOfPage( unsigned int _page, unsigned int _frameset );
@@ -235,18 +202,10 @@ public:
 
     void print() {}
 
-    /**
-     * @param _ypos is relative to the upper left corner of the FIRST
-     *              page of the document.
-     *
-     * @return TRUE if '_ypos' is within the printable area of the
-     *         page with number '_page'. The borders of the paper
-     *         are not considered to belong to the printable area.
-     */
     bool isPTYInFrame( unsigned int _frameSet, unsigned int _frame, unsigned int _ypos );
 
     bool printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset, int _w, int _h,
-                    bool _viewFormattingChars = false, bool _drawVarBack = true );
+		    bool _viewFormattingChars = false, bool _drawVarBack = true );
     void printBorders( QPainter &_painter, int xOffset, int yOffset, int _w, int _h );
 
     void drawMarker( KWFormatContext &_fc, QPainter *_painter, int xOffset, int yOffset );
@@ -262,27 +221,31 @@ public:
     int getPages() { return pages; }
 
     void setPages( int _pages )
-    { pages = _pages; }
-
+    { pages = _pages;  }
     KWFormatCollection *getFormatCollection()
     { return &formatCollection; }
-    KWImageCollection *getImageCollection()
+    
+    KWImageCollection *getImageCollection()  
     { return &imageCollection; }
-
+    
     void insertPicture( QString _filename, KWPage *_paperWidget );
 
     void setSelStart( KWFormatContext &_fc )
     { selStart = _fc; }
+    
     KWFormatContext *getSelStart()
-    { return &selStart; }
+    { return &selStart;  }
     void setSelEnd( KWFormatContext &_fc )
-    { selEnd = _fc; }
+    { selEnd = _fc; } 
+
     KWFormatContext *getSelEnd()
     { return &selEnd; }
+
     void drawSelection( QPainter &_painter, int xOffset, int yOffset,
-                        KWFormatContext *_selStart = 0L, KWFormatContext *_selEnd = 0L );
+			KWFormatContext *_selStart = 0L, KWFormatContext *_selEnd = 0L );
     void setSelection( bool _has )
     { hasSelection = _has; }
+    
     bool has_selection()
     { return hasSelection; }
 
@@ -295,14 +258,9 @@ public:
     void appendPage( unsigned int _page );
 
     ProcessingType getProcessingType()
-    { return processingType; }
+    { return processingType;  }
 
     int getFrameSet( unsigned int mx, unsigned int my );
-    /**
-     * Return 1, if a frame gets selected which was not selected before,
-     * 2, if a frame gets selected which was already selected, and
-     * 0 if no frame got selected.
-     */
     int selectFrame( unsigned int mx, unsigned int my, bool simulate = false );
     void deSelectFrame( unsigned int mx, unsigned int my );
     void deSelectAllFrames();
@@ -392,10 +350,9 @@ public:
 
     KWAutoFormat &getAutoFormat() { return autoFormat; }
 
-    void setPageLayoutChanged( bool c )
-    { pglChanged = c; }
-    bool getPageLayoutChanged()
-    { return pglChanged; }
+    void setPageLayoutChanged( bool c ) { pglChanged = c; }
+
+    bool getPageLayoutChanged() { return pglChanged; }
 
     void addImageRequest( const QString &filename, KWCharImage *img );
     void addImageRequest( const QString &filename, KWPictureFrameSet *fs );
@@ -415,7 +372,7 @@ protected:
     virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
 
     virtual void draw( QPaintDevice*, CORBA::Long _width, CORBA::Long _height,
-                       CORBA::Float _scale );
+		       CORBA::Float _scale );
 
     void loadFrameSets( KOMLParser&, vector<KOMLAttrib>& );
     void loadStyleTemplates( KOMLParser&, vector<KOMLAttrib>& );
@@ -427,47 +384,18 @@ protected:
 
     bool m_bModified;
 
-    /**
-     * Calculates the width of a column.
-     *
-     * @see #columnWidth
-     * @see #ptColumnWidth
-     */
-    //void calcColumnWidth();
-
     KoPageLayout pageLayout;
     KoColumns pageColumns;
     KoKWHeaderFooter pageHeaderFooter;
 
-    /**
-     * Width of a column in unzoomed points. This value is automatically calculated,
-     * so dont write to it if you dont know exactly what you are doing.
-     *
-     * @see #calcColumnWidth
-     */
     unsigned int ptColumnWidth;
 
-    /**
-     * List of all framesets.
-     *
-     * @see KWFrame
-     */
     KWFormatCollection formatCollection;
     KWImageCollection imageCollection;
     QList<KWFrameSet> frames;
     QList<KWGroupManager> grpMgrs;
 
-    /**
-     * The default user font.
-     *
-     * @see KWUserFont
-     */
     KWUserFont *defaultUserFont;
-    /**
-     * The default parag layout
-     *
-     * @see KWParagLayout
-     */
     KWParagLayout *defaultParagLayout;
 
     int pages;

@@ -11,7 +11,7 @@ class KWordDocument;
 #include <qfontmetrics.h>
 
 /******************************************************************/
-/* Class: KWUserFont                                              */
+/* Class: KWUserFont						  */
 /******************************************************************/
 
 class KWUserFont
@@ -35,14 +35,14 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWDisplayFont                                           */
+/* Class: KWDisplayFont						  */
 /******************************************************************/
 
 class KWDisplayFont : public QFont
 {
 public:
     KWDisplayFont( KWordDocument *_doc, KWUserFont *_font, unsigned int _size,
-                   int _weight, bool _italic, bool _underline );
+		   int _weight, bool _italic, bool _underline );
     ~KWDisplayFont();
 
     void scaleFont();

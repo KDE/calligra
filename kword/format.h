@@ -13,7 +13,7 @@ class KWUserFont;
 class KWDisplayFont;
 
 /******************************************************************/
-/* Class: KWFormat                                                */
+/* Class: KWFormat						  */
 /******************************************************************/
 
 /**
@@ -29,10 +29,10 @@ public:
      * Creates a new KWFormat instance.
      *
      * @param _color The color to use for the text. If this color is not not valid
-     *               ( find out with QColor::isValid ) then the color does not change.
-     *               Pass <TT>QColor()</TT> if you dont want to change the color at all.
+     *		     ( find out with QColor::isValid ) then the color does not change.
+     *		     Pass <TT>QColor()</TT> if you dont want to change the color at all.
      * @param _font A pointer to the font family. if this pointer is 0L that means
-     *              that the text does not change its current font family.
+     *		    that the text does not change its current font family.
      * @param _font_size The size of the font to use or -1 if this value does not change.
      * @param _weight The fonts weight or -1 if the value should not change
      * @param _italic 1 to enable italic font, 0 to disable and -1 for no change.
@@ -43,7 +43,7 @@ public:
      * @see KWUserFont
      */
     KWFormat( KWordDocument *_doc, const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
-              char _italic = -1, char _underline = -1, VertAlign _vertAlign = VA_NORMAL, char _math = -1, char _direct = -1 );
+	      char _italic = -1, char _underline = -1, VertAlign _vertAlign = VA_NORMAL, char _math = -1, char _direct = -1 );
 
     /**
      * Creates a new KWFormat instance. This instance has set all values to
@@ -68,7 +68,7 @@ public:
 
     /**
      * @return The color to use. The color may be not valid ( test with <TT>QColor::isValid()</TT>.
-     *         In this case you shoud not use the color returned.
+     *	       In this case you shoud not use the color returned.
      */
     const QColor& getColor() const { return color; }
 
@@ -106,7 +106,7 @@ public:
      * You may want to use this function to get a default font & color.
      *
      * @param _doc is the document this format belongs to. The document provides information
-     *             on the default font for example.
+     *		   on the default font for example.
      *
      * @see KWordDocument
      */
@@ -115,18 +115,18 @@ public:
     /**
      * Set the color to use.
      * @param _color The color to use for the text. If this color is not not valid
-     *               ( find out with QColor::isValid ) then the color does not change.
-     *               Pass <TT>QColor()</TT> if you dont want to change the color at all.
+     *		     ( find out with QColor::isValid ) then the color does not change.
+     *		     Pass <TT>QColor()</TT> if you dont want to change the color at all.
      *
      * @see $QColor
      */
-    void setColor( QColor& _c ) { color = _c; }
+    void setColor( const QColor& _c ) { color = _c; }
 
     /**
      * Sets the font to use.
      *
      * @param _font A pointer to the font family. if this pointer is 0L that means
-     *              that the text does not change its current font family.
+     *		    that the text does not change its current font family.
      *
      * @see KWUserFont
      */

@@ -1364,7 +1364,7 @@ Reggie, 3.7.1999:
   the framesets, to which a frame can be connected,
   are listed
 - Framesets have now unique names, which the user
-  can (has to) specify - this makes working with 
+  can (has to) specify - this makes working with
   multiple framesets easier for users
 - Implemented deleting frames, framesets and tables
 - Some minor fixes
@@ -1374,3 +1374,7 @@ Reggie, 4.7.1999:
 - Implemented reconnecting frames
 - Some fixes
 
+Reggie, 13.7.1999:
+-----------------
+- Code cleanups
+- Improved pasting (it make a format diff like M$-Word now)

@@ -17,7 +17,7 @@ class KWTextFrameSet;
 class KWordDocument;
 
 /******************************************************************/
-/* Class: KWParag                                                 */
+/* Class: KWParag						  */
 /******************************************************************/
 
 /**
@@ -34,14 +34,15 @@ public:
      *
      * @param _doc the document this paragraph is belonging to.
      * @param _prev a pointer to the previous paragraph or 0L if this one is to become
-     *              the first one.
+     *		    the first one.
      * @param _next a pointer to the next paragraph or 0L if this one is to become
-     *              the last one.
+     *		    the last one.
      * @param _paragLayout the layout to use in this paragraph.
      *
      * @see KWParagraphLayout
      */
-    KWParag( KWTextFrameSet *_frameSet, KWordDocument *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout, bool useForFirst = true );
+    KWParag( KWTextFrameSet *_frameSet, KWordDocument *_doc, KWParag* _prev,
+	     KWParag* _next, KWParagLayout* _paragLayout, bool useForFirst = true );
     KWParag( const KWParag& _parag );
 
     /**
@@ -61,42 +62,42 @@ public:
     KWParag* getPrev() { return prev; }
     /**
      * @return The page this paragraph starts on. This value is only valid if this paragraph is
-     *         in front of the last modified paragraph. The value is zoomed.
+     *	       in front of the last modified paragraph. The value is zoomed.
      */
     unsigned int getStartPage() { return startPage; }
     unsigned int getEndPage() { return endPage; }
     /**
      * @return The column this paragraph starts in. This value is only valid if this paragraph is
-     *         in front of the last modified paragraph. The value is zoomed.
+     *	       in front of the last modified paragraph. The value is zoomed.
      */
     unsigned int getStartFrame() { return startFrame; }
     /**
      * @return The column this paragraph ends in. This value is only valid if this paragraph is
-     *         in front of the last modified paragraph. The value is zoomed.
+     *	       in front of the last modified paragraph. The value is zoomed.
      */
     unsigned int getEndFrame() { return endFrame; }
     /**
      * @return The y position on the page on which this paragraph starts.
-     *         This value is only valid if this paragraph is in front of the last modified paragraph.
-     *         The value is zoomed.
+     *	       This value is only valid if this paragraph is in front of the last modified paragraph.
+     *	       The value is zoomed.
      */
     unsigned int getPTYStart() { return ptYStart; }
     /**
      * @return The y position on the page on which this paragraph ends.
-     *         This value is only valid if this paragraph is in front of the last modified paragraph.
-     *         The value is zoomed.
+     *	       This value is only valid if this paragraph is in front of the last modified paragraph.
+     *	       The value is zoomed.
      */
     unsigned int getPTYEnd() { return ptYEnd; }
 
     /**
      * @return the size of the text in bytes. This does NOT mean
-     *         the amount of characters or whatever. The size needed
-     *         to store pointers to @ref #KWFormat is included for example.
+     *	       the amount of characters or whatever. The size needed
+     *	       to store pointers to @ref #KWFormat is included for example.
      */
     unsigned int getTextLen() { return text.size(); }
     /**
      * @return a pointer to the memory segment, which holds text paragraphs
-     *         text.
+     *	       text.
      */
     KWChar* getText() { return text.data(); }
     KWChar* getChar( unsigned int _pos ) { assert( _pos < text.size() ); return text.data() + _pos; }
@@ -164,17 +165,22 @@ public:
     bool hasHardBreak() { return hardBreak; }
 
     QString getParagName() { return paragName; }
-    void setParagName( const QString &name )
+    void setParagName( const QString &name ) 
     { paragName = name; }
 
-    void setFrameSet( KWTextFrameSet *_fs )
+    void setFrameSet( KWTextFrameSet *_fs ) 
     { frameSet = _fs; }
-    void setDocument( KWordDocument *_doc )
-    { document = _doc; }
 
+    void setDocument( KWordDocument *_doc ) 
+    { document = _doc; }
+    
     Info getInfo() { return info; }
     void setInfo( Info _info ) { info = _info; }
 
+    static void correctFormat( KWParag *newParag, KWParag *oldParag );
+
+    KWordDocument* getDocument() { return document; }
+    
 protected:
     /**
      * Pointer to the previous paragraph or 0L if this is the first one.
