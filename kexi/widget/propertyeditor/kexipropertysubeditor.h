@@ -24,6 +24,8 @@
 
 class KexiProperty;
 
+/** The base class for all editors used in KexiPropertyEditor.
+ **/
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertySubEditor : public QWidget
 {
 	Q_OBJECT
@@ -36,11 +38,15 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertySubEditor : public QWidget
 		virtual QVariant	getValue();
 		virtual void		setValue(const QVariant &value);
 
+		//! Sets \a w as editor 's widget, ie the widget which events are filtered and which is resized.
 		void			setWidget(QWidget *w);
 
 	signals:
+		//! Validate the input in the editor.
 		void			accept(KexiPropertySubEditor *);
+		//! Do not validate the contents of the editor.
 		void			reject(KexiPropertySubEditor *);
+		//! The editor's value has changed.
 		void			changed(KexiPropertySubEditor *);
 
 	protected:

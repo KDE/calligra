@@ -27,21 +27,33 @@ class QObject;
 class QString;
 class QStringList;
 
+/** This class holds a single property, which can be any of the types supported by QVariant.
+    It includes support for QStringList properties, an i18n'ed label and stores an old value to allow undo. 
+ **/
 class KEXIPROPERTYEDITOR_EXPORT KexiProperty
 {
 	public:
+		/*! Creates a simple property with \a name as name and \a value as value. */
 		KexiProperty(const QString &name, QVariant value);
+		/*! Creates a simple property with \a name as name, \a value as value and \a as i18n'ed description. */
 		KexiProperty(const QString &name, QVariant value, const QString &desc);
+		/*! Creates a list property with \a name as name, \a value as value 
+		  and \a list as the list of all possible values for \a value.
+		  The user will be able to choose a value in \a list.
+		*/
 		KexiProperty(const QString &name, QVariant value, const QStringList &list);
+		//! Copy constructor.
 		KexiProperty(const KexiProperty &property);
 		//KexiProperty(const QString &name, QVariant value, QStringList *list);
+		//! Creates an empty property.
 		KexiProperty();
 		~KexiProperty();
 		
 		const KexiProperty& operator=(const KexiProperty &property);
 
+		//! \return property name.
 		QString		name() const { return m_name; }
-
+		//! \return property value.
 		QVariant	value() const { return m_value; }
 		/*! Sets this property value to a new value \a v. If this is a first change, 
 		 and \a saveOldValue is true, an old value is saved, and can be later retrieved
@@ -50,19 +62,32 @@ class KEXIPROPERTYEDITOR_EXPORT KexiProperty
 		*/
 		void setValue(const QVariant &v, bool saveOldValue = true);
 
-		/*! \return old preperty value. This makes only sense when changed() is true. 
+		/*! \return old property value. This makes only sense when changed() is true. 
 		 The old value is saved on first change.
 		*/
 		QVariant	oldValue() const { return m_oldValue; }
+		//! \return property i18n'ed description.
 		QString		desc() const { return m_desc; }
+		/*! \return the QVariant::Type of property value and QVariant::StringList if this is a list property. */
 		QVariant::Type  type() const;
+		/*! \return a pointer to the QStringList containing all possible values for this property. */
 		QStringList*	list() const{ return m_list;}
+		/*! \return 1 if the property should be synced automatically in Property Editor 
+		  as soon as editor contents change (e.g. when the user types text). If autoSync() == 0, property value 
+		  will be updated when the user presses Enter or when another editor gets the focus.
+		  Property follow Property Editor global rule if autoSync() != 0 and 1 (default)
+		*/
 		int		autoSync() const { return m_autosync; }
 
+		/*! if \a sync == true, then the property will be synced automatically in Property Editor 
+		  as soon as editor contents change (e.g. when the user types text). If \a sync == false, property value 
+		  will be updated when the user presses Enter or when another editor gets the focus.
+		*/
 		void setAutoSync(int sync) { m_autosync = sync; }
 
 		//! \return true is this preperty value is changed. 
 		bool changed() const { return m_changed; }
+		/*! Marks this property as changed if \a set is true, or unchanged if \a set is true. */
 		void setChanged(bool set);
 	private:
 		QString		m_name;

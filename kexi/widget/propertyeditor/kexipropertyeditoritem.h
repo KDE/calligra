@@ -30,33 +30,61 @@
 
 typedef QDict<KexiPropertyEditorItem> ChildDict;
 
+/** This class is a subclass of KListViewItem which is associated to a property.
+    It also takes care of drawing custom contents.
+ **/
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 {
 	public:
+		/*! Creates a KexiPropertyEditorItem child of \a parent, associated to \a property.
+		    Items are created in KexiPropertyEditor::fill(), every time the buffer is updated.
+		*/
 		KexiPropertyEditorItem(KexiPropertyEditorItem *parent, KexiProperty *property);
+		//! Creates KexiPropertyEditor Top Item which is necessary for drawing all branches.
 		KexiPropertyEditorItem(KListView *parent, const QString &text);
 		~KexiPropertyEditorItem();
 
+		//! \return item's name (ie property's name)
 		const QString	name() { return m_property->name(); }
+		//! \return item's QVariant::Type (ie property's QVariant::Type)
 		QVariant::Type	type() { return m_property->type(); }
+		//! \return item's current value
 		QVariant	value() { return m_value; }
+		//! \return item's old value (ie property's old value)
 		QVariant	oldValue() { return m_oldvalue; }
+		//! \return a pointer to the property associated to this item.
 		KexiProperty*	property() { return m_property;}
 
+		//! Sets item value to \a value.
 		void		setValue(QVariant value);
+		/*! \return the composed item value.
+		    This function is used by property editor to update composed items, ie items with child items.
+		    It updates parent item when one oh its child changes.
+		*/ 
 		QVariant	getComposedValue();
+		/*! Updates the value of child items, when the value of the parent was changed
+ 		    with setValue(). Used by FormDesigner. 
+		*/
 		void		updateChildValue();
 
+		/*! \return the QString to be shown in the 2nd column of the list. The value is formatted depending on its 
+		    QVariant::Type.
+		*/
 		static QString	format(const QVariant &s);
-		
+
+		//! \return true if the item has been modified.
 		bool		modified() { return !(m_value==m_oldvalue);}
 
-	protected slots:
-		void childChanged(KexiPropertyEditorItem *item);
-
 	protected:
+		/*! Reimplemented from KListViewItem to draw custom contents. Properties names are wriiten in bold if 
+		    modified. Also takes care of drawing borders around the cells as well as pixmaps or colors if necessary.
+		*/
 		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
+		/*! Reimplemented from KListViewItem to draw custom contents. It takes care of drawing the [+] and [-]
+		    signs only if the item has children.
+		*/
 		virtual void paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h);
+		//! Reimplemented from KListViewItem to hide the top item.
 		virtual void setup();
 
 	private:

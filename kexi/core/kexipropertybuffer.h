@@ -27,19 +27,32 @@
 
 typedef QMap<QString, KexiProperty> PropertyBuffer;
 
+/** This class is a QMap<QString, KexiProperty> which holds properties to be shown in 
+    Property Editor. 
+**/
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertyBuffer : public QObject, public PropertyBuffer
 {
 	Q_OBJECT
 
 	public:
+		//! Creates an empty KexiPropertyBuffer, ie a QMap<QString, KexiProperty>
 		KexiPropertyBuffer(QObject *parent, const char *name=0);
 		virtual ~KexiPropertyBuffer();
-		
+
+		/*! Add \a property to buffer with property->name() as key in QMap.
+		    Same as insert(\a property->name(), \a property);
+		*/
 		void add(const KexiProperty &property);
 
+		/* Change the value of property whose key is \a property to \a value.
+		  By default, it only calls KexiProperty::setValue().
+		*/
 		virtual void	changeProperty(const char *property, const QVariant &value);
 
 	signals:
+		/*! This signal is emitted when property whose key is \a property has changed 
+		   (ie when changeProperty() was called). \a value is the new property value.
+		*/
 		void	propertyChanged(const char *property, const QVariant &value);
 };
 
