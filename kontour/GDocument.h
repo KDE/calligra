@@ -29,6 +29,7 @@
 #include <qobject.h>
 #include <qptrlist.h>
 #include <qvaluelist.h>
+#include <qcolor.h>
 
 #include "GStyleList.h"
 

@@ -23,6 +23,7 @@
 */
 
 #include "GStyleList.h"
+#include "GStyle.h"
 
 #include <klocale.h>
 

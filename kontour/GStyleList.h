@@ -27,12 +27,11 @@
 
 #include <qdict.h>
 
-#include "GStyle.h"
-
 class QDomDocument;
 class QDomElement;
 class QStringList;
 
+class GStyle;
 class GStyleList
 {
 public:

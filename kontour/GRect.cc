@@ -130,10 +130,12 @@ QDomElement GRect::writeToXml(QDomDocument &document)
 void GRect::draw(QPainter &p, bool withBasePoints, bool outline, bool)
 {
   p.save();
-  QPen pen(black);
+  //QPen pen(black);
   
 //  p.setWorldMatrix(tmpMatrix, true);
-  p.setPen(pen);
+  //p.setPen(pen);
+  setPen(&p);
+  setBrush(&p);
 
   p.drawRect((int)sPoint.x(), (int)sPoint.y(), (int)(ePoint.x() - sPoint.x()), (int)(ePoint.y() - sPoint.y()));
   

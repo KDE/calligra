@@ -692,6 +692,9 @@ void KontourView::slotStyles(const QString &s)
 
 void KontourView::slotAddStyle()
 {
+  // TODO : we need to read the current pen and brush from the color chooser(s)
+  // here. Should we update KoColorChooser to read the current color value instead of
+  // catching signals ? (Rob)
   activeDocument()->styles()->addStyle();
   updateStyles();
 }

@@ -174,6 +174,7 @@ void RectTool::processEvent(QEvent *e)
       rect->endPoint(KoPoint(r.right() - canvas->xOffset(), r.bottom() - canvas->yOffset()));
       CreateRectCmd *cmd = new CreateRectCmd(toolController()->view()->activeDocument(), rect);
       KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
+	  rect->style() = *(doc->document()->styles()->current());	// copy current style
       doc->history()->addCommand(cmd);
       canvas->updateBuf(r);
       canvas->repaint(r);

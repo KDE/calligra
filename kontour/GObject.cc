@@ -26,6 +26,7 @@
 #include "GObject.h"
 
 #include <qdom.h>
+#include <qpainter.h>
 #include <kdebug.h>
 
 #include "GOval.h"
@@ -251,5 +252,21 @@ void GObject::invalidateClipRegion  () {
 }
 ---------------------*/
 
+void GObject::setPen(QPainter *p)
+{
+  // TODO : set dashes, arrows, linewidth etc.
+  QPen pen;
+  pen.setColor(st.outlineColor().color());
+  p->setPen(pen);
+}
+
+void GObject::setBrush(QPainter *p)
+{
+  // TODO : patterns, gradients, noFill
+	QBrush brush;
+	brush.setStyle(Qt::SolidPattern);
+	brush.setColor(st.fillColor().color());
+	p->setBrush(brush);
+}
 
 #include "GObject.moc"

@@ -145,6 +145,7 @@ void OvalTool::processEvent(QEvent *e)
       CreateOvalCmd *cmd = new CreateOvalCmd(toolController()->view()->activeDocument(), oval);
       KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
       doc->history()->addCommand(cmd);
+      canvas->updateBuf(r);
       canvas->repaint(r);
       state = S_Init;
     }

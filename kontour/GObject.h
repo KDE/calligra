@@ -36,6 +36,7 @@
 
 class QDomDocument;
 class QDomElement;
+class QPainter;
 class GPath;
 class GLayer;
 
@@ -225,6 +226,8 @@ protected:
   void updateBoundingBox(const KoPoint &p1, const KoPoint &p2);
   void calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint &tright, const KoPoint &bright, const KoPoint &bleft);
   void updateRegion(bool recalcBBox = true);
+  void setPen(QPainter *p);
+  void setBrush(QPainter *p);
   
 protected:
   unsigned int rcount;       // the reference counter
