@@ -1503,10 +1503,11 @@ void KSpreadTable::setSeries( QPoint _marker, double start, double end, double s
   */
   int numberOfCells;
   if (end > start)
-    numberOfCells = (int) ((end - start) / step + 1); /* initialize for linear */
-  else
-    numberOfCells = (int) ((start - end) / step + 1); /* initialize for linear */
-
+    numberOfCells = (int) ((end - start) / step + 1); /*initialize for linear*/
+  else if ( end <start )
+    numberOfCells = (int) ((start - end) / step + 1); /*initialize for linear*/
+  else //equal ! => one cell fix infini loop
+      numberOfCells = 1;
   if (type == Geometric)
   {
     /* basically, A(n) = start ^ n
@@ -1594,7 +1595,7 @@ void KSpreadTable::setSeries( QPoint _marker, double start, double end, double s
 
   /* now we're going to actually loop through and set the values */
   double incr;
-
+  kdDebug()<<" increment !!!!!!!!!!!!!!!! \n";
   if (step >= 0 && start < end)
   {
     for ( incr = start; incr <= end; )
@@ -1690,7 +1691,7 @@ void KSpreadTable::setSeries( QPoint _marker, double start, double end, double s
   }
   else
   {
-    for ( incr = start; incr >= end; )
+    for ( incr = start; incr <= end; )
     {
       cell = nonDefaultCell( x, y );
 
