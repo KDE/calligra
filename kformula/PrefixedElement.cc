@@ -48,7 +48,7 @@ void PrefixedElement::draw(QPoint drawPoint,int resolution)
 	Draw Prefixed!!
     */
     int ofs=(numericFont/32)+1; 
-
+    unit = 0;
     if( content[1]=='S')
      unit = (familySize.height()-2*ofs)/8;
     if( content[1]=='F')
@@ -58,30 +58,30 @@ void PrefixedElement::draw(QPoint drawPoint,int resolution)
      {
       QColor elementColor(pen->pen().color());
       pen->setBrush(elementColor);
-      pen->drawChord(x+familySize.x()-ofs+unit,y+familySize.y(),
+      pen->drawChord(x+familySize.x()-ofs+unit+1,y+familySize.y(),
                       unit+2*ofs,(unit+ofs)*2,
 		      0,180*16);
       pen->setBrush(pen->backgroundColor());
       pen->setPen(pen->backgroundColor());
-      pen->drawChord(x+familySize.x()+unit,y+familySize.y()+ofs*2,
-                      unit,unit*2,
+      pen->drawChord(x+familySize.x()+unit+1,y+familySize.y()+ofs  ,
+                      unit,unit*2+ofs,
 		      0,180*16);
       pen->setPen(elementColor);
     
       pen->setBrush(elementColor);
-      pen->drawChord(x+familySize.x(),y+familySize.bottom()-(unit+ofs)*2,
+      pen->drawChord(x+familySize.x()+1,y+familySize.bottom()-(unit+ofs)*2,
                       unit+ofs*2,(unit+ofs)*2,
 		      180*16,180*16);
       pen->setBrush(pen->backgroundColor());
       pen->setPen(pen->backgroundColor());
-      pen->drawChord(x+familySize.x()+ofs,y+familySize.bottom()-(unit+ofs)*2,
-                      unit,unit*2,
+      pen->drawChord(x+familySize.x()+ofs+1,y+familySize.bottom()-(unit+ofs)*2,
+                      unit,unit*2+ofs,
 		      180*16,180*16);
       pen->setPen(elementColor);
     
       QPointArray points(5);
-      points.setPoint(1,x+familySize.x()+unit+ofs-1,y+familySize.bottom()-unit-ofs+1);
-      points.setPoint(2,x+familySize.x()+unit+ofs*2-2,y+familySize.bottom()-unit-ofs+1); 
+      points.setPoint(1,x+familySize.x()+unit+ofs+1 ,y+familySize.bottom()-unit-ofs    );
+      points.setPoint(2,x+familySize.x()+unit+ofs*2  ,y+familySize.bottom()-unit-ofs  ); 
       points.setPoint(3,x+familySize.x()+unit,y+familySize.y()+unit+ofs-1);
       points.setPoint(4,x+familySize.x()-ofs+unit+1,y+familySize.y()+unit+ofs-1);
       pen->setBrush(pen->pen().color());
@@ -123,9 +123,9 @@ void PrefixedElement::checkSize()
   
     child[0]->checkSize();
     familySize=child[0]->getSize();
-    int unit;
+    int unit=0;
     if( content[1]=='S')
-     unit = (familySize.height())/6;
+     unit = (familySize.height())/8 ;
     if( content[1]=='F')
      unit = atoi(content.mid(1,3));
     familySize.setTop(familySize.top()-1-(numericFont/32));
