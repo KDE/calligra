@@ -190,7 +190,7 @@ signals:
     /** Emitted by formatMore() after formatting a bunch of paragraphs.
      * KWord uses this signal to check for things like 'I need to create a new page'
      */
-    void afterFormatting( int bottom, QTextParag* m_lastFormatted );
+    void afterFormatting( int bottom, QTextParag* m_lastFormatted, bool* abort );
 
     /** Emitted when a new command has been created and should be added to
      * the main list of commands (usually in the KoDocument).

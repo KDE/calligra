@@ -1310,7 +1310,10 @@ void KoTextObject::formatMore()
                    << endl;
 #endif
 
-    emit afterFormatting( bottom, m_lastFormatted );
+    bool abort = false;
+    emit afterFormatting( bottom, m_lastFormatted, &abort );
+    if ( abort )
+        return;
 
     // Now let's see when we'll need to get back here.
     if ( m_lastFormatted )
