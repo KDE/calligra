@@ -248,7 +248,67 @@ try inserting other parts or even parts in parts.
 
 <chapter id="customization">
 <title>Customizing &KOffice;</title>
-<para></para>
+<para>This chapter shows you how to customize KOffice to suit your needs.</para>
+<sect1><title>Customizing the &KOffice; GUI</title>
+<para>
+While &KOffice; will come out of the box with a GUI that should suit most people's needs,
+ there are good reasons why you may want to change its looks. My mother, for example, is
+ a bit afraid of every button and every menu entry she doesn't understand. To tailor
+ &KOffice; to her needs, I reduced its GUI to a bare minimum of functionality. As she
+ only needs to write letters and use certain templates, there's no need for much more
+ functionality than saving, loading, printing etc.</para>
+<para>
+Thanks to the action concept of Qt and KDE, you can freely customize &KOffice; menu bar
+ and tool bars. Unfortunately, right now there's no easy-to-use dialog to do this.
+ &KOffice; stores its GUI configuration in XML files and you'll have to edit those.
+ Hopefully this situation is going to change in the future; but for now, you should
+ have some basic knowledge of how an XML document looks like (or HTML, which actually
+ is an XML subset).
+</para>
+<para>
+Normally, each &KOffice; application has at least two of those XML files: one describing
+ the GUI of the shell (basically, that's what you see if there's no document open) and
+ one describing the GUI of the respective part (that's what you see normally). E.g.
+ for &KWord;, there are <filename>kword_shell.rc</filename> and <filename>kword.rc</filename>.
+</para>
+<para> 
+Here's a simple example of such an rc-file.
+<example>
+<title>An example of a simple rc-file</title>
+<screen>
+<![ CDATA [
+<!DOCTYPE QConfig ><QConfig>
+<MenuBar>
+ <Menu name="Edit"><text>Edit</text>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Separator/>
+  <Action name="edit_find"/>
+ </Menu>
+ <Menu name="Insert"><text>Insert</text>
+  <Action name="insert_picture"/>
+  <Action name="insert_clipart"/>
+  <Menu name="Variable"><text>Variable</text>
+   <Action name="insert_var_datefix"/>
+   <Action name="insert_var_datevar"/>
+  </Menu>
+ </Menu>
+</MenuBar>
+<ToolBars>
+ <ToolBar name="edit_toolbar" position="right">
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+ </ToolBar>
+</ToolBars>
+</QConfig>
+]]>
+</screen>
+</example>
+
+</para>
+</sect1>
 </chapter>
 
 <chapter id="moreinfo">
@@ -310,7 +370,22 @@ in the <filename>example</filename> directory.
 
 <chapter id="legal">
 <title>Copyright and Licensing</title>
-<para></para>
+<para>
+KOffice is copyrighted by the KOffice team.
+KOffice is licensed mainly under the terms of the <ulink url="common/gpl-license.html">GNU GPL</ulink>.
+</para>
+<para>
+Some programs are licensed under the terms of the Artistic License. FIXME: put artistic-license.html in common!
+</para>
+<para>
+This manual is copyright by Jost Schenck. It can be distributed freely, as long as this
+copyright notice is included. You may change it as long as you send me the changes or
+commit them to KDE CVS. I'll not be liable for anything resulting from the use of this
+manual.
+</para>
+<para>
+The other KOffice manuals are copyrighted by their respective authors.
+</para>
 </chapter>
 
 <glossary id="glossary"><title>Glossary</title>
