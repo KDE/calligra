@@ -73,6 +73,21 @@ RTFWorker::RTFWorker():
 
 #define FULL_TABLE_SUPPORT
 
+QString RTFWorker::writeRow(const QString& textCellx, const QString& rowText, const int firstLeft)
+{
+    QString row;
+    row += "\\trowd\\trgaph60";  // start new row
+    row += "\\trleft";
+    if (firstLeft>=0)
+        row += QString::number(qRound(PT_TO_TWIP(firstLeft)) - m_paperMarginLeft);
+    else
+        row += '0';
+    row += textCellx;
+    row += " "; // End of keyword
+    row += rowText;
+    return row;
+}
+
 bool RTFWorker::makeTable(const FrameAnchor& anchor)
 {
     m_textBody += m_prefix;
@@ -80,6 +95,7 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
 
 #ifdef FULL_TABLE_SUPPORT
     int rowCurrent = 0;
+    int firstLeft=-1; // \trleft undefined
     int debugCellCurrent = 0; //DEBUG
     int debugRowCurrent = 0; //DEBUG
     QString textCellx; // All \cellx
@@ -97,19 +113,25 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
         if (rowCurrent!=(*itCell).row)
         {
             rowCurrent = (*itCell).row;
-            m_textBody += "\\trowd\\trgaph60\\trleft-60";  // start new row
-            m_textBody += textCellx;
-            m_textBody += " "; // End of keyword
-            m_textBody += rowText;
+            m_textBody += writeRow( textCellx, rowText, firstLeft);
             m_textBody += "\\row";
             m_textBody += m_eol;
             rowText = QString::null;
             textCellx = QString::null;
-            debugRowCurrent++; // DEBUG
+            firstLeft = -1;
+            debugRowCurrent ++; // DEBUG
             debugCellCurrent = 0; //DEBUG
         }
 
         const FrameData& frame = (*itCell).frame;
+
+        if (firstLeft<0) // Not yet set, so set the position of the left border.
+        {
+            firstLeft=frame.left;
+            if (firstLeft<0) // If still negative, set it to 0
+                firstLeft=0;
+        }
+
         kdDebug(30515) << "Cell: " << debugRowCurrent << "," << debugCellCurrent
             << " left: " << frame.left << " right: " << frame.right << " top: " << frame.top << " bottom " << frame.bottom << endl;
         textCellx += "\\cellx";
@@ -134,10 +156,7 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
     }
 
 #ifdef FULL_TABLE_SUPPORT
-    m_textBody += "\\trowd\\trgaph60\\trleft-60";  // start new row
-    m_textBody += textCellx;
-    m_textBody += " "; // End of keyword
-    m_textBody += rowText;
+    m_textBody += writeRow( textCellx, rowText, firstLeft);
     //m_textBody += "\\row";
     //m_textBody += m_eol;
     m_inTable = oldInTable;
