@@ -19,7 +19,7 @@
 */
 
 #ifndef KEXIFORMPART_H
-#define KEXITFORMPART_H
+#define KEXIFORMPART_H
 
 #include <qdom.h>
 #include <qcstring.h>
