@@ -19,6 +19,8 @@
 
 #include "serialletter_qtsqlplugin.h"
 #include "serialletter_qtsqlplugin.moc"
+#include "mailmerge_qtsqlplugin_easyfilter.h"
+
 
 #include <qlayout.h>
 #include <qsqlcursor.h>
@@ -168,7 +170,7 @@ KWQTSQLDataSourceEditor::KWQTSQLDataSourceEditor( QWidget *parent, KWQTSQLSerial
         (new QVBoxLayout(plainPage()))->setAutoAdd(true);
         setMainWidget(widget=new QTSQLDataSourceEditor(plainPage()));
 	connect(widget->tableCombo,SIGNAL(activated(int)),this,SLOT(tableChanged(int)));
-	connect(widget->editFilter,SIGNAL(clicked()),this,SLOT(editFilters()));
+	connect(widget->editFilter,SIGNAL(clicked()),this,SLOT(editFilter()));
 	updateTableCombo();
 	
 //        connect(this,SIGNAL(okClicked()),this,SLOT(slotSetQuery()));
@@ -204,6 +206,8 @@ void KWQTSQLDataSourceEditor::slotSetQuery()
 
 void KWQTSQLDataSourceEditor::editFilter()
 {
+	KWQTSqlEasyFilter *f=new KWQTSqlEasyFilter(static_cast<QWidget*>(parent()));
+	f->exec();
 }
 
 extern "C" {
