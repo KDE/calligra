@@ -586,7 +586,7 @@ void KWView::setupActions()
     actionBorderWidth->setItems( lst );
 
 
-     actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color" );
+    actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color" );
     connect(actionBorderColor,SIGNAL(activated()),SLOT(borderColor()));
 
 
