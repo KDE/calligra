@@ -426,7 +426,7 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
   tmpQLabel->setText(i18n("Recent file:"));
 
   QComboBox * recentFile = new QComboBox( this );
-  recentFile->setMaximumWidth( KApplication::kApplication()->desktop()->width()*3/4 );
+  recentFile->setMaximumWidth( kapp->desktop()->width()*3/4 );
   lay2->addWidget(recentFile);
 
   QStringList fileList = KRecentDocument::recentDocuments();
