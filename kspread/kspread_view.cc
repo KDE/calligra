@@ -79,6 +79,7 @@
 #include "kspread_dlg_area.h"
 #include "kspread_dlg_resize2.h"
 #include "kspread_dlg_preference.h"
+#include "kspread_dlg_comment.h"
 #include <kscript_scriptmenu.h>
 
 #include "handler.h"
@@ -273,14 +274,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_firstLetterUpper = new KAction( i18n("Convert first letter to upper case"),KSBarIcon("first_letter_upper") ,0, this, SLOT( firstLetterUpper() ), actionCollection(), "firstletterupper" );
     m_verticalText = new KToggleAction( i18n("Vertical text"),KSBarIcon("vertical_text") ,0 ,actionCollection(), "verticaltext" );
     connect( m_verticalText, SIGNAL( toggled( bool ) ), this, SLOT( verticalText( bool ) ) );
-    //m_hideGrid = new KToggleAction( i18n("Hide Grid"), 0, actionCollection(), "hideGrid");
-    //connect( m_hideGrid, SIGNAL( toggled( bool ) ), this, SLOT( toggleGrid( bool ) ) );
-    //m_showFormular = new KToggleAction( i18n("Show formular"), 0, actionCollection(), "showFormular");
-    //connect( m_showFormular, SIGNAL( toggled( bool ) ), this, SLOT( toggleFormular( bool ) ) );
-    //m_LcMode = new KToggleAction( i18n("LC mode"), 0, actionCollection(), "LcMode");
-    //connect( m_LcMode, SIGNAL( toggled( bool ) ), this, SLOT( toggleLcMode( bool ) ) );
-    //m_showColumnNumber = new KToggleAction( i18n("Show column number"), 0, actionCollection(), "columnNumber");
-    //connect( m_showColumnNumber, SIGNAL( toggled( bool ) ), this, SLOT( toggleColumnNumber( bool ) ) );
+    m_addModifyComment = new KAction( i18n("Add/modify comment..."),KSBarIcon("comment"), 0, this, SLOT( addModifyComment() ), actionCollection(), "addmodifycomment" );
+    m_showComment = new KAction( i18n("Show comment"), 0, this, SLOT( showComment() ), actionCollection(), "showcomment" );
+    m_removeComment = new KAction( i18n("Remove comment"),KSBarIcon("removecomment"), 0, this, SLOT( removeComment() ), actionCollection(), "removecomment" );
     m_editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this, SLOT( editGlobalScripts() ),
 				       actionCollection(), "editGlobalScripts" );
     m_editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this, SLOT( editLocalScripts() ), actionCollection(), "editLocalScripts" );
@@ -1563,11 +1559,7 @@ void KSpreadView::changeTable( const QString& _name )
 
     updateEditWidget();
     //refresh toggle button
-    //m_hideGrid->setChecked( !m_pTable->getShowGrid() );
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
-    //m_showFormular->setChecked(m_pTable->getShowFormular());
-    //m_LcMode->setChecked(m_pTable->getLcMode());
-    //m_showColumnNumber->setChecked(m_pTable->getShowColumnNumber());
 
 }
 
@@ -1664,6 +1656,20 @@ void KSpreadView::specialPaste()
     dlg.exec();
     m_pTable->recalc(true);
     updateEditWidget();
+}
+
+void KSpreadView::removeComment()
+{
+  if ( !m_pTable )
+	return;
+  m_pTable->setSelectionRemoveComment( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+}
+
+void KSpreadView::showComment()
+{
+  if ( !m_pTable )
+	return;
+  m_pCanvas->showComment();
 }
 
 void KSpreadView::consolidate()
@@ -1822,40 +1828,6 @@ void KSpreadView::togglePageBorders( bool mode )
    m_pTable->setShowPageBorders( mode );
 }
 
-/*void KSpreadView::toggleGrid( bool mode)
-{
-  if ( !m_pTable )
-       return;
-  m_pTable->setShowGrid(!mode);
-  m_pCanvas->repaint();
-}*/
-
-/*void KSpreadView::toggleFormular( bool mode)
-{
-  if ( !m_pTable )
-       return;
-  m_pTable->setShowFormular(mode);
-  m_pTable->recalc();
-  m_pCanvas->repaint();
-
-}*/
-
-/*void KSpreadView::toggleLcMode( bool mode)
-{
-  if ( !m_pTable )
-       return;
-  m_pTable->setLcMode(mode);
-  m_pCanvas->repaint();
-  slotUpdateHBorder(activeTable());
-}*/
-
-/*void KSpreadView::toggleColumnNumber(bool mode)
-{
- if ( !m_pTable )
-       return;
-  m_pTable->setShowColumnNumber(mode);
-  slotUpdateHBorder(activeTable());
-}*/
 
 void KSpreadView::preference()
 {
@@ -1866,6 +1838,15 @@ void KSpreadView::preference()
   m_pTable->recalc();
   m_pCanvas->repaint();
   slotUpdateHBorder(activeTable());
+}
+
+void KSpreadView::addModifyComment()
+{
+  if ( !m_pTable )
+       return;
+
+  KSpreadcomment* dlg = new  KSpreadcomment( this, "comment",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+  dlg->show();
 }
 
 void KSpreadView::editCell()
@@ -2118,14 +2099,22 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     if(selection.left()==0 && koDocument()->isReadWrite() )
     {
     	m_pPopupMenu->insertSeparator();
-    	m_pPopupMenu->insertItem( i18n("Insert Cell"),this,SLOT(slotInsert()));
-    	m_pPopupMenu->insertItem( i18n("Remove Cell"),this,SLOT(slotRemove()));
+        m_pPopupMenu->insertItem( KSBarIcon("insertcell"),i18n("Insert Cell"),this,SLOT(slotInsert()));
+    	m_pPopupMenu->insertItem( KSBarIcon("removecell"),i18n("Remove Cell"),this,SLOT(slotRemove()));
     }
+    KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+    m_pPopupMenu->insertSeparator();
+    m_addModifyComment->plug( m_pPopupMenu );
+    if(!cell->getComment().isEmpty())
+        {
+        m_showComment->plug( m_pPopupMenu );
+        m_removeComment->plug( m_pPopupMenu );
+        }
 
     // Remove informations about the last tools we offered
     m_lstTools.clear();
     m_lstTools.setAutoDelete( true );
-    KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+
     if ( !cell->isFormular() && !cell->isValue() && !cell->valueString().isEmpty()&& koDocument()->isReadWrite() )
     {
       m_popupMenuFirstToolId = 10;
@@ -2154,7 +2143,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
 	    m_lstTools.append( t );
 	  }
 	}
-	
+
 	QObject::connect( m_pPopupMenu, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
       }
     }
@@ -2303,7 +2292,7 @@ void KSpreadView::resizeColumn()
     if(selection.right()==0x7FFF)
     	KMessageBox::error( this, i18n("Area too large!"));
     else
-    	{	
+    	{
 	KSpreadresize2* dlg = new KSpreadresize2( this, "Resize column", KSpreadresize2::resize_column );
     	dlg->show();
     	}

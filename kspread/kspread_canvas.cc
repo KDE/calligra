@@ -173,6 +173,7 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
 
   choose_visible = false;
 
+  labelComment=0;
   setFocus();
 }
 
@@ -1442,6 +1443,13 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
 {
   bool own_painter = FALSE;
 
+  //delete labelComment when you change position
+  if(labelComment)
+        {
+        delete labelComment;
+        labelComment=0;
+        }
+
   if ( _painter == 0L )
   {
     _painter = new QPainter();
@@ -1870,6 +1878,49 @@ if(selected)
 	}
 
 }
+
+void KSpreadCanvas::showComment()
+{
+QPainter painter;
+KSpreadCell* cell = activeTable()->cellAt( marker() );
+QString tmp;
+int pos=0;
+int index=0;
+int line=0;
+
+if(labelComment)
+        {
+        delete labelComment;
+        labelComment=0;
+        }
+tmp=cell->getComment();
+int len=tmp.length();
+
+do
+{
+  pos=tmp.find("\n",pos);
+  index=QMAX((pos-index),index);
+  pos++;
+  line++;
+}
+while(pos!=len);
+painter.begin( this );
+
+len = painter.fontMetrics().width("b")*index;
+int hei =painter.fontMetrics().height()*line;
+painter.end();
+
+labelComment=new QLabel(this);
+labelComment->setBackgroundColor( yellow );
+int xpos = activeTable()->columnPos( markerColumn(), this );
+int ypos = activeTable()->rowPos( markerRow(), this );
+int w = cell->width( markerColumn(), this );
+labelComment->setGeometry(xpos +w +10, ypos + 10,len, hei+10 ) ;
+labelComment->setAlignment(Qt::AlignVCenter);
+labelComment->setText(tmp);
+labelComment->show();
+}
+
 /****************************************************************
  *
  * KSpreadVBorder

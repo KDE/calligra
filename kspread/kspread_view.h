@@ -252,6 +252,9 @@ public slots:
     void preference();
     void firstLetterUpper();
     void verticalText(bool );
+    void addModifyComment();
+    void removeComment();
+    void showComment();
     /**
      * @ref #tabBar is connected to this slot.
      * When the user selects a new table using the @ref #tabBar this slot
@@ -446,8 +449,6 @@ private:
     KAction* m_default;
     KAction* m_areaName;
     KAction* m_showArea;
-//    KToggleAction* m_showFormular;
-//    KToggleAction* m_LcMode;
     KAction* m_resizeRow;
     KAction* m_resizeColumn;
     KAction* m_fontSizeUp;
@@ -459,7 +460,9 @@ private:
     KAction* m_preference;
     KAction* m_firstLetterUpper;
     KToggleAction* m_verticalText;
-//    KToggleAction* m_showColumnNumber;
+    KAction* m_addModifyComment;
+    KAction* m_showComment;
+    KAction* m_removeComment;
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.

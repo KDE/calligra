@@ -1810,7 +1810,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
   	{
   	if(!table()->getShowGrid())
   		{
-  		_painter.setPen(Qt::NoPen);	
+  		_painter.setPen(Qt::NoPen);
   		}
   	else
   		{
@@ -1832,7 +1832,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
   	{
     	if(!table()->getShowGrid())
   		{
-  		_painter.setPen(Qt::NoPen);	
+  		_painter.setPen(Qt::NoPen);
   		}
   	else
   		{
@@ -1861,7 +1861,13 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
     _painter.setBrush(m_backGroundBrush);
     _painter.drawRect( _tx + left, _ty + top, w-left-BORDER_SPACE, h - top - BORDER_SPACE);
     }
-
+  if( !comment.isEmpty())
+    {
+    _painter.setPen( Qt::red );
+    _painter.drawLine( _tx+w-10, _ty + dy, _tx + w, _ty + dy );
+    _painter.drawLine( _tx+w, _ty+dy , _tx+w , _ty+dy+10  );
+    _painter.drawLine( _tx+w-10, _ty+dy , _tx+w  , _ty + dy+10  );
+    }
   static QColorGroup g( Qt::black, Qt::white, Qt::white, Qt::darkGray, Qt::lightGray, Qt::black, Qt::black );
   static QBrush fill( Qt::lightGray );
   /**
@@ -3149,6 +3155,12 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   		}
   	cell.appendChild( condition );
   	}
+  if ( !comment.isEmpty() )
+        {
+        QDomElement comment = doc.createElement( "comment" );
+        comment.appendChild( doc.createTextNode( getComment() ) );
+        cell.appendChild( comment );
+        }
   if ( !m_strText.isEmpty() )
   {
     if ( isFormular() )
@@ -3467,6 +3479,13 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
   	 	}
 
   	}
+    QDomElement comment = cell.namedItem( "comment" ).toElement();
+    if ( !comment.isNull() )
+        {
+        QString t = comment.text();
+	//t = t.stripWhiteSpace();
+        setComment(t+"\n");
+        }
 
     QDomElement text = cell.namedItem( "text" ).toElement();
     if ( !text.isNull() && ( pm == ::Normal || pm == ::Text || pm == ::NoBorder ) )

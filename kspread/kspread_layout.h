@@ -182,6 +182,9 @@ public:
     virtual void setVerticalText( bool _b ) { m_bVerticalText = _b; }
     virtual bool verticalText() { return m_bVerticalText; }
 
+    virtual QString getComment() {return comment;}
+    virtual void setComment(QString _comment){ comment=_comment;}
+
     KSpreadTable* table() { return m_pTable; }
 
 protected:
@@ -283,6 +286,8 @@ protected:
     double m_dFaktor;
 
     bool m_bVerticalText;
+
+    QString comment;
 
     KSpreadTable *m_pTable;
 };

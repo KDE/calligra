@@ -386,6 +386,9 @@ public:
 
     void setSelectionVerticalText( const QPoint &_marker,bool _b);
 
+    void setSelectionComment( const QPoint &_marker,QString _comment);
+    void setSelectionRemoveComment( const QPoint &_marker);
+
     void setSelectionTextColor( const QPoint &_marker, QColor tbColor );
     void setSelectionbgColor( const QPoint &_marker, QColor bg_Color );
     void setSelectionBorderColor( const QPoint &_marker, QColor bd_Color );
