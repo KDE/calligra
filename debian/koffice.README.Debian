@@ -8,4 +8,4 @@ The documentation for each application is in the corresponding
 /usr/share/doc/<package>/ directory (for instance, /usr/share/doc/kword/,
 /usr/share/doc/kspread/ and so on).
 
- -- Ben Burton <benb@acm.org>, Fri,  6 Apr 2001 10:30:32 -0500
+ -- Ben Burton <bab@debian.org>, Fri,  6 Apr 2001 10:30:32 -0500
