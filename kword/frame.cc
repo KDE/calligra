@@ -1051,10 +1051,10 @@ void KWTextFrameSet::updateCounters()
 			    counterData[ i ] = atoi( p->getParagLayout()->getStartCounter() );
 			    break;
 			case KWParagLayout::CT_ALPHAB_L:
-			    counterData[ i ] = QChar( p->getParagLayout()->getStartCounter()[ 0 ] );
+			    counterData[ i ] = p->getParagLayout()->getStartCounter()[ 0 ].unicode();
 			    break;
 			case KWParagLayout::CT_ALPHAB_U:
-			    counterData[ i ] = QChar( p->getParagLayout()->getStartCounter()[ 0 ] );
+			    counterData[ i ] = p->getParagLayout()->getStartCounter()[ 0 ].unicode();
 			    break;
 			default: break;
 			}
@@ -1087,10 +1087,10 @@ void KWTextFrameSet::updateCounters()
 			    listData[ i ] = atoi( p->getParagLayout()->getStartCounter() );
 			    break;
 			case KWParagLayout::CT_ALPHAB_L:
-			    listData[ i ] = QChar( p->getParagLayout()->getStartCounter()[ 0 ] );
+			    listData[ i ] = p->getParagLayout()->getStartCounter()[ 0 ].unicode();
 			    break;
 			case KWParagLayout::CT_ALPHAB_U:
-			    listData[ i ] = QChar( p->getParagLayout()->getStartCounter()[ 0 ] );
+			    listData[ i ] = p->getParagLayout()->getStartCounter()[ 0 ].unicode();
 			    break;
 			default: break;
 			}
