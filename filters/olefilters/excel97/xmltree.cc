@@ -100,10 +100,10 @@ void XMLTree::getFont(Q_UINT16, QDomElement &f, Q_UINT16 fontid)
 
     if ((fonts[fontid]->grbit & 0x02) == 2)
         font.setAttribute("italic", "yes");
-      
+
     if ((fonts[fontid]->grbit & 0x08) == 8)
 	font.setAttribute("strikeout", "yes" );
-    
+
     if (fonts[fontid]->uls != 0)
         font.setAttribute("underline", "yes");
 
@@ -319,7 +319,8 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
     if (fontid > 3)
         --fontid;
 
-    format.setAttribute("bgcolor", palette[xfs[xf]->cellColor & 0x7f]);
+    format.setAttribute("bgcolor", palette[(xfs[xf]->cellColor & 0x7f) > 64 ?
+                                          64 : xfs[xf]->cellColor & 0x7f]);
 
     format.setAttribute("align", (xfs[xf]->align & 0x07) == 0 ? 4 : xfs[xf]->align & 0x07);
     format.setAttribute("alignY", ((xfs[xf]->align >> 4) & 0x07) == 3 ? 2 : ((xfs[xf]->align >> 4) & 0x07) + 1);
