@@ -1,15 +1,14 @@
 REAL BUGS:
 -	zooming has problems (zoom out: shapes and selection coords are different. zoom back:
 	canvas is "fragmented")
--	if selecting many shapes, the fill/stroke state should be "unknown",
-	preview widgets needs to paint questionmarks or something in this case
 -	canvas doesn't repaint correctly while scrolling with the scrollbar
--	CMYK color model has a bug (in VColor.cc) - weird things happen when K value is used
--	HSB color model doesn't display correctly (VColor.cc)
+-	copying works wrong: the last selected shape is pasted instead of the shape one copied
 
 TODO:
 -	move the stuff from PAPER to DOC. PAGE would be better than PAPER, and since we have a
 	single page format...
+-	if selecting many shapes, the fill/stroke state should be "unknown",
+	preview widgets needs to paint questionmarks or something in this case
 -	select first/last segment's knot if one of each other's knot is selected
 -	don't create tools while being a r/o part
 -	investigate whether we can use a KToolBar with an appropriate layout to replace

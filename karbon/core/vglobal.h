@@ -33,6 +33,9 @@ namespace VGlobal
 	const double pi_180		=  0.01745329251994329576;	// pi/180
 	const double one_pi_180	= 57.29577951308232087684;	// 180/pi
 	const double sqrt2		=  1.41421356237309504880;	// sqrt(2)
+	const double one_3		=  0.33333333333333333333;	// 1/3
+	const double two_3		=  0.66666666666666666667;	// 2/3
+	const double one_6		=  0.16666666666666666667;	// 1/6
 	const double one_7		=  0.14285714285714285714;	// 1/7
 
 	/**
