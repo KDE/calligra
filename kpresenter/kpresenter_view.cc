@@ -1509,11 +1509,6 @@ void KPresenterView::screenStart()
     startScreenPres( getCurrPgNum() ); 
 }
 
-void KPresenterView::screenViewPage()
-{
-    startScreenPres( getCurrPgNum() ); 
-}
-
 void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
@@ -1583,7 +1578,6 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         m_canvas->startScreenPresentation( _presFakt, pgNum );
 
         actionScreenStart->setEnabled( false );
-        actionScreenViewPage->setEnabled( false );
 
         if ( kPresenterDoc()->presentationDuration() ) {
             m_presentationDuration.start();
@@ -1655,7 +1649,6 @@ void KPresenterView::screenStop()
 	}
 
         actionScreenStart->setEnabled( true );
-        actionScreenViewPage->setEnabled( true );
         pageBase->resizeEvent( 0 );
 
         m_canvas->setActivePage( m_pKPresenterDoc->pageList().at( getCurrPgNum() - 1 ) );
@@ -3043,11 +3036,6 @@ void KPresenterView::setupActions()
                                      "1rightarrow", 0,
                                      this, SLOT( screenStart() ),
                                      actionCollection(), "screen_start" );
-
-    actionScreenViewPage = new KAction( i18n( "&View Current Page" ),
-                                        "viewmag", 0,
-                                        this, SLOT( screenViewPage() ),
-                                        actionCollection(), "screen_viewpage" );
 
     actionScreenFirst = new KAction( i18n( "&Go to Start" ),
                                      "start", Key_Home,
@@ -7345,7 +7333,6 @@ void KPresenterView::slotChangeCutState(bool b)
 
 void KPresenterView::updatePresentationButton(bool b)
 {
-    actionScreenViewPage->setEnabled( b );
     actionScreenStart->setEnabled( b );
 }
 

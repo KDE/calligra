@@ -337,11 +337,6 @@ void KPresenterViewIface::screenSkip()
     view->screenSkip();
 }
 
-void KPresenterViewIface::screenViewPage()
-{
-    view->screenViewPage();
-}
-
 void KPresenterViewIface::sizeSelected( int size )
 {
     view->sizeSelected( size );

@@ -262,7 +262,6 @@ public slots:
     void screenAssignEffect();
     void screenTransEffect();
     void screenStart();
-    void screenViewPage();
     void screenStop();
     void screenPause();
     void screenFirst();
@@ -935,7 +934,6 @@ private:
     KAction *actionScreenAssignEffect;
     KAction *actionScreenTransEffect;
     KAction *actionScreenStart;
-    KAction *actionScreenViewPage;
     KAction *actionScreenStop;
     KAction *actionScreenPause;
     KAction *actionScreenFirst;

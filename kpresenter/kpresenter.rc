@@ -157,7 +157,6 @@
   <Action name="screen_transeffect"/>
   <Separator/>
   <Action name="screen_start"/>
-  <Action name="screen_viewpage"/>
   <Separator/>
   <Action name="screen_first"/>
   <Action name="screen_prev"/>
@@ -255,7 +254,6 @@
   <Action name="screen_assigneffect"/>
   <Separator/>
   <Action name="screen_start"/>
-  <Action name="screen_viewpage"/>
   <Separator/>
   <Action name="screen_first"/>
   <Action name="screen_prev"/>
