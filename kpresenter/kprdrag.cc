@@ -38,8 +38,8 @@ QByteArray KPrTextDrag::encodedData( const char *mime ) const
     {
         QByteArray a;
         QCString s (  QString::number(m_textObjectNumber).local8Bit() );
-	a.resize( s.length() + 1 ); // trailing zero
-	memcpy( a.data(), s.data(), s.length() + 1 );
+        a.resize( s.length() + 1 ); // trailing zero
+        memcpy( a.data(), s.data(), s.length() + 1 );
         return a;
     }
     else

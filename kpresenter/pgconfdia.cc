@@ -24,6 +24,7 @@
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qhbox.h>
+#include <qgroupbox.h>
 #include <qheader.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -43,13 +44,13 @@
 
 /*================================================================*/
 PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc* doc )
-    : KDialogBase( KDialogBase::Tabbed, i18n("Configure Slide Show"), 
-      Ok|Cancel, Ok, parent, "pgConfDia", true ), 
+    : KDialogBase( KDialogBase::Tabbed, i18n("Configure Slide Show"),
+      Ok|Cancel, Ok, parent, "pgConfDia", true ),
       m_doc( doc )
 {
     setupPageGeneral();
     setupPageSlides();
-    
+
     connect( this, SIGNAL( okClicked() ), this, SLOT( confDiaOk() ) );
     connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 }
@@ -57,7 +58,7 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc* doc )
 /*================================================================*/
 void PgConfDia::setupPageGeneral()
 {
-    QFrame* generalPage = addPage( i18n("&General") );    
+    QFrame* generalPage = addPage( i18n("&General") );
     QVBoxLayout *generalLayout = new QVBoxLayout( generalPage, 0, spacingHint() );
     generalLayout->setAutoAdd( true );
 
@@ -71,23 +72,23 @@ void PgConfDia::setupPageGeneral()
     presentationDuration->setChecked( m_doc->presentationDuration() );
 
     // presentation pen (color and width)
-    
-    new QLabel( i18n( "Presentation pen:" ), generalPage );
 
-    QHBox* penGroup = new QHBox( generalPage );
-    penGroup->setSpacing( KDialog::spacingHint() );
+    QGroupBox* penGroup = new QGroupBox( 1, Qt::Horizontal, i18n("Presentation pen:") , generalPage );
+    penGroup->setInsideSpacing( KDialog::spacingHint() );
+    penGroup->setInsideMargin( KDialog::marginHint() );
+    penGroup->setFlat(true);
 
     new QLabel( i18n( "Color:" ), penGroup );
     penColor = new KColorButton( m_doc->presPen().color(), m_doc->presPen().color(), penGroup );
 
     new QLabel( i18n( "Width:" ), penGroup );
     penWidth = new KIntNumInput( 1, penGroup );
-    penWidth->setSuffix( i18n(" pt") ); 
+    penWidth->setSuffix( i18n(" pt") );
     penWidth->setRange( 1, 10, 1 );
     penWidth->setValue( m_doc->presPen().width() );
-    
+
     QWidget* spacer = new QWidget( generalPage );
-    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );    
+    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 }
 
 /*================================================================*/
@@ -96,32 +97,32 @@ void PgConfDia::setupPageSlides()
     QFrame* slidesPage = addPage( i18n("&Slides") );
     QVBoxLayout *slidesLayout = new QVBoxLayout( slidesPage, 0, spacingHint() );
     slidesLayout->setAutoAdd( true );
-    
+
     slides = new QListView( slidesPage );
     slides->addColumn( i18n("Slide") );
     slides->setSorting( -1 );
     slides->header()->hide();
-    
-    for ( int i = m_doc->getPageNums() - 1; i >= 0; --i ) 
+
+    for ( int i = m_doc->getPageNums() - 1; i >= 0; --i )
     {
         KPrPage *page=m_doc->pageList().at( i );
-        QCheckListItem* item = new QCheckListItem( slides, 
-            page->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) ), 
+        QCheckListItem* item = new QCheckListItem( slides,
+            page->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) ),
             QCheckListItem::CheckBox );
         item->setOn( page->isSlideSelected() );
     }
-    
+
     QHBox* buttonGroup = new QHBox( slidesPage );
     buttonGroup->setSpacing( KDialog::spacingHint() );
-    
+
     QPushButton* selectAllButton = new QPushButton( i18n( "Select &All" ), buttonGroup );
     connect( selectAllButton, SIGNAL( clicked() ), this, SLOT( selectAllSlides() ) );
-    
+
     QPushButton* deselectAllButton = new QPushButton( i18n( "&Deselect All" ), buttonGroup );
-    connect( deselectAllButton, SIGNAL( clicked() ), this, SLOT( deselectAllSlides() ) );    
-    
+    connect( deselectAllButton, SIGNAL( clicked() ), this, SLOT( deselectAllSlides() ) );
+
     QWidget* spacer = new QWidget( buttonGroup );
-    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );    
+    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 }
 
 /*================================================================*/
@@ -157,7 +158,7 @@ QPen PgConfDia::getPen() const
 QValueList<bool> PgConfDia::getSelectedSlides() const
 {
     QValueList<bool> selectedSlides;
-    
+
     QListViewItem *item = slides->firstChild();
     while( item )
     {
