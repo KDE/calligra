@@ -123,31 +123,31 @@ KivioCollisionType KivioStraightConnector::checkForCollision( KivioPoint *p, flo
     float px = p->x();
     float py = p->y();
 
-        KivioConnectorPoint *pPoint;
+    KivioConnectorPoint *pPoint;
 
     int i = kctCustom + 1;
     pPoint = m_pConnectorPoints->first();
     while( pPoint )
     {
-       if( px >= pPoint->x() - end_thresh &&
-	   px <= pPoint->x() + end_thresh &&
-	   py >= pPoint->y() - end_thresh &&
-	   py <= pPoint->y() + end_thresh )
-       {
-	  return (KivioCollisionType)i;
-       }
+        if( px >= pPoint->x() - end_thresh &&
+            px <= pPoint->x() + end_thresh &&
+            py >= pPoint->y() - end_thresh &&
+            py <= pPoint->y() + end_thresh )
+        {
+            return (KivioCollisionType)i;
+        }
 
-       i++;
-       pPoint = m_pConnectorPoints->next();
+        i++;
+        pPoint = m_pConnectorPoints->next();
     }
 
 
     if( collisionLine( m_pStart->x(), m_pStart->y(),
-		       m_pEnd->x(), m_pEnd->y(),
-		       px, py,
-		       threshold )==true )
+          m_pEnd->x(), m_pEnd->y(),
+          px, py,
+          threshold ) )
     {
-       return kctBody;
+      return kctBody;
     }
 
     return kctNone;

@@ -85,9 +85,7 @@
 #include "kivio_lineendsaction.h"
 #include "tkfloatspinboxaction.h"
 #include "tk2floatspinboxaction.h"
-#include "tkunitsaction.h"
 #include "tkcombobox.h"
-#include "tkbuttongroupcontroller.h"
 #include "tooldockmanager.h"
 #include "tooldockbase.h"
 
@@ -1606,11 +1604,6 @@ void KivioView::alignStencilsDlg()
 {
   AlignDialog* dlg = new AlignDialog(0,"AlignDialog", true);
 
-  (void) new TKButtonGroupController(dlg->vAlignBox);
-  (void) new TKButtonGroupController(dlg->hAlignBox);
-  (void) new TKButtonGroupController(dlg->vDistBox);
-  (void) new TKButtonGroupController(dlg->hDistBox);
-
   if( dlg->exec() == QDialog::Accepted )
   {
     AlignData ad;
@@ -1726,7 +1719,7 @@ void KivioView::exportPage()
    //KFileDialog fd( this, "Export To File", true );
 
    QString fileName = KFileDialog::getSaveFileName( "", extList );
-   if( fileName.isNull()==true )
+   if( fileName.isEmpty()==true )
    {
       return;
    }
@@ -1735,7 +1728,7 @@ void KivioView::exportPage()
       return;
    }
 
-   if( m_pDoc->exportPage( m_pActivePage, fileName, &dlg )==false )
+   if(!m_pDoc->exportPage( m_pActivePage, fileName, &dlg ))
    {
       kdDebug() << "KivioView::exportPage() failed\n";
       return;

@@ -142,16 +142,19 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
 
 DCOPObject* KivioDoc::dcopObject()
 {
-    if ( !dcop )
-	dcop = new KIvioDocIface( this );
+  if ( !dcop ) {
+    dcop = new KIvioDocIface( this );
+  }
 
-    return dcop;
+  return dcop;
 }
 
 QPtrList<KivioDoc>& KivioDoc::documents()
 {
-  if ( s_docs == 0 )
+  if ( s_docs == 0 ) {
     s_docs = new QPtrList<KivioDoc>;
+  }
+
   return *s_docs;
 }
 
@@ -165,25 +168,24 @@ bool KivioDoc::initDoc()
                                       KoTemplateChooseDia::NoTemplates );
 
   if ( ret == KoTemplateChooseDia::File ) {
-    KURL url;
-    url.setPath(f);
-    return openURL( url );
-  }
-  else if ( ret == KoTemplateChooseDia::Empty ) {
+    KURL url(f);
+    return openURL(url);
+  } else if ( ret == KoTemplateChooseDia::Empty ) {
       KivioPage *t = createPage();
       m_pMap->addPage( t );
       resetURL();
       initConfig();
       return true;
-  }
-  else
+  } else {
     return false;
+  }
 }
 
 KoView* KivioDoc::createViewInstance( QWidget* parent, const char* name )
 {
-  if (!name)
+  if (!name) {
     name = "View";
+  }
 
   return new KivioView( parent, name, this );
 }

@@ -580,7 +580,7 @@ KoPoint KivioCanvas::mapFromScreen( const QPoint & pos )
   double xf = m_pView->zoomHandler()->unzoomItX(x);
   double yf = m_pView->zoomHandler()->unzoomItX(y);
 
-  KoPoint p(xf, yf);;
+  KoPoint p(xf, yf);
   return p;
 }
 

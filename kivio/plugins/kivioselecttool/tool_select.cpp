@@ -135,7 +135,7 @@ void SelectTool::select(const QRect &r)
     KoPoint releasePoint = m_pCanvas->mapFromScreen( QPoint( r.x() + r.width(), r.y() + r.height() ) );
 
 
-    float x, y, w, h;
+    double x, y, w, h;
 
     // Calculate the x,y position of the selection box
     x = startPoint.x() < releasePoint.x() ? startPoint.x() : releasePoint.x();
@@ -172,14 +172,14 @@ void SelectTool::mousePress(const QPoint &pos)
     m_origPoint = m_lastPoint;
 
     // Check if we nailed a custom drag point on a selected stencil
-    if( startCustomDragging(pos, true)==true )
+    if( startCustomDragging(pos, true) )
     {
         m_mode = stmCustomDragging;
         return;
     }
 
     // Check if we are resizing
-    if( startResizing(pos)==true )
+    if( startResizing(pos) )
     {
         m_mode = stmResizing;
         return;
@@ -187,21 +187,21 @@ void SelectTool::mousePress(const QPoint &pos)
 
 
     // Check if we nailed a custom drag point on any other stencil
-    if( startCustomDragging(pos, false)==true )
+    if( startCustomDragging(pos, false) )
     {
        m_mode = stmCustomDragging;
        return;
     }
 
     // Check if we can drag a stencil (only the selected stencils first)
-    if( startDragging(pos, true)==true )
+    if( startDragging(pos, true) )
     {
         m_mode = stmDragging;
         return;
     }
 
     // Check if we can drag a stencil
-    if( startDragging(pos, false)==true )
+    if( startDragging(pos, false) )
     {
         m_mode = stmDragging;
         return;
@@ -243,7 +243,7 @@ bool SelectTool::startDragging(const QPoint &pos, bool onlySelected)
     int colType;
 
     // Figure out how big 4 pixels is in terms of points
-    float threshhold =  m_pView->zoomHandler()->unzoomItY(4);
+    double threshhold =  m_pView->zoomHandler()->unzoomItY(4);
 
     KoPoint pagePoint = m_pCanvas->mapFromScreen( pos );
 
@@ -366,8 +366,8 @@ bool SelectTool::startResizing(const QPoint &pos)
     KoPoint pagePoint = m_pCanvas->mapFromScreen(pos);
     KivioSelectDragData *pData;
 
-    float x = pagePoint.x();
-    float y = pagePoint.y();
+    double x = pagePoint.x();
+    double y = pagePoint.y();
 
     // Search selected stencils to see if we have a resizing point
     KivioStencil *pStencil = m_pCanvas->activePage()->selectedStencils()->first();
@@ -479,13 +479,13 @@ void SelectTool::continueDragging(const QPoint &pos)
 {
     KoPoint pagePoint = m_pCanvas->mapFromScreen( pos );
 
-    float dx = pagePoint.x() - m_origPoint.x();
-    float dy = pagePoint.y() - m_origPoint.y();
+    double dx = pagePoint.x() - m_origPoint.x();
+    double dy = pagePoint.y() - m_origPoint.y();
 
     bool snappedX;
     bool snappedY;
 
-    float newX, newY;
+    double newX, newY;
 
     // Undraw the old stencils
     m_pCanvas->drawSelectedStencilsXOR();
@@ -586,17 +586,17 @@ void SelectTool::continueResizing(const QPoint &pos)
         return;
     }
 
-    float dx = pagePoint.x() - m_origPoint.x();
-    float dy = pagePoint.y() - m_origPoint.y();
+    double dx = pagePoint.x() - m_origPoint.x();
+    double dy = pagePoint.y() - m_origPoint.y();
 
 
     // Undraw the old outline
     m_pCanvas->drawStencilXOR( m_pResizingStencil );
 
-    float sx = pData->rect.x();
-    float sy = pData->rect.y();
-    float sw = pData->rect.w();
-    float sh = pData->rect.h();
+    double sx = pData->rect.x();
+    double sy = pData->rect.y();
+    double sw = pData->rect.w();
+    double sh = pData->rect.h();
 
     switch( m_resizeHandle )
     {
@@ -693,11 +693,11 @@ void SelectTool::changeMouseCursor(const QPoint &pos)
     KoPoint pagePoint = m_pCanvas->mapFromScreen(pos);
     KivioStencil *pStencil;
     KivioPoint col;
-    float threshhold = m_pView->zoomHandler()->unzoomItY(4);
+    double threshhold = m_pView->zoomHandler()->unzoomItY(4);
     int cursorType;
 
-    float x = pagePoint.x();
-    float y = pagePoint.y();
+    double x = pagePoint.x();
+    double y = pagePoint.y();
 
     col.set(x, y);
 
@@ -741,12 +741,6 @@ void SelectTool::changeMouseCursor(const QPoint &pos)
                 return;
 
             default:
-                KivioPoint col;
-
-                // Figure out how big 4 pixels is in terms of points
-                float threshhold =  m_pView->zoomHandler()->unzoomItY(4);
-
-                col.set(x,y);
                 if( pStencil->checkForCollision( &col, threshhold )!= kctNone )
                 {
                     m_pCanvas->setCursor( sizeAllCursor );
@@ -776,10 +770,10 @@ y <= by+three_pixels
 /**
  * Tests if a point is over a stencils
  */
-int SelectTool::isOverResizeHandle( KivioStencil *pStencil, const float x, const float y )
+int SelectTool::isOverResizeHandle( KivioStencil *pStencil, const double x, const double y )
 {
-    float three_pixels = 4.0;
-    float newX, newY, newW, newH;
+    double three_pixels = 4.0;
+    double newX, newY, newW, newH;
 
     int available;
 
@@ -967,7 +961,7 @@ void SelectTool::showPopupMenu( const QPoint &pos )
 
 
 /**
- * Handles what happens when a left-button float click occurs.
+ * Handles what happens when a left-button double click occurs.
  *
  * If there are no stencils selected, this function returns.  Otherwise
  * it launches the text tool on the selected stencils and switches back

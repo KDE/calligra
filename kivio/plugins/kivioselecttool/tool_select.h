@@ -90,7 +90,7 @@ protected:
     void showPopupMenu(const QPoint&);
 
     void changeMouseCursor(const QPoint&);
-    int isOverResizeHandle( KivioStencil *pStencil, const float x, const float y );
+    int isOverResizeHandle( KivioStencil *pStencil, const double x, const double y );
     QPoint m_startPoint, m_releasePoint;
     KoPoint m_lastPoint;
     KoPoint m_origPoint;
