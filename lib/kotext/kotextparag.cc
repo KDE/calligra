@@ -1150,7 +1150,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
             p->setPen( QPen( col, dim, Qt::DashLine ) );
             break;
         case KoTextFormat::U_DOT:
-            p->setPen( QPen( col, dim, Qt::DashDotLine ) );
+            p->setPen( QPen( col, dim, Qt::DotLine ) );
             break;
         case KoTextFormat::U_DASH_DOT:
             p->setPen( QPen( col, dim, Qt::DashDotLine ) );
@@ -1184,7 +1184,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
             p->setPen( QPen( color,dim, Qt::DashLine ) );
             break;
         case KoTextFormat::S_DOT:
-            p->setPen( QPen( color, dim, Qt::DashDotLine ) );
+            p->setPen( QPen( color, dim, Qt::DotLine ) );
             break;
         case KoTextFormat::S_DASH_DOT:
             p->setPen( QPen( color, dim, Qt::DashDotLine ) );
@@ -1218,7 +1218,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
             p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashLine ) );
             break;
         case KoTextFormat::S_DOT:
-            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DotLine ) );
             break;
         case KoTextFormat::S_DASH_DOT:
             p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
