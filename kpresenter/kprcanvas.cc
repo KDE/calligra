@@ -5271,8 +5271,8 @@ KPObject *KPrCanvas::getSelectedObj()
 int KPrCanvas::getPenBrushFlags()
 {
     int flags=0;
-    flags=activePage()->getPenBrushFlags();
-    flags=flags |m_view->kPresenterDoc()->stickyPage()->getPenBrushFlags();
+    flags=activePage()->getPenBrushFlags(activePage()->objectList());
+    flags=flags |m_view->kPresenterDoc()->stickyPage()->getPenBrushFlags(m_view->kPresenterDoc()->stickyPage()->objectList());
     if(flags==0)
       flags = StyleDia::SdAll;
     return flags;

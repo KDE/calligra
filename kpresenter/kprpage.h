@@ -152,7 +152,7 @@ public:
     KCommand *alignObjsCenterV();
     KCommand *alignObjsBottom();
 
-    int getPenBrushFlags()const;
+    int getPenBrushFlags(QPtrList<KPObject>list );
     KCommand* setPieSettings( PieType pieType, int angle, int len );
     KCommand* setRectSettings( int _rx, int _ry );
     KCommand* setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );

@@ -2148,11 +2148,11 @@ KCommand * KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd l
     return cmd;
 }
 
-int KPrPage::getPenBrushFlags() const
+int KPrPage::getPenBrushFlags( QPtrList<KPObject>list )
 {
     int flags = 0;
 
-    QPtrListIterator<KPObject> it( m_objectList );
+    QPtrListIterator<KPObject> it( list);
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected())
@@ -2183,6 +2183,17 @@ int KPrPage::getPenBrushFlags() const
                     flags = flags | StyleDia::SdPen;
                     flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
                     flags = flags | StyleDia::SdEndBeginLine;
+                }
+                break;
+                case OT_GROUP:
+                {
+                    KPGroupObject *obj=dynamic_cast<KPGroupObject*>( it.current() );
+                    if(obj)
+                    {
+                        obj->selectAllObj();
+                        flags = flags | getPenBrushFlags( obj->objectList() );
+                        obj->deSelectAllObj();
+                    }
                 }
                 break;
                 default: break;
