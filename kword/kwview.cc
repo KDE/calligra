@@ -5706,7 +5706,7 @@ void KWView::insertFile()
                 for ( ; it!= end ; ++it )
                     paragsElem.appendChild( *it );
 
-                kdDebug() << k_funcinfo << domDoc.toCString() << endl;
+                //kdDebug() << k_funcinfo << domDoc.toCString() << endl;
                 KCommand *cmd = textFrameSet->pasteKWord( &insertionCursor, domDoc.toCString(), true );
 
                 if ( cmd ) {
@@ -5719,8 +5719,8 @@ void KWView::insertFile()
                 QValueList<QDomElement> framesetsList;
 
                 QDomDocument domDocFrames( "SELECTION" ); // see KWCanvas::copySelectedFrames
-                QDomElement topElem = domDoc.createElement( "SELECTION" );
-                domDoc.appendChild( topElem );
+                QDomElement topElem = domDocFrames.createElement( "SELECTION" );
+                domDocFrames.appendChild( topElem );
                 for ( ; !framesetElem.isNull() ; framesetElem = framesetElem.nextSibling().toElement() )
                 {
                     if ( framesetElem.tagName() == "FRAMESET" )
@@ -5744,6 +5744,7 @@ void KWView::insertFile()
                 if ( !macroCmd )
                     macroCmd = new KMacroCommand( i18n("Insert File") );
 
+                //kdDebug() << k_funcinfo << domDocFrames.toCString() << endl;
                 m_doc->pasteFrames( topElem, macroCmd );
                 m_doc->addCommand( macroCmd );
             }
