@@ -915,10 +915,31 @@ bool KWFrameDia::applyChanges()
         // Floating
         if ( floating->isChecked() && !parentFs->isFloating() )
         {
+             KMacroCommand * macroCmd = new KMacroCommand( i18n("Make FrameSet Floating") );
+
+            QList<FrameIndex> frameindexList;
+            QList<FrameResizeStruct> frameindexMove;
+
+            FrameIndex *index=new FrameIndex( frame );
+            FrameResizeStruct *move=new FrameResizeStruct;
+
+            move->sizeOfBegin=frame->normalize();
+
             // turn non-floating frame into floating frame
             KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( i18n("Make FrameSet Floating"), parentFs, true );
-            doc->addCommand(cmd);
             cmd->execute();
+
+            move->sizeOfEnd=frame->normalize();
+
+            frameindexList.append(index);
+            frameindexMove.append(move);
+
+            KWFrameMoveCommand *cmdMoveFrame = new KWFrameMoveCommand( i18n("Move Frame"), frameindexList, frameindexMove );
+
+            macroCmd->addCommand(cmdMoveFrame);
+            macroCmd->addCommand(cmd);
+            doc->addCommand(macroCmd);
+
         }
         else if ( !floating->isChecked() && parentFs->isFloating() )
         {
