@@ -81,4 +81,8 @@ Internal coordinates (the coordinates given to QRT - in "layout units")
 
 This last transformation doesn't depend on the view-mode arrangement,
 nor on the zoom. It's only about going from the frameset coord to the
-qrt internal coord (i.e. going to a coord system that is internal to the train).
+qrt internal coord (i.e. the high-resolution coordinates in which the
+text layout is done).
+
+Font sizes: note that the text formats in memory (format collection),
+for characters, styles etc. have font sizes in layout units (very big).
