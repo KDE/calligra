@@ -91,6 +91,8 @@ public:
 
     virtual QSize getOriginalSize(void) const;
 
+    virtual QPixmap generatePixmap(const QSize& size);
+
 protected:
     QPixmap getPixmap(QImage& image);
     /**

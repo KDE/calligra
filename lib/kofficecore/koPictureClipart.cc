@@ -21,6 +21,7 @@
 
 #include <qpainter.h>
 #include <qpicture.h>
+#include <qpixmap.h>
 
 #include <kdebug.h>
 #include <kdebugclasses.h>
@@ -128,4 +129,22 @@ void KoPictureClipart::setRawData(const QByteArray& newRawData)
 QSize KoPictureClipart::getOriginalSize(void) const
 {
     return m_clipart.boundingRect().size();
+}
+
+QPixmap KoPictureClipart::generatePixmap(const QSize& size)
+{
+    // Not sure if it works, but it worked for KoPictureFilePreviewWidget::setClipart
+    QPixmap pixmap(size);
+    QPainter p;
+
+    p.begin( &pixmap );
+    p.setBackgroundColor( Qt::white );
+    pixmap.fill( Qt::white );
+
+    QRect br = m_clipart.boundingRect();
+    if ( br.width() && br.height() )
+        p.scale( (double)pixmap.width() / (double)br.width(), (double)pixmap.height() / (double)br.height() );
+    p.drawPicture( m_clipart );
+    p.end();
+    return pixmap;
 }
