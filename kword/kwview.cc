@@ -1870,8 +1870,6 @@ void KWView::tableJoinCells()
                                   "before joining cells." ),
                             i18n( "Join Cells" ) );
     } else {
-        QPainter painter;
-        painter.begin( gui->canvasWidget() );
         if ( !table->joinCells() )
         {
             KMessageBox::sorry( this,
@@ -1879,7 +1877,6 @@ void KWView::tableJoinCells()
                                       "and are not already joined." ),
                                 i18n( "Join Cells" ) );
         }
-        painter.end();
         //KoRect r = doc->zoomRect( table->boundingRect() );
         //gui->canvasWidget()->repaintScreen( r, TRUE );
         gui->canvasWidget()->repaintAll();
@@ -1906,8 +1903,6 @@ void KWView::tableSplitCells()
         return;
     }
 
-    QPainter painter;
-    painter.begin( gui->canvasWidget() );
     int rows=1, cols=2;
     if ( !table->splitCell(rows,cols) ) {
         KMessageBox::sorry( this,
@@ -1915,7 +1910,6 @@ void KWView::tableSplitCells()
                             //i18n("There is not enough space to split the cell into that many parts"),
                             i18n("Split Cells") );
     }
-    painter.end();
     //KoRect r = doc->zoomRect( table->boundingRect() );
     //gui->canvasWidget()->repaintScreen( r, TRUE );
     gui->canvasWidget()->repaintAll();
