@@ -327,3 +327,4 @@ void KivioLayerPanel::reset()
   updateButtons(list->currentItem());
 }
 
+#include "kivio_layer_panel.moc"

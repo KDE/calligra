@@ -379,3 +379,4 @@ void KivioBirdEyePanel::handleMousePress(QPoint p)
 
   m_pCanvas->setViewCenterPoint(KivioPoint(x,y));
 }
+#include "kivio_birdeye_panel.moc"

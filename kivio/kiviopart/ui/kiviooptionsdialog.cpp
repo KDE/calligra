@@ -84,3 +84,4 @@ void KivioOptionsDialog::slotOk()
   accept();
 }
 
+#include "kiviooptionsdialog.moc"

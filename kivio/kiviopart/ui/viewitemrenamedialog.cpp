@@ -32,3 +32,5 @@ QString ViewItemRenameDialog::text()
   return edit->text();
 }
 
+#include "viewitemrenamedialog.moc"
+
