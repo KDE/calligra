@@ -48,6 +48,11 @@ public:
     bool abortFormatting;
 };
 
+const char * KoTextObject::acceptSelectionMimeType()
+{
+    return "application/vnd.oasis.openoffice.";
+}
+
 KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont,
                             const QString &defaultLanguage, bool hyphenation,
                             KoParagStyle* defaultStyle, int tabStopWidth,

@@ -21,6 +21,7 @@
 #include "kwdrag.moc"
 #include "defs.h"
 #include <kdebug.h>
+#include <kotextobject.h>
 
 /******************************************************************/
 /* Class: KWTextDrag                                               */
@@ -33,7 +34,7 @@ KWTextDrag::KWTextDrag( QWidget *dragSource, const char *name )
 
 QByteArray KWTextDrag::encodedData( const char *mime ) const
 {
-    if ( ( strcmp( selectionMimeType(), mime ) == 0 )|| QString( mime ).startsWith( KWTextDrag::acceptSelectionMimeType()))
+    if ( ( strcmp( selectionMimeType(), mime ) == 0 )|| QString( mime ).startsWith( KoTextObject::acceptSelectionMimeType()))
         return kword;
     else if( strcmp( "application/x-kword-framesetnumber", mime ) == 0)
     {
@@ -63,7 +64,7 @@ bool KWTextDrag::provides( QMimeSource* e , const char* mimeType, const char* ac
 bool KWTextDrag::canDecode( QMimeSource* e )
 {
     QString tmp;
-    if ( KWTextDrag::provides( e, selectionMimeType(), acceptSelectionMimeType(),tmp ) )
+    if ( KWTextDrag::provides( e, selectionMimeType(), KoTextObject::acceptSelectionMimeType(),tmp ) )
        return true;
     return QTextDrag::canDecode(e);
 }
@@ -82,11 +83,6 @@ const char* KWTextDrag::format( int i ) const
 const char * KWTextDrag::selectionMimeType()
 {
     return "application/vnd.oasis.openoffice.text";
-}
-
-const char * KWTextDrag::acceptSelectionMimeType()
-{
-    return "application/vnd.oasis.openoffice.";
 }
 
 void KWTextDrag::setFrameSetNumber( int number )

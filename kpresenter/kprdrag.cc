@@ -21,6 +21,7 @@
 #include "kprdrag.h"
 #include "kprdrag.moc"
 #include <kdebug.h>
+#include <kotextobject.h>
 
 KPrTextDrag::KPrTextDrag( QWidget *dragSource, const char *name )
     : QTextDrag( dragSource, name )
@@ -29,7 +30,7 @@ KPrTextDrag::KPrTextDrag( QWidget *dragSource, const char *name )
 
 QByteArray KPrTextDrag::encodedData( const char *mime ) const
 {
-    if ( ( strcmp( selectionMimeType(), mime ) == 0 ) || QString( mime ).startsWith( KPrTextDrag::acceptSelectionMimeType()) )
+    if ( ( strcmp( selectionMimeType(), mime ) == 0 ) || QString( mime ).startsWith( KoTextObject::acceptSelectionMimeType()) )
         return kpresenter;
     else if( strcmp( "application/x-kpresenter-textobjectnumber", mime ) == 0)
     {
@@ -60,7 +61,7 @@ bool KPrTextDrag::provides( QMimeSource* e , const char* mimeType, const char* a
 bool KPrTextDrag::canDecode( QMimeSource* e )
 {
     QString tmp;
-    if ( KPrTextDrag::provides( e, selectionMimeType(), acceptSelectionMimeType(), tmp ) )
+    if ( KPrTextDrag::provides( e, selectionMimeType(), KoTextObject::acceptSelectionMimeType(), tmp ) )
         return true;
     return QTextDrag::canDecode(e);
 }
@@ -80,12 +81,6 @@ const char * KPrTextDrag::selectionMimeType()
 {
     return "application/vnd.oasis.openoffice.presentation";
 }
-
-const char * KPrTextDrag::acceptSelectionMimeType()
-{
-    return "application/vnd.oasis.openoffice.";
-}
-
 
 void KPrTextDrag::setTextObjectNumber( int number )
 {

@@ -44,7 +44,6 @@ public:
     static bool canDecode( QMimeSource* e );
 
     static const char * selectionMimeType();
-    static const char * acceptSelectionMimeType();
 
     void setTextObjectNumber( int number );
 

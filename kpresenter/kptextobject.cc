@@ -1814,7 +1814,7 @@ void KPTextView::paste()
 
     QMimeSource *data = QApplication::clipboard()->data();
     QString returnMimeType;
-    if ( KPrTextDrag::provides( data , KPrTextDrag::selectionMimeType(), KPrTextDrag::acceptSelectionMimeType(), returnMimeType) )
+    if ( KPrTextDrag::provides( data , KPrTextDrag::selectionMimeType(), KoTextObject::acceptSelectionMimeType(), returnMimeType) )
     {
         QByteArray arr = data->encodedData( returnMimeType.latin1() );
         if ( arr.size() )
@@ -2417,7 +2417,7 @@ void KPTextView::dropEvent( QDropEvent * e )
             textObject()->selectionChangedNotify();
         }
         QString returnedTypeMime;
-        if ( KPrTextDrag::provides( e , KPrTextDrag::selectionMimeType(), KPrTextDrag::acceptSelectionMimeType(),  returnedTypeMime) )
+        if ( KPrTextDrag::provides( e , KPrTextDrag::selectionMimeType(), KoTextObject::acceptSelectionMimeType(),  returnedTypeMime) )
         {
             QByteArray arr = e->encodedData( returnedTypeMime.latin1() );
             if ( arr.size() )

@@ -197,6 +197,8 @@ public:
     virtual ~KoTextObject();
 
 
+    static const char * acceptSelectionMimeType();
+
     void setNeedSpellCheck(bool b);
     bool needSpellCheck() const { return m_needsSpellCheck;}
     void setProtectContent(bool b) { m_protectContent = b; }
