@@ -29,6 +29,8 @@
 class KDualColorButton;
 class QPushButton;
 class QFrame;
+class QLabel;
+class QSpinBox;
 class QSpinBox;
 class RGBWidget;
 class ColorFrame;
@@ -88,10 +90,15 @@ class RGBWidget : public QWidget
   void colorChanged(const QColor&);
 
  protected:
+  virtual void resizeEvent(QResizeEvent *);
+
+ protected:
   ColorSlider *m_pRSlider;
   ColorSlider *m_pGSlider;
   ColorSlider *m_pBSlider;
-  QVBoxLayout *m_pVLayout;
+  QGridLayout *m_pLayout;
+  QLabel      *m_pRLabel, *m_pGLabel, *m_pBLabel;
+  QSpinBox    *m_pRIn, *m_pGIn, *m_pBIn;
 };
 
 #endif

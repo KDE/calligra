@@ -36,15 +36,21 @@ class ColorSlider : public QWidget
   ColorSlider(QWidget *parent = 0L);
   virtual ~ColorSlider();
 
+  int minValue();
+  int maxValue();
+
  protected:
   virtual void resizeEvent (QResizeEvent *);
   
  public slots:
   void slotSetColor1(const QColor&);
   void slotSetColor2(const QColor&);
+
+  void slotSetValue(int);
+  void slotSetRange(int min, int max);
   
  protected slots:
-  void slotSetValue(int);
+  void slotValueChanged(int);
 
  signals:
   void  colorSelected(const QColor&);
@@ -52,6 +58,8 @@ class ColorSlider : public QWidget
  protected:
   SliderWidget *m_pSlider;
   ColorFrame   *m_pColorFrame;
+  int           m_min, m_max;
+  int           m_value;
 };
 
 class SliderWidget : public QFrame

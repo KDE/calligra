@@ -29,7 +29,11 @@ ColorSlider::ColorSlider(QWidget *parent) : QWidget(parent)
   m_pColorFrame = new ColorFrame(this);
   m_pSlider = new SliderWidget(this);
 
-  connect(m_pSlider, SIGNAL(positionChanged(int)), this, SLOT(slotSetValue(int)));
+  m_min = 0;
+  m_max = 255;
+  m_value = 0;
+
+  connect(m_pSlider, SIGNAL(positionChanged(int)), this, SLOT(slotValueChanged(int)));
 }
 
 ColorSlider::~ColorSlider()
@@ -38,10 +42,30 @@ ColorSlider::~ColorSlider()
   delete m_pSlider;
 }
 
-void ColorSlider::resizeEvent (QResizeEvent *)
+int ColorSlider::minValue()
 {
+  return  m_min;
+}
+
+int ColorSlider::maxValue()
+{
+  return  m_max;
+}
+
+void ColorSlider::slotSetRange(int min, int max)
+{
+  if (min >= max)
+	return;
+  
+  m_min = min;
+  m_max = max;
+}
+
+void ColorSlider::resizeEvent (QResizeEvent *e)
+{
+  QWidget::resizeEvent(e);
   m_pColorFrame->setGeometry(3, 0, width()-6, height()-8);
-  m_pSlider->move(width()/2, height()-16);
+  slotSetValue(m_value);
 }
 
 void ColorSlider::slotSetColor1(const QColor& c)
@@ -54,12 +78,39 @@ void ColorSlider::slotSetColor2(const QColor& c)
   m_pColorFrame->slotSetColor2(c);
 }
 
-void ColorSlider::slotSetValue(int x)
+void ColorSlider::slotSetValue(int value)
+{
+  if (value < m_min) value = m_min;
+  if (value > m_max) value = m_max;
+
+  m_value = value;
+
+  int range = m_max - m_min +1;
+  kdebug(KDEBUG_INFO, 0, "range: %d", range);
+  float v = value;
+   if (m_min < 0)
+	v += -m_min;
+
+   kdebug(KDEBUG_INFO, 0, "value: %f", v);
+  
+  float factor = v /range;
+  int x = static_cast<int>(factor * m_pColorFrame->contentsWidth());
+  kdebug(KDEBUG_INFO, 0, "x: %d", x);
+
+  m_pSlider->move(QPoint(x , height()-16));
+}
+
+void ColorSlider::slotValueChanged(int x)
 {
   if (x < 0)
 	x = 0;
   if (x > m_pColorFrame->contentsWidth())
 	x = m_pColorFrame->contentsWidth();
+  float factor = x;
+  factor /= m_pColorFrame->contentsWidth();
+  int range = m_max - m_min +1;
+  
+  m_value = static_cast<int>(factor * range);
 
   emit colorSelected(m_pColorFrame->colorAt(QPoint(x, m_pColorFrame->contentsHeight()/2)));
 }
@@ -111,7 +162,7 @@ void SliderWidget::mouseMoveEvent (QMouseEvent *e)
 		newPos.setX(p->width()- width());
 	  
 	  move(newPos);
-	  emit positionChanged(pos().x() + width()/2);
+	  emit positionChanged(pos().x());
     }
   else
 	QFrame::mouseMoveEvent(e);

@@ -79,7 +79,15 @@ void ColorFrame::mousePressEvent (QMouseEvent *e)
 {
   if (e->button() & LeftButton)
     {
-      QColor c = colorAt(QPoint(e->pos().x() - contentsRect().left(), e->pos().y() - contentsRect().top()));
+	  QPoint pos = QPoint(e->pos().x() - contentsRect().left(), e->pos().y() - contentsRect().top());
+
+	  if (pos.x() < 0
+		  || pos.y() < 0
+		  || pos.x() >= contentsRect().width()
+		  || pos.y() >= contentsRect().height())
+		return ;
+	  
+      QColor c = colorAt(pos);
 	  kdebug(KDEBUG_INFO, 0, "ColorFrame -> emit colorSelected()");
 	  emit colorSelected(c);
 	}
@@ -89,14 +97,15 @@ void ColorFrame::mousePressEvent (QMouseEvent *e)
 
 const QColor ColorFrame::colorAt (const QPoint& p)
 {
-  if (!contentsRect().contains(p))
-	return QColor(255,255,255);
-
   if (m_pixChanged)
 	{
 	  m_pmImage = m_pm.convertToImage();
 	  m_pixChanged = false;
 	}
+
+  if (p.x() >= m_pm.width()
+	  || p.y() >= m_pm.height())
+	return QColor(255,255,255);
 
   return QColor(m_pmImage.pixel(p.x(), p.y()));
 }

@@ -23,6 +23,8 @@
 #include <qspinbox.h>
 #include <qpainter.h>
 #include <qlayout.h>
+#include <qlabel.h>
+#include <qspinbox.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -59,8 +61,10 @@ ColorChooserWidget::ColorChooserWidget(QWidget *parent) : QWidget(parent)
   m_pCMYKButton = new QPushButton("CMYK", this);
   m_pLABButton = new QPushButton("LAB", this);
 
-  m_fg = KColor(255,255,255);;
-  m_bg = KColor(0,0,0);
+  m_fg = KColor(0,0,0);;
+  m_bg = KColor(255,255,255);
+
+  m_pRGBWidget->slotSetColor(QColor(0,0,0));
 
   connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), m_pColorFrame, SLOT(slotSetColor1(const QColor &)));
   connect(m_pColorButton, SIGNAL(bgChanged(const QColor &)), m_pColorFrame, SLOT(slotSetColor2(const QColor &)));
@@ -97,45 +101,142 @@ void ColorChooserWidget::resizeEvent(QResizeEvent *e)
 
 RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent)
 {
+  //m_pLayout = new QGridLayout(this, 3, 3);
+
   m_pRSlider = new ColorSlider(this);
+  m_pRSlider->setMaximumHeight(30);
+  m_pRSlider->slotSetRange(0, 255);
+
   m_pGSlider = new ColorSlider(this);
+  m_pGSlider->setMaximumHeight(30);
+  m_pGSlider->slotSetRange(0, 255);
+
   m_pBSlider = new ColorSlider(this);
+  m_pBSlider->setMaximumHeight(30);
+  m_pBSlider->slotSetRange(0, 255);
+ 
+  m_pRLabel = new QLabel("R", this);
+  m_pRLabel->setFixedWidth(20);
+  m_pRLabel->setFixedHeight(20);
+  m_pGLabel = new QLabel("G", this);
+  m_pGLabel->setFixedWidth(20);
+  m_pGLabel->setFixedHeight(20);
+  m_pBLabel = new QLabel("B", this);
+  m_pBLabel->setFixedWidth(20);
+  m_pBLabel->setFixedHeight(20);
+ 
+  m_pRIn = new QSpinBox(0, 255, 1, this);
+  m_pRIn->setFixedWidth(42);
+  m_pRIn->setFixedHeight(20);
+  m_pGIn = new QSpinBox(0, 255, 1, this);
+  m_pGIn->setFixedWidth(42);
+  m_pGIn->setFixedHeight(20);
+  m_pBIn = new QSpinBox(0, 255, 1, this);
+  m_pBIn->setFixedWidth(42);
+  m_pBIn->setFixedHeight(20);
 
-  m_pRSlider->setMaximumHeight(32);
-  m_pGSlider->setMaximumHeight(32);
-  m_pBSlider->setMaximumHeight(32);
+  /*
+	m_pLayout->addWidget(m_pRLabel, 0, 0);
+	m_pLayout->addWidget(m_pRSlider, 0, 1);
+	m_pLayout->addWidget(m_pRIn, 0, 2);
+	
+	m_pLayout->addWidget(m_pGLabel, 1, 0);
+	m_pLayout->addWidget(m_pGSlider, 1, 1);
+	m_pLayout->addWidget(m_pGIn, 1, 2);
+	
+	m_pLayout->addWidget(m_pBLabel, 2, 0);
+	m_pLayout->addWidget(m_pBSlider, 2, 1);
+	m_pLayout->addWidget(m_pBIn, 2, 2);
+  */
+  connect(m_pRSlider, SIGNAL(colorSelected(const QColor&)), this, SLOT(slotRedChanged(const QColor &)));
+  connect(m_pGSlider, SIGNAL(colorSelected(const QColor&)), this, SLOT(slotGreenChanged(const QColor &)));
+  connect(m_pBSlider, SIGNAL(colorSelected(const QColor&)), this, SLOT(slotBlueChanged(const QColor &)));
 
-  m_pVLayout = new QVBoxLayout(this, 3);
-  m_pVLayout->addWidget(m_pRSlider);
-  m_pVLayout->addWidget(m_pGSlider);
-  m_pVLayout->addWidget(m_pBSlider);
+  //connect(m_pRIn, SIGNAL(valueChanged (int)), m_pRSlider, SLOT(slotSetValue(int)));
+}
 
+void RGBWidget::resizeEvent(QResizeEvent *)
+{
+  // I know a QGridLayout would look nicer,
+  // but it does not use the space as good as I want it to.
+
+  int y1 = height()/3;
+  int y2 = 2 * y1;
+
+  int labelY =(y1 - m_pRLabel->height())/2 - 4;
+  if (labelY < 0) 
+	labelY = 0;
+
+  m_pRLabel->move(2, 0 + labelY);
+  m_pGLabel->move(2, y1 + labelY);
+  m_pBLabel->move(2, y2 + labelY);
+
+  int x1 = m_pRLabel->pos().x() + m_pRLabel->width();
+
+  int inY =(y1 - m_pRIn->height())/2 - 4;
+  if (inY < 0) 
+	inY = 0;
+
+  m_pRIn->move(width() - m_pRIn->width(), 0 + inY);
+  m_pGIn->move(width() - m_pRIn->width(), y1 + inY);
+  m_pBIn->move(width() - m_pRIn->width(), y2 + inY);
+
+  int x2 = width() - m_pRIn->width() - 2;
+
+  m_pRSlider->resize(QSize(x2 - x1, y1));
+  m_pGSlider->resize(QSize(x2 - x1, y1));
+  m_pBSlider->resize(QSize(x2 - x1, y1));
+
+  m_pRSlider->move(x1, 0 + (y1 - m_pRSlider->height())/2);
+  m_pGSlider->move(x1, y1 + (y1 - m_pRSlider->height())/2);
+  m_pBSlider->move(x1, y2 + (y1 - m_pRSlider->height())/2);
 }
 
 void RGBWidget::slotSetColor(const QColor&c)
 {
-  m_pRSlider->slotSetColor1(c);
+  m_pRSlider->slotSetColor1(QColor(0, c.green(), c.blue()));
   m_pRSlider->slotSetColor2(QColor(255, c.green(), c.blue()));
+  m_pRSlider->slotSetValue(c.red());
 
-  m_pGSlider->slotSetColor1(c);
+  m_pGSlider->slotSetColor1(QColor(c.red(), 0, c.blue()));
   m_pGSlider->slotSetColor2(QColor(c.red(), 255, c.blue()));
+  m_pGSlider->slotSetValue(c.green());
 
-  m_pBSlider->slotSetColor1(c);
+  m_pBSlider->slotSetColor1(QColor(c.red(), c.green(), 0));
   m_pBSlider->slotSetColor2(QColor(c.red(), c.green(), 255));
+  m_pBSlider->slotSetValue(c.blue());
 }
   
 void RGBWidget::slotRedChanged(const QColor& c)
 {
+  m_pGSlider->slotSetColor1(QColor(c.red(), 0, c.blue()));
+  m_pGSlider->slotSetColor2(QColor(c.red(), 255, c.blue()));
+
+  m_pBSlider->slotSetColor1(QColor(c.red(), c.green(), 0));
+  m_pBSlider->slotSetColor2(QColor(c.red(), c.green(), 255));
+
   emit colorChanged(c);
 }
 
 void RGBWidget::slotGreenChanged(const QColor& c)
 {
+  m_pRSlider->slotSetColor1(QColor(0, c.green(), c.blue()));
+  m_pRSlider->slotSetColor2(QColor(255, c.green(), c.blue()));
+
+  m_pBSlider->slotSetColor1(QColor(c.red(), c.green(), 0));
+  m_pBSlider->slotSetColor2(QColor(c.red(), c.green(), 255));
+
   emit colorChanged(c);
 }
 
 void RGBWidget::slotBlueChanged(const QColor& c)
 {
+  m_pRSlider->slotSetColor1(QColor(0, c.green(), c.blue()));
+  m_pRSlider->slotSetColor2(QColor(255, c.green(), c.blue()));
+
+  m_pGSlider->slotSetColor1(QColor(c.red(), 0, c.blue()));
+  m_pGSlider->slotSetColor2(QColor(c.red(), 255, c.blue()));
+
   emit colorChanged(c);
 }
 
@@ -144,7 +245,7 @@ RGBWidget::~RGBWidget()
   delete m_pRSlider;
   delete m_pGSlider;
   delete m_pBSlider;
-  delete m_pVLayout;
+  //delete m_pLayout;
 }
 
 #include "colordialog.moc"
