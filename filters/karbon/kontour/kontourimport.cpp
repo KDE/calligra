@@ -162,7 +162,7 @@ KontourImport::convert()
 
 	parseGroup( lay.firstChild().toElement() );
 
-	m_document.saveXML( outdoc );
+	outdoc = m_document.saveXML();
 }
 
 void
