@@ -1264,6 +1264,12 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
 
         if (n.toElement().tagName() == "text:s")
             textData = expandWhitespace(n.toElement());
+        else if (n.toElement().tagName() == "text:date" // fields
+                 || n.toElement().tagName() == "text:time")
+        {
+            textData = "#";     // field placeholder
+            appendField(doc, p, n.toElement());
+        }
         else if ( t.isNull() ) // no textnode, so maybe it's a text:span
         {
             QDomElement ts = n.toElement();
@@ -1988,6 +1994,79 @@ void OoImpressImport::appendPoints(QDomDocument& doc, QDomElement& e, const QDom
     }
 
     e.appendChild(ptsElem);
+}
+
+void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object)
+{
+    const QString tag = object.tagName();
+
+    //kdDebug() << "We got a field: " << tag << endl;
+
+    QDomElement custom = doc.createElement("CUSTOM");
+    custom.setAttribute("pos", 0);
+    QDomElement variable = doc.createElement("VARIABLE");
+
+    if (tag == "text:date")
+    {
+        QDate date(QDate::fromString(object.attribute("text:date-value"), Qt::ISODate));
+
+        bool fixed = (object.hasAttribute("text:fixed") && object.attribute("text:fixed")=="true");
+
+        if (!date.isValid()) {
+            date = QDate::currentDate(); // OOo docs say so :)
+            fixed = false;
+        }
+
+        QDomElement typeElem = doc.createElement("TYPE");
+        typeElem.setAttribute("key", "DATE0locale"); // ### find out the correlation between KOffice and OOo date/time types
+        typeElem.setAttribute("type", 0); // VT_DATE
+        typeElem.setAttribute("text", object.text());
+
+        variable.appendChild(typeElem);
+
+        QDomElement dateElem = doc.createElement("DATE");
+        dateElem.setAttribute("subtype", fixed ? 0 : 1); // VST_DATE_FIX, VST_DATE_CURRENT
+        dateElem.setAttribute("fix", fixed ? 1 : 0);
+        dateElem.setAttribute("day", date.day());
+        dateElem.setAttribute("month", date.month());
+        dateElem.setAttribute("year", date.year());
+        if (object.hasAttribute("text:date-adjust"))
+            dateElem.setAttribute("correct", object.attribute("text:date-adjust"));
+
+        variable.appendChild(dateElem);
+    }
+    else if (tag == "text:time")
+    {
+        QTime time(QTime::fromString(object.attribute("text:time-value"), Qt::ISODate));
+
+        bool fixed = (object.hasAttribute("text:fixed") && object.attribute("text:fixed")=="true");
+
+        if (!time.isValid()) {
+            time = QTime::currentTime(); // OOo docs say so :)
+            fixed = false;
+        }
+
+        QDomElement typeElem = doc.createElement("TYPE");
+        typeElem.setAttribute("key", "TIMElocale"); // ### find out the correlation between KOffice and OOo date/time types
+        typeElem.setAttribute("type", 2); // VT_TIME
+        typeElem.setAttribute("text", object.text());
+
+        variable.appendChild(typeElem);
+
+        QDomElement timeElem = doc.createElement("TIME");
+        timeElem.setAttribute("subtype", fixed ? 0 : 1); // VST_TIME_FIX, VST_TIME_CURRENT
+        timeElem.setAttribute("fix", fixed ? 1 : 0);
+        timeElem.setAttribute("hour", time.hour());
+        timeElem.setAttribute("minute", time.minute());
+        timeElem.setAttribute("second", time.second());
+        /*if (object.hasAttribute("text:time-adjust"))
+          timeElem.setAttribute("correct", object.attribute("text:time-adjust"));*/ // ### TODO
+
+        variable.appendChild(timeElem);
+    }
+
+    custom.appendChild(variable);
+    e.appendChild(custom);
 }
 
 #include "ooimpressimport.moc"
