@@ -125,9 +125,9 @@ void KoParagCounter::load( QDomElement & element )
         m_startNumber = s.lower()[0].latin1() - 'a' + 1;
     s = element.attribute("display-levels");
     if ( !s.isEmpty() )
-        m_displayLevels = s.toInt();
-    else // Not specified -> compat with koffice-1.2: make equal to depth
-        m_displayLevels = m_depth;
+        m_displayLevels = QMIN( s.toInt(), m_depth+1 ); // can't be > depth+1
+    else // Not specified -> compat with koffice-1.2: make equal to depth+1
+        m_displayLevels = m_depth+1;
     m_customBullet.font = element.attribute("bulletfont");
     m_custom = element.attribute("customdef");
     QString restart = element.attribute("restart");
@@ -502,7 +502,8 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
     if ( m_displayLevels > 1 && parent( paragraph ) )
     {
         KoTextParag* p = m_cache.parent; // calculated by parent() above
-        for ( int level = 2 ; level <= m_displayLevels ; ++level )  {
+        int displayLevels = QMIN( m_displayLevels, m_depth+1 ); // can't be >depth+1
+        for ( int level = 2 ; level <= displayLevels ; ++level )  {
             if ( p )
             {
                 KoParagCounter* counter = p->counter();

@@ -76,18 +76,24 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
 
     sSuffix = new QLineEdit( gStyle, "sSuffix" );
     lSuffix->setBuddy( sSuffix );
-    grid->addWidget( sSuffix, 1, 4);
+    grid->addWidget( sSuffix, 1, 4 );
 
     lStart = new QLabel( gStyle, "lStart" );
     lStart->setText( i18n( "&Start at:" ) );
-    grid->addWidget( lStart, 2, 1);
+    grid->addWidget( lStart, 2, 1 );
 
 
     spnDepth = new QSpinBox( 0, 15, 1, gStyle );
     if (  displayDepth )
-        grid->addWidget( spnDepth, 3, 2);
+        grid->addWidget( spnDepth, 3, 2 );
     else
         spnDepth->hide();
+
+    spnDisplayLevels = new QSpinBox( 0, 15, 1, gStyle );
+    if ( displayDepth )
+        grid->addWidget( spnDisplayLevels, 3, 4 );
+    else
+        spnDisplayLevels->hide();
 
     QHBoxLayout *customCharBox = new QHBoxLayout(0, 0, 6);
     lCustom = new QLabel( i18n( "Custo&m character:" ), gStyle, "custom char label" );
@@ -112,9 +118,17 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     lDepth->setText( i18n( "&Depth:" ) );
     lDepth->setBuddy( spnDepth );
     if ( displayDepth )
-        grid->addWidget( lDepth, 3, 1);
+        grid->addWidget( lDepth, 3, 1 );
     else
         lDepth->hide();
+
+    QLabel *lDisplayLevels = new QLabel( gStyle );
+    lDisplayLevels->setText( i18n( "&Display levels:" ) );
+    lDisplayLevels->setBuddy( spnDisplayLevels );
+    if ( displayDepth )
+        grid->addWidget( lDisplayLevels, 3, 3 );
+    else
+        lDisplayLevels->hide();
 
     cbRestart = new QCheckBox( i18n( "&Restart numbering at this paragraph" ), gStyle );
     grid->addWidget( cbRestart, 5, 1 );
@@ -133,8 +147,9 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     connect( sPrefix, SIGNAL( textChanged (const QString &) ), this, SLOT( prefixChanged(const QString &) ) );
     connect( spnStart, SIGNAL( valueChanged (int) ), this, SLOT( startChanged(int) ) );
     connect( spnDepth, SIGNAL( valueChanged (int) ), this, SLOT( depthChanged(int) ) );
+    connect( spnDisplayLevels, SIGNAL( valueChanged (int) ), this, SLOT( displayLevelsChanged(int) ) );
     noSignals = false;
-    if (disableAll )
+    if ( disableAll )
     {
         gStyle->setEnabled( false );
         lstStyle->setEnabled( false );
@@ -143,6 +158,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
         bCustom->setEnabled( false );
         spnStart->setEnabled( false );
         spnDepth->setEnabled( false );
+        spnDisplayLevels->setEnabled( false );
         lStart->setEnabled( false );
         lCustom->setEnabled( false );
         cbRestart->setEnabled( false );
@@ -230,6 +246,7 @@ void KoCounterStyleWidget::displayStyle( KoParagCounter::Style style )
     sSuffix->setText( m_counter.suffix() );
 
     spnDepth->setValue( m_counter.depth() );
+    spnDisplayLevels->setValue( m_counter.displayLevels() );
     spnStart->setValue( m_counter.startNumber() );
 
     cbRestart->setChecked( m_counter.restartCounter() );
@@ -323,10 +340,11 @@ void KoCounterStyleWidget::numStyleChanged() {
     StyleRepresenter *sr = stylesList.at(lstStyle->currentItem());
     emit changeStyle( sr->style() );
     m_counter.setStyle( sr->style() );
-    bool hasStart = !sr->isBullet() && !sr->style() == KoParagCounter::STYLE_NONE;
-    lStart->setEnabled( hasStart );
-    spnStart->setEnabled( hasStart );
-    cbRestart->setEnabled( hasStart );
+    bool isNumbered = !sr->isBullet() && !sr->style() == KoParagCounter::STYLE_NONE;
+    lStart->setEnabled( isNumbered );
+    spnStart->setEnabled( isNumbered );
+    cbRestart->setEnabled( isNumbered );
+    spnDisplayLevels->setEnabled( isNumbered );
     changeKWSpinboxType(sr->style() );
 }
 
@@ -1444,6 +1462,7 @@ KoParagCounterWidget::KoParagCounterWidget( bool disableAll, QWidget * parent, c
     connect( m_styleWidget, SIGNAL( sig_startChanged(int) ), this, SLOT( startChanged(int) ) );
     connect( m_styleWidget, SIGNAL( sig_restartChanged(bool) ), this, SLOT( restartChanged(bool) ) );
     connect( m_styleWidget, SIGNAL( sig_depthChanged (int) ), this, SLOT( depthChanged(int) ) );
+    connect( m_styleWidget, SIGNAL( sig_displayLevelsChanged (int) ), this, SLOT( displayLevelsChanged(int) ) );
     connect( m_styleWidget, SIGNAL( changeCustomBullet( const QString & , QChar ) ), this, SLOT( slotChangeCustomBullet( const QString & , QChar ) ) );
 
     connect( m_styleWidget, SIGNAL( sig_numTypeChanged( int ) ), this, SLOT( numTypeChanged(int ) ) );
