@@ -308,6 +308,8 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 		else if( params == "square" )
 			gc->stroke.setLineCap( VStroke::capSquare );
 	}
+	else if( command == "stroke-miterlimit" )
+		gc->stroke.setMiterLimit( params.toFloat() );
 	else if( command == "stroke-dasharray" )
 	{
 		QStringList dashes = QStringList::split( ' ', params );
