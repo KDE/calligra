@@ -436,6 +436,9 @@ public:
     bool dontCheckTitleCase() const {return  m_bDontCheckTitleCase;}
     void setDontCheckTitleCase(bool _b) {m_bDontCheckTitleCase=_b;}
 
+    bool showdocStruct() const {return  m_bShowDocStruct;}
+    void setShowDocStruct(bool _b){m_bShowDocStruct=_b;}
+
     // in pt
     double getIndentValue() { return m_indent; }
     void setIndentValue(double _ind) { m_indent=_ind; }
@@ -597,6 +600,7 @@ private:
     bool m_bShowRuler;
     bool m_bDontCheckUpperWord;
     bool m_bDontCheckTitleCase;
+    bool m_bShowDocStruct;
     //bool m_onlineSpellCheck;
 
     // The document that is used by all formulas

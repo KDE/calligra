@@ -238,12 +238,12 @@ void KWView::changeNbOfRecentFiles(int _nb)
 void KWView::initGui()
 {
     clipboardDataChanged();
-
     if ( m_gui )
         m_gui->showGUI();
     setTool( KWCanvas::MM_EDIT );
     actionViewFrameBorders->setChecked( viewFrameBorders() );
     actionViewFormattingChars->setChecked( m_doc->viewFormattingChars() );
+    actionShowDocStruct->setChecked(m_doc->showdocStruct());
 
     actionViewHeader->setChecked(m_doc->isHeaderVisible());
     actionViewFooter->setChecked(m_doc->isFooterVisible());
@@ -654,6 +654,9 @@ void KWView::setupActions()
                                      this, SLOT( openLink() ),
                                      actionCollection(), "open_link" );
 
+    actionShowDocStruct = new KToggleAction( i18n( "Show doc structure" ), 0,
+                                            this, SLOT( showDocStructure() ),
+                                            actionCollection(), "show_docstruct" );
 }
 
 
@@ -3681,6 +3684,12 @@ void KWView::openLink()
         edit->openLink();
 }
 
+void KWView::showDocStructure()
+{
+    m_doc->setShowDocStruct(actionShowDocStruct->isChecked());
+    m_doc->reorganizeGUI();
+}
+
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */
 /******************************************************************/
@@ -3752,7 +3761,6 @@ KWGUI::KWGUI( QWidget *parent, KWView *_view )
     r_vert->hide();
 
     canvas->show();
-    docStruct->show();
 
     reorganize();
 
@@ -3799,6 +3807,11 @@ void KWGUI::reorganize()
         tabChooser->hide();
         space=0;
     }
+
+    if(view->kWordDocument()->showdocStruct())
+        docStruct->show();
+    else
+        docStruct->hide();
 
     panner->setGeometry( 0, 0, width(), height() );
     canvas->setGeometry( space, space, left->width() - space, left->height() - space );

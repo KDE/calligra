@@ -168,6 +168,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_viewFormattingChars = false;
     m_viewFrameBorders = true;
 
+    m_bShowDocStruct = true;
     m_bDontCheckUpperWord = false;
     m_bDontCheckTitleCase = false;
     //m_onlineSpellCheck = false;
@@ -265,6 +266,7 @@ void KWDocument::initConfig()
       m_viewFrameBorders = config->readBoolEntry( "ViewFrameBorders", true );
 
       m_zoom = config->readNumEntry( "Zoom", 100 );
+      m_bShowDocStruct = config->readBoolEntry("showDocStruct",true);
   }
   else
       m_zoom = 100;
@@ -281,6 +283,7 @@ void KWDocument::saveConfig()
     config->writeEntry( "ViewFormattingChars", m_viewFormattingChars );
     config->writeEntry( "ViewFrameBorders", m_viewFrameBorders );
     config->writeEntry( "Zoom", m_zoom );
+    config->writeEntry( "showDocStruct",m_bShowDocStruct);
 }
 
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint )

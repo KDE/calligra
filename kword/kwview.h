@@ -293,6 +293,8 @@ public slots:
 
     void openLink();
 
+    void showDocStructure();
+
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
@@ -342,6 +344,8 @@ private:
     KToggleAction *actionViewFooter;
     KToggleAction *actionViewFootNotes;
     KToggleAction *actionViewEndNotes;
+    KToggleAction *actionShowDocStruct;
+
     KSelectAction *actionViewZoom;
 
     KAction *actionInsertFrameBreak;
