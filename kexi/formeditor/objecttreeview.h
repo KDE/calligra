@@ -68,7 +68,7 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 	Q_OBJECT
 
 	public:
-		ObjectTreeView(QWidget *parent=0, const char *name=0);
+		ObjectTreeView(QWidget *parent=0, const char *name=0, bool tabStop = false);
 		~ObjectTreeView(){;}
 
 		virtual QSize sizeHint() const;
@@ -108,6 +108,8 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 	private:
 		Form    *m_form;
 		ObjectTreeViewItem   *m_topItem;
+
+	friend class TabStopDialog;
 };
 
 }

@@ -356,6 +356,11 @@ StdWidgetFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 		menu->insertItem(SmallIconSet("edit"), i18n("Edit rich text"), this, SLOT(editText()));
 		return true;
 	}
+	else if(classname == "KListView")
+	{
+		menu->insertItem(SmallIconSet("edit"), i18n("Edit listview contents"), this, SLOT(editListContents()));
+		return true;
+	}
 
 	return false;
 }
@@ -576,6 +581,13 @@ StdWidgetFactory::editText()
 		changeProperty("textFormat", "RichText", m_container);
 		changeProperty("text", text, m_container);
 	}
+}
+
+void
+StdWidgetFactory::editListContents()
+{
+	if(m_widget->inherits("QListView"))
+		editListView((QListView*)m_widget);
 }
 
 StdWidgetFactory::~StdWidgetFactory()

@@ -42,6 +42,7 @@ class FormManager;
 //class ResizeHandleSet;
 class ObjectTree;
 class ObjectTreeItem;
+typedef QPtrList<ObjectTreeItem> ObjectTreeC;
 
 /*!
   This class represents one form and holds the corresponding ObjectTree and Containers.
@@ -137,6 +138,9 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		void addCommand(KCommand *command, bool execute);
 
+		ObjectTreeC*		tabStops() { return &m_tabstops; }
+		void			addWidgetToTabStops(ObjectTreeItem *c);
+
 	public slots:
 		/*! This slot is called when the name of a widget was changed in Property Editor. It renames the ObjectTreeItem
 		  associated to this widget.
@@ -200,6 +204,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		KCommandHistory		*m_history;
 		KActionCollection	*m_collection;
+
+		ObjectTreeC		m_tabstops;
 };
 
 }

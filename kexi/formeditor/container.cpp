@@ -46,11 +46,12 @@ namespace KFormDesigner {
 
 void installRecursiveEventFilter(QObject *object, QObject *container)
 {
-	kdDebug() << "Installing recursive event filter on widget " << object->name() << " of type " << object->className() << endl;
 	if(!object->isWidgetType())
 		return;
+	kdDebug() << "Installing recursive event filter on widget " << object->name() << " of type " << object->className() << endl;
 	object->installEventFilter(container);
-	((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
+	if( ((QWidget*)object)->cursor().shape() != Qt::ArrowCursor )
+		((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
 
 	if(!object->children())
 		return;
@@ -113,7 +114,7 @@ EventEater::~EventEater()
 // Container itself
 
 Container::Container(Container *toplevel, QWidget *container, QObject *parent, const char *name)
-:QObject(parent, name)
+: QObject(parent, name)
 {
 	m_container = container;
 

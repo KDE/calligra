@@ -86,7 +86,7 @@ ObjectTreeViewItem::paintCell(QPainter *p, const QColorGroup & cg, int column, i
 		if(isSelected())
 			f.setBold(true);
 		p->setFont(f);
-		p->drawText(QRect(margin,0,width, height()-1), Qt::AlignVCenter, text(0));
+		p->drawText(QRect(margin,0,width, height()-1), Qt::AlignVCenter, m_item->name());
 		p->restore();
 
 		p->setPen( QColor(200,200,200) ); //like in t.v.
@@ -147,7 +147,7 @@ ObjectTreeViewItem::setup()
 
 // ObjectTreeView itself
 
-ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name)
+ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name, bool tabStop)
  : KListView(parent, name)
 {
 	m_form = 0;
@@ -155,12 +155,16 @@ ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name)
 	addColumn(i18n("Class"), 100);
 
 	connect((QObject*)header(), SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotColumnSizeChanged(int)));
-	connect(this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(emitSelChanged(QListViewItem*)));
-	connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint&)), this, SLOT(displayContextMenu(KListView*, QListViewItem*, const QPoint&)));
+	if(!tabStop)
+	{
+		connect(this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(emitSelChanged(QListViewItem*)));
+		connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint&)), this, SLOT(displayContextMenu(KListView*, QListViewItem*, const QPoint&)));
+	}
 
 	setFullWidth(true);
 	setAllColumnsShowFocus(true);
 	setItemMargin(3);
+	setSorting(-1);
 }
 
 QSize
@@ -185,7 +189,7 @@ ObjectTreeView::slotColumnSizeChanged(int column)
 void
 ObjectTreeView::displayContextMenu(KListView *list, QListViewItem *item, const QPoint &p)
 {
-	if(list!= this)
+	if((list!= this) || !m_form)
 		return;
 
 	QWidget *w = ((ObjectTreeViewItem*)item)->m_item->widget();
@@ -226,6 +230,7 @@ ObjectTreeView::setSelWidget(QWidget *w)
 	if((name == objIt->name()) || (name == QString::null))
 		return;
 
+	setCurrentItem((QListViewItem*) findItem(name));
 	setSelected((QListViewItem*) findItem(name), true);
 }
 
@@ -292,6 +297,12 @@ ObjectTreeView::loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent)
 		return 0;
 	ObjectTreeViewItem *treeItem = new ObjectTreeViewItem(parent, item);
 	treeItem->setOpen(true);
+
+	QListViewItem *last = parent->firstChild();
+	while(last->nextSibling())
+		last = last->nextSibling();
+	treeItem->moveItem(last);
+	parent->insertItem(treeItem);
 	ObjectTreeC *list = item->children();
 
 	for(ObjectTreeItem *it = list->first(); it; it = list->next())

@@ -75,6 +75,7 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 
 	public slots:
 		void  editText();
+		void  editListContents();
 
 	protected:
 		virtual void  changeText(const QString &newText);

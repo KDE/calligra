@@ -149,6 +149,17 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 	layoutDefaults.setAttribute("margin", QString::number(Form::defaultMargin()));
 	uiElement.appendChild(layoutDefaults);
 
+	/// Save tab Stops
+	QDomElement tabStops = domDoc.createElement("tabstops");
+	uiElement.appendChild(tabStops);
+	for(ObjectTreeItem *it = form->tabStops()->first(); it; it = form->tabStops()->next())
+	{
+		QDomElement tabstop = domDoc.createElement("tabstop");
+		tabStops.appendChild(tabstop);
+		QDomText tabStopText = domDoc.createTextNode(it->name());
+		tabstop.appendChild(tabStopText);
+	}
+
 	return 1;
 }
 
@@ -214,6 +225,32 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 	QDomElement ui = inBuf.namedItem("UI").toElement();
 	QDomElement element = ui.namedItem("widget").toElement();
 	createToplevelWidget(form, container, element);
+
+	// Loading the tabstops
+	QDomElement tabStops = ui.namedItem("tabstops").toElement();
+	if(tabStops.isNull())
+		return 1;
+
+	int i = 0;
+	for(QDomNode n = tabStops.firstChild(); !n.isNull(); n = n.nextSibling(), i++)
+	{
+		kdDebug() << "i== " << i << endl;
+		QString name = n.toElement().text();
+		ObjectTreeItem *item = form->objectTree()->lookup(name);
+		if(!item)
+		{
+			kdDebug() << "FormIO::loadFormFromDom ERROR : no ObjectTreeItem " << endl;
+			continue;
+		}
+		int index = form->tabStops()->findRef(item);
+		if((index != -1) && (index != i))
+		{
+			form->tabStops()->remove(item);
+			form->tabStops()->insert(i, item);
+		}
+		if(index == -1)
+			kdDebug() << "FormIO: error the item is not in list " << endl;
+	}
 
 	return 1;
 }

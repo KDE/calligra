@@ -146,6 +146,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		 */
 		void pasteWidget();
 
+		void editTabOrder();
 		/*! This slot is called when the user presses a "Widget" toolbar button or a "Widget" menu item. Prepares all Forms for
 		  creation of a new widget (ie changes cursor ...).
 		 */

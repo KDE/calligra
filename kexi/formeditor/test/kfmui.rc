@@ -5,6 +5,9 @@
   <Menu name="edit">
       <ActionList name="undo_actions" />
   </Menu>
+  <Menu name="tools">
+   <Action name="taborder"/>
+  </Menu>
   <Menu name="widgets">
    <text>&amp;Widgets</text>
    <Merge/>

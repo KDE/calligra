@@ -45,6 +45,7 @@
 #include "formIO.h"
 #include "objecttreeview.h"
 #include "commands.h"
+#include "extrawidgets.h"
 
 #include "formmanager.h"
 
@@ -516,6 +517,14 @@ FormManager::showPropertyBuffer(ObjectPropertyBuffer *buff)
 		m_editor->setBuffer(buff);
 
 	emit bufferSwitched(buff);
+}
+
+void
+FormManager::editTabOrder()
+{
+	if(!m_active)  return;
+	TabStopDialog *d = new TabStopDialog(m_active, m_active->toplevelContainer()->widget()->topLevelWidget());
+	delete d;
 }
 
 void

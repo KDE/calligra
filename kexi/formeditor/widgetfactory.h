@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,9 +27,6 @@
 #include <qguardedptr.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
-#include <ktextedit.h>
-
-#include <kdialogbase.h>
 
 // class QPixmap;
 
@@ -37,53 +35,15 @@ class KLineEdit;
 class QDomElement;
 class QDomDocument;
 class QVariant;
-class KToolBar;
-class KTextEdit;
-class KFontCombo;
-class KColorCombo;
+class QListView;
 
 namespace KFormDesigner {
-
 
 class WidgetFactory;
 class Container;
 class ResizeHandleSet;
 class ObjectTreeItem;
 
-class KFORMEDITOR_EXPORT RichTextDialog : KDialogBase
-{
-	Q_OBJECT
-
-	public:
-		RichTextDialog(QWidget *parent, const QString &text);
-		~RichTextDialog(){;}
-
-		QString  text();
-
-	public slots:
-		void  changeFont(const QString &);
-		void  changeColor(const QColor&);
-		void  buttonToggled(int);
-		void  cursorPositionChanged(int, int);
-		void  slotVerticalAlignmentChanged(KTextEdit::VerticalAlignment align);
-
-	private:
-		KToolBar  *m_toolbar;
-		KTextEdit  *m_edit;
-		KFontCombo  *m_fcombo;
-		KColorCombo  *m_colCombo;
-};
-/*
-class KFORMEDITOR_EXPORT EditListViewDialog : KDialogBase
-{
-	Q_OBJECT
-
-	public:
-		EditListViewDialog(QListView *listview, QWidget *parent);
-		~EditListViewDialog(){;}
-
-};
-*/
 /**
  * this class holds properties of widgets
  */
@@ -200,6 +160,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		virtual void  addPropertyDescription(Container *container, const char *prop, const QString &desc);
 		virtual void  addValueDescription(Container *container, const char *value, const QString &desc);
 		bool  editRichText(QWidget *w, QString &text);
+		void  editListView(QListView *listview);
 
 	protected slots:
 		/*! You have to implement this function for editing inside the Form to work. This slot is called when the line edit text changes,

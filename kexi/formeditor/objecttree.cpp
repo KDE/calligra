@@ -178,6 +178,7 @@ ObjectTree::addChild(ObjectTreeItem *parent, ObjectTreeItem *c)
 		c->setParent(parent);
 	}
 	kdDebug() << "ObjectTree::addChild(): adding " << c->name() << " to " << parent->name() << endl;
+	m_container->form()->addWidgetToTabStops(c);
 	m_container->form()->emitChildAdded(c);
 }
 

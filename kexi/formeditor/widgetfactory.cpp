@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,21 +17,13 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#include <qlayout.h>
-#include <qdialog.h>
-#include <qcursor.h>
-
-#include <keditlistbox.h>
-#include <kstdguiitem.h>
-#include <klineedit.h>
-#include <kpushbutton.h>
-#include <ktoolbar.h>
-#include <kfontcombo.h>
-#include <kcolorcombo.h>
-#include <ktoolbarradiogroup.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <klineedit.h>
+#include <kdialogbase.h>
+#include <keditlistbox.h>
 
+#include "extrawidgets.h"
 #include "resizehandle.h"
 #include "objpropbuffer.h"
 #include "formmanager.h"
@@ -41,188 +34,6 @@
 
 
 namespace KFormDesigner {
-
-// A simple dialog to edit rich text
-
-RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
-: KDialogBase(parent, "richtext_dialog", true, i18n("Edit rich text"), Ok|Cancel, Ok, false)
-{
-	QFrame *frame = makeMainWidget();
-	QVBoxLayout *l = new QVBoxLayout(frame);
-	l->setAutoAdd(true);
-
-	m_toolbar = new KToolBar(frame);
-	m_toolbar->setFlat(true);
-	m_toolbar->show();
-
-	m_fcombo = new KFontCombo(m_toolbar);
-	m_toolbar->insertWidget(101, 40, m_fcombo);
-	connect(m_fcombo, SIGNAL(textChanged(const QString&)), this, SLOT(changeFont(const QString &)));
-
-	m_toolbar->insertSeparator();
-
-	m_colCombo = new KColorCombo(m_toolbar);
-	m_toolbar->insertWidget(102, 30, m_colCombo);
-	connect(m_colCombo, SIGNAL(activated(const QColor&)), this, SLOT(changeColor(const QColor&)));
-
-	m_toolbar->insertButton("text_bold", 103, true, i18n("Bold"));
-	m_toolbar->insertButton("text_italic", 104, true, i18n("Italic"));
-	m_toolbar->insertButton("text_under", 105, true, i18n("Underline"));
-	m_toolbar->setToggle(103, true);
-	m_toolbar->setToggle(104, true);
-	m_toolbar->setToggle(105, true);
-	m_toolbar->insertSeparator();
-
-	m_toolbar->insertButton("text_super", 106, true, i18n("Superscript"));
-	m_toolbar->insertButton("text_sub", 107, true, i18n("Subscript"));
-	m_toolbar->setToggle(106, true);
-	m_toolbar->setToggle(107, true);
-	m_toolbar->insertSeparator();
-
-	KToolBarRadioGroup *group = new KToolBarRadioGroup(m_toolbar);
-	m_toolbar->insertButton("text_left", 201, true, i18n("Right Align"));
-	m_toolbar->setToggle(201, true);
-	group->addButton(201);
-	m_toolbar->insertButton("text_center", 202, true, i18n("Left Align"));
-	m_toolbar->setToggle(202, true);
-	group->addButton(202);
-	m_toolbar->insertButton("text_right", 203, true, i18n("Centered"));
-	m_toolbar->setToggle(203, true);
-	group->addButton(203);
-	m_toolbar->insertButton("text_block", 204, true, i18n("Justified"));
-	m_toolbar->setToggle(204, true);
-	group->addButton(204);
-
-	connect(m_toolbar, SIGNAL(toggled(int)), this, SLOT(buttonToggled(int)));
-
-	m_edit = new KTextEdit(text, QString::null, frame, "richtext_edit");
-	m_edit->setTextFormat(RichText);
-	m_edit->setFocus();
-
-	connect(m_edit, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(cursorPositionChanged(int, int)));
-	connect(m_edit, SIGNAL(clicked(int, int)), this, SLOT(cursorPositionChanged(int, int)));
-	connect(m_edit, SIGNAL(currentVerticalAlignmentChanged(QTextEdit::VerticalAlignment)), this, SLOT(slotVerticalAlignmentChanged(QTextEdit::VerticalAlignment)));
-
-	m_edit->moveCursor(QTextEdit::MoveEnd, false);
-	cursorPositionChanged(0, 0);
-	m_edit->show();
-	frame->show();
-}
-
-QString
-RichTextDialog::text()
-{
-	return m_edit->text();
-}
-
-void
-RichTextDialog::changeFont(const QString &font)
-{
-	m_edit->setFamily(font);
-}
-
-void
-RichTextDialog::changeColor(const QColor &color)
-{
-	m_edit->setColor(color);
-}
-
-void
-RichTextDialog::buttonToggled(int id)
-{
-	bool isOn = m_toolbar->isButtonOn(id);
-
-	switch(id)
-	{
-		case 103: m_edit->setBold(isOn); break;
-		case 104: m_edit->setItalic(isOn); break;
-		case 105: m_edit->setUnderline(isOn); break;
-		case 106:
-		{
-			if(isOn && m_toolbar->isButtonOn(107))
-				m_toolbar->setButton(107, false);
-			m_edit->setVerticalAlignment(isOn ? QTextEdit::AlignSuperScript : QTextEdit::AlignNormal);
-			break;
-		}
-		case 107:
-		{
-			if(isOn && m_toolbar->isButtonOn(106))
-				m_toolbar->setButton(106, false);
-			m_edit->setVerticalAlignment(isOn ? QTextEdit::AlignSubScript : QTextEdit::AlignNormal);
-			break;
-		}
-		case 201: case 202:
-		case 203: case 204:
-		{
-			if(!isOn)  break;
-			switch(id)
-			{
-				case 201:  m_edit->setAlignment(Qt::AlignLeft); break;
-				case 202:  m_edit->setAlignment(Qt::AlignCenter); break;
-				case 203:  m_edit->setAlignment(Qt::AlignRight); break;
-				case 204:  m_edit->setAlignment(Qt::AlignJustify); break;
-				default: break;
-			}
-		}
-		default: break;
-	}
-
-}
-
-void
-RichTextDialog::cursorPositionChanged(int, int)
-{
-//	if (m_edit->hasSelectedText())
-//		return;
-
-	m_fcombo->setCurrentFont(m_edit->currentFont().family());
-	m_colCombo->setColor(m_edit->color());
-	m_toolbar->setButton(103, m_edit->bold());
-	m_toolbar->setButton(104, m_edit->italic());
-	m_toolbar->setButton(105, m_edit->underline());
-
-	int id = 0;
-	switch(m_edit->alignment())
-	{
-		case Qt::AlignLeft:    id = 201; break;
-		case Qt::AlignCenter:  id = 202; break;
-		case Qt::AlignRight:   id = 203; break;
-		case Qt::AlignJustify: id = 204; break;
-		default:  id = 201; break;
-	}
-	m_toolbar->setButton(id, true);
-}
-
-void
-RichTextDialog::slotVerticalAlignmentChanged(QTextEdit::VerticalAlignment align)
-{
-	switch(align)
-	{
-		/*case QTextEdit::AlignSuperScript:
-		{
-			m_toolbar->setButton(106, true);
-			m_toolbar->setButton(107, false);
-			break;
-		}
-		case QTextEdit::AlignSubScript:
-		{
-			m_toolbar->setButton(107, true);
-			m_toolbar->setButton(106, false);
-			break;
-		}*/
-		default:
-		{
-			m_toolbar->setButton(107, false);
-			m_toolbar->setButton(106, false);
-		}
-	}
-}
-
-// A Dialog to edit the contents of a listview ///
-/*EditListViewDialog::EditListViewDialog(QListView *listview, QWidget *parent)
-: KDialogBase(parent, "editlistview_dialog", true, i18n("Edit listview contents"), Ok|Cancel, Ok, false)
-{
-}*/
 
 ///// Widget Factory //////////////////////////
 
@@ -289,10 +100,14 @@ WidgetFactory::editList(QWidget *w, QStringList &list)
 	if(dialog->exec() == QDialog::Accepted)
 	{
 		list = edit->items();
+		delete dialog;
 		return true;
 	}
 	else
+	{
+		delete dialog;
 		return false;
+	}
 }
 
 bool
@@ -302,10 +117,21 @@ WidgetFactory::editRichText(QWidget *w, QString &text)
 	if( ((QDialog*)d)->exec()== QDialog::Accepted)
 	{
 		text = d->text();
+		delete d;
 		return true;
 	}
 	else
+	{
+		delete d;
 		return false;
+	}
+}
+
+void
+WidgetFactory::editListView(QListView *listview)
+{
+	EditListViewDialog *d = new EditListViewDialog(listview, ((QWidget*)listview)->topLevelWidget());
+	delete d;
 }
 
 bool

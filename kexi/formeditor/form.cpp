@@ -51,12 +51,13 @@ Form::Form(FormManager *manager, const char *name)
 	m_design = true;
 	m_collection = new KActionCollection(this);
 	m_history = new KCommandHistory(m_collection, true);
+	m_tabstops.setAutoDelete(false);
 }
 
 void
 Form::createToplevel(QWidget *container, const QString &classname)
 {
-	kdDebug() << "Form::createToplevel()" << endl;
+	kdDebug() << "Form::createToplevel()" << container->name() << this->name() << endl;
 
 	m_toplevel = new Container(0, container, this, name());
 	EventEater *eater = new EventEater(container, m_toplevel);
@@ -194,6 +195,35 @@ Form::addCommand(KCommand *command, bool execute)
 {
 	emit m_manager->dirty(this);
 	m_history->addCommand(command, execute);
+}
+
+void
+Form::addWidgetToTabStops(ObjectTreeItem *c)
+{
+	QWidget *w = c->widget();
+	if(!w)
+		return;
+	if(w->focusPolicy() == QWidget::NoFocus)
+	{
+		if(!w->children())
+		return;
+
+		QObjectList list = *(w->children());
+		for(QObject *obj = list.first(); obj; obj = list.next())
+		{
+			if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() != QWidget::NoFocus))
+			{
+				if(m_tabstops.findRef(c) == -1)
+				{
+					m_tabstops.append(c);
+					return;
+				}
+			}
+		}
+	}
+
+	if(m_tabstops.findRef(c) == -1)
+		m_tabstops.append(c);
 }
 
 Container*
