@@ -37,11 +37,9 @@ void KPresenterShell_impl::setDocument(KPresenterDocument_impl *_doc)
 {
   m_rDoc = OPParts::Document::_duplicate(_doc);
 
-  OPParts::View_var v = _doc->createView();  
-  v->setPartShell(this);
-  setRootPart(v);
-
-  mdeb("setDocument %i | %i\n",v->refCount(),v->_refcnt());
+  m_vView = _doc->createView();  
+  m_vView->setPartShell(this);
+  setRootPart(m_vView);
 }
 
 /*======================== open document =========================*/
@@ -76,9 +74,11 @@ void KPresenterShell_impl::fileNew()
   
   m_rDoc = OPParts::Document::_duplicate(new KPresenterDocument_impl);
   
-  OPParts::View_var view = m_rDoc->createView();
-  view->setPartShell(this);
-  setRootPart(view);
+  m_vView = m_rDoc->createView();
+  m_vView->setPartShell(this);
+  setRootPart(m_vView);
+  m_rMenuBar->setItemEnabled(m_idMenuFile_SaveAs,true);
+  m_rToolBarFile->setItemEnabled(m_idButtonFile_Print,true);
 }
 
 /*======================== clean up ==============================*/

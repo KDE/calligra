@@ -205,7 +205,9 @@ void Page::paintObjects(QPainter *painter,QRect rect)
       if ((rect.intersects(QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
 				 objPtr->ow,objPtr->oh)) && editMode) ||
 	  (!editMode && QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
-			      objPtr->ow,objPtr->oh).intersects(QRect(0,0,getPageSize(currPresPage).width(),
+			      objPtr->ow,objPtr->oh).intersects(QRect((width() - getPageSize(currPresPage).width()) / 2 + 10,
+								      (height() - getPageSize(currPresPage).height()) / 2 + 10,
+								      getPageSize(currPresPage).width(),
 								      getPageSize(currPresPage).height()))))
 	{     
 	  switch (objPtr->objType)

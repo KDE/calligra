@@ -347,6 +347,8 @@ void KPresenterView_impl::screenStart()
       if (widget()->height() > KPresenterDoc()->getPageSize(0,0,0).height())
 	yOffset -= (widget()->height() - KPresenterDoc()->getPageSize(0,0,0).height()) / 2;
       page->startScreenPresentation();
+      vert->setEnabled(false);
+      horz->setEnabled(false);
     }
 }
 
@@ -359,6 +361,8 @@ void KPresenterView_impl::screenStop()
       yOffset = _yOffset;
       page->stopScreenPresentation();
       presStarted = false;
+      vert->setEnabled(true);
+      horz->setEnabled(true);
     }
 }
 

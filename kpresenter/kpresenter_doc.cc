@@ -202,18 +202,44 @@ bool KPresenterDocument_impl::save(const char *_url)
 bool KPresenterDocument_impl::save(ostream& out)
 {
   out << otag << "<DOC author=\"" << "Reginals Stadlbauer" << "\" email=" << "reggie@kde.org" << " editor=" << "KPresenter"
-      << " mime=" << "\"application/x-kpresenter\"" << " >" << endl;
+      << " mime=" << "\"application/x-kpresenter\"" << ">" << endl;
   
   out << otag << "<PAPER format=" << paperFormatString() << " orientation=" << orientationString() << '>' << endl;
   out << indent << "<PAPERBORDERS left=" << pageLayout().left << " top=" << pageLayout().top << " right=" << pageLayout().right
       << " bottom=" << pageLayout().bottom << "/>" << endl;
   out << etag << "</PAPER>" << endl;
   
+  out << otag << "<BACKGROUND pages=" << _pageList.count() << ">" << endl;
+
+  saveBackground(out);
+
+  out << etag << "</BACKGROUND>" << endl;
+
   out << etag << "</DOC>" << endl;
     
   setModified(false);
     
   return true;
+}
+
+/*========================== save background ====================*/
+void KPresenterDocument_impl::saveBackground(ostream& out)
+{
+  for (pagePtr = _pageList.first();pagePtr != 0;pagePtr = _pageList.next())
+    {
+      out << otag << "<PAGE>" << endl;
+      out << indent << "<PAGENUM value=" << pagePtr->pageNum << "/>" << endl; 
+      out << indent << "<BACKTYPE value=" << pagePtr->backType << "/>" << endl; 
+      out << indent << "<BACKVIEW value=" << pagePtr->backPicView << "/>" << endl; 
+      out << indent << "<BACKCOLOR1 red=" << pagePtr->backColor1.red() << " green=" 
+	  << pagePtr->backColor1.green() << " blue=" << pagePtr->backColor1.blue() << "/>" << endl; 
+      out << indent << "<BACKCOLOR2 red=" << pagePtr->backColor2.red() << " green=" 
+	  << pagePtr->backColor2.green() << " blue=" << pagePtr->backColor2.blue() << "/>" << endl; 
+      out << indent << "<BCTYPE value=" << pagePtr->bcType << "/>" << endl; 
+      out << indent << "<BACKPIC value=\"" << pagePtr->backPic << "\"/>" << endl; 
+      out << indent << "<BACKCLIP value=\"" << pagePtr->backClip << "\"/>" << endl; 
+      out << etag << "</PAGE>" << endl;
+    }
 }
 
 /*========================== load ===============================*/

@@ -274,6 +274,11 @@ signals:
 
 protected:
 
+  // ************ functions ************
+  void saveBackground(ostream&);
+
+  // ************ variables ************
+
   // list of views and children
   QList<KPresenterView_impl> m_lstViews;
   QList<KPresenterChild> m_lstChildren;

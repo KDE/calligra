@@ -56,6 +56,7 @@ protected:
 
   // reference to a document
   Document_ref m_rDoc;
+  OPParts::View_var m_vView;
 
 };
 
