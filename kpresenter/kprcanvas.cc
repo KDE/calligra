@@ -626,7 +626,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( overObject ) {
                         if ( kpobject ) {
                             selectObj( kpobject );
-                            modType = MT_NONE;
                             raiseObject( kpobject );
 			}
                     }
