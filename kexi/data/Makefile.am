@@ -1,9 +1,9 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-if compile_qsa_plugin
-scripthandler = kexiscripthandler.desktop
-scriptrc = kexiscriptpartui.rc
-endif
+#if compile_qsa_plugin
+#scripthandler = kexiscripthandler.desktop
+#scriptrc = kexiscriptpartui.rc
+#endif
 
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.
@@ -34,8 +34,8 @@ rc_DATA = kexiui.rc \
 	kexiformpartui.rc kexiformpartinstui.rc \
 	kexitableview.rc \
 	kexirelationsview.rc kexikugarhandlerui.rc kexidatatableui.rc \
-	$(scriptrc) \
 	readme_en
+#	$(scriptrc)
 
 kde_conf_DATA = kexirc
 
@@ -44,7 +44,8 @@ servicetypes_DATA=kexihandler.desktop kexitablefilter.desktop  kexiimportfilter.
 			kexifileimportfilter.desktop kexiserverimportfilter.desktop
 
 servicesdir=$(kde_servicesdir)/kexi
-services_DATA=kexitablehandler.desktop kexiqueryhandler.desktop kexirelationhandler.desktop kexiformhandler.desktop $(scripthandler)
+services_DATA=kexitablehandler.desktop kexiqueryhandler.desktop kexirelationhandler.desktop kexiformhandler.desktop 
+#$(scripthandler)
 
 magicdir = $(kde_confdir)/magic
 magic_DATA = kexi.magic
