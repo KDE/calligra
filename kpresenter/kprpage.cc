@@ -168,7 +168,7 @@ void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter)
     }
 }
 
-void KPrPage::pasteObjs( const QByteArray & data,int nbCopy )
+void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle )
 {
     m_doc->deSelectAllObj();
     int num = m_objectList.count();
@@ -185,18 +185,28 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy )
             createMacro = true ;
         }
     }
-    if (createMacro)
-        m_doc->addCommand(macro);
-    else
-        delete macro;
 
     //move and select all new pasted in objects
     KPObject *_tempObj;
     for (_tempObj = m_objectList.at(num); _tempObj; _tempObj = m_objectList.next()) {
       _tempObj->moveBy( 20,20 );
       _tempObj->setSelected( true );
-      m_doc->repaint(_tempObj);
+      if ( angle == 0.0 )
+          m_doc->repaint(_tempObj);
     }
+
+    if ( angle != 0.0)
+    {
+        KCommand *cmd = rotateObj(angle, true);
+        if (cmd )
+            macro->addCommand( cmd );
+    }
+
+    if (createMacro)
+        m_doc->addCommand(macro);
+    else
+        delete macro;
+
     m_doc->setModified(true);
 }
 
@@ -3353,7 +3363,7 @@ void KPrPage::repaintObj()
     }
 }
 
-KCommand *KPrPage::rotateObj(float _newAngle)
+KCommand *KPrPage::rotateObj(float _newAngle,  bool addAngle)
 {
     RotateCmd *rotateCmd=0L;
     bool newAngle=false;
@@ -3386,7 +3396,7 @@ KCommand *KPrPage::rotateObj(float _newAngle)
     if ( !_objects.isEmpty() && newAngle )
     {
 	rotateCmd = new RotateCmd( i18n( "Change Rotation" ),
-                                   _oldRotate, _newAngle, _objects, m_doc );
+                                   _oldRotate, _newAngle, _objects, m_doc,addAngle );
 	rotateCmd->execute();
     }
     else

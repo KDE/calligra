@@ -31,3 +31,4 @@ KPresenter 1.2beta1 -> 1.2 beta 2
 - When we create a line object and we press shift we draw horizontal/vertical
 - Add support for dnd between "text object"
 - Add support for "keep ratio" in obj
+- Add "duplicate object" dialogbox

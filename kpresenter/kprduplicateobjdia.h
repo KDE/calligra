@@ -24,6 +24,7 @@
 #include <koRect.h>
 
 class KIntNumInput;
+class KDoubleNumInput;
 
 class KPrDuplicatObjDia : public KDialogBase
 {
@@ -31,11 +32,13 @@ class KPrDuplicatObjDia : public KDialogBase
 public:
     KPrDuplicatObjDia( QWidget *parent,const char *name=0L);
     int nbCopy() const;
+    double angle() const;
 
 protected slots:
     void slotReset();
 protected:
     KIntNumInput *m_nbCopy;
+    KDoubleNumInput *m_rotation;
 };
 
 

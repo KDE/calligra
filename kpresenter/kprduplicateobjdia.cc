@@ -39,17 +39,28 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent,const char *name)
     m_nbCopy = new KIntNumInput( 1, page );
     m_nbCopy->setRange( 1 , 10, 1);
 
+    lab=new QLabel(i18n("Rotation Angle:"), page);
+
+    m_rotation = new KDoubleNumInput( page, "customInput" );
+
     connect( this, SIGNAL( user1Clicked() ), this ,SLOT( slotReset() ));
-    resize( 300,100 );
+    resize( 200,100 );
 }
 
 void KPrDuplicatObjDia::slotReset()
 {
     m_nbCopy->setValue( 1 );
+    m_rotation->setValue( 0.0 );
 }
 
 int KPrDuplicatObjDia::nbCopy() const
 {
     return m_nbCopy->value();
 }
+
+double KPrDuplicatObjDia::angle() const
+{
+    return m_rotation->value();
+}
+
 #include "kprduplicateobjdia.moc"

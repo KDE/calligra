@@ -243,13 +243,15 @@ void SetBackCmd::unexecute()
 
 /*======================== constructor ===========================*/
 RotateCmd::RotateCmd( const QString &_name, QPtrList<RotateValues> &_oldRotate, float _newAngle,
-                      QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
+                      QPtrList<KPObject> &_objects, KPresenterDoc *_doc, bool _addAngle )
     : KNamedCommand( _name ), oldRotate( _oldRotate ), objects( _objects )
 {
     objects.setAutoDelete( false );
     oldRotate.setAutoDelete( false );
     doc = _doc;
     newAngle = _newAngle;
+
+    addAngle = _addAngle;
 
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
@@ -271,7 +273,12 @@ void RotateCmd::execute()
 {
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
-        it.current()->rotate( newAngle );
+    {
+        if ( addAngle )
+            it.current()->rotate( it.current()->getAngle()+newAngle );
+        else
+            it.current()->rotate( newAngle );
+    }
     doc->updateRuler();
     doc->repaint( false );
 }

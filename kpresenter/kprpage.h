@@ -90,7 +90,7 @@ public:
 
     KCommand * deleteObjs( bool _add=true );
     int numSelected() const;
-    void pasteObjs( const QByteArray & data, int nbCopy = 1 );
+    void pasteObjs( const QByteArray & data, int nbCopy = 1, double angle = 0.0 );
     KCommand * replaceObjs( bool createUndoRedo, unsigned int _orastX,unsigned int _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol);
 
     void copyObjs(QDomDocument &doc, QDomElement &presenter);
@@ -245,7 +245,7 @@ public:
     KCommand *moveObject(KPresenterView *_view, int diffx,int diffy);
     KCommand *moveObject(KPresenterView *m_view,const KoPoint &_move,bool key);
 
-    KCommand *rotateObj(float _newAngle);
+    KCommand *rotateObj(float _newAngle, bool addAngle=false);
     KCommand *shadowObj(ShadowDirection dir,int dist, const QColor &col);
     KCommand *stickyObj(bool _sticky, KPrPage * currentPage);
 

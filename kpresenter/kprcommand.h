@@ -164,7 +164,7 @@ public:
     };
 
     RotateCmd( const QString &_name, QPtrList<RotateValues> &_oldRotate, float _newAngle,
-               QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
+               QPtrList<KPObject> &_objects, KPresenterDoc *_doc, bool _addAngle = false );
     ~RotateCmd();
 
     virtual void execute();
@@ -175,6 +175,8 @@ protected:
     QPtrList<RotateValues> oldRotate;
     QPtrList<KPObject> objects;
     float newAngle;
+    //necessary for duplicate object, we can duplicated and add angle.
+    bool addAngle;
 
 };
 
