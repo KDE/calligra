@@ -139,10 +139,17 @@ parameterLocale::parameterLocale( KSpreadView* _view,QWidget *parent , char *nam
   lay1->setMargin( 20 );
   lay1->setSpacing( 10 );
   QLabel *label=new QLabel( tmpQGroupBox,"label");
+  //label=new QLabel( tmpQGroupBox,"label7");
+  label->setText( i18n("Language : %1").arg( _view->doc()->locale()->language() ));
+  lay1->addWidget(label);
+  label=new QLabel( tmpQGroupBox,"label6");
   label->setText( i18n("Number : %1").arg( _view->doc()->locale()->formatNumber(12.55) ));
   lay1->addWidget(label);
   label=new QLabel( tmpQGroupBox,"label1");
   label->setText( i18n("Date : %1").arg( _view->doc()->locale()->formatDate(QDate(2000,10,23)) ));
+  lay1->addWidget(label);
+  label=new QLabel( tmpQGroupBox,"label5");
+  label->setText( i18n("Short date : %1").arg( _view->doc()->locale()->formatDate(QDate(2000,10,23),true) ));
   lay1->addWidget(label);
   label=new QLabel( tmpQGroupBox,"label2");
   label->setText( i18n("Time : %1").arg( _view->doc()->locale()->formatTime(QTime(15,10,53)) ));
