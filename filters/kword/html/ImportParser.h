@@ -46,6 +46,8 @@ public:
     virtual bool doStartElement(const QString& tagName, const HtmlAttributes& attributes)=0;
     virtual bool doEndElement(const QString& tagName)=0;
     virtual bool doCharacters(const QString& strChars)=0;
+    virtual bool doSgmlProcessingInstruction(const QString& tagName,const QString&  strInstruction)=0;
+    virtual bool doXmlProcessingInstruction(const QString& tagName, const HtmlAttributes& attributes)=0;	
 protected:
     inline bool IsWhiteSpace(const QChar& ch)
     {
@@ -59,7 +61,9 @@ protected:
     virtual void WriteOut(const QString& str)=0;
     void unGetCharacter(const QChar& ch);
     bool parseTag(bool tagClosing);
-    void treatMetaTag(const QString& tagName, HtmlAttributes& attributes);
+	bool parseXmlProcessingInstruction(const QString& tagName);
+	bool parseSgmlProcessingInstruction(const QString& tagName);
+	bool parseProcessingInstruction(void);
 private:
     MapTag m_mapTag;
     QTextStream& m_streamIn;
@@ -94,6 +98,8 @@ protected:
     bool treatMetaTag(const QString& tagName, const HtmlAttributes& attributes);
     virtual void WriteOut(const QChar& ch) { };
     virtual void WriteOut(const QString& str) { };
+	virtual bool doSgmlProcessingInstruction(const QString& tagName,const QString&  strInstruction) { return true;}
+	virtual bool doXmlProcessingInstruction(const QString& tagName, const HtmlAttributes& attributes);
 private:
     QString m_strCharset;
 };

@@ -121,7 +121,7 @@ bool HtmlParser::setEncoding(const QString& strEncoding)
         return true;
     }
 
-    // We have an encoding that is not predefined, so you have to do it the normal way.
+    // We have an encoding that is not predefined, so we have to do it the normal way.
 
 
     QTextCodec* codec=QTextCodec::codecForName(strEncoding.latin1());
@@ -147,7 +147,7 @@ bool HtmlParser::parseTag(bool tagClosing)
     QString attributeName;
     QString attributeValue;
     QChar ch;
-    QMapIterator<QString,ParsingTag> mapTagIter=m_mapTag.begin(); // Default to first element.
+    MapTag::Iterator mapTagIter=m_mapTag.begin(); // Default to first element.
     HtmlAttributes attributes;
 
     while (state!=stateNormal)
@@ -423,6 +423,294 @@ bool HtmlParser::parseTag(bool tagClosing)
     return true;
 }
 
+bool HtmlParser::parseXmlProcessingInstruction(const QString& tagName)
+{
+    States state=stateBeforeAttributeName;
+    QString attributeName;
+    QString attributeValue;
+    QChar ch;
+    HtmlAttributes attributes;
+
+    while (state!=stateNormal)
+    {
+        if (atEnd())
+        {
+            kdError(30503) << "Unexpected end of file! Aborting!"
+                    << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                    << endl;
+            return false;
+        }
+        ch=getCharacter();
+
+        // TODO/FIXME: charachter ? (for now, just an additional attribute)
+
+        switch (state)
+        {
+        case stateBeforeAttributeName:
+            {
+                if (ch=='>')
+                {
+                    state=stateNormal;
+                }
+                else if (!IsWhiteSpace(ch))
+                {
+                    attributeName=ch;
+                    state=stateAttributeName;
+                }
+                break;
+            }
+        case stateAttributeName:
+            {
+                if (IsWhiteSpace(ch))
+                {
+                    state=stateAfterAttributeName;
+                    if (attributeName.isEmpty())
+                    {
+                        kdError(30503) << "PARSING ERROR: attribute name empty!"
+                            << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                            << endl;
+                        return false;
+                    }
+                    // Make a default attribute value (see XHTML 1.0)
+                    attributes[attributeName]=attributeName;
+
+                    attributeValue=attributeName;
+                }
+                else if (ch=='>')
+                {
+                    state=stateNormal;
+
+                    // Add the attribute, only if it is not named '?'
+                    // Else we have catched a ?> sequence, ending the processing instruction
+                    if (attributeName!="?")
+                    {
+                        // Attribute has no value but XML forces it to have one.
+                        attributes[attributeName]=attributeName;
+                    }
+                }
+                else if (ch=='=')
+                {
+                    state=stateBeforeAttributeValue;
+                    attributeValue=QString::null;
+                }
+                else
+                {
+                    // Make sure that the attribute name is lower-case
+                    attributeName+=ch;
+                }
+                break;
+            }
+        case stateAfterAttributeName:
+            {
+                if (ch=='/')
+                {
+                    state=stateXMLEmptyElement;
+                }
+                else if (ch=='>')
+                {
+                    state=stateNormal;
+                }
+                else if (ch=='=')
+                {
+                    state=stateBeforeAttributeValue;
+                    attributeValue=QString::null;
+                }
+                else if (!IsWhiteSpace(ch))
+                {
+                    // We have again characters, but we have not seen any equal sign.
+                    // However XML forces attributes to have an explicit value
+                    attributes[attributeName]=attributeName;
+
+                    // Having again characters means that we are starting a new attribute name!
+                    attributeName=ch;
+                    state=stateAttributeName;
+                }
+                break;
+            }
+        case stateBeforeAttributeValue:
+            {
+                if (ch=='>')
+                {
+                    kdError(30503) << "PARSING ERROR: unexpected > before attribute value"
+                        << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                        << endl;
+                    return false;
+                }
+                else if (ch=='"')
+                {
+                    state=stateQuotedAttributeValue;
+                    attributeValue=QString::null;
+                }
+                else if (ch=="'")
+                {
+                    state=stateSingleQuotedAttributeValue;
+                    attributeValue=QString::null;
+                }
+                else if (!IsWhiteSpace(ch))
+                {
+                    // We have a new attribute value!
+                    attributeValue=ch;
+                    state=stateAttributeValue;
+                }
+                break;
+            }
+        case stateAttributeValue:
+            {
+                if (IsWhiteSpace(ch))
+                {
+                    state=stateBeforeAttributeName;
+                    attributes[attributeName]=attributeValue;
+                }
+                else if (ch=='>')
+                {
+                    state=stateNormal;
+                    attributes[attributeName]=attributeValue;
+                }
+                else
+                {
+                    attributeValue+=ch;
+                }
+                break;
+            }
+        case stateQuotedAttributeValue:
+            {
+                if (ch=='"')
+                {
+                    state=stateBeforeAttributeName;
+                    attributes[attributeName]=attributeValue;
+                }
+                else
+                {
+                    attributeValue+=ch;
+                }
+                break;
+            }
+        case stateSingleQuotedAttributeValue:
+            {
+                if (ch=="'")
+                {
+                    state=stateBeforeAttributeName;
+                    attributes[attributeName]=attributeValue;
+                }
+                else
+                {
+                    attributeValue+=ch;
+                }
+                break;
+            }
+        default:
+            {
+                kdError(30503) << "Unknown state: " << int(state) << " (ParseXmlProcessingInstruction)"
+                    << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                    << endl;
+                break;
+            }
+
+        }
+    }
+
+    return doXmlProcessingInstruction(tagName, attributes);
+}
+
+bool HtmlParser::parseSgmlProcessingInstruction(const QString& tagName)
+{
+
+    kdDebug(30503) << "Processing instruction name: " << tagName << endl;
+
+    QString strInstruction;
+    QChar ch;
+
+    for (;;)
+    {
+        if (atEnd())
+        {
+            kdError(30503) << "Unexpected end of file! Aborting!"
+                    << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                    << endl;
+            return false;
+        }
+
+        ch=getCharacter();
+
+        if (ch=='>')
+        {
+            break;
+        }
+        else if (ch=='?')
+        {
+            ch=getCharacter();
+            if (ch=='>')
+            {
+                break;
+            }
+            else
+            {
+                strInstruction+='?';
+                unGetCharacter(ch); // We need to unget as the character may be again a '?'
+            }
+        }
+        else
+        {
+            strInstruction+=ch;
+        }
+    }
+
+    return doSgmlProcessingInstruction(tagName, strInstruction);
+}
+
+bool HtmlParser::parseProcessingInstruction(void)
+{
+    QString tagName; // Means here the name of the processing instruction
+    QChar ch;
+
+    for (;;)
+    {
+        if (atEnd())
+        {
+            kdError(30503) << "Unexpected end of file! Aborting!"
+                    << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+                    << endl;
+            return false;
+        }
+
+        ch=getCharacter();
+
+        {
+            if ((IsWhiteSpace(ch)) || (ch=='>') || (ch=='?'))
+            {
+                unGetCharacter(ch);
+                break;
+            }
+            else
+            {
+                tagName+=ch;
+            }
+        }
+    }
+
+    if (tagName.isEmpty())
+    {
+        kdError(30503) << "PARSING ERROR: name of processing instruction is empty!"
+            << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+            << endl;
+        return false;
+    }
+
+    bool result;
+
+    if (tagName.startsWith("xml"))
+    {
+        // We have a XML processing instruction (similar to a normal tag)
+        result=parseXmlProcessingInstruction(tagName);
+    }
+    else
+    {
+        // We have a normal SGML processing instruction
+        result=parseSgmlProcessingInstruction(tagName);
+    }
+
+    return result;
+}
 
 bool HtmlParser::parse(void)
 {
@@ -446,14 +734,6 @@ bool HtmlParser::parse(void)
     while (!atEnd())
     {
         ch=getCharacter();
-
-#if 1
-        // DEBUG
-        if (ch==QChar(0xe9))
-        {
-            kdDebug(30503) << "e acute found at line: " << getLine() << ", column: " << getColumn() <<  endl;
-        }
-#endif
 
         switch (state)
         {
@@ -487,13 +767,14 @@ bool HtmlParser::parse(void)
                 bool res=true;
                 if (ch=='?')
                 {
-                    state=stateProcessingInstruction;
-                    WriteOut("<?");
+                    res=parseProcessingInstruction();
+                    state=stateNormal;
                 }
                 else if (ch=='!')
                 {
                     state=stateSGML;
                     WriteOut("<!");
+                    kdDebug(30503) << "Sequence <! found!" << endl;
                     depth=1; // set depth counter
                 }
                 else if (ch=='/')
@@ -746,6 +1027,46 @@ bool CharsetParser::treatMetaTag(const QString& tagName, const HtmlAttributes& a
 
     return false; // We have a charset definition, so stop parsing!
 
+}
+
+bool CharsetParser::doXmlProcessingInstruction(const QString& tagName, const HtmlAttributes& attributes)
+{
+#if 1
+    // DEBUG
+    QString strDebug="<?xml";
+    HtmlAttributes::ConstIterator it;
+    for (it=attributes.begin(); it !=attributes.end(); it++)
+    {
+        strDebug += ' ';
+        strDebug += it.key();
+        strDebug += '=';
+        strDebug += '"';
+        strDebug += it.data();
+        strDebug += '"';
+    }
+    strDebug += "?>";
+    kdDebug(30503) << strDebug << endl;
+#endif
+
+    if (tagName!="xml")
+    {
+        return true; // Continue, as we are not interested
+    }
+
+    QString strCharset=attributes["encoding"];
+    if (strCharset.isEmpty())
+    {
+        // An XML declaration without an explicit encoding means an UTF-8 charset
+        m_strCharset="UTF-8";
+        kdDebug(30503) << "XML Declaration without explicit encoding! Assuming UTF-8!" << endl;
+    }
+    else
+    {
+        kdDebug(30503) << "Charset: " << strCharset << " (given through <?xml> processing instruction)" << endl;
+        m_strCharset=strCharset;
+    }
+
+    return false; // We have a charset definition, so stop parsing!
 }
 
 bool CharsetParser::doEndElement(const QString&)

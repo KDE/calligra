@@ -22,6 +22,8 @@
 #ifndef IMPORTLISTENER_H
 #define IMPORTLISTENER_H
 
-bool HtmlFilter(const QString &fileIn, const QString &fileOut);
+#include <qdom.h>
+
+bool HtmlFilter(const QString &fileIn, QDomDocument& qDomDocumentOut);
 
 #endif // IMPORTLISTENER_H

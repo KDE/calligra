@@ -19,19 +19,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <config.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#include <kdebug.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qdom.h>
 #include <qstack.h>
 
-#include <koStore.h>
+#include <kdebug.h>
 
 #include "ImportTags.h"
 #include "htmlimportsax.h"
@@ -59,6 +52,8 @@ public:
     virtual bool doStartElement(const QString& tagName, const HtmlAttributes& attributes);
     virtual bool doEndElement(const QString& tagName);
     virtual bool doCharacters(const QString& strChars);
+    virtual bool doSgmlProcessingInstruction(const QString& tagName,const QString&  strInstruction) { return true;}
+    virtual bool doXmlProcessingInstruction(const QString& tagName, const HtmlAttributes& attributes) { return true;}
 protected:
     // We are not interesed in WriteOut events.
     virtual void WriteOut(const QChar& ) { }
@@ -210,6 +205,10 @@ bool HtmlListener :: doCharacters ( const QString & ch )
         kdError(30503) << "Stack is empty!! Aborting! (in StructureParser::characters)" << endl;
         return false;
     }
+    else
+    {
+        kdDebug(30503) << "Stack has " <<  structureStack.count() << " elements" << endl;
+    }
 
     bool success=false;
 
@@ -279,10 +278,8 @@ QString FindCharset(const QString &fileIn)
     return str;
 }
 
-bool HtmlFilter(const QString &fileIn, const QString &fileOut)
+bool HtmlFilter(const QString &fileIn, QDomDocument& qDomDocumentOut)
 {
-    kdDebug(30503)<<"HTML Import filter"<<endl;
-
     // At first, we must find the charset of the input file.
     QString strCharset=FindCharset(fileIn);
 
@@ -310,7 +307,6 @@ bool HtmlFilter(const QString &fileIn, const QString &fileOut)
     strHeader+="</PAPER>\n";
     strHeader+="</DOC>\n";
 
-    QDomDocument qDomDocumentOut(fileOut);
     qDomDocumentOut.setContent(strHeader);
 
     HtmlListener* listener=new HtmlListener(streamIn,DoCreateMainFramesetElement(qDomDocumentOut));
@@ -332,25 +328,6 @@ bool HtmlFilter(const QString &fileIn, const QString &fileOut)
         kdError(30503) << "Import: Parsing unsuccessful. Aborting!" << endl;
         return false;
     }
-
-    KoStore out=KoStore(fileOut, KoStore::Write);
-    if(!out.open("root"))
-    {
-        kdError(30503) << "Import: unable to open output file!" << endl;
-        out.close();
-        return false;
-    }
-
-    //Write the document!
-    QCString strOut=qDomDocumentOut.toCString();
-    out.write((const char*)strOut, strOut.length());
-    out.close();
-
-#if 0
-    kdDebug(30503) << qDomDocumentOut.toString();
-#endif
-
-    kdDebug(30503) << "Now importing to KWord!" << endl;
 
     return true;
 }

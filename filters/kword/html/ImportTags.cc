@@ -176,5 +176,6 @@ bool MapTag::InitMapTag(void)
 
     // Non-HTML 4.01 Elements
     // No one for now!
+
     return true;
 }

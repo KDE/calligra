@@ -20,9 +20,45 @@
 
 #include <htmlimport.h>
 #include <htmlimport.moc>
+
 #include <kdebug.h>
+#include <koStore.h>
 
 #include "ImportListener.h"
+
+static bool HtmlFilter(const QString &fileIn, const QString &fileOut)
+{
+    kdDebug(30503)<<"HTML Import filter"<<endl;
+
+    QDomDocument qDomDocumentOut(fileOut);
+
+	if (!HtmlFilter(fileIn,qDomDocumentOut))
+    {
+        return false;
+    }
+
+    KoStore out=KoStore(fileOut, KoStore::Write);
+    if(!out.open("root"))
+    {
+        kdError(30503) << "Import: unable to open output file!" << endl;
+        out.close();
+        return false;
+    }
+
+    //Write the document!
+    QCString strOut=qDomDocumentOut.toCString();
+    out.write((const char*)strOut, strOut.length());
+    out.close();
+
+#if 0
+    kdDebug(30503) << qDomDocumentOut.toString();
+#endif
+
+    kdDebug(30503) << "Now importing to KWord!" << endl;
+
+    return true;
+}
+
 
 HTMLImport::HTMLImport(KoFilter *parent, const char*name) :
                      KoFilter(parent, name) {
