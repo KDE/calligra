@@ -30,6 +30,7 @@
 #define KIVIO_CUT_HALF_LENGTH    -2.0f
 
 class KivioPainter;
+class KoZoomHandler;
 
 typedef enum {
     kahtNone=0,
@@ -72,15 +73,15 @@ struct KivioArrowHeadData
 {
     float x, y;
     float vecX, vecY;
-    float scale;
+    KoZoomHandler* zoomHandler;
 
-    KivioPainter *painter;
+    KivioPainter* painter;
 };
 
 
 class KivioArrowHead
 {
-protected:
+  protected:
     /**
      * The cut is the distance 'into' the arrowhead the line should continue
      */
@@ -100,7 +101,7 @@ protected:
     void paintArrowLine( KivioArrowHeadData * );
     void paintArrowTriangleSolid( KivioArrowHeadData * );
 
-public:
+  public:
     KivioArrowHead();
     virtual ~KivioArrowHead();
 
@@ -117,7 +118,7 @@ public:
     inline float width() { return m_w; }
     inline float length() { return m_l; }
 
-    void paint( KivioPainter *, float, float, float, float, float );
+    void paint( KivioPainter *, float, float, float, float, KoZoomHandler* zoomHandler );
 
     bool loadXML( const QDomElement & );
     QDomElement saveXML( QDomDocument & );

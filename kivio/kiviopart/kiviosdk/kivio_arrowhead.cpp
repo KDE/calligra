@@ -23,6 +23,7 @@
 
 #include <math.h>
 #include <kdebug.h>
+#include <kozoomhandler.h>
 
 KivioArrowHead::KivioArrowHead()
 {
@@ -103,13 +104,13 @@ float KivioArrowHead::cut()
  * @param y The y position of the arrow head (the point)
  * @param vecX The X component of the negative direction vector
  * @param vecY The Y component of the negative direction vector
- * @param scale The scale we are drawing at
+ * @param zoomHandler The zoom handler to use to scale
  *
  * The (x,y) should be the vertex
  * representing the endpoint of the line.  The <vecX, vecY> is a vector
  * pointing to (x,y) (in the direction of the arrow head).
  */
-void KivioArrowHead::paint( KivioPainter *painter, float x, float y, float vecX, float vecY, float scale )
+void KivioArrowHead::paint( KivioPainter *painter, float x, float y, float vecX, float vecY, KoZoomHandler* zoomHandler )
 {
     KivioArrowHeadData d;
 
@@ -118,7 +119,7 @@ void KivioArrowHead::paint( KivioPainter *painter, float x, float y, float vecX,
     d.y = y;
     d.vecX = vecX;
     d.vecY = vecY;
-    d.scale = scale;
+    d.zoomHandler = zoomHandler;
 
     // One big-ass switch statement
     switch( m_type )
@@ -148,7 +149,7 @@ void KivioArrowHead::paintArrowLine( KivioArrowHeadData *d )
 
     float length;
 
-    float scale = d->scale;
+    KoZoomHandler* zoomHandler = d->zoomHandler;
 
     float nvecX, nvecY; // normalized vectors
     float pvecX, pvecY; // normal perpendicular vector
@@ -167,15 +168,13 @@ void KivioArrowHead::paintArrowLine( KivioArrowHeadData *d )
     float _x;
     float _y;
 
-    _x = (d->x + nvecX * m_l) + pvecX*(m_w/2.0f);
-    _y = (d->y + nvecY * m_l) + pvecY*(m_w/2.0f);
-    _x *= scale;
-    _y *= scale;
+    _x = zoomHandler->zoomItX((d->x + nvecX * m_l) + pvecX*(m_w/2.0f));
+    _y = zoomHandler->zoomItY((d->y + nvecY * m_l) + pvecY*(m_w/2.0f));
 
     l.append( new KivioPoint( _x, _y ) );
 
-    _x = d->x * d->scale;
-    _y = d->y * d->scale;
+    _x = zoomHandler->zoomItX(d->x);
+    _y = zoomHandler->zoomItY(d->y);
 
     l.append( new KivioPoint( _x, _y ) );       // point
 
@@ -183,10 +182,8 @@ void KivioArrowHead::paintArrowLine( KivioArrowHeadData *d )
     pvecX *= -1.0f;
     pvecY *= -1.0f;
 
-    _x = (d->x + nvecX * m_l) + pvecX*(m_w/2.0f);
-    _y = (d->y + nvecY * m_l) + pvecY*(m_w/2.0f);
-    _x *= scale;
-    _y *= scale;
+    _x = zoomHandler->zoomItX((d->x + nvecX * m_l) + pvecX*(m_w/2.0f));
+    _y = zoomHandler->zoomItY((d->y + nvecY * m_l) + pvecY*(m_w/2.0f));
 
     l.append( new KivioPoint( _x, _y ) );
 
@@ -203,7 +200,7 @@ void KivioArrowHead::paintArrowTriangleSolid( KivioArrowHeadData *d )
 
     float length;
 
-    float scale = d->scale;
+    KoZoomHandler* zoomHandler = d->zoomHandler;
 
     float nvecX, nvecY; // normalized vectors
     float pvecX, pvecY; // normal perpendicular vector
@@ -219,29 +216,25 @@ void KivioArrowHead::paintArrowTriangleSolid( KivioArrowHeadData *d )
     QPtrList<KivioPoint>l;
     l.setAutoDelete(true);
 
-    float _x = d->x * d->scale;
-    float _y = d->y * d->scale;
+    float _x = zoomHandler->zoomItX(d->x);
+    float _y = zoomHandler->zoomItY(d->y);
 
     l.append( new KivioPoint( _x, _y ) );
 
-    _x = (d->x + nvecX * m_l) + pvecX*(m_w/2.0f);
-    _y = (d->y + nvecY * m_l) + pvecY*(m_w/2.0f);
-    _x *= scale;
-    _y *= scale;
+    _x = zoomHandler->zoomItX((d->x + nvecX * m_l) + pvecX*(m_w/2.0f));
+    _y = zoomHandler->zoomItY((d->y + nvecY * m_l) + pvecY*(m_w/2.0f));
 
     l.append( new KivioPoint( _x, _y ) );
 
     pvecX *= -1.0f;
     pvecY *= -1.0f;
 
-    _x = (d->x + nvecX * m_l) + pvecX*(m_w/2.0f);
-    _y = (d->y + nvecY * m_l) + pvecY*(m_w/2.0f);
-    _x *= scale;
-    _y *= scale;
+    _x = zoomHandler->zoomItX((d->x + nvecX * m_l) + pvecX*(m_w/2.0f));
+    _y = zoomHandler->zoomItY((d->y + nvecY * m_l) + pvecY*(m_w/2.0f));
 
     l.append( new KivioPoint( _x, _y ) );
 
-    l.append( new KivioPoint( d->x * scale, d->y * scale ) );
+    l.append( new KivioPoint( zoomHandler->zoomItX(d->x), zoomHandler->zoomItY(d->y) ) );
 
     painter->drawPolygon( &l );
 }

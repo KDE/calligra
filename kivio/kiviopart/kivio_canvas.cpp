@@ -378,8 +378,8 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 void KivioCanvas::centerPage()
 {
   KoPageLayout pl = activePage()->paperLayout();
-  KivioPoint p(pl.ptWidth / 2, pl.ptHeight / 2);
-  setViewCenterPoint(p);
+  KivioRect r(0, 0, pl.ptWidth, pl.ptHeight);
+  setViewCenterPoint(r.center());
 }
 
 void KivioCanvas::updateScrollBars()

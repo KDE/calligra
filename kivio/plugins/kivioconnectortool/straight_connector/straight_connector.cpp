@@ -223,8 +223,8 @@ void KivioStraightConnector::paint( KivioIntraStencilData *pData )
   {
     painter->setBGColor( m_pFillStyle->color() );
 
-    m_startAH->paint(painter, m_pStart->x(), m_pStart->y(), -vecX, -vecY, zoomHandler->zoomedResolutionY());
-    m_endAH->paint(painter, m_pEnd->x(), m_pEnd->y(), vecX, vecY, zoomHandler->zoomedResolutionY());
+    m_startAH->paint(painter, m_pStart->x(), m_pStart->y(), -vecX, -vecY, zoomHandler);
+    m_endAH->paint(painter, m_pEnd->x(), m_pEnd->y(), vecX, vecY, zoomHandler);
   }
 
   // Text
