@@ -1910,40 +1910,42 @@ void KPresenterView::penChosen()
 void KPresenterView::brushChosen()
 {
     QColor c = actionBrushColor->color();
-    KPTextView *edit=m_canvas->currentTextObjectView();
+    KPTextView *edit = m_canvas->currentTextObjectView();
     if ( !edit )
     {
-        bool fill = true;
-        KMacroCommand *macro= 0L;
-        KCommand *cmd=0L;
-        cmd=m_canvas->activePage()->setBrushColor( c, fill,m_canvas->activePage()->objectList() );
-        if(cmd)
+        KMacroCommand * macro= NULL;
+        KCommand * cmd = NULL;
+        QBrush newBrush( c ); 
+        
+        cmd = m_canvas->activePage()->setBrush( newBrush, FT_BRUSH, QColor(), QColor(), BCT_PLAIN, false, 
+                                                0, 0, BrushCmd::BrushColor | BrushCmd::BrushStyle | 
+                                                BrushCmd::BrushGradientSelect );
+        if( cmd )
         {
             if ( !macro )
-                macro= new KMacroCommand(i18n( "Change Brush Color" ));
-            macro->addCommand(cmd);
+                macro = new KMacroCommand( i18n( "Change Brush Color" ) );
+            macro->addCommand( cmd );
         }
-        cmd=stickyPage()->setBrushColor( c, fill,stickyPage()->objectList() );
-        if(cmd)
+
+        cmd = stickyPage()->setBrush( newBrush, FT_BRUSH, QColor(), QColor(), BCT_PLAIN, false, 
+                                      0, 0, BrushCmd::BrushColor | BrushCmd::BrushStyle | 
+                                      BrushCmd::BrushGradientSelect );
+        if( cmd )
         {
             if ( !macro )
-                macro= new KMacroCommand(i18n( "Change Brush Color" ));
+                macro = new KMacroCommand( i18n( "Change Brush Color" ) );
             macro->addCommand(cmd);
         }
-        if(macro)
-            m_pKPresenterDoc->addCommand(macro);
+        
+        if( macro )
+            m_pKPresenterDoc->addCommand( macro );
         else
-        {
-            if ( fill )
-                brush.setColor( c );
-            else
-                brush = NoBrush;
-        }
+            brush.setColor( c );
     }
     else
     {
         tbColor = c;
-        m_canvas->setTextBackgroundColor(c);
+        m_canvas->setTextBackgroundColor( c );
     }
 }
 
@@ -3398,7 +3400,7 @@ void KPresenterView::styleOk()
                                              confBrushDia->getGColor1(), confBrushDia->getGColor2(),
                                              confBrushDia->getGType(), confBrushDia->getGUnbalanced(),
                                              confBrushDia->getGXFactor(), confBrushDia->getGYFactor(),
-                                             confBrushDia->getBrushConfigChange(), m_canvas->activePage()->objectList());
+                                             confBrushDia->getBrushConfigChange());
 
         if(cmd)
         {
@@ -3412,7 +3414,7 @@ void KPresenterView::styleOk()
                                    confBrushDia->getGColor1(), confBrushDia->getGColor2(),
                                    confBrushDia->getGType(), confBrushDia->getGUnbalanced(),
                                    confBrushDia->getGXFactor(), confBrushDia->getGYFactor(),
-                                   confBrushDia->getBrushConfigChange(), stickyPage()->objectList());
+                                   confBrushDia->getBrushConfigChange());
 
         if(cmd)
         {

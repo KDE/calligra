@@ -1730,16 +1730,11 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
 }
 
 KCommand * KPrPage::setBrush( const QBrush &brush, FillType ft, const QColor &g1, const QColor &g2,
-                              BCType gt, bool unbalanced, int xfactor, int yfactor, int flags, QPtrList<KPObject>list )
+                              BCType gt, bool unbalanced, int xfactor, int yfactor, int flags )
 {
-    KPObject *kpobject = 0;
-    BrushCmd *brushCmd=0L;
-    bool cmdCreate=false;
-    KMacroCommand *cmd=new KMacroCommand(i18n("Apply Style"));
+    BrushCmd * cmd = NULL;
 
-    QPtrList<KPObject> _objects;
-    QPtrList<BrushCmd::Brush> _oldBrush;
-    BrushCmd::Brush _newBrush, *btmp;
+    BrushCmd::Brush _newBrush;
 
     _newBrush.brush = QBrush( brush );
     _newBrush.fillType = ft;
@@ -1750,79 +1745,23 @@ KCommand * KPrPage::setBrush( const QBrush &brush, FillType ft, const QColor &g1
     _newBrush.xfactor = xfactor;
     _newBrush.yfactor = yfactor;
 
+    QPtrList<KPObject> _objects;
     _objects.setAutoDelete( false );
-    _oldBrush.setAutoDelete( false );
 
-    QPtrListIterator<KPObject> it( list );
+    QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        if(it.current()->isSelected())
+        if( it.current()->isSelected() )
         {
-            kpobject=it.current();
-            btmp = new BrushCmd::Brush;
-            switch ( kpobject->getType() ) {
-            case OT_RECT:
-            case OT_ELLIPSE:
-            case OT_AUTOFORM:
-            case OT_PIE:
-            case OT_PART:
-            case OT_TEXT:
-            case OT_CLIPART:
-            case OT_PICTURE:
-            case OT_POLYGON:
-            case OT_CLOSED_LINE: {
-                KP2DObject * obj = dynamic_cast<KP2DObject *>( kpobject );
-                if( obj ) {
-                    btmp->brush = obj->getBrush();
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                    btmp->unbalanced = obj->getGUnbalanced();
-                    btmp->xfactor = obj->getGXFactor();
-                    btmp->yfactor = obj->getGYFactor();
-                }
-            } break;
-            case OT_GROUP:
-            {
-                KPGroupObject *obj=dynamic_cast<KPGroupObject*>( kpobject );
-                if(obj)
-                {
-                    obj->selectAllObj();
-                    KCommand *cmd2=setBrush(brush, ft, g1, g2, gt, unbalanced,
-                                            xfactor,yfactor, flags, obj->objectList());
-                    obj->deSelectAllObj();
-                    if(cmd2)
-                    {
-                        cmd->addCommand(cmd2);
-                        cmdCreate=true;
-                    }
-                }
-            }
-            break;
-            default: break;
-            }
-            _oldBrush.append( btmp );
-            _objects.append( kpobject );
+            _objects.append( it.current() );
         }
     }
 
-    if ( !_objects.isEmpty() ) {
-        brushCmd = new BrushCmd( i18n( "Apply Styles" ), _oldBrush, _newBrush, _objects, m_doc, this, flags );
-        brushCmd->execute();
-        cmd->addCommand(brushCmd);
-        cmdCreate=true;
-    } else {
-        _oldBrush.setAutoDelete( true );
-        _oldBrush.clear();
+    if ( !_objects.isEmpty() && flags ) {
+        cmd = new BrushCmd( i18n( "Apply Styles" ), _objects, _newBrush, m_doc, this, flags );
+        cmd->execute();
     }
-    if(cmdCreate)
-        return cmd;
-    else
-    {
-        delete cmd;
-        cmd=0L;
-    }
+    
     return cmd;
 }
 
@@ -2108,180 +2047,6 @@ KCommand* KPrPage::setPictureSettings( PictureMirrorType _mirrorType, int _depth
     m_doc->setModified( true );
 
     return pictureSettingCmd;
-}
-
-KCommand* KPrPage::setBrushColor( const QColor &c, bool fill, QPtrList<KPObject> list )
-{
-    KPObject *kpobject = 0;
-    BrushCmd *brushCmd=0L;
-    QPtrList<KPObject> _objects;
-    QPtrList<BrushCmd::Brush> _oldBrush;
-    BrushCmd::Brush _newBrush, *btmp;
-    KMacroCommand *cmd=new KMacroCommand(i18n("Change Brush"));
-    bool cmdCreate=false;
-    _newBrush.fillType = FT_BRUSH;
-    if ( !fill )
-        _newBrush.brush = Qt::NoBrush;
-    else
-        _newBrush.brush = QBrush( c );
-
-    _objects.setAutoDelete( false );
-    _oldBrush.setAutoDelete( false );
-
-    QPtrListIterator<KPObject> it( list );
-    for ( ; it.current() ; ++it )
-    {
-        kpobject=it.current();
-        if ( kpobject->isSelected() && kpobject->getType() != OT_LINE
-             && kpobject->getType() != OT_FREEHAND
-             && kpobject->getType() != OT_POLYLINE
-             && kpobject->getType() != OT_QUADRICBEZIERCURVE
-             && kpobject->getType() != OT_CUBICBEZIERCURVE ) {
-            btmp = new BrushCmd::Brush;
-            switch ( kpobject->getType() )
-            {
-            case OT_RECT: {
-                KPRectObject *obj=dynamic_cast<KPRectObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                }
-            } break;
-            case OT_ELLIPSE: {
-                KPEllipseObject *obj=dynamic_cast<KPEllipseObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = obj->getBrush();
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                }
-            } break;
-            case OT_AUTOFORM: {
-                KPAutoformObject *obj=dynamic_cast<KPAutoformObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                }
-            } break;
-            case OT_PIE: {
-                KPPieObject *obj=dynamic_cast<KPPieObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                }
-            } break;
-            case OT_PART: {
-                KPPartObject *obj=dynamic_cast<KPPartObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                }
-            } break;
-            case OT_TEXT: {
-                KPTextObject *obj=dynamic_cast<KPTextObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                }
-            } break;
-            case OT_CLIPART:
-            case OT_PICTURE: {
-                KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                }
-            } break;
-            case OT_CLOSED_LINE: {
-                KPClosedLineObject *obj = dynamic_cast<KPClosedLineObject*>( kpobject );
-                if( obj ) {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                }
-            } break;
-            case OT_POLYGON: {
-                KPPolygonObject *obj=dynamic_cast<KPPolygonObject*>( kpobject );
-                if(obj)
-                {
-                    btmp->brush = QBrush( obj->getBrush() );
-                    btmp->fillType = obj->getFillType();
-                    btmp->gColor1 = obj->getGColor1();
-                    btmp->gColor2 = obj->getGColor2();
-                    btmp->gType = obj->getGType();
-                }
-            } break;
-            case OT_GROUP:
-            {
-                KPGroupObject *obj=dynamic_cast<KPGroupObject*>( kpobject );
-                if(obj)
-                {
-                    obj->selectAllObj();
-                    KCommand* cmd2= setBrushColor( c, fill, obj->objectList() );
-                    obj->deSelectAllObj();
-                    if(cmd2)
-                    {
-                        cmd->addCommand(cmd2);
-                        cmdCreate=true;
-                    }
-                }
-            }
-            break;
-            default: continue; break;
-            }
-            _oldBrush.append( btmp );
-            _objects.append( kpobject );
-        }
-    }
-
-    if ( !_objects.isEmpty() ) {
-        brushCmd = new BrushCmd( i18n( "Change Brush" ), _oldBrush, _newBrush, _objects, m_doc, this );
-        brushCmd->execute();
-        cmd->addCommand( brushCmd );
-        cmdCreate=true;
-    } else {
-        _oldBrush.setAutoDelete( true );
-        _oldBrush.clear();
-    }
-
-    if(cmdCreate)
-        return cmd;
-    else
-    {
-        delete cmd;
-        cmd=0L;
-    }
-
-    m_doc->setModified(true);
-    return cmd;
 }
 
 void KPrPage::slotRepaintVariable()

@@ -41,6 +41,7 @@
 class KPresenterDoc;
 class KPTextObject;
 class KPObject;
+class KP2DObject;
 class KPPixmapObject;
 class KPGroupObject;
 class KPresenterView;
@@ -436,18 +437,20 @@ public:
         All = BrushColor | BrushStyle | BrushGradientSelect | GradientColor1 | GradientColor2 | GradientType | GradientBalanced
     };
 
-    BrushCmd(const QString &_name, QPtrList<Brush> &_oldBrush, Brush _newBrush,
-             QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags = All);
+    BrushCmd( const QString &_name, QPtrList<KPObject> &_objects, Brush _newBrush,
+              KPresenterDoc *_doc, KPrPage *_page, int _flags = All );
     ~BrushCmd();
-    void applyBrush(KPObject *kpobject, Brush *tmpBrush);
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
+    void addObjects( const QPtrList<KPObject> &_objects );
+    void applyBrush( KP2DObject *object, Brush *tmpBrush );
+    
     KPresenterDoc *doc;
     QPtrList<Brush> oldBrush;
-    QPtrList<KPObject> objects;
+    QPtrList<KP2DObject> objects;
     Brush newBrush;
     KPrPage *m_page;
     int flags;

@@ -1036,22 +1036,57 @@ void PenCmd::unexecute()
 }
 
 
-BrushCmd::BrushCmd(const QString &_name, QPtrList<Brush> &_oldBrush, Brush _newBrush,
-                   QPtrList<KPObject> &_objects, KPresenterDoc *_doc,  KPrPage *_page, int _flags)
-    : KNamedCommand(_name), doc(_doc), oldBrush(_oldBrush), objects(_objects),
-      newBrush(_newBrush), m_page( _page ), flags(_flags)
+BrushCmd::BrushCmd( const QString &_name, QPtrList<KPObject> &_objects, Brush _newBrush,
+                    KPresenterDoc *_doc, KPrPage *_page, int _flags )
+:KNamedCommand(_name), doc(_doc), newBrush(_newBrush)
+,m_page(_page), flags(_flags)
 {
     objects.setAutoDelete( false );
     oldBrush.setAutoDelete( false );
 
-    QPtrListIterator<KPObject> it( objects );
-    for ( ; it.current() ; ++it )
-        it.current()->incCmdRef();
+    addObjects( _objects );
+}
+
+void BrushCmd::addObjects( const QPtrList<KPObject> &_objects )
+{
+    QPtrListIterator<KPObject> it( _objects );
+    for ( ; it.current(); ++it )
+    {
+        if ( it.current()->getType() == OT_GROUP )
+        {
+            KPGroupObject * obj=dynamic_cast<KPGroupObject*>( it.current() );
+            if ( obj )
+            {
+                addObjects( obj->objectList() );
+            }
+        }
+        else
+        {
+            KP2DObject * obj = dynamic_cast<KP2DObject *>( it.current() );
+            if( obj )
+            {
+                objects.append( obj );
+                obj->incCmdRef();
+                
+                Brush * brush = new BrushCmd::Brush;
+                brush->brush = obj->getBrush();
+                brush->fillType = obj->getFillType();
+                brush->gColor1 = obj->getGColor1();
+                brush->gColor2 = obj->getGColor2();
+                brush->gType = obj->getGType();
+                brush->unbalanced = obj->getGUnbalanced();
+                brush->xfactor = obj->getGXFactor();
+                brush->yfactor = obj->getGYFactor();
+                
+                oldBrush.append( brush );
+            }
+        }
+    }
 }
 
 BrushCmd::~BrushCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KP2DObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 
@@ -1097,28 +1132,23 @@ void BrushCmd::execute()
     doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
 }
 
-void BrushCmd::applyBrush(KPObject *kpobject, Brush *tmpBrush)
+void BrushCmd::applyBrush( KP2DObject *object, Brush *tmpBrush )
 {
-    KP2DObject * obj = dynamic_cast<KP2DObject *>( kpobject );
-    if( obj )
-    {
-        obj->setBrush( tmpBrush->brush );
-        obj->setFillType( tmpBrush->fillType );
-        obj->setGColor1( tmpBrush->gColor1 );
-        obj->setGColor2( tmpBrush->gColor2 );
-        obj->setGType( tmpBrush->gType );
-        obj->setGUnbalanced( tmpBrush->unbalanced );
-        obj->setGXFactor( tmpBrush->xfactor );
-        obj->setGYFactor( tmpBrush->yfactor );
-        doc->repaint( obj );
-    }
+    object->setBrush( tmpBrush->brush );
+    object->setFillType( tmpBrush->fillType );
+    object->setGColor1( tmpBrush->gColor1 );
+    object->setGColor2( tmpBrush->gColor2 );
+    object->setGType( tmpBrush->gType );
+    object->setGUnbalanced( tmpBrush->unbalanced );
+    object->setGXFactor( tmpBrush->xfactor );
+    object->setGYFactor( tmpBrush->yfactor );
+    doc->repaint( object );
 }
 
 void BrushCmd::unexecute()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-        if( oldBrush.count() > i)
-            applyBrush(objects.at( i ), oldBrush.at( i ));
+        applyBrush( objects.at( i ), oldBrush.at( i ) );
     }
     
     int pos=doc->pageList().findRef(m_page);

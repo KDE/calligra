@@ -143,8 +143,8 @@ public:
     bool getProtectContent(bool prot) const;
 
     KCommand* setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, QPtrList<KPObject> list);
-    KCommand* setBrush( const QBrush &brush, FillType ft,const  QColor& g1, const QColor &g2, BCType gt,
-                        bool unbalanced, int xfactor, int yfactor, int flags, QPtrList<KPObject> list);
+    KCommand* setBrush( const QBrush &brush, FillType ft, const  QColor& g1, const QColor &g2, 
+                        BCType gt, bool unbalanced, int xfactor, int yfactor, int flags );
 
     QPen getPen( const QPen & pen ) const;
 
@@ -197,7 +197,6 @@ public:
     KCommand* setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue, int flags );
     KCommand* setPictureSettings( PictureMirrorType _mirrorType, int _depth, bool _swapRGB, bool _grayscal,
                                   int _bright );
-    KCommand* setBrushColor( const QColor &c, bool fill, QPtrList<KPObject> list );
 
     void slotRepaintVariable();
     void recalcPageNum();
