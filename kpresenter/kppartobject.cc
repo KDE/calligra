@@ -64,7 +64,6 @@ void KPPartObject::rotate( float _angle )
 void KPPartObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
-    if ( move ) return;
     child->setGeometry( KoRect( orig, ext ).toQRect() );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
                                      getOrig().y() + getSize().height() / 2 ) );
@@ -106,7 +105,6 @@ void KPPartObject::moveBy( double _dx, double _dy )
 void KPPartObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
-    if ( move ) return;
     child->setGeometry( KoRect( orig, ext ).toQRect() );
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
                                      getOrig().y() + getSize().height() / 2 ) );
@@ -117,12 +115,13 @@ void KPPartObject::resizeBy( double _dx, double _dy )
 /*======================== draw ==================================*/
 void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool drawSelection )
 {
+    /*
     if ( move )
     {
         KPObject::draw( _painter, _zoomhandler, drawSelection );
         return;
     }
-
+    */
 //     int ox = orig.x() - _diffx;
 //     int oy = orig.y() - _diffy;
     double ow = ext.width();

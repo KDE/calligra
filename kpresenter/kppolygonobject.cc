@@ -155,7 +155,6 @@ int KPPolygonObject::load( const QDomElement &element )
 void KPPolygonObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
-    if ( move ) return;
 
     double fx = (double)( (double)ext.width() / (double)origSize.width() );
     double fy = (double)( (double)ext.height() / (double)origSize.height() );
@@ -178,7 +177,6 @@ void KPPolygonObject::resizeBy( const KoSize &_size )
 void KPPolygonObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
-    if ( move ) return;
 
     double fx = (double)( (double)ext.width() / (double)origSize.width() );
     double fy = (double)( (double)ext.height() / (double)origSize.height() );
@@ -235,30 +233,28 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
     QPointArray pointArray = points.toQPointArray();
     double fx=1.0;
     double fy=1.0;
-    if ( !move ) {
-        if(_w>1)
-        {
-            fx = (double)( (double)( _zoomHandler->zoomItX(ext.width()) - _w ) / (double)_zoomHandler->zoomItX(ext.width()) );
-            fy = (double)( (double)( _zoomHandler->zoomItY(ext.height()) - _w ) / (double)_zoomHandler->zoomItY(ext.height()) );
-        }
-
-        unsigned int index = 0;
-        KoPointArray tmpPoints;
-        KoPointArray::ConstIterator it;
-        for ( it = points.begin(); it != points.end(); ++it ) {
-            KoPoint point = (*it);
-            double tmpX = _zoomHandler->zoomItX( point.x()) * fx ;
-            double tmpY = _zoomHandler->zoomItY(point.y()) * fy;
-            if ( tmpX == 0 )
-                tmpX = _w;
-            if ( tmpY == 0 )
-                tmpY = _w;
-
-            tmpPoints.putPoints( index, 1, tmpX,tmpY );
-            ++index;
-        }
-        pointArray = tmpPoints.toQPointArray();
+    if(_w>1)
+    {
+        fx = (double)( (double)( _zoomHandler->zoomItX(ext.width()) - _w ) / (double)_zoomHandler->zoomItX(ext.width()) );
+        fy = (double)( (double)( _zoomHandler->zoomItY(ext.height()) - _w ) / (double)_zoomHandler->zoomItY(ext.height()) );
     }
+
+    unsigned int index = 0;
+    KoPointArray tmpPoints;
+    KoPointArray::ConstIterator it;
+    for ( it = points.begin(); it != points.end(); ++it ) {
+        KoPoint point = (*it);
+        double tmpX = _zoomHandler->zoomItX( point.x()) * fx ;
+        double tmpY = _zoomHandler->zoomItY(point.y()) * fy;
+        if ( tmpX == 0 )
+            tmpX = _w;
+        if ( tmpY == 0 )
+            tmpY = _w;
+
+        tmpPoints.putPoints( index, 1, tmpX,tmpY );
+        ++index;
+    }
+    pointArray = tmpPoints.toQPointArray();
 
     if ( drawShadow || fillType == FT_BRUSH || !gradient ) {
         _painter->setPen( pen2 );

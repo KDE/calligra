@@ -143,11 +143,12 @@ int KPQuadricBezierCurveObject::load(const QDomElement &element)
 /*========================= draw =================================*/
 void KPQuadricBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
 {
+/*
     if ( move ) {
         KPObject::draw( _painter, _zoomHandler, drawSelection );
         return;
     }
-
+*/
     double ox = orig.x();
     double oy = orig.y();
     double ow = ext.width();
@@ -268,30 +269,28 @@ void KPQuadricBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHa
     QPointArray pointArray = allPoints.toQPointArray();
     double fx=1.0;
     double fy=1.0;
-    if ( !move ) {
-        if(_w>1.0)
-        {
-            fx = (double)( (double)( _zoomHandler->zoomItX( ext.width()) - _w ) / (double)_zoomHandler->zoomItX( ext.width()) );
-            fy = (double)( (double)( _zoomHandler->zoomItY( ext.height()) - _w ) / (double)_zoomHandler->zoomItY( ext.height()) );
-        }
-        unsigned int index = 0;
-        KoPointArray tmpPoints;
-        KoPointArray::ConstIterator it;
-        for ( it = allPoints.begin(); it != allPoints.end(); ++it ) {
-            KoPoint point = (*it);
-            double tmpX = _zoomHandler->zoomItX(point.x()) * fx ;
-            double tmpY = _zoomHandler->zoomItY(point.y()) * fy ;
-
-            if ( tmpX == 0 )
-                tmpX = _w;
-            if ( tmpY == 0 )
-                tmpY = _w;
-
-            tmpPoints.putPoints( index, 1, tmpX,tmpY );
-            ++index;
-        }
-        pointArray = tmpPoints.toQPointArray();
+    if(_w>1.0)
+    {
+        fx = (double)( (double)( _zoomHandler->zoomItX( ext.width()) - _w ) / (double)_zoomHandler->zoomItX( ext.width()) );
+        fy = (double)( (double)( _zoomHandler->zoomItY( ext.height()) - _w ) / (double)_zoomHandler->zoomItY( ext.height()) );
     }
+    unsigned int index = 0;
+    KoPointArray tmpPoints;
+    KoPointArray::ConstIterator it;
+    for ( it = allPoints.begin(); it != allPoints.end(); ++it ) {
+        KoPoint point = (*it);
+        double tmpX = _zoomHandler->zoomItX(point.x()) * fx ;
+        double tmpY = _zoomHandler->zoomItY(point.y()) * fy ;
+
+        if ( tmpX == 0 )
+            tmpX = _w;
+        if ( tmpY == 0 )
+            tmpY = _w;
+
+        tmpPoints.putPoints( index, 1, tmpX,tmpY );
+        ++index;
+    }
+    pointArray = tmpPoints.toQPointArray();
 
     _painter->setPen( pen2 );
     _painter->drawPolyline( pointArray );

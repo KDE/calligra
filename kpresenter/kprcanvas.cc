@@ -862,10 +862,10 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                     for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
                         kpobject = objectList().at( i );
                         if ( kpobject->isSelected() ) {
-                            kpobject->setMove( false );
                             _objects.append( kpobject );
                             QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
-                            br.moveBy( firstX - mx, firstY - my );
+                            br.moveBy( firstX - mx - diffx(), firstY - my - diffy() );
+                            kdDebug() << "KPrCanvas::mouseReleaseEvent repainting " << DEBUGRECT(br) << endl;
                             _repaint( br );
                             _repaint( kpobject );
                         }
@@ -880,7 +880,6 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                     for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
                         kpobject = objectList().at( i );
                         if ( kpobject->isSelected() ) {
-                            kpobject->setMove( false );
                             _repaint( kpobject );
                         }
                     }
@@ -892,13 +891,11 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object up" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
-                kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList().at( resizeObjNum );
-            kpobject->setMove( false );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
@@ -908,13 +905,11 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object down" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
-                kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList().at( resizeObjNum );
-            kpobject->setMove( false );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
@@ -924,13 +919,11 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
-                kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList().at( resizeObjNum );
-            kpobject->setMove( false );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
@@ -940,13 +933,11 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
-                kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList().at( resizeObjNum );
-            kpobject->setMove( false );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
@@ -956,13 +947,11 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left up" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
-                kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList().at( resizeObjNum );
-            kpobject->setMove( false );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
@@ -972,13 +961,11 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left and down" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
-                kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList().at( resizeObjNum );
-            kpobject->setMove( false );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
@@ -988,13 +975,11 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right and up" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
-                kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList().at( resizeObjNum );
-            kpobject->setMove( false );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
@@ -1004,13 +989,11 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right and down" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
-                kpobject->setMove( false );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
             kpobject = objectList().at( resizeObjNum );
-            kpobject->setMove( false );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
@@ -4620,18 +4603,15 @@ void KPrCanvas::moveObject( int x, int y, bool key )
             if ( kpobject->isSelected() ) {
                 p.begin( this );
                 kpobject->moveBy(m_view->zoomHandler()->unzoomItX(-diffx()),m_view->zoomHandler()->unzoomItY(-diffy()));
-                kpobject->setMove( true );
-                kpobject->draw( &p, m_view->zoomHandler(), true );
+                kpobject->paintSelection( &p, m_view->zoomHandler() );
                 kpobject->moveBy( newPosX, newPosY );
-                kpobject->draw( &p, m_view->zoomHandler(), true );
+                kpobject->paintSelection( &p, m_view->zoomHandler() );
                 kpobject->moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
                 p.end();
 
-                kpobject->setMove( false );
                 _objects.append( kpobject );
-                QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
-                br.moveBy( -x, -y );
-                _repaint( br );
+                //QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
+                //_repaint( br );
                 _repaint( kpobject );
 
             }
@@ -4651,10 +4631,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     double dx = m_view->zoomHandler()->unzoomItX( _dx);
     double dy = m_view->zoomHandler()->unzoomItY( _dy);
 
-    KPObject *kpobject;
-
-    kpobject = objectList().at( resizeObjNum );
-    kpobject->setMove( false );
+    KPObject *kpobject = objectList().at( resizeObjNum );
 
     QPainter p;
     p.begin( this );

@@ -141,8 +141,6 @@ QBrush KPTextObject::getBrush() const
 void KPTextObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
-    if ( move )
-        return;
 
     //kdDebug() << " KPTextObject::setSize -> setting doc width to " << m_doc->zoomHandler()->pixelToLayoutUnitX( _width ) << endl;
     textDocument()->setWidth( m_doc->zoomHandler()->ptToLayoutUnitPixX( _width ) );
@@ -157,8 +155,6 @@ void KPTextObject::setSize( double _width, double _height )
 void KPTextObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
-    if ( move )
-        return;
     //kdDebug() << " KPTextObject::resizeBy -> setting doc width to " << m_doc->zoomHandler()->pixelToLayoutUnitX( getSize().width() ) << endl;
     textDocument()->setWidth( m_doc->zoomHandler()->ptToLayoutUnitPixX( getSize().width() ) );
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
@@ -226,12 +222,13 @@ int KPTextObject::load(const QDomElement &element)
 /*========================= draw =================================*/
 void KPTextObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
 {
+    /*
     if ( move )
     {
         KPObject::draw( _painter, _zoomHandler, drawSelection );
         return;
     }
-
+    */
     draw( _painter,_zoomHandler, false, 0L, true, drawSelection );
 }
 

@@ -68,8 +68,6 @@ KPPixmapObject &KPPixmapObject::operator=( const KPPixmapObject & )
 void KPPixmapObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
-    if ( move ) return;
-
     if ( ext == orig_size )
         ext = KoSize::fromQSize(image.size());
 
@@ -83,8 +81,6 @@ void KPPixmapObject::setSize( double _width, double _height )
 void KPPixmapObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
-    if ( move ) return;
-
     if ( ext == orig_size )
         ext = KoSize::fromQSize(image.size());
 
@@ -173,12 +169,13 @@ int KPPixmapObject::load(const QDomElement &element)
 /*========================= draw =================================*/
 void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
 {
+    /*
     if ( move )
     {
         KPObject::draw( _painter, _zoomHandler, drawSelection );
         return;
     }
-
+    */
     if ( image.isNull() ) return;
 
     double ox = orig.x();

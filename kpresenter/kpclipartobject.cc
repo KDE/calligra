@@ -113,12 +113,13 @@ int KPClipartObject::load(const QDomElement &element)
 /*========================= draw =================================*/
 void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
 {
+/*
     if ( move )
     {
         KPObject::draw( _painter, _zoomHandler, drawSelection );
         return;
     }
-
+*/
     if ( m_clipart.isNull() )
         return;
 

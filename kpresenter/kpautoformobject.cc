@@ -79,7 +79,6 @@ KPAutoformObject &KPAutoformObject::operator=( const KPAutoformObject & )
 void KPAutoformObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
-    if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
     {
@@ -93,7 +92,6 @@ void KPAutoformObject::setSize( double _width, double _height )
 void KPAutoformObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
-    if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
     {

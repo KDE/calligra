@@ -68,7 +68,6 @@ KPEllipseObject &KPEllipseObject::operator=( const KPEllipseObject & )
 void KPEllipseObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
-    if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
     {
@@ -82,7 +81,6 @@ void KPEllipseObject::setSize( double _width, double _height )
 void KPEllipseObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
-    if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
     {

@@ -103,12 +103,13 @@ int KPLineObject::load(const QDomElement &element)
 /*========================= draw =================================*/
 void KPLineObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler, bool drawSelection )
 {
+    /*
     if ( move )
     {
         KPObject::draw( _painter, _zoomhandler, drawSelection );
         return;
     }
-
+    */
     double ox = orig.x();
     double oy = orig.y();
     double ow = ext.width();

@@ -98,7 +98,6 @@ KPObject::KPObject()
     onlyCurrStep = true;
     inObjList = true;
     cmds = 0;
-    move = false;
     resize = false;
     sticky = false;
     dcop = 0;
@@ -443,12 +442,7 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType ) const
 void KPObject::draw( QPainter *_painter, KoZoomHandler *_zoomHandler, bool drawSelection )
 {
     if ( drawSelection )
-    {
-        _painter->save();
-        _painter->translate( _zoomHandler->zoomItX(orig.x()) , _zoomHandler->zoomItY( orig.y()) );
         paintSelection( _painter, _zoomHandler );
-        _painter->restore();
-    }
 }
 
 /*====================== get shadow coordinates ==================*/
@@ -504,9 +498,10 @@ void KPObject::getShadowCoords( int& _x, int& _y ) const
 }
 
 /*======================== paint selection =======================*/
-void KPObject::paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler )
+void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler )
 {
     _painter->save();
+    _painter->translate( _zoomHandler->zoomItX(orig.x()) , _zoomHandler->zoomItY( orig.y()) );
     Qt::RasterOp rop = _painter->rasterOp();
 
     _painter->setRasterOp( Qt::NotROP );
@@ -710,7 +705,6 @@ KP2DObject &KP2DObject::operator=( const KP2DObject & )
 void KP2DObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
-    if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize().toQSize() );
@@ -719,7 +713,6 @@ void KP2DObject::setSize( double _width, double _height )
 void KP2DObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
-    if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize().toQSize() );
@@ -792,12 +785,13 @@ int KP2DObject::load(const QDomElement &element)
 
 void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
 {
+/*
     if ( move )
     {
         KPObject::draw( _painter, _zoomHandler, drawSelection );
         return;
     }
-
+*/
     double ox = orig.x();
     double oy = orig.y();
     double ow = ext.width();

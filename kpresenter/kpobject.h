@@ -196,9 +196,6 @@ public:
     virtual void decCmdRef()
     { cmds--; doDelete(); }
 
-    virtual void setMove( bool _move )
-    { move = _move; }
-
     virtual void setSticky( bool b ) { sticky = b; }
     bool isSticky() const { return sticky; }
 
@@ -209,13 +206,13 @@ public:
 
     virtual void setOrigSizeInGroup( const KoSize &_size ) { origSizeInGroup = _size; }
     virtual KoSize getOrigSizeInGroup() const{ return origSizeInGroup; }
-
+    void paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler );
 protected:
     /**
      * Modifies x and y to add the shadow offsets
      */
     void getShadowCoords( int& _x, int& _y ) const;
-    virtual void paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler );
+
     virtual void doDelete();
 
     QDomElement createValueElement(const QString &tag, int value, QDomDocument &doc);
@@ -255,7 +252,6 @@ protected:
     bool onlyCurrStep:1;
     bool ownClipping:1;
     bool inObjList:1;
-    bool move:1;
     bool resize:1;
     bool sticky:1;
 
