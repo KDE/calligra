@@ -199,7 +199,7 @@ bool WinWordDoc::convert()
         m_body.append(QString::number(s_width - s_hMargin));
         m_body.append("\" bottom=\"");
         m_body.append(QString::number(s_height - s_vMargin));
-        m_body.append("\" runaround=\"1\" runaGap=\"2\" lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleft=\"0\" bright=\"0\" btop=\"0\" bbottom=\"0\"");
+        m_body.append("\" runaround=\"1\" runaGap=\"2\"");
         m_body.append(" autoCreateNewFrame=\"1\" newFrameBehaviour=\"0\"/>\n");
         parse();
         m_body.append(
@@ -235,8 +235,9 @@ bool WinWordDoc::convert()
         }
         m_body.append(
             "</DOC>\n");
+//        kdDebug(s_area) << m_body << endl;
         m_result = m_body.utf8();
-	m_isConverted = true;
+        m_isConverted = true;
     }
     return m_success;
 }
