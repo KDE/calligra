@@ -55,6 +55,7 @@
 #include <gdk-pixbuf-xlibrgb.h>
 
 #include <kdebug.h>
+#include <kglobal.h>
 #include <math.h>
 
 #include <koPoint.h>
@@ -163,10 +164,10 @@ VKoPainter::blit( const KoRect &r )
 {
 	//kdDebug() << "m_width : " << m_width << endl;
 	//kdDebug() << "m_height : " << m_height << endl;
-	int x		= QMAX( 0, r.x() );
-	int y		= QMAX( 0, r.y() );
-	int width	= QMIN( int( m_width ),		r.x() + r.width() );
-	int height	= QMIN( int( m_height ),	r.y() + r.height() );
+	int x		= KMAX( 0, int( r.x() ) );
+	int y		= KMAX( 0, int( r.y() ) );
+	int width	= KMIN( m_width,	(unsigned int)KMAX( 0, int( r.x() + r.width() ) ) );
+	int height	= KMIN( m_height,	(unsigned int)KMAX( 0, int( r.y() + r.height() ) ) );
 	xlib_draw_rgb_32_image( m_target->handle(), gc, x, y, width - x, height - y,
 							XLIB_RGB_DITHER_NONE, m_buffer + (x * 4) + (y * m_width * 4), m_width * 4 );
 }
@@ -174,7 +175,7 @@ VKoPainter::blit( const KoRect &r )
 void
 VKoPainter::clear()
 {
-	if ( m_buffer )
+	if( m_buffer )
 		memset( m_buffer, qRgba( 255, 255, 255, 255 ), m_width * m_height * 4 );
 }
 
@@ -182,7 +183,7 @@ void
 VKoPainter::clear( const QColor &c )
 {
 	unsigned int color = c.rgb();
-	if ( m_buffer )
+	if( m_buffer )
 		memset( m_buffer, qRgba( qRed( color ), qGreen( color ), qBlue( color ), 100 ), m_width * m_height * 4 );
 }
 
@@ -190,13 +191,13 @@ void
 VKoPainter::clear( const KoRect &r, const QColor &c )
 {
 	unsigned int color = c.rgb();
-	int x		= QMAX( 0, r.x() );
-	int y		= QMAX( 0, r.y() );
-	int width	= QMIN( int( m_width ),		r.x() + r.width() );
-	int height	= QMIN( int( m_height ),	r.y() + r.height() );
-	if ( m_buffer )
+	int x		= KMAX( 0, int( r.x() ) );
+	int y		= KMAX( 0, int( r.y() ) );
+	int width	= KMIN( m_width,	(unsigned int)KMAX( 0, int( r.x() + r.width() ) ) );
+	int height	= KMIN( m_height,	(unsigned int)KMAX( 0, int( r.y() + r.height() ) ) );
+	if( m_buffer )
 	{
-		for( unsigned int i = y;i < height;i++)
+		for( int i = y;i < height;i++)
 			memset( m_buffer + int( x * 4) + int( i * ( m_width * 4 ) ),
 					qRgba( qRed( color ), qGreen( color ), qBlue( color ), 100 ), int( width * 4 ) );
 	}
@@ -693,7 +694,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		if( x0 != x1 && y0 != y1 )
 		{
 			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
-			int opacity = opa * 255.0;
+			int opacity = int( opa * 255.0 );
 			art_render_svp( render, svp );
 			art_render_mask_solid (render, (opacity << 8) + opacity + (opacity >> 7));
 			art_karbon_render_gradient_linear( render, linear, ART_FILTER_NEAREST );
@@ -744,7 +745,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		if( x0 != x1 && y0 != y1 )
 		{
 			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * x0 + m_width * 4 * y0, m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
-			int opacity = opa * 255.0;
+			int opacity = int( opa * 255.0 );
 			art_render_svp( render, svp );
 			art_render_mask_solid (render, (opacity << 8) + opacity + (opacity >> 7));
 			art_karbon_render_gradient_radial( render, radial, ART_FILTER_NEAREST );
@@ -781,7 +782,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		if( x0 != x1 && y0 != y1 )
 		{
 			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * x0 + m_width * 4 * y0, m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
-			int opacity = opa * 255.0;
+			int opacity = int( opa * 255.0 );
 			art_render_svp( render, svp );
 			art_render_mask_solid (render, (opacity << 8) + opacity + (opacity >> 7));
 			art_karbon_render_gradient_conical( render, conical, ART_FILTER_NEAREST );
@@ -813,7 +814,7 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 		int b = qBlue( qStopColor.rgb() );
 		art_u32 rgba = (r << 24) | (g << 16) | (b << 8) | qAlpha(qStopColor.rgb());
 		/* convert from separated to premultiplied alpha */
-		int a = colorStops[ offset]->color.opacity() * 255.0;//rgba & 0xff;
+		int a = int( colorStops[ offset]->color.opacity() * 255.0 );
 		r = (rgba >> 24) * a + 0x80;
 		r = (r + (r >> 8)) >> 8;
 		g = ((rgba >> 16) & 0xff) * a + 0x80;
@@ -835,7 +836,7 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 						int(b + ((qBlue(qStopColor2.rgb()) - b)) * 0.5) << 8 |
 						qAlpha(qStopColor2.rgb());
 			/* convert from separated to premultiplied alpha */
-			int a = colorStops[ offset]->color.opacity() * 255.0;//rgba & 0xff;
+			int a = int( colorStops[ offset]->color.opacity() * 255.0 );
 			r = (rgba >> 24) * a + 0x80;
 			r = (r + (r >> 8)) >> 8;
 			g = ((rgba >> 16) & 0xff) * a + 0x80;
@@ -859,10 +860,10 @@ VKoPainter::drawNode( const KoPoint& p, int width )
 	if( !m_bDrawNodes ) return;
 
 	KoPoint _p( m_matrix.map( QPoint( p.x() * m_zoomFactor, p.y() * m_zoomFactor ) ) );
-	int x1 = _p.x() - width;
-	int x2 = _p.x() + width;
-	int y1 = _p.y() - width;
-	int y2 = _p.y() + width;
+	int x1 = int( _p.x() - width );
+	int x2 = int( _p.x() + width );
+	int y1 = int( _p.y() - width );
+	int y2 = int( _p.y() + width );
 
 	clampToViewport( x1, y1, x2, y2 );
 
