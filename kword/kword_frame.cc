@@ -665,7 +665,7 @@ void KWTextFrameSet::init()
     parags = 0L;
 
     parags = new KWParag( this, doc, 0L, 0L, doc->getDefaultParagLayout() );
-    KWFormat *format = new KWFormat( doc );
+    format = new KWFormat( doc );
     format->setDefaults( doc );
 
     updateCounters();
@@ -723,8 +723,11 @@ KWTextFrameSet::~KWTextFrameSet()
         p->setNext( 0L );
     }
 
-    if(parags) delete parags;
+    delete parags;
     parags = 0L;
+
+    delete format;
+    format = 0L;
 
     if(doc) doc->delFrameSet(this);
     doc=0L;
@@ -791,8 +794,8 @@ KWFrame *tmpFrame=frames.at(0);
 
         if(! l->isEmpty())
             frameList.append( l );
-	else
-	    delete l;
+        else
+            delete l;
     }
 
     frames.setAutoDelete( false );
@@ -994,7 +997,9 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                 delete parags;
                 parags = new KWParag( this, doc, 0L, 0L, doc->getDefaultParagLayout() );
                 if ( doc->getNumFrameSets() == 0 ) {
-                    KWFormat *format = new KWFormat( doc );
+                    if(format)
+                        delete format;
+                    format = new KWFormat( doc );
                     format->setDefaults( doc );
                     parags->setFormat( 0, 1, *format );
                 }
@@ -1251,7 +1256,7 @@ KWTextFrameSet *KWTextFrameSet::getCopy() {
         KWFrame *thisFrame=getFrame(i)->getCopy();
         newFS->addFrame(thisFrame);
     }
-    if(newFS->getNumFrames() >0) 
+    if(newFS->getNumFrames() >0)
         newFS->assign(this);
     return newFS;
 }
@@ -1724,7 +1729,7 @@ void KWPartFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 
 /*================================================================*/
 KWFormulaFrameSet::KWFormulaFrameSet( KWordDocument *_doc, QWidget *parent )
-    : KWFrameSet( _doc ), pic( 0 ), font( "times", 12 ), color( Qt::black )
+    : KWFrameSet( _doc ), format(0L), pic( 0 ), font( "times", 12 ), color( Qt::black )
 
 {
     formulaEdit = new KFormulaEdit( ( (QScrollView*)parent )->viewport() );
@@ -1745,7 +1750,7 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWordDocument *_doc, QWidget *parent )
 
 /*================================================================*/
 KWFormulaFrameSet::KWFormulaFrameSet( KWordDocument *_doc )
-    : KWFrameSet( _doc ), formulaEdit( 0 ), pic( 0 )
+    : KWFrameSet( _doc ), formulaEdit( 0 ), format(0L), pic( 0 )
 {
 }
 
@@ -1782,16 +1787,17 @@ void KWFormulaFrameSet::setFormat( const QFont &f, const QColor &c )
 /*================================================================*/
 KWFormat *KWFormulaFrameSet::getFormat()
 {
-    KWFormat *f = new KWFormat( doc );
-    f->setUserFont( doc->findUserFont( font.family() ) );
-    f->setPTFontSize( font.pointSize() );
-    f->setWeight( font.weight() );
-    f->setUnderline( font.underline() );
-    f->setItalic( font.italic() );
-    f->setVertAlign( KWFormat::VA_NORMAL );
-    f->setColor( color );
+    if(format==0L)
+        format = new KWFormat( doc );
+    format->setUserFont( doc->findUserFont( font.family() ) );
+    format->setPTFontSize( font.pointSize() );
+    format->setWeight( font.weight() );
+    format->setUnderline( font.underline() );
+    format->setItalic( font.italic() );
+    format->setVertAlign( KWFormat::VA_NORMAL );
+    format->setColor( color );
 
-    return f;
+    return format;
 }
 
 /*================================================================*/
@@ -2103,7 +2109,7 @@ KWGroupManager::KWGroupManager( const KWGroupManager &original ) :
 /*================================================================*/
 KWGroupManager::~KWGroupManager() {
 //kdDebug () << "KWGroupManager::~KWGroupManager " << this << endl;
-    if(doc) doc->delGroupManager(this); 
+    if(doc) doc->delGroupManager(this);
     doc=0L;
 }
 
@@ -2404,7 +2410,7 @@ void KWGroupManager::recalcRows()
                     activeCell->frameSet->getFrame(0)->top()- coordinate);
             if(postAdjust!=0) {
                 if(row==0) row++;
-                for ( unsigned int i = 0; i < cols; i++) { 
+                for ( unsigned int i = 0; i < cols; i++) {
                     cell = getCell(row-1,i);
                     cell->frameSet->getFrame(0)->setHeight(
                         cell->frameSet->getFrame(0)->height() + postAdjust);
@@ -2438,7 +2444,7 @@ void KWGroupManager::recalcRows()
                 }
             }
             if(postAdjust!=0) {
-                for ( unsigned int i = 0; i < cols; i++) { 
+                for ( unsigned int i = 0; i < cols; i++) {
                     cell = getCell(row,i);
                     cell->frameSet->getFrame(0)->setHeight(
                         cell->frameSet->getFrame(0)->height() + postAdjust);

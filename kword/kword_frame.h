@@ -50,8 +50,8 @@ class KWPage;
 
 enum FrameType { FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART = 3, FT_FORMULA = 4 };
 enum FrameInfo { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3,
-		 FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6,
-		 FI_FOOTNOTE = 7 };
+                 FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6,
+                 FI_FOOTNOTE = 7 };
 enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_SKIP = 2 };
 enum FrameBehaviour { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
 enum NewFrameBehaviour { Reconnect=0, NoFollowup=1, Copy=2 };
@@ -166,7 +166,7 @@ protected:
 
     KWUnit bleft, bright, btop, bbottom;
     QArray<KWResizeHandle*> handles;
-    
+
 private:
     KWFrame &operator=( const KWFrame &_frame );
     KWFrame ( const KWFrame &_frame );
@@ -201,7 +201,7 @@ public:
     { return frames.count(); }
 
     virtual bool isPTYInFrame( unsigned int /*_frame*/, unsigned int /*_ypos */ )
-	{ return true; }
+        { return true; }
 
     virtual void update()
     {; }
@@ -270,8 +270,7 @@ class KWTextFrameSet : public KWFrameSet
 {
 public:
     KWTextFrameSet( KWordDocument *_doc )
-        : KWFrameSet( _doc )
-    {; }
+        : KWFrameSet( _doc ), parags(0L), format(0L) {}
     ~KWTextFrameSet();
 
     virtual FrameType getFrameType()
@@ -313,6 +312,7 @@ protected:
 
     // pointer to the first parag of the list of parags
     KWParag *parags;
+    KWFormat *format;
 };
 
 /******************************************************************/
@@ -418,6 +418,7 @@ public:
 
 protected:
     KFormulaEdit *formulaEdit;
+    KWFormat *format;
     QPicture *pic;
     QString text;
     QFont font;
@@ -456,8 +457,8 @@ public:
     bool isTableHeader( KWFrameSet *fs );
 
     void init( unsigned int x, unsigned int y,
-	       unsigned int width, unsigned int height,
-	       KWTblCellSize wid, KWTblCellSize hei );
+               unsigned int width, unsigned int height,
+               KWTblCellSize wid, KWTblCellSize hei );
     void init();
     void recalcCols();
     void recalcRows();
