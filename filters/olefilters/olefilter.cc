@@ -37,8 +37,19 @@ DESCRIPTION
 #include <wordfilter.h>
 #include <qfile.h>
 
-typedef KGenericFactory<OLEFilter, KoFilter> OLEFilterFactory;
-K_EXPORT_COMPONENT_FACTORY( libolefilter, OLEFilterFactory( "olefilter" ) );
+class OLEFilterFactory : KGenericFactory<OLEFilter, KoFilter>
+{
+public:
+    OLEFilterFactory(void) : KGenericFactory<OLEFilter, KoFilter> ("olefilter")
+    {}
+protected:
+    virtual void setupTranslations( void )
+    {
+        KGlobal::locale()->insertCatalogue( "olefilterswinword97filter" );
+    }
+};
+
+K_EXPORT_COMPONENT_FACTORY( libolefilter, OLEFilterFactory() );
 
 OLEFilter::OLEFilter(KoFilter *, const char *, const QStringList&) :
                      KoFilter() {
