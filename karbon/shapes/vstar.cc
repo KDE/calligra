@@ -56,10 +56,30 @@ VStar::VStar( VObject* parent,
 
 	if( m_type == star || m_type == framed_star )
 	{
-		innerRadius = 0.4 * outerRadius;
 		int j = (edges % 2 == 0 ) ? ( edges - 2 ) / 2 : ( edges - 1 ) / 2;
-		int k = j - 1;
-		int jumpto = 0;
+		// get two well chosen lines of the star
+		KoPoint p1 = p;
+		int jumpto = ( j ) % edges;
+		double nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
+		KoPoint p2( outerRadius * cos( nextOuterAngle ), outerRadius * sin( nextOuterAngle ) );
+
+		nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges;
+		KoPoint p3( outerRadius * cos( nextOuterAngle ),
+					outerRadius * sin( nextOuterAngle ) );
+		jumpto = ( edges - j + 1 ) % edges;
+		nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
+		KoPoint p4( outerRadius * cos( nextOuterAngle ), outerRadius * sin( nextOuterAngle ) );
+
+		// calc (x, y) -> intersection point
+		double b1 = ( p2.y() - p1.y() ) / ( p2.x() - p1.x() );
+		double b2 = ( p4.y() - p3.y() ) / ( p4.x() - p3.x() );
+		double a1 = p1.y() - b1 * p1.x();
+		double a2 = p3.y() - b2 * p3.x();
+		double x = -( a1 - a2 ) / ( b1 - b2 );
+		double y = a1 + b1 * x;
+		// calc inner radius from intersection point and center
+		innerRadius = sqrt( x * x + y * y );//0.4 * outerRadius;
+		jumpto = 0;
 		bool discontinueous = ( edges % 4 == 2 );
 		for ( uint i = 1; i < edges + 1; ++i )
 		{
@@ -74,7 +94,7 @@ VStar::VStar( VObject* parent,
 			p.setY( innerRadius * sin( nextInnerAngle ) );
 			lineTo( p );
 
-			double nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
+			nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
 			p.setX( outerRadius * cos( nextOuterAngle ) );
 			p.setY( outerRadius * sin( nextOuterAngle ) );
 			lineTo( p );
