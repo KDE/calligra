@@ -26,6 +26,8 @@ class KWordDocument;
 class KWParag
 {
 public:
+  enum Info {PI_NONE,PI_FOOTNOTE};
+  
   /**
    * Creates a new instance of KWParag.
    *
@@ -38,7 +40,7 @@ public:
    *
    * @see KWParagraphLayout
    */
-  KWParag(KWTextFrameSet *_frameSet, KWordDocument *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout, bool useForFirst = true);
+  KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc,KWParag* _prev,KWParag* _next,KWParagLayout* _paragLayout,bool useForFirst = true);
   KWParag(const KWParag& _parag);
 
   /**
@@ -96,7 +98,7 @@ public:
    *         text.
    */
   KWChar* getText() { return text.data(); }
-  KWChar* getChar( unsigned int _pos ) { assert( _pos < text.size() ); return text.data() + _pos; }
+  KWChar* getChar(unsigned int _pos) { assert(_pos < text.size()); return text.data() + _pos; }
   KWString* getKWString() { return &text; }
 
   /**
@@ -120,18 +122,18 @@ public:
   /**
    * Set the paragraph following this one.
    */
-  void setNext( KWParag* _p ) { next = _p; }
+  void setNext(KWParag* _p) { next = _p; }
   /**
    * Set the paragraph before this one.
    */
-  void setPrev( KWParag* _p ) { prev = _p; }
+  void setPrev(KWParag* _p) { prev = _p; }
 
-  void setStartPage( unsigned int _page ) { startPage = _page; }
-  void setEndPage( unsigned int _page ) { endPage = _page; }
-  void setStartFrame( unsigned int _frame ) { startFrame = _frame; }
-  void setEndFrame( unsigned int _frame ) { endFrame = _frame; }
-  void setPTYStart( unsigned int _y ) { ptYStart = _y; }
-  void setPTYEnd( unsigned int _y ) { ptYEnd = _y; }
+  void setStartPage(unsigned int _page) { startPage = _page; }
+  void setEndPage(unsigned int _page) { endPage = _page; }
+  void setStartFrame(unsigned int _frame) { startFrame = _frame; }
+  void setEndFrame(unsigned int _frame) { endFrame = _frame; }
+  void setPTYStart(unsigned int _y) { ptYStart = _y; }
+  void setPTYEnd(unsigned int _y) { ptYEnd = _y; }
 
   void insertText(unsigned int _pos,QString _text);
   void insertText(unsigned int _pos,KWString *_text);
@@ -140,8 +142,8 @@ public:
   void insertPictureAsChar(unsigned int _pos,QString _filename);
   void insertTab(unsigned int _pos);
   void appendText(KWChar *_text,unsigned int _len);
-  bool deleteText( unsigned int _pos, unsigned int _len = 1);
-  void setFormat( unsigned int _pos, unsigned int _len, const KWFormat &format );
+  bool deleteText(unsigned int _pos,unsigned int _len = 1);
+  void setFormat(unsigned int _pos,unsigned int _len,const KWFormat &format);
 
   void save(ostream &out);
   void load(KOMLParser&,vector<KOMLAttrib>&);
@@ -167,6 +169,9 @@ public:
   void setDocument(KWordDocument *_doc)
     { document = _doc; }
 
+  Info getInfo() { return info; }
+  void setInfo(Info _info) { info = _info; }
+  
 protected:
   /**
    * Pointer to the previous paragraph or 0L if this is the first one.
@@ -235,7 +240,8 @@ protected:
   bool hardBreak;
 
   QString paragName;
-
+  Info info;
+    
 };
 
 #endif

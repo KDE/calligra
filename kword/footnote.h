@@ -22,6 +22,7 @@
 class KWFootNote;
 class KWordDocument;
 class KWFormatContext;
+class KWParag;
 
 /******************************************************************/
 /* Class: KWFootNoteManager                                       */
@@ -30,6 +31,8 @@ class KWFormatContext;
 class KWFootNoteManager
 {
 public:
+  enum NoteType {FootNotes,EndNotes};
+
   KWFootNoteManager(KWordDocument *_doc);
 
   int getStart() { return start; }
@@ -44,13 +47,20 @@ public:
 
   void insertFootNote(KWFootNote *fn);
   void removeFootNote(KWFootNote *fn);
+
+  NoteType getNoteType() { return noteType; }
+  void setNoteType(NoteType nt) { noteType = nt; }
   
 protected:
+  void addFootNoteText(KWFootNote *fn);
+  
   KWordDocument *doc;
   int start;
   QList<KWFootNote> footNotes;
   bool superscript;
-
+  NoteType noteType;
+  QString firstParag;
+  
 };
 
 /******************************************************************/
@@ -84,6 +94,9 @@ public:
   void setBefore(const QString &_before) { before = _before; }
   void setAfter(const QString &_after) { after = _after; }
 
+  void setParag(KWParag *_parag);
+  QString getParag() { return parag; }
+  
 protected:
   void makeText();
 
@@ -91,7 +104,8 @@ protected:
   int start,end;
   QList<KWFootNoteInternal> parts;
   QString before,after,text;
-
+  QString parag;
+  
 };
 
 #endif

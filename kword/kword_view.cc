@@ -873,7 +873,7 @@ void KWordView::viewFootNotes()
   m_vMenuEdit->setItemChecked(m_idMenuView_FootNotes,true);
   m_vMenuEdit->setItemChecked(m_idMenuView_EndNotes,false);
 
-  m_pKWordDoc->setNoteType(KWordDocument::FootNotes);
+  m_pKWordDoc->setNoteType(KWFootNoteManager::FootNotes);
 
   sendFocusEvent();
 }
@@ -884,7 +884,7 @@ void KWordView::viewEndNotes()
   m_vMenuEdit->setItemChecked(m_idMenuView_FootNotes,false);
   m_vMenuEdit->setItemChecked(m_idMenuView_EndNotes,true);
 
-  m_pKWordDoc->setNoteType(KWordDocument::EndNotes);
+  m_pKWordDoc->setNoteType(KWFootNoteManager::EndNotes);
 
   sendFocusEvent();
 }

@@ -43,7 +43,9 @@
 #include <koQueryTypes.h>
 
 #include <X11/Xlib.h>
+
 #include <kapp.h>
+#include <kmimemagic.h>
 
 class KWordGUI;
 class KWordDocument;
@@ -279,8 +281,8 @@ protected:
   virtual void dragMoveEvent(QDragMoveEvent *e);
   virtual void dragLeaveEvent(QDragLeaveEvent *e);
   virtual void dropEvent(QDropEvent *e);
-  bool isInSelection(KWFormatContext *_fc);  
-  
+  bool isInSelection(KWFormatContext *_fc);
+
   KWordDocument *doc;
   bool markerIsVisible;
   bool paint_directly,has_to_copy;
@@ -345,7 +347,7 @@ protected:
   bool recalcingText;
   bool mouseMoved;
   bool maybeDrag;
-  
+
   EditMode editMode;
 
   KWGroupManager *curTable;

@@ -34,7 +34,7 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   editNum = -1;
   recalcingText = false;
   maybeDrag = false;
-  
+
   setBackgroundColor(white);
   buffer.fill(white);
   doc = _doc;
@@ -146,7 +146,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
       startDrag();
       return;
     }
-  
+
   if (!hasFocus())
     gui->getView()->sendFocusEvent();
 
@@ -599,7 +599,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 void KWPage::mousePressEvent(QMouseEvent *e)
 {
   maybeDrag = false;
-  
+
   if (gui->getView()) gui->getView()->sendFocusEvent();
 
   if (editNum != -1)
@@ -677,7 +677,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 			  _painter.end();
 			}
 		    }
-		  
+		
 		  doc->setSelStart(*fc);
 		  doc->setSelEnd(*fc);
 		  doc->setSelection(false);
@@ -879,7 +879,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 
   mousePressed = false;
   maybeDrag = false;
-  
+
   switch (mouseMode)
     {
     case MM_EDIT:
@@ -4083,11 +4083,13 @@ void KWPage::dragEnterEvent(QDragEnterEvent *e)
 {
   //debug("void KWPage::dragEnterEvent(QDragEnterEvent *e)");
 
-  if (KWordDrag::canDecode(e))
+  if (KWordDrag::canDecode(e) ||
+      QImageDrag::canDecode(e) ||
+      QUrlDrag::canDecode(e))
     {
       if (mouseMode != MM_EDIT)
 	setMouseMode(MM_EDIT);
-	      
+	
       unsigned int mx = e->pos().x() + xOffset;
       unsigned int my = e->pos().y() + yOffset;
 	
@@ -4153,7 +4155,7 @@ void KWPage::dragEnterEvent(QDragEnterEvent *e)
 	      gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
 	      gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
 	    }
-	  
+	
 	  e->accept();
 	}
       else
@@ -4162,7 +4164,7 @@ void KWPage::dragEnterEvent(QDragEnterEvent *e)
 	  markerIsVisible = true;
 	  _painter.end();
 	}
-    } 
+    }
 }
 
 /*================================================================*/
@@ -4183,17 +4185,99 @@ void KWPage::dropEvent(QDropEvent *e)
   //debug("void KWPage::dropEvent(QDropEvent *e)");
 
   QDropEvent *drop = e;
-  
-  if (drop->provides(MIME_TYPE))
+
+  if (KWordDrag::canDecode(e))
     {
-      if (drop->encodedData(MIME_TYPE).size())
-	editPaste(drop->encodedData(MIME_TYPE),MIME_TYPE);
+      if (drop->provides(MIME_TYPE))
+	{
+	  if (drop->encodedData(MIME_TYPE).size())
+	    editPaste(drop->encodedData(MIME_TYPE),MIME_TYPE);
+	}
+      else if (drop->provides("text/plain"))
+	{
+	  if (drop->encodedData("text/plain").size())
+	    editPaste(drop->encodedData("text/plain"));
+	}
     }
-  else if (drop->provides("text/plain"))
+  else if (QImageDrag::canDecode(e))
     {
-      if (drop->encodedData("text/plain").size())
-	editPaste(drop->encodedData("text/plain"));
+      QImage pix;
+      QImageDrag::decode(e,pix);
+
+      QString uid = getenv("USER");
+      QString num;
+      num.setNum(doc->getNumFrameSets());
+      uid += "_";
+      uid += num;
+
+      QString filename = "/tmp/kword";
+      filename += uid;
+      filename += ".xpm";
+
+      pix.save(filename,"XPM");
+      KWPictureFrameSet *frameset = new KWPictureFrameSet(doc);
+      frameset->setFileName(filename,KSize(pix.width(),pix.height()));
+      KWFrame *frame = new KWFrame(e->pos().x() + xOffset,e->pos().y() + yOffset,pix.width(),pix.height());
+      frameset->addFrame(frame);
+      doc->addFrameSet(frameset);
+      repaint(false);
+
+      QString cmd = "rm -f ";
+      cmd += filename;
+      system(cmd.ascii());
     }
+  else if (QUrlDrag::canDecode(e))
+    {
+      QStrList lst;
+      QUrlDrag::decode(e,lst);
+
+      QString str;
+      for (str = lst.first();!str.isEmpty();str = lst.next())
+	{
+	  KURL url(str);
+	  if (!url.isLocalFile()) return;
+
+	  QString filename = url.path();
+ 	  KMimeMagicResult *res = KMimeMagic::self()->findFileType(filename);
+	
+	  if (res && res->isValid())
+	    {
+	      QString mimetype = res->mimeType();
+	      if (mimetype.contains("image"))
+		{
+		  QPixmap pix(filename);
+		  KWPictureFrameSet *frameset = new KWPictureFrameSet(doc);
+		  frameset->setFileName(filename,KSize(pix.width(),pix.height()));
+		  KWFrame *frame = new KWFrame(e->pos().x() + xOffset,e->pos().y() + yOffset,pix.width(),pix.height());
+		  frameset->addFrame(frame);
+		  doc->addFrameSet(frameset);
+		  repaint(false);
+      		  continue;
+		}	
+	
+	    }
+	
+	  // open any non-picture as text
+	  // in the future we should open specific mime types with "their" programms and embed them
+	  QFile f(filename);
+	  QTextStream t(&f);
+	  QString text = "",tmp;
+
+	  if (f.open(IO_ReadOnly))
+	    {
+	      while (!t.eof())
+		{
+		  tmp = t.readLine();
+		  tmp += "\n";
+		  text.append(tmp);
+		}
+	      f.close();
+	    }
+	  doc->paste(fc,text,this);
+	  repaint(false);
+	}
+    }
+	   
 }
 
 /*================================================================*/
@@ -4201,7 +4285,7 @@ bool KWPage::isInSelection(KWFormatContext *_fc)
 {
   if (!doc->has_selection())
     return false;
-  
+
   if (doc->getSelStart()->getParag() == _fc->getParag())
     {
       if (_fc->getTextPos() >= doc->getSelStart()->getTextPos())
@@ -4216,10 +4300,10 @@ bool KWPage::isInSelection(KWFormatContext *_fc)
 	}
       return false;
     }
-  
+
   if (doc->getSelStart()->getParag() == doc->getSelEnd()->getParag())
     return false;
-  
+
   if (doc->getSelEnd()->getParag() == _fc->getParag())
     {
       if (_fc->getTextPos() <= doc->getSelEnd()->getTextPos())
@@ -4228,7 +4312,7 @@ bool KWPage::isInSelection(KWFormatContext *_fc)
     }
 
   KWParag *parag = doc->getSelStart()->getParag()->getNext();
-  
+
   while (parag && parag != doc->getSelEnd()->getParag())
     {
       if (parag == _fc->getParag())

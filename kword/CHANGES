@@ -1044,3 +1044,10 @@ Reggie, 6.4.1999:
 -----------------
 - Started with a dialog for inserting a footnote where you can make crazy footnotes
   if you want (like [1,2,3-6,7] and so on)
+
+Reggie, 7.4.1999:
+-----------------
+- When dropping an image into a KWord page, it's inserted as a picture frame
+- When dropping an url(list) into a KWord page the url(s) are opened ("image/*" is inserted as
+  picture frame and other mime types are inserted as text for now)
+- More work on footnotes

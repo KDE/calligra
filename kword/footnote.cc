@@ -27,8 +27,9 @@
 
 /*================================================================*/
 KWFootNoteManager::KWFootNoteManager(KWordDocument *_doc)
-  : start(1), superscript(true)
+  : start(1), superscript(true), firstParag(QString::null)
 {
+  noteType = EndNotes;
   doc = _doc;
 }
 
@@ -49,13 +50,13 @@ int KWFootNoteManager::findStart(KWFormatContext *_fc,QPainter &p)
 
   if (footNotes.isEmpty())
     return start;
-  
+
   KWFormatContext fc(doc,_fc->getFrameSet());
   fc.init(dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(_fc->getFrameSet() - 1))->getFirstParag(),p);
   int curr = start;
   KWParag *parag = fc.getParag();
   unsigned int found = 0;
-  
+
   while (parag != _fc->getParag())
     {
       KWString *str = parag->getKWString();
@@ -101,6 +102,7 @@ void KWFootNoteManager::insertFootNote(KWFootNote *fn)
     {
       footNotes.insert(0,fn);
       recalc();
+      addFootNoteText(fn);
       return;
     }
 
@@ -116,6 +118,7 @@ void KWFootNoteManager::insertFootNote(KWFootNote *fn)
     }
 
   recalc();
+  addFootNoteText(fn);
 }
 
 /*================================================================*/
@@ -125,6 +128,21 @@ void KWFootNoteManager::removeFootNote(KWFootNote *fn)
   if (n != -1)
     footNotes.take(n);
   recalc();
+}
+
+/*================================================================*/
+void KWFootNoteManager::addFootNoteText(KWFootNote *fn)
+{
+  if (firstParag.isEmpty())
+    {
+      KWTextFrameSet *frameSet = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(0));
+      KWParag *parag = frameSet->getLastParag();
+      KWParag *parag2 = new KWParag(frameSet,doc,parag,0L,doc->findParagLayout("Standard"));
+      parag2->insertText(0,fn->getText());
+      KWFormat format(doc);
+      format.setDefaults(doc);
+      parag2->setFormat(0,fn->getText().length(),format);
+    }
 }
 
 /******************************************************************/
@@ -192,3 +210,8 @@ void KWFootNote::makeText()
   text += after;
 }
 
+/*================================================================*/
+void KWFootNote::setParag(KWParag *_parag) 
+{ 
+  parag = _parag->getParagName(); 
+}
