@@ -3796,6 +3796,8 @@ void KWDocument::refreshGUIButton()
 void KWDocument::enableBackgroundSpellCheck( bool b )
 {
     m_bgSpellCheck->enableBackgroundSpellCheck(b);
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        viewPtr->updateBgSpellCheckingState();
 }
 
 bool KWDocument::backgroundSpellCheckEnabled() const

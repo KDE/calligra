@@ -350,6 +350,12 @@ void KWView::initGui()
 }
 
 
+void KWView::updateBgSpellCheckingState()
+{
+    actionAllowBgSpellCheck->setChecked( m_doc->backgroundSpellCheckEnabled() );
+}
+
+
 void KWView::initGUIButton()
 {
     actionViewFrameBorders->setChecked( viewFrameBorders() );

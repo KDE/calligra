@@ -175,6 +175,8 @@ public:
     void insertFile(const QString & path);
     void configureSpellChecker();
     void testAndCloseAllFrameSetProtectedContent();
+    void updateBgSpellCheckingState();
+
 public slots:
     void fileStatistics();
     void editCut();
