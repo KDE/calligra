@@ -467,6 +467,10 @@ void KWFrameStyleCommand::execute()
     m_frame->setTopBorder( m_fs->topBorder() );
     m_frame->setBottomBorder( m_fs->bottomBorder() );
 
+    m_frame->frameBordersChanged();
+    if (m_frame->isSelected())
+        m_frame->updateResizeHandles();
+
     if ( repaintViews )
         m_frame->frameSet()->kWordDocument()->repaintAllViews();
     m_frame->frameSet()->kWordDocument()->refreshFrameBorderButton();
@@ -479,6 +483,10 @@ void KWFrameStyleCommand::unexecute()
     m_frame->setRightBorder( m_oldValues->rightBorder() );
     m_frame->setTopBorder( m_oldValues->topBorder() );
     m_frame->setBottomBorder( m_oldValues->bottomBorder() );
+
+    m_frame->frameBordersChanged();
+    if (m_frame->isSelected())
+        m_frame->updateResizeHandles();
 
     if ( repaintViews )
         m_frame->frameSet()->kWordDocument()->repaintAllViews();
