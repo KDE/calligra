@@ -120,7 +120,6 @@ void KPRectObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
 
         _painter->setPen( pen2 );
         _painter->setBrush( Qt::NoBrush );
-        kdDebug()<<" _zoomHandler->zoomItX(pw) :"<<_zoomHandler->zoomItX(pw)<<"  _zoomHandler->zoomItX(ow - 2 * pw) :"<< _zoomHandler->zoomItX(ow - 2 * pw)<<endl;
         _painter->drawRoundRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw), _zoomHandler->zoomItX(xRnd), _zoomHandler->zoomItY(yRnd) );
     }
 }
