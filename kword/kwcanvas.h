@@ -27,7 +27,7 @@
 #include <qrichtext_p.h>
 #include <koQueryTrader.h>
 #include "kwtextparag.h"
-
+#include "kwframe.h"
 class KWDocument;
 class KWFrame;
 class KWFrameSet;
@@ -36,6 +36,7 @@ class KWTextFrameSet;
 class KWTableFrameSet;
 class KWFrameMoveCommand;
 class KWViewMode;
+
 namespace Qt3 {
 class QTextCursor;
 class QTextParag;
@@ -212,6 +213,8 @@ protected:
     //for dnd
     bool checkCurrentTextEdit( KWFrameSet * fs );
 
+    void insertInlineTable();
+
 signals:
     // Emitted when the current frameset edit changes
     void currentFrameSetEditChanged();
@@ -256,7 +259,12 @@ private:
     bool m_mousePressed;
     bool m_printing;
     bool m_imageDrag;
+
+    //define type of frame (for set inline frame)
     bool m_frameInline;
+    FrameSetType m_frameInlineType;
+
+
     KWViewMode *m_viewMode;
 
     // Frame stuff

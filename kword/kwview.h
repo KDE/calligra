@@ -161,6 +161,8 @@ public:
 
     void insertInlinePicture();
 
+    void displayFrameInlineInfo();
+
 public slots:
     void fileStatistics();
     void editCut();

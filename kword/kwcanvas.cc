@@ -48,6 +48,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     m_mousePressed = false;
     m_imageDrag = false;
     m_frameInline = false;
+    m_frameInlineType=FT_TABLE;
     m_viewMode = new KWViewModeNormal( m_doc ); // maybe pass as parameter, for initial value ( loaded from doc ) ?
     cmdMoveFrame=0L;
 
@@ -484,10 +485,14 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 if ( emitChanged ) // emitted after mousePressEvent [for tables]
                     emit currentFrameSetEditChanged();
                  emit updateRuler();
-                 //insert inline picture
+
+
                  if( m_frameInline)
                  {
-                     m_gui->getView()->insertInlinePicture();
+                     if(m_frameInlineType==FT_TABLE)
+                         insertInlineTable();
+                     else if(m_frameInlineType==FT_PICTURE)
+                         m_gui->getView()->insertInlinePicture();
                      m_frameInline=false;
                  }
             }
@@ -563,11 +568,25 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
     m_table.height = hei;
     m_table.floating = isFloating;
 
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
-
-    if ( isFloating && edit )
+    if ( isFloating  )
     {
-        m_insRect = KoRect( 0, 0, edit->frameSet()->frame(0)->width()-10, rows * 30 ); // mostly unused anyway
+        m_frameInline=true;
+        m_frameInlineType=FT_TABLE;
+        m_gui->getView()->displayFrameInlineInfo();
+    }
+    else
+    {
+        m_frameInline=false;
+        setMouseMode( MM_CREATE_TABLE );
+    }
+}
+
+void KWCanvas::insertInlineTable()
+{
+    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
+    if(edit)
+    {
+        m_insRect = KoRect( 0, 0, edit->frameSet()->frame(0)->width()-10, m_table.rows * 30 ); // mostly unused anyway
         KWTableFrameSet * table = createTable();
         m_doc->addFrameSet( table, false );
         edit->insertFloatingFrameSet( table, i18n("Insert Inline Table") );
@@ -576,7 +595,10 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
         m_doc->refreshDocStructure(Tables);
     }
     else
-        setMouseMode( MM_CREATE_TABLE );
+    {
+        m_frameInline=false;
+    }
+    m_gui->getView()->updateFrameStatusBarItem();
 }
 
 void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, bool noGrid )
@@ -2158,6 +2180,7 @@ void KWCanvas::setXimPosition( int x, int y, int w, int h )
 void KWCanvas::inlinePictureStarted()
 {
     m_frameInline=true;
+    m_frameInlineType=FT_PICTURE;
 }
 
 #include "kwcanvas.moc"

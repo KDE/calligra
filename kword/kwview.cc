@@ -1916,23 +1916,8 @@ void KWView::insertPicture( const QString &filename, bool isClipart,
         fsInline->addFrame( frame, false );
         m_gui->canvasWidget()->inlinePictureStarted();
         setTool( KWCanvas::MM_EDIT );
-        KMessageBox::information(this,
-                                 i18n("Set cursor where you want insert inline picture."),
-                                 i18n("Insert Picture Inline"),
-                                 "SetCursorInsertInlinePicture",true);
 
-    KStatusBar * sb = statusBar();
-    if (sb )
-    {
-        if ( !m_sbFramesLabel )
-        {
-            m_sbFramesLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
-            addStatusBarItem( m_sbFramesLabel );
-        }
-        if(m_sbFramesLabel)
-            m_sbFramesLabel->setText( i18n("Set cursor where you want insert inline picture.") );
-    }
-
+        displayFrameInlineInfo();
 
 #if 0
         edit->insertFloatingFrameSet( fs, i18n("Insert Picture Inline") );
@@ -1971,6 +1956,26 @@ void KWView::insertInlinePicture()
         delete fsInline;
         fsInline=0L;
         updateFrameStatusBarItem();
+    }
+}
+
+void KWView::displayFrameInlineInfo()
+{
+    KMessageBox::information(this,
+                             i18n("Set cursor where you want insert inline frame."),
+                             i18n("Insert Inline frame"),
+                             "SetCursorInsertInlineFrame",true);
+
+    KStatusBar * sb = statusBar();
+    if (sb )
+    {
+        if ( !m_sbFramesLabel )
+        {
+            m_sbFramesLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
+            addStatusBarItem( m_sbFramesLabel );
+        }
+        if(m_sbFramesLabel)
+            m_sbFramesLabel->setText( i18n("Set cursor where you want insert inline frame.") );
     }
 }
 
