@@ -630,10 +630,10 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     double l, r, t, b;
     doc->getFrameMargins( l, r, t, b );
-    sml->setText( QString::number( KWUnit::userValue( l, doc->getUnit() ) ) );
-    smr->setText( QString::number( KWUnit::userValue( r, doc->getUnit() ) ) );
-    smt->setText( QString::number( KWUnit::userValue( t, doc->getUnit() ) ) );
-    smb->setText( QString::number( KWUnit::userValue( b, doc->getUnit() ) ) );
+    sml->setText( QString::number( QMAX(0.00,KWUnit::userValue( l, doc->getUnit() ) ) ));
+    smr->setText( QString::number( QMAX(0.00,KWUnit::userValue( r, doc->getUnit() ) ) ));
+    smt->setText( QString::number( QMAX(0.00,KWUnit::userValue( t, doc->getUnit() ) ) ));
+    smb->setText( QString::number( QMAX(0.00,KWUnit::userValue( b, doc->getUnit() ) ) ));
 
     sx->setValidator( new QDoubleValidator( sx ) );
     sy->setValidator( new QDoubleValidator( sy ) );
