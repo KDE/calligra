@@ -92,8 +92,16 @@ void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link
 {
     if ( bookmarkLink)
         bookmarkLink->setBookmarkList(bkmlist);
-    if( _href.isEmpty())
+    if ( _href.isEmpty())
+    {
+        if ( !_link.isEmpty() )
+        {
+            internetLink->setLinkName(_link);
+            showPage(0);
+            slotTextChanged ( );
+        }
         return;
+    }
     if(_href.find("http://")!=-1 || _href.find("https://")!=-1 ||_href.find("ftp://")!=-1 )
     {
         internetLink->setHrefName(_href);

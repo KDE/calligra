@@ -4710,6 +4710,23 @@ void KPresenterView::insertLink()
         return;
     QString link;
     QString ref;
+    if ( edit->textObject()->hasSelection() )
+    {
+        QString selectedText = edit->textObject()->selectedText();
+        if ( selectedText.startsWith( "mailto:/" ) ||
+             selectedText.startsWith( "ftp:/" ) ||
+             selectedText.startsWith( "http:/" ) )
+        {
+            link=selectedText;
+            ref = selectedText;
+        }
+        else
+        {
+            //Just add text as link name and not url
+            link = selectedText;
+        }
+    }
+
     if(KoInsertLinkDia::createLinkDia(link, ref, QStringList(), false, this))
     {
         if(!link.isEmpty() && !ref.isEmpty())

@@ -439,3 +439,5 @@ void BrushProperty::slotYFactorChanged()
 {
     m_preview->setYFactor( getGYFactor() );
 }
+
+#include "brushproperty.moc"
