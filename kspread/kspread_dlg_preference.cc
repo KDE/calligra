@@ -504,11 +504,11 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
   typeOfMove=new QComboBox( tmpQGroupBox);
   label->setBuddy(typeOfMove);
   listType.clear();
-  listType+=i18n("Bottom");
-  listType+=i18n("Top");
-  listType+=i18n("Right");
-  listType+=i18n("Left");
-  listType+=i18n("Bottom, First Cell");
+  listType+=i18n("towards to", "Bottom");
+  listType+=i18n("towards to", "Top");
+  listType+=i18n("towards to", "Right");
+  listType+=i18n("towards to", "Left");
+  listType+=i18n("towards to", "Bottom, First Cell");
   typeOfMove->insertStringList(listType);
   typeOfMove->setCurrentItem(0);
   msgError= new QCheckBox(i18n("&Show error message"),tmpQGroupBox);
