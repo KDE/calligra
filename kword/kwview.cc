@@ -5820,7 +5820,6 @@ void KWView::insertFile(const QString & path)
 
                 //kdDebug() << k_funcinfo << domDocFrames.toCString() << endl;
                 m_doc->pasteFrames( topElem, macroCmd,true );
-                m_doc->addCommand( macroCmd );
 
 
                 KCommand *cmd = textFrameSet->pasteKWord( &insertionCursor, domDoc.toCString(), true );
@@ -5828,6 +5827,8 @@ void KWView::insertFile(const QString & path)
                     macroCmd = new KMacroCommand( i18n("Insert File") );
                     macroCmd->addCommand( cmd );
                 }
+                m_doc->addCommand( macroCmd );
+
             }
         }
         else
