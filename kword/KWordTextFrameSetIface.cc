@@ -162,6 +162,41 @@ QColor KWordTextFrameSetIface::textBackgroundColor() const
     return m_frametext->textObject()->textBackgroundColor();
 }
 
+bool KWordTextFrameSetIface::textDoubleUnderline() const
+{
+    return m_frametext->textObject()->textDoubleUnderline();
+}
+
+bool KWordTextFrameSetIface::textItalic() const
+{
+    return m_frametext->textObject()->textItalic();
+}
+
+bool KWordTextFrameSetIface::textBold() const
+{
+    return m_frametext->textObject()->textBold();
+}
+
+bool KWordTextFrameSetIface::textUnderline()const
+{
+    return m_frametext->textObject()->textUnderline();
+}
+
+bool KWordTextFrameSetIface::textStrikeOut()const
+{
+    return m_frametext->textObject()->textStrikeOut();
+}
+
+bool KWordTextFrameSetIface::textSubScript() const
+{
+    return m_frametext->textObject()->textSubScript();
+}
+
+bool KWordTextFrameSetIface::textSuperScript() const
+{
+    return m_frametext->textObject()->textSuperScript();
+}
+
 void KWordTextFrameSetIface::setTextFamilyFont(const QString &font)
 {
     KCommand *cmd=m_frametext->textObject()->setFamilyCommand(font);
