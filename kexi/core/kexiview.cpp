@@ -75,7 +75,7 @@ KexiView::KexiView(KexiWindowMode winmode, KexiProject *part, QWidget *parent, c
 //	m_modeDescriptions<<i18n("Single document");
 	m_possibleModes=m_modeDescriptions;
 #if !KDE_IS_VERSION(3,1,9)
-	m_possibleModes.remove(m_possibleModes.at(1);
+	m_possibleModes.remove(m_possibleModes.at(1));
 #endif
 	initActions();
 
