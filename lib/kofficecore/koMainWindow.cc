@@ -641,12 +641,12 @@ bool KoMainWindow::exportConfirmation( const QCString &outputFormat, const QCStr
         {
             ret = KMessageBox::warningContinueCancel
             (
-            0,
+                0,
                 i18n( "<qt>Saving as a %1 may result in some loss of formatting."
                       "<p>Do you still want to save in this format?</qt>" )
                     .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
                 i18n( "Confirm Save" ),
-            KStdGuiItem::save (),
+                KStdGuiItem::save (),
                 "NonNativeSaveConfirmation",
                 true
             );
