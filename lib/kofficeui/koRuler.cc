@@ -199,7 +199,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     int totalw = qRound( zoomIt(layout.ptWidth) );
     QString str;
     QFont font; // Use the global KDE font. Let's hope it's appropriate.
-    font.setPointSize( 8 );
+    font.setPixelSize( 8 );
     QFontMetrics fm( font );
 
     p.setBrush( colorGroup().brush( QColorGroup::Base ) );
@@ -344,7 +344,7 @@ void KoRuler::drawVertical( QPainter *_painter )
     if ( ( diffy >= 0 && totalh > diffy ) || ( diffy < 0 && diffy + totalh >= 0 ) ) {
         QString str;
         QFont font; // Use the global KDE font. Let's hope it's appropriate.
-        font.setPointSize( 8 ); // Hardcode the size? (Werner)
+        font.setPixelSize( 8 ); // Hardcode the size? (Werner)
         QFontMetrics fm( font );
 
         p.setBrush( colorGroup().brush( QColorGroup::Base ) );
