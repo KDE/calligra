@@ -252,7 +252,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   if ( oldRootDoc && oldRootDoc->viewCount() == 0 )
   {
     kdDebug(30003) << "No more views, deleting old doc " << oldRootDoc << endl;
-    oldRootDoc->delayedDestruction();
+    delete oldRootDoc;
   }
 }
 
