@@ -18,7 +18,6 @@
 */
 
 #include "kwvariable.h"
-#include "kwvariable.moc"
 
 #include "kwtextframeset.h"
 #include "kwtextdocument.h"
