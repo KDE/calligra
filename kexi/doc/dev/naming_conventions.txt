@@ -95,8 +95,33 @@ use \param tag, e.g.:
 to recognise who marked given fragment.
 
 4. Indentation
-We ae use the rule as in the rest of KDE code.
+4.1 We can use the rule as in the rest of KDE code.
 example:
 	QString		objectName(); //wrong
 	QString objectName(); //wrong
 rule: dont use tabs between words.
+
+4.2 To avoid many indentation level, we can use:
+
+void mymethod()
+{
+	if (!something)
+		return;
+	if(!something_else && .....)
+		return
+	do_something();
+}
+
+ instead of:
+
+void mymethod()
+{
+	if (something) {
+		if(something_else && .....) {
+			do_something;
+		}
+	}
+}
+
+This is good, because made qt and kde sources readable.
+ANYWAY: we use indentation.
