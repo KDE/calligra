@@ -2,7 +2,7 @@
 
    Copyright 2004 Tomas Mecir <mecirt@gmail.com>
    Copyright 1999-2002,2004,2005 Laurent Montel <montel@kde.org>
-   Copyright 2002-2004 Ariya Hidayat <ariya@kde.org>
+   Copyright 2002-2005 Ariya Hidayat <ariya@kde.org>
    Copyright 2001-2003 Philipp Mueller <philipp.mueller@gmx.de>
    Copyright 2002-2003 Norbert Andres <nandres@web.de>
    Copyright 2003 Reinhart Geiser <geiseri@kde.org>
@@ -43,7 +43,6 @@
 #include <math.h>
 
 #include <qapplication.h>
-#include <qsimplerichtext.h>
 #include <qregexp.h>
 #include <qpopupmenu.h>
 #include <koStyleStack.h>
@@ -104,10 +103,6 @@ public:
     // Not empty when the cell holds a link
     QString link;
 
-    // Set when the cell contains rich text
-    // At the moment, it's used to store hyperlink
-    QSimpleRichText *QML;
-
     // amount of additional cells
     int extraXCells;
     int extraYCells;
@@ -151,9 +146,6 @@ public:
     // This cell's column. If it is 0, this is the default cell and its row/column can
     // not be determined.
     int column;
-
-    // Tells which kind of content the cell holds.
-    KSpreadCell::Content content;
 
     // Value of the cell, either typed by user or as result of formula
     KSpreadValue value;
@@ -213,7 +205,6 @@ CellPrivate::CellPrivate()
 {
   row = 0;
   column = 0;
-  content= KSpreadCell::Text;
   value = KSpreadValue::empty();
   code = 0;
 
@@ -239,7 +230,6 @@ CellExtra* CellPrivate::extra()
     if( !cellExtra )
     {
         cellExtra = new CellExtra;
-        cellExtra->QML = 0;
         cellExtra->conditions = 0;
         cellExtra->validity = 0;
         cellExtra->extraXCells = 0;
@@ -359,14 +349,9 @@ QString KSpreadCell::columnName( int column )
     return str;
 }
 
-KSpreadCell::Content KSpreadCell::content() const
-{
-    return d->content;
-}
-
 bool KSpreadCell::isFormula() const
 {
-    return d->content == Formula;
+    return d->strText[0] == '=';
 }
 
 QString KSpreadCell::text() const
@@ -390,13 +375,6 @@ void KSpreadCell::setValue( const KSpreadValue& v )
     clearAllErrors();
 
   d->value = v;
-
-  // Free all content data
-  if (d->hasExtra())
-  {
-    delete d->extra()->QML;
-    d->extra()->QML = 0;
-  }
 
   setFlag(Flag_LayoutDirty);
   setFlag(Flag_TextFormatDirty);
@@ -1031,9 +1009,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // in which case d->row and d->column are 0 and 0, but col and row
     // are the real coordinates of the cell.
 
-    // due to QSimpleRichText, always make layout for QML
-    if ( !testFlag( Flag_LayoutDirty ) &&
-        ( (!d->hasExtra()) || (!d->extra()->QML) ) )
+    if ( !testFlag( Flag_LayoutDirty ) )
       return;
 
     if (d->hasExtra())
@@ -1070,143 +1046,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     //
     applyZoomedFont( _painter, _col, _row );
 
-    /**
-     * RichText
-     */
-    if ( d->hasExtra() && d->extra()->QML  )
-    {
-        delete d->extra()->QML;
-
-        // TODO: more formatting as QStyleSheet supports
-        QString qml_text;
-        qml_text += QString("<font face=\"%1\">").arg( _painter.font().family() );
-        //if( _painter.font().bold() ) qml_text += "<b>";
-        //if( _painter.font().italic() ) qml_text += "<i>";
-        //if( _painter.font().underline() ) qml_text += "<u>";
-
-        qml_text += d->strText.mid(1);
-        d->extra()->QML = new QSimpleRichText( qml_text, _painter.font() );
-
-        setFlag( Flag_LayoutDirty );
-
-        // Calculate how many cells we could use in addition right hand
-        // Never use more then 10 cells.
-        int right = 0;
-        double max_width = dblWidth( _col );
-        bool ende = false;
-        int c;
-        d->extra()->QML->setWidth( &_painter, (int)max_width );
-        for( c = _col + 1; !ende && c <= _col + 10; ++c )
-        {
-            KSpreadCell *cell = m_pTable->cellAt( c, _row );
-            if ( cell && !cell->isEmpty() )
-                ende = true;
-            else
-            {
-                ColumnFormat *cl = m_pTable->columnFormat( c );
-                max_width += cl->dblWidth();
-
-                // Can we make use of extra cells ?
-                int h = d->extra()->QML->height();
-                d->extra()->QML->setWidth( &_painter, int( max_width ) );
-                if ( d->extra()->QML->height() < h )
-                    ++right;
-                else
-                {
-                    max_width -= cl->dblWidth();
-                    d->extra()->QML->setWidth( &_painter, int( max_width ) );
-                    ende = true;
-                }
-            }
-        }
-
-        // How may space do we need now ?
-        // d->extra()->QML->setWidth( &_painter, max_width );
-        int h = d->extra()->QML->height();
-        int w = d->extra()->QML->width();
-        kdDebug(36001) << "QML w=" << w << " max=" << max_width << endl;
-
-        // Occupy the needed extra cells in horizontal direction
-        max_width = dblWidth( _col );
-        ende = ( max_width >= w );
-        for( c = _col + 1; !ende && c <= _col + right; ++c )
-        {
-            KSpreadCell *cell = m_pTable->nonDefaultCell( c, _row );
-            cell->obscure( this );
-            ColumnFormat *cl = m_pTable->columnFormat( c );
-            max_width += cl->dblWidth();
-            if ( max_width >= w )
-                ende = true;
-        }
-        d->extra()->extraXCells = c - _col - 1;
-
-        /* we may have used extra cells, but only cells that we were already
-           merged to.
-        */
-        if( d->extra()->extraXCells < d->extra()->mergedXCells )
-        {
-            d->extra()->extraXCells = d->extra()->mergedXCells;
-        }
-        else
-        {
-            d->extra()->extraWidth = max_width;
-        }
-        // Occupy the needed extra cells in vertical direction
-        double max_height = dblHeight( _row );
-        int r = _row;
-        ende = ( max_height >= h );
-        for( r = _row + 1; !ende && r < _row + 500; ++r )
-        {
-            bool empty = true;
-            for( c = _col; c <= _col + d->extra()->extraXCells; ++c )
-            {
-                KSpreadCell *cell = m_pTable->cellAt( c, r );
-                if ( cell && !cell->isEmpty() )
-                {
-                    empty = false;
-                    break;
-                }
-            }
-            if ( !empty )
-            {
-                ende = true;
-                break;
-            }
-            else
-            {
-                // Occupy this row
-                for( c = _col; c <= _col + d->extra()->extraXCells; ++c )
-                {
-                    KSpreadCell *cell = m_pTable->nonDefaultCell( c, r );
-                    cell->obscure( this );
-                }
-                RowFormat *rl = m_pTable->rowFormat( r );
-                max_height += rl->dblHeight();
-                if ( max_height >= h )
-                    ende = true;
-            }
-        }
-        d->extra()->extraYCells = r - _row - 1;
-        /* we may have used extra cells, but only cells that we were already
-           merged to.
-        */
-        if( d->extra()->extraYCells < d->extra()->mergedYCells )
-        {
-            d->extra()->extraYCells = d->extra()->mergedYCells;
-        }
-        else
-        {
-            d->extra()->extraHeight = max_height;
-        }
-        clearFlag( Flag_LayoutDirty );
-
-        textSize( _painter );
-
-        offsetAlign( _col, _row );
-
-        return;
-    }
-
     // Calculate text dimensions
     textSize( _painter );
 
@@ -1223,7 +1062,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     // Calculate the extraWidth and extraHeight if we are forced to.
     /* Use d->extra()->extraWidth/height here? Isn't it already calculated?*/
-    /* No, they are calculated here only (beside of QML part above) Philipp */
+    /* No, they are calculated here only       Philipp */
     if ( testFlag( Flag_ForceExtra ) )
     {
         int extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
@@ -1406,7 +1245,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
 
     // Do we have to occupy additional cells at the bottom ?
-    if ( ( (d->hasExtra() && d->extra()->QML) || multiRow( _col, _row ) ) &&
+    if ( multiRow( _col, _row ) &&
          d->textHeight > h - 2 * BORDER_SPACE -
          topBorderWidth( _col, _row ) - bottomBorderWidth( _col, _row ) )
     {
@@ -1584,8 +1423,6 @@ void KSpreadCell::offsetAlign( int _col, int _row )
       if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle )
       {
         d->textY = h - BORDER_SPACE - effBottomBorderPen( _col, _row ).width();
-        if ( d->hasExtra() && d->extra()->QML )
-          d->textY = d->textY - d->extra()->QML->height();
       }
       else if ( tmpAngle != 0 )
       {
@@ -1733,13 +1570,6 @@ void KSpreadCell::textSize( QPainter &_paint )
       tmpVerticalText = verticalText( _col, _row );
       ay = alignY( _col, _row );
       fontUnderlined = textFontUnderline( _col, _row );
-    }
-
-    if( d->hasExtra() && d->extra()->QML )
-    {
-     d->textWidth = m_pTable->doc()->unzoomItX( d->extra()->QML->widthUsed() );
-     d->textHeight = m_pTable->doc()->unzoomItY( d->extra()->QML->height() );
-     return;
     }
 
     if ( !tmpVerticalText && !tmpAngle )
@@ -1988,10 +1818,6 @@ bool KSpreadCell::calc(bool delay)
 //FIXME    m_dataType = StringData;
     QString str = context.value()->toString( context );
     setValue (KSpreadValue (str));
-    if (!str.isEmpty() && str[0] == '!' )
-    {
-      d->extra()->QML = new QSimpleRichText(str.mid(1), QApplication::font()); //, m_pTable->widget() );
-    }
   }
 
   clearFlag(Flag_CalcDirty);
@@ -2130,19 +1956,6 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
 
     paintMoreTextIndicator( painter, cellRect, backgroundColor );
 
-  /**
-   * QML ?
-   */
-    if ( d->hasExtra() && d->extra()->QML
-         && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(), cellRef.y() ) )
-         && !( m_pTable->isProtected() && isHideAll( cellRef.x(), cellRef.y() ) ) )
-    {
-      paintText( painter, cellRect, cellRef );
-    }
-    /**
-     * Usual Text
-     */
-    else
     if ( !d->strOutText.isEmpty()
               && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(), cellRef.y() ) )
               && !( m_pTable->isProtected() && isHideAll( cellRef.x(), cellRef.y() ) ) )
@@ -2752,6 +2565,15 @@ void KSpreadCell::paintText( QPainter& painter,
         tmpPen.setColor( Qt::red );
     }
   }
+  
+  // Check for blue color, for hyperlink
+  if( !link().isEmpty() )
+  {
+    tmpPen.setColor( QApplication::palette().active().link() );
+    QFont f = painter.font();
+    f.setUnderline( true );
+    painter.setFont( f );
+  }
 
 /****
 
@@ -2864,16 +2686,8 @@ void KSpreadCell::paintText( QPainter& painter,
 
   if ( !tmpMultiRow && !tmpVerticalText && !tmpAngle )
   {
-    if( !d->hasExtra() || !d->extra()->QML )
        painter.drawText( doc->zoomItX( indent + cellRect.x() + d->textX - offsetCellTooShort ),
                       doc->zoomItY( cellRect.y() + d->textY - offsetFont ), d->strOutText );
-    else
-        d->extra()->QML->draw( &painter,
-                    doc->zoomItX( indent + cellRect.x() + d->textX ),
-                    doc->zoomItY( cellRect.y() + d->textY - offsetFont ),
-                    QRegion( doc->zoomRect( KoRect( cellRect.x(),     cellRect.y(),
-                                                    cellRect.width(), cellRect.height() ) ) ),
-                    QApplication::palette().active(), 0 );
   }
   else if ( tmpAngle != 0 )
   {
@@ -3996,7 +3810,6 @@ void KSpreadCell::setNumber( double number )
 {
   setValue( KSpreadValue( number ) );
 
-  d->content = Text;
   d->strText.setNum( number );
   checkNumberFormat();
 }
@@ -4011,7 +3824,6 @@ void KSpreadCell::setCellText( const QString& _text, bool asText )
     {
       d->strOutText = ctext;
       d->strText    = ctext;
-      d->content = Text;
       setValue( KSpreadValue( ctext ) );
 
       return;
@@ -4041,7 +3853,6 @@ void KSpreadCell::setDisplayText( const QString& _text )
     setFlag(Flag_LayoutDirty);
     setFlag(Flag_TextFormatDirty);
 
-    d->content = Formula;
     if ( !m_pTable->isLoading() )
     {
       if ( !makeFormula() )
@@ -4050,23 +3861,12 @@ void KSpreadCell::setDisplayText( const QString& _text )
       }
     }
   }
-  /**
-   * QML
-   */
-  else if ( !d->strText.isEmpty() && d->strText[0] == '!' )
-  {
-    d->extra()->QML = new QSimpleRichText( d->strText.mid(1),  QApplication::font() );//, m_pTable->widget() );
-    setFlag(Flag_LayoutDirty);
-    setFlag(Flag_TextFormatDirty);
-    d->content = RichText;
-  }
+  
   /**
    * Some numeric value or a string.
    */
   else
   {
-    d->content = Text;
-
     // Find out what data type it is
     checkTextInput();
 
@@ -4077,25 +3877,12 @@ void KSpreadCell::setDisplayText( const QString& _text )
   m_pTable->doc()->emitEndOperation( QRect( d->column, d->row, 1, 1 ) );
 }
 
-void KSpreadCell::setLink( const QString& link, bool bold, bool italic )
+void KSpreadCell::setLink( const QString& link )
 {
   d->extra()->link = link;
-  if( link.isEmpty() ) return;
-
-  QString t = d->strText;
-  if( t.isEmpty() )
-    t = link;
-
-  // TODO what if strText is already rich-text?
-
   
-  t = "<a href=\"" + link + "\">" + t + "</a>";
-  if( italic ) 
-    t.prepend( "<i>" ).append( "</i>" );  
-  if( bold ) 
-    t.prepend( "<b>" ).append( "</b>" );  
-  t.prepend( '!' );
-  setCellText( t );
+  if( !link.isEmpty() && d->strText.isEmpty() )
+    setCellText( link );
 }
 
 QString KSpreadCell::link() const
@@ -4391,7 +4178,7 @@ bool KSpreadCell::isTime() const
 
 void KSpreadCell::setCalcDirtyFlag()
 {
-  if ( d->content != Formula )
+  if ( !isFormula() )
   {
     //don't set the flag if we don't hold a formula
     clearFlag(Flag_CalcDirty);
@@ -4514,8 +4301,6 @@ void KSpreadCell::checkTextInput()
   clearAllErrors();
 
   d->value = KSpreadValue::empty();
-
-  Q_ASSERT( d->content == Text );
 
   // Get the text from that cell
   QString str = d->strText;
@@ -4658,12 +4443,13 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
             cell.appendChild( formulaResult );
 
         }
-        // Have to be saved in some CDATA section because of too many
-        // special charatcers.
-        else if ( content() == RichText )//|| content() == VisualFormula )
+        else if ( !link().isEmpty() )
         {
+            // KSpread pre 1.4 saves link as rich text, marked with first char '
+            // Have to be saved in some CDATA section because of too many special charatcers.
             QDomElement text = doc.createElement( "text" );
-            text.appendChild( doc.createCDATASection( d->strText ) );
+            QString qml = "!<a href=\"" + link() + "\">" + d->strText + "</a>";
+            text.appendChild( doc.createCDATASection( qml ) );
             cell.appendChild( text );
         }
         else
@@ -4813,7 +4599,7 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
       QString formula( convertFormulaToOasisFormat( text() ) );
       xmlwriter.addAttribute( "table:formula", formula );
     }
-    else if ( content() == RichText )//|| content() == VisualFormula )
+    else if ( !link().isEmpty() )
     {
         kdDebug()<<"Link found \n";
         //TODO format !
@@ -4823,36 +4609,6 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
         xmlwriter.addTextNode( text() );
         xmlwriter.endElement();
         xmlwriter.endElement();
-        //<text:p>
-        //<text:a xlink:href="http://www.kde.org/">sdffd</text:a>
-        //</text:p>
-#if 0
-            QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
-    if ( !textP.isNull() )
-    {
-        QDomElement subText = textP.firstChild().toElement();
-        if ( !subText.isNull() )
-        {
-            // something in <text:p>, e.g. links
-            text = subText.text();
-
-            if ( subText.hasAttributeNS( KoXmlNS::xlink, "href" ) )
-            {
-                QString link = subText.attributeNS( KoXmlNS::xlink, "href", QString::null );
-                text = "!<a href=\"" + link + "\"><i>" + text + "</i></a>";
-                d->extra()->QML = new QSimpleRichText( text.mid(1),  QApplication::font() );//, m_pTable->widget() );
-                d->strText = text;
-            }
-        }
-        else
-        {
-            text = textP.text(); // our text, could contain formating for value or result of formul
-            setCellText( text );
-            setValue( text );
-        }
-    }
-
-#endif
     }
 
     if ( isForceExtraCells() )
@@ -5080,8 +4836,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             if ( subText.hasAttributeNS( KoXmlNS::xlink, "href" ) )
             {
                 QString link = subText.attributeNS( KoXmlNS::xlink, "href", QString::null );
-                text = "!<a href=\"" + link + "\"><i>" + text + "</i></a>";
-                d->extra()->QML = new QSimpleRichText( text.mid(1),  QApplication::font() );//, m_pTable->widget() );
+                d->extra()->link = link;
                 d->strText = text;
             }
         }
@@ -5889,7 +5644,6 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
 
     setFlag(Flag_CalcDirty);
     clearAllErrors();
-    d->content = Formula;
 
     if ( !m_pTable->isLoading() ) // i.e. when pasting
       if ( !makeFormula() )
@@ -5898,8 +5652,49 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
   // rich text ?
   else if (t[0] == '!' )
   {
-      d->extra()->QML = new QSimpleRichText( t.mid(1),  QApplication::font() );//, m_pTable->widget() );
-      d->strText = t;
+      // KSpread pre 1.4 stores hyperlink as rich text (first char is '!')
+      // extract the link and the correspoding text
+      // This is a rather dirty hack, but enough for KSpread generated XML
+      bool inside_tag = false;
+      QString qml_text;
+      QString tag;
+      QString qml_link;
+      
+      for( unsigned i = 1; i < t.length(); i++ )
+      {
+        QChar ch = t[i];
+        if( ch == '<' )
+        {
+          if( !inside_tag )
+          {
+            inside_tag = true;
+            tag = QString::null;
+          }
+        }
+        else if( ch == '>' )
+        {
+          if( inside_tag )
+          {
+            inside_tag = false;
+            if( tag.startsWith( "a href=\"", true ) )
+            if( tag.endsWith( "\"" ) )
+              qml_link = tag.mid( 8, tag.length()-9 );
+            tag = QString::null;
+          }  
+        }
+        else
+        {
+          if( !inside_tag ) 
+            qml_text += ch;
+          else
+            tag += ch;
+        }
+      }      
+      
+      if( !qml_link.isEmpty() )
+        d->extra()->link = qml_link;
+      d->strText = qml_text;
+      setValue( d->strText );
   }
   else
   {
@@ -6135,7 +5930,6 @@ QString KSpreadCell::pasteOperation( const QString &new_text, const QString &old
 
         setFlag(Flag_LayoutDirty);
         clearAllErrors();
-        d->content = Text;
 
         return tmp_op;
     }
@@ -6163,7 +5957,6 @@ QString KSpreadCell::pasteOperation( const QString &new_text, const QString &old
         tmp_op = decodeFormula( tmp_op, d->column, d->row );
         setFlag(Flag_LayoutDirty);
         clearAllErrors();
-        d->content = Formula;
 
         return tmp_op;
     }
@@ -6171,17 +5964,26 @@ QString KSpreadCell::pasteOperation( const QString &new_text, const QString &old
     tmp = decodeFormula( new_text, d->column, d->row );
     setFlag(Flag_LayoutDirty);
     clearAllErrors();
-    d->content = Formula;
 
     return tmp;
 }
 
-QString KSpreadCell::testAnchor( int _x, int _y ) const
+QString KSpreadCell::testAnchor( int x, int y ) const
 {
-  if ( !d->hasExtra() || !d->extra()->QML )
+  if( link().isEmpty() )
     return QString::null;
+  
+  KSpreadDoc* doc = m_pTable->doc();
+  int x1 = doc->zoomItX( d->textX );
+  int y1 = doc->zoomItX( d->textY - d->textHeight );
+  int x2 = doc->zoomItX( d->textX + d->textWidth );
+  int y2 = doc->zoomItX( d->textY );
 
-  return d->extra()->QML->anchorAt( QPoint( _x, _y ) );
+  if( x > x1 ) if( x < x2 )
+  if( y > y1 ) if( y < y2 )
+    return link();  
+    
+  return QString::null;
 }
 
 void KSpreadCell::tableDies()
@@ -6207,7 +6009,6 @@ KSpreadCell::~KSpreadCell()
 
     if (d->hasExtra())
     {
-      delete d->extra()->QML;
       delete d->extra()->validity;
     }
     delete d->code;
@@ -6350,7 +6151,7 @@ void KSpreadCell::clearAllErrors()
 
 bool KSpreadCell::calcDirtyFlag()
 {
-  return ( (d->content == Formula) ? testFlag( Flag_CalcDirty ) : false );
+  return isFormula() ? testFlag( Flag_CalcDirty ) : false;
 }
 
 bool KSpreadCell::layoutDirtyFlag() const

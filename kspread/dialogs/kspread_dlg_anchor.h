@@ -32,7 +32,6 @@ class KSpreadSheet;
 class KSpreadCell;
 class KURLRequester;
 class QLineEdit;
-class QCheckBox;
 class QPushButton;
 
 class internetAnchor : public QWidget
@@ -42,16 +41,12 @@ public:
   internetAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
   QString text() const;
   QString link() const;
-  bool bold() const;
-  bool italic() const;
 private:
     QString createLink() const;
     KSpreadView* m_pView;
 
     QLineEdit* textEdit;
     QLineEdit* l_internet;
-    QCheckBox *boldCheck;
-    QCheckBox *italicCheck;
 };
 
 class mailAnchor : public QWidget
@@ -61,15 +56,11 @@ public:
   mailAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
   QString text() const;
   QString link() const;
-  bool bold() const;
-  bool italic() const;
 private:
     KSpreadView* m_pView;
 
     QLineEdit* textEdit;
     QLineEdit* l_mail;
-    QCheckBox *boldCheck;
-    QCheckBox *italicCheck;
 };
 
 class fileAnchor : public QWidget
@@ -79,8 +70,6 @@ public:
   fileAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
   QString text() const;
   QString link() const;
-  bool bold() const;
-  bool italic() const;
 private slots:
     void slotSelectRecentFile( const QString &_file );
 private:
@@ -88,8 +77,6 @@ private:
 
     QLineEdit* textEdit;
     KURLRequester* l_file;
-    QCheckBox *boldCheck;
-    QCheckBox *italicCheck;
 };
 
 class cellAnchor : public QWidget
@@ -99,15 +86,11 @@ public:
   cellAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
   QString text() const;
   QString link() const;
-  bool bold() const;
-  bool italic() const;
 private:
     KSpreadView* m_pView;
 
     QLineEdit* textEdit;
     QLineEdit* l_cell;
-    QCheckBox *boldCheck;
-    QCheckBox *italicCheck;
 };
 
 class KSpreadLinkDlg : public KDialogBase
@@ -117,8 +100,6 @@ public:
     KSpreadLinkDlg( KSpreadView* parent, const char* name );
     QString text() const;
     QString link() const;
-    bool bold() const;
-    bool italic() const;
 
 protected slots:
   void slotOk();
@@ -127,15 +108,11 @@ private:
     KSpreadView* m_pView;
     QString m_text;
     QString m_link;
-    bool m_bold;
-    bool m_italic;
     internetAnchor *_internetAnchor;
     mailAnchor *_mailAnchor;
     fileAnchor *_fileAnchor;
     cellAnchor *_cellAnchor;
 };
-
-
 
 
 #endif

@@ -39,7 +39,6 @@ class KSpreadSheet;
 class KSpreadCanvas;
 class KSpreadView;
 
-class QSimpleRichText;
 class QDomElement;
 class QDomDocument;
 class KoXmlWriter;
@@ -112,8 +111,6 @@ class KSPREAD_EXPORT KSpreadCell : public KSpreadFormat
   friend class SelectPrivate;
   friend class KSpreadConditions;
 public:
-    /** The type of content in the cell */
-    enum Content { Text, RichText, Formula, VisualFormula };
 
     KSpreadCell( KSpreadSheet *_table, int _column, int _row );
     KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _column, int _row );
@@ -182,12 +179,6 @@ public:
      * column name, i.e. the first column is "A", the second is "B", and so on.
      */
     static QString columnName( int column );
-
-    /**
-     * Tells what is the content of the cell: text, formula or rich text.
-     * Set by @ref setDisplayText().
-     */
-    Content content() const;
 
     /**
      * Returns true if this cell holds a formula.
@@ -391,7 +382,7 @@ public:
      * Possible choices for link are URL (web, ftp), e-mail address, local file, 
      * or another cell.
      */
-    void setLink( const QString& link, bool bold = false, bool italic = false );
+    void setLink( const QString& link );
     
     /**
      * Returns the link associated with cell. It is empty if this cell
