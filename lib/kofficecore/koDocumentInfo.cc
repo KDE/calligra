@@ -55,10 +55,8 @@ bool KoDocumentInfo::load( const QDomDocument& doc )
 
 QDomDocument KoDocumentInfo::save()
 {
-    QDomDocument doc( "document-info" );
-    doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDomElement e = doc.createElement( "document-info" );
-    doc.appendChild( e );
+    QDomDocument doc = KoDocument::createDomDocument( "document-info" /*DTD name*/, "document-info" /*tag name*/, "1.1" );
+    QDomElement e = doc.documentElement();
 
     QStringList lst = pages();
     QStringList::ConstIterator it = lst.begin();

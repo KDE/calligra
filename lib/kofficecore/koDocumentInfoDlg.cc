@@ -35,11 +35,12 @@
 
 #include <klocale.h>
 #include <ktar.h>
+#include <koStore.h>
 #include <kdebug.h>
 #include <ktempfile.h>
 #include <kmimetype.h>
-#include <kfilterdev.h>
 #include <qgrid.h>
+#include <kfilterdev.h>
 
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
@@ -310,6 +311,9 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
 
   d->m_dst = 0;
 
+#ifdef __GNUC__
+#warning TODO port this to KoStore !!!
+#endif
   d->m_src = new KTarGz( d->m_url.path(), "application/x-gzip" );
 
   if ( !d->m_src->open( IO_ReadOnly ) )
@@ -342,16 +346,9 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
 KoDocumentInfoPropsPage::~KoDocumentInfoPropsPage()
 {
   delete d->m_info;
-
-  if ( d->m_src )
-    delete d->m_src;
-
-  if ( d->m_dst )
-    delete d->m_dst;
-
-  if ( d->m_dlg )
-    delete d->m_dlg;
-
+  delete d->m_src;
+  delete d->m_dst;
+  delete d->m_dlg;
   delete d;
 }
 

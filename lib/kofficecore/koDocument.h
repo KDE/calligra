@@ -342,6 +342,24 @@ public:
     virtual QDomDocument saveXML();
 
     /**
+     *  Return a correctly created QDomDocument for this KoDocument,
+     *  including processing instruction, complete DOCTYPE tag (with systemId and publicId), and root element.
+     *  @param tagName the name of the tag for the root element
+     *  @param version the DTD version (usually the application's version).
+     */
+    QDomDocument createDomDocument( const QString& tagName, const QString& version ) const;
+
+    /**
+     *  Return a correctly created QDomDocument for a KOffice document,
+     *  including processing instruction, complete DOCTYPE tag (with systemId and publicId), and root element.
+     *  This static method can be used e.g. by filters.
+     *  @param appName the app's instance name, e.g. kword, kspread, kpresenter etc.
+     *  @param tagName the name of the tag for the root element, e.g. DOC for kword/kpresenter.
+     *  @param version the DTD version (usually the application's version).
+     */
+    static QDomDocument createDomDocument( const QString& appName, const QString& tagName, const QString& version );
+
+    /**
      *  Save the document. The default implementation is to call
      *  @ref saveXML. This method exists only for applications that
      *  don't use QDomDocument for saving, i.e. kword and kpresenter.

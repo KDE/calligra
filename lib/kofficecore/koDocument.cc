@@ -1204,6 +1204,24 @@ bool KoDocument::completeSaving( KoStore* )
     return true;
 }
 
+QDomDocument KoDocument::createDomDocument( const QString& tagName, const QString& version ) const
+{
+    return createDomDocument( instance()->instanceName(), tagName, version );
+}
+
+//static
+QDomDocument KoDocument::createDomDocument( const QString& appName, const QString& tagName, const QString& version )
+{
+    QDomImplementation impl;
+    QString url = QString("http://www.koffice.org/DTD/%1-%1.dtd").arg(appName).arg(version);
+    QDomDocumentType dtype = impl.createDocumentType( tagName,
+                                                      QString("-//KDE//DTD %1 %1//EN").arg(tagName).arg(version),
+                                                      url );
+    QDomDocument doc = impl.createDocument( url, tagName, dtype );
+    doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+    return doc;
+}
+
 QDomDocument KoDocument::saveXML()
 {
     kdError(30003) << "KoDocument::saveXML not implemented" << endl;
