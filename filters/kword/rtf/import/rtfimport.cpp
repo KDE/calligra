@@ -1041,7 +1041,8 @@ void RTFImport::insertTableRow( RTFProperty * )
 	// Number of cell definitions should equal the number of cells
 	while (row.cells.count() > row.frameSets.count())
 	{
-	    row.cells.remove( row.cells.end() );
+            // ### TODO: verify if it is the roght action and how we have come here at all.
+	    row.cells.pop_back();
 	}
 	while (row.cells.count() < row.frameSets.count())
 	{
@@ -2421,6 +2422,7 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
  */
 void RTFImport::finishTable()
 {
+    kdDebug(30515) << "Starting TFImport::finishTable..." << endl;
     QCString emptyArray;
     QValueList<int> cellx;
     int left = 0, right = 0;
@@ -2539,6 +2541,7 @@ void RTFImport::finishTable()
     }
     textState->table = 0;
     textState->rows.clear();
+    kdDebug(30515) << "Quitting TFImport::finishTable..." << endl;
 }
 
 /**
