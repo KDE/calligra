@@ -27,6 +27,7 @@
 #include <functordata.h>
 #include <ustring.h>
 #include <parser.h>
+#include <fields.h>
 
 #include <qfont.h>
 #include <qfontinfo.h>
@@ -52,7 +53,8 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 
 KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser )
     : m_parser( parser ), m_sectionNumber( 0 ), m_footNoteNumber( 0 ), m_endNoteNumber( 0 ),
-      m_currentStyle( 0L ), m_shadowTextFound( NoShadow ), m_index( 0 )
+      m_currentStyle( 0L ), m_shadowTextFound( NoShadow ), m_index( 0 ),
+      m_insideField( false), m_fieldAfterSeparator( false ), m_fieldType( 0 )
 {
 }
 
@@ -179,15 +181,59 @@ void KWordTextHandler::paragraphEnd()
         writeOutParagraph( "Standard", m_paragraph );
 }
 
+void KWordTextHandler::fieldStart( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
+{
+    m_fieldType = Conversion::fldToFieldType( fld );
+    m_insideField = true;
+    m_fieldAfterSeparator = false;
+    m_fieldValue = ""; 
+}
+
+void KWordTextHandler::fieldSeparator( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
+{
+    m_fieldAfterSeparator = true;
+}
+
+void KWordTextHandler::fieldEnd( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
+{
+    // only for handled field type
+    if( m_fieldType >= 0 )
+    {
+        QDomElement varElem = insertVariable( 8, chp, "STRING" );
+        QDomElement fieldElem = varElem.ownerDocument().createElement( "FIELD" );
+        fieldElem.setAttribute( "subtype", m_fieldType ); 
+        fieldElem.setAttribute( "value", m_fieldValue );
+        varElem.appendChild( fieldElem );
+    }
+
+    // reset
+    m_fieldValue = "";
+    m_fieldType = -1;
+    m_insideField = false;
+    m_fieldAfterSeparator = false;
+}
+
 void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
 {
     QConstString newText( Conversion::string( text ) );
     kdDebug() << "runOfText: " << newText.string() << endl;
+
+    // text after fieldStart and before fieldSeparator is useless
+    if( m_insideField && !m_fieldAfterSeparator ) return;
+
+    // if we can handle the field, consume the text
+    if( m_insideField && m_fieldAfterSeparator && ( m_fieldType >= 0 ) )
+    {
+        m_fieldValue.append( newText.string() );
+        return;
+    }
+
     m_paragraph += newText.string();
 
     writeFormat( m_formats, chp, m_currentStyle ? &m_currentStyle->chp() : 0, m_index, text.length(), 1, 0L );
 
     m_index += text.length();
+
 }
 
 void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len, int formatId, QDomElement* pChildElement )

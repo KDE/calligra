@@ -30,6 +30,7 @@ namespace wvWare {
         class LSPD;
         class BRC;
     }
+    class FLD;
 }
 
 // Static methods for simple MSWord->KWord conversions
@@ -73,6 +74,9 @@ namespace Conversion
 
     // Convert a mask of Header Types to the fType value for KWord
     int headerMaskToFType( unsigned char mask );
+
+    // Convert wv2's FLD to KWord FIELD.subtype (or -1 if can't be handled)
+    int fldToFieldType( const wvWare::FLD* fld );
 
     bool isHeader( unsigned char type );
 };

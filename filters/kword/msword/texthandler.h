@@ -64,6 +64,9 @@ public:
 
     virtual void paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties );
     virtual void paragraphEnd();
+    virtual void fieldStart( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
+    virtual void fieldSeparator( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
+    virtual void fieldEnd( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
     virtual void runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
 
     ///////// Our own interface, also used by processStyles
@@ -105,6 +108,11 @@ private:
     int m_index;
     QDomElement m_formats;
     QDomElement m_oldLayout;
+
+    QString m_fieldValue;
+    bool m_insideField;
+    bool m_fieldAfterSeparator;
+    int m_fieldType; // 0 for no field
 };
 
 #endif // TEXTHANDLER_H

@@ -21,6 +21,7 @@
 
 #include <word97_generated.h>
 #include <functordata.h>
+#include <fields.h>
 
 #include <kdebug.h>
 #include <qregexp.h>
@@ -245,4 +246,36 @@ int Conversion::headerMaskToFType( unsigned char mask )
     if ( hasFirst )
         return hasEvenOdd ? 1 : 2;
     return hasEvenOdd ? 3 : 0;
+}
+
+int Conversion::fldToFieldType( const wvWare::FLD* fld )
+{
+    // assume unhandled
+    int m_fieldType = -1;
+
+    // sanity check
+    if( !fld ) return -1;
+
+    switch( fld->flt )
+    {
+    case 15:    m_fieldType = 10; break;  // title
+    case 17:    m_fieldType =  2; break;  // author
+    case 18:    m_fieldType = -1; break;  // keywords (unhandled)
+    case 19:    m_fieldType = 11; break;  // comments (unhandled)
+    case 21:    m_fieldType = -1; break;  // createdate (unhandled)
+    case 22:    m_fieldType = -1; break;  // savedate (unhandled)
+    case 23:    m_fieldType = -1; break;  // printdate (unhandled)
+    case 25:    m_fieldType = -1; break;  // edittime (unhandled)
+    case 29:    m_fieldType =  0; break;  // filename (unhandled)
+    case 32:    m_fieldType = -1; break;  // time (unhandled)
+    case 60:    m_fieldType =  2; break;  // username <-> KWord's author name
+    case 61:    m_fieldType = 16; break;  // userinitials <-> KWord's author initial)
+    case 62:    m_fieldType = -1; break;  // useraddress (unhandled)
+    default:    m_fieldType = -1; break;
+    }
+
+    if( m_fieldType < 0 )
+        kdDebug() << "unhandled field: fld.ftl: " << (int)fld->flt << endl;
+
+    return m_fieldType;
 }
