@@ -42,6 +42,13 @@ The following list summarizes known formmating tags:
 Note: Word underline is just like underline, except that
 spaces between words are not underlined.
 
+Special characters are escaped or encoded because 
+they have special meaning. Known so far: 
+   < encoded as <<
+   [            <[>
+   @            @@
+   >            <;>
+
 4  Styles
 ---------
 Styles are defined in the header. More about this will be
