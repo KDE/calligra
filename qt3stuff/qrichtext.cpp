@@ -5017,6 +5017,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		tmpBaseLine = lineStart->baseLine;
 		lastBreak = -1;
 		col = 0;
+		tminw = marg;
 	    } else {
 		// Breakable char was found
 		i = lastBreak;
