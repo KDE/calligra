@@ -195,6 +195,9 @@ public:
   QString footMid() { if ( m_footMid.isNull() ) return ""; return m_footMid; }
   QString footRight() { if ( m_footRight.isNull() ) return ""; return m_footRight; }
 
+  QString localizeHeadFootLine ( const QString &_text );
+  QString delocalizeHeadFootLine ( const QString &_text );
+
   void setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
                         const QString &_footl, const QString &_footm, const QString &_footr );
 

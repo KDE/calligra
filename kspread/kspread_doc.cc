@@ -24,6 +24,7 @@
 #include <dirent.h>
 #include <pwd.h>
 
+#include <qregexp.h>
 
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -434,6 +435,118 @@ void KSpreadDoc::addTable( KSpreadTable *_table )
   emit sig_addTable( _table );
 }
 
+QString KSpreadDoc::localizeHeadFootLine ( const QString &_text )
+{
+    QString tmp;
+    QString localText;
+    QString internalText;
+
+    tmp = _text;
+
+    localText = i18n("<page>");
+    internalText = "<page>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( internalText ), localText );
+
+    localText = i18n("<file>");
+    internalText = "<file>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( internalText ), localText );
+
+    localText = i18n("<name>");
+    internalText = "<name>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( internalText ), localText );
+
+    localText = i18n("<time>");
+    internalText = "<time>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( internalText ), localText );
+
+    localText = i18n("<date>");
+    internalText = "<date>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( internalText ), localText );
+
+    localText = i18n("<author>");
+    internalText = "<author>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( internalText ), localText );
+
+    localText = i18n("<email>");
+    internalText = "<email>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( internalText ), localText );
+
+    localText = i18n("<org>");
+    internalText = "<org>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( internalText ), localText );
+
+    localText = i18n("<table>");
+    internalText = "<table>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( internalText ), localText );
+
+    return tmp;
+}
+
+QString KSpreadDoc::delocalizeHeadFootLine ( const QString &_text )
+{
+    QString tmp;
+    QString localText;
+    QString internalText;
+
+    tmp = _text;
+
+    localText = i18n("<page>");
+    internalText = "<page>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( localText ), internalText );
+
+    localText = i18n("<file>");
+    internalText = "<file>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( localText ), internalText );
+
+    localText = i18n("<name>");
+    internalText = "<name>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( localText ), internalText );
+
+    localText = i18n("<time>");
+    internalText = "<time>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( localText ), internalText );
+
+    localText = i18n("<date>");
+    internalText = "<date>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( localText ), internalText );
+
+    localText = i18n("<author>");
+    internalText = "<author>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( localText ), internalText );
+
+    localText = i18n("<email>");
+    internalText = "<email>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( localText ), internalText );
+
+    localText = i18n("<org>");
+    internalText = "<org>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( localText ), internalText );
+
+    localText = i18n("<table>");
+    internalText = "<table>";
+    if ( localText != internalText )
+        tmp.replace ( QRegExp( localText ), internalText );
+
+    return tmp;
+}
+
 void KSpreadDoc::setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
                                const QString &_footl, const QString &_footm, const QString &_footr )
 {
@@ -598,31 +711,31 @@ QString KSpreadDoc::completeHeading( const QString &_data, int _page, const QStr
 
     tmp = _data;
     int pos = 0;
-    while ( ( pos = tmp.find( i18n("<page>"), pos ) ) != -1 )
+    while ( ( pos = tmp.find( "<page>", pos ) ) != -1 )
         tmp.replace( pos, 6, page );
     pos = 0;
-    while ( ( pos = tmp.find( i18n("<file>"), pos ) ) != -1 )
+    while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
         tmp.replace( pos, 6, pathFileName );
     pos = 0;
-    while ( ( pos = tmp.find( i18n("<name>"), pos ) ) != -1 )
+    while ( ( pos = tmp.find( "<name>", pos ) ) != -1 )
         tmp.replace( pos, 6, fileName );
     pos = 0;
-    while ( ( pos = tmp.find( i18n("<time>"), pos ) ) != -1 )
+    while ( ( pos = tmp.find( "<time>", pos ) ) != -1 )
         tmp.replace( pos, 6, t );
     pos = 0;
-    while ( ( pos = tmp.find( i18n("<date>"), pos ) ) != -1 )
+    while ( ( pos = tmp.find( "<date>", pos ) ) != -1 )
         tmp.replace( pos, 6, d );
     pos = 0;
-    while ( ( pos = tmp.find( i18n("<author>"), pos ) ) != -1 )
+    while ( ( pos = tmp.find( "<author>", pos ) ) != -1 )
         tmp.replace( pos, 8, full_name );
     pos = 0;
-    while ( ( pos = tmp.find( i18n("<email>"), pos ) ) != -1 )
+    while ( ( pos = tmp.find( "<email>", pos ) ) != -1 )
         tmp.replace( pos, 7, email_addr );
     pos = 0;
-    while ( ( pos = tmp.find( i18n("<org>"), pos ) ) != -1 )
+    while ( ( pos = tmp.find( "<org>", pos ) ) != -1 )
         tmp.replace( pos, 5, organization );
     pos = 0;
-    while ( ( pos = tmp.find( i18n("<table>"), pos ) ) != -1 )
+    while ( ( pos = tmp.find( "<table>", pos ) ) != -1 )
         tmp.replace( pos, 7, ta );
 
     return tmp;
@@ -733,12 +846,12 @@ void KSpreadDoc::paperLayoutDlg()
     pl.ptBottom = MM_TO_POINT(  bottomBorder() );
 
     KoHeadFoot hf;
-    hf.headLeft = headLeft();
-    hf.headRight = headRight();
-    hf.headMid = headMid();
-    hf.footLeft = footLeft();
-    hf.footRight = footRight();
-    hf.footMid = footMid();
+    hf.headLeft  = localizeHeadFootLine( headLeft()  );
+    hf.headRight = localizeHeadFootLine( headRight() );
+    hf.headMid   = localizeHeadFootLine( headMid()   );
+    hf.footLeft  = localizeHeadFootLine( footLeft()  );
+    hf.footRight = localizeHeadFootLine( footRight() );
+    hf.footMid   = localizeHeadFootLine( footMid()   );
 
     KoUnit::Unit unit = paperUnit();
 
@@ -753,7 +866,13 @@ void KSpreadDoc::paperLayoutDlg()
 
     setPaperLayout( POINT_TO_MM(pl.ptLeft), POINT_TO_MM(pl.ptTop), POINT_TO_MM(pl.ptRight), POINT_TO_MM(pl.ptBottom), pl.format, pl.orientation );
 
-    setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
+    setHeadFootLine( localizeHeadFootLine( hf.headLeft  ),
+                     localizeHeadFootLine( hf.headMid   ),
+                     localizeHeadFootLine( hf.headRight ),
+                     localizeHeadFootLine( hf.footLeft  ),
+                     localizeHeadFootLine( hf.footMid   ),
+                     localizeHeadFootLine( hf.footRight ) );
+
     setPaperUnit( unit );
 }
 
