@@ -253,7 +253,7 @@ void VClipartTool::mouseDragRelease()
 {
 	if ( m_clipart )
 	{
-		draw();
+		//draw();
 
 		m_last = last();
 		QWMatrix mat( m_last.x() - first().x(), 0, 0, m_last.y() - first().y(), first().x(), first().y() );
