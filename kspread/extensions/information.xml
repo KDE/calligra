@@ -27,7 +27,7 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The INFO() returns information about the current operating environment. Parameter type specifies what type of information you want to return. It is one of the following: "directory" returns path of the current directory, "numfile" returns number of active documents, "release" returns version of KSpread as text, "recalc" returns the current recalculation mode: "Automatic" or "Manual", "system" returns name of the operating environment, "osversion" returns current operating system.</Text>
+	<Text>The INFO() function returns information about the current operating environment. Parameter type specifies what type of information you want to return. It is one of the following: "directory" returns the path of the current directory, "numfile" returns the number of active documents, "release" returns the version of KSpread as text, "recalc" returns the current recalculation mode: "Automatic" or "Manual", "system" returns the name of the operating environment, "osversion" returns the current operating system.</Text>
 	<Syntax>INFO(type)</Syntax>
       </Help>
     </Function>
@@ -180,7 +180,7 @@
 	<Syntax>TYPE(x)</Syntax>
 	<Example>TYPE(A1) returns 2, if A1 contains "Text"</Example>
 	<Example>TYPE(-7) returns 1</Example>
-	<Example>TYPE(A2) returns 1, if A2 contains "=CURRENTDATE()</Example>
+	<Example>TYPE(A2) returns 1, if A2 contains "=CURRENTDATE()"</Example>
       </Help>
     </Function>
     
@@ -188,7 +188,7 @@
       <Name>VERSION</Name>
       <Type>String</Type>
       <Help>
-	<Text>Returns the KSpread version as a string. This function is obsolete and will be removed in future version of KSpread. It is provided only for compatibility. Please use function INFO("release") instead.</Text>
+	<Text>Returns the KSpread version as a string. This function is obsolete and will be removed in a later version of KSpread. It is provided only for compatibility. Please use function INFO("release") instead.</Text>
 	<Syntax>VERSION()</Syntax>
 	</Help>
     </Function>
@@ -197,7 +197,7 @@
       <Name>FILENAME</Name>
       <Type>String</Type>
       <Help>
-	<Text>Returns the current filename. If the current document is not saved an empty string is returned.</Text>
+	<Text>Returns the current filename. If the current document is not saved, an empty string is returned.</Text>
 	<Syntax>FILENAME()</Syntax>
 	</Help>
     </Function>
@@ -210,7 +210,7 @@
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The COUNTBLANK function returns the number of blank cells in the given parameter list.</Text>
+	<Text>The COUNTBLANK() function returns the number of blank cells in the given parameter list.</Text>
 	<Syntax>COUNTBLANK(x)</Syntax>
 	<Example>COUNTBLANK(A1:A4) returns 4 if nothing is in the cells</Example>
       </Help>
