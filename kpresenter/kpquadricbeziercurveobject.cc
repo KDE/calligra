@@ -180,7 +180,7 @@ void KPQuadricBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHa
             QPoint point = (*it1);
             if ( startPoint != point ) {
                 float angle = KoPoint::getAngle( startPoint, point );
-                drawFigure( lineBegin, _painter, _zoomHandler->unzoomPoint( startPoint ), pen.color(), _w, angle,_zoomHandler );
+                drawFigureWithOffset( lineBegin, _painter, startPoint, pen2.color(), _w, angle,_zoomHandler );
 
                 break;
             }
@@ -200,7 +200,7 @@ void KPQuadricBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHa
             QPoint point = (*it2);
             if ( endPoint != point ) {
                 float angle = KoPoint::getAngle( endPoint, point );
-                drawFigure( lineEnd, _painter, _zoomHandler->unzoomPoint( endPoint ), pen.color(), _w, angle, _zoomHandler );
+                drawFigureWithOffset( lineEnd, _painter, endPoint, pen2.color(), _w, angle,_zoomHandler );
 
                 break;
             }

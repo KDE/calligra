@@ -31,7 +31,9 @@ class KoSize;
 class KoPoint;
 
 void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor & color, int _w, float angle, KoZoomHandler*_zoomHandler );
+void drawFigureWithOffset( LineEnd figure, QPainter* painter, const QPoint &coord, const QColor & color, int _w, float angle, KoZoomHandler*_zoomHandler );
 KoSize getBoundingSize( LineEnd figure, int _w, const KoZoomHandler*_zoomHandler );
+KoSize getOffset( LineEnd figure, int _w, float angle );
 QString lineEndBeginName( LineEnd type );
 LineEnd lineEndBeginFromString( const QString & name );
 KoPointArray getCloseObject( KoPointArray points, bool close, bool objClosed );
