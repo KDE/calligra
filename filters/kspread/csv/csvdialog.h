@@ -43,9 +43,15 @@ private:
     void fillComboBox();
     void setText(int row, int col, const QString& text);
     void adjustRows(int iRows);
+    void adjustCols(int iCols);
+    bool checkUpdateRange();
 
-    int     m_adjustRows;
-    int     m_startline;
+    bool    m_adjustRows;
+    bool    m_adjustCols;
+    int     m_startRow;
+    int     m_startCol;
+    int     m_endRow;
+    int     m_endCol;
     QChar   m_textquote;
     QString m_delimiter;
     bool    m_ignoreDups;
@@ -56,11 +62,11 @@ private slots:
     void returnPressed();
     void formatClicked(int id);
     void delimiterClicked(int id);
-    void lineSelected(const QString& line);
     void textquoteSelected(const QString& mark);
     void currentCellChanged(int, int col);
     void textChanged ( const QString & );
     void ignoreDuplicatesChanged( int );
+    void updateClicked();
 };
 
 #endif

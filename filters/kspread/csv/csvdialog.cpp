@@ -25,17 +25,25 @@
 #include <qcursor.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
+#include <qspinbox.h>
 #include <qtextstream.h>
 #include <qbuttongroup.h>
+#include <qpushbutton.h>
 #include <qradiobutton.h>
 
 #include <kapplication.h>
+#include <kdebug.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*seperator*/)
     : KDialogBase(parent, 0, true, QString::null, Ok|Cancel, No, true),
-      m_adjustRows(0),
-      m_startline(0),
+      m_adjustRows(false),
+      m_adjustCols(false),
+      m_startRow(0),
+      m_startCol(0),
+      m_endRow(-1),
+      m_endCol(-1),
       m_textquote('"'),
       m_delimiter(","),
       m_ignoreDups(false),
@@ -45,7 +53,6 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
     kapp->restoreOverrideCursor();
 
     fillTable();
-    fillComboBox();
 
     resize(sizeHint());
     setMainWidget(m_dialog);
@@ -60,14 +67,14 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
             this, SLOT(returnPressed()));
     connect(m_dialog->m_delimiterEdit, SIGNAL(textChanged ( const QString & )),
             this, SLOT(textChanged ( const QString & ) ));
-    connect(m_dialog->m_comboLine, SIGNAL(activated(const QString &)),
-            this, SLOT(lineSelected(const QString &)));
     connect(m_dialog->m_comboQuote, SIGNAL(activated(const QString &)),
             this, SLOT(textquoteSelected(const QString &)));
     connect(m_dialog->m_table, SIGNAL(currentChanged(int, int)),
             this, SLOT(currentCellChanged(int, int)));
     connect(m_dialog->m_ignoreDuplicates, SIGNAL(stateChanged(int)),
             this, SLOT(ignoreDuplicatesChanged(int)));
+    connect(m_dialog->m_updateButton, SIGNAL(clicked()),
+            this, SLOT(updateClicked()));
 }
 
 CSVDialog::~CSVDialog()
@@ -75,7 +82,7 @@ CSVDialog::~CSVDialog()
     kapp->setOverrideCursor(Qt::waitCursor);
 }
 
-void CSVDialog::fillTable()
+void CSVDialog::fillTable( )
 {
     int row, column;
     bool lastCharDelimiter = false;
@@ -91,19 +98,24 @@ void CSVDialog::fillTable()
         for (column = 0; column < m_dialog->m_table->numCols(); ++column)
             m_dialog->m_table->clearCell(row, column);
 
+    int maxColumn = 1;
     row = column = 1;
     QTextStream inputStream(m_fileArray, IO_ReadOnly);
     inputStream.setEncoding(QTextStream::Locale);
 
-    while (!inputStream.atEnd()) {
+    while (!inputStream.atEnd()) 
+    {
         inputStream >> x; // read one char
 
         if (x == '\r') 
             inputStream >> x; // eat '\r', to handle DOS/LOSEDOWS files correctly
 
+        if ( column > maxColumn )
+          maxColumn = column;
+
         switch (state)
         {
-        case S_START :
+         case S_START :
             if (x == m_textquote)
             {
                 state = S_QUOTED_FIELD;
@@ -118,6 +130,8 @@ void CSVDialog::fillTable()
             {
                 ++row;
                 column = 1;
+                if ( row > ( m_endRow - m_startRow ) && m_endRow >= 0 )
+                  break;
             }
             else
             {
@@ -125,18 +139,20 @@ void CSVDialog::fillTable()
                 state = S_MAYBE_NORMAL_FIELD;
             }
             break;
-        case S_QUOTED_FIELD :
+         case S_QUOTED_FIELD :
             if (x == m_textquote)
             {
                 state = S_MAYBE_END_OF_QUOTED_FIELD;
             }
             else if (x == '\n')
             {
-                setText(row - m_startline, column, field);
+                setText(row - m_startRow, column - m_startCol, field);
                 field = "";
 
                 ++row;
                 column = 1;
+                if ( row > ( m_endRow - m_startRow ) && m_endRow >= 0 )
+                  break;
 
                 state = S_START;
             }
@@ -145,7 +161,7 @@ void CSVDialog::fillTable()
                 field += x;
             }
             break;
-        case S_MAYBE_END_OF_QUOTED_FIELD :
+         case S_MAYBE_END_OF_QUOTED_FIELD :
             if (x == m_textquote)
             {
                 field += x;
@@ -153,12 +169,14 @@ void CSVDialog::fillTable()
             }
             else if (x == m_delimiter || x == '\n')
             {
-                setText(row - m_startline, column, field);
+                setText(row - m_startRow, column - m_startCol, field);
                 field = "";
                 if (x == '\n')
                 {
                     ++row;
                     column = 1;
+                    if ( row > ( m_endRow - m_startRow ) && m_endRow >= 0 )
+                      break;
                 }
                 else
                 {
@@ -173,15 +191,17 @@ void CSVDialog::fillTable()
                 state = S_END_OF_QUOTED_FIELD;
             }
             break;
-        case S_END_OF_QUOTED_FIELD :
+         case S_END_OF_QUOTED_FIELD :
             if (x == m_delimiter || x == '\n')
             {
-                setText(row - m_startline, column, field);
+                setText(row - m_startRow, column - m_startCol, field);
                 field = "";
                 if (x == '\n')
                 {
                     ++row;
                     column = 1;
+                    if ( row > ( m_endRow - m_startRow ) && m_endRow >= 0 )
+                      break;
                 }
                 else
                 {
@@ -196,22 +216,24 @@ void CSVDialog::fillTable()
                 state = S_END_OF_QUOTED_FIELD;
             }
             break;
-        case S_MAYBE_NORMAL_FIELD :
+         case S_MAYBE_NORMAL_FIELD :
             if (x == m_textquote)
             {
                 field = "";
                 state = S_QUOTED_FIELD;
                 break;
             }
-        case S_NORMAL_FIELD :
+         case S_NORMAL_FIELD :
             if (x == m_delimiter || x == '\n')
             {
-                setText(row - m_startline, column, field);
+                setText(row - m_startRow, column - m_startCol, field);
                 field = "";
                 if (x == '\n')
                 {
                     ++row;
                     column = 1;
+                    if ( row > ( m_endRow - m_startRow ) && m_endRow >= 0 )
+                      break;
                 }
                 else
                 {
@@ -233,12 +255,18 @@ void CSVDialog::fillTable()
     // file with only one line without '\n'
     if (field.length() > 0)
     {
-      setText(row - m_startline, column, field);
+      setText(row - m_startRow, column - m_startCol, field);
       ++row;
       field = "";
     }
     
-    adjustRows( row - m_startline );
+    m_adjustCols = true;
+    adjustRows( row - m_startRow );
+    adjustCols( maxColumn - m_startCol );
+    m_dialog->m_colEnd->setMaxValue( maxColumn );
+    if ( m_endCol == -1 )
+      m_dialog->m_colEnd->setValue( maxColumn );
+    
 
     for (column = 0; column < m_dialog->m_table->numCols(); ++column)
     {
@@ -249,25 +277,56 @@ void CSVDialog::fillTable()
 
         m_dialog->m_table->adjustColumn(column);
     }
+    fillComboBox();
 
     kapp->restoreOverrideCursor();
 }
 
 void CSVDialog::fillComboBox()
 {
-    m_dialog->m_comboLine->clear();
-    for (int row = 0; row < m_dialog->m_table->numRows(); ++row)
-        m_dialog->m_comboLine->insertItem(QString::number(row + 1), row);
+  if ( m_endRow == -1 )
+    m_dialog->m_rowEnd->setValue( m_dialog->m_table->numRows() );  
+  else
+    m_dialog->m_rowEnd->setValue( m_endRow );
+
+  if ( m_endCol == -1 )
+    m_dialog->m_colEnd->setValue( m_dialog->m_table->numCols() );
+  else
+    m_dialog->m_colEnd->setValue( m_endCol );  
+
+  m_dialog->m_rowEnd->setMinValue( 1 );
+  m_dialog->m_colEnd->setMinValue( 1 );
+  m_dialog->m_rowEnd->setMaxValue( m_dialog->m_table->numRows() );
+  m_dialog->m_colEnd->setMaxValue( m_dialog->m_table->numCols() );
+
+  m_dialog->m_rowStart->setMinValue( 1 );
+  m_dialog->m_colStart->setMinValue( 1 );
+  m_dialog->m_rowStart->setMaxValue( m_dialog->m_table->numRows() );
+  m_dialog->m_colStart->setMaxValue( m_dialog->m_table->numCols() );
 }
 
 int CSVDialog::getRows()
 {
-    return m_dialog->m_table->numRows();
+  int rows = m_dialog->m_table->numRows();
+  if ( m_endRow >= 0 )
+  {
+    if ( rows > ( m_startRow + m_endRow ) )
+      rows = m_startRow + m_endRow;
+  }
+
+  return rows;
 }
 
 int CSVDialog::getCols()
 {
-    return m_dialog->m_table->numCols();
+  int cols = m_dialog->m_table->numCols();
+  if ( m_endCol >= 0 )
+  {
+    if ( cols > ( m_startCol + m_endCol ) )
+      cols = m_startCol + m_endCol;
+  }
+
+  return cols;
 }
 
 int CSVDialog::getHeader(int col)
@@ -286,23 +345,37 @@ int CSVDialog::getHeader(int col)
 
 QString CSVDialog::getText(int row, int col)
 {
-    return m_dialog->m_table->text(row, col);
+    return m_dialog->m_table->text( row, col );
 }
 
 void CSVDialog::setText(int row, int col, const QString& text)
 {
-    if (row < 1) // skipped by the user
+  kdDebug() << endl << "Row: " << row << ", Col: " << col << " - Text: " << text << endl;
+  kdDebug() << "EndRow: " << m_endRow << ", m_startRow: " << m_startRow 
+            << ", EndCol: " << m_endCol << ", m_startCol: " << m_startCol << endl;
+
+    if ( row < 1 || col < 1 ) // skipped by the user
         return;
 
-    if (m_dialog->m_table->numRows() < row) {
-        m_dialog->m_table->setNumRows(row+5000); /* We add 5000 at a time to limit recalculations */
-        m_adjustRows=1;
+    if ( ( row > ( m_endRow - m_startRow ) && m_endRow > 0 ) || ( col > ( m_endCol - m_startCol ) && m_endCol > 0 ) )
+      return;
+
+    kdDebug() << "Rows: " << m_dialog->m_table->numRows() << ", Cols: " << m_dialog->m_table->numCols() << endl;
+
+    if ( m_dialog->m_table->numRows() < row ) 
+    {
+        m_dialog->m_table->setNumRows( row + 5000 ); /* We add 5000 at a time to limit recalculations */
+        m_adjustRows = true;
     }
 
-    if (m_dialog->m_table->numCols() < col)
-        m_dialog->m_table->setNumCols(col);
+    if ( m_dialog->m_table->numCols() < col )
+    {
+      kdDebug() << "Updating columns" << endl;
+        m_dialog->m_table->setNumCols( col );
+        m_adjustCols = true;
+    }
 
-    m_dialog->m_table->setText(row - 1, col - 1, text);
+    m_dialog->m_table->setText( row - 1, col - 1, text );
 }
 
 /*
@@ -310,9 +383,30 @@ void CSVDialog::setText(int row, int col, const QString& text)
  */
 void CSVDialog::adjustRows(int iRows)
 {
-    if (m_adjustRows) {
+    if (m_adjustRows) 
+    {
         m_dialog->m_table->setNumRows( iRows );
-        m_adjustRows=0;
+        m_adjustRows = false;
+    }
+}
+
+void CSVDialog::adjustCols(int iCols)
+{
+    if (m_adjustCols) 
+    {  
+        m_dialog->m_table->setNumCols( iCols );
+        m_adjustCols = false;
+
+        kdDebug() << "adjustCols: " << m_endCol << endl;
+
+        if ( m_endCol == -1 )
+        {
+          if ( iCols > ( m_endCol - m_startCol ) )
+            iCols = m_endCol - m_startCol;
+
+          m_dialog->m_table->setNumCols( iCols );
+          kdDebug() << "Cols: " << iCols << endl;
+        }
     }
 }
 
@@ -388,10 +482,30 @@ void CSVDialog::textquoteSelected(const QString& mark)
     fillTable();
 }
 
-void CSVDialog::lineSelected(const QString& line)
+void CSVDialog::updateClicked()
 {
-    m_startline = line.toInt() - 1;
-    fillTable();
+  if ( !checkUpdateRange() )
+    return;
+
+  m_startRow = m_dialog->m_rowStart->value() - 1;
+  m_endRow   = m_dialog->m_rowEnd->value();
+
+  m_startCol  = m_dialog->m_colStart->value() - 1;
+  m_endCol    = m_dialog->m_colEnd->value();
+
+  fillTable();
+}
+
+bool CSVDialog::checkUpdateRange()
+{
+  if ( ( m_dialog->m_rowStart->value() > m_dialog->m_rowEnd->value() ) 
+       || ( m_dialog->m_colStart->value() > m_dialog->m_colEnd->value() ) )
+  {
+    KMessageBox::error( this, i18n( "Please check the ranges you specified. The start value must be lower than the end value." ) );
+    return false;
+  }
+
+  return true;
 }
 
 void CSVDialog::currentCellChanged(int, int col)

@@ -116,32 +116,56 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     emit sigProgress(value);
     QApplication::setOverrideCursor(Qt::waitCursor);
 
-    for (int row = 0; row < numRows; ++row)
+    int i;
+    double init = table->nonDefaultColumnFormat( 1 )->dblWidth();
+    QMemArray<double> widths( numCols );
+    for ( i = 0; i < numCols; ++i )
+      widths[i] = init;
+
+    KSpreadCell * c = table->nonDefaultCell( 1, 1 );
+    QFontMetrics fm( c->textFont( 1, 1 ) );
+    double width = fm.width('x');
+
+    for ( int row = 0; row < numRows; ++row )
+    {
         for (int col = 0; col < numCols; ++col)
         {
             value += step;
             emit sigProgress(value);
-            table->setText(row + 1, col + 1, dialog->getText(row, col), false);
+            QString text( dialog->getText( row, col ) );
+            table->setText( row + 1, col + 1, text, false, true );
             cell = table->cellAt( col + 1, row + 1, false );
+
+            cell->calculateTextParameters( table->painter(), col + 1, row + 1 );
+            if ( text.length() * width > widths[col] )
+              widths[col] = text.length() * width;
 
             switch (dialog->getHeader(col))
             {
-            case CSVDialog::TEXT:
+             case CSVDialog::TEXT:
                 break;
-            case CSVDialog::NUMBER:
+             case CSVDialog::NUMBER:
                 cell->setFormatType(KSpreadCell::Number);
                 cell->setPrecision(2);
                 break;
-            case CSVDialog::DATE:
+             case CSVDialog::DATE:
                 cell->setFormatType(KSpreadCell::ShortDate);
                 break;
-            case CSVDialog::CURRENCY:
+             case CSVDialog::CURRENCY:
                 cell->setFormatType(KSpreadCell::Money);
                 break;
             }
-        }
+        }        
+    }
 
-    emit sigProgress(100);
+    emit sigProgress( 98 );
+    for ( i = 0; i < numCols; ++i )
+    {
+      ColumnFormat * c  = table->nonDefaultColumnFormat( i );
+      c->setDblWidth( widths[i] );
+    }
+
+    emit sigProgress( 100 );
     QApplication::restoreOverrideCursor();
     delete dialog;
 
