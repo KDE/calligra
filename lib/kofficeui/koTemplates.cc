@@ -217,14 +217,13 @@ void KoTemplateTree::readGroups() {
 	for(QStringList::ConstIterator tdirIt=templateDirs.begin(); tdirIt!=templateDirs.end(); ++tdirIt) {
 	    if(*tdirIt=="." || *tdirIt=="..") // we don't want to check those dirs :)
 		continue;
-	    QDir templateDir(dir.absPath()+*tdirIt);
+	    QDir templateDir(*it+*tdirIt);
 	    QString name=*tdirIt;
 	    if(templateDir.exists(".directory")) {
-		kdDebug() << ".directory: " << templateDir.absPath()+".directory" << endl;
-		KSimpleConfig config(templateDir.absPath()+".directory", true);
+		KSimpleConfig config(templateDir.absPath()+"/.directory", true);
 		config.setDesktopGroup();
 		name=config.readEntry("Name");
-		kdDebug() << "name: " << name <<endl;
+		//kdDebug() << "name: " << name <<endl;
 	    }
 	    KoTemplateGroup *g=new KoTemplateGroup(name, *it+*tdirIt+QChar('/'));
 	    add(g);
