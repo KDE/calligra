@@ -127,6 +127,8 @@ KexiViewBase* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog,
 		return t;
 	}
 	else if (viewMode == Kexi::DataViewMode) {
+		if(!sch)
+			return 0; //todo: message
 		KexiDB::Cursor *c = win->project()->dbConnection()->prepareQuery(*sch);
 
 		kdDebug() << "KexiTablePart::execute(): cursor is " << c << endl;
