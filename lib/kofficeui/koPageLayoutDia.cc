@@ -137,9 +137,6 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayou
 
     setFocusPolicy( QWidget::StrongFocus );
     setFocus();
-
-    // FIXME (Werner)
-    //resize( 600, 500 );
 }
 
 /*==================== constructor ===============================*/
@@ -169,9 +166,6 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name, KoPageLayou
 
     setFocusPolicy( QWidget::StrongFocus );
     setFocus();
-
-    // FIXME (Werner)
-    //resize( 600, 500 );
 }
 
 /*===================== destructor ===============================*/
@@ -343,7 +337,6 @@ void KoPageLayoutDia::setupTab1()
 	// ------------- unit _______________
 	// label unit
 	lpgUnit = new QLabel( i18n( "Unit:" ), tab1 );
-	lpgUnit->resize( lpgUnit->sizeHint() );
 	grid1->addWidget( lpgUnit, 0, 0 );
 
 	// combo unit
@@ -352,10 +345,8 @@ void KoPageLayoutDia::setupTab1()
 	cpgUnit->insertItem( i18n( "Millimeters ( mm )" ) );
 	cpgUnit->insertItem( i18n( "Points ( pt )" ) );
 	cpgUnit->insertItem( i18n( "Inches ( in )" ) );
-	cpgUnit->resize( cpgUnit->sizeHint() );
 	grid1->addWidget( cpgUnit, 1, 0 );
 	connect( cpgUnit, SIGNAL( activated( int ) ), this, SLOT( unitChanged( int ) ) );
-	//if ( !( flags & USE_NEW_STUFF ) ) cpgUnit->setEnabled( false );
     } else {
 	QString str;
 	switch ( layout.unit ) {
@@ -365,7 +356,6 @@ void KoPageLayoutDia::setupTab1()
 	}
 
 	lpgUnit = new QLabel( i18n( QString( "All values are given in " + str ) ), tab1 );
-	lpgUnit->resize( lpgUnit->sizeHint() );
 	grid1->addWidget( lpgUnit, 0, 0 );
     }
 
@@ -375,12 +365,10 @@ void KoPageLayoutDia::setupTab1()
 
     // label format
     lpgFormat = new QLabel( i18n( "\nFormat:" ), formatFrame );
-    lpgFormat->resize( lpgFormat->sizeHint() );
     formatGrid->addWidget( lpgFormat, 0, 0 );
 
     // label orientation
     lpgOrientation = new QLabel( i18n( "\nOrientation:" ), formatFrame );
-    lpgOrientation->resize( lpgOrientation->sizeHint() );
     formatGrid->addWidget( lpgOrientation, 0, 1 );
 
     // combo format
@@ -395,7 +383,6 @@ void KoPageLayoutDia::setupTab1()
     cpgFormat->insertItem( i18n( "Custom" ) );
     cpgFormat->insertItem( i18n( "DIN B5" ) );
     cpgFormat->insertItem( i18n( "US Executive" ) );
-    cpgFormat->resize( cpgFormat->sizeHint() );
     formatGrid->addWidget( cpgFormat, 1, 0 );
     connect( cpgFormat, SIGNAL( activated( int ) ), this, SLOT( formatChanged( int ) ) );
 
@@ -404,13 +391,11 @@ void KoPageLayoutDia::setupTab1()
     cpgOrientation->setAutoResize( false );
     cpgOrientation->insertItem( i18n( "Portrait" ) );
     cpgOrientation->insertItem( i18n( "Landscape" ) );
-    cpgOrientation->resize( cpgOrientation->sizeHint() );
     formatGrid->addWidget( cpgOrientation, 1, 1 );
     connect( cpgOrientation, SIGNAL( activated( int ) ), this, SLOT( orientationChanged( int ) ) );
 
     // label width
     lpgWidth = new QLabel( i18n( "Width:" ), formatFrame );
-    lpgWidth->resize( lpgWidth->sizeHint() );
     formatGrid->addWidget( lpgWidth, 2, 0 );
 
     // linedit width
@@ -420,7 +405,6 @@ void KoPageLayoutDia::setupTab1()
     epgWidth->setMaxLength( 6 );
     epgWidth->setEchoMode( QLineEdit::Normal );
     epgWidth->setFrame( true );
-    epgWidth->resize( epgWidth->sizeHint().width()/2, epgWidth->sizeHint().height() );
     formatGrid->addWidget( epgWidth, 3, 0 );
     if ( layout.format != PG_CUSTOM )
 	epgWidth->setEnabled( false );
@@ -430,7 +414,6 @@ void KoPageLayoutDia::setupTab1()
 
     // label height
     lpgHeight = new QLabel( i18n( "Height:" ), formatFrame );
-    lpgHeight->resize( lpgHeight->sizeHint() );
     formatGrid->addWidget( lpgHeight, 2, 1 );
 
     // linedit height
@@ -440,7 +423,6 @@ void KoPageLayoutDia::setupTab1()
     epgHeight->setMaxLength( 6 );
     epgHeight->setEchoMode( QLineEdit::Normal );
     epgHeight->setFrame( true );
-    epgHeight->resize( epgHeight->sizeHint().width()/2, epgHeight->sizeHint().height() );
     formatGrid->addWidget( epgHeight, 3, 1 );
     if ( layout.format != PG_CUSTOM )
 	epgHeight->setEnabled( false );
@@ -468,9 +450,6 @@ void KoPageLayoutDia::setupTab1()
     formatGrid->addRowSpacing( 3, epgWidth->height() );
     formatGrid->addRowSpacing( 3, epgHeight->height() );
 
-    // activate grid
-    //formatGrid->activate();
-    //formatFrame->resize( 0, 0 );
     grid1->addWidget( formatFrame, 2, 0 );
 
     // --------------- page borders ---------------
@@ -479,7 +458,6 @@ void KoPageLayoutDia::setupTab1()
 
     // label left
     lbrLeft = new QLabel( i18n( "\nLeft:" ), borderFrame );
-    lbrLeft->resize( lbrLeft->sizeHint() );
     borderGrid->addWidget( lbrLeft, 0, 0 );
 
     // linedit left
@@ -489,7 +467,6 @@ void KoPageLayoutDia::setupTab1()
     ebrLeft->setMaxLength( 6 );
     ebrLeft->setEchoMode( QLineEdit::Normal );
     ebrLeft->setFrame( true );
-    ebrLeft->resize( ebrLeft->sizeHint().width()/2, ebrLeft->sizeHint().height() );
     borderGrid->addWidget( ebrLeft, 1, 0 );
     connect( ebrLeft, SIGNAL( returnPressed() ), this, SLOT( rPressed() ) );
     connect( ebrLeft, SIGNAL( returnPressed() ), this, SLOT( leftChanged() ) );
@@ -498,7 +475,6 @@ void KoPageLayoutDia::setupTab1()
 
     // label right
     lbrRight = new QLabel( i18n( "\nRight:" ), borderFrame );
-    lbrRight->resize( lbrRight->sizeHint() );
     borderGrid->addWidget( lbrRight, 0, 1 );
 
     // linedit right
@@ -508,7 +484,6 @@ void KoPageLayoutDia::setupTab1()
     ebrRight->setMaxLength( 6 );
     ebrRight->setEchoMode( QLineEdit::Normal );
     ebrRight->setFrame( true );
-    ebrRight->resize( ebrRight->sizeHint().width()/2, ebrRight->sizeHint().height() );
     borderGrid->addWidget( ebrRight, 1, 1 );
     connect( ebrRight, SIGNAL( returnPressed() ), this, SLOT( rPressed() ) );
     connect( ebrRight, SIGNAL( returnPressed() ), this, SLOT( rightChanged() ) );
@@ -517,7 +492,6 @@ void KoPageLayoutDia::setupTab1()
 
     // label top
     lbrTop = new QLabel( i18n( "Top:" ), borderFrame );
-    lbrTop->resize( lbrTop->sizeHint() );
     borderGrid->addWidget( lbrTop, 2, 0 );
 
     // linedit top
@@ -527,7 +501,6 @@ void KoPageLayoutDia::setupTab1()
     ebrTop->setMaxLength( 6 );
     ebrTop->setEchoMode( QLineEdit::Normal );
     ebrTop->setFrame( true );
-    ebrTop->resize( ebrTop->sizeHint().width()/2, ebrTop->sizeHint().height() );
     borderGrid->addWidget( ebrTop, 3, 0 );
     connect( ebrTop, SIGNAL( returnPressed() ), this, SLOT( rPressed() ) );
     connect( ebrTop, SIGNAL( returnPressed() ), this, SLOT( topChanged() ) );
@@ -536,7 +509,6 @@ void KoPageLayoutDia::setupTab1()
 
     // label bottom
     lbrBottom = new QLabel( i18n( "Bottom:" ), borderFrame );
-    lbrBottom->resize( lbrBottom->sizeHint() );
     borderGrid->addWidget( lbrBottom, 2, 1 );
 
     // linedit bottom
@@ -546,7 +518,6 @@ void KoPageLayoutDia::setupTab1()
     ebrBottom->setMaxLength( 6 );
     ebrBottom->setEchoMode( QLineEdit::Normal );
     ebrBottom->setFrame( true );
-    ebrBottom->resize( ebrBottom->sizeHint().width()/2, ebrBottom->sizeHint().height() );
     borderGrid->addWidget( ebrBottom, 3, 1 );
     connect( ebrBottom, SIGNAL( returnPressed() ), this, SLOT( rPressed() ) );
     connect( ebrBottom, SIGNAL( returnPressed() ), this, SLOT( bottomChanged() ) );
@@ -573,9 +544,6 @@ void KoPageLayoutDia::setupTab1()
     borderGrid->addRowSpacing( 3, ebrTop->height() );
     borderGrid->addRowSpacing( 3, ebrBottom->height() );
 
-    // activate grid
-    //borderGrid->activate();
-    //borderFrame->resize( 0, 0 );
     grid1->addWidget( borderFrame, 3, 0 );
 
     // ------------- preview -----------
@@ -597,8 +565,6 @@ void KoPageLayoutDia::setupTab1()
     grid1->addRowSpacing( 3, borderFrame->height() );
     grid1->addRowSpacing( 3, 120 );
     grid1->setRowStretch( 4, 1 );
-
-    //grid1->activate();
 
     setValuesTab1();
     updatePreview( layout );
@@ -722,7 +688,6 @@ void KoPageLayoutDia::setupTab2()
 			   "<li>&lt;author&gt;: Your full name</li>"
 			   "<li>&lt;org&gt;: Your organisation</li>"
 			   "<li>&lt;email&gt;: Your email address</li></ul></qt>", tab2 );
-    lMacros2->resize( lMacros2->sizeHint() );
     grid2->addMultiCellWidget( lMacros2, 6, 6, 0, 2 );
 }
 
@@ -734,11 +699,9 @@ void KoPageLayoutDia::setupTab3()
     grid3 = new QGridLayout( tab3, 5, 2, 15, 7 );
 
     lColumns = new QLabel( i18n( "Columns:" ), tab3 );
-    lColumns->resize( lColumns->sizeHint() );
     grid3->addWidget( lColumns, 0, 0 );
 
     nColumns = new QSpinBox( 1, 16, 1, tab3 );
-    nColumns->resize( nColumns->sizeHint() );
     grid3->addWidget( nColumns, 1, 0 );
     nColumns->setValue( cl.columns );
     connect( nColumns, SIGNAL( valueChanged( int ) ), this, SLOT( nColChanged( int ) ) );
@@ -751,7 +714,6 @@ void KoPageLayoutDia::setupTab3()
     }
 
     lCSpacing = new QLabel( i18n( QString( "Columns Spacing ( " + str + " ):" ) ), tab3 );
-    lCSpacing->resize( lCSpacing->sizeHint() );
     grid3->addWidget( lCSpacing, 2, 0 );
 
     nCSpacing = new QLineEdit( tab3, "" );
@@ -760,7 +722,6 @@ void KoPageLayoutDia::setupTab3()
     nCSpacing->setMaxLength( 5 );
     nCSpacing->setEchoMode( QLineEdit::Normal );
     nCSpacing->setFrame( true );
-    nCSpacing->resize( nCSpacing->sizeHint() );
     grid3->addWidget( nCSpacing, 3, 0 );
 
     switch ( layout.unit ) {
@@ -813,25 +774,21 @@ void KoPageLayoutDia::setupTab4()
     headerGrid = new QGridLayout( gHeader, 5, 2, 15, 7 );
 
     rhSame = new QRadioButton( i18n( "Same header for all pages" ), gHeader );
-    rhSame->resize( rhSame->sizeHint() );
     gHeader->insert( rhSame );
     headerGrid->addMultiCellWidget( rhSame, 1, 1, 0, 1 );
     if ( kwhf.header == HF_SAME ) rhSame->setChecked( true );
 
     rhFirst = new QRadioButton( i18n( "Different header for the first page" ), gHeader );
-    rhFirst->resize( rhFirst->sizeHint() );
     gHeader->insert( rhFirst );
     headerGrid->addMultiCellWidget( rhFirst, 2, 2, 0, 1 );
     if ( kwhf.header == HF_FIRST_DIFF ) rhFirst->setChecked( true );
 
     rhEvenOdd = new QRadioButton( i18n( "Different header for even and odd pages" ), gHeader );
-    rhEvenOdd->resize( rhEvenOdd->sizeHint() );
     gHeader->insert( rhEvenOdd );
     headerGrid->addMultiCellWidget( rhEvenOdd, 3, 3, 0, 1 );
     if ( kwhf.header == HF_EO_DIFF ) rhEvenOdd->setChecked( true );
 
     lHSpacing = new QLabel( i18n( QString( "Spacing between header and body ( " + str + " ):" ) ), gHeader );
-    lHSpacing->resize( lHSpacing->sizeHint() );
     lHSpacing->setAlignment( AlignRight | AlignVCenter );
     headerGrid->addWidget( lHSpacing, 4, 0 );
 
@@ -841,7 +798,6 @@ void KoPageLayoutDia::setupTab4()
     nHSpacing->setMaxLength( 5 );
     nHSpacing->setEchoMode( QLineEdit::Normal );
     nHSpacing->setFrame( true );
-    nHSpacing->resize( nHSpacing->sizeHint() );
     headerGrid->addWidget( nHSpacing, 4, 1 );
 
     switch ( layout.unit ) {
@@ -882,25 +838,21 @@ void KoPageLayoutDia::setupTab4()
     footerGrid = new QGridLayout( gFooter, 5, 2, 15, 7 );
 
     rfSame = new QRadioButton( i18n( "Same footer for all pages" ), gFooter );
-    rfSame->resize( rfSame->sizeHint() );
     gFooter->insert( rfSame );
     footerGrid->addMultiCellWidget( rfSame, 1, 1, 0, 1 );
     if ( kwhf.footer == HF_SAME ) rfSame->setChecked( true );
 
     rfFirst = new QRadioButton( i18n( "Different footer for the first page" ), gFooter );
-    rfFirst->resize( rfFirst->sizeHint() );
     gFooter->insert( rfFirst );
     footerGrid->addMultiCellWidget( rfFirst, 2, 2, 0, 1 );
     if ( kwhf.footer == HF_FIRST_DIFF ) rfFirst->setChecked( true );
 
     rfEvenOdd = new QRadioButton( i18n( "Different footer for even and odd pages" ), gFooter );
-    rfEvenOdd->resize( rfEvenOdd->sizeHint() );
     gFooter->insert( rfEvenOdd );
     footerGrid->addMultiCellWidget( rfEvenOdd, 3, 3, 0, 1 );
     if ( kwhf.footer == HF_EO_DIFF ) rfEvenOdd->setChecked( true );
 
     lFSpacing = new QLabel( i18n( QString( "Spacing between footer and body ( " + str + " ):" ) ), gFooter );
-    lFSpacing->resize( lFSpacing->sizeHint() );
     lFSpacing->setAlignment( AlignRight | AlignVCenter );
     footerGrid->addWidget( lFSpacing, 4, 0 );
 
@@ -910,7 +862,6 @@ void KoPageLayoutDia::setupTab4()
     nFSpacing->setMaxLength( 5 );
     nFSpacing->setEchoMode( QLineEdit::Normal );
     nFSpacing->setFrame( true );
-    nFSpacing->resize( nFSpacing->sizeHint() );
     footerGrid->addWidget( nFSpacing, 4, 1 );
 
     switch ( layout.unit ) {
