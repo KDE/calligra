@@ -1952,6 +1952,8 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
 
     connect( formula, SIGNAL( formulaChanged( double, double ) ),
              this, SLOT( slotFormulaChanged( double, double ) ) );
+    connect( formula, SIGNAL( formulaChanged( int, int ) ),
+             this, SLOT( slotFormulaChanged( int, int ) ) );
     if ( name.isEmpty() )
         m_name = _doc->generateFramesetName( i18n( "Formula %1" ) );
     else
@@ -1968,6 +1970,8 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
         }
     }
     */
+    QRect rect = formula->boundingRect();
+    slotFormulaChanged(rect.width(), rect.height());
 }
 
 KWordFrameSetIface* KWFormulaFrameSet::dcopObject()
@@ -2008,22 +2012,32 @@ void KWFormulaFrameSet::drawFrameContents( KWFrame* /*frame*/, QPainter* painter
         if ( resetChanged )
             m_changed = false;
 
+        QPainter p( &buffer );
         if ( edit )
         {
             KWFormulaFrameSetEdit * formulaEdit = static_cast<KWFormulaFrameSetEdit *>(edit);
             if ( formulaEdit->getFormulaView() ) {
-                formulaEdit->getFormulaView()->draw( *painter, crect, cg );
+                formulaEdit->getFormulaView()->draw( p, crect, cg );
             }
             else {
-                formula->draw( *painter, crect, cg );
+                formula->draw( p, crect, cg );
             }
         }
         else
         {
             //kdDebug(32001) << "KWFormulaFrameSet::drawFrame drawing (without edit) crect=" << crect << endl;
-            formula->draw( *painter, crect, cg );
+            formula->draw( p, crect, cg );
         }
+        painter->drawPixmap( crect.x(), crect.y(),
+                             buffer,
+                             crect.x(), crect.y(),
+                             crect.width(), crect.height() );
     }
+}
+
+void KWFormulaFrameSet::slotFormulaChanged( int width, int height )
+{
+    buffer.resize( width, height );
 }
 
 void KWFormulaFrameSet::slotFormulaChanged( double width, double height )
