@@ -596,7 +596,9 @@ void KPTView::slotAddRelation(KPTNode *par, KPTNode *child) {
     KPTRelation *rel = new KPTRelation(par, child);
     KPTAddRelationDialog *dia = new KPTAddRelationDialog(rel, this);
     if (dia->exec()) {
-        getPart()->addCommand(new KPTAddRelationCmd(getPart(), rel, i18n("Add Relation")));
+        KCommand *cmd = dia->buildCommand(getPart());
+        if (cmd)
+            getPart()->addCommand(cmd);
     } else {
         delete rel;
     }
@@ -618,20 +620,18 @@ void KPTView::slotAddRelation(KPTNode *par, KPTNode *child, int linkType) {
 
 void KPTView::slotModifyRelation(KPTRelation *rel) {
     kdDebug()<<k_funcinfo<<endl;
-    KPTRelation *relation = new KPTRelation(rel);
-    KPTModifyRelationDialog *dia = new KPTModifyRelationDialog(relation, this);
+    KPTModifyRelationDialog *dia = new KPTModifyRelationDialog(rel, this);
     if (dia->exec()) {
         if (dia->relationIsDeleted()) {
             getPart()->addCommand(new KPTDeleteRelationCmd(getPart(), rel, i18n("Delete Relation")));
         } else {
-            KPTModifyRelationTypeCmd *cmd = dia->buildCommand(getPart(), rel);
+            KCommand *cmd = dia->buildCommand(getPart());
             if (cmd) {
                 getPart()->addCommand(cmd);
             }
         }
     }
     delete dia;
-    delete relation;
 }
 
 void KPTView::slotModifyRelation(KPTRelation *rel, int linkType) {

@@ -305,6 +305,20 @@ private:
     KPTRelation::Type m_oldtype;
 };
 
+class KPTModifyRelationLagCmd : public KNamedCommand
+{
+public:
+    KPTModifyRelationLagCmd(KPTPart *part, KPTRelation *rel, KPTDuration lag, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTRelation *m_rel;
+    KPTDuration m_newlag;
+    KPTDuration m_oldlag;
+};
+
 class KPTAddResourceRequestCmd : public KNamedCommand
 {
 public:

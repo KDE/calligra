@@ -24,6 +24,10 @@
 #include <kdialogbase.h>
 
 class QButtonGroup;
+class KCommand;
+
+class RelationPanel;
+class KPTDurationWidget;
 
 namespace KPlato
 {
@@ -33,44 +37,38 @@ class KPTRelation;
 class KPTPart;
 class KPTModifyRelationTypeCmd;
 
-
 class KPTAddRelationDialog : public KDialogBase 
 {
     Q_OBJECT
 public:
-    KPTAddRelationDialog(KPTRelation *rel, QWidget *p=0, const char *n=0);
+    KPTAddRelationDialog(KPTRelation *rel, QWidget *p, QString caption=QString::null, int buttons=Ok|Cancel, const char *n=0);
     
+    virtual KCommand *buildCommand(KPTPart *part);
+
 protected slots:
     void slotOk();
 
 protected:
-    void init();
-    
-private:
+    RelationPanel *m_panel;
     QButtonGroup *relationType;
     KPTRelation *m_relation;
+    KPTDurationWidget *m_lag;
 };
 
 
-class KPTModifyRelationDialog : public KDialogBase 
+class KPTModifyRelationDialog : public KPTAddRelationDialog 
 {
     Q_OBJECT
 public:
     KPTModifyRelationDialog(KPTRelation *rel, QWidget *p=0, const char *n=0);
 
-    KPTModifyRelationTypeCmd *buildCommand(KPTPart *part, KPTRelation *rel);
+    virtual KCommand *buildCommand(KPTPart *part);
     bool relationIsDeleted() { return m_deleted; }
     
 protected slots:
-    void slotOk();
     void slotUser1();
 
-protected:
-    void init();
-    
 private:
-    QButtonGroup *relationType;
-    KPTRelation *m_relation;
     bool m_deleted;
 };
 

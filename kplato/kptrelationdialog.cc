@@ -3,7 +3,7 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
+   License as published by the Free Software Foundation;
    version 2 of the License.
 
    This library is distributed in the hope that it will be useful,
@@ -22,6 +22,8 @@
 #include "kptnode.h"
 #include "kptpart.h"
 #include "kptcommand.h"
+#include "kptdurationwidget.h"
+#include "relationpanel.h"
 
 #include <qlayout.h>
 #include <qvbox.h>
@@ -31,127 +33,72 @@
 
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kcommand.h>
 #include <kdebug.h>
 
 namespace KPlato
 {
 
-KPTAddRelationDialog::KPTAddRelationDialog(KPTRelation *rel, QWidget *p, const char *n)
-    : KDialogBase(Plain, i18n("Add Relationship"), Ok|Cancel, Ok, p, n, true, true)
+KPTAddRelationDialog::KPTAddRelationDialog(KPTRelation *rel, QWidget *p, QString caption, int buttons, const char *n)
+    : KDialogBase(Plain, caption, buttons, Ok, p, n, true, true)
 {
+    if (caption.isEmpty())
+        setCaption(i18n("Add Relationship"));
     m_relation = rel;
-    kdDebug()<<k_funcinfo<<"rel="<<rel<<endl;
-
-    init();
+    m_panel = new RelationPanel(plainPage());
+    m_panel->fromName->setText(rel->parent()->name());
+    m_panel->toName->setText(rel->child()->name());
+    m_panel->relationType->setButton(rel->type());
+    
+    m_panel->lag->setVisibleFields(KPTDurationWidget::Days|KPTDurationWidget::Hours|KPTDurationWidget::Minutes);
+    m_panel->lag->setFieldUnit(0, i18n("days"));
+    m_panel->lag->setFieldUnit(1, i18n("hours"));
+    m_panel->lag->setFieldUnit(2, i18n("minutes"));
+    m_panel->lag->setValue(rel->lag());
+    
+    resize( QSize(350, 300).expandedTo(minimumSizeHint()) ); //FIXME 
 }
 
-void KPTAddRelationDialog::init()
-{
-    QWidget *page = plainPage();
-    QGridLayout *layout = new QGridLayout(page, 3, 2, marginHint(), spacingHint());
-    QString s1 = i18n("From: "), s2 = i18n("To: ");
-    s1 += m_relation->parent()->name();
-    s2 += m_relation->child()->name();
-    QLabel *l = new QLabel(s1,page);
-    layout->addWidget(l, 0, 0);
-    l = new QLabel(s2,page);
-    layout->addWidget(l, 1, 0);
-
-    //layout->addMultiCellWidget(relationType = new QButtonGroup(box), 0, 5, 0, 1);
-    relationType = new QButtonGroup(0, Qt::Vertical, i18n("Relationship Type"),page);
-    relationType->layout()->setSpacing(KDialog::spacingHint());
-    relationType->layout()->setMargin(KDialog::marginHint());
-    layout->addWidget(relationType, 2, 0);
-
-    QGridLayout *relationTypeLayout = new QGridLayout(relationType->layout(), 6, 1);
-
-    QRadioButton *b = new QRadioButton(QString("Finish-Start"), relationType);
-    relationTypeLayout->addWidget(b, 0, 0);
-    b = new QRadioButton(QString("Finish-Finish"), relationType);
-    relationTypeLayout->addWidget(b, 1, 0);
-    b = new QRadioButton(QString("Start-Start"), relationType);
-    relationTypeLayout->addWidget(b, 2, 0);
-    relationType->setButton(m_relation->type());    
+KCommand *KPTAddRelationDialog::buildCommand(KPTPart *part) {
+    return new KPTAddRelationCmd(part, m_relation, i18n("Add relation"));
 }
 
-
-void KPTAddRelationDialog::slotOk() 
-{
-    QButton *r = relationType->selected();
-    if ( r == 0 ) {
+void KPTAddRelationDialog::slotOk() {
+    if ( m_panel->relationType->selected() == 0 ) {
         KMessageBox::sorry(this, i18n("You must select a relationship type"));
-	    return;
+        return;
     }
-    m_relation->setType((KPTRelation::Type)relationType->id(r));
     accept();
 }
 
 //////////////////
 
 KPTModifyRelationDialog::KPTModifyRelationDialog(KPTRelation *rel, QWidget *p, const char *n)
-    : KDialogBase(Plain, i18n("Edit Relationship"), Ok|Cancel|User1, Ok, p, n, true, true)
+    : KPTAddRelationDialog(rel, p, i18n("Edit Relationship"), Ok|Cancel|User1, n)
 {
-    m_relation = rel;
-    kdDebug()<<k_funcinfo<<"rel="<<rel<<endl;
     setButtonText( KDialogBase::User1, i18n("Delete") );
-
-    init();
-}
-
-void KPTModifyRelationDialog::init()
-{
     m_deleted = false;
-    QWidget *page = plainPage();
-    QGridLayout *layout = new QGridLayout(page, 3, 2, marginHint(), spacingHint());
-    QString s1 = i18n("From: "), s2 = i18n("To: ");
-    s1 += m_relation->parent()->name();
-    s2 += m_relation->child()->name();
-    QLabel *l = new QLabel(s1,page);
-    layout->addWidget(l, 0, 0);
-    l = new QLabel(s2,page);
-    layout->addWidget(l, 1, 0);
-
-    relationType = new QButtonGroup(0, Qt::Vertical, i18n("Relationship Type"),page);
-    relationType->layout()->setSpacing(KDialog::spacingHint());
-    relationType->layout()->setMargin(KDialog::marginHint());
-    layout->addWidget(relationType, 2, 0);
-
-    QGridLayout *relationTypeLayout = new QGridLayout(relationType->layout(), 6, 1);
-
-    QRadioButton *b = new QRadioButton(QString("Finish-Start"), relationType);
-    relationTypeLayout->addWidget(b, 0, 0);
-    b = new QRadioButton(QString("Finish-Finish"), relationType);
-    relationTypeLayout->addWidget(b, 1, 0);
-    b = new QRadioButton(QString("Start-Start"), relationType);
-    relationTypeLayout->addWidget(b, 2, 0);
-    relationType->setButton(m_relation->type());    
-}
-
-
-void KPTModifyRelationDialog::slotOk() 
-{
-    QButton *r = relationType->selected();
-    if ( r == 0 ) {
-        KMessageBox::sorry(this, i18n("You must select a relationship type"));
-        return;
-    }
-    m_relation->setType((KPTRelation::Type)relationType->id(r));
-    accept();
 }
 
 // Delete
-void KPTModifyRelationDialog::slotUser1() 
-{
+void KPTModifyRelationDialog::slotUser1() {
     m_deleted = true;
     accept();
 }
 
-KPTModifyRelationTypeCmd *KPTModifyRelationDialog::buildCommand(KPTPart *part, KPTRelation *rel) {
-    if (rel->type() == m_relation->type())
-        return 0;
-        
-    kdDebug()<<k_funcinfo<<endl;
-    return new KPTModifyRelationTypeCmd(part, rel, m_relation->type(), i18n("Modify Relation Type"));
+KCommand *KPTModifyRelationDialog::buildCommand(KPTPart *part) {
+    KMacroCommand *cmd=0;
+    if (m_panel->relationType->selectedId() != m_relation->type()) {
+        if (cmd == 0)
+            cmd = new KMacroCommand(i18n("Modify relation"));
+        cmd->addCommand(new KPTModifyRelationTypeCmd(part, m_relation, (KPTRelation::Type)m_panel->relationType->selectedId()));
+    }
+    if (m_relation->lag() != m_panel->lag->value()) {
+        if (cmd == 0)
+            cmd = new KMacroCommand(i18n("Modify relation"));
+        cmd->addCommand(new KPTModifyRelationLagCmd(part, m_relation, m_panel->lag->value()));
+    }
+    return cmd;
 }
 
 }  //KPlato namespace

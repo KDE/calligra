@@ -64,6 +64,7 @@ public:
     *  and the start of the child.
     */
     const KPTDuration &lag() const { return m_lag; }
+    void setLag(KPTDuration lag) { m_lag = lag; }
 
     /**
      * @return The parent dependent node.

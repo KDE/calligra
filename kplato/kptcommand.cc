@@ -479,6 +479,25 @@ void KPTModifyRelationTypeCmd::unexecute() {
         m_part->setCommandType(1);
 }
 
+KPTModifyRelationLagCmd::KPTModifyRelationLagCmd(KPTPart *part, KPTRelation *rel, KPTDuration lag, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_rel(rel),
+      m_newlag(lag) {
+    
+    m_oldlag = rel->lag();
+}
+void KPTModifyRelationLagCmd::execute() {
+    m_rel->setLag(m_newlag);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTModifyRelationLagCmd::unexecute() {
+    m_rel->setLag(m_oldlag);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+
 KPTAddResourceRequestCmd::KPTAddResourceRequestCmd(KPTPart *part, KPTResourceGroupRequest *group, KPTResourceRequest *request, QString name)
     : KNamedCommand(name),
       m_part(part),
