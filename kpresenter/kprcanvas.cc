@@ -3687,8 +3687,8 @@ void KPrCanvas::insertFreehand( const KoPointArray &_pointArray )
 {
     KoRect rect = getDrawRect( _pointArray );
 
-    double ox = rect.x() + diffx();
-    double oy = rect.y() + diffy();
+    double ox = rect.x();
+    double oy = rect.y();
 
     unsigned int index = 0;
 
@@ -3697,8 +3697,8 @@ void KPrCanvas::insertFreehand( const KoPointArray &_pointArray )
     KoPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = point.x() - ox + diffx();
-        double tmpY = point.y() - oy + diffy();
+        double tmpX = point.x() - ox + m_view->zoomHandler()->unzoomItX(diffx());
+        double tmpY = point.y() - oy + m_view->zoomHandler()->unzoomItY(diffy());
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
@@ -3715,8 +3715,8 @@ void KPrCanvas::insertPolyline( const KoPointArray &_pointArray )
 {
     KoRect rect = getDrawRect( _pointArray );
 
-    double ox = rect.x() + diffx();
-    double oy = rect.y() + diffy();
+    double ox = rect.x();
+    double oy = rect.y();
     unsigned int index = 0;
 
     KoPointArray points( _pointArray );
@@ -3724,8 +3724,8 @@ void KPrCanvas::insertPolyline( const KoPointArray &_pointArray )
     KoPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = point.x() - ox + diffx();
-        double tmpY = point.y() - oy + diffy();
+        double tmpX = point.x() - ox + m_view->zoomHandler()->unzoomItX(diffx());
+        double tmpY = point.y() - oy + m_view->zoomHandler()->unzoomItY(diffy());
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
@@ -3798,8 +3798,8 @@ void KPrCanvas::insertCubicBezierCurve( const KoPointArray &_pointArray )
         _allPoints = tmpPointArray;
     }
 
-    double ox = _rect.x() + diffx();
-    double oy = _rect.y() + diffy();
+    double ox = _rect.x();
+    double oy = _rect.y();
     unsigned int index = 0;
 
     KoPointArray points( _pointArray );
@@ -3807,8 +3807,8 @@ void KPrCanvas::insertCubicBezierCurve( const KoPointArray &_pointArray )
     KoPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = point.x() - ox + diffx();
-        double tmpY = point.y() - oy + diffy();
+        double tmpX = point.x() - ox +  m_view->zoomHandler()->unzoomItX(diffx());
+        double tmpY = point.y() - oy + m_view->zoomHandler()->unzoomItY(diffy());
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
@@ -3817,8 +3817,8 @@ void KPrCanvas::insertCubicBezierCurve( const KoPointArray &_pointArray )
     KoPointArray tmpAllPoints;
     for ( it = _allPoints.begin(); it != _allPoints.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = point.x() - ox + diffx();
-        double tmpY = point.y() - oy + diffy();
+        double tmpX = point.x() - ox + m_view->zoomHandler()->unzoomItX(diffx());
+        double tmpY = point.y() - oy + m_view->zoomHandler()->unzoomItY(diffy());
         tmpAllPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
@@ -3841,16 +3841,16 @@ void KPrCanvas::insertPolygon( const KoPointArray &_pointArray )
 {
     KoPointArray points( _pointArray );
     KoRect rect= points.boundingRect();
-    double ox = rect.x() + diffx();
-    double oy = rect.y() + diffy();
+    double ox = rect.x();
+    double oy = rect.y();
     unsigned int index = 0;
 
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = point.x() - ox + diffx();
-        double tmpY = point.y() - oy + diffy();
+        double tmpX = point.x() - ox + m_view->zoomHandler()->unzoomItX(diffx());
+        double tmpY = point.y() - oy + m_view->zoomHandler()->unzoomItY(diffy());
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
