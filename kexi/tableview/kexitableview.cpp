@@ -1398,7 +1398,7 @@ KexiTableView::print(KPrinter &printer)
 
 	int leftMargin = printer.margins().width() + 2 + m_rowHeight;
 	int topMargin = printer.margins().height() + 2;
-	int bottomMargin = topMargin + ( printer.realPageSize()->pageHeight() * printer.resolution() + 36 ) / 72;
+	int bottomMargin = topMargin + ( printer.realPageSize().height() * printer.resolution() + 36 ) / 72;
 	kdDebug() << "KexiTableView::print: bottom = " << bottomMargin << endl;
 
 	QPainter p(&printer);
