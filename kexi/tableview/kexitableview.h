@@ -39,6 +39,7 @@
 
 #include "kexitablerm.h"
 #include "kexitableviewdata.h"
+#include "kexitableedit.h"
 
 class KPopupMenu;
 class KPrinter;
