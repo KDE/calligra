@@ -325,7 +325,15 @@ OoDrawImport::parseGroup( VGroup *parent, const QDomElement& parentobject )
 			storeObjectStyles( o );
 			VComposite *path = new VComposite( parent );
 			path->loadSvgPath( o.attribute( "svg:d" ) );
-			appendPoints( *path, o );
+			KoRect rect = parseViewBox( o );
+			double x = KoUnit::parseValue( o.attribute( "svg:x" ) );
+			double y = ymirror( KoUnit::parseValue( o.attribute( "svg:y" ) ) );
+			double w = KoUnit::parseValue( o.attribute( "svg:width" ) );
+			double h = KoUnit::parseValue( o.attribute( "svg:height" ) );
+			QWMatrix mat;
+			mat.translate( x, y );
+			mat.scale( w / rect.width(), -h / rect.height() );
+			path->transform( mat );
 			appendPen( *path );
 			appendBrush( *path );
 			obj = path;
