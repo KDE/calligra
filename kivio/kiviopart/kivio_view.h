@@ -25,7 +25,6 @@ class KivioPage;
 class KivioDoc;
 class KivioPainter;
 class KivioPaperLayout;
-class KivioParagraphAction;
 class KivioShell;
 class KivioStackBar;
 class KivioStencilSpawner;
@@ -218,6 +217,13 @@ class KivioView : public KoView
 
     void setHParaAlign( int );
     void setVParaAlign( int );
+    void textAlignLeft();
+    void textAlignCenter();
+    void textAlignRight();
+    void textSuperScript();
+    void textSubScript();
+    void showAlign( int align );
+    void showVAlign( int align );
 
     void slotSetStartArrow( int );
     void slotSetEndArrow( int );
@@ -277,8 +283,11 @@ class KivioView : public KoView
     KToggleAction *m_setItalics;
     KToggleAction *m_setUnderline;
     TKSelectColorAction *m_setTextColor;
-    KivioParagraphAction *m_setHTextAlignment;
-    KivioParagraphAction *m_setVTextAlignment;
+    KToggleAction* m_textAlignLeft;
+    KToggleAction* m_textAlignCenter;
+    KToggleAction* m_textAlignRight;
+    KToggleAction* m_textVAlignSuper;
+    KToggleAction* m_textVAlignSub;
 
     KivioArrowHeadAction* m_setArrowHeads;
 

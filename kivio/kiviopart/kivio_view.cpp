@@ -112,7 +112,6 @@
 #include "kivio_stackbar.h"
 #include "kivio_icon_view.h"
 
-#include "kivio_paragraph_action.h"
 #include "KIvioViewIface.h"
 #include "kivio_command.h"
 #include "kiviostencilsetaction.h"
@@ -422,10 +421,31 @@ void KivioView::setupActions()
   connect( m_setUnderline, SIGNAL(toggled(bool)), SLOT(toggleFontUnderline(bool)));
 
   //FIXME: Port to KOffice!
-  m_setHTextAlignment = new KivioParagraphAction( false, actionCollection(), "setHTextAlignment" );
-  m_setVTextAlignment = new KivioParagraphAction( true, actionCollection(), "setVTextAlignment" );
-  connect( m_setHTextAlignment, SIGNAL(activated(int)), SLOT(setHParaAlign(int)) );
-  connect( m_setVTextAlignment, SIGNAL(activated(int)), SLOT(setVParaAlign(int)) );
+//  m_setHTextAlignment = new KivioParagraphAction( false, actionCollection(), "setHTextAlignment" );
+//  m_setVTextAlignment = new KivioParagraphAction( true, actionCollection(), "setVTextAlignment" );
+  m_textAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", CTRL + Key_L,
+                                    this, SLOT( textAlignLeft() ),
+                                    actionCollection(), "textAlignLeft" );
+  m_textAlignLeft->setExclusiveGroup( "align" );
+  m_textAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", CTRL + ALT + Key_C,
+                                      this, SLOT( textAlignCenter() ),
+                                      actionCollection(), "textAlignCenter" );
+  m_textAlignCenter->setExclusiveGroup( "align" );
+  m_textAlignCenter->setChecked( TRUE );
+  m_textAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", CTRL + ALT + Key_R,
+                                      this, SLOT( textAlignRight() ),
+                                      actionCollection(), "textAlignRight" );
+  m_textAlignRight->setExclusiveGroup( "align" );
+  m_textVAlignSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
+                                            this, SLOT( textSuperScript() ),
+                                            actionCollection(), "textVAlignSuper" );
+  m_textVAlignSuper->setExclusiveGroup( "valign" );
+  m_textVAlignSub = new KToggleAction( i18n( "Subscript" ), "sub", 0,
+                                            this, SLOT( textSubScript() ),
+                                            actionCollection(), "textVAlignSub" );
+  m_textVAlignSub->setExclusiveGroup( "valign" );
+//  connect( m_setHTextAlignment, SIGNAL(activated(int)), SLOT(setHParaAlign(int)) );
+//  connect( m_setVTextAlignment, SIGNAL(activated(int)), SLOT(setVParaAlign(int)) );
 
   QWidget* lineWidthWidget = new QWidget(this, "kde toolbar widget");
   QLabel* lineWidthLbl = new QLabel(lineWidthWidget, "kde toolbar widget");
@@ -1262,8 +1282,8 @@ void KivioView::updateToolBars()
         m_setItalics->setChecked( false );
         m_setUnderline->setChecked( false );
         m_setLineWidth->setValue( 1.0 );
-        m_setHTextAlignment->setCurrentItem( 1 );
-        m_setVTextAlignment->setCurrentItem( 1 );
+        showAlign(Qt::AlignHCenter);
+        showVAlign(Qt::AlignVCenter);
 
         m_pStencilGeometryPanel->setSize(0.0,0.0);
         m_pStencilGeometryPanel->setPosition(0.0,0.0);
@@ -1290,8 +1310,8 @@ void KivioView::updateToolBars()
         m_setBGColor->setActiveColor(pStencil->bgColor());
         m_setTextColor->setActiveColor(pStencil->textColor());
 
-        m_setHTextAlignment->setCurrentItem( pStencil->hTextAlign() );
-        m_setVTextAlignment->setCurrentItem( pStencil->vTextAlign() );
+        showAlign(pStencil->hTextAlign());
+        showVAlign(pStencil->vTextAlign());
 
         m_pStencilGeometryPanel->setSize( pStencil->w(), pStencil->h() );
         m_pStencilGeometryPanel->setPosition( pStencil->x(), pStencil->y() );
@@ -1923,6 +1943,89 @@ void KivioView::showZoom(int z)
   QStringList list = m_viewZoom->items();
   QString zoomStr = QString::number(z) + '%';
   m_viewZoom->setCurrentItem(list.findIndex(zoomStr));
+}
+
+void KivioView::textAlignLeft()
+{
+  if ( m_textAlignLeft->isChecked() ) {
+    setHParaAlign( Qt::AlignLeft );
+  } else {
+    m_textAlignLeft->setChecked( true );
+  }
+}
+
+void KivioView::textAlignCenter()
+{
+  if ( m_textAlignCenter->isChecked() ) {
+    setHParaAlign( Qt::AlignHCenter );
+  } else {
+    m_textAlignCenter->setChecked( true );
+  }
+}
+
+void KivioView::textAlignRight()
+{
+  if ( m_textAlignRight->isChecked() ) {
+    setHParaAlign( Qt::AlignRight );
+  } else {
+    m_textAlignRight->setChecked( true );
+  }
+}
+
+void KivioView::textSuperScript()
+{
+  if ( m_textVAlignSuper->isChecked() ) {
+    setVParaAlign( Qt::AlignTop );
+  } else {
+    if ( !m_textVAlignSub->isChecked() ) {
+      setVParaAlign( Qt::AlignVCenter );
+    }
+  }
+}
+
+void KivioView::textSubScript()
+{
+  if ( m_textVAlignSub->isChecked() ) {
+    setVParaAlign( Qt::AlignBottom );
+  } else {
+    if ( !m_textVAlignSuper->isChecked() ) {
+      setVParaAlign( Qt::AlignVCenter );
+    }
+  }
+}
+
+void KivioView::showAlign( int align )
+{
+  switch ( align ) {
+    case Qt::AlignAuto: // In left-to-right mode it's align left. TODO: alignright if text->isRightToLeft()
+      kdWarning() << k_funcinfo << "shouldn't be called with AlignAuto" << endl;
+      // fallthrough
+    case Qt::AlignLeft:
+      m_textAlignLeft->setChecked( true );
+      break;
+    case Qt::AlignHCenter:
+      m_textAlignCenter->setChecked( true );
+      break;
+    case Qt::AlignRight:
+      m_textAlignRight->setChecked( true );
+      break;
+  }
+}
+
+void KivioView::showVAlign( int align )
+{
+  switch(align) {
+    case Qt::AlignTop:
+      m_textVAlignSuper->setChecked(true);
+      break;
+    case Qt::AlignVCenter:
+      m_textVAlignSuper->setChecked(false);
+      m_textVAlignSub->setChecked(false);
+      break;
+    case Qt::AlignBottom:
+      m_textVAlignSub->setChecked(true);
+      break;
+  }
 }
 
 #include "kivio_view.moc"

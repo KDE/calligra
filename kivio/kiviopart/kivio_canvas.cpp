@@ -23,7 +23,6 @@
 #include "kivio_view.h"
 #include "kivio_doc.h"
 #include "kivio_tabbar.h"
-#include "kivio_ruler.h"
 
 #include "kivio_icon_view.h"
 #include "kivio_stencil.h"

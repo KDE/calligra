@@ -19,7 +19,7 @@ INCLUDES = -I$(srcdir)/ui\
 	$(all_includes)
 
 libkiviopart_la_METASOURCES = AUTO
-libkiviopart_la_SOURCES = kivio_canvas.cpp 		kivio_doc.cpp		kivio_factory.cpp		kivio_tabbar.cpp		kivio_view.cpp		kivio_map.cpp		kivio_page.cpp		kivio_dlg_pageshow.cpp		kivio_ruler.cpp		kivio_zoomaction.cpp		kivio_icon_view.cpp		kivio_config.cpp		kivio_spawner_drag.cpp		kivio_intra_stencil_data.cpp		kivio_stackbar.cpp		stencilbarbutton.cpp		stencilbardockmanager.cpp		stencilbarmovemanager.cpp	tooldockbase.cpp		tooldockmanager.cpp		kivio_paragraph_action.cpp		stencil_text_dlg.cpp		kivio_grid_data.cpp		kivio_guidelines.cpp		kivio_stencil_geometry_panel.cpp		kivio_viewmanager_panel.cpp		KIvioViewIface.skel		KIvioViewIface.cc		KIvioDocIface.skel		KIvioDocIface.cc		KIvioMapIface.skel		KIvioMapIface.cc		KIvioPageIface.skel		KIvioPageIface.cc		kivio_command.cc		KIvioLayerIface.skel		KIvioLayerIface.cc		kivioglobal.cpp kiviostencilsetaction.cpp kivioarrowheadaction.cpp
+libkiviopart_la_SOURCES = kivio_canvas.cpp 		kivio_doc.cpp		kivio_factory.cpp		kivio_tabbar.cpp		kivio_view.cpp		kivio_map.cpp		kivio_page.cpp		kivio_dlg_pageshow.cpp		kivio_zoomaction.cpp		kivio_icon_view.cpp		kivio_config.cpp		kivio_spawner_drag.cpp		kivio_intra_stencil_data.cpp		kivio_stackbar.cpp		stencilbarbutton.cpp		stencilbardockmanager.cpp		stencilbarmovemanager.cpp	tooldockbase.cpp		tooldockmanager.cpp		stencil_text_dlg.cpp		kivio_grid_data.cpp		kivio_guidelines.cpp		kivio_stencil_geometry_panel.cpp		kivio_viewmanager_panel.cpp		KIvioViewIface.skel		KIvioViewIface.cc		KIvioDocIface.skel		KIvioDocIface.cc		KIvioMapIface.skel		KIvioMapIface.cc		KIvioPageIface.skel		KIvioPageIface.cc		kivio_command.cc		KIvioLayerIface.skel		KIvioLayerIface.cc		kivioglobal.cpp kiviostencilsetaction.cpp kivioarrowheadaction.cpp
 
 EXTRA_DIST = \
 		main.cpp\
@@ -43,8 +43,6 @@ EXTRA_DIST = \
 		kivio_readonly.rc\
 		kivio_dlg_pageshow.cpp\
 		kivio_dlg_pageshow.h\
-		kivio_ruler.cpp\
-		kivio_ruler.h\
 		kivio_zoomaction.cpp\
 		kivio_zoomaction.h\
 		kivio_icon_view.cpp\
@@ -70,8 +68,6 @@ EXTRA_DIST = \
 		tooldockmanager.cpp\
 		tooldockmanager.h\
 		kivio_lineendspix.h\
-		kivio_paragraph_action.h\
-		kivio_paragraph_action.cpp\
 		stencil_text_dlg.cpp\
 		stencil_text_dlg.h\
 		lo16-app-kivio.png\
