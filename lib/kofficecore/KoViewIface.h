@@ -24,6 +24,8 @@
 #include <dcopobject.h>
 #include <dcopref.h>
 
+#include "kofficemacros.h"
+
 class KDCOPActionProxy;
 class KoView;
 
