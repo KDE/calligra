@@ -619,12 +619,21 @@ don't put a </?xml...> at the end of the file!).
     style CDATA #REQUIRED
     width CDATA #REQUIRED>
 
+<!--    Defines the position of a tabulation
+        Attributes:
+
+            type:               0 .. left
+                                1 .. center
+                                2 .. right
+                                3 .. alignment of decimal point
+
+            ptpos:              Position of the tabulation, in pt
+-->
 <!ELEMENT TABULATOR
     EMPTY>
 <!ATTLIST TABULATOR
-    mmpos CDATA #REQUIRED
-    ptpos CDATA #REQUIRED
-    type CDATA #REQUIRED>
+    type CDATA #REQUIRED
+    ptpos CDATA #REQUIRED>
 
 <!--    An anchor describes an object which is anchored.
 
