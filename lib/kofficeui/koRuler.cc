@@ -257,12 +257,12 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     // Draw the indents triangles
     if ( d->flags & F_INDENTS ) {
         int top = 2;
-        p.drawPixmap( qRound(applyRtlAndZoom(i_first, r.width()) - d->pmFirst.width() * 0.5 +
+        p.drawPixmap( qRound(applyRtlAndZoom(i_first) - d->pmFirst.width() * 0.5 +
                                  static_cast<double>(r.left())), top, d->pmFirst );
         int bottom = height() - d->pmLeft.height() - 2;
-        p.drawPixmap( qRound(applyRtlAndZoom(i_left, r.width()) - d->pmLeft.width() * 0.5 +
+        p.drawPixmap( qRound(applyRtlAndZoom(i_left) - d->pmLeft.width() * 0.5 +
                              static_cast<double>(r.left())), bottom, d->pmLeft );
-        p.drawPixmap( qRound(static_cast<double>(r.right()) - applyRtlAndZoom(d->i_right, r.width())
+        p.drawPixmap( qRound(static_cast<double>(r.right()) - applyRtlAndZoom(d->i_right)
                              - d->pmLeft.width() * 0.5 ), bottom, d->pmLeft );
     }
 
@@ -290,7 +290,7 @@ void KoRuler::drawTabs( QPainter &_painter )
 
     KoTabulatorList::Iterator it = d->tabList.begin();
     for ( ; it != d->tabList.end() ; it++ ) {
-        ptPos = qRound(zoomIt((*it).ptPos)) - diffx + frameStart;
+        ptPos = qRound(applyRtlAndZoom((*it).ptPos)) - diffx + frameStart;
         switch ( (*it).type ) {
         case T_LEFT: {
             ptPos -= 4;
@@ -468,7 +468,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
                 drawLine(d->oldMx, -1);
         } else if ( d->action == A_TAB ) {
             if ( d->canvas && d->currTab!=d->tabList.end()) {
-                drawLine( qRound( zoomIt((*d->currTab).ptPos) ) + frameStart - diffx, -1);
+                drawLine( qRound( applyRtlAndZoom((*d->currTab).ptPos) ) + frameStart - diffx, -1 );
             }
         } else if ( d->tabChooser && ( d->flags & F_TABS ) && d->tabChooser->getCurrTabType() != 0 ) {
             int left = frameStart - diffx;
@@ -494,7 +494,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
                 break;
             default: break;
             }
-            tab.ptPos = unZoomIt( static_cast<double>( e->x() + diffx - frameStart ) );
+            tab.ptPos = unZoomItRtl( e->x() + diffx - frameStart );
 
             KoTabulatorList::Iterator it=d->tabList.begin();
             while ( it!=d->tabList.end() && tab > (*it) )
@@ -570,7 +570,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
         emit newRightIndent( d->i_right );
     } else if ( d->action == A_TAB ) {
         if ( d->canvas && !fakeMovement ) {
-            drawLine( qRound( zoomIt((*d->currTab).ptPos) ) + frameStart - diffx, -1);
+            drawLine( qRound( applyRtlAndZoom( (*d->currTab).ptPos ) ) + frameStart - diffx, -1);
         }
         if ( (e->y() < -50 || e->y() > height() + 50) && d->currTab!=d->tabList.end() )
             d->tabList.remove(d->currTab);
@@ -613,9 +613,9 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
     int right = d->frameEnd - diffx;
     int bottom = qRound(zoomIt(layout.ptBottom));
     bottom = ph - bottom - diffy;
-    int ip_left = qRound(applyRtlAndZoom(i_left, pw));
-    int ip_first = qRound(applyRtlAndZoom(i_first, pw));
-    int ip_right = qRound(applyRtlAndZoom(d->i_right, pw));
+    int ip_left = qRound(applyRtlAndZoom(i_left));
+    int ip_first = qRound(applyRtlAndZoom(i_first));
+    int ip_right = qRound(applyRtlAndZoom(d->i_right));
 
     int mx = e->x();
     mx = mx+diffx < 0 ? 0 : mx;
@@ -684,19 +684,19 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             if( ip_first > right-left-15 ) {
                                 ip_first=right-left-15;
                                 ip_first=ip_first<0 ? 0 : ip_first;
-                                i_first=unZoomItRtl( ip_first, pw );
+                                i_first=unZoomItRtl( ip_first );
                                 emit newFirstIndent( i_first );
                             }
                             if( ip_left > right-left-15 ) {
                                 ip_left=right-left-15;
                                 ip_left=ip_left<0 ? 0 : ip_left;
-                                i_left=unZoomItRtl( ip_left, pw );
+                                i_left=unZoomItRtl( ip_left );
                                 emit newLeftIndent( i_left );
                             }
                             if ( ip_right > right-left-15 ) {
                                 ip_right=right-left-15;
                                 ip_right=ip_right<0? 0 : ip_right;
-                                d->i_right=unZoomItRtl( ip_right, pw );
+                                d->i_right=unZoomItRtl( ip_right );
                                 emit newRightIndent( d->i_right );
                             }
                             d->oldMx = mx;
@@ -713,19 +713,19 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             if( ip_first > right-left-15 ) {
                                 ip_first=right-left-15;
                                 ip_first=ip_first<0 ? 0 : ip_first;
-                                i_first=unZoomItRtl( ip_first, pw );
+                                i_first=unZoomItRtl( ip_first );
                                 emit newFirstIndent( i_first );
                             }
                             if( ip_left > right-left-15 ) {
                                 ip_left=right-left-15;
                                 ip_left=ip_left<0 ? 0 : ip_left;
-                                i_left=unZoomItRtl( ip_left, pw );
+                                i_left=unZoomItRtl( ip_left );
                                 emit newLeftIndent( i_left );
                             }
                             if ( ip_right > right-left-15 ) {
                                 ip_right=right-left-15;
                                 ip_right=ip_right<0? 0 : ip_right;
-                                d->i_right=unZoomItRtl( ip_right, pw );
+                                d->i_right=unZoomItRtl( ip_right );
                                 emit newRightIndent( d->i_right );
                             }
                             d->oldMx = mx;
@@ -747,8 +747,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     } break;
                     case A_LEFT_INDENT: {
                         if ( d->canvas ) {
-                            if(newValue == i_left) break;
                             if (d->rtl) newValue = unZoomIt(pw) - newValue;
+                            if(newValue == i_left) break;
                             double newFirst =(i_first - i_left) + newValue;
                             if(zoomIt(newFirst) + left > right) break;
 
@@ -772,15 +772,16 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     } break;
                     case A_TAB: {
                         if ( d->canvas) {
+                            if (d->rtl) newValue = unZoomIt(pw) - newValue;
                             if(newValue == (*d->currTab).ptPos) break; // no change
                             QPainter p( d->canvas );
                             p.setRasterOp( Qt::NotROP );
-                            double pt = zoomIt((*d->currTab).ptPos);
+                            double pt = applyRtlAndZoom((*d->currTab).ptPos);
                             int pt_fr = qRound(pt) + frameStart - diffx;
                             if(d->currTab != d->removeTab) // prevent drawLine when we just created a new tab.
                                 p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
                             (*d->currTab).ptPos = newValue;
-                            pt = zoomIt( (*d->currTab).ptPos );
+                            pt = applyRtlAndZoom( (*d->currTab).ptPos );
                             pt_fr = qRound(pt) + frameStart - diffx;
                             p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
                             p.end();
@@ -1006,7 +1007,7 @@ void KoRuler::searchTab(int mx) {
     d->currTab = d->tabList.end();
     KoTabulatorList::Iterator it = d->tabList.begin();
     for ( ; it != d->tabList.end() ; ++it ) {
-        pos = qRound(zoomIt((*it).ptPos)) - diffx + frameStart;
+        pos = qRound(applyRtlAndZoom((*it).ptPos)) - diffx + frameStart;
         if ( mx > pos - 5 && mx < pos + 5 ) {
             setCursor( Qt::sizeHorCursor );
             d->action = A_TAB;
@@ -1078,14 +1079,16 @@ int KoRuler::flags() const
     return d->flags;
 }
 
-double KoRuler::applyRtlAndZoom( double value, int width ) const
+double KoRuler::applyRtlAndZoom( double value ) const
 {
-    return d->rtl ? ( width - zoomIt( value ) ) : zoomIt( value );
+    int frameWidth = d->frameEnd - frameStart;
+    return d->rtl ? ( frameWidth - zoomIt( value ) ) : zoomIt( value );
 }
 
-double KoRuler::unZoomItRtl( int pixValue, int width ) const
+double KoRuler::unZoomItRtl( int pixValue ) const
 {
-    return d->rtl ? ( unZoomIt( (double)(width - pixValue) ) ) : unZoomIt( (double)pixValue );
+    int frameWidth = d->frameEnd - frameStart;
+    return d->rtl ? ( unZoomIt( (double)(frameWidth - pixValue) ) ) : unZoomIt( (double)pixValue );
 }
 
 #include "koRuler.moc"

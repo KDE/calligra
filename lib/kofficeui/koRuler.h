@@ -265,8 +265,8 @@ protected:
     void drawLine(int oldX, int newX);
 
 private:
-    double applyRtlAndZoom( double value, int width ) const;
-    double unZoomItRtl( int pixValue, int width ) const;
+    double applyRtlAndZoom( double value ) const;
+    double unZoomItRtl( int pixValue ) const;
 
     KoRulerPrivate *d;
 
