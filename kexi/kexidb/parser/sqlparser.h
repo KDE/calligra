@@ -341,45 +341,44 @@ void parseData(KexiDB::Parser *p, const char *data);
      TIMEZONE_HOUR = 563,
      TIMEZONE_MINUTE = 564,
      TINYINT = 565,
-     TITLE = 566,
-     TO = 567,
-     TO_CHAR = 568,
-     TO_DATE = 569,
-     TRANSACTION = 570,
-     TRANSLATE = 571,
-     TRANSLATION = 572,
-     TRUNCATE = 573,
-     GENERAL_TITLE = 574,
-     TWO_DIGITS = 575,
-     UCASE = 576,
-     UNION = 577,
-     UNIQUE = 578,
-     SQL_UNKNOWN = 579,
-     UNSIGNED_INTEGER = 580,
-     UPDATE = 581,
-     UPPER = 582,
-     USAGE = 583,
-     USER = 584,
-     USER_DEFINED_NAME = 585,
-     USING = 586,
-     VALUE = 587,
-     VALUES = 588,
-     VARBINARY = 589,
-     VARCHAR = 590,
-     VARYING = 591,
-     VENDOR = 592,
-     VIEW = 593,
-     WEEK = 594,
-     WHEN = 595,
-     WHENEVER = 596,
-     WHERE = 597,
-     WHERE_CURRENT_OF = 598,
-     WITH = 599,
-     WORD_WRAPPED = 600,
-     WORK = 601,
-     WRAPPED = 602,
-     YEAR = 603,
-     YEARS_BETWEEN = 604
+     TO = 566,
+     TO_CHAR = 567,
+     TO_DATE = 568,
+     TRANSACTION = 569,
+     TRANSLATE = 570,
+     TRANSLATION = 571,
+     TRUNCATE = 572,
+     GENERAL_TITLE = 573,
+     TWO_DIGITS = 574,
+     UCASE = 575,
+     UNION = 576,
+     UNIQUE = 577,
+     SQL_UNKNOWN = 578,
+     UNSIGNED_INTEGER = 579,
+     UPDATE = 580,
+     UPPER = 581,
+     USAGE = 582,
+     USER = 583,
+     USER_DEFINED_NAME = 584,
+     USING = 585,
+     VALUE = 586,
+     VALUES = 587,
+     VARBINARY = 588,
+     VARCHAR = 589,
+     VARYING = 590,
+     VENDOR = 591,
+     VIEW = 592,
+     WEEK = 593,
+     WHEN = 594,
+     WHENEVER = 595,
+     WHERE = 596,
+     WHERE_CURRENT_OF = 597,
+     WITH = 598,
+     WORD_WRAPPED = 599,
+     WORK = 600,
+     WRAPPED = 601,
+     YEAR = 602,
+     YEARS_BETWEEN = 603
    };
 #endif
 #define PERCENT 258
@@ -690,51 +689,50 @@ void parseData(KexiDB::Parser *p, const char *data);
 #define TIMEZONE_HOUR 563
 #define TIMEZONE_MINUTE 564
 #define TINYINT 565
-#define TITLE 566
-#define TO 567
-#define TO_CHAR 568
-#define TO_DATE 569
-#define TRANSACTION 570
-#define TRANSLATE 571
-#define TRANSLATION 572
-#define TRUNCATE 573
-#define GENERAL_TITLE 574
-#define TWO_DIGITS 575
-#define UCASE 576
-#define UNION 577
-#define UNIQUE 578
-#define SQL_UNKNOWN 579
-#define UNSIGNED_INTEGER 580
-#define UPDATE 581
-#define UPPER 582
-#define USAGE 583
-#define USER 584
-#define USER_DEFINED_NAME 585
-#define USING 586
-#define VALUE 587
-#define VALUES 588
-#define VARBINARY 589
-#define VARCHAR 590
-#define VARYING 591
-#define VENDOR 592
-#define VIEW 593
-#define WEEK 594
-#define WHEN 595
-#define WHENEVER 596
-#define WHERE 597
-#define WHERE_CURRENT_OF 598
-#define WITH 599
-#define WORD_WRAPPED 600
-#define WORK 601
-#define WRAPPED 602
-#define YEAR 603
-#define YEARS_BETWEEN 604
+#define TO 566
+#define TO_CHAR 567
+#define TO_DATE 568
+#define TRANSACTION 569
+#define TRANSLATE 570
+#define TRANSLATION 571
+#define TRUNCATE 572
+#define GENERAL_TITLE 573
+#define TWO_DIGITS 574
+#define UCASE 575
+#define UNION 576
+#define UNIQUE 577
+#define SQL_UNKNOWN 578
+#define UNSIGNED_INTEGER 579
+#define UPDATE 580
+#define UPPER 581
+#define USAGE 582
+#define USER 583
+#define USER_DEFINED_NAME 584
+#define USING 585
+#define VALUE 586
+#define VALUES 587
+#define VARBINARY 588
+#define VARCHAR 589
+#define VARYING 590
+#define VENDOR 591
+#define VIEW 592
+#define WEEK 593
+#define WHEN 594
+#define WHENEVER 595
+#define WHERE 596
+#define WHERE_CURRENT_OF 597
+#define WITH 598
+#define WORD_WRAPPED 599
+#define WORK 600
+#define WRAPPED 601
+#define YEAR 602
+#define YEARS_BETWEEN 603
 
 
 
 
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
-#line 433 "sqlparser.y"
+#line 432 "sqlparser.y"
 typedef union YYSTYPE {
 	char stringValue[255];
 	int integerValue;
@@ -742,7 +740,7 @@ typedef union YYSTYPE {
 	KexiDB::Field *field;
 } YYSTYPE;
 /* Line 1240 of yacc.c.  */
-#line 742 "y.tab.h"
+#line 740 "y.tab.h"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1

@@ -307,7 +307,6 @@
 %token TIMEZONE_HOUR
 %token TIMEZONE_MINUTE
 %token TINYINT
-%token TITLE
 %token TO
 %token TO_CHAR
 %token TO_DATE
@@ -554,10 +553,9 @@ Select ColViews
 	}
 */
 }
-| SelectStatement FROM USER_DEFINED_NAME
+| SelectStatement Tables
 {
-	kdDebug() << "FROM: '" << $3 << "'" << endl;
-	requiresTable = false;
+	kdDebug() << "from detail" << endl;
 }
 ;
 
@@ -569,6 +567,53 @@ SELECT
 	parser->setOperation(KexiDB::Parser::OP_Select);
 }
 ;
+
+Tables:
+FROM FlatTableList
+{
+}
+| Tables LEFT JOIN USER_DEFINED_NAME SQL_ON ColExpression
+{
+	kdDebug() << "LEFT JOIN: '" << $4 << "' ON " << $6 << endl;
+	requiresTable = false;
+}
+| Tables LEFT OUTER JOIN USER_DEFINED_NAME SQL_ON ColExpression
+{
+	kdDebug() << "LEFT OUTER JOIN: '" << $5 << "' ON " << $7 << endl;
+	requiresTable = false;
+}
+| Tables INNER JOIN USER_DEFINED_NAME SQL_ON ColExpression
+{
+	kdDebug() << "INNER JOIN: '" << $4 << "' ON " << $6 << endl;
+	requiresTable = false;
+}
+| Tables RIGHT JOIN USER_DEFINED_NAME SQL_ON ColExpression
+{
+	kdDebug() << "RIGHT JOIN: '" << $4 << "' ON " << $6 << endl;
+	requiresTable = false;
+}
+| Tables RIGHT OUTER JOIN USER_DEFINED_NAME SQL_ON ColExpression
+{
+	kdDebug() << "RIGHT OUTER JOIN: '" << $5 << "' ON " << $7 << endl;
+	requiresTable = false;
+}
+;
+
+FlatTableList:
+FlatTableList COMMA FlatTable|FlatTable
+{
+}
+;
+
+FlatTable:
+USER_DEFINED_NAME
+{
+	kdDebug() << "FROM: '" << $1 << "'" << endl;
+	requiresTable = false;
+}
+;
+
+
 
 ColViews:
 ColViews COMMA ColItem|ColItem

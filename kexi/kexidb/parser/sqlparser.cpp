@@ -361,45 +361,44 @@
      TIMEZONE_HOUR = 563,
      TIMEZONE_MINUTE = 564,
      TINYINT = 565,
-     TITLE = 566,
-     TO = 567,
-     TO_CHAR = 568,
-     TO_DATE = 569,
-     TRANSACTION = 570,
-     TRANSLATE = 571,
-     TRANSLATION = 572,
-     TRUNCATE = 573,
-     GENERAL_TITLE = 574,
-     TWO_DIGITS = 575,
-     UCASE = 576,
-     UNION = 577,
-     UNIQUE = 578,
-     SQL_UNKNOWN = 579,
-     UNSIGNED_INTEGER = 580,
-     UPDATE = 581,
-     UPPER = 582,
-     USAGE = 583,
-     USER = 584,
-     USER_DEFINED_NAME = 585,
-     USING = 586,
-     VALUE = 587,
-     VALUES = 588,
-     VARBINARY = 589,
-     VARCHAR = 590,
-     VARYING = 591,
-     VENDOR = 592,
-     VIEW = 593,
-     WEEK = 594,
-     WHEN = 595,
-     WHENEVER = 596,
-     WHERE = 597,
-     WHERE_CURRENT_OF = 598,
-     WITH = 599,
-     WORD_WRAPPED = 600,
-     WORK = 601,
-     WRAPPED = 602,
-     YEAR = 603,
-     YEARS_BETWEEN = 604
+     TO = 566,
+     TO_CHAR = 567,
+     TO_DATE = 568,
+     TRANSACTION = 569,
+     TRANSLATE = 570,
+     TRANSLATION = 571,
+     TRUNCATE = 572,
+     GENERAL_TITLE = 573,
+     TWO_DIGITS = 574,
+     UCASE = 575,
+     UNION = 576,
+     UNIQUE = 577,
+     SQL_UNKNOWN = 578,
+     UNSIGNED_INTEGER = 579,
+     UPDATE = 580,
+     UPPER = 581,
+     USAGE = 582,
+     USER = 583,
+     USER_DEFINED_NAME = 584,
+     USING = 585,
+     VALUE = 586,
+     VALUES = 587,
+     VARBINARY = 588,
+     VARCHAR = 589,
+     VARYING = 590,
+     VENDOR = 591,
+     VIEW = 592,
+     WEEK = 593,
+     WHEN = 594,
+     WHENEVER = 595,
+     WHERE = 596,
+     WHERE_CURRENT_OF = 597,
+     WITH = 598,
+     WORD_WRAPPED = 599,
+     WORK = 600,
+     WRAPPED = 601,
+     YEAR = 602,
+     YEARS_BETWEEN = 603
    };
 #endif
 #define PERCENT 258
@@ -710,51 +709,50 @@
 #define TIMEZONE_HOUR 563
 #define TIMEZONE_MINUTE 564
 #define TINYINT 565
-#define TITLE 566
-#define TO 567
-#define TO_CHAR 568
-#define TO_DATE 569
-#define TRANSACTION 570
-#define TRANSLATE 571
-#define TRANSLATION 572
-#define TRUNCATE 573
-#define GENERAL_TITLE 574
-#define TWO_DIGITS 575
-#define UCASE 576
-#define UNION 577
-#define UNIQUE 578
-#define SQL_UNKNOWN 579
-#define UNSIGNED_INTEGER 580
-#define UPDATE 581
-#define UPPER 582
-#define USAGE 583
-#define USER 584
-#define USER_DEFINED_NAME 585
-#define USING 586
-#define VALUE 587
-#define VALUES 588
-#define VARBINARY 589
-#define VARCHAR 590
-#define VARYING 591
-#define VENDOR 592
-#define VIEW 593
-#define WEEK 594
-#define WHEN 595
-#define WHENEVER 596
-#define WHERE 597
-#define WHERE_CURRENT_OF 598
-#define WITH 599
-#define WORD_WRAPPED 600
-#define WORK 601
-#define WRAPPED 602
-#define YEAR 603
-#define YEARS_BETWEEN 604
+#define TO 566
+#define TO_CHAR 567
+#define TO_DATE 568
+#define TRANSACTION 569
+#define TRANSLATE 570
+#define TRANSLATION 571
+#define TRUNCATE 572
+#define GENERAL_TITLE 573
+#define TWO_DIGITS 574
+#define UCASE 575
+#define UNION 576
+#define UNIQUE 577
+#define SQL_UNKNOWN 578
+#define UNSIGNED_INTEGER 579
+#define UPDATE 580
+#define UPPER 581
+#define USAGE 582
+#define USER 583
+#define USER_DEFINED_NAME 584
+#define USING 585
+#define VALUE 586
+#define VALUES 587
+#define VARBINARY 588
+#define VARCHAR 589
+#define VARYING 590
+#define VENDOR 591
+#define VIEW 592
+#define WEEK 593
+#define WHEN 594
+#define WHENEVER 595
+#define WHERE 596
+#define WHERE_CURRENT_OF 597
+#define WITH 598
+#define WORD_WRAPPED 599
+#define WORK 600
+#define WRAPPED 601
+#define YEAR 602
+#define YEARS_BETWEEN 603
 
 
 
 
 /* Copy the first part of user declarations.  */
-#line 365 "sqlparser.y"
+#line 364 "sqlparser.y"
 
 #include <stdio.h>
 #include <string.h>
@@ -837,7 +835,7 @@
 #endif
 
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
-#line 433 "sqlparser.y"
+#line 432 "sqlparser.y"
 typedef union YYSTYPE {
 	char stringValue[255];
 	int integerValue;
@@ -845,7 +843,7 @@ typedef union YYSTYPE {
 	KexiDB::Field *field;
 } YYSTYPE;
 /* Line 191 of yacc.c.  */
-#line 849 "y.tab.c"
+#line 847 "y.tab.c"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
@@ -857,7 +855,7 @@ typedef union YYSTYPE {
 
 
 /* Line 214 of yacc.c.  */
-#line 861 "y.tab.c"
+#line 859 "y.tab.c"
 
 #if ! defined (yyoverflow) || YYERROR_VERBOSE
 
@@ -956,20 +954,20 @@ union yyalloc
 /* YYFINAL -- State number of the termination state. */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   422
+#define YYLAST   479
 
 /* YYNTOKENS -- Number of terminals. */
-#define YYNTOKENS  350
+#define YYNTOKENS  349
 /* YYNNTS -- Number of nonterminals. */
-#define YYNNTS  16
+#define YYNNTS  19
 /* YYNRULES -- Number of rules. */
-#define YYNRULES  53
+#define YYNRULES  62
 /* YYNRULES -- Number of states. */
-#define YYNSTATES  103
+#define YYNSTATES  133
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   604
+#define YYMAXUTOK   603
 
 #define YYTRANSLATE(YYX) 						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -1037,7 +1035,7 @@ static const unsigned short yytranslate[] =
      315,   316,   317,   318,   319,   320,   321,   322,   323,   324,
      325,   326,   327,   328,   329,   330,   331,   332,   333,   334,
      335,   336,   337,   338,   339,   340,   341,   342,   343,   344,
-     345,   346,   347,   348,   349
+     345,   346,   347,   348
 };
 
 #if YYDEBUG
@@ -1047,44 +1045,51 @@ static const unsigned char yyprhs[] =
 {
        0,     0,     3,     6,     9,    10,    11,    19,    23,    25,
       28,    32,    35,    37,    40,    43,    45,    47,    52,    57,
-      58,    61,    65,    67,    71,    73,    75,    77,    81,    83,
-      87,    89,    91,    93,    95,    99,   103,   107,   111,   115,
-     119,   123,   127,   131,   135,   139,   143,   147,   152,   157,
-     162,   167,   172,   174
+      58,    61,    64,    66,    69,    76,    84,    91,    98,   106,
+     110,   112,   114,   118,   120,   122,   124,   128,   130,   134,
+     136,   138,   140,   142,   146,   150,   154,   158,   162,   166,
+     170,   174,   178,   182,   186,   190,   194,   199,   204,   209,
+     214,   219,   221
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS. */
 static const short yyrhs[] =
 {
-     351,     0,    -1,   351,   352,    -1,   351,   359,    -1,    -1,
-      -1,    78,   301,   330,   353,   182,   354,   262,    -1,   354,
-      64,   355,    -1,   355,    -1,   330,   358,    -1,   330,   358,
-     356,    -1,   356,   357,    -1,   357,    -1,   244,   177,    -1,
-     215,   218,    -1,    35,    -1,     4,    -1,     4,   182,   325,
-     262,    -1,   335,   182,   325,   262,    -1,    -1,   360,   361,
-      -1,   359,   143,   330,    -1,   272,    -1,   361,    64,   362,
-      -1,   362,    -1,   364,    -1,   365,    -1,   364,    25,   330,
-      -1,   330,    -1,   330,   114,   330,    -1,    55,    -1,   279,
-      -1,   325,    -1,   363,    -1,   364,    24,   364,    -1,   364,
-      23,   364,    -1,   364,   283,   364,    -1,   364,    30,   364,
-      -1,   364,   121,   364,    -1,   364,   216,   364,    -1,   364,
-     150,   364,    -1,   364,   151,   364,    -1,   364,   185,   364,
-      -1,   364,   184,   364,    -1,   364,   187,   364,    -1,   364,
-       3,   364,    -1,   182,   364,   262,    -1,   297,   182,   364,
-     262,    -1,   199,   182,   364,   262,    -1,   197,   182,   364,
-     262,    -1,    36,   182,   364,   262,    -1,   111,   182,   364,
-     262,    -1,    30,    -1,   330,   114,    30,    -1
+     350,     0,    -1,   350,   351,    -1,   350,   358,    -1,    -1,
+      -1,    78,   301,   329,   352,   182,   353,   262,    -1,   353,
+      64,   354,    -1,   354,    -1,   329,   357,    -1,   329,   357,
+     355,    -1,   355,   356,    -1,   356,    -1,   244,   177,    -1,
+     215,   218,    -1,    35,    -1,     4,    -1,     4,   182,   324,
+     262,    -1,   334,   182,   324,   262,    -1,    -1,   359,   363,
+      -1,   358,   360,    -1,   272,    -1,   143,   361,    -1,   360,
+     181,   175,   329,   225,   366,    -1,   360,   181,   231,   175,
+     329,   225,   366,    -1,   360,   165,   175,   329,   225,   366,
+      -1,   360,   261,   175,   329,   225,   366,    -1,   360,   261,
+     231,   175,   329,   225,   366,    -1,   361,    64,   362,    -1,
+     362,    -1,   329,    -1,   363,    64,   364,    -1,   364,    -1,
+     366,    -1,   367,    -1,   366,    25,   329,    -1,   329,    -1,
+     329,   114,   329,    -1,    55,    -1,   279,    -1,   324,    -1,
+     365,    -1,   366,    24,   366,    -1,   366,    23,   366,    -1,
+     366,   283,   366,    -1,   366,    30,   366,    -1,   366,   121,
+     366,    -1,   366,   216,   366,    -1,   366,   150,   366,    -1,
+     366,   151,   366,    -1,   366,   185,   366,    -1,   366,   184,
+     366,    -1,   366,   187,   366,    -1,   366,     3,   366,    -1,
+     182,   366,   262,    -1,   297,   182,   366,   262,    -1,   199,
+     182,   366,   262,    -1,   197,   182,   366,   262,    -1,    36,
+     182,   366,   262,    -1,   111,   182,   366,   262,    -1,    30,
+      -1,   329,   114,    30,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const unsigned short yyrline[] =
 {
-       0,   443,   443,   444,   445,   450,   449,   458,   458,   464,
-     473,   488,   488,   494,   499,   504,   512,   517,   524,   531,
-     539,   557,   565,   574,   574,   580,   584,   587,   594,   602,
-     611,   618,   625,   635,   639,   644,   649,   654,   659,   664,
-     669,   674,   679,   684,   689,   694,   699,   705,   712,   719,
-     726,   733,   741,   750
+       0,   442,   442,   443,   444,   449,   448,   457,   457,   463,
+     472,   487,   487,   493,   498,   503,   511,   516,   523,   530,
+     538,   556,   563,   572,   575,   580,   585,   590,   595,   603,
+     603,   609,   619,   619,   625,   629,   632,   639,   647,   656,
+     663,   670,   680,   684,   689,   694,   699,   704,   709,   714,
+     719,   724,   729,   734,   739,   744,   750,   757,   764,   771,
+     778,   786,   795
 };
 #endif
 
@@ -1144,7 +1149,7 @@ static const char *const yytname[] =
   "SQLERROR", "SQLSTATE", "SQLWARNING", "SQRT", "STDEV", "SUBSTRING", 
   "SUM", "SYSDATE", "SYSDATE_FORMAT", "SYSTEM", "TABLE", "TAN", 
   "TEMPORARY", "THEN", "THREE_DIGITS", "TIME", "TIMESTAMP", 
-  "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TINYINT", "TITLE", "TO", "TO_CHAR", 
+  "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TINYINT", "TO", "TO_CHAR", 
   "TO_DATE", "TRANSACTION", "TRANSLATE", "TRANSLATION", "TRUNCATE", 
   "GENERAL_TITLE", "TWO_DIGITS", "UCASE", "UNION", "UNIQUE", 
   "SQL_UNKNOWN", "UNSIGNED_INTEGER", "UPDATE", "UPPER", "USAGE", "USER", 
@@ -1153,8 +1158,8 @@ static const char *const yytname[] =
   "WHERE_CURRENT_OF", "WITH", "WORD_WRAPPED", "WORK", "WRAPPED", "YEAR", 
   "YEARS_BETWEEN", "$accept", "Statement", "CreateTableStatement", "@1", 
   "ColDefs", "ColDef", "ColKeys", "ColKey", "ColType", "SelectStatement", 
-  "Select", "ColViews", "ColItem", "ColView", "ColExpression", 
-  "ColWildCard", 0
+  "Select", "Tables", "FlatTableList", "FlatTable", "ColViews", "ColItem", 
+  "ColView", "ColExpression", "ColWildCard", 0
 };
 #endif
 
@@ -1197,19 +1202,20 @@ static const unsigned short yytoknum[] =
      565,   566,   567,   568,   569,   570,   571,   572,   573,   574,
      575,   576,   577,   578,   579,   580,   581,   582,   583,   584,
      585,   586,   587,   588,   589,   590,   591,   592,   593,   594,
-     595,   596,   597,   598,   599,   600,   601,   602,   603,   604
+     595,   596,   597,   598,   599,   600,   601,   602,   603
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const unsigned short yyr1[] =
 {
-       0,   350,   351,   351,   351,   353,   352,   354,   354,   355,
-     355,   356,   356,   357,   357,   357,   358,   358,   358,   358,
-     359,   359,   360,   361,   361,   362,   362,   362,   363,   363,
-     363,   363,   363,   364,   364,   364,   364,   364,   364,   364,
-     364,   364,   364,   364,   364,   364,   364,   364,   364,   364,
-     364,   364,   365,   365
+       0,   349,   350,   350,   350,   352,   351,   353,   353,   354,
+     354,   355,   355,   356,   356,   356,   357,   357,   357,   357,
+     358,   358,   359,   360,   360,   360,   360,   360,   360,   361,
+     361,   362,   363,   363,   364,   364,   364,   365,   365,   365,
+     365,   365,   366,   366,   366,   366,   366,   366,   366,   366,
+     366,   366,   366,   366,   366,   366,   366,   366,   366,   366,
+     366,   367,   367
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -1217,10 +1223,11 @@ static const unsigned char yyr2[] =
 {
        0,     2,     2,     2,     0,     0,     7,     3,     1,     2,
        3,     2,     1,     2,     2,     1,     1,     4,     4,     0,
-       2,     3,     1,     3,     1,     1,     1,     3,     1,     3,
-       1,     1,     1,     1,     3,     3,     3,     3,     3,     3,
-       3,     3,     3,     3,     3,     3,     3,     4,     4,     4,
-       4,     4,     1,     3
+       2,     2,     1,     2,     6,     7,     6,     6,     7,     3,
+       1,     1,     3,     1,     1,     1,     3,     1,     3,     1,
+       1,     1,     1,     3,     3,     3,     3,     3,     3,     3,
+       3,     3,     3,     3,     3,     3,     4,     4,     4,     4,
+       4,     1,     3
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -1229,48 +1236,54 @@ static const unsigned char yyr2[] =
 static const unsigned char yydefact[] =
 {
        4,     0,     1,     0,    22,     2,     3,     0,     0,     0,
-      52,     0,    30,     0,     0,     0,     0,    31,     0,    32,
-      28,    20,    24,    33,    25,    26,     5,    21,     0,     0,
-      28,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+      21,    61,     0,    39,     0,     0,     0,     0,    40,     0,
+      41,    37,    20,    33,    42,    34,    35,     5,    31,    23,
+      30,     0,     0,     0,     0,     0,    37,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,    46,     0,     0,     0,    53,    29,
-      23,    45,    35,    34,    27,    37,    38,    40,    41,    43,
-      42,    44,    39,    36,     0,    50,    51,    49,    48,    47,
-      19,     0,     8,    16,     0,     9,     0,     6,     0,     0,
-      15,     0,     0,    10,    12,     7,     0,     0,    14,    13,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,    55,     0,     0,     0,
+      62,    38,    32,    54,    44,    43,    36,    46,    47,    49,
+      50,    52,    51,    53,    48,    45,     0,    29,     0,     0,
+       0,     0,     0,    59,    60,    58,    57,    56,    19,     0,
+       8,     0,     0,     0,     0,     0,    16,     0,     9,     0,
+       6,    26,    24,     0,    27,     0,     0,     0,    15,     0,
+       0,    10,    12,     7,    25,    28,     0,     0,    14,    13,
       11,    17,    18
 };
 
 /* YYDEFGOTO[NTERM-NUM]. */
 static const yysigned_char yydefgoto[] =
 {
-      -1,     1,     5,    50,    81,    82,    93,    94,    85,     6,
-       7,    21,    22,    23,    24,    25
+      -1,     1,     5,    56,    99,   100,   121,   122,   108,     6,
+       7,    10,    29,    30,    22,    23,    24,    25,    26
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -316
+#define YYPACT_NINF -311
 static const short yypact[] =
 {
-    -316,     6,  -316,  -289,  -316,  -316,  -129,   -29,  -315,  -312,
-    -316,  -163,  -316,  -162,   -33,  -161,  -159,  -316,  -146,  -316,
-     -77,   -26,  -316,  -316,     5,  -316,  -316,  -316,   -33,   -33,
-     -75,     1,   -33,   -33,   -33,   -28,   -29,   -33,   -33,   -33,
-    -287,   -33,   -33,   -33,   -33,   -33,   -33,   -33,   -33,   -33,
-    -141,    10,    24,  -286,  -316,    29,    82,   139,  -316,  -316,
-    -316,   -13,   -25,   -25,  -316,  -316,   -13,   -13,   -13,   -13,
-     -13,   -13,   -13,  -316,  -285,  -316,  -316,  -316,  -316,  -316,
-      -4,   -55,  -316,  -136,  -133,   -19,  -285,  -316,  -275,  -274,
-    -316,  -160,  -122,   -19,  -316,  -316,  -199,  -198,  -316,  -316,
-    -316,  -316,  -316
+    -311,    10,  -311,  -285,  -311,  -311,  -126,   -29,  -310,  -308,
+    -147,  -311,  -159,  -311,  -146,   -33,  -145,  -144,  -311,  -142,
+    -311,   -73,   -22,  -311,  -311,     5,  -311,  -311,  -311,   -21,
+    -311,  -131,  -166,  -164,   -33,   -33,   -69,     1,   -33,   -33,
+     -33,   -28,   -29,   -33,   -33,   -33,  -283,   -33,   -33,   -33,
+     -33,   -33,   -33,   -33,   -33,   -33,  -133,  -308,  -279,  -278,
+    -123,  -274,  -119,     9,    24,  -272,  -311,    50,    93,   154,
+    -311,  -311,  -311,   -10,   -25,   -25,  -311,  -311,   -10,   -10,
+     -10,   -10,   -10,   -10,   -10,  -311,  -271,  -311,  -165,  -163,
+    -270,  -162,  -268,  -311,  -311,  -311,  -311,  -311,    -4,   -58,
+    -311,   -33,   -33,  -161,   -33,  -157,  -116,  -113,   -20,  -271,
+    -311,   196,   196,   -33,   196,   -33,  -254,  -253,  -311,  -143,
+    -105,   -20,  -311,  -311,   196,   196,  -186,  -185,  -311,  -311,
+    -311,  -311,  -311
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const short yypgoto[] =
 {
-    -316,  -316,  -316,  -316,  -316,   -18,  -316,   -14,  -316,  -316,
-    -316,  -316,    44,  -316,    28,  -316
+    -311,  -311,  -311,  -311,  -311,   -30,  -311,   -40,  -311,  -311,
+    -311,  -311,  -311,    26,  -311,    42,  -311,   350,  -311
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -1280,113 +1293,126 @@ static const short yypgoto[] =
 #define YYTABLE_NINF -1
 static const unsigned char yytable[] =
 {
-      83,    10,    58,    11,    37,    41,     2,    11,    37,    86,
-      38,    39,     8,    37,     9,    26,    90,    41,    27,    28,
-      29,    32,    12,    33,    38,    39,    12,    37,    38,    39,
-      40,    41,    37,    38,    39,    41,    34,    35,    36,    53,
-      41,    74,    31,    64,    59,    80,    88,    38,    39,    89,
-      96,    97,    38,    39,    41,    99,    51,    52,    98,    41,
-      55,    56,    57,   101,   102,    61,    62,    63,    95,    65,
-      66,    67,    68,    69,    70,    71,    72,    73,    13,   100,
-      60,     0,    13,     0,     3,    37,     0,     0,     0,     0,
+     106,    11,    70,    12,    43,    47,   109,    12,    43,    59,
+       2,    61,    43,    44,    45,   118,     8,     9,    31,    27,
+      47,    28,    13,    34,    44,    45,    13,    43,    44,    45,
+      46,    47,    44,    45,    32,    47,    35,    38,    39,    47,
+      40,    41,    42,    57,    58,    65,    76,    44,    45,    86,
+      88,    89,    90,    43,    47,    91,    92,    71,    98,   103,
+     101,   105,   102,   104,   113,    60,   116,    62,   115,   117,
+     126,   127,   129,    44,    45,   128,   131,   132,    14,   123,
+      47,   130,    14,    87,    72,     0,     0,     0,     3,     0,
+       0,     0,     0,     0,     0,     0,    43,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,    38,    39,     0,     0,     0,
-       0,     0,    41,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,    42,     0,     0,     0,    42,     0,     0,     0,
-       0,    42,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,    37,     0,     0,    42,     0,     0,     0,    14,
-      42,    43,    44,    14,     0,    43,    44,     0,     0,     0,
-      43,    44,    38,    39,    15,     0,    16,     0,    15,    41,
-      16,     0,     0,     0,    43,    44,     0,     0,     0,    43,
-      44,     0,     0,     0,     0,    45,    46,     0,    47,    45,
-      46,     0,    47,     0,    45,    46,    91,    47,     0,     0,
-       0,     0,     0,    42,     0,     0,     0,    87,    45,    46,
-       0,    47,     0,    45,    46,     0,    47,    48,     0,     0,
-       0,    48,     0,     0,     0,    92,    48,     0,     0,     0,
-       0,     0,    43,    44,     0,     0,     0,     0,     0,     0,
-      48,     0,     0,     0,     0,    48,    17,     0,     0,     0,
-      17,     0,     0,     0,     0,     0,     0,     0,    49,     0,
-      42,     0,     0,    54,    18,     0,    45,    46,    18,    47,
-      49,     0,    75,     0,     0,     0,     0,     0,     4,     0,
-       0,     0,     0,     0,    49,     0,    76,     0,    49,    43,
-      44,    77,    19,    49,     0,     0,    19,    30,    48,     0,
-       0,    20,    59,     0,     0,     0,     0,    49,     0,     0,
-       0,     0,    49,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,    45,    46,     0,    47,     0,     0,     0,
-       0,    84,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,    78,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,    48,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,    49,     0,     0,     0,     0,
+       0,     0,     0,     0,    33,     0,    44,    45,     0,     0,
+       0,     0,    48,    47,     0,     0,    48,     0,     0,     0,
+      48,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,    48,     0,     0,     0,    15,
+       0,    49,    50,    15,     0,    49,    50,    43,     0,    49,
+      50,     0,     0,     0,    16,     0,    17,     0,    16,     0,
+      17,    48,     0,     0,    49,    50,     0,    44,    45,     0,
+       0,     0,     0,     0,    47,    51,    52,     0,    53,    51,
+      52,     0,    53,    51,    52,   119,    53,     0,     0,    43,
+      49,    50,     0,     0,   110,     0,     0,     0,    51,    52,
+       0,    53,     0,     0,    48,     0,     0,    54,     0,    44,
+      45,    54,     0,     0,   120,    54,    47,     0,     0,     0,
+       0,     0,     0,     0,    51,    52,     0,    53,     0,     0,
+      54,     0,     0,    49,    50,     0,    18,     0,     0,     0,
+      18,     0,     0,     0,     0,     0,     0,     0,    55,     0,
+       0,     0,     0,    66,    19,     0,    54,     0,    19,     0,
+       0,    93,     0,    55,     0,    48,     0,    51,    52,     0,
+      53,     0,     4,     0,    55,     0,    94,     0,    55,     0,
+       0,    20,    55,     0,     0,    20,    36,     0,     0,     0,
+      21,    71,     0,     0,    49,    50,     0,    55,     0,    54,
+       0,     0,    95,     0,     0,     0,     0,    48,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+     107,     0,     0,    55,     0,     0,     0,     0,    51,    52,
+       0,    53,     0,     0,     0,     0,    49,    50,     0,     0,
+       0,     0,     0,     0,     0,    96,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,    37,     0,     0,     0,     0,
+      54,     0,     0,     0,     0,     0,    55,     0,     0,     0,
+      51,    52,     0,    53,    63,    64,     0,     0,    67,    68,
+      69,     0,     0,    73,    74,    75,     0,    77,    78,    79,
+      80,    81,    82,    83,    84,    85,     0,     0,     0,     0,
+       0,     0,    54,     0,     0,     0,    97,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,    55,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,    79,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,    49
+       0,   111,   112,     0,   114,     0,     0,     0,     0,     0,
+       0,     0,     0,   124,     0,   125,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,    55
 };
 
 static const short yycheck[] =
 {
-       4,    30,    30,    36,     3,    30,     0,    36,     3,    64,
-      23,    24,   301,     3,   143,   330,    35,    30,   330,   182,
-     182,   182,    55,   182,    23,    24,    55,     3,    23,    24,
-      25,    30,     3,    23,    24,    30,   182,   114,    64,   114,
-      30,   182,    14,   330,   330,   330,   182,    23,    24,   182,
-     325,   325,    23,    24,    30,   177,    28,    29,   218,    30,
-      32,    33,    34,   262,   262,    37,    38,    39,    86,    41,
-      42,    43,    44,    45,    46,    47,    48,    49,   111,    93,
-      36,    -1,   111,    -1,    78,     3,    -1,    -1,    -1,    -1,
+       4,    30,    30,    36,     3,    30,    64,    36,     3,   175,
+       0,   175,     3,    23,    24,    35,   301,   143,   165,   329,
+      30,   329,    55,   182,    23,    24,    55,     3,    23,    24,
+      25,    30,    23,    24,   181,    30,   182,   182,   182,    30,
+     182,   114,    64,    64,   175,   114,   329,    23,    24,   182,
+     329,   329,   175,     3,    30,   329,   175,   329,   329,   329,
+     225,   329,   225,   225,   225,   231,   182,   231,   225,   182,
+     324,   324,   177,    23,    24,   218,   262,   262,   111,   109,
+      30,   121,   111,    57,    42,    -1,    -1,    -1,    78,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,     3,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    23,    24,    -1,    -1,    -1,
-      -1,    -1,    30,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,   121,    -1,    -1,    -1,   121,    -1,    -1,    -1,
-      -1,   121,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,     3,    -1,    -1,   121,    -1,    -1,    -1,   182,
-     121,   150,   151,   182,    -1,   150,   151,    -1,    -1,    -1,
-     150,   151,    23,    24,   197,    -1,   199,    -1,   197,    30,
-     199,    -1,    -1,    -1,   150,   151,    -1,    -1,    -1,   150,
-     151,    -1,    -1,    -1,    -1,   184,   185,    -1,   187,   184,
-     185,    -1,   187,    -1,   184,   185,   215,   187,    -1,    -1,
-      -1,    -1,    -1,   121,    -1,    -1,    -1,   262,   184,   185,
-      -1,   187,    -1,   184,   185,    -1,   187,   216,    -1,    -1,
-      -1,   216,    -1,    -1,    -1,   244,   216,    -1,    -1,    -1,
-      -1,    -1,   150,   151,    -1,    -1,    -1,    -1,    -1,    -1,
-     216,    -1,    -1,    -1,    -1,   216,   279,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,   261,    -1,    23,    24,    -1,    -1,
+      -1,    -1,   121,    30,    -1,    -1,   121,    -1,    -1,    -1,
+     121,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,   121,    -1,    -1,    -1,   182,
+      -1,   150,   151,   182,    -1,   150,   151,     3,    -1,   150,
+     151,    -1,    -1,    -1,   197,    -1,   199,    -1,   197,    -1,
+     199,   121,    -1,    -1,   150,   151,    -1,    23,    24,    -1,
+      -1,    -1,    -1,    -1,    30,   184,   185,    -1,   187,   184,
+     185,    -1,   187,   184,   185,   215,   187,    -1,    -1,     3,
+     150,   151,    -1,    -1,   262,    -1,    -1,    -1,   184,   185,
+      -1,   187,    -1,    -1,   121,    -1,    -1,   216,    -1,    23,
+      24,   216,    -1,    -1,   244,   216,    30,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,   184,   185,    -1,   187,    -1,    -1,
+     216,    -1,    -1,   150,   151,    -1,   279,    -1,    -1,    -1,
      279,    -1,    -1,    -1,    -1,    -1,    -1,    -1,   283,    -1,
-     121,    -1,    -1,   262,   297,    -1,   184,   185,   297,   187,
-     283,    -1,   262,    -1,    -1,    -1,    -1,    -1,   272,    -1,
-      -1,    -1,    -1,    -1,   283,    -1,   262,    -1,   283,   150,
-     151,   262,   325,   283,    -1,    -1,   325,   330,   216,    -1,
-      -1,   330,   330,    -1,    -1,    -1,    -1,   283,    -1,    -1,
-      -1,    -1,   283,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,   184,   185,    -1,   187,    -1,    -1,    -1,
-      -1,   335,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,   262,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,   216,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,   283,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,   262,   297,    -1,   216,    -1,   297,    -1,
+      -1,   262,    -1,   283,    -1,   121,    -1,   184,   185,    -1,
+     187,    -1,   272,    -1,   283,    -1,   262,    -1,   283,    -1,
+      -1,   324,   283,    -1,    -1,   324,   329,    -1,    -1,    -1,
+     329,   329,    -1,    -1,   150,   151,    -1,   283,    -1,   216,
+      -1,    -1,   262,    -1,    -1,    -1,    -1,   121,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+     334,    -1,    -1,   283,    -1,    -1,    -1,    -1,   184,   185,
+      -1,   187,    -1,    -1,    -1,    -1,   150,   151,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,   262,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    15,    -1,    -1,    -1,    -1,
+     216,    -1,    -1,    -1,    -1,    -1,   283,    -1,    -1,    -1,
+     184,   185,    -1,   187,    34,    35,    -1,    -1,    38,    39,
+      40,    -1,    -1,    43,    44,    45,    -1,    47,    48,    49,
+      50,    51,    52,    53,    54,    55,    -1,    -1,    -1,    -1,
+      -1,    -1,   216,    -1,    -1,    -1,   262,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,   283,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,   262,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,   283
+      -1,   101,   102,    -1,   104,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,   113,    -1,   115,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,   283
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const unsigned short yystos[] =
 {
-       0,   351,     0,    78,   272,   352,   359,   360,   301,   143,
-      30,    36,    55,   111,   182,   197,   199,   279,   297,   325,
-     330,   361,   362,   363,   364,   365,   330,   330,   182,   182,
-     330,   364,   182,   182,   182,   114,    64,     3,    23,    24,
-      25,    30,   121,   150,   151,   184,   185,   187,   216,   283,
-     353,   364,   364,   114,   262,   364,   364,   364,    30,   330,
-     362,   364,   364,   364,   330,   364,   364,   364,   364,   364,
-     364,   364,   364,   364,   182,   262,   262,   262,   262,   262,
-     330,   354,   355,     4,   335,   358,    64,   262,   182,   182,
-      35,   215,   244,   356,   357,   355,   325,   325,   218,   177,
-     357,   262,   262
+       0,   350,     0,    78,   272,   351,   358,   359,   301,   143,
+     360,    30,    36,    55,   111,   182,   197,   199,   279,   297,
+     324,   329,   363,   364,   365,   366,   367,   329,   329,   361,
+     362,   165,   181,   261,   182,   182,   329,   366,   182,   182,
+     182,   114,    64,     3,    23,    24,    25,    30,   121,   150,
+     151,   184,   185,   187,   216,   283,   352,    64,   175,   175,
+     231,   175,   231,   366,   366,   114,   262,   366,   366,   366,
+      30,   329,   364,   366,   366,   366,   329,   366,   366,   366,
+     366,   366,   366,   366,   366,   366,   182,   362,   329,   329,
+     175,   329,   175,   262,   262,   262,   262,   262,   329,   353,
+     354,   225,   225,   329,   225,   329,     4,   334,   357,    64,
+     262,   366,   366,   225,   366,   225,   182,   182,    35,   215,
+     244,   355,   356,   354,   366,   366,   324,   324,   218,   177,
+     356,   262,   262
 };
 
 #if ! defined (YYSIZE_T) && defined (__SIZE_TYPE__)
@@ -1997,17 +2023,17 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 443 "sqlparser.y"
+#line 442 "sqlparser.y"
     { YYACCEPT; }
     break;
 
   case 3:
-#line 444 "sqlparser.y"
+#line 443 "sqlparser.y"
     { YYACCEPT; }
     break;
 
   case 5:
-#line 450 "sqlparser.y"
+#line 449 "sqlparser.y"
     {
 	parser->setOperation(KexiDB::Parser::OP_CreateTable);
 	parser->createTable(yyvsp[0].stringValue);
@@ -2015,13 +2041,13 @@ yyreduce:
     break;
 
   case 8:
-#line 459 "sqlparser.y"
+#line 458 "sqlparser.y"
     {
 }
     break;
 
   case 9:
-#line 465 "sqlparser.y"
+#line 464 "sqlparser.y"
     {
 	kdDebug() << "adding field " << yyvsp[-1].stringValue << endl;
 	field->setName(yyvsp[-1].stringValue);
@@ -2033,7 +2059,7 @@ yyreduce:
     break;
 
   case 10:
-#line 474 "sqlparser.y"
+#line 473 "sqlparser.y"
     {
 	kdDebug() << "adding field " << yyvsp[-2].stringValue << endl;
 	field->setName(yyvsp[-2].stringValue);
@@ -2048,13 +2074,13 @@ yyreduce:
     break;
 
   case 12:
-#line 489 "sqlparser.y"
+#line 488 "sqlparser.y"
     {
 }
     break;
 
   case 13:
-#line 495 "sqlparser.y"
+#line 494 "sqlparser.y"
     {
 	field->setPrimaryKey(true);
 	kdDebug() << "primary" << endl;
@@ -2062,7 +2088,7 @@ yyreduce:
     break;
 
   case 14:
-#line 500 "sqlparser.y"
+#line 499 "sqlparser.y"
     {
 	field->setNotNull(true);
 	kdDebug() << "not_null" << endl;
@@ -2070,7 +2096,7 @@ yyreduce:
     break;
 
   case 15:
-#line 505 "sqlparser.y"
+#line 504 "sqlparser.y"
     {
 	field->setAutoIncrement(true);
 	kdDebug() << "ainc" << endl;
@@ -2078,7 +2104,7 @@ yyreduce:
     break;
 
   case 16:
-#line 513 "sqlparser.y"
+#line 512 "sqlparser.y"
     {
 	field = new KexiDB::Field();
 	field->setType(yyvsp[0].coltype);
@@ -2086,7 +2112,7 @@ yyreduce:
     break;
 
   case 17:
-#line 518 "sqlparser.y"
+#line 517 "sqlparser.y"
     {
 	kdDebug() << "sql + length" << endl;
 	field = new KexiDB::Field();
@@ -2096,7 +2122,7 @@ yyreduce:
     break;
 
   case 18:
-#line 525 "sqlparser.y"
+#line 524 "sqlparser.y"
     {
 	field = new KexiDB::Field();
 	field->setPrecision(yyvsp[-1].integerValue);
@@ -2105,7 +2131,7 @@ yyreduce:
     break;
 
   case 19:
-#line 531 "sqlparser.y"
+#line 530 "sqlparser.y"
     {
 	// SQLITE compatibillity
 	field = new KexiDB::Field();
@@ -2114,7 +2140,7 @@ yyreduce:
     break;
 
   case 20:
-#line 540 "sqlparser.y"
+#line 539 "sqlparser.y"
     {
 /*
 	parser->select()->setBaseTable($4);
@@ -2135,15 +2161,14 @@ yyreduce:
     break;
 
   case 21:
-#line 558 "sqlparser.y"
+#line 557 "sqlparser.y"
     {
-	kdDebug() << "FROM: '" << yyvsp[0].stringValue << "'" << endl;
-	requiresTable = false;
+	kdDebug() << "from detail" << endl;
 }
     break;
 
   case 22:
-#line 566 "sqlparser.y"
+#line 564 "sqlparser.y"
     {
 	kdDebug() << "SELECT" << endl;
 	parser->createSelect();
@@ -2151,34 +2176,94 @@ yyreduce:
 }
     break;
 
-  case 24:
-#line 575 "sqlparser.y"
+  case 23:
+#line 573 "sqlparser.y"
     {
+}
+    break;
+
+  case 24:
+#line 576 "sqlparser.y"
+    {
+	kdDebug() << "LEFT JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].field << endl;
+	requiresTable = false;
 }
     break;
 
   case 25:
 #line 581 "sqlparser.y"
     {
-	kdDebug() << " adding field '" << yyvsp[0].field->name() << "'" << endl;
+	kdDebug() << "LEFT OUTER JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].field << endl;
+	requiresTable = false;
 }
     break;
 
   case 26:
-#line 585 "sqlparser.y"
+#line 586 "sqlparser.y"
     {
+	kdDebug() << "INNER JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].field << endl;
+	requiresTable = false;
 }
     break;
 
   case 27:
-#line 588 "sqlparser.y"
+#line 591 "sqlparser.y"
+    {
+	kdDebug() << "RIGHT JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].field << endl;
+	requiresTable = false;
+}
+    break;
+
+  case 28:
+#line 596 "sqlparser.y"
+    {
+	kdDebug() << "RIGHT OUTER JOIN: '" << yyvsp[-2].stringValue << "' ON " << yyvsp[0].field << endl;
+	requiresTable = false;
+}
+    break;
+
+  case 30:
+#line 604 "sqlparser.y"
+    {
+}
+    break;
+
+  case 31:
+#line 610 "sqlparser.y"
+    {
+	kdDebug() << "FROM: '" << yyvsp[0].stringValue << "'" << endl;
+	requiresTable = false;
+}
+    break;
+
+  case 33:
+#line 620 "sqlparser.y"
+    {
+}
+    break;
+
+  case 34:
+#line 626 "sqlparser.y"
+    {
+	kdDebug() << " adding field '" << yyvsp[0].field->name() << "'" << endl;
+}
+    break;
+
+  case 35:
+#line 630 "sqlparser.y"
+    {
+}
+    break;
+
+  case 36:
+#line 633 "sqlparser.y"
     {
 	kdDebug() << " adding field '" << yyvsp[-2].field->name() << "' as '" << yyvsp[0].stringValue << "'" << endl;
 }
     break;
 
-  case 28:
-#line 595 "sqlparser.y"
+  case 37:
+#line 640 "sqlparser.y"
     {
 	kdDebug() << "  + col " << yyvsp[0].stringValue << endl;
 	yyval.field = new KexiDB::Field();
@@ -2188,8 +2273,8 @@ yyreduce:
 }
     break;
 
-  case 29:
-#line 603 "sqlparser.y"
+  case 38:
+#line 648 "sqlparser.y"
     {
 	kdDebug() << "  + col " << yyvsp[0].stringValue << " from " << yyvsp[-2].stringValue << endl;
 	yyval.field = new KexiDB::Field();
@@ -2200,8 +2285,8 @@ yyreduce:
 }
     break;
 
-  case 30:
-#line 612 "sqlparser.y"
+  case 39:
+#line 657 "sqlparser.y"
     {
 	yyval.field = new KexiDB::Field();
 	yyval.field->setName(yyvsp[0].stringValue);
@@ -2210,131 +2295,131 @@ yyreduce:
 }
     break;
 
-  case 31:
-#line 619 "sqlparser.y"
-    {
-	yyval.field = new KexiDB::Field();
-	yyval.field->setName(QString::number(yyvsp[0].integerValue));
-//	parser->select()->addField(field);
-	kdDebug() << "  + numerical constant " << yyvsp[0].integerValue << endl;
-}
-    break;
-
-  case 32:
-#line 626 "sqlparser.y"
-    {
-	yyval.field = new KexiDB::Field();
-	yyval.field->setName(QString::number(yyvsp[0].integerValue));
-//	parser->select()->addField(field);
-	kdDebug() << "  + numerical constant " << yyvsp[0].integerValue << endl;
-}
-    break;
-
-  case 33:
-#line 636 "sqlparser.y"
-    {
-	yyval.field = yyvsp[0].field;
-}
-    break;
-
-  case 34:
-#line 640 "sqlparser.y"
-    {
-	kdDebug() << yyvsp[-2].field->name() << " + " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " + " + yyvsp[0].field->name());
-}
-    break;
-
-  case 35:
-#line 645 "sqlparser.y"
-    {
-	kdDebug() << yyvsp[-2].field->name() << " - " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " - " + yyvsp[0].field->name());
-}
-    break;
-
-  case 36:
-#line 650 "sqlparser.y"
-    {
-	kdDebug() << yyvsp[-2].field->name() << " / " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " / " + yyvsp[0].field->name());
-}
-    break;
-
-  case 37:
-#line 655 "sqlparser.y"
-    {
-	kdDebug() << yyvsp[-2].field->name() << " * " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " * " + yyvsp[0].field->name());
-}
-    break;
-
-  case 38:
-#line 660 "sqlparser.y"
-    {
-	kdDebug() << yyvsp[-2].field->name() << " = " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " = " + yyvsp[0].field->name());
-}
-    break;
-
-  case 39:
-#line 665 "sqlparser.y"
-    {
-	kdDebug() << yyvsp[-2].field->name() << " <> " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " <> " + yyvsp[0].field->name());
-}
-    break;
-
   case 40:
-#line 670 "sqlparser.y"
+#line 664 "sqlparser.y"
     {
-	kdDebug() << yyvsp[-2].field->name() << " > " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " > " + yyvsp[0].field->name());
+	yyval.field = new KexiDB::Field();
+	yyval.field->setName(QString::number(yyvsp[0].integerValue));
+//	parser->select()->addField(field);
+	kdDebug() << "  + numerical constant " << yyvsp[0].integerValue << endl;
 }
     break;
 
   case 41:
-#line 675 "sqlparser.y"
+#line 671 "sqlparser.y"
     {
-	kdDebug() << yyvsp[-2].field->name() << " >= " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " >= " + yyvsp[0].field->name());
+	yyval.field = new KexiDB::Field();
+	yyval.field->setName(QString::number(yyvsp[0].integerValue));
+//	parser->select()->addField(field);
+	kdDebug() << "  + numerical constant " << yyvsp[0].integerValue << endl;
 }
     break;
 
   case 42:
-#line 680 "sqlparser.y"
+#line 681 "sqlparser.y"
     {
-	kdDebug() << yyvsp[-2].field->name() << " < " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " < " + yyvsp[0].field->name());
+	yyval.field = yyvsp[0].field;
 }
     break;
 
   case 43:
 #line 685 "sqlparser.y"
     {
-	kdDebug() << yyvsp[-2].field->name() << " <= " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " <= " + yyvsp[0].field->name());
+	kdDebug() << yyvsp[-2].field->name() << " + " << yyvsp[0].field->name() << endl;
+	yyval.field->setName(yyvsp[-2].field->name() + " + " + yyvsp[0].field->name());
 }
     break;
 
   case 44:
 #line 690 "sqlparser.y"
     {
-	kdDebug() << yyvsp[-2].field->name() << " LIKE " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " LIKE " + yyvsp[0].field->name());
+	kdDebug() << yyvsp[-2].field->name() << " - " << yyvsp[0].field->name() << endl;
+	yyval.field->setName(yyvsp[-2].field->name() + " - " + yyvsp[0].field->name());
 }
     break;
 
   case 45:
 #line 695 "sqlparser.y"
     {
-	kdDebug() << yyvsp[-2].field->name() << " % " << yyvsp[0].field->name() << endl;
-	yyval.field->setName(yyvsp[-2].field->name() + " % " + yyvsp[0].field->name());
+	kdDebug() << yyvsp[-2].field->name() << " / " << yyvsp[0].field->name() << endl;
+	yyval.field->setName(yyvsp[-2].field->name() + " / " + yyvsp[0].field->name());
 }
     break;
 
   case 46:
 #line 700 "sqlparser.y"
+    {
+	kdDebug() << yyvsp[-2].field->name() << " * " << yyvsp[0].field->name() << endl;
+	yyval.field->setName(yyvsp[-2].field->name() + " * " + yyvsp[0].field->name());
+}
+    break;
+
+  case 47:
+#line 705 "sqlparser.y"
+    {
+	kdDebug() << yyvsp[-2].field->name() << " = " << yyvsp[0].field->name() << endl;
+	yyval.field->setName(yyvsp[-2].field->name() + " = " + yyvsp[0].field->name());
+}
+    break;
+
+  case 48:
+#line 710 "sqlparser.y"
+    {
+	kdDebug() << yyvsp[-2].field->name() << " <> " << yyvsp[0].field->name() << endl;
+	yyval.field->setName(yyvsp[-2].field->name() + " <> " + yyvsp[0].field->name());
+}
+    break;
+
+  case 49:
+#line 715 "sqlparser.y"
+    {
+	kdDebug() << yyvsp[-2].field->name() << " > " << yyvsp[0].field->name() << endl;
+	yyval.field->setName(yyvsp[-2].field->name() + " > " + yyvsp[0].field->name());
+}
+    break;
+
+  case 50:
+#line 720 "sqlparser.y"
+    {
+	kdDebug() << yyvsp[-2].field->name() << " >= " << yyvsp[0].field->name() << endl;
+	yyval.field->setName(yyvsp[-2].field->name() + " >= " + yyvsp[0].field->name());
+}
+    break;
+
+  case 51:
+#line 725 "sqlparser.y"
+    {
+	kdDebug() << yyvsp[-2].field->name() << " < " << yyvsp[0].field->name() << endl;
+	yyval.field->setName(yyvsp[-2].field->name() + " < " + yyvsp[0].field->name());
+}
+    break;
+
+  case 52:
+#line 730 "sqlparser.y"
+    {
+	kdDebug() << yyvsp[-2].field->name() << " <= " << yyvsp[0].field->name() << endl;
+	yyval.field->setName(yyvsp[-2].field->name() + " <= " + yyvsp[0].field->name());
+}
+    break;
+
+  case 53:
+#line 735 "sqlparser.y"
+    {
+	kdDebug() << yyvsp[-2].field->name() << " LIKE " << yyvsp[0].field->name() << endl;
+	yyval.field->setName(yyvsp[-2].field->name() + " LIKE " + yyvsp[0].field->name());
+}
+    break;
+
+  case 54:
+#line 740 "sqlparser.y"
+    {
+	kdDebug() << yyvsp[-2].field->name() << " % " << yyvsp[0].field->name() << endl;
+	yyval.field->setName(yyvsp[-2].field->name() + " % " + yyvsp[0].field->name());
+}
+    break;
+
+  case 55:
+#line 745 "sqlparser.y"
     {
 	kdDebug() << "(" << yyvsp[-1].field->name() << ")" << endl;
 	yyval.field = yyvsp[-1].field;
@@ -2342,8 +2427,8 @@ yyreduce:
 }
     break;
 
-  case 47:
-#line 706 "sqlparser.y"
+  case 56:
+#line 751 "sqlparser.y"
     {
 	yyval.field = yyvsp[-1].field;
 	yyval.field->setName("SUM(" + yyvsp[-1].field->name() + ")");
@@ -2352,8 +2437,8 @@ yyreduce:
 }
     break;
 
-  case 48:
-#line 713 "sqlparser.y"
+  case 57:
+#line 758 "sqlparser.y"
     {
 	yyval.field = yyvsp[-1].field;
 	yyval.field->setName("MIN(" + yyvsp[-1].field->name() + ")");
@@ -2362,8 +2447,8 @@ yyreduce:
 }
     break;
 
-  case 49:
-#line 720 "sqlparser.y"
+  case 58:
+#line 765 "sqlparser.y"
     {
 	yyval.field = yyvsp[-1].field;
 	yyval.field->setName("MAX(" + yyvsp[-1].field->name() + ")");
@@ -2372,8 +2457,8 @@ yyreduce:
 }
     break;
 
-  case 50:
-#line 727 "sqlparser.y"
+  case 59:
+#line 772 "sqlparser.y"
     {
 	yyval.field = yyvsp[-1].field;
 	yyval.field->setName("AVG(" + yyvsp[-1].field->name() + ")");
@@ -2382,16 +2467,16 @@ yyreduce:
 }
     break;
 
-  case 51:
-#line 734 "sqlparser.y"
+  case 60:
+#line 779 "sqlparser.y"
     {
 	yyval.field = yyvsp[-1].field;
 	yyval.field->setName("DISTINCT(" + yyvsp[-1].field->name() + ")");
 }
     break;
 
-  case 52:
-#line 742 "sqlparser.y"
+  case 61:
+#line 787 "sqlparser.y"
     {
 	kdDebug() << "all columns" << endl;
 	field = new KexiDB::Field();
@@ -2402,8 +2487,8 @@ yyreduce:
 }
     break;
 
-  case 53:
-#line 751 "sqlparser.y"
+  case 62:
+#line 796 "sqlparser.y"
     {
 	kdDebug() << "  + all columns from " << yyvsp[-2].stringValue << endl;
 	field = new KexiDB::Field();
@@ -2418,7 +2503,7 @@ yyreduce:
     }
 
 /* Line 999 of yacc.c.  */
-#line 2422 "y.tab.c"
+#line 2507 "y.tab.c"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -2612,7 +2697,7 @@ yyreturn:
 }
 
 
-#line 761 "sqlparser.y"
+#line 806 "sqlparser.y"
 
 
 

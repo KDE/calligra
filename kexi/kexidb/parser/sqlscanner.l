@@ -1491,11 +1491,6 @@ ABSOLUTE{NondelimiterTerminator} {
 	BEGIN DelimOrSep;
 	return TIMEZONE_MINUTE;
 }
-"TITLE"{NondelimiterTerminator} {
-	unput( yytext[ yyleng - 1 ] );
-	BEGIN DelimOrSep;
-	return TITLE;
-}
 "TO"{NondelimiterTerminator} {
 	unput( yytext[ yyleng - 1 ] );
 	BEGIN DelimOrSep;
