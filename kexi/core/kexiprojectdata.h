@@ -51,7 +51,9 @@ class KEXICORE_EXPORT KexiProjectData : public KexiDB::SchemaData
 		 */
 //		KexiProjectConnectionData(const QString &driverName, const QString &fileName=QString::null);
 
-		const KexiDB::ConnectionData* connectionData() const;
+		KexiDB::ConnectionData* connectionData();
+
+		const KexiDB::ConnectionData* constConnectionData() const;
 
 		//! in fact, this is the same as KexiDB::SchemaData::name()
 		QString databaseName() const;

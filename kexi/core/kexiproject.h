@@ -23,7 +23,10 @@
 #include <qobject.h>
 #include <qvaluelist.h>
 
-class KexiProjectConnectionData;
+#include "kexiprojectdata.h"
+#include <kexidb/object.h>
+
+//class KexiProjectConnectionData;
 
 namespace KexiDB
 {
@@ -44,24 +47,27 @@ typedef QValueList<KexiPart::Item> ItemList;
 /**
  * this class represents a project it contains data about connections, current file state etc..
  */
-class KexiProject : public QObject
+class KexiProject : public QObject, public KexiDB::Object
 {
 	Q_OBJECT
 
 	public:
-		KexiProject();
+		KexiProject(KexiProjectData* pdata);
 		~KexiProject();
+
+		bool		open();
+		bool		open(KexiDB::Connection* conn);
 
 		/**
 		 * opens a project/xml-connection
 		 * @returns true on success
 		 */
-		bool		open(const QString &doc);
+	//	bool		open(const QString &doc);
 
 		/**
 		 * @returns a error wich may have occured at actions like open/openConnection or QString::null if none
 		 */
-		const QString		error() { return m_error; }
+//		const QString		error() { return m_error; }
 
 		/**
 		 * @returns the part manager
@@ -85,7 +91,7 @@ class KexiProject : public QObject
 
 
 	protected:
-		bool			openConnection(KexiProjectConnectionData *connection);
+//		bool			openConnection(KexiProjectConnectionData *connection);
 
 	signals:
 		/**
@@ -95,11 +101,12 @@ class KexiProject : public QObject
 
 
 	private:
-		KexiDB::DriverManager		*m_drvManager;
+//		KexiDB::DriverManager		*m_drvManager;
 		KexiDB::Connection		*m_connection;
-		KexiProjectConnectionData	*m_connData;
+		KexiProjectData* m_data;
+//		KexiProjectConnectionData	*m_connData;
 		KexiPart::Manager		*m_partManager;
-		QString				m_error;
+//		QString				m_error;
 };
 
 #endif

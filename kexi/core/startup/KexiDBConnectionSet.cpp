@@ -27,8 +27,10 @@ public:
 	KexiDBConnectionSetPrivate()
 	{
 		list.setAutoDelete(true);
+		maxid=-1;
 	}
-	KexiDB::ConnectionData::ConstList list;
+	KexiDB::ConnectionData::List list;
+	int maxid;
 };
 
 KexiDBConnectionSet::KexiDBConnectionSet()
@@ -41,12 +43,17 @@ KexiDBConnectionSet::~KexiDBConnectionSet()
 	delete d;
 }
 
-void KexiDBConnectionSet::addConnectionData(const KexiDB::ConnectionData *data)
+void KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data)
 {
+	if (data->id<0)
+		data->id = d->maxid+1;
+	//TODO: 	check for id-duplicates
+	
+	d->maxid = QMAX(d->maxid,data->id);
 	d->list.append(data);
 }
 
-KexiDB::ConnectionData::ConstList KexiDBConnectionSet::list() const
+KexiDB::ConnectionData::List KexiDBConnectionSet::list() const
 {
 	return d->list;
 }

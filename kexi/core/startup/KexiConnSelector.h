@@ -50,7 +50,7 @@ public:
 		Returns NULL if no selection has been made or file-based connection 
 		has been selected.
 	*/
-	const KexiDB::ConnectionData* selectedConnectionData() const;
+	KexiDB::ConnectionData* selectedConnectionData() const;
 		
 	//! Usable when we want to do other things for "back" button
 	void disconnectShowSimpleConnButton();
@@ -88,7 +88,11 @@ public:
 	int selectedConnectionType() const;
 
 	/*! see: KexiConnSelector::selectedConnectionData() */
-	const KexiDB::ConnectionData* selectedConnectionData() const;
+	KexiDB::ConnectionData* selectedConnectionData() const;
+
+	/*! \return true if we should always use files for creating new projects.
+	 It is effect of previous selecting a checkbox by user. */
+	static bool alwaysUseFilesForNewProjects();
 
 protected slots:
 	void connectionItemSelected();
@@ -96,6 +100,7 @@ protected slots:
 
 protected:
 	void updateDialogState();
+	virtual void accept();
 	
 	KexiConnSelectorWidget *m_sel;
 };

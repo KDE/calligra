@@ -157,13 +157,18 @@ public:
 		iconname = KMimeType::mimeType("application/x-kexiproject-shortcut")->icon(none,0);
 		kexi_shortcut_icon = KGlobal::iconLoader()->loadIcon( iconname, KIcon::Desktop );
 		prj_selector = 0;
+		chkDoNotShow = 0;
 	}
 	~KexiStartupDialogPrivate()
 	{}
 
+	int dialogType, dialogOptions;
+	
 	QFrame *pageTemplates, *pageOpenExisting, *pageOpenRecent;
 	int pageTemplatesID, pageOpenExistingID, pageOpenRecentID;
 
+	QCheckBox *chkDoNotShow;
+	
 	//widgets for template tab:
 	KJanusWidget* templatesWidget;
 	QObject *templatesWidget_IconListBox;//helper
@@ -205,7 +210,7 @@ public:
 	KDialogBase::Ok) {
 */
 KexiStartupDialog::KexiStartupDialog( 
-	int dialogType, 
+	int dialogType, int dialogOptions,
 	const KexiDBConnectionSet& connSet, const KexiProjectSet& recentProjects,
 	QWidget *parent, const char *name )
  : KDialogBase( Tabbed, i18n("Choose a project"), Help | Ok | Cancel, Ok, parent, name )
@@ -213,6 +218,8 @@ KexiStartupDialog::KexiStartupDialog(
 {
 	d->recentProjects = &recentProjects;
 	d->connSet = &connSet;
+	d->dialogType = dialogType;
+	d->dialogOptions = dialogOptions;
 //    QPushButton* ok = actionButton( KDialogBase::Ok );
 //    QPushButton* cancel = actionButton( KDialogBase::Cancel );
 //    cancel->setAutoDefault(false);
@@ -224,16 +231,16 @@ KexiStartupDialog::KexiStartupDialog(
 
 	setSizeGripEnabled(true);
 	int id=0;
-	if (dialogType & Templates) {
+	if (d->dialogType & Templates) {
 		setupPageTemplates();
 		d->pageTemplatesID = id++;
 		d->templatesWidget->setFocus();
 	}
-	if (dialogType & OpenExisting) {
+	if (d->dialogType & OpenExisting) {
 		setupPageOpenExisting();
 		d->pageOpenExistingID = id++;
 	}
-	if (dialogType & OpenRecent) {
+	if (d->dialogType & OpenRecent) {
 		setupPageOpenRecent();
 		d->pageOpenRecentID = id++;
 	}
@@ -264,6 +271,8 @@ void KexiStartupDialog::show()
 	//just some cleanup
 	d->selectedTemplateKey=QString::null;
 	d->existingFileToOpen=QString::null;
+	
+	move((qApp->desktop()->width()-width())/2,(qApp->desktop()->height()-height())/2);
 	KDialogBase::show();
 }
 
@@ -323,6 +332,11 @@ void KexiStartupDialog::setupPageTemplates()
 	}
     lyr->addWidget(d->templatesWidget);
 	connect(d->templatesWidget, SIGNAL(aboutToShowPage(QWidget*)), this, SLOT(templatesPageShown(QWidget*)));
+	
+	if (d->dialogOptions & CheckBoxDoNotShowAgain) {
+		d->chkDoNotShow = new QCheckBox(i18n("Do not show this window in future"), d->pageTemplates, "chkDoNotShow");
+    	lyr->addWidget(d->chkDoNotShow);
+	}
 
 	//template groups:
 	QFrame *templPageFrame;
@@ -511,7 +525,9 @@ void KexiStartupDialog::templateItemExecuted(QIconViewItem *item)
 	if (!item)
 		return;
 	updateSelectedTemplateKeyInfo();
+#ifndef NO_DB_TEMPLATES
 	accept();
+#endif
 }
 
 void KexiStartupDialog::updateSelectedTemplateKeyInfo()

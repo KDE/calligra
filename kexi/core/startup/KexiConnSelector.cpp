@@ -30,17 +30,19 @@
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kconfig.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlistview.h>
+#include <qcheckbox.h>
 
 //! helper class
 class ConnectionDataLVItem : public QListViewItem
 {
 public:
-	ConnectionDataLVItem(const KexiDB::ConnectionData *d, 
+	ConnectionDataLVItem(KexiDB::ConnectionData *d, 
 		const KexiDB::Driver::Info& info, QListView *list)
 		: QListViewItem(list)
 		, data(d)
@@ -56,7 +58,7 @@ public:
 	}
 	~ConnectionDataLVItem() {}
 	
-	const KexiDB::ConnectionData *data;
+	KexiDB::ConnectionData *data;
 };
 
 /*================================================================*/
@@ -126,8 +128,8 @@ void KexiConnSelectorWidget::showAdvancedConn()
 		d->conn_sel_shown=true;
 		//show connections (on demand):
 		KexiDB::DriverManager manager;
-		KexiDB::ConnectionData::ConstList list = m_conn_set->list();
-		const KexiDB::ConnectionData *data = list.first();
+		KexiDB::ConnectionData::List list = m_conn_set->list();
+		KexiDB::ConnectionData *data = list.first();
 		while (data) {
 			KexiDB::Driver::Info info = manager.driverInfo(data->driverName);
 			if (!info.name.isEmpty()) {
@@ -156,7 +158,7 @@ int KexiConnSelectorWidget::selectedConnectionType() const
 	return (visibleWidget()==m_file_sel) ? FileBased : ServerBased;
 }
 
-const KexiDB::ConnectionData* KexiConnSelectorWidget::selectedConnectionData() const
+KexiDB::ConnectionData* KexiConnSelectorWidget::selectedConnectionData() const
 {
 	if (selectedConnectionType()==KexiConnSelectorWidget::FileBased)
 		return 0;
@@ -185,7 +187,7 @@ KexiConnSelectorDialog::KexiConnSelectorDialog( const KexiDBConnectionSet& conn_
 		this,SLOT(connectionItemDBLClicked(QListViewItem*)));
 
 	m_sel->setMinimumWidth(500);
-//	adjustSize();
+	move((qApp->desktop()->width()-width())/2,(qApp->desktop()->height()-height())/2);
 }
 
 KexiConnSelectorDialog::~KexiConnSelectorDialog()
@@ -219,10 +221,41 @@ void KexiConnSelectorDialog::updateDialogState()
 	}
 }
 
-const KexiDB::ConnectionData* KexiConnSelectorDialog::selectedConnectionData() const
+KexiDB::ConnectionData* KexiConnSelectorDialog::selectedConnectionData() const
 {
 	return m_sel->selectedConnectionData();
 }
+
+bool KexiConnSelectorDialog::alwaysUseFilesForNewProjects() {
+	KGlobal::config()->setGroup("Startup");
+	return KGlobal::config()->readBoolEntry("AlwaysUseFilesForCreatingNewProjects", false);
+}
+
+/*KexiDB::ConnectionData* KexiConnSelectorDialog::connectionDataWeAlwaysUseForCreatingNewProjects()
+{
+	KGlobal::config()->setGroup("Startup");
+	int id = KGlobal::config()->readNumEntry("ConnectionDataWeAlwaysUseForCreatingNewProjects", -1);
+	if (id==-1)
+		return 0;
+	LoadConn
+	
+	
+}*/
+void KexiConnSelectorDialog::accept()
+{
+	//save setting
+	if (selectedConnectionType()==KexiConnSelectorWidget::FileBased
+		&& m_sel->m_file_sel->chk_always->isChecked()) {
+		KGlobal::config()->writeEntry("AlwaysUseFilesForCreatingNewProjects", true);
+	}
+	else if (m_sel->selectedConnectionData() && m_sel->m_conn_sel->chk_always->isChecked()) {
+//		m_sel->m_conn_sel->selectedConnectionData();
+		KGlobal::config()->writeEntry("ConnectionDataWeAlwaysUseForNewProjects", m_sel->selectedConnectionData()->id);
+		//TODO
+	}
+	KDialogBase::accept();
+}
+
 
 #include "KexiConnSelector.moc"
 

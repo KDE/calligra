@@ -19,6 +19,8 @@
 
 #include "KexiXMLStorage.h"
 
+#include "KexiDBConnectionSet.h"
+
 #include <qdom.h>
 #include <qdir.h>
 #include <qfile.h>
@@ -33,8 +35,43 @@ KexiProjectData* loadKexiConnectionDataXML(QIODevice *dev, QString &error)
 	return 0;
 }
 
+bool saveKexiConnectionDataListXML( QIODevice *dev, const KexiDBConnectionSet& cset)
+{
+	QDomDocument doc( "kexiconnectionset" );
+	doc.createComment("List of database connections used for Kexi.");
+	QDomElement mainel = doc.createElement("kexiconnectionset");
+	doc.appendChild(mainel);
+	KexiDB::ConnectionData::List clist = cset.list();
+	const KexiDB::ConnectionData *cdata = clist.first();
+	while (cdata) {
+		QDomElement el = doc.createElement("connectiondata");
+		el.setAttribute("id",QString::number(cdata->id));
+		if (!cdata->name.isEmpty())
+			el.setAttribute("name",cdata->name);
+		if (!cdata->driverName.isEmpty())
+			el.setAttribute("engine",cdata->driverName);
+		if (!cdata->hostName.isEmpty())
+			el.setAttribute("host",cdata->hostName);
+		if (cdata->port>0)
+			el.setAttribute("port",QString::number(cdata->port));
+		if (!cdata->localSocketFileName.isEmpty())
+			el.setAttribute("localSocketFileName",cdata->localSocketFileName);
+		if (!cdata->userName.isEmpty())
+			el.setAttribute("user",cdata->userName);
+		if (!cdata->password.isEmpty())
+			el.setAttribute("password",cdata->password);
+		if (!cdata->dbPath().isEmpty())
+			el.setAttribute("dbPath",cdata->dbPath());
+		if (!cdata->dbFileName().isEmpty())
+			el.setAttribute("dbFileName",cdata->dbFileName());
+		mainel.appendChild(el);
+		cdata = clist.next();
+	}
+}
+
 bool saveKexiConnectionDataXML(QIODevice *dev, const KexiDB::ConnectionData &data, QString &error)
 {
+	
 	//TODO
 	return false;
 }

@@ -33,17 +33,29 @@
 #include "kexipartmanager.h"
 #include "kexipartitem.h"
 #include "kexipartinfo.h"
-#include "kexiprojectconnectiondata.h"
+//#include "kexiprojectconnectiondata.h"
 #include "kexiproject.h"
+#include "kexi.h"
 
-KexiProject::KexiProject()
- : QObject()
+KexiProject::KexiProject(KexiProjectData *pdata)
+ : QObject(), Object()
+ , m_data(pdata)
 {
-	m_drvManager = new KexiDB::DriverManager();
-	m_connData = new KexiProjectConnectionData();
+//	m_drvManager = new KexiDB::DriverManager();
+//	m_connData = new KexiProjectConnectionData();
 	m_partManager = new KexiPart::Manager(this);
+
+//*******************
+//(JS): shouldn't partmanager be outside project, so can be initialised just once?
+//*******************
 	m_partManager->lookup();
 	m_connection = 0;
+}
+
+KexiProject::~KexiProject()
+{
+	delete m_data;
+	m_data=0;
 }
 
 #if 0
@@ -75,6 +87,65 @@ KexiProject::parseCmdLineOptions()
 #endif
 
 bool
+KexiProject::open()
+{
+	clearError();
+	if (Kexi::driverManager.error()) {//get initial errors
+		setError(&Kexi::driverManager);
+		return false;
+	}
+	
+	KexiDB::Driver *driver = Kexi::driverManager.driver(m_data->connectionData()->driverName);
+	if(!driver) {
+		setError(&Kexi::driverManager);
+		return false;
+	}
+
+	m_connection = driver->createConnection(*m_data->connectionData());
+	if(!m_connection) 
+	{
+		kdDebug() << "KexiProject::open(): uuups faild " << driver->errorMsg()  << endl;
+		setError(driver);
+		return false;
+	}
+
+	if (!m_connection->connect())
+	{
+		setError(m_connection);
+		kdDebug() << "KexiProject::openConnection() errror connecting: " << m_connection->errorMsg() << endl;
+		delete m_connection;
+		m_connection = 0;
+		return false;
+	}
+
+	return open(m_connection);
+}
+
+bool 
+KexiProject::open(KexiDB::Connection* conn)
+{
+	if (conn!=m_connection) {
+		delete m_connection;
+		m_connection = 0;
+	}
+	if (!conn->useDatabase(m_data->databaseName()))
+	{
+		setError(conn);
+//		m_error = i18n("Couldn't open database '%1'").arg(m_connData->databaseName());
+		return false;
+	}
+
+	emit dbAvailable();
+	kdDebug() << "KexiProject::open(): checking project parts..." << endl;
+	
+	m_connection = conn;
+	m_partManager->checkProject(m_connection);
+	
+	return true;
+}
+
+#if 0
+bool
 KexiProject::open(const QString &file)
 {
 	QFile f(file);
@@ -83,7 +154,7 @@ KexiProject::open(const QString &file)
 
 	KMimeType::Ptr ptr = KMimeType::findByFileContent(file);
 	kdDebug() << "KexiProject::open(): found mime is: " << ptr.data()->name() << endl;
-	QString drivername = m_drvManager->lookupByMime(ptr.data()->name());
+	QString drivername = Kexi::driverManager.lookupByMime(ptr.data()->name());
 	kdDebug() << "KexiProject::open(): driver name: " << drivername << endl;
 	if(!drivername.isNull())
 	{
@@ -170,6 +241,7 @@ KexiProject::openConnection(KexiProjectConnectionData *connection)
 	m_connection = conn;
 	return true;
 }
+#endif
 
 bool
 KexiProject::isConnected()
@@ -206,10 +278,6 @@ KexiProject::items(KexiPart::Info *i)
 	m_connection->deleteCursor(cursor);
 	kdDebug() << "KexiProject::items(): end with cout " << list.count() << endl;
 	return list;
-}
-
-KexiProject::~KexiProject()
-{
 }
 
 #include "kexiproject.moc"

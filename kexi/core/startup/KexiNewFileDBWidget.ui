@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>289</width>
-            <height>302</height>
+            <width>392</width>
+            <height>255</height>
         </rect>
     </property>
     <property name="caption">
@@ -87,7 +87,7 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>40</height>
+                    <height>20</height>
                 </size>
             </property>
         </spacer>
@@ -143,7 +143,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Always &amp;use files for creating new databases.
+                <string>Always &amp;use files for creating new projects.
 Don't show me this dialog again. </string>
             </property>
         </widget>

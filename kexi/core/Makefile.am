@@ -1,10 +1,12 @@
 lib_LTLIBRARIES = libkexicore.la
-libkexicore_la_SOURCES = kexi_global.cpp \
+libkexicore_la_SOURCES = kexi.cpp kexi_global.cpp \
 	kexiproject.cpp keximainwindow.cpp kexidialogbase.cpp \
-	kexistartupdlgui.ui kexistartupdlg.cpp kexiprojectconnectiondata.cpp \
+	kexistartupdlgui.ui kexistartupdlg.cpp \
 	kexipartmanager.cpp kexipartinfo.cpp kexipartitem.cpp kexipart.cpp \
 	kexibrowser.cpp kexibrowseritem.cpp \
 	kexiprojectdata.cpp
+
+# kexiprojectconnectiondata.cpp
 
 libkexicore_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) -Wnounresolved -no-undefined
 

@@ -35,9 +35,9 @@ public:
 
 	/*! Adds \a data as connection data. 
 	 \a will be owned by a KexiDBConnectionSet object. */
-	void addConnectionData(const KexiDB::ConnectionData *data);
+	void addConnectionData(KexiDB::ConnectionData *data);
 	
-	KexiDB::ConnectionData::ConstList list() const;
+	KexiDB::ConnectionData::List list() const;
 
 private:
 	KexiDBConnectionSetPrivate *d;

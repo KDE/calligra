@@ -26,6 +26,10 @@
 #include "KexiProjectSet.h"
 
 class QIODevice;
+class KexiDBConnectionSet;
+
+bool saveKexiConnectionDataListXML( QIODevice *dev, const KexiDBConnectionSet& cset);
+
 
 /*! \return a new KexiConnectionData object loaded from xml contents on \a dev device
 	or NULL on error (then i18n'd error message is filled in \a error).

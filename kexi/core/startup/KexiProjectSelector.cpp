@@ -43,7 +43,7 @@ public:
 		, data(d)
 	{
 		setText(0, data->caption()+"  ");
-		const KexiDB::ConnectionData *cdata = data->connectionData();
+		const KexiDB::ConnectionData *cdata = data->constConnectionData();
 		
 		setText(1, data->databaseName()+"  ");
 		
@@ -99,7 +99,7 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget( const KexiProjectSet& prj_
 	KexiProjectData::ConstList prjlist = m_prj_set->list();
 	const KexiProjectData *data = prjlist.first();
 	while (data) {
-		KexiDB::Driver::Info info = manager.driverInfo(data->connectionData()->driverName);
+		KexiDB::Driver::Info info = manager.driverInfo(data->constConnectionData()->driverName);
 		if (!info.name.isEmpty()) {
 			ProjectDataLVItem *item = new ProjectDataLVItem(data, info, list);
 			if (info.fileBased)
@@ -108,7 +108,7 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget( const KexiProjectSet& prj_
 				item->setPixmap( 0, dbicon );
 		}
 		else {
-			kdWarning() << "KexiProjectSelector::KexiProjectSelector(): no driver found for '" << data->connectionData()->driverName << "'!" << endl;
+			kdWarning() << "KexiProjectSelector::KexiProjectSelector(): no driver found for '" << data->constConnectionData()->driverName << "'!" << endl;
 		}
 		data=prjlist.next();
 	}

@@ -42,6 +42,10 @@
 {
 }*/
 
+KexiProjectData::KexiProjectData()
+{
+}
+
 KexiProjectData::KexiProjectData( 
 	const KexiDB::ConnectionData &cdata, const QString& dbname )
  : m_connData(cdata)
@@ -53,7 +57,12 @@ KexiProjectData::~KexiProjectData()
 {
 }
 
-const KexiDB::ConnectionData* KexiProjectData::connectionData() const
+KexiDB::ConnectionData* KexiProjectData::connectionData()
+{
+	return &m_connData;
+}
+
+const KexiDB::ConnectionData* KexiProjectData::constConnectionData() const
 {
 	return &m_connData;
 }

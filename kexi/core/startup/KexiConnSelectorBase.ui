@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>494</width>
-            <height>343</height>
+            <height>378</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -292,7 +292,7 @@
             </property>
             <property name="text">
                 <string>Al&amp;ways use selected connection for creating
-new databases. Don't show me this dialog again. </string>
+new projects. Don't show me this dialog again. </string>
             </property>
         </widget>
         <spacer row="7" column="2">

@@ -68,30 +68,38 @@ class KEXICORE_EXPORT KexiStartupDialog : public KDialogBase
 public:
 	/*! The Dialog returns one of these values depending 
 	 on the input of the user.
-	 CancelResult = The user pressed 'Cancel'
-	 TemplateResult = The user selected a template
-	 OpenExistingResult = The user has chosen an existing connection or db file
-	 OpenRecentResult = The user selected one of recently used databases
+	 CancelResult The user pressed 'Cancel'
+	 TemplateResult The user selected a template
+	 OpenExistingResult The user has chosen an existing connection or db file
+	 OpenRecentResult The user selected one of recently used databases
 	 */
 	enum Result { CancelResult=0, TemplateResult=1, OpenExistingResult=2, OpenRecentResult=3 };
 	/*!
 	 To configure the dialog you have to use this enum 
 	  (any !=0 or'ed value is ok)
-	  - Templates = Show "Templates" tab
+	  - Templates Show "Templates" tab
 	  - OpenExisting Show "Open existing" tab
-	  - OpenRecent = Show "Recent" tab
-	  - Everything = Show everything above
+	  - OpenRecent Show "Recent" tab
+	  - Everything Show everything above
 	 */
 	enum DialogType { Templates = 1, OpenExisting = 2, OpenRecent = 4, Everything = (1+2+4) };
 
+	/*! Options for a dialog
+	  (any or'ed value or 0 is ok)
+	  - CheckBoxDoNotShowAgain Adds "do not show this window" checkbox at the bottom
+	*/
+	enum DialogOptions { CheckBoxDoNotShowAgain = 1 };
+	
 	/*! Creates a dialog.
 	 @param dialogType see DialogType description
+	 $param dialogOptions see dialogOptions description
 	 @param recentProjects a set of recent projects' info, used for "Open recent" tab
 	 @param connSet conenction set used to present available conenctions
 	  in "Open Existing" tab. Pass an empty object is this tab is not used.
 	 */
 	KexiStartupDialog(
 		int dialogType, 
+		int dialogOptions,
 		const KexiDBConnectionSet& connSet,
 		const KexiProjectSet& recentProjects,
 		QWidget *parent = 0, const char *name = 0 );

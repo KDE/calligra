@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,9 +22,11 @@
 #define KEXIMAINWINDOW_H
 
 #include <kmdimainfrm.h>
+
 //#include <kmdidefines.h>
 
 class KexiProject;
+class KexiProjectData;
 class KexiBrowser;
 class KMdiChildView;
 class KexiDialogBase;
@@ -41,7 +44,7 @@ class KexiMainWindow : public KMdiMainFrm
 		 * creates a emtpy mainwindow
 		 */
 		KexiMainWindow();
-		~KexiMainWindow();
+		virtual ~KexiMainWindow();
 
 		KexiProject	*project() { return m_project; }
 
@@ -50,6 +53,7 @@ class KexiMainWindow : public KMdiMainFrm
 		 */
 		void		registerChild(KexiDialogBase *dlg);
 
+		void startup(KexiProjectData* pdata);
 
 	protected:
 		//reimplementation of events
@@ -59,8 +63,7 @@ class KexiMainWindow : public KMdiMainFrm
 		 * creates standard actions like new, open, save ...
 		 */
 		void		initActions();
-
-
+		
 		/**
 		 * sets up the window from user settings (e.g. mdi mode)
 		 */
@@ -70,14 +73,29 @@ class KexiMainWindow : public KMdiMainFrm
 		 * writes user settings back
 		 */
 		void		storeSettings();
+		
+		/** Invalidates action availability for current appliacation state.
+		*/
+		void		invalidateActions();
 
+		void openProject(KexiProjectData *pdata);
+		
+		bool closeProject();
+		
+		/*! Shows dialog for creating new blank database,
+		 ans creates one. Dialog is not shown if option for automatic creation 
+		 is checkekd.
+		 \return true is database was created, false on error or when cancel pressed
+		*/
+		bool createBlankDatabase();
+	
 	protected slots:
 
 		/**
 		 * parsers command line options and checks if we should open the startupdlg
 		 * or a file direclty
 		 */
-		void		parseCmdLineOptions();
+//		void		parseCmdLineOptions();
 
 		/**
 		 * creates browser and fills it with empty items
@@ -92,15 +110,24 @@ class KexiMainWindow : public KMdiMainFrm
 		void slotShowSettings();
 		void slotConfigureKeys();
 		void slotConfigureToolbars();
+		void slotProjectNew();
+		void slotProjectOpen();
+		void slotProjectOpenRecentAboutToShow();
+		void slotProjectOpenRecent(int id);
+		void slotProjectOpenRecentMore();
+		void slotProjectSave();
+		void slotProjectSaveAs();
+		void slotProjectProperties();
+		void slotProjectClose();
+		void slotQuit();
 
 	private:
-#ifndef KEXI_NO_CTXT_HELP
-		KToggleAction *m_actionHelper;
-#endif
-		KToggleAction *m_actionBrowser;
-		
+
 		KexiProject	*m_project;
 		KexiBrowser	*m_browser;
+		
+		class Private;
+		Private *d;
 };
 
 #endif
