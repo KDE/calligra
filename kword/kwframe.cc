@@ -894,7 +894,7 @@ void KWPartFrameSet::drawContents( QPainter * painter, const QRect & crect,
         QRegion reg = frameClipRegion( painter, frame, crect );
         if ( !reg.isEmpty() )
         {
-            //kdDebug() << "KWPartFrameSet::drawContents clipregion=" << DEBUGRECT(reg.boundingRect()) << endl;
+            kdDebug() << "KWPartFrameSet::drawContents clipregion=" << DEBUGRECT(reg.boundingRect()) << endl;
             painter->save();
             QRect r = painter->viewport();
             painter->setClipRegion( reg );
@@ -906,28 +906,8 @@ void KWPartFrameSet::drawContents( QPainter * painter, const QRect & crect,
             child->document()->paintEverything( *painter, rframe, true, 0 );
             painter->setViewport( r );
             painter->restore();
-        } //else kdDebug() << "KWPartFrameSet::drawContents " << this << " no intersection" << endl;
+        } else kdDebug() << "KWPartFrameSet::drawContents " << this << " no intersection" << endl;
     }
-}
-
-/*================================================================*/
-void KWPartFrameSet::activate( QWidget *_widget )
-{
-    updateFrames();
-    KWView *view = (KWView*)_widget;
-    KoDocument* part = child->document();
-    if ( !part )
-        return;
-    //kdDebug() << "Child activated. part="<<part<<" child="<<child<<endl;
-    view->partManager()->addPart( part, false );
-    view->partManager()->setActivePart(  part, view );
-}
-
-/*================================================================*/
-void KWPartFrameSet::deactivate()
-{
-    // repaint
-    kWordDocument()->frameChanged( frames.first() );
 }
 
 /*================================================================*/
@@ -980,18 +960,34 @@ KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * canvas )
 
 KWPartFrameSetEdit::~KWPartFrameSetEdit()
 {
-    partFrameSet()->deactivate();
+    kdDebug() << "KWPartFrameSetEdit::~KWPartFrameSetEdit" << endl;
 }
 
 void KWPartFrameSetEdit::mousePressEvent( QMouseEvent * )
 {
-    partFrameSet()->activate( m_canvas->gui()->getView() );
+    // activate child part
+    partFrameSet()->updateFrames();
+    KoDocument* part = partFrameSet()->getChild()->document();
+    if ( !part )
+        return;
+    KWView * view = m_canvas->gui()->getView();
+    //kdDebug() << "Child activated. part="<<part<<" child="<<child<<endl;
+    view->partManager()->addPart( part, false );
+    view->partManager()->setActivePart( part, view );
 }
 
 void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent * )
 {
     /// ## Pretty useless since single-click does it now...
-    partFrameSet()->activate( m_canvas->gui()->getView() );
+    //partFrameSet()->activate( m_canvas->gui()->getView() );
+}
+
+void KWPartFrameSetEdit::drawContents( QPainter *p, const QRect &r, QColorGroup &cg, bool oc, bool rc)
+{
+    // Nothing to be painted by ourselves while editing a part
+    // But when deactivating, kwcanvas doesn't get the click, so
+    // we still have the edit object created...
+    partFrameSet()->drawContents( p, r, cg, oc, rc );
 }
 
 /******************************************************************/
@@ -1069,14 +1065,6 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
     }
 }
 
-
-void KWFormulaFrameSet::activate( QWidget */*_widget*/ )
-{
-}
-
-void KWFormulaFrameSet::deactivate()
-{
-}
 
 // ## can this be done in the constructor instead (DF) ?
 void KWFormulaFrameSet::create( QWidget */*parent*/ )
@@ -1189,7 +1177,6 @@ KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
     focusOutEvent();
     m_canvas->gui()->getView()->showFormulaToolbar(false);
     delete formulaView;
-    formulaFrameSet()->deactivate();
 }
 
 /**

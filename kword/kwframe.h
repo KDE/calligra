@@ -34,6 +34,7 @@
 class KWFrame;
 class KWDocument;
 class KWChild;
+class KWView;
 class KWTableFrameSet;
 class KFormulaContainer;
 class KFormulaView;
@@ -474,9 +475,6 @@ public:
 
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * );
 
-    void activate( QWidget *_widget );
-    void deactivate();
-
     KWChild *getChild() { return child; }
 
     virtual void updateFrames();
@@ -507,9 +505,8 @@ public:
         return static_cast<KWPartFrameSet*>(frameSet());
     }
 
-    // Nothing to be painted by ourselves while editing a part
     void drawContents( QPainter *, const QRect &,
-        QColorGroup &, bool, bool ) { }
+                       QColorGroup &, bool, bool );
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void mousePressEvent( QMouseEvent * );
@@ -534,8 +531,6 @@ public:
 
     virtual KWFrameSetEdit* createFrameSetEdit(KWCanvas*);
 
-    //virtual QPicture *getPicture();
-
     /**
      * Paint this frameset
      * When the frameset is being edited, KWFrameSetEdit's drawContents is called instead.
@@ -546,9 +541,6 @@ public:
     void drawContents(QPainter*, const QRect&,
                       QColorGroup&, bool onlyChanged, bool resetChanged,
                       KFormulaView* formulaView);
-
-    virtual void activate( QWidget *_widget );
-    virtual void deactivate();
 
     virtual void updateFrames();
 

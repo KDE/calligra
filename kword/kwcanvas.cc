@@ -573,6 +573,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                     // Terminate edition of that frameset
                     delete m_currentFrameSetEdit;
                     m_currentFrameSetEdit = 0L;
+                    repaintAll();
                 }
                 // Edit the frameset under the mouse, if any
                 if ( !m_currentFrameSetEdit && fs )
@@ -1578,6 +1579,7 @@ void KWCanvas::deleteTable( KWTableFrameSet *table )
         // Terminate edition of that frameset
         delete m_currentFrameSetEdit;
         m_currentFrameSetEdit = 0L;
+        repaintAll();
     }
     // ## TODO undo/redo support
     doc->delFrameSet( table );
@@ -1596,6 +1598,7 @@ void KWCanvas::setMouseMode( MouseMode _mm )
             // Terminate edition of current frameset
             delete m_currentFrameSetEdit;
             m_currentFrameSetEdit = 0L;
+            repaintAll();
         }
     }
 
