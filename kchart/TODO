@@ -103,18 +103,18 @@ Item								   Prio Status
   + Check *all* subpages for uglyness and bugs			     S1 ----
     - BackgroundPixmap						     S1 --
     - Bar		REMOVE					     S1 done
-    - Color							     S1 --
+    - Color		Ugly					     S1 --
     - Combo		When is this used?			     S1 --
     - Data		OK					     S1 done
     - Font		Ugly					     S1 --
-    - Geometry		REMOVE					     S1 --
+    - Geometry		REMOVE					     S1 done
     - HeaderFooter	Somewhat ugly?				     S1 --
     - Legend		OK					     S1 done
     - Line3d		UGLY!!  FIX!				     S1 --
-    - Parameter3d						     S1 done
-    - Parameter (Axes)	Ugly					     S1 done
-    - ParameterPie						     S1 --
-    - ParameterPolar						     S1 --
+    - Parameter3d	OK					     S1 done
+    - Parameter (Axes)	Ugly->OK				     S1 done
+    - ParameterPie	Ugly					     S1 --
+    - ParameterPolar	Ugly					     S1 --
     - Pie		Remove?					     S1 --
     - SubtypeChartPage						     S1 --
   + Check handling of defaults.					      1 DONE
