@@ -1,0 +1,94 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1998-12-09 10:15+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: kdiagramm_shell.cc:44
+msgid ""
+"The document has been modified\n"
+"Do you want to save it ?"
+msgstr "O documento foi modificado\nDeseja salvá-lo ?"
+
+#: kdiagramm_shell.cc:284
+msgid "KDiagramm Error"
+msgstr "Erro do KDiagramm"
+
+#: kdiagramm_shell.cc:284
+msgid "Could not create new document"
+msgstr "Impossível criar novo documento"
+
+#: kdiagramm_shell.cc:297
+#, c-format
+msgid ""
+"Could not open\n"
+"%s"
+msgstr "Impossível abrir\n%s"
+
+#: kdiagramm_shell.cc:298 kdiagramm_shell.cc:317 kdiagramm_shell.cc:327
+msgid "IO Error"
+msgstr "Erro de E/S"
+
+#: kdiagramm_shell.cc:316
+#, c-format
+msgid ""
+"Could not save\n"
+"%s"
+msgstr "Impossível salvar\n%s"
+
+#: kdiagramm_shell.cc:326
+msgid "Could not save file"
+msgstr "Impossível salvar arquivo"
+
+#: kdiagramm_view.cc:126
+msgid "Lines"
+msgstr "Linhas"
+
+#: kdiagramm_view.cc:131
+msgid "Areas"
+msgstr "Áreas"
+
+#: kdiagramm_view.cc:136
+msgid "3D-Bars"
+msgstr "Barras 3D"
+
+#: kdiagramm_view.cc:141
+msgid "Cakes"
+msgstr "Tortas"
+
+#: kdiagramm_view.cc:162
+msgid "&Lines"
+msgstr "&Linhas"
+
+#: kdiagramm_view.cc:167
+msgid "&Areas"
+msgstr "&Áreas"
+
+#: kdiagramm_view.cc:172
+msgid "&Bars"
+msgstr "&Barras"
+
+#: kdiagramm_view.cc:177
+msgid "&Cakes"
+msgstr "&Tortas"
+
+#: kdiagramm_view.cc:181
+msgid "&Edit Data..."
+msgstr "&Editar Dados..."
+
+#: kdiagramm_view.cc:185
+msgid "&Page Layout"
+msgstr "Disposição da &Página"
+
+#: koDiagramm.cc:558
+msgid "Rest"
+msgstr "Resto"
