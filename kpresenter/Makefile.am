@@ -81,7 +81,7 @@ uninstall-local:
 messages:
 	$(XGETTEXT) -C -ki18n -ktranslate -x $(includedir)/kde.pot */*.cc *.cc *.h && mv messages.po ../po/kpresenter.pot
 
-kpresenter.h: kpresenter.idl
+kpresenter.h: kpresenter.idl $(micodir)/include/CORBA.h
 	rm -f kpresenter.h
 	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kpresenter.idl
 
