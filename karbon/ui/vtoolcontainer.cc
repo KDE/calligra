@@ -10,10 +10,21 @@
 #include <kdualcolorbutton.h>
 #include <koMainWindow.h>
 #include <koView.h>
+#include "karbon_part.h"
 #include "../karbon_factory.h"
 
 #include "vtoolcontainer.h"
 #include <kiconloader.h>
+
+QPtrDict< VToolContainer > VToolContainer::m_containers;
+
+VToolContainer *VToolContainer::instance( KarbonPart *part, KoView* parent, const char* name )
+{
+	if( !m_containers.find( part ) )
+		m_containers.insert( part, new VToolContainer( parent, name ) );
+
+	return m_containers.find( part );
+}
 
 VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	: QToolBar( parent->shell() )

@@ -83,7 +83,7 @@ KarbonView::~KarbonView()
 	delete m_painterFactory;
 	delete m_canvas;
 	m_canvas = 0L;
-	delete m_toolbox;
+	//delete m_toolbox;
 	delete m_status;
 }
 
@@ -615,7 +615,7 @@ KarbonView::initActions()
 		SLOT( refreshView() ), actionCollection(), "view_refresh" );
 	// view <-----
 
-	m_toolbox = new VToolContainer( this );
+	m_toolbox = VToolContainer::instance( m_part, this );
 
 	connect( m_toolbox, SIGNAL(selectToolActivated()), this, SLOT(selectTool()) );
 	connect( m_toolbox, SIGNAL(scaleToolActivated()), this, SLOT(scaleTool()) );

@@ -10,6 +10,8 @@
 
 #include "vcanvas.h"
 
+#include <ksharedptr.h>
+
 class QPaintEvent;
 class QLabel;
 
@@ -144,7 +146,7 @@ private:
 	//KSelectColorAction *m_setTextColor;
 
 	//toolbox
-	VToolContainer *m_toolbox;
+	KSharedPtr< VToolContainer > m_toolbox;
 	DCOPObject *m_dcop;
 
 	//status bar message
