@@ -211,6 +211,9 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     QDomElement backgroundElement = doc.createElement( "BACKGROUND" );
     QDomElement soundElement = doc.createElement( "SOUNDS" );
     QDomElement selSlideElement = doc.createElement( "SELSLIDES" );
+    QDomElement helpLineElement = doc.createElement( "HELPLINES" );
+
+    QDomElement settingsDoc = m_settings.documentElement();
 
 
     QDomElement dp = drawPage.toElement();
@@ -329,6 +332,8 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 
     docElement.appendChild( paperElement );
     docElement.appendChild( backgroundElement );
+    if ( appendHelpLine( doc, settingsDoc, helpLineElement ) )
+        docElement.appendChild( helpLineElement );
     docElement.appendChild( pageTitleElement );
     docElement.appendChild( pageNoteElement );
     docElement.appendChild( objectElement );
@@ -338,6 +343,49 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 
     doccontent.appendChild( doc );
 }
+
+bool OoImpressImport::appendHelpLine( QDomDocument &doc,const QDomElement &settingElement, QDomElement &helpLineElement )
+{
+    bool foundElement = false;
+    //<config:config-item config:name="SnapLinesDrawing" config:type="string">V7939H1139</config:config-item>
+    //by default show line
+    QDomNode tmp = settingElement.namedItem( "office:settings" );
+    if (tmp.isNull() )
+        return false;
+
+    for ( QDomNode n = tmp.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement e = n.toElement();
+        //kdDebug()<<"e.tagName() :"<<e.tagName()<<endl;
+        if ( e.hasAttribute( "config:name" ) && ( e.attribute( "config:name" )=="view-settings" ) )
+        {
+            for ( QDomNode viewSetting = n.firstChild(); !viewSetting.isNull(); viewSetting = viewSetting.nextSibling() )
+            {
+                QDomElement configItem = viewSetting.toElement();
+                if ( configItem.tagName()== "config:config-item-map-indexed"
+                     && ( configItem.attribute( "config:name" )=="Views" ) )
+                {
+                    QDomNode item = configItem.firstChild(); //<config:config-item-map-entry>
+                    for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
+                    {
+                        QDomElement viewItem = item2.toElement();
+                        //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
+                        if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")=="SnapLinesDrawing" ) )
+                        {
+                            kdDebug()<<"SnapLinesDrawing****************:"<<viewItem.text()<<endl;
+                            foundElement = true;
+                            break;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    return foundElement;
+}
+
 
 void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QDomElement & soundElement, QDomElement & pictureElement, QDomElement & pageNoteElement, QDomElement &objectElement, double offset, bool sticky)
 {

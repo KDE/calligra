@@ -87,6 +87,7 @@ private:
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& list );
     void parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent,
                              QDomElement& outputParagraph, uint& pos);
+    bool appendHelpLine( QDomDocument &doc, const QDomElement &settingElement, QDomElement &helpLineElement );
     KoFilter::ConversionStatus openFile();
     KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc);
 
