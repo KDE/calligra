@@ -276,6 +276,7 @@ private:
     QPtrList<Cell> m_cells;
     QValueList<unsigned int> m_pageBoundaries;
     static const unsigned int tableCellSpacing;
+    unsigned int redrawFromCol;
     QValueList<double> m_rowPositions, m_colPositions;
 };
 
