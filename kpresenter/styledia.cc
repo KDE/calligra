@@ -800,7 +800,13 @@ bool StyleDia::isProtected() const
 
 KoRect StyleDia::getNewSize() const
 {
-    return KoRect();
+    double top=QMAX(0, KoUnit::fromUserValue( m_lineTop->text(), m_doc->getUnit() ));
+    double left=QMAX(0, KoUnit::fromUserValue( m_lineLeft->text(), m_doc->getUnit() ));
+    double width=QMAX(0, KoUnit::fromUserValue( m_lineWidth->text(), m_doc->getUnit() ));
+    double height=QMAX(0, KoUnit::fromUserValue( m_lineHeight->text(), m_doc->getUnit() ));
+
+    KoRect newRect = KoRect( left, top, width, height);
+    return newRect;
 }
 
 void StyleDia::setSize(const KoRect & _rect)

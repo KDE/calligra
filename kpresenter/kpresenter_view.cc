@@ -3423,6 +3423,18 @@ void KPresenterView::styleOk()
         createMacro=true;
         macro->addCommand( cmd );
     }
+
+    if ( styleDia->isOneObject())
+    {
+        KoRect rect = styleDia->getNewSize();
+        KoRect oldRect = m_canvas->getSelectedObj()->getRect();
+        cmd = new ResizeCmd( i18n("Change Size"), rect.topLeft()-oldRect.topLeft(), rect.size() - oldRect.size(), m_canvas->getSelectedObj(), m_pKPresenterDoc );
+        cmd->execute();
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+
+
     if(createMacro)
         kPresenterDoc()->addCommand(macro);
     else
