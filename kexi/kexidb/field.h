@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,7 +70,8 @@ class KEXI_DB_EXPORT Field
 			Asterisk = 128,    /*! type used in QueryAsterisk subclass objects only,
 			                       not used in table definitions,
 			                       but only in query definitions */
-			Enum = 129         /*! a integer internal with a string list of hints */
+			Enum = 129,        /*! an integer internal with a string list of hints */
+			Map = 130          /*! mapping from string to string list (more generic than Enum */
 		};
 
 		const int defaultTextLength() { return 200; }
@@ -239,11 +240,6 @@ class KEXI_DB_EXPORT Field
 		/*! static version of isTextType() method
 		 *! \return true if the field is of any text type */
 		static bool isTextType(uint type);
-                        
-//js: we have m_table for this		/*!
-//		 *	@return the table.column that this field references or QString::null if !foreign_key()
-//		 */
-//		virtual QString		references() const;
 
 		uint options() const { return m_options; }
 
@@ -410,16 +406,14 @@ class KEXI_DB_EXPORT Field
 		/*! Returns the hints for enum fields */
 		QValueVector<QString> enumHints() const { return m_hints; }
 		QString enumHint(uint num) { return (num < m_hints.size()) ? m_hints.at(num) : QString::null; }
-//</TMP>
-
 		/*! sets the hint for enum fields */
 		void setEnumHints(const QValueVector<QString> &l) { m_hints = l; }
+//</TMP>
 
 	protected:
 		FieldList *m_parent; //!< In most cases this points to a TableSchema 
 		                     //!< object that field is assigned.
 		QString m_name;
-//		QString m_reference;
 		Type m_type;
 		uint m_constraints;
 		uint m_length;

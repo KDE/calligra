@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kexidb/reference.h>
+#include <kexidb/relationship.h>
 
 #include <kexidb/indexschema.h>
 #include <kexidb/tableschema.h>
@@ -27,14 +27,14 @@
 
 using namespace KexiDB;
 
-Reference::Reference()
+Relationship::Relationship()
 	: m_masterIndex(0)
 	, m_detailsIndex(0)
 {
 	m_pairs.setAutoDelete(true);
 }
 
-Reference::Reference(IndexSchema* masterIndex, IndexSchema* detailsIndex)
+Relationship::Relationship(IndexSchema* masterIndex, IndexSchema* detailsIndex)
 	: m_masterIndex(0)
 	, m_detailsIndex(0)
 {
@@ -42,21 +42,21 @@ Reference::Reference(IndexSchema* masterIndex, IndexSchema* detailsIndex)
 	setIndices(masterIndex, detailsIndex);
 }
 
-Reference::~Reference()
+Relationship::~Relationship()
 {
 }
 
-TableSchema* Reference::masterTable() const
+TableSchema* Relationship::masterTable() const
 {
 	return m_masterIndex ? m_masterIndex->table() : 0;
 }
 
-TableSchema* Reference::detailsTable() const
+TableSchema* Relationship::detailsTable() const
 {
 	return m_detailsIndex ? m_detailsIndex->table() : 0;
 }
 
-void Reference::setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex)
+void Relationship::setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex)
 {
 	m_masterIndex = 0;
 	m_detailsIndex = 0;
@@ -68,7 +68,7 @@ void Reference::setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex)
 	Field *f2 = detailsIndex->fields()->first();
 	while (f1 && f2) {
 		if (f1->type()!=f1->type()) {
-			KexiDBDbg << "Reference::setIndices(INDEX on '"<<masterIndex->table()->name()
+			KexiDBDbg << "Relationship::setIndices(INDEX on '"<<masterIndex->table()->name()
 			<<"',INDEX on "<<detailsIndex->table()->name()<<"): !equal field types: "
 			<<Driver::defaultSQLTypeName(f1->type())<<" "<<f1->name()<<", "
 			<<Driver::defaultSQLTypeName(f2->type())<<" "<<f2->name() <<endl;
@@ -76,7 +76,7 @@ void Reference::setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex)
 			return;
 		}
 		if ((f1->isUnsigned() && !f2->isUnsigned()) || (!f1->isUnsigned() && f1->isUnsigned())) {
-			KexiDBDbg << "Reference::setIndices(INDEX on '"<<masterIndex->table()->name()
+			KexiDBDbg << "Relationship::setIndices(INDEX on '"<<masterIndex->table()->name()
 			<<"',INDEX on "<<detailsIndex->table()->name()<<"): !equal signedness of field types: "
 			<<Driver::defaultSQLTypeName(f1->type())<<" "<<f1->name()<<", "
 			<<Driver::defaultSQLTypeName(f2->type())<<" "<<f2->name() <<endl;
@@ -88,14 +88,14 @@ void Reference::setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex)
 	}
 	//ok: update information
 	if (m_masterIndex) {//detach yourself
-		m_masterIndex->detachReference(this);
+		m_masterIndex->detachRelationship(this);
 	}
 	if (m_detailsIndex) {//detach yourself
-		m_detailsIndex->detachReference(this);
+		m_detailsIndex->detachRelationship(this);
 	}
 	m_masterIndex = masterIndex;
 	m_detailsIndex = detailsIndex;
-	m_masterIndex->attachReference(this);
-	m_detailsIndex->attachReference(this);
+	m_masterIndex->attachRelationship(this);
+	m_detailsIndex->attachRelationship(this);
 }
 

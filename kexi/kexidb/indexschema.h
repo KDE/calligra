@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,7 +25,7 @@
 
 #include <kexidb/fieldlist.h>
 #include <kexidb/schemadata.h>
-#include <kexidb/reference.h>
+#include <kexidb/relationship.h>
 
 namespace KexiDB {
 
@@ -37,18 +37,9 @@ class QuerySchema;
 	that can be created on database table. 
 	
 	IndexSchema object stores information about table fields that
-	defines this index and additional properties like: if index is unique,
-	primary key (requires unique). Single-field index can be also auto generated.
+	defines this index and additional properties like: whether index is unique
+	or primary key (requires unique). Single-field index can be also auto generated.
 
-	Example:
-	<pre>
-	          ---------
-	 ---r1--<|         |
-	         | Table A |----r3---<
-	 ---r2--<|         |
-	          ---------
-	</pre>
-	Table A has two re
 */
 
 class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
@@ -69,15 +60,13 @@ class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
 		IndexSchema(const IndexSchema& idx);
 
 		/*! Destroys the index. Field objects are not deleted.
-		 All Reference objects listed in referencesFrom() list 
+		 All Relationship objects listed in masterRelationships() list 
 		 are destroyed (these are also detached from 
-		 reference-side indices before destruction). 
-		 Reference objects listed in referencesTo() are not touched. */
+		 detail-side indices before destruction). 
+		 Relationship objects listed in detailsRelationships() are not touched. */
 		~IndexSchema();
 
-//		void setName(const QString& name);
-
-		/*! Adds field at the and of field list. 
+		/*! Adds field at the end of field list. 
 		 Field will not be owned by index. Field must belong to a table
 		 the index is bulit on, otherwise field couldn't be added. */
 		virtual FieldList& addField(Field *field);
@@ -85,35 +74,37 @@ class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
 		/*! \return table that index is defined for. */
 		TableSchema* table() const;
 
-		/*! \return list of references from the table (of this index), i.e. any such reference in which
-		 the table is at 'master' side. See Reference class documentation for more information.
+		/*! \return list of relationships from the table (of this index), 
+		 i.e. any such relationship in which this table is at 'master' side. 
+		 See Relationship class documentation for more information.
 		 All objects listed here will be automatically destroyed on this IndexSchema object destruction. */
-		Reference::List* masterReferences() { return &m_master_refs; }
+		Relationship::List* masterRelationships() { return &m_master_rels; }
 
-		/*! \return list of references to the table (of this index), i.e. any such reference in which
-		 the table is at 'details' side. See Reference class documentation for more information. */
-		Reference::List* detailsReferences() { return &m_details_refs; }
+		/*! \return list of relationships to the table (of this index), 
+		 i.e. any such relationship in which this table is at 'details' side. 
+		 See Relationship class documentation for more information. */
+		Relationship::List* detailsRelationships() { return &m_details_rels; }
 
-		/*! Attaches reference definition \a ref to this IndexSchema object. 
-		 If \a ref reference has this IndexSchema defined at the master-side,
-		 \a ref is added to the list of master refererences (available with masterReferences())
-		 If \a ref reference has this IndexSchema defined at the details-side,
-		 \a ref is added to the list of details refererences (available with detailsReferences()).
-		 For the former case, attached \a ref object is now owned by this IndexSchema object. 
+		/*! Attaches relationship definition \a rel to this IndexSchema object. 
+		 If \a rel relationship has this IndexSchema defined at the master-side,
+		 \a rel is added to the list of master relationships (available with masterRelationships())
+		 If \a rel relationship has this IndexSchema defined at the details-side,
+		 \a rel is added to the list of details relationships (available with detailsRelationships()).
+		 For the former case, attached \a rel object is now owned by this IndexSchema object. 
 
-		 Note: call detachReference() for IndexSchema object that \a ref 
+		 Note: call detachRelationship() for IndexSchema object that \a rel 
 		 was previously attached to, if any. */
-		void attachReference(Reference *ref);
+		void attachRelationship(Relationship *rel);
 
-		/*! Detaches reference definition \a ref for this IndexSchema object
-		 from the list of master refererences (available with masterReferences()),
-		 or details references, depending on which side of the reference
+		/*! Detaches relationship definition \a rel for this IndexSchema object
+		 from the list of master relationships (available with masterRelationships()),
+		 or from details relationships list, depending for which side of the relationship
 		 is this IndexSchem object assigned.
 
-		 Note: If \a ref was detached from referencesFrom() list, this \a ref object now has no parent, 
-		 so attach it to somewhere or destruct it. 
+		 Note: If \a rel was detached from masterRelationships() list, 
+		 this object now has no parent, so you need to attach it to somewhere or destruct it. 
 		*/
-		void detachReference(Reference *ref);
+		void detachRelationship(Relationship *rel);
 
 		/*! \return true if index is auto-generated.
 			Auto-generated index is one-field index
@@ -151,7 +142,7 @@ class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
 		 is the requirement for PRIMARY KEYS. */
 		void setUnique(bool set);
 
-		/*! Shows debug information about index. */
+		/*! Shows debug information about the index. */
 		virtual void debug() const;
 	protected:
 
@@ -160,13 +151,11 @@ class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
 		\sa isAutoGenerated(). */
 		void setAutoGenerated(bool set);
 
-	//js	QStringList m_primaryKeys;
-//		Connection *m_conn;
 		TableSchema *m_tableSchema; //! table on that index is built
-		Reference::List m_master_refs; //! list of references from the table (of this index),
-		                             //! this index is foreign key for these references
+		Relationship::List m_master_rels; //! list of master relationships for the table (of this index),
+		                             //! this index is a master key for these relationships
 		                             //! and therefore - owner of these
-		Reference::List m_details_refs; //! list of references to table (of this index)
+		Relationship::List m_details_rels; //! list of relationships to table (of this index)
 		bool m_primary : 1;
 		bool m_unique : 1;
 		bool m_isAutoGenerated : 1;

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -98,6 +98,13 @@ KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
 {
 	if (!field)
 		return *this;
+	if (m_fieldsExpanded) {
+		delete m_fieldsExpanded;
+		m_fieldsExpanded = 0;
+		delete m_fieldsOrder;
+		m_fieldsOrder = 0;
+		m_detailedVisibility.clear();
+	}
 	if (!field->isQueryAsterisk() && !field->table()) {
 		KexiDBDbg << "QuerySchema::addField(): WARNING: field '"<<field->name()<<"' must contain table information!" <<endl;
 		return *this;
@@ -107,15 +114,30 @@ KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
 		m_asterisks.append(field);
 		//if this is single-table asterisk,
 		//add a table to list if not exists there:
-		if (field->table() && (m_tables.find(field->table())==-1))
+		if (field->table() && (m_tables.findRef(field->table())==-1))
 			m_tables.append(field->table());
 	}
 	else {
 		//add a table to list if not exists there:
-		if (m_tables.find(field->table())==-1)
+		if (m_tables.findRef(field->table())==-1)
 			m_tables.append(field->table());
 	}
+	//visible by default
+	setFieldVisible(field, true);
 	return *this;
+}
+
+bool QuerySchema::isFieldVisible(KexiDB::Field *f) const
+{
+	return m_visibility[f]!=0;
+}
+
+void QuerySchema::setFieldVisible(KexiDB::Field *f, bool v)
+{
+	m_visibility.take(f);
+	if (!v)
+		return;
+	m_visibility.insert(f, f);
 }
 
 FieldList& QuerySchema::addAsterisk(QueryAsterisk *asterisk)
@@ -123,7 +145,8 @@ FieldList& QuerySchema::addAsterisk(QueryAsterisk *asterisk)
 	if (!asterisk)
 		return *this;
 	//make unique name
-	asterisk->m_name = (asterisk->table() ? asterisk->table()->name() + ".*" : "*") + QString::number(asterisks()->count());
+	asterisk->m_name = (asterisk->table() ? asterisk->table()->name() + ".*" : "*") 
+		+ QString::number(asterisks()->count());
 	return addField(asterisk);
 }
 
@@ -175,7 +198,8 @@ void QuerySchema::addTable(TableSchema *table)
 	kdDebug() << "QuerySchema::addTable() " << (void *)table << endl;
 	if (!table)
 		return;
-	m_tables.append(table);
+	if (m_tables.findRef(table)==-1)
+		m_tables.append(table);
 }
 
 void QuerySchema::removeTable(TableSchema *table)
@@ -198,10 +222,18 @@ void QuerySchema::setAlias(Field *field, const QString& alias)
 	m_aliases[field] = alias;
 }
 
-Field::Vector QuerySchema::fieldsExpanded()
+Field::Vector QuerySchema::fieldsExpanded(QValueList<bool> *detailedVisibility)
 {
-	if (m_fieldsExpanded)
+	if (m_fieldsExpanded) {
+		if (detailedVisibility)
+			*detailedVisibility = m_detailedVisibility;
 		return *m_fieldsExpanded;
+	}
+
+	if (detailedVisibility)
+		detailedVisibility->clear();
+
+	m_detailedVisibility.clear();
 
 	Field::List list;
 	int i = 0;
@@ -211,6 +243,7 @@ Field::Vector QuerySchema::fieldsExpanded()
 			if (static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) {
 				Field::List *ast_fields = static_cast<QueryAsterisk*>(f)->table()->fields();
 				for (Field *ast_f = ast_fields->first(); ast_f; ast_f=ast_fields->next()) {
+					m_detailedVisibility += isFieldVisible(f);
 					list.append(ast_f);
 				}
 			}
@@ -220,12 +253,14 @@ Field::Vector QuerySchema::fieldsExpanded()
 					Field::List *tab_fields = table->fields();
 					for (Field *tab_f = tab_fields->first(); tab_f; tab_f = tab_fields->next()) {
 //! \todo (js): perhaps not all fields should be appended here
+						m_detailedVisibility += isFieldVisible(f);
 						list.append(tab_f);
 					}
 				}
 			}
 		}
 		else {
+			m_detailedVisibility += isFieldVisible(f);
 			list.append(f);
 		}
 	}
@@ -238,11 +273,12 @@ Field::Vector QuerySchema::fieldsExpanded()
 		m_fieldsExpanded->resize( list.count() );
 		m_fieldsOrder->clear();
 	}
-
 	for (i=0, f = list.first(); f; f = list.next(), i++) {
 		m_fieldsExpanded->insert(i,f);
 		m_fieldsOrder->insert(f,i);
 	}
+	if (detailedVisibility)
+		*detailedVisibility = m_detailedVisibility;
 	return *m_fieldsExpanded;
 }
 

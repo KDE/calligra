@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -264,19 +264,6 @@ Field::table() const
 {
 	return static_cast<TableSchema*>(m_parent);
 }
-
-/*QString
-Field::references() const
-{
-	return m_reference;
-}*/
-
-/*
-bool
-Field::binary() const
-{
-	return m_binary;
-}*/
 
 void
 Field::setTable(TableSchema *tableSchema)

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 #include <qstring.h>
 #include <qmap.h>
 #include <qptrlist.h>
+#include <qptrdict.h>
 
 #include <kexidb/fieldlist.h>
 #include <kexidb/schemadata.h>
@@ -73,6 +74,12 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 Field bust have its table assigned. 
 		 */
 		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
+
+		//! \return field's visibility. By default field is visible.
+		bool isFieldVisible(KexiDB::Field *f) const;
+
+		//! Sets field's visibility.
+		void setFieldVisible(KexiDB::Field *f, bool v);
 
 		/*! Adds \a asterisk at the and of field list. */
 		FieldList& addAsterisk(QueryAsterisk *asterisk);
@@ -156,7 +163,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 This method's result is cached by QuerySchema object.
 @todo js: UPDATE CACHE!
 		*/
-		Field::Vector fieldsExpanded();
+		Field::Vector fieldsExpanded(QValueList<bool> *detailedVisibility = 0);
 
 		/*! \return a map for fast lookup of query fields' order.
 		 This is exactly opposite information compared to vector returned by fieldsExpanded()
@@ -207,7 +214,10 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		
 		/*! Used to mapping Fields to its aliases for this query */
 		QMap<Field*, QString> m_aliases;
-		
+
+		/*! Used to store visibility flag for every field */
+		QPtrDict<Field> m_visibility;
+
 		/*! List of asterisks defined for this query  */
 		Field::List m_asterisks;
 
@@ -218,6 +228,8 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 This is exactly opposite information compared to vector returned by fieldsExpanded()
 		*/
 		QMap<Field*,uint> *m_fieldsOrder;
+
+		QValueList<bool> m_detailedVisibility;
 
 		//! order of PKEY fields (e.g. for updateRow() )
 		QValueVector<uint> *m_pkeyFieldsOrder;

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,7 +28,7 @@
 #include <kexidb/fieldlist.h>
 #include <kexidb/schemadata.h>
 #include <kexidb/indexschema.h>
-#include <kexidb/reference.h>
+#include <kexidb/relationship.h>
 
 namespace KexiDB {
 
@@ -37,11 +37,6 @@ class Connection;
 /*! KexiDB::TableSchema provides information about native database table 
 	that can be stored using SQL database engine. 
 */	
-/*OLD:	In most cases this class is used internally, while KexiDB::TableDef 
-	is visible for the users. 
-	Use KexiDB::TableDef subclass to get more rich structure (meta data) 
-	that is extension of KexiDB::Table.
-*/
 
 class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 {
@@ -67,7 +62,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		 This method never returns NULL value,
 		 if there is no primary key, empty IndexSchema object is returned.
 		 IndexSchema object is owned by the table schema. */
-		inline IndexSchema* primaryKey() const { return m_pkey; }
+		IndexSchema* primaryKey() const { return m_pkey; }
 
 		/*! Sets table's primary key index to \a pkey. Pass pkey==NULL if you want to unassign
 		 existing primary key ("primary" property of given IndexSchema object will be
@@ -81,10 +76,10 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		*/
 		void setPrimaryKey(IndexSchema *pkey);
 
-		inline const IndexSchema::ListIterator indicesIterator() const 
+		const IndexSchema::ListIterator indicesIterator() const 
 			{ return IndexSchema::ListIterator(m_indices); }
 
-		inline const IndexSchema::List* indices() { return &m_indices; }
+		const IndexSchema::List* indices() { return &m_indices; }
 
 //js		void addPrimaryKey(const QString& key);
 
@@ -97,7 +92,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 
 		/*! if table was created using a connection, 
 			returns this connection object, otherwise NULL. */
-		inline Connection* connection() const { return m_conn; }
+		Connection* connection() const { return m_conn; }
 
 		/*! \return true if this is KexiDB storage system's table 
 		 (used internally by KexiDB). This helps in hiding such tables

@@ -34,7 +34,7 @@ cursor.cpp \
 fieldlist.cpp \
 global.cpp \
 expression.cpp \
-reference.cpp \
+relationship.cpp \
 roweditbuffer.cpp \
 \
 parser/parser.cpp \

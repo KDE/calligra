@@ -17,24 +17,24 @@
    Boston, MA 02111-1307, USA.
  */
 
-#ifndef KEXIDB_REFERENCE_H
-#define KEXIDB_REFERENCE_H
+#ifndef KEXIDB_RELATIONSHIP_H
+#define KEXIDB_RELATIONSHIP_H
 
 #include <kexidb/field.h>
 
 namespace KexiDB {
 
-/*! KexiDB::Reference provides information about one-to-many reference between two tables.
- Reference is defined by a pair of (potentially multi-field) indices: 
+/*! KexiDB::Relationship provides information about one-to-many relationship between two tables.
+ Relationship is defined by a pair of (potentially multi-field) indices: 
  - "one" or "master" side: unique key
  - "many" or "details" side: referenced foreign key
  <pre>
- [unique, master] ----< [fk, details]
+ [unique key, master] ----< [foreign key, details]
  </pre>
 
  In this documentation, we will call table that owns fields of "one" side as 
- "master side of the relation", and the table that owns foreign key fields of 
- as "details side of the relation".
+ "master side of the relationship", and the table that owns foreign key fields of 
+ as "details side of the relationship".
  Use masterTable(), and detailsTable() to get one-side table and many-side table, respectively.
 
  Note: some engines (e.g. MySQL with InnoDB) requires that indices at both sides 
@@ -43,70 +43,84 @@ namespace KexiDB {
  \todo (js) It is planned that this will be handled by KexiDB internally and transparently.
 
  Each (of the two) key can be defined (just like index) as list of fields owned by one table.
- Indeed, reference info can retrieved from Reference object in two ways:
+ Indeed, relationship info can retrieved from Relationship object in two ways:
  -# pair of indices; use masterIndex(), detailsIndex() for that
  -# ordered list of field pairs (<master-side-field, details-side-field>); use fieldPairs() for that
 
- No assigned objects (like fields, indices) are owned by Reference object. The exception is that 
+ No assigned objects (like fields, indices) are owned by Relationship object. The exception is that 
  list of field-pairs is internally created (on demand) and owned.
 
- Reference object is owned by IndexSchema object (the one that is defined at master-side of the 
- reference).
+ Relationship object is owned by IndexSchema object (the one that is defined at master-side of the 
+ relationship).
  Note also that IndexSchema objects are owned by appropriate tables, so thus 
- there is implicit ownership between TableSchema and Reference.
- If Reference object is not attached to IndexSchema object, you should care about destroying it by hand.
+ there is implicit ownership between TableSchema and Relationship.
+
+ If Relationship object is not attached to IndexSchema object, 
+ you should care about destroying it by hand.
+
+	Example:
+	<pre>
+			  ----------
+	 ---r1--<|          |
+			 | Table A [uk]----r3---<
+	 ---r2--<|          |
+			  ----------
+	</pre>
+	Table A has two relationships (r1, r2) at details side and one (r3) at master side.
+	[uk] stands for unique key.
 */
 
 class IndexSchema;
 class TableSchema;
 
-class KEXI_DB_EXPORT Reference
+class KEXI_DB_EXPORT Relationship
 {
 	public:
-		typedef QPtrList<Reference> List;
+		typedef QPtrList<Relationship> List;
+		typedef QPtrListIterator<Relationship> ListIterator;
 
-		/*! Creates uninitialized Reference object. 
+		/*! Creates uninitialized Relationship object. 
 			setIndices() will be required to call.
 		*/
-		Reference();
+		Relationship();
 
-		/*! Creates Reference object and initialises it just by 
+		/*! Creates Relationship object and initialises it just by 
 		 calling setIndices(). If setIndices() failed, object is still uninitialised.
 		*/
-		Reference(IndexSchema* masterIndex, IndexSchema* detailsIndex);
+		Relationship(IndexSchema* masterIndex, IndexSchema* detailsIndex);
 
-		virtual ~Reference();
+		virtual ~Relationship();
 
-		/*! \return index defining master side of this reference
+		/*! \return index defining master side of this relationship
 		 or null if there is no information defined. */
 		IndexSchema* masterIndex() const { return m_masterIndex; }
 
-		/*! \return index defining referenced side of this reference.
+		/*! \return index defining referenced side of this relationship.
 		 or null if there is no information defined. */
 		IndexSchema* detailsIndex() const { return m_detailsIndex; }
 
 		/*! \return ordered list of field pairs -- alternative form 
-		 for representation of reference or null if there is no information defined.
+		 for representation of relationship or null if there is no information defined.
 		 Each pair has a form of <master-side-field, details-side-field>. */
 		Field::PairList* fieldPairs() { return &m_pairs; }
 
-		/*! \return table assigned at "master / one" side of this reference.
+		/*! \return table assigned at "master / one" side of this relationship.
 		 or null if there is no information defined. */
 		TableSchema* masterTable() const;
 
-		/*! \return table assigned at "details / many / foreign" side of this reference.
+		/*! \return table assigned at "details / many / foreign" side of this relationship.
 		 or null if there is no information defined. */
 		TableSchema* detailsTable() const;
 
-		/*! Sets \a masterIndex and \a detailsIndex indices for this reference.
+		/*! Sets \a masterIndex and \a detailsIndex indices for this relationship.
 		 This also sets information about tables for master- and details- sides.
 		 Notes: 
 		 - both indices must contain the same number of fields
 		 - both indices must not be owned by the same table, and table (owner) must be not null.
 		 - corresponding filed types must be the same
 		 - corresponding filed types' signedness must be the same
-		 If above rules are not fulfilled, information about this reference is cleared. 
-		 On success, this Reference object is detached from previous IndexSchema objects that were
+		 If above rules are not fulfilled, information about this relationship is cleared. 
+		 On success, this Relationship object is detached from previous IndexSchema objects that were
 		 assigned before, and new are attached.
 		 */
 		void setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex);
