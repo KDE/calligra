@@ -39,7 +39,7 @@ public:
   UnitBox(QWidget *parent = 0L, const char *name = 0L);
   ~UnitBox();
 
-  void setFormatString(const char* fmt);
+  void setPrecision(int prec);
 
   double getValue();
   void setValue(double value);

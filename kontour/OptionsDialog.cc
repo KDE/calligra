@@ -183,7 +183,7 @@ void OptionsDialog::createGridWidget (QWidget* parent)
   grid->addWidget(label, 0, 0);
 
   hspinbox = new UnitBox(box);
-  hspinbox->setFormatString("%-3.3f");
+  hspinbox->setPrecision(3);
   hspinbox->setRange(0, 1000);
   connect(hspinbox, SIGNAL(valueChanged(double)), this, SLOT(slotSetDocModified()));
   connect(hspinbox, SIGNAL(valueChanged(double)), this, SLOT(slotSetViewUpdate()));
@@ -193,7 +193,7 @@ void OptionsDialog::createGridWidget (QWidget* parent)
   grid->addWidget(label, 1, 0);
 
   vspinbox = new UnitBox(box);
-  vspinbox->setFormatString("%-3.3f");
+  vspinbox->setPrecision(3);
   vspinbox->setRange(0, 1000);
   connect(vspinbox, SIGNAL(valueChanged(double)), this, SLOT(slotSetDocModified()));
   connect(vspinbox, SIGNAL(valueChanged(double)), this, SLOT(slotSetViewUpdate()));

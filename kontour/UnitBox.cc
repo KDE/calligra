@@ -38,7 +38,7 @@ QHBox(parent, name)
   ptMinVal = 1.0;
   ptMaxVal = 10.0;
   m_step = 1.0;
-  valueBox->setFormat("%3.2f");
+  valueBox->setPrecision("2");
   valueBox->setRange(ptMinVal, ptMaxVal, m_step);
 
   unitCombo = new QComboBox(this, "unitCombo");
@@ -59,9 +59,9 @@ UnitBox::~UnitBox()
 {
 }
 
-void UnitBox::setFormatString(const char *fmt)
+void UnitBox::setPrecision(int prec)
 {
-  valueBox->setFormat(fmt);
+  valueBox->setPrecision(prec);
 }
 
 double UnitBox::getValue()
