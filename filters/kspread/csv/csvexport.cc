@@ -92,7 +92,8 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString& from, const QCStr
     // (Hey, this could be part of the dialog too, choosing which table to export....
     //  It's great to have parametrable filters... IIRC even MSOffice doesn't have that)
     // Ok, for now we'll use the first table - my document has only one table anyway ;-)))
-    KSpreadTable * table = ksdoc->map()->firstTable();
+    KSpreadTable * table = ksdoc->displayTable();
+    if( !table ) table = ksdoc->map()->firstTable();
 
     // Ah ah ah - the document is const, but the map and table aren't. Safety: 0.
 
