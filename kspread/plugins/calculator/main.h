@@ -26,7 +26,7 @@
 
 #include <klibloader.h>
 #include <kparts/plugin.h>
-
+#include <koffice_export.h>
 class KSpreadView;
 class QtCalculator;
 class KInstance;
