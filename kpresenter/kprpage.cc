@@ -248,10 +248,11 @@ void KPrPage::groupObjects()
 {
     QPtrList<KPObject> objs;
     objs.setAutoDelete( false );
-    KPObject *kpobject;
-    for ( kpobject = m_objectList.first(); kpobject; kpobject = m_objectList.next() ) {
-	if ( kpobject->isSelected() )
-	    objs.append( kpobject );
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->isSelected())
+	    objs.append( it.current() );
     }
 
     if ( objs.count() > 1 ) {

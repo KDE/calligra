@@ -38,6 +38,8 @@ k_dcop:
     virtual DCOPRef selectedObject();
     virtual DCOPRef textObject( int num );
 
+    virtual DCOPRef groupObjects();
+
     virtual int numTextObject() const;
 
 
@@ -50,7 +52,6 @@ k_dcop:
 
     virtual unsigned int objNums() const;
     virtual int numSelected() const;
-    virtual void groupObjects();
     virtual void ungroupObjects();
     virtual void raiseObjs();
     virtual void lowerObjs();

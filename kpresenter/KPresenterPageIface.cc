@@ -107,9 +107,10 @@ int KPresenterPageIface::numSelected() const
     return m_page->numSelected();
 }
 
-void KPresenterPageIface::groupObjects()
+DCOPRef KPresenterPageIface::groupObjects()
 {
     m_page->groupObjects();
+    return selectedObject();
 }
 
 void KPresenterPageIface::ungroupObjects()
