@@ -1,0 +1,115 @@
+From: rizzi@kde.org
+To: Laurent Montel <lmontel@mandrakesoft.com>
+cc: coolo@kde.org
+Subject: Re: Improvemnent of kformular
+
+On Wed, 11 Oct 2000, Laurent Montel wrote:
+
+> Hi,
+> 
+> My name is laurent Montel, I work on kspread and I started to improve
+> kformular.
+Great!! My time is less than zero and I spent all my september free time
+in translations and related stuff (kbabel search engine)
+
+> Now it works on koffice2.0, I imporved a lot of thing, but I want to 
+> implemente save and load kformular file but I don't understand how your old 
+> save/load function works.
+May be it doesn't work.
+In Erlangen I decided with Stephan Kulow (he is in Cc:) a major rewrite
+for kformula.
+We plan to change something in the element structure.
+The idea for load/save function is to call a save() function recursively
+for each element (you call it for the first element and than it call for
+its children, indexes & next elements).
+What surely need to be rewritten is the Render part of each element.
+
+Here what I think about formula editors (many of these ideas are shared by
+the physics community here in Pisa):
+
+2 Axioms:
+-TeX is great because once rendered(printed) it is very very very nice
+ but sometimes is difficult and complicate to write/edit your formula.
+-MSWord is shit because it is very hugly when you print and because it
+ crash, but you can SEE what you write without any 120 pages latex
+ render.
+
+I think we can merge best elements of TeX and MSWord (we use a stable
+system and a GUI).
+
+First of all I think object cannot be linearly stored in our structure
+because in a math formula (not x = y) they are not linear.
+It often happens that you want to use an "element" (i.e. something that 
+could be itself a whole formula) of your formula as a parameter of a
+"function-like" element (SQRT,SUM, etc) or that you want to "modify" you
+element (or better its meaning in the formula) with decoration or indexes
+etc...
+The non-linearty is great for many reasons: you can easly evaluate your
+formula (if there's a meaning), you can delete an element and everything
+that refers to it with recursive calls. I also think that the best way to
+keep an information, if you want to edit it, is keeping it in a
+close-to-meaning format (e.g. When you modify any image is simpler if you
+have to modify a bitmap and not an LZW-compressed file)
+
+The main problem with non linar structure is the keyboard navigation.
+Bue the real problem is that the editing of a formula CANNOT be linear, in
+TeX you can edit with your keyboard arrows but you have to parse in your
+mind the formula to understand "where" is you cursor in the formula.
+
+I think there are 2 ways to solve this problem.
+The first is to keep a list of possible cursor position and to update this
+list every time you modify something in the formula (now kformula works in
+this way), this list is filled in a non intuitive order but you can edit
+with only left and right keys.
+
+The second is to use both left/right and Up/down with left/right you move
+across "same level elements" and with up down you go more or less deeply
+in the structure (imagine a tree view with navigation keys inverted).
+
+I think we can let the user choice what he prefer and implement both the
+methods.
+
+
+The Elements:
+the elements will be derived classes from BasicElement (we must rewrite
+it), a BasicElement is an element of a double-linked list(i.e. it contains
+only references to 
+BasicElement *prev,*next; 
+
+The derived classes contains other pointer to their children (may be
+indexes(e.g. the 1 in X1), operator contex(e.g. the X in SQRT(X)), etc)
+obviously the *prev of a child is its father.
+
+Now we have to decide how many and what classes we want to implement.
+Now there are classes for
+-Simple text
+-Root
+-Fraction
+-Parenthesis
+-Matrix
+-Sum & Integral  operators
+-Decorations
+-Symbols
+
+We have to add something for indexes (and power of) because we will remove
+it from BasicElement.
+We can decide if is a good choice or not to define classes also for
+binary operator like = + - * etc..
+It think we can do a general BinaryOpElement class but I'm not sure it is
+a good idea..
+
+Ok, I'm waiting your (i.e. Laurent and Stephan ) comments.
+
+
+Bye
+The very busy Andrea. 
+
+Registered Linux User No.71426  |       ***  KDE Project  ***
+        Andrea Rizzi		|  http://www.kde.org/
+mailto:	Andrea.Rizzi@sns.it    	|  http://www.kde.org/international/italy
+	rizzi@cibs.sns.it   	|  Projects: KOffice,KFinger,KTranslator,
+	rizzi@kde.org		|  Italian translations teamleader
+
+	
+
+
