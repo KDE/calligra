@@ -1000,6 +1000,10 @@ bool KPrPage::getSticky( bool s )
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        //don't test header/footer all the time sticky
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+
         if(it.current()->isSelected())
             return it.current()->isSticky();
     }
