@@ -24,7 +24,7 @@
 #include <qptrlist.h>
 
 #include "defs.h"
-#include "koborder.h"
+#include <koborder.h>
 
 class KWCanvas;
 class KWDocument;
