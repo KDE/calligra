@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformpartinst" version="2">
+<kpartgui name="kexiformpartinst" version="3">
 
 <MenuBar>
   <Menu name="edit">
@@ -22,9 +22,9 @@
    <Action name="library_widget_Spacer"/>
  <ActionList name="library_widgets" />
 </ToolBar>
-<ToolBar name="tools" fullWidth="false">
+<!-- ToolBar name="tools" fullWidth="false">
    <Action name="change_style"/>
-</ToolBar>
+</ToolBar -->
 
 </kpartgui>
 
