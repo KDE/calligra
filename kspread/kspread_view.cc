@@ -4799,6 +4799,7 @@ void KSpreadView::slotChildUnselected( KoDocumentChild* )
     {
         m_transformToolBox->setEnabled( FALSE );
     }
+    deleteEditor( true );
 }
 
 
