@@ -20,13 +20,13 @@ VObjectList::~VObjectList()
 QRect
 VObjectList::boundingBox( const double zoomFactor ) const
 {
-	if(count() > 0)
+	if( count() > 0 )
 	{
 		QRect rect = getFirst()->boundingBox( zoomFactor );
-	    VObjectListIterator itr( *this );
+		VObjectListIterator itr( *this );
 		++itr;
-	    for ( ; itr.current() ; ++itr )
-	        rect = rect.unite( itr.current()->boundingBox( zoomFactor ) );
+		for ( ; itr.current() ; ++itr )
+			rect |= itr.current()->boundingBox( zoomFactor );
 
 		return rect;
 	}

@@ -3,8 +3,6 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <math.h>
-
 #include <koPoint.h>
 
 #include "vglobal.h"
@@ -38,30 +36,4 @@ VSegmentTools::linesIntersect(
 	return true;
 }
 
-double
-VSegmentTools::height(
-	const KoPoint& a,
-	const KoPoint& p,
-	const KoPoint& b )
-{
-	// calculate determinant of AP and AB to obtain projection of vector AP to
-	// the orthogonal vector of AB:
-	const double det =
-		p.x() * a.y() + b.x() * p.y() - p.x() * b.y() -
-		a.x() * p.y() + a.x() * b.y() - b.x() * a.y();
 
-	// calculate norm = length(AB):
-	const double norm = sqrt(
-		( b.x() - a.x() ) * ( b.x() - a.x() ) +
-		( b.y() - a.y() ) * ( b.y() - a.y() ) );
-
-	// if norm is very small, simply use distance AP:
-	if( norm < 1.0e-6 )
-		return
-			sqrt(
-				( p.x() - a.x() ) * ( p.x() - a.x() ) +
-				( p.y() - a.y() ) * ( p.y() - a.y() ) );
-
-	// normalize:
-	return det / norm;
-}

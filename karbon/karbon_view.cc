@@ -17,6 +17,7 @@
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "karbon_view.h"
+#include "vccmd_text.h"
 #include "vctool_ellipse.h"
 #include "vctool_polygon.h"
 #include "vctool_rectangle.h"
@@ -24,21 +25,20 @@
 #include "vctool_sinus.h"
 #include "vctool_spiral.h"
 #include "vctool_star.h"
+#include "vmcmd_delete.h"
+#include "vmcmd_fill.h"
+#include "vmcmd_stroke.h"
+#include "vmdlg_solidfill.h"
+#include "vmdlg_stroke.h"
+#include "vmpanel_color.h"
 #include "vmtool_handle.h"
 #include "vmtool_select.h"
 #include "vmtool_rotate.h"
 #include "vmtool_scale.h"
 #include "vmtool_shear.h"
-#include "vmcmd_delete.h"
-#include "vtoolcontainer.h"
-#include "vpainterfactory.h"
 #include "vpainter.h"
-#include "vmdlg_solidfill.h"
-#include "vmdlg_stroke.h"
-#include "vmpanel_color.h"
-#include "vccmd_text.h"
-#include "vmcmd_stroke.h"
-#include "vmcmd_fill.h"
+#include "vpainterfactory.h"
+#include "vtoolcontainer.h"
 #include "vtext.h"
 
 #include <kdebug.h>
@@ -617,7 +617,10 @@ bool
 KarbonView::eventFilter( QObject* object, QEvent* event )
 {
 	if ( object == m_canvas->viewport() )
+	{
+
 		return s_currentTool->eventFilter( this, event );
+	}
 	else
 		return false;
 }

@@ -178,8 +178,7 @@ VPath::draw( VPainter *painter, const QRect& rect,
 	// draw small boxes for path nodes:
 	if( state() == state_selected )
 	{
-		//QPainter qpainter( painter->device() );
-		painter->setRasterOp( Qt::CopyROP );
+		painter->setRasterOp( Qt::NotROP );
 		painter->setPen( Qt::NoPen );
 
 		for( itr.toFirst(); itr.current(); ++itr )
@@ -188,10 +187,22 @@ VPath::draw( VPainter *painter, const QRect& rect,
 			for( ; jtr.current(); ++jtr )
 			{
 				painter->setBrush( Qt::blue.light() );
-				painter->moveTo( KoPoint( jtr.current()->knot2().x() - 2 / zoomFactor, jtr.current()->knot2().y() - 2 / zoomFactor ) );
-				painter->lineTo( KoPoint( jtr.current()->knot2().x() + 2 / zoomFactor, jtr.current()->knot2().y() - 2 / zoomFactor ) );
-				painter->lineTo( KoPoint( jtr.current()->knot2().x() + 2 / zoomFactor, jtr.current()->knot2().y() + 2 / zoomFactor ) );
-				painter->lineTo( KoPoint( jtr.current()->knot2().x() - 2 / zoomFactor, jtr.current()->knot2().y() + 2 / zoomFactor ) );
+				painter->moveTo(
+					KoPoint(
+						jtr.current()->knot2().x() - 2 / zoomFactor,
+						jtr.current()->knot2().y() - 2 / zoomFactor ) );
+				painter->lineTo(
+					KoPoint(
+						jtr.current()->knot2().x() + 2 / zoomFactor,
+						jtr.current()->knot2().y() - 2 / zoomFactor ) );
+				painter->lineTo(
+					KoPoint(
+						jtr.current()->knot2().x() + 2 / zoomFactor,
+						jtr.current()->knot2().y() + 2 / zoomFactor ) );
+				painter->lineTo(
+					KoPoint(
+						jtr.current()->knot2().x() - 2 / zoomFactor,
+						jtr.current()->knot2().y() + 2 / zoomFactor ) );
 				painter->fillPath();
 			}
 		}
@@ -315,21 +326,27 @@ VPath::boundingBox( const double zoomFactor ) const
 	}
 
 	return QRect(
-		qRound( rect.left() * zoomFactor ),
-		qRound( rect.top() * zoomFactor ),
-		qRound( rect.right() * zoomFactor ),
-		qRound( rect.bottom() * zoomFactor ) );
+		qRound( rect.left() / zoomFactor ),
+		qRound( rect.top() / zoomFactor ),
+		qRound( rect.right() / zoomFactor ),
+		qRound( rect.bottom() / zoomFactor ) );
 }
 
 bool
-VPath::intersects( const QRect& rect, const double zoomFactor ) const
+VPath::intersects( const QRect& qrect, const double zoomFactor ) const
 {
+	KoRect rect( qrect.topLeft() * zoomFactor, qrect.bottomRight() * zoomFactor );
+
 	VPathBounding bb;
 	QPtrListIterator<VSegmentList> itr( m_segmentLists );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
-		if( bb.intersects( rect, zoomFactor, *( itr.current() ) ) )
-			return true;
+		// check first for boundingbox interferance:
+		if( rect.intersects( itr.current()->boundingBox() ) )
+		{
+			if( bb.intersects( qrect, zoomFactor, *( itr.current() ) ) )
+				return true;
+		}
 	}
 
 	return false;

@@ -96,7 +96,7 @@ public:
 	virtual void transform( const QWMatrix& m );
 
 	virtual QRect boundingBox( const double zoomFactor ) const;
-	virtual bool intersects( const QRect& rect, const double zoomFactor ) const;
+	virtual bool intersects( const QRect& qrect, const double zoomFactor ) const;
 
 	virtual VObject* clone();
 

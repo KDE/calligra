@@ -5,14 +5,17 @@
 
 #include <qapplication.h>
 #include <qpainter.h>
-#include "vpainterfactory.h"
-#include "vpainter.h"
 #include <qpixmap.h>
-#include <kdebug.h>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
 #include "vcanvas.h"
+#include "vmtool_handle.h"
+#include "vpainter.h"
+#include "vpainterfactory.h"
+
+#include <kdebug.h>
+
 
 VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
     : QScrollView( view, "canvas", WStaticContents/*WNorthWestGravity*/ | WResizeNoErase  |
@@ -78,7 +81,7 @@ void
 VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 {
 	//kdDebug() << "drawDoc rect : " << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
-	VPainter *p = m_view->painterFactory()->painter();
+	VPainter* p = m_view->painterFactory()->painter();
 	p->begin();
 	QWMatrix mat;
 	mat.translate( -contentsX(), -contentsY() );
@@ -90,6 +93,10 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 	for ( ; i.current(); ++i )
 		if ( i.current()->visible() )
 			i.current()->draw( p, rect, m_zoomFactor );
+
+	// draw handle:
+	QPainter qpainter( p->device() );
+	VMToolHandle::instance( m_part )->draw( qpainter, m_zoomFactor );
 
 	p->end();
 }
@@ -111,7 +118,7 @@ VCanvas::resizeEvent( QResizeEvent* event )
 }
 
 void
-VCanvas::slotContentsMoving( int x, int y )
+VCanvas::slotContentsMoving( int /*x*/, int /*y*/ )
 {
 	m_bScrolling = true;
 }

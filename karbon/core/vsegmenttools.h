@@ -6,10 +6,6 @@
 #ifndef __VSEGMENTTOOLS_H__
 #define __VSEGMENTTOOLS_H__
 
-#include <koRect.h>
-
-#include "vsegment.h"
-
 class KoPoint;
 
 // This is a place for algorithms which are helpfull in various places.
@@ -22,12 +18,6 @@ namespace VSegmentTools
 		const KoPoint& a1,
 		const KoPoint& b0,
 		const KoPoint& b1 );
-
-	/// Calculate height of p above line AB.
-	double height(
-		const KoPoint& a,
-		const KoPoint& p,
-		const KoPoint& b );
 }
 
 #endif

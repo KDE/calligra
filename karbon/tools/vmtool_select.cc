@@ -64,7 +64,7 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 		VObjectListIterator itr = part()->selection();
 		VObjectList list;
 		list.setAutoDelete( true );
-	    for( ; itr.current() ; ++itr )
+		for( ; itr.current() ; ++itr )
 		{
 			list.append( itr.current()->clone() );
 		}
