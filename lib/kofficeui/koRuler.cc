@@ -495,6 +495,10 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
             emit tabListChanged( d->tabList );
             repaint( false );
         }
+        else if ( d->flags & F_HELPLINES )
+        {
+            d->action=A_HELPLINES;
+        }
     }
 }
 
@@ -572,6 +576,10 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
         searchTab( e->x() );
         emit tabListChanged( d->tabList );
         repaint( false );
+    }
+    else if( d->action == A_HELPLINES )
+    {
+        emit addHelpline( e->pos(), orientation == Qt::Horizontal);
     }
 }
 
@@ -814,6 +822,12 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
             }
         } break;
     }
+
+    if( d->action == A_HELPLINES )
+    {
+        emit moveHelpLines( e->pos(), orientation == Qt::Horizontal);
+    }
+
     d->oldMx = mx;
     d->oldMy = my;
 }

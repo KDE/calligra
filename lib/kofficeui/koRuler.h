@@ -60,7 +60,7 @@ struct KoTabulator {
     double ptWidth;
 
     bool operator==( const KoTabulator & t ) const {
-        return ptPos == t.ptPos && type == t.type && 
+        return ptPos == t.ptPos && type == t.type &&
                filling == t.filling && ptWidth == t.ptWidth;
     }
     // Operators used for sorting
@@ -96,6 +96,7 @@ class KoRuler : public QFrame
 public:
     static const int F_TABS = 1;
     static const int F_INDENTS = 2;
+    static const int F_HELPLINES = 4;
 
     /**
      * Create a ruler
@@ -216,9 +217,13 @@ signals:
     void tabListChanged( const KoTabulatorList & );
     void unitChanged( QString ); // TODO KoUnit::Unit instead ?
 
+    void addHelpline(const QPoint &, bool );
+    void moveHelpLines( const QPoint &, bool );
+
 protected:
     enum Action {A_NONE, A_BR_LEFT, A_BR_RIGHT, A_BR_TOP, A_BR_BOTTOM,
-                 A_LEFT_INDENT, A_FIRST_INDENT, A_TAB, A_RIGHT_INDENT};
+                 A_LEFT_INDENT, A_FIRST_INDENT, A_TAB, A_RIGHT_INDENT,
+                 A_HELPLINES };
 
     void drawContents( QPainter *_painter )
     { orientation == Qt::Horizontal ? drawHorizontal( _painter ) : drawVertical( _painter ); }
