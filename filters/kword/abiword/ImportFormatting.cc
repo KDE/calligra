@@ -339,20 +339,42 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
         for ( QStringList::Iterator it = listTab.begin(); it != listTab.end(); ++it )
         {
             QStringList tab=QStringList::split("/",*it);
+            const QChar tabType=tab[1].at(0);
+            const QChar tabFilling=tab[1].at(1); // Might be empty in old AbiWord files
             int type;
-            if(tab[1]=="L0")
+            if (tabType=='L') // left
                 type=0;
-            else if(tab[1]=="C0")
+            else if (tabType=='C') // center
                 type=1;
-            else if(tab[1]=="R0")
+            else if (tabType=='R') // right
                 type=2;
-            else if(tab[1]=="D0")
+            else if(tabType=='D') // decimal
                 type=3;
-            else
+            else if(tabType=='B') // bar (unsupported by KWord)
                 type=0;
+            else
+            {
+                kdWarning(30506)<<"Unknown tabulator type: " << QString(tabType) << endl;
+                type=0;
+            }
+            int filling;
+            int width=72; // Any non-null value
+            if (tabFilling.isNull() || tabFilling=='0') // No filling
+                filling=0;
+            else if (tabFilling=='1') // dot
+            {
+                filling=1;
+                width=2;    // TODO: which width?
+            }
+            else if (tabFilling=='3') // underline
+                filling=2;
+            else
+                filling=0;
             element=mainDocument.createElement("TABULATOR");
             element.setAttribute("ptpos",ValueWithLengthUnit(tab[0]));
             element.setAttribute("type",type);
+            element.setAttribute("filling",filling);
+            element.setAttribute("width",width);
             layoutElement.appendChild(element);
         }
     }

@@ -1,7 +1,7 @@
 // $Header$
 
 /* This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -56,7 +56,7 @@ enum StackItemElementType{
 //  <iw>, <bookmark>, <l>
 //
 // Properties that we do not or cannot support:
-//  page-margin-footer, page-margin-header, lang, font-stretch
+//  page-margin-footer, page-margin-header, lang, font-stretch, keep-with-next
 
 
 class StackItem
