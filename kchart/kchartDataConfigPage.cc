@@ -48,34 +48,6 @@ using namespace std;
 namespace KChart
 {
 
-class KChartFontListBoxItem : public QListBoxText
-{
-public:
-    KChartFontListBoxItem( QListBox* lb,  const QString& text = QString::null ) :
-        QListBoxText( lb,  text )  {}
-    KChartFontListBoxItem( const QString& text = QString::null ) :
-        QListBoxText( text )  {}
-
-    void setFont( const QFont& font )  {
-        _font = font;
-        listBox()->repaint();
-    }
-    QFont font() const {
-        return _font;
-    }
-
-protected:
-    void paint( QPainter* painter )  {
-        painter->save();
-        painter->setFont( _font );
-        QListBoxText::paint( painter );
-        painter->restore();
-    }
-
-private:
-    QFont _font;
-};
-
 KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
                                             QWidget* parent, KoChart::Data *dat) :
     QWidget( parent ), m_params( params ), data(dat)
