@@ -1196,6 +1196,13 @@ KWParag *KWTextFrameSet::getLastParag()
 /******************************************************************/
 
 /*================================================================*/
+KWPictureFrameSet::~KWPictureFrameSet() {
+    if(image) {
+        image->decRef();
+    }
+} 
+
+/*================================================================*/
 void KWPictureFrameSet::setFileName( QString _filename )
 {
     int dashdash = _filename.findRev( "--" );
@@ -1210,6 +1217,7 @@ void KWPictureFrameSet::setFileName( QString _filename )
     filename = _filename;
 
     bool del = false;
+    // retrieve image from imageCollection
     KWImage *_image = doc->getImageCollection()->getImage( filename );
     if ( !_image ) {
 	del = true;

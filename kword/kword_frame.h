@@ -322,8 +322,7 @@ public:
     KWPictureFrameSet( KWordDocument *_doc )
         : KWFrameSet( _doc )
     { image = 0L; }
-    virtual ~KWPictureFrameSet()
-    {; }
+    virtual ~KWPictureFrameSet();
 
     virtual FrameType getFrameType()
     { return FT_PICTURE; }
