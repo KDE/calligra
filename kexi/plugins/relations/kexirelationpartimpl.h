@@ -25,6 +25,8 @@
 
 class KexiRelationPartImpl : public KexiInternalPart
 {
+	Q_OBJECT
+
 	public:
 		KexiRelationPartImpl(QObject *parent, const char *name, const QStringList &args);
 		virtual ~KexiRelationPartImpl();
