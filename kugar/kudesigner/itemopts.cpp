@@ -28,7 +28,19 @@ void dlgItemOptions::commitProps()
     for (int i = 0; i < taProps->numRows(); i++)
     {
         QString a = taProps->item(i, 0)->text();
-        (*props)[a].first = taProps->item(i, 1)->text();
+        QString result = taProps->item(i, 1)->text();
+        bool ok;
+        result.toDouble( &ok );
+        if ( ok )
+            (*props)[a].first = result;
+        else
+        {
+            result.toInt( &ok );
+            if ( ok )
+                (*props)[a].first = result;
+            else
+                (*props)[a].first = QString::number(0);
+        }
     }
 }
 
@@ -53,12 +65,12 @@ dlgItemOptions::dlgItemOptions(std::map<QString, std::pair<QString, QStringList>
 	taProps->setText(j, 1, i->second.first);
 	j++;
     }
-    
+
     //delete the last empty row if exists
     if (taProps->text(taProps->numRows()-1, 0) == "")
     	taProps->removeRow(taProps->numRows()-1);
-    
-    connect(buttonOk, SIGNAL(clicked()), this, SLOT(commitProps()));    
+
+    connect(buttonOk, SIGNAL(clicked()), this, SLOT(commitProps()));
 }
 
 void dlgItemOptions::showPropertyTip(int row, int col)
