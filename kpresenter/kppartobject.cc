@@ -94,12 +94,14 @@ void KPPartObject::activate(QWidget *_widget,int diffx,int diffy)
 {
   view->setGeometry(orig.x() - diffx + 20,orig.y() - diffy + 20,ext.width(),ext.height());
   view->show();
+  view->view()->mainWindow()->setActivePart(view->view()->id());
 }
 
 /*================================================================*/
 void KPPartObject::deactivate()
 {
   view->hide();
+  view->view()->mainWindow()->setActivePart(parentID);
 }
 
 /*================================================================*/

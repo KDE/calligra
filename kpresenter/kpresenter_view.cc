@@ -164,7 +164,10 @@ void KPresenterView::setFramesToParts()
     {
       frame = m_lstFrames.at(i);
       frame->hide();
+      frame->view()->setMainWindow(mainWindow());
       frame->getKPPartObject()->setView(frame);
+      frame->getKPPartObject()->setMainWindow(mainWindow());
+      frame->getKPPartObject()->setParentID(id());
     }
 }
 

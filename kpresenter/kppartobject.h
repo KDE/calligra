@@ -19,6 +19,10 @@
 #include <qpicture.h>
 #include <qwidget.h>
 
+#include <koMainWindow.h>
+#include <koView.h>
+#include <openparts.h>
+
 #include "kpobject.h"
 
 class KPresenterChild;
@@ -56,6 +60,9 @@ public:
   KPresenterFrame *getView() { return view; }
   void setView(KPresenterFrame *_view) { view = _view; }
 
+  void setMainWindow(OpenParts::MainWindow_ptr _mainWindow) { mainWindow = KOffice::MainWindow::_narrow(_mainWindow); }
+  void setParentID(OpenParts::Id _id) { parentID = _id; }
+
   KPresenterChild *getChild() { return child; }
 
 protected:
@@ -63,6 +70,8 @@ protected:
 
   KPresenterFrame *view;
   KPresenterChild *child;
+  KOffice::MainWindow_var mainWindow;
+  OpenParts::Id parentID;
 
 };
 
