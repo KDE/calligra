@@ -1025,6 +1025,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     if ( value != "application/x-kword" )
     {
         kdError(32001) << "Unknown mime type " << value << endl;
+        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-kword, got %1" ).arg( value ) );
         return false;
     }
     m_syntaxVersion = KWDocument::getAttribute( word, "syntaxVersion", 0 );
@@ -1035,7 +1036,10 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
                     "Opening it in this version of KWord will lose some information.").arg(m_syntaxVersion),
             i18n("File format mismatch"), i18n("Continue") );
         if ( ret == KMessageBox::Cancel )
+        {
+            setErrorMessage( "USER_CANCELED" );
             return false;
+        }
     }
 
     // Looks like support for the old way of naming images internally,
@@ -1381,7 +1385,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     setModified( false );
 
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
-    return TRUE;
+    return true;
 }
 
 void KWDocument::loadEmbedded( QDomElement embedded )
