@@ -33,6 +33,7 @@ class KWStyle;
 class KWFrame;
 class KWView;
 class KWViewMode;
+class KMacroCommand;
 class KoDocumentEntry;
 class QPainter;
 class KSpellConfig;
@@ -120,6 +121,7 @@ public:
     virtual bool loadChildren( KoStore *_store );
     virtual QDomDocument saveXML();
     void processImageRequests();
+    void processAnchorRequests();
 
     int syntaxVersion( ) const { return m_syntaxVersion; }
 
@@ -227,6 +229,8 @@ public:
      */
     void frameChanged( KWFrame * frame, KWView * view = 0L );
     void framesChanged( const QList<KWFrame> & frames, KWView * view = 0L );
+
+    void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd );
 
     const QList<KWStyle> & styleList() const { return m_styleList; }
     /**
@@ -543,10 +547,12 @@ private:
     QMap<KoImageKey, QString> * m_pixmapMap;
     QMap<KoClipartKey, QString> * m_clipartMap;
 
-    QMap<KoImageKey, KWTextImage *> m_imageRequests;
+    QMap<KoImageKey, KWTextImage *> m_imageRequests; // to be removed
     QMap<KoImageKey, KWPictureFrameSet *> m_imageRequests2;
     QMap<QString, KWAnchorPosition> m_anchorRequests;
     QMap<KoClipartKey, KWClipartFrameSet *> m_clipartRequests;
+
+    QMap<QString,QString> * m_pasteFramesetsMap;
 
     QMap<int, KWVariableFormat*> m_mapVariableFormats;
     QList<KWVariable> variables;

@@ -3305,6 +3305,13 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
     {
         text = c1.parag()->string()->toString().mid( c1.index(), c2.index() - c1.index() );
         static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c2.index()-1 );
+        // Look for anchors, and save their inline frameset into the DOM document
+        for ( int i = c1.index(); i <= c2.index()-1; ++i )
+        {
+            QTextStringChar * ch = c1.parag()->at(i);
+            if ( ch->isCustom() && dynamic_cast<KWAnchor *>( ch->customItem() ) )
+                static_cast<KWAnchor *>( ch->customItem() )->frameSet()->save( elem );
+        }
     }
     else
     {
@@ -3314,6 +3321,13 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
         while ( p && p != c2.parag() ) {
             text += p->string()->toString() + "\n";
             static_cast<KWTextParag *>(p)->save( elem );
+            // Look for anchors, and save their inline frameset into the DOM document
+            for ( int i = 0; i <= p->length()-2; ++i )
+            {
+                QTextStringChar * ch = p->at(i);
+                if ( ch->isCustom() && dynamic_cast<KWAnchor *>( ch->customItem() ) )
+                    static_cast<KWAnchor *>( ch->customItem() )->frameSet()->save( elem );
+            }
             p = p->next();
         }
         text += c2.parag()->string()->toString().left( c2.index() );
@@ -3324,7 +3338,7 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
     KWTextDrag *kd = new KWTextDrag( parent );
     kd->setPlain( text );
     kd->setKWord( domDoc.toCString() );
-    //kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << domDoc.toCString() << endl;
+    kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << domDoc.toCString() << endl;
     return kd;
 }
 

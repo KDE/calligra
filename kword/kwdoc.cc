@@ -192,6 +192,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_lastStyle = 0L;
     m_pixmapMap = 0L;
     m_clipartMap = 0L;
+    m_pasteFramesetsMap = 0L;
 
     slDataBase = new KWSerialLetterDataBase( this );
     slRecordNum = -1;
@@ -1534,17 +1535,7 @@ bool KWDocument::completeLoading( KoStore *_store )
     }
 
     processImageRequests();
-
-    QMapIterator<QString, KWAnchorPosition> itanch = m_anchorRequests.begin();
-    for ( ; itanch != m_anchorRequests.end(); ++itanch )
-    {
-        kdDebug(32001) << "KWDocument::completeLoading anchoring frameset " << itanch.key() << endl;
-        KWFrameSet * fs = getFrameSetByName( itanch.key() );
-        ASSERT( fs );
-        if ( fs )
-            fs->setAnchored( itanch.data().textfs, itanch.data().paragId, itanch.data().index, true );
-    }
-    m_anchorRequests.clear();
+    processAnchorRequests();
 
     // The fields from documentinfo.xml just got loaded -> update vars
     recalcVariables( VT_FIELD );
@@ -1576,6 +1567,107 @@ void KWDocument::processImageRequests()
     for ( ; it4 != m_clipartRequests.end(); ++it4 )
         it4.data()->setClipart( m_clipartCollection.findClipart( it4.key() ) );
     m_clipartRequests.clear();
+}
+
+void KWDocument::processAnchorRequests()
+{
+    QMapIterator<QString, KWAnchorPosition> itanch = m_anchorRequests.begin();
+    for ( ; itanch != m_anchorRequests.end(); ++itanch )
+    {
+        QString fsname = itanch.key();
+        if ( m_pasteFramesetsMap && m_pasteFramesetsMap->contains( fsname ) )
+            fsname = (*m_pasteFramesetsMap)[ fsname ];
+        kdDebug(32001) << "KWDocument::completeLoading anchoring frameset " << fsname << endl;
+        KWFrameSet * fs = getFrameSetByName( fsname );
+        ASSERT( fs );
+        if ( fs )
+            fs->setAnchored( itanch.data().textfs, itanch.data().paragId, itanch.data().index, true );
+    }
+    m_anchorRequests.clear();
+}
+
+void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
+{
+    m_pasteFramesetsMap = new QMap<QString, QString>();
+    int ref=0;
+
+    QDomElement elem = topElem.firstChild().toElement();
+    for ( ; !elem.isNull() ; elem = elem.nextSibling().toElement() )
+    {
+        QDomElement frameElem;
+        KWFrameSet * fs = 0L;
+        if ( elem.tagName() == "FRAME" )
+        {
+            QString frameSetName = frameElem.attribute( "parentFrameset" );
+            fs = getFrameSetByName( frameSetName );
+            if ( !fs )
+            {
+                kdWarning(32001) << "pastFrames: Frameset '" << frameSetName << "' not found" << endl;
+                continue;
+            }
+            frameElem = elem;
+        }
+        else if ( elem.tagName() == "FRAMESET" )
+        {
+            fs = loadFrameSet( elem, false );
+            frameElem = elem.namedItem( "FRAME" ).toElement();
+        }
+        // Test commented out since the toplevel element can contain "PARAGRAPH" now
+        //else
+        //kdWarning(32001) << "Unsupported toplevel-element in KWCanvas::pasteFrames : '" << elem.tagName() << "'" << endl;
+
+        if ( fs && !frameElem.isNull() )
+        {
+            double offs = 20.0;
+            KoRect rect;
+            rect.setLeft( KWDocument::getAttribute( frameElem, "left", 0.0 ) + offs );
+            rect.setTop( KWDocument::getAttribute( frameElem, "top", 0.0 ) + offs );
+            rect.setRight( KWDocument::getAttribute( frameElem, "right", 0.0 ) + offs );
+            rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) + offs );
+            KWFrame * frame = new KWFrame( fs, rect.x(), rect.y(), rect.width(), rect.height() );
+            frame->load( frameElem, fs->isHeaderOrFooter(), KWDocument::CURRENT_SYNTAX_VERSION );
+            QString newName=i18n("Copy-%1").arg(fs->getName());
+            newName = generateFramesetName( newName+"-%1" );
+            m_pasteFramesetsMap->insert( fs->getName(), newName ); // remember the name transformation
+            fs->setName( newName );
+            fs->addFrame( frame );
+            if ( macroCmd )
+            {
+                KWCreateFrameCommand *cmd = new KWCreateFrameCommand( QString::null, frame );
+                macroCmd->addCommand(cmd);
+            }
+            fs->finalize();
+            int type=0;
+            // Please move this to some common method somewhere (e.g. in KWDocument) (David)
+            switch(fs->type())
+            {
+            case FT_TEXT:
+                type=(int)TextFrames;
+                break;
+            case FT_PICTURE:
+                type=(int)Pictures;
+                break;
+            case FT_PART:
+                type=(int)Embedded;
+                break;
+            case FT_FORMULA:
+                type=(int)FormulaFrames;
+                break;
+            case FT_TABLE:
+                type=(int)Tables;
+                break;
+            default:
+                type=(int)TextFrames;
+            }
+            ref|=type;
+        }
+    }
+    processImageRequests();
+    processAnchorRequests();
+    repaintAllViews();
+    refreshDocStructure(ref);
+    delete m_pasteFramesetsMap;
+    m_pasteFramesetsMap = 0L;
 }
 
 QDomDocument KWDocument::saveXML()

@@ -348,6 +348,9 @@ QTextCursor * KWPasteTextCommand::execute( QTextCursor *c )
     KWDocument * doc = textFs->kWordDocument();
     doc->processImageRequests();
 
+    // In case of any inline frameset
+    doc->pasteFrames( elem, 0 );
+
     textFs->zoom();
 
     m_lastParag = c->parag()->paragId();

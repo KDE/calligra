@@ -141,7 +141,6 @@ void KWAnchor::save( QDomElement &formatElem )
     // ## TODO save the frame number as well ? Only the first frame ? to be determined
     // ## or maybe use len=<number of frames>. Difficult :}
     anchorElem.setAttribute( "instance", m_frameset->getName() );
-    return;
 }
 
 bool KWAnchor::ownLine() const
