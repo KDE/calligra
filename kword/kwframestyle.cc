@@ -48,6 +48,7 @@ void KWFrameStyleCollection::clear()
 {
     m_styleList.setAutoDelete( true );
     m_styleList.clear();
+    m_styleList.setAutoDelete( false );
     m_deletedStyles.clear();
     m_lastStyle = 0L;
 }
