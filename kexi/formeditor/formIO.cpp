@@ -1302,6 +1302,16 @@ FormIO::loadImage(QDomDocument domDoc, QString name)
 	return pix;
 }
 
+void FormIO::setCurrentForm(Form *form)
+{
+	m_currentForm = form;
+}
+
+void FormIO::setCurrentItem(ObjectTreeItem *item)
+{
+	m_currentItem = item;
+}
+
 }
 
 #include "formIO.moc"
