@@ -59,3 +59,4 @@
 * Create a PixmapCollection with an editor which allow to choose pixmaps by path or from KDE icons, no inline saving of pixmaps (9/06/04)
 * Make actions toggable (with KToggleAction) (js 11/06/04)
 * Make FormWidget pure virtual (17/06/04)
+* Resize label to fit the text (22/06/04)

@@ -85,6 +85,8 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int
 
 	m_editor = editor;
 	m_widget = w;
+
+	changeText(text); // to update size of the widget
 	return editor;
 }
 

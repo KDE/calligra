@@ -18,6 +18,7 @@
 #include <qvariant.h>
 #include <qheader.h>
 #include <qdom.h>
+#include <qstyle.h>
 
 #include <klineedit.h>
 #include <kpushbutton.h>
@@ -389,11 +390,11 @@ StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 	{
 		KPushButton *push = static_cast<KPushButton*>(w);
 		QRect r(push->geometry());
-		r.setX(r.x() + 10);
-		r.setY(r.y() + 10);
-		r.setWidth(r.width()-10);
-		r.setHeight(r.height() - 10);
-		createEditor(push->text(), push, r, Qt::AlignCenter);
+		//r.setX(r.x() + 5);
+		//r.setY(r.y() + 5);
+		//r.setWidth(r.width()-10);
+		//r.setHeight(r.height() - 10);
+		createEditor(push->text(), push, r, Qt::AlignCenter, false, Qt::PaletteButton);
 	}
 	else if(classname == "QRadioButton")
 	{
@@ -457,6 +458,31 @@ StdWidgetFactory::changeText(const QString &text)
 		((KIntSpinBox*)w)->setValue(text.toInt());
 	else
 		changeProperty("text", text, m_container);
+
+	QFontMetrics fm = w->fontMetrics();
+	QSize s(fm.width( text ), fm.height());
+	int width;
+	if(n == "QLabel") // labels are resized to fit the text
+	{
+		w->resize( s.width() + 4, s.height() + 4);
+		WidgetFactory::m_editor->resize(w->size());
+		return;
+	}
+	// and other widgets are just enlared if needed
+	else if(n == "KPushButton")
+		width = w->style().sizeFromContents( QStyle::CT_PushButton, w, s).width();
+	else if(n == "QCheckBox")
+		width = w->style().sizeFromContents( QStyle::CT_CheckBox, w, s).width();
+	else if(n == "QRadioButton")
+		width = w->style().sizeFromContents( QStyle::CT_RadioButton, w, s).width();
+	else
+		return;
+
+	if(w->width() < width)
+	{
+		w->resize(width, w->height() );
+		WidgetFactory::m_editor->resize(w->size());
+	}
 }
 
 void

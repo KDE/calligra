@@ -19,6 +19,7 @@
 #include <qdom.h>
 #include <qwidget.h>
 #include <qlayout.h>
+#include <qlabel.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -232,13 +233,25 @@ InsertWidgetCommand::execute()
 		return;
 
 	m_container->m_insertRect = m_insertRect;
+	// a label is resized to just fit its contents
+	if(w->inherits("QLabel"))
+	{
+		QLabel *label = (QLabel*)w;
+		if(!label->text().isEmpty()) // text pixmap
+		{
+			QFontMetrics fm = w->fontMetrics();
+			m_container->m_insertRect = QRect(m_insertRect.x(), m_insertRect.y(), fm.width( label->text() ) + 4 , fm.height() + 4);
+		}
+		else if(!label->pixmap()->isNull()) // picture pixmap
+			m_container->m_insertRect = QRect(m_insertRect.x(), m_insertRect.y(), label->pixmap()->width(), label->pixmap()->height());
+	}
 	// if the insertRect is invalid (ie only one point), we use widget' size hint
-	if/*(!m_container->m_insertRect.isValid() || */( (m_insertRect.width() < 21) && (m_insertRect.height() < 21))
+	else if/*(!m_container->m_insertRect.isValid() || */( (m_insertRect.width() < 21) && (m_insertRect.height() < 21))
 	{
 		QSize s = w->sizeHint();
 		if(s.isEmpty())
 			s = QSize(20, 20); // Minimum size to avoid creating a (0,0) widget
-		m_container->m_insertRect = QRect(m_point.x(), m_point.y(), s.width(), s.height());
+		m_container->m_insertRect = QRect(m_insertRect.x(), m_insertRect.y(), s.width(), s.height());
 	}
 	w->move(m_container->m_insertRect.x(), m_container->m_insertRect.y());
 	w->resize(m_container->m_insertRect.width()-1, m_container->m_insertRect.height()-1);
