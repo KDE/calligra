@@ -143,6 +143,23 @@ QPoint KWTextFrameSet::internalToContents( QPoint p ) const
     return p;
 }
 
+
+QRegion KWTextFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame )
+{
+    QRect rc = painter->xForm( *frame );
+    //kdDebug() << "KWTextFrameSet::frameClipRegion initial rect=" << frame->x() << "," << frame->y() << " " << frame->width() << "," << frame->height()
+    //          << " clip region rect=" << rc.x() << "," << rc.y() << " " << rc.width() << "," << rc.height() << endl;
+    QRegion reg( rc ); // The initial clipping rect is the frame (translated correctly)
+    QListIterator<KWFrame> fIt( m_framesOnTop );
+    for ( ; fIt.current() ; ++fIt )
+    {
+        QRect r = painter->xForm( *fIt.current() );
+        //kdDebug() << "KWTextFrameSet::frameClipRegion for frame " << frame << " subtracting rectangle " << r.x() << "," << r.y() << " " << r.width() << "," << r.height() << endl;
+        reg.subtract( r );
+    }
+    return reg;
+}
+
 void KWTextFrameSet::drawContents( QPainter *p, int cx, int cy, int cw, int ch, QColorGroup &gb, bool onlyChanged, bool drawCursor, QTextCursor *cursor )
 {
     //if ( !cursorVisible )
@@ -168,9 +185,12 @@ void KWTextFrameSet::drawContents( QPainter *p, int cx, int cy, int cw, int ch, 
             // into the QTextDocument's coordinate system
             // (which doesn't have frames, borders, etc.)
             // ##### This will not work with multiple frames in the same page (DTP)
-            p->translate( frame->left(), frame->top() - totalHeight ); // translate to qrt coords
             r.moveBy( -frame->left(), -frame->top() + totalHeight );   // portion of the frame to be drawn, in qrt coords
-            p->setClipRect( p->xForm( r ) );                           // don't draw out of the frame
+            p->setClipRegion( frameClipRegion( p, frame ) );
+            //p->setClipRect( p->xForm( r ) );                           // don't draw out of the frame
+
+            p->translate( frame->left(), frame->top() - totalHeight ); // translate to qrt coords - after setting the clip region !
+
             gb.setBrush(QColorGroup::Base,frame->getBackgroundColor());
             m_lastFormatted = text->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor );
 
@@ -180,7 +200,7 @@ void KWTextFrameSet::drawContents( QPainter *p, int cx, int cy, int cw, int ch, 
                 //kdDebug() << "KWTextFrameSet::drawContents drawing blank area onlyChanged=" << onlyChanged << endl;
                 int docHeight = text->height();
                 QRect blank( 0, docHeight, frame->width(), totalHeight+frame->height() - docHeight );
-                //kdDebug() << "Blank: " << blank.x() << "," << blank.y() << " " << blank.width() << "x" << blank.height() << endl;
+                //kdDebug() << this << " Blank area: " << blank.x() << "," << blank.y() << " " << blank.width() << "x" << blank.height() << endl;
                 p->fillRect( blank, gb.brush( QColorGroup::Base ) );
             }
             p->restore();
@@ -213,8 +233,9 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         if ( !r.isEmpty() )
         {
             p->save();
-            p->translate( frame->left(), frame->top() - totalHeight );
-            p->setClipRect( p->xForm( r ) );                           // don't draw out of the frame
+            p->setClipRegion( frameClipRegion( p, frame ) );
+            //p->setClipRect( p->xForm( r ) );                           // don't draw out of the frame
+            p->translate( frame->left(), frame->top() - totalHeight ); // translate to qrt coords - after setting the clip region !
 
             // Hmmm... This probably concentrates on the parag rect itself ? Or ?
             //p->translate( cursor->totalOffsetX(), cursor->totalOffsetY() );
@@ -256,41 +277,18 @@ void KWTextFrameSet::setWidth( int w )
 int KWTextFrameSet::adjustLMargin( int yp, int margin, int space )
 {
     //kdDebug() << "KWTextFrameSet " << this << " adjustLMargin m_width=" << m_width << endl;
-    // ### only first frame for now
-    int left = frames.first()->left();
-    int absoluteYp = yp + frames.first()->top();
-
+    QPoint p = internalToContents( QPoint(0, yp) );
     int middle = m_width / 2;
 
-    bool foundThis = false;
-
-    // ### quick hack, make faster!
-    QListIterator<KWFrameSet> framesetIt( doc->framesetsIterator() );
-    for (; framesetIt.current(); ++framesetIt )
+    QListIterator<KWFrame> fIt( m_framesOnTop );
+    for ( ; fIt.current() ; ++fIt )
     {
-        KWFrameSet *frameSet = framesetIt.current();
-
-        if ( frameSet == this )
-            foundThis = true;
-
-        if ( !foundThis ||
-             frameSet == this || !frameSet->isVisible() )
-            continue;
-
-        QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
-        for ( ; frameIt.current(); ++frameIt )
-        {
-            KWFrame *frame = frameIt.current();
-
-            if ( !frame->isValid() )
-                continue;
-
-            if ( absoluteYp >= frame->y() && absoluteYp < frame->bottom() &&
-                 ( frame->left() - left < middle ) ) // adjust the left margin only
-                                                     // for frames which are in the
-                                                     // left half
-                margin = QMAX( margin, ( frame->right() - left ) + space );
-        }
+        KWFrame * frame = fIt.current();
+        if ( p.y() >= frame->y() && p.y() < frame->bottom() &&
+             ( frame->left() - p.x() < middle ) ) // adjust the left margin only
+                                                  // for frames which are in the
+                                                  // left half
+            margin = QMAX( margin, ( frame->right() - p.x() ) + space );
     }
 
     return QTextFlow::adjustLMargin( yp, margin, space );
@@ -298,41 +296,18 @@ int KWTextFrameSet::adjustLMargin( int yp, int margin, int space )
 
 int KWTextFrameSet::adjustRMargin( int yp, int margin, int space )
 {
-    // ### only first frame for now
-    int left = frames.first()->left();
-    int absoluteYp = yp + frames.first()->top();
-
+    QPoint p = internalToContents( QPoint(0, yp) );
     int middle = m_width / 2;
 
-    bool foundThis = false;
-
-    // ### quick hack, make faster!
-    QListIterator<KWFrameSet> framesetIt( doc->framesetsIterator() );
-    for (; framesetIt.current(); ++framesetIt )
+    QListIterator<KWFrame> fIt( m_framesOnTop );
+    for ( ; fIt.current() ; ++fIt )
     {
-        KWFrameSet *frameSet = framesetIt.current();
-
-       if ( frameSet == this )
-            foundThis = true;
-
-        if ( !foundThis ||
-             frameSet == this || !frameSet->isVisible() )
-            continue;
-
-        QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
-        for ( ; frameIt.current(); ++frameIt )
-        {
-            KWFrame *frame = frameIt.current();
-
-            if ( !frame->isValid() )
-                continue;
-
-            if ( absoluteYp >= frame->y() && absoluteYp < frame->bottom() &&
-                 frame->left() - left >= middle ) // adjust the right margin only
-                                                   // for frames which are in the
-                                                   // right half
-                margin = QMAX( margin, m_width - ( frame->x() - left ) - space );
-        }
+        KWFrame * frame = fIt.current();
+        if ( p.y() >= frame->y() && p.y() < frame->bottom() &&
+             frame->left() - p.x() >= middle ) // adjust the right margin only
+                                               // for frames which are in the
+                                               // right half
+                margin = QMAX( margin, m_width - ( frame->x() - p.x() ) - space );
     }
 
     return QTextFlow::adjustRMargin( yp, margin, space );
@@ -567,6 +542,44 @@ void KWTextFrameSet::updateFrames()
     //kdDebug() << "KWTextFrameSet::update m_availableHeight=" << m_availableHeight << endl;
     ASSERT( m_availableHeight >= text->height() );
     frames.setAutoDelete( true );
+
+
+    // Now iterate over ALL framesets, to find those which have frames on top of us.
+    // We'll use this information in various methods (adjust[LR]Margin, drawContents etc.)
+    // So we want it cached.
+    m_framesOnTop.clear();
+    QListIterator<KWFrameSet> framesetIt( doc->framesetsIterator() );
+    bool foundThis = false;
+    for (; framesetIt.current(); ++framesetIt )
+    {
+        KWFrameSet *frameSet = framesetIt.current();
+
+        if ( frameSet == this )
+        {
+            foundThis = true;
+            continue;
+        }
+
+        if ( !foundThis || !frameSet->isVisible() )
+            continue;
+
+        QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
+        for ( ; frameIt.current(); ++frameIt )
+        {
+            KWFrame *frame = frameIt.current();
+            // Is this frame over any of our frames ?
+            QListIterator<KWFrame> fIt( frameIterator() );
+            for ( ; fIt.current(); ++fIt )
+            {
+                if ( frame->intersects( *fIt.current() ) )
+                {
+                    m_framesOnTop.append( frame );
+                    break;
+                }
+            }
+        }
+    }
+    kdDebug() << "KWTextFrameSet::updateFrames frame on top:" << m_framesOnTop.count() << endl;
 }
 
 /*================================================================*/
@@ -826,10 +839,10 @@ void KWTextFrameSet::formatMore()
         viewsBottom = QMAX( viewsBottom, mapIt.data() );
 
     QTextParag *lastFormatted = m_lastFormatted;
-    kdDebug() << "KWTextFrameSet::formatMore lastFormatted=" << lastFormatted << " to=" << to << " viewsBottom=" << viewsBottom << endl;
+    //kdDebug() << "KWTextFrameSet::formatMore lastFormatted=" << lastFormatted << " to=" << to << " viewsBottom=" << viewsBottom << endl;
     for ( int i = 0; ( i < to /*|| firstVisible*/ ) && lastFormatted; ++i )
     {
-        kdDebug() << "KWTextFrameSet::formatMore formatting " << lastFormatted << endl;
+        //kdDebug() << "KWTextFrameSet::formatMore formatting " << lastFormatted << endl;
 	lastFormatted->format();
 #if 0  // This is only valid for a rectangle being viewed, nor for a region
 	if ( i == 0 )

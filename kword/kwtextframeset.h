@@ -154,6 +154,9 @@ protected:
     void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool fillStyles = false );
     void setLastFormattedParag( QTextParag *parag ) { m_lastFormatted = parag; }
 
+    // Determine the clipping rectangle for drawing the contents of @p frame with @p painter
+    QRegion frameClipRegion( QPainter * painter, KWFrame *frame );
+
 private:
     /**
      * The undo-redo structure holds the _temporary_ information that _will_
@@ -190,14 +193,15 @@ private:
     };
     void checkUndoRedoInfo( QTextCursor * cursor, UndoRedoInfo::Type t );
 
-    QTimer *formatTimer, *changeIntervalTimer;
-    UndoRedoInfo undoRedoInfo;
     KWTextDocument *text;
-    QTextParag *m_lastFormatted;
-    int m_width; // copy of private QTextFlow::width
-    int m_availableHeight;
-    int interval;
-    QMap<QWidget *, int> m_mapViewAreas;
+    UndoRedoInfo undoRedoInfo;                 // Currently built undo/redo info
+    QTextParag *m_lastFormatted;               // Idle-time-formatting stuff
+    QTimer *formatTimer, *changeIntervalTimer; // Same
+    int interval;                              // Same
+    int m_width;                               // Copy of private QTextFlow::width
+    int m_availableHeight;                     // Sum of the height of all our frames
+    QMap<QWidget *, int> m_mapViewAreas;       // Store the "needs" of each view
+    QList<KWFrame> m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
 };
 
 /**

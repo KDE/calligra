@@ -279,14 +279,14 @@ void KWCanvas::drawBorders( QPainter *painter, QRect v_area, bool drawBack, QReg
         }
     }
 
-    if ( region ) {
+/*    if ( region ) {
         // clear empty space
         painter->save();
         painter->setClipRegion( *region );
         painter->fillRect( region->boundingRect(), Qt::white );
         painter->restore();
     }
-
+*/
     // Draw page borders (red)
     painter->setPen( red );
     painter->setBrush( Qt::NoBrush );
