@@ -35,6 +35,9 @@ public:
 
     /** Copy another style */
     KoStyle( const KoStyle & rhs ) { *this = rhs; }
+
+    ~KoStyle() {}
+
     void operator=( const KoStyle & );
 
     /** The internal name (untranslated if a standard style) */

@@ -571,7 +571,7 @@ void KoTextParag::drawCursor( QPainter &painter, QTextCursor *cursor, int curx, 
 {
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     int x = zh->layoutUnitToPixelX( curx ) + cursor->parag()->at( cursor->index() )->pixelxadj;
-    qDebug("  drawCursor: LU: [cur]x=%d, cury=%d -> PIX: x=%d, y=%d", curx, cury, x, zh->layoutUnitToPixelY( cury ) );
+    //qDebug("  drawCursor: LU: [cur]x=%d, cury=%d -> PIX: x=%d, y=%d", curx, cury, x, zh->layoutUnitToPixelY( cury ) );
     QTextParag::drawCursor( painter, cursor, x,
                             zh->layoutUnitToPixelY( cury ),
                             zh->layoutUnitToPixelY( cury, curh ), cg );
