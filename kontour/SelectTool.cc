@@ -52,6 +52,7 @@ Tool(aId, tc)
   
 void SelectTool::activate()
 {
+  ctype = C_Arrow;
 }
 
 void SelectTool::deactivate()
@@ -81,10 +82,26 @@ void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *ca
   bool shiftFlag = e->state() & Qt::ShiftButton;
   p1.setX(e->x());
   p1.setY(e->y());
+  //TODO * zoom factor....
+  double x = e->x() - canvas->xOffset();
+  double y = e->y() - canvas->yOffset();
   if(state == S_Init)
   {
-    //TODO * zoom factor....
-    GObject *obj = page->findContainingObject(e->x() - canvas->xOffset(), e->y() - canvas->yOffset());
+    mHL = page->document()->indexOfHorizHelpline(y);
+    if(mHL != -1)
+    {
+      state = S_DragHorizHelpline;
+      prevcoord = e->y();
+      return;
+    }
+    mHL = page->document()->indexOfVertHelpline(x);
+    if(mHL != -1)
+    {
+      state = S_DragVertHelpline;
+      prevcoord = e->x();
+      return;
+    }
+    GObject *obj = page->findContainingObject(x, y);
     if(obj)
     {
       /* an object will be selected */
@@ -107,8 +124,56 @@ void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *ca
 void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canvas)
 {
   int xpos = e->x();
-  int ypos = e->x();
-  if(state == S_Rubberband)
+  int ypos = e->y();
+  double x = e->x() - canvas->xOffset();
+  double y = e->y() - canvas->yOffset();
+  if(state == S_Init)
+  {
+    int mHL = page->document()->indexOfHorizHelpline(y);
+    if(mHL != -1)
+    {
+      if(ctype != C_Vert)
+      {
+        canvas->setCursor(Qt::sizeVerCursor);
+        ctype = C_Vert;
+      }
+      return;
+    }
+    mHL = page->document()->indexOfVertHelpline(x);
+    if(mHL != -1)
+    {
+      if(ctype != C_Horiz)
+      {
+        canvas->setCursor(Qt::sizeHorCursor);
+        ctype = C_Horiz;
+      }
+      return;
+    }
+    if(ctype != C_Arrow)
+    {
+      canvas->setCursor(Qt::arrowCursor);
+      ctype = C_Arrow;
+    }
+  }
+  else if(state == S_DragHorizHelpline)
+  {
+    page->document()->updateHorizHelpline(mHL, y);
+    canvas->updateBuf(QRect(0, prevcoord, canvas->width(), 1));
+    canvas->repaint(0, prevcoord, canvas->width(), 1);
+    canvas->updateBuf(QRect(0, ypos, canvas->width(), 1));
+    canvas->repaint(0, ypos, canvas->width(), 1);
+    prevcoord = ypos;
+  }
+  else if(state == S_DragVertHelpline)
+  {
+    page->document()->updateVertHelpline(mHL, x);
+    canvas->updateBuf(QRect(prevcoord, 0, 1, canvas->height()));
+    canvas->repaint(prevcoord, 0, 1, canvas->height());
+    canvas->updateBuf(QRect(xpos, 0, 1, canvas->height()));
+    canvas->repaint(xpos, 0, 1, canvas->height());
+    prevcoord = xpos;
+  }
+  else if(state == S_Rubberband)
   {
     canvas->repaint(r);
     if(p1.x() <= e->x())
@@ -178,6 +243,10 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
       state = S_Init;
     }
   }
+  else if(state == S_DragHorizHelpline)
+    state = S_Init;
+  else if(state == S_DragVertHelpline)
+    state = S_Init;
   else if(state == S_Translate)
   {
     state = S_Pick;

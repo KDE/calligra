@@ -307,6 +307,7 @@ void Canvas::addHelpline(int x, int y, bool horizH)
     mGDoc->addHorizHelpline(pos);
     updateBuf(QRect(0, y, width(), 1));
     repaint(0, y, width(), 1);
+    mTmpHorizHelpline = -1;
   }
   else
   {
@@ -314,6 +315,7 @@ void Canvas::addHelpline(int x, int y, bool horizH)
     mGDoc->addVertHelpline(pos);
     updateBuf(QRect(x, 0, 1, height()));
     repaint(x, 0, 1, height());
+    mTmpVertHelpline = -1;
   }
 }
 
