@@ -78,7 +78,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_lan
 #endif
     int pointSize;
     if ( f.pointSize() == -1 ) // font was set with a pixelsize, we need a pointsize!
-        pointSize = (int)( ( (double)fn.pixelSize() * 72.0 ) / (double)QPaintDevice::x11AppDpiY() );
+        pointSize = (int)( ( (double)fn.pixelSize() * 72.0 ) / (double)KoGlobal::dpiY() );
     else
         pointSize = f.pointSize();
     fn.setPointSize( pointSize );
@@ -1027,7 +1027,7 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
     if ( d->m_shadowDistanceX != 0 )
     {
         // pt to pixel conversion
-        int shadowpix = (int)(POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiX() ) ) * QABS( d->m_shadowDistanceX ) );
+        int shadowpix = (int)(POINT_TO_INCH( static_cast<double>( KoGlobal::dpiX() ) ) * QABS( d->m_shadowDistanceX ) );
         //kdDebug(32500) << "d->m_shadowDistanceX=" << d->m_shadowDistanceX << " -> shadowpix=" << shadowpix
         //      << ( applyZoom ? " and applying zoom " : " (100% zoom) " )
         //      << " -> adding " << ( applyZoom ? (  shadowpix * zh->zoom() / 100 ) : shadowpix ) << endl;
@@ -1056,7 +1056,7 @@ int KoTextFormat::height() const
         // Add room for the shadow
         if ( d->m_shadowDistanceY != 0 ) {
             // pt -> pixel (at 100% zoom)
-            h += (int)(POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiY() ) ) * QABS( d->m_shadowDistanceY ) );
+            h += (int)(POINT_TO_INCH( static_cast<double>( KoGlobal::dpiY() ) ) * QABS( d->m_shadowDistanceY ) );
         }
 
         //kdDebug(32500) << "KoTextFormat::height 100%-zoom font says h=" << h << " in LU:" << KoTextZoomHandler::ptToLayoutUnitPt(h) << endl;
@@ -1076,7 +1076,7 @@ int KoTextFormat::offsetX() const // in LU pixels
     if ( d->m_shadowDistanceX < 0 )
     {
         double lupt = KoTextZoomHandler::ptToLayoutUnitPt( QABS( d->m_shadowDistanceX ) );
-        off += (int)(POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiX() ) ) * lupt );
+        off += (int)(POINT_TO_INCH( static_cast<double>( KoGlobal::dpiX() ) ) * lupt );
     }
 #endif
     return off;
@@ -1090,7 +1090,7 @@ int KoTextFormat::offsetY() const // in LU pixels
     if ( d->m_shadowDistanceY < 0 )
     {
         double lupt = KoTextZoomHandler::ptToLayoutUnitPt( QABS( d->m_shadowDistanceY ) );
-        off += (int)(POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiY() ) ) * lupt );
+        off += (int)(POINT_TO_INCH( static_cast<double>( KoGlobal::dpiY() ) ) * lupt );
     }
 #endif
     return off;

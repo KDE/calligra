@@ -30,7 +30,7 @@ int KoTextZoomHandler::m_layoutUnitFactor = 20;
 KoZoomHandler::KoZoomHandler()
 {
     // Note that this calls the method below, not the derived one
-    setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
 }
 
 void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY )
@@ -71,7 +71,7 @@ void KoZoomHandler::setZoom( int zoom )
 int KoZoomHandler::fontSizeToLayoutUnit( double ptSizeFloat, bool forPrint ) const
 {
     return ptToLayoutUnit( ptSizeFloat / ( m_zoomedResolutionY *
-        ( forPrint ? 1.0 : (72.0 / QPaintDevice::x11AppDpiY()) ) ) );
+        ( forPrint ? 1.0 : (72.0 / KoGlobal::dpiY()) ) ) );
 }
 #endif
 
