@@ -334,6 +334,16 @@ RowLayout* KSpreadTable::rowLayout( int _row )
     return m_pDefaultRowLayout;
 }
 
+void KSpreadTable::setDefaultHeight( double height )
+{
+  m_pDefaultRowLayout->setHeight( height );
+}
+
+void KSpreadTable::setDefaultWidth( double width )
+{
+  m_pDefaultColumnLayout->setWidth( width );
+}
+
 int KSpreadTable::leftColumn( int _xpos, double &_left,
                               const KSpreadCanvas *_canvas ) const
 {

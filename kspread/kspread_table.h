@@ -281,6 +281,9 @@ public:
 
     bool isLoading();
 
+    void setDefaultHeight( double height );
+    void setDefaultWidth( double width );
+
     const ColumnLayout* columnLayout( int _column ) const;
     ColumnLayout* columnLayout( int _column );
     /**

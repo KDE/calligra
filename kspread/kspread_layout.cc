@@ -37,6 +37,15 @@
 
 using namespace std;
 
+namespace layout_LNS
+{
+  double gColWidth  = colWidth;
+  double gRowHeight = heightOfRow;
+}
+
+using namespace layout_LNS;
+
+
 /*****************************************************************************
  *
  * KSpreadLayout
@@ -105,6 +114,16 @@ void KSpreadLayout::defaultStyleLayout()
   setFormatType(Number);
   setComment("");
   setDontPrintText(false);
+}
+
+void KSpreadLayout::setGlobalColWidth( double width )
+{
+  gColWidth = width;
+}
+
+void KSpreadLayout::setGlobalRowHeight( double height )
+{
+  gRowHeight = height;
 }
 
 void KSpreadLayout::copy( const KSpreadLayout &_l )
@@ -1862,7 +1881,7 @@ RowLayout::RowLayout( KSpreadTable *_table, int _row ) : KSpreadLayout( _table )
     m_prev = 0;
 
     m_bDisplayDirtyFlag = false;
-    m_fHeight = heightOfRow;
+    m_fHeight = gRowHeight;
     m_iRow = _row;
     m_bDefault = false;
     m_bHide=false;
@@ -2096,7 +2115,7 @@ bool RowLayout::isDefault() const
 ColumnLayout::ColumnLayout( KSpreadTable *_table, int _column ) : KSpreadLayout( _table )
 {
   m_bDisplayDirtyFlag = false;
-  m_fWidth = colWidth;
+  m_fWidth = gColWidth;
   m_iColumn = _column;
   m_bDefault=false;
   m_bHide=false;
@@ -2694,7 +2713,13 @@ KSpreadCurrency::KSpreadCurrency(QString const & code, currencyFormat format)
 {
   if ( format == Gnumeric )
   {
-    if ( code[0] == '[' && code[1] == '$' ) 
+    if ( code.find( '¤' ) != -1 )
+      m_code = "¤";
+    else if ( code.find( '£' ) != -1 )
+      m_code = "£";
+    else if ( code.find( '¥' ) != -1 )
+      m_code = "¥";
+    else if ( code[0] == '[' && code[1] == '$' ) 
     {
       int n = code.find(']');
       if (n != -1)
@@ -2706,7 +2731,9 @@ KSpreadCurrency::KSpreadCurrency(QString const & code, currencyFormat format)
         m_type = 0;
         //        m_code = locale()->currentCurrencySymbol();
       }
-    }    
+    }
+    else if ( code.find( '$' ) != -1 )
+      m_code = "$";
   } // end gnumeric
 }
 

@@ -146,6 +146,9 @@ public:
     //
     ////////////////////////////////
 
+    static void setGlobalColWidth( double width );
+    static void setGlobalRowHeight( double height );
+
     virtual void setAlign( Align _align );
     virtual void setAlignY( AlignY _alignY );
     virtual void setFactor( double _d );

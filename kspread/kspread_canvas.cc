@@ -2554,7 +2554,6 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
   bool bottomLeftSame = !newLeft && !newBottom;
   bool bottomRightSame = !newBottom && !newRight;
 
-
   if (!topLeftSame && !topRightSame && !bottomLeftSame && !bottomRightSame)
   {
     /* the two areas are not related. */
