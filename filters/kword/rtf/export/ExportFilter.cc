@@ -301,7 +301,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
     str += " {";
 
     if (layout.pageBreakBefore)
-        str += "\\page";
+        str += "\\page ";
     
     if (!paraText.isEmpty())
     {
