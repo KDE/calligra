@@ -19,14 +19,15 @@
 		author:		The document's author
 		email:		The document's author's email address
 		editor:		The program this file was written with
-		mime:		The MIME type (must always have the value application/x-kpresenter
+                syntaxVersion:  Integer version of the syntax. Currently 2.
+		mime:		The MIME type (must always have the value application/x-kpresenter)
 -->
 <!ELEMENT DOC (PAPER | BACKGROUND | ,VARIABLESETTINGS | HEADER | FOOTER | PAGETITLES | PAGENOTES | OBJECTS | INFINITLOOP | MANUALSWITCH | PRESSPEED | PIXMAPS | SELSLIDES | PIXMAPS | CLIPARTS | SHOWPRESENTATIONDURATION | HELPLINES)* >
-<!ATTLIST DOC	author CDATA #IMPLIED
-				email CDATA #IMPLIED
-				editor CDATA #IMPLIED
-                                syntaxVersion NMTOKEN #IMPLIED
-				mime CDATA "application/x-kpresenter">
+<!ATTLIST DOC   author CDATA #IMPLIED
+                email CDATA #IMPLIED
+                editor CDATA #IMPLIED
+                syntaxVersion NMTOKEN #IMPLIED
+                mime CDATA "application/x-kpresenter">
 
 <!--	Describes the page format. Can have no or one PAPERBORDERS child that 
 		describes the margins.

@@ -90,6 +90,7 @@
 using namespace std;
 
 static const int CURRENT_SYNTAX_VERSION = 2;
+// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 static const char * CURRENT_DTD_VERSION = "1.1";
 
 /******************************************************************/
@@ -451,7 +452,6 @@ QDomDocument KPresenterDoc::saveXML()
     presenter.setAttribute("editor", "KPresenter");
     presenter.setAttribute("mime", "application/x-kpresenter");
     presenter.setAttribute("syntaxVersion", CURRENT_SYNTAX_VERSION);
-    doc.appendChild(presenter);
     QDomElement paper=doc.createElement("PAPER");
     paper.setAttribute("format", static_cast<int>( m_pageLayout.format ));
     paper.setAttribute("ptWidth", m_pageLayout.ptWidth);
