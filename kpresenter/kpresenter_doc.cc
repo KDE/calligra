@@ -598,6 +598,8 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 		      } break;
 		    default: break;
 		    }
+
+		  if (objStartY > 0) _objectList.last()->moveBy(0,objStartY);
 		}
 	    }
 	}

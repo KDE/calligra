@@ -48,7 +48,7 @@ SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		rotatedia.moc ksearchdialogs.moc shadowdia.moc \
 		\
 		kpobject.moc kplineobject.moc kprectobject.moc kpellipseobject.moc \
-		kpautoformobject.moc kpclipartobject.moc kptextobject.h \
+		kpautoformobject.moc kpclipartobject.moc kptextobject.moc \
 		kppixmapobject.moc
 		kpbackground.moc kppixmap.moc kpclipart.moc kpgradient.moc\
 		kppixmapcollection.moc kpgradientcollection.moc
