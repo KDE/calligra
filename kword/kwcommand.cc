@@ -869,3 +869,84 @@ void KWDeleteTableCommand::unexecute()
     doc->layout();
     doc->repaintAllViews();
 }
+
+
+KWInsertColumnCommand::KWInsertColumnCommand( const QString &name, KWTableFrameSet * _table, int _col ):
+    KCommand(name),
+    m_pTable(_table),
+    m_colPos(_col)
+{
+    ASSERT(m_pTable);
+    m_ListFrame.clear();
+}
+
+void KWInsertColumnCommand::execute()
+{
+    kdDebug() << "KWInsertColumnCommand::execute" << endl;
+    KWDocument * doc = m_pTable->kWordDocument();
+    m_pTable->insertCol( m_colPos,m_ListFrame);
+    doc->terminateEditing(m_pTable);
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
+}
+
+void KWInsertColumnCommand::unexecute()
+{
+    kdDebug() << "KWInsertColumnCommand::unexecute" << endl;
+    KWDocument * doc = m_pTable->kWordDocument();
+    if(m_ListFrame.isEmpty())
+    {
+        for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ ) {
+            KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( i ));
+            if(cell->m_col==m_colPos)
+                m_ListFrame.append(cell);
+        }
+    }
+    doc->terminateEditing(m_pTable);
+    m_pTable->deleteCol( m_colPos/*,m_ListFrame*/);
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
+}
+
+
+
+KWInsertRowCommand::KWInsertRowCommand( const QString &name, KWTableFrameSet * _table, int _row ):
+    KCommand(name),
+    m_pTable(_table),
+    m_rowPos(_row)
+{
+    ASSERT(m_pTable);
+    m_ListFrame.clear();
+}
+
+void KWInsertRowCommand::execute()
+{
+    kdDebug() << "KWInsertRowCommand::execute" << endl;
+    KWDocument * doc = m_pTable->kWordDocument();
+    m_pTable->insertRow( m_rowPos,m_ListFrame);
+    doc->terminateEditing(m_pTable);
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
+}
+
+void KWInsertRowCommand::unexecute()
+{
+    kdDebug() << "KWInsertRowCommand::unexecute" << endl;
+    KWDocument * doc = m_pTable->kWordDocument();
+    if(m_ListFrame.isEmpty())
+    {
+        for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ ) {
+            KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( i ));
+            if(cell->m_row==m_rowPos)
+                m_ListFrame.append(cell);
+        }
+    }
+    doc->terminateEditing(m_pTable);
+    m_pTable->deleteRow( m_rowPos/*,m_ListFrame*/);
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
+}

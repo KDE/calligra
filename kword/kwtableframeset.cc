@@ -565,7 +565,8 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
 
             if ( m_showHeaderOnAllPages ) {
                 m_hasTmpHeaders = true;
-                insertRow( j, false, true );
+                QList<KWFrameSet> list=QList<KWFrameSet>();
+                insertRow( j,list, false, true );
             }
             for(i = 0; i < m_cells.count(); i++) {
                 Cell *cell = m_cells.at(i);
@@ -794,7 +795,7 @@ bool KWTableFrameSet::getFirstSelected( unsigned int &row, unsigned int &col )
     return false;
 }
 
-void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader )
+void KWTableFrameSet::insertRow( unsigned int _idx,const QList<KWFrameSet> list, bool _recalc, bool isAHeader )
 {
     unsigned int i = 0;
     unsigned int _rows = m_rows;
@@ -860,7 +861,15 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
         frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
         frame->setNewFrameBehaviour(KWFrame::NoFollowup);
 
-        Cell *newCell = new Cell( this, _idx, i, QString::null );
+        Cell *newCell=0L;
+        if(list.isEmpty())
+            newCell=new Cell( this, _idx, i, QString::null );
+        else
+        {
+            QList<KWFrameSet>tmp(list);
+            newCell = static_cast<KWTableFrameSet::Cell*> (tmp.at(i));
+            addCell( newCell );
+        }
         newCell->m_cols=colSpan;
         newCell->setIsRemoveableHeader( isAHeader );
         newCell->addFrame( frame, _recalc );
@@ -887,7 +896,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
         finalize();
 }
 
-void KWTableFrameSet::insertCol( unsigned int col )
+void KWTableFrameSet::insertCol( unsigned int col,const QList<KWFrameSet> list )
 {
     unsigned int _cols = m_cols;
     double x=0, width = 60;
@@ -929,7 +938,15 @@ void KWTableFrameSet::insertCol( unsigned int col )
             cell = getCell(i, col+1);
             height = cell->getFrame(0)->height();
         }
-        Cell *newCell = new Cell( this, i, col, QString::null );
+        Cell *newCell=0L;
+        if(list.isEmpty())
+            newCell = new Cell( this, i, col, QString::null );
+        else
+        {
+            QList<KWFrameSet>tmp(list);
+            newCell = static_cast<KWTableFrameSet::Cell*> (tmp.at(i));
+            addCell( newCell );
+        }
         KWFrame *frame = new KWFrame(newCell, x, cell->getFrame(0)->y(), width, height, KWFrame::RA_NO );
         frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
         newCell->addFrame( frame );
@@ -964,8 +981,10 @@ void KWTableFrameSet::deleteRow( unsigned int row, bool _recalc )
         Cell *cell = m_cells.at(i);
         if ( row >= cell->m_row  && row < cell->m_row + cell->m_rows) { // cell is indeed in row
             if(cell->m_rows == 1) { // lets remove it
-                frames.remove(cell->getFrame(0));
-                m_cells.remove( i );
+                frames.remove( cell->getFrame(0) );
+                cell->delFrame( cell->getFrame(0));
+                //m_cells.remove(  i);
+                m_cells.take(i);
                 i--;
             } else { // make cell span rowspan less rows
                 cell->m_rows -= rowspan;
@@ -984,7 +1003,7 @@ void KWTableFrameSet::deleteRow( unsigned int row, bool _recalc )
 }
 
 /* Delete all cells that are completely in this col.              */
-void KWTableFrameSet::deleteCol( unsigned int col )
+void KWTableFrameSet::deleteCol( unsigned int col,const QList<KWFrameSet> list )
 {
     double width=0;
     unsigned int colspan=1;
@@ -1004,7 +1023,9 @@ void KWTableFrameSet::deleteCol( unsigned int col )
         if ( col >= cell->m_col  && col < cell->m_col + cell->m_cols) { // cell is indeed in col
             if(cell->m_cols == 1) { // lets remove it
                 frames.remove( cell->getFrame(0) );
-                m_cells.remove(  i);
+                cell->delFrame( cell->getFrame(0));
+                //m_cells.remove(  i);
+                m_cells.take(i);
                 i--;
             } else { // make cell span colspan less cols
                 cell->m_cols -= colspan;

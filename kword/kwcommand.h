@@ -367,4 +367,40 @@ public:
     void unexecute() { KWDeleteTableCommand::execute(); }
 };
 
+/**
+ * Command created when inserting a column
+ */
+class KWInsertColumnCommand : public KCommand
+{
+public:
+    KWInsertColumnCommand( const QString &name, KWTableFrameSet * _table, int _pos);
+    ~KWInsertColumnCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWTableFrameSet *m_pTable;
+    QList<KWFrameSet> m_ListFrame;
+    unsigned int m_colPos;
+};
+
+
+/**
+ * Command created when inserting a row
+ */
+class KWInsertRowCommand : public KCommand
+{
+public:
+    KWInsertRowCommand( const QString &name, KWTableFrameSet * _table, int _pos);
+    ~KWInsertRowCommand() {}
+
+    void execute();
+    void unexecute();
+protected:
+    KWTableFrameSet *m_pTable;
+    QList<KWFrameSet> m_ListFrame;
+    unsigned int m_rowPos;
+};
+
+
 #endif

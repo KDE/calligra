@@ -23,6 +23,7 @@
 #include "insdia.h"
 #include "insdia.moc"
 #include "kwtableframeset.h"
+#include "kwcommand.h"
 
 #include <klocale.h>
 
@@ -112,16 +113,22 @@ void KWInsertDia::setupTab1()
 
 bool KWInsertDia::doInsert()
 {
+    unsigned int insert= value->value() - ( rBefore->isChecked() ? 1 : 0 );
     if ( type == ROW )
-        table->insertRow( value->value() - ( rBefore->isChecked() ? 1 : 0 ) );
+    {
+         KWInsertRowCommand *cmd = new KWInsertRowCommand( i18n("Insert row"), table, insert);
+        //table->insertCol( value->value() - ( rBefore->isChecked() ? 1 : 0 ) );
+         cmd->execute();
+         doc->addCommand(cmd);
+    }
     else
-        table->insertCol( value->value() - ( rBefore->isChecked() ? 1 : 0 ) );
+    {
+        KWInsertColumnCommand *cmd = new KWInsertColumnCommand( i18n("Insert column"), table, insert);
+        //table->insertCol( value->value() - ( rBefore->isChecked() ? 1 : 0 ) );
+        cmd->execute();
+        doc->addCommand(cmd);
+    }
 
-    doc->recalcFrames();
-    doc->updateAllFrames();
-    doc->repaintAllViews();
-    doc->layout();
-    canvas->repaintAll();
     return true;
 }
 
