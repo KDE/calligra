@@ -33,7 +33,7 @@ KChartShell::~KChartShell()
 
 QString KChartShell::configFile() const
 {
-    return readConfigFile( locate( "data", "kchart/kchart.rc", 
+    return readConfigFile( locate( "data", "kchart/kchart_shell.rc", 
 			  KChartFactory::global() ) );
     //    return readConfigFile( "kchart_shell.rc" );
 }
