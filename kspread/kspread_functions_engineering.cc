@@ -1296,7 +1296,7 @@ bool kspreadfunc_base( KSContext& context )
     int ix;
     for( int i = 0; i < prec; i++ )
     {
-      ix = value * base;
+      ix = (int) value * base;
 
 kdDebug() << "value " << value << "  ix " << ix << endl;
 

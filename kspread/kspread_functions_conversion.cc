@@ -244,7 +244,7 @@ bool kspreadfunc_arabic( KSContext& context )
 
   int val = 0;
   int lastd = 0;
-  int d;
+  int d = 0;
 
   for( unsigned i=0; i < roman.length(); i++ )
   {
