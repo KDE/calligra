@@ -109,9 +109,9 @@
         <description xml:lang="en_us">The status of this filter is unknown, as its development has been abandoned.</description>
     </status>
 
-    <version id="stable" stable="yes" kofficepath="http://www.koffice.org/filters/1.2" webcvscheckout="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~" cvstag="KOFFICE_1_2">
-        <title xml:lang="en_us">KOffice 1.2 RC1</title>
-        <description xml:lang="en_us">KOffice 1.2 Release Candidate 1</description>
+    <version id="current" stable="no" kofficepath="http://www.koffice.org/filters/1.2" webcvscheckout="http://webcvs.kde.org/cgi-bin/cvsweb.cgi/~checkout~" cvstag="">
+        <title xml:lang="en_us">KOffice CVS</title>
+        <description xml:lang="en_us">KOffice Development Version</description>
 
         <application id="generic">
             <title xml:lang="en_us">Generic (for all KOffice applications)</title>
