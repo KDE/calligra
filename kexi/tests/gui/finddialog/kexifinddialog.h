@@ -30,7 +30,7 @@ class KexiFindDialog : public KexiFindDialogBase
 {
 	Q_OBJECT
 	public:
-		KexiFindDialog( QWidget* parent = 0, const char* name = 0, bool modal = FALSE );
+		KexiFindDialog( bool replaceMode, QWidget* parent = 0, const char* name = 0, bool modal = FALSE );
 		virtual ~KexiFindDialog();
 
 #if 0
@@ -39,11 +39,15 @@ TODO TODO TODO TODO TODO TODO
 	 "(All columns)" item is also prepended. */
 	void setLookInColumnList(const QStringList& columnNames);
 
+	/*! \return a list for 'look in column' combo box. 
+	 "(All columns)" item is also prepended. */
+	QStringList* lookInColumnList() const;
+
 	/*! \return column name selected in 'look in column' combo box.
 	 If "(All columns)" item is selected, "*" is returned. */
 	QString lookInColumn() const;
 
-	/*! Selecte \a columnName to be selected 'look in column'.
+	/*! Selects \a columnName to be selected 'look in column'.
 	 By default "(All columns)" item is selected. To select this item, pass "*". */
 	void setLookInColumn(const QString& columnName);
 

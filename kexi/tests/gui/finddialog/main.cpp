@@ -30,7 +30,7 @@ int main( int argc, char ** argv )
   KCmdLineArgs::init( argc, argv, &aboutData );
   KApplication app;
 
-  KexiFindDialog dlg(0, "dialog");
+  KexiFindDialog dlg(true, 0, "dialog");
 
   return dlg.exec();
 }

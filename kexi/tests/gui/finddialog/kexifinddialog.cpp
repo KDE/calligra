@@ -21,25 +21,40 @@
 
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
+#include <kcombobox.h>
+#include <klocale.h>
 
 #include <qcheckbox.h>
+#include <qlabel.h>
 
-KexiFindDialog::KexiFindDialog( QWidget* parent, const char* name, bool modal )
+KexiFindDialog::KexiFindDialog( bool replaceMode, QWidget* parent, const char* name, bool modal )
  : KexiFindDialogBase(parent, name, modal)
+ , m_replaceMode(true)
 {
 	m_btnFind->setIconSet(KStdGuiItem::find().iconSet());
 	m_btnClose->setIconSet(KStdGuiItem::close().iconSet());
-	setReplaceMode(false);
+	setReplaceMode(replaceMode);
+	m_lookIn->insertItem(i18n("(All columns)"));
 }
 
 void KexiFindDialog::setReplaceMode(bool set)
 {
+	if (m_replaceMode == set)
+		return;
 	m_replaceMode = set;
 	if (m_replaceMode) {
 		m_promptOnReplace->show();
+		m_replaceLbl->show();
+		m_textToReplace->show();
+		m_btnReplace->show();
+		m_btnReplaceAll->show();
 	}
 	else {
 		m_promptOnReplace->hide();
+		m_replaceLbl->hide();
+		m_textToReplace->hide();
+		m_btnReplace->hide();
+		m_btnReplaceAll->hide();
 		resize(width(),height()-30);
 	}
 	updateGeometry();

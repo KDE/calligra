@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>484</width>
+            <width>476</width>
             <height>224</height>
         </rect>
     </property>
@@ -97,7 +97,7 @@
         </widget>
         <widget class="QLabel" row="1" column="0">
             <property name="name">
-                <cstring>textLabel2</cstring>
+                <cstring>m_replaceLbl</cstring>
             </property>
             <property name="text">
                 <string>Re&amp;place with:</string>
@@ -185,7 +185,7 @@
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>90</width>
+                    <width>16</width>
                     <height>20</height>
                 </size>
             </property>
@@ -217,6 +217,9 @@
             <property name="accel">
                 <string></string>
             </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
         </widget>
         <spacer row="7" column="2">
             <property name="name">
@@ -231,13 +234,13 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>20</height>
+                    <height>16</height>
                 </size>
             </property>
         </spacer>
         <widget class="QLayoutWidget" row="0" column="4" rowspan="8" colspan="1">
             <property name="name">
-                <cstring>layout8</cstring>
+                <cstring>layout2</cstring>
             </property>
             <vbox>
                 <property name="name">
@@ -265,6 +268,28 @@
                         <string></string>
                     </property>
                 </widget>
+                <widget class="KPushButton">
+                    <property name="name">
+                        <cstring>m_btnReplace</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Replace</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+R</string>
+                    </property>
+                </widget>
+                <widget class="KPushButton">
+                    <property name="name">
+                        <cstring>m_btnReplaceAll</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Replace All</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+R</string>
+                    </property>
+                </widget>
                 <spacer>
                     <property name="name">
                         <cstring>spacer8</cstring>
@@ -278,7 +303,7 @@
                     <property name="sizeHint">
                         <size>
                             <width>20</width>
-                            <height>121</height>
+                            <height>40</height>
                         </size>
                     </property>
                 </spacer>
@@ -314,6 +339,8 @@
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>
