@@ -17,6 +17,8 @@ REAL BUGS:
 	canvas is "fragmented")
 -	canvas doesn't repaint correctly while scrolling with the scrollbar
 -	copying works wrong: the last selected shape is pasted instead of the shape one copied
+-	crashes in vtext
+-	make curve1To, curve2To work
 
 TODO:
 -	move the X11-hacks from VPolylineTool to VCanvas so that other tools can benefit from that.
