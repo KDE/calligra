@@ -64,7 +64,7 @@ void Formula::analyse(const QDomNode balise)
 		}
 		else if(getChildName(balise, index).compare("FORMULA")== 0)
 		{
-			getFormula(getChild(getChild(getChild(balise, "FORMULA"), "FORMULA"), "ROOT"), 0);
+			getFormula(getChild(getChild(balise, "FORMULA"), "FORMULA"), 0);
 			kdDebug() << _formula << endl;
 		}
 		
@@ -103,16 +103,16 @@ void Formula::getFormula(QDomNode p, int indent)
 					_formula = _formula + "=\"" + attr.item(index).nodeValue() + "\"";
 				}
 				if(p.childNodes().length() == 0)
-					_formula = _formula + "/>";
+					_formula = _formula + "/>\n";
 				else
 				{
-					_formula = _formula + ">";
+					_formula = _formula + ">\n";
 					QDomNodeList child = p.childNodes();
 					for(int index = 0; index < child.length(); index++)
 					{
 						getFormula(child.item(index), indent+3); // The child elements
 					}
-					_formula = _formula + "</" + p.nodeName() + ">";
+					_formula = _formula + "</" + p.nodeName() + ">\n";
 				}
 				break;
 			/*default:
@@ -136,7 +136,7 @@ void Formula::analyseParamFrame(const QDomNode balise)
 	_bottom = getAttr(balise, "bottom").toInt();
 	setRunAround(getAttr(balise, "runaround").toInt());
 	setAroundGap(getAttr(balise, "runaroundGap").toInt());
-	setAutoCreate(getAttr(balise, "AUTOCREATENEWFRAME").toInt());
+	setAutoCreate(getAttr(balise, "autoCreateNewFrame").toInt());
 	setNewFrame(getAttr(balise, "newFrameBehaviour").toInt());
 	setSheetSide(getAttr(balise, "sheetside").toInt());
 }
@@ -147,12 +147,11 @@ void Formula::analyseParamFrame(const QDomNode balise)
 void Formula::generate(QTextStream &out)
 {
 	kdDebug() << "FORMULA GENERATION" << endl;
-
+	QDomDocument *doc = new QDomDocument();
+	doc->setContent(_formula);
 	KFormula::KFormulaMimeSource *formula = 
-		new KFormula::KFormulaMimeSource(QDomDocument(_formula));
+		new KFormula::KFormulaMimeSource(*doc);
 	kdDebug() << QString(formula->encodedData("text/x-tex")) << endl;
-	out << QString(formula->encodedData("text/x-tex"));
-	
-	//out << _formula << endl;
+	out << "$" << QString(formula->encodedData("text/x-tex")) << "$";
 }
 
