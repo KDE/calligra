@@ -568,6 +568,7 @@ void KWFrame::load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVers
 void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* frameSet )
 {
     KoStyleStack& styleStack = context.styleStack();
+    styleStack.setTypeProperties( "" ); //I think that it's not necessary, but for be safe
     // padding. fo:padding for 4 values or padding-left/right/top/bottom (3.11.29 p228)
     m_paddingLeft = KoUnit::parseValue( styleStack.attribute( "fo:padding", "left" ) );
     m_paddingRight = KoUnit::parseValue( styleStack.attribute( "fo:padding", "right" ) );
