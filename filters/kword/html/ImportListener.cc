@@ -216,11 +216,11 @@ bool HtmlListener :: doCharacters ( const QString & ch )
 
     if (stackItem->elementType==ElementTypeSpan)
     { // <span>
-        success=charactersElementSpan(stackItem,ch);
+        success=charactersElementSpan(stackItem,ch.simplifyWhiteSpace());
     }
     else if (stackItem->elementType==ElementTypeParagraph)
     { // <p>
-        success=charactersElementP(stackItem,ch);
+        success=charactersElementP(stackItem,ch.simplifyWhiteSpace());
     }
     else
     {
