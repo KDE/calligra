@@ -47,7 +47,7 @@ KoDocInfoPropsFactory::~KoDocInfoPropsFactory()
 {
 }
 
-QObject* KoDocInfoPropsFactory::create( QObject* parent, const char*, const char *classname,
+QObject* KoDocInfoPropsFactory::createObject( QObject* parent, const char*, const char *classname,
 			                const QStringList & )
 {
   if ( strcmp( classname, "KPropsDlgPlugin" ) == 0 )
@@ -57,7 +57,6 @@ QObject* KoDocInfoPropsFactory::create( QObject* parent, const char*, const char
       return 0L;
 
     QObject *obj = new KoDocumentInfoPropsPage( static_cast<KPropertiesDialog *>( parent ) );
-    emit objectCreated( obj );
     return obj;
   }
 
