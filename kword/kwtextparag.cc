@@ -43,7 +43,7 @@ Counter::Counter()
     m_startNumber = 1;
     m_prefix = QString::null;
     m_suffix = '.';
-    m_customBullet.character = QChar('-');
+    m_customBullet.character = QChar( '-' );
     m_customBullet.font = QString::null;
     invalidate();
 }
@@ -123,7 +123,7 @@ void Counter::load( QDomElement & element )
         m_startNumber = s.toInt();
     else // support for very-old files
         m_startNumber = s.lower()[0].latin1() - 'a' + 1;
-    m_customBullet.font = correctQString( element.attribute("m_customBullet.font") );
+    m_customBullet.font = correctQString( element.attribute("bulletfont") );
     m_custom = correctQString( element.attribute("customdef") );
     invalidate();
 }
@@ -282,7 +282,7 @@ void Counter::save( QDomElement & element )
     element.setAttribute( "righttext", m_suffix );
     element.setAttribute( "start", m_startNumber );
     element.setAttribute( "numberingtype", static_cast<int>( m_numbering ) );
-    element.setAttribute( "m_customBullet.font", m_customBullet.font );
+    element.setAttribute( "bulletfont", m_customBullet.font );
     element.setAttribute( "customdef", m_custom );
 }
 
