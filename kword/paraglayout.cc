@@ -5,10 +5,10 @@ KWParagLayout::KWParagLayout( KWordDocument_impl *_doc )
   : format(_doc), counterFormat(_doc)
 {
     flow = LEFT;
-    ptParagFootOffset = 0;
-    ptParagHeadOffset = 0;
-    ptFirstLineLeftIndent = 0;
-    ptLeftIndent = 0;
+    mmParagFootOffset = 0;
+    mmParagHeadOffset = 0;
+    mmFirstLineLeftIndent = 0;
+    mmLeftIndent = 0;
     counterFlow = C_LEFT;
     counterDepth = 0;
     // counterNr = -1;
@@ -34,10 +34,10 @@ KWParagLayout::~KWParagLayout()
 KWParagLayout& KWParagLayout::operator=(KWParagLayout &_layout)
 {
   flow = _layout.getFlow();
-  ptParagFootOffset = _layout.getPTParagFootOffset();
-  ptParagHeadOffset = _layout.getPTParagHeadOffset();
-  ptFirstLineLeftIndent = _layout.getPTFirstLineLeftIndent();
-  ptLeftIndent = _layout.getPTLeftIndent();
+  mmParagFootOffset = _layout.getPTParagFootOffset();
+  mmParagHeadOffset = _layout.getPTParagHeadOffset();
+  mmFirstLineLeftIndent = _layout.getPTFirstLineLeftIndent();
+  mmLeftIndent = _layout.getPTLeftIndent();
   counterFlow = static_cast<CounterFlow>(_layout.getCounterFlow());
   counterDepth = _layout.getCounterDepth();
   counterNr = _layout.getCounterNr();

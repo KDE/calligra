@@ -125,11 +125,11 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 
   for (unsigned int i = 0;i < _len;i++)
     {
-      if (text.data()[_pos + i].attrib && text.data()[_pos + i].attrib->getClassId() == ID_KWCharFormat)
-	{
-	  ((KWCharFormat*)text.data()[_pos + i].attrib)->getFormat()->decRef();
-	  ((KWCharFormat*)text.data()[_pos + i].attrib)->setFormat(0L);
-	}
+//       if (text.data()[_pos + i].attrib && text.data()[_pos + i].attrib->getClassId() == ID_KWCharFormat)
+// 	{
+// 	  ((KWCharFormat*)text.data()[_pos + i].attrib)->getFormat()->decRef();
+// 	  ((KWCharFormat*)text.data()[_pos + i].attrib)->setFormat(0L);
+// 	}
       freeChar( text.data()[ _pos + i] );
       KWFormat *format = document->getFormatCollection()->getFormat(_format);
       KWCharFormat *f = new KWCharFormat(format);

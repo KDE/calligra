@@ -258,6 +258,7 @@ public:
 
   void deleteSelectedText(KWFormatContext *_fc,QPainter &_painter);
   void copySelectedText();
+  void setFormat(KWFormat &_format);
 
   void paste(KWFormatContext *_fc,QString _string,KWPage *_page);
 

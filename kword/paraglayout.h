@@ -18,17 +18,17 @@ class KWParagLayout
 public:
     enum Flow { LEFT, RIGHT, CENTER, BLOCK };
     enum CounterFlow { C_LEFT, C_RIGHT };
-    
+
     KWParagLayout( KWordDocument_impl *_doc );
     ~KWParagLayout();
     
     KWParagLayout& operator=(KWParagLayout &_layout);
 
     void setFormat( KWFormat &_format );
-    void setPTFirstLineLeftIndent( unsigned int _i ) { ptFirstLineLeftIndent = _i; }
-    void setptLeftIndent( unsigned int _i ) { ptLeftIndent = _i; }
-    void setptParagFootOffset( unsigned int _i) { ptParagFootOffset = _i; }
-    void setptParagHeadOffset( unsigned int _i) { ptParagHeadOffset = _i; }
+    void setMMFirstLineLeftIndent( unsigned int _i ) { mmFirstLineLeftIndent = _i; }
+    void setMMLeftIndent( unsigned int _i ) { mmLeftIndent = _i; }
+    void setMMParagFootOffset( unsigned int _i) { mmParagFootOffset = _i; }
+    void setMMParagHeadOffset( unsigned int _i) { mmParagHeadOffset = _i; }
     void setPTLineSpacing( unsigned int _i) { ptLineSpacing = _i; }
     void setName( const char* _n) { name = _n; }
     void setFlow( Flow _f ) { flow = _f; }
@@ -84,10 +84,14 @@ public:
      */
     KWFormat& getFormat() { return format; }
     const char* getName() { return name.data(); }
-    unsigned int getPTFirstLineLeftIndent() { return ptFirstLineLeftIndent; }
-    unsigned int getPTLeftIndent() { return ptLeftIndent; }
-    unsigned int getPTParagFootOffset() { return ptParagFootOffset; }
-    unsigned int getPTParagHeadOffset() { return ptParagHeadOffset; }
+    unsigned int getPTFirstLineLeftIndent() { return MM_TO_POINT(mmFirstLineLeftIndent); }
+    unsigned int getPTLeftIndent() { return MM_TO_POINT(mmLeftIndent); }
+    unsigned int getPTParagFootOffset() { return MM_TO_POINT(mmParagFootOffset); }
+    unsigned int getPTParagHeadOffset() { return MM_TO_POINT(mmParagHeadOffset); }
+    unsigned int getMMFirstLineLeftIndent() { return mmFirstLineLeftIndent; }
+    unsigned int getMMLeftIndent() { return mmLeftIndent; }
+    unsigned int getMMParagFootOffset() { return mmParagFootOffset; }
+    unsigned int getMMParagHeadOffset() { return mmParagHeadOffset; }
     unsigned int getPTLineSpacing() { return ptLineSpacing; }
     Flow getFlow() { return flow; }
     /**
@@ -123,10 +127,10 @@ public:
 
 protected:
     Flow flow;
-    unsigned int ptParagFootOffset;
-    unsigned int ptParagHeadOffset;
-    unsigned int ptFirstLineLeftIndent;
-    unsigned int ptLeftIndent;
+    unsigned int mmParagFootOffset;
+    unsigned int mmParagHeadOffset;
+    unsigned int mmFirstLineLeftIndent;
+    unsigned int mmLeftIndent;
     unsigned int ptLineSpacing;
     /**
      * This instance holds information about the font and color etc. for

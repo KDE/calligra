@@ -67,13 +67,14 @@ QString KWFormatCollection::generateKey(const KWFormat &_format)
 
   // Key: BIU-Fontname-Fontsize-red-gree-blue
   // e.g. B**-Times-12-256-40-32
-  key.sprintf("%c%c%c-%s-%d-%d-%d-%d",
+  key.sprintf("%c%c%c-%s-%d-%d-%d-%d-%d",
 	      (_format.getWeight() == QFont::Bold ? 'B' : '*'),
 	      (_format.getItalic() == 1 ? 'I' : '*'),
 	      (_format.getUnderline() == 1 ? 'U' : '*'),
 	      _format.getUserFont()->getFontName(),
 	      _format.getPTFontSize(),_format.getColor().red(),
-	      _format.getColor().green(),_format.getColor().blue());
+	      _format.getColor().green(),_format.getColor().blue(),
+	      _format.getVertAlign());
 
   return key;
 }

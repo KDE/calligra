@@ -68,6 +68,7 @@ KWordView_impl::KWordView_impl(QWidget *_parent = 0L,const char *_name = 0L)
   gui = 0;
   flow = KWParagLayout::LEFT;
   paragDia = 0;
+  vertAlign = KWFormat::VA_NORMAL;
 }
 
 /*================================================================*/
@@ -175,6 +176,22 @@ void KWordView_impl::setFormat(KWFormat &_format,bool _check = true)
       m_rToolBarText->setButtonPixmap(m_idButtonText_Color,CORBA::string_dup(colorToPixString(_format.getColor())));
       tbColor = QColor(_format.getColor());
     }
+
+  m_rToolBarText->setButton(m_idButtonText_SuperScript,false);  
+  m_rToolBarText->setButton(m_idButtonText_SubScript,false);  
+
+  if (_format.getVertAlign() == KWFormat::VA_NORMAL)
+    vertAlign = KWFormat::VA_NORMAL;
+  else if (_format.getVertAlign() == KWFormat::VA_SUB)
+    {
+      vertAlign = KWFormat::VA_SUB;
+      m_rToolBarText->setButton(m_idButtonText_SubScript,true);  
+   }
+  else if (_format.getVertAlign() == KWFormat::VA_SUPER)
+    {
+      vertAlign = KWFormat::VA_SUPER;
+      m_rToolBarText->setButton(m_idButtonText_SuperScript,true);  
+   }
 
   format = _format;
   
@@ -541,6 +558,30 @@ void KWordView_impl::textUnsortList()
 {
 }
 
+/*===============================================================*/
+void KWordView_impl::textSuperScript()
+{
+  m_rToolBarText->setButton(m_idButtonText_SubScript,false);  
+  if (!m_rToolBarText->isButtonOn(m_idButtonText_SuperScript))
+    vertAlign = KWFormat::VA_SUPER;
+  else
+    vertAlign = KWFormat::VA_NORMAL;
+  format.setVertAlign(vertAlign);
+  gui->getPaperWidget()->formatChanged(format);
+}
+
+/*===============================================================*/
+void KWordView_impl::textSubScript()
+{
+  m_rToolBarText->setButton(m_idButtonText_SuperScript,false);  
+  if (!m_rToolBarText->isButtonOn(m_idButtonText_SubScript))
+    vertAlign = KWFormat::VA_SUB;
+  else
+    vertAlign = KWFormat::VA_NORMAL;
+  format.setVertAlign(vertAlign);
+  gui->getPaperWidget()->formatChanged(format);
+}
+
 /*================================================================*/
 void KWordView_impl::resizeEvent(QResizeEvent *e)
 {
@@ -899,7 +940,6 @@ void KWordView_impl::setupTextToolbar()
       m_idButtonText_EnumList = m_rToolBarText->insertButton(CORBA::string_dup(pix),
 							     CORBA::string_dup(i18n("Enumerated List")),
 							     this,CORBA::string_dup("textEnumList"));
-
       // unsorted list
       tmp = kapp->kde_datadir().copy();
       tmp += "/kword/toolbar/unsortedList.xpm";
@@ -907,6 +947,26 @@ void KWordView_impl::setupTextToolbar()
       m_idButtonText_EnumList = m_rToolBarText->insertButton(CORBA::string_dup(pix),
 							     CORBA::string_dup(i18n("Unsorted List")),
 							     this,CORBA::string_dup("textUnsortList"));
+
+      m_rToolBarText->insertSeparator();
+
+      // superscript
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kword/toolbar/super.xpm";
+      pix = loadPixmap(tmp);
+      m_idButtonText_SuperScript = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Superscript")),
+								this,CORBA::string_dup("textSuperScript"));
+      m_rToolBarText->setToggle(m_idButtonText_SuperScript,true);
+      m_rToolBarText->setButton(m_idButtonText_SuperScript,false);
+
+      // subscript
+      tmp = kapp->kde_datadir().copy();
+      tmp += "/kword/toolbar/sub.xpm";
+      pix = loadPixmap(tmp);
+      m_idButtonText_SubScript = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Subscript")),
+							      this,CORBA::string_dup("textSubScript"));
+      m_rToolBarText->setToggle(m_idButtonText_SubScript,true);
+      m_rToolBarText->setButton(m_idButtonText_SubScript,false);
     }
 }      
 

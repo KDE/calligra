@@ -133,6 +133,8 @@ public:
   virtual void textAlignBlock();
   virtual void textEnumList();
   virtual void textUnsortList();
+  virtual void textSuperScript();
+  virtual void textSubScript();
 
   virtual void setMode(OPParts::Part::Mode _mode);
   virtual void setFocus(CORBA::Boolean mode);
@@ -260,6 +262,8 @@ protected:
   CORBA::Long m_idButtonText_ABlock;
   CORBA::Long m_idButtonText_EnumList;
   CORBA::Long m_idButtonText_UnsortList;
+  CORBA::Long m_idButtonText_SuperScript;
+  CORBA::Long m_idButtonText_SubScript;
 
   // text toolbar values
   QFont tbFont;
@@ -271,6 +275,7 @@ protected:
 
   KWFormat format;
   KWParagLayout::Flow flow;
+  KWFormat::VertAlign vertAlign;
 
   KWParagDia *paragDia;
 

@@ -1041,6 +1041,12 @@ void KWPage::scroll(int dx,int dy)
 void KWPage::formatChanged(KWFormat &_format)
 {
   format = _format;
+
+  if (doc->has_selection())
+    {
+      doc->setFormat(format);
+      recalcCursor();
+    }
 }
 
 /*================================================================*/

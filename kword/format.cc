@@ -2,7 +2,7 @@
 #include "kword_doc.h"
 
 KWFormat::KWFormat( KWordDocument_impl *_doc, const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
-		    char _italic = -1, char _underline = -1, char _math = -1, char _direct = -1 )
+		    char _italic = -1, char _underline = -1, VertAlign _vertAlign = VA_NORMAL, char _math = -1, char _direct = -1 )
 {
     doc = _doc;
     color = _color;
@@ -11,6 +11,7 @@ KWFormat::KWFormat( KWordDocument_impl *_doc, const QColor& _color, KWUserFont *
     weight = _weight;
     italic = _italic;
     underline = _underline;
+    vertAlign = _vertAlign;
     math = _math;
     direct = _direct;
     ref = 0;
@@ -30,6 +31,7 @@ KWFormat::KWFormat( KWordDocument_impl *_doc,const KWFormat &_format )
     weight = _format.getWeight();
     italic = _format.getItalic();
     underline = _format.getUnderline();
+    vertAlign = _format.getVertAlign();
     color = _format.getColor();
     math = -1;
     direct = -1;
@@ -44,6 +46,7 @@ KWFormat& KWFormat::operator=( const KWFormat& _format )
     weight = _format.getWeight();
     italic = _format.getItalic();
     underline = _format.getUnderline();
+    vertAlign = _format.getVertAlign();
     color = _format.getColor();
     math = -1;
     direct = -1;
@@ -60,7 +63,8 @@ bool KWFormat::operator==(const KWFormat & _format)
 	  weight == _format.getWeight() &&
 	  italic == _format.getItalic() &&
 	  underline == _format.getUnderline() &&
-	  color == _format.getColor());
+	  color == _format.getColor() &&
+	  vertAlign == _format.getVertAlign());
 }
 
 bool KWFormat::operator!=(const KWFormat & _format)
@@ -70,7 +74,8 @@ bool KWFormat::operator!=(const KWFormat & _format)
 	  weight != _format.getWeight() ||
 	  italic != _format.getItalic() ||
 	  underline != _format.getUnderline() ||
-	  color != _format.getColor());
+	  color != _format.getColor() ||
+	  vertAlign != _format.getVertAlign());
 }
 
 void KWFormat::setDefaults( KWordDocument_impl *_doc )
@@ -81,6 +86,7 @@ void KWFormat::setDefaults( KWordDocument_impl *_doc )
     italic = 0;
     underline = 0;
     color = black;
+    vertAlign = VA_NORMAL;
     math = -1;
     direct = -1;
 }
@@ -119,6 +125,8 @@ void KWFormat::apply( KWFormat &_format )
     
     if ( _format.getColor().isValid() )
 	color = _format.getColor();
+    
+    vertAlign = _format.getVertAlign();
 }
 
 void KWFormat::decRef()
@@ -129,6 +137,7 @@ void KWFormat::decRef()
 
   if (ref <= 0 && doc) 
     doc->getFormatCollection()->removeFormat(this); 
+
   if (!doc && ref == 0) warning("RefCount of the format == 0, but I couldn't delete it,"
 				" because I have not a pointer to the document!");
 }

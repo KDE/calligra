@@ -85,26 +85,26 @@ public:
   void setFlow(KWParagLayout::Flow _flow)
     { fc->getParag()->getParagLayout()->setFlow(_flow); recalcCursor(); }
   void setLeftIndent(float _left)
-    { fc->getParag()->getParagLayout()->setptLeftIndent(static_cast<unsigned int>(MM_TO_POINT(_left))); recalcCursor(); }
+    { fc->getParag()->getParagLayout()->setMMLeftIndent(static_cast<unsigned int>(_left)); recalcCursor(); }
   void setFirstLineIndent(float _first)
-    { fc->getParag()->getParagLayout()->setPTFirstLineLeftIndent(static_cast<unsigned int>(MM_TO_POINT(_first))); recalcCursor(); }
+    { fc->getParag()->getParagLayout()->setMMFirstLineLeftIndent(static_cast<unsigned int>(_first)); recalcCursor(); }
   void setSpaceBeforeParag(float _before)
-    { fc->getParag()->getParagLayout()->setptParagHeadOffset(static_cast<unsigned int>(MM_TO_POINT(_before))); recalcCursor(); }
+    { fc->getParag()->getParagLayout()->setMMParagHeadOffset(static_cast<unsigned int>(_before)); recalcCursor(); }
   void setSpaceAfterParag(float _after)
-    { fc->getParag()->getParagLayout()->setptParagFootOffset(static_cast<unsigned int>(MM_TO_POINT(_after))); recalcCursor(); }
+    { fc->getParag()->getParagLayout()->setMMParagFootOffset(static_cast<unsigned int>(_after)); recalcCursor(); }
   void setLineSpacing(unsigned int _spacing)
     { fc->getParag()->getParagLayout()->setPTLineSpacing(_spacing); recalcCursor(); }
 
   KWParagLayout::Flow getFlow()
     { return fc->getParag()->getParagLayout()->getFlow(); }
   float getLeftIndent()
-    { return POINT_TO_MM(static_cast<float>(fc->getParag()->getParagLayout()->getPTLeftIndent())); }
+    { return static_cast<float>(fc->getParag()->getParagLayout()->getMMLeftIndent()); }
   float getFirstLineIndent()
-    { return POINT_TO_MM(static_cast<float>(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent())); }
+    { return static_cast<float>(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent()); }
   float getSpaceBeforeParag()
-    { return POINT_TO_MM(static_cast<float>(fc->getParag()->getParagLayout()->getPTParagHeadOffset())); }
+    { return static_cast<float>(fc->getParag()->getParagLayout()->getMMParagHeadOffset()); }
   float getSpaceAfterParag()
-    { return POINT_TO_MM(static_cast<float>(fc->getParag()->getParagLayout()->getPTParagFootOffset())); }
+    { return static_cast<float>(fc->getParag()->getParagLayout()->getMMParagFootOffset()); }
   unsigned int getLineSpacing()
     { return fc->getParag()->getParagLayout()->getPTLineSpacing(); }
 

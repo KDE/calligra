@@ -206,3 +206,10 @@ Reggie, 8.10.1998:
 Reggie, 9.10.1998:
 ------------------
 - Small fixes
+- Implemented setting the format for a selected text
+- Fixed an awful bug when changing the format
+- Linespacing works correctly now
+- Bugfix with placing pictures
+- Implemented subscript
+- Implemented superscript
+- Implemented space before/after paragraphs

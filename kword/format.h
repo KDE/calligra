@@ -17,6 +17,7 @@ class KWordDocument_impl;
 class KWFormat
 {
 public:
+    enum VertAlign { VA_NORMAL, VA_SUB, VA_SUPER };
     /**
      * Creates a new KWFormat instance. 
      *
@@ -35,7 +36,7 @@ public:
      * @see KWUserFont
      */
     KWFormat( KWordDocument_impl *_doc, const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
-	      char _italic = -1, char _underline = -1, char _math = -1, char _direct = -1 );
+	      char _italic = -1, char _underline = -1, VertAlign _vertAlign = VA_NORMAL, char _math = -1, char _direct = -1 );
     
     /**
      * Creates a new KWFormat instance. This instance has set all values to
@@ -90,6 +91,8 @@ public:
      * @return The underline mode. The return value may be -1 if the underline mode should not change.
      */
     char getUnderline() const { return underline; }
+
+    VertAlign getVertAlign() const { return vertAlign; }
 
     /**
      * Fills all values with defaults. No value will remain in the 'dont change' state.
@@ -150,6 +153,8 @@ public:
      */
     void setUnderline( char _underline ) { underline = _underline; }
 
+    void setVertAlign(VertAlign _vertAlign) { vertAlign = _vertAlign; }
+
     void incRef();
     void decRef();
     int refCount()
@@ -198,6 +203,8 @@ protected:
      * 1 to enable direct mode, 0 to disable and -1 for no change.
      */
     char direct;
+
+    VertAlign vertAlign;
 
     int ref;
     KWordDocument_impl *doc;

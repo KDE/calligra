@@ -430,6 +430,7 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
   KWParagLayout *lay = _fc.getParag()->getParagLayout();
   // Index in the text memory segment that points to the line start
   unsigned int pos = _fc.getLineStartPos();
+  int plus = 0;
 
   // First line ? Draw the counter ?
   if ( pos == 0 && lay->getCounterNr() != -1 )
@@ -481,10 +482,13 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 	{
 	  buffer[i] = '\0';
 	  _painter.drawText( tmpPTPos - xOffset, /*_fc.getPTY() + _fc.getPTMaxAscender() - yOffset*/
-			     _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset, buffer );
+			     _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - 
+			     _fc.getParag()->getParagLayout()->getPTLineSpacing() - yOffset + plus, buffer );
 	  i = 0;
 
-	  _painter.drawImage(QPoint(tmpPTPos - xOffset, _fc.getPTY() - yOffset),
+	  _painter.drawImage(QPoint(tmpPTPos - xOffset, _fc.getPTY() - yOffset + 
+				    ((_fc.getLineHeight() - _fc.getParag()->getParagLayout()->getPTLineSpacing()) 
+				     - ((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage()->height())),
 			     *((KWCharImage*)text[ _fc.getTextPos() ].attrib)->getImage());
 	  _fc.cursorGotoNextChar( _painter );
 	  // Torben: TODO: Handle special objects like images here
@@ -498,7 +502,25 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 	      KWCharFormat *f = (KWCharFormat*)text[ _fc.getTextPos() ].attrib;
 	      _fc.apply( *f->getFormat() );
 	      // Change the painter
-	      _painter.setFont( *_fc.loadFont( this ) );
+	      if (_fc.getVertAlign() == KWFormat::VA_NORMAL)
+		{
+		  _painter.setFont( *_fc.loadFont( this ) );
+		  plus = 0;
+		}
+	      else if (_fc.getVertAlign() == KWFormat::VA_SUB)
+		{
+		  QFont _font = *_fc.loadFont( this );
+		  _font.setPointSize((2 * _font.pointSize()) / 3);
+		  _painter.setFont(_font);
+		  plus = _font.pointSize() / 2;
+		}
+	      else if (_fc.getVertAlign() == KWFormat::VA_SUPER)
+		{
+		  QFont _font = *_fc.loadFont( this );
+		  _font.setPointSize((2 * _font.pointSize()) / 3);
+		  _painter.setFont(_font);
+		  plus = - _fc.getPTAscender() + _font.pointSize() / 2;
+		}
 	      _painter.setPen( _fc.getColor() );
 	      //cerr << "Switch 2 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
 	    }
@@ -511,7 +533,8 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 	      // what we have so far
 	      buffer[i] = '\0';
 	      _painter.drawText( tmpPTPos - xOffset, /*_fc.getPTY() + _fc.getPTMaxAscender() - yOffset*/
-				 _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset, buffer );
+				 _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - yOffset - 
+				 _fc.getParag()->getParagLayout()->getPTLineSpacing() + plus,buffer );
 	      //cerr << "#'" << buffer << "'" << endl;
 	      i = 0;
 	      // Blanks are not printed at all
@@ -547,9 +570,9 @@ void KWordDocument_impl::drawMarker(KWFormatContext &_fc,QPainter *_painter,int 
     }
 
   _painter->drawLine(_fc.getPTPos() - xOffset + diffx1,
-		     _fc.getPTY() + _fc.getParag()->getParagLayout()->getPTLineSpacing() - yOffset,
+		     _fc.getPTY() - yOffset,
 		     _fc.getPTPos() - xOffset + diffx2,
-		     _fc.getPTY() + _fc.getLineHeight()/* - _fc.getParag()->getParagLayout()->getPTLineSpacing()*/ - yOffset);
+		     _fc.getPTY() + _fc.getLineHeight() - _fc.getParag()->getParagLayout()->getPTLineSpacing() - yOffset);
 
   _painter->setRasterOp(rop);
 }
@@ -902,6 +925,58 @@ void KWordDocument_impl::copySelectedText()
 
   QClipboard *cb = QApplication::clipboard();
   cb->setText(clipString.data());
+}
+
+/*================================================================*/
+void KWordDocument_impl::setFormat(KWFormat &_format)
+{
+  KWFormatContext tmpFC2(this);
+  KWFormatContext tmpFC1(this);
+
+  if (selStart.getParag() == selEnd.getParag())
+    {
+      if (selStart.getTextPos() < selEnd.getTextPos())
+	{  
+	  tmpFC1 = selStart;
+	  tmpFC2 = selEnd;
+	}
+      else
+	{
+	  tmpFC1 = selEnd;
+	  tmpFC2 = selStart;
+	}
+      
+      tmpFC1.getParag()->setFormat(tmpFC1.getTextPos(),tmpFC2.getTextPos() - tmpFC1.getTextPos(),_format);
+    }
+  else
+    {
+      KWParag *parag = getFirstParag();
+      while (parag)
+	{
+	  if (parag == selStart.getParag())
+	    {
+	      tmpFC1 = selStart;
+	      tmpFC2 = selEnd;
+	      break;
+	    }
+	  if (parag == selEnd.getParag())
+	    {
+	      tmpFC2 = selStart;
+	      tmpFC1 = selEnd;
+	      break;
+	    }
+	  parag = parag->getNext();
+	}
+
+      tmpFC1.getParag()->setFormat(tmpFC1.getTextPos(),tmpFC1.getParag()->getTextLen() - tmpFC1.getTextPos(),_format);
+      parag = tmpFC1.getParag()->getNext();
+      while (parag && parag != tmpFC2.getParag())
+	{
+	  parag->setFormat(0,parag->getTextLen(),_format);
+	  parag = parag->getNext();
+	}
+      tmpFC2.getParag()->setFormat(0,tmpFC2.getTextPos(),_format);
+    }
 }
 
 /*================================================================*/

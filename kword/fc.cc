@@ -69,6 +69,8 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
     // Set the context to the given paragraph
     if ( parag != 0L )
     {
+      if (isCursorInLastLine() && getParag() && getParag()->getParagLayout()->getPTParagFootOffset() != 0)
+	ptY += getParag()->getParagLayout()->getPTParagFootOffset(); 
       parag = parag->getNext();
       if ( parag == 0L )
       {
@@ -105,6 +107,8 @@ void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters =
     // apply( parag->getParagLayout()->getFormat() );
         
     // Calculate everything about the line we are in.
+    if (isCursorInFirstLine() && getParag() && getParag()->getParagLayout()->getPTParagHeadOffset() != 0)
+      ptY += getParag()->getParagLayout()->getPTParagHeadOffset(); 
     makeLineLayout( _painter );
 }
 
@@ -479,7 +483,7 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos, QPainter & )
 	{
 	  // Handle specials here
 	  ptPos += ((KWCharImage*)text[pos].attrib)->getImage()->width();
-	  specialHeight = ((KWCharImage*)text[pos].attrib)->getImage()->height();
+	  specialHeight = max(specialHeight,(unsigned int)((KWCharImage*)text[pos].attrib)->getImage()->height());
 	  pos++;
 	}
 	else
@@ -575,7 +579,7 @@ int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
     {
       // Handle specials here
       ptPos += ((KWCharImage*)text[pos].attrib)->getImage()->width();
-      specialHeight = ((KWCharImage*)text[pos].attrib)->getImage()->height();
+      specialHeight = max(specialHeight,(unsigned int)((KWCharImage*)text[pos].attrib)->getImage()->height());
       pos++;
     }
   else
@@ -798,7 +802,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	{
 	  ptPos += ((KWCharImage*)text[textPos].attrib)->getImage()->width();
 	  tmpPTWidth += ((KWCharImage*)text[textPos].attrib)->getImage()->width();
-	  specialHeight = ((KWCharImage*)text[textPos].attrib)->getImage()->height();
+	  specialHeight = max(specialHeight,(unsigned int)((KWCharImage*)text[textPos].attrib)->getImage()->height());
 	  textPos++;
 	}
 	else // A usual character ...
@@ -880,8 +884,9 @@ unsigned short KWFormatContext::getCounter( unsigned int _counternr, unsigned in
 unsigned int KWFormatContext::getLineHeight()
 { 
   unsigned int hei = ptMaxAscender + ptMaxDescender;
+  unsigned int plus = 0;
 
-  return max(hei,specialHeight) + getParag()->getParagLayout()->getPTLineSpacing(); 
+  return max(hei,specialHeight) + getParag()->getParagLayout()->getPTLineSpacing() + plus; 
 }
 
 void KWFormatContext::makeCounterLayout( QPainter &_painter )
@@ -907,7 +912,13 @@ void KWFormatContext::apply( KWFormat &_format )
     {
       displayFont->setFamily(_format.getUserFont()->getFontName());
       if (_format.getPTFontSize() != -1)
-	displayFont->setPTSize(_format.getPTFontSize());
+	{
+	  if (_format.getVertAlign() == VA_NORMAL)
+	    displayFont->setPTSize(_format.getPTFontSize());
+	  else
+	    displayFont->setPTSize((2 * _format.getPTFontSize()) / 3);
+	}
+				   
       if (_format.getWeight() != -1)
 	displayFont->setWeight(_format.getWeight());
       if (_format.getItalic() != -1)
@@ -919,6 +930,11 @@ void KWFormatContext::apply( KWFormat &_format )
       ptDescender = displayFont->getPTDescender();
       ptMaxAscender = max(ptAscender,ptMaxAscender);
       ptMaxDescender = max(ptDescender,ptMaxDescender);
+
+      if (_format.getVertAlign() == KWFormat::VA_SUB)
+	ptMaxDescender = max(ptMaxDescender,(unsigned int)((2 * _format.getPTFontSize()) / 3) / 2);
+      else if (_format.getVertAlign() == KWFormat::VA_SUPER)
+	ptMaxAscender = max(ptMaxAscender,(unsigned int)((2 * _format.getPTFontSize()) / 3) / 2);
     }
 }
 

@@ -52,6 +52,8 @@ module KWord
       slot void textAlignBlock();
       slot void textEnumList();
       slot void textUnsortList();
+      slot void textSuperScript();
+      slot void textSubScript();
     };
 
   interface KWordDocument : OPParts::Document, OPParts::Print
