@@ -1,5 +1,5 @@
 
-INCLUDES= $(all_includes) $(KOFFICE_INCLUDES)
+INCLUDES= $(KOFFICE_INCLUDES) $(all_includes) 
 
 SUBDIRS = pics
 
