@@ -564,7 +564,7 @@ void KSpreadView::initializeEditActions()
   m_redo->setEnabled( FALSE );
   m_redo->setToolTip(i18n("Redo the action that has been undone."));
 
-  KStdAction::find(this, SLOT(find()), actionCollection());
+  m_find = KStdAction::find(this, SLOT(find()), actionCollection());
 
   KStdAction::replace(this, SLOT(replace()), actionCollection());
 }
@@ -1922,6 +1922,7 @@ void KSpreadView::updateReadWrite( bool readwrite )
   m_gotoCell->setEnabled( true );
   m_viewZoom->setEnabled( true );
   m_showPageBorders->setEnabled( true );
+  m_find->setEnabled( true);
   //  m_newView->setEnabled( true );
   //m_pDoc->KXMLGUIClient::action( "newView" )->setEnabled( true ); // obsolete (Werner)
   // m_oszi->setEnabled( true );
