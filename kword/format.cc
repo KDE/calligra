@@ -172,7 +172,14 @@ QDomElement KWFormat::save( QDomDocument &doc, int id )
     QDomElement format = doc.createElement( "FORMAT" );
     if ( id != -1 )
 	format.setAttribute( "id", id );
-    format.setAttribute( "color", color.name() );
+
+    QString c("#%1%2%3");
+    c = c.arg( color.red(), 2, 16 ).arg( color.green(), 2, 16 ).arg( color.blue(), 2, 16 );
+    for( uint i = 0; i < c.length(); ++i )
+      if ( c[i].isSpace() )
+        c[i] = '0';
+
+    format.setAttribute( "color", c );
     format.setAttribute( "font", userFont->getFontName() );
     format.setAttribute( "size", ptFontSize );
     format.setAttribute( "weight", weight );
