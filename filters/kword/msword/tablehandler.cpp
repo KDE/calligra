@@ -39,7 +39,7 @@ void KWordTableHandler::tableStart( KWord::Table* table )
     qHeapSort( table->m_cellEdges );
 #if 0
     for (unsigned int i = 0; i < table->m_cellEdges.size(); i++)
-        kdDebug() << table->m_cellEdges[i] << endl;
+        kdDebug(30513) << table->m_cellEdges[i] << endl;
 #endif
     m_row = -1;
     m_currentY = 0;
@@ -65,12 +65,12 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
     m_row++;
     m_column = -1;
     m_tap = tap;
-    kdDebug() << "tableRowStart row=" << m_row << endl;
+    kdDebug(30513) << "tableRowStart row=" << m_row << endl;
 }
 
 void KWordTableHandler::tableRowEnd()
 {
-    kdDebug() << "tableRowEnd" << endl;
+    kdDebug(30513) << "tableRowEnd" << endl;
     m_currentY += rowHeight();
 }
 
@@ -109,7 +109,7 @@ void KWordTableHandler::tableCellStart()
     int rowSpan = 1;
     if ( tc.fVertRestart )
     {
-        //kdDebug() << "fVertRestart is set!" << endl;
+        //kdDebug(30513) << "fVertRestart is set!" << endl;
         // This cell is the first one of a series of vertically merged cells ->
         // we want to find out its size.
         QValueList<KWord::Row>::Iterator it = m_currentTable->rows.at( m_row + 1 );
@@ -122,7 +122,7 @@ void KWordTableHandler::tableCellStart()
                  if ( QABS( tapBelow->rgdxaCenter[ c ] - left ) <= 3
                       && QABS( tapBelow->rgdxaCenter[ c + 1 ] - right ) <= 3 ) {
                      tcBelow = &tapBelow->rgtc[ c ];
-                     //kdDebug() << "found cell below, at (Word) column " << c << " fVertMerge:" << tcBelow->fVertMerge << endl;
+                     //kdDebug(30513) << "found cell below, at (Word) column " << c << " fVertMerge:" << tcBelow->fVertMerge << endl;
                  }
             }
             if ( tcBelow && tcBelow->fVertMerge && !tcBelow->fVertRestart )
@@ -130,7 +130,7 @@ void KWordTableHandler::tableCellStart()
             else
                 break;
         }
-        //kdDebug() << "rowSpan=" << rowSpan << endl;
+        //kdDebug(30513) << "rowSpan=" << rowSpan << endl;
     }
     // Skip cells that are part of a vertically merged cell, KWord doesn't want them
     // The MSWord spec says they must be empty anyway (and we'll get a warning if not).
@@ -158,7 +158,7 @@ void KWordTableHandler::tableCellStart()
                      ( right - left ) / 20.0, // width
                      rowHeight() ); // height
 
-    kdDebug() << " tableCellStart row=" << m_row << " WordColumn=" << m_column << " colSpan=" << colSpan << " (from " << leftCellNumber << " to " << rightCellNumber << " for KWord) rowSpan=" << rowSpan << " cellRect=" << cellRect << endl;
+    kdDebug(30513) << " tableCellStart row=" << m_row << " WordColumn=" << m_column << " colSpan=" << colSpan << " (from " << leftCellNumber << " to " << rightCellNumber << " for KWord) rowSpan=" << rowSpan << " cellRect=" << cellRect << endl;
 
     // Sort out the borders.
     // It seems we get this on the cells that are adjacent
@@ -182,7 +182,7 @@ void KWordTableHandler::tableCellStart()
 
 void KWordTableHandler::tableCellEnd()
 {
-    kdDebug() << " tableCellEnd" << endl;
+    kdDebug(30513) << " tableCellEnd" << endl;
     emit sigTableCellEnd();
 }
 
@@ -195,7 +195,7 @@ void KWord::Table::cacheCellEdge(int cellEdge)
     for (unsigned int i = 0; i < size; i++)
     {
         if (m_cellEdges[i] == cellEdge)  {
-            kdDebug() << k_funcinfo << cellEdge << " -> found" << endl;
+            kdDebug(30513) << k_funcinfo << cellEdge << " -> found" << endl;
             return;
         }
     }
@@ -203,7 +203,7 @@ void KWord::Table::cacheCellEdge(int cellEdge)
     // Add the edge to the array.
     m_cellEdges.resize(size + 1, QGArray::SpeedOptim);
     m_cellEdges[size] = cellEdge;
-    kdDebug() << k_funcinfo << cellEdge << " -> added. Size=" << size+1 << endl;
+    kdDebug(30513) << k_funcinfo << cellEdge << " -> added. Size=" << size+1 << endl;
 }
 
 // Lookup a cell edge from the cache of cell edges

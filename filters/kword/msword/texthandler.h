@@ -92,7 +92,7 @@ signals:
     void firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> );
     void subDocFound( const wvWare::FunctorBase* parsingFunctor, int data );
     void tableFound( const KWord::Table& table );
-    void pictureFound( const QString& frameName, const QString& pictureName, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
+    void pictureFound( const QString& frameName, const QString& pictureName, const wvWare::FunctorBase* pictureFunctor );
 
 protected:
     void writeOutParagraph( const QString& styleName, const QString& text );

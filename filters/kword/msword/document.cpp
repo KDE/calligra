@@ -34,13 +34,16 @@
 #include <wv2/paragraphproperties.h>
 #include <wv2/associatedstrings.h>
 #include <klocale.h>
+#include <koStore.h>
+#include <koFilterChain.h>
 
 
-Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomDocument& documentInfo, QDomElement& framesetsElement )
+Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomDocument& documentInfo, QDomElement& framesetsElement, KoFilterChain* chain )
     : m_mainDocument( mainDocument ), m_documentInfo ( documentInfo ),
       m_framesetsElement( framesetsElement ),
       m_replacementHandler( new KWordReplacementHandler ), m_tableHandler( new KWordTableHandler ),
-      m_graphicsHandler( new KWordGraphicsHandler ), m_textHandler( 0 ),
+      m_graphicsHandler( new KWordGraphicsHandler( this ) ), m_textHandler( 0 ),
+      m_chain( chain ),
       m_parser( wvWare::ParserFactory::createParser( fileName ) ), m_headerFooters( 0 ), m_bodyFound( false ),
       m_footNoteNumber( 0 ), m_endNoteNumber( 0 )
 {
@@ -51,6 +54,8 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
                  this, SLOT( slotSubDocFound( const wvWare::FunctorBase*, int ) ) );
         connect( m_textHandler, SIGNAL( tableFound( const KWord::Table& ) ),
                  this, SLOT( slotTableFound( const KWord::Table& ) ) );
+        connect( m_textHandler, SIGNAL( pictureFound( const QString&, const QString&, const wvWare::FunctorBase* ) ),
+                 this, SLOT( slotPictureFound( const QString&, const QString&, const wvWare::FunctorBase* ) ) );
         m_parser->setSubDocumentHandler( this );
         m_parser->setTextHandler( m_textHandler );
         m_parser->setTableHandler( m_tableHandler );
@@ -111,9 +116,18 @@ void Document::finishDocument()
     Q_ASSERT ( !paperElement.isNull() ); // slotFirstSectionFound should have been called!
     if ( !paperElement.isNull() )
     {
-        kdDebug() << k_funcinfo << "m_headerFooters=" << m_headerFooters << endl;
+        kdDebug(30513) << k_funcinfo << "m_headerFooters=" << m_headerFooters << endl;
         paperElement.setAttribute("hType", Conversion::headerMaskToHType( m_headerFooters ) );
         paperElement.setAttribute("fType", Conversion::headerMaskToFType( m_headerFooters ) );
+    }
+
+    // Write out <PICTURES> tag
+    QDomElement picturesElem = m_mainDocument.createElement("PICTURES");
+    elementDoc.appendChild( picturesElem );
+    for( QStringList::Iterator it = m_pictureList.begin(); it != m_pictureList.end(); ++it ) {
+        QDomElement keyElem = m_mainDocument.createElement("KEY");
+        picturesElem.appendChild( keyElem );
+        keyElem.setAttribute( "filename", *it );
     }
 }
 
@@ -158,12 +172,12 @@ void Document::processStyles()
     m_textHandler->setFrameSetElement( stylesElem ); /// ### naming!
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
     unsigned int count = styles.size();
-    //kdDebug() << k_funcinfo << "styles count=" << count << endl;
+    //kdDebug(30513) << k_funcinfo << "styles count=" << count << endl;
     for ( unsigned int i = 0; i < count ; ++i )
     {
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
-        //kdDebug() << k_funcinfo << "style " << i << " " << style << endl;
+        //kdDebug(30513) << k_funcinfo << "style " << i << " " << style << endl;
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
             QDomElement styleElem = m_mainDocument.createElement("STYLE");
@@ -174,7 +188,7 @@ void Document::processStyles()
             element.setAttribute( "value", name.string() );
             styleElem.appendChild( element );
 
-            kdDebug() << k_funcinfo << "Style " << i << ": " << name.string() << endl;
+            kdDebug(30513) << k_funcinfo << "Style " << i << ": " << name.string() << endl;
 
             const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
             if ( followingStyle && followingStyle != style )
@@ -205,7 +219,7 @@ bool Document::parse()
 
 void Document::bodyStart()
 {
-    kdDebug() << k_funcinfo << endl;
+    kdDebug(30513) << k_funcinfo << endl;
 
     QDomElement mainFramesetElement = m_mainDocument.createElement("FRAMESET");
     mainFramesetElement.setAttribute("frameType",1);
@@ -224,7 +238,7 @@ void Document::bodyStart()
 
 void Document::bodyEnd()
 {
-    kdDebug() << k_funcinfo << endl;
+    kdDebug(30513) << k_funcinfo << endl;
     disconnect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
              this, SLOT( slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ) );
 }
@@ -232,7 +246,7 @@ void Document::bodyEnd()
 
 void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
 {
-    kdDebug() << k_funcinfo << endl;
+    kdDebug(30513) << k_funcinfo << endl;
     QDomElement elementDoc = m_mainDocument.documentElement();
 
     QDomElement elementPaper = m_mainDocument.createElement("PAPER");
@@ -269,7 +283,7 @@ void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SE
 
 void Document::headerStart( wvWare::HeaderData::Type type )
 {
-    kdDebug() << "startHeader type=" << type << " (" << Conversion::headerTypeToFramesetName( type ) << ")" << endl;
+    kdDebug(30513) << "startHeader type=" << type << " (" << Conversion::headerTypeToFramesetName( type ) << ")" << endl;
     // Werner says the headers are always emitted in the order of the Type enum.
 
     QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
@@ -322,7 +336,7 @@ void Document::footnoteStart()
 
 void Document::footnoteEnd()
 {
-    kdDebug() << k_funcinfo << endl;
+    kdDebug(30513) << k_funcinfo << endl;
     m_textHandler->setFrameSetElement( QDomElement() );
 }
 
@@ -389,7 +403,7 @@ void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::
         // (and icoBack is usually white; it's the other colour of the pattern,
         // something that we can't set in Qt apparently).
         int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
-        kdDebug() << "generateFrameBorder: " << " icoFore=" << shd.icoFore << " icoBack=" << shd.icoBack << " ipat=" << shd.ipat << " -> bkColor=" << bkColor << endl;
+        kdDebug(30513) << "generateFrameBorder: " << " icoFore=" << shd.icoFore << " icoBack=" << shd.icoBack << " ipat=" << shd.ipat << " -> bkColor=" << bkColor << endl;
 
         // Reverse-engineer MSWord's own hackery: it models various gray levels
         // using dithering. But this looks crappy with Qt. So we go back to a QColor.
@@ -420,7 +434,7 @@ void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::
 
 void Document::slotSubDocFound( const wvWare::FunctorBase* functor, int data )
 {
-    SubDocument subdoc( functor, data );
+    SubDocument subdoc( functor, data, QString::null, QString::null );
     m_subdocQueue.push( subdoc );
 }
 
@@ -430,8 +444,10 @@ void Document::slotTableFound( const KWord::Table& table )
 }
 
 void Document::slotPictureFound( const QString& frameName, const QString& pictureName,
-                                 wvWare::SharedPtr<const wvWare::Word97::PICF> picf )
+                                 const wvWare::FunctorBase* pictureFunctor )
 {
+    SubDocument subdoc( pictureFunctor, 0, frameName, pictureName );
+    m_subdocQueue.push( subdoc );
 }
 
 void Document::processSubDocQueue()
@@ -459,5 +475,33 @@ void Document::processSubDocQueue()
         m_tableQueue.pop();
     }
 }
+
+KoStoreDevice* Document::createPictureFrameSet( const KoSize& size )
+{
+    // Grab data that was stored with the functor, that triggered this parsing
+    SubDocument subdoc( m_subdocQueue.front() );
+
+    QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
+    framesetElement.setAttribute( "frameType", 2 /*picture*/ );
+    framesetElement.setAttribute( "frameInfo", 0 );
+    framesetElement.setAttribute( "name", subdoc.name );
+    m_framesetsElement.appendChild(framesetElement);
+
+    // The position doesn't matter as long as the picture is inline
+    // FIXME for non-inline pics ####
+    createInitialFrame( framesetElement, 0, size.width(), 0, size.height(), false, NoFollowup );
+
+    QDomElement pictureElem = m_mainDocument.createElement("PICTURE");
+    framesetElement.appendChild( pictureElem );
+
+    QDomElement keyElem = m_mainDocument.createElement("KEY");
+    pictureElem.appendChild( keyElem );
+    keyElem.setAttribute( "filename", subdoc.extraName );
+    m_pictureList.append( subdoc.extraName );
+
+    kdDebug(30513) << "Preparing to write picture for '" << subdoc.name << "' into " << subdoc.extraName << endl;
+    return m_chain->storageFile( subdoc.extraName, KoStore::Write );
+}
+
 
 #include "document.moc"

@@ -56,7 +56,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
     QDomDocument documentInfo;
     documentInfo.appendChild (documentInfo.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
-    Document document( QFile::encodeName( m_chain->inputFile() ).data(), mainDocument, documentInfo, framesetsElem );
+    Document document( QFile::encodeName( m_chain->inputFile() ).data(), mainDocument, documentInfo, framesetsElem, m_chain );
 
     if ( !document.hasParser() )
         return KoFilter::WrongFormat;
@@ -65,7 +65,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
     document.processSubDocQueue();
     document.finishDocument();
     if ( !document.bodyFound() )
-        return KoFilter::WrongFormat; // this currently happens with Word95 documents
+        return KoFilter::WrongFormat;
 
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
     if ( !out ) {

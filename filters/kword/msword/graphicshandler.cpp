@@ -18,28 +18,57 @@
 */
 
 #include "graphicshandler.h"
+#include "document.h"
 
 #include <wv2/olestream.h>
 
+#include <koStoreDevice.h>
+#include <koSize.h>
 #include <kdebug.h>
 
 using namespace wvWare;
 
-KWordGraphicsHandler::KWordGraphicsHandler() : QObject()
+KWordGraphicsHandler::KWordGraphicsHandler( Document* doc ) : QObject(), m_doc(doc)
 {
 }
 
-void KWordGraphicsHandler::bitmapData( const OLEImageReader& reader, SharedPtr<const Word97::PICF> /*picf*/ )
+void KWordGraphicsHandler::bitmapData( OLEImageReader& reader, SharedPtr<const Word97::PICF> /*picf*/ )
 {
-    kdDebug() << "Bitmap data found ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> size=" << reader.size() << endl;
+    kdDebug(30513) << "Bitmap data found ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> size=" << reader.size() << endl;
+
 }
 
-void KWordGraphicsHandler::wmfData( const OLEImageReader& reader, SharedPtr<const Word97::PICF> /*picf*/,
+void KWordGraphicsHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf,
                                     const GraphicsHandler::WMFDimensions& dimensions )
 {
-    kdDebug() << "wmf data found ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> size=" << reader.size() << endl;
+    kdDebug(30513) << "wmf data found ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> size=" << reader.size() << endl;
     // No idea if that's dimension thingy is needed at all. The docu doesn't really help
     Q_ASSERT( dimensions.left == 0 && dimensions.top == 0 && dimensions.width == 0 && dimensions.height == 0 );
+
+    // We have two things to do here
+    // 1 - Create the frameset and its frame
+    // 2 - Store the picture in the store
+    // We combine those two things into one call to the document
+    KoSize size( (double)picf->dxaGoal / 20.0, (double)picf->dyaGoal / 20.0 );
+    kdDebug(30513) << "size=" << size << endl;
+    KoStoreDevice* dev = m_doc->createPictureFrameSet( size );
+    Q_ASSERT(dev);
+    if ( !dev )
+        return; // ouch
+
+#define IMG_BUF_SIZE 2048
+    wvWare::U8 buf[IMG_BUF_SIZE];
+    Q_LONG len = reader.size();
+    while ( len > 0 )  {
+        size_t n = reader.read( buf, QMIN( len, IMG_BUF_SIZE ) );
+        Q_LONG n1 = dev->writeBlock( (const char*)buf, n );
+        Q_ASSERT( (size_t)n1 == n );
+        if ( (size_t)n1 != n )
+            return; // ouch
+        len -= n;
+    }
+    Q_ASSERT( len == 0 );
+    dev->close();
 }
 
 void KWordGraphicsHandler::tiffData( const UString& /*name*/, SharedPtr<const Word97::PICF> /*picf*/ )

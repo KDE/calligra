@@ -28,9 +28,13 @@
 #include <qstring.h>
 #include <qdom.h>
 #include <qobject.h>
+#include <qstringlist.h>
 
 #include <queue>
 #include <string>
+
+class KoStoreDevice;
+class KoSize;
 
 namespace wvWare {
     class Parser;
@@ -39,6 +43,7 @@ namespace wvWare {
     }
 }
 class KoRect;
+class KoFilterChain;
 class KWordReplacementHandler;
 class KWordTableHandler;
 class KWordGraphicsHandler;
@@ -48,7 +53,7 @@ class Document : public QObject, public wvWare::SubDocumentHandler
 {
     Q_OBJECT
 public:
-    Document( const std::string& fileName, QDomDocument& mainDocument, QDomDocument &documentInfo, QDomElement& framesetsElement );
+    Document( const std::string& fileName, QDomDocument& mainDocument, QDomDocument &documentInfo, QDomElement& framesetsElement, KoFilterChain* chain );
     virtual ~Document();
 
     bool hasParser() const { return m_parser != 0L; }
@@ -72,11 +77,17 @@ public:
     typedef const wvWare::FunctorBase* FunctorPtr;
     struct SubDocument
     {
-        SubDocument( FunctorPtr ptr, int d ) : functorPtr(ptr), data(d) {}
+        SubDocument( FunctorPtr ptr, int d, const QString& n, const QString& extra )
+            : functorPtr(ptr), data(d), name(n), extraName(extra) {}
         ~SubDocument() {}
         FunctorPtr functorPtr;
         int data;
+        QString name;
+        QString extraName;
     };
+
+    // Called by GraphicsHandler
+    KoStoreDevice* createPictureFrameSet( const KoSize& size );
 
 protected slots:
     // Connected to the KWordTextHandler only when parsing the body
@@ -90,7 +101,7 @@ protected slots:
     void slotTableFound( const KWord::Table& table );
 
     // Write out the frameset and add the key to the PICTURES tag
-    void slotPictureFound( const QString& frameName, const QString& pictureName, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
+    void slotPictureFound( const QString& frameName, const QString& pictureName, const wvWare::FunctorBase* );
 
     // Similar to footnoteStart/footnoteEnd but for cells.
     // This is connected to KWordTableHandler
@@ -111,9 +122,11 @@ private:
     KWordTableHandler* m_tableHandler;
     KWordGraphicsHandler* m_graphicsHandler;
     KWordTextHandler* m_textHandler;
+    KoFilterChain* m_chain;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     std::queue<SubDocument> m_subdocQueue;
     std::queue<KWord::Table> m_tableQueue;
+    QStringList m_pictureList; // for <PICTURES>
     unsigned char m_headerFooters; // a mask of HeaderData::Type bits
     bool m_bodyFound;
     int m_footNoteNumber; // number of footnote _framesets_ written out

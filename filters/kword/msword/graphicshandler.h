@@ -24,24 +24,22 @@
 #include <wv2/handlers.h>
 
 #include <qobject.h>
+#include "document.h"
 
 class KWordGraphicsHandler : public QObject, public wvWare::GraphicsHandler
 {
     Q_OBJECT
 public:
-    KWordGraphicsHandler();
+    KWordGraphicsHandler( Document* doc );
 
     //////// GraphicsHandler interface
-    virtual void bitmapData( const wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
-    virtual void wmfData( const wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
+    virtual void bitmapData( wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
+    virtual void wmfData( wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
                           const wvWare::GraphicsHandler::WMFDimensions& dimensions );
     virtual void tiffData( const wvWare::UString& name, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
 
-    ///////// Our own interface
-
-signals:
-    // Tells Document to create an anchor for the picture
-    void sigInlinePicture();
+private:
+    Document* m_doc;
 
 };
 
