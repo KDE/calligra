@@ -146,6 +146,7 @@ void KPPieObject::loadOasis(const QDomElement &element, KoOasisContext & context
 
     kdDebug()<<"KPPieObject::loadOasis(const QDomElement &element) : p_angle :"<<p_angle<<" p_len :"<<p_len<<endl;
     KoStyleStack & styleStack = context.styleStack();
+    styleStack.setTypeProperties( "" );
     if ( styleStack.hasAttribute( "draw:marker-start" ) )
     {
         QString type = styleStack.attribute( "draw:marker-start" );

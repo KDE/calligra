@@ -469,29 +469,29 @@ void KPBackGround::loadOasis(KoOasisContext & context )
 {
     KoStyleStack& styleStack = context.styleStack();
     kdDebug()<<"KPBackGround::loadOasis()\n";
-
-    if ( styleStack.hasAttribute( "presentation:visibility", QString::null, "drawing-page" ) )
+    styleStack.setTypeProperties( "drawing-page" );
+    if ( styleStack.hasAttribute( "presentation:visibility" ) )
     {
-        QString str =  styleStack.attribute( "presentation:visibility", QString::null, "drawing-page" );
+        QString str =  styleStack.attribute( "presentation:visibility" );
         if ( str=="hidden" )
             m_page->slideSelected( false );
         else
             kdDebug()<<" presentation:visibility parameter not implemented :"<<str<<endl;
     }
 
-    if ( styleStack.hasAttribute( "draw:fill", QString::null, "drawing-page" ) )
+    if ( styleStack.hasAttribute( "draw:fill" ) )
     {
-        const QString fill = styleStack.attribute( "draw:fill", QString::null, "drawing-page" );
+        const QString fill = styleStack.attribute( "draw:fill" );
         kdDebug()<<"fill page  type :"<<fill<<endl;
         if ( fill == "solid" )
         {
-            setBackColor1(QColor(styleStack.attribute( "draw:fill-color", QString::null, "drawing-page" ) ) );
+            setBackColor1(QColor(styleStack.attribute( "draw:fill-color" ) ) );
             setBackColorType(BCT_PLAIN);
             setBackType(BT_COLOR);
         }
         else if ( fill == "bitmap" )
         {
-            QString style = styleStack.attribute( "draw:fill-image-name", QString::null, "drawing-page" );
+            QString style = styleStack.attribute( "draw:fill-image-name" );
             QDomElement* draw =context.oasisStyles().drawStyles()[style];
 
             const QString href( draw->attribute("xlink:href") );
@@ -519,9 +519,9 @@ void KPBackGround::loadOasis(KoOasisContext & context )
                 pictureCollection()->insertPicture( key, backPicture );
             }
 
-            if ( styleStack.hasAttribute( "style:repeat", QString::null, "drawing-page" ) )
+            if ( styleStack.hasAttribute( "style:repeat" ) )
             {
-                QString repeat = styleStack.attribute( "style:repeat", QString::null, "drawing-page" );
+                QString repeat = styleStack.attribute( "style:repeat" );
                 if ( repeat == "stretch" )
                     setBackView( BV_ZOOM );
                 else if ( repeat == "no-repeat" )
@@ -536,7 +536,7 @@ void KPBackGround::loadOasis(KoOasisContext & context )
         }
         else if ( fill == "gradient" )
         {
-            QString style = styleStack.attribute( "draw:fill-gradient-name", QString::null, "drawing-page" );
+            QString style = styleStack.attribute( "draw:fill-gradient-name" );
             QDomElement *draw = context.oasisStyles().drawStyles()[style];
             if ( draw )
             {
@@ -618,11 +618,11 @@ void KPBackGround::loadOasis(KoOasisContext & context )
             }
         }
     }
-    if ( styleStack.hasAttribute( "presentation:transition-speed", QString::null, "drawing-page" ) )
+    if ( styleStack.hasAttribute( "presentation:transition-speed" ) )
     {
         // this argument is not defined into kpresenter_doc and not into kprpage
         // TODO add it into each page.
-        QString speed = styleStack.attribute( "presentation:transition-speed", QString::null, "drawing-page" );
+        QString speed = styleStack.attribute( "presentation:transition-speed" );
         if ( speed == "slow" )
         {
             m_presSpeed = 1;
@@ -638,9 +638,9 @@ void KPBackGround::loadOasis(KoOasisContext & context )
         else
             kdDebug()<<" transition-speed not defined :"<<speed<<endl;
     }
-    if ( styleStack.hasAttribute("presentation:duration" , QString::null, "drawing-page"))
+    if ( styleStack.hasAttribute("presentation:duration" ))
     {
-        QString str = styleStack.attribute("presentation:duration" , QString::null, "drawing-page");
+        QString str = styleStack.attribute("presentation:duration");
         kdDebug()<<"styleStack.hasAttribute(presentation:duration , QString::null, drawing-page ) :"<<str<<endl;
         //convert date duration
 	    int hour( str.mid( 2, 2 ).toInt() );
@@ -651,16 +651,16 @@ void KPBackGround::loadOasis(KoOasisContext & context )
         kdDebug()<<" second : "<<second<<" minute :"<<minute<<" hour "<<hour<<endl;
 
     }
-    if ( styleStack.hasAttribute( "presentation:transition-type", QString::null, "drawing-page" ) )
+    if ( styleStack.hasAttribute( "presentation:transition-type" ) )
     {
         //Not defined into kpresenter
         //it's global for the moment.
-        kdDebug()<<" presentation:transition-type :"<<styleStack.attribute( "presentation:transition-type", QString::null, "drawing-page" )<<endl;
+        kdDebug()<<" presentation:transition-type :"<<styleStack.attribute( "presentation:transition-type" )<<endl;
     }
-    if ( styleStack.hasAttribute("presentation:transition-style", QString::null, "drawing-page"))
+    if ( styleStack.hasAttribute("presentation:transition-style"))
     {
         kdDebug()<<" have a presentation:transition-style------------\n";
-        const QString effect = styleStack.attribute("presentation:transition-style", QString::null, "drawing-page");
+        const QString effect = styleStack.attribute("presentation:transition-style");
         kdDebug() << "Transition name: " << effect << endl;
         PageEffect pef;
         if ( effect=="none" )
@@ -752,7 +752,7 @@ void KPBackGround::loadOasis(KoOasisContext & context )
             pef=PEF_RANDOM;
         setPageEffect( pef );
     }
-    if ( styleStack.hasChildNode("presentation:sound", "drawing-page"))
+    if ( styleStack.hasChildNode("presentation:sound"))
     {
 #if 0 //load sound file store it into kpresenter_doc "m_page->kPresenterDoc()"
         QString soundUrl = storeSound(m_styleStack.childNode("presentation:sound").toElement(),

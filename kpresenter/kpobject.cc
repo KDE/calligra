@@ -119,9 +119,10 @@ void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QSt
     kdDebug()<<"void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QString & attr, LineEnd &_element ) :"<<attr<<endl;
 
     KoStyleStack &styleStack = context.styleStack();
-    if ( styleStack.hasAttribute( attr, QString::null,"graphic" ) )
+    styleStack.setTypeProperties( "graphic" );
+    if ( styleStack.hasAttribute( attr ) )
     {
-        QString style = styleStack.attribute( attr, QString::null,"graphic" );
+        QString style = styleStack.attribute( attr );
         //kdDebug()<<" marker style is  : "<<style<<endl;
 
         //type not defined by default
@@ -491,7 +492,8 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
     ext.setWidth(KoUnit::parseValue( element.attribute( "svg:width" )) );
     ext.setHeight(KoUnit::parseValue( element.attribute( "svg:height" ) ) );
     //kdDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
-    const KoStyleStack &styleStack = context.styleStack();
+    KoStyleStack &styleStack = context.styleStack();
+    styleStack.setTypeProperties( "" ); //no type default type
     if( element.hasAttribute( "draw:transform" ))
         {
             QString transform = element.attribute( "draw:transform" );
@@ -680,32 +682,33 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
 
 // draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:shadow="visible" draw:move-protect="true" draw:size-protect="true"
     //kpresenter doesn't have two attribute for protect move and protect size perhaps create two argument for 1.4
-    if ( styleStack.hasAttribute("draw:move-protect", QString::null,"graphic" ) )
+    styleStack.setTypeProperties( "graphic" );
+    if ( styleStack.hasAttribute("draw:move-protect" ) )
     {
-        kdDebug()<<" styleStack.attribute(draw:move-protect ) :"<<styleStack.attribute("draw:move-protect", QString::null,"graphic" )<<endl;
-        protect = ( styleStack.attribute("draw:move-protect", QString::null,"graphic" ) == "true" );
+        kdDebug()<<" styleStack.attribute(draw:move-protect ) :"<<styleStack.attribute("draw:move-protect" )<<endl;
+        protect = ( styleStack.attribute("draw:move-protect" ) == "true" );
     }
-    if ( styleStack.hasAttribute("draw:size-protect", QString::null,"graphic" ) )
+    if ( styleStack.hasAttribute("draw:size-protect" ) )
     {
-        kdDebug()<<" styleStack.attribute(draw:size-protect ) :"<<styleStack.attribute("draw:size-protect", QString::null,"graphic" )<<endl;
-        protect = ( styleStack.attribute("draw:size-protect", QString::null,"graphic" ) == "true" );
+        kdDebug()<<" styleStack.attribute(draw:size-protect ) :"<<styleStack.attribute("draw:size-protect" )<<endl;
+        protect = ( styleStack.attribute("draw:size-protect" ) == "true" );
     }
 
     //not supported into kpresenter
-    if ( styleStack.hasAttribute("draw:textarea-vertical-align", QString::null,"graphic" ) )
+    if ( styleStack.hasAttribute("draw:textarea-vertical-align" ) )
     {
-        kdDebug()<<" styleStack.attribute(draw:textarea-vertical-align ) :"<<styleStack.attribute("draw:textarea-vertical-align", QString::null,"graphic" )<<endl;
+        kdDebug()<<" styleStack.attribute(draw:textarea-vertical-align ) :"<<styleStack.attribute("draw:textarea-vertical-align" )<<endl;
     }
-    if ( styleStack.hasAttribute("draw:textarea-horizontal-align", QString::null,"graphic" ) )
+    if ( styleStack.hasAttribute("draw:textarea-horizontal-align") )
     {
-        kdDebug()<<" styleStack.attribute(draw:textarea-horizontal-align ) :"<<styleStack.attribute("draw:textarea-horizontal-align", QString::null,"graphic" )<<endl;
+        kdDebug()<<" styleStack.attribute(draw:textarea-horizontal-align ) :"<<styleStack.attribute("draw:textarea-horizontal-align" )<<endl;
     }
-    if ( styleStack.hasAttribute( "draw:shadow", QString::null,"graphic" ) &&
-              styleStack.attribute( "draw:shadow", QString::null,"graphic" ) == "visible" )
+    if ( styleStack.hasAttribute( "draw:shadow" ) &&
+              styleStack.attribute( "draw:shadow") == "visible" )
     {
         // use the shadow attribute to indicate an object-shadow
-        double x = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-x", QString::null,"graphic" ) );
-        double y = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-y", QString::null,"graphic" ) );
+        double x = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-x" ) );
+        double y = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-y" ) );
         kdDebug()<<" shadow x : "<<x<<" shadow y :"<<y<<endl;
         if ( x < 0 && y < 0 )
         {
@@ -747,8 +750,8 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
             shadowDirection = SD_LEFT;
             shadowDistance = (int) fabs ( x );
         }
-        if ( styleStack.hasAttribute ( "draw:shadow-color", QString::null,"graphic" ) )
-            shadowColor= QColor(styleStack.attribute( "draw:shadow-color", QString::null,"graphic" ) );
+        if ( styleStack.hasAttribute ( "draw:shadow-color" ) )
+            shadowColor= QColor(styleStack.attribute( "draw:shadow-color" ) );
         kdDebug()<<" shadow color : "<<shadowColor.name()<<endl;
     }
 }
@@ -1546,15 +1549,16 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
     kdDebug()<<"void KPShadowObject::loadOasis(const QDomElement &element)**********************\n";
     KPObject::loadOasis(element, context, info);
     KoStyleStack &styleStack = context.styleStack();
-    if ( styleStack.hasAttribute( "draw:stroke", QString::null,"graphic" ))
+    styleStack.setTypeProperties( "graphic" );
+    if ( styleStack.hasAttribute( "draw:stroke" ))
     {
-        if ( styleStack.attribute( "draw:stroke", QString::null,"graphic" ) == "none" )
+        if ( styleStack.attribute( "draw:stroke" ) == "none" )
             pen.setStyle(Qt::NoPen );
-        else if ( styleStack.attribute( "draw:stroke", QString::null,"graphic" ) == "solid" )
+        else if ( styleStack.attribute( "draw:stroke" ) == "solid" )
             pen.setStyle(Qt::SolidLine );
-        else if ( styleStack.attribute( "draw:stroke", QString::null,"graphic" ) == "dash" )
+        else if ( styleStack.attribute( "draw:stroke" ) == "dash" )
         {
-            QString style = styleStack.attribute( "draw:stroke-dash", QString::null,"graphic" );
+            QString style = styleStack.attribute( "draw:stroke-dash" );
 
             kdDebug()<<" stroke style is  : "<<style<<endl;
             //type not defined by default
@@ -1596,10 +1600,10 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
             }
         }
         //FIXME witdh pen style is not good :(
-        if ( styleStack.hasAttribute( "svg:stroke-width", QString::null,"graphic" ) )
-            pen.setWidth( (int) KoUnit::parseValue( styleStack.attribute( "svg:stroke-width", QString::null,"graphic" ) ) );
-        if ( styleStack.hasAttribute( "svg:stroke-color", QString::null,"graphic" ) )
-            pen.setColor( styleStack.attribute( "svg:stroke-color", QString::null,"graphic" ) );
+        if ( styleStack.hasAttribute( "svg:stroke-width" ) )
+            pen.setWidth( (int) KoUnit::parseValue( styleStack.attribute( "svg:stroke-width" ) ) );
+        if ( styleStack.hasAttribute( "svg:stroke-color" ) )
+            pen.setColor( styleStack.attribute( "svg:stroke-color" ) );
     }
     else
         pen = defaultPen();
@@ -1958,22 +1962,23 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
 
     KPShadowObject::loadOasis(element, context, info);
     KoStyleStack &styleStack = context.styleStack();
-    if ( styleStack.hasAttribute( "draw:fill", QString::null, "graphic" ) )
+    styleStack.setTypeProperties( "graphic" );
+    if ( styleStack.hasAttribute( "draw:fill" ) )
     {
-        const QString fill = styleStack.attribute( "draw:fill", QString::null, "graphic" );
+        const QString fill = styleStack.attribute( "draw:fill" );
         kdDebug()<<" load object gradient fill type :"<<fill<<endl;
         QBrush tmpBrush;
 
         if ( fill == "solid" )
         {
             tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 1 ) );
-            if ( styleStack.hasAttribute( "draw:fill-color", QString::null, "graphic" ) )
-                tmpBrush.setColor(styleStack.attribute( "draw:fill-color", QString::null, "graphic" ) );
+            if ( styleStack.hasAttribute( "draw:fill-color" ) )
+                tmpBrush.setColor(styleStack.attribute( "draw:fill-color" ) );
             setBrush(tmpBrush );
         }
         else if ( fill == "hatch" )
         {
-            QString style = styleStack.attribute( "draw:fill-hatch-name", QString::null, "graphic" );
+            QString style = styleStack.attribute( "draw:fill-hatch-name" );
             kdDebug()<<" hatch style is  : "<<style<<endl;
 
             //type not defined by default
@@ -2068,7 +2073,7 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
             // otherwise the properties dialog for the object won't
             // display the preview for the gradient.
 
-            QString style = styleStack.attribute( "draw:fill-gradient-name", QString::null, "graphic" );
+            QString style = styleStack.attribute( "draw:fill-gradient-name" );
             kdDebug()<<" style gradient name :"<<style<<endl;
             QDomElement* draw = context.oasisStyles().drawStyles()[style];
             kdDebug()<<" draw : "<<draw<<endl;

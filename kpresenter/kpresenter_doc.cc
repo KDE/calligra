@@ -1231,14 +1231,14 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
                 newpage = m_pageList.at(pos);
             }
             m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
-
-            if ( context.styleStack().hasAttribute( "draw:fill", QString::null, "drawing-page" )
-                 || context.styleStack().hasAttribute( "presentation:transition-style", QString::null, "drawing-page" ) )
+            context.styleStack().setTypeProperties( "drawing-page" );
+            if ( context.styleStack().hasAttribute( "draw:fill" )
+                 || context.styleStack().hasAttribute( "presentation:transition-style" ) )
             {
                 kdDebug()<<" fill or presentation-style found \n";
                 m_pageList.at(pos)->background()->loadOasis( context );
             }
-            else if ( !context.styleStack().hasAttribute( "draw:fill", QString::null, "drawing-page" ) && backgroundStyle)
+            else if ( !context.styleStack().hasAttribute( "draw:fill" ) && backgroundStyle)
             {
                 context.styleStack().save();
                 context.addStyles( backgroundStyle );
