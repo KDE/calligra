@@ -61,7 +61,7 @@
 //#define DEBUG_VIEWAREA
 //#define DEBUG_CURSOR
 
-#define DEBUG_DTI
+//#define DEBUG_DTI
 //#define DEBUG_ITD
 
 /**
@@ -792,9 +792,8 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     // Note: it is very important that this method works in internal coordinates.
     // Otherwise, parags broken at the line-level (e.g. between two columns) are seen
     // as still in one piece, and we miss the frames in the 2nd column.
-    int left = m_doc->ptToLayoutUnitPixX( theFrame->bLeft());
-    int from = left;
-    int to = m_doc->ptToLayoutUnitPixX( theFrame->innerWidth());
+    int from = m_doc->ptToLayoutUnitPixX( theFrame->bLeft());
+    int to = m_doc->ptToLayoutUnitPixX( theFrame->width()-theFrame->bRight());
     bool init = false;
 
 #ifdef DEBUG_MARGINS
@@ -874,7 +873,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 #endif
     if ( from == to ) {
         from = m_doc->ptToLayoutUnitPixX( theFrame->bLeft());
-        to = m_doc->ptToLayoutUnitPixX( theFrame->innerWidth());
+        to = m_doc->ptToLayoutUnitPixX( theFrame->width()-theFrame->bRight());
     }
 
     if ( marginLeft )

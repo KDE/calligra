@@ -457,12 +457,10 @@ bool KWFrame::frameAtPos( const QPoint& point, bool borderOfFrameOnly) {
 
 KoRect KWFrame::innerRect() const
 {
-    //kdDebug()<<" this->normalize() :"<<DEBUGRECT(this->normalize())<<endl;
     KoRect inner( this->normalize());
     inner.moveBy( bLeft(), bTop());
     inner.setWidth( inner.width() - bLeft() - bRight() );
     inner.setHeight( inner.height() - bTop() - bBottom() );
-    //kdDebug()<<" DEBUGRECT inner :"<<DEBUGRECT(inner)<<endl;
     return inner;
 }
 
