@@ -333,7 +333,7 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 	else
 		ch = (m_value != v);
 
-	if (!ch) // && m_value == v)
+	if (!ch)
 		return;
 
 	if (saveOldValue) {
