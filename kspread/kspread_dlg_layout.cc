@@ -29,6 +29,7 @@
 #include "kspread_doc.h"
 #include "kspread_view.h"
 #include "kspread_canvas.h"
+#include "kspread_util.h"
 
 #include <qlabel.h>
 #include <qpainter.h>
@@ -817,7 +818,7 @@ void CellLayoutDlg::slotApply()
     }
     borderPage->applyOutline( left, top, right, bottom );
 
-   
+
 
     if(right!=0x7FFF && bottom!=0x7FFF)
     {
@@ -1203,457 +1204,357 @@ else
 
 void CellLayoutPageFloat::makeDateFormat()
 {
-QString tmp,tmp2;
-if( listFormat->currentItem()==0)
-        tmp=dlg->locale()->formatDate(dlg->m_date,true);
-else if(listFormat->currentItem()==1)
-        tmp=dlg->locale()->formatDate(dlg->m_date,false);
-else if(listFormat->currentItem()==2)/*18-Feb-99*/
-        {
-        tmp=QString().sprintf("%02d", dlg->m_date.day());
-        tmp=tmp+"-"+dlg->locale()->monthName(dlg->m_date.month(), true)+"-";
-        tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
-        }
-else if(listFormat->currentItem()==3) /*18-Feb-1999*/
-        {
-        tmp=QString().sprintf("%02d", dlg->m_date.day());
-        tmp=tmp+"-"+dlg->locale()->monthName(dlg->m_date.month(), true)+"-";
-        tmp=tmp+tmp2.setNum(dlg->m_date.year());
-        }
-else if(listFormat->currentItem()==4) /*18-Feb*/
-        {
-        tmp=QString().sprintf("%02d", dlg->m_date.day());
-        tmp=tmp+"-"+dlg->locale()->monthName(dlg->m_date.month(), true);
-        }
-else if(listFormat->currentItem()==5) /*18-05*/
-        {
-        tmp=QString().sprintf("%02d", dlg->m_date.day());
-        tmp=tmp+"-"+QString().sprintf("%02d", dlg->m_date.month());
-        }
-else if(listFormat->currentItem()==6) /*18/05/00*/
-        {
-        tmp=QString().sprintf("%02d", dlg->m_date.day());
-        tmp=tmp+"/"+QString().sprintf("%02d", dlg->m_date.month())+"/";
-        tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
-        }
-else if(listFormat->currentItem()==7) /*18/05/1999*/
-        {
-        tmp=QString().sprintf("%02d", dlg->m_date.day());
-        tmp=tmp+"/"+QString().sprintf("%02d", dlg->m_date.month())+"/";
-        tmp=tmp+tmp2.setNum(dlg->m_date.year());
-        }
-else if(listFormat->currentItem()==8) /*Feb-99*/
-        {
-        tmp=dlg->locale()->monthName(dlg->m_date.month(), true)+"-";
-        tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
-        }
-else if(listFormat->currentItem()==9) /*February-99*/
-        {
-        tmp=dlg->locale()->monthName(dlg->m_date.month())+"-";
-        tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
-        }
-else if(listFormat->currentItem()==10) /*February-1999*/
-        {
-        tmp=dlg->locale()->monthName(dlg->m_date.month())+"-";
-        tmp=tmp+tmp2.setNum(dlg->m_date.year());
-        }
-else if(listFormat->currentItem()==11) /*F-99*/
-        {
-        tmp=dlg->locale()->monthName(dlg->m_date.month()).at(0)+"-";
-        tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
-        }
-else if(listFormat->currentItem()==12) /*18/Feb*/
-        {
-        tmp=QString().sprintf("%02d", dlg->m_date.day())+"/";
-        tmp+=dlg->locale()->monthName(dlg->m_date.month(),true);
-        }
-else if(listFormat->currentItem()==13) /*18/02*/
-        {
-        tmp=QString().sprintf("%02d", dlg->m_date.day())+"/";
-        tmp+=QString().sprintf("%02d", dlg->m_date.month());
-        }
-else if(listFormat->currentItem()==14) /*18/Feb/1999*/
-        {
-        tmp=QString().sprintf("%02d", dlg->m_date.day());
-        tmp=tmp+"/"+dlg->locale()->monthName(dlg->m_date.month(),true)+"/";
-        tmp=tmp+tmp2.setNum(dlg->m_date.year());
-        }
-else if(listFormat->currentItem()==15) /*2000/Feb/18*/
-        {
-        tmp=tmp2.setNum(dlg->m_date.year());
-        tmp=tmp+"/"+dlg->locale()->monthName(dlg->m_date.month(),true)+"/";
-        tmp=tmp+QString().sprintf("%02d", dlg->m_date.day());
-        }
-else if(listFormat->currentItem()==16) /*2000-Feb-18*/
-        {
-        tmp=tmp2.setNum(dlg->m_date.year());
-        tmp=tmp+"-"+dlg->locale()->monthName(dlg->m_date.month(),true)+"-";
-        tmp=tmp+QString().sprintf("%02d", dlg->m_date.day());
-        }
-else if(listFormat->currentItem()==17) /*2000-02-18*/
-        {
-        tmp=tmp2.setNum(dlg->m_date.year());
-        tmp=tmp+"-"+QString().sprintf("%02d", dlg->m_date.month())+"-";
-        tmp=tmp+QString().sprintf("%02d", dlg->m_date.day());
-        }
- else if( listFormat->currentItem()==18) /*2000-02-18*/
-        {
-	   tmp=QString().sprintf("%d", dlg->m_date.day());
-	   tmp=tmp+" "+dlg->locale()->monthName(dlg->m_date.month())+" ";
-	   tmp=tmp+tmp2.setNum(dlg->m_date.year());
-        }
- exampleLabel->setText(tmp);
+    KSpreadCell::formatNumber tmpFormat=KSpreadCell::ShortDate;
+    QString tmp;
+    if( listFormat->currentItem()==0)
+        tmpFormat=KSpreadCell::ShortDate;
+    else if(listFormat->currentItem()==1)
+        tmpFormat=KSpreadCell::TextDate;
+    else if(listFormat->currentItem()==2)/*18-Feb-99*/
+        tmpFormat=KSpreadCell::date_format1;
+    else if(listFormat->currentItem()==3) /*18-Feb-1999*/
+        tmpFormat=KSpreadCell::date_format2;
+    else if(listFormat->currentItem()==4) /*18-Feb*/
+        tmpFormat=KSpreadCell::date_format3;
+    else if(listFormat->currentItem()==5) /*18-05*/
+        tmpFormat=KSpreadCell::date_format4;
+    else if(listFormat->currentItem()==6) /*18/05/00*/
+        tmpFormat=KSpreadCell::date_format5;
+    else if(listFormat->currentItem()==7) /*18/05/1999*/
+        tmpFormat=KSpreadCell::date_format6;
+    else if(listFormat->currentItem()==8) /*Feb-99*/
+        tmpFormat=KSpreadCell::date_format7;
+    else if(listFormat->currentItem()==9) /*February-99*/
+        tmpFormat=KSpreadCell::date_format8;
+    else if(listFormat->currentItem()==10) /*February-1999*/
+        tmpFormat=KSpreadCell::date_format9;
+    else if(listFormat->currentItem()==11) /*F-99*/
+        tmpFormat=KSpreadCell::date_format10;
+    else if(listFormat->currentItem()==12) /*18/Feb*/
+        tmpFormat=KSpreadCell::date_format11;
+    else if(listFormat->currentItem()==13) /*18/02*/
+        tmpFormat=KSpreadCell::date_format12;
+    else if(listFormat->currentItem()==14) /*18/Feb/1999*/
+        tmpFormat=KSpreadCell::date_format13;
+    else if(listFormat->currentItem()==15) /*2000/Feb/18*/
+        tmpFormat=KSpreadCell::date_format14;
+    else if(listFormat->currentItem()==16) /*2000-Feb-18*/
+        tmpFormat=KSpreadCell::date_format15;
+    else if(listFormat->currentItem()==17) /*2000-02-18*/
+        tmpFormat=KSpreadCell::date_format16;
+    else if( listFormat->currentItem()==18) /*2000-02-18*/
+        tmpFormat=KSpreadCell::date_format17;
+    tmp= util_dateFormat( dlg->locale(), dlg->m_date, tmpFormat);
+    exampleLabel->setText(tmp);
 }
 
 
 void CellLayoutPageFloat::init()
 {
-QStringList list;
-QString tmp;
-QString tmp2;
-list+=i18n("System: ")+dlg->locale()->formatDate(QDate::currentDate(),true);
-list+=i18n("System: ")+dlg->locale()->formatDate(QDate::currentDate(),false);
-/*18-Feb-00*/
-tmp=tmp2.setNum(18);
-tmp+="-"+dlg->locale()->monthName(2, true)+"-";
-tmp+=tmp2.setNum(2000).right(2);
-list+=tmp;
-/*18-Feb-1999*/
-tmp=tmp2.setNum(18);
-tmp+="-"+dlg->locale()->monthName(2, true)+"-";
-tmp+=tmp2.setNum(2000);
-list+=tmp;
-/*18-Feb*/
-tmp=tmp2.setNum(18);
-tmp=tmp+"-"+dlg->locale()->monthName(2, true);
-list+=tmp;
-/*18-2*/
-tmp=tmp2.setNum(18);
-tmp=tmp+"-"+QString().sprintf("%02d", 2);
-list+=tmp;
-/*18/2/00*/
-tmp=tmp2.setNum(18);
-tmp=tmp+"/"+QString().sprintf("%02d", 2)+"/";
-tmp=tmp+tmp2.setNum(2000).right(2);
-list+=tmp;
-/*18/5/1999*/
-tmp=tmp2.setNum(18);
-tmp=tmp+"/"+QString().sprintf("%02d", 2)+"/";
-tmp=tmp+tmp2.setNum(2000);
-list+=tmp;
-/*Feb-99*/
-tmp=dlg->locale()->monthName(2, true)+"-";
-tmp=tmp+tmp2.setNum(2000).right(2);
-list+=tmp;
-/*February-99*/
-tmp=dlg->locale()->monthName(2)+"-";
-tmp=tmp+tmp2.setNum(2000).right(2);
-list+=tmp;
-/*February-1999*/
-tmp=dlg->locale()->monthName(2)+"-";
-tmp=tmp+tmp2.setNum(2000);
-list+=tmp;
-/*F-99*/
-tmp=dlg->locale()->monthName(2).at(0)+"-";
-tmp=tmp+tmp2.setNum(2000).right(2);
-list+=tmp;
-/*18/Feb*/
-tmp=tmp2.setNum(18)+"/";
-tmp+=dlg->locale()->monthName(2,true);
-list+=tmp;
-/*18/2*/
-tmp=tmp2.setNum(18)+"/";
-tmp+=QString().sprintf("%02d", 2);
-list+=tmp;
-/*18/Feb/1999*/
-tmp=tmp2.setNum(18);
-tmp=tmp+"/"+dlg->locale()->monthName(2,true)+"/";
-tmp=tmp+tmp2.setNum(2000);
-list+=tmp;
-/*2000/Feb/18*/
-tmp=tmp2.setNum(2000);
-tmp=tmp+"/"+dlg->locale()->monthName(2,true)+"/";
-tmp=tmp+tmp2.setNum(18);
-list+=tmp;
-/*2000-Feb-18*/
-tmp=tmp2.setNum(2000);
-tmp=tmp+"-"+dlg->locale()->monthName(2,true)+"-";
-tmp=tmp+tmp2.setNum(18);
-list+=tmp;
-/*2000-2-18*/
-tmp=tmp.setNum(2000);
-tmp=tmp+"-"+QString().sprintf("%02d", 2)+"-";
-tmp=tmp+tmp2.setNum(18);
-list+=tmp;
-/*2 february 2000*/
- tmp=tmp2.setNum(18);
- tmp=tmp+" "+dlg->locale()->monthName(2)+" ";
- tmp=tmp+tmp2.setNum(2000);
-list+=tmp;
+    QStringList list;
+    QString tmp;
+    QString tmp2;
+    QDate tmpDate( 2000,2,18);
+    list+=i18n("System: ")+dlg->locale()->formatDate(QDate::currentDate(),true);
+    list+=i18n("System: ")+dlg->locale()->formatDate(QDate::currentDate(),false);
+    /*18-Feb-00*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format1);
+    /*18-Feb-1999*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format2);
+    /*18-Feb*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format3);
+    /*18-2*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format4);
+    /*18/2/00*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format5);
+    /*18/5/1999*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format6);
+    /*Feb-99*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format7);
+    /*February-99*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format8);
+    /*February-1999*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format9);
+    /*F-99*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format10);
+    /*18/Feb*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format11);
+    /*18/2*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format12);
+    /*18/Feb/1999*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format13);
+    /*2000/Feb/18*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format14);
+    /*2000-Feb-18*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format15);
+    /*2000-2-18*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format16);
+    /*2 february 2000*/
+    list+=util_dateFormat( dlg->locale(), tmpDate, KSpreadCell::date_format17);
 
-listFormat->insertStringList(list);
-if( dlg->formatNumber==KSpreadCell::ShortDate )
+    listFormat->insertStringList(list);
+    if( dlg->formatNumber==KSpreadCell::ShortDate )
         listFormat->setCurrentItem(0);
-else if(dlg->formatNumber==KSpreadCell::TextDate)
+    else if(dlg->formatNumber==KSpreadCell::TextDate)
         listFormat->setCurrentItem(1);
-else if(dlg->formatNumber==KSpreadCell::date_format1)
+    else if(dlg->formatNumber==KSpreadCell::date_format1)
         listFormat->setCurrentItem(2);
-else if(dlg->formatNumber==KSpreadCell::date_format2)
+    else if(dlg->formatNumber==KSpreadCell::date_format2)
         listFormat->setCurrentItem(3);
-else if(dlg->formatNumber==KSpreadCell::date_format3)
+    else if(dlg->formatNumber==KSpreadCell::date_format3)
         listFormat->setCurrentItem(4);
-else if(dlg->formatNumber==KSpreadCell::date_format4)
+    else if(dlg->formatNumber==KSpreadCell::date_format4)
         listFormat->setCurrentItem(5);
-else if(dlg->formatNumber==KSpreadCell::date_format5)
+    else if(dlg->formatNumber==KSpreadCell::date_format5)
         listFormat->setCurrentItem(6);
-else if(dlg->formatNumber==KSpreadCell::date_format6)
+    else if(dlg->formatNumber==KSpreadCell::date_format6)
         listFormat->setCurrentItem(7);
-else if(dlg->formatNumber==KSpreadCell::date_format7)
+    else if(dlg->formatNumber==KSpreadCell::date_format7)
         listFormat->setCurrentItem(8);
-else if(dlg->formatNumber==KSpreadCell::date_format8)
+    else if(dlg->formatNumber==KSpreadCell::date_format8)
         listFormat->setCurrentItem(9);
-else if(dlg->formatNumber==KSpreadCell::date_format9)
+    else if(dlg->formatNumber==KSpreadCell::date_format9)
         listFormat->setCurrentItem(10);
-else if(dlg->formatNumber==KSpreadCell::date_format10)
+    else if(dlg->formatNumber==KSpreadCell::date_format10)
         listFormat->setCurrentItem(11);
-else if(dlg->formatNumber==KSpreadCell::date_format11)
+    else if(dlg->formatNumber==KSpreadCell::date_format11)
         listFormat->setCurrentItem(12);
-else if(dlg->formatNumber==KSpreadCell::date_format12)
+    else if(dlg->formatNumber==KSpreadCell::date_format12)
         listFormat->setCurrentItem(13);
-else if(dlg->formatNumber==KSpreadCell::date_format13)
+    else if(dlg->formatNumber==KSpreadCell::date_format13)
         listFormat->setCurrentItem(14);
-else if(dlg->formatNumber==KSpreadCell::date_format14)
+    else if(dlg->formatNumber==KSpreadCell::date_format14)
         listFormat->setCurrentItem(15);
-else if(dlg->formatNumber==KSpreadCell::date_format15)
+    else if(dlg->formatNumber==KSpreadCell::date_format15)
         listFormat->setCurrentItem(16);
-else if(dlg->formatNumber==KSpreadCell::date_format16)
+    else if(dlg->formatNumber==KSpreadCell::date_format16)
         listFormat->setCurrentItem(17);
-else if(dlg->formatNumber==KSpreadCell::date_format17)
+    else if(dlg->formatNumber==KSpreadCell::date_format17)
         listFormat->setCurrentItem(18);
-else
+    else
         listFormat->setCurrentItem(0);
 
 }
 void CellLayoutPageFloat::makeformat()
 {
-m_bFormatNumberChanged=true;
-QString tmp;
-int p;
-p = (precision->value() == -1) ? 8 : precision->value();
-QChar decimal_point= dlg->locale()->decimalSymbol()[0];
-if(!dlg->m_bValue&&!dlg->m_bDate&&!dlg->m_bTime)
+    m_bFormatNumberChanged=true;
+    QString tmp;
+    int p;
+    p = (precision->value() == -1) ? 8 : precision->value();
+    QChar decimal_point= dlg->locale()->decimalSymbol()[0];
+    if(!dlg->m_bValue&&!dlg->m_bDate&&!dlg->m_bTime)
         {
-        QString tmpText;
-        if( dlg->cellText.length()>50)
+            QString tmpText;
+            if( dlg->cellText.length()>50)
                 tmpText=dlg->cellText.left(50);
-        exampleLabel->setText(tmpText);
+            exampleLabel->setText(tmpText);
         }
-else if(dlg->m_bDate)
+    else if(dlg->m_bDate)
         {
-        if(date->isChecked())
+            if(date->isChecked())
                 {
-                makeDateFormat();
+                    makeDateFormat();
                 }
-        else
+            else
                 exampleLabel->setText(dlg->cellText);
         }
-else if(dlg->m_bTime)
+    else if(dlg->m_bTime)
         {
-        if(time->isChecked())
+            if(time->isChecked())
                 {
-                QString tmp;
-                QString tmpTime;
-                if( listFormat->currentItem()==0)
+                    QString tmp;
+                    QString tmpTime;
+                    if( listFormat->currentItem()==0)
                         exampleLabel->setText(dlg->locale()->formatTime(dlg->m_time,false));
-                else if(listFormat->currentItem()==1)
+                    else if(listFormat->currentItem()==1)
                         exampleLabel->setText(dlg->locale()->formatTime(dlg->m_time,true));
-                else if(listFormat->currentItem()==2)
+                    else if(listFormat->currentItem()==2)
                         {
-                        if( dlg->m_time.hour()>12)
+                            if( dlg->m_time.hour()>12)
                                 tmp=QString().sprintf("%02d", dlg->m_time.hour()-12)+":"+QString().sprintf("%02d",dlg->m_time.minute()) +" "+ i18n("PM");
-                        else
+                            else
                                 tmp=QString().sprintf("%02d", dlg->m_time.hour())+":"+QString().sprintf("%02d",dlg->m_time.minute()) +" "+ i18n("AM");
-                        exampleLabel->setText(tmp);
+                            exampleLabel->setText(tmp);
                         }
-                else if(listFormat->currentItem()==3)
+                    else if(listFormat->currentItem()==3)
                         {
 
-                        if( dlg->m_time.hour()>12)
+                            if( dlg->m_time.hour()>12)
                                 tmp=QString().sprintf("%02d", dlg->m_time.hour()-12)+":"+QString().sprintf("%02d",dlg->m_time.minute()) +":"+QString().sprintf("%02d",dlg->m_time.second())+" "+ i18n("PM");
-                        else
+                            else
                                 tmp=QString().sprintf("%02d", dlg->m_time.hour())+":"+QString().sprintf("%02d",dlg->m_time.minute()) +":"+QString().sprintf("%02d",dlg->m_time.second())+" "+ i18n("AM");
-                        exampleLabel->setText(tmp);
+                            exampleLabel->setText(tmp);
                         }
-                else if(listFormat->currentItem()==4)
+                    else if(listFormat->currentItem()==4)
                         {
-                        tmp=QString().sprintf("%02d",dlg->m_time.hour())+" "+i18n("h")+" "+QString().sprintf("%02d",dlg->m_time.minute())+" "+i18n("min")+" "+QString().sprintf("%02d",dlg->m_time.second())  +" "+ i18n("s");
-                        exampleLabel->setText(tmp);
+                            tmp=QString().sprintf("%02d",dlg->m_time.hour())+" "+i18n("h")+" "+QString().sprintf("%02d",dlg->m_time.minute())+" "+i18n("min")+" "+QString().sprintf("%02d",dlg->m_time.second())  +" "+ i18n("s");
+                            exampleLabel->setText(tmp);
                         }
                 }
-        else
+            else
                 exampleLabel->setText(dlg->cellText);
         }
-else if(dlg->m_bValue)
+    else if(dlg->m_bValue)
         {
-        if(number->isChecked())
+            if(number->isChecked())
                 tmp=dlg->locale()->formatNumber(dlg->m_value,p );
-        else if(money->isChecked())
+            else if(money->isChecked())
                 tmp=dlg->locale()->formatMoney(dlg->m_value,dlg->locale()->currencySymbol(),p );
-        else if(percent->isChecked())
+            else if(percent->isChecked())
                 tmp=dlg->locale()->formatNumber(dlg->m_value*100.0, p)+ " %";
-        else if(scientific->isChecked())
+            else if(scientific->isChecked())
                 {
-                tmp=QString::number(dlg->m_value, 'E', p);
-                int pos;
-                if((pos=tmp.find('.'))!=-1)
+                    tmp=QString::number(dlg->m_value, 'E', p);
+                    int pos;
+                    if((pos=tmp.find('.'))!=-1)
                         tmp=tmp.replace(pos,1,decimal_point);
                 }
-        else if(fraction->isChecked())
+            else if(fraction->isChecked())
                 {
-                double result = (dlg->m_value)-floor(dlg->m_value);
+                    double result = (dlg->m_value)-floor(dlg->m_value);
 
-                if(result == 0 )
-                {
-                        tmp = tmp.setNum( dlg->m_value );
-                }
-                else
-                {
-                        int index = 0;
-                        switch( listFormat->currentItem())
+                    if(result == 0 )
                         {
-                        case 0:
-                                index=2;
-                                break;
-                        case 1:
-                                index=4;
-                                break;
-                        case 2:
-                                index=8;
-                                break;
-                        case 3:
-                                index=16;
-                                break;
-                        case 4:
-                                index=10;
-                                break;
-                        case 5:
-                                index=100;
-                                break;
-                        case 6:
-                                index=3;
-                                break;
-                        case 7:
-                                index=4;
-                                break;
-                        case 8:
-                                index=5;
-                                break;
+                            tmp = tmp.setNum( dlg->m_value );
                         }
-                        if( listFormat->currentItem()!=6
-                        &&listFormat->currentItem()!=7
-                        &&listFormat->currentItem()!=8)
+                    else
+                        {
+                            int index = 0;
+                            switch( listFormat->currentItem())
                                 {
-                                double calc = 0;
-                                int index1 = 1;
-                                double diff = result;
-                                for(int i=1;i<index;i++)
+                                case 0:
+                                    index=2;
+                                    break;
+                                case 1:
+                                    index=4;
+                                    break;
+                                case 2:
+                                    index=8;
+                                    break;
+                                case 3:
+                                    index=16;
+                                    break;
+                                case 4:
+                                    index=10;
+                                    break;
+                                case 5:
+                                    index=100;
+                                    break;
+                                case 6:
+                                    index=3;
+                                    break;
+                                case 7:
+                                    index=4;
+                                    break;
+                                case 8:
+                                    index=5;
+                                    break;
+                                }
+                            if( listFormat->currentItem()!=6
+                                &&listFormat->currentItem()!=7
+                                &&listFormat->currentItem()!=8)
                                 {
-                                        calc = i*1.0 / index;
-                                        if( fabs( result - calc ) < diff )
+                                    double calc = 0;
+                                    int index1 = 1;
+                                    double diff = result;
+                                    for(int i=1;i<index;i++)
+                                        {
+                                            calc = i*1.0 / index;
+                                            if( fabs( result - calc ) < diff )
                                                 {
-                                                index1=i;
-                                                diff = fabs(result-calc);
+                                                    index1=i;
+                                                    diff = fabs(result-calc);
                                                 }
+                                        }
+                                    tmp = tmp.setNum( floor(dlg->m_value) ) + " " + tmp.setNum( index1 ) + "/" + tmp.setNum( index );
                                 }
-                                tmp = tmp.setNum( floor(dlg->m_value) ) + " " + tmp.setNum( index1 ) + "/" + tmp.setNum( index );
-                        }
-                        else
-                        {
-                        int limit=0;
-
-                        double preci=0;
-                        if(listFormat->currentItem()==6)
-                                limit=9;
-                        else if(listFormat->currentItem()==7)
-                                limit=99;
-                        else if(listFormat->currentItem()==8)
-                                limit=999;
-                        double denominator=0;
-                        double numerator=0;
-                        do
-                        {
-                        double val1=result;
-                        double inter2=1;
-                        double inter4=0;
-                        double p=0;
-                        double q=0;
-                        double val2=rint(result);
-
-                        preci=pow((float)10,(-1*index));
-                        numerator=rint(result);
-                        denominator=1;
-                        while(fabs(numerator/denominator-result)>preci)
+                            else
                                 {
-                                val1=(1/(val1-val2));
-                                val2=rint(val1);
-                                p= val2*numerator + inter2;
-                                q= val2*denominator + inter4;
-                                inter2=numerator;
-                                inter4=denominator;
-                                numerator=p;
-                                denominator=q;
+                                    int limit=0;
+
+                                    double preci=0;
+                                    if(listFormat->currentItem()==6)
+                                        limit=9;
+                                    else if(listFormat->currentItem()==7)
+                                        limit=99;
+                                    else if(listFormat->currentItem()==8)
+                                        limit=999;
+                                    double denominator=0;
+                                    double numerator=0;
+                                    do
+                                        {
+                                            double val1=result;
+                                            double inter2=1;
+                                            double inter4=0;
+                                            double p=0;
+                                            double q=0;
+                                            double val2=rint(result);
+
+                                            preci=pow((float)10,(-1*index));
+                                            numerator=rint(result);
+                                            denominator=1;
+                                            while(fabs(numerator/denominator-result)>preci)
+                                                {
+                                                    val1=(1/(val1-val2));
+                                                    val2=rint(val1);
+                                                    p= val2*numerator + inter2;
+                                                    q= val2*denominator + inter4;
+                                                    inter2=numerator;
+                                                    inter4=denominator;
+                                                    numerator=p;
+                                                    denominator=q;
+                                                }
+                                            index--;
+                                        }
+                                    while (fabs(denominator)>limit) ;
+                                    if(fabs(denominator)==fabs(numerator))
+                                        tmp = tmp.setNum( floor(dlg->m_value+1) );
+                                    else
+                                        tmp = tmp.setNum( floor(dlg->m_value) ) + " " + tmp.setNum( fabs(numerator) ) + "/" + tmp.setNum( fabs(denominator) );
+
                                 }
-                        index--;
-                        }
-                        while (fabs(denominator)>limit) ;
-                        if(fabs(denominator)==fabs(numerator))
-                                tmp = tmp.setNum( floor(dlg->m_value+1) );
-                        else
-                                tmp = tmp.setNum( floor(dlg->m_value) ) + " " + tmp.setNum( fabs(numerator) ) + "/" + tmp.setNum( fabs(denominator) );
-
                         }
                 }
-                }
-        if ( precision->value() == -1 && tmp.find(decimal_point) >= 0 )
-        {
-            int start=0;
-            if(tmp.find('%')!=-1)
-                start=2;
-            else if(tmp.find(dlg->locale()->currencySymbol())==((int)(tmp.length()-dlg->locale()->currencySymbol().length())))
-                start=dlg->locale()->currencySymbol().length()+1;
-            else if((start=tmp.find('E'))!=-1)
-                start=tmp.length()-start;
-            else
-                start=0;
-            int i = tmp.length()-start;
-            bool bFinished = FALSE;
-
-
-            while ( !bFinished && i > 0 )
-            {
-                QChar ch = tmp[ i - 1 ];
-                if ( ch == '0' )
-                    tmp.remove(--i,1);
-                else
+            if ( precision->value() == -1 && tmp.find(decimal_point) >= 0 )
                 {
-                    bFinished = TRUE;
-                    if ( ch == decimal_point )
-                        tmp.remove(--i,1);
-                }
-            }
+                    int start=0;
+                    if(tmp.find('%')!=-1)
+                        start=2;
+                    else if(tmp.find(dlg->locale()->currencySymbol())==((int)(tmp.length()-dlg->locale()->currencySymbol().length())))
+                        start=dlg->locale()->currencySymbol().length()+1;
+                    else if((start=tmp.find('E'))!=-1)
+                        start=tmp.length()-start;
+                    else
+                        start=0;
+                    int i = tmp.length()-start;
+                    bool bFinished = FALSE;
 
-        }
-        if(dlg->m_bValue && !time->isChecked() && !date->isChecked())
-        {
-                if ( prefix->text() != "########" )
+
+                    while ( !bFinished && i > 0 )
+                        {
+                            QChar ch = tmp[ i - 1 ];
+                            if ( ch == '0' )
+                                tmp.remove(--i,1);
+                            else
+                                {
+                                    bFinished = TRUE;
+                                    if ( ch == decimal_point )
+                                        tmp.remove(--i,1);
+                                }
+                        }
+
+                }
+            if(dlg->m_bValue && !time->isChecked() && !date->isChecked())
+                {
+                    if ( prefix->text() != "########" )
                         tmp=prefix->text()+" "+tmp;
-                if ( postfix->text() != "########" )
+                    if ( postfix->text() != "########" )
                         tmp+=" "+postfix->text();
+                }
+            exampleLabel->setText(tmp);
         }
-        exampleLabel->setText(tmp);
-        }
-        else
-                exampleLabel->setText(i18n("Error"));
+    else
+        exampleLabel->setText(i18n("Error"));
 }
 
 
@@ -2034,7 +1935,7 @@ KSpreadCell::Style CellLayoutPageMisc::getStyle()
       return KSpreadCell::ST_Button;
     case 2:
       return  KSpreadCell::ST_Select;
-    case 3 : 
+    case 3 :
       return  KSpreadCell::ST_Undef;
     default :
       return KSpreadCell::ST_Normal;

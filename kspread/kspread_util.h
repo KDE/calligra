@@ -22,10 +22,13 @@
 
 #include <qstring.h>
 #include <qrect.h>
+#include <qdatetime.h>
+#include <kspread_cell.h>
 
 class KSpreadMap;
 class KSpreadTable;
-class KSpreadCell;
+//class KSpreadCell;
+class KLocale;
 
 struct KSpreadPoint
 {
@@ -108,6 +111,8 @@ QString util_cellName( int _col, int _row );
 QString util_rangeName( QRect _area );
 QString util_rangeName( KSpreadTable *_table, QRect _area );
 QString util_columnLabel( int column );
+
+QString util_dateFormat( KLocale* locale, QDate _date, KSpreadCell::formatNumber _tmpFormat); 
 
 #endif
 

@@ -30,7 +30,121 @@
 #include <stdio.h>
 #include <string>
 
+#include <klocale.h>
+
 #include <kapp.h>
+
+
+QString util_dateFormat( KLocale* locale, QDate m_Date, KSpreadCell::formatNumber tmpFormat)
+{
+    QString tmp,tmp2;
+    if(tmpFormat==KSpreadCell::ShortDate)
+        tmp = locale->formatDate(m_Date,true);
+    else if(tmpFormat==KSpreadCell::TextDate)
+        tmp=locale->formatDate(m_Date,false);
+    else if(tmpFormat==KSpreadCell::date_format1)/*18-Feb-99*/
+    {
+        tmp=QString().sprintf("%02d", m_Date.day());
+        tmp=tmp+"-"+locale->monthName(m_Date.month(), true)+"-";
+        tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
+    }
+    else if(tmpFormat==KSpreadCell::date_format2) /*18-Feb-1999*/
+    {
+        tmp=QString().sprintf("%02d", m_Date.day());
+        tmp=tmp+"-"+locale->monthName(m_Date.month(), true)+"-";
+        tmp=tmp+tmp2.setNum(m_Date.year());
+    }
+    else if(tmpFormat==KSpreadCell::date_format3) /*18-Feb*/
+    {
+        tmp=QString().sprintf("%02d", m_Date.day());
+        tmp=tmp+"-"+locale->monthName(m_Date.month(), true);
+    }
+    else if(tmpFormat==KSpreadCell::date_format4) /*18-05*/
+    {
+        tmp=QString().sprintf("%02d", m_Date.day());
+        tmp=tmp+"-"+QString().sprintf("%02d", m_Date.month());
+    }
+    else if(tmpFormat==KSpreadCell::date_format5) /*18/05/00*/
+    {
+        tmp=QString().sprintf("%02d", m_Date.day());
+        tmp=tmp+"/"+ QString().sprintf("%02d", m_Date.month())+"/";
+        tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
+    }
+    else if(tmpFormat==KSpreadCell::date_format6) /*18/05/1999*/
+    {
+        tmp=QString().sprintf("%02d", m_Date.day());
+        tmp=tmp+"/"+ QString().sprintf("%02d", m_Date.month())+"/";
+        tmp=tmp+tmp2.setNum(m_Date.year());
+    }
+    else if(tmpFormat==KSpreadCell::date_format7) /*Feb-99*/
+    {
+        tmp=locale->monthName(m_Date.month(), true)+"-";
+        tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
+    }
+    else if(tmpFormat==KSpreadCell::date_format8) /*February-99*/
+    {
+        tmp=locale->monthName(m_Date.month())+"-";
+        tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
+    }
+    else if(tmpFormat==KSpreadCell::date_format9) /*February-1999*/
+    {
+        tmp=locale->monthName(m_Date.month())+"-";
+        tmp=tmp+tmp2.setNum(m_Date.year());
+    }
+    else if(tmpFormat==KSpreadCell::date_format10) /*F-99*/
+    {
+        tmp=locale->monthName(m_Date.month()).at(0)+"-";
+        tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
+    }
+    else if(tmpFormat==KSpreadCell::date_format11) /*18/Feb*/
+    {
+        tmp=QString().sprintf("%02d", m_Date.day())+"/";
+        tmp+=locale->monthName(m_Date.month(),true);
+    }
+    else if(tmpFormat==KSpreadCell::date_format12) /*18/02*/
+    {
+        tmp=QString().sprintf("%02d", m_Date.day())+"/";
+        tmp+=QString().sprintf("%02d", m_Date.month());
+    }
+    else if(tmpFormat==KSpreadCell::date_format13) /*18/Feb/1999*/
+    {
+        tmp=QString().sprintf("%02d", m_Date.day());
+        tmp=tmp+"/"+locale->monthName(m_Date.month(),true)+"/";
+        tmp=tmp+tmp2.setNum(m_Date.year());
+    }
+    else if(tmpFormat==KSpreadCell::date_format14) /*2000/Feb/18*/
+    {
+        tmp=tmp2.setNum(m_Date.year());
+        tmp=tmp+"/"+locale->monthName(m_Date.month(),true)+"/";
+        tmp=tmp+QString().sprintf("%02d", m_Date.day());
+    }
+    else if(tmpFormat==KSpreadCell::date_format15) /*2000-Feb-18*/
+    {
+        tmp=tmp2.setNum(m_Date.year());
+        tmp=tmp+"-"+locale->monthName(m_Date.month(),true)+"-";
+        tmp=tmp+QString().sprintf("%02d", m_Date.day());
+    }
+    else if(tmpFormat==KSpreadCell::date_format16) /*2000-02-18*/
+    {
+        tmp=tmp2.setNum(m_Date.year());
+        tmp=tmp+"-"+QString().sprintf("%02d", m_Date.month())+"-";
+        tmp=tmp+QString().sprintf("%02d", m_Date.day());
+    }
+    else if(tmpFormat==KSpreadCell::date_format17) /*2 february 2000*/
+    {
+      tmp=QString().sprintf("%d", m_Date.day());
+      tmp=tmp+" "+locale->monthName(m_Date.month())+" ";
+      tmp=tmp+tmp2.setNum(m_Date.year());
+    }
+    else
+        tmp = locale->formatDate(m_Date,true);
+    return tmp;
+}
+
+
+
+
+
 
 QString util_columnLabel( int column )
 {
