@@ -98,15 +98,15 @@ KWFormat *KWFormatCollection::insertFormat( QString _key, const KWFormat &_forma
 }
 
 /*================================================================*/
-QDOM::Element KWFormatCollection::save( QDOM::Document &doc )
+QDomElement KWFormatCollection::save( QDOM::Document &doc )
 {
-    QDOM::Element formats_ = doc.createElement( "FORMATS" );
+    QDomElement formats_ = doc.createElement( "FORMATS" );
     indexMap.clear();
 
     QDictIterator<KWFormat> it( formats );
     for ( unsigned int i = 0; it.current(); ++it ) {
 	indexMap[ it.current() ] = i++;
-	QDOM::Element f = it.current()->save( doc, i );
+	QDomElement f = it.current()->save( doc, i );
 	if ( f.isNull() )
 	    return f;
 	formats_.appendChild( f );

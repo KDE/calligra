@@ -611,7 +611,7 @@ bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
 }
 
 /*================================================================*/
-bool KWordDocument::loadXML( const QDOM::Document& doc, KOStore::Store_ptr )
+bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
 {
     _loaded = true;
     pixmapKeys.clear();
@@ -732,12 +732,12 @@ bool KWordDocument::loadXML( const QDOM::Document& doc, KOStore::Store_ptr )
     if ( doc.doctype().name() != "DOC" )
 	return false;
 
-    QDOM::Element word = doc.documentElement();
+    QDomElement word = doc.documentElement();
 
     if ( word.attribute( "mime" ) != "application/x-kword" )
 	return false;
 
-    QDOM::Element paper = doc.namedItem("PAPER").toElement();
+    QDomElement paper = doc.namedItem("PAPER").toElement();
     if ( paper.isNull() )
 	return false;
     __pgLayout.format = (KoFormat)paper.attribute( "format" ).toInt();
@@ -761,7 +761,7 @@ bool KWordDocument::loadXML( const QDOM::Document& doc, KOStore::Store_ptr )
     __hf.mmFootBody = paper.attribute( "mmFootBody" ).toInt();
     __hf.inchFootBody = paper.attribute( "inchFootBody" ).toInt();
 
-    QDOM::Element border = paper.namedItem( "PAPERBORDERS" ).toElement();
+    QDomElement border = paper.namedItem( "PAPERBORDERS" ).toElement();
     if ( border.isNull() )
 	return false;
     __pgLayout.ptLeft = border.attribute( "ptLeft" ).toInt();
@@ -777,7 +777,7 @@ bool KWordDocument::loadXML( const QDOM::Document& doc, KOStore::Store_ptr )
     __pgLayout.inchTop = border.attribute( "inchTop" ).toInt();
     __pgLayout.inchBottom = border.attribute( "inchBottom" ).toInt();
     
-    QDOM::Element attribs = doc.namedItem( "ATTRIBUTES" ).toElement();
+    QDomElement attribs = doc.namedItem( "ATTRIBUTES" ).toElement();
     if ( attribs.isNull() )
 	return false;
     processingType = attribs.attribute( "processing" ).toInt();
@@ -794,8 +794,8 @@ bool KWordDocument::loadXML( const QDOM::Document& doc, KOStore::Store_ptr )
     if ( !loadStyleTemplates( word.namedItem( "STYLES" ).toElement() ) )
 	return FALSE;
 
-    QDOM::Element pix = word.namedItem( "PIXMAPS" ).toElement();
-    QDOM::Element key = pix.firstChild();
+    QDomElement pix = word.namedItem( "PIXMAPS" ).toElement();
+    QDomElement key = pix.firstChild();
     for ( ; !key.isNull(); key = key.nextSibling() )
 	pixmapKeys.append( key.attribute( "key" ) );
     
@@ -941,9 +941,9 @@ bool KWordDocument::loadXML( const QDOM::Document& doc, KOStore::Store_ptr )
 }
 
 /*================================================================*/
-bool KWordDocument::loadStyleTemplates( const QDOM::Element& element )
+bool KWordDocument::loadStyleTemplates( const QDomElement& element )
 {
-    QDOM::Element style = element.firstChild();
+    QDomElement style = element.firstChild();
     for ( ; !style.isNull(); style = style.nextSibling() ) {
 	KWParagLayout *pl = new KWParagLayout( this, FALSE );
 	if ( pl->load( style ) )
@@ -955,7 +955,7 @@ bool KWordDocument::loadStyleTemplates( const QDOM::Element& element )
 }
 
 /*================================================================*/
-void KWordDocument::loadFrameSets( const QDOM::Element &framesets )
+void KWordDocument::loadFrameSets( const QDomElement &framesets )
 {
     string tag;
     string name;
@@ -966,7 +966,7 @@ void KWordDocument::loadFrameSets( const QDOM::Element &framesets )
     int _row = 0, _col = 0, _rows = 1, _cols = 1;
     bool _visible = true;
 
-    QDOM::Element frameset = framesets.firstChild();
+    QDomElement frameset = framesets.firstChild();
     for ( ; !frameset.isNull(); frameset = frameset.nextSibling() ) {
 	FrameType frameType = FT_BASE;
 	_name = "";
@@ -1088,9 +1088,9 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
 /*================================================================*/
 bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format )
 {
-    QDOM::Document doc( "DOC" );
+    QDomDocument doc( "DOC" );
     doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDOM::Element word = doc.createElement( "DOC" );
+    QDomElement word = doc.createElement( "DOC" );
 
     word.setAttribute( "author", "Reginald Stadlbauer and Torben Weis" );
     word.setAttribute( "email", "reggie@kde.org and weis@kde.org" );
@@ -1098,7 +1098,7 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     word.setAttribute( "mime", "application/x-kword" );
     word.appendChild( spread );
 
-    QDOM::Element paper = doc.createElement( "PAPER" );
+    QDomElement paper = doc.createElement( "PAPER" );
     word.appendChild( paper );
     paper.setAttribute( "format", (int)pageLayout.format );
     paper.setAttribute( "ptWidth", pageLayout.ptWidth );
@@ -1121,12 +1121,12 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     paper.setAttribute( "mmFootBody", pageHeaderFooter.mmFooterBodySpacing );
     paper.setAttribute( "inchFootBody", pageHeaderFooter.inchFooterBodySpacing );
 
-    QDOM::Element e = formatCollection->save( doc );
+    QDomElement e = formatCollection->save( doc );
     if ( e.isNull() )
 	return FALSE;
     word.append( e );
 
-    QDOM::Element border = doc.createElement( "PAPERBORDERS" );
+    QDomElement border = doc.createElement( "PAPERBORDERS" );
     paper.appendChild( border );
     border.setAttribute( "mmLeft", pageLayout.mmLeft );
     border.setAttribute( "mmTop", pageLayout.mmTop );
@@ -1141,19 +1141,19 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     border.setAttribute( "inchRight", pageLayout.inchRight );
     border.setAttribute( "inchBottom", pageLayout.inchBottom );
 
-    QDOM::Element attr = doc.createElement( "ATTRIBUTES" );
+    QDomElement attr = doc.createElement( "ATTRIBUTES" );
     word.appendChild( attr );
     attr.setAttribute( "processing", (int)processingType );
     attr.setAttribute( "hasHeader", hasHeader() );
     attr.setAttribute( "hasFooter", hasFooter() );
     attr.setAttribute( "unit", getUnit() );
 
-    QDOM::Element fn = footNodeManager.save( doc );
+    QDomElement fn = footNodeManager.save( doc );
     if ( fn.isNull() )
 	return false;
     word.appendChild( fn );
 
-    QDOM::Element fs = doc.createElement( "FRAMESETS" );
+    QDomElement fs = doc.createElement( "FRAMESETS" );
     word.appendChild( fs );
 
     KWFrameSet *frameSet = 0L;
@@ -1162,25 +1162,25 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
 	frameSet = getFrameSet( i );
 	if ( frameSet->getFrameType() != FT_PART )
 	{
-	    QDOM::Element e = frameSet->save( doc );
+	    QDomElement e = frameSet->save( doc );
 	    if ( e.isNull() )
 		return false;
 	    fs.append( e );
 	}
     }
 
-    QDOM::Element styles = doc.createElement( "STYLES" );
+    QDomElement styles = doc.createElement( "STYLES" );
     word.appendChild( styles );
 
     for ( unsigned int j = 0; j < paragLayoutList.count(); j++ )
     {
-	QDOM::Element e = paragLayoutList.at( j )->save( doc );
+	QDomElement e = paragLayoutList.at( j )->save( doc );
 	if ( e.isNull() )
 	    return false;
 	styles.append( e );
     }
 
-    QDOM::Element pix = doc.createElement( "PIXMAPS" );
+    QDomElement pix = doc.createElement( "PIXMAPS" );
     word.appendChild( pix );
 
     QDictIterator<KWImage> it = imageCollection.iterator();
@@ -1189,7 +1189,7 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     {
 	if ( keys.contains( it.currentKey() ) || images.contains( it.current()->getFilename() ) )
 	    continue;
-	QDOM::Element e = doc.createElement( "KEY" );
+	QDomElement e = doc.createElement( "KEY" );
 	e.setAttribute( "key", it.current()->getFilename() );
 	pix.appendChild( e )
 	    keys.append( it.currentKey() );
@@ -1200,7 +1200,7 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     QListIterator<KWordChild> chl( m_lstChildren );
     for( ; chl.current(); ++chl )
     {
-	QDOM::Element e = chl.current()->save( doc );
+	QDomElement e = chl.current()->save( doc );
 	if ( e.isNull() )
 	    return false;
 	word.appendChild( e );

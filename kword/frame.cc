@@ -322,7 +322,7 @@ QString KWFrame::saveLeftBrd2()
 }
 
 /*================================================================*/
-void KWFrame::saveRightBrd2( QDOM::Element &e )
+void KWFrame::saveRightBrd2( QDomElement &e )
 {
     e.setAttribute( "rWidth", brd_right.ptWidth() );
     e.setAttribute( "rRed", brd_right.color.red() );
@@ -516,16 +516,16 @@ QCursor KWFrameSet::getMouseCursor( unsigned int mx, unsigned int my )
 }
 
 /*================================================================*/
-QDOM::Element KWFrameSet::save( QDOM::Document &doc )
+QDomElement KWFrameSet::save( QDOM::Document &doc )
 {
-    QDOM::Element frameset = doc.createElement( "FRAMESET" );
+    QDomElement frameset = doc.createElement( "FRAMESET" );
     
     KWFrame *frame;
 
     for ( unsigned int i = 0; i < frames.count(); i++ ) {
 	frame = getFrame( i );
 	
-	QDOM::Element frm = doc.createElement( "FRAME" );
+	QDomElement frm = doc.createElement( "FRAME" );
 	frm.setAttribute( "left", frame->left() );
 	frm.setAttribute( "right", frame->right() );
 	frm.setAttribute( "top", frame->top() );
@@ -883,9 +883,9 @@ void KWTextFrameSet::splitParag( KWParag *_parag, unsigned int _pos )
 }
 
 /*================================================================*/
-QDOM::Element KWTextFrameSet::save( QDOM::Document &doc )
+QDomElement KWTextFrameSet::save( QDOM::Document &doc )
 {
-    QDOM::Element frameset = KWFrameSet::save( doc );
+    QDomElement frameset = KWFrameSet::save( doc );
     
     QString grp = "";
     if ( grpMgr )
@@ -919,7 +919,7 @@ QDOM::Element KWTextFrameSet::save( QDOM::Document &doc )
     
     KWParag *parag = getFirstParag();
     while ( parag ) {
-	QDOM::Element p = parag->save( doc );
+	QDomElement p = parag->save( doc );
 	if ( p.isNull() )
 	    return p;
 	frameset.appendChild( p );
@@ -1318,13 +1318,13 @@ void KWPictureFrameSet::setSize( QSize _imgSize )
 }
 
 /*================================================================*/
-QDOM::Element KWPictureFrameSet::save( QDOM::Document &doc )
+QDomElement KWPictureFrameSet::save( QDOM::Document &doc )
 {
-    QDOM::Element frameset = KWFrameSet::save( doc );
+    QDomElement frameset = KWFrameSet::save( doc );
     frameset.setAttribute( "frameType", (int)getFrameType() );
     frameset.setAttribute( "frameInfo", (int)frameInfo );
     
-    QDOM::Element img = image->save( doc );
+    QDomElement img = image->save( doc );
     if ( img.isNull() )
 	return img;
     frameset.appendChild( img );

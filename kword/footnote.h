@@ -54,8 +54,8 @@ public:
     NoteType getNoteType() { return noteType; }
     void setNoteType( NoteType nt ) { noteType = nt; }
 
-    QDOM::Element save( QDOM::Document& );
-    bool load( QDOM::Element& );
+    QDomElement save( QDOM::Document& );
+    bool load( QDomElement& );
 
 protected:
     void addFootNoteText( KWFootNote *fn );

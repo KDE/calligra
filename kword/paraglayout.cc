@@ -121,9 +121,9 @@ void KWParagLayout::setFormat( const KWFormat &_f )
 }
 
 /*================================================================*/
-QDOM::Element KWParagLayout::save( const QDOM::Document& doc )
+QDomElement KWParagLayout::save( const QDOM::Document& doc )
 {
-    QDOM::Element layout = doc.createElement( "PARAGLAYOUT" );
+    QDomElement layout = doc.createElement( "PARAGLAYOUT" );
     layout.setAttribute( "name", name );
     layout.setAttribute( "following-parag-layout", followingParagLayout );
     layout.setAttribute( "flow", (int)flow );
@@ -137,7 +137,7 @@ QDOM::Element KWParagLayout::save( const QDOM::Document& doc )
     layout.setAttribute( "left-indent", leftIndent );
     layout.setAttribute( "line-spacing", lineSpacing );
 
-    QDOM::Element c = doc.createElement( "COUNTER" );
+    QDomElement c = doc.createElement( "COUNTER" );
     layout.appendChild( c );
     c.setAttribute( "type", (int)counter.counterType );
     c.setAttribute( "depth", counter.counterDepth );
@@ -148,37 +148,37 @@ QDOM::Element KWParagLayout::save( const QDOM::Document& doc )
     c.setAttribute( "right-text", counter.counterRightText );
     c.setAttribute( "bullet-font", counter.bulletFont );
 
-    QDOM::Element b = doc.createElement( "LEFTBORDER", left.color() )
+    QDomElement b = doc.createElement( "LEFTBORDER", left.color() )
 		      b.setAttribute( "width", left.ptWidth );
     b.setAttribute( "style", left.style );
     layout.appendChild( b );
 
-    QDOM::Element b = doc.createElement( "RIGHTBORDER", right.color() )
+    QDomElement b = doc.createElement( "RIGHTBORDER", right.color() )
 		      b.setAttribute( "width", right.ptWidth );
     b.setAttribute( "style", right.style );
     layout.appendChild( b );
 
-    QDOM::Element b = doc.createElement( "TOPBORDER", top.color() )
+    QDomElement b = doc.createElement( "TOPBORDER", top.color() )
 		      b.setAttribute( "width", top.ptWidth );
     b.setAttribute( "style", top.style );
     layout.appendChild( b );
 
-    QDOM::Element b = doc.createElement( "BOTTOMBORDER", bottom.color() )
+    QDomElement b = doc.createElement( "BOTTOMBORDER", bottom.color() )
 		      b.setAttribute( "width", bottom.ptWidth );
     b.setAttribute( "style", bottom.style );
     layout.appendChild( b );
 
     // TOOD: Use only the id of the format
-    QDOM::Element f = format->save( doc );
+    QDomElement f = format->save( doc );
     if ( f.isNull() )
 	return f;
     layout.appendChild( f );
 
-    QDOM::Element tabs = doc.createElement( "TABULATORS" );
+    QDomElement tabs = doc.createElement( "TABULATORS" );
     layout.appendChild( tabs );
     for ( unsigned int i = 0; i < tabList.count(); i++ )
     {
-	QDOM::Element tab = doc.createElement( "TABULATOR" );
+	QDomElement tab = doc.createElement( "TABULATOR" );
 	if ( tab.isNull() )
 	    return tab;
 	tabs.appendChild( tab );
@@ -192,7 +192,7 @@ return layout;
 }
 
 /*================================================================*/
-bool KWParagLayout::load( QDOM::Element& layout )
+bool KWParagLayout::load( QDomElement& layout )
 {
     name = layout.attribute( "name" );
     followingParagLayout = layout.attribute( "following-parag-layout" );
@@ -209,7 +209,7 @@ bool KWParagLayout::load( QDOM::Element& layout )
 				   layout.attribute( "foot-offset-inch" ).toInt() )
 
     
-    QDOM::Element c = layout.namedItem( "COUNTER" );
+    QDomElement c = layout.namedItem( "COUNTER" );
     if ( c.isNull() )
       return false;
     counter.counterType = (CounterType)c.attribute( "type" ).toInt();
@@ -221,7 +221,7 @@ bool KWParagLayout::load( QDOM::Element& layout )
     counter.counterRightText = c.attribute( "right-text" );
     counter.bulletFont = c.attribute( "bullet-font" );
 
-    QDOM::Element b = layout.namedItem( "LEFTBORDER" );
+    QDomElement b = layout.namedItem( "LEFTBORDER" );
     if ( b.isNull() )
       return false;
     left.color = b.toColor();
@@ -250,15 +250,15 @@ bool KWParagLayout::load( QDOM::Element& layout )
     bottom.style = (BorderStyle)b.attribute( "style" );
 
     KWFormat form( document );
-    QDOM::Element f = layout.namedItem( "FORMAT" ).toElement();
+    QDomElement f = layout.namedItem( "FORMAT" ).toElement();
     if ( f.isNull() )
       return false;
     if ( !form.load( f ) )
       return false;
     setFormat( form );
 
-    QDOM::Element tabs = layout.namedItem( "TABULATORS" );
-    QDOM::Element tab = tabs.firstChild().toElement();
+    QDomElement tabs = layout.namedItem( "TABULATORS" );
+    QDomElement tab = tabs.firstChild().toElement();
     for( ; !tab.isNull(); tab = tab.nextSibling().toElement() )
     {
       KoTabulator *tab = new KoTabulator;

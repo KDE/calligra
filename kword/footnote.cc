@@ -214,20 +214,20 @@ void KWFootNoteManager::addFootNoteText( KWFootNote *fn )
 }
 
 /*================================================================*/
-QDOM::Element KWFootNoteManager::save( QDOM::Document& doc )
+QDomElement KWFootNoteManager::save( QDOM::Document& doc )
 {
-  QDOM::Element e = doc.createElement( "FOOTNODE-GLOBAL" );
+  QDomElement e = doc.createElement( "FOOTNODE-GLOBAL" );
 
-  QDOM::Element s = doc.createElement( "START" );
+  QDomElement s = doc.createElement( "START" );
   e.appendChild( s );
   s.setAttribute( "value", start );
 
-  QDOM::Element format = doc.createElement( "FORMAT" );
+  QDomElement format = doc.createElement( "FORMAT" );
   e.appendChild( format );
   format.setAttribute( "superscript", superscript );
   format.setAttribute( "type", (int)noteType );
 
-  QDOM::Element fp = doc.createElement( "FIRSTPARAG" );
+  QDomElement fp = doc.createElement( "FIRSTPARAG" );
   e.appendChild( fp );
   fp.setAttribute( "ref", firstParag );
 
@@ -235,11 +235,11 @@ QDOM::Element KWFootNoteManager::save( QDOM::Document& doc )
 }
 
 /*================================================================*/
-bool KWFootNoteManager::load( QDOM::Element &e )
+bool KWFootNoteManager::load( QDomElement &e )
 {
   bool ok;
 
-  QDOM::Element s = e.namedItem( "START" ).toElement();
+  QDomElement s = e.namedItem( "START" ).toElement();
   if ( s.isNull() )
     return false;
   start = s.attribute( "value" ).toInt( &ok );

@@ -115,8 +115,8 @@ public:
 
     QString getFollowingParagLayout() { return followingParagLayout; }
 
-    QDOM::Element save( QDOM::Document& );
-    bool load( const QDOM::Element& );
+    QDomElement save( QDOM::Document& );
+    bool load( const QDomElement& );
 
     Counter getCounter() const { return counter; }
     void setCounter( Counter _counter ) { counter = _counter; }

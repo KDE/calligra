@@ -105,10 +105,10 @@ public:
     QBrush getBackgroundColor() { return backgroundColor; }
     void setBackgroundColor( QBrush _color ) { backgroundColor = _color; }
 
-    void saveLeftBrd2( QDOM::Element &e );
-    void saveRightBrd2( QDOM::Element &e );
-    void saveTopBrd2( QDOM::Element &e );
-    void saveBottomBrd2( QDOM::Element &e );
+    void saveLeftBrd2( QDomElement &e );
+    void saveRightBrd2( QDomElement &e );
+    void saveTopBrd2( QDomElement &e );
+    void saveBottomBrd2( QDomElement &e );
 
     unsigned int getNextFreeYPos( unsigned int _y, unsigned int _h );
 
@@ -187,7 +187,7 @@ public:
     virtual void deSelectFrame( unsigned int mx, unsigned int my );
     virtual QCursor getMouseCursor( unsigned int mx, unsigned int my );
 
-    virtual QDOM::Element save( QDOM::Document &doc );
+    virtual QDomElement save( QDOM::Document &doc );
 
     int getNext( QRect _rect );
     int getPageOfFrame( int i ) { return frames.at( i )->getPageNum(); }
@@ -265,7 +265,7 @@ public:
     void insertParag( KWParag *_parag, InsertPos _pos );
     void splitParag( KWParag *_parag, unsigned int _pos );
 
-    virtual QDOM::Element save( QDOM::Document &doc );
+    virtual QDomElement save( QDOM::Document &doc );
     virtual void load( KOMLParser&, vector<KOMLAttrib>& );
 
     bool getAutoCreateNewFrame() { return autoCreateNewFrame; }
@@ -312,7 +312,7 @@ public:
     { return image; }
     QString getFileName() { return filename; }
 
-    virtual QDOM::Element save( QDOM::Document &doc );
+    virtual QDomElement save( QDOM::Document &doc );
     virtual void load( KOMLParser&, vector<KOMLAttrib>& );
 
 protected:
