@@ -131,8 +131,10 @@ void KSpreadPoint::init( const QString& _str )
       return;
   }
 
-  int y = atoi( _str.ascii() + p2 );
-
+  int y = atoi( _str.latin1() + p2 );
+  if ( y <= 0 )
+    return;
+  
   pos = QPoint( x, y );
 }
 
