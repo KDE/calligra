@@ -8,7 +8,6 @@
 #include <kgenericfactory.h>
 #include <koFilter.h>
 #include <koFilterChain.h>
-#include <kprocio.h>
 
 #include <kdebug.h>
 
@@ -48,21 +47,11 @@ EpsImport::convert( const QCString& from, const QCString& to )
 		return KoFilter::NotImplemented;
 	}
 
-	// initialize ghostscript:
-	//KProcIO* proc = new KProcIO();
-	//*proc
-	//	<< "/usr/bin/gs -q -dNOPAUSE -dSAFER -dNODISPLAY "
-	//	<< " ps2ai.ps " << m_chain->inputFile()
-	//	<< " >" << m_chain->outputFile();
+	// run ghostscript:
+	QString command = QString(
+		"gs -q -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps %1 > %2" ).
+			arg( m_chain->inputFile() ).arg( m_chain->outputFile() );
 
-	// start ghostscript:
-	//proc->start( KProcess::Block );
-
-	// stop ghostview:
-	//delete( proc );
-
-	// Do it ;)
-	QString command = QString( "gs -q -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps %1 > %2" ).arg( m_chain->inputFile() ).arg( m_chain->outputFile() );
 	system( command.latin1() );
 
 	return KoFilter::OK;
