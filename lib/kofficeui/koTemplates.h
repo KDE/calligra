@@ -70,9 +70,9 @@ public:
     QStringList dirs() const { return m_dirs; }
     void addDir(const QString &dir) { m_dirs.append(dir); m_touched=true; }
 
-    // If all children are hidden, we are hidden too
+    /// If all children are hidden, we are hidden too
     bool isHidden() const;
-    // if we should hide, we hide all the children
+    /// if we should hide, we hide all the children
     void setHidden(bool hidden=true) const;
 
     KoTemplate *first() { return m_templates.first(); }
