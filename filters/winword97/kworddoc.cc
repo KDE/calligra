@@ -8,10 +8,10 @@ KWordDoc::KWordDoc() {
 KWordDoc::~KWordDoc() {
 }
 
-void KWordDoc::part(const QString &part) {
+void KWordDoc::part(const QString &) { //part) {
 
     ready=true;
-    success=false; //at the moment
+    success=false; // at the moment
 }
 
 const QString KWordDoc::kwdFile() {

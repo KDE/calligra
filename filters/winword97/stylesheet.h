@@ -1,13 +1,9 @@
 #ifndef STYLESHEET_H
 #define STYLESHEET_H
 
-#include <qobject.h>
-#include <qlist.h>
 #include <myfile.h>
 
-class StyleSheet : public QObject {
-
-    Q_OBJECT
+class StyleSheet {
 
 public:
     StyleSheet(const myFile &m);

@@ -7,8 +7,7 @@ const short WinWordDoc::CP2UNI[] = { 0x20ac, 0x0000, 0x201a, 0x0192,
                                      0x0000, 0x2018, 0x2019, 0x201c,
                                      0x201d, 0x2022, 0x2013, 0x2014,
                                      0x02dc, 0x2122, 0x0161, 0x203a,
-                                     0x0153, 0x0000, 0x017e, 0x0178
-};
+                                     0x0153, 0x0000, 0x017e, 0x0178 };
 
 WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
                        const myFile &table1Stream, const myFile &dataStream) :
@@ -17,6 +16,7 @@ WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
     success=true;
     ready=false;
     fib=0L;
+    ptSize=-1;      // safer that way
     readFIB();
 
     if(fib->fEncrypted==1) {
@@ -29,7 +29,7 @@ WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
         table=table1Stream;
 
     // print some debug info
-    FIBInfo();
+    // FIBInfo();
 }
 
 WinWordDoc::~WinWordDoc() {
@@ -179,17 +179,23 @@ void WinWordDoc::readFIB() {
 const PCD WinWordDoc::readPCD(const long &pos) {
 
     PCD ret;
+
+    if(ptSize==-1)
+        return ret;       // undefined, so don't call this one
+                          // before you call locatePieceTbl()!
+
+    long tmpPos=ptPCDBase+pos*8;
     unsigned short *tmp=(unsigned short*)&ret;
 
-    *tmp=read16(table.data+pos);
-    ret.fc=read32(table.data+pos+2);
+    *tmp=read16(table.data+tmpPos);
+    ret.fc=read32(table.data+tmpPos+2);
     if((ret.fc & 0x40000000) == 0x40000000) {
         ret.fc=(ret.fc & 0xBFFFFFFF)/2;
         ret.unicode=false;
     }
     else
         ret.unicode=true;
-    ret.prm=read16(table.data+pos+6);
+    ret.prm=read16(table.data+tmpPos+6);
     return ret;
 }
 
@@ -203,7 +209,7 @@ const bool WinWordDoc::locatePieceTbl() {
         tmp+=read16(table.data+tmp+1)+3;
 
     if(*(table.data+tmp)==2) {
-        kdebug(KDEBUG_INFO, 31000, "WinWordDoc::locatePieceTbl(): Found pclfpcd :)");
+        kdebug(KDEBUG_INFO, 31000, "WinWordDoc::locatePieceTbl(): Hoohoo! Found pclfpcd :)");
         found=true;
         ptCPBase=tmp+1;
         ptSize=read32(table.data+ptCPBase);
