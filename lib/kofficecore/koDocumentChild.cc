@@ -17,6 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <kparts/partmanager.h>
+
 #include <koDocumentChild.h>
 #include <koDocument.h>
 #include <koStore.h>
@@ -186,6 +188,23 @@ bool KoDocumentChild::loadDocument( KoStore* _store )
   }
 
   m_tmpURL = QString::null;
+
+  // see KoDocument::insertChild for an exaplanation what's going on
+  // now :-)
+  if ( parentDocument() )
+  {
+      KoDocument *parent = parentDocument();
+
+      if ( parent->manager() && parent->manager()->parts() )
+      {
+          KParts::PartManager *manager = parent->manager();
+
+          if ( !manager->parts()->containsRef( document() ) &&
+               !parent->isSingleViewMode() )
+              manager->addPart( document(), false );
+      }
+
+  }
 
   return res;
 }

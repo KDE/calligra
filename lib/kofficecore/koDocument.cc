@@ -328,7 +328,15 @@ void KoDocument::insertChild( const KoDocumentChild *child )
   connect( child, SIGNAL( destroyed() ),
            this, SLOT( slotChildDestroyed() ) );
 
-  if ( manager() && !isSingleViewMode() && child->document()!=0)
+  // It may be that insertChild is called without the KoDocumentChild
+  // having a KoDocument attached, yet. This happens for example
+  // when KPresenter loads a document with embedded objects. For those
+  // KPresenterChild objects are allocated and insertChild is called.
+  // Later in loadChildren() KPresenter iterates over the child list
+  // and calls loadDocument for each child. That's exactly where we
+  // will try to do what we cannot do now: Register the child document
+  // at the partmanager (Simon)
+  if ( manager() && !isSingleViewMode() && child->document() )
     manager()->addPart( child->document(), false );
 }
 
