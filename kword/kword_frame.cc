@@ -506,6 +506,10 @@ bool KWFrameSet::contains( unsigned int mx, unsigned int my )
 }
 
 /*================================================================*/
+/* Select the first frame where the x and y coords fall into 
+   returns 0 if none was selected, return 1 if selected, return 2 
+   if the frame was allready selected.
+*/
 int KWFrameSet::selectFrame( unsigned int mx, unsigned int my, bool simulate )
 {
     for ( unsigned int i = 0; i < frames.count(); i++ ) {
@@ -746,7 +750,6 @@ KWTextFrameSet::~KWTextFrameSet()
 /*================================================================*/
 void KWTextFrameSet::update()
 {
-    unsigned int amount=frames.count();
     KWFrame *tmpFrame=frames.at(0);
     typedef QList<KWFrame> FrameList;
     QList<FrameList> frameList;
@@ -810,8 +813,6 @@ void KWTextFrameSet::update()
             delete l;
     }
 
-   // frames.clear();
-
     int rm = 0;
     for ( unsigned int n = 0; n < frameList.count(); n++ ) {
         for ( unsigned int o = 0; o < frameList.at( n )->count(); o++ ) {
@@ -824,13 +825,6 @@ void KWTextFrameSet::update()
                 }
             }
         }
-    }
-    // sanity check. Keep this as long as things go wrong with frames.. TZ
-    if(amount != frames.count())  {
-        kdDebug() << "ERROR: Found a problem with a frameset. " << (int) amount - frames.count() << " frames have been removed!" << endl;
-        kdDebug() << "       frame size: " << tmpFrame->x() << ","<< tmpFrame->y() << "," << tmpFrame->width() << "," << tmpFrame->height() << endl;
-        if(grpMgr)
-            kdDebug() << "       cell: " << grpMgr->getCell(this)->row << "," << grpMgr->getCell(this)->col << endl;
     }
     frames.setAutoDelete( true );
 }
@@ -2262,15 +2256,20 @@ void KWGroupManager::recalcCols()
         int coordinate;
         // find old coord.
         coordinate=activeCell->frameSet->getFrame(0)->left();
-        for ( unsigned int i = 0; i < rows; i++) {
-            if(i!=row) {
-                cell=getCell(i,col);
-                if(cell->col==col) {
-                    coordinate=cell->frameSet->getFrame(0)->left();
-                    break;
+        if(col!=0) { // calculate the old position.
+            coordinate = getCell(row, col-1)->frameSet->getFrame(0)->right() + 3;
+        } else { // is leftmost, so lets look at other rows..
+            for ( unsigned int i = 0; i < rows; i++) {
+                if(i!=row) {
+                    cell=getCell(i,col);
+                    if(cell->col==col) {
+                        coordinate=cell->frameSet->getFrame(0)->left();
+                        break;
+                    }
                 }
             }
         }
+            
         int postAdjust=0;
         if(coordinate != activeCell->frameSet->getFrame(0)->left()) { // left pos changed
             for ( unsigned int i = 0; i < rows; i++) {
@@ -2467,18 +2466,17 @@ void KWGroupManager::recalcRows()
         bool _addRow = false;
 
         for ( i = 0; i < cols; i++ ) {
-
             Cell *cell = getCell(j,i);
+            if(!(cell->frameSet && cell->frameSet->getFrame(0))) { // sanity check.
+                kdDebug() << "screwy table cell!! row:" << cell->row << ", col: " << cell->col << endl;
+                continue;
+            }
             if(cell->col==i && cell->row==j) { // beware of multi cell frames.
                 cell->frameSet->getFrame( 0 )->moveTopLeft( QPoint( cell->frameSet->getFrame( 0 )->x(), y ) );
                 cell->frameSet->getFrame( 0 )->setPageNum(doingPage);
             }
-            if(cell->frameSet && cell->frameSet->getFrame(0)){ // sanity check.
-                if(cell->row + cell->rows -1 == j){
-                    nextY=cell->frameSet->getFrame(0) -> bottom() + 3;
-                }
-            } else
-                kdDebug () << "Something is wrong with this cell " <<cell->row << "," << cell->col << endl;
+            if(cell->row + cell->rows -1 == j)
+                nextY=cell->frameSet->getFrame(0) -> bottom() + 3;
         }
 
         // check all cells on this row if one might have fallen off the page.
@@ -2499,28 +2497,27 @@ void KWGroupManager::recalcRows()
             j=fromRow;
             doingPage++;
 
-            /*if ( showHeaderOnAllPages ) { // maybe I'll see the solve to this very frustrating problem tomorrow.
+            if ( y >= static_cast<int>( doc->getPTPaperHeight() * doc->getPages() ))
+                doc->appendPage( doc->getPages() - 1 );
+
+            if ( showHeaderOnAllPages ) {
                 hasTmpHeaders = true;
                 insertRow( j, false, true );
-            }*/
+            }
             for(i = 0; i < cols; i++) {
                 Cell *cell = getCell (j,i);
-                int height= cell->frameSet->getFrame(0)->height();
-                /*if ( showHeaderOnAllPages ) {
-                    KWTextFrameSet *f1, *f2;
-                    f1 = dynamic_cast<KWTextFrameSet*>( cell->frameSet );
-                    f2 = dynamic_cast<KWTextFrameSet*>( getFrameSet( 0, i ) );
-                    f1->assign( f2 );
-                }*/
-                cell->frameSet->getFrame(0)->setTop(y);
-                cell->frameSet->getFrame(0)->setHeight(height);
+                if ( showHeaderOnAllPages ) {
+                    KWTextFrameSet *newFrameSet = dynamic_cast<KWTextFrameSet*>( cell->frameSet );
+                    KWTextFrameSet *baseFrameSet = dynamic_cast<KWTextFrameSet*>( getFrameSet( 0, i ) );
+                    newFrameSet->assign( baseFrameSet );
+                    newFrameSet->getFrame(0)->setHeight(baseFrameSet->getFrame(0)->height());
+                }
+                cell->frameSet->getFrame( 0 )->moveTopLeft( QPoint( cell->frameSet->getFrame( 0 )->x(), y ) );
                 cell->frameSet->getFrame( 0 )->setPageNum(doingPage);
                 if(cell->row + cell->rows -1 == j) {
                     nextY=cell->frameSet->getFrame(0) -> bottom() + 3;
                 }
             }
-            if ( nextY > static_cast<int>( doc->getPTPaperHeight() * doc->getPages() ))
-                doc->appendPage( doc->getPages() - 1 );
         }
     }
 }
@@ -2555,8 +2552,7 @@ bool KWGroupManager::hasSelectedFrame()
 /*================================================================*/
 void KWGroupManager::moveBy( int dx, int dy )
 {
-    // Ignore the x-offset.
-    dx = 0;
+    dx = 0; // Ignore the x-offset.
     if(dy==0) return;
     for ( unsigned int i = 0; i < cells.count(); i++ )
         cells.at( i )->frameSet->getFrame( 0 )->moveBy( dx, dy );
@@ -2588,6 +2584,8 @@ void KWGroupManager::deselectAll()
 /*================================================================*/
 void KWGroupManager::selectUntil( KWFrameSet *fs, KWPage *page )
 {
+    // TODO debug this, right now it always selects 2 frames at a minimum.
+    // TRY selecting top left and shift top left...
     unsigned int row = 0, col = 0;
     row=getCell( fs )->row;
     col=getCell( fs )->col;

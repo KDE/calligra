@@ -800,26 +800,25 @@ void KWPage::vmpEditFrame( QMouseEvent *e, int mx, int my )
         // only simulate selection - we do real selection below
         int r = doc->selectFrame( mx, my, TRUE );
 
-        bool goon = TRUE;
-
         KWFrameSet *fs = doc->getFrameSet( doc->getFrameSet( mx, my ) );
-        if ( r != 0 && ( e->state() & ShiftButton ) && fs->getGroupManager() ) {
+        if ( r != 0 && ( e->state() & ShiftButton ) && fs->getGroupManager() ) { // is table and we hold shift
+            // select all frames from top left selection to new selection.
+            // TODO make this more intelligent, remember first selected, and use that instead of 
+            //      top left selected frame
             selectFrame( mx, my, TRUE );
             fs->getGroupManager()->selectUntil( fs, this );
             curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
-            goon = FALSE;
-        }
-
-        if ( goon ) {
-            if ( r == 0 )
+        } else {
+            if ( r == 0 ) // none selected
                 selectAllFrames( FALSE );
 
+            // 1 selected
             if ( r == 1 ) {
                 if ( !( e->state() & ControlButton || e->state() & ShiftButton ) )
                     selectAllFrames( FALSE );
                 selectFrame( mx, my, TRUE );
                 curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();
-            } else if ( r == 2 ) {
+            } else if ( r == 2 ) { // was allready selected
                 if ( e->state() & ControlButton || e->state() & ShiftButton ) {
                     selectFrame( mx, my, FALSE );
                     curTable = doc->getFrameSet( doc->getFrameSet( mx, my ) )->getGroupManager();

@@ -3345,6 +3345,10 @@ int KWordDocument::getFrameSet( unsigned int mx, unsigned int my )
 }
 
 /*================================================================*/
+/* Select the first frame where the x and y coords fall into
+   returns 0 if none was selected, return 1 if selected, return 2
+   if the frame was allready selected.
+*/
 int KWordDocument::selectFrame( unsigned int mx, unsigned int my, bool simulate )
 {
     KWFrameSet *frameSet = 0L;
