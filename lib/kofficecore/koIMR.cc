@@ -84,19 +84,28 @@ bool imr_create( const char* _name, const char* _mode, const char *_exec, QStrLi
   return 0;
 }
 
-CORBA::Object_ptr imr_activate( const char *_server, CORBA::ImplRepository_ptr _imr, const char *_addr )
+CORBA::Object_ptr imr_activate( const char *_server, const char *_repoid, CORBA::ImplRepository_ptr _imr, const char *_addr )
 {
-  /* CORBA::ImplRepository::ImplDefSeq_var impls = _imr->find_by_name( _server );
+  CORBA::ImplRepository_var imr;
+  if ( _imr == 0L )
+  {    
+    CORBA::Object_var obj = opapp_orb->resolve_initial_references ("ImplementationRepository");
+    imr = CORBA::ImplRepository::_narrow( obj );
+    assert( !CORBA::is_nil( imr ) );
+    _imr = imr;
+  }
+
+  CORBA::ImplRepository::ImplDefSeq_var impls = _imr->find_by_name( _server );
   if ( impls->length() == 0 )
   {
-    cout << "no such server: " << args[0] << endl;
+    cout << "no such server: " << _server << endl;
     return 0L;
   }
   assert (impls->length() == 1);
 
   CORBA::ORB_var orb = CORBA::ORB_instance ("mico-local-orb");
   CORBA::Object_var obj;
-  if (args.size() > 1)
+  if ( _addr )
   {
     // try given address
     obj = orb->bind ("IDL:omg.org/CORBA/OAMediator:1.0", _addr );
@@ -120,71 +129,37 @@ CORBA::Object_ptr imr_activate( const char *_server, CORBA::ImplRepository_ptr _
   CORBA::OAMediator_var oamed = CORBA::OAMediator::_narrow( obj );
   if ( !oamed->force_activation (impls[(CORBA::ULong)0]) )
   {
-    cout << "error: cannot activate server " << args[0] << endl;
+    cout << "error: cannot activate server " << _server << endl;
     return 0L;
   }
-    return 0;
-    */
 
+  // Lets bind to the requested server
+  CORBA::ORB::ObjectTag_var tag = CORBA::ORB::string_to_tag( _server );
+  obj = 0L;
+  if( _addr )
+    obj = opapp_orb->bind( _repoid, tag, _addr );
+  if( CORBA::is_nil( obj ) )
+  {
+    // try address of the impl repo
+    const CORBA::Address *addr = imr->_ior()->addr();
+    obj = opapp_orb->bind( _repoid, tag, addr->stringify().c_str());
+  }
+  if (CORBA::is_nil( obj ) )
+    obj = opapp_orb->bind( _repoid, tag );
 
-    CORBA::ImplRepository_var imr;
-    if ( _imr == 0L )
-    {    
-      CORBA::Object_var obj = opapp_orb->resolve_initial_references ("ImplementationRepository");
-      imr = CORBA::ImplRepository::_narrow( obj );
-      assert( !CORBA::is_nil( imr ) );
-      _imr = imr;
-    }
+  if ( CORBA::is_nil( obj ) )
+  {
+    cout << "could not bind to server: " << _server << endl;
+    return CORBA::Object::_nil();
+  }
+  /*
+   * a bind() will only run the server the first time, but will not
+   * reactivate a server. therefore we make an invocation that will
+   * always force (re)activation.
+   */
+  obj->_non_existent ();
 
-    CORBA::ImplRepository::ImplDefSeq_var impls
-	= _imr->find_by_name( _server );
-    if ( impls->length() == 0 )
-    {
-      cout << "no such server: " << _server << endl;
-      return CORBA::Object::_nil();
-    }
-
-    assert (impls->length() == 1);
-    CORBA::ImplementationDef::RepoIdList_var repoids = impls[0]->repoids();
-    if ( repoids->length() == 0 )
-    {
-      cout << "server " << _server << " implements no objects?!" << endl;
-      return CORBA::Object::_nil();
-    }
-
-    CORBA::ORB::ObjectTag_var tag = CORBA::ORB::string_to_tag( _server );
-
-    CORBA::ORB_var orb = CORBA::ORB_instance ("mico-local-orb");
-    CORBA::Object_var obj;
-    if ( _addr )
-    {
-	// try given address
-	obj = orb->bind( repoids[0], tag, _addr );
-    }
-    if (CORBA::is_nil (obj))
-    {
-	// try address of the impl repo
-	const CORBA::Address *addr = _imr->_ior()->addr();
-	obj = orb->bind (repoids[0], tag, addr->stringify().c_str());
-    }
-    if ( CORBA::is_nil( obj ) )
-    {
-	// try default addresses 
-	obj = orb->bind (repoids[0], tag );
-    }
-    if ( CORBA::is_nil( obj ) )
-    {
-      cout << "could not activate server: " << _server << endl;
-      return CORBA::Object::_nil();
-    }
-    /*
-     * a bind() will only run the server the first time, but will not
-     * reactivate a server. therefore we make an invocation that will
-     * always force (re)activation.
-     */
-    obj->_non_existent ();
-
-    return CORBA::Object::_duplicate( obj );
+  return CORBA::Object::_duplicate( obj );
 }
 
 KOffice::Document_ptr imr_createDocByServerName( const char *_server_name )
