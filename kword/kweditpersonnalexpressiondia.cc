@@ -255,6 +255,8 @@ void KWEditPersonnalExpression::slotAddExpression() {
     m_ExpressionsList->setBottomItem (m_ExpressionsList->count() -1);
     m_ExpressionsList->blockSignals(false);
     m_ExpressionsList->setSelected(m_ExpressionsList->count() -1, true);
+    m_expressionLineEdit->selectAll();
+    m_expressionLineEdit->setFocus();
 
     updateExpression();
 
