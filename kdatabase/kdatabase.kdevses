@@ -3,27 +3,5 @@
 <KDevPrjSession>
  <LastCompileConfig>(Default)</LastCompileConfig>
  <Mainframe MaximizeMode="1" />
- <DocsAndViews NumberOfDocuments="7" >
-  <Doc0 CursorPosLine="0" Type="KWriteDoc" NumberOfViews="1" CursorPosCol="0" FileName="/root/kdesrc/koffice/kdatabase/kdatabase_part.h" >
-   <View0 Top="24" Width="400" Attach="1" Height="300" Left="3" Focus="0" Type="KWriteView" MinMaxMode="0" />
-  </Doc0>
-  <Doc1 CursorPosLine="0" Type="KWriteDoc" NumberOfViews="1" CursorPosCol="0" FileName="/root/kdesrc/koffice/kdatabase/kdatabase_factory.h" >
-   <View0 Top="46" Width="714" Attach="1" Height="281" Left="25" Focus="0" Type="KWriteView" MinMaxMode="0" />
-  </Doc1>
-  <Doc2 CursorPosLine="50" Type="KWriteDoc" NumberOfViews="1" CursorPosCol="0" FileName="/root/kdesrc/koffice/kdatabase/kdatabase_view.h" >
-   <View0 Top="68" Width="714" Attach="1" Height="281" Left="47" Focus="0" Type="KWriteView" MinMaxMode="0" />
-  </Doc2>
-  <Doc3 CursorPosLine="0" Type="KWriteDoc" NumberOfViews="1" CursorPosCol="0" FileName="/root/kdesrc/koffice/kdatabase/clstbldesigner.cpp" >
-   <View0 Top="90" Width="714" Attach="1" Height="281" Left="69" Focus="0" Type="KWriteView" MinMaxMode="0" />
-  </Doc3>
-  <Doc4 CursorPosLine="35" Type="KWriteDoc" NumberOfViews="1" CursorPosCol="8" FileName="/root/kdesrc/koffice/kdatabase/maindlg.h" >
-   <View0 Top="112" Width="714" Attach="1" Height="281" Left="91" Focus="0" Type="KWriteView" MinMaxMode="0" />
-  </Doc4>
-  <Doc5 CursorPosLine="17" Type="KWriteDoc" NumberOfViews="1" CursorPosCol="19" FileName="/root/kdesrc/koffice/kdatabase/maindlg.cpp" >
-   <View0 Top="110" Width="720" Attach="1" Height="308" Left="110" Focus="1" Type="KWriteView" MinMaxMode="2" />
-  </Doc5>
-  <Doc6 Type="CDocBrowser" NumberOfViews="1" FileName="/root/kdesrc/qt-x11-free-3.0.0/doc/html//qlistviewitem.html#text" >
-   <View Top="156" Width="124" Attach="1" Height="115" Left="135" Focus="0" Type="KHTMLView" MinMaxMode="0" />
-  </Doc6>
- </DocsAndViews>
+ <DocsAndViews NumberOfDocuments="0" />
 </KDevPrjSession>

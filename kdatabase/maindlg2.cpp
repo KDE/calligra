@@ -105,7 +105,7 @@ return(true);
 
 bool MainDlg2::refreshTableView(QDomNode tableSection){
 
-    QPtrList<QString> myList;
+    QPtrList<QString> myList; //maybe you noticed, that we have got a QStringList ;)
     QString myItemName;
 
     kdDebug() << "KDatabase:MainDlg refreshTableView" << endl;

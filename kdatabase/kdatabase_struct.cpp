@@ -81,9 +81,10 @@ QPtrList<QString> KDBStruct::getForms(){
 }
 
 
-QPtrList<QString> KDBTable::getColumns(QString *tableName, QString *returnMessage){
+QPtrList<TableStructureRow> KDBTable::getColumns(QString tableName)
+{
 
-    QPtrList<QString> columnList;
+    QPtrList<TableStructureRow> columnList;
 
     return(columnList);
 }

@@ -19,16 +19,40 @@
 #include <qdom.h>
 #include <qptrlist.h>
 
+class QString;
+
 class KDBStruct;
 class KDBTable;
 class KDBView;
 class KDBForm;
 
+enum DataType
+	{
+		t_int,
+		t_char,
+		t_vchar,
+		t_float,
+		t_boolen
+	};
+
+typedef struct TableStructureRow
+{
+	bool	primary_key;
+	QString	name;
+	DataType	type;
+	int	size;
+	QString	Default;
+	bool	allow_null;
+};	
+
+
+
 class KDBTable {
 //This class is meant for viewing and modifying table structure.
 //KDBTableData is for accessing and modifying data.
 public:
-      QPtrList<QString> getColumns(QString *tableName, QString *returnMessage);
+
+      QPtrList<TableStructureRow> getColumns(QString tableName);
       bool insertColumn(QString *tableName, QString *columnInfo, QString *returnMessage);
       bool modifyColumn(QString *tableName, QString *columnInfo, QString *returnMessage);
       bool deleteColumn(QString *tableName, QString *columnInfo, QString *returnMessage);

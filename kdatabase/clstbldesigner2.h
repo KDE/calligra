@@ -19,20 +19,40 @@
 #define CLSTBLDESIGNER2_H
 
 #include <kdialog.h>
-#include <qtable.h>
+#include <qstringlist.h>
+//#include <qtable.h>
 
 /**
   *@author root
   */
 
+class QTable;
+class QStringList;
+
 class clsTblDesigner2 : public KDialog  {
          Q_OBJECT
 public: 
+
+	enum DataType
+	{
+		t_int,
+		t_char,
+		t_vchar,
+		t_float,
+		t_boolen
+	};
+		 
 	clsTblDesigner2();
 	~clsTblDesigner2();
-   bool populateTblDesigner(QString tblName);
+	bool populateTblDesigner(QString tblName);
+	void addRow(bool primary_key=false, QString name="", DataType type=t_int, int size=10, QString default_v="", bool allow_null=false);
+
 private:
-   QTable* myQTable;
+	QTable		*m_table;
+	QStringList	m_comboEntries;
+
+protected:
+	int		m_rows;
 };
 
 #endif
