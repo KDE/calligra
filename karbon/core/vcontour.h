@@ -8,9 +8,7 @@
 #include "vcolor.h"
 #include "vsegment.h"
 
-class QPainter;
-
-class VContour : public VSegmentListTraverser
+class VContour
 {
 public:
 	enum VLineCap{
@@ -30,30 +28,19 @@ public:
 	void setColor( const VColor& color ) { m_color = color; }
 
 	double lineWidth() const { return m_lineWidth; }
-	void setLineWidth( const double lineWidth ) { m_lineWidth = lineWidth; }
+	void setLineWidth( const double width ) { m_lineWidth = width; }
 
-	void draw( QPainter& painter, const double zoomFactor, const VSegmentList& list,
-		bool plain = false );	// "plain" is for drawing objects while editing them
+	VLineCap lineCap() const { return m_lineCap; }
+	void setLineCap( const VLineCap cap ) { m_lineCap = cap; }
 
-	virtual bool begin( const KoPoint& p );
-	virtual bool curveTo ( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 );
-	virtual bool curve1To( const KoPoint& p2, const KoPoint& p3 )
-		{ return curveTo( p2, p2, p3 ); }
-	virtual bool curve2To( const KoPoint& p1, const KoPoint& p3 )
-		{ return curveTo( p1, p3, p3 ); }
-	virtual bool lineTo( const KoPoint& p );
-	virtual bool end( const KoPoint& p )
-		{ return lineTo( p ); }
+	VLineJoin lineJoin() const { return m_lineJoin; }
+	void setLineJoin( const VLineJoin join ) { m_lineJoin = join; }
 
 private:
 	VColor m_color;
 	double m_lineWidth;
 	VLineCap m_lineCap;
 	VLineJoin m_lineJoin;
-
-	// stuff for painting:
-	double m_zoomFactor;
-	QPointArray m_pa;
 };
 
 #endif

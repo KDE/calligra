@@ -20,6 +20,17 @@
 	</Menu>
 	<Menu name="object">
 		<text>&amp;Object</text>
+		<Menu name="object_arrange">
+			<text>&amp;Arrange</text>
+			<Action name="object_arrange_totop"/>
+			<Action name="object_arrange_up"/>
+			<Action name="object_arrange_down"/>
+			<Action name="object_arrange_tobottom"/>
+		</Menu>
+		<Menu name="object_transform">
+			<text>&amp;Transform</text>
+			<Action name="object_trafo_move"/>
+		</Menu>
 		<Separator/>
 		<Menu name="object_insert">
 			<text>&amp;Insert Shape</text>
@@ -30,7 +41,7 @@
 			<Action name="tool_sinus"/>
 			<Action name="tool_spiral"/>
 			<Action name="tool_star"/>
-			</Menu>
+		</Menu>
 	</Menu>
 	<Menu name="text">
 		<text>&amp;Text</text>

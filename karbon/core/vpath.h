@@ -9,8 +9,8 @@
 #include <qpointarray.h>
 #include <koPoint.h>
 
-#include "vcontour.h"
-#include "vfill.h"
+#include "vpath_contour.h"
+#include "vpath_fill.h"
 #include "vobject.h"
 #include "vsegment.h"
 
@@ -134,8 +134,8 @@ private:
 	VSegmentList m_segments;			// "outline" segments.
 	QPtrList<VSegmentList> m_holes;		// "holes" inside the outline
 
-	VContour m_contour;		// contour.
-	VFill m_fill;			// fill.
+	VPathContour m_contour;		// contour.
+	VPathFill m_fill;			// fill.
 
 	bool m_isClosed;
 };

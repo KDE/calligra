@@ -82,14 +82,18 @@ KarbonView::editSelectAll()
 {
 	m_part->selectAllObjects();
 	handleTool();
-	m_part->repaintAllViews();
+	if( m_part->selection().count() > 0 )
+		m_part->repaintAllViews();
 }
 
 void
 KarbonView::editDeselectAll()
 {
-	m_part->deselectAllObjects();
-	m_part->repaintAllViews();
+	if( m_part->selection().count() > 0 )
+	{
+		m_part->deselectAllObjects();
+		m_part->repaintAllViews();
+	}
 }
 
 void
@@ -206,7 +210,7 @@ KarbonView::initActions()
 		i18n( "&Deselect All" ), QKeySequence( "Ctrl+D" ), this,
 		SLOT( editDeselectAll() ), actionCollection(), "edit_deselect_all" );
   	new KAction(
-		i18n( "D&elete" ), "editdelete", 0, this,
+		i18n( "D&elete" ), "editdelete", QKeySequence( "Del" ), this,
 		SLOT( editDeleteSelection() ), actionCollection(), "edit_delete" );
 	new KAction(
 		i18n( "&History" ), 0, 0, this,
@@ -214,28 +218,28 @@ KarbonView::initActions()
 
 	// tools:
 	m_ellipseToolAction = new KToggleAction(
-		i18n("&Ellipse"), "ellipse", 0, this,
+		i18n( "&Ellipse" ), "ellipse", 0, this,
 		SLOT( ellipseTool() ), actionCollection(), "tool_ellipse" );
 	m_polygonToolAction = new KToggleAction(
-		i18n("&Polygon"), "polygon", 0, this,
+		i18n( "&Polygon" ), "polygon", 0, this,
 		SLOT( polygonTool() ), actionCollection(), "tool_polygon" );
 	m_rectangleToolAction = new KToggleAction(
-		i18n("&Rectangle"), "rectangle", 0, this,
+		i18n( "&Rectangle" ), "rectangle", 0, this,
 		SLOT( rectangleTool() ), actionCollection(), "tool_rectangle" );
 	m_roundRectToolAction = new KToggleAction(
-		i18n("&Round Rectangle"), "roundrect", 0, this,
+		i18n( "&Round Rectangle" ), "roundrect", 0, this,
 		SLOT( roundRectTool() ), actionCollection(), "tool_roundrect" );
 	m_sinusToolAction = new KToggleAction(
-		i18n("S&inus"), "sinus", 0, this,
+		i18n( "S&inus" ), "sinus", 0, this,
 		SLOT( sinusTool() ), actionCollection(), "tool_sinus" );
 	m_selectToolAction = new KToggleAction(
-		i18n("&Select Objects"), "select", 0, this,
+		i18n( "&Select Objects" ), "select", 0, this,
 		SLOT( selectTool() ), actionCollection(), "tool_select" );
 	m_spiralToolAction = new KToggleAction(
-		i18n("S&piral"), "spiral", 0, this,
+		i18n( "S&piral" ), "spiral", 0, this,
 		SLOT( spiralTool() ), actionCollection(), "tool_spiral" );
 	m_starToolAction = new KToggleAction(
-		i18n("S&tar"), "star", 0, this,
+		i18n( "S&tar" ), "star", 0, this,
 		SLOT( starTool() ), actionCollection(), "tool_star" );
 
 	m_ellipseToolAction->setExclusiveGroup( "Tools" );
@@ -248,14 +252,17 @@ KarbonView::initActions()
 	m_starToolAction->setExclusiveGroup( "Tools" );
 
 	// zoom:
-	m_zoomAction = new KSelectAction( i18n( "&Zoom" ), 0, this, SLOT( zoomChanged() ), actionCollection(),
-		"view_zoom" );
+	m_zoomAction = new KSelectAction(
+		i18n( "&Zoom" ), 0, this,
+		SLOT( zoomChanged() ), actionCollection(), "view_zoom" );
+
 	QStringList stl;
 	stl
 		<< i18n( "25%" )
 		<< i18n( "50%" )
 		<< i18n( "100%" )
 		<< i18n( "200%" )
+		<< i18n( "300%" )
 		<< i18n( "400%" )
 		<< i18n( "800%" );
 	m_zoomAction->setItems( stl );
