@@ -72,9 +72,7 @@ void TimeFormatWidget::slotPersonalizeChanged(bool b)
 void TimeFormatWidget::comboActivated()
 {
     QString string=combo2->currentText();
-    if(combo1->currentText().lower()==i18n("Locale").lower())
-        combo1->setCurrentText("");
-    else if(string==i18n("Hour"))
+    if(string==i18n("Hour"))
         combo1->lineEdit()->insert("h");
     else if(string==i18n("Hour (2 digit)"))
         combo1->lineEdit()->insert("hh");

@@ -10,7 +10,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <qlineedit.h>
-
+#include <kdebug.h>
 /*
  *  Constructs a TimeFormatWidget which is a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'
@@ -82,9 +82,7 @@ void DateFormatWidget::slotPersonalizeChanged(bool b)
 void DateFormatWidget::comboActivated()
 {
     QString string=combo2->currentText();
-    if(combo1->currentText().lower()==i18n("Locale").lower())
-        combo1->setCurrentText("");
-    else if(string==i18n( "Days"))
+    if(string==i18n( "Days"))
         combo1->lineEdit()->insert("d");
     else if(string==i18n( "Days (2 digits)"))
         combo1->lineEdit()->insert("dd");
