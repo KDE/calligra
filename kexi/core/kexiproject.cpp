@@ -93,7 +93,6 @@ bool KexiProject::initDoc()
 		QObject *newDlg = KParts::ComponentFactory::createInstanceFromLibrary<QObject>( "kexiprojectwizard", this );
 		ok=(static_cast<KexiCreateProjectIface*>(newDlg->qt_cast("KexiCreateProjectIface"))->execute())==QDialog::Accepted;
 		delete newDlg;
-		ok=false;
 	} else if (ret==KoTemplateChooseDia::File) {
 		KURL url(filename);
 		kdDebug()<<"kexi: opening file: "<<url.prettyURL()<<endl;
