@@ -79,9 +79,7 @@ void KFormulaView::draw(QPainter& painter, const QRect& rect, const QColorGroup&
     QPainter p(&buffer);
     p.translate(-formulaRect.x(), -formulaRect.y());
     
-    p.fillRect(rect, cg.base());
-    //buffer.fill(cg.base());
-    document->draw(p, rect);
+    document->draw(p, rect, cg);
     if (cursorVisible) {
         cursor->draw(p, smallCursor);
     }

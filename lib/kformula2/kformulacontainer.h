@@ -42,9 +42,10 @@ class IndexElement;
 class KCommand;
 class KFormulaCommand;
 class KFormulaDocument;
+class KPrinter;
+class QColorGroup;
 class QKeyEvent;
 class QPainter;
-class KPrinter;
 
 
 /**
@@ -87,6 +88,11 @@ public:
      * recalc.
      */
     void changed();
+
+    /**
+     * Draws the whole thing.
+     */
+    void draw(QPainter& painter, const QRect& r, const QColorGroup& cg);
 
     /**
      * Draws the whole thing.

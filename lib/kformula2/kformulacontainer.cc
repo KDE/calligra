@@ -154,9 +154,13 @@ bool KFormulaContainer::isEmpty()
 }
 
 
-/**
- * Draws the whole thing.
- */
+void KFormulaContainer::draw(QPainter& painter, const QRect& r, const QColorGroup& cg)
+{
+    painter.fillRect( r, cg.base() );
+    draw( painter, r );
+}
+
+
 void KFormulaContainer::draw(QPainter& painter, const QRect& r)
 {
     rootElement->draw(painter, r, getDocument()->getContextStyle());
