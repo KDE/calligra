@@ -53,6 +53,8 @@
 #include <koRect.h>
 #include <qapplication.h>
 #include <kostyle.h>
+#include <koVariable.h>
+#include <qrichtext_p.h>
 
 /******************************************************************/
 /* class KPrPage - KPrPage                                        */
@@ -2806,16 +2808,32 @@ QString KPrPage::pageTitle( const QString &_title ) const
     if ( !textobject )
         return QString( _title );
 
-    QString txt = textobject->textDocument()->text().stripWhiteSpace();
-    if ( txt.isEmpty() )
+    QString txt/* = textobject->textDocument()->text().stripWhiteSpace()*/;
+
+    //search custom variable.
+    if ( textobject->textDocument()->firstParag() )
+    {
+        QString tmp = textobject->textDocument()->firstParag()->string()->toString();
+        for ( int i = 0 ; i < (int)tmp.length() ; ++i )
+        {
+            KoTextStringChar * ch = textobject->textDocument()->firstParag()->at( i );
+            if ( ch->isCustom() )
+            {
+                KoVariable * var = dynamic_cast<KoVariable *>(ch->customItem());
+                if ( var )
+                {
+                    txt += var->text(true);
+                }
+            }
+            else
+                txt += ch->c;
+
+        }
+    }
+
+    if ( txt.isEmpty()|| txt=="\n" )
         return _title;
-    unsigned int i=0;
-    while( i<txt.length() && txt[i]=='\n' )
-        ++i;
-    int j=txt.find('\n', i);
-    if(i==0 && j==-1)
-        return txt;
-    return txt.mid(i, j);
+    return txt;
 }
 
 
