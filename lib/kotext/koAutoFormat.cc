@@ -728,9 +728,36 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
             textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
             cursor.setIndex( start + length );
             textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            KCommand *cmd = txtObj->replaceSelectionCommand( textEditCursor, it.data().replace(),
+            KCommand *cmd = 0L;
+            if (!it.data().formatEntryContext() )
+                cmd = txtObj->replaceSelectionCommand( textEditCursor, it.data().replace(),
                                                              KoTextObject::HighlightSelection,
                                                              i18n("Autocorrect word") );
+            else
+            {
+                int flags = 0;
+                KoTextFormat * lastFormat = parag->at( start )->format();
+                KoTextFormat * newFormat = new KoTextFormat(*lastFormat);
+                changeTextFormat(it.data().formatEntryContext(), newFormat, flags );
+                KMacroCommand *macro = new KMacroCommand( i18n("Autocorrect word with format"));
+                KCommand *cmd2=txtObj->replaceSelectionCommand( textEditCursor, it.data().replace(),
+                                                               KoTextObject::HighlightSelection,
+                                                               i18n("Autocorrect word") );
+                if ( cmd2 )
+                    macro->addCommand(cmd2);
+                KoTextCursor cursor( parag->document() );
+                cursor.setParag( parag );
+                cursor.setIndex( index );
+                textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+                cursor.setIndex( index + length );
+                textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+
+
+                cmd2 =txtObj->setFormatCommand( textEditCursor, &lastFormat, newFormat, flags, false, KoTextObject::HighlightSelection );
+                macro->addCommand( cmd2);
+                cmd = macro;
+
+            }
             // The space/tab/CR that we inserted is still there but delete/insert moved the cursor
             // -> go right
             txtObj->emitHideCursor();
