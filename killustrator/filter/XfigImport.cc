@@ -33,12 +33,54 @@
 #include <math.h>
 #include <algorithm>
 
+#define RAD_FACTOR 180.0 / M_PI
+
+struct PSFont {
+  const char* family;
+  QFont::Weight weight;
+  bool italic;
+} psFontTable[] = {
+  { "times", QFont::Normal, false },      // Times Roman
+  { "times", QFont::Normal, true },       // Times Italic
+  { "times", QFont::Bold, false },        // Times Bold
+  { "times", QFont::Bold, true },         // Times Bold Italic
+  { "avantgarde", QFont::Normal, false },   // AvantGarde Book
+  { "avantgarde", QFont::Normal, true },    // AvantGarde Book Oblique
+  { "avantgarde", QFont::DemiBold, false }, // AvantGarde Demi
+  { "avantgarde", QFont::DemiBold, true },  // AvantGarde Demi Oblique
+  { "bookman", QFont::Light, false },     // Bookman Light
+  { "bookman", QFont::Light, true },      // Bookman Light Italic
+  { "bookman", QFont::DemiBold, false },  // Bookman Demi
+  { "bookman", QFont::DemiBold, true },   // Bookman Demi Italic
+  { "courier", QFont::Normal, false },    // Courier
+  { "courier", QFont::Normal, true },     // Courier Oblique
+  { "courier", QFont::Bold, false },      // Courier Bold
+  { "courier", QFont::Bold, true },       // Courier Bold Oblique
+  { "helvetica", QFont::Normal, false },  // Helvetica
+  { "helvetica", QFont::Normal, true },   // Helvetica Oblique
+  { "helvetica", QFont::Bold, false },    // Helvetica Bold
+  { "helvetica", QFont::Bold, true },     // Helvetica Bold Oblique
+  { "helvetica", QFont::Normal, false },  // Helvetica Narrow
+  { "helvetica", QFont::Normal, true },   // Helvetica Narrow Oblique
+  { "helvetica", QFont::Bold, false },    // Helvetica Narrow Bold
+  { "helvetica", QFont::Bold, true },     // Helvetica Narrow Bold Oblique
+  { "newcenturyschoolbook", QFont::Normal, false },// New Century Schoolbook 
+  { "newcenturyschoolbook", QFont::Normal, true }, // New Century Italic
+  { "newcenturyschoolbook", QFont::Bold, false },  // New Century Bold
+  { "newcenturyschoolbook", QFont::Bold, true },   // New Century Bold Italic
+  { "palatino", QFont::Normal, false },   // Palatino Roman
+  { "palatino", QFont::Normal, true },    // Palatino Italic
+  { "palatino", QFont::Bold, false },     // Palatino Bold
+  { "palatino", QFont::Bold, true },      // Palatino Bold Italic
+  { "symbol", QFont::Normal, false },     // Symbol
+  { "zapfchancery", QFont::Normal, false }, // Zapf Chancery Medium Italic
+  { "zapfdingbats", QFont::Normal, false }, // Zapf Dingbats
+};
+
 bool greater_than (const pair<int, GObject*>& x, 
 		const pair<int, GObject*>& y) {
   return x.first > y.first;
 }
-
-#define RAD_FACTOR 180.0 / M_PI
 
 XfigImport::XfigImport () {
 }
@@ -67,9 +109,7 @@ bool XfigImport::setup (GDocument* doc, const char* format) {
 
 bool XfigImport::importFromFile (GDocument *doc) {
   char buf[255];
-  char c;
   int value;
-  int reqHeaderFields = 5;
   KoPageLayout layout;
 
   ifstream fin (inputFileName ());
@@ -79,65 +119,69 @@ bool XfigImport::importFromFile (GDocument *doc) {
   layout = doc->pageLayout ();
 
   fin.getline (buf, 255);
-  if (::strcmp (buf, "#FIG 3.1")) {
+  if (::strncmp (buf, "#FIG 3", 6)) {
     cerr << "ERROR: no xfig file or wrong header" << endl;
     return false;
   }
 
-  // read the header
-  while (reqHeaderFields > 0) {
-    do {
-      fin.get (c);
-    } while (isspace (c));
-
-    if (isdigit (c)) {
-      // we read the resolution or the coordinate system
-      fin.unget ();
-      fin >> value;
-      if (value > 2) {
-	// ok - it's the fig_resolution
-	// xfig works with points per inch, but we need "real" points
-	fig_resolution = value / 72.0;
-	reqHeaderFields--;
-      }
-      else {
-	// the origin of the coordinate system: it's ignored in
-	// current xfig release
-	coordinate_system = value;
-	reqHeaderFields--;
-      }
-    }
-    else {
-      fin.unget ();
-
-      fin.getline (buf, 255);
-
-      if (::strcmp (buf, "Landscape") == 0) {
-	layout.orientation = PG_LANDSCAPE;
-	reqHeaderFields--;
-      }
-      else if (::strcmp (buf, "Portrait") == 0) {
-	layout.orientation = PG_PORTRAIT;
-	reqHeaderFields--;
-      }
-      else if (::strcmp (buf, "Center") == 0) {
-	// don't know how to handle this 
-	reqHeaderFields--;
-      }
-      else if (::strcmp (buf, "Flush Left") == 0) {
-	// don't know how to handle this 
-	reqHeaderFields--;
-      }
-      else if (::strcmp (buf, "Metric") == 0) {
-	layout.unit = PG_MM;
-	reqHeaderFields--;
-      }
-      else if (::strcmp (buf, "Inches") == 0) {
-	layout.unit = PG_INCH;
-	reqHeaderFields--;
-      }
-    }
+  if (buf[7] == '2') {
+      version = 320;
   }
+  else if (buf[7] == '1') {
+      version = 310;
+  }
+  else {
+    cerr << "ERROR: unsupported xfig version" << endl;
+    return false;
+  }
+
+  /*
+   * read the header
+   */
+
+  // orientation
+  fin.getline (buf, 255);
+  if (::strcmp (buf, "Landscape") == 0)
+      layout.orientation = PG_LANDSCAPE;
+  else if (::strcmp (buf, "Portrait") == 0)
+      layout.orientation = PG_PORTRAIT;
+  else 
+      cerr << "ERROR: invalid orientation" << endl;
+
+  // justification (don't know how to handle this)
+  fin.getline (buf, 255);
+
+  // units
+  fin.getline (buf, 255);
+  if (::strcmp (buf, "Metric") == 0)
+      layout.unit = PG_MM;
+  else if (::strcmp (buf, "Inches") == 0)
+      layout.unit = PG_INCH;
+  else 
+      cerr << "ERROR: invalid units" << endl;
+
+  if (version >= 320) {
+      // paper size (don't know how to handle this)
+      fin.getline (buf, 255);
+      
+      // magnification
+      float magnification;
+      fin >> magnification;
+      fin.ignore (INT_MAX, '\n');
+      
+      //multiple page (not supported yet)
+      fin.getline (buf, 255);
+      
+      // transparent color (not supported yet)
+      int transColor;
+      fin >> transColor;
+      fin.ignore (INT_MAX, '\n');
+  }
+
+  // resolution and coordinate system
+  fin >> value >> coordinate_system;
+  fig_resolution = value / 72.0;
+  fin.ignore (INT_MAX, '\n');
 
   // now read in the objects
   while (! fin.eof ()) {
@@ -152,7 +196,7 @@ bool XfigImport::importFromFile (GDocument *doc) {
     switch (tag) {
     case 0:
       // a color pseudo object
-      cout << "color pseudo object\n";
+      parseColorObject (fin);
       break;
     case 1:
       // a ellipse
@@ -172,7 +216,7 @@ bool XfigImport::importFromFile (GDocument *doc) {
       break;
     case 5:
       // an arc
-      cout << "arc\n";
+      parseArc (fin, doc);
       break;
     case 6:
       // a compound object
@@ -192,9 +236,64 @@ bool XfigImport::importFromFile (GDocument *doc) {
 }
 
 void XfigImport::parseColorObject (istream& fin) {
+    int number;
+    char buf[20];
+    fin >> number >> buf;
 }
 
 void XfigImport::parseArc (istream& fin, GDocument* doc) {
+  int sub_type, line_style, thickness, pen_color, fill_color,
+    depth, pen_style, area_fill, cap_style, direction, 
+    forward_arrow, backward_arrow, x1, y1, x2, y2, x3, y3;
+  float center_x, center_y;
+  float style_val;
+  GOval *obj = new GOval ();
+
+  // first line
+  fin >> sub_type >> line_style >> thickness >> pen_color >> fill_color
+      >> depth >> pen_style >> area_fill >> style_val >> cap_style
+      >> direction >> forward_arrow >> backward_arrow
+      >> center_x >> center_y >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
+
+  if (forward_arrow > 0) {
+    // forward arow line
+    fin.ignore (INT_MAX, '\n');
+  }
+
+  if (backward_arrow > 0) {
+    // backward arrow line
+    fin.ignore (INT_MAX, '\n');
+  }
+
+  // compute radius
+  float dx = x1 - center_x;
+  float dy = y1 - center_y;
+  float radius = sqrt (dx * dx + dy * dy);
+
+  Coord p1 ((center_x - radius) / fig_resolution,
+	    (center_y - radius) / fig_resolution);
+  Coord p2 ((center_x + radius) / fig_resolution,
+	    (center_y + radius) / fig_resolution);
+
+  obj->setStartPoint (p1);
+  obj->setEndPoint (p2);
+
+  if (sub_type == 0)
+      obj->setOutlineShape (GObject::OutlineInfo::PieShape);
+  else if (sub_type == 1)
+      obj->setOutlineShape (GObject::OutlineInfo::ArcShape);
+
+  p1 = Coord (center_x / fig_resolution, center_y /fig_resolution);
+  p2 = Coord (x1 / fig_resolution, y1 /fig_resolution);
+  float m = ((p2.y () - p1.y ()) / (p2.x () - p1.x ()));
+  float angle1 = atan (m) * RAD_FACTOR;
+
+  p2 = Coord (x3 / fig_resolution, y3 /fig_resolution);
+  m = ((p2.y () - p1.y ()) / (p2.x () - p1.x ()));
+  float angle2 = atan (m) * RAD_FACTOR;
+
+  obj->setAngles (angle1, angle2);
+  objList.push_back (pair<int, GObject*> (depth, obj));
 }
 
 void XfigImport::parseEllipse (istream& fin, GDocument* doc) {
@@ -218,7 +317,7 @@ void XfigImport::parseEllipse (istream& fin, GDocument* doc) {
 
   obj->setStartPoint (p1);
   obj->setEndPoint (p2);
-  fin.ignore (INT_MAX, '\n');
+
   objList.push_back (pair<int, GObject*> (depth, obj));
 }
 
@@ -250,9 +349,11 @@ void XfigImport::parsePolyline (istream& fin, GDocument* doc) {
     obj = new GPolygon ();
     break;
   case 5: // imported picture
+    return;
     break;
   default:
     // doesn't occur
+    cout << "unknown subtype: " << sub_type << endl;
     break;
   }
 
@@ -333,6 +434,10 @@ void XfigImport::parseText (istream& fin, GDocument* doc) {
 
   if (font_flags & 4) {
     // PostScript font
+    if (font == -1)
+      font = 0;
+    qfont = QFont (psFontTable[font].family, qRound (font_size), 
+		   psFontTable[font].weight, psFontTable[font].italic);
   }
   else {
     // LaTeX font

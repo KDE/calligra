@@ -51,6 +51,7 @@ private:
 
   float fig_resolution;
   int coordinate_system;
+  int version;
   QIntDict<QColor> colorTable;
   
   list<pair<int, GObject*> > objList;
