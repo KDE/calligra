@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=Other Office Files
+ServiceTypes=ThumbCreator
+MimeTypes=application/msword,application/msexcel,application/mspowerpoint
+X-KDE-Library=kofficethumbnail
+CacheThumbnail=true

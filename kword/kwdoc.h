@@ -144,6 +144,9 @@ public:
      * Draw as embedded.
      */
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
+
+    virtual QPixmap generatePreview( const QSize &size );
+
     /**
      * @param emptyRegion The region is modified to subtract the areas painted, thus
      *                    allowing the caller to determine which areas remain to be painted.
@@ -164,7 +167,6 @@ public:
     void setPageLayout( const KoPageLayout& _layout, const KoColumns& _cl, const KoKWHeaderFooter& _hf );
 
     void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf );
-    KoPageLayout pageLayout() const { return m_pageLayout; }
 
     KWTextFrameSet * textFrameSet ( unsigned int _num ) const;
     // Return the frameset number @p _num
@@ -558,7 +560,6 @@ private:
     QPtrList<KWView> m_lstViews;
     QPtrList<KWChild> m_lstChildren;
 
-    KoPageLayout m_pageLayout;
     KoColumns m_pageColumns;
     KoKWHeaderFooter m_pageHeaderFooter;
 

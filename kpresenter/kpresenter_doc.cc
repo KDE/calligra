@@ -198,7 +198,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     emit sig_changeActivePage(newpage );
     m_stickyPage=new KPrPage(this);
     objStartY = 0;
-    setPageLayout( _pageLayout );
+    setPageLayout( m_pageLayout );
     _presPen = QPen( red, 3, SolidLine );
     presSpeed = 2;
     ignoreSticky = TRUE;
@@ -411,18 +411,18 @@ QDomDocument KPresenterDoc::saveXML()
     presenter.setAttribute("syntaxVersion", CURRENT_SYNTAX_VERSION);
     doc.appendChild(presenter);
     QDomElement paper=doc.createElement("PAPER");
-    paper.setAttribute("format", static_cast<int>( _pageLayout.format ));
-    paper.setAttribute("ptWidth", _pageLayout.ptWidth);
-    paper.setAttribute("ptHeight", _pageLayout.ptHeight);
+    paper.setAttribute("format", static_cast<int>( m_pageLayout.format ));
+    paper.setAttribute("ptWidth", m_pageLayout.ptWidth);
+    paper.setAttribute("ptHeight", m_pageLayout.ptHeight);
 
-    paper.setAttribute("orientation", static_cast<int>( _pageLayout.orientation ));
+    paper.setAttribute("orientation", static_cast<int>( m_pageLayout.orientation ));
     paper.setAttribute("unit", m_unit );
     QDomElement paperBorders=doc.createElement("PAPERBORDERS");
 
-    paperBorders.setAttribute("ptLeft", _pageLayout.ptLeft);
-    paperBorders.setAttribute("ptTop", _pageLayout.ptTop);
-    paperBorders.setAttribute("ptRight", _pageLayout.ptRight);
-    paperBorders.setAttribute("ptBottom", _pageLayout.ptBottom);
+    paperBorders.setAttribute("ptLeft", m_pageLayout.ptLeft);
+    paperBorders.setAttribute("ptTop", m_pageLayout.ptTop);
+    paperBorders.setAttribute("ptRight", m_pageLayout.ptRight);
+    paperBorders.setAttribute("ptBottom", m_pageLayout.ptBottom);
     paper.appendChild(paperBorders);
     presenter.appendChild(paper);
 
@@ -1598,7 +1598,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	    setPageLayout( __pgLayout );
         }
 	else
-	    setPageLayout( _pageLayout );
+	    setPageLayout( m_pageLayout );
     }
     recalcVariables( VT_FIELD );
     return true;
@@ -1664,7 +1664,7 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout )
     //     if ( _pageLayout == pgLayout )
     //	return;
 
-    _pageLayout = pgLayout;
+    m_pageLayout = pgLayout;
 
     //for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
     //    m_pageList.at( i )->updateBackgroundSize();
@@ -1792,12 +1792,12 @@ QValueList<int> KPresenterDoc::reorderPage( unsigned int num )
 /*================== get size of page ===========================*/
 QRect KPresenterDoc::getPageRect( bool decBorders ) const
 {
-    int pw, ph, bl = static_cast<int>(_pageLayout.ptLeft);
-    int br = static_cast<int>(_pageLayout.ptRight);
-    int bt = static_cast<int>(_pageLayout.ptTop);
-    int bb = static_cast<int>(_pageLayout.ptBottom);
-    int wid = static_cast<int>(_pageLayout.ptWidth);
-    int hei = static_cast<int>(_pageLayout.ptHeight);
+    int pw, ph, bl = static_cast<int>(m_pageLayout.ptLeft);
+    int br = static_cast<int>(m_pageLayout.ptRight);
+    int bt = static_cast<int>(m_pageLayout.ptTop);
+    int bb = static_cast<int>(m_pageLayout.ptBottom);
+    int wid = static_cast<int>(m_pageLayout.ptWidth);
+    int hei = static_cast<int>(m_pageLayout.ptHeight);
 
     if ( !decBorders ) {
 	br = 0;
@@ -1815,24 +1815,24 @@ QRect KPresenterDoc::getPageRect( bool decBorders ) const
 /*================================================================*/
 int KPresenterDoc::getLeftBorder() const
 {
-    return static_cast<int>(_pageLayout.ptLeft);
+    return static_cast<int>(m_pageLayout.ptLeft);
 }
 
 /*================================================================*/
 int KPresenterDoc::getTopBorder() const
 {
-    return static_cast<int>(_pageLayout.ptTop);
+    return static_cast<int>(m_pageLayout.ptTop);
 }
 
 /*================================================================*/
 int KPresenterDoc::getBottomBorder() const
 {
-    return static_cast<int>(_pageLayout.ptBottom);
+    return static_cast<int>(m_pageLayout.ptBottom);
 }
 
 int KPresenterDoc::getRightBorder() const
 {
-    return static_cast<int>(_pageLayout.ptRight);
+    return static_cast<int>(m_pageLayout.ptRight);
 }
 
 
@@ -2148,6 +2148,19 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
 
 }
 
+QPixmap KPresenterDoc::generatePreview( const QSize& size )
+{
+    int oldZoom = zoomHandler()->zoom();
+    double oldResX = zoomHandler()->resolutionX();
+    double oldResY = zoomHandler()->resolutionY();
+
+    QPixmap pix = KoDocument::generatePreview(size);
+
+    zoomHandler()->setZoomAndResolution(oldZoom, oldResX * 72, oldResY * 72);
+    newZoomAndResolution( false, false );
+
+    return pix;
+}
 
 void KPresenterDoc::movePage( int from, int to )
 {
@@ -2447,11 +2460,10 @@ void KPresenterDoc::updateRulerPageLayout()
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
-        ((KPresenterView*)it.current())->getHRuler()->setPageLayout(_pageLayout );
-        ((KPresenterView*)it.current())->getVRuler()->setPageLayout( _pageLayout );
+        ((KPresenterView*)it.current())->getHRuler()->setPageLayout(m_pageLayout );
+        ((KPresenterView*)it.current())->getVRuler()->setPageLayout(m_pageLayout );
 
     }
-
 }
 
 void KPresenterDoc::refreshAllNoteBar(int page, const QString &text, KPresenterView *exceptView)
@@ -2599,7 +2611,6 @@ void KPresenterDoc::saveStyle( KoStyle *sty, QDomElement parentElem )
     styleElem.appendChild( formatElem );
 #endif
 }
-
 
 void KPresenterDoc::startBackgroundSpellCheck()
 {

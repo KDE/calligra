@@ -2102,7 +2102,7 @@ KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
 
 void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool transparent, double zoomX, double zoomY )
 {
-    //kdDebug() << "KWDocument::paintContent zoomX=" << zoomX << " zoomY=" << zoomY << endl;
+    //kdDebug() << "************************KWDocument::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << endl;
     m_zoom = 100;
     if ( m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY )
     {
@@ -2138,6 +2138,21 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
                                     0L, viewMode, 0L );
     }
     delete viewMode;
+}
+
+QPixmap KWDocument::generatePreview( const QSize& size )
+{
+    int oldZoom = m_zoom;
+    double oldZoomX = m_zoomedResolutionX;
+    double oldZoomY = m_zoomedResolutionY;
+
+    QPixmap pix = KoDocument::generatePreview(size);
+
+    m_zoom = oldZoom;
+    setResolution( oldZoomX, oldZoomY );
+    newZoomAndResolution( false, false );
+
+    return pix;
 }
 
 void KWDocument::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode * viewMode )

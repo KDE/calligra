@@ -36,7 +36,7 @@
 
 #include <kio/netaccess.h>
 #include <kparts/partmanager.h>
-
+#include <iostream.h>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kapplication.h>
@@ -46,6 +46,7 @@
 #include <qfile.h>
 #include <qpainter.h>
 #include <qtimer.h>
+#include <qimage.h>
 #include <kiconloader.h>
 
 // Define the protocol used here for embedded documents' URL
@@ -185,6 +186,13 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
     }
 
   d->m_docInfo = new KoDocumentInfo( this, "document info" );
+
+  m_pageLayout.ptWidth = 0;
+  m_pageLayout.ptHeight = 0;
+  m_pageLayout.ptTop = 0;
+  m_pageLayout.ptBottom = 0;
+  m_pageLayout.ptLeft = 0;
+  m_pageLayout.ptRight = 0;
 }
 
 KoDocument::~KoDocument()
@@ -653,6 +661,11 @@ bool KoDocument::saveNativeFormat( const QString & file )
     (void)dev.writeBlock( s.data(), s.size()-1 );
     store->close();
   }
+  if ( store->open( "preview.png" ) )
+  {
+    savePreview( store);
+    store->close();
+  }
 
   bool ret = completeSaving( store );
   kdDebug(30003) << "Saving done" << endl;
@@ -701,6 +714,62 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
   kdDebug(30003) << "Saved document to store" << endl;
 
   return true;
+}
+
+void KoDocument::savePreview( KoStore* store )
+{
+    QPixmap pix = generatePreview(QSize(128, 128));
+
+    QByteArray imageData;
+    QDataStream imageStream(imageData, IO_WriteOnly);
+    imageStream << pix;
+    store->write( imageData );
+}
+
+QPixmap KoDocument::generatePreview( const QSize& size )
+{
+    double docWidth, docHeight;
+    int pixmapSize = QMAX(size.width(), size.height());
+
+    if (m_pageLayout.ptWidth > 1.0) {
+        docWidth = m_pageLayout.ptWidth / 72 * QPaintDevice::x11AppDpiX();
+        docHeight = m_pageLayout.ptHeight / 72 * QPaintDevice::x11AppDpiX();
+
+    } else {
+        // If we don't have a page layout, just draw the top left hand corner
+        docWidth = 500.0;
+        docHeight = 500.0;
+    }
+
+    double ratio = docWidth / docHeight;
+
+    QPixmap pix;
+    int previewWidth, previewHeight;
+    if (ratio > 1.0)
+    {
+        previewWidth = (int) pixmapSize;
+        previewHeight = (int) (pixmapSize / ratio);
+    }
+    else
+    {
+        previewWidth = (int) (pixmapSize * ratio);
+        previewHeight = (int) pixmapSize;
+    }
+
+    pix.resize((int)docWidth, (int)docHeight);
+
+    pix.fill( QColor( 245, 245, 245 ) );
+
+    QRect rc(0, 0, pix.width(), pix.height());
+
+    QPainter p;
+    p.begin(&pix);
+    paintEverything(p, rc, false);
+    p.end();
+
+    pix.convertFromImage(pix.convertToImage().smoothScale(previewWidth, previewHeight));
+
+    return pix;
 }
 
 QString KoDocument::autoSaveFile( const QString & path ) const

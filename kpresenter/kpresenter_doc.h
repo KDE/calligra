@@ -119,11 +119,11 @@ public:
     // page layout
     void setPageLayout( KoPageLayout );
 
+    virtual QPixmap generatePreview( const QSize &size );
+
     //header-footer
     void createHeaderFooter();
     void updateHeaderFooterPosition();
-
-    KoPageLayout pageLayout() const { return _pageLayout; }
 
     bool insertNewTemplate( bool clean=false );
 
@@ -410,9 +410,6 @@ protected:
         QString filename;
         QString pix_string;
     };
-
-    // page layout
-    KoPageLayout _pageLayout;
 
     // screenpresentations
     bool _spInfinitLoop, _spManualSwitch, _showPresentationDuration;

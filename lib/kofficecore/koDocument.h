@@ -28,6 +28,7 @@ using namespace std;
 #include <kparts/part.h>
 #include <kurl.h>
 #include <kservice.h>
+#include <koGlobal.h>
 
 class QDomElement;
 class QDomDocument;
@@ -236,6 +237,8 @@ public:
   virtual void paintEverything( QPainter &painter, const QRect &rect, bool transparent = false,
                                 KoView *view = 0L, double zoomX = 1.0, double zoomY = 1.0 );
 
+  virtual QPixmap generatePreview( const QSize& size );
+
   /**
    *  Paints all of the documents children into the given painter object.
    *
@@ -440,6 +443,8 @@ public:
    */
   virtual bool isStoredExtern();
 
+  KoPageLayout pageLayout() const { return m_pageLayout; }
+
 signals:
   /**
    * This signal is emitted, if a direct or indirect child document changes
@@ -571,12 +576,15 @@ protected:
   /** @internal */
   virtual void insertChild(QObject *o) { QObject::insertChild(o); }
 
+  KoPageLayout m_pageLayout;
+
 private slots:
   void slotChildChanged( KoChild *c );
   void slotChildDestroyed();
   void slotAutoSave();
 
 private:
+    void savePreview( KoStore* store );
 
     KoDocumentPrivate *d;
     KService::Ptr m_nativeService;
