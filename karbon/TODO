@@ -9,6 +9,8 @@ GUI:
 -	make some pattern widget, krita seems to have a nice one, maybe we can work
 	together, share pattern images and put something in kofficeui.
 -	we need a gradient widget, maybe cooperate with krita too
+-	other koffice apps have widgts that may of interest to us, for instance in kpresenter. We should
+	try to reuse them.
 -	remove the dialog which opens when double clicking the gradient tool and but the functionality
 	into a docker together with the gradient widget
 -	imho "View->Refresh" is an excuse for not being able to code properly
