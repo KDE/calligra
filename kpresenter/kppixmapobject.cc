@@ -233,11 +233,13 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
     if ( shadowDistance > 0 && !drawContour )
     {
-        if ( angle == 0 )
-        {
-            double sx = ox;
-            double sy = oy;
-            getShadowCoords( sx, sy );
+      double sx = ox;
+      double sy = oy;
+
+      getShadowCoords( sx, sy );
+
+      if ( angle == 0 )
+        {                        
             _painter->setPen( QPen( shadowColor ) );
             _painter->setBrush( shadowColor );
             _painter->drawRect( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ),
@@ -257,14 +259,11 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
             br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
             rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-            double dx = 0, dy = 0;
-            getShadowCoords( dx, dy );
-
-            QWMatrix m;
+	    QWMatrix m;
             m.translate( pw / 2, ph / 2 );
             m.rotate( angle );
-            m.translate( rr.left() + pixXPos + _zoomHandler->zoomItX( dx ),
-                         rr.top() + pixYPos + _zoomHandler->zoomItY( dy ) );
+            m.translate( rr.left() + pixXPos + _zoomHandler->zoomItX( sx ),
+                         rr.top() + pixYPos + _zoomHandler->zoomItY( sy ) );
 
             _painter->setWorldMatrix( m, true );
 
@@ -301,9 +300,9 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         if ( !drawContour ) {
             QSize _pixSize =  QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
             QPixmap _pixmap = image.generatePixmap( _pixSize );
-
-            QPixmap tmpPix = changePictureSettings( _pixmap );
-
+	    
+	    QPixmap tmpPix = changePictureSettings( _pixmap );
+	    
             _painter->drawPixmap( QRect( (int)( _zoomHandler->zoomItX( ox ) + penw ),
                                          (int)( _zoomHandler->zoomItY( oy ) + penw ),
                                          (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
@@ -356,7 +355,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
             QSize _pixSize =  QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
             QPixmap _pixmap = image.generatePixmap( _pixSize );
 
-            QPixmap tmpPix = changePictureSettings( _pixmap );
+	    QPixmap tmpPix = changePictureSettings( _pixmap );
 
             _painter->drawPixmap( QRect( (int)penw, (int)penw,
                                          (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
@@ -404,6 +403,10 @@ void KPPixmapObject::getPictureSettings( PictureMirrorType *_mirrorType, int *_d
 
 QPixmap KPPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
 {
+
+  if (mirrorType == PM_NORMAL && !swapRGB && !grayscal && bright == 0)
+    return _tmpPixmap;
+
     QImage _tmpImage = _tmpPixmap.convertToImage();
     bool _horizontal = false;
     bool _vertical = false;
