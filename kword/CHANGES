@@ -1592,3 +1592,10 @@ Reggie, 6.10.1999:
 Reggie, 19.10.1999:
 -----------------
 - Improvements for tables, still more needed
+
+Reggie, 26.10.1999:
+-----------------
+- When selection text with keyboard Key_Home/Key_End
+  are working as expected
+- Frame borders with a width > 1 are drawn correctly again
+- Fixed some crashing code

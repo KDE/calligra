@@ -172,6 +172,7 @@ public:
     void recalcWholeText( KWParag *start, unsigned int fs );
     void footerHeaderDisappeared();
     void drawBorders( QPainter &_painter, QRect v_area, bool drawBack = true, QRegion *region = 0 );
+    void drawFrameBorder( QPainter &p, KWFrame *frame, int dx = 0, int dy = 0 );
     void createResizeHandles( KWFrame *frame );
     void removeResizeHandles( KWFrame *frame );
     void setRuler2Frame( unsigned int _frameset, unsigned int _frame );
@@ -196,8 +197,8 @@ public:
     void addLen() { currFindPos += currFindLen; }
 
     void setTableConfig( unsigned int rows, unsigned int cols,
-			 KWTblCellSize wid, KWTblCellSize hei ) { 
-	trows = rows; tcols = cols; 
+			 KWTblCellSize wid, KWTblCellSize hei ) {
+	trows = rows; tcols = cols;
 	twid = wid; thei = hei;
     }
 
@@ -268,7 +269,7 @@ public slots:
     KWTblCellSize tableHeightMode() const {
 	return thei;
     }
-    
+
 protected slots:
     void frameDiaClosed();
     void startBlinkCursor();
@@ -412,7 +413,7 @@ protected:
     int selectedFrameSet, selectedFrame;
     unsigned int tcols, trows;
     KWTblCellSize twid, thei;
-    
+
     bool recalcingText;
     bool mouseMoved;
     bool maybeDrag;

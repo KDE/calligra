@@ -27,7 +27,6 @@ class QGroupBox;
 class QRadioButton;
 class QCheckBox;
 class QLabel;
-class KRestrictedLine;
 class QCloseEvent;
 class QListView;
 class QListViewItem;
@@ -49,7 +48,7 @@ class KWFrameDia : public QTabDialog
     Q_OBJECT
 
 public:
-    KWFrameDia( QWidget *parent, const char *name, KWFrame *_frame, KWordDocument *_doc, 
+    KWFrameDia( QWidget *parent, const char *name, KWFrame *_frame, KWordDocument *_doc,
                 KWPage *_page, int _flags, KWFrameSet *fs = 0 );
 
 protected:
@@ -67,16 +66,16 @@ protected:
     QLabel *lRunNo, *lRunBounding, *lRunContur, *lRGap, *lFrameSet, *lNewFrame;
     QLabel *lx, *ly, *lw, *lh, *lml, *lmr, *lmt, *lmb;
     QListView *lFrameSList;
-    KRestrictedLine *sx, *sy, *sw, *sh, *sml, *smr, *smt, *smb;
+    QLineEdit *sx, *sy, *sw, *sh, *sml, *smr, *smt, *smb;
     QLineEdit *eFrameSetName;
 
     KWFrame *frame;
-    KRestrictedLine *eRGap;
+    QLineEdit *eRGap;
     int flags;
     KWordDocument *doc;
     KWPage *page;
     KWFrameSet *frameset;
-    
+
     float oldX, oldY, oldW, oldH;
 
     void closeEvent( QCloseEvent *e )

@@ -22,7 +22,6 @@
 
 #include <klocale.h>
 #include <kapp.h>
-#include <krestrictedline.h>
 #include <kiconloader.h>
 #include <kglobal.h>
 
@@ -39,6 +38,7 @@
 #include <qhbox.h>
 #include <qheader.h>
 #include <qmessagebox.h>
+#include <qvalidator.h>
 
 #include <stdlib.h>
 #include <limits.h>
@@ -198,7 +198,11 @@ void KWFrameDia::setupTab2TextFrame()
     lRGap->setAlignment( AlignRight | AlignVCenter );
     grid2->addWidget( lRGap, 1, 0 );
 
-    eRGap = new KRestrictedLine( tab2, "", KWUnit::unitType( doc->getUnit() ) == U_PT ? "1234567890" : "1234567890." );
+    eRGap = new QLineEdit( tab2 );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	eRGap->setValidator( new QIntValidator( eRGap ) );
+    else
+	eRGap->setValidator( new QDoubleValidator( eRGap ) );
     eRGap->setText( "0.00" );
     eRGap->setMaxLength( 5 );
     eRGap->setEchoMode( QLineEdit::Normal );
@@ -322,7 +326,11 @@ void KWFrameDia::setupTab4Geometry()
     lx->resize( lx->sizeHint() );
     pGrid->addWidget( lx, 1, 0 );
 
-    sx = new KRestrictedLine( grp1, "", KWUnit::unitType( doc->getUnit() ) == U_PT ? "1234567890" : "1234567890." );
+    sx = new QLineEdit( grp1 );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	sx->setValidator( new QIntValidator( sx ) );
+    else
+	sx->setValidator( new QDoubleValidator( sx ) );
     sx->setText( "0.00" );
     sx->setMaxLength( 16 );
     sx->setEchoMode( QLineEdit::Normal );
@@ -334,7 +342,11 @@ void KWFrameDia::setupTab4Geometry()
     ly->resize( ly->sizeHint() );
     pGrid->addWidget( ly, 1, 1 );
 
-    sy = new KRestrictedLine( grp1, "", KWUnit::unitType( doc->getUnit() ) == U_PT ? "1234567890" : "1234567890." );
+    sy = new QLineEdit( grp1 );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	sy->setValidator( new QIntValidator( sy ) );
+    else
+	sy->setValidator( new QDoubleValidator( sy ) );
     sy->setText( "0.00" );
     sy->setMaxLength( 16 );
     sy->setEchoMode( QLineEdit::Normal );
@@ -346,7 +358,11 @@ void KWFrameDia::setupTab4Geometry()
     lw->resize( lw->sizeHint() );
     pGrid->addWidget( lw, 3, 0 );
 
-    sw = new KRestrictedLine( grp1, "", KWUnit::unitType( doc->getUnit() ) == U_PT ? "1234567890" : "1234567890." );
+    sw = new QLineEdit( grp1 );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	sw->setValidator( new QIntValidator( sw ) );
+    else
+	sw->setValidator( new QDoubleValidator( sw ) );
     sw->setText( "0.00" );
     sw->setMaxLength( 16 );
     sw->setEchoMode( QLineEdit::Normal );
@@ -358,7 +374,11 @@ void KWFrameDia::setupTab4Geometry()
     lh->resize( lh->sizeHint() );
     pGrid->addWidget( lh, 3, 1 );
 
-    sh = new KRestrictedLine( grp1, "", KWUnit::unitType( doc->getUnit() ) == U_PT ? "1234567890" : "1234567890." );
+    sh = new QLineEdit( grp1 );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	sh->setValidator( new QIntValidator( sh ) );
+    else
+	sh->setValidator( new QDoubleValidator( sh ) );
     sh->setText( "0.00" );
     sh->setMaxLength( 16 );
     sh->setEchoMode( QLineEdit::Normal );
@@ -403,7 +423,11 @@ void KWFrameDia::setupTab4Geometry()
     lml->resize( lml->sizeHint() );
     mGrid->addWidget( lml, 1, 0 );
 
-    sml = new KRestrictedLine( grp2, "", KWUnit::unitType( doc->getUnit() ) == U_PT ? "1234567890" : "1234567890." );
+    sml = new QLineEdit( grp2 );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	sml->setValidator( new QIntValidator( sml ) );
+    else
+	sml->setValidator( new QDoubleValidator( sml ) );
     sml->setText( "0.00" );
     sml->setMaxLength( 5 );
     sml->setEchoMode( QLineEdit::Normal );
@@ -415,7 +439,11 @@ void KWFrameDia::setupTab4Geometry()
     lmr->resize( lmr->sizeHint() );
     mGrid->addWidget( lmr, 1, 1 );
 
-    smr = new KRestrictedLine( grp2, "", KWUnit::unitType( doc->getUnit() ) == U_PT ? "1234567890" : "1234567890." );
+    smr = new QLineEdit( grp2 );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	smr->setValidator( new QIntValidator( smr ) );
+    else
+	smr->setValidator( new QDoubleValidator( smr ) );
     smr->setText( "0.00" );
     smr->setMaxLength( 5 );
     smr->setEchoMode( QLineEdit::Normal );
@@ -427,7 +455,11 @@ void KWFrameDia::setupTab4Geometry()
     lmt->resize( lmt->sizeHint() );
     mGrid->addWidget( lmt, 3, 0 );
 
-    smt = new KRestrictedLine( grp2, "", KWUnit::unitType( doc->getUnit() ) == U_PT ? "1234567890" : "1234567890." );
+    smt = new QLineEdit( grp2 );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	smt->setValidator( new QIntValidator( smt ) );
+    else
+	smt->setValidator( new QDoubleValidator( smt ) );
     smt->setText( "0.00" );
     smt->setMaxLength( 5 );
     smt->setEchoMode( QLineEdit::Normal );
@@ -439,7 +471,11 @@ void KWFrameDia::setupTab4Geometry()
     lmb->resize( lmb->sizeHint() );
     mGrid->addWidget( lmb, 3, 1 );
 
-    smb = new KRestrictedLine( grp2, "", KWUnit::unitType( doc->getUnit() ) == U_PT ? "1234567890" : "1234567890." );
+    smb = new QLineEdit( grp2 );
+    if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
+	smb->setValidator( new QIntValidator( smb ) );
+    else
+	smb->setValidator( new QDoubleValidator( smb ) );
     smb->setText( "0.00" );
     smb->setMaxLength( 5 );
     smb->setEchoMode( QLineEdit::Normal );

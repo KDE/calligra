@@ -1890,15 +1890,15 @@ void KWGroupManager::init( unsigned int x, unsigned int y, unsigned int width, u
     if ( heim == TblAuto ||
 	 static_cast<int>( hei ) < doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 5 )
 	hei = doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 5;
-    
+
     if ( widm == TblAuto ) {
 	x = doc->getPTLeftBorder();
-	width = doc->getPTPaperWidth() - 
+	width = doc->getPTPaperWidth() -
 		( doc->getPTLeftBorder() + doc->getPTRightBorder() );
 	wid = width / cols - 5;
     }
-    
-    if ( wid < 40 ) 
+
+    if ( wid < 40 )
 	wid = 40;
 
     unsigned int _wid, _hei;
@@ -2029,7 +2029,7 @@ void KWGroupManager::recalcRows()
 	    if ( j > 0 && y + getFrameSet( j, i )->getFrame( 0 )->height() >
 		 ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) *
 		 doc->getPTPaperHeight() - doc->getPTBottomBorder() ) {
-		y = ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) * 
+		y = ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) *
 		    doc->getPTPaperHeight() + doc->getPTTopBorder();
 		_addRow = true;
 	    }
