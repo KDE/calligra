@@ -37,8 +37,11 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 
     KoTextStringChar *firstChar = 0;
     KoTextString *string = parag->string();
+    bool rtl = string->isRightToLeft();
     int left = doc ? parag->leftMargin() + doc->leftMargin() : 0;
-    int x = left + ( doc ? parag->firstLineMargin() : 0 );
+    int x = left;
+    if ( doc && !rtl )
+        x += parag->firstLineMargin();
     int curLeft = left;
     int y = doc && doc->addMargins() ? parag->topMargin() : 0;
     int h = 0;
@@ -52,7 +55,10 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 
     curLeft = x;
     int rm = parag->rightMargin();
-    int initialRMargin = doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h + c->height(), rm, 4, parag ) : 0;
+    int currentRightMargin = rm;
+    if ( doc && rtl )
+        currentRightMargin += parag->firstLineMargin();
+    int initialRMargin = doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h + c->height(), currentRightMargin, 4, parag ) : 0;
     int availableWidth = dw - initialRMargin; // 'w' in QRT
 #ifdef DEBUG_FORMATTER
     qDebug( "KoTextFormatterBaseBreakWords::format left=%d initialHeight=%d initialLMargin=%d initialRMargin=%d availableWidth=%d", left, initialHeight, initialLMargin, initialRMargin, availableWidth );
@@ -217,11 +223,12 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		lineStart = lineStart2;
 		tmph = c->height();
 		h = 0;
+                currentRightMargin = rm;
 		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), tmph, left, 4, parag ) : left;
                 pixelx = zh->layoutUnitToPixelX( x );
 		initialHeight = tmph;
 		initialLMargin = x;
-		initialRMargin = ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), tmph, rm, 4, parag ) : 0 );
+		initialRMargin = ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), tmph, currentRightMargin, 4, parag ) : 0 );
 		availableWidth = dw - initialRMargin;
 		if ( parag->isNewLinesAllowed() && c->c == '\t' ) {
 		    int nx = parag->nextTab( i, x );
@@ -266,10 +273,11 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		tmph = c->height();
 		h = tmph;
 		x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), h, left, 4, parag ) : left;
+                currentRightMargin = rm;
                 pixelx = zh->layoutUnitToPixelX( x );
 		initialHeight = h;
 		initialLMargin = x;
-		initialRMargin = ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h, rm, 4, parag ) : 0 );
+		initialRMargin = ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h, currentRightMargin, 4, parag ) : 0 );
 		availableWidth = dw - initialRMargin;
 		if ( x != left || availableWidth != dw )
 		    fullWidth = FALSE;
@@ -309,12 +317,13 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    // format this line again
 	    if ( doc && h > initialHeight )
 	    {
-		int lm = left + ( ( firstChar == &string->at(0) && doc ) ? parag->firstLineMargin() : 0 );
+		int lm = left + ( ( firstChar == &string->at(0) && doc && !rtl ) ? parag->firstLineMargin() : 0 );
+                currentRightMargin = rm - ( ( firstChar == &string->at(0) && doc && rtl ) ? parag->firstLineMargin() : 0 );
 #ifdef DEBUG_FORMATTER
                 qDebug( "left=%d, firstlinepargin=%d => lm=%d", left, ( firstChar == &string->at(0) && doc ) ? parag->firstLineMargin() : 0, lm );
 #endif
 		int newLMargin = doc->flow()->adjustLMargin( y + parag->rect().y(), h, lm, 4, parag );
-		int newRMargin = doc->flow()->adjustRMargin( y + parag->rect().y(), h, rm, 4, parag );
+		int newRMargin = doc->flow()->adjustRMargin( y + parag->rect().y(), h, currentRightMargin, 4, parag );
 		initialHeight = h;
 #ifdef DEBUG_FORMATTER
 		qDebug("new height: %d => left=%d lm=%d first-char=%d newLMargin=%d newRMargin=%d", h, left, lm, (firstChar==&string->at(0)), newLMargin, newRMargin);
@@ -561,15 +570,9 @@ KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
     }
 
     if ( align & Qt::AlignHCenter ) {
-        if ( text->isRightToLeft() )
-            x = space/2 - x;
-        else
-            x += space/2;
+        x += space/2;
     } else if ( align & Qt::AlignRight ) {
-        if ( text->isRightToLeft() )
-            x = space - x;
-        else
-            x += space;
+        x += space;
     } else if ( align & Qt::AlignJustify ) {
 	for ( int j = last - 1; j >= start; --j ) {
             //// Start at last tab, if any. BR #40472 specifies that justifying should start after the last tab.
