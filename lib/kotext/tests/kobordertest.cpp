@@ -9,22 +9,38 @@ class MyWidget : public QWidget
 public:
     MyWidget( ) : QWidget( 0L ) {
         m_zh = new KoZoomHandler();
-        m_leftBorder.setPenWidth( 5 );
+        // First square
+        m_leftBorder.setPenWidth( 6 );
         m_leftBorder.color = red;
-        m_rightBorder.setPenWidth( 5 );
-        m_rightBorder.color = green;
-        m_topBorder.setPenWidth( 5 );
+        m_rightBorder.setPenWidth( 9 );
+        m_rightBorder.color = red;
+        m_topBorder.setPenWidth( 11 );
         m_topBorder.color = blue;
-        m_bottomBorder.setPenWidth( 5 );
+        m_bottomBorder.setPenWidth( 16 );
+        m_bottomBorder.color = green;
+        // Second square
+        m_doubleBorder.setPenWidth( 2 );
+        m_doubleBorder.setStyle( KoBorder::DOUBLE_LINE );
     }
 
 protected:
     virtual void paintEvent( QPaintEvent* )
     {
         QPainter p( this );
-        QRect rect( 20, 20, 120, 120 );
+        QRect rect( 20, 20, 100, 100 );
         KoBorder::drawBorders( p, m_zh, rect, m_leftBorder,
                                m_rightBorder, m_topBorder, m_bottomBorder,
+                               0, QPen() );
+        // Show the corners of the initial rect - they must apppear _inside_ the borders.
+        p.setPen( black );
+        p.drawPoint( rect.topLeft() );
+        p.drawPoint( rect.topRight() );
+        p.drawPoint( rect.bottomRight() );
+        p.drawPoint( rect.bottomLeft() );
+        // Second square
+        rect = QRect( 20, 250, 100, 100 );
+        KoBorder::drawBorders( p, m_zh, rect, m_doubleBorder,
+                               m_doubleBorder, m_doubleBorder, m_doubleBorder,
                                0, QPen() );
     }
     KoZoomHandler* m_zh;
@@ -32,6 +48,7 @@ protected:
     KoBorder m_rightBorder;
     KoBorder m_topBorder;
     KoBorder m_bottomBorder;
+    KoBorder m_doubleBorder;
 };
 
 int main (int argc, char ** argv)

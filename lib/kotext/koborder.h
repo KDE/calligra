@@ -61,12 +61,12 @@ public:
     static int zoomWidthY( double ptWidth, KoZoomHandler * zoomHandler, int minborder ); // For top/bottom borders
 
     // Get a ready-to-use QPen for this border.
+    // defaultColor is the color to use for QColor() - either defaultTextColor() or defaultBgColor().
     static QPen borderPen( const KoBorder & brd, int width, QColor defaultColor );
 
     // The do-it-all method :)
     // Draws in @p painter the 4 borders on the _outside_ of @p rect.
     // If a border is of size 0, minborder will be applied (no border if 0, defaultPen otherwise)
-    // defaultColor is the color to use for QColor() - either defaultTextColor() or defaultBgColor().
     static void drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRect rect,
                              KoBorder left, KoBorder right, KoBorder top, KoBorder bottom,
                              int minborder, QPen defaultPen );

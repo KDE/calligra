@@ -181,8 +181,11 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
     int leftBorderPenWidth = zoomWidthX( leftBorder.penWidth(), zoomHandler, minborder );
     int rightBorderPenWidth = zoomWidthX( rightBorder.penWidth(), zoomHandler, minborder );
 
-    kdDebug(32500) << "KoBorder::drawBorders widths: top=" << topBorderWidth << " bottom=" << bottomBorderWidth
-                   << " left=" << leftBorderWidth << " right=" << rightBorderWidth << endl;
+    //kdDebug(32500) << "KoBorder::drawBorders widths: top=" << topBorderWidth << " bottom=" << bottomBorderWidth
+    //               << " left=" << leftBorderWidth << " right=" << rightBorderWidth << endl;
+
+    //kdDebug(32500) << "                   penWidths: top=" << topBorderPenWidth << " bottom=" << bottomBorderPenWidth
+    //               << " left=" << leftBorderPenWidth << " right=" << rightBorderPenWidth << endl;
 
     QColor defaultColor = KoTextFormat::defaultTextColor( &painter );
 
@@ -192,16 +195,18 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
             painter.setPen( KoBorder::borderPen( topBorder, topBorderPenWidth, defaultColor ) );
         else
             painter.setPen( defaultPen );
-        int y = rect.top() - topBorderWidth + topBorderWidth/2;
+        int y = rect.top() - topBorderWidth + topBorderPenWidth/2;
         if ( topBorder.style==KoBorder::DOUBLE_LINE)
         {
-            y = rect.top() - topBorderWidth + topBorderPenWidth/2;
             painter.drawLine( rect.left()- 2*leftBorderPenWidth-1, y, rect.right()+4*rightBorderPenWidth, y );
             y += topBorderPenWidth + 1;
             painter.drawLine( rect.left()-leftBorderPenWidth, y, rect.right()+rightBorderPenWidth, y );
         }
         else
-            painter.drawLine( rect.left()-leftBorderWidth, y, rect.right()+rightBorderWidth, y );
+        {
+            int adjust = topBorderPenWidth/2;
+            painter.drawLine( rect.left()-leftBorderWidth+adjust, y, rect.right()+rightBorderWidth-adjust, y );
+        }
     }
     if ( bottomBorderWidth > 0 )
     {
@@ -216,12 +221,15 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
         {
             y = rect.bottom() + bottomBorderWidth - (bottomBorderPenWidth-1)/2;
             painter.drawLine( rect.left()-2*leftBorderPenWidth-1, y, rect.right()+4*rightBorderPenWidth, y );
-            y-= bottomBorderPenWidth + 1;
+            y -= bottomBorderPenWidth + 1;
             painter.drawLine( rect.left()-leftBorderPenWidth, y, rect.right()+rightBorderPenWidth, y );
 
         }
         else
-            painter.drawLine( rect.left()-leftBorderWidth, y, rect.right()+rightBorderWidth, y );
+        {
+            int adjust = bottomBorderPenWidth/2;
+            painter.drawLine( rect.left()-leftBorderWidth+adjust, y, rect.right()+rightBorderWidth-adjust, y );
+        }
     }
     if ( leftBorderWidth > 0 )
     {
@@ -234,16 +242,18 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
         {
             x = rect.left() - leftBorderWidth + leftBorderPenWidth/2;
             painter.drawLine( x, rect.top()-2*topBorderPenWidth, x, rect.bottom()+2*bottomBorderPenWidth );
-            x+= leftBorderPenWidth + 1;
+            x += leftBorderPenWidth + 1;
             painter.drawLine( x, rect.top()-topBorderPenWidth, x, rect.bottom()+bottomBorderPenWidth );
         }
         else
         {
-            int yBottom = rect.bottom()+bottomBorderWidth;
-            /*kdDebug(32500) << " pen=" << painter.pen() << " rect=" << rect
-                           << " painting from " << x << "," << rect.top()-topBorderWidth
+            int adjust = leftBorderPenWidth/2; // due to SquareCap
+            int yTop = rect.top() - topBorderWidth + adjust;
+            int yBottom = rect.bottom() + bottomBorderWidth - adjust;
+            /*kdDebug(32500) << " pen=" << painter.pen() << " rect=" << rect << " topBorderWidth=" << topBorderWidth << " adjust=" << adjust
+                           << " painting from " << x << "," << yTop
                            << " to " << x << "," << yBottom << endl;*/
-            painter.drawLine( x, rect.top()-topBorderWidth, x, yBottom );
+            painter.drawLine( x, yTop, x, yBottom );
         }
     }
     if ( rightBorderWidth > 0 )
@@ -253,15 +263,19 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
         else
             painter.setPen( defaultPen );
         int x = rect.right() + rightBorderWidth - (rightBorderWidth-1)/2;
+        //kdDebug(32500) << "Drawing right border at x=" << x << endl;
         if ( rightBorder.style==KoBorder::DOUBLE_LINE)
         {
             x = rect.right() + rightBorderWidth - (rightBorderPenWidth-1)/2;
             painter.drawLine( x, rect.top()-2*topBorderPenWidth, x, rect.bottom()+2*bottomBorderPenWidth );
-            x-= leftBorderPenWidth + 1;
+            x -= rightBorderPenWidth + 1;
             painter.drawLine( x, rect.top()-topBorderPenWidth, x, rect.bottom()+bottomBorderPenWidth );
 
         }
         else
-            painter.drawLine( x, rect.top()-topBorderWidth, x, rect.bottom()+bottomBorderWidth );
+        {
+            int adjust = rightBorderPenWidth/2;
+            painter.drawLine( x, rect.top()-topBorderWidth+adjust, x, rect.bottom()+bottomBorderWidth-adjust );
+        }
     }
 }
