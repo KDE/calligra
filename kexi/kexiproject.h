@@ -37,7 +37,8 @@ struct Credentials
 			port,
 			driver,
 			user,
-			password;
+			password,
+			socket;
 };
 
 class KexiProject : public QObject

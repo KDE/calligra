@@ -95,12 +95,15 @@ KexiCreateProjectPageDB::KexiCreateProjectPageDB(KexiCreateProject *parent, QPix
 }
 
 void
-KexiCreateProjectPageDB::connectHost(QString driver, QString host, QString user, QString password)
+KexiCreateProjectPageDB::connectHost(QString driver, QString host, QString user, QString password,
+	QString socket, QString port)
 {
 	m_cred.driver = driver;
 	m_cred.host = host;
 	m_cred.user = user;
 	m_cred.password = password;
+	m_cred.socket = socket;
+	m_cred.port = port;
 
 	if(kexi->project()->initHostConnection(m_cred))
 	{

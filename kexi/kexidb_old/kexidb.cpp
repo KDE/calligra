@@ -89,7 +89,7 @@ KexiDB::queryRecord(QString, bool)
 
 
 bool
-KexiDB::connect(QString, QString, QString)
+KexiDB::connect(QString, QString, QString, QString, QString)
 {
 	/*! implemented for linking reasons */
 	kdDebug() << "KexiDB::connect(host): sorry you are wrong here" << endl;
@@ -97,7 +97,7 @@ KexiDB::connect(QString, QString, QString)
 }
 
 bool
-KexiDB::connect(QString, QString, QString, QString, bool)
+KexiDB::connect(QString, QString, QString, QString, QString, QString, bool)
 {
 	/*! implemented for linking reasons */
 	kdDebug() << "KexiDB::connect(db): sorry you are wrong here" << endl;

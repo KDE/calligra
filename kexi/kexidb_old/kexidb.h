@@ -48,8 +48,9 @@ class KexiDB : public QObject
 		virtual KexiDBRecord* queryRecord(QString query, bool buffer=false);
 
 		/*! connect to database hope that is ansi-compatible */
-		virtual bool connect(QString host, QString user, QString password);
-		virtual bool connect(QString host, QString user, QString password, QString db, bool create = false);
+		virtual bool connect(QString host, QString user, QString password, QString socket, QString port);
+		virtual bool connect(QString host, QString user, QString password, QString socket, QString port,
+			QString db, bool create = false);
 		/*! connect method for file-based databases*/
 		virtual bool load(QString file);
 

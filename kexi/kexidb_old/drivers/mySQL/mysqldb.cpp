@@ -60,16 +60,26 @@ MySqlDB::queryRecord(QString querystatement, bool buffer)
 }
 
 bool
-MySqlDB::connect(QString host, QString user, QString password)
+MySqlDB::connect(QString host, QString user, QString password, QString socket, QString port)
 {
+	const char* sock = 0;
 	kdDebug() << "MySqlDB::connect(" << host << "," << user << "," << password << ")" << endl;
-	mysql_real_connect(m_mysql, host.local8Bit(), user.local8Bit(), password.local8Bit(), 0, 0, 0, 0);
+	
+	if(socket != "")
+	{
+		sock = socket.local8Bit();
+	}
+	
+	mysql_real_connect(m_mysql, host.local8Bit(), user.local8Bit(), password.local8Bit(), 0,
+		port.toUInt(), sock, 0);
 	if(mysql_errno(m_mysql) == 0)
 	{
 		m_connected = true;
 		m_host = host;
 		m_user = user;
 		m_password = password;
+		m_port = port.toUInt();
+		m_socket = socket;
 		return true;
 	}
 	
@@ -78,10 +88,11 @@ MySqlDB::connect(QString host, QString user, QString password)
 }
 
 bool
-MySqlDB::connect(QString host, QString user, QString password, QString db, bool create)
+MySqlDB::connect(QString host, QString user, QString password, QString socket, QString port, QString db, bool create)
 {
 	kdDebug() << "MySqlDB::connect(QString host, QString user, QString password, QString db)" << endl;
-	if(m_connected && host == m_host && user == m_user && password == m_password)
+	if(m_connected && host == m_host && user == m_user && password == m_password && socket == m_socket
+		&& port.toUInt() == m_port)
 	{
 		kdDebug() << "MySqlDB::connect(db): already connected" << endl;
 		
@@ -100,7 +111,7 @@ MySqlDB::connect(QString host, QString user, QString password, QString db, bool 
 	}
 	else
 	{
-		if(connect(host, user, password))
+		if(connect(host, user, password, socket, port))
 		{
 			//create new database if needed
 			if(create)

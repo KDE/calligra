@@ -55,8 +55,9 @@ class MySqlDB : public KexiDB
 
 		KexiDBRecord	*queryRecord(QString querystatement, bool buffer=false);
 
-		bool		connect(QString host, QString user, QString password);
-		bool		connect(QString host, QString user, QString password, QString db, bool create = false);
+		bool		connect(QString host, QString user, QString password, QString socket, QString port);
+		bool		connect(QString host, QString user, QString password, QString socket, QString port,
+			QString db, bool create = false);
 
 		QStringList	databases();
 		QStringList	tables();
@@ -102,7 +103,7 @@ class MySqlDB : public KexiDB
 		bool		m_connected;
 		bool		m_connectedDB;
 		unsigned int    m_port;
-		const char	*m_unix_socket;
+		QString		m_socket;
 		unsigned int	m_client_flag;
 
 		QString		m_host;

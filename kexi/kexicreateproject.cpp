@@ -95,8 +95,10 @@ KexiCreateProject::next()
 		QString host = m_pageConnection->data("host").toString();
 		QString user = m_pageConnection->data("user").toString();
 		QString pass = m_pageConnection->data("password").toString();
+		QString port = m_pageConnection->data("port").toString();
+		QString socket = m_pageConnection->data("socket").toString();
 		
-		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectHost(engine, host, user, pass);
+		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectHost(engine, host, user, pass, socket, port);
 	}
 	KWizard::next();
 }

@@ -38,7 +38,8 @@ class KexiCreateProjectPageDB : public KexiCreateProjectPage
 		KexiCreateProjectPageDB(KexiCreateProject *parent, QPixmap *wpic, const char *name=0);
 		~KexiCreateProjectPageDB();
 
-		void		connectHost(QString driver, QString host, QString user, QString password);
+		void		connectHost(QString driver, QString host, QString user, QString password,
+			QString socket, QString port);
 		bool		connectDB();
 
 	protected:
