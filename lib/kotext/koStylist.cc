@@ -279,6 +279,19 @@ void KoStyleManager::updateGUI() {
         }
     }
 
+    QString inheritName = m_currentStyle->parentStyle() ? m_currentStyle->parentStyle()->translatedName() : QString::null;
+    kdDebug(32500) << "KoStyleManager::updateGUI updating combo to " << inheritName << endl;
+    for ( int i = 0; i < m_inheritCombo->count(); i++ ) {
+        if ( m_inheritCombo->text( i ) == inheritName ) {
+            m_inheritCombo->setCurrentItem( i );
+            kdDebug(32500) << "found at " << i << endl;
+            break;
+        }
+        else
+            m_inheritCombo->setCurrentItem( 0 );//none !!!
+    }
+
+
     // update delete button (can't delete first style);
     m_deleteButton->setEnabled(m_stylesList->currentItem() != 0);
 
