@@ -1080,7 +1080,12 @@ void KWView::editReplace()
 /*================================================================*/
 void KWView::editDeleteFrame()
 {
-    gui->canvasWidget()->deleteFrame();
+    int result;
+    result = KMessageBox::warningContinueCancel(this,                                                i18n("Do you want to delete this frame?"),
+                                                i18n("Delete Row"),
+                                                i18n("&Delete"));
+    if (result == KMessageBox::Continue)
+        gui->canvasWidget()->deleteFrame();
 }
 
 /*================================================================*/
@@ -1221,6 +1226,12 @@ void KWView::viewZoom( const QString &s )
         newPageLayout( pgLayout );
         gui->getVertRuler()->setZoom(static_cast<double>(zoom)/100.0);
         gui->getHorzRuler()->setZoom(static_cast<double>(zoom)/100.0);
+        KWFrame *frame=doc->getFirstSelectedFrame();
+        if(frame!=0L && frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
+        {
+            if(doc->processingType()  == KWDocument::WP && frame->getFrameSet() == doc->getFrameSet(0)&& frame->isSelected())
+                frame->setSelected(true);
+        }
     }
     gui->canvasWidget()->repaintAll();
     gui->canvasWidget()->setFocus();
@@ -1476,6 +1487,12 @@ void KWView::formatPage()
         gui->getHorzRuler()->setPageLayout( pgLayout );
         doc->setModified(true);
         gui->canvasWidget()->repaintAll();
+        KWFrame *frame=doc->getFirstSelectedFrame();
+        if(frame!=0L && frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
+        {
+            if(doc->processingType()  == KWDocument::WP && frame->getFrameSet() == doc->getFrameSet(0)&& frame->isSelected())
+                frame->setSelected(true);
+        }
 #if 0
         gui->canvasWidget()->frameSizeChanged( pgLayout );
 #endif
@@ -2549,6 +2566,13 @@ void KWView::newPageLayout( KoPageLayout _layout )
     gui->getHorzRuler()->setPageLayout( _layout );
     gui->getVertRuler()->setPageLayout( _layout );
     gui->canvasWidget()->repaintAll();
+
+    KWFrame *frame=doc->getFirstSelectedFrame();
+    if(frame!=0L && frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
+        {
+            if(doc->processingType()  == KWDocument::WP && frame->getFrameSet() == doc->getFrameSet(0)&& frame->isSelected())
+                frame->setSelected(true);
+        }
 #if 0
     gui->canvasWidget()->frameSizeChanged( _layout );
     gui->canvasWidget()->forceFullUpdate();
