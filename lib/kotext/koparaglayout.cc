@@ -596,12 +596,11 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
         }
 
         if ( context.styleStack().hasAttribute( "style:break-inside" ) ) { // 3.11.7
-            if ( context.styleStack().attribute( "style:break-inside" ) != "true" ) // opposite meaning
+            if ( context.styleStack().attribute( "style:break-inside" ) == "avoid" )
                  pageBreaking |= KoParagLayout::KeepLinesTogether;
         }
-        // 3.11.31 (the doc said style:keep-with-next but DV said it's wrong)
         if ( context.styleStack().hasAttribute( "fo:keep-with-next" ) ) {
-            // OASIS spec says it's "auto"/"always", not a boolean. Not sure which one OO uses.
+            // OASIS spec says it's "auto"/"always", not a boolean.
             QString val = context.styleStack().attribute( "fo:keep-with-next" );
             if ( val == "true" || val == "always" )
                 pageBreaking |= KoParagLayout::KeepWithNext;
@@ -867,5 +866,26 @@ void KoParagLayout::saveOasis( KoGenStyle& gs ) const
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     gs.addChildElement( "style:tab-stops", elementContents );
 
-    // TODO finish
+    bool fourBordersEqual = leftBorder.penWidth() > 0 &&
+               leftBorder == rightBorder && rightBorder == topBorder && topBorder == bottomBorder;
+    if ( fourBordersEqual ) {
+        gs.addProperty( "fo:border", leftBorder.saveFoBorder() );
+    } else {
+        if ( leftBorder.penWidth() > 0 )
+            gs.addProperty( "fo:border-left", leftBorder.saveFoBorder() );
+        if ( rightBorder.penWidth() > 0 )
+            gs.addProperty( "fo:border-right", rightBorder.saveFoBorder() );
+        if ( topBorder.penWidth() > 0 )
+            gs.addProperty( "fo:border-top", topBorder.saveFoBorder() );
+        if ( bottomBorder.penWidth() > 0 )
+            gs.addProperty( "fo:border-bottom", bottomBorder.saveFoBorder() );
+    }
+
+    if ( pageBreaking & KoParagLayout::HardFrameBreakBefore )
+        gs.addProperty( "fo:break-before", "column" );
+    else if ( pageBreaking & KoParagLayout::HardFrameBreakAfter )
+        gs.addProperty( "fo:break-after", "column" );
+    gs.addProperty( "style:break-inside", pageBreaking & KoParagLayout::KeepLinesTogether ? "avoid" : "auto" );
+    if ( pageBreaking & KoParagLayout::KeepWithNext )
+        gs.addProperty( "fo:keep-with-next", "always" );
 }

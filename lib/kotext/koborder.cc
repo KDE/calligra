@@ -23,6 +23,20 @@
 #include "kozoomhandler.h"
 #include "kotextformat.h"
 #include "korichtext.h" // for KoTextFormat
+#include <float.h>
+
+static const struct BorderStyle {
+    QPen::PenStyle penStyle;
+    QCString oasisName;
+    QCString uiStringStyle;
+} s_borderStyles[] = {
+    { QPen::SolidLine, "solid", "_________" }, // SOLID
+    { QPen::DashLine, "dashed", "___ ___ __" }, // DASH
+    { QPen::DotLine, "dotted", "_ _ _ _ _ _" }, // DOT
+    { QPen::DashDotLine, "dot-dash", "___ _ ___ _" }, // DASH_DOT
+    { QPen::DashDotDotLine, "dot-dot-dash", "___ _ _ ___" }, // DASH_DOT_DOT
+    { QPen::SolidLine, "double", "===========" } // DOUBLE_LINE
+};
 
 KoBorder::KoBorder()
     : color(), m_style( SOLID )
@@ -47,16 +61,14 @@ bool KoBorder::operator!=( const KoBorder _brd ) const {
 void KoBorder::setStyle(BorderStyle _style)
 {
     m_style = _style;
-    setPenWidth(ptPenWidth);
+    setPenWidth( ptPenWidth );
 }
 
 void KoBorder::setPenWidth(double _w)
 {
     ptPenWidth = _w;
-    if ( m_style==KoBorder::DOUBLE_LINE)
-    {
+    if ( m_style == KoBorder::DOUBLE_LINE )
         ptWidth = 2 * ptPenWidth + 1;
-    }
     else
         ptWidth = _w;
 }
@@ -67,28 +79,12 @@ QPen KoBorder::borderPen( const KoBorder & _brd, int width, QColor defaultColor 
     if ( !_brd.color.isValid() )
         pen.setColor( defaultColor );
 
-    switch ( _brd.m_style ) {
-    case KoBorder::SOLID:
-    case KoBorder::DOUBLE_LINE:
-        pen.setStyle( SolidLine );
-        break;
-    case KoBorder::DASH:
-        pen.setStyle( DashLine );
-        break;
-    case KoBorder::DOT:
-        pen.setStyle( DotLine );
-        break;
-    case KoBorder::DASH_DOT:
-        pen.setStyle( DashDotLine );
-        break;
-    case KoBorder::DASH_DOT_DOT:
-        pen.setStyle( DashDotDotLine );
-        break;
-    }
+    pen.setStyle( s_borderStyles[ _brd.m_style ].penStyle );
 
     return pen;
 }
 
+// KOffice-1.3 file format (deprecated)
 KoBorder KoBorder::loadBorder( const QDomElement & elem )
 {
     KoBorder bd;
@@ -113,23 +109,16 @@ void KoBorder::loadFoBorder( const QString& border )
 
     // ## isn't it faster to use QStringList::split than parse it 3 times?
     QString _width = border.section(' ', 0, 0);
-    QString _style = border.section(' ', 1, 1);
+    QCString _style = border.section(' ', 1, 1).latin1();
     QString _color = border.section(' ', 2, 2);
 
     setPenWidth( KoUnit::parseValue( _width, 1.0 ) );
 
-    if ( _style == "dashed" )
-        m_style = DASH;
-    else if ( _style == "dotted" )
-        m_style = DOT;
-    else if ( _style == "dot-dash" ) // not in xsl/fo, but in OASIS (in other places)
-        m_style = DASH_DOT;
-    else if ( _style == "dot-dot-dash" ) // not in xsl/fo, but in OASIS (in other places)
-        m_style = DASH_DOT_DOT;
-    else if ( _style == "double" )
-        m_style = DOUBLE_LINE;
-    else
-        m_style = SOLID;
+    m_style = SOLID;
+    for ( uint i = 0; i < sizeof( s_borderStyles ) / sizeof *s_borderStyles; ++i ) {
+        if ( _style == s_borderStyles[i].oasisName )
+            m_style = static_cast<BorderStyle>( i );
+    }
 
     if ( _color.isEmpty() )
         color = QColor();
@@ -137,6 +126,22 @@ void KoBorder::loadFoBorder( const QString& border )
         color.setNamedColor( _color );
 }
 
+QString KoBorder::saveFoBorder() const
+{
+    if ( QABS( ptPenWidth ) < 1E-10 ) // i.e. ptPenWidth == 0
+        return "none";
+    //string like "2pt solid #800000"
+    QString str = QString::number( ptPenWidth, 'g', DBL_DIG );
+    str += "pt ";
+    str += s_borderStyles[ m_style ].oasisName;
+    if ( color.isValid() ) {
+        str += ' ';
+        str += color.name();
+    }
+    return str;
+}
+
+// KOffice-1.3 file format (deprecated)
 void KoBorder::save( QDomElement & elem ) const
 {
     if (color.isValid()) {
@@ -150,40 +155,17 @@ void KoBorder::save( QDomElement & elem ) const
 
 KoBorder::BorderStyle KoBorder::getStyle( const QString &style )
 {
-    if ( style == "___ ___ __" )
-        return KoBorder::DASH;
-    if ( style == "_ _ _ _ _ _" )
-        return KoBorder::DOT;
-    if ( style == "___ _ ___ _" )
-        return KoBorder::DASH_DOT;
-    if ( style == "___ _ _ ___" )
-        return KoBorder::DASH_DOT_DOT;
-    if ( style == "===========" )
-        return KoBorder::DOUBLE_LINE;
+    for ( uint i = 0; i < sizeof( s_borderStyles ) / sizeof *s_borderStyles; ++i ) {
+        if ( style == s_borderStyles[i].uiStringStyle.data() )
+            return static_cast<BorderStyle>( i );
+    }
     // default
     return KoBorder::SOLID;
 }
 
 QString KoBorder::getStyle( const BorderStyle &style )
 {
-    switch ( style )
-    {
-    case KoBorder::SOLID:
-        return "_________";
-    case KoBorder::DASH:
-        return "___ ___ __";
-    case KoBorder::DOT:
-        return "_ _ _ _ _ _";
-    case KoBorder::DASH_DOT:
-        return "___ _ ___ _";
-    case KoBorder::DASH_DOT_DOT:
-        return "___ _ _ ___";
-    case KoBorder::DOUBLE_LINE:
-        return "===========";
-    }
-
-    // Keep compiler happy.
-    return "_________";
+    return s_borderStyles[style].uiStringStyle;
 }
 
 int KoBorder::zoomWidthX( double ptWidth, KoZoomHandler * zoomHandler, int minborder )

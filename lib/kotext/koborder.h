@@ -54,6 +54,7 @@ public:
     void loadFoBorder( const QString& border );
     // Save to XML
     void save( QDomElement & elem ) const;
+    QString saveFoBorder() const;
 
     // String to style enum, and vice versa, for UI.
     static BorderStyle getStyle( const QString &style );
