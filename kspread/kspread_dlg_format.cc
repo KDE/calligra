@@ -57,7 +57,7 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     for( ; it != lst.end(); ++it )
     {
 	KSimpleConfig cfg( *it, TRUE );
-	cfg.setGroup( "Sheet-Style" );
+	cfg.setGroup( "Table-Style" );
 
 	Entry e;
 	e.config = *it;
