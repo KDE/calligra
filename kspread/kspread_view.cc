@@ -1031,8 +1031,8 @@ void KSpreadView::insertMathExpr()
 {
     if ( m_pTable == 0L )
         return;
-    KSpreadDlgFormula dlg( this, "Formula Editor" );
-    dlg.show();
+    KSpreadDlgFormula *dlg=new KSpreadDlgFormula( this, "Formula Editor" );
+    dlg->show();
     // #### Is the dialog deleted when it's closed ? (David)
     // Torben thinks that not.
 }
@@ -1048,8 +1048,8 @@ void KSpreadView::formulaSelection( const QString &_math )
         return;
     }
 
-    KSpreadDlgFormula dlg( this, "Formula Editor",_math );
-    dlg.show();
+    KSpreadDlgFormula *dlg=new KSpreadDlgFormula( this, "Formula Editor",_math );
+    dlg->show();
 }
 
 void KSpreadView::fontSizeSelected( int _size )
@@ -1542,8 +1542,8 @@ void KSpreadView::consolidate()
     {
         m_pCanvas->deleteEditor( true ); // save changes
     }
-    KSpreadConsolidate dlg( this, "Consolidate" );
-    dlg.show();
+    KSpreadConsolidate *dlg=new KSpreadConsolidate( this, "Consolidate" );
+    dlg->show();
 }
 
 void KSpreadView::sortList()
