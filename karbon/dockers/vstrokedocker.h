@@ -40,6 +40,9 @@ public:
 	 VStrokeDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
 	 VStroke stroke() { return *m_stroke; }
   
+public slots:
+	virtual void setStroke( VStroke * );
+
 private:
 	QHButtonGroup *m_capGroup;
 	QHButtonGroup *m_joinGroup;
@@ -47,7 +50,14 @@ private:
 	KarbonPart *m_part;
 	KarbonView *m_view;
 	TKUFloatSpinBox *m_setLineWidth;
-	
+
+private slots:
+	void slotCapChanged( int ID );
+	void slotJoinChanged( int ID );
+	void updateCanvas();
+	void updateDocker();
+	void widthChanged();
+
 protected:
 	VStroke *m_stroke;
 };

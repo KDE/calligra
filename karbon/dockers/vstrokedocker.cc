@@ -34,6 +34,7 @@
 #include "karbon_view.h"
 #include "vstroke.h"
 #include "vcolorslider.h"
+#include "vselection.h"
 #include "vstrokecmd.h"
 
 #include "vstrokedocker.h"
@@ -54,6 +55,7 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	m_setLineWidth->setMinValue(0.0);
 	m_setLineWidth->setLineStep(0.5);
 	mainLayout->addWidget ( m_setLineWidth, 0, 1 );
+	connect( m_setLineWidth, SIGNAL( valueChanged( float ) ), this, SLOT( widthChanged() ) ); 
 	
 	QLabel* capLabel = new QLabel( i18n ( "Cap:" ), mainWidget );
 	mainLayout->addWidget( capLabel, 1, 0 );
@@ -74,6 +76,7 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	button->setToggleButton( true );
 	m_capGroup->insert( button );
 	mainLayout->addWidget( m_capGroup, 1, 1 );
+	connect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
 	
 	QLabel* joinLabel = new QLabel( i18n ( "Join:" ), mainWidget );
 	mainLayout->addWidget( joinLabel, 2, 0 );
@@ -95,11 +98,85 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	button->setToggleButton( true );
 	m_joinGroup->insert( button );
 	mainLayout->addWidget( m_joinGroup, 2, 1 );
+	connect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
 	
 	mainLayout->activate();
 	setWidget( mainWidget );
 	
 	m_stroke = new VStroke();
+	updateDocker();
+}
+
+void VStrokeDocker::updateCanvas()
+{
+	if( m_part && m_part->document().selection()->objects().count() > 0 )
+	{
+		m_part->addCommand( new VStrokeCmd( &m_part->document(), m_stroke ), true );
+		m_view->selectionChanged();
+	}
+}
+
+void VStrokeDocker::slotCapChanged( int ID )
+{
+	switch ( ID ) {
+		case 1:
+			m_stroke->setLineCap ( VStroke::capRound ); break;
+		case 2:
+			m_stroke->setLineCap ( VStroke::capSquare ); break;
+		default:
+			m_stroke->setLineCap ( VStroke::capButt );
+	}
+	updateCanvas();
+}
+
+void VStrokeDocker::slotJoinChanged( int ID )
+{
+	switch ( ID ) {
+		case 1:
+			m_stroke->setLineJoin ( VStroke::joinRound ); break;
+		case 2:
+			m_stroke->setLineJoin ( VStroke::joinBevel ); break;
+		default:
+			m_stroke->setLineJoin ( VStroke::joinMiter );
+	}
+	updateCanvas();
+}
+
+void VStrokeDocker::updateDocker()
+{
+	switch( m_stroke->lineCap() )
+	{
+		case VStroke::capRound:
+			m_capGroup->setButton( 1 ); break;
+		case VStroke::capSquare:
+			m_capGroup->setButton( 2 ); break;
+		default:
+			m_capGroup->setButton( 0 );
+	}
+
+	switch( m_stroke->lineJoin() )
+	{
+		case VStroke::joinRound:
+			m_joinGroup->setButton( 1 ); break;
+		case VStroke::joinBevel:
+			m_joinGroup->setButton( 2 ); break;
+		default:
+			m_joinGroup->setButton( 0 );
+	}
+	
+	m_setLineWidth->setValue( m_stroke->lineWidth() );
+}
+
+void VStrokeDocker::widthChanged()
+{
+	m_stroke->setLineWidth( m_setLineWidth->value() );
+	updateCanvas();
+}
+
+void VStrokeDocker::setStroke( VStroke *stroke )
+{
+	m_stroke = stroke;
+	updateDocker();
 }
 
 #include "vstrokedocker.moc"
