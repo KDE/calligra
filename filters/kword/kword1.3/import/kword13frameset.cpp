@@ -95,7 +95,7 @@ bool KWord13PictureFrameset::setKey(const QString& key)
 
 void KWord13PictureFrameset::xmldump( QTextStream& iostream )
 {
-    iostream << "  <frameset variant=\"Text\" type=\"" << m_frameType
+    iostream << "  <frameset variant=\"Picture\" type=\"" << m_frameType
          << "\" info=\"" << m_frameInfo
          << "\" name=\"" << EscapeXmlDump( m_name ) <<"\">\n";
     iostream << "   <key>" << m_pictureKey << "</key>\n";

@@ -370,7 +370,6 @@ bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttribu
         KWord13PictureFrameset* frameset = new KWord13PictureFrameset( frameType, frameInfo, attributes.value( "name" ) );
         m_kwordDocument->m_otherFramesetList.append( frameset );
         stackItem->m_currentFrameset = m_kwordDocument->m_otherFramesetList.current();
-        // ### TODO: keepAspectRatio (but how to transform it to OASIS)
     }
     // ### frameType == 6 : horizontal line (however KWord did not save it correctly)
     // ### frameType == 4 : formula
@@ -431,7 +430,7 @@ bool KWord13Parser::startElementKey( const QString& name, const QXmlAttributes& 
         // ### TODO: catch duplicate keys (should not happen but who knows?)
         m_kwordDocument->m_pictureDict.insert( key, pic );
     }
-    else if ( stackItem->elementType == KWord13TypePictureFrameset )
+    else if ( stackItem->elementType == KWord13TypePicture )
     {
         // ### TODO: error messages?
         if ( stackItem->m_currentFrameset )
@@ -441,7 +440,8 @@ bool KWord13Parser::startElementKey( const QString& name, const QXmlAttributes& 
     }
     else
     {
-        // Not child of <PICTURES>, <PIXMAPS>, <CLIPARTS> or <FRAMESET>
+        // Neither child of <PICTURES>, <PIXMAPS>, <CLIPARTS>
+        // nor of <PICTURE>, <IMAGE>, <CLIPART>
         // ### TODO: parse error?
     }
     return true;
@@ -540,6 +540,15 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
     else if ( name == "KEY" )
     {
         success = startElementKey( name, attributes, stackItem );
+    }
+    else if ( name == "PICTURE" || name == "IMAGE" || name == "CLIPART" )
+    {
+        // ### TODO: keepAspectRatio (but how to transform it to OASIS)
+        if ( stackItem->elementType == KWord13TypePictureFrameset )
+        {
+            stackItem->elementType = KWord13TypePicture;
+        }
+        success = true;
     }
     else if ( name == "FRAME" )
     {

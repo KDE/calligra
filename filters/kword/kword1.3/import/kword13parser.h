@@ -54,7 +54,8 @@ enum KWord13StackItemType
     KWord13TypeFormatsPlural,///< \<FORMATS\>, as child of \<PARAGRAPH\>
     KWord13TypeVariable,        ///< \<FORMAT id="4"\> or \<VARIABLE\>
     KWord13TypePicturesPlural,  ///< \<PICTURES\>, \<PIXMAPS\> or \<CLIPARTS\>
-    KWord13TypePictureFrameset ///< \<FRAMESET typeInfo="2"\> (picture, image, clipart)
+    KWord13TypePictureFrameset, ///< \<FRAMESET typeInfo="2"\> (picture, image, clipart)
+    KWord13TypePicture         ///<  \<PICTURE\>, \<IMAGE\> or \<CLIPART\>
 };
 
 class KWord13StackItem

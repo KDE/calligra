@@ -917,7 +917,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     }
     
     
-# if 1 // DEBUG (out of specification)
+# ifndef NDEBUG // DEBUG (out of specification)
     m_store->open("debug.xml"); // ### TODO: check error!
     KoStoreDevice io ( m_store );
     io.open( IO_WriteOnly );  // ### TODO: check error!
