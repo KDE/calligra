@@ -22,6 +22,7 @@
 
 #include <kparts/mainwindow.h>
 
+class QLabel;
 class KoDocument;
 class KoView;
 class KoMainWindowPrivate;
