@@ -2305,6 +2305,10 @@ void CellLayoutPageFont::setCombos()
         textColor = dlg->textColor;
  else
         textColor = colorGroup().text();
+
+ if(!textColor.isValid())
+     textColor =colorGroup().text();
+
  textColorButton->setColor( textColor );
 
 
@@ -4283,6 +4287,10 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
         bgColor = dlg->bgColor;
     else
         bgColor = colorGroup().base();
+
+    if(!bgColor.isValid())
+        bgColor=colorGroup().base();
+
     bgColorButton->setColor(bgColor);
     connect( bgColorButton, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotSetBackgroundColor( const QColor & ) ) );

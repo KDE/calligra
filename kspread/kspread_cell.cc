@@ -2053,11 +2053,11 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                 {
                 //bad hack but there is a qt bug
                 //so I can print backgroundcolor
-                if( bg.isValid())
-                        {
-                        QBrush bb( bg );
-                        _painter.fillRect( _tx , _ty ,w2 ,h2 , bb );
-                        }
+                    QBrush bb( bg );
+                    if( !bg.isValid())
+                        bb.setColor(Qt::white);
+                    _painter.fillRect( _tx , _ty ,w2 ,h2 , bb );
+
                 }
     }
 
@@ -2209,6 +2209,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         _painter.setPen( vert_pen );
         _painter.drawLine( _tx + w, _ty, _tx + w, _ty + bottom );
     }
+    QColor textColorPrint=textColor( _col, _row);
 
     // This cell is obscured? Then dont draw any content
     if ( override_obscured )
@@ -2302,6 +2303,14 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 
     }
 
+    if(_painter.device()->isExtDev()&&!textColorPrint.isValid())
+        textColorPrint=Qt::black;
+    else if(!_painter.device()->isExtDev())
+    {
+        if(!textColorPrint.isValid())
+            textColorPrint=QApplication::palette().active().text();
+    }
+
     /**
      * QML ?
      */
@@ -2357,10 +2366,10 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                 if ( floatColor( _col, _row) == KSpreadCell::NegRed && v < 0.0 && !m_pTable->getShowFormular() )
                     tmpPen.setColor( Qt::red );
                 else
-                    tmpPen.setColor( textColor( _col, _row) );
+                    tmpPen.setColor( textColorPrint );
             }
             else
-                tmpPen.setColor( textColor( _col, _row) );
+                tmpPen.setColor( textColorPrint );
         }
         _painter.setPen(tmpPen);
 

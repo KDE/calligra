@@ -643,8 +643,17 @@ void KSpreadView::updateEditWidget()
     else
         editWidget()->setText( cell->text() );
 
-    m_textColor->setCurrentColor( cell->textColor( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    m_bgColor->setCurrentColor( cell->bgColor( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    QColor color=cell->textColor( m_pCanvas->markerColumn(), m_pCanvas->markerRow());
+    if(!color.isValid())
+        color=QApplication::palette().active().text();
+    m_textColor->setCurrentColor( color );
+
+    color=cell->bgColor( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+
+    if(!color.isValid())
+        color=QApplication::palette().active().base();
+
+    m_bgColor->setCurrentColor( color );
 
     m_selectFontSize->setFontSize( cell->textFontSize( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
     m_selectFont->setFont( cell->textFontFamily( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );

@@ -65,7 +65,7 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_dFaktor = 1.0;
     m_bMultiRow = FALSE;
     m_bVerticalText = FALSE;
-    m_textPen.setColor( QApplication::palette().active().text() );
+    m_textPen.setColor( QColor()/*QApplication::palette().active().text()*/ );
     m_eFormatNumber=KSpreadLayout::Number;
     m_rotateAngle=0;
     m_strComment="";
@@ -1405,7 +1405,7 @@ const QColor& KSpreadLayout::bgColor( int col, int row ) const
 	    return l->bgColor( col, row );
     }
 
-    return m_bgColor.isValid() ? m_bgColor : QApplication::palette().active().base();
+    return m_bgColor;//m_bgColor.isValid() ? m_bgColor : QApplication::palette().active().base();
 }
 
 const QPen& KSpreadLayout::textPen( int col, int row ) const

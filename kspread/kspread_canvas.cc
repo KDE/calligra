@@ -2028,8 +2028,14 @@ void KSpreadCanvas::createEditor( EditorType ed )
     int ypos = table->rowPos( markerRow(), this );
     QPalette p = m_pEditor->palette();
     QColorGroup g( p.normal() );
-    g.setColor( QColorGroup::Text, cell->textColor( markerColumn(), markerRow() ) );
-    g.setColor( QColorGroup::Background, cell->bgColor( markerColumn(), markerRow() ) );
+    QColor color=cell->textColor( markerColumn(), markerRow() );
+    if(!color.isValid())
+        color=QApplication::palette().active().text();
+    g.setColor( QColorGroup::Text, color);
+    color=cell->bgColor( markerColumn(), markerRow() );
+    if(!color.isValid())
+        color=g.base();
+    g.setColor( QColorGroup::Background, color );
     m_pEditor->setPalette( QPalette( g, p.disabled(), g ) );
     m_pEditor->setFont( cell->textFont( markerColumn(), markerRow() ) );
     m_pEditor->setGeometry( xpos, ypos, w, h );
