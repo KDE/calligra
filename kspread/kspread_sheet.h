@@ -284,6 +284,7 @@ public:
 
     bool isLoading();
 
+    void password( QCString & passwd ) const { passwd = m_strPassword; }
     bool isProtected() const { return !m_strPassword.isNull(); }
     void setProtected( QCString const & passwd );
     bool checkPassword( QCString const & passwd ) const { return ( passwd == m_strPassword ); }
