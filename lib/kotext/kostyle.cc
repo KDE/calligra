@@ -39,9 +39,22 @@ KoStyleCollection::KoStyleCollection()
 
 KoStyleCollection::~KoStyleCollection()
 {
+    clear();
+}
+
+void KoStyleCollection::clear()
+{
     m_styleList.setAutoDelete( true );
     m_styleList.clear();
     m_deletedStyles.clear();
+}
+
+QStringList KoStyleCollection::translatedStyleNames() const
+{
+    QStringList lst;
+    for( QPtrListIterator<KoParagStyle> p( m_styleList ); *p; ++p )
+        lst << (*p)->displayName();
+    return lst;
 }
 
 void KoStyleCollection::loadOasisStyleTemplates( KoOasisContext& context )
@@ -193,14 +206,18 @@ KoParagStyle* KoStyleCollection::addStyleTemplate( KoParagStyle * sty )
     for ( KoParagStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
     {
         if ( p->name() == sty->name() ) {
-            //kdDebug() << k_funcinfo << "replace existing style " << p->name() << endl;
-            // Replace existing style
-            if ( sty != p )
-            {
-                *p = *sty;
-                delete sty;
+            if ( p->displayName() == sty->displayName() ) {
+                //kdDebug() << k_funcinfo << "replace existing style " << p->name() << endl;
+                // Replace existing style
+                if ( sty != p )
+                {
+                    *p = *sty;
+                    delete sty;
+                }
+                return p;
+            } else { // internal name conflict, but it's not the same style as far as the user is concerned
+                sty->setInternalName( generateUniqueName() );
             }
-            return p;
         }
     }
     m_styleList.append( sty );
@@ -251,6 +268,34 @@ void KoStyleCollection::updateStyleListOrder( const QStringList &list )
         kdDebug()<<" style.current()->name() :"<<style.current()->name()<<endl;
     }
 #endif
+}
+
+void KoStyleCollection::importStyles( const QPtrList<KoParagStyle>& styleList )
+{
+    QPtrListIterator<KoParagStyle> styleIt( styleList );
+    QMap<QString, QString> followStyle;
+    for ( ; styleIt.current() ; ++styleIt )
+    {
+        KoParagStyle* style = new KoParagStyle(*styleIt.current());
+        if ( style->followingStyle() ) {
+            followStyle.insert( style->name(), style->followingStyle()->name() );
+        }
+        style = addStyleTemplate( style );
+    }
+
+    QMapIterator<QString, QString> itFollow = followStyle.begin();
+    for ( ; itFollow != followStyle.end(); ++itFollow )
+    {
+        KoParagStyle * style = findStyle(itFollow.key());
+        const QString followingStyleName = followStyle[ itFollow.key() ];
+        KoParagStyle * styleFollow = findStyle(followingStyleName);
+        //kdDebug() << "    " << style << "  " << itFollow.key() << ": followed by " << styleFollow << " (" << followingStyleName << ")" << endl;
+        Q_ASSERT(styleFollow);
+        if ( styleFollow )
+            style->setFollowingStyle( styleFollow );
+        else
+            style->setFollowingStyle( style );
+    }
 }
 
 void KoStyleCollection::saveOasisOutlineStyles( KoXmlWriter& writer ) const
@@ -316,6 +361,25 @@ KoParagStyle* KoStyleCollection::defaultStyle() const
     return findStyle( "Standard" ); // includes the fallback to first style
 }
 
+QString KoStyleCollection::generateUniqueName() const
+{
+    int count = 1;
+    QString name;
+    do {
+        name = "new" + QString::number( count++ );
+    } while ( findStyle( name ) );
+    return name;
+}
+
+#ifndef NDEBUG
+void KoStyleCollection::printDebug() const
+{
+    for( QPtrListIterator<KoParagStyle> p( m_styleList ); *p; ++p )
+    {
+        kdDebug() << *p << "  " << (*p)->name() << "    " << (*p)->displayName() << "  followingStyle=" << (*p)->followingStyle() << endl;
+    }
+}
+#endif
 
 /////////////
 
@@ -366,6 +430,10 @@ KoParagStyle::KoParagStyle( const KoParagStyle & rhs )
     *this = rhs;
 }
 
+KoParagStyle::~KoParagStyle()
+{
+}
+
 void KoParagStyle::operator=( const KoParagStyle &rhs )
 {
     KoCharStyle::operator=( rhs );
@@ -376,6 +444,11 @@ void KoParagStyle::operator=( const KoParagStyle &rhs )
     m_inheritedParagLayoutFlag = rhs.m_inheritedParagLayoutFlag;
     m_inheritedFormatFlag = rhs.m_inheritedFormatFlag;
     m_bOutline = rhs.m_bOutline;
+}
+
+void KoParagStyle::setFollowingStyle( KoParagStyle *fst )
+{
+  m_followingStyle = fst;
 }
 
 void KoParagStyle::saveStyle( QDomElement & parentElem )

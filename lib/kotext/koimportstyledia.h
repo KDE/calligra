@@ -31,31 +31,43 @@ class KoImportStyleDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KoImportStyleDia( const QStringList & _list, QWidget *parent, const char *name );
+    /// @param currentCollection collection of styles already present in the document
+    /// (this is used to avoid conflicts in the style names and displayNames)
+    KoImportStyleDia( KoStyleCollection* currentCollection, QWidget *parent, const char *name );
     ~KoImportStyleDia();
 
-    QPtrList<KoParagStyle> listOfStyleImported()const { return m_styleList;}
+    const QPtrList<KoParagStyle>& importedStyles() const { return m_styleList; }
+
 protected slots:
     virtual void slotOk();
     void slotLoadFile();
+
 protected:
     /**  Open file dialog and load the list of styles from the selected doc.
      */
     virtual void loadFile()=0;
 
-    void generateStyleList();
-    void updateFollowingStyle(const QString & _name);
+    void clear();
+    QString generateStyleName( const QString & templateName ) const;
+    QString generateStyleDisplayName( const QString & templateName ) const;
 
-    QString generateStyleName( const QString & templateName );
+    KoParagStyle *findStyle( const QString & _name) const;
+    KoParagStyle *findTranslatedStyle( const QString & _name) const;
 
-    KoParagStyle *findStyle( const QString & _name);
+    // @return collection of styles already present in the document
+    const KoStyleCollection* currentCollection() const { return m_currentCollection; }
 
     void initList();
 
+    // used by subclasses, hmm...
     QListBox *m_listStyleName;
-    QPtrList<KoParagStyle> m_styleList;
+    QPtrList<KoParagStyle> m_styleList; // ## should be a KoStyleCollection?
 
-    QStringList m_list;
+private:
+    void generateStyleList();
+    void updateFollowingStyle(const QString & _name);
+
+    KoStyleCollection* m_currentCollection; // Styles already present in the document
 };
 
 #endif

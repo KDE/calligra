@@ -34,9 +34,9 @@
 #include <qlabel.h>
 #include "kptextobject.h"
 
-KPrImportStyleDia::KPrImportStyleDia( KPresenterDoc *_doc, const QStringList &_list,
+KPrImportStyleDia::KPrImportStyleDia( KPresenterDoc *_doc, KoStyleCollection* currentCollection,
                                       QWidget *parent, const char *name )
-    :KoImportStyleDia( _list, parent, name ),
+    :KoImportStyleDia( currentCollection, parent, name ),
      m_doc(_doc)
 {
 }
@@ -68,8 +68,7 @@ void KPrImportStyleDia::loadFile()
     {
         if (store->open("maindoc.xml") )
         {
-            m_styleList.setAutoDelete(true);
-            m_styleList.clear();
+            clear();
             m_listStyleName->clear();
 
             QDomDocument doc;
@@ -88,12 +87,17 @@ void KPrImportStyleDia::loadFile()
                     QDomElement styleElem = listStyles.item( item ).toElement();
 
                     KoParagStyle *sty = new KoParagStyle( QString::null );
-	            // Load the style from the <STYLE> element
-	            sty->loadStyle( styleElem );
+                    // Load the style from the <STYLE> element
+                    sty->loadStyle( styleElem );
 
-                    QString name = sty->name();
-                    if ( m_list.findIndex( name )!=-1 )
-                        sty->setDisplayName(generateStyleName( sty->displayName() + QString( "-%1")));
+                    QString name = sty->displayName();
+                    if ( currentCollection()->findStyle( name ) )
+                        sty->setInternalName(generateStyleName(sty->name() + "-%1"));
+                    // ### TODO: we should offer the option of updating the
+                    // existing style instead of creating a foo-1 style. Any ideas for a GUI?
+                    if ( currentCollection()->findTranslatedStyle( name ) )
+                        sty->setDisplayName(generateStyleDisplayName(sty->displayName() + "-%1"));
+                    insertStyle.insert( name, sty->name() );
 
                     QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
                     if ( !formatElem.isNull() )

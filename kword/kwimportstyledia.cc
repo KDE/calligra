@@ -36,8 +36,8 @@
 
 #include "kwtextparag.h"
 
-KWImportStyleDia::KWImportStyleDia( KWDocument *_doc, const QStringList &_list, QWidget *parent, const char *name )
-    :KoImportStyleDia( _list, parent, name ),
+KWImportStyleDia::KWImportStyleDia( KWDocument *_doc, KoStyleCollection* currentCollection, QWidget *parent, const char *name )
+    :KoImportStyleDia( currentCollection, parent, name ),
      m_doc(_doc)
 {
 
@@ -51,7 +51,7 @@ KWImportStyleDia::~KWImportStyleDia()
 void KWImportStyleDia::loadFile()
 {
     KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
-    fd.setMimeFilter( "application/x-kword" );
+    fd.setMimeFilter( "application/x-kword" ); // ## TODO OASIS
     fd.setCaption(i18n("Import Style"));
     KURL url;
     if ( fd.exec() != QDialog::Accepted )
@@ -71,8 +71,7 @@ void KWImportStyleDia::loadFile()
     {
         if (store->open("maindoc.xml") )
         {
-            m_styleList.setAutoDelete(true);
-            m_styleList.clear();
+            clear();
             m_listStyleName->clear();
 
             QDomDocument doc;
@@ -83,6 +82,12 @@ void KWImportStyleDia::loadFile()
             {
                 //todo
                 //duplicate code try to remove it !
+                // TODO: use loadOasisStyleTemplates() for OASIS
+                //       (and put as much code as possible in koimportstyledia of course)
+                //
+                // I guess we'll have to keep this old loading code forever though,
+                // so we can't really get rid of the subclasses.
+
                 QValueList<QString> followingStyles;
                 QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
                 for (unsigned int item = 0; item < listStyles.count(); item++)
@@ -91,12 +96,16 @@ void KWImportStyleDia::loadFile()
 
                     KWStyle *sty = new KWStyle( QString::null );
                     // Load the paraglayout from the <STYLE> element
-                    sty->loadStyle( styleElem, m_doc->syntaxVersion() );
+                    sty->loadStyle( styleElem, m_doc->syntaxVersion() ); //#### wrong syntaxVersion!
 
-                    QString name = sty->name();
-                    if ( m_list.findIndex( name )!=-1 )
-                        sty->setDisplayName(generateStyleName( sty->displayName() + QString( "-%1")));
-                    insertStyle.insert( name, sty->name());
+                    QString name = sty->displayName();
+                    if ( currentCollection()->findStyle( name ) )
+                        sty->setInternalName(generateStyleName(sty->name() + "-%1"));
+                    // ### TODO: we should offer the option of updating the
+                    // existing style instead of creating a foo-1 style. Any ideas for a GUI?
+                    if ( currentCollection()->findTranslatedStyle( name ) )
+                        sty->setDisplayName(generateStyleDisplayName(sty->displayName() + "-%1"));
+                    insertStyle.insert( name, sty->name() ); // old name -> new name
 
                     QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
                     if ( !formatElem.isNull() )

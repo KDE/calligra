@@ -28,19 +28,19 @@
 #include <kdebug.h>
 #include <qlabel.h>
 
-KoImportStyleDia::KoImportStyleDia( const QStringList &_list, QWidget *parent, const char *name )
+KoImportStyleDia::KoImportStyleDia( KoStyleCollection* currentCollection, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel|User1, Ok, true )
 {
-    setCaption( i18n("Import Style") );
-    m_list =_list;
+    setCaption( i18n("Import Styles") );
+    m_currentCollection = currentCollection;
     QVBox *page = makeVBoxMainWidget();
-    new QLabel(i18n("Select style to import:"), page);
+    new QLabel(i18n("Select styles to import:"), page);
     m_listStyleName = new QListBox( page );
     m_listStyleName->setSelectionMode( QListBox::Multi );
-    enableButtonOK( (m_listStyleName->count()!=0) );
+    enableButtonOK( m_listStyleName->count() != 0 );
     setButtonText( KDialogBase::User1, i18n("Load...") );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotLoadFile()));
-    resize (300, 400);
+    setInitialSize( QSize( 300, 400 ) );
     setFocus();
 }
 
@@ -48,7 +48,6 @@ KoImportStyleDia::~KoImportStyleDia()
 {
     m_styleList.setAutoDelete(true);
     m_styleList.clear();
-
 }
 
 void KoImportStyleDia::generateStyleList()
@@ -57,12 +56,12 @@ void KoImportStyleDia::generateStyleList()
     {
         if ( !m_listStyleName->isSelected( i ))
         {
-            QString name = m_listStyleName->text(i );
+            QString name = m_listStyleName->text( i );
             //remove this style from list
             QPtrListIterator<KoParagStyle> styleIt( m_styleList );
             for ( ; styleIt.current(); ++styleIt )
             {
-                if ( styleIt.current()->name() == name )
+                if ( styleIt.current()->displayName() == name )
                 {
                     updateFollowingStyle( styleIt.current()->displayName() );
                     m_styleList.remove(styleIt.current());
@@ -88,16 +87,15 @@ void KoImportStyleDia::updateFollowingStyle(const QString & _name)
 void KoImportStyleDia::slotLoadFile()
 {
     loadFile();
-    enableButtonOK( (m_listStyleName->count()!=0) );
+    enableButtonOK( m_listStyleName->count() != 0 );
 }
 
 void KoImportStyleDia::initList()
 {
     QStringList lst;
-    for ( KoParagStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
-    {
-        lst<<p->displayName();
-    }
+    QPtrListIterator<KoParagStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+        lst << styleIt.current()->displayName();
     m_listStyleName->insertStringList(lst);
 }
 
@@ -107,29 +105,60 @@ void KoImportStyleDia::slotOk()
     KDialogBase::slotOk();
 }
 
-QString KoImportStyleDia::generateStyleName( const QString & templateName )
+QString KoImportStyleDia::generateStyleName( const QString & templateName ) const
 {
     QString name;
     int num = 1;
     bool exists;
     do {
         name = templateName.arg( num );
-        exists = (m_list.findIndex( name )!=-1);
+        exists = m_currentCollection->findStyle( name ) != 0;
         ++num;
     } while ( exists );
     return name;
 }
 
-KoParagStyle *KoImportStyleDia::findStyle( const QString & _name)
+QString KoImportStyleDia::generateStyleDisplayName( const QString & templateName ) const
+{
+    QString name;
+    int num = 1;
+    bool exists;
+    do {
+        name = templateName.arg( num );
+        exists = m_currentCollection->findTranslatedStyle( name ) != 0;
+        ++num;
+    } while ( exists );
+    return name;
+}
+
+KoParagStyle *KoImportStyleDia::findStyle( const QString & name ) const
 {
     QPtrListIterator<KoParagStyle> styleIt( m_styleList );
     for ( ; styleIt.current(); ++styleIt )
     {
-        if ( styleIt.current()->name() == _name ) {
+        if ( styleIt.current()->name() == name ) {
             return styleIt.current();
         }
     }
-    return 0L;
+    return 0;
+}
+
+KoParagStyle * KoImportStyleDia::findTranslatedStyle( const QString & name ) const
+{
+    QPtrListIterator<KoParagStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        if ( styleIt.current()->displayName() == name ) {
+            return styleIt.current();
+        }
+    }
+    return 0;
+}
+
+void KoImportStyleDia::clear()
+{
+    m_styleList.setAutoDelete(true);
+    m_styleList.clear();
 }
 
 #include "koimportstyledia.moc"

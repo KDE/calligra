@@ -1201,7 +1201,7 @@ void KWView::setupActions()
                                             this, SLOT( selectBookmark() ),
                                             actionCollection(), "select_bookmark" );
 
-    actionImportStyle= new KAction( i18n( "Import Style..." ), 0,
+    actionImportStyle= new KAction( i18n( "Import Styles..." ), 0,
                                             this, SLOT( importStyle() ),
                                             actionCollection(), "import_style" );
 
@@ -6861,36 +6861,11 @@ void KWView::selectBookmark()
 
 void KWView::importStyle()
 {
-    QStringList lst;
-    QPtrListIterator<KWStyle> styleIt( m_doc->styleCollection()->styleList() );
-    for ( ; styleIt.current(); ++styleIt )
-    {
-        lst<<styleIt.current()->displayName();
-    }
-    KWImportStyleDia dia( m_doc, lst, this, 0L );
-    if ( dia.exec() ) {
-        QMap<QString, QString>followStyle;
-        QPtrList<KWStyle>list(dia.listOfStyleImported());
-        QPtrListIterator<KWStyle> style(  list );
-        for ( ; style.current() ; ++style )
-        {
-            followStyle.insert( style.current()->name(), style.current()->followingStyle()->name());
-            m_doc->styleCollection()->addStyleTemplate(new KWStyle(*style.current()));
-        }
-        if ( style.count() > 0 )
-            m_doc->setModified( true );
-
+    KWImportStyleDia dia( m_doc, m_doc->styleCollection(), this );
+    if ( dia.exec() && !dia.importedStyles().isEmpty() ) {
+        m_doc->styleCollection()->importStyles( dia.importedStyles() );
+        m_doc->setModified( true );
         m_doc->updateAllStyleLists();
-
-        QMapIterator<QString, QString> itFollow = followStyle.begin();
-        for ( ; itFollow != followStyle.end(); ++itFollow )
-        {
-            KWStyle * style = m_doc->styleCollection()->findStyle(itFollow.key());
-            QString newName =(followStyle)[ itFollow.key() ];
-            KWStyle * styleFollow = m_doc->styleCollection()->findStyle(newName);
-            if (styleFollow )
-                style->setFollowingStyle( styleFollow );
-        }
     }
 }
 

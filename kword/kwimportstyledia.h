@@ -37,7 +37,7 @@ class KWImportStyleDia : public KoImportStyleDia
 {
     Q_OBJECT
 public:
-    KWImportStyleDia( KWDocument *_doc,const QStringList & _list, QWidget *parent, const char *name );
+    KWImportStyleDia( KWDocument *_doc, KoStyleCollection* currentCollection, QWidget *parent, const char *name = 0 );
     ~KWImportStyleDia();
 
 protected:

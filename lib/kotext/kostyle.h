@@ -49,7 +49,9 @@ class KoStyleCollection
 public:
     KoStyleCollection();
     ~KoStyleCollection();
+
     const QPtrList<KoParagStyle> & styleList() const { return m_styleList; }
+    QStringList translatedStyleNames() const;
 
     /**
      * find style based on the untranslated name @p name
@@ -71,9 +73,14 @@ public:
 
     void removeStyleTemplate ( KoParagStyle *style );
 
+    /// Import a number of styles (e.g. loaded from another document)
+    void importStyles( const QPtrList<KoParagStyle>& styleList );
+
+    /// Change the order of the styles. Those not listed will be deleted.
     void updateStyleListOrder( const QStringList &list );
 
     void loadOasisStyleTemplates( KoOasisContext& context );
+
     /// Save the entire style collection to OASIS
     /// @p styleType is the STYLE_* value for this style.
     /// Return a the auto-name for each style, to be used when saving the document.
@@ -96,6 +103,15 @@ public:
     /// in very specific cases (e.g. in increaseOutlineLevel() for "not a heading")
     /// The current implementation is to return Standard or the first one in the collection.
     KoParagStyle* defaultStyle() const;
+
+    QString generateUniqueName() const;
+
+    /// delete all styles
+    void clear();
+
+#ifndef NDEBUG
+    void printDebug() const;
+#endif
 
 private:
     QPtrList<KoParagStyle> m_styleList;
@@ -159,7 +175,7 @@ public:
     /** Copy another style */
     KoParagStyle( const KoParagStyle & rhs );
 
-    ~KoParagStyle() {}
+    ~KoParagStyle();
 
     void operator=( const KoParagStyle & );
 
@@ -168,7 +184,7 @@ public:
     KoParagLayout & paragLayout();
 
     KoParagStyle *followingStyle() const { return m_followingStyle; }
-    void setFollowingStyle( KoParagStyle *fst ) { m_followingStyle = fst; }
+    void setFollowingStyle( KoParagStyle *fst );
 
     /// Saves the name, layout, the following style and the outline bool. Not the format.
     /// @deprecated  (1.3 format)

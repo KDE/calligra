@@ -3101,7 +3101,7 @@ void KPresenterView::setupActions()
     actionInsertFile= new KAction( i18n( "File..." ), 0,
                                    this, SLOT( insertFile() ),
                                    actionCollection(), "insert_file" );
-    actionImportStyle= new KAction( i18n( "Import Style..." ), 0,
+    actionImportStyle= new KAction( i18n( "Import Styles..." ), 0,
                                     this, SLOT( importStyle() ),
                                     actionCollection(), "import_style" );
 
@@ -6627,37 +6627,11 @@ void KPresenterView::insertFile(const QString &path)
 
 void KPresenterView::importStyle()
 {
-    QStringList lst;
-    QPtrListIterator<KoParagStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
-
-    for ( ; styleIt.current(); ++styleIt )
-        lst<<styleIt.current()->displayName();
-
-    KPrImportStyleDia dia( m_pKPresenterDoc, lst, this, 0L );
-    if ( dia.exec() ) {
-        QPtrList<KoParagStyle>list(dia.listOfStyleImported());
-        QPtrListIterator<KoParagStyle> style(  list );
-        QMap<QString, QString>followStyle;
-
-        for ( ; style.current() ; ++style )
-        {
-            followStyle.insert( style.current()->displayName(), style.current()->followingStyle()->displayName());
-            m_pKPresenterDoc->styleCollection()->addStyleTemplate(new KoParagStyle(*style.current()));
-        }
-        if ( style.count()>0)
-            m_pKPresenterDoc->setModified( true );
+    KPrImportStyleDia dia( m_pKPresenterDoc, m_pKPresenterDoc->styleCollection(), this );
+    if ( dia.exec() && !dia.importedStyles().isEmpty() ) {
+        m_pKPresenterDoc->styleCollection()->importStyles( dia.importedStyles() );
+        m_pKPresenterDoc->setModified( true );
         m_pKPresenterDoc->updateAllStyleLists();
-        //update followingStyle.
-
-        QMapIterator<QString, QString> itFollow = followStyle.begin();
-        for ( ; itFollow != followStyle.end(); ++itFollow )
-        {
-            KoParagStyle * style = m_pKPresenterDoc->styleCollection()->findStyle(itFollow.key());
-            QString newName =(followStyle)[ itFollow.key() ];
-            KoParagStyle * styleFollow = m_pKPresenterDoc->styleCollection()->findStyle(newName);
-            if (styleFollow )
-                style->setFollowingStyle( styleFollow );
-        }
     }
 }
 
