@@ -724,8 +724,10 @@ int KoTextParag::nextTab( int chnum, int x )
             }
             ++i;
         }
+        // No more tabs
+        return tArray[0];
     }
-    // No tab list (or no more tabs), use tab-stop-width. QTextParag has the code :)
+    // No tab list, use tab-stop-width. QTextParag has the code :)
     return QTextParag::nextTab( chnum, x );
 }
 

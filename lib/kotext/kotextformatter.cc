@@ -22,6 +22,7 @@
 #include "kotextdocument.h"
 #include "kozoomhandler.h"
 
+#include <kdebug.h>
 //#define DEBUG_FORMATTER
 
 // Heavily based on QTextFormatterBreakWords::format()
