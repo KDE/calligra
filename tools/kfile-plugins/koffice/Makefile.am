@@ -1,14 +1,14 @@
 ## Makefile.am for koffice file meta info plugin
 
 # set the include path for X, qt and KDE
-INCLUDES         = $(all_includes)
+INCLUDES         = $(KOFFICE_INCLUDES) $(all_includes)
 
 # these are the headers for your project
 noinst_HEADERS   = kfile_koffice.h
 
 kde_module_LTLIBRARIES = kfile_koffice.la
 
-kfile_koffice_la_SOURCES = kfile_koffice.cpp 
+kfile_koffice_la_SOURCES = kfile_koffice.cpp
 kfile_koffice_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kfile_koffice_la_LIBADD = $(LIB_KOFFICECORE)
 
