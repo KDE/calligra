@@ -114,7 +114,7 @@ VToolBox::registerTool( VTool *tool )
 void
 VToolBox::setupTools()
 {
-	QPtrListIterator<VTool> itr( m_part->toolController()->tools() );
+	QDictIterator<VTool> itr( m_part->toolController()->tools() );
 	kdDebug() << "count : " << m_part->toolController()->tools().count() << endl;
 	for( ; itr.current() ; ++itr )
 		registerTool( itr.current() );
