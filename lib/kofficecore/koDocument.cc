@@ -1379,6 +1379,13 @@ DCOPObject * KoDocument::dcopObject()
     return d->m_dcopObject;
 }
 
+QCString KoDocument::dcopObjectId() const
+{ 
+	return const_cast<KoDocument *>(this)->dcopObject()->objId(); 
+	
+} 
+
+
 void KoDocument::setErrorMessage( const QString& errMsg )
 {
     d->lastErrorMessage = errMsg;

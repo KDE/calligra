@@ -54,6 +54,8 @@ class DCOPObject;
 class KoDocument : public KParts::ReadWritePart
 {
     Q_OBJECT
+    Q_PROPERTY( QCString dcopObjectId READ dcopObjectId)
+    
 public:
 
     /**
@@ -458,6 +460,11 @@ public:
      * so that their dcop interface provides more functionality than the basic KoDocumentIface
      */
     virtual DCOPObject * dcopObject();
+    
+    /**
+     * return the ID of the dcop interface for this document.
+     **/
+    QCString dcopObjectId() const;
 
     void emitProgress( int value ) { emit sigProgress( value ); }
 
