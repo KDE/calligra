@@ -496,6 +496,10 @@ class KPresenterDoc : public KoDocument
 #ifdef HAVE_LIBKSPELL2
     KPrBgSpellCheck* backSpeller() const { return m_bgSpellCheck; }
 #endif
+
+    CustomListMap customListSlideShow();
+    void updateCustomListSlideShow( CustomListMap & map );
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from );
@@ -567,7 +571,7 @@ protected:
     int createPresentationAnimation(const QDomElement& element, int order = 0 ,bool increaseOrder = true);
 
     void saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter );
-    void saveOasisPresentationCustionSlideShow( KoXmlWriter &contentTmpWriter );
+    void saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpWriter );
     void saveOasisHeaderFooter( KoXmlWriter &stickyTmpWriter , KoSavingContext& context );
     void loadOasisHeaderFooter( QDomNode & drawPage, KoOasisContext & context);
 

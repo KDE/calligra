@@ -81,9 +81,12 @@ CustomSlideShowDia::CustomSlideShowDia( QWidget* parent, KPresenterDoc *_doc, co
 
 void CustomSlideShowDia::init()
 {
-    //todo
-    //init qmap
-    //m_customListMap
+    m_customListMap = m_doc->customListSlideShow();
+    CustomListMap::Iterator it;
+    for ( it = m_customListMap.begin(); it != m_customListMap.end(); ++it ) {
+        list->insertItem( it.key() );
+    }
+
     for( unsigned i = 0; i < m_doc->pageList().count(); i++ )
         listPageName.append( m_doc->pageList().at( i )->pageTitle() );
 }
@@ -133,7 +136,7 @@ void CustomSlideShowDia::slotRemove()
 
 void CustomSlideShowDia::slotOk()
 {
-    //todo
+    m_doc->updateCustomListSlideShow(m_customListMap);
     accept();
 }
 

@@ -47,6 +47,7 @@
 #include <qregexp.h>
 #include <qfileinfo.h>
 #include <qdom.h>
+#include <qdict.h>
 
 #include <kurl.h>
 #include <kdebug.h>
@@ -1271,11 +1272,11 @@ void KPresenterDoc::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter
     contentTmpWriter.startElement( "presentation:settings" );
     contentTmpWriter.addAttribute( "presentation:endless",  ( _spInfiniteLoop ? "true" : "false" ) );
     contentTmpWriter.addAttribute( "presentation:force-manual",  ( _spManualSwitch ? "true" : "false" ) );
-    saveOasisPresentationCustionSlideShow( contentTmpWriter );
+    saveOasisPresentationCustomSlideShow( contentTmpWriter );
     contentTmpWriter.endElement();
 }
 
-void KPresenterDoc::saveOasisPresentationCustionSlideShow( KoXmlWriter &contentTmpWriter )
+void KPresenterDoc::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpWriter )
 {
     if ( m_customListSlideShow.isEmpty() )
         return;
@@ -1288,7 +1289,7 @@ void KPresenterDoc::saveOasisPresentationCustionSlideShow( KoXmlWriter &contentT
         QString tmp;
         QDictIterator<KPrPage> itPage( it.data() ); // See QDictIterator
         for( ; itPage.current(); ++itPage )
-            tmp+=itPage.current()->pageTitle();
+            tmp+=itPage.current()->pageTitle()+",";
 
         contentTmpWriter.addAttribute( "presentation:pages", tmp );
         contentTmpWriter.endElement();
@@ -4402,5 +4403,53 @@ void KPresenterDoc::addWordToDictionary( const QString & word)
     }
 #endif
 }
+
+CustomListMap KPresenterDoc::customListSlideShow()
+{
+    CustomListMap listMap;
+    if ( !m_customListSlideShow.isEmpty() )
+    {
+        //kdDebug()<<" m_customListSlideShow is not empty\n";
+        ListCustomSlideShow::Iterator it;
+        for ( it = m_customListSlideShow.begin(); it != m_customListSlideShow.end(); ++it )
+        {
+            QStringList tmp;
+            QDictIterator<KPrPage> itPage( it.data() ); // See QDictIterator
+            for( ; itPage.current(); ++itPage )
+                if ( m_pageList.find(itPage.current() ) != -1 )
+                {
+                    //kdDebug()<<" add page :"<<itPage.current()->pageTitle()<<endl;
+                    tmp.append( itPage.current()->pageTitle() );
+                }
+            listMap.insert( it.key(), tmp);
+        }
+    }
+    return listMap;
+}
+
+void KPresenterDoc::updateCustomListSlideShow( CustomListMap & map )
+{
+    m_customListSlideShow.clear();
+    CustomListMap::Iterator it;
+    for ( it = map.begin(); it != map.end(); ++it ) {
+        QStringList tmp( it.data() );
+        QDict<KPrPage> tmpDict;
+        for ( QStringList::Iterator itList = tmp.begin(); itList != tmp.end(); ++itList )
+        {
+            for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
+            {
+                //kdDebug()<<" insert page name :"<<*itList<<endl;
+                if ( m_pageList.at( i )->pageTitle()== ( *itList ) )
+                {
+                    tmpDict.insert( ( *itList ), m_pageList.at( i ) );
+                    //kdDebug()<<" really insert\n";
+                    break;
+                }
+            }
+        }
+        m_customListSlideShow.insert( it.key(), tmpDict );
+    }
+}
+
 
 #include "kpresenter_doc.moc"
