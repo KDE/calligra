@@ -175,6 +175,9 @@ void KFormulaContainer::keyPressEvent(FormulaCursor* cursor, QKeyEvent* event)
 
 void KFormulaContainer::addText(FormulaCursor* cursor, QChar ch)
 {
+    if (cursor->isSelection()) {
+        removeSelection(cursor, BasicElement::beforeCursor);
+    }
     QList<BasicElement> list;
     list.setAutoDelete(true);
     list.append(new TextElement(ch));
@@ -285,7 +288,7 @@ void KFormulaContainer::removeSelection(FormulaCursor* cursor,
         BasicElement* element = cursor->replaceByMainChildContent();
         delete element;
     }
-    cursor->normalize();
+    cursor->normalize(direction);
 }
 
 

@@ -340,12 +340,15 @@ void FormulaCursor::elementWillVanish(BasicElement* element)
     BasicElement* child = getElement();
     if (child == element->getParent()) {
         child->moveHome(this);
+        setSelection(false);
+        return;
     }
     while (child != 0) {
         if (child == element) {
             // This is meant to catch all cursors that did not
             // cause the deletion.
             child->getParent()->moveLeft(this, child);
+            setSelection(false);
             return;
         }
         child = child->getParent();
