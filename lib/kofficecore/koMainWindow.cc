@@ -54,6 +54,7 @@
 #include <kdebug.h>
 #include <kmimetype.h>
 #include <ktempfile.h>
+#include <krecentdocument.h>
 
 #include <kparts/partmanager.h>
 #include <kparts/plugin.h>
@@ -453,8 +454,10 @@ bool KoMainWindow::saveDocument( bool saveas )
         bool bOk;
         do {
             bOk=true;
-            if(dialog->exec()==QDialog::Accepted)
+            if(dialog->exec()==QDialog::Accepted) {
                 newURL=dialog->selectedURL();
+                KRecentDocument::add(dialog->selectedURL().url(), !dialog->selectedURL().isLocalFile());
+            }
             else
             {
                 bOk = false;
@@ -581,8 +584,10 @@ void KoMainWindow::slotFileOpen()
                                            KoDocument::readNativeFormatMimeType(),
                                            nativeFormatPattern(), nativeFormatName(), true);
     KURL url;
-    if(dialog->exec()==QDialog::Accepted)
+    if(dialog->exec()==QDialog::Accepted) {
         url=dialog->selectedURL();
+        KRecentDocument::add(dialog->selectedURL().url(), !dialog->selectedURL().isLocalFile());
+    }
     else
         return;
 

@@ -41,6 +41,7 @@
 #include <koFilterManager.h>
 #include <koTemplates.h>
 #include <kseparator.h>
+#include <krecentdocument.h>
 
 #include <koTemplateChooseDia.h>
 
@@ -311,6 +312,7 @@ void KoTemplateChooseDia::chooseFile()
     if(dialog->exec()==QDialog::Accepted)
     {
         u=dialog->selectedURL();
+        KRecentDocument::add(dialog->selectedURL().url(), !dialog->selectedURL().isLocalFile());
     } else //revert state
     {
         if (bEmpty) openEmpty();
