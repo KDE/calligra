@@ -39,6 +39,61 @@
 #include <qlabel.h>
 
 
+
+KWAutoFormatExceptionWidget::KWAutoFormatExceptionWidget(QWidget *parent, const QString &name,const QStringList &_list,bool _abreviation)
+    :QWidget( parent )
+{
+    m_bAbbreviation=_abreviation;
+    m_listException=_list;
+    QGridLayout *grid = new QGridLayout(this, 7, 2,2,2);
+    exceptionLine = new QLineEdit( this );
+    grid->addWidget(exceptionLine,1,0);
+
+    QLabel *lab=new QLabel(name,this);
+    grid->addMultiCellWidget(lab,0,0,0,1);
+
+    pbAddException=new QPushButton(i18n("Add"),this);
+    connect(pbAddException, SIGNAL(clicked()),this,SLOT(slotAddException()));
+    grid->addWidget(pbAddException,2,1);
+
+    pbRemoveException=new QPushButton(i18n("Remove"),this);
+    connect(pbRemoveException, SIGNAL(clicked()),this,SLOT(slotRemoveException()));
+    grid->addWidget(pbRemoveException,3,1);
+
+    exceptionList=new QListBox(this);
+    exceptionList->insertStringList(m_listException);
+    grid->addMultiCellWidget(exceptionList,2,6,0,0);
+    pbRemoveException->setEnabled(m_listException.count()>0);
+}
+
+
+void KWAutoFormatExceptionWidget::slotAddException()
+{
+    QString text=exceptionLine->text().stripWhiteSpace();
+    if(!text.isEmpty())
+    {
+        if(text.at(text.length()-1)!='.' && m_bAbbreviation)
+            text=text+".";
+        m_listException<<text;
+
+        exceptionList->clear();
+        exceptionList->insertStringList(m_listException);
+        pbRemoveException->setEnabled(m_listException.count()>0);
+        exceptionLine->clear();
+    }
+}
+
+void KWAutoFormatExceptionWidget::slotRemoveException()
+{
+    if(!exceptionList->currentText().isEmpty())
+    {
+        m_listException.remove(exceptionList->currentText());
+        exceptionList->clear();
+        pbRemoveException->setEnabled(m_listException.count()>0);
+        exceptionList->insertStringList(m_listException);
+    }
+}
+
 /******************************************************************/
 /* Class: KWAutoFormatDia                                         */
 /******************************************************************/
@@ -154,55 +209,15 @@ void KWAutoFormatDia::setupTab2()
 void KWAutoFormatDia::setupTab3()
 {
     tab3 = addPage( i18n( "Exception" ) );
-    QGridLayout *grid = new QGridLayout(tab3, 7, 2,15,7);
-    exceptionLine = new QLineEdit( tab3 );
-    grid->addWidget(exceptionLine,1,0);
+    QVBoxLayout *grid = new QVBoxLayout(tab3, 5, 5);
+    grid->setAutoAdd( true );
 
-    QLabel *lab=new QLabel(i18n("Don't upper lettre after these word.(Word with a point at the end)"),tab3);
-    grid->addMultiCellWidget(lab,0,0,0,1);
-
-    pbAddException=new QPushButton(i18n("Add"),tab3);
-    connect(pbAddException, SIGNAL(clicked()),this,SLOT(slotAddException()));
-    grid->addWidget(pbAddException,2,1);
-
-    pbRemoveException=new QPushButton(i18n("Remove"),tab3);
-    connect(pbRemoveException, SIGNAL(clicked()),this,SLOT(slotRemoveException()));
-    grid->addWidget(pbRemoveException,3,1);
-
-    exceptionList=new QListBox(tab3);
-    m_listException=m_autoFormat.listException();
-    exceptionList->insertStringList(m_listException);
-    grid->addMultiCellWidget(exceptionList,2,6,0,0);
-    pbRemoveException->setEnabled(m_listException.count()>0);
-
+    abbreviation=new KWAutoFormatExceptionWidget(tab3,i18n("Abbreviation (Word with a point at the end):"),m_autoFormat.listException(),true);
+    ( void )new QWidget( tab3 );
+    twoUpperLetter=new KWAutoFormatExceptionWidget(tab3,i18n("Two Upper Letter in the word:"),m_autoFormat.listTwoUpperLetterException());
+    ( void )new QWidget( tab3 );
 }
 
-void KWAutoFormatDia::slotAddException()
-{
-    QString text=exceptionLine->text().stripWhiteSpace();
-    if(!text.isEmpty())
-    {
-        if(text.at(text.length()-1)!='.')
-            text=text+".";
-        m_listException<<text;
-
-        exceptionList->clear();
-        exceptionList->insertStringList(m_listException);
-        pbRemoveException->setEnabled(m_listException.count()>0);
-        exceptionLine->clear();
-    }
-}
-
-void KWAutoFormatDia::slotRemoveException()
-{
-    if(!exceptionList->currentText().isEmpty())
-    {
-        m_listException.remove(exceptionList->currentText());
-        exceptionList->clear();
-        pbRemoveException->setEnabled(m_listException.count()>0);
-        exceptionList->insertStringList(m_listException);
-    }
-}
 
 void KWAutoFormatDia::slotChangeItem( QListViewItem * )
 {
@@ -286,7 +301,8 @@ bool KWAutoFormatDia::applyConfig()
 
     // Second tab
     m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );
-    m_docAutoFormat->copyListException(m_listException);
+    m_docAutoFormat->copyListException(abbreviation->getListException());
+    m_docAutoFormat->copyListTwoUpperCaseException(twoUpperLetter->getListException());
     // Save to config file
     m_docAutoFormat->saveConfig();
 

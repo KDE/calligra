@@ -120,7 +120,12 @@ public:
     void copyListException( const QStringList & _list)
 	{ upperCaseExceptions=_list;}
 
+    void copyListTwoUpperCaseException( const QStringList &_list)
+	{ twoUpperLetterException=_list; }
+
     QStringList listException() {return upperCaseExceptions;}
+
+    QStringList listTwoUpperLetterException() {return twoUpperLetterException;}
 
     // Read/save config ( into kwordrc )
     void readConfig();
@@ -150,6 +155,7 @@ private:
     typedef QMap< QString, KWAutoFormatEntry > KWAutoFormatEntryMap;
     KWAutoFormatEntryMap m_entries;
     QStringList upperCaseExceptions;
+    QStringList twoUpperLetterException;
     int m_maxlen;
 };
 

@@ -81,6 +81,8 @@ void KWAutoFormat::readConfig()
     if(config->hasKey( "UpperCaseExceptions" ) )
         upperCaseExceptions=config->readListEntry( "UpperCaseExceptions" );
 
+    if(config->hasKey( "TwoUpperLetterExceptions"))
+        twoUpperLetterException=config->readListEntry( "TwoUpperLetterExceptions" );
     m_configRead = true;
 }
 
@@ -105,6 +107,8 @@ void KWAutoFormat::saveConfig()
     config->writeEntry( "Replace", replace );
 
     config->writeEntry( "UpperCaseExceptions",upperCaseExceptions );
+
+    config->writeEntry( "TwoUpperLetterExceptions",twoUpperLetterException);
 
     config->sync();
 }
@@ -267,7 +271,7 @@ void KWAutoFormat::doUpperCase( QTextCursor *textEditCursor, KWTextParag *parag,
             // Check next letter - we still want to be able to write fully uppercase words...
             backCursor.setIndex( backCursor.index() + 1 );
             QChar thirdChar = backCursor.parag()->at( backCursor.index() )->c;
-            if ( isLower( thirdChar ) )
+            if ( isLower( thirdChar ) && (twoUpperLetterException.findIndex(word)==-1))
             {
                 // Ok, convert
                 QTextCursor cursor( parag->document() );

@@ -34,6 +34,32 @@ class QListBox;
 
 
 /******************************************************************/
+/* Class: KWAutoFormatExceptionWidget                             */
+/******************************************************************/
+
+class KWAutoFormatExceptionWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    KWAutoFormatExceptionWidget(QWidget *_parent, const QString &name,const QStringList &_list,bool _abbreviation=false);
+
+
+    QStringList getListException(){return m_listException;}
+protected slots:
+    void slotAddException();
+    void slotRemoveException();
+
+ private:
+    QListBox *exceptionList;
+    QLineEdit *exceptionLine;
+    QPushButton *pbAddException,*pbRemoveException;
+
+    QStringList m_listException;
+    bool m_bAbbreviation;
+};
+
+/******************************************************************/
 /* Class: KWAutoFormatDia                                         */
 /******************************************************************/
 
@@ -60,16 +86,14 @@ protected:
     KCharSelect *charselect;
     KListView * m_pListView;
 
-    QListBox *exceptionList;
-    QLineEdit *exceptionLine;
-    QPushButton *pbAddException,*pbRemoveException;
-
     QChar oBegin, oEnd;
 
     KWAutoFormat m_autoFormat; // The copy we're working on
     KWAutoFormat * m_docAutoFormat; // Pointer to the real one (in KWDocument)
 
-    QStringList m_listException;
+    KWAutoFormatExceptionWidget *abbreviation;
+    KWAutoFormatExceptionWidget *twoUpperLetter;
+
 protected slots:
     virtual void slotOk();
     void slotItemRenamed(QListViewItem * item, const QString & newText, int column);
@@ -79,8 +103,7 @@ protected slots:
     void chooseQuote2();
     void slotAddEntry();
     void slotChangeItem( QListViewItem * );
-    void slotAddException();
-    void slotRemoveException();
+
 };	
 
 /******************************************************************/
