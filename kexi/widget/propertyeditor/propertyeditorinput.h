@@ -36,7 +36,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorInput : public KexiPropertySubEdit
 
 	public:
 		PropertyEditorInput(QWidget *parent, KexiProperty *property, const char *name=0);
-		~PropertyEditorInput() {;}
+		virtual ~PropertyEditorInput() {;}
 
 		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
@@ -66,7 +66,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorSpin : public KexiPropertySubEdito
 
 	public:
 		PropertyEditorSpin(QWidget *parent, KexiProperty *property, const char *name=0);
-		~PropertyEditorSpin() {;}
+		virtual ~PropertyEditorSpin() {;}
 
 		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
@@ -86,8 +86,9 @@ class KEXIPROPERTYEDITOR_EXPORT PropDoubleSpinBox : public KDoubleSpinBox
 
 	public:
 	PropDoubleSpinBox(QWidget *parent);
+	virtual ~PropDoubleSpinBox() {;}
+
 	virtual bool eventFilter(QObject *o, QEvent *e);
-	~PropDoubleSpinBox() {;}
 };
 
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorDblSpin : public KexiPropertySubEditor
@@ -96,7 +97,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorDblSpin : public KexiPropertySubEd
 
 	public:
 		PropertyEditorDblSpin(QWidget *parent, KexiProperty *property, const char *name=0);
-		~PropertyEditorDblSpin() {;}
+		virtual ~PropertyEditorDblSpin() {;}
 
 		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
@@ -116,18 +117,18 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorBool : public KexiPropertySubEdito
 
 	public:
 		PropertyEditorBool(QWidget *parent, KexiProperty *property, const char *name=0);
-		~PropertyEditorBool() {;}
+		virtual ~PropertyEditorBool() {;}
 
-		virtual QVariant	value();
-		virtual	void 		setValue(const QVariant &value);
+		virtual QVariant value();
+		virtual void setValue(const QVariant &value);
 
 		virtual bool eventFilter(QObject* watched, QEvent* e);
 
 	protected slots:
-		void			setState(bool state);
+		void setState(bool state);
 
 	protected:
-		QToolButton		*m_toggle;
+		QToolButton *m_toggle;
 };
 
 #endif

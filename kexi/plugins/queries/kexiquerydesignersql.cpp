@@ -23,10 +23,12 @@
 #include <qhbox.h>
 #include <qvbox.h>
 
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
 
+#include <kexi_utils.h>
 #include <kexidb/connection.h>
 #include <kexidb/parser/parser.h>
 
@@ -96,6 +98,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWid
 	d->splitter->setOrientation(Vertical);
 	d->head = new KexiSectionHeader(i18n("SQL Query Text"), Vertical, d->splitter);
 	d->editor = new KexiQueryDesignerSQLEditor(mainWin, d->head, "sqle");
+//	d->editor->installEventFilter(this);//for keys
 	connect(d->editor, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 	addChildView(d->editor);
 	setViewWidget(d->editor);

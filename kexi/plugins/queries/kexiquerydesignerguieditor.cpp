@@ -214,14 +214,9 @@ f= new KexiDB::Field(i18n("Sort"), KexiDB::Field::Enum);
 
 void KexiQueryDesignerGuiEditor::initTableRows()
 {
-//	d->data->clear();
 	d->data->deleteAllRows();
 	const int columns = d->data->columnsCount();
 	for (int i=0; i<(int)d->buffers->size(); i++) {
-//		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
-//		buff->insert("primaryKey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
-//		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
-//		m_fields.insert(i, buff);
 		KexiTableItem *item = new KexiTableItem(columns);
 		d->data->append(item);
 	}
@@ -1061,7 +1056,7 @@ KexiQueryDesignerGuiEditor::createPropertyBuffer( int row,
 {
 	const bool asterisk = (tableName=="*" || fieldName.find("*")!=-1);
 	QString typeName = "KexiQueryDesignerGuiEditor::Column";
-	KexiPropertyBuffer *buff = new KexiPropertyBuffer(this, typeName);
+	KexiPropertyBuffer *buff = new KexiPropertyBuffer(d->buffers, typeName);
 
 	KexiProperty *prop;
 	buff->add(prop = new KexiProperty("table", QVariant(tableName)) );

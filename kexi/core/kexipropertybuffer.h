@@ -107,6 +107,10 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, protected KexiPropert
 
 		void debug();
 
+		/*! Used by property editor to preserve previous selection when this buffer is set again. */
+		inline QCString prevSelection() const { return m_prevSelection; }
+		inline void setPrevSelection(const QCString& prevSelection) { m_prevSelection = prevSelection; }
+
 	signals:
 		/*! This signal is emitted when \a property has changed
 		   (i.e. when changeProperty() was called). */
@@ -128,6 +132,7 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, protected KexiPropert
 	protected:
 		QString m_typeName;
 		KexiProperty::List m_list;
+		QCString m_prevSelection;
 		PixmapCollection  *m_collection;
 		
 		static KexiProperty m_nonConstNull;

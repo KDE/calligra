@@ -397,9 +397,22 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 CCMAIL: dkite@shaw.ca
 
+2004-11-10
+Property Editor
+- on focus
+--previously focused editor is activated;
+--first visible item is activated if no item was active
+- fixed buffer switching (focus is not set)
+- focusing for combo box (list) editor fixed
+Table View Prop. Buffer
+- fixed memory leak
+
 2004-11-09
 Main
 - fix conflict of CTRL+Tab with tabbed/ideal mode
+Query Designer
+- 'check query' action is now avaialble under Key_F9 (was CTRL+Key_Enter) 
+   to avoid conflict with editor
 
 2004-11-08
 Main

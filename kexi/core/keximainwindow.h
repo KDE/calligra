@@ -76,7 +76,8 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		 If \a preservePrevSelection is true and there was a buffer 
 		 set before call, previously selected item will be preselected 
 		 in the editor (if found). */
-		virtual void propertyBufferSwitched(KexiDialogBase *dlg, bool force=false, bool preservePrevSelection = false) = 0;
+		virtual void propertyBufferSwitched(KexiDialogBase *dlg, bool force=false, 
+			bool preservePrevSelection = true) = 0;
 
 		/*! Saves dialog's \a dlg data. It dialog's data is never saved,
 		 User is asked for name and caption, before saving.

@@ -75,7 +75,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		    or user presses Enter key. Each property can overwrite this if its autoSync() == 0 or 1.
 		*/
 		KexiPropertyEditor(QWidget *parent=0, bool autoSync=true, const char *name=0);
-		~KexiPropertyEditor();
+		virtual ~KexiPropertyEditor();
 
 		/*! Reset the list, ie clears all items in the list.
 		   if \a editorOnly is true, then only the current editor will be cleared, not the whole list.
@@ -98,49 +98,57 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		/*! This signal is emitted when a property value has changed, ie when the user presses Enter or when another item
 		    gets the focus. \a propname is the name of the property and \a value is the new value of this property.
 		*/
-		void	valueChanged(const QString &propname, QVariant value);
+		void valueChanged(const QString &propname, QVariant value);
 
 	public slots:
+		/*! On focus:
+		 - previously focused editor is activated
+		 - first visible item is activated if no item was active
+		*/
+		virtual void setFocus();
+
+	protected slots:
 		/*! This slot resets the value of an item, using KexiProperty::oldValue().
 		   It is called when pressing the "Revert to defaults" button
 		*/
-		void    resetItem();
+		void resetItem();
+
 		/*! This slot updates the positions of current editor and revert button.
-		   It is called when double-clicking list's header.
+		   It is called when double-clicking list's header. 
 		*/
-		void    moveEditor();
+		void moveEditor();
+
 		/*! Fills the list with an item for each property in the buffer.
 		   You shouldn't need to call this, as it is automatically called in setBuffer().
 		*/
-		void	fill();
+		void fill();
 
-	protected slots:
 		/*! This slot is called when the user presses Enter key and when the selected item changes.
 		    It takes care of saving editor value into buffer.
 		*/
-		void	slotEditorAccept(KexiPropertySubEditor *editor);
+		void slotEditorAccept(KexiPropertySubEditor *editor);
 		/*! This slot is called when the user press Esc key.
 		    It undoes last input, setting item value as it was on editor's creation.
 		    If autoSync == true, it sets item value to KexiProperty::oldValue().
 		*/
-		void	slotEditorReject(KexiPropertySubEditor *editor);
+		void slotEditorReject(KexiPropertySubEditor *editor);
 		/*! This slot is called every time the editor contents change.
 		   If AutoSync is true, the buffer is updated. Otherwise, does nothing.
 		   This slot also takes care of syncing composed items (eg. QRect item with x, y, width and height chilren).
 		*/
-		void	slotValueChanged(KexiPropertySubEditor *editor);
+		void slotValueChanged(KexiPropertySubEditor *editor);
 
 		/*! This slot updates editor and revert buttons position and size when the columns are resized. */
-		void	slotColumnSizeChanged(int section, int oldS, int newS);
-		void	slotColumnSizeChanged(int section);
+		void slotColumnSizeChanged(int section, int oldS, int newS);
+		void slotColumnSizeChanged(int section);
 
 		/*! This slot is called when the user clicks the list view. It takes care of deleting current editor and
 		   creating a new editor for the newly selected item.
 		*/
-		void	slotClicked(QListViewItem *item);
+		void slotClicked(QListViewItem *item);
 
-		void	slotExpanded(QListViewItem *item);
-		void	slotCollapsed(QListViewItem *item);
+		void slotExpanded(QListViewItem *item);
+		void slotCollapsed(QListViewItem *item);
 
 		/*! Receives signals on \a prop property change from buffer \a buf. */
 		void slotPropertyChanged(KexiPropertyBuffer &buf,KexiProperty &prop);
@@ -156,9 +164,9 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		    if property is modified (ie KexiPropertyEditorItem::modified() == true).
 		    The editor type depends on KexiProperty::type() of the item's property.
 		*/
-		void	createEditor(KexiPropertyEditorItem *i);//, const QRect &geometry);
+		void createEditor(KexiPropertyEditorItem *i);//, const QRect &geometry);
 		/*! Reimplemented from KListView to update editor and revert button position. */
-		void 	resizeEvent(QResizeEvent *ev);
+		void resizeEvent(QResizeEvent *ev);
 
 		void showDefaultsButton( bool show );
 
@@ -177,6 +185,8 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		//! Helpers for setBufferLater()
 		bool setBufferLater_set : 1;
 		bool preservePrevSelection_preservePrevSelection : 1;
+		bool doNotSetFocusOnSelection : 1;
+		//! Helper for setBuffer()
 		KexiPropertyBuffer* setBufferLater_buffer;
 
 	friend class KexiPropertyEditorItem;

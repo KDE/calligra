@@ -340,6 +340,11 @@ KexiQueryDesignerSQLEditor::jump(int character)
 #endif
 }
 
+void KexiQueryDesignerSQLEditor::installEventFilter ( const QObject * filterObj )
+{
+	d->view->installEventFilter( filterObj );
+	QObject::installEventFilter( filterObj );
+}
 
 bool KexiQueryDesignerSQLEditor::eventFilter(QObject *o, QEvent *ev)
 {

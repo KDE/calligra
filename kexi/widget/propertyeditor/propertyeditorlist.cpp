@@ -162,8 +162,7 @@ PropertyEditorList::PropertyEditorList(QWidget *parent, KexiProperty *property, 
 		}
 	}
 
-	setWidget(box); // TMP
-	//setWidget(m_combo);
+	setWidget(box, m_combo->lineEdit());
 	connect(m_combo, SIGNAL(activated(int)), SLOT(valueChanged()));
 }
 

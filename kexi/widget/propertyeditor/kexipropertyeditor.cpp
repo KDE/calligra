@@ -198,7 +198,8 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i)//, const QRect &geom
 
 		default:
 //			m_currentEditor = 0;
-			setFocus();
+			if (!doNotSetFocusOnSelection)
+				setFocus();
 			kdDebug() << "PropertyEditor::createEditor: No editor created!" << endl;
 //			return;
 	}
@@ -217,7 +218,8 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i)//, const QRect &geom
 		moveChild(editor, geometry.x(), geometry.y());
 		editor->show();
 
-		editor->setFocus();
+		if (!doNotSetFocusOnSelection)
+			editor->setFocus();
 	}
 	m_currentEditor = editor;
 //	m_editItem = i;
@@ -437,13 +439,23 @@ KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b, bool preservePrevSelection)
 		}
 		return;
 	}
-	QCString selectedPropertyName;
 	if (m_buffer) {
 		slotEditorAccept(m_currentEditor);
-		if (preservePrevSelection && m_editItem) {
-			selectedPropertyName = m_editItem->name();
+		if (m_editItem) {
+			//store prev. selection for this buffer
+			m_buffer->setPrevSelection( m_editItem->name() );
 		}
 		m_buffer->disconnect(this);
+	}
+	QCString selectedPropertyName1, selectedPropertyName2;
+	if (preservePrevSelection) {
+		//try to find prev. selection:
+		//1. in new buffer's prev. selection
+		if (b)
+			selectedPropertyName1 = b->prevSelection();
+		//2. in prev. buffer's current selection
+		if (m_buffer)
+			selectedPropertyName2 = m_buffer->prevSelection();
 	}
 	m_buffer = b;
 	if (m_buffer) {
@@ -455,11 +467,17 @@ KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b, bool preservePrevSelection)
 		connect(m_buffer,SIGNAL(destroying()), this, SLOT(slotBufferDestroying()));
 	}
 	fill();
-	if (!selectedPropertyName.isEmpty()) {
+	if (m_buffer) {
 		//select prev. selecteed item
-		KexiPropertyEditorItem * item = m_items[selectedPropertyName];
+		KexiPropertyEditorItem * item = 0;
+		if (!selectedPropertyName2.isEmpty()) //try other one for old buffer
+			item = m_items[selectedPropertyName2];
+		if (!item && !selectedPropertyName1.isEmpty()) //try old one for current buffer
+			item = m_items[selectedPropertyName1];
 		if (item) {
-			setSelected(item, true);
+			doNotSetFocusOnSelection = true;
+			 setSelected(item, true);
+			doNotSetFocusOnSelection = false;
 			ensureItemVisible(item);
 		}
 	}
@@ -473,7 +491,7 @@ void KexiPropertyEditor::setBufferLater()
 		return;
 	bool b = insideSlotValueChanged;
 	insideSlotValueChanged = false;
-  setBuffer(setBufferLater_buffer, preservePrevSelection_preservePrevSelection);
+	setBuffer(setBufferLater_buffer, preservePrevSelection_preservePrevSelection);
 	insideSlotValueChanged = b;
 }
 
@@ -524,6 +542,28 @@ KexiPropertyEditor::fill()
 			m_items.insert(it.current()->name(), item);
 		}
 	}
+}
+
+void
+KexiPropertyEditor::setFocus()
+{
+	KexiPropertyEditorItem *item = static_cast<KexiPropertyEditorItem *>(selectedItem());
+	if (item) {
+		ensureItemVisible(item);
+	}
+	else {
+		//select an item before focusing
+		item = static_cast<KexiPropertyEditorItem *>(itemAt(QPoint(10,1)));
+		if (item) {
+			ensureItemVisible(item);
+			setSelected(item, true);
+		}
+	}
+	if (m_currentEditor) {
+		m_currentEditor->setFocus();
+	}
+	else
+		KListView::setFocus();
 }
 
 void

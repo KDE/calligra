@@ -40,7 +40,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropComboBox : public KComboBox
 
 	public:
 		PropComboBox(QWidget *parent, bool multi);
-		~PropComboBox() {;}
+		virtual ~PropComboBox() {;}
 
 		virtual bool eventFilter(QObject *o, QEvent *e);
 		void setSelected(const QStringList &list);
@@ -61,10 +61,10 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorList : public KexiPropertySubEdito
 
 	public:
 		PropertyEditorList(QWidget *parent, KexiProperty *property, const char *name=0);
-		~PropertyEditorList() {;}
+		virtual ~PropertyEditorList() {;}
 
-		virtual QVariant	value();
-		virtual	void 		setValue(const QVariant &value);
+		virtual QVariant value();
+		virtual void setValue(const QVariant &value);
 
 		void setList(QStringList l);
 
@@ -73,8 +73,8 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorList : public KexiPropertySubEdito
 		void itemExecuted();
 
 	protected:
-		PropComboBox		*m_combo;
-		QToolButton		*m_button;
+		PropComboBox *m_combo;
+		QToolButton *m_button;
 };
 
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorMultiList : public KexiPropertySubEditor
@@ -83,10 +83,10 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorMultiList : public KexiPropertySub
 
 	public:
 		PropertyEditorMultiList(QWidget *parent, KexiProperty *property, const char *name=0);
-		~PropertyEditorMultiList() {;}
+		virtual ~PropertyEditorMultiList() {;}
 
-		virtual QVariant	value();
-		virtual	void 		setValue(const QVariant &value);
+		virtual QVariant value();
+		virtual void setValue(const QVariant &value);
 
 		void setList(QStringList l);
 
@@ -94,7 +94,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorMultiList : public KexiPropertySub
 		void valueChanged();
 
 	protected:
-		PropComboBox		*m_combo;
+		PropComboBox *m_combo;
 };
 
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorCursor : public PropertyEditorList
@@ -103,10 +103,10 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorCursor : public PropertyEditorList
 
 	public:
 		PropertyEditorCursor(QWidget *parent, KexiProperty *property, const char *name=0);
-		~PropertyEditorCursor() {;}
+		virtual ~PropertyEditorCursor() {;}
 
 		virtual QVariant	value();
-		virtual	void 		setValue(const QVariant &value);
+		virtual void setValue(const QVariant &value);
 };
 
 

@@ -450,14 +450,15 @@ void KexiMainWindowImpl::fillWindowMenu()
 {
 	KexiMainWindow::fillWindowMenu();
 
-	const QString t = i18n("&Dock/Undock...");
-	int i = 0;
-	for (int index;; i++) {
+	//insert window_next, window_previous actions:
+//	const QString t = i18n("&Dock/Undock...");
+	int i = m_pWindowMenu->count()-1;
+	for (int index;; i--) {
 		index = m_pWindowMenu->idAt(i);
-		if (index==-1 || m_pWindowMenu->text(index)==t)
+		if (index==-1 || m_pWindowMenu->text(index).isNull())
 				break;
 	}
-	i+=2;
+	i++;
 	d->action_window_next->plug( m_pWindowMenu, i++ );
 	d->action_window_previous->plug( m_pWindowMenu, i++ );
 	if (!m_pDocumentViews->isEmpty())
@@ -651,7 +652,7 @@ KexiMainWindowImpl::initActions()
 
 	d->action_window_previous = new KAction( i18n("&Previous Window"), "", 
 #ifdef Q_WS_WIN
-		CTRL+Key_BackTab,
+		CTRL+SHIFT+Key_Tab,
 #else
 		ALT+Key_Left,
 #endif
@@ -1639,7 +1640,7 @@ KexiMainWindowImpl::slotConfigureKeys()
 /*    KKeyDialog dlg;
     dlg.insert( actionCollection() );
     dlg.configure();*/
-	KKeyDialog::configure( actionCollection() );
+	KKeyDialog::configure( actionCollection(), false/*bAllowLetterShortcuts*/, this );
 }
 
 void

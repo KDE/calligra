@@ -47,6 +47,7 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiViewBase
 		QString text();
 		void jump(int character);
 
+		void installEventFilter ( const QObject * filterObj );
 		virtual bool eventFilter(QObject *o, QEvent *ev);
 
 	public slots:

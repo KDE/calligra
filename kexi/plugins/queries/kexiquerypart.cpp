@@ -118,7 +118,7 @@ void KexiQueryPart::initInstanceActions()
 //		m_instanceGuiClients[Kexi::DesignViewMode]->actionCollection(), "querypart_check_query");
 
 	KAction *a = createSharedAction(Kexi::TextViewMode, i18n("Check Query"), "test_it", 
-		CTRL|Key_Return, "querypart_check_query");
+		Key_F9, "querypart_check_query");
 	a->setToolTip(i18n("Check Query"));
 	a->setWhatsThis(i18n("Checks query for validity."));
 

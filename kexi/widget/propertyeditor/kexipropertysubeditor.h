@@ -32,27 +32,29 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertySubEditor : public QWidget
 
 	public:
 		KexiPropertySubEditor(QWidget *parent, KexiProperty *property, const char *name=0);
-		~KexiPropertySubEditor();
+		virtual ~KexiPropertySubEditor();
 
-		virtual bool		eventFilter(QObject* watched, QEvent* e);
-		virtual QVariant	value();
-		virtual void		setValue(const QVariant &value);
+		virtual bool eventFilter(QObject* watched, QEvent* e);
+		virtual QVariant value();
+		virtual void setValue(const QVariant &value);
 
-		//! Sets \a w as editor 's widget, ie the widget which events are filtered and which is resized.
-		void			setWidget(QWidget *w);
+		/*! Sets \a w as editor 's widget, ie the widget which events are filtered and which is resized.
+		 If \a focusProxy is not 0, it will be used as focus proxy instead of \a w.
+		*/
+		void setWidget(QWidget *w, QWidget* focusProxy = 0);
 
 		//! \sa m_leaveTheSpaceForRevertButton description
 		bool leavesTheSpaceForRevertButton() const { return m_leaveTheSpaceForRevertButton; }
 	signals:
 		//! Validate the input in the editor.
-		void			accept(KexiPropertySubEditor *);
+		void accept(KexiPropertySubEditor *);
 		//! Do not validate the contents of the editor.
-		void			reject(KexiPropertySubEditor *);
+		void reject(KexiPropertySubEditor *);
 		//! The editor's value has changed.
-		void			changed(KexiPropertySubEditor *);
+		void changed(KexiPropertySubEditor *);
 
 	protected:
-		virtual void		resizeEvent(QResizeEvent *ev);
+		virtual void resizeEvent(QResizeEvent *ev);
 
 		KexiProperty *m_property;
 		QWidget *m_childWidget;

@@ -46,23 +46,22 @@ KexiPropertySubEditor::eventFilter(QObject* /*watched*/, QEvent* e)
 			emit accept(this);
 			return true;
 		}
-		KListView *list = (KListView*) parentWidget()->parentWidget();
-		KListViewItem *item = (KListViewItem*)list->itemAt(mapToParent(QPoint(2,2)));
+		else if (ev->state()!=ControlButton && (ev->key()==Key_Up || ev->key()==Key_Down)) {
+			KListView *list = (KListView*) parentWidget()->parentWidget();
+			KListViewItem *item = (KListViewItem*)list->itemAt(mapToParent(QPoint(2,2)));
 		
-		if(ev->key()==Key_Up && ev->state()!=ControlButton)
-		{
-			if(item->itemAbove())
-			list->setCurrentItem(item->itemAbove());
-			return true;
-		}
-		else if(ev->key()==Key_Down && ev->state()!=ControlButton)
-		{
-			if(item->itemBelow())
-			list->setCurrentItem(item->itemBelow());
-			return true;
+			if(ev->key()==Key_Up) {
+				if(item->itemAbove())
+					list->setCurrentItem(item->itemAbove());
+				return true;
+			}
+			else if(ev->key()==Key_Down) {
+				if(item->itemBelow())
+					list->setCurrentItem(item->itemBelow());
+				return true;
+			}
 		}
 	}
-
 	return false;
 }
 
@@ -76,13 +75,22 @@ KexiPropertySubEditor::resizeEvent(QResizeEvent *ev)
 }
 
 void
-KexiPropertySubEditor::setWidget(QWidget *w)
+KexiPropertySubEditor::setWidget(QWidget *w, QWidget* focusProxy)
 {
+	if (m_childWidget)
+		m_childWidget->removeEventFilter(this);
+
 	m_childWidget = w;
+
 	if(!m_childWidget)
 		return;
-	if (m_childWidget->focusPolicy()!=NoFocus)
+	if (focusProxy && focusProxy->focusPolicy()!=NoFocus) {
+		setFocusProxy(focusProxy);
+		focusProxy->installEventFilter(this);
+	}
+	else if (m_childWidget->focusPolicy()!=NoFocus)
 		setFocusProxy(m_childWidget);
+
 	m_childWidget->installEventFilter(this);
 //	if (m_childWidget->inherits("QFrame")) {
 //		static_cast<QFrame*>(m_childWidget)->setFrameStyle( QFrame::Box | QFrame::Plain );

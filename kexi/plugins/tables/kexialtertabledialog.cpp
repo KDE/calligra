@@ -65,6 +65,10 @@ class KexiAlterTableDialogPrivate
 		 , primaryKeyExists(false)
 		{}
 
+		~KexiAlterTableDialogPrivate() {
+			delete buffers;
+		}
+
 		KexiTableViewData *data;
 
 		KexiTableViewPropertyBuffer *buffers;
@@ -252,7 +256,7 @@ KexiPropertyBuffer *
 KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field, bool newOne )
 {
 	QString typeName = "KexiDB::Field::" + field->typeGroupString();
-	KexiPropertyBuffer *buff = new KexiPropertyBuffer(this, typeName);
+	KexiPropertyBuffer *buff = new KexiPropertyBuffer(d->buffers, typeName);
 //	connect(buff,SIGNAL(propertyChanged(KexiPropertyBuffer&,KexiProperty&)),
 //		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&,KexiProperty&)));
 	//name
