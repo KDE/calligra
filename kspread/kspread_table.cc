@@ -105,10 +105,11 @@ void ChartBinding::cellChanged( KSpreadCell* )
 
     KoChart::Data matrix( m_rctDataArea.height(), m_rctDataArea.width() );
 
+    KSpreadCell* cell;
     for ( int y = 0; y < m_rctDataArea.height(); y++ )
         for ( int x = 0; x < m_rctDataArea.width(); x++ )
         {
-            KSpreadCell* cell = m_pTable->cellAt( m_rctDataArea.left() + x, m_rctDataArea.top() + y );
+            cell = m_pTable->cellAt( m_rctDataArea.left() + x, m_rctDataArea.top() + y );
             if ( cell && cell->isNumeric() )
                 matrix.cell( y, x ) = KoChart::Value( cell->valueDouble() );
             else if ( cell )
@@ -908,6 +909,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
     // create cells in rows if complete columns selected
+    KSpreadCell *cell;
     if ( !worker.type_B && selected && isColumnSelected() )
     {
 	for ( RowLayout* rw =m_rows.first(); rw; rw = rw->next() )
@@ -916,7 +918,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 	    {
 		for ( int i=m_rctSelection.left(); i<=m_rctSelection.right(); i++ )
 		{
-		    KSpreadCell *cell = cellAt( i, rw->row() );
+		    cell = cellAt( i, rw->row() );
 		    if ( cell == m_pDefaultCell )
 			// '&& worker.create_if_default' unneccessary as never used in type A
 		    {
@@ -991,14 +993,14 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 		ColumnLayout *cl=nonDefaultColumnLayout(i);
 		worker.doWork( cl );
 	    }
-
+	    KSpreadCell *cell;
 	    for ( RowLayout* rw =m_rows.first(); rw; rw = rw->next() )
 	    {
 		if ( !rw->isDefault() && worker.testCondition( rw ) )
 		{
 		    for ( int i=m_rctSelection.left(); i<=m_rctSelection.right(); i++ )
 		    {
-			KSpreadCell *cell = cellAt( i, rw->row() );
+			cell = cellAt( i, rw->row() );
 			// ### this if should be not necessary; cells are created
 			//     before the undo object is created, aren't they?
 			if ( cell == m_pDefaultCell )
@@ -1018,10 +1020,11 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
     // cell region selected
     else
     {
+	KSpreadCell *cell;
 	for ( int x = r.left(); x <= r.right(); x++ )
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
 	    {
-		KSpreadCell *cell = cellAt( x, y );
+		cell = cellAt( x, y );
                 if ( worker.testCondition( cell ) )
 		{
 		    if ( worker.create_if_default && cell == m_pDefaultCell )
@@ -2124,10 +2127,11 @@ else
   int left=selection.left();
   int bottom=selection.bottom();
   int right=selection.right();
+  KSpreadCell *cell;
   for ( int x = selection.left(); x <= selection.right(); x++ )
         for ( int y = selection.top(); y <= selection.bottom(); y++ )
         {
-                KSpreadCell *cell = cellAt( x, y );
+                cell = cellAt( x, y );
                 if( cell->isForceExtraCells())
                 {
                         right=QMAX(right,cell->extraXCells()+x);
@@ -2309,11 +2313,12 @@ void KSpreadTable::find( const QPoint &_marker, QString _find, long options, KSp
         colStart = _marker.x();
         rowStart =  _marker.y();
     }
+    KSpreadCell *cell;
     for (int row = rowStart ; !bck ? row < rowEnd : row > rowEnd ; !bck ? ++row : --row )
     {
         for(int col = colStart ; !bck ? col < colEnd : col > colEnd ; !bck ? ++col : --col )
         {
-            KSpreadCell *cell = cellAt( col, row );
+            cell = cellAt( col, row );
             if ( !cell->isDefault() && !cell->isObscured() && !cell->isFormula() )
             {
                 QString text = cell->text();
@@ -2382,11 +2387,12 @@ void KSpreadTable::replace( const QPoint &_marker, QString _find, QString _repla
         colStart = _marker.x();
         rowStart =  _marker.y();
     }
+    KSpreadCell *cell;
     for (int row = rowStart ; !bck ? row < rowEnd : row > rowEnd ; !bck ? ++row : --row )
     {
         for(int col = colStart ; !bck ? col < colEnd : col > colEnd ; !bck ? ++col : --col )
         {
-            KSpreadCell *cell = cellAt( col, row );
+            cell = cellAt( col, row );
             if ( !cell->isDefault() && !cell->isObscured() && !cell->isFormula() )
             {
                 QString text = cell->text();
@@ -2964,25 +2970,27 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode, bool cpLayout )
     // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
     // For each column, we look for all cells right hand of it and we find the one to swap with it.
     // Much faster than the awful bubbleSort...
-
+    KSpreadCell *cell;
+    KSpreadCell *cell1;
+    KSpreadCell *cell2;
+    KSpreadCell *bestCell;
     for ( int d = r.left();  d <= r.right(); d++ )
     {
-        KSpreadCell *cell1 = cellAt( d, ref_row );
+        cell1 = cellAt( d, ref_row );
         if ( cell1->isObscured() && cell1->isObscuringForced() )
         {
             int moveX = cell1->obscuringCellsColumn();
-            KSpreadCell * cell = cellAt( moveX, ref_row );
+            cell = cellAt( moveX, ref_row );
             cell1 = cellAt( moveX + cell->extraXCells() + 1, moveX );
             d = moveX + cell->extraXCells() + 1;
         }
 
         // Look for which column we want to swap with the one number d
-        KSpreadCell * bestCell = cell1;
+        bestCell = cell1;
         int bestX = d;
-
         for ( int x = d + 1 ; x <= r.right(); x++ )
         {
-            KSpreadCell * cell2 = cellAt( x, ref_row );
+            cell2 = cellAt( x, ref_row );
 
             if ( cell2->isEmpty() )
             { /* No need to swap */ }
@@ -3066,23 +3074,27 @@ void KSpreadTable::sortByColumn( int ref_column, SortingOrder mode, bool cpLayou
     // Much faster than the awful bubbleSort...
     // Torben: Asymptotically it is alltogether O(n^2) :-)
 
+   KSpreadCell *cell;
+   KSpreadCell *cell1;
+   KSpreadCell *cell2;
+   KSpreadCell *bestCell;
    for ( int d = r.top(); d <= r.bottom(); d++ )
     {
         // Look for which row we want to swap with the one number d
-        KSpreadCell *cell1 = cellAt( ref_column, d );
+        cell1 = cellAt( ref_column, d );
         if ( cell1->isObscured() && cell1->isObscuringForced() )
         {
             int moveY=cell1->obscuringCellsRow();
-            KSpreadCell* cell = cellAt( ref_column, moveY );
+            cell = cellAt( ref_column, moveY );
             cell1 = cellAt( ref_column, moveY+cell->extraYCells()+1 );
             d=moveY+cell->extraYCells()+1;
         }
-        KSpreadCell * bestCell = cell1;
+        bestCell = cell1;
         int bestY = d;
 
         for ( int y = d + 1 ; y <= r.bottom(); y++ )
         {
-            KSpreadCell * cell2 = cellAt( ref_column, y );
+            cell2 = cellAt( ref_column, y );
             
             if ( cell2->isEmpty() )
             { /* No need to swap */ }
@@ -3343,6 +3355,7 @@ bool KSpreadTable::areaIsEmpty()
     }
     else
     {
+        KSpreadCell *cell;
         QRect r( m_rctSelection );
         if ( !selected )
             r.setCoords( marker().x(), marker().y(), marker().x(), marker().y() );
@@ -3350,7 +3363,7 @@ bool KSpreadTable::areaIsEmpty()
         for ( int x = r.left(); x <= r.right(); x++ )
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
-                KSpreadCell *cell = cellAt( x, y );
+                cell = cellAt( x, y );
                 if(!cell->isObscuringForced() && !cell->text().isEmpty())
                 {
                 return false;
@@ -3721,9 +3734,10 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
         else
         {
         int x = _col;
+        KSpreadCell *cell;
         for ( int y = r.top(); y <= r.bottom(); y++ )
         {
-            KSpreadCell *cell = cellAt( x, y );
+            cell = cellAt( x, y );
             if( cell != m_pDefaultCell && !cell->isEmpty()
             && !cell->isObscured())
             {
@@ -3818,9 +3832,10 @@ int KSpreadTable::adjustRow( const QPoint &_marker, int _row )
         else
         {
             int y = _row;
+            KSpreadCell *cell;
             for ( int x = r.left(); x <= r.right(); x++ )
                 {
-                KSpreadCell *cell = cellAt( x, y );
+                cell = cellAt( x, y );
                 if( cell != m_pDefaultCell && !cell->isEmpty()
                         && !cell->isObscured())
                         {
@@ -4183,11 +4198,12 @@ QString KSpreadTable::copyAsText( const QPoint &_marker )
     int y;
     unsigned int max = 1;
     QString result;
+    KSpreadCell *cell;
     for (y = m_rctSelection.top(); y <= m_rctSelection.bottom(); ++y)
     {
       for (x = m_rctSelection.left(); x <= m_rctSelection.right(); ++x)
       {
-        KSpreadCell * cell = cellAt( x, y );
+        cell = cellAt( x, y );
         if( !cell->isDefault() )
         {
           if ( cell->strOutText().length() > max )
@@ -4197,12 +4213,12 @@ QString KSpreadTable::copyAsText( const QPoint &_marker )
     }
 
     ++max;
-
+    
     for (y = m_rctSelection.top(); y <= m_rctSelection.bottom(); ++y)
     {
       for (x = m_rctSelection.left(); x <= m_rctSelection.right(); ++x)
       {
-        KSpreadCell * cell = cellAt( x, y );
+        cell = cellAt( x, y );
         if( !cell->isDefault() )
         {
             int l = max - cell->strOutText().length();
@@ -4492,6 +4508,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 
     KSpreadCell* refreshCell = 0;
     QDomElement c = e.firstChild().toElement();
+    KSpreadCell *cell;
     for( ; !c.isNull(); c = c.nextSibling().toElement() )
     {
         if ( c.tagName() == "cell" )
@@ -4508,7 +4525,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
                   //          << roff << "," << coff << ", _xshift: " << _xshift << ", _yshift: " << _yshift << endl;
 
                     bool needInsert = FALSE;
-                    KSpreadCell* cell = cellAt( col + coff, row + roff );
+                    cell = cellAt( col + coff, row + roff );
                     if ( cell->isDefault() )
                     {
                         cell = new KSpreadCell( this, 0, 0 );
@@ -5109,6 +5126,7 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
     // Draw the cells.
     //
     int ypos = 0;
+    KSpreadCell *cell;
     for ( int y = page_range.top(); y <= page_range.bottom(); y++ )
     {
         RowLayout *row_lay = rowLayout( y );
@@ -5118,7 +5136,7 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
         {
             ColumnLayout *col_lay = columnLayout( x );
 
-            KSpreadCell *cell = cellAt( x, y );
+            cell = cellAt( x, y );
             QRect r( 0, 0, view.width(), view.height() );
             cell->paintCell( r, _painter, QPoint(xpos, ypos), QPoint(x,y));
 
@@ -5255,11 +5273,12 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
     //when they don't exist we created them
     //because it's necessary when there is a  layout on a column/row
     //but I remove cell which is inserted.
+    KSpreadCell *cell;
     for (int i=_rect.left();i<=_rect.right();i++)
 	for(int j=_rect.top();j<=_rect.bottom();j++)
 	{
 	    bool insert=false;
-	    KSpreadCell *cell = cellAt( i, j );
+	    cell = cellAt( i, j );
 	    if ( cell == m_pDefaultCell )
 	    {
 		cell = new KSpreadCell( this, i, j );
@@ -5982,11 +6001,12 @@ void KSpreadTable::printDebug()
     int iMaxRow = maxRow();
 
     kdDebug(36001) << "Cell | Content  | DataT | Text" << endl;
+    KSpreadCell *cell;
     for ( int currentrow = 1 ; currentrow < iMaxRow ; ++currentrow )
     {
         for ( int currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
         {
-            KSpreadCell * cell = cellAt( currentcolumn, currentrow );
+            cell = cellAt( currentcolumn, currentrow );
             if ( !cell->isDefault() && !cell->isEmpty() )
             {
                 QString cellDescr = util_cellName( currentcolumn, currentrow );
