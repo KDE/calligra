@@ -290,10 +290,9 @@ void
 KexiRelationView::addConnection(SourceConnection conn, bool interactive)
 {
 	kdDebug() << "KexiRelationView::addConnection()" << endl;
-
-	
-	kdDebug() << "KexiRelationView::addConnection() source: " << (&conn)->srcTable << endl;
-//	KexiRelationViewTable *src = m_tables[(&conn)->srcTable];
+//	kdDebug() << "KexiRelationView::addConnection() source: " << (&conn)->srcTable << endl;
+//	QString srcS = (&conn)->srcTable;
+//	KexiRelationViewTable *src = m_tables[srcS];
 //	KexiRelationViewTable *rcv = m_tables[(&conn)->rcvTable];
 
 //	KexiRelationViewConnection *conn = new KexiRelationViewConnection(src, rcv, conn.srcField, conn.rcvField);
