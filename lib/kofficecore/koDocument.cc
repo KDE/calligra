@@ -1596,6 +1596,8 @@ void KoDocument::setModified( bool mod )
     //kdDebug()<<k_funcinfo<<" mod="<<mod<<" MParts mod="<<KParts::ReadWritePart::isModified()<<" isModified="<<isModified()<<endl;
 
     d->modifiedAfterAutosave=mod;
+    if ( isAutosaving() ) // ignore setModified calls due to autosaving
+        return;
     if ( mod == KParts::ReadWritePart::isModified() )
         return;
 
@@ -1862,7 +1864,7 @@ void KoDocument::setErrorMessage( const QString& errMsg )
     d->lastErrorMessage = errMsg;
 }
 
-bool KoDocument::isAutosaving()
+bool KoDocument::isAutosaving() // BIC: add const
 {
     return d->m_autosaving;
 }
