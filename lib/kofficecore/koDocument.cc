@@ -530,8 +530,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
   }
   else
     return false;
-  // FIXME (Werner)
-  if ( store->open( "/documentinfo.xml" ) )
+  if ( store->open( "documentinfo.xml" ) )
   {
     QBuffer buffer;
     buffer.open( IO_WriteOnly );
@@ -704,8 +703,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
       QApplication::restoreOverrideCursor();
       return false;
     }
-    // FIXME (Werner)
-    if ( store->open( "/documentinfo.xml" ) )
+    if ( store->open( "documentinfo.xml" ) )
     {
       istorestream in( store );
 
