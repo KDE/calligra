@@ -634,3 +634,92 @@ QString KoParagCounter::makeAlphaLowerNumber( int n )
     tmp.prepend( QChar( 'a' + n - 1 ) );
     return tmp;
 }
+
+int KoParagCounter::fromRomanNumber( const QString &string )
+{
+    int ret = 0;
+    int stringStart = 0;
+    const int stringLen = string.length();
+
+    for (int base = 1000; base >= 1 && stringStart < stringLen; base /= 10)
+    {
+        const QCString *rn;
+        int rnNum;
+        switch (base)
+        {
+            case 1000:
+                rn = RNThousands;
+                rnNum = sizeof (RNThousands) / sizeof (const QCString);
+                break;
+            case 100:
+                rn = RNHundreds;
+                rnNum = sizeof (RNHundreds) / sizeof (const QCString);
+                break;
+            case 10:
+                rn = RNTens;
+                rnNum = sizeof (RNTens) / sizeof (const QCString);
+                break;
+            case 1:
+            default:
+                rn = RNUnits;
+                rnNum = sizeof (RNUnits) / sizeof (const QCString);
+                break;
+        }
+
+        // I _think_ this will work :) - Clarence
+        for (int i = rnNum - 1; i >= 1; i--)
+        {
+            const int rnLength = rn[i].length();
+            if (string.mid(stringStart,rnLength) == (const char*)rn[i])
+            {
+                ret += i * base;
+                stringStart += rnLength;
+                break;
+            }
+        }
+    }
+
+    return (ret == 0 || stringStart != stringLen) ? -1 /*invalid value*/ : ret;
+}
+
+int KoParagCounter::fromAlphaUpperNumber( const QString &string )
+{
+    int ret = 0;
+
+    const int len = string.length();
+    for (int i = 0; i < len; i++)
+    {
+        const int add = char(string[i]) - 'A' + 1;
+
+        if (add >= 1 && add <= 26) // _not_ < 26
+            ret = ret * 26 + add;
+        else
+        {
+            ret = -1; // invalid character
+            break;
+        }
+    }
+
+    return ret;
+}
+
+int KoParagCounter::fromAlphaLowerNumber( const QString &string )
+{
+    int ret = 0;
+
+    const int len = string.length();
+    for (int i = 0; i < len; i++)
+    {
+        const int add = char(string[i]) - 'a' + 1;
+
+        if (add >= 1 && add <= 26) // _not_ < 26
+            ret = ret * 26 + add;
+        else
+        {
+            ret = -1; // invalid character
+            break;
+        }
+    }
+
+    return ret;
+}

@@ -45,6 +45,7 @@ public:
     KoSpinBox( QWidget * parent = 0, const char * name = 0 );
     virtual ~KoSpinBox();
     virtual QString mapValueToText( int value );
+    virtual int mapTextToValue( bool * ok );
     void setCounterType(counterType _type);
  private:
     counterType m_Etype;

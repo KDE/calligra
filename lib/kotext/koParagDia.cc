@@ -96,6 +96,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     else
         spnDisplayLevels->hide();
 
+
     QHBoxLayout *customCharBox = new QHBoxLayout(0, 0, 6);
     lCustom = new QLabel( i18n( "Custo&m character:" ), gStyle, "custom char label" );
     customCharBox->addWidget( lCustom );
@@ -124,7 +125,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
         lDepth->hide();
 
     QLabel *lDisplayLevels = new QLabel( gStyle );
-    lDisplayLevels->setText( i18n( "&Display levels:" ) );
+    lDisplayLevels->setText( i18n( "Display le&vels:" ) );
     lDisplayLevels->setBuddy( spnDisplayLevels );
     if ( displayDepth )
         grid->addWidget( lDisplayLevels, 3, 3 );
@@ -403,6 +404,40 @@ QString KoSpinBox::mapValueToText( int value )
     return QString::null;
 }
 
+int KoSpinBox::mapTextToValue( bool * ok )
+{
+    int ret;
+    QString txt = text();
+
+    *ok = TRUE;
+    switch(m_Etype)
+    {
+        case NUM:
+            ret = txt.toInt ( ok );
+            break;
+        case ALPHAB_L:
+            ret = KoParagCounter::fromAlphaLowerNumber( txt.lower() );
+            break;
+        case ALPHAB_U:
+            ret = KoParagCounter::fromAlphaUpperNumber( txt.upper() );
+            break;
+        case ROM_NUM_L:
+            ret = KoParagCounter::fromRomanNumber( txt.lower() );
+            break;
+        case ROM_NUM_U:
+            ret = KoParagCounter::fromRomanNumber( txt.lower() ); // _not_ upper()
+            break;
+        case NONE:
+        default:
+            ret = -1;
+            break;
+    }
+
+    if (ret == -1)
+        *ok = FALSE;
+
+    return ret;
+}
 
 
 /******************************************************************/
