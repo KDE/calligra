@@ -34,7 +34,6 @@ KChartConfigDialog::KChartConfigDialog( KDChartParams* params,
     _subTypePage( 0 )
 {
     // Geometry page
-    // PENDING(kalle) _xstep only for axes charts
     //_geompage = new KChartGeometryConfigPage( this );
     //addTab( _geompage, i18n( "&Geometry" ) );
     setCaption( i18n( "Chart config dialog" ) );
@@ -113,19 +112,33 @@ void KChartConfigDialog::apply()
 
     // PENDING(kalle) Replace with equivalents
     //     _params->BGColor = _colorpage->backgroundColor();
-    //     _params->GridColor = _colorpage->gridColor();
-    _params->setOutlineDataColor( _colorpage->lineColor() );
-    // PENDING(kalle) Replace with equivalents
     //     _params->PlotColor = _colorpage->plotColor();
-    //     _params->VolColor = _colorpage->volColor();
-    //     _params->TitleColor = _colorpage->titleColor();
-    //     _params->XTitleColor = _colorpage->xTitleColor();
-    //     _params->YTitleColor = _colorpage->yTitleColor();
-    //     _params->YTitle2Color = _colorpage->yTitle2Color();
-    //     _params->XLabelColor = _colorpage->xLabelColor();
-    //     _params->YLabelColor = _colorpage->yLabelColor();
-    //     _params->YLabel2Color = _colorpage->yLabel2Color();
     //_params->EdgeColor = _colorpage->edgeColor();
+    //     _params->VolColor = _colorpage->volColor();
+    KDChartAxisParams leftparams = _params->axisParams( KDChartAxisParams::AxisPosLeft );
+    leftparams.setAxisGridColor( _colorpage->gridColor() );
+    _params->setOutlineDataColor( _colorpage->lineColor() );
+    KDChartAxisParams rightparams = _params->axisParams( KDChartAxisParams::AxisPosRight );
+    KDChartAxisParams bottomparams = _params->axisParams( KDChartAxisParams::AxisPosBottom );
+    if( _colorpage->xTitleColor().isValid() )
+        bottomparams.setAxisLineColor( _colorpage->xTitleColor() );
+    else
+        bottomparams.setAxisLineColor( _colorpage->titleColor() );
+    if( _colorpage->yTitleColor().isValid() )
+        leftparams.setAxisLineColor( _colorpage->yTitleColor() );
+    else
+        leftparams.setAxisLineColor( _colorpage->titleColor() );
+    if( _colorpage->yTitle2Color().isValid() )
+        rightparams.setAxisLineColor( _colorpage->yTitle2Color() );
+    else
+        rightparams.setAxisLineColor( _colorpage->titleColor() );
+    bottomparams.setAxisLabelsColor( _colorpage->xLabelColor() );
+    leftparams.setAxisLabelsColor( _colorpage->yLabelColor() );
+    rightparams.setAxisLabelsColor( _colorpage->yLabel2Color() );
+    
+    _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparams );
+    _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparams );
+    _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparams );
 
     if( _params->chartType() != KDChartParams::Pie ) {
         _parameterpage->apply();
@@ -164,18 +177,21 @@ void KChartConfigDialog::defaults()
 {
     // color page
     _colorpage->setLineColor( _params->outlineDataColor() );
+    KDChartAxisParams leftparams( _params->axisParams( KDChartAxisParams::AxisPosLeft ) );
+    KDChartAxisParams rightparams( _params->axisParams( KDChartAxisParams::AxisPosRight ) );
+    KDChartAxisParams bottomparams( _params->axisParams( KDChartAxisParams::AxisPosBottom ) );
+    _colorpage->setGridColor( leftparams.axisGridColor() );
+    _colorpage->setTitleColor( QColor() );
+    _colorpage->setXTitleColor( bottomparams.axisLineColor() );
+    _colorpage->setYTitleColor( leftparams.axisLineColor() );
+    _colorpage->setYTitle2Color( rightparams.axisLineColor() );
+    _colorpage->setXLabelColor( bottomparams.axisLabelsColor() );
+    _colorpage->setYLabelColor( leftparams.axisLabelsColor() );
+    _colorpage->setYLabel2Color( rightparams.axisLabelsColor() );
     // PENDING(kalle) Replace with KDChart equivalents
     //     _colorpage->setBackgroundColor( _params->BGColor );
-    //     _colorpage->setGridColor( _params->GridColor );
     //     _colorpage->setPlotColor( _params->PlotColor );
     //     _colorpage->setVolColor( _params->VolColor );
-    //     _colorpage->setTitleColor( _params->TitleColor );
-    //     _colorpage->setXTitleColor( _params->XTitleColor );
-    //     _colorpage->setYTitleColor( _params->YTitleColor );
-    //     _colorpage->setYTitle2Color( _params->YTitle2Color );
-    //     _colorpage->setXLabelColor( _params->XLabelColor );
-    //     _colorpage->setYLabelColor( _params->YLabelColor );
-    //     _colorpage->setYLabel2Color( _params->YLabel2Color );
     //_colorpage->setEdgeColor( _params->EdgeColor );
 
     if( _params->chartType() != KDChartParams::Pie ) {
@@ -203,8 +219,8 @@ void KChartConfigDialog::defaults()
     }
 
     _backgroundpixpage->init();
-    //     for( uint i = 0; i < NUMDATACOLORS; i++ )
-    // 	_colorpage->setDataColor( i, _params->_datacolors.color( i ) );
+//     for( uint i = 0; i < NUMDATACOLORS; i++ )
+//      	_colorpage->setDataColor( i, _params->dataColor( i ) );
 }
 
 
