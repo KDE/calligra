@@ -1051,7 +1051,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
            strLayout += QString("\\sl-%1\\slmult0").arg(int(layout.lineSpacing)*20);
 
         else if ( layout.lineSpacingType==LayoutData::LS_MULTIPLE  )
-           strLayout += QString("\\sl%1\\slmult1").arg( int(layout.lineSpacing)*120 );
+           strLayout += QString("\\sl%1\\slmult1").arg( int(layout.lineSpacing)*240 );
 
         else if ( layout.lineSpacingType==LayoutData::LS_CUSTOM )
            // custom line spacing (in points)
