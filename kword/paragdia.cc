@@ -1608,7 +1608,18 @@ void KWParagTabulatorsWidget::setActiveItem(int selected) {
     noSignals=false;
 }
 
-QString KWParagTabulatorsWidget::tabToString(KoTabulator *tab) {
+void KWParagTabulatorsWidget::setCurrentTab( double tabPos ) {
+    KoTabulatorList::ConstIterator it = m_tabList.begin();
+    for ( int i = 0; it != m_tabList.end(); ++it, ++i )
+        if ( (*it).ptPos == tabPos ) {
+            lstTabs->setCurrentItem(lstTabs->findItem(tabToString(&(*it))));
+            setActiveItem( i );
+            return;
+        }
+    kdWarning() << "KWParagTabulatorsWidget::setCurrentTab: no tab found at pos=" << tabPos << endl;
+}
+
+QString KWParagTabulatorsWidget::tabToString(const KoTabulator *tab) {
     return QString::number( KWUnit::userValue( tab->ptPos, m_unit) );
 }
 
@@ -1634,7 +1645,7 @@ void KWParagTabulatorsWidget::sortLists() {
     qHeapSort( m_tabList );
 
     // we could just sort the listView, but to make sure we never have any problems with
-    // incosistent lists, just re-add..
+    // inconsistent lists, just re-add..
     QString curValue=lstTabs->currentText();
     lstTabs->clear();
     KoTabulatorList::ConstIterator it = m_tabList.begin();
@@ -1710,6 +1721,30 @@ KWParagDia::KWParagDia( QWidget* parent, const char* name,
 
 KWParagDia::~KWParagDia()
 {
+}
+
+void KWParagDia::setCurrentPage( int page )
+{
+    switch( page )
+    {
+    case PD_SPACING:
+        showPage( pageIndex( m_indentSpacingWidget->parentWidget() ) );
+        break;
+    case PD_ALIGN:
+        showPage( pageIndex( m_alignWidget->parentWidget() ) );
+        break;
+    case PD_BORDERS:
+        showPage( pageIndex( m_borderWidget->parentWidget() ) );
+        break;
+    case PD_NUMBERING:
+        showPage( pageIndex( m_counterWidget->parentWidget() ) );
+        break;
+    case PD_TABS:
+        showPage( pageIndex( m_tabulatorsWidget->parentWidget() ) );
+        break;
+    default:
+        break;
+    }
 }
 
 void KWParagDia::setParagLayout( const KWParagLayout & lay )

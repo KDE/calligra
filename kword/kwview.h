@@ -263,6 +263,7 @@ public slots:
     void frameSelectedChanged();
     void docStructChanged(int _type);
     void slotHRulerDoubleClicked();
+    void slotHRulerDoubleClicked( double );
 
     void pageNumChanged();
 
@@ -299,6 +300,8 @@ protected:
     void createExpressionActions( KActionMenu * parentMenu,const QString& filename );
 
     void insertPicture( const QString &filename, bool isClipart, bool makeInline, QSize pixmapSize, bool _keepRatio );
+
+    void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
 
     KWTextFrameSetEdit *currentTextEdit();
 

@@ -2055,6 +2055,11 @@ void KWView::formatFont()
 
 void KWView::formatParagraph()
 {
+    showParagraphDialog();
+}
+
+void KWView::showParagraphDialog( int initialPage, double initialTabPos )
+{
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
     {
@@ -2067,6 +2072,15 @@ void KWView::formatParagraph()
         // Initialize the dialog from the current paragraph's settings
         KWParagLayout lay = static_cast<KWTextParag *>(edit->cursor()->parag())->paragLayout();
         paragDia->setParagLayout( lay );
+
+        // Set initial page and initial tabpos if necessary
+        if ( initialPage != -1 )
+        {
+            paragDia->setCurrentPage( initialPage );
+            if ( initialPage == KWParagDia::PD_TABS )
+                paragDia->tabulatorsWidget()->setCurrentTab( initialTabPos );
+        }
+
         if(!paragDia->exec())
             return;
         KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph settings" ) );
@@ -2187,6 +2201,11 @@ void KWView::formatParagraph()
         delete paragDia;
     }
 
+}
+
+void KWView::slotHRulerDoubleClicked( double ptpos )
+{
+    showParagraphDialog( KWParagDia::PD_TABS, ptpos );
 }
 
 void KWView::slotHRulerDoubleClicked()
@@ -3704,6 +3723,7 @@ KWGUI::KWGUI( QWidget *parent, KWView *_view )
     connect( r_horz, SIGNAL( newRightIndent( double ) ), view, SLOT( newRightIndent( double ) ) );
 
     connect( r_horz, SIGNAL( doubleClicked() ), view, SLOT( slotHRulerDoubleClicked() ) );
+    connect( r_horz, SIGNAL( doubleClicked(double) ), view, SLOT( slotHRulerDoubleClicked(double) ) );
     connect( r_horz, SIGNAL( unitChanged( QString ) ), this, SLOT( unitChanged( QString ) ) );
     connect( r_vert, SIGNAL( newPageLayout( KoPageLayout ) ), view, SLOT( newPageLayout( KoPageLayout ) ) );
     connect( r_vert, SIGNAL( doubleClicked() ), view, SLOT( formatPage() ) );

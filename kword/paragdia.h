@@ -266,7 +266,7 @@ private:
 };
 
 /**
- * 
+ *
  */
 class KWTabulatorsLineEdit : public QLineEdit
 {
@@ -296,6 +296,7 @@ public:
 
     KoTabulatorList tabList() const { return m_tabList; }
 
+    void setCurrentTab( double tabPos );
 
 protected slots:
     void slotTabValueChanged( const QString &_text );
@@ -308,7 +309,7 @@ protected slots:
 protected:
 
     void sortLists();
-    QString tabToString(KoTabulator *tab);
+    QString tabToString(const KoTabulator *tab);
 
     QVBoxLayout* editLayout;
 
@@ -343,18 +344,17 @@ class KWParagDia : public KDialogBase
     Q_OBJECT
 
 public:
-    static const int PD_SPACING = 1;
-    static const int PD_ALIGN = 2;
-    static const int PD_BORDERS = 4;
-    static const int PD_NUMBERING = 8;
-    static const int PD_TABS = 16;
+    enum { PD_SPACING = 1, PD_ALIGN = 2, PD_BORDERS = 4, PD_NUMBERING = 8, PD_TABS = 16 };
 
     KWParagDia( QWidget*, const char*, int flags, KWDocument *_doc, double _frameWidth=-1);
     ~KWParagDia();
 
     int getFlags() { return m_flags; }
 
-    // Set the values to be displayed
+    /** Make a given page the current one - @p page is a flag (PD_something) value */
+    void setCurrentPage( int page );
+
+    /** Set the values to be displayed */
     void setParagLayout( const KWParagLayout & lay );
 
     // Get values (in pt) - tab 1
@@ -380,6 +380,7 @@ public:
 
     // tab 5
     KoTabulatorList tabListTabulator() const { return m_tabulatorsWidget->tabList(); }
+    KWParagTabulatorsWidget * tabulatorsWidget() const { return m_tabulatorsWidget; }
 
     // Support for "what has changed?"
     bool isAlignChanged() const {return oldLayout.alignment!=align();}
