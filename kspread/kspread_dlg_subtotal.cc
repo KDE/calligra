@@ -21,6 +21,7 @@
 #include "kspreadsubtotal.h"
 #include "kspread_sheet.h"
 #include "kspread_view.h"
+#include "kspread_doc.h"
 #include "kspread_util.h"
 
 #include <kdebug.h>
@@ -90,6 +91,7 @@ void KSpreadSubtotalDlg::slotOk()
   QString result( " " + i18n("Result") );
   int lastChangedRow = top;
 
+  m_pView->doc()->emitBeginOperation( false );
   bool ignoreEmptyCells = m_dialog->m_IgnoreBox->isChecked();
   bool addRow;
   if ( !m_dialog->m_summaryOnly->isChecked() )
@@ -162,6 +164,7 @@ void KSpreadSubtotalDlg::slotOk()
     }
   }
 
+  m_pView->doc()->emitEndOperation();
   accept();
 }
 
@@ -172,7 +175,9 @@ void KSpreadSubtotalDlg::slotCancel()
 
 void KSpreadSubtotalDlg::slotUser1()
 {
+  m_pView->doc()->emitBeginOperation( false );
   removeSubtotalLines();
+  m_pView->doc()->emitEndOperation();
   accept();
 }
 
@@ -209,8 +214,8 @@ void KSpreadSubtotalDlg::removeSubtotalLines()
     {
       kdDebug() << "Line " << y << " contains a subtotal " << endl;
       QRect rect( l, y, m_selection.width(), 1 );
-      m_pTable->unshiftColumn( rect );
 
+      m_pTable->unshiftColumn( rect );
       m_selection.setHeight( m_selection.height() - 1 );
     }
   }

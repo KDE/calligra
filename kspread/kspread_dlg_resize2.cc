@@ -69,6 +69,7 @@ KSpreadResizeRow::KSpreadResizeRow( KSpreadView* parent, const char* name )
 
 void KSpreadResizeRow::slotOk()
 {
+    m_pView->doc()->emitBeginOperation( false );
     double height = KoUnit::ptFromUnit( m_pHeight->value(), m_pView->doc()->getUnit() );
 
     //Don't generate a resize, when there isn't a change or the change is only a rounding issue
@@ -86,6 +87,7 @@ void KSpreadResizeRow::slotOk()
             m_pView->vBorderWidget()->resizeRow( height, i, false );
     }
 
+    m_pView->doc()->emitEndOperation();
     accept();
 }
 
@@ -131,6 +133,7 @@ KSpreadResizeColumn::KSpreadResizeColumn( KSpreadView* parent, const char* name 
 
 void KSpreadResizeColumn::slotOk()
 {
+    m_pView->doc()->emitBeginOperation( false );
     double width = KoUnit::ptFromUnit( m_pWidth->value(), m_pView->doc()->getUnit() );
 
     //Don't generate a resize, when there isn't a change or the change is only a rounding issue
@@ -149,6 +152,7 @@ void KSpreadResizeColumn::slotOk()
 
     }
 
+    m_pView->doc()->emitEndOperation();
     accept();
 }
 

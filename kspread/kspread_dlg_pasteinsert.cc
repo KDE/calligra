@@ -53,6 +53,7 @@ KSpreadpasteinsert::KSpreadpasteinsert( KSpreadView* parent, const char* name,co
 
 void KSpreadpasteinsert::slotOk()
 {
+    m_pView->doc()->emitBeginOperation( false );
     if( rb1->isChecked() )
         m_pView->activeTable()->paste( m_pView->selection() ,
                                        true, Normal,OverWrite,true,-1);
@@ -60,6 +61,7 @@ void KSpreadpasteinsert::slotOk()
         m_pView->activeTable()->paste( m_pView->selection() ,
                                        true, Normal,OverWrite,true,+1);
 
+    m_pView->doc()->emitEndOperation();
     accept();
 }
 

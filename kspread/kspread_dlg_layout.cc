@@ -668,6 +668,7 @@ int CellFormatDlg::exec()
 
 void CellFormatDlg::slotDefault()
 {
+  m_pView->doc()->emitBeginOperation( false );
   KSpreadCell * obj = table->defaultCell();
 
   floatPage->apply( obj );
@@ -677,11 +678,13 @@ void CellFormatDlg::slotDefault()
   borderPage->applyOutline(obj);
 
   m_pView->slotUpdateView( table, m_pView->canvasWidget()->visibleCells() );
+  m_pView->doc()->emitEndOperation();
 }
 
 void CellFormatDlg::slotApply()
 {
-  KSpreadCell *cell = NULL;
+    m_pView->doc()->emitBeginOperation( false );
+    KSpreadCell *cell = NULL;
 
     KSpreadMacroUndoAction *macroUndo=new KSpreadMacroUndoAction( table->doc(),i18n("Change Format") );
 
@@ -861,6 +864,7 @@ void CellFormatDlg::slotApply()
     m_pView->doc()->setModified( true );
     // Update the toolbar (bold/italic/font...)
     m_pView->updateEditWidget();
+    m_pView->doc()->emitEndOperation();
 }
 
 

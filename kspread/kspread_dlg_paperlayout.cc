@@ -150,6 +150,7 @@ void KSpreadPaperLayout::slotOk()
     else
       sheet = m_pSheet;
 
+    m_pView->doc()->emitBeginOperation( false );
     while ( sheet )
     {
       KoPageLayout pl = getLayout();
@@ -265,6 +266,7 @@ void KSpreadPaperLayout::slotOk()
         sheet = 0;
     }
 
+    m_pView->doc()->emitEndOperation();
     accept();
     delete this;
 }

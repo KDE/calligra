@@ -3063,7 +3063,7 @@ void KSpreadView::specialPaste()
     KSpreadspecial dlg( this, "Special Paste" );
     if( dlg.exec() )
     {
-      if (m_pTable->getAutoCalc())
+      if( m_pTable->getAutoCalc() )
       {
         m_pDoc->emitBeginOperation(false);
         m_pTable->recalc();
@@ -3239,12 +3239,8 @@ void KSpreadView::textToColumns()
         return;
     }
 
-    m_pDoc->emitBeginOperation(false);
-
     KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", m_selectionInfo->selection(), KSpreadCSVDialog::Column );
     dialog.exec();
-
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::consolidate()
@@ -3253,8 +3249,6 @@ void KSpreadView::consolidate()
     KSpreadConsolidate * dlg = new KSpreadConsolidate( this, "Consolidate" );
     dlg->show();
     // dlg destroys itself
-    /* TODO - dialog needs to take care of repainting issues
-       (begin/end operations)*/
 }
 
 void KSpreadView::sortList()
@@ -3518,8 +3512,6 @@ void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
     if ( !m_pTable )
         return;
 
-    m_pDoc->emitBeginOperation(false);
-
     // Transform the view coordinates to document coordinates
     KoRect unzoomedRect = m_pDoc->unzoomRect( _geometry );
     unzoomedRect.moveBy( m_pCanvas->xOffset(), m_pCanvas->yOffset() );
@@ -3533,7 +3525,6 @@ void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
 
     // Insert the new child in the active table.
     m_pTable->insertChild( unzoomedGeometry, _e );
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::slotRemoveChild( KSpreadChild *_child )
@@ -3638,13 +3629,14 @@ void KSpreadView::preference()
 {
   if ( !m_pTable )
        return;
-  KSpreadpreference dlg( this, "Preference");
-  m_pDoc->emitBeginOperation(false);
-  if(dlg.exec())
+
+  KSpreadpreference dlg( this, "Preference" );
+  if( dlg.exec() )
   {
+    m_pDoc->emitBeginOperation( false );
     m_pTable->refreshPreference();
+    m_pDoc->emitEndOperation();
   }
-  m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::addModifyComment()
@@ -4451,18 +4443,14 @@ void KSpreadView::slotInsert()
 {
     QRect r( selection() );
     KSpreadinsert dlg( this, "Insert", r,KSpreadinsert::Insert );
-    m_pDoc->emitBeginOperation(false);
     dlg.exec();
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::slotRemove()
 {
     QRect r( m_selectionInfo->selection() );
     KSpreadinsert dlg( this, "Remove", r,KSpreadinsert::Remove );
-    m_pDoc->emitBeginOperation(false);
     dlg.exec();
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::slotInsertCellCopy()
@@ -4470,35 +4458,37 @@ void KSpreadView::slotInsertCellCopy()
   if ( !m_pTable )
     return;
 
-  m_pDoc->emitBeginOperation(false);
-  if( !m_pTable->testAreaPasteInsert())
-    m_pTable->paste( selection(), true, Normal, OverWrite, true);
+  if( !m_pTable->testAreaPasteInsert() )
+  {
+    m_pDoc->emitBeginOperation( false );
+    m_pTable->paste( selection(), true, Normal, OverWrite, true );
+    m_pDoc->emitEndOperation();
+  }
   else
   {
     KSpreadpasteinsert dlg( this, "Remove", selection() );
     dlg.exec();
   }
-  if(m_pTable->getAutoCalc())
-    m_pTable->recalc();
-  updateEditWidget();
 
-  m_pDoc->emitEndOperation();
+  if( m_pTable->getAutoCalc() )
+  {
+    m_pDoc->emitBeginOperation( false );
+    m_pTable->recalc();
+    m_pDoc->emitEndOperation();
+  }
+  updateEditWidget();
 }
 
 void KSpreadView::setAreaName()
 {
     KSpreadarea dlg( this, "Area Name",QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow()) );
-    m_pDoc->emitBeginOperation(false);
     dlg.exec();
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::showAreaName()
 {
     KSpreadreference dlg( this, "Show Area" );
-    m_pDoc->emitBeginOperation(false);
     dlg.exec();
-    m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::resizeRow()
@@ -4507,10 +4497,8 @@ void KSpreadView::resizeRow()
         KMessageBox::error( this, i18n("Area too large!"));
     else
     {
-      m_pDoc->emitBeginOperation(false);
       KSpreadResizeRow dlg( this );
       dlg.exec();
-      m_pDoc->emitEndOperation();
     }
 }
 
@@ -4520,10 +4508,8 @@ void KSpreadView::resizeColumn()
         KMessageBox::error( this, i18n("Area too large!"));
     else
     {
-      m_pDoc->emitBeginOperation(false);
       KSpreadResizeColumn dlg( this );
       dlg.exec();
-      m_pDoc->emitEndOperation();
     }
 }
 
@@ -4556,10 +4542,8 @@ void KSpreadView::layoutDlg()
 {
   QRect selection( m_selectionInfo->selection() );
 
-  m_pDoc->emitBeginOperation(false);
   CellFormatDlg dlg( this, m_pTable, selection.left(), selection.top(),
                      selection.right(), selection.bottom() );
-  m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::paperLayoutDlg()

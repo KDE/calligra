@@ -20,6 +20,7 @@
 
 #include "kspread_dlg_insert.h"
 #include "kspread_view.h"
+#include "kspread_doc.h"
 #include "kspread_sheet.h"
 
 #include <qlayout.h>
@@ -74,6 +75,7 @@ KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QRect 
 
 void KSpreadinsert::slotOk()
 {
+    m_pView->doc()->emitBeginOperation( false );
     if( rb1->isChecked() )
     {
 	if( insRem == Insert )
@@ -129,6 +131,7 @@ void KSpreadinsert::slotOk()
 
     m_pView->updateEditWidget();
 
+    m_pView->doc()->emitEndOperation();
     accept();
 }
 

@@ -147,6 +147,8 @@ void KSpreadreference::slotRemove()
   QString textRemove;
   if ( m_list->currentItem() != -1)
   {
+    m_pView->doc()->emitBeginOperation( false );
+
     QString textRemove = m_list->text(m_list->currentItem());
     m_pView->doc()->removeArea(textRemove );
     m_pView->doc()->setModified(true);
@@ -170,6 +172,8 @@ void KSpreadreference::slotRemove()
     {
       tbl->refreshRemoveAreaName(textRemove);
     }
+
+    m_pView->doc()->emitEndOperation();
   }
 
   if ( !m_list->count() )
@@ -196,6 +200,8 @@ void KSpreadreference::slotEdit()
 
 void KSpreadreference::slotOk()
 {
+  m_pView->doc()->emitBeginOperation( false );
+
   QString text;
   if (m_list->currentItem() != -1)
   {
@@ -218,6 +224,8 @@ void KSpreadreference::slotOk()
                                            area[index].rect.bottomRight(),
                                            m_pView->activeTable() );
   }
+
+  m_pView->doc()->emitEndOperation();
   accept();
 }
 
@@ -330,16 +338,20 @@ void KSpreadEditAreaName::slotOk()
     range = KSpreadRange( m_area->text() );
   }
 
+  m_pView->doc()->emitBeginOperation( false );
+
   m_pView->doc()->removeArea( m_areaName->text() );
   m_pView->doc()->addAreaName(range.range, m_areaName->text(), m_sheets->currentText() );
 
-  KSpreadSheet *tbl;
+  KSpreadSheet *sheet;
 
-  for ( tbl = m_pView->doc()->map()->firstTable(); tbl != 0L; tbl = m_pView->doc()->map()->nextTable() )
+  for ( sheet = m_pView->doc()->map()->firstTable(); sheet != 0L; 
+        sheet = m_pView->doc()->map()->nextTable() )
   {
-    tbl->refreshChangeAreaName( m_areaName->text() );
+    sheet->refreshChangeAreaName( m_areaName->text() );
   }
 
+  m_pView->doc()->emitEndOperation();
   accept();
 }
 

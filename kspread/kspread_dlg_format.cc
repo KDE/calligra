@@ -107,6 +107,8 @@ void KSpreadFormatDlg::slotActivated( int index )
 
 void KSpreadFormatDlg::slotOk()
 {
+    m_view->doc()->emitBeginOperation( false );
+
     QString xml = KSpreadFactory::global()->dirs()->findResource( "table-styles", m_entries[ m_combo->currentItem() ].xml );
     if ( xml.isEmpty() )
     {
@@ -287,6 +289,7 @@ void KSpreadFormatDlg::slotOk()
     m_view->selectionInfo()->setSelection( r.topLeft(), r.bottomRight(),
                                            m_view->activeTable() );
     m_view->doc()->setModified( true );
+    m_view->doc()->emitEndOperation();
     accept();
 }
 
