@@ -53,6 +53,7 @@
 #include <htmlexport.moc>
 
 #include <KWEFStructures.h>
+#include <KWEFUtil.h>
 #include <TagProcessing.h>
 #include <KWEFBaseClass.h>
 #include <ProcessDocument.h>
@@ -354,7 +355,7 @@ bool ClassExportFilterHtml::filter(const QString  &filenameIn, const QString  &f
     // Eliminate the dollar signs
     //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
     streamOut << "<meta name=\"Generator\" content=\"KWord HTML Export Filter Version"
-              << strVersion.mid(10).replace(QRegExp("\\$"),"") // Note: double escape character (one for C++, one for QRegExp!)
+              << strVersion.mid(10).replace(QRegExp("\\$"),"") // Note: double  character (one for C++, one for QRegExp!)
               << "\""<< (isXML()?" /":"") // X(HT)ML closes empty elements, HTML not!
               << ">" << endl;
 
@@ -370,7 +371,7 @@ bool ClassExportFilterHtml::filter(const QString  &filenameIn, const QString  &f
         }
     }
 
-    streamOut << "<title>"<< escapeText(strTitle) <<"</title>" << endl;  // <TITLE> is mandatory in HTML 4.01 !
+    streamOut << "<title>"<< EscapeXmlText(strTitle,true,false) <<"</title>" << endl;  // <TITLE> is mandatory in HTML 4.01 !
 
     //TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 

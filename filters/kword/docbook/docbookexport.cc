@@ -27,6 +27,7 @@
 #include <qdom.h>
 
 #include <KWEFStructures.h>
+#include <KWEFUtil.h>
 #include <TagProcessing.h>
 #include <KWEFBaseClass.h>
 #include <ProcessDocument.h>
@@ -86,10 +87,7 @@ void ProcessParagraphData ( QString                 &paraText,
                 outputText += "<LITERAL>";
             }
 
-            outputText += paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len )
-                                  .replace ( QRegExp ( "&" ), "&amp;" )
-                                  .replace ( QRegExp ( "<" ), "&lt;"  )
-                                  .replace ( QRegExp ( ">" ), "&gt;"  );
+            outputText += EscapeXmlText(paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len ));
 
             if ( fixedFont )
             {

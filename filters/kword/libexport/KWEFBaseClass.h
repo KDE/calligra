@@ -37,7 +37,7 @@ class KWEFBaseClass
     public: //Non-virtual
     public: //virtual
 //        virtual bool filter(const QString &filenameIn, const QString &filenameOut);
-        virtual QString escapeText(const QString& str) const;
+//        virtual QString escapeText(const QString& str) const;
         virtual QString getHtmlOpeningTagExtraAttributes(void) const;
 //        virtual QString getDocType(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;

@@ -20,18 +20,13 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qdom.h>
+#include <qstring.h>
 
-#include "KWEFStructures.h"
-#include "KWEFBaseClass.h"
+#include "KWEFUtil.h"
 
-QString KWEFBaseClass::getHtmlOpeningTagExtraAttributes(void) const
-{
-    return QString::null;
-}
-
-#if 0
-QString KWEFBaseClass::escapeText(const QString& strIn) const
+QString EscapeXmlText(const QString& strIn,
+                      const bool quot /* = false */ ,
+                      const bool apos /* = false */ )
 {
     QString strReturn;
     QChar ch;
@@ -58,11 +53,21 @@ QString KWEFBaseClass::escapeText(const QString& strIn) const
             }
         case 34: // "
             {
-                strReturn+="&quot;";
+                if (quot)
+                    strReturn+="&quot;";
+                else
+                    strReturn+=ch;
                 break;
             }
-        // NOTE: the apostrophe ' is not escaped,
-        // NOTE:  as HTML does not define &apos; by default (only XML/XHTML does)
+        case 39: // '
+            {
+                // NOTE:  HTML does not define &apos; by default (only XML/XHTML does)
+                if (apos)
+                    strReturn+="&apos;";
+                else
+                    strReturn+=ch;
+                break;
+            }
         default:
             {
                 // TODO: verify that the character ch can be expressed in the
@@ -75,37 +80,3 @@ QString KWEFBaseClass::escapeText(const QString& strIn) const
 
     return strReturn;
 }
-#endif // 0
-
-QString KWEFBaseClass::processDocTagStylesOnly(QDomElement myNode)
-{
-    return QString::null;
-}
-
-void KWEFBaseClass::processStyleTag (QDomNode, void *, QString&)
-{
-}
-
-void KWEFBaseClass::helpStyleProcessing(QDomNode myNode,LayoutData* layout)
-{
-}
-
-QString KWEFBaseClass::getBodyOpeningTagExtraAttributes(void) const
-{
-    return QString::null;
-}
-
-void KWEFBaseClass::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)
-{
-}
-
-QString KWEFBaseClass::getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)
-{
-    return QString::null;
-}
-
-QString KWEFBaseClass::getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout)
-{
-    return QString::null;
-}
-

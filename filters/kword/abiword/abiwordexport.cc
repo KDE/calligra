@@ -44,6 +44,7 @@
 #include <koGlobal.h>
 
 #include <KWEFStructures.h>
+#include <KWEFUtil.h>
 #include <TagProcessing.h>
 #include <KWEFBaseClass.h>
 #include <ProcessDocument.h>
@@ -63,52 +64,6 @@ public:
     ClassExportFilterBase(void) {}
     virtual ~ClassExportFilterBase(void) {}
 };
-
-static QString EscapeText(const QString& strIn)
-{
-    QString strReturn;
-    QChar ch;
-
-    for (uint i=0; i<strIn.length(); i++)
-    {
-        ch=strIn[i];
-        switch (ch.unicode())
-        {
-        case 38: // &
-            {
-                strReturn+="&amp;";
-                break;
-            }
-        case 60: // <
-            {
-                strReturn+="&lt;";
-                break;
-            }
-        case 62: // >
-            {
-                strReturn+="&gt;";
-                break;
-            }
-        case 34: // "
-            {
-                strReturn+="&quot;";
-                break;
-            }
-        case 39: // '
-            {
-                strReturn+="&apos;";
-                break;
-            }
-        default:
-            {
-                strReturn+=ch;
-                break;
-            }
-        }
-    }
-
-    return strReturn;
-}
 
 static QString FormatDataToAbiProps(FormatData& formatData)
 {
@@ -236,8 +191,9 @@ static void ProcessParagraphData ( QString &paraText,
               paraFormatDataIt++ )
         {
             // Retrieve text and escape it
-            partialText=EscapeText(
-                paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len));
+            partialText=EscapeXmlText(
+                paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len),
+                true,true);
 
             if ((*paraFormatDataIt).missing)
             {

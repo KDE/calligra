@@ -35,7 +35,6 @@ class ClassExportFilterHtml : public KWEFBaseClass
         inline void setUTF8 (const bool flag ) { m_utf8=flag; }
         bool filter(const QString  &filenameIn, const QString  &filenameOut);
     public: //virtual
-        virtual QString escapeText(const QString& str) const;
         virtual QString getHtmlOpeningTagExtraAttributes(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
