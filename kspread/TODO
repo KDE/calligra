@@ -51,6 +51,8 @@ General bugs
 	   overlapped left cell.
   + 61452: drawing problem when text overflow the right border        1 ----
   + 66859: Decimals are in the next horizontal cell		      1 ----
+  + Border on a cell in the cell format dialog -> the line width      1 ----
+    does not "take".
 
 * Printing
   + 68190: Empty document generates 2 printed pages (testcase)	      1 INGE
@@ -59,7 +61,7 @@ General bugs
   + 77962: print range doesn't work into kspread		      1 DONE
   + 85155: RIGHT ALIGN TEXT CUT WHEN PRINTING			      1 ----
   + 87367: Ugly postscript rendering of cell borders.		      1 ----
-  + 88252: content larger than column are not print as PDF	      1 ----
+  + 88252: content larger than column are not print as PDF	      1 DONE
   + 95159: Many blank pages when printing spreadsheet to PDF file.    1 INGE
   + 100643: KSpread prints a completely empty page at the end of      1 INGE
 	    the document.
