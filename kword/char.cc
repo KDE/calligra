@@ -300,8 +300,6 @@ QDomElement KWString::save( QDomDocument& d )
     if ( _len_ == 0 )
 	return e;
 
-    unsigned int start = 0;
-
     QDomElement f = _data_[0].attrib->save( d );
     if ( f.isNull() )
 	return f;
@@ -346,7 +344,12 @@ bool KWString::load( const QDomElement &element, KWordDocument* doc )
 	}
 	else if ( t.tagName() == "VARIABLE" )
         {
-	    // ####todo
+	    KWChar c;
+	    c.attrib = new KWCharVariable();
+	    if ( !((KWCharVariable*)c.attrib)->load( t, doc ) )
+		return FALSE;
+	    append( c );
+
 	}
 	else if ( t.tagName() == "FOOTNOTE" )
         {
@@ -354,7 +357,11 @@ bool KWString::load( const QDomElement &element, KWordDocument* doc )
 	}
 	else if ( t.tagName() == "TAB" )
         {
-	    // ####todo
+	    KWChar c;
+	    c.attrib = new KWCharTab();
+	    if ( !((KWCharTab*)c.attrib)->load( t, doc ) )
+		return FALSE;
+	    append( c );
 	}
 	else if ( t.tagName() == "IMAGE" )
         {
@@ -1018,6 +1025,8 @@ QDomElement KWCharVariable::save( QDomDocument& doc )
 /*================================================================*/
 bool KWCharVariable::load( const QDomElement& element, KWordDocument* doc )
 { 
+    if ( var )
+	delete var;
     if ( format )
 	format->decRef();
     format = doc->getFormatCollection()->getFormat( element.attribute( "id" ).toInt() );

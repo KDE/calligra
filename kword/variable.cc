@@ -137,22 +137,18 @@ QDomElement KWPgNumVariable::save( QDomDocument& doc )
 }
 
 /*================================================================*/
-// #### todo
-// void KWPgNumVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
-// {
-//     KWVariable::load( name, tag, lst );
-
-//     if ( name == "PGNUM" )
-//     {
-// 	KOMLParser::parseTag( tag.c_str(), name, lst );
-// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
-// 	for( ; it != lst.end(); it++ )
-// 	{
-// 	    if ( ( *it ).m_strName == "value" )
-// 		pgNum = atoi( ( *it ).m_strValue.c_str() );
-// 	}
-//     }
-// }
+bool KWPgNumVariable::load( const QDomElement& element )
+{
+    if ( !KWVariable::load( element ) )
+	return FALSE;
+    
+    QDomElement e = element.namedItem( "PGNUM" ).toElement();
+    if ( e.isNull() )
+	return FALSE;
+    pgNum = e.attribute( "value" ).toInt();
+    
+    return TRUE;
+}
 
 /******************************************************************/
 /* Class: KWDateVariable					  */
@@ -191,35 +187,21 @@ QDomElement KWDateVariable::save( QDomDocument& doc )
 }
 
 /*================================================================*/
-// #### todo
-// void KWDateVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
-// {
-//     KWVariable::load( name, tag, lst );
+bool KWDateVariable::load( const QDomElement& element )
+{
+    if ( !KWVariable::load( element ) )
+	return FALSE;
 
-//     int y, m, d;
-
-//     if ( name == "DATE" )
-//     {
-// 	KOMLParser::parseTag( tag.c_str(), name, lst );
-// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
-// 	for( ; it != lst.end(); it++ )
-// 	{
-// 	    if ( ( *it ).m_strName == "year" )
-// 		y = atoi( ( *it ).m_strValue.c_str() );
-// 	    else if ( ( *it ).m_strName == "month" )
-// 		m = atoi( ( *it ).m_strValue.c_str() );
-// 	    else if ( ( *it ).m_strName == "day" )
-// 		d = atoi( ( *it ).m_strValue.c_str() );
-// 	    else if ( ( *it ).m_strName == "fix" )
-// 		fix = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
-// 	}
-//     }
-
-//     if ( fix )
-// 	date.setYMD( y, m, d );
-//     else
-// 	date = QDate::currentDate();
-// }
+    QDomElement e = element.namedItem( "DATE" ).toElement();
+    fix = (bool)e.attribute( "fix" );
+    
+    int y = e.attribute( "year" ).toInt();
+    int m = e.attribute( "month" ).toInt();
+    int d = e.attribute( "day" ).toInt();
+    date = QDate( y, m, d );
+    
+    return TRUE;
+}
 
 /******************************************************************/
 /* Class: KWTimeVariable					  */
@@ -259,36 +241,20 @@ QDomElement KWTimeVariable::save( QDomDocument& doc )
 }
 
 /*================================================================*/
-// #### todo
-// void KWTimeVariable::load( string name, string tag, vector<KOMLAttrib>& lst )
-// {
-//     KWVariable::load( name, tag, lst );
+bool KWTimeVariable::load( const QDomElement& element )
+{
+    if ( !KWVariable::load( element ) )
+	return FALSE;
 
-//     int h, m, s, ms;
-
-//     if ( name == "TIME" )
-//     {
-// 	KOMLParser::parseTag( tag.c_str(), name, lst );
-// 	vector<KOMLAttrib>::const_iterator it = lst.begin();
-// 	for( ; it != lst.end(); it++ )
-// 	{
-// 	    if ( ( *it ).m_strName == "hour" )
-// 		h = atoi( ( *it ).m_strValue.c_str() );
-// 	    else if ((*it).m_strName == "minute")
-// 		m = atoi( ( *it ).m_strValue.c_str() );
-// 	    else if ( ( *it ).m_strName == "second" )
-// 		s = atoi( ( *it ).m_strValue.c_str() );
-// 	    else if ( ( *it ).m_strName == "msecond" )
-// 		ms = atoi( ( *it ).m_strValue.c_str() );
-// 	    else if ( ( *it ).m_strName == "fix" )
-// 		fix = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
-// 	}
-//     }
-
-//     if ( fix )
-// 	time.setHMS( h, m, s, ms );
-//     else
-// 	time = QTime::currentTime();
-// }
-
+    QDomElement e = element.namedItem( "TIME" ).toElement();
+    fix = (bool)e.attribute( "fix" );
+    
+    int h = e.attribute( "hour" ).toInt();
+    int m = e.attribute( "minute" ).toInt();
+    int s = e.attribute( "second" ).toInt();
+    int ms = e.attribute( "second" ).toInt();
+    time = QTime( h, m, s, ms );
+    
+    return TRUE;
+}
 

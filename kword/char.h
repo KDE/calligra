@@ -127,6 +127,7 @@ public:
 class KWCharVariable : public KWCharFormat
 {
 public:
+    KWCharVariable() : KWCharFormat() { classId = ID_KWCharVariable; var = 0; }
     KWCharVariable( KWVariable *_var ) : KWCharFormat() { classId = ID_KWCharVariable; var = _var; }
     ~KWCharVariable() { if ( var ) delete var; if ( format ) format->decRef(); format = 0L; }
 
@@ -149,6 +150,7 @@ protected:
 class KWCharFootNote : public KWCharFormat
 {
 public:
+    KWCharFootNote() : KWCharFormat() { fn = 0; classId = ID_KWCharFootNote; }
     KWCharFootNote( KWFootNote *_fn ) : KWCharFormat() { fn = _fn; classId = ID_KWCharFootNote; }
     ~KWCharFootNote() { if ( fn ) delete fn; if ( format ) format->decRef(); format = 0L; }
 

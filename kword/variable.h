@@ -182,8 +182,7 @@ public:
     long unsigned int getPgNum() { return pgNum; }
 
     virtual QDomElement save( QDomDocument& doc );
-    // #### todo
-    //virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+    virtual bool load( const QDomElement& element );
 
 protected:
     long unsigned int pgNum;
@@ -216,8 +215,7 @@ public:
     void setDate( QDate _date ) { date = _date; }
 
     virtual QDomElement save( QDomDocument& doc );
-    // #### todo
-    //virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+    virtual bool load( const QDomElement& element );
 
 protected:
     QDate date;
@@ -251,8 +249,7 @@ public:
     void setTime( QTime _time ) { time = _time; }
 
     virtual QDomElement save( QDomDocument& doc );
-    // #### todo
-    //virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+    virtual bool load( const QDomElement& element );
 
 protected:
     QTime time;

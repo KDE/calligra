@@ -1492,7 +1492,7 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
  	_store->open( u2, mime.lower() );
 	
 	QBuffer buffer;
-	buffer.open( IO_ReadOnly );
+	buffer.open( IO_WriteOnly );
 	{
 	    QDataStream str( &buffer );
 	    str << *it.current();
