@@ -32,7 +32,7 @@
 
 /*======================== constructor ===========================*/
 PenBrushCmd::PenBrushCmd( QString _name, QList<Pen> &_oldPen, QList<Brush> &_oldBrush,
-                          Pen _newPen, Brush _newBrush, QList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = 0 )
+                          Pen _newPen, Brush _newBrush, QList<KPObject> &_objects, KPresenterDoc *_doc, int _flags )
     : Command( _name ), oldPen( _oldPen ), oldBrush( _oldBrush ), objects( _objects )
 {
     objects.setAutoDelete( false );
@@ -250,7 +250,7 @@ void PenBrushCmd::unexecute()
                 dynamic_cast<KPEllipseObject*>( kpobject )->setGColor1( oldBrush.at( i )->gColor1 );
                 dynamic_cast<KPEllipseObject*>( kpobject )->setGColor2( oldBrush.at( i )->gColor2 );
                 dynamic_cast<KPEllipseObject*>( kpobject )->setGType( oldBrush.at( i )->gType );
-            }   
+            }
             doc->repaint( kpobject );
         } break;
         case OT_AUTOFORM:

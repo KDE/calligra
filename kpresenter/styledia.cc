@@ -23,7 +23,7 @@
 /******************************************************************/
 
 /*====================== constructor =============================*/
-PBPreview::PBPreview( QWidget* parent=0, const char* name=0, int _paintType=0 )
+PBPreview::PBPreview( QWidget* parent, const char* name, int _paintType )
     : QWidget( parent, name )
 {
     paintType = _paintType;
@@ -77,7 +77,7 @@ void PBPreview::paintEvent( QPaintEvent* )
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-StyleDia::StyleDia( QWidget* parent = 0, const char* name = 0, int flags = SD_PEN | SD_BRUSH )
+StyleDia::StyleDia( QWidget* parent, const char* name, int flags )
     : QTabDialog( parent, name, true )
 {
     penFrame = new QWidget( this, "penGrp" );

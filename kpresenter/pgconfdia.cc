@@ -31,7 +31,7 @@
 
 /*==================== constructor ===============================*/
 PgConfDia::PgConfDia( QWidget* parent, const char* name,
-                      bool infLoop, bool swMan, int pgNum=1, PageEffect pageEffect = PEF_NONE, PresSpeed presSpeed = PS_NORMAL )
+                      bool infLoop, bool swMan, int pgNum, PageEffect pageEffect, PresSpeed presSpeed )
     : QDialog( parent, name, true )
 {
     general = new QButtonGroup( this, "general" );

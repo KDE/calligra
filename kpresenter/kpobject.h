@@ -78,12 +78,12 @@ public:
     { disappear = b; }
     virtual void setDisappearNum( int num )
     { disappearNum = num; }
-    virtual void setEffect3( Effect3 _effect3) 
+    virtual void setEffect3( Effect3 _effect3)
     { effect3 = _effect3; }
-    
-    virtual void save( ostream& out )
+
+    virtual void save( ostream& /*out*/ )
     {; }
-    virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst )
+    virtual void load( KOMLParser& /*parser*/, vector<KOMLAttrib>& /*lst*/ )
     {; }
 
     virtual ObjType getType()
@@ -136,7 +136,7 @@ public:
     virtual bool intersects( KRect _rect, int _diffx, int _diffy );
     virtual QCursor getCursor( KPoint _point, int _diffx, int _diffy, ModifyType &_modType );
 
-    virtual void activate( QWidget *_widget, int diffx, int diffy )
+    virtual void activate( QWidget * /*_widget*/, int /*diffx*/, int /*diffy*/ )
     {; }
     virtual void deactivate()
     {; }
@@ -169,7 +169,7 @@ protected:
     Effect3 effect3;
     int presNum, disappearNum;
     bool disappear;
-    
+
     bool selected, dSelection;
     bool zoomed;
     float presFakt;

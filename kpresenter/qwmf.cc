@@ -473,7 +473,7 @@ QColor QWinMetaFile::color( short* parm )
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::setWindowOrg( short num, short* parm )
+void QWinMetaFile::setWindowOrg( short, short* parm )
 {
     KRect r = mPainter.window();
     mPainter.setWindow( parm[ 1 ], parm[ 0 ], r.width(), r.height() );
@@ -481,7 +481,7 @@ void QWinMetaFile::setWindowOrg( short num, short* parm )
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::setWindowExt( short num, short* parm )
+void QWinMetaFile::setWindowExt( short, short* parm )
 {
     KRect r = mPainter.window();
     mPainter.setWindow( r.left(), r.top(), parm[ 1 ], parm[ 0 ] );
@@ -489,21 +489,21 @@ void QWinMetaFile::setWindowExt( short num, short* parm )
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::lineTo( short num, short* parm )
+void QWinMetaFile::lineTo( short, short* parm )
 {
     mPainter.lineTo( parm[ 0 ], parm[ 1 ] );
 }
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::moveTo( short num, short* parm )
+void QWinMetaFile::moveTo( short, short* parm )
 {
     mPainter.moveTo( parm[ 0 ], parm[ 1 ] );
 }
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::selectObject( short num, short* parm )
+void QWinMetaFile::selectObject( short, short* parm )
 {
     int idx = parm[ 0 ];
     if ( idx>=0 && idx < MAX_OBJHANDLE && mObjHandleTab[ idx ] )
@@ -512,14 +512,14 @@ void QWinMetaFile::selectObject( short num, short* parm )
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::deleteObject( short num, short* parm )
+void QWinMetaFile::deleteObject( short, short* parm )
 {
     deleteHandle( parm[ 0 ] );
 }
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::ellipse( short num, short* parm )
+void QWinMetaFile::ellipse( short, short* parm )
 {
     mPainter.drawEllipse( parm[ 0 ], parm[ 1 ], parm[ 2 ]-parm[ 0 ], parm[ 3 ]-parm[ 1 ] );
 }
@@ -546,14 +546,14 @@ void QWinMetaFile::polyline( short num, short* parm )
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::setPolyFillMode( short num, short* parm )
+void QWinMetaFile::setPolyFillMode( short, short* parm )
 {
     mWinding = parm[ 0 ];
 }
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::escape( short num, short* parm )
+void QWinMetaFile::escape( short, short* parm )
 {
     if ( parm[ 0 ]==15 )
     {
@@ -564,14 +564,14 @@ void QWinMetaFile::escape( short num, short* parm )
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::setBkColor( short num, short* parm )
+void QWinMetaFile::setBkColor( short, short* parm )
 {
     mPainter.setBackgroundColor( color( parm ) );
 }
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::setBkMode( short num, short* parm )
+void QWinMetaFile::setBkMode( short, short* parm )
 {
     if ( parm[ 0 ]==1 ) mPainter.setBackgroundMode( Qt::TransparentMode );
     else mPainter.setBackgroundMode( Qt::OpaqueMode );
@@ -579,7 +579,7 @@ void QWinMetaFile::setBkMode( short num, short* parm )
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::setRop( short num, short* parm )
+void QWinMetaFile::setRop( short, short* parm )
 {
     Qt::RasterOp opTab[] =
     {
@@ -599,7 +599,7 @@ void QWinMetaFile::setRop( short num, short* parm )
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::createBrushIndirect( short num, short* parm )
+void QWinMetaFile::createBrushIndirect( short, short* parm )
 {
     static Qt::BrushStyle hatchedStyleTab[] =
     {
@@ -648,7 +648,7 @@ void QWinMetaFile::createBrushIndirect( short num, short* parm )
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::createPenIndirect( short num, short* parm )
+void QWinMetaFile::createPenIndirect( short, short* parm )
 {
     static Qt::PenStyle styleTab[] =
     { Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine,

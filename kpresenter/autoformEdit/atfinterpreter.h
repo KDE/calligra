@@ -111,11 +111,11 @@ protected:
   static const char COMMENT    = '#';
 
   // block (structure) beginnings - ends
-  static const char PNT_BG[]   = "POINT{";
-  static const char X_BG[]     = "X{";
-  static const char Y_BG[]     = "Y{";
-  static const char ATTR_BG[]  = "ATTRIB{";
-  static const char END[]       = "}";
+  static const char PNT_BG[];
+  static const char X_BG[];
+  static const char Y_BG[];
+  static const char ATTR_BG[];
+  static const char END[];
 
   // allowed variables
   static const char VAR_1      = 'a';

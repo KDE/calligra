@@ -34,6 +34,42 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+const char KTextObject::tag_html[] = "HTML";
+const char KTextObject::tag_head[] = "HEAD";
+const char KTextObject::tag_body[] = "BODY";
+const char KTextObject::tag_font[] = "FONT";
+const char KTextObject::tag_bold[] = "B";
+const char KTextObject::tag_italic[] = "I";
+const char KTextObject::tag_underline[] = "U";
+const char KTextObject::tag_paragraph[] = "P";
+const char KTextObject::tag_break[] = "BR";
+const char KTextObject::tag_h1[] = "H1";
+const char KTextObject::tag_h2[] = "H2";
+const char KTextObject::tag_h3[] = "H3";
+const char KTextObject::tag_h4[] = "H4";
+const char KTextObject::tag_h5[] = "H5";
+const char KTextObject::tag_h6[] = "H6";
+const char KTextObject::tag_plain[] = "PLAIN";
+const char KTextObject::tag_enumlist[] = "ENUM_LIST";
+const char KTextObject::tag_unsortlist[] = "UNSORT_LIST";
+
+const char KTextObject::attrib_face[] = "FACE";
+const char KTextObject::attrib_char[] = "CHAR";
+const char KTextObject::attrib_start[] = "START";
+const char KTextObject::attrib_before[] = "BEFORE";
+const char KTextObject::attrib_after[] = "AFTER";
+const char KTextObject::attrib_type[] = "TYPE";
+const char KTextObject::attrib_size[] = "SIZE";
+const char KTextObject::attrib_color[] = "COLOR";
+const char KTextObject::attrib_align[] = "ALIGN";
+const char KTextObject::attrib_bold[] = "BOLD";
+const char KTextObject::attrib_italic[] = "ITALIC";
+const char KTextObject::attrib_underline[] = "UNDERLINE";
+
+const char attrib_value_left[] = "LEFT";
+const char attrib_value_center[] = "CENTER";
+const char attrib_value_right[] = "RIGHT";
+
 /******************************************************************/
 /* class TxtCursor - Text Cursor                                  */
 /******************************************************************/
@@ -407,7 +443,7 @@ TxtObj::TxtObj()
 }
 
 /*================= overloaded constructor =======================*/
-TxtObj::TxtObj( const QString &text, QFont f, QColor c, VertAlign va, ObjType ot=TEXT )
+TxtObj::TxtObj( const QString &text, QFont f, QColor c, VertAlign va, ObjType ot )
 {
     // init the object
     objType = ot;
@@ -473,7 +509,7 @@ int TxtObj::getPos( int pos )
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-TxtLine::TxtLine( bool init = false )
+TxtLine::TxtLine( bool init )
 {
     // init the object
     objList.setAutoDelete( true );
@@ -487,14 +523,14 @@ TxtLine::TxtLine( bool init = false )
 }
 
 /*===================== insert a text ============================*/
-void TxtLine::insert( unsigned int pos, const QString &text, QFont f, QColor c,
-                      TxtObj::VertAlign va )
+void TxtLine::insert( unsigned int /*pos*/, const QString &/*text*/, QFont /*f*/, QColor /*c*/,
+                      TxtObj::VertAlign /*va*/ )
 {
 }
 
 /*===================== insert a char ============================*/
-void TxtLine::insert( unsigned int pos, char text, QFont f, QColor c,
-                      TxtObj::VertAlign va )
+void TxtLine::insert( unsigned int /*pos*/, char /*text*/, QFont /*f*/, QColor /*c*/,
+                      TxtObj::VertAlign /*va*/ )
 {
 }
 
@@ -684,7 +720,7 @@ void TxtLine::splitObj( unsigned int pos )
 }
 
 /*=============== get position in an object ======================*/
-int TxtLine::getInObj( unsigned int pos, int *startpos=0 )
+int TxtLine::getInObj( unsigned int pos, int *startpos  )
 {
     unsigned int i, obj = 0, objNum = 0;
 
@@ -715,7 +751,7 @@ int TxtLine::getInObj( unsigned int pos, int *startpos=0 )
 }
 
 /*============== get position before an object ===================*/
-int TxtLine::getBeforeObj( unsigned int pos, int *startpos=0L )
+int TxtLine::getBeforeObj( unsigned int pos, int *startpos  )
 {
     unsigned int i, obj = 0, objNum = 0;
 
@@ -745,7 +781,7 @@ int TxtLine::getBeforeObj( unsigned int pos, int *startpos=0L )
 }
 
 /*=============== get position after an object ===================*/
-int TxtLine::getAfterObj( unsigned int pos, int *startpos=0L )
+int TxtLine::getAfterObj( unsigned int pos, int *startpos  )
 {
     unsigned int i, obj = 0, objNum = 0;
 
@@ -854,7 +890,7 @@ QString TxtLine::wordAt( unsigned int pos, int &ind )
 /******************************************************************/
 
 /*===================== constructor ==============================*/
-TxtParagraph::TxtParagraph( bool init = false )
+TxtParagraph::TxtParagraph( bool init )
 {
     // init the objects
     lineList.setAutoDelete( true );
@@ -873,25 +909,25 @@ TxtParagraph::TxtParagraph( bool init = false )
 }
 
 /*======================== insert a text =========================*/
-void TxtParagraph::insert( TxtCursor pos, const QString & text, QFont f,
-                           QColor c, TxtObj::VertAlign va )
+void TxtParagraph::insert( TxtCursor, const QString &, QFont,
+                           QColor, TxtObj::VertAlign )
 {
 }
 
 /*======================== insert a char =========================*/
-void TxtParagraph::insert( TxtCursor pos, char text, QFont f,
-                           QColor c, TxtObj::VertAlign va )
+void TxtParagraph::insert( TxtCursor , char , QFont ,
+                           QColor , TxtObj::VertAlign  )
 {
 }
 
 /*======================= append a text ==========================*/
-void TxtParagraph::append( const QString & text, QFont f, QColor c,
-                           TxtObj::VertAlign va )
+void TxtParagraph::append( const QString & , QFont , QColor ,
+                           TxtObj::VertAlign  )
 {
 }
 
 /*====================== append a char ===========================*/
-void TxtParagraph::append( char text, QFont f, QColor c, TxtObj::VertAlign va )
+void TxtParagraph::append( char , QFont , QColor , TxtObj::VertAlign  )
 {
 }
 
@@ -908,7 +944,7 @@ void TxtParagraph::append( TxtLine *l )
 }
 
 /*======================= append an object =======================*/
-void TxtParagraph::insert( unsigned int i, TxtObj* )
+void TxtParagraph::insert( unsigned int /*i*/, TxtObj* )
 {
 }
 
@@ -961,7 +997,7 @@ unsigned int TxtParagraph::height()
 }
 
 /*======================= break lines ============================*/
-KRect TxtParagraph::breakLines( unsigned int wid, bool regExpMode=false, bool composerMode=false )
+KRect TxtParagraph::breakLines( unsigned int wid, bool regExpMode , bool composerMode )
 {
     //debug( "break lines begin" );
     //debug( " concat lines begin" );
@@ -1032,7 +1068,7 @@ KRect TxtParagraph::breakLines( unsigned int wid, bool regExpMode=false, bool co
 }
 
 /*===================== break lines ==============================*/
-void TxtParagraph::break_Lines( unsigned int wid, bool regExpMode=false, bool composerMode=false )
+void TxtParagraph::break_Lines( unsigned int wid, bool regExpMode, bool composerMode )
 {
     linePtr = toOneLine();
 
@@ -1159,7 +1195,7 @@ void TxtParagraph::doComposerMode( QColor quoted_color, QFont quoted_font, QColo
 }
 
 /*======================== do regexp mode ========================*/
-void TxtParagraph::doRegExpMode( QList<RegExpMode> *regExpList, bool revert=true )
+void TxtParagraph::doRegExpMode( QList<RegExpMode> *regExpList, bool revert )
 {
     if ( linePtr && !regExpList->isEmpty() )
     {
@@ -1483,8 +1519,8 @@ void TxtParagraph::setDepth( int d )
 /******************************************************************/
 
 /*====================== constructor =============================*/
-KTextObject::KTextObject( QWidget *parent=0, const char *name=0, ObjType ot=PLAIN,
-                          unsigned int c=0, unsigned int r=0, int __width=0 )
+KTextObject::KTextObject( QWidget *parent, const char *name, ObjType ot,
+                          unsigned int c, unsigned int r, int __width )
     : QTableView( parent, name )
 {
     // init the objects
@@ -1628,7 +1664,7 @@ unsigned int KTextObject::textLength()
 }
 
 /*==================== get horizontal alignemnt ==================*/
-TxtParagraph::HorzAlign KTextObject::horzAlign( int p = -1 )
+TxtParagraph::HorzAlign KTextObject::horzAlign( int p )
 {
     if ( p == -1 ) p = txtCursor->positionParagraph();
 
@@ -1636,7 +1672,7 @@ TxtParagraph::HorzAlign KTextObject::horzAlign( int p = -1 )
 }
 
 /*=================== get QPicture of the obj ====================*/
-QPicture* KTextObject::getPic( int _x, int _y, int _w, int _h, bool presMode=false, int from=-1, int to=-1, bool _clip=true )
+QPicture* KTextObject::getPic( int _x, int _y, int _w, int _h, bool presMode, int from, int to, bool _clip )
 {
     QPainter p;
 
@@ -1678,7 +1714,7 @@ QPicture* KTextObject::getPic( int _x, int _y, int _w, int _h, bool presMode=fal
 }
 
 /*=================== get QPicture of the obj ====================*/
-void KTextObject::draw( QPainter &p, int _x, int _y, int _w, int _h, bool presMode=false, int from=-1, int to=-1, bool _clip=true, bool _drawempty=true )
+void KTextObject::draw( QPainter &p, int _x, int _y, int _w, int _h, bool presMode, int from, int to, bool _clip, bool _drawempty )
 {
     p.save();
 
@@ -1834,7 +1870,7 @@ TxtParagraph* KTextObject::addParagraph()
 }
 
 /*======================== clear =================================*/
-void KTextObject::clear( bool init=true )
+void KTextObject::clear( bool init )
 {
     _modified = true;
 
@@ -1870,7 +1906,7 @@ void KTextObject::clear( bool init=true )
 }
 
 /*==================== return ascii text =========================*/
-QString KTextObject::toASCII( bool linebreak=true, bool makelist=true )
+QString KTextObject::toASCII( bool linebreak, bool makelist )
 {
     QString str;
 
@@ -1940,7 +1976,7 @@ QString KTextObject::toASCII( bool linebreak=true, bool makelist=true )
 }
 
 /*==================== return html text ==========================*/
-QString KTextObject::toHTML( bool clean=false, bool onlyBody=false )
+QString KTextObject::toHTML( bool /*clean*/, bool /*onlyBody*/ )
 {
 //   QString str, str2;
 
@@ -2145,7 +2181,7 @@ QString KTextObject::toHTML( bool clean=false, bool onlyBody=false )
 }
 
 /*======================= save ASCII text ========================*/
-void KTextObject::saveASCII( QString filename, bool linebreak=true )
+void KTextObject::saveASCII( QString filename, bool linebreak )
 {
     FILE *file;
 
@@ -2154,7 +2190,7 @@ void KTextObject::saveASCII( QString filename, bool linebreak=true )
     fclose( file );
 }
 /*======================= save HTML text =========================*/
-void KTextObject::saveHTML( QString filename, bool clean=false )
+void KTextObject::saveHTML( QString filename, bool clean )
 {
     FILE *file;
 
@@ -2165,8 +2201,8 @@ void KTextObject::saveHTML( QString filename, bool clean=false )
 
 /*======================== add text ==============================*/
 void KTextObject::addText( QString text, QFont font, QColor color,
-                           bool newParagraph=false, TxtParagraph::HorzAlign align=TxtParagraph::LEFT,
-                           bool _recalc=true, bool htmlMode=false )
+                           bool newParagraph, TxtParagraph::HorzAlign align,
+                           bool _recalc, bool htmlMode )
 {
     _modified = true;
 
@@ -2646,7 +2682,7 @@ QString KTextObject::getPartOfText( TxtCursor *_from, TxtCursor *_to )
 }
 
 /*====================== copy region =============================*/
-void KTextObject::copyRegion( bool hideSelection=false )
+void KTextObject::copyRegion( bool hideSelection )
 {
     if ( drawSelection && stopCursor.positionAbs() != startCursor.positionAbs() )
     {
@@ -2966,7 +3002,7 @@ TxtLine* KTextObject::lineAt( int line, int para )
 }
 
 /*====================== get the region ==========================*/
-QList<TxtObj>* KTextObject::regionAt( TxtCursor *_startCursor, TxtCursor *_stopCursor )
+QList<TxtObj>* KTextObject::regionAt( TxtCursor * /*_startCursor*/, TxtCursor * /*_stopCursor*/ )
 {
 //   int start_line = 0, start_para = 0, start_pos = 0, i;
 //   int stop_line = 0, stop_para = 0, stop_pos = 0;
@@ -3181,7 +3217,7 @@ void KTextObject::deleteLine( int line, int para )
 }
 
 /*====================== delete paragraph ========================*/
-void KTextObject::deleteParagraph( int para, bool _update = true )
+void KTextObject::deleteParagraph( int para, bool _update )
 {
     _modified = true;
 
@@ -3554,7 +3590,7 @@ void KTextObject::insertItems( QList<TxtObj> *items, int pos, int line, int para
 }
 
 /*======================== insert items ==========================*/
-void KTextObject::insertItems( QList<TxtObj> *items, TxtCursor *_cursor, bool redraw=true )
+void KTextObject::insertItems( QList<TxtObj> *items, TxtCursor *_cursor, bool redraw )
 {
     _modified = true;
 
@@ -4982,7 +5018,7 @@ void KTextObject::mouseMoveEvent( QMouseEvent *e )
 }
 
 /*=================== recalcualte everything =====================*/
-void KTextObject::recalc( bool breakAllLines=true )
+void KTextObject::recalc( bool breakAllLines )
 {
     switch ( obType )
     {
@@ -5359,7 +5395,7 @@ bool KTextObject::kbackspace()
 }
 
 /*========================= key delete ===========================*/
-bool KTextObject::kdelete( bool _recalc=true )
+bool KTextObject::kdelete( bool _recalc )
 {
     //unsigned int i;
     unsigned int para = txtCursor->positionParagraph();
@@ -5583,7 +5619,7 @@ bool KTextObject::makeCursorVisible()
 }
 
 /*====================== set cursor psoition ====================*/
-TxtCursor KTextObject::getCursorPos( int _x, int _y, bool &changed, bool set=false, bool redraw=false )
+TxtCursor KTextObject::getCursorPos( int _x, int _y, bool &changed, bool set, bool redraw )
 {
     QFontMetrics fm( currFont );
     int x = _x + xOffset() - fm.width( 'x' ) / 2;
@@ -6135,9 +6171,9 @@ int KTextObject::getParagNum( TxtParagraph *_parag )
 
 /*================================================================*/
 void KTextObject::setDepth( int d )
-{ 
+{
     _modified = true;
-    
+
     if ( drawSelection && startCursor.positionAbs() != stopCursor.positionAbs() )
     {
         int start_para = startCursor.positionParagraph();
@@ -6149,12 +6185,12 @@ void KTextObject::setDepth( int d )
     else
         paragraphList.at( txtCursor->positionParagraph() )->setDepth( d );
 
-    recalc(); 
-    repaint( true ); 
+    recalc();
+    repaint( true );
 }
 
 /*================================================================*/
-void KTextObject::incDepth() 
+void KTextObject::incDepth()
 {
     if ( drawSelection && startCursor.positionAbs() != stopCursor.positionAbs() )
     {
@@ -6168,13 +6204,13 @@ void KTextObject::incDepth()
     else
         paragraphList.at( txtCursor->positionParagraph() )->setDepth( paragraphList.at( txtCursor->positionParagraph() )->getDepth() + 1 < 16 ?
                                                                       paragraphList.at( txtCursor->positionParagraph() )->getDepth() + 1 : 15 );
-        
-    recalc(); 
+
+    recalc();
     repaint( true );
 }
 
 /*================================================================*/
-void KTextObject::decDepth() 
+void KTextObject::decDepth()
 {
     if ( drawSelection && startCursor.positionAbs() != stopCursor.positionAbs() )
     {
@@ -6188,7 +6224,7 @@ void KTextObject::decDepth()
     else
         paragraphList.at( txtCursor->positionParagraph() )->setDepth( paragraphList.at( txtCursor->positionParagraph() )->getDepth() - 1 >= 0 ?
                                                                       paragraphList.at( txtCursor->positionParagraph() )->getDepth() - 1 : 0 );
-    recalc(); 
+    recalc();
     repaint( true );
 }
 
@@ -6257,7 +6293,7 @@ void KTextObject::setDistBefore( int d )
     }
     else
         paragraphList.at( txtCursor->positionParagraph() )->setDistBefore( d );
-    
+
     recalc();
     repaint( true );
 }

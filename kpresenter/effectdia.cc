@@ -52,9 +52,9 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
     back = new QVBox( this );
     back->setMargin( 10 );
     back->setSpacing( 5 );
-    
+
     QGroupBox *grp1 = new QGroupBox( 4, Qt::Horizontal, i18n( "Appear" ), back );
-    
+
     lNum = new QLabel( i18n( "Number: " ), grp1 );
     lNum->setAlignment( AlignVCenter );
 
@@ -63,7 +63,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
 
     ( void )new QWidget( grp1 );
     ( void )new QWidget( grp1 );
-    
+
     lEffect = new QLabel( i18n( "Effect (appearing): " ), grp1 );
     lEffect->setAlignment( AlignVCenter );
 
@@ -111,7 +111,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
         }
     }
 
-    disappear = new QCheckBox( i18n( "Disappear" ), back ); 
+    disappear = new QCheckBox( i18n( "Disappear" ), back );
     disappear->setChecked( view->kPresenterDoc()->objectList()->at(_objNum)->getDisappear() );
 
     QGroupBox *grp2 = new QGroupBox( 2, Qt::Horizontal, back );
@@ -140,12 +140,12 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
     cDisappear->insertItem( i18n( "Wipe to the top" ) );
     cDisappear->insertItem( i18n( "Wipe to the bottom" ) );
     cDisappear->setCurrentItem( static_cast<int>( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect3() ) );
-    
+
     ( void )new QWidget( back );
-    
+
     KButtonBox *bb = new KButtonBox( back );
     bb->addStretch();
-    
+
     okBut = bb->addButton( i18n( "OK" ) );
     okBut->setAutoRepeat( false );
     okBut->setAutoResize( false );
@@ -155,15 +155,15 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
     cancelBut = bb->addButton( i18n( "Cancel" ) );
 
     bb->layout();
-    
+
     bb->setMaximumHeight( bb->sizeHint().height() );
-    
+
     connect( okBut, SIGNAL( clicked() ), this, SLOT( slotEffectDiaOk() ) );
     connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
     connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
     connect( disappear, SIGNAL( clicked() ), this, SLOT( disappearChanged() ) );
     disappearChanged();
-    
+
     resize( 630, 300 );
 }
 
@@ -201,11 +201,11 @@ void EffectDia::disappearChanged()
 }
 
 /*================================================================*/
-void EffectDia::num1Changed( int num )
+void EffectDia::num1Changed( int /*num*/ )
 {
 }
 
 /*================================================================*/
-void EffectDia::num2Changed( int num )
+void EffectDia::num2Changed( int /*num*/ )
 {
 }

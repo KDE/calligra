@@ -1911,7 +1911,7 @@ void KPresenterView::slotInsertObject( KPresenterChild *_child, KPPartObject *_k
 }
 
 /*========================== update child geometry =============*/
-void KPresenterView::slotUpdateChildGeometry( KPresenterChild *_child )
+void KPresenterView::slotUpdateChildGeometry( KPresenterChild * /*_child*/ )
 {
 //   // Find frame for child
 //   KPresenterFrame *f = 0L;
@@ -1930,7 +1930,7 @@ void KPresenterView::slotUpdateChildGeometry( KPresenterChild *_child )
 }
 
 /*======================= slot geometry end ====================*/
-void KPresenterView::slotGeometryEnd( KoFrame* _frame )
+void KPresenterView::slotGeometryEnd( KoFrame* /*_frame*/ )
 {
 //   KPresenterFrame *f = ( KPresenterFrame* )_frame;
 //   // TODO scaling
@@ -1938,7 +1938,7 @@ void KPresenterView::slotGeometryEnd( KoFrame* _frame )
 }
 
 /*==================== slot move end ===========================*/
-void KPresenterView::slotMoveEnd( KoFrame* _frame )
+void KPresenterView::slotMoveEnd( KoFrame* /*_frame*/ )
 {
 //   KPresenterFrame *f = ( KPresenterFrame* )_frame;
 //   // TODO scaling
@@ -2229,7 +2229,7 @@ void KPresenterView::fontChanged( QFont* font )
         m_vToolBarText->setButton( ID_UNDERLINE, tbFont.underline() );
         QValueList<QString>::Iterator it = fontList.begin();
         QValueList<QString>::Iterator it2 = fontList.find( tbFont.family().lower() );
-        if ( it2 != fontList.end() ) 
+        if ( it2 != fontList.end() )
         {
             int pos = 0;
             for ( ; it != it2; ++it, ++pos );
@@ -2905,7 +2905,7 @@ void KPresenterView::hideParts()
 }
 
 /*====================== present parts ==========================*/
-void KPresenterView::presentParts( float _presFakt, QPainter* _painter, KRect _rect, int _diffx, int _diffy )
+void KPresenterView::presentParts( float /*_presFakt*/, QPainter* /*_painter*/, KRect /*_rect*/, int /*_diffx*/, int /*_diffy*/ )
 {
 //   QListIterator<KPresenterChild> chl = m_pKPresenterDoc->childIterator();
 //   KRect child_geometry;
@@ -4106,7 +4106,7 @@ void KPresenterView::setRanges()
 
         vert->setSteps( 10, m_pKPresenterDoc->getPageSize( 0, xOffset, yOffset, 1.0, false ).height() + 20 );
         range = ( m_pKPresenterDoc->getPageSize( 0, xOffset, yOffset, 1.0, false ).height() ) *
-                m_pKPresenterDoc->getPageNums() - page->height() + 16
+                (int)m_pKPresenterDoc->getPageNums() - (int)page->height() + 16
                 < 0 ? 0 :
             ( m_pKPresenterDoc->getPageSize( 0, xOffset, yOffset, 1.0, false ).height() ) *
                 m_pKPresenterDoc->getPageNums() - page->height() + 16;

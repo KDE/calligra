@@ -74,7 +74,7 @@ int KPGotoPage::gotoPage(int minValue,int maxValue,int start,QWidget *parent)
 }
 
 /*================================================================*/
-bool KPGotoPage::eventFilter( QObject *obj, QEvent *e )
+bool KPGotoPage::eventFilter( QObject * /*obj*/, QEvent *e )
 {
 #undef KeyPress
 
@@ -84,13 +84,13 @@ bool KPGotoPage::eventFilter( QObject *obj, QEvent *e )
         if ( ke->key() == Key_Enter || ke->key() == Key_Return )
         {
             page = spinbox->value();
-    
+
             spinbox->releaseMouse();
             spinbox->releaseKeyboard();
-    
+
             kapp->exit_loop();
             hide();
-    
+
             return true;
         }
         else if ( ke->key() == Key_Escape )
@@ -102,7 +102,7 @@ bool KPGotoPage::eventFilter( QObject *obj, QEvent *e )
 
             kapp->exit_loop();
             hide();
-    
+
             return true;
         }
         else if ( ke->key() == Key_Up )
@@ -120,7 +120,7 @@ bool KPGotoPage::eventFilter( QObject *obj, QEvent *e )
 }
 
 /*================================================================*/
-void KPGotoPage::resizeEvent( QResizeEvent *e )
+void KPGotoPage::resizeEvent( QResizeEvent * /*e*/ )
 {
     spinbox->resize( spinbox->sizeHint() );
     label->resize( label->sizeHint() );

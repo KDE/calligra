@@ -32,7 +32,7 @@
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-OptionDia::OptionDia( QWidget *parent=0, const char *name=0 )
+OptionDia::OptionDia( QWidget *parent, const char *name )
     :QTabDialog( parent, name, true )
 {
     int col1 = 20, dummy, w, h;

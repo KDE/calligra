@@ -31,32 +31,32 @@
 
 class PntInsDia : public QDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
 
-  // constructor - destructor
-  PntInsDia(QWidget* parent=0,const char* name=0,int points=0); 
-  ~PntInsDia();                                                 
+    // constructor - destructor
+    PntInsDia( QWidget* parent = 0, const char* name = 0,int points = 0 );
+    ~PntInsDia();
 
-  // ********** variables **********
+    // ********** variables **********
 
-  // dialog objects
-  QLabel *label1,*label2;
-  QRadioButton *radioBefore,*radioAfter;
-  QButtonGroup *btnGrp;
-  KNumericSpinBox *spinBox;
-  QPushButton *okBut,*cancelBut;
+    // dialog objects
+    QLabel *label1,*label2;
+    QRadioButton *radioBefore,*radioAfter;
+    QButtonGroup *btnGrp;
+    KNumericSpinBox *spinBox;
+    QPushButton *okBut,*cancelBut;
 
 signals:
 
-  // insert a point
-  void insPoint(int,bool);
+    // insert a point
+    void insPoint(int,bool);
 
 private slots:
 
-  // insert a point
-  void insPnt();
+    // insert a point
+    void insPnt();
 
 };
 #endif //PNTINSDIA_H

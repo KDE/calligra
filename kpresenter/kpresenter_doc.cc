@@ -974,7 +974,7 @@ void KPresenterDoc::loadBackground( KOMLParser& parser, vector<KOMLAttrib>& lst 
 }
 
 /*========================= load objects =========================*/
-void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bool _paste = false )
+void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bool _paste )
 {
     string tag;
     string name;
@@ -1300,7 +1300,7 @@ void KPresenterDoc::insertChild( KPresenterChild *_child )
 }
 
 /*======================= change child geometry ==================*/
-void KPresenterDoc::changeChildGeometry( KPresenterChild *_child, const KRect& _rect, int _diffx, int _diffy )
+void KPresenterDoc::changeChildGeometry( KPresenterChild *_child, const KRect& _rect, int /*_diffx*/, int /*_diffy*/ )
 {
     _child->setGeometry( _rect );
 
@@ -1345,7 +1345,7 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
 }
 
 /*==================== insert a new page =========================*/
-unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore=true )
+unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore  )
 {
 
     KPBackGround *kpbackground = new KPBackGround( &_pixmapCollection, &_gradientCollection, &_clipartCollection, this );
@@ -1364,7 +1364,7 @@ unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore=t
 }
 
 /*================================================================*/
-bool KPresenterDoc::insertNewTemplate( int diffx, int diffy, bool clean=false )
+bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean )
 {
     QString templateDir = KApplication::kde_datadir();
 
@@ -2665,7 +2665,7 @@ int KPresenterDoc::getRndY( int _ry )
 }
 
 /*======================== lower objects =========================*/
-void KPresenterDoc::lowerObjs( int diffx, int diffy )
+void KPresenterDoc::lowerObjs( int /*diffx*/, int /*diffy*/ )
 {
     KPObject *kpobject = 0;
 
@@ -2694,7 +2694,7 @@ void KPresenterDoc::lowerObjs( int diffx, int diffy )
 }
 
 /*========================= raise object =========================*/
-void KPresenterDoc::raiseObjs( int diffx, int diffy )
+void KPresenterDoc::raiseObjs( int /*diffx*/, int /*diffy*/ )
 {
     KPObject *kpobject = 0;
 
@@ -2723,7 +2723,7 @@ void KPresenterDoc::raiseObjs( int diffx, int diffy )
 }
 
 /*=================== insert a picture ==========================*/
-void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _x = 10, int _y = 10 )
+void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _x , int _y )
 {
     QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
     QDateTime dt;
@@ -2782,7 +2782,7 @@ void KPresenterDoc::insertClipart( QString filename, int diffx, int diffy )
 }
 
 /*======================= change picture ========================*/
-void KPresenterDoc::changePicture( QString filename, int diffx, int diffy )
+void KPresenterDoc::changePicture( QString filename, int /*diffx*/, int /*diffy*/ )
 {
     KPObject *kpobject = 0;
 
@@ -2820,7 +2820,7 @@ void KPresenterDoc::changePicture( QString filename, int diffx, int diffy )
 }
 
 /*======================= change clipart ========================*/
-void KPresenterDoc::changeClipart( QString filename, int diffx, int diffy )
+void KPresenterDoc::changeClipart( QString filename, int /*diffx*/, int /*diffy*/ )
 {
     QMap< KPClipartCollection::Key, QPicture >::Iterator it = _clipartCollection.begin();
     QDateTime dt;
@@ -2920,7 +2920,7 @@ void KPresenterDoc::insertPie( KRect r, QPen pen, QBrush brush, FillType ft, QCo
 }
 
 /*===================== insert a textobject =====================*/
-void KPresenterDoc::insertText( KRect r, int diffx, int diffy, QString text = QString::null, KPresenterView *_view = 0L )
+void KPresenterDoc::insertText( KRect r, int diffx, int diffy, QString text, KPresenterView *_view )
 {
     KPTextObject *kptextobject = new KPTextObject();
     kptextobject->setOrig( r.x() + diffx, r.y() + diffy );
@@ -2956,7 +2956,7 @@ void KPresenterDoc::insertAutoform( KRect r, QPen pen, QBrush brush, LineEnd lb,
 }
 
 /*======================= set rasters ===========================*/
-void KPresenterDoc::setRasters( unsigned int rx, unsigned int ry, bool _replace = true )
+void KPresenterDoc::setRasters( unsigned int rx, unsigned int ry, bool _replace )
 {
     _orastX = _rastX;
     _orastY = _rastY;
@@ -3035,7 +3035,7 @@ void KPresenterDoc::repaint( KPObject *kpobject )
 }
 
 /*==================== reorder page =============================*/
-QValueList<int> KPresenterDoc::reorderPage( unsigned int num, int diffx, int diffy, float fakt = 1.0 )
+QValueList<int> KPresenterDoc::reorderPage( unsigned int num, int diffx, int diffy, float fakt )
 {
     QValueList<int> orderList;
 
@@ -3078,7 +3078,7 @@ QValueList<int> KPresenterDoc::reorderPage( unsigned int num, int diffx, int dif
 }
 
 /*====================== get page of object ======================*/
-int KPresenterDoc::getPageOfObj( int objNum, int diffx, int diffy, float fakt = 1.0 )
+int KPresenterDoc::getPageOfObj( int objNum, int diffx, int diffy, float fakt )
 {
     KRect rect;
 
@@ -3102,7 +3102,7 @@ int KPresenterDoc::getPageOfObj( int objNum, int diffx, int diffy, float fakt = 
 }
 
 /*================== get size of page ===========================*/
-KRect KPresenterDoc::getPageSize( unsigned int num, int diffx, int diffy, float fakt=1.0, bool decBorders = true )
+KRect KPresenterDoc::getPageSize( unsigned int num, int diffx, int diffy, float fakt , bool decBorders )
 {
 //   double fact = 1;
 //   if ( _pageLayout.unit == PG_CM ) fact = 10;
@@ -3260,7 +3260,7 @@ KPObject* KPresenterDoc::getSelectedObj()
 }
 
 /*======================= delete objects =========================*/
-void KPresenterDoc::deleteObjs( bool _add = true )
+void KPresenterDoc::deleteObjs( bool _add )
 {
     KPObject *kpobject = 0;
     QList<KPObject> _objects;

@@ -135,7 +135,7 @@ void KPPartObject::paint( QPainter *_painter )
 }
 
 /*================================================================*/
-void KPPartObject::activate( QWidget *_widget, int diffx, int diffy )
+void KPPartObject::activate( QWidget * /*_widget*/, int diffx, int diffy )
 {
     view->setGeometry( orig.x() - diffx + 20, orig.y() - diffy + 20, ext.width(), ext.height() );
     view->show();

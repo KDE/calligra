@@ -36,76 +36,76 @@
 /******************************************************************/
 class EditWidget : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
 
-  // constructor - destructor
-  EditWidget(QWidget *parent=0, const char *name=0);
-  ~EditWidget();
+    // constructor - destructor
+    EditWidget(QWidget *parent = 0, const char *name = 0);
+    ~EditWidget();
 
-  // set the source
-  void setSource(QList<ATFInterpreter::PointStruct> pl) {pointList = pl; parseSource();}
+    // set the source
+    void setSource(QList<ATFInterpreter::PointStruct> pl) {pointList = pl; parseSource();}
 
-  // delete a point
-  void deletePoint();
-  
-  // is changed or not (=saved)
-  bool isChanged() {return changed;}
-  void saved() {changed = false;}
+    // delete a point
+    void deletePoint();
+
+    // is changed or not (=saved)
+    bool isChanged() {return changed;}
+    void saved() {changed = false;}
 
 protected:
 
-  // resize event
-  void resizeEvent(QResizeEvent*);
+    // resize event
+    void resizeEvent(QResizeEvent*);
 
-  // paint the autoform
-  void parseSource();
+    // paint the autoform
+    void parseSource();
 
-  // stretch - simlify line
-  QString stretch(QString);
-  QString simplify(QString);
+    // stretch - simlify line
+    QString stretch(QString);
+    QString simplify(QString);
 
-  // is number/operator/variable/ok
-  bool isNum(char);
-  bool isVar(char);
-  bool isOperator(char);
-  bool isInputOk(QString,int,int);
+    // is number/operator/variable/ok
+    bool isNum(char);
+    bool isVar(char);
+    bool isOperator(char);
+    bool isInputOk(QString,int,int);
 
-  // ********** variables **********
+    // ********** variables **********
 
-  // GUI-elements
-  KButton *ok;
-  KButton *cancel;
-  QLineEdit *lineEdit;
-  KTreeList *treeList;
+    // GUI-elements
+    KButton *ok;
+    KButton *cancel;
+    QLineEdit *lineEdit;
+    KTreeList *treeList;
 
-  // list to points and a pointer to a point
-  QList<ATFInterpreter::PointStruct> pointList;
-  ATFInterpreter::PointStruct *pntPtr;
+    // list to points and a pointer to a point
+    QList<ATFInterpreter::PointStruct> pointList;
+    ATFInterpreter::PointStruct *pntPtr;
 
-  // autoform changed?
-  bool changed;
+    // autoform changed?
+    bool changed;
 
 signals:
 
-  // set source
-  void getSource();
+    // set source
+    void getSource();
 
-  // change variable
-  void changeVar(int,int,int,QString);
+    // change variable
+    void changeVar(int,int,int,QString);
 
-  // delete point
-  void delPnt(int);
+    // delete point
+    void delPnt(int);
 
 private slots:
 
-  // item selected/changed 
-  void itemSelected(int);
-  void itemChanged();
+    // item selected/changed
+    void itemSelected(int);
+    void itemChanged();
 
-  // input cancled
-  void cancelInput();
+    // input cancled
+    void cancelInput();
 
 };
 

@@ -34,64 +34,64 @@
 /******************************************************************/
 class DrawWidget : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
 
-  // constructor - destructor
-  DrawWidget(QWidget *parent=0);
-  ~DrawWidget();
+    // constructor - destructor
+    DrawWidget( QWidget *parent = 0 );
+    ~DrawWidget();
 
-  // get - set relation
-  void setRelation(bool);
-  bool getRelation() {return relation;}
+    // get - set relation
+    void setRelation(bool);
+    bool getRelation() {return relation;}
 
-  // set pointarray
-  void setPointArray(QPointArray pa,QList<ATFInterpreter::AttribList> al) {pntArry = pa; atrLs = al; repaint(true);}
+    // set pointarray
+    void setPointArray(QPointArray pa,QList<ATFInterpreter::AttribList> al) {pntArry = pa; atrLs = al; repaint(true);}
 
-  // get geometry
-  int aW() {return aWidth;}
-  int aH() {return aHeight;}
+    // get geometry
+    int aW() {return aWidth;}
+    int aH() {return aHeight;}
 
-  // get - set pen width
-  void setPenWidth(unsigned int w) {wid = w; repaint(true);}
-  unsigned int getPenWidth() {return wid;}
+    // get - set pen width
+    void setPenWidth(unsigned int w) {wid = w; repaint(true);}
+    unsigned int getPenWidth() {return wid;}
 
-  // create pixmap
-  void createPixmap(const QString &);
+    // create pixmap
+    void createPixmap(const QString &);
 
 protected:
 
-  // resize and paint event
-  void resizeEvent(QResizeEvent*);
-  void paintEvent(QPaintEvent*);
+    // resize and paint event
+    void resizeEvent(QResizeEvent*);
+    void paintEvent(QPaintEvent*);
 
-  // ********** variables **********
+    // ********** variables **********
 
-  // vars for raster
-  bool drawRaster;
-  int dRastW,dRastH;
+    // vars for raster
+    bool drawRaster;
+    int dRastW,dRastH;
 
-  // points
-  int xPoints,yPoints;
+    // points
+    int xPoints,yPoints;
 
-  // relation
-  bool relation;
+    // relation
+    bool relation;
 
-  // geometry
-  int aWidth,aHeight;
+    // geometry
+    int aWidth,aHeight;
 
-  // pointarray - attribute list
-  QPointArray pntArry;
-  QList<ATFInterpreter::AttribList> atrLs;
+    // pointarray - attribute list
+    QPointArray pntArry;
+    QList<ATFInterpreter::AttribList> atrLs;
 
-  // pen width
-  unsigned int wid;
+    // pen width
+    unsigned int wid;
 
 signals:
 
-  // get point array
-  void getPntArry(int,int);
+    // get point array
+    void getPntArry(int,int);
 
 };
 

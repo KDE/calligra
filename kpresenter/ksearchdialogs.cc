@@ -26,7 +26,7 @@
 /* Class: KSearchDialog                                           */
 /******************************************************************/
 
-KSearchDialog::KSearchDialog( QWidget *parent=0, const char *name=0 )
+KSearchDialog::KSearchDialog( QWidget *parent, const char *name )
     : QDialog( parent, name, true )
 {
     setCaption( i18n( "Find" ) );
@@ -66,7 +66,7 @@ KSearchDialog::KSearchDialog( QWidget *parent=0, const char *name=0 )
 /* Class: KSearchReplaceDialog                                    */
 /******************************************************************/
 
-KSearchReplaceDialog::KSearchReplaceDialog( QWidget *parent=0, const char *name=0 )
+KSearchReplaceDialog::KSearchReplaceDialog( QWidget *parent, const char *name )
     : QDialog( parent, name, true )
 {
     setCaption( i18n( "Find & Replace" ) );

@@ -22,7 +22,7 @@
 /******************************************************************/
 
 /*======================= get Gradient ===========================*/
-QPixmap* KPGradientCollection::getGradient( QColor _color1, QColor _color2, BCType _bcType, KSize _size, bool addref = true )
+QPixmap* KPGradientCollection::getGradient( QColor _color1, QColor _color2, BCType _bcType, KSize _size, bool addref )
 {
     int num = inGradientList( _color1, _color2, _bcType, _size );
 

@@ -62,7 +62,7 @@
 /******************************************************************/
 
 /*====================== constructor =============================*/
-Page::Page( QWidget *parent=0, const char *name=0, KPresenterView *_view=0 )
+Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
     : QWidget( parent, name )
 {
     if ( parent )
@@ -184,16 +184,16 @@ void Page::drawObjects( QPainter *painter, KRect rect )
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
     {
         kpobject = objectList()->at( i );
-        
+
         if ( ( rect.intersects( kpobject->getBoundingRect( diffx( i ), diffy( i ) ) ) && editMode ) ||
              ( !editMode && getPageOfObj( i, _presFakt ) == static_cast<int>( currPresPage ) &&
-               kpobject->getPresNum() <= static_cast<int>( currPresStep ) && 
-               ( !kpobject->getDisappear() || kpobject->getDisappear() && 
+               kpobject->getPresNum() <= static_cast<int>( currPresStep ) &&
+               ( !kpobject->getDisappear() || kpobject->getDisappear() &&
                  kpobject->getDisappearNum() > static_cast<int>( currPresStep ) ) ) )
         {
             if ( inEffect && kpobject->getPresNum() >= static_cast<int>( currPresStep ) )
                 continue;
-            
+
             if ( !editMode && static_cast<int>( currPresStep ) == kpobject->getPresNum() && !goingBack )
             {
                 kpobject->setSubPresStep( subPresStep );
@@ -266,7 +266,7 @@ void Page::mousePressEvent( QMouseEvent *e )
                 firstX = e->x();
                 firstY = e->y();
 
-                if ( objectList()->count() - 1 >= 0 )
+                if ( (int)objectList()->count() - 1 >= 0 )
                 {
                     for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0 ; i-- )
                     {
@@ -464,7 +464,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
 
                 rubber = rubber.normalize();
                 KPObject *kpobject = 0;
-                if ( objectList()->count() - 1 >= 0 )
+                if ( (int)objectList()->count() - 1 >= 0 )
                 {
                     for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- )
                     {
@@ -480,7 +480,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
         {
             if ( firstX != mx || firstY != my )
             {
-                if ( objectList()->count() - 1 >= 0 )
+                if ( (int)objectList()->count() - 1 >= 0 )
                 {
                     for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- )
                     {
@@ -502,7 +502,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 view->kPresenterDoc()->commands()->addCommand( moveByCmd );
             }
             else
-                if ( objectList()->count() - 1 >= 0 )
+                if ( (int)objectList()->count() - 1 >= 0 )
                 {
                     for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- )
                     {
@@ -762,7 +762,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
         if ( ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) && toolEditMode == TEM_MOUSE )
         {
             setCursor( arrowCursor );
-            if ( objectList()->count() - 1 >= 0 )
+            if ( (int)objectList()->count() - 1 >= 0 )
             {
                 for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- )
                 {
@@ -810,7 +810,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
                     QPainter p;
                     p.begin( this );
 
-                    if ( objectList()->count() - 1 >= 0 )
+                    if ( (int)objectList()->count() - 1 >= 0 )
                     {
                         for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- )
                         {
@@ -999,7 +999,7 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
     deSelectAllObj();
     KPObject *kpobject = 0;
 
-    if ( objectList()->count() - 1 >= 0 )
+    if ( (int)objectList()->count() - 1 >= 0 )
     {
         for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- )
         {
@@ -1105,7 +1105,7 @@ int Page::getObjectAt( int x, int y )
 {
     KPObject *kpobject = 0;
 
-    if ( objectList()->count() - 1 >= 0 )
+    if ( (int)objectList()->count() - 1 >= 0 )
     {
         for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0 ; i-- )
         {
@@ -1119,7 +1119,7 @@ int Page::getObjectAt( int x, int y )
 }
 
 /*================================================================*/
-int Page::diffx( int i = -1 )
+int Page::diffx( int /*i*/ )
 {
     //if ( i == -1 )
     return view->getDiffX();
@@ -1131,7 +1131,7 @@ int Page::diffx( int i = -1 )
 }
 
 /*================================================================*/
-int Page::diffy( int i = -1 )
+int Page::diffy( int /*i*/ )
 {
     //if ( i == -1 )
     return view->getDiffY();
@@ -1882,7 +1882,7 @@ bool Page::pNext( bool )
 }
 
 /*====================== previous ================================*/
-bool Page::pPrev( bool manual )
+bool Page::pPrev( bool /*manual*/ )
 {
     goingBack = true;
     subPresStep = 0;
@@ -1942,7 +1942,7 @@ bool Page::canAssignEffect( int &pgNum, int &objNum )
 }
 
 /*================================================================*/
-void Page::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float _zoom = 1.0 )
+void Page::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_zoom*/ )
 {
     currPresPage = pgnum + 1;
     int _yOffset = view->getDiffY();
@@ -2441,7 +2441,7 @@ void Page::doObjEffects()
     int i;
     QPixmap screen_orig( kapp->desktop()->width(), kapp->desktop()->height() );
     bool drawn = false;
-    
+
     // YABADABADOOOOOOO.... That's a hack :-)
     if ( subPresStep == 0 && currPresPage > 0 )
     {
@@ -2595,7 +2595,7 @@ void Page::doObjEffects()
             }
         }
     }
-    
+
     if ( effects )
     {
         _step_width = static_cast<int>( ( static_cast<float>( kapp->desktop()->width() ) / objSpeedFakt() ) );
@@ -2968,10 +2968,10 @@ void Page::doObjEffects()
 /*======================= draw object ============================*/
 void Page::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y, int _w, int _h, int _cx, int _cy )
 {
-    if ( kpobject->getDisappear() && 
+    if ( kpobject->getDisappear() &&
          kpobject->getDisappearNum() < static_cast<int>( currPresStep ) )
         return;
-    
+
     int ox, oy, ow, oh;
     KRect br = kpobject->getBoundingRect( 0, 0 );
     ox = br.x(); oy = br.y(); ow = br.width(); oh = br.height();
@@ -3095,7 +3095,7 @@ void Page::editSelectedTextArea()
 {
     KPObject *kpobject = 0;
 
-    if ( objectList()->count() - 1 >= 0 )
+    if ( (int)objectList()->count() - 1 >= 0 )
     {
         for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- )
         {
@@ -3338,7 +3338,7 @@ void Page::dragEnterEvent( QDragEnterEvent *e )
 }
 
 /*================================================================*/
-void Page::dragLeaveEvent( QDragLeaveEvent *e )
+void Page::dragLeaveEvent( QDragLeaveEvent * /*e*/ )
 {
 }
 
@@ -3533,7 +3533,7 @@ void Page::enterEvent( QEvent *e )
 }
 
 /*================================================================*/
-void Page::leaveEvent( QEvent *e )
+void Page::leaveEvent( QEvent * /*e*/ )
 {
     view->setRulerMouseShow( false );
 }
@@ -3593,7 +3593,7 @@ bool Page::spManualSwitch()
 }
 
 /*================================================================*/
-KRect Page::getPageSize( unsigned int p, float fakt=1.0, bool decBorders = true )
+KRect Page::getPageSize( unsigned int p, float fakt, bool decBorders )
 {
     return view->kPresenterDoc()->getPageSize( p, diffx(), diffy(), fakt, decBorders );
 }
@@ -3605,7 +3605,7 @@ unsigned int Page::pageNums()
 }
 
 /*================================================================*/
-int Page::getPageOfObj( int i, float fakt = 1.0 )
+int Page::getPageOfObj( int i, float fakt )
 {
     return view->kPresenterDoc()->getPageOfObj( i, diffx(), diffy(), fakt );
 }
@@ -3623,7 +3623,7 @@ float Page::pageSpeedFakt()
 }
 
 /*================================================================*/
-void Page::_repaint( bool erase=true )
+void Page::_repaint( bool /*erase*/ )
 {
     view->kPresenterDoc()->repaint( false );
 }

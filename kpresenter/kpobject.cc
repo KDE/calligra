@@ -272,7 +272,7 @@ void KPObject::draw( QPainter *_painter, int _diffx, int _diffy )
 }
 
 /*====================== get shadow coordinates ==================*/
-void KPObject::getShadowCoords( int& _x, int& _y, ShadowDirection _direction, int _distance )
+void KPObject::getShadowCoords( int& _x, int& _y, ShadowDirection /*_direction*/, int /*_distance*/ )
 {
     int sx = 0, sy = 0;
 
