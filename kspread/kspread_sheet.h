@@ -226,6 +226,9 @@ protected:
  *
  ********************************************************************/
 
+class SheetPrivate;
+ 
+ 
 /**
  */
 class KSpreadSheet : public QObject
@@ -374,7 +377,7 @@ public:
     KSpreadCell* nonDefaultCell( QPoint const & cellRef, bool scroll = false )
       { return nonDefaultCell( cellRef.x(), cellRef.y(), scroll ); }
 
-    KSpreadCell* defaultCell()const { return m_pDefaultCell; }
+    KSpreadCell* defaultCell() const;
 
     KSpreadFormat* defaultFormat() { return m_defaultFormat; };
     const KSpreadFormat* defaultFormat() const { return m_defaultFormat; }
@@ -1198,14 +1201,6 @@ protected:
      */
     void fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList, QPtrList<AutoFillSequence>& _seqList, bool down = true );
 
-    KSpreadCluster m_cells;
-    KSpreadRowCluster m_rows;
-    KSpreadColumnCluster m_columns;
-
-    KSpreadCell* m_pDefaultCell;
-    RowFormat* m_pDefaultRowFormat;
-    ColumnFormat* m_pDefaultColumnFormat;
-
     /**
      * The name of the table. This name shows in the tab bar on the bottom of the window.
      */
@@ -1373,6 +1368,8 @@ private:
     void checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, int & ret);
     int  adjustColumnHelper( KSpreadCell * c, int _col, int _row );
     void checkContentDirection( QString const & name );
+    
+    SheetPrivate* d;
 };
 
 typedef KSpreadSheet KSpreadTable;
