@@ -30,8 +30,8 @@ Cell
 Format
    [x] Font family
    [x] Font size
-   [x] Numeric format
-   [ ] Borders
+   [!] Numeric format 
+   [X] Borders
    [ ] Border shadow
    [ ] Font color
 
@@ -39,10 +39,10 @@ Sheet
    [x] Sheet name
    [x] Display or hide
    [x] Protection status
-   [x] Marker position
+   [x] Marker position (Not reload)
    [x] Sheet properties (view options)
    [ ] Value highlighting
-   [ ] Sheet tab color
+   [ ] Sheet tab color (Not supported by kspread)
 
 Document/Workbook   
    [x] Active sheet
@@ -60,7 +60,7 @@ Formula (not supported yet)
 Configuration Settings
     ShowZeroValues
     ShowNotes
-    ShowGrid
+    [X] ShowGrid
     GridColor
     ShowPageBreak
     LinkUpdateMode
