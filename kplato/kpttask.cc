@@ -642,7 +642,7 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
             break;
         case KPTNode::StartNotEarlier:
             // m_startTime calculated above
-            kdDebug()<<"StartNotEarlier="<<m_constraintStartTime.toString()<<" "<<m_startTime.toString()<<endl;
+            //kdDebug()<<"StartNotEarlier="<<m_constraintStartTime.toString()<<" "<<m_startTime.toString()<<endl;
             if (m_startTime < m_constraintStartTime) {
                 if (m_constraintStartTime < latestFinish - m_durationBackward) {
                     m_startTime = m_constraintStartTime;
@@ -662,7 +662,7 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
             break;
         case KPTNode::FinishNotLater:
             // m_startTime calculated above
-            kdDebug()<<"FinishNotLater="<<m_constraintEndTime.toString()<<" "<<m_startTime.toString()<<endl;
+            //kdDebug()<<"FinishNotLater="<<m_constraintEndTime.toString()<<" "<<m_startTime.toString()<<endl;
             if (m_startTime == earliestStart)
                 m_duration = m_durationForward;
             else if (m_startTime == latestFinish - m_durationBackward)
@@ -675,7 +675,7 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
             break;
         case KPTNode::MustStartOn:
             // m_startTime calculated above
-            kdDebug()<<"MustStartOn="<<m_constraintStartTime.toString()<<" "<<m_startTime.toString()<<endl;
+            //kdDebug()<<"MustStartOn="<<m_constraintStartTime.toString()<<" "<<m_startTime.toString()<<endl;
             if (m_constraintStartTime < m_startTime ||
                 m_constraintStartTime > latestFinish - m_durationBackward) {
                 m_schedulingError = true;
@@ -691,7 +691,7 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
             break;
         case KPTNode::MustFinishOn:
             // m_startTime calculated above
-            kdDebug()<<"MustFinishOn="<<m_constraintEndTime.toString()<<" "<<m_startTime.toString()<<endl;
+            //kdDebug()<<"MustFinishOn="<<m_constraintEndTime.toString()<<" "<<m_startTime.toString()<<endl;
             if (m_constraintEndTime > latestFinish ||
                 m_constraintEndTime < earliestStart + m_durationForward) {
                 m_schedulingError = true;
@@ -707,7 +707,7 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
             break;
         case KPTNode::FixedInterval:
             // m_startTime calculated above
-            kdDebug()<<"FixedInterval="<<m_constraintStartTime.toString()<<" "<<m_startTime.toString()<<endl;
+            //kdDebug()<<"FixedInterval="<<m_constraintStartTime.toString()<<" "<<m_startTime.toString()<<endl;
             if (m_constraintEndTime > latestFinish ||
                 m_constraintStartTime < m_startTime) {
                 m_schedulingError = true;
@@ -740,7 +740,7 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
         }
         case KPTNode::MustStartOn:
         case KPTNode::FixedInterval:
-            kdDebug()<<"Forw, MustStartOn: "<<m_constraintStartTime.toString()<<" "<<m_startTime.toString()<<endl;
+            //kdDebug()<<"Forw, MustStartOn: "<<m_constraintStartTime.toString()<<" "<<m_startTime.toString()<<endl;
             if (m_constraintStartTime < m_startTime ||
                 m_constraintStartTime > latestFinish) {
                 m_schedulingError = true;
@@ -846,7 +846,7 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
             break;
         case KPTNode::StartNotEarlier:
             // m_endTime calculated above
-            kdDebug()<<"StartNotEarlier="<<m_constraintStartTime.toString()<<" "<<m_endTime.toString()<<endl;
+            //kdDebug()<<"StartNotEarlier="<<m_constraintStartTime.toString()<<" "<<m_endTime.toString()<<endl;
             if (m_endTime == latestFinish)
                 m_duration = m_durationBackward;
             else if (m_constraintStartTime > earliestStart &&
@@ -864,7 +864,7 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
             break;
         case KPTNode::FinishNotLater:
             // m_endTime calculated above
-            kdDebug()<<"FinishNotLater="<<m_constraintEndTime.toString()<<" "<<m_endTime.toString()<<endl;
+            //kdDebug()<<"FinishNotLater="<<m_constraintEndTime.toString()<<" "<<m_endTime.toString()<<endl;
             
             if (m_endTime == earliestStart + m_durationForward)
                 m_duration = m_durationForward;
@@ -883,7 +883,7 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
             break;
         case KPTNode::MustStartOn:
             // m_endTime calculated above
-            kdDebug()<<"MustStartOn="<<m_constraintStartTime.toString()<<" "<<m_startTime.toString()<<endl;
+            //kdDebug()<<"MustStartOn="<<m_constraintStartTime.toString()<<" "<<m_startTime.toString()<<endl;
             if (m_constraintStartTime < earliestStart ||
                 m_constraintStartTime > latestFinish - m_durationBackward) {
                 m_schedulingError = true;
@@ -899,7 +899,7 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
             break;
         case KPTNode::MustFinishOn:
             // m_endTime calculated above
-            kdDebug()<<"MustFinishOn="<<m_constraintEndTime.toString()<<" "<<m_startTime.toString()<<endl;
+            //kdDebug()<<"MustFinishOn="<<m_constraintEndTime.toString()<<" "<<m_startTime.toString()<<endl;
             if (m_constraintEndTime > latestFinish ||
                 m_constraintEndTime < earliestStart + m_durationForward) {
                 m_schedulingError = true;
@@ -915,7 +915,7 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
             break;
         case KPTNode::FixedInterval:
             // m_endTime calculated above
-            kdDebug()<<"FixedInterval="<<m_constraintEndTime.toString()<<" "<<m_endTime.toString()<<endl;
+            //kdDebug()<<"FixedInterval="<<m_constraintEndTime.toString()<<" "<<m_endTime.toString()<<endl;
             if (m_constraintEndTime > m_endTime ||
                 m_constraintStartTime < earliestStart) {
                 m_schedulingError = true;
