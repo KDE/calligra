@@ -79,6 +79,7 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     slotExpressionActivated(m_typeExpression->currentText() );
     resize(200,300);
     m_bChanged=false;
+    setFocus();
 }
 
 void KWEditPersonnalExpression::slotExpressionActivated(const QString &_text )
