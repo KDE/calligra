@@ -99,6 +99,7 @@ public:
 
     QTimer m_autoSaveTimer;
     int m_autoSaveDelay; // in seconds, 0 to disable.
+    bool modifiedAfterAutosave;
 };
 
 // Used in singleViewMode
@@ -169,6 +170,7 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
   setAutoSave( s_defaultAutoSave );
   d->m_bSingleViewMode = singleViewMode;
   d->filterManager = 0L;
+  d->modifiedAfterAutosave=false;
 
   // the parent setting *always* overrides! (Simon)
   if ( parent )
@@ -326,11 +328,13 @@ void KoDocument::setFilterManager( KoFilterManager * manager )
 void KoDocument::slotAutoSave()
 {
     //kdDebug() << "KoDocument::slotAutoSave m_file=" << m_file << endl;
-    if ( !m_file.isEmpty() && isModified() )
+    //kdDebug()<<"Autosave : modifiedAfterAutosave "<<d->modifiedAfterAutosave<<endl;
+    if ( !m_file.isEmpty() && isModified() && d->modifiedAfterAutosave )
     {
         // TODO temporary message in statusbar ?
         /*bool ret =*/ saveNativeFormat( autoSaveFile( m_file ) );
         setModified( true );
+        d->modifiedAfterAutosave=false;
     }
 }
 
@@ -985,6 +989,7 @@ void KoDocument::setModified( bool mod )
 
     // This influences the title
     setTitleModified();
+    d->modifiedAfterAutosave=mod;
 
 }
 
