@@ -751,7 +751,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
 
     new QLabel(i18n("Tab stop (%1):").arg(doc->getUnitName()), gbDocumentSettings);
     m_tabStopWidth = new KDoubleNumInput( gbDocumentSettings );
-    m_tabStopWidth->setRange( 0.0, KoUnit::ptToUnit( doc->ptPaperWidth(), unit ) , 0.1, false);
+    m_tabStopWidth->setRange( KoUnit::ptToUnit( MM_TO_POINT(2),unit ), KoUnit::ptToUnit( doc->ptPaperWidth(), unit ) , 0.1, false);
     m_oldTabStopWidth = doc->tabStopValue();
     m_tabStopWidth->setValue( KoUnit::ptToUnit( m_oldTabStopWidth, doc->getUnit() ));
 
