@@ -221,7 +221,8 @@ void KWFootNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& contex
     writer.endElement();
 
     writer.startElement( "text:note-body" );
-//TODO add text from frameset
+    //save text from end/footnote
+    m_frameset->saveOasisContent( writer, context );
     writer.endElement();
 
     writer.endElement();
