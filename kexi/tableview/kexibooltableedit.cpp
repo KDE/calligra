@@ -47,7 +47,7 @@ void KexiBoolTableEdit::init()
 	m_hasFocusableWidget = false;
 }
 	
-void KexiBoolTableEdit::init(const QString& /*add*/, bool removeOld)
+void KexiBoolTableEdit::init(const QString& /*add*/, bool /*removeOld*/)
 {
 	m_currentValue = m_origValue;
 	//nothing to do more...
@@ -98,8 +98,8 @@ bool KexiBoolTableEdit::cursorAtEnd()
 	return m_lineedit->size();
 }*/
 
-void KexiBoolTableEdit::setupContents( QPainter *p, bool focused, QVariant val, 
-	QString &txt, int &align, int &x, int &y_offset, int &w, int &h  )
+void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, QVariant val, 
+	QString &/*txt*/, int &/*align*/, int &/*x*/, int &y_offset, int &w, int &h  )
 {
 #ifdef Q_WS_WIN
 //	x = 1;

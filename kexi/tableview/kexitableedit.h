@@ -64,7 +64,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 
 		virtual QVariant value(bool &ok) = 0;
 
-		inline KexiDB::Field *field() const { return m_column->field; }
+		inline KexiDB::Field *field() const { return m_column->field(); }
 		inline KexiTableViewColumn *column() const { return m_column; }
 
 		/*! \return true if internal editor's cursor (whatever that means, eg. line edit cursor)
@@ -139,7 +139,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		 For implementation: true should be returned if \a ke should be accepted.
 		 If \a editorActive is true, this editor is currently active, i.e. the table view is in edit mode.
 		 By default false is returned. */
-		virtual bool handleKeyPress( QKeyEvent *ke, bool editorActive ) { return false; }
+		virtual bool handleKeyPress( QKeyEvent * /*ke*/, bool /*editorActive*/ ) { return false; }
 
 		/*! \return width of \a value. For the default implementation \a val is converted to a string 
 		 and width of this string is returned. */

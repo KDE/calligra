@@ -84,7 +84,7 @@ KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *p
 	setFocusProxy(m_edit);
 }
 
-void KexiDateTableEdit::init(const QString& add, bool /*removeOld*/)
+void KexiDateTableEdit::init(const QString& /*add*/, bool /*removeOld*/)
 {
 	bool ok;
 	QDate date = KGlobal::locale()->readDate(m_origValue.toString(), &ok);

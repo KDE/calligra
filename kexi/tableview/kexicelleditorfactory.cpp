@@ -88,7 +88,7 @@ KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, 
 		item = KexiCellEditorFactory::item( KexiDB::Field::Enum );
 	}
 	else {
-		item = KexiCellEditorFactory::item( column.field->type() );
+		item = KexiCellEditorFactory::item( column.field()->type() );
 	}
 	
 #if 0 //js: TODO LATER

@@ -226,7 +226,7 @@ void KexiInputTableEdit::init(const QString& add, bool removeOld)
 	m_origText = m_lineedit->text();
 }
 
-void KexiInputTableEdit::paintEvent ( QPaintEvent *e )
+void KexiInputTableEdit::paintEvent ( QPaintEvent * /*e*/ )
 {
 	QPainter p(this);
 	p.setPen( QPen( colorGroup().text() ) );

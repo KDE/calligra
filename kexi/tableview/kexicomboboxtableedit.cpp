@@ -159,7 +159,7 @@ void KexiComboBoxTableEdit::resize(int w, int h)
 	QWidget::resize(w - m_button->width(), h);
 	m_button->resize( h, h );
 	m_rightMargin = m_parentRightMargin + m_button->width();
-	int xx = m_scrollView->contentsX();
+//	int xx = m_scrollView->contentsX();
 	QRect r( pos().x(), pos().y(), w+1, h+1 );
 	r.moveBy(m_scrollView->contentsX(),0);
 	updateFocus( r );
@@ -330,7 +330,8 @@ void KexiComboBoxTableEdit::showPopup()
 	if (tv) {
 		m_popup->move( tv->viewport()->mapToGlobal(pos()) + QPoint(0,height()) );//+ rect().bottomLeft() ) );
 		//to avoid flickering: first resize to 0-height, then show and resize back to prev. height
-		int h = m_popup->height(), w = m_popup->width();
+//		const int h = m_popup->height()
+		const int w = m_popup->width();
 		m_popup->resize(w, 0);
 		m_popup->show();
 		m_popup->updateSize();
@@ -447,7 +448,7 @@ int KexiComboBoxTableEdit::widthForValue( QVariant &val, QFontMetrics &fm )
 	return fm.width( txt );
 }
 
-bool KexiComboBoxTableEdit::eventFilter( QObject *o, QEvent *e )
+bool KexiComboBoxTableEdit::eventFilter( QObject * /*o*/, QEvent *e )
 {
 	if (e->type()==QEvent::MouseButtonPress) {
 		kdDebug() <<"??" <<endl;

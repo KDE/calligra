@@ -39,7 +39,10 @@ KexiTableViewPropertyBuffer::KexiTableViewPropertyBuffer(KexiViewBase *view, Kex
 		this, SLOT(slotCellSelected(int,int)));
 
 	slotDataSet( m_tableView->data() );
+	const bool wasDirty = view->dirty();
 	clear();
+	if (!wasDirty)
+		view->setDirty(false);
 }
 
 KexiTableViewPropertyBuffer::~KexiTableViewPropertyBuffer()

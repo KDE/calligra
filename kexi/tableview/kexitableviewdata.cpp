@@ -41,11 +41,12 @@ unsigned short KexiTableViewData::charTable[]=
 };
 
 KexiTableViewColumn::KexiTableViewColumn(KexiDB::Field& f, bool owner)
-: field(&f)
+: fieldinfo(0)
+, m_field(&f)
 {
 	isDBAware = false;
 	m_fieldOwned = owner;
-	m_nameOrCaption = field->captionOrName();
+	m_nameOrCaption = m_field->captionOrName();
 	init();
 }
 
@@ -54,9 +55,11 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 	uint options,
 	uint length, uint precision,
 	QVariant defaultValue,
-	const QString& caption, const QString& description, uint width)
+	const QString& caption, const QString& description, uint width
+)
+: fieldinfo(0)
 {
-	field = new KexiDB::Field(
+	m_field = new KexiDB::Field(
 		name, ctype,
 		cconst,
 		options,
@@ -66,36 +69,40 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 
 	isDBAware = false;
 	m_fieldOwned = true;
-	m_nameOrCaption = field->captionOrName();
+	m_nameOrCaption = m_field->captionOrName();
 	init();
 }
 
 KexiTableViewColumn::KexiTableViewColumn(
-	const KexiDB::QuerySchema &query, KexiDB::Field& f)
-: field(&f)
+	const KexiDB::QuerySchema &query, KexiDB::QueryFieldInfo& fi)
+//	const KexiDB::QuerySchema &query, KexiDB::Field& f)
+: fieldinfo(&fi)
+, m_field(fi.field)
 {
 	isDBAware = true;
 	m_fieldOwned = false;
 
 	//setup column's caption:
-	if (!field->caption().isEmpty()) {
-		m_nameOrCaption = field->caption();
+	if (!fieldinfo->field->caption().isEmpty()) {
+		m_nameOrCaption = fieldinfo->field->caption();
 	}
 	else {
 		//reuse alias if available:
-		m_nameOrCaption = query.alias(field);
+		m_nameOrCaption = fieldinfo->alias;
 		//last hance: use field name
 		if (m_nameOrCaption.isEmpty())
-			m_nameOrCaption = field->name();
+			m_nameOrCaption = fieldinfo->field->name();
+		//todo: compute other auto-name?
 	}
 	init();
 	//setup column's readonly flag: true if this is parent table's field
-	m_readOnly = (query.parentTable()!=f.table());
+	m_readOnly = (query.parentTable()!=fieldinfo->field->table());
 //	m_visible = query.isFieldVisible(&f);
 }
 
 KexiTableViewColumn::KexiTableViewColumn(bool)
-: field(0)
+: fieldinfo(0)
+, m_field(0)
 {
 	isDBAware = false;
 	init();
@@ -104,7 +111,7 @@ KexiTableViewColumn::KexiTableViewColumn(bool)
 KexiTableViewColumn::~KexiTableViewColumn()
 {
 	if (m_fieldOwned)
-		delete field;
+		delete m_field;
 	setValidator( 0 );
 	delete m_relatedData;
 }
@@ -139,7 +146,7 @@ void KexiTableViewColumn::setRelatedData(KexiTableViewData *data)
 	//find a primary key
 	KexiTableViewColumn::ListIterator it( data->columns );
 	for (int id = 0;it.current();++it, id++) {
-		if (it.current()->field->isPrimaryKey()) {
+		if (it.current()->field()->isPrimaryKey()) {
 			//found, remember
 			m_relatedDataPKeyID = id;
 			m_relatedData = data;
@@ -150,18 +157,19 @@ void KexiTableViewColumn::setRelatedData(KexiTableViewData *data)
 
 bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
 {
-	if (field->isNumericType()) {
+	if (m_field->isNumericType()) {
 		if (ch=="-")
-			 return !field->isUnsigned();
+			 return !m_field->isUnsigned();
 		if (ch=="+" || (ch>="0" && ch<="9"))
 			return true;
 		return false;
 	}
-	else if (field->type() == KexiDB::Field::Boolean)
+	else if (m_field->type() == KexiDB::Field::Boolean)
 		return false;
 		
 	return true;
 }
+
 
 //------------------------------------------------------
 
@@ -193,13 +201,15 @@ KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
 	init();
 
 	uint i = 0;
-	QValueList<bool> detailedVisibility;
-	KexiDB::Field::Vector vector = m_cursor->query()->fieldsExpanded(&detailedVisibility);
+//	QValueList<bool> detailedVisibility;
+//	KexiDB::Field::Vector vector = m_cursor->query()->fieldsExpanded(&detailedVisibility);
+	KexiDB::QueryFieldInfo::Vector vector 
+		= m_cursor->query()->fieldsExpanded();
 	KexiTableViewColumn* col;
 	for (i=0;i<vector.count();i++) {
-		if (detailedVisibility[i]) {
-			KexiDB::Field *f = vector[i];
-			col=new KexiTableViewColumn(*m_cursor->query(), *f);
+		KexiDB::QueryFieldInfo *fi = vector[i];
+		if (fi->visible) {
+			col=new KexiTableViewColumn(*m_cursor->query(), *fi);
 			//col->setVisible( detailedVisibility[i] );
 			addColumn( col );
 		}
@@ -309,7 +319,7 @@ void KexiTableViewData::setSorting(int column, bool ascending)
 		return;
 	}
 
-	const int t = columns.at(m_key)->field->type();
+	const int t = columns.at(m_key)->field()->type();
 	if (t == KexiDB::Field::Boolean || KexiDB::Field::isNumericType(t))
 		cmpFunc = &KexiTableViewData::cmpInt;
 	else
@@ -417,17 +427,21 @@ bool KexiTableViewData::updateRowEditBuffer(KexiTableItem *item,
 		kdDebug() << "KexiTableViewData::updateRowEditBuffer(): column #" << colnum<<" not found! col==0" << endl;
 		return false;
 	}
-	if (!(col->field)) {
+	if (m_pRowEditBuffer->isDBAware()) {
+		if (!(col->fieldinfo)) {
+			kdDebug() << "KexiTableViewData::updateRowEditBuffer(): column #" << colnum<<" not found!" << endl;
+			return false;
+		}
+//		if (!(static_cast<KexiDBTableViewColumn*>(col)->field)) {
+		m_pRowEditBuffer->insert( *col->fieldinfo, newval);
+		return true;
+	}
+	if (!(col->field())) {
 		kdDebug() << "KexiTableViewData::updateRowEditBuffer(): column #" << colnum<<" not found!" << endl;
 		return false;
 	}
-	if (m_pRowEditBuffer->isDBAware()) {
-//		if (!(static_cast<KexiDBTableViewColumn*>(col)->field)) {
-		m_pRowEditBuffer->insert( *col->field, newval);
-		return true;
-	}
 	//not db-aware:
-	const QString colname = col->field->name();
+	const QString colname = col->field()->name();
 	if (colname.isEmpty()) {
 		kdDebug() << "KexiTableViewData::updateRowEditBuffer(): column #" << colnum<<" not found!" << endl;
 		return false;
@@ -450,7 +464,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert)
 	KexiDB::RowData::iterator it_r = item.begin();
 	int col = 0;
 	for (;it_f.current() && it_r!=item.end();++it_f,++it_r,col++) {
-		KexiDB::Field *f = it_f.current()->field;
+		KexiDB::Field *f = it_f.current()->field();
 		//get new value (of present in the buffer), or the old one, otherwise
 		QVariant *val = rowEditBuffer()->at( *f );
 		if (!val)
@@ -501,8 +515,8 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 		for (KexiDB::RowEditBuffer::SimpleMap::Iterator it = b.begin();it!=b.end();++it) {
 			uint i=0;
 			for (KexiTableViewColumn::ListIterator it2(columns);it2.current();++it2, i++) {
-				if (it2.current()->field->name()==it.key()) {
-					kdDebug() << it2.current()->field->name()<< ": "<<item[i].toString()<<" -> "<<it.data().toString()<<endl;
+				if (it2.current()->field()->name()==it.key()) {
+					kdDebug() << it2.current()->field()->name()<< ": "<<item[i].toString()<<" -> "<<it.data().toString()<<endl;
 					item[i] = it.data();
 				}
 			}

@@ -403,12 +403,14 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 			for (KexiTableViewColumn::ListIterator it(m_data->columns);
 				it.current(); ++it) 
 			{
-				if (it.current()->visible()) {
-					int wid = it.current()->field->width();
+				KexiDB::Field *f = it.current()->field();
+				if (!it.current()->fieldinfo || it.current()->fieldinfo->visible) {
+					int wid = f->width();
 					if (wid==0)
 						wid=KEXITV_DEFAULT_COLUMN_WIDTH;//default col width in pixels
 //js: TODO - add col width configuration and storage
-					d->pTopHeader->addLabel(it.current()->field->captionOrName(), wid);
+kdDebug() << ">>" << f <<endl;
+					d->pTopHeader->addLabel(f->captionOrName(), wid);
 				}
 			}
 		}
@@ -493,7 +495,7 @@ void KexiTableView::slotRowsDeleted( const QValueList<int> &rows )
 	viewport()->repaint();
 	QSize s(tableSize());
 	resizeContents(s.width(),s.height());
-	setCursor(QMAX(0, d->curRow - rows.count()), -1, true);
+	setCursor(QMAX(0, (int)d->curRow - (int)rows.count()), -1, true);
 }
 
 
@@ -1937,7 +1939,7 @@ void KexiTableView::clearSelection()
 {
 //	selectRow( -1 );
 	int oldRow = d->curRow;
-	int oldCol = d->curCol;
+//	int oldCol = d->curCol;
 	d->curRow = -1;
 	d->curCol = -1;
 	d->pCurrentItem = 0;
@@ -2023,7 +2025,7 @@ KexiTableEdit *KexiTableView::editor( int col, bool ignoreMissingEditor )
 	return editor;
 }
 
-void KexiTableView::editorShowFocus( int row, int col )
+void KexiTableView::editorShowFocus( int /*row*/, int col )
 {
 	KexiTableEdit *edit = editor( col );
 	/*nt p = rowPos(row);
@@ -2232,7 +2234,7 @@ bool KexiTableView::dropsAtRowEnabled() const
 
 void KexiTableView::setDropsAtRowEnabled(bool set)
 {
-	const bool old = d->dropsAtRowEnabled;
+//	const bool old = d->dropsAtRowEnabled;
 	if (!set)
 		d->dragIndicatorLine = -1;
 	if (d->dropsAtRowEnabled && !set) {
@@ -2742,7 +2744,7 @@ bool KexiTableView::acceptEditor()
 		//1. check using validator
 		KexiValidator *validator = m_data->column(d->curCol)->validator();
 		if (validator) {
-			res = validator->check(m_data->column(d->curCol)->field->captionOrName(), 
+			res = validator->check(m_data->column(d->curCol)->field()->captionOrName(), 
 				newval, msg, desc);
 		}
 	}
@@ -3098,7 +3100,7 @@ KexiDB::Field* KexiTableView::field(int colNum) const
 {
 	if (!m_data || !m_data->column(colNum))
 		return 0;
-	return m_data->column(colNum)->field;
+	return m_data->column(colNum)->field();
 }
 
 void KexiTableView::adjustColumnWidthToContents(int colNum)
@@ -3108,7 +3110,7 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 		return;
 
 	if (colNum==-1) {
-		const int cols = columns();
+//		const int cols = columns();
 		for (int i=0; i<columns(); i++)
 			adjustColumnWidthToContents(i);
 		return;
@@ -3126,7 +3128,7 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 //js TODO: this is NOT EFFECTIVE for big data sets!!!!
 
 	KexiTableEdit *ed = editor( colNum );
-	KexiDB::Field *f = m_data->column( colNum )->field;
+//	KexiDB::Field *f = m_data->column( colNum )->field;
 	if (ed) {
 //		KexiDB::Field *f = m_data->column(colNum)->field;
 		for (QPtrListIterator<KexiTableItem> it( *m_data ); it.current(); ++it) {
@@ -3306,7 +3308,7 @@ void KexiTableView::triggerUpdate()
 
 int KexiTableView::columnType(int col) const
 {
-	return (m_data && col>=0 && col<columns()) ? m_data->column(col)->field->type() : KexiDB::Field::InvalidType;
+	return (m_data && col>=0 && col<columns()) ? m_data->column(col)->field()->type() : KexiDB::Field::InvalidType;
 }
 
 bool KexiTableView::columnEditable(int col) const
@@ -3314,7 +3316,7 @@ bool KexiTableView::columnEditable(int col) const
 	return (m_data && col>=0 && col<columns()) ? !m_data->column(col)->readOnly() : false;
 }
 
-QVariant KexiTableView::columnDefaultValue(int col) const
+QVariant KexiTableView::columnDefaultValue(int /*col*/) const
 {
 	return QVariant(0);
 //TODO(js)	
@@ -3628,7 +3630,8 @@ void KexiTableView::scrollBarTipTimeout()
 	d->scrollBarTipTimerCnt=0;
 }
 
-void KexiTableView::slotTopHeaderSizeChange( int section, int oldSize, int newSize )
+void KexiTableView::slotTopHeaderSizeChange( 
+	int /*section*/, int /*oldSize*/, int /*newSize*/ )
 {
 	editorShowFocus( d->curRow, d->curCol );
 }
@@ -3640,13 +3643,13 @@ QVariant* KexiTableView::bufferedValueAt(int col)
 		KexiTableViewColumn* tvcol = m_data->column(col);
 		if (tvcol->isDBAware) {
 //			QVariant *cv = m_data->rowEditBuffer()->at( *static_cast<KexiDBTableViewColumn*>(tvcol)->field );
-			QVariant *cv = m_data->rowEditBuffer()->at( *tvcol->field );
+			QVariant *cv = m_data->rowEditBuffer()->at( *tvcol->field() );
 			if (cv)
 				return cv;
 
 			return &d->pCurrentItem->at(col);
 		}
-		QVariant *cv = m_data->rowEditBuffer()->at( tvcol->field->name() );
+		QVariant *cv = m_data->rowEditBuffer()->at( tvcol->field()->name() );
 		if (cv)
 			return cv;
 	}

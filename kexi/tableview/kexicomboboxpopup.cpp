@@ -127,7 +127,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn &column)
 {
 	if (!column.relatedData()) {
 		kdWarning() << "KexiComboBoxPopup::setData(KexiTableViewColumn &): no column relatedData \n - moving to setData(KexiDB::Field &)" << endl;
-		setData(*column.field);
+		setData(*column.field());
 		return;
 	}
 	setDataInternal( column.relatedData(), false /*!owner*/ );

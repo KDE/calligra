@@ -40,14 +40,14 @@ KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent, c
 	installEventFilter(this);
 
 	//margins
-	if (m_column->field->isFPNumericType()) {
+	if (m_column->field()->isFPNumericType()) {
 #ifdef Q_WS_WIN
 		m_leftMargin = 0;
 #else
 		m_leftMargin = 0;
 #endif
 	}
-	else if (m_column->field->isIntegerType()) {
+	else if (m_column->field()->isIntegerType()) {
 #ifdef Q_WS_WIN
 		m_leftMargin = 1;
 #else
@@ -110,7 +110,7 @@ void KexiTableEdit::resize(int w, int h)
 	}
 }
 
-void KexiTableEdit::showFocus( const QRect& r )
+void KexiTableEdit::showFocus( const QRect& /*r*/ )
 {
 }
 
@@ -161,8 +161,8 @@ void KexiTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, int y, in
 	p->drawRect(x, y, w, h);
 }
 
-void KexiTableEdit::setupContents( QPainter *p, bool focused, QVariant val, 
-	QString &txt, int &align, int &x, int &y_offset, int &w, int &h  )
+void KexiTableEdit::setupContents( QPainter * /*p*/, bool /*focused*/, QVariant val, 
+	QString &txt, int &align, int &/*x*/, int &y_offset, int &w, int &/*h*/  )
 {
 #ifdef Q_WS_WIN
 //	x = 1;
@@ -176,14 +176,14 @@ void KexiTableEdit::setupContents( QPainter *p, bool focused, QVariant val,
 //	align = SingleLine | AlignVCenter;
 //	QString txt; //text to draw
 
-	if (m_column->field->isFPNumericType()) {
+	if (m_column->field()->isFPNumericType()) {
 //js TODO: ADD OPTION to desplaying NULL VALUES as e.g. "(null)"
 		if (!val.isNull())
 			txt = KGlobal::locale()->formatNumber(val.toDouble());
 		w -= 6;
 		align |= AlignRight;
 	}
-	else if (m_column->field->isIntegerType()) {
+	else if (m_column->field()->isIntegerType()) {
 		int num = val.toInt();
 /*#ifdef Q_WS_WIN
 		x = 1;
@@ -229,8 +229,7 @@ else if (m_field->type() == KexiDB::Field::Date) { //todo: datetime & time
 
 }
 
-void KexiTableEdit::paintSelectionBackground( QPainter *p, bool focused, const QString& txt, 
-	int align, int x, int y_offset, int w, int h, const QColor& fillColor,
+void KexiTableEdit::paintSelectionBackground( QPainter *p, bool /*focused*/, const QString& txt, 	int align, int x, int y_offset, int w, int h, const QColor& fillColor,
 	bool readOnly, bool fullRowSelection )
 {
 	if (!readOnly && !fullRowSelection && !txt.isEmpty()) {

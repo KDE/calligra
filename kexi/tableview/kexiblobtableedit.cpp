@@ -68,7 +68,7 @@ KexiBlobTableEdit::~KexiBlobTableEdit()
 }
 
 //! initializes this editor with \a add value
-void KexiBlobTableEdit::init(const QString& add, bool /*removeOld*/)
+void KexiBlobTableEdit::init(const QString& /*add*/, bool /*removeOld*/)
 {
 	QByteArray val = m_origValue.toByteArray();
 	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << val.size() << endl;
@@ -271,7 +271,7 @@ KexiBlobTableEdit::loadFile()
 
 	if(!file.isEmpty())
 	{
-		KIO::FileCopyJob* job = KIO::file_copy(KURL(file), KURL(m_tempFile->name()), -1, true);
+		/*KIO::FileCopyJob* job =*/(void) KIO::file_copy(KURL(file), KURL(m_tempFile->name()), -1, true);
 	}
 }
 
@@ -282,7 +282,7 @@ KexiBlobTableEdit::saveFile()
 
 	if(!file.isEmpty())
 	{
-		KIO::FileCopyJob* job = KIO::file_copy(KURL(m_tempFile->name()), KURL(file), -1, true);
+		/*KIO::FileCopyJob* job =*/ (void)KIO::file_copy(KURL(m_tempFile->name()), KURL(file), -1, true);
 	}
 }
 
@@ -315,7 +315,7 @@ KexiBlobEditorFactoryItem::~KexiBlobEditorFactoryItem()
 }
 
 KexiTableEdit* KexiBlobEditorFactoryItem::createEditor(
-	KexiTableViewColumn &column, QScrollView* parent)
+	KexiTableViewColumn & /*column*/, QScrollView* /*parent*/)
 {
 //js: TODO enable when KexiBlobTableEdit will be stable again!
 //DISABLED

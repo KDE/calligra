@@ -70,7 +70,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 			uint width = 0);
 
 		//! Db-aware version.
-		KexiTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::Field& f);
+		KexiTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::QueryFieldInfo& fi);
 
 		virtual ~KexiTableViewColumn();
 
@@ -114,10 +114,16 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 
 		/*! For not-db-aware data only:
 		 Related data \a data for this column, what defines simple one-field. 
-		 Null by default. \sa setRelatedData() */
+		 NULL by default. \sa setRelatedData() */
 		KexiTableViewData *relatedData() const { return m_relatedData; }
 
-		KexiDB::Field* field;
+		/*! \return field for this column. 
+		 For db-aware information is taken from \a fieldinfo member. */
+		KexiDB::Field* field() const { return m_field; }
+		
+		/*! A rich field information for db-aware data. 
+		 For not-db-aware data it always return false (use field() instead. */
+		KexiDB::QueryFieldInfo* fieldinfo;
 
 		bool isDBAware : 1; //!< true if data is stored in DB, not only in memeory
 
@@ -145,6 +151,8 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 
 		KexiTableViewData* m_relatedData;
 		uint m_relatedDataPKeyID;
+
+		KexiDB::Field* m_field;
 
 		bool m_readOnly : 1;
 		bool m_fieldOwned : 1;
