@@ -747,7 +747,7 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
 
 #ifdef DEBUG_FORMATTER
     if ( applyZoom ) // ###
-        qDebug( "\nKoTextFormatter::format: char=%s, LU-size=%d, LU-width=%d [equiv. to pix=%d] pixel-width=%d", // format=%s",
+        qDebug( "\nKoTextFormat::charWidth: char=%s, LU-size=%d, LU-width=%d [equiv. to pix=%d] pixel-width=%d", // format=%s",
                 QString(c->c).latin1(), pointSize(),
                 ww, zh->layoutUnitToPixelX(ww), pixelww/*, this->key().latin1()*/ );
 #endif
