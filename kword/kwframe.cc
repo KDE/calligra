@@ -59,10 +59,10 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
     : KoRect( left, top, width, height ),
       // Initialize member vars here. This ensures they are all initialized, since it's
       // easier to compare this list with the member vars list (compiler ensures order).
-      sheetSide( AnySide ),
+      m_sheetSide( AnySide ),
       m_runAround( _ra ),
       frameBehaviour( AutoCreateNewFrame ),
-      newFrameBehaviour( ( fs && fs->type() == FT_TEXT ) ? Reconnect : NoFollowup ),
+      m_newFrameBehavior( ( fs && fs->type() == FT_TEXT ) ? Reconnect : NoFollowup ),
       m_runAroundGap( _gap ),
       bleft( 0 ),
       bright( 0 ),
@@ -71,12 +71,12 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_bCopy( false ),
       selected( false ),
       m_internalY( 0 ),
-      backgroundColor( QBrush( QColor() ) ), // valid brush with invalid color ( default )
+      m_backgroundColor( QBrush( QColor() ) ), // valid brush with invalid color ( default )
       brd_left( QColor(), KoBorder::SOLID, 0 ),
       brd_right( QColor(), KoBorder::SOLID, 0 ),
       brd_top( QColor(), KoBorder::SOLID, 0 ),
       brd_bottom( QColor(), KoBorder::SOLID, 0 ),
-      frameSet( fs )
+      m_frameSet( fs )
 {
     //kdDebug() << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
     handles.setAutoDelete(true);
@@ -92,10 +92,10 @@ KWFrame::~KWFrame()
 
 int KWFrame::pageNum() const
 {
-    Q_ASSERT( frameSet );
-    if ( !frameSet )
+    Q_ASSERT( m_frameSet );
+    if ( !m_frameSet )
         return 0;
-    KWDocument *doc = frameSet->kWordDocument();
+    KWDocument *doc = m_frameSet->kWordDocument();
     int page = static_cast<int>(y() / doc->ptPaperHeight());
     return QMIN( page, doc->getPages()-1 );
 }
@@ -150,24 +150,24 @@ KWFrame *KWFrame::getCopy() {
 void KWFrame::copySettings(KWFrame *frm)
 {
     //necessary to reapply these parameters
-    setFrameSet( frm->getFrameSet() );
+    setFrameSet( frm->frameSet() );
     setRect(frm->x(), frm->y(), frm->width(), frm->height());
     setRunAroundGap( frm->runAroundGap());
     setRunAround( frm->runAround());
 
     //
-    setBackgroundColor( frm->getBackgroundColor() );
-    setFrameBehaviour(frm->getFrameBehaviour());
-    setNewFrameBehaviour(frm->getNewFrameBehaviour());
-    setSheetSide(frm->getSheetSide());
+    setBackgroundColor( frm->backgroundColor() );
+    setFrameBehaviour(frm->frameBehavior());
+    setNewFrameBehavior(frm->newFrameBehavior());
+    setSheetSide(frm->sheetSide());
     setLeftBorder(frm->leftBorder());
     setRightBorder(frm->rightBorder());
     setTopBorder(frm->topBorder());
     setBottomBorder(frm->bottomBorder());
-    setBLeft(frm->getBLeft());
-    setBRight(frm->getBRight());
-    setBTop(frm->getBTop());
-    setBBottom(frm->getBBottom());
+    setBLeft(frm->bLeft());
+    setBRight(frm->bRight());
+    setBTop(frm->bTop());
+    setBBottom(frm->bBottom());
     setCopy(frm->isCopy());
     selected = false; // don't copy this attribute
     /*if(frm->anchor())
@@ -177,7 +177,7 @@ void KWFrame::copySettings(KWFrame *frm)
 // Insert all resize handles
 void KWFrame::createResizeHandles() {
     removeResizeHandles();
-    QPtrList <KWView> pages = getFrameSet()->kWordDocument()->getAllViews();
+    QPtrList <KWView> pages = frameSet()->kWordDocument()->getAllViews();
     for (int i=pages.count() -1; i >= 0; i--)
         createResizeHandlesForPage(pages.at(i)->getGUI()->canvasWidget());
 }
@@ -220,7 +220,7 @@ void KWFrame::updateRulerHandles(){
         updateResizeHandles();
     else
     {
-        KWDocument *doc = getFrameSet()->kWordDocument();
+        KWDocument *doc = frameSet()->kWordDocument();
         if(doc)
             doc->updateRulerFrameStartEnd();
     }
@@ -240,7 +240,7 @@ void KWFrame::setSelected( bool _selected )
 
 QRect KWFrame::outerRect() const
 {
-    KWDocument *doc = getFrameSet()->kWordDocument();
+    KWDocument *doc = frameSet()->kWordDocument();
     QRect outerRect( doc->zoomRect( *this ) );
     outerRect.rLeft() -= KoBorder::zoomWidthX( brd_left.ptWidth, doc, 1 );
     outerRect.rTop() -= KoBorder::zoomWidthY( brd_top.ptWidth, doc, 1 );
@@ -252,7 +252,7 @@ QRect KWFrame::outerRect() const
 KoRect KWFrame::outerKoRect() const
 {
     KoRect outerRect = *this;
-    KWDocument *doc = getFrameSet()->kWordDocument();
+    KWDocument *doc = frameSet()->kWordDocument();
 /*    outerRect.rLeft() -= brd_left.ptWidth;
     outerRect.rTop() -= brd_top.ptWidth;
     outerRect.rRight() += brd_right.ptWidth;
@@ -326,36 +326,36 @@ void KWFrame::save( QDomElement &frameElem )
     if(bottomBorder().style != KoBorder::SOLID)
         frameElem.setAttribute( "bStyle", static_cast<int>( bottomBorder().style ) );
 
-    if(getBackgroundColor().color().isValid())
+    if(backgroundColor().color().isValid())
     {
-        frameElem.setAttribute( "bkRed", getBackgroundColor().color().red() );
-        frameElem.setAttribute( "bkGreen", getBackgroundColor().color().green() );
-        frameElem.setAttribute( "bkBlue", getBackgroundColor().color().blue() );
-        frameElem.setAttribute( "bkStyle", (int)getBackgroundColor().style ());
+        frameElem.setAttribute( "bkRed", backgroundColor().color().red() );
+        frameElem.setAttribute( "bkGreen", backgroundColor().color().green() );
+        frameElem.setAttribute( "bkBlue", backgroundColor().color().blue() );
+        frameElem.setAttribute( "bkStyle", (int)backgroundColor().style ());
     }
-    if(getBLeft() != 0)
-        frameElem.setAttribute( "bleftpt", getBLeft() );
+    if(bLeft() != 0)
+        frameElem.setAttribute( "bleftpt", bLeft() );
 
-    if(getBRight()!=0)
-        frameElem.setAttribute( "brightpt", getBRight() );
+    if(bRight()!=0)
+        frameElem.setAttribute( "brightpt", bRight() );
 
-    if(getBTop()!=0)
-        frameElem.setAttribute( "btoppt", getBTop() );
+    if(bTop()!=0)
+        frameElem.setAttribute( "btoppt", bTop() );
 
-    if(getBBottom()!=0)
-        frameElem.setAttribute( "bbottompt", getBBottom() );
+    if(bBottom()!=0)
+        frameElem.setAttribute( "bbottompt", bBottom() );
 
-    if(getFrameBehaviour()!=AutoCreateNewFrame)
-        frameElem.setAttribute( "autoCreateNewFrame", static_cast<int>( getFrameBehaviour()) );
+    if(frameBehavior()!=AutoCreateNewFrame)
+        frameElem.setAttribute( "autoCreateNewFrame", static_cast<int>( frameBehavior()) );
 
-    //if(getNewFrameBehaviour()!=Reconnect) // always save this one, since the default value depends on the type of frame, etc.
-    frameElem.setAttribute( "newFrameBehaviour", static_cast<int>( getNewFrameBehaviour()) );
+    //if(newFrameBehavior()!=Reconnect) // always save this one, since the default value depends on the type of frame, etc.
+    frameElem.setAttribute( "newFrameBehavior", static_cast<int>( newFrameBehavior()) );
 
     //same reason
     frameElem.setAttribute( "copy", static_cast<int>( m_bCopy ) );
 
-    if(getSheetSide()!= AnySide)
-        frameElem.setAttribute( "sheetSide", static_cast<int>( getSheetSide()) );
+    if(sheetSide()!= AnySide)
+        frameElem.setAttribute( "sheetSide", static_cast<int>( sheetSide()) );
 }
 
 void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersion )
@@ -364,11 +364,11 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
     m_runAroundGap = ( frameElem.hasAttribute( "runaroundGap" ) )
                           ? frameElem.attribute( "runaroundGap" ).toDouble()
                           : frameElem.attribute( "runaGapPT" ).toDouble();
-    sheetSide = static_cast<SheetSide>( KWDocument::getAttribute( frameElem, "sheetSide", AnySide ) );
+    m_sheetSide = static_cast<SheetSide>( KWDocument::getAttribute( frameElem, "sheetSide", AnySide ) );
     frameBehaviour = static_cast<FrameBehaviour>( KWDocument::getAttribute( frameElem, "autoCreateNewFrame", AutoCreateNewFrame ) );
-    // Old documents had no "NewFrameBehaviour" for footers/headers -> default to Copy.
-    NewFrameBehaviour defaultValue = headerOrFooter ? Copy : Reconnect;
-    newFrameBehaviour = static_cast<NewFrameBehaviour>( KWDocument::getAttribute( frameElem, "newFrameBehaviour", defaultValue ) );
+    // Old documents had no "NewFrameBehavior" for footers/headers -> default to Copy.
+    NewFrameBehavior defaultValue = headerOrFooter ? Copy : Reconnect;
+    m_newFrameBehavior = static_cast<NewFrameBehavior>( KWDocument::getAttribute( frameElem, "newFrameBehavior", defaultValue ) );
 
     KoBorder l, r, t, b;
     l.ptWidth = KWDocument::getAttribute( frameElem, "lWidth", 0.0 );
@@ -421,11 +421,11 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
     brd_right = r;
     brd_top = t;
     brd_bottom = b;
-    backgroundColor = QBrush( c );
+    m_backgroundColor = QBrush( c );
 
 
     if( frameElem.hasAttribute("bkStyle"))
-        backgroundColor.setStyle (static_cast<Qt::BrushStyle>(KWDocument::getAttribute( frameElem, "bkStyle", Qt::SolidPattern )));
+        m_backgroundColor.setStyle (static_cast<Qt::BrushStyle>(KWDocument::getAttribute( frameElem, "bkStyle", Qt::SolidPattern )));
 
     bleft = frameElem.attribute( "bleftpt" ).toDouble();
     bright = frameElem.attribute( "brightpt" ).toDouble();
@@ -548,7 +548,7 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
     QRect frameRect( viewMode->normalToView( m_doc->zoomRect(  *frame ) ) );
 
     painter->save();
-    QBrush bgBrush( settingsFrame->getBackgroundColor() );
+    QBrush bgBrush( settingsFrame->backgroundColor() );
     bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
     painter->setBrush( bgBrush );
 
@@ -657,7 +657,7 @@ void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolder
         //if ( ! frameIt.current()->anchor() )
         {
             // Anchor this frame, after the previous one
-            KWAnchor * anchor = createAnchor( m_anchorTextFs->kwTextDocument(), getFrameFromPtr( frameIt.current() ) );
+            KWAnchor * anchor = createAnchor( m_anchorTextFs->kwTextDocument(), frameFromPtr( frameIt.current() ) );
             if ( !placeHolderExists )
                 parag->insert( index, KoTextObject::customItemChar() );
             parag->setCustomItem( index, anchor, 0 );
@@ -782,19 +782,19 @@ KWFrame * KWFrameSet::frameAtPos( double _x, double _y )
     return 0L;
 }
 
-KWFrame *KWFrameSet::getFrame( unsigned int _num )
+KWFrame *KWFrameSet::frame( unsigned int _num )
 {
     return frames.at( _num );
 }
 
-int KWFrameSet::getFrameFromPtr( KWFrame *frame )
+int KWFrameSet::frameFromPtr( KWFrame *frame )
 {
     return frames.findRef( frame );
 }
 
 KWFrame * KWFrameSet::settingsFrame(KWFrame* frame)
 {
-    QPtrListIterator<KWFrame> frameIt( frame->getFrameSet()->frameIterator() );
+    QPtrListIterator<KWFrame> frameIt( frame->frameSet()->frameIterator() );
     if ( !frame->isCopy() )
         return frame;
     KWFrame* lastRealFrame=0L;
@@ -948,7 +948,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                 p->translate( r.x() - icrect.x(), r.y() - icrect.y() ); // This assume that viewToNormal() is only a translation
                 p->setBrushOrigin( p->brushOrigin() + r.topLeft() - icrect.topLeft() );
 
-                QBrush bgBrush( settingsFrame->getBackgroundColor() );
+                QBrush bgBrush( settingsFrame->backgroundColor() );
                 bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
                 cg.setBrush( QColorGroup::Base, bgBrush );
 
@@ -1167,7 +1167,7 @@ bool KWFrameSet::isAWrongFooter( KoHFType t ) const
 bool KWFrameSet::isMainFrameset() const
 {
     return ( m_doc->processingType() == KWDocument::WP &&
-             m_doc->getFrameSet( 0 ) == this );
+             m_doc->frameSet( 0 ) == this );
 }
 
 bool KWFrameSet::isMoveable() const
@@ -1270,11 +1270,11 @@ void KWFrameSet::printDebug()
         printDebug( frame );
         kdDebug() << "     Rectangle : " << frame->x() << "," << frame->y() << " " << frame->width() << "x" << frame->height() << endl;
         kdDebug() << "     RunAround: "<< runaround[ frame->runAround() ] << endl;
-        kdDebug() << "     FrameBehaviour: "<< frameBh[ frame->getFrameBehaviour() ] << endl;
-        kdDebug() << "     NewFrameBehaviour: "<< newFrameBh[ frame->getNewFrameBehaviour() ] << endl;
-        QColor col = frame->getBackgroundColor().color();
+        kdDebug() << "     FrameBehaviour: "<< frameBh[ frame->frameBehavior() ] << endl;
+        kdDebug() << "     NewFrameBehavior: "<< newFrameBh[ frame->newFrameBehavior() ] << endl;
+        QColor col = frame->backgroundColor().color();
         kdDebug() << "     BackgroundColor: "<< ( col.isValid() ? col.name().latin1() : "(default)" ) << endl;
-        kdDebug() << "     SheetSide "<< frame->getSheetSide() << endl;
+        kdDebug() << "     SheetSide "<< frame->sheetSide() << endl;
         kdDebug() << "     minFrameHeight "<< frame->minFrameHeight() << endl;
         if(frame->isSelected())
             kdDebug() << " *   Page "<< frame->pageNum() << endl;
@@ -1290,7 +1290,7 @@ void KWFrameSet::printDebug( KWFrame * )
 #endif
 
 KWFrameSetEdit::KWFrameSetEdit( KWFrameSet * fs, KWCanvas * canvas )
-     : m_fs(fs), m_canvas(canvas), m_currentFrame( fs->getFrame(0) )
+     : m_fs(fs), m_canvas(canvas), m_currentFrame( fs->frame(0) )
 {
 }
 

@@ -58,14 +58,14 @@ void KWFootNoteManager::recalc()
 
 int KWFootNoteManager::findStart( KWFormatContext *_fc )
 {
-    if ( _fc->getFrameSet() > 1 )
+    if ( _fc->frameSet() > 1 )
         return -1;
 
     if ( footNotes.isEmpty() )
         return start;
 
-    KWFormatContext fc( doc, _fc->getFrameSet() );
-    fc.init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( _fc->getFrameSet() - 1 ) )->getFirstParag() );
+    KWFormatContext fc( doc, _fc->frameSet() );
+    fc.init( dynamic_cast<KWTextFrameSet*>( doc->frameSet( _fc->frameSet() - 1 ) )->getFirstParag() );
     int curr = start;
     KWParag *parag = fc.getParag();
     unsigned int found = 0;
@@ -131,7 +131,7 @@ void KWFootNoteManager::removeFootNote( KWFootNote *fn )
         if ( n == 0 ) {
             if ( footNotes.count() > 1 ) {
                 firstParag = footNotes.at( 1 )->getParag();
-                KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getLastParag();
+                KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->frameSet( 0 ) )->getLastParag();
 
                 while ( p && p->getParagName() != firstParag )
                     p = p->getPrev();
@@ -156,7 +156,7 @@ void KWFootNoteManager::addFootNoteText( KWFootNote *fn )
     if ( firstParag.isEmpty() )
         hardBreak = true;
 
-    KWTextFrameSet *frameSet = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) );
+    KWTextFrameSet *frameSet = dynamic_cast<KWTextFrameSet*>( doc->frameSet( 0 ) );
     KWParag *parag = frameSet->getLastParag();
     KWParag *next = 0, *op = parag;
 
@@ -339,7 +339,7 @@ void KWFootNote::updateDescription( int _start )
     if ( parag.isEmpty() )
         return;
 
-    KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getLastParag();
+    KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->frameSet( 0 ) )->getLastParag();
 
     while ( p && p->getParagName() != parag )
         p = p->getPrev();
@@ -362,7 +362,7 @@ void KWFootNote::makeTempNames()
     if ( parag.isEmpty() )
         return;
 
-    KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getLastParag();
+    KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->frameSet( 0 ) )->getLastParag();
 
     while ( p && p->getParagName() != parag )
         p = p->getPrev();
@@ -381,7 +381,7 @@ void KWFootNote::updateNames()
     if ( parag.isEmpty() )
         return;
 
-    KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getLastParag();
+    KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->frameSet( 0 ) )->getLastParag();
 
     while ( p && p->getParagName() != parag )
         p = p->getPrev();
@@ -400,7 +400,7 @@ void KWFootNote::destroy()
     if ( parag.isEmpty() )
         return;
 
-    KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getLastParag();
+    KWParag *p = dynamic_cast<KWTextFrameSet*>( doc->frameSet( 0 ) )->getLastParag();
 
     while ( p && p->getParagName() != parag )
         p = p->getPrev();

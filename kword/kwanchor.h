@@ -37,16 +37,19 @@ public:
     KWAnchor( KWTextDocument *textdoc, KWFrameSet * frameset, int frameNum );
     ~KWAnchor();
 
-    // The frameset and frame number anchored here
+    /** The frameset that will provide the content to display in this anchor object */
     KWFrameSet * frameSet() const { return m_frameset; }
+    /** The index the frameset needs to access which content is displayed in the anchor object */
     int frameNum() const { return m_frameNum; }
 
     /** Return the size of the item, i.e. the size of the frame (zoomed) */
     QSize size() const;
 
+    /* overloaded methods, see lib/kotext/kotextdocument.h for docu*/
     virtual void resize();
     virtual void move( int x, int y );
 
+    /* overloaded methods, see qrichtext_p.h for docu*/
     virtual Placement placement() const { return PlaceInline; }
     virtual bool ownLine() const;
     virtual int widthHint() const { return size().width(); }
@@ -63,8 +66,9 @@ public:
     virtual void save( QDomElement &formatElem );
 
 private:
-    KWFrameSet * m_frameset;
-    int m_frameNum;
+    KWFrameSet * m_frameset; // the frameset that implements the content for this special char.
+    int m_frameNum;          // the reference the frameset needs to identify the content in its
+                             // set of frames
 };
 
 #endif

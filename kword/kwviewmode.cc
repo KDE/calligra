@@ -243,7 +243,7 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
 
 KWTextFrameSet * KWViewModeText::textFrameSet() const
 {
-    KWFrameSet * fs = m_doc->getFrameSet( 0 );
+    KWFrameSet * fs = m_doc->frameSet( 0 );
     if ( !fs || fs->type() != FT_TEXT )
         return 0L;
     return static_cast<KWTextFrameSet *>(fs);

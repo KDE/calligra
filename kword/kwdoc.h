@@ -162,11 +162,11 @@ public:
     KoPageLayout pageLayout() const { return m_pageLayout; }
 
     // Return the frameset number @p _num
-    KWFrameSet *getFrameSet( unsigned int _num )
+    KWFrameSet *frameSet( unsigned int _num )
     { return frames.at( _num ); }
 
     // Return the frameset with a given name
-    KWFrameSet * getFrameSetByName( const QString & name );
+    KWFrameSet * frameSetByName( const QString & name );
 
     // Returns the frame under the mouse (or 0)
     // The bool border is true if the mouse is on a border, false if it's inside the frame
@@ -179,7 +179,7 @@ public:
     // Generate a new name for a frameset. @p templateName must contain a %1 [for a number].
     QString generateFramesetName( const QString & templateName );
 
-    // Prefer this over getFrameSet(i), if iterating over all of them
+    // Prefer this over frameSet(i), if iterating over all of them
     QPtrListIterator<KWFrameSet> framesetsIterator() const { return QPtrListIterator<KWFrameSet>(frames); }
     void addFrameSet( KWFrameSet *f, bool finalize = true );
     // Remove frameset from list (don't delete)
@@ -268,7 +268,7 @@ public:
     QCursor getMouseCursor( const QPoint& nPoint, bool controlPressed );
     QPtrList<KWFrame> getSelectedFrames();
     KWFrame *getFirstSelectedFrame();
-    int getFrameSetNum( KWFrameSet* fs ) { return frames.findRef( fs ); }
+    int frameSetNum( KWFrameSet* fs ) { return frames.findRef( fs ); }
 
     void updateAllFrames();
 
@@ -299,7 +299,7 @@ public:
     KoHFType getHeaderType() { return m_pageHeaderFooter.header; }
     KoHFType getFooterType() { return m_pageHeaderFooter.footer; }
 
-    void getFrameMargins( double &l, double &r, double &t, double &b );
+    void frameMargins( double &l, double &r, double &t, double &b );
     bool isOnlyOneFrameSelected();
     void setFrameMargins( double l, double r, double t, double b );
     void setFrameCoords( double x, double y, double w, double h );

@@ -95,7 +95,7 @@ void KWDocStructTableItem::slotDoubleClicked( QListViewItem *_item )
 {
     if ( _item == this )
     {
-        KWFrame *frame = table->getCell( 0, 0 )->getFrame( 0 );
+        KWFrame *frame = table->getCell( 0, 0 )->frame( 0 );
         gui->canvasWidget()->scrollToOffset( frame->topLeft() );
     }
 }
@@ -115,7 +115,7 @@ void KWDocStructPictureItem::slotDoubleClicked( QListViewItem *_item )
 {
     if ( _item == this )
     {
-        KWFrame *frame = pic->getFrame( 0 );
+        KWFrame *frame = pic->frame( 0 );
         gui->canvasWidget()->scrollToOffset( frame->topLeft() );
     }
 }
@@ -135,7 +135,7 @@ void KWDocStructFormulaItem::slotDoubleClicked( QListViewItem *_item )
 {
     if ( _item == this )
     {
-        KWFrame *frame = form->getFrame( 0 );
+        KWFrame *frame = form->frame( 0 );
         gui->canvasWidget()->scrollToOffset( frame->topLeft() );
     }
 }
@@ -155,7 +155,7 @@ void KWDocStructPartItem::slotDoubleClicked( QListViewItem *_item )
 {
     if ( _item == this )
     {
-        KWFrame *frame = part->getFrame( 0 );
+        KWFrame *frame = part->frame( 0 );
         gui->canvasWidget()->scrollToOffset( frame->topLeft() );
     }
 }
@@ -261,7 +261,7 @@ void KWDocStructRootItem::setupArrangement()
 
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
-        frameset = doc->getFrameSet( i );
+        frameset = doc->frameSet( i );
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->getGroupManager() && frameset->getNumFrames()>0)
         {
             item = new QListViewItem( this, frameset->getName() );
@@ -323,7 +323,7 @@ void KWDocStructRootItem::setupTextFrames()
 
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
-        frameset = doc->getFrameSet( i );
+        frameset = doc->frameSet( i );
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->getGroupManager() && frameset->getNumFrames()>0)
         {
             item = new QListViewItem( this, frameset->getName() );
@@ -339,7 +339,7 @@ void KWDocStructRootItem::setupTextFrames()
                 }
                 else
                     _name=i18n( "Text Frame %1" ).arg(QString::number(j + 1));
-                child = new KWDocStructFrameItem( item, _name, frameset, frameset->getFrame( j ), gui );
+                child = new KWDocStructFrameItem( item, _name, frameset, frameset->frame( j ), gui );
                 QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
             }
         }
@@ -369,7 +369,7 @@ void KWDocStructRootItem::setupFormulaFrames()
 
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
-        frameset = doc->getFrameSet( i );
+        frameset = doc->frameSet( i );
         if ( frameset->type() == FT_FORMULA &&
             frameset->getNumFrames()>0  )
         {
@@ -402,7 +402,7 @@ void KWDocStructRootItem::setupTables()
 
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
-        KWFrameSet *fs = doc->getFrameSet(i);
+        KWFrameSet *fs = doc->frameSet(i);
         if ( fs->type() != FT_TABLE)
             continue;
         KWTableFrameSet *tfs = static_cast<KWTableFrameSet *> (fs);
@@ -439,7 +439,7 @@ void KWDocStructRootItem::setupPictures()
     int j = 0;
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
-        frameset = doc->getFrameSet( i );
+        frameset = doc->frameSet( i );
         if ( frameset->type() == FT_PICTURE && frameset->getNumFrames()>0)
         {
             _name=i18n("Picture (%1) %2").arg(dynamic_cast<KWPictureFrameSet*>( frameset )->key().filename()).arg(++j);
@@ -476,7 +476,7 @@ void KWDocStructRootItem::setupEmbedded()
 
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
-        frameset = doc->getFrameSet( i );
+        frameset = doc->frameSet( i );
         if ( frameset->type() == FT_PART && frameset->getNumFrames()>0)
         {
             // Use the name of the frameset as the entry for the object.

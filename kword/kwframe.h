@@ -107,7 +107,7 @@ public:
     /** what should happen when the frame is full */
     enum FrameBehaviour { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
 
-    FrameBehaviour getFrameBehaviour() { return frameBehaviour; }
+    FrameBehaviour frameBehavior() { return frameBehaviour; }
     void setFrameBehaviour( FrameBehaviour fb ) { frameBehaviour = fb; }
 
     /* Frame duplication properties */
@@ -116,21 +116,21 @@ public:
      *   AnySide, OddSide or EvenSide
      */
     enum SheetSide { AnySide=0, OddSide=1, EvenSide=2};
-    SheetSide getSheetSide() { return sheetSide; }
-    void setSheetSide( SheetSide ss ) { sheetSide = ss; }
+    SheetSide sheetSide() { return m_sheetSide; }
+    void setSheetSide( SheetSide ss ) { m_sheetSide = ss; }
 
     /** What happens on new page (create a new frame and reconnect, no followup, make copy) */
-    enum NewFrameBehaviour { Reconnect=0, NoFollowup=1, Copy=2 };
-    NewFrameBehaviour getNewFrameBehaviour() { return newFrameBehaviour; }
-    void setNewFrameBehaviour( NewFrameBehaviour nfb ) { newFrameBehaviour = nfb; }
+    enum NewFrameBehavior { Reconnect=0, NoFollowup=1, Copy=2 };
+    NewFrameBehavior newFrameBehavior() { return m_newFrameBehavior; }
+    void setNewFrameBehavior( NewFrameBehavior nfb ) { m_newFrameBehavior = nfb; }
 
     /** Drawing property: if isCopy, this frame is a copy of the previous frame in the frameset */
     bool isCopy() { return m_bCopy; }
     void setCopy( bool copy ) { m_bCopy = copy; }
 
     /* Data stucture methods */
-    KWFrameSet *getFrameSet() const { return frameSet; }
-    void setFrameSet( KWFrameSet *fs ) { frameSet = fs; }
+    KWFrameSet *frameSet() const { return m_frameSet; }
+    void setFrameSet( KWFrameSet *fs ) { m_frameSet = fs; }
 
     /* The page on which this frame is (0 based)*/
     int pageNum() const;
@@ -162,8 +162,8 @@ public:
     void updateResizeHandles();
     void updateRulerHandles();
 
-    QBrush getBackgroundColor() const { return backgroundColor; }
-    void setBackgroundColor( QBrush _color ) { backgroundColor = _color; }
+    QBrush backgroundColor() const { return m_backgroundColor; }
+    void setBackgroundColor( QBrush _color ) { m_backgroundColor = _color; }
 
     // For text frames only
     void setInternalY( int y ) { m_internalY = y; }
@@ -179,13 +179,13 @@ public:
     void setBBottom( double b ) { bbottom = b; }
 
     /** get left margin size */
-    double getBLeft() { return bleft; }
+    double bLeft() { return bleft; }
     /** get right margin size */
-    double getBRight() { return bright; }
+    double bRight() { return bright; }
     /** get top margin size */
-    double getBTop() { return btop; }
+    double bTop() { return btop; }
     /** get bottom margin size */
-    double getBBottom() { return bbottom; }
+    double bBottom() { return bbottom; }
 
     /** returns a copy of self */
     KWFrame *getCopy();
@@ -201,10 +201,10 @@ public:
     double minFrameHeight(void) {return m_minFrameHeight;}
 
 private:
-    SheetSide sheetSide;
+    SheetSide m_sheetSide;
     RunAround m_runAround;
     FrameBehaviour frameBehaviour;
-    NewFrameBehaviour newFrameBehaviour;
+    NewFrameBehavior m_newFrameBehavior;
     double m_runAroundGap;
     double bleft, bright, btop, bbottom; // margins
 
@@ -213,11 +213,11 @@ private:
     int m_internalY; // for text frames only
     double m_minFrameHeight;
 
-    QBrush backgroundColor;
+    QBrush m_backgroundColor;
     KoBorder brd_left, brd_right, brd_top, brd_bottom;
 
     QPtrList<KWResizeHandle> handles;
-    KWFrameSet *frameSet;
+    KWFrameSet *m_frameSet;
 
     // Prevent operator= and copy constructor
     KWFrame &operator=( const KWFrame &_frame );
@@ -304,7 +304,7 @@ public:
 
     virtual FrameSetType type() { return FT_BASE; }
 
-    virtual void addTextFramesets( QPtrList<KWTextFrameSet> & /*lst*/ ) {};
+    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/ ) {};
 
     /** The different types of textFramesets (that TEXT is important here!)
      * FI_BODY = normal text frames.<br>
@@ -345,7 +345,7 @@ public:
     virtual KWFrame *frameByBorder( const QPoint & nPoint );
 
     /** get a frame by number */
-    KWFrame *getFrame( unsigned int _num );
+    KWFrame *frame( unsigned int _num );
 
     /** get the frame whose settings apply for @p frame
         (usually @p frame, but can also be the real frame if frame is a copy) */
@@ -354,7 +354,7 @@ public:
     /* Iterator over the child frames */
     const QPtrList<KWFrame> &frameIterator() const { return frames; }
     /* Get frame number */
-    int getFrameFromPtr( KWFrame *frame );
+    int frameFromPtr( KWFrame *frame );
     /* Get number of child frames */
     unsigned int getNumFrames() const { return frames.count(); }
 

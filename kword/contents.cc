@@ -238,7 +238,7 @@ KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int dept
         {
             KoTabulatorList tabList;
             KoTabulator tab;
-            tab.ptPos = fs->getFrame( 0 )->width() - 10; // not sure why that much is necessary....
+            tab.ptPos = fs->frame( 0 )->width() - 10; // not sure why that much is necessary....
             tab.type = T_RIGHT;
             tabList.append( tab );
             style->paragLayout().setTabList( tabList );

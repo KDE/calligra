@@ -118,11 +118,11 @@ void KWResizeHandle::mousePressEvent( QMouseEvent *e )
     KWFrame *frm = 0;
 
     // Deselect all other frames
-    KWDocument * doc = frame->getFrameSet()->kWordDocument();
+    KWDocument * doc = frame->frameSet()->kWordDocument();
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
-        fs = doc->getFrameSet( i );
+        fs = doc->frameSet( i );
         for ( unsigned int j = 0; j < fs->getNumFrames(); ++j ) {
-            frm = fs->getFrame( j );
+            frm = fs->frame( j );
             if ( frame->isSelected() && frm != frame )
                 frm->setSelected( FALSE );
         }
@@ -146,7 +146,7 @@ void KWResizeHandle::mouseReleaseEvent( QMouseEvent *e )
 
 void KWResizeHandle::updateGeometry()
 {
-    //KWDocument * doc = frame->getFrameSet()->kWordDocument();
+    //KWDocument * doc = frame->frameSet()->kWordDocument();
     QRect newRect( frame->outerRect() );
     QRect frameRect( m_canvas->viewMode()->normalToView( newRect ) );
     switch ( direction ) {
@@ -183,7 +183,7 @@ void KWResizeHandle::updateGeometry()
 
 bool KWResizeHandle::isResizingEnabled() const
 {
-    KWFrameSet *fs = frame->getFrameSet();
+    KWFrameSet *fs = frame->frameSet();
     if ( !fs )
     {
         kdWarning() << "KWResizeHandle: Frame has been deleted !  " << frame << endl;
@@ -196,12 +196,12 @@ bool KWResizeHandle::isResizingEnabled() const
     // Headers and footer are resizable only in some directions
     // and only if not in auto-resize mode
     if ( fs->isAHeader() &&
-         ( frame->getFrameBehaviour() == KWFrame::AutoExtendFrame ||
+         ( frame->frameBehavior() == KWFrame::AutoExtendFrame ||
            ( direction != Down && direction != LeftDown && direction != RightDown ) ) )
         return false;
 
     if ( fs->isAFooter() &&
-         ( frame->getFrameBehaviour() == KWFrame::AutoExtendFrame ||
+         ( frame->frameBehavior() == KWFrame::AutoExtendFrame ||
            ( direction != Up && direction != LeftUp && direction != RightUp ) ) )
         return false;
 

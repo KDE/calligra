@@ -89,12 +89,12 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
     : KDialogBase( Tabbed, i18n("Frame settings"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
     frame = _frame;
-    KWFrameSet * fs = frame->getFrameSet();
+    KWFrameSet * fs = frame->frameSet();
     KWTableFrameSet *table = fs->getGroupManager();
     if(table)
         frameType = table->type();
     else
-        frameType = frame->getFrameSet() ? frame->getFrameSet()->type() : (FrameSetType) -1;
+        frameType = frame->frameSet() ? frame->frameSet()->type() : (FrameSetType) -1;
     // parentFs is the table in case of a table, fs otherwise
     KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
     frameSetFloating = parentFs->isFloating();
@@ -119,7 +119,7 @@ void KWFrameDia::init() {
     if (frame) {
         KoRect r = frame->normalize();
         frame->setRect( r.x(), r.y(), r.width(), r.height() );
-        KWFrameSet *fs = frame->getFrameSet(); // 0 when creating a frame
+        KWFrameSet *fs = frame->frameSet(); // 0 when creating a frame
         if(!doc && fs)
         {
             doc = fs->kWordDocument();
@@ -149,7 +149,7 @@ void KWFrameDia::init() {
             setupTab3();
             setupTab4();
             setupTab5();
-            if(! frame->getFrameSet()) // first creation
+            if(! frame->frameSet()) // first creation
                 showPage(2);
         }
         else if(frameType == FT_PICTURE || frameType == FT_CLIPART)
@@ -200,7 +200,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     grid1->addWidget(cbCopy,1,0);
 
     cbCopy->setChecked( frame->isCopy() );
-    cbCopy->setEnabled( frame->getFrameSet() && frame->getFrameSet()->getFrame( 0 ) != frame ); // First one can't be a copy
+    cbCopy->setEnabled( frame->frameSet() && frame->frameSet()->frame( 0 ) != frame ); // First one can't be a copy
     // Well, for images, formulas etc. it doesn't make sense to deactivate 'is copy'. What else would it show ?
     if(frameType!=FT_TEXT)
         cbCopy->setEnabled( false );
@@ -212,8 +212,8 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     if(frameType==FT_PICTURE)
     {
         cbAspectRatio = new QCheckBox (i18n("Retain original aspect ratio"),tab1);
-        if ( frame->getFrameSet() )
-            cbAspectRatio->setChecked( static_cast<KWPictureFrameSet *>( frame->getFrameSet() )->keepAspectRatio() );
+        if ( frame->frameSet() )
+            cbAspectRatio->setChecked( static_cast<KWPictureFrameSet *>( frame->frameSet() )->keepAspectRatio() );
         else
             cbAspectRatio->setChecked( true );
         grid1->addWidget(cbAspectRatio, row, 0);
@@ -247,9 +247,9 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
         eofGrid->addRowSpacing( 0, KDialog::marginHint() + 5 );
 
-        if(frame->getFrameBehaviour() == KWFrame::AutoExtendFrame) {
+        if(frame->frameBehavior() == KWFrame::AutoExtendFrame) {
             rResizeFrame->setChecked(true);
-        } else if (frame->getFrameBehaviour() == KWFrame::AutoCreateNewFrame) {
+        } else if (frame->frameBehavior() == KWFrame::AutoCreateNewFrame) {
             rAppendFrame->setChecked(true);
         } else {
             rNoShow->setChecked(true);
@@ -262,7 +262,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         rNoShow = 0L;
     }
 
-    // NewFrameBehaviour - now for all type of frames
+    // NewFrameBehavior - now for all type of frames
     onNewPage = new QGroupBox(i18n("On new page creation:"),tab1);
     grid1->addWidget( onNewPage, row, column );
 
@@ -292,9 +292,9 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     grp2->insert( noFollowup );
     grp2->insert( copyRadio );
     grid1->addRowSpacing( row, onNewPage->height());
-    if(frame->getNewFrameBehaviour() == KWFrame::Reconnect) {
+    if(frame->newFrameBehavior() == KWFrame::Reconnect) {
         reconnect->setChecked(true);
-    } else if(frame->getNewFrameBehaviour() == KWFrame::NoFollowup) {
+    } else if(frame->newFrameBehavior() == KWFrame::NoFollowup) {
         noFollowup->setChecked(true);
     } else {
         copyRadio->setChecked(true);
@@ -475,7 +475,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     lFrameSList->header()->setMovingEnabled( false );
 
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
-        KWFrameSet * fs = doc->getFrameSet( i );
+        KWFrameSet * fs = doc->frameSet( i );
         if ( i == 0 && doc->processingType() == KWDocument::WP )
             continue;
         if ( fs->type() != FT_TEXT || fs->isHeaderOrFooter() )
@@ -487,16 +487,16 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
         QListViewItem *item = new QListViewItem( lFrameSList );
         item->setText( 0, QString( "%1" ).arg( i + 1 ) );
         item->setText( 1, fs->getName() );
-        if( frame->getFrameSet() == fs )
+        if( frame->frameSet() == fs )
             lFrameSList->setSelected(item, TRUE );
     }
 
     // We now create this item (new frameset) in all cases, to allow disconnect+createnew
-    //if (! frame->getFrameSet()) {
+    //if (! frame->frameSet()) {
         QListViewItem *item = new QListViewItem( lFrameSList );
         item->setText( 0, QString( "*%1" ).arg( doc->getNumFrameSets()+1 ) );
         item->setText( 1, i18n( "Create a new frameset with this frame" ) );
-    if (! frame->getFrameSet()) {
+    if (! frame->frameSet()) {
         lFrameSList->setSelected( lFrameSList->firstChild(), TRUE );
     }
 
@@ -506,7 +506,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
 
     QHBox *row = new QHBox( tab3 );
     row->setSpacing( 5 );
-    if (! frame->getFrameSet())
+    if (! frame->frameSet())
     {
         ( void )new QLabel( i18n( "Name of new frameset:" ), row );
         oldFrameSetName = doc->generateFramesetName( i18n( "Text Frameset %1" ) );
@@ -514,7 +514,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     else
     {
         ( void )new QLabel( i18n( "Name of frameset:" ), row );
-        oldFrameSetName = frame->getFrameSet()->getName();
+        oldFrameSetName = frame->frameSet()->getName();
     }
     eFrameSetName = new QLineEdit( row );
     eFrameSetName->setText( oldFrameSetName );
@@ -687,7 +687,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     /// ##### grid4->addWidget( grp2, ++row, 0 );
 
     double l, r, t, b;
-    doc->getFrameMargins( l, r, t, b );
+    doc->frameMargins( l, r, t, b );
     sml->setText( QString::number( QMAX(0.00,KoUnit::userValue( l, doc->getUnit() ) ) ));
     smr->setText( QString::number( QMAX(0.00,KoUnit::userValue( r, doc->getUnit() ) ) ));
     smt->setText( QString::number( QMAX(0.00,KoUnit::userValue( t, doc->getUnit() ) ) ));
@@ -704,7 +704,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     bool disable = false;
     // Only one frame selected, or when creating a frame -> enable coordinates
-    if ( doc->isOnlyOneFrameSelected() || !frame->getFrameSet() )
+    if ( doc->isOnlyOneFrameSelected() || !frame->frameSet() )
     {
 	// Can't use frame->pageNum() here since frameset might be 0
 	int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
@@ -724,7 +724,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         oldW = sw->text().toDouble();
         oldH = sh->text().toDouble();
 
-        KWFrameSet * fs = frame->getFrameSet();
+        KWFrameSet * fs = frame->frameSet();
         if ( fs && fs->getGroupManager() )
             floating->setText( i18n( "Table is inline" ) );
 
@@ -804,12 +804,12 @@ void KWFrameDia::setupTab5()
 void KWFrameDia::initComboStyleBrush()
 {
     if ( frame )
-        newBrushStyle = frame->getBackgroundColor();
+        newBrushStyle = frame->backgroundColor();
     else
     {
         KWFrame *firstFrame = doc->getFirstSelectedFrame();
         if ( firstFrame )
-            newBrushStyle = frame->getBackgroundColor();
+            newBrushStyle = frame->backgroundColor();
     }
 
     switch ( newBrushStyle.style() )
@@ -1038,7 +1038,7 @@ void KWFrameDia::enableOnNewPageOptions()
             reconnect->setEnabled( false );
         else
         {
-            KWFrameSet *fs = frame->getFrameSet(); // 0 when creating a frame
+            KWFrameSet *fs = frame->frameSet(); // 0 when creating a frame
             if ( fs && fs->isHeaderOrFooter() )
             {
                 reconnect->setEnabled( false );
@@ -1056,7 +1056,7 @@ void KWFrameDia::enableRunAround()
             runGroup->setEnabled( false ); // Runaround options don't make sense for floating frames
         else
         {
-            KWFrameSet *fs = frame->getFrameSet();
+            KWFrameSet *fs = frame->frameSet();
             if ( fs )
                 runGroup->setEnabled( !frameSetFloating && !fs->isMainFrameset() && !fs->isHeaderOrFooter() );
             else
@@ -1072,7 +1072,7 @@ bool KWFrameDia::applyChanges()
     if ( !frame )
         return false;
     KWFrame *frameCopy = frame->getCopy(); // keep a copy of the original (for undo/redo)
-    bool isNewFrame = frame->getFrameSet() == 0L; // true if we are creating a new frame
+    bool isNewFrame = frame->frameSet() == 0L; // true if we are creating a new frame
     if ( tab3 )
     {
         // Frame/Frameset belonging, and frameset naming
@@ -1087,7 +1087,7 @@ bool KWFrameDia::applyChanges()
         if ( createFrameset )
             str.remove( 0, 1 );
         int _num = str.toInt() - 1;
-        KWFrameSet * fs = frame->getFrameSet();
+        KWFrameSet * fs = frame->frameSet();
 
         QString name = eFrameSetName->text();
         if ( name.isEmpty() ) // Don't allow empty names
@@ -1120,7 +1120,7 @@ bool KWFrameDia::applyChanges()
         // Third case (changing frame attachment)
         if ( fs &&
              ! (static_cast<unsigned int>( _num ) < doc->getNumFrameSets() &&
-                fs == doc->getFrameSet(_num)))
+                fs == doc->frameSet(_num)))
         {
             // Check if last frame
             if ( fs->getNumFrames() == 1 )
@@ -1151,7 +1151,7 @@ bool KWFrameDia::applyChanges()
         }
         // Do not use 'fs' past this, the above might have changed the frame's frameset
 
-        if(frame->getFrameSet() == 0L) { // if there is no frameset (anymore)
+        if(frame->frameSet() == 0L) { // if there is no frameset (anymore)
             if ( createFrameset )
             {
                 kdDebug() << "KWFrameDia::applyChanges creating a new frameset" << endl;
@@ -1165,7 +1165,7 @@ bool KWFrameDia::applyChanges()
             {
                 kdDebug() << "KWFrameDia::applyChanges attaching to frameset " << _num << endl;
                 // attach frame to frameset number _num
-                KWFrameSet * newFs = doc->getFrameSet( _num );
+                KWFrameSet * newFs = doc->frameSet( _num );
                 Q_ASSERT( newFs );
                 newFs->addFrame( frame );
                 // TODO undo/redo ?
@@ -1174,10 +1174,10 @@ bool KWFrameDia::applyChanges()
         else
         {
             // Rename frameset
-            KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Rename frameset"), frame->getFrameSet(), KWFrameSetPropertyCommand::FSP_NAME, name );
+            KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Rename frameset"), frame->frameSet(), KWFrameSetPropertyCommand::FSP_NAME, name );
             doc->addCommand(cmd);
 	    cmd->execute();
-            //frame->getFrameSet()->setName( name );
+            //frame->frameSet()->setName( name );
         }
     }
 
@@ -1198,16 +1198,16 @@ bool KWFrameDia::applyChanges()
                 frame->setFrameBehaviour(KWFrame::Ignore);
         }
 
-        // NewFrameBehaviour
+        // NewFrameBehavior
         if( reconnect && reconnect->isChecked() )
-            frame->setNewFrameBehaviour(KWFrame::Reconnect);
+            frame->setNewFrameBehavior(KWFrame::Reconnect);
         else if ( noFollowup->isChecked() )
-            frame->setNewFrameBehaviour(KWFrame::NoFollowup);
+            frame->setNewFrameBehavior(KWFrame::NoFollowup);
         else
-            frame->setNewFrameBehaviour(KWFrame::Copy);
+            frame->setNewFrameBehavior(KWFrame::Copy);
 
-        if ( cbAspectRatio && frame->getFrameSet() )
-            static_cast<KWPictureFrameSet *>( frame->getFrameSet() )->setKeepAspectRatio( cbAspectRatio->isChecked() );
+        if ( cbAspectRatio && frame->frameSet() )
+            static_cast<KWPictureFrameSet *>( frame->frameSet() )->setKeepAspectRatio( cbAspectRatio->isChecked() );
     }
     if ( tab2 )
     {
@@ -1225,7 +1225,7 @@ bool KWFrameDia::applyChanges()
     if(tab5)
     {
         QBrush tmpBrush=frameBrushStyle();
-        if(tmpBrush!=frame->getBackgroundColor())
+        if(tmpBrush!=frame->backgroundColor())
         {
             frame->setBackgroundColor(tmpBrush);
             doc->repaintAllViews();
@@ -1236,11 +1236,11 @@ bool KWFrameDia::applyChanges()
     // Undo/redo for frame properties
     if(!isNewFrame && (
                       frameCopy->isCopy()!=frame->isCopy()
-                   || frameCopy->getFrameBehaviour()!=frame->getFrameBehaviour()
-                   || frameCopy->getNewFrameBehaviour()!=frame->getNewFrameBehaviour())
+                   || frameCopy->frameBehavior()!=frame->frameBehavior()
+                   || frameCopy->newFrameBehavior()!=frame->newFrameBehavior())
                    || frameCopy->runAround()!=frame->runAround()
                    || frameCopy->runAroundGap()!=frame->runAroundGap()
-                   || (tab5 && frameCopy->getBackgroundColor()!=frameBrushStyle()))
+                   || (tab5 && frameCopy->backgroundColor()!=frameBrushStyle()))
     {
         if(!macroCmd)
             macroCmd = new KMacroCommand( i18n("Frame Properties") );
@@ -1256,7 +1256,7 @@ bool KWFrameDia::applyChanges()
     if ( tab4 )
     {
         // The floating attribute applies to the whole frameset...
-        KWFrameSet * fs = frame->getFrameSet();
+        KWFrameSet * fs = frame->frameSet();
         KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
 
         // Floating
@@ -1299,7 +1299,7 @@ bool KWFrameDia::applyChanges()
 
         if ( doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
                                                 ( doc->processingType() == KWDocument::WP &&
-                                                  doc->getFrameSetNum( frame->getFrameSet() ) > 0 ) ) ) {
+                                                  doc->frameSetNum( frame->frameSet() ) > 0 ) ) ) {
             if ( oldX != sx->text().toDouble() || oldY != sy->text().toDouble() || oldW != sw->text().toDouble() || oldH != sh->text().toDouble() ) {
                 //kdDebug() << "Old geom: " << oldX << ", " << oldY<< " " << oldW << "x" << oldH << endl;
                 //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
@@ -1386,12 +1386,12 @@ void KWFrameDia::connectListSelected( QListViewItem *item )
         // Allow naming new frameset
         eFrameSetName->setEnabled( TRUE );
     }
-    else if ( frame && frame->getFrameSet() )
+    else if ( frame && frame->frameSet() )
     {
         int _num = str.toInt() - 1;
         // Allow renaming an existing frameset
         // ( Disabled when changing the frameset connection )
-        eFrameSetName->setEnabled( doc->getFrameSet( _num ) == frame->getFrameSet() );
+        eFrameSetName->setEnabled( doc->frameSet( _num ) == frame->frameSet() );
     }
     else
         eFrameSetName->setEnabled( FALSE );

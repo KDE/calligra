@@ -340,7 +340,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
                                 QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                 KWFrameSetEdit *edit )
 {
-    //kdDebug() << "KWTextFrameSet::drawFrame " << getName() << "(frame " << getFrameFromPtr( frame ) << ") crect(r)=" << DEBUGRECT( r ) << endl;
+    //kdDebug() << "KWTextFrameSet::drawFrame " << getName() << "(frame " << frameFromPtr( frame ) << ") crect(r)=" << DEBUGRECT( r ) << endl;
     m_currentDrawnFrame = frame;
     // Update variables for each frame (e.g. for page-number)
     // If more than KWPgNumVariable need this functionality, create an intermediary base class
@@ -482,7 +482,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
 
             QPixmap *pix = 0;
             QColorGroup cg = QApplication::palette().active();
-            QBrush bgBrush( settings->getBackgroundColor() );
+            QBrush bgBrush( settings->backgroundColor() );
             bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
             cg.setBrush( QColorGroup::Base, bgBrush );
 
@@ -914,7 +914,7 @@ int KWTextFrameSet::formatVertically( Qt3::QTextParag * _parag )
         int bottom = totalHeight + frameHeight;
         // Only skip bottom of frame if there is a next one or if there'll be another one created.
         // ( Not for header/footer, for instance. )
-        bool check = frameIt.atLast() && frameIt.current()->getFrameBehaviour() == KWFrame::AutoCreateNewFrame;
+        bool check = frameIt.atLast() && frameIt.current()->frameBehavior() == KWFrame::AutoCreateNewFrame;
         if ( !check )
         {
             // ## TODO optimize this [maybe we should simply start from the end in the main loop?]
@@ -1533,7 +1533,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastForma
         }
 
         double wantedPosition = 0;
-        switch ( frames.last()->getFrameBehaviour() ) {
+        switch ( frames.last()->frameBehavior() ) {
         case KWFrame::AutoExtendFrame:
         {
             int difference = ( bottom + 2 ) - availHeight; // in layout units
@@ -1552,7 +1552,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastForma
                 // There's no point in resizing a copy, so go back to the last non-copy frame
                 KWFrame *theFrame = settingsFrame( frames.last() );
 
-                if ( theFrame->getFrameSet()->isAFooter() )
+                if ( theFrame->frameSet()->isAFooter() )
                 {
                     double maxFooterSize = footerHeaderSizeMax(  theFrame );
                     wantedPosition = theFrame->top() - m_doc->layoutUnitToPt( difference );
@@ -1569,7 +1569,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastForma
                 pageBottom -= m_doc->ptBottomBorder();
                 double newPosition = QMIN( wantedPosition, pageBottom );
 
-                if ( theFrame->getFrameSet()->isAHeader() )
+                if ( theFrame->frameSet()->isAHeader() )
                 {
                     double maxHeaderSize=footerHeaderSizeMax(  theFrame );
                     newPosition = QMIN( newPosition, maxHeaderSize+theFrame->top() );
@@ -1586,13 +1586,13 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastForma
                     theFrame->setBottom(newPosition);
                 }
 
-                if(newPosition < wantedPosition && (theFrame->getNewFrameBehaviour() == KWFrame::NoFollowup)) {
+                if(newPosition < wantedPosition && (theFrame->newFrameBehavior() == KWFrame::NoFollowup)) {
                     if ( resized )
                         frameResized( theFrame );
                     m_textobj->setLastFormattedParag( 0 );
                     break;
                 }
-                if(newPosition < wantedPosition && theFrame->getNewFrameBehaviour() == KWFrame::Reconnect) {
+                if(newPosition < wantedPosition && theFrame->newFrameBehavior() == KWFrame::Reconnect) {
                     wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
                     // fall through to AutoCreateNewFrame
                 } else {
@@ -1681,7 +1681,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastForma
     // Handle the case where the last frame is in AutoExtendFrame mode
     // and there is less text than space
     else if ( !lastFormatted && bottom + 2 < availHeight &&
-              frames.last()->getFrameBehaviour() == KWFrame::AutoExtendFrame )
+              frames.last()->frameBehavior() == KWFrame::AutoExtendFrame )
     {
         // The + 2 here leaves 2 pixels below the last line. Without it we hit
         // the "break at end of frame" case in formatVertically (!!).
@@ -1689,7 +1689,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastForma
         kdDebug(32002) << "formatMore less text than space (AutoExtendFrame) difference=" << difference << endl;
         // There's no point in resizing a copy, so go back to the last non-copy frame
         KWFrame *theFrame = settingsFrame( frames.last() );
-        if ( theFrame->getFrameSet()->isAFooter() )
+        if ( theFrame->frameSet()->isAFooter() )
         {
             double wantedPosition = theFrame->top() + m_doc->layoutUnitToPt( difference );
             if ( wantedPosition != theFrame->top() )
@@ -1718,7 +1718,7 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
 {
     double tmp =m_doc->ptPaperHeight()-m_doc->ptBottomBorder()-m_doc->ptTopBorder()-40;//default min 40 for page size
     int page = theFrame->pageNum();
-    bool header=theFrame->getFrameSet()->isAHeader();
+    bool header=theFrame->frameSet()->isAHeader();
     if( header ? m_doc->isHeaderVisible():m_doc->isFooterVisible() )
     {
         QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
@@ -1727,7 +1727,7 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
             bool state = header ? fit.current()->isAFooter():fit.current()->isAHeader();
             if(fit.current()->isVisible() && state)
             {
-                KWFrame * frm=fit.current()->getFrame( 0 );
+                KWFrame * frm=fit.current()->frame( 0 );
                 if(frm->pageNum()==page )
                     return (tmp-frm->height());
             }
@@ -1739,10 +1739,10 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
 void KWTextFrameSet::frameResized( KWFrame *theFrame )
 {
     kdDebug() << "KWTextFrameSet::frameResized " << theFrame << endl;
-    if ( theFrame->getFrameSet()->frameSetInfo() != KWFrameSet::FI_BODY )
+    if ( theFrame->frameSet()->frameSetInfo() != KWFrameSet::FI_BODY )
         m_doc->recalcFrames();
 
-    KWTableFrameSet *table = theFrame->getFrameSet()->getGroupManager();
+    KWTableFrameSet *table = theFrame->frameSet()->getGroupManager();
     if ( table )
     {
         KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)this;
@@ -1768,12 +1768,12 @@ bool KWTextFrameSet::isFrameEmpty( KWFrame * frame )
     ensureFormatted( lastParag );
     int bottom = lastParag->rect().top() + lastParag->rect().height();
 
-    if ( frame->getFrameSet() == this ) // safety check
+    if ( frame->frameSet() == this ) // safety check
         return bottom < frame->internalY();
 
     kdWarning() << "KWTextFrameSet::isFrameEmpty called for frame " << frame << " which isn't a child of ours!" << endl;
-    if ( frame->getFrameSet() )
-        kdDebug() << "(this is " << getName() << " and the frame belongs to " << frame->getFrameSet()->getName() << ")" << endl;
+    if ( frame->frameSet() )
+        kdDebug() << "(this is " << getName() << " and the frame belongs to " << frame->frameSet()->getName() << ")" << endl;
     return false;
 }
 
@@ -1790,7 +1790,7 @@ bool KWTextFrameSet::canRemovePage( int num )
     {
         KWFrame * frame = frameIt.current();
         Q_ASSERT( frame->pageNum() == num );
-        Q_ASSERT( frame->getFrameSet() == this );
+        Q_ASSERT( frame->frameSet() == this );
         bool isEmpty = isFrameEmpty( frame );
 #ifdef DEBUG_FORMAT_MORE
         kdDebug() << "KWTextFrameSet(" << getName() << ")::canRemovePage"

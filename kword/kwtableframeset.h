@@ -91,7 +91,7 @@ public:
 
     virtual FrameSetType type() { return FT_TABLE; }
 
-    virtual void addTextFramesets( QPtrList<KWTextFrameSet> & /*lst*/ );
+    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/ );
 
     // constructors
     KWTableFrameSet( KWDocument *_doc, const QString & name );
@@ -119,29 +119,23 @@ public:
     Cell *getCell( unsigned int row, unsigned int col );
     Cell *getCellByPos( double x, double y );
 
-    /** first row and auto-added rows are the table headers.
-    * @returns if this frameset is either one.
-    */
-    bool isTableHeader( Cell *cell );
-
     enum CellSize {
         TblAuto = 0,
         TblManual
     };
 
     /**
-     * Layout all cells:
-     *
-     *  setHeightMode() and setWidthMode() controls the layout process.
-     *  setBoundingRect() causes the layout to recalculated.
-     *  boundingRect() returns a KoRect which outlines the whole of the table.
+     * Calculate the absolute size of the complete table. 
+     *  From the first cell to the last, including page breaks et.
+     *  @return KoRect which outlines the whole of the table.
      */
-    CellSize heightMode() { return m_heightMode; }
-    void setHeightMode( CellSize mode );
-    CellSize widthMode() { return m_widthMode; }
-    void setWidthMode( CellSize mode );
     KoRect boundingRect();
-    void setBoundingRect( KoRect rect );
+
+    /**
+     * Layout all cells to fit inside the rect, cells will however use a minimum size, so
+     * the table might end up bigger.
+     */
+    void setBoundingRect( KoRect rect, CellSize widthMode, CellSize heightMode );
 
     /** resize and position all cells */
     void recalcCols(int _col=-1,int _row=-1);
@@ -243,27 +237,29 @@ public:
 
     virtual void updateFrames();
 
+    /* Overloaded methods, look for docu in kwframe.h */
     virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
     virtual QSize floatingFrameSize( int frameNum );
-    /** Store command for creating an anchored object */
     virtual KCommand * anchoredObjectCreateCommand( int frameNum );
-    /** Store command for deleting an anchored object */
     virtual KCommand * anchoredObjectDeleteCommand( int frameNum );
     virtual KWAnchor * createAnchor( KWTextDocument * textdoc, int frameNum );
 
     virtual bool canRemovePage( int num );
 
     void showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *view, const QPoint &point );
+    /** Add a cell to this table, the cell should allready have info like row, col and should
+     * allready have a frame.
+     */
+    void addCell( Cell *cell );
 
 #ifndef NDEBUG
     virtual void printDebug( KWFrame * frame );
     virtual void printDebug();
 #endif
-    void addCell( Cell *cell );
 protected:
+    /* Overloaded methods, look for docu in kwframe.h */
     virtual void deleteAnchors();
     virtual void createAnchors( KWTextParag * parag, int index, bool placeHolderExists = false );
-    //void addCell( Cell *cell );
 
 private:
     /** position an individual cell in the grid */
