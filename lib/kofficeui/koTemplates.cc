@@ -44,22 +44,15 @@ const QPixmap &KoTemplate::loadPicture() {
 
     if(m_cached)
         return m_pixmap;
-    // This code is shamelessly borrowed from KIconCanvas::slotLoadFiles
-    QImage img;
-    img.load(m_picture);
+    QImage img( m_picture );
     if (img.isNull()) {
         kdWarning() << "Couldn't find icon " << m_picture << endl;
         m_pixmap=QPixmap();
         return m_pixmap;
     }
-    if (img.width() > 60 || img.height() > 60) {
-        if (img.width() > img.height()) {
-            int height = (int) ((60.0 / img.width()) * img.height());
-            img = img.smoothScale(60, height);
-        } else {
-            int width = (int) ((60.0 / img.height()) * img.width());
-            img = img.smoothScale(width, 60);
-        }
+    const int maxHeightWidth = 64;
+    if (img.width() > maxHeightWidth || img.height() > maxHeightWidth) {
+        img = img.smoothScale( maxHeightWidth, maxHeightWidth, QImage::ScaleMax );
     }
     m_pixmap.convertFromImage(img, QPixmap::Color);
     m_cached=true;
