@@ -320,7 +320,7 @@ void KoPageLayoutDia::setupTab1()
     // -------------- page size -----------------
     QGroupBox *formatFrame = new QGroupBox( i18n( "Page Size" ), tab1 );
     grid1->addWidget( formatFrame, 1, 0 );
-    QGridLayout *formatGrid = new QGridLayout( formatFrame, 3, 2, 
+    QGridLayout *formatGrid = new QGridLayout( formatFrame, 3, 2,
        2*KDialog::marginHint(), KDialog::spacingHint() );
     formatGrid->setColStretch( 1, 1 );
 
@@ -359,7 +359,7 @@ void KoPageLayoutDia::setupTab1()
     // --------------- orientation ---------------
     QButtonGroup *orientFrame = new QButtonGroup( i18n( "Orientation" ), tab1 );
     grid1->addWidget( orientFrame, 2, 0 );
-    QLayout *orientLayout = new QGridLayout( orientFrame, 2, 2,  
+    QLayout *orientLayout = new QGridLayout( orientFrame, 2, 2,
        2*KDialog::marginHint(), KDialog::spacingHint() );
     orientLayout->setAutoAdd( true );
 
@@ -380,7 +380,7 @@ void KoPageLayoutDia::setupTab1()
     // --------------- page margins ---------------
     QButtonGroup *marginsFrame = new QButtonGroup( i18n( "Margins" ), tab1 );
     grid1->addWidget( marginsFrame, 3, 0 );
-    QGridLayout *marginsLayout = new QGridLayout( marginsFrame, 4, 2, 
+    QGridLayout *marginsLayout = new QGridLayout( marginsFrame, 4, 2,
        2*KDialog::marginHint(), KDialog::spacingHint() );
     marginsLayout->setColStretch( 1, 1 );
 
@@ -455,7 +455,7 @@ void KoPageLayoutDia::setValuesTab1()
     pgPreview->setPageLayout( layout );
 }
 
-void KoPageLayoutDia::setValuesTab1Helper() 
+void KoPageLayoutDia::setValuesTab1Helper()
 {
     epgWidth->setValue( KoUnit::ptToUnit( layout.ptWidth, m_unit ) );
     epgWidth->setSuffix( KoUnit::unitName( m_unit ) );
@@ -668,7 +668,7 @@ void KoPageLayoutDia::setupTab4()
     grid4->addWidget( gFooter, 2, 0 );
 
     QButtonGroup *gFootNote = new QButtonGroup( i18n( "Foot-/Endnote" ), tab4 );
-    QGridLayout *footNoteGrid = new QGridLayout( gFootNote, 2, 2, 2*KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *footNoteGrid = new QGridLayout( gFootNote, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *lFNSpacing = new QLabel( i18n("Spacing between footnote and body (%1):").arg(str), gFootNote );
     lFNSpacing->setAlignment( AlignRight | AlignVCenter );
