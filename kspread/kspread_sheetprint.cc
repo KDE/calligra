@@ -223,7 +223,7 @@ bool KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
 
     //Calculate the range to be printed
     QRect cell_range = cellsPrintRange();
-
+    kdDebug()<<"cellsPrintRange() :"<<cellsPrintRange()<<endl;
     //Ensure, that our newPage lists are generated for the whole sheet to print
     //For this we add to the lists the width/height of 1 page
     updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( cell_range.right() ) + printableWidthPts() ) );
@@ -243,6 +243,7 @@ bool KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
         {
             QRect page_range( QPoint( (*itX).startItem(), (*itY).startItem() ),
                               QPoint( (*itX).endItem(),   (*itY).endItem() ) );
+            kdDebug()<<" page_range :"<<page_range<<endl;
             //Append page when there is something to print
             if ( pageNeedsPrinting( page_range ) )
             {
