@@ -1,5 +1,5 @@
 
-SUBDIRS = lib kspread kimage kpresenter kchart killustrator kformula po 
+SUBDIRS = lib kspread kimage kpresenter kchart killustrator kformula kword po 
 
 acinclude.m4: acinclude.m4.in libtool.m4.in
 	cat acinclude.m4.in libtool.m4.in   > acinclude.m4 
