@@ -38,13 +38,15 @@ public:
     const QStringList& syntax() { return m_syntax; }
     QString helpText() const { return m_help; }
     QString name() const { return m_name; }
-    KSpreadParameterType tyoe() const { return m_type; }
+    KSpreadParameterType type() const { return m_type; }
     
     int params() const { return m_params.count(); }
     KSpreadFunctionParameter& param( int i ) { return m_params[ i ]; }
     
     void setGroup( const QString& g ) { m_group = g; }
     QString group() const { return m_group; }
+    
+    QString toQML() const;
     
 private:
     QString m_group;

@@ -3,6 +3,8 @@
 #include <qdom.h>
 #include <qfile.h>
 
+#include <klocale.h>
+
 static KSpreadParameterType toType( const QString& type )
 {
     if ( type == "Boolean" )
@@ -15,6 +17,44 @@ static KSpreadParameterType toType( const QString& type )
 	return KSpread_Any;
     
     return KSpread_Float;
+}
+
+static QString toString( KSpreadParameterType type, bool range = FALSE )
+{
+    if ( !range )
+    {
+	switch( type )
+	{
+	case KSpread_String:
+	    return i18n("Text");
+	case KSpread_Int:
+	    return i18n("Whole number (like 1, 132, 2344)");
+	case KSpread_Boolean:
+	    return i18n("A truth value (TRUE or FALSE)" );
+	case KSpread_Float:
+	    return i18n("A floating point value (like 1.3, 0.343, 253 )" );
+	case KSpread_Any:
+	    return i18n("Any kind of value");
+	}
+    }
+    else
+    {
+	switch( type )
+	{
+	case KSpread_String:
+	    return i18n("A range of strings");
+	case KSpread_Int:
+	    return i18n("A range of whole numbers (like 1, 132, 2344)");
+	case KSpread_Boolean:
+	    return i18n("A range of truth values (TRUE or FALSE)" );
+	case KSpread_Float:
+	    return i18n("A range of A floating point values (like 1.3, 0.343, 253 )" );
+	case KSpread_Any:
+	    return i18n("A range of any kind of values");
+	}
+    }
+    
+    return QString::null;
 }
 
 KSpreadFunctionParameter::KSpreadFunctionParameter()
@@ -39,7 +79,7 @@ KSpreadFunctionParameter::KSpreadFunctionParameter( const QDomElement& element )
 	{ 
 	    QDomElement e = n.toElement();
 	    if ( e.tagName() == "Comment" )
-		m_help = e.text();
+		m_help = i18n( e.text().latin1() );
 	    else if ( e.tagName() == "Type" )
 	    {
 		m_type = toType( e.text() );
@@ -82,11 +122,11 @@ KSpreadFunctionDescription::KSpreadFunctionDescription( const QDomElement& eleme
 		    { 
 			QDomElement e2 = n2.toElement();
 			if ( e.tagName() == "Text" )
-			    m_help = e.text();
+			    m_help = i18n( e.text().latin1() );
 			else if ( e.tagName() == "Syntax" )
-			    m_syntax.append( e.text() );
+			    m_syntax.append( i18n( e.text().latin1() ) );
 			else if ( e.tagName() == "Example" )
-			    m_examples.append( e.text() );
+			    m_examples.append( i18n( e.text().latin1() ) );
 		    }
 		}
 	    }
@@ -103,8 +143,65 @@ KSpreadFunctionDescription::KSpreadFunctionDescription( const KSpreadFunctionDes
     m_type = desc.m_type;
 }
 
+QString KSpreadFunctionDescription::toQML() const
+{
+    QString text( "<qt><h1>" );
+    text += name();
+    text += "</h1><p>";
+    text += helpText();
+    text += "</p><p><b>Return type: </b>";
+    text += toString( type() );
+    text += "</p>";
+
+    if ( !m_params.isEmpty() )
+    {
+	text += "<h2>Parameters</h2><ul>";
+	QValueList<KSpreadFunctionParameter>::ConstIterator it = m_params.begin();
+	for( ; it != m_params.end(); ++it )
+	{
+	    text += "<li><b>Comment:</b> ";
+	    text += (*it).helpText();
+	    text += "<b>Type:</b> ";
+	    text += toString( (*it).type(), (*it).hasRange );
+	}
+	text += "</ul>";
+    }
+    
+    if ( !m_examples.isEmpty() )
+    {
+	text += "<h2>Syntax</h2><ul>";
+	QStringList::ConstIterator it = m_syntax.begin();
+	for( ; it != m_syntax.end(); ++it )
+	{
+	    text += "<li>";
+	    text += *it;
+	}
+	text += "</ul>";
+    }
+
+    if ( !m_examples.isEmpty() )
+    {
+	text += "<h2>Example</h2><ul>";
+	QStringList::ConstIterator it = m_examples.begin();
+	for( ; it != m_examples.end(); ++it )
+	{
+	    text += "<li>";
+	    text += *it;
+	}
+	text += "</ul>";
+    }
+    
+    text += "</qt>";
+    
+    return text;
+}
+
+
 KSpreadFunctionRepository::KSpreadFunctionRepository()
 {
+    m_funcs.setAutoDelete( TRUE );
+    
+
     QFile file( "kspread_functions.xml" );
     if ( !file.open( IO_ReadOnly ) )
 	return;
@@ -123,7 +220,7 @@ KSpreadFunctionRepository::KSpreadFunctionRepository()
 	    QDomElement e = n.toElement();
 	    if ( e.tagName() == "Group" )
 	    {
-		group = e.namedItem( "GroupName" ).toElement().text();
+		group = i18n( e.namedItem( "GroupName" ).toElement().text().latin1() );
 		
 		QDomNode n2 = e.firstChild();
 		for( ; !n2.isNull(); n2 = n2.nextSibling() )
