@@ -3273,14 +3273,14 @@ QCursor KWDocument::getMouseCursor( const QPoint &nPoint, int keyState )
             return Qt::forbiddenCursor;
         return Qt::sizeVerCursor;
     case MEANING_RESIZE_COLUMN:
-        // Bug in (at least) Qt-3.1.1 : Qt::splitVCursor and Qt::splitHCursor are swapped!
-#if QT_VERSION < 0x030200
+        // Bug in Qt up to Qt-3.1.1 : Qt::splitVCursor and Qt::splitHCursor are swapped!
+#if QT_VERSION <= 0x030101
         return Qt::splitVCursor;
 #else
         return Qt::splitHCursor;
 #endif
     case MEANING_RESIZE_ROW:
-#if QT_VERSION < 0x030200
+#if QT_VERSION <= 0x030101
         return Qt::splitHCursor;
 #else
         return Qt::splitVCursor;
