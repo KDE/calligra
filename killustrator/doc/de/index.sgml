@@ -1,6 +1,6 @@
 <!doctype linuxdoc system>
 
-<!-- KIllustrator Handbuch Version 0.3
+<!-- KIllustrator Handbuch Version 0.3.1
  -->
 
 <!-- I added some comments to mark changes between versions of this handbook. -->
@@ -15,11 +15,11 @@
 <!-- Title information -->
 
 <title>Das KIllustrator Handbuch<img src=logo.png>
-<p>
+<P>
 <author>Hagen Höpfner, <tt/Hagen.Hoepfner@gmx.de/
-<date>Version 0.3, 08. September 1999
+<date>Version 0.3.1, 08. November 1999
 <abstract>
-Dieses Handbuch beschreibt die Version 0.7 des KIllustrators von Kai-Uwe Sattler.
+Dieses Handbuch beschreibt die Version 0.7.1 des KIllustrators von Kai-Uwe Sattler.
 </abstract>
 
 <!-- Table of contents -->
@@ -65,7 +65,8 @@ Bislang erschienene Versionen:
 <item>24.02.1999 Schnappschuß 0.6.3 veröffentlicht 
 <item>06.04.1999 Schnappschuß 0.6.4 veröffentlicht (reine Fehlerkorrektur) 
 <item>09.04.1999 Schnappschuß 0.6.5 veröffentlicht (reine Fehlerkorrektur)
-<item>17.07.1999 Schnappschu_ 0.7 vervffentlicht
+<item>15.07.1999 Schnappschuß 0.7 veröffentlicht
+<item>19.10.1999 Schnappschuß 0.7.1 veröffentlicht
 </itemize>
 
 <sect>Über das Handbuch
@@ -267,8 +268,7 @@ Freihandzeichnung anfangen soll
 
 <sect2>geschlossener Polygonzug<label id="gp">
 <P>
-<img src=line.png> Um einen geschlossenen Polygonzug zu zeichnen, geht man wie beim Pfad vor. Der Unterschied liegt nur im Beenden des Polygonzuges. Um das Polygon zu schließen, hält man die  Schift-Taste gedrückt, wenn man den abschließenden Rechsklick m
-acht. Dadurch wird eine Linie von dem zuletzt mit einem Linksklick gesetzten Punkt zum Anfangspunkt des Polygonzuges gezeichnet.
+<img src=line.png> Um einen geschlossenen Polygonzug zu zeichnen, geht man wie beim Pfad vor. Der Unterschied liegt nur im Beenden des Polygonzuges. Um das Polygon zu schließen, hält man die  Schift-Taste gedrückt, wenn man den abschließenden Rechsklick macht. Dadurch wird eine Linie von dem zuletzt mit einem Linksklick gesetzten Punkt zum Anfangspunkt des Polygonzuges gezeichnet.
 
 <sect1>Bezierkurve<label id="be">
 <p>
@@ -331,8 +331,7 @@ Die Eingabe wird solange fortgesetzt, bis ein neuer Objekttyp gewählt oder ein L
 
 <sect>Transformationen von 2D-Primitiven
 <p>
-Wie jedes Zeichentool bietet auch der KIllustrator mannigfaltige Möglichkeiten, gezeichnete Objekte zu rotieren, zu skalieren, zu verschieben; kurz gesagt zu transformieren. Dieser Abschnitt beschreibt nun, wie man entsprechende Transformationen durchführ
-en kann. Das Icon, welches unter den Punkten zugeordnet ist, ist jeweils vorher in der Iconleiste zu wählen.
+Wie jedes Zeichentool bietet auch der KIllustrator mannigfaltige Möglichkeiten, gezeichnete Objekte zu rotieren, zu skalieren, zu verschieben; kurz gesagt zu transformieren. Dieser Abschnitt beschreibt nun, wie man entsprechende Transformationen durchführen kann. Das Icon, welches unter den Punkten zugeordnet ist, ist jeweils vorher in der Iconleiste zu wählen.
 
 <sect1>Rotation
 <p>
@@ -366,8 +365,7 @@ Hält man während des Verschiebens die STRG-Taste gedrückt, erfolgt die
 Verschiebung entweder nur horizontal oder nur vertikal.
 <sect1>Ändern eines gezeichneten Objektes
 <p>
-<img src=point.png> Neben den Transformationen von ganzen Objekten besteht auch die Möglichkeit einzelne Teile von Objekten zu manipulieren. Wenn man auf das Icon geklickt hat, öffnet sich ein Untermenü, über welches man die folgenden Änderungen auswählen
- kann.
+<img src=point.png> Neben den Transformationen von ganzen Objekten besteht auch die Möglichkeit einzelne Teile von Objekten zu manipulieren. Wenn man auf das Icon geklickt hat, öffnet sich ein Untermenü, über welches man die folgenden Änderungen auswählen kann.
 WICHTIG ! Das Objekt, das auf diese Art verändert werden soll, muß vorher selektiert sein! Wählt man daraufhin das Punktmanipulationstool, so ändert sich der Rahmen des Objektes in leere Vierecke. 
 
 <sect2>Verschieben von Punkten
@@ -389,8 +387,7 @@ WICHTIG ! Das Objekt, das auf diese Art verändert werden soll, muß vorher selekt
 
 <sect2>Füllen von Objekten
 <p>
-<img src=pfeil.png> Will man ein Objekt einfach mit einer Farbe füllen, ist es ausreichend, dieses zu selektieren und mit der linken Maustaste auf die gewünschte Farbe in der Farbauswahlleiste zu klicken. Ist die gewünschte Farbe nicht dabei oder soll zum
- Füllen ein Muster oder ein Farbverlauf verwendet werden, geht man wie folgt vor.
+<img src=pfeil.png> Will man ein Objekt einfach mit einer Farbe füllen, ist es ausreichend, dieses zu selektieren und mit der linken Maustaste auf die gewünschte Farbe in der Farbauswahlleiste zu klicken. Ist die gewünschte Farbe nicht dabei oder soll zum Füllen ein Muster oder ein Farbverlauf verwendet werden, geht man wie folgt vor.
 <enum> 
 <item>selektieren des zu füllenden Objektes 
 <item>Rechtsklick in das Objekt (Maustaste wieder loslassen) 
@@ -408,8 +405,7 @@ Der KIllustrator bietet eine Vielzahl von Hilfsmitteln zum Positionieren von Obj
 
 <sect1>Gitter
 <P>
-Das Gitter ist eine Möglichkeit, schon beim Zeichnen sehr genau zu arbeiten. Es kann aber auch nur als Anhalt angesehen werden. Folgende drei Aktionen sind zum Einstellen von Gittern möglich. (In Klammern steht als erstes, über welche Menüpunkte man die e
-ntsprechende Funktion auslösen kann und als zweites, was sie bewirkt.) 
+Das Gitter ist eine Möglichkeit, schon beim Zeichnen sehr genau zu arbeiten. Es kann aber auch nur als Anhalt angesehen werden. Folgende drei Aktionen sind zum Einstellen von Gittern möglich. (In Klammern steht als erstes, über welche Menüpunkte man die entsprechende Funktion auslösen kann und als zweites, was sie bewirkt.) 
 <enum>
 <item>Gitter anzeigen (Ansicht -> Gitter anzeigen, stellt das Gitter dar) 
 <item>An Gitter ausrichten (Layout -> An Gitter ausrichten, Objekte rasten nun auf dem Gitter ein) 
@@ -419,8 +415,7 @@ Die Funktionen eins und zwei erklären sich von selbst und können auch mit entspr
 
 <sect1>Hilfslinien
 <p>
-Hilfslinien sind neben dem Gitter eine Möglichkeit bereits beim Zeichnen Perfektion walten zu lassen. Der Funktionsumfang entspricht dem des Gitters und auch die Funktionsaufrufe sind äquivalet zu finden. Sie haben gegenüber dem Gitter den Vorteil, daß ma
-n die Abstände zwischen den einzelnen Hilflinien frei variieren kann. Der KIllustrator ermöglicht vertikale und horizontale Hilfslinien.
+Hilfslinien sind neben dem Gitter eine Möglichkeit bereits beim Zeichnen Perfektion walten zu lassen. Der Funktionsumfang entspricht dem des Gitters und auch die Funktionsaufrufe sind äquivalet zu finden. Sie haben gegenüber dem Gitter den Vorteil, daß man die Abstände zwischen den einzelnen Hilflinien frei variieren kann. Der KIllustrator ermöglicht vertikale und horizontale Hilfslinien.
 
 <sect1>Ausrichten von Objekten
 <p>
@@ -456,8 +451,7 @@ Folgende Objekte können als Pfad verwendet werden:
 </itemize>
 <sect1>Gruppieren von Objekten
 <P>
-Einzelne Objekte können zu Gruppen zusammengefaßt werden. Dies ist vor allem dann interessant, wenn man komplexe Figuren aus einzelnen Objekten zusammensetzen und diese Figuren dann als einzelnes Objekt betrachten will. Zum Gruppieren von Objekten geht ma
-n wie folgt vor: 
+Einzelne Objekte können zu Gruppen zusammengefaßt werden. Dies ist vor allem dann interessant, wenn man komplexe Figuren aus einzelnen Objekten zusammensetzen und diese Figuren dann als einzelnes Objekt betrachten will. Zum Gruppieren von Objekten geht man wie folgt vor: 
 <enum>
 <item>Selektieren der zu gruppierenden Objekte; Das Selektieren mehrerer
 Objekte kann entweder mittest des Selektionstools oder durch Verwendung
@@ -469,8 +463,7 @@ die Funktion "Gruppierung aufheben" des Menüpunktes "Anordnen".
 <P>
 <sect1>Was sind Schichten?
 <p>
-Das Schichtenkonzept läßt sich am einfachsten an Papierzeichnungen erklären. Jede Schicht entspricht einem Blatt. Standartmäßig sind alle Blätter transparent, können beschrieben und verschickt werden. Im KIllustrator entsprechen diese drei Eigenschaften f
-olgende Funktionen: 
+Das Schichtenkonzept läßt sich am einfachsten an Papierzeichnungen erklären. Jede Schicht entspricht einem Blatt. Standartmäßig sind alle Blätter transparent, können beschrieben und verschickt werden. Im KIllustrator entsprechen diese drei Eigenschaften folgende Funktionen: 
 <itemize>
 <item>Transparenz: Man kann durch die einzelnen Schichten auf die anderen blicken. Es entsteht somit der Eindruck, man arbeite mit nur einer Schicht (einem Blatt). 
 <item>Beschreibbarkeit: Ich kann in der gewählten Schicht zeichnen. 
@@ -485,8 +478,7 @@ Damit ist aber das Repertoire noch nicht ausgeschöpft. Einzelne Schichten können
 
 <sect1>Zeichnung speichern
 <p>
-Zum Speichern von Zeichnungen gibt es im großen und ganzen zwei Wege. Zum einen, über den Menüpunkt "Datei" und zum anderen über das Diskettenicon in der Iconleiste. Hat man die aktuelle Zeichnung neu erstellt und noch nie gespeichert, so gelangt man auf 
-jeden Fall in den Dialog, in dem man den Dateinamen der zu speichernden Zeichnung bestimmen kann. 
+Zum Speichern von Zeichnungen gibt es im großen und ganzen zwei Wege. Zum einen, über den Menüpunkt "Datei" und zum anderen über das Diskettenicon in der Iconleiste. Hat man die aktuelle Zeichnung neu erstellt und noch nie gespeichert, so gelangt man auf jeden Fall in den Dialog, in dem man den Dateinamen der zu speichernden Zeichnung bestimmen kann. 
 <P>
 <quote>
 <img src=save_dialog.png>
@@ -503,18 +495,16 @@ Auch zum Öffnen von Dateien gibt es zwei Wege. Entweder klickt man auf das entsp
 <img src=open_dialog.png>
 </quote>
 <P>
-Da diese Dialogform dem KDE-Standard entspricht, soll an dieser Stelle nicht auf jeden Knopf eingegangen werden. Hat man die zu öffnende Datei selektiert, so erscheint im rechten Teil des Dialoges eine Vorschau. Nun kann man die Datei entweder mittels Dop
-pelklick auf den Dateinamen oder über den Knopf "OK" laden. 
+Da diese Dialogform dem KDE-Standard entspricht, soll an dieser Stelle nicht auf jeden Knopf eingegangen werden. Hat man die zu öffnende Datei selektiert, so erscheint im rechten Teil des Dialoges eine Vorschau. Nun kann man die Datei entweder mittels Doppelklick auf den Dateinamen oder über den Knopf "OK" laden. 
 
 <sect1>Importieren und Exportieren
 <P>
-Leider werden die meisten Programme daran gemessen, wie viele Fremdformate sie unterstützen. Damit Software jedoch einen gewissen Grad Flexibilität hat, sind solche Import- und Exportschnittstellen notwendig. Der KIllustrator kann diverse Dateiformate in 
-Zeichnungen einbinden (importieren): 
+Leider werden die meisten Programme daran gemessen, wie viele Fremdformate sie unterstützen. Damit Software jedoch einen gewissen Grad Flexibilität hat, sind solche Import- und Exportschnittstellen notwendig. Der KIllustrator kann diverse Dateiformate in Zeichnungen einbinden (importieren): 
 <itemize>
 <item>KIllustrator Zeichnungen (.kil) 
 <item>XFig Zeichnungen (.fig) 
 <item>Windows Metafiles (.wmf) 
-<item>GIF Bilder (.png) 
+<item>GIF Bilder (.gif) 
 <item>JPEG Bilder (.jpg) 
 <item>PNG Bilder (.png) 
 <item>X11 Bitmaps 
@@ -522,7 +512,7 @@ Zeichnungen einbinden (importieren):
 </itemize>
 Der KIllustrator kann Zeichnungen in folgenden Fremdformaten speichern (exportieren): 
 <itemize>
-<item>GIF Bilder (.png) 
+<item>GIF Bilder (.gif) 
 <item>X11 Pixmaps (.xpm) 
 <item>Encapsulated Postscript (.eps) 
 <item>PPM Bilder (.ppm)
@@ -536,12 +526,11 @@ das Einfügen von <tt>.wmf</tt> Dateien. Die Filter für pixelorientierte Bilder b
 sich im Unterpunkt "Bitmap". Um XFig-Zeichnungen oder eine ander
 KIllustrator-Zeichnung zu importieren, muß man den Menüeintrag "Importieren" 
 im "Datei"-Menü benutzen. 
-Die jeweiligen Dialoge entsprechen dem Dialog zum Datei öffnen. 
+Die jeweiligen Dialoge entsprechen dem Dialog zum Dateiöffnen. 
 
 <sect2>Exportieren
 <p>
-Über das Menü "Datei" und den Menüpunkt "exportieren" gelangt man in
-folgenden Dialog: 
+Über das Menü "Datei" und den Menüpunkt exportieren gelangt man in folgenden Dialog: 
 <p>
 <quote>
 <img src=export.png>
@@ -555,8 +544,7 @@ Prinzipiell entspricht er dem Dialog zum speichern von Dateien. Der einzige Unte
 
 <sect>Undo / Redo
 <P>
-Die Funktionen Undo und Redo ermöglichen es, ein wenig mit den verschiedenen Tools "herumzuspielen". Wenn man merkt, daß der Schritt, den man gerade gemacht hat, nicht gefällt, so verwendet man einfach Undo um ihn rückgängig zu machen. Stellt man nach ein
-em Undo fest, daß die rückgänging gemachte Aktion doch nicht so schlecht gewesen ist, kann man sie mit Redo wiederholen.
+Die Funktionen Undo und Redo ermöglichen es, ein wenig mit den verschiedenen Tools "herumzuspielen". Wenn man merkt, daß der Schritt, den man gerade gemacht hat, nicht gefällt, so verwendet man einfach Undo um ihn rückgängig zu machen. Stellt man nach einem Undo fest, daß die rückgänging gemachte Aktion doch nicht so schlecht gewesen ist, kann man sie mit Redo wiederholen.
 Der KIllustrator bietet die Möglichkeit alle gemachten Aktionen zu wiederrufen. D.h. das Undo funktioniert solange, bis die Zeichnung wieder leer ist.
 Man sollte aber beachten, daß Undo und Redo immer in der Reihenfolge wirken, in der gezeichnet wurde. Es ist also nicht möglich nur den vorletzten Schritt rückgängig zu machen und den letzten zu behalten. 
 
@@ -564,8 +552,7 @@ Man sollte aber beachten, daß Undo und Redo immer in der Reihenfolge wirken, in 
 <P>
 <img src=zoom.png> Das Zoomen, wie das Ändern der Ansichtsgröße auch
 genannt
-wird, kann auf zwei Wegen erfolgen. Der einfachste ist das Auswählen eines Zoomfaktors aus dem Ausklappmenü in dem standardmäßig 100% steht. Der zweite besteht in der Verwendung der Lupe. Klickt man mit der linken Maustaste in die Zeichnung, so wird die R
-egion um den Klickpunkt auf den nächste Zoomfaktor vergrößert. Folgende Zoomfaktoren stehen zur Verfügung:
+wird, kann auf zwei Wegen erfolgen. Der einfachste ist das Auswählen eines Zoomfaktors aus dem Ausklappmenü in dem standardmäßig 100% steht. Der zweite besteht in der Verwendung der Lupe. Klickt man mit der linken Maustaste in die Zeichnung, so wird die Region um den Klickpunkt auf den nächste Zoomfaktor vergrößert. Folgende Zoomfaktoren stehen zur Verfügung:
 
 <itemize>
 <item>50% 
@@ -582,8 +569,7 @@ egion um den Klickpunkt auf den nächste Zoomfaktor vergrößert. Folgende Zoomfakt
 <P>
 <img src=pfeil.png> Der Umgang mit Farben ist beim KIllustrator sehr
 einfach gestaltet. Im
-Grunde könnte man ihn mit einem Satz beschreiben, wenn da nicht noch zusätzliche Funktionen wären. Allgemein sei gesagt, ein Linksklick in die Farbauswahlleiste ändert die Füllfarbe, ein Rechtsklick hingegen die Zeichen- bzw. Rahmenfarbe eines selektierte
-n Objektes. Ist der gewünschte Farbton nicht in dieser Leiste enthalten, muß man zum Ändern der Zeichenfarbe wie folgt vorgehen. 
+Grunde könnte man ihn mit einem Satz beschreiben, wenn da nicht noch zusätzliche Funktionen wären. Allgemein sei gesagt, ein Linksklick in die Farbauswahlleiste ändert die Füllfarbe, ein Rechtsklick hingegen die Zeichen- bzw. Rahmenfarbe eines selektierten Objektes. Ist der gewünschte Farbton nicht in dieser Leiste enthalten, muß man zum Ändern der Zeichenfarbe wie folgt vorgehen. 
 
 <enum> 
 <item>Selektieren des zu bearbeitenden Objektes 
@@ -614,8 +600,7 @@ Man kann die HSV und RGB Werte der Farbe auch direkt als Zahlenwert eingeben. Da
 
 <sect1>Parameter von Objekten
 <p>
-Funktionen, wie z.B. das Füllen von Objekten, können als Standard für neu zu zeichnenden Objekte definiert werden. Dies geschieht, indem man die entsprechende Funktion aufruft, ohne ein Objekt selektiert zu haben. Aus Sicherheitsgründen muß man dann noch 
-eine Bestätigung der globalen Änderung vornehmen. 
+Funktionen, wie z.B. das Füllen von Objekten, können als Standard für neu zu zeichnenden Objekte definiert werden. Dies geschieht, indem man die entsprechende Funktion aufruft, ohne ein Objekt selektiert zu haben. Aus Sicherheitsgründen muß man dann noch eine Bestätigung der globalen Änderung vornehmen. 
 
 <!-- Kapitel 4 ---------------------------------------------------------->
 
@@ -627,8 +612,7 @@ eine Bestätigung der globalen Änderung vornehmen.
 (<tt>\epsfig{file=graphics.eps,width=9cm,clip=}</tt>)
 <p>
 <tag/Frage:/Wie kann ich ASC II Dateien in ein KIllustratordokument importieren?
-<tag/Antwort:/Das Importieren von ASC II Dateien ist nur mittels Kopieren/Einfügen möglich. Öffnen Sie dazu die zu importierende Datei mit einem Texteditor (z.B. kedit) und selektieren Sie den zu kopierenden Text. Danch kann man den Text mit der mittleren
- Maustaste in das KIllustratordokument einfügen.
+<tag/Antwort:/Das Importieren von ASC II Dateien ist nur mittels Kopieren/Einfügen möglich. Öffnen Sie dazu die zu importierende Datei mit einem Texteditor (z.B. kedit) und selektieren Sie den zu kopierenden Text. Danch kann man den Text mit der mittleren Maustaste in das KIllustratordokument einfügen.
 <p>
 <tag/Frage:/Ich habe SuSE Linux und finde unter das KIllustrator-Paket nicht.
 <tag/Antwort:/SuSE hat die Bestandteile des KOffice-Paketes nicht als eigenständiges Pakete
@@ -685,8 +669,6 @@ Es gibt sicherlich vieles, was an diesem Handbuch noch verbessert werden kann bz
 <item>Drucken 
 </itemize>
 Sollten Sie Vorschläge oder Hinweise haben oder auf Fehler gestoßen sein, bitte ich Sie, mir diese per <htmlurl url="mailto:Hagen.Hoepfner@gmx.de" name="eMail"> mitzuteilen.
-<chapt>Copyright
-<p>
 <tscreen><verb>
 KIllustrator is Copyright 1998-99 Kai-Uwe Sattler, kus@iti.cs.uni-magdeburg.de
 
