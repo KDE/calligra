@@ -1,5 +1,6 @@
 #include "kformula_factory.h"
 #include "kformula_doc.h"
+#include "kformula_aboutdata.h"
 
 #include <kinstance.h>
 #include <kiconloader.h>
@@ -7,14 +8,9 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kstddirs.h>
-//#include <kimgio.h>
 #include <klocale.h>
-#include <kaboutdata.h>
 
 #include <qstringlist.h>
-
-static const char* description=I18N_NOOP("KOffice Formula Editor");
-static const char* version="0.3";
 
 extern "C"
 {
@@ -30,13 +26,7 @@ KAboutData* KFormulaFactory::s_aboutData = 0;
 KAboutData* KFormulaFactory::aboutData()
 {
     if( !s_aboutData )
-    {
-      s_aboutData= new KAboutData( "kformula", I18N_NOOP("KFormula"),
-                                   version, description, KAboutData::License_GPL,
-                                   "(c) 1998-2000, Andrea Rizzi");
-      s_aboutData->addAuthor("Andrea Rizzi",0, "rizzi@kde.org");
-      s_aboutData->addAuthor("Ulrich Kuettler",0, "ulrich.kuettler@mailbox.tu-dresden.de");
-    }
+        s_aboutData=newKFormulaAboutData();
     return s_aboutData;
 }
 
@@ -51,16 +41,10 @@ KFormulaFactory::KFormulaFactory( QObject* parent, const char* name )
 
 KFormulaFactory::~KFormulaFactory()
 {
-  if( s_aboutData )
-  {
-    delete s_aboutData;
-    s_aboutData=0;
-  }
-  if ( s_global )
-  {
-    delete s_global;
-    s_global = 0L;
-  }
+  delete s_aboutData;
+  s_aboutData=0;
+  delete s_global;
+  s_global = 0L;
 }
 
 KParts::Part* KFormulaFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )

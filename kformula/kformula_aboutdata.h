@@ -1,11 +1,11 @@
-
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
+	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+   version 2.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,29 +18,18 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koApplication.h>
-#include <kcmdlineargs.h>
+#include <kaboutdata.h>
 #include <klocale.h>
-#include <dcopclient.h>
 
-#include "kformula_aboutdata.h"
+static const char* description=I18N_NOOP("KOffice Formula Editor");
+static const char* version="0.3";
 
-static const KCmdLineOptions options[]=
+KAboutData * newKFormulaAboutData()
 {
-        {"+[file]", I18N_NOOP("File To Open"),0},
-        {0,0,0}
-};
-
-int main( int argc, char **argv )
-{
-    KCmdLineArgs::init( argc, argv, newKFormulaAboutData() );
-    KCmdLineArgs::addCmdLineOptions( options );
-
-    KoApplication app;
-    app.dcopClient()->attach();
-    app.dcopClient()->registerAs("kformula");
-
-    if (!app.start())
-        return 1;
-    return app.exec();
+    KAboutData * aboutData = new KAboutData( "kformula", I18N_NOOP("KFormula"),
+                                             version, description, KAboutData::License_GPL,
+                                             "(c) 1998-2000, Andrea Rizzi");
+    aboutData->addAuthor("Andrea Rizzi",0, "rizzi@kde.org");
+    aboutData->addAuthor("Ulrich Kuettler",0, "ulrich.kuettler@mailbox.tu-dresden.de");
+    return aboutData;
 }

@@ -2,8 +2,8 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula2 -I$(interfacedir) $(all_includes)
 KDE_CXXFLAGS = $(USE_RTTI)
 
-lib_LTLIBRARIES = libkformulapart.la kformulamain.la
 ## The part
+kde_module_LTLIBRARIES = libkformulapart.la
 libkformulapart_la_SOURCES = kformula_doc.cc \
 	kformula_view.cc kformula_factory.cc \
 	matrixwidget.cc
@@ -12,9 +12,10 @@ libkformulapart_la_LIBADD = ../lib/kofficeui/libkofficeui.la ../lib/kformula2/li
 libkformulapart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
+lib_LTLIBRARIES = kformulamain.la
 kformulamain_la_SOURCES = main.cc
 kformulamain_la_LDFLAGS = $(all_libraries) -module -avoid-version
-kformulamain_la_LIBADD = libkformulapart.la
+kformulamain_la_LIBADD = ../lib/kofficecore/libkofficecore.la
 
 ## The executable
 bin_PROGRAMS = kformula
@@ -27,7 +28,7 @@ dummy.cc:
 
 noinst_HEADERS =  kformula_doc.h \
 		  kformula_view.h kformula_factory.h formuladef.h \
-		  matrixwidget.h
+		  matrixwidget.h kformula_aboutdata.h
 
 kdelnk_DATA = kformula.desktop
 kdelnkdir = $(kde_appsdir)/Office
@@ -41,4 +42,4 @@ rcdir = $(kde_datadir)/kformula
 SUBDIRS =  pics
 
 messages: rc.cpp
-	$(XGETTEXT) rc.cpp *.cc -o $(podir)/kformula.pot
+	$(XGETTEXT) rc.cpp *.cc kformula_aboutdata.h -o $(podir)/kformula.pot
