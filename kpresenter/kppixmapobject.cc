@@ -35,6 +35,9 @@
 #include <kimageeffect.h>
 #include <koSize.h>
 #include <kozoomhandler.h>
+#include <koStore.h>
+#include <koStoreDevice.h>
+#include <kooasiscontext.h>
 
 #include "kppixmapobject.h"
 #include "kpgradient.h"
@@ -139,6 +142,31 @@ void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & cont
 {
     KP2DObject::loadOasis( element, context, animation );
     //todo load file picture
+    const QString href( element.attribute("xlink:href") );
+    kdDebug()<<" href: "<<href<<endl;
+    if ( !href.isEmpty() && href[0] == '#' )
+    {
+        QString strExtension;
+        const int result=href.findRev(".");
+        if (result>=0)
+        {
+            strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.
+        }
+        QString filename(href.mid(1));
+        const KoPictureKey key(filename, QDateTime::currentDateTime(Qt::UTC));
+        image.setKey(key);
+
+        KoStore* store = context.store();
+        if ( store->open( filename ) )
+        {
+            KoStoreDevice dev(store);
+            if ( !image.load( &dev, strExtension ) )
+                kdWarning() << "Cannot load picture: " << filename << " " << href << endl;
+            store->close();
+        }
+        imageCollection->insertPicture( key, image );
+    }
+
 }
 
 
