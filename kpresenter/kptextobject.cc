@@ -47,7 +47,7 @@
 #include "kptextobject.moc"
 #include "page.h"
 #include <koAutoFormat.h>
-
+#include <koparagcounter.h>
 using namespace std;
 
 /******************************************************************/
@@ -697,10 +697,62 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
     kdDebug()<<"updateUI( bool updateFormat, bool force  )\n";
     KoTextView::updateUI( updateFormat, force  );
     // Paragraph settings
-    Qt3::QTextParag * parag = cursor()->parag();
+    KoTextParag * parag = static_cast<KoTextParag*>( cursor()->parag());
     if ( m_paragLayout.alignment != parag->alignment() || force ) {
         m_paragLayout.alignment = parag->alignment();
         m_page->getView()->alignChanged(  m_paragLayout.alignment );
+    }
+
+    // Counter
+    if ( !m_paragLayout.counter )
+        m_paragLayout.counter = new KoParagCounter; // we can afford to always have one here
+    KoParagCounter::Style cstyle = m_paragLayout.counter->style();
+    if ( parag->counter() )
+        *m_paragLayout.counter = *parag->counter();
+    else
+    {
+        m_paragLayout.counter->setNumbering( KoParagCounter::NUM_NONE );
+        m_paragLayout.counter->setStyle( KoParagCounter::STYLE_NONE );
+    }
+    if ( m_paragLayout.counter->style() != cstyle || force )
+    {
+        //todo
+        //m_canvas->gui()->getView()->showCounter( * m_paragLayout.counter );
+    }
+    if(m_paragLayout.leftBorder!=parag->leftBorder() ||
+       m_paragLayout.rightBorder!=parag->rightBorder() ||
+       m_paragLayout.topBorder!=parag->topBorder() ||
+       m_paragLayout.bottomBorder!=parag->bottomBorder() || force )
+    {
+        m_paragLayout.leftBorder = parag->leftBorder();
+        m_paragLayout.rightBorder = parag->rightBorder();
+        m_paragLayout.topBorder = parag->topBorder();
+        m_paragLayout.bottomBorder = parag->bottomBorder();
+        //todo
+        //m_canvas->gui()->getView()->showParagBorders( m_paragLayout.leftBorder, m_paragLayout.rightBorder, m_paragLayout.topBorder, m_paragLayout.bottomBorder );
+    }
+
+    if ( !parag->style() )
+        kdWarning() << "Paragraph " << parag->paragId() << " has no style" << endl;
+    else if ( m_paragLayout.style != parag->style() || force )
+    {
+        m_paragLayout.style = parag->style();
+        //todo
+        //m_canvas->gui()->getView()->showStyle( m_paragLayout.style->name() );
+    }
+
+
+
+    if( m_paragLayout.margins[QStyleSheetItem::MarginLeft] != parag->margin(QStyleSheetItem::MarginLeft)
+        || m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] != parag->margin(QStyleSheetItem::MarginFirstLine)
+        || m_paragLayout.margins[QStyleSheetItem::MarginRight] != parag->margin(QStyleSheetItem::MarginRight)
+	|| force )
+    {
+        m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] = parag->margin(QStyleSheetItem::MarginFirstLine);
+        m_paragLayout.margins[QStyleSheetItem::MarginLeft] = parag->margin(QStyleSheetItem::MarginLeft);
+        m_paragLayout.margins[QStyleSheetItem::MarginRight] = parag->margin(QStyleSheetItem::MarginRight);
+        //todo Perhaps change koRuler properties
+        //m_canvas->gui()->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine], m_paragLayout.margins[QStyleSheetItem::MarginRight] );
     }
 }
 

@@ -59,6 +59,7 @@ class KColorAction;
 class KSelectAction;
 class KFontAction;
 class KSpell;
+class KoParagCounter;
 
 class PageBase : public QWidget
 {
@@ -371,6 +372,8 @@ public:
     void autoScreenPresReStartTimer();
     void autoScreenPresIntervalTimer();
     void autoScreenPresStopTimer();
+
+    void showCounter( KoParagCounter &c );
 
 protected slots:
     // dialog slots

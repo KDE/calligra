@@ -101,6 +101,8 @@
 #include <koCharSelectDia.h>
 #include <koInsertLink.h>
 #include <koAutoFormatDia.h>
+#include <koparagcounter.h>
+
 
 #include <kspell.h>
 
@@ -3774,5 +3776,9 @@ void KPresenterView::spellCheckerFinished()
         edit->drawCursor( TRUE );
 }
 
+void KPresenterView::showCounter( KoParagCounter &c )
+{
+    actionTextTypeUnsortList->setChecked( c.numbering() == KoParagCounter::NUM_LIST );
+}
 
 #include <kpresenter_view.moc>
