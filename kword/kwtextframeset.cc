@@ -2724,7 +2724,7 @@ QString KWTextFrameSet::copyTextParag( QDomElement & elem, int selectionId )
     return text;
 }
 
-bool KWTextFrameSet::sortText()
+bool KWTextFrameSet::sortText(sortType type)
 {
     KoTextCursor c1 = textDocument()->selectionStartCursor(KoTextDocument::Standard );
     KoTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
@@ -2770,10 +2770,21 @@ bool KWTextFrameSet::sortText()
         QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
         domDoc.appendChild( elem );
         KWTextParag *parag =0L;
-        for (unsigned int i =0; i < listOfText.count(); i++)
+        if ( type ==KW_SORTINCREASE )
         {
-            parag = static_cast<KWTextParag *>(textDocument()->paragAt( sortText.find(listOfText[i]).data() ));
-            parag->save(elem);
+            for (unsigned int i =0; i < listOfText.count(); i++)
+            {
+                parag = static_cast<KWTextParag *>(textDocument()->paragAt( sortText.find(listOfText[i]).data() ));
+                parag->save(elem);
+            }
+        }
+        else
+        {
+            for (unsigned int i =listOfText.count()-1 ; i > 0; --i)
+            {
+                parag = static_cast<KWTextParag *>(textDocument()->paragAt( sortText.find(listOfText[i]).data() ));
+                parag->save(elem);
+            }
         }
         KWTextDrag *kd = new KWTextDrag( 0L );
         kd->setFrameSetNumber( -1 );

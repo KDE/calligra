@@ -74,6 +74,7 @@
 #include "kwtablestyle.h"
 #include "kwvariable.h"
 #include "KWordViewIface.h"
+#include "sortdia.h"
 #include "configfootnotedia.h"
 #include <qrichtext_p.h>
 #include <kaccel.h>
@@ -6884,21 +6885,26 @@ void KWView::sortText()
     KWTextFrameSetEdit* edit = currentTextEdit();
     if ( edit && edit->textFrameSet()->hasSelection())
     {
-        if ( edit->textFrameSet()->sortText() )
+        KWSortDia * dlg = new KWSortDia( this, "sort dia" );
+        if ( dlg->exec())
         {
-            QMimeSource *data = QApplication::clipboard()->data();
-            if ( data->provides( KWTextDrag::selectionMimeType() ) )
+            if ( edit->textFrameSet()->sortText(dlg->getSortType()) )
             {
-                QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
-                if ( arr.size() )
+                QMimeSource *data = QApplication::clipboard()->data();
+                if ( data->provides( KWTextDrag::selectionMimeType() ) )
                 {
-                    KCommand *cmd =edit->textFrameSet()->pasteKWord( edit->cursor(), QCString( arr ), true );
-                    if ( cmd )
-                        m_doc->addCommand(cmd);
+                    QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
+                    if ( arr.size() )
+                    {
+                        KCommand *cmd =edit->textFrameSet()->pasteKWord( edit->cursor(), QCString( arr ), true );
+                        if ( cmd )
+                            m_doc->addCommand(cmd);
+                    }
                 }
+                QApplication::clipboard()->clear();
             }
-            QApplication::clipboard()->clear();
         }
+        delete dlg;
     }
 }
 
