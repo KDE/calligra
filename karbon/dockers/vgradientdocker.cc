@@ -55,7 +55,8 @@ VGradientPreview::~VGradientPreview()
 
 void VGradientPreview::paintEvent( QPaintEvent* )
 {
-	VKoPainter gp( this, width(), height() );
+	QPixmap pixmap( width(), height() );
+	VKoPainter gp( &pixmap, width(), height() );
 	gp.setRasterOp( Qt::XorROP );
 	gp.newPath();
 	VGradient gradient( **m_lpgradient );
@@ -86,7 +87,7 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	gp.fillPath();
 	gp.end();
 	
-	QPainter p( this );
+	QPainter p( &pixmap );
 	
 	p.setPen( colorGroup().light() );
 	p.moveTo( 1, height() - 1 );
@@ -101,6 +102,7 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	p.moveTo( width() - 2, 2 );
 	p.lineTo( width() - 2, height() - 2 );
 	p.lineTo( 2, height() - 2 );    
+	bitBlt( this, 0, 0, &pixmap, 0, 0, width(), height() );
 } // VGradientPreview::paintEvent
 
 VGradientDocker::VGradientDocker( VGradient& gradient, QWidget* parent, const char* name )

@@ -84,7 +84,8 @@ void VGradientWidget::paintMidPoint( QPainter& p, int x )
 
 void VGradientWidget::paintEvent( QPaintEvent* )
 {
-	VKoPainter gp( this, width(), height() );
+	QPixmap pixmap( width(), height() );
+	VKoPainter gp( &pixmap, width(), height() );
 	gp.setRasterOp( Qt::XorROP );
 	gp.newPath();
 	VGradient gradient( **m_lpgradient );
@@ -108,7 +109,7 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 	gp.fillPath();
 	gp.end();
 	
-	QPainter p( this );
+	QPainter p( &pixmap );
 	
 	p.setPen( colorGroup().light() );
 	p.moveTo( 1, height()-17 );
@@ -153,6 +154,8 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 		}
 		paintColorStop( p, (int)( stop->rampPoint * w ), stop->color );
 	}
+	p.end();
+	bitBlt( this, 0, 0, &pixmap, 0, 0, width(), height() );
 } // VGradientWidget::paintEvent
 
 void VGradientWidget::mousePressEvent( QMouseEvent* e )
