@@ -2571,7 +2571,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 
     // Point the little corner if there is a comment attached
     // to this cell.
-    if( !comment(column(),row()).isEmpty())
+    if( !comment(column(),row()).isEmpty() && rl->height()>2 && cl->width()>10)
     {
         QPointArray point( 3 );
         point.setPoint( 0,_tx + w2 - 10, _ty );
@@ -2584,7 +2584,8 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 
     //show  a red triangle when it's not possible to write all text in cell
     //don't print the red triangle
-    if(m_bCellTooShort && !_painter.device()->isExtDev() )
+
+    if(m_bCellTooShort && !_painter.device()->isExtDev() && rl->height()>2  && cl->width()>4)
     {
         QPointArray point( 3 );
         point.setPoint( 0,_tx + w2-4 , (_ty+h2/2)-4 );
