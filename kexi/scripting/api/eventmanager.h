@@ -70,17 +70,6 @@ namespace Kross { namespace Api {
              */
             ~EventManager();
 
-//TODO
-//Wozu EventSignal ???????????
-//=> vielleicht als container fuer signals, signalsignatur, etc. ?
-//=> fuer rueckweg, receiver-signal emitten vom script ohne QObject zu kennen?
-//connect(const char *signal, QObject *receiver, const char *slot);
-
-            //void addEventSignal(EventSignal* receiver);
-            //void removeEventSignal(EventSignal* receiver);
-            //void addEventSlot(EventSlot* receiver);
-            //void removeEventSlot(EventSlot* receiver);
-
             /**
              * Connect a QObject signal with a script function.
              *

@@ -56,13 +56,16 @@ namespace Kross { namespace Api {
              * \param eventmanager The \a EventManager instance
              *       used to create this EventSlot.
              */
-            EventSlot(EventManager* eventmanager);
+            explicit EventSlot(EventManager* eventmanager = 0);
 
             /**
              * Destructor.
              */
             virtual ~EventSlot() {}
 
+virtual EventSlot* create(EventManager* eventmanager) {
+    return new EventSlot(eventmanager);
+}
             /**
              * Return the slot matching to the signal.
              *
@@ -83,8 +86,11 @@ namespace Kross { namespace Api {
              *       the Qt SIGNAL(mysignalname()) macro.
              * \param function The name of the function we should
              *        call if the signal got emitted.
+             * \param slot The slot to connect with. If empty we
+             *        try to determinate the slot from within
+             *        the signal by using getSlot(const QCString& signal).
              */
-            virtual bool connect(QObject* senderobj, const QCString& signal, QString function);
+            virtual bool connect(EventManager* eventmanager, QObject* senderobj, const QCString& signal, QString function, const QCString& slot = QCString());
 
             /**
              * Disconnect the event.
@@ -102,6 +108,9 @@ namespace Kross { namespace Api {
             QCString m_slot;
             QString m_function;
 
+            QValueList<EventSlot*> m_slots;
+
+        protected:
             void call(const QVariant&);
 
         public slots:
@@ -142,22 +151,28 @@ namespace Kross { namespace Api {
             //void callback(Kross::Api::List*);
     };
 
-    /**
-     * Class to handle slots with primitive parameters
-     * like QString, int or QVariant.
-     */
-    class EventSlotPrimitive : public EventSlot
+/*TODO
+    class EventSlotTranslator : protected QObject
     {
             Q_OBJECT
+            //friend class EventManager;
         public:
-            EventSlotPrimitive(EventManager* eventmanager)
-                : EventSlot(eventmanager) {}
-            virtual ~EventSlotPrimitive() {}
-        public slots:
-            void callback() {}
-            void callback(int) {}
-            void callback(int, int) {}
+            EventSlotTranslator() {}
+            virtual ~EventSlotTranslator() {}
+- Nur EINE instanz fuer alle!!!
+- connect() muss hier erfolgen. oder ???
+  => dann muessen wir uns aber auch QObject, etc. merken :-(
+- also mapper;
+  IN EVENTSLOT* =>
+    void connect(QObject* sender, const QCString& signal, QString function)
+    {
+      connect(sender,SIGNAL(),EventSlotTranslator*,SLOT())
+      connect(EventSlotTranslator*, SIGNAL(callbackSignal()), this, SLOT())
+    }
+        signals:
+            void callbackSignal(Kross::Api::List*);
     };
+*/
 
 }}
 

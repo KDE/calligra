@@ -21,6 +21,7 @@
 
 #include "qtobject.h"
 #include "../main/scriptcontainer.h"
+#include "../main/manager.h"
 #include "eventsignal.h"
 #include "eventslot.h"
 
@@ -31,6 +32,7 @@ EventManager::EventManager(ScriptContainer* scriptcontainer, QtObject* qtobj)
     , m_scriptcontainer(scriptcontainer)
     , m_qtobj(qtobj)
 {
+    //m_slots.append( new EventSlot(this) );
 }
 
 EventManager::~EventManager()
@@ -39,17 +41,26 @@ EventManager::~EventManager()
 
 bool EventManager::connect(QObject *sender, const QCString& signal, const QString& functionname)
 {
+    QValueList<EventSlot*> slotslist = m_scriptcontainer->getManager()->getEventSlots();
+    for(QValueList<EventSlot*>::Iterator it = slotslist.begin(); it != slotslist.end(); ++it) {
+        QCString slot = (*it)->getSlot(signal);
+        if(! slot.isNull()) {
+            return (*it)->connect(this, sender, signal, functionname, slot);
+        }
+    }
+    return false;
+
+/*
     // create the matching EventSlot
     EventSlot* eventslot = new EventSlot(this);
-
     // and try to connect the signal
     if(! eventslot->connect(sender, signal, functionname)) {
         delete eventslot;
         return false;
     }
-
     m_slots << eventslot; // remember the EventSlot instance.
     return true;
+*/
 }
 
 bool EventManager::disconnect(QObject *sender, const QCString& signal, const QString& functionname)
@@ -69,16 +80,4 @@ bool EventManager::disconnect(QObject *sender, const QCString& signal, const QSt
     }
     return ok;
 }
-
-/*
-void EventManager::addEventSlot(EventSlot* receiver)
-{
-    //TODO
-}
-
-void EventManager::removeEventSlot(EventSlot* receiver)
-{
-    //TODO
-}
-*/
 

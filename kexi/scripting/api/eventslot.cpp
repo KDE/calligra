@@ -68,31 +68,40 @@ QCString EventSlot::getSlot(const QCString& signal)
         return QCString();
     }
 
-//kdDebug()<<"signal="<<signal<<" slot="<<slot<<" params="<<params<<endl;
-
-//QMember* m = md->member;
-//const QUMethod *m = md->method;
+//QMember* member = md->member;
+//const QUMethod *method = md->method;
 
     kdDebug()<<"signal="<<signal<<" slot="<<slot<<" slotid="<<slotid<<" params="<<params<<" md->name="<<md->name<<endl;
-    return "1" + slot; // Emulate the SLOT(...) macro by adding as first char a "1".
+    return QCString("1" + slot); // Emulate the SLOT(...) macro by adding as first char a "1".
 }
 
-bool EventSlot::connect(QObject* senderobj, const QCString& signal, QString function)
+bool EventSlot::connect(EventManager* eventmanager, QObject* senderobj, const QCString& signal, QString function, const QCString& slot)
 {
-    if(m_sender && ! disconnect()) return false;
-
-    m_slot = getSlot(signal);
-    if(! m_slot) return false;
-
-    if(! QObject::connect((QObject*)senderobj, signal, this, m_slot)) {
-        kdDebug() << QString("EventSlot::connect(%1, %2, %3) failed.").arg(senderobj->name()).arg(signal).arg(function) << endl;
+    if(m_sender && ! disconnect())
         return false;
+
+    const QCString& myslot = slot.isEmpty() ? getSlot(signal) : slot;
+    if(! myslot)
+        return false;
+
+    if(! m_eventmanager) {
+        EventSlot* eventslot = create(eventmanager);
+        eventslot->connect(eventmanager, senderobj, signal, function, slot);
+        m_slots.append(eventslot);
+        kdDebug() << QString("EventSlot::connect(%1, %2, %3) added child EventSlot !!!").arg(senderobj->name()).arg(signal).arg(function) << endl;
+    }
+    else {
+        m_sender = senderobj;
+        m_signal = signal;
+        m_function = function;
+        m_slot = myslot;
+        if(! QObject::connect((QObject*)senderobj, signal, this, myslot)) {
+            kdDebug() << QString("EventSlot::connect(%1, %2, %3) failed.").arg(senderobj->name()).arg(signal).arg(function) << endl;
+            return false;
+        }
+        kdDebug() << QString("EventSlot::connect(%1, %2, %3) successfully connected.").arg(senderobj->name()).arg(signal).arg(function) << endl;
     }
 
-    kdDebug() << QString("EventSlot::connect(%1, %2, %3) successfully connected.").arg(senderobj->name()).arg(signal).arg(function) << endl;
-    m_sender = senderobj;
-    m_signal = signal;
-    m_function = function;
     return true;
 }
 

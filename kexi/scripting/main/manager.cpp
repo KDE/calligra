@@ -24,6 +24,7 @@
 #include "../kjs/kjsinterpreter.h"
 #include "../api/object.h"
 #include "../api/qtobject.h"
+#include "../api/eventslot.h"
 //#include "../api/script.h"
 #include "scriptcontainer.h"
 
@@ -33,6 +34,8 @@ using namespace Kross::Api;
 
 Manager::Manager()
 {
+    m_buildin_slot = new EventSlot();
+    addEventSlot(m_buildin_slot);
 }
 
 Manager::~Manager()
@@ -43,6 +46,7 @@ Manager::~Manager()
         delete iit.data();
     for(QMap<QString, Object*>::Iterator mit = m_modules.begin(); mit != m_modules.end(); ++mit)
         delete mit.data();
+    delete m_buildin_slot;
 }
 
 bool Manager::hasModule(const QString& name)
@@ -72,6 +76,16 @@ bool Manager::addModule(Object* module)
     }
     m_modules.replace(module->getName(), module);
     return true;
+}
+
+QValueList<EventSlot*> Manager::getEventSlots()
+{
+    return m_slots;
+}
+
+void Manager::addEventSlot(EventSlot* eventslot)
+{
+    m_slots.append( eventslot );
 }
 
 ScriptContainer* Manager::getScriptContainer(const QString& scriptname)

@@ -33,6 +33,7 @@ namespace Kross { namespace Api {
     class ScriptContainer;
     class Interpreter;
     class Object;
+    class EventSlot;
 
     /**
      * The Manager class is the main entry point to work with
@@ -95,6 +96,24 @@ namespace Kross { namespace Api {
             bool addModule(Object* module);
 
             /**
+             * Return all \a EventSlot instances.
+             *
+             * \return List of \a EventSlot instances.
+             */
+            QValueList<EventSlot*> getEventSlots();
+
+            /**
+             * Add a from \a EventSlot inherited class
+             * that implements handling of additional
+             * Qt slot macros.
+             *
+             * \param eventslot The \a EventSlot that spends
+             *       slots to get Qt signals translated
+             *       into a functioncall.
+             */
+            void addEventSlot(EventSlot* eventslot);
+
+            /**
              * Return the existing \a ScriptContainer with scriptname
              * or create a new \a ScriptContainer instance and associate
              * the passed scriptname with it.
@@ -126,6 +145,10 @@ namespace Kross { namespace Api {
             QMap<QString, Interpreter*> m_interpreter;
             /// List of avaible modules.
             QMap<QString, Object*> m_modules;
+            /// The buildin \a EventSlot for basic Qt slots.
+            EventSlot* m_buildin_slot;
+            /// List of additional \a EventSlot instances.
+            QValueList<EventSlot*> m_slots;
     };
 
 }}

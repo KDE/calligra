@@ -43,12 +43,9 @@ ScriptContainer::~ScriptContainer()
     finalize();
 }
 
-bool ScriptContainer::addQObject(QObject* object, const QString& name)
+Manager* ScriptContainer::getManager()
 {
-    QString n = name.isEmpty() ? object->name() : name;
-    if(m_qtobjects.contains(n)) return false;
-    m_qtobjects.replace(n, new QtObject(this, object, n));
-    return true;
+    return m_manager;
 }
 
 const QString& ScriptContainer::getName()
@@ -81,6 +78,14 @@ void ScriptContainer::setInterpreterName(const QString& name)
 const QStringList& ScriptContainer::getFunctionNames()
 {
     return m_script ? m_script->getFunctionNames() : QStringList();
+}
+
+bool ScriptContainer::addQObject(QObject* object, const QString& name)
+{
+    QString n = name.isEmpty() ? object->name() : name;
+    if(m_qtobjects.contains(n)) return false;
+    m_qtobjects.replace(n, new QtObject(this, object, n));
+    return true;
 }
 
 void ScriptContainer::initialize()

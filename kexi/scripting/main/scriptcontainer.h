@@ -62,20 +62,9 @@ namespace Kross { namespace Api {
             ~ScriptContainer();
 
             /**
-             * Add a QObject to publish it's slots, signals
-             * and properties by using \a Kross::Api::QtObject
-             * as QObject-wrapper.
-             *
-             * \param object The QObject to wrap and publish.
-             * \param name The name the QObject should be
-             *        accessible as. If QString::null, then
-             *        the QObject's name() will be used.
-             *        Note that each QObject needs it's unique
-             *        name to be easy accessible per script.
-             * \return true if the QObject was successfully
-             *         added else false.
+             * Return the \a Manager this ScriptContainer belongs too.
              */
-            bool addQObject(QObject* object, const QString& name = QString::null);
+            Manager* getManager();
 
             /**
              * Return the name is ScriptContainer is reachable as.
@@ -109,6 +98,22 @@ namespace Kross { namespace Api {
              * \a setCode defined scriptcode spends.
              */
             const QStringList& getFunctionNames();
+
+            /**
+             * Add a QObject to publish it's slots, signals
+             * and properties by using \a Kross::Api::QtObject
+             * as QObject-wrapper.
+             *
+             * \param object The QObject to wrap and publish.
+             * \param name The name the QObject should be
+             *        accessible as. If QString::null, then
+             *        the QObject's name() will be used.
+             *        Note that each QObject needs it's unique
+             *        name to be easy accessible per script.
+             * \return true if the QObject was successfully
+             *         added else false.
+             */
+            bool addQObject(QObject* object, const QString& name = QString::null);
 
             /**
              * Execute the script container.
