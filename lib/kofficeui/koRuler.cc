@@ -105,6 +105,7 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
 /*================================================================*/
 KoRuler::~KoRuler()
 {
+    delete d->rb_menu;
     delete d;
 }
 
