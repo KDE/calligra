@@ -93,8 +93,8 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
     m_dragging( false )
 {
   d = new CanvasPrivate;
-  
-  
+
+
   d->length_namecell = 0;
   m_chooseStartTable = NULL;
   m_pEditor = 0;
@@ -143,13 +143,13 @@ KSpreadCanvas::~KSpreadCanvas()
   delete d;
 }
 
-KSpreadView* KSpreadCanvas::view() const 
-{ 
-  return d->view; 
+KSpreadView* KSpreadCanvas::view() const
+{
+  return d->view;
 }
 
-KSpreadDoc* KSpreadCanvas::doc() const 
-{ 
+KSpreadDoc* KSpreadCanvas::doc() const
+{
   return d->doc;
 }
 
@@ -192,8 +192,8 @@ bool KSpreadCanvas::focusNextPrevChild( bool )
 }
 
 int KSpreadCanvas::chooseTextLen() const
-{ 
-  return d->length_namecell; 
+{
+  return d->length_namecell;
 }
 
 KSpreadSelection* KSpreadCanvas::selectionInfo() const
@@ -804,7 +804,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     QString anchor;
     if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
       anchor = cell->testAnchor( doc()->zoomItX( cell->dblWidth() - ev_PosX +
-                               xpos ), doc()->zoomItY( ev_PosY - ypos ) );    
+                               xpos ), doc()->zoomItY( ev_PosY - ypos ) );
     else
       anchor = cell->testAnchor( doc()->zoomItX( ev_PosX - xpos ),
                                        doc()->zoomItY( ev_PosY - ypos ) );
@@ -966,30 +966,29 @@ void KSpreadCanvas::extendCurrentSelection( QPoint cell )
 
 void KSpreadCanvas::processLeftClickAnchor()
 {
-  bool isLink = (m_strAnchor.find("http://") == 0 || m_strAnchor.find("mailto:") == 0
-                 || m_strAnchor.find("ftp://") == 0 || m_strAnchor.find("file:") == 0 );
-  bool isLocalLink = (m_strAnchor.find("file:") == 0);
-  if ( isLink )
-  {
-    QString question = i18n("Do you want to open this link to '%1'?\n").arg(m_strAnchor);
-    if ( isLocalLink )
+    bool isRefLink = localReferenceAnchor( m_strAnchor );
+    bool isLocalLink = (m_strAnchor.find("file:") == 0);
+    if ( !isRefLink )
     {
-      question += i18n("Note that opening a link to a local file may "
-                       "compromise your system's security.");
-    }
+        QString question = i18n("Do you want to open this link to '%1'?\n").arg(m_strAnchor);
+        if ( isLocalLink )
+        {
+            question += i18n("Note that opening a link to a local file may "
+                             "compromise your system's security.");
+        }
 
-    // this will also start local programs, so adding a "don't warn again"
-    // checkbox will probably be too dangerous
-    int choice = KMessageBox::warningYesNo(this, question, i18n("Open Link?"));
-    if ( choice == KMessageBox::Yes )
-    {
-      (void) new KRun( m_strAnchor );
+        // this will also start local programs, so adding a "don't warn again"
+        // checkbox will probably be too dangerous
+        int choice = KMessageBox::warningYesNo(this, question, i18n("Open Link?"));
+        if ( choice == KMessageBox::Yes )
+        {
+            (void) new KRun( m_strAnchor );
+        }
     }
-  }
-  else
-  {
-    gotoLocation( KSpreadPoint( m_strAnchor, d->doc->map() ) );
-  }
+    else
+    {
+        gotoLocation( KSpreadPoint( m_strAnchor, d->doc->map() ) );
+    }
 }
 
 void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
@@ -1495,7 +1494,7 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
     // LTR interface)
     if ( activeTable() && activeTable()->layoutDirection()==KSpreadSheet::RightToLeft && !QApplication::reverseLayout() )
     {
-        int dx = _ev->size().width() - _ev->oldSize().width(); 
+        int dx = _ev->size().width() - _ev->oldSize().width();
         scroll(dx, 0);
     }
     else if ( activeTable() && activeTable()->layoutDirection()==KSpreadSheet::LeftToRight && QApplication::reverseLayout() )
@@ -1563,7 +1562,7 @@ QPoint KSpreadCanvas::cursorPos ()
   }
   else
     cursor = selectionInfo()->cursorPosition();
-  
+
   return cursor;
 }
 
@@ -1933,7 +1932,7 @@ void KSpreadCanvas::processF2Key(QKeyEvent* /* event */)
     d->view->editWidget()->setCursorPosition( m_pEditor->cursorPosition() - 1 );
   d->view->editWidget()->cursorForward( false );
 
-  
+
   QPoint cursor = cursorPos();
 
   d->doc->emitEndOperation( QRect( cursor, cursor ) );
@@ -2379,7 +2378,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     processF2Key( _ev );
     return;
     break;
-   
+
    case Key_F4:
     processF4Key( _ev );
     return;
@@ -2390,7 +2389,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     return;
     break;
   }
-  
+
   //most process*Key methods call emitEndOperation, this only gets called in some situations
   // (after some move operations)
   d->doc->emitEndOperation( table->visibleRect( this ) );
@@ -2406,9 +2405,9 @@ void KSpreadCanvas::processIMEvent( QIMEvent * event )
     createEditor( CellEditor );
     m_pEditor->handleIMEvent( event );
   }
-  
+
   QPoint cursor;
-  
+
   if ( m_bChoose )
   {
     cursor = selectionInfo()->getChooseCursor();
@@ -2418,7 +2417,7 @@ void KSpreadCanvas::processIMEvent( QIMEvent * event )
   }
   else
     cursor = selectionInfo()->cursorPosition();
- 
+
   d->doc->emitEndOperation( QRect( cursor, cursor ) );
 }
 
@@ -2599,7 +2598,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
 
       if ( cell->isObscuringForced() )
         continue;
-      
+
       formatCellByKey (cell, _ev->key(), rect);
     } // for left .. right
   } // for top .. bottom
@@ -2664,7 +2663,7 @@ bool KSpreadCanvas::formatCellByKey (KSpreadCell *cell, int key, const QRect &re
     }
     break;
   } // switch
-  
+
   return true;
 }
 
@@ -3333,7 +3332,7 @@ void KSpreadCanvas::paintUpdates()
       if ( sheet->cellIsPaintDirty( QPoint( x, y ) ) )
       {
         cell = sheet->cellAt( x, y );
-        
+
         // recalc and relayout only for non default cells
         if( !cell->isDefault() )
         {
@@ -4315,24 +4314,24 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     {
       QColor c = colorGroup().highlight().light();
       QBrush fillSelected( c );
-      qDrawPlainRect ( &painter, 0, zoomedYPos, width, height+1, c.dark(150), 
+      qDrawPlainRect ( &painter, 0, zoomedYPos, width, height+1, c.dark(150),
            1, &fillSelected );
     }
     else if ( highlighted )
     {
       QColor c = colorGroup().highlight().light();
       QBrush fillHighlighted( c );
-      qDrawPlainRect ( &painter, 0, zoomedYPos, width, height+1, c.dark(150), 
+      qDrawPlainRect ( &painter, 0, zoomedYPos, width, height+1, c.dark(150),
            1, &fillHighlighted );
     }
     else
     {
       QColor c = colorGroup().background();
       QBrush fill( c );
-      qDrawPlainRect ( &painter, 0, zoomedYPos, width, height+1, c.dark(150), 
+      qDrawPlainRect ( &painter, 0, zoomedYPos, width, height+1, c.dark(150),
            1, &fill );
     }
-    
+
     QString rowText = QString::number( y );
 
     // Reset painter
@@ -4343,7 +4342,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
       painter.setPen( colorGroup().highlightedText() );
     else if ( highlighted || current )
       painter.setFont( boldFont );
-      
+
     int len = painter.fontMetrics().width( rowText );
     if (!row_lay->isHide())
         painter.drawText( ( width-len )/2, zoomedYPos +
@@ -5130,28 +5129,28 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
       {
         QColor c = colorGroup().highlight().light();
         QBrush fillSelected( c );
-        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150), 
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150),
            1, &fillSelected );
       }
       else if ( highlighted )
       {
         QColor c = colorGroup().highlight().light();
         QBrush fillHighlighted( c );
-        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150), 
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150),
            1, &fillHighlighted );
       }
       else
       {
         QColor c = colorGroup().background();
         QBrush fill( c );
-        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150), 
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150),
            1, &fill );
       }
 
       // Reset painter
       painter.setFont( normalFont );
       painter.setPen( colorGroup().text() );
-      
+
       if ( selected )
         painter.setPen( colorGroup().highlightedText() );
       else if ( highlighted || current )
@@ -5197,21 +5196,21 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
       {
         QColor c = colorGroup().highlight().light();
         QBrush fillSelected( c );
-        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(), 
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(),
            1, &fillSelected );
       }
       else if ( highlighted )
       {
         QColor c = colorGroup().highlight().light();
         QBrush fillHighlighted( c );
-        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(), 
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(),
            1, &fillHighlighted );
       }
       else
       {
         QColor c = colorGroup().background();
         QBrush fill( c );
-        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150), 
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150),
            1, &fill );
       }
 
@@ -5272,7 +5271,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     KSpreadSheet *table = m_canvas->activeTable();
     if ( !table )
         return;
-        
+
     // Over which cell is the mouse ?
     double ypos, xpos;
     double dwidth = m_canvas->doc()->unzoomItX( m_canvas->width() );
@@ -5291,47 +5290,47 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     KSpreadCell* cell = table->visibleCellAt( col, row );
     if ( !cell )
         return;
-        
-    // Quick cut  
+
+    // Quick cut
     if( cell->strOutText().isEmpty() )
         return;
 
     // displayed tool tip, which has the following priorities:
-    //  - cell content if the cell dimension is too small    
+    //  - cell content if the cell dimension is too small
     //  - cell comment
     //  - hyperlink
-    QString tipText;   
-    
+    QString tipText;
+
     // If cell is too small, show the content
     if ( cell->testFlag( KSpreadCell::Flag_CellTooShortX ) ||
          cell->testFlag( KSpreadCell::Flag_CellTooShortY ) )
     {
         tipText = cell->strOutText();
-        
+
         //Add 2 extra lines and a text, when both should be in the tooltip
         QString comment = cell->comment( col, row );
         if ( !comment.isEmpty() )
             comment = "\n\n" + i18n("Comment:") + "\n" + comment;
-            
-        tipText += comment;    
-    }    
+
+        tipText += comment;
+    }
 
     // Show comment, if any
     if( tipText.isEmpty() )
     {
         tipText = cell->comment( col, row );
     }
-    
+
     // Show hyperlink, if any
     if( tipText.isEmpty() )
     {
         tipText = cell->link();
     }
-    
+
     // Nothing to display, bail out
     if( tipText.isEmpty() )
       return;
-            
+
     // Determine position and width of the current cell.
     cell = table->cellAt( col, row );
     double u = cell->dblWidth( col );

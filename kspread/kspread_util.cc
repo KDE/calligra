@@ -471,7 +471,7 @@ double util_fact( double val, double end )
 
 bool util_isAllSelected(const QRect &selection)
 {
-  return ( selection.top() == 1 && selection.bottom() == KS_rowMax 
+  return ( selection.top() == 1 && selection.bottom() == KS_rowMax
 	   && selection.left() == 1 && selection.right() == KS_colMax);
 }
 
@@ -720,4 +720,14 @@ QPen convertOasisStringToPen( const QString &border )
         pen.setColor(  QColor( _color ) );
 
     return pen;
+}
+
+//Return true when it's a reference to cell from table.
+bool localReferenceAnchor( const QString &_ref )
+{
+    bool isLocalRef = (_ref.find("http://") != 0 &&
+                       _ref.find("mailto:") != 0 &&
+                       _ref.find("ftp://") != 0  &&
+                       _ref.find("file:") != 0 );
+    return isLocalRef;
 }

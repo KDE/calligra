@@ -57,12 +57,12 @@ public:
 
   bool operator== (const KSpreadPoint &cell) const;
   bool operator< (const KSpreadPoint &cell) const;
-  
+
   int row () const { return pos.y(); };
   int column () const { return pos.x(); };
   void setRow (int r) { pos.setY (r); };
   void setColumn (int c) { pos.setX (c); };
-  
+
   /*
     TODO
   bool columnFixed() const { return m_columnFixed; }
@@ -116,7 +116,7 @@ struct KSPREAD_EXPORT KSpreadRange
   int startCol () const { return range.left(); };
   int endRow () const { return range.bottom(); };
   int endCol () const { return range.right(); };
-  
+
   /** does this range contain the given cell? */
   bool contains (const KSpreadPoint &cell) const;
   /** do these two ranges have at least one common cell? */
@@ -133,7 +133,7 @@ struct KSPREAD_EXPORT KSpreadRange
 
 /**
 range-list and cell-list
-TODO: move to a separate file, improve structure, add iterators and all that 
+TODO: move to a separate file, improve structure, add iterators and all that
 TODO: use this class instead of other means of range-walking all over KSpread
 TODO: use this as selection
 TODO: anything I forgot ;)
@@ -224,6 +224,9 @@ QString convertRangeToRef( const QString & tableName, const QRect & _area );
 void insertBracket( QString & s );
 QString convertOasisPenToString( const QPen & pen );
 QPen convertOasisStringToPen( const QString &str );
+
+//Return true when it's a reference to cell from table.
+bool localReferenceAnchor( const QString &_ref );
 
 
 #endif

@@ -4611,7 +4611,11 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
         kdDebug()<<"Link found \n";
         xmlwriter.startElement( "text:p" );
         xmlwriter.startElement( "text:a" );
-        xmlwriter.addAttribute( " xlink:href", link() );
+        //Reference cell is started by "#"
+        if ( localReferenceAnchor( link() ) )
+            xmlwriter.addAttribute( " xlink:href", ( "#"+link() ) );
+        else
+            xmlwriter.addAttribute( " xlink:href", link() );
         xmlwriter.addTextNode( text() );
         xmlwriter.endElement();
         xmlwriter.endElement();
@@ -4846,11 +4850,13 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
                 text = textA.text();
                 setCellText( text );
                 setValue( text );
+                if ( link[0]=='#' )
+                    link=link.remove( 0, 1 );
                 setLink( link );
             }
-        }             
+        }
     }
-    
+
     bool isFormula = false;
     if ( element.hasAttributeNS( KoXmlNS::table, "formula" ) )
     {
