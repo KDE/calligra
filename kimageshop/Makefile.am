@@ -32,6 +32,7 @@ METASOURCES = kimageshop_main.moc kimageshop_shell.moc \
 	kfloatingtabdialog.moc gradient.moc
 
 idl_DATA = kimageshop.idl
+kimageshop.h: $(top_builddir)/lib/kofficecore/koffice.idl
 
 kdelnk_DATA = kimageshop.desktop
 kdelnkdir = $(kde_appsdir)/KOffice

@@ -108,7 +108,6 @@ void KImageShopDoc::cleanUp()
 
   ASSERT(m_lstViews.count() == 0);
 
-  m_lstAllChildren.clear();
   KoDocument::cleanUp();
 }
 

@@ -161,24 +161,21 @@ bool KImageShopShell::newDocument()
   return true;
 }
 
-bool KImageShopShell::openDocument( const char *_url, const char *_format )
+bool KImageShopShell::openDocument( const char *_url )
 {
-  if ( _format == 0L || *_format == 0 )
-    _format = "application/x-kimageshop";
-
   if ( m_pDoc && m_pDoc->isEmpty() )
     releaseDocument();
   else if ( m_pDoc && !m_pDoc->isEmpty() )
   {
     KImageShopShell *s = new KImageShopShell();
     s->show();
-    return s->openDocument( _url, _format );
+    return s->openDocument( _url );
   }
 
   kdebug( KDEBUG_INFO, 0, "Creating new document" );
 
   m_pDoc = new KImageShopDoc(510, 510);
-  if ( !m_pDoc->loadFromURL( _url, _format ) )
+  if ( !m_pDoc->loadFromURL( _url ) )
     return false;
 
   m_pView = m_pDoc->createImageView( frame() );
@@ -304,7 +301,7 @@ void KImageShopShell::slotFileOpen()
   if ( file.isNull() )
     return;
 
-  if ( !openDocument( file, "" ) )
+  if ( openDocument( file  ) )
   {
     QString tmp;
     tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );

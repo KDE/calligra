@@ -72,9 +72,6 @@ public:
   virtual void print( QPaintDevice* _dev );
   virtual void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale );
 
-//bool openDocument( const char* _filename, const char* _format = 0L );
-//bool saveDocument( const char* _filename, const char* _format = 0L );
-
   KoCommandHistory* commandHistory() { return &m_commands; };
 
 public slots:
