@@ -257,6 +257,7 @@ public slots:
     void changeAngle();
     void mergeCell();
     void dissociateCell();
+    void gotoCell();
 
     //void showComment();
     /**
@@ -470,6 +471,7 @@ private:
     KAction* m_changeAngle;
     KAction* m_mergeCell;
     KAction* m_dissociateCell;
+    KAction* m_gotoCell; 
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.

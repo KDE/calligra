@@ -80,6 +80,7 @@
 #include "kspread_dlg_preference.h"
 #include "kspread_dlg_comment.h"
 #include "kspread_dlg_angle.h"
+#include "kspread_dlg_goto.h"
 #include <kscript_scriptmenu.h>
 
 #include "handler.h"
@@ -262,7 +263,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_fontSizeDown = new KAction( i18n("Decrease font size"), "fontsizedown", 0, this, SLOT( decreaseFontSize() ), actionCollection(), "decreaseFontSize" );
     m_upper = new KAction( i18n("Upper case"), "upper", 0, this, SLOT( upper() ), actionCollection(), "upper" );
     m_lower = new KAction( i18n("Lower case"), "lower", 0, this, SLOT( lower() ), actionCollection(), "lower" );
-
+    m_gotoCell = new KAction( i18n("Goto Cell..."),"goto", 0, this, SLOT( gotoCell() ), actionCollection(), "gotoCell" );
     m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
     m_undo->setEnabled( FALSE );
     m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );
@@ -584,7 +585,7 @@ bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
 
 	if ( !choose )
 	    updateEditWidget();
-	
+
 	break;
 
     case Key_Left:
@@ -787,6 +788,7 @@ void KSpreadView::updateReadWrite( bool readwrite )
   m_undo->setEnabled( false );
   m_showTable->setEnabled( true );
   m_hideTable->setEnabled( true );
+  m_gotoCell->setEnabled( true );
   //  m_newView->setEnabled( true );
   //m_pDoc->KXMLGUIClient::action( "newView" )->setEnabled( true ); // obsolete (Werner)
   m_oszi->setEnabled( true );
@@ -1689,6 +1691,12 @@ m_pTable->dissociateCell(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow
 void KSpreadView::consolidate()
 {
     KSpreadConsolidate* dlg = new KSpreadConsolidate( this, "Consolidate" );
+    dlg->show();
+}
+
+void KSpreadView::gotoCell()
+{
+    KSpreadgoto* dlg = new KSpreadgoto( this, "GotoCell" );
     dlg->show();
 }
 
