@@ -875,8 +875,6 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
         if ( !wordArray[i].isEmpty())
         {
             KoAutoFormatEntry* it = m_entries[wordArray[i].lower()];
-            unsigned int length = wordArray[i].length();
-            int start = index - length;
 
             if ( wordArray[i]!=0  && it )
             {
@@ -1813,8 +1811,8 @@ void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::Size)
         {
-            format->setBold( formatOptions->m_options & KoSearchContext::Bold);
-            flags |=KoTextFormat::Bold;
+            format->setPointSize( formatOptions->m_size );
+            flags |=KoTextFormat::Size;
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::Family)
         {
@@ -1826,7 +1824,7 @@ void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::BgColor)
         {
-            format->setTextBackgroundColor(formatOptions->m_color);
+            format->setTextBackgroundColor(formatOptions->m_backGroungColor);
             flags |=KoTextFormat::TextBackgroundColor;
         }
 
