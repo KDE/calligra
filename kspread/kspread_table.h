@@ -462,22 +462,23 @@ public:
     /**
      * Moves all columns which are >= @p col one position to the right and
      * inserts a new and empty column. After this the table is redrawn.
+     * nbCol is the number of column which are installing
      */
-    bool insertColumn( int col );
+    bool insertColumn( int col,int nbCol=0 );
     /**
      * Moves all rows which are >= @p row one position down and
      * inserts a new and empty row. After this the table is redrawn.
      */
-    bool insertRow( int row );
+    bool insertRow( int row,int nbRow=0 );
 
     /**
      * Deletes the column @p col and redraws the table.
      */
-    void removeColumn( int col );
+    void removeColumn( int col,int nbCol=0 );
     /**
      * Deletes the row @p row and redraws the table.
      */
-    void removeRow( int row );
+    void removeRow( int row,int nbRow=0 );
 
     int adjustColumn( const QPoint &_marker, int _col = -1 );
     int adjustRow( const QPoint &_marker, int _row = -1 );
@@ -565,7 +566,7 @@ public:
      * @param ref see ChangeRef
      * @param tabname completes the pos specification by giving the table name
      */
-    void changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref,QString tabname);
+    void changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref,QString tabname,int NbCol=1);
 
     /**
      * Update chart when you insert or remove row or column

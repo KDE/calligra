@@ -2286,22 +2286,27 @@ void KSpreadTable::unshiftRow( const QPoint& marker )
     emit sig_updateView( this );
 }
 
-bool KSpreadTable::insertColumn( int col )
+bool KSpreadTable::insertColumn( int col, int nbCol )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        KSpreadUndoInsertColumn *undo = new KSpreadUndoInsertColumn( m_pDoc, this, col );
+        KSpreadUndoInsertColumn *undo = new KSpreadUndoInsertColumn( m_pDoc, this, col,nbCol );
         m_pDoc->undoBuffer()->appendUndo( undo  );
     }
 
     m_pDoc->setModified( true );
-
-    bool res = m_cells.insertColumn( col );
-    m_columns.insertColumn( col );
+    bool res=false;
+    for(int i=0;i<=nbCol;i++)
+        {
+        bool result = m_cells.insertColumn( col+i );
+        m_columns.insertColumn( col+i);
+        if(!result)
+                res=false;
+        }
 
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert, name() );
+        it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert, name() ,nbCol+1);
     refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert );
     refreshMergedCell();
     recalc(true);
@@ -2311,22 +2316,28 @@ bool KSpreadTable::insertColumn( int col )
     return res;
 }
 
-bool KSpreadTable::insertRow( int row )
+bool KSpreadTable::insertRow( int row,int nbRow )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        KSpreadUndoInsertRow *undo = new KSpreadUndoInsertRow( m_pDoc, this, row );
+        KSpreadUndoInsertRow *undo = new KSpreadUndoInsertRow( m_pDoc, this, row,nbRow );
         m_pDoc->undoBuffer()->appendUndo( undo  );
     }
 
     m_pDoc->setModified( true );
 
-    bool res = m_cells.insertRow( row );
-    m_rows.insertRow( row );
+    bool res=false;
+    for(int i=0;i<=nbRow;i++)
+        {
+        bool result = m_cells.insertRow( row+i );
+        m_rows.insertRow( row );
+        if(!result)
+                res=false;
+        }
 
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowInsert, name() );
+        it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowInsert, name() ,nbRow+1);
     refreshChart( QPoint( 1, row ), true, KSpreadTable::RowInsert );
     refreshMergedCell();
     recalc(true);
@@ -2336,22 +2347,25 @@ bool KSpreadTable::insertRow( int row )
     return res;
 }
 
-void KSpreadTable::removeColumn( int col )
+void KSpreadTable::removeColumn( int col,int nbCol )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        KSpreadUndoRemoveColumn *undo = new KSpreadUndoRemoveColumn( m_pDoc, this, col );
+        KSpreadUndoRemoveColumn *undo = new KSpreadUndoRemoveColumn( m_pDoc, this, col, nbCol );
         m_pDoc->undoBuffer()->appendUndo( undo  );
     }
 
     m_pDoc->setModified( true );
 
-    m_cells.removeColumn( col );
-    m_columns.removeColumn( col );
+    for(int i=0;i<=nbCol;i++)
+        {
+        m_cells.removeColumn( col );
+        m_columns.removeColumn( col );
+        }
 
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove, name() );
+        it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove, name(),nbCol+1 );
     refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove );
     recalc(true);
     refreshMergedCell();
@@ -2359,22 +2373,22 @@ void KSpreadTable::removeColumn( int col )
     emit sig_updateView( this );
 }
 
-void KSpreadTable::removeRow( int row )
+void KSpreadTable::removeRow( int row,int nbRow )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        KSpreadUndoRemoveRow *undo = new KSpreadUndoRemoveRow( m_pDoc, this, row );
+        KSpreadUndoRemoveRow *undo = new KSpreadUndoRemoveRow( m_pDoc, this, row,nbRow );
         m_pDoc->undoBuffer()->appendUndo( undo  );
     }
-
     m_pDoc->setModified( true );
-
-    m_cells.removeRow( row );
-    m_rows.removeRow( row );
-
+    for(int i=0;i<=nbRow;i++)
+        {
+        m_cells.removeRow( row );
+        m_rows.removeRow( row );
+        }
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowRemove, name() );
+        it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowRemove, name(),nbRow+1 );
     refreshChart(QPoint( 1, row ), true, KSpreadTable::RowRemove);
     recalc(true);
     refreshMergedCell();
@@ -2470,7 +2484,7 @@ else
   return selection;
 }
 
-void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref, QString tabname)
+void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref, QString tabname,int nbCol)
 {
   bool correctDefaultTableName = (tabname == name()); // for cells without table ref (eg "A1")
   KSpreadCell* c = m_cells.firstCell();
@@ -2529,14 +2543,14 @@ void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
                    && col>=pos.x()     // Column after the new one : +1
                    && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
                 {
-                  newText += util_columnLabel(col+1);
+                  newText += util_columnLabel(col+nbCol);
                 }
                 else if(ref==ColumnRemove
                         && correctTableName
                         && col > pos.x() // Column after the deleted one : -1
                         && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
                 {
-                  newText += util_columnLabel(col-1);
+                  newText += util_columnLabel(col-nbCol);
                 }
                 else
                   newText += util_columnLabel(col);
@@ -2551,14 +2565,14 @@ void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
                    && row >= pos.y() // Row after the new one : +1
                    && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
                 {
-                  newText += QString::number( row+1 );
+                  newText += QString::number( row+nbCol );
                 }
                 else if(ref==RowRemove
                         && correctTableName
                         && row > pos.y() // Column after the deleted one : -1
                         && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
                 {
-                  newText += QString::number( row-1 );
+                  newText += QString::number( row-nbCol );
                 }
                 else
                   newText += QString::number( row );

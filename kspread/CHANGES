@@ -1069,3 +1069,7 @@ compatibility with old function you can used against DECHEX, DECOCT, DECBIN
 2000-11-11-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 -Now kspread_dlg_layout works when you select an entire column/row(s)
+
+2000-11-16-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+Now you can insert/remove multiple column/row ( select area )

@@ -327,13 +327,13 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( m_selectFont, SIGNAL( activated( const QString& ) ), this, SLOT( fontSelected( const QString& ) ) );
     m_selectFontSize = new KFontSizeAction( i18n("Select Font Size"), 0, actionCollection(), "selectFontSize" );
     connect( m_selectFontSize, SIGNAL( fontSizeChanged( int ) ), this, SLOT( fontSizeSelected( int ) ) );
-    m_deleteColumn = new KAction( i18n("Delete Column"), "delete_table_col", 0, this, SLOT( deleteColumn() ),
+    m_deleteColumn = new KAction( i18n("Delete Column(s)"), "delete_table_col", 0, this, SLOT( deleteColumn() ),
                                   actionCollection(), "deleteColumn" );
-    m_deleteRow = new KAction( i18n("Delete Row"), "delete_table_row", 0, this, SLOT( deleteRow() ),
+    m_deleteRow = new KAction( i18n("Delete Row(s)"), "delete_table_row", 0, this, SLOT( deleteRow() ),
                                actionCollection(), "deleteRow" );
-    m_insertColumn = new KAction( i18n("Insert Column"), "insert_table_col" , 0, this, SLOT( insertColumn() ),
+    m_insertColumn = new KAction( i18n("Insert Column(s)"), "insert_table_col" , 0, this, SLOT( insertColumn() ),
                                   actionCollection(), "insertColumn" );
-    m_insertRow = new KAction( i18n("Insert Row"), "insert_table_row", 0, this, SLOT( insertRow() ),
+    m_insertRow = new KAction( i18n("Insert Row(s)"), "insert_table_row", 0, this, SLOT( insertRow() ),
                                actionCollection(), "insertRow" );
     m_insertCell = new KAction( i18n("Insert Cell ..."), "insertcell", 0, this, SLOT( slotInsert() ),
                                actionCollection(), "insertCell" );
@@ -818,10 +818,10 @@ void KSpreadView::deleteColumn()
         return;
 
     QRect r( activeTable()-> selectionRect() );
-    if(r.left()==0)
+    if(r.left()==0 || r.right()==0x7FFF)
         m_pTable->removeColumn( m_pCanvas->markerColumn() );
     else
-        m_pTable->removeColumn( r.left() );
+        m_pTable->removeColumn( r.left(),(r.right()-r.left()) );
 
     updateEditWidget();
 }
@@ -831,10 +831,10 @@ void KSpreadView::deleteRow()
     if ( !m_pTable )
         return;
     QRect r( activeTable()-> selectionRect() );
-    if(r.left()==0)
+    if(r.left()==0 || r.bottom()==0x7FFF)
         m_pTable->removeRow( m_pCanvas->markerRow() );
     else
-        m_pTable->removeRow( r.top() );
+        m_pTable->removeRow( r.top(),(r.bottom()-r.top()) );
 
     updateEditWidget();
 }
@@ -844,10 +844,10 @@ void KSpreadView::insertColumn()
     if ( !m_pTable )
         return;
     QRect r( activeTable()-> selectionRect() );
-    if(r.left()==0)
+    if(r.left()==0|| r.right()==0x7FFF)
         m_pTable->insertColumn( m_pCanvas->markerColumn() );
     else
-        m_pTable->insertColumn( r.left() );
+        m_pTable->insertColumn( r.left(),(r.right()-r.left()) );
 
 
     updateEditWidget();
@@ -858,10 +858,10 @@ void KSpreadView::insertRow()
     if ( !m_pTable )
         return;
     QRect r( activeTable()-> selectionRect() );
-    if(r.left()==0)
+    if(r.left()==0 || r.bottom()==0x7FFF)
         m_pTable->insertRow( m_pCanvas->markerRow() );
     else
-        m_pTable->insertRow( r.top() );
+        m_pTable->insertRow( r.top(),(r.bottom()-r.top()) );
 
     updateEditWidget();
 }
