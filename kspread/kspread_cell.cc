@@ -2132,9 +2132,9 @@ void KSpreadCell::paintFormulaIndicator(QPainter& painter, QPoint corner,
   if( isFormula() && m_pTable->getShowFormulaIndicator() )
   {
     QPointArray point( 3 );
-    point.setPoint( 0, corner.x(), corner.y() + height() - 5 );
+    point.setPoint( 0, corner.x(), corner.y() + height() - 6 );
     point.setPoint( 1, corner.x(), corner.y() + height() );
-    point.setPoint( 2, corner.x() + 5, corner.y() + height() );
+    point.setPoint( 2, corner.x() + 6, corner.y() + height() );
     painter.setBrush( QBrush(Qt::blue ) );
     painter.setPen( Qt::NoPen );
     painter.drawPolygon( point );
