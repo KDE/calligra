@@ -578,19 +578,28 @@ void KFormulaView::createGUI()
 
 void KFormulaView::slotTypeChanged(const BasicElement *elm)
 {  
-    const type_info& type = typeid(*elm);
-    
-    bool isText = type == typeid(TextElement);
-    bool isBracket = type == typeid(BracketElement);
-    bool isFraction = type == typeid(FractionElement);
-    // bool isIntegral = type == typeid(IntegralElement);
-    bool isIntegral = false;
-    bool isMatrix = type == typeid(MatrixElement);
+    bool isText, isBracket, isFraction, isIntegral, isMatrix, isRoot;
+
+    if (elm) {
+	
+	const type_info& type = typeid(*elm);
+	
+	isText = type == typeid(TextElement);
+	isBracket = type == typeid(BracketElement);
+	isFraction = type == typeid(FractionElement);
+	// isIntegral = type == typeid(IntegralElement);
+	isIntegral = false;
+	isMatrix = type == typeid(MatrixElement);
+	isRoot = type == typeid(RootElement);
+    } else {
+	isRoot = isMatrix = isIntegral = 
+	    isFraction = isBracket = isText = false;
+    }
 
     m_rToolBarType->setItemEnabled(m_idButtonType_Spl,isText);
     m_rToolBarType->setItemEnabled(m_idComboType_DelLeft,isBracket);
     m_rToolBarType->setItemEnabled(m_idComboType_DelRight,isBracket);
-    m_rToolBarType->setItemEnabled(m_idButtonType_RIn,type == typeid(RootElement));
+    m_rToolBarType->setItemEnabled(m_idButtonType_RIn,isRoot);
     m_rToolBarType->setItemEnabled(m_idButtonType_UAl,isFraction);
     m_rToolBarType->setItemEnabled(m_idButtonType_DAl,isFraction); 
     m_rToolBarType->setItemEnabled(m_idButtonType_MAl,isFraction);  
