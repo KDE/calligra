@@ -45,6 +45,8 @@ private slots:
 
     void spellCheckerReplaceAll( const QString &, const QString & );
 
+    void slotModalSpellText();
+
 private:
     QMultiLineEdit *multi;
     KOSpell *m_spell;

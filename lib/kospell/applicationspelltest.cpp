@@ -28,6 +28,8 @@ ApplicationWindowSpell::ApplicationWindowSpell()
 
 
     file->insertItem( "Spell text", this, SLOT(slotSpellText()));
+    file->insertItem( "Modal Spell text", this, SLOT(slotModalSpellText()));
+
     file->insertItem( "Config", this, SLOT(slotConfigSpellText()));
 
     multi = new QMultiLineEdit( this, "editor" );
@@ -46,6 +48,16 @@ ApplicationWindowSpell::~ApplicationWindowSpell()
     delete m_spellConfig;
 }
 
+void ApplicationWindowSpell::slotModalSpellText()
+{
+    QString text = multi->selectedText();
+    if ( !text.isEmpty() )
+    {
+        kdDebug()<<" text :"<<text<<endl;
+        KOSpell::modalCheck( text, 0L );
+        kdDebug()<<" after : text :"<<text<<endl;
+    }
+}
 
 void ApplicationWindowSpell::slotSpellText()
 {

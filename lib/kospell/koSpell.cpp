@@ -269,8 +269,9 @@ bool KOSpell::writePersonalDictionary ()
     return true;
 }
 
-bool KOSpell::ignore (const QString & word)
+bool KOSpell::ignore (const QString & /*word*/)
 {
+    //fixme !!!!!!!!!!!!!!!!
     return true;
 }
 
@@ -299,7 +300,7 @@ QStringList KOSpell::resultCheckWord( const QString &_word )
 bool KOSpell::spellWord( const QString &_word )
 {
     QStringList lst =resultCheckWord( _word );
-    if ( lst.isEmpty() && (lastpos >= origbuffer.length()-1) )
+    if ( lst.isEmpty() && (lastpos >= (int)origbuffer.length()-1) )
     {
         emit death();
         return false;
@@ -317,7 +318,7 @@ void KOSpell::nextWord()
     do
     {
         int i =0;
-        for ( i = lastpos; i<origbuffer.length();i++)
+        for ( i = lastpos; i<(int)origbuffer.length();i++)
         {
             QChar ch = origbuffer[i];
             if ( ch.isSpace() || ch.isPunct() )
@@ -343,7 +344,7 @@ void KOSpell::nextWord()
         if (ignorelist.findIndex(word.lower())!=-1)
             word ="";
     }
-    while ( word.isEmpty() && (lastpos < origbuffer.length()-1));
+    while ( word.isEmpty() && (lastpos < (int)origbuffer.length()-1));
 
     if ( !spellWord( word ))
     {
@@ -584,6 +585,56 @@ void KOSpell::changeSpellLanguage( int index )
     //possible_err = new_aspell_speller(spell_config2);
     delete_aspell_config(config2);
 }
+
+
+int KOSpell::modalCheck( QString& text )
+{
+    return modalCheck( text,0 );
+}
+
+int KOSpell::modalCheck( QString& text, KOSpellConfig* _kcs )
+{
+    modalreturn = 0;
+    modaltext = text;
+
+    KOSpell* m_spell = new KOSpell(0L, i18n("Spell Checker"), 0 ,_kcs, true, true );
+    QObject::connect( m_spell, SIGNAL( death() ),
+                      m_spell, SLOT( slotModalSpellCheckerFinished() ) );
+    QObject::connect( m_spell, SIGNAL( corrected( const QString &, const QString &, unsigned int ) ),
+                      m_spell, SLOT( slotSpellCheckerCorrected( const QString &, const QString &, unsigned int ) ) );
+    QObject::connect( m_spell, SIGNAL( done( const QString & ) ),
+                      m_spell, SLOT( slotModalDone( const QString & ) ) );
+
+    bool result = m_spell->check( text );
+    if ( !result)
+    {
+        delete m_spell;
+        m_spell=0L;
+    }
+
+    text = modaltext;
+
+    return modalreturn;
+}
+
+void KOSpell::slotSpellCheckerCorrected( const QString & oldText, const QString & newText, unsigned int pos )
+{
+    modaltext=modaltext.replace(pos,oldText.length(),newText);
+}
+
+
+void KOSpell::slotModalDone( const QString &/*_buffer*/ )
+{
+    slotModalSpellCheckerFinished();
+}
+
+void KOSpell::slotModalSpellCheckerFinished()
+{
+    modalreturn=(int)this->status();
+}
+QString KOSpell::modaltext;
+int KOSpell::modalreturn = 0;
+
 
 #include "koSpell.moc"
 

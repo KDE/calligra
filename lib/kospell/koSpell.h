@@ -419,6 +419,13 @@ protected:
     bool progressbar;
     bool autoDelete;
     bool modaldlg;
+
+    static QString modaltext;
+    static int modalreturn;
+    static QWidget* modalWidgetHack;
+    static QStringList modalListText;
+
+
     bool autocorrect;
     QString caption;
     QString orig;
@@ -461,6 +468,12 @@ protected:
 
     bool initConfig();
     void changeSpellLanguage( int index );
+
+private slots:
+    void slotSpellCheckerCorrected( const QString &, const QString &, unsigned int );
+    void slotModalDone( const QString &/*_buffer*/ );
+    void slotModalSpellCheckerFinished();
+
 private:
     class KOSpellPrivate;
     KOSpellPrivate *d;
