@@ -24,7 +24,6 @@
 #include <kdatetimewidget.h>
 #include <klineedit.h>
 #include <knuminput.h>
-#include <kpassdlg.h>
 #include <ktextedit.h>
 #include <ktimewidget.h>
 
@@ -43,7 +42,7 @@ double KexiDBInputWidget::getDoubleRangeFromPrecision( int precision ) {
 	return base.toDouble();
 }
 
-KexiDBInputWidget::KexiDBInputWidget( DataType type, QWidget *parent, const char *name )
+KexiDBInputWidget::KexiDBInputWidget( WidgetType type, QWidget *parent, const char *name )
 	: QWidget( parent, name ), p_widget( 0 ) {
 
 	p_intMin = INTMIN;
@@ -56,7 +55,7 @@ KexiDBInputWidget::KexiDBInputWidget( DataType type, QWidget *parent, const char
 	
 	(new QVBoxLayout( this ))->setAutoAdd( true );
 	
-	setDataType( type );
+	setWidgetType( type );
 }
 
 KexiDBInputWidget::KexiDBInputWidget( QWidget *parent, const char *name )
@@ -72,7 +71,7 @@ KexiDBInputWidget::KexiDBInputWidget( QWidget *parent, const char *name )
 	
 	(new QVBoxLayout( this ))->setAutoAdd( true );
 	
-	setDataType( Undefined );
+	setWidgetType( Undefined );
 }
 
 KexiDBInputWidget::~KexiDBInputWidget() {
@@ -136,7 +135,7 @@ void KexiDBInputWidget::reinit() {
 		delete p_widget;
 	}
 	
-	switch( p_dataType ) {
+	switch( p_widgetType ) {
 		case Date:
 			p_widget = new KDateWidget( this );
 			connect( p_widget, SIGNAL( valueChanged( const QDate& ) ), this, SLOT( slotValueChanged() ) );
@@ -152,11 +151,6 @@ void KexiDBInputWidget::reinit() {
 		case Integer:
 			p_widget = new KIntSpinBox( p_intMin, p_intMax, 1, 0, 10, this );
 			connect( p_widget, SIGNAL( valueChanged( int ) ), this, SLOT( slotValueChanged() ) );
-			break;
-		case Password:
-			p_widget = new KPasswordEdit( this );
-			((KPasswordEdit*)p_widget)->setMaxLength( p_maxStringLength );
-			connect( p_widget, SIGNAL( valueChanged( const QString& ) ), this, SLOT( slotValueChanged( const QString& ) ) );
 			break;
 		case Text:
 			p_widget = new KLineEdit( this );
@@ -188,9 +182,9 @@ void KexiDBInputWidget::reinit() {
 void KexiDBInputWidget::setInvalidState( const QString& text ) {
 	/*
 	Widgets with an invalid dataSource are always a QLabel
-	Setting this explicitly until the datatype is set automatically
+	Setting this explicitly until the widgettype is set automatically
 	*/
-	setDataType( Undefined );
+	setWidgetType( Undefined );
 	QLabel* lbl = dynamic_cast<QLabel*>( p_widget );
 	if ( lbl != 0L ) {
 		lbl->setText( text );

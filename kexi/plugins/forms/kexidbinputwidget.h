@@ -37,25 +37,24 @@ class KexiDBInputWidget : public QWidget, public KexiDataItemInterface
 	Q_OBJECT
 	Q_OVERRIDE(QString text DESIGNABLE false)
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(DataType dataType READ dataType WRITE setDataType DESIGNABLE true)
+	Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType DESIGNABLE true)
 	Q_PROPERTY(bool readOnly READ readOnly WRITE setReadOnly DESIGNABLE true)
-	Q_ENUMS( DataType )
+	Q_ENUMS( WidgetType )
 
 	public:
 	
-		enum DataType {
+		enum WidgetType {
 			Undefined,
 			Date,
 			DateTime,
 			Decimal,
 			Integer,
 			MultiLineText,
-			Password,
 			Text,
 			Time
 		};
 	
-		KexiDBInputWidget( DataType type, QWidget *parent = 0, const char *name = 0 );
+		KexiDBInputWidget( WidgetType type, QWidget *parent = 0, const char *name = 0 );
 		KexiDBInputWidget( QWidget *parent = 0, const char *name = 0 );
 
 		virtual ~KexiDBInputWidget();
@@ -64,8 +63,8 @@ class KexiDBInputWidget : public QWidget, public KexiDataItemInterface
 		virtual QVariant value();
 		virtual void setInvalidState( const QString& text );
 
-		DataType dataType() const {
-			return p_dataType;
+		WidgetType widgetType() const {
+			return p_widgetType;
 		}
 
 		bool readOnly() const {
@@ -74,9 +73,9 @@ class KexiDBInputWidget : public QWidget, public KexiDataItemInterface
 
 	public slots:
 		void setReadOnly( bool );
-		void setDataType( DataType type ) {
-			const bool differ = type != p_dataType;
-			p_dataType = type;
+		void setWidgetType( WidgetType type ) {
+			const bool differ = type != p_widgetType;
+			p_widgetType = type;
 			if ( differ) {
 				reinit();
 			}
@@ -94,8 +93,6 @@ class KexiDBInputWidget : public QWidget, public KexiDataItemInterface
 	protected:
 		virtual void setValueInternal( const QVariant& value );
 	
-	protected:
-	
 	protected slots:
 		void slotValueChanged( const QString& );
 		void slotValueChanged();
@@ -111,7 +108,7 @@ class KexiDBInputWidget : public QWidget, public KexiDataItemInterface
 		double p_doubleMin;
 		double p_doubleMax;
 		int p_maxStringLength;
-		DataType p_dataType;
+		WidgetType p_widgetType;
 		QWidget* p_widget;
 		bool p_readOnly;
 	};
