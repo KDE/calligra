@@ -28,6 +28,7 @@
 #include "kwtextframeset.h"
 #include "kwanchor.h"
 #include "resizehandles.h"
+#include <qpicture.h>
 
 #include <kformulacontainer.h>
 #include <kformuladocument.h>
@@ -1274,7 +1275,8 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
         {
             KoImageKey key;
             key.loadAttributes( keyElement, QDate(), QTime() );
-            m_doc->addImageRequest( key, this );
+            m_image = KWImage( key, QImage() );
+            m_doc->addImageRequest( this );
         }
         else
         {
@@ -1283,7 +1285,8 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
             if ( !filenameElement.isNull() )
             {
                 QString filename = filenameElement.attribute( "value" );
-                m_doc->addImageRequest( KoImageKey( filename, QDateTime::currentDateTime() ), this );
+                m_image = KWImage( KoImageKey( filename, QDateTime::currentDateTime() ), QImage() );
+                m_doc->addImageRequest( this );
             }
             else
             {
@@ -1352,7 +1355,8 @@ void KWClipartFrameSet::load( QDomElement &attributes, bool loadFrames )
         {
             KoClipartKey key;
             key.loadAttributes( keyElement, QDate(), QTime() );
-            m_doc->addClipartRequest( key, this );
+            m_clipart = KoClipart( key, QPicture() );
+            m_doc->addClipartRequest( this );
         }
         else
             kdError(32001) << "Missing KEY tag in CLIPART" << endl;

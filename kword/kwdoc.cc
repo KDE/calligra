@@ -1574,14 +1574,14 @@ void KWDocument::processImageRequests()
     }
     m_imageRequests.clear();
 
-    QMapIterator<KoImageKey,KWPictureFrameSet *> it3 = m_imageRequests2.begin();
-    for ( ; it3 != m_imageRequests2.end(); ++it3 )
-        it3.data()->setImage( m_imageCollection.findImage( it3.key() ) );
+    QListIterator<KWPictureFrameSet> it3( m_imageRequests2 );
+    for ( ; it3.current(); ++it3 )
+        it3.current()->setImage( m_imageCollection.findImage( it3.current()->key() ) );
     m_imageRequests2.clear();
 
-    QMapIterator<KoClipartKey,KWClipartFrameSet *> it4 = m_clipartRequests.begin();
-    for ( ; it4 != m_clipartRequests.end(); ++it4 )
-        it4.data()->setClipart( m_clipartCollection.findClipart( it4.key() ) );
+    QListIterator<KWClipartFrameSet> it4( m_clipartRequests );
+    for ( ; it4.current(); ++it4 )
+        it4.current()->setClipart( m_clipartCollection.findClipart( it4.current()->key() ) );
     m_clipartRequests.clear();
 }
 
@@ -2408,19 +2408,19 @@ void KWDocument::addImageRequest( const KoImageKey &key, KWTextImage *img )
     m_imageRequests.insert( key, img );
 }
 
-void KWDocument::addImageRequest( const KoImageKey &key, KWPictureFrameSet *fs )
+void KWDocument::addImageRequest( KWPictureFrameSet *fs )
 {
-    m_imageRequests2.insert( key, fs );
+    m_imageRequests2.append( fs );
+}
+
+void KWDocument::addClipartRequest( KWClipartFrameSet *fs )
+{
+    m_clipartRequests.append( fs );
 }
 
 void KWDocument::addAnchorRequest( const QString &framesetName, const KWAnchorPosition &anchorPos )
 {
     m_anchorRequests.insert( framesetName, anchorPos );
-}
-
-void KWDocument::addClipartRequest( const KoClipartKey & key, KWClipartFrameSet *fs )
-{
-    m_clipartRequests.insert( key, fs );
 }
 
 KWVariableFormat * KWDocument::variableFormat( int type )

@@ -311,9 +311,9 @@ public:
     // For KWTextImage
     void addImageRequest( const KoImageKey &key, KWTextImage *img );
     // For KWPictureFrameSet
-    void addImageRequest( const KoImageKey &key, KWPictureFrameSet *fs );
+    void addImageRequest( KWPictureFrameSet *fs );
     // For KWClipartFrameSet
-    void addClipartRequest( const KoClipartKey &key, KWClipartFrameSet *fs );
+    void addClipartRequest( KWClipartFrameSet *fs );
     // For KWTextParag
     void addAnchorRequest( const QString &framesetName, const KWAnchorPosition &anchorPos );
 
@@ -551,9 +551,9 @@ private:
     QMap<KoClipartKey, QString> * m_clipartMap;
 
     QMap<KoImageKey, KWTextImage *> m_imageRequests; // to be removed
-    QMap<KoImageKey, KWPictureFrameSet *> m_imageRequests2;
+    QList<KWPictureFrameSet> m_imageRequests2;
+    QList<KWClipartFrameSet> m_clipartRequests;
     QMap<QString, KWAnchorPosition> m_anchorRequests;
-    QMap<KoClipartKey, KWClipartFrameSet *> m_clipartRequests;
 
     QMap<QString,QString> * m_pasteFramesetsMap;
 
