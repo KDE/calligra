@@ -19,7 +19,7 @@
 	<Text>The DOLLAR() function converts a number to text using currency format, with the decimals rounded to the specified place. Although the name is DOLLAR, this functions will do the conversion according to the current locale.</Text>
 	<Syntax>DOLLAR(number,decimals)</Syntax>
 	<Example>DOLLAR(1403.77) returns "$ 1,403.77"</Example>
-	<Example>DOLLAR(-0.123;4) returns "$0.1230"</Example>
+	<Example>DOLLAR(-0.123;4) returns "$-0.1230"</Example>
       </Help>
     </Function>
 
