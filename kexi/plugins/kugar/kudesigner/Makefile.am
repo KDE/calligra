@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = kudesigner_kexiplugin.la
 
 kudesigner_kexiplugin_la_SOURCES = kudesigner_kexiplugin.cpp
 		
-kudesigner_kexiplugin_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
+kudesigner_kexiplugin_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
 kudesigner_kexiplugin_la_LIBADD =  ../../../core/libkexicore.la ../../../../kugar/kudesigner/libkudesignercore.la
 
 

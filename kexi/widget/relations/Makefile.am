@@ -5,7 +5,7 @@ lib_LTLIBRARIES = libkexirelationsview.la
 libkexirelationsview_la_SOURCES = kexirelationview.cpp kexirelationviewconnection.cpp \
 				kexirelationviewtable.cpp kexirelationwidget.cpp
 
-libkexirelationsview_la_LDFLAGS = $(all_libraries) -Wnounresolved
+libkexirelationsview_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexirelationsview_la_LIBADD = ../../core/libkexicore.la
 
 libkexirelationsview_la_METASOURCES = AUTO

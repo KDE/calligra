@@ -8,7 +8,7 @@ libkrosspython_la_SOURCES = \
     pythonscript.cpp \
     pythoninterpreter.cpp
 
-libkrosspython_la_LDFLAGS = $(PYTHON_FLAGS) $(all_libraries) -Wnounresolved
+libkrosspython_la_LDFLAGS = $(PYTHON_FLAGS) $(all_libraries) $(VER_INFO) -Wnounresolved
 
 libkrosspython_la_LIBADD = \
     $(LIB_QT) \

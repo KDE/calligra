@@ -5,7 +5,7 @@ kde_module_LTLIBRARIES = kexihandler_script.la
 kexihandler_script_la_SOURCES = kexiscripthandler.cpp kexiscripthandlerproxy.cpp \
 kexiscripthandleritem.cpp kexiqsaeventhandler.cpp kexiqsahost.cpp kexiqsaeditor.cpp \
 kexiqsaclasses.cpp
-kexihandler_script_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
+kexihandler_script_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
 kexihandler_script_la_LIBADD = ../../core/libkexicore.la ../../kexiDB/libkexidb.la \
 	-lqsa ../../formeditor/libkformeditor.la
 

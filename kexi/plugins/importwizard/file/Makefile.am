@@ -3,7 +3,7 @@ include $(top_srcdir)/kexi/Makefile.global
 kde_module_LTLIBRARIES = kexifileimport.la
 
 kexifileimport_la_SOURCES =  kexifileimportwizard.cpp kexiimportfiledialogwidget.cpp
-kexifileimport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
+kexifileimport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
 kexifileimport_la_LIBADD = ../../../core/libkexicore.la ../common/libkexiimportwizard.la
 
 

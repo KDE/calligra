@@ -9,7 +9,7 @@ libkexiextendedwidgets_la_SOURCES = kexidataawareview.cpp \
 	kexiscrollview.cpp kexidbconnectionwidgetbase.ui kexidbconnectionwidget.cpp \
 	kexidbconnectionwidgetdetailsbase.ui kexidbdrivercombobox.cpp
 
-libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) -Wnounresolved
+libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexiextendedwidgets_la_LIBADD = $(LIB_KDEUI) ./utils/libkexiguiutils.la tableview/libkexidatatable.la ../core/libkexicore.la -lktexteditor
 
 SUBDIRS = utils tableview . propertyeditor relations

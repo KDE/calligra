@@ -7,7 +7,7 @@ libkrossmain_la_SOURCES = \
     scriptcontainer.cpp \
     manager.cpp
 
-libkrossmain_la_LDFLAGS = $(all_libraries) -Wnounresolved
+libkrossmain_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 #$(PYTHON_FLAGS)
 
 libkrossmain_la_LIBADD = \

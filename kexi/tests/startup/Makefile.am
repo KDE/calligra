@@ -15,5 +15,5 @@ kexistartuptest_LDADD = $(LIB_QT) $(LIB_KDECORE) $(top_builddir)/kexi/kexidb/lib
  $(top_builddir)/kexi/core/libkexicore.la \
  $(all_libraries)
 
-kexistartuptest_LDFLAGS = $(all_libraries) $(KDE_RPATH) --no-undefined
+kexistartuptest_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(VER_INFO) --no-undefined
 

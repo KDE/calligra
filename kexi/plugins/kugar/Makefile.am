@@ -5,7 +5,7 @@ kde_module_LTLIBRARIES = kexihandler_kugar.la
 kexihandler_kugar_la_SOURCES = kexikugarlicense.ui kexikugarhandler.cpp kexikugarhandlerproxy.cpp \
 		kexikugarwrapper.cpp kexikugarhandleritem.cpp kexikugardesignerwrapper.cpp kexitempdir.cpp
 		
-kexihandler_kugar_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
+kexihandler_kugar_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
 kexihandler_kugar_la_LIBADD = ../../core/libkexicore.la
 
 

@@ -25,7 +25,7 @@ libkeximigrate_la_LIBADD = \
 	$(top_builddir)/kexi/main/libkeximain.la \
 	$(top_builddir)/kexi/main/startup/libkeximainstartup.la
 
-libkeximigrate_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) \
+libkeximigrate_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(VER_INFO) \
 -L$(PQXX_LIBDIR) -L$(PG_LIBDIR)
 
 

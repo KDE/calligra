@@ -10,7 +10,7 @@ keximigrate_txtmigrate_la_SOURCES = txtmigrate.cpp
 
 keximigrate_txtmigrate_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) ../libkeximigrate.la
 
-keximigrate_txtmigrate_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) -no-undefined
+keximigrate_txtmigrate_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) $(VER_INFO) -no-undefined
 
 kde_services_DATA = keximigrate_txtmigrate.desktop
 

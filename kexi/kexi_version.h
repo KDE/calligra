@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (c) 2003 Kexi Team
+   Copyright (c) 2003-2005 Kexi Team
     
    Version information based on kofficeversion.h,
    Copyright (c) 2003 KOffice Team
@@ -30,12 +30,12 @@
 #endif
 
 #ifndef KEXI_VERSION_STRING
-# define KEXI_VERSION_STRING "0.1 -pre1"
+# define KEXI_VERSION_STRING "0.1"
 #endif
 
 #define KEXI_VERSION_MAJOR 0
-#define KEXI_VERSION_MINOR 0 /* 0.1 stable -pre1 */
-#define KEXI_VERSION_RELEASE 199
+#define KEXI_VERSION_MINOR 1 /* 0.1 stable -pre1 */
+#define KEXI_VERSION_RELEASE 0
 
 #define KEXI_MAKE_VERSION( a,b,c ) (((a) << 16) | ((b) << 8) | (c))
 

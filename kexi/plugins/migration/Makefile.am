@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = kexihandler_migration.la
 
 kexihandler_migration_la_SOURCES = keximigrationpart.cpp
 
-kexihandler_migration_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
+kexihandler_migration_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
 kexihandler_migration_la_LIBADD = ../../core/libkexicore.la \
 	../../migration/libkeximigrate.la
 

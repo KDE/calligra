@@ -8,7 +8,7 @@ METASOURCES = AUTO
 bin_PROGRAMS = test
 
 test_SOURCES = main.cpp test.cpp
-test_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+test_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(VER_INFO)
 test_LDADD = $(LIB_KDEUI) ../libkexipropertyeditor.la 
 
 

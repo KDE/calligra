@@ -11,7 +11,7 @@ libkeximain_la_SOURCES = \
 
 # kexiprojectconnectiondata.cpp
 
-libkeximain_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) -Wnounresolved -no-undefined
+libkeximain_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(VER_INFO) -Wnounresolved -no-undefined
 
 SUBDIRS = startup .
 

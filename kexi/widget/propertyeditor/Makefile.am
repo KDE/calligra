@@ -9,7 +9,7 @@ libkexipropertyeditor_la_SOURCES = \
 	propertyeditorfont.cpp propertyeditorinput.cpp propertyeditorlist.cpp \
 	propertyeditordate.cpp
 
-libkexipropertyeditor_la_LDFLAGS = $(all_libraries) -Wnounresolved
+libkexipropertyeditor_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexipropertyeditor_la_LIBADD = $(LIB_KIO) \
 	../../core/libkexicore.la ../libkexiextendedwidgets.la
 

@@ -10,7 +10,7 @@ keximigrate_mysql_la_SOURCES = mysqlmigrate.cpp
 
 keximigrate_mysql_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) ../libkeximigrate.la $(MYSQL_LIBS) -lmysqlclient
 
-keximigrate_mysql_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) -no-undefined
+keximigrate_mysql_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) $(VER_INFO) -no-undefined
 
 kde_services_DATA = keximigrate_mysql.desktop
 

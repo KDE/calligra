@@ -9,7 +9,7 @@ bin_PROGRAMS = kformdesigner
 # set the include path for X, qt and KDE
 INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/formeditor -I$(top_srcdir)/kexi/widget/propertyeditor -I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/core $(all_includes)
 
-kformdesigner_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+kformdesigner_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(VER_INFO)
 
 kformdesigner_LDADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la
 
@@ -30,7 +30,7 @@ rc_DATA = kfd_mainwindow.rc
 kde_module_LTLIBRARIES = libkformdesigner_part.la
 
 libkformdesigner_part_la_SOURCES = kfd_part.cpp
-libkformdesigner_part_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+libkformdesigner_part_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries) $(VER_INFO)
 libkformdesigner_part_la_LIBADD  = $(top_builddir)/kexi/formeditor/libkformdesigner.la $(LIB_KFILE)
 
 # this is where the desktop file will go

@@ -5,7 +5,7 @@ kde_module_LTLIBRARIES = kexihandler_form.la kexidbwidgets.la
 kexihandler_form_la_SOURCES = kexidataprovider.cpp kexiformpart.cpp \
 	kexiformscrollview.cpp kexidbform.cpp kexiformview.cpp
 
-kexihandler_form_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module -no-undefined
+kexihandler_form_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module -no-undefined
 kexihandler_form_la_LIBADD = ../../core/libkexicore.la \
   ../../widget/utils/libkexiguiutils.la \
   ../../widget/tableview/libkexidatatable.la \
@@ -13,7 +13,7 @@ kexihandler_form_la_LIBADD = ../../core/libkexicore.la \
   ../../formeditor/libkformdesigner.la \
   ./libkexiformutils.la
 
-kexidbwidgets_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) -module
+kexidbwidgets_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
 kexidbwidgets_la_SOURCES = kexidbfactory.cpp kexilabel.cpp \
 	kexidbinputwidget.cpp
 kexidbwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la \
@@ -21,7 +21,7 @@ kexidbwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la \
 
 lib_LTLIBRARIES = libkexiformutils.la
 libkexiformutils_la_SOURCES = kexiformdataiteminterface.cpp kexidataawarewidgetinfo.cpp
-libkexiformutils_la_LDFLAGS = $(all_libraries) -Wnounresolved
+libkexiformutils_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexiformutils_la_LIBADD = ../../core/libkexicore.la
 
 servicesdir=$(kde_servicesdir)/kformdesigner

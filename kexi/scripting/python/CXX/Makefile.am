@@ -1,3 +1,5 @@
+include $(top_srcdir)/kexi/Makefile.global
+
 noinst_LTLIBRARIES = libkrosspythoncxx.la
 
 libkrosspythoncxx_la_SOURCES = \
@@ -6,7 +8,7 @@ libkrosspythoncxx_la_SOURCES = \
     cxxextensions.c \
     IndirectPythonInterface.cxx
 
-libkrosspythoncxx_la_LDFLAGS = $(PYTHON_FLAGS) $(all_libraries) -Wnounresolved
+libkrosspythoncxx_la_LDFLAGS = $(PYTHON_FLAGS) $(all_libraries) $(VER_INFO) -Wnounresolved
 libkrosspythoncxx_la_LIBADD = $(PYTHON_LIB)
 
 libkrosspythoncxx_la_METASOURCES = AUTO

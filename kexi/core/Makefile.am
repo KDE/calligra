@@ -16,7 +16,7 @@ libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp kexivalidator.cpp \
 
 noinst_HEADERS = kexi_p.h kexiactionproxy_p.h kexicontexthelp_p.h kexisharedactionhost_p.h
 
-libkexicore_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) -Wnounresolved -no-undefined
+libkexicore_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(VER_INFO) -Wnounresolved -no-undefined
 
 SUBDIRS = .
 

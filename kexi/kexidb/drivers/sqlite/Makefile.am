@@ -14,7 +14,7 @@ kexidb_sqlite3driver_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) \
  $(top_builddir)/kexi/kexidb/libkexidb.la \
  $(top_builddir)/kexi/kexidb/parser/libkexidbparser.la
 
-kexidb_sqlite3driver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) 
+kexidb_sqlite3driver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) $(VER_INFO) 
 
 
 kde_services_DATA = kexidb_sqlite3driver.desktop

@@ -4,7 +4,7 @@ lib_LTLIBRARIES =
 kdeinit_LTLIBRARIES = kexi.la
 bin_PROGRAMS =
 kexi_la_SOURCES = main.cpp
-kexi_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+kexi_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) $(VER_INFO)
 kexi_la_LIBADD = ./core/libkexicore.la \
 	./main/libkeximain.la
 

@@ -24,8 +24,10 @@ CVS_PASS=								# CHANGE
 CVS_HOST=cvs.kde.org				# CHANGE
 
 # Dist-settings
-TAG=0.1beta5						#CHANGE (or leave empty if snapshot)
-EXC="3rdparty/uuid main/projectWizard main/filters plugins/kugar plugins/importwizard plugins/scripting filters interfaces migration"
+#leave empty if snapshot
+TAG=`grep "# define KEXI_VERSION_STRING" ../../kexi_version.h | sed -e 's/.*\"\(.*\)\"/\1/;s/ //g'`
+
+EXC="3rdparty/uuid main/projectWizard main/filters plugins/kugar plugins/html plugins/importwizard plugins/scripting filters interfaces scriptig"
 
 # Paths
 DESTINATION=/tmp/kexi-dist/$TAG				# CHANGE TO A NON-EXISTING DIR, WHICH WILL BE CREATED LATER!!!

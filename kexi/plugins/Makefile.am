@@ -1,1 +1,3 @@
-SUBDIRS = tables relations migration queries forms #importwizard relations queries reports
+SUBDIRS = tables relations migration queries forms 
+
+#importwizard relations reports

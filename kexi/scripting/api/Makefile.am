@@ -16,7 +16,7 @@ libkrossapi_la_SOURCES = \
 
 #dict.cpp
 
-libkrossapi_la_LDFLAGS = $(all_libraries) -Wnounresolved
+libkrossapi_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkrossapi_la_LIBADD = \
     $(LIB_QT) \
     $(LIB_KDECORE)

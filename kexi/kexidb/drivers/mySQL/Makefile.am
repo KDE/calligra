@@ -22,7 +22,7 @@ kexidb_mysqldriver_la_LIBADD = $(LIB_KPARTS) \
   -lmysqlclient \
   ../../libkexidb.la
 
-kexidb_mysqldriver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) -no-undefined
+kexidb_mysqldriver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) $(VER_INFO) -no-undefined
 
 
 kde_services_DATA = kexidb_mysqldriver.desktop

@@ -7,7 +7,7 @@ INCLUDES = -I$(top_srcdir)/kexi/widget \
   -I$(top_srcdir)/kexi $(all_includes)
 
 lib_LTLIBRARIES =  libkformdesigner.la
-libkformdesigner_la_LDFLAGS = -no-undefined $(all_libraries)
+libkformdesigner_la_LDFLAGS = -no-undefined $(all_libraries) $(VER_INFO)
 libkformdesigner_la_SOURCES = container.cpp resizehandle.cpp widgetfactory.cpp \
   objpropbuffer.cpp widgetlibrary.cpp libactionwidget.cpp form.cpp \
   objecttree.cpp formIO.cpp formmanager.cpp objecttreeview.cpp spring.cpp \

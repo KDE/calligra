@@ -4,7 +4,7 @@ lib_LTLIBRARIES = libkexiimportwizard.la
 
 libkexiimportwizard_la_SOURCES =  kexiimportwizard.cpp kexiimportwizardformbase.ui\
 	kexiimportwizardform.cpp
-libkexiimportwizard_la_LDFLAGS = $(all_libraries)  --no-unresolved
+libkexiimportwizard_la_LDFLAGS = $(all_libraries) $(VER_INFO) --no-unresolved
 libkexiimportwizard_la_LIBADD = ../../../core/libkexicore.la
 
 

@@ -4,7 +4,7 @@ lib_LTLIBRARIES = libkexiguiutils.la
 libkexiguiutils_la_SOURCES = kexisharedactionclient.cpp kexirecordnavigator.cpp \
 	kexigradientwidget.cpp kexirecordmarker.cpp
 
-libkexiguiutils_la_LDFLAGS = $(all_libraries) -Wnounresolved
+libkexiguiutils_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexiguiutils_la_LIBADD = $(LIB_KDEUI)
 
 SUBDIRS = .

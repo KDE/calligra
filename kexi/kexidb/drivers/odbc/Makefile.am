@@ -10,7 +10,7 @@ kexidb_odbcdriver_la_SOURCES = odbcdriver.cpp odbcconnection.cpp
 
 kexidb_odbcdriver_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) -lodbc $(top_builddir)/kexi/kexidb/libkexidb.la
 
-kexidb_odbcdriver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) -no-undefined
+kexidb_odbcdriver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) $(VER_INFO) -no-undefined
 
 
 kde_services_DATA = kexidb_odbcdriver.desktop

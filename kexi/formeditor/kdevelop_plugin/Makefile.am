@@ -7,7 +7,7 @@ METASOURCES = AUTO
 kde_module_LTLIBRARIES = libkformdesigner_kdev_part.la
 
 libkformdesigner_kdev_part_la_SOURCES = kfd_kdev_part.cpp
-libkformdesigner_kdev_part_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+libkformdesigner_kdev_part_la_LDFLAGS = -module $(KDE_PLUGIN) $(VER_INFO) $(all_libraries)
 libkformdesigner_kdev_part_la_LIBADD  = $(top_builddir)/kexi/formeditor/libkformdesigner.la \
 	-lkinterfacedesigner $(LIB_KFILE)
 

@@ -5,7 +5,7 @@ kde_module_LTLIBRARIES = kexicsvimport.la
 kexicsvimport_la_SOURCES = 
 # kexicsvsourcebase.ui kexicsvsource.cpp kexicsvimport.cpp
 
-kexicsvimport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
+kexicsvimport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
 kexicsvimport_la_LIBADD = ../../../core/libkexicore.la
 
 INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \

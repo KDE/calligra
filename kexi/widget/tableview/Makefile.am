@@ -11,7 +11,7 @@ libkexidatatable_la_SOURCES = kexidataawareobjectiface.cpp \
 
 noinst_HEADERS = kexitableview_p.h kexidatetimeeditor_p.h
 
-libkexidatatable_la_LDFLAGS = $(all_libraries) -Wnounresolved
+libkexidatatable_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkexidatatable_la_LIBADD = $(LIB_KDEUI) \
 	../../core/libkexicore.la ../utils/libkexiguiutils.la 
 
