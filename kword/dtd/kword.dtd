@@ -505,7 +505,7 @@ don't put a </?xml...> at the end of the file!).
         When FORMAT is used to specify the format of a style, pos and len are omitted.
 -->
 <!ELEMENT FORMAT
-    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|SHADOWTEXT|ANCHOR|IMAGE|PICTURE|VARIABLE|TEXTBACKGROUNDCOLOR|OFFSETFROMBASELINE)*>
+    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|SHADOWTEXT|WORDBYWORD|ANCHOR|IMAGE|PICTURE|VARIABLE|TEXTBACKGROUNDCOLOR|OFFSETFROMBASELINE)*>
 
 
 <!ATTLIST FORMAT
@@ -694,6 +694,15 @@ don't put a </?xml...> at the end of the file!).
     EMPTY>
 <!ATTLIST OFFSETFROMBASELINE
     value CDATA #REQUIRED>
+
+<!-- WORDBYWORD
+        Value is either 0 or 1 with 1=true and 0=false
+-->
+<!ELEMENT WORDBYWORD
+    EMPTY>
+<!ATTLIST WORDBYWORD
+    value CDATA #REQUIRED>
+
 
 <!-- NAME
         The name of a style.

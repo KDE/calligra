@@ -4220,7 +4220,8 @@ void KoTextParag::setFormat( int index, int len, KoTextFormat *f, bool useCollec
 	       f->font().italic() != of->font().italic() ||
 	       f->vAlign() != of->vAlign() ||
                f->relativeTextSize() != of->relativeTextSize() ||
-               f->offsetFromBaseLine() != of->offsetFromBaseLine() )) {
+               f->offsetFromBaseLine() != of->offsetFromBaseLine() ||
+               f->wordByWord() != of->wordByWord()  )) {
 	    invalidate( 0 );
 	}
 	if ( flags == -1 || flags == KoTextFormat::Format || !fc ) {
@@ -4316,7 +4317,7 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
     int startOfLine;
     line=m_lineChanged;
     if(line<0) line=0;
-    
+
     int numLines=lines();
     for(;line<numLines;line++)
     {
@@ -4329,7 +4330,7 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 	else
 		lineStartOfLine(line+1, &nextLine);
 	lineLen=(nextLine-startOfLine);
-	
+
 	// init this line
 	lineInfo( line, cy, h, baseLine );
 	lasth = h;
@@ -4389,11 +4390,11 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 		    lastY != cy || chr->format() != lastFormat ||
 		    ( paintEnd != -1 && at( paintEnd )->c =='\t' ) || chr->c == '\t' ||
 		    ( paintEnd != -1 && at( paintEnd )->c.unicode() == 0xad ) || chr->c.unicode() == 0xad ||
-		    selectionChange || 
-		    chr->isCustom() 
-		   ) 
+		    selectionChange ||
+		    chr->isCustom()
+		   )
 		   {
-	
+
 		   if ( paintStart <= paintEnd ) {
 			if ( chr->isCustom() && chr->customItem()->placement() == KoTextCustomItem::PlaceInline ) {
 			    qstr.replace(i,1," ");
@@ -6020,6 +6021,8 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
         setShadowText(nf.shadowText());
     if( flags & KoTextFormat::OffsetFromBaseLine)
         setOffsetFromBaseLine(nf.offsetFromBaseLine());
+    if( flags & KoTextFormat::WordByWord)
+        setWordByWord(nf.wordByWord());
 
     //////
     update();

@@ -1880,6 +1880,7 @@ void KPresenterView::mtextFont()
                                actionFormatSub->isChecked(),
                                actionFormatSuper->isChecked(),
                                textIface->textShadow(),
+                               textIface->wordByWord(),
                                textIface->textColor(),
                                col,
                                textIface->textUnderlineColor(),
@@ -1918,6 +1919,7 @@ void KPresenterView::slotApplyFont()
                           m_fontDlg->getShadowText(),
                           m_fontDlg->getRelativeTextSize(),
                           m_fontDlg->getOffsetFromBaseLine(),
+                          m_fontDlg->getWordByWord(),
                           flags);
     }
 }

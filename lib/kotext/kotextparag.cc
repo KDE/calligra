@@ -201,7 +201,8 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
         {
             if ( rtl )
                 prefix.prepend( ' ' /*the space before the bullet in RTL mode*/ );
-            KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, width, y, height );
+            KoTextParag::drawFontEffectsHelper( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, width, y, height, prefix, 0, prefix.length(),this );
+
             int posY =y + base - format->offsetFromBaseLine();
             //we must move to bottom text because we create
             //shadow to 'top'.
@@ -239,7 +240,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
                     bulletFont.setFamily( m_layout.counter->customBulletFont() );
                     p->setFont( bulletFont );
                 }
-                KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet, base, width, y, height );
+                KoTextParag::drawFontEffectsHelper( p, format, zh, format->screenFont( zh ), textColor, xBullet, base, width, y, height, m_layout.counter->customBulletCharacter(), 0, 1,this );
 
                 posY =y + base- format->offsetFromBaseLine();
                 //we must move to bottom text because we create
@@ -259,7 +260,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
             if ( !rtl )
                 suffix += ' ' /*the space after the bullet*/;
 
-            KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet + width, base, counterWidth, y,height );
+            KoTextParag::drawFontEffectsHelper( p, format, zh, format->screenFont( zh ), textColor, xBullet + width, base, counterWidth, y,height, suffix, 0, suffix.length(), this );
 
             int posY =y + base- format->offsetFromBaseLine();
             //we must move to bottom text because we create
@@ -272,12 +273,11 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
     }
     else
     {
+        QString counterText = m_layout.counter->text( this );
         // There are no bullets...any parent bullets have already been suppressed.
         // Just draw the text! Note: one space is always appended.
-        KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, counterWidth, y, height);
+        KoTextParag::drawFontEffectsHelper( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, counterWidth, y, height, counterText, 0, counterText.length(), this);
 
-
-        QString counterText = m_layout.counter->text( this );
         if ( !counterText.isEmpty() )
         {
             counterText += ' ' /*the space after the bullet (before in RTL mode)*/;
@@ -561,7 +561,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	}
     }
 
-    KoTextParag::drawFontEffects( &painter, lastFormat, zh, font, textColor, startX, baseLine, bw, lastY, h);
+    KoTextParag::drawFontEffectsHelper( &painter, lastFormat, zh, font, textColor, startX, baseLine, bw, lastY, h, str, start, len, this);
 
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
 
@@ -1128,6 +1128,49 @@ void KoTextParag::printRTDebug( int info )
 }
 #endif
 
+
+void KoTextParag::drawFontEffectsHelper( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h, const QString & /*str*/, int startText, int len, KoTextParag *_parag)
+{
+    if ( !format->wordByWord() )
+    {
+        KoTextParag::drawFontEffects( p, format, zh, font, color, startX, baseLine, bw , lastY, h);
+    }
+    else
+    {
+        bool noSpace = false;
+        int large = 0;
+        int tmpStartX = startX;
+        bool noDraw = true;
+        for ( int  b= startText; b < startText+len; b++ )
+        {
+            if ( !_parag->at(b)->c.isSpace() )
+            {
+                large += _parag->at( b )->pixelwidth;
+                noSpace = true;
+                noDraw  = true;
+            }
+            else
+            {
+                if ( !noSpace )
+                {
+                    tmpStartX += _parag->at( b )->pixelwidth;
+                    noDraw  = true;
+                }
+                else
+                {
+                    KoTextParag::drawFontEffects( p, format, zh, font, color, tmpStartX, baseLine, large , lastY, h);
+                    tmpStartX += _parag->at( b )->pixelwidth;
+                    tmpStartX += large;
+                    large = 0;
+                    noSpace = false;
+                    noDraw  = false;
+                }
+            }
+        }
+        if ( noDraw && noSpace )
+            KoTextParag::drawFontEffects( p, format, zh, font, color, tmpStartX, baseLine, /*bw*/ large , lastY, h);
+    }
+}
 
 void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int lastY,  int h )
 {

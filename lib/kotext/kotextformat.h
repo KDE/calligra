@@ -49,6 +49,7 @@ public:
     bool m_bShadowText;
     double m_relativeTextSize;
     int m_offsetFromBaseLine;
+    bool m_bWordByWord;
 };
 
 
@@ -62,7 +63,7 @@ public:
     int compare( const KoTextFormat & format ) const;
 
     /** Extending the base KoTextFormat enum */
-    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 , SpellCheckingLanguage = 4096, ShadowText = 8192, OffsetFromBaseLine = 16384 };
+    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 , SpellCheckingLanguage = 4096, ShadowText = 8192, OffsetFromBaseLine = 16384, WordByWord = 32768 };
 
     enum UnderlineLineType { U_NONE = 0, U_SIMPLE = 1, U_DOUBLE = 2, U_SIMPLE_BOLD = 3, U_WAVE = 4};
     enum StrikeOutLineType { S_NONE = 0, S_SIMPLE = 1, S_DOUBLE = 2, S_SIMPLE_BOLD = 3};
@@ -111,6 +112,8 @@ public:
     int offsetFromBaseLine() const { return d->m_offsetFromBaseLine;}
     void setOffsetFromBaseLine( int _offset );
 
+    bool wordByWord() const { return d->m_bWordByWord;}
+    void setWordByWord( bool _b );
 
     bool doubleUnderline() const { return (m_underlineLine==U_DOUBLE ); }
     bool waveUnderline() const { return (m_underlineLine==U_WAVE ); }

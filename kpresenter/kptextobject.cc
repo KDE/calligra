@@ -561,6 +561,9 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
         element.setAttribute("shadowtext", false);
     if ( lastFormat->offsetFromBaseLine()!=0 )
         element.setAttribute( "offsetfrombaseline" , lastFormat->offsetFromBaseLine());
+    if ( lastFormat->wordByWord() )
+        element.setAttribute("wordbyword", true);
+
 }
 
 QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFormat , QDomDocument &doc)
@@ -860,6 +863,8 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
         format.setRelativeTextSize( n.attribute("relativetextsize").toDouble() ) ;
     if ( n.hasAttribute("offsetfrombaseline") )
         format.setOffsetFromBaseLine( static_cast<int>(n.attribute("offsetfrombaseline").toInt() ) );
+    if ( n.hasAttribute("wordbyword") )
+        format.setWordByWord( static_cast<int>(n.attribute("wordbyword").toInt() ) );
 
 
     //kdDebug(33001)<<"loadFormat :"<<format.key()<<endl;

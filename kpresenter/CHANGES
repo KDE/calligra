@@ -127,4 +127,4 @@ Changes after KPresenter 1.2
 - Now koinsertlink use 'recent document'
 - Now "create backup file" is configurable
 - Add support to insert cursor directly
-
+- Add support to "word by word" underline/strikeout attribute

@@ -84,7 +84,7 @@ public:
     //void setFamily(const QString &font);
     KCommand *setFamilyCommand(const QString &font);
     //void setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
-    KCommand *setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, bool _shadowText, double _relativeTextSize, int _offsetFromBaseLine, int flags);
+    KCommand *setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, bool _shadowText, double _relativeTextSize, int _offsetFromBaseLine, bool _wordByWord, int flags);
     //void setTextSubScript(bool on);
     KCommand *setTextSubScriptCommand(bool on);
     //void setTextSuperScript(bool on);
@@ -116,6 +116,9 @@ public:
 
     KCommand *setOffsetFromBaseLineCommand( int _offset );
 
+    KCommand *setWordByWordCommand( bool _b );
+
+
     QColor textColor() const;
     QFont textFont() const;
     QString textFontFamily()const;
@@ -141,6 +144,7 @@ public:
     bool textShadow() const;
     double relativeTextSize() const;
     int offsetFromBaseLine()const;
+    bool wordByWord()const;
 };
 
 /**

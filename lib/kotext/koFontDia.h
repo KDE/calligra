@@ -71,6 +71,10 @@ public:
     void setShadowText( bool _b);
     bool getShadowText()const;
 
+    bool getWordByWord()const;
+    void setWordByWord( bool _b);
+
+
     double getRelativeTextSize()const;
     void setRelativeTextSize(double _size);
 
@@ -94,6 +98,7 @@ protected slots:
     void slotShadowClicked();
     void slotRelativeSizeChanged( int );
     void slotOffsetFromBaseLineChanged( int );
+    void slotWordByWordClicked();
 private:
     KFontChooser *m_chooseFont;
     QRadioButton *m_superScript;
@@ -125,6 +130,7 @@ public:
     KoFontDia( QWidget* parent, const char* name, const QFont &_font,
                bool _subscript, bool _superscript,
                bool _shadowText,
+               bool _wordByWord,
                const QColor & color,
 	       const QColor & backGroundColor,
                const QColor & underlineColor,
@@ -151,6 +157,8 @@ public:
     double getRelativeTextSize()const{ return m_chooser->getRelativeTextSize();}
 
     int getOffsetFromBaseLine() const {return m_chooser->getOffsetFromBaseLine();}
+    bool getWordByWord()const{ return m_chooser->getWordByWord();}
+
     int changedFlags() const { return m_chooser->changedFlags(); }
 
 protected slots:
@@ -176,6 +184,7 @@ private:
     bool m_shadowText;
     double m_relativeSize;
     int m_offsetBaseLine;
+    bool m_wordByWord;
 };
 
 #endif

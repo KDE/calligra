@@ -376,7 +376,12 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             elem.setAttribute( "value", curFormat->offsetFromBaseLine() );
         }
     }
-
+    if( !refFormat || curFormat->wordByWord() != refFormat->wordByWord())
+    {
+        elem = doc.createElement( "WORDBYWORD" );
+        formatElem.appendChild( elem );
+        elem.setAttribute( "value", static_cast<int>(curFormat->wordByWord()));
+    }
     return formatElem;
 }
 
@@ -618,6 +623,10 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     elem = formatElem.namedItem( "OFFSETFROMBASELINE" ).toElement();
     if ( !elem.isNull() )
         format.setOffsetFromBaseLine( elem.attribute("value").toInt());
+
+    elem = formatElem.namedItem( "WORDBYWORD" ).toElement();
+    if ( !elem.isNull() )
+        format.setWordByWord( elem.attribute("value").toInt() == 1);
 
     //kdDebug() << "KWTextParag::loadFormat format=" << format.key() << endl;
     return format;

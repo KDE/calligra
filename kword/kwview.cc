@@ -3230,6 +3230,7 @@ void KWView::formatFont()
                                actionFormatSub->isChecked(),
                                actionFormatSuper->isChecked(),
                                textIface->textShadow(),
+                               textIface->wordByWord(),
                                textIface->textColor(),
                                col,
                                textIface->textUnderlineColor(),
@@ -3273,6 +3274,7 @@ void KWView::slotApplyFont()
                                                          m_fontDlg->getShadowText(),
                                                          m_fontDlg->getRelativeTextSize(),
                                                          m_fontDlg->getOffsetFromBaseLine(),
+                                                         m_fontDlg->getWordByWord(),
                                                          flags);
             if (cmd)
                 globalCmd->addCommand(cmd);

@@ -2205,6 +2205,11 @@ int KoTextFormatInterface::offsetFromBaseLine()const
     return ( currentFormat()->offsetFromBaseLine());
 }
 
+bool KoTextFormatInterface::wordByWord()const
+{
+    return ( currentFormat()->wordByWord());
+}
+
 
 KoTextFormat::UnderlineLineType KoTextFormatInterface::underlineLineType()const
 {
@@ -2244,7 +2249,7 @@ QString KoTextFormatInterface::spellCheckingLanguage() const
     return currentFormat()->spellCheckingLanguage();
 }
 
-KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, bool _shadowText, double _relativeTextSize, int _offsetFromBaseLine, int flags)
+KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, bool _shadowText, double _relativeTextSize, int _offsetFromBaseLine, bool _wordByWord,int flags)
 {
     KoTextFormat format( *currentFormat() );
     format.setFont( font );
@@ -2258,6 +2263,7 @@ KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscri
     format.setShadowText( _shadowText);
     format.setRelativeTextSize( _relativeTextSize);
     format.setOffsetFromBaseLine( _offsetFromBaseLine);
+    format.setWordByWord( _wordByWord );
     if(!_subscript)
     {
         if(!_superscript)
@@ -2337,6 +2343,14 @@ KCommand *KoTextFormatInterface::setOffsetFromBaseLineCommand( int _offset )
     format.setOffsetFromBaseLine( _offset );
     return setFormatCommand( &format, KoTextFormat::OffsetFromBaseLine );
 }
+
+KCommand *KoTextFormatInterface::setWordByWordCommand( bool _b )
+{
+    KoTextFormat format( *currentFormat() );
+    format.setWordByWord( _b );
+    return setFormatCommand( &format, KoTextFormat::WordByWord );
+}
+
 
 #if 0
 void KoTextFormatInterface::setAlign(int align)

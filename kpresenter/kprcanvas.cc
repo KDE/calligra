@@ -2526,7 +2526,7 @@ void KPrCanvas::savePicture()
     stickyPage()->savePicture(m_view);
 }
 
-void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor & underlineColor, KoTextFormat::UnderlineLineType underlineType, KoTextFormat::UnderlineLineStyle underlineStyle, KoTextFormat::StrikeOutLineType strikeOutType , KoTextFormat::StrikeOutLineStyle strikeOutStyle, bool _shadowText, double _relativeSize, int _offsetFromBaseLine, int flags)
+void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor & underlineColor, KoTextFormat::UnderlineLineType underlineType, KoTextFormat::UnderlineLineStyle underlineStyle, KoTextFormat::StrikeOutLineType strikeOutType , KoTextFormat::StrikeOutLineStyle strikeOutStyle, bool _shadowText, double _relativeSize, int _offsetFromBaseLine, bool _wordByWord, int flags)
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
@@ -2546,6 +2546,7 @@ void KPrCanvas::setFont(const QFont &font, bool _subscript, bool _superscript,  
                                                      _shadowText,
                                                      _relativeSize,
                                                      _offsetFromBaseLine,
+                                                     _wordByWord,
                                                      flags);
 
         if (cmd)

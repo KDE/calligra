@@ -280,3 +280,4 @@ Changes after KWord-1.2
 - Add support to add offset from baseline
 - Now koinsertlink use "Recent document".
 - Add support to insert directly cursor
+- Add support for "word by word" format attribute.

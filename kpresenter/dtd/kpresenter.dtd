@@ -328,7 +328,8 @@
                 VERTALIGN CDATA #REQUIRED
                 shadowtext CDATA #REQUIRED
                 relativetextsize CDATA #REQUIRED
-                offsetfrombaseline CDATA #REQUIRED>
+                offsetfrombaseline CDATA #REQUIRED
+                wordbyword CDATA #REQUIRED>
 
 <!-- 
         A paragraph and a style can have counter data.

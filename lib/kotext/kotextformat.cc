@@ -113,6 +113,15 @@ void KoTextFormat::setOffsetFromBaseLine( int _offset )
     update();
 }
 
+void KoTextFormat::setWordByWord( bool _b )
+{
+    if ( d->m_bWordByWord == _b)
+        return;
+    d->m_bWordByWord = _b;
+    update();
+}
+
+
 int KoTextFormat::compare( const KoTextFormat & format ) const
 {
     int flags = 0;
@@ -144,6 +153,8 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::ShadowText;
     if ( offsetFromBaseLine() != format.offsetFromBaseLine() )
         flags |= KoTextFormat::OffsetFromBaseLine;
+    if ( wordByWord() != format.wordByWord() )
+        flags |= KoTextFormat::WordByWord;
     return flags;
 }
 
