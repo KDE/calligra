@@ -48,6 +48,7 @@ public:
     KPresenterChild *getChild() const { return child; }
     void enableDrawing( bool f ) { _enableDrawing = f; }
     virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj );
+    virtual void loadOasis(const QDomElement &element, KoOasisContext &context, KPRLoadingInfo *info);
 
 public slots:
     void slot_changed( KoChild *_koChild );

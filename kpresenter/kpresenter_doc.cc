@@ -1490,19 +1490,18 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         }
         else if ( name == "draw:object" )
         {
-            //todo load part object
-#if 0
             KPresenterChild *ch = new KPresenterChild( this );
             QRect r;
             KPPartObject *kppartobject = new KPPartObject( ch );
-            QDomElement object=elem.namedItem("OBJECT").toElement();
-            if(!object.isNull()) {
-                ch->load(object, true);  // true == uppercase
-                r = ch->geometry();
-                insertChild( ch );
-                kppartobject = new KPPartObject( ch );
-            }
-#endif
+            kppartobject->loadOasis( o, context, m_loadingInfo );
+            r = ch->geometry();
+            if ( groupObject )
+                groupObject->addObjects( kppartobject );
+            else
+                newpage->appendObject(kppartobject);
+            kppartobject->setOrig( r.x(), r.y() );
+            kppartobject->setSize( r.width(), r.height() );
+
         }
         else if ( name == "presentation:notes" ) // notes
         {

@@ -86,6 +86,7 @@ Bugs:
 In Progress:
 -> save/load picture effect
 -> save/load protect object
+-> save/load embedded object
 	
 Reginald Stadlbauer <reggie@kde.org>
 Laurent Montel <montel@kde.org>

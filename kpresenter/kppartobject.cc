@@ -62,9 +62,34 @@ void KPPartObject::rotate( float _angle )
 
 bool KPPartObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
 {
-    //FIXME
+    xmlWriter.startElement( "draw:object" );
+    //save default child object parameter
+
+    // geometry is no zoom value !
+    QRect _rect = child->geometry();
+    KoZoomHandler* zh = child->parent()->zoomHandler();
+    int tmpX = (int)zh->unzoomItX( _rect.x() );
+    int tmpY = (int)zh->unzoomItY( _rect.y() );
+    int tmpWidth = (int)zh->unzoomItX( _rect.width() );
+    int tmpHeight = (int)zh->unzoomItY( _rect.height() );
+    child->setGeometry( QRect( tmpX, tmpY, tmpWidth, tmpHeight ) );
+
+    child->saveOasis( xmlWriter );
+
+    if( !objectName.isEmpty())
+        xmlWriter.addAttribute( "draw:name", objectName );
+    xmlWriter.endElement();
     return true;
 }
+
+void KPPartObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPRLoadingInfo *info)
+{
+    kdDebug()<<"void KPPartObject::loadOasis(const QDomElement &element)******************\n";
+    child->loadOasis( element );
+    if(element.hasAttribute( "draw:name" ))
+        objectName = element.attribute("draw:name");
+}
+
 
 void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
                          SelectionMode selectionMode, bool drawContour )
