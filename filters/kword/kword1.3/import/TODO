@@ -21,6 +21,8 @@ Spellcheck settings?
 Cursor position
 
 === KWord 0.8 ===
+Make OOWriter load correctly the converted file (page size?)
+Some files are not even as syntax version
 Document settings
 <FOOTNOTEMGR>, <START>, <FORMAT> as child of <FOOTNOTEMGR>, <FIRSTPARAG>
 <FORMAT id="3"> (tabulator)
