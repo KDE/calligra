@@ -1096,8 +1096,6 @@ void KisView::slotDocUpdated()
 */
 void KisView::slotDocUpdated(const QRect& rect)
 {
-	QRect test(0, 0, m_pCanvas -> width(), m_pCanvas -> height());
-
 	kdDebug() << "slotDocUpdated(const QRect& rect)" << endl;
 
 	KisImage *img;
