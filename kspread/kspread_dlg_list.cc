@@ -36,7 +36,7 @@
 #include <kspread_view.h>
 
 KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n("Sort Lists"), Ok|Cancel )
+	: KDialogBase( parent, name, true, i18n("Custom Lists"), Ok|Cancel )
 {
   QWidget* page = new QWidget( this );
   setMainWidget( page );
