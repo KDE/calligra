@@ -25,13 +25,12 @@
 
 #include "koshell_shell.h"
 
-// Damn, how is this called in StarOffice ?
-static const char* description=I18N_NOOP("KOffice Common Window");
+static const char* description=I18N_NOOP("KOffice Workspace");
 static const char* version="0.3";
 
 int main( int argc, char **argv )
 {
-  KAboutData * aboutData = new KAboutData( "koshell", I18N_NOOP("KOShell"),
+  KAboutData * aboutData = new KAboutData( "koshell", I18N_NOOP("KOffice Workspace"),
      version, description, KAboutData::License_GPL,
        "(c) 1998-2000, Torben Weis");
   aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
