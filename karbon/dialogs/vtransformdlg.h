@@ -8,11 +8,17 @@
 
 #include <qdockwindow.h>
 
+class QCheckBox;
 class QTabWidget;
-class QHButtonGroup;
+class QVButtonGroup;
+
 class KoMainWindow;
 class KoView;
+
 class KarbonPart;
+class TKUFloatSpinBox;
+
+enum ButtonChoice { tr_Duplicate, tr_Apply };
 
 // Translate widget for this dialog...
 class VTranslateWidget : public QWidget
@@ -20,6 +26,11 @@ class VTranslateWidget : public QWidget
 	Q_OBJECT
 public:
 	VTranslateWidget( QWidget* parent );
+private:
+	QCheckBox* mRelative;
+	QVButtonGroup* mButtonGroup;
+	TKUFloatSpinBox* mHSpinBox;
+	TKUFloatSpinBox* mVSpinBox;
 };
 
 // Rotation widget for this dialog...
@@ -28,6 +39,12 @@ class VRotateWidget : public QWidget
 	Q_OBJECT
 public:
 	VRotateWidget( QWidget* parent );
+private:
+	QCheckBox* mRelative;
+	QVButtonGroup* mButtonGroup;
+	TKUFloatSpinBox* mAngle;
+	TKUFloatSpinBox* mHSpinBox;
+	TKUFloatSpinBox* mVSpinBox;
 };
 
 // Shear widget for this dialog...
@@ -36,6 +53,10 @@ class VShearWidget : public QWidget
 	Q_OBJECT
 public:
 	VShearWidget( QWidget* parent );
+private:
+	QVButtonGroup* mButtonGroup;
+	TKUFloatSpinBox* mHSpinBox;
+	TKUFloatSpinBox* mVSpinBox;
 };
 
 // Scale widget for this dialog...
@@ -44,6 +65,11 @@ class VScaleWidget : public QWidget
 	Q_OBJECT
 public:
 	VScaleWidget( QWidget* parent );
+private:
+	QCheckBox* mRelative;
+	QVButtonGroup* mButtonGroup;
+	TKUFloatSpinBox* mHSpinBox;
+	TKUFloatSpinBox* mVSpinBox;
 };
 
 // The dialog ...
@@ -64,7 +90,9 @@ public:
 private:
 	QTabWidget* mTabWidget;
 	VTranslateWidget* mTranslateWidget;
-	enum ButtonChoice { tr_Duplicate, tr_Apply };
+	VRotateWidget* mRotateWidget;
+	VShearWidget* mShearWidget;
+	VScaleWidget* mScaleWidget;
 	KarbonPart *m_part;
 };
 
