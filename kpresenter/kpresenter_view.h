@@ -467,6 +467,8 @@ public:
 
     KPrPage * stickyPage();
 
+    void updatePageParameter();
+
 protected slots:
     // dialog slots
     void backOk( bool );

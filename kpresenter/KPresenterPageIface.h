@@ -105,7 +105,7 @@ k_dcop:
     virtual int rndX();
     virtual void setBackGroundColor1(const QColor &col);
     virtual void setBackGroundColor2(const QColor &col);
-
+    virtual void setBackGroundColorType(const QString &type);
 
     DCOPRef insertRectangle(int x,int y, int h, int w);
     DCOPRef insertEllipse(int x,int y, int h, int w );

@@ -3901,8 +3901,30 @@ void KPresenterView::skipToPage( int num )
     //otherwise you can change object properties on other page
     m_canvas->deSelectAllObj();
     m_canvas->repaint( FALSE );
+    updatePageParameter();
 }
-
+//update color gradient etc... when we skip page
+void KPresenterView::updatePageParameter()
+{
+    KPrPage *page=m_canvas->activePage();
+    if(page)
+    {
+        pieType = page->getPieType(pieType);
+        pieAngle = page->getPieAngle(pieAngle);
+        pieLength = page->getPieLength(pieLength);
+        rndX = page->getRndX( rndX );
+        rndY = page->getRndY( rndY );
+        page->getPolygonSettings( &checkConcavePolygon, &cornersValue, &sharpnessValue );
+        lineBegin=page->getLineEnd( lineBegin );
+        lineEnd=page->getLineBegin( lineEnd );
+        gUnbalanced=page->getBackUnbalanced();
+        gColor1=page->getBackColor1();
+        gColor2=page->getBackColor2();
+        gXFactor=page->getBackXFactor();
+        gYFactor=page->getBackYFactor();
+        gType=page->getBackColorType();
+    }
+}
 
 void KPresenterView::refreshPageButton()
 {

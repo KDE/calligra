@@ -419,6 +419,37 @@ void KPresenterPageIface::setBackGroundColor2(const QColor &col)
     m_page->setBackColor( col1, col, m_page->getBackColorType(),m_page->getBackUnbalanced(), backXFactor(), backYFactor() );
 }
 
+void KPresenterPageIface::setBackGroundColorType(const QString &type)
+{
+    BCType bctype;
+    if(type=="PLAIN")
+        bctype=BCT_PLAIN;
+    else if(type=="GHORZ")
+        bctype=BCT_GHORZ;
+    else if(type=="GVERT")
+        bctype=BCT_GVERT;
+    else if(type=="GDIAGONAL1")
+        bctype=BCT_GDIAGONAL1;
+    else if(type=="GDIAGONAL2")
+        bctype=BCT_GDIAGONAL2;
+    else if(type=="GCIRCLE")
+        bctype=BCT_GCIRCLE;
+    else if(type=="GRECT")
+        bctype=BCT_GRECT;
+    else if(type=="GPIPECROSS")
+        bctype=BCT_GPIPECROSS;
+    else if(type=="GPYRAMID")
+        bctype=BCT_GPYRAMID;
+    else
+    {
+        kdDebug()<<"Error KPresenterPageIface::setBackGroundColorType\n";
+        return;
+    }
+
+    m_page->setBackColor( backColor1(), backColor2(), bctype,m_page->getBackUnbalanced(), backXFactor(), backYFactor() );
+}
+
+
 int KPresenterPageIface::rndY()
 {
     int ret=-1;
