@@ -897,17 +897,14 @@ void KSpreadSheetPrint::definePrintRange( KSpreadSelection* selectionInfo )
         KCommand* command = new DefinePrintRangeCommand( m_pSheet );
         m_pDoc->addCommand( command );
         setPrintRange( selectionInfo->selection() );
-        command->execute();
     }
 }
 
 void KSpreadSheetPrint::resetPrintRange ()
 {
-
     KCommand* command = new DefinePrintRangeCommand( m_pSheet );
     m_pDoc->addCommand( command );
     setPrintRange( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) );
-    command->execute();
 }
 
 void KSpreadSheetPrint::replaceHeadFootLineMacro ( QString &_text, const QString &_search, const QString &_replace )
@@ -1250,6 +1247,7 @@ void KSpreadSheetPrint::setPrintRange( const QRect &_printRange )
     if ( m_pSheet->isProtected() )
         NO_MODIFICATION_POSSIBLE;
 
+
     if ( m_printRange == _printRange )
         return;
 
@@ -1266,6 +1264,7 @@ void KSpreadSheetPrint::setPrintRange( const QRect &_printRange )
     m_pDoc->setModified( true );
 
     emit sig_updateView( m_pSheet );
+
 }
 
 void KSpreadSheetPrint::setPageLimitX( int pages )
