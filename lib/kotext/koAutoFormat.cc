@@ -433,7 +433,7 @@ void KoAutoFormat::saveConfig()
 
 
     QDomElement simpleQuote;
-    simpleQuote = doc.createElement("simpleQuote");
+    simpleQuote = doc.createElement("SimpleQuote");
     data = doc.createElement("simplequote");
     data.setAttribute("begin", QString(m_typographicDefaultSimpleQuotes.begin));
     data.setAttribute("end", QString(m_typographicDefaultSimpleQuotes.end));
