@@ -63,7 +63,7 @@ public:
    *
    * @param condition a reference to a condition that will be set to the 
    *                  matching condition.  If none of the conditions are true
-   *                  than this parameter is undefined on exit (check the 
+   *                  then this parameter is undefined on exit (check the 
    *                  return value).
    *
    * @return true if one of the conditions is true, false if not.
