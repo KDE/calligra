@@ -4,6 +4,7 @@
 */
 
 #include <qdom.h>
+#include <math.h>
 
 #include "vglobal.h"
 #include "vsegment.h"
