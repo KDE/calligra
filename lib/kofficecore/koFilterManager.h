@@ -80,10 +80,10 @@ public:
      * @param allfiles Whether a wildcard that matches all files should be added to the list.
      */
     QString fileSelectorList( const Direction &direction,
-                                    const char *_format,
-                                    const QString & _native_pattern=QString::null,
-                                    const QString & _native_name=QString::null,
-                                    const bool allfiles=false ) const;
+                              const char *_format,
+                              const QString & _native_pattern=QString::null,
+                              const QString & _native_name=QString::null,
+                              bool allfiles=false ) const;
 
     /**
      * Prepares a KFileDialog instance. This means it adds the available
@@ -207,7 +207,7 @@ public:
     virtual ~PreviewStack();
 
     // As the stack can be hidden/visible one has to know the status
-    const bool isHidden() const { return hidden; }
+    bool isHidden() const { return hidden; }
 
 public slots:
     // The URL has changed -> show the correct dialog

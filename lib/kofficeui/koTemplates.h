@@ -35,7 +35,7 @@ public:
     KoTemplate(const QString &name,
 	       const QString &file=QString::null,
 	       const QString &picture=QString::null,
-	       const bool &hidden=false, const bool &touched=false);
+	       bool hidden=false, bool touched=false);
     ~KoTemplate() {}
 
     QString name() const { return m_name; }
@@ -43,10 +43,10 @@ public:
     QString picture() const { return m_picture; }
     const QPixmap &loadPicture();
 
-    const bool &isHidden() const { return m_hidden; }
-    void setHidden(const bool hidden=true) { m_hidden=hidden; m_touched=true; }
+    bool isHidden() const { return m_hidden; }
+    void setHidden(bool hidden=true) { m_hidden=hidden; m_touched=true; }
 
-    const bool &touched() const { return m_touched; }
+    bool touched() const { return m_touched; }
 
 private:
     QString m_name, m_file, m_picture;
@@ -62,7 +62,7 @@ class KoTemplateGroup {
 public:
     KoTemplateGroup(const QString &name,
 		    const QString &dir=QString::null,
-		    const bool &touched=false);
+		    bool touched=false);
     ~KoTemplateGroup() {}
 
     QString name() const { return m_name; }
@@ -70,9 +70,9 @@ public:
     void addDir(const QString &dir) { m_dirs.append(dir); m_touched=true; }
 
     // If all children are hidden, we are hidden too
-    const bool isHidden() const;
+    bool isHidden() const;
     // if we should hide, we hide all the children
-    void setHidden(const bool &hidden=true) const;
+    void setHidden(bool hidden=true) const;
 
     KoTemplate *first() { return m_templates.first(); }
     KoTemplate *next() { return m_templates.next(); }
@@ -80,10 +80,10 @@ public:
     KoTemplate *prev() { return m_templates.prev(); }
     KoTemplate *current() { return m_templates.current(); }
 
-    const bool add(KoTemplate *t, bool force=false, bool touch=true);
+    bool add(KoTemplate *t, bool force=false, bool touch=true);
     KoTemplate *find(const QString &name) const;
 
-    const bool &touched() const { return m_touched; }
+    bool touched() const { return m_touched; }
 
 private:
     QString m_name;
@@ -97,7 +97,7 @@ class KoTemplateTree {
 
 public:
     KoTemplateTree(const QCString &templateType, KInstance *instance,
-		   const bool &readTree=false);
+		   bool readTree=false);
     ~KoTemplateTree() {}
 
     QCString templateType() const { return m_templateType; }

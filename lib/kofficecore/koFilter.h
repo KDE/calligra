@@ -61,14 +61,33 @@ public:
      * @param config    A String which can be used to pass configure information (see HOWTO)
      * @return          If the method returns true the filtering was successful
      */
-    virtual const bool filter(const QString &fileIn, const QString &fileOut,
-                              const QString &from, const QString &to,
-                              const QString &config=QString::null);
+    virtual bool filter(const QString &fileIn, const QString &fileOut,
+                        const QString &from, const QString &to,
+                        const QString &config=QString::null);
 
-    virtual const bool filter1(const QString &fileIn,
-                              const QString &fileOut, const QString &prefixOut,
-                              const QString &from, const QString &to,
-                              const QString &config=QString::null);
+    /**
+     * This method takes a file as input and outputs a file. As opposed to the
+     * "traditional way" of filtering this method should be used to filter embedded
+     * documents. Use this only if you really know what you're doing.
+     * @param fileIn    The name of the file to filter (input file)
+     * @param fileOut   Save the converted stuff to that file (output file)
+     * @param prefixOut The current position in the storage
+     * @param from      Mimetype of the input
+     * @param to        Mimetype of the output
+     * @param config    A String which can be used to pass configure information (see HOWTO)
+     * @return          If the method returns true the filtering was successful
+     */
+    virtual bool filter(const QString &fileIn,
+                        const QString &fileOut, const QString &prefixOut,
+                        const QString &from, const QString &to,
+                        const QString &config);
+
+    /**
+     * Return true here if your filter supports embedded documents and therefore
+     * has to know the current prefix for the file in the storage.
+     * Leave this untouched if you couldn't make sense of the sentence above :)
+     * @return If you want to know the prefix
+     */
     virtual bool supportsEmbedding();
 
     /**
@@ -83,9 +102,9 @@ public:
      * @param config    A String which can be used to pass configure information
      * @return          If the method returns true the filtering was successful
      */
-    virtual const bool I_filter(const QString &file, const QString &from,
-                                QDomDocument &doc, const QString &to,
-                                const QString &config=QString::null);
+    virtual bool I_filter(const QString &file, const QString &from,
+                          QDomDocument &doc, const QString &to,
+                          const QString &config=QString::null);
 
     /**
      * This is the most hacky method(tm) available. Here you have direct
@@ -100,9 +119,9 @@ public:
      * @param config    A String which can be used to pass configure information
      * @return          If the method returns true the filtering was successful
      */
-    virtual const bool I_filter(const QString &file, KoDocument *document,
-                                const QString &from, const QString &to,
-                                const QString &config=QString::null);
+    virtual bool I_filter(const QString &file, KoDocument *document,
+                          const QString &from, const QString &to,
+                          const QString &config=QString::null);
 
     /**
      * This is another very nasty method. Here you have direct access to the
@@ -118,11 +137,15 @@ public:
      * @param config    A String which can be used to pass configure information
      * @return          If the method returns true the filtering was successful
      */
-    virtual const bool E_filter(const QString &file, const KoDocument * const document,
-                                const QString &from, const QString &to,
-                                const QString &config=QString::null);
+    virtual bool E_filter(const QString &file, const KoDocument * const document,
+                          const QString &from, const QString &to,
+                          const QString &config=QString::null);
 
 signals:
+    /**
+     * Emit this signal with a value in the range of 1...100 to have some
+     * progress feedback for the user.
+     */
     void sigProgress(int value);
 
 protected:
@@ -132,4 +155,5 @@ private:
     KoFilter();                                 // Meyers says this is nice :)
     KoFilter &operator=(const KoFilter &);
 };
+
 #endif

@@ -38,8 +38,8 @@
 
 
 KoTemplate::KoTemplate(const QString &name, const QString &file,
-                       const QString &picture, const bool &hidden,
-                       const bool &touched) :
+                       const QString &picture, bool hidden,
+                       bool touched) :
     m_name(name), m_file(file), m_picture(picture), m_hidden(hidden),
     m_touched(touched), m_cached(false) {
 }
@@ -72,13 +72,13 @@ const QPixmap &KoTemplate::loadPicture() {
 
 
 KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir,
-                                 const bool &touched) :
+                                 bool touched) :
     m_name(name), m_touched(touched) {
     m_dirs.append(dir);
     m_templates.setAutoDelete(true);
 }
 
-const bool KoTemplateGroup::isHidden() const {
+bool KoTemplateGroup::isHidden() const {
 
     QListIterator<KoTemplate> it(m_templates);
     bool hidden=true;
@@ -89,7 +89,7 @@ const bool KoTemplateGroup::isHidden() const {
     return hidden;
 }
 
-void KoTemplateGroup::setHidden(const bool &hidden) const {
+void KoTemplateGroup::setHidden(bool hidden) const {
 
     QListIterator<KoTemplate> it(m_templates);
     for( ; it.current()!=0L; ++it)
@@ -97,7 +97,7 @@ void KoTemplateGroup::setHidden(const bool &hidden) const {
     m_touched=true;
 }
 
-const bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch) {
+bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch) {
 
     KoTemplate *myTemplate=find(t->name());
     if(myTemplate==0L) {
@@ -124,7 +124,7 @@ KoTemplate *KoTemplateGroup::find(const QString &name) const {
 
 
 KoTemplateTree::KoTemplateTree(const QCString &templateType,
-                               KInstance *instance, const bool &readTree) :
+                               KInstance *instance, bool readTree) :
     m_templateType(templateType), m_instance(instance), m_defaultGroup(0L) {
 
     m_groups.setAutoDelete(true);

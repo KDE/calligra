@@ -84,7 +84,7 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
                                            const char *_format,
                                            const QString & _native_pattern,
                                            const QString & _native_name,
-                                           const bool allfiles ) const
+                                           bool allfiles ) const
 {
     QString service;
     service = "'";
@@ -163,11 +163,18 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
 }
 
 bool KoFilterManager::prepareDialog( KFileDialog *dialog,
-                                 const Direction &direction,
-                                 const char *_format,
-                                 const QString & _native_pattern,
-                                 const QString & _native_name,
-                                 bool allfiles ) {
+                                     const Direction &direction,
+                                     const char *_format,
+                                     const QString &
+#ifndef HAVE_KDEPRINT
+                                      _native_pattern
+#endif
+                                     , const QString &_native_name,
+                                     bool
+#ifndef HAVE_KDEPRINT
+                                      allfiles
+#endif
+                                               ) {
 
     QString nativeFormat = QString::fromLatin1(_format);
     QString service;
@@ -393,7 +400,7 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
                 return QString::null;
             tempfname=tempFile.name();
             if (filter->supportsEmbedding())
-                ok=filter->filter1( file, tempfname, storePrefix, mimeType, _native_format, d->config );
+                ok=filter->filter( file, tempfname, storePrefix, mimeType, _native_format, d->config );
             else
                 ok=filter->filter( file, tempfname, mimeType, _native_format, d->config );
             tempfname=tempFile.name(); // hack for -DQT_NO_BLAH stuff
