@@ -9,6 +9,7 @@ Small things:
 - check below/above accent+letter combination.
 - check "..." symbol and replace it with dots (?)
 - treat lots of "......" as tab with '.' filling
+- detect horizontal lines
 
 Bigger things:
 - fix height offsets (difficult to do for KOffice 1.2 : I need to

@@ -175,6 +175,7 @@ void Device::drawLink(::Link* link, Catalog *cat)
 
 void Device::addImage()
 {
+//    kdDebug(30516) << "-> add image" << endl;
     if ( _currentImage.image.width()==0 || _currentImage.image.height()==0 ) {
         kdDebug(30516) << "image has null width or height !" << endl;
         _currentImage = Image();
@@ -257,12 +258,21 @@ uint Device::initImage(GfxState *state, int width, int height,
     computeGeometry(state, image);
 
     // check if new image
+//    kdDebug(30516) << "current image " << _currentImage.image.width()
+//                   << " " << _currentImage.rect.left()
+//                   << " " << _currentImage.rect.right()
+//                   << " " << _currentImage.rect.bottom()
+//                   << " " << _currentImage.mask << endl;
+//    kdDebug(30516) << "new image " << width
+//                   << " " << image.rect.left() << " " << image.rect.right()
+//                   << " " << image.rect.top()
+//                   << " " << image.mask << endl;
     if ( !_currentImage.image.isNull() &&
          (_currentImage.image.width()!=width
           || !equal(image.rect.left(), _currentImage.rect.left())
           || !equal(image.rect.right(), _currentImage.rect.right())
           || !equal(image.rect.top(), _currentImage.rect.bottom())
-          || !equal(image.mask, _currentImage.mask)) )
+          || image.mask!=_currentImage.mask) )
         addImage();
 
     uint offset =
@@ -270,6 +280,7 @@ uint Device::initImage(GfxState *state, int width, int height,
     image.image = QImage(width, offset + height, 32);
     image.image.setAlphaBuffer(withMask);
     if ( !_currentImage.image.isNull() ) { // copy previous
+//        kdDebug(30516) << "image continued..." << endl;
         for (int j=0; j<_currentImage.image.height(); j++) {
             QRgb *pix = (QRgb *)_currentImage.image.scanLine(j);
             QRgb *newPix = (QRgb *)image.image.scanLine(j);

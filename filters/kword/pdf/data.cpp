@@ -132,7 +132,7 @@ QDomElement Data::createFrame(FramesetType type, const DRect &r,
         (text ? (forceMainFrameset ? true : _textIndex==1) : false);
 
     QDomElement frame = _document.createElement("FRAME");
-    if (text) frame.setAttribute("autoCreateNewFrame", 1);
+    if (text) frame.setAttribute("autoCreateNewFrame", 0);
     frame.setAttribute("newFrameBehavior", 1);
     frame.setAttribute("runaround", 0);
     frame.setAttribute("left", r.left());
