@@ -595,6 +595,9 @@ void KoDocument::paintChildren( QPainter &painter, const QRect &/*rect*/, KoView
 
 void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *view, double zoomX, double zoomY )
 {
+    if ( child->isDeleted() )
+        return;
+        
     // QRegion rgn = painter.clipRegion();
 
     child->transform( painter );

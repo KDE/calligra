@@ -104,6 +104,12 @@ public:
 
   virtual bool isStoredExtern();
 
+  /**
+   * This document (child) is deleted.
+   * Reimplement this if your app provides delete function.
+   */
+  virtual bool isDeleted() { return false; }
+  
 protected: // Should be private, but KWord needs access to the variables
     // because it reimplements load/save (for uppercase tags)
 
