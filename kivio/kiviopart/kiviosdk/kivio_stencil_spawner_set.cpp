@@ -305,3 +305,9 @@ KivioStencilSpawner* KivioStencilSpawnerSet::find( const QString& id)
     return NULL;
 }
 
+void KivioStencilSpawnerSet::addSpawner(KivioStencilSpawner* spawner)
+{
+  if(spawner) {
+    m_pSpawners->append(spawner);
+  }
+}

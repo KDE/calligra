@@ -109,6 +109,9 @@ class KivioDoc : public KoDocument
 
     KivioStencilSpawner *findStencilSpawner( const QString& setId, const QString& stencilId );
     KivioStencilSpawner *findInternalStencilSpawner( const QString& title );
+    
+    void addInternalStencilSpawner(KivioStencilSpawner* spawner);
+    KivioStencilSpawnerSet* internalSpawnerSet() { return m_pInternalSet; }
 
     KivioMap* map() const { return m_pMap; }
 

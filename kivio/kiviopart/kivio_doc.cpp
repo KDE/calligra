@@ -1007,6 +1007,11 @@ KivioStencilSpawner* KivioDoc::findInternalStencilSpawner( const QString& stenci
     return m_pInternalSet->find(stencilId);
 }
 
+void KivioDoc::addInternalStencilSpawner(KivioStencilSpawner* spawner)
+{
+  m_pInternalSet->addSpawner(spawner);
+}
+
 void KivioDoc::setUnits(KoUnit::Unit unit)
 {
   if (m_units == unit)

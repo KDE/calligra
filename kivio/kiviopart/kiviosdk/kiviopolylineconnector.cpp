@@ -32,6 +32,7 @@
 #include "tkmath.h"
 #include "kivio_page.h"
 #include "kivio_layer.h"
+#include "kivio_common.h"
 
 
 namespace Kivio {
@@ -58,6 +59,59 @@ namespace Kivio {
   {
     delete m_startArrow;
     delete m_endArrow;
+  }
+
+  bool PolyLineConnector::loadCustom(const QDomElement& e)
+  {
+    QDomNode node = e.firstChild();
+    QString nodeName;
+    m_points.clear();
+    kdDebug() << "Loading custom nodes..." << endl;
+    
+    while(!node.isNull()) {
+      nodeName = node.nodeName();
+      
+      if(nodeName == "KivioArrowHeads") {
+        loadArrowHeads(node.toElement());
+      } else if(nodeName == "KivioGeometryPoints") {
+        QDomNode pointsNode = node.firstChild();
+        QDomElement el;
+        
+        while(!pointsNode.isNull()) {
+          if(pointsNode.nodeName() == "KivioPoint") {
+            el = pointsNode.toElement();
+            KoPoint p;
+            p.setX(XmlReadFloat(el, "x", 1.0f));
+            p.setY(XmlReadFloat(el, "y", 1.0f));
+            addPoint(p);
+          }
+          
+          pointsNode.nextSibling();
+        }
+      }
+
+      node = node.nextSibling();
+    }
+
+    return true;
+  }
+  
+  bool PolyLineConnector::saveCustom(QDomElement& e, QDomDocument& doc)
+  {
+    e.appendChild(saveArrowHeads(doc));
+    QDomElement pointsElement = doc.createElement("KivioGeometryPoints");
+
+    for(QValueList<KoPoint>::iterator it = m_points.begin(); it != m_points.end(); ++it) {
+      KoPoint p = (*it);
+      QDomElement el = doc.createElement("KivioPoint");
+      XmlWriteFloat(el, "x", p.x());
+      XmlWriteFloat(el, "y", p.y());
+      pointsElement.appendChild(el);
+    }
+    
+    e.appendChild(pointsElement);
+
+    return true;
   }
 
   KivioCollisionType PolyLineConnector::checkForCollision(KoPoint* p, double threshold)
@@ -336,5 +390,36 @@ namespace Kivio {
     }
     
     return retVal;
+  }
+
+  bool PolyLineConnector::loadArrowHeads(const QDomElement& e)
+  {
+    bool first = true;
+    QDomNode node = e.firstChild();
+    
+    while(!node.isNull()) {
+      if(node.nodeName() == "KivioArrowHead") {
+        if(first) {
+          m_startArrow->loadXML(node.toElement());
+          first = false;
+        } else {
+          m_endArrow->loadXML(node.toElement());
+        }
+      }
+
+      node = node.nextSibling();
+    }
+
+    return true;
+  }
+  
+  QDomElement PolyLineConnector::saveArrowHeads(QDomDocument& doc)
+  {
+    QDomElement e = doc.createElement("KivioArrowHeads");
+
+    e.appendChild( m_startArrow->saveXML(doc) );
+    e.appendChild( m_endArrow->saveXML(doc) );
+
+    return e;
   }
 }

@@ -68,6 +68,8 @@ class KivioStencilSpawnerSet
     static QString readDescription(const QString&);
     
     QStringList files() const { return m_files; }
+    
+    void addSpawner(KivioStencilSpawner* spawner);
 };
 
 #endif

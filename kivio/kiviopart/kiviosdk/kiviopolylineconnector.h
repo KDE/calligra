@@ -39,6 +39,9 @@ namespace Kivio {
       PolyLineConnector();
       virtual ~PolyLineConnector();
       
+      virtual bool loadCustom(const QDomElement& e);
+      virtual bool saveCustom(QDomElement& e, QDomDocument& doc);
+      
       virtual KivioCollisionType checkForCollision(KoPoint* p, double threshold);
   
       virtual void paint(KivioIntraStencilData* data);
@@ -100,6 +103,9 @@ namespace Kivio {
     protected:
       void checkForConnection(KivioConnectorPoint* cp, KivioPage* page);
   
+      bool loadArrowHeads(const QDomElement& e);
+      QDomElement saveArrowHeads(QDomDocument& doc);
+
     private:
       KivioArrowHead* m_startArrow; // Arrow head for the first point.
       KivioArrowHead* m_endArrow; // Arrow head for the last point.

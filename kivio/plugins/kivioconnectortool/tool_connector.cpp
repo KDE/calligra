@@ -43,6 +43,7 @@
 #include "kivio_pluginmanager.h"
 #include "kivio_1d_stencil.h"
 #include "kiviopolylineconnector.h"
+#include "polylineconnectorspawner.h"
 
 ConnectorTool::ConnectorTool( KivioView* parent ) : Kivio::MouseTool(parent, "Connector Mouse Tool")
 {
@@ -63,6 +64,8 @@ ConnectorTool::ConnectorTool( KivioView* parent ) : Kivio::MouseTool(parent, "Co
 
   m_pConnectorCursor1 = new QCursor(BarIcon("kivio_connector_cursor1",KivioFactory::global()),2,2);
   m_pConnectorCursor2 = new QCursor(BarIcon("kivio_connector_cursor2",KivioFactory::global()),2,2);
+  
+  parent->doc()->addInternalStencilSpawner(new Kivio::PolyLineConnectorSpawner(parent->doc()->internalSpawnerSet()));
 }
 
 ConnectorTool::~ConnectorTool()
@@ -187,22 +190,24 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
   KivioCanvas* canvas = view()->canvasWidget();
   KivioDoc* doc = view()->doc();
   KivioPage* pPage = canvas->activePage();
+  QString spawnerId;
   
   if(m_type == StraightConnector) {
-    KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Dave Marotti - Straight Connector");
-    
-    if (!ss) {
-      kdDebug(43000) << "ConnectorTool: Failed to find StencilSpawner!" << endl;
-      return false;
-    }
-    
-    // Create the stencil
-    m_pStencil = static_cast<Kivio1DStencil*>(ss->newStencil());
+    spawnerId = "Dave Marotti - Straight Connector";
   } else {
-    // Create the stencil
-    m_pStencil = static_cast<Kivio1DStencil*>(new Kivio::PolyLineConnector());
+    spawnerId = "Internal - PolyLine Connector";
   }
 
+  KivioStencilSpawner* ss = doc->findInternalStencilSpawner(spawnerId);
+    
+  if(!ss) {
+    kdDebug(43000) << "ConnectorTool: Failed to find StencilSpawner!" << endl;
+    return false;
+  }
+    
+    // Create the stencil
+  m_pStencil = static_cast<Kivio1DStencil*>(ss->newStencil());
+  
   bool hit = false;
   startPoint = pPage->snapToTarget(canvas->mapFromScreen(e->pos()), 8.0, hit);
 

@@ -39,7 +39,6 @@ KivioPluginStencilSpawner::KivioPluginStencilSpawner( KivioStencilSpawnerSet *pS
 
 KivioPluginStencilSpawner::~KivioPluginStencilSpawner()
 {
-
 }
 
 bool KivioPluginStencilSpawner::load( const QString &f )

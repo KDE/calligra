@@ -10,6 +10,6 @@ noinst_LTLIBRARIES =  libpolyline_connector.la
 libpolyline_connector_la_LIBADD = $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviocommon.la
 
 libpolyline_connector_la_LDFLAGS = $(all_libraries)
-libpolyline_connector_la_SOURCES = kiviopolylineconnector.cpp
+libpolyline_connector_la_SOURCES = kiviopolylineconnector.cpp polylineconnectorspawner.cpp
 
 noinst_HEADERS = kiviopolylineconnector.h

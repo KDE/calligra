@@ -1318,7 +1318,7 @@ void KivioSMLStencil::drawTextBox( KivioShape *pShape, KivioIntraStencilData *pD
   KoZoomHandler* zoomHandler = pData->zoomHandler;
 
 
-  if( pShapeData->text().length() <= 0 ) {
+  if(pShapeData->text().isEmpty()) {
     return;
   }
 
