@@ -468,6 +468,9 @@ KoTextFormat::UnderlineLineType KoFontChooser::getUnderlineLineType()
     case 3:
         return KoTextFormat::U_DOUBLE;
         break;
+    case 4:
+        return KoTextFormat::U_WAVE;
+        break;
     default:
         return KoTextFormat::U_NONE;
     }
@@ -534,6 +537,12 @@ void KoFontChooser::setUnderlineLineType(KoTextFormat::UnderlineLineType nb)
         break;
     case KoTextFormat::U_DOUBLE:
         m_underlining->setCurrentItem(3);
+        break;
+    case KoTextFormat::U_WAVE:
+        m_underlining->setCurrentItem(4);
+        break;
+    default:
+        m_underlining->setCurrentItem(0);
         break;
     }
     m_changedFlags = 0;

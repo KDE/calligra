@@ -956,6 +956,7 @@ QStringList KoTextFormat::underlineStyleList()
     lst <<i18n("Single");
     lst <<i18n("Simple Bold");
     lst <<i18n("Double");
+    lst <<i18n("Wave");
     return lst;
 }
 
