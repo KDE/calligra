@@ -880,6 +880,7 @@ bool KoMainWindow::saveDocument( bool saveas )
         if (!needConfirm ||
                (needConfirm && exportConfirmation ( oldOutputFormat /* not so old :) */, _native_format ))
            )
+        {
             // be sure pDoc has the correct outputMimeType!
             ret = pDoc->save();
 
@@ -888,6 +889,7 @@ bool KoMainWindow::saveDocument( bool saveas )
                 kdDebug(30003) << "Failed Save!" << endl;
                 pDoc->setURL( oldURL ), pDoc->setFile( oldFile );
             }
+        }
         else
             ret = false;
     }
