@@ -9,9 +9,11 @@
 #include <kdebug.h>
 
 struct STYLE {
-    bool paragStyle;       // is it a paragraph style?
-    unsigned long fcPAPX;  // position of the PAPX grpprl in the table stream if there is one
-    unsigned long fcCHPX;  // CHPX position
+    bool paragStyle;         // is it a paragraph style?
+    unsigned long fcPAPX;    // position of the PAPX grpprl in the table stream if there is one
+    unsigned short lenPAPX;  // length of the grpprl
+    unsigned long fcCHPX;    // CHPX position
+    unsigned short lenCHPX;  // length
 };
 
 class StyleSheet {

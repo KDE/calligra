@@ -1,42 +1,11 @@
 #include <stylesheet.h>
 
-//#include <qfile.h>   // for testing only
-
 StyleSheet::StyleSheet(const myFile &t, const FIB * const f) : table(t),
                        fib(f), lastSti(0xffff) {
 
     stdOffset=fib->fcStshf+read16(table.data+fib->fcStshf);
     cstd=read16(table.data+fib->fcStshf+2);
     stdBaseLength=read16(table.data+fib->fcStshf+4);
-
-    // for testing purpose ///////////////////////////
-    kdebug(KDEBUG_INFO, 31000, "################## StyleSheet ####################");
-    /*
-    kdebug(KDEBUG_INFO, 31000, styleName(0));
-    kdebug(KDEBUG_INFO, 31000, styleName(1));
-    kdebug(KDEBUG_INFO, 31000, styleName(2));
-    kdebug(KDEBUG_INFO, 31000, styleName(3));
-    kdebug(KDEBUG_INFO, 31000, styleName(65));
-    kdebug(KDEBUG_INFO, 31000, styleName(66));
-    kdebug(KDEBUG_INFO, 31000, styleName(80));
-    kdebug(KDEBUG_INFO, 31000, styleName(81));
-    kdebug(KDEBUG_INFO, 31000, styleName(89));
-    kdebug(KDEBUG_INFO, 31000, styleName(85));
-    */
-    chain_rec(0);
-    kdebug(KDEBUG_INFO, 31000, "################## StyleSheet ####################");
-
-    /*
-    QFile f("/home/koffice/table.stream.part");
-    f.open(IO_WriteOnly);
-    f.writeBlock((const char*)(table.data+fib->fcStshf), fib->lcbStshf);
-    f.close();
-
-    QString d="stdOffset=";
-    d+=QString::number((long)stdOffset);
-    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(d));
-    */
-    ///////////// till here :) //////////////////////////
 }
 
 StyleSheet::~StyleSheet() {
@@ -65,31 +34,11 @@ const bool StyleSheet::chain_rec(const unsigned short &sti) {
     bool success=true;
 
     if(findSTD(sti, offset)) {
-        QString d="StyleSheet::chain_rec(): found sti(";
-        d+=QString::number((long)sti);
-        d+="), offset=";
-        d+=QString::number((long)offset);
-        kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(d));
-
         tmp=read16(table.data+offset+2);
         unsigned short sgc=tmp & 0x000f;
         unsigned short istdBase=(tmp & 0xfff0) >> 4;
         tmp=read16(table.data+offset+4);
         unsigned short cupx=tmp & 0x000f;
-        unsigned short istdNext=(tmp & 0xfff0) >> 4;
-
-        d="sgc=";
-        d+=QString::number((long)sgc);
-        kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(d));
-        d="istdBase=";
-        d+=QString::number((long)istdBase);
-        kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(d));
-        d="cupx=";
-        d+=QString::number((long)cupx);
-        kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(d));
-        d="istdNext=";
-        d+=QString::number((long)istdNext);
-        kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(d));
 
         if(istdBase!=0x0fff)
             success=chain_rec(istdBase);   // next step towards stiNil (end of recursion)
@@ -105,17 +54,42 @@ const bool StyleSheet::chain_rec(const unsigned short &sti) {
         else if(sgc==2)
             myStyle.paragStyle=false;
         else {
-            kdebug(KDEBUG_ERROR, 31000, "StyleSheet::chain_rec(): Error: Don't know the format!");
+            kdebug(KDEBUG_ERROR, 31000, "StyleSheet::chain_rec(): Error: Don't know this style-format!");
             return false;
         }
 
-        // "read" the fc positions, fill STYLE, and add it to the chain! (TODO)
+        if(sgc==1 && cupx==2) {                            // only for paragraph styles
+            tmp=read16(table.data+offset);                 // read the length of the UPX
+            offset+=2;                                     // Adjust offset (2 bytes length info)
+            if(read16(table.data+offset)!=sti)
+                kdebug(KDEBUG_WARN, 31000, "StyleSheet::chain_rec(): Sigh - istd and sti are different!?!");
+            myStyle.fcPAPX=offset+2;
+            myStyle.lenPAPX=tmp;
+            offset+=tmp;
+            tmp=read16(table.data+offset);
+            offset+=2;
+            myStyle.fcCHPX=offset;
+            myStyle.lenCHPX=tmp;
+        }
+        else if(sgc==2 && cupx==1) {                       // for character styles
+            tmp=read16(table.data+offset);
+            offset+=2;
+            myStyle.fcCHPX=offset;
+            myStyle.lenCHPX=tmp;
+            myStyle.fcPAPX=0;
+            myStyle.lenPAPX=0;
+        }
+        else {
+            kdebug(KDEBUG_ERROR, 31000, "StyleSheet::chain_rec(): Error: Don't know this UPX-format!");
+            return false;
+        }
+        _chain.append(myStyle);
     }
     else {
         QString d="StyleSheet::chain_rec(): ERROR: Didn't find sti(";
         d+=QString::number((long)sti);
         d+=")!";
-        kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(d));
+        kdebug(KDEBUG_ERROR, 31000, static_cast<const char*>(d));
         success=false;
     }
     return success;
