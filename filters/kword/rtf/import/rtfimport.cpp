@@ -218,6 +218,7 @@ static RTFProperty propertyTable[] =
 	PROP(	"Text",		"sect",		insertPageBreak,	0L, 0 ),
 	PROP(	0L,		"sectd",	setSectionDefaults,	0L, 0 ),
 	MEMBER(	0L,		"sl",		setNumericProperty,	state.layout.spaceBetween, 0 ),
+	MEMBER(	0L,		"slmult",	setToggleProperty,	state.layout.spaceBetweenMultiple, 0 ),
 	MEMBER(	"@stylesheet",	"snext",	setNumericProperty,	style.next, 0 ),
 	MEMBER(	0L,		"strike",	setToggleProperty,	state.format.strike, 0 ),
 	MEMBER(	0L,		"striked",	setToggleProperty,	state.format.striked, 0 ),
@@ -906,6 +907,7 @@ void RTFImport::setParagraphDefaults( RTFProperty * )
     layout.spaceBefore	= 0;
     layout.spaceAfter	= 0;
     layout.spaceBetween	= 0;
+    layout.spaceBetweenMultiple = false;
     layout.style	= 0;
     layout.alignment	= RTFLayout::Left;
     layout.border	= 0L;
@@ -2238,29 +2240,63 @@ void RTFImport::addLayout( DomNode &node, const QString &name, RTFLayout &layout
 
 
     // Linespacing
-    if (layout.spaceBetween > 0)
-    {
-	node.addNode( "LINESPACING" );
-        if( layout.spaceBetween == 360 )
-  	    node.setAttribute( "type", "oneandhalf" );
-        else if( layout.spaceBetween == 480 )
-	    node.setAttribute( "type", "double" );
-        else
-        {
-	    node.setAttribute( "type", "custom" );
-	    node.setAttribute( "spacingvalue", 0.05*layout.spaceBetween );
-        }
-	node.closeNode( "LINESPACING" );
-    }
-    if (layout.spaceBetween < 0)
-    {
-        // negative linespace means "exact"
-	node.addNode( "LINESPACING" );
-	node.setAttribute( "type", "fixed" );
-	node.setAttribute( "spacingvalue", -0.05*layout.spaceBetween );
-	node.closeNode( "LINESPACING" );
-    }
 
+    QString lineSpacingType;
+    QString lineSpacingValue;  
+    if ( layout.spaceBetweenMultiple )
+    {
+        // Note: 240 is a sort of magic value for one line (Once upon a time, it meant 12pt for a single line)
+        switch (layout.spaceBetween )
+        {
+        case 240:
+            {
+                lineSpacingType = "single"; // ### TODO: does KWord really supports this?
+                break;
+            }
+        case 360:
+            {
+                lineSpacingType = "oneandhalf";
+                break;
+            }
+        case 480 :
+            {
+                lineSpacingType = "double";
+                break;
+            }
+        default:
+            {    
+                if ( layout.spaceBetween > 0 )
+                {
+                    lineSpacingType = "multiple";
+                    lineSpacingValue.setNum( layout.spaceBetween / 240.0 );
+                }
+                break;
+            }
+        }
+    }
+    else
+    {
+        if (layout.spaceBetween > 0)
+        {
+            lineSpacingType = "atleast";
+            lineSpacingValue.setNum( 0.05*layout.spaceBetween );
+        }
+        if (layout.spaceBetween < 0)
+        {
+            // negative linespace means "exact"
+            lineSpacingType = "fixed" ;
+            lineSpacingValue.setNum( -0.05*layout.spaceBetween );
+        }
+    }
+    
+    if ( ! lineSpacingType.isEmpty() )
+    {
+        node.addNode( "LINESPACING" );
+        node.setAttribute( "type", lineSpacingType );
+        if ( ! lineSpacingValue.isEmpty() )
+            node.setAttribute( "spacingvalue", lineSpacingValue );
+        node.closeNode( "LINESPACING" );
+    }
 
     if (layout.keep || layout.pageBB || layout.pageBA || frameBreak || layout.keepNext)
     {
