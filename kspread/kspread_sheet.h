@@ -54,6 +54,7 @@ class KoOasisSettings;
 
 #include <koDocument.h>
 #include <koDocumentChild.h>
+#include <koOasisSettings.h> // for KoOasisSettings::NamedMap
 
 #include <qpen.h>
 #include <qptrlist.h>
@@ -248,7 +249,7 @@ public:
     enum SortingOrder{ Increase, Decrease };
     enum ChangeRef { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
     enum TestType { Text, Validity, Comment, ConditionalCellAttribute };
-    
+
     enum LayoutDirection { LeftToRight, RightToLeft };
 
     KSpreadSheet( KSpreadMap *_map, const QString &tableName, const char *_name=0L );
@@ -301,9 +302,9 @@ public:
     virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, KSpreadGenValidationStyles &valStyle );
     void saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const;
 
-    void loadOasisSettings( const KoOasisSettings &settings );
-    void saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker );
-    void saveOasisPrintStyleLayout( KoGenStyle &style );
+    void loadOasisSettings( const KoOasisSettings::NamedMap &settings );
+    void saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker ) const;
+    void saveOasisPrintStyleLayout( KoGenStyle &style ) const;
 
     /**
      * Saves a children
@@ -315,18 +316,18 @@ public:
     virtual bool loadChildren( KoStore* _store );
 
     bool isLoading();
-    
+
     /**
      * Returns the layout direction of the sheet.
      */
     LayoutDirection layoutDirection() const;
-    
+
     /**
      * Sets the layout direction of the sheet. For example, for Arabic or Hebrew
      * documents, it is possibly to layout the sheet from right to left.
      */
     void setLayoutDirection( LayoutDirection dir );
-    
+
     /**
      * \deprecated Use direction().
      */
@@ -498,7 +499,7 @@ public:
      * sure that no invalid values in other tables make you trouble.
      */
     void recalc();
-    
+
     /** handles the fact that a cell has been changed - updates
     things that need to be updated */
     void valueChanged (KSpreadCell *cell);
@@ -1170,7 +1171,7 @@ public:
 
   /** returns a pointer to the dependency manager */
   KSpread::DependencyManager *dependencies ();
-  
+
 signals:
     void sig_refreshView();
     void sig_updateView( KSpreadSheet *_table );

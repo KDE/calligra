@@ -250,15 +250,12 @@ void
 KarbonPart::loadOasisSettings( const QDomDocument&settingsDoc )
 {
     if ( settingsDoc.isNull() )
-        return ; //not a error some file doesn't have settings.xml
+        return ; // not an error if some file doesn't have settings.xml
     KoOasisSettings settings( settingsDoc );
-    bool tmp = settings.selectItemSet( "view-settings" );
-    //kdDebug()<<" settings : view-settings :"<<tmp<<endl;
-
-    if ( tmp )
+    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
+    if ( !viewSettings.isNull() )
     {
-        tmp = settings.selectItemMap( "Views" );
-        setUnit(KoUnit::unit(settings.parseConfigItemString("unit")));
+        setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
         //todo add other config here.
     }
 }
@@ -373,17 +370,9 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
-
-    //<config:config-item-map-indexed config:name="Views">
-    settingsWriter->startElement("config:config-item-map-indexed" );
-    settingsWriter->addAttribute("config:name", "Views" );
-    settingsWriter->startElement("config:config-item-map-entry" );
     KoUnit::saveOasis(settingsWriter, unit());
     saveOasisSettings( *settingsWriter );
-    settingsWriter->endElement();
 
-
-    settingsWriter->endElement(); //config:config-item-map-indexed
     settingsWriter->endElement(); // config:config-item-set
     settingsWriter->endElement(); // office:settings
     settingsWriter->endElement(); // Root element

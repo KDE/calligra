@@ -92,16 +92,23 @@ void KSpreadMap::moveTable( const QString & _from, const QString & _to, bool _be
 
 void KSpreadMap::loadOasisSettings( KoOasisSettings &settings )
 {
-    QString activeTable = settings.parseConfigItemString( "ActiveTable" );
-    kdDebug()<<" loadOasisSettings( KoOasisSettings &settings ) activeTable :"<<activeTable<<endl;
+    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
+    KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap( "Views" );
+    KoOasisSettings::Items firstView = viewMap.entry( 0 );
 
-    QPtrListIterator<KSpreadSheet> it( m_lstTables );
-    bool exist = settings.selectItemMapNamed( "Tables" );
-    kdDebug()<<" loadOasisSettings( KoOasisSettings &settings ) exist : "<<exist<<endl;
-    for( ; it.current(); ++it )
+    KoOasisSettings::NamedMap tablesMap = firstView.namedMap( "Tables" );
+    kdDebug()<<" loadOasisSettings( KoOasisSettings &settings ) exist : "<< !tablesMap.isNull() <<endl;
+    if ( !tablesMap.isNull() )
     {
-        it.current()->loadOasisSettings( settings );
+        QPtrListIterator<KSpreadSheet> it( m_lstTables );
+        for( ; it.current(); ++it )
+        {
+            it.current()->loadOasisSettings( tablesMap );
+        }
     }
+
+    QString activeTable = firstView.parseConfigItemString( "ActiveTable" );
+    kdDebug()<<" loadOasisSettings( KoOasisSettings &settings ) activeTable :"<<activeTable<<endl;
 
     if (!activeTable.isEmpty())
     {
@@ -113,8 +120,7 @@ void KSpreadMap::loadOasisSettings( KoOasisSettings &settings )
 
 void KSpreadMap::saveOasisSettings( KoXmlWriter &settingsWriter )
 {
-    //fixme ViewId is convert in boolean... strnage I don't understand why
-    settingsWriter.addConfigItem( "ViewId", "View1" );
+    settingsWriter.addConfigItem( "ViewId", QString::fromLatin1( "View1" ) );
     // Save visual info for the first view, such as active table and active cell
     // It looks like a hack, but reopening a document creates only one view anyway (David)
     KSpreadView * view = static_cast<KSpreadView*>(this->doc()->views().getFirst());

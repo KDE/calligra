@@ -1052,24 +1052,17 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter.startElement("config:config-item-set");
     settingsWriter.addAttribute("config:name", "view-settings");
 
-    settingsWriter.startElement( "config:config-item-map-indexed" );
-    settingsWriter.addAttribute( "config:name", "Views" );
-    settingsWriter.startElement("config:config-item-map-entry" );
-
     KoUnit::saveOasis(&settingsWriter, m_unit);
     saveOasisSettings( settingsWriter );
 
-    settingsWriter.endElement(); //config:config-item-map-entry
-    settingsWriter.endElement(); //config:config-item-map-indexed
     settingsWriter.endElement(); // config:config-item-set
 
     settingsWriter.startElement("config:config-item-set");
     settingsWriter.addAttribute("config:name", "configuration-settings");
-    saveOasisIgnoreList( settingsWriter );
+    settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellListIgnoreAll.join( "," ) );
     settingsWriter.endElement(); // config:config-item-set
 
     settingsWriter.endElement(); // office:settings
-    settingsWriter.endElement(); // Root element
     settingsWriter.endDocument();
     delete &settingsWriter;
 
@@ -1087,24 +1080,12 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     return true;
 }
 
-void KPresenterDoc::saveOasisIgnoreList( KoXmlWriter &settingsWriter )
+void KPresenterDoc::loadOasisIgnoreList( const KoOasisSettings& settings )
 {
-    settingsWriter.startElement("config:config-item-map-entry" );
-    settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellListIgnoreAll.join( "," ) );
-    settingsWriter.endElement();
-}
-
-void KPresenterDoc::loadOasisIgnoreList( const QDomDocument&settingsDoc )
-{
-    KoOasisSettings settings( settingsDoc );
-    bool tmp = settings.selectItemSet( "configuration-settings" );
-    kdDebug()<<" settings : configuration-settings :"<<tmp<<endl;
-
-    if ( tmp )
+    KoOasisSettings::Items configurationSettings = settings.itemSet( "configuration-settings" );
+    if ( !configurationSettings.isNull() )
     {
-        QString ignorelist = settings.parseConfigItemString( "SpellCheckerIgnoreList" );
-        //kdDebug()<<" ignorelist :"<<ignorelist<<endl;
-
+        const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
         m_spellListIgnoreAll = QStringList::split( ',', ignorelist );
     }
 }
@@ -1219,23 +1200,18 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
 {
     KoOasisSettings settings( settingsDoc );
-    bool tmp = settings.selectItemSet( "view-settings" );
-    //kdDebug()<<" settings : view-settings :"<<tmp<<endl;
-
-    if ( tmp )
+    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
+    setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
+    KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap( "Views" );
+    KoOasisSettings::Items firstView = viewMap.entry( 0 );
+    if ( !firstView.isNull() )
     {
-        tmp = settings.selectItemMap( "Views" );
-        //kdDebug()<<" View :"<<tmp<<endl;
-        if ( tmp )
-        {
-            parseOasisHelpLine(  settings.parseConfigItemString( "SnapLinesDrawing" ) );
-            setShowHelplines( settings.parseConfigItemBool( "SnapLineIsVisible" ) );
-            int valx = settings.parseConfigItemInt( "GridFineWidth" );
-            m_gridX = MM_TO_POINT( valx / 100.0 );
-            int valy = settings.parseConfigItemInt( "GridFineHeight" );
-            m_gridY = MM_TO_POINT( valy / 100.0 );
-            setUnit(KoUnit::unit(settings.parseConfigItemString("unit")));
-        }
+        parseOasisHelpLine( firstView.parseConfigItemString( "SnapLinesDrawing" ) );
+        setShowHelplines( firstView.parseConfigItemBool( "SnapLineIsVisible" ) );
+        int valx = firstView.parseConfigItemInt( "GridFineWidth" );
+        m_gridX = MM_TO_POINT( valx / 100.0 );
+        int valy = firstView.parseConfigItemInt( "GridFineHeight" );
+        m_gridY = MM_TO_POINT( valy / 100.0 );
     }
 }
 

@@ -83,6 +83,8 @@
 #include <koxmlwriter.h>
 #include <koGenStyles.h>
 #include <koOasisSettings.h>
+#include <kodom.h>
+#include <koxmlns.h>
 
 //using namespace std;
 
@@ -358,20 +360,11 @@ bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
-
-    //<config:config-item-map-indexed config:name="Views">
-    settingsWriter->startElement("config:config-item-map-indexed" );
-    settingsWriter->addAttribute("config:name", "Views" );
-    settingsWriter->startElement("config:config-item-map-entry" );
     KoUnit::saveOasis( settingsWriter, units() );
     saveOasisSettings( *settingsWriter );
-    settingsWriter->endElement();
 
-
-    settingsWriter->endElement(); //config:config-item-map-indexed
     settingsWriter->endElement(); // config:config-item-set
     settingsWriter->endElement(); // office:settings
-    settingsWriter->endElement(); // Root element
     settingsWriter->endDocument();
 
     delete settingsWriter;
@@ -397,7 +390,7 @@ bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, c
   m_bLoading = true;
 
   QDomElement contents = doc.documentElement();
-  QDomElement body(contents.namedItem("office:body").toElement());
+  QDomElement body(KoDom::namedItemNS( contents, KoXmlNS::office, "body"));
 
   if(body.isNull()) {
     kdDebug(43000) << "No office:body found!" << endl;
@@ -406,7 +399,7 @@ bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, c
     return false;
   }
 
-  body = body.namedItem("office:drawing").toElement();
+  body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
 
   if(body.isNull()) {
     kdDebug(43000) << "No office:drawing found!" << endl;
@@ -416,12 +409,13 @@ bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, c
   }
 
   QDomNode node = body.firstChild();
-  QString nodeName;
+  QString localName;
 
+  // TODO: port to forEachElement
   while(!node.isNull()) {
-    nodeName = node.nodeName();
+    localName = node.localName();
 
-    if(nodeName == "draw:page") {
+    if(localName == "page" /* && and namespace is KoXmlNS::draw*/) {
       KivioPage* p = createPage();
       addPage(p);
 
@@ -445,13 +439,10 @@ void KivioDoc::loadOasisSettings( const QDomDocument&settingsDoc )
     if ( settingsDoc.isNull() )
         return ; //not a error some file doesn't have settings.xml
     KoOasisSettings settings( settingsDoc );
-    bool tmp = settings.selectItemSet( "view-settings" );
-    //kdDebug()<<" settings : view-settings :"<<tmp<<endl;
-
-    if ( tmp )
+    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
+    if ( !viewSettings.isNull() )
     {
-        tmp = settings.selectItemMap( "Views" );
-        setUnits(KoUnit::unit(settings.parseConfigItemString("unit")));
+        setUnits(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
         //todo add other config here.
     }
 }

@@ -706,27 +706,16 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
-
-    //<config:config-item-map-indexed config:name="Views">
-    settingsWriter->startElement("config:config-item-map-indexed" );
-    settingsWriter->addAttribute("config:name", "Views" );
-    settingsWriter->startElement("config:config-item-map-entry" );
     KoUnit::saveOasis(settingsWriter, unit());
     saveOasisSettings( *settingsWriter );
-    settingsWriter->endElement();
 
-
-    settingsWriter->endElement(); //config:config-item-map-indexed
     settingsWriter->endElement(); // config:config-item-set
 
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "configuration-settings");
-    saveOasisIgnoreList( *settingsWriter );
+    settingsWriter->addConfigItem("SpellCheckerIgnoreList", d->spellListIgnoreAll.join( "," ) );
     settingsWriter->endElement(); // config:config-item-set
-
-
     settingsWriter->endElement(); // office:settings
-    settingsWriter->endElement(); // Root element
     settingsWriter->endDocument();
     delete settingsWriter;
 
@@ -743,16 +732,13 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 void KSpreadDoc::loadOasisSettings( const QDomDocument&settingsDoc )
 {
     KoOasisSettings settings( settingsDoc );
-    bool tmp = settings.selectItemSet( "view-settings" );
-    //kdDebug()<<" settings : view-settings :"<<tmp<<endl;
-
-    if ( tmp )
+    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
+    if ( !viewSettings.isNull() )
     {
-        tmp = settings.selectItemMap( "Views" );
-        setUnit(KoUnit::unit(settings.parseConfigItemString("unit")));
-        if (  tmp )
-            d->workbook->loadOasisSettings( settings );
+        setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
     }
+    d->workbook->loadOasisSettings( settings );
+    loadOasisIgnoreList( settings );
 }
 
 void KSpreadDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
@@ -761,24 +747,13 @@ void KSpreadDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 }
 
 
-void KSpreadDoc::saveOasisIgnoreList( KoXmlWriter &settingsWriter )
+void KSpreadDoc::loadOasisIgnoreList( const KoOasisSettings& settings )
 {
-    settingsWriter.startElement("config:config-item-map-entry" );
-    settingsWriter.addConfigItem("SpellCheckerIgnoreList", d->spellListIgnoreAll.join( "," ) );
-    settingsWriter.endElement();
-}
-
-void KSpreadDoc::loadOasisIgnoreList( const QDomDocument&settingsDoc )
-{
-    KoOasisSettings settings( settingsDoc );
-    bool tmp = settings.selectItemSet( "configuration-settings" );
-    kdDebug()<<" settings : configuration-settings :"<<tmp<<endl;
-
-    if ( tmp )
+    KoOasisSettings::Items configurationSettings = settings.itemSet( "configuration-settings" );
+    if ( !configurationSettings.isNull() )
     {
-        QString ignorelist = settings.parseConfigItemString( "SpellCheckerIgnoreList" );
+        const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
         kdDebug()<<" ignorelist :"<<ignorelist<<endl;
-
         d->spellListIgnoreAll = QStringList::split( ',', ignorelist );
     }
 }

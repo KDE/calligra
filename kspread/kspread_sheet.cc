@@ -7531,26 +7531,30 @@ void KSpreadSheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) 
 }
 
 
-void KSpreadSheet::loadOasisSettings( const KoOasisSettings &settings )
+void KSpreadSheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings )
 {
-    d->hideZero = settings.parseConfigItemBool( "ShowZeroValues", d->name );
-    d->showGrid = settings.parseConfigItemBool( "ShowGrid", d->name );
-    d->firstLetterUpper = settings.parseConfigItemBool( "FirstLetterUpper", d->name );
+    // Find the entry in the map that applies to this sheet (by name)
+    KoOasisSettings::Items items = settings.entry( d->name );
+    if ( items.isNull() )
+        return;
+    d->hideZero = items.parseConfigItemBool( "ShowZeroValues" );
+    d->showGrid = items.parseConfigItemBool( "ShowGrid" );
+    d->firstLetterUpper = items.parseConfigItemBool( "FirstLetterUpper" );
 
-    int cursorX = settings.parseConfigItemInt( "CursorPositionX", d->name );
-    int cursorY = settings.parseConfigItemInt( "CursorPositionY", d->name );
+    int cursorX = items.parseConfigItemInt( "CursorPositionX" );
+    int cursorY = items.parseConfigItemInt( "CursorPositionY" );
 
     d->doc->loadingInfo()->addMarkerSelection( this, QPoint( cursorX, cursorY ) );
     kdDebug()<<"d->hideZero :"<<d->hideZero<<" d->showGrid :"<<d->showGrid<<" d->firstLetterUpper :"<<d->firstLetterUpper<<" cursorX :"<<cursorX<<" cursorY :"<<cursorY<< endl;
 
-    d->showFormulaIndicator = settings.parseConfigItemInt("ShowFormulaIndicator" );
-    d->showPageBorders = settings.parseConfigItemBool( "ShowPageBorders" );
-    d->lcMode = settings.parseConfigItemBool( "lcmode" );
-    d->showColumnNumber = settings.parseConfigItemBool( "ShowPageBorders" );
-    d->firstLetterUpper = settings.parseConfigItemBool( "FirstLetterUpper" );
+    d->showFormulaIndicator = items.parseConfigItemInt("ShowFormulaIndicator" );
+    d->showPageBorders = items.parseConfigItemBool( "ShowPageBorders" );
+    d->lcMode = items.parseConfigItemBool( "lcmode" );
+    d->showColumnNumber = items.parseConfigItemBool( "ShowPageBorders" );
+    d->firstLetterUpper = items.parseConfigItemBool( "FirstLetterUpper" );
 }
 
-void KSpreadSheet::saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker )
+void KSpreadSheet::saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker ) const
 {
     //not into each page into oo spec
     settingsWriter.addConfigItem( "ShowZeroValues", d->hideZero );
@@ -7599,7 +7603,7 @@ bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, 
     return true;
 }
 
-void KSpreadSheet::saveOasisPrintStyleLayout( KoGenStyle &style )
+void KSpreadSheet::saveOasisPrintStyleLayout( KoGenStyle &style ) const
 {
     QString printParameter;
     if ( d->print->printGrid() )

@@ -78,6 +78,7 @@ namespace KFormula {
 
 class KoTextParag;
 class KoOasisContext;
+class KoOasisSettings;
 
 #include "kwanchorpos.h" // legacy loading stuff
 //#include "kwbookmark.h"
@@ -860,8 +861,7 @@ protected:
 
     void saveOasisSettings( KoXmlWriter &settingsWriter );
 
-    void saveOasisIgnoreList( KoXmlWriter &settingsWriter );
-    void loadOasisIgnoreList( const QDomDocument&settingsDoc );
+    void loadOasisIgnoreList( const KoOasisSettings& settings );
 
 private:
     void endOfLoading();

@@ -28,6 +28,7 @@
 #ifndef KSPREAD_DOC
 #define KSPREAD_DOC
 
+class KoOasisSettings;
 class KCommand;
 
 class KSpreadDoc;
@@ -764,9 +765,7 @@ private:
 
     void saveOasisSettings( KoXmlWriter &settingsWriter );
     void loadOasisSettings( const QDomDocument&settingsDoc );
-    void saveOasisIgnoreList( KoXmlWriter &settingsWriter );
-    void loadOasisIgnoreList( const QDomDocument&settingsDoc );
-
+    void loadOasisIgnoreList( const KoOasisSettings& settings );
     KSPLoadingInfo *m_loadingInfo;
 };
 

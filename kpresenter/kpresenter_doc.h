@@ -49,6 +49,7 @@ class KPRLoadingInfo;
 class KPGroupObject;
 
 class KoOasisContext;
+class KoOasisSettings;
 class KoXmlWriter;
 class QFile;
 class KoSavingContext;
@@ -595,8 +596,7 @@ protected:
     void saveOasisSettings( KoXmlWriter &contentTmpWriter );
     void loadOasisSettings( const QDomDocument&settingsDoc );
 
-    void saveOasisIgnoreList( KoXmlWriter &settingsWriter );
-    void loadOasisIgnoreList( const QDomDocument&settingsDoc );
+    void loadOasisIgnoreList( const KoOasisSettings& settings );
 
     //we move presSpeed to each table => compatibility with old file format
     void compatibilityFromOldFileFormat();
