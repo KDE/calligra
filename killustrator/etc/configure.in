@@ -1,0 +1,50 @@
+
+dnl without this order in this file, autoconf will not work!
+dnl the argument is a source file out of your sources. But
+dnl acinclude.m4 makes the job for all programs ;-)
+AC_INIT(acinclude.m4)
+
+dnl without this order in this file, automake will be confused!
+dnl the argument 
+AM_CONFIG_HEADER(config.h)
+AC_CHECK_COMPILERS
+
+AM_INIT_AUTOMAKE(killustrator, 0.9)
+
+dnl make $KDEDIR the default for the installation
+AC_PREFIX_DEFAULT(${KDEDIR:-/usr/local/kde})
+
+AM_DISABLE_LIBRARIES
+KDE_PROG_LIBTOOL
+AC_PATH_KDE 
+AM_KDE_WITH_NLS
+
+dnl Check for MICO. The argument is the minimal version required.
+KDE_CHECK_MICO(2.0.7)
+KDE_CHECK_MINI_STL
+
+idldir="\$(includedir)/idl"
+AC_SUBST(idldir)
+
+KDE_CHECK_PYTHON(1.5)
+AC_CHECK_HEADERS(unistd.h sys/param.h floatingpoint.h)
+AC_FIND_QIMGIO
+AC_C_BIGENDIAN
+
+KOFFICE_LIBS="-lkofficeui -lkofficecore -llibkoml"
+AC_SUBST(KOFFICE_LIBS)
+
+KOFFICE_INCLUDES=""
+AC_SUBST(KOFFICE_INCLUDES)
+
+dnl add here all your Makefiles. These are created by configure
+AC_OUTPUT( \
+	Makefile \
+	doc/Makefile \
+	filter/Makefile \
+	pics/Makefile \
+	share/Makefile \
+	standalone/Makefile \
+	xmlutils/Makefile \
+	po/Makefile
+ )

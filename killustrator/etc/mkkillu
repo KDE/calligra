@@ -1,0 +1,39 @@
+#! /bin/sh
+
+make acinclude.m4
+rm -rf killustrator.dist
+cp -ra killustrator killustrator.dist
+rm -rf killustrator.dist/etc killustrator.dist/koffice
+cp -a ltmain.sh ltconfig missing mkinstalldirs acinclude.m4 killustrator/etc/configure.in COPYING INSTALL acconfig.h config.guess config.sub config.h.bot killustrator.dist
+mkdir killustrator.dist/po
+cp -a po/killustrator.pot killustrator.dist/po
+cp -a killustrator/etc/po_Makefile.am killustrator.dist/po/Makefile.am
+list=""
+for file in po/*/killustrator.po; do
+   lang=`echo $file | sed -e "s#.*po/\(.*\)/.*#\1#"`
+   cp -a $file killustrator.dist/po/$lang.po
+   msgfmt $file -o killustrator.dist/po/$lang.gmo
+   list="$list $lang.gmo"
+done
+
+# remove killustrator from SUBDIRS. Every other instance doesn't hurt :)
+for i in killustrator.dist/Makefile*; do 
+  sed -e "s#koffice#po#" $i > $i.new && mv $i.new $i
+done
+
+cd killustrator.dist
+find . -name \".deps\" -exec rm -rf {} \; 
+find . -name CVS -exec rm -rf {} \; 
+find . -name ".cvsignore" -exec rm -f {} \; 
+
+sed -e "s#@GMOFILES@#$list#" po/Makefile.am > po/Makefile.am.new && mv po/Makefile.am.new po/Makefile.am
+make -k maintainer-clean || rm config.cache
+aclocal
+autoheader
+automake
+autoconf
+
+# if the following fails, try it by hand.
+./configure
+make dist
+
