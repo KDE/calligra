@@ -1,6 +1,6 @@
 ---------------------------------------------------------
  Kexi Development CHANGELOG / TODO Document
- From js' Point of View
+ From js's Point of View
  
  Also includes: win32 porting and multiplatform 
   features improving details
@@ -59,13 +59,21 @@ TODO: change texts in projectwizard to more descriptive:
 
 TODO: finish transactions code: do simulated autocommit
 TODO: implement better references (foreign key information) between tables
-TODO: add field aliases for QuerySchema and checking if there is alias
 TODO: add kexi driver version info
 TODO: add server version info retrieval
-TODO: add QueryAsterisk for * in queries
 
+2003-10-07
+-KexiDB::QueryAsterisk class introduced to define select queries with asterisks, like
+ "staff.*" in "SELECT staff.*, cars.model from staff, cars WHERE staff.car = cars.number"
+ (1st ttype) or "*" in "SELECT * from staff, cars WHERE staff.car = cars.number" (2nd type)
+ 
 
 2003-10-06
+-KexiDB::QuerySchema: 
+ - field aliases added and checking if there is alias
+ - list of tables used in query added
+ - debug() updated
+
 
 2003-10-05
 -KexiDB:: 

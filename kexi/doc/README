@@ -1,2 +1,4 @@
 
-dev/ - Development Documentation
+common/ - Common files for Doxygen-generated html documentation
+dev/ - Development Documentation: thoughts, ideas, notes
+kexidb/ - place for Doxygen-generated KexiDB Module Documentation
