@@ -9,10 +9,11 @@
 
 
 
-<!--	A KImageshop image consists of a list of image layers.
+<!--	A image contains _one_ layers element.
 
 		Attributes:
 
+        name:       Every image has a name. ;-)
 		author:		The image's author
 		email:		The image's author's email address
 		editor:		The program this file was written with
@@ -23,8 +24,9 @@
         cMode:      The image's color mode. "RGBA" for example. See kis_global.h.
         
 -->
-<!ELEMENT IMAGE (LAYER)*>
-<!ATTLIST IMAGE author   CDATA #IMPLIED
+<!ELEMENT IMAGE (LAYERS)>
+<!ATTLIST IMAGE name     CDATA #REQUIRED
+                author   CDATA #IMPLIED
                 email    CDATA #IMPLIED
                 editor   CDATA #IMPLIED
                 mime     CDATA "application/x-kimageshop"
@@ -35,7 +37,16 @@
 
 
 
-<!--	A KImageShop layer consists of a list of channels.
+<!--	The layers element holds the image's layers.
+
+        Attributes: none
+
+-->
+<!ELEMENT LAYERS (LAYER)*>
+
+
+
+<!--	A layer contains _one_ channels element.
 
         Attributes:
 
@@ -50,7 +61,7 @@
         bitDepth:   The bit depth. == The number of bits a pixel uses _per channel_!.
         cMode:      The image's color mode. "RGBA" for example. See kis_global.h.
 -->
-<!ELEMENT LAYER (CHANNEL)*>
+<!ELEMENT LAYER (CHANNELS)>
 <!ATTLIST LAYER name      CDATA #REQUIRED
                 x         CDATA #REQUIRED
                 y         CDATA #REQUIRED
@@ -61,6 +72,15 @@
                 linked  CDATA #REQUIRED
                 bitDepth  CDATA #REQUIRED
                 cMode     CDATA #REQUIRED>
+
+
+
+<!--	The channels element holds the layer's channels.
+
+        Attributes: none
+
+-->
+<!ELEMENT CHANNELS (CHANNEL)*>
 
 
 

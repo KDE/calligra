@@ -45,9 +45,6 @@ public:
 public slots:
 
   virtual void slotFileNew();
-  //virtual void slotFileOpen();
-  //virtual void slotFileSave();
-  //virtual void slotFileSaveAs();
   virtual void slotFilePrint();
   virtual void slotFileClose();
 
@@ -56,6 +53,7 @@ public slots:
 protected:
 
   virtual KoDocument* createDoc();
+  virtual bool openDocument( const KURL & url );
 
 private:
 

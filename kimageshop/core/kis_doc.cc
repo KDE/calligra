@@ -99,6 +99,7 @@ bool KisDoc::save( ostream& out, const char* )
 
   // image element
   QDomElement image = doc.createElement( "image" );
+  image.setAttribute( "name", img->name() );
   image.setAttribute( "author", img->author() );
   image.setAttribute( "email", img->email() );
   image.setAttribute( "editor", "KImageShop" );
@@ -109,9 +110,13 @@ bool KisDoc::save( ostream& out, const char* )
   image.setAttribute( "cMode", static_cast<int>(img->colorMode()) );
   doc.appendChild( image );
 
+  // layers element
+  QDomElement layers = doc.createElement( "layers" );
+  image.appendChild( layers );
+
   // layer elements
-  QList<KisLayer> layers = img->layerList();
-  for (KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
+  QList<KisLayer> l_lst = img->layerList();
+  for (KisLayer *lay = l_lst.first(); lay != 0; lay = l_lst.next())
 	{
 	  QDomElement layer = doc.createElement( "layer" );
 	  layer.setAttribute( "name", lay->name() );
@@ -134,7 +139,11 @@ bool KisDoc::save( ostream& out, const char* )
 	  layer.setAttribute( "bitDepth", static_cast<int>(lay->bitDepth()) );
 	  layer.setAttribute( "cMode", static_cast<int>(lay->colorMode()) );
 
-	  image.appendChild( layer );
+	  layers.appendChild( layer );
+
+	  // channels element
+	  QDomElement channels = doc.createElement( "channels" );
+	  layer.appendChild( channels );
 
 	  // channel elements
 	  for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
@@ -142,7 +151,7 @@ bool KisDoc::save( ostream& out, const char* )
 		  QDomElement channel = doc.createElement( "channel" );
 		  channel.setAttribute( "cId", static_cast<int>(ch->channelId()) );
 		  channel.setAttribute( "bitDepth", static_cast<int>(ch->bitDepth()) );
-		  layer.appendChild( channel );
+		  channels.appendChild( channel );
 		} 
 	}
 
@@ -212,9 +221,97 @@ bool KisDoc::load( istream& in, KoStore* store )
   return b;
 }
 
-bool KisDoc::loadXML( const QDomDocument& , KoStore* )
+bool KisDoc::loadXML( const QDomDocument& doc , KoStore* )
 {
-  // TODO: Load XML file.
+  if ( doc.doctype().name() != "image" )
+	return false;
+  
+  QDomElement image = doc.documentElement();
+
+  if (image.attribute( "mime" ) != "application/x-kimageshop") return false;
+
+  QString name = image.attribute( "name" );
+  int w = image.attribute( "width" ).toInt();
+  int h = image.attribute( "height" ).toInt();
+  int cm = image.attribute( "cMode" ).toInt();
+  int bd = image.attribute( "bitDepth" ).toInt();
+
+  cMode colorMode;
+
+  switch (cm)
+	{
+	case 0:
+	  colorMode = cm_Indexed;
+	  break;
+	case 1:
+	  colorMode = cm_Greyscale;
+	  break;
+	case 2:
+	  colorMode = cm_RGB;
+	  break;
+	case 3:
+	  colorMode = cm_RGBA;
+	  break;
+	case 4:
+	  colorMode = cm_CMYK;
+	  break;
+	case 5:
+	  colorMode = cm_CMYKA;
+	  break;
+	case 6: 
+	  colorMode = cm_Lab;
+	  break;
+	case 7:
+	  colorMode = cm_LabA;
+	  break;
+	default:
+	  return false;
+	}
+
+  KisImage *img = newImage(name, w, h, colorMode, bd);
+  if (!img) return false;
+
+  img->setAuthor( image.attribute( "author" ));
+  img->setEmail( image.attribute( "email" ));
+
+  // layers element
+  QDomElement layers = image.namedItem( "layers" ).toElement();
+  if (layers.isNull()) return false;
+
+  // layer elements
+  QDomNode l = layers.firstChild();
+
+  while (!l.isNull())
+	{
+      QDomElement layer = l.toElement();
+      if (layer.tagName() != "layer" ) continue;
+
+	  cout << "--- layer ---" << endl;
+
+	  // channels element
+	  QDomElement channels = layer.namedItem( "channels" ).toElement();
+	  if (channels.isNull()) continue;
+
+	  // channel elements
+	  QDomNode c = channels.firstChild();
+	  
+	  while (!c.isNull())
+		{
+		  QDomElement channel = c.toElement();
+		  if (channel.tagName() != "channel" ) continue;
+
+		  cout << "--- channel ---" << endl;
+		  c = c.nextSibling();
+		}
+	  l = l.nextSibling();
+	}  
+  
+  // add background layer
+  img->addLayer(QRect(0, 0, w, h), KisColor::white(), false, "background");
+  img->setLayerOpacity(255);
+  img->compositeImage(QRect(0, 0, w, h));
+  setCurrentImage(img);
+
   return true;
 }
 

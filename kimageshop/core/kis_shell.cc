@@ -73,47 +73,24 @@ void KisShell::slotFileNew()
       doc->slotNewImage();
     }
 }
-/*
-void KisShell::slotFileOpen()
+
+bool KisShell::openDocument( const KURL & url )
 {
-  QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), KisCore::readFilters() );
+  KoDocument* doc = rootDocument();
 
-  if ( file.isNull() )
-    return;
-
-  KisDoc* doc = (KisDoc*)rootDocument();
-
-  if (!doc->loadImage(file))
-    {
-      QString tmp;
-      tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
-      KMessageBox::error( 0L, tmp, i18n( "IO Error" ) );
-    }
+  if (!doc)
+	{
+	  KoDocument* newdoc = createDoc();
+	  if (!newdoc->loadFromURL( url ))
+		{
+		  setRootDocument( newdoc );
+		  return true;
+		}
+	  return false;
+	}
+  return doc->loadFromURL( url );
 }
 
-void KisShell::slotFileSave()
-{
-  // ##### FIXME
-  slotFileSaveAs();
-}
-
-void KisShell::slotFileSaveAs()
-{
-  QString file = KFileDialog::getSaveFileName( getenv( "HOME" ), KisCore::writeFilters() );
-
-  if ( file.isNull() )
-    return;
-
-  KisDoc* doc = (KisDoc*)rootDocument();
-
-  if (!doc->saveCurrentImage( file ))
-    {
-      QString tmp;
-      tmp.sprintf( i18n( "Could not save\n%s" ), file.data() );
-      KMessageBox::error( 0L, tmp, i18n( "IO Error" ) );
-    }
-}
-*/
 void KisShell::slotFilePrint()
 {
   // TODO
