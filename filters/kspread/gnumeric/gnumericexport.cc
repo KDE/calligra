@@ -441,7 +441,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 	 /* Save selection info. */
 
 	 QDomElement selection = gnumeric_doc.createElement("gmr:Selection");
-	 QRect table_selection(table->selectionRect());
+	 QRect table_selection(table->selection());
 
 	 selections.appendChild(selection);
 
