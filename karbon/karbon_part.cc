@@ -185,7 +185,7 @@ KarbonPart::repaintAllViews( bool /*erase*/ )
 
 void
 KarbonPart::paintContent( QPainter& painter, const QRect& rect,
-	bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
+	bool /*transparent*/, double zoomX, double /*zoomY*/ )
 {
 	kdDebug() << "**** part->paintContent()" << endl;
 	painter.eraseRect( rect );
@@ -194,7 +194,7 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	VPainter *p = painterFactory->painter();
 	//VPainter *p = new VKoPainter( painter.device() );
 	p->begin();
-	p->setZoomFactor( 1.0 );
+	p->setZoomFactor( zoomX );
 	kdDebug() << painter.worldMatrix().dx() << endl;
 	p->setWorldMatrix( painter.worldMatrix() );
 
