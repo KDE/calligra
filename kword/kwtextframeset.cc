@@ -927,8 +927,9 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
 // breakBegin, breakEnd, and paragLeftMargin set -> check whether we should jump over some frames
 //                                                  [when there is not enough space besides them]
 void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRight,
-                                 int* breakBegin, int* breakEnd, int paragLeftMargin )
+                                 int* breakBegin, int* breakEnd, KoTextParag* parag )
 {
+    int paragLeftMargin = parag ? QMAX( parag->firstLineMargin(), parag->leftMargin() ) : 0;
 #ifdef DEBUG_MARGINS
     kdDebugBody(32002) << "  KWTextFrameSet " << this << "(" << getName() << ") getMargins yp=" << yp
                        << " h=" << h << " called by "
@@ -1029,7 +1030,12 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 #endif
                     // If the available space is too small, give up on it
                     if ( to - from < m_doc->ptToLayoutUnitPixX( 15 ) + paragLeftMargin )
+                    {
+#ifdef DEBUG_MARGINS
+                        kdDebugBody(32002) << "   smaller than minimum=" << m_doc->ptToLayoutUnitPixX( 15 ) + paragLeftMargin << endl;
+#endif
                         from = to;
+                    }
 
                     if ( breakEnd && from == to ) // no-space case
                     {
@@ -1076,30 +1082,30 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     }
 }
 
-int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
+int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space, KoTextParag* parag )
 {
     int marginLeft = 0;
     if ( m_doc->viewMode()->shouldAdjustMargins() )
     {
-        getMargins( yp, h, &marginLeft, 0L, 0L, 0L );
+        getMargins( yp, h, &marginLeft, 0L, 0L, 0L, parag );
 #ifdef DEBUG_MARGINS
         kdDebugBody(32002) << "KWTextFrameSet::adjustLMargin marginLeft=" << marginLeft << endl;
 #endif
     }
-    return KoTextFlow::adjustLMargin( yp, h, margin + marginLeft, space );
+    return KoTextFlow::adjustLMargin( yp, h, margin + marginLeft, space, parag );
 }
 
-int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
+int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space, KoTextParag* parag )
 {
     int marginRight = 0;
     if ( m_doc->viewMode()->shouldAdjustMargins() )
     {
-        getMargins( yp, h, 0L, &marginRight, 0L, 0L );
+        getMargins( yp, h, 0L, &marginRight, 0L, 0L, parag );
 #ifdef DEBUG_MARGINS
         kdDebugBody(32002) << "KWTextFrameSet::adjustRMargin marginRight=" << marginRight << endl;
 #endif
     }
-    return KoTextFlow::adjustRMargin( yp, h, margin + marginRight, space );
+    return KoTextFlow::adjustRMargin( yp, h, margin + marginRight, space, parag );
 }
 
 // helper for formatVertically
@@ -1306,7 +1312,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
     // leave no space by their side for any text (e.g. most tables)
     int breakBegin = 0;
     int breakEnd = 0;
-    getMargins( yp, hp, 0L, 0L, &breakBegin, &breakEnd, parag ? QMAX( parag->firstLineMargin(), parag->leftMargin() ) : 0 );
+    getMargins( yp, hp, 0L, 0L, &breakBegin, &breakEnd, parag );
     if ( breakEnd )
     {
         kdDebug(32002) << "KWTextFrameSet("<<getName()<<")::formatVertically no-space case. breakBegin=" << breakBegin

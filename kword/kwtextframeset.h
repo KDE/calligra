@@ -214,9 +214,9 @@ public:
         ulong & words, ulong& sentences, ulong & syllables, bool selected );
 
     /** reimplemented from KoTextFlow, implements flowing around frames etc. */
-    virtual int adjustLMargin( int yp, int h, int margin, int space );
+    virtual int adjustLMargin( int yp, int h, int margin, int space, KoTextParag* parag );
     /** reimplemented from KoTextFlow, implements flowing around frames etc. */
-    virtual int adjustRMargin( int yp, int h, int margin, int space );
+    virtual int adjustRMargin( int yp, int h, int margin, int space, KoTextParag* parag );
 
     /** Called by KWTextFrameSet. Implements page breaking, breaking around frames, etc. */
     int formatVertically( KoTextParag *parag );
@@ -287,7 +287,7 @@ protected slots:
     void slotParagraphModified(KoTextParag*_parag, int /*KoTextParag::ParagModifyType*/, int, int);
 
 protected:
-    void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakBegin, int* breakEnd, int paragLeftMargin = 0 );
+    void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakBegin, int* breakEnd, KoTextParag* parag );
     bool checkVerticalBreak( int & yp, int & h, KoTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
     void fixParagWidth( KWTextParag* parag );
     void frameResized( KWFrame *theFrame, bool invalidateLayout );
