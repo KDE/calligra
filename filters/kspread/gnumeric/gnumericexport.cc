@@ -1224,10 +1224,8 @@ QString convertRefToRange( const QString & table, const QRect & rect )
 {
   QPoint topLeft( rect.topLeft() );
   QPoint bottomRight( rect.bottomRight() );
-#if 0 //FIXME !!!!
   if ( topLeft == bottomRight )
     return convertRefToBase( table, rect );
-#endif
   QString s;
   s += table;
   s += "!$";
@@ -1235,6 +1233,21 @@ QString convertRefToRange( const QString & table, const QRect & rect )
   s += '$';
   s += QString::number( topLeft.y() );
   s += ":$";
+  s += KSpreadCell::columnName( bottomRight.x() );
+  s += '$';
+  s += QString::number( bottomRight.y() );
+
+  return s;
+}
+
+
+QString convertRefToBase( const QString & table, const QRect & rect )
+{
+  QPoint bottomRight( rect.bottomRight() );
+
+  QString s;
+  s = table;
+  s += "!$";
   s += KSpreadCell::columnName( bottomRight.x() );
   s += '$';
   s += QString::number( bottomRight.y() );
