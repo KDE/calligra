@@ -1025,7 +1025,6 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 
 		if ( !parser.close( tag ) ) {
 		    cerr << "ERR: Closing Child" << endl;
-		    QApplication::restoreOverrideCursor();
 		    return FALSE;
 		}
 	    }
@@ -1051,7 +1050,6 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 
 		if ( !parser.close( tag ) ) {
 		    cerr << "ERR: Closing Child" << endl;
-		    QApplication::restoreOverrideCursor();
 		    return FALSE;
 		}
 	    }
