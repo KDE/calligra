@@ -618,10 +618,6 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     QTextFlow::adjustFlow( yp_ro, w, h, parag, FALSE );
 }
 
-void KWTextFrameSet::draw( QPainter *, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/ )
-{
-}
-
 void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorGroup & cg )
 {
     // This is called when adjustFlow above moved a paragraph downwards to move

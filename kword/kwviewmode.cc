@@ -119,6 +119,7 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
             drawBottomShadow( painter, crect, pageRect, s_shadowOffset );
         }
     }
+    painter->restore();
 }
 
 //////////////////////// Preview mode ////////////////////////////////
@@ -187,4 +188,5 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
         drawRightShadow( painter, crect, pageRect, s_shadowOffset );
         drawBottomShadow( painter, crect, pageRect, s_shadowOffset );
     }
+    painter->restore();
 }

@@ -59,7 +59,7 @@ void KWTextImage::resize()
     }
 }
 
-void KWTextImage::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
+void KWTextImage::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
     if ( placement() != PlaceInline ) {
         x = xpos;
@@ -78,6 +78,10 @@ void KWTextImage::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int c
         p->drawPixmap( x, y, m_image.pixmap() );
     else
         p->drawPixmap( cx, cy, m_image.pixmap(), cx - x, cy - y, cw, ch );
+
+    if ( selected && placement() == PlaceInline /*&& p->device()->devType() != QInternal::Printer*/ ) {
+	p->fillRect( QRect( QPoint( x, y ), m_image.size() ), QBrush( cg.highlight(), QBrush::Dense4Pattern) );
+    }
 }
 
 void KWTextImage::save( QDomElement & formatElem )

@@ -173,7 +173,6 @@ public:
     virtual int adjustLMargin( int yp, int h, int margin, int space );
     virtual int adjustRMargin( int yp, int h, int margin, int space );
     virtual void adjustFlow( int &yp, int w, int h, QTextParag *parag, bool pages = TRUE );
-    virtual void draw( QPainter *p, int cx, int cy, int cw, int ch );
     virtual void eraseAfter( QTextParag *parag, QPainter *p, const QColorGroup & cg );
 
     // Make sure this paragraph is formatted

@@ -55,7 +55,7 @@ public:
     virtual int widthHint() const { return size().width(); }
     virtual int minimumWidth() const { return size().width(); }
 
-    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
+    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool /*selected*/ );
 
     virtual KCommand * createCommand();
     virtual KCommand * deleteCommand();

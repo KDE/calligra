@@ -38,7 +38,7 @@ KWAnchor::~KWAnchor()
     kdDebug() << "KWAnchor::~KWAnchor" << endl;
 }
 
-void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
+void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool /*selected TODO*/ )
 {
     ASSERT( !m_deleted );
     if ( m_deleted ) // can't happen !

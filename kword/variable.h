@@ -126,7 +126,7 @@ public:
     virtual void resize();
     virtual int widthHint() const { return width; }
     virtual int minimumWidth() const { return width; }
-    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
+    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
 
     QTextFormat * format() const;
 
@@ -234,7 +234,7 @@ public:
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
-    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
+    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
 protected:
     short int m_subtype;
     int m_pgNum;
