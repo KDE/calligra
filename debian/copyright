@@ -1,12 +1,39 @@
-This package was debianized by Ivan E. Moore II <rkrusty@debian.org>.
+This package was debianized by Ivan E. Moore II <rkrusty@debian.org> on
+Sat, 12 Jun 1999 03:00:29 -0400.
  
-It was downloaded via CVS from cvs.kde.org
- 
+It was downloaded via CVS from cvs.kde.org.
+
+Upstream authors:
+
+  KChart: Kalle Dalheimer <kalle@kde.org>,
+          Laurent Montel <montell@club-internet.fr>
+  KIllustrator: Kai-Uwe Sattler <kus@iti.cs.uni-magdeburg.de> and others
+  Kivio: Dave Marotti <lndshark@speakeasy.net>,
+         Max Judin <max@thekompany.com>, Dmitry Poplavsky <dima@kde.org>
+  KOShell: Torben Weis <weis@kde.org>, Simon Hausmann <hausmann@kde.org>,
+           David Faure <faure@kde.org>
+  KPresenter: Reginald Stadlbauer <reggie@kde.org>,
+              Werner Trobin <trobin@kde.org>, David Faure <dfaure@kde.org>
+  Krayon: Michael Koch <koch@kde.org>, Matthias Elter <me@kde.org>,
+          Andrew Richards <physajr@phys.canterbury.ac.nz>,
+          Carsten Pfeiffer <pfeiffer@kde.org>,
+          John Califf <jcaliff@compuzone.net>
+  KSpread: Torben Weis <weis@kde.org>,
+           Laurent Montel <montell@club-internet.fr>
+  Kugar: Mutiny Bay Software <info@mutinybaysoftware.com>,
+         Phil Thompson <phil@river-bank.demon.co.uk>
+  KWord: Reginald Stadlbauer <reggie@kde.org>, Torben Weis <weis@kde.org>,
+         David Faure <dfaure@kde.org>, Thomas Zander <zander@kde.org>,
+         Shaheed Haque <srhaque@iee.org>,
+         Laurent Montel <lmontel@mandrakesoft.com>
+
 Copyright:
  
-All programs in this package are released under either the GPL or the LGPL
- 
-kimageshop, parts of killustrator,  and parts of kspread are GPL'd 
-while everything else falls under the LGPL.  
+All programs in this package are released under either the GPL (GNU
+General Public License) or the AL (Artistic License) which is less
+restrictive than the GPL.  See http://www.koffice.org/ for details
+regarding which applications are released under which licenses.
 
-Please see /usr/share/common-licenses/* for full copies of these licenses.
+On Debian GNU/Linux systems, the complete texts of these licenses can be
+found in `/usr/share/common-licenses/GPL' (GNU General Public License) and
+`/usr/share/common-licenses/Artistic' (Artistic License).

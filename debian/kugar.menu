@@ -1,0 +1,7 @@
+?package(kugar):\
+	needs=x11\
+	section=Apps/Tools\
+	hints="KDE"\
+	title="Kugar"\
+	command=kugar
+

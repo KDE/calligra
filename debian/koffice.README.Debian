@@ -1,0 +1,11 @@
+KDE Office Suite for Debian
+---------------------------
+
+Package koffice is a metapackage that depends on the core components of
+the KDE Office Suite and suggests the remaining components.
+
+The documentation for each application is in the corresponding
+/usr/share/doc/<package>/ directory (for instance, /usr/share/doc/kword/,
+/usr/share/doc/kspread/ and so on).
+
+ -- Ben Burton <benb@acm.org>, Fri,  6 Apr 2001 10:30:32 -0500

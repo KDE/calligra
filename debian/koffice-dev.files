@@ -1,0 +1,10 @@
+usr/include/kde/*.h
+usr/lib/libkformula.so
+usr/lib/libkochart.so
+usr/lib/libkodocinfopropspage.so
+usr/lib/libkofficecore.so
+usr/lib/libkofficeui.so
+usr/lib/libkoml.so
+usr/lib/libkoscript.so
+usr/lib/libkstore.so
+usr/lib/libqt3stuff.so

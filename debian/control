@@ -1,29 +1,45 @@
 Source: koffice
-Build-Depends: autoconf, automake, libtool, debhelper, gettext, kdelibs-dev (>= 4:2.1.1)
 Section: x11
 Priority: optional
-Maintainer: Debian QA Group <debian-qa@lists.debian.org>
+Maintainer: Ben Burton <benb@acm.org>
+Build-Depends: automake, debhelper (>> 3.0.0), kdelibs-dev (>= 4:2.1.1), libtool, uic
 Standards-Version: 3.5.0
+
+Package: koffice
+Architecture: all
+Section: x11
+Depends: koffice-libs, kchart, killustrator, kivio, koshell, krayon, kpresenter, kspread, kugar, kword
+Suggests: koffice-dev
+Description: KDE Office Suite
+ KOffice is an integrated office suite for KDE, the K Desktop
+ Environment.  It offers a word processor, spreadsheet, presentation
+ program, graphics tools and more.
+ .
+ This package provides all the components of KOffice.
+
+Package: koffice-libs
+Architecture: any
+Section: libs
+Replaces: koffice (<< 2.1-beta2-1), koffice-common, kspread (<< 2.1-20010101-0), kivio (<< 2.1-20010101-0)
+Depends: ${shlibs:Depends}, kdebase-libs
+Suggests: kdebase
+Conflicts: koffice (<< 2.1-beta2-1), koffice-common
+Description: common libraries and files for the KDE Office Suite
+ This package provides the libraries, binaries and other files that are
+ shared amongst the various components of KOffice.
+ .
+ This package is part of the KDE Office Suite.
 
 Package: koffice-dev
 Architecture: any
 Section: devel
 Replaces: kformula
-Depends: koffice-libs (>= ${Source-Version}), kdelibs-dev
-Description: Core libraries for KOffice (Development files)
- Core libraries for Koffice (Development files)
-
-Package: koffice-libs
-Architecture: any
-Section: libs
-Replaces: koffice, koffice-common, kspread (<< 2.1-20010101-0), kivio (<< 2.1-20010101-0)
-Depends: ${shlibs:Depends}, kdebase-libs, debconf (>= 0.3.83)
-Suggests: kdebase
-Conflicts: koffice, koffice-common
-Description: KDE Office Suite (Common libraries and binaries)
- KDE Office Suite 
+Depends: koffice-libs (= ${Source-Version}), kdelibs-dev
+Description: common libraries for KOffice (development files)
+ This package provides the development files for the libraries that are
+ shared amongst the various components of KOffice.
  .
- This package contains all common architecture specific files.
+ This package is part of the KDE Office Suite.
 
 Package: kchart
 Architecture: any
@@ -31,34 +47,10 @@ Section: x11
 Replaces: koffice-common
 Depends: ${shlibs:Depends}
 Suggests: kdebase
-Description: KDE Office Suite - KChart
- KDE Office Suite - KChart
+Description: a chart drawing program for the KDE Office Suite
+ KChart is a chart drawing application.
  .
- A Graphical Chart program based on QT and KDE
-
-Package: kivio
-Architecture: any
-Section: graphics
-Depends: ${shlibs:Depends}
-Suggests: kdebase
-Description: KDE Office Suite - Kivio
- KDE Office Suite - Kivio
- .
- Kivio on the surface is your everyday flowcharting program.  Underneath this
- skin, however, lies much more. Kivio will offer basic  flowcharting abilities,
- but with a twist. Objects are scriptable, and a backend plugin system will
- offer the ability to make objects do just about anything.
-
-Package: kspread
-Architecture: any
-Section: x11
-Replaces: koffice-common
-Depends: ${shlibs:Depends}
-Suggests: kdebase
-Description: KDE Office Suite - KSpread
- KDE Office Suite - KSpread
- .
- A Spreadsheet program based on QT and KDE
+ This package is part of the KDE Office Suite.
 
 Package: killustrator
 Architecture: any
@@ -66,10 +58,41 @@ Section: graphics
 Replaces: koffice-common
 Depends: ${shlibs:Depends}
 Suggests: kdebase
-Description: KDE Office Suite - KIllustrator
- KDE Office Suite - KIllustrator
+Description: a vector graphics tool for the KDE Office Suite
+ KIllustrator is a vector graphics application.
  .
- A Vector Graphics Tool based on QT and KDE
+ This package is part of the KDE Office Suite.
+
+Package: kivio
+Architecture: any
+Section: graphics
+Depends: ${shlibs:Depends}
+Suggests: kdebase
+Conflicts: koffice-libs (<< 1:1.1-20010404-1)
+Description: a flowcharting program for the KDE Office Suite
+ Kivio is a flowcharting program that offers basic flowcharting abilities,
+ but with a twist.  Objects are scriptable, and a backend plugin system
+ offers the ability to make objects do just about anything.
+ .
+ Feed it a directory of C++ header files, or even Java files, and let it
+ generate a graphical class map for you.  Give it a network and let it
+ explore and map out the network for you.  All this is possible through
+ the scripting/plugin architecture Kivio possesses.
+ .
+ This package is part of the KDE Office Suite.
+
+Package: koshell
+Architecture: any
+Section: x11
+Replaces: koffice-libs (<< 2.0.1-0)
+Depends: ${shlibs:Depends}
+Recommends: koffice
+Suggests: kdebase
+Description: the KDE Office Suite workspace
+ The KOffice workspace is a desktop with easy one-click launchers for
+ KOffice applications.
+ .
+ This package is part of the KDE Office Suite.
 
 Package: kpresenter
 Architecture: any
@@ -77,21 +100,12 @@ Section: x11
 Replaces: koffice-common
 Depends: ${shlibs:Depends}
 Suggests: kdebase
-Description: KDE Office Suite - KPresenter
- KDE Office Suite - KPresenter
+Description: a presentation program for the KDE Office Suite
+ KPresenter is a fully-featured presentation program.  It is sufficiently
+ developed that it is already being successfully used for giving talks and
+ presentations.
  .
- A Presentation program based on QT and KDE
-
-Package: kword
-Architecture: any
-Section: x11
-Replaces: koffice-common
-Depends: ${shlibs:Depends}
-Suggests: kdebase
-Description: KDE Office Suite - KWord
- KDE Office Suite - KWord
- .
- A Professional Text editor based on QT and KDE
+ This package is part of the KDE Office Suite.
 
 Package: krayon
 Architecture: any
@@ -99,20 +113,51 @@ Section: graphics
 Replaces: koffice-common
 Depends: ${shlibs:Depends}
 Suggests: kdebase
-Description: KDE Office Suite - Krayon
- KDE Office Suite - Krayon
+Description: an image editor for the KDE Office Suite
+ Krayon is a pixel-based image manipulation program like the GIMP or
+ Adobe Photoshop.  It's intended to be suitable for all your image
+ creation and editing needs, such as making web images, touching up
+ scanned photographs, creating original art, or anything else you might
+ need to do with bitmapped images.
  .
- Professional Image tools for KOffice
+ This package is part of the KDE Office Suite.
 
-Package: koshell
+Package: kspread
 Architecture: any
 Section: x11
-Replaces: koffice-libs (<< 2.0.1-0)
+Replaces: koffice-common
 Depends: ${shlibs:Depends}
-Recommends: kchart, kword, kspread, killustrator, kpresenter, kivio, krayon
 Suggests: kdebase
-Description: KDE Office Workspace
- KDE Office Workspace
+Conflicts: koffice-libs (<< 1:1.1-20010404-1)
+Description: a spreadsheet for the KDE Office Suite
+ KSpread is a powerful spreadsheet application.
  .
- A desktop with easy one-click Office launchers.
+ This package is part of the KDE Office Suite.
+
+Package: kugar
+Architecture: any
+Section: x11
+Depends: ${shlibs:Depends}
+Suggests: kdebase
+Description: a business report maker for the KDE Office Suite
+ Kugar is a tool for generating business quality reports which can
+ be viewed and printed.  It includes a standalone report viewer and a
+ KPart report viewer.  The latter means that any KDE application can
+ embed the report viewing functionality and that reports can be viewed
+ using the Konqueror browser.
+ .
+ This package is part of the KDE Office Suite.
+
+Package: kword
+Architecture: any
+Section: x11
+Replaces: koffice-common
+Depends: ${shlibs:Depends}
+Suggests: kdebase
+Description: a word processor for the KDE Office Suite
+ KWord is a frame-based wordprocessor comparable to FrameMaker.  It
+ can be used for desktop publishing, but also for "normal" wordprocessing
+ (like writing letters, reports and so on).
+ .
+ This package is part of the KDE Office Suite.
 

@@ -3,5 +3,6 @@
 	section=Apps/Tools\
 	hints="KDE"\
 	title="KPresenter"\
+	icon="/usr/share/pixmaps/kpresenter.xpm"\
 	command=kpresenter
 

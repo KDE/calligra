@@ -1,0 +1,6 @@
+usr/bin/kugar
+usr/lib/libkugarpart.*
+usr/share/applnk/Office/kugar.desktop
+usr/share/apps/kugar/*
+usr/share/mimelnk/application/x-kugar.desktop
+usr/share/lintian/overrides/kugar

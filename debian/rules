@@ -2,8 +2,15 @@
 # Made with the aid of debmake, by Christoph Lameter,
 # based on the sample debian/rules file for GNU hello by Ian Jackson.
 
+export DH_COMPAT=3
 
-BUILDDIR = ./build
+INSTALL_DIR = install -p -d -o root -g root -m 755
+INSTALL_FILE = install -p -o root -g root -m 644
+INSTALL_SCRIPT = install -p -o root -g root -m 755
+
+tmp = debian/tmp
+overrides = $(tmp)/usr/share/lintian/overrides
+pixmaps = $(tmp)/usr/share/pixmaps
 
 build: build-stamp
 
@@ -18,10 +25,8 @@ build-stamp:
 	  $(MAKE) -f admin/Makefile.common ;\
 	fi 
 	./configure $(configkde) \
-	--libdir=$(kde_libdir) --includedir=$(kde_includedir)
-
-	make
-
+	  --libdir=$(kde_libdir) --includedir=$(kde_includedir)
+	$(MAKE)
 	touch build-stamp
 
 clean: debian-clean
@@ -30,66 +35,98 @@ clean: debian-clean
 
 debian-clean:
 	dh_testdir
-	-rm -f build-stamp
-	if test -d CVS; then \
-	  make -f admin/Makefile.common cvs-clean ;\
-	fi
-	-make distclean
-
-install: build
 	dh_testroot
+	-rm -f build-stamp install-stamp
+	if test -d CVS; then \
+	  $(MAKE) -f admin/Makefile.common cvs-clean ;\
+	fi
+	-$(MAKE) distclean
+
+install: install-stamp
+
+install-stamp: build
 	dh_testdir
-	dh_clean
-	-rm -f debian/undocumented
-	install -d debian/tmp/etc/kde2
-	install -d debian/tmp/usr/share/lintian/overrides
-	make install DESTDIR=`pwd`/debian/tmp/
-	perl -w admin/debianrules cleanup
-	cp debian/*.override debian/tmp/usr/share/lintian/overrides/
-	for i in `ls debian/tmp/usr/share/lintian/overrides/`; do \
-		mv debian/tmp/usr/share/lintian/overrides/$$i debian/tmp/usr/share/lintian/overrides/`echo $$i | sed -e 's#.override##'`; \
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	$(INSTALL_DIR) $(overrides)
+	$(INSTALL_FILE) debian/*.override $(overrides)
+	-for i in `ls $(overrides)/`; do \
+		mv $(overrides)/$$i \
+		$(overrides)/`echo $$i | sed -e 's#.override##'`; \
 	done
 
+	$(INSTALL_DIR) $(pixmaps)
+	$(INSTALL_FILE) debian/*.xpm $(pixmaps)
+
+	$(MAKE) install DESTDIR=`pwd`/$(tmp)
+
+	# Add "#!/usr/bin/perl" to the head of kprconverter.pl.
+	echo "#!/usr/bin/perl -w" > $(tmp)/usr/bin/kprconverter.pl.new
+	cat $(tmp)/usr/bin/kprconverter.pl >> $(tmp)/usr/bin/kprconverter.pl.new
+	-mv $(tmp)/usr/bin/kprconverter.pl.new $(tmp)/usr/bin/kprconverter.pl
+	-chmod 755 $(tmp)/usr/bin/kprconverter.pl
+
+	perl -w admin/debianrules cleanup
+
+	for i in `find debian/ -type l -name "common"`; do \
+		rm $$i ;\
+	done
+
+	touch install-stamp
 	
 binary-indep: build install
-	dh_testroot
 	dh_testdir
+	dh_testroot
+	dh_movefiles -i
+	dh_installdocs -i
+	dh_installmenu -i
+	dh_installmime -i
+	dh_installman -i
+	dh_undocumented -i
+	dh_installchangelogs -pkoffice
+	dh_link -i
+	dh_strip -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_perl -i
+	dh_shlibdeps -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
 
 binary-arch: build install
 	dh_testdir
 	dh_testroot
-	dh_installdirs
-	for i in `find debian/ -type l -name "common"`; do \
-		rm $$i ;\
-		ln -s ../common $$i ;\
-	done
-	for i in `cat debian/undocumented.in | grep -v "#"`; do \
-		echo "$$i.1" >> debian/undocumented ; \
-	done
-	dh_undocumented
 	dh_movefiles -a
 	dh_installdebconf -a
 	dh_installdocs -a
 	dh_installmenu -a
-	dh_installchangelogs -pkoffice-libs
-	dh_installchangelogs -pkword kword/CHANGES
-	dh_installchangelogs -pkspread kspread/ChangeLog
-	dh_installchangelogs -pkpresenter kpresenter/CHANGES
-	dh_installchangelogs -pkoshell
-	dh_installchangelogs -pkillustrator
-	dh_installchangelogs -pkchart kchart/CHANGES
-	dh_installchangelogs -pkivio kivio/CHANGELOG
-	dh_installchangelogs -pkrayon kimageshop/ChangeLog
-	dh_installchangelogs -pkoffice-dev
 	dh_installmime -a
+	dh_installman -a
+	dh_undocumented -a
+	dh_installchangelogs -pkoffice-libs
+	dh_installchangelogs -pkoffice-dev
+	dh_installchangelogs -pkchart kchart/CHANGES
+	dh_installchangelogs -pkillustrator
+	dh_installchangelogs -pkivio kivio/CHANGELOG
+	dh_installchangelogs -pkoshell
+	dh_installchangelogs -pkpresenter kpresenter/CHANGES
+	dh_installchangelogs -pkrayon kimageshop/ChangeLog
+	dh_installchangelogs -pkspread kspread/CHANGES
+	dh_installchangelogs -pkugar kugar/ChangeLog
+	dh_installchangelogs -pkword kword/CHANGES
+	dh_link -a
 	dh_strip -a
-	dh_perl -a
 	dh_compress -a
 	dh_fixperms -a
-	-chmod 644 debian/kivio/usr/share/apps/kivio/autoloadStencils/*ksp \
-		debian/kpresenter/usr/bin/kprconverter.pl
+	-chmod 644 debian/kivio/usr/share/apps/kivio/autoloadStencils/*ksp
+	# Leave debian/kpresenter/usr/bin/kprconverter.pl with execute perms.
 	dh_makeshlibs -a -V
 	dh_installdeb -a
+	dh_perl -a
 	dh_shlibdeps -a -l`pwd`/debian/koffice-libs/usr/lib
 	dh_gencontrol -a
 	dh_md5sums -a
@@ -97,6 +134,5 @@ binary-arch: build install
 
 # Below here is fairly generic really
 
-binary:		binary-indep binary-arch
-
-.PHONY: binary binary-arch binary-indep clean
+binary: binary-indep binary-arch
+.PHONY: binary binary-arch binary-indep clean debian-clean build install

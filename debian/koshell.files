@@ -1,8 +1,5 @@
-usr/lib/koshell.so
-usr/lib/koshell.la
 usr/bin/koshell
-usr/share/man/man1/koshell*
+usr/lib/koshell.*
 usr/share/applnk/Office/koshell.desktop
-usr/share/doc/koffice/koshell/*
 usr/share/doc/kde/HTML/en/koshell/*
 usr/share/lintian/overrides/koshell

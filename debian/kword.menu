@@ -1,7 +1,8 @@
 ?package(kword):\
 	needs=x11\
 	section=Apps/Editors\
-	hints="KDE,Word processors"\
+	hints="KDE,WordProcessors"\
 	title="KWord"\
+	icon="/usr/share/pixmaps/kword.xpm"\
 	command=kword
 

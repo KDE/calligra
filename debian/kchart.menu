@@ -3,5 +3,6 @@
 	section=Apps/Math\
 	hints="KDE,Graphs"\
 	title="KChart"\
+	icon="/usr/share/pixmaps/kchart.xpm"\
 	command=kchart
 

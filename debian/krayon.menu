@@ -3,5 +3,6 @@
 	section=Apps/Graphics\
 	hints="KDE"\
 	title="Krayon"\
+	icon="/usr/share/pixmaps/krayon.xpm"\
 	command=krayon
 

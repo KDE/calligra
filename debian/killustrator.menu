@@ -3,5 +3,6 @@
 	section=Apps/Graphics\
 	hints="KDE"\
 	title="KIllustrator"\
+	icon="/usr/share/pixmaps/killustrator.xpm"\
 	command=killustrator
 

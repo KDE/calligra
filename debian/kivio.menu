@@ -3,5 +3,6 @@
 	section=Apps/Tools\
 	hints="KDE,Vector"\
 	title="Kivio"\
+	icon="/usr/share/pixmaps/kivio.xpm"\
 	command=kivio
 

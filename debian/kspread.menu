@@ -3,5 +3,6 @@
 	section=Apps/Math\
 	hints="KDE,Spreadsheets"\
 	title="KSpread"\
+	icon="/usr/share/pixmaps/kspread.xpm"\
 	command=kspread
 
