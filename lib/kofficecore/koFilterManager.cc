@@ -190,7 +190,7 @@ namespace  // in order not to mess with the global namespace ;)
 
         // partly copied from build graph, but I don't see any other
         // way without crude hacks, as we have to obey the direction here
-        QValueList<KoDocumentEntry> parts( KoDocumentEntry::query(false) );
+        QValueList<KoDocumentEntry> parts( KoDocumentEntry::query(false, QString::null) );
         QValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
         QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
@@ -334,7 +334,7 @@ QStringList KoFilterManager::mimeFilter()
     QAsciiDict<Vertex> vertices;
     buildGraph( vertices, KoFilterManager::Import );
 
-    QValueList<KoDocumentEntry> parts( KoDocumentEntry::query(false) );
+    QValueList<KoDocumentEntry> parts( KoDocumentEntry::query(false, QString::null) );
     QValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
     QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
