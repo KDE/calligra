@@ -892,3 +892,11 @@ Bug fix :
 selected an area and press Enter, so you moved
 into this area
 =>now it reworks
+
+2000-08-14-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+* Redraw problem when selecting cells with a border
+* F2 switches from cell to edit-widget
+* Layout fixes
+* Fixes for undo/redo
+* Fixes for copy and paste of cells with extra width

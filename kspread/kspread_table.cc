@@ -630,8 +630,21 @@ void KSpreadTable::setSelection( const QRect &_sel, const QPoint& m, KSpreadCanv
   m_rctSelection = _sel;
 
   KSpreadCell* cell = cellAt( m.x(), m.y() );
-  if ( cell->extraXCells() || cell->extraYCells() )
+  if ( cell->extraXCells() || cell->extraYCells())
       m_marker.setCoords( m.x(), m.y(), m.x() + cell->extraXCells(), m.y() + cell->extraYCells() );
+  else if(cell->isObscuringForced())
+        {
+        KSpreadCell* cell2 = cellAt( cell->obscuringCellsColumn(),
+        cell->obscuringCellsRow() );
+        if( m.x()==cell->obscuringCellsColumn()+ cell2->extraXCells() &&
+                m.y()==cell->obscuringCellsRow()+ cell2->extraYCells())
+                {
+                m_marker.setCoords( cell->obscuringCellsColumn(),
+                        cell->obscuringCellsRow(), m.x(), m.y()  );
+                }
+        else
+                m_marker = QRect( m, m );
+        }
   else
       m_marker = QRect( m, m );
 
@@ -3962,6 +3975,7 @@ void KSpreadTable::mergeCell( const QPoint &_marker)
                            abs(m_rctSelection.right() -m_rctSelection.left()),
                            abs(m_rctSelection.bottom() - m_rctSelection.top()));
 
+    setMarker(QPoint(x,y));
     emit sig_updateView( this, m_rctSelection );
 }
 
@@ -3976,7 +3990,8 @@ void KSpreadTable::dissociateCell( const QPoint &_marker)
         y=1;
     cell->forceExtraCells( _marker.x() ,_marker.y(), 0, 0 );
     QRect selection( _marker.x(), _marker.y(), x, y );
-
+    setSelection(selection);
+    unselect();
     emit sig_updateView( this, selection );
 }
 
@@ -4259,7 +4274,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
         KSpreadCell* c = m_cells.firstCell();
         for( ;c; c = c->nextCell() )
         {
-            if ( !c->isDefault() )
+            if ( !c->isDefault()&&!c->isObscuringForced() )
             {
                 QPoint p( c->column(), c->row() );
                 if ( _rect.contains( p ) )
@@ -4301,7 +4316,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
         KSpreadCell* c = m_cells.firstCell();
         for( ;c; c = c->nextCell() )
         {
-            if ( !c->isDefault() )
+            if ( !c->isDefault()&&!c->isObscuringForced())
             {
                 QPoint p( c->column(), c->row() );
                 if ( _rect.contains( p ) )
@@ -4334,7 +4349,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
     {
-        if ( !c->isDefault() )
+        if ( !c->isDefault() && !c->isObscuringForced())
         {
             QPoint p( c->column(), c->row() );
             if ( _rect.contains( p ) )

@@ -2005,7 +2005,7 @@ void KSpreadBorderButton::setUndefined()
 {
  setPenStyle(SolidLine );
  setPenWidth(1);
- setColor(colorGroup().text());
+ setColor(colorGroup().midlight());
 }
 
 
@@ -2033,7 +2033,7 @@ void KSpreadBord::paintEvent( QPaintEvent *_ev )
   QPainter painter;
   painter.begin( this );
 
-  pen.setColor( Qt::gray );
+  pen.setColor( colorGroup().midlight() );
   pen.setStyle( SolidLine );
   pen.setWidth( 2 );
   painter.setPen( pen );

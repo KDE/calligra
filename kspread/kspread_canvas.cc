@@ -682,7 +682,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     // If nothing changed, then quit
     if ( selection == table->selectionRect() )
         return;
-
+    
     // Set the new selection
     table->setSelection( selection, QPoint( col, row ), this );
     // Scroll the table if necessary
