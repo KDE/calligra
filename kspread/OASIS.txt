@@ -181,4 +181,17 @@ Cell vertical alignment: bottom
       style:text-align-source="fix" style:repeat-content="none" 
       fo:margin-left="0in" style:vertical-align="bottom"/>
     </style:style>
+
+Unprotected cell
+    <style:style style:name="ce1" style:family="table-cell" style:parent-style-name="Default">
+      <style:table-cell-properties style:cell-protect="none" 
+      style:print-content="true"/>
+    </style:style>
+
+Protected sheet
+    <table:table table:name="Sheet1" table:style-name="ta1" 
+    table:protected="true" table:protection-key="Fa52hNHBdTG7CgoGGStwsTuzHyI=" 
+    table:automatic-print-range="false">
+    ....
+    </table:table>
      
