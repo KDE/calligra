@@ -108,5 +108,7 @@ Auto-hide mouse cursor while typing.
 SVG support (for cliparts).
 Module for SVG and WMF previews in Konqueror.
 
-Add triple click (select a line)
+Add triple click (select a paragraph)
+
+Add Dcop Interface
 
