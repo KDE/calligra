@@ -110,7 +110,8 @@ bool kspreadfunc_info( KSContext& context )
     struct utsname name;
     if( uname( &name ) >= 0 )
     {
-       QString os = QString("%1 %2").arg( name.sysname ).arg( name.release );
+       QString os = QString("%1 %2 (%3)").arg( name.sysname ).
+         arg( name.release ).arg( name.machine );
        context.setValue( new KSValue( os ) );
        return true;
     }
