@@ -38,9 +38,8 @@
 #include "kspread_functions.h"
 #include "kspread_util.h"
 #include "kspread_value.h"
+#include "valueparser.h"
 #include "valueconverter.h"
-// this is due to one ugly hack below:
-#include "docbase.h"
 
 // prototypes
 bool kspreadfunc_char( KSContext& context );
@@ -908,13 +907,14 @@ bool kspreadfunc_t( KSContext& context )
   
   else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
     val.setValue (args[0]->boolValue());
-    
-  KSpread::DocInfo di;
-  di.locale = KGlobal::locale();
-  KSpread::ValueConverter converter (&di);
-
-  val = converter.asString (val);
   
+  // temporary hack for value conversion  
+  KSpread::ValueParser *parser = new KSpread::ValueParser( KGlobal::locale() );
+  KSpread::ValueConverter *converter = new KSpread::ValueConverter( parser );
+  val = converter->asString (val);
+  delete converter;
+  delete parser;
+
   context.setValue( new KSValue( val.asString() ));
   return true;
 }
@@ -961,12 +961,13 @@ bool kspreadfunc_text( KSContext& context )
   else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
     val.setValue (args[0]->boolValue());
     
-  KSpread::DocInfo di;
-  di.locale = KGlobal::locale();
-  KSpread::ValueConverter converter (&di);
+  // temporary hack for value conversion  
+  KSpread::ValueParser *parser = new KSpread::ValueParser( KGlobal::locale() );
+  KSpread::ValueConverter *converter = new KSpread::ValueConverter( parser );
+  val = converter->asString (val);
+  delete converter;
+  delete parser;
 
-  val = converter.asString (val);
-  
   context.setValue( new KSValue( val.asString() ));
   return true;
 }
@@ -1064,12 +1065,13 @@ bool kspreadfunc_value( KSContext& context )
   else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
     val.setValue (args[0]->boolValue());
     
-  KSpread::DocInfo di;
-  di.locale = KGlobal::locale();
-  KSpread::ValueConverter converter (&di);
+  // temporary hack for value conversion  
+  KSpread::ValueParser *parser = new KSpread::ValueParser( KGlobal::locale() );
+  KSpread::ValueConverter *converter = new KSpread::ValueConverter( parser );
+  val = converter->asString (val);
+  delete converter;
+  delete parser;
 
-  val = converter.asString (val);
-  
   context.setValue( new KSValue( val.asFloat() ));
   
   return true;

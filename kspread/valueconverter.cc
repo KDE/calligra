@@ -24,7 +24,7 @@
 
 using namespace KSpread;
 
-ValueConverter::ValueConverter (DocInfo *docinfo) : DocBase (docinfo)
+ValueConverter::ValueConverter (ValueParser* p) : parser( p )
 {
 }
 
@@ -46,7 +46,7 @@ KSpreadValue ValueConverter::asBoolean (const KSpreadValue &value) const
       val.setValue ((value.asFloat() == 0.0) ? false : true);
     break;
     case KSpreadValue::String:
-      val = parser()->tryParseBool (value.asString(), &ok);
+      val = parser->tryParseBool (value.asString(), &ok);
       if (!ok)
         val.setValue (false);
     break;
@@ -83,7 +83,7 @@ KSpreadValue ValueConverter::asInteger (const KSpreadValue &value) const
       val.setValue (value.asInteger());
     break;
     case KSpreadValue::String:
-      val.setValue ((int) parser()->tryParseNumber
+      val.setValue ((int) parser->tryParseNumber
           (value.asString(), &ok).asFloat());
       if (!ok)
         val.setValue (0);
@@ -121,7 +121,7 @@ KSpreadValue ValueConverter::asFloat (const KSpreadValue &value) const
       val = value;
     break;
     case KSpreadValue::String:
-      val = parser()->tryParseNumber (value.asString(), &ok);
+      val = parser->tryParseNumber (value.asString(), &ok);
       if (!ok)
         val.setValue (0.0);
     break;
@@ -154,8 +154,8 @@ KSpreadValue ValueConverter::asString (const KSpreadValue &value) const
       val = QString::null;
     break;
     case KSpreadValue::Boolean:
-      val.setValue (value.asBoolean() ? locale()->translate ("True") :
-          locale()->translate ("False"));
+      val.setValue (value.asBoolean() ? parser->locale()->translate ("True") :
+          parser->locale()->translate ("False"));
     break;
     case KSpreadValue::Integer:
     {
@@ -163,11 +163,11 @@ KSpreadValue ValueConverter::asString (const KSpreadValue &value) const
       if (fmt == KSpreadValue::fmt_Percent)
         val = QString::number (value.asInteger() * 100) + " %";
       else if (fmt == KSpreadValue::fmt_DateTime)
-        val = locale()->formatDateTime (value.asDateTime());
+        val = parser->locale()->formatDateTime (value.asDateTime());
       else if (fmt == KSpreadValue::fmt_Date)
-        val = locale()->formatDate (value.asDate());
+        val = parser->locale()->formatDate (value.asDate());
       else if (fmt == KSpreadValue::fmt_Time)
-        val = locale()->formatTime (value.asTime());
+        val = parser->locale()->formatTime (value.asTime());
       else
         val = QString::number (value.asInteger());
     }
@@ -175,16 +175,16 @@ KSpreadValue ValueConverter::asString (const KSpreadValue &value) const
     case KSpreadValue::Float:
       fmt = value.format();
       if (fmt == KSpreadValue::fmt_DateTime)
-        val = locale()->formatDateTime (value.asDateTime());
+        val = parser->locale()->formatDateTime (value.asDateTime());
       else if (fmt == KSpreadValue::fmt_Date)
-        val = locale()->formatDate (value.asDate(), true);
+        val = parser->locale()->formatDate (value.asDate(), true);
       else if (fmt == KSpreadValue::fmt_Time)
-        val = locale()->formatTime (value.asTime());
+        val = parser->locale()->formatTime (value.asTime());
       else
       {
         //convert the number, change decimal point from English to local
         s = QString::number (value.asFloat(), 'g', 10);
-        decimal_point = locale()->decimalSymbol()[0];
+        decimal_point = parser->locale()->decimalSymbol()[0];
         if (decimal_point && ((pos = s.find ('.')) != -1))
           s = s.replace (pos, 1, decimal_point);
         if (fmt == KSpreadValue::fmt_Percent)
@@ -232,7 +232,7 @@ KSpreadValue ValueConverter::asDateTime (const KSpreadValue &value) const
     break;
     case KSpreadValue::String:
       //no DateTime parser, so we parse as Date, hoping for the best ...
-      val = parser()->tryParseDate (value.asString(), &ok);
+      val = parser->tryParseDate (value.asString(), &ok);
       if (!ok)
         val.setValue (QDateTime::currentDateTime());
       val.setFormat (KSpreadValue::fmt_DateTime);
@@ -273,7 +273,7 @@ KSpreadValue ValueConverter::asDate (const KSpreadValue &value) const
       val.setFormat (KSpreadValue::fmt_Date);
     break;
     case KSpreadValue::String:
-      val = parser()->tryParseDate (value.asString(), &ok);
+      val = parser->tryParseDate (value.asString(), &ok);
       if (!ok)
         val.setValue (QDate::currentDate());
     break;
@@ -313,7 +313,7 @@ KSpreadValue ValueConverter::asTime (const KSpreadValue &value) const
       val.setFormat (KSpreadValue::fmt_Time);
     break;
     case KSpreadValue::String:
-      val = parser()->tryParseTime (value.asString(), &ok);
+      val = parser->tryParseTime (value.asString(), &ok);
       if (!ok)
         val.setValue (QTime::currentTime());
     break;

@@ -22,20 +22,21 @@
 
 class KLocale;
 
-#include "docbase.h"
 #include "kspread_value.h"
 
 namespace KSpread {
+
+class ValueParser;
 
 /**
 The ValueConverter class can convert KSpreadValue between various different
 formats.
 */
 
-class ValueConverter : public DocBase {
+class ValueConverter {
  public:
   /** constructor */
-  ValueConverter (DocInfo *docinfo);
+  ValueConverter (ValueParser *parser);
  
   KSpreadValue asBoolean (const KSpreadValue &value) const;
   KSpreadValue asInteger (const KSpreadValue &value) const;
@@ -44,6 +45,9 @@ class ValueConverter : public DocBase {
   KSpreadValue asDateTime (const KSpreadValue &value) const;
   KSpreadValue asDate (const KSpreadValue &value) const;
   KSpreadValue asTime (const KSpreadValue &value) const;
+  
+ private:
+   ValueParser *parser; 
 };
 
 

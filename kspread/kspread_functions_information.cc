@@ -42,9 +42,8 @@
 #include "kspread_sheet.h"
 #include "kspread_interpreter.h"
 #include "kspread_value.h"
+#include "valueparser.h"
 #include "valueconverter.h"
-// this is due to one ugly hack below:
-#include "docbase.h"
 
 // prototypes (sort alphabetically)
 //bool kspreadfunc_countblank( KSContext & context );
@@ -517,11 +516,11 @@ bool kspreadfunc_n( KSContext & context )
     val.setValue (args[0]->boolValue());
     
   // temporary ugly hack, yay!
-  KSpread::DocInfo di;
-  di.locale = KGlobal::locale();
-  KSpread::ValueConverter converter (&di);;
-
-  val = converter.asFloat (val);
+  KSpread::ValueParser *parser = new KSpread::ValueParser( KGlobal::locale() );
+  KSpread::ValueConverter *converter = new KSpread::ValueConverter( parser );
+  val = converter->asFloat (val);
+  delete converter;
+  delete parser;
   
   context.setValue( new KSValue( val.asFloat() ));
   return true;
