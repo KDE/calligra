@@ -1,0 +1,19 @@
+^^^^^^^^^^^^^^^  IMPORTANT  ^^^^^^^^^^^^^^^^^^^^^^
+**** New Features : ******
+* Add support for layouts and special container (HBox, VBox ...) and spacers
+* Create an event editor and manage signals/slots (EventBuffer ?)
+* Form previewing stuff (see KUIViewer)
+* Add many other widgets :-)
+* Create db-aware widget factory
+
+****** Bugfixes/Changes : *****
+* Only QTabWidget should be selected, not pages
+* Add a grouping ability to Widget
+* Merge stdwidgetfactory and containerfactory
+* Finish sync between Form and ObjectTreeView
+* Make FormManager independant of the parent container (ie no longer depends on QWorkspace)
+* Fix pixmaps in Property Editor
+
+^^^^^^^^^^^^^^^^^^  OTHER ^^^^^^^^^^^^^^^^^^^^^^^^
+* Change tab position by drag'n drop
+* Move tab between two QTabWidgets by drag'n drop
