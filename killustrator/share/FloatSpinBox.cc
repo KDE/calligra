@@ -39,6 +39,7 @@ FloatSpinBox::FloatSpinBox (QWidget* parent, const char* name,
   minval = 1;
   maxval = 10;
   step = 1;
+  value_ = 0.0;
 
   format = "%3.2f";
   setValue ((float) 1);
@@ -56,7 +57,8 @@ FloatSpinBox::~FloatSpinBox () {
 }
 
 float FloatSpinBox::getValue () {
-  return atof (TEXT (text ()));
+  //  return atof (TEXT (text ()));
+  return value_;
 }
 
 void FloatSpinBox::setFormatString (const char* fmt) {
@@ -68,12 +70,13 @@ void FloatSpinBox::setValue (float value) {
   if (minval <= value && value <= maxval) {
     sprintf (buf, (const char *) format, value);
     //    KSpinBox::setValue (buf);
+    value_ = value;
     QSpinBox::setValue (int (value * 100.0));
   }
 }
 
-void FloatSpinBox::setStep (float val) {
-  step = val;
+void FloatSpinBox::setStep (float s) {
+  step = s;
   setSteps (step * 10.0, step * 10.0);
 }
 
@@ -112,9 +115,9 @@ void FloatSpinBox::reportChanges () {
 
 int FloatSpinBox::mapTextToValue (bool *ok) {
   const char *txt = TEXT (text ());
-  float v = atof (txt);
-  return int (v * 100.0);
+  value_ = atof (txt);
   *ok = true;
+  return int (value_ * 100.0);
 }
 
 QString FloatSpinBox::mapValueToText (int v) {

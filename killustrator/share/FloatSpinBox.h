@@ -62,7 +62,7 @@ protected:
   QString mapValueToText (int v);
 
 private:
-  float step, minval, maxval;
+  float step, minval, maxval, value_;
   QString format;
   QDoubleValidator *val;
 };

@@ -276,8 +276,7 @@ void Ruler::drawRuler () {
     step = (int) (10.0 * zoom);
     step1 = (int) (100.0 * zoom);
     step2 = (int) (50.0 * zoom);
-    cvtFactor = 1.0;
-    cvtFactor = 1.065656267;
+    cvtFactor = 1157.0 / 1238.0;
     break;
   case UnitCicero:
     if (firstVisible < 0) {
@@ -287,7 +286,7 @@ void Ruler::drawRuler () {
     step = (int) (zoom);
     step1 = (int) (10.0 * zoom);
     step2 = (int) (5.0 * zoom);
-    cvtFactor = 1.065656267 * 12;
+    cvtFactor = 1157.0 * 12 / 1238.0;
     break;
   }
 
@@ -368,22 +367,6 @@ void Ruler::drawRuler () {
 	break;
       }
     case UnitCicero:
-      {
-	for (int i = -start; i < buffer->width (); i += step) {
-	  int pos = qRound (i * cvtFactor);
-	  int poff = pos + ioff + start;
-	  if (i % step1 == 0) {
-	    p.drawLine (poff, 10, poff, 30);
-	    sprintf (buf, "%d", (int) (((float) i * 10.0) / zoom));
-	    p.drawText (poff + 3, 18, buf);
-	  }
-	  else if (i % step2 == 0)
-	    p.drawLine (poff, 15, poff, 30);
-	  else
-	    p.drawLine (poff, 20, poff, 30);
-	}
-	break;
-      }
     case UnitPica:
       {
 	for (int i = -start; i < buffer->width (); i += step) {
