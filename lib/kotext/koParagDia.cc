@@ -1015,16 +1015,20 @@ void KoIndentSpacingWidget::firstChanged( double _val )
 
 void KoIndentSpacingWidget::spacingActivated( int _index )
 {
-    //FIXME !!!!!!!!!!!!!!!!!!!!!
-    if ( _index == cSpacing->count()-1 /* last item */ ) {
-        eSpacing->setEnabled( true );
-        eSpacing->setFocus();
+    KoParagLayout::spacingType _type = lineSpacingType();
+    bool state = (_type != KoParagLayout::LS_SINGLE &&
+                  _type != KoParagLayout::LS_ONEANDHALF &&
+                  _type != KoParagLayout::LS_DOUBLE);
+
+    eSpacing->setEnabled( state);
+    if ( state)
+    {
+        eSpacing->setFocus( );
         prev1->setSpacing( eSpacing->value() );
-    } else {
-        eSpacing->setEnabled( false );
-        // 1 -> oneandhalf (8)
-        // 2 -> double (16)
-        prev1->setSpacing( _index == 1 ? 8 : _index == 2 ? 16 : 0 );
+    }
+    else
+    {
+        prev1->setSpacing( _type == KoParagLayout::LS_ONEANDHALF ? 8 : _type == KoParagLayout::LS_DOUBLE ? 16 :0 );
     }
 }
 
