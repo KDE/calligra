@@ -180,10 +180,8 @@ class KEXI_DB_EXPORT Field
 //		virtual bool isBinary() const;
 
 		void setType(Type t);
-//		void setTable(const QString& t);
 		void setTable(TableSchema *table);
 		void setName(const QString& n);
-		void setColumnType(Type t);
 		void setConstraints(int c);
 		void setLength(int l);
 		void setPrecision(int p);
