@@ -383,6 +383,11 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 	    }
 	}
         else if ( parag->hasChanged() || !onlyChanged ) {
+            // lineChanged() only makes sense if we're drawing with onlyChanged=true
+            // otherwise, call setChanged() to make sure we'll paint it all.
+            // (this avoids having to send onlyChanged to drawParagWYSIWYG)
+            if ( !onlyChanged && parag->lineChanged() > 0 )
+                parag->setChanged( true );
             drawParagWYSIWYG( p, parag, cx, cy, cw, ch, doubleBuffer, cg,
                               zoomHandler, drawCursor, cursor, resetChanged, drawingFlags );
         }
