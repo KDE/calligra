@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,24 +23,22 @@
 
 */
 
-#ifndef RotateCmd_h_
-#define RotateCmd_h_
+#ifndef __RotateCmd_h__
+#define __RotateCmd_h__
 
-#include <Command.h>
+#include "Command.h"
+#include <koPoint.h>
 
-/**
- * Rotates the selected objects of the given document <tt>doc</tt>
- * around the position <tt>center</tt> by the angle <tt>a</tt>.
- */
-class RotateCmd : public ObjectManipCmd {
+class RotateCmd : public ObjectManipCmd
+{
 public:
-  RotateCmd (GDocument* doc, const Coord& center, float a);
+  RotateCmd(GDocument *aGDoc, const KoPoint &center, double a);
 
-  void execute ();
+  void execute();
 
 private:
-  Coord rcenter;
-  float angle;
+  KoPoint rcenter;
+  double angle;
 };
 
 #endif

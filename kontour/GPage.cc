@@ -329,6 +329,7 @@ void GPage::selectObject(GObject *obj)
     selection.append(obj);
     selBoxIsValid = false;
     updateHandle();
+    document()->emitSelectionChanged();
   }
 }
 
@@ -342,6 +343,7 @@ void GPage::unselectObject(GObject *obj)
     selection.remove(i);
 //    selBoxIsValid = false;
     updateHandle();
+    document()->emitSelectionChanged();
   }
 }
 
@@ -364,6 +366,7 @@ void GPage::selectAllObjects()
   }
   selBoxIsValid = false;
   updateHandle();
+  document()->emitSelectionChanged();
 }
 
 void GPage::unselectAllObjects()
@@ -377,6 +380,7 @@ void GPage::unselectAllObjects()
   selection.clear();
   selBoxIsValid = false;
   updateHandle();
+  document()->emitSelectionChanged();
 }
 
 void GPage::selectNextObject()

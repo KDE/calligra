@@ -134,6 +134,7 @@ public:
   GPage *findPage(QString name);
   
   void emitChanged(const KoRect &r, bool handle = false);
+  void emitSelectionChanged();
 
 public slots:
   void setModified(bool flag = true);
@@ -143,6 +144,7 @@ signals:
   void gridChanged();
   void helplinesChanged();
   void pageChanged();                    // active page was changed
+  void selectionChanged();
   void updateLayerView();
   void changed(const KoRect &r, bool handle);
 

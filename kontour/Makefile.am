@@ -59,6 +59,10 @@ libkontourpart_la_SOURCES = \
 	Command.cc \
 	DeleteCmd.cc \
 	ToPathCmd.cc \
+	TranslateCmd.cc \
+	RotateCmd.cc \
+	ScaleCmd.cc \
+	ShearCmd.cc \
 	CreateOvalCmd.cc \
 	CreateRectCmd.cc \
 	OptionsDialog.cc \

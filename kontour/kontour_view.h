@@ -105,6 +105,7 @@ private slots:
 
   void changePenColor(KoColor c);
   void changeBrushColor(KoColor c);
+  void changeSelection();
 
   void slotZoomFactorChanged();
 

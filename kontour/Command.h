@@ -27,8 +27,11 @@
 #define __Command_h__
 
 #include <kcommand.h>
+#include <qptrvector.h>
 
 class GDocument;
+class GObject;
+class GOState;
 
 class Command : public KCommand
 {
@@ -40,7 +43,7 @@ private:
   GDocument *mGDoc;
 };
 
-/*class ObjectManipCmd : public Command
+class ObjectManipCmd : public Command
 {
 protected:
   ObjectManipCmd(GDocument *aGDoc, const QString &name);
@@ -55,6 +58,6 @@ public:
 protected:
   QPtrVector<GObject> objects;
   QPtrVector<GOState> states;
-};*/
+};
 
 #endif

@@ -40,6 +40,7 @@
 #include "GObject.h"
 #include "Canvas.h"
 #include "ToolController.h"
+#include "TranslateCmd.h"
 
 SelectTool::SelectTool(QString aId, ToolController *tc):
 Tool(aId, tc)
@@ -251,8 +252,9 @@ void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool pe
     QListIterator<GObject> it(page->getSelection());
     for(; it.current(); ++it)
       (*it)->setWorkInProgress(false);
-    //TranslateCmd *cmd = new TranslateCmd(doc, dx, dy);
-//    history->addCommand (cmd, true);
+    KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
+    TranslateCmd *cmd = new TranslateCmd(page->document(), dx, dy);
+    doc->history()->addCommand(cmd);
   }
   else
   {

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,26 +23,20 @@
 
 */
 
-#ifndef TranslateCmd_h_
-#define TranslateCmd_h_
+#ifndef __TranslateCmd_h__
+#define __TranslateCmd_h__
 
-#include <Command.h>
+#include "Command.h"
 
-/**
- * Translates the selected objects of the given document <tt>doc</tt>
- * by the values of <tt>x</tt> and <tt>y</tt>.
- */
-class TranslateCmd : public ObjectManipCmd {
+class TranslateCmd : public ObjectManipCmd
+{
 public:
-  TranslateCmd (GDocument* doc, float x, float y);
+  TranslateCmd(GDocument *aGDoc, double x, double y);
 
-  void execute ();
-
-  float xOffset () const { return dx; }
-  float yOffset () const { return dy; }
+  void execute();
 
 private:
-  float dx, dy;
+  double dx, dy;
 };
 
 #endif

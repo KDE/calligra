@@ -132,10 +132,7 @@ QDomElement GRect::writeToXml(QDomDocument &document)
 void GRect::draw(QPainter &p, bool withBasePoints, bool outline, bool)
 {
   p.save();
-  //QPen pen(black);
-  
-//  p.setWorldMatrix(tmpMatrix, true);
-  //p.setPen(pen);
+  p.setWorldMatrix(tmpMatrix, true);
   setPen(&p);
   setBrush(&p);
 
@@ -144,14 +141,6 @@ void GRect::draw(QPainter &p, bool withBasePoints, bool outline, bool)
   p.restore();
 
 /*  double alen = 0;
-  QPen pen;
-  QBrush brush;
-
-  initPen (pen);
-
-
-  
-
   if (! workInProgress () && ! outline) {
     initBrush (brush);
     p.setBrush (brush);

@@ -39,6 +39,7 @@ class QDomElement;
 class QPainter;
 class GPath;
 class GLayer;
+class GOState;
 
 /**
  * The base class for all graphical objects.
@@ -160,8 +161,12 @@ public:
    * @return The current matrix.
    */
   const QWMatrix &matrix() const {return tMatrix; }
-  
+
   void matrix(QWMatrix m);
+
+  GOState *saveState();
+  void initState(GOState *state);
+  void restoreState(GOState *state);
 
   /**
    * Initialize a temporary matrix for transformation from the values of
@@ -260,7 +265,6 @@ class GOState
 private:
   QWMatrix matrix;
   GStyle st;
-  unsigned int rcount;
 };
 
 #endif

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -25,29 +26,29 @@
 #include "RotateCmd.h"
 
 #include <klocale.h>
-#include <kdebug.h>
 
-RotateCmd::RotateCmd (GDocument* doc, const Coord& center, float a)
-:ObjectManipCmd (doc, i18n("Rotate"))
+#include "GObject.h"
+
+RotateCmd::RotateCmd(GDocument *aGDoc, const KoPoint &center, double a):
+ObjectManipCmd(aGDoc, i18n("Rotate"))
 {
   rcenter = center;
   angle = a;
 }
 
-void RotateCmd::execute () {
+void RotateCmd::execute()
+{
   QWMatrix m1, m2, m3;
-  m1.translate (-rcenter.x (), -rcenter.y ());
-  m2.rotate (angle);
-  m3.translate (rcenter.x (), rcenter.y ());
-  kdDebug(38000)<<"RotateCmd::exec(): rotating around ("<<rcenter.x()<<"|"<<rcenter.y()<<") by "<<angle<<" degree"<<endl;
+  m1.translate(-rcenter.x(), -rcenter.y());
+  m2.rotate(angle);
+  m3.translate(rcenter.x(), rcenter.y());
 
-  ObjectManipCmd::execute ();
+  ObjectManipCmd::execute();
 
-  for (unsigned int i = 0; i < objects.count (); i++)
+  for(unsigned int i = 0; i < objects.count(); i++)
   {
-    objects[i]->transform (m1);
-    objects[i]->transform (m2);
-    objects[i]->transform (m3, true);
+    objects[i]->transform(m1);
+    objects[i]->transform(m2);
+    objects[i]->transform(m3, true);
   }
 }
-

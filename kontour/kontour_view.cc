@@ -194,6 +194,8 @@ void KontourView::setupActions()
   /* Settings menu */
 
   m_options = KStdAction::preferences(this, SLOT(slotOptions()), actionCollection(), "options");
+  
+  changeSelection();
 }
 
 void KontourView::initActions()
@@ -287,6 +289,7 @@ void KontourView::setupCanvas()
   connect(mCanvas, SIGNAL(offsetYChanged(int)), vRuler, SLOT(updateOffset(int)));
 
   connect(activeDocument(), SIGNAL(zoomFactorChanged(double)), this, SLOT(slotZoomFactorChanged()));
+  connect(activeDocument(), SIGNAL(selectionChanged()), this, SLOT(changeSelection()));
 
   /* helpline creation */
   connect(hRuler, SIGNAL(drawHelpline(int, int, bool)), mCanvas, SLOT(drawTmpHelpline(int, int, bool)));
@@ -520,6 +523,22 @@ void KontourView::changePenColor(KoColor c)
 
 void KontourView::changeBrushColor(KoColor c)
 {
+}
+
+void KontourView::changeSelection()
+{
+  if(activeDocument()->activePage()->selectionIsEmpty())
+  {
+    m_copy->setEnabled(false);
+    m_cut->setEnabled(false);
+    m_convertToPath->setEnabled(false);
+  }
+  else
+  {
+    m_copy->setEnabled(true);
+    m_cut->setEnabled(true);
+    m_convertToPath->setEnabled(true);
+  }
 }
 
 void KontourView::slotZoomFactorChanged()

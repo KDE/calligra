@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,27 +23,24 @@
 
 */
 
-#ifndef ScaleCmd_h_
-#define ScaleCmd_h_
+#ifndef __ScaleCmd_h__
+#define __ScaleCmd_h__
 
-#include <Command.h>
+#include "Command.h"
+#include <koRect.h>
 
-/**
- * Scales the selected objects of the given document <tt>doc</tt>
- * according to the direction flag <tt>mask</tt> (see Handle.h for details)
- * and the scaling factors <tt>x</tt> and <tt>y</tt>.
- */
-class ScaleCmd : public ObjectManipCmd {
+class ScaleCmd : public ObjectManipCmd
+{
 public:
-  ScaleCmd (GDocument* doc, int mask, float x, float y);
-  ScaleCmd (GDocument* doc, int mask, float x, float y, Rect r);
+  ScaleCmd(GDocument *aGDoc, int mask, double x, double y);
+  ScaleCmd(GDocument *aGDoc, int mask, double x, double y, KoRect r);
 
-  void execute ();
+  void execute();
 
 private:
-  float sx, sy;
+  double sx, sy;
   int hmask;
-  Rect box;
+  KoRect box;
 };
 
 #endif

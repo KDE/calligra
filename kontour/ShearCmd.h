@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,25 +23,22 @@
 
 */
 
-#ifndef ShearCmd_h_
-#define ShearCmd_h_
+#ifndef __ShearCmd_h__
+#define __ShearCmd_h__
 
-#include <Command.h>
+#include "Command.h"
+#include <koPoint.h>
 
-/**
- * Shears the selected objects of the given document <tt>doc</tt>
- * around the position <tt>center</tt> by the values of <tt>x</tt>
- * and <tt>y</tt>.
- */
-class ShearCmd : public ObjectManipCmd {
+class ShearCmd : public ObjectManipCmd
+{
 public:
-  ShearCmd (GDocument* doc, const Coord& center, float x, float y);
+  ShearCmd(GDocument *aGDoc, const KoPoint &center, double x, double y);
 
-  void execute ();
+  void execute();
 
 private:
-  Coord rcenter;
-  float sx, sy;
+  KoPoint rcenter;
+  double sx, sy;
 };
 
 #endif

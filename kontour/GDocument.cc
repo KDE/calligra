@@ -390,6 +390,11 @@ void GDocument::emitChanged(const KoRect &r, bool handle)
   emit changed(r, handle);
 }
 
+void GDocument::emitSelectionChanged()
+{
+  emit selectionChanged();
+}
+
 void GDocument::setModified(bool flag)
 {
   mDoc->setModified(flag);

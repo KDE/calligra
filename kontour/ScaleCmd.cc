@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,47 +23,56 @@
 
 */
 
-#include <ScaleCmd.h>
-#include <klocale.h>
-#include <GDocument.h>
-#include "GPage.h"
+#include "ScaleCmd.h"
 
-ScaleCmd::ScaleCmd (GDocument* doc, int mask, float x, float y) :
-  ObjectManipCmd (doc, i18n("Scale"))
+#include <klocale.h>
+
+#include "GDocument.h"
+#include "GPage.h"
+#include "GObject.h"
+
+ScaleCmd::ScaleCmd(GDocument *aGDoc, int mask, double x, double y):
+ObjectManipCmd(aGDoc, i18n("Scale"))
 {
-  box = doc->activePage()->boundingBoxForSelection ();
-  sx = x; sy = y;
+  box = document()->activePage()->boundingBoxForSelection();
+  sx = x;
+  sy = y;
   hmask = mask;
 }
 
-ScaleCmd::ScaleCmd (GDocument* doc, int mask, float x, float y, Rect r) :
-  ObjectManipCmd (doc, i18n("Scale")) {
-  sx = x; sy = y;
+ScaleCmd::ScaleCmd(GDocument *aGDoc, int mask, double x, double y, KoRect r):
+ObjectManipCmd(aGDoc, i18n("Scale"))
+{
+  sx = x;
+  sy = y;
   hmask = mask;
   box = r;
 }
 
-void ScaleCmd::execute () {
+void ScaleCmd::execute()
+{
   QWMatrix m1, m2, m3;
 
-  float xoff = box.x (), yoff = box.y ();
-  float xback = xoff, yback = yoff;
+  double xoff = box.x();
+  double yoff = box.y();
+  double xback = xoff;
+  double yback = yoff;
 
-  if (hmask & Handle::HPos_Left)
-    xback = box.left () + box.width () * (1 - sx);
-  if (hmask & Handle::HPos_Top)
-    yback = box.top () + box.height () * (1 - sy);
+/*  if(hmask & Handle::HPos_Left)
+    xback = box.left() + box.width() * (1.0 - sx);
+  if(hmask & Handle::HPos_Top)
+    yback = box.top() + box.height() * (1.0 - sy);*/
 
-  m1.translate (-xoff, -yoff);
-  m2.scale (sx, sy);
-  m3.translate (xback, yback);
+  m1.translate(-xoff, -yoff);
+  m2.scale(sx, sy);
+  m3.translate(xback, yback);
 
-  ObjectManipCmd::execute ();
+  ObjectManipCmd::execute();
 
-  for (unsigned int i = 0; i < objects.count (); i++) {
-    objects[i]->transform (m1);
-    objects[i]->transform (m2);
-    objects[i]->transform (m3, true);
+  for(unsigned int i = 0; i < objects.count(); i++)
+  {
+    objects[i]->transform(m1);
+    objects[i]->transform(m2);
+    objects[i]->transform(m3, true);
   }
 }
-

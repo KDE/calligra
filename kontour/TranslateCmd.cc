@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,22 +23,27 @@
 
 */
 
-#include <TranslateCmd.h>
+#include "TranslateCmd.h"
+
 #include <klocale.h>
 
-TranslateCmd::TranslateCmd (GDocument* doc, float x, float y) :
-  ObjectManipCmd (doc, i18n("Translate")) {
-  dx = x; dy = y;
+#include "GObject.h"
+
+TranslateCmd::TranslateCmd(GDocument *aGDoc, double x, double y):
+ObjectManipCmd(aGDoc, i18n("Translate"))
+{
+  dx = x;
+  dy = y;
 }
 
-void TranslateCmd::execute () {
+void TranslateCmd::execute()
+{
   QWMatrix m;
-  m.translate (dx, dy);
+  m.translate(dx, dy);
 
-  // save the states
-  ObjectManipCmd::execute ();
+  /* save the states */
+  ObjectManipCmd::execute();
 
-  for (unsigned int i = 0; i < objects.count (); i++)
-    objects[i]->transform (m, true);
+  for(unsigned int i = 0; i < objects.count(); i++)
+    objects[i]->transform(m, true);
 }
-
