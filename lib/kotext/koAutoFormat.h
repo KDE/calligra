@@ -72,6 +72,8 @@ public:
     KoAutoFormat( const KoAutoFormat& format );
 
     ~KoAutoFormat();
+
+    KCommand *applyAutoFormat( KoTextObject * obj );
     /**
      * Called by edit widget when a character (@p ch) has been inserted
      * into @p parag, at the given @p index.
@@ -279,7 +281,7 @@ protected:
     void doAutoIncludeAbbreviation(KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
 
     KCommand *doAutoSuperScript( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
-
+    KCommand *scanParag( KoTextParag * parag, KoTextObject * obj );
 private:
     void detectStartOfLink(const QString &word);
     void autoFormatIsActive();

@@ -328,6 +328,7 @@ public slots:
 
     void slotCompletion();
 
+    void applyAutoFormat();
     // end of public slots
 
 protected slots:
@@ -391,6 +392,7 @@ private:
     KAction *actionEditCustomVars;
     KAction *actionEditFind;
     KAction *actionEditReplace;
+    KAction *actionApplyAutoFormat;
 
     KToggleAction *actionViewTextMode;
     KToggleAction *actionViewPageMode;

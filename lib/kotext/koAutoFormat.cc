@@ -1450,3 +1450,62 @@ void KoAutoFormat::configAutoSuperScript( bool b )
 {
     m_bAutoSuperScript = b;
 }
+
+KCommand *KoAutoFormat::applyAutoFormat( KoTextObject * obj )
+{
+    KoTextParag * parag = obj->textDocument()->firstParag();
+    KMacroCommand *macro = new KMacroCommand( i18n("Apply AutoFormat"));
+    bool createCmd = false;
+    while ( parag )
+    {
+        KCommand *cmd = scanParag( parag,obj );
+        if ( cmd )
+        {
+            macro->addCommand( cmd);
+            createCmd = true;
+        }
+        parag = parag->next();
+    }
+    if ( createCmd )
+    {
+        return macro;
+    }
+    delete macro;
+    return 0L;
+}
+
+KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
+{
+    KMacroCommand * macro = new KMacroCommand( i18n("Apply AutoFormat"));
+    KoTextCursor *cursor = new KoTextCursor( obj->textDocument() );
+
+    bool createMacro = false;
+    KoTextString *s = parag->string();
+    for ( int i = 0; i < s->length(); i++ )
+    {
+        QChar ch = s->at( i ).c;
+        if ( ch == '"' && m_typographicDoubleQuotes.replace )
+        {
+            KCommand *cmd =doTypographicQuotes( cursor, parag, i, obj, true /*double quote*/ );
+            if ( cmd )
+            {
+                macro->addCommand( cmd );
+                createMacro = true;
+            }
+        }
+        else if ( ch == '\'' && m_typographicDoubleQuotes.replace )
+        {
+            KCommand *cmd =doTypographicQuotes(  cursor, parag, i,obj, false /* simple quote*/ );
+            if ( cmd )
+            {
+                macro->addCommand( cmd );
+                createMacro = true;
+            }
+        }
+    }
+    delete cursor;
+    if ( createMacro )
+        return macro;
+    return 0L;
+}
+

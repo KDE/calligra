@@ -901,7 +901,9 @@ void KWView::setupActions()
     actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
                                         this, SLOT( editCustomVars() ),
                                         actionCollection(), "edit_customvars" );
-
+    actionApplyAutoFormat= new KAction( i18n( "Apply autoFormat" ), 0,
+                                        this, SLOT( applyAutoFormat() ),
+                                        actionCollection(), "apply_autoformat" );
 
 }
 
@@ -4949,6 +4951,31 @@ void KWView::configureCompletion()
     KoCompletionDia dia( this, 0, m_doc->getAutoFormat() );
     dia.exec();
 }
+
+void KWView::applyAutoFormat()
+{
+    m_doc->getAutoFormat()->readConfig();
+    KMacroCommand *macro = new KMacroCommand( i18n("Apply AutoFormat"));
+    bool createcmd=false;
+    QPtrList<KoTextObject> list(m_doc->frameTextObject());
+    QPtrListIterator<KoTextObject> fit(list);
+    for ( ; fit.current() ; ++fit )
+    {
+        KCommand *cmd = m_doc->getAutoFormat()->applyAutoFormat( fit.current() );
+        if ( cmd )
+        {
+            createcmd= true;
+            macro->addCommand( cmd );
+        }
+    }
+    if ( createcmd )
+    {
+        m_doc->addCommand( macro );
+    }
+    else
+        delete macro;
+}
+
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */
