@@ -1195,5 +1195,14 @@ KSpreadTable * KSpreadDoc::displayTable()const
     return m_activeTable;
 }
 
+void KSpreadDoc::addView( KoView *_view )
+{
+    KoDocument::addView( _view );
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KSpreadView*)it.current())->closeEditor();
+}
+
+
 #include "kspread_doc.moc"
 

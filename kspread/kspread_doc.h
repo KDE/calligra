@@ -77,7 +77,7 @@ public:
   virtual bool loadXML( QIODevice *, const QDomDocument& doc );
   QDomElement saveAreaName( QDomDocument& doc ) ;
   void loadAreaName( const QDomElement& element );
-
+    virtual void addView( KoView *_view );
 
   virtual bool initDoc();
 

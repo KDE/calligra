@@ -149,7 +149,7 @@ public:
      * Called before saving, to finish the current edition (if any)
      */
     void deleteEditor( bool saveChanges = true );
-
+    void closeEditor();
     virtual DCOPObject* dcopObject();
 
     virtual QWidget *canvas();

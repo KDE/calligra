@@ -4893,5 +4893,10 @@ void KSpreadView::updateShowTableMenu()
     m_showTable->setEnabled(m_pTabBar->listhide().count()>0);
 }
 
+void KSpreadView::closeEditor()
+{
+    m_pCanvas->closeEditor();
+}
+
 #include "kspread_view.moc"
 
