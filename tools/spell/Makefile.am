@@ -34,7 +34,7 @@ install-exec-local:
 	$(INSTALL_SCRIPT) spell_tool $(bindir)/spell_tool
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../po/kword.pot
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../po/spell_tool.pot
 
 datatools.h: $(idldir)/datatools.idl
 	rm -f datatools.h

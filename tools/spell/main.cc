@@ -8,7 +8,7 @@
 
 typedef KOMAutoLoader<MyTool> MyAutoLoader;
 
-MyApplication::MyApplication( int &argc, char **argv ) : KOMApplication( argc, argv )
+MyApplication::MyApplication( int &argc, char **argv ) : KOMApplication( argc, argv , "spell_tool")
 {
 }
 
