@@ -40,7 +40,7 @@ kchartWizard::kchartWizard ( KChartPart* chart, QWidget *parent, const char* nam
    addPage( _selectchartsubtypepage, i18n( "Select chart subtype" ) );
 
   // Fourth page: data setup
-  //  _setupdatapage = new kchartWizardSetupDataPage( this, _chart );
+    //_setupdatapage = new kchartWizardSetupDataPage( this, _chart );
   //addPage( _setupdatapage, i18n( "Data setup" ) );
 
   // Fifth page: labels/legends setup

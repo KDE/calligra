@@ -97,3 +97,7 @@ But Pb for writing % in label for the moment it's not good
 2000-04-30 - Montel laurent <montell@club-internet.fr>
 ------------------------------------------------------
 -Bug fix
+
+2000-06-12 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Improved layout manager in kchartwizard

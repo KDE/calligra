@@ -9,6 +9,7 @@
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qgroupbox.h>
+#include <qlayout.h>
 #include <klocale.h>
 #include <kfontdialog.h>
 
@@ -18,12 +19,12 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
   _chart( chart )
 {
   chart3d=true;
-  QFrame* tmpQFrame;
+  /*QFrame* tmpQFrame;
   tmpQFrame = new QFrame( this, "Frame_2" );
   tmpQFrame->setGeometry( 10, 10, 240, 220 );
   tmpQFrame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-  tmpQFrame->setLineWidth( 2 );
-  QLabel *tmpLabel;
+  tmpQFrame->setLineWidth( 2 );*/
+
   /*
   preview = new kchartWidget( _chart, tmpQFrame );
   preview->show();
@@ -32,198 +33,141 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
 				   tmpQFrame->contentsRect().height() );
   */
 
-  grid = new QCheckBox( i18n( "Has grid" ), this );
-  grid->setGeometry( 70, 250, 110, 30 );
-  grid->setChecked( _chart->params()->grid );
+  QGridLayout *grid1 = new QGridLayout(this,2,2,15,15);
 
-  gridColor=new KColorButton(this);
-  gridColor->setGeometry( 190,250,80,30 );
+  QGroupBox* tmpQGroupBox;
+  tmpQGroupBox = new QGroupBox( this, "GroupBox_1" );
+  tmpQGroupBox->setFrameStyle( 49 );
+
+  QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,2,2,15,7);
+
+  grid = new QCheckBox( i18n( "Has grid" ),tmpQGroupBox  );
+  grid->setChecked( _chart->params()->grid );
+  grid2->addWidget(grid,0,0);
+
+  gridColor=new KColorButton(tmpQGroupBox);
   colorGrid=_chart->params()->GridColor;
   gridColor->setColor( colorGrid );
+  grid2->addWidget(gridColor,0,1);
 
-  tmpLabel=new QLabel(this);
+  border = new QCheckBox( i18n( "Border" ), tmpQGroupBox );
+  border->setChecked( _chart->params()->border );
+  grid2->addWidget(border,1,0);
+
+  borderColor=new KColorButton(tmpQGroupBox);
+  colorBorder=_chart->params()->LineColor;
+  borderColor->setColor( colorBorder );
+  grid2->addWidget(borderColor,1,1);
+
+  grid1->addWidget(tmpQGroupBox,0,0);
+
+
+  tmpQGroupBox = new QGroupBox( this, "GroupBox_2" );
+  tmpQGroupBox->setFrameStyle( 49 );
+
+  grid2 = new QGridLayout(tmpQGroupBox,3,2,15,7);
+
+  QLabel *tmpLabel;
+  tmpLabel=new QLabel(tmpQGroupBox);
+  tmpLabel->setText(i18n("Angle 3D : "));
+  grid2->addWidget(tmpLabel,0,0);
+  angle = new QSpinBox(1, 90, 1,tmpQGroupBox );
+  angle->setValue(_chart->params()->_3d_angle);
+  grid2->addWidget(angle,0,1);
+
+  tmpLabel=new QLabel(tmpQGroupBox);
+  tmpLabel->setText(i18n("Depth 3D: "));
+  grid2->addWidget(tmpLabel,1,0);
+  depth = new QSpinBox(1, 20, 1, tmpQGroupBox);
+  depth->setValue(_chart->params()->_3d_depth);
+  grid2->addWidget(depth,1,1);
+
+  tmpLabel=new QLabel(tmpQGroupBox);
+  tmpLabel->setText(i18n("bar width: "));
+  grid2->addWidget(tmpLabel,2,0);
+  barWidth = new QSpinBox(1, 200, 1, tmpQGroupBox);
+  barWidth->setValue(_chart->params()->bar_width);
+  grid2->addWidget(barWidth,2,1);
+
+  grid1->addWidget(tmpQGroupBox,0,1);
+
+
+  tmpQGroupBox = new QGroupBox( this, "GroupBox_3" );
+  tmpQGroupBox->setFrameStyle( 49 );
+
+  grid2 = new QGridLayout(tmpQGroupBox,3,2,15,7);
+
+  tmpLabel=new QLabel(tmpQGroupBox);
   tmpLabel->setText(i18n("Y interval : "));
-  tmpLabel->setGeometry(10,290,50,30);
+  grid2->addWidget(tmpLabel,0,0);
+
   QString tmp;
-  y_interval=new QLineEdit(this);
-  y_interval->setGeometry(70,290,110,30);
+  y_interval=new QLineEdit(tmpQGroupBox);
+  grid2->addWidget(y_interval,0,1);
   if( _chart->params()->requested_yinterval != -MAXDOUBLE)
         y_interval->setText( tmp.setNum(_chart->params()->requested_yinterval));
 
-  tmpLabel=new QLabel(this);
+  tmpLabel=new QLabel(tmpQGroupBox);
   tmpLabel->setText(i18n("Y min : "));
-  tmpLabel->setGeometry(10,330,50,30);
-  y_min=new QLineEdit(this);
-  y_min->setGeometry(70,330,110,30);
+  grid2->addWidget(tmpLabel,1,0);
+  y_min=new QLineEdit(tmpQGroupBox);
+  grid2->addWidget(y_min,1,1);
   if( _chart->params()->requested_ymin != MAXDOUBLE)
         y_min->setText( tmp.setNum(_chart->params()->requested_ymin));
 
-  tmpLabel=new QLabel(this);
+  tmpLabel=new QLabel(tmpQGroupBox);
   tmpLabel->setText(i18n("Y max : "));
-  tmpLabel->setGeometry(10,370,50,30);
-  y_max=new QLineEdit(this);
-  y_max->setGeometry(70,370,110,30);
+  grid2->addWidget(tmpLabel,2,0);
+  y_max=new QLineEdit(tmpQGroupBox);
+  grid2->addWidget(y_max,2,1);
   if( _chart->params()->requested_ymax != -MAXDOUBLE)
         y_max->setText( tmp.setNum(_chart->params()->requested_ymax));
 
-  border = new QCheckBox( i18n( "Border" ), this );
-  border->setGeometry( 70, 410, 110, 30 );
-  border->setChecked( _chart->params()->border );
+  grid1->addWidget(tmpQGroupBox,1,0);
 
-  borderColor=new KColorButton(this);
-  borderColor->setGeometry( 190,410,80,30 );
-  colorBorder=_chart->params()->LineColor;
-  borderColor->setColor( colorBorder );
+  tmpQGroupBox = new QGroupBox( this, "GroupBox_3" );
+  tmpQGroupBox->setFrameStyle( 49 );
 
-  tmpLabel=new QLabel(this);
-  tmpLabel->setText(i18n("Angle 3D : "));
-  tmpLabel->setGeometry(10,440,50,30);
-  angle = new QSpinBox(1, 90, 1, this);
-  angle->setValue(_chart->params()->_3d_angle);
-  angle->setGeometry( 70, 440, 110, 30 );
+  grid2 = new QGridLayout(tmpQGroupBox,3,2,15,7);
 
-  tmpLabel=new QLabel(this);
+  tmpLabel=new QLabel(tmpQGroupBox);
   tmpLabel->setText(i18n("YLabel format : "));
-  tmpLabel->setGeometry(10,480,80,30);
-  ylabel_fmt=new QLineEdit(this);
+  grid2->addWidget(tmpLabel,0,0);
+  ylabel_fmt=new QLineEdit(tmpQGroupBox);
+  grid2->addWidget(ylabel_fmt,0,1);
 
   if( !_chart->params()->ylabel_fmt.isEmpty())
         {
         int len=_chart->params()->ylabel_fmt.length();
          ylabel_fmt->setText(_chart->params()->ylabel_fmt.right(len-3));
         }
-  ylabel_fmt->setGeometry( 100, 480, 110, 30 );
-  ylabelFont = new QPushButton( this);
-  ylabelFont->setGeometry( 220,480,80,30 );
+  ylabelFont = new QPushButton( tmpQGroupBox);
+  grid2->addWidget(ylabelFont,1,0);
   ylabelFont->setText(i18n("Font"));
   ylabel=_chart->params()->yAxisFont();
 
-  ylabelColor=new KColorButton(this);
-  ylabelColor->setGeometry( 310,480,80,30 );
+  ylabelColor=new KColorButton(tmpQGroupBox);
+  grid2->addWidget(ylabelColor,1,1);
   ycolor=_chart->params()->YLabelColor;
   ylabelColor->setColor( ycolor );
 
-  tmpLabel=new QLabel(this);
-  tmpLabel->setText(i18n("Depth 3D: "));
-  tmpLabel->setGeometry(250,20,60,30);
-  depth = new QSpinBox(1, 20, 1, this);
-  depth->setValue(_chart->params()->_3d_depth);
-  depth->setGeometry( 320, 20, 110, 30 );
 
-  tmpLabel=new QLabel(this);
-  tmpLabel->setText(i18n("bar width: "));
-  tmpLabel->setGeometry(250,60,60,30);
-  barWidth = new QSpinBox(1, 200, 1, this);
-  barWidth->setValue(_chart->params()->bar_width);
-  barWidth->setGeometry( 320, 60, 110, 30 );
-
-  tmpLabel=new QLabel(this);
+  tmpLabel=new QLabel(tmpQGroupBox);
   tmpLabel->setText(i18n("YLabel2 format : "));
-  tmpLabel->setGeometry(250,100,80,30);
-  ylabel2_fmt=new QLineEdit(this);
+  grid2->addWidget(tmpLabel,2,0);
 
+  ylabel2_fmt=new QLineEdit(tmpQGroupBox);
+  grid2->addWidget(ylabel2_fmt,2,1);
   if( !_chart->params()->ylabel2_fmt.isEmpty())
         {
         int len=_chart->params()->ylabel2_fmt.length();
          ylabel2_fmt->setText(_chart->params()->ylabel2_fmt.right(len-3));
         }
-  ylabel2_fmt->setGeometry( 320, 100, 110, 30 );
+
+  grid1->addWidget(tmpQGroupBox,1,1);
 
 
-  /*
-  QGroupBox* ticksettingsGB = new QGroupBox( i18n( "Tick settings" ), this );
-  ticksettingsGB->setGeometry( 260, 10, 330, 120 );
 
-  QCheckBox* showfullgridCB = new QCheckBox( i18n( "Show full grid" ), this );
-  showfullgridCB->setGeometry( 270, 30, 100, 30 );
-  //  showfullgridCB->setChecked( _chart->longTicks() );
-  //  connect( showfullgridCB, SIGNAL( toggled( bool ) ),
-  //		   _chart, SLOT( setLongTicks( bool ) ) );
-
-  QCheckBox* showxticksCB = new QCheckBox( i18n( "Show ticks on X axis" ),
-										   this );
-  showxticksCB->setGeometry( 270, 60, 140, 30 );
-  //showxticksCB->setChecked( _chart->params()->xTicks() );
-  // connect( showxticksCB, SIGNAL( toggled( bool ) ),
-  //		   _chart, SLOT( setXTicks( bool ) ) );
-
-  QLabel* ticklengthLA = new QLabel( i18n( "Tick length:" ), this );
-  ticklengthLA->setGeometry( 270, 90, 70, 30 );
-
-  QLineEdit* ticklengthED = new QLineEdit( this ); // todo KFloatValidator
-  ticklengthED->setGeometry( 340, 90, 40, 30 );
-  //ticklengthED->setText( QString().setNum(_chart->tickLength()) );
-  */
-  /*
-  connect( ticklengthED, SIGNAL( textChanged( const QString & ) ),
-                   this, SLOT( setTickLength( const QString & ) ) );
-    */
-    /*
-  QLabel* yticksnumLA = new QLabel( i18n( "Number of ticks on Y axis:" ),
-									this );
-  yticksnumLA->setGeometry( 400, 90, 150, 30 );
-
-  QLineEdit* yticksnumED = new QLineEdit( this ); // todo KFloatValidator
-  yticksnumED->setGeometry( 550, 90, 30, 30 );
-  */
-  //yticksnumED->setText( QString().setNum(_chart->yTicksNum()) );
-  /*
-  connect( yticksnumED, SIGNAL( textChanged( const QString & ) ),
-		   this, SLOT( setYTicksNum( const QString & ) ) );
-    */
-    /*
-  QGroupBox* axeslabelsGB = new QGroupBox( i18n( "Axes labelling" ), this );
-  axeslabelsGB->setGeometry( 260, 140, 330, 150 );
-
-  QCheckBox* showxvaluesCB = new QCheckBox( i18n( "Show values on X axis" ),
-											this );
-  showxvaluesCB->setGeometry( 270, 160, 140, 30 );
-  */
-  //showxvaluesCB->setChecked( _chart->xPlotValues() );
-  /*connect( showxvaluesCB, SIGNAL( toggled( bool ) ),
-		   _chart, SLOT( setXPlotValues( bool ) ) );
-    */
-  /*
-  QLabel* showeveryxLA = new QLabel( i18n( "Show every" ), this );
-  showeveryxLA->setGeometry( 270, 190, 70, 30 );
-
-  QLineEdit* showeveryxED = new QLineEdit( this ); // todo KFloatValidator
-  showeveryxED->setGeometry( 340, 190, 20, 30 );
-  */
-  //showeveryxED->setText( QString().setNum(_chart->xLabelSkip()) );
-  /*
-  connect( showeveryxED, SIGNAL( textChanged( const QString & ) ),
-		   this, SLOT( setXLabelSkip( const QString & ) ) );
-    */
-  /*
-  QLabel* showeveryx2KA = new QLabel( i18n( ". value on X axis" ), this );
-  showeveryx2KA->setGeometry( 360, 190, 100, 30 );
-
-  QCheckBox* showyvaluesCB = new QCheckBox( i18n( "Show values on Y axis" ),
-											this );
-  showyvaluesCB->setGeometry( 270, 220, 140, 30 );
-  */
-  //showyvaluesCB->setChecked( _chart->yPlotValues() );
-  /*
-  connect( showyvaluesCB, SIGNAL( toggled( bool ) ),
-		   _chart, SLOT( setYPlotValues( bool ) ) );
-    */
-    /*
-  QLabel* showeveryyLA = new QLabel( i18n( "Show every" ), this );
-  showeveryyLA->setGeometry( 270, 250, 70, 30 );
-
-  QLineEdit* showeveryyED = new QLineEdit( this ); // todo KFloatValidator
-  showeveryyED->setGeometry( 340, 250, 20, 30 );
-  */
-  //  showeveryyED->setText( QString().setNum(_chart->yLabelSkip()) );
-  /*
-  connect( showeveryyED, SIGNAL( textChanged( const QString & ) ),
-		   this, SLOT( setYLabelSkip( const QString & ) ) );
-   */
-  /*
-  QLabel* showeveryy2KA = new QLabel( i18n( ". value on Y axis" ), this );
-  showeveryy2KA->setGeometry( 360, 250, 100, 30 );
-  */
   connect(ylabelFont,SIGNAL(clicked()),this,SLOT(changeLabelFont()));
 
 
@@ -321,21 +265,5 @@ void kchartWizardSetupAxesPage::apply()
         _chart->params()->ylabel2_fmt="";
         }
 }
-/*
-void kchartWizardSetupAxesPage::setYTicksNum( const QString & newValue )
-{
-  //  _chart->setYTicksNum( newValue.toInt() );
-}
 
-void kchartWizardSetupAxesPage::setXLabelSkip( const QString & newValue )
-{
-  //  _chart->setXLabelSkip( newValue.toInt() );
-}
-
-void kchartWizardSetupAxesPage::setYLabelSkip( const QString & newValue )
-{
-  //  _chart->setYLabelSkip( newValue.toInt() );
-}
-
-*/
 #include "kchartWizardSetupAxesPage.moc"

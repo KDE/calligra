@@ -110,8 +110,6 @@ void kchartWizardSelectChartTypePage::chartTypeSelected( int type )
 {
    _type=(KChartType)type;
    emit chartChange(type);
-   // _chart->params()->type = (KChartType)type;
-
 }
 
 void kchartWizardSelectChartTypePage::apply()

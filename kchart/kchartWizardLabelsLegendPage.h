@@ -8,7 +8,7 @@
 class QLineEdit;
 class QRadioButton;
 class KChartPart;
-class kchartWidget;
+//class kchartWidget;
 
 class kchartWizardLabelsLegendPage : public QWidget
 {
@@ -18,7 +18,6 @@ public:
   kchartWizardLabelsLegendPage( QWidget* parent, KChartPart* chart );
   ~kchartWizardLabelsLegendPage();
 
-  //void placementChanged( int );
   bool ytitle2;
 public slots:
   void apply();
@@ -34,17 +33,11 @@ protected:
 
 private:
   KChartPart* _chart;
-  kchartWidget* preview;
+  //kchartWidget* preview;
   QLineEdit* _xlabelED;
   QLineEdit* _ylabelED;
   QLineEdit* _titleED;
   QLineEdit* _ylabel2ED;
-  /*QRadioButton* _righttopRB;
-  QRadioButton* _rightcenterRB;
-  QRadioButton* _rightbottomRB;
-  QRadioButton* _bottomleftRB;
-  QRadioButton* _bottomcenterRB;
-  QRadioButton* _bottomrightRB;*/
   QPushButton *xtitlefont;
   QPushButton *ytitlefont;
   QPushButton *titlefont;
@@ -53,6 +46,7 @@ private:
   KColorButton *ytitlecolor;
   KColorButton *titlecolor;
   KColorButton *ytitle2color;
+
   QFont xlabel;
   QFont ylabel;
   QFont title;
