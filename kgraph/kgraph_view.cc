@@ -22,7 +22,7 @@
 //#include <kaction.h>
 //#include <kstdaction.h>
 #include <klocale.h>
-//#include <kdebug.h>
+#include <kdebug.h>
 
 #include <kgraph_global.h>
 #include <kgraph_part.h>
@@ -37,6 +37,8 @@ KGraphView::KGraphView(KGraphPart *part, QWidget *parent, const char *name)
 }
 
 void KGraphView::paintEvent(QPaintEvent *ev) {
+
+    kdDebug(37001) << "KGraphView::painEvent()" << endl;
 
     QPainter painter;
     painter.begin(this);

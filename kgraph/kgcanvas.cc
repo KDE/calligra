@@ -17,33 +17,18 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KGRAPH_VIEW_H
-#define KGRAPH_VIEW_H
+#include <kgcanvas.h>
 
-#include <koView.h>
 
-class QPaintEvent;
+KGCanvas::KGCanvas(QWidget *parent, const char *name) : 
+                   QScrollView(parent, name) {
+    
+    setFocusPolicy(QWidget::StrongFocus);
+    setFocus();
+    setMouseTracking(true);    
+}
 
-//class KAction;
-class KGraphPart;
-//class KGCanvas;
+KGCanvas::~KGCanvas() {
+}
 
-class KGraphView : public KoView {
-
-    Q_OBJECT
-
-public:
-    KGraphView(KGraphPart *part, QWidget *parent=0, const char *name=0);
-
-//protected slots:
-    //void a_editcut();
-
-protected:
-    void paintEvent(QPaintEvent *ev);
-
-    virtual void updateReadWrite(bool readwrite);
-
-private:
-    //KAction *editcut;
-};
-#endif
+#include <kgcanvas.moc>
