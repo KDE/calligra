@@ -1554,7 +1554,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     m_loadingInfo=0L;
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
 
-    if ( !settings.isNull() )
+    if ( !settingsDoc.isNull() )
     {
         loadOasisSettings( settingsDoc );
         loadOasisIgnoreList( settingsDoc );
