@@ -67,6 +67,7 @@ protected:
 	virtual void mouseDragRelease();
 	virtual void mouseDragCtrlPressed();
 	virtual void mouseDragCtrlReleased();
+	virtual void arrowKeyReleased( Qt::Key );
 
 	void updateStatusBar() const;
 

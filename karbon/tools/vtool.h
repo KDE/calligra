@@ -174,6 +174,13 @@ protected:
 	}
 
 	/**
+	 * "Shift" key released while mouse drag.
+	 */
+	virtual void arrowKeyReleased( Qt::Key )
+	{
+	}
+
+	/**
 	 * Cancels all tool operations. This event is invoked when ESC is pressed.
 	 */
 	virtual void cancel()

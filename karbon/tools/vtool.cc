@@ -170,17 +170,24 @@ VTool::keyEvent( QEvent* event )
 	{
 		QKeyEvent* keyEvent = static_cast<QKeyEvent*>( event );
 
-		if( keyEvent->key() == Qt::Key_Shift && m_isDragging )
+		Qt::Key key = keyEvent->key();
+		if( key == Qt::Key_Shift && m_isDragging )
 		{
 			mouseDragShiftReleased();
 
 			return true;
 		}
 
-		if( keyEvent->key() == Qt::Key_Control && m_isDragging )
+		if( key == Qt::Key_Control && m_isDragging )
 		{
 			mouseDragCtrlReleased();
 
+			return true;
+		}
+
+		if( key == Qt::Key_Left || key == Qt::Key_Right || key == Qt::Key_Up || Qt::Key_Down )
+		{
+			arrowKeyReleased( key );
 			return true;
 		}
 	}

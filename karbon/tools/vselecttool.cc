@@ -247,6 +247,26 @@ VSelectTool::mouseDragRelease()
 }
 
 void
+VSelectTool::arrowKeyReleased( Qt::Key key )
+{
+	int dx = 0;
+	int dy = 0;
+	switch( key )
+	{
+		case Qt::Key_Up: dy = 10; break;
+		case Qt::Key_Down: dy = -10; break;
+		case Qt::Key_Right: dx = 10; break;
+		case Qt::Key_Left: dx = -10;
+	}
+	m_state = normal;
+	view()->part()->addCommand(
+		new VTranslateCmd(
+			&view()->part()->document(),
+			dx, dy ),
+		true );
+}
+
+void
 VSelectTool::updateStatusBar() const
 {
 	if( view()->part()->document().selection()->objects().count() > 0 )
