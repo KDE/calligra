@@ -716,7 +716,7 @@ void KSpreadCanvas::scrollToCell(QPoint location)
   double unzoomedHeight = doc()->unzoomItY( height() );
 
   double xpos;
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
     xpos = unzoomedWidth - table->dblColumnPos( location.x() ) - xOffset();
   else
     xpos = table->dblColumnPos( location.x() ) - xOffset();
@@ -727,7 +727,7 @@ void KSpreadCanvas::scrollToCell(QPoint location)
   //kdDebug(36001) << "KSpreadCanvas::gotoLocation : height=" << height() << endl;
   //kdDebug(36001) << "KSpreadCanvas::gotoLocation : width=" << width() << endl;
 
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
   {
     double minX = 100.0; // less than that, we scroll
     double maxX = unzoomedWidth - 100.0; // more than that, we scroll
@@ -833,7 +833,7 @@ void KSpreadCanvas::slotScrollHorz( int _value )
   if (dx > 0)
   {
     area.setRight( area.left() );
-    if ( sheet->isRightToLeft() )
+    if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
       area.setLeft( sheet->leftColumn( dwidth - unzoomedValue, tmp ) );
     else
       area.setLeft( sheet->leftColumn( unzoomedValue, tmp ) );
@@ -841,7 +841,7 @@ void KSpreadCanvas::slotScrollHorz( int _value )
   else
   {
     area.setLeft( area.right() );
-    if ( sheet->isRightToLeft() )
+    if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
       area.setRight( sheet->rightColumn( unzoomedValue ) );
     else
       area.setRight( sheet->rightColumn( doc()->unzoomItX( width() ) +
@@ -983,7 +983,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   double xpos;
   double ypos;
   int col;
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
     col = table->leftColumn( dwidth - ev_PosX, xpos );
   else
     col = table->leftColumn( ev_PosX, xpos );
@@ -1032,7 +1032,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   {
     //If the cursor is over the hanlde, than it might be already on the next cell.
     //Recalculate the cell!
-    if ( table->isRightToLeft() )
+    if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
       col = table->leftColumn( dwidth - ev_PosX - doc()->unzoomItX( 2 ), xpos );
     else
       col  = table->leftColumn( ev_PosX - doc()->unzoomItX( 2 ), xpos );
@@ -1222,7 +1222,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
   double dwidth = 0.0;
   double ev_PosX;
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
   {
     dwidth = doc()->unzoomItX( width() );
     ev_PosX = dwidth - doc()->unzoomItX( _ev->pos().x() ) + xOffset();
@@ -1500,7 +1500,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   int right_col;
   //Philipp: I don't know why we need the +1, but otherwise we don't get it correctly
   //Testcase: Move a dialog slowly up left. Sometimes the top/left most points are not painted
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
   {
     right_col = table->leftColumn( dwidth - tl.x(), tmp );
     left_col  = table->rightColumn( dwidth - br.x() + 1.0 );
@@ -3850,7 +3850,7 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
 
   double xpos;
   double x;
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
   {
     xpos = dWidth - table->dblColumnPos( marker.left() ) - xOffset();
     x    = dWidth - table->dblColumnPos( marker.right() ) - xOffset();
@@ -3874,7 +3874,7 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
   /* left, top, right, bottom */
   positions[0] = xpos;
   positions[1] = ypos;
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
     positions[2] = xpos - w + 1;
   else
     positions[2] = xpos + w;
@@ -3886,13 +3886,13 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
   double right = positions[2];
   double bottom = positions[3];
 
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
     kdDebug() << "X: " << x << ", xpos: " << xpos << ", w: " << w
               << ", Right: " << right << ", VRight: " << viewRect.right()
               << ", Left:  " << left  << ", VLeft:  " << viewRect.left() << endl;
 
   /* left, top, right, bottom */
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
   {
     paintSides[0] = (viewRect.left() <= left) && (left - 1 <= viewRect.right()) &&
                   (bottom >= viewRect.top()) && (top <= viewRect.bottom());
@@ -4599,7 +4599,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 
   double ev_PosX;
   double dWidth = m_pCanvas->doc()->unzoomItX( width() );
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
     ev_PosX = dWidth - m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
   else
     ev_PosX = m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
@@ -4610,7 +4610,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   double x;
 
   const double unzoomedPixel = m_pCanvas->doc()->unzoomItX( 1 );
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
   {
     int tmpCol = table->leftColumn( m_pCanvas->xOffset(), x );
 
@@ -4679,7 +4679,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   {
     // Determine the column to resize
     double tmp;
-    if ( table->isRightToLeft() )
+    if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
     {
       m_iResizedColumn = table->leftColumn( ev_PosX - 1, tmp );
       // kdDebug() << "RColumn: " << m_iResizedColumn << ", PosX: " << ev_PosX << endl;
@@ -4771,7 +4771,7 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
         double width = 0.0;
         double x;
 
-        if ( table->isRightToLeft() )
+        if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
         {
           ev_PosX = dWidth - m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
           x = table->dblColumnPos( m_iResizedColumn );
@@ -5008,7 +5008,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     double x;
     int col;
 
-    if ( table->isRightToLeft() )
+    if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
       col = table->leftColumn( dWidth - ev_PosX, x );
     else
       col = table->leftColumn( ev_PosX, x );
@@ -5045,7 +5045,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     const double unzoomedPixel = m_pCanvas->doc()->unzoomItX( 1 );
     double x;
 
-    if ( table->isRightToLeft() )
+    if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
     {
       int tmpCol = table->leftColumn( m_pCanvas->xOffset(), x );
 
@@ -5230,7 +5230,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   //several cells selected but not just a cell merged
   bool area = ( m_pView->selection().left()!=0 && extraCell != m_pView->selection() );
 
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
   {
     xPos = m_pCanvas->doc()->unzoomItX( _ev->rect().right() ) - xPos;
 

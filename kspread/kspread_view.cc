@@ -3451,7 +3451,7 @@ void KSpreadView::setActiveTable( KSpreadSheet * _t, bool updateTable )
     return;
   }
 
-  if ( oldSheet && oldSheet->isRightToLeft() != d->activeSheet->isRightToLeft() )
+  if ( oldSheet && oldSheet->layoutDirection()==KSpreadSheet::RightToLeft != d->activeSheet->layoutDirection()==KSpreadSheet::RightToLeft )
     refreshView();
 
   d->doc->setDisplayTable( d->activeSheet );
@@ -3559,6 +3559,7 @@ void KSpreadView::sheetProperties()
     if( d->activeSheet->isProtected() ) return;
 
     SheetPropertiesDialog* dlg = new SheetPropertiesDialog( this );
+    dlg->setLayoutDirection( d->activeSheet->layoutDirection() );
     dlg->setAutoCalc( d->activeSheet->getAutoCalc() );
     dlg->setShowGrid( d->activeSheet->getShowGrid() );
     dlg->setShowPageBorders( d->activeSheet->isShowPageBorders() );
@@ -3571,6 +3572,7 @@ void KSpreadView::sheetProperties()
 
     if( dlg->exec() )
     {
+        d->activeSheet->setLayoutDirection( dlg->layoutDirection() );
         d->activeSheet->setAutoCalc( dlg->autoCalc() );
         d->activeSheet->setShowGrid( dlg->showGrid() );
         d->activeSheet->setShowPageBorders( dlg->showPageBorders() );
@@ -4854,7 +4856,7 @@ void KSpreadView::refreshView()
   }
 
   d->toolWidget->show();
-  if( table->isRightToLeft() )
+  if( table->layoutDirection()==KSpreadSheet::RightToLeft )
     d->formulaBarLayout->setDirection( QBoxLayout::RightToLeft );
   else
     d->formulaBarLayout->setDirection( QBoxLayout::LeftToRight );
@@ -4868,7 +4870,7 @@ void KSpreadView::refreshView()
   int heightHScrollbar = d->horzScrollBar->sizeHint().height();
 
   int left = 0;
-  if ( table->isRightToLeft() && d->doc->showVerticalScrollBar() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft && d->doc->showVerticalScrollBar() )
     left = widthVScrollbar;
 
   if (!d->doc->showHorizontalScrollBar())
@@ -4889,7 +4891,7 @@ void KSpreadView::refreshView()
     d->horzScrollBar->hide();
 
   left = 0;
-  if ( !activeTable()->isRightToLeft() )
+  if ( !activeTable()->layoutDirection()==KSpreadSheet::RightToLeft )
     left = width() - widthVScrollbar;
 
   if ( !d->doc->showTabBar() && !d->doc->showHorizontalScrollBar())
@@ -4941,7 +4943,7 @@ void KSpreadView::refreshView()
       statusBar()->hide();
   }
 
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
   {
     if ( !d->doc->showTabBar() && !d->doc->showHorizontalScrollBar() )
       d->frame->setGeometry( widthVScrollbar, top, width() - widthVScrollbar, height() - top - heightHScrollbar);
@@ -4974,7 +4976,7 @@ void KSpreadView::refreshView()
 
   d->frame->show();
 
-  if ( !table->isRightToLeft() )
+  if ( !table->layoutDirection()==KSpreadSheet::RightToLeft )
     d->canvas->setGeometry( widthRowHeader, heightColHeader,
                             d->frame->width() - widthRowHeader, d->frame->height() - heightColHeader );
   else
@@ -4984,7 +4986,7 @@ void KSpreadView::refreshView()
   d->canvas->updatePosWidget();
 
   left = 0;
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
   {
     d->hBorderWidget->setGeometry( 1.0, 0,
                                    d->frame->width() - widthRowHeader + 2.0, heightColHeader );
@@ -4998,7 +5000,7 @@ void KSpreadView::refreshView()
   d->vBorderWidget->setGeometry( left, heightColHeader + 1, widthRowHeader,
                                  d->frame->height() - heightColHeader );
 
-  if ( table->isRightToLeft() )
+  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
   {
     int hswidth = d->doc->showTabBar() ? (width()/2) : width();
     d->horzScrollBar->setGeometry( 0, height() - heightHScrollbar,

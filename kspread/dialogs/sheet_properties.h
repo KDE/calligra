@@ -22,6 +22,7 @@
 
 #include <qwidget.h>
 #include <kdialogbase.h>
+#include "kspread_sheet.h"
 
 class SheetPropertiesBase;
 
@@ -37,6 +38,10 @@ public:
     ~SheetPropertiesDialog();
 
     virtual void slotDefault();
+    
+    KSpreadSheet::LayoutDirection layoutDirection() const;
+    
+    void setLayoutDirection( KSpreadSheet::LayoutDirection dir );
 
     bool autoCalc() const;
 

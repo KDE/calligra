@@ -2254,7 +2254,7 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
   double width  = d->extra()->extraXCells ? d->extra()->extraWidth  : colFormat->dblWidth();
   double height = d->extra()->extraYCells ? d->extra()->extraHeight : rowFormat->dblHeight();
 
-  if ( m_pTable->isRightToLeft() && view && view->canvasWidget() )
+  if ( m_pTable->layoutDirection()==KSpreadSheet::RightToLeft && view && view->canvasWidget() )
     left = view->canvasWidget()->width() - coordinate.x() - width;
 
   const KoRect cellRect( left, coordinate.y(), width, height );

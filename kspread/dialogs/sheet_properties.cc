@@ -20,11 +20,14 @@
 #include "sheet_properties.h"
 #include "sheet_properties_base.h"
 
-#include <qcheckbox.h>
 #include <qvbox.h>
+#include <qcheckbox.h>
 
+#include <kcombobox.h>
 #include <kdialogbase.h>
 #include <klocale.h>
+
+#include "kspread_sheet.h"
 
 SheetPropertiesDialog::SheetPropertiesDialog( QWidget* parent ):
   KDialogBase( parent, "sheetPropertiesDialog", true, 
@@ -33,6 +36,9 @@ SheetPropertiesDialog::SheetPropertiesDialog( QWidget* parent ):
 {
   QVBox* mainWidget = makeVBoxMainWidget();
   d = new SheetPropertiesBase( mainWidget );
+  QWidget* spacer = new QWidget( mainWidget );
+  spacer->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Expanding );
+  enableButtonSeparator( true );
 }
 
 SheetPropertiesDialog::~SheetPropertiesDialog()
@@ -42,6 +48,7 @@ SheetPropertiesDialog::~SheetPropertiesDialog()
 
 void SheetPropertiesDialog::slotDefault()
 {
+  setLayoutDirection( KSpreadSheet::LeftToRight );
   setAutoCalc( true );
   setShowGrid( true );
   setShowFormula( false );
@@ -50,6 +57,32 @@ void SheetPropertiesDialog::slotDefault()
   setColumnAsNumber( false );
   setLcMode( false );
   setCapitalizeFirstLetter( false );
+}
+
+KSpreadSheet::LayoutDirection SheetPropertiesDialog::layoutDirection() const
+{
+  if( d->directionComboBox->currentText() == i18n( "Left To Right" ) )
+    return KSpreadSheet::LeftToRight;
+  
+  if( d->directionComboBox->currentText() == i18n( "Right To Left" ) )
+    return KSpreadSheet::RightToLeft;
+  
+  // fallback
+  return KSpreadSheet::LeftToRight;
+}
+
+void SheetPropertiesDialog::setLayoutDirection( KSpreadSheet::LayoutDirection dir )
+{
+  switch( dir )
+  {
+    case KSpreadSheet::LeftToRight:
+      d->directionComboBox->setCurrentText( i18n( "Left To Right" ) );
+      break;
+    case KSpreadSheet::RightToLeft:
+      d->directionComboBox->setCurrentText( i18n( "Right To Left" ) );
+      break;
+    default: break;
+  };
 }
 
 bool SheetPropertiesDialog::autoCalc() const

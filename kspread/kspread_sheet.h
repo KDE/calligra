@@ -238,6 +238,8 @@ public:
     enum SortingOrder{ Increase, Decrease };
     enum ChangeRef { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
     enum TestType { Text, Validity, Comment, ConditionalCellAttribute };
+    
+    enum LayoutDirection { LeftToRight, RightToLeft };
 
     KSpreadSheet( KSpreadMap *_map, const QString &tableName, const char *_name=0L );
     ~KSpreadSheet();
@@ -303,6 +305,21 @@ public:
     virtual bool loadChildren( KoStore* _store );
 
     bool isLoading();
+    
+    /**
+     * Returns the layout direction of the sheet.
+     */
+    LayoutDirection layoutDirection() const;
+    
+    /**
+     * Sets the layout direction of the sheet. For example, for Arabic or Hebrew
+     * documents, it is possibly to layout the sheet from right to left.
+     */
+    void setLayoutDirection( LayoutDirection dir );
+    
+    /**
+     * \deprecated Use direction().
+     */
     bool isRightToLeft() const;
 
     void password( QCString & passwd ) const ;

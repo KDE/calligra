@@ -225,6 +225,8 @@ public:
 
   QString name;
   int id;
+  
+  KSpreadSheet::LayoutDirection layoutDirection;
 
   // true if sheet is hidden
   bool hide;
@@ -402,9 +404,19 @@ int KSpreadSheet::id() const
   return d->id;
 }
 
+KSpreadSheet::LayoutDirection KSpreadSheet::layoutDirection() const
+{
+  return d->layoutDirection;
+}
+
+void KSpreadSheet::setLayoutDirection( LayoutDirection dir )
+{
+  d->layoutDirection = dir;
+}
+
 bool KSpreadSheet::isRightToLeft() const
 {
-  return d->rightToLeft;
+  return d->layoutDirection == RightToLeft;
 }
 
 bool KSpreadSheet::isHidden() const
@@ -6602,10 +6614,6 @@ bool KSpreadSheet::isLoading()
 
 void KSpreadSheet::checkContentDirection( QString const & name )
 {
-  bool rtl = d->rightToLeft;
-
-  kdDebug() << "name.isRightToLeft(): " << name.isRightToLeft() << ", RTL: " << rtl << endl;
-
   /*
    * note:
    * the rtl code in kspread is till buggy. for this release the trigger will be
@@ -6613,15 +6621,11 @@ void KSpreadSheet::checkContentDirection( QString const & name )
    * of the sheet will start with "rtl". just to make developers life easier.
    */
   if ( (name.isRightToLeft())  ||  (name.left(3) == "rtl")  )
-  {
-    kdDebug() << "Table direction set to right to left" << endl;
-    d->rightToLeft = true;
-  }
+    setLayoutDirection( RightToLeft );
   else
-    d->rightToLeft = false;
-
-  if ( rtl != d->rightToLeft )
-    emit sig_refreshView();
+    setLayoutDirection( LeftToRight );
+  
+  emit sig_refreshView();
 }
 
 bool KSpreadSheet::loadTableStyleFormat( QDomElement *style )
