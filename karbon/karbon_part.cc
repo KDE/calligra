@@ -23,31 +23,27 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
 	m_commandHistory = new VCommandHistory( this );
-        m_bShowStatusBar = true;
-        m_maxRecentFiles = 10;
-	m_layers.setAutoDelete( true );
-        dcop = 0;
+	m_bShowStatusBar = true;
+	m_maxRecentFiles = 10;
+	dcop = 0;
 
-	// create a layer. we need at least one:
-	m_layers.append( new VLayer() );
-	m_activeLayer = m_layers.getLast();
-        connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
-        connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
+	m_activeLayer = m_doc.layers().getLast();
+	connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
+	connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
 	float r = 1.0, g = 1.0, b = 1.0;
 	m_defaultFillColor.setValues( &r, &g, &b, 0L );
 
-        initConfig();
-        if ( name )
-            dcopObject();
-
+	initConfig();
+	if( name )
+		dcopObject();
 }
 
 KarbonPart::~KarbonPart()
 {
 	// delete the command-history:
 	delete m_commandHistory;
-        delete dcop;
+	delete dcop;
 }
 
 DCOPObject* KarbonPart::dcopObject()
@@ -68,66 +64,20 @@ KarbonPart::initDoc()
 KoView*
 KarbonPart::createViewInstance( QWidget* parent, const char* name )
 {
-	return  new KarbonView( this, parent, name );
+	return new KarbonView( this, parent, name );
 }
 
 bool
 KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 {
-	QDomElement doc = document.documentElement();
-
-	if(
-		doc.attribute( "mime" ) != "application/x-karbon" ||
-		doc.attribute( "syntaxVersion" ) != "0.1" )
-	{
-		return false;
-	}
-
-	m_layers.clear();
-
-	QDomNodeList list = doc.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
-
-			if( e.tagName() == "LAYER" )
-			{
-				VLayer* layer = new VLayer();
-				layer->load( e );
-				m_layers.append( layer );
-			}
-		}
-	}
-	m_activeLayer = m_layers.getLast();
-
-	return true;
+	return m_doc.load( document.documentElement() );
 }
 
 QDomDocument
 KarbonPart::saveXML()
 {
 	QDomDocument document( "DOC" );
-
-	document.appendChild(
-		document.createProcessingInstruction(
-			"xml",
-			"version=\"0.1\" encoding=\"UTF-8\"") );
-
-	QDomElement doc = document.createElement( "DOC" );
-	doc.setAttribute( "editor", "karbon14 0.0.1" );
-	doc.setAttribute( "mime", "application/x-karbon" );
-	doc.setAttribute( "syntaxVersion", "0.1" );
-	document.appendChild( doc );
-
-	// save layers:
-	QPtrListIterator<VLayer> itr( m_layers );
-	for ( ; itr.current(); ++itr )
-	{
-		itr.current()->save( doc );
-	}
-
+	m_doc.save( document );
 	return document;
 }
 
@@ -163,7 +113,7 @@ KarbonPart::selectAllObjects()
 	m_selection.clear();
 
 	VObjectList objects;
-	VLayerListIterator itr( m_layers );
+	VLayerListIterator itr( m_doc.layers() );
 
 	for ( ; itr.current(); ++itr )
 	{
@@ -188,7 +138,7 @@ KarbonPart::moveSelectionUp()
 
 	VObjectList objects;
 
-	VLayerListIterator litr( m_layers );
+	VLayerListIterator litr( m_doc.layers() );
 	while( !selection.isEmpty() )
 	{
 		kdDebug() << "!selection.isEmpty()" << endl;
@@ -227,7 +177,7 @@ KarbonPart::moveSelectionDown()
 
 	VObjectList objects;
 
-	VLayerListIterator litr( m_layers );
+	VLayerListIterator litr( m_doc.layers() );
 	while( !selection.isEmpty() )
 	{
 		//kdDebug() << "!selection.isEmpty()" << endl;
@@ -261,14 +211,14 @@ KarbonPart::moveSelectionDown()
 void
 KarbonPart::moveSelectionToTop()
 {
-	VLayer *topLayer = m_layers.getLast();
+	VLayer *topLayer = m_doc.layers().getLast();
 	//
 	VObjectListIterator itr( m_selection );
 	for ( ; itr.current() ; ++itr )
 	{
 		// remove from old layer
 		VObjectList objects;
-		VLayerListIterator litr( m_layers );
+		VLayerListIterator litr( m_doc.layers() );
 
 		for ( ; litr.current(); ++litr )
 		{
@@ -292,14 +242,14 @@ KarbonPart::moveSelectionToTop()
 void
 KarbonPart::moveSelectionToBottom()
 {
-	VLayer *bottomLayer = m_layers.getFirst();
+	VLayer *bottomLayer = m_doc.layers().getFirst();
 	//
 	VObjectListIterator itr( m_selection );
 	for ( ; itr.current() ; ++itr )
 	{
 		// remove from old layer
 		VObjectList objects;
-		VLayerListIterator litr( m_layers );
+		VLayerListIterator litr( m_doc.layers() );
 
 		for ( ; litr.current(); ++litr )
 		{
@@ -328,7 +278,7 @@ KarbonPart::selectObjectsWithinRect( const KoRect& rect,
 		deselectAllObjects();
 
 	VObjectList objects;
-	VLayerListIterator itr( m_layers );
+	VLayerListIterator itr( m_doc.layers() );
 
 	for ( ; itr.current(); ++itr )
 	{
@@ -394,7 +344,7 @@ void
 KarbonPart::purgeHistory()
 {
 	// remove "deleted" objects from all layers:
-	VLayerListIterator itr( m_layers );
+	VLayerListIterator itr( m_doc.layers() );
 	for ( ; itr.current() ; ++itr )
 	{
 		itr.current()->removeDeletedObjects();
@@ -428,7 +378,7 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	p->begin();
 	p->setZoomFactor( 1.0 );
 
-	QPtrListIterator<VLayer> itr( m_layers );
+	QPtrListIterator<VLayer> itr( m_doc.layers() );
 	for( ; itr.current(); ++itr )
 		if( itr.current()->visible() )
 			itr.current()->draw( p, KoRect::fromQRect( rect ) );

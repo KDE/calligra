@@ -14,6 +14,7 @@ noinst_HEADERS = \
 	vfill.h \
 	vglobal.h \
 	vgradient.h \
+	vdocument.h \
 	vlayer.h \
 	vobject.h \
 	vobjectlist.h \
@@ -32,6 +33,7 @@ libkarboncore_la_SOURCES = \
 	vdashpattern.cc \
 	vfill.cc \
 	vgradient.cc \
+	vdocument.cc \
 	vlayer.cc \
 	vobject.cc \
 	vobjectlist.cc \

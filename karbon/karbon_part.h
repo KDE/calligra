@@ -9,6 +9,7 @@
 #include <qptrlist.h>
 #include <koDocument.h>
 
+#include "vdocument.h"
 #include "vlayer.h"
 #include "vcolor.h"
 
@@ -60,7 +61,7 @@ public:
 	void purgeHistory();
 
 	// layers:
-	const QPtrList<VLayer>& layers() const { return m_layers; }	// r/o access.
+	const QPtrList<VLayer>& layers() const { return m_doc.layers(); }	// r/o access.
 	// TODO: still needed?
 	VLayer* activeLayer() const { return m_activeLayer; }	// active layer.
 
@@ -92,7 +93,7 @@ protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
 private:
-	VLayerList m_layers;			// all objects exist inside a layer.
+	VDocument m_doc;
 	VLayer* m_activeLayer;				// the active/current layer.
 
 	VObjectList m_selection;		// a list of selected objects.
