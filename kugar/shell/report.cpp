@@ -40,13 +40,11 @@ Report::Report(QWidget* parent, const char* name)
 	KStdAction::print(this,SLOT(slotPrint()),actionCollection());
 	KStdAction::quit(this,SLOT(slotFileQuit()),actionCollection());
 
-	goFirstPage = KStdAction::firstPage(rptviewer,SLOT(slotFirstPage()),actionCollection());
-	goPriorPage = KStdAction::prior(rptviewer,SLOT(slotPrevPage()),actionCollection());
-	goNextPage = KStdAction::next(rptviewer,SLOT(slotNextPage()),actionCollection());
-	goLastPage = KStdAction::lastPage(rptviewer,SLOT(slotLastPage()),actionCollection());
+	goFirstPage = KStdAction::firstPage(rptviewer,SLOT(slotFirstPage()),actionCollection(),"goFirstPage");
+	goPriorPage = KStdAction::prior(rptviewer,SLOT(slotPrevPage()),actionCollection(),"goPriorPage");
+	goNextPage = KStdAction::next(rptviewer,SLOT(slotNextPage()),actionCollection(), "goNextPage");
+	goLastPage = KStdAction::lastPage(rptviewer,SLOT(slotLastPage()),actionCollection(), "goLastPage");
 	
-//	KStdAction::home(rptviewer,SLOT(slotFirstPage()),actionCollection());
-
 	KStdAction::showToolbar(this,SLOT(slotViewToolBar()),actionCollection());
 	KStdAction::showStatusbar(this,SLOT(slotViewStatusBar()),actionCollection());
 

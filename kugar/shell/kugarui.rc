@@ -1,3 +1,18 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Kugar" version="1.3">
+<kpartgui name="Kugar" version="1.2">
+<MenuBar>
+  <Menu name="go"><text>&amp;Go</text>
+    <Action name="goFirstPage"/>
+    <Action name="goPriorPage"/>
+    <Action name="goNextPage"/>
+    <Action name="goLastPage"/>
+  </Menu>
+</MenuBar>
+		
+<ToolBar name="mainToolBar">
+  <Action name="goFirstPage"/>
+  <Action name="goPriorPage"/>
+  <Action name="goNextPage"/>
+  <Action name="goLastPage"/>
+</ToolBar>
 </kpartgui>

@@ -18,7 +18,7 @@
 
 int main(int argc,char **argv)
 {
-	KAboutData about(PACKAGE, I18N_NOOP("Kugar"), VERSION,
+	KAboutData about("kugar", I18N_NOOP("Kugar"), VERSION,
 		I18N_NOOP("A template driven report viewer for XML data."),
 		KAboutData::License_GPL_V2,
 		"Copyright (c) 1999-2000 Mutiny Bay Software\n"
