@@ -78,6 +78,10 @@ public:
      */
     enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_SKIP = 2 };
 
+    /** Runaround side - only meaningful when RA_BOUNDINGRECT is used
+     */
+    enum RunAroundSide { RA_BIGGEST = 0, RA_LEFT = 1, RA_RIGHT = 2 };
+
     /**
      * Constructor
      * @param fs parent frameset
@@ -106,15 +110,18 @@ public:
     double runAroundGap()const { return m_runAroundGap; }
     void setRunAroundGap( double gap ) { m_runAroundGap = gap; }
 
-    RunAround runAround()const { return m_runAround; }
-    void setRunAround( RunAround _ra ) { m_runAround = _ra; }
+    // Don't look at the implementation, it's about saving one byte ;)
+    RunAround runAround()const { return (RunAround)(m_runAround & 0x0f); }
+    void setRunAround( RunAround _ra ) { m_runAround = 16 * runAroundSide() + _ra; }
 
+    RunAroundSide runAroundSide() const { return (RunAroundSide)(m_runAround / 16); }
+    void setRunAroundSide( RunAroundSide rs ) { m_runAround = 16 * rs + runAround(); }
 
     /** what should happen when the frame is full
      */
     enum FrameBehavior { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
 
-    FrameBehavior frameBehavior()const { return m_frameBehavior; }
+    FrameBehavior frameBehavior()const { return (FrameBehavior)m_frameBehavior; }
     void setFrameBehavior( FrameBehavior fb ) { m_frameBehavior = fb; }
 
     /* Frame duplication properties */
@@ -123,13 +130,13 @@ public:
      *   AnySide, OddSide or EvenSide
      */
     enum SheetSide { AnySide=0, OddSide=1, EvenSide=2};
-    SheetSide sheetSide()const { return m_sheetSide; }
+    SheetSide sheetSide()const { return (SheetSide)m_sheetSide; }
     void setSheetSide( SheetSide ss ) { m_sheetSide = ss; }
 
     /** What happens on new page
      * (create a new frame and reconnect, no followup, make copy) */
     enum NewFrameBehavior { Reconnect=0, NoFollowup=1, Copy=2 };
-    NewFrameBehavior newFrameBehavior()const { return m_newFrameBehavior; }
+    NewFrameBehavior newFrameBehavior()const { return (NewFrameBehavior)m_newFrameBehavior; }
     void setNewFrameBehavior( NewFrameBehavior nfb ) { m_newFrameBehavior = nfb; }
 
     /** Drawing property: if isCopy, this frame is a copy of the previous frame in the frameset
@@ -276,10 +283,10 @@ public:
     bool drawFootNoteLine()const { return m_drawFootNoteLine; }
 
 private:
-    SheetSide m_sheetSide;
-    RunAround m_runAround;
-    FrameBehavior m_frameBehavior;
-    NewFrameBehavior m_newFrameBehavior;
+    char /*SheetSide*/ m_sheetSide;
+    char /*RunAroundSide*/ m_runAround; // includes runaround side
+    char /*FrameBehavior*/ m_frameBehavior;
+    char /*NewFrameBehavior*/ m_newFrameBehavior;
     double m_runAroundGap;
     double bleft, bright, btop, bbottom; // margins
     double m_minFrameHeight;

@@ -374,6 +374,10 @@ don't put a </?xml...> at the end of the file!).
                                 2...Text in overlapping frames will avoid the
                                     complete horizontal space of this frame.
 
+            runaroundSide:      when runaround is 1 specify here the side of the frame
+                                on which the text should flow.
+                                Values: "left", "right" or "biggest". Default is biggest.
+
             runaroundGap:       when runaround is 1 specify here the distance (in pt)
                                 between overlapping frames and runaround text
 

@@ -54,7 +54,7 @@ void KWBgSpellCheck::slotRepaintChanged(KoTextObject *obj)
         m_doc->slotRepaintChanged(m_currentFrame);
 }
 
-KoTextObject *KWBgSpellCheck::nextTextObject( KoTextObject *obj )
+KoTextObject *KWBgSpellCheck::nextTextObject( KoTextObject *  /*obj*/ )
 {
     m_currentFrame=m_doc->nextTextFrameSet(m_currentFrame);
     if(!m_currentFrame)

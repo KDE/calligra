@@ -898,12 +898,24 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
                     kdDebugBody(32002) << "   getMargins availLeft=" << availLeft
                                        << " availRight=" << availRight << endl;
 #endif
-                    if ( availLeft > availRight ) // choose the max [TODO: make it configurable]
+                    bool chooseLeft = false;
+                    switch ( (*fIt)->runAroundSide() ) {
+                    case KWFrame::RA_LEFT:
+                        chooseLeft = true;
+                        break;
+                    case KWFrame::RA_RIGHT:
+                        break; // chooseLeft remains false
+                    case KWFrame::RA_BIGGEST:
+                        chooseLeft = ( availLeft > availRight ); // choose the max
+                    };
+
+                    if ( chooseLeft )
                         // flow text at the left of the frame
                         to = QMIN( to, from + availLeft - 1 );  // can only go left -> QMIN
                     else
                         // flow text at the right of the frame
                         from = QMAX( from, to - availRight + 1 ); // can only go right -> QMAX
+
 #ifdef DEBUG_MARGINS
                     kdDebugBody(32002) << "   getMargins from=" << from << " to=" << to << endl;
 #endif
@@ -1070,7 +1082,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
     KWTextParag *parag = static_cast<KWTextParag *>( _parag );
     if ( !m_doc->viewMode()->shouldFormatVertically() )
     {
-        fixParagRect( parag );
+        fixParagWidth( parag );
         return 0;
     }
 
@@ -1166,6 +1178,9 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
             if ( (*fIt)->runAround() == KWFrame::RA_SKIP )
             {
                 KoRect rectOnTop = frameIt.current()->intersect( (*fIt)->runAroundRect() );
+                double gap = (*fIt)->runAroundGap();
+                rectOnTop.rTop() -= gap;
+                rectOnTop.rBottom() += gap;
                 QPoint iTop, iBottom; // top and bottom in internal coordinates
                 if ( documentToInternal( rectOnTop.topLeft(), iTop ) &&
                      iTop.y() <= yp + hp &&
@@ -1200,8 +1215,8 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
 
     // ## TODO loop around those three methods until we don't move anymore ?
 
-    // We also use verticalBreak as a hook into the formatting algo, to fix the parag rect if necessary.
-    fixParagRect( parag );
+    // We also use verticalBreak as a hook into the formatting algo, to fix the parag width if necessary.
+    fixParagWidth( parag );
 
     if ( hp != oldHeight )
         parag->setHeight( hp );
@@ -1217,7 +1232,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
     return ( yp + hp ) - ( oldY + oldHeight );
 }
 
-void KWTextFrameSet::fixParagRect( KWTextParag* parag )
+void KWTextFrameSet::fixParagWidth( KWTextParag* parag )
 {
     if ( parag && parag->hasBorder() )
     {

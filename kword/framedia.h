@@ -81,13 +81,26 @@ protected:
     void setupTab4();
     void setupTab5();
     void updateFrames();
-    void enableRunAround();
     void enableOnNewPageOptions();
     void initComboStyleBrush();
     bool mayDeleteFrameSet(KWTextFrameSet *fs);
 
     QBrush frameBrushStyle();
 
+protected slots:
+    virtual void slotOk();
+    void connectListSelected( QListViewItem * );
+    void setFrameBehaviorInputOn();
+    void setFrameBehaviorInputOff();
+    void slotFloatingToggled(bool);
+    void slotProtectSizeToggled(bool);
+    void textNameFrameChanged ( const QString & );
+    void updateBrushConfiguration();
+    void slotMarginsChanged( double );
+    void slotProtectContentChanged( bool );
+    void enableRunAround();
+
+private:
     // TAB 1:
     QWidget *tab1;
     QGridLayout *grid1, *eofGrid, *onpGrid, *sideGrid;
@@ -101,8 +114,9 @@ protected:
 
     // TAB 2:
     QWidget *tab2;
-    QRadioButton *rRunNo, *rRunBounding, *rRunContur;
-    QGroupBox *runGroup;
+    QRadioButton *rRunNo, *rRunBounding, *rRunSkip;
+    QRadioButton *rRunLeft, *rRunRight, *rRunBiggest;
+    QGroupBox *runGroup, *runSideGroup;
     KDoubleNumInput *eRGap;
 
     // TAB 3:
@@ -144,17 +158,6 @@ protected:
     QString oldFrameSetName;
     QBrush newBrushStyle;
     bool noSignal;
-protected slots:
-    virtual void slotOk();
-    void connectListSelected( QListViewItem * );
-    void setFrameBehaviorInputOn();
-    void setFrameBehaviorInputOff();
-    void slotFloatingToggled(bool);
-    void slotProtectSizeToggled(bool);
-    void textNameFrameChanged ( const QString & );
-    void updateBrushConfiguration();
-    void slotMarginsChanged( double );
-    void slotProtectContentChanged( bool );
 };
 
 #endif

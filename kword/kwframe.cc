@@ -309,8 +309,18 @@ void KWFrame::save( QDomElement &frameElem )
     frameElem.setAttribute( "bottom", QString::number( bottom(), 'g', DBL_DIG ) );
 
     if(runAround()!=RA_NO)
+    {
         frameElem.setAttribute( "runaround", static_cast<int>( runAround() ) );
-
+        if (runAround() == RA_BOUNDINGRECT)
+        {
+            if (runAroundSide()==RA_LEFT)
+                frameElem.setAttribute( "runaroundSide", "left" );
+            else if (runAroundSide()==RA_RIGHT)
+                frameElem.setAttribute( "runaroundSide", "right" );
+            else
+                frameElem.setAttribute( "runaroundSide", "biggest" );
+        }
+    }
     if(runAroundGap()!=0)
         frameElem.setAttribute( "runaroundGap", runAroundGap() );
 
@@ -396,6 +406,13 @@ void KWFrame::save( QDomElement &frameElem )
 void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersion )
 {
     m_runAround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", RA_NO ) );
+    QString str = frameElem.attribute( "runaroundSide" );
+    if ( str == "left" )
+        setRunAroundSide( RA_LEFT );
+    else if ( str == "right" )
+        setRunAroundSide( RA_RIGHT );
+    // default case: RA_BIGGEST, since it's 0
+
     m_runAroundGap = ( frameElem.hasAttribute( "runaroundGap" ) )
                           ? frameElem.attribute( "runaroundGap" ).toDouble()
                           : frameElem.attribute( "runaGapPT" ).toDouble();
@@ -1500,7 +1517,8 @@ void KWFrameSet::printDebug()
                                            "first footer", "odd footers", "even footers", "footnote", "ERROR" };
     static const char * frameBh[] = { "AutoExtendFrame", "AutoCreateNewFrame", "Ignore", "ERROR" };
     static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
-    static const char * runaround[] = { "No Runaround", "Bounding Rect", "Horizontal Space", "ERROR" };
+    static const char * runaround[] = { "No Runaround", "Bounding Rect", "Skip", "ERROR" };
+    static const char * runaroundSide[] = { "Biggest", "Left", "Right", "ERROR" };
 
     kdDebug() << " |  Visible: " << isVisible() << endl;
     kdDebug() << " |  Type: " << typeFrameset[ type() ] << endl;
@@ -1514,7 +1532,7 @@ void KWFrameSet::printDebug()
         kdDebug() << " +-- Frame " << j << " of "<< getNumFrames() << "    (" << frame << ")  " << copy << endl;
         printDebug( frame );
         kdDebug() << "     Rectangle : " << frame->x() << "," << frame->y() << " " << frame->width() << "x" << frame->height() << endl;
-        kdDebug() << "     RunAround: "<< runaround[ frame->runAround() ] << endl;
+        kdDebug() << "     RunAround: "<< runaround[ frame->runAround() ] << " side:" << runaroundSide[ frame->runAroundSide() ]<< endl;
         kdDebug() << "     FrameBehavior: "<< frameBh[ frame->frameBehavior() ] << endl;
         kdDebug() << "     NewFrameBehavior: "<< newFrameBh[ frame->newFrameBehavior() ] << endl;
         QColor col = frame->backgroundColor().color();

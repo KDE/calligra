@@ -431,7 +431,8 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     {
         row++;
         sideHeads = new QGroupBox(i18n("SideHead Definition"),tab1);
-        sideHeads->setEnabled(false);
+        sideHeads->setEnabled(false); //###
+        sideHeads->hide(); //###
         grid1->addWidget(sideHeads, row, 0);
 
         sideGrid = new QGridLayout( sideHeads, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
@@ -495,23 +496,24 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
 
     tab2 = addPage( i18n( "Text Run Around" ) );
 
-    QVBoxLayout *form1Layout = new QVBoxLayout( tab2, 11, 6, "tab2Layout");
+    QVBoxLayout *tabLayout = new QVBoxLayout( tab2, 11, 6, "tabLayout");
 
-    runGroup = new QButtonGroup(  i18n( "Text in Other Frames Will" ), tab2);
-    runGroup->setColumnLayout(0, Qt::Vertical );
-    runGroup->layout()->setSpacing( 6 );
-    runGroup->layout()->setMargin( 11 );
+    // First groupbox
+    runGroup = new QButtonGroup(  i18n( "Layout of Text in Other Frames" ), tab2);
+    runGroup->setColumnLayout( 0, Qt::Vertical );
+    runGroup->layout()->setSpacing( KDialog::spacingHint() );
+    runGroup->layout()->setMargin( KDialog::marginHint() );
     QGridLayout *groupBox1Layout = new QGridLayout( runGroup->layout() );
     groupBox1Layout->setAlignment( Qt::AlignTop );
 
-    rRunNo = new QRadioButton( i18n( "&Run through this frame" ), runGroup );
+    rRunNo = new QRadioButton( i18n( "Text will run &through this frame" ), runGroup );
     groupBox1Layout->addWidget( rRunNo, 0, 1 );
 
-    rRunBounding = new QRadioButton( i18n( "Run around the &boundary rectangle of this frame" ), runGroup );
+    rRunBounding = new QRadioButton( i18n( "Text will run &around the frame" ), runGroup );
     groupBox1Layout->addWidget( rRunBounding, 1, 1 );
 
-    rRunContur = new QRadioButton( i18n( "Do&n't run around this frame" ), runGroup );
-    groupBox1Layout->addWidget( rRunContur, 2, 1 );
+    rRunSkip = new QRadioButton( i18n( "Text will &not run around this frame" ), runGroup );
+    groupBox1Layout->addWidget( rRunSkip, 2, 1 );
 
     QPixmap pixmap = KWBarIcon( "run_not" );
     QLabel *lRunNo = new QLabel( runGroup );
@@ -526,29 +528,72 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
     groupBox1Layout->addWidget( lRunBounding, 1, 0 );
 
     pixmap = KWBarIcon( "run_skip" );
-    QLabel *lRunContur = new QLabel( runGroup );
-    lRunContur->setBackgroundPixmap( pixmap );
-    lRunContur->setFixedSize( pixmap.size() );
-    groupBox1Layout->addWidget( lRunContur, 2, 0 );
+    QLabel *lRunSkip = new QLabel( runGroup );
+    lRunSkip->setBackgroundPixmap( pixmap );
+    lRunSkip->setFixedSize( pixmap.size() );
+    groupBox1Layout->addWidget( lRunSkip, 2, 0 );
 
-    form1Layout->addWidget( runGroup );
+    tabLayout->addWidget( runGroup );
 
+    // Second groupbox
+    runSideGroup = new QButtonGroup(  i18n( "Run Around Side" ), tab2);
+    runSideGroup->setColumnLayout( 0, Qt::Vertical );
+    runSideGroup->layout()->setSpacing( KDialog::spacingHint() );
+    runSideGroup->layout()->setMargin( KDialog::marginHint() );
+    QGridLayout *runSideLayout = new QGridLayout( runSideGroup->layout() );
+    runSideLayout->setAlignment( Qt::AlignTop );
+
+    rRunLeft = new QRadioButton( i18n( "&Left" ), runSideGroup );
+    runSideLayout->addWidget( rRunLeft, 0, 0 /*1*/ );
+
+    rRunRight = new QRadioButton( i18n( "&Right" ), runSideGroup );
+    runSideLayout->addWidget( rRunRight, 1, 0 /*1*/ );
+
+    rRunBiggest = new QRadioButton( i18n( "&Biggest side" ), runSideGroup );
+    runSideLayout->addWidget( rRunBiggest, 2, 0 /*1*/ );
+
+#if 0 // TODO icons!
+    QPixmap pixmap = KWBarIcon( "run_left" );
+    QLabel *label = new QLabel( runSideGroup );
+    label->setBackgroundPixmap( pixmap );
+    label->setFixedSize( pixmap.size() );
+    runSideLayout->addWidget( label, 0, 0 );
+
+    pixmap = KWBarIcon( "run_right" );
+    label = new QLabel( runSideGroup );
+    label->setBackgroundPixmap( pixmap );
+    label->setFixedSize( pixmap.size() );
+    runSideLayout->addWidget( label, 1, 0 );
+
+    pixmap = KWBarIcon( "run_biggest" );
+    label = new QLabel( runSideGroup );
+    label->setBackgroundPixmap( pixmap );
+    label->setFixedSize( pixmap.size() );
+    runSideLayout->addWidget( label, 2, 0 );
+#endif
+
+    tabLayout->addWidget( runSideGroup );
+
+    // [useless?] spacer
     QHBoxLayout *Layout1 = new QHBoxLayout( 0, 0, 6);
     QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
     Layout1->addItem( spacer );
 
-    QLabel *lRGap = new QLabel( i18n( "Run around gap (%1):" ).arg(doc->getUnitName()), tab2 );
+    QLabel *lRGap = new QLabel( i18n( "Distance between frame and text (%1):" ).arg(doc->getUnitName()), tab2 );
     Layout1->addWidget( lRGap );
 
     eRGap = new KDoubleNumInput( tab2 );
     eRGap->setValue( 0.0 );
     eRGap->setMinimumWidth ( 100 );
     Layout1->addWidget( eRGap );
-    form1Layout->addLayout( Layout1 );
+    tabLayout->addLayout( Layout1 );
     QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
-    form1Layout->addItem( spacer_2 );
+    tabLayout->addItem( spacer_2 );
 
 
+    // Show current settings
+
+    // Runaround
     bool show=true;
     KWFrame::RunAround ra = KWFrame::RA_NO;
     if ( frame )
@@ -567,10 +612,34 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
         switch ( ra ) {
             case KWFrame::RA_NO: rRunNo->setChecked( true ); break;
             case KWFrame::RA_BOUNDINGRECT: rRunBounding->setChecked( true ); break;
-            case KWFrame::RA_SKIP: rRunContur->setChecked( true ); break;
+            case KWFrame::RA_SKIP: rRunSkip->setChecked( true ); break;
         }
     }
 
+    // Runaround side
+    show = true;
+    KWFrame::RunAroundSide rs = KWFrame::RA_BIGGEST;
+    if ( frame )
+        rs = frame->runAroundSide();
+    else {
+        KWFrame *f=allFrames.first();
+        rs = f->runAroundSide();
+        f = allFrames.next();
+        while(f) {
+            if(rs != f->runAroundSide()) show=false;
+            f=allFrames.next();
+        }
+    }
+
+    if(show) {
+        switch ( rs ) {
+            case KWFrame::RA_LEFT: rRunLeft->setChecked( true ); break;
+            case KWFrame::RA_RIGHT: rRunRight->setChecked( true ); break;
+            case KWFrame::RA_BIGGEST: rRunBiggest->setChecked( true ); break;
+        }
+    }
+
+    // Runaround gap
     show=true;
     double ragap = 0;
     if ( frame )
@@ -590,7 +659,11 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
         str = KoUnit::ptToUnit( ragap, doc->getUnit() );
     eRGap->setValue( str );
 
+
     enableRunAround();
+
+    // Changing the type of runaround needs to enable/disable the runaround-side options
+    connect( runGroup, SIGNAL( clicked(int) ), this, SLOT( enableRunAround() ) );
 
     //kdDebug() << "setup tab 2 exit"<<endl;
 }
@@ -607,14 +680,14 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     //kdDebug() << "setup tab 3 frameSet"<<endl;
     tab3 = addPage( i18n( "Connect Text Frames" ) );
 
-    QVBoxLayout *form1Layout = new QVBoxLayout( tab3, 11, 6);
+    QVBoxLayout *tabLayout = new QVBoxLayout( tab3, 11, 6);
 
     QButtonGroup *myGroup = new QButtonGroup(this);
     myGroup->hide();
 
     rExistingFrameset = new QRadioButton( tab3, "rExistingFrameset" );
     rExistingFrameset->setText( i18n("Select existing frameset to connect frame to") );
-    form1Layout->addWidget( rExistingFrameset );
+    tabLayout->addWidget( rExistingFrameset );
     myGroup->insert(rExistingFrameset,1);
 
     QHBoxLayout *layout2 = new QHBoxLayout( 0, 0, 6);
@@ -628,18 +701,18 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     lFrameSList->header()->setMovingEnabled( false );
 
     layout2->addWidget( lFrameSList );
-    form1Layout->addLayout( layout2 );
+    tabLayout->addLayout( layout2 );
 
     rNewFrameset = new QRadioButton( tab3);
     rNewFrameset->setText( i18n( "Create a new frameset" ) );
-    form1Layout->addWidget( rNewFrameset );
+    tabLayout->addWidget( rNewFrameset );
     myGroup->insert(rNewFrameset,2);
 
     QFrame *line1 = new QFrame( tab3 );
     line1->setProperty( "frameShape", (int)QFrame::HLine );
     line1->setFrameShadow( QFrame::Plain );
     line1->setFrameShape( QFrame::HLine );
-    form1Layout->addWidget( line1 );
+    tabLayout->addWidget( line1 );
 
     QHBoxLayout *layout1 = new QHBoxLayout( 0, 0, 6 );
     QLabel *textLabel1 = new QLabel( tab3 );
@@ -649,7 +722,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     eFrameSetName = new QLineEdit( tab3 );
     connect(eFrameSetName, SIGNAL(textChanged ( const QString & )),this,SLOT(textNameFrameChanged ( const QString & )));
     layout1->addWidget( eFrameSetName );
-    form1Layout->addLayout( layout1 );
+    tabLayout->addLayout( layout1 );
 
     int amount=0;
     // now fill the gui.
@@ -1257,15 +1330,18 @@ void KWFrameDia::enableRunAround()
 {
     if ( tab2 )
     {
-        if ( tab4 && floating->isChecked() )
+        if ( tab4 && floating->isChecked() ) {
             runGroup->setEnabled( false ); // Runaround options don't make sense for floating frames
-        else
+        } else
         {
             if ( frame && frame->frameSet() )
                 runGroup->setEnabled( !frameSetFloating && !frame->frameSet()->isMainFrameset() && !frame->frameSet()->isHeaderOrFooter() && !frame->frameSet()->isFootEndNote() );
             else
                 runGroup->setEnabled( true );
         }
+        runSideGroup->setEnabled( runGroup->isEnabled() && rRunBounding->isChecked() );
+        eRGap->setEnabled( runGroup->isEnabled() &&
+            ( rRunBounding->isChecked() || rRunSkip->isChecked() ) );
     }
 }
 
@@ -1484,7 +1560,7 @@ bool KWFrameDia::applyChanges()
             ra = KWFrame::RA_NO;
         else if ( rRunBounding->isChecked() )
             ra = KWFrame::RA_BOUNDINGRECT;
-        else if ( rRunContur->isChecked() )
+        else if ( rRunSkip->isChecked() )
             ra = KWFrame::RA_SKIP;
         else
             update=false;
@@ -1494,7 +1570,26 @@ bool KWFrameDia::applyChanges()
             for(KWFrame *f=allFrames.first();f; f=allFrames.next())
                 f->setRunAround(ra);
         }
-        // run around gap.
+
+        // Run around side.
+        KWFrame::RunAroundSide rs=KWFrame::RA_BIGGEST;
+        update=true;
+        if ( rRunLeft->isChecked() )
+            rs = KWFrame::RA_LEFT;
+        else if ( rRunRight->isChecked() )
+            rs = KWFrame::RA_RIGHT;
+        else if ( rRunBiggest->isChecked() )
+            rs = KWFrame::RA_BIGGEST;
+        else
+            update=false;
+        if(frame)
+            frame->setRunAroundSide(rs);
+        else if (update) {
+            for(KWFrame *f=allFrames.first();f; f=allFrames.next())
+                f->setRunAroundSide(rs);
+        }
+
+        // Run around gap.
         double newValue = QMAX( 0, KoUnit::ptFromUnit( eRGap->value(), doc->getUnit() ));
         if(frame)
             frame->setRunAroundGap(newValue);
@@ -1549,6 +1644,7 @@ bool KWFrameDia::applyChanges()
                            || frameCopy->frameBehavior()!=frame->frameBehavior()
                            || frameCopy->newFrameBehavior()!=frame->newFrameBehavior()
                            || frameCopy->runAround()!=frame->runAround()
+                           || frameCopy->runAroundSide()!=frame->runAroundSide()
                            || frameCopy->runAroundGap()!=frame->runAroundGap()
                            || (tab5 && frameCopy->backgroundColor()!=frameBrushStyle())))
         {
