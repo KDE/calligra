@@ -39,6 +39,8 @@ protected slots:
     virtual void slotOk();
     void slotLoadFile();
 protected:
+    /**  Open file dialog and load the list of styles from the selected doc.
+     */
     virtual void loadFile()=0;
 
     void generateStyleList();
