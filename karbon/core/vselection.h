@@ -11,11 +11,13 @@
 #include <qptrlist.h>
 
 #include "vobject.h"
+#include "vsegment.h"
 
 class QObject;
 class QPainter;
 class QPoint;
 class QRect;
+
 
 typedef QPtrList<VObject> VObjectList;
 typedef QPtrListIterator<VObject> VObjectListIterator;
@@ -94,11 +96,16 @@ public:
 	 */
 	VHandleNode node( const QPoint& point ) const;
 
+	bool selectNode( const KoPoint &p );
+	void selectNodes();
+
 private:
 	/**
 	 * A list of selected objects.
 	 */
 	VObjectList m_objects;
+
+	QPtrList<VSegment> m_segments;
 
 	/**
 	 * Handle and nodes paint coordinates.

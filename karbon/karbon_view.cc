@@ -26,6 +26,7 @@
 #include "vroundrecttool.h"
 #include "vselection.h"
 #include "vselecttool.h"
+#include "veditnodetool.h"
 #include "vsheartool.h"
 #include "vsinustool.h"
 #include "vspiraltool.h"
@@ -58,7 +59,6 @@
 #include "karbon_view.h"
 #include "karbon_view_iface.h"
 #include "vgroup.h"
-#include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
 //#include "vtext.h"
@@ -115,6 +115,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_rotateTool = new VRotateTool( this );
 	m_roundRectTool = new VRoundRectTool( this );
 	m_selectTool = new VSelectTool( this );
+	m_editNodeTool = new VEditNodeTool( this );
 	m_shearTool = new VShearTool( this );
 	m_sinusTool = new VSinusTool( this );
 	m_spiralTool = new VSpiralTool( this );
@@ -488,6 +489,15 @@ KarbonView::selectTool()
 }
 
 void
+KarbonView::editNodeTool()
+{
+	m_currentTool->deactivate();
+	m_currentTool = m_editNodeTool;
+	m_currentTool->activate();
+	m_editNodeToolAction->setChecked( true );
+}
+
+void
 KarbonView::rotateTool()
 {
 	m_currentTool->deactivate();
@@ -836,6 +846,9 @@ KarbonView::initActions()
 	m_selectToolAction = new KToggleAction(
 		i18n( "&Select Objects" ), "select", 0, this,
 		SLOT( selectTool() ), actionCollection(), "tool_select" );
+	m_editNodeToolAction = new KToggleAction(
+		i18n( "&Manipulate nodes" ), "select", 0, this,
+		SLOT( editNodeTool() ), actionCollection(), "tool_select" );
 	m_rotateToolAction = new KToggleAction(
 		i18n( "&Rotate Objects" ), "14_rotate", 0, this,
 		SLOT( rotateTool() ), actionCollection(), "tool_rotate" );
@@ -979,6 +992,9 @@ KarbonView::initActions()
 	connect(
 		m_toolbox, SIGNAL( selectToolActivated() ),
 		this, SLOT( selectTool() ) );
+	connect(
+		m_toolbox, SIGNAL( editNodeToolActivated() ),
+		this, SLOT( editNodeTool() ) );
 	connect(
 		m_toolbox, SIGNAL( rotateToolActivated() ),
 		this, SLOT( rotateTool() ) );

@@ -8,9 +8,7 @@
 
 #include "vdocument.h"
 #include "vselection.h"
-
-#include <kdebug.h>
-
+#include "vnodeselector.h"
 
 VSelection::VSelection( VObject* parent )
 	: VObject( parent )
@@ -225,5 +223,37 @@ VSelection::node( const QPoint& point ) const
 	}
 
 	return node_none;
+}
+
+void
+VSelection::selectNodes()
+{
+	VNodeSelector op;
+	m_segments.clear();
+	VObjectListIterator itr = m_objects;
+	for( ; itr.current(); ++itr )
+	{
+		op.visit( *itr.current() );
+	}
+}
+
+bool
+VSelection::selectNode( const KoPoint &p )
+{
+	VNodeSelector op( p );
+	m_segments.clear();
+
+	VObjectListIterator itr = m_objects;
+	for( ; itr.current(); ++itr )
+	{
+		op.visit( *itr.current() );
+		QPtrListIterator<VSegment> it2( op.result() );
+		for( it2.toFirst(); it2.current(); ++it2 )
+		{
+			m_segments.append( it2.current() );
+		}
+	}
+
+	return m_segments.count() > 0;
 }
 

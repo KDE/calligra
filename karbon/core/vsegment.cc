@@ -49,6 +49,8 @@ VSegment::VSegment()
 	m_prev = 0L;
 	m_next = 0L;
 
+	m_isSelected[ 0 ] = m_isSelected[ 1 ] = m_isSelected[ 2 ] = true;
+
 	m_type = begin;
 	m_ctrlPointFixing = none;
 	m_smooth = false;
@@ -64,6 +66,10 @@ VSegment::VSegment( const VSegment& segment )
 	m_point[0] = segment.m_point[0];
 	m_point[1] = segment.m_point[1];
 	m_point[2] = segment.m_point[2];
+
+	m_isSelected[ 0 ] = segment.m_isSelected[ 0 ];
+	m_isSelected[ 1 ] = segment.m_isSelected[ 1 ];
+	m_isSelected[ 2 ] = segment.m_isSelected[ 2 ];
 
 	m_type = segment.m_type;
 	m_ctrlPointFixing = segment.m_ctrlPointFixing;
@@ -475,6 +481,33 @@ VSegment::linesIntersect(
 		return false;
 
 	return true;
+}
+
+void
+VSegment::transform( const QWMatrix& m )
+{
+	if( m_isSelected[ 0 ] )
+		setCtrlPoint1( m_point[ 0].transform( m ) );
+	if( m_isSelected[ 1 ] )
+		setCtrlPoint2( m_point[ 1 ].transform( m ) );
+	if( m_isSelected[ 2 ] )
+		setKnot( m_point[ 2 ].transform( m ) );
+}
+
+void
+VSegment::selectNode()
+{
+	m_isSelected[ 0 ] = m_isSelected[ 1 ] = m_isSelected[ 2 ] = true;
+}
+
+bool
+VSegment::selectNode( const KoPoint &p )
+{
+	m_isSelected[ 0 ] =	m_point[ 0 ].isNear( p, 2);//VGlobal::isNearRange );
+	m_isSelected[ 1 ] =	m_point[ 1 ].isNear( p, 2);//VGlobal::isNearRange );
+	m_isSelected[ 2 ] =	m_point[ 2 ].isNear( p, 2);//VGlobal::isNearRange );
+
+	return m_isSelected[ 0 ] || m_isSelected[ 1 ] || m_isSelected[ 2 ];
 }
 
 void

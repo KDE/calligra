@@ -79,6 +79,8 @@ public:
 	void setKnot( const KoPoint& p )
 		{ m_point[2] = p; }
 
+	void transform( const QWMatrix& m );
+
 	/**
 	 * Returns a pointer to the previous segment, if stored in a
 	 * VSegmentList.
@@ -170,6 +172,10 @@ public:
 		const KoPoint& b0,
 		const KoPoint& b1 );
 
+	// set up node selection depending on p
+	bool selectNode( const KoPoint &p );
+	void selectNode();
+
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
@@ -180,6 +186,7 @@ public:
 
 private:
 	KoPoint m_point[3];
+	bool m_isSelected[3];
 
 	VSegment* m_prev;
 	VSegment* m_next;

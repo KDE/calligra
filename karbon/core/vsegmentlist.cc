@@ -449,10 +449,7 @@ VSegmentList::transform( const QWMatrix& m )
 	VSegment* segment = m_first;
 	while( segment )
 	{
-		segment->setCtrlPoint1( segment->ctrlPoint1().transform( m ) );
-		segment->setCtrlPoint2( segment->ctrlPoint2().transform( m ) );
-		segment->setKnot( segment->knot().transform( m ) );
-
+		segment->transform( m );
 		segment = segment->m_next;
 	}
 

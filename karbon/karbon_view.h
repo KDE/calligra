@@ -39,6 +39,7 @@ class VRoundCornersDlg;
 class VRoundRectTool;
 class VScaleTool;
 class VSelectTool;
+class VEditNodeTool;
 class VShearTool;
 class VSinusTool;
 class VSpiralTool;
@@ -131,6 +132,7 @@ protected slots:
 	void rectangleTool();
 	void roundRectTool();
 	void selectTool();
+	void editNodeTool();
 	void rotateTool();
 	void shearTool();
 	void sinusTool();
@@ -176,6 +178,7 @@ private:
 	KToggleAction* m_rotateToolAction;
 	KToggleAction* m_roundRectToolAction;
 	KToggleAction* m_selectToolAction;
+	KToggleAction* m_editNodeToolAction;
 	KToggleAction* m_shearToolAction;
 	KToggleAction* m_sinusToolAction;
 	KToggleAction* m_spiralToolAction;
@@ -189,6 +192,7 @@ private:
 	VRotateTool* m_rotateTool;
 	VRoundRectTool* m_roundRectTool;
 	VSelectTool* m_selectTool;
+	VEditNodeTool* m_editNodeTool;
 	VShearTool* m_shearTool;
 	VSinusTool* m_sinusTool;
 	VSpiralTool* m_spiralTool;

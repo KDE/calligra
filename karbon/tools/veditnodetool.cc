@@ -17,64 +17,42 @@
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vselection.h"
-#include "vselecttool.h"
+#include "veditnodetool.h"
 #include "vtransformcmd.h"
 
 #include <kdebug.h>
 
 
-VSelectTool::VSelectTool( KarbonView* view )
+VEditNodeTool::VEditNodeTool( KarbonView* view )
 	: VTool( view ), m_state( normal ), m_isDragging( false )
 {
 }
 
-VSelectTool::~VSelectTool()
+VEditNodeTool::~VEditNodeTool()
 {
 }
 
 void
-VSelectTool::activate()
+VEditNodeTool::activate()
 {
 	//if( m_state == normal )
-		view()->statusMessage()->setText( i18n( "Select" ) );
+		view()->statusMessage()->setText( i18n( "EditNode" ) );
 	//else
 //		view()->statusMessage()->setText( i18n( "Scale" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
 }
 
 void
-VSelectTool::setCursor( const QPoint &p ) const
+VEditNodeTool::setCursor( const QPoint &p ) const
 {
-	switch( view()->part()->document().selection()->node( p ) )
-	{
-		case node_lt:
-		case node_rb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeFDiagCursor ) );
-			break;
-		case node_rt:
-		case node_lb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeBDiagCursor ) );
-			break;
-		case node_lm:
-		case node_rm:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeHorCursor ) );
-			break;
-		case node_mt:
-		case node_mb:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::SizeVerCursor ) );
-			break;
-		default:
-			view()->canvasWidget()->viewport()->
-				setCursor( QCursor( Qt::arrowCursor ) );
-	}
+	if( view()->part()->document().selection()->selectNode( KoPoint( p ) ) )
+		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::CrossCursor ) );
+	else
+		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
 }
 
 void
-VSelectTool::drawTemporaryObject()
+VEditNodeTool::drawTemporaryObject()
 {
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
@@ -86,73 +64,15 @@ VSelectTool::drawTemporaryObject()
 
 	kdDebug() << " x: " << rect.x() << " y: " << rect.y() << " rect.width: " << rect.width() << " rect.height: " << rect.height() << endl;
 	if( view()->part()->document().selection()->objects().count() > 0 &&
-		( m_state != normal || m_activeNode != node_none || rect.contains( fp * ( 1.0 /  view()->zoom() ) ) ) )
+		( m_state != normal || rect.contains( fp * ( 1.0 /  view()->zoom() ) ) ) )
 	{
 		if( m_state == normal )
-			m_state = ( m_activeNode == node_none ) ? moving : scaling;
+			m_state = moving;
 
 		// move operation
 		QWMatrix mat;
-		if( m_state == moving )
-			mat.translate(	( m_lp.x() - fp.x() ) / view()->zoom(),
-							( m_lp.y() - fp.y() ) / view()->zoom() );
-		else
-		{
-			// scale operation
-			if( m_activeNode == node_lt )
-			{
-				m_sp = KoPoint( rect.right(), rect.bottom() );
-				m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
-				m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
-			}
-			else if( m_activeNode == node_mt )
-			{
-				m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.bottom() );
-				m_s1 = ( rect.right() - lp.x() ) / double( rect.width() / 2 );
-				m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
-			}
-			else if( m_activeNode == node_rt )
-			{
-				m_sp = KoPoint( rect.x(), rect.bottom() );
-				m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
-				m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
-			}
-			else if( m_activeNode == node_rm)
-			{
-				m_sp = KoPoint( rect.x(), ( rect.bottom() + rect.top() )  / 2 );
-				m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
-				m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
-			}
-			else if( m_activeNode == node_rb )
-			{
-				m_sp = KoPoint( rect.x(), rect.y() );
-				m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
-				m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
-			}
-			else if( m_activeNode == node_mb )
-			{
-				m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.y() );
-				m_s1 = ( rect.right() - lp.x() ) / double( rect.width() / 2 );
-				m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
-			}
-			else if( m_activeNode == node_lb )
-			{
-				m_sp = KoPoint( rect.right(), rect.y() );
-				m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
-				m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
-			}
-			else if( m_activeNode == node_lm )
-			{
-				m_sp = KoPoint( rect.right(), ( rect.bottom() + rect.top() )  / 2 );
-				m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
-				m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
-			}
-			KoPoint sp = KoPoint( m_sp.x() - view()->canvasWidget()->contentsX(), m_sp.y() - view()->canvasWidget()->contentsY() );
-			mat.translate( sp.x(), sp.y() );
-			mat.scale( m_s1, m_s2 );
-			mat.translate(	- ( sp.x() + view()->canvasWidget()->contentsX() ),
-							- ( sp.y() + view()->canvasWidget()->contentsY() ) );
-		}
+		mat.translate(	( m_lp.x() - fp.x() ) / view()->zoom(),
+						( m_lp.y() - fp.y() ) / view()->zoom() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = view()->part()->document().selection()->objects();
@@ -192,11 +112,12 @@ VSelectTool::drawTemporaryObject()
 
 
 bool
-VSelectTool::eventFilter( QEvent* event )
+VEditNodeTool::eventFilter( QEvent* event )
 {
 	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 	QPoint lp = view()->canvasWidget()->viewportToContents( mouse_event->pos() );
-	setCursor( lp );
+	if( !m_isDragging )
+		setCursor( lp );
 
 	if ( event->type() == QEvent::MouseMove && m_isDragging )
 	{
@@ -232,13 +153,6 @@ VSelectTool::eventFilter( QEvent* event )
 				true );
 
 //			view()->part()->repaintAllViews();
-		}
-		else if( m_state == scaling )
-		{
-			m_state = normal;
-			view()->part()->addCommand(
-				new VScaleCmd( &view()->part()->document(), m_sp, m_s1, m_s2 ),
-				true );
 		}
 		else
 		{
@@ -297,8 +211,7 @@ VSelectTool::eventFilter( QEvent* event )
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
-		m_activeNode = view()->part()->document().selection()->node( lp );
-		view()->part()->document().selection()->selectNodes();
+		//m_activeNode = view()->part()->document().selection()->node( lp );
 
 		// draw initial object:
 		drawTemporaryObject();

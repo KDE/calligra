@@ -18,6 +18,7 @@ noinst_HEADERS = \
 	vrotatetool.h \
 	vroundrecttool.h \
 	vselecttool.h \
+	veditnodetool.h \
 	vshapetool.h \
 	vsheartool.h \
 	vsinustool.h \
@@ -33,6 +34,7 @@ libkarbontools_la_SOURCES = \
 	vrotatetool.cc \
 	vroundrecttool.cc \
 	vselecttool.cc \
+	veditnodetool.cc \
 	vshapetool.cc \
 	vsheartool.cc \
 	vsinustool.cc \
