@@ -57,6 +57,7 @@ public:
 		star,
 		gear
 	};
+	VStar( VObject* parent, VState state = edit );
 	VStar( VObject* parent,
 		const KoPoint& center, double outerRadius, double innerRadius,
 		uint edges, double angle = 0.0, uint innerAngle = 0,
@@ -66,7 +67,21 @@ public:
 
 	virtual QString name() const;
 
+
+	virtual void save( QDomElement& element ) const;
+	virtual void load( const QDomElement& element );
+
+protected:
+	void init();
+
 private:
+	KoPoint m_center;
+	double m_outerRadius;
+	double m_innerRadius;
+	uint   m_edges;
+	double m_angle;
+	double m_innerAngle;
+	double m_roundness;
 	VStarType m_type;
 };
 

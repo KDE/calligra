@@ -31,6 +31,7 @@
 #include "shapes/vroundrect.h"
 #include "shapes/vsinus.h"
 #include "shapes/vspiral.h"
+#include "shapes/vstar.h"
 #include "vfill.h"
 #include "vgroup.h"
 #include "vlayer.h"
@@ -216,6 +217,12 @@ VGroup::load( const QDomElement& element )
 				VSpiral* spiral = new VSpiral( this );
 				spiral->load( e );
 				append( spiral );
+			}
+			else if( e.tagName() == "STAR" )
+			{
+				VStar* star = new VStar( this );
+				star->load( e );
+				append( star );
 			}
 			else if( e.tagName() == "GROUP" )
 			{
