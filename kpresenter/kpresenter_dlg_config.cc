@@ -233,8 +233,8 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     box->addWidget(recentFiles);
 
     QString suffix = KoUnit::unitName( unit ).prepend(' ');
-    double val = KoUnit::toUserValue( ptIndent, unit );
-    indent = new KDoubleNumInput( val, this);
+    indent = new KDoubleNumInput( this );
+    indent->setValue( KoUnit::toUserValue( ptIndent, unit ) );
     indent->setRange(KoUnit::toUserValue( 0.1, unit ), KoUnit::toUserValue( 50, unit ), KoUnit::toUserValue( 0.1, unit ));
 
 
