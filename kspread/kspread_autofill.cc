@@ -584,7 +584,7 @@ double getDiff(KSpreadCell * cell1, KSpreadCell * cell2, AutoFillSequenceItem::T
     return 0.0;
 }
 
-bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList, 
+bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
                                             QPtrList<KSpreadCell>& _destList,
                                             QPtrList<AutoFillSequence>& _seqList,
                                             bool down)
@@ -611,8 +611,8 @@ bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
     else if ( cell->isDate() )
       type = AutoFillSequenceItem::DATE;
     else if ( cell->isTime() )
-      type = AutoFillSequenceItem::TIME;    
- 
+      type = AutoFillSequenceItem::TIME;
+
     while ( cell && cell2 )
     {
       // check if both cells contain the same type
@@ -668,14 +668,14 @@ bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
     }
 
     // we have found something:
-    if (count > 0 && (tmpcount > 0 || count == 1)) 
+    if (count > 0 && (tmpcount > 0 || count == 1))
     {
-      double initDouble;
+      double initDouble=0.0;
       QDate  initDate;
       QTime  initTime;
 
-      KSpreadCell * dest; 
-      KSpreadCell * src; 
+      KSpreadCell * dest;
+      KSpreadCell * src;
 
       int i = tmpcount;
       if (down)
@@ -724,9 +724,9 @@ bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
         if (type == AutoFillSequenceItem::FLOAT)
         {
           if (down)
-            initDouble += diff->at( i );        
+            initDouble += diff->at( i );
           else
-            initDouble -= diff->at( i );        
+            initDouble -= diff->at( i );
 
           res.sprintf("%f", initDouble );
         }
@@ -754,7 +754,7 @@ bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
         dest->setCellText( res, true );
         dest->copyLayout( src );
         dest->setFormatType( src->formatType() );
-        
+
         if (down)
         {
           ++i;
@@ -876,7 +876,7 @@ bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
             }
           }
 
-          kdDebug() << "Step: " << step << " S: " << s << " Block " << block 
+          kdDebug() << "Step: " << step << " S: " << s << " Block " << block
                     << " SeqList: " << _seqList.count()
                     << " SrcList: " << _srcList.count() << " DeltaList: " << deltaList.count()
                     << endl;
@@ -896,7 +896,7 @@ bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
           {
             // Previous cell
             cell = _destList.prev();
-            --s;            
+            --s;
           }
 	}
       }
@@ -905,7 +905,7 @@ bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
   return ok;
 }
 
-void KSpreadTable::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList, 
+void KSpreadTable::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
                                         QPtrList<KSpreadCell>& _destList,
                                         bool down)
 {
@@ -934,7 +934,7 @@ void KSpreadTable::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
     {
       if ( s >= _srcList.count() )
         s = _srcList.count() - 1;
-    } 
+    }
 
     if ( !_srcList.at( s )->text().isEmpty() )
     {

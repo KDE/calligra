@@ -124,3 +124,13 @@ bool KSpreadDocIface::showMessageError()const
     return doc->getShowMessageError();
 }
 
+QColor KSpreadDocIface::pageBorderColor() const
+{
+    return doc->pageBorderColor();
+}
+
+void KSpreadDocIface::changePageBorderColor( const QColor & _color)
+{
+    doc->changePageBorderColor( _color);
+}
+

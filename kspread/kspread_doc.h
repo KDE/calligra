@@ -108,7 +108,7 @@ public:
   /**
    * @return the KScript Interpreter used by this document.
    */
-  KSpreadInterpreter* interpreter() { return m_pInterpreter; }
+  KSpreadInterpreter* interpreter()const { return m_pInterpreter; }
   /**
    * Kills the interpreter and creates a new one and
    * reloads all scripts. This is useful if they have been
@@ -133,7 +133,7 @@ public:
    * @return the object that is respnsible for keeping track
    *         of the undo buffer.
    */
-  KSpreadUndo *undoBuffer() { return m_pUndoBuffer; }
+  KSpreadUndo *undoBuffer()const { return m_pUndoBuffer; }
 
     // virtual void printMap( QPainter &_painter );
 
@@ -143,7 +143,7 @@ public:
   /**
    * @return TRUE if the document is currently loading.
    */
-  bool isLoading() { return m_bLoading; }
+  bool isLoading()const { return m_bLoading; }
 
   void setDefaultGridPen( const QPen& );
   const QPen& defaultGridPen() { return m_defaultGridPen; }
@@ -173,14 +173,14 @@ public:
   void setShowVerticalScrollBar(bool _show) {   m_bVerticalScrollBarShow=_show;}
   void setShowHorizontalScrollBar(bool _show) {   m_bHorizontalScrollBarShow=_show;}
 
-  bool getShowVerticalScrollBar() { return  m_bVerticalScrollBarShow;}
-  bool getShowHorizontalScrollBar() {  return  m_bHorizontalScrollBarShow;}
+  bool getShowVerticalScrollBar()const { return  m_bVerticalScrollBarShow;}
+  bool getShowHorizontalScrollBar()const {  return  m_bHorizontalScrollBarShow;}
 
   /**
   * completion mode
   */
 
-  KGlobalSettings::Completion completionMode( ) { return m_iCompletionMode;}
+  KGlobalSettings::Completion completionMode( )const { return m_iCompletionMode;}
   void setCompletionMode( KGlobalSettings::Completion _complMode) {  m_iCompletionMode=_complMode;}
 
   /**
@@ -189,29 +189,29 @@ public:
   void setShowColHeader(bool _show) { m_bShowColHeader=_show; }
   void setShowRowHeader(bool _show) { m_bShowRowHeader=_show; }
 
-  bool getShowColHeader() { return  m_bShowColHeader; }
-  bool getShowRowHeader() { return  m_bShowRowHeader; }
+  bool getShowColHeader()const { return  m_bShowColHeader; }
+  bool getShowRowHeader()const { return  m_bShowRowHeader; }
 
   /**
   * value of indent
   */
-  int getIndentValue() {return m_iIndentValue;}
+  int getIndentValue()const {return m_iIndentValue;}
   void setIndentValue(int _val) {m_iIndentValue=_val;}
 
-  KSpread::MoveTo getMoveToValue() {return m_EMoveTo;}
+  KSpread::MoveTo getMoveToValue()const {return m_EMoveTo;}
   void setMoveToValue(KSpread::MoveTo _moveTo) {m_EMoveTo=_moveTo;}
 
   /**
   * Show or not error message
   */
   void setShowMessageError(bool _show) {   m_bShowError=_show;}
-  bool getShowMessageError() { return  m_bShowError;}
+  bool getShowMessageError()const { return  m_bShowError;}
 
   /**
   * Method of calc
   */
   void setTypeOfCalc( MethodOfCalc _calc) { m_EMethodOfCalc=_calc;}
-  MethodOfCalc getTypeOfCalc(){ return m_EMethodOfCalc;}
+  MethodOfCalc getTypeOfCalc()const{ return m_EMethodOfCalc;}
 
   /**
    * show/hide tabbar
@@ -240,7 +240,7 @@ public:
    * get custom kspell config
    */
   void setKSpellConfig(KSpellConfig _kspell);
-  KSpellConfig * getKSpellConfig() {return m_pKSpellConfig;}
+  KSpellConfig * getKSpellConfig()const {return m_pKSpellConfig;}
 
   bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
   void setDontCheckUpperWord(bool _b) { m_bDontCheckUpperWord = _b; }

@@ -40,6 +40,9 @@ k_dcop:
     void setShowMessageError(bool _show);
     bool showMessageError()const;
 
+    QColor pageBorderColor() const;
+    void changePageBorderColor( const QColor & _color);
+
 private:
     KSpreadDoc* doc;
 };
