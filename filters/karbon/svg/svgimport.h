@@ -45,6 +45,7 @@ protected:
 		GraphicsContext()
 		{
 			stroke.setType( VStroke::none ); // default is no stroke
+			stroke.setLineWidth( 1.0 );
 		}
 		VFill		fill;
 		VStroke		stroke;

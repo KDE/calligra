@@ -112,6 +112,8 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		stroke.setColor( color );
 		gc->stroke = stroke;
 	}
+	if( !e.attribute( "stroke-width" ).isEmpty() )
+		gc->stroke.setLineWidth( e.attribute( "stroke-width" ).toDouble() );
 
 	// try style attr
 	QString style = e.attribute( "style" ).simplifyWhiteSpace();
@@ -128,6 +130,15 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 			fill.setColor( color );
 			gc->fill = fill;
 		}
+		else if( command == "stroke" )
+		{
+			c.setNamedColor( params );
+			VColor color( c );
+			stroke.setColor( color );
+			gc->stroke = stroke;
+		}
+		else if( command == "stroke-width" )
+			gc->stroke.setLineWidth( params.toDouble() );
 	}
 
 	obj->setFill( gc->fill );
