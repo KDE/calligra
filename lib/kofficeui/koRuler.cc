@@ -800,18 +800,19 @@ void KoRuler::mouseDoubleClickEvent(QMouseEvent*)
 }
 
 /*================================================================*/
-void KoRuler::setTabList(QList<KoTabulator>* _tabList)
+void KoRuler::setTabList(const QList<KoTabulator>* _tabList)
 { 
   tabList.setAutoDelete(true);
   tabList.clear(); 
   tabList.setAutoDelete(false);
-  for (unsigned int i = 0;i < _tabList->count();i++)
+  QListIterator<KoTabulator> it(*_tabList);
+  for (it.toFirst(); !it.atLast(); ++it)
     {
       KoTabulator *t = new KoTabulator;
-      t->type = _tabList->at(i)->type;
-      t->mmPos = _tabList->at(i)->mmPos;
-      t->inchPos = _tabList->at(i)->inchPos;
-      t->ptPos = _tabList->at(i)->ptPos;
+      t->type = it.current()->type;
+      t->mmPos = it.current()->mmPos;
+      t->inchPos = it.current()->inchPos;
+      t->ptPos = it.current()->ptPos;
       tabList.append(t);
     }
   repaint(false); 
@@ -846,7 +847,7 @@ void KoRuler::uncheckMenu()
 }
 
 /*================================================================*/
-void KoRuler::setUnit(QString _unit) 
+void KoRuler::setUnit(const QString& _unit) 
 { 
   unit = _unit; 
   uncheckMenu();

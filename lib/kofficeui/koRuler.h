@@ -75,11 +75,11 @@ public:
   static const int F_TABS = 1;
   static const int F_INDENTS = 2;
 
-  KoRuler(QWidget *_parent,QWidget *_canvas,Orientation _orientation,
+  KoRuler(QWidget *_parent, QWidget *_canvas,Orientation _orientation,
 	  KoPageLayout _layout,int _flags,KoTabChooser *_tabChooser = 0L);
   ~KoRuler();
 
-  void setUnit(QString _unit);
+  void setUnit(const QString& _unit);
 
   void setPageLayout(KoPageLayout _layout)
     { layout = _layout; repaint(false); }
@@ -96,7 +96,7 @@ public:
   void setFirstIndent(float _first)
     { i_first = makeIntern(_first); repaint(false); }
 
-  void setTabList(QList<KoTabulator>* _tabList);
+  void setTabList(const QList<KoTabulator>* _tabList);
   void setFrameStart(int _frameStart) { frameStart = _frameStart; repaint(false); }
   
   void setAllowUnits(bool _allow) { allowUnits = _allow; }
