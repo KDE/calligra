@@ -61,7 +61,7 @@ extern "C" int kdemain(int argc, char **argv)
 /* TODO: get selection(), not only clipboard!
 	QClipboard *cb = QApplication::clipboard();
 	QString text = cb->text();
-	if( text == QString::null || text.length() > 50 ) {
+	if( text.isNull() || text.length() > 50 ) {
 		// long texts are probably not supposed to be searched for
 		text = "";
 	}

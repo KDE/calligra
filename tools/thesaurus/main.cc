@@ -301,7 +301,7 @@ void Thesaurus::slotChangeLanguage()
 {
     QString filename = KFileDialog::getOpenFileName(
         KGlobal::dirs()->findResourceDir("data", "thesaurus/")+"thesaurus/");
-    if( filename != QString::null ) {
+    if( !filename.isNull() ) {
         m_data_file = filename;
         setCaption();
     }
