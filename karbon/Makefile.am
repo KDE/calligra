@@ -2,11 +2,12 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) \
 	-I$(srcdir) \
 	-I$(srcdir)/core \
 	-I$(srcdir)/tools \
+	-I$(srcdir)/commands \
 	-I$(srcdir)/ui \
 	-I$(srcdir)/render \
 	$(all_includes)
 
-SUBDIRS = core ui tools filters render . data pics
+SUBDIRS = core ui commands tools filters render . data pics
 
 bin_PROGRAMS = karbon
 lib_LTLIBRARIES = \
@@ -21,6 +22,7 @@ libkarbonpart_la_SOURCES = \
 libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) \
 	tools/libkarbontools.la \
+	commands/libkarboncommands.la \
 	core/libkarboncore.la \
 	render/libvpainter.la
 

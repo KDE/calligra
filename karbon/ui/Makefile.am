@@ -1,6 +1,7 @@
 INCLUDES = $(KOFFICE_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../core \
+	-I$(srcdir)/../commands \
 	-I$(srcdir)/../tools \
 	$(all_includes)
 

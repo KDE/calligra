@@ -508,17 +508,6 @@ KarbonView::initActions()
 	connect( m_toolbox, SIGNAL(starToolActivated()), this, SLOT(starTool()) );
 	connect( m_toolbox, SIGNAL(sinusToolActivated()), this, SLOT(sinusTool()) );
 	connect( m_toolbox, SIGNAL(spiralToolActivated()), this, SLOT(spiralTool()) );
-	connect( m_toolbox, SIGNAL(selectToolActivated()), this, SLOT(selectTool()) );
-	connect( m_toolbox, SIGNAL(scaleToolActivated()), this, SLOT(scaleTool()) );
-	connect( m_toolbox, SIGNAL(rotateToolActivated()), this, SLOT(rotateTool()) );
-	connect( m_toolbox, SIGNAL(shearToolActivated()), this, SLOT(shearTool()) );
-	connect( m_toolbox, SIGNAL(ellipseToolActivated()), this, SLOT(ellipseTool()) );
-	connect( m_toolbox, SIGNAL(rectangleToolActivated()), this, SLOT(rectangleTool()) );
-	connect( m_toolbox, SIGNAL(roundRectToolActivated()), this, SLOT(roundRectTool()) );
-	connect( m_toolbox, SIGNAL(polygonToolActivated()), this, SLOT(polygonTool()) );
-	connect( m_toolbox, SIGNAL(starToolActivated()), this, SLOT(starTool()) );
-	connect( m_toolbox, SIGNAL(sinusToolActivated()), this, SLOT(sinusTool()) );
-	connect( m_toolbox, SIGNAL(spiralToolActivated()), this, SLOT(spiralTool()) );
 	connect( m_toolbox, SIGNAL(textToolActivated()), this, SLOT(textTool()) );
 	connect( m_toolbox, SIGNAL(solidFillActivated()), this, SLOT(solidFillClicked()) );
 	connect( m_toolbox, SIGNAL(strokeActivated()), this, SLOT(strokeClicked()) );
