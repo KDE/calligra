@@ -140,6 +140,8 @@ public:
 	const VPathList& paths() const
 		{ return m_paths; }
 
+	void clear() { m_paths.clear(); }
+
 	/// Applies an affine transformation.
 	virtual void transform( const QWMatrix& m );
 
