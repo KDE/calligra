@@ -1117,6 +1117,10 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
         activePage=m_pageList.findRef(m_initialActivePage);
     activePage = QMAX( activePage, 0);
     settingsWriter.addConfigItem( "SelectedPage", activePage );
+
+    //not define into oo spec
+    settingsWriter.addConfigItem( "SnapLineIsVisible", showHelplines() );
+
 }
 
 void KPresenterDoc::loadOasisSettings()
