@@ -102,7 +102,7 @@ public:
     void setMousePos( int mx, int my );
 
     void setOffset( int _diffx, int _diffy )
-    { diffx = zoomIt(_diffx); diffy = zoomIt(_diffy); repaint( false ); }
+    { diffx = _diffx; diffy = _diffy; repaint( false ); }
 
     void setLeftIndent( float _left )
     { i_left = makeIntern( _left ); repaint( false ); }

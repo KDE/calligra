@@ -444,7 +444,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 	    break;
 	default: break;
 	}
-	_tab->ptPos = unZoomIt(e->x() + diffx - ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) : frameStart ));
+	_tab->ptPos = unZoomIt(e->x() + diffx - zoomIt( frameStart == -1 ? static_cast<int>( layout.ptLeft ) : frameStart ));
 	_tab->mmPos = cPOINT_TO_MM( _tab->ptPos );
 	_tab->inchPos = cPOINT_TO_INCH( _tab->ptPos );
 
@@ -722,7 +722,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    int pt=zoomIt(d->tabList.at( d->currTab )->ptPos);
 			    int fr=(frameStart == -1 ? static_cast<int>(zoomIt(layout.ptLeft)) : zoomIt(frameStart) );
 			    p.drawLine( pt + fr, 0, pt + fr, d->canvas->height() );
-			    d->tabList.at( d->currTab )->ptPos += unZoomIt( mx - d->oldMx );
+			    d->tabList.at( d->currTab )->ptPos = unZoomIt( mx - fr );
 			    d->tabList.at( d->currTab )->mmPos = cPOINT_TO_MM( d->tabList.at( d->currTab )->ptPos );
 			    d->tabList.at( d->currTab )->inchPos = cPOINT_TO_INCH( d->tabList.at( d->currTab )->ptPos );
 			    pt=zoomIt(d->tabList.at( d->currTab )->ptPos);
@@ -886,12 +886,8 @@ void KoRuler::setZoom( const double& zoom )
 {
     if(zoom==m_zoom)
 	return;
-    diffx=unZoomIt(diffx);
-    diffy=unZoomIt(diffy);
     m_zoom=zoom;
     m_1_zoom=1/m_zoom;
-    diffx=zoomIt(diffx);
-    diffy=zoomIt(diffy);
     repaint( false );
 }
 
