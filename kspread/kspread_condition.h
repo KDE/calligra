@@ -50,7 +50,7 @@ struct KSpreadConditional
 class KSpreadConditions
 {
 public:
-  
+
   /**
    * Constructor.  There is no default constructor - you must use this one
    * with the owner cell as a parameter
@@ -61,9 +61,9 @@ public:
   /**
    * Use this function to see what conditions actually apply currently
    *
-   * @param condition a reference to a condition that will be set to the 
+   * @param condition a reference to a condition that will be set to the
    *                  matching condition.  If none of the conditions are true
-   *                  then this parameter is undefined on exit (check the 
+   *                  then this parameter is undefined on exit (check the
    *                  return value).
    *
    * @return true if one of the conditions is true, false if not.
@@ -90,7 +90,7 @@ public:
    * Takes a parsed DOM element and recreates the conditions structure out of
    * it
    */
-  void LoadConditions(QDomElement element);
+  void LoadConditions(const QDomElement &element);
 private:
 
   KSpreadCell *cell;

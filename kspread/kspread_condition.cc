@@ -180,7 +180,7 @@ QDomElement KSpreadConditions::SaveConditions(QDomDocument& doc)
   }
 }
 
-void KSpreadConditions::LoadConditions(QDomElement element)
+void KSpreadConditions::LoadConditions(const QDomElement &element)
 {
   QDomNodeList nodeList = element.childNodes();
   KSpreadConditional newCondition;

@@ -28,12 +28,12 @@ class KSpreadDependency
   KSpreadDependency(int col, int row, KSpreadTable* table);
   KSpreadDependency(int left, int top, int right, int bottom, KSpreadTable* table);
 
-  int Left();
-  int Right();
-  int Top();
-  int Bottom();
-  
-  KSpreadTable* Table();
+  int Left()const;
+  int Right()const;
+  int Top()const;
+  int Bottom()const;
+
+  KSpreadTable* Table()const;
 
  private:
   int m_left;

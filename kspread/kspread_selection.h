@@ -72,7 +72,7 @@ public:
   /**
    * @return the 'anchor' point of the selection -- i.e. the fixed corner
    */
-   QPoint selectionAnchor();
+   QPoint selectionAnchor()const;
 
   /**
    * The 'cursor position' is used to keep track of where on the spreadsheet the
@@ -94,7 +94,7 @@ public:
    *
    * You are probably wanting to use marker(), not this function
    */
-  QPoint getCursorPosition();
+  QPoint getCursorPosition()const;
 
 
   void setChooseAnchor(QPoint chooseAnchor) { m_chooseAnchor = chooseAnchor; }
@@ -102,12 +102,12 @@ public:
   void setChooseCursor(QPoint chooseCursor) { m_chooseCursor = chooseCursor; }
   void setChooseTable(KSpreadTable* table) { m_chooseTable = table; }
 
-  QRect getChooseRect();
-  QPoint getChooseCursor() { return m_chooseCursor; }
-  QPoint getChooseMarker() { return m_chooseMarker; }
-  QPoint getChooseAnchor() { return m_chooseAnchor; }
+  QRect getChooseRect()const;
+  QPoint getChooseCursor()const { return m_chooseCursor; }
+  QPoint getChooseMarker()const { return m_chooseMarker; }
+  QPoint getChooseAnchor()const { return m_chooseAnchor; }
 
-  KSpreadTable* getChooseTable() { return m_chooseTable; }
+  KSpreadTable* getChooseTable()const { return m_chooseTable; }
 
 
 private: /* private data for the above functions on selections */

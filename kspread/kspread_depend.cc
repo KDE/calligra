@@ -45,27 +45,27 @@ KSpreadDependency::KSpreadDependency(int left, int top, int right, int bottom, K
   m_table = table;
 }
 
-int KSpreadDependency::Left()
+int KSpreadDependency::Left()const
 {
   return m_left;
 }
 
-int KSpreadDependency::Right()
+int KSpreadDependency::Right()const
 {
   return m_right;
 }
 
-int KSpreadDependency::Top()
+int KSpreadDependency::Top()const
 {
   return m_top;
 }
 
-int KSpreadDependency::Bottom()
+int KSpreadDependency::Bottom()const
 {
   return m_bottom;
 }
-  
-KSpreadTable* KSpreadDependency::Table()
+
+KSpreadTable* KSpreadDependency::Table()const
 {
   return m_table;
 }

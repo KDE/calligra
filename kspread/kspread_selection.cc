@@ -107,7 +107,7 @@ QRect KSpreadSelection::getSelectionHandleArea(KSpreadCanvas* canvas)
   width = cell->width( column, canvas );
   height = cell->height( row, canvas );
 
-  QRect handle( (xpos + width - 2), (ypos + height - 1), 
+  QRect handle( (xpos + width - 2), (ypos + height - 1),
                 (int) (5 * canvas->zoom()), (int) (5 * canvas->zoom()) );
   return handle;
 }
@@ -175,7 +175,7 @@ void KSpreadSelection::setMarker( QPoint _point, KSpreadTable* table )
   setSelection( QRect(topLeft, botRight), topLeft, table );
 }
 
-QPoint KSpreadSelection::selectionAnchor()
+QPoint KSpreadSelection::selectionAnchor()const
 {
   /* the anchor is in the opposite corner of the selection rect from the marker */
 
@@ -206,12 +206,12 @@ bool KSpreadSelection::setCursorPosition(QPoint position)
   return false;
 }
 
-QPoint KSpreadSelection::getCursorPosition()
+QPoint KSpreadSelection::getCursorPosition()const
 {
   return m_cursorPosition;
 }
 
-QRect KSpreadSelection::getChooseRect()
+QRect KSpreadSelection::getChooseRect()const
 {
   QRect chooseRect;
 
