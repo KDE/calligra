@@ -161,4 +161,11 @@ void KivioStencilGeometryPanel::setSize( double w, double h )
     m_pW->setValue(KoUnit::ptToUnit(w, m_unit));
     m_pH->setValue(KoUnit::ptToUnit(h, m_unit));
 }
+
+void KivioStencilGeometryPanel::setPageLayout(const KoPageLayout& l)
+{
+  m_pX->setMaxValue(KoUnit::ptToUnit(l.ptWidth, m_unit));
+  m_pY->setMaxValue(KoUnit::ptToUnit(l.ptHeight, m_unit));
+}
+
 #include "kivio_stencil_geometry_panel.moc"

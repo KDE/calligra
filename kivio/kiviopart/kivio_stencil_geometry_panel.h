@@ -3,34 +3,36 @@
 
 #include <qwidget.h>
 #include <koUnit.h>
+#include <koGlobal.h>
 
 class KoUnitDoubleSpinBox;
 
 class KivioStencilGeometryPanel : public QWidget
-{ Q_OBJECT
-protected:
+{
+  Q_OBJECT
+  protected:
     KoUnitDoubleSpinBox *m_pX, *m_pY, *m_pW, *m_pH;
     KoUnit::Unit m_unit;
 
-public slots:
+  public slots:
     void setUnit(KoUnit::Unit);
     void setPosition(double, double);
     void setSize(double, double);
+    void setPageLayout(const KoPageLayout& l);
 
-protected slots:
+  protected slots:
     void xChange(double);
     void yChange(double);
     void wChange(double);
     void hChange(double);
 
-signals:
+  signals:
     void positionChanged(double, double);
     void sizeChanged(double, double);
 
-public:
+  public:
     KivioStencilGeometryPanel(QWidget* parent);
     virtual ~KivioStencilGeometryPanel();
 };
 
 #endif
-

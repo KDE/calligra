@@ -499,8 +499,9 @@ void KivioCanvas::mousePressEvent(QMouseEvent* e)
 
 void KivioCanvas::mouseReleaseEvent(QMouseEvent* e)
 {
-    if(!m_pDoc->isReadWrite())
-        return;
+  if(!m_pDoc->isReadWrite())
+    return;
+
   if (pressGuideline) {
     m_guideLinesTimer->stop();
     KoPoint p = mapFromScreen(e->pos());
@@ -557,10 +558,7 @@ void KivioCanvas::mouseMoveEvent(QMouseEvent* e)
       }
     }
   }
-//  float xf = p.xToUnit(UnitMillimeter);
-//  float yf = p.yToUnit(UnitMillimeter);
 
-//  debug("%s %s",(const char*)QString::number(xf,'f',2),(const char*)QString::number(yf,'f',2));
   lastPoint = e->pos();
 }
 
@@ -641,50 +639,48 @@ void KivioCanvas::endRectDraw()
  */
 void KivioCanvas::startSpawnerDragDraw( const QPoint &p )
 {
-    currRect = QRect( 0, 0, -1, -1 );
+  currRect = QRect( 0, 0, -1, -1 );
 
-    KivioStencilSpawner *pSpawner = KivioIconView::curDragSpawner();
-    if( !pSpawner )
-        return;
+  KivioStencilSpawner *pSpawner = KivioIconView::curDragSpawner();
+  if( !pSpawner )
+    return;
 
-    // If we for some reason didn't delete an old drag stencil,
-    // do so now.
-    if( m_pDragStencil )
-    {
-       kdDebug() << "KivioCanvas::startSpawnerDragDraw() - m_pDragStencil still exists.  BUG!" << endl;
-        delete m_pDragStencil;
-        m_pDragStencil = 0L;
-    }
+  // If we for some reason didn't delete an old drag stencil,
+  // do so now.
+  if( m_pDragStencil )
+  {
+    kdDebug() << "KivioCanvas::startSpawnerDragDraw() - m_pDragStencil still exists.  BUG!" << endl;
+    delete m_pDragStencil;
+    m_pDragStencil = 0L;
+  }
 
-    // Map the point from screenspace to page space
-    KoPoint qp = mapFromScreen( p );
-    qp = snapToGrid(qp);
+  // Map the point from screenspace to page space
+  KoPoint qp = mapFromScreen( p );
+  qp = snapToGrid(qp);
 
-    // Allocate a new stencil for dragging around
-    m_pDragStencil = pSpawner->newStencil();
-    m_pDragStencil->setPosition( qp.x(), qp.y() );
-//    m_pDragStencil->setDimensions( pSpawner->defWidth(), pSpawner->defHeight() );
+  // Allocate a new stencil for dragging around
+  m_pDragStencil = pSpawner->newStencil();
+  m_pDragStencil->setPosition( qp.x(), qp.y() );
 
-    // Invalidate the rectangle
-    oldRectValid = true;
+  // Invalidate the rectangle
+  oldRectValid = true;
 
-    // Create a new painter object
-    beginUnclippedSpawnerPainter();
+  // Create a new painter object
+  beginUnclippedSpawnerPainter();
 
-    // Translate the painter so that 0,0 means where the page starts on the canvas
-    unclippedSpawnerPainter->painter()->save();
-    unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
+  // Translate the painter so that 0,0 means where the page starts on the canvas
+  unclippedSpawnerPainter->painter()->save();
+  unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
 
-    // Assign the painter object to the intra-stencil data object, as well
-    // as the zoom factor
-    m_dragStencilData.painter = unclippedSpawnerPainter;
-    m_dragStencilData.zoomHandler = m_pView->zoomHandler();
+  // Assign the painter object to the intra-stencil data object, as well
+  // as the zoom factor
+  m_dragStencilData.painter = unclippedSpawnerPainter;
+  m_dragStencilData.zoomHandler = m_pView->zoomHandler();
 
-    // Draw the outline of the stencil
-    m_pDragStencil->paintOutline( &m_dragStencilData );
+  // Draw the outline of the stencil
+  m_pDragStencil->paintOutline( &m_dragStencilData );
 
-    unclippedSpawnerPainter->painter()->restore();
-
+  unclippedSpawnerPainter->painter()->restore();
 }
 
 /**
@@ -748,29 +744,28 @@ void KivioCanvas::continueSpawnerDragDraw( const QPoint &p )
  */
 void KivioCanvas::endSpawnerDragDraw()
 {
-    // Avoid the noid
-    if ( !unclippedSpawnerPainter )
-        return;
+  // Avoid the noid
+  if ( !unclippedSpawnerPainter )
+    return;
 
-    // If we have a valid old drawing spot, undraw it
-    if ( oldRectValid )
-    {
-        unclippedSpawnerPainter->painter()->save();
-        unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
-        m_pDragStencil->paintOutline( &m_dragStencilData );
-        unclippedSpawnerPainter->painter()->restore();
-    }
+  // If we have a valid old drawing spot, undraw it
+  if ( oldRectValid )
+  {
+    unclippedSpawnerPainter->painter()->save();
+    unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
+    m_pDragStencil->paintOutline( &m_dragStencilData );
+    unclippedSpawnerPainter->painter()->restore();
+  }
 
-    // Smack the painter around a bit
-    endUnclippedSpawnerPainter();
+  // Smack the painter around a bit
+  endUnclippedSpawnerPainter();
 
-    // If we have a stencil we were dragging around, delete it.
-    if( m_pDragStencil )
-    {
-        delete m_pDragStencil;
-        m_pDragStencil = 0L;
-    }
-
+  // If we have a stencil we were dragging around, delete it.
+  if( m_pDragStencil )
+  {
+    delete m_pDragStencil;
+    m_pDragStencil = 0L;
+  }
 }
 
 

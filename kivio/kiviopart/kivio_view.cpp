@@ -507,16 +507,6 @@ void KivioView::setupActions()
   m_setArrowHeads = new KivioArrowHeadAction(i18n("Arrowheads"), "arrowheads", actionCollection(), "arrowHeads");
   connect( m_setArrowHeads, SIGNAL(endChanged(int)), SLOT(slotSetEndArrow(int)));
   connect( m_setArrowHeads, SIGNAL(startChanged(int)), SLOT(slotSetStartArrow(int)));
-/*
-  m_setEndArrowSize = new TKSizeAction(actionCollection(), "endArrowSize");
-  m_setStartArrowSize = new TKSizeAction(actionCollection(), "startArrowSize");
-
-  connect( m_pDoc, SIGNAL(unitsChanged(int)), m_setEndArrowSize, SLOT(setUnit(int)) );
-  connect( m_setEndArrowSize, SIGNAL(activated()), SLOT(slotSetEndArrowSize()));
-
-  connect( m_pDoc, SIGNAL(unitsChanged(int)), m_setStartArrowSize, SLOT(setUnit(int)) );
-  connect( m_setStartArrowSize, SIGNAL(activated()), SLOT(slotSetStartArrowSize()));
-*/
   connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
 
   KStdAction::preferences(this, SLOT(optionsDialog()), actionCollection(), "options" );
@@ -1529,34 +1519,36 @@ void KivioView::pasteStencil()
 
 void KivioView::slotChangeStencilSize(double newW, double newH)
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-    if ( pStencil )
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+
+  if ( pStencil )
+  {
+    KivioRect oldPos(pStencil->rect());
+    pStencil->setDimensions(newW, newH);
+    if ((oldPos.w() != pStencil->rect().w()) || (oldPos.h() != pStencil->rect().h()))
     {
-        KivioRect oldPos(pStencil->rect());
-        pStencil->setDimensions(newW, newH);
-        if ((oldPos.w() != pStencil->rect().w()) || (oldPos.h() != pStencil->rect().h()))
-        {
-            KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Resize Stencil"), pStencil, oldPos , pStencil->rect(), m_pCanvas->activePage());
-            m_pDoc->updateView(m_pActivePage);
-            m_pDoc->addCommand( cmd );
-        }
+      KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Resize Stencil"), pStencil, oldPos , pStencil->rect(), m_pCanvas->activePage());
+      m_pDoc->updateView(m_pActivePage);
+      m_pDoc->addCommand( cmd );
     }
+  }
 }
 
 void KivioView::slotChangeStencilPosition(double newW, double newH)
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-    if ( pStencil )
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+
+  if ( pStencil )
+  {
+    KivioRect oldPos(pStencil->rect());
+    pStencil->setPosition(newW, newH);
+    if ((oldPos.x() != pStencil->rect().x()) || (oldPos.y() != pStencil->rect().y()))
     {
-        KivioRect oldPos(pStencil->rect());
-        pStencil->setPosition(newW, newH);
-        if ((oldPos.x() != pStencil->rect().x()) || (oldPos.y() != pStencil->rect().y()))
-        {
-            KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"), pStencil, oldPos , pStencil->rect(), m_pCanvas->activePage());
-            m_pDoc->updateView(m_pActivePage);
-            m_pDoc->addCommand( cmd );
-        }
+      KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"), pStencil, oldPos , pStencil->rect(), m_pCanvas->activePage());
+      m_pDoc->updateView(m_pActivePage);
+      m_pDoc->addCommand( cmd );
     }
+  }
 }
 
 
@@ -1865,6 +1857,7 @@ void KivioView::setRulerPageLayout(const KoPageLayout& l)
   hRuler->setPageLayout(l);
   vRuler->setFrameStartEnd(zoomHandler()->zoomItY(l.ptTop), zoomHandler()->zoomItY(l.ptHeight - l.ptBottom));
   hRuler->setFrameStartEnd(zoomHandler()->zoomItX(l.ptLeft), zoomHandler()->zoomItX(l.ptWidth - l.ptRight));
+  m_pStencilGeometryPanel->setPageLayout(l);
 }
 
 void KivioView::setLineWidthUnit(KoUnit::Unit u)

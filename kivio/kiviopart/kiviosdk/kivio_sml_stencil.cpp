@@ -1521,34 +1521,38 @@ KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, 
  */
 void KivioSMLStencil::updateGeometry()
 {
-    KivioConnectorTarget *pTarget, *pOriginal;
-    double _x, _y;
-    double defWidth, defHeight;
+  KivioConnectorTarget *pTarget, *pOriginal;
+  double _x, _y;
+  double defWidth, defHeight;
+  kdDebug() << "m_x = " << m_x << " m_y = " << m_y << endl;
 
-    defWidth = m_pSpawner->defWidth();
-    defHeight = m_pSpawner->defHeight();
+  defWidth = m_pSpawner->defWidth();
+  defHeight = m_pSpawner->defHeight();
 
-    QPtrList<KivioConnectorTarget> *pOriginalTargets;
+  QPtrList<KivioConnectorTarget> *pOriginalTargets;
 
-    KivioSMLStencilSpawner *smlSpawner = dynamic_cast<KivioSMLStencilSpawner *>(m_pSpawner);
-    KivioDiaStencilSpawner *diaSpawner = dynamic_cast<KivioDiaStencilSpawner *>(m_pSpawner);
-    if(smlSpawner != 0)
-	pOriginalTargets = smlSpawner->targets();
-    else if(diaSpawner != 0)
-	pOriginalTargets = diaSpawner->targets();
-    pTarget = m_pConnectorTargets->first();
-    pOriginal = pOriginalTargets->first();
+  KivioSMLStencilSpawner *smlSpawner = dynamic_cast<KivioSMLStencilSpawner *>(m_pSpawner);
+  KivioDiaStencilSpawner *diaSpawner = dynamic_cast<KivioDiaStencilSpawner *>(m_pSpawner);
 
-    while( pTarget && pOriginal )
-    {
-        _x = (pOriginal->x() / defWidth) * m_w  + m_x;
-        _y = (pOriginal->y() / defHeight) * m_h + m_y;
+  if(smlSpawner != 0) {
+    pOriginalTargets = smlSpawner->targets();
+  } else if(diaSpawner != 0) {
+    pOriginalTargets = diaSpawner->targets();
+  }
 
-        pTarget->setPosition( _x, _y );
+  pTarget = m_pConnectorTargets->first();
+  pOriginal = pOriginalTargets->first();
 
-        pTarget = m_pConnectorTargets->next();
-        pOriginal = pOriginalTargets->next();
-    }
+  while( pTarget && pOriginal )
+  {
+    _x = (pOriginal->x() / defWidth) * m_w  + m_x;
+    _y = (pOriginal->y() / defHeight) * m_h + m_y;
+
+    pTarget->setPosition( _x, _y );
+
+    pTarget = m_pConnectorTargets->next();
+    pOriginal = pOriginalTargets->next();
+  }
 }
 
 
