@@ -188,12 +188,6 @@ private slots:
 private:
     static const int s_area = 30003;
 
-    /**
-     *	Get the ID of the QWidget in the Stack which matches this
-     *  extension. (internal)
-     */
-    const int findWidget(const QString &ext) const;
-
     static KoFilterManager* s_pSelf;
     KoFilterManagerPrivate *d;
     //static unsigned long s_refCnt;
