@@ -172,14 +172,182 @@ eliminated.
 available in standalone mode and when embedded in &kspread;
 </para>
 <para>
+Depending on the chart type you have selected, the available
+options are slightly different. Let's choose the line chart
+type by clicking on the <inlinemediaobject><imageobject>
+<imagedata fileref="cr22-action-chart_line.png" format="PNG"/>
+</imageobject></inlinemediaobject> icon in the toolbar.
+</para>
+<para>
 To get to the chart configuration dialog, select <menuchoice>
 <guimenu>Edit</guimenu><guisubmenu>Chart</guisubmenu>
 <guimenuitem>Configure Chart...</guimenuitem>
-</menuchoice> from the menu or by clicking on the
+</menuchoice> from the menu or click on the
 <inlinemediaobject><imageobject>
 <imagedata fileref="cr22-action-options.png" format="PNG"/>
 </imageobject></inlinemediaobject> icon in the toolbar.
 </para>
+<sect3 id="config-rowcol">
+<title>Row and Column Swapping</title>
+<screenshot>
+<screeninfo>Configuration page 1 - row/column swapping</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config1.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The first configuration page can be used to swap the
+interpretation of rows and columns.
+By default one row is considered to be a data set
+and each column holds the individual values of the data
+series. Here you can choose to have a each column hold
+one data set. Note that the values are not really swapped
+but only their interpretation.
+</para>
+</sect3>
+<sect3 id="config-subtype">
+<title>Chart Subtype</title>
+<screenshot>
+<screeninfo>Configuration page 2 - Chart Subtype</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config2.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The second page can be used to select the desired sub type of
+a chart. The available sub types depend on the chart type, in
+this case the line chart. Some chart types have no sub type
+at all in which case this configuration page is not shown.
+You also get a preview for each subtype.
+</para>
+</sect3>
+<sect3 id="config-titlefooter">
+<title>Title and Footer</title>
+<screenshot>
+<screeninfo>Configuration page 3 - Title and Footer</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config3.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+On the third page you can set the title, the subtitle and the footer of
+the chart, each with individual font settings.
+</para>
+</sect3>
+<sect3 id="config-legend">
+<title>Legend</title>
+<screenshot>
+<screeninfo>Configuration page 4 - Legend</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config4.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The legend configuration page lets you set all aspects of the legend.
+The legend contains the names for all data sets with the respective
+colors, this is important to identify the data on the chart.
+</para>
+<para>
+The General box holds the title of the legend, which is displayed
+at the top of the legend box.
+The Position box can be used to place the legend at various locations
+on the chart. Use the central button to hide the legend.
+</para>
+<para>
+The Font box can be used to set
+different fonts for the legend title and the individual entries.
+Additionally you can set different colors in the Color box.
+</para>
+</sect3>
+<sect3 id="config-axes">
+<title>Axes</title>
+<screenshot>
+<screeninfo>Configuration page 5 - Axes</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config5.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The Axes page holds configuration for the chart axes. This
+page highly depends on the chart type chosen. For the line
+chart you can set linear or logarithmic scales, turn the grid
+on and off and the line marker puts a square at every data value.
+</para>
+</sect3>
+<sect3 id="config-colors">
+<title>Colors</title>
+<screenshot>
+<screeninfo>Configuration page 6 - Colors</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config6.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+On the colors page you can choose the colors for the individual
+data sets. You can also set colors for some general chart parts
+like axes line color and grid color.
+</para>
+</sect3>
+<sect3 id="config-font">
+<title>Font</title>
+<screenshot>
+<screeninfo>Configuration page 7 - Font</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config7.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The font page can be used to configure various fonts like
+titles, axes labels and so on. Some of these fonts can
+be set on other pages as well, but on the font page you
+have them all in one place.
+</para>
+</sect3>
+<sect3 id="config-background">
+<title>Background</title>
+<screenshot>
+<screeninfo>Configuration page 8 - Background </screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-config8.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+On the background page you will find various options for tweaking
+the background settings of the chart. You can either choose
+different background colors or even a background picture.
+</para>
+</sect3>
+<sect3 id="config-more">
+<title>More...</title>
+<para>
+This short overview of the configuration options gave you an
+introduction to the configuration possibilities of your chart,
+it is by no means complete. Different chart types have
+additional specialised configuration pages and you are welcome
+to look around, try different chart types and look at the
+configuration possibilities. Use the tooltips and read the
+What's This? help. To use the What's This? help simply
+click on the question mark on the window
+decoration and then click on the area of the configuration
+page you want get more information on.
+</para>
+</sect3>
 </sect2>
 </sect1>
 </chapter>
