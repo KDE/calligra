@@ -445,6 +445,11 @@ void KOSpell::dialog2 (int result)
         replacelist.append (replacement());
         emit replaceall( dlgorigword ,  replacement() );
         break;
+    case KS_CHECKAGAINWITHNEWLANGUAGE:
+        changeSpellLanguage( ksdlg->languageIndex());
+        spellCheckReplaceWord( dlgreplacement);
+        testNextWord = false;
+        break;
     case KS_CHECKAGAIN:
         spellCheckReplaceWord( dlgreplacement);
         testNextWord = false;
@@ -546,6 +551,13 @@ void KOSpell::setIgnoreTitleCase(bool _ignore)
     d->m_bIgnoreTitleCase=_ignore;
 }
 
+void KOSpell::changeSpellLanguage( int index )
+{
+    AspellConfig * config2 = aspell_config_clone(config);
+    aspell_config_replace(config2, "lang",KOSpellConfig::listOfLanguageFileName()[index].latin1() );
+    //possible_err = new_aspell_speller(spell_config2);
+    delete_aspell_config(config2);
+}
 
 #include "koSpell.moc"
 

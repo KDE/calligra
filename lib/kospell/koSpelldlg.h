@@ -39,7 +39,8 @@ enum KS_RESULT {
   KS_ADD=        5,
   KS_STOP=       7,
   KS_CHECKAGAIN =8,
-  KS_ADDAUTOCORRECT = 9
+  KS_ADDAUTOCORRECT = 9,
+  KS_CHECKAGAINWITHNEWLANGUAGE = 10
 };
 
 class KOSpellDlg : public KDialogBase
@@ -57,7 +58,7 @@ class KOSpellDlg : public KDialogBase
     QLabel *wordlabel;
     QString word, newword;
     bool progressbar;
-
+    int m_indexLanguage;
 public:
     KOSpellDlg (QWidget *parent, const char *name, int indexOfLanguage,
                bool _progressbar = FALSE, bool _modal = FALSE, bool _autocorrect = false );
@@ -75,6 +76,8 @@ public:
     void changeSuggList( QStringList *_lst );
 
     void standby() { emit(ready(false)); }
+
+    int languageIndex()const { return m_indexLanguage;}
 
 public slots:
     /**

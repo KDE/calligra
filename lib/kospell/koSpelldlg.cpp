@@ -51,7 +51,7 @@ KOSpellDlg::KOSpellDlg(
 {
   QWidget * w = new QWidget(this);
   setMainWidget(w);
-
+  m_indexLanguage=0;
   wordlabel = new QLabel(w, "wordlabel");
   wordlabel->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 
@@ -178,7 +178,8 @@ void KOSpellDlg::changeLanguage( int index)
 {
     //todo change language in config
     newword = word;
-    done (KS_CHECKAGAIN);
+    m_indexLanguage = index;
+    done (KS_CHECKAGAINWITHNEWLANGUAGE);
 }
 
 void KOSpellDlg::changeSuggList( QStringList *_lst )

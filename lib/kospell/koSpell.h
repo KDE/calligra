@@ -457,6 +457,7 @@ protected:
     void spellCheckReplaceWord( const QString & _word);
     QStringList resultCheckWord( const QString &_word );
     bool initConfig();
+    void changeSpellLanguage( int index );
 private:
     class KOSpellPrivate;
     KOSpellPrivate *d;
