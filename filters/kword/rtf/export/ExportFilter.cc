@@ -29,6 +29,7 @@
 #include <qfontinfo.h>
 #include <qpicture.h>
 #include <qregion.h> // for #include <kdebugclasses.h>
+#include <qimage.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -76,17 +77,46 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
     return true;
 }
 
+// convert unknown image to PNG using QImageIO
+// return false is failed
+
+bool RTFWorker::convertUnknownImage(QByteArray& unknownImage, QByteArray& image)
+{
+    // try to load the "unknown" image
+    QBuffer inbuf(unknownImage); 
+    inbuf.open(IO_ReadOnly);
+    QImageIO imageIO(&inbuf,NULL);
+    if (!imageIO.read())
+        return false;
+    inbuf.close();
+
+    // prepare outbuf & try to convert to PNG
+    QBuffer outbuf(image);
+    outbuf.open(IO_WriteOnly);
+    imageIO.setIODevice(&outbuf);
+    imageIO.setFormat("PNG");
+
+    if (!imageIO.write())
+    {
+        kdWarning(30503) << "Could not write converted image! " << endl;
+        return false;
+    }
+    outbuf.close();
+
+    return true;
+}
+
+
 bool RTFWorker::makeImage(const FrameAnchor& anchor)
 {
     QString strImageName(anchor.picture.koStoreName);
+    QString strExt;
+    QByteArray image;
+
+    kdDebug(30503) << "RTFWorker::makeImage" << endl << anchor.picture.koStoreName << endl;
 
     const int pos=strImageName.findRev('.');
-    if (pos==-1)
-    {
-        kdError(30503) << "Images without extensions are not supported: " << anchor.picture.koStoreName << endl;
-        return true;
-    }
-    const QString strExt(strImageName.mid(pos).lower());
+    if(pos!=-1) strExt = strImageName.mid(pos).lower();
 
     QString strTag;
     if (strExt==".bmp")
@@ -99,22 +129,31 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
         strTag="\\wmetafile";
     else
     {
-        kdWarning(30503) << "Cannot support type of picture:" << anchor.picture.koStoreName << endl;
-        return true;
-    }
+        // either without extension or format is unknown
+        // let's try to convert it to PNG format
+        kdDebug(30503) << "Converting image " << anchor.picture.koStoreName << endl;
 
-    kdDebug(30503) << "Picture " << anchor.picture.koStoreName << " will be written as " << strTag << endl;
+        strTag="\\pngblip";
+        QByteArray unknownImage;
+        loadKoStoreFile(anchor.picture.koStoreName,unknownImage);
+        if( !convertUnknownImage(unknownImage,image) )
+        {
+            kdWarning(30503) << "Unable to convert " << anchor.picture.koStoreName << endl;
+            return true;
+        }
+    }
 
     m_textBody += "{\\pict";
     m_textBody += strTag;
     // ### TODO: height/width original/scaled
 
-    QByteArray image;
-    if (!loadKoStoreFile(anchor.picture.koStoreName,image))
-    {
-        kdWarning(30503) << "Unable to load picture " << anchor.picture.koStoreName << endl;
-        return true;
-    }
+    // load the image, this isn't necessary for converted image
+    if( !image.size() )
+        if (!loadKoStoreFile(anchor.picture.koStoreName,image))
+        {
+            kdWarning(30503) << "Unable to load picture " << anchor.picture.koStoreName << endl;
+            return true;
+        }
 
     const int width  = int(anchor.right  - anchor.left) * 20;
     const int height = int(anchor.bottom - anchor.top)  * 20;

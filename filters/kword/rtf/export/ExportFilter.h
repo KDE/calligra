@@ -70,6 +70,7 @@ private:
     void formatTextParagraph(const QString& strText,
         const FormatData& formatOrigin, const FormatData& format);
     bool makeTable(const FrameAnchor& anchor);
+    bool convertUnknownImage(QByteArray& unknownImage, QByteArray& image);
     bool makeImage(const FrameAnchor& anchor);
     void writeFontData(void);
     void writeColorData(void);
