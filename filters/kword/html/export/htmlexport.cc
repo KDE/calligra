@@ -63,17 +63,11 @@ bool HTMLExport::filter(const QString  &filenameIn,
         return false;
     }
 
-#if 1
-    // Some "security" to see if I have forgotten to run "make install"
-    // (Can be deleted when the filter will be stable.)
-    kdDebug(30503) << "htmlexport.cc " << __DATE__ " " __TIME__ << " " << "$Revision$" << endl;
-#endif
-
     HtmlExportDialog* dialog = new HtmlExportDialog();
 
     if (!dialog)
     {
-        kdError(30503) << "Dialog has not been created Aborting!" << endl;
+        kdError(30503) << "Dialog has not been created! Aborting!" << endl;
         return false;
     }
 
