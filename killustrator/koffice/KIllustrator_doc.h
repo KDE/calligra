@@ -74,6 +74,8 @@ public:
 
   virtual bool saveChildren (KOStore::Store_ptr _store, const char *_path);
   bool save (ostream& os, const char *fmt);
+  bool completeSaving (KOStore::Store_ptr store);
+
   bool load (istream& is, KOStore::Store_ptr store);
   bool loadChildren (KOStore::Store_ptr store);
   bool hasToWriteMultipart ();

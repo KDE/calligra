@@ -41,9 +41,6 @@ KIllustratorChild::KIllustratorChild (KIllustratorDocument* killu,
 				      KOffice::Document_ptr doc)
   : KoDocumentChild (rect, doc) {
   m_pKilluDoc = killu;
-  cout << "mime type = " << (const char *) m_strMimeType << endl;
-  cout << "url = " << (const char *) m_strURL << " (" <<
-    m_rDoc->url () << ")" << endl;
 }
 
 KIllustratorChild::~KIllustratorChild () {
@@ -139,6 +136,13 @@ bool KIllustratorDocument::saveChildren (KOStore::Store_ptr _store, const char *
     }
   return true;
 }  
+
+bool KIllustratorDocument::completeSaving (KOStore::Store_ptr store) {
+  if (!store)
+    return true;
+
+  return true;
+}
 
 bool KIllustratorDocument::hasToWriteMultipart () {
   return (m_lstChildren.count () > 0);

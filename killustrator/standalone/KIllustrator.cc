@@ -1221,7 +1221,9 @@ void KIllustrator::saveFile () {
     document->setFileName ((const char *) document->fileName ());
     PStateManager::instance ()->addRecentFile ((const char *)
 					       document->fileName ());
+#if !NEWKDE
     setUnsavedData (false);
+#endif
   }
 }
 
@@ -1254,7 +1256,9 @@ void KIllustrator::saveAsFile () {
     document->setFileName (fname);
     PStateManager::instance ()->addRecentFile ((const char *) fname);
     setFileCaption (fname);
+#if !NEWKDE
     setUnsavedData (false);
+#endif
     lastExport = "";
   }
 }
@@ -1543,7 +1547,9 @@ void KIllustrator::toolSelected (int id) {
 }
 
 void KIllustrator::documentIsModifiedSlot (bool flag) {
+#if !NEWKDE
   setUnsavedData (flag);
+#endif
 }
 
 void KIllustrator::saveProperties (KConfig* config) {
