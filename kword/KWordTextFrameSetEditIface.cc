@@ -110,5 +110,22 @@ void KWordTextFrameSetEditIface::insertVariable( const QString & var)
   else if (var=="CURRENTPAGE")
     m_framesetedit->insertVariable(4,0);
   else if (var=="TOTALPAGE")
-    m_framesetedit->insertVariable(4,1);
+    m_framesetedit->insertVariable(8,1);
+  else if (var=="TELEPHONE")
+    m_framesetedit->insertVariable(8,7);
+  else if (var=="FAX")
+    m_framesetedit->insertVariable(8,8);
+  else if (var=="COUNTRY")
+    m_framesetedit->insertVariable(8,9);
+  else if (var=="POSTAL_CODE")
+    m_framesetedit->insertVariable(8,12);
+  else if (var=="CITY")
+    m_framesetedit->insertVariable(8,13);
+  else if (var=="STREET")
+    m_framesetedit->insertVariable(8,14);
+}
+
+void KWordTextFrameSetEditIface::insertNote(const QString &_note)
+{
+    m_framesetedit->insertNote(_note);
 }
