@@ -159,14 +159,19 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
                       << data.typeName() << "(" << data.type() << ")" << endl;
         return QString::null;
     }
-    QDate date = data.type() == QVariant::Date ? data.toDate() : data.toDateTime().date();
+    QDate date = data.toDate();
+    QDateTime dateTime = data.type() == QVariant::DateTime ? data.toDateTime() : QDateTime(date, QTime());
     if ( !date.isValid() )
-        return QString("");
+        return i18n("No date set"); // e.g. "last printed date" if never printed
 
-    if (m_strFormat.lower()=="locale" || m_strFormat.isEmpty())
+    if (m_strFormat.lower() == "locale" || m_strFormat.isEmpty())
 	return KGlobal::locale()->formatDate( date, false );
     else if ( m_strFormat.lower() == "localeshort" )
 	return KGlobal::locale()->formatDate( date, true );
+    else if ( m_strFormat.lower() == "localedatetime" )
+	return KGlobal::locale()->formatDateTime( dateTime, false );
+    else if ( m_strFormat.lower() == "localedatetimeshort" )
+	return KGlobal::locale()->formatDateTime( dateTime, true );
 
     QString tmp=data.toDate().toString(m_strFormat);
     tmp.replace("PPPP", KGlobal::locale()->monthNamePossessive(date.month(), false)); //long possessive month name
@@ -202,6 +207,8 @@ QStringList KoVariableDateFormat::staticFormatPropsList()
     QStringList listDateFormat;
     listDateFormat<<"locale";
     listDateFormat<<"localeshort";
+    listDateFormat<<"localedatetime";
+    listDateFormat<<"localedatetimeshort";
     listDateFormat<<"dd/MM/yy";
     listDateFormat<<"dd/MM/yyyy";
     listDateFormat<<"MMM dd,yy";
@@ -222,8 +229,10 @@ QStringList KoVariableDateFormat::staticFormatPropsList()
 QStringList KoVariableDateFormat::staticTranslatedFormatPropsList()
 {
     QStringList listDateFormat;
-    listDateFormat<<i18n("Locale format");
-    listDateFormat<<i18n("Short locale format");
+    listDateFormat<<i18n("Locale date format");
+    listDateFormat<<i18n("Short locale date format");
+    listDateFormat<<i18n("Locale date & time format");
+    listDateFormat<<i18n("Short locale date & time format");
     listDateFormat<<"dd/MM/yy";
     listDateFormat<<"dd/MM/yyyy";
     listDateFormat<<"MMM dd,yy";
@@ -848,18 +857,18 @@ void KoDateVariable::resize()
 void KoDateVariable::recalc()
 {
     if ( m_subtype == VST_DATE_CURRENT )
-        m_varValue = QVariant(QDate::currentDate().addDays(m_correctDate));
+        m_varValue = QDateTime::currentDateTime().addDays(m_correctDate);
     else if ( m_subtype == VST_DATE_LAST_PRINTING )
-        m_varValue = QVariant(m_varColl->variableSetting()->lastPrintingDate());
+        m_varValue = m_varColl->variableSetting()->lastPrintingDate();
     else if ( m_subtype == VST_DATE_CREATE_FILE )
-        m_varValue = QVariant( m_varColl->variableSetting()->creationDate() );
+        m_varValue = m_varColl->variableSetting()->creationDate();
     else if ( m_subtype == VST_DATE_MODIFY_FILE )
-        m_varValue = QVariant( m_varColl->variableSetting()->modificationDate() );
+        m_varValue = m_varColl->variableSetting()->modificationDate();
     else
     {
         // Only if never set before (i.e. upon insertion)
-        if ( m_varValue.toDate().isNull() )
-            m_varValue= QVariant(QDate::currentDate().addDays(m_correctDate));
+        if ( m_varValue.isNull() )
+            m_varValue = QDateTime::currentDateTime().addDays(m_correctDate);
     }
     resize();
 }
@@ -868,14 +877,21 @@ void KoDateVariable::saveVariable( QDomElement& varElem )
 {
     QDomElement elem = varElem.ownerDocument().createElement( "DATE" );
     varElem.appendChild( elem );
-    QDate date = m_varValue.toDate();
-    date = date.addDays( (-1*m_correctDate) );//remove correctDate value otherwise value stored is bad
+    QDate date = m_varValue.toDate(); // works with Date and DateTime
+    date = date.addDays( -m_correctDate );//remove correctDate value otherwise value stored is bad
     elem.setAttribute( "year", date.year() );
     elem.setAttribute( "month", date.month() );
     elem.setAttribute( "day", date.day() );
     elem.setAttribute( "fix", m_subtype == VST_DATE_FIX ); // for compat
     elem.setAttribute( "correct", m_correctDate);
     elem.setAttribute( "subtype", m_subtype);
+    if ( m_varValue.type() == QVariant::DateTime )
+    {
+        QTime time = m_varValue.toTime();
+        elem.setAttribute( "hour", time.hour() );
+        elem.setAttribute( "minute", time.minute() );
+        elem.setAttribute( "second", time.second() );
+    }
 }
 
 void KoDateVariable::load( QDomElement& elem )
@@ -902,6 +918,18 @@ void KoDateVariable::load( QDomElement& elem )
         m_subtype = fix ? VST_DATE_FIX : VST_DATE_CURRENT;
         if ( elem.hasAttribute( "subtype" ))
             m_subtype = elem.attribute( "subtype").toInt();
+        // support for time info
+        if ( elem.hasAttribute( "hour" ) )
+        {
+            int h = e.attribute("hour").toInt();
+            int m = e.attribute("minute").toInt();
+            int s = e.attribute("second").toInt();
+            int ms = e.attribute("msecond").toInt();
+            QTime time;
+            time.setHMS( h, m, s, ms );
+            // no time correction here... time = time.addSecs( m_correctTime );
+            m_varValue = QDateTime( m_varValue.toDate(), time );
+        }
     }
 }
 
@@ -1042,11 +1070,11 @@ void KoTimeVariable::saveVariable( QDomElement& parentElem )
     QDomElement elem = parentElem.ownerDocument().createElement( "TIME" );
     parentElem.appendChild( elem );
     QTime time = m_varValue.toTime();
-    time = time.addSecs(1*m_correctTime);
+    time = time.addSecs(-m_correctTime);
     elem.setAttribute( "hour", time.hour() );
     elem.setAttribute( "minute", time.minute() );
     elem.setAttribute( "second", time.second() );
-//    elem.setAttribute( "msecond", m_time.msec() );
+    elem.setAttribute( "msecond", time.msec() );
     elem.setAttribute( "fix", m_subtype == VST_TIME_FIX );
     elem.setAttribute( "correct", m_correctTime );
 }

@@ -113,17 +113,10 @@ void DateFormatWidget::comboActivated()
  */
 void DateFormatWidget::updateLabel()
 {
-    QDate ct=QDate::currentDate();
-    ct = ct.addDays(correctValue());
-    if(combo1->currentText().lower()==i18n("Locale").lower())
-      {
-	label->setText(KGlobal::locale()->formatDate( ct ));
-	return;
-      }
-    QString tmp=combo1->currentText();;
-    tmp.replace("PPPP", KGlobal::locale()->monthNamePossessive(ct.month(), false)); //long possessive month name
-    tmp.replace("PPP", KGlobal::locale()->monthNamePossessive(ct.month(), true)); //short possessive month name
-    label->setText(ct.toString(tmp));
+    KoVariableDateFormat format;
+    format.setFormatProperties( resultString() );
+    QDateTime ct = QDateTime::currentDateTime().addDays( correctValue() );
+    label->setText( format.convert( ct ) );
 }
 
 QString DateFormatWidget::resultString()

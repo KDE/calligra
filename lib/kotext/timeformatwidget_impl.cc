@@ -103,14 +103,11 @@ void TimeFormatWidget::comboActivated()
  */
 void TimeFormatWidget::updateLabel()
 {
-    QTime ct=QTime::currentTime();
-    ct = ct.addSecs(correctValue());
-    if(combo1->currentText().lower()==i18n("Locale").lower())
-      {
-	label->setText(KGlobal::locale()->formatTime( ct ));
-	return;
-      }
-    label->setText(ct.toString(combo1->currentText()));
+    KoVariableTimeFormat format;
+    format.setFormatProperties( resultString() );
+
+    QTime ct = QTime::currentTime().addSecs(correctValue());
+    label->setText( format.convert( ct ) );
 }
 
 QString TimeFormatWidget::resultString()
