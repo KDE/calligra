@@ -676,7 +676,10 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
         dlg->formatNumber==KSpreadCell::fraction_eighth ||
         dlg->formatNumber==KSpreadCell::fraction_sixteenth ||
         dlg->formatNumber==KSpreadCell::fraction_tenth ||
-        dlg->formatNumber==KSpreadCell::fraction_hundredth )
+        dlg->formatNumber==KSpreadCell::fraction_hundredth ||
+        dlg->formatNumber==KSpreadCell::fraction_one_digit ||
+        dlg->formatNumber==KSpreadCell::fraction_two_digits ||
+        dlg->formatNumber==KSpreadCell::fraction_three_digits)
                 fraction->setChecked(true);
         }
     connect(fraction,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
@@ -736,12 +739,15 @@ else if(fraction->isChecked())
         {
         precision->setEnabled(false);
         listFormat->setEnabled(true);
-        list+="1/2";
-        list+="1/4";
-        list+="1/8";
-        list+="1/16";
-        list+="1/10";
-        list+="1/100";
+        list+=i18n("Demis 1/2");
+        list+=i18n("Quarters 1/4");
+        list+=i18n("Eighths 1/8");
+        list+=i18n("Sixteenths 1/16");
+        list+=i18n("Tenths 1/10");
+        list+=i18n("Hundredth 1/100");
+        list+=i18n("One digit 5/9");
+        list+=i18n("Two digits 15/22");
+        list+=i18n("Three digits 153/652");
         listFormat->insertStringList(list);
         if(dlg->formatNumber==KSpreadCell::fraction_half)
                 listFormat->setCurrentItem(0);
@@ -755,6 +761,12 @@ else if(fraction->isChecked())
                 listFormat->setCurrentItem(4);
         else if(dlg->formatNumber==KSpreadCell::fraction_hundredth )
                 listFormat->setCurrentItem(5);
+        else if(dlg->formatNumber==KSpreadCell::fraction_one_digit )
+                listFormat->setCurrentItem(6);
+        else if(dlg->formatNumber==KSpreadCell::fraction_two_digits )
+                listFormat->setCurrentItem(7);
+        else if(dlg->formatNumber==KSpreadCell::fraction_three_digits )
+                listFormat->setCurrentItem(8);
         else
                 listFormat->setCurrentItem(0);
         }
@@ -854,20 +866,78 @@ else if(dlg->m_bValue)
 	                case 5:
 	                        index=100;
         	                break;
+                        case 6:
+                                index=3;
+        	                break;
+                        case 7:
+                                index=4;
+        	                break;
+                        case 8:
+                                index=5;
+        	                break;
                         }
-                        double calc = 0;
-                        int index1 = 1;
-                        double diff = result;
-                        for(int i=1;i<index;i++)
+                        if( listFormat->currentItem()!=6
+                        &&listFormat->currentItem()!=7
+                        &&listFormat->currentItem()!=8)
+                                {
+                                double calc = 0;
+                                int index1 = 1;
+                                double diff = result;
+                                for(int i=1;i<index;i++)
+                                {
+        	                        calc = i*1.0 / index;
+	                                if( fabs( result - calc ) < diff )
+	                                        {
+		                                index1=i;
+        		                        diff = fabs(result-calc);
+	                                        }
+                                }
+                                tmp = tmp.setNum( floor(dlg->m_value) ) + " " + tmp.setNum( index1 ) + "/" + tmp.setNum( index );
+                        }
+                        else
                         {
-        	        calc = i*1.0 / index;
-	                if( fabs( result - calc ) < diff )
-	                        {
-		                index1=i;
-        		        diff = fabs(result-calc);
-	                        }
+                        int limit=0;
+
+                        double preci=0;
+                        if(listFormat->currentItem()==6)
+                                limit=9;
+                        else if(listFormat->currentItem()==7)
+                                limit=99;
+                        else if(listFormat->currentItem()==8)
+                                limit=999;
+                        double denominator=0;
+                        double numerator=0;
+                        do
+                        {
+                        double val1=result;
+                        double inter2=1;
+                        double inter4=0;
+                        double p=0;
+                        double q=0;
+                        double val2=rint(result);
+
+                        preci=pow(10,(-1*index));
+                        numerator=rint(result);
+                        denominator=1;
+                        while(fabs(numerator/denominator-result)>preci)
+                                {
+                                val1=(1/(val1-val2));
+                                val2=rint(val1);
+                                p= val2*numerator + inter2;
+                                q= val2*denominator + inter4;
+                                inter2=numerator;
+                                inter4=denominator;
+                                numerator=p;
+                                denominator=q;
+                                }
+                        index--;
                         }
-                        tmp = tmp.setNum( floor(dlg->m_value) ) + " " + tmp.setNum( index1 ) + "/" + tmp.setNum( index );
+                        while (fabs(denominator)>limit) ;
+                        if(fabs(denominator)==fabs(numerator))
+                                tmp = tmp.setNum( floor(dlg->m_value+1) );
+                        else
+                                tmp = tmp.setNum( floor(dlg->m_value) ) + " " + tmp.setNum( fabs(numerator) ) + "/" + tmp.setNum( fabs(denominator) );
+                        }
                 }
                 }
         if ( precision->value() == -1 && tmp.find(decimal_point) >= 0 )
@@ -960,6 +1030,12 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
                 _obj->setFormatNumber(KSpreadCell::fraction_tenth);
         else if( listFormat->currentItem()==5)
                 _obj->setFormatNumber(KSpreadCell::fraction_hundredth);
+        else if( listFormat->currentItem()==6)
+                _obj->setFormatNumber(KSpreadCell::fraction_one_digit);
+        else if( listFormat->currentItem()==7)
+                _obj->setFormatNumber(KSpreadCell::fraction_two_digits);
+        else if( listFormat->currentItem()==8)
+                _obj->setFormatNumber(KSpreadCell::fraction_three_digits);
         }
     else if(date->isChecked())
         {
@@ -979,7 +1055,6 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
         _obj->setFormatNumber(KSpreadCell::Money);
     else if(scientific->isChecked())
         _obj->setFormatNumber(KSpreadCell::Scientific);
-    //_obj->setPrecision( 0 );
 
 }
 

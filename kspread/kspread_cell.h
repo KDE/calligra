@@ -127,7 +127,8 @@ public:
     enum Content { Text, RichText, Formula, VisualFormula };
     enum formatNumber { Number=0,Money=10,Percentage=25,Scientific=30,ShortDate=35,TextDate=36, Time=50,
     SecondeTime=51,fraction_half=70,fraction_quarter=71,fraction_eighth=72,fraction_sixteenth=73,
-     fraction_tenth=74,fraction_hundredth=75};
+     fraction_tenth=74,fraction_hundredth=75,fraction_one_digit=76,
+     fraction_two_digits=77,fraction_three_digits=78};
 
     KSpreadCell( KSpreadTable *_table, int _column, int _row );
     /**
@@ -270,12 +271,12 @@ public:
     QString text() const { return m_strText; }
 
     void setStyle( Style _s );
-    
+
     void setAction( const QString& _action ) { m_strAction = _action; }
 
     void setComment( const QString& c );
     QString comment() const;
-    
+
     ////////////////////////////////
     //
     // Methods for querying layout stuff.
@@ -291,7 +292,7 @@ public:
      * @reimp
      */
     const QPen& topBorderPen( int col, int row ) const;
-    
+
     /**
      * @reimp
      */
@@ -322,7 +323,7 @@ public:
      * @reimp
      */
     void setRightBorderPen( const QPen& p );
-    
+
     /**
      * @reimp
      */
@@ -333,7 +334,7 @@ public:
     // Other stuff
     //
     //////////////////////
-    
+
     /**
      * @see #setStyle
      * @see #m_style
@@ -564,7 +565,7 @@ public:
     		m_secondCondition=new KSpreadConditional;
     	return m_secondCondition;
     	}
-    	
+
     KSpreadConditional * getThirdCondition(int newStruct=-1)
     	{
     	if((m_thirdCondition==0)&&(newStruct==-1))
@@ -912,7 +913,7 @@ protected:
 
     KSpreadCell* m_nextCell;
     KSpreadCell* m_previousCell;
-    
+
     /**
      * Stores a comment string.
      */

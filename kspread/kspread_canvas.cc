@@ -54,14 +54,14 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
 		tmp = text().left(pos)+text().mid(pos).upper();
 	    else
 		tmp=text().upper();
-	
+
 	    // Selection entered in location widget
 	    if ( text().contains( ':' ) )
 		m_pView->canvasWidget()->gotoLocation( KSpreadRange( tmp, m_pView->doc()->map() ) );
 	    // Location entered in location widget
 	    else
 		m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp, m_pView->doc()->map() ));
-	
+
 	    // Set the focus back on the canvas.
 	    m_pView->canvasWidget()->setFocus();
 	    _ev->accept();
@@ -940,10 +940,10 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     else if ( _ev->button() == RightButton )
     {
 	// No selection or the mouse press was outside of an existing selection ?
-	if ( selection.left() == 0 || !selection.contains( col, row ) )
+	if ( selection.left() == 0 || !selection.contains( QPoint(col, row )) )
 	    table->setMarker( QPoint( col, row ) );
     }
-    
+
     // Update the edit box
     m_pView->updateEditWidget();
 
@@ -956,7 +956,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 	QPoint p = mapToGlobal( _ev->pos() );
 	m_pView->openPopupMenu( p );
     }
-    
+
     // Paste operation with the middle button ?
     if( _ev->button() == MidButton )
         table->paste( QPoint( markerColumn(), markerRow() ) );
@@ -1120,7 +1120,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
       rect.rTop() = 0;
   if ( rect.bottom() > height() )
       rect.rBottom() = height();
-			
+
   // printf("PAINT EVENT %i %i %i %i\n", rect.x(), rect.y(), rect.width(), rect.height() );
 
   QPainter painter;
@@ -1582,7 +1582,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
     // Limit the number of cells
     uni.rBottom() = QMIN( 9999, uni.bottom() );
     uni.rRight() = QMIN( 9999, uni.right() );
-	
+
     // qDebug("UNI %i/%i %i/%i", uni.left(), uni.top(), uni.right(), uni.bottom() );
 
     // Determine the position of "uni" rect on the screen.
@@ -1630,7 +1630,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
 	    KSpreadCell *cell = table->cellAt( x, y, TRUE );
 
 	    QPoint p( x, y );
-		
+
 	    //
 	    // Determine which parts of the marker this cell used to
 	    // display.
@@ -1640,16 +1640,16 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
 	    QRect larger;
 	    larger.setCoords( old_sel.left() - 1, old_sel.top() - 1,
 			      old_sel.right() + 1, old_sel.bottom() + 1 );
-	
+
 	    QPoint lr = old_sel.bottomRight();
-	
+
 	    int old_border = 0;
-	
+
 	    if ( old_sel.left() == x && old_sel.right() == x &&
 		 old_sel.top() == y && old_sel.bottom() == y &&
 		 ( cell->extraXCells() || cell->extraYCells() ) )
 		old_border = 1 | 2 | 4 | 8;
-	    else if ( old_sel.contains( x, y ) )
+	    else if ( old_sel.contains( QPoint(x, y) ) )
 	    {
 		// Upper border ?
 		if ( y == old_sel.top() )
@@ -1667,7 +1667,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
 		if ( p == lr )
 		    old_border |= 256;
 	    }
-	    else if ( larger.contains( x, y ) )
+	    else if ( larger.contains( QPoint(x, y) ) )
 	    {
 		// Upper border ?
 		if ( x >= old_sel.left() && x <= old_sel.right() && y - 1 == old_sel.bottom() )
@@ -1712,14 +1712,14 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
 	    larger.setCoords( new_sel.left() - 1, new_sel.top() - 1,
 			      new_sel.right() + 1, new_sel.bottom() + 1 );
 	    lr = new_sel.bottomRight();
-	
+
 	    int new_border = 0;
-	
+
 	    if ( new_sel.left() == x && new_sel.right() == x &&
 		 new_sel.top() == y && new_sel.bottom() == y &&
 		 ( cell->extraXCells() || cell->extraYCells() ) )
 		new_border = 1 | 2 | 4 | 8;
-	    else if ( new_sel.contains( x, y ) )
+	    else if ( new_sel.contains( QPoint(x, y) ) )
 	    {
 		// Upper border ?
 		if ( y == new_sel.top() )
@@ -1737,7 +1737,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
 		if ( p == lr )
 		    old_border |= 256;
 	    }
-	    else if ( larger.contains( x, y ) )
+	    else if ( larger.contains( QPoint(x, y) ) )
 	    {
 		// Upper border ?
 		if ( x >= new_sel.left() && x <= new_sel.right() && y - 1 == new_sel.bottom() )
@@ -1773,7 +1773,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
 		if ( x == lr.x() + 1 && y == lr.y() )
 		    old_border |= 2048;
 	    }
-	
+
 	    // Draw if the cell
 	    // a) was part of the selection, but is no longer.
 	    // b) the exact opposite of a)
@@ -1783,7 +1783,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
 	    {
 		cell->paintCell( view, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
 	    }
-	
+
 	    xpos += col_lay->width();
 	}
 
@@ -2885,7 +2885,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
 	int moveX = cell->obscuringCellsColumn();
 	int moveY = cell->obscuringCellsRow();
 	cell = table->cellAt( moveX, moveY );
-	
+
 	// Use the obscuring cells dimensions
 	u = cell->width( moveX, m_canvas );
 	xpos = table->columnPos( moveX, m_canvas );

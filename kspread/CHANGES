@@ -790,3 +790,6 @@ so now you can see pattern with its backgroundcolor
 -Imporved show example format, I think that it works.
 -Add new functions : DECHEX convert a decimal number to hexadecimal
 DECBIN, DECOCT
+-Add new fraction format (One digit, two digits and three digits)
+Algo gave by jp martin
+-Add functions documentations.

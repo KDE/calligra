@@ -970,10 +970,21 @@ void KSpreadDlgFormula::changeFunction()
   	tmp.firstElementType=type_double;
     }
     else if( m_funcName == "PI" || m_funcName=="currentDate"
-             || m_funcName=="currentTime" ||m_funcName=="currentDateTime")
+              ||m_funcName=="currentDateTime")
     {
 	tmp.nb_param = 0;
         tmp.help=i18n("Help");
+
+    }
+    else if( m_funcName=="currentTime")
+    {
+        tmp.nb_param = 0;
+        QString tmp1=i18n("The currentTime() function returns the current time\n"
+                "formated with local parameters.\n");
+        tmp1+=i18n("Syntax : ") +m_funcName+"()\n";
+        tmp1+=i18n("Example : \n");
+        tmp1+=i18n("currentTime() returns 19:12:01");
+        tmp.help=tmp1;
     }
     else if( m_funcName=="right" || m_funcName=="left" || m_funcName=="REPT" )
     {
@@ -1117,13 +1128,34 @@ void KSpreadDlgFormula::changeFunction()
         tmp.firstElementType=type_string;
         tmp.firstElementType=type_string;
     }
-    else if (m_funcName=="date" || m_funcName=="dayOfYear")
+    else if( m_funcName=="dayOfYear")
     {
         tmp.nb_param=3;
         tmp.firstElementLabel=i18n("Year (int)");
         tmp.secondElementLabel=i18n("Month (int)");
         tmp.thirdElementLabel=i18n("Day (int)");
-        tmp.help=m_funcName+"("+"Year,Month,Day"+")";
+        QString tmp1=i18n("The dayOfYear() function returns the number of days\n"
+                "in the year (1...365).\n");
+        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Year,Month,Day"+")\n";
+        tmp1+=i18n("Example : \n");
+        tmp1+=i18n("dayOfYear(2000,12,1) returns 336\n dayOfYear(2000,2,29) return 60");
+        tmp.help=tmp1;
+        tmp.firstElementType=type_int;
+        tmp.secondElementType=type_int;
+        tmp.thirdElementType=type_int;
+    }
+    else if (m_funcName=="date")
+    {
+        tmp.nb_param=3;
+        tmp.firstElementLabel=i18n("Year (int)");
+        tmp.secondElementLabel=i18n("Month (int)");
+        tmp.thirdElementLabel=i18n("Day (int)");
+        QString tmp1=i18n("The date() function returns a name\n"
+                "formated with loacal parameters\n");
+        tmp1+=i18n("Syntax : ") +m_funcName+"("+i18n("Year,Month,Day")+")\n";
+        tmp1+=i18n("Example : \n");
+        tmp1+=i18n("date(2000,5,5) return Friday 05 May 2000");
+        tmp.help=tmp1;
         tmp.firstElementType=type_int;
         tmp.secondElementType=type_int;
         tmp.thirdElementType=type_int;
@@ -1145,13 +1177,18 @@ void KSpreadDlgFormula::changeFunction()
         tmp.firstElementLabel=i18n("Day (int)");
 
         tmp.help=m_funcName+"("+"Day"+")";
+
         tmp.firstElementType=type_int;
     }
     else if (m_funcName=="month")
     {
         tmp.nb_param=1;
-        tmp.firstElementLabel=i18n("Month (int)");
-        tmp.help=m_funcName+"("+"Month"+")";
+        tmp.firstElementLabel=i18n("Month (Int)");
+        QString tmp1=i18n("The month() function returns name of the month (1...12).\n");
+        tmp1+=i18n("Syntax : ") +m_funcName+"("+"Int"+")\n";
+        tmp1+=i18n("Example : \n");
+        tmp1+=i18n("month(5) return May");
+        tmp.help=tmp1;
         tmp.firstElementType=type_int;
     }
     else if (m_funcName=="fact")

@@ -1284,6 +1284,9 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
     case fraction_sixteenth:
     case fraction_tenth:
     case fraction_hundredth:
+    case fraction_one_digit:
+    case fraction_two_digits:
+    case fraction_three_digits:
 	localizedNumber=createFractionFormat(value);
 	break;
     default :
@@ -1325,24 +1328,82 @@ QString KSpreadCell::createFractionFormat(double value)
 	case fraction_hundredth:
 	    index=100;
 	    break;
+        case fraction_one_digit:
+	    index=3;
+	    break;
+        case fraction_two_digits:
+	    index=4;
+	    break;
+        case fraction_three_digits:
+	    index=5;
+	    break;
 	default:
 	    kdDebug(36001)<<"Error in Fraction format\n";
 	    break;
 	}
+        if( m_eFormatNumber !=fraction_three_digits
+        && m_eFormatNumber !=fraction_two_digits
+        && m_eFormatNumber !=fraction_one_digit)
+                {
+                double calc = 0;
+                int index1 = 1;
+                double diff = result;
+                for(int i=1;i<index;i++)
+                {
+	                calc = i*1.0 / index;
+	                if( fabs( result - calc ) < diff )
+	                {
+		        index1=i;
+		        diff = fabs(result-calc);
+	                }
+	        }
+                tmp = tmp.setNum( floor(value) ) + " " + tmp.setNum( index1 ) + "/" + tmp.setNum( index );
+                }
+         else
+                {
+                int limit=0;
 
-        double calc = 0;
-        int index1 = 1;
-        double diff = result;
-        for(int i=1;i<index;i++)
-        {
-	    calc = i*1.0 / index;
-	    if( fabs( result - calc ) < diff )
-	    {
-		index1=i;
-		diff = fabs(result-calc);
-	    }
-	}
-        tmp = tmp.setNum( floor(value) ) + " " + tmp.setNum( index1 ) + "/" + tmp.setNum( index );
+                double precision=0;
+                if(m_eFormatNumber ==fraction_three_digits)
+                        limit=999;
+                else if(m_eFormatNumber ==fraction_two_digits)
+                        limit=99;
+                else if(m_eFormatNumber ==fraction_one_digit)
+                        limit=9;
+                double denominator=0;
+                double numerator=0;
+                do
+                        {
+                        double val1=result;
+                        double inter2=1;
+                        double inter4=0;
+                        double p=0;
+                        double q=0;
+                        double val2=rint(result);
+
+                        precision=pow(10,(-1*index));
+                        numerator=rint(result);
+                        denominator=1;
+                        while(fabs(numerator/denominator-result)>precision)
+                                {
+                                val1=(1/(val1-val2));
+                                val2=rint(val1);
+                                p= val2*numerator + inter2;
+                                q= val2*denominator + inter4;
+                                inter2=numerator;
+                                inter4=denominator;
+                                numerator=p;
+                                denominator=q;
+                                }
+                        index--;
+                        }
+                while (fabs(denominator)>limit) ;
+                if(fabs(denominator)==fabs(numerator))
+                        tmp = tmp.setNum( floor(value+1) )+" ";
+                else
+                        tmp = tmp.setNum( floor(value) ) + " " + tmp.setNum( fabs(numerator) ) + "/" + tmp.setNum( fabs(denominator) );
+                }
+
     }
 
     return tmp;
@@ -1888,7 +1949,7 @@ static void paintCellHelper( QPainter& _painter, int _tx, int _ty, int col, int 
 			     int w, int h, int pos, const QRect& marker )
 {
     QPoint p = marker.bottomRight();
-		
+
     switch( pos )
     {
     // top
@@ -2145,7 +2206,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     KSpreadCell* cell_r = m_pTable->cellAt( _col + 1, _row );
     KSpreadCell* cell_l = m_pTable->cellAt( _col - 1, _row );
     // Not yet used .... KSpreadCell* cell_b = m_pTable->cellAt( _col, _row + 1 );
-   
+
     // Fix the borders which meat at the top left corner
     QPen vert_pen = cell_t->leftBorderPen( _col, _row - 1 );
     if ( vert_pen.style() != Qt::NoPen )
@@ -2441,11 +2502,11 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 3, marker );
 	paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 4, marker );
     }
-    else if ( marker.contains( _col, _row ) )
+    else if ( marker.contains( QPoint(_col, _row) ) )
     {
 	int w = cl->width();
 	int h = rl->height();
-	
+
 	// Upper border ?
 	if ( _row == marker.top() )
 	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 1, marker );
@@ -2460,7 +2521,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	    paintCellHelper( _painter, _tx, _ty, _col, _row, w, h, 2, marker );
     }
     // Dont obeye extra cells
-    else if ( larger.contains( _col, _row ) )
+    else if ( larger.contains( QPoint(_col, _row) ) )
     {
 	int w = cl->width();
 	int h = rl->height();
