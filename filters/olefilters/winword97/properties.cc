@@ -922,9 +922,13 @@ void Properties::apply(MsWord::U16 style)
 
     // Copy the given style, then restore the style index.
 
-    // If the level has a null style, default to something sane.
-    if (style == 4095)
+    // If the level has an unexpected style, default to something sane.
+    if (style >= m_document.m_styles.count)
+    {
+        kdError(MsWord::s_area) << "out of range style: " << style << " last style: " <<
+                m_document.m_styles.count << endl;
         style = 0;
+    }
     m_pap = m_document.m_styles.data[style]->m_pap;
     m_chp = m_document.m_styles.data[style]->m_chp;
     m_tap = m_document.m_styles.data[style]->m_tap;
