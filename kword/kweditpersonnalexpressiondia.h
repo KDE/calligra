@@ -31,7 +31,7 @@ class KWEditPersonnalExpression : public KDialogBase
 {
     Q_OBJECT
 public:
-    KWEditPersonnalExpression( QWidget *parent, const char *name );
+    KWEditPersonnalExpression( QWidget *parent, const char *name = 0 );
 
 protected:
     void init(const QString& filename );
@@ -50,7 +50,7 @@ protected slots:
     virtual void slotOk();
 
  private:
-    typedef QMap<QString,QStringList> list; 
+    typedef QMap<QString,QStringList> list;
     list listExpression;
     QComboBox *m_typeExpression;
     QListBox *m_listOfExpression;

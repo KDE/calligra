@@ -44,7 +44,7 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     setMainWidget(page);
     QGridLayout *grid = new QGridLayout( page, 9, 3, 15, 7 );
 
-    setCaption( i18n("Edit personnal expression: ") );
+    setCaption( i18n("Edit personal expression: ") );
 
     QLabel *lab=new QLabel(i18n( "Expression name:" ), page );
     grid->addWidget(lab,0,0);
