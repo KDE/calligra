@@ -289,7 +289,7 @@ class KSpreadSpell : public KSpell
 KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
   : KoView( doc, _parent, _name )
 {
-  //  ElapsedTime et( "KSpreadView constructor" );
+    ElapsedTime et( "KSpreadView constructor" );
 
     m_popupMenuFirstToolId = 0;
     kdDebug(36001) << "sizeof(KSpreadCell)=" << sizeof(KSpreadCell) <<endl;
@@ -6423,8 +6423,7 @@ int KSpreadView::canvasYOffset() const
 
 void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
-  m_pDoc->increaseNumOperation();
-  m_pDoc->emitBeginOperation( false );
+  m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 
   if ( ev->activated() )
   {
@@ -6441,9 +6440,7 @@ void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
       }*/
   }
 
-  m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
-  KoView::guiActivateEvent( ev );
-  m_pDoc->decreaseNumOperation();
+  KoView::guiActivateEvent( ev );	
 }
 
 void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
