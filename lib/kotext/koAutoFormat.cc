@@ -1221,7 +1221,7 @@ KCommand * KoAutoFormat::doAutoReplaceNumber( KoTextCursor* textEditCursor, KoTe
 
 void KoAutoFormat::detectStartOfLink(const QString &word)
 {
-    if (word.find("http")!=-1 || word.find("mailto")!=-1
+    if (word.find("http")!=-1 || word.find("https")!=-1 || word.find("mailto")!=-1
         || word.find("ftp")!=-1 || word.find("file")!=-1
         || word.find("news")!=-1 )
         m_ignoreUpperCase=true;
@@ -1229,7 +1229,7 @@ void KoAutoFormat::detectStartOfLink(const QString &word)
 
 void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj )
 {
-    if (word.find("http://")!=-1 || word.find("mailto:")!=-1
+    if (word.find("http://")!=-1 || word.find("https://")!=-1 || word.find("mailto:")!=-1
         || word.find("ftp://")!=-1 || word.find("file:")!=-1
         || word.find("news:")!=-1)
     {
