@@ -7,9 +7,8 @@
 #include <qstring.h>
 #include <qcolor.h>
 #include <qlist.h>
+#include <qdom.h>
 
-#include <iostream>
-#include <koStream.h>
 #include <koRuler.h>
 
 class KWParagLayout;
@@ -116,8 +115,8 @@ public:
     
     QString getFollowingParagLayout() { return followingParagLayout; }
 
-    void save( ostream &out );
-    void load( KOMLParser&, vector<KOMLAttrib>& );
+    QDOM::Element save( QDOM::Document& );
+    bool load( const QDOM::Element& );
 
     Counter getCounter() const { return counter; }
     void setCounter( Counter _counter ) { counter = _counter; }

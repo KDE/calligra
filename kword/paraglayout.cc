@@ -115,61 +115,79 @@ void KWParagLayout::setFormat( const KWFormat &_f )
 }
 
 /*================================================================*/
-void KWParagLayout::save( ostream &out )
+QDOM::Element KWParagLayout::save( const QDOM::Document& doc )
 {
-    out << indent << "<NAME value=\"" << correctQString( name ).latin1() << "\"/>" << endl;
-    out << indent << "<FOLLOWING name=\"" << correctQString( followingParagLayout ).latin1() << "\"/>" << endl;
-    out << indent << "<FLOW value=\"" << static_cast<int>( flow ) << "\"/>" << endl;
-    out << indent << "<OHEAD " << paragHeadOffset << "/>" << endl;
-    out << indent << "<OFOOT " << paragFootOffset << "/>" << endl;
-    out << indent << "<IFIRST " << firstLineLeftIndent << "/>" << endl;
-    out << indent << "<ILEFT " << leftIndent << "/>" << endl;
-    out << indent << "<LINESPACE " << lineSpacing << "/>" << endl;
-    out << indent << "<COUNTER type=\"" << static_cast<int>( counter.counterType ) << "\" depth=\"" << counter.counterDepth
-	<< "\" bullet=\"" << static_cast<unsigned short>( counter.counterBullet.unicode() ) << "\" start=\""
-	<< correctQString( counter.startCounter ).latin1() << "\" numberingtype=\""
-	<< static_cast<int>( counter.numberingType ) << "\" lefttext=\"" << correctQString( counter.counterLeftText ).latin1() << "\" righttext=\""
-	<< correctQString( counter.counterRightText ).latin1() << "\" bulletfont=\"" << correctQString( counter.bulletFont ).latin1() << "\"/>" << endl;
-    out << indent << "<LEFTBORDER red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
-	<< left.color.blue() << "\" style=\"" << static_cast<int>( left.style ) << "\" width=\"" << left.ptWidth << "\"/>" << endl;
-    out << indent << "<RIGHTBORDER red=\"" << right.color.red() << "\" green=\"" << right.color.green() << "\" blue=\""
-	<< right.color.blue() << "\" style=\"" << static_cast<int>( right.style ) << "\" width=\"" << right.ptWidth << "\"/>" << endl;
-    out << indent << "<TOPBORDER red=\"" << top.color.red() << "\" green=\"" << top.color.green() << "\" blue=\""
-	<< top.color.blue() << "\" style=\"" << static_cast<int>( top.style ) << "\" width=\"" << top.ptWidth << "\"/>" << endl;
-    out << indent << "<BOTTOMBORDER red=\"" << bottom.color.red() << "\" green=\"" << bottom.color.green() << "\" blue=\""
-	<< bottom.color.blue() << "\" style=\"" << static_cast<int>( bottom.style ) << "\" width=\"" << bottom.ptWidth << "\"/>" << endl;
-    out << otag << "<FORMAT>" << endl;
-    format.save( out );
-    out << etag << "</FORMAT> " << endl;
+  QDOM::Element layout = doc.createElement( "PARAGLAYOUT" );
+  layout.setAttribute( "name", name );
+  layout.setAttribute( "following-parag-layout", followingParagLayout );
+  layout.setAttribute( "flow", (int)flow );
+  layout.setAttribute( "head-offset", paragHeadOffset );
+  layout.setAttribute( "foot-offset", paragFootOffset );
+  layout.setAttribute( "first-line-left-indent", firstLineLeftIndent );
+  layout.setAttribute( "left-indent", leftIndent );
+  layout.setAttribute( "line-spacing", lineSpacing );
 
-    for ( unsigned int i = 0; i < tabList.count(); i++ )
-	out << indent << "<TABULATOR mmpos=\"" << tabList.at( i )->mmPos << "\" ptpos=\"" << tabList.at( i )->ptPos
-	    << "\" inchpos=\"" << tabList.at( i )->inchPos << "\" type=\"" << static_cast<int>( tabList.at( i )->type ) << "\"/>" << endl;
+  QDOM::Element c = doc.createElement( "COUNTER" );
+  layout.appendChild( c );
+  c.setAttribute( "type", (int)counter.counterType );
+  c.setAttribute( "depth", (counter.counterDepth );
+  c.setAttribute( "bullet", (int)counter.counterBullet.unicode() );
+  c.setAttribute( "start", counter.startCounter );
+  c.setAttribute( "numbering-type", (int)counter.numberingType );
+  c.setAttribute( "left-text", counter.counterLeftText );
+  c.setAttribute( "right-text", counter.counterRightText );
+  c.setAttribute( "bullet-font", counter.bulletFont );
+
+  QDOM::Element b = doc.createElement( "LEFTBORDER", left.color() )
+  b.setAttribute( "width", left.ptWidth );
+  b.setAttribute( "style", left.style );
+  layout.appendChild( b );
+
+  QDOM::Element b = doc.createElement( "RIGHTBORDER", right.color() )
+  b.setAttribute( "width", right.ptWidth );
+  b.setAttribute( "style", right.style );
+  layout.appendChild( b );
+
+  QDOM::Element b = doc.createElement( "TOPBORDER", top.color() )
+  b.setAttribute( "width", top.ptWidth );
+  b.setAttribute( "style", top.style );
+  layout.appendChild( b );
+
+  QDOM::Element b = doc.createElement( "BOTTOMBORDER", bottom.color() )
+  b.setAttribute( "width", bottom.ptWidth );
+  b.setAttribute( "style", bottom.style );
+  layout.appendChild( b );
+
+  // TOOD: Use only the id of the format
+  QDOM::Element f = format.save( doc );
+  if ( f.isNull() )
+    return f;
+  layout.appendChild( f );
+
+  for ( unsigned int i = 0; i < tabList.count(); i++ )
+  {
+    QDOM::Element tab = doc.createElement( "TABULATOR" );
+    if ( tab.isNull() )
+      return tab;
+    layout.appendChild( tab );
+    tab.setAttribute( "mmpos", tabList.at( i )->mmPos );
+    tab.setAttribute( "ptpos", tabList.at( i )->ptPos );
+    tab.setAttribute( "inchpos", tabList.at( i )->inchPos );
+    tab.setAttribute( "type", (int)tabList.at( i )->type );
+  }
+
+  return layout;
 }
 
 /*================================================================*/
-void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
+bool KWParagLayout::load( QDOM::Element& layout )
 {
-    string tag;
-    string _name;
-    unsigned int pt;
-    float mm, inch;
-
-    while ( parser.open( 0L, tag ) )
-    {
-	KOMLParser::parseTag( tag.c_str(), _name, lst );
-
-	// name
-	if ( _name == "NAME" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    name = correctQString( ( *it ).m_strValue.c_str() );
-	    }
-	}
+  name = layout.attribute( "name" );
+  followingParagLayout = layout.attribute( "following-parag-layout" );
+  flow = (Flow)layout.attribute( "flow" ).toInt();
+  paragHeadOffset = layout.attribute( "head-offset" );
+  paragFootOffset = layout.attribute( "foot-offset" );
+  firstLineLeftIndent = layout.attribute( "first-line-left-indent" );
 
 	// following parag layout
 	else if ( _name == "FOLLOWING" )
@@ -208,17 +226,6 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    tabList.append( tab );
 	}
 
-	// flow
-	else if ( _name == "FLOW" )
-	{
-	    KOMLParser::parseTag( tag.c_str(), _name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "value" )
-		    flow = static_cast<Flow>( atoi( ( *it ).m_strValue.c_str() ) );
-	    }
-	}
 
 	// head offset
 	else if ( _name == "OHEAD" )
