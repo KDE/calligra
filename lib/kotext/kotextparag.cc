@@ -445,12 +445,35 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     //kdDebug() << "KoTextParag::drawParagString startX in pixels : " << startXpix << endl;
     //kdDebug() << "KoTextParag::drawParagString h(LU)=" << h << " lastY(LU)=" << lastY
     //          << " h(PIX)=" << zh->layoutUnitToPixelY( lastY, h ) << " lastY(PIX)=" << zh->layoutUnitToPixelY( lastY ) << endl;
+
+    int lastY_pix = zh->layoutUnitToPixelY( lastY );
+    int baseLine_pix = zh->layoutUnitToPixelY( lastY, baseLine );
+    int h_pix = zh->layoutUnitToPixelY( lastY, h );
     QTextParag::drawParagString( painter, s, start, len, startXpix,
-                                 zh->layoutUnitToPixelY( lastY ), zh->layoutUnitToPixelY( lastY, baseLine ),
+                                 lastY_pix, baseLine_pix,
                                  bw, // Note that bw is already in pixels (see QTextParag::paint)
-                                 zh->layoutUnitToPixelY( lastY, h ),
-                                 drawSelections, lastFormat, i, selectionStarts,
+                                 h_pix, drawSelections, lastFormat, i, selectionStarts,
                                  selectionEnds, cg, rightToLeft );
+    // Draw "invisible chars"
+    int end = QMIN( start + len, length() - 1 ); // don't look at the trailing space
+    for ( int idx = start ; idx < end ; ++idx )
+    {
+        QTextStringChar &ch = string()->at(idx);
+        if ( ch.isCustom() )
+            continue;
+        if ( !lastFormat->inFont( ch.c ) )
+        {
+            kdDebug() << "KoTextParag::drawParagString char not in font" << endl;
+            int w = ch.pixelwidth;
+            int height = zh->layoutUnitToPixelY( ch.ascent() ) / 2; // we use half ascent and 0 descent
+            int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj;
+            painter.save();
+            QPen pen( cg.color( QColorGroup::Text ) );
+            painter.setPen( pen );
+            painter.drawRect( x, lastY_pix + baseLine_pix - height, w, height );
+            painter.restore();
+        }
+    }
 
     drawFormattingChars( painter, s, start, len, startX,
                          lastY, baseLine, bw, h, drawSelections,

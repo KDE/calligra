@@ -1430,6 +1430,7 @@ public:
     VerticalAlignment vAlign() const;
     int minLeftBearing() const;
     int minRightBearing() const;
+    bool inFont( QChar c ) const { return fm.inFont( c ); }
     int width( const QChar &c ) const;
     int width( const QString &str, int pos ) const;
     int height() const;
