@@ -52,7 +52,7 @@
 <firstname>Mike</firstname>
 <surname>McBride</surname>
 <affiliation>
-<address><email>mpmcbride7@yahoo.com</email></address>
+<address></address>
 </affiliation>
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
@@ -65,7 +65,7 @@
 <legalnotice>&FDLNotice;</legalnotice>
 
 <date>2003-02-01</date>
-<releaseinfo>1.03.00</releaseinfo>
+<releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
 <para>
@@ -73,7 +73,7 @@
 &koffice; suite of utilities.
 </para>
 <para>
-This manual describes KWord 1.3.
+This manual describes KWord 1.2.
 </para>
 </abstract>
 
