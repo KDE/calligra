@@ -5175,7 +5175,7 @@ bool KSpreadTable::isOnNewPageX( int _column )
 {
     int col = 1;
     float x = columnLayout( col )->mmWidth();
-    while ( col <= _column )
+    while ( ( col <= _column ) && ( col < KS_colMax ) )
     {
         // Should never happen
         if ( col > KS_colMax )
@@ -5202,7 +5202,7 @@ bool KSpreadTable::isOnNewPageY( int _row )
 {
     int row = 1;
     float y = rowLayout( row )->mmHeight();
-    while ( row <= _row )
+    while ( ( row <= _row ) && ( row < KS_rowMax ) )
     {
         // Should never happen
         if ( row > KS_rowMax )
