@@ -50,14 +50,13 @@ AC_OUTPUT( \
 	kformula/Makefile \
 	kformula/pics/Makefile \
 	killustrator/Makefile \
-	killustrator/src/Makefile \
-	killustrator/src/doc/Makefile \
-	killustrator/src/filter/Makefile \
-	killustrator/src/koffice/Makefile \
-	killustrator/src/pics/Makefile \
-	killustrator/src/share/Makefile \
-	killustrator/src/standalone/Makefile \
-	killustrator/src/xmlutils/Makefile \
+	killustrator/doc/Makefile \
+	killustrator/filter/Makefile \
+	killustrator/koffice/Makefile \
+	killustrator/pics/Makefile \
+	killustrator/share/Makefile \
+	killustrator/standalone/Makefile \
+	killustrator/xmlutils/Makefile \
 	kimage/Makefile \
 	kpresenter/Makefile \
 	kpresenter/autoformEdit/Makefile \

@@ -1,5 +1,5 @@
 # This file you have to edit. Change the name here
-SUBDIRS = src 
+SUBDIRS = share filter xmlutils standalone koffice pics doc
 
 # not a GNU package. You can remove this line, if 
 # have all needed files, that a GNU package needs
