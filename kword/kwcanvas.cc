@@ -1390,6 +1390,9 @@ void KWCanvas::frameDiaClosed() // get rid of this?
         KWFrame *theFrame = frames.at(0);
         if(theFrame->isSelected())
             theFrame->setSelected(true);
+        //if you change pos, you must move text also.
+        if(theFrame->getFrameSet()->getFrameType() == FT_FORMULA)
+            theFrame->getFrameSet()->updateFrames();
     }
     doc->repaintAllViews();
 #if 0
