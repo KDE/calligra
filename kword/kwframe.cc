@@ -872,7 +872,7 @@ void KWPictureFrameSet::load( QDomElement &attributes )
 }
 
 void KWPictureFrameSet::drawContents( QPainter *painter, const QRect & crect,
-                                      QColorGroup &, bool /*onlyChanged*/ )
+                                      QColorGroup &, bool, bool )
 {
     QRect r = kWordDocument()->zoomRect( *frames.first() );
 
@@ -904,23 +904,8 @@ KWPartFrameSet::~KWPartFrameSet()
 {
 }
 
-#if 0
-QPicture *KWPartFrameSet::getPicture()
-{
-    QPainter p( &pic );
-    //child->transform( p );
-
-    if ( child && child->document() && !frames.isEmpty() )
-        child->document()->paintEverything( p, QRect( 0, 0,
-                                            frames.first()->width(), frames.first()->height() ),
-                                            TRUE, 0 );
-
-    return &pic;
-}
-#endif
-
 void KWPartFrameSet::drawContents( QPainter * painter, const QRect & crect,
-                                   QColorGroup &, bool onlyChanged )
+                                   QColorGroup &, bool onlyChanged, bool )
 {
     if (!onlyChanged)
     {
@@ -1014,8 +999,7 @@ void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent * )
 
 
 KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, QWidget */*parent*/ )
-    : KWFrameSet( _doc )
-
+    : KWFrameSet( _doc ), m_changed( false )
 {
     formula = doc->getFormulaDocument()->createFormula();
     connect(formula, SIGNAL(formulaChanged(int, int)),
@@ -1023,7 +1007,7 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, QWidget */*parent*/ )
 }
 
 KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc )
-        : KWFrameSet( _doc ), formula(0)
+        : KWFrameSet( _doc ), formula(0), m_changed( false )
 {
 }
 
@@ -1038,29 +1022,41 @@ KWFrameSetEdit* KWFormulaFrameSet::createFrameSetEdit(KWCanvas* canvas)
 }
 
 void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
-                                      QColorGroup& cg, bool /*onlyChanged*/ )
+                                      QColorGroup& cg, bool onlyChanged, bool resetChanged )
 {
-    //kdDebug(32001) << "KWFormulaFrameSet::drawContents1" << endl;
-    QRegion reg = frameClipRegion( painter, frames.first(), crect );
-    if ( !reg.isEmpty() ) {
-        painter->save();
-        painter->setClipRegion( reg );
-        formula->draw( *painter, crect, cg );
-        painter->restore();
+    if ( m_changed || !onlyChanged )
+    {
+        if ( resetChanged )
+            m_changed = false;
+
+        //kdDebug(32001) << "KWFormulaFrameSet::drawContents1" << endl;
+        QRegion reg = frameClipRegion( painter, frames.first(), crect );
+        if ( !reg.isEmpty() ) {
+            painter->save();
+            painter->setClipRegion( reg );
+            formula->draw( *painter, crect, cg );
+            painter->restore();
+        }
     }
 }
 
 void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
-                                      QColorGroup& cg, bool,
+                                      QColorGroup& cg, bool onlyChanged, bool resetChanged,
                                       KFormulaView* formulaView )
 {
-    //kdDebug(32001) << "KWFormulaFrameSet::drawContents2" << endl;
-    QRegion reg = frameClipRegion( painter, frames.first(), crect );
-    if ( !reg.isEmpty() ) {
-        painter->save();
-        painter->setClipRegion( reg );
-        formulaView->draw( *painter, crect, cg );
-        painter->restore();
+    if ( m_changed || !onlyChanged )
+    {
+        if ( resetChanged )
+            m_changed = false;
+
+        //kdDebug(32001) << "KWFormulaFrameSet::drawContents2" << endl;
+        QRegion reg = frameClipRegion( painter, frames.first(), crect );
+        if ( !reg.isEmpty() ) {
+            painter->save();
+            painter->setClipRegion( reg );
+            formulaView->draw( *painter, crect, cg );
+            painter->restore();
+        }
     }
 }
 
@@ -1103,6 +1099,7 @@ void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
     }
 
     updateFrames();
+    m_changed = true;
     emit repaintChanged( this );
 }
 
@@ -1186,10 +1183,10 @@ KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
  * Paint this frameset in "has focus" mode (e.g. with a cursor)
  */
 void KWFormulaFrameSetEdit::drawContents(QPainter* painter, const QRect& rect,
-                                         QColorGroup& gc, bool onlyChanged)
+                                         QColorGroup& gc, bool onlyChanged, bool resetChanged)
 {
     //kdDebug(32001) << "KWFormulaFrameSetEdit::drawContents" << endl;
-    formulaFrameSet()->drawContents(painter, rect, gc, onlyChanged, formulaView);
+    formulaFrameSet()->drawContents(painter, rect, gc, onlyChanged, resetChanged, formulaView);
 }
 
 void KWFormulaFrameSetEdit::keyPressEvent(QKeyEvent* event)
@@ -1256,6 +1253,7 @@ void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )
         int y = formulaView->getCursorPoint().y();
         m_canvas->ensureVisible( x, y );
     }
+    formulaFrameSet()->setChanged();
     m_canvas->repaintChanged( formulaFrameSet() );
 }
 

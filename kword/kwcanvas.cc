@@ -171,6 +171,7 @@ void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int c
         focus = false;
 
     bool onlyChanged = (onlyFrameset != 0L);
+    bool resetChanged = onlyChanged && ( m_gui->getView() == doc->getAllViews().last() ); // Only reset "changed" for the last view
 
     QRect crect( cx, cy, cw, ch );
     if ( !onlyFrameset )      // no need for borders if we're only repainting the text
@@ -187,9 +188,9 @@ void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int c
             {
                 QColorGroup gb = QApplication::palette().active();
                 if ( focus && m_currentFrameSetEdit && frameset == m_currentFrameSetEdit->frameSet() )     // Currently edited frameset
-                    m_currentFrameSetEdit->drawContents( painter, crect, gb, onlyChanged );
+                    m_currentFrameSetEdit->drawContents( painter, crect, gb, onlyChanged, resetChanged );
                 else
-                    frameset->drawContents( painter, crect, gb, onlyChanged );
+                    frameset->drawContents( painter, crect, gb, onlyChanged, resetChanged );
             }
         }
     }

@@ -94,15 +94,15 @@ public:
     KWTextFrameSet *getCopy();
 
     virtual void drawContents( QPainter *p, const QRect & crect,
-                               QColorGroup &cg, bool onlyChanged )
+                               QColorGroup &cg, bool onlyChanged, bool resetChanged )
     {
         // Called by KWCanvas when no focus (->no cursor)
-        drawContents( p, crect, cg, onlyChanged, false, 0L );
+        drawContents( p, crect, cg, onlyChanged, false, 0L, resetChanged );
     }
 
     void drawContents( QPainter *p, const QRect & crect,
                        QColorGroup &gb, bool onlyChanged,
-                       bool drawCursor, QTextCursor *cursor );
+                       bool drawCursor, QTextCursor *cursor, bool resetChanged );
 
     void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible );
 
@@ -238,9 +238,9 @@ public:
      * Paint this frameset with a cursor
      */
     virtual void drawContents( QPainter *p, const QRect & crect,
-                               QColorGroup &gb, bool onlyChanged )
+                               QColorGroup &gb, bool onlyChanged, bool resetChanged )
     {
-        textFrameSet()->drawContents( p, crect, gb, onlyChanged, true, cursor );
+        textFrameSet()->drawContents( p, crect, gb, onlyChanged, true, cursor, resetChanged );
     }
 
     KWTextFrameSet * textFrameSet() const

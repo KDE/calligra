@@ -243,9 +243,10 @@ public:
 
     /**
      * Paint this frameset in "has focus" mode (e.g. with a cursor)
+     * See KWFrameSet for explanation about the arguments.
      */
     virtual void drawContents( QPainter *, const QRect &,
-                               QColorGroup &, bool /*onlyChanged*/ ) {}
+                               QColorGroup &, bool onlyChanged, bool resetChanged ) = 0;
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent( QKeyEvent * ) {}
@@ -320,10 +321,21 @@ public:
     /**
      * Paint this frameset
      * When the frameset is being edited, KWFrameSetEdit's drawContents is called instead.
+     * @param painter The painter in which to draw the contents of the frameset
+     * @param crect The rectangle (in "contents coordinates") to be painted
+     * @param cg The colorgroup from which to get the colors
+     * @param onlyChanged If true, only redraw what has changed (see KWCanvas::repaintChanged)
+     * @param resetChanged If true, set the changed flag to false after drawing.
+     *
+     * The way this "onlyChanged/resetChanged" works is: when something changes,
+     * all views are asked to redraw themselves with onlyChanged=true.
+     * But all views except the last one shouldn't reset the changed flag to false,
+     * otherwise the other views wouldn't repaint anything.
+     * So resetChanged is called with "false" for all views except the last one,
+     * and with "true" for the last one, so that it resets the flag.
      */
-    virtual void drawContents( QPainter *, const QRect &,
-                               QColorGroup &, bool /*onlyChanged*/ )
-    {}
+    virtual void drawContents( QPainter * painter, const QRect & crect,
+                               QColorGroup & cg, bool onlyChanged, bool resetChanged ) = 0L;
 
     /**
      * Called when our frames change, or when another frameset's frames change.
@@ -442,7 +454,7 @@ public:
     virtual void load( QDomElement &attributes );
 
     virtual void drawContents( QPainter *painter, const QRect & crect,
-                               QColorGroup &, bool /*onlyChanged*/ );
+                               QColorGroup &, bool onlyChanged, bool resetChanged );
 
 protected:
     KWImage m_image;
@@ -472,7 +484,7 @@ public:
     virtual void updateFrames();
 
     void drawContents( QPainter * p, const QRect & crect,
-                       QColorGroup &, bool onlyChanged );
+                       QColorGroup &, bool onlyChanged, bool resetChanged );
 
     //void enableDrawing( bool f ) { _enableDrawing = f; }
 
@@ -497,6 +509,10 @@ public:
     {
         return static_cast<KWPartFrameSet*>(frameSet());
     }
+
+    // Nothing to be painted by ourselves while editing a part
+    void drawContents( QPainter *, const QRect &,
+        QColorGroup &, bool, bool ) { }
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void mousePressEvent( QMouseEvent * );
@@ -528,10 +544,11 @@ public:
      * When the frameset is being edited, KWFrameSetEdit's drawContents is called instead.
      */
     virtual void drawContents(QPainter*, const QRect&,
-                              QColorGroup&, bool onlyChanged);
+                              QColorGroup&, bool onlyChanged, bool resetChanged);
 
     void drawContents(QPainter*, const QRect&,
-                      QColorGroup&, bool onlyChanged, KFormulaView* formulaView);
+                      QColorGroup&, bool onlyChanged, bool resetChanged,
+                      KFormulaView* formulaView);
 
     virtual void activate( QWidget *_widget );
     virtual void deactivate();
@@ -546,12 +563,15 @@ public:
 
     KFormulaContainer* getFormula() const { return formula; }
 
+    void setChanged() { m_changed = true; }
+
 protected slots:
 
     void slotFormulaChanged(int width, int height);
 
 private:
     KFormulaContainer* formula;
+    bool m_changed;
 };
 
 
@@ -571,7 +591,7 @@ public:
      * Paint this frameset in "has focus" mode (e.g. with a cursor)
      */
     virtual void drawContents(QPainter*, const QRect&,
-                              QColorGroup&, bool onlyChanged);
+                              QColorGroup&, bool onlyChanged, bool resetChanged);
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent(QKeyEvent*);

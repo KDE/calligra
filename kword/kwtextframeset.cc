@@ -135,7 +135,7 @@ KWFrame * KWTextFrameSet::internalToContents( QPoint iPoint, QPoint & cPoint ) c
     return 0L;
 }
 
-void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &gb, bool onlyChanged, bool drawCursor, QTextCursor *cursor )
+void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &gb, bool onlyChanged, bool drawCursor, QTextCursor *cursor, bool resetChanged )
 {
     //kdDebug(32002) << "KWTextFrameSet::drawContents drawCursor=" << drawCursor << endl;
     //if ( !cursorVisible )
@@ -175,7 +175,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                 p->translate( frameRect.left(), frameRect.top() - totalHeight ); // translate to qrt coords - after setting the clip region !
 
                 gb.setBrush(QColorGroup::Base,frame->getBackgroundColor());
-                QTextParag * lastDrawn = text->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor );
+                QTextParag * lastDrawn = text->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor, resetChanged );
 
                 // NOTE: QTextView sets m_lastFormatted to lastDrawn here
                 // But when scrolling up, this causes to reformat a lot of stuff for nothing.
@@ -202,7 +202,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
 {
     // This redraws the paragraph where the cursor is
 
-    cursor->parag()->setChanged( TRUE );      // ? to force the drawing to happen ?
+    cursor->parag()->setChanged( TRUE );      // To force the drawing to happen
     QListIterator<KWFrame> frameIt( frameIterator() );
     int totalHeight = 0;
     bool drawn = false;
