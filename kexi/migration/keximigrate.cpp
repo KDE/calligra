@@ -112,6 +112,8 @@ bool KexiMigrate::performImport()
 	return true;
 }
 
+//=============================================================================
+// Copy a table
 bool KexiMigrate::copyData(const QString& table, 
                            KexiDB::TableSchema* dstTable) {
 	kdDebug() << "Copying table " << table << endl;
@@ -126,48 +128,37 @@ bool KexiMigrate::createDatabase(const QString& dbname)
 	bool failure = false;
 	
 	kdDebug() << "Creating database [" << dbname << "]" << endl;
-	if(m_kexiDB->connect())
-	{
-		if(m_kexiDB->createDatabase(dbname))
-		{
-			if (m_kexiDB->useDatabase(dbname))
-			{
-				//Right, were connected..create the tables
-				for(uint i = 0; i < v_tableSchemas.size(); i++)
-				{
-/*! @todo check this earlier: on creating table list! */
-					if (m_kexiDB->driver()->isSystemObjectName( v_tableSchemas[i]->name() ))
-						continue;
-					if(!m_kexiDB->createTable(v_tableSchemas[i]))
-					{	
-						kdDebug() << "Failed to create a table" << v_tableSchemas[i] << endl;
-						m_kexiDB->debugError();
-						failure = true;
-					}
-				}
-				return !failure;
-			}
-			else
-			{
-				kdDebug() << "Couldnt use newly created database" << endl;
-				return false;
-			}
-		}
-		else
-		{
-			kdDebug() << "Couldnt create database at destination" << endl;
-			return false;
-		}
-	}
-	else
-	{
+	if(!m_kexiDB->connect()) {
 		kdDebug() << "Couldnt connect to destination database" << endl;
 		return false;
 	}
+
+	if(!m_kexiDB->createDatabase(dbname)) {
+		kdDebug() << "Couldnt create database at destination" << endl;
+		return false;
+	}
+
+	if (!m_kexiDB->useDatabase(dbname)) {
+		kdDebug() << "Couldnt use newly created database" << endl;
+		return false;
+	}
+
+	//Right, were connected..create the tables
+	for(uint i = 0; i < v_tableSchemas.size(); i++) {
+		/*! @todo check this earlier: on creating table list! */
+		if (m_kexiDB->driver()->isSystemObjectName( v_tableSchemas[i]->name() ))
+			continue;
+		if(!m_kexiDB->createTable(v_tableSchemas[i])) {
+			kdDebug() << "Failed to create a table" << v_tableSchemas[i] << endl;
+			m_kexiDB->debugError();
+			failure = true;
+		}
+	}
+	return !failure;
 }
 
 //=============================================================================
-// Get the table names
+// Functions for getting table data
 bool KexiMigrate::tableNames(QStringList & tn)
 {
 	//! @todo Cache list of table names
@@ -175,8 +166,6 @@ bool KexiMigrate::tableNames(QStringList & tn)
 	return drv_tableNames(tn);
 }
 
-//=============================================================================
-// Get the table schema
 bool KexiMigrate::readTableSchema(const QString& table)
 {
 	kdDebug() << "Reading table schema for [" << table << "]" << endl;
@@ -184,6 +173,8 @@ bool KexiMigrate::readTableSchema(const QString& table)
 }
 
 
+//=============================================================================
+// Progress functions
 bool KexiMigrate::progressInitialise() {
 	Q_ULLONG sum = 0, size;
 	bool success = true;
@@ -215,6 +206,7 @@ bool KexiMigrate::progressInitialise() {
 	return success;
 }
 
+
 void KexiMigrate::progressDoneRow() {
 	progressDone++;
 	if (progressDone >= progressNextReport) {
@@ -225,61 +217,60 @@ void KexiMigrate::progressDoneRow() {
 		          << progressNextReport << endl;
 		emit progressPercent(percent);
 	}
-
 }
+
 //=============================================================================
 // Prompt the user to choose a field type
 KexiDB::Field::Type KexiMigrate::userType()
 {
-KInputDialog *dlg;
-QStringList  types;
-QString res;
+	KInputDialog *dlg;
+	QStringList  types;
+	QString res;
 
-types << "Byte";
-types << "Short Integer";
-types << "Integer";
-types << "Big Integer";
-types << "Boolean";
-types << "Date";
-types << "Date Time";
-types << "Time";
-types << "Float";
-types << "Double";
-types << "Text";
-types << "Long Text";
-types << "Binary Large Object";
+	types << "Byte";
+	types << "Short Integer";
+	types << "Integer";
+	types << "Big Integer";
+	types << "Boolean";
+	types << "Date";
+	types << "Date Time";
+	types << "Time";
+	types << "Float";
+	types << "Double";
+	types << "Text";
+	types << "Long Text";
+	types << "Binary Large Object";
 
-res = dlg->getItem("Choose Field Type", "Field Type", types, 0, false);
+	res = dlg->getItem("Choose Field Type", "Field Type", types, 0, false);
 
-if (res == types[0])
-	return KexiDB::Field::Byte;
-else if (res == types[1])
-	return KexiDB::Field::ShortInteger;
-else if (res == types[2])
-	return KexiDB::Field::Integer;
-else if (res == types[3])
-	return KexiDB::Field::BigInteger;
-else if (res == types[4])
-	return KexiDB::Field::Boolean;
-else if (res == types[5])
-	return KexiDB::Field::Date;
-else if (res == types[6])
-	return KexiDB::Field::DateTime;
-else if (res == types[7])
-	return KexiDB::Field::Time;
-else if (res == types[8])
-	return KexiDB::Field::Float;
-else if (res == types[9])
-	return KexiDB::Field::Double;
-else if (res == types[10])
-	return KexiDB::Field::Text;
-else if (res == types[11])
-	return KexiDB::Field::LongText;
-else if (res == types[12])
-	return KexiDB::Field::BLOB;
-else
-	return KexiDB::Field::Text;
-
+	if (res == types[0])
+		return KexiDB::Field::Byte;
+	else if (res == types[1])
+		return KexiDB::Field::ShortInteger;
+	else if (res == types[2])
+		return KexiDB::Field::Integer;
+	else if (res == types[3])
+			return KexiDB::Field::BigInteger;
+	else if (res == types[4])
+		return KexiDB::Field::Boolean;
+	else if (res == types[5])
+		return KexiDB::Field::Date;
+	else if (res == types[6])
+		return KexiDB::Field::DateTime;
+	else if (res == types[7])
+		return KexiDB::Field::Time;
+	else if (res == types[8])
+		return KexiDB::Field::Float;
+	else if (res == types[9])
+		return KexiDB::Field::Double;
+	else if (res == types[10])
+		return KexiDB::Field::Text;
+	else if (res == types[11])
+		return KexiDB::Field::LongText;
+	else if (res == types[12])
+		return KexiDB::Field::BLOB;
+	else
+		return KexiDB::Field::Text;
 }
 
 #include "keximigrate.moc"
