@@ -783,6 +783,7 @@ void KWStatisticVariable::recalc()
                         m_subtype == VST_STATISTIC_NB_LINES ||
                         m_subtype == VST_STATISTIC_NB_CHARACTERE);
     QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+    //TODO chnage int to ulong
     for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt )
     {
         KWFrameSet *frameSet = framesetIt.current();
