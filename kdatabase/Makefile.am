@@ -38,7 +38,7 @@ kdemimedir = $(kde_mimedir)/application
 rc_DATA = kdatabase.rc
 rcdir = $(kde_datadir)/kdatabase
 
-SUBDIRS = . dtd templates
+SUBDIRS = . dtd templates pics
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kdatabase_aboutdata.h -o $(podir)/kdatabase.pot

@@ -18,10 +18,13 @@
 #include "kdebug.h"
 #include "kdatabase_struct.h"
 #include <klistview.h>
+#include <qlayout.h>
 #include "ktabctl.h"
 
 MainDlg2::MainDlg2(QWidget *parentWidget, const char * widgetName, bool isModal):KDialog(parentWidget,widgetName,isModal){
    tabWidget = new KTabCtl(this, "tabWidget");
+   QGridLayout *g = new QGridLayout(this);
+   g->addWidget(tabWidget, 0, 0);
    tabWidget->resize(525,320);
    KListView1 = new QListView(tabWidget, "KListView1");
    KListView2 = new QListView(tabWidget, "KListView2");
