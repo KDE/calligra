@@ -242,6 +242,7 @@ void GBezier::updateBasePoint (int idx) {
 
 void GBezier::setWorkingSegment (int seg) {
   wSegment = seg;
+  emit changed ();
 }
 
 void GBezier::calcBoundingBox () {
