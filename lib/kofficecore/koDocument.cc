@@ -627,11 +627,8 @@ bool KoDocument::saveNativeFormat( const QString & _file )
         kdDebug(30003) << "Saving as uncompressed XML, using directory store." << endl;
     }
 
-    QCString appIdentification( "KOffice " ); // We are limited in the number of chars.
-    appIdentification += nativeFormatMimeType();
-    appIdentification += '\004'; // Two magic bytes to make the identification
-    appIdentification += '\006'; // more reliable (DF)
-    KoStore* store = KoStore::createStore( file, KoStore::Write, appIdentification, backend );
+    kdDebug() << "KoDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType() << endl;
+    KoStore* store = KoStore::createStore( file, KoStore::Write, nativeFormatMimeType(), backend );
     if ( store->bad() )
     {
         d->lastErrorMessage = i18n( "Couldn't open the file for saving" ); // more details needed?
@@ -654,6 +651,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
         KoStoreDevice dev( store );
         if ( !saveToStream( &dev ) )
         {
+		kdDebug() << "saveToStream failed" << endl;
             delete store;
             return false;
         }
@@ -694,6 +692,7 @@ bool KoDocument::saveToStream( QIODevice * dev )
     // Important: don't use s.length() here. It's slow, and dangerous (in case of a '\0' somewhere)
     // The -1 is because we don't want to write the final \0.
     int nwritten = dev->writeBlock( s.data(), s.size()-1 );
+    kdDebug() << "KoDocument::saveToStream wrote " << nwritten << "   - expected " << s.size()-1 << endl;
     return nwritten == (int)s.size()-1;
 }
 

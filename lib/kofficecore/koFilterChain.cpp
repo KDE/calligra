@@ -528,10 +528,7 @@ void KoFilterChain::storageInit( const QString& file, KoStore::Mode mode, KoStor
         // for a storage to write to, we don't check the content of
         // the mimetype here. It doesn't do a lot of harm if someome
         // "abuses" this method.
-        appIdentification = "KOffice ";
-        appIdentification += m_chainLinks.current()->to();
-        appIdentification += '\004'; // Two magic bytes to make the identification
-        appIdentification += '\006'; // more reliable (DF)
+        appIdentification = m_chainLinks.current()->to();
     }
     *storage = KoStore::createStore( file, mode, appIdentification );
 }
