@@ -67,8 +67,6 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
     m_rbFootNote = new QRadioButton( i18n("&Footnote"), grp );
     m_rbEndNote = new QRadioButton( i18n("&Endnote"), grp );
 
-    m_rbEndNote->setEnabled( false ); // ### not implemented yet
-
     grp->setExclusive( true );
     grp->insert( m_rbFootNote );
     grp->insert( m_rbEndNote );
@@ -76,8 +74,6 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
         m_rbFootNote->setChecked( true );
     else
         m_rbEndNote->setChecked( true );
-    //laurent activate it when end note will be implemented.
-    grp->hide();
 
     footNoteTypeChanged();
     setButtonText( KDialogBase::User1, i18n("C&onfigure...") );

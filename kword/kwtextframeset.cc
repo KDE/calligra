@@ -1912,6 +1912,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                     }
                     break;
                 }
+                // Other frames are resized by the bottom
 
                 wantedPosition = m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) ) + theFrame->bottom();
                 double pageBottom = (double) (theFrame->pageNum()+1) * m_doc->ptPaperHeight();
@@ -2028,7 +2029,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
               && bottom < availHeight - m_doc->ptToLayoutUnitPixY( frames.last()->innerHeight() ) )
     {
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32002) << "slotAfterFormatting too much space (" << bottom << ", " << availHeight << ") , trying to remove last frame" << endl;
+        kdDebug(32002) << "slotAfterFormatting too much space (bottom=" << bottom << ", availHeight=" << availHeight << ") , trying to remove last frame" << endl;
 #endif
         int lastPage = m_doc->getPages() - 1;
         if(frames.last()->frameBehavior() == KWFrame::AutoExtendFrame) {
@@ -2066,7 +2067,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
         // There's no point in resizing a copy, so go back to the last non-copy frame
         KWFrame *theFrame = settingsFrame( frames.last() );
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32002) << "frame is " << *theFrame << " footer:" << ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() ) << endl;
+        kdDebug(32002) << "   frame is " << *theFrame << " footer:" << ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() ) << endl;
 #endif
         if ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() )
         {
@@ -2074,13 +2075,17 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
             Q_ASSERT( wantedPosition < theFrame->bottom() );
             if ( wantedPosition != theFrame->top() )
             {
-                kdDebug() << "top= " << theFrame->top() << " setTop " << wantedPosition << endl;
+#ifdef DEBUG_FORMAT_MORE
+                kdDebug() << "   top= " << theFrame->top() << " setTop " << wantedPosition << endl;
+#endif
                 theFrame->setTop( wantedPosition );
-                kdDebug() << " -> the footer is now " << *theFrame << endl;
+#ifdef DEBUG_FORMAT_MORE
+                kdDebug() << "    -> the frame is now " << *theFrame << endl;
+#endif
                 frameResized( theFrame, true );
             }
         }
-        else
+        else // header or other frame: resize bottom
         {
             double wantedPosition = theFrame->bottom() - m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
 #ifdef DEBUG_FORMAT_MORE
@@ -2101,8 +2106,14 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                         frameResized( theFrame, false );
                     }
                 } else {
+#ifdef DEBUG_FORMAT_MORE
+                    kdDebug() << "    the frame was " << *theFrame << endl;
                     kdDebug() << "setBottom " << wantedPosition << endl;
+#endif
                     theFrame->setBottom( wantedPosition );
+#ifdef DEBUG_FORMAT_MORE
+                    kdDebug() << "    -> the frame is now " << *theFrame << endl;
+#endif
                     frameResized( theFrame, true );
                 }
             }
@@ -2182,8 +2193,14 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
     }
     theFrame->updateRulerHandles();
 
+    // Do a full KWFrameLayout if this will have influence on other frames, i.e.:
+    // * if we resized a header or footer
+    // * if we resized the last main text frame (the one before the first endnote)
     if ( theFrame->frameSet()->frameSetInfo() != KWFrameSet::FI_BODY )
-        m_doc->recalcFrames(); // warning this can delete theFrame!
+        m_doc->recalcFrames( theFrame->pageNum(), -1 ); // warning this can delete theFrame!
+    else if ( theFrame->frameSet()->isMainFrameset() )
+        // In that case, delay it. We need the textdoc height...
+        m_doc->delayedRecalcFrames( theFrame->pageNum() );
 
     // m_doc->frameChanged( theFrame );
     // Warning, can't call layout() (frameChanged calls it)
@@ -3594,7 +3611,6 @@ bool KWFootNoteFrameSet::isFootNote() const
 {
     if ( !m_footNoteVar )
         return false;
-    //Q_ASSERT( m_footNoteVar );
     return (m_footNoteVar->noteType()==FootNote );
 }
 
@@ -3602,7 +3618,6 @@ bool KWFootNoteFrameSet::isEndNote() const
 {
     if ( !m_footNoteVar )
         return false;
-    //Q_ASSERT( m_footNoteVar );
     return (m_footNoteVar->noteType()==EndNote );
 }
 

@@ -99,9 +99,14 @@ public:
 
     /**
      * Constructor
+     * @param doc the KWDocument we're layouting
+     * @param headersFooters list of header and footer HFFs (see definition of HeaderFooterFrameset)
+     * @param footnotes list of footnotes framesets HFFs
+     * @param endnotes list of endnotes framesets HFFs
      */
-    KWFrameLayout( KWDocument* doc, QPtrList<HeaderFooterFrameset>& headersFooters, QPtrList<HeaderFooterFrameset>& footnotes )
-        : m_headersFooters( headersFooters ), m_footnotes( footnotes ), m_doc( doc )
+    KWFrameLayout( KWDocument* doc, QPtrList<HeaderFooterFrameset>& headersFooters,
+                   QPtrList<HeaderFooterFrameset>& footnotes, QPtrList<HeaderFooterFrameset>& endnotes )
+        : m_headersFooters( headersFooters ), m_footnotes( footnotes ), m_endnotes( endnotes ), m_doc( doc )
         {}
 
     /**
@@ -117,13 +122,15 @@ public:
 protected:
     void resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, uint frameNumber, const KoRect& rect );
     KoRect firstColumnRect( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns ) const;
-    bool resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns, double ptColumnWidth, double ptColumnSpacing, double left, double top, double bottom, bool hasFootNotes );
+    enum HasFootNotes { NoFootNote, WithFootNotes, NoChange, FirstEndNote };
+    bool resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns, double ptColumnWidth, double ptColumnSpacing, double left, double top, double bottom, HasFootNotes hasFootNotes );
     void checkFootNotes();
 
 private:
     // A _ref_ to a list. Must remain alive as long as this object.
     QPtrList<HeaderFooterFrameset>& m_headersFooters;
     QPtrList<HeaderFooterFrameset>& m_footnotes;
+    QPtrList<HeaderFooterFrameset>& m_endnotes;
     KWDocument* m_doc;
 };
 
