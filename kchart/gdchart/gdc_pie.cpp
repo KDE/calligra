@@ -9,9 +9,8 @@
 #include <stdio.h>
 #include <values.h>
 #include <math.h>
+#include <stdlib.h>
 
-#define GDC_INCL
-#define GDC_LIB
 #include "gdc.h"
 #include "gdcpie.h"
 
@@ -19,7 +18,7 @@
 
 /* rem circle:  x = rcos(@), y = rsin(@)	*/
 
-extern struct	GDC_FONT_T	GDC_fontc[];
+extern struct	GDC_FONT_T*	GDC_fontc;
 
 inline static void setrect( QPointArray& gdp, int x1, int x2, int y1, int y2 )
 {
@@ -42,20 +41,14 @@ inline static double func_py( int cy, int x, double rad, double pscl )
 }
 
 
-inline static double func_cx( int cx, int i, int d, int xdepth_3D, int** slice_angle )
-{
-    return( cx + (d? xdepth_3D: 0) + 
-            (int)( (double)(GDCPIE_explode?GDCPIE_explode[(i)]:0) * 
-                   sin((double)(slice_angle[0][i])) ) );
-}
+#define CX( i, d ) ( cx + ((d)? xdepth_3D: 0) + \
+            (int)( (double)(GDCPIE_explode?GDCPIE_explode[((i))]:0) * \
+                   sin((double)(slice_angle[0][(i)])) ) )
 
+#define CY( i, d ) ( cy - ((d)? ydepth_3D: 0) - \
+            (int)( (double)(GDCPIE_explode?GDCPIE_explode[(i)]:0) * \
+                   cos((double)(slice_angle[0][(i)])) ) )
 
-inline static double func_cy( int cy, int i, int d, int ydepth_3D, int** slice_angle )
-{
-    return( cy - (d? ydepth_3D: 0) - 
-            (int)( (double)(GDCPIE_explode?GDCPIE_explode[(i)]:0) * 
-                   cos((double)(slice_angle[0][i])) ) );
-}
 
 
 /* expect slice number:     i (index into slice_angle array) *\ 
@@ -65,48 +58,29 @@ inline static double func_cy( int cy, int i, int d, int ydepth_3D, int** slice_a
  *   and 3D depth:          d (0: do depth,                  *
  *                             1: no depth adjustment)       *
 \* adjusts for explosion                                     */
-inline static double func_ix( int i, int f, int d )
-{
-    return( func_cx(cx, i, d, xdepth_3D, slice_angle) + (int)( (double)rad * sin((double)(slice_angle[f][i])) ) );
-}
-inline static double func_iy( int i, int f, int d )
-{
-    return( func_cy(i,d) - (int)( (double)rad * cos((double)(slice_angle[f][i])) ) );
-}
+#define IX( i, f, d ) ( CX( (i), (d) ) + (int)( (double)rad * sin((double)(slice_angle[f][(i)])) ) )
+
+#define IY( i, f, d ) ( CY( (i), (d) ) - (int)( (double)rad * cos((double)(slice_angle[f][(i)])) ) )
+
+
 /* same as above except o is angle */
-inline static double func_ox( int i, int o, int d )
-{
-    return( func_cx(i,d) + (int)( (double)rad * sin((double)(o)) ) );
-}
-inline static double func_oy( int i, int o, int d )
-{
-    return( func_cy(i,d) - (int)( (double)rad * cos((double)(o)) ) );
-}
-inline static int func_to_int_deg( double o )
-{
-    return (int)rint( (double)((o)/(2.0*M_PI)*360.0) );
-}
-inline static int func_to_int_deg_floor( double o )
-{
-    return (int)floor( (double)((o)/(2.0*M_PI)*360.0) );
-}
-inline static int func_to_int_deg_ceil( double o )
-{
-    return (int)ceil( (double)((o)/(2.0*M_PI)*360.0) );
-}
-inline static double func_to_rad( double o )
-{
-    return ( (o)/360.0*(2.0*M_PI) );
-}
+#define OX( i, o, d ) ( CX( (i),(d)) + (int)( (double)rad * sin((double)((o))) ) )
+
+#define OY( i, o, d ) ( CY( i,d) - (int)( (double)rad * cos((double)(o)) ) )
+
+#define TO_INT_DEG( o ) (int)rint( (double)((o)/(2.0*M_PI)*360.0) )
+
+#define TO_INT_DEG_FLOOR( o ) (int)floor( (double)((o)/(2.0*M_PI)*360.0) )
+
+#define TO_INT_DEG_CEIL( o ) (int)ceil( (double)((o)/(2.0*M_PI)*360.0) )
+
+#define TO_RAD( o ) ( (o)/360.0*(2.0*M_PI) )
+
 /* assume !> 4*PI */
-inline static double func_mod_2pi( double o )
-{
-    return ( (o)>=(2.0*M_PI)? ((o)-(2.0*M_PI)): (((o)<0)? ((o)+(2.0*M_PI)): (o)) );
-}
-inline static double func_mod_360( double o )
-{
-    return ( (o)>=360? (o)-360: (o) );								/* assume !> 720 */ 
-}
+#define MOD_2PI( o ) ( (o)>=(2.0*M_PI)? ((o)-(2.0*M_PI)): (((o)<0)? ((o)+(2.0*M_PI)): (o)) )
+
+#define MOD_360( o ) ( (o)>=360? (o)-360: (o) )								/* assume !> 720 */ 
+
 
 struct tmp_slice_t { int	i;					// original index
     char	hidden;				// 'behind' top [3D] pie
@@ -116,14 +90,10 @@ static float				pie_3D_rad;			// user requested 3D angle in radians
 
 // degrees (radians) between angle a, and depth angle
 // 1&2, so comparisons can be done.
-inline static double func_rad_dist1( double a )
-{
-    return ( (dist_foo1=ABS(((a>-.00001&&a<.00001)?0.00001:a)-pie_3D_rad)), ((dist_foo1>M_PI)? ABS(dist_foo1-2.0*M_PI): dist_foo1) );
-}
-inline static double func_rad_dist2( double a )
-{
-    return ( (dist_foo2=ABS(((a>-.00001&&a<.00001)?0.00001:a)-pie_3D_rad)), ((dist_foo2>M_PI)? ABS(dist_foo2-2.0*M_PI): dist_foo2) );
-}
+#define RAD_DIST1( a ) ( (dist_foo1=ABS(((a>-.00001&&a<.00001)?0.00001:a)-pie_3D_rad)), ((dist_foo1>M_PI)? ABS(dist_foo1-2.0*M_PI): dist_foo1) )
+
+#define RAD_DIST2( a ) ( (dist_foo2=ABS(((a>-.00001&&a<.00001)?0.00001:a)-pie_3D_rad)), ((dist_foo2>M_PI)? ABS(dist_foo2-2.0*M_PI): dist_foo2) )
+
 
 static float				dist_foo1, dist_foo2;
 
@@ -132,7 +102,7 @@ static float				dist_foo1, dist_foo2;
  * order by angle opposite (180) of depth angle
  * comparing across 0-360 line
 \* ------------------------------------------------------- */
-static int ocmpr( struct tmp_slice_t *a, struct tmp_slice_t *b )
+static int ocmpr( const struct tmp_slice_t *a, const struct tmp_slice_t *b )
 {
     if( RAD_DIST1(a->angle) < RAD_DIST2(b->angle) )
         return 1;
@@ -166,9 +136,9 @@ static int ocmpr( struct tmp_slice_t *a, struct tmp_slice_t *b )
  *  sum(val[0], ... val[num_points-1]) is assumed to be 100%
 \* ======================================================= */
 void
-pie_gif( QPainter*      p,					// paint here
-         short			imagewidth,
+pie_gif( short			imagewidth,
          short			imageheight,
+		 QPainter*      p,					// paint here
          GDCPIE_TYPE	type,
          int			num_points,
          char			*lbl[],				/* data labels */
@@ -214,8 +184,6 @@ pie_gif( QPainter*      p,					// paint here
     //	xdepth_3D      = threeD? (int)( cos(pie_3D_rad) * GDCPIE_3d_depth ): 0;
     //	ydepth_3D      = threeD? (int)( sin(pie_3D_rad) * GDCPIE_3d_depth ): 0;
 
-    load_font_conversions();
-
 	/* ----- get total value ----- */
     for( i=0; i<num_points; ++i )
         tot_val += val[i];
@@ -248,15 +216,15 @@ pie_gif( QPainter*      p,					// paint here
         /* walk around pie. determine spacing to edge */
         for( i=0; i<num_points; ++i ) {
             float	this_pct = val[i]/tot_val;	/* should never be > 100% */
-            float	this = this_pct*(2.0*M_PI);	/* pie-portion */
+            float	that = this_pct*(2.0*M_PI);	/* pie-portion */
             if( (this_pct > min_grphable) ||	/* too small */
                 (!GDCPIE_missing || !GDCPIE_missing[i]) ) {	/* still want angles */
                 int this_explode = GDCPIE_explode? GDCPIE_explode[i]: 0;
                 double	this_sin;
                 double	this_cos;
-                slice_angle[0][i] = this/2.0+last; /* mid-point on full pie */
+                slice_angle[0][i] = that/2.0+last; /* mid-point on full pie */
                 slice_angle[1][i] = last;		   /* 1st on full pie */
-                slice_angle[2][i] = this+last;	   /* 2nd on full pie */
+                slice_angle[2][i] = that+last;	   /* 2nd on full pie */
                 this_sin        = sin( (double)slice_angle[0][i] );
                 this_cos        = cos( (double)slice_angle[0][i] );
 
@@ -340,13 +308,13 @@ pie_gif( QPainter*      p,					// paint here
                             rad -= (float)ABS( (double)(1+this_y_explode_pos-(cy+cheight))/cos(M_PI) );
 
                         for( j=0; j<3; ++j ) {
-                            this_y_explode_pos = func_iy(i,j,1);
+                            this_y_explode_pos = IY(i,j,1);
                             if( this_y_explode_pos < cy-cheight )
                                 rad -= (float)ABS( (double)((cy-cheight)-this_y_explode_pos)/cos((double)slice_angle[j][i]) );
                             if( this_y_explode_pos > cy+cheight )
                                 rad -= (float)ABS( (double)(1+this_y_explode_pos-(cy+cheight))/cos((double)slice_angle[j][i]) );
 
-                            this_x_explode_pos = func_ix(i,j,1);
+                            this_x_explode_pos = IX(i,j,1);
                             if( this_x_explode_pos < cx-cwidth )
                                 rad -= (float)ABS( (double)((cx-cwidth)-this_x_explode_pos)/sin((double)slice_angle[j][i]) );
                             if( this_x_explode_pos > cx+cwidth )
@@ -359,22 +327,22 @@ pie_gif( QPainter*      p,					// paint here
                 others[i] = TRUE;
                 slice_angle[0][i] = -MAXFLOAT;
             }
-            last += this;
+            last += that;
         }
     }
 
     /* --- allocate the requested colors --- */
-    BGColor   = GDCPIE_BGColor;
-    LineColor = GDCPIE_LineColor;
-    PlotColor = GDCPIE_PlotColor;
+    BGColor   = *GDCPIE_BGColor;
+    LineColor = *GDCPIE_LineColor;
+    PlotColor = *GDCPIE_PlotColor;
     if( GDCPIE_EdgeColor != GDC_NOCOLOR ) {
-        EdgeColor = GDCPIE_EdgeColor;
+        EdgeColor = *GDCPIE_EdgeColor;
         if( threeD )
             // PENDING(kalle) This can probably be done more easily
             // with the hsv color model
-            EdgeColorShd = QColor( GDCPIE_EdgeColor.red() / 2,
-                                   GDCPIE_EdgeColor.green() / 2,
-                                   GDCPIE_EdgeColor.blue() / 2 );
+            EdgeColorShd = QColor( GDCPIE_EdgeColor->red() / 2,
+                                   GDCPIE_EdgeColor->green() / 2,
+                                   GDCPIE_EdgeColor->blue() / 2 );
     }
 
     /* --- set color for each slice --- */
@@ -389,9 +357,9 @@ pie_gif( QPainter*      p,					// paint here
         } else {
             SliceColor[i]     = PlotColor;
             if( threeD )
-                SliceColorShd[i] = QColor( GDCPIE_PlotColor.red() / 2,
-                                           GDCPIE_PlotColor.green() / 2,
-                                           GDCPIE_PlotColor.blue() / 2 );
+                SliceColorShd[i] = QColor( GDCPIE_PlotColor->red() / 2,
+                                           GDCPIE_PlotColor->green() / 2,
+                                           GDCPIE_PlotColor->blue() / 2 );
         }
 
     pscl = (2.0*M_PI)/tot_val;
@@ -414,13 +382,15 @@ pie_gif( QPainter*      p,					// paint here
                     (!GDCPIE_missing || !GDCPIE_missing[i]) ) {
                     float	rad = rad1;
                     p->setPen( SliceColorShd[i] );
-                    p->drawLine( func_cx(i,1), func_cy(i,1), 
-                                 func_ix(i,1,1), func_iy(i,1,1) );
-                    p->drawLine( func_cx(i,1), func_cy(i,1), 
-                                 func_ix(i,2,1), func_iy(i,2,1) );
+                    p->drawLine( CX(i,1), 
+								 CY(i,1), 
+                                 IX(i,1,1), IY(i,1,1) );
+                    p->drawLine( CX(i,1), 
+								 CY(i,1), 
+                                 IX(i,2,1), IY(i,2,1) );
 					
                     // original parameters:
-                    // center: func_cx(i,1), func_cy(i,1)
+                    // center: CX(i,1), CY(i,1)
                     // width, height: rad*2, rad*2
                     // start: TO_INT_DEG_FLOOR(slice_angle[1][i])+270)
                     // end: TO_INT_DEG_CEIL(slice_angle[2][i])+270
@@ -432,7 +402,7 @@ pie_gif( QPainter*      p,					// paint here
                     // degrees, gd angles in full degrees
 
                     // Original - gd:
-                    // 					gdImageArc( im, func_cx(i,1), func_cy(i,1),
+                    // 					gdImageArc( im, CX(i,1), CY(i,1),
                     // 								rad*2, rad*2,
                     // 								TO_INT_DEG_FLOOR(slice_angle[1][i])+270,
                     // 								TO_INT_DEG_CEIL(slice_angle[2][i])+270,
@@ -440,8 +410,8 @@ pie_gif( QPainter*      p,					// paint here
 
                     // New - Qt:
                     p->setPen( SliceColorShd[i] );
-                    p->drawArc( func_cx(i,1)-(rad*2/2), // x
-                                func_cy(i,1)-(rad*2/2), // y
+                    p->drawArc( CX(i,1)-(rad*2/2), // x
+                                CY(i,1)-(rad*2/2), // y
                                 rad*2, rad*2,           // w, h
                                 (TO_INT_DEG_FLOOR(slice_angle[1][i])+270)*16,
                                 ((TO_INT_DEG_CEIL(slice_angle[2][i])+270)-
@@ -452,25 +422,29 @@ pie_gif( QPainter*      p,					// paint here
                     // PENDING(kalle) Can it really be that Qt has no
                     // flood fill??? If necessary, implement own
                     // algorithm here.
-                    //					gdImageFillToBorder( im, func_ix(i,0,1), func_iy(i,0,1), SliceColorShd[i], SliceColorShd[i] );
+                    //					gdImageFillToBorder( im, IX(i,0,1), IY(i,0,1), SliceColorShd[i], SliceColorShd[i] );
                     rad = rad1;
                     if( GDCPIE_EdgeColor != GDC_NOCOLOR ) {
                         p->setPen( EdgeColorShd );
-                        p->drawLine( func_cx(i,1), func_cy(i,1), func_ix(i,1,1), func_iy(i,1,1) );
-                        p->drawLine( func_cx(i,1), func_cy(i,1), func_ix(i,2,1), func_iy(i,2,1) );
+                        p->drawLine( CX(i,1), 
+									 CY(i,1), 
+									 IX(i,1,1), IY(i,1,1) );
+                        p->drawLine( CX(i,1), 
+									 CY(i,1), 
+									 IX(i,2,1), IY(i,2,1) );
                         // For differences between gd arc handling and 
                         // Qt arc handling, please see first
                         // QPainter::drawArc() call in this file.
 
                         // New: Qt
-                        p->drawArc( func_cx(i,1)-rad, // x
-                                    func_cy(i,1)-rad, // y
+                        p->drawArc( CX(i,1)-rad, // x
+                                    CY(i,1)-rad, // y
                                     rad*2, rad*2,     // w, h
                                     (TO_INT_DEG(slice_angle[1][i])+270)*16,
                                     ((TO_INT_DEG(slice_angle[2][i])+270)-
                                      (TO_INT_DEG(slice_angle[1][i])+270))*16 );
                         // Original: gd
-                        // 						gdImageArc( im, func_cx(i,1), func_cy(i,1), 
+                        // 						gdImageArc( im, CX(i,1), CY(i,1), 
                         // 									rad*2, rad*2,
                         // 									TO_INT_DEG(slice_angle[1][i])+270, TO_INT_DEG(slice_angle[2][i])+270,
                         // 									EdgeColorShd);
@@ -521,56 +495,60 @@ pie_gif( QPainter*      p,					// paint here
 				
                 i = tmp_slice[t].i;
 				
-                gdp.setPoint( 0, func_cy(i,0), func_cy(i,0) );
-                gdp.setPoint( 1, func_cx(i,1), func_cy(i,1) );
+                gdp.setPoint( 0, CX(i,0), 
+							  CY(i,0) );
+                gdp.setPoint( 1, CX(i,1), 
+							  CY(i,1) );
                 gdp.setPoint( 2, OX(i,tmp_slice[t].angle,1),
-                              OY(i,tmp_slice[t].angle,1);
-                              gdp.setPoint( 3, OX(i,tmp_slice[t].angle,0),
-                                            OY(i,tmp_slice[t].angle,0);
-				
-                                            if( !(tmp_slice[t].hidden) ) {
-	p->setBrush( SliceColorShd[i] );
-	p->setPen( SliceColorShd[i] );
-	p->drawPolygon( gdp );
-                                            } else {
-	rad -= 2.0;										/* no peeking */
-	gdp.setPoint( 0, OX(i,slice_angle[0][i],0),
-	              OY(i,slice_angle[0][i],0) );
-	gdp.setPoint( 1, OX(i,slice_angle[0][i],1),
+                              OY(i,tmp_slice[t].angle,1) );
+				gdp.setPoint( 3, OX(i,tmp_slice[t].angle,0),
+							  OY(i,tmp_slice[t].angle,0) );
+							  
+				if( !(tmp_slice[t].hidden) ) {
+					p->setBrush( SliceColorShd[i] );
+					p->setPen( SliceColorShd[i] );
+					p->drawPolygon( gdp );
+				} else {
+					rad -= 2.0;										/* no peeking */
+					gdp.setPoint( 0, OX(i,slice_angle[0][i],0),
+								  OY(i,slice_angle[0][i],0) );
+					gdp.setPoint( 1, OX(i,slice_angle[0][i],1),
 	              OY(i,slice_angle[0][i],1) );
-	rad += 2.0;
-	gdp.setPoint( 2, OX(i,slice_angle[1][i],1),
-	              OY(i,slice_angle[1][i],1) );
-	gdp.setPoint( 3, OX(i,slice_angle[1][i],0),
+					rad += 2.0;
+					gdp.setPoint( 2, OX(i,slice_angle[1][i],1),
+								  OY(i,slice_angle[1][i],1) );
+					gdp.setPoint( 3, OX(i,slice_angle[1][i],0),
 	              OY(i,slice_angle[1][i],0) );
-	p->setBrush( SliceColorShd[i] );
-	p->setPen( SliceColorShd[i] );
-	p->drawPolygon( gdp );
-	gdp.setPoint( 2, OX(i,slice_angle[2][i],1),
+					p->setBrush( SliceColorShd[i] );
+					p->setPen( SliceColorShd[i] );
+					p->drawPolygon( gdp );
+					gdp.setPoint( 2, OX(i,slice_angle[2][i],1),
 	              OY(i,slice_angle[2][i],1) );
-	gdp.setPoint( 3, OX(i,slice_angle[2][i],0),
-	              OY(i,slice_angle[2][i],0) );
-	p->setBrush( SliceColorShd[i] );
-	p->setPen( SliceColorShd[i] );
-	p->drawPolygon( gdp );
-                                            }
+					gdp.setPoint( 3, OX(i,slice_angle[2][i],0),
+								  OY(i,slice_angle[2][i],0) );
+					p->setBrush( SliceColorShd[i] );
+					p->setPen( SliceColorShd[i] );
+					p->drawPolygon( gdp );
+				}
 				
-
-                                            if( GDCPIE_EdgeColor != GDC_NOCOLOR ) {
-	p->setPen( EdgeColorShd );
-	p->drawLine( func_cx(i,0), func_cy(i,0), 
-	             func_cx(i,1), func_cy(i,1) );
-	p->drawLine( OX(i,tmp_slice[t].angle,0), 
-	             OY(i,tmp_slice[t].angle,0),
-	             OX(i,tmp_slice[t].angle,1), 
-	             OY(i,tmp_slice[t].angle,1) );
-                                            }
-                                            }
-                              }
-            }
-
-
-            /* ----- pie face ----- */
+				
+				if( GDCPIE_EdgeColor != GDC_NOCOLOR ) {
+					p->setPen( EdgeColorShd );
+					p->drawLine( CX(i,0), 
+								 CY(i,0), 
+								 CX(i,1), 
+				 CY(i,1) );
+					p->drawLine( OX(i,tmp_slice[t].angle,0), 
+								 OY(i,tmp_slice[t].angle,0),
+								 OX(i,tmp_slice[t].angle,1), 
+								 OY(i,tmp_slice[t].angle,1) );
+				}
+			}
+		}
+	}
+	
+	
+	/* ----- pie face ----- */
             {
                 // float	last = 0.0;
                 float	rad1 = rad;
@@ -580,27 +558,29 @@ pie_gif( QPainter*      p,					// paint here
                         float	rad = rad1;
 
                         // last += val[i];
-                        // EXPLODE_func_cx_func_cy( slice_angle[0][i], i );
+                        // EXPLODE_CX_CY( slice_angle[0][i], i );
                         p->setPen( SliceColor[i] );
-                        p->drawLine( func_cx(i,0), func_cy(i,0), 
-                                     func_ix(i,1,0), func_iy(i,1,0) );
-                        p->drawLine( func_cx(i,0), func_cy(i,0), 
-                                     func_ix(i,2,0), func_iy(i,2,0) );
+                        p->drawLine( CX(i,0), 
+									 CY(i,0), 
+                                     IX(i,1,0), IY(i,1,0) );
+                        p->drawLine( CX(i,0), 
+									 CY(i,0), 
+                                     IX(i,2,0), IY(i,2,0) );
 				
                         // For the differences between Qt arc handling and gd
                         // arc handling, please see first call to
                         // QPainter::drawArc() in this file.
 
                         // New - Qt:
-                        p->drawArc( func_cx(i,0)-rad, // x
-                                    func_cy(i,0)-rad, // y
+                        p->drawArc( CX(i,0)-rad, // x
+                                    CY(i,0)-rad, // y
                                     rad*2, rad*2,     // w, h
                                     (TO_INT_DEG_FLOOR(slice_angle[1][i])+270)*16,
                                     ((TO_INT_DEG_CEIL(slice_angle[2][i])+270)-
                                      (TO_INT_DEG_FLOOR(slice_angle[1][i])+270))*16 );
 
                         // Original - gd:
-                        // 				gdImageArc( im, func_cx(i,0), func_cy(i,0), 
+                        // 				gdImageArc( im, CX(i,0), CY(i,0), 
                         // 							(int)rad*2, (int)rad*2,
                         // 							TO_INT_DEG_FLOOR(slice_angle[1][i])+270,
                         // 							TO_INT_DEG_CEIL(slice_angle[2][i])+270,
@@ -609,33 +589,36 @@ pie_gif( QPainter*      p,					// paint here
                         rad *= 3.0/4.0;
                         // PENDING(kalle) Can it really be that Qt has no
                         // flood fill?
-                        //				gdImageFillToBorder( im, func_ix(i,0,0), func_iy(i,0,0), SliceColor[i], SliceColor[i] );
+                        //				gdImageFillToBorder( im, IX(i,0,0), IY(i,0,0), SliceColor[i], SliceColor[i] );
                         /* catch missed pixels on narrow slices */
                         p->setPen( SliceColor[i] );
-                        p->drawLine( func_cx(i,0), func_cy(i,0), 
-                                     func_ix(i,0,0), func_iy(i,0,0) );
+                        p->drawLine( CX(i,0), 
+									 CY(i,0), 
+                                     IX(i,0,0), IY(i,0,0) );
                         rad = rad1;
                         if( GDCPIE_EdgeColor != GDC_NOCOLOR ) {
                             p->setPen( EdgeColor );
-                            p->drawLine( func_cx(i,0), func_cy(i,0), 
-                                         func_ix(i,1,0), func_iy(i,1,0) );
-                            p->drawLine( func_cx(i,0), func_cy(i,0), 
-                                         func_ix(i,2,0), func_iy(i,2,0) );
+                            p->drawLine( CX(i,0), 
+										 CY(i,0), 
+                                         IX(i,1,0), IY(i,1,0) );
+                            p->drawLine( CX(i,0), 
+										 CY(i,0), 
+                                         IX(i,2,0), IY(i,2,0) );
 
                             // For the differences between Qt arc handling and 
                             // gd arc handling, please see the first call to
                             // QPainter::drawArc() in this file.
 
                             // New - Qt:
-                            p->drawArc( func_cx(i,0)-rad,   // x
-                                        func_cy(i,0)-rad,   // y
+                            p->drawArc( CX(i,0)-rad,   // x
+                                        CY(i,0)-rad,   // y
                                         rad*2, rad*2,       // w, h
                                         (TO_INT_DEG(slice_angle[1][i])+270)*16,
                                         ((TO_INT_DEG(slice_angle[2][i])+270)-
                                          (TO_INT_DEG(slice_angle[1][i])+270))*16 );
 
                             // Original - gd:
-                            // 					gdImageArc( im, func_cx(i,0), func_cy(i,0), 
+                            // 					gdImageArc( im, CX(i,0), CY(i,0), 
                             // 								rad*2, rad*2,
                             // 								TO_INT_DEG(slice_angle[1][i])+270, TO_INT_DEG(slice_angle[2][i])+270,
                             // 								EdgeColor );
@@ -647,13 +630,24 @@ pie_gif( QPainter*      p,					// paint here
                 int	title_len;
 		
                 cnt_nl( GDCPIE_title, &title_len );
-                GDCImageStringNL( im,
-                                  &GDC_fontc[GDCPIE_title_size],
-                                  (imagewidth-title_len*GDC_fontc[GDCPIE_title_size].w)/2,
-                                  1,
-                                  GDCPIE_title,
-                                  LineColor,
-                                  GDC_JUSTIFY_CENTER );
+				// PENDING(kalle) Check whether this really does line breaks
+				QRect br = QFontMetrics( *GDC_fontc[GDCPIE_title_size].f ).boundingRect( 0, 0, MAXINT, 
+																						 MAXINT, 
+																						 Qt::AlignCenter,
+																						 GDCPIE_title );
+				p->drawText( (imagewidth-title_len*GDC_fontc[GDCPIE_title_size].w)/2,
+							 1, // y
+							 br.width(), br.height(),
+							 Qt::AlignCenter, GDCPIE_title );
+				
+				// Original
+//                 GDCImageStringNL( im,
+//                                   &GDC_fontc[GDCPIE_title_size],
+//                                   (imagewidth-title_len*GDC_fontc[GDCPIE_title_size].w)/2,
+//                                   1,
+//                                   GDCPIE_title,
+//                                   LineColor,
+//                                   GDC_JUSTIFY_CENTER );
             }
 	
             /* labels */
@@ -683,8 +677,8 @@ pie_gif( QPainter*      p,					// paint here
                             0:
                             strlen(pct_str) * GDC_fontc[GDCPIE_label_size].w;
 				
-                        lbly = (liney = func_iy(i,0,0))-( num_nl * (1+GDC_fontc[GDCPIE_label_size].h) ) / 2;
-                        lblx = pctx = linex = func_ix(i,0,0);
+                        lbly = (liney = IY(i,0,0))-( num_nl * (1+GDC_fontc[GDCPIE_label_size].h) ) / 2;
+                        lblx = pctx = linex = IX(i,0,0);
 				
                         if( slice_angle[0][i] > M_PI ) {								/* which semicircle */
                             lblx -= lbl_wdth;
@@ -699,14 +693,14 @@ pie_gif( QPainter*      p,					// paint here
                                 pctx -= lbl_wdth-1;
                             else
                                 lblx += pct_wdth+1;
-                            pcty = func_iy(i,0,0) - ( 1+GDC_fontc[GDCPIE_label_size].h ) / 2;
+                            pcty = IY(i,0,0) - ( 1+GDC_fontc[GDCPIE_label_size].h ) / 2;
                             break;
                         case GDCPIE_PCT_RIGHT:	
                             if( slice_angle[0][i] > M_PI )
                                 lblx -= pct_wdth-1;
                             else
                                 pctx += lbl_wdth+1;
-                            pcty = func_iy(i,0,0) - ( 1+GDC_fontc[GDCPIE_label_size].h ) / 2;
+                            pcty = IY(i,0,0) - ( 1+GDC_fontc[GDCPIE_label_size].h ) / 2;
                             break;
                         case GDCPIE_PCT_ABOVE:	
                             lbly += (1+GDC_fontc[GDCPIE_label_size].h) / 2;
@@ -718,18 +712,20 @@ pie_gif( QPainter*      p,					// paint here
                             break;
                         case GDCPIE_PCT_NONE:
                         default:
+							;
                         }
 				
                         if( GDCPIE_percent_labels != GDCPIE_PCT_NONE ) {
 							p->setPen( LineColor );
-							p->setFont( GDC_fontc[GDCPIE_label_size].f );
+							p->setFont( *GDC_fontc[GDCPIE_label_size].f );
 							p->drawText( slice_angle[0][i] <= M_PI? pctx:
 										 pctx+lbl_wdth-pct_wdth,
 										 pcty,
 										 pct_str );
 						}
                         if( lbl[i] ) {
-							QRect br = QFontMetrics( GDC_fontc[GDCPIE_label_size] ).boundingRect( 0, 0, MAXINT, MAXINT, lbl[i] );
+							QRect br = QFontMetrics( *GDC_fontc[GDCPIE_label_size].f ).boundingRect( 0, 0, MAXINT, MAXINT, slice_angle[0][i] <= M_PI ?
+										 Qt::AlignLeft : Qt::AlignRight, lbl[i] );
 							p->drawText( lblx, lbly,
 										 br.width(), br.height(),
 										 slice_angle[0][i] <= M_PI ?
@@ -740,7 +736,7 @@ pie_gif( QPainter*      p,					// paint here
                             float	rad = liner;
                             p->setPen( LineColor );
                             p->drawLine( linex, liney, 
-                                         func_ix(i,0,0), func_iy(i,0,0) );
+                                         IX(i,0,0), IY(i,0,0) );
                         }
                     }
                 }

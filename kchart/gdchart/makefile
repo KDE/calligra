@@ -2,7 +2,7 @@ GDC_INCL = .
 
 CC=g++ -g
 
-all: gdc_samp1 # gdc_samp2 gdc_pie_samp
+all: gdc_samp1 gdc_samp2 gdc_pie_samp
 
 # compile the samples
 gdc_samp1: gdc.o gdchart.o price_conv.o gdc_samp1.o params.o init.o

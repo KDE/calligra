@@ -7,9 +7,9 @@
 #include "gdc.h"
 #endif
 
-#ifdef GDC_LIB
-extern struct GDC_FONT_T	GDC_fontc[];
-#endif
+class QPainter;
+
+extern struct GDC_FONT_T*	GDC_fontc;
 
 typedef enum {
              GDC_3DPIE,
@@ -28,26 +28,26 @@ typedef enum {
 /**************************************************/
 /**** USER DEFINABLE PIE OPTIONS  w/ defaults *****/
 /**************************************************/
-EXTERND unsigned long		GDCPIE_BGColor			DEFAULTO( 0x000000L );	/* black */
-EXTERND unsigned long		GDCPIE_PlotColor		DEFAULTO( 0xC0C0C0L );	/* gray */
-EXTERND unsigned long		GDCPIE_LineColor		DEFAULTO( GDC_DFLTCOLOR );
-EXTERND unsigned long		GDCPIE_EdgeColor		DEFAULTO( GDC_NOCOLOR ); /* edging on/off */
+extern QColor* GDCPIE_BGColor;	/* black */
+extern QColor* GDCPIE_PlotColor;	/* gray */
+extern QColor* GDCPIE_LineColor;
+extern QColor* GDCPIE_EdgeColor; /* edging on/off */
 
-EXTERND char				GDCPIE_other_threshold	DEFAULTO( -1 );
-EXTERND unsigned short		GDCPIE_3d_angle			DEFAULTO( 45 );			/* 0-360 */
-EXTERND unsigned short		GDCPIE_3d_depth			DEFAULTO( 10 );			/* % gif width */
-EXTERND char				*GDCPIE_title			DEFAULTO( NULL );		/* NLs ok here */
-EXTERND enum GDC_font_size	GDCPIE_title_size		DEFAULTO( GDC_MEDBOLD );
-EXTERND enum GDC_font_size	GDCPIE_label_size		DEFAULTO( GDC_SMALL );
-EXTERND int					GDCPIE_label_dist		DEFAULTO( 1+8/2 );		/* 1+GDC_fontc[GDCPIE_label_size].h/2 */
-EXTERND unsigned char		GDCPIE_label_line		DEFAULTO( FALSE );		/* from label to slice */
+extern char	GDCPIE_other_threshold;
+extern unsigned short GDCPIE_3d_angle;			/* 0-360 */
+extern unsigned short GDCPIE_3d_depth;			/* % gif width */
+extern char *GDCPIE_title;		/* NLs ok here */
+extern enum GDC_font_size GDCPIE_title_size;
+extern enum GDC_font_size GDCPIE_label_size;
+extern int GDCPIE_label_dist;		/* 1+GDC_fontc[GDCPIE_label_size].h/2 */
+extern unsigned char GDCPIE_label_line;		/* from label to slice */
 
-EXTERND int					*GDCPIE_explode			DEFAULTO( (int*)NULL );	/* [num_points] */
+extern int *GDCPIE_explode;	/* [num_points] */
 															/* [num_points] supercedes GDCPIE_PlotColor */
-EXTERND unsigned long		*GDCPIE_Color			DEFAULTO( (unsigned long*)NULL );
-EXTERND unsigned char		*GDCPIE_missing			DEFAULTO( (unsigned char*)NULL );	/* TRUE/FALSE */
+extern QColor *GDCPIE_Color;
+extern unsigned char *GDCPIE_missing;	/* TRUE/FALSE */
 
-EXTERND GDCPIE_PCT_TYPE		GDCPIE_percent_labels	DEFAULTO( GDCPIE_PCT_NONE );
+extern GDCPIE_PCT_TYPE		GDCPIE_percent_labels;
 /**** COMMON OPTIONS ******************************/
 /* NOTE:  common options copy here for reference only! */
 /*        they live in gdc.h                           */
@@ -60,14 +60,9 @@ EXTERND void				*GDC_image			DEFAULTO( (void*)NULL );	/* in/out */
 #endif
 /**************************************************/
 
-#ifdef GDC_LIB
-#define clrallocate( im, rawclr )		_clrallocate( im, rawclr, GDCPIE_BGColor )
-#define clrshdallocate( im, rawclr )	_clrshdallocate( im, rawclr, GDCPIE_BGColor )
-#endif
-
 void pie_gif( short			width,
 			  short			height,
-			  FILE*,						/* open file pointer, can be stdout */
+			  QPainter*,						/* open file pointer, can be stdout */
 			  GDCPIE_TYPE,
 			  int			num_points,
 			  char			*labels[],		/* slice labels */
