@@ -395,17 +395,37 @@ public slots:
     void increaseIndent();
     void decreaseIndent();
     void copyAsText();
+
+    void moveTable( unsigned table, unsigned target );
+    
     /**
-     * @ref #tabBar is connected to this slot.
-     * When the user selects a new table using the @ref #tabBar this slot
-     * is signaled.
+     * Switch the active sheet to the name. This slot is connected to the tab bar
+     * and activated when the user selects a new sheet in the tab bar.
      */
     void changeTable( const QString& _name );
-    void moveTable( unsigned table, unsigned target );
 
+    /**
+     * Switch the active sheet to the next visible sheet. Does nothing if the current
+     * active sheet is the last visible sheet in the workbook.
+     */
     void nextTable();
+
+    /**
+     * Switch the active sheet to the previous visible sheet. Does nothing if the current
+     * active sheet is the first visible sheet in the workbook.
+     */
     void previousTable();
+
+    /**
+     * Switch the active sheet to the first visible sheet in the workbook. Does nothing
+     * if the current active sheet is already the first one.
+     */
     void firstTable();
+
+    /**
+     * Switch the active sheet to the last visible sheet in the workbook. Does nothing
+     * if the current active sheet is already the last one.
+     */
     void lastTable();
 
     void sortList();
