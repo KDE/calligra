@@ -956,7 +956,8 @@ int MSWRITEImport::tagWrite (const char *format, ...)
 	va_list list;
 	va_start (list, format);
 
-	vsprintf (string, format, list);
+	vsnprintf (string, sizeof(string)-1, format, list);
+	string[sizeof(string)-1] = '\0';
 
 	ret = textWrite_lowLevel (string);
 
