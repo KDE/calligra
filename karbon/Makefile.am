@@ -40,7 +40,7 @@ libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOPAINTER) \
 	dialogs/libkarbondialogs.la \
 	libkarbonbase.la \
 	$(LIBART_LIBS) \
-	$(FONTCONFIG_LIBS) \
+	$(LIBFONTCONFIG_LIBS) \
 	$(LIBFREETYPE_LIBS)
 
 libkarbonpart_la_METASOURCES = AUTO
