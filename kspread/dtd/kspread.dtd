@@ -149,7 +149,9 @@
                         format           CDATA #REQUIRED
                         angle            CDATA #REQUIRED
                         brushcolor       CDATA #REQUIRED
-                        indent           CDATA #REQUIRED>
+                        indent           CDATA #REQUIRED
+                        dontprinttext    CDATA #REQUIRED>
+
 
 
 <!--	Describes one column
