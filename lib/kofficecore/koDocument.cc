@@ -91,10 +91,13 @@ public:
   KoDocumentInfo *m_docInfo;
 };
 
+// Used in singleViewMode
 class KoViewWrapperWidget : public QWidget
 {
 public:
-  KoViewWrapperWidget( QWidget *parent ) : QWidget( parent, "HackyWackyKoDocumentWrapperWidget" ) {};
+  KoViewWrapperWidget( QWidget *parent, const char *name )
+    : QWidget( parent, name ) {};
+  virtual ~KoViewWrapperWidget() {}
 
   virtual void resizeEvent( QResizeEvent * )
   {
@@ -110,7 +113,7 @@ public:
   }
 };
 
-KoDocument::KoDocument( QObject* parent, const char* name, bool singleViewMode )
+KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KParts::ReadWritePart( parent, name )
 {
     d = new KoDocumentPrivate;
@@ -130,8 +133,7 @@ KoDocument::KoDocument( QObject* parent, const char* name, bool singleViewMode )
 
   if ( singleViewMode )
   {
-      ASSERT( parent->inherits( "QWidget" ) );
-      d->m_wrapperWidget = new KoViewWrapperWidget( (QWidget *)parent );
+      d->m_wrapperWidget = new KoViewWrapperWidget( parentWidget, widgetName );
       setWidget( d->m_wrapperWidget );
   }
 

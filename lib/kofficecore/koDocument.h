@@ -56,19 +56,27 @@ class KoDocument : public KParts::ReadWritePart
 
 public:
 
-  // ####### Better make two constructors!
   /**
    *  Constructor.
+   * The first 4  arguments are the same as the ones passed to KParts::Factory::createPart.
    *
-   * @param parent may be another KoDocument or a class derived from @ref QWidget.
+   * @param parentWidget the parent widget, in case we create a wrapper widget
+   *        (in single view mode).
+   *        Usually the first argument passed by KParts::Factory::createPart.
+   * @param parent may be another KoDocument, or anything else.
+   *        Usually the third argument of KParts::Factory::createPart.
    * @param name is used to identify this document via DCOP so you may want to
    *        pass a meaningful name here which matches the pattern [A-Za-z_][A-Za-z_0-9]*.
-   * @param singleViewMode determines wether the document may only have one view. In this case
+   * @param singleViewMode determines whether the document may only have one view. In this case
    *        the @param parent must be a QWidget derived class. KoDocument will then create a wrapper widget
-   *        (@ref KoViewWrapperWidget) which is a child of @param parent. This widget can be retrieved
-   *        by calling @ref #widget.
+   *        (@ref KoViewWrapperWidget) which is a child of @param parentWidget.
+   *        This widget can be retrieved by calling @ref #widget.
    */
-  KoDocument( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+  KoDocument( QWidget* parentWidget,
+              const char* widgetName,
+              QObject* parent,
+              const char* name,
+              bool singleViewMode = false );
 
   /**
    *  Destructor.
@@ -79,11 +87,11 @@ public:
   virtual ~KoDocument();
 
   /**
-   * Tells wether this document is in singleview mode. This mode can only be set
+   * Tells whether this document is in singleview mode. This mode can only be set
    * in the constructor.
    */
   bool singleViewMode() const;
-    
+
   /**
    * Is the document embedded?
    */
@@ -120,7 +128,7 @@ public:
   virtual void setManager( KParts::PartManager *manager );
 
   /**
-   * Sets wether the document can be edited or is read only.
+   * Sets whether the document can be edited or is read only.
    * This recursively applied to all child documents and
    * @ref KoView::updateReadWrite is called for every attached
    * view.
@@ -175,7 +183,7 @@ public:
    * Adds a view to the document.
    *
    * This calls @ref KoView::updateReadWrite to tell the new view
-   * wether the document is readonly or not.
+   * whether the document is readonly or not.
    *
    * You may want to call this method after you created a new view.
    * Usually this is done by @ref #createView for you, so you dont need to
@@ -282,7 +290,7 @@ public:
   virtual void setTitleModified();
 
   /**
-   *  Sets wether a filter change this document.
+   *  Sets whether a filter change this document.
    */
   virtual void changedByFilter( bool changed=true ) const;
 
@@ -338,15 +346,6 @@ public:
 
     // ############# Can be protected, or ?
   /**
-   *  Saves a document to @ref KReadOnlyPart::m_file (KParts takes care of uploading
-   *  remote documents)
-   *  Applies a filter if necessary, and calls saveNativeFormat in any case
-   *  You should not have to reimplement, except for very special cases.
-   */
-  virtual bool saveFile();
-
-    // ############# Can be protected, or ?
-  /**
    *  Saves the document in native format, to a given file
    *  You should never have to reimplement.
    */
@@ -394,8 +393,6 @@ public:
   void setViewContainerStates( KoView *view, const QMap<QString,QByteArray> &states );
   QMap<QString,QByteArray> viewContainerStates( KoView *view );
 
-  // [Used to be protected and friend KoMainWindow, but 1 - this sucks
-  // 2 - it prevented reimplementing KoMainWindow stuff (in KoShell)
   /**
    * Appends the shell to the list of shells which show this
    * document as their root document.
@@ -428,6 +425,14 @@ protected slots:
   virtual void slotViewDestroyed();
 
 protected:
+
+  /**
+   *  Saves a document to @ref KReadOnlyPart::m_file (KParts takes care of uploading
+   *  remote documents)
+   *  Applies a filter if necessary, and calls saveNativeFormat in any case
+   *  You should not have to reimplement, except for very special cases.
+   */
+  virtual bool saveFile();
 
   /**
    *  This function is called from @ref #loadFromURL and @ref #loadFromStore.
