@@ -40,7 +40,8 @@ KWZoomDia::KWZoomDia( KWView* parent, const char *name )
 
     zoom=new QSpinBox ( 10, 500, 10,page );
     grid->addWidget(zoom,0,0);
-
+    zoom->setFocus();
+    zoom->setSuffix ( QString("%") ) ;
 
 }
 
