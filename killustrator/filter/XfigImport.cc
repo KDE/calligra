@@ -82,6 +82,21 @@ bool greater_than (const pair<int, GObject*>& x,
   return x.first > y.first;
 }
 
+int hexstrToInt (const char *str) {
+    const int fak[] = { 16, 1 };
+   int value = 0, v;
+
+   for (int i = 0; i < 2; i++) {
+       if (str[i] >= '0' && str[i] <= '9')
+	   v = str[i] - '0';
+       else
+	   v = str[i] - 'a' + 10;
+       value += v * fak[i];
+   }
+
+   return value;
+}
+
 XfigImport::XfigImport () {
 }
 
@@ -101,6 +116,8 @@ bool XfigImport::setup (GDocument* doc, const char* format) {
   colorTable.insert (6, new QColor (yellow));
   colorTable.insert (7, new QColor (white));
   // TODO: up to 31 !!
+  for (int i = 8; i < 32; i++)
+      colorTable.insert (i, new QColor (black));
 
   objList.clear ();
 
@@ -236,9 +253,19 @@ bool XfigImport::importFromFile (GDocument *doc) {
 }
 
 void XfigImport::parseColorObject (istream& fin) {
-    int number;
-    char buf[20];
+    int number, red, green, blue;
+    char buf[20], red_str[3], green_str[3], blue_str[3];
+
     fin >> number >> buf;
+    strncpy (red_str, &buf[1], 2); red_str[2] = '\0';
+    strncpy (green_str, &buf[3], 2); green_str[2] = '\0';
+    strncpy (blue_str, &buf[5], 2); blue_str[2] = '\0';
+
+    red = hexstrToInt (red_str);
+    green = hexstrToInt (green_str);
+    blue = hexstrToInt (blue_str);
+
+    colorTable.insert (number, new QColor (red, green, blue));
 }
 
 void XfigImport::parseArc (istream& fin, GDocument* doc) {
