@@ -200,12 +200,13 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
     m_oldUndoRedo = 30;
 
     QString unitType=KoUnit::unitName(unit);
-
+    //#################"laurent
+    //don't load unitType from config file because unit is
+    //depend from kword file => unit can be different from config file
     if( m_config->hasGroup( "Misc" ) )
     {
         m_config->setGroup( "Misc" );
         m_oldUndoRedo = m_config->readNumEntry( "UndoRedo", m_oldUndoRedo );
-        unitType=m_config->readEntry("Units",unitType);
     }
 
     m_undoRedo = new KIntNumInput( m_oldUndoRedo, tmpQGroupBox );
