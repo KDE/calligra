@@ -57,6 +57,7 @@
 #include "vcolordocker.h"
 #include "vdocumentdocker.h"
 #include "vstrokedocker.h"
+#include "vstyledocker.h"
 #include "vtransformdocker.h"
 
 // ToolBars
@@ -120,6 +121,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_strokeFillPreview = 0L;
 	m_ColorManager = 0L;
 	m_strokeDocker = 0L;
+	m_styleDocker = 0L;
 
 	// set selectTool by default
 	//m_toolbox->slotPressButton( 0 );
@@ -129,6 +131,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		//Create Dockers
 		m_ColorManager = new VColorDocker( part(), this );
 		m_strokeDocker = new VStrokeDocker( part(), this );
+		m_styleDocker = new VStyleDocker( part(), this );
 
 		m_TransformDocker = new VTransformDocker( part(), this );
 	}
@@ -169,6 +172,7 @@ KarbonView::~KarbonView()
 	{
 		delete( m_ColorManager );
 		delete( m_strokeDocker );
+		delete( m_styleDocker );
 		delete( m_TransformDocker );
 	}
 
@@ -764,6 +768,16 @@ KarbonView::viewStrokeDocker()
 }
 
 void
+KarbonView::viewStyleDocker()
+{
+	if( m_styleDocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_styleDocker, DockRight );
+		m_styleDocker->show();
+	}
+}
+
+void
 KarbonView::initActions()
 {
 	// view ----->
@@ -886,6 +900,9 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&Stroke" ), "strokedocker", 0, this,
 		SLOT( viewStrokeDocker() ), actionCollection(), "view_stroke_docker" );
+	new KAction(
+		i18n( "&Style" ), "styledocker", 0, this,
+		SLOT( viewStyleDocker() ), actionCollection(), "view_style_docker" );
 	// view <-----
 
 	// line width

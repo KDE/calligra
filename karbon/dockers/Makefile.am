@@ -12,19 +12,21 @@ noinst_LTLIBRARIES = \
 	libkarbondockers.la
 
 noinst_HEADERS = \
-	vdocker.h \
 	vcolordocker.h \
+	vdocker.h \
+	vdocumentdocker.h \
 	vstrokedocker.h \
-	vtransformdocker.h \
-	vdocumentdocker.h
+	vstyledocker.h \
+	vtransformdocker.h
 
 libkarbondockers_la_SOURCES = \
 	dummy.cc \
-	vdocker.cc \
 	vcolordocker.cc \
+	vdocumentdocker.cc \
+	vdocker.cc \
 	vstrokedocker.cc \
-	vtransformdocker.cc \
-	vdocumentdocker.cc
+	vstyledocker.cc \
+	vtransformdocker.cc
 
 libkarbondockers_la_METASOURCES = AUTO
 

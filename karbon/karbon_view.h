@@ -45,15 +45,16 @@ class KoRuler;
 
 class VColorDocker;
 class VDocumentDocker;
+class VStrokeDocker;
+class VStyleDocker;
+class VTransformDocker;
 
 class VFill;
 class VPainterFactory;
 class VSelectToolBar;
 class VStateButton;
 class VStroke;
-class VStrokeDocker;
 class VStrokeFillPreview;
-class VTransformDocker;
 class VCanvas;
 
 class VTool;
@@ -160,6 +161,7 @@ protected slots:
 	void zoomChanged( const KoPoint & = KoPoint() );
 	void viewColorManager();
 	void viewStrokeDocker();
+	void viewStyleDocker();
 
 	// Toolbox dialogs.
 	void slotStrokeChanged( const VStroke& );
@@ -211,6 +213,7 @@ private:
 	VColorDocker			*m_ColorManager;
 	VDocumentDocker			*m_documentDocker;
 	VStrokeDocker			*m_strokeDocker;
+	VStyleDocker			*m_styleDocker;
 	VTransformDocker		*m_TransformDocker;
 
 	VSelectToolBar			*m_selectToolBar;
