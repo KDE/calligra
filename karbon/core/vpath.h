@@ -24,6 +24,7 @@ class VSegment
 public:
 	VSegment();
 	VSegment( const double lpX, const double lpY );
+	virtual ~VSegment();
 
 	virtual const VPoint* firstPoint( const VSegment* prevSeg ) const
 		{ return prevSeg ? prevSeg->lastPoint() : 0L; }

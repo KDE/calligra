@@ -66,7 +66,7 @@ VCCmdSpiral::createPath()
 	double new_centerY = 0.0;
 	path->moveTo( old_x, old_y );
 
-	for ( int i = 0; i < m_segments; ++i )
+	for ( uint i = 0; i < m_segments; ++i )
 	{
 		new_x = r * cos( adv_ang * ( i + 2 ) ) + new_centerX;
 		new_y = r * sin( adv_ang * ( i + 2 ) ) + new_centerY;

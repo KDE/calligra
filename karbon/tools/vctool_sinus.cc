@@ -10,8 +10,8 @@
 VCToolSinus* VCToolSinus::s_instance = 0L;
 
 VCToolSinus::VCToolSinus( KarbonPart* part )
-	: m_part( part ), m_isDragging( false ), m_isSquare( false ),
-	  m_isCentered( false ), m_periods( 1 )
+	: m_part( part ), m_periods( 1 ), m_isDragging( false ), m_isSquare( false ),
+	  m_isCentered( false )
 {
 	// create config dialog:
 	m_dialog = new VCDlgSinus();

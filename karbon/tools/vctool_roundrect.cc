@@ -10,8 +10,8 @@
 VCToolRoundRect* VCToolRoundRect::s_instance = 0L;
 
 VCToolRoundRect::VCToolRoundRect( KarbonPart* part )
-	: m_part( part ), m_isDragging( false ), m_isSquare( false ),
-	  m_isCentered( false ), m_round( 20.0 )
+	: m_part( part ), m_round( 20.0 ), m_isDragging( false ), 
+      m_isSquare( false ), m_isCentered( false )
 {
 	// create config dialog:
 	m_dialog = new VCDlgRoundRect();

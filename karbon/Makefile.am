@@ -12,7 +12,7 @@ libkarbonpart_la_SOURCES = \
 	karbon_view.cc \
 	karbon_factory.cc
 
-libkarbonpart_la_LDFLAGS = -module -avoid-version -no-undefined
+libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonpart_la_LIBADD = \
 	../../koffice/lib/kofficeui/libkofficeui.la \
 	$(srcdir)/tools/libkarbontools.la \

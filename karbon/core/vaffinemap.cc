@@ -13,8 +13,9 @@ VAffineMap::VAffineMap(
 		const double a11, const double a12,
 		const double a21, const double a22,
 		const double v1,  const double v2 )
-	: m_a11( a11 ), m_a12( a12 ), m_v1( v1 ),
-	  m_a21( a21 ), m_a22( a22 ), m_v2( v2 )
+	: m_a11( a11 ), m_a12( a12 ), 
+	  m_a21( a21 ), m_a22( a22 ),
+	  m_v1( v1 ), m_v2( v2 )
 {
 }
 

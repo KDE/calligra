@@ -19,13 +19,17 @@
 double
 VSegment::s_lastZoomFactor = 0.0;
 
-VSegment:: VSegment()
-	: m_QPointArray(1), m_isDirty( true )
+VSegment::VSegment()
+	:  m_isDirty( true ), m_QPointArray(1)
 {
 }
 
-VSegment:: VSegment( const double lpX, const double lpY )
-	: m_lastPoint( lpX, lpY ), m_QPointArray(1), m_isDirty( true )
+VSegment::VSegment( const double lpX, const double lpY )
+	: m_lastPoint( lpX, lpY ), m_isDirty( true ), m_QPointArray(1)
+{
+}
+
+VSegment::~VSegment()
 {
 }
 
@@ -590,7 +594,7 @@ VPath::transform( const VAffineMap& affMap )
 }
 
 QPointArray
-VPath::getQPointArray( const double zoomFactor = 1.0 ) const
+VPath::getQPointArray( const double zoomFactor ) const
 {
 	QListIterator<VSegment> i( m_segments );
 	const VSegment* prev_seg( 0L );	// pointer to previous segment

@@ -52,7 +52,7 @@ VCCmdStar::createPath()
 
 	// we start at 90 degrees:
 	path->moveTo( 0.0, m_outerR );
-	for ( int i = 0; i < m_edges; ++i )
+	for ( uint i = 0; i < m_edges; ++i )
 	{
 		path->lineTo(
 			m_innerR * cos( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 0.5 ) ),
