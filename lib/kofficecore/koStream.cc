@@ -84,7 +84,7 @@ ostream& operator<< ( ostream& outs, const QColor &_color )
 QColor strToColor( const char *_buffer )
 {
   QColor c;
-  c.setRgb( hexStrToShort( _buffer ), hexStrToShort( _buffer + 2 ), hexStrToShort( _buffer + 4 ) );
+  c.setRgb( hexStrToShort( _buffer + 1 ), hexStrToShort( _buffer + 3 ), hexStrToShort( _buffer + 5 ) );
 
   return c;
 }
@@ -181,8 +181,9 @@ ostream& operator<< ( ostream& outs, const QFont &_font )
 
 QFont tagToFont( vector<KOMLAttrib>& _attribs )
 {
-  QFont f;
-  
+  // QFont f;
+  QFont f( "Times", 12 );  
+
   vector<KOMLAttrib>::const_iterator it = _attribs.begin();
   for( ; it != _attribs.end() ; it++ )
   {
@@ -200,3 +201,4 @@ QFont tagToFont( vector<KOMLAttrib>& _attribs )
 
   return f;
 }
+
