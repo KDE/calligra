@@ -4049,4 +4049,12 @@ void KPresenterView::changeNbOfRecentFiles(int _nb)
         shell()->setMaxRecentItems( _nb );
 }
 
+QPopupMenu * KPresenterView::popupMenu( const QString& name )
+{
+    Q_ASSERT(factory());
+    if ( factory() )
+        return ((QPopupMenu*)factory()->container( name, this ));
+    return 0L;
+}
+
 #include <kpresenter_view.moc>

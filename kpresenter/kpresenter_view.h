@@ -379,6 +379,8 @@ public:
 
     void showCounter( KoParagCounter &c );
 
+    QPopupMenu * popupMenu( const QString& name );
+
 protected slots:
     // dialog slots
     void backOk( bool );

@@ -452,4 +452,16 @@
   <Action name="edit_delpage"/>
   <Action name="rename_page"/>
 </Menu>
+<Menu name="text_popup">
+ <Action name="text_default"/>
+ <Action name="text_font"/>
+ <Action name="format_paragraph"/>
+ <Separator/>
+ <Action name="brush_color"/>
+ <Separator/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
+ <ActionList name="datatools"/>
+</Menu>
 </kpartgui>

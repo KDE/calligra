@@ -325,7 +325,13 @@ void Page::mousePressEvent( QMouseEvent *e )
             QPoint pos;
             pos=view->kPresenterDoc()->pixelToLayoutUnit( e->pos() - txtObj->getOrig() );
             mousePressed=true;
-            m_currentTextObjectView->mousePressEvent(e, pos);
+            if(e->button() == RightButton)
+            {
+                m_currentTextObjectView->showPopup( view, QCursor::pos() );
+                mousePressed=false;
+            }
+            else
+                m_currentTextObjectView->mousePressEvent(e, pos);
             return;
         }
     }

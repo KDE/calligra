@@ -157,6 +157,7 @@ public:
     virtual void drawCursor( bool b );
 
     const KoParagLayout & currentParagLayout() const { return m_paragLayout; }
+    void showPopup( KPresenterView *view, const QPoint &point );
 
 public slots:
     void cut();
@@ -181,6 +182,7 @@ protected:
     KPTextObject *m_kptextobj;
     Page *m_page;
     KoParagLayout m_paragLayout;
+    QPtrList<KAction> m_actionList; // for the kodatatools
 };
 
 
