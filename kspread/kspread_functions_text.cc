@@ -517,17 +517,36 @@ bool kspreadfunc_rept( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 2, "REPT", true ) )
     return false;
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
   if( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
     return false;
 
+  QString s;
+
+  // this is code duplication, can be rewritten once we have KSpreadFormat
+  if( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
+    s = args[0]->stringValue();
+
+  else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
+    s = args[0]->boolValue() ? i18n("True") : i18n("False");
+
+  else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
+    s = KGlobal::locale()->formatNumber( args[0]->doubleValue() );
+
+  else if( KSUtil::checkType( context, args[0], KSValue::TimeType, false ) )
+    s = KGlobal::locale()->formatTime( args[0]->timeValue() );
+
+  else if( KSUtil::checkType( context, args[0], KSValue::DateType, false ) )
+    s = KGlobal::locale()->formatDate( args[0]->dateValue() );
+
+  else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
+    s = KGlobal::locale()->formatNumber( args[0]->intValue() );
+
+  else return false;
+
   int nb=(int) args[1]->doubleValue();
-  QString tmp=args[0]->stringValue();
-  QString tmp1;
-  for (int i=0 ;i<nb;i++)
-    tmp1+=tmp;
-  context.setValue( new KSValue(tmp1));
+  QString result;
+  for (int i=0 ;i<nb;i++) result += s;
+  context.setValue( new KSValue( result ) );
   return true;
 }
 
