@@ -41,8 +41,8 @@
       <UNDERLINE value="0"/>
       <VERTALIGN value="0"/>
      </FORMAT>
-     <TABULATOR mmpos="64.2055" ptpos="182" inchpos="2.52778" type="0"/>
-     <TABULATOR mmpos="128.764" ptpos="365" inchpos="5.06944" type="0"/>
+     <TABULATOR mmpos="34.5722" ptpos="98" inchpos="1.36111" type="0"/>
+     <TABULATOR mmpos="16.2277" ptpos="46" inchpos="0.638889" type="0"/>
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
