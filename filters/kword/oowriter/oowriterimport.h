@@ -57,10 +57,11 @@ private:
     KoFilter::ConversionStatus openFile();
     bool createStyleMap( const QDomDocument & styles );
     void insertStyles( const QDomElement& element );
-    void fillStyleStack( const QDomElement& object );
+    void fillStyleStack( const QDomElement& object, const QString& attrName );
     void addStyles( const QDomElement* style );
     QString appendPicture(QDomDocument& doc, const QDomElement& object);
     QString appendTextBox(QDomDocument& doc, const QDomElement& object);
+    void importFrame( QDomElement& frameElementOut, const QDomElement& object, bool isText );
     void anchorFrameset( QDomDocument& doc, QDomElement& formats, uint pos, const QString& frameName );
     void appendField(QDomDocument& doc, QDomElement& outputFormats, const QDomElement& object, uint pos);
     void appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,

@@ -214,7 +214,7 @@ void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const QDomElement& p
         else if ( name == "text:section" ) // Provisory support (###TODO)
         {
             kdDebug(30518) << "Section found!" << endl;
-            fillStyleStack( t );
+            fillStyleStack( t, "text:style-name" );
             parseBodyOrSimilar( doc, t, currentFramesetElement);
         }
         else if ( name == "table:table" )
@@ -222,10 +222,18 @@ void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const QDomElement& p
             kdDebug(30518) << "Table found!" << endl;
             parseTable( doc, t, currentFramesetElement );
         }
+        else if ( name == "draw:image" )
+        {
+            appendPicture( doc, t );
+        }
+        else if ( name == "draw:text-box" )
+        {
+            appendTextBox( doc, t );
+        }
         // TODO text:sequence-decls
         else
         {
-            kdDebug(30518) << "Unsupported texttype '" << name << "'" << endl;
+            kdDebug(30518) << "Unsupported body element '" << name << "'" << endl;
             m_styleStack.restore();
             continue;
         }
@@ -602,12 +610,12 @@ void OoWriterImport::insertStyles( const QDomElement& styles )
     }
 }
 
-void OoWriterImport::fillStyleStack( const QDomElement& object )
+void OoWriterImport::fillStyleStack( const QDomElement& object, const QString& attrName )
 {
     // find all styles associated with an object and push them on the stack
     // OoImpressImport has more tests here, but I don't think they're relevant to OoWriterImport
-    if ( object.hasAttribute( "text:style-name" ) )
-        addStyles( m_styles[object.attribute( "text:style-name" )] );
+    if ( object.hasAttribute( attrName ) )
+        addStyles( m_styles[object.attribute( attrName )] );
 }
 
 void OoWriterImport::addStyles( const QDomElement* style )
@@ -642,7 +650,7 @@ QDomDocumentFragment OoWriterImport::parseList( QDomDocument& doc, const QDomEle
         //kdDebug(30518) << k_funcinfo << "Got tag: " << e.tagName() << endl;
 
         // parse the list-properties
-        fillStyleStack( e );
+        fillStyleStack( e, "text:style-name" );
         QDomElement p = parseParagraph( doc, e );
 
         QDomElement counter = doc.createElement( "COUNTER" );
@@ -688,7 +696,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         if (tagName == "text:span")
         {
             m_styleStack.save();
-            fillStyleStack( ts );
+            fillStyleStack( ts, "text:style-name" );
             parseSpanOrSimilar( doc, ts, outputParagraph, outputFormats, paragraphText, pos);
             m_styleStack.restore();
         }
@@ -786,7 +794,7 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
     QDomElement p = doc.createElement( "PARAGRAPH" );
 
     // parse the paragraph-properties
-    fillStyleStack( paragraph );
+    fillStyleStack( paragraph, "text:style-name" );
 
     QDomElement formats = doc.createElement( "FORMATS" );
 
@@ -1168,13 +1176,8 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
 
 }
 
-QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& object)
+void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElement& object, bool isText )
 {
-    const QString frameName ( object.attribute("draw:name") ); // ### TODO: what if empty, i.e. non-unique
-    kdDebug() << "appendTextBox " << frameName << endl;
-    m_styleStack.save();
-    fillStyleStack( object );
-
     double width = 100;
     if ( object.hasAttribute( "svg:width" ) ) // fixed width
     {
@@ -1200,14 +1203,17 @@ QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& obje
     }
 
     int overflowBehavior;
-    if ( m_styleStack.hasAttribute( "style:overflow-behavior" ) ) // OASIS extension
+    if ( isText )
     {
-        overflowBehavior = Conversion::importOverflowBehavior( m_styleStack.attribute( "style:overflow-behavior" ) );
-    }
-    else
-    {
-        // AutoCreateNewFrame not supported in OO-1.1. The presence of min-height tells if it's an auto-resized frame.
-        overflowBehavior = hasMinHeight ? 0 /*AutoExtendFrame*/ : 2 /*Ignore, i.e. fixed size*/;
+        if ( m_styleStack.hasAttribute( "style:overflow-behavior" ) ) // OASIS extension
+        {
+            overflowBehavior = Conversion::importOverflowBehavior( m_styleStack.attribute( "style:overflow-behavior" ) );
+        }
+        else
+        {
+            // AutoCreateNewFrame not supported in OO-1.1. The presence of min-height tells if it's an auto-resized frame.
+            overflowBehavior = hasMinHeight ? 0 /*AutoExtendFrame*/ : 2 /*Ignore, i.e. fixed size*/;
+        }
     }
 
     // Available in the style: draw:stroke, svg:stroke-color, draw:fill, draw:fill-color,
@@ -1220,7 +1226,34 @@ QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& obje
 
     // TODO margins (p98)
     // TODO draw:auto-grow-height  draw:auto-grow-width - hmm? I thought min-height meant auto-grow-height...
-    // TODO editable
+
+
+    KoRect frameRect( KoUnit::parseValue( object.attribute( "svg:x" ) ),
+                      KoUnit::parseValue( object.attribute( "svg:y" ) ),
+                      width, height );
+
+    frameElementOut.setAttribute("left", frameRect.left() );
+    frameElementOut.setAttribute("right", frameRect.right() );
+    frameElementOut.setAttribute("top", frameRect.top() );
+    frameElementOut.setAttribute("bottom", frameRect.bottom() );
+    if ( hasMinHeight )
+        frameElementOut.setAttribute("min-height", height );
+    frameElementOut.setAttribute( "z-index", object.attribute( "draw:z-index" ) );
+    QPair<int, QString> attribs = Conversion::importWrapping( m_styleStack.attribute( "style:wrap" ) );
+    frameElementOut.setAttribute("runaround", attribs.first );
+    if ( !attribs.second.isEmpty() )
+        frameElementOut.setAttribute("runaroundSide", attribs.second );
+    // Not implemented in KWord: contour wrapping
+    if ( isText )
+        frameElementOut.setAttribute("autoCreateNewFrame", overflowBehavior);
+}
+
+QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& object)
+{
+    const QString frameName ( object.attribute("draw:name") ); // ### TODO: what if empty, i.e. non-unique
+    kdDebug() << "appendTextBox " << frameName << endl;
+    m_styleStack.save();
+    fillStyleStack( object, "draw:style-name" ); // get the style for the graphics element
 
     // Create KWord frameset
     QDomElement framesetElement(doc.createElement("FRAMESET"));
@@ -1232,24 +1265,12 @@ QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& obje
     framesetsPluralElement.appendChild(framesetElement);
 
     QDomElement frameElementOut(doc.createElement("FRAME"));
-    KoRect frameRect( KoUnit::parseValue( object.attribute( "svg:x" ) ),
-                      KoUnit::parseValue( object.attribute( "svg:y" ) ),
-                      width, height );
-
-    frameElementOut.setAttribute("left", frameRect.left() );
-    frameElementOut.setAttribute("right", frameRect.right() );
-    frameElementOut.setAttribute("top", frameRect.top() );
-    frameElementOut.setAttribute("bottom", frameRect.bottom() );
-    frameElementOut.setAttribute( "z-index", object.attribute( "draw:z-index" ) );
-    QPair<int, QString> attribs = Conversion::importWrapping( m_styleStack.attribute( "style:wrap" ) );
-    frameElementOut.setAttribute("runaround", attribs.first );
-    if ( !attribs.second.isEmpty() )
-        frameElementOut.setAttribute("runaroundSide", attribs.second );
-    // Not implemented in KWord: contour wrapping
-    frameElementOut.setAttribute("autoCreateNewFrame", overflowBehavior);
-    // ### TODO: a few attributes are missing
     framesetElement.appendChild(frameElementOut);
+    importFrame( frameElementOut, object, true /*text*/ );
+    // TODO editable
 
+    // We're done with the graphics style
+    m_styleStack.restore();
 
     // Obey draw:text-style-name
     if ( m_styleStack.hasAttribute( "draw:text-style-name" ) )
@@ -1258,15 +1279,12 @@ QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& obje
     // Parse contents
     parseBodyOrSimilar( doc, object, framesetElement );
 
-    m_styleStack.restore();
     return frameName;
 }
 
 QString OoWriterImport::appendPicture(QDomDocument& doc, const QDomElement& object)
 {
     const QString frameName ( object.attribute("draw:name") ); // ### TODO: what if empty, i.e. non-unique
-    const double height=KoUnit::parseValue( object.attribute("svg:height") );
-    const double width=KoUnit::parseValue( object.attribute("svg:width") );
     const QString href ( object.attribute("xlink:href") );
 
     kdDebug(30518) << "Picture: " << frameName << " " << href << " (in OoWriterImport::appendPicture)" << endl;
@@ -1359,13 +1377,12 @@ QString OoWriterImport::appendPicture(QDomDocument& doc, const QDomElement& obje
     framesetsPluralElement.appendChild(framesetElement);
 
     QDomElement frameElementOut=doc.createElement("FRAME");
-    frameElementOut.setAttribute("left",0);
-    frameElementOut.setAttribute("top",0);
-    frameElementOut.setAttribute("bottom",height);
-    frameElementOut.setAttribute("right" ,width );
-    frameElementOut.setAttribute("runaround",1);
-    // TODO: a few attributes are missing
     framesetElement.appendChild(frameElementOut);
+
+    m_styleStack.save();
+    fillStyleStack( object, "draw:style-name" ); // get the style for the graphics element
+    importFrame( frameElementOut, object, false /*not text*/ );
+    m_styleStack.restore();
 
     QDomElement element=doc.createElement("PICTURE");
     element.setAttribute("keepAspectRatio","true");
