@@ -147,9 +147,9 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 
 			part()->selectObjectsWithinRect(
 				QRect(
-					qRound( fp.x() ), qRound( fp.y() ), qRound( ( lp.x() - fp.x() ) ),
-					qRound( ( lp.y() - fp.y() ) ) ).normalize(),
-				1 / view->zoomFactor(),
+					qRound( fp.x() / view->zoomFactor() ), qRound( fp.y() / view->zoomFactor() ),
+					qRound( ( lp.x() - fp.x() ) / view->zoomFactor() ),
+					qRound( ( lp.y() - fp.y() ) / view->zoomFactor() ) ).normalize(), 1,
 				true );
 
 			//if( part()->selection().count() > 0  )

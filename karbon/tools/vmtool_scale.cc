@@ -124,10 +124,11 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
 		}
-		mat.translate( m_sp.x() / view->zoomFactor(), m_sp.y() / view->zoomFactor());
+		QPoint sp = QPoint( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
+		mat.translate( sp.x() / view->zoomFactor(), sp.y() / view->zoomFactor());
 		mat.scale( m_s1, m_s2 );
-		mat.translate(	- ( m_sp.x() + view->canvasWidget()->contentsX() ) / view->zoomFactor(),
-						- ( m_sp.y() + view->canvasWidget()->contentsY() ) / view->zoomFactor() );
+		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ) / view->zoomFactor(),
+						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoomFactor() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->selection();
