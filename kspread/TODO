@@ -365,10 +365,13 @@ Oasis File Format:
 
 Todo:
 -----
--> save/load font format
 -> save/load formula
 -> save/load repeate header print
 -> save/load options
+
+In Progress:
+------------
+-> save/load font format
 
 Done:
 -----
@@ -383,3 +386,4 @@ Done:
 -> save/load conditional cell attribute
 -> save/load style
 -> save/load cell border attribute
+

@@ -220,6 +220,12 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
 
     //FIXME fallback ????
     KSpreadFormat::Align a = KSpreadFormat::Undefined;
+    if ( hasProperty( PFont ) || !hasNoFallBackProperties( PFont ) )
+    {
+        //fo:font-size="13pt" fo:font-style="italic" style:text-underline="single" style:text-underline-color="font-color" fo:font-weight="bold"
+        saveOasisFontCellStyle( currentCellStyle, m_pStyle->font() );
+    }
+
 
     if ( hasProperty( KSpreadFormat::PAlign,true ) || hasNoFallBackProperties( KSpreadFormat::PAlign ) )
     {
@@ -353,6 +359,23 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
     }
 }
 
+void KSpreadFormat::saveOasisFontCellStyle( KoGenStyle &currentCellStyle, const QFont &_font )
+{
+    currentCellStyle.addProperty( "style:font-name", _font.family() );
+    if ( _font.bold() )
+        currentCellStyle.addProperty("fo:font-weight","bold" );
+    if ( _font.italic() )
+        currentCellStyle.addProperty("fo:font-style", "italic" );
+    if ( _font.strikeOut() )
+        currentCellStyle.addProperty("style:text-crossing-out", "single-line" );
+
+    if ( _font.underline() )
+    {
+        currentCellStyle.addProperty( "style:text-underline", "single" );
+        currentCellStyle.addProperty( "style:text-underline-color", "font-color" );
+    }
+    currentCellStyle.addPropertyPt( "fo:font-size", _font.pointSize() );
+}
 
 void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, int _col, int _row )
 {
@@ -365,6 +388,13 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, int _col, 
         if ( m_pStyle->parent() && m_pStyle->parent()->name().length() > 0 )
             currentCellStyle.addAttribute( "style:parent-style-name", m_pStyle->parent()->name() );
     }
+
+    if ( hasProperty( PFont ) || !hasNoFallBackProperties( PFont ) )
+    {
+        //fo:font-size="13pt" fo:font-style="italic" style:text-underline="single" style:text-underline-color="font-color" fo:font-weight="bold"
+        saveOasisFontCellStyle( currentCellStyle, textFont( _col, _row ) );
+    }
+
 
     //FIXME fallback ????
     KSpreadFormat::Align alignX = KSpreadFormat::Undefined;
@@ -1036,33 +1066,33 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
 #if 0
     if ( f.hasAttribute( "style-name" ) )
     {
-      KSpreadStyle * s = m_pTable->doc()->styleManager()->style( f.attribute( "style-name" ) );
+        KSpreadStyle * s = m_pTable->doc()->styleManager()->style( f.attribute( "style-name" ) );
 
-      //kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
-      if ( s )
-      {
-        setKSpreadStyle( s );
+        //kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
+        if ( s )
+        {
+            setKSpreadStyle( s );
 
-        return true;
-      }
-      else if ( !paste )
-        return false;
+            return true;
+        }
+        else if ( !paste )
+            return false;
     }
     else
-    if ( f.hasAttribute( "parent" ) )
-    {
-      KSpreadCustomStyle * s = (KSpreadCustomStyle *) m_pTable->doc()->styleManager()->style( f.attribute( "parent" ) );
-      //kdDebug() << "Loading Style, parent: " << s->name() << ": " << s << endl;
+        if ( f.hasAttribute( "parent" ) )
+        {
+            KSpreadCustomStyle * s = (KSpreadCustomStyle *) m_pTable->doc()->styleManager()->style( f.attribute( "parent" ) );
+            //kdDebug() << "Loading Style, parent: " << s->name() << ": " << s << endl;
 
-      if ( s )
-      {
-        if ( m_pStyle && m_pStyle->release() )
-          delete m_pStyle;
+            if ( s )
+            {
+                if ( m_pStyle && m_pStyle->release() )
+                    delete m_pStyle;
 
-        m_pStyle = new KSpreadStyle();
-        m_pStyle->setParent( s );
-      }
-    }
+                m_pStyle = new KSpreadStyle();
+                m_pStyle->setParent( s );
+            }
+        }
 #endif
     if (  styleStack.hasAttribute("style:parent-style-name" ) )
     {
@@ -1086,10 +1116,13 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
     if ( styleStack.hasAttribute( "style:font-name" ) )
     {
         QDomElement * font = oasisStyles.styles()[ styleStack.attribute( "style:font-name" ) ];
-        styleStack.save();
-        styleStack.push( *font );
-        loadFontOasisStyle( styleStack ); // generell font style
-        styleStack.restore();
+        if ( font )
+        {
+            styleStack.save();
+            styleStack.push( *font );
+            loadFontOasisStyle( styleStack ); // generell font style
+            styleStack.restore();
+        }
     }
 
     loadFontOasisStyle( styleStack ); // specific font style
