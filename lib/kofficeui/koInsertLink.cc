@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <kapplication.h>
 #include <klocale.h>
 
 #include <qlayout.h>
@@ -424,8 +425,8 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
   lay2->addWidget(tmpQLabel);
   tmpQLabel->setText(i18n("Recent file:"));
 
-
   QComboBox * recentFile = new QComboBox( this );
+  recentFile->setMaximumWidth( KApplication::kApplication()->desktop()->width()*3/4 );
   lay2->addWidget(recentFile);
 
   QStringList fileList = KRecentDocument::recentDocuments();
