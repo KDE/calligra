@@ -2397,7 +2397,10 @@ void KWTableFrameSet::printDebug() {
 /////
 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col, const QString &/*name*/ ) :
-    KWTextFrameSet( table->m_doc, "." /*dummy and not empty, faster*/ )
+    KWTextFrameSet( table->m_doc,
+                    // Generate frameset name from table_name+row+col
+                    i18n("Hello dear translator :), 1 is the table name, 2 and 3 are row and column", "%1 Cell %2,%3")
+                    .arg( table->getName() ).arg(row).arg(col) )
 {
     m_row = row;
     m_col = col;
@@ -2406,19 +2409,16 @@ KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned 
     m_isJoinedCell = false;
     setGroupManager( table );
     table->addCell( this );
-    m_name = i18n("Hello dear translator :), 1 is the table name, 2 and 3 are row and column", "%1 Cell %2,%3")
-             .arg( table->getName() ).arg(m_row).arg(m_col);
 }
 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, const Cell &original ) :
-    KWTextFrameSet( table->m_doc, "." )
+    KWTextFrameSet( table->m_doc, original.m_name+'_' )
 {
     m_row = original.m_row;
     m_col = original.m_col;
     m_rows = original.m_rows;
     m_cols = original.m_cols;
     m_isJoinedCell = original.m_isJoinedCell;
-    setName(original.m_name+'_'); // unicity problem !
     setGroupManager( table );
     table->addCell( this );
 }
