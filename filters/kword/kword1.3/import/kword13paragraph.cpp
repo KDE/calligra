@@ -1,6 +1,15 @@
 
 #include "kword13paragraph.h"
 
+KWord13Paragraph::KWord13Paragraph( void )
+{
+    m_formats.setAutoDelete ( true );
+}
+
+KWord13Paragraph::~KWord13Paragraph( void )
+{
+}
+
 void KWord13Paragraph::xmldump( QTextStream& iostream )
 {
     iostream << "    <paragraph>\n";

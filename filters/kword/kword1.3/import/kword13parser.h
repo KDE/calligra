@@ -51,7 +51,7 @@ enum StackItemElementType
     ElementTypeParagraph,   ///< \<PARAGRAPH\>
     ElementTypeText,        ///< \<TEXT\>
     ElementTypeLayout,      ///< \<STYLE\> and \<LAYOUT\>
-    ElementTypeFormat,      ///< \<FORMAT\>, not child of \<LAYOUT\>
+    ElementTypeFormat,      ///< \<FORMAT\>, child of \<FORMATS\>
     ElementTypeLayoutFormatOne,///< \<FORMAT id="1"\> as child of \<LAYOUT\>
     ElementTypeFormatsPlural///< \<FORMATS\>, as child of \<PARAGRAPH\>
 };

@@ -551,9 +551,26 @@ bool KWord13Parser :: endElement( const QString&, const QString& , const QString
     }
     else if ( name == "FORMAT" )
     {
-        // ### TODO: do something with the collected information
-        delete m_currentFormat;
-        m_currentFormat = 0;
+        if ( stackItem->elementType == ElementTypeFormat )
+        {
+            if ( m_currentParagraph )
+            {
+                m_currentParagraph->m_formats.append( m_currentFormat );
+                m_currentFormat = 0;
+            }
+            else
+            {
+                kdError(30520) << "No paragraph to store <FORMAT>! Aborting!" << endl;
+                delete m_currentFormat;
+                m_currentFormat = 0;
+                return false; // Assume parsing error!
+            }
+
+        }
+        else if ( stackItem->elementType == ElementTypeLayoutFormatOne )
+        {
+            // Nothing to do!
+        }
         success = true;
     }
     else if ( name == "LAYOUT" )
