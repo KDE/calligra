@@ -49,6 +49,7 @@ public:
     // What we replace it with is replace().
     KoAutoFormatEntry(const QString& replace = QString::null);
     ~KoAutoFormatEntry();
+    KoAutoFormatEntry(const KoAutoFormatEntry& _entry);
 
     QString replace() const { return m_replace; }
     KoSearchContext *formatEntryContext()const;
@@ -287,8 +288,8 @@ protected:
     KCommand *doAutoSuperScript( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
     KCommand *scanParag( KoTextParag * parag, KoTextObject * obj );
 
-    static void changeTextFormat(KoSearchContext *m_formatOptions, KoTextFormat * format, int & flags );
-    void loadEntry( QDomElement nl);
+    static void changeTextFormat(KoSearchContext *formatOptions, KoTextFormat * format, int & flags );
+    void loadEntry( const QDomElement &nl);
     QDomElement saveEntry( QMapIterator<QString, KoAutoFormatEntry>_entry, QDomDocument doc);
 private:
     void detectStartOfLink(const QString &word);

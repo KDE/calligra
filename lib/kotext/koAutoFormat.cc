@@ -47,13 +47,34 @@ KoAutoFormatEntry::KoAutoFormatEntry(const QString& replace)
     m_formatOptions= 0L;
 }
 
+KoAutoFormatEntry::KoAutoFormatEntry(const KoAutoFormatEntry& _entry)
+    :m_replace(_entry.replace())
+{
+    kdDebug()<<" KoAutoFormatEntry::KoAutoFormatEntry(const KoAutoFormatEntry& _entry) :"<<this<<endl;
+    if ( _entry.formatEntryContext() )
+    {
+        m_formatOptions = new KoSearchContext();
+        m_formatOptions->m_family = _entry.formatEntryContext()->m_family;
+        m_formatOptions->m_color = _entry.formatEntryContext()->m_color;
+        m_formatOptions->m_backGroungColor = _entry.formatEntryContext()->m_backGroungColor;
+        m_formatOptions->m_size = _entry.formatEntryContext()->m_size;
+        m_formatOptions->m_vertAlign = _entry.formatEntryContext()->m_vertAlign;
+        m_formatOptions->m_underline = _entry.formatEntryContext()->m_underline;
+        m_formatOptions->m_strikeOut = _entry.formatEntryContext()->m_strikeOut;
+        m_formatOptions->m_strings = _entry.formatEntryContext()->m_strings;
+        m_formatOptions->m_optionsMask = _entry.formatEntryContext()->m_optionsMask;
+        m_formatOptions->m_options = _entry.formatEntryContext()->m_options;
+    }
+}
+
 KoAutoFormatEntry::~KoAutoFormatEntry()
 {
+    kdDebug()<<" delete KoAutoFormatEntry::~KoAutoFormatEntry(): "<<this<<endl;
     delete m_formatOptions;
     m_formatOptions=0L;
 }
 
-KoSearchContext *KoAutoFormatEntry::formatEntryContext()const
+KoSearchContext *KoAutoFormatEntry::formatEntryContext() const
 {
     return m_formatOptions;
 }
@@ -352,9 +373,9 @@ void KoAutoFormat::readConfig()
     m_configRead = true;
 }
 
-void KoAutoFormat::loadEntry( QDomElement nl)
+void KoAutoFormat::loadEntry( const QDomElement &nl)
 {
-    KoAutoFormatEntry tmp = KoAutoFormatEntry(nl.attribute("replace"));
+    KoAutoFormatEntry tmp =KoAutoFormatEntry(nl.attribute("replace"));
     if ( nl.hasAttribute("FONT"))
     {
         tmp.createNewEntryContext();
@@ -406,7 +427,13 @@ void KoAutoFormat::loadEntry( QDomElement nl)
         QString value = nl.attribute("VERTALIGN");
         tmp.formatEntryContext()->m_vertAlign=static_cast<KoTextFormat::VerticalAlignment>( nl.attribute("value").toInt() );
     }
-    m_entries.insert( nl.attribute("find"), tmp );
+    if (tmp.formatEntryContext() )
+    {
+        kdDebug()<<"tmp.formatEntryContext()->m_optionsMask :"<<tmp.formatEntryContext()->m_optionsMask<<endl;
+        m_entries.insert( nl.attribute("find"), KoAutoFormatEntry(tmp) );
+    }
+    else
+        m_entries.insert( nl.attribute("find"), tmp );
 #if 0 //todo
     elem = formatElem.namedItem( "COLOR" ).toElement();
     if ( !elem.isNull() )
@@ -1799,52 +1826,54 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
     return 0L;
 }
 
-void KoAutoFormat::changeTextFormat(KoSearchContext *m_formatOptions, KoTextFormat * format, int & flags )
+void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat * format, int & flags )
 {
-    if (m_formatOptions )
+    if (formatOptions )
     {
-        if (m_formatOptions->m_optionsMask & KoSearchContext::Bold)
+        kdDebug()<<"formatOptions->m_optionsMask :"<<formatOptions->m_optionsMask<<endl;
+        if (formatOptions->m_optionsMask & KoSearchContext::Bold)
         {
-            format->setBold( m_formatOptions->m_options & KoSearchContext::Bold);
+            format->setBold( formatOptions->m_options & KoSearchContext::Bold);
             flags |=KoTextFormat::Bold;
         }
-        if (m_formatOptions->m_optionsMask & KoSearchContext::Size)
+        if ( formatOptions->m_optionsMask & KoSearchContext::Size)
         {
-            format->setBold( m_formatOptions->m_options & KoSearchContext::Bold);
+            format->setBold( formatOptions->m_options & KoSearchContext::Bold);
             flags |=KoTextFormat::Bold;
         }
-        if ( m_formatOptions->m_optionsMask & KoSearchContext::Family)
+        if ( formatOptions->m_optionsMask & KoSearchContext::Family)
         {
         }
-        if ( m_formatOptions->m_optionsMask & KoSearchContext::Color)
+        if ( formatOptions->m_optionsMask & KoSearchContext::Color)
         {
-            format->setColor(m_formatOptions->m_color);
+            format->setColor(formatOptions->m_color);
             flags |=KoTextFormat::Color;
         }
-        if ( m_formatOptions->m_optionsMask & KoSearchContext::BgColor)
+        if ( formatOptions->m_optionsMask & KoSearchContext::BgColor)
         {
-            format->setTextBackgroundColor(m_formatOptions->m_color);
+            format->setTextBackgroundColor(formatOptions->m_color);
             flags |=KoTextFormat::TextBackgroundColor;
         }
 
-        if ( m_formatOptions->m_optionsMask & KoSearchContext::Italic)
+        if ( formatOptions->m_optionsMask & KoSearchContext::Italic)
         {
-            format->setItalic( m_formatOptions->m_options & KoSearchContext::Italic);
+            kdDebug()<<"italic *****************************\n";
+            format->setItalic( formatOptions->m_options & KoSearchContext::Italic);
             flags |=KoTextFormat::Italic;
         }
-        if ( m_formatOptions->m_optionsMask & KoSearchContext::Underline)
+        if ( formatOptions->m_optionsMask & KoSearchContext::Underline)
         {
-            format->setUnderlineLineType(m_formatOptions->m_underline);
+            format->setUnderlineLineType(formatOptions->m_underline);
             flags |=KoTextFormat::ExtendUnderLine;
         }
-        if ( m_formatOptions->m_optionsMask & KoSearchContext::StrikeOut)
+        if ( formatOptions->m_optionsMask & KoSearchContext::StrikeOut)
         {
-            format->setStrikeOutLineType(m_formatOptions->m_strikeOut);
+            format->setStrikeOutLineType(formatOptions->m_strikeOut);
             flags |= KoTextFormat::StrikeOut;
         }
-        if ( m_formatOptions->m_optionsMask & KoSearchContext::VertAlign)
+        if ( formatOptions->m_optionsMask & KoSearchContext::VertAlign)
         {
-            format->setVAlign(m_formatOptions->m_vertAlign);
+            format->setVAlign(formatOptions->m_vertAlign);
             flags |=KoTextFormat::VAlign;
         }
     }
