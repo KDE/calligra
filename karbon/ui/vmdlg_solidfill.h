@@ -23,6 +23,9 @@ private:
 	QSpinBox* mRed;
 	QSpinBox* mGreen;
 	QSpinBox* mBlue;
+	QSpinBox* mHue;
+	QSpinBox* mSaturation;
+	QSpinBox* mBrightness;
 };
 
 #endif
