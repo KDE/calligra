@@ -16,6 +16,9 @@ VGradient::addStop( const VColor &color, float rampPoint )
 {
 	VColorStop stop;
 	stop.color = color;
+	// Clamping between 0.0 and 1.0
+	rampPoint = rampPoint < 0.0 ? 0.0 : rampPoint;
+	rampPoint = rampPoint > 1.0 ? 1.0 : rampPoint;
 	stop.rampPoint = rampPoint;
 	m_colorStops.append( stop );
 }
