@@ -830,10 +830,9 @@ void KWTextFrameSet::formatMore()
     if ( !m_lastFormatted )
 	return;
 
-    int bottom = availableHeight(); // was contentsHeight();
-    int lastBottom = -1;
+    int bottom = -1;
     int to = !sender() ? 2 : 20; // 20 when it comes from the formatTimer
-    //bool firstVisible = false;
+
     int viewsBottom = 0;
     QMapIterator<QWidget *, int> mapIt = m_mapViewAreas.begin();
     for ( ; mapIt != m_mapViewAreas.end() ; ++mapIt )
@@ -846,13 +845,11 @@ void KWTextFrameSet::formatMore()
     // Stop if we have formatted everything or if we need more space
     // Otherwise, stop formatting after "to" paragraphs,
     // but make sure we format everything the views need
-    for ( int i = 0; lastFormatted && bottom <= m_availableHeight && ( i < to || lastBottom <= viewsBottom ) ; ++i )
+    for ( int i = 0; lastFormatted && bottom <= m_availableHeight && ( i < to || bottom <= viewsBottom ) ; ++i )
     {
         //kdDebug() << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
 	lastFormatted->format();
-	bottom = QMAX( bottom, lastFormatted->rect().top() +
-		       lastFormatted->rect().height() );
-	lastBottom = lastFormatted->rect().top() + lastFormatted->rect().height();
+	bottom = lastFormatted->rect().top() + lastFormatted->rect().height();
 	lastFormatted = lastFormatted->next();
     }
     m_lastFormatted = lastFormatted;
@@ -885,7 +882,7 @@ void KWTextFrameSet::formatMore()
         }
     }
     else
-        if ( frames.count() > 1 && !lastFormatted && lastBottom < m_availableHeight - frames.last()->height() )
+        if ( frames.count() > 1 && !lastFormatted && bottom < m_availableHeight - frames.last()->height() )
         {
             // Last frame is empty -> try removing last page
             if ( doc->canRemovePage( doc->getPages() - 1, frames.last() ) )

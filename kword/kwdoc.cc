@@ -1318,7 +1318,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
 
     for (unsigned int item = 0; item < listFramesets.count(); item++)
     {
-        QDomElement frameset = listFramesets.item( item ).toElement();
+        QDomElement framesetElem = listFramesets.item( item ).toElement();
         FrameType frameType;
         FrameInfo frameInfo;
         QString _name;
@@ -1327,19 +1327,19 @@ void KWDocument::loadFrameSets( QDomElement framesets )
         bool _visible;
         QString fsname;
 
-        frameType = static_cast<FrameType>( KWDocument::getAttribute( frameset, "frameType", FT_BASE ) );
-        frameInfo = static_cast<FrameInfo>( KWDocument::getAttribute( frameset, "frameInfo", FI_BODY ) );
-        _name = correctQString( KWDocument::getAttribute( frameset, "grpMgr", "" ) );
-        _row = KWDocument::getAttribute( frameset, "row", 0 );
-        _col = KWDocument::getAttribute( frameset, "col", 0 );
-        if ( frameset.attribute( "removeable" ) != QString::null )
-            removeable = static_cast<bool>( KWDocument::getAttribute( frameset, "removeable", false ) );
+        frameType = static_cast<FrameType>( KWDocument::getAttribute( framesetElem, "frameType", FT_BASE ) );
+        frameInfo = static_cast<FrameInfo>( KWDocument::getAttribute( framesetElem, "frameInfo", FI_BODY ) );
+        _name = correctQString( KWDocument::getAttribute( framesetElem, "grpMgr", "" ) );
+        _row = KWDocument::getAttribute( framesetElem, "row", 0 );
+        _col = KWDocument::getAttribute( framesetElem, "col", 0 );
+        if ( framesetElem.attribute( "removeable" ) != QString::null )
+            removeable = static_cast<bool>( KWDocument::getAttribute( framesetElem, "removeable", false ) );
         else
-            removeable = static_cast<bool>( KWDocument::getAttribute( frameset, "removable", false ) );
-        _rows = getAttribute( frameset, "rows", 1 );
-        _cols = getAttribute( frameset, "cols", 1 );
-        _visible = static_cast<bool>( KWDocument::getAttribute( frameset, "visible", true ) );
-        fsname = correctQString( KWDocument::getAttribute( frameset, "name", "" ) );
+            removeable = static_cast<bool>( KWDocument::getAttribute( framesetElem, "removable", false ) );
+        _rows = getAttribute( framesetElem, "rows", 1 );
+        _cols = getAttribute( framesetElem, "cols", 1 );
+        _visible = static_cast<bool>( KWDocument::getAttribute( framesetElem, "visible", true ) );
+        fsname = correctQString( KWDocument::getAttribute( framesetElem, "name", "" ) );
 
         if ( fsname.isEmpty() ) {
             if(frameInfo!=FI_BODY)
@@ -1353,7 +1353,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                 KWTextFrameSet *fs = new KWTextFrameSet( this );
                 fs->setVisible( _visible );
                 fs->setName( fsname );
-                fs->load( frameset );
+                fs->load( framesetElem );
                 fs->setFrameInfo( frameInfo );
                 fs->setIsRemoveableHeader( removeable );
 
@@ -1384,23 +1384,32 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                 } else
                     frames.append( fs );
 
+                // Old file format had autoCreateNewFrame as a frameset attribute,
+                // and our templates still use that.
+                if ( framesetElem.hasAttribute( "autoCreateNewFrame" ) )
+                {
+                    FrameBehaviour behav = static_cast<FrameBehaviour>( framesetElem.attribute( "autoCreateNewFrame" ).toInt() );
+                    QListIterator<KWFrame> frameIt( fs->frameIterator() );
+                    for ( ; frameIt.current() ; ++frameIt ) // Apply it to all frames
+                        frameIt.current()->setFrameBehaviour( behav );
+                }
+
                 // Now we can start the formatting (which creates more pages/frames if necessary)
                 fs->formatMore();
-
             } break;
             case FT_PICTURE: {
-                KWPictureFrameSet *frame = new KWPictureFrameSet( this );
-                frame->setName( fsname );
-                frame->load( frameset );
-                frame->setFrameInfo( frameInfo );
-                frames.append( frame );
+                KWPictureFrameSet *fs = new KWPictureFrameSet( this );
+                fs->setName( fsname );
+                fs->load( framesetElem );
+                fs->setFrameInfo( frameInfo );
+                frames.append( fs );
             } break;
             case FT_FORMULA: {
-                KWFormulaFrameSet *frame = new KWFormulaFrameSet( this );
-                frame->setName( fsname );
-                frame->load( frameset );
-                frame->setFrameInfo( frameInfo );
-                frames.append( frame );
+                KWFormulaFrameSet *fs = new KWFormulaFrameSet( this );
+                fs->setName( fsname );
+                fs->load( framesetElem );
+                fs->setFrameInfo( frameInfo );
+                frames.append( fs );
             } break;
             default: break;
         }
