@@ -53,6 +53,11 @@ Command* SymbolSequenceElement::buildCommand( Container* container, Request* req
 {
     switch ( *request ) {
     case req_addIndex: {
+        FormulaCursor* cursor = container->activeCursor();
+        if ( cursor->isSelection() ||
+             ( cursor->getPos() > 0 && cursor->getPos() < countChildren() ) ) {
+            break;
+        }
         IndexRequest* ir = static_cast<IndexRequest*>( request );
         if ( ( ir->index() == upperMiddlePos ) || ( ir->index() == lowerMiddlePos ) ) {
             SymbolElement* element = static_cast<SymbolElement*>( getParent() );
@@ -62,7 +67,6 @@ Command* SymbolSequenceElement::buildCommand( Container* container, Request* req
                 return command;
             }
             else {
-                FormulaCursor* cursor = container->activeCursor();
                 index->moveToIndex( cursor, afterCursor );
                 cursor->setSelection( false );
                 formula()->cursorHasMoved( cursor );

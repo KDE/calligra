@@ -23,13 +23,57 @@
 
 #include <kdebug.h>
 
+#include "MatrixDialog.h"
 #include "formulaelement.h"
 #include "formulacursor.h"
+#include "kformulacontainer.h"
 #include "matrixelement.h"
 #include "sequenceelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
-using namespace std;
+
+
+class MatrixSequenceElement : public SequenceElement {
+    typedef SequenceElement inherited;
+public:
+
+    MatrixSequenceElement( BasicElement* parent = 0 ) : SequenceElement( parent ) {}
+
+    /**
+     * This is called by the container to get a command depending on
+     * the current cursor position (this is how the element gets choosen)
+     * and the request.
+     *
+     * @returns the command that performs the requested action with
+     * the containers active cursor.
+     */
+    virtual Command* buildCommand( Container*, Request* );
+};
+
+
+Command* MatrixSequenceElement::buildCommand( Container* container, Request* request )
+{
+    switch ( *request ) {
+    case req_changeMatrix: {
+        //FormulaCursor* cursor = container->activeCursor();
+        MatrixElement* matrix = static_cast<MatrixElement*>( getParent() );
+        MatrixDialog* dialog = new MatrixDialog( 0, matrix->getColumns(), matrix->getRows() );
+        if ( dialog->exec() ) {
+            uint rows = dialog->h;
+            uint cols = dialog->w;
+            if ( ( rows != matrix->getRows() ) || ( cols != matrix->getColumns() ) ) {
+                // the dialog hides the normal cursor.
+                //*( impl->internCursor ) = *cursor;
+                //paste( matrix->resizedDom( rows, cols ), i18n( "Matrix size change" ) );
+            }
+        }
+    }
+    default:
+        break;
+    }
+    return inherited::buildCommand( container, request );
+}
+
 
 MatrixElement::MatrixElement(uint rows, uint columns, BasicElement* parent)
     : BasicElement(parent)
@@ -38,7 +82,7 @@ MatrixElement::MatrixElement(uint rows, uint columns, BasicElement* parent)
         QPtrList<SequenceElement>* list = new QPtrList<SequenceElement>;
         list->setAutoDelete(true);
         for (uint c = 0; c < columns; c++) {
-            list->append(new SequenceElement(this));
+            list->append(new MatrixSequenceElement(this));
         }
         content.append(list);
     }
@@ -530,7 +574,7 @@ bool MatrixElement::readAttributesFromDom(QDomElement& element)
         list->setAutoDelete(true);
         content.append(list);
         for (uint c = 0; c < cols; c++) {
-            SequenceElement* element = new SequenceElement(this);
+            SequenceElement* element = new MatrixSequenceElement(this);
             list->append(element);
 	}
     }

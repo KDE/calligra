@@ -326,7 +326,8 @@ void Container::cut()
     FormulaCursor* cursor = activeCursor();
     if (cursor->isSelection()) {
         copy();
-        //remove();
+        DirectedRemove r( req_remove, beforeCursor );
+        performRequest( &r );
     }
 }
 

@@ -883,28 +883,16 @@ Command* SequenceElement::buildCommand( Container* container, Request* request )
             return command;
         }
     }
-    /*
-    case req_changeMatrix: {
-        FormulaCursor* cursor = activeCursor();
-        MatrixElement* matrix = cursor->getActiveMatrixElement();
-        if ( matrix != 0 ) {
-            MatrixDialog* dialog = new MatrixDialog( 0, matrix->getColumns(), matrix->getRows() );
-            if ( dialog->exec() ) {
-                uint rows = dialog->h;
-                uint cols = dialog->w;
-                if ( ( rows != matrix->getRows() ) || ( cols != matrix->getColumns() ) ) {
-                    // the dialog hides the normal cursor.
-                    *( impl->internCursor ) = *cursor;
-                    paste( matrix->resizedDom( rows, cols ), i18n( "Matrix size change" ) );
-                }
-            }
-            delete dialog;
-        }
-    }
-    */
     case req_addIndex: {
-        IndexElement* element = new IndexElement;
         FormulaCursor* cursor = container->activeCursor();
+        if ( cursor->getPos() > 0 && !cursor->isSelection() ) {
+            IndexElement* element = dynamic_cast<IndexElement*>( children.at( cursor->getPos()-1 ) );
+            if ( element != 0 ) {
+                element->getMainChild()->goInside( cursor );
+                return element->getMainChild()->buildCommand( container, request );
+            }
+        }
+        IndexElement* element = new IndexElement;
         if ( !cursor->isSelection() ) {
             cursor->moveLeft( SelectMovement | WordMovement );
         }

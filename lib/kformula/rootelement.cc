@@ -54,6 +54,11 @@ Command* RootSequenceElement::buildCommand( Container* container, Request* reque
 {
     switch ( *request ) {
     case req_addIndex: {
+        FormulaCursor* cursor = container->activeCursor();
+        if ( cursor->isSelection() ||
+             ( cursor->getPos() > 0 && cursor->getPos() < countChildren() ) ) {
+            break;
+        }
         IndexRequest* ir = static_cast<IndexRequest*>( request );
         if ( ir->index() == upperLeftPos ) {
             RootElement* element = static_cast<RootElement*>( getParent() );
@@ -63,7 +68,6 @@ Command* RootSequenceElement::buildCommand( Container* container, Request* reque
                 return command;
             }
             else {
-                FormulaCursor* cursor = container->activeCursor();
                 index->moveToIndex( cursor, afterCursor );
                 cursor->setSelection( false );
                 formula()->cursorHasMoved( cursor );

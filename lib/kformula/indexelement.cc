@@ -54,6 +54,11 @@ Command* IndexSequenceElement::buildCommand( Container* container, Request* requ
 {
     switch ( *request ) {
     case req_addIndex: {
+        FormulaCursor* cursor = container->activeCursor();
+        if ( cursor->isSelection() ||
+             ( cursor->getPos() > 0 && cursor->getPos() < countChildren() ) ) {
+            break;
+        }
         IndexElement* element = static_cast<IndexElement*>( getParent() );
         IndexRequest* ir = static_cast<IndexRequest*>( request );
         ElementIndexPtr index = element->getIndex( ir->index() );
@@ -62,7 +67,6 @@ Command* IndexSequenceElement::buildCommand( Container* container, Request* requ
             return command;
         }
         else {
-            FormulaCursor* cursor = container->activeCursor();
             index->moveToIndex( cursor, afterCursor );
             cursor->setSelection( false );
             formula()->cursorHasMoved( cursor );
