@@ -325,7 +325,20 @@ void KoStyleManager::save() {
 
         int indexNextStyle = styleIndex( m_styleCombo->currentItem() );
         m_currentStyle->setFollowingStyle( m_changedStyles.at( indexNextStyle ) );
+        m_currentStyle->setParentStyle( style( m_inheritCombo->currentText() ) );
     }
+}
+
+KoStyle * KoStyleManager::style( const QString & _name )
+{
+    for(unsigned int i=0; i < m_changedStyles.count(); i++) {
+        // Skip deleted styles, they're no in m_stylesList anymore
+        KoStyle * style = m_changedStyles.at(i);
+        if ( !style ) continue;
+        if ( style->name() == _name)
+            return style;
+    }
+    return 0;
 }
 
 void KoStyleManager::addStyle() {

@@ -125,6 +125,8 @@ public:
       }
 
     KoStyle * parentStyle() const {return m_parentStyle;}
+    void setParentStyle( KoStyle *_style){ m_parentStyle = _style;}
+
     int inheritedParagLayoutFlag() const { return m_inheritedParagLayoutFlag; }
     int inheritedFormatFlag() const { return m_inheritedFormatFlag; }
 

@@ -100,6 +100,7 @@ protected slots:
     void moveDownStyle();
     void renameStyle(const QString &);
 protected:
+    KoStyle * style( const QString & _name );
     void addTab( KoStyleManagerTab * tab );
 };
 
