@@ -799,11 +799,11 @@ public:
 
 private:
     KWFramePartMoveCommand *m_cmdMoveChild;
+    DCOPObject *m_dcop;
+
 protected slots:
     void slotChildChanged();
     void slotChildActivated(bool);
-    DCOPObject *m_dcop;
-
 };
 
 /******************************************************************/
