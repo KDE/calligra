@@ -216,6 +216,7 @@ public:
 KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     : KParts::MainWindow( name )
 {
+    setStandardToolBarMenuEnabled(true); // should there be a check for >= 3.1 ?
     Q_ASSERT(instance);
     d = new KoMainWindowPrivate;
 
