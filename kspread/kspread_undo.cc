@@ -727,8 +727,6 @@ void KSpreadUndoResizeColRow::redo()
         }
     }
 
-    // TODO: function for refreshing rows and columns
-
     doc()->undoBuffer()->unlock();
 }
 
@@ -775,8 +773,11 @@ void KSpreadUndoClearCell::undo()
     for ( it2 = m_lstClearCell.begin(); it2 != m_lstClearCell.end(); ++it2 )
     {
         KSpreadCell *cell = table->nonDefaultCell( (*it2).col, (*it2).row );
-        if ( (*it2).text.isNull() )
-	       cell->setCellText( "" );
+        if ( (*it2).text.isEmpty() )
+                {
+                if(!cell->text().isEmpty())
+	                cell->setCellText( "" );
+                }
         else
 	       cell->setCellText( (*it2).text );
     }
@@ -796,8 +797,11 @@ void KSpreadUndoClearCell::redo()
     for ( it2 = m_lstRedoClearCell.begin(); it2 != m_lstRedoClearCell.end(); ++it2 )
     {
         KSpreadCell *cell = table->nonDefaultCell( (*it2).col, (*it2).row );
-        if ( (*it2).text.isNull() )
-	       cell->setCellText( "" );
+        if ( (*it2).text.isEmpty() )
+                {
+                if(!cell->text().isEmpty())
+	                cell->setCellText( "" );
+                }
         else
 	       cell->setCellText( (*it2).text );
     }
@@ -805,3 +809,48 @@ void KSpreadUndoClearCell::redo()
     doc()->undoBuffer()->unlock();
 }
 
+
+KSpreadUndoMergedCell::KSpreadUndoMergedCell( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _row , int _extraX,int _extraY) :
+    KSpreadUndoAction( _doc )
+{
+  m_tableName = _table->name();
+  m_iRow=_row;
+  m_iCol=_column;
+  m_iExtraX=_extraX;
+  m_iExtraY=_extraY;
+
+}
+
+KSpreadUndoMergedCell::~KSpreadUndoMergedCell()
+{
+}
+
+void KSpreadUndoMergedCell::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+
+    KSpreadCell *cell = table->nonDefaultCell( m_iCol, m_iRow );
+    m_iExtraRedoX=cell->extraXCells();
+    m_iExtraRedoY=cell->extraYCells();
+
+    table->changeMergedCell( m_iCol, m_iRow, m_iExtraX,m_iExtraY);
+
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoMergedCell::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+
+    table->changeMergedCell( m_iCol, m_iRow, m_iExtraRedoX,m_iExtraRedoY);
+
+    doc()->undoBuffer()->unlock();
+}

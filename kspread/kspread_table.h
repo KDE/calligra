@@ -504,7 +504,8 @@ public:
     void setShowColumnNumber(bool _showColumnNumber) {m_bShowColumnNumber=_showColumnNumber;}
 
     void mergeCell( const QPoint &_marker );
-    void dissociateCell( const QPoint &_marker );
+    void dissociateCell( const QPoint &_marker, bool makeUndo=true );
+    void changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY);
 
     /**
      * Change name of reference when the user inserts or removes a column,

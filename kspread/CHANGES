@@ -915,3 +915,9 @@ into this area
 * Implemented Undo/Redo on clear cell
 * Another fix for merged cells (conditionnal formatting).
 
+2000-08-19-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+* Implemented Undo for merging cells
+* Fixed repainting problem when unmerging
+* Fixed undo on clear cell
+

@@ -4006,6 +4006,28 @@ void KSpreadTable::updateView(const QRect& rect)
     emit sig_updateView( this, rect );
 }
 
+void KSpreadTable::changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY)
+{
+   if( m_iExtraX==0 && m_iExtraY==0)
+        {
+        dissociateCell( QPoint( m_iCol,m_iRow),false);
+        return;
+        }
+    KSpreadCell *cell = nonDefaultCell( m_iCol,m_iRow  );
+    if(cell->isForceExtraCells())
+        dissociateCell( QPoint( m_iCol,m_iRow),false);
+
+    cell->forceExtraCells( m_iCol,m_iRow,
+                           m_iExtraX,m_iExtraY);
+
+    setMarker(QPoint(m_iCol,m_iRow));
+    refreshMergedCell();
+    QRect rect;
+    rect.setCoords(m_iCol,m_iRow,m_iCol+m_iExtraX,m_iRow+m_iExtraY);
+    emit sig_updateView( this, rect );
+
+}
+
 void KSpreadTable::mergeCell( const QPoint &_marker)
 {
     if(m_rctSelection.left() == 0)
@@ -4018,6 +4040,12 @@ void KSpreadTable::mergeCell( const QPoint &_marker)
         y = m_rctSelection.top();
     KSpreadCell *cell = nonDefaultCell( x ,y  );
 
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+        KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( m_pDoc, this, x ,y,cell->extraXCells() ,cell->extraYCells());
+        m_pDoc->undoBuffer()->appendUndo( undo );
+    }
+
     cell->forceExtraCells( x ,y,
                            abs(m_rctSelection.right() -m_rctSelection.left()),
                            abs(m_rctSelection.bottom() - m_rctSelection.top()));
@@ -4026,19 +4054,32 @@ void KSpreadTable::mergeCell( const QPoint &_marker)
     emit sig_updateView( this, m_rctSelection );
 }
 
-void KSpreadTable::dissociateCell( const QPoint &_marker)
+void KSpreadTable::dissociateCell( const QPoint &_marker,bool makeUndo)
 {
     KSpreadCell *cell = nonDefaultCell(_marker.x() ,_marker.y()  );
+    if(!cell->isForceExtraCells())
+        return;
+
+    if(makeUndo)
+    {
+        if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+                KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( m_pDoc, this, _marker.x() ,_marker.y(),cell->extraXCells() ,cell->extraYCells());
+                m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+    }
     int x=cell->extraXCells();
     if( x == 0 )
         x=1;
     int y = cell->extraYCells();
     if( y == 0 )
         y=1;
+
     cell->forceExtraCells( _marker.x() ,_marker.y(), 0, 0 );
     QRect selection( _marker.x(), _marker.y(), x, y );
     setSelection(selection);
     unselect();
+    refreshMergedCell();
     emit sig_updateView( this, selection );
 }
 

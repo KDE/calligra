@@ -231,6 +231,26 @@ protected:
     QString m_tableName;
 };
 
+class KSpreadUndoMergedCell : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoMergedCell( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _row, int _extraX,int _extraY);
+    virtual ~KSpreadUndoMergedCell();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+    int m_iRow;
+    int m_iCol;
+    int m_iExtraX;
+    int m_iExtraY;
+    int m_iExtraRedoX;
+    int m_iExtraRedoY;
+    QString m_tableName;
+};
+
+
 class KSpreadUndo
 {
 public:
