@@ -444,7 +444,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 		// Close the current destination
 		(this->*destination.destproc)(0L);
                 //kdDebug(30515) << "Closing destination... " << destinationStack.count() << endl;
-                if ( destinationStack.count() <= 0 )
+                if (destinationStack.isEmpty())
                 {
                     kdWarning(30515) << "Destination stack is empty! Document might be buggy!" << endl;
                     // Keep the destination to save what can still be saved!
@@ -454,16 +454,16 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
                     destination = destinationStack.pop();
                 }
 	    }
-	    if (stateStack.count() > 1)
-	    {
-		// Retrieve the current state from the stack
-		state = stateStack.pop();
-	    }
-	    else
+	    if (stateStack.count() <= 1)
 	    {
 		// End-of-document, keep formatting properties
 		stateStack.pop();
 		break;
+	    }
+            else
+	    {
+		// Retrieve the current state from the stack
+		state = stateStack.pop();
 	    }
 	}
 	else if (token.type == RTFTokenizer::ControlWord)
@@ -1918,7 +1918,7 @@ void RTFImport::parseRichText( RTFProperty * )
 	    int len = (token.text[0] < 0) ? 1 : strlen( token.text );
 
 	    // Check and store format changes
-	    if (textState->formats.count() == 0 ||
+	    if (textState->formats.isEmpty() ||
 		memcmp( &textState->formats.last().fmt,
 			&state.format, sizeof(RTFFormat) )|| (!textState->formats.last().xmldata.isEmpty()))
 	    {
@@ -2396,7 +2396,7 @@ void RTFImport::addLayout( DomNode &node, const QString &name, RTFLayout &layout
     }
 
     // Tabulators
-    if (layout.tablist.count() > 0)
+    if (!layout.tablist.isEmpty())
     {
 	for (uint i=0; i < layout.tablist.count(); i++)
 	{
