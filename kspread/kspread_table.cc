@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <ctype.h>
+#include <float.h>
 #include <math.h>
 
 #include <qapplication.h>
