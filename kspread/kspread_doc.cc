@@ -70,6 +70,7 @@
 
 #include <koApplication.h>
 #include <koxmlns.h>
+#include <kodom.h>
 
 using namespace std;
 using namespace KSpread;
@@ -839,7 +840,7 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     d->refs.clear();
 
     QDomElement content = doc.documentElement();
-    QDomElement body ( content.namedItem( "office:body" ).toElement() );
+    QDomElement body ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( body.isNull() )
     {
         setErrorMessage( i18n( "Invalid document. No office:body." ));
@@ -847,7 +848,8 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         d->m_loadingInfo = 0L;
         return false;
     }
-    body = body.namedItem( "office:spreadsheet" ).toElement();
+    body = KoDom::namedItemNS( body, KoXmlNS::office, "spreadsheet" );
+
     if ( body.isNull() )
     {
         setErrorMessage( i18n( "Invalid document. No office:spreadsheet." ));
