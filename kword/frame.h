@@ -267,8 +267,7 @@ public:
     void splitParag( KWParag *_parag, unsigned int _pos );
 
     virtual QDomElement save( QDomDocument &doc );
-    // #### todo
-    //virtual void load( KOMLParser&, vector<KOMLAttrib>& );
+    virtual bool load( const QDomElement& element );
 
     bool getAutoCreateNewFrame() { return autoCreateNewFrame; }
     void setAutoCreateNewFrame( bool _auto ) { autoCreateNewFrame = _auto; }
@@ -315,8 +314,7 @@ public:
     QString getFileName() { return filename; }
 
     virtual QDomElement save( QDomDocument &doc );
-    // #### todo
-    //virtual void load( KOMLParser&, vector<KOMLAttrib>& );
+    virtual bool load( const QDomElement& element );
 
 protected:
     KWImage *image;
