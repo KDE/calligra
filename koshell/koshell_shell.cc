@@ -375,7 +375,7 @@ void KoShellWindow::slotFileOpen()
 void KoShellWindow::slotFileClose()
 {
   // reimplemented to avoid closing the window when we have docs opened
-
+  
   // No docs at all ?
   if ( m_lstPages.count() == 0 )
     close(); // close window
@@ -430,31 +430,32 @@ bool KoShellWindow::queryClose()
   // Save current doc and views
   QPtrList<KoView> currentViews;
   KoDocument * currentDoc = 0L;
+  bool ok = true;
   if (m_activePage != m_lstPages.end())
   {
       currentDoc = (*m_activePage).m_pDoc;
       currentViews.append((*m_activePage).m_pView);
-  }
-
-  // This one is called by slotFileQuit and by the X button.
-  // We have to check for unsaved docs...
-  bool ok = true;
-  QValueList<Page>::Iterator it = m_lstPages.begin();
-  for( ; it != m_lstPages.end(); ++it )
-  {
-    // This is quite a HACK
-    // We should ask ourselves, to get a better dialog box
-    setRootDocumentDirect( (*it).m_pDoc, QPtrList<KoView>() );
-    // Test if we can close this doc
-    if ( !KoMainWindow::queryClose() )
-    {
-      ok = false; // No
-      break; // abort
-    }
-  }
+    
+      // This one is called by slotFileQuit and by the X button.
+      // We have to check for unsaved docs...
+      
+      QValueList<Page>::Iterator it = m_lstPages.begin();
+      for( ; it != m_lstPages.end(); ++it )
+      {
+          // This is quite a HACK
+          // We should ask ourselves, to get a better dialog box
+          setRootDocumentDirect( (*it).m_pDoc, QPtrList<KoView>() );
+          // Test if we can close this doc
+          if ( !KoMainWindow::queryClose() )
+          {
+              ok = false; // No
+              break; // abort
+          }
+      }
 
   // Restore current doc and views
   setRootDocumentDirect( currentDoc, currentViews );
+  }
   return ok;
 }
 
