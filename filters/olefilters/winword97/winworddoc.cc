@@ -280,13 +280,16 @@ QString WinWordDoc::generateFormats(
             const MsWordGenerated::CHP *chp = static_cast<Format *>(run)->values->getChp();
 
 kdDebug() << "WinWordDoc::generateFormats: hps 3: " <<chp->hps<< endl;
-            formats.append("<FORMAT id=\"1\" pos=\"");
-            formats.append(QString::number(run->start));
-            formats.append("\" len=\"");
-            formats.append(QString::number(run->end - run->start - 1));
-            formats.append("\">\n");
-            formats.append(generateFormat(chp));
-            formats.append("</FORMAT>\n");
+            if (run->end > run->start)
+            {
+                formats.append("<FORMAT id=\"1\" pos=\"");
+                formats.append(QString::number(run->start));
+                formats.append("\" len=\"");
+                formats.append(QString::number(run->end - run->start - 1));
+                formats.append("\">\n");
+                formats.append(generateFormat(chp));
+                formats.append("</FORMAT>\n");
+            }
         }
         else
         if (typeid(Image) == typeid(*run))
@@ -697,24 +700,24 @@ void WinWordDoc::gotTableEnd(
             cell.append(QString::number(ROW_SIZE + y * ROW_SIZE));
             cell.append("\" bottom=\"");
             cell.append(QString::number(2 * ROW_SIZE + y * ROW_SIZE));
-            
-	    QColor brcLeft = colorForNumber(QString::number(row.rgtc[x].brcLeft.ico), -1);
-	    QColor brcRight = colorForNumber(QString::number(row.rgtc[x].brcRight.ico), -1);
-	    QColor brcTop = colorForNumber(QString::number(row.rgtc[x].brcTop.ico), -1);
-	    QColor brcBottom = colorForNumber(QString::number(row.rgtc[x].brcBottom.ico), -1);
-	    QColor icoBack = colorForNumber(QString::number(row.rgshd[x].icoBack), 8);
-	    
-	    cell.append(
+
+            QColor brcLeft = colorForNumber(QString::number(row.rgtc[x].brcLeft.ico), -1);
+            QColor brcRight = colorForNumber(QString::number(row.rgtc[x].brcRight.ico), -1);
+            QColor brcTop = colorForNumber(QString::number(row.rgtc[x].brcTop.ico), -1);
+            QColor brcBottom = colorForNumber(QString::number(row.rgtc[x].brcBottom.ico), -1);
+            QColor icoBack = colorForNumber(QString::number(row.rgshd[x].icoBack), 8);
+
+            cell.append(
                 QString::fromLatin1("\" runaround=\"1\" runaGap=\"2\"") +
-        	QString::fromLatin1("lWidth=\"1\" lStyle=\"0\" ") + 
-		QString::fromLatin1("lRed=\"%1\" lGreen=\"%2\" lBlue=\"%3\" ").arg(brcLeft.red()).arg(brcLeft.green()).arg(brcLeft.blue()) +
+                QString::fromLatin1("lWidth=\"1\" lStyle=\"0\" ") +
+                QString::fromLatin1("lRed=\"%1\" lGreen=\"%2\" lBlue=\"%3\" ").arg(brcLeft.red()).arg(brcLeft.green()).arg(brcLeft.blue()) +
                 QString::fromLatin1("rWidth=\"1\" rStyle=\"0\" ") +
-		QString::fromLatin1("rRed=\"%1\" rGreen=\"%2\" rBlue=\"%3\" ").arg(brcRight.red()).arg(brcRight.green()).arg(brcRight.blue()) +
+                QString::fromLatin1("rRed=\"%1\" rGreen=\"%2\" rBlue=\"%3\" ").arg(brcRight.red()).arg(brcRight.green()).arg(brcRight.blue()) +
                 QString::fromLatin1("tWidth=\"1\" tStyle=\"0\" ") +
-		QString::fromLatin1("tRed=\"%1\" tGreen=\"%2\" tBlue=\"%3\" ").arg(brcTop.red()).arg(brcTop.green()).arg(brcTop.blue()) +
+                QString::fromLatin1("tRed=\"%1\" tGreen=\"%2\" tBlue=\"%3\" ").arg(brcTop.red()).arg(brcTop.green()).arg(brcTop.blue()) +
                 QString::fromLatin1("bWidth=\"1\" bStyle=\"0\" ") +
-		QString::fromLatin1("bRed=\"%1\" bGreen=\"%2\" bBlue=\"%3\" ").arg(brcBottom.red()).arg(brcBottom.green()).arg(brcBottom.blue()) +
-		QString::fromLatin1("bkRed=\"%1\" bkGreen=\"%2\" bkBlue=\"%3\" ").arg(icoBack.red()).arg(icoBack.green()).arg(icoBack.blue()) +
+                QString::fromLatin1("bRed=\"%1\" bGreen=\"%2\" bBlue=\"%3\" ").arg(brcBottom.red()).arg(brcBottom.green()).arg(brcBottom.blue()) +
+                QString::fromLatin1("bkRed=\"%1\" bkGreen=\"%2\" bkBlue=\"%3\" ").arg(icoBack.red()).arg(icoBack.green()).arg(icoBack.blue()) +
                 QString::fromLatin1("bleft=\"0\" bright=\"0\" btop=\"0\" bbottom=\"0\""));
             cell.append(" autoCreateNewFrame=\"0\" newFrameBehaviour=\"1\"/>\n");
             cell.append("<PARAGRAPH>\n<TEXT>");
@@ -746,6 +749,10 @@ void WinWordDoc::gotTableRow(
         cacheCellEdge(tableNumber, computeCellEdge(row, i + 1));
     }
     i = m_table.count();
+
+    // Fundamentally, MsWord provides all data on a per-row basis, but we have
+    // to save it all till the end of the table so that we can work out the
+    // number of cell edges in the table.
     m_table.resize(i + 1);
     m_table.insert(i, newRow);
 }

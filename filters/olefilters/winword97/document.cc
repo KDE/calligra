@@ -325,60 +325,13 @@ QString Document::getFont(unsigned fc)
 {
     QString msFont = MsWord::getFont(fc).xstzName;
 
-// Solution 2: Part 1/2 (slow)
-//    QFontDatabase fontdb;
-//    QStringList fonts = fontdb.families(false);
-//    for(QStringList::ConstIterator it = fonts.begin(); it != fonts.end(); ++it)
-//    {
-//	kdDebug() << "Comparing \"" << (msFont.lower()).stripWhiteSpace() << "\" to \"" << ((*it).lower()).stripWhiteSpace() << "\"" << endl;
-//	if((msFont.lower()).stripWhiteSpace() == ((*it).lower()).stripWhiteSpace())
-//	{
-//	    // TODO: Remember the MsFont<->*it mapping in a seperate QMap (?)
-//	    kdDebug() << "Found font!" << endl;
-//	    return *it;
-//	}
-//    }
-
+    // Use Qt to look up our local equivalent of the MS font.
     QFont xFont(msFont);
     QFontInfo info(xFont);
     kdDebug() << "FONT: Original: " << msFont << endl;
     kdDebug() << "FONT: Requested: " << xFont.family() << endl;
     kdDebug() << "FONT: Got: " << info.family() << endl;
     return info.family();
-
-    
-// Solution 2: Part 2/2 (slow)
-//    kdError() << "Font not found in local QFontDatabase...trying to map now by static list!" << endl;
-    
-//    static const unsigned ENTRIES = 6;
-//    static QString lookup[ENTRIES][2] =
-//    {
-        // Since most fonts are sans-serif, we default to
-        // helvetica. Thus, this table need contain no entries
-        // that map to helvetica.
-        // Ms               X11
-//        { "times",          "times" },
-//        { "courier",        "courier" },
-//        { "andale",         "monotype" },
-//        { "monotype.com",   "monotype" },
-//        { "georgia",        "times" },
-        // Default entry, guaranteed to match! This must be the
-        // last entry...
-//        { "",               "helvetica" }
-//    };
-
-//    unsigned i;
-//    QString font;
-
-    // How to translate a Microsoft font name to one known by us?
-
-//    for (i = 0; i < ENTRIES; i++)
-//    {
-//        if (msFont.find(lookup[i][0], 0, FALSE) != -1)
-//            break;
-//    }
-//    kdError() << "Converting \"" << msFont << "\" to \"" << lookup[i][1] << "\"" << endl;
-//    return lookup[i][1];
 }
 
 void Document::gotParagraph(
