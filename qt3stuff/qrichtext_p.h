@@ -421,7 +421,7 @@ public:
     }
 
     QTextDocument *parent; // obsolete?
-    
+
     QTextParag *paragraph() const { return parag; }
     void setParagraph( QTextParag * p ) { parag = p; }
 private:
@@ -830,6 +830,8 @@ public:
     void clear( bool createEmptyParag = FALSE );
 
     virtual QTextParag *createParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE );
+    void insertChild( QObject *o ) { QObject::insertChild( o ); }
+    void removeChild( QObject *o ) { QObject::removeChild( o ); }
     void insertChild( QTextDocument *d ) { childList.append( d ); }
     void removeChild( QTextDocument *d ) { childList.removeRef( d ); }
     QPtrList<QTextDocument> children() const { return childList; }

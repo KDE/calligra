@@ -667,13 +667,16 @@ void QTextCursor::restoreState()
 	pop();
 }
 
-bool QTextCursor::place( const QPoint &pos, QTextParag *s )
+bool QTextCursor::place( const QPoint &p, QTextParag *s )
 {
+    QPoint pos( p );
     QRect r;
+    if ( pos.y() < s->rect().y() )
+	pos.setY( s->rect().y() );
     while ( s ) {
 	r = s->rect();
 	r.setWidth( doc ? doc->width() : QWIDGETSIZE_MAX );
-	if ( r.contains( pos ) )
+	if ( pos.y() >= r.y() && pos.y() <= r.y() + r.height() )
 	    break;
 	s = s->next();
         if ( !s )
@@ -707,6 +710,8 @@ bool QTextCursor::place( const QPoint &pos, QTextParag *s )
 	nextLine = s->length();
     i = index;
     int x = s->rect().x();
+    if ( pos.x() < x )
+	pos.setX( x + 1 );
     int cw;
     int curpos = s->length()-1;
     int dist = 10000000;
@@ -998,8 +1003,12 @@ void QTextCursor::gotoPageDown( int visibleHeight )
 	s = s->next();
     }
 
-    if ( !s && doc )
+    if ( !s && doc ) {
 	s = doc->lastParag();
+	string = s;
+	idx = string->length() - 1;
+	return;
+    }
 
     if ( !s->isValid() )
 	return;
@@ -1419,7 +1428,7 @@ void QTextDocument::setRichText( const QString &text, const QString &context )
 
 void QTextDocument::setRichTextInternal( const QString &text )
 {
-    QTextParag* curpar = fParag;
+    QTextParag* curpar = lParag;
     int pos = 0;
     QValueStack<Tag> tags;
     Tag curtag( "", sheet_->item("") );
@@ -1571,6 +1580,8 @@ void QTextDocument::setRichTextInternal( const QString &text )
 		if ( c == '\n' ) // happens in WhiteSpacePre mode
 		    break;
 		if ( !hadNonSpace && space && curtag.wsm == QStyleSheetItem::WhiteSpaceNormal )
+		    continue;
+		if ( c == '\r' )
 		    continue;
 		s += c;
 	    }
@@ -1915,13 +1926,26 @@ bool QTextDocument::setSelectionEnd( int id, QTextCursor *cursor )
 void QTextDocument::selectAll( int id )
 {
     removeSelection( id );
+
+    QTextDocumentSelection sel;
+    sel.swapped = FALSE;
     QTextCursor c( this );
+
     c.setParag( fParag );
     c.setIndex( 0 );
-    setSelectionStart( id, &c );
+    sel.startCursor = c;
+
     c.setParag( lParag );
     c.setIndex( lParag->length() - 1 );
-    setSelectionEnd( id, &c );
+    sel.endCursor = c;
+
+    QTextParag *p = fParag;
+    while ( p ) {
+	p->setSelection( id, 0, p->length() - 1 );
+	p = p->next();
+    }
+
+    selections.insert( id, sel );
 }
 
 bool QTextDocument::removeSelection( int id )
@@ -2062,6 +2086,10 @@ void QTextDocument::removeSelectedText( int id, QTextCursor *cursor )
 	c2 = sel.startCursor;
 	c1 = sel.endCursor;
     }
+
+    // ### no support for editing tables yet
+    if ( c1.nestedDepth() || c2.nestedDepth() )
+	return;
 
     c2.restoreState();
     c1.restoreState();
@@ -5985,7 +6013,10 @@ void QTextFlow::adjustFlow( int &yp, int , int h, QTextParag *, bool pages )
     }
 
     if ( yp + h > height )
+    {
 	height = yp + h;
+	qDebug("QTextFlow::adjustFlow now height=%d",height);
+    }
 }
 
 void QTextFlow::unregisterFloatingItem( QTextCustomItem* item )
@@ -6464,8 +6495,8 @@ void QTextTable::up( QTextCursor *c, QTextDocument *&doc, QTextParag *&parag, in
 QTextTableCell::QTextTableCell( QTextTable* table,
 				int row, int column,
 				const QMap<QString, QString> &attr,
-				const QStyleSheetItem* style,
-				const QTextFormat&, const QString& context,
+				const QStyleSheetItem* /*style*/, // ### use them
+				const QTextFormat& /*fmt*/, const QString& context,
 				QMimeSourceFactory &factory, QStyleSheet *sheet,
 				const QString& doc)
 {
@@ -6475,8 +6506,6 @@ QTextTableCell::QTextTableCell( QTextTable* table,
 #endif
     cached_width = -1;
     cached_sizehint = -1;
-    Q_UNUSED( style ); // #### use them
-    //Q_UNUSED( fmt );
 
     maxw = QWIDGETSIZE_MAX;
     minw = 0;
