@@ -516,10 +516,6 @@ don't put a </?xml...> at the end of the file!).
         Each of the child elements can be present only once, except
         TABULATOR which can be repeated.
         The FORMAT tag here is the 'default format' for the paragraph.
-
-        Note: on loading the properties of the layout for a paragraph
-        default to those specified in the style of the paragraph.
-        On saving, the paragraph layout is currently fully specified.
 -->
 <!ENTITY % layout "NAME|FLOW|INDENTS|OFFSETS|LINESPACING|PAGEBREAKING|
     LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|COUNTER|FORMAT|
@@ -710,17 +706,19 @@ don't put a </?xml...> at the end of the file!).
         first: indent (pt) from the left border (of the frame) of the first line of a paragraph.
                This indent is added from the left indent (or to the right indent
                in a right-to-left paragraph).
+        If not specified, the default value is 0.
 -->
 <!ELEMENT INDENTS
     EMPTY>
 <!ATTLIST INDENTS
-    first CDATA #REQUIRED
-    left CDATA #REQUIRED
-    right CDATA #REQUIRED>
+    first CDATA #IMPLIED
+    left CDATA #IMPLIED
+    right CDATA #IMPLIED>
 
 <!-- OFFSETS
         before: space before the paragraph, or "head offset" (KWord-0.8), aka "top margin" (KWord-1.0) (pt)
         after: space after the paragraph, or "foot offset" (KWord-0.8), aka "bottom margin" (KWord-1.0) (pt)
+        If not specified, the default value is 0.
 -->
 <!ELEMENT OFFSETS
     EMPTY>
@@ -784,11 +782,12 @@ don't put a </?xml...> at the end of the file!).
 <!--
         The space to be added between two consecutive lines in a given paragraph.
         value in points. Can also be "oneandhalf" for 1.5 lines and "double".
+        If not specified, the default value is 0.
 -->
 <!ELEMENT LINESPACING
     EMPTY>
 <!ATTLIST LINESPACING
-    value (CDATA|oneandhalf|double) #REQUIRED>
+    value (CDATA|oneandhalf|double) #IMPLIED>
 
 <!--
         Attributes relating to the way paragraphs are broken at the end of a frame/page.
