@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Form Designer
+Name[bg]=Проектиране на форми
+Name[br]=Ergrafer ar paperenn-reol
 Name[cy]=Dylunydd Ffurflenni
 Name[es]=Diseñador de formularios
 Name[et]=Vormikujundaja
@@ -13,6 +15,7 @@ Name[sr]=Дизајнер форми
 Name[sv]=Formulärkonstruktion
 Name[ta]=படிவ வடிவமைப்பாளர்
 Name[tg]=Дизайнгари шакл
+Name[tr]=FormTasarımcısı
 Name[xx]=xxForm Designerxx
 MimeType=application/x-designer;
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
