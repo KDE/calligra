@@ -4,7 +4,8 @@
        
 To edit or validate this document separately, uncomment this prolog
 Be sure to comment it out again when you are done -->
-<chapter>
+
+<chapter id="hints-and-tips">
 <title>General Hints and Tips for Great Presentations</title>
 
 <para>Okay, you've decided to use &kpresenter; for your
@@ -123,6 +124,3 @@ across. &kpresenter; is a useful tool. It can help you to get that
 message over, but it can not do the job for you.</para>
 
 </chapter>
-
-
-
