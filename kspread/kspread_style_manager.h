@@ -32,6 +32,7 @@ class QDomDocument;
 class QStringList;
 
 class KoGenStyles;
+class KoOasisStyles;
 
 class KSpreadStyleManager
 {
@@ -43,6 +44,7 @@ class KSpreadStyleManager
   bool loadXML( QDomElement const & styles );
 
     void saveOasis( KoGenStyles &mainStyles );
+    void loadOasisStyleTemplate(  KoOasisStyles& oasisStyles );
 
   KSpreadCustomStyle * defaultStyle() const { return m_defaultStyle; }
   KSpreadCustomStyle * style( QString const & name ) const;

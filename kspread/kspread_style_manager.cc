@@ -20,7 +20,7 @@
 
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
-
+#include <koOasisStyles.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <qdom.h>
@@ -66,6 +66,41 @@ void KSpreadStyleManager::saveOasis( KoGenStyles &mainStyles )
         ++iter;
     }
 
+}
+
+void KSpreadStyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
+{
+    uint nStyles = oasisStyles.userStyles().count();
+    kdDebug()<<" number of template style to load : "<<nStyles<<endl;
+    for (unsigned int item = 0; item < nStyles; item++) {
+        QDomElement styleElem = oasisStyles.userStyles()[item];
+        QString name;
+        if ( styleElem.hasAttribute( "style:display-name" ) )
+        {
+            name = styleElem.attribute( "style:display-name" );
+        }
+
+        if ( name == "Default" )
+        {
+            m_defaultStyle->loadOasis( styleElem,name );
+            m_defaultStyle->setType( KSpreadStyle::BUILTIN );
+        }
+        else if ( !name.isEmpty() )
+        {
+            KSpreadCustomStyle * style = 0;
+            if ( styleElem.hasAttribute( "style:parent-style-name" ) && styleElem.attribute( "style:parent-style-name" ) == "Default" )
+                style = new KSpreadCustomStyle( name, m_defaultStyle );
+            else
+                style = new KSpreadCustomStyle( name, 0 );
+
+            //fixme test return;
+            style->loadOasis( styleElem,name );
+            style->setType( KSpreadStyle::CUSTOM );
+            m_styles[name] = style;
+            kdDebug() << "Style " << name << ": " << style << endl;
+
+        }
+    }
 }
 
 QDomElement KSpreadStyleManager::save( QDomDocument & doc )

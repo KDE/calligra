@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <koGenStyles.h>
 #include <qdom.h>
+#include <koStyleStack.h>
 
 static uint calculateValue( QPen const & pen )
 {
@@ -114,6 +115,331 @@ KSpreadStyle::KSpreadStyle( KSpreadStyle * style )
 
 KSpreadStyle::~KSpreadStyle()
 {
+}
+
+void KSpreadStyle::loadOasisStyle( const QDomElement & element )
+{
+    KoStyleStack styleStack;
+    styleStack.push( element );
+    styleStack.setTypeProperties( "cell" );
+    if ( styleStack.hasAttribute( "fo:text-align" ) )
+    {
+        QString str( styleStack.attribute( "fo:text-align" ) );
+        if ( str == "center" )
+            m_alignX == KSpreadFormat::Center;
+        else if ( str == "end" )
+            m_alignX == KSpreadFormat::Right;
+        else if ( str == "start" )
+            m_alignX == KSpreadFormat::Left;
+        else
+            m_alignX == KSpreadFormat::Undefined;
+        m_featuresSet |= SAlignX;
+    }
+
+#if 0
+    bool ok;
+  if ( format.hasAttribute( "type" ) )
+  {
+    m_type = (StyleType) format.attribute( "type" ).toInt( &ok );
+    if ( !ok )
+      return false;
+  }
+
+  if ( format.hasAttribute( "alignX" ) )
+  {
+    KSpreadFormat::Align a = (KSpreadFormat::Align) format.attribute( "alignX" ).toInt( &ok );
+    if ( !ok )
+      return false;
+    if ( (unsigned int) a >= 1 || (unsigned int) a <= 4 )
+    {
+      m_alignX = a;
+      m_featuresSet |= SAlignX;
+    }
+  }
+  if ( format.hasAttribute( "alignY" ) )
+  {
+    KSpreadFormat::AlignY a = (KSpreadFormat::AlignY) format.attribute( "alignY" ).toInt( &ok );
+    if ( !ok )
+      return false;
+    if ( (unsigned int) a >= 1 || (unsigned int) a < 4 )
+    {
+      m_alignY = a;
+      m_featuresSet |= SAlignY;
+    }
+  }
+
+  if ( format.hasAttribute( "bgcolor" ) )
+  {
+    m_bgColor = QColor( format.attribute( "bgcolor" ) );
+    m_featuresSet |= SBackgroundColor;
+  }
+
+  if ( format.hasAttribute( "multirow" ) )
+  {
+    setProperty( PMultiRow );
+    m_featuresSet |= SMultiRow;
+  }
+
+  if ( format.hasAttribute( "verticaltext" ) )
+  {
+    setProperty( PVerticalText );
+    m_featuresSet |= SVerticalText;
+  }
+
+  if ( format.hasAttribute( "precision" ) )
+  {
+    int i = format.attribute( "precision" ).toInt( &ok );
+    if ( i < -1 )
+    {
+      kdDebug(36001) << "Value out of range Cell::precision=" << i << endl;
+      return false;
+    }
+    m_precision = i;
+    m_featuresSet |= SPrecision;
+  }
+
+  if ( format.hasAttribute( "float" ) )
+  {
+    KSpreadFormat::FloatFormat a = (KSpreadFormat::FloatFormat)format.attribute( "float" ).toInt( &ok );
+    if ( !ok )
+      return false;
+    if ( (unsigned int) a >= 1 || (unsigned int) a <= 3 )
+    {
+      m_floatFormat = a;
+      m_featuresSet |= SFloatFormat;
+    }
+  }
+
+  if ( format.hasAttribute( "floatcolor" ) )
+  {
+    KSpreadFormat::FloatColor a = (KSpreadFormat::FloatColor) format.attribute( "floatcolor" ).toInt( &ok );
+    if ( !ok ) return false;
+    if ( (unsigned int) a >= 1 || (unsigned int) a <= 2 )
+    {
+      m_floatColor = a;
+      m_featuresSet |= SFloatColor;
+    }
+  }
+
+  if ( format.hasAttribute( "factor" ) )
+  {
+    m_factor = format.attribute( "factor" ).toDouble( &ok );
+    if ( !ok )
+      return false;
+    m_featuresSet |= SFactor;
+  }
+
+  if ( format.hasAttribute( "format" ) )
+  {
+    int fo = format.attribute( "format" ).toInt( &ok );
+    if ( ! ok )
+      return false;
+    m_formatType = ( KSpreadFormat::FormatType ) fo;
+    m_featuresSet |= SFormatType;
+  }
+  if ( format.hasAttribute( "custom" ) )
+  {
+    m_strFormat = format.attribute( "custom" );
+    m_featuresSet |= SCustomFormat;
+  }
+  if ( m_formatType == KSpreadFormat::Money )
+  {
+    if ( format.hasAttribute( "type" ) )
+    {
+      m_currency.type   = format.attribute( "type" ).toInt( &ok );
+      if (!ok)
+        m_currency.type = 1;
+    }
+    if ( format.hasAttribute( "symbol" ) )
+    {
+      m_currency.symbol = format.attribute( "symbol" );
+    }
+  }
+  if ( format.hasAttribute( "angle" ) )
+  {
+    m_rotateAngle = format.attribute( "angle" ).toInt( &ok );
+    if ( !ok )
+      return false;
+    m_featuresSet |= SAngle;
+  }
+  if ( format.hasAttribute( "indent" ) )
+  {
+    m_indent = format.attribute( "indent" ).toDouble( &ok );
+    if ( !ok )
+      return false;
+    m_featuresSet |= SIndent;
+  }
+  if ( format.hasAttribute( "dontprinttext" ) )
+  {
+    setProperty( PDontPrintText );
+    m_featuresSet |= SDontPrintText;
+  }
+
+  if ( format.hasAttribute( "noprotection" ) )
+  {
+    setProperty( PNotProtected );
+    m_featuresSet |= SNotProtected;
+  }
+
+  if ( format.hasAttribute( "hideall" ) )
+  {
+    setProperty( PHideAll );
+    m_featuresSet |= SHideAll;
+  }
+
+  if ( format.hasAttribute( "hideformula" ) )
+  {
+    setProperty( PHideFormula );
+    m_featuresSet |= SHideFormula;
+  }
+
+  // TODO: remove that...
+  QDomElement font = format.namedItem( "font" ).toElement();
+  if ( !font.isNull() )
+  {
+    QFont f( util_toFont( font ) );
+    m_fontFamily = f.family();
+    m_fontSize = f.pointSize();
+    if ( f.italic() )
+      m_fontFlags |= FItalic;
+    if ( f.bold() )
+      m_fontFlags |= FBold;
+    if ( f.underline() )
+      m_fontFlags |= FUnderline;
+    if ( f.strikeOut() )
+      m_fontFlags |= FStrike;
+
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFamily;
+    m_featuresSet |= SFontFlag;
+    m_featuresSet |= SFontSize;
+  }
+
+  if ( format.hasAttribute( "font-family" ) )
+  {
+    m_fontFamily = format.attribute( "font-family" );
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFamily;
+  }
+  if ( format.hasAttribute( "font-size" ) )
+  {
+    m_fontSize = format.attribute( "font-size" ).toInt( &ok );
+    if ( !ok )
+      return false;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontSize;
+  }
+
+  if ( format.hasAttribute( "font-flags" ) )
+  {
+    m_fontFlags = format.attribute( "font-flags" ).toInt( &ok );
+    if ( !ok )
+      return false;
+    m_featuresSet |= SFont;
+    m_featuresSet |= SFontFlag;
+  }
+
+  if ( format.hasAttribute( "brushcolor" ) )
+  {
+    m_backGroundBrush.setColor( QColor( format.attribute( "brushcolor" ) ) );
+    m_featuresSet |= SBackgroundBrush;
+  }
+
+  if ( format.hasAttribute( "brushstyle" ) )
+  {
+    m_backGroundBrush.setStyle( (Qt::BrushStyle) format.attribute( "brushstyle" ).toInt( &ok )  );
+    if ( !ok )
+      return false;
+    m_featuresSet |= SBackgroundBrush;
+  }
+
+  QDomElement pen = format.namedItem( "pen" ).toElement();
+  if ( !pen.isNull() )
+  {
+    m_textPen = util_toPen( pen );
+    m_featuresSet |= STextPen;
+  }
+
+  QDomElement left = format.namedItem( "left-border" ).toElement();
+  if ( !left.isNull() )
+  {
+    QDomElement pen = left.namedItem( "pen" ).toElement();
+    if ( !pen.isNull() )
+    {
+      m_leftBorderPen = util_toPen( pen );
+      m_featuresSet |= SLeftBorder;
+    }
+  }
+
+  QDomElement top = format.namedItem( "top-border" ).toElement();
+  if ( !top.isNull() )
+  {
+    QDomElement pen = top.namedItem( "pen" ).toElement();
+    if ( !pen.isNull() )
+    {
+      m_topBorderPen = util_toPen( pen );
+      m_featuresSet |= STopBorder;
+    }
+  }
+
+  QDomElement right = format.namedItem( "right-border" ).toElement();
+  if ( !right.isNull() )
+  {
+    QDomElement pen = right.namedItem( "pen" ).toElement();
+    if ( !pen.isNull() )
+    {
+      m_rightBorderPen = util_toPen( pen );
+      m_featuresSet |= SRightBorder;
+    }
+  }
+
+  QDomElement bottom = format.namedItem( "bottom-border" ).toElement();
+  if ( !bottom.isNull() )
+  {
+    QDomElement pen = bottom.namedItem( "pen" ).toElement();
+    if ( !pen.isNull() )
+    {
+      m_bottomBorderPen = util_toPen( pen );
+      m_featuresSet |= SBottomBorder;
+    }
+  }
+
+  QDomElement fallDiagonal = format.namedItem( "fall-diagonal" ).toElement();
+  if ( !fallDiagonal.isNull() )
+  {
+    QDomElement pen = fallDiagonal.namedItem( "pen" ).toElement();
+    if ( !pen.isNull() )
+    {
+      m_fallDiagonalPen = util_toPen( pen );
+      m_featuresSet |= SFallDiagonal;
+    }
+  }
+
+  QDomElement goUpDiagonal = format.namedItem( "up-diagonal" ).toElement();
+  if ( !goUpDiagonal.isNull() )
+  {
+    QDomElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
+    if ( !pen.isNull() )
+    {
+      m_goUpDiagonalPen = util_toPen( pen );
+      m_featuresSet |= SGoUpDiagonal;
+    }
+  }
+
+  if ( format.hasAttribute( "prefix" ) )
+  {
+    m_prefix = format.attribute( "prefix" );
+    m_featuresSet |= SPrefix;
+  }
+  if ( format.hasAttribute( "postfix" ) )
+  {
+    m_postfix = format.attribute( "postfix" );
+    m_featuresSet |= SPostfix;
+  }
+
+  return true;
+
+#endif
 }
 
 void KSpreadStyle::saveOasisStyle( KoGenStyle &style )
@@ -1674,6 +2000,18 @@ void KSpreadCustomStyle::saveOasis( KoGenStyles &mainStyles )
     gs.addAttribute( "style:display-name", m_name );
     saveOasisStyle( gs );
     mainStyles.lookup( gs, "custom-style" );
+}
+
+void KSpreadCustomStyle::loadOasis( const QDomElement & style, const QString & name )
+{
+    m_name = name;
+    if ( style.hasAttribute( "style:parent-style-name" ) )
+        m_parentName = style.attribute( "style:parent-style-name" );
+
+
+    m_type = CUSTOM;
+
+    KSpreadStyle::loadOasisStyle( style );
 }
 
 void KSpreadCustomStyle::save( QDomDocument & doc, QDomElement & styles )

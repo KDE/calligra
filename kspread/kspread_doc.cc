@@ -748,6 +748,8 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     // TODO check versions and mimetypes etc.
     loadOasisAreaName( body );
     loadOasisCellValidation( body );
+    d->styleManager->loadOasisStyleTemplate( oasisStyles );
+
     // all <table:table> goes to workbook
     if ( !d->workbook->loadOasis( body, oasisStyles ) )
     {
