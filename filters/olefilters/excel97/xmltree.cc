@@ -502,6 +502,11 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
       format.setAttribute("format", "50");
 	  break;
     default:
+      if(!formats[xfs[xf]->ifmt])
+      {
+        kdError() << "Formatting IFMT " << xfs[xf]->ifmt << " NOT found!" << endl;
+        break;
+      }
       s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
 			      formats[xfs[xf]->ifmt]->cch);
     }
