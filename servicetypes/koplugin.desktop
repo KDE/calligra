@@ -1,0 +1,10 @@
+[Desktop Entry]
+X-KDE-ServiceType=KOfficePlugin
+Comment=KOffice Plugin
+
+[PropertyDef::MenuEntries]
+Type=QStringList
+
+[PropertyDef::ToolBarEntries]
+Type=QStringList
+

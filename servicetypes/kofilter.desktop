@@ -1,0 +1,15 @@
+[Desktop Entry]
+X-KDE-ServiceType=KOfficeFilter
+Comment=KOffice Filter
+
+[PropertyDef::Import]
+Type=QString
+
+[PropertyDef::ImportDescription]
+Type=QString
+
+[PropertyDef::Export]
+Type=QString
+
+[PropertyDef::ExportDescription]
+Type=QString

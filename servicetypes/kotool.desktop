@@ -1,0 +1,9 @@
+[Desktop Entry]
+X-KDE-ServiceType=KOfficeTool
+Comment=KOffice Tool
+
+[PropertyDef::Commands]
+Type=QStringList
+
+[PropertyDef::CommandsI18N]
+Type=QStringList
