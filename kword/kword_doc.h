@@ -137,7 +137,7 @@ public:
     unsigned int getNumFrameSets()
     { return frames.count(); }
     void addFrameSet( KWFrameSet *f )
-    { frames.append(f); updateAllFrames(); setModified( true ); /*updateAllViews(0L);*/ }
+    { frames.append(f); /*updateAllFrames();*/ setModified( true ); /*updateAllViews(0L);*/ }
     void delFrameSet( KWFrameSet *f, bool deleteit = true );
 
     KWParag *getFirstParag( unsigned int _num ) {

@@ -751,6 +751,7 @@ void KWTextFrameSet::update()
     typedef QList<KWFrame> FrameList;
     QList<FrameList> frameList;
     frameList.setAutoDelete( true );
+    frames.setAutoDelete( false );
 
     // sort frames of this frameset into l2 on (page, y coord, x coord)
     QRect pageRect;
@@ -762,6 +763,7 @@ void KWTextFrameSet::update()
             if ( frames.at( j )->intersects( pageRect ) ) {
                 frames.at( j )->setPageNum( i );
                 l->append( frames.at( j ) );
+                frames.remove(j--);
             }
         }
 
@@ -808,8 +810,7 @@ void KWTextFrameSet::update()
             delete l;
     }
 
-    frames.setAutoDelete( false );
-    frames.clear();
+   // frames.clear();
 
     int rm = 0;
     for ( unsigned int n = 0; n < frameList.count(); n++ ) {
@@ -826,7 +827,7 @@ void KWTextFrameSet::update()
     }
     // sanity check. Keep this as long as things go wrong with frames.. TZ
     if(amount != frames.count())  {
-        kdDebug() << "ERROR: Found a problem with a frameset. " << amount - frames.count() << " frames have been removed!" << endl;
+        kdDebug() << "ERROR: Found a problem with a frameset. " << (int) amount - frames.count() << " frames have been removed!" << endl;
         kdDebug() << "       frame size: " << tmpFrame->x() << ","<< tmpFrame->y() << "," << tmpFrame->width() << "," << tmpFrame->height() << endl;
         if(grpMgr)
             kdDebug() << "       cell: " << grpMgr->getCell(this)->row << "," << grpMgr->getCell(this)->col << endl;
@@ -2346,7 +2347,7 @@ void KWGroupManager::recalcCols()
                 Cell *cell = getCell(j,i);
                 if(cell->col==i && cell->row==j) {
                     cell->frameSet->getFrame( 0 )->moveTopLeft( QPoint( x, cell->frameSet->getFrame( 0 )->y() ) );
-                    cell->frameSet->update();
+                    //cell->frameSet->update();
                 }
                 if(cell->col + cell->cols -1 == i)
                     nextX=cell->frameSet->getFrame(0) -> right() + 3;
@@ -2459,88 +2460,67 @@ void KWGroupManager::recalcRows()
 
     // do positioning of frames
     unsigned int y,nextY = getFrameSet( 0, 0 )->getFrame( 0 )->y();
+    unsigned int doingPage = getFrameSet(0,0)->getPageOfFrame(0);
     for ( unsigned int j = 0; j < rows; j++ ) {
         y=nextY;
         unsigned int i = 0;
         bool _addRow = false;
 
-/*  TODO Check if all cells fit on page.
-
-    At the end of a row rerun row and check if all fit on the page. If they don't fit
-    put them on the next page by
-    1) inserting a header and
-    2) moving all frames on the row to top of the standard-WP-frame pos.
-
-    ps this will work for joined cells as well ;-)
-  */
-
-        //if ( doc->getProcessingType() == KWordDocument::DTP ) {
-            // will this row fit on the page?
-            if ( j > 0 && y + getFrameSet( j, i )->getFrame( 0 )->height() >
-                 ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) *
-                 doc->getPTPaperHeight() - doc->getPTBottomBorder() ) { // no
-                y = ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) *
-                    doc->getPTPaperHeight() + doc->getPTTopBorder();
-                _addRow = true;
-            }
-        /*} else {
-            // will this row fit on the page?
-            if ( j > 0 && static_cast<int>( y + getFrameSet( j, i )->getFrame( 0 )->height() ) >
-                 static_cast<int>( ( doc->getFrameSet( 0 )->getFrame( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) *
-                     doc->getColumns() )->bottom() ) ) ) {
-                if ( doc->getPages() < getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 2 ) {
-                    doc->appendPage( doc->getPages() - 1 );
-                    _addRow = true;
-                    nextY = doc->getFrameSet( 0 )->getFrame( ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) * doc->getColumns() )->y();
-                }
-            }
-        }*/
-
-        if ( _addRow && showHeaderOnAllPages ) {
-            hasTmpHeaders = true;
-            insertRow( j, false, true );
-        }
-
         for ( i = 0; i < cols; i++ ) {
-            if ( _addRow ) {
-                KWTextFrameSet *f1, *f2;
-                f1 = dynamic_cast<KWTextFrameSet*>( getFrameSet( j, i ) );
-                f2 = dynamic_cast<KWTextFrameSet*>( getFrameSet( 0, i ) );
-                f1->assign( f2 );
-                f1->getFrame( 0 )->setHeight( f2->getFrame( 0 )->height() );
-            }
 
             Cell *cell = getCell(j,i);
-            if(cell->col==i && cell->row==j) {
+            if(cell->col==i && cell->row==j) { // beware of multi cell frames.
                 cell->frameSet->getFrame( 0 )->moveTopLeft( QPoint( cell->frameSet->getFrame( 0 )->x(), y ) );
-                cell->frameSet->update();
+                cell->frameSet->getFrame( 0 )->setPageNum(doingPage);
             }
-            if(cell->frameSet && cell->frameSet->getFrame(0)){
-                if(cell->row + cell->rows -1 == j && cell->frameSet && cell->frameSet->getFrame(0)){
+            if(cell->frameSet && cell->frameSet->getFrame(0)){ // sanity check.
+                if(cell->row + cell->rows -1 == j){
                     nextY=cell->frameSet->getFrame(0) -> bottom() + 3;
                 }
             } else
                 kdDebug () << "Something is wrong with this cell " <<cell->row << "," << cell->col << endl;
         }
 
-    }
-
-    if ( getBoundingRect().y() + getBoundingRect().height() >
-         static_cast<int>( doc->getPTPaperHeight() * doc->getPages() ) )
-        doc->appendPage( doc->getPages() - 1 );
-
-    // Reggie: UHHHHHHHHHHHH: Ugly and slow but it helps for now
-    Cell *c;
-    for ( unsigned int f = 0; f < cells.count(); f++ ) {
-        c = cells.at( f );
-        if ( c->frameSet->getNumFrames() > 1 ) {
-            kdDebug () << "ERROR: found more than one frame on a tablecel !! " << endl;
-            while ( true ) {
-                if ( c->frameSet->getNumFrames() > 1 )
-                    c->frameSet->delFrame( 1 );
-                else
-                    break;
+        // check all cells on this row if one might have fallen off the page.
+        if( j == 0 ) continue;
+        int fromRow=j;
+        for(i = 0; i < cols; i++) {
+            Cell *cell = getCell(j,i);
+            KWFrameSet *fs=cell->frameSet;
+            if(cell->row < fromRow) 
+                fromRow = cell->row;
+            if ( fs->getFrame( 0 )->bottom() >  // fits on page?
+                  (doingPage+1) * doc->getPTPaperHeight() - doc->getPTBottomBorder() ) { // no
+                y = (doingPage+1) * doc->getPTPaperHeight() + doc->getPTTopBorder();
+                _addRow = true;
             }
+        }
+        if ( _addRow ) {
+            j=fromRow;
+            doingPage++;
+
+            /*if ( showHeaderOnAllPages ) { // maybe I'll see the solve to this very frustrating problem tomorrow.
+                hasTmpHeaders = true;
+                insertRow( j, false, true );
+            }*/
+            for(i = 0; i < cols; i++) {
+                Cell *cell = getCell (j,i);
+                int height= cell->frameSet->getFrame(0)->height();
+                /*if ( showHeaderOnAllPages ) {
+                    KWTextFrameSet *f1, *f2;
+                    f1 = dynamic_cast<KWTextFrameSet*>( cell->frameSet );
+                    f2 = dynamic_cast<KWTextFrameSet*>( getFrameSet( 0, i ) );
+                    f1->assign( f2 );
+                }*/
+                cell->frameSet->getFrame(0)->setTop(y);
+                cell->frameSet->getFrame(0)->setHeight(height);
+                cell->frameSet->getFrame( 0 )->setPageNum(doingPage);
+                if(cell->row + cell->rows -1 == j) {
+                    nextY=cell->frameSet->getFrame(0) -> bottom() + 3;
+                }
+            }
+            if ( nextY > static_cast<int>( doc->getPTPaperHeight() * doc->getPages() ))
+                doc->appendPage( doc->getPages() - 1 );
         }
     }
 }
@@ -2706,9 +2686,13 @@ void KWGroupManager::insertRow( unsigned int _idx, bool _recalc, bool _removeabl
 
     int ww = 0;
     for ( i = 0; i < getCols(); i++ ) {
+        KWFrame *frame = new KWFrame(0L, r.x() + ww, r.y(), *w.at( i ), doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10 );
+        frame->setFrameBehaviour(AutoExtendFrame);
+
         KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
         _frameSet->setGroupManager( this );
         _frameSet->setIsRemoveableHeader( _removeable );
+        _frameSet->addFrame( frame );
 
         // If the group is anchored, we must avoid double-application of
         // the anchor offset.
@@ -2720,9 +2704,6 @@ void KWGroupManager::insertRow( unsigned int _idx, bool _recalc, bool _removeabl
         }
         addFrameSet( _frameSet, _idx, i );
 
-        KWFrame *frame = new KWFrame(_frameSet, r.x() + ww, r.y(), *w.at( i ), doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10 );
-        frame->setFrameBehaviour(AutoExtendFrame);
-        _frameSet->addFrame( frame );
         nCells.append( _frameSet );
         ww += *w.at( i ) + 2;
     }
