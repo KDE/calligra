@@ -65,7 +65,8 @@ public:
     KoOasisStyles& oasisStyles() { return m_styles; }
     KoStyleStack& styleStack() { return m_styleStack; }
 
-    void fillStyleStack( const QDomElement& object, const QString& attrName );
+    void fillStyleStack( const QDomElement& object, const char* nsURI, const char* attrName );
+    void fillStyleStack( const QDomElement& object, const QString& attrName ) KDE_DEPRECATED;
     void addStyles( const QDomElement* style );
 
     ///// List handling

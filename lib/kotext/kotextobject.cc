@@ -24,6 +24,7 @@
 #include "kostyle.h"
 #include "koFontDia.h"
 #include "kooasiscontext.h"
+#include <koxmlns.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -1969,7 +1970,7 @@ KoTextCursor KoTextObject::pasteOasisText( const QDomElement &bodyElem, KoOasisC
             if ( tag.isNull() ) continue;
             context.styleStack().save();
             // We mostly ignore tag.tagName() here, unless it's not even a paragraph
-            context.fillStyleStack( tag, "text:style-name" );
+            context.fillStyleStack( tag, KoXmlNS::text, "style-name" );
             lastParagraph->loadOasis( tag, context, styleColl, pos );
             context.styleStack().restore();
             // Done with first parag, remove it and exit loop

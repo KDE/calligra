@@ -1693,7 +1693,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         else if ( afterText == "span" ) // text:span
         {
             context.styleStack().save();
-            context.fillStyleStack( ts, "text:style-name" );
+            context.fillStyleStack( ts, KoXmlNS::text, "style-name" );
             loadOasisSpan( ts, context, pos ); // recurse
             context.styleStack().restore();
         }

@@ -25,6 +25,7 @@
 #include "kocommand.h"
 #include "kooasiscontext.h"
 #include <koxmlns.h>
+#include <kodom.h>
 #include <kdebug.h>
 #include <kdeversion.h>
 
@@ -1463,16 +1464,15 @@ KoTextDocCommand *KoTextDocument::deleteTextCommand( KoTextDocument *textdoc, in
 KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection* styleColl, KoTextParag* nextParagraph )
 {
     // was OoWriterImport::parseBodyOrSimilar
-    for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
+    QDomElement tag;
+    forEachElement( tag, bodyElem )
     {
-        QDomElement tag = text.toElement();
-        if ( tag.isNull() ) continue;
         context.styleStack().save();
-        const QString tagName = tag.tagName();
-        const bool textFoo = tagName.startsWith( "text:" );
+        const QString localName = tag.localName();
+        const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
         uint pos = 0;
-        if ( textFoo && tagName == "text:p" ) {  // text paragraph
-            context.fillStyleStack( tag, "text:style-name" );
+        if ( isTextNS && localName == "p" ) {  // text paragraph
+            context.fillStyleStack( tag, KoXmlNS::text, "style-name" );
 
             KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
             parag->loadOasis( tag, context, styleColl, pos );
@@ -1480,10 +1480,10 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
                 setFirstParag( parag );
             lastParagraph = parag;
         }
-        else if ( textFoo && tagName == "text:h" ) // heading
+        else if ( isTextNS && localName == "h" ) // heading
         {
             kdDebug(32500)<<" heading \n";
-            context.fillStyleStack( tag, "text:style-name" );
+            context.fillStyleStack( tag, KoXmlNS::text, "style-name" );
             int level = tag.attributeNS( KoXmlNS::text, "level", QString::null ).toInt();
             bool listOK = false;
             // When a heading is inside a list, it seems that the list prevails.
@@ -1512,27 +1512,27 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
                 context.listStyleStack().pop();
             }
         }
-        else if ( textFoo &&
-                  (  tagName == "text:unordered-list" || tagName == "text:ordered-list" // OOo-1.1
-                     || tagName == "text:list" || tagName == "text:numbered-paragraph" ) )  // OASIS
+        else if ( isTextNS &&
+                  ( localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
+                    || localName == "list" || localName == "numbered-paragraph" ) )  // OASIS
         {
             kdDebug(32500)<<" list \n";
             lastParagraph = loadList( tag, context, lastParagraph, styleColl, nextParagraph );
         }
-        else if ( textFoo && tagName == "text:section" ) // Provisory support (###TODO)
+        else if ( isTextNS && localName == "section" ) // Temporary support (###TODO)
         {
             kdDebug(32500) << "Section found!" << endl;
-            context.fillStyleStack( tag, "text:style-name" );
+            context.fillStyleStack( tag, KoXmlNS::text, "style-name" );
             lastParagraph = loadOasisText( tag, context, lastParagraph, styleColl, nextParagraph );
         }
-        else if ( textFoo && tagName == "text:variable-decls" )
+        else if ( isTextNS && localName == "variable-decls" )
         {
             // We don't parse variable-decls since we ignore var types right now
             // (and just storing a list of available var names wouldn't be much use)
         }
         else if ( !loadOasisBodyTag( tag, context, lastParagraph, styleColl, nextParagraph ) )
         {
-            kdWarning(32002) << "Unsupported body element '" << tagName << "'" << endl;
+            kdWarning(32002) << "Unsupported body element '" << localName << "'" << endl;
         }
 
         context.styleStack().restore(); // remove the styles added by the paragraph or list
@@ -1551,7 +1551,7 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
         context.setCurrentListStyleName( list.attributeNS( KoXmlNS::text, "style-name", QString::null ) );
     bool listOK = !context.currentListStyleName().isEmpty();
     int level;
-    if ( list.tagName() == "text:numbered-paragraph" )
+    if ( list.localName() == "numbered-paragraph" )
         level = list.attributeNS( KoXmlNS::text, "level", "1" ).toInt();
     else
         level = context.listStyleStack().level() + 1;
@@ -1559,10 +1559,10 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
         listOK = context.pushListLevelStyle( context.currentListStyleName(), level );
 
     const QDomElement listStyle = context.listStyleStack().currentListStyle();
-    // The tag is either text:list-level-style-number or text:list-level-style-bullet
-    const bool orderedList = listStyle.tagName() == "text:list-level-style-number";
+    // The tag is either list-level-style-number or list-level-style-bullet
+    const bool orderedList = listStyle.localName() == "list-level-style-number";
 
-    if ( list.tagName() == "text:numbered-paragraph" )
+    if ( list.localName() == "numbered-paragraph" )
     {
         // A numbered-paragraph contains paragraphs directly (it's both a list and a list-item)
         int restartNumbering = -1;
@@ -1587,7 +1587,7 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
             lastParagraph = loadOasisText( listItem, context, lastParagraph, styleColl, nextParagraph );
             KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();
             // It's either list-header (normal text on top of list) or list-item
-            if ( listItem.tagName() != "text:list-header" && firstListItem ) {
+            if ( listItem.localName() != "list-header" && firstListItem ) {
                 // Apply list style to first paragraph inside list-item
                 firstListItem->applyListStyle( context, restartNumbering, orderedList, false, level );
             }

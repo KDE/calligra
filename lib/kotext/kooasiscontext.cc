@@ -28,6 +28,14 @@ KoOasisContext::KoOasisContext( KoDocument* doc, KoVariableCollection& varColl,
 {
 }
 
+void KoOasisContext::fillStyleStack( const QDomElement& object, const char* nsURI, const char* attrName )
+{
+    // find all styles associated with an object and push them on the stack
+    // OoImpressImport has more tests here, but I don't think they're relevant to OoWriterImport
+    if ( object.hasAttributeNS( nsURI, attrName ) )
+        addStyles( m_styles.styles()[object.attributeNS( nsURI, attrName, QString::null )] );
+}
+
 void KoOasisContext::fillStyleStack( const QDomElement& object, const QString& attrName )
 {
     // find all styles associated with an object and push them on the stack
