@@ -180,6 +180,8 @@ class G2DObjectM9r : public G1DObjectM9r {
 public:
     virtual ~G2DObjectM9r() {}
 
+    void updatePage();
+
 protected slots:
     virtual void slotChanged(int x);
     virtual void slotChanged(const QColor &x);
@@ -197,7 +199,6 @@ private slots:
     void slotBalance();   // activate/deactivate the sliders (xfactor/yfactor)
 
 private:
-    void updatePage();
     void updatePreview(int btn);
 
     QVButtonGroup *m_style;
@@ -464,7 +465,13 @@ inline void GObject::scalePoint(QPoint &p, const double &xfactor, const double &
 class PWidget : public QWidget {
 
 public:
-    PWidget(QWidget *w) : QWidget(w) {}
-    virtual QSizePolicy sizePolicy() const;
+    PWidget(QWidget *w, G2DObjectM9r *mgr) : QWidget(w), manager(mgr) {}
+
+protected:
+    void showEvent(QShowEvent *) { manager->updatePage(); }
+
+private:
+    G2DObjectM9r *manager;
 };
+
 #endif

@@ -320,7 +320,8 @@ void G2DObjectM9r::createPropertyDialog() {
     m_style->setExclusive(true);
 
     QVGroupBox *previewbox=new QVGroupBox(i18n("Preview:"), fill);
-    m_preview=new PWidget(previewbox);
+    m_preview=new PWidget(previewbox, this);
+    m_preview->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     leftbox->addWidget(previewbox);
     leftbox->setStretchFactor(previewbox, 1);
 
@@ -768,9 +769,4 @@ GObject::GObject(const QDomElement &element) : m_parent(0L), m_boundingRectDirty
     m_ok=true;   // CTOR has been completed successfully :)
 }
 
-
-// be really "greedy"
-QSizePolicy PWidget::sizePolicy() const {
-    return QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-}
 #include <gobject.moc>
