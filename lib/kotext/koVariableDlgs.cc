@@ -169,6 +169,7 @@ KoCustomVariablesList::KoCustomVariablesList( QWidget *parent )
     connect( header(), SIGNAL( sectionClicked( int ) ),
              this, SLOT( sectionClicked( int ) ) );
 
+    setResizeMode(QListView::LastColumn);
     setSorting( -1 );
 }
 
@@ -233,11 +234,6 @@ KoCustomVariablesDia::KoCustomVariablesDia( QWidget *parent, const QPtrList<KoVa
     showButtonOK(lst.count()>0);
 
     resize( 600, 400 );
-    list->updateItems();
-    // Oh this is nasty. We do it twice, because the first one computed the size of
-    // the columns (max of the items' width), and the second time will resize all
-    // the lineedits to that size.... David - with shame :)
-    list->updateItems();
 }
 
 void KoCustomVariablesDia::slotOk()
