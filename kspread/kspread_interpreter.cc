@@ -148,25 +148,32 @@ bool kspreadfunc_iseven( KSContext& context );
 bool kspreadfunc_char( KSContext& context );
 bool kspreadfunc_clean( KSContext& context );
 bool kspreadfunc_code( KSContext& context );
-bool kspreadfunc_join( KSContext& context );
-bool kspreadfunc_left( KSContext& context );
-bool kspreadfunc_right( KSContext& context );
-bool kspreadfunc_upper( KSContext& context );
-bool kspreadfunc_toggle( KSContext& context );
-bool kspreadfunc_sleek( KSContext& context );
-bool kspreadfunc_proper(KSContext & context);
-bool kspreadfunc_lower( KSContext& context );
+bool kspreadfunc_compare( KSContext& context ); // KSpread specific
+bool kspreadfunc_concatenate( KSContext& context ); 
+bool kspreadfunc_dollar( KSContext& context ); // TODO
+bool kspreadfunc_exact( KSContext& context );
 bool kspreadfunc_find( KSContext& context );
-bool kspreadfunc_mid( KSContext& context );
-bool kspreadfunc_trim(KSContext& context );
+bool kspreadfunc_fixed( KSContext& context ); //TODO
+bool kspreadfunc_join( KSContext& context );    // obsolete, use CONCATENATE
+bool kspreadfunc_left( KSContext& context );
 bool kspreadfunc_len( KSContext& context );
-bool kspreadfunc_EXACT( KSContext& context );
-bool kspreadfunc_compare( KSContext& context );
+bool kspreadfunc_lower( KSContext& context );
+bool kspreadfunc_mid( KSContext& context );
+bool kspreadfunc_proper(KSContext & context);
 bool kspreadfunc_replace( KSContext& context );
-bool kspreadfunc_REPT( KSContext& context );
+bool kspreadfunc_rept( KSContext& context );
+bool kspreadfunc_right( KSContext& context );
+bool kspreadfunc_search( KSContext& context ); //TODO
+bool kspreadfunc_sleek( KSContext& context );   // KSpread-specific
+bool kspreadfunc_substitute( KSContext& context ); //TODO
+bool kspreadfunc_t( KSContext& context ); //TODO
+bool kspreadfunc_text( KSContext& context ); //TODO
+bool kspreadfunc_toggle( KSContext& context );  // KSpread-specific
+bool kspreadfunc_trim(KSContext& context );
+bool kspreadfunc_upper( KSContext& context );
+bool kspreadfunc_value( KSContext& context );
 
 // defined in kspread_functions_conversion.cc
-bool kspreadfunc_value( KSContext& context );
 bool kspreadfunc_dec2hex( KSContext& context );
 bool kspreadfunc_dec2oct( KSContext& context );
 bool kspreadfunc_dec2bin( KSContext& context );
@@ -529,7 +536,6 @@ static const functionEntry funcTab[] = {
   { "SHORTCURRENTDATE", kspreadfunc_shortcurrentDate },
 
   // conversion
-  { "VALUE", kspreadfunc_value },
   { "DEGREE", kspreadfunc_degree },
   { "RADIAN", kspreadfunc_radian },
   { "DEC2HEX", kspreadfunc_dec2hex },
@@ -628,21 +634,30 @@ static const functionEntry funcTab[] = {
   { "CHAR", kspreadfunc_char },
   { "CLEAN", kspreadfunc_clean },
   { "CODE", kspreadfunc_code },
+  { "COMPARE", kspreadfunc_compare }, // KSpread-specific
+  { "CONCATENATE", kspreadfunc_concatenate },
+  //{ "DOLLAR", kspreadfunc_dollar },
+  { "EXACT", kspreadfunc_exact },
+  { "FIND", kspreadfunc_find },
+  //{ "FIXED", kspreadfunc_fixed },
+  { "JOIN", kspreadfunc_join }, // obsolete, use CONCATENATE
   { "LEFT", kspreadfunc_left },
-  { "RIGHT", kspreadfunc_right },
-  { "MID", kspreadfunc_mid },
   { "LEN", kspreadfunc_len },
-  { "EXACT", kspreadfunc_EXACT },
-  { "COMPARE", kspreadfunc_compare },
+  { "LOWER", kspreadfunc_lower },
+  { "MID", kspreadfunc_mid },
   { "PROPER", kspreadfunc_proper },
   { "REPLACE", kspreadfunc_replace },
-  { "REPT", kspreadfunc_REPT },
-  { "LOWER", kspreadfunc_lower },
-  { "UPPER", kspreadfunc_upper },
-  { "TOGGLE", kspreadfunc_toggle },
-  { "FIND", kspreadfunc_find },
-  { "CONCATENATE", kspreadfunc_join },
+  { "REPT", kspreadfunc_rept },
+  { "RIGHT", kspreadfunc_right },
+  //{ "SEARCH", kspreadfunc_search },
   { "SLEEK", kspreadfunc_sleek },
+  //{ "SUBSTITUTE", kspreadfunc_substitute },
+  //{ "T", kspreadfunc_t },
+  //{ "TEXT", kspreadfunc_text },
+  { "TOGGLE", kspreadfunc_toggle },
+  { "TRIM", kspreadfunc_trim },
+  { "UPPER", kspreadfunc_upper },
+  { "VALUE", kspreadfunc_value },
 
   // misc
   { "CELL", kspreadfunc_cell },
@@ -656,7 +671,6 @@ static const functionEntry funcTab[] = {
   { "DECHEX", kspreadfunc_dec2hex },
   { "DECBIN", kspreadfunc_dec2bin },
   { "DECOCT", kspreadfunc_dec2oct },
-  { "JOIN", kspreadfunc_join },
 
   // end  marker
   { NULL, NULL }

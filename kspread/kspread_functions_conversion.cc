@@ -584,32 +584,3 @@ bool kspreadfunc_NumberToString( KSContext& context )
 
   return false;
 }
-
-// Function: Value
-bool kspreadfunc_value( KSContext& context )
-{
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "VALUE", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-
-  QString str = args[0]->stringValue();
-  if( str.length() <= 0 )
-     return false;
-
-  // try to parse the string as number
-  bool ok;
-  double value = KGlobal::locale()->readNumber(str, &ok);
-  if ( !ok )  value = str.toDouble(&ok);
-  if( ok )
-  {
-     context.setValue( new KSValue( value ) );
-     return true;
-  }
-
-  return false;
-  // TODO parse as boolean/date/time
-}

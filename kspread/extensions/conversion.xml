@@ -5,20 +5,6 @@
     <GroupName>Conversion</GroupName>
 
     <Function>
-      <Name>VALUE</Name>
-      <Type>Double</Type>
-      <Parameter>
-        <Comment>Text</Comment>
-        <Type range="false">String</Type>
-      </Parameter>
-      <Help>
-        <Text>Converts text string that represents a value to the real value.  </Text>
-        <Syntax>VALUE(text)</Syntax>
-	<Example>VALUE("14.03") returns 14.03</Example>
-      </Help>
-    <Function>
-
-    <Function>
       <Name>BOOL2STRING</Name>
       <Type>String</Type>
       <Parameter>
