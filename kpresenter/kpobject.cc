@@ -1265,8 +1265,9 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
-QString KP2DObject::saveOasisBackgroundStyle( KoGenStyles& mainStyles )
+QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 {
+    saveOasisPosObject( xmlWriter );
     KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphics" );
     switch ( fillType )
     {

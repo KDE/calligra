@@ -163,7 +163,7 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
 bool KPPixmapObject::saveOasisImage( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 {
     xmlWriter.startElement( "draw:image" );
-    saveOasisPosObject(xmlWriter );
+    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles ) );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
 

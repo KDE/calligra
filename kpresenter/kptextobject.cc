@@ -213,10 +213,7 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc, double offset )
 bool KPTextObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 {
     xmlWriter.startElement( "draw:text-box" );
-    //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
-    //save object name and other generic attribute
-    //KPObject::saveOasis( xmlWriter );
-    saveOasisPosObject(xmlWriter );
+    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles ) );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
     m_textobj->saveOasisContent( xmlWriter, mainStyles );

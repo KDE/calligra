@@ -54,11 +54,12 @@ DCOPObject* KPFreehandObject::dcopObject()
     return dcop;
 }
 
-bool KPFreehandObject::saveOasis( KoXmlWriter &xmlWriter )
+bool KPFreehandObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
 {
     kdDebug()<<"bool KPFreehandObject::saveOasis( KoXmlWriter &xmlWriter ) not implemented\n";
     xmlWriter.startElement( "draw:path" );
-    saveOasisPosObject(xmlWriter );
+    //FIXME !!!!!!!!!!!!!!!!!!!!!
+//xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles ) );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
     //save path I don't know how to do.

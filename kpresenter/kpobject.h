@@ -427,7 +427,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation);
-    QString saveOasisBackgroundStyle( KoGenStyles& mainStyles );
+    QString saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles );
 
     virtual void flip(bool horizontal );
 
