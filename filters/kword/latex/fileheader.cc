@@ -294,6 +294,11 @@ void FileHeader::generatePackage(QTextStream &out)
 		out << "\\usepackage{enumerate}" << endl;
 	if(hasGraphics())
 		out << "\\usepackage{graphics}" << endl;
+	if(hasTable())
+	{
+		out << "\\usepackage{array}" << endl;
+		out << "\\usepackage{multirow}" << endl;
+	}
 	out << endl;
 			
 }

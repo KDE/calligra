@@ -77,7 +77,8 @@ void PictureZone::generate(QTextStream &out)
 	generate_format_begin(out);
 
 	/* Display the picture */
-	out << "\\includegraphics{" << getFilename()<< "}" << endl;
+	//convert(getFilename());
+	out << "\\includegraphics{" << getFilenameEPS()<< "}" << endl;
 
 	generate_format_end(out);
 }

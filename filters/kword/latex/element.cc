@@ -30,10 +30,16 @@ Element::Element()
 {
 	_type      = ST_NONE;
 	_hinfo     = SI_NONE;
+	_section   = SS_NONE;
 	_name      = 0;
 	_suivant   = 0;
 	_removable = false;
 	_visible   = true;
+	_row       = 0;
+	_col       = 0;
+	_rows      = 0;
+	_cols      = 0;
+	setGrpMgr("");
 }
 
 /*******************************************/
@@ -77,7 +83,6 @@ void Element::analyseParam(const Markup *balise)
 		else if(strcmp(arg->zName, "FRAMETYPE")== 0)
 		{
 			// TO FINISH
-			kdDebug() << "TYPE : " << arg->zValue << endl;
 			switch(atoi(arg->zValue))
 			{
 				case 0: _type = ST_NONE;
@@ -95,9 +100,9 @@ void Element::analyseParam(const Markup *balise)
 					kdDebug() << "error : frameinfo unknown!" << endl;
 			}
 		}
-		else if(strcmp(arg->zName, "FRAMEINFO")== 0)
+		else if(strcmp(arg->zName, "FRAMEINFO")== 0 && _section == SS_NONE)
 		{
-			kdDebug() << "INFO :" << arg->zValue << endl;
+			/* If _section != NONE, it's a table. */
 			switch(atoi(arg->zValue))
 			{
 				case 0: _section = SS_BODY;
@@ -135,25 +140,27 @@ void Element::analyseParam(const Markup *balise)
 		{
 			setVisible(atoi(arg->zValue));
 		}
-		else if(strcmp(arg->zName, "GRPMNG") == 0)
+		else if(strcmp(arg->zName, "GRPMGR") == 0)
 		{
 			/* It's a table !! */
+			_section = SS_TABLE;
+			setGrpMgr(arg->zValue);
 		}
 		else if(strcmp(arg->zName, "ROW") == 0)
 		{
-
+			setRow(atoi(arg->zValue));
 		}
 		else if(strcmp(arg->zName, "COL") == 0)
 		{
-
+			setCol(atoi(arg->zValue));
 		}
 		else if(strcmp(arg->zName, "ROWS") == 0)
 		{
-
+			setRows(atoi(arg->zValue));
 		}
 		else if(strcmp(arg->zName, "COLS") == 0)
 		{
-
+			setCols(atoi(arg->zValue));
 		}
 	}
 	kdDebug() << "FIN PARAM" << endl;

@@ -5,12 +5,12 @@ VERSION 1
 		* ...
 	- layout					DONE
 	- titre						DONE
-	- puce						DONE
+	- list						DONE
 	- paper						DONE
 	- footer, header				DONE
-		* analyser l'entete puis tester s'il y a un entete, pieds
-		* de page, ...				DONE
-		* Use  hType for  hedaers/footers	DONE
+		* analyse the header and then test if a
+		* header, footer exist			DONE
+		* Use hType for hedaers/footers		DONE
 		* Use either \fancyhead or \chead	DONE
 		- add a parameter useformat to generate
 		  method				DONE
@@ -19,18 +19,22 @@ VERSION 1
 		  to do that --> isCenter method for
 		  Texte class
 	- clean codes :)))	
-	- commentaires					DONE
+	- kdoc						DONE
 	- footnote					DONE AT 80 %
 	- Get all default informations			DONE
+	- Use QList for all list
+	- Use QStack for env (flow).
+
 
 VERSION 2
-	- table
+	- unicode
+	- table						DONE AT 80 %
 	- picture					DONE AT 50 %
 	- variable
 	- personalization
 
 VERSION 3
 	- parts
-	- math
+	- formula					DONE AT 50 % (only for my part:)) )
 	- figure
 	- frame

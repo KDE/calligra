@@ -1,8 +1,8 @@
 send bugs to rjacolin@ifrance.com
 
-	- first header doesn't work
+	- first header doesn't work			DONE
 	- enumeration with two lists interlinked and closed one behind the other,
-	the first is not closed, e.g. :
+	the first is not closed, e.g. :			DONE
 		\begin{enum}
 		- 1
 		- 2

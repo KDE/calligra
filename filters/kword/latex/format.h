@@ -54,6 +54,7 @@ class Format: public XmlParser
 		Format(Para *para= 0): _id((EFormat) 0), _para(para) {}
 		virtual ~Format() {}
 
+		EFormat getId        () const { return _id;   }
 		Para*   getPara      () const { return _para; }
 		EFormat getFormatType() const { return _id;   }
 		//int getPos()

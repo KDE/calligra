@@ -22,6 +22,9 @@
 #include <kdebug.h>		/* for kdDebug stream */
 #include "listelement.h"
 
+/*******************************************/
+/* Constructor                             */
+/*******************************************/
 ListElement::ListElement()
 {
 	_start = 0;
@@ -29,6 +32,9 @@ ListElement::ListElement()
 	_size  = 0;
 }
 
+/*******************************************/
+/* Destructor                              */
+/*******************************************/
 ListElement::~ListElement()
 {
 	Element *elt = 0;
@@ -42,11 +48,18 @@ ListElement::~ListElement()
 	}
 }
 
+/*******************************************/
+/* Initialiser                             */
+/*******************************************/
 void ListElement::initialiser(Element *elt)
 {
 	_end  = _start = elt;
 }
 
+
+/*******************************************/
+/* add                                     */
+/*******************************************/
 void ListElement::add(Element *elt)
 {
 	if(_start == 0)

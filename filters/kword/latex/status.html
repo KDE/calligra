@@ -113,8 +113,10 @@
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
-     <td>- Can export to LaTeX documents, documents with some text only
-	(no picture, table or part like formula)</td>
+     <td>- Can export to LaTeX documents, documents with some text only. Formulas are analysed,
+	picture are not translated (the name is not write in the tex markup with new extension),
+	<b>simple</b>table are supported now (just a little pb with the size of cell) but part
+	is still not supported yet.</td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
@@ -123,29 +125,29 @@
 <PRE>
 <B>VERSION 1:</B>
 <table BORDER="0" WIDTH="100%">
-<tr><td>text with accent</td> <td>DONE</td></tr>
-<tr><td>text with special characters</td> <td></td></tr>
-<tr><td>layout</td>	      <td>DONE</td></tr>
-<tr><td>title</td> 	      <td>DONE</td></tr>
-<tr><td>list</td>  	      <td>DONE</td></tr>
-<tr><td>paper</td>	      <td>DONE</td></tr>
-<tr><td>footnote, head</td>   <td>DONE (still a little bug for first foot/header)</td></tr>
-<tr><td>comments with kdoc</td> <td>STARTED</td></tr>
-<tr><td>unicode support</td>    <td>STUDY (SEE omega package)</td></tr>
-<tr><td>break (line, page)</td> <td></td></tr>
+<tr><td>text with accent</td>			<td>DONE</td></tr>
+<tr><td>text with special characters</td>	<td></td></tr>
+<tr><td>layout</td>				<td>DONE</td></tr>
+<tr><td>title</td>			<td>DONE</td></tr>
+<tr><td>list</td>			<td>DONE</td></tr>
+<tr><td>paper</td>			<td>DONE</td></tr>
+<tr><td>footnote, head</td>		<td>DONE (still a little bug for first foot/header)</td></tr>
+<tr><td>comments with kdoc</td>		<td>STARTED</td></tr>
+<tr><td>unicode support</td>		<td>STUDY (SEE omega package)</td></tr>
+<tr><td>break (line, page)</td>		<td>STARTED</td></tr>
 </table>
 <B>VERSION 2</B>
 <table BORDER="0" WIDTH="100%">
-<tr><td>table</td> <td></td></tr>
-<tr><td>picture</td> <td></td></tr>
-<tr><td>personalization</td> <td></td></tr>
+<tr><td>table</td> 			<td>STARTED</td></tr>
+<tr><td>picture</td>			<td>STARTED</td></tr>
+<tr><td>personalization</td>		<td></td></tr>
 </table>
 <B>VERSION 3</B>
 <table BORDER="0" WIDTH="100%">
-<tr><td>parts</td> <td></td></tr>
-<tr><td>math</td> <td></td></tr>
-<tr><td>figure</td> <td></td></tr>
-<tr><td>frame</td> <td></td></tr>
+<tr><td>parts</td>			<td></td></tr>
+<tr><td>math</td>			<td>STARTED</td></tr>
+<tr><td>figure</td>			<td></td></tr>
+<tr><td>frame</td>			<td></td></tr>
 </table>
 </ul>
       </PRE>
@@ -177,6 +179,10 @@
 	<li>28 april 2001 : second update to support the new dtd, bugs fixes and
 		implements class to support pictures.
 	</li>
+	<li>07 may 2001 : fix bug list (now list work fine), analyse a formula (but can not 
+		be generated), simples tables are supported (no cell splited or merged) but with
+		a little "bug" for cell size (nb of lines).
+	</li>
 	</ul>
     </td>
     </tr>
@@ -197,7 +203,7 @@
 <H2>Markup supported at 28 april 2001</H2>
 
 <PRE>
-<b>note</b> : ir's the full support of the new dtd (now all "work", if it doesn't, it's a bug)).
+<b>note</b> : it's the full support of the new dtd (now all "work", if it doesn't, it's a bug)).
 <table BORDER="0" WIDTH="100%">
 <tr><td colspan="2"><b><i>PAPER</i></b></td></tr>
 <tr><td>format</td>		<td></td>			<td>SUPPORTED</td></tr>
@@ -237,7 +243,7 @@
 <tr><td></td>			<td>1...Text frame</td>		<td>SUPPORTED</td></tr>
 <tr><td></td>			<td>2...Picture frame</td>	<td>ANALYSED</td></tr>
 <tr><td></td>			<td>3...Part frame</td>		<td>ANALYSED</td></tr>
-<tr><td></td>			<td>1...Formula frame</td>	<td>ANALYSED</td></tr>
+<tr><td></td>			<td>4...Formula frame</td>	<td>ANALYSED</td></tr>
 
 <tr><td>frameInfo</td>		<td></td></tr>
 <tr><td></td>			<td>0...Body</td>		<td>SUPPORTED</td></tr>
@@ -248,9 +254,11 @@
 <tr><td></td>			<td>5...Odd footer</td>		<td>SUPPORTED</td></tr>
 <tr><td></td>			<td>6...Even footer</td>	<td>SUPPORTED</td></tr>
 <tr><td></td>			<td>7...footnote</td>		<td>ANALYSED</td></tr>
-<tr><td>grpMgr</td>		<td></td>			<td>IGNORED</td></tr>
-<tr><td></td>			<td>row</td>			<td>IGNORED</td></tr>
-<tr><td></td>			<td>col</td>			<td>IGNORED</td></tr>
+<tr><td>grpMgr</td>		<td></td>			<td>SUPPORTED</td></tr>
+<tr><td></td>			<td>row</td>			<td>SUPPORTED</td></tr>
+<tr><td></td>			<td>col</td>			<td>SUPPORTED</td></tr>
+<tr><td></td>			<td>rows</td>			<td>ANALYSED</td></tr>
+<tr><td></td>			<td>cols</td>			<td>ANALYSED</td></tr>
 <tr><td>removeable</td>		<td></td>			<td>ANALYSED</td></tr>
 <tr><td>visible</td>		<td></td>			<td>ANALYSED</td></tr>
 

@@ -25,6 +25,7 @@
 
 #include <qtextstream.h>
 #include <qstring.h>
+#include <kdebug.h>
 #include "textformat.h"
 
 enum _EType
@@ -48,7 +49,7 @@ enum _EEnv
 	ENV_LEFT,
 	ENV_RIGHT,
 	ENV_CENTER,
-	ENV_NONE	/* Parag. always justify in Latex */
+	ENV_NONE	/* default in latex */
 };
 
 typedef enum _EType EType;

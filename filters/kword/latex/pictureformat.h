@@ -30,7 +30,10 @@ class PictureFormat: public Format
 {
 	int      _pos;
 	int      _length;	/* Length of the string !! */
-	QString  _filename;
+	QString  _filename,
+		 _filenameEPS,
+		 _path,
+		 _pathEPS;
 
 	public:
 		PictureFormat(): _pos(0)
@@ -38,13 +41,18 @@ class PictureFormat: public Format
 		}
 		virtual ~PictureFormat() {}
 
-		int     getPos       () const { return _pos;      }
-		int     getLength    () const { return _length;   }
-		QString getFilename  () const { return _filename; }
+		int     getPos        () const { return _pos;         }
+		int     getLength     () const { return _length;      }
+		QString getFilename   () const { return _filename;    }
+		QString getFilenameEPS() const { return _filenameEPS; }
+		QString getPath       () const { return _path;        }
+		QString getPathEPS    () const { return _pathEPS;     }
 
-		void setPos      (const int pos) { _pos      = pos;  }
-		void setLength   (const int t)   { _length   = t; }
-		void setFilename (const char* f) { _filename = f; }
+		void setPos        (const int p)   { _pos         = p; }
+		void setLength     (const int t)   { _length      = t; }
+		void setFilename   (const char* f) { _filename    = f; }
+		void setFilenameEPS(const char* f) { _filenameEPS = f; }
+		void setPathEPS    (const char* p) { _pathEPS     = p; }
 
 		void analysePictureFormat(const Markup*);
 		void analyseParam        (const Markup*);

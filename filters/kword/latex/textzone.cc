@@ -239,8 +239,8 @@ void TextZone::display(QString texte, QTextStream& out)
 /*******************************************/
 void TextZone::generate_format_begin(QTextStream & out)
 {
-	kdDebug() << "GENERATE FORMAT" << endl;
-	// Bold, Italic or underlined
+	kdDebug() << "GENERATE FORMAT BEGIN" << endl;
+	/* Bold, Italic or underlined */
 	if(getWeight() > 0)
 		out << " \\textbf{";
 	if(isItalic())
@@ -249,14 +249,14 @@ void TextZone::generate_format_begin(QTextStream & out)
 		out << " \\uline{";
 	if (isStrikeout())
 		out << " \\sout{";
-	// Size
+	/* Size */
 	if(getSize() != 11)
 	{
 		out << "\\fontsize{" << getLength() << "}{1}%" << endl;
 		out << "\\selectfont" << endl;
 	}
 
-	// Color
+	/* Color */
 	if(isColor())
 	{
 		out << "\\textcolor{rgb}{";
@@ -264,12 +264,12 @@ void TextZone::generate_format_begin(QTextStream & out)
 		out << getColorBlue() << "}{";
 	}
 
-	// Alignement
+	/* Alignement */
 	switch(getAlign())
 	{
 		case EA_NONE:
 			break;
-		case EA_SUB: // pass in math mode !!
+		case EA_SUB: /* pass in math mode !! */
 			out << " $_{";
 			break;
 		case EA_SUPER:
@@ -285,24 +285,25 @@ void TextZone::generate_format_begin(QTextStream & out)
 /*******************************************/
 void TextZone::generate_format_end(QTextStream & out)
 {
-	// Alignement
+	kdDebug() << "GENERATE FORMAT END" << endl;
+	/* Alignement */
 	if(getAlign() == EA_SUPER)
 		out << "}";
 	if(getAlign() == EA_SUB)
 		out << "}$";
 
-	// Color
+	/* Color */
 	if(isColor())
 		out << "}";
 
-	// Size
+	/* Size */
 	if(getSize() != 11)
 	{
 		out << "\\fontsize{11}{1}%" << endl;
 		out << "\\selectfont" << endl;
 	}
 
-	// Bold, Italic or underlined
+	/* Bold, Italic or underlined */
 	if(isUnderlined())
 		out << "}";
 	if(isItalic())

@@ -25,6 +25,8 @@
 
 #include "document.h"
 #include "texte.h"
+#include "formula.h"
+//#include "part.h"
 
 /*******************************************/
 /* Constructor                             */
@@ -73,31 +75,73 @@ void Document::analyse(const Markup * balise_initiale)
 					// elt->analyse(balise);
 					break;
 				case ST_PART:
+					kdDebug() << "PART" << endl;
+					//elt = new Part;
+					//elt->analyse(balise);
 					break;
 				case ST_FORMULA:
+					/* Just save the frameset in a QString input
+					 * call the formula latex export filter
+					 * save in output
+					 * generate : write the output
+					 */
+					kdDebug() << "FORMULA" << endl;
+					elt = new Formula;
+					elt->analyse(balise);
 					break;
 				default:
 					kdDebug() << "error " << elt->getType() << " " << ST_TEXT << endl;
 			}
 			
 			/* 3. Add the Element in one of the lists */
-			/* ATTENTION : IF it's a table add the frame in a special list */
-			kdDebug() << "INFO : " << elt->getSection();
-			switch(elt->getSection())
+			if(elt != 0)
 			{
-				case SS_FOOTERS: kdDebug() << " FOOTER" <<endl;
-					       _footer.add(elt);
-					       break;
-				case SS_HEADERS: kdDebug() << " HEADER" << endl;
-						_header.add(elt);
+				kdDebug() << "INFO : " << elt->getSection() << endl;
+				switch(elt->getSection())
+				{
+					case SS_FOOTERS: kdDebug() << " FOOTER" <<endl;
+						       _footer.add(elt);
+						       break;
+					case SS_HEADERS: kdDebug() << " HEADER" << endl;
+							_header.add(elt);
+						break;
+					case SS_BODY:
+						if(!elt->isTable())
+						{
+							switch(elt->getType())
+							{
+								case ST_TEXT:
+								case ST_PICTURE:
+										_corps.add(elt);
+										kdDebug() << " BODY" << endl;
+									break;
+								case ST_PART:
+										kdDebug() << " PART" <<endl;
+										//_parts.add(elt);
+									break;
+								case ST_FORMULA:
+										kdDebug() << " FORMULA" <<endl;
+										_formulas.add(elt);
+									break;
+							}
+						}
+						break;
+					case SS_TABLE:
+						kdDebug() << " TABLE" <<endl;
+						/* Don't add simplely the cell */
+						/* heriter ListTable de ListElement et surcharger
+						 * la methode add. Une cellule est un element.
+						 */
+						_tables.add(elt);
+						if(_fileHeader!= 0)
+							_fileHeader->useTable();
+						break;
+					case SS_FOOTNOTES: /* Just for the new kwd file version */
+							_footnotes.add(elt);
 					break;
-				case SS_BODY: 	_corps.add(elt);
-						kdDebug() << " BODY" << endl;
-					break;
-				case SS_FOOTNOTES: /* Just for the new kwd file version */
-					break;
-				default: kdDebug() << "UNKNOWN" << endl;
-					break;
+					default: kdDebug() << "UNKNOWN" << endl;
+						break;
+				}
 			}
 		}
 		kdDebug() << "END OF ANALYSE OF A FRAMESET" << endl;
@@ -114,11 +158,9 @@ SType Document::getTypeFrameset(const Markup *balise)
 
 	for(arg= balise->pArg; arg!= 0; arg= arg->pNext)
 	{
-		kdDebug() << "param : " << arg->zName << " " << arg->zValue << endl;
 		if(strcmp(arg->zName, "FRAMETYPE")== 0)
 		{
 			// A FINIR
-			kdDebug() << "TYPE : " << arg->zValue<< endl;
 			switch(atoi(arg->zValue))
 			{
 				case 0: type = ST_NONE;
@@ -133,11 +175,11 @@ SType Document::getTypeFrameset(const Markup *balise)
 					break;
 				default:
 					type = ST_NONE;
-					kdDebug() << "error : frameinfo unknown!" << endl;
+					kdError() << "error : frameinfo unknown!" << endl;
 			}
 		}
 	}
-	kdDebug() << "END TYPE" << endl;
+	kdDebug() << "(end type analyse)" << endl;
 	return type;
 }
 
@@ -191,6 +233,9 @@ void Document::generate(QTextStream &out)
 	out << "\\begin{document}" << endl;
 	if(_corps.getFirst() != 0)
 		_corps.getFirst()->generate(out);
+	/* Just for test */
+	if(_tables.getFirst() != 0)
+		_tables.getFirst()->generate(out);
 	out << "\\end{document}" << endl;
 }
 

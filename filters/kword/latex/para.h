@@ -23,12 +23,12 @@
 #define __KWORD_PARA_H__
 
 #include <qstring.h>
+#include <qstack.h>		/* historic list */
 
 #include "listeformat.h"	/* children class contents the zone (italic, footnote,
 				   variable. */
 #include "layout.h"		/* set of informations about the paragraph style. */
 #include "element.h"		/* to use the father class. */
-//#include "heap.h"		/* to manage a heap. */
 
 enum EP_INFO
 {
@@ -67,9 +67,10 @@ class Para: public Layout
 	Para*          _previous;
 
 	/* USEFULL DATA */
-	Texte*         _element;	/* Father frame */
-	unsigned int   _currentPos;	/* Begining of the text for use the good format */
-	//Heap           _heapEnum;	/* opened enum but not closed */
+	Texte*                _element;		/* Father frame */
+	unsigned int          _currentPos;	/* Begining of the text for use the good format */
+	static QStack<EType>  _historicList;	/* opened lists but not closed */
+	int                   _nbLines;		/* Nb of lines in a cell (table) */
 
 	public:
 		/**
@@ -114,13 +115,17 @@ class Para: public Layout
 		 */
 		Texte*   getTexte     () const { return _element;   }
 		/**
-		 * @return the frame type (Header, footer, body or footnote).
+		 * @return the frame type (Header, footer, body, footnote or table, ...).
 		 */
 		SSect    getFrameType () const;
 		/**
 		 * @return the next format type (picture, text, variable, footnote).
 		 */
 		EFormat  getTypeFormat(const Markup*) const;
+		/**
+		 * @return count the number of characters in the paragraph.
+		 */
+		int getNbCharPara() const;
 
 		/**
 		 * Modifiors
@@ -129,7 +134,7 @@ class Para: public Layout
 		void setPrevious(Para *p)  { _previous  = p;    }
 
 		/**
-		 * Catch informations from a markup list.
+		 * Catch informations from a markup tree.
 		 */
 		void analyse         (const Markup*);
 		/**
@@ -149,13 +154,23 @@ class Para: public Layout
 		/**
 		 * If the paragraph is a title, generate the command.
 		 */
-		void generateTitle(QTextStream&);
+		void generateTitle    (QTextStream&);
 
 		/**
 		 * Write the paragraph style, format.
 		 */
-		void generateDebut   (QTextStream&);
-		void generateFin     (QTextStream&);
+		void generateDebut    (QTextStream&);
+		void generateFin      (QTextStream&);
+
+		/**
+		 * Write the markup to begin a list
+		 */
+		void openList         (EType, QTextStream&);
+
+		/**
+		 * Write the markup to close a list
+		 */
+		void closeList        (EType, QTextStream&);
 };
 
 #endif /* __KWORD_PARA_H__ */

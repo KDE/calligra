@@ -26,6 +26,9 @@
 
 #include "fileheader.h"		/* class header file.      */
 #include "listelement.h"	/* list of children frame. */
+//#include "listformula.h"	/* list of formulas (just a list of QString). */
+//#include "listpart.h"		/* list of parts (don't know how it will be). */
+#include "listtable.h"		/* list of tables (another kind of list of elements). */
 
 enum EGenerate
 {
@@ -47,6 +50,10 @@ class Document: public XmlParser
 	ListElement _header;
 	ListElement _footer;
 	ListElement _corps;
+	ListElement _footnotes;
+	ListElement _formulas;
+	ListTable   _tables;
+	ListElement _parts;
 	EGenerate   _generation;
 
 	public:

@@ -117,7 +117,8 @@ class FileHeader: public XmlParser
 	bool     _hasUnderline;
 	bool     _hasEnumerate;
 	bool     _hasGraphics;
-	
+	bool     _hasTable;
+
 	public:
 		/**
 		 * Constructor
@@ -146,7 +147,7 @@ class FileHeader: public XmlParser
 		bool      hasUnderline  () const { return _hasUnderline; }
 		bool      hasEnumerate  () const { return _hasEnumerate; }
 		bool      hasGraphics   () const { return _hasGraphics;  }
-
+		bool      hasTable      () const { return _hasTable;     }
 		/**
 		 * Modifiors
 		 */
@@ -165,6 +166,7 @@ class FileHeader: public XmlParser
 		void useUnderline  ()           { _hasUnderline = true;           }
 		void useEnumerate  ()           { _hasEnumerate = true;           }
 		void useGraphics   ()           { _hasGraphics  = true;           }
+		void useTable      ()           { _hasTable     = true;           }
 
 		void analysePaper     (const Markup *);
 		void analyseAttributs (const Markup *);

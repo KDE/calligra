@@ -38,16 +38,16 @@ typedef enum _EAlign EAlign;
 
 class TextFormat: public Format
 {
-	QString  _police;
-	int      _pos;
-	int      _taille;	/* Length of the string */
-	int      _size;		/* Size of the police */
-	int      _weight;
-	bool     _italic;
-	bool     _underline;
-	bool     _strikeout;
-	EAlign   _vertalign;
-	QColor*  _textcolor;
+	QString      _police;
+	unsigned int _pos;
+	unsigned int _taille;		/* Length of the string */
+	unsigned int _size;		/* Size of the police */
+	unsigned int _weight;
+	bool         _italic;
+	bool         _underline;
+	bool         _strikeout;
+	EAlign       _vertalign;
+	QColor*      _textcolor;
 
 	public:
 		TextFormat(): _pos(0), _taille(0), _size(11), _weight(0), _italic(false),
@@ -57,10 +57,10 @@ class TextFormat: public Format
 		}
 		virtual ~TextFormat() {}
 
-		int    getPos       () const { return _pos;       }
-		int    getLength    () const { return _taille;    }
-		int    getSize      () const { return _size;      }
-		int    getWeight    () const { return _weight;    }
+		unsigned int    getPos       () const { return _pos;       }
+		unsigned int    getLength    () const { return _taille;    }
+		unsigned int    getSize      () const { return _size;      }
+		unsigned int    getWeight    () const { return _weight;    }
 		bool   isItalic     () const { return (_italic     == true); }
 		bool   isUnderlined () const { return (_underline  == true); }
 		bool   isStrikeout  () const { return (_strikeout  == true); }
@@ -71,10 +71,10 @@ class TextFormat: public Format
 		int    getColorRed  () const;
 
 		//void setId         (const int id)  { _id        = id;   }
-		void setPos        (const int pos) { _pos       = pos;  }
-		void setLength     (const int t)   { _taille    = t; }
-		void setSize       (const int t)   { _size      = t; }
-		void setWeight     (const int w)   { _weight    = w; }
+		void setPos        (const unsigned int pos) { _pos       = pos;  }
+		void setLength     (const unsigned int t)   { _taille    = t; }
+		void setSize       (const unsigned int t)   { _size      = t; }
+		void setWeight     (const unsigned int w)   { _weight    = w; }
 		void setItalic     (bool i)        { _italic    = i; }
 		void setUnderlined (bool u)        { _underline = u; }
 		void setStrikeout  (bool s)        { _strikeout = s; }

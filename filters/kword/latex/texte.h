@@ -20,39 +20,11 @@
 **
 */
 
-#ifndef kword_latex_texte
-#define kword_latex_texte
+#ifndef __KWORD_LATEXTEXT_H__
+#define __KWORD_LATEXTEXT_H__
 
 #include "element.h"
 #include "listepara.h"
-
-enum TAround
-{
-	TA_NONE,
-	TA_FRAME,
-	TA_TEXT
-};
-
-enum TCreate
-{
-	TC_EXTEND,
-	TC_CREATE,
-	TC_IGNORE
-};
-
-enum TNFrame
-{
-	TF_RECONNECT,
-	TF_NOCREATION,
-	TF_COPY
-};
-
-enum TSide
-{
-	TS_ANYSIDE,
-	TS_ODDPAGE,
-	TS_EVENPAGE
-};
 
 class Texte: public Element
 {
@@ -78,11 +50,21 @@ class Texte: public Element
 		
 		/*bool    hasColor      () const;
 		bool    hasUline      () const;*/
+		int     getLeft       () const { return _left;              }
+		int     getRight      () const { return _right;             }
+		int     getTop        () const { return _top;               }
+		int     getBottom     () const { return _bottom;            }
 		TAround getRunAround  () const { return _runaround;         }
 		double  getAroundGap  () const { return _runaroundGap;      }
 		TCreate getAutoCreate () const { return _autoCreate;        }
 		TNFrame getNewFrame   () const { return _newFrameBehaviour; }
 		TSide   getSheetSide  () const { return _sheetSide;         }
+		Para*   getFirstPara  () const { return _parags.getFirst(); }
+
+		void setLeft      (const int l)    { _left   = l;               }
+		void setRight     (const int r)    { _right  = r;               }
+		void setTop       (const int t)    { _top    = t;               }
+		void setBottom    (const int b)    { _bottom = b;               }
 
 		void setRunAround (const int a)    { _runaround = (TAround) a;  }
 		void setAroundGap (const double r) { _runaroundGap = r;         }
@@ -100,4 +82,5 @@ class Texte: public Element
 
 };
 
-#endif
+#endif /* __KWORD_LATEXTEXT_H__ */
+

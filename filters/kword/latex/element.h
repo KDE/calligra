@@ -26,13 +26,14 @@
 #include <qtextstream.h>
 #include "xmlparser.h"
 
+/* FRAMESET */
 enum SType
 {
 	ST_NONE,
 	ST_TEXT,
 	ST_PICTURE,
-	ST_PART,
-	ST_FORMULA
+	ST_PART,		/* This last Type mustn't    */
+	ST_FORMULA		/* be display where they     */
 };
 
 enum SSect
@@ -41,7 +42,8 @@ enum SSect
 	SS_HEADERS,
 	SS_FOOTERS,
 	SS_BODY,
-	SS_FOOTNOTES
+	SS_FOOTNOTES,
+	SS_TABLE
 };
 
 enum SInfo
@@ -52,14 +54,46 @@ enum SInfo
 	SI_EVEN
 };
 
+/* FRAME */
+enum TAround
+{
+	TA_NONE,
+	TA_FRAME,
+	TA_TEXT
+};
+
+enum TCreate
+{
+	TC_EXTEND,
+	TC_CREATE,
+	TC_IGNORE
+};
+
+enum TNFrame
+{
+	TF_RECONNECT,
+	TF_NOCREATION,
+	TF_COPY
+};
+
+enum TSide
+{
+	TS_ANYSIDE,
+	TS_ODDPAGE,
+	TS_EVENPAGE
+};
+
 class Element: public XmlParser
 {
-	SType _type;
-	SSect _section;
-	SInfo _hinfo;
-	char* _name;
-	bool  _removable;
-	bool  _visible;
+	/* FRAMESET PARAM */
+	SType   _type;
+	SSect   _section;
+	SInfo   _hinfo;
+	char*   _name;
+	bool    _removable;
+	bool    _visible;
+	QString _grpMgr;
+	int     _row, _col, _rows, _cols;
 
 	Element* _suivant;
 
@@ -71,18 +105,29 @@ class Element: public XmlParser
 		/*virtual bool  hasColor() const = 0;
 		virtual bool  hasUline() const = 0;*/
 		
-		SSect    getSection()  const { return _section;   }
-		SType    getType()     const { return _type;      }
-		SInfo    getInfo()     const { return _hinfo;     }
-		Element* getNext()     const { return _suivant;   }
-		bool     isVisible()   const { return _visible;   }
-		bool     isRemovable() const { return _removable; }
-		
+		SSect    getSection () const { return _section;        }
+		SType    getType    () const { return _type;           }
+		SInfo    getInfo    () const { return _hinfo;          }
+		Element* getNext    () const { return _suivant;        }
+		bool     isVisible  () const { return _visible;        }
+		bool     isRemovable() const { return _removable;      }
+		QString  getGrpMgr  () const { return _grpMgr;         }
+		int      getRow     () const { return _row;            }
+		int      getCol     () const { return _col;            }
+		int      getRows    () const { return _rows;           }
+		int      getCols    () const { return _cols;           }
+		bool     isTable    () const { return (_section == SS_TABLE); }
+
 		void setType(SType t)       { _type      = t;   }
 		void setSection(SSect s)    { _section   = s;   }
 		void setNext(Element *elt)  { _suivant   = elt; }
 		void setVisible(bool v)     { _visible   = v;   }
 		void setRemovable(bool r)   { _removable = r;   }
+		void setGrpMgr(const char*g){ _grpMgr    = g;   }
+		void setRow   (int r)       { _row       = r;   }
+		void setCol   (int c)       { _col       = c;   }
+		void setRows  (int r)       { _rows      = r;   }
+		void setCols  (int c)       { _cols      = c;   }
 
 		virtual void analyse(const Markup*);
 		virtual void generate(QTextStream&) = 0;

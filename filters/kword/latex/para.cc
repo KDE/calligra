@@ -28,6 +28,9 @@
 #include "textzone.h"
 #include "footnote.h"
 
+/* static data */
+QStack<EType> Para::_historicList;
+
 /*******************************************/
 /* Constructor                             */
 /*******************************************/
@@ -132,6 +135,45 @@ EFormat Para::getTypeFormat(const Markup* balise) const
 		}
 	}
 	return EF_ERROR;
+}
+
+/*******************************************/
+/* getNbCharPara                           */
+/*******************************************/
+/* To know the size of a paragraph.        */
+/*******************************************/
+int Para::getNbCharPara() const
+{
+	int nb = 0;
+	FormatIter iter;
+
+	if(_lines != 0)
+	{
+		kdDebug() << "  NB ZONE : " << _lines->getSize() << endl;
+		iter.setList(_lines);
+		while(!iter.isTerminate())
+		{
+			Format* zone = iter.getCourant();
+			switch(zone->getId())
+			{
+				case EF_TEXTZONE:
+						nb = nb + ((TextZone*) zone)->getSize();
+					break;
+				case EF_PICTURE:
+					break;
+				case EF_TABULATOR:
+					break;
+				case EF_VARIABLE:
+					break;
+				case EF_FOOTNOTE:
+					break;
+				case EF_ANCHOR:
+					break;
+			}
+			iter.next();
+		}
+	}
+	return nb;
 }
 
 /*******************************************/
@@ -322,7 +364,7 @@ void Para::analyseFormats(const Markup *balise_initiale)
 			analyseFormat(balise);
 		}
 		else
-			kdDebug() << " FORMAT FIELD UNKNOWN" << endl;
+			kdDebug() << " FORMAT UNUSEFULL HERE" << endl;
 	}
 	setTokenCurrent(savedToken);
 
@@ -429,9 +471,9 @@ void Para::generate(QTextStream &out)
 			iter.getCourant()->generate(out);
 			iter.next();
 		}
+		/* To separate the text zones */
+		out << endl;
 	}
-	/* To separate the paragraphs */
-	out << endl;
 
 	if(getInfo() != EP_FOOTNOTE && getFrameType() != SS_HEADERS &&
 	   getFrameType() != SS_FOOTERS)
@@ -451,6 +493,26 @@ void Para::generate(QTextStream &out)
 /*******************************************/
 void Para::generateDebut(QTextStream &out)
 {
+	/* Be careful we are in a table ! 
+	 * You can't use directly environment, ...
+	 */
+	if(getFrameType() == SS_TABLE)
+	{
+		int sizeCell = 5;
+		/* first number depends with the cell size (next number}
+		 * and with the number of characters in the para. 
+		 * It can be 20 char. / 5 cm  = 4 char / cm so */
+		/* nbLines = nb_char_para / (4 * cell size) + 1 */
+		sizeCell = (_element->getRight() - _element->getLeft()) / 27;
+		kdDebug() << "SIZE OF CELL : " << sizeCell << endl;
+		// TODO : arrondir au superieur 
+		_nbLines = ((_element->getBottom() - _element->getTop()) / 27) + 1;
+		kdDebug() << "NB OF LINES : " << _nbLines << endl;
+		/* 2 at least, 1 for the line, 1 for the space line */
+		if(_nbLines < 2)
+			_nbLines = 2;
+		out << "\\multirow{" << _nbLines << "}{"<< sizeCell << "cm}{" << endl;
+	}
 	/* if it's a chapter */
 	if(isChapter())
 	{
@@ -471,58 +533,83 @@ void Para::generateDebut(QTextStream &out)
 					break;
 				case ENV_CENTER: out << "\\begin{center}" << endl;
 					break;
-				case ENV_NONE: out << endl;
+				case ENV_NONE: if(getFrameType() == SS_TABLE)
+							out << "\\begin{flushleft}";
+						out << endl;
 					break;
 			}
 		}
 		if(isEnum())
 		{
-			/* if it's a list */
+			/* If it's a list : */
+			/* - go in a new list */
+			/* - change depth (a list in a list) */
+			/* - or two lists nearby */
 			if(_previous == 0 || !_previous->isList() ||
-			  (_previous->isList() && _previous->getCounterDepth() < getCounterDepth()) ||
-			  (_previous->isList() && _previous->getCounterType() != getCounterType()))
+			  (_previous->isList() && (
+				(_previous->getCounterDepth() < getCounterDepth()) ||
+				(_previous->getCounterType() != getCounterType()))
+			  ))
 			{
-				switch(getCounterType())
-				{
-					case TL_NONE:
-						break;
-					case TL_ARABIC:
-						   out << "\\begin{enumerate}" << endl;
-						break;
-					case TL_LLETTER:	/* a, b, ... */
-						out << "\\begin{enumerate}[a]" << endl;
-						break;
-					case TL_CLETTER:	/* A, B, ... */
-						out << "\\begin{enumerate}[A]" << endl;
-						break;
-					case TL_LLNUMBER:	/* i, ii, ... */
-						out << "\\begin{enumerate}[i]" << endl;
-						break;
-					case TL_CLNUMBER: /* I, II, ... */
-						out << "\\begin{enumerate}[I]" << endl;
-						break;
-					case TL_CUSTOM_SIMPLE: /* - */
-						out << "\\begin{enumerate}[" << getCounterBullet() << "]" << endl;
-						break;
-					case TL_CUSTOM_COMPLEX: /* - */
-						out << "\\begin{enumerate}[" << getCounterBullet() << "]" << endl;
-						break;
-					case TL_CIRCLE_BULLET:
-						out << "\\begin{itemize}" << endl;
-						break;
-					case TL_SQUARE_BULLET:
-						out << "\\begin{itemize}" << endl;
-						break;
-					case TL_DISC_BULLET:
-						out << "\\begin{itemize}" << endl;
-						break;
-					default:
-						out << "\\begin{itemize}[SPECIAL]" << endl;
-				}
+				openList(getCounterType(), out);
 			}
 			out << "\\item ";
 		}
 	}
+}
+
+/*******************************************/
+/* openList                                */
+/*******************************************/
+/* Generate the markup to begin a list and */
+/* push the type in the historic stack.    */
+/*******************************************/
+void Para::openList(EType type, QTextStream &out)
+{
+	EType *type_temp = 0;
+
+	switch(type)
+	{
+		case TL_NONE:
+			break;
+		case TL_ARABIC:
+			out << "\\begin{enumerate}" << endl;
+			break;
+		case TL_LLETTER:	/* a, b, ... */
+			out << "\\begin{enumerate}[a]" << endl;
+			break;
+		case TL_CLETTER:	/* A, B, ... */
+			out << "\\begin{enumerate}[A]" << endl;
+			break;
+		case TL_LLNUMBER:	/* i, ii, ... */
+			out << "\\begin{enumerate}[i]" << endl;
+			break;
+		case TL_CLNUMBER: /* I, II, ... */
+			out << "\\begin{enumerate}[I]" << endl;
+			break;
+		case TL_CUSTOM_SIMPLE: /* - */
+			out << "\\begin{enumerate}[" << getCounterBullet() << "]" << endl;
+			break;
+		case TL_CUSTOM_COMPLEX: /* - */
+			out << "\\begin{enumerate}[" << getCounterBullet() << "]" << endl;
+			break;
+		case TL_CIRCLE_BULLET:
+			out << "\\begin{itemize}" << endl;
+			break;
+		case TL_SQUARE_BULLET:
+			out << "\\begin{itemize}" << endl;
+			break;
+		case TL_DISC_BULLET:
+			out << "\\begin{itemize}" << endl;
+			break;
+		default:
+			out << "\\begin{itemize}[SPECIAL]" << endl;
+	}
+
+	/* Keep the list type */
+	type_temp = new EType(type);
+	kdDebug() << " type list to open : " << *type_temp << endl;
+	_historicList.push(type_temp);
 }
 
 /*******************************************/
@@ -537,40 +624,31 @@ void Para::generateFin(QTextStream &out)
 		out << "}" << endl;
 	else if(isList())
 	{
-		/* It's a list */
+		/* It's a list : */
+		/* - end of a list */
+		/* - change the deph (end of a list in a list) */
+		/* - end of a first list with two lists nearby */
+		/* - always in a cell of a table */
 		if(_next == 0 || !_next->isEnum() ||
-			(_next->isList() && _next->getCounterDepth() < getCounterDepth()) ||
-			(_next->isList() && _next->getCounterType() != getCounterType() &&
-			_next->getCounterDepth() < getCounterDepth()))
+		  (_next->isList() && _next->getCounterDepth() < getCounterDepth()) ||
+		  (_next->isList() && _next->getCounterType() != getCounterType() && _next->getCounterDepth() == getCounterDepth()) ||
+		  getFrameType() == SS_TABLE)
 		{
-			out << endl;
-			/* but the next parag is not a same list */
-			switch(getCounterType())
+			closeList(getCounterType(), out);
+
+			if(((getCounterDepth() - 1) >= 0) && ((_next!= 0 && !_next->isEnum()) || _next == 0))
 			{
-				case TL_NONE: out << endl;
-					break;
-				case TL_ARABIC:
-				case TL_LLETTER:  /* a, b, ... */
-				case TL_CLETTER:  /* A, B, ... P. 250*/
-				case TL_LLNUMBER: /* i, ii, ... */
-				case TL_CLNUMBER: /* I, II, ... */
-				case TL_CUSTOM_SIMPLE: /* - */
-				case TL_CUSTOM_COMPLEX: /* - */
-					       out << endl << "\\end{enumerate}" << endl;
-					break;
-				case TL_CIRCLE_BULLET:
-						out << endl << "\\end{itemize}" << endl;
-				case TL_SQUARE_BULLET:
-				case TL_DISC_BULLET:
-						out << endl << "\\end{itemize}" << endl;
-					break;
-				default:
-						out << endl << "no suported" << endl;
-			}
-			if(((getCounterDepth() - 1) >= 0) && _next!= 0 && !_next->isEnum())
-			{
-				/* We must close all the enums */
-				out << "enum to finish" << endl;
+				/* We must close all the lists since
+				 * after this paragraph it's a normal paragraph.
+				 */
+				kdDebug() << "lists to close" << endl;
+				while(!_historicList.isEmpty())
+				{
+					EType *type_temp = 0;
+					type_temp = _historicList.pop();
+					if(type_temp != 0)
+						closeList(*type_temp, out);
+				}
 			}
 		}
 	}
@@ -580,19 +658,74 @@ void Para::generateFin(QTextStream &out)
 		{
 			switch(getEnv())
 			{
-				case ENV_LEFT: out << endl << "\\end{flushleft}" << endl;
+				case ENV_LEFT: out << "\\end{flushleft}" << endl;
 					break;
-				case ENV_RIGHT: out << endl << "\\end{flushright}" << endl;
+				case ENV_RIGHT: out << "\\end{flushright}" << endl;
 					break;
-				case ENV_CENTER: out << endl << "\\end{center}" << endl;
+				case ENV_CENTER: out << "\\end{center}" << endl;
 					break;
-				case ENV_NONE: out << endl;
+				case ENV_NONE: if(getFrameType() == SS_TABLE)
+							out << "\\end{flushleft}" << endl;
 					break;
 			}
 		}
-		if(_next == 0 || _next->getEnv() == getEnv())
-			out << endl;
+		/* Be carefull : for table the CR are dangerous */
+		/*if((_next == 0 || _next->getEnv() == getEnv()) &&
+		   getFrameType() != SS_TABLE)
+			out << endl;*/
 	}
+	/* Be careful we are in a table ! 
+	 * You can't use directly environment, ...
+	 */
+	if(getFrameType() == SS_TABLE)
+	{
+		out << "} \\\\" << endl;
+		/* Create all the lines used by this paragraph */
+		for(int i = 0; i< _nbLines; i++)
+			out << "\\\\ ";
+		out << endl;
+	}
+}
+
+/*******************************************/
+/* closeList                               */
+/*******************************************/
+/* Generate the closing list markup for a  */
+/* list type (letter, custom, ...) and     */
+/* remove the last list saved.             */
+/*******************************************/
+void Para::closeList(EType type, QTextStream &out)
+{
+	//out << endl;
+	kdDebug() << " type list to close : " << type << endl;
+	/* but the next parag is not a same list */
+	switch(type)
+	{
+		case TL_NONE: //out << endl;
+			break;
+		case TL_ARABIC:
+		case TL_LLETTER:  /* a, b, ... */
+		case TL_CLETTER:  /* A, B, ... P. 250*/
+		case TL_LLNUMBER: /* i, ii, ... */
+		case TL_CLNUMBER: /* I, II, ... */
+		case TL_CUSTOM_SIMPLE: /* - */
+		case TL_CUSTOM_COMPLEX: /* - */
+			       out << "\\end{enumerate}" << endl;
+			break;
+		case TL_CIRCLE_BULLET:
+				out << "\\end{itemize}" << endl;
+			break;
+		case TL_SQUARE_BULLET:
+		case TL_DISC_BULLET:
+				out << "\\end{itemize}" << endl;
+			break;
+		default:
+				out << "no suported" << endl;
+	}
+
+	/* Pop the list which has been closed */
+	_historicList.remove();
+	kdDebug() << "removed" << endl;
 }
 
 /*******************************************/

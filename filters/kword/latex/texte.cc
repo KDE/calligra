@@ -40,7 +40,7 @@ Texte::Texte()
 	_footnotes         = 0;
 
 	setType(ST_TEXT);
-	setSection(SS_BODY);
+	//setSection(SS_BODY);
 }
 
 /*******************************************/
@@ -155,7 +155,7 @@ void Texte::analyse(const Markup * balise_initiale)
 		}
 		
 	}
-	kdDebug() << "END OF A FRAME" << endl;
+	kdDebug() << "END OF A FRAME ANALYSE" << endl;
 }
 
 /*******************************************/
@@ -171,19 +171,19 @@ void Texte::analyseParamFrame(const Markup *balise)
 		kdDebug() << "PARAM " << arg->zName << endl;
 		if(strcmp(arg->zName, "LEFT")== 0)
 		{
-			_left = atoi(arg->zValue);
+			setLeft(atoi(arg->zValue));
 		}
 		else if(strcmp(arg->zName, "TOP")== 0)
 		{
-			_top = atoi(arg->zValue);
+			setTop(atoi(arg->zValue));
 		}
 		else if(strcmp(arg->zName, "RIGHT")== 0)
 		{
-			_right = atoi(arg->zValue);
+			setRight(atoi(arg->zValue));
 		}
 		else if(strcmp(arg->zName, "BOTTOM")== 0)
 		{
-			_bottom = atoi(arg->zValue);
+			setBottom(atoi(arg->zValue));
 		}
 		else if(strcmp(arg->zName, "RUNAROUND")== 0)
 		{
@@ -217,12 +217,26 @@ void Texte::generate(QTextStream &out)
 	kdDebug() << "TEXT GENERATION" << endl;
 	kdDebug() << "NB PARA " << _parags.getSize() << endl;
 	iter.setList(_parags);
+
+	if(getSection() == SS_TABLE)
+	{
+		out << "\\begin{tabular}{l}" << endl;
+	}
+
 	while(!iter.isTerminate())
 	{
 		//iter.getCourant()->setFrameType(getSection());
 		iter.getCourant()->generate(out);
+		/* Between each cell of a table, do : */
 		iter.next();
+		if(!iter.isTerminate() && getSection() == SS_TABLE)
+			out << "\\\\" << endl;
 		kdDebug() << iter.getCourant() << endl;
+	}
+
+	if(getSection() == SS_TABLE)
+	{
+		out << "\\end{tabular}" << endl;
 	}
 }
 
