@@ -12,7 +12,7 @@ else
   echo "  +The PostgreSQL C-API (libpq) headers were found"
 fi
 
-if test -z "$PG_INCDIR"; then
+if test -z "$PG_LIBDIR"; then
   echo ""
   echo "  +The PostgreSQL C-API (libpq) libs were not found"
   echo "     These usually ship with PostgreSQL, but if you've installed from"
