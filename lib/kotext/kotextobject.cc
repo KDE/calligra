@@ -332,9 +332,12 @@ void KoTextObject::doKeyboardAction( QTextCursor * cursor, KoTextFormat * & /*cu
             undoRedoInfo.text = QString::null;
             undoRedoInfo.oldParagLayouts << parag->paragLayout();
         }
-        QTextStringChar * ch = parag->at( cursor->index() );
-        undoRedoInfo.text += ch->c;
-        copyCharFormatting( parag, cursor->index(), undoRedoInfo.text.length()-1, true );
+        if ( !cursor->atParagEnd() )
+        {
+            QTextStringChar * ch = parag->at( cursor->index() );
+            undoRedoInfo.text += ch->c;
+            copyCharFormatting( parag, cursor->index(), undoRedoInfo.text.length()-1, true );
+        }
         KoParagLayout paragLayout;
         if ( parag->next() )
             paragLayout = static_cast<KoTextParag *>( parag->next() )->paragLayout();
@@ -357,7 +360,8 @@ void KoTextObject::doKeyboardAction( QTextCursor * cursor, KoTextFormat * & /*cu
             if(cmd)
                 emit newCommand(cmd);
         }
-        else
+        else if ( !cursor->atParagStart() || parag->prev() )
+        // Nothing to do if at the beginning of the very first parag
         {
             checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
             if ( !undoRedoInfo.valid() ) {
@@ -412,32 +416,32 @@ void KoTextObject::doKeyboardAction( QTextCursor * cursor, KoTextFormat * & /*cu
 
     } break;
     case ActionKill:
-        checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
-        if ( !undoRedoInfo.valid() ) {
-            newPlaceHolderCommand( i18n("Delete text") );
-            undoRedoInfo.id = cursor->parag()->paragId();
-            undoRedoInfo.index = cursor->index();
-            undoRedoInfo.text = QString::null;
-            undoRedoInfo.oldParagLayouts << parag->paragLayout();
-        }
-        if ( cursor->atParagEnd() ) {
-            QTextStringChar * ch = cursor->parag()->at( cursor->index() );
-            undoRedoInfo.text += ch->c;
-            copyCharFormatting( parag, cursor->index(), undoRedoInfo.text.length()-1, true );
-            KoParagLayout paragLayout;
-            if ( parag->next() )
-                paragLayout = static_cast<KoTextParag *>( parag->next() )->paragLayout();
-            if ( cursor->remove() )
-            {
-                undoRedoInfo.text += "\n";
-                undoRedoInfo.oldParagLayouts << paragLayout;
+        // Nothing to kill if at end of very last paragraph
+        if ( !cursor->atParagEnd() || cursor->parag()->next() ) {
+            checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
+            if ( !undoRedoInfo.valid() ) {
+                newPlaceHolderCommand( i18n("Delete text") );
+                undoRedoInfo.id = cursor->parag()->paragId();
+                undoRedoInfo.index = cursor->index();
+                undoRedoInfo.text = QString::null;
+                undoRedoInfo.oldParagLayouts << parag->paragLayout();
             }
-        } else {
-            int oldLen = undoRedoInfo.text.length();
-            undoRedoInfo.text += cursor->parag()->string()->toString().mid( cursor->index() );
-            for ( int i = cursor->index(); i < cursor->parag()->length(); ++i )
-                copyCharFormatting( cursor->parag(), i, oldLen + i - cursor->index(), true );
-            cursor->killLine();
+            if ( cursor->atParagEnd() ) {
+                // Get paraglayout from next parag (next can't be 0 here)
+                KoParagLayout paragLayout = static_cast<KoTextParag *>( parag->next() )->paragLayout();
+                if ( cursor->remove() )
+                {
+                    m_lastFormatted = cursor->parag();
+                    undoRedoInfo.text += "\n";
+                    undoRedoInfo.oldParagLayouts << paragLayout;
+                }
+            } else {
+                int oldLen = undoRedoInfo.text.length();
+                undoRedoInfo.text += cursor->parag()->string()->toString().mid( cursor->index() );
+                for ( int i = cursor->index(); i < cursor->parag()->length(); ++i )
+                    copyCharFormatting( cursor->parag(), i, oldLen + i - cursor->index(), true );
+                cursor->killLine();
+            }
         }
         break;
     }
