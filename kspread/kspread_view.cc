@@ -1930,7 +1930,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
 	  // ### Torben: Insert pixmaps here, too
 	  for (; it != lst.end(); ++it )
 	    m_pPopupMenu->insertItem( *it, m_popupMenuFirstToolId + i++ );
-	
+
 	  lst = (*entry).commands();
           it = lst.begin();
 	  for (; it != lst.end(); ++it )
@@ -2015,7 +2015,19 @@ void KSpreadView::deleteSelection()
 
 void KSpreadView::adjust()
 {
+    QRect r( activeTable()-> selectionRect() );
+    if( r.right() ==0x7FFF)
+    {
+	KMessageBox::error( this, i18n("Area too large!"));
+    }
+    else if(r.bottom()==0x7FFF)
+    {
+	KMessageBox::error( this, i18n("Area too large!"));
+    }
+    else
+    {
     canvasWidget()->adjustArea();
+    }
 }
 
 void KSpreadView::clearSelection()

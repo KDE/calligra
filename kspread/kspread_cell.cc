@@ -424,7 +424,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
   // Did a syntax error occur ?
   if ( context.exception() )
   {
-    QString tmp("Error in cell %1\n\n");
+    QString tmp(i18n("Error in cell %1\n\n"));
     tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
     tmp += context.exception()->toString( context );
     QMessageBox::critical( 0, i18n("KSpread error"), tmp, i18n("OK"));
@@ -436,7 +436,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
       // Print out exception if any
       if ( context2.exception() )
       {
-	  QString tmp("Error in cell %1\n\n");
+	  QString tmp(i18n("Error in cell %1\n\n"));
 	  tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
 	  tmp += context2.exception()->toString( context2 );
 	  QMessageBox::critical( 0, i18n("KSpread error"), tmp, i18n("OK"));
@@ -1600,7 +1600,7 @@ bool KSpreadCell::makeFormular()
     m_dValue = 0.0;
     m_bLayoutDirtyFlag = true;
     DO_UPDATE;
-    QString tmp("Error in cell %1\n\n");
+    QString tmp(i18n("Error in cell %1\n\n"));
     tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
     tmp += context.exception()->toString( context );
     QMessageBox::critical( 0, i18n("KSpread error"), tmp, i18n("OK"));
@@ -1721,7 +1721,7 @@ bool KSpreadCell::calc( bool _makedepend )
       // Print out exception if any
       if ( context.exception() )
       {
-	QString tmp("Error in cell %1\n\n");
+	QString tmp(i18n("Error in cell %1\n\n"));
 	tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
 	tmp += context.exception()->toString( context );
 	QMessageBox::critical( 0, i18n("KSpread error"), tmp, i18n("OK"));

@@ -2039,7 +2039,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
 
     if ( !point->isValid() )
     {
-      QString tmp( "The expression %1 is not valid" );
+      QString tmp( i18n("The expression %1 is not valid") );
       tmp = tmp.arg( node->getStringLiteral() );
       context.setException( new KSException( "InvalidCellExpression", tmp ) );
       return false;
@@ -2049,7 +2049,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
 
     if ( cell->hasError() )
     {
-      QString tmp( "The cell %1 has an error:\n\n%2" );
+      QString tmp( i18n("The cell %1 has an error:\n\n%2") );
       tmp = tmp.arg( util_cellName( cell->table(), cell->column(), cell->row() ) );
       tmp = tmp.arg( node->getStringLiteral() );
       context.setException( new KSException( "ErrorInCell", tmp ) );
@@ -2077,7 +2077,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
     // Is it a valid range ?
     if ( !r->isValid() )
     {
-      QString tmp( "The expression %1 is not valid" );
+      QString tmp( i18n("The expression %1 is not valid") );
       tmp = tmp.arg( node->getStringLiteral() );
       context.setException( new KSException( "InvalidRangeExpression", tmp ) );
       return false;
@@ -2096,7 +2096,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
 
 	if ( cell->hasError() )
 	{
-	  QString tmp( "The cell %1 has an error:\n\n%2" );
+	  QString tmp( i18n("The cell %1 has an error:\n\n%2") );
 	  tmp = tmp.arg( util_cellName( cell->table(), cell->column(), cell->row() ) );
 	  tmp = tmp.arg( node->getStringLiteral() );
 	  context.setException( new KSException( "ErrorInCell", tmp ) );
