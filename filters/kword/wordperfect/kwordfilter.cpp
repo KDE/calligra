@@ -63,7 +63,8 @@ QString KWordFormat::asXML()
 
   if( bold ) result.append( "    <WEIGHT value=\"75\" />\n" );
   if( italic ) result.append( "    <ITALIC value=\"1\" />\n" );
-  if( underline || doubleunderline ) result.append( "    <UNDERLINE value=\"1\" />\n" );
+  if( underline ) result.append( "    <UNDERLINE value=\"1\" />\n" );
+  if( doubleunderline ) result.append( "    <UNDERLINE value=\"double\" />\n" );
   if( striked ) result.append( "    <STRIKEOUT value=\"1\" />\n" );
   if( subscript ) result.append( "<VERTALIGN value=\"1\" />\n" );
   if( superscript ) result.append( "<VERTALIGN value=\"2\" />\n" );
