@@ -94,11 +94,11 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 		if ( i.current()->visible() )
 			i.current()->draw( p, rect, m_zoomFactor );
 
+	p->end();
+
 	// draw handle:
 	QPainter qpainter( p->device() );
 	VMToolHandle::instance( m_part )->draw( qpainter, m_zoomFactor );
-
-	p->end();
 }
 
 void
