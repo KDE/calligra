@@ -228,6 +228,16 @@ void KprKword::convert()
             QString text;
             // For each text element in the paragraph...
             QDomElement textElem = p.firstChild().toElement();
+
+            QDomElement counter = p.namedItem( "COUNTER" ).toElement();
+            QDomElement indent=p.namedItem("INDENTS").toElement();
+            QDomElement lineSpacing=p.namedItem( "LINESPACING" ).toElement();
+            QDomElement offset=p.namedItem("OFFSETS").toElement();
+            QDomElement leftBorder = p.namedItem( "LEFTBORDER" ).toElement();
+            QDomElement rightBorder = p.namedItem( "RIGHTBORDER" ).toElement();
+            QDomElement topBorder = p.namedItem( "TOPBORDER" ).toElement();
+            QDomElement bottomBorder = p.namedItem( "BOTTOMBORDER" ).toElement();
+
             for ( ; !textElem.isNull() ; textElem = textElem.nextSibling().toElement() )
             {
                 int oldLen = text.length();
@@ -244,6 +254,12 @@ void KprKword::convert()
                 if ( textElem.attribute( "underline" ).toInt() )
                 {
                     QDomElement e = outdoc.createElement("UNDERLINE");
+                    e.setAttribute( "value", 1 );
+                    outFormatElem.appendChild( e );
+                }
+                if( textElem.attribute("strikeOut").toInt())
+                {
+                    QDomElement e = outdoc.createElement("STRIKEOUT");
                     e.setAttribute( "value", 1 );
                     outFormatElem.appendChild( e );
                 }
@@ -304,7 +320,22 @@ void KprKword::convert()
             QDomElement nameElem = outdoc.createElement( "NAME" );
             layoutElem.appendChild( nameElem );
             nameElem.setAttribute( "value", isTitle ? titleStyleName : "Standard" );
-
+            if(!counter.isNull() )
+                layoutElem.appendChild( counter );
+            if(!indent.isNull())
+                layoutElem.appendChild( indent );
+            if(!lineSpacing.isNull())
+                layoutElem.appendChild( lineSpacing );
+            if(!offset.isNull())
+                layoutElem.appendChild( offset);
+            if(!leftBorder.isNull())
+                layoutElem.appendChild(leftBorder);
+            if(!rightBorder.isNull())
+                layoutElem.appendChild(rightBorder);
+            if(!topBorder.isNull())
+                layoutElem.appendChild(topBorder);
+            if(!bottomBorder.isNull())
+                layoutElem.appendChild(bottomBorder);
             // Only the first parag of the top text object is set to the 'title' style
             isTitle = false;
         }
