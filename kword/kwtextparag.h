@@ -173,6 +173,8 @@ public:
     bool linesTogether() const { return m_layout.pageBreaking & KWParagLayout::KeepLinesTogether; }
     bool hardFrameBreakBefore() const { return m_layout.pageBreaking & KWParagLayout::HardFrameBreakBefore; }
     bool hardFrameBreakAfter() const { return m_layout.pageBreaking & KWParagLayout::HardFrameBreakAfter; }
+    bool isPageBreakParag() const { return m_bPageBreak; }
+    void setPageBreakParag( bool b );
 
     // Get and set tabulator positions
     KoTabulatorList tabList() const { return m_layout.tabList(); }
@@ -237,6 +239,7 @@ protected:
 private:
     QStyleSheetItem * m_item;
     KWParagLayout m_layout;
+    bool m_bPageBreak;
 };
 
 #endif

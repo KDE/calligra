@@ -269,8 +269,8 @@ public slots:
     void slotEmbedImage( const QString &filename );
 
     void insertCustomVariable();
-
     void insertNewCustomVariable();
+    void slotSpecialCharDlgClosed();
 
     void refreshCustomMenu();
 protected:

@@ -1763,14 +1763,18 @@ void KWView::insertSpecialChar()
     QChar c=' ';
     if (m_specialCharDlg==0)
     {
-        m_specialCharDlg=new KCharSelectDia( this, "insert special char", f,c,false );
-        connect(m_specialCharDlg,SIGNAL(insertChar(QChar,const QString &)),this,SLOT(slotSpecialChar(QChar,const QString &)));
-    };
-//    KCharSelectDia *dlg=new KCharSelectDia( this, "insert special char", f,c );
-//    connect(dlg,SIGNAL(insertChar(QChar,const QString &)),this,SLOT(slotSpecialChar(QChar,const QString &)));
-//    dlg->show();
-//    delete dlg;
+        m_specialCharDlg = new KCharSelectDia( this, "insert special char", f, c, false );
+        connect( m_specialCharDlg, SIGNAL(insertChar(QChar,const QString &)),
+                 this, SLOT(slotSpecialChar(QChar,const QString &)));
+        connect( m_specialCharDlg, SIGNAL( finished() ),
+                 this, SLOT( slotSpecialCharDlgClosed() ) );
+    }
     m_specialCharDlg->show();
+}
+
+void KWView::slotSpecialCharDlgClosed()
+{
+    m_specialCharDlg = 0L;
 }
 
 void KWView::slotSpecialChar(QChar c, const QString &_font)
@@ -1790,8 +1794,10 @@ void KWView::insertFrameBreak()
         return;
     // We use "new paragraph" and "frame break before", because this allows using 'Backspace'
     // to get rid of it. With "frame break after" we'd need to open the paragraph dialog.
-    edit->insertParagraph();
-    edit->setPageBreaking( edit->currentParagLayout().pageBreaking | KWParagLayout::HardFrameBreakBefore );
+    // But with "frame break before", if one keeps typing "Enter", it will go in the previous page !
+    //edit->insertParagraph();
+    //edit->setPageBreaking( edit->currentParagLayout().pageBreaking | KWParagLayout::HardFrameBreakBefore );
+    edit->insertPageBreakParag();
 }
 
 void KWView::insertVariable()

@@ -865,7 +865,12 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     //Hack. Fixing the parag rect from here, to add room for the CR formatting character
     if ( parag && m_doc->viewFormattingChars() )
     {
-        if ( parag->lineStartList().count() == 1 ) // don't use lines() here, parag not formatted yet
+        if ( static_cast<KWTextParag *>( parag )->isPageBreakParag() )
+        {
+            QTextFormat * lastFormat = parag->at( 0 )->format();
+            parag->setWidth( parag->rect().width() + 20 * lastFormat->width('-') );
+        }
+        else if ( parag->lineStartList().count() == 1 ) // don't use lines() here, parag not formatted yet
         {
             QTextFormat * lastFormat = parag->at( parag->length() - 1 )->format();
             parag->setWidth( parag->rect().width() + lastFormat->width('x') );
@@ -2870,6 +2875,28 @@ void KWTextFrameSet::setLastFormattedParag( QTextParag *parag )
         m_lastFormatted = parag;
 }
 
+void KWTextFrameSet::insertParagraph( QTextCursor *cursor, KWTextFormat *currentFormat )
+{
+    if ( textDocument()->hasSelection( QTextDocument::Standard ) )
+        removeSelectedText( cursor );
+    doKeyboardAction( cursor, currentFormat, KWTextFrameSet::ActionReturn );
+}
+
+void KWTextFrameSet::insertPageBreakParag( QTextCursor *cursor, KWTextFormat *currentFormat )
+{
+    insertParagraph( cursor, currentFormat );
+    KWTextParag *parag = static_cast<KWTextParag *>( cursor->parag() );
+    parag->setPageBreakParag( true );
+    if ( parag->next() == 0 )
+        insertParagraph( cursor, currentFormat );
+    setLastFormattedParag( parag );
+    formatMore();
+    emit repaintChanged( this );
+    emit ensureCursorVisible();
+    emit updateUI( true );
+    emit showCursor();
+}
+
 void KWTextFrameSet::checkUndoRedoInfo( QTextCursor * cursor, UndoRedoInfo::Type t )
 {
     if ( undoRedoInfo.valid() && ( t != undoRedoInfo.type || cursor != undoRedoInfo.cursor ) ) {
@@ -4037,13 +4064,6 @@ void KWTextFrameSetEdit::setTextSuperScript(bool on)
     else
         format.setVAlign(QTextFormat::AlignSuperScript);
     textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::VAlign );
-}
-
-void KWTextFrameSetEdit::insertParagraph()
-{
-    if ( textDocument()->hasSelection( QTextDocument::Standard ) )
-        textFrameSet()->removeSelectedText( cursor );
-    textFrameSet()->doKeyboardAction( cursor, m_currentFormat, KWTextFrameSet::ActionReturn );
 }
 
 void KWTextFrameSetEdit::insertSpecialChar(QChar _c)

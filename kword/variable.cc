@@ -101,6 +101,11 @@ void KWVariable::draw( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*
     {
         p->setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
         p->fillRect( x, y, width, h, cg.color( QColorGroup::Highlight ) );
+    } else if ( parag->textDocument()->textFrameSet() &&
+                parag->textDocument()->textFrameSet()->kWordDocument()->viewFormattingChars() )
+    {
+        p->setPen( QPen( cg.color( QColorGroup::Highlight ), 0, Qt::DotLine ) );
+        p->drawRect( x, y, width, h );
     }
     p->setFont( f->font() );
     int offset=0;

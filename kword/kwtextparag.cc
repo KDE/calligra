@@ -40,6 +40,7 @@ KWTextParag::KWTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool
 {
     //kdDebug() << "KWTextParag::KWTextParag " << this << endl;
     m_item = 0L;
+    m_bPageBreak = false;
 }
 
 KWTextParag::~KWTextParag()
@@ -382,54 +383,72 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
         if ( doc && doc->viewFormattingChars() && painter.device()->devType() != QInternal::Printer )
         {
             painter.save();
-            QPen pen( Qt::blue );
+            QPen pen( cg.color( QColorGroup::Highlight ) ); // ## maybe make configurable ?
             painter.setPen( pen );
-            //kdDebug() << "KWTextParag::drawParagString start=" << start << " len=" << len << " length=" << length() << endl;
-            if ( start + len == length() )
+            if ( isPageBreakParag() )
             {
-                // drawing the end of the parag
-                QTextFormat * format = at( length() - 1 )->format();
-                int w = format->width('x'); // see KWTextFrameSet::adjustFlow
-                int size = QMIN( w, h * 3 / 4 );
-                int arrowsize = textDocument()->zoomHandler()->zoomItY( 2 );
-                // x,y is the bottom right corner of the reversed L
-                int x = startX + bw + w - 1;
-                int y = lastY + baseLine - arrowsize;
-                //kdDebug() << "KWTextParag::drawParagString drawing CR at " << x << "," << y << endl;
-                painter.drawLine( x, y - size, x, y );
-                painter.drawLine( x, y, x - size, y );
-                // Now the arrow
-                painter.drawLine( x - size, y, x - size + arrowsize, y - arrowsize );
-                painter.drawLine( x - size, y, x - size + arrowsize, y + arrowsize );
+                QTextFormat format = *lastFormat;
+                format.setColor( pen.color() );
+                // keep in sync with KWTextFrameSet::adjustFlow
+                QString str = "--------------------"; //i18n( "Frame Break" );
+                int width = 0;
+                for ( int i = 0 ; i < (int)str.length() ; ++i )
+                    width += lastFormat->width( str, i );
+                kdDebug() << "KWTextParag::drawParagString page-break width=" << width << endl;
+                QTextParag::drawParagString( painter, str, 0, str.length(), at( 0 )->x,
+                                             rect().y(), at( 0 )->ascent(), width, lastFormat->height(),
+                                             drawSelections, &format, 0, selectionStarts,
+                                             selectionEnds, cg, rightToLeft );
             }
-            // Now draw spaces and tabs
-            int end = QMIN( start + len, length() - 1 ); // don't look at the trailing space
-            for ( int i = start ; i < end ; ++i )
+            else
             {
-                QTextStringChar &ch = string()->at(i);
-                if ( ch.isCustom() )
-                    continue;
-                if ( ch.c == ' ' )
+                //kdDebug() << "KWTextParag::drawParagString start=" << start << " len=" << len << " length=" << length() << endl;
+                if ( start + len == length() )
                 {
-                    int w = string()->width(i);
-                    int height = ch.ascent();
-                    int size = QMAX( 2, QMIN( w/2, height/3 ) ); // Enfore that it's a square, and that it's visible
-                    painter.drawRect( ch.x + (w - size) / 2, lastY + baseLine - (height - size) / 2, size, size );
-                }
-                else if ( ch.c == '\t' )
-                {
-                    QTextStringChar &nextch = string()->at(i+1);
-                    int nextx = (nextch.x > ch.x) ? nextch.x : rect().width();
-                    //kdDebug() << "tab x=" << ch.x << " nextch.x=" << nextch.x
-                    //          << " nextx=" << nextx << " startX=" << startX << " bw=" << bw << endl;
-                    int availWidth = nextx - ch.x - 1;
-                    int x = ch.x + availWidth / 2;
-                    int size = QMIN( availWidth, ch.format()->width('W') ) / 2; // actually the half size
-                    int y = lastY + baseLine - ch.ascent()/2;
+                    // drawing the end of the parag
+                    QTextFormat * format = at( length() - 1 )->format();
+                    int w = format->width('x'); // see KWTextFrameSet::adjustFlow
+                    int size = QMIN( w, h * 3 / 4 );
                     int arrowsize = textDocument()->zoomHandler()->zoomItY( 2 );
-                    painter.drawLine( x + size, y, x - size, y );
-                    painter.drawLine( x + size, y, x + size - arrowsize, y - arrowsize );
-                    painter.drawLine( x + size, y, x + size - arrowsize, y + arrowsize );
+                    // x,y is the bottom right corner of the reversed L
+                    int x = startX + bw + w - 1;
+                    int y = lastY + baseLine - arrowsize;
+                    //kdDebug() << "KWTextParag::drawParagString drawing CR at " << x << "," << y << endl;
+                    painter.drawLine( x, y - size, x, y );
+                    painter.drawLine( x, y, x - size, y );
+                    // Now the arrow
+                    painter.drawLine( x - size, y, x - size + arrowsize, y - arrowsize );
+                    painter.drawLine( x - size, y, x - size + arrowsize, y + arrowsize );
+                }
+                // Now draw spaces and tabs
+                int end = QMIN( start + len, length() - 1 ); // don't look at the trailing space
+                for ( int i = start ; i < end ; ++i )
+                {
+                    QTextStringChar &ch = string()->at(i);
+                    if ( ch.isCustom() )
+                        continue;
+                    if ( ch.c == ' ' )
+                    {
+                        int w = string()->width(i);
+                        int height = ch.ascent();
+                        int size = QMAX( 2, QMIN( w/2, height/3 ) ); // Enfore that it's a square, and that it's visible
+                        painter.drawRect( ch.x + (w - size) / 2, lastY + baseLine - (height - size) / 2, size, size );
+                    }
+                    else if ( ch.c == '\t' )
+                    {
+                        QTextStringChar &nextch = string()->at(i+1);
+                        int nextx = (nextch.x > ch.x) ? nextch.x : rect().width();
+                        //kdDebug() << "tab x=" << ch.x << " nextch.x=" << nextch.x
+                        //          << " nextx=" << nextx << " startX=" << startX << " bw=" << bw << endl;
+                        int availWidth = nextx - ch.x - 1;
+                        int x = ch.x + availWidth / 2;
+                        int size = QMIN( availWidth, ch.format()->width('W') ) / 2; // actually the half size
+                        int y = lastY + baseLine - ch.ascent()/2;
+                        int arrowsize = textDocument()->zoomHandler()->zoomItY( 2 );
+                        painter.drawLine( x + size, y, x - size, y );
+                        painter.drawLine( x + size, y, x + size - arrowsize, y - arrowsize );
+                        painter.drawLine( x + size, y, x + size - arrowsize, y + arrowsize );
+                    }
                 }
             }
             painter.restore();
@@ -1001,6 +1020,13 @@ void KWTextParag::setParagLayout( const KWParagLayout & layout, int flags )
     if ( flags == KWParagLayout::All )
         // Don't call setStyle from here, it would overwrite any paragraph-specific settings
         setStyle( layout.style );
+}
+
+void KWTextParag::setPageBreakParag( bool b )
+{
+     m_bPageBreak = b;
+     if ( m_bPageBreak )
+         setPageBreaking( pageBreaking() | KWParagLayout::HardFrameBreakAfter );
 }
 
 #ifndef NDEBUG
