@@ -106,7 +106,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     if ( fs->normalToInternal( frameTopLeft, iPoint ) )
     {
         QPoint vPoint = fs->currentViewMode()->normalToView( frameTopLeft );
-        p->translate( iPoint.x() - vPoint.x(), iPoint.y() - vPoint.y() );
+        p->translate( iPoint.x() - vPoint.x(), iPoint.y() - vPoint.y() - paragy );
     } else
         kdWarning() << "normalToInternal returned 0L in KWAnchor::draw - shouldn't happen. "
                     << frameTopLeft.x() << "," << frameTopLeft.y() << endl;
