@@ -25,12 +25,13 @@
 #include <qdom.h>
 
 #include "kformulacontainer.h"
+#include <koffice_export.h>
 
 KFORMULA_NAMESPACE_BEGIN
 class FormulaElement;
 
 
-class MimeSource : public QMimeSource, public FormulaDocument
+class KOFORMULA_EXPORT MimeSource : public QMimeSource, public FormulaDocument
 {
 public:
     MimeSource(Document* doc, const QDomDocument& formula);

@@ -52,7 +52,7 @@ protected:
 /**
  * Command created when deleting some text
  */
-class KoTextDeleteCommand : public KoTextDocDeleteCommand
+class KOTEXT_EXPORT KoTextDeleteCommand : public KoTextDocDeleteCommand
 {
 public:
     KoTextDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
@@ -83,7 +83,7 @@ public:
 /**
  * Command created when changing paragraph attributes
  */
-class KoTextParagCommand : public KoTextDocCommand
+class KOTEXT_EXPORT KoTextParagCommand : public KoTextDocCommand
 {
 public:
     KoTextParagCommand( KoTextDocument *d, int fParag, int lParag,

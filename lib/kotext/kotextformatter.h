@@ -31,7 +31,7 @@ class KoHyphenator;
  * It also implements hyphenation.
  * @author David Faure <faure@kde.org>
  */
-class KoTextFormatter : public KoTextFormatterBase
+class KOTEXT_EXPORT KoTextFormatter : public KoTextFormatterBase
 {
 public:
     KoTextFormatter();

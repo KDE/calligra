@@ -27,7 +27,7 @@ class KEditListBox;
 class KURLRequester;
 class QCheckBox;
 
-class KoEditPathDia : public KDialogBase
+class KOFFICEUI_EXPORT KoEditPathDia : public KDialogBase
 {
     Q_OBJECT
 public:

@@ -115,7 +115,7 @@ class KoSavingContext;
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-class KoTextStringChar
+class KOTEXT_EXPORT KoTextStringChar
 {
     friend class KoTextString;
 
@@ -514,7 +514,7 @@ template class QPtrList<KoTextCustomItem>;
 // MOC_SKIP_END
 #endif
 
-class KoTextFlow
+class KOTEXT_EXPORT KoTextFlow
 {
     friend class KoTextDocument;
     friend class KoTextTableCell;
@@ -711,7 +711,7 @@ struct KoTextDocumentSelection
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-class KoTextDocDeleteCommand : public KoTextDocCommand
+class KOTEXT_EXPORT KoTextDocDeleteCommand : public KoTextDocCommand
 {
 public:
     KoTextDocDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str );

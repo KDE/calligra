@@ -61,7 +61,7 @@ class QVBoxLayout;
  * that handles modifying a part of a KoParagLayout.
  * Used by the paragraph dialog (this file) and by the style editor.
  */
-class KoParagLayoutWidget : public QWidget
+class KOTEXT_EXPORT KoParagLayoutWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -96,7 +96,7 @@ private:
 /**
  * The widget for editing idents and spacings (tab 1)
  */
-class KoIndentSpacingWidget : public KoParagLayoutWidget
+class KOTEXT_EXPORT KoIndentSpacingWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
@@ -135,7 +135,7 @@ private:
 /**
  * The widget for editing paragraph alignment (tab 2)
  */
-class KoParagAlignWidget : public KoParagLayoutWidget
+class KOTEXT_EXPORT KoParagAlignWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
@@ -168,7 +168,7 @@ private:
 /**
  * The widget for editing paragraph borders (tab 3)
  */
-class KoParagBorderWidget : public KoParagLayoutWidget
+class KOTEXT_EXPORT KoParagBorderWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
@@ -287,7 +287,7 @@ private:
 /**
  * The widget for editing counters (bullets & numbering) (tab 4)
  */
-class KoParagCounterWidget : public KoParagLayoutWidget
+class KOTEXT_EXPORT KoParagCounterWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
