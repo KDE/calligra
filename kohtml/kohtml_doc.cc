@@ -169,7 +169,7 @@ int KoHTMLDoc::viewCount()
   return m_lstViews.count();
 }
 
-CORBA::Boolean KoHTMLDoc::init()
+CORBA::Boolean KoHTMLDoc::initDoc()
 {
   return true;
 }
@@ -539,7 +539,7 @@ void KoHTMLDoc::insertObject(const KRect &rect, KoDocumentEntry &de)
   if (CORBA::is_nil(doc))
      return;
 
-  if (!doc->init())
+  if (!doc->initDoc())
      {
        QMessageBox::critical(0L, i18n("KoHTML Error"), i18n("Could not initialize child document"), i18n("OK"));
        return;

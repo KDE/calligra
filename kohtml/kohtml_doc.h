@@ -131,7 +131,7 @@ public:
   
   virtual bool isEmpty() { return m_bEmpty; }
   
-  virtual CORBA::Boolean init();
+  virtual CORBA::Boolean initDoc();
   
   virtual void cleanUp();
   

@@ -91,7 +91,7 @@ public:
   virtual void newView();
   virtual void insertObject();
 
-  virtual void slotStatusMsg(CORBA::WChar *text);
+  virtual void slotStatusMsg(const CORBA::WChar *text);
   virtual void statusCallback(CORBA::Long ID);
 
   virtual void slotURLEntered();

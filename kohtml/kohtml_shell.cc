@@ -126,7 +126,7 @@ bool KoHTMLShell::newDocument()
 
   m_pDoc = new KoHTMLDoc;
 
-  if (!m_pDoc->init())
+  if (!m_pDoc->initDoc())
      {
        cerr << "ERROR: Could not initialize document" << endl;
        return false;

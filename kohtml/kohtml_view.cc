@@ -648,7 +648,7 @@ void KoHTMLView::viewStatusBar()
     m_vMenuOptions->setItemChecked(m_idMenuOptions_View_StatusBar, m_bStatusBarVisible);
 }     
 
-void KoHTMLView::slotStatusMsg(CORBA::WChar *text)
+void KoHTMLView::slotStatusMsg(const CORBA::WChar *text)
 {
   if (m_vStatusBar != 0L)
      {
@@ -1042,7 +1042,7 @@ void KoHTMLView::slotOpenURL(KHTMLView *view, const char *url, int button, const
           {
 	    KoHTMLDoc *doc = new KoHTMLDoc();
 
-	    if (!doc->init()) return;
+	    if (!doc->initDoc()) return;
 	    
 	    doc->openURL(url, false);
 	    
@@ -1085,7 +1085,7 @@ void KoHTMLView::slotOpenURLInNewWindow()
 
   KoHTMLDoc *doc = new KoHTMLDoc();
 
-  if (!doc->init()) return;
+  if (!doc->initDoc()) return;
 	    
   KoHTMLShell *shell = new KoHTMLShell();
   shell->show();

@@ -53,7 +53,7 @@ messages:
 
 kohtml.h: kohtml.idl
 	rm -f kohtml.h
-	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kohtml.idl
+	$(IDL) --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kohtml.idl
 
 BUILT_SOURCES = kohtml.h
 
