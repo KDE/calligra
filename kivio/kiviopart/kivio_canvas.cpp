@@ -197,11 +197,23 @@ void KivioCanvas::wheelEvent( QWheelEvent* ev )
   //QPoint p = ev->pos();
   if( (ev->delta()>0))
   {
-     m_pVertScrollBar->setValue(m_pVertScrollBar->value() - 30);
+     if(ev->state() == ControlButton) {
+       zoomIn(ev->pos());
+     } else if(ev->state() == ShiftButton) {
+       m_pVertScrollBar->setValue(m_pVertScrollBar->value() - height());
+     } else {
+       m_pVertScrollBar->setValue(m_pVertScrollBar->value() - 30);
+     }
   }
   else
   {
-     m_pVertScrollBar->setValue(m_pVertScrollBar->value() + 30);
+     if(ev->state() == ControlButton) {
+       zoomOut(ev->pos());
+     } else if(ev->state() == ShiftButton) {
+       m_pVertScrollBar->setValue(m_pVertScrollBar->value() + height());
+     } else {
+       m_pVertScrollBar->setValue(m_pVertScrollBar->value() + 30);
+     }
   }
 }
 
