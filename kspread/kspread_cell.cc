@@ -2142,6 +2142,17 @@ bool KSpreadCell::calc( bool _makedepend )
         m_strFormularOut = createDateFormat();
         }
   }
+  else if ( context.value()->type() == KSValue::Empty )
+  {
+    m_dValue = 0.0;
+    m_bError =false;
+    m_bValue = true;
+    m_bBool = false;
+    m_bDate =false;
+    m_bTime=false;
+    // Format the result appropriately
+    m_strFormularOut = createFormat( m_dValue, m_iColumn, m_iRow );
+  }
   else
   {
     if ( m_pQML )
