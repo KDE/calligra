@@ -574,21 +574,21 @@ KexiMainWindowImpl::initActions()
 	d->action_edit_insert_empty_row->setWhatsThis(i18n("Inserts one empty row above currently selected table row."));
 
 	//VIEW MENU
-	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "table", KShortcut(),
+	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "table", Key_F6,
 		this, SLOT(slotViewDataMode()), actionCollection(), "view_data_mode");
 	d->actions_for_view_modes.insert( Kexi::DataViewMode, d->action_view_data_mode );
 	d->action_view_data_mode->setExclusiveGroup("view_mode");
 	d->action_view_data_mode->setToolTip(i18n("Switch to Data View mode"));
 	d->action_view_data_mode->setWhatsThis(i18n("Switches to Data View mode."));
 
-	d->action_view_design_mode = new KRadioAction(i18n("D&esign View"), "state_edit", KShortcut(),
+	d->action_view_design_mode = new KRadioAction(i18n("D&esign View"), "state_edit", Key_F7,
 		this, SLOT(slotViewDesignMode()), actionCollection(), "view_design_mode");
 	d->actions_for_view_modes.insert( Kexi::DesignViewMode, d->action_view_design_mode );
 	d->action_view_design_mode->setExclusiveGroup("view_mode");
 	d->action_view_design_mode->setToolTip(i18n("Switch to Design View mode"));
 	d->action_view_design_mode->setWhatsThis(i18n("Switches to Design View mode."));
 
-	d->action_view_text_mode = new KRadioAction(i18n("&Text View"), "state_sql", KShortcut(),
+	d->action_view_text_mode = new KRadioAction(i18n("&Text View"), "state_sql", Key_F8,
 		this, SLOT(slotViewTextMode()), actionCollection(), "view_text_mode");
 	d->actions_for_view_modes.insert( Kexi::TextViewMode, d->action_view_text_mode );
 	d->action_view_text_mode->setExclusiveGroup("view_mode");

@@ -408,6 +408,8 @@ Table View Prop. Buffer
 - fixed memory leak and possible crash
 Table Designer
 - switching from design view to data view: it's now posible to discard changes
+Main
+- Key_F7/F8/F9 added for data/design/text modes
 
 2004-11-09
 Main
