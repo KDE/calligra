@@ -13,7 +13,6 @@
 </KivioSMLStencilSpawnerInfo>
 <Dimensions w="238.167" h="177.167" defaultAspect="0.75"/>
 <KivioConnectorTarget x="180" y="5"/>
-<KivioShape type="TextBox" name="TextBox0"  x="0.0" y="0.0" w="238.167" h="97.167" />
 <KivioShape type="Polygon" name="Polygon1">
 	<KivioPoint x="2.000" y="39.667"/>
 	<KivioPoint x="2.000" y="79.000"/>
@@ -133,4 +132,5 @@
 	<KivioLineStyle width="0.000" capStyle="32" pattern="1" joinStyle="128" color="#000000" />
 	<KivioFillStyle colorStyle="1" color="#808080" />
 </KivioShape>
+<KivioShape type="TextBox" name="TextBox0"  x="0.0" y="0.0" w="238.167" h="97.167" />
 </KivioShapeStencil>

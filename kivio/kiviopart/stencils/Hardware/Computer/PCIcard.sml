@@ -16,7 +16,6 @@
 <KivioConnectorTarget x="5.0" y="52.5"/>
 <KivioConnectorTarget x="57.5" y="100"/>
 <KivioConnectorTarget x="160.0" y="52.5"/>
-<KivioShape type="TextBox" name="Text"  x="2.0" y="60.0" w="96.0" h="40.0"/>
 <KivioShape type="ClosedPath" name="S1">
 	<KivioFillStyle colorStyle="1" color="#e4e4e4"/>
 	<KivioLineStyle color="#5959a5" width="0.5" capStyle="32" joinStyle="128"/>
@@ -50,4 +49,5 @@
 	<KivioPoint x="20" y="100"/>
 	<KivioPoint x="20" y="90"/>
 </KivioShape>
+<KivioShape type="TextBox" name="Text"  x="2.0" y="60.0" w="96.0" h="40.0"/>
 </KivioShapeStencil>

@@ -15,7 +15,6 @@
 <KivioConnectorTarget x="145" y="26"/>
 <KivioConnectorTarget x="0" y="75"/>
 <KivioConnectorTarget x="257" y="80"/>
-<KivioShape type="TextBox" name="TextBox0"  x="0.0" y="0.0" w="278.667" h="200.917" />
 <KivioShape type="Polygon" name="Polygon1">
 	<KivioPoint x="53.500" y="20.833"/>
 	<KivioPoint x="53.500" y="146.500"/>
@@ -501,4 +500,5 @@
 	<KivioLineStyle width="1.000" capStyle="32" pattern="1" joinStyle="128" color="#404040" />
 	<KivioFillStyle colorStyle="1" color="#404040" />
 </KivioShape>
+<KivioShape type="TextBox" name="TextBox0"  x="0.0" y="0.0" w="278.667" h="200.917" />
 </KivioShapeStencil>
