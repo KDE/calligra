@@ -45,7 +45,7 @@ KexiDBConnection::KexiDBConnection()
 }
 
 KexiDBConnection::KexiDBConnection(const QString &engine, const QString &host, const QString &dbname,
- const QString &user, const QString &pass, const QString &socket, const QString &port)
+ const QString &user, const QString &pass, const QString &socket, const QString &port, bool create)
 {
 	m_connected = false;
 	m_type = KexiDB::RemoteDB;
@@ -58,6 +58,7 @@ KexiDBConnection::KexiDBConnection(const QString &engine, const QString &host, c
 	m_port = port;
 
 	m_persistant = false;
+	m_createDb = create;
 	m_encoding = KexiDB::Latin1;
 }
 
@@ -92,7 +93,7 @@ KexiDBConnection::connectDB(KexiDBInterfaceManager *parent, KoStore *store)
 	{
 		case KexiDB::RemoteDB:
 		{
-			if(addDB->connect(m_host, m_user, m_pass, m_socket, m_port, m_dbname, false))
+			if(addDB->connect(m_host, m_user, m_pass, m_socket, m_port, m_dbname, m_createDb))
 			{
 				kdDebug() << "KexiDBConnection::connectDB(): remote = " << addDB << endl;
 				addDB->setEncoding(m_encoding);

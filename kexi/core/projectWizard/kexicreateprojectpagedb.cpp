@@ -132,7 +132,9 @@ bool
 KexiCreateProjectPageDB::connectDB()
 {
 	QString database = data("database").toString();
-	KexiDBConnection *c = new KexiDBConnection(m_driver, m_host, database, m_user, m_pass, m_socket, m_port);
+	KexiDBConnection *c = new KexiDBConnection(m_driver, m_host, database, m_user,
+                                             m_pass, m_socket, m_port,
+                                             m_newRBtn->isChecked());
 	if(project()->initDBConnection(c))
 	{
 		return true;

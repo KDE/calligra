@@ -46,7 +46,7 @@ class KexiDBConnection
 		 */
 		KexiDBConnection(const QString &engine, const QString &host, const QString &dbname,
 		 const QString &user, const QString &pass, const QString &socket=QString::null,
-		 const QString &port=QString::null);
+		 const QString &port=QString::null, bool createdb = false);
 
 		/**
 		 * file/dir engine connection
@@ -108,6 +108,7 @@ class KexiDBConnection
 		QString		m_port;
 		QString		m_file;
 		bool		m_persistant;
+		bool		m_createDb;
 		KexiDB::Encoding m_encoding;
 
 		QString		m_tmpname;
