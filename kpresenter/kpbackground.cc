@@ -162,48 +162,66 @@ void KPBackGround::restore()
 QDomElement KPBackGround::save( QDomDocument &doc )
 {
     QDomElement page=doc.createElement("PAGE");
-    QDomElement element=doc.createElement("BACKTYPE");
-    element.setAttribute("value", static_cast<int>( backType ));
-    page.appendChild(element);
-    element=doc.createElement("BACKVIEW");
-    element.setAttribute("value", static_cast<int>( backView ));
-    page.appendChild(element);
-    element=doc.createElement("BACKCOLOR1");
-    element.setAttribute("red", backColor1.red());
-    element.setAttribute("green", backColor1.green());
-    element.setAttribute("blue", backColor1.blue());
-    page.appendChild(element);
-    element=doc.createElement("BACKCOLOR2");
-    element.setAttribute("red", backColor2.red());
-    element.setAttribute("green", backColor2.green());
-    element.setAttribute("blue", backColor2.blue());
-    page.appendChild(element);
-    element=doc.createElement("BCTYPE");
-    element.setAttribute("value", static_cast<int>( bcType ));
-    page.appendChild(element);
-    element=doc.createElement("BGRADIENT");
-    element.setAttribute("unbalanced", static_cast<int>( unbalanced ));
-    element.setAttribute("xfactor", xfactor);
-    element.setAttribute("yfactor", yfactor);
-    page.appendChild(element);
+    QDomElement element;
+
+    if (backType!=BT_COLOR) {
+        element=doc.createElement("BACKTYPE");
+        element.setAttribute("value", static_cast<int>( backType ));
+        page.appendChild(element);
+    }
+
+    if (backView!=BV_CENTER) {
+        element=doc.createElement("BACKVIEW");
+        element.setAttribute("value", static_cast<int>( backView ));
+        page.appendChild(element);
+    }
+
+    if (backColor1!=Qt::white) {
+        element=doc.createElement("BACKCOLOR1");
+        element.setAttribute("color", backColor1.name());
+        page.appendChild(element);
+    }
+
+    if (backColor2!=Qt::white) {
+        element=doc.createElement("BACKCOLOR2");
+        element.setAttribute("color", backColor2.name());
+        page.appendChild(element);
+    }
+
+    if (bcType!=BCT_PLAIN) {
+        element=doc.createElement("BCTYPE");
+        element.setAttribute("value", static_cast<int>( bcType ));
+        page.appendChild(element);
+    }
+
+    if (xfactor!=100 || yfactor!=100 || unbalanced) {
+        element=doc.createElement("BGRADIENT");
+        element.setAttribute("unbalanced", static_cast<int>( unbalanced ));
+        element.setAttribute("xfactor", xfactor);
+        element.setAttribute("yfactor", yfactor);
+        page.appendChild(element);
+    }
 
     if ( !backImage.isNull() && backType == BT_PICTURE )
     {
-        QDomElement elem = doc.createElement( "BACKPIXKEY" );
-        backImage.key().saveAttributes( elem );
-        page.appendChild( elem );
+        element = doc.createElement( "BACKPIXKEY" );
+        backImage.key().saveAttributes( element );
+        page.appendChild( element );
     }
 
     if ( !backClipart.isNull() && backType == BT_CLIPART )
     {
-        QDomElement elem=doc.createElement( "BACKCLIPKEY" );
-        backClipart.key().saveAttributes( elem );
-        page.appendChild( elem );
+        element=doc.createElement( "BACKCLIPKEY" );
+        backClipart.key().saveAttributes( element );
+        page.appendChild( element );
     }
 
-    element=doc.createElement("PGEFFECT");
-    element.setAttribute("value", static_cast<int>( pageEffect ));
-    page.appendChild(element);
+    if (pageEffect!=PEF_NONE) {
+        element=doc.createElement("PGEFFECT");
+        element.setAttribute("value", static_cast<int>( pageEffect ));
+        page.appendChild(element);
+    }
+
     return page;
 }
 
@@ -233,7 +251,10 @@ void KPBackGround::load( const QDomElement &element )
             green=e.attribute("green").toInt();
         if(e.hasAttribute("blue"))
             blue=e.attribute("blue").toInt();
-        setBackColor1(QColor(red, green, blue));
+        if(e.hasAttribute("color"))
+            setBackColor1(QColor(e.attribute("color")));
+        else
+            setBackColor1(QColor(red, green, blue));
     }
     e=element.namedItem("BACKCOLOR2").toElement();
     if(!e.isNull()) {
@@ -244,7 +265,10 @@ void KPBackGround::load( const QDomElement &element )
             green=e.attribute("green").toInt();
         if(e.hasAttribute("blue"))
             blue=e.attribute("blue").toInt();
-        setBackColor2(QColor(red, green, blue));
+        if(e.hasAttribute("color"))
+            setBackColor2(QColor(e.attribute("color")));
+        else
+            setBackColor2(QColor(red, green, blue));
     }
     e=element.namedItem("PGEFFECT").toElement();
     if(!e.isNull()) {

@@ -147,7 +147,9 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     //   _pageLayout.ptRight = 0;
     //   _pageLayout.ptTop = 0;
     //   _pageLayout.ptBottom = 0;
+
     _pageLayout.unit = PG_MM;
+
     objStartY = 0;
     setPageLayout( _pageLayout, 0, 0 );
     _presPen = QPen( red, 3, SolidLine );
@@ -254,34 +256,43 @@ QDomDocument KPresenterDoc::saveXML()
     paper.setAttribute("format", static_cast<int>( _pageLayout.format ));
     paper.setAttribute("ptWidth", _pageLayout.ptWidth);
     paper.setAttribute("ptHeight", _pageLayout.ptHeight);
-    paper.setAttribute("mmWidth", _pageLayout.mmWidth);
-    paper.setAttribute("mmHeight", _pageLayout.mmHeight);
-    paper.setAttribute("inchWidth", _pageLayout.inchWidth);
-    paper.setAttribute("inchHeight", _pageLayout.inchHeight);
+
+    //### OPTIMIZATION
+    //paper.setAttribute("mmWidth", _pageLayout.mmWidth);
+    //paper.setAttribute("mmHeight", _pageLayout.mmHeight);
+    //paper.setAttribute("inchWidth", _pageLayout.inchWidth);
+    //paper.setAttribute("inchHeight", _pageLayout.inchHeight);
+
     paper.setAttribute("orientation", static_cast<int>( _pageLayout.orientation ));
     paper.setAttribute("unit", static_cast<int>( _pageLayout.unit ));
     QDomElement paperBorders=doc.createElement("PAPERBORDERS");
-    paperBorders.setAttribute("mmLeft", _pageLayout.mmLeft);
-    paperBorders.setAttribute("mmTop", _pageLayout.mmTop);
-    paperBorders.setAttribute("mmRight", _pageLayout.mmRight);
-    paperBorders.setAttribute("mmBottom", _pageLayout.mmBottom);
+
+    //### OPTIMIZATION
+    //paperBorders.setAttribute("mmLeft", _pageLayout.mmLeft);
+    //paperBorders.setAttribute("mmTop", _pageLayout.mmTop);
+    //paperBorders.setAttribute("mmRight", _pageLayout.mmRight);
+    //paperBorders.setAttribute("mmBottom", _pageLayout.mmBottom);
     paperBorders.setAttribute("ptLeft", _pageLayout.ptLeft);
     paperBorders.setAttribute("ptTop", _pageLayout.ptTop);
     paperBorders.setAttribute("ptRight", _pageLayout.ptRight);
     paperBorders.setAttribute("ptBottom", _pageLayout.ptBottom);
-    paperBorders.setAttribute("inchLeft", _pageLayout.inchLeft);
-    paperBorders.setAttribute("inchTop", _pageLayout.inchTop);
-    paperBorders.setAttribute("inchRight", _pageLayout.inchRight);
-    paperBorders.setAttribute("inchBottom", _pageLayout.inchBottom);
+    //paperBorders.setAttribute("inchLeft", _pageLayout.inchLeft);
+    //paperBorders.setAttribute("inchTop", _pageLayout.inchTop);
+    //paperBorders.setAttribute("inchRight", _pageLayout.inchRight);
+    //paperBorders.setAttribute("inchBottom", _pageLayout.inchBottom);
     paper.appendChild(paperBorders);
     presenter.appendChild(paper);
 
     QDomElement element=doc.createElement("BACKGROUND");
     element.setAttribute("rastX", _rastX);
     element.setAttribute("rastY", _rastY);
-    element.setAttribute("bred", _txtBackCol.red());
-    element.setAttribute("bgreen", _txtBackCol.green());
-    element.setAttribute("bblue", _txtBackCol.blue());
+
+    //### OPTIMIZATION
+    //element.setAttribute("bred", _txtBackCol.red());
+    //element.setAttribute("bgreen", _txtBackCol.green());
+    //element.setAttribute("bblue", _txtBackCol.blue());
+    element.setAttribute("color", _txtBackCol.name());
+
     element.appendChild(saveBackground( doc ));
     presenter.appendChild(element);
 
@@ -414,7 +425,11 @@ QDomElement KPresenterDoc::saveObjects( QDomDocument &doc )
         if ( kpobject->getType() == OT_PART ) continue;
         QDomElement object=doc.createElement("OBJECT");
         object.setAttribute("type", static_cast<int>( kpobject->getType() ));
-        object.setAttribute("sticky", static_cast<int>(kpobject->isSticky()));
+
+        bool _sticky = kpobject->isSticky();
+        if (_sticky)
+            object.setAttribute("sticky", static_cast<int>(_sticky));
+
         QPoint orig = kpobject->getOrig();
         if ( saveOnlyPage != -1 )
             kpobject->moveBy( 0, -saveOnlyPage * getPageRect( 0, 0, 0 ).height() );
@@ -603,15 +618,15 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 __pgLayout.orientation=static_cast<KoOrientation>(elem.attribute("orientation").toInt());
             if(elem.hasAttribute("ptWidth"))
                 __pgLayout.ptWidth = elem.attribute("ptWidth").toDouble();
-            if(elem.hasAttribute("inchWidth"))
+            if(elem.hasAttribute("inchWidth"))  //compatibility
                 __pgLayout.inchWidth = elem.attribute("inchWidth").toDouble();
-            if(elem.hasAttribute("mmWidth"))
+            if(elem.hasAttribute("mmWidth"))    //compatibility
                 __pgLayout.mmWidth = elem.attribute("mmWidth").toDouble();
             if(elem.hasAttribute("ptHeight"))
                 __pgLayout.ptHeight = elem.attribute("ptHeight").toDouble();
-            if(elem.hasAttribute("inchHeight"))
+            if(elem.hasAttribute("inchHeight")) //compatibility
                 __pgLayout.inchHeight = elem.attribute("inchHeight").toDouble();
-            if(elem.hasAttribute("mmHeight"))
+            if(elem.hasAttribute("mmHeight"))   //compatibility
                 __pgLayout.mmHeight = elem.attribute("mmHeight").toDouble();
             if(elem.hasAttribute("unit"))
                 __pgLayout.unit = static_cast<KoUnit>(elem.attribute("unit").toInt());
@@ -650,27 +665,27 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 }
                 if(borders.hasAttribute("ptLeft"))
                     __pgLayout.ptLeft = borders.attribute("ptLeft").toDouble();
-                if(borders.hasAttribute("inchLeft"))
+                if(borders.hasAttribute("inchLeft"))    //compatibility
                     __pgLayout.inchLeft = borders.attribute("inchLeft").toDouble();
-                if(borders.hasAttribute("mmLeft"))
+                if(borders.hasAttribute("mmLeft"))      //compatibility
                     __pgLayout.mmLeft = borders.attribute("mmLeft").toDouble();
                 if(borders.hasAttribute("ptRight"))
                     __pgLayout.ptRight = borders.attribute("ptRight").toDouble();
-                if(borders.hasAttribute("inchRight"))
+                if(borders.hasAttribute("inchRight"))   //compatibility
                     __pgLayout.inchRight = borders.attribute("inchRight").toDouble();
-                if(borders.hasAttribute("mmRight"))
+                if(borders.hasAttribute("mmRight"))     //compatibility
                     __pgLayout.mmRight = borders.attribute("mmRight").toDouble();
                 if(borders.hasAttribute("ptTop"))
                     __pgLayout.ptTop = borders.attribute("ptTop").toDouble();
-                if(borders.hasAttribute("inchTop"))
+                if(borders.hasAttribute("inchTop"))     //compatibility
                     __pgLayout.inchTop = borders.attribute("inchTop").toDouble();
-                if(borders.hasAttribute("mmTop"))
+                if(borders.hasAttribute("mmTop"))       //compatibility
                     __pgLayout.mmTop = borders.attribute("mmTop").toDouble();
                 if(borders.hasAttribute("ptBottom"))
                     __pgLayout.ptBottom = borders.attribute("ptBottom").toDouble();
-                if(borders.hasAttribute("inchBottom"))
+                if(borders.hasAttribute("inchBottom"))  //compatibility
                     __pgLayout.inchBottom = borders.attribute("inchBottom").toDouble();
-                if(borders.hasAttribute("mmBottom"))
+                if(borders.hasAttribute("mmBottom"))    //compatibility
                     __pgLayout.mmBottom = borders.attribute("inchBottom").toDouble();
             }
         } else if(elem.tagName()=="BACKGROUND") {
@@ -689,7 +704,10 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 green = elem.attribute("bgreen").toInt();
             if(elem.hasAttribute("bblue"))
                 blue = elem.attribute("bblue").toInt();
-            _txtBackCol.setRgb(red, green, blue);
+            if(elem.hasAttribute("color"))
+                _txtBackCol.setNamedColor(elem.attribute("color"));
+            else
+                _txtBackCol.setRgb(red, green, blue);
             loadBackground(elem);
         } else if(elem.tagName()=="HEADER") {
             if ( _clean || !hasHeader() ) {
