@@ -61,8 +61,8 @@ k_dcop:
     virtual void formatPage();
     virtual void raiseFrame();
     virtual void lowerFrame();
-    virtual void bringForward();
-    virtual void sendBackward();
+    virtual void bringToFront();
+    virtual void sendToBack();
     virtual void applyAutoFormat();
 private:
     KWView *view;

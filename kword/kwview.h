@@ -309,10 +309,14 @@ public slots:
 
     void configureHeaderFooter();
     void inlineFrame();
+    /** Move the selected frame above maximum 1 frame that is in front of it. */
     void raiseFrame();
+    /** Move the selected frame behind maximum 1 frame that is behind it */
     void lowerFrame();
-    void bringForward();
-    void sendBackward();
+    /** Move the selected frame(s) to be in the front most position. */
+    void bringToFront();
+    /** Move the selected frame(s) to be behind all other frames */
+    void sendToBack();
     void openLink();
     void changeLink();
     void editComment();
@@ -387,7 +391,7 @@ private:
     KAction *actionRaiseFrame;
     KAction *actionLowerFrame;
     KAction *actionSendBackward;
-    KAction *actionBringForward;
+    KAction *actionBringToFront;
 
     KAction *actionEditCustomVars;
     KAction *actionEditFind;

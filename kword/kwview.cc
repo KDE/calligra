@@ -381,13 +381,13 @@ void KWView::setupActions()
     actionLowerFrame->setToolTip( i18n( "Lower the currently selected frame so that it disappears under any frame that overlaps it" ) );
     actionLowerFrame->setWhatsThis( i18n( "Lower the currently selected frame so that it disappears under any frame that overlaps it. If multiple frames are selected they are all lowered in turn." ) );
 
-    actionBringForward= new KAction( i18n( "Bring Forward" ), "bring_forward",
-                                          0, this, SLOT( bringForward() ),
-                                          actionCollection(), "bring_forward_frame" );
+    actionBringToFront= new KAction( i18n( "Bring to Front" ), "bring_tofront",
+                                          0, this, SLOT( bringToFront() ),
+                                          actionCollection(), "bring_tofront_frame" );
 
-    actionSendBackward= new KAction( i18n( "Send Backward" ), "send_backward",
-                                          0, this, SLOT( sendBackward() ),
-                                          actionCollection(), "send_backward_frame" );
+    actionSendBackward= new KAction( i18n( "Send to Back" ), "send_toback",
+                                          0, this, SLOT( sendToBack() ),
+                                          actionCollection(), "send_toback_frame" );
 
 
     // -------------- View menu
@@ -1889,7 +1889,7 @@ void KWView::lowerFrame()
     }
 }
 
-void KWView::bringForward()
+void KWView::bringToFront()
 {
     KMacroCommand* macroCmd = 0L;
     // For each selected frame...
@@ -1919,7 +1919,7 @@ void KWView::bringForward()
             frameOfFirstFrameSet->setZOrder( newZOrder );
             KWFramePropertiesCommand* cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frameOfFirstFrameSet);
             if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Bring Forward Frame") );
+                macroCmd = new KMacroCommand( i18n("Bring to Front") );
             macroCmd->addCommand(cmd);
 
             frameCopy = frameChangeLevel->getCopy();
@@ -1927,7 +1927,7 @@ void KWView::bringForward()
 
             cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frameChangeLevel );
             if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Bring Forward Frame") );
+                macroCmd = new KMacroCommand( i18n("Bring to Front") );
             macroCmd->addCommand(cmd);
         }
         // Can't lower under the main frame in a WP document.
@@ -1945,7 +1945,7 @@ void KWView::bringForward()
     }
 }
 
-void KWView::sendBackward()
+void KWView::sendToBack()
 {
     KMacroCommand* macroCmd = 0L;
     // For each selected frame...
@@ -1976,7 +1976,7 @@ void KWView::sendBackward()
 
             KWFramePropertiesCommand* cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frameOfFirstFrameSet);
             if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Send Backward Frame") );
+                macroCmd = new KMacroCommand( i18n("Send to Back") );
             macroCmd->addCommand(cmd);
 
             frameCopy = frameChangeLevel->getCopy();
@@ -1984,7 +1984,7 @@ void KWView::sendBackward()
 
             cmd = new KWFramePropertiesCommand( QString::null, frameCopy, frameChangeLevel );
             if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Send Backward Frame") );
+                macroCmd = new KMacroCommand( i18n("Send to Back") );
             macroCmd->addCommand(cmd);
         }
         // Can't lower under the main frame in a WP document.
@@ -4566,24 +4566,31 @@ void KWView::frameSelectedChanged()
     if ( rw && nbFrame >= 1 )
     {
         bool okForDelete = true;
-        bool okForLowerRaise = true;
-        // Check we didn't select the main text frame (in WP mode)
+        bool okForLowerRaise = false;
         QPtrListIterator<KWFrame> it( selectedFrames );
         for ( ; it.current() && ( okForDelete || okForLowerRaise ) ; ++it )
         {
             // Check we selected no footer nor header
-            okForDelete &= !it.current()->frameSet()->isHeaderOrFooter();
+
+            bool headerFooter = it.current()->frameSet()->isHeaderOrFooter();
             bool isMainWPFrame = ( m_doc->processingType() == KWDocument::WP )
                                    && it.current()->frameSet() == m_doc->frameSet( 0 );
+
+            okForDelete &= !headerFooter;
             okForDelete &= !isMainWPFrame;
-            okForLowerRaise &= !isMainWPFrame;
+
+            // Check we selected a frame we can lower raise.
+            // The header, footer, main frameset and inline frames can't be raised.  (in WP mode)
+            // As soon as we find one who we can lower/raise open the option.
+            okForLowerRaise |= !(isMainWPFrame | headerFooter | it.current()->frameSet()->isFloating());
         }
         actionEditDelFrame->setEnabled( okForDelete );
         actionEditCut->setEnabled( okForDelete );
+        
         actionLowerFrame->setEnabled( okForLowerRaise );
         actionRaiseFrame->setEnabled( okForLowerRaise );
         actionSendBackward->setEnabled( okForLowerRaise );
-        actionBringForward->setEnabled( okForLowerRaise );
+        actionBringToFront->setEnabled( okForLowerRaise );
     } else
     {   // readonly document, or no frame selected -> disable
         actionEditDelFrame->setEnabled( false );
@@ -4592,7 +4599,7 @@ void KWView::frameSelectedChanged()
         actionLowerFrame->setEnabled( false );
         actionRaiseFrame->setEnabled( false );
         actionSendBackward->setEnabled( false );
-        actionBringForward->setEnabled( false );
+        actionBringToFront->setEnabled( false );
     }
     bool frameDifferentOfPart=false;
     if(nbFrame >= 1)
