@@ -85,8 +85,8 @@ class KexiAlterTableDialogPrivate
 
 //----------------------------------------------
 
-KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, 
-	KexiDB::TableSchema *table, const char *name)
+KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
+	const char *name)
  : KexiDataTable(win, parent, name, false/*not db-aware*/)
  , d( new KexiAlterTableDialogPrivate() )
 {
@@ -115,7 +115,7 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 #endif
 	d->maxTypeNameTextWidth = 0;
 	QFontMetrics fm(font());
-	for (int i=1; i<=types.count(); i++) {
+	for (uint i=1; i<=types.count(); i++) {
 		types[i-1] = KexiDB::Field::typeGroupName(i);
 		d->maxTypeNameTextWidth = QMAX(d->maxTypeNameTextWidth, fm.width(types[i-1]));
 	}
@@ -309,7 +309,7 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field, bool 
 	return buff;
 }
 
-void KexiAlterTableDialog::updateActions(bool activated)
+void KexiAlterTableDialog::updateActions(bool /*activated*/)
 {
 /*! \todo check if we can set pkey for this column type (eg. BLOB?) */
 	setAvailable("tablepart_toggle_pkey", propertyBuffer()!=0);
@@ -429,7 +429,7 @@ tristate KexiAlterTableDialog::beforeSwitchTo(int mode, bool &dontStore)
 		else if (dirty() && !parentDialog()->neverSaved()) {
 //			cancelled = (KMessageBox::No == KMessageBox::questionYesNo(this, i18n("Saving changes for existing table design is not yet supported.\nDo you want to discard your changes now?")));
 
-			KexiDB::Connection *conn = mainWin()->project()->dbConnection();
+//			KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 			bool emptyTable;
 			if (KMessageBox::No == KMessageBox::questionYesNo(this, 
 				i18n("Saving changes for existing table design is now required.")
@@ -597,8 +597,9 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 
 		kdDebug() << "KexiAlterTableDialog::slotRowUpdated(): " << field.debugString() << endl;
 
-		//create new property buffer:
-		KexiPropertyBuffer *newbuff = createPropertyBuffer( m_view->currentRow(), &field, true );
+		//create a new property buffer:
+//		KexiPropertyBuffer *newbuff = 
+		createPropertyBuffer( m_view->currentRow(), &field, true );
 //moved
 		//add a special property indicating that this is brand new buffer, 
 		//not just changed
@@ -681,7 +682,7 @@ void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer &buf, KexiProp
 	}
 }
 
-void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* item, 
+void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* /*item*/, 
 	KexiDB::ResultInfo* /*result*/, bool /*repaint*/)
 {
 	setDirty();

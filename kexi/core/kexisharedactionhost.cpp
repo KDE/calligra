@@ -32,8 +32,8 @@ KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h
 , actionProxies(401)
 , actionMapper( this )
 , volatileActions(401)
-, host(h)
 , enablers(401, false)
+, host(h)
 {
 	volatileActions.setAutoDelete(true);
 	connect(&actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));

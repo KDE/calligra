@@ -969,7 +969,7 @@ aExpr9:
 //TODO ok?
 
 	$$ = new ConstExpr( INTEGER_CONST, val );
-	kdDebug() << "  + int constant: " << val << endl;
+	kdDebug() << "  + int constant: " << val.toString() << endl;
 }
 | REAL_CONST
 {

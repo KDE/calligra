@@ -79,7 +79,7 @@ KexiViewBase* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog,
 	}
 
 	if (viewMode == Kexi::DesignViewMode) {
-		KexiAlterTableDialog *t = new KexiAlterTableDialog(win, parent, sch, "altertable");
+		KexiAlterTableDialog *t = new KexiAlterTableDialog(win, parent, "altertable");
 		return t;
 	}
 	else if (viewMode == Kexi::DataViewMode) {
@@ -143,7 +143,8 @@ KexiTableDataSource::fields(KexiProject *project, const KexiPart::Item &it)
 }
 
 KexiDB::Cursor *
-KexiTableDataSource::cursor(KexiProject *project, const KexiPart::Item &it, bool buffer)
+KexiTableDataSource::cursor(KexiProject * /*project*/, 
+	const KexiPart::Item &/*it*/, bool /*buffer*/)
 {
 	return 0;
 }

@@ -59,7 +59,7 @@ KexiTimeTableEdit::KexiTimeTableEdit(KexiTableViewColumn &column, QScrollView *p
 	if (m_dte_time_obj)
 		m_dte_time_obj->installEventFilter(this);
 	
-#if QDateTimeEditor_HACK
+#ifdef QDateTimeEditor_HACK
 	m_dte_time = dynamic_cast<QDateTimeEditor*>(m_dte_time_obj);
 #else
 	m_dte_time = 0;
@@ -113,7 +113,7 @@ KexiTimeTableEdit::value(bool &ok)
 
 bool KexiTimeTableEdit::cursorAtStart()
 {
-#if QDateTimeEditor_HACK
+#ifdef QDateTimeEditor_HACK
 	return m_dte_time && m_edit->hasFocus() && m_dte_time->focusSection()==0;
 #else
 	return false;
@@ -122,9 +122,9 @@ bool KexiTimeTableEdit::cursorAtStart()
 
 bool KexiTimeTableEdit::cursorAtEnd()
 {
-#if QDateTimeEditor_HACK
+#ifdef QDateTimeEditor_HACK
 	return m_dte_time && m_edit->hasFocus() 
-		&& m_dte_time->focusSection()==(m_dte_time->sectionCount()-1);
+		&& m_dte_time->focusSection()==int(m_dte_time->sectionCount()-1);
 #else
 	return false;
 #endif
@@ -136,7 +136,7 @@ void KexiTimeTableEdit::clear()
 	m_cleared = true;
 }
 
-void KexiTimeTableEdit::slotValueChanged(const QTime& t)
+void KexiTimeTableEdit::slotValueChanged(const QTime& /*t*/)
 {
 	m_cleared = false;
 }
@@ -144,7 +144,7 @@ void KexiTimeTableEdit::slotValueChanged(const QTime& t)
 //! @internal helper
 void KexiTimeTableEdit::moveToFirstSection()
 {
-#if QDateTimeEditor_HACK
+#ifdef QDateTimeEditor_HACK
 	m_dte_time->setFocusSection(0);
 #else
 	QKeyEvent ke_left(QEvent::KeyPress, Qt::Key_Left, 0, 0);
@@ -165,9 +165,8 @@ bool KexiTimeTableEdit::eventFilter( QObject *o, QEvent *e )
 			m_setNumberOnFocus = -1;
 		}
 	}
-#if QDateTimeEditor_HACK
+#ifdef QDateTimeEditor_HACK
 	else if (e->type()==QEvent::KeyPress && m_dte_time) {
-		bool resendEvent = false;
 		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 		if ((ke->key()==Qt::Key_Right && !m_sentEvent && cursorAtEnd())
 			|| (ke->key()==Qt::Key_Left && !m_sentEvent && cursorAtStart()))

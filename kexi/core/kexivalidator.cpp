@@ -42,8 +42,8 @@ KexiValidator::Result KexiValidator::check(const QString &valueName, const QVari
 	return internalCheck(valueName, v, message, details);
 }
 
-KexiValidator::Result KexiValidator::internalCheck(const QString &valueName, 
-	const QVariant& v, QString &message, QString &details)
+KexiValidator::Result KexiValidator::internalCheck(const QString & /*valueName*/, 
+	const QVariant& /*v*/, QString & /*message*/, QString & /*details*/)
 {
 	return Error;
 }

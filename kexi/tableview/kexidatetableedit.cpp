@@ -68,7 +68,7 @@ KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *p
 	if (m_dte_date_obj)
 		m_dte_date_obj->installEventFilter(this);
 	
-#if QDateTimeEditor_HACK
+#ifdef QDateTimeEditor_HACK
 	m_dte_date = dynamic_cast<QDateTimeEditor*>(m_dte_date_obj);
 #else
 	m_dte_date = 0;
@@ -152,13 +152,15 @@ void KexiDateTableEdit::moveToFirstSection()
 {
 	if (!m_dte_date_obj)
 		return;
-#if QDateTimeEditor_HACK
+#ifdef QDateTimeEditor_HACK
 	if (m_dte_date)
 		m_dte_date->setFocusSection(0);
 #else
+#ifdef Q_WS_WIN //tmp
 	QKeyEvent ke_left(QEvent::KeyPress, Qt::Key_Left, 0, 0);
 	for (int i=0; i<8; i++)
 		QApplication::sendEvent( m_dte_date_obj, &ke_left );
+#endif
 #endif
 }
 
@@ -192,6 +194,7 @@ bool KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
 			break;
 		}
 	}
+#ifdef Q_WS_WIN //tmp
 	else if (e->type()==QEvent::FocusIn && o->parent() && o->parent()->parent()==m_edit
 		&& m_setNumberOnFocus >= 0 && m_dte_date_obj)
 	{
@@ -202,9 +205,9 @@ bool KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
 		QApplication::sendEvent( m_dte_date_obj, &ke );
 		m_setNumberOnFocus = -1;
 	}
-#if QDateTimeEditor_HACK
+#endif
+#ifdef QDateTimeEditor_HACK
 	else if (e->type()==QEvent::KeyPress && m_dte_date) {
-		bool resendEvent = false;
 		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 		if ((ke->key()==Qt::Key_Right && !m_sentEvent && cursorAtEnd())
 			|| (ke->key()==Qt::Key_Left && !m_sentEvent && cursorAtStart()))
@@ -230,7 +233,7 @@ void KexiDateTableEdit::acceptDate()
 
 bool KexiDateTableEdit::cursorAtStart()
 {
-#if QDateTimeEditor_HACK
+#ifdef QDateTimeEditor_HACK
 	return m_dte_date && m_edit->hasFocus() && m_dte_date->focusSection()==0;
 #else
 	return false;
@@ -239,9 +242,9 @@ bool KexiDateTableEdit::cursorAtStart()
 
 bool KexiDateTableEdit::cursorAtEnd()
 {
-#if QDateTimeEditor_HACK
+#ifdef QDateTimeEditor_HACK
 	return m_dte_date && m_edit->hasFocus() 
-		&& m_dte_date->focusSection()==(m_dte_date->sectionCount()-1);
+		&& m_dte_date->focusSection()==int(m_dte_date->sectionCount()-1);
 #else
 	return false;
 #endif

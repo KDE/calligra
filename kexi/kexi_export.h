@@ -20,8 +20,8 @@
 #ifndef _KEXI_EXPORT_H_
 #define _KEXI_EXPORT_H_
 
-#include <kdeversion.h> //this will also include <kdelibs_export.h>, if available
-//TODO: #include <koffice_export.h>
+#include <kdeversion.h> /* this will also include <kdelibs_export.h>, if available */
+/* TODO: #include <koffice_export.h> */
 
 #ifdef MAKE_KEXICORE_LIB
 # define KEXICORE_EXPORT KDE_EXPORT
@@ -184,6 +184,41 @@
 # define KEXIRELATIONSVIEW_EXPORT  KDE_IMPORT
 #else
 # define KEXIRELATIONSVIEW_EXPORT //for apps
+#endif
+
+
+/* -- compile-time settings -- */
+#ifdef Q_WS_WIN
+/* defined in a .pro file */
+#else
+
+# define KEXI_HAND_TBL_EXPORT
+# define KEXICORE_EXPORT
+# define KEXIMAIN_EXPORT 
+# define KEXI_DB_EXPORT
+# define KEXIFILTER_EXPORT
+# define KFORMEDITOR_EXPORT
+# define KEXI_HAND_TBL_EXPORT
+# define KEXI_HAND_QUERY_EXPORT
+# define KEXI_HAND_RELAT_EXPORT
+# define KEXI_HAND_FORM_EXPORT
+# define KEXIEXTWIDGETS_EXPORT
+# define KEXIDATATABLE_EXPORT
+# define KEXIPRJWIZARD_EXPORT
+# define KEXI_DB_EXPORT
+# define KEXI_MYSQL_IFACE_EXPORT
+# define KEXIPROPERTYEDITOR_EXPORT
+# define KEXIRELATIONSVIEW_EXPORT
+
+/* unfinished features visibility */
+# define KEXI_SHOW_UNIMPLEMENTED 
+# define KEXI_STARTUP_SHOW_TEMPLATES 
+# define KEXI_STARTUP_SHOW_RECENT
+# define KEXI_SERVER_SUPPORT KEXI_FORMS_SUPPORT
+
+/* additional default options */
+# define KDE_CXXFLAGS
+# define DKEXI_NO_CTXT_HELP
 #endif
 
 #endif //KEXI_EXPORT_H

@@ -31,7 +31,7 @@ KexiPropertySubEditor::KexiPropertySubEditor(QWidget *parent, KexiProperty *prop
 }
 
 bool
-KexiPropertySubEditor::eventFilter(QObject* watched, QEvent* e)
+KexiPropertySubEditor::eventFilter(QObject* /*watched*/, QEvent* e)
 {
 	if(e->type() == QEvent::KeyPress)
 	{
@@ -96,7 +96,7 @@ KexiPropertySubEditor::value()
 }
 
 void
-KexiPropertySubEditor::setValue(const QVariant &value)
+KexiPropertySubEditor::setValue(const QVariant &/*value*/)
 {
 	return;
 }

@@ -3816,7 +3816,7 @@ void KexiTableView::navBtnNewClicked()
 bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 {
 	//don't allow to stole key my events by others:
-	kdDebug() << "spontaneous " << e->spontaneous() << " type=" << e->type() << endl;
+//	kdDebug() << "spontaneous " << e->spontaneous() << " type=" << e->type() << endl;
 	
 	if (e->spontaneous() && (e->type()==QEvent::KeyPress /*|| e->type()==QEvent::AccelOverride*/)) {
 		QKeyEvent *ke = static_cast<QKeyEvent*>(e);

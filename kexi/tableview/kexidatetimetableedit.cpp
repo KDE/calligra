@@ -82,7 +82,7 @@ KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, QScrol
 	m_datePickerPopupMenu->insertItem(m_datePicker);
 	dateBtn->setPopup(m_datePickerPopupMenu);
 	
-#if QDateTimeEditor_HACK
+#ifdef QDateTimeEditor_HACK
 	m_dte_date = Kexi::findFirstChild<QDateTimeEditor>(m_dateEdit, "QDateTimeEditor");
 	m_dte_time = Kexi::findFirstChild<QDateTimeEditor>(m_timeEdit, "QDateTimeEditor");
 	if (m_dte_date && m_dte_time) {
@@ -117,7 +117,7 @@ void KexiDateTimeTableEdit::init(const QString& /*add*/, bool /*removeOld*/)
 	m_dateEdit->setDate(m_origValue.toDate());
 	m_timeEdit->setTime(m_origValue.toTime());
 
-#if QDateTimeEditor_HACK
+#ifdef QDateTimeEditor_HACK
 	if (m_dte_date)
 		m_dte_date->setFocusSection(0);
 #endif
@@ -192,14 +192,14 @@ KexiDateTimeTableEdit::eventFilter( QObject *o, QEvent *e )
 			break;
 		}
 	}
-#if QDateTimeEditor_HACK
+#ifdef QDateTimeEditor_HACK
 	else if (e->type()==QEvent::KeyPress && m_dte_date && m_dte_time) {
 		bool resendEvent = false;
 		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 		if (ke->key()==Qt::Key_Right)
 		{
 			if (o==m_dte_date && m_dateEdit->hasFocus() 
-				&& m_dte_date->focusSection()==(m_dte_date->sectionCount()-1))
+				&& m_dte_date->focusSection()==int(m_dte_date->sectionCount()-1))
 			{
 				m_dte_date->setFocusSection(0); //to avoid h-scrolling
 				m_timeEdit->setFocus();
@@ -239,7 +239,7 @@ void KexiDateTimeTableEdit::acceptDate()
 
 bool KexiDateTimeTableEdit::cursorAtStart()
 {
-#if QDateTimeEditor_HACK
+#ifdef QDateTimeEditor_HACK
 	return m_dte_date && m_dateEdit->hasFocus() && m_dte_date->focusSection()==0;
 #else
 	return false;
@@ -248,9 +248,9 @@ bool KexiDateTimeTableEdit::cursorAtStart()
 
 bool KexiDateTimeTableEdit::cursorAtEnd()
 {
-#if QDateTimeEditor_HACK
+#ifdef QDateTimeEditor_HACK
 	return m_dte_time && m_timeEdit->hasFocus() 
-		&& m_dte_time->focusSection()==(m_dte_time->sectionCount()-1);
+		&& m_dte_time->focusSection()==int(m_dte_time->sectionCount()-1);
 #else
 	return false;
 #endif

@@ -33,10 +33,9 @@ class KexiAlterTableDialog : public KexiDataTable
 	Q_OBJECT
 
 	public:
-		/*! Creates alter table dialog. \a table may be NULL 
-		 if new table should be composed instead of altering existing one. */
+		/*! Creates a new alter table dialog. */
 		KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, 
-			KexiDB::TableSchema *table, const char *name = 0);
+			const char *name = 0);
 
 		virtual ~KexiAlterTableDialog();
 

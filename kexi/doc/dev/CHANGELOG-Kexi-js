@@ -231,6 +231,9 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 - add action "restore original column order"
 - add possibility of renaming column by 1) dbl-clicking header 2) "rename column" action
 - more actions (as in Format and Insert menus of MSA2k3)
+- add own impl. (based on Qt) for date/time editor because:
+-- no focusSection(), etc. is available in current impl.
+-- frames cannot be easily removed
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -374,6 +377,12 @@ TableView
 CCMAIL: dkite@shaw.ca
 
 ===================== Kexi 0.1 Beta 5 "Helloween" =====================
+
+2004-10-25
+- defines moved from Makefile.global
+- minor compile fixes and some warnings removed
+TableView
+- datatimeedit hack disabled for !win32
 
 2004-10-22
 TableView
