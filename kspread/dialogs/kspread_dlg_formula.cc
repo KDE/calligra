@@ -658,6 +658,7 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
         result->setFocus();
         result->setCursorPosition(pos+functions->text(functions->currentItem()).length()+2);
     }
+    slotChangeText( "" );
 }
 
 void KSpreadDlgFormula::slotSelected( const QString& function )
