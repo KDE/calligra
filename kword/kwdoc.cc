@@ -1658,6 +1658,7 @@ void KWDocument::processAnchorRequests()
 void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
 {
     m_pasteFramesetsMap = new QMap<QString, QString>();
+    QList<KWFrameSet> frameSetsToFinalize;
     int ref=0;
 
     QDomElement elem = topElem.firstChild().toElement();
@@ -1681,6 +1682,9 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
             fs = loadFrameSet( elem, false );
             frameElem = elem.namedItem( "FRAME" ).toElement();
         }
+
+        if ( frameSetsToFinalize.findRef( fs ) == -1 )
+            frameSetsToFinalize.append( fs );
         // Test commented out since the toplevel element can contain "PARAGRAPH" now
         //else
         //kdWarning(32001) << "Unsupported toplevel-element in KWCanvas::pasteFrames : '" << elem.tagName() << "'" << endl;
@@ -1699,13 +1703,12 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
             newName = generateFramesetName( newName+"-%1" );
             m_pasteFramesetsMap->insert( fs->getName(), newName ); // remember the name transformation
             fs->setName( newName );
-            fs->addFrame( frame );
+            fs->addFrame( frame, false );
             if ( macroCmd )
             {
                 KWCreateFrameCommand *cmd = new KWCreateFrameCommand( QString::null, frame );
                 macroCmd->addCommand(cmd);
             }
-            fs->finalize();
             int type=0;
             // Please move this to some common method somewhere (e.g. in KWDocument) (David)
             switch(fs->type())
@@ -1733,6 +1736,11 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
     }
     processImageRequests();
     processAnchorRequests();
+
+    // Finalize afterwards - especially in case of inline frames, made them inline in processAnchorRequests
+    for ( QListIterator<KWFrameSet> fit( frameSetsToFinalize ); fit.current(); ++fit )
+        fit.current()->finalize();
+
     repaintAllViews();
     refreshDocStructure(ref);
     delete m_pasteFramesetsMap;
