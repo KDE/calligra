@@ -1238,6 +1238,16 @@ KSpreadValue Formula::eval() const
 #if 0    
   Function* function;
 #endif
+  if( d->dirty )
+  {
+    Tokens tokens = scan( d->expression );
+    d->valid = tokens.valid();
+    if( tokens.valid() )
+      compile( tokens );
+  }
+  
+  if( !d->valid )
+    return KSpreadValue::errorVALUE();
 
   for( unsigned pc = 0; pc < d->codes.count(); pc++ )
   {
