@@ -330,3 +330,7 @@ Reggie, 22.6.1999:
 ------------------
 - Activating/Deactivating embedded parts works now
   (no crashes anymore :-)
+
+Reggie, 23.6.1999:
+------------------
+- Don't flicker when resizing the page

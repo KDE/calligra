@@ -65,6 +65,8 @@
 Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
     : QWidget( parent, name )
 {
+    setWFlags( WResizeNoErase );
+    
     if ( parent )
     {
         mousePressed = false;
@@ -1836,6 +1838,7 @@ void Page::stopScreenPresentation()
     repaint( true );
     setToolEditMode( toolEditMode );
     tmpObjs.clear();
+    setWFlags( WResizeNoErase );
 }
 
 /*========================== next ================================*/
