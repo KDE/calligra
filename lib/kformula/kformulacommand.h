@@ -45,7 +45,7 @@ KFORMULA_NAMESPACE_BEGIN
  *
  * If you don't like what you've done feel free to @ref unexecute .
  */
-class Command : public KCommand
+class Command : public KNamedCommand
 {
 public:
 

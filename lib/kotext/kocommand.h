@@ -35,11 +35,11 @@ class KoTextDocument;
  * on the KoTextObject. Since one KCommand is created for each
  * command there, the two simply map.
  */
-class KoTextCommand : public KCommand
+class KoTextCommand : public KNamedCommand
 {
 public:
     KoTextCommand( KoTextObject * textobj, const QString & name ) :
-        KCommand( name ), m_textobj(textobj) {}
+        KNamedCommand( name ), m_textobj(textobj) {}
     ~KoTextCommand() {}
 
     virtual void execute();

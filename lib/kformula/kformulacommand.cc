@@ -35,7 +35,7 @@ KFORMULA_NAMESPACE_BEGIN
 int Command::evilDestructionCount = 0;
 
 Command::Command(const QString &name, Container* document)
-        : KCommand(name), cursordata(0), undocursor(0), doc(document)
+        : KNamedCommand(name), cursordata(0), undocursor(0), doc(document)
 {
     evilDestructionCount++;
 }

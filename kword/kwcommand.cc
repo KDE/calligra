@@ -213,7 +213,7 @@ FrameIndex::FrameIndex( KWFrame *frame )
 }
 
 KWFrameBorderCommand::KWFrameBorderCommand( const QString &name, QPtrList<FrameIndex> &_listFrameIndex, QPtrList<FrameBorderTypeStruct> &_frameTypeBorder,const KoBorder & _newBorder):
-    KCommand(name),
+    KNamedCommand(name),
     m_indexFrame(_listFrameIndex),
     m_oldBorderFrameType(_frameTypeBorder),
     m_newBorder( _newBorder)
@@ -318,7 +318,7 @@ void KWFrameBorderCommand::unexecute()
 }
 
 KWFrameBackGroundColorCommand::KWFrameBackGroundColorCommand( const QString &name, QPtrList<FrameIndex> &_listFrameIndex, QPtrList<QBrush> &_oldBrush,const QBrush & _newColor ):
-    KCommand(name),
+    KNamedCommand(name),
     m_indexFrame(_listFrameIndex),
     m_oldBackGroundColor(_oldBrush),
     m_newColor( _newColor)
@@ -361,7 +361,7 @@ void KWFrameBackGroundColorCommand::unexecute()
 
 
 KWFrameResizeCommand::KWFrameResizeCommand( const QString &name, FrameIndex _frameIndex, FrameResizeStruct _frameResize ) :
-    KCommand(name),
+    KNamedCommand(name),
     m_indexFrame(_frameIndex),
     m_FrameResize(_frameResize)
 {
@@ -432,7 +432,7 @@ void KWFrameResizeCommand::unexecute()
 }
 
 KWFrameChangePictureClipartCommand::KWFrameChangePictureClipartCommand( const QString &name, FrameIndex _frameIndex, const QString & _oldFile, const QString &_newFile, bool _isAPicture ) :
-    KCommand(name),
+    KNamedCommand(name),
     m_indexFrame(_frameIndex),
     m_oldFile(_oldFile),
     m_newFile(_newFile),
@@ -483,7 +483,7 @@ void KWFrameChangePictureClipartCommand::unexecute()
 
 
 KWFramePartMoveCommand::KWFramePartMoveCommand( const QString &name, FrameIndex _frameIndex,  FrameResizeStruct _frameMove ) :
-    KCommand(name),
+    KNamedCommand(name),
     m_indexFrame(_frameIndex),
     m_frameMove(_frameMove)
 {
@@ -522,7 +522,7 @@ bool KWFramePartMoveCommand::frameMoved()
 }
 
 KWFrameMoveCommand::KWFrameMoveCommand( const QString &name, QPtrList<FrameIndex> &_frameIndex, QPtrList<FrameResizeStruct>&_frameMove  ) :
-    KCommand(name),
+    KNamedCommand(name),
     m_indexFrame(_frameIndex),
     m_frameMove(_frameMove)
 {
@@ -598,7 +598,7 @@ void KWFrameMoveCommand::unexecute()
 }
 
 KWFramePropertiesCommand::KWFramePropertiesCommand( const QString &name, KWFrame *_frameBefore,  KWFrame *_frameAfter ) :
-    KCommand(name),
+    KNamedCommand(name),
     m_frameIndex( _frameAfter ),
     m_frameBefore(_frameBefore),
     m_frameAfter(_frameAfter->getCopy())
@@ -657,7 +657,7 @@ void KWFramePropertiesCommand::unexecute()
 
 
 KWFrameSetPropertyCommand::KWFrameSetPropertyCommand( const QString &name, KWFrameSet *frameset, Property prop, const QString& value ) :
-    KCommand(name),
+    KNamedCommand(name),
     m_pFrameSet( frameset ),
     m_property( prop ),
     m_value( value )
@@ -726,7 +726,7 @@ void KWFrameSetPropertyCommand::unexecute()
 }
 
 KWPageLayoutCommand::KWPageLayoutCommand( const QString &name,KWDocument *_doc,pageLayout &_oldLayout, pageLayout &_newLayout  ) :
-    KCommand(name),
+    KNamedCommand(name),
     m_pDoc(_doc),
     m_OldLayout(_oldLayout),
     m_NewLayout(_newLayout)
@@ -753,7 +753,7 @@ void KWPageLayoutCommand::unexecute()
 
 
 KWDeleteFrameCommand::KWDeleteFrameCommand( const QString &name, KWFrame * frame ):
-    KCommand(name),
+    KNamedCommand(name),
     m_frameIndex( frame ),
     m_copyFrame( frame->getCopy() )
 {
@@ -800,7 +800,7 @@ KWCreateFrameCommand::KWCreateFrameCommand( const QString &name, KWFrame * frame
 
 
 KWUngroupTableCommand::KWUngroupTableCommand( const QString &name, KWTableFrameSet * _table ):
-    KCommand(name),
+    KNamedCommand(name),
     m_pTable(_table)
 {
     m_ListFrame.clear();
@@ -860,7 +860,7 @@ void KWUngroupTableCommand::unexecute()
 
 
 KWDeleteTableCommand::KWDeleteTableCommand( const QString &name, KWTableFrameSet * _table ):
-    KCommand(name),
+    KNamedCommand(name),
     m_pTable(_table)
 {
     Q_ASSERT(m_pTable);
@@ -890,7 +890,7 @@ void KWDeleteTableCommand::unexecute()
 
 
 KWInsertColumnCommand::KWInsertColumnCommand( const QString &name, KWTableFrameSet * _table, int _col ):
-    KCommand(name),
+    KNamedCommand(name),
     m_pTable(_table),
     m_colPos(_col)
 {
@@ -933,7 +933,7 @@ void KWInsertColumnCommand::unexecute()
 
 
 KWInsertRowCommand::KWInsertRowCommand( const QString &name, KWTableFrameSet * _table, int _row ):
-    KCommand(name),
+    KNamedCommand(name),
     m_pTable(_table),
     m_rowPos(_row)
 {
@@ -977,7 +977,7 @@ void KWInsertRowCommand::unexecute()
 
 
 KWRemoveRowCommand::KWRemoveRowCommand( const QString &name, KWTableFrameSet * _table, int _row ):
-    KCommand(name),
+    KNamedCommand(name),
     m_pTable(_table),
     m_rowPos(_row)
 {
@@ -1023,7 +1023,7 @@ void KWRemoveRowCommand::unexecute()
 
 
 KWRemoveColumnCommand::KWRemoveColumnCommand( const QString &name, KWTableFrameSet * _table, int _col ):
-    KCommand(name),
+    KNamedCommand(name),
     m_pTable(_table),
     m_colPos(_col)
 {
@@ -1070,7 +1070,7 @@ void KWRemoveColumnCommand::unexecute()
 
 
 KWSplitCellCommand::KWSplitCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd ):
-    KCommand(name),
+    KNamedCommand(name),
     m_pTable(_table),
     m_colBegin(colBegin),
     m_rowBegin(rowBegin),
@@ -1134,7 +1134,7 @@ void KWSplitCellCommand::unexecute()
 
 
 KWJoinCellCommand::KWJoinCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd, QPtrList<KWFrameSet> listFrameSet,QPtrList<KWFrame> listCopyFrame):
-    KCommand(name),
+    KNamedCommand(name),
     m_pTable(_table),
     m_colBegin(colBegin),
     m_rowBegin(rowBegin),
@@ -1172,7 +1172,7 @@ void KWJoinCellCommand::unexecute()
 
 
 KWChangeStartingPageCommand::KWChangeStartingPageCommand( const QString &name, KWDocument *_doc, int _oldStartingPage, int _newStartingPage):
-    KCommand(name),
+    KNamedCommand(name),
     m_doc(_doc),
     oldStartingPage(_oldStartingPage),
     newStartingPage(_newStartingPage)
@@ -1192,7 +1192,7 @@ void KWChangeStartingPageCommand::unexecute()
 }
 
 KWChangeDisplayLinkCommand::KWChangeDisplayLinkCommand( const QString &name, KWDocument *_doc, bool _oldDisplay,bool _newDisplay):
-    KCommand(name),
+    KNamedCommand(name),
     m_doc(_doc),
     m_bOldDisplay(_oldDisplay),
     m_bNewDisplay(_newDisplay)
@@ -1212,7 +1212,7 @@ void KWChangeDisplayLinkCommand::unexecute()
 }
 
 KWChangeCustomVariableValue::KWChangeCustomVariableValue( const QString &name, KWDocument *_doc,const QString & _oldValue, const QString & _newValue,KoCustomVariable *var):
-    KCommand(name),
+    KNamedCommand(name),
     m_doc(_doc),
     newValue(_newValue),
     oldValue(_oldValue),

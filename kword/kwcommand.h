@@ -72,7 +72,7 @@ struct FrameBorderTypeStruct {
 /**
  * Command created when changing frame border
  */
-class KWFrameBorderCommand : public KCommand
+class KWFrameBorderCommand : public KNamedCommand
 {
 public:
     KWFrameBorderCommand( const QString &name, QPtrList<FrameIndex> &_listFrameIndex, QPtrList<FrameBorderTypeStruct> &_frameTypeBorder,const KoBorder & _newBorder ) ;
@@ -90,7 +90,7 @@ protected:
 /**
  * Command created when changing background color of one or more frames
  */
-class KWFrameBackGroundColorCommand : public KCommand
+class KWFrameBackGroundColorCommand : public KNamedCommand
 {
 public:
     KWFrameBackGroundColorCommand( const QString &name, QPtrList<FrameIndex> &_listFrameIndex, QPtrList<QBrush> &_oldBrush, const QBrush & _newColor ) ;
@@ -113,7 +113,7 @@ struct FrameResizeStruct {
 /**
  * Command created when a frame is resized
  */
-class KWFrameResizeCommand : public KCommand
+class KWFrameResizeCommand : public KNamedCommand
 {
 public:
     KWFrameResizeCommand( const QString &name, FrameIndex _frameIndex, FrameResizeStruct _frameResize ) ;
@@ -130,7 +130,7 @@ protected:
 /**
  * Command created when we changed a clipart or picture
  */
-class KWFrameChangePictureClipartCommand : public KCommand
+class KWFrameChangePictureClipartCommand : public KNamedCommand
 {
 public:
     KWFrameChangePictureClipartCommand( const QString &name, FrameIndex _frameIndex, const QString & _oldFile, const QString &_newFile, bool _isAPicture) ;
@@ -149,7 +149,7 @@ protected:
 /**
  * Command created when one or more frames are moved
  */
-class KWFrameMoveCommand : public KCommand
+class KWFrameMoveCommand : public KNamedCommand
 {
 public:
     KWFrameMoveCommand( const QString &name,QPtrList<FrameIndex> &_frameIndex,QPtrList<FrameResizeStruct>&_frameMove ) ;
@@ -169,7 +169,7 @@ protected:
  * In the long run, KWFrameBackGroundColorCommand, KWFrameBorderCommand etc.
  * could be removed and KWFramePropertiesCommand could be used instead.
  */
-class KWFramePropertiesCommand : public KCommand
+class KWFramePropertiesCommand : public KNamedCommand
 {
 public:
     KWFramePropertiesCommand( const QString &name, KWFrame *_frameBefore,  KWFrame *_frameAfter );
@@ -186,7 +186,7 @@ protected:
 /**
  * Command created when one part is moved or resized
  */
-class KWFramePartMoveCommand : public KCommand
+class KWFramePartMoveCommand : public KNamedCommand
 {
 public:
     KWFramePartMoveCommand( const QString &name,FrameIndex _frameIndex,FrameResizeStruct _frameMove ) ;
@@ -204,7 +204,7 @@ protected:
 /**
  * This command changes one property of a frameset.
  */
-class KWFrameSetPropertyCommand : public KCommand
+class KWFrameSetPropertyCommand : public KNamedCommand
 {
 public:
     enum Property { FSP_NAME, FSP_FLOATING, FSP_KEEPASPECTRATION };
@@ -234,7 +234,7 @@ struct pageLayout {
 /**
  * Command created when changing the page layout
  */
-class KWPageLayoutCommand : public KCommand
+class KWPageLayoutCommand : public KNamedCommand
 {
 public:
     KWPageLayoutCommand( const QString &name, KWDocument *_doc, pageLayout &_oldLayout, pageLayout &_newLayout);
@@ -252,7 +252,7 @@ protected:
 /**
  * Command created when deleting a frame
  */
-class KWDeleteFrameCommand : public KCommand
+class KWDeleteFrameCommand : public KNamedCommand
 {
 public:
     KWDeleteFrameCommand( const QString &name, KWFrame * frame) ;
@@ -281,7 +281,7 @@ public:
 /**
  * Command created when ungrouping a table
  */
-class KWUngroupTableCommand : public KCommand
+class KWUngroupTableCommand : public KNamedCommand
 {
 public:
     KWUngroupTableCommand( const QString &name, KWTableFrameSet * _table) ;
@@ -297,7 +297,7 @@ protected:
 /**
  * Command created when deleting a table
  */
-class KWDeleteTableCommand : public KCommand
+class KWDeleteTableCommand : public KNamedCommand
 {
 public:
     KWDeleteTableCommand( const QString &name, KWTableFrameSet * _table) ;
@@ -327,7 +327,7 @@ public:
 /**
  * Command created when inserting a column
  */
-class KWInsertColumnCommand : public KCommand
+class KWInsertColumnCommand : public KNamedCommand
 {
 public:
     KWInsertColumnCommand( const QString &name, KWTableFrameSet * _table, int _pos);
@@ -345,7 +345,7 @@ protected:
 /**
  * Command created when inserting a row
  */
-class KWInsertRowCommand : public KCommand
+class KWInsertRowCommand : public KNamedCommand
 {
 public:
     KWInsertRowCommand( const QString &name, KWTableFrameSet * _table, int _pos);
@@ -362,7 +362,7 @@ protected:
 /**
  * Command created when removing a row
  */
-class KWRemoveRowCommand : public KCommand
+class KWRemoveRowCommand : public KNamedCommand
 {
 public:
     KWRemoveRowCommand( const QString &name, KWTableFrameSet * _table, int _pos);
@@ -381,7 +381,7 @@ protected:
 /**
  * Command created when removing a column
  */
-class KWRemoveColumnCommand : public KCommand
+class KWRemoveColumnCommand : public KNamedCommand
 {
 public:
     KWRemoveColumnCommand( const QString &name, KWTableFrameSet * _table, int _pos);
@@ -399,7 +399,7 @@ protected:
 /**
  * Command created when splitting a cell
  */
-class KWSplitCellCommand : public KCommand
+class KWSplitCellCommand : public KNamedCommand
 {
 public:
     KWSplitCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd );
@@ -419,7 +419,7 @@ protected:
 /**
  * Command created when joining cells
  */
-class KWJoinCellCommand : public KCommand
+class KWJoinCellCommand : public KNamedCommand
 {
 public:
     KWJoinCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd, QPtrList<KWFrameSet> listFrameSet,QPtrList<KWFrame> listCopyFrame);
@@ -440,7 +440,7 @@ protected:
 /**
  * Command to starting page setting
  */
-class KWChangeStartingPageCommand : public KCommand
+class KWChangeStartingPageCommand : public KNamedCommand
 {
 public:
     KWChangeStartingPageCommand( const QString &name, KWDocument *_doc, int _oldStartingPage, int _newStartingPage);
@@ -457,7 +457,7 @@ protected:
 /**
  * Command to display link setting
  */
-class KWChangeDisplayLinkCommand : public KCommand
+class KWChangeDisplayLinkCommand : public KNamedCommand
 {
 public:
     KWChangeDisplayLinkCommand( const QString &name, KWDocument *_doc, bool _oldDisplay, bool _newDisplay);
@@ -471,7 +471,7 @@ protected:
     bool m_bNewDisplay;
 };
 
-class KWChangeCustomVariableValue : public KCommand
+class KWChangeCustomVariableValue : public KNamedCommand
 {
  public:
     KWChangeCustomVariableValue( const QString &name, KWDocument *_doc,const QString & _oldValue, const QString & _newValue, KoCustomVariable *var);
