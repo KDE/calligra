@@ -782,6 +782,27 @@ static bool kspread_convert_pressure( const QString& fromUnit,
   return true;
 }
 
+static bool kspread_convert_force( const QString& fromUnit,
+  const QString& toUnit, double value, double& result )
+{
+  static QMap<QString, double> forceMap;
+
+  // first-time initialization
+  if( forceMap.isEmpty() )
+  {
+    forceMap[ "N" ]      = 1.0; // Newton (reference)
+    forceMap[ "dyn" ]    = 1.0e5; // dyn
+    forceMap[ "pond" ]   = 1.019716e2; // pond
+  }
+
+  if( !forceMap.contains( fromUnit ) ) return false;
+  if( !forceMap.contains( toUnit ) ) return false;
+
+  result = value * forceMap[ toUnit ] / forceMap[ fromUnit ];
+
+  return true;
+}
+
 static bool kspread_convert_energy( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -861,7 +882,8 @@ bool kspreadfunc_convert( KSContext& context )
     if( !kspread_convert_distance( fromUnit, toUnit, value, result ) )
       if( !kspread_convert_temperature( fromUnit, toUnit, value, result ) )
         if( !kspread_convert_pressure( fromUnit, toUnit, value, result ) )
-          if( !kspread_convert_energy( fromUnit, toUnit, value, result ) )
+          if( !kspread_convert_force( fromUnit, toUnit, value, result ) )
+            if( !kspread_convert_energy( fromUnit, toUnit, value, result ) )
             return false;
 
   context.setValue( new KSValue( result ) );
