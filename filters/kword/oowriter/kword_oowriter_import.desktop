@@ -1,19 +1,22 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Service
-Name=oowriter Import Filter for KSpread
+Name=OpenWriter Import Filter for KWord
 Name[bg]=Филтър за импорт от oowriter в KSpread
 Name[ca]=Filtre d'importació OOwriter per a KSpread
 Name[da]=oowriter importfilter for KSpread
+Name[el]=Φίλτρο εισαγωγής oowriter του KSpread
 Name[es]=Filtro de importación oowriter para KSpread
 Name[et]=KSpreadi oowriteri importfilter
 Name[fr]=Filtre d'importation oowriter pour KSpread
 Name[hu]=Oowriter importszűrő a KSpreadhez
 Name[it]=Filtro di importazione oowriter per KSpread
 Name[ja]=KSpread用 oowriter インポートフィルター
+Name[lo]= ຕົວຕອງການນຳເຂົ້າ CSV ຂອງກະດາດຄຳນວນ K
+Name[lv]=oowriter Importa Filtrs priek?? KSpread
 Name[nb]=OOo-Writer-importfilter for KSpread
 Name[pl]=Filtr importu formatu oowriter do KSpread
-Name[pt]=Filtro de importação do oowriter para o KSpread
+Name[pt]=Filtro de Importação do oowriter para o KSpread
 Name[pt_BR]=Filtro de Importação oowriter para o KSpread
 Name[ru]=Фильтр импорта oowriter в KSpread
 Name[sk]=Filter pre import oowriter pre KSpread
