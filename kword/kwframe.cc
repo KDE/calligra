@@ -1334,7 +1334,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
     }
     else
     {
-        if ( frame->bLeft() || frame->bTop() || frame->bRight() || frame->bBottom() )
+        if ( frame && (frame->bLeft() || frame->bTop() || frame->bRight() || frame->bBottom()) )
             drawMargins( frame, painter, outerCRect, cg, viewMode );
         painter->save();
         painter->translate( translationOffset.x(), translationOffset.y() );
