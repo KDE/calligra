@@ -130,7 +130,7 @@ namespace KexiDB
 
 	/*! \return identifier for object \a objName of type \a objType
 	 or 0 if such object does not exist. */
-	int idForObjectName( Connection &conn, const QString& objName, int objType );
+	KEXI_DB_EXPORT int idForObjectName( Connection &conn, const QString& objName, int objType );
 }
 
 #endif
