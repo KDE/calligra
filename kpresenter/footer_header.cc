@@ -54,7 +54,6 @@
 KPFooterHeaderEditor::KPFooterHeaderEditor( KPresenterDoc *_doc )
     : QVBox( 0L ), _allowClose( false )
 {
-#if 0
     setMargin( 10 );
 
     doc = _doc;
@@ -84,41 +83,33 @@ KPFooterHeaderEditor::KPFooterHeaderEditor( KPresenterDoc *_doc )
 
     connect( tabwidget, SIGNAL( selected( const QString & ) ),
 	     this, SLOT( tabSelected( const QString & ) ) );
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::tabSelected( const QString &s )
 {
-#if 0
     if ( s == i18n( "&Header" ) )
 	doc->header()->getKTextObject()->setFocus();
     else
 	doc->footer()->getKTextObject()->setFocus();
-#endif
 }
 
 /*================================================================*/
 KPFooterHeaderEditor::~KPFooterHeaderEditor()
 {
-#if 0
     doc->header()->getKTextObject()->reparent( 0L, 0, QPoint( 0, 0 ), false );
     doc->footer()->getKTextObject()->reparent( 0L, 0, QPoint( 0, 0 ), false );
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::updateSizes()
 {
-#if 0
     updateGeometry();
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::setupHeader()
 {
-#if 0
     QVBox *back = new QVBox( tabwidget );
 
     QHBox *tool1 = new QHBox( back );
@@ -218,12 +209,12 @@ void KPFooterHeaderEditor::setupHeader()
     htool2->setMaximumHeight(tool1->maximumHeight());
     htool2->setMinimumHeight(tool1->maximumHeight());
 
-    connect( doc->header()->getKTextObject(), SIGNAL( fontChanged( QFont* ) ),
-	     this, SLOT( headerFontChanged( QFont* ) ) );
-    connect( doc->header()->getKTextObject(), SIGNAL( colorChanged( QColor* ) ),
-	     this, SLOT( headerColorChanged( QColor* ) ) );
-    connect( doc->header()->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
-	     this, SLOT( headerAlignChanged( TxtParagraph::HorzAlign ) ) );
+    connect( doc->header()->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
+	     this, SLOT( headerFontChanged( const QFont & ) ) );
+    connect( doc->header()->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
+	     this, SLOT( headerColorChanged( const QColor & ) ) );
+    connect( doc->header()->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
+	     this, SLOT( headerAlignChanged( int ) ) );
 
     // iiiiiiii: I hate such things..
     back->setMinimumWidth( 550 );
@@ -237,13 +228,11 @@ void KPFooterHeaderEditor::setupHeader()
     doc->header()->getKTextObject()->setBackgroundColor( Qt::white );
 
     tabwidget->addTab( back, i18n( "&Header" ) );
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::setupFooter()
 {
-#if 0
     QVBox *back = new QVBox( tabwidget );
 
     QHBox *tool1 = new QHBox( back );
@@ -343,12 +332,12 @@ void KPFooterHeaderEditor::setupFooter()
     ftool2->setMaximumHeight(tool1->maximumHeight());
     ftool2->setMinimumHeight(tool1->maximumHeight());
 
-    connect( doc->footer()->getKTextObject(), SIGNAL( fontChanged( QFont* ) ),
-	     this, SLOT( footerFontChanged( QFont* ) ) );
-    connect( doc->footer()->getKTextObject(), SIGNAL( colorChanged( QColor* ) ),
-	     this, SLOT( footerColorChanged( QColor* ) ) );
-    connect( doc->footer()->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
-	     this, SLOT( footerAlignChanged( TxtParagraph::HorzAlign ) ) );
+    connect( doc->footer()->getKTextObject(), SIGNAL( currentFontChanged( const QFont & ) ),
+	     this, SLOT( footerFontChanged( const QFont & ) ) );
+    connect( doc->footer()->getKTextObject(), SIGNAL( currentColorChanged( const QColor & ) ),
+	     this, SLOT( footerColorChanged( const QColor & ) ) );
+    connect( doc->footer()->getKTextObject(), SIGNAL( currentAlignmentChanged( int ) ),
+	     this, SLOT( footerAlignChanged( int ) ) );
 
     // iiiiiiii: I hate such things..
     back->setMinimumWidth( 550 );
@@ -362,51 +351,41 @@ void KPFooterHeaderEditor::setupFooter()
     doc->footer()->getKTextObject()->setBackgroundColor( Qt::white );
 
     tabwidget->addTab( back, i18n( "&Footer" ) );
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::slotShowHeader()
 {
-#if 0
     //showHeader->setChecked( !showHeader->isChecked() );
     doc->setHeader( showHeader->isChecked() );
     penBrush1->setEnabled( showHeader->isChecked() );
     slotUpdatePage();
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::slotShowFooter()
 {
-#if 0
     //showFooter->setChecked( !showFooter->isChecked() );
     doc->setFooter( showFooter->isChecked() );
     penBrush2->setEnabled( showFooter->isChecked() );
     slotUpdatePage();
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::slotUpdatePage()
 {
-#if 0
     doc->repaint( false );
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::slotCloseDia()
 {
-#if 0
     hide();
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::slotHeaderPenBrush()
 {
-#if 0
     KPTextObject *header = doc->header();
 
     StyleDia *styleDia = new StyleDia( 0, "StyleDia" );
@@ -425,8 +404,7 @@ void KPFooterHeaderEditor::slotHeaderPenBrush()
 			   header->getGYFactor() );
     styleDia->setCaption( i18n( "Configure Header Frame and Background" ) );
 
-    if ( styleDia->exec() == QDialog::Accepted )
-    {
+    if ( styleDia->exec() == QDialog::Accepted ) {
 	header->setPen( styleDia->getPen() );
 	header->setBrush( styleDia->getBrush() );
 	header->setFillType( styleDia->getFillType() );
@@ -440,13 +418,11 @@ void KPFooterHeaderEditor::slotHeaderPenBrush()
 
     delete styleDia;
     slotUpdatePage();
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::slotFooterPenBrush()
 {
-#if 0
     KPTextObject *footer = doc->footer();
 
     StyleDia *styleDia = new StyleDia( 0, "StyleDia" );
@@ -465,8 +441,7 @@ void KPFooterHeaderEditor::slotFooterPenBrush()
 			   footer->getGYFactor() );
     styleDia->setCaption( i18n( "Configure Footer Frame and Background" ) );
 
-    if ( styleDia->exec() == QDialog::Accepted )
-    {
+    if ( styleDia->exec() == QDialog::Accepted ) {
 	footer->setPen( styleDia->getPen() );
 	footer->setBrush( styleDia->getBrush() );
 	footer->setFillType( styleDia->getFillType() );
@@ -480,110 +455,84 @@ void KPFooterHeaderEditor::slotFooterPenBrush()
 
     delete styleDia;
     slotUpdatePage();
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerFont( const QString &f )
 {
-#if 0
     QFont fn = doc->header()->getKTextObject()->font();
     fn.setFamily( f );
     doc->header()->getKTextObject()->setFont( fn );
     doc->header()->getKTextObject()->setFocus();
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerSize( const QString &s )
 {
-#if 0
     QFont fn = doc->header()->getKTextObject()->font();
     fn.setPointSize( atoi( s ) );
     doc->header()->getKTextObject()->setFont( fn );
     doc->header()->getKTextObject()->setFocus();
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerBold()
 {
-#if 0
-    QFont fn = doc->header()->getKTextObject()->font();
-    fn.setBold( htool2->isButtonOn( h_bold ) );
-    doc->header()->getKTextObject()->setFont( fn );
-#endif
+    doc->header()->getKTextObject()->setBold( htool2->isButtonOn( h_bold ) );
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerItalic()
 {
-#if 0
-    QFont fn = doc->header()->getKTextObject()->font();
-    fn.setItalic( htool2->isButtonOn( h_italic ) );
-    doc->header()->getKTextObject()->setFont( fn );
-#endif
+    doc->header()->getKTextObject()->setItalic( htool2->isButtonOn( h_italic ) );
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerUnderline()
 {
-#if 0
-    QFont fn = doc->header()->getKTextObject()->font();
-    fn.setUnderline( htool2->isButtonOn( h_underline ) );
-    doc->header()->getKTextObject()->setFont( fn );
-#endif
+    doc->header()->getKTextObject()->setUnderline( htool2->isButtonOn( h_underline ) );
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerColor()
 {
-#if 0
     QColor col = doc->header()->getKTextObject()->color();
-    if ( KColorDialog::getColor( col ) )
-    {
+    if ( KColorDialog::getColor( col ) ) {
 	QPixmap pix( 18, 18 );
 	pix.fill( col );
 	doc->header()->getKTextObject()->setColor( col );
 	htool2->setButtonPixmap( h_color, pix );
     }
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerAlignLeft()
 {
-#if 0
-    doc->header()->getKTextObject()->setHorzAlign( TxtParagraph::LEFT );
+    doc->header()->getKTextObject()->setAlignment( Qt::AlignLeft );
 
     htool2->setButton( h_aleft, true );
     htool2->setButton( h_acenter, false );
     htool2->setButton( h_aright, false );
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerAlignCenter()
 {
-#if 0
-    doc->header()->getKTextObject()->setHorzAlign( TxtParagraph::CENTER );
+    doc->header()->getKTextObject()->setAlignment( Qt::AlignCenter );
 
     htool2->setButton( h_aleft, false );
     htool2->setButton( h_acenter, true );
     htool2->setButton( h_aright, false );
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerAlignRight()
 {
-#if 0
-    doc->header()->getKTextObject()->setHorzAlign( TxtParagraph::RIGHT );
+    doc->header()->getKTextObject()->setAlignment( Qt::AlignRight );
 
     htool2->setButton( h_aleft, false );
     htool2->setButton( h_acenter, false );
     htool2->setButton( h_aright, true );
-#endif
 }
 
 /*================================================================*/
@@ -597,116 +546,88 @@ void KPFooterHeaderEditor::headerInsertPageNum()
 /*================================================================*/
 void KPFooterHeaderEditor::footerFont( const QString &f )
 {
-#if 0
     QFont fn = doc->footer()->getKTextObject()->font();
     fn.setFamily( f );
     doc->footer()->getKTextObject()->setFont( fn );
     doc->footer()->getKTextObject()->setFocus();
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerSize( const QString &s )
 {
-#if 0
     QFont fn = doc->footer()->getKTextObject()->font();
     fn.setPointSize( atoi( s ) );
     doc->footer()->getKTextObject()->setFont( fn );
-    doc->footer()->getKTextObject()->setFocus();
-#endif
+   doc->footer()->getKTextObject()->setFocus();
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerBold()
 {
-#if 0
-    QFont fn = doc->footer()->getKTextObject()->font();
-    fn.setBold( ftool2->isButtonOn( f_bold ) );
-    doc->footer()->getKTextObject()->setFont( fn );
-#endif
+    doc->footer()->getKTextObject()->setBold( ftool2->isButtonOn( f_bold ) );
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerItalic()
 {
-#if 0
-    QFont fn = doc->footer()->getKTextObject()->font();
-    fn.setItalic( ftool2->isButtonOn( f_italic ) );
-    doc->footer()->getKTextObject()->setFont( fn );
-#endif
+    doc->footer()->getKTextObject()->setItalic( ftool2->isButtonOn( f_italic ) );
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerUnderline()
 {
-#if 0
-    QFont fn = doc->footer()->getKTextObject()->font();
-    fn.setUnderline( ftool2->isButtonOn( f_underline ) );
-    doc->footer()->getKTextObject()->setFont( fn );
-#endif
+    doc->footer()->getKTextObject()->setUnderline( ftool2->isButtonOn( f_underline ) );
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerColor()
 {
-#if 0
     QColor col = doc->footer()->getKTextObject()->color();
-    if ( KColorDialog::getColor( col ) )
-    {
+    if ( KColorDialog::getColor( col ) ) {
 	QPixmap pix( 18, 18 );
 	pix.fill( col );
 	doc->footer()->getKTextObject()->setColor( col );
 	ftool2->setButtonPixmap( f_color, pix );
     }
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerAlignLeft()
 {
-#if 0
-    doc->footer()->getKTextObject()->setHorzAlign( TxtParagraph::LEFT );
+    doc->footer()->getKTextObject()->setAlignment( Qt::AlignLeft );
 
     ftool2->setButton( f_aleft, true );
     ftool2->setButton( f_acenter, false );
     ftool2->setButton( f_aright, false );
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerAlignCenter()
 {
-#if 0
-    doc->footer()->getKTextObject()->setHorzAlign( TxtParagraph::CENTER );
+    doc->footer()->getKTextObject()->setAlignment( Qt::AlignCenter );
 
     ftool2->setButton( f_aleft, false );
     ftool2->setButton( f_acenter, true );
     ftool2->setButton( f_aright, false );
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerAlignRight()
 {
-#if 0
-    doc->footer()->getKTextObject()->setHorzAlign( TxtParagraph::RIGHT );
+    doc->footer()->getKTextObject()->setAlignment( Qt::AlignRight );
 
     ftool2->setButton( f_aleft, false );
     ftool2->setButton( f_acenter, false );
     ftool2->setButton( f_aright, true );
-#endif
 }
 
 /*================================================================*/
-void KPFooterHeaderEditor::headerFontChanged( QFont *f )
+void KPFooterHeaderEditor::headerFontChanged( const QFont &f )
 {
-#if 0
     QComboBox *combo = htool2->getCombo( h_font );
 
-    for ( int i = 0; i < combo->count(); i++ )
-    {
-	if ( combo->text( i ).lower() == f->family().lower() )
-	{
+    for ( int i = 0; i < combo->count(); i++ ) {
+	if ( combo->text( i ).lower() == f.family().lower() ) {
 	    combo->setCurrentItem( i );
 	    break;
 	}
@@ -714,51 +635,41 @@ void KPFooterHeaderEditor::headerFontChanged( QFont *f )
 
     combo = htool2->getCombo( h_size );
 
-    for ( int j = 0; j < combo->count(); j++ )
-    {
-	if ( atoi( combo->text( j ) ) == f->pointSize() )
-	{
+    for ( int j = 0; j < combo->count(); j++ ) {
+	if ( atoi( combo->text( j ) ) == f.pointSize() ) {
 	    combo->setCurrentItem( j );
 	    break;
 	}
     }
 
-    htool2->setButton( h_bold, f->bold() );
-    htool2->setButton( h_italic, f->italic() );
-    htool2->setButton( h_underline, f->underline() );
-#endif
+    htool2->setButton( h_bold, f.bold() );
+    htool2->setButton( h_italic, f.italic() );
+    htool2->setButton( h_underline, f.underline() );
 }
 
 /*================================================================*/
-void KPFooterHeaderEditor::headerColorChanged( QColor *c )
+void KPFooterHeaderEditor::headerColorChanged( const QColor &c )
 {
-#if 0
     QPixmap pix( 18, 18 );
-    pix.fill( *c );
+    pix.fill( c );
     htool2->setButtonPixmap( h_color, pix );
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::headerAlignChanged( int ha )
 {
-#if 0
-    htool2->setButton( h_aleft, ha == TxtParagraph::LEFT );
-    htool2->setButton( h_acenter, ha == TxtParagraph::CENTER );
-    htool2->setButton( h_aright, ha == TxtParagraph::RIGHT );
-#endif
+    htool2->setButton( h_aleft, ( ha & Qt::AlignLeft ) );
+    htool2->setButton( h_acenter, ( ha & Qt::AlignCenter ) );
+    htool2->setButton( h_aright, ( ha & Qt::AlignRight ) );
 }
 
 /*================================================================*/
-void KPFooterHeaderEditor::footerFontChanged( QFont *f )
+void KPFooterHeaderEditor::footerFontChanged( const QFont &f )
 {
-#if 0
     QComboBox *combo = ftool2->getCombo( f_font );
 
-    for ( int i = 0; i < combo->count(); i++ )
-    {
-	if ( combo->text( i ).lower() == f->family().lower() )
-	{
+    for ( int i = 0; i < combo->count(); i++ ) {
+	if ( combo->text( i ).lower() == f.family().lower() ) {
 	    combo->setCurrentItem( i );
 	    break;
 	}
@@ -766,55 +677,44 @@ void KPFooterHeaderEditor::footerFontChanged( QFont *f )
 
     combo = ftool2->getCombo( f_size );
 
-    for ( int j = 0; j < combo->count(); j++ )
-    {
-	if ( atoi( combo->text( j ) ) == f->pointSize() )
-	{
+    for ( int j = 0; j < combo->count(); j++ ) {
+	if ( atoi( combo->text( j ) ) == f.pointSize() ) {
 	    combo->setCurrentItem( j );
 	    break;
 	}
     }
 
-    ftool2->setButton( f_bold, f->bold() );
-    ftool2->setButton( f_italic, f->italic() );
-    ftool2->setButton( f_underline, f->underline() );
-#endif
+    ftool2->setButton( f_bold, f.bold() );
+    ftool2->setButton( f_italic, f.italic() );
+    ftool2->setButton( f_underline, f.underline() );
 }
 
 /*================================================================*/
-void KPFooterHeaderEditor::footerColorChanged( QColor *c )
+void KPFooterHeaderEditor::footerColorChanged( const QColor &c )
 {
-#if 0
     QPixmap pix( 18, 18 );
-    pix.fill( *c );
+    pix.fill( c );
     ftool2->setButtonPixmap( f_color, pix );
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::footerAlignChanged( int ha )
 {
-#if 0
-    ftool2->setButton( f_aleft, ha == TxtParagraph::LEFT );
-    ftool2->setButton( f_acenter, ha == TxtParagraph::CENTER );
-    ftool2->setButton( f_aright, ha == TxtParagraph::RIGHT );
-#endif
+    ftool2->setButton( f_aleft, ( ha & Qt::AlignLeft ) );
+    ftool2->setButton( f_acenter, ( ha & Qt::AlignCenter ) );
+    ftool2->setButton( f_aright, ( ha & Qt::AlignRight ) );
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::setShowHeader( bool b )
 {
-#if 0
     showHeader->setChecked( b );
-#endif
 }
 
 /*================================================================*/
 void KPFooterHeaderEditor::setShowFooter( bool b )
 {
-#if 0
     showFooter->setChecked( b );
-#endif
 }
 
 /*================================================================*/

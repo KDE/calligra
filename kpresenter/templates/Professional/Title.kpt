@@ -50,7 +50,7 @@
        <FONT family="utopia" pointSize="48" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT>  </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>

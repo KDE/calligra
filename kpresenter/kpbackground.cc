@@ -538,10 +538,10 @@ void KPBackGround::drawBackPix( QPainter *_painter )
 /*================================================================*/
 void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 {
-#if 0
     if ( doc->hasHeader() ) {
+
 	QSize s( doc->header()->getKTextObject()->size() );
-	QPoint pnt( doc->header()->getKTextObject()->x(), doc->header()->getKTextObject()->y() );
+	QPoint pnt( doc->header()->getKTextObject()->x(), doc->header()->getKTextObject()->y() ); 
 
 	// #### Reggie: not very efficient but ok for now
 	if ( true /*doc->header()->getKTextObject()->isModified()*/ ) {
@@ -553,24 +553,17 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 	int pgnum = doc->backgroundList()->findRef( this );
 	if ( pgnum == -1 )
 	    pgnum = 0;
+#if 0
 	doc->header()->getKTextObject()->setPageNum( ++pgnum );
+#endif
 	
-	int h = 0;
-	if ( doc->header()->getKTextObject()->isModified() ) {
-	    for ( int i = 0; i < doc->header()->getKTextObject()->paragraphs(); i++ )
-		h += doc->header()->getKTextObject()->paragraphAt( i )->height();
-	    h += 2;
-	    doc->header()->setSize( ext.width(), h );
-	}
+	doc->header()->setSize( ext.width(), doc->header()->getKTextObject()->document()->lastParag()->rect().bottom() + 1 );
 
 	doc->header()->draw( _painter, 0, 0 );
 
 	if ( doc->header()->getKTextObject()->isModified() )
-	    doc->header()->getKTextObject()->resize( s.width(), s.height() );
-
+	    doc->header()->getKTextObject()->resize( s );
 	doc->header()->getKTextObject()->move( pnt.x(), pnt.y() );
-
-	doc->header()->getKTextObject()->toggleModified( false );
     }
 
     if ( doc->hasFooter() ) {
@@ -581,12 +574,8 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 	if ( true ) { //doc->footer()->getKTextObject()->isModified() || footerHeight <= 0 )
 	    doc->footer()->setSize( ext.width(), 10 );
 
-	    int h = 0;
-	    for ( int i = 0; i < doc->footer()->getKTextObject()->paragraphs(); i++ )
-		h += doc->footer()->getKTextObject()->paragraphAt( i )->height();
-	    h += 2;
-	    doc->footer()->setSize( ext.width(), h );
-	    footerHeight = h;
+	    footerHeight = doc->footer()->getKTextObject()->document()->lastParag()->rect().bottom() + 1;
+	    doc->footer()->setSize( ext.width(), footerHeight );
 	}
 
 	doc->footer()->setOrig( _offset.x(), _offset.y() + ext.height() - footerHeight );
@@ -594,18 +583,16 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 	int pgnum = doc->backgroundList()->findRef( this );
 	if ( pgnum == -1 )
 	    pgnum = 0;
+#if 0
 	doc->footer()->getKTextObject()->setPageNum( ++pgnum );
-
+#endif
 	doc->footer()->draw( _painter, 0, 0 );
 
 	if ( doc->footer()->getKTextObject()->isModified() )
 	    doc->footer()->getKTextObject()->resize( s.width(), s.height() );
 
 	doc->footer()->getKTextObject()->move( pnt.x(), pnt.y() );
-
-	doc->footer()->getKTextObject()->toggleModified( false );
     }
-#endif
 }
 
 /*================================================================*/

@@ -115,12 +115,12 @@ protected slots:
     void footerAlignRight();
     void footerInsertPageNum();
 
-    void headerFontChanged( QFont *f );
-    void headerColorChanged( QColor *c );
+    void headerFontChanged( const QFont & );
+    void headerColorChanged( const QColor &c );
     void headerAlignChanged( int ha );
 
-    void footerFontChanged( QFont *f );
-    void footerColorChanged( QColor *c );
+    void footerFontChanged( const QFont &f );
+    void footerColorChanged( const QColor &c );
     void footerAlignChanged( int ha );
 
     void tabSelected( const QString &s );

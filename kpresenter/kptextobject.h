@@ -106,7 +106,7 @@ public:
     virtual void zoom( float _fakt );
     virtual void zoomOrig();
 
-    virtual void extendObject2Contents( KPresenterView *view );
+    virtual void extendObject2Contents( KPresenterView *view = 0 );
 
     void recalcPageNum( KPresenterDoc *doc );
 
