@@ -1328,8 +1328,8 @@ void KoTextDocument::init()
     flow_ = new KoTextFlow;
     flow_->setWidth( cw );
 
-    leftmargin = 4;
-    rightmargin = 4;
+    leftmargin = 0; // 4 in QRT
+    rightmargin = 0; // 4 in QRT
 
     selectionColors[ Standard ] = QApplication::palette().color( QPalette::Active, QColorGroup::Highlight );
     selectionText[ Standard ] = TRUE;
@@ -3513,7 +3513,7 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
     visible = TRUE;
     list_val = -1;
     newLinesAllowed = FALSE;
-    lastInFrame = FALSE;
+    //lastInFrame = FALSE;
     defFormat = formatCollection()->defaultFormat();
     if ( !doc ) {
 	tabStopWidth = defFormat->width( 'x' ) * 8;
@@ -3766,9 +3766,11 @@ void KoTextParag::move( int &dy )
 		i->finalize();
 	}
     }
-    if ( p )
-	p->lastInFrame = FALSE;
+    //if ( p )
+    //    p->lastInFrame = TRUE; // Qt does this, but the loop at the end of format() calls move a lot!
+
     movedDown = FALSE;
+
     // do page breaks if required
     if ( doc && doc->isPageBreakEnabled() ) {
 	int shift;
@@ -3797,8 +3799,8 @@ void KoTextParag::format( int start, bool doMove )
     //kdDebug() << "KoTextParag::format " << this << " id:" << paragId() << endl;
 
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
-    if ( p )
-	p->lastInFrame = FALSE;
+    //if ( p )
+    //    p->lastInFrame = FALSE;
 
     movedDown = FALSE;
     bool formattedAgain = FALSE;
@@ -3880,7 +3882,7 @@ void KoTextParag::format( int start, bool doMove )
         //kdDebug(32500) << "r=" << r << " n->r=" << n->r << endl;
 	int dy = ( r.y() + r.height() ) - n->r.y();
 	KoTextParag *s = n;
-	bool makeInvalid = p && p->lastInFrame;
+	bool makeInvalid = false; //p && p->lastInFrame;
 	//qDebug("might move of dy=%d. previous's lastInFrame (=makeInvalid): %d", dy, makeInvalid);
 	while ( s && dy ) {
             if ( s->movedDown ) { // (not in QRT) : moved down -> invalidate and stop moving down
@@ -3892,8 +3894,8 @@ void KoTextParag::format( int start, bool doMove )
 	    if ( makeInvalid )
 		s->invalidate( 0 );
 	    s->move( dy );
-	    if ( s->lastInFrame )
-		makeInvalid = TRUE;
+	    //if ( s->lastInFrame )
+            //    makeInvalid = TRUE;
   	    s = s->n;
 	}
     }

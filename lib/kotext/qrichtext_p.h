@@ -1178,7 +1178,8 @@ public:
     void hide();
     bool isVisible() const { return visible; }
 
-    bool isLastInFrame() const { return lastInFrame; }
+    //bool isLastInFrame() const { return lastInFrame; }
+    //void setLastInFrame( bool b ) { lastInFrame = b; }
 
     KoTextParag *prev() const;
     KoTextParag *next() const;
@@ -1339,7 +1340,7 @@ private:
     uint needPreProcess : 1;
     uint fullWidth : 1;
     uint newLinesAllowed : 1;
-    uint lastInFrame : 1;
+    //uint lastInFrame : 1;
     uint visible : 1;
     uint breakable : 1;
     uint isBr : 1;
