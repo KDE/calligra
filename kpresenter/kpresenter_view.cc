@@ -518,7 +518,7 @@ void KPresenterView::toolsDiagramm()
   page->deSelectAllObj();
   page->setToolEditMode(INS_DIAGRAMM);
 
-  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:Chart/SimpleChart:1.0' in RepoID", 1 );
+  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KDiagramm/DocumentFactory:1.0' in RepoID", 1 );
   if ( vec.size() == 0 )
   {    
     cout << "Got no results" << endl;
@@ -540,7 +540,7 @@ void KPresenterView::toolsTable()
   if ( vec.size() == 0 )
   {    
     cout << "Got no results" << endl;
-    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
+    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no table component registered"), i18n("Ok") );
     return;
   }
 
@@ -558,7 +558,7 @@ void KPresenterView::toolsFormula()
   if ( vec.size() == 0 )
   {    
     cout << "Got no results" << endl;
-    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
+    QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no formula component registered"), i18n("Ok") );
     return;
   }
 

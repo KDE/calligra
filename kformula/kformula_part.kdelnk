@@ -11,4 +11,7 @@ MimeTypes=application/x-kformula
 RepoID=IDL:KFormula/DocumentFactory:1.0,
 ActivationMode=shared
 Type=OpenPart
+Icon=unknown.xpm
+MiniIcon=unknown.xpm
+
 

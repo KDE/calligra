@@ -2199,8 +2199,8 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
 	  
 	  frameset = doc->getFrameSet(i);
 	  if (frameset->getFrameType() == FT_TEXT && 
-	      (dynamic_cast<KWTextFrameSet*>(frameset)->getFrameInfo() == FI_HEADER && !doc->hasHeader()) ||
-	      (dynamic_cast<KWTextFrameSet*>(frameset)->getFrameInfo() == FI_FOOTER && !doc->hasFooter()))
+	      ((dynamic_cast<KWTextFrameSet*>(frameset)->getFrameInfo() == FI_HEADER && !doc->hasHeader()) ||
+	      (dynamic_cast<KWTextFrameSet*>(frameset)->getFrameInfo() == FI_FOOTER && !doc->hasFooter())))
 	    continue;
 	  for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 	    {

@@ -1859,8 +1859,8 @@ int KWordDocument::getFrameSet(unsigned int mx,unsigned int my)
       if (frameSet->contains(mx,my)) 
 	{
 	  if (frameSet->getFrameType() == FT_TEXT && 
-	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
-	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter()))
+	      ((dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
+	       (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter())))
 	    continue;
 	  return getNumFrameSets() - 1 - i;
 	}
@@ -1880,8 +1880,8 @@ int KWordDocument::selectFrame(unsigned int mx,unsigned int my)
       if (frameSet->contains(mx,my))
 	{
 	  if (frameSet->getFrameType() == FT_TEXT && 
-	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
-	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter()))
+	      ((dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
+	       (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter())))
 	    continue;
 	  return frameSet->selectFrame(mx,my);
 	}
@@ -1928,8 +1928,8 @@ QCursor KWordDocument::getMouseCursor(unsigned int mx,unsigned int my)
       if (frameSet->contains(mx,my))
 	{
 	  if (frameSet->getFrameType() == FT_TEXT && 
-	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
-	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter()))
+	      ((dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
+	       (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter())))
 	    continue;
 	  return frameSet->getMouseCursor(mx,my);
 	}
@@ -1949,8 +1949,8 @@ KWFrame *KWordDocument::getFirstSelectedFrame()
       for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
 	{	
 	  if (frameSet->getFrameType() == FT_TEXT && 
-	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
-	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter()))
+	      ((dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
+	       (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter())))
 	    continue;
 	  if (frameSet->getFrame(j)->isSelected())
 	    return frameSet->getFrame(j);
@@ -1973,8 +1973,8 @@ KWFrame *KWordDocument::getFirstSelectedFrame(int &_frameset)
       for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
 	{	
 	  if (frameSet->getFrameType() == FT_TEXT && 
-	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
-	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter()))
+	      ((dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
+	       (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter())))
 	    continue;
 	  if (frameSet->getFrame(j)->isSelected())
 	    return frameSet->getFrame(j);
