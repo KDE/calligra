@@ -734,125 +734,89 @@ bool KWTableFrameSet::getFirstSelected( unsigned int &row, unsigned int &col )
     return false;
 }
 
-void KWTableFrameSet::insertRow( unsigned int _idx,QPtrList<KWFrameSet> listFrameSet, QPtrList<KWFrame> listFrame,bool _recalc, bool isAHeader )
-{
-    unsigned int i = 0;
-    unsigned int _rows = m_rows;
+void KWTableFrameSet::insertRow( unsigned int newRowNumber,QPtrList<KWFrameSet> redoFrameset, QPtrList<KWFrame> redoFrame,bool recalc, bool isAHeader ) {
 
-    QValueList<double> colStart;
-    KoRect br = boundingRect();
-
-    bool needFinetune=false;
-    //laurent
-    //it's an unsigned so if idx==0 when you put before first row
-    // you substract 1 to 0 to an unsigned value is bad
-    unsigned int copyFromRow=(_idx==0)? 0 : _idx-1;
-    int nbCols=0;
-    if(isAHeader) copyFromRow=0;
-
-    // build a list of colStart positions.
-    for ( i = 0; i < m_cells.count(); i++ ) {
-        Cell *cell = m_cells.at(i);
-        if ( cell->m_row == copyFromRow ) {
-            nbCols++;
-            if(cell->m_cols==1)
-                colStart.append(cell->getFrame( 0 )->left());
-            else {
-                needFinetune=true;
-                for( int rowspan=cell->m_cols; rowspan>0; rowspan--)
-                {
-                    colStart.append(cell->getFrame( 0 )->left() + (cell->getFrame( 0 )->width() / cell->m_cols)*(rowspan - 1) );
-                }
-            }
-        }
-        // also move all cells beneath the new row.
-        if ( cell->m_row >= _idx )
-            cell->m_row++;
-    }
-    if(needFinetune) {
-        for( unsigned int col = 0; col < colStart.count(); col++) {
-            for ( i = 0; i < m_cells.count(); i++ ) {
-                if(m_cells.at(i)->m_col == col) {
-                    colStart[col]=m_cells.at(i)->getFrame(0)->left();
-                    break;
-                }
-            }
-        }
-    }
-
-    //add right position of table.
-    colStart.append(br.right());
-    QPtrList<KWTableFrameSet::Cell> nCells;
-    nCells.setAutoDelete( false );
-    if(_idx==0)
+    unsigned int copyFromRow = newRowNumber==0?0:newRowNumber-1;
+    if(newRowNumber==0)
         copyFromRow=1;
 
-    double height = getCell(copyFromRow,0)->getFrame(0)->height();
-    for ( i = 0; i < getCols(); i++ ) {
-        int colSpan = getCell(copyFromRow,i)->m_cols;
-        double tmpWidth= colStart[i+colSpan] - colStart[i];
-        if(i+colSpan != getCols())
-            tmpWidth-=tableCellSpacing;
-        /*else
-          tmpWidth+=1;*/
+    m_rows++;
+    for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
+        Cell *cell = m_cells.at(i);
+        if ( cell->m_row >= newRowNumber ) { // move all cells beneath the new row.
+            cell->m_row++;
+            position(cell);
+        }
+    }
 
+    double height = getPositionOfRow(copyFromRow,true) - getPositionOfRow(copyFromRow);
+    unsigned int adjustment=0;
+    unsigned int untilRow=m_rows;
+    QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
+    while(pageBound != m_pageBoundaries.end() && (*pageBound) <= newRowNumber) {
+        adjustment++;
+        pageBound++;
+    }
+    QValueList<double>::iterator tmp = m_rowPositions.at(newRowNumber);
+    double newPos = *tmp + height;
+    tmp++;
+    m_rowPositions.insert(tmp, newPos);
+    for(unsigned int i=newRowNumber+adjustment+2; i < m_rowPositions.count(); i++) {
+        double &rowPos = m_rowPositions[i];
+        rowPos = rowPos + height;
+        if(*pageBound == i) {
+            untilRow= *pageBound;
+            break;              // stop at pageBreak.
+        }
+    }
+
+    unsigned int i =0;
+    double oneMm = MM_TO_POINT( 1.0 );
+    while(i < m_cols) {
         KWFrame *frame = 0L;
-        if(listFrame.isEmpty())
+        if(redoFrame.isEmpty())
         {
-            frame=new KWFrame(0L, colStart[i], br.y(), tmpWidth, height, KWFrame::RA_NO);
+            frame=new KWFrame(0L, 1, 1, 100, 20, KWFrame::RA_NO); // use dummy values here...
             frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
             frame->setNewFrameBehaviour(KWFrame::NoFollowup);
         }
         else
         {
-            if(i<listFrame.count())
-                frame=listFrame.at(i)->getCopy();
+            if(i<redoFrame.count())
+                frame=redoFrame.at(i)->getCopy();
         }
 
         Cell *newCell=0L;
-        if(listFrameSet.isEmpty())
-            newCell=new Cell( this, _idx, i, QString::null );
+        if(redoFrameset.isEmpty())
+            newCell=new Cell( this, newRowNumber, i, QString::null );
         else
         {
-            //when we add a column which has just a cell
-            // for example when we split a cell
-            // so we have a new column, but this column
-            //has just a cell.
-            if( i<listFrameSet.count())
+            if( i<redoFrameset.count())
             {
-                newCell = static_cast<KWTableFrameSet::Cell*> (listFrameSet.at(i));
+                newCell = static_cast<KWTableFrameSet::Cell*> (redoFrameset.at(i));
                 addCell( newCell );
             }
             else
             {
-                newCell =getCell(_idx-1,i);
+                newCell =getCell(newRowNumber-1,i);
                 newCell->m_rows=newCell->m_rows+1;
                 continue;
             }
         }
-        newCell->m_cols=colSpan;
+
+        newCell->m_cols=getCell(copyFromRow,i)->m_cols;
         newCell->setIsRemoveableHeader( isAHeader );
-        newCell->addFrame( frame, /*_recalc*/false );
-        nCells.append( newCell );
-        newCell->m_cols = getCell(copyFromRow,i)->m_cols;
-
-
-        if(colSpan>1)
-            i+=colSpan-1;
-
-    }
-    m_rows = ++_rows;
-
-    for ( i = 0; i < nCells.count(); i++ ) {
-        double oneMm = MM_TO_POINT( 1.0 );
-        KWFrame *frame = nCells.at( i )->getFrame( 0 );
+        newCell->addFrame( frame, false );
         frame->setBLeft( oneMm );
         frame->setBRight( oneMm );
         frame->setBTop( oneMm );
         frame->setBBottom( oneMm );
+        position(newCell);
+
+        i+=newCell->m_cols;
     }
 
-    if ( _recalc )
+    if ( recalc )
         finalize();
 }
 
