@@ -3386,6 +3386,11 @@ void KPresenterView::setupActions()
                                                   this, SLOT( insertDirectCursor() ),
                                                   actionCollection(), "direct_cursor" );
 
+    actionSpellIgnoreAll = new KAction( i18n( "Ignore All" ), 0,
+                                        this, SLOT( slotAddIgnoreAllWord() ),
+                                        actionCollection(), "ignore_all" );
+
+
 }
 
 void KPresenterView::textSubScript()
@@ -7386,6 +7391,13 @@ void KPresenterView::copyTextOfComment()
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
         edit->copyTextOfComment();
+}
+
+void KPresenterView::slotAddIgnoreAllWord()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+        m_pKPresenterDoc->addIgnoreWordAll( edit->underCursorWord() );
 }
 
 

@@ -135,4 +135,4 @@ Changes after KPresenter 1.2
 - Add support for font attribute ( Uppercase/lowercase )
 - Add autocorrection : "Capitalize name of days"
 - Add new font attribute : small caps
-
+- Now we can modify "ignore list"

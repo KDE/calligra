@@ -418,7 +418,7 @@ public slots:
     void updateBgSpellCheckingState();
     void updatePresentationButton(bool);
     void refreshGroupButton();
-
+    void slotAddIgnoreAllWord();
 public:
     // create GUI
     virtual void createGUI();
@@ -586,6 +586,7 @@ public:
 
     void insertDirectCursor(bool b);
     void updateDirectCursorButton();
+
 
 
 protected slots:
@@ -1034,6 +1035,8 @@ private:
 
 
     KAction *actionInsertFile;
+
+    KAction *actionSpellIgnoreAll;
 
     KToggleAction *actionAlignVerticalTop;
     KToggleAction *actionAlignVerticalBottom;

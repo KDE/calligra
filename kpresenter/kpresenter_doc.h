@@ -396,6 +396,9 @@ public:
 
     QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
     void addIgnoreWordAll( const QString & );
+    void addIgnoreWordAllList( const QStringList & _lst)
+        { m_spellListIgnoreAll = _lst;}
+
     void clearIgnoreWordAll( );
     KCommandHistory * commandHistory()const { return m_commandHistory; }
     void updateObjectStatusBarItem();

@@ -3528,8 +3528,9 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     actionList.clear();
     variableList.clear();
 
+    bool singleWord= false;
     KWDocument * doc = frameSet()->kWordDocument();
-    actionList = dataToolActionList(doc->instance(), word);
+    actionList = dataToolActionList(doc->instance(), word, singleWord);
 
     doc->getVariableCollection()->setVariableSelected(variable());
     if ( variable() )
@@ -3566,7 +3567,12 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
                 popup = view->popupMenu("footnote_popup");
             }
             else
-                popup = view->popupMenu("text_popup");
+            {
+                if ( singleWord)
+                    popup = view->popupMenu("text_popup_spell");
+                else
+                    popup = view->popupMenu("text_popup");
+            }
             Q_ASSERT(popup);
             if (popup)
                 popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)

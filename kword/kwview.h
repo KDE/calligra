@@ -388,6 +388,8 @@ public slots:
 
     void convertToTextBox();
 
+    void slotAddIgnoreAllWord();
+
 protected slots:
     void slotSetInitialPosition();
 
@@ -640,6 +642,7 @@ private:
 
     KAction *actionConvertToTextBox;
 
+    KAction *actionSpellIgnoreAll;
 
     KToggleAction *actionInsertDirectCursor;
 

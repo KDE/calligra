@@ -1161,6 +1161,10 @@ void KWView::setupActions()
                                                   actionCollection(), "convert_to_text_box" );
 
 
+    actionSpellIgnoreAll = new KAction( i18n( "Ignore All" ), 0,
+                                        this, SLOT( slotAddIgnoreAllWord() ),
+                                        actionCollection(), "ignore_all" );
+
 }
 
 void KWView::refreshMenuExpression()
@@ -6764,6 +6768,13 @@ void KWView::convertToTextBox()
     if ( edit && edit->textFrameSet()->protectContent()) {
         //todo
     }
+}
+
+void KWView::slotAddIgnoreAllWord()
+{
+    KWTextFrameSetEdit* edit = currentTextEdit();
+    if ( edit )
+        m_doc->addIgnoreWordAll( edit->underCursorWord() );
 }
 
 /******************************************************************/

@@ -1836,7 +1836,42 @@ void KPTextView::drawCursor( bool b )
 
 QPoint KPTextView::cursorPosition( const QPoint & pos )
 {
-    QPoint iPoint=pos - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()) );
+    QPoint tmp(pos);
+    kdDebug()<<" pos.x() :"<<pos.x()<<" pos.y() "<<pos.y()<<endl;
+    QWMatrix m;
+#if 0
+    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(kpTextObject()->getSize().width() / 2.0), kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(kpTextObject()->getSize().height() /  2.0) );
+    m.rotate( kpTextObject()->getAngle() );
+
+
+
+    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(kpTextObject()->getOrig().x()), kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(kpTextObject()->getOrig().y()) );
+    //m = m.invert();
+     tmp = m * pos;
+
+     kdDebug()<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
+#endif
+
+    KoRect br = KoRect( 0, 0, kpTextObject()->getSize().width(), kpTextObject()->getSize().height() );
+    double pw = br.width();
+    double ph = br.height();
+    KoRect rr = br;
+    double yPos = -rr.y();
+    double xPos = -rr.x();
+    rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
+
+    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(pw / 2.0), kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(ph / 2.0 ));
+    m.rotate( kpTextObject()->getAngle() );
+    m.translate( kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItX(rr.left() + xPos), kpTextObject()->kPresenterDocument()->zoomHandler()->zoomItY(rr.top() + yPos) );
+
+    m = m.invert();
+
+     tmp = m * pos;
+
+     kdDebug()<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
+
+
+    QPoint iPoint=tmp - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()) );
     iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
     return iPoint;
 }
@@ -1894,12 +1929,14 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
     }
     else
     {
-        actionList = dataToolActionList(view->kPresenterDoc()->instance(), word);
+        bool singleWord= false;
+        actionList = dataToolActionList(view->kPresenterDoc()->instance(), word, singleWord);
         //kdDebug(33001) << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
         if(refLink().isNull())
         {
             QPopupMenu * popup;
             view->plugActionList( "datatools", actionList );
+
             KoNoteVariable * var = dynamic_cast<KoNoteVariable *>(variable());
             KoCustomVariable * varCustom = dynamic_cast<KoCustomVariable *>(variable());
             if( var )
@@ -1907,10 +1944,17 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
             else if( varCustom )
                 popup = view->popupMenu("custom_var_popup");
             else
-                popup = view->popupMenu("text_popup");
+            {
+                if ( singleWord )
+                    popup = view->popupMenu("text_popup_spell");
+                else
+                    popup = view->popupMenu("text_popup");
+            }
             Q_ASSERT(popup);
             if (popup)
+            {
                 popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
+            }
         }
         else
         {
