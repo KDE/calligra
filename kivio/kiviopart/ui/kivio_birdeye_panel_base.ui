@@ -19,7 +19,7 @@
     </property>
     <property stdset="1">
         <name>caption</name>
-        <string>BirdsEyeView</string>
+        <string></string>
     </property>
     <property>
         <name>layoutMargin</name>
