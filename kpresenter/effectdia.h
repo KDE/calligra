@@ -51,8 +51,12 @@ public:
     EffectDia( QWidget* parent, const char*, const QPtrList<KPObject> &_objs,
 	       KPresenterView* );
 
+    ~EffectDia();
+
 protected:
     void resizeEvent( QResizeEvent *e );
+
+    QString getSoundFileFilter();
 
     QComboBox *cEffect, *cEffect2, *cDisappear;
     QLabel *lEffect, *lEffect2, *lNum, *lDisappear, *lDEffect;

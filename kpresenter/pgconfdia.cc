@@ -54,6 +54,8 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
                       PresSpeed presSpeed, int pageTimer, bool soundEffect, QString fileName )
     : QDialog( parent, name, true )
 {
+    soundPlayer = 0;
+
     QVBoxLayout *back = new QVBoxLayout( this, 4 );
     back->setMargin( 10 );
     back->setSpacing( 10 );
@@ -205,6 +207,13 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
 }
 
 /*================================================================*/
+PgConfDia::~PgConfDia()
+{
+    stopSound();
+    delete soundPlayer;
+}
+
+/*================================================================*/
 void PgConfDia::presSlidesChanged( int )
 {
     if ( slidesSelected->isChecked() )
@@ -303,6 +312,9 @@ void PgConfDia::soundEffectChanged()
 /*================================================================*/
 void PgConfDia::slotRequesterClicked( KURLRequester *requester )
 {
+    QString filter = getSoundFileFilter();
+    requester->fileDialog()->setFilter( filter );
+
     // find the first "sound"-resource that contains files
     QStringList soundDirs = KGlobal::dirs()->resourceDirs( "sound" );
     if ( !soundDirs.isEmpty() ) {
@@ -332,6 +344,7 @@ void PgConfDia::slotSoundFileChanged( const QString &text )
 /*================================================================*/
 void PgConfDia::playSound()
 {
+    delete soundPlayer;
     soundPlayer = new KPresenterSoundPlayer( requester->url() );
     soundPlayer->play();
 
@@ -344,10 +357,37 @@ void PgConfDia::stopSound()
 {
     if ( soundPlayer ) {
         soundPlayer->stop();
+        delete soundPlayer;
+        soundPlayer = 0;
 
         buttonTestPlaySoundEffect->setEnabled( true );
         buttonTestStopSoundEffect->setEnabled( false );
     }
+}
+
+/*================================================================*/
+QString PgConfDia::getSoundFileFilter()
+{
+    QStringList fileList;
+    fileList << "wav" << "au" << "mp3" << "mp1" << "mp2" << "mpg" << "dat"
+             << "mpeg" << "ogg" << "cdda" << "cda " << "vcd" << "null";
+    fileList.sort();
+
+    bool comma = false;
+    QString full, str;
+    for ( QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it ) {
+        if ( comma )
+            str += '\n';
+        comma = true;
+        str += QString( i18n( "*.%1|%2 Files" ) ).arg( *it ).arg( (*it).upper() );
+
+        full += QString( "*.") + (*it) + ' ';
+    }
+
+    str = full + '|' + i18n( "All supported files" ) + '\n' + str;
+    str += "\n*|" + i18n( "All files" );
+
+    return str;
 }
 
 #include <pgconfdia.moc>

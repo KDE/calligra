@@ -120,6 +120,9 @@ Page::~Page()
     exitEditMode();
 
     delete presMenu;
+
+    stopSound();
+    delete soundPlayer;
 }
 
 
@@ -4056,14 +4059,18 @@ void Page::lowerObject()
 
 void Page::playSound( QString soundFileName )
 {
+    delete soundPlayer;
     soundPlayer = new KPresenterSoundPlayer( soundFileName );
     soundPlayer->play();
 }
 
 void Page::stopSound()
 {
-    if ( soundPlayer )
+    if ( soundPlayer ) {
         soundPlayer->stop();
+        delete soundPlayer;
+        soundPlayer = 0;
+    }
 }
 
 #include <page.moc>

@@ -53,6 +53,7 @@ public:
                bool infLoop, bool swMan, int pgNum,
                PageEffect pageEffect, PresSpeed presSpeed, int pageTimer,
                bool soundEffect, QString fileName );
+    ~PgConfDia();
     bool getInfinitLoop();
     bool getManualSwitch();
     PageEffect getPageEffect();
@@ -60,6 +61,9 @@ public:
     int getPageTimer();
     bool getPageSoundEffect();
     QString getPageSoundFileName();
+
+protected:
+    QString getSoundFileFilter();
 
 protected:
     QButtonGroup *general, *page, *slides;

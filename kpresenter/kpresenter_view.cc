@@ -1038,12 +1038,6 @@ void KPresenterView::extraPenWidth()
 /*========================== screen config pages ================*/
 void KPresenterView::screenConfigPages()
 {
-    if ( pgConfDia ) {
-	QObject::disconnect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
-	pgConfDia->close();
-	delete pgConfDia;
-	pgConfDia = 0;
-    }
     pgConfDia = new PgConfDia( this, "PageConfig", kPresenterDoc()->spInfinitLoop(),
 			       kPresenterDoc()->spManualSwitch(), getCurrPgNum(),
 			       kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageEffect(),
@@ -1052,8 +1046,12 @@ void KPresenterView::screenConfigPages()
 			       kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageSoundEffect(),
 			       kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageSoundFileName() );
     pgConfDia->setCaption( i18n( "KPresenter - Page Configuration for Screen Presentations" ) );
-    QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
-    pgConfDia->show();
+    QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );    
+    pgConfDia->exec();
+
+    QObject::disconnect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
+    delete pgConfDia;
+    pgConfDia = 0;
 }
 
 /*========================== screen presStructView  =============*/

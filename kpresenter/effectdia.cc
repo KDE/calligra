@@ -299,6 +299,16 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 }
 
 /*================================================================*/
+EffectDia::~EffectDia()
+{
+    stopSound1();
+    stopSound2();
+
+    delete soundPlayer1;
+    delete soundPlayer2;
+}
+
+/*================================================================*/
 void EffectDia::slotEffectDiaOk()
 {
     QValueList<EffectCmd::EffectStruct> oldEffects;
@@ -435,6 +445,9 @@ void EffectDia::disappearSoundEffectChanged()
 /*================================================================*/
 void EffectDia::slotRequesterClicked( KURLRequester *requester )
 {
+    QString filter = getSoundFileFilter();
+    requester->fileDialog()->setFilter( filter );
+
     // find the first "sound"-resource that contains files
     QStringList soundDirs = KGlobal::dirs()->resourceDirs( "sound" );
     if ( !soundDirs.isEmpty() ) {
@@ -471,6 +484,7 @@ void EffectDia::slotDisappearFileChanged( const QString &text )
 /*================================================================*/
 void EffectDia::playSound1()
 {
+    delete soundPlayer1;
     soundPlayer1 = new KPresenterSoundPlayer( requester1->url() );
     soundPlayer1->play();
 
@@ -481,6 +495,7 @@ void EffectDia::playSound1()
 /*================================================================*/
 void EffectDia::playSound2()
 {
+    delete soundPlayer2;
     soundPlayer2 = new KPresenterSoundPlayer( requester2->url() );
     soundPlayer2->play();
 
@@ -493,6 +508,8 @@ void EffectDia::stopSound1()
 {
     if ( soundPlayer1 ) {
         soundPlayer1->stop();
+        delete soundPlayer1;
+        soundPlayer1 = 0;
 
         buttonTestPlaySoundEffect1->setEnabled( true );
         buttonTestStopSoundEffect1->setEnabled( false );
@@ -504,10 +521,37 @@ void EffectDia::stopSound2()
 {
     if ( soundPlayer2 ) {
         soundPlayer2->stop();
+        delete soundPlayer2;
+        soundPlayer2 = 0;
 
         buttonTestPlaySoundEffect2->setEnabled( true );
         buttonTestStopSoundEffect2->setEnabled( false );
     }
+}
+
+/*================================================================*/
+QString EffectDia::getSoundFileFilter()
+{
+    QStringList fileList;
+    fileList << "wav" << "au" << "mp3" << "mp1" << "mp2" << "mpg" << "dat"
+             << "mpeg" << "ogg" << "cdda" << "cda " << "vcd" << "null";
+    fileList.sort();
+
+    bool comma = false;
+    QString full, str;
+    for ( QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it ) {
+        if ( comma )
+            str += '\n';
+        comma = true;
+        str += QString( i18n( "*.%1|%2 Files" ) ).arg( *it ).arg( (*it).upper() );
+
+        full += QString( "*.") + (*it) + ' ';
+    }
+
+    str = full + '|' + i18n( "All supported files" ) + '\n' + str;
+    str += "\n*|" + i18n( "All files" );
+
+    return str;
 }
 
 #include <effectdia.moc>
