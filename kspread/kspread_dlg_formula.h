@@ -75,6 +75,12 @@ private slots:
      */
     void slotSelected( const QString& function );
     /**
+     * Called if the user clicked on one of the "related function"
+     * This will switch the active function and show help page 
+     * of the function as well.
+     */
+    void slotShowFunction( const QString& function );
+    /**
      * Called if the user double clicked on some method name.
      * That will switch into editing mode, allowing the user
      * to enter the parameters for the function.

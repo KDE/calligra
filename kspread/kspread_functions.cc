@@ -136,6 +136,8 @@ KSpreadFunctionDescription::KSpreadFunctionDescription( const QDomElement& eleme
 			    m_syntax.append( i18n( e2.text().latin1() ) );
 			else if ( e2.tagName() == "Example" )
 			    m_examples.append( i18n( e2.text().latin1() ) );
+			else if ( e2.tagName() == "Related" )
+			    m_related.append( i18n( e2.text().latin1() ) );
 		    }
 		}
 	    }
@@ -146,6 +148,7 @@ KSpreadFunctionDescription::KSpreadFunctionDescription( const QDomElement& eleme
 KSpreadFunctionDescription::KSpreadFunctionDescription( const KSpreadFunctionDescription& desc )
 {
     m_examples = desc.m_examples;
+    m_related = desc.m_related;
     m_syntax = desc.m_syntax;
     m_help = desc.m_help;
     m_name = desc.m_name;
@@ -196,6 +199,20 @@ QString KSpreadFunctionDescription::toQML() const
 	{
 	    text += "<li>";
 	    text += *it;
+	}
+	text += "</ul>";
+    }
+
+    if ( !m_related.isEmpty() )
+    {
+	text += i18n("<h2>Related Function</h2><ul>");
+	QStringList::ConstIterator it = m_related.begin();
+	for( ; it != m_related.end(); ++it )
+	{
+	    text += "<li>";
+	    text += "<a href=\"" + *it + "\">";
+	    text += *it;
+	    text += "</a>";
 	}
 	text += "</ul>";
     }

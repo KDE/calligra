@@ -176,6 +176,9 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     connect( m_pView, SIGNAL( sig_chooseSelectionChanged( KSpreadTable*, const QRect& ) ),
              this, SLOT( slotSelectionChanged( KSpreadTable*, const QRect& ) ) );
 
+    connect( m_browser, SIGNAL( linkClicked( const QString& ) ),
+             this, SLOT( slotShowFunction( const QString& ) ) );
+
     // Save the name of the active table.
     m_tableName = m_pView->activeTable()->tableName();
     // Save the cells current text.
@@ -654,6 +657,28 @@ void KSpreadDlgFormula::slotSelected( const QString& function )
 
     // Unlock
     refresh_result=true;
+}
+
+// from hyperlink in the "Related Function"
+void KSpreadDlgFormula::slotShowFunction( const QString& function )
+{
+    KSpreadFunctionDescription* desc = m_repo.function( function );
+    if ( !desc )
+    {
+	m_browser->setText( "" );
+	return;
+    }
+
+    // select the category
+    QString category = desc->group();
+    slotActivated( category );
+
+    // select the function
+    QListBoxItem* item = functions->findItem( function, 
+      Qt::ExactMatch | Qt::CaseSensitive );
+    if( item ) functions->setCurrentItem( item );
+
+    slotSelected( function );
 }
 
 void KSpreadDlgFormula::slotSelectionChanged( KSpreadTable* _table, const QRect& _selection )
