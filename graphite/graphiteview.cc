@@ -86,6 +86,10 @@ void GraphiteView::slotViewNew() {
 
 void GraphiteView::slotViewZoom(int item) {
     kdDebug(37001) << "GraphiteView::slotViewZoom(): item=" << item << endl;
+    m_horiz->setZoom(static_cast<double>(item)*0.5+0.5);
+    m_horiz->repaint(false);
+    m_vert->setZoom(static_cast<double>(item)*0.5+0.5);
+    m_vert->repaint(false);
 }
 
 void GraphiteView::recalcRulers(int x, int y) {
@@ -102,8 +106,8 @@ void GraphiteView::recalcRulers(int x, int y) {
 void GraphiteView::resizeEvent(QResizeEvent *e) {
 
     m_canvas->resize(e->size().width()-20, e->size().height()-20);
-    m_horiz->setGeometry(20, 0, m_canvas->viewport()->width()+20, 20);
-    m_vert->setGeometry(0, 20, 20, m_canvas->viewport()->height()+20);
+    m_horiz->setGeometry(20, 0, e->size().width(), 20);
+    m_vert->setGeometry(0, 20, 20, e->size().height());
     recalcRulers(m_canvas->contentsX(), m_canvas->contentsY());
 }
 

@@ -360,11 +360,6 @@ private:
     static QString attrXFactor;
     static QString attrYFactor;
     static QString tagPen;
-    static QString attrPenColor;
-    static QString attrPenStyle;
-    static QString attrPenWidth;
-    static QString attrPenJoinStyle;
-    static QString attrPenCapStyle;
 };
 
 

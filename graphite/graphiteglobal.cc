@@ -19,11 +19,21 @@
 
 // This file has to be included, or kimageeffect will fail to compile!?!
 #include <qimage.h>
+#include <qdom.h>
 #include <kdebug.h>
 
 #include <gobject.h>
 #include <graphiteglobal.h>
 
+
+QString GraphiteGlobal::attrPenColor=QString::fromLatin1("color");
+QString GraphiteGlobal::attrPenStyle=QString::fromLatin1("style");
+QString GraphiteGlobal::attrWidth=QString::fromLatin1("width");
+QString GraphiteGlobal::attrPenJoinStyle=QString::fromLatin1("joinstyle");
+QString GraphiteGlobal::attrPenCapStyle=QString::fromLatin1("capstyle");
+QString GraphiteGlobal::attrX=QString::fromLatin1("x");
+QString GraphiteGlobal::attrY=QString::fromLatin1("y");
+QString GraphiteGlobal::attrHeight=QString::fromLatin1("height");
 
 const bool operator==(const Gradient &lhs, const Gradient &rhs) {
 
@@ -81,6 +91,57 @@ void GraphiteGlobal::setZoom(const double &zoom) {
 
 void GraphiteGlobal::setResoltuion(const int &resolution) {
     m_resolution=static_cast<double>(resolution)/25.4;
+}
+
+QDomElement GraphiteGlobal::createElement(const QString &tagName, const QPen &pen, QDomDocument &doc) const {
+
+    QDomElement e=doc.createElement(tagName);
+    e.setAttribute(attrPenColor, pen.color().name());
+    e.setAttribute(attrPenStyle, static_cast<int>(pen.style()));
+    e.setAttribute(attrWidth, pen.width());
+    e.setAttribute(attrPenJoinStyle, pen.joinStyle());
+    e.setAttribute(attrPenCapStyle, pen.capStyle());
+    return e;
+}
+
+QPen GraphiteGlobal::toPen(const QDomElement &element) const {
+
+    QPen pen;
+    if(element.hasAttribute(attrPenColor))
+	pen.setColor(QColor(element.attribute(attrPenColor)));
+    if(element.hasAttribute(attrPenStyle))
+	pen.setStyle(static_cast<Qt::PenStyle>(element.attribute(attrPenStyle).toInt()));
+    if(element.hasAttribute(attrWidth))
+	pen.setWidth(element.attribute(attrWidth).toInt());
+    if(element.hasAttribute(attrPenJoinStyle))
+	pen.setJoinStyle(static_cast<Qt::PenJoinStyle>(element.attribute(attrPenJoinStyle).toInt()));
+    if(element.hasAttribute(attrPenCapStyle))
+	pen.setCapStyle(static_cast<Qt::PenCapStyle>(element.attribute(attrPenCapStyle).toInt()));
+    return pen;
+}
+
+QDomElement GraphiteGlobal::createElement(const QString &tagName, const QRect &rect, QDomDocument &doc) const {
+
+    QDomElement e=doc.createElement(tagName);
+    e.setAttribute(attrX, rect.left());
+    e.setAttribute(attrY, rect.top());
+    e.setAttribute(attrWidth, rect.width());
+    e.setAttribute(attrHeight, rect.height());
+    return e;
+}
+
+QRect GraphiteGlobal::toRect(const QDomElement &element) const {
+
+    QRect rect;
+    if(element.hasAttribute(attrX))
+	rect.setTop(element.attribute(attrX).toInt());
+    if(element.hasAttribute(attrY))
+	rect.setTop(element.attribute(attrY).toInt());
+    if(element.hasAttribute(attrWidth))
+	rect.setTop(element.attribute(attrWidth).toInt());
+    if(element.hasAttribute(attrHeight))
+	rect.setTop(element.attribute(attrHeight).toInt());
+    return rect;
 }
 
 GraphiteGlobal::GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4),

@@ -530,11 +530,6 @@ QString GObject::attrType=QString::fromLatin1("type");
 QString GObject::attrXFactor=QString::fromLatin1("xfactor");
 QString GObject::attrYFactor=QString::fromLatin1("yfactor");
 QString GObject::tagPen=QString::fromLatin1("pen");
-QString GObject::attrPenColor=QString::fromLatin1("color");
-QString GObject::attrPenStyle=QString::fromLatin1("style");
-QString GObject::attrPenWidth=QString::fromLatin1("width");
-QString GObject::attrPenJoinStyle=QString::fromLatin1("joinstyle");
-QString GObject::attrPenCapStyle=QString::fromLatin1("capstyle");
 
 QDomElement GObject::save(QDomDocument &doc) const {
 
@@ -560,13 +555,8 @@ QDomElement GObject::save(QDomDocument &doc) const {
     gradient.setAttribute(attrXFactor, m_gradient.xfactor);
     gradient.setAttribute(attrYFactor, m_gradient.yfactor);
     format.appendChild(gradient);
-    QDomElement pen=doc.createElement(tagPen);
-    pen.setAttribute(attrPenColor, m_pen.color().name());
-    pen.setAttribute(attrPenStyle, static_cast<int>(m_pen.style()));
-    pen.setAttribute(attrPenWidth, m_pen.width());
-    pen.setAttribute(attrPenJoinStyle, m_pen.joinStyle());
-    pen.setAttribute(attrPenCapStyle, m_pen.capStyle());
-    format.appendChild(pen);
+    format.appendChild(GraphiteGlobal::self()->
+		       createElement(tagPen, m_pen, doc));
     e.appendChild(format);		
     return e;
 }
@@ -750,18 +740,8 @@ GObject::GObject(const QDomElement &element) : m_parent(0L), m_boundingRectDirty
 	}
 	
 	QDomElement pen=format.namedItem(tagPen).toElement();
-	if(!pen.isNull()) {
-	    if(pen.hasAttribute(attrPenColor))
-		m_pen.setColor(QColor(pen.attribute(attrPenColor)));
-	    if(pen.hasAttribute(attrPenStyle))
-		m_pen.setStyle(static_cast<Qt::PenStyle>(pen.attribute(attrPenStyle).toInt()));
-	    if(pen.hasAttribute(attrPenWidth))
-		m_pen.setWidth(pen.attribute(attrPenWidth).toInt());
-	    if(pen.hasAttribute(attrPenJoinStyle))
-		m_pen.setJoinStyle(static_cast<Qt::PenJoinStyle>(pen.attribute(attrPenJoinStyle).toInt()));
-	    if(pen.hasAttribute(attrPenCapStyle))
-		m_pen.setCapStyle(static_cast<Qt::PenCapStyle>(pen.attribute(attrPenCapStyle).toInt()));
-	}
+	if(!pen.isNull())
+	    m_pen=GraphiteGlobal::self()->toPen(pen);
     }
     else {
 	m_fillStyle=Brush;

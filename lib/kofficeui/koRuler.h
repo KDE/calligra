@@ -98,10 +98,11 @@ public:
 
     void showMousePos( bool _showMPos )
     { showMPos = _showMPos; hasToDelete = false; mposX = -1; mposY = -1; repaint( false ); }
+    // Not zoomed - real pixel coords!
     void setMousePos( int mx, int my );
 
     void setOffset( int _diffx, int _diffy )
-    { diffx = _diffx; diffy = _diffy; repaint( false ); }
+    { diffx = zoomIt(_diffx); diffy = zoomIt(_diffy); repaint( false ); }
 
     void setLeftIndent( float _left )
     { i_left = makeIntern( _left ); repaint( false ); }
@@ -139,6 +140,13 @@ protected:
     void resizeEvent( QResizeEvent *e );
 
     unsigned int makeIntern( float _v );
+    double zoomIt(const double &value) const;
+    int zoomIt(const int &value) const;
+    unsigned int zoomIt(const unsigned int &value) const;
+    double unZoomIt(const double &value) const;
+    int unZoomIt(const int &value) const;
+    unsigned int unZoomIt(const unsigned int &value) const;
+    int double2Int(const double &value) const;
     void setupMenu();
     void uncheckMenu();
 
@@ -149,7 +157,7 @@ protected:
     int i_left, i_first;
     KoPageLayout layout;
     QPixmap buffer;
-    double m_zoom;
+    double m_zoom, m_1_zoom;
     QString unit;
     bool hasToDelete;
     bool showMPos;
@@ -165,5 +173,50 @@ protected slots:
 
 };
 
-#endif
+inline double KoRuler::zoomIt(const double &value) const {
+    if (m_zoom==1.0)
+	return value;
+    return m_zoom*value;
+}
 
+inline int KoRuler::zoomIt(const int &value) const {
+    if (m_zoom==1.0)
+	return value;
+    return double2Int(m_zoom*value);
+}
+
+inline unsigned int KoRuler::zoomIt(const unsigned int &value) const {
+    if (m_zoom==1.0)
+	return value;
+    return static_cast<unsigned int>(double2Int(m_zoom*value));
+}
+
+inline double KoRuler::unZoomIt(const double &value) const {
+    if(m_zoom==1.0)
+	return value;
+    return value*m_1_zoom;
+}
+
+inline int KoRuler::unZoomIt(const int &value) const {
+    if(m_zoom==1.0)
+	return value;
+    return double2Int(value*m_1_zoom);
+}
+
+inline unsigned int KoRuler::unZoomIt(const unsigned int &value) const {
+    if(m_zoom==1.0)
+	return value;
+    return static_cast<unsigned int>(double2Int(value*m_1_zoom));
+}
+
+inline int KoRuler::double2Int(const double &value) const {
+
+    if( static_cast<double>((value-static_cast<int>(value)))>=0.5 )
+	return static_cast<int>(value)+1;
+    else if( static_cast<double>((value-static_cast<int>(value)))<=-0.5 )
+	return static_cast<int>(value)-1;
+    else
+	return static_cast<int>(value);
+}
+
+#endif

@@ -1294,6 +1294,8 @@ void KWordView::viewZoom( const QString &s )
 	m_pKWordDoc->getPageLayout( pgLayout, cl, hf );
 	m_pKWordDoc->setZoom( zoom );
 	newPageLayout( pgLayout );
+	gui->getVertRuler()->setZoom(static_cast<double>(zoom)/100.0);
+	gui->getHorzRuler()->setZoom(static_cast<double>(zoom)/100.0);
     }
     gui->getPaperWidget()->setFocus();
 }

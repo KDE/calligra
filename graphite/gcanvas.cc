@@ -30,7 +30,6 @@ GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
 
     m_widget=new GCanvasWidget(this, view, doc);
     addChild(m_widget);
-    resizeContents(2000, 2000); // <- for testing :P
 }
 
 void GCanvas::setRulers(KoRuler *vertical, KoRuler *horizontal) {
@@ -50,7 +49,14 @@ void GCanvas::showMousePos(const bool &pos) {
 
 void GCanvas::resizeEvent(QResizeEvent *e) {
     // for now
+    //kdDebug() << "GCanvas::resizeEvent(): width=" << e->size().width()
+    //	      << " height=" << e->size().height() << endl;
     m_widget->resize(e->size().width()-4, e->size().height()-4);
+}
+
+void GCanvas::viewportResizeEvent(QResizeEvent */*e*/) {
+    //kdDebug() << "GCanvas::viewportResizeEvent() width=" << e->size().width()
+    //	      << " height=" << e->size().height() << endl;
 }
 
 

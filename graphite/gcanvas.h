@@ -43,6 +43,7 @@ public:
 
 protected:
     virtual void resizeEvent(QResizeEvent *e);
+    virtual void viewportResizeEvent(QResizeEvent *e);
 
 private:
     GCanvasWidget *m_widget;

@@ -24,6 +24,9 @@
 
 class QColor;
 class QPoint;
+class QPen;
+class QDomDocument;
+class QDomElement;
 
 struct Gradient {
     QColor ca;
@@ -77,6 +80,11 @@ public:
     // note: set the dpi resolution!
     void setResoltuion(const int &resolution);
 
+    QDomElement createElement(const QString &tagName, const QPen &pen, QDomDocument &doc) const;
+    QPen toPen(const QDomElement &element) const;
+
+    QDomElement createElement(const QString &tagName, const QRect &rect, QDomDocument &doc) const;
+    QRect toRect(const QDomElement &element) const;
     // maybe I'll add a init(...) method which takes a KConfig file/pointer
     // and initializes all the "global" vars.
 
@@ -98,6 +106,15 @@ private:
     QString m_unitString;
     double m_zoom;
     double m_resolution;
+
+    static QString attrPenColor;
+    static QString attrPenStyle;
+    static QString attrWidth;
+    static QString attrPenJoinStyle;
+    static QString attrPenCapStyle;
+    static QString attrX;
+    static QString attrY;
+    static QString attrHeight;
 };
 
 
@@ -120,7 +137,7 @@ public:
     const int &pxValue() const { return m_pixel; }
     void setPxValue(const int &pixel);
 
-    const double valueUnit() const;  // current unit
+    const double valueUnit() const;  // value in the current unit
     const double valueMM() const;
     const double valueInch() const;
     const double valuePt() const;
