@@ -511,3 +511,7 @@ bold,italic,multirow,underline etc... thanks a lot.
 2000-05-16 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
 -Now you can strike out the text
+
+2000-05-17 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Improved layout management in kspread_dlg_layout->font.

@@ -768,99 +768,34 @@ void CellLayoutPageMisc::slotSetBackgroundColor( const QColor &_color )
 bgColor =_color;
 }
 
-/*void CellLayoutPageMisc::setColor( QPushButton *_button, const QColor &_color )
-{
-    QColorGroup normal( ( QColor( QRgb(0) ) ), _color, QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-    QColorGroup disabled( ( QColor( QRgb(8421504) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-    QColorGroup active( ( QColor( QRgb(0) ) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(6316128) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-    QPalette palette( normal, disabled, active );
-    _button->setPalette( palette );
-}*/
 
-#define YOFFSET  5
-#define XOFFSET  5
-#define LABLE_LENGTH  40
-#define LABLE_HEIGHT 20
-#define SIZE_X 400
-#define SIZE_Y 280
-#define FONTLABLE_LENGTH 60
-#define COMBO_BOX_HEIGHT 28
-#define COMBO_ADJUST 3
-#define OKBUTTONY 260
-#define BUTTONHEIGHT 25
 
 CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) : QWidget ( parent )
 {
   dlg = _dlg;
 
-  box1 = new QGroupBox(this, "Box1");
-  box1->setGeometry(XOFFSET,YOFFSET,SIZE_X -  XOFFSET
-		   ,160);
+  QVBoxLayout* grid = new QVBoxLayout( this, 6 );
+
+  box1 = new QGroupBox( this, "Box1");
   box1->setTitle(i18n("Requested Font"));
-
-  box1 = new QGroupBox(this, "Box2");
-  box1->setGeometry(XOFFSET,170,SIZE_X -  XOFFSET
-		   ,110);
-  box1->setTitle(i18n("Actual Font"));
-
-
-  family_label = new QLabel(this,"family");
+  QGridLayout *grid2 = new QGridLayout(box1,3,4,15,7);
+  family_label = new QLabel(box1,"family");
   family_label->setText(i18n("Family:"));
-  family_label->setGeometry(3*XOFFSET,8*YOFFSET,LABLE_LENGTH,LABLE_HEIGHT);
+  grid2->addWidget(family_label,0,0);
 
-  actual_family_label = new QLabel(this,"afamily");
-  actual_family_label->setText(i18n("Family:"));
-  actual_family_label->setGeometry(3*XOFFSET,190,40,LABLE_HEIGHT);
-
-  actual_family_label_data = new QLabel(this,"afamilyd");
-  actual_family_label_data->setGeometry(3*XOFFSET +50 ,190,110,LABLE_HEIGHT);
-
-  size_label = new QLabel(this,"size");
+  size_label = new QLabel(box1,"size");
   size_label->setText(i18n("Size:"));
-  size_label->setGeometry(6*XOFFSET + LABLE_LENGTH + 12*XOFFSET +2* FONTLABLE_LENGTH,
-			  8*YOFFSET,LABLE_LENGTH,LABLE_HEIGHT);
+  grid2->addWidget(size_label,0,2);
 
-  actual_size_label = new QLabel(this,"asize");
-  actual_size_label->setText(i18n("Size:"));
-  actual_size_label->setGeometry(3*XOFFSET,190 +LABLE_HEIGHT ,
-				 LABLE_LENGTH,LABLE_HEIGHT);
-
-  actual_size_label_data = new QLabel(this,"asized");
-  actual_size_label_data->setGeometry(3*XOFFSET +50 ,190 + LABLE_HEIGHT
-				      ,110,LABLE_HEIGHT);
-
-  weight_label = new QLabel(this,"weight");
+  weight_label = new QLabel(box1,"weight");
   weight_label->setText(i18n("Weight:"));
-  weight_label->setGeometry(3*XOFFSET,15*YOFFSET + LABLE_HEIGHT
-			  ,LABLE_LENGTH,LABLE_HEIGHT);
+  grid2->addWidget(weight_label,1,0);
 
-  actual_weight_label = new QLabel(this,"aweight");
-  actual_weight_label->setText(i18n("Weight:"));
-  actual_weight_label->setGeometry(3*XOFFSET,190 + 2*LABLE_HEIGHT ,
-				 LABLE_LENGTH,LABLE_HEIGHT);
-
-  actual_weight_label_data = new QLabel(this,"aweightd");
-  actual_weight_label_data->setGeometry(3*XOFFSET +50 ,190 + 2*LABLE_HEIGHT
-				      ,110,LABLE_HEIGHT);
-
-  style_label = new QLabel(this,"style");
+  style_label = new QLabel(box1,"style");
   style_label->setText(i18n("Style:"));
-  style_label->setGeometry(6*XOFFSET + LABLE_LENGTH + 12*XOFFSET +
-			   2*FONTLABLE_LENGTH,
-			   15*YOFFSET + LABLE_HEIGHT
-			 ,LABLE_LENGTH,
-			   LABLE_HEIGHT);
+  grid2->addWidget(style_label,1,2);
 
-  actual_style_label = new QLabel(this,"astyle");
-  actual_style_label->setText(i18n("Style:"));
-  actual_style_label->setGeometry(3*XOFFSET,190 + 3*LABLE_HEIGHT ,
-				 LABLE_LENGTH,LABLE_HEIGHT);
-
-  actual_style_label_data = new QLabel(this,"astyled");
-  actual_style_label_data->setGeometry(3*XOFFSET +50 ,190 + 3*LABLE_HEIGHT
-				      ,110,LABLE_HEIGHT);
-
-  family_combo = new QComboBox( this, "Family" );
+  family_combo = new QComboBox( box1, "Family" );
   family_combo->insertItem( "", 0 );
   family_combo->insertItem( "Times" );
   family_combo->insertItem( "Helvetica" );
@@ -868,15 +803,12 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   family_combo->insertItem( "Symbol" );
 
   family_combo->setInsertionPolicy(QComboBox::NoInsertion);
+  grid2->addWidget(family_combo,0,1);
 
-  family_combo->setGeometry(6*XOFFSET + LABLE_LENGTH
-			    ,8*YOFFSET - COMBO_ADJUST ,4* LABLE_LENGTH,COMBO_BOX_HEIGHT);
   connect( family_combo, SIGNAL(activated(const QString &)),
 	   SLOT(family_chosen_slot(const QString &)) );
-  //  QToolTip::add( family_combo, "Select Font Family" );
 
-
-  size_combo = new QComboBox( true, this, "Size" );
+  size_combo = new QComboBox( true, box1, "Size" );
   QStringList lst;
   lst.append("");
   for ( unsigned int i = 1; i < 100; ++i )
@@ -885,70 +817,97 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   size_combo->insertStringList( lst );
 
   size_combo->setInsertionPolicy(QComboBox::NoInsertion);
-  size_combo->setGeometry(10*XOFFSET + 6*LABLE_LENGTH
-			    ,8*YOFFSET - COMBO_ADJUST
-			  ,2*LABLE_LENGTH + 20,COMBO_BOX_HEIGHT);
+  grid2->addWidget(size_combo,0,3);
   connect( size_combo, SIGNAL(activated(const QString &)),
 	   SLOT(size_chosen_slot(const QString &)) );
-  //  QToolTip::add( size_combo, "Select Font Size in Points" );
-  strike = new QCheckBox(i18n("Strike out"),this);
-  strike->setGeometry(6*XOFFSET + LABLE_LENGTH
-			    ,26*YOFFSET - COMBO_ADJUST
-			    ,2*LABLE_LENGTH+20,COMBO_BOX_HEIGHT);
+
+  weight_combo = new QComboBox( box1, "Weight" );
+  weight_combo->insertItem( "", 0 );
+  weight_combo->insertItem( i18n("normal") );
+  weight_combo->insertItem( i18n("bold") );
+
+  weight_combo->setInsertionPolicy(QComboBox::NoInsertion);
+  grid2->addWidget(weight_combo,1,1);
+  connect( weight_combo, SIGNAL(activated(const QString &)),
+	   SLOT(weight_chosen_slot(const QString &)) );
+
+  style_combo = new QComboBox( box1, "Style" );
+  style_combo->insertItem( "", 0 );
+  style_combo->insertItem( i18n("roman") );
+  style_combo->insertItem( i18n("italic"), 2 );
+  grid2->addWidget(style_combo,1,3);
+  style_combo->setInsertionPolicy(QComboBox::NoInsertion);
+  connect( style_combo, SIGNAL(activated(const QString &)),
+	   SLOT(style_chosen_slot(const QString &)) );
+
+  strike = new QCheckBox(i18n("Strike out"),box1);
+  grid2->addWidget(strike,2,1);
   strike->setChecked(dlg->strike);
   connect( strike, SIGNAL( clicked()),
 	   SLOT(strike_chosen_slot()) );
-  underline = new QCheckBox(i18n("Underline"),this);
-  underline->setGeometry(10*XOFFSET + 6*LABLE_LENGTH
-			    ,26*YOFFSET - COMBO_ADJUST
-			    ,2*LABLE_LENGTH+20,COMBO_BOX_HEIGHT);
+
+  underline = new QCheckBox(i18n("Underline"),box1);
+  grid2->addWidget(underline,2,3);
   underline->setChecked(dlg->underline);
   connect( underline, SIGNAL( clicked()),
 	   SLOT(underline_chosen_slot()) );
 
-  weight_combo = new QComboBox( this, "Weight" );
-  weight_combo->insertItem( "", 0 );
-  weight_combo->insertItem( i18n("normal") );
-  weight_combo->insertItem( i18n("bold") );
-  weight_combo->setGeometry(6*XOFFSET + LABLE_LENGTH
-			    ,19*YOFFSET - COMBO_ADJUST
-			    ,4*LABLE_LENGTH,COMBO_BOX_HEIGHT);
-  weight_combo->setInsertionPolicy(QComboBox::NoInsertion);
-  connect( weight_combo, SIGNAL(activated(const QString &)),
-	   SLOT(weight_chosen_slot(const QString &)) );
-  //  QToolTip::add( weight_combo, "Select Font Weight" );
+
+  grid->addWidget(box1);
+
+  box1 = new QGroupBox(this, "Box2");
+  box1->setTitle(i18n("Actual Font"));
+  grid2 = new QGridLayout(box1,2,4,15,7);
+
+  actual_family_label = new QLabel(box1,"afamily");
+  actual_family_label->setText(i18n("Family:"));
+  grid2->addWidget(actual_family_label,0,0);
+
+  actual_family_label_data = new QLabel(box1,"afamilyd");
+  grid2->addWidget(actual_family_label_data,0,1);
+
+  actual_size_label = new QLabel(box1,"asize");
+  actual_size_label->setText(i18n("Size:"));
+  grid2->addWidget(actual_size_label,1,0);
+
+  actual_size_label_data = new QLabel(box1,"asized");
+  grid2->addWidget(actual_size_label_data,1,1);
+
+  actual_weight_label = new QLabel(box1,"aweight");
+  actual_weight_label->setText(i18n("Weight:"));
+  grid2->addWidget(actual_weight_label,2,0);
+
+  actual_weight_label_data = new QLabel(box1,"aweightd");
+  grid2->addWidget(actual_weight_label_data,2,1);
+
+  actual_style_label = new QLabel(box1,"astyle");
+  actual_style_label->setText(i18n("Style:"));
+  grid2->addWidget(actual_style_label,3,0);
+
+  actual_style_label_data = new QLabel(box1,"astyled");
+  grid2->addWidget(actual_style_label_data,3,1);
 
 
-  style_combo = new QComboBox( this, "Style" );
-  style_combo->insertItem( "", 0 );
-  style_combo->insertItem( i18n("roman") );
-  style_combo->insertItem( i18n("italic"), 2 );
-  style_combo->setGeometry(10*XOFFSET + 6*LABLE_LENGTH
-			    ,19*YOFFSET- COMBO_ADJUST
-			   ,2*LABLE_LENGTH + 20,COMBO_BOX_HEIGHT);
-  style_combo->setInsertionPolicy(QComboBox::NoInsertion);
-  connect( style_combo, SIGNAL(activated(const QString &)),
-	   SLOT(style_chosen_slot(const QString &)) );
-  // QToolTip::add( style_combo, "Select Font Style" );
-
-  example_label = new QLabel(this,"examples");
+  example_label = new QLabel(box1,"examples");
   example_label->setFont(selFont);
-  example_label->setGeometry(200,190,190, 80);
   example_label->setAlignment(AlignCenter);
   example_label->setBackgroundColor(white);
   example_label->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
   example_label->setLineWidth( 1 );
   example_label->setText(i18n("Dolor Ipse"));
   //  example_label->setAutoResize(true);
-
+  grid2->addMultiCellWidget(example_label,0,3,2,3);
   connect(this,SIGNAL(fontSelected( const QFont&  )),
 	  this,SLOT(display_example( const QFont&)));
 
+
+  grid->addWidget(box1);
   setCombos();
   display_example( selFont );
 
   this->resize( 400, 400 );
 }
+
 
 void CellLayoutPageFont::apply( KSpreadCell *_obj )
 {
@@ -1133,7 +1092,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     QGridLayout *grid3 = new QGridLayout(this,3,2,15,7);
     QButtonGroup *grp = new QButtonGroup( i18n("Horizontal"),this);
     grp->setRadioButtonExclusive( TRUE );
-    
+
     QGridLayout *grid2 = new QGridLayout(grp,3,1,15,7);
     left = new QRadioButton( i18n("Left"), grp );
     grid2->addWidget(left,0,0);
@@ -1171,7 +1130,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
         bottom->setChecked(true);
 
     grp = new QButtonGroup( i18n("Multi Row"),this);
-    
+
     grid2 = new QGridLayout(grp,1,1,15,7);
     multi = new QCheckBox( i18n("Goto line automatically"), grp );
 

@@ -560,9 +560,11 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
 
   if ( col < m_iMouseStartColumn )
-    col = m_iMouseStartColumn;
+     col = m_iMouseStartColumn;
+
   if ( row < m_iMouseStartRow )
-    row = m_iMouseStartRow;
+     row = m_iMouseStartRow;
+
 
   if ( row == selection.bottom() && col == selection.right() )
     return;
@@ -690,6 +692,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     int xpos;
     int ypos;
     int w, h;
+
     // No selection or complete rows/columns are selected
     if ( selection.left() == 0 ||
          selection.right() == 0x7fff || selection.bottom() == 0x7fff )
