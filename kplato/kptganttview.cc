@@ -83,7 +83,12 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     m_gantt->setShowLegendButton(false);
     m_gantt->setShowHeaderPopupMenu();
     m_taskView = new KPTTaskAppointmentsView(this, "Task widget");
-	draw(view->getPart()->getProject());
+    // hide KPTTaskAppointmentsView
+    QValueList<int> list = sizes();
+    list[0] += list[1];
+    list[1] = 0;
+    setSizes(list);    
+    draw(view->getPart()->getProject());
     
 	connect(m_gantt, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )),
 	             this, SLOT (popupMenuRequested(KDGanttViewItem *, const QPoint &, int)));
