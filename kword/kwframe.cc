@@ -1025,6 +1025,7 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
             if ( !reg.isEmpty() ) {
                 painter->save();
                 painter->setClipRegion( reg );
+                cg.setBrush(QColorGroup::Base,frames.first()->getBackgroundColor());
                 formula->draw( *painter, crect, cg );
                 painter->restore();
             }
@@ -1048,6 +1049,7 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
             if ( !reg.isEmpty() ) {
                 painter->save();
                 painter->setClipRegion( reg );
+                cg.setBrush(QColorGroup::Base,frames.first()->getBackgroundColor());
                 formulaView->draw( *painter, crect, cg );
                 painter->restore();
             }
