@@ -63,25 +63,25 @@ class StyleClusterQuad
   public:
   
     /**
-     * Initializes m_type to Simple and everything else to NULL.
-     * You should set style, type and the child quads to your needs!
+     * You should set style and the child quads to your needs!
      */
-    StyleClusterQuad();
+    inline StyleClusterQuad();
     
     /**
      * Releases m_style, deletes child quads, if m_type is Quad
      */
-    ~StyleClusterQuad();
+    inline ~StyleClusterQuad();
 
     /**
      * Returns the number of m_{top,bottom}{left,right} pointers that are null
      * Does not use the isSimple variable, so safe to call if isSimple is
      * invalid.
      */
-    int numNullChildren();
+    inline int numNullChildren();
 
     /**
      * Are the following 4 pointers all null?  For speed efficency.. I hope.
+     * This needs to be kept in sync manually.
      */
     bool m_isSimple;
 
@@ -90,13 +90,9 @@ class StyleClusterQuad
     StyleClusterQuad* m_bottomLeft;
     StyleClusterQuad* m_bottomRight;
 
-    KSpreadStyle* getStyle();
-    void setStyle(KSpreadStyle * style);
+    KSpreadStyle* getStyle() { return m_style; }
+    inline void setStyle(KSpreadStyle * style);
 };
-
-KSpreadStyle *StyleClusterQuad::getStyle() {
-  return m_style;
-}
 
 void StyleClusterQuad::setStyle(KSpreadStyle * style) {
   if(m_style && m_style->release()) {
@@ -147,6 +143,9 @@ int StyleClusterQuad::numNullChildren() {
   if(!m_bottomLeft ) num_children++;
   return num_children;
 }
+
+//end of StyleClusterQuad
+//start of StyleCluster
 
 StyleCluster::StyleCluster(KSpreadSheet* sheet)
 : m_sheet(sheet)
