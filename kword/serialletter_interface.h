@@ -28,6 +28,9 @@ typedef class QMap< class QString, class QString > DbRecord;
 #define KWSLOpen		3
 #define KWSLMergePreview	4
 #define KWSLMergeDocument	5
+
+#define KWSLCreate_text		"create"
+#define KWSLOpen_text		"open"
 /******************************************************************
  *
  * Class: KWSerialLetterDataSource
@@ -46,7 +49,7 @@ class KWSerialLetterDataSource
     }
 
     virtual  int getNumRecords() const =0;
-    virtual  void showConfigDialog(class QWidget*,int) =0;
+    virtual  bool showConfigDialog(class QWidget*,int) =0;
 
     virtual void save( class QDomElement& parentElem )=0;
     virtual void load( class QDomElement& elem )=0;

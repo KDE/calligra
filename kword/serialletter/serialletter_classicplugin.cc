@@ -197,12 +197,17 @@ void KWClassicSerialDataSource::load( QDomElement& /*elem*/ )
 #endif
 }
 
-void KWClassicSerialDataSource::showConfigDialog(QWidget *par,int)
+bool KWClassicSerialDataSource::showConfigDialog(QWidget *par,int action)
 {
+   if (action==KWSLCreate)
+   {
+   	db.clear();
+   	sampleRecord.clear();
+   }
    KWClassicSerialLetterEditor *dia=new KWClassicSerialLetterEditor( par, this );
-   dia->exec();
+   bool ret=(dia->exec()==QDialog::Accepted);
    delete dia;
-
+   return ret;
 }
 
 
@@ -515,7 +520,7 @@ void KWClassicSerialLetterEditor::removeRecord()
 }
 
 extern "C" {
-	KWSerialLetterDataSource *create_classic()
+	KWSerialLetterDataSource *create_kwserialletter_classic()
 	{
 		return new KWClassicSerialDataSource();
 	}

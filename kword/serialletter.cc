@@ -45,6 +45,8 @@
 #include <qfile.h>
 #include <kstdaction.h>
 #include <kaction.h>
+#include <kservice.h>
+#include <kmessagebox.h>
 
 /******************************************************************
  *
@@ -55,7 +57,39 @@
 KWSerialLetterDataBase::KWSerialLetterDataBase( KWDocument *doc_ )
     : doc( doc_ )
 {
-   plugin=loadPlugin("classic");
+   plugin=0; //loadPlugin("classic");
+}
+
+KWSerialLetterDataSource *KWSerialLetterDataBase::openPluginFor(int type)
+{
+	KWSerialLetterDataSource *ret=0;
+	QString constrain=QString("'%1' in [X-KDE-Capabilities]").arg(((type==KWSLCreate)?KWSLCreate_text:KWSLOpen_text));
+	kdDebug()<<constrain<<endl;
+	KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/SerialLetterPlugin"),constrain);
+
+	//Only for debugging
+	for (KTrader::OfferList::Iterator it=pluginOffers.begin();*it;++it)
+	{
+		kdDebug()<<"Found serial letter plugin: "<< (*it)->name()<<endl;
+	}
+	
+	if (!pluginOffers.count())
+	{
+		//Sorry no suitable plugins found
+		kdDebug()<<"No plugins found"<<endl;
+		KMessageBox::sorry(0,i18n("No plugins supporting the requested action were found"));
+	}
+	else
+	{
+		KWSerialLetterChoosePluginDialog *dia=new KWSerialLetterChoosePluginDialog(pluginOffers);
+		if (dia->exec()==QDialog::Accepted)
+		{
+			ret=loadPlugin((*(pluginOffers.at(dia->
+			chooser->currentItem())))->library());
+		}
+
+	}
+	return ret;
 }
 
 KWSerialLetterDataSource *KWSerialLetterDataBase::loadPlugin(const QString& name)
@@ -67,7 +101,7 @@ KWSerialLetterDataSource *KWSerialLetterDataBase::loadPlugin(const QString& name
       KLibLoader *loader = KLibLoader::self();
 
       // try to load the library
-      QString libname("libkwserialletter_%1");
+      QString libname("lib%1");
       KLibrary *lib = loader->library(QFile::encodeName(libname.arg(name)));
       if (lib)
 	{
@@ -123,18 +157,7 @@ int KWSerialLetterDataBase::getNumRecords() const
 void KWSerialLetterDataBase::showConfigDialog(QWidget *par)
 {
 	KWSerialLetterConfigDialog *dia=new KWSerialLetterConfigDialog(par,this);
-	if ( dia->exec() == QDialog::Accepted )
-	{
-		switch (dia->action)
-		{
-			case KWSLEdit:
-				break;
-			case KWSLCreate:
-			case KWSLOpen:
-				if (plugin) return plugin->showConfigDialog(par,dia->action);
-				break;
-			}
-	}
+	dia->exec();
 	delete dia;
 }
 
@@ -150,6 +173,38 @@ void KWSerialLetterDataBase::load( QDomElement& /*elem*/ )
 //	if (plugin) plugin->load(parentElem); // Not completely sure, perhaps the database itself has to load something too (JoWenn)
 }
 
+
+/******************************************************************
+ *
+ * Class: KWSerialLetter ChoosePluginDialog
+ *
+ ******************************************************************/
+
+KWSerialLetterChoosePluginDialog::KWSerialLetterChoosePluginDialog(KTrader::OfferList pluginOffers)
+    : KDialogBase(Plain, i18n( "Serial Letter - Configuration" ), Ok|Cancel, Ok, /*parent*/ 0, "", true )
+{
+	QWidget *back = plainPage();
+	QVBoxLayout *layout=new QVBoxLayout(back);
+	layout->setSpacing( 5 );
+	layout->setMargin( 5 );
+	layout->setAutoAdd(true);
+	QLabel *l = new QLabel( i18n( "Available sources:" ),back );
+    	l->setMaximumHeight( l->sizeHint().height() );
+	chooser=new QComboBox(back);
+	chooser->setEditable(false);
+	for (KTrader::OfferList::Iterator it=pluginOffers.begin();*it;++it)
+	{
+		chooser->insertItem((*it)->name());
+	}
+	l=new QLabel((*pluginOffers.at(0))->comment(),back);
+	l->setAlignment(WordBreak);
+	l->setFrameShape( QFrame::Box );
+	l->setFrameShadow( QFrame::Sunken );
+}
+
+KWSerialLetterChoosePluginDialog::~KWSerialLetterChoosePluginDialog()
+{
+}
 
 /******************************************************************
  *
@@ -189,12 +244,7 @@ KWSerialLetterConfigDialog::KWSerialLetterConfigDialog(QWidget *parent,KWSerialL
     preview=new QPushButton(i18n("Print preview"),row2);
     document=new QPushButton(i18n("Create new document"),row2);
 
-    if (!db->plugin)
-    	{
-		preview->setEnabled(false);
-		document->setEnabled(false);
-		edit->setEnabled(false);
-	}
+    enableDisableEdit();
 
     connect(edit,SIGNAL(clicked()), this, SLOT(slotEditClicked()));
     connect(create,SIGNAL(clicked()),this,SLOT(slotCreateClicked()));
@@ -203,16 +253,67 @@ KWSerialLetterConfigDialog::KWSerialLetterConfigDialog(QWidget *parent,KWSerialL
     connect(document,SIGNAL(clicked()),this,SLOT(slotDocumentClicked()));
 }
 
+void KWSerialLetterConfigDialog::enableDisableEdit()
+{
+    if (!db_->plugin)
+    	{
+		preview->setEnabled(false);
+		document->setEnabled(false);
+		edit->setEnabled(false);
+	}
+	else
+	{
+		preview->setEnabled(true);
+		document->setEnabled(true);
+		edit->setEnabled(true);
+	}
+}
+
 void KWSerialLetterConfigDialog::slotEditClicked()
 {action=KWSLEdit;
  if (db_->plugin) db_->plugin->showConfigDialog((QWidget*)parent(),KWSLEdit);
 }
 
 void KWSerialLetterConfigDialog::slotCreateClicked()
-{action=KWSLCreate;done(QDialog::Accepted);}
+{
+	action=KWSLCreate;
+	doNewActions();
+//done(QDialog::Accepted);
+}
+
+void KWSerialLetterConfigDialog::doNewActions()
+{
+	KWSerialLetterDataSource *tmpPlugin=db_->openPluginFor(action);
+	if (tmpPlugin)
+	{
+		if (tmpPlugin->showConfigDialog(dynamic_cast<QWidget*>(parent()),action))
+		{
+			if (db_->plugin)
+			{
+				if (KMessageBox::warningContinueCancel(this,
+					i18n("Do you really want to replace the current datasource ?"),
+					QString::null,QString::null,QString::null,true)== KMessageBox::Cancel)
+				{
+					delete tmpPlugin;
+					return;
+				}
+
+			}
+			db_->plugin=tmpPlugin;
+		}
+		else
+		{
+			delete tmpPlugin;
+		}
+	}
+	enableDisableEdit();
+}
 
 void KWSerialLetterConfigDialog::slotOpenClicked()
-{action=KWSLOpen;done(QDialog::Accepted);}
+{
+	action=KWSLOpen;
+	doNewActions();
+}
 
 void KWSerialLetterConfigDialog::slotPreviewClicked()
 {

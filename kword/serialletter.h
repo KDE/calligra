@@ -23,6 +23,8 @@
 #define serialletter_h
 
 #include <kdialogbase.h>
+#include <ktrader.h>
+
 
 #include <qmap.h>
 #include <qstring.h>
@@ -68,14 +70,23 @@ public:
     void load( QDomElement& elem ); // save some global config + plugin config
 
     KWSerialLetterDataSource *loadPlugin(const QString& name);
+    KWSerialLetterDataSource *openPluginFor(int type);
 protected:
     friend class KWSerialLetterConfigDialog;
     KWDocument *doc;
     class KWSerialLetterDataSource *plugin;
     QMap<QString, QString> emptyMap;
-
 };
 
+
+class KWSerialLetterChoosePluginDialog : public KDialogBase
+{
+	Q_OBJECT
+public:
+	KWSerialLetterChoosePluginDialog(KTrader::OfferList);
+	~KWSerialLetterChoosePluginDialog();
+	class QComboBox *chooser;
+};
 
 class KWSerialLetterConfigDialog : public KDialogBase
 {
@@ -92,6 +103,9 @@ protected:
     QPushButton *preview;
     QPushButton *document;
     KWSerialLetterDataBase *db_;
+    void enableDisableEdit();
+    void doNewActions();
+    
 protected slots:
     void slotEditClicked();
     void slotCreateClicked();

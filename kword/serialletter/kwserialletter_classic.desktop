@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=KWord/SerialLetterPlugin
+
+Name=Internal Store
+Comment=This datasource type stores the data directly in the KWord file
+
+X-KDE-Library=kwserialletter_classic
+X-KDE-Capabilities=edit,create

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=KWord/SerialLetterPlugin
+Comment=KWord serial letter plugin
+
+[PropertyDef::X-KDE-Capabilities]
+Type=QStringList
+
+[PropertyDef::X-KDE-Library]
+Type=QString
+
