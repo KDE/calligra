@@ -23,7 +23,6 @@
 #include <ktabwidget.h>
 #include <klistbox.h>
 #include <kiconloader.h>
-#include <kmessagebox.h>
 #include <kdebug.h>
 #include <klocale.h>
 
