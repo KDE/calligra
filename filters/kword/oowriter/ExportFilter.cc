@@ -85,41 +85,48 @@ bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
     return true;
 }
 
+void OOWriterWorker::writeContentXml(void)
+{
+    if (!m_zip)
+        return;
+
+    QCString head( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
+    head += "<!DOCTYPE office:document-content>\n";
+    head += "<office:document-content>\n";
+
+    QCString tail( "</office:document-content>\n" );
+
+    QByteArray fontArray;
+    QTextStream stream(fontArray, IO_WriteOnly);
+    stream.setEncoding( QTextStream::UnicodeUTF8 );    
+    stream << " <office:fonts-decls>\n";
+    for (QStringList::ConstIterator it=m_fontNames.begin(); it!=m_fontNames.end(); it++)
+    {
+        stream << "  <style:font-decl style:name=\"" << escapeOOText(*it) << "\"";
+        stream << " fo:font-family=\"" << escapeOOText(*it) << "\" />\n";
+        // ### TODO: pitch
+    }
+    stream << " </office:fonts-decls>\n";
+
+    uint size=0;
+    m_zip->writeData(head.data(), head.length());
+    size += head.length();
+    m_zip->writeData(fontArray.data(), fontArray.size());
+    size += fontArray.size();
+    // TODO: styles
+    m_zip->writeData(m_contentBody.data(), m_contentBody.size());
+    size += m_contentBody.size();
+    m_zip->writeData(tail.data(), tail.length());
+    size += tail.length();
+    m_zip->doneWriting(size);
+}
+
 bool OOWriterWorker::doCloseFile(void)
 {
     kdDebug(30518)<< "OOWriterWorker::doCloseFile" << endl;
     if (m_zip)
     {
-        QCString head( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-        head += "<!DOCTYPE office:document-content>\n";
-        head += "<office:document-content>\n";
-    
-        QCString tail( "</office:document-content>\n" );
-        
-        QByteArray fontArray;
-        QTextStream stream(fontArray, IO_WriteOnly);
-        stream.setEncoding( QTextStream::UnicodeUTF8 );    
-        stream << " <office:fonts-decls>\n";
-        for (QStringList::ConstIterator it=m_fontNames.begin(); it!=m_fontNames.end(); it++)
-        {
-            stream << "  <style:font-decl style:name=\"" << escapeOOText(*it) << "\"";
-            stream << " fo:font-family=\"" << escapeOOText(*it) << "\" />\n";
-            // ### TODO: pitch
-        }
-        stream << " </office:fonts-decls>\n";
-        
-        uint size=0;
-        m_zip->prepareWriting("content.xml", QString::null, QString::null, 0);
-        m_zip->writeData(head.data(), head.length());
-        size += head.length();
-        m_zip->writeData(fontArray.data(), fontArray.size());
-        size += fontArray.size();
-        // TODO: styles
-        m_zip->writeData(m_contentBody.data(), m_contentBody.size());
-        size += m_contentBody.size();
-        m_zip->writeData(tail.data(), tail.length());
-        size += tail.length();
-        m_zip->doneWriting(size);
+        writeContentXml();
         m_zip->close();
     }
         
@@ -141,18 +148,6 @@ bool OOWriterWorker::doCloseDocument(void)
 {
     *m_streamOut << "</office:body>\n";
     *m_streamOut << "</office:document-content>\n";
-    return true;
-}
-
-bool OOWriterWorker::doOpenStyles(void)
-{
-    *m_streamOut << "<office:automatic-styles>\n";
-    return true;
-}
-
-bool OOWriterWorker::doCloseStyles(void)
-{
-    *m_streamOut << "</office:automatic-styles>\n";
     return true;
 }
 
@@ -214,13 +209,12 @@ QString OOWriterWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
         }
     }
 
-#if 0
     if (force || (formatOrigin.fgColor!=formatData.fgColor))
     {
         if ( formatData.fgColor.isValid() )
         {
             // Give colour
-            strElement+="abiword:color=\"";
+            strElement+="fo:color=\"";
             strElement+=formatData.fgColor.name();
             strElement+="\" ";
         }
@@ -231,12 +225,11 @@ QString OOWriterWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
         if ( formatData.bgColor.isValid() )
         {
             // Give background colour
-            strElement+="abiword:bgcolor=\"";
+            strElement+="fo:background-color=\"";
             strElement+=formatData.bgColor.name();
             strElement+="\" ";
         }
     }
-#endif
 
     if (force || (formatOrigin.underline!=formatData.underline)
         || (formatOrigin.strikeout!=formatData.strikeout))
@@ -383,7 +376,7 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
     int pos;
     while ((pos=partialText.find(QChar(10)))>-1)
     {
-        partialText.replace(pos,1,"<abiword:br/>");
+        partialText.replace(pos,1,"<test:line-break/>");
     }
 
     if (formatData.text.missing)
@@ -405,17 +398,12 @@ void OOWriterWorker::processVariable ( const QString&,
 {
     if (0==formatData.variable.m_type)
     {
-        // As AbiWord's field is inflexible, we cannot make the date custom
-        *m_streamOut << "<abiword:field type=\"date_ntdfl\"";
-        writeAbiProps(formatLayout,formatData.text);
-        *m_streamOut << "/>";
+        *m_streamOut << "<text:date/>";
     }
     else if (2==formatData.variable.m_type)
     {
         // As AbiWord's field is inflexible, we cannot make the time custom
-        *m_streamOut << "<abiword:field type=\"time\"";
-        writeAbiProps(formatLayout,formatData.text);
-        *m_streamOut << "/>";
+        *m_streamOut << "<text:time/>";
     }
     else if (4==formatData.variable.m_type)
     {
@@ -423,34 +411,30 @@ void OOWriterWorker::processVariable ( const QString&,
         QString strFieldType;
         if (formatData.variable.isPageNumber())
         {
-            strFieldType="page_number";
+            *m_streamOut << "<text:page-number/>";
         }
+#if 0
         else if (formatData.variable.isPageCount())
         {
-            strFieldType="page_count";
+            *m_streamOut << "<text:page-number/>";
         }
-        if (strFieldType.isEmpty())
+#endif
+        else
         {
             // Unknown subtype, therefore write out the result
             *m_streamOut << formatData.variable.m_text;
         }
-        else
-        {
-            *m_streamOut << "<abiword:field type=\"" << strFieldType <<"\"";
-            writeAbiProps(formatLayout,formatData.text);
-            *m_streamOut << "/>";
-        }
     }
     else if (9==formatData.variable.m_type)
     {
-        // A link
-        *m_streamOut << "<abiword:a xlink:href=\""
+        // A link (### TODO is the <text:span> really needed?)
+        *m_streamOut << "<text:a xlink:href=\""
             << escapeOOText(formatData.variable.getHrefName())
-            << "\"><text:span";  // In AbiWord, an anchor <a> has always a <c> child
+            << " xlink:type=\"simple\" xlink:actuate=\"onRequest\"><text:span";
         writeAbiProps(formatLayout,formatData.text);
         *m_streamOut << ">"
             << escapeOOText(formatData.variable.getLinkName())
-            << "</text:span></abiword:a>";
+            << "</text:span></text:a>";
     }
 #if 0
                 else if (11==(*paraFormatDataIt).variable.m_type)
@@ -564,34 +548,26 @@ QString OOWriterWorker::layoutToCss(const LayoutData& layoutOrigin,
     if (!layout.tabulatorList.isEmpty()
         && (force || (layoutOrigin.tabulatorList!=layout.tabulatorList) ))
     {
-        props += "abiword:tabstops:";
-        bool first=true;
+        props += "<style:tabstops>";
         TabulatorList::ConstIterator it;
         for (it=layout.tabulatorList.begin();it!=layout.tabulatorList.end();it++)
         {
-            if (first)
-            {
-                first=false;
-            }
-            else
-            {
-                props += ",";
-            }
+            props+="<style:tabstop style:position=\"";
             props += QString::number((*it).m_ptpos);
-            props += "pt";
+            props += "pt\"";
 
             switch ((*it).m_type)
             {
-                case 0:  props += "/L"; break;
-                case 1:  props += "/C"; break;
-                case 2:  props += "/R"; break;
-                case 3:  props += "/D"; break;
-                default: props += "/L";
+                case 0:  props += " style:type=\"left\""; break;
+                case 1:  props += " style:type=\"center\""; break;
+                case 2:  props += " style:type=\"right\""; break;
+                //case 3:  props += "/D"; break;
+                default: props += " style:type=\"left\""; break;
             }
+            props +="/>"
 
-            props += "0"; // No filling
         }
-        props += "; ";
+        props += "</style:tabstops>";
     }
 #endif
 
@@ -643,7 +619,7 @@ QString OOWriterWorker::layoutToCss(const LayoutData& layoutOrigin,
     }
     else if ( 20==layout.lineSpacingType  )
     {
-        props += "line-height=\"2.0\" "; // Two
+        props += "fo:line-height=\"2.0\" "; // Two
     }
     else if ( layout.lineSpacingType!=10  )
     {
@@ -671,26 +647,30 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
         *m_streamOut << " text:style-name=\"" << EscapeXmlText(style,true,true) << "\"";
     }
     *m_streamOut << props;
-    *m_streamOut << ">";  //Warning(AbiWord): No trailing white space or else it's in the text!!!
-
-    // Before processing the text, test if we have a page break
     if (layout.pageBreakBefore)
     {
         // We have a page break before the paragraph
-        *m_streamOut << "<abiword:pbr/>";
+        *m_streamOut << " fo:page-break-before=\"page\"";
     }
+    if (layout.pageBreakAfter)
+    {
+        // We have a page break after the paragraph
+        *m_streamOut << " fo:page-break-after=\"page\"";
+    }
+    *m_streamOut << ">";  //Warning(AbiWord): No trailing white space or else it's in the text!!!
+
 
     processParagraphData(paraText, layout.formatData.text, paraFormatDataList);
 
     // Before closing the paragraph, test if we have a page break
-    if (layout.pageBreakAfter)
-    {
-        // We have a page break after the paragraph
-        *m_streamOut << "<abiword:pbr/>";
-    }
 
     *m_streamOut << "</text:p>\n";
     return true;
+}
+
+bool OOWriterWorker::doOpenStyles(void)
+{
+    m_styles += " <office:styles>\n";
 }
 
 bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
@@ -698,11 +678,12 @@ bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
     //Register style in the style map
     m_styleMap[layout.styleName]=layout;
 
-#if 0
-    m_styles += "  <style:style>";
+    m_styles += "  <style:style";
 
     m_styles += " style:name=\"" + EscapeXmlText(layout.styleName,true,true) + "\"";
-    m_styles += " abiword:followedby=\"" + EscapeXmlText(layout.styleFollowing,true,true) + "\"";
+    m_styles += " style:next-style-name=\"" + EscapeXmlText(layout.styleFollowing,true,true) + "\"";
+    m_styles += ">";
+#if 0
     if ( (layout.counter.numbering == CounterData::NUM_CHAPTER)
         && (layout.counter.depth<10) )
     {
@@ -710,6 +691,7 @@ bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
         m_styles += QString::number(layout.counter.depth+1,10);
         m_styles += << "\">";
     }
+#endif
     m_styles += "<style:properties ";
      
     m_styles += layoutToCss(layout,layout,true);
@@ -717,10 +699,15 @@ bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
     m_styles += "/>";
 
     m_styles += "</style:style>\n";
-#endif
 
     return true;
 }
+
+bool OOWriterWorker::doCloseStyles(void)
+{
+    m_styles += " </office:styles>\n";
+}
+
 
 bool OOWriterWorker::doFullPaperFormat(const int format,
             const double width, const double height, const int orientation)
@@ -763,15 +750,6 @@ bool OOWriterWorker::doFullPaperBorders (const double top, const double left,
     return true;
 }
 
-bool OOWriterWorker::doCloseHead(void)
-{
-    if (!m_pagesize.isEmpty())
-    {
-        *m_streamOut << m_pagesize;
-    }
-    return true;
-}
-
 bool OOWriterWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 {
     m_docInfo=docInfo;
@@ -784,15 +762,6 @@ bool OOWriterWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
     stream << "<office:document-meta>\n";
     stream << " <office:meta>\n";
     
-    if (!m_docInfo.title.isEmpty())
-    {
-        stream << "  <dc:title>" << escapeOOText(m_docInfo.title) << "</dc:title>\n";    
-    }
-    if (!m_docInfo.abstract.isEmpty())
-    {
-        stream << "  <dc:description>" << escapeOOText(m_docInfo.abstract) << "</dc:description>\n";    
-    }
-    
     // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
     stream << "  <meta:generator>KWord Export Filter";
 
@@ -802,7 +771,16 @@ bool OOWriterWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
     stream << strVersion.mid(10).replace('$',"");
 
     stream << "</meta:generator>\n";
-
+    
+    if (!m_docInfo.title.isEmpty())
+    {
+        stream << "  <dc:title>" << escapeOOText(m_docInfo.title) << "</dc:title>\n";    
+    }
+    if (!m_docInfo.abstract.isEmpty())
+    {
+        stream << "  <dc:description>" << escapeOOText(m_docInfo.abstract) << "</dc:description>\n";    
+    }
+    
     QDateTime now (QDateTime::currentDateTime(Qt::UTC)); // current time in UTC
     stream << "  <dc:date>"
          << escapeOOText(now.toString(Qt::ISODate))

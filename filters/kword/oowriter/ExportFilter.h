@@ -65,11 +65,10 @@ public:
         const double width, const double height, const int orientation); // Calc AbiWord's <papersize>
     virtual bool doFullPaperBorders (const double top, const double left,
         const double bottom, const double right); // Like KWord's <PAPERBORDERS>
-    virtual bool doCloseHead(void); // Write <papersize>
-    virtual bool doOpenStyles(void); // AbiWord's <styles>
-    virtual bool doCloseStyles(void); // AbiWord's </styles>
-    virtual bool doFullDefineStyle(LayoutData& layout); // AbiWord's <s></s>
-    virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo); // AbiWord's <metadata>
+    virtual bool doOpenStyles(void); // AbiWord's <office:styles>
+    virtual bool doCloseStyles(void); // AbiWord's </office:styles>
+    virtual bool doFullDefineStyle(LayoutData& layout); // AbiWord's <style:style/>
+    virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo); // <office:meta/>
 private:
     void processParagraphData (const QString& paraText,
         const TextFormatting& formatLayout,
@@ -93,6 +92,7 @@ private:
     bool convertUnknownPicture(const QString& name, const QString& extension, QByteArray& image);
     void writeAbiProps(const TextFormatting& formatLayout, const TextFormatting& format);
     void declareFont(const QString& fontName);
+    void writeContentXml(void);
 private:
     QTextStream* m_streamOut;
     QString m_pagesize; // Buffer for the <pagesize> tag
