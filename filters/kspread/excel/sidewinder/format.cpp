@@ -255,9 +255,13 @@ class FormatBorder::Private
 public:
   bool null;
   unsigned leftBorderStyle;
+  Color leftBorderColor;
   unsigned rightBorderStyle;
+  Color rightBorderColor;
   unsigned topBorderStyle;
+  Color topBorderColor;
   unsigned bottomBorderStyle;
+  Color bottomBorderColor;
 };
 
 // constructor
@@ -266,9 +270,13 @@ FormatBorder::FormatBorder()
   d                    = new FormatBorder::Private;
   d->null              = true;
   d->leftBorderStyle   = 0;
+  d->leftBorderColor   = Color( 0, 0, 0);
   d->rightBorderStyle  = 0;
+  d->rightBorderColor  = Color( 0, 0, 0);
   d->topBorderStyle    = 0;
+  d->topBorderColor    = Color( 0, 0, 0);
   d->bottomBorderStyle = 0;
+  d->bottomBorderColor = Color( 0, 0, 0);
 }
 
 // destructor
@@ -295,9 +303,13 @@ FormatBorder& FormatBorder::assign( const FormatBorder& border )
 {
   d->null              = border.isNull();
   d->leftBorderStyle   = border.leftBorderStyle();
+  d->leftBorderColor   = border.leftBorderColor();
   d->rightBorderStyle  = border.rightBorderStyle();
+  d->rightBorderColor  = border.rightBorderColor();
   d->topBorderStyle    = border.topBorderStyle();
+  d->topBorderColor    = border.topBorderColor();
   d->bottomBorderStyle = border.bottomBorderStyle();
+  d->bottomBorderColor = border.bottomBorderColor();
   return *this;
 }
 
@@ -317,6 +329,16 @@ void FormatBorder::setLeftBorderStyle( unsigned s )
   d->null = false;
 }
 
+Color FormatBorder::leftBorderColor() const
+{
+  return d->leftBorderColor;
+}
+
+void FormatBorder::setLeftBorderColor( const Color& color )
+{
+  d->leftBorderColor = color;
+}
+
 unsigned FormatBorder::rightBorderStyle() const
 {
   return d->rightBorderStyle;
@@ -326,6 +348,16 @@ void FormatBorder::setRightBorderStyle( unsigned s )
 {
   d->rightBorderStyle = s;
   d->null = false;
+}
+
+Color FormatBorder::rightBorderColor() const
+{
+  return d->rightBorderColor;
+}
+
+void FormatBorder::setRightBorderColor( const Color& color )
+{
+  d->rightBorderColor = color;
 }
 
 unsigned FormatBorder::topBorderStyle() const
@@ -339,6 +371,16 @@ void FormatBorder::setTopBorderStyle( unsigned s )
   d->null = false;
 }
 
+Color FormatBorder::topBorderColor() const
+{
+  return d->topBorderColor;
+}
+
+void FormatBorder::setTopBorderColor( const Color& color )
+{
+  d->topBorderColor = color;
+}
+
 unsigned FormatBorder::bottomBorderStyle() const
 {
   return d->bottomBorderStyle;
@@ -348,6 +390,16 @@ void FormatBorder::setBottomBorderStyle( unsigned s )
 {
   d->bottomBorderStyle = s;
   d->null = false;
+}
+
+Color FormatBorder::bottomBorderColor() const
+{
+  return d->bottomBorderColor;
+}
+
+void FormatBorder::setBottomBorderColor( const Color& color )
+{
+  d->bottomBorderColor = color;
 }
 
 // helper class for Format class

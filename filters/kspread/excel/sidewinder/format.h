@@ -21,6 +21,7 @@
 #define SIDEWINDER_FORMAT_H
 
 #include "ustring.h"
+#include "defs.h"
 
 namespace Sidewinder
 {
@@ -272,18 +273,34 @@ public:
   
   void setLeftBorderStyle( unsigned s );
   
+  Color leftBorderColor() const;
+  
+  void setLeftBorderColor( const Color& color );
+  
   unsigned rightBorderStyle() const;
   
   void setRightBorderStyle( unsigned s );
     
+  Color rightBorderColor() const;
+  
+  void setRightBorderColor( const Color& color );
+  
   unsigned topBorderStyle() const;
   
   void setTopBorderStyle( unsigned s );
+  
+  Color topBorderColor() const;
+  
+  void setTopBorderColor( const Color& color );
   
   unsigned bottomBorderStyle() const;
   
   void setBottomBorderStyle( unsigned s );
         
+  Color bottomBorderColor() const;
+  
+  void setBottomBorderColor( const Color& color );
+  
 private:  
   class Private;
   Private *d;
