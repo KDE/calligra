@@ -1,5 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Norbert Andres (nandres@web.de)
+   Copyright (C) 2002-2003 Norbert Andres <nandres@web.de>
+             (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
+             (C) 2002      Laurent Montel <montel@kde.org>
+             (C) 1999 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

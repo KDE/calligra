@@ -1,6 +1,15 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+   Copyright (C) 2002-2003 Norbert Andres <nandres@web.de>
+             (C) 2002 Ariya Hidayat <ariya@kde.org> 
+             (C) 2002 Philipp Mueller <philipp.mueller@gmx.de>
+             (C) 2002 John Dailey <dailey@vt.edu>
+             (C) 2000-2001 Werner Trobin <trobin@kde.org>
+             (C) 2000-2001 Laurent Montel <montel@kde.org>
+             (C) 1999-2002 David Faure <faure@kde.org>
+             (C) 1999 Stephan Kulow <coolo@kde.org> 
+             (C) 1999 Reginald Stadlbauer <reggie@kde.org>
+             (C) 1998-1999 Torben Weis <weis@kde.org>
+  
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
