@@ -541,7 +541,7 @@ RangeList DependencyList::computeDependencies (const KSpreadPoint &cell) const
 
   //TODO: when the new parser is in use, KSpreadCell will hold a Formula
   //instance, hence we'll be able to use that one directly
-  Formula formula;
+  Formula formula (c->locale());
   formula.setExpression (c->text());
   
   kdDebug(36001) << "Retrieving dependencies for cell with text \"" <<

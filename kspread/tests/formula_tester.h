@@ -26,27 +26,29 @@
 
 #include <kspread_value.h>
 
+class KLocale;
+
 namespace KSpread
 {
 
 class FormulaParserTester: public Tester
 {
 public:
-  FormulaParserTester();
+  FormulaParserTester(KLocale *locale);
   virtual QString name();
   virtual void run();
 private:
-  void checkParse( const char *file, int line, const char* msg, const QString&, const QString& );
+  void checkParse( const char *file, int line, const char* msg, const QString&, const QString&, KLocale* );
 };
 
 class FormulaEvalTester: public Tester
 {
 public:
-  FormulaEvalTester();
+  FormulaEvalTester(KLocale *locale);
   virtual QString name();
   virtual void run();
 private:
-  void checkEval( const char *file, int line, const char* msg, const QString&, const KSpreadValue& );
+  void checkEval( const char *file, int line, const char* msg, const QString&, const KSpreadValue&, KLocale* );
 };
 
 } // namespace KSpread

@@ -66,6 +66,8 @@ KSpreadValue ValueConverter::asBoolean (const KSpreadValue &value,
         val.setValue (false);
     break;
     case KSpreadValue::Array:
+      val = asBoolean (value.element (0, 0), locale);
+    break;
     case KSpreadValue::CellRange:
       /* NOTHING */
     break;
@@ -103,6 +105,8 @@ KSpreadValue ValueConverter::asInteger (const KSpreadValue &value,
         val.setValue (0);
     break;
     case KSpreadValue::Array:
+      val = asInteger (value.element (0, 0), locale);
+    break;
     case KSpreadValue::CellRange:
       /* NOTHING */
     break;
@@ -140,6 +144,8 @@ KSpreadValue ValueConverter::asFloat (const KSpreadValue &value,
         val.setValue (0.0);
     break;
     case KSpreadValue::Array:
+      val = asFloat (value.element (0, 0), locale);
+    break;
     case KSpreadValue::CellRange:
       /* NOTHING */
     break;
@@ -209,6 +215,8 @@ KSpreadValue ValueConverter::asString (const KSpreadValue &value,
       val = value;
     break;
     case KSpreadValue::Array:
+      val = asString (value.element (0, 0), locale);
+    break;
     case KSpreadValue::CellRange:
       /* NOTHING */
     break;
@@ -251,6 +259,8 @@ KSpreadValue ValueConverter::asDateTime (const KSpreadValue &value,
       val.setFormat (KSpreadValue::fmt_DateTime);
     break;
     case KSpreadValue::Array:
+      val = asDateTime (value.element (0, 0), locale);
+    break;
     case KSpreadValue::CellRange:
       /* NOTHING */
     break;
@@ -291,6 +301,8 @@ KSpreadValue ValueConverter::asDate (const KSpreadValue &value,
         val.setValue (QDate::currentDate());
     break;
     case KSpreadValue::Array:
+      val = asDate (value.element (0, 0), locale);
+    break;
     case KSpreadValue::CellRange:
       /* NOTHING */
     break;
@@ -331,6 +343,8 @@ KSpreadValue ValueConverter::asTime (const KSpreadValue &value,
         val.setValue (QTime::currentTime());
     break;
     case KSpreadValue::Array:
+      val = asTime (value.element (0, 0), locale);
+    break;
     case KSpreadValue::CellRange:
       /* NOTHING */
     break;

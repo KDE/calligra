@@ -6728,7 +6728,7 @@ void KSpreadView::handleDamages( const QValueList<Damage*>& damages )
 void KSpreadView::runInternalTests()
 {
     // run various tests, only for developers
-    KSpread::TestRunner* runner = new KSpread::TestRunner();
+    KSpread::TestRunner* runner = new KSpread::TestRunner(d->doc->locale());
     runner->exec();
     delete runner;
 }

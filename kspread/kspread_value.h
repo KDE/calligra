@@ -186,7 +186,7 @@ class KSPREAD_EXPORT KSpreadValue
     bool isString() const { return type() == String; }
 
     /**
-     * Returns true if the type of this value is string.
+     * Returns true if the type of this value is array.
      */
     bool isArray() const { return type() == Array; }
 
@@ -416,66 +416,7 @@ class KSPREAD_EXPORT KSpreadValue
     bool isZero() const;
     
     static bool isZero( double v );
-    
-    /**
-     * Adds two given values, return the result. This only works if both are
-     * numbers. 
-     *
-     * The result is a floating-point number, except when both values 
-     * are integers and the result is still within integer limits.
-     */    
-     static KSpreadValue add( const KSpreadValue& v1, const KSpreadValue& v2 );
-     
-     KSpreadValue& add( const KSpreadValue& v );
-
-    /**
-     * Subtracts two given values, return the result. This only works if both are
-     * numbers. 
-     *
-     * The result is a floating-point number, except when both values 
-     * are integers and the result is still within integer limits.
-     */    
-     static KSpreadValue sub( const KSpreadValue& v1, const KSpreadValue& v2 );
-
-     KSpreadValue& sub( const KSpreadValue& v );
-
-    /**
-     * Multiplies two given values, return the result. This only works if both are
-     * numbers. If any of them is not a number, it will be converted first
-     * into number. When conversion fails, this function will return #VALUE.
-     *
-     * The result is a floating-point number, except when both values 
-     * are integers and the result is still within integer limits.
-     */    
-     static KSpreadValue mul( const KSpreadValue& v1, const KSpreadValue& v2 );
-
-     KSpreadValue& mul( const KSpreadValue& v );
-     
-    /**
-     * Divides two given values, return the result. This only works if both are
-     * numbers. If any of them is not a number, it will be converted first
-     * into number. When conversion fails, this function will return #VALUE.
-     *
-     * The result is a floating-point number, except when the result is still
-     * integer and within integer limits when both values are integers.
-     */    
-     static KSpreadValue div( const KSpreadValue& v1, const KSpreadValue& v2 );
-
-     KSpreadValue& div( const KSpreadValue& v );
-     
-    /**
-     * Calculates one value raised to the power of another value. This only 
-     * works if both are numbers. If any of them is not a number, it will be 
-     * converted first into number. When conversion fails, this function will 
-     * return #VALUE.
-     *
-     * The result is a floating-point number, except when the result is still
-     * integer and within integer limits when both values are integers.
-     */    
-     static KSpreadValue pow( const KSpreadValue& v1, const KSpreadValue& v2 );
-     
-     KSpreadValue& pow( const KSpreadValue& v );
-
+      
   protected:
 
     KSpreadValueData* d; // can't never be 0

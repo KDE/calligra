@@ -65,6 +65,7 @@
 #include "commands.h"
 #include "ksploadinginfo.h"
 #include "damages.h"
+#include "valuecalc.h"
 
 #include "KSpreadDocIface.h"
 
@@ -238,6 +239,9 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->spellConfig = 0;
   d->dontCheckUpperWord = false;
   d->dontCheckTitleCase = false;
+
+  //set locale for ValueCalc
+  KSpread::ValueCalc::self()->setLocale (&d->locale);
 }
 
 KSpreadDoc::~KSpreadDoc()

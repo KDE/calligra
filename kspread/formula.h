@@ -27,6 +27,8 @@
 #include "kspread_util.h"
 #include "kspread_value.h"
 
+class KLocale;
+
 namespace KSpread
 {
 
@@ -233,7 +235,7 @@ class Formula
     /*
      * Creates a formula.
      */
-    Formula();
+    Formula(KLocale *_locale);
     
     /*
      * Destroys the formula.
@@ -292,21 +294,6 @@ class Formula
      */
     QString dump() const;
 
-    /*
-     * Converts the value to number. If not possible, return error #VALUE.
-     */    
-    KSpreadValue convertToNumber( const KSpreadValue& value ) const;
-    
-    /*
-     * Converts the value to Boolean. If not possible, return error #VALUE.
-     */    
-    KSpreadValue convertToBool( const KSpreadValue& value ) const;
-    
-    /*
-     * Converts the value to string. If not possible, return error #VALUE.
-     */    
-    KSpreadValue convertToString( const KSpreadValue& value ) const;
-    
   protected:
   
     void compile( const Tokens& tokens ) const;        

@@ -22,6 +22,9 @@
 #include "kspread_sheet.h"
 #include "kspread_value.h"
 
+#include "valuecalc.h"
+#include "valueconverter.h"
+
 #if 0
 #include "functions.h"
 #endif 
@@ -91,6 +94,7 @@ public:
   Formula *formula;
   bool dirty;
   bool valid;
+  KLocale *locale;
   QString expression;
   QValueVector<Opcode> codes;
   QValueVector<KSpreadValue> constants;
@@ -365,9 +369,10 @@ static bool isIdentifier( QChar ch )
 
 // Constructor
 
-Formula::Formula()
+Formula::Formula(KLocale *locale)
 {
   d = new Private;
+  d->locale = locale;
   clear();
 }
 
@@ -1119,116 +1124,6 @@ RangeList Formula::getDependencies (KSpreadSheet *sheet) const
   return rl;
 }
 
-// Convert any value to integer or float
-
-KSpreadValue Formula::convertToNumber( const KSpreadValue& value ) const
-{
-  KSpreadValue result = KSpreadValue::errorVALUE();
-  bool ok; long num1; double num2;
-
-  switch( value.type() )
-  {
-    case KSpreadValue::Integer:
-    case KSpreadValue::Float:
-      result.setValue( value );
-      break;
-
-    case KSpreadValue::Boolean:
-      result.setValue( (long)(value.asBoolean() ? 1 : 0 ) );
-      break;
-
-    case KSpreadValue::String:
-      num1 = value.asString().toLong( &ok );
-      if( ok ) result.setValue( num1 );
-      else
-      {
-        num2 = value.asString().toDouble( &ok );
-        if( ok ) result.setValue( num2 );
-      }
-      break;
-
-    default: break;
-  }
-
-  return result;
-}
-
-
-// Convert any value to string
-
-KSpreadValue Formula::convertToString( const KSpreadValue& value ) const
-{
-  KSpreadValue result = KSpreadValue::errorVALUE();
-  QString str;
-
-  switch( value.type() )
-  {
-    case KSpreadValue::Integer:
-      str= QString::number( value.asInteger() );;
-      break;
-
-    case KSpreadValue::Float:
-      str = QString::number( value.asFloat() );
-      break;
-
-    case KSpreadValue::Boolean:
-      if( value.asBoolean() )
-          str = "True";
-      else
-          str = "False";
-      break;
-
-    case KSpreadValue::String:
-      str = value.asString();
-      break;
-
-    case KSpreadValue::Error:
-      str = "Error!";
-      break;
-
-    default: break;
-  }
-
-  result.setValue( str );
-
-  return result;
-}
-
-// Convert any value to Boolean
-
-KSpreadValue Formula::convertToBool( const KSpreadValue& value ) const
-{
-  KSpreadValue result = KSpreadValue::errorVALUE();
-  QString str;
-
-  switch( value.type() )
-  {
-    case KSpreadValue::Integer:
-      result.setValue( value.asInteger() != 0 );
-      break;
-
-    case KSpreadValue::Float:
-      // FIXME use machine epsilon here
-      result.setValue( value.asFloat() != 0.0 );
-      break;
-
-    case KSpreadValue::Boolean:
-      result.setValue( value.asBoolean()  );
-      break;
-
-    case KSpreadValue::String:
-      // FIXME use i18n version as well
-      str = value.asString();
-      if( str == "True" ) result.setValue( true );
-      else if( str == "False" ) result.setValue( false );
-      break;
-
-    default: break;
-  }
-
-  return result;
-}
-
 // Evaluates the formula, returns the result.
 
 KSpreadValue Formula::eval() const
@@ -1270,7 +1165,7 @@ KSpreadValue Formula::eval() const
 
       // unary operation
       case Opcode::Neg:
-        val1 = convertToNumber( stack.pop() );
+        val1 = ValueConverter::self()->asFloat( stack.pop(), d->locale );
         if( val1.isError() ) return KSpreadValue::errorVALUE();
         stack.push( -val1.asFloat() );
         break;
@@ -1278,51 +1173,51 @@ KSpreadValue Formula::eval() const
       // binary operation: take two values from stack, do the operation,
       // push the result to stack
       case Opcode::Add:
-        val1 = convertToNumber( stack.pop() );
-        val2 = convertToNumber( stack.pop() );
-        val2.add( val1 );
+        val1 = stack.pop();
+        val2 = stack.pop();
+        val2 = ValueCalc::self()->add( val1, val2 );
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
 
       case Opcode::Sub:
-        val1 = convertToNumber( stack.pop() );
-        val2 = convertToNumber( stack.pop() );
-        val2.sub( val1 );
+        val1 = stack.pop();
+        val2 = stack.pop();
+        val2 = ValueCalc::self()->sub( val1, val2 );
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
 
       case Opcode::Mul:
-        val1 = convertToNumber( stack.pop() );
-        val2 = convertToNumber( stack.pop() );
-        val2.mul( val1 );
+        val1 = stack.pop();
+        val2 = stack.pop();
+        val2 = ValueCalc::self()->mul( val1, val2 );
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
 
       case Opcode::Div:
-        val1 = convertToNumber( stack.pop() );
-        val2 = convertToNumber( stack.pop() );
+        val1 = stack.pop();
+        val2 = stack.pop();
         if( val1.isZero() ) return KSpreadValue::errorDIV0();
-        val2.div( val1 );
+        val2 = ValueCalc::self()->div( val1, val2 );
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
 
       case Opcode::Pow:
-        val1 = convertToNumber( stack.pop() );
-        val2 = convertToNumber( stack.pop() );
-        val2.pow( val1 );
+        val1 = stack.pop();
+        val2 = stack.pop();
+        val2 = ValueCalc::self()->pow( val1, val2 );
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
 
       // string concatenation
       case Opcode::Concat:
-        val1 = convertToString( stack.pop() );
+        val1 = ValueConverter::self()->asString( stack.pop(), d->locale );
         if( val1.isError() ) return KSpreadValue::errorVALUE();
-        val2 = convertToString( stack.pop() );
+        val2 = ValueConverter::self()->asString( stack.pop(), d->locale );
         if( val2.isError() ) return KSpreadValue::errorVALUE();
         val1.setValue( val2.asString().append( val1.asString() ) );
         stack.push( val1 );
@@ -1330,7 +1225,7 @@ KSpreadValue Formula::eval() const
 
       // logical not
       case Opcode::Not:
-        val1 = convertToBool( stack.pop() );
+        val1 = ValueConverter::self()->asBoolean( stack.pop(), d->locale );
         if( val1.isError() ) return KSpreadValue::errorVALUE();
         val1.setValue( !val1.asBoolean() );
         stack.push( val1 );
@@ -1433,7 +1328,7 @@ QString Formula::dump() const
 
   result = QString("Expression: [%1]\n").arg( d->expression );
   KSpreadValue value = eval();
-  result.append( QString("Result: %1\n").arg( convertToString( value ).asString() ) );
+  result.append( QString("Result: %1\n").arg( ValueConverter::self()->asString( value, d->locale ).asString() ) );
 
   result.append("  Constants:\n");
   for( unsigned c = 0; c < d->constants.count(); c++ )

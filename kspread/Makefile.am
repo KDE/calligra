@@ -51,6 +51,7 @@ libkspreadcommon_la_SOURCES =  \
         kspread_sheet.cc \
         kspread_sheetprint.cc \
         kspread_util.cc  \
+				valuecalc.cc \
 				valueconverter.cc \
 				valueformatter.cc \
 				valueparser.cc \

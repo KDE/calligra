@@ -50,7 +50,7 @@ public:
 using namespace KSpread;
 
 
-TestRunner::TestRunner():
+TestRunner::TestRunner(KLocale *locale):
   KDialogBase( KDialogBase::Plain, "Internal Tests", KDialogBase::Close, 
   KDialogBase::Close )
 {
@@ -80,8 +80,8 @@ TestRunner::TestRunner():
   
   // add all tests here !!
   addTester( new ValueTester() );
-  addTester( new FormulaParserTester() );
-  addTester( new FormulaEvalTester() );
+  addTester( new FormulaParserTester(locale) );
+  addTester( new FormulaEvalTester(locale) );
 }
 
 TestRunner::~TestRunner()
