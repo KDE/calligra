@@ -19,7 +19,6 @@
 #include "searchdia.h"
 #include "searchdia.moc"
 
-#include <kmsgbox.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kcolorbtn.h>
@@ -35,6 +34,7 @@
 #include <qpushbutton.h>
 #include <qevent.h>
 #include <qstrlist.h>
+#include <qmessagebox.h>
 
 #include <stdlib.h>
 
@@ -862,11 +862,12 @@ void KWSearchDia::replaceAll()
         if ( replace && cAsk->isChecked() )
         {
             bool _exit = false;
-            switch ( KMsgBox::yesNoCancel( 0L, i18n( "Replace" ), i18n( "Replace selected text?" ), 0, i18n( "&Yes" ), i18n( "&No" ), i18n( "&Skip" ) ) )
+            switch ( QMessageBox::information( thsi, i18n( "Replace" ), i18n( "Replace selected text?" ), 
+					       i18n( "&Yes" ), i18n( "&No" ), i18n( "&Skip" ) ) )
             {
-            case 1: break;
-            case 2: _exit = true; break;
-            case 3:
+            case 0: break;
+            case 1: _exit = true; break;
+            case 2:
             {
                 if ( addlen ) page->addLen();
                 page->repaintScreen( false );
