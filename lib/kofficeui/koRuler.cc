@@ -130,7 +130,7 @@ KoRuler::~KoRuler()
     delete d;
 }
 
-void KoRuler::displayLayoutMenuItem(bool b)
+void KoRuler::setPageLayoutMenuItemEnabled(bool b)
 {
     d->rb_menu->setItemEnabled(d->mPageLayout, b);
 }

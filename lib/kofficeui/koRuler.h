@@ -202,7 +202,10 @@ public:
      */
     int flags() const;
 
-    void displayLayoutMenuItem(bool b);
+    /**
+     * Enable or disable the "Page Layout" menu item.
+     */
+    void setPageLayoutMenuItemEnabled(bool b);
 
 signals:
     void newPageLayout( KoPageLayout );
