@@ -670,6 +670,7 @@ class ClassExportFilterBase
         virtual QString getParagraphOpeningTagExtraAttributes(const QString& strAlign) const = 0;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText) = 0;
         virtual QString getStyleElement(void) {return QString::null;} //Default is no style
+        virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)=0;
     public: // Public variables
         bool inList; // Are we currently in a list?
         bool orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
@@ -768,33 +769,14 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
         {
             // We are not yet part of a list
             exportFilter->inList=true;
-            switch (paraLayout.counter.style)
-            {
-            case CounterData::STYLE_NONE:
-            default:
-                {
-                    exportFilter->orderedList=false;
-                    outputText+="<ul>\n";
-                    break;
-                }
-            case CounterData::STYLE_NUM:
-            case CounterData::STYLE_ALPHAB_L:
-            case CounterData::STYLE_ALPHAB_U:
-            case CounterData::STYLE_ROM_NUM_L:
-            case CounterData::STYLE_ROM_NUM_U:
-            case CounterData::STYLE_CUSTOM:
-                 {
-                    exportFilter->orderedList=true;
-                    outputText+="<ol>\n";
-                    break;
-                }
-            }
+            outputText+=exportFilter->getStartOfListOpeningTag(paraLayout.counter.style,exportFilter->orderedList);
             exportFilter->typeList=paraLayout.counter.style;
         }
         // TODO: with Cascaded Style Sheet, we could add the exact counter type we want
-        // Note: .arg(strParaText) must remain last,
+        // Note 1: .arg(strParaText) must remain last,
         //  as strParaText may contain an unwanted % + number sequence
-        outputText += QString("<li%1>%2</li>\n").arg(align).arg(strParaText);
+        // Note 2: <li> cannot have an "align" attribute!
+        outputText += QString("<li>%1</li>\n").arg(strParaText);
     }
     else
     {
@@ -1002,7 +984,9 @@ bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &f
 
 }
 
+//
 // ClassExportFilterHtmlTransitional (normal HTML 4.01 Transitional)
+//
 
 class ClassExportFilterHtmlTransitional : public ClassExportFilterBase
 {
@@ -1014,6 +998,7 @@ class ClassExportFilterHtmlTransitional : public ClassExportFilterBase
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
         virtual QString getParagraphOpeningTagExtraAttributes(const QString& strAlign) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
+        virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
 };
 
 QString ClassExportFilterHtmlTransitional::getDocType(void) const
@@ -1200,7 +1185,81 @@ void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText
     }
 }
 
+QString ClassExportFilterHtmlTransitional::getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)
+{
+    QString strResult;
+    switch (typeList)
+    {
+    case CounterData::STYLE_NONE: // HTML cannot express STYLE_NONE
+    case CounterData::STYLE_CUSTOMBULLET: // We cannot keep the custom type/style
+    default:
+        {
+            orderedList=false;
+            strResult="<ul>\n";
+            break;
+        }
+    case CounterData::STYLE_CIRCLEBULLET:
+        {
+            orderedList=false;
+            strResult="<ul type=\"circle\">\n";
+            break;
+        }
+    case CounterData::STYLE_SQUAREBULLET:
+        {
+            orderedList=false;
+            strResult="<ul type=\"square\">\n";
+            break;
+        }
+    case CounterData::STYLE_DISCBULLET:
+        {
+            orderedList=false;
+            strResult="<ul type=\"disc\">\n";
+            break;
+        }
+    case CounterData::STYLE_NUM:
+        {
+            orderedList=true;
+            strResult="<ol type=\"1\">\n";
+            break;
+        }
+    case CounterData::STYLE_ALPHAB_L:
+        {
+            orderedList=true;
+            strResult="<ol type=\"a\">\n";
+            break;
+        }
+    case CounterData::STYLE_ALPHAB_U:
+        {
+            orderedList=true;
+            strResult="<ol type=\"A\">\n";
+            break;
+        }
+    case CounterData::STYLE_ROM_NUM_L:
+        {
+            orderedList=true;
+            strResult="<ol type=\"i\">\n";
+            break;
+        }
+    case CounterData::STYLE_ROM_NUM_U:
+        {
+            orderedList=true;
+            strResult="<ol type=\"I\">\n";
+            break;
+        }
+    case CounterData::STYLE_CUSTOM:
+        {
+            // We cannot keep the custom type/style
+            orderedList=true;
+            strResult="<ol>\n";
+            break;
+        }
+    }
+    return strResult;
+}
+
+//
 // ClassExportFilterHtmlTransitional (normal XHTML 1.0 Transitional)
+//
 
 class ClassExportFilterXHtmlTransitional : public ClassExportFilterHtmlTransitional
 {
@@ -1219,7 +1278,9 @@ QString ClassExportFilterXHtmlTransitional::getDocType(void) const
     return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">";
 }
 
+//
 // ClassExportFilterHtmlSpartan (HTML 4.01 Strict, only document structure, no (HTML-)deprecated formattings)
+//
 
 class ClassExportFilterHtmlSpartan : public ClassExportFilterBase
 {
@@ -1231,6 +1292,7 @@ class ClassExportFilterHtmlSpartan : public ClassExportFilterBase
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
         virtual QString getParagraphOpeningTagExtraAttributes(const QString& strAlign) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
+        virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
 };
 
 QString ClassExportFilterHtmlSpartan::getDocType(void) const
@@ -1319,7 +1381,36 @@ void ClassExportFilterHtmlSpartan::ProcessParagraphData ( QString &paraText, Val
     }
 }
 
+QString ClassExportFilterHtmlSpartan::getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)
+{
+    QString strResult;
+    switch (typeList)
+    {
+    case CounterData::STYLE_NONE:
+    default:
+        {
+            orderedList=false;
+            strResult="<ul>\n";
+            break;
+        }
+    case CounterData::STYLE_NUM:
+    case CounterData::STYLE_ALPHAB_L:
+    case CounterData::STYLE_ALPHAB_U:
+    case CounterData::STYLE_ROM_NUM_L:
+    case CounterData::STYLE_ROM_NUM_U:
+    case CounterData::STYLE_CUSTOM:
+        {
+            orderedList=true;
+            strResult="<ol>\n";
+            break;
+        }
+    }
+    return strResult;
+}
+
+//
 // ClassExportFilterXHtmlSpartan (HTML 4.01 Strict, only document structure, no (HTML-)deprecated formattings)
+//
 
 class ClassExportFilterXHtmlSpartan : public ClassExportFilterHtmlSpartan
 {
@@ -1349,6 +1440,7 @@ class ClassExportFilterHtmlStyle : public ClassExportFilterBase
         virtual QString getParagraphOpeningTagExtraAttributes(const QString& strAlign) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
         virtual QString getStyleElement(void);
+        virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
 };
 
 QString ClassExportFilterHtmlStyle::getDocType(void) const
@@ -1530,7 +1622,87 @@ QString ClassExportFilterHtmlStyle::getParagraphOpeningTagExtraAttributes(const 
     }
 }
 
+QString ClassExportFilterHtmlStyle::getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)
+{
+    QString strResult;
+    switch (typeList)
+    {
+    case CounterData::STYLE_CUSTOMBULLET: // We cannot keep the custom type/style
+    default:
+        {
+            orderedList=false;
+            strResult="<ul>\n";
+            break;
+        }
+    case CounterData::STYLE_NONE:
+        {
+            orderedList=false;
+            strResult="<ul style=\"list-style-type:none\">\n";
+            break;
+        }
+    case CounterData::STYLE_CIRCLEBULLET:
+        {
+            orderedList=false;
+            strResult="<ul style=\"list-style-type:circle\">\n";
+            break;
+        }
+    case CounterData::STYLE_SQUAREBULLET:
+        {
+            orderedList=false;
+            strResult="<ul style=\"list-style-type:square\">\n";
+            break;
+        }
+    case CounterData::STYLE_DISCBULLET:
+        {
+            orderedList=false;
+            strResult="<ul style=\"list-style-type:disc\">\n";
+            break;
+        }
+    case CounterData::STYLE_NUM:
+        {
+            orderedList=true;
+            strResult="<ol style=\"list-style-type:decimal\">\n";
+            break;
+        }
+    case CounterData::STYLE_ALPHAB_L:
+        {
+            orderedList=true;
+            strResult="<ol style=\"list-style-type:lower-alpha\">\n";
+            break;
+        }
+    case CounterData::STYLE_ALPHAB_U:
+        {
+            orderedList=true;
+            strResult="<ol style=\"list-style-type:upper-alpha\">\n";
+            break;
+        }
+    case CounterData::STYLE_ROM_NUM_L:
+        {
+            orderedList=true;
+            strResult="<ol style=\"list-style-type:lower-roman\">\n";
+            break;
+        }
+    case CounterData::STYLE_ROM_NUM_U:
+        {
+            orderedList=true;
+            strResult="<ol style=\"list-style-type:upper-roman\">\n";
+            break;
+        }
+    case CounterData::STYLE_CUSTOM:
+        {
+            // We cannot keep the custom type/style
+            orderedList=true;
+            strResult="<ol>\n";
+            break;
+        }
+    }
+    return strResult;
+}
+
+//
 // ClassExportFilterXHtmlStyle (HTML 4.01 Strict, style using CSS2, no style sheets)
+//
+
 class ClassExportFilterXHtmlStyle : public ClassExportFilterHtmlStyle
 {
     public:
@@ -1561,6 +1733,7 @@ QString ClassExportFilterXHtmlStyle::getStyleElement(void)
 //
 // HTMLExport
 //
+
 HTMLExport::HTMLExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
 }
