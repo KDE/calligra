@@ -24,6 +24,7 @@
 #include <koQueryTrader.h>
 #include <kmimetype.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include <qapplication.h>
 
@@ -200,7 +201,25 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* _store, const KoDocumentEnt
         else
         {
             // Reference to an external document. Hmmm...
-            res = document()->openURL( m_tmpURL );
+            if ( !KURL(m_tmpURL).isLocalFile() )
+            {
+                QApplication::restoreOverrideCursor();
+                // For security reasons we need to ask confirmation if the url is remote
+                int result = KMessageBox::warningYesNoCancel(
+                    0, i18n( "This document contains an external link to a remote document\n%1").arg(m_tmpURL),
+                    i18n( "Confirmation required" ), i18n( "Download" ), i18n( "Skip" ) );
+
+                if ( result == KMessageBox::Cancel )
+                {
+                    d->m_parent->setErrorMessage("USER_CANCELED");
+                    return false;
+                }
+                if ( result == KMessageBox::Yes )
+                    res = document()->openURL( m_tmpURL );
+                // and if == No, res will still be false so we'll use a kounavail below
+            }
+            else
+                res = document()->openURL( m_tmpURL );
             if ( !res )
             {
                 delete d->m_doc;

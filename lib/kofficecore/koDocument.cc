@@ -956,7 +956,8 @@ bool KoDocument::loadNativeFormat( const QString & file )
     if ( !loadChildren( store ) )
     {
       kdError(30003) << "ERROR: Could not load children" << endl;
-      d->lastErrorMessage = i18n( "Couldn't load embedded objects" );
+      if ( d->lastErrorMessage.isEmpty() )
+          d->lastErrorMessage = i18n( "Couldn't load embedded objects" );
       delete store;
       QApplication::restoreOverrideCursor();
       return false;
