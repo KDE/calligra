@@ -1,0 +1,78 @@
+
+The design of this filter is a bit complicated due to the use of XPDF (which
+is not done for use as a library).
+
+PDFImport implements the KoFilter class and is the starting point in the
+process:
+
+PDFImport::convert
+ |
+ |- Dialog: ask for import options
+ |
+ |- Document::paperSize/pageOrientation: extract paper size/orientation
+ |
+ |- for each page
+ |   |
+ |   |- Document::treatPage -> [XPDF]PDFDoc::displayPage
+ |      which calls the following methods as appropriate
+ |       * Device::startPage -> new Page
+ |       * Device::endPage -> FilterPage::endPage
+ |          |
+ |          |- [XPDF]TextPage::coalesce
+ |          |
+ |          |- Page::createParagraphs
+ |          |
+ |          |- Page::checkHeader
+ |          |
+ |          |- Page::checkFooter
+ |       * Device::updateFont/... -> TextPage::updateFont
+ |       * Device::beginString -> new String -> new TextString
+ |       * Device::drawChar -> TextPage::addChar -> String::addChar
+ |          |
+ |          |- checkLigature
+ |          |
+ |          |- TextString:addChar
+ |          |
+ |          |- checkCombination
+ |       * Device::endString -> Page::endString -> TextPage::endString
+ |         -> Page::addString
+ |          |
+ |          |- checkCombination
+ |          |
+ |          |- TextPage::addString
+ |       * Device::drawLink -> Page::addLink
+ |       * Device::drawImage(Mask) -> Device::initImage -> Device::addImage
+ |       * Device::stroke/fill/... (ignore at the moment)
+ |
+ |- Document::init -> FilterDevice::init: compute and set body, header, and
+ |  footer rectangles for all pages
+ |
+ |- for each page
+ |   |
+ |   |- Document::dumpPage -> FilterDevice::dumpPage
+ |       |
+ |       |- Data::initPage
+ |       |
+ |       |- Page::dump
+ |           |
+ |           |- Page::prepare
+ |           |   |
+ |           |   |- associate links
+ |           |   |
+ |           |   |- Page::initParagraph: compute tabs, indents and alignments
+ |           |   |
+ |           |   |- Page::fillParagrap: remove hyphen/eol, add tabs, add text 
+ |           |   |
+ |           |   |- Page::checkSpecialChars -> Page::checkSpecial
+ |           |   |
+ |	     |   |- Page::coalesce(par)
+ |           |    
+ |           |- Page::dump(par)
+ |           |
+ |           |- add tab, indents, offsets, flows, text and format
+ |           |
+ |           |- Data::createParagraph
+ |
+ |- Data::endDump
+ |
+ |- write XML to KoStoreDevice

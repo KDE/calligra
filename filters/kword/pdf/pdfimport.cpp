@@ -104,10 +104,11 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
     time.start();
     SelectionRangeIterator it(_options.range);
     for (uint k=0; k<2; k++) {
+        bool first = ( k==0 );
         data.pageIndex = 0;
-        if ( k==1 ) _doc.init();
+        if ( !first ) _doc.init();
         for (it.toFirst(); it.current()!=it.end(); it.next()) {
-            QString s = (k==0 ? i18n("First pass: page #%1...")
+            QString s = (first ? i18n("First pass: page #%1...")
                          : i18n("Second pass: page #%1..."));
             pd.setLabel( s.arg(it.current()) );
             qApp->processEvents();
@@ -115,7 +116,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
             kdDebug(30516) << "-- " << "pass #" << k
                            << "  treat page: " << it.current()
                            << "----------------" << endl;
-            if ( k==0 ) _doc.treatPage( it.current() );
+            if (first) _doc.treatPage( it.current() );
             else _doc.dumpPage(data.pageIndex);
             pd.progressBar()->advance(1);
             data.pageIndex++;

@@ -17,6 +17,8 @@ Bigger things:
 - compute columns of text.
 - correctly detect and layout superscript.
 - correctly detect and layout underline and strokeline.
+- reduce memory usage (but more computing) by only keeping the relevant data
+  from first pass and discarding the page as soon as dumped on second pass.
 
 Hard things:
 - detect footnotes.
