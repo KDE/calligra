@@ -167,9 +167,7 @@ void KexiView::initActions()
 //	KAction *actionProjectProps = new KAction(i18n("Project Properties"), "project_props", Key_F7,
 	KAction *actionProjectProps = new KAction(i18n("Project Properties"), "", Key_F7,
 	 actionCollection(), "project_props");
-#ifndef KEXI_NO_UNFINISHED
 	connect(actionProjectProps, SIGNAL(activated()), this, SLOT(slotShowProjectProps()));
-#endif
 
 #ifndef KEXI_NO_UNFINISHED
 	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
@@ -209,7 +207,7 @@ void KexiView::initActions()
 	INIT_UNF("file_export_file");
 	INIT_UNF("file_send_file");
 	INIT_UNF("help_contents");
-	INIT_UNF_ACT(actionProjectProps);
+//	INIT_UNF_ACT(actionProjectProps);
 #undef INIT_UNF
 #endif
 }
