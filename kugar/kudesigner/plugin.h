@@ -30,9 +30,12 @@ class KuDesignerPlugin: public QObject {
 public:
 	KuDesignerPlugin(QObject *parent, const char* name, const QStringList& args);
 	virtual ~KuDesignerPlugin();
+        virtual bool acceptsDrops(){return false;}
+	virtual bool dragMove(QDragMoveEvent *,CanvasBox *cb) {return false;}
+	virtual void newCanvasBox(int type, CanvasBox *cb){;}
 public slots:
     virtual void createPluggedInEditor(QWidget *& retVal, PropertyEditor *editor,
-        int type,QString name,QString value,const CanvasBox *cb);
+        int type,QString name,QString value,const CanvasBox *);
 };
 
 #endif

@@ -137,7 +137,7 @@ bool KudesignerDoc::loadXML( QIODevice *, const QDomDocument & rt)
     delete printer;
 
     //creating canvas
-    docCanvas = new MyCanvas(width, height);
+    docCanvas = new MyCanvas(width, height,this);
     docCanvas->setAdvancePeriod(30);
 
     //creating KugarTemplate object

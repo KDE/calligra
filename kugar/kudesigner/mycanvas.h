@@ -19,10 +19,11 @@
 
 #include <qcanvas.h>
 #include "canvbox.h"
+#include "kudesigner_doc.h"
 
 class MyCanvas: public QCanvas{
 public:
-    MyCanvas(int w, int h): QCanvas(w, h) 
+    MyCanvas(int w, int h,KudesignerDoc *doc): QCanvas(w, h),m_doc(doc)
     {
 	templ = 0;
     }
@@ -36,8 +37,10 @@ public:
 	}*/
     }
     
+    KudesignerDoc *document(){return m_doc;}
     CanvasKugarTemplate *templ;
 private:
+    KudesignerDoc *m_doc;
     void scaleCanvas(int scale);
 };
 

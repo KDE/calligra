@@ -63,6 +63,8 @@ public:
       map<QString, PropPtr >
     */
     std::map<QString, PropPtr > props;
+    protected:
+    void registerAs(int type);
 };
 
 class CanvasSection: public CanvasBox{

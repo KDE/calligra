@@ -34,6 +34,12 @@ CanvasBox::~CanvasBox()
 {
 }
 
+void CanvasBox::registerAs(int type)
+{
+	if (((MyCanvas*)canvas())->document()->plugin()) {
+		(((MyCanvas*)canvas())->document()->plugin())->newCanvasBox(type,this);
+	}
+}
 
 void CanvasBox::scale(int scale)
 {
@@ -488,6 +494,7 @@ CanvasDetail::CanvasDetail(int x, int y, int width, int height, QCanvas * canvas
 {
     props["Height"] = *(new PropPtr(new Property(IntegerValue, "Height", i18n("Detail height"), "50")));
     props["Level"] = *(new PropPtr(new Property(IntegerValue, "Level", i18n("Detail level"), "0")));
+    registerAs(KuDesignerRttiDetail);
 }
 
 void CanvasDetail::draw(QPainter &painter)

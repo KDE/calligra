@@ -57,6 +57,12 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
     initActions();
 
     rc = new ReportCanvas((QCanvas *)(part->canvas()), (QWidget*)this);
+    if (part->plugin())
+    {
+       rc->setAcceptDrops(part->plugin()->acceptsDrops());
+       rc->viewport()->setAcceptDrops(part->plugin()->acceptsDrops());
+       rc->setPlugin(part->plugin());
+    }
     rc->viewport()->setFocusProxy(rc);
     rc->viewport()->setFocusPolicy(WheelFocus);
     rc->setFocus();

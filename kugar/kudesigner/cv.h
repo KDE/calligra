@@ -30,6 +30,7 @@ class CanvasReportItem;
 class QMouseEvent;
 class QCanvasItemList;
 class CanvasBox;
+class KuDesignerPlugin;
 
 class SelectionRect: public QCanvasRectangle{
 public:
@@ -51,10 +52,16 @@ public:
     void setRequest(RequestType r);
     void clearRequest();
     bool requested();
+    void setPlugin(KuDesignerPlugin *plugin);
 protected:
     void contentsMousePressEvent(QMouseEvent*);
     void contentsMouseReleaseEvent(QMouseEvent*);
     void contentsMouseMoveEvent(QMouseEvent*);
+  
+    void contentsDragEnterEvent ( QDragEnterEvent * );
+    void contentsDragMoveEvent ( QDragMoveEvent * );
+//    void contentsDragLeaveEvent ( QDragLeaveEvent * );
+//    void contentsDropEvent ( QDropEvent * );
 
     void startMoveOrResizeOrSelectItem(QCanvasItemList &l, QMouseEvent *e, QPoint &p);
     void placeItem(QCanvasItemList &l, QMouseEvent *e);
@@ -75,6 +82,7 @@ private:
     double moving_offsetX;
     CanvasReportItem *resizing;
     bool selectionStarted;
+    KuDesignerPlugin *m_plugin;
 
     SelectionRect *selectionRect;
     

@@ -40,6 +40,7 @@
 #include "cline.h"
 
 #include "property.h"
+#include "plugin.h"
 
 void SelectionRect::draw(QPainter & painter)
 {
@@ -81,7 +82,7 @@ void SelectionRect::draw(QPainter & painter)
 
 
 ReportCanvas::ReportCanvas(QCanvas * canvas, QWidget * parent, const char * name, WFlags f):
-	QCanvasView(canvas, parent, name, f)
+	QCanvasView(canvas, parent, name, f),m_plugin(0)
 {
     itemToInsert = 0;
     moving = 0;
@@ -90,6 +91,11 @@ ReportCanvas::ReportCanvas(QCanvas * canvas, QWidget * parent, const char * name
     selected.setAutoDelete(false);
     request = RequestNone;
     selectionRect = new SelectionRect(0, 0, 0, 0, canvas);
+}
+
+void ReportCanvas::setPlugin(KuDesignerPlugin *plugin)
+{
+	m_plugin=plugin;
 }
 
 void ReportCanvas::deleteItem(QCanvasItemList &l)
@@ -638,5 +644,27 @@ void ReportCanvas::finishSelection()
     }*/
 
 }
+
+void ReportCanvas::contentsDragMoveEvent ( QDragMoveEvent * event) {
+//perhaps this could be optimized a littlebit
+	if (!m_plugin) return;
+	QCanvasItemList l=canvas()->collisions(event->pos());
+	kdDebug()<<l.count()<<endl;
+	if (l.count()<2) 
+	{
+		event->ignore();
+		return;
+	}
+	CanvasBox *b=(CanvasBox*) (*(l.begin()));
+	if (m_plugin->dragMove(event,b))
+	        event->accept();
+	else
+		event->ignore();
+}
+
+void ReportCanvas::contentsDragEnterEvent ( QDragEnterEvent * event) {
+//	event->accept();
+}
+
 
 #include "cv.moc"

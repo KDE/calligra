@@ -57,6 +57,8 @@ CanvasField::CanvasField(int x, int y, int width, int height, QCanvas * canvas):
     props["NegValueColor"] = *(new PropPtr(new Property(Color, "NegValueColor", i18n("Negative value color"), "0,0,0")));
 
     props["CommaSeparator"] = *(new PropPtr(new Property(Symbol, "CommaSeparator", i18n("Comma separator"), "44")));
+
+    registerAs(KuDesignerRttiCanvasField);
 }
 
 void CanvasField::draw(QPainter &painter)
