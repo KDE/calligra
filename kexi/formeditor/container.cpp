@@ -98,7 +98,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 		m_form = toplevel->form();
 
-		ObjectTreeItem *it = new ObjectTreeItem(widget()->className(), widget()->name(), widget(), this);
+		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(widget()->className()), widget()->name(), widget(), this);
 		setObjectTree(it);
 		if(parent->inherits("QWidget"))
 		{
@@ -178,7 +178,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				kdDebug() << "Container::eventFilter(): context menu" << endl;
 				KPopupMenu *parent = m_form->manager()->popupMenu();
 				QWidget *w = (QWidget*)s;
-				QString n = w->className();
+				QString n = m_form->manager()->lib()->displayName(w->className());
 				KPopupMenu *p = new KPopupMenu();
 
 				m_form->manager()->lib()->createMenuActions(n,w,p,this);

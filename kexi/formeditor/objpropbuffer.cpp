@@ -102,7 +102,7 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty 
 			for(w = m_widgets.first(); w; w = m_widgets.next())
 			{
 				ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(w->name());
-				if((*this)[property]->changed())
+				if((*this)[property.latin1()]->changed())
 					tree->addModProperty(property, w->property(property.latin1()));
 
 				w->setProperty(property.latin1(), value);

@@ -214,7 +214,7 @@ InsertWidgetCommand::execute()
 {
 	Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
 	if(m_name.isEmpty())
-		m_name = m_container->form()->objectTree()->genName(m_class);
+		m_name = m_container->form()->objectTree()->genName(m_container->form()->manager()->lib()->displayName(m_class));
 
 	QWidget *w = m_container->form()->manager()->lib()->createWidget(m_class, m_container->m_container, m_name.latin1(), m_container);
 
@@ -233,7 +233,7 @@ InsertWidgetCommand::execute()
 	m_container->form()->manager()->stopInsert();
 
 	if (!m_container->form()->objectTree()->lookup(m_name))
-		m_container->form()->objectTree()->addChild(m_container->m_tree, new ObjectTreeItem(m_class, m_name, w));
+		m_container->form()->objectTree()->addChild(m_container->m_tree, new ObjectTreeItem(m_container->form()->manager()->lib()->displayName(m_class), m_name, w));
 
 	Container::LayoutType type = m_container->layoutType();
 	m_container->setLayout(Container::NoLayout);

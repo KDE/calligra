@@ -14,6 +14,7 @@
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 #include "spacer.h"
@@ -25,21 +26,21 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wLabel = new KFormDesigner::Widget(this);
 	wLabel->setPixmap("label");
 	wLabel->setClassName("QLabel");
-	wLabel->setName("Text Label");
+	wLabel->setName(i18n("Text Label"));
 //	wLabel->setDescription(i18n("A widget to display text or pixmaps"));
 	m_classes.append(wLabel);
 
 	KFormDesigner::Widget *wLineEdit = new KFormDesigner::Widget(this);
 	wLineEdit->setPixmap("lineedit");
 	wLineEdit->setClassName("QLineEdit");
-	wLineEdit->setName("Line Edit");
+	wLineEdit->setName(i18n("Line Edit"));
 //	wLineEdit->setDescription(i18n("A widget to input text"));
 	m_classes.append(wLineEdit);
 
 	KFormDesigner::Widget *wSpacer = new KFormDesigner::Widget(this);
 	wSpacer->setPixmap("kexi");
 	wSpacer->setClassName("Spacer");
-	wSpacer->setName("Spacer");
+	wSpacer->setName(i18n("Spacer"));
 //	wSpacer->setDescription(i18n("A widget to input text"));
 	m_classes.append(wSpacer);
 }

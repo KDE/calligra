@@ -90,8 +90,10 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 * @returns the widget or 0 if something falid
 		 */
 		QWidget	*createWidget(const QString &w, QWidget *parent, const char *name, Container *c);
-		
+
 		void	createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
+
+		QString  displayName(const QString &classname);
 
 	signals:
 		void	prepareInsert(const QString &c);

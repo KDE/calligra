@@ -16,6 +16,7 @@
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
+#include <klocale.h>
 #include <kdebug.h>
 #include <klineeditdlg.h>
 
@@ -30,19 +31,19 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 	KFormDesigner::Widget *wBtnGroup = new KFormDesigner::Widget(this);
 	wBtnGroup->setPixmap("frame");
 	wBtnGroup->setClassName("QButtonGroup");
-	wBtnGroup->setName("Button Group");
+	wBtnGroup->setName(i18n("Button Group"));
 	m_classes.append(wBtnGroup);
 
 	KFormDesigner::Widget *wTabWidget = new KFormDesigner::Widget(this);
 	wTabWidget->setPixmap("tabwidget");
 	wTabWidget->setClassName("QTabWidget");
-	wTabWidget->setName("Tab Widget");
+	wTabWidget->setName(i18n("Tab Widget"));
 	m_classes.append(wTabWidget);
 
 	KFormDesigner::Widget *wWidget = new KFormDesigner::Widget(this);
 	wWidget->setPixmap("widget");
 	wWidget->setClassName("QWidget");
-	wWidget->setName("Empty Widget");
+	wWidget->setName(i18n("Empty Widget"));
 //	wLabel->setDescription(i18n("A widget to display text or pixmaps"));
 	m_classes.append(wWidget);
 }

@@ -16,7 +16,6 @@
 * Create db-aware widget factory
 
 ****** Bugfixes/Changes : *****
-* Remove all these " Q*** " names
 * Add a grouping ability to Widget
 * Make actions toggable (with KRadioAction)
 
@@ -44,3 +43,4 @@
 * Undo support(3/05/04)
 * Alignment and layout properties also support old values (3/06/04)
 * Better handling of multiple widgets in ObjectPropertyBuffer : each widget has its own old value, so reset will act as expected (3/07/04)
+* Remove all these " Q*** " names (3/08/04)

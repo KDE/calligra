@@ -22,6 +22,7 @@
 #include <qtabwidget.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 #include <kcommand.h>
 #include <kaction.h>
 
@@ -55,8 +56,8 @@ Form::createToplevel(QWidget *container, const QString &classname)
 {
 	kdDebug() << "Form::createToplevel()" << endl;
 
-	m_toplevel = new Container(0, container, this, "form1");
-	m_topTree = new ObjectTree(classname, container->name(), container, m_toplevel);
+	m_toplevel = new Container(0, container, this, name());
+	m_topTree = new ObjectTree(i18n("Form"), container->name(), container, m_toplevel);
 	m_toplevel->setObjectTree(m_topTree);
 	m_toplevel->setForm(this);
 

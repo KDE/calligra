@@ -146,6 +146,14 @@ WidgetLibrary::createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu,
 	return;
 }
 
+QString
+WidgetLibrary::displayName(const QString &classname)
+{
+	if(m_widgets.find(classname))
+		return m_widgets[classname]->name();
+	else
+		return QString();
+}
 
 WidgetLibrary::~WidgetLibrary()
 {
