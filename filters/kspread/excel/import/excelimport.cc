@@ -56,6 +56,20 @@ ExcelImport::ExcelImport ( QObject*, const char*, const QStringList& )
 {
 }
 
+// convert from RGB values to "#rrggbb"
+static QString convertColor( const Sidewinder::Color& color )
+{
+  QString c;
+  c.append( '#' );
+  c.append( QString::number( color.red / 16, 16 ) );
+  c.append( QString::number( color.red % 10, 16 ) );
+  c.append( QString::number( color.green / 16, 16 ) );
+  c.append( QString::number( color.green % 10, 16 ) );
+  c.append( QString::number( color.blue / 16, 16 ) );
+  c.append( QString::number( color.blue % 10, 16 ) );
+  return c;
+}
+
 QDomElement convertFormat( QDomDocument& doc, const Sidewinder::Format& format )
 {
   QDomElement e = doc.createElement( "format" );
@@ -83,6 +97,12 @@ QDomElement convertFormat( QDomDocument& doc, const Sidewinder::Format& format )
   fontElement.setAttribute( "underline", font.underline() ? "yes" : "no" );
   fontElement.setAttribute( "strikeout", font.strikeout() ? "yes" : "no" );
   e.appendChild( fontElement );
+
+  QDomElement penElement = doc.createElement( "pen" );
+  penElement.setAttribute( "width", 0 );
+  penElement.setAttribute( "style", 1 );
+  penElement.setAttribute( "color", convertColor( font.color() ) );
+  e.appendChild( penElement );
 
   return e;
 }
