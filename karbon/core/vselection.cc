@@ -26,6 +26,8 @@ VSelection::VSelection( const VSelection& selection )
 VSelection::~VSelection()
 {
 	delete[]( m_qrect );
+
+	clear();
 }
 
 VSelection*
