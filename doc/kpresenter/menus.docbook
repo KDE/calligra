@@ -1033,24 +1033,6 @@ section.</para></listitem>
 <varlistentry>
 <term>
 <menuchoice>
-<shortcut><keycap>F4</keycap></shortcut>
-<guimenu>Insert</guimenu>
-<guimenuitem>Clipart...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-<action>Insert scaleable clipart in vector format.</action>
-&kpresenter; can currently import clipart in the <literal
-role="extension">.wmf</literal> or <quote>Windows Meta File</quote>
-format, which is common on &Windows;.
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
 <guimenu>Insert</guimenu>
 <guimenuitem>Scan Image...</guimenuitem>
 </menuchoice>
