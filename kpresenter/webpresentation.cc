@@ -607,6 +607,7 @@ KPWebPresentationWizard::KPWebPresentationWizard( const QString &_config, KPrese
     setupPage1();
     setupPage2();
     setupPage3();
+    setupPage4();
 
     connect( nextButton(), SIGNAL( clicked() ), this, SLOT( pageChanged() ) );
     connect( backButton(), SIGNAL( clicked() ), this, SLOT( pageChanged() ) );
@@ -644,51 +645,52 @@ void KPWebPresentationWizard::setupPage1()
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page1 );
-    QGridLayout *layout = new QGridLayout( canvas, 6, 2, 
+    QGridLayout *layout = new QGridLayout( canvas, 7, 2, 
         KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
     helptext->setAlignment( Qt::WordBreak | Qt::AlignTop| Qt::AlignLeft );
     helptext->setText( i18n( "Enter your name, email address and "
                              "the title of the web presentation. "
-                             "Also enter the path into which the "
-                             "web presentation should be created. "
-                             "(This must be a directory)." ) );
+                             "Also enter the output directory where the "
+                             "web presentation should be saved. " ) );
     layout->addMultiCellWidget( helptext, 0, 0, 0, 1 );
+
+    layout->addMultiCell( new QSpacerItem( 1, 50 ), 1, 1, 0, 1 );
 
     QLabel *label1 = new QLabel( i18n("Author:"), canvas );
     label1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    layout->addWidget( label1, 1, 0 );
+    layout->addWidget( label1, 2, 0 );
 
     QLabel *label2 = new QLabel( i18n("Title:"), canvas );
     label2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    layout->addWidget( label2, 2, 0 );
+    layout->addWidget( label2, 3, 0 );
 
-    QLabel *label3 = new QLabel( i18n("Email address:"), canvas );
+    QLabel *label3 = new QLabel( i18n("E-mail address:"), canvas );
     label3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    layout->addWidget( label3, 3, 0 );
+    layout->addWidget( label3, 4, 0 );
 
     QLabel *label4 = new QLabel( i18n("Path:"), canvas );
     label4->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    layout->addWidget( label4, 4, 0 );
+    layout->addWidget( label4, 5, 0 );
 
     author = new KLineEdit( webPres.getAuthor(), canvas );
-    layout->addWidget( author, 1, 1 );
+    layout->addWidget( author, 2, 1 );
 
     title = new KLineEdit( webPres.getTitle(), canvas );
-    layout->addWidget( title, 2, 1 );
+    layout->addWidget( title, 3, 1 );
 
     email = new KLineEdit( webPres.getEmail(), canvas );
-    layout->addWidget( email, 3, 1 );
+    layout->addWidget( email, 4, 1 );
 
     path=new KURLRequester( canvas );
     path->setMode( KFile::Directory);
     path->lineEdit()->setText(webPres.getPath());
-    layout->addWidget( path, 4, 1 );
+    layout->addWidget( path, 5, 1 );
 
     QSpacerItem* spacer = new QSpacerItem( 1, 10, 
         QSizePolicy::Minimum, QSizePolicy::Expanding );
-    layout->addMultiCell( spacer, 5, 5, 0, 1 );
+    layout->addMultiCell( spacer, 6, 6, 0, 1 );
 
     connect(path, SIGNAL(textChanged(const QString&)),
            this,SLOT(slotChoosePath(const QString&)));
@@ -716,14 +718,13 @@ void KPWebPresentationWizard::setupPage2()
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page2 );
-    QGridLayout *layout = new QGridLayout( canvas, 8, 2, 
+    QGridLayout *layout = new QGridLayout( canvas, 6, 2, 
         KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
     helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
-    QString help = i18n("Here you can configure the style "
-                        "of the web pages (colors). You also "
-                        "need to specify the image format "
+    QString help = i18n("Here you can configure the style of the web pages. "
+                        "You also need to specify the image format "
                         "which should be used for the slides.");
 
     help += "\n";
@@ -760,41 +761,22 @@ void KPWebPresentationWizard::setupPage2()
 
     layout->addMultiCellWidget( helptext, 0, 0, 0, 1 );
 
-    QLabel *label1 = new QLabel( i18n("Text color:"), canvas );
-    label1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    layout->addWidget( label1, 1, 0 );
-
-    QLabel *label2 = new QLabel( i18n("Title color:"), canvas );
-    label2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    layout->addWidget( label2, 2, 0 );
-
-    QLabel *label3 = new QLabel( i18n("Background color:"), canvas );
-    label3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    layout->addWidget( label3, 3, 0 );
+    layout->addMultiCell( new QSpacerItem( 1, 50 ), 1, 1, 0, 1 );
 
     QLabel *label4 = new QLabel( i18n("Image format:"), canvas );
     label4->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    layout->addWidget( label4, 4, 0 );
+    layout->addWidget( label4, 2, 0 );
 
     QLabel *label5 = new QLabel( i18n("Zoom:"), canvas );
     label5->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    layout->addWidget( label5, 5, 0 );
+    layout->addWidget( label5, 3, 0 );
 
     QLabel *label6 = new QLabel( i18n( "Default encoding:" ), canvas );
     label6->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    layout->addWidget( label6, 6, 0 );
-
-    textColor = new KColorButton( webPres.getTextColor(), canvas );
-    layout->addWidget( textColor, 1, 1 );
-
-    titleColor = new KColorButton( webPres.getTitleColor(), canvas );
-    layout->addWidget( titleColor, 2, 1 );
-
-    backColor = new KColorButton( webPres.getBackColor(), canvas );
-    layout->addWidget( backColor, 3, 1 );
+    layout->addWidget( label6, 4, 0 );
 
     format = new KComboBox( false, canvas );
-    layout->addWidget( format, 4, 1 );
+    layout->addWidget( format, 2, 1 );
     format->insertItem( "BMP", -1 );
     format->insertItem( "PNG", -1 );
     if ( KImageIO::canWrite( "JPEG" ) )
@@ -802,12 +784,12 @@ void KPWebPresentationWizard::setupPage2()
     format->setCurrentItem( static_cast<int>( webPres.getImageFormat() ) );
 
     zoom = new KIntNumInput( webPres.getZoom(), canvas );
-    layout->addWidget( zoom, 5, 1 );
+    layout->addWidget( zoom, 3, 1 );
     zoom->setSuffix( " %" );
     zoom->setRange( 25, 1000, 5 );
 
     encoding = new KComboBox( false, canvas );
-    layout->addWidget( encoding, 6, 1 );
+    layout->addWidget( encoding, 4, 1 );
     QStringList _strList = KGlobal::charsets()->availableEncodingNames();
     encoding->insertStringList( _strList );
     QString _name = webPres.getEncoding();
@@ -815,9 +797,9 @@ void KPWebPresentationWizard::setupPage2()
 
     QSpacerItem* spacer = new QSpacerItem( 1, 10, 
         QSizePolicy::Minimum, QSizePolicy::Expanding );
-    layout->addMultiCell( spacer, 7, 7, 0, 1 );
+    layout->addMultiCell( spacer, 5, 5, 0, 1 );
 
-    addPage( page2, i18n( "Step 2: Choose Style" ) );
+    addPage( page2, i18n( "Step 2: Configure HTML" ) );
 
     setHelpEnabled(page2, false);  //doesn't do anything currently
 }
@@ -826,8 +808,8 @@ void KPWebPresentationWizard::setupPage2()
 void KPWebPresentationWizard::setupPage3()
 {
     page3 = new QHBox( this );
-    page3->setSpacing( 5 );
-    page3->setMargin( 5 );
+    page3->setSpacing( 6 );
+    page3->setMargin( 6 );
 
     QLabel* sidebar = new QLabel( page3 );
     sidebar->setMinimumSize( 106, 318 );
@@ -837,6 +819,61 @@ void KPWebPresentationWizard::setupPage3()
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page3 );
+    QGridLayout *layout = new QGridLayout( canvas, 6, 2, 
+        KDialog::marginHint(), KDialog::spacingHint() );
+
+    QLabel *helptext = new QLabel( canvas );
+    helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
+    helptext->setText( i18n( "Now you can customize the colors of the web pages." ) );
+    layout->addMultiCellWidget( helptext, 0, 0, 0, 1 );
+
+    layout->addMultiCell( new QSpacerItem( 1, 50 ), 1, 1, 0, 1 );
+
+    QLabel *label1 = new QLabel( i18n("Text color:"), canvas );
+    label1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label1, 2, 0 );
+
+    QLabel *label2 = new QLabel( i18n("Title color:"), canvas );
+    label2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label2, 3, 0 );
+
+    QLabel *label3 = new QLabel( i18n("Background color:"), canvas );
+    label3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label3, 4, 0 );
+
+    textColor = new KColorButton( webPres.getTextColor(), canvas );
+    layout->addWidget( textColor, 2, 1 );
+
+    titleColor = new KColorButton( webPres.getTitleColor(), canvas );
+    layout->addWidget( titleColor, 3, 1 );
+
+    backColor = new KColorButton( webPres.getBackColor(), canvas );
+    layout->addWidget( backColor, 4, 1 );
+
+    QSpacerItem* spacer = new QSpacerItem( 1, 10, 
+        QSizePolicy::Minimum, QSizePolicy::Expanding );
+    layout->addMultiCell( spacer, 5, 5, 0, 1 );
+
+    addPage( page3, i18n( "Step 3: Customize Colors" ) );
+
+    setHelpEnabled(page3, false);  //doesn't do anything currently
+}
+
+/*================================================================*/
+void KPWebPresentationWizard::setupPage4()
+{
+    page4 = new QHBox( this );
+    page4->setSpacing( 5 );
+    page4->setMargin( 5 );
+
+    QLabel* sidebar = new QLabel( page4 );
+    sidebar->setMinimumSize( 106, 318 );
+    sidebar->setMaximumSize( 106, 318 );
+    sidebar->setFrameShape( QFrame::Panel );
+    sidebar->setFrameShadow( QFrame::Sunken );
+    sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
+
+    QWidget* canvas = new QWidget( page4 );
     QGridLayout *layout = new QGridLayout( canvas, 3, 2, 
         KDialog::marginHint(), KDialog::spacingHint() );
 
@@ -881,11 +918,11 @@ void KPWebPresentationWizard::setupPage3()
 
     slideTitles->setSelected( slideTitles->firstChild(), true );
 
-    addPage( page3, i18n( "Step 3: Customize Slide Titles" ) );
+    addPage( page4, i18n( "Step 4: Customize Slide Titles" ) );
 
-    setHelpEnabled(page3, false);  //doesn't do anything currently
+    setHelpEnabled(page4, false);  //doesn't do anything currently
 
-    setFinish( page3, true );
+    setFinish( page4, true );
 }
 
 
@@ -915,7 +952,7 @@ void KPWebPresentationWizard::finish()
 /*================================================================*/
 void KPWebPresentationWizard::pageChanged()
 {
-    if ( currentPage() != page3 ) 
+    if ( currentPage() != page4 ) 
     {
 
         QString pathname = path->lineEdit()->text();
@@ -986,7 +1023,7 @@ void KPWebPresentationWizard::slideTitleChanged( QListViewItem *i )
 void KPWebPresentationWizard::closeEvent( QCloseEvent *e )
 {
     view->enableWebPres();
-    QWizard::closeEvent( e );
+    KWizard::closeEvent( e );
 }
 
 void KPWebPresentationWizard::slotChoosePath(const QString &text)

@@ -156,9 +156,11 @@ public:
     static void createWebPresentation( const QString &_config, KPresenterDoc *_doc, KPresenterView *_view );
 
 protected:
+
     void setupPage1();
     void setupPage2();
     void setupPage3();
+    void setupPage4();
 
     void closeEvent( QCloseEvent *e );
 
@@ -167,7 +169,7 @@ protected:
     KPresenterView *view;
     KPWebPresentation webPres;
 
-    QHBox *page1, *page2, *page3;
+    QHBox *page1, *page2, *page3, *page4;
     KLineEdit *author, *title, *email;//, *path;
     KColorButton *textColor, *titleColor, *backColor;
     KComboBox *format, *encoding;
