@@ -383,8 +383,8 @@ QString BackDia::selectPicture( const QStringList& mimetypes )
     KURL url;
 
     KFileDialog fd( QString::null, QString::null, 0, 0, true );
-    fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
     fd.setMimeFilter( mimetypes );
+    fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 
     if ( fd.exec() == QDialog::Accepted )
     {
@@ -404,8 +404,8 @@ QString BackDia::selectPicture( const QStringList& mimetypes )
 void BackDia::selectPic()
 {
     QStringList mimetypes;
-    mimetypes += KoPictureFilePreview::clipartMimeTypes();
     mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
+    mimetypes += KoPictureFilePreview::clipartMimeTypes();
 
     QString strResult=selectPicture( mimetypes );
     if ( strResult.isEmpty() )
