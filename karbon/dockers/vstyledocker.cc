@@ -54,7 +54,7 @@ ClipartChooser::startDrag()
 	KarbonDrag* kd = new KarbonDrag( this );
 	VObjectList objects;
 	VClipartIconItem *selectedClipart = (VClipartIconItem *)currentItem();
-	double s = 128;//kMax( selectedClipart->originalWidth(), selectedClipart->originalHeight() );
+	double s = kMax( selectedClipart->originalWidth(), selectedClipart->originalHeight() );
 	VObject *clipart = selectedClipart->clipart()->clone();
 
 	QWMatrix mat( s, 0, 0, -s, -( s / 2 ), ( s / 2 ) );
