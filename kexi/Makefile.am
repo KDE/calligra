@@ -5,10 +5,11 @@ kdeinit_LTLIBRARIES = kexi.la
 bin_PROGRAMS =
 kexi_la_SOURCES = main.cpp
 kexi_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-kexi_la_LIBADD = core/libkexicore.la
+kexi_la_LIBADD = ./core/libkexicore.la \
+	./main/libkeximain.la
 
 #SUBDIRS= 3rdparty kexidb core tableview . data widget plugins tests
-SUBDIRS= 3rdparty kexidb core tableview widget plugins data pics . 
+SUBDIRS= 3rdparty kexidb core tableview widget plugins data pics main . 
 
 kdelnkdir = $(kde_appsdir)/Office
 kdelnk_DATA = kexi.desktop

@@ -18,37 +18,28 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIMAINWINDOW_H
-#define KEXIMAINWINDOW_H
+#ifndef KexiMainWindowIMPL_H
+#define KexiMainWindowIMPL_H
 
-#include "kexisharedactionhost.h"
-#include "kexi.h"
+#include "core/keximainwindow.h"
 
-#include <kmdimainfrm.h>
-
-#include <qintdict.h>
-
-class KexiProject;
 class KexiProjectData;
-class KexiBrowser;
 class KexiActionProxy;
 class KMdiChildView;
-class KexiDialogBase;
 
 namespace KexiDB {
 	class Object;
 	class ConnectionData;
 }
 namespace KexiPart {
-	class Item;
 	class Info;
 	class Part;
 }
 
 /**
- * @short Kexi's main window
+ * @short Kexi's main window implementation
  */
-class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActionHost
+class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 {
 	Q_OBJECT
 
@@ -56,16 +47,16 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		/**
 		 * creates an empty mainwindow
 		 */
-		KexiMainWindow();
-		virtual ~KexiMainWindow();
+		KexiMainWindowImpl();
+		virtual ~KexiMainWindowImpl();
 
 		//! Project data of currently opened project or NULL if no project here yet.
-		KexiProject	*project();
+		virtual KexiProject *project();
 
 		/**
 		 * registers a dialog for watching and adds it to the view
 		 */
-		void		registerChild(KexiDialogBase *dlg);
+		virtual void registerChild(KexiDialogBase *dlg);
 
 		/**
 		 * activates a window by it's document identifier
@@ -81,19 +72,20 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		void plugActionProxy(KexiActionProxy *proxy);
 		void updateActionAvailable(const char *action_name, bool set, QObject *obj);
 
-		QPopupMenu* findPopupMenu(const char *popupName);
+		virtual QPopupMenu* findPopupMenu(const char *popupName);
 
 		/**
 		 * @returns a pointer to the relation parts loads it if needed
 		 */
 //		KexiRelationPart	*relationPart();
 
+//TODO: move to kexiproject
 		/*! Generates ID for private "document" like Relations window.
 		 Private IDs are negative numbers (while ID regular part instance's IDs are >0)
 		 Private means that the object is not stored as-is in the project but is somewhat 
 		 generated and in most cases there is at most one unique instance document of such type (part).
 		 To generate this ID, just app-wide internal counter is used. */
-		int generatePrivateDocID();
+		virtual int generatePrivateDocID();
 
 	public slots:
 		/** Inherited from KMdiMainFrm: we need to do some tasks before child is closed */
@@ -103,9 +95,9 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false);
 
 		//! Opens object pointed by \a item in a view \a viewMode
-		KexiDialogBase * openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode);
+		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode);
 		//! For convenience
-		KexiDialogBase * openObject(const QString& mime, const QString& name, int viewMode = Kexi::DataViewMode);
+		virtual KexiDialogBase * openObject(const QString& mime, const QString& name, int viewMode = Kexi::DataViewMode);
 
 		/*! this slot handles event when user double clicked (or single -depending on settings)
 		 or pressed return ky on the part item in the navigator.
@@ -118,6 +110,16 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		bool removeObject( KexiPart::Item *item );
 
 	protected:
+		/**
+		 * Creates navigator (if it's not yet created),
+		 * lookups items for current project and fills the nav. with not-opened items
+		 */
+		void initNavigator();
+		
+		void initContextHelp();
+		
+		void initPropertyEditor();
+		
 		//! reimplementation of events
 		virtual void	closeEvent(QCloseEvent *);
 
@@ -198,21 +200,15 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 //js		void		parseCmdLineOptions();
 
 		/**
-		 * Creates navigator, lookups items for current project and fills the nav. with not-opened items
-		 */
-		void		initNavigator();
-		void		initContextHelp();
-
-		/**
 		 * this slot is called if a window changes
 		 */
-		void		activeWindowChanged(KMdiChildView *dlg);
+		void activeWindowChanged(KMdiChildView *dlg);
 
 		/**
 		 * this slot is called if a window gets colsed
 		 * and will unregister stuff
 		 */
-		void		childClosed(KMdiChildView *dlg);
+		void childClosed(KMdiChildView *dlg);
 
 		void slotPartLoaded(KexiPart::Part* p);
 

@@ -18,7 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "keximainwindow.h"
+#include "keximainwindowimpl.h"
 
 #include <qapplication.h>
 #include <qfile.h>
@@ -43,6 +43,7 @@
 #include <kexidb/connection.h>
 
 #include "kexibrowser.h"
+#include "kexipropertyeditorview.h"
 #include "kexiactionproxy.h"
 #include "kexidialogbase.h"
 #include "kexipartmanager.h"
@@ -51,6 +52,7 @@
 #include "kexipartguiclient.h"
 #include "kexiproject.h"
 #include "kexiprojectdata.h"
+#include "kexiprojectset.h"
 #include "kexi.h"
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
@@ -60,10 +62,10 @@
 #include "startup/KexiConnSelector.h"
 #include "startup/KexiProjectSelectorBase.h"
 #include "startup/KexiProjectSelector.h"
-#include "startup/KexiProjectSet.h"
 #include "startup/KexiNewProjectWizard.h"
 #include "startup/KexiStartup.h"
 #include "kexicontexthelp.h"
+
 
 #if defined(Q_WS_WIN) || !KDE_IS_VERSION(3,1,9)
 # include <unistd.h>
@@ -76,14 +78,15 @@
 
 typedef QIntDict<KexiDialogBase> KexiDialogDict;
 
-class KexiMainWindow::Private
+class KexiMainWindowImpl::Private
 {
 	public:
 		KexiProject	*prj;
 #ifndef KEXI_NO_CTXT_HELP
-		KexiContextHelp *ctxH;
+		KexiContextHelp *ctxHelp;
 #endif
 		KexiBrowser *nav;
+		KexiPropertyEditorView *propEditor;
 		KexiDialogDict dialogs;
 		KXMLGUIClient *curDialogGUIClient, *closedDialogGUIClient;
 		QGuardedPtr<KexiDialogBase> curDialog;
@@ -117,7 +120,9 @@ class KexiMainWindow::Private
 		//data menu
 		KAction *action_data_save_row;
 
+		//for dock windows
 		KMdiToolViewAccessor* navToolWindow;
+		KMdiToolViewAccessor* propEditorToolWindow;
 
 		QWidget *focus_before_popup;
 //		KexiRelationPart *relationPart;
@@ -144,10 +149,10 @@ class KexiMainWindow::Private
 
 //-------------------------------------------------
 
-KexiMainWindow::KexiMainWindow()
- : KMdiMainFrm(0L, "keximainwindow")
- , KexiSharedActionHost(this)
- , d(new KexiMainWindow::Private() )
+KexiMainWindowImpl::KexiMainWindowImpl()
+ : KexiMainWindow()
+// , KexiSharedActionHost(this)
+ , d(new KexiMainWindowImpl::Private() )
 {
 	setAsDefaultHost(); //this is default host now.
 	KGlobal::iconLoader()->addAppDir("kexi");
@@ -168,6 +173,7 @@ KexiMainWindow::KexiMainWindow()
 
 	d->origAppCaption = caption();
 	initContextHelp();
+	initPropertyEditor();
 
 	restoreSettings();
 
@@ -196,18 +202,18 @@ KexiMainWindow::KexiMainWindow()
 	invalidateActions();
 }
 
-KexiMainWindow::~KexiMainWindow()
+KexiMainWindowImpl::~KexiMainWindowImpl()
 {
 	closeProject();
 	delete d;
 }
 
-KexiProject	*KexiMainWindow::project()
+KexiProject	*KexiMainWindowImpl::project()
 {
 	return d->prj;
 }
 
-void KexiMainWindow::setWindowMenu(QPopupMenu *menu)
+void KexiMainWindowImpl::setWindowMenu(QPopupMenu *menu)
 {
 	if (m_pWindowMenu)
 		delete m_pWindowMenu;
@@ -216,13 +222,13 @@ void KexiMainWindow::setWindowMenu(QPopupMenu *menu)
 	QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
 }
 
-QPopupMenu* KexiMainWindow::findPopupMenu(const char *popupName)
+QPopupMenu* KexiMainWindowImpl::findPopupMenu(const char *popupName)
 {
 	return d->popups[popupName];
 }
 
 void
-KexiMainWindow::initActions()
+KexiMainWindowImpl::initActions()
 {
 //	d->actionMapper = new QSignalMapper(this, "act_map");
 //	connect(d->actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));
@@ -309,7 +315,7 @@ KexiMainWindow::initActions()
 
 /* moved to host:*/
 #if 0
-KAction* KexiMainWindow::createSharedActionInternal( KAction *action )
+KAction* KexiMainWindowImpl::createSharedActionInternal( KAction *action )
 {
 	connect(action,SIGNAL(activated()), d->actionMapper, SLOT(map()));
 	d->actionMapper->setMapping(action, action->name());
@@ -317,7 +323,7 @@ KAction* KexiMainWindow::createSharedActionInternal( KAction *action )
 	return action;
 }
 
-KAction* KexiMainWindow::createSharedAction(const QString &text, const QString &pix_name, 
+KAction* KexiMainWindowImpl::createSharedAction(const QString &text, const QString &pix_name, 
 	const KShortcut &cut, const char *name)
 {
 	return createSharedActionInternal( 
@@ -326,7 +332,7 @@ KAction* KexiMainWindow::createSharedAction(const QString &text, const QString &
 	);
 }
 
-KAction* KexiMainWindow::createSharedAction( KStdAction::StdAction id, const char *name)
+KAction* KexiMainWindowImpl::createSharedAction( KStdAction::StdAction id, const char *name)
 {
 	return createSharedActionInternal( 
 		KStdAction::create( id, name, 0/*receiver*/, 0/*slot*/, actionCollection() )
@@ -334,13 +340,13 @@ KAction* KexiMainWindow::createSharedAction( KStdAction::StdAction id, const cha
 }
 #endif
 
-void KexiMainWindow::invalidateActions()
+void KexiMainWindowImpl::invalidateActions()
 {
 	invalidateProjectWideActions();
 	invalidateSharedActions();
 }
 
-void KexiMainWindow::invalidateSharedActions(QWidget *w)
+void KexiMainWindowImpl::invalidateSharedActions(QWidget *w)
 {
 	//TODO: enabling is more complex...
 /*	d->action_edit_cut->setEnabled(true);
@@ -362,7 +368,7 @@ void KexiMainWindow::invalidateSharedActions(QWidget *w)
 	}*/
 }
 
-void KexiMainWindow::invalidateProjectWideActions()
+void KexiMainWindowImpl::invalidateProjectWideActions()
 {
 //	stateChanged("project_opened",d->prj ? StateNoReverse : StateReverse);
 
@@ -391,7 +397,7 @@ void KexiMainWindow::invalidateProjectWideActions()
 #endif
 }
 
-void KexiMainWindow::invalidateViewModeActions()
+void KexiMainWindowImpl::invalidateViewModeActions()
 {
 	if (d->curDialog) {
 		//update toggle action
@@ -405,7 +411,7 @@ void KexiMainWindow::invalidateViewModeActions()
 }
 
 #if 0
-void KexiMainWindow::setActionAvailable(const char *name, bool avail)
+void KexiMainWindowImpl::setActionAvailable(const char *name, bool avail)
 {
 	KAction *act = actionCollection()->action(name);
 	if (!act)
@@ -413,7 +419,7 @@ void KexiMainWindow::setActionAvailable(const char *name, bool avail)
 	act->setEnabled(avail);
 }
 
-void KexiMainWindow::updateActionAvailable(const char *action_name, bool set, QObject *obj)
+void KexiMainWindowImpl::updateActionAvailable(const char *action_name, bool set, QObject *obj)
 {
 	QWidget *fw = focusWidget();
 	while (fw && obj!=fw)
@@ -425,23 +431,23 @@ void KexiMainWindow::updateActionAvailable(const char *action_name, bool set, QO
 	setActionAvailable(action_name, set);
 }
 
-/*bool KexiMainWindow::isActionAvailable(const char *action_name)
+/*bool KexiMainWindowImpl::isActionAvailable(const char *action_name)
 {
 //	KexiActionProxy *proxy = d->actionProxies[ QCString(action_name)+QCString().setNum((ulong)proxy->receiver()) ];
 	KexiActionProxy *proxy = d->actionProxies[ QCString(action_name)+QCString().setNum((ulong)proxy->receiver()) ];
 	return proxy && proxy->isAvailable(action_name);
 }*/
 
-void KexiMainWindow::plugActionProxy(KexiActionProxy *proxy)//, const char *action_name)
+void KexiMainWindowImpl::plugActionProxy(KexiActionProxy *proxy)//, const char *action_name)
 {
 //	d->actionProxies[ QCString(action_name)+QCString().setNum((ulong)proxy->receiver()) ] = proxy;
 	d->actionProxies.insert( proxy->receiver(), proxy);
 }
 #endif
 
-void KexiMainWindow::startup(KexiProjectData *projectData)
+void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 {
-	kdDebug() << "KexiMainWindow::startup()..." << endl;
+	kdDebug() << "KexiMainWindowImpl::startup()..." << endl;
 	if (!projectData) {
 //<TEMP>
 		//some connection data
@@ -521,7 +527,7 @@ void KexiMainWindow::startup(KexiProjectData *projectData)
 	openProject(projectData);
 }
 
-bool KexiMainWindow::openProject(KexiProjectData *projectData)
+bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 {
 	if (!projectData)
 		return false;
@@ -567,7 +573,7 @@ bool KexiMainWindow::openProject(KexiProjectData *projectData)
 }
 
 KexiProjectData*
-KexiMainWindow::selectProject(KexiDB::ConnectionData *cdata)
+KexiMainWindowImpl::selectProject(KexiDB::ConnectionData *cdata)
 {
 	if (!cdata)
 		return 0;
@@ -588,7 +594,7 @@ KexiMainWindow::selectProject(KexiDB::ConnectionData *cdata)
 	return projectData;
 }
 
-bool KexiMainWindow::closeProject()
+bool KexiMainWindowImpl::closeProject()
 {
 	if (!d->prj)
 		return true;
@@ -599,38 +605,39 @@ bool KexiMainWindow::closeProject()
 	return true;
 }
 
-void KexiMainWindow::initContextHelp() {
+void KexiMainWindowImpl::initContextHelp() {
 #ifndef KEXI_NO_CTXT_HELP
-	d->ctxH=new KexiContextHelp(this,this);
-	d->ctxH->setContextHelp(i18n("Welcome"),i18n("The <B>KEXI team</B> wishes you a lot of productive work, "
+	d->ctxHelp=new KexiContextHelp(this,this);
+	d->ctxHelp->setContextHelp(i18n("Welcome"),i18n("The <B>KEXI team</B> wishes you a lot of productive work, "
 		"with this product. <BR><HR><BR>If you have found a <B>bug</B> or have a <B>feature</B> request, please don't "
 		"hesitate to report it at our <A href=\"http://www.kexi-project.org/cgi-bin/bug.pl\"> issue "
 		"tracking system </A>.<BR><HR><BR>If you would like to <B>join</B> our effort, the <B>development</B> documentation "
 		"at <A href=\"http://www.kexi-project.org\">www.kexi-project.org</A> is a good starting point."),0);
-	addToolWindow(d->ctxH,KDockWidget::DockBottom | KDockWidget::DockLeft,getMainDockWidget(),20);
+	addToolWindow(d->ctxHelp,KDockWidget::DockBottom | KDockWidget::DockLeft,getMainDockWidget(),20);
 #endif
 }
 
 void
-KexiMainWindow::initNavigator()
+KexiMainWindowImpl::initNavigator()
 {
-	kdDebug() << "KexiMainWindow::initNavigator()" << endl;
+	kdDebug() << "KexiMainWindowImpl::initNavigator()" << endl;
 
 	if(!d->nav)
 	{
-//		d->nav = new KexiBrowser(this, "kexi/db", 0);
 		d->nav = new KexiBrowser(this);
 		d->nav->installEventFilter(this);
 		d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
 		connect(d->nav,SIGNAL(openItem(KexiPart::Item*,int)),this,SLOT(openObject(KexiPart::Item*,int)));
-		connect(d->nav,SIGNAL(openOrActivateItem(KexiPart::Item*,int)),this,SLOT(openObjectFromNavigator(KexiPart::Item*,int)));
-		connect(d->nav,SIGNAL(newItem( KexiPart::Info* )),this,SLOT(newObject(KexiPart::Info*)));
-		connect(d->nav,SIGNAL(removeItem(KexiPart::Item*)),this,SLOT(removeObject(KexiPart::Item*)));
-		if (d->prj)//connect to project
-			connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
-
-//		connect(d->nav,SIGNAL(actionAvailable(const char*,bool)),this,SLOT(actionAvailable(const char*,bool)));
-
+		connect(d->nav,SIGNAL(openOrActivateItem(KexiPart::Item*,int)),
+			this,SLOT(openObjectFromNavigator(KexiPart::Item*,int)));
+		connect(d->nav,SIGNAL(newItem( KexiPart::Info* )),
+			this,SLOT(newObject(KexiPart::Info*)));
+		connect(d->nav,SIGNAL(removeItem(KexiPart::Item*)),
+			this,SLOT(removeObject(KexiPart::Item*)));
+		if (d->prj) {//connect to the project
+			connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), 
+				d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
+		}
 	}
 	if(d->prj->isConnected()) {
 		d->nav->clear();
@@ -638,7 +645,7 @@ KexiMainWindow::initNavigator()
 		KexiPart::PartInfoList *pl = Kexi::partManager().partInfoList();
 		for(KexiPart::Info *it = pl->first(); it; it = pl->next())
 		{
-			kdDebug() << "KexiMainWindow::initNavigator(): adding " << it->groupName() << endl;
+			kdDebug() << "KexiMainWindowImpl::initNavigator(): adding " << it->groupName() << endl;
 			d->nav->addGroup(it);
 
 /*			KexiPart::Part *p=Kexi::partManager().part(it);
@@ -669,7 +676,22 @@ KexiMainWindow::initNavigator()
 	invalidateActions();
 }
 
-void KexiMainWindow::slotPartLoaded(KexiPart::Part* p)
+void KexiMainWindowImpl::initPropertyEditor()
+{
+/*TODO: FIX LAYOUT PROBLEMS
+	d->propEditor = new KexiPropertyEditorView(this);
+	d->propEditor->installEventFilter(this);
+	d->propEditorToolWindow = addToolWindow(d->propEditor, 
+		KDockWidget::DockRight, getMainDockWidget(), 20);
+*/
+/*    KMdiToolViewAccessor *tmp=createToolWindow();
+    tmp->setWidgetToWrap(d->propEditor);
+	d->propEditor->show(); // I'm not sure, if this is a bug in kdockwidget, which I would better fix there
+    tmp->show(KDockWidget::DockRight,getMainDockWidget(),20);
+*/
+}
+
+void KexiMainWindowImpl::slotPartLoaded(KexiPart::Part* p)
 {
 	if (!p)
 		return;
@@ -678,7 +700,7 @@ void KexiMainWindow::slotPartLoaded(KexiPart::Part* p)
 }
 
 //! internal
-void KexiMainWindow::slotCaptionForCurrentMDIChild(bool childrenMaximized)
+void KexiMainWindowImpl::slotCaptionForCurrentMDIChild(bool childrenMaximized)
 {
 	//js todo: allow to set custom "static" app caption
 
@@ -705,7 +727,7 @@ void KexiMainWindow::slotCaptionForCurrentMDIChild(bool childrenMaximized)
 	}
 }
 
-void KexiMainWindow::updateAppCaption()
+void KexiMainWindowImpl::updateAppCaption()
 {
 	//js todo: allow to set custom "static" app caption
 
@@ -747,23 +769,23 @@ void KexiMainWindow::updateAppCaption()
 	}*/
 }
 
-void KexiMainWindow::slotNoMaximizedChildFrmLeft(KMdiChildFrm*)
+void KexiMainWindowImpl::slotNoMaximizedChildFrmLeft(KMdiChildFrm*)
 {
 	slotCaptionForCurrentMDIChild(false);
 }
 
-void KexiMainWindow::slotLastChildFrmClosed()
+void KexiMainWindowImpl::slotLastChildFrmClosed()
 {
 	slotCaptionForCurrentMDIChild(false);
 }
 
-void KexiMainWindow::slotChildViewIsDetachedNow(QWidget*)
+void KexiMainWindowImpl::slotChildViewIsDetachedNow(QWidget*)
 {
 	slotCaptionForCurrentMDIChild(false);
 }
 
 void
-KexiMainWindow::closeEvent(QCloseEvent *ev)
+KexiMainWindowImpl::closeEvent(QCloseEvent *ev)
 {
 	storeSettings();
 	
@@ -773,7 +795,7 @@ KexiMainWindow::closeEvent(QCloseEvent *ev)
 }
 
 void
-KexiMainWindow::restoreSettings()
+KexiMainWindowImpl::restoreSettings()
 {
 	KConfig *config = kapp->config();
 	config->setGroup("MainWindow");
@@ -829,9 +851,9 @@ KexiMainWindow::restoreSettings()
 }
 
 void
-KexiMainWindow::storeSettings()
+KexiMainWindowImpl::storeSettings()
 {
-	kdDebug() << "KexiMainWindow::storeSettings()" << endl;
+	kdDebug() << "KexiMainWindowImpl::storeSettings()" << endl;
 
 	KConfig *config = kapp->config();
 	config->setGroup("MainWindow");
@@ -842,14 +864,14 @@ KexiMainWindow::storeSettings()
 }
 
 void
-KexiMainWindow::registerChild(KexiDialogBase *dlg)
+KexiMainWindowImpl::registerChild(KexiDialogBase *dlg)
 {
-	kdDebug() << "KexiMainWindow::registerChild()" << endl;
+	kdDebug() << "KexiMainWindowImpl::registerChild()" << endl;
 	connect(dlg, SIGNAL(activated(KMdiChildView *)), this, SLOT(activeWindowChanged(KMdiChildView *)));
 	connect(dlg, SIGNAL(childWindowCloseRequest(KMdiChildView *)), this, SLOT(childClosed(KMdiChildView *)));
 	if(dlg->docID() != -1)
 		d->dialogs.insert(dlg->docID(), dlg);
-	kdDebug() << "KexiMainWindow::registerChild() docID = " << dlg->docID() << endl;
+	kdDebug() << "KexiMainWindowImpl::registerChild() docID = " << dlg->docID() << endl;
 
 	if (m_mdiMode==KMdi::ToplevelMode || m_mdiMode==KMdi::ChildframeMode) {//kmdi fix
 		//js TODO: check if taskbar is switched in menu
@@ -864,10 +886,10 @@ KexiMainWindow::registerChild(KexiDialogBase *dlg)
 }
 
 void
-KexiMainWindow::activeWindowChanged(KMdiChildView *v)
+KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 {
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
-	kdDebug() << "KexiMainWindow::activeWindowChanged() to = " << (dlg ? dlg->caption() : "") << endl;
+	kdDebug() << "KexiMainWindowImpl::activeWindowChanged() to = " << (dlg ? dlg->caption() : "") << endl;
 
 	KXMLGUIClient *client=0;
 
@@ -886,7 +908,7 @@ KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 			}
 		}
 		if (client!=d->curDialogGUIClient) {
-			kdDebug()<<"KexiMainWindow::activeWindowChanged(): old gui client:"<<d->curDialogGUIClient<<" new gui client: "<<client<<endl;
+			kdDebug()<<"KexiMainWindowImpl::activeWindowChanged(): old gui client:"<<d->curDialogGUIClient<<" new gui client: "<<client<<endl;
 			if (d->curDialogGUIClient) {
 				guiFactory()->removeClient(d->curDialogGUIClient);
 				d->curDialog->detachFromGUIClient();
@@ -929,9 +951,9 @@ KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 }
 
 bool
-KexiMainWindow::activateWindow(int id)
+KexiMainWindowImpl::activateWindow(int id)
 {
-	kdDebug() << "KexiMainWindow::activateWindow()" << endl;
+	kdDebug() << "KexiMainWindowImpl::activateWindow()" << endl;
 	KexiDialogBase *dlg = d->dialogs[id];
 	if(!dlg)
 		return false;
@@ -941,9 +963,9 @@ KexiMainWindow::activateWindow(int id)
 }
 
 void
-KexiMainWindow::childClosed(KMdiChildView *v)
+KexiMainWindowImpl::childClosed(KMdiChildView *v)
 {
-	kdDebug() << "KexiMainWindow::unregisterWindow()" << endl;
+	kdDebug() << "KexiMainWindowImpl::unregisterWindow()" << endl;
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
 	d->dialogs.remove(dlg->docID());
 
@@ -953,14 +975,14 @@ KexiMainWindow::childClosed(KMdiChildView *v)
 }
 
 void
-KexiMainWindow::slotShowSettings()
+KexiMainWindowImpl::slotShowSettings()
 {
 //TODO	KexiSettings s(this);
 //	s.exec();
 }
 
 void
-KexiMainWindow::slotConfigureKeys()
+KexiMainWindowImpl::slotConfigureKeys()
 {
 /*    KKeyDialog dlg;
     dlg.insert( actionCollection() );
@@ -969,7 +991,7 @@ KexiMainWindow::slotConfigureKeys()
 }
 
 void
-KexiMainWindow::slotConfigureToolbars()
+KexiMainWindowImpl::slotConfigureToolbars()
 {
     KEditToolbar edit(factory());
 //    connect(&edit,SIGNAL(newToolbarConfig()),this,SLOT(slotNewToolbarConfig()));
@@ -977,7 +999,7 @@ KexiMainWindow::slotConfigureToolbars()
 }
 
 void 
-KexiMainWindow::slotProjectNew()
+KexiMainWindowImpl::slotProjectNew()
 {
 	if (d->prj)//js: TODO: start new instance!
 		return;
@@ -985,7 +1007,7 @@ KexiMainWindow::slotProjectNew()
 }
 
 void
-KexiMainWindow::createKexiProject(KexiProjectData* new_data)
+KexiMainWindowImpl::createKexiProject(KexiProjectData* new_data)
 {
 	d->prj = new KexiProject( new_data );
 	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
@@ -994,7 +1016,7 @@ KexiMainWindow::createKexiProject(KexiProjectData* new_data)
 }
 
 bool
-KexiMainWindow::createBlankDatabase()
+KexiMainWindowImpl::createBlankDatabase()
 {
 	KexiNewProjectWizard wiz(Kexi::connset(), 0, "KexiNewProjectWizard", true);
 	if (wiz.exec() != QDialog::Accepted)
@@ -1026,7 +1048,7 @@ KexiMainWindow::createBlankDatabase()
 		d->prj = 0;
 		return false;
 	}
-	kdDebug() << "KexiMainWindow::slotProjectNew(): new project created --- " << endl;
+	kdDebug() << "KexiMainWindowImpl::slotProjectNew(): new project created --- " << endl;
 	initNavigator();
 	Kexi::recentProjects().addProjectData( new_data );
 
@@ -1036,7 +1058,7 @@ KexiMainWindow::createBlankDatabase()
 }
 
 void
-KexiMainWindow::slotProjectOpen()
+KexiMainWindowImpl::slotProjectOpen()
 {
 	KexiStartupDialog dlg(
 		KexiStartupDialog::OpenExisting, 0, Kexi::connset(), Kexi::recentProjects(),
@@ -1068,7 +1090,7 @@ KexiMainWindow::slotProjectOpen()
 }
 
 void
-KexiMainWindow::slotProjectOpenRecentAboutToShow()
+KexiMainWindowImpl::slotProjectOpenRecentAboutToShow()
 {
 	//setup
 	KPopupMenu *popup = d->action_open_recent->popupMenu();
@@ -1091,39 +1113,39 @@ KexiMainWindow::slotProjectOpenRecentAboutToShow()
 }
 
 void
-KexiMainWindow::slotProjectOpenRecent(int id)
+KexiMainWindowImpl::slotProjectOpenRecent(int id)
 {
 	if (id<0 || id==d->action_open_recent_more_id)
 		return;
-	kdDebug() << "KexiMainWindow::slotProjectOpenRecent("<<id<<")"<<endl;
+	kdDebug() << "KexiMainWindowImpl::slotProjectOpenRecent("<<id<<")"<<endl;
 }
 
 void
-KexiMainWindow::slotProjectOpenRecentMore()
+KexiMainWindowImpl::slotProjectOpenRecentMore()
 {
 }
 
 void
-KexiMainWindow::slotProjectSave()
+KexiMainWindowImpl::slotProjectSave()
 {
 }
 
 void
-KexiMainWindow::slotProjectSaveAs()
+KexiMainWindowImpl::slotProjectSaveAs()
 {
 }
 
 void
-KexiMainWindow::slotProjectProperties()
+KexiMainWindowImpl::slotProjectProperties()
 {
 }
 
 void
-KexiMainWindow::slotProjectClose()
+KexiMainWindowImpl::slotProjectClose()
 {
 }
 
-void KexiMainWindow::slotProjectRelations()
+void KexiMainWindowImpl::slotProjectRelations()
 {
 	if (!d->prj)
 		return;
@@ -1138,7 +1160,7 @@ void KexiMainWindow::slotProjectRelations()
 }
 
 /*
-void KexiMainWindow::slotAction(const QString& act_id)
+void KexiMainWindowImpl::slotAction(const QString& act_id)
 {
 	QWidget *w = focusWindow(); //focusWidget();
 //	while (w && !w->inherits("KexiDialogBase") && !w->inherits("KexiDockBase"))
@@ -1153,17 +1175,17 @@ void KexiMainWindow::slotAction(const QString& act_id)
 	proxy->activateSharedAction(act_id.latin1());
 }*/
 
-void KexiMainWindow::slotImportFile() {
+void KexiMainWindowImpl::slotImportFile() {
 }
 
 void
-KexiMainWindow::slotQuit()
+KexiMainWindowImpl::slotQuit()
 {
 	//TODO
 	close();
 }
 
-void KexiMainWindow::slotViewNavigator()
+void KexiMainWindowImpl::slotViewNavigator()
 {
 	if (!d->nav || !d->navToolWindow)
 		return;
@@ -1181,7 +1203,7 @@ void KexiMainWindow::slotViewNavigator()
 
 }
 
-void KexiMainWindow::slotViewDataMode()
+void KexiMainWindowImpl::slotViewDataMode()
 {
 	if (!d->curDialog)
 		return;
@@ -1195,7 +1217,7 @@ void KexiMainWindow::slotViewDataMode()
 	}
 }
 
-void KexiMainWindow::slotViewDesignMode()
+void KexiMainWindowImpl::slotViewDesignMode()
 {
 	if (!d->curDialog)
 		return;
@@ -1209,7 +1231,7 @@ void KexiMainWindow::slotViewDesignMode()
 	}
 }
 
-void KexiMainWindow::slotViewTextMode()
+void KexiMainWindowImpl::slotViewTextMode()
 {
 	if (!d->curDialog)
 		return;
@@ -1224,7 +1246,7 @@ void KexiMainWindow::slotViewTextMode()
 }
 
 void
-KexiMainWindow::showErrorMessage(const QString &title, const QString &details)
+KexiMainWindowImpl::showErrorMessage(const QString &title, const QString &details)
 {
 	QString msg = title;
 	if (title.isEmpty())
@@ -1239,7 +1261,7 @@ KexiMainWindow::showErrorMessage(const QString &title, const QString &details)
 }
 
 void
-KexiMainWindow::showErrorMessage(const QString &title, KexiDB::Object *obj)
+KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB::Object *obj)
 {
 	QString msg = title;
 	if (!obj) {
@@ -1261,7 +1283,7 @@ KexiMainWindow::showErrorMessage(const QString &title, KexiDB::Object *obj)
 }
 
 void
-KexiMainWindow::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
+KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 {
 	if (!pWnd)
 		return;
@@ -1287,7 +1309,7 @@ KexiMainWindow::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 
 /*
 KexiRelationPart *
-KexiMainWindow::relationPart()
+KexiMainWindowImpl::relationPart()
 {
 	if(d->relationPart)
 		return d->relationPart;
@@ -1296,7 +1318,7 @@ KexiMainWindow::relationPart()
 	return d->relationPart;
 }*/
 
-void KexiMainWindow::detachWindow(KMdiChildView *pWnd,bool bShow)
+void KexiMainWindowImpl::detachWindow(KMdiChildView *pWnd,bool bShow)
 {
 	KMdiMainFrm::detachWindow(pWnd,bShow);
 	// update icon - from small to large
@@ -1304,7 +1326,7 @@ void KexiMainWindow::detachWindow(KMdiChildView *pWnd,bool bShow)
 //	pWnd->setIcon( DesktopIcon( static_cast<KexiDialogBase *>(pWnd)->part()->info()->itemIcon() ) );
 }
 
-void KexiMainWindow::attachWindow(KMdiChildView *pWnd, bool /*bShow*/, bool bAutomaticResize)
+void KexiMainWindowImpl::attachWindow(KMdiChildView *pWnd, bool /*bShow*/, bool bAutomaticResize)
 {
 //	if (bAutomaticResize || w->size().isEmpty() || (w->size() == QSize(1,1))) {
 	KMdiMainFrm::attachWindow(pWnd,true,bAutomaticResize);
@@ -1322,25 +1344,25 @@ void KexiMainWindow::attachWindow(KMdiChildView *pWnd, bool /*bShow*/, bool bAut
 }
 
 /*
-bool KexiMainWindow::isWindow(QObject *o)
+bool KexiMainWindowImpl::isWindow(QObject *o)
 {
 	return o->inherits("KexiDialogBase") || o->inherits("KexiDockBase");
 }*/
 
-QWidget* KexiMainWindow::findWindow(QWidget *w)
+QWidget* KexiMainWindowImpl::findWindow(QWidget *w)
 {
 	while (w && !acceptsSharedActions(w))
 		w = w->parentWidget();
 	return w;
 }
 
-bool KexiMainWindow::acceptsSharedActions(QObject *w)
+bool KexiMainWindowImpl::acceptsSharedActions(QObject *w)
 {
 	return w->inherits("KexiDialogBase") || w->inherits("KexiViewBase");
 }
 
 /*moved to host
-QWidget* KexiMainWindow::focusWindow() const
+QWidget* KexiMainWindowImpl::focusWindow() const
 {
 	QWidget* fw = focusWidget();
 	while (fw && !fw->inherits("KexiDialogBase") && !fw->inherits("KexiDockBase"))
@@ -1348,7 +1370,7 @@ QWidget* KexiMainWindow::focusWindow() const
 	return fw;
 }*/
 
-bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
+bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 {
 //	kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
 	if (e->type()==QEvent::KeyPress) {
@@ -1454,7 +1476,7 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 }
 
 KexiDialogBase *
-KexiMainWindow::openObject(const QString& mime, const QString& name, int viewMode)
+KexiMainWindowImpl::openObject(const QString& mime, const QString& name, int viewMode)
 {
 	KexiPart::Item *item = d->prj->item(mime,name);
 	if (!item)
@@ -1463,7 +1485,7 @@ KexiMainWindow::openObject(const QString& mime, const QString& name, int viewMod
 }
 
 KexiDialogBase *
-KexiMainWindow::openObject(KexiPart::Item* item, int viewMode)
+KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 {
 	if (!item)
 		return false;
@@ -1493,7 +1515,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, int viewMode)
  This differs from openObject() signal in that if the object is already opened
  in view mode other than \a viewMode, the mode is not changed. */
 KexiDialogBase *
-KexiMainWindow::openObjectFromNavigator(KexiPart::Item* item, int viewMode)
+KexiMainWindowImpl::openObjectFromNavigator(KexiPart::Item* item, int viewMode)
 {
 	if (!item)
 		return false;
@@ -1508,7 +1530,7 @@ KexiMainWindow::openObjectFromNavigator(KexiPart::Item* item, int viewMode)
 	return openObject(item, viewMode);
 }
 
-bool KexiMainWindow::newObject( KexiPart::Info *info )
+bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 {
 	if (!info)
 		return false;
@@ -1546,7 +1568,7 @@ bool KexiMainWindow::newObject( KexiPart::Info *info )
 	it->setName(dlg->name());
 	it->setCaption(dlg->caption());
 
-	kdDebug() << "KexiMainWindow::newObject(): id = " << it->identifier() << endl;
+	kdDebug() << "KexiMainWindowImpl::newObject(): id = " << it->identifier() << endl;
 
 	d->nav->addItem(it);
 
@@ -1556,7 +1578,7 @@ bool KexiMainWindow::newObject( KexiPart::Info *info )
 	return true;
 }
 
-bool KexiMainWindow::removeObject( KexiPart::Item *item )
+bool KexiMainWindowImpl::removeObject( KexiPart::Item *item )
 {
 	if (!item)
 		return false;
@@ -1583,11 +1605,11 @@ bool KexiMainWindow::removeObject( KexiPart::Item *item )
 	return true;
 }
 
-int KexiMainWindow::generatePrivateDocID()
+int KexiMainWindowImpl::generatePrivateDocID()
 {
 	return --d->privateDocIDCounter;
 }
 
 
-#include "keximainwindow.moc"
+#include "keximainwindowimpl.moc"
 
