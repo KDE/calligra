@@ -472,7 +472,7 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
     if ( processingType != DTP )
 	pages = 1;
 
-    KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet*>( frames.at( 0 ) );
+    KWTextFrameSet *frameset = (KWTextFrameSet*)( frames.at( 0 ) );
 
     unsigned int frms = frameset->getNumFrames();
 
