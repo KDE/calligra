@@ -633,7 +633,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     if(tmp_kpobject && tmp_kpobject->getType() == OT_TEXT)
     {
       KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( tmp_kpobject );
-      KPTextView *textview = kptextobject->createKPTextView(this);
+      KPTextView *textview = kptextobject->createKPTextView(this, true);
       if ( textview && textview->isLinkVariable(e->pos(),true) ) //the user clicked on a link
       {
 	textview->openLink();
@@ -1525,7 +1525,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 	  if(tmp_kpobject && tmp_kpobject->getType() == OT_TEXT)
 	  {
 	    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( tmp_kpobject );
-	    KPTextView *textview = kptextobject->createKPTextView(this);
+	    KPTextView *textview = kptextobject->createKPTextView(this, true);
 	    if ( textview && textview->isLinkVariable(e->pos()))// the mouse cursor points on a link
 	    {
 	      setCursor(Qt::PointingHandCursor);

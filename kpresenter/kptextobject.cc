@@ -1444,9 +1444,9 @@ void KPTextObject::slotRepaintChanged()
     emit repaintChanged( this );
 }
 
-KPTextView * KPTextObject::createKPTextView( KPrCanvas * _canvas )
+KPTextView * KPTextObject::createKPTextView( KPrCanvas * _canvas, bool temp )
 {
-    return new KPTextView( this, _canvas );
+    return new KPTextView( this, _canvas, temp );
 }
 
 void KPTextObject::removeHighlight ()
@@ -1772,11 +1772,13 @@ QPoint KPTextObject::cursorPos(KPrCanvas *canvas, KoTextCursor *cursor) const
   return origPix+iPoint;
 }
 
-KPTextView::KPTextView( KPTextObject * txtObj, KPrCanvas *_canvas )
+KPTextView::KPTextView( KPTextObject * txtObj, KPrCanvas *_canvas, bool temp )
     : KoTextView( txtObj->textObject() )
 {
     m_canvas=_canvas;
     m_kptextobj=txtObj;
+    if (temp)
+      return;
     connect( txtObj->textObject(), SIGNAL( selectionChanged(bool) ),
              m_canvas, SIGNAL( selectionChanged(bool) ) );
     KoTextView::setReadWrite( txtObj->kPresenterDocument()->isReadWrite() );

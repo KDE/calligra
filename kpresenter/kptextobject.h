@@ -109,7 +109,7 @@ public:
 
     KPresenterDoc* kPresenterDocument() const { return m_doc; }
 
-    KPTextView * createKPTextView( KPrCanvas * );
+    KPTextView * createKPTextView( KPrCanvas *,bool temp=false );
     void applyStyleChange( KoStyleChangeDefMap changed );
 
     void removeHighlight();
@@ -220,7 +220,7 @@ class KPTextView : public KoTextView
 {
     Q_OBJECT
 public:
-    KPTextView( KPTextObject * txtObj, KPrCanvas *_canvas );
+    KPTextView( KPTextObject * txtObj, KPrCanvas *_canvas, bool temp=false );
     virtual ~KPTextView();
 
     virtual KoTextViewIface* dcopObject();
