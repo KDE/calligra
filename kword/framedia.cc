@@ -910,6 +910,8 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         sw->setEnabled( false );
         sh->setEnabled( false );
         floating->setEnabled( false );
+        protectSize->setEnabled( false );
+
     }
     if ( isMainFrame )
     {
