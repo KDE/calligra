@@ -368,6 +368,8 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
                                         // row of the activeCell
             do { // for each row (under startRow)
                 Cell *thisCell=getCell(rowCount,colCount);
+                if ( !thisCell )
+                    break; // ###
                 if(thisCell->firstRow() < startRow) { // above -> set startRow and restart
                     rowSpan += startRow - thisCell->firstRow();
                     startRow = thisCell->firstRow();
