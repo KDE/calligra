@@ -267,7 +267,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     saveOnlyPage = -1;
 
-    QObject::connect( &_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
+    QWidget::connect( &_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
                       this, SLOT( slotUndoRedoChanged( QString, QString ) ) );
 
 
@@ -1368,6 +1368,7 @@ void KPresenterDoc::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _
     kppartobject->setOrig( _rect.x() + _diffx, _rect.y() + _diffy );
     kppartobject->setSize( _rect.width(), _rect.height() );
     kppartobject->setSelected( true );
+    QWidget::connect(ch, SIGNAL(changed(KoChild *)), kppartobject, SLOT(slot_changed(KoChild *)) );
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Embed Object" ), kppartobject, this );
     insertCmd->execute();

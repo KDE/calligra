@@ -21,6 +21,7 @@
 #define kppartobject_h
 
 #include <koMainWindow.h>
+#include <koChild.h>
 
 #include "kpobject.h"
 
@@ -34,8 +35,9 @@ class KPGradient;
 /* Class: KPPartObject                                            */
 /******************************************************************/
 
-class KPPartObject : public KPObject
+class KPPartObject : public QObject, public KPObject
 {
+    Q_OBJECT
 public:
     KPPartObject( KPresenterChild *_child );
     virtual ~KPPartObject();
@@ -100,6 +102,9 @@ public:
     KPresenterChild *getChild() { return child; }
 
     void enableDrawing( bool f ) { _enableDrawing = f; }
+
+public slots:
+    void slot_changed(KoChild *child);
 
 protected:
     void paint( QPainter *_painter );

@@ -225,6 +225,16 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
 }
 
 /*================================================================*/
+void KPPartObject::slot_changed(KoChild *child)
+{
+    QRect g = child->geometry();
+    KPObject::setOrig( g.x(), g.y() );
+    KPObject::setSize( g.width(), g.height() );
+    if ( fillType == FT_GRADIENT && gradient )
+        gradient->setSize( g.size() );
+}
+
+/*================================================================*/
 void KPPartObject::paint( QPainter *_painter )
 {
     if ( !_enableDrawing ) return;
@@ -495,3 +505,5 @@ void KPPartObject::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
         }
     }
 }
+
+#include "kppartobject.moc"
