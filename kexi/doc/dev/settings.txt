@@ -21,6 +21,8 @@ NOT YET IMPELMENTED: -alwaysShowDetailsInMsgBoxes [boolean]
 Group: Startup
 -OpenExistingType [File|Server]
 -ShowStartupDialog [bool]
+#default file db driver name, used on file db creation:
+TODO: -DefaultFileDBDriverName [string default="sqlite3", can be also "sqlite2"]
 
 Group: TableView
 TODO: -add default values for KexiTableView::Appearance
