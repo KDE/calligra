@@ -47,7 +47,7 @@ public:
     rowFixed = c.rowFixed;
   }
 
-  bool isValid() const { return ( pos.x() >= 0 && ( table != 0 || !tableName.isEmpty() ) ); }
+  bool isValid() const { return ( pos.x() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
   bool isTableKnown() const { return ( !tableName.isEmpty() && table != 0 ); }
 
   KSpreadCell* cell();
@@ -177,7 +177,7 @@ bool util_isColumnSelected(const QRect &selection);
 bool util_isRowSelected(const QRect &selection);
 
 bool util_validateTableName(QString name);
-QDateTime util_readTime( const QString & intstr, KLocale * locale, bool withSeconds, 
+QDateTime util_readTime( const QString & intstr, KLocale * locale, bool withSeconds,
                          bool * ok, bool & duration );
 
 QDomElement util_createElement( const QString & tagName, const QFont & font, QDomDocument & doc );
