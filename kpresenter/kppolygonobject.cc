@@ -223,10 +223,17 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 			     bool drawingShadow, bool drawContour )
 {
     int _w = _zoomHandler->zoomItX( pen.width() );
+    QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
+
+    if ( drawContour ) {
+	QPen pen3( Qt::black, 1, Qt::DotLine );
+	_painter->setPen( pen3 );
+	_painter->drawConvexPolygon( pointArray );
+	return;
+    }
+
     QPen pen2(pen);
     pen2.setWidth(_w);
-
-    QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
 
     if ( drawingShadow || fillType == FT_BRUSH || !gradient ) {
         _painter->setPen( pen2 );
@@ -235,8 +242,6 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
     }
     else {
         QSize size( _zoomHandler->zoomSize( ext ) );
-        kdDebug() << "KPPolygonObject::paint size(pix)=" << size.width() << "," << size.height()
-                  << " ext(pt)=" << ext.width() << "," << ext.height() << endl;
         if ( redrawPix || gradient->size() != size )
         {
             redrawPix = false;
