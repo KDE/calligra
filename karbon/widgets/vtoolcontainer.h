@@ -11,7 +11,6 @@
 #include <ksharedptr.h>
 
 class KarbonPart;
-class KDualColorButton;
 class KoMainWindow;
 class KoView;
 class QButtonGroup;
@@ -26,10 +25,6 @@ public:
 		const char* name = 0L );
 	~VToolContainer();
 
-// TODO: why are these public?
-	QButtonGroup* btngroup;
-	QButtonGroup* dlggroup;
-	KDualColorButton* m_dualColorButton;
 	VStrokeFillPreview* strokeFillPreview() { return m_strokeFillPreview; }
 
 signals:
@@ -53,6 +48,8 @@ signals:
 	void gradToolActivated();
 
 private:
+	QButtonGroup* btngroup;
+	//QButtonGroup* dlggroup;
 	VStrokeFillPreview* m_strokeFillPreview;
 	enum ButtonChoice
 	{

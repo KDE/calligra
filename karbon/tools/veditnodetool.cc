@@ -62,7 +62,7 @@ VEditNodeTool::drawTemporaryObject()
 	KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
 
 	if( view()->part()->document().selection()->objects().count() > 0 &&
-		( m_state != normal || view()->part()->document().selection()->checkNode( lp ) ) )
+		m_state != dragging && ( m_state == moving || view()->part()->document().selection()->checkNode( lp ) ) )
 	{
 		if( m_state == normal )
 			m_state = moving;
@@ -104,7 +104,7 @@ VEditNodeTool::drawTemporaryObject()
 		painter->lineTo( KoPoint( m_fp.x(), m_fp.y() ) );
 		painter->strokePath();
 
-		m_state = normal;
+		m_state = dragging;
 	}
 }
 
@@ -178,6 +178,7 @@ VEditNodeTool::eventFilter( QEvent* event )
 
 			view()->selectionChanged();
 			view()->part()->repaintAllViews();
+			m_state = normal;
 		}
 
 		m_isDragging = false;

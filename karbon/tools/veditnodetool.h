@@ -26,7 +26,7 @@ protected:
 	void setCursor( const KoPoint & ) const;
 
 private:
-	enum { normal, moving } m_state;
+	enum { normal, dragging, moving } m_state;
 
 	// input (mouse coordinates):
 	KoPoint m_fp;
