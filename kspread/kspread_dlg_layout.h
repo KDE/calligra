@@ -165,17 +165,7 @@ public:
 
 public slots:
     void slotStyle( int );
-    //void slotSetTextColor( const QColor &_color );
-    void slotSetBackgroundColor( const QColor &_color );
 protected:
-    //QColor textColor;
-    //bool bTextColorUndefined;
-    QColor bgColor;
-    bool bBgColorUndefined;
-
-    //KColorButton *textColorButton;
-    KColorButton *bgColorButton;
-
     QComboBox* styleButton;
     int idStyleNormal;
     int idStyleUndef;
@@ -385,6 +375,7 @@ public:
 public slots:
     void slotUnselect2( KSpreadBrushSelect *_select );
     void slotSetColorButton( const QColor &_color );
+    void slotSetBackgroundColor( const QColor &_color );
 protected:
     KSpreadBrushSelect *selectedBrush;
     KSpreadBrushSelect *brush1;
@@ -406,6 +397,10 @@ protected:
     KColorButton* color;
 
     QColor currentColor;
+
+    QColor bgColor;
+    bool bBgColorUndefined;
+    KColorButton *bgColorButton;
 
     CellLayoutDlg *dlg;
 };

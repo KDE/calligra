@@ -701,16 +701,26 @@ void CellLayoutPageFloat::slotChangeState()
 {
 QStringList list;
 listFormat->clear();
+precision->setEnabled(true);
 if(number->isChecked())
         listFormat->setEnabled(false);
 else if(percent->isChecked())
+        {
         listFormat->setEnabled(false);
+        if(dlg->precision==-1)
+                precision->setValue(2);
+        }
 else if(money->isChecked())
+        {
         listFormat->setEnabled(false);
+        if(dlg->precision==-1)
+                precision->setValue(2);
+        }
 else if(scientific->isChecked())
         listFormat->setEnabled(false);
 else if(date->isChecked())
         {
+        precision->setEnabled(false);
         listFormat->setEnabled(true);
         list+=KGlobal::locale()->formatDate(QDate::currentDate(),true);
         list+=KGlobal::locale()->formatDate(QDate::currentDate(),false);
@@ -724,6 +734,7 @@ else if(date->isChecked())
         }
 else if(fraction->isChecked())
         {
+        precision->setEnabled(false);
         listFormat->setEnabled(true);
         list+="1/2";
         list+="1/4";
@@ -749,6 +760,7 @@ else if(fraction->isChecked())
         }
 else if(time->isChecked())
         {
+        precision->setEnabled(false);
         listFormat->setEnabled(true);
         list+=KGlobal::locale()->formatTime(QTime::currentTime(),false);
         list+=KGlobal::locale()->formatTime(QTime::currentTime(),true);
@@ -768,7 +780,7 @@ void CellLayoutPageFloat::makeformat()
 QString tmp;
 int p;
 p = (precision->value() == -1) ? 8 : precision->value();
-
+QChar decimal_point= KGlobal::locale()->decimalSymbol()[0];
 if(!dlg->m_bValue&&!dlg->m_bDate&&!dlg->m_bTime)
         exampleLabel->setText(dlg->cellText);
 else if(dlg->m_bDate)
@@ -805,7 +817,12 @@ else if(dlg->m_bValue)
         else if(percent->isChecked())
                 tmp=KGlobal::locale()->formatNumber(dlg->m_value*100.0, p)+ " %";
         else if(scientific->isChecked())
+                {
                 tmp=QString::number(dlg->m_value, 'E', p);
+                int pos;
+                if((pos=tmp.find('.'))!=-1)
+	                tmp=tmp.replace(pos,1,decimal_point);
+                }
         else if(fraction->isChecked())
                 {
                 double result = (dlg->m_value)-floor(dlg->m_value);
@@ -853,23 +870,34 @@ else if(dlg->m_bValue)
                         tmp = tmp.setNum( floor(dlg->m_value) ) + " " + tmp.setNum( index1 ) + "/" + tmp.setNum( index );
                 }
                 }
-        if ( precision->value() == -1 && tmp.find(KGlobal::locale()->decimalSymbol()[0]) >= 0 )
+        if ( precision->value() == -1 && tmp.find(decimal_point) >= 0 )
         {
-	    int i = tmp.length();
+            int start=0;
+            if(tmp.find('%')!=-1)
+                start=2;
+            else if(tmp.find(KGlobal::locale()->currencySymbol())==(tmp.length()-1))
+                start=2;
+            else if((start=tmp.find('E'))!=-1)
+                start=tmp.length()-start;
+            else
+                start=0;
+            int i = tmp.length()-start;
 	    bool bFinished = FALSE;
-	    while ( !bFinished && i > 0 )
+
+
+            while ( !bFinished && i > 0 )
 	    {
 		QChar ch = tmp[ i - 1 ];
-		if ( ch == '0' )
-		    tmp.truncate( --i );
+                if ( ch == '0' )
+                    tmp.remove(--i,1);
 		else
 	        {
 		    bFinished = TRUE;
-		    if ( ch == KGlobal::locale()->decimalSymbol()[0] )
-			tmp.truncate( --i );
-		}
-	    }
-	}
+		    if ( ch == decimal_point )
+                        tmp.remove(--i,1);
+                }
+            }
+        }
         exampleLabel->setText(tmp);
         }
         else
@@ -959,35 +987,21 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
 CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) : QWidget( parent )
 {
     dlg = _dlg;
-    bBgColorUndefined = !dlg->bBgColor;
+
 
     QGridLayout* layout = new QGridLayout( this, 2,2,7,7 );
     QGroupBox *box = new QGroupBox( this, "Box");
 
-    QGridLayout *grid = new QGridLayout(box,2,6,7,7);
+    QGridLayout *grid = new QGridLayout(box,2,4,7,7);
     QLabel *tmpQLabel;
-    tmpQLabel = new QLabel( box, "Label_2" );
-    grid->addWidget(tmpQLabel,0,0);
-    tmpQLabel->setText( i18n("Background Color") );
-
-    bgColorButton = new KColorButton( box, "ColorButton" );
-    grid->addWidget(bgColorButton,1,0);
-    if ( dlg->bBgColor )
-	bgColor = dlg->bgColor;
-    else
-	bgColor = colorGroup().base();
-    bgColorButton->setColor(bgColor);
-
-    connect( bgColorButton, SIGNAL( changed( const QColor & ) ),
-             this, SLOT( slotSetBackgroundColor( const QColor & ) ) );
 
     tmpQLabel = new QLabel( box, "Label_3" );
-    grid->addWidget(tmpQLabel,2,0);
+    grid->addWidget(tmpQLabel,0,0);
     tmpQLabel->setText( i18n("Functionality") );
 
     styleButton = new QComboBox( box, "ComboBox_2" );
 
-    grid->addWidget(styleButton,3,0);
+    grid->addWidget(styleButton,1,0);
 
     idStyleNormal = 0; styleButton->insertItem( i18n("Normal"), 0 );
     idStyleButton = 1; styleButton->insertItem( i18n("Button"), 1 );
@@ -1001,11 +1015,11 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
     connect( styleButton, SIGNAL( activated( int ) ), this, SLOT( slotStyle( int ) ) );
 
     tmpQLabel = new QLabel( box, "Label_3" );
-    grid->addWidget(tmpQLabel,4,0);
+    grid->addWidget(tmpQLabel,2,0);
     tmpQLabel->setText( i18n("Action") );
 
     actionText = new QLineEdit( box );
-    grid->addMultiCellWidget(actionText,5,5,0,1);
+    grid->addMultiCellWidget(actionText,3,3,0,1);
 
     if ( dlg->isSingleCell() )
     {
@@ -1033,8 +1047,6 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
 
 void CellLayoutPageMisc::apply( KSpreadCell *_obj )
 {
-    if ( !bBgColorUndefined )
-	_obj->setBgColor( bgColor );
     if ( styleButton->currentItem() == idStyleNormal )
       _obj->setStyle( KSpreadCell::ST_Normal );
     else if ( styleButton->currentItem() == idStyleButton )
@@ -1052,12 +1064,6 @@ void CellLayoutPageMisc::slotStyle( int _i )
   else
     actionText->setEnabled( false );
 }
-
-void CellLayoutPageMisc::slotSetBackgroundColor( const QColor &_color )
-{
-bgColor =_color;
-}
-
 
 
 CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) : QWidget ( parent )
@@ -2567,7 +2573,9 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 {
     dlg = _dlg;
 
-    QGridLayout *grid = new QGridLayout(this,3,2,15,15);
+    bBgColorUndefined = !dlg->bBgColor;
+
+    QGridLayout *grid = new QGridLayout(this,5,2,15,15);
 
     QGroupBox* tmpQGroupBox;
     tmpQGroupBox = new QGroupBox( this, "GroupBox" );
@@ -2575,7 +2583,7 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     tmpQGroupBox->setTitle( i18n("Pattern") );
     tmpQGroupBox->setAlignment( 1 );
 
-    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,6,3,15,7);
+    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,7,3,15,7);
 
     brush1 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_1" );
     brush1->setFrameStyle( 50 );
@@ -2647,7 +2655,26 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 
     grid2->addMultiCell(grid3,5,5,0,2);
 
-    grid->addMultiCellWidget(tmpQGroupBox,0,1,0,0);
+    grid3=new QGridLayout(tmpQGroupBox,1,2);
+
+    tmpQLabel = new QLabel( tmpQGroupBox, "Label_2" );
+    grid3->addWidget(tmpQLabel,0,0);
+    tmpQLabel->setText( i18n("Background Color") );
+
+    bgColorButton = new KColorButton( tmpQGroupBox, "ColorButton" );
+    grid3->addWidget(bgColorButton,0,1);
+    if ( dlg->bBgColor )
+	bgColor = dlg->bgColor;
+    else
+	bgColor = colorGroup().base();
+    bgColorButton->setColor(bgColor);
+
+    connect( bgColorButton, SIGNAL( changed( const QColor & ) ),
+             this, SLOT( slotSetBackgroundColor( const QColor & ) ) );
+
+    grid2->addMultiCell(grid3,6,6,0,2);
+
+    grid->addMultiCellWidget(tmpQGroupBox,0,3,0,0);
 
     tmpQGroupBox = new QGroupBox( this, "GroupBox1" );
     tmpQGroupBox->setTitle( i18n("Preview") );
@@ -2659,7 +2686,7 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     current = new KSpreadBrushSelect( tmpQGroupBox, "Current" );
     current->setFrameStyle( 50 );
     grid2->addWidget(current,0,0);
-    grid->addWidget( tmpQGroupBox,2,0);
+    grid->addWidget( tmpQGroupBox,4,0);
 
     connect( brush1, SIGNAL( clicked( KSpreadBrushSelect* ) ),
 	     this, SLOT( slotUnselect2( KSpreadBrushSelect* ) ) );
@@ -2712,6 +2739,7 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     current->slotSelect();
     selectedBrush=current;
     color->setColor(dlg->brushColor);
+    current->setBackgroundColor(bgColor);
 
     connect( color, SIGNAL( changed( const QColor & ) ),
 	     this, SLOT( slotSetColorButton( const QColor & ) ) );
@@ -2719,6 +2747,12 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     slotSetColorButton( dlg->brushColor );
     init();
     this->resize( 400, 400 );
+}
+
+void CellLayoutPagePattern::slotSetBackgroundColor( const QColor &_color )
+{
+bgColor =_color;
+current->setBackgroundColor(bgColor);
 }
 
 void CellLayoutPagePattern::init()
@@ -2854,5 +2888,7 @@ void CellLayoutPagePattern::apply( KSpreadCell *_obj )
          _obj->setBackGroundBrushColor(selectedBrush->getBrushColor() );
          _obj->setBackGroundBrushStyle(selectedBrush->getBrushStyle() );
         }
+  if ( !bBgColorUndefined )
+	_obj->setBgColor( bgColor );
 }
 #include "kspread_dlg_layout.moc"

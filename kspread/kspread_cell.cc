@@ -935,7 +935,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	// unless the number has no decimal point
 	if ( m_iPrecision == -1 && localizedNumber.find(decimal_point) >= 0 )
         {
-	    int i = localizedNumber.length();
+	/*    int i = localizedNumber.length();
 	    bool bFinished = FALSE;
 	    while ( !bFinished && i > 0 )
 	    {
@@ -948,7 +948,32 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 		    if ( ch == decimal_point )
 			localizedNumber.truncate( --i );
 		}
-	    }
+	    }*/
+            int start=0;
+            if(localizedNumber.find('%')!=-1)
+                start=2;
+            else if(localizedNumber.find(decimal_point)==(localizedNumber.length()-1))
+                start=2;
+            else if((start=localizedNumber.find('E'))!=-1)
+                start=localizedNumber.length()-start;
+            else
+                start=0;
+            int i = localizedNumber.length()-start;
+	    bool bFinished = FALSE;
+
+
+            while ( !bFinished && i > 0 )
+	    {
+		QChar ch = localizedNumber[ i - 1 ];
+                if ( ch == '0' )
+                    localizedNumber.remove(--i,1);
+		else
+	        {
+		    bFinished = TRUE;
+		    if ( ch == decimal_point )
+                        localizedNumber.remove(--i,1);
+                }
+            }
 	}
 
 	// Start building the output string with prefix and postfix
@@ -1935,7 +1960,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	if( table()->getShowGrid() )
         {
 	    left_offset = 1;
-	
+
 	    QPen t = m_pTable->cellAt( _col, _row - 1 )->leftBorderPen( _col, _row - 1 );
 	    QPen b = m_pTable->cellAt( _col, _row + 1 )->leftBorderPen( _col, _row + 1 );
 
@@ -1955,7 +1980,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	if( table()->getShowGrid() )
         {
 	    top_offset = 1;
-	
+
 	    QPen l = m_pTable->cellAt( _col, _row - 1 )->leftBorderPen( _col, _row - 1 );
 	    QPen r = m_pTable->cellAt( _col, _row - 1 )->rightBorderPen( _col, _row - 1 );
 
@@ -1981,7 +2006,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 
 	_painter.setPen( left_pen );
 	_painter.drawLine( _tx, _ty - top, _tx, _ty + h + bottom );
-	
+
 	left_offset = left_pen.width() - ( left_pen.width() / 2 );
     }
     if ( right_pen.style() != Qt::NoPen )
@@ -1991,21 +2016,21 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 
 	_painter.setPen( right_pen );
 	_painter.drawLine( w + _tx, _ty - top, w + _tx, _ty + h + bottom );
-	
+
 	right_offset = right_pen.width() / 2;
     }
     if ( top_pen.style() != Qt::NoPen )
     {
 	_painter.setPen( top_pen );
 	_painter.drawLine( _tx, _ty, _tx + w, _ty );
-	
+
 	top_offset = top_pen.width() - ( top_pen.width() / 2 );
     }
     if ( bottom_pen.style() != Qt::NoPen )
     {
 	_painter.setPen( bottom_pen );
 	_painter.drawLine( _tx, h + _ty, _tx + w, h + _ty );
-	
+
 	bottom_offset = bottom_pen.width() / 2;
     }
 
@@ -2827,28 +2852,7 @@ void KSpreadCell::checkValue()
 	m_dValue = atof( ptext );
         return;
         }
-    //bool ok;
-    //double val=m_strText.toDouble(&ok);
     QString tmp;
-    //test for scientific format
-    //don't work for the moment.
-    /*if(ok)
-        {
-        if(m_strText.contains('E')||m_strText.contains('e'))
-                {
-                m_dValue=val;
-                m_bValue = true;
-                m_eFormatNumber=Scientific;
-                if(fabs(val)<1)
-                        m_strText= QString::number(val, 'f');
-                else
-                        m_strText= QString::number(val, 'f',0);
-                setFaktor(1.0);
-                //setPrecision(-1);
-                return;
-                }
-        }
-    */
     QTime tmpTime;
     int pos;
     QString stringPm=i18n("pm");
@@ -2984,6 +2988,37 @@ void KSpreadCell::checkFormat(bool _formular)
                         }
                 }
         }
+    val=m_strText.toDouble(&ok);
+    if(ok)
+        {
+        if(m_strText.contains('E')||m_strText.contains('e'))
+                {
+                m_dValue=val;
+                m_bValue = true;
+                m_eFormatNumber=Scientific;
+                m_strText= QString::number(val, 'f',8);
+
+                int i = m_strText.length();
+	        bool bFinished = FALSE;
+	        while ( !bFinished && i > 0 )
+	        {
+		QChar ch = m_strText[ i - 1 ];
+		if ( ch == '0' )
+		    m_strText.truncate( --i );
+		else
+	        {
+		    bFinished = TRUE;
+		    if ( ch == '.' )
+			m_strText.truncate( --i );
+		}
+                }
+                setFaktor(1.0);
+                if(_formular)
+                        m_strText="="+m_strText;
+                return;
+                }
+        }
+
 }
 
 

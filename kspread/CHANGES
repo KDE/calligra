@@ -772,3 +772,19 @@ setMultirow(bool), multiRow(), setVerticalText(bool), verticalText()
 setPrefix(),prefix(),setPostfix(),postfix(),setAlign(),align()
 setAlignY(),align(),getFormatNumber(),  setFormatNumber()
 -Improved a little kspread_dlg_layout->Font
+
+Summary 2000-07-12 ->2000-07-15
+Torben improved against kspread
+=>fix a lot of bugs
+Works with David Faure on kofficelib
+etc...
+
+
+2000-07-15-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Now kspread can recognize scientific format when you write
+1.25E-5
+-Imporved kspread_dlg_layout
+=>now I move backgroundcolor to pattern page
+so now you can see pattern with its backgroundcolor
+-Imporved show example format, I think that it works.
