@@ -5015,6 +5015,11 @@ void KWView::switchModeView()
     actionInsertFootEndNote->setEnabled( state );
     actionViewFooter->setEnabled( state );
     actionViewHeader->setEnabled( state );
+    //switch to main frameset when we switch in text-view mode
+    //otherwise we can edit a footnote frame or header/footer
+    if ( !state )
+        m_gui->canvasWidget()->editFrameSet( m_doc->frameSet( 0 ));
+
 }
 
 void KWView::configureFootEndNote()
