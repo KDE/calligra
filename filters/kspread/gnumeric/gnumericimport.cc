@@ -35,6 +35,7 @@
 // hehe >:->
 #include <kspread_doc.h>
 #include <kspread_sheet.h>
+#include <kspread_sheetprint.h>
 #include <kspread_cell.h>
 #include <kspread_util.h>
 #include <koDocumentInfo.h>
@@ -836,8 +837,8 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * 
   table->setPaperFormat( fleft, ftop, fright, fbottom,
                          paperSize, orientation );
 */
-  table->setHeadFootLine( headLeft, headMiddle, headRight,
-                          footLeft, footMiddle, footRight );
+  table->print()->setHeadFootLine( headLeft, headMiddle, headRight,
+                                   footLeft, footMiddle, footRight );
 }
 
 void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * kspread_cell)

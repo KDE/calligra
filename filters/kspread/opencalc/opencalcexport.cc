@@ -43,6 +43,7 @@
 #include <kspread_format.h>
 #include <kspread_map.h>
 #include <kspread_sheet.h>
+#include <kspread_sheetprint.h>
 #include <kspread_util.h>
 
 typedef QValueList<Reference> AreaList;
@@ -755,19 +756,19 @@ void OpenCalcExport::exportPageAutoStyles( QDomDocument & doc, QDomElement & aut
 
   if ( sheet )
   {
-    width  = sheet->paperWidth() / 10;
-    height = sheet->paperHeight() / 10;
+    width  = sheet->print()->paperWidth() / 10;
+    height = sheet->print()->paperHeight() / 10;
   }
 
   QString sWidth  = QString( "%1cm" ).arg( width  );
   QString sHeight = QString( "%1cm" ).arg( height );
-  
+
   QDomElement pageMaster = doc.createElement( "style:page-master" );
   pageMaster.setAttribute( "style:name", "pm1" );
 
   QDomElement properties = doc.createElement( "style:properties" );
   properties.setAttribute( "fo:page-width",  sWidth  );
-  properties.setAttribute( "fo:page-height", sHeight ); 
+  properties.setAttribute( "fo:page-height", sHeight );
   properties.setAttribute( "fo:border", "0.002cm solid #000000" );
   properties.setAttribute( "fo:padding", "0cm" );
   properties.setAttribute( "fo:background-color", "transparent" );
@@ -817,12 +818,12 @@ void OpenCalcExport::exportMasterStyles( QDomDocument & doc, QDomElement & maste
   
   if ( sheet )
   {
-    headerLeft   = sheet->headLeft();
-    headerCenter = sheet->headMid();
-    headerRight  = sheet->headRight();
-    footerLeft   = sheet->footLeft();
-    footerCenter = sheet->footMid();
-    footerRight  = sheet->footRight();
+    headerLeft   = sheet->print()->headLeft();
+    headerCenter = sheet->print()->headMid();
+    headerRight  = sheet->print()->headRight();
+    footerLeft   = sheet->print()->footLeft();
+    footerCenter = sheet->print()->footMid();
+    footerRight  = sheet->print()->footRight();
   }
 
   if ( ( headerLeft.length() > 0 ) || ( headerCenter.length() > 0 )

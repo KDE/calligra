@@ -40,6 +40,7 @@
 #include <kspread_global.h>
 #include <kspread_map.h>
 #include <kspread_sheet.h>
+#include <kspread_sheetprint.h>
 #include <kspread_util.h>
 #include <kspread_value.h>
 
@@ -1144,7 +1145,8 @@ void OpenCalcImport::loadTableMasterStyle( KSpreadSheet * table,
     }
   }
 
-  table->setHeadFootLine( hleft, hmiddle, hright, fleft, fmiddle, fright );
+  table->print()->setHeadFootLine( hleft, hmiddle, hright,
+                                   fleft, fmiddle, fright );
 }
 
 bool OpenCalcImport::parseBody( int numOfTables )
@@ -1317,7 +1319,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
       kdDebug() << "Print table: " << p.tableName << endl;
 
       if ( table->tableName() == p.tableName )
-        table->setPrintRange( p.range );
+        table->print()->setPrintRange( p.range );
     }
 
     if ( !readColLayouts( t, table ) )
