@@ -10,7 +10,8 @@ libkotext_la_SOURCES = qcomplextext.cpp qrichtext.cpp qrichtext_p.cpp \
 	koChangeCaseDia.cc koStylist.cc koSearchDia.cc \
 	timedateformatwidget.ui timeformatwidget_impl.cc dateformatwidget_impl.cc \
 	KoTextViewIface.skel KoTextViewIface.cc koFontDia.cc koBgSpellCheck.cc \
-	koCommentDia.cc kospell.cc koCreateStyleDia.cc
+	koCommentDia.cc kospell.cc koCreateStyleDia.cc kotextcustomitem.cc
+
 libkotext_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 # We use kofficeui for koRect :)
 libkotext_la_LIBADD = $(LIB_KOFFICEUI) -lkspell

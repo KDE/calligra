@@ -445,14 +445,21 @@ void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
     bl = zh->layoutUnitToPixelY( y, bl );
 
     p->save();
-    p->setPen( QPen( f->color() ) );
 
     QFont font( f->screenFont( zh ) );
     QColor textColor( f->color() );
+    if ( !textColor.isValid() ) // Resolve the color at this point
+        textColor = KoTextFormat::defaultTextColor( p );
 
     if ( f->textBackgroundColor().isValid() )
         p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h, f->textBackgroundColor() );
-    if ( selected )
+
+    if ( textDocument()->drawingShadow() ) // Use shadow color if drawing a shadow
+    {
+        textColor = parag->shadowColor();
+        p->setPen( textColor );
+    }
+    else if ( selected )
     {
         textColor = cg.color( QColorGroup::HighlightedText );
         p->setPen( QPen( textColor ) );
@@ -466,12 +473,10 @@ void KoVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
         p->setPen( QPen ( textColor, 0, Qt::DotLine ) );
         p->drawRect( x, y, zh->layoutUnitToPixelX( width ), h );
     }
-
-    if ( textDocument()->drawingShadow() ) // Use shadow color if drawing a shadow
-    {
-        textColor = parag->shadowColor();
-        p->setPen( textColor );
+    else {
+        p->setPen( QPen( textColor ) );
     }
+
 
     KoTextParag::drawUnderlineDoubleUnderline( p , f , zh, font, textColor, x , bl, zh->layoutUnitToPixelX( width ), y, h);
 

@@ -335,6 +335,7 @@ void KoTextObject::readFormats( KoTextCursor &c1, KoTextCursor &c2, bool copyPar
 void KoTextObject::newPlaceHolderCommand( const QString & name )
 {
     Q_ASSERT( !undoRedoInfo.placeHolderCmd );
+    if ( undoRedoInfo.placeHolderCmd ) kdDebug() << kdBacktrace();
     undoRedoInfo.placeHolderCmd = new KMacroCommand( name );
     emit newCommand( undoRedoInfo.placeHolderCmd );
 }
