@@ -37,6 +37,7 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 	m_view = new QLineEdit(this, "tableLineEdit");
 	m_view->installEventFilter(this);
 	static_cast<QLineEdit*>(m_view)->setFrame(false);
+	m_calculatedCell = false;
 
 	if(!ov.isNull())
 	{
@@ -53,9 +54,10 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 			case QVariant::UInt:
 				if(ov == "1" || ov == "2" || ov == "3" || ov == "4" || ov == "5" || ov == "6" || ov == "7" || ov == "8" || ov == "9" || ov == "0")
 					static_cast<QLineEdit*>(m_view)->setText(ov);
-					break;
+//					break;
 
 				if(ov == "=")
+					kdDebug() << "KexiInputTableEdit::KexiInputTableEdit(): calculated!" << endl;
 					m_calculatedCell = true;
 					static_cast<QLineEdit*>(m_view)->setText(ov);
 					break;
@@ -76,7 +78,6 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 		static_cast<QLineEdit*>(m_view)->selectAll();
 	}
 
-	m_calculatedCell = false;
 	setFocusProxy(m_view);
 }
 

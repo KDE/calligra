@@ -15,7 +15,6 @@ TODO:
 	+ query
 		- SQL => gui parser (using cql)
 		    => would bring query saving what is very important
-		- devide gui and meta
 
 	+ relationeditor
 

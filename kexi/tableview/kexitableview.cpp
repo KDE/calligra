@@ -867,6 +867,9 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		break;
 
     case Key_Shift:
+    case Key_Alt:
+    case Key_Control:
+    case Key_Meta:
     		e->ignore();
         	break;
 
