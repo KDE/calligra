@@ -92,13 +92,14 @@
 
 // tools
 #include "kis_tool_factory.h"
+#include "kis_tool_paste.h"	
 
 // debug
 #include <kdebug.h>
 #include "kis_timer.h"
 
 //#define TEST_PIXMAP
-//#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
+//#define KISBarIcon(x) BarIcon(x, KisFactory::global())
 
 /*
     KisView - constructor.  What is a KoView?  A widget, but it
@@ -116,8 +117,8 @@
     views one should be able to have a different image in each pane, and
     cut and paste, make comparisons, etc., between them.
 */
-KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
-    : super( doc, parent, name )
+KisView::KisView(KisDoc* doc, QWidget* parent, const char* name)
+    : super(doc, parent, name)
 {
 	kdDebug() << "KisView::KisView\n";
 	m_doc = doc;
@@ -168,8 +169,8 @@ KisView::~KisView()
 
 DCOPObject* KisView::dcopObject()
 {
-    if ( !m_dcop )
-	m_dcop = new KRayonViewIface( this );
+    if (!m_dcop)
+	m_dcop = new KRayonViewIface(this);
 
     return m_dcop;
 }
@@ -210,26 +211,26 @@ void KisView::setupCanvas()
 {
     m_pCanvas = new KisCanvas(this, "kis_canvas");
 
-    QObject::connect( m_pCanvas, SIGNAL( mousePressed( QMouseEvent* ) ),
-        this, SLOT( canvasGotMousePressEvent ( QMouseEvent* ) ) );
+    QObject::connect(m_pCanvas, SIGNAL(mousePressed( QMouseEvent*)),
+        this, SLOT(canvasGotMousePressEvent (QMouseEvent*)) );
 
-    QObject::connect( m_pCanvas, SIGNAL( mouseMoved( QMouseEvent* ) ),
-        this, SLOT( canvasGotMouseMoveEvent ( QMouseEvent* ) ) );
+    QObject::connect(m_pCanvas, SIGNAL(mouseMoved( QMouseEvent*)),
+        this, SLOT(canvasGotMouseMoveEvent (QMouseEvent*)) );
 
-    QObject::connect( m_pCanvas, SIGNAL( mouseReleased (QMouseEvent* ) ),
-        this, SLOT( canvasGotMouseReleaseEvent ( QMouseEvent* ) ) );
+    QObject::connect(m_pCanvas, SIGNAL(mouseReleased (QMouseEvent*)),
+        this, SLOT(canvasGotMouseReleaseEvent (QMouseEvent*)) );
 
-    QObject::connect( m_pCanvas, SIGNAL( gotPaintEvent (QPaintEvent* ) ),
-		this, SLOT( canvasGotPaintEvent ( QPaintEvent* ) ) );
+    QObject::connect(m_pCanvas, SIGNAL(gotPaintEvent (QPaintEvent*)),
+		this, SLOT(canvasGotPaintEvent (QPaintEvent*)) );
 
-    QObject::connect( m_pCanvas, SIGNAL( gotEnterEvent (QEvent* ) ),
-		this, SLOT( canvasGotEnterEvent ( QEvent* ) ) );
+    QObject::connect(m_pCanvas, SIGNAL(gotEnterEvent (QEvent*)),
+		this, SLOT(canvasGotEnterEvent (QEvent*)) );
 
-    QObject::connect( m_pCanvas, SIGNAL( gotLeaveEvent (QEvent* ) ),
-		this, SLOT( canvasGotLeaveEvent ( QEvent* ) ) );
+    QObject::connect(m_pCanvas, SIGNAL(gotLeaveEvent (QEvent*)),
+		this, SLOT(canvasGotLeaveEvent (QEvent*)) );
 
-    QObject::connect( m_pCanvas, SIGNAL( mouseWheelEvent( QWheelEvent* ) ),
-                      this, SLOT( canvasGotMouseWheelEvent( QWheelEvent* ) ) );
+    QObject::connect(m_pCanvas, SIGNAL(mouseWheelEvent( QWheelEvent*)),
+                      this, SLOT(canvasGotMouseWheelEvent(QWheelEvent*)) );
 }
 
 
@@ -339,7 +340,7 @@ void KisView::setupSideBar()
     connect(this, SIGNAL(bgColorChanged(const KisColor&)),
         m_pSideBar, SLOT(slotSetBGColor(const KisColor&)));
 
-    m_side_bar->setChecked( true );
+    m_side_bar->setChecked(true);
 }
 
 /*
@@ -348,8 +349,8 @@ void KisView::setupSideBar()
 */
 void KisView::setupScrollBars()
 {
-    m_pVert = new QScrollBar( QScrollBar::Vertical, this );
-    m_pHorz = new QScrollBar( QScrollBar::Horizontal, this );
+    m_pVert = new QScrollBar(QScrollBar::Vertical, this);
+    m_pHorz = new QScrollBar(QScrollBar::Horizontal, this);
 
     m_pVert->setGeometry(width()-16, 20, 16, height()-36);
     m_pHorz->setGeometry(20, height()-16, width()-36, 16);
@@ -402,31 +403,31 @@ void KisView::setupTabBar()
     m_pTabBar->slotImageListUpdated();
 
     QObject::connect(m_pTabBar, SIGNAL(tabSelected(const QString&)),
-		    m_doc, SLOT( setCurrentImage( const QString& ) ) );
+		    m_doc, SLOT(setCurrentImage(const QString&)) );
 
-    QObject::connect( m_doc, SIGNAL( imageListUpdated() ),
-		    m_pTabBar, SLOT( slotImageListUpdated( ) ) );
+    QObject::connect(m_doc, SIGNAL(imageListUpdated()),
+		    m_pTabBar, SLOT(slotImageListUpdated()) );
 
     // tabbar control buttons
-    m_pTabFirst = new QPushButton( this );
-    m_pTabFirst->setPixmap( QPixmap( BarIcon( "tab_first" ) ) );
-    QObject::connect( m_pTabFirst, SIGNAL( clicked() ),
-        m_pTabBar, SLOT( slotScrollFirst() ) );
+    m_pTabFirst = new QPushButton(this);
+    m_pTabFirst->setPixmap(QPixmap(BarIcon( "tab_first")) );
+    QObject::connect(m_pTabFirst, SIGNAL(clicked()),
+        m_pTabBar, SLOT(slotScrollFirst()));
 
-    m_pTabLeft = new QPushButton( this );
-    m_pTabLeft->setPixmap( QPixmap( BarIcon( "tab_left" ) ) );
-    QObject::connect( m_pTabLeft, SIGNAL( clicked() ),
-        m_pTabBar, SLOT( slotScrollLeft() ) );
+    m_pTabLeft = new QPushButton(this);
+    m_pTabLeft->setPixmap(QPixmap(BarIcon( "tab_left")) );
+    QObject::connect(m_pTabLeft, SIGNAL(clicked()),
+        m_pTabBar, SLOT(slotScrollLeft()));
 
-    m_pTabRight = new QPushButton( this );
-    m_pTabRight->setPixmap( QPixmap( BarIcon( "tab_right" ) ) );
-    QObject::connect( m_pTabRight, SIGNAL( clicked() ),
-        m_pTabBar, SLOT( slotScrollRight() ) );
+    m_pTabRight = new QPushButton(this);
+    m_pTabRight->setPixmap(QPixmap(BarIcon( "tab_right")) );
+    QObject::connect(m_pTabRight, SIGNAL(clicked()),
+        m_pTabBar, SLOT(slotScrollRight()));
 
-    m_pTabLast = new QPushButton( this );
-    m_pTabLast->setPixmap( QPixmap( BarIcon( "tab_last" ) ) );
-    QObject::connect( m_pTabLast, SIGNAL( clicked() ),
-        m_pTabBar, SLOT( slotScrollLast() ) );
+    m_pTabLast = new QPushButton(this);
+    m_pTabLast->setPixmap(QPixmap(BarIcon( "tab_last")) );
+    QObject::connect(m_pTabLast, SIGNAL(clicked()),
+        m_pTabBar, SLOT(slotScrollLast()));
 }
 
 /*
@@ -442,262 +443,94 @@ void KisView::setupTabBar()
 
 void KisView::setupActions()
 {
-    // history actions
-    m_undo = KStdAction::undo( this, SLOT( undo() ),
-        actionCollection(), "undo");
-
-    m_redo = KStdAction::redo( this, SLOT( redo() ),
-        actionCollection(), "redo");
-
-    // navigation actions
-    new KAction( i18n("Refresh Canvas"),
-        "reload", 0, this, SLOT( slotDocUpdated() ),
-        actionCollection(), "refresh_canvas" );
-
-    new KAction( i18n("Panic Button"),
-        "stop", 0, this, SLOT( slotHalt() ),
-        actionCollection(), "panic_button" );
-
-    /*
-    new KAction( i18n("Gimp"),
-        "wilbur", 0, this, SLOT( slotGimp() ),
-        actionCollection(), "gimp" );
-    */
-
-    // selection actions
-    m_cut = KStdAction::cut( this, SLOT( cut() ),
-        actionCollection(), "cut");
-
-    m_copy = KStdAction::copy( this, SLOT( copy() ),
-        actionCollection(), "copy");
-
-    m_paste = KStdAction::paste( this, SLOT( paste() ),
-        actionCollection(), "paste");
-
-    new KAction( i18n("Remove selection"),
-        "remove", 0, this, SLOT( removeSelection() ),
-        actionCollection(), "remove");
-
-    m_crop = new KAction( i18n("Copy selection to new layer"),
-        "crop", 0,  this, SLOT( crop() ),
-        actionCollection(), "crop");
-
-    m_select_all = KStdAction::selectAll( this, SLOT( selectAll() ),
-        actionCollection(), "select_all");
-
-    m_unselect_all = new KAction( i18n("Select None"),
-        0, this, SLOT( unSelectAll() ),
-        actionCollection(), "select_none");
-
-    // import/export actions
-    new KAction( i18n("Import Image"),
-        "wizard", 0, this, SLOT( import_image() ),
-        actionCollection(), "import_image" );
-
-    new KAction( i18n("Export Image"),
-        "wizard", 0, this, SLOT( export_image() ),
-        actionCollection(), "export_image" );
-
-    // view actions
-    new KAction( i18n("Zoom &in"),
-        "viewmag+", 0, this, SLOT( zoom_in() ),
-        actionCollection(), "zoom_in" );
-
-    new KAction( i18n("Zoom &out"),
-        "viewmag-", 0, this, SLOT( zoom_out() ),
-        actionCollection(), "zoom_out" );
-
-    // tool settings actions
-
-    m_dialog_gradient
-        = new KAction( i18n("&Gradient Dialog"),
-        "blend", 0, this, SLOT( dialog_gradient() ),
-        actionCollection(), "dialog_gradient");
-
-    // tool actions - lots of them
-
-    (void) new KAction( i18n("&Current Tool Properties..."),
-        "configure", 0, this, SLOT( tool_properties() ),
-        actionCollection(), "current_tool_properties" );
-
-    // layer actions
-
-    (void) new KAction( i18n("&Add layer..."),
-        0, this, SLOT( insert_layer() ),
-        actionCollection(), "insert_layer" );
-
-    (void) new KAction( i18n("&Remove layer..."),
-        0, this, SLOT( remove_layer() ),
-        actionCollection(), "remove_layer" );
-
-    (void) new KAction( i18n("&Link/Unlink layer..."),
-        0, this, SLOT( link_layer() ),
-        actionCollection(), "link_layer" );
-
-    (void) new KAction( i18n("&Hide/Show layer..."),
-        0, this, SLOT( hide_layer() ),
-        actionCollection(), "hide_layer" );
-
-    (void) new KAction( i18n("&Next layer..."),
-        "forward", 0, this, SLOT( next_layer() ),
-        actionCollection(), "next_layer" );
-
-    (void) new KAction( i18n("&Previous layer..."),
-        "back", 0, this, SLOT( previous_layer() ),
-        actionCollection(), "previous_layer" );
-
-    (void) new KAction( i18n("Layer Properties..."),
-        0, this, SLOT( layer_properties() ),
-        actionCollection(), "layer_properties" );
-
-    (void) new KAction( i18n("I&nsert image as layer..."),
-        0, this, SLOT( insert_image_as_layer() ),
-        actionCollection(), "insert_image_as_layer" );
-
-    (void) new KAction( i18n("Save layer as image..."),
-        0, this, SLOT( save_layer_as_image() ),
-        actionCollection(), "save_layer_as_image" );
-
-    // layer transformations - should be generic, for selection too
-
-    (void) new KAction( i18n("Scale layer smoothly"),
-        0, this, SLOT( layer_scale_smooth() ),
-        actionCollection(), "layer_scale_smooth");
-
-    (void) new KAction( i18n("Scale layer - keep palette"),
-        0, this, SLOT( layer_scale_rough() ),
-        actionCollection(), "layer_scale_rough");
-
-    m_layer_rotate180 = new KAction( i18n("Rotate &180"),
-        0, this, SLOT( layer_rotate180() ),
-        actionCollection(), "layer_rotate180");
-
-    m_layer_rotate270 = new KAction( i18n("Rotate &270"),
-        0, this, SLOT( layer_rotateleft90() ),
-        actionCollection(), "layer_rotateleft90");
-
-    m_layer_rotate90 = new KAction( i18n("Rotate &90"),
-        0, this, SLOT( layer_rotateright90() ),
-        actionCollection(), "layer_rotateright90");
-
-    m_layer_rotate_custom = new KAction( i18n("Rotate &Custom"),
-        0, this, SLOT( layer_rotate_custom() ),
-        actionCollection(), "layer_rotate_custom");
-
-    m_layer_mirrorX = new KAction( i18n("Mirror &X"),
-        0, this, SLOT( layer_mirrorX() ),
-        actionCollection(), "layer_mirrorX");
-
-    m_layer_mirrorY = new KAction( i18n("Mirror &Y"),
-        0, this, SLOT( layer_mirrorY() ),
-        actionCollection(), "layer_mirrorY");
-
-    // image actions
-
-    (void) new KAction( i18n("Add new image"),
-        0, this, SLOT( add_new_image_tab() ),
-        actionCollection(), "add_new_image_tab");
-
-    (void) new KAction( i18n("Remove current image"),
-        0, this, SLOT( remove_current_image_tab() ),
-        actionCollection(), "remove_current_image_tab");
-
-    (void) new KAction( i18n("Merge &all layers"),
-        0, this, SLOT( merge_all_layers() ),
-        actionCollection(), "merge_all_layers");
-
-    (void) new KAction( i18n("Merge &visible layers"),
-        0, this, SLOT( merge_visible_layers() ),
-        actionCollection(), "merge_visible_layers");
-
-    (void) new KAction( i18n("Merge &linked layers"),
-        0, this, SLOT( merge_linked_layers() ),
-        actionCollection(), "merge_linked_layers");
-
-    // setting actions
-
-    m_toggle_paint_offset
-        = new KToggleAction( i18n("Toggle Paint Offset"),
-        "remove_view", 0, this, SLOT( slotSetPaintOffset() ),
-        actionCollection(), "toggle_paint_offset" );
-
-    m_side_bar = new KToggleAction( i18n("Show/Hide Sidebar"),
-        "ok", 0, this, SLOT( showSidebar() ),
-        actionCollection(), "show_sidebar" );
-
-    m_float_side_bar = new KToggleAction( i18n("Dock/Undock Sidebar"),
-         "attach", 0, this, SLOT( floatSidebar() ),
-        actionCollection(), "float_sidebar" );
-
-    m_lsidebar = new KToggleAction( i18n("Left/Right Sidebar"),
-         "view_right", 0, this, SLOT( leftSidebar() ),
-        actionCollection(), "left_sidebar" );
-
-    (void) KStdAction::saveOptions( this, SLOT( saveOptions() ),
-        actionCollection(), "save_options" );
-
-    (void) new KAction( i18n("Krayon Preferences"),
-        "edit", 0, this, SLOT( preferences() ),
-        actionCollection(), "preferences");
-
-	 // krayon box toolbar actions - these will be used only
-     // to dock and undock wideget in the krayon box
-
-    m_dialog_colors = new KToggleAction( i18n("&Colors"),
-        "color_dialog", 0, this, SLOT( dialog_colors() ),
-        actionCollection(), "colors_dialog");
-
-    m_dialog_krayons = new KToggleAction( i18n("&Krayons"),
-        "krayon_box", 0, this, SLOT( dialog_krayons() ),
-        actionCollection(), "krayons_dialog");
-
-    m_dialog_brushes = new KToggleAction( i18n("Brushes"),
-        "brush_dialog", 0, this, SLOT( dialog_brushes() ),
-        actionCollection(), "brushes_dialog");
-
-    m_dialog_patterns = new KToggleAction( i18n("Patterns"),
-        "pattern_dialog", 0, this, SLOT( dialog_patterns() ),
-        actionCollection(), "patterns_dialog");
-
-    m_dialog_layers = new KToggleAction( i18n("Layers"),
-        "layer_dialog", 0, this, SLOT( dialog_layers() ),
-        actionCollection(), "layers_dialog");
-
-    m_dialog_channels = new KToggleAction( i18n("Channels"),
-        "channel_dialog", 0, this, SLOT( dialog_channels() ),
-        actionCollection(), "channels_dialog");
-
-    m_dialog_brushes->setChecked (true);
-    m_dialog_patterns->setChecked (true);
-    m_dialog_layers->setChecked (true);
-    m_dialog_channels->setChecked (true);
-
-    // help actions - these are standard kde actions
-
-    m_helpMenu = new KHelpMenu( this );
-
-    (void) KStdAction::helpContents(m_helpMenu, SLOT(appHelpActivated()),
-        actionCollection(), "help_contents" );
-
-    (void) KStdAction::whatsThis(m_helpMenu, SLOT(contextHelpActivated()),
-        actionCollection(), "help_whatsthis" );
-
-    (void) KStdAction::reportBug(m_helpMenu, SLOT(reportBug()),
-        actionCollection(), "help_bugreport" );
-
-    (void) KStdAction::aboutApp(m_helpMenu, SLOT(aboutApplication()),
-        actionCollection(), "help_about" );
-
-    // disable at startup unused actions
-
-    m_undo->setEnabled( false );
-    m_redo->setEnabled( false );
-
-    //m_layer_rotate180->setEnabled( false );
-    //m_layer_rotate270->setEnabled( false );
-    //m_layer_rotate90->setEnabled( false );
-    m_layer_mirrorX->setEnabled( false );
-    m_layer_mirrorY->setEnabled( false );
+	// history actions
+	(void)KStdAction::undo(this, SLOT(undo()), actionCollection(), "undo");
+	(void)KStdAction::redo(this, SLOT(redo()), actionCollection(), "redo");
+
+	// navigation actions
+	(void)new KAction(i18n("Refresh Canvas"), "reload", 0, this, SLOT(slotDocUpdated()), actionCollection(), "refresh_canvas");
+	(void)new KAction(i18n("Panic Button"), "stop", 0, this, SLOT(slotHalt()), actionCollection(), "panic_button");
+
+	// selection actions
+	(void)KStdAction::cut(this, SLOT(cut()), actionCollection(), "cut");
+	(void)KStdAction::copy(this, SLOT(copy()), actionCollection(), "copy");
+	(void)KStdAction::paste(this, SLOT(paste()), actionCollection(), "paste_special");
+	(void)new KAction(i18n("Remove selection"), "remove", 0, this, SLOT(removeSelection()), actionCollection(), "remove");
+	(void)new KAction(i18n("Copy selection to new layer"), "crop", 0,  this, SLOT(crop()), actionCollection(), "crop");
+	(void)KStdAction::selectAll(this, SLOT(selectAll()), actionCollection(), "select_all");
+	(void)new KAction(i18n("Select None"), 0, this, SLOT(unSelectAll()), actionCollection(), "select_none");
+
+	// import/export actions
+	(void)new KAction(i18n("Import Image"), "wizard", 0, this, SLOT(import_image()), actionCollection(), "import_image");
+	(void)new KAction(i18n("Export Image"), "wizard", 0, this, SLOT(export_image()), actionCollection(), "export_image");
+
+	// view actions
+	(void)new KAction(i18n("Zoom &in"), "viewmag+", 0, this, SLOT(zoom_in()), actionCollection(), "zoom_in");
+	(void)new KAction(i18n("Zoom &out"), "viewmag-", 0, this, SLOT(zoom_out()), actionCollection(), "zoom_out"); 
+
+	// tool settings actions
+	(void)new KAction(i18n("&Gradient Dialog"), "blend", 0, this, SLOT(dialog_gradient()), actionCollection(), "dialog_gradient");
+
+	// tool actions
+	(void)new KAction(i18n("&Current Tool Properties..."), "configure", 0, this, SLOT(tool_properties()), actionCollection(), "current_tool_properties");
+
+	// layer actions
+	(void)new KAction(i18n("&Add layer..."), 0, this, SLOT(insert_layer()), actionCollection(), "insert_layer");
+	(void)new KAction(i18n("&Remove layer..."), 0, this, SLOT(remove_layer()), actionCollection(), "remove_layer"); 
+	(void)new KAction(i18n("&Link/Unlink layer..."), 0, this, SLOT(link_layer()), actionCollection(), "link_layer");
+	(void)new KAction(i18n("&Hide/Show layer..."), 0, this, SLOT(hide_layer()), actionCollection(), "hide_layer");
+	(void)new KAction(i18n("&Next layer..."), "forward", 0, this, SLOT(next_layer()), actionCollection(), "next_layer");
+	(void)new KAction(i18n("&Previous layer..."), "back", 0, this, SLOT(previous_layer()), actionCollection(), "previous_layer");
+	(void)new KAction(i18n("Layer Properties..."), 0, this, SLOT(layer_properties()), actionCollection(), "layer_properties");
+	(void)new KAction(i18n("I&nsert image as layer..."), 0, this, SLOT(insert_image_as_layer()), actionCollection(), "insert_image_as_layer");
+	(void)new KAction(i18n("Save layer as image..."), 0, this, SLOT(save_layer_as_image()), actionCollection(), "save_layer_as_image");
+
+	// layer transformations - should be generic, for selection too
+	(void)new KAction(i18n("Scale layer smoothly"), 0, this, SLOT(layer_scale_smooth()), actionCollection(), "layer_scale_smooth");
+	(void)new KAction(i18n("Scale layer - keep palette"), 0, this, SLOT(layer_scale_rough()), actionCollection(), "layer_scale_rough"); 
+	(void)new KAction(i18n("Rotate &180"), 0, this, SLOT(layer_rotate180()), actionCollection(), "layer_rotate180");
+	(void)new KAction(i18n("Rotate &270"), 0, this, SLOT(layer_rotateleft90()), actionCollection(), "layer_rotateleft90");
+	(void)new KAction(i18n("Rotate &90"), 0, this, SLOT(layer_rotateright90()), actionCollection(), "layer_rotateright90");
+	(void)new KAction(i18n("Rotate &Custom"), 0, this, SLOT(layer_rotate_custom()), actionCollection(), "layer_rotate_custom");
+	(void)new KAction(i18n("Mirror &X"), 0, this, SLOT(layer_mirrorX()), actionCollection(), "layer_mirrorX");
+	(void)new KAction(i18n("Mirror &Y"), 0, this, SLOT(layer_mirrorY()), actionCollection(), "layer_mirrorY");
+
+	// image actions
+	(void)new KAction(i18n("Add new image"), 0, this, SLOT(add_new_image_tab()), actionCollection(), "add_new_image_tab");
+	(void)new KAction(i18n("Remove current image"), 0, this, SLOT(remove_current_image_tab()), actionCollection(), "remove_current_image_tab");
+	(void)new KAction(i18n("Merge &all layers"), 0, this, SLOT(merge_all_layers()), actionCollection(), "merge_all_layers");
+	(void)new KAction(i18n("Merge &visible layers"), 0, this, SLOT(merge_visible_layers()), actionCollection(), "merge_visible_layers");
+	(void)new KAction(i18n("Merge &linked layers"), 0, this, SLOT(merge_linked_layers()), actionCollection(), "merge_linked_layers");
+
+	// setting actions
+	(void)new KToggleAction(i18n("Toggle Paint Offset"), "remove_view", 0, this, SLOT(slotSetPaintOffset()), actionCollection(), "toggle_paint_offset");
+	m_side_bar = new KToggleAction(i18n("Show/Hide Sidebar"), "ok", 0, this, SLOT(showSidebar()), actionCollection(), "show_sidebar");
+	m_float_side_bar = new KToggleAction(i18n("Dock/Undock Sidebar"), "attach", 0, this, SLOT(floatSidebar()), actionCollection(), "float_sidebar");
+	m_lsidebar = new KToggleAction(i18n("Left/Right Sidebar"), "view_right", 0, this, SLOT(leftSidebar()), actionCollection(), "left_sidebar");
+	(void)KStdAction::saveOptions(this, SLOT(saveOptions()), actionCollection(), "save_options"); 
+	(void)new KAction(i18n("Krayon Preferences"), "edit", 0, this, SLOT(preferences()), actionCollection(), "preferences");
+
+	// krayon box toolbar actions - these will be used only
+	// to dock and undock wideget in the krayon box
+	m_dialog_colors = new KToggleAction(i18n("&Colors"), "color_dialog", 0, this, SLOT(dialog_colors()), actionCollection(), "colors_dialog");
+	m_dialog_krayons = new KToggleAction(i18n("&Krayons"), "krayon_box", 0, this, SLOT(dialog_krayons()), actionCollection(), "krayons_dialog");
+	m_dialog_brushes = new KToggleAction(i18n("Brushes"), "brush_dialog", 0, this, SLOT(dialog_brushes()), actionCollection(), "brushes_dialog");
+	m_dialog_patterns = new KToggleAction(i18n("Patterns"), "pattern_dialog", 0, this, SLOT(dialog_patterns()), actionCollection(), "patterns_dialog");
+	m_dialog_layers = new KToggleAction(i18n("Layers"), "layer_dialog", 0, this, SLOT(dialog_layers()), actionCollection(), "layers_dialog");
+	m_dialog_channels = new KToggleAction(i18n("Channels"), "channel_dialog", 0, this, SLOT(dialog_channels()), actionCollection(), "channels_dialog");
+
+	m_dialog_brushes -> setChecked (true);
+	m_dialog_patterns -> setChecked (true);
+	m_dialog_layers -> setChecked (true);
+	m_dialog_channels -> setChecked (true);
+
+	// help actions - these are standard kde actions
+	m_helpMenu = new KHelpMenu(this);
+
+	(void)KStdAction::helpContents(m_helpMenu, SLOT(appHelpActivated()), actionCollection(), "help_contents");
+	(void)KStdAction::whatsThis(m_helpMenu, SLOT(contextHelpActivated()), actionCollection(), "help_whatsthis");
+	(void) KStdAction::reportBug(m_helpMenu, SLOT(reportBug()), actionCollection(), "help_bugreport");
+	(void) KStdAction::aboutApp(m_helpMenu, SLOT(aboutApplication()), actionCollection(), "help_about");
 }
 
 /*
@@ -841,7 +674,7 @@ void KisView::resizeEvent(QResizeEvent*)
     // ruler geometry
     m_pHRuler->setGeometry(ruler + lsideW, 0,
         width() - ruler - rsideW - lsideW, ruler);
-    m_pVRuler->setGeometry( 0 + lsideW, ruler,
+    m_pVRuler->setGeometry(0 + lsideW, ruler,
         ruler, height() - (ruler + tbarBtnH));
 
     // tabbar control buttons
@@ -990,7 +823,7 @@ void KisView::resizeEvent(QResizeEvent*)
 /*
     updateReadWrite - for the functionally illiterate
 */
-void KisView::updateReadWrite( bool /*readwrite*/ )
+void KisView::updateReadWrite(bool /*readwrite*/)
 {
 }
 
@@ -1137,7 +970,7 @@ void KisView::slotDocUpdated(const QRect& rect)
     for transferring offscreen updates that do not generate
     paint events for the canvas
 */
-void KisView::updateCanvas( QRect & ur )
+void KisView::updateCanvas(QRect & ur)
 {
     kdDebug() << "updateCanvas(QRect & ur)" << endl;
 
@@ -1154,7 +987,7 @@ void KisView::updateCanvas( QRect & ur )
     }
 
     QPainter p;
-    p.begin( m_pCanvas);
+    p.begin(m_pCanvas);
 
     if (m_pTool && !m_pTool -> willModify()) {
 	    kdDebug() << "Calling KisTool::update()\n";
@@ -1168,17 +1001,17 @@ void KisView::updateCanvas( QRect & ur )
     p.eraseRect(xPaintOffset(), 0, width(), yPaintOffset());
 
     // erase area to the below - account for zoomed width of doc
-    p.eraseRect( xPaintOffset(),
+    p.eraseRect(xPaintOffset(),
         yPaintOffset() + (int)(docHeight() * zoomFactor()),
-        width(), height() );
+        width(), height());
 
     // erase area to right - account for zoomed height of doc
-    p.eraseRect( xPaintOffset() + (int)(docWidth() * zoomFactor()),
+    p.eraseRect(xPaintOffset() + (int)(docWidth() * zoomFactor()),
         yPaintOffset(),
-        width(), height() );
+        width(), height());
 
     // scale the paint device only after clearing border areas
-    p.scale( zoomFactor(), zoomFactor() );
+    p.scale(zoomFactor(), zoomFactor());
 
     // reduce size of update rectangle by inverse of zoom factor
     // only do this at higher/lower zooms.
@@ -1195,7 +1028,7 @@ void KisView::updateCanvas( QRect & ur )
         ur.setHeight(urH);
     }
 
-    ur.moveBy( - xPaintOffset() + m_pHorz->value(),
+    ur.moveBy(- xPaintOffset() + m_pHorz->value(),
         - yPaintOffset() + m_pVert->value());
     ur = ur.intersect(img->imageExtents());
 
@@ -1224,7 +1057,7 @@ void KisView::updateCanvas( QRect & ur )
 /*
     canvasGotPaintEvent - handles repaint of canvas (image) area
 */
-void KisView::canvasGotPaintEvent( QPaintEvent*e )
+void KisView::canvasGotPaintEvent(QPaintEvent*e)
 {
     kdDebug() << "canvasGotPaintEvent()" << endl;
     KisImage* img = m_doc->current();
@@ -1241,29 +1074,29 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
     QRect ur = e->rect();
 
     QPainter p;
-    p.begin( m_pCanvas );
+    p.begin(m_pCanvas);
 
     if (m_pTool && !m_pTool -> willModify())
 	    m_pTool -> update(p);
 
     // erase strip along left side
-    p.eraseRect( 0, 0, xPaintOffset(), height() );
+    p.eraseRect(0, 0, xPaintOffset(), height());
 
     // erase strip along top
-    p.eraseRect( xPaintOffset(), 0, width(), yPaintOffset() );
+    p.eraseRect(xPaintOffset(), 0, width(), yPaintOffset());
 
     // erase area below - account for zoomed width of doc
-    p.eraseRect( xPaintOffset(),
+    p.eraseRect(xPaintOffset(),
         yPaintOffset() + (int)(docHeight() * zoomFactor()),
-        width(), height() );
+        width(), height());
 
     // erase area to right - account for zoomed height of doc
-    p.eraseRect( xPaintOffset() + (int)(docWidth() * zoomFactor()),
+    p.eraseRect(xPaintOffset() + (int)(docWidth() * zoomFactor()),
         yPaintOffset(),
-        width(), height() );
+        width(), height());
 
     // scale the paint device only after clearing border areas
-    p.scale( zoomFactor(), zoomFactor() );
+    p.scale(zoomFactor(), zoomFactor());
 
     // reduce size of update rectangle by inverse of zoom factor
     // also reduce offset into image by same factor (1/zoomFactor())
@@ -1288,7 +1121,7 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
 
     // find out where the update rectangle is in terms
     // of the image, as the pixmap will be drawn from the image
-    ur.moveBy( - xPaintOffset() + m_pHorz->value(),
+    ur.moveBy(- xPaintOffset() + m_pHorz->value(),
         - yPaintOffset() + m_pVert->value());
     ur = ur.intersect(img->imageExtents());
 
@@ -1314,7 +1147,7 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
     // p is the paint device, ur is the update rectangle,
     // bool transparency, ptr to the particular view to update
 
-    koDocument()->paintEverything( p, ur, FALSE, this );
+    koDocument()->paintEverything(p, ur, FALSE, this);
     p.end();
 }
 
@@ -1342,7 +1175,7 @@ void KisView::canvasGotMousePressEvent(QMouseEvent *e)
     canvasGotMouseMoveEvent - just passes the signal on
     to the appropriate tool - also sets ruler pointers
 */
-void KisView::canvasGotMouseMoveEvent ( QMouseEvent *e )
+void KisView::canvasGotMouseMoveEvent (QMouseEvent *e)
 {
     int x = e->pos().x() - xPaintOffset()
         + (int)(zoomFactor() * m_pHorz->value());
@@ -1356,17 +1189,17 @@ void KisView::canvasGotMouseMoveEvent ( QMouseEvent *e )
         m_pVRuler->setValue(e->pos().y() - yPaintOffset());
     }
 
-    QMouseEvent ev( QEvent::MouseMove, QPoint(x, y),
-        e->globalPos(), e->button(), e->state() );
+    QMouseEvent ev(QEvent::MouseMove, QPoint(x, y),
+        e->globalPos(), e->button(), e->state());
 
-    emit canvasMouseMoveEvent( &ev );
+    emit canvasMouseMoveEvent(&ev);
 }
 
 /*
     canvasGotMouseReleaseEvent - just passes the signal on
     to the appropriate tool
 */
-void KisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
+void KisView::canvasGotMouseReleaseEvent (QMouseEvent *e)
 {
     buttonIsDown = false;
 
@@ -1375,27 +1208,27 @@ void KisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
     int y = e->pos().y() - yPaintOffset()
         + (int)(zoomFactor() * m_pVert->value());
 
-    QMouseEvent ev( QEvent::MouseButtonRelease, QPoint(x, y),
-        e->globalPos(), e->button(), e->state() );
+    QMouseEvent ev(QEvent::MouseButtonRelease, QPoint(x, y),
+        e->globalPos(), e->button(), e->state());
 
-    emit canvasMouseReleaseEvent( &ev );
+    emit canvasMouseReleaseEvent(&ev);
 }
 
 /*
     canvasGotEnterEvent - just passes the signal on
     to the appropriate tool
 */
-void KisView::canvasGotEnterEvent ( QEvent *e )
+void KisView::canvasGotEnterEvent (QEvent *e)
 {
     QEvent ev(*e);
-    emit canvasEnterEvent( &ev );
+    emit canvasEnterEvent(&ev);
 }
 
 /*
     canvasGotLeaveEvent - just passes the signal on
     to the appropriate tool
 */
-void KisView::canvasGotLeaveEvent ( QEvent *e )
+void KisView::canvasGotLeaveEvent (QEvent *e)
 {
 	// clear artifacts from tools which paint on canvas
 	// this does not affect the image or layer
@@ -1504,35 +1337,27 @@ void KisView::copy()
 */
 void KisView::cut()
 {
-    // set local clip
-    if(!m_doc->setClipImage())
-        kdDebug() << "m_doc->setClipImage() failed" << endl;
+	// set local clip
+	if (!m_doc -> setClipImage())
+		kdDebug() << "m_doc->setClipImage() failed" << endl;
 
-    // copy local clip to global clipboard
-    if(m_doc->getClipImage())
-    {
-        kapp->clipboard()->setImage(*(m_doc->getClipImage()));
+	// copy local clip to global clipboard
+	if (m_doc -> getClipImage()) {
+//		kapp -> clipboard() -> setImage(*(m_doc -> getClipImage()));
 
-        kdDebug() << "got m_doc->getClipImage()" << endl;
-        QImage cImage = *m_doc->getClipImage();
-        kapp->clipboard()->setImage(cImage);
-        {
-            if(kapp->clipboard()->image().isNull())
-                kdDebug() << "clip image is null" << endl;
-            else
-               kdDebug() << "clip image is NOT null" << endl;
-        }
-    }
+		kdDebug() << "got m_doc->getClipImage()" << endl;
+		QImage cImage = *m_doc -> getClipImage();
+		kapp -> clipboard() -> setImage(cImage);
+        
+		{
+			if (kapp -> clipboard() -> image().isNull())
+				kdDebug() << "clip image is null" << endl;
+			else
+				kdDebug() << "clip image is NOT null" << endl;
+		}
+	}
 
-    // erase selection in place
-    if(!m_doc->getSelection()->erase())
-        kdDebug() << "m_doc->m_Selection.erase() failed" << endl;
-
-    // clear old selection outline
-    m_pTool->clearOld();
-
-    /* refresh canvas */
-    slotUpdateImage();
+	removeSelection();
 }
 
 /*
@@ -1560,21 +1385,14 @@ void KisView::removeSelection()
 */
 void KisView::paste()
 {
-	// XXX
-#if 0
-    // get local clip from global clipboard
-    if(m_doc->getClipImage())
-    {
-        m_pPasteTool->setClip();
-        activateTool(m_pPasteTool);
-        slotUpdateImage();
-    }
-    // empty clipboard
-    else
-    {
-        KMessageBox::sorry(NULL, i18n("Nothing to paste!"), "", FALSE);
-    }
-#endif
+	// get local clip from global clipboard
+	if (m_doc -> getClipImage()) {
+		m_paste -> setClip();
+		activateTool(m_paste);
+		slotUpdateImage();
+	}
+	else
+		KMessageBox::sorry(0, i18n("Nothing to paste!"), "", false);
 }
 
 /*
@@ -1613,7 +1431,7 @@ void KisView::crop()
     if(!img) return;
 
     QRect layerRect(0, 0, cImage.width(), cImage.height());
-    QString name = i18n( "layer %1" ).arg( img->layerList().count() );
+    QString name = i18n("layer %1").arg(img->layerList().count());
 
     img->addLayer(layerRect, white, true, name);
     uint indx = img->layerList().count() - 1;
@@ -1670,7 +1488,7 @@ void KisView::unSelectAll()
        Zooming
 ---------------------------*/
 
-void KisView::zoom( int _x, int _y, float zf )
+void KisView::zoom(int _x, int _y, float zf)
 {
     /* Avoid divide by zero errors by disallowing a zoom
     factor of zero, which is impossible anyway, as it would
@@ -1692,12 +1510,12 @@ void KisView::zoom( int _x, int _y, float zf )
     without this limit. */
     else if(zf > 16.0) zf = 16.0;
 
-    setZoomFactor( zf );
+    setZoomFactor(zf);
 
     // clear everything
     QPainter p;
-    p.begin( m_pCanvas );
-    p.eraseRect( 0, 0, width(), height() );
+    p.begin(m_pCanvas);
+    p.eraseRect(0, 0, width(), height());
     p.end();
 
     // adjust scaling of rulers to zoom factor
@@ -1765,7 +1583,7 @@ void KisView::zoom( int _x, int _y, float zf )
     if (x < 0) x = 0;
     if (y < 0) y = 0;
 
-    scrollTo( QPoint( x, y ) );
+    scrollTo(QPoint(x, y));
 
     m_pCanvas->update();
 
@@ -1785,31 +1603,31 @@ void KisView::zoom( int _x, int _y, float zf )
 }
 
 
-void KisView::zoom_in( int x, int y )
+void KisView::zoom_in(int x, int y)
 {
     float zf = zoomFactor();
     zf *= 2;
-    zoom( x, y, zf);
+    zoom(x, y, zf);
 }
 
 
-void KisView::zoom_out( int x, int y )
+void KisView::zoom_out(int x, int y)
 {
     float zf = zoomFactor();
     zf /= 2;
-    zoom( x, y, zf);
+    zoom(x, y, zf);
 }
 
 
 void KisView::zoom_in()
 {
-    zoom_in( 0, 0 );
+    zoom_in(0, 0);
 }
 
 
 void KisView::zoom_out()
 {
-    zoom_out( 0, 0 );
+    zoom_out(0, 0);
 }
 
 
@@ -1909,8 +1727,8 @@ void KisView::layer_properties()
     if(LayerPropertyDialog::editProperties(*(lay)))
     {
         QRect updateRect = lay->imageExtents();
-        m_pLayerView->layerTable()->updateAllCells( );
-        img->markDirty( updateRect );
+        m_pLayerView->layerTable()->updateAllCells();
+        img->markDirty(updateRect);
     }
 }
 
@@ -1933,7 +1751,7 @@ void KisView::insert_layer()
     QRect layerRect(0, 0,
         pNewLayerDialog->width(), pNewLayerDialog->height());
 
-    QString name = i18n( "layer %1" ).arg( img->layerList().count() );
+    QString name = i18n("layer %1").arg(img->layerList().count());
 
     // new layers are currently appended - perhaps they should
     // be prepended so more recent ones are on top in the
@@ -1953,7 +1771,7 @@ void KisView::insert_layer()
     slotUpdateImage();
     slotRefreshPainter();
 
-    m_doc->setModified( true );
+    m_doc->setModified(true);
 }
 
 /*
@@ -1966,7 +1784,7 @@ void KisView::remove_layer()
     slotUpdateImage();
     slotRefreshPainter();
 
-    m_doc->setModified( true );
+    m_doc->setModified(true);
 }
 
 /*
@@ -1984,7 +1802,7 @@ void KisView::hide_layer()
     m_pLayerView->layerTable()->updateTable();
     m_pLayerView->layerTable()->updateAllCells();
 
-    m_doc->setModified( true );
+    m_doc->setModified(true);
 }
 
 /*
@@ -2002,7 +1820,7 @@ void KisView::link_layer()
     m_pLayerView->layerTable()->updateTable();
     m_pLayerView->layerTable()->updateAllCells();
 
-    m_doc->setModified( true );
+    m_doc->setModified(true);
 }
 
 /*
@@ -2038,7 +1856,7 @@ void KisView::next_layer()
         showScrollBars();
         slotRefreshPainter();
 
-        m_doc->setModified( true );
+        m_doc->setModified(true);
     }
 }
 
@@ -2077,7 +1895,7 @@ void KisView::previous_layer()
         showScrollBars();
         slotRefreshPainter();
 
-        m_doc->setModified( true );
+        m_doc->setModified(true);
    }
 }
 
@@ -2097,7 +1915,7 @@ void KisView::insert_image_as_layer()
 {
     insert_layer_image(false);
 
-    m_doc->setModified( true );
+    m_doc->setModified(true);
 }
 
 void KisView::save_layer_as_image()
@@ -2207,10 +2025,10 @@ int KisView::insert_layer_image(bool newImage, const QString &filename)
 */
 void KisView::save_layer_image(bool mergeLayers)
 {
-    KURL url = KFileDialog::getSaveURL( QString::null,
-        KisUtil::readFilters(), 0, i18n("Image file for layer") );
+    KURL url = KFileDialog::getSaveURL(QString::null,
+        KisUtil::readFilters(), 0, i18n("Image file for layer"));
 
-    if( !url.isEmpty() )
+    if(!url.isEmpty())
     {
         if(mergeLayers)
         {
@@ -2290,7 +2108,7 @@ void KisView::layerScale(bool smooth)
         showScrollBars();
         slotRefreshPainter();
 
-        m_doc->setModified( true );
+        m_doc->setModified(true);
     }
 }
 
@@ -2337,7 +2155,7 @@ void KisView::add_new_image_tab()
         slotUpdateImage();
         slotRefreshPainter();
 
-        m_doc->setModified( true );
+        m_doc->setModified(true);
     }
 }
 
@@ -2350,7 +2168,7 @@ void KisView::remove_current_image_tab()
         slotUpdateImage();
         slotRefreshPainter();
 
-        m_doc->setModified( true );
+        m_doc->setModified(true);
     }
 }
 
@@ -2363,7 +2181,7 @@ void KisView::merge_all_layers()
         slotUpdateImage();
         slotRefreshPainter();
 
-        m_doc->setModified( true );
+        m_doc->setModified(true);
     }
 }
 
@@ -2376,7 +2194,7 @@ void KisView::merge_visible_layers()
         slotUpdateImage();
         slotRefreshPainter();
 
-        m_doc->setModified( true );
+        m_doc->setModified(true);
     }
 }
 
@@ -2389,7 +2207,7 @@ void KisView::merge_linked_layers()
         slotUpdateImage();
         slotRefreshPainter();
 
-        m_doc->setModified( true );
+        m_doc->setModified(true);
     }
 }
 
@@ -2517,7 +2335,7 @@ int KisView::yPaintOffset()
 }
 
 
-void KisView::scrollTo( QPoint pt )
+void KisView::scrollTo(QPoint pt)
 {
     kdDebug() << "scroll to " << pt.x() << "," << pt.y() << endl;
 
@@ -2589,53 +2407,53 @@ void KisView::slotSetBGColor(const KisColor& c)
 	emit bgColorChanged(c);
 }
 
-void KisView::setupPrinter( KPrinter &printer )
+void KisView::setupPrinter(KPrinter &printer)
 {
-    printer.setPageSelection( KPrinter::ApplicationSide );
+    printer.setPageSelection(KPrinter::ApplicationSide);
 
     int count = 0;
     QStringList imageList = m_doc->images();
-    for ( QStringList::Iterator it = imageList.begin(); it != imageList.end(); ++it ) {
-        if ( *it == m_doc->current()->name() )
+    for (QStringList::Iterator it = imageList.begin(); it != imageList.end(); ++it) {
+        if (*it == m_doc->current()->name())
             break;
         ++count;
     }
 
-    printer.setCurrentPage( 1 + count );
-    printer.setMinMax( 1, m_doc->images().count() );
-    printer.setPageSize( KPrinter::A4 );
-    printer.setOrientation( KPrinter::Portrait );
+    printer.setCurrentPage(1 + count);
+    printer.setMinMax(1, m_doc->images().count());
+    printer.setPageSize(KPrinter::A4);
+    printer.setOrientation(KPrinter::Portrait);
 }
 
-void KisView::print( KPrinter &printer )
+void KisView::print(KPrinter &printer)
 {
-    printer.setFullPage( true );
+    printer.setFullPage(true);
     QPainter paint;
-    paint.begin( &printer );
-    paint.setClipping( false );
+    paint.begin(&printer);
+    paint.setClipping(false);
     QValueList<int> imageList;
     int from = printer.fromPage();
     int to = printer.toPage();
-    if( !from && !to )
+    if(!from && !to)
     {
         from = printer.minPage();
         to = printer.maxPage();
     }
-    for ( int i = from; i <= to; i++ )
-        imageList.append( i );
+    for (int i = from; i <= to; i++)
+        imageList.append(i);
     QString tmp_currentImageName = m_doc->currentImage();
     QValueList<int>::Iterator it = imageList.begin();
-    for ( ; it != imageList.end(); ++it )
+    for (; it != imageList.end(); ++it)
     {
         int imageNumber = *it - 1;
-        if ( it != imageList.begin() )
+        if (it != imageList.begin())
             printer.newPage();
 
-        m_doc->setImage( *m_doc->images().at( imageNumber ) );
-        m_doc->paintContent( paint, m_doc->getImageRect() );
+        m_doc->setImage(*m_doc->images().at(imageNumber));
+        m_doc->paintContent(paint, m_doc->getImageRect());
     }
     paint.end ();
-    m_doc->setImage( tmp_currentImageName );
+    m_doc->setImage(tmp_currentImageName);
 }
 
 void KisView::appendToDocImgList(QImage& loadedImg, KURL& u)
@@ -2683,8 +2501,11 @@ void KisView::setupTools()
 
 	m_tools = m_doc -> getTools();
 
-	if (!m_tools.size())
+	if (!m_tools.size()) {
 		m_tools = ::toolFactory(m_pCanvas, m_pBrush, m_pPattern, m_doc);
+		m_paste = new PasteTool(m_doc, m_pCanvas);
+		m_tools.push_back(m_paste);
+	}
 
 	for (ktvector_size_type i = 0; i < m_tools.size(); i++) {
 		KisTool *p = m_tools[i];
@@ -2692,8 +2513,6 @@ void KisView::setupTools()
 		Q_ASSERT(p);
 		p -> setupAction(actionCollection());
 	}
-
-	kdDebug() << "KisView::setupTools\n";
 
 	if (m_doc -> viewCount() < 1)
 		m_doc -> setTools(m_tools);

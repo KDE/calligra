@@ -51,16 +51,20 @@ public:
 	virtual QDomElement saveSettings(QDomDocument& doc) const;
 	virtual bool loadSettings(QDomElement& elem);
 	virtual void update(QPainter& gc);
+
+	virtual void optionsDialog();
+	virtual void clearOld();
+	virtual bool shouldRepaint() const;
+	virtual bool willModify() const;
+
 	virtual QCursor cursor() const;
 	virtual void setCursor(const QCursor& cursor);
 	virtual void setCursor();
+
 	virtual void setPattern(KisPattern *pattern);
 	virtual void setBrush(KisBrush *b);
-	virtual void optionsDialog();
-	virtual void clearOld();
 	virtual void setChecked(bool check);
-	virtual bool shouldRepaint() const;
-	virtual bool willModify() const;
+	virtual bool setClip();
 	
 	void setSelectCursor();
 	void setMoveCursor();

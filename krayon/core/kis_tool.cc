@@ -446,5 +446,10 @@ void KisTool::update(QPainter& /*gc*/)
 	kdDebug() << "KisTool::update\n";
 }
 
+bool KisTool::setClip()
+{
+	return false;
+}
+
 #include "kis_tool.moc"
 

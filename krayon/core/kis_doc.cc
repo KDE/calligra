@@ -945,7 +945,7 @@ bool KisDoc::isEmpty() const
 KisView *KisDoc::currentView()
 {
 	kdDebug() << "KisDoc::currentView m_current_view = " << m_current_view << endl;
-	return m_current_view ? m_current_view : dynamic_cast<KisView *>(views().getLast());
+	return m_current_view;
 }
 
 
