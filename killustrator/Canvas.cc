@@ -45,6 +45,7 @@
 #include <kdebug.h>
 
 #include "GDocument.h"
+#include "KIllustrator_doc.h"
 #include "GPage.h"
 #include "Handle.h"
 #include "ToolController.h"
@@ -824,6 +825,9 @@ void Canvas::drawGrid (QPainter& p)
 
 void Canvas::drawHelplines (QPainter& p)
 {
+
+    if( !document->document()->isReadWrite())
+        return;
   QPen pen (blue, 0);
   p.save ();
   p.setPen (pen);
@@ -873,7 +877,7 @@ void Canvas::drawTmpHelpline (int x, int y, bool horizH)
   }
   // it makes no sense to hide helplines yet
   document->showHelplines (true);
-  if(document->showHelplines())
+  if(document->showHelplines() )
     repaint();
 }
 
