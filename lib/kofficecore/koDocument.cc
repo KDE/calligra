@@ -383,7 +383,7 @@ bool KoDocument::loadFromURL( const QString & _url )
 
   if ( !u.isLocalFile() )
   {
-    kdebug( KDEBUG_INFO, 30003, "Can not save to remote URL" );
+    kdebug( KDEBUG_INFO, 30003, "Can not load remote URL (not implemented yet)" );
     QApplication::restoreOverrideCursor();
     return false;
   }
