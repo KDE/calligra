@@ -33,7 +33,7 @@
 #include <kwtextdocument.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-
+#include "kwtextparag.h"
 /******************************************************************/
 /* Class: KWStyleManager                                          */
 /******************************************************************/
@@ -67,23 +67,23 @@ KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc )
     addTab( fontTab );
 
     KWStyleParagTab *newTab = new KWStyleParagTab( m_tabs );
-    newTab->setWidget( new KWIndentSpacingWidget( unit, newTab ) );
+    newTab->setWidget( new KoIndentSpacingWidget( unit, newTab ) );
     addTab( newTab );
 
     newTab = new KWStyleParagTab( m_tabs );
-    newTab->setWidget( new KWParagAlignWidget( newTab ) );
+    newTab->setWidget( new KoParagAlignWidget( newTab ) );
     addTab( newTab );
 
     newTab = new KWStyleParagTab( m_tabs );
-    newTab->setWidget( new KWParagBorderWidget( newTab ) );
+    newTab->setWidget( new KoParagBorderWidget( newTab ) );
     addTab( newTab );
 
     newTab = new KWStyleParagTab( m_tabs );
-    newTab->setWidget( new KWParagCounterWidget( newTab ) );
+    newTab->setWidget( new KoParagCounterWidget( newTab ) );
     addTab( newTab );
 
     newTab = new KWStyleParagTab( m_tabs );
-    newTab->setWidget( new KWParagTabulatorsWidget( unit, -1, newTab ) );
+    newTab->setWidget( new KoParagTabulatorsWidget( unit, -1, newTab ) );
     addTab( newTab );
     m_stylesList->setCurrentItem( 0 );
     noSignals=false;
@@ -547,7 +547,7 @@ void KWStyleParagTab::save()
      m_widget->save( m_style->paragLayout() );
 }
 
-void KWStyleParagTab::setWidget( KWParagLayoutWidget * widget )
+void KWStyleParagTab::setWidget( KoParagLayoutWidget * widget )
 {
     m_widget = widget;
 }

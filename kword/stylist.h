@@ -23,7 +23,7 @@
 #include <kdialogbase.h>
 #include <qstringlist.h>
 
-#include "paragdia.h"
+#include <koParagDia.h>
 
 class KWDocument;
 class KoFontChooser;
@@ -39,6 +39,7 @@ class QListBox;
 class QPushButton;
 class QTabWidget;
 class QWidget;
+class KWTextDocument;
 
 /******************************************************************/
 /* Class: KWStyleManager                                          */
@@ -140,7 +141,7 @@ public:
         : KWStyleManagerTab( parent ) { m_widget = 0L; }
 
     // not a constructor parameter since 'this' is the parent of the widget
-    void setWidget( KWParagLayoutWidget * widget );
+    void setWidget( KoParagLayoutWidget * widget );
 
     virtual void update();
     virtual void save();
@@ -148,7 +149,7 @@ public:
 protected:
     virtual void resizeEvent( QResizeEvent *e );
 private:
-    KWParagLayoutWidget * m_widget;
+    KoParagLayoutWidget * m_widget;
 };
 
 // The "font" tab. Maybe we should put the text color at the bottom ?

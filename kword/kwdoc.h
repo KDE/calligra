@@ -62,7 +62,7 @@ namespace KFormula {
 #include <kozoomhandler.h>
 #include "kwimage.h"
 #include "kwanchorpos.h"
-#include "kwunit.h"
+#include <kwunit.h>
 #include "defs.h"
 
 #include <qmap.h>

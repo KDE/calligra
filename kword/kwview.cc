@@ -47,7 +47,7 @@
 #include "kwtableframeset.h"
 #include "kwview.h"
 #include "kwviewmode.h"
-#include "paragdia.h"
+#include <koParagDia.h>
 #include "searchdia.h"
 #include "serialletter.h"
 #include "splitcellsdia.h"
@@ -2105,10 +2105,10 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
     {
-        KWParagDia *paragDia = new KWParagDia( this, "",
-                                               KWParagDia::PD_SPACING | KWParagDia::PD_ALIGN |
-                                               KWParagDia::PD_BORDERS |
-                                               KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, m_doc,edit->textFrameSet()->getFrame(0)->width() );
+        KoParagDia *paragDia = new KoParagDia( this, "",
+                                               KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
+                                               KoParagDia::PD_BORDERS |
+                                               KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, m_doc->getUnit(),edit->textFrameSet()->getFrame(0)->width() );
         paragDia->setCaption( i18n( "Paragraph settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
@@ -2119,7 +2119,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
         if ( initialPage != -1 )
         {
             paragDia->setCurrentPage( initialPage );
-            if ( initialPage == KWParagDia::PD_TABS )
+            if ( initialPage == KoParagDia::PD_TABS )
                 paragDia->tabulatorsWidget()->setCurrentTab( initialTabPos );
         }
 
@@ -2247,7 +2247,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
 
 void KWView::slotHRulerDoubleClicked( double ptpos )
 {
-    showParagraphDialog( KWParagDia::PD_TABS, ptpos );
+    showParagraphDialog( KoParagDia::PD_TABS, ptpos );
 }
 
 void KWView::slotHRulerDoubleClicked()
