@@ -1820,8 +1820,17 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
     paintBackground( painter, view, corner, cellRef, width, height, selected );
   }
 
-  paintDefaultBorders( painter, view, corner, cellRef, width, height );
-  paintCellBorders( painter, view, corner, cellRef, width, height );
+  //If we print pages then we disable clipping otherwise borders are cut in the middle at the page borders
+  if ( !painter.device()->isExtDev() )
+    painter.setClipping( false );
+
+  paintDefaultBorders( painter, view, rect, corner, cellRef, width, height );
+  paintCellBorders( painter, view, rect, corner, cellRef, width, height );
+
+  if ( !painter.device()->isExtDev() )
+    painter.setClipping( true );
+  
+  paintCellDiagonalLines( painter, corner, cellRef, width, height );
 
   /* paint all the cells that this one obscures */
   paintingObscured++;
@@ -1833,10 +1842,10 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
     /* don't paint content if this cell is obscured */
   {
     if ( !painter.device()->isExtDev() || m_pTable->getPrintCommentIndicator() )
-      paintCommentIndicator( painter, view, corner, cellRef, width, height );
+      paintCommentIndicator( painter, corner, cellRef, width, height );
     if ( !painter.device()->isExtDev() || m_pTable->getPrintFormulaIndicator() )
-      paintFormulaIndicator( painter, view, corner, cellRef, height );
-    paintMoreTextIndicator( painter, view, corner, cellRef, width, height );
+      paintFormulaIndicator( painter, corner, height );
+    paintMoreTextIndicator( painter,corner, width, height );
 
   /**
    * QML ?
@@ -1858,11 +1867,11 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
               (!painter.device()->isExtDev() ||
                !getDontprintText(cellRef.x(), cellRef.y()) ) )
     {
-      paintText( painter, view, corner, cellRef, width, height );
+      paintText( painter, corner, cellRef, width, height );
     }
   } /* if (!isObscured()) */
 
-  paintPageBorders( painter, view, corner, cellRef, width, height );
+  paintPageBorders( painter, corner, cellRef, width, height );
 
   if (isObscured() && paintingObscured == 0)
   {
@@ -2019,7 +2028,7 @@ void KSpreadCell::paintBackground(QPainter& painter, KSpreadView* view,
 }
 
 void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
-                                       const QPoint &corner, const QPoint &cellRef,
+                                       const QRect &rect, const QPoint &corner, const QPoint &cellRef,
                                        int width, int height )
 {
   QPen left_pen = leftBorderPen( cellRef.x(), cellRef.y() );
@@ -2090,8 +2099,10 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( corner.x(), corner.y() + dt,
-                      corner.x(), corner.y() + height - db );
+    painter.drawLine( QMAX( rect.left(),   corner.x() ), 
+                      QMAX( rect.top(),    corner.y() + dt ),
+                      QMIN( rect.right(), corner.x() ), 
+                      QMIN( rect.bottom(),  corner.y() + height - db ) );
   }
 
   /* should we do the right border? */
@@ -2121,8 +2132,10 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( corner.x() + width, corner.y() + dt,
-                      corner.x() + width, corner.y() + height - db );
+    painter.drawLine( QMAX( rect.left(),   corner.x() + width ), 
+                      QMAX( rect.top(),    corner.y() + dt ),
+                      QMIN( rect.right(), corner.x() + width ), 
+                      QMIN( rect.bottom(),  corner.y() + height - db ) );
   }
 
   /* should we do the top border? */
@@ -2151,8 +2164,10 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( corner.x() + dl,         corner.y(),
-                      corner.x() + width - dr, corner.y() );
+    painter.drawLine( QMAX( rect.left(),   corner.x() + dl ), 
+                      QMAX( rect.top(),    corner.y() ),
+                      QMIN( rect.right(), corner.x() + width - dr ), 
+                      QMIN( rect.bottom(),  corner.y() ) );
   }
 
   /* should we do the bottom border? */
@@ -2181,13 +2196,15 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( corner.x() + dl,         corner.y() + height,
-                      corner.x() + width - dr, corner.y() + height );
+    painter.drawLine( QMAX( rect.left(),   corner.x() + dl ), 
+                      QMAX( rect.top(),    corner.y() + height ),
+                      QMIN( rect.right(), corner.x() + width - dr ), 
+                      QMIN( rect.bottom(),  corner.y() + height ) );
   }
 }
 
 
-void KSpreadCell::paintCommentIndicator( QPainter& painter, KSpreadView* /*view*/,
+void KSpreadCell::paintCommentIndicator( QPainter& painter,
                                          const QPoint &corner, const QPoint &cellRef,
                                          int width, int height )
 {
@@ -2211,8 +2228,8 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter, KSpreadView* /*view*
 
 
 // small blue rectangle if this cell holds a formula
-void KSpreadCell::paintFormulaIndicator( QPainter& painter, KSpreadView* /*view*/,
-                                         const QPoint &corner, const QPoint &/*cellRef*/,
+void KSpreadCell::paintFormulaIndicator( QPainter& painter,
+                                         const QPoint &corner,
                                          int height )
 {
   if( isFormula() && m_pTable->getShowFormulaIndicator() )
@@ -2228,8 +2245,8 @@ void KSpreadCell::paintFormulaIndicator( QPainter& painter, KSpreadView* /*view*
 }
 
 
-void KSpreadCell::paintMoreTextIndicator( QPainter& painter, KSpreadView* /*view*/,
-                                          const QPoint &corner, const QPoint &/*cellRef*/,
+void KSpreadCell::paintMoreTextIndicator( QPainter& painter,
+                                          const QPoint &corner,
                                           int width, int height )
 {
   //show  a red triangle when it's not possible to write all text in cell
@@ -2248,7 +2265,7 @@ void KSpreadCell::paintMoreTextIndicator( QPainter& painter, KSpreadView* /*view
   }
 }
 
-void KSpreadCell::paintText( QPainter& painter, KSpreadView* /*view*/,
+void KSpreadCell::paintText( QPainter& painter,
                              const QPoint &corner, const QPoint &cellRef,
                              int width, int height )
 {
@@ -2471,8 +2488,10 @@ void KSpreadCell::paintText( QPainter& painter, KSpreadView* /*view*/,
 
 }
 
-void KSpreadCell::paintPageBorders( QPainter& painter, KSpreadView* /*view*/,
+void KSpreadCell::paintPageBorders( QPainter& painter,
+
                                     const QPoint &corner, const QPoint &cellRef,
+
                                     int width, int height )
 {
   if ( painter.device()->isExtDev() )
@@ -2503,7 +2522,8 @@ void KSpreadCell::paintPageBorders( QPainter& painter, KSpreadView* /*view*/,
 
 
 void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
-                                    const QPoint &corner, const QPoint &cellRef,
+                                    const QRect& rect, const QPoint &corner, const QPoint &cellRef,
+
                                     int width, int height )
 {
   /* we might not paint some borders if this cell is merged with another in
@@ -2555,8 +2575,10 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( left_pen );
-    painter.drawLine( corner.x(), corner.y() - top,
-                      corner.x(), corner.y() + height + bottom );
+    painter.drawLine( QMAX( rect.left(),   corner.x() ), 
+                      QMAX( rect.top(),    corner.y() - top ),
+                      QMIN( rect.right(), corner.x() ), 
+                      QMIN( rect.bottom(),  corner.y() + height + bottom ) );
   }
 
   if ( right_pen.style() != Qt::NoPen && paintRight)
@@ -2575,43 +2597,30 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( right_pen );
-    painter.drawLine( width + corner.x(), corner.y() - top,
-                      width + corner.x(), corner.y() + height + bottom );
+    painter.drawLine( QMAX( rect.left(),   corner.x() + width ), 
+                      QMAX( rect.top(),    corner.y() - top ),
+                      QMIN( rect.right(), corner.x() + width ), 
+                      QMIN( rect.bottom(),  corner.y() + height + bottom ) );
   }
 
   if ( top_pen.style() != Qt::NoPen && paintTop)
   {
     painter.setPen( top_pen );
-    painter.drawLine( corner.x(), corner.y(),
-                      corner.x() + width, corner.y() );
+    painter.drawLine( QMAX( rect.left(),   corner.x() ), 
+                      QMAX( rect.top(),    corner.y() ),
+                      QMIN( rect.right(), corner.x() + width ), 
+                      QMIN( rect.bottom(),  corner.y() ) );
   }
 
   if ( bottom_pen.style() != Qt::NoPen && paintBottom )
   {
     painter.setPen( bottom_pen );
-    painter.drawLine( corner.x(), height + corner.y(), corner.x() + width,
-                      height + corner.y() );
+    painter.drawLine( QMAX( rect.left(),   corner.x() ), 
+                      QMAX( rect.top(),    corner.y() + height ),
+                      QMIN( rect.right(), corner.x() + width ), 
+                      QMIN( rect.bottom(),  corner.y() + height ) );
   }
 
-
-  //
-  // Draw diagonal borders.
-  //
-  if (!isObscuringForced())
-  {
-    if ( fallDiagonalPen( cellRef.x(), cellRef.y() ).style() != Qt::NoPen )
-    {
-      painter.setPen( fallDiagonalPen(cellRef.x(), cellRef.y()) );
-      painter.drawLine( corner.x(),         corner.y(),
-                        corner.x() + width, corner.y() + height );
-    }
-    if (goUpDiagonalPen( cellRef.x(), cellRef.y() ).style() != Qt::NoPen )
-    {
-      painter.setPen( goUpDiagonalPen(cellRef.x(), cellRef.y()) );
-      painter.drawLine( corner.x(),         corner.y() + height,
-                        corner.x() + width, corner.y() );
-    }
-  }
 
   //
   // Look at the cells on our corners. It may happen that we
@@ -2632,8 +2641,10 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
         bottom = 0;
 
     painter.setPen( vert_pen );
-    painter.drawLine( corner.x(), corner.y(),
-                      corner.x(), corner.y() + bottom );
+    painter.drawLine( QMAX( rect.left(),   corner.x() ), 
+                      QMAX( rect.top(),    corner.y() ),
+                      QMIN( rect.right(), corner.x() ), 
+                      QMIN( rect.bottom(),  corner.y() + bottom ) );
   }
 
   // Fix the borders which meet at the top right corner
@@ -2649,8 +2660,10 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
         bottom = 0;
 
     painter.setPen( vert_pen );
-    painter.drawLine( corner.x() + width, corner.y(),
-                      corner.x() + width, corner.y() + bottom );
+    painter.drawLine( QMAX( rect.left(),   corner.x() + width ), 
+                      QMAX( rect.top(),    corner.y() ),
+                      QMIN( rect.right(), corner.x() + width ), 
+                      QMIN( rect.bottom(),  corner.y() + bottom ) );
   }
 
   // Bottom
@@ -2669,8 +2682,10 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
           bottom = 0;
 
       painter.setPen( vert_pen );
-      painter.drawLine( corner.x(), corner.y() + height - bottom,
-                        corner.x(), corner.y() + height );
+      painter.drawLine( QMAX( rect.left(),   corner.x() ), 
+                        QMAX( rect.top(),    corner.y() + height - bottom ),
+                        QMIN( rect.right(), corner.x() ), 
+                        QMIN( rect.bottom(),  corner.y() + height ) );
     }
 
     // Fix the borders which meet at the bottom right corner
@@ -2686,12 +2701,35 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
           bottom = 0;
 
       painter.setPen( vert_pen );
-      painter.drawLine( corner.x() + width, corner.y() + height - bottom,
-                        corner.x() + width, corner.y() + height );
+      painter.drawLine( QMAX( rect.left(),   corner.x() + width ), 
+                        QMAX( rect.top(),    corner.y() + height - bottom ),
+                        QMIN( rect.right(), corner.x() + width ), 
+                        QMIN( rect.bottom(),  corner.y() + height ) );
     }
   }
 }
 
+void KSpreadCell::paintCellDiagonalLines( QPainter& painter,
+                                          const QPoint &corner, const QPoint &cellRef,
+                                          int width, int height )
+{
+  if (!isObscuringForced())
+  {
+    if ( fallDiagonalPen( cellRef.x(), cellRef.y() ).style() != Qt::NoPen )
+    {
+      painter.setPen( fallDiagonalPen( cellRef.x(), cellRef.y() ) );
+      painter.drawLine( corner.x(),         corner.y(),
+                        corner.x() + width, corner.y() + height );
+    }
+    if (goUpDiagonalPen( cellRef.x(), cellRef.y() ).style() != Qt::NoPen )
+    {
+      painter.setPen( goUpDiagonalPen( cellRef.x(), cellRef.y() ) );
+      painter.drawLine( corner.x(),         corner.y() + height,
+                        corner.x() + width, corner.y() );
+    }
+  }
+
+}
 int KSpreadCell::defineAlignX()
 {
     int a = align(column(),row());

@@ -987,31 +987,33 @@ private:
 
   /* helper functions to the paintCell(...) function */
     void paintCellBorders( QPainter& painter, KSpreadView* view,
+                           const QRect &rect, const QPoint &corner, const QPoint &cellRef,
+                           int width, int height );
+    void paintPageBorders( QPainter& painter,
                            const QPoint &corner, const QPoint &cellRef,
                            int width, int height );
-    void paintPageBorders( QPainter& painter, KSpreadView* view,
-                           const QPoint &corner, const QPoint &cellRef,
-                           int width, int height );
-    void paintText( QPainter& painter, KSpreadView* view,
+    void paintText( QPainter& painter,
                     const QPoint &corner, const QPoint &cellRef,
                     int width, int height );
-    void paintMoreTextIndicator( QPainter& painter, KSpreadView* view,
-                                 const QPoint &corner, const QPoint &cellRef,
+    void paintMoreTextIndicator( QPainter& painter,
+                                 const QPoint &corner,
                                  int width, int height );
-    void paintCommentIndicator( QPainter& painter, KSpreadView* view,
+    void paintCommentIndicator( QPainter& painter,
                                 const QPoint &corner, const QPoint &cellRef,
                                 int width, int height );
-    void paintFormulaIndicator( QPainter& painter, KSpreadView* view,
-                                const QPoint &corner, const QPoint &cellRef,
-                                int height );
+    void paintFormulaIndicator( QPainter& painter, const QPoint &corner, int height );
     void paintDefaultBorders( QPainter& painter, KSpreadView* view,
-                              const QPoint &corner, const QPoint &cellRef,
+                              const QRect &rect, const QPoint &corner, const QPoint &cellRef,
                               int width, int height );
     void paintBackground( QPainter& painter, KSpreadView* view,
                           const QPoint &corner, const QPoint &cellRef,
                           int width, int height, bool selected );
     void paintObscuredCells( const QRect& rect, QPainter& painter,
                              KSpreadView* view, const QPoint &corner, const QPoint &cellRef );
+    void paintCellDiagonalLines( QPainter& painter,
+                                 const QPoint &corner, const QPoint &cellRef,
+                                 int width, int height );
+
 
 
   /* helper functions to the makeLayout(...) function */
