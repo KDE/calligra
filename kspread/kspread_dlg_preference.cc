@@ -483,6 +483,7 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
   valIndent=new KIntNumInput(_indent, tmpQGroupBox , 10);
   valIndent->setRange(1, 100, 1);
   valIndent->setLabel(i18n("&Value of indent:"));
+  valIndent->setSuffix(i18n("pt"));
 
   label=new QLabel(i18n("&Press enter to move selection to:"), tmpQGroupBox);
   typeOfMove=new QComboBox( tmpQGroupBox);

@@ -1177,9 +1177,13 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
     QStringList files;
     for ( QStringList::Iterator it = path.begin(); it != path.end(); ++it )
     {
-        QStringList tmp = QDir(*it).entryList("*.xml");
-        for ( QStringList::Iterator it2 = tmp.begin(); it2 != tmp.end(); ++it2 )
-            files.append( QString( (*it) + (*it2)));
+        QDir dir( *it );
+        if ( dir.exists() )
+        {
+            QStringList tmp = dir.entryList("*.xml");
+            for ( QStringList::Iterator it2 = tmp.begin(); it2 != tmp.end(); ++it2 )
+                files.append( QString( (*it) + (*it2)));
+        }
     }
 
     //QStringList files = KWFactory::global()->dirs()->findAllResources( "expression", "*.xml", TRUE );
