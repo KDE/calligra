@@ -1976,8 +1976,8 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
 {
   QPen left_pen = leftBorderPen( cellRef.x(), cellRef.y() );
   QPen top_pen = topBorderPen( cellRef.x(), cellRef.y() );
-  QPen right_pen = leftBorderPen( cellRef.x()+1, cellRef.y() );
-  QPen bottom_pen = topBorderPen( cellRef.x(), cellRef.y()+1 );
+  QPen right_pen = rightBorderPen( cellRef.x(), cellRef.y() );
+  QPen bottom_pen = bottomBorderPen( cellRef.x(), cellRef.y() );
   ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int height = rowLayout->height();
