@@ -109,26 +109,15 @@
   <Separator/>
   <Action name="formula_typeleft"/>
   <Action name="formula_typeright"/>
-  <Separator/>
+ </ToolBar>
+ <ToolBar name="Font"><Text>Font</Text>
   <Action name="formula_textsize"/>
   <Separator/>
   <Action name="formula_format_bold"/>
   <Action name="formula_format_italic"/>
+  <Separator/>
+  <Action name="formula_fontfamily"/>
  </ToolBar>
-<!--
- <ToolBar name="Font"><Text>Font</Text>
-  <Action name="textfont"/>
-  <Action name="textsize"/>
-  <Action name="textbold"/>
-  <Action name="textitalic"/>
-  <Action name="textunder"/>
-  <Action name="fontelement"/>
-  <Action name="fontindex"/>
-  <Action name="fontchild"/>
-  <Action name="fontnext"/>
-
- </ToolBar>
--->
 <!--
  <ToolBar name="Element"><Text>Element</Text>
   <Action name="textsplit"/>

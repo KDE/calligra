@@ -46,3 +46,10 @@ corresponding latin letter and pressing Ctrl-G afterwards?
 </html>
 </tip>
 
+<tip category="KFormula|Keyboard">
+<html>
+<p>...that you can insert any number of lines using the <em>Multiline</em> element?
+By inserting <tt>&</tt> you can align these lines.
+</p>
+</html>
+</tip>
