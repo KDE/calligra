@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Simon Hausmann <hausmann@kde.org>
 
-#include "kpimage.h"
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kpimage.h"
 
 KPImage KPImageCollection::findOrLoad( const QString & fileName, const QDateTime & dateTime )
 {
