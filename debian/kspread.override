@@ -4,6 +4,9 @@ kspread: non-dev-pkg-with-shlib-symlink usr/lib/kspread.so.0.0.0 usr/lib/kspread
 kspread: shlib-missing-in-control-file libkspreadpart.so usr/lib/kde2/libkspreadpart.so
 kspread: shlib-missing-in-control-file libcsvexport.so usr/lib/kde2/libcsvexport.so
 kspread: shlib-missing-in-control-file libcsvimport.so usr/lib/kde2/libcsvimport.so
+kspread: shlib-missing-in-control-file libgnumericexport.so usr/lib/kde2/libgnumericexport.so
+kspread: shlib-missing-in-control-file libgnumericimport.so usr/lib/kde2/libgnumericimport.so
+kspread: shlib-missing-in-control-file libkspreadhtmlexport.so usr/lib/kde2/libkspreadhtmlexport.so
 kspread: shlib-missing-in-control-file libqproimport.so usr/lib/kde2/libqproimport.so
 kspread: shlib-missing-in-control-file libkspreadcalc.so usr/lib/kde2/libkspreadcalc.so
 # This is inserted by debhelper and is legal.

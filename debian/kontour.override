@@ -1,0 +1,9 @@
+# There is no -dev package.
+kontour: non-dev-pkg-with-shlib-symlink usr/lib/kontour.so.0.0.0 usr/lib/kontour.so
+# These are modules in /usr/lib/kde2/.
+kontour: shlib-missing-in-control-file libkontourpart.so usr/lib/kde2/libkontourpart.so
+kontour: shlib-missing-in-control-file libxfigimport.so usr/lib/kde2/libxfigimport.so
+# This is inserted by debhelper and is legal.
+kontour: postrm-calls-ldconfig
+# Menu item.
+kontour: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kontour:8

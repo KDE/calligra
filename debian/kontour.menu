@@ -1,0 +1,9 @@
+?package(kontour):\
+	needs=x11\
+	section=Apps/Graphics\
+	hints="KDE"\
+	kderemove="1"\
+	title="Kontour"\
+	icon="/usr/share/pixmaps/kontour.xpm"\
+	command=kontour
+

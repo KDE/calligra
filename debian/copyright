@@ -11,17 +11,13 @@ Upstream authors:
           Laurent Montel <montell@club-internet.fr>
   KFormula: Andrea Rizzi <rizzi@kde.org>, Stephan Kulow <coolo@kde.org>,
             Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-  KIllustrator: Kai-Uwe Sattler <kus@iti.cs.uni-magdeburg.de> and others
+  Kontour: Kai-Uwe Sattler <kus@iti.cs.uni-magdeburg.de> and others
   Kivio: Dave Marotti <lndshark@speakeasy.net>,
          Max Judin <max@thekompany.com>, Dmitry Poplavsky <dima@kde.org>
   KOShell: Torben Weis <weis@kde.org>, Simon Hausmann <hausmann@kde.org>,
            David Faure <faure@kde.org>
   KPresenter: Reginald Stadlbauer <reggie@kde.org>,
               Werner Trobin <trobin@kde.org>, David Faure <dfaure@kde.org>
-  Krayon: Michael Koch <koch@kde.org>, Matthias Elter <me@kde.org>,
-          Andrew Richards <physajr@phys.canterbury.ac.nz>,
-          Carsten Pfeiffer <pfeiffer@kde.org>,
-          John Califf <jcaliff@compuzone.net>
   KSpread: Torben Weis <weis@kde.org>,
            Laurent Montel <montell@club-internet.fr>
   Kugar: Mutiny Bay Software <info@mutinybaysoftware.com>,
@@ -38,6 +34,10 @@ General Public License) or the AL (Artistic License) which is less
 restrictive than the GPL.  See http://www.koffice.org/ for details
 regarding which applications are released under which licenses.
 
+The basic flowcharting stencils provided with Kivio are released under the
+BSD license.
+
 On Debian GNU/Linux systems, the complete texts of these licenses can be
-found in `/usr/share/common-licenses/GPL' (GNU General Public License) and
-`/usr/share/common-licenses/Artistic' (Artistic License).
+found in `/usr/share/common-licenses/GPL' (GNU General Public License),
+`/usr/share/common-licenses/Artistic' (Artistic License) and
+`/usr/share/common-licenses/BSD' (BSD License).

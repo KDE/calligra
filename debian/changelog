@@ -1,3 +1,28 @@
+koffice (1:1.1-rc1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Renamed package killustrator to kontour.
+  * Removed package krayon.
+  * Rebuilt with newer admin files (closes: Bug#105209).
+  * Added kdebase-dev to build-depends.
+  * Builds on alpha.
+
+ -- Ben Burton <benb@acm.org>  Tue, 31 Jul 2001 12:23:44 +1000
+
+koffice (1:1.1-beta3-3) unstable; urgency=low
+
+  * Added kivio stencils to copyright file (closes: Bug#103659).
+
+ -- Ben Burton <benb@acm.org>  Mon,  9 Jul 2001 00:52:28 +1000
+
+koffice (1:1.1-beta3-2) unstable; urgency=low
+
+  * Build-Depends: Requires at least KDE 2.2.
+  * kformula: Linked locolor icons to hicolor icons to satisfy KDE 2.2.
+  * koffice-libs: Added Spanish template file (closes: Bug#103064).
+
+ -- Ben Burton <benb@acm.org>  Mon,  2 Jul 2001 02:01:01 -0500
+
 koffice (1:1.1-beta3-1) unstable; urgency=low
 
   * New upstream release (closes: #75750, #90686, #98370, #101017, #101951).

@@ -1,5 +1,8 @@
 usr/bin/kspread
 usr/lib/kspread.*
+usr/lib/kde2/libgnumericexport.*
+usr/lib/kde2/libgnumericimport.*
+usr/lib/kde2/libkspreadhtmlexport.*
 usr/lib/kde2/libkspreadpart.*
 usr/lib/kde2/libkspreadcalc.*
 usr/lib/kde2/libcsvexport.*
@@ -8,10 +11,14 @@ usr/lib/kde2/libqproimport.*
 usr/share/applnk/Office/kspread.desktop
 usr/share/apps/kspread/*
 usr/share/mimelnk/application/x-kspread.desktop
+usr/share/mimelnk/text/x-gnumeric.desktop
 usr/share/services/kspreadcalc.desktop
 usr/share/services/kspread_csv_export.desktop
 usr/share/services/kspread_csv_import.desktop
+usr/share/services/kspread_html_export.desktop
 usr/share/services/kspread_qpro_import.desktop
+usr/share/services/kspread_gnumeric_export.desktop
+usr/share/services/kspread_gnumeric_import.desktop
 usr/share/icons/hicolor/16x16/apps/kspread.png
 usr/share/icons/hicolor/32x32/apps/kspread.png
 usr/share/icons/hicolor/48x48/apps/kspread.png

@@ -1,5 +1,5 @@
 /* XPM */
-static char * killustrator_xpm[] = {
+static char * kontour_xpm[] = {
 "32 32 10 1",
 " 	c None",
 ".	c #000000",

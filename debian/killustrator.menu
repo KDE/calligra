@@ -1,9 +1,0 @@
-?package(killustrator):\
-	needs=x11\
-	section=Apps/Graphics\
-	hints="KDE"\
-	kderemove="1"\
-	title="KIllustrator"\
-	icon="/usr/share/pixmaps/killustrator.xpm"\
-	command=killustrator
-

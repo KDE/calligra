@@ -15,6 +15,13 @@ pixmaps = $(tmp)/usr/share/pixmaps
 kugar_docs = $(tmp)/usr/share/doc/kde/HTML/en/kugar
 icons = $(tmp)/usr/share/icons
 
+ARCH = $(shell dpkg-architecture -qDEB_BUILD_ARCH)
+ifeq ($(ARCH),alpha)
+  COMPILER_FLAGS=CXX=g++-3.0 CC=gcc-3.0 CFLAGS=-mieee CXXFLAGS=-mieee
+else
+  COMPILER_FLAGS=CXX=g++ CC=gcc
+endif
+
 build: build-stamp
 
 -include debian/debiandirs
@@ -27,6 +34,7 @@ build-stamp:
 	if test ! -f configure; then \
 	  $(MAKE) -f admin/Makefile.common ;\
 	fi 
+	$(COMPILER_FLAGS) \
 	./configure $(configkde) \
 	  --libdir=$(kde_libdir) --includedir=$(kde_includedir)
 	$(MAKE) KDE_PLUGIN_DEBIAN="-module -no-undefined"
@@ -55,7 +63,7 @@ install-stamp: build
 
 	$(INSTALL_DIR) $(overrides)
 	$(INSTALL_FILE) debian/*.override $(overrides)
-	-for i in `ls $(overrides)/`; do \
+	for i in `ls $(overrides)/`; do \
 		mv $(overrides)/$$i \
 		$(overrides)/`echo $$i | sed -e 's#.override##'`; \
 	done
@@ -74,14 +82,25 @@ install-stamp: build
 	# Add "#!/usr/bin/perl" to the head of kprconverter.pl.
 	echo "#!/usr/bin/perl -w" > $(tmp)/usr/bin/kprconverter.pl.new
 	cat $(tmp)/usr/bin/kprconverter.pl >> $(tmp)/usr/bin/kprconverter.pl.new
-	-mv $(tmp)/usr/bin/kprconverter.pl.new $(tmp)/usr/bin/kprconverter.pl
-	-chmod 755 $(tmp)/usr/bin/kprconverter.pl
+	mv $(tmp)/usr/bin/kprconverter.pl.new $(tmp)/usr/bin/kprconverter.pl
+	chmod 755 $(tmp)/usr/bin/kprconverter.pl
+
+	# Move the gnumeric export/import libraries to the correct directory.
+	mv $(tmp)/usr/lib/libgnumeric* $(tmp)/usr/lib/kde2
+	
+	# Move the kontour plugins to the correct directory.
+	mv $(tmp)/usr/share/apps/killustrator/kpartplugins \
+		$(tmp)/usr/share/apps/kontour
+	
+	# Move the kontour docs to the correct directory.
+	mv $(tmp)/usr/share/doc/kde/HTML/en/killustrator \
+		$(tmp)/usr/share/doc/kde/HTML/en/kontour
 
 	# Sort out this mess where kivio wants to installed a shared library
 	# in /usr/share with the wrong extension.
 	# We'll put a symlink in kivio.links.
 	$(INSTALL_DIR) $(tmp)/usr/lib/kivio
-	-mv $(tmp)/usr/share/apps/kivio/autoloadStencils/straight_connector.ksp \
+	mv $(tmp)/usr/share/apps/kivio/autoloadStencils/straight_connector.ksp \
 		$(tmp)/usr/lib/kivio/libstraight_connector.so
 
 	perl -w admin/debianrules cleanup
@@ -120,28 +139,28 @@ binary-arch: build install
 	dh_installdocs -a
 	dh_installexamples -a
 	# Rename a couple of newly installed files.
-	-mv debian/koffice-libs/usr/share/doc/koffice-libs/HOWTO \
+	mv debian/koffice-libs/usr/share/doc/koffice-libs/HOWTO \
 	  debian/koffice-libs/usr/share/doc/koffice-libs/filters.HOWTO
-	-mv debian/kugar/usr/share/doc/kugar/examples/kugar.examples.README \
+	mv debian/kugar/usr/share/doc/kugar/examples/kugar.examples.README \
 	  debian/kugar/usr/share/doc/kugar/examples/README.examples
 	dh_installmenu -a
 	dh_installmime -a
 	dh_installman -a
 	# Move the .pl.* manpages to the correct place.
-	-mv debian/kpresenter/usr/share/man/pl/man1/* \
+	mv debian/kpresenter/usr/share/man/pl/man1/* \
 		debian/kpresenter/usr/share/man/man1
-	-rm -rf debian/kpresenter/usr/share/man/pl
+	rm -rf debian/kpresenter/usr/share/man/pl
 	dh_undocumented -a
 	dh_installchangelogs -pkoffice
 	dh_installchangelogs -pkoffice-libs
 	dh_installchangelogs -pkoffice-dev
 	dh_installchangelogs -pkchart kchart/CHANGES
 	dh_installchangelogs -pkformula
-	dh_installchangelogs -pkillustrator
+	dh_installchangelogs -pkontour
 	dh_installchangelogs -pkivio kivio/CHANGELOG
 	dh_installchangelogs -pkoshell
 	dh_installchangelogs -pkpresenter kpresenter/CHANGES
-	dh_installchangelogs -pkrayon kimageshop/ChangeLog
+	#dh_installchangelogs -pkrayon kimageshop/ChangeLog
 	dh_installchangelogs -pkspread kspread/CHANGES
 	dh_installchangelogs -pkugar kugar/ChangeLog
 	dh_installchangelogs -pkword kword/CHANGES
@@ -160,16 +179,16 @@ binary-arch: build install
 	  -ldebian/koffice-libs/usr/lib:debian/kchart/usr/lib
 	dh_shlibdeps -pkformula \
 	  -ldebian/koffice-libs/usr/lib:debian/kformula/usr/lib
-	dh_shlibdeps -pkillustrator \
-	  -ldebian/koffice-libs/usr/lib:debian/killustrator/usr/lib
+	dh_shlibdeps -pkontour \
+	  -ldebian/koffice-libs/usr/lib:debian/kontour/usr/lib
 	dh_shlibdeps -pkivio \
 	  -ldebian/koffice-libs/usr/lib:debian/kivio/usr/lib
 	dh_shlibdeps -pkoshell \
 	  -ldebian/koffice-libs/usr/lib:debian/koshell/usr/lib
 	dh_shlibdeps -pkpresenter \
 	  -ldebian/koffice-libs/usr/lib:debian/kpresenter/usr/lib
-	dh_shlibdeps -pkrayon \
-	  -ldebian/koffice-libs/usr/lib:debian/krayon/usr/lib
+	#dh_shlibdeps -pkrayon \
+	#  -ldebian/koffice-libs/usr/lib:debian/krayon/usr/lib
 	dh_shlibdeps -pkspread \
 	  -ldebian/koffice-libs/usr/lib:debian/kspread/usr/lib
 	dh_shlibdeps -pkugar \

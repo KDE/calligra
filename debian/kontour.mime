@@ -1,0 +1,2 @@
+application/x-killustrator; kontour;test=test "$DISPLAY" != ""; priority=7
+application/x-kontour; kontour;test=test "$DISPLAY" != ""; priority=7

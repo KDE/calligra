@@ -10,4 +10,10 @@ Description-de: KOffice ist eine Beta-Version!
  Die meisten Funktionen werden funktionieren. Es kann aber auch
  zu abstürzen kommen. Der Hauptgrund für diese Version ist es,
  Paket-Probleme und andere Bugs in diesem Zusammenhang zu beseitigen.
+Description-es: ¡KOffice es beta! 
+ Esta versión de KOffice es una beta anterior a la versión 1.1. La mayor
+ parte de las funciones más comunes funcionarán, pero puede que haya
+ fallos inesperados. La principal razón para incluir esta versión de
+ KOffice es investigar sobre posibles problemas de empaquetamiento y
+ errores no relacionados con la documentación.
 
