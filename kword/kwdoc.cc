@@ -3493,11 +3493,11 @@ void KWDocument::layout()
             it.current()->layout();
 }
 
-void KWDocument::invalidate()
+void KWDocument::invalidate(const KWFrameSet *skipThisFrameSet)
 {
     QPtrListIterator<KWFrameSet> it = framesetsIterator();
     for (; it.current(); ++it )
-        it.current()->invalidate();
+        if(it.current()!=skipThisFrameSet) it.current()->invalidate();
 }
 
 KFormula::Document* KWDocument::getFormulaDocument()

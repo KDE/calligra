@@ -1921,8 +1921,8 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                 } else {
                     if ( resized )
                     {
-                        frameResized( theFrame, false );
-                        *abort = false;
+                        frameResized( theFrame, true );
+                        abort = false;
                     }
                     break;
                 }
@@ -2069,7 +2069,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                 } else {
                     kdDebug() << "setBottom " << wantedPosition << endl;
                     theFrame->setBottom( wantedPosition );
-                    frameResized( theFrame, false );
+                    frameResized( theFrame, true );
                 }
             }
         }
@@ -2153,7 +2153,7 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
     // Warning, can't call layout() (frameChanged calls it)
     // from here, since it calls formatMore() !
     if ( invalidateLayout )
-        m_doc->invalidate();
+        m_doc->invalidate(this);
     theFrame->updateRulerHandles();
 
     // Can't repaint directly, we might be in a paint event already

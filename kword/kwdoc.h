@@ -747,7 +747,7 @@ public slots:
     void slotRepaintVariable();
 
     /** calls invalidate() on all framesets  */
-    void invalidate();
+    void invalidate(const KWFrameSet *skipThisFrameSet=0);
 
 protected slots:
     void slotRecalcFrames();
