@@ -64,7 +64,7 @@ class StyleDia;
 class KPPartObject;
 
 /******************************************************************/
-/* class KPresenterChild					  */
+/* class KPresenterChild                                          */
 /******************************************************************/
 class KPresenterChild : public KoDocumentChild
 {
@@ -86,7 +86,7 @@ public:
 };
 
 /*****************************************************************/
-/* class KPresenterDoc						 */
+/* class KPresenterDoc                                           */
 /*****************************************************************/
 class KPresenterDoc : public KoDocument
 {
@@ -118,7 +118,7 @@ public:
     // get mime type
     virtual QCString mimeType() const { return QCString( MIME_TYPE ); }
 
-    // get output- and inputformats
+    // get output- and inputformats [obsolete?]
     virtual QStrList outputFormats();
     virtual QStrList inputFormats();
 
@@ -147,7 +147,7 @@ public:
     void setBackView( unsigned int, BackView );
     void setBackType( unsigned int, BackType );
     bool setPenBrush( QPen, QBrush, LineEnd, LineEnd, FillType, QColor, QColor, BCType,
-		      bool, int, int );
+                      bool, int, int );
     bool setLineBegin( LineEnd );
     bool setLineEnd( LineEnd );
     bool setPieSettings( PieType, int, int );
@@ -198,10 +198,10 @@ public:
     void insertRectangle( QRect, QPen, QBrush, FillType, QColor, QColor, BCType, int, int, bool ,int, int, int, int );
     void insertCircleOrEllipse( QRect, QPen, QBrush, FillType, QColor, QColor, BCType, bool ,int, int, int, int );
     void insertPie( QRect, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
-		    BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le, bool ,int, int, int diffx, int diffy );
+                    BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le, bool ,int, int, int diffx, int diffy );
     void insertText( QRect, int, int, QString text = QString::null, KPresenterView *_view = 0L );
     void insertAutoform( QRect, QPen, QBrush, LineEnd, LineEnd, FillType, QColor,
-			 QColor, BCType, QString, bool ,int, int, int, int );
+                         QColor, BCType, QString, bool ,int, int, int, int );
 
     // get list of pages and objects
     QList<KPBackGround> *backgroundList() {return &_backgroundList; }
@@ -284,7 +284,7 @@ public:
     void insertPage( int _page, InsPageMode _insPageMode, InsertPos _insPos );
 
     void setObjectList( QList<KPObject> *_list ) {
-	_objectList->setAutoDelete( false ); _objectList = _list; _objectList->setAutoDelete( false );
+        _objectList->setAutoDelete( false ); _objectList = _list; _objectList->setAutoDelete( false );
     }
 
     int getPenBrushFlags();
@@ -314,17 +314,17 @@ public:
     virtual DCOPObject* dcopObject();
 
     KPresenterView *getFirstView() {
-	return (KPresenterView*)firstView();
+        return (KPresenterView*)firstView();
     }
     KPresenterView *getNextView() {
-	return (KPresenterView*)nextView();
+        return (KPresenterView*)nextView();
     }
 
     void groupObjects();
     void ungroupObjects();
 
     KTextEditFormatCollection *formatCollection() const { return fCollection; }
-    
+
 signals:
 
     // document modified
@@ -367,8 +367,8 @@ protected:
 
     struct PixCache
     {
-	QString filename;
-	QString pix_string;
+        QString filename;
+        QString pix_string;
     };
 
     // list of views and children
@@ -430,7 +430,7 @@ protected:
 
     int saveOnlyPage;
     KTextEditFormatCollection *fCollection;
-    
+
 };
 
 #endif
