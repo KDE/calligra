@@ -74,7 +74,7 @@ class KoViewWrapperWidget;
  *
  **********************************************************/
 
-const int KoDocument::s_defaultAutoSave = 120; // 2 minutes
+const int KoDocument::s_defaultAutoSave = 300; // 5 minutes
 
 class KoDocument::Private
 {
