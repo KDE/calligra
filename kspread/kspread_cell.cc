@@ -5311,6 +5311,12 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
         xmlwriter.addAttribute( "table:number-rows-spanned", QString::number( rowSpan ) );
     }
 
+    if ( !isEmpty() )
+    {
+        xmlwriter.startElement( "text:p" );
+        xmlwriter.addTextNode(strOutText());
+        xmlwriter.endElement();
+    }
     xmlwriter.endElement();
     return true;
 }
