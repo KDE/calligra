@@ -681,7 +681,6 @@ void OoImpressExport::appendObjects(QDomDocument & doccontent, QDomNode &objects
 
 void OoImpressExport::appendGroupObject( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
-    kdDebug()<<" group not implemented \n";
     QDomElement groupElement = doc.createElement( "draw:g" );
     QDomNode objects = source.namedItem( "OBJECTS" );
     appendObjects( doc, objects, groupElement);
@@ -691,7 +690,7 @@ void OoImpressExport::appendGroupObject( QDomDocument & doc, QDomElement & sourc
 void OoImpressExport::appendNote( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
     QString noteText = source.attribute("note");
-    kdDebug()<<"noteText :"<<noteText<<endl;
+    //kdDebug()<<"noteText :"<<noteText<<endl;
     if ( noteText.isEmpty() )
         return;
     QDomElement noteElement = doc.createElement( "presentation:notes" );
