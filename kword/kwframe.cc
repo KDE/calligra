@@ -1555,26 +1555,23 @@ KWordFrameSetIface* KWPictureFrameSet::dcopObject()
 }
 
 
-void KWPictureFrameSet::loadImage( const QString & fileName, const QSize &_imgSize )
+void KWPictureFrameSet::loadImage( const QString & fileName, const QSize & /*_imgSize*/ )
+// _imgSize is not needed anymore with KoPicture
 {
     KoPictureCollection *collection = m_doc->imageCollection();
 
     m_image = collection->loadPicture( fileName );
-
-    m_image.setSize( _imgSize );
 }
 
-void KWPictureFrameSet::setSize( const QSize & _imgSize )
+void KWPictureFrameSet::setSize( const QSize & /*_imgSize*/ )
 {
-    m_image.setSize( _imgSize );
+    // Do nothing as KoPicture needs a size only at drawing time
 }
 
 void KWPictureFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize )
 {
     KWFrameSet::resizeFrame( frame, newWidth, newHeight, finalSize );
     QSize newSize = kWordDocument()->zoomSize( frame->innerRect().size() );
-    m_image.setSize( newSize );
-    // TODO: !finalSize /* finalSize==false -> fast mode=true */ );
 }
 
 QDomElement KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
