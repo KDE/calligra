@@ -262,7 +262,7 @@ void KoTextObject::readFormats( QTextCursor &c1, QTextCursor &c2, bool copyParag
     } else {
         int lastIndex = oldLen;
         int i;
-        kdDebug() << "KoTextObject::readFormats copying from " << c1.index() << " to " << c1.parag()->length()-1 << " into lastIndex=" << lastIndex << endl;
+        //kdDebug() << "KoTextObject::readFormats copying from " << c1.index() << " to " << c1.parag()->length()-1 << " into lastIndex=" << lastIndex << endl;
         // Replace the trailing spaces with '\n'. That char carries the formatting for the trailing space.
         undoRedoInfo.text += c1.parag()->string()->toString().mid( c1.index(), c1.parag()->length() - 1 - c1.index() ) + '\n';
         for ( i = c1.index(); i < c1.parag()->length(); ++i, ++lastIndex )
@@ -271,14 +271,14 @@ void KoTextObject::readFormats( QTextCursor &c1, QTextCursor &c2, bool copyParag
         Qt3::QTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
             undoRedoInfo.text += p->string()->toString().left( p->length() - 1 ) + '\n';
-            kdDebug() << "KoTextObject::readFormats (mid) copying from 0 to "  << p->length()-1 << " into i+" << lastIndex << endl;
+            //kdDebug() << "KoTextObject::readFormats (mid) copying from 0 to "  << p->length()-1 << " into i+" << lastIndex << endl;
             for ( i = 0; i < p->length(); ++i )
                 copyCharFormatting( p, i, i + lastIndex, moveCustomItems );
             lastIndex += p->length(); // + 1; // skip the '\n'
-            kdDebug() << "KoTextObject::readFormats lastIndex now " << lastIndex << " - text is now " << undoRedoInfo.text.toString() << endl;
+            //kdDebug() << "KoTextObject::readFormats lastIndex now " << lastIndex << " - text is now " << undoRedoInfo.text.toString() << endl;
             p = p->next();
         }
-        kdDebug() << "KoTextObject::readFormats copying [last] from 0 to " << c2.index() << " into i+" << lastIndex << endl;
+        //kdDebug() << "KoTextObject::readFormats copying [last] from 0 to " << c2.index() << " into i+" << lastIndex << endl;
         undoRedoInfo.text += c2.parag()->string()->toString().left( c2.index() );
         for ( i = 0; i < c2.index(); ++i )
             copyCharFormatting( c2.parag(), i, i + lastIndex, moveCustomItems );
