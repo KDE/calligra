@@ -749,7 +749,7 @@ void KWPage::vmpMidButton()
             editPaste( cb->data()->encodedData( MIME_TYPE ), MIME_TYPE );
     } else if ( cb->data()->provides( "text/plain" ) ) {
         if ( cb->data()->encodedData( "text/plain" ).size() )
-            editPaste( cb->data()->encodedData( "text/plain" ) );
+            editPaste( QString::fromLocal8Bit(cb->data()->encodedData( "text/plain" )) );
     }
     else if ( !cb->text().isEmpty() )
     {
