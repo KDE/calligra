@@ -109,11 +109,13 @@ void KPPresStructObjectItem::setPage( KPBackGround *p, int pgnum )
 }
 
 /*================================================================*/
-void KPPresStructObjectItem::setObject( KPObject *o, int num,const QString &_objName )
+void KPPresStructObjectItem::setObject( KPObject *o, int num, bool sticky,const QString &_objName )
 {
   object = o;
   if ( object && parent() ) {
     QString type = _objName.isEmpty() ? (object->getTypeString() + " (%1)").arg( num + 1 ):_objName;
+    if( sticky )
+        type+=i18n(" (Sticky object)");
     setText(0, type);
     switch ( object->getType() ) {
     case OT_PICTURE:
@@ -255,7 +257,7 @@ void KPPresStructView::setupSlideList()
             }
             KPPresStructObjectItem *item_ = new KPPresStructObjectItem( item );
             item_->setPage( page->background(), i );
-            item_->setObject( it.current(), offset,name );
+            item_->setObject( it.current(), offset, name.isEmpty(), name );
             item_->setNum(offset);
             offset++;
         }
