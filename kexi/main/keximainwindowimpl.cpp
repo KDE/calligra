@@ -2693,7 +2693,7 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 	if (!dontAsk) {
 		if (KMessageBox::No == KMessageBox::warningYesNo(this, "<p>"+i18n("Do you want to remove:")
 			+"</p><p>"+part->instanceName()+" \""+ item->name() + "\"?</p>",
-			0, KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeDeletePartItem"/*config entry*/))
+			0, KStdGuiItem::yes(), KStdGuiItem::no()))//, "askBeforeDeletePartItem"/*config entry*/))
 			return cancelled;
 	}
 
