@@ -52,6 +52,7 @@
 #include <qtimer.h>
 #include <qimage.h>
 #include <kiconloader.h>
+#include <kfileitem.h>
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qcursor.h>
@@ -297,16 +298,23 @@ bool KoDocument::saveFile()
 
     QApplication::setOverrideCursor( waitCursor );
 
-    if ( KIO::NetAccess::exists( url() ) ) { // this file exists => backup
-        KURL backup;
-        if ( d->m_backupPath.isEmpty())
-            backup= url();
-        else
-            backup = d->m_backupPath +"/"+url().fileName();
-        backup.setPath( backup.path() + QString::fromLatin1("~") );
-        if ( backupFile() ) {
+    if ( backupFile() ) {
+        KIO::UDSEntry entry;
+        if ( KIO::NetAccess::stat( url(), entry ) ) { // this file exists => backup
+            KFileItem item( entry, url() );
+            Q_ASSERT( item.name() == url().fileName() );
+            KURL backup;
+            if ( d->m_backupPath.isEmpty())
+                backup = url();
+            else
+                backup = d->m_backupPath +"/"+url().fileName();
+            backup.setPath( backup.path() + QString::fromLatin1("~") );
             KIO::NetAccess::del( backup ); // Copy does not remove existing destination file
             KIO::NetAccess::copy( url(), backup );
+            // Not network transparent. TODO: use NetAccess::file_copy once KDE-3.2 is required,
+            // or implement KIO::NetAccess::chmod (or fire an async ChmodJob?).
+            if ( backup.isLocalFile() )
+                ::chmod( QFile::encodeName( backup.path() ), item.permissions() );
         }
     }
 
@@ -940,7 +948,7 @@ void KoDocument::savePreview( KoStore* store )
     imageIO.setFormat("PNG");
     imageIO.write();
     buffer.close();
-    
+
     store->write( imageData );
 }
 
