@@ -93,7 +93,10 @@ public:
 
     KoDocumentInfo *m_docInfo;
 
-    QCString outputMimeType;
+    QCString outputMimeType; // The mimetype to use when saving
+    KoFilterManager * filterManager; // The filter-manager to use when loading/saving [for the options]
+    // It can be set by KoMainWindow (to pass options), or created here (without options)
+
     QTimer m_autoSaveTimer;
     int m_autoSaveDelay; // in seconds, 0 to disable.
 };
@@ -163,8 +166,9 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
   d->m_changed=false;
   d->m_dcopObject = 0L;
   connect( &d->m_autoSaveTimer, SIGNAL( timeout() ), this, SLOT( slotAutoSave() ) );
-  setAutoSave( 0 ); // OFF
+  setAutoSave( s_defaultAutoSave );
   d->m_bSingleViewMode = singleViewMode;
+  d->filterManager = 0L;
 
   // the parent setting *always* overrides! (Simon)
   if ( parent )
@@ -268,8 +272,9 @@ bool KoDocument::saveFile()
     kdDebug(30003) << "Saving to format " << outputMimeType << " in " << m_file << endl;
     // Not native format : save using export filter
     d->m_changed=false;
-    KoFilterManager * filterManager = new KoFilterManager();
-    QString nativeFile=filterManager->prepareExport( m_file, _native_format, outputMimeType, this);
+    if ( !d->filterManager )
+        d->filterManager = new KoFilterManager();
+    QString nativeFile = d->filterManager->prepareExport( m_file, _native_format, outputMimeType, this);
     kdDebug(30003) << "Temp native file " << nativeFile << endl;
 
     if(d->m_changed==false && nativeFile!=m_file) {
@@ -277,13 +282,12 @@ bool KoDocument::saveFile()
         if ( !ret )
             kdError(30003) << "Couldn't save in native format!" << endl;
         else
-            ret = filterManager->export_();
+            ret = d->filterManager->export_();
     } else {
       // How can this happen ? m_changed = true ?
       // No -> nativeFile==m_file :) (Werner)
       ret = true;
     }
-    delete filterManager;
   } else {
     // Native format => normal save
     ret = saveNativeFormat( m_file );
@@ -309,6 +313,13 @@ void KoDocument::setOutputMimeType( const QCString & mimeType )
 {
     d->outputMimeType = mimeType;
 }
+
+void KoDocument::setFilterManager( KoFilterManager * manager )
+{
+    delete d->filterManager;
+    d->filterManager = manager;
+}
+
 
 void KoDocument::slotAutoSave()
 {
@@ -779,9 +790,9 @@ bool KoDocument::openFile()
   QCString _native_format = nativeFormatMimeType();
 
   // Launch a filter if we need one for this url ?
-  KoFilterManager * filterManager = new KoFilterManager();
-  QString importedFile = filterManager->import( m_file, _native_format, this );
-  delete filterManager;
+  if ( !d->filterManager )
+      d->filterManager = new KoFilterManager();
+  QString importedFile = d->filterManager->import( m_file, _native_format, this );
 
   kdDebug(30003) << "KoDocument::openFile - importedFile " << importedFile << endl;
 

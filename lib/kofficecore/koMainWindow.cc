@@ -389,9 +389,19 @@ KParts::PartManager *KoMainWindow::partManager()
 
 bool KoMainWindow::openDocument( const KURL & url )
 {
+    return openDocumentInternal( 0L, url );
+}
+
+bool KoMainWindow::openDocumentInternal( KoFilterManager * filterManager, const KURL & url )
+{
     //kdDebug(30003) << "KoMainWindow::openDocument " << url.url() << endl;
     KoDocument* doc = rootDocument();
     KoDocument *newdoc=createDoc();
+
+    // Pass the filterManager to the document (who will own it from now on)
+    if ( filterManager )
+        newdoc->setFilterManager( filterManager );
+
     d->m_firstTime=true;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
@@ -462,9 +472,10 @@ bool KoMainWindow::saveDocument( bool saveas )
     {
         KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
         dialog->setCaption( i18n("Save document as") );
-        KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Export,
-                                               _native_format, nativeFormatPattern(),
-                                               nativeFormatName(), true);
+        KoFilterManager * filterManager = new KoFilterManager();
+        filterManager->prepareDialog(dialog, KoFilterManager::Export,
+                                     _native_format, nativeFormatPattern(),
+                                     nativeFormatName(), true);
         KURL newURL;
         QCString outputFormat = _native_format;
 
@@ -507,7 +518,10 @@ bool KoMainWindow::saveDocument( bool saveas )
                                                   i18n("Warning") ) == KMessageBox::Yes;
             }
         } while ( !bOk );
-        KoFilterManager::self()->cleanUp();
+        // Get the options from the dialog
+        filterManager->cleanUp();
+        // Pass the filterManager to the document (who will own it from now on)
+        pDoc->setFilterManager( filterManager );
         delete dialog;
         if (bOk) {
             m_recent->addURL( newURL );
@@ -619,9 +633,10 @@ void KoMainWindow::slotFileOpen()
 {
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
     dialog->setCaption( i18n("Open document") );
-    KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import,
-                                           KoDocument::readNativeFormatMimeType(),
-                                           nativeFormatPattern(), nativeFormatName(), true);
+    KoFilterManager * filterManager = new KoFilterManager;
+    filterManager->prepareDialog(dialog, KoFilterManager::Import,
+                                 KoDocument::readNativeFormatMimeType(),
+                                 nativeFormatPattern(), nativeFormatName(), true);
     KURL url;
     if(dialog->exec()==QDialog::Accepted) {
         url=dialog->selectedURL();
@@ -632,19 +647,25 @@ void KoMainWindow::slotFileOpen()
             KRecentDocument::add(url.url(-1), true);
     }
     else
+    {
+        delete filterManager;
         return;
+    }
 
-    KoFilterManager::self()->cleanUp();
+    filterManager->cleanUp();
     delete dialog;
     if ( url.isEmpty() )
+    {
+        delete filterManager;
         return;
+    }
 
-    (void) openDocument(url);
+    (void) openDocumentInternal( filterManager, url );
 }
 
 void KoMainWindow::slotFileOpenRecent( const KURL & url )
 {
-  (void) openDocument( url );
+    (void) openDocument( url );
 }
 
 void KoMainWindow::slotFileSave()

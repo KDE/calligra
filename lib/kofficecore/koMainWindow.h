@@ -27,6 +27,7 @@ class KoView;
 class KoMainWindowPrivate;
 class KURL;
 class KRecentFilesAction;
+class KoFilterManager;
 
 namespace KParts
 {
@@ -235,6 +236,8 @@ protected:
     virtual void closeEvent( QCloseEvent * e );
     virtual void resizeEvent( QResizeEvent * e );
     virtual bool queryClose();
+
+    bool openDocumentInternal( KoFilterManager * filterManager, const KURL & url );
 
     KRecentFilesAction *m_recent;
 

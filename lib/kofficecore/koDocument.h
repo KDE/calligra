@@ -40,6 +40,7 @@ class KoDocumentChildPicture;
 class KoView;
 class KoDocumentPrivate;
 class KoDocumentInfo;
+class KoFilterManager;
 class DCOPObject;
 
 
@@ -172,6 +173,12 @@ public:
    * have to call it.
    */
   void setOutputMimeType( const QCString & mimeType );
+
+  /**
+   * Set the filter-manager to be used for the next load/save operation.
+   * Called by KoMainWindow when a file dialog was used to select the file and set options.
+   */
+  void setFilterManager( KoFilterManager * manager );
 
   /**
    *  Create a new view for the document.
@@ -367,6 +374,12 @@ public:
   void setAutoSave( int delay );
 
   /**
+   * Retrieve the default value for autosave. Called by the applications
+   * to use the correct default in their config
+   */
+  static int defaultAutoSave() { return s_defaultAutoSave; }
+
+  /**
    * @return the list of all children. Do not modify the
    *         returned list.
    */
@@ -556,6 +569,7 @@ private:
     KURL m_strURL;
     bool m_bEmpty;
     static QList<KoDocument> *s_documentList;
+    static const int s_defaultAutoSave = 120; // 2 minutes
 };
 
 #endif
