@@ -85,7 +85,6 @@ This manual describes &kword; 1.3.
 
 <!--
 TODO:
-- Horizontal lines
 - Correct screenshot "footend.png" - Footnotes/Endnotes.
 - Write Migrating section
 - Write Watermark procedure
@@ -776,13 +775,13 @@ can read and write effectively.  <link linkend="filters-rtf">Rich Text Font</lin
 <listitem><para>Frank Dekervel <email>frank.dekervel@student.kuleuven.ac.be</email></para></listitem>
 <listitem><para>Krister Wicksell Eriksson <email>krister.wicksell@spray.se</email></para></listitem>
 <listitem><para>David Faure <email>faure@kde.org</email></para></listitem>
-<listitem><para>Nicolas Goutte <email>nicog@snafu.de</email></para></listitem>
+<listitem><para>Nicolas Goutte <email>goutte@kde.org</email></para></listitem>
 <listitem><para>Shaheed Haque <email>srhaque@iee.org</email></para></listitem>
 <listitem><para>Simon Hausmann <email>hausmann@kde.org</email></para></listitem>
 <listitem><para>Nash Hoogwater <email>nrhoogwater@wanadoo.nl</email></para></listitem>
 <listitem><para>Stephan Kulow <email>coolo@kde.org</email></para></listitem>
 <listitem><para>Sven L&uuml;ppken <email>sven@kde.org></email></para></listitem>
-<listitem><para>Laurent Montel <email>montell@club-internet.fr</email></para></listitem>
+<listitem><para>Laurent Montel <email>montel@kde.org</email></para></listitem>
 <listitem><para>Daniel Naber<email>daniel.naber@t-online.de</email></para></listitem>
 <listitem><para>Reginald Stadlbauer <email>reggie@kde.org</email></para></listitem>
 <listitem><para>Werner Trobin <email>trobin@kde.org</email></para></listitem>
@@ -795,16 +794,16 @@ can read and write effectively.  <link linkend="filters-rtf">Rich Text Font</lin
 <itemizedlist>
 <title>&kword; Import/Export Filter Developers (Alphabetically)</title>
 <listitem><para>Enno Bartels <email>ebartels@nwn.de</email></para></listitem>
-<listitem><para>Wolf-Michael Bolle <email>Bolle@ID-PRO.de</email></para></listitem>
+<listitem><para>Wolf-Michael Bolle</para></listitem>
 <listitem><para>Matthias Kalle Dalheimer <email>kalle@dalheimer.de</email></para></listitem>
 <listitem><para>Clarence Dang <email>dang@kde.org</email></para></listitem>
 <listitem><para>Frank Dekervel <email>frank.dekervel@student.kuleuven.ac.be</email></para></listitem>
-<listitem><para>Nicolas Goutte <email>nicog@snafu.de</email></para></listitem>
+<listitem><para>Nicolas Goutte <email>goutte@kde.org</email></para></listitem>
 <listitem><para>Tomasz Grobelny <email>grotk@poczta.onet.pl</email></para></listitem>
 <listitem><para>Shaheed Haque <email>srhaque@iee.org</email></para></listitem>
 <listitem><para>Ariya Hidayat <email>ariya@kde.org</email></para></listitem>
 <listitem><para>Robert Jacolin <email>rjacolin@ifrance.com</email></para></listitem>
-<listitem><para>Michael Johnson <email>mikej@xnet.com</email></para></listitem>
+<listitem><para>Michael Johnson</para></listitem>
 <!--<listitem><para>Alexandros Karypidis<email>mailto:karypid@inf.uth.gr</email></para></listitem>-->
 <listitem><para>Ewald Snel <email>ewald@rambo.its.tudelft.nl</email></para></listitem>
 </itemizedlist>
