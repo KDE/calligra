@@ -1,7 +1,11 @@
--	make vselection a visitor
+TODO:
 -	make vselection a pointer
--	move every selection into vselection
+-	move all selection-code into vselection
+-	make vselection a visitor
 -	add a point-list to vselection
+-	if we come up that vpaths should always have a defined winding
+	(e.g. ccw), create all shapes accordingly. + check in close() and
+	combine().
 
 REAL BUGS:
 -	linewith doesnt update bbox anymore
@@ -13,7 +17,8 @@ REAL BUGS:
 -	examine the problem with non closed paths (polygonize combined.karbon for example
 	to make the inner circles rectangles)
 -	vroundcorners needs to be imrpoved for beziers and big radii (lenny)
--	introduce polygonizevisitor in vselectool for more precise selection (lenny)
+-	use vflatten in vselectool for more precise selection (lenny)
+	maybe use libart instead ("art_drect_svp from art_rect_svp")
 -	move vdocument::moveSelection* to a proper command.
 -	compare ghostscript's "flatten" with our's (lenny)
 
@@ -23,7 +28,5 @@ OPTIMIZATION:
 -	check places we use sqrt() if these are really necessary (lenny)
 
 MAKE IT NICE:
--	add validators to all tool-dialog input-fields
 -	pass all dialogs a parent
--	use (first introduce of course) centerOfMass() for vpath's
-	"center knot" position. problem: CM for beziers?
+-	introduce centerOfMass() for vsegmentlist. problem: CM for beziers?

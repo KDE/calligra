@@ -11,17 +11,17 @@ VEllipse::VEllipse( VObject* parent,
 		const KoPoint& topLeft, double width, double height )
 	: VPath( parent )
 {
-	// First create (half-)unity circle around origin (0,0):
-	moveTo( KoPoint( -0.5, 0.0 ) );
-	arcTo( KoPoint(-0.5,  0.5 ), KoPoint( 0.0,  0.5 ), 0.5 );
-	arcTo( KoPoint( 0.5,  0.5 ), KoPoint( 0.5,  0.0 ), 0.5 );
-	arcTo( KoPoint( 0.5, -0.5 ), KoPoint( 0.0, -0.5 ), 0.5 );
-	arcTo( KoPoint(-0.5, -0.5 ), KoPoint(-0.5,  0.0 ), 0.5 );
+	// Create (half-)unity circle with topLeft at (0|0):
+	moveTo( KoPoint( 0.0, -0.5 ) );
+	arcTo( KoPoint( 0.0, -1.0 ), KoPoint( 0.5, -1.0 ), 0.5 );
+	arcTo( KoPoint( 1.0, -1.0 ), KoPoint( 1.0, -0.5 ), 0.5 );
+	arcTo( KoPoint( 1.0,  0.0 ), KoPoint( 0.5,  0.0 ), 0.5 );
+	arcTo( KoPoint( 0.0,  0.0 ), KoPoint( 0.0, -0.5 ), 0.5 );
 	close();
 
 	// Translate and scale:
 	QWMatrix m;
-	m.translate( topLeft.x() + width * 0.5, topLeft.y() - height * 0.5 );
+	m.translate( topLeft.x(), topLeft.y() );
 	m.scale( width, height );
 	transform( m );
 }
