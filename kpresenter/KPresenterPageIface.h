@@ -125,7 +125,7 @@ k_dcop:
     bool oneObjectTextExist() const ;
     bool isOneObjectSelected() const;
 
-    bool haveASelectedPictureObj() const;
+    bool haveASelectedClipartObj() const;
     bool haveASelectedPartObj() const;
     bool haveASelectedGroupObj() const;
     void rotateAllObjSelected(float _newAngle);

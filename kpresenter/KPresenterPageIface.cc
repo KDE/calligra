@@ -653,7 +653,7 @@ bool KPresenterPageIface::isOneObjectSelected() const
 }
 
 
-bool KPresenterPageIface::haveASelectedPictureObj() const
+bool KPresenterPageIface::haveASelectedClipartObj() const
 {
     return m_page->haveASelectedClipartObj();
 }

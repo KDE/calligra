@@ -6673,7 +6673,7 @@ void KPrCanvas::ensureVisible( int x, int y, int xmargin, int ymargin )
     }
     else
     {
-        newx= (x /*+xmargin*/)-(visibleRect().left()+diffx());
+        newx= x -(visibleRect().left()+diffx());
         if( newx < 0)
             m_view->getHScrollBar()->setValue(m_view->getHScrollBar()->value()+newx - xmargin );
     }
