@@ -36,22 +36,24 @@ Y_OFFSET=510
 class MgpImporter:
   def __init__(self):
     "Constructor"
-    self.charset="iso8859-1" #TODO - move this into a reset() method to deal with page defaults
-    self.alignment="1"       #text alignment, left
-    self.textColor="black"
-    self.pageBuffer=""
+    self.charset="iso8859-1"
     self.pageCount=-1        #page counter
+    self.defFonts={}         #default (symbolic) font names
+    self.useDefaults=1       #use page default values?
+    self.ydpi=int(getYDpi()) #Y DPI
+
+    self.__reset()           #init properties
+
+  def __reset(self):
+    self.alignment="1"       #text alignment, left
+    self.vgap=1              #line spacing
 
     #font properties
     self.fontName="standard"
     self.fontItalic=0
     self.fontBold=0
     self.fontSize=24         #default (approximated) font size (5%)
-    self.defFonts={}         #default (symbolic) font names
-    
-    self.vgap=1              #line spacing
-    self.useDefaults=1       #use page default values?
-    self.ydpi=int(getYDpi()) #Y DPI
+    self.textColor="white"
 
     # background properties
     self.backtype="0"
@@ -184,35 +186,32 @@ class MgpImporter:
     parent.appendChild(pageElem)
 
   def __handlePage(self,parent,bgParent):
-    if (self.pageBuffer):
-      self.__setBackground(bgParent) #set the background for this page
+    self.__setBackground(bgParent) #set the background for this page
       
-      self.pageCount=self.pageCount+1
-      objElem=self.document.createElement("OBJECT") #KPresenter text object
-      objElem.setAttribute("type", "4")
+    self.pageCount=self.pageCount+1
+    objElem=self.document.createElement("OBJECT") #KPresenter text object
+    objElem.setAttribute("type", "4")
 
-      elem=self.document.createElement("ORIG") #object position
-      elem.setAttribute("x", "30")
-      elem.setAttribute("y", str(self.pageCount*Y_OFFSET+30))
-      objElem.appendChild(elem)
+    elem=self.document.createElement("ORIG") #object position
+    elem.setAttribute("x", "30")
+    elem.setAttribute("y", str(self.pageCount*Y_OFFSET+30))
+    objElem.appendChild(elem)
 
-      elem=self.document.createElement("SIZE") #object size
-      elem.setAttribute("width", "610")
-      elem.setAttribute("height", "440")
-      objElem.appendChild(elem)
+    elem=self.document.createElement("SIZE") #object size
+    elem.setAttribute("width", "610")
+    elem.setAttribute("height", "440")
+    objElem.appendChild(elem)
 
-      self.textElem=self.document.createElement("TEXTOBJ") #text object
-      ### para
+    self.textElem=self.document.createElement("TEXTOBJ") #text object
+    ### para comes here
       
-      objElem.appendChild(self.textElem)
-      parent.appendChild(objElem)
+    objElem.appendChild(self.textElem)
+    parent.appendChild(objElem)
 
     self.useDefaults=1
-    self.pageBuffer=""
+    self.__reset()
 
   def __handleText(self,line):
-    self.pageBuffer+=unicode(line, self.charset, 'ignore')
-    
     pElem=self.document.createElement("P") #paragraph
     pElem.setAttribute("align", self.alignment) 
 
@@ -240,6 +239,9 @@ class MgpImporter:
     tokens=string.split(command,' ')
     self.textColor=string.replace(tokens[1].strip(),'"', '') #strip quotes
     #print self.textColor
+
+  def __handleBar(self,command):
+    tokens=string.split(command,' ')
 
   def __setPaper(self,parent):
     paperElem=self.document.createElement("PAPER")
@@ -312,14 +314,14 @@ class MgpImporter:
             self.__setTextColor(command)
           elif (command.startswith('back')):              #background color
             self.__setBgColor(command)
+          elif (command.startswith('bar')):               #horizontal line
+            self.__handleBar(command)
           elif (command.startswith('nodefault')):         #use default page values?
             self.useDefault=0
           else:
             continue
       else:
         self.__handleText(line)                           #text
-
-    self.__handlePage(objsElem, bgElem)                   #flush the last page
 
     rootElem.appendChild(bgElem)
     rootElem.appendChild(objsElem)
