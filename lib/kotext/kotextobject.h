@@ -114,6 +114,7 @@ public:
 
     KCommand *setRelativeTextSizeCommand( double _size );
 
+    KCommand *setOffsetFromBaseLine( int _offset );
 
     QColor textColor() const;
     QFont textFont() const;
@@ -139,7 +140,7 @@ public:
     bool textSuperScript() const;
     bool textShadow() const;
     double relativeTextSize() const;
-
+    int offsetFromBaseLine()const;
 };
 
 /**

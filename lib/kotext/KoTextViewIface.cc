@@ -140,6 +140,16 @@ void KoTextViewIface::setTextShadow( bool _shadow)
     delete cmd;
 }
 
+double KoTextViewIface::relativeTextSize() const
+{
+    return m_textView->relativeTextSize();
+}
+
+void KoTextViewIface::setRelativeTextSize( double _size)
+{
+    KCommand *cmd=m_textView->setRelativeTextSizeCommand(_size);
+    delete cmd;
+}
 
 void KoTextViewIface::setUnderlineColor( const QColor & color )
 {

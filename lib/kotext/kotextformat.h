@@ -48,6 +48,7 @@ public:
     // m_refWidths[ 256 ] would speed things up too, but ushort might not be enough for it
     bool m_bShadowText;
     float m_relativeTextSize;
+    int m_offsetFromBaseLine;
 };
 
 
@@ -61,7 +62,7 @@ public:
     int compare( const KoTextFormat & format ) const;
 
     /** Extending the base KoTextFormat enum */
-    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 , SpellCheckingLanguage = 4096, ShadowText = 8192 };
+    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 , SpellCheckingLanguage = 4096, ShadowText = 8192, OffsetFromBaseLine = 16384 };
 
     enum UnderlineLineType { U_NONE = 0, U_SIMPLE = 1, U_DOUBLE = 2, U_SIMPLE_BOLD = 3, U_WAVE = 4};
     enum StrikeOutLineType { S_NONE = 0, S_SIMPLE = 1, S_DOUBLE = 2, S_SIMPLE_BOLD = 3};
@@ -105,6 +106,11 @@ public:
 
     double relativeTextSize() const { return d->m_relativeTextSize;}
     void setRelativeTextSize( double _size );
+
+    //we store this offset into as point => int
+    int offsetFromBaseLine() const { return d->m_offsetFromBaseLine;}
+    void setOffsetFromBaseLine( int _offset );
+
 
     bool doubleUnderline() const { return (m_underlineLine==U_DOUBLE ); }
     bool waveUnderline() const { return (m_underlineLine==U_WAVE ); }

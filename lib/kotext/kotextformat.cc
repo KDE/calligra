@@ -105,6 +105,13 @@ void KoTextFormat::setRelativeTextSize( double _size )
     update();
 }
 
+void KoTextFormat::setOffsetFromBaseLine( int _offset )
+{
+    if ( d->m_offsetFromBaseLine == _offset)
+        return;
+    d->m_offsetFromBaseLine = _offset;
+    update();
+}
 
 int KoTextFormat::compare( const KoTextFormat & format ) const
 {
@@ -135,6 +142,8 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::SpellCheckingLanguage;
     if ( shadowText() != format.shadowText() )
         flags |= KoTextFormat::ShadowText;
+    if ( offsetFromBaseLine() != format.offsetFromBaseLine() )
+        flags |= KoTextFormat::OffsetFromBaseLine;
     return flags;
 }
 

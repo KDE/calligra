@@ -2200,6 +2200,11 @@ double KoTextFormatInterface::relativeTextSize() const
     return ( currentFormat()->relativeTextSize());
 }
 
+int KoTextFormatInterface::offsetFromBaseLine()const
+{
+    return ( currentFormat()->offsetFromBaseLine());
+}
+
 
 KoTextFormat::UnderlineLineType KoTextFormatInterface::underlineLineType()const
 {
@@ -2323,6 +2328,13 @@ KCommand *KoTextFormatInterface::setRelativeTextSizeCommand( double _size )
     KoTextFormat format( *currentFormat() );
     format.setRelativeTextSize( _size );
     return setFormatCommand( &format, KoTextFormat::VAlign );
+}
+
+KCommand *KoTextFormatInterface::setOffsetFromBaseLine( int _offset )
+{
+    KoTextFormat format( *currentFormat() );
+    format.setOffsetFromBaseLine( _offset );
+    return setFormatCommand( &format, KoTextFormat::OffsetFromBaseLine );
 }
 
 #if 0

@@ -139,7 +139,7 @@ KoTextFormat::KoTextFormat()
     m_spellCheckLanguage = QString::null;
     d->m_bShadowText = true;
     d->m_relativeTextSize = 0.66;
-
+    d->m_offsetFromBaseLine= 0;
     ////
 //#ifdef DEBUG_COLLECTION
 //    qDebug("KoTextFormat simple ctor, no addRef, no generateKey ! %p",this);
@@ -214,6 +214,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, KoTextFormatCollect
     m_spellCheckLanguage = QString::null;
     d->m_bShadowText = true;
     d->m_relativeTextSize= 0.66;
+    d->m_offsetFromBaseLine = 0;
     ////
     generateKey();
     addRef();
@@ -256,7 +257,7 @@ KoTextFormat::KoTextFormat( const KoTextFormat &f )
     m_spellCheckLanguage = f.m_spellCheckLanguage;
     d->m_bShadowText = f.d->m_bShadowText;
     d->m_relativeTextSize = f.d->m_relativeTextSize;
-
+    d->m_offsetFromBaseLine = f.d->m_offsetFromBaseLine;
     ////
     addRef();
 }
@@ -311,6 +312,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     m_spellCheckLanguage = f.m_spellCheckLanguage;
     d->m_bShadowText = f.d->m_bShadowText;
     d->m_relativeTextSize = f.d->m_relativeTextSize;
+    d->m_offsetFromBaseLine = f.d->m_offsetFromBaseLine;
     ////
     addRef();
     return *this;
@@ -407,7 +409,8 @@ void KoTextFormat::generateKey()
     k += QString::number( (int)d->m_bShadowText);
     k += '/';
     k += QString::number( d->m_relativeTextSize);
-
+    k += '/';
+    k += QString::number( d->m_offsetFromBaseLine);
     ////
 }
 

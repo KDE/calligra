@@ -48,6 +48,7 @@ k_dcop:
     void setUnderlineColor( const QColor & color );
     void setDefaultFormat();
     void setTextShadow( bool _shadow);
+    void setRelativeTextSize( double _size);
 
     QColor textColor() const;
     QString textFontFamily()const;
@@ -62,6 +63,7 @@ k_dcop:
     bool textSubScript() const;
     bool textSuperScript() const;
     bool textShadow() const;
+    double relativeTextSize() const;
 
     void setTextColor(const QColor &color);
     void setTextBackgroundColor(const QColor &);
