@@ -285,6 +285,7 @@ VSelectTool::arrowKeyReleased( Qt::Key key )
 			&view()->part()->document(),
 			dx, dy ),
 		true );
+	updateStatusBar();
 }
 
 void
