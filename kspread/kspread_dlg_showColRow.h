@@ -47,7 +47,7 @@ protected:
   QPushButton* m_pOk;
   QPushButton* m_pClose;
   ShowColRow typeShow;
-
+  QValueList<int> listInt;
 };
 
 #endif

@@ -24,6 +24,7 @@
 #include "kspread_canvas.h"
 #include "kspread_tabbar.h"
 #include "kspread_table.h"
+#include "kspread_util.h"
 #include <kapp.h>
 #include <klocale.h>
 #include <qstringlist.h>
@@ -45,9 +46,9 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
   list=new QListBox(this);
   lay1->addWidget( list );
   if(_type==Column)
-        setCaption( i18n("Number of the hidden column :") );
+        setCaption( i18n("Name of the hidden column:") );
   else if(_type==Row)
-        setCaption( i18n("Number of the hidden row :") );
+        setCaption( i18n("Number of the hidden row:") );
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
@@ -63,17 +64,20 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
 
         QString text;
         QStringList listCol;
-        QValueList<int> listColInt;
         for( ; col; col = col->next() )
-                {
-                if(col->isHide())
-                        listColInt.append(col->column());
-                }
-        qHeapSort(listColInt);
+	  {
+	    if(col->isHide())
+	      listInt.append(col->column());
+	  }
+        qHeapSort(listInt);
         QValueList<int>::Iterator it;
-        for( it = listColInt.begin(); it != listColInt.end(); ++it )
-                listCol+=text.setNum((*it));
-
+        for( it = listInt.begin(); it != listInt.end(); ++it )
+	  {
+	    if(!m_pView->activeTable()->getShowColumnNumber())
+	      listCol+=i18n("Column: %1").arg(util_columnLabel(*it));
+	    else
+	      listCol+=i18n("Column: %1").arg(text.setNum(*it));
+	  }
         list->insertStringList(listCol);
         }
   else if(_type==Row)
@@ -82,26 +86,23 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
 
         QString text;
         QStringList listRow;
-        QValueList<int> listRowInt;
         for( ; row; row = row->next() )
-                {
-                if(row->isHide())
-                        listRowInt.append(row->row());
-                }
-        qHeapSort(listRowInt);
+	  {
+	    if(row->isHide())
+	      listInt.append(row->row());
+	  }
+        qHeapSort(listInt);
         QValueList<int>::Iterator it;
-        for( it = listRowInt.begin(); it != listRowInt.end(); ++it )
-                listRow+=text.setNum((*it));
+        for( it = listInt.begin(); it != listInt.end(); ++it )
+	  listRow+=i18n("Row: %1").arg(text.setNum(*it));
 
         list->insertStringList(listRow);
         }
 
-
   if(!list->count())
-        {
-        m_pOk->setEnabled(false);
-        list->sort();
-        }
+    {
+      m_pOk->setEnabled(false);
+    }
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
@@ -116,22 +117,17 @@ void KSpreadShowColRow::slotDoubleClicked(QListBoxItem *)
 
 void KSpreadShowColRow::slotOk()
 {
+  int num=list->currentItem();
   if( typeShow==Column)
-        {
-        if(list->currentItem()!=-1)
-                {
-                int num=list->currentText().toInt();
-                m_pView->activeTable()->showColumn(num);
-                }
-        }
+    {
+      if(num!=-1)
+	m_pView->activeTable()->showColumn(*listInt.at(num));
+    }
   if( typeShow==Row)
-        {
-        if(list->currentItem()!=-1)
-                {
-                int num=list->currentText().toInt();
-                m_pView->activeTable()->showRow(num);
-                }
-        }
+    {
+      if(num!=-1)
+	m_pView->activeTable()->showRow(*listInt.at(num));
+    }
   accept();
 }
 

@@ -2566,7 +2566,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     width=new KIntNumInput(dlg->widthSize, grp, 10);
     if(dlg->right==0x7FFF && (dlg->right!=dlg->left))
         width->setEnabled(false);
-    width->setRange(20, 400, 1);
+    width->setRange(2, 400, 1);
 
     grid2->addWidget(width,0,1);
     defaultWidth=new QCheckBox(i18n("Default width (60)"),grp);
@@ -2583,7 +2583,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     if(dlg->bottom==0x7FFF && (dlg->bottom!=dlg->top))
         height->setEnabled(false);
 
-    height->setRange(20, 400, 1);
+    height->setRange(2, 400, 1);
     grid2->addWidget(height,0,3);
 
     defaultHeight=new QCheckBox(i18n("Default height (20)"),grp);
