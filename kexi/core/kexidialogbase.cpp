@@ -34,9 +34,6 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &title)
 }
 
 
-KexiDialogBase::~KexiDialogBase()
-{
-}
 
 void KexiDialogBase::registerDialog() {
 	m_parentWindow->registerChild(this);
@@ -68,6 +65,10 @@ void KexiDialogBase::setContextHelp(const QString& caption, const QString& text,
 	m_contextHelpInfo->text=iconName;
 	updateContextHelp();
 
+}
+
+KexiDialogBase::~KexiDialogBase()
+{
 }
 
 #include "kexidialogbase.moc"

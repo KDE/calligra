@@ -132,6 +132,13 @@ class KexiMainWindow : public KMdiMainFrm
 		 */
 		void		activeWindowChanged(KMdiChildView *dlg);
 
+		/**
+		 * this slot is called if a window gets colsed
+		 * and will unregister stuff
+		 */
+		void		childClosed(KMdiChildView *dlg);
+
+
 		//! Shows an error message signaled by project's objects, connections, etc.
 		void slotShowErrorMessageFor(const QString&,KexiDB::Object *obj);
 
