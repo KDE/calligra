@@ -5,5 +5,8 @@ This is the new kformula library, it will use code from old koffice/kformula
 it will be used by kformula part and in the future it may replace the 
 libkformula.
 
+To test the library do
+make kformulatest
+./kformulatest
 
 See DESIGN to know the structure of the formulas
