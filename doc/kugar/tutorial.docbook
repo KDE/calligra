@@ -148,7 +148,7 @@ report items.
 You can now add items to the sections on the report. Five different types of
 items can be added to the report. <link linkend="label-element">Label</link>
 is a rectangular area that can have borders and can be filled by
-any kind of textual data. Label text and background colors, aswell as fonts,
+any kind of textual data. Label text and background colors, as well as fonts,
 can be changed. Border line types and line colors are also
 customizable. <link linkend="field-element">Field</link> can be placed
 on to a detail section. Fields represent data fields; their values
