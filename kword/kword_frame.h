@@ -364,6 +364,9 @@ public:
 
     void enableDrawing( bool f ) { _enableDrawing = f; }
 
+    virtual void save( ostream &out );
+    virtual void load( KOMLParser&, vector<KOMLAttrib>& );
+
 protected:
     KWordFrame *frame;
     KWordChild *child;
