@@ -233,7 +233,7 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 -use one and multi-key relations from kexidb
 
 === Table View TODO ====
-- combobox tv: fix row highlighting for 'related table data' model
+- do not accept when enterind "-" for unsigned numeric types
 - add a functions for moving/cutting/copying/pasting rows
 - extended support for enums (combo boxes)
 - add top-left button that allow select all rows
@@ -316,6 +316,9 @@ CCPASTEUR:
 	-perhaps we'd reuse KDE Menu editor GUI?
 
 === KexiDB TODO ===
+- Connection::alterTableName():
+--alter table name for server DB backends!
+--what about objects (queries/forms) that use old name?
 - PGSQL: use setval(sequence) to allow setting autonumber values by hand
    http://www.postgresql.org/docs/7.4/interactive/functions-sequence.html
 - optioanlly, introduce EDITABLE_AUTONUMBER_FIELDS driver flag
@@ -386,6 +389,7 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 -improve sql parser
 -improve sql gui designer
 --criteria
+---add saving for criteria
 --totals (sum, avg)
 -simple docs
 -add newly created table to tables list in query designer
@@ -407,11 +411,24 @@ TableView
 	d->pEditor and calling startEditCurrentCell() only if it's present
 - Empty row is appended on row deletion when 'spreadsheet mode' is on.
 - fixed setting row numbers in record navigator for empty data sets
+- fixed editing large FP numbers (removed scientific mode)
 SQL Parser
 - added Date/DateTime/Time types support to ConstExpr 
   (parser does not operate on these constants yet)
 Query Designer
 - added support for Date/DateTime/Time criterias
+Table Designer
+- some properties are hidden for KEXI_NO_UNFINISHED
+Main
+- BUG: 89381 proposed fix, please test
+- Browser: added override for Key_Delete (items removing)
+KexiDB
+- DriverBehaviour: QString AUTO_INCREMENT_PK_FIELD_OPTION and 
+  bool AUTO_INCREMENT_REQUIRES_PK added. This fixes problem with 
+  pgsql sequences.
+- Connection:
+--fixed generationg 'create table' statements.
+--added drv_dropTable(), drv_alterTableName().
 
 2004-11-02
 Main

@@ -25,6 +25,7 @@
 #include <qmap.h>
 
 #include "kexi.h"
+#include "tristate.h"
 
 class KexiMainWindow;
 class KActionCollection;
@@ -85,7 +86,7 @@ class KEXICORE_EXPORT Part : public QObject
 		 You shouldn't use by hand transactions here.
 
 		 Default implementation does nothing and returns true. */
-		virtual bool rename(KexiMainWindow * /*win*/, KexiPart::Item & /*item*/, 
+		virtual tristate rename(KexiMainWindow * /*win*/, KexiPart::Item & /*item*/, 
 			const QString& /*newName*/)
 			{ return true; }
 
