@@ -58,14 +58,6 @@ public:
     QString pwDiv;
   };
 
-  //point structure
-  struct PointStruct
-  {
-    CoordStruct x;
-    CoordStruct y;
-    AttribStruct attrib;
-  };
-
   // structure of signs
   struct Sign
   {
@@ -179,11 +171,8 @@ protected:
   Sign *signPtr;
   Value *valuePtr;
 
-  // list of lines and points and pointer to a point
+  // list of lines
   QStringList lines;
-  QList<PointStruct> pointList;
-  PointStruct *pntPtr;
-
 };
 
 #endif //ATFINTERP_H

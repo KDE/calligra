@@ -40,7 +40,6 @@ ATFInterpreter::ATFInterpreter() {
 ATFInterpreter::~ATFInterpreter()
 {
     coordList.setAutoDelete(true);
-    pointList.setAutoDelete(true);
 }
 
 /*====================== load autoform ===========================*/
@@ -51,7 +50,6 @@ void ATFInterpreter::load(const QString & fileName)
 
     coordList.clear();
     lines.clear();
-    pointList.clear();
 
     if (ptA.open(IO_ReadOnly))
     {
@@ -193,8 +191,7 @@ void ATFInterpreter::interpret()
 
     level.push(LEVEL_NULL);
 
-    unsigned int i = 0;
-    for (QStringList::Iterator it=lines.begin(); it!=lines.end(); ++it, ++i)
+    for (QStringList::Iterator it=lines.begin(); it!=lines.end(); ++it)
     {
         if (!(*it).isEmpty() && (*it).at(0) != COMMENT)
         {
@@ -204,7 +201,6 @@ void ATFInterpreter::interpret()
                 {
                     coordPtr = new Coord;
                     level.push(LEVEL_POINT);
-                    pntPtr = new PointStruct;
                 }
             }
             else if (level.top() == LEVEL_POINT)
@@ -219,7 +215,6 @@ void ATFInterpreter::interpret()
                 {
                     level.pop();
                     coordList.append(coordPtr);
-                    pointList.append(pntPtr);
                 }
             }
             else if (level.top() == LEVEL_X || level.top() == LEVEL_Y || level.top() == LEVEL_ATTR)
@@ -263,13 +258,13 @@ void ATFInterpreter::interpret()
                 } break;
                 case VAR_VARIA:
                 {
-                    if ((*it).at(2) == '0') v = false;
+                    if ((*it).find('0') != -1) v = false;
                     else v = true;
                     attrib.isVariable = (*it);
                 } break;
                 case VAR_PW:
                 {
-                    pw = 1; pw = ((*it).at(2)).latin1() - 48;
+                    pw = 1; pw = ((*it).at(4)).latin1() - 48;
                     attrib.pwDiv = (*it);
                 } break;
                 case '}':
@@ -279,7 +274,6 @@ void ATFInterpreter::interpret()
                     case LEVEL_X:
                     {
                         coordPtr->pntX = value;
-                        pntPtr->x = coord;
                         coord.a = QString::null;
                         coord.b = QString::null;
                         coord.c = QString::null;
@@ -291,7 +285,6 @@ void ATFInterpreter::interpret()
                     case LEVEL_Y:
                     {
                         coordPtr->pntY = value;
-                        pntPtr->y = coord;
                         coord.a = QString::null;
                         coord.a = QString::null;
                         coord.b = QString::null;
@@ -307,7 +300,6 @@ void ATFInterpreter::interpret()
                         coordPtr->pwDiv = pw;
                         pw = 1;
                         v = false;
-                        pntPtr->attrib = attrib;
                         attrib.isVariable = QString::null;
                         attrib.pwDiv = 1;
                     } break;
