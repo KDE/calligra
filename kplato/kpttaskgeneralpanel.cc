@@ -42,6 +42,11 @@ KPTTaskGeneralPanel::KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *wor
     : KPTTaskGeneralPanelBase(p, n),
       m_task(task)
 {
+    setStartValues(task, workTime);
+    namefield->setFocus();
+}
+
+void KPTTaskGeneralPanel::setStartValues(KPTTask &task, KPTStandardWorktime *workTime) {
     namefield->setText(task.name());
     leaderfield->setText(task.leader());
     descriptionfield->setText(task.description());
@@ -73,11 +78,7 @@ KPTTaskGeneralPanel::KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *wor
     setEstimate(task.effort()->expected()); 
     setOptimistic(task.effort()->optimisticRatio());
     setPessimistic(task.effort()->pessimisticRatio());
-    
-    namefield->setFocus();
-    
 }
-
 
 KMacroCommand *KPTTaskGeneralPanel::buildCommand(KPTPart *part) {
     KMacroCommand *cmd = new KMacroCommand(i18n("Modify Task"));
@@ -85,15 +86,16 @@ KMacroCommand *KPTTaskGeneralPanel::buildCommand(KPTPart *part) {
 
     KPTDuration dt = KPTDuration();
 
-    if (m_task.name() != namefield->text()) {
+    if (!namefield->isHidden() && m_task.name() != namefield->text()) {
         cmd->addCommand(new KPTNodeModifyNameCmd(part, m_task, namefield->text()));
         modified = true;
     }
-    if (m_task.leader() != leaderfield->text()) {
+    if (!leaderfield->isHidden() && m_task.leader() != leaderfield->text()) {
         cmd->addCommand(new KPTNodeModifyLeaderCmd(part, m_task, leaderfield->text()));
         modified = true;
     }
-    if (m_task.description() != descriptionfield->text()) {
+    if (!descriptionfield->isHidden() && 
+        m_task.description() != descriptionfield->text()) {
         cmd->addCommand(new KPTNodeModifyDescriptionCmd(part, m_task, descriptionfield->text()));
         modified = true;
     }
@@ -112,7 +114,7 @@ KMacroCommand *KPTTaskGeneralPanel::buildCommand(KPTPart *part) {
         cmd->addCommand(new KPTNodeModifyConstraintEndTimeCmd(part, m_task, endTime()));
         modified = true;
     }
-    if (idfield->text() != m_task.id()) {
+    if (!idfield->isHidden() && idfield->text() != m_task.id()) {
         
         cmd->addCommand(new KPTNodeModifyIdCmd(part, m_task, idfield->text()));
         modified = true;

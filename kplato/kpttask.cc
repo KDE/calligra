@@ -36,7 +36,9 @@ namespace KPlato
 KPTTask::KPTTask(KPTNode *parent) : KPTNode(parent), m_resource() {
     m_resource.setAutoDelete(true);
     KPTDuration d(1, 0, 0);
-    m_effort = new KPTEffort(d) ;
+    m_effort = new KPTEffort(d);
+    m_effort->setOptimisticRatio(-10);
+    m_effort->setPessimisticRatio(20);
     m_requests = 0;
 
     if (m_parent)

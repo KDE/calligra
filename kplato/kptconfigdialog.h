@@ -3,7 +3,7 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation;
+   License as published by the Free Software Foundation; 
    version 2 of the License.
 
    This library is distributed in the hope that it will be useful,
@@ -17,38 +17,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPTTASKGENERALPANEL_H
-#define KPTTASKGENERALPANEL_H
+#ifndef KPTCONFIGDIALOG_H
+#define KPTCONFIGDIALOG_H
 
-#include "kpttaskgeneralpanelbase.h"
+#include <kdialogbase.h>
 
-class KMacroCommand;
+class QWidget;
 
 namespace KPlato
 {
 
-class KPTTaskGeneralPanel;
-class KPTRequestResourcesPanel;
-class KPTPart;
+class KPTTaskDefaultPanel;
 class KPTTask;
-class KPTStandardWorktime;
 
-class KPTTaskGeneralPanel : public KPTTaskGeneralPanelBase {
+class KPTConfigDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
+    KPTConfigDialog(KPTTask &task, QWidget *parent=0, const char *name=0);
 
-    KMacroCommand *buildCommand(KPTPart *part);
-
-    bool ok();
-
-public:
-    void setStartValues(KPTTask &task, KPTStandardWorktime *workTime=0);
+protected slots:
+    void slotApply();
+    void slotOk();
+    void slotDefault();
+    void slotChanged();
     
 private:
-    KPTTask &m_task;
+    KPTTaskDefaultPanel *m_taskDefaultPage;
+
 };
 
 } //KPlato namespace
 
-#endif // KPTTASKGENERALPANEL_H
+#endif // KPTCONFIGDIALOG_H

@@ -17,38 +17,25 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPTTASKGENERALPANEL_H
-#define KPTTASKGENERALPANEL_H
+#ifndef KPTTASKDEFAULTPANEL_H
+#define KPTTASKDEFAULTPANEL_H
 
-#include "kpttaskgeneralpanelbase.h"
+#include "kpttaskgeneralpanel.h"
 
-class KMacroCommand;
 
 namespace KPlato
 {
 
-class KPTTaskGeneralPanel;
-class KPTRequestResourcesPanel;
-class KPTPart;
 class KPTTask;
 class KPTStandardWorktime;
 
-class KPTTaskGeneralPanel : public KPTTaskGeneralPanelBase {
+class KPTTaskDefaultPanel : public KPTTaskGeneralPanel {
     Q_OBJECT
 public:
-    KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
+    KPTTaskDefaultPanel(KPTTask &task, KPTStandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
 
-    KMacroCommand *buildCommand(KPTPart *part);
-
-    bool ok();
-
-public:
-    void setStartValues(KPTTask &task, KPTStandardWorktime *workTime=0);
-    
-private:
-    KPTTask &m_task;
 };
 
 } //KPlato namespace
 
-#endif // KPTTASKGENERALPANEL_H
+#endif // KPTTASKDEFAULTPANEL_H

@@ -162,6 +162,7 @@ void KPTTaskGeneralPanelBase::setEstimateType( int type)
 
 void KPTTaskGeneralPanelBase::checkAllFieldsFilled()
 {
+    emit changed();
     emit obligatedFieldsFilled(!namefield->text().isEmpty() && !idfield->text().isEmpty());
 }
 

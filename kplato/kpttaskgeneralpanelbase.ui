@@ -44,7 +44,7 @@
                         </property>
                         <widget class="QLabel">
                             <property name="name">
-                                <cstring>textLabel1</cstring>
+                                <cstring>namelabel</cstring>
                             </property>
                             <property name="text">
                                 <string>Name</string>
@@ -55,7 +55,7 @@
                         </widget>
                         <widget class="QLabel">
                             <property name="name">
-                                <cstring>textLabel2</cstring>
+                                <cstring>idlabel</cstring>
                             </property>
                             <property name="text">
                                 <string>Task id</string>
@@ -94,7 +94,7 @@
                                 </widget>
                                 <widget class="QLabel">
                                     <property name="name">
-                                        <cstring>textLabel5</cstring>
+                                        <cstring>leaderlabel</cstring>
                                     </property>
                                     <property name="text">
                                         <string>Responsible</string>
@@ -402,7 +402,7 @@
                         </property>
                         <widget class="QLabel">
                             <property name="name">
-                                <cstring>textLabel6</cstring>
+                                <cstring>descriptionlabell6</cstring>
                             </property>
                             <property name="text">
                                 <string>Note</string>
@@ -579,6 +579,7 @@
 <signals>
     <signal>obligatedFieldsFilled( bool )</signal>
     <signal>schedulingTypeChanged( int )</signal>
+    <signal>changed();</signal>
 </signals>
 <slots>
     <slot>setSchedulingType( int type )</slot>

@@ -79,6 +79,7 @@
 #include "kptcalendarlistdialog.h"
 #include "kptstandardworktimedialog.h"
 #include "kptcanvasitem.h"
+#include "kptconfigdialog.h"
 
 #include "KDGanttView.h"
 #include "KDGanttViewTaskItem.h"
@@ -425,8 +426,11 @@ void KPTView::slotAddMilestone() {
     delete dia;
 }
 
- void KPTView::slotConfigure() {
-
+void KPTView::slotConfigure() {
+    //kdDebug()<<k_funcinfo<<endl;
+    KPTConfigDialog *dia = new KPTConfigDialog(getProject().defaultTask());
+    dia->exec();
+    delete dia;
 }
 
 KPTNode *KPTView::currentTask()

@@ -17,38 +17,29 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPTTASKGENERALPANEL_H
-#define KPTTASKGENERALPANEL_H
+#include "kpttaskdefaultpanel.h"
 
-#include "kpttaskgeneralpanelbase.h"
+#include <klocale.h>
+#include <kcommand.h>
+#include <klineedit.h>
 
-class KMacroCommand;
+#include <qlabel.h>
+
+#include <kdebug.h>
 
 namespace KPlato
 {
 
-class KPTTaskGeneralPanel;
-class KPTRequestResourcesPanel;
-class KPTPart;
-class KPTTask;
-class KPTStandardWorktime;
+KPTTaskDefaultPanel::KPTTaskDefaultPanel(KPTTask &task, KPTStandardWorktime *workTime, QWidget *parent, const char *n)
+    : KPTTaskGeneralPanel(task, workTime, parent, n)
+{
+    namefield->hide();
+    namelabel->hide();
+    idfield->hide();
+    idlabel->hide();
+}
 
-class KPTTaskGeneralPanel : public KPTTaskGeneralPanelBase {
-    Q_OBJECT
-public:
-    KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
 
-    KMacroCommand *buildCommand(KPTPart *part);
+}  //KPlato namespace
 
-    bool ok();
-
-public:
-    void setStartValues(KPTTask &task, KPTStandardWorktime *workTime=0);
-    
-private:
-    KPTTask &m_task;
-};
-
-} //KPlato namespace
-
-#endif // KPTTASKGENERALPANEL_H
+#include "kpttaskdefaultpanel.moc"
