@@ -78,6 +78,11 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                                      SLOT( ringChart() ), actionCollection(),
                                      "ringchart");
     m_chartring->setExclusiveGroup( "charttypes" );
+    //Laurent for koffice 1.2 change icon
+    m_chartpolar = new KToggleAction( i18n("&Polar"), "ring", 0, this,
+                                     SLOT( polarChart() ), actionCollection(),
+                                     "polarchart");
+    m_chartpolar->setExclusiveGroup( "charttypes" );
 
     // initialize the configuration
     //    loadConfig();
@@ -266,6 +271,13 @@ void KChartView::ringChart()
 {
     KDChartParams* params = ((KChartPart*)koDocument())->params();
     params->setChartType( KDChartParams::Ring );
+    repaint();
+}
+
+void KChartView::polarChart()
+{
+    KDChartParams* params = ((KChartPart*)koDocument())->params();
+    params->setChartType( KDChartParams::Polar );
     repaint();
 }
 
