@@ -30,6 +30,7 @@
   </Menu>
   <Action name="typeleft"/>
   <Action name="typeright"/>
+<!--
   <Menu name="VA"><text>Vertical align</text>
    <Action name="fracup"/>
    <Action name="fracmiddle"/>
@@ -51,10 +52,13 @@
    <Action name="matrixremrow"/>
    <Action name="matrixremcol"/>
   </Menu>
+-->
 
   <Action name="fracmidline"/>
   <Action name="removeenclosing"/>
+  <Action name="makegreek"/>
  </Menu>
+<!--
  <Menu name="Font"><text>Font</text>
   <Action name="textfont"/>
   <Action name="textsize"/>
@@ -69,6 +73,7 @@
 
   </Menu>
  </Menu>
+-->
 
 </MenuBar>
 
@@ -97,7 +102,11 @@
   <Action name="addlowerleft"/>
   <Action name="addupperright"/>
   <Action name="addlowerright"/>
+
+  <Action name="typeleft"/>
+  <Action name="typeright"/>
  </ToolBar>
+<!--
  <ToolBar name="Font"><Text>Font</Text>
   <Action name="textfont"/>
   <Action name="textsize"/>
@@ -110,6 +119,8 @@
   <Action name="fontnext"/>
 
  </ToolBar>
+-->
+<!--
  <ToolBar name="Element"><Text>Element</Text>
   <Action name="textsplit"/>
   <Action name="rootindex"/>
@@ -132,5 +143,5 @@
   <Action name="matrixremrow"/>
   <Action name="matrixremcol"/>
  </ToolBar>
-
+-->
 </kpartgui>
