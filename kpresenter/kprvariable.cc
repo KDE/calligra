@@ -25,10 +25,27 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+
+KPrVariableCollection::KPrVariableCollection()
+    : KoVariableCollection()
+{
+}
+
+KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc )
+{
+    KPresenterDoc*m_doc=static_cast<KPresenterDoc*>(doc);
+    KoVariable *var=0L;
+    if(type ==VT_PGNUM)
+        var = new KPrPgNumVariable( textdoc,subtype, coll->format( "NUMBER" ),this,m_doc  );
+    else
+        var = KoVariableCollection::createVariable( type, subtype,  coll,varFormat, textdoc,doc);
+    return var;
+}
+
 /******************************************************************/
 /* Class: KPrPgNumVariable                                         */
 /******************************************************************/
-KPrPgNumVariable::KPrPgNumVariable( KPrTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KPresenterDoc *doc  )
+KPrPgNumVariable::KPrPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KPresenterDoc *doc  )
     : KoPgNumVariable( textdoc, subtype, varFormat ,_varColl ),m_doc(doc)
 {
 }

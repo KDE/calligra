@@ -118,6 +118,7 @@
 
 #include <koSearchDia.h>
 #include "searchdia.h"
+#include <kprvariable.h>
 
 #define DEBUG
 

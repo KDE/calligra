@@ -32,13 +32,20 @@ namespace Qt3 {
 class QTextFormat;
 }
 
+class KPrVariableCollection : public KoVariableCollection 
+{
+ public:
+    KPrVariableCollection();
+    virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc );
+};
+
 /**
  * "current page number" and "number of pages" variables
  */
 class KPrPgNumVariable : public KoPgNumVariable
 {
 public:
-    KPrPgNumVariable( KPrTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KPresenterDoc *doc );
+    KPrPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl, KPresenterDoc *doc );
 
     virtual void recalc();
     virtual QString text();

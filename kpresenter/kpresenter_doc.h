@@ -31,7 +31,7 @@ class KoAutoFormat;
 class KoUnit;
 class KoVariable;
 class KoVariableFormatCollection;
-class KoVariableCollection;
+class KPrVariableCollection;
 
 #include <koDocument.h>
 #include <koDocumentChild.h>
@@ -53,6 +53,7 @@ class KoVariableCollection;
 #include <kpclipartcollection.h>
 #include <koUnit.h>
 #include <kozoomhandler.h>
+//#include "kprvariable.h"
 class KoDocumentEntry;
 class KPFooterHeaderEditor;
 class KPTextObject;
@@ -362,7 +363,7 @@ public:
     KoVariableFormatCollection *variableFormatCollection() { return m_varFormatCollection; }
 
     void recalcVariables( int type );
-    KoVariableCollection *getVariableCollection() {return m_varColl;}
+    KPrVariableCollection *getVariableCollection() {return m_varColl;}
 
     void refreshMenuCustomVariable();
 
@@ -514,7 +515,7 @@ protected:
     int m_maxRecentFiles;
 
     KoVariableFormatCollection *m_varFormatCollection;
-    KoVariableCollection *m_varColl;
+    KPrVariableCollection *m_varColl;
 
     // For NoteBar
     QStringList noteTextList;

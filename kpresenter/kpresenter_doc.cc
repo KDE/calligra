@@ -83,6 +83,7 @@
 
 #include <koVariable.h>
 #include <koDocumentInfo.h>
+#include "kprvariable.h"
 
 using namespace std;
 
@@ -136,7 +137,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_zoomHandler = new KoZoomHandler;
 
     m_varFormatCollection = new KoVariableFormatCollection;
-    m_varColl=new KoVariableCollection;
+    m_varColl=new KPrVariableCollection;
 
     dcop = 0;
     m_kpresenterView = 0;

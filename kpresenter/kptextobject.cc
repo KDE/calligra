@@ -1318,14 +1318,8 @@ void KPTextView::insertVariable( int type, int subtype )
         if ( dia.exec() == QDialog::Accepted )
             var = new KoCustomVariable( textObject()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection() );
     }
-    else if(type ==VT_PGNUM)
-    {
-        //force to recalc variable
-        kpTextObject()->recalcPageNum( doc );
-        var = new KPrPgNumVariable( kpTextObject()->textDocument(),subtype, doc->variableFormatCollection()->format( "NUMBER" ),doc->getVariableCollection(),doc  );
-    }
     else
-        var = KoVariable::createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textObject()->textDocument(),doc,doc->getVariableCollection());
+        var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textObject()->textDocument(),doc);
 
     insertVariable( var );
 }
