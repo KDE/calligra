@@ -18,6 +18,7 @@
 */
 
 #include <kprinter.h>
+#include <kaccel.h>
 #include <qpainter.h>
 #include <qscrollbar.h>
 #include <qpopupmenu.h>
