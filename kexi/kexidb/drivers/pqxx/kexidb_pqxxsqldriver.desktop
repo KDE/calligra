@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=PostgreSQL
+Comment=PostgreSQL is better then mySQL :)
+X-KDE-Library=kexidb_pqxxsqldriver
+ServiceTypes=Kexi/DBDriver
+Type=Service
+InitialPreference=8
+MimeType=text/plain
+X-Kexi-Location=RemoteDB
+X-Kexi-DriverName=pqxxSql
