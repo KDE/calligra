@@ -671,9 +671,11 @@ bool QTextCursor::place( const QPoint &pos, QTextParag *s )
     while ( s ) {
 	r = s->rect();
 	r.setWidth( doc ? doc->width() : QWIDGETSIZE_MAX );
-	if ( r.contains( pos ) || !s->next() )
+	if ( r.contains( pos ) )
 	    break;
 	s = s->next();
+        if ( !s )
+            break;
     }
 
     if ( !s )
