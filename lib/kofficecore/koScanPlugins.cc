@@ -22,13 +22,12 @@
 #include "koView.h"
 
 #include <opUIUtils.h>
-#include <kstring.h>
 #include <qmsgbox.h>
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <dirent.h>    
+#include <dirent.h>
 #include <sys/stat.h>
 #include <assert.h>
 
@@ -48,7 +47,7 @@ void koScanPlugins()
   CORBA::Object_var obj = opapp_orb->resolve_initial_references ("ImplementationRepository");
   CORBA::ImplRepository_var imr = CORBA::ImplRepository::_narrow( obj );
   assert( !CORBA::is_nil( imr ) );
-  
+
   koScanPlugins( imr );
 }
 
@@ -60,7 +59,7 @@ void koScanPlugins( CORBA::ImplRepository_ptr _imr )
 }
 
 void koScanPlugins( const char* _path, CORBA::ImplRepository_ptr _imr )
-{   
+{
   if ( g_plstPluginEntries == 0L )
     g_plstPluginEntries = new QList<KoPluginEntry>;
 
@@ -69,7 +68,7 @@ void koScanPlugins( const char* _path, CORBA::ImplRepository_ptr _imr )
   dp = opendir( _path );
   if ( dp == 0L )
     return;
-  
+
   // Loop thru all directory entries
   while ( ( ep = readdir( dp ) ) != 0L )
   {
@@ -98,7 +97,7 @@ void koScanPlugins( const char* _path, CORBA::ImplRepository_ptr _imr )
       }
     }
   }
-  
+
   closedir( dp );
 }
 
@@ -106,7 +105,7 @@ void koScanPluginFile( const char* _file, CORBA::ImplRepository_ptr _imr )
 {
   KSimpleConfig config( _file, true );
   config.setGroup( "KDE Desktop Entry" );
-  
+
   QString type = config.readEntry( "Type" );
   if ( type.isEmpty() )
   {
@@ -132,7 +131,7 @@ void koScanPluginFile( const char* _file, CORBA::ImplRepository_ptr _imr )
     return;
   }
   bool guiplugin = true;
-  
+
   QString cmd = config.readEntry( "Exec" );
   if ( cmd.isEmpty() )
   {
@@ -168,7 +167,7 @@ void koScanPluginFile( const char* _file, CORBA::ImplRepository_ptr _imr )
     if ( name.isEmpty() )
       return;
   }
-  
+
   QString comment = config.readEntry( "Comment" );
   if ( comment.isEmpty() )
     comment = name.data();
@@ -178,7 +177,7 @@ void koScanPluginFile( const char* _file, CORBA::ImplRepository_ptr _imr )
     koScanPluginsError( _file, "ActivationMode" );
     return;
   }
-  
+
   imr_create( name, mode, cmd, repoids, _imr );
 
   KoPluginEntry* plugin = new KoPluginEntry( name, cmd, mode, comment, icon, miniicon, guiplugin, repoids );
@@ -205,7 +204,7 @@ void koScanPluginFile( const char* _file, CORBA::ImplRepository_ptr _imr )
       koScanPluginsError( _file, tmp );
       continue;
     }
-    
+
     KoPluginEntry::Entry e;
     e.m_strIcon = icon;
     e.m_strMiniIcon = miniicon;
@@ -243,7 +242,7 @@ void koScanPluginFile( const char* _file, CORBA::ImplRepository_ptr _imr )
       koScanPluginsError( _file, tmp );
       continue;
     }
-    
+
     KoPluginEntry::Entry e;
     e.m_strIcon = icon;
     e.m_strMiniIcon = miniicon;
@@ -253,7 +252,7 @@ void koScanPluginFile( const char* _file, CORBA::ImplRepository_ptr _imr )
 
     plugin->addToolBarEntry( e );
   }
-  
+
   g_plstPluginEntries->append( plugin );
 }
 
@@ -268,7 +267,7 @@ KoPluginEntry::KoPluginEntry( const char *_name, const char *_exec, const char *
   m_strlstRepoID = _repos;
   m_strIcon = _icon;
   m_strMiniIcon = _miniicon;
-  
+
   m_lstMenuEntries.setAutoDelete( false );
   m_lstToolBarEntries.setAutoDelete( false );
 }
@@ -276,7 +275,7 @@ KoPluginEntry::KoPluginEntry( const char *_name, const char *_exec, const char *
 QListIterator<KoPluginEntry> KoPluginEntry::plugins()
 {
   assert( g_plstPluginEntries != 0L );
-  
+
   return QListIterator<KoPluginEntry>( *g_plstPluginEntries );
 }
 
@@ -297,26 +296,26 @@ KoPluginCallback::KoPluginCallback( KoPluginProxy* _proxy, KoPluginEntry::Entry 
   m_pProxy = _proxy;
   m_pEntry = _entry;
 }
-  
+
 void KoPluginCallback::callback()
 {
   KOM::Plugin_var obj = m_pProxy->ref();
   if ( CORBA::is_nil( obj ) )
     return;
-  
+
   CORBA::Request_var _req = obj->_request( m_pEntry->m_strSlot );
   _req->result()->value()->type( CORBA::_tc_void );
   _req->invoke();
 }
 
 KoPluginProxy::KoPluginProxy( KoPluginManager *_manager, KoPluginEntry *_entry )
-{  
+{
   m_pManager = _manager;
   m_pEntry = _entry;
-  
+
   m_lstToolBarCallbacks.setAutoDelete( false );
   m_lstMenuBarCallbacks.setAutoDelete( false );
-  
+
   QListIterator<KoPluginEntry::Entry> it = _entry->toolBarEntries();
   for( ; it.current() != 0L; ++it )
   {
@@ -341,10 +340,10 @@ void KoPluginProxy::cleanUp()
   for( ; it.current() != 0L; ++it )
     CORBA::release( it );
   m_lstToolBarCallbacks.clear();
-  
+
   it = m_lstMenuBarCallbacks;
   for( ; it.current() != 0L; ++it )
-    CORBA::release( it );  
+    CORBA::release( it );
   m_lstMenuBarCallbacks.clear();
 }
 
@@ -352,7 +351,7 @@ KOM::Plugin_ptr KoPluginProxy::ref()
 {
   if ( !CORBA::is_nil( m_vPlugin ) )
     return KOM::Plugin::_duplicate( m_vPlugin );
-  
+
   const char *repoid = m_pEntry->repoID().current();
   assert( repoid );
   cerr << "Creating " << repoid << endl;
@@ -361,43 +360,43 @@ KOM::Plugin_ptr KoPluginProxy::ref()
   if ( CORBA::is_nil( obj ) )
   {
     QString tmp;
-    ksprintf( &tmp, i18n("Could not activate plugin %s"), m_pEntry->name() );
+    tmp.sprintf( i18n("Could not activate plugin %s").ascii(), m_pEntry->name() );
     QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
     return 0L;
   }
-  
+
   cerr << "Got factory" << endl;
-  
+
   KOM::PluginFactory_var factory = KOM::PluginFactory::_narrow( obj );
   if ( CORBA::is_nil( factory ) )
   {
     QString tmp;
-    ksprintf( &tmp, i18n("%s is not a plugin"), m_pEntry->name() );
+    tmp.sprintf( i18n("%s is not a plugin").ascii(), m_pEntry->name() );
     QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
     return 0L;
   }
-  
+
   cerr << "Narrow ok" << endl;
-  
+
   KOM::Component_var comp = m_pManager->view();
   m_vPlugin = factory->create( comp );
   if ( CORBA::is_nil( m_vPlugin ) )
-  {    
+  {
     QString tmp;
-    ksprintf( &tmp, i18n("Could not create plugin of type %s"), m_pEntry->name() );
+    tmp.sprintf( i18n("Could not create plugin of type %s").ascii(), m_pEntry->name() );
     QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
     return 0L;
   }
 
   cerr << "Plugin ok" << endl;
-  
+
   return KOM::Plugin::_duplicate( m_vPlugin );
 }
 
 KoPluginManager::KoPluginManager()
-{ 
+{
   m_lstPlugins.setAutoDelete( true );
-   
+
   QListIterator<KoPluginEntry> it = KoPluginEntry::plugins();
   for( ; it.current() != 0L; ++it )
   {
@@ -407,8 +406,8 @@ KoPluginManager::KoPluginManager()
 }
 
 KoPluginManager::~KoPluginManager()
-{ 
-  cleanUp();  
+{
+  cleanUp();
 }
 
 void KoPluginManager::cleanUp()
@@ -428,7 +427,7 @@ void KoPluginManager::fillToolBar( OpenPartsUI::ToolBarFactory_ptr _factory )
     m_vToolBar = 0L;
     return;
   }
-  
+
   KoPluginProxy *p;
   for( p = m_lstPlugins.first(); p != 0L; p = m_lstPlugins.next() )
   {
@@ -436,7 +435,7 @@ void KoPluginManager::fillToolBar( OpenPartsUI::ToolBarFactory_ptr _factory )
     for( ; it.current() != 0L; ++it )
     {
       if ( CORBA::is_nil( m_vToolBar ) )
-      {  
+      {
 	m_vToolBar = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 	m_vToolBar->setFullWidth(false);
       }
