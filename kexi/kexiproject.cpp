@@ -44,8 +44,9 @@ KexiProject::loadProject(const QString& path)
 bool 
 KexiProject::initDbConnection(const Credentials &cred)
 {
+	kdDebug() << "using driver " << cred.driver << endl;
 	m_db = QSqlDatabase::addDatabase(cred.driver);
-
+	
 	m_db->setDatabaseName(cred.database);
 	m_db->setUserName(cred.user);
 	m_db->setPassword(cred.password);
