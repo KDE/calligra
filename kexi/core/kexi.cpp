@@ -83,7 +83,7 @@ void Kexi::deleteGlobalObjects()
 }
 
 //temp
-bool _tempShowForms = 0;
+bool _tempShowForms = true;
 bool& Kexi::tempShowForms() { return _tempShowForms; }
 
 
