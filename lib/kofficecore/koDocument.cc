@@ -296,16 +296,8 @@ bool KoDocument::saveFile()
         ret = saveNativeFormat( m_file );
 
     if ( ret )
-    {
-        // Eliminate any auto-save file
-        QString asf = autoSaveFile( m_file ); // the one in the current dir
-        if ( QFile::exists( asf ) )
-            unlink( QFile::encodeName( asf ) );
-        asf = autoSaveFile( QString::null ); // and the one in $HOME
-        if ( QFile::exists( asf ) )
-            unlink( QFile::encodeName( asf ) );
-    }
-
+        removeAutoSaveFiles();
+    
     QApplication::restoreOverrideCursor();
     if ( !ret )
     {
@@ -833,7 +825,7 @@ QString KoDocument::autoSaveFile( const QString & path ) const
         Q_ASSERT( url.isLocalFile() );
         QString dir = url.directory(false);
         QString filename = url.fileName();
-        return dir + '.' + filename + ".autosave" + extension;
+        return dir + "." + filename + ".autosave" + extension;
     }
 }
 
@@ -1393,6 +1385,17 @@ void KoDocument::setErrorMessage( const QString& errMsg )
 bool KoDocument::isAutosaving()
 {
     return d->m_autosaving;
+}
+
+void KoDocument::removeAutoSaveFiles()
+{
+        // Eliminate any auto-save file
+        QString asf = autoSaveFile( m_file ); // the one in the current dir
+        if ( QFile::exists( asf ) )
+            unlink( QFile::encodeName( asf ) );
+        asf = autoSaveFile( QString::null ); // and the one in $HOME
+        if ( QFile::exists( asf ) )
+            unlink( QFile::encodeName( asf ) );
 }
 
 #include <koDocument.moc>

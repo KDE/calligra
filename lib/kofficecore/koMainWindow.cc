@@ -702,6 +702,7 @@ bool KoMainWindow::queryClose()
                   return false;
           }
           case KMessageBox::No :
+              rootDocument()->removeAutoSaveFiles();
               break;
           default : // case KMessageBox::Cancel :
               return false;

@@ -479,7 +479,9 @@ public:
     virtual bool isStoredExtern();
 
     KoPageLayout pageLayout() const { return m_pageLayout; }
-
+    
+    void removeAutoSaveFiles();
+    
 signals:
     /**
      * This signal is emitted, if a direct or indirect child document changes
