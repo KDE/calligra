@@ -267,7 +267,7 @@ public:
   static QList<KSpreadDoc>& documents();
 
   void addAreaName(const QRect &_rect,const QString & name,const QString & tableName);
-  QValueList<Reference> listArea(){return m_refs;}
+  const QValueList<Reference>  & listArea(){return m_refs;}
   void removeArea( const QString &name);
 
   KCompletion & completion(){return listCompletion;}

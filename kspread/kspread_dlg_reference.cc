@@ -33,6 +33,7 @@
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
 #include <qlistbox.h>
+#include <kdebug.h>
 
 KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
 	: QDialog( parent, name,TRUE )
@@ -86,21 +87,23 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
 void KSpreadreference::slotHighlighted(QListBoxItem * )
 {
     QString tmp=list->text(list->currentItem());
-  QString tmpName;
-  QValueList<Reference>::Iterator it;
-  QValueList<Reference> area=m_pView->doc()->listArea();
-  for ( it = area.begin(); it != area.end(); ++it )
+    QString tmpName;
+    QValueList<Reference>::Iterator it;
+    QValueList<Reference> area(m_pView->doc()->listArea());
+    for ( it = area.begin(); it != area.end(); ++it )
     {
-      if((*it).ref_name==tmp)
+        if((*it).ref_name==tmp)
 	{
-	  tmpName=util_rangeName( m_pView->doc()->map()->findTable( (*it).table_name), (*it). rect );
-	  break;
+            if(!m_pView->doc()->map()->findTable( (*it).table_name))
+                kdDebug()<<"(*it).table_name) doesn't find*********\n";
+            else
+                tmpName=util_rangeName( m_pView->doc()->map()->findTable( (*it).table_name), (*it).rect );
+            break;
 	}
     }
 
-  tmpName=i18n("area: %1").arg(tmpName);
-
-  rangeName->setText(tmpName);
+    tmpName=i18n("area: %1").arg(tmpName);
+    rangeName->setText(tmpName);
 }
 
 void KSpreadreference::slotDoubleClicked(QListBoxItem *)
