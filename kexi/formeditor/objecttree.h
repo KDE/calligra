@@ -24,10 +24,10 @@
 #include <qptrlist.h>
 #include <qmap.h>
 #include <qdict.h>
+#include <qvariant.h>
+#include <qstring.h>
 
-class QString;
 class QWidget;
-class QVariant;
 
 namespace KFormDesigner {
 
