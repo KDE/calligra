@@ -49,6 +49,7 @@
 #include <koTemplateChooseDia.h>
 #include <koxmlwriter.h>
 #include <koStoreDevice.h>
+#include <koOasisSettings.h>
 
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
@@ -672,12 +673,19 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter.startElement("config:config-item-set");
     settingsWriter.addAttribute("config:name", "view-settings");
 
+
+    //<config:config-item-map-indexed config:name="Views">
+    settingsWriter.startElement("config:config-item-map-indexed" );
+    settingsWriter.addAttribute("config:name", "Views" );
+
     KoUnit::saveOasis(&settingsWriter, unit());
 
     settingsWriter.startElement("config:config-item-map-entry" );
     saveOasisSettings( settingsWriter );
     settingsWriter.endElement();
 
+
+    settingsWriter.endElement(); //config:config-item-map-indexed
     settingsWriter.endElement(); // config:config-item-set
     settingsWriter.endElement(); // office:settings
     settingsWriter.endElement(); // Root element
@@ -693,9 +701,18 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     return true;
 }
 
-void KSpreadDoc::loadOasisSettings( const QDomElement& setting )
+void KSpreadDoc::loadOasisSettings( const QDomDocument&settingsDoc )
 {
+    if ( settingsDoc.isNull() )
+        return ; //not a error some file doesn't have settings.xml
+    KoOasisSettings settings( settingsDoc );
+    bool tmp = settings.selectItemSet( "view-settings" );
+    kdDebug()<<" settings : view-settings :"<<tmp<<endl;
 
+    if ( tmp )
+    {
+        //todo
+    }
 }
 
 void KSpreadDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
@@ -788,6 +805,8 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         d->isLoading = false;
         return false;
     }
+
+    loadOasisSettings( settings );
 
     emit sigProgress( 90 );
     initConfig();

@@ -32,6 +32,7 @@ class QDomElement;
 class QDomDocument;
 class KoXmlWriter;
 class KoGenStyles;
+class KoOasisSettings;
 
 #include <qcstring.h>
 #include <qptrlist.h>
@@ -61,7 +62,7 @@ public:
   QDomElement save( QDomDocument& doc );
 
     void saveOasisSettings( KoXmlWriter &settingsWriter );
-    void loadOasisSettings( const QDomElement& setting );
+    void loadOasisSettings( KoOasisSettings &settings );
 
     bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles );
 

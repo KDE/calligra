@@ -748,7 +748,7 @@ private:
   void loadPaper( QDomElement const & paper );
 
     void saveOasisSettings( KoXmlWriter &settingsWriter );
-    void loadOasisSettings( const QDomElement& setting );
+    void loadOasisSettings( const QDomDocument&settingsDoc );
 
     KSPLoadingInfo *m_loadingInfo;
 };
