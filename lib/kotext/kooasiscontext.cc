@@ -21,6 +21,7 @@
 #include <koOasisStyles.h>
 #include <koxmlns.h>
 #include <kdebug.h>
+#include <kodom.h>
 
 KoOasisContext::KoOasisContext( KoDocument* doc, KoVariableCollection& varColl,
                                 KoOasisStyles& styles, KoStore* store )
@@ -80,7 +81,7 @@ bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, int level
 
 bool KoOasisContext::pushOutlineListLevelStyle( int level )
 {
-    QDomElement outlineStyle = m_styles.officeStyle().namedItem( "text:outline-style" ).toElement();
+    QDomElement outlineStyle = KoDom::namedItemNS( m_styles.officeStyle(), KoXmlNS::text, "outline-style" );
     Q_ASSERT( !outlineStyle.isNull() );
     return pushListLevelStyle( "<outline-style>", outlineStyle, level );
 }

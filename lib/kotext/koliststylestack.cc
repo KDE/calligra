@@ -1,4 +1,6 @@
 #include "koliststylestack.h"
+#include <kodom.h>
+#include <koxmlns.h>
 
 KoListStyleStack::KoListStyleStack()
     : m_initialLevel( 0 )
@@ -34,5 +36,5 @@ QDomElement KoListStyleStack::currentListStyle() const
 QDomElement KoListStyleStack::currentListStyleProperties() const
 {
     QDomElement style = currentListStyle();
-    return style.namedItem( "style:properties" ).toElement();
+    return KoDom::namedItemNS( style, KoXmlNS::style, "properties" );
 }
