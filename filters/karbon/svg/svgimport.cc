@@ -75,13 +75,13 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
         else
                 strMime="text/plain";
 
-        kdDebug() << "File extension: -" << strExt << "- Compression: " << strMime << endl;
+        kdDebug(30514) << "File extension: -" << strExt << "- Compression: " << strMime << endl;
 
         QIODevice* in = KFilterDev::deviceForFile(fileIn,strMime);
 
         if (!in->open(IO_ReadOnly))
         {
-                kdError() << "Cannot open file! Aborting!" << endl;
+                kdError(30514) << "Cannot open file! Aborting!" << endl;
                 delete in;
                 return KoFilter::FileNotFound;
         }
@@ -93,7 +93,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
         delete in;
 	if ( ! parsed )
 	{
-	        kdError() << "Error while parsing file: "
+	        kdError(30514) << "Error while parsing file: "
 		        << "at line " << line << " column: " << col 
 		        << " message: " << errormessage << endl;
 		// ### TODO: feedback to the user
@@ -106,7 +106,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 	KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
 	if( !out )
 	{
-		kdError(30502) << "Unable to open output file!" << endl;
+		kdError(30514) << "Unable to open output file!" << endl;
 		return KoFilter::StorageCreationError;
 	}
 	QCString cstring = outdoc.toCString(); // utf-8 already
