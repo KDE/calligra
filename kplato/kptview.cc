@@ -84,10 +84,6 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 	m_pertview = new KPTPertView( this, m_tab, layout );
     m_tab->addWidget(m_pertview);
 
-	// HACK: Avoid crash
-	// If gantt view is shown first, we have a crash...
-	m_tab->raiseWidget(m_pertview);
-
     connect(m_tab, SIGNAL(aboutToShow(QWidget *)), this, SLOT(slotChanged(QWidget *)));
 
 	// The menu items
