@@ -78,9 +78,6 @@ bool KisDoc::initDoc()
 
 void KisDoc::setCurrentImage(KisImage *img)
 {
-  if (!img)
-    return;
-
   if (m_pCurrent)
     {
       // disconnect old current image
