@@ -134,10 +134,10 @@ VDrawSelection::visitVPath( VPath &composite )
 
 					if(
 						jtr.current()->prev() &&
-						( jtr.current()->prev()->knotIsSelected() ||
+						( ( jtr.current()->prev()->knotIsSelected() ||
 						  jtr.current()->pointIsSelected( 0 ) ) ||
 						( jtr.current()->prev()->pointIsSelected( 1 ) &&
-						  jtr.current()->prev()->isSmooth() ) )
+						  jtr.current()->prev()->isSmooth() ) ) )
 					{
 						m_painter->newPath();
 						m_painter->moveTo(
