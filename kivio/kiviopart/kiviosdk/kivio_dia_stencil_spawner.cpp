@@ -412,15 +412,19 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 			else if(svgChild.tagName() == "svg:path")
 			{
 				runs++;
+				bool isClosed;
+				QDomElement kivioShape = kivio.createElement("KivioShape");
 				if(svgChild.hasAttribute("d"))
 				{
-					QDomElement kivioShape = kivio.createElement("KivioShape");
+
 					if(svgChild.attribute("d").contains('z') || svgChild.attribute("d").contains('Z'))
 					{
+						isClosed = true;
 						kivioShape.setAttribute("type", "ClosedPath");
 					}
 					else
 					{
+						isClosed = false;
 						kivioShape.setAttribute("type", "OpenPath");
 					}
 
@@ -432,8 +436,35 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 					dpp->parseSVG(svgChild.attribute("d"));
 					delete dpp;
 
-					kivio.documentElement().appendChild(kivioShape);
+
 				}
+
+				if( svgChild.hasAttribute("style"))
+				{
+					// style="stroke: background; stroke-width: 0.8; stroke-miterlimit: 1; stroke-linecap: round; stroke-linejoin: round"
+					// Supported:
+					// stroke-width:
+					// stroke-linejoin: milter, bevel, round
+					// stroke-linecap: round, square, flat
+					// fill: ?
+					QStringList styles = QStringList::split(";", svgChild.attribute("style"));
+					for( uint idx = 0; idx < styles.count(); idx++)
+					{
+						//kdDebug() << "Style: " << styles[idx] << endl;
+						if( isClosed && styles[idx].contains("fill:"))
+						{
+							QDomElement fillStyle = kivio.createElement("KivioFillStyle");
+							if( styles[idx].contains("forground"))
+								fillStyle.setAttribute("color", "#0000");
+							else if (styles[idx].contains("background"))
+								fillStyle.setAttribute("color", "#ffff");
+
+							fillStyle.setAttribute("colorStyle", "1");
+							kivioShape.appendChild(fillStyle);
+						}
+					}
+				}
+				kivio.documentElement().appendChild(kivioShape);
 			}
 		}
 		svgNode = svgNode.nextSibling();
