@@ -110,6 +110,9 @@ QString util_cellName( KSpreadTable*, int _col, int _row );
 QString util_cellName( int _col, int _row );
 QString util_rangeName( const QRect &_area );
 QString util_rangeName( KSpreadTable *_table, const QRect &_area );
+QString util_rangeColumnName( const QRect &_area);
+QString util_rangeRowName( const QRect &_area);
+
 /**
 * Call this function to decode the text of a column label to an integer
 * i.e. AA->27

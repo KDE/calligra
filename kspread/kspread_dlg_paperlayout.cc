@@ -246,7 +246,17 @@ void KSpreadPaperLayout::slotSelectionChanged( KSpreadTable* /*_table*/, const Q
 
   QString area = util_rangeName( _selection );
   if ( m_focus )
+  {
+      if ( m_focus == ePrintRange )
+          area = util_rangeName( _selection );
+      else if ( m_focus == eRepeatRows )
+          area = util_rangeRowName( _selection );
+      else if ( m_focus == eRepeatCols )
+          area = util_rangeColumnName( _selection );
+      else
+          return;
       m_focus->setText( area );
+  }
 }
 
 void KSpreadPaperLayout::slotCancel()
@@ -259,12 +269,10 @@ bool KSpreadPaperLayout::eventFilter( QObject* obj, QEvent* ev )
 {
     if ( obj == ePrintRange && ev->type() == QEvent::FocusIn )
         m_focus = ePrintRange;
-#if 0 //for the moment we can rescue column range or row range
     else if ( obj == eRepeatCols && ev->type() == QEvent::FocusIn )
         m_focus = eRepeatCols;
     else if ( obj == eRepeatRows && ev->type() == QEvent::FocusIn )
         m_focus = eRepeatRows;
-#endif
     else
         return false;
 

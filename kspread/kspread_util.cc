@@ -334,6 +334,21 @@ QString util_cellName(KSpreadTable * table, int _col, int _row)
 	    .arg(_row);
 }
 
+QString util_rangeColumnName( const QRect &_area)
+{
+    return QString("%1:%2")
+        .arg(util_encodeColumnLabelText( _area.left()))
+        .arg(util_encodeColumnLabelText(_area.right()));
+}
+
+QString util_rangeRowName( const QRect &_area)
+{
+    return QString("%1:%2")
+        .arg( _area.top())
+        .arg(_area.bottom());
+}
+
+
 QString util_rangeName(const QRect &_area)
 {
     return QString("%1:%2")
@@ -400,7 +415,7 @@ void
     //get the colomn number for the character between actual position and the first non text charakter
     if ( result != -1 )
 	x = util_decodeColumnLabelText( _str.mid( p, result - p ) ); // x is defined now
-    else  // If there isn't any, then this is not a point -> return 
+    else  // If there isn't any, then this is not a point -> return
     {
 	kdDebug(36001) << "KSpreadPoint::init: no number in string (str: '" << _str.mid( p, result ) << "'" << endl;
 	return;
