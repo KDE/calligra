@@ -829,6 +829,22 @@ void configureLayoutPage::initCombo()
       orientation=config->readNumEntry( "Default orientation page" ,0);
       unit=config->readNumEntry( "Default unit page" ,0);
     }
+
+    switch (m_pView->doc()->getUnit() )
+    {
+        case KoUnit::U_MM:
+            unit=0;
+            break;
+        case KoUnit::U_PT:
+            unit=1;
+            break;
+        case KoUnit::U_INCH:
+        default:
+            unit=2;
+    }
+  defaultUnit->setCurrentItem(unit);
+
+
   defaultSizePage->setCurrentItem(paper);
   defaultOrientationPage->setCurrentItem(orientation);
   defaultUnit->setCurrentItem(unit);
