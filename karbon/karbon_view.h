@@ -176,7 +176,6 @@ protected:
 	virtual void resizeEvent( QResizeEvent* event );
 	void dragEnterEvent( QDragEnterEvent *e );
 	void dropEvent ( QDropEvent *e );
-	virtual void guiActivateEvent( KParts::GUIActivateEvent * );
 
 private:
 	void initActions();
@@ -260,7 +259,6 @@ private:
 	QLabel* m_status;
 
 	VStrokeFillPreview *m_strokeFillPreview;
-	bool m_done;
 };
 
 #endif

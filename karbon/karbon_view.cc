@@ -109,8 +109,8 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 		setXMLFile( QString::fromLatin1( "karbon_readonly.rc" ) );
 	else
 		setXMLFile( QString::fromLatin1( "karbon.rc" ) );
+
 	m_strokeFillPreview = 0L;
-	m_done = false;
 	initActions();
 	m_dcop = 0;
 	dcopObject(); // build it
@@ -551,35 +551,6 @@ KarbonView::selectNodesTool()
 void
 KarbonView::rotateTool()
 {
-	/*if( !m_done )
-	{
-	// set up the new button group
-	QButtonGroup *grp = new QButtonGroup( 2, Horizontal, mainWindow()->toolBar( "Toolbox" ) );
-	grp->setInsideSpacing( 2 );
-	grp->setInsideMargin( 5 );
-	grp->setExclusive( true );
-
-	// get the buttons
-	QPtrList<QToolButton> buttons;
-	QLayoutIterator it( mainWindow()->toolBar( "Toolbox" )->boxLayout()->iterator() );
-	while( it.current() != 0 )
-	{
-		if( dynamic_cast<QToolButton *>( it.current()->widget() ) )
-			buttons.append( dynamic_cast<QToolButton *>( it.current()->widget() ) );
-		++it;
-	}
-
-	// move to the new button group
-	QPtrListIterator<QToolButton> itr = buttons;
-	while( itr.current() != 0 )
-	{
-		itr.current()->reparent( grp, QPoint( 0, 10 ) );
-		itr.current()->setToggleButton( true );
-		++itr;
-	}
-	mainWindow()->toolBar( "Toolbox" )->insertWidget( 1, 30, grp );
-		m_done = true;
-	}*/
 	m_currentTool->deactivate();
 	m_currentTool = m_rotateTool;
 	m_currentTool->activate();
@@ -1142,46 +1113,6 @@ KarbonView::initActions()
 	m_configureAction = new KAction(
 		i18n( "Configure Karbon..." ), "configure", 0, this,
 		SLOT( configure() ), actionCollection(), "configure" );
-}
-
-void
-//KarbonView::partSelectEvent( KParts::PartSelectEvent *ev )
-KarbonView::guiActivateEvent( KParts::GUIActivateEvent *ev )
-{
-	kdDebug() << "KarbonView::partSelectEvent" << endl;
-	KoView::guiActivateEvent( ev );
-	//KoView::partSelectEvent( ev );
-	/*QButtonGroup *grp = new QButtonGroup( 2, Horizontal, mainWindow()->toolBar( "Toolbox" ) );
-	grp->setInsideSpacing( 2 );
-	grp->setInsideMargin( 5 );
-	grp->setExclusive( true );
-
-	// get the buttons
-	QPtrList<QToolButton> buttons;
-	QLayoutIterator it( mainWindow()->toolBar( "Toolbox" )->boxLayout()->iterator() );
-	int i = 0;
-			kdDebug() << "ri : " << i++ << endl;
-	while( it.current() != 0 )
-	{
-			kdDebug() << "i : " << i++ << endl;
-		if( dynamic_cast<QToolButton *>( it.current()->widget() ) )
-		{
-			kdDebug() << "i : " << i++ << endl;
-			buttons.append( dynamic_cast<QToolButton *>( it.current()->widget() ) );
-		}
-		++it;
-	}
-
-	// move to the new button group
-	QPtrListIterator<QToolButton> itr = buttons;
-	while( itr.current() != 0 )
-	{
-		itr.current()->reparent( grp, QPoint( 0, 10 ) );
-		itr.current()->setToggleButton( true );
-		++itr;
-	}
-	mainWindow()->toolBar( "Toolbox" )->insertWidget( 1, 30, grp );*/
-		//m_done = true;
 }
 
 void
