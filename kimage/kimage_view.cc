@@ -165,7 +165,7 @@ bool KImageView::event( const char* _event, const CORBA::Any& _value )
  *  Allgemeine Makros
  */
 #define TEXT( text ) Q2C( i18n( text ) )
-#define PIX( pix ) *OPUIUtils::convertPixmap( ICON( pix ) )
+#define PIX( pix ) *OPUIUtils::convertPixmap( BarIcon( pix ) )
 
 /**
  *  Makros zur Menubarerzeugung
