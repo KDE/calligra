@@ -56,7 +56,13 @@ KWPage::KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui)
   recalcAll = false;
 
   recalcText();
-//   debug("recalc text");
+  mouseMode = MM_EDIT;
+
+  setupMenus();
+  setMouseMode(MM_EDIT);
+
+  oldMx = oldMy = 0;
+  deleteMovingRect = true;
 }
 
 unsigned int KWPage::ptLeftBorder() { return doc->getPTLeftBorder(); }
@@ -73,69 +79,144 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 {
   if (mousePressed)
     {
+      switch (mouseMode)
+	{
+	case MM_EDIT:
+	  {
+	    unsigned int mx = e->x() + xOffset;
+	    unsigned int my = e->y() + yOffset;
+	    
+	    QPainter _painter;
+	    _painter.begin(this);
+	    
+	    int frameset = doc->getFrameSet(mx,my);
+	    
+	    // only if we are in the _same_ frameset as before!!
+	    if (frameset != -1 && frameset == static_cast<int>(fc->getFrameSet()) - 1)
+	      {
+		doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+		
+		fc->setFrameSet(frameset + 1);
+		
+		fc->cursorGotoPixelLine(mx,my,_painter);
+		fc->cursorGotoPixelInLine(mx,my,_painter);
+		
+		_painter.end();
+		
+		if (fc->getPTPos() != doc->getSelStart()->getPTPos() ||
+		    fc->getPTY() != doc->getSelStart()->getPTY())
+		  {
+		    _painter.begin(this);
+		    if (doc->has_selection())
+		      doc->drawSelection(_painter,xOffset,yOffset);
+		    doc->setSelEnd(*fc);
+		    doc->setSelection(false);
+		    _painter.end();
+		    
+		    scrollToCursor(*fc);
+		    
+		    doc->setSelection(true);
+		    _painter.begin(this);
+		    doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+		    doc->drawSelection(_painter,xOffset,yOffset);
+		    _painter.end();
+		    
+		    if (doc->getProcessingType() == KWordDocument_impl::DTP)
+		      setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
+		    
+		    gui->getVertRuler()->setOffset(0,-getVertRulerPos());
+		    
+		    if (fc->getParag())
+		      {	  
+			gui->getHorzRuler()->setLeftIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTLeftIndent()));
+			gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
+		      }
+		  }
+		else
+		  {
+		    _painter.begin(this);
+		    doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+		    _painter.end();
+		  }
+	      }
+	    else _painter.end();
+	  } break;
+	case MM_EDIT_FRAME:
+	  {
+	    int mx = e->x() + xOffset;
+	    int my = e->y() + yOffset;
+
+	    mx = (mx / doc->getRastX()) * doc->getRastX();
+	    my = (my / doc->getRastY()) * doc->getRastY();
+
+	    switch (cursor().shape())
+	      {
+	      case SizeAllCursor:
+		{
+		  if (mx != oldMy || my != oldMy)
+		    {
+		      QPainter p;
+		      p.begin(this);
+		      p.setRasterOp(NotROP);
+		      p.setPen(black);
+		      p.setBrush(NoBrush);
+		      
+		      KWFrameSet *frameset;
+		      KWFrame *frame;
+		      for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
+			{
+			  frameset = doc->getFrameSet(i);
+			  for (unsigned int j = 0;j < frameset->getNumFrames();j++)
+			    {
+			      frame = frameset->getFrame(j);
+			      if (frame->isSelected())
+				{
+				  if (deleteMovingRect)
+				    p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+				  frame->moveBy(mx - oldMx,my - oldMy);
+				  if (frame->x() < 0 || 
+				      frame->y() < getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
+				      static_cast<int>(ptPaperHeight()) ||
+				      frame->right() > static_cast<int>(ptPaperWidth()) || 
+				      frame->bottom() > (getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) + 1) * 
+				      static_cast<int>(ptPaperHeight()))
+				    frame->moveBy(oldMx - mx,oldMy - my);
+				  p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+				}
+			    }
+			}
+		      deleteMovingRect = true;
+		      oldMx = mx; oldMy = my;
+		      p.end();
+		    }
+		} break;
+	      default: break;
+	      }
+	  } break;
+	default: break;
+	}
+    }
+  else
+    {
       unsigned int mx = e->x() + xOffset;
       unsigned int my = e->y() + yOffset;
       
-      QPainter _painter;
-      _painter.begin(this);
-
-      int frameset = doc->getFrameSet(mx,my);
-
-      // only if we are in the _same_ frameset as before!!
-      if (frameset != -1 && frameset == static_cast<int>(fc->getFrameSet()) - 1)
+      switch (mouseMode)
 	{
-	  doc->drawMarker(*fc,&_painter,xOffset,yOffset);
-	      
-	  fc->setFrameSet(frameset + 1);
-	  
-	  fc->cursorGotoPixelLine(mx,my,_painter);
-	  fc->cursorGotoPixelInLine(mx,my,_painter);
-	  
-	  _painter.end();
-	  
-	  if (fc->getPTPos() != doc->getSelStart()->getPTPos() ||
-	      fc->getPTY() != doc->getSelStart()->getPTY())
-	    {
-	      _painter.begin(this);
-	      if (doc->has_selection())
-		doc->drawSelection(_painter,xOffset,yOffset);
-	      doc->setSelEnd(*fc);
-	      doc->setSelection(false);
-	      _painter.end();
-	      
-	      scrollToCursor(*fc);
-	      
-	      doc->setSelection(true);
-	      _painter.begin(this);
-	      doc->drawMarker(*fc,&_painter,xOffset,yOffset);
-	      doc->drawSelection(_painter,xOffset,yOffset);
-	      _painter.end();
-	      
-	      if (doc->getProcessingType() == KWordDocument_impl::DTP)
-		setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
-	      
-	      gui->getVertRuler()->setOffset(0,-getVertRulerPos());
-	      
-	      if (fc->getParag())
-		{	  
-		  gui->getHorzRuler()->setLeftIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTLeftIndent()));
-		  gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
-		}
-	    }
-	  else
-	    {
-	      _painter.begin(this);
-	      doc->drawMarker(*fc,&_painter,xOffset,yOffset);
-	      _painter.end();
-	    }
+	case MM_EDIT_FRAME:
+	  setCursor(doc->getMouseCursor(mx,my));
+	  break;
+	default: break;
 	}
-      else _painter.end();
     }
 }
 
 /*================================================================*/
 void KWPage::mousePressEvent(QMouseEvent *e)
 {
+  oldMx = e->x() + xOffset;
+  oldMy = e->y() + yOffset;
+
   switch (e->button())
     {
     case LeftButton:
@@ -153,52 +234,113 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	    doc->drawSelection(_painter,xOffset,yOffset);
 	    doc->setSelection(false);
 	  }  
+
+	_painter.end();
 	
-	doc->drawMarker(*fc,&_painter,xOffset,yOffset);
-	markerIsVisible = false;
-	
-	int frameset = doc->getFrameSet(mx,my);
-
-	if (frameset != -1)
+	switch (mouseMode)
 	  {
-	    fc->setFrameSet(frameset + 1);
-	    
-	    fc->cursorGotoPixelLine(mx,my,_painter);
-	    fc->cursorGotoPixelInLine(mx,my,_painter);
-	    
-	    doc->drawMarker(*fc,&_painter,xOffset,yOffset);
-	    markerIsVisible = true;
-	    
-	    _painter.end();
-	    
-	    doc->setSelStart(*fc);
-	    doc->setSelEnd(*fc);
-	    doc->setSelection(false);
+	  case MM_EDIT:
+	    {
+	      _painter.begin(this);
+	      doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+	      markerIsVisible = false;
+	      
+	      int frameset = doc->getFrameSet(mx,my);
+	      
+	      if (frameset != -1)
+		{
+		  fc->setFrameSet(frameset + 1);
+		  
+		  fc->cursorGotoPixelLine(mx,my,_painter);
+		  fc->cursorGotoPixelInLine(mx,my,_painter);
+		  
+		  doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+		  markerIsVisible = true;
+		  
+		  _painter.end();
+		  
+		  doc->setSelStart(*fc);
+		  doc->setSelEnd(*fc);
+		  doc->setSelection(false);
+		  
+		  if (doc->getProcessingType() == KWordDocument_impl::DTP)
+		    setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
+		  
+		  gui->getVertRuler()->setOffset(0,-getVertRulerPos());
+		  
+		  if (fc->getParag())
+		    {	  
+		      gui->getHorzRuler()->setLeftIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTLeftIndent()));
+		      gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
+		    }
+		}
+	      else
+		{
+		  doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+		  markerIsVisible = true;
+		  _painter.end();
+		}
+	    } break;
+	  case MM_EDIT_FRAME:
+	    {
+	      int r = doc->selectFrame(mx,my);
 
-	    if (doc->getProcessingType() == KWordDocument_impl::DTP)
-	      setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
+	      if (r == 0)
+		doc->deSelectAllFrames();
+	      else if (r == 1)
+		{
+		  if (!(e->state() & ControlButton || e->state() & ShiftButton))
+		    doc->deSelectAllFrames();
+		  doc->selectFrame(mx,my);
+		}
+	      else if (r == 2)
+		{
+		  if (e->state() & ControlButton || e->state() & ShiftButton)
+		    doc->deSelectFrame(mx,my);
+		  else if (cursor().shape() != SizeAllCursor)
+		    {
+		      doc->deSelectAllFrames();
+		      doc->selectFrame(mx,my);
+		    }
+		}
 
-	    gui->getVertRuler()->setOffset(0,-getVertRulerPos());
-	    
-	    if (fc->getParag())
-	      {	  
-		gui->getHorzRuler()->setLeftIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTLeftIndent()));
-		gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
-	      }
+	      repaint(false);
+
+	      mousePressed = false;
+	      mouseMoveEvent(e);
+	      mousePressed = true;
+
+	      deleteMovingRect = false;
+	      mx = (mx / doc->getRastX()) * doc->getRastX();
+	      oldMx = mx;
+	      my = (my / doc->getRastX()) * doc->getRastY();
+	      oldMy = my;
+	    } break;
+	  case MM_CREATE_TEXT:
+	    {
+	    } break;
+	  case MM_CREATE_PIX:
+	    {
+	    } break;
+	  default: break;
 	  }
-	else
-	  {
-	    doc->drawMarker(*fc,&_painter,xOffset,yOffset);
-	    markerIsVisible = true;
-	    _painter.end();
-	  }
-
       } break;
     case MidButton:
       {
 	QClipboard *cb = QApplication::clipboard();
 	if (cb->text())
 	  editPaste(cb->text());
+      } break;
+    case RightButton:
+      {
+	unsigned int mx = e->x() + xOffset;
+	unsigned int my = e->y() + yOffset;
+
+	if (doc->getFrameSet(mx,my) == -1)
+	  {
+	    QPoint pnt(QCursor::pos());
+	    mm_menu->popup(pnt);
+	  }
       } break;
     default: break;
     }
@@ -208,15 +350,30 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 void KWPage::mouseReleaseEvent(QMouseEvent *e)
 {
   mousePressed = false;
-  if (doc->has_selection())
-    doc->copySelectedText();
+  switch (mouseMode)
+    {
+    case MM_EDIT:
+      {
+	if (doc->has_selection())
+	  doc->copySelectedText();
 	
-  gui->getView()->setFormat(*((KWFormat*)fc));
-  gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
-  gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
-				  fc->getParag()->getParagLayout()->getRightBorder(),
-				  fc->getParag()->getParagLayout()->getTopBorder(),
-				  fc->getParag()->getParagLayout()->getBottomBorder());
+	gui->getView()->setFormat(*((KWFormat*)fc));
+	gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+	gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
+					fc->getParag()->getParagLayout()->getRightBorder(),
+					fc->getParag()->getParagLayout()->getTopBorder(),
+					fc->getParag()->getParagLayout()->getBottomBorder());
+      } break;
+    case MM_EDIT_FRAME:
+      {
+	doc->updateAllFrames();
+	recalcAll = true;
+	recalcText();
+	recalcCursor();
+	recalcAll = false;
+      } break;
+    default: break;
+    }
 }
 
 /*================================================================*/
@@ -1317,6 +1474,20 @@ void KWPage::drawBorders(QPainter &_painter,QRect v_area)
 
 	  if (v_area.intersects(frame))
 	    _painter.drawRect(frame);
+	  if (mouseMode == MM_EDIT_FRAME && tmp->isSelected())
+	    {
+	      _painter.save();
+	      _painter.setRasterOp(NotROP);
+	      _painter.fillRect(frame.x(),frame.y(),6,6,black);
+	      _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y(),6,6,black);
+	      _painter.fillRect(frame.x(),frame.y() + frame.height() / 2 - 3,6,6,black);
+	      _painter.fillRect(frame.x() + frame.width() - 6,frame.y(),6,6,black);
+	      _painter.fillRect(frame.x(),frame.y() + frame.height() - 6,6,6,black);
+	      _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y() + frame.height() - 6,6,6,black);
+	      _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() / 2 - 3,6,6,black);
+	      _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() - 6,6,6,black);
+	      _painter.restore();
+	    }
 	}
     }
 
@@ -1352,6 +1523,7 @@ void KWPage::frameSizeChanged(KoPageLayout _layout)
 										   MM_TO_POINT(_layout.width) - MM_TO_POINT(_layout.right),
 										   MM_TO_POINT(_layout.height) - MM_TO_POINT(_layout.bottom)
 										   + page * ptPaperHeight());
+  doc->updateAllFrames();
   recalcText();
   recalcCursor();
 }
@@ -1380,4 +1552,73 @@ void KWPage::setRuler2Frame(unsigned int _frameset,unsigned int _frame)
   _layout.bottom = POINT_TO_MM(_layout.height - frame->bottom()) + page * POINT_TO_MM(ptPaperHeight());
   gui->getHorzRuler()->setPageLayout(_layout);
   gui->getVertRuler()->setPageLayout(_layout);
+}
+
+/*================================================================*/
+void KWPage::setMouseMode(MouseMode _mm)
+{
+  mouseMode = _mm;
+  mmUncheckAll();
+  
+  switch (mouseMode)
+    {
+    case MM_EDIT: 
+      {
+	setCursor(ibeamCursor);
+	mm_menu->setItemChecked(mm_edit,true);
+      } break;
+    case MM_EDIT_FRAME: 
+      {
+	setCursor(arrowCursor);
+	mm_menu->setItemChecked(mm_edit_frame,true);
+      } break;
+    case MM_CREATE_TEXT:
+      {
+	setCursor(crossCursor);
+	mm_menu->setItemChecked(mm_create_text,true);
+      } break;
+    case MM_CREATE_PIX:
+      {
+	setCursor(crossCursor);
+	mm_menu->setItemChecked(mm_create_pix,true);
+      } break;
+    }
+
+  repaint(false);
+}
+
+/*================================================================*/
+void KWPage::setupMenus()
+{
+  QString pixdir;;
+  QPixmap pixmap;
+
+  mm_menu = new QPopupMenu();
+  CHECK_PTR(mm_menu);
+  mm_edit = mm_menu->insertItem(i18n("Edit"),this,SLOT(mmEdit()));
+  mm_edit_frame = mm_menu->insertItem(i18n("Edit Frames"),this,SLOT(mmEditFrame()));
+  mm_create_text = mm_menu->insertItem(i18n("Create Text-Frame"),this,SLOT(mmCreateText()));
+  mm_create_pix = mm_menu->insertItem(i18n("Create Pixmap-Frame"),this,SLOT(mmCreatePix()));
+  mm_menu->setCheckable(false);
+}
+
+/*================================================================*/
+void KWPage::mmUncheckAll()
+{
+  mm_menu->setItemChecked(mm_edit,false);
+  mm_menu->setItemChecked(mm_edit_frame,false);
+  mm_menu->setItemChecked(mm_create_text,false);
+  mm_menu->setItemChecked(mm_create_pix,false);
+}
+
+/*================================================================*/
+int KWPage::getPageOfRect(QRect _rect)
+{
+  for (int i = 0;i < doc->getPages();i++)
+    {
+      if (_rect.intersects(QRect(0,i * ptPaperHeight(),ptPaperWidth(),ptPaperHeight())))
+	return i;
+    }
+
+  return -1;
 }

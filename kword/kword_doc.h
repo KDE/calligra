@@ -278,10 +278,22 @@ public:
     { return processingType; }
   
   int getFrameSet(unsigned int mx,unsigned int my);
+  /**
+   * Return 1, if a frame gets selected which was not selected before,
+   * 2, if a frame gets selected which was already selected, and
+   * 0 if no frame got selected.
+   */
+  int selectFrame(unsigned int mx,unsigned int my);
+  void deSelectFrame(unsigned int mx,unsigned int my);
+  void deSelectAllFrames();
+  QCursor getMouseCursor(unsigned int mx,unsigned int my);
 
   void print(QPainter *painter,QPrinter *printer,float left_margin,float top_margin);
   
   void updateAllFrames();
+
+  int getRastX() { return rastX; }
+  int getRastY() { return rastY; }
 
 signals:
   void sig_imageModified();
@@ -352,6 +364,7 @@ protected:
   bool hasSelection;
 
   ProcessingType processingType;
+  int rastX,rastY;
 
 };
 

@@ -29,12 +29,17 @@
 #include <qkeycode.h>
 #include <qpixmap.h>
 #include <qclipboard.h>
+#include <qpopupmenu.h>
+#include <qpoint.h>
+#include <qcursor.h>
 
 #include <X11/Xlib.h>
 #include <kapp.h>
 
 class KWordGUI;
 class KWordDocument_impl;
+
+enum MouseMode {MM_EDIT = 0,MM_EDIT_FRAME = 1,MM_CREATE_TEXT = 2,MM_CREATE_PIX = 3};
 
 /******************************************************************/
 /* Class: KWPage                                                  */
@@ -135,6 +140,8 @@ public:
   void recalcText();
   void drawBorders(QPainter &_painter,QRect v_area);
   void setRuler2Frame(unsigned int _frameset,unsigned int _frame);
+  void setMouseMode(MouseMode _mm);
+  int getPageOfRect(QRect _rect);
   
 public slots:
   void newLeftIndent(int _left)
@@ -142,6 +149,14 @@ public slots:
   void newFirstIndent(int _first)
     { setFirstLineIndent(static_cast<float>(_first)); }
   void frameSizeChanged(KoPageLayout);
+  void mmEdit()
+    { setMouseMode(MM_EDIT); mmUncheckAll(); mm_menu->setItemChecked(mm_edit,true); }
+  void mmEditFrame()
+    { setMouseMode(MM_EDIT_FRAME); mmUncheckAll(); mm_menu->setItemChecked(mm_edit_frame,true); }
+  void mmCreateText()
+    { setMouseMode(MM_CREATE_TEXT); mmUncheckAll(); mm_menu->setItemChecked(mm_create_text,true); }
+  void mmCreatePix()
+    { setMouseMode(MM_CREATE_PIX); mmUncheckAll(); mm_menu->setItemChecked(mm_create_pix,true); }
 
 protected:
   unsigned int ptLeftBorder();
@@ -173,6 +188,8 @@ protected:
   void drawBuffer();
   void drawBuffer(QRect _rect);
   void copyBuffer();
+  void setupMenus();
+  void mmUncheckAll();
 
   KWordDocument_impl *doc;
   bool markerIsVisible;
@@ -209,6 +226,13 @@ protected:
   bool mousePressed;
   bool inKeyEvent;
   bool recalcAll;
+
+  MouseMode mouseMode;
+  QPopupMenu *mm_menu;
+  int mm_edit,mm_edit_frame,mm_create_text,mm_create_pix;
+
+  int oldMx,oldMy;
+  bool deleteMovingRect;
   
 };
 

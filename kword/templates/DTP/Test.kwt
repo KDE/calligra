@@ -5,8 +5,8 @@
  <ATTRIBUTES processing="1" standardpage="1"/>
  <FRAMESETS>
   <FRAMESET frameType="1">
-   <FRAME left="28" top="100" right="200" bottom="300"/>
-   <FRAME left="200" top="400" right="300" bottom="510"/>
+   <FRAME left="28" top="100" right="200" bottom="300" runaround="0"/>
+   <FRAME left="200" top="400" right="300" bottom="510" runaround="0"/>
    <PARAGRAPH>
     <TEXT value=""/>
     <FORMATS>
@@ -25,8 +25,8 @@
    </PARAGRAPH>
   </FRAMESET>
   <FRAMESET frameType="1">
-   <FRAME left="28" top="42" right="300" bottom="600"/>
-   <FRAME left="310" top="42" right="500" bottom="600"/>
+   <FRAME left="28" top="42" right="300" bottom="600" runaround="1"/>
+   <FRAME left="310" top="42" right="500" bottom="600" runaround="1"/>
    <PARAGRAPH>
     <TEXT value=""/>
     <FORMATS>

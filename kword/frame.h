@@ -19,6 +19,7 @@
 #include <qrect.h>
 #include <qpoint.h>
 #include <qlist.h>
+#include <qcursor.h>
 
 #include "parag.h"
 #include "paraglayout.h"
@@ -47,6 +48,11 @@ public:
   void setRunAround(RunAround _ra) { runAround = _ra; }
   RunAround getRunAround() { return runAround; }
 
+  void setSelected(bool _selected)
+    { selected = _selected; }
+  bool isSelected()
+    { return selected; }
+
   void addIntersect(QRect _r);
   void clearIntersects()
     { intersections.clear(); }
@@ -57,8 +63,11 @@ public:
   bool hasIntersections()
     { return !intersections.isEmpty(); }
 
+  QCursor getMouseCursor(int mx,int my);
+
 protected:
   RunAround runAround;
+  bool selected;
 
   QList<QRect> intersections;
 
@@ -100,6 +109,13 @@ public:
     {;}
 
   virtual bool contains(unsigned int mx,unsigned int my);
+  /**
+   * Return 1, if a frame gets selected which was not selected before,
+   * 2, if a frame gets selected which was already selected
+   */
+  virtual int selectFrame(unsigned int mx,unsigned int my);
+  virtual void deSelectFrame(unsigned int mx,unsigned int my);
+  virtual QCursor getMouseCursor(unsigned int mx,unsigned int my);
 
   virtual void save(ostream &out);
 

@@ -75,6 +75,8 @@ KWordDocument_impl::KWordDocument_impl()
 
   m_bModified = false;
   hasSelection = false;
+
+  rastX = rastY = 10;
 }
 
 /*================================================================*/
@@ -1428,6 +1430,67 @@ int KWordDocument_impl::getFrameSet(unsigned int mx,unsigned int my)
     }
   
   return -1;
+}
+
+/*================================================================*/
+int KWordDocument_impl::selectFrame(unsigned int mx,unsigned int my)
+{
+  KWFrameSet *frameSet = 0L;
+
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      frameSet = getFrameSet(i);
+      if (frameSet->contains(mx,my))
+	{
+	  return frameSet->selectFrame(mx,my);
+	}
+    }
+
+  deSelectAllFrames();
+  return 0;
+}
+
+/*================================================================*/
+void KWordDocument_impl::deSelectFrame(unsigned int mx,unsigned int my)
+{
+  KWFrameSet *frameSet = 0L;
+
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      frameSet = getFrameSet(i);
+      if (frameSet->contains(mx,my))
+	frameSet->deSelectFrame(mx,my);
+    }
+}
+
+/*================================================================*/
+void KWordDocument_impl::deSelectAllFrames()
+{
+  KWFrameSet *frameSet = 0L;
+
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      frameSet = getFrameSet(i);
+      for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
+	frameSet->getFrame(j)->setSelected(false);
+    }
+}
+
+/*================================================================*/
+QCursor KWordDocument_impl::getMouseCursor(unsigned int mx,unsigned int my)
+{
+  KWFrameSet *frameSet = 0L;
+
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      frameSet = getFrameSet(i);
+      if (frameSet->contains(mx,my))
+	{
+	  return frameSet->getMouseCursor(mx,my);
+	}
+    }
+
+  return arrowCursor;
 }
 
 /*================================================================*/

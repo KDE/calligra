@@ -36,6 +36,7 @@ KWFrame::KWFrame()
 { 
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
+  selected = false;
 }
 
 /*================================================================*/
@@ -44,6 +45,7 @@ KWFrame::KWFrame(const QPoint &topleft,const QPoint &bottomright)
 { 
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
+  selected = false;
 } 
 
 /*================================================================*/
@@ -52,6 +54,7 @@ KWFrame::KWFrame(const QPoint &topleft,const QSize &size)
 { 
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
+  selected = false;
 }    
 
 /*================================================================*/
@@ -60,6 +63,7 @@ KWFrame::KWFrame(int left,int top,int width,int height)
 { 
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
+  selected = false;
 }
 
 /*================================================================*/
@@ -68,6 +72,7 @@ KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra)
 { 
   runAround = _ra; 
   intersections.setAutoDelete(true); 
+  selected = false;
 }
 
 /*================================================================*/
@@ -79,7 +84,7 @@ void KWFrame::addIntersect(QRect _r)
 /*================================================================*/
 int KWFrame::getLeftIndent(int _y,int _h)
 {
-  if (intersections.isEmpty()) return 0;
+  if (!runAround || intersections.isEmpty()) return 0;
 
   int _left = 0;
   QRect rect;
@@ -101,7 +106,7 @@ int KWFrame::getLeftIndent(int _y,int _h)
 /*================================================================*/
 int KWFrame::getRightIndent(int _y,int _h)
 {
-  if (intersections.isEmpty()) return 0;
+  if (!runAround || intersections.isEmpty()) return 0;
 
   int _right = 0;
   QRect rect;
@@ -118,6 +123,32 @@ int KWFrame::getRightIndent(int _y,int _h)
     }
 
   return _right;
+}
+
+/*================================================================*/
+QCursor KWFrame::getMouseCursor(int mx,int my)
+{
+  if (mx >= x() && my >= y() && mx <= x() + 6 && my <= y() + 6)
+    return sizeFDiagCursor;
+  if (mx >= x() && my >= y() + height() / 2 - 3 && mx <= x() + 6 && my <= y() + height() / 2 + 3)
+    return sizeHorCursor;
+  if (mx >= x() && my >= y() + height() - 6 && mx <= x() + 6 && my <= y() + height())
+    return sizeBDiagCursor;
+  if (mx >= x() + width() / 2 - 3 && my >= y() && mx <= x() + width() / 2 + 3 && my <= y() + 6)
+    return sizeVerCursor;
+  if (mx >= x() + width() / 2 - 3 && my >= y() + height() - 6 && mx <= x() + width() / 2 + 3 && my <= y() + height())
+    return sizeVerCursor;
+  if (mx >= x() + width() - 6 && my >= y() && mx <= x() + width() && my <= y() + 6)
+    return sizeBDiagCursor;
+  if (mx >= x() + width() - 6 && my >= y() + height() / 2 - 3 && mx <= x() + width() && my <= y() + height() / 2 + 3)
+    return sizeHorCursor;
+  if (mx >= x() + width() - 6 && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height())
+    return sizeFDiagCursor;
+  
+  if (selected)
+    return sizeAllCursor;
+
+  return arrowCursor;
 }
 
 /******************************************************************/
@@ -177,6 +208,45 @@ bool KWFrameSet::contains(unsigned int mx,unsigned int my)
     }
 
   return false;
+}
+
+/*================================================================*/
+int KWFrameSet::selectFrame(unsigned int mx,unsigned int my)
+{
+  for (unsigned int i = 0;i < frames.count();i++)
+    {
+      if (frames.at(i)->contains(QPoint(mx,my)))
+	{
+	  int r = 1;
+	  if (frames.at(i)->isSelected()) r = 2;
+	  frames.at(i)->setSelected(true);
+	  return r;
+	}
+    }
+  return 0;
+}
+
+/*================================================================*/
+void KWFrameSet::deSelectFrame(unsigned int mx,unsigned int my)
+{
+  for (unsigned int i = 0;i < frames.count();i++)
+    {
+      if (frames.at(i)->contains(QPoint(mx,my)))
+	frames.at(i)->setSelected(false);
+    }
+}
+
+/*================================================================*/
+QCursor KWFrameSet::getMouseCursor(unsigned int mx,unsigned int my)
+{
+  int frame = getFrame(mx,my);
+
+  if (frame == -1)
+    return arrowCursor;
+
+  if (!getFrame(frame)->isSelected()) return arrowCursor;
+
+  return getFrame(frame)->getMouseCursor(mx,my);
 }
 
 /*================================================================*/
