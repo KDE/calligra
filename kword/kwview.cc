@@ -1410,88 +1410,113 @@ void KWView::editDeleteFrame()
 void KWView::deleteFrame( bool _warning )
 {
     QList<KWFrame> frames=m_doc->getSelectedFrames();
-    ASSERT( frames.count() == 1 );
-    if( frames.count() != 1)
+    ASSERT( frames.count() >= 1 );
+    if( frames.count() < 1)
         return;
-    KWFrame *theFrame = frames.at(0);
-    KWFrameSet *fs = theFrame->getFrameSet();
-
-    ASSERT( !fs->isAHeader() ); // the action is disabled for such cases
-    ASSERT( !fs->isAFooter() );
-    if ( fs->isAFooter() || fs->isAHeader() )
-        return;
-
-    // frame is part of a table?
-    if ( fs->getGroupManager() )
+    if(frames.count()==1)
     {
-        int result = KMessageBox::warningContinueCancel(
-            this,
-            i18n( "You are about to delete a table.\n"
-                  "Doing so will delete all the text in the table.\n"
-                  "Are you sure you want to do that?"),
-            i18n("Delete Table"), i18n("&Delete"),
-#if KDE_VERSION >= 220
-            "DeleteTableConfirmation",
-#endif
-            true );
-        if (result != KMessageBox::Continue)
-            return;
-        m_doc->deleteTable( fs->getGroupManager() );
-        m_gui->canvasWidget()->emitFrameSelectedChanged();
-        return;
-    }
+        KWFrame *theFrame = frames.at(0);
+        KWFrameSet *fs = theFrame->getFrameSet();
 
-    if ( fs->getNumFrames() == 1 && fs->type() == FT_TEXT) {
-        if ( m_doc->processingType() == KWDocument::WP && m_doc->getFrameSetNum( fs ) == 0 )
+        ASSERT( !fs->isAHeader() ); // the action is disabled for such cases
+        ASSERT( !fs->isAFooter() );
+        if ( fs->isAFooter() || fs->isAHeader() )
             return;
 
-        KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>(m_doc->getFrameSet( 0 ) );
-        if ( !textfs )
-            return;
-
-        QTextDocument * textdoc = textfs->textDocument();
-        QTextParag * parag = textdoc->firstParag();
-        if ( parag && parag->string()->length() > 0 )
+        // frame is part of a table?
+        if ( fs->getGroupManager() )
         {
             int result = KMessageBox::warningContinueCancel(
                 this,
-                i18n( "You are about to delete the last Frame of the\n"
-                      "Frameset '%1'.\n"
-                      "The contents of this Frameset will not appear\n"
-                      "anymore!\n\n"
-                      "Are you sure you want to do that?").arg(fs->getName()),
-                i18n("Delete Frame"), i18n("&Delete"),
+                i18n( "You are about to delete a table.\n"
+                      "Doing so will delete all the text in the table.\n"
+                      "Are you sure you want to do that?"),
+                i18n("Delete Table"), i18n("&Delete"),
 #if KDE_VERSION >= 220
-                "DeleteLastFrameConfirmation",
+                "DeleteTableConfirmation",
 #endif
                 true );
-
             if (result != KMessageBox::Continue)
                 return;
-
-            m_doc->deleteFrame( theFrame );
+            m_doc->deleteTable( fs->getGroupManager() );
             m_gui->canvasWidget()->emitFrameSelectedChanged();
             return;
         }
 
-    }
+        if ( fs->getNumFrames() == 1 && fs->type() == FT_TEXT) {
+            if ( m_doc->processingType() == KWDocument::WP && m_doc->getFrameSetNum( fs ) == 0 )
+                return;
 
-    if(_warning)
-    {
-        int result = KMessageBox::warningContinueCancel(
-            this,
-            i18n("Do you want to delete this frame?"),
-            i18n("Delete Frame"),
-            i18n("&Delete"),
+            KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>(m_doc->getFrameSet( 0 ) );
+            if ( !textfs )
+                return;
+
+            QTextDocument * textdoc = textfs->textDocument();
+            QTextParag * parag = textdoc->firstParag();
+            if ( parag && parag->string()->length() > 0 )
+            {
+                int result = KMessageBox::warningContinueCancel(
+                    this,
+                    i18n( "You are about to delete the last Frame of the\n"
+                          "Frameset '%1'.\n"
+                          "The contents of this Frameset will not appear\n"
+                          "anymore!\n\n"
+                          "Are you sure you want to do that?").arg(fs->getName()),
+                    i18n("Delete Frame"), i18n("&Delete"),
 #if KDE_VERSION >= 220
-            "DeleteLastFrameConfirmation",
+                    "DeleteLastFrameConfirmation",
 #endif
-            true );
-        if (result != KMessageBox::Continue)
-            return;
+                    true );
+
+                if (result != KMessageBox::Continue)
+                    return;
+
+                m_doc->deleteFrame( theFrame );
+                m_gui->canvasWidget()->emitFrameSelectedChanged();
+                return;
+            }
+
+        }
+
+        if(_warning)
+        {
+            int result = KMessageBox::warningContinueCancel(
+                this,
+                i18n("Do you want to delete this frame?"),
+                i18n("Delete Frame"),
+                i18n("&Delete"),
+#if KDE_VERSION >= 220
+                "DeleteLastFrameConfirmation",
+#endif
+                true );
+            if (result != KMessageBox::Continue)
+                return;
+        }
+        m_doc->deleteFrame( theFrame );
+        m_gui->canvasWidget()->emitFrameSelectedChanged();
     }
-    m_doc->deleteFrame( theFrame );
-    m_gui->canvasWidget()->emitFrameSelectedChanged();
+    else
+    {
+        //several frame
+        if(_warning)
+        {
+            int result = KMessageBox::warningContinueCancel(
+                this,
+                i18n("Do you want to delete this frame?"),
+                i18n("Delete Frame"),
+                i18n("&Delete"),
+#if KDE_VERSION >= 220
+                "DeleteLastFrameConfirmation",
+#endif
+                true );
+            if (result != KMessageBox::Continue)
+                return;
+        }
+
+        m_doc->deleteSeveralFrame();
+
+        m_gui->canvasWidget()->emitFrameSelectedChanged();
+    }
 }
 
 void KWView::editCustomVars()
@@ -2774,9 +2799,8 @@ void KWView::updatePopupMenuChangeAction()
     // if a header/footer etc. Dont show the popup.
     if(frame && frame->getFrameSet() && frame->getFrameSet()->frameSetInfo() != KWFrameSet::FI_BODY)
         return;
-    int nbFrame=m_doc->getSelectedFrames().count();
     // enable delete
-    actionEditDelFrame->setEnabled(true && nbFrame==1);
+    actionEditDelFrame->setEnabled(true );
 
     // if text frame,
     if(frame && frame->getFrameSet() && frame->getFrameSet()->type() == FT_TEXT)
@@ -3036,8 +3060,8 @@ void KWView::frameSelectedChanged()
             if ( okForDelete && m_doc->processingType() == KWDocument::WP )
                 okForDelete = it.current()->getFrameSet() != m_doc->getFrameSet( 0 );
         }
-        actionEditDelFrame->setEnabled( okForDelete && nbFrame==1);
-        actionEditCut->setEnabled( okForDelete && nbFrame==1);
+        actionEditDelFrame->setEnabled( okForDelete );
+        actionEditCut->setEnabled( okForDelete );
     } else
     {
         actionEditDelFrame->setEnabled( false );

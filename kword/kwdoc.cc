@@ -2752,6 +2752,84 @@ void KWDocument::deleteFrame( KWFrame * frame )
     emit docStructureChanged(docItem);
 }
 
+void KWDocument::deleteSeveralFrame()
+{
+    QList<KWFrame> frames=getSelectedFrames();
+    int nbCommand=0;
+    KWFrame *tmp=0;
+
+    int docItem=0;
+
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Delete frames") );
+    for ( tmp=frames.first(); tmp != 0; tmp=frames.next() )
+    {
+        KWFrameSet *fs = tmp->getFrameSet();
+        if ( fs->isAFooter() || fs->isAHeader() )
+            continue;
+        //a table
+        if ( fs->getGroupManager() )
+        {
+            KWTableFrameSet *table=fs->getGroupManager();
+            ASSERT(table);
+            docItem|=typeItemDocStructure(table->type());
+
+            if ( table->isFloating() )
+            {
+                emit sig_terminateEditing( table ); // to unselect its cells, especially
+                docItem|=typeItemDocStructure(fs->type());
+
+                KWAnchor * anchor = table->findAnchor( 0 );
+                KCommand * cmd=table->anchorFrameset()->deleteAnchoredFrame( anchor );
+                macroCmd->addCommand(cmd);
+                nbCommand++;
+            }
+            else
+            {
+                KWDeleteTableCommand *cmd = new KWDeleteTableCommand( i18n("Delete table"), table );
+                addCommand( cmd );
+                cmd->execute();
+                macroCmd->addCommand(cmd);
+                nbCommand++;
+            }
+        }
+        else
+        {// a simple frame
+            if ( fs->type() == FT_TEXT)
+            {
+                if ( processingType() == KWDocument::WP && getFrameSetNum( fs ) == 0 )
+                    continue;
+            }
+
+            docItem|=typeItemDocStructure(fs->type());
+
+            if ( fs->isFloating() )
+            {
+                tmp->setSelected( false );
+                KWAnchor * anchor = fs->findAnchor( 0 );
+                KCommand *cmd=fs->anchorFrameset()->deleteAnchoredFrame( anchor );
+                macroCmd->addCommand(cmd);
+                nbCommand++;
+            }
+            else
+            {
+                KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand( i18n("Delete frame"), tmp );
+                addCommand( cmd );
+                cmd->execute();
+                macroCmd->addCommand(cmd);
+                nbCommand++;
+            }
+        }
+    }
+    if( nbCommand)
+    {
+        addCommand(macroCmd);
+        emit refreshDocStructure(docItem);
+    }
+    else
+        delete macroCmd;
+
+}
+
 void KWDocument::reorganizeGUI()
 {
    QListIterator<KWView> it( m_lstViews );
@@ -2769,7 +2847,7 @@ void KWDocument::refreshDocStructure(int type)
      emit docStructureChanged(type);
 }
 
-void KWDocument::refreshDocStructure(FrameSetType _type)
+int KWDocument::typeItemDocStructure(FrameSetType _type)
 {
     int typeItem;
     switch(_type)
@@ -2792,7 +2870,12 @@ void KWDocument::refreshDocStructure(FrameSetType _type)
         default:
             typeItem=(int)TextFrames;
     }
-    emit docStructureChanged(typeItem);
+    return typeItem;
+}
+
+void KWDocument::refreshDocStructure(FrameSetType _type)
+{
+    emit docStructureChanged(typeItemDocStructure(_type));
 }
 
 QColor KWDocument::resolveTextColor( const QColor & col, QPainter * painter )
