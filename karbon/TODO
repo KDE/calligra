@@ -1,5 +1,7 @@
 GUI:
 -	move the dialogs from "Edit->Transform" to a docker under "View"
+-   make some pattern widget, krita seems to have a nice one, maybe we can work
+    together, share pattern images and put something in kofficeui.
 
 REAL BUGS:
 -	scale gradient coords while zooming as well
@@ -31,6 +33,7 @@ TODO:
 -	printing
 -	change flatness test in intersection code to a estimation used in gems code. otherwise
 	if the 2 input curves are the same our code runs forever.
+-   bring text support back, ideally using fontconfig and freetype, and no xft.
 
 WISHLIST:
 -	Ctrl or Shift (pressed) while dragging a shape should make the shape move along only one axis
