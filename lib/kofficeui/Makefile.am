@@ -1,9 +1,9 @@
 ###### General stuff
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = -I$(top_srcdir)/lib/kofficecore -I$(top_builddir)/lib/kofficecore $(all_includes)
+INCLUDES = $(KOFFICECORE_INCLUDES) $(all_includes)
 libkofficeui_la_LDFLAGS	= -version-info 1:0:0 -no-undefined
-libkofficeui_la_LIBADD  = ../kofficecore/libkofficecore.la
+libkofficeui_la_LIBADD  = $(LIB_KOFFICECORE)
 
 ####### Files
 

@@ -32,14 +32,14 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	preview.h preview.cc kpresenter_dlg_config.cc
 
 libkpresenterpart_la_LDFLAGS = $(KDE_PLUGIN)
-libkpresenterpart_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la
+libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) 
 libkpresenterpart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = kpresenter.la
 kpresenter_la_SOURCES = main.cc
 kpresenter_la_LDFLAGS = $(all_libraries) -avoid-version -module
-kpresenter_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+kpresenter_la_LIBADD = $(LIB_KOFFICECORE)
 
 ## The executable
 bin_PROGRAMS = kpresenter

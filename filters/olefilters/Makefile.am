@@ -1,7 +1,7 @@
 
 INCLUDES = -I$(srcdir) -I$(srcdir)/lib -I$(srcdir)/winword97 \
 -I$(srcdir)/excel97 -I$(srcdir)/powerpoint97 $(KOFFICE_INCLUDES) \
-$(KOFFICECORE_INCLUDES) $(all_includes)
+$(all_includes)
 
 libolefilter_la_LDFLAGS = -module -avoid-version -no-undefined
 libolefilter_la_LIBADD = ./lib/libfilterbase.la ./lib/libklaola.la \

@@ -100,12 +100,6 @@ KPObject::~KPObject()
 {
 }
 
-/*================================================================*/
-KPObject &KPObject::operator=( const KPObject & )
-{
-    return *this;
-}
-
 QDomDocumentFragment KPObject::save( QDomDocument& doc )
 {
     QDomDocumentFragment fragment=doc.createDocumentFragment();

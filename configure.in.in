@@ -1,6 +1,6 @@
 #MIN_CONFIG
 
-AM_INIT_AUTOMAKE(koffice, "1.1-beta1") 
+AM_INIT_AUTOMAKE(koffice, "post 1.1") 
 
 CXXFLAGS="$CXXFLAGS -DQT_CLEAN_NAMESPACE -DQT_NO_COMPAT -DQT_NO_ASCII_CAST"
 
@@ -8,6 +8,3 @@ AC_CHECK_HEADERS(unistd.h sys/param.h floatingpoint.h paths.h)
 KDE_CHECK_KIMGIO
 AC_C_BIGENDIAN
 AC_CHECK_KDEMAXPATHLEN
-
-dnl AC_DEFINE(USE_QFD, 1, [Define if you prefer the Qt provided file dialog])
-

@@ -19,7 +19,7 @@ rc_DATA = KIllustrator.rc
 lib_LTLIBRARIES = kontour.la
 kontour_la_SOURCES = main.cc
 kontour_la_LDFLAGS = $(all_libraries) -avoid-version -module
-kontour_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+kontour_la_LIBADD = $(LIB_KOFFICECORE)
 
 ## The executable
 bin_PROGRAMS = kontour
@@ -75,6 +75,6 @@ libkontourpart_la_SOURCES = KIllustrator_doc.cc \
 	filter_utils.cc LayerPanel.cc TabBar.cc tooldockbase.cc
 
 libkontourpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkontourpart_la_LIBADD = $(top_builddir)/kontour/filter/libfilter.la $(top_builddir)/lib/kofficeui/libkofficeui.la
+libkontourpart_la_LIBADD = $(top_builddir)/kontour/filter/libfilter.la $(LIB_KOFFICEUI)
 
 METASOURCES = AUTO

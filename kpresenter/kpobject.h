@@ -44,7 +44,6 @@ public:
     KPObject();
     virtual ~KPObject();
 
-    KPObject &operator=( const KPObject & );
 
     virtual DCOPObject* dcopObject();
 
@@ -224,6 +223,11 @@ protected:
         &attrEffect2, &tagPRESNUM, &tagANGLE,
         &tagDISAPPEAR, &attrDoit, &attrNum, &tagFILLTYPE,
         &tagGRADIENT, &tagPEN, &tagBRUSH, &attrValue;
+
+private:
+    // Don't copy or assign it
+    KPObject(const KPObject &rhs);
+    KPObject &operator=(const KPObject &rhs);
 };
 
 

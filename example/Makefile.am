@@ -6,13 +6,13 @@ kde_module_LTLIBRARIES = libexamplepart.la
 libexamplepart_la_SOURCES = example_part.cc \
 	example_view.cc example_factory.cc
 libexamplepart_la_LDFLAGS = $(KDE_PLUGIN)
-libexamplepart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
+libexamplepart_la_LIBADD = $(LIB_KOFFICEUI)
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = example.la
 example_la_SOURCES = main.cc
 example_la_LDFLAGS = $(all_libraries) -module -avoid-version
-example_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+example_la_LIBADD = $(LIB_KOFFICEUI)
 
 ## The executable
 bin_PROGRAMS = example

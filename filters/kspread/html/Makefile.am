@@ -1,7 +1,7 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) -I$(top_srcdir)/kspread $(KOFFICE_INCLUDES) \
--I$(top_srcdir)/lib/kscript -I$(top_srcdir)/lib/koscript $(all_includes)
+	$(KOSCRIPT_INCLUDES) $(all_includes)
 
 ####### Files
 

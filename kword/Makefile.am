@@ -1,6 +1,6 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula \
+INCLUDES = $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) \
 	-I$(top_srcdir)/qt3stuff $(all_includes)
 
 ## The part
@@ -22,14 +22,14 @@ libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
 		splitcellsdia.cc kwinsertpicdia.cc
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkwordpart_la_LIBADD = ../lib/kofficeui/libkofficeui.la ../lib/kformula/libkformula.la ../qt3stuff/libqt3stuff.la -lkspell
+libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KFORMULA) ../qt3stuff/libqt3stuff.la -lkspell
 libkwordpart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = kword.la
 kword_la_SOURCES = main.cc
 kword_la_LDFLAGS = $(all_libraries) -avoid-version -module
-kword_la_LIBADD = ../lib/kofficecore/libkofficecore.la
+kword_la_LIBADD = $(LIB_KOFFICECORE)
 
 ## The executable
 bin_PROGRAMS = kword

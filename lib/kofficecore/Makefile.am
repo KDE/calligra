@@ -2,9 +2,8 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES= $(KSTORE_INCLUDES) $(KWMF_INCLUDES) $(all_includes)
-libkofficecore_la_LIBADD  = \
-	$(top_builddir)/lib/store/libkstore.la $(top_builddir)/lib/kwmf/libkwmf.la \
-	$(LIB_KPARTS) $(LIB_KDEPRINT)
+libkofficecore_la_LIBADD  = $(LIB_KSTORE) $(LIB_KWMF) $(LIB_KPARTS) \
+	$(LIB_KDEPRINT)
 
 ####### Files
 
@@ -40,12 +39,9 @@ include_HEADERS = koFilter.h \
 
 noinst_HEADERS = koDocument_p.h
 
-#libkofficecore_la_METASOURCES = AUTO
-
 libkodocinfopropspage_la_SOURCES = koDocInfoPropsFactory.cc
-libkodocinfopropspage_la_LIBADD = libkofficecore.la
+libkodocinfopropspage_la_LIBADD = ./libkofficecore.la
 libkodocinfopropspage_la_LDFLAGS = $(all_libraries) -module -no-undefined
-#libkodocinfopropspage_la_METASOURCES = AUTO
 
 METASOURCES = AUTO
 
