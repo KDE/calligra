@@ -22,6 +22,7 @@
 
 #include <klocale.h>
 #include <kiconloaderdialog.h>
+#include <kapp.h>
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -80,7 +81,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( QWidget *parent, const QString &file_,
     
     QStringList::ConstIterator it = templateRoots_.begin();
     QString privateData = getenv( "HOME" );
-    privateData += "/.kde/share/apps/kpresenter/templates/";
+    privateData += "/.kde/share/apps/" + kapp->instanceName() + "/templates/";
     bool hadPrivateData = FALSE;
     for ( ; it != templateRoots_.end(); ++it ) {
 	if ( *it == privateData )
@@ -100,7 +101,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( QWidget *parent, const QString &file_,
 			QDir dir( *it + s );
 			QListViewItem *folder = new QListViewItem( root, s );
 			folder->setOpen( TRUE );
-			const QFileInfoList *lst = dir.entryInfoList( "*.kpt" );
+			const QFileInfoList *lst = dir.entryInfoList( "*." + extension );
 			QFileInfoListIterator it( *lst );
 			QFileInfo *fi;
 			while ( ( fi = it.current() ) != 0 ) {
