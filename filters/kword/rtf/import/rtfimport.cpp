@@ -633,10 +633,11 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
  */
 void RTFImport::setCodepage( RTFProperty * )
 {
-    QString cp("CP");
-    cp+=QString::number( token.value );
-    textCodec=QTextCodec::codecForName(cp.utf8());
-    kdDebug(30515) << "\\ansicpg: asked: " << cp << " given: " << textCodec->name() << endl;
+    QCString cp;
+    cp.setNum( token.value );
+    cp.prepend("CP");
+    textCodec=QTextCodec::codecForName(cp);
+    kdDebug(30515) << "\\ansicpg: asked: " << cp << " given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
 }
 
 /**
@@ -645,7 +646,7 @@ void RTFImport::setCodepage( RTFProperty * )
 void RTFImport::setMacCodepage( RTFProperty * )
 {
     textCodec=QTextCodec::codecForName("Apple Roman");
-    kdDebug(30515) << "\\mac " << textCodec->name() << endl; 
+    kdDebug(30515) << "\\mac " << (textCodec?textCodec->name():QString("-none-")) << endl; 
 }
 
 /**
@@ -655,7 +656,7 @@ void RTFImport::setMacCodepage( RTFProperty * )
 void RTFImport::setAnsiCodepage( RTFProperty * )
 {
     textCodec=QTextCodec::codecForName("CP1252");
-    kdDebug(30515) << "\\ansi " << textCodec->name() << endl; 
+    kdDebug(30515) << "\\ansi " << (textCodec?textCodec->name():QString("-none-")) << endl; 
 }
 
 /**
@@ -664,7 +665,7 @@ void RTFImport::setAnsiCodepage( RTFProperty * )
 void RTFImport::setPcaCodepage( RTFProperty * )
 {
     textCodec=QTextCodec::codecForName("IBM 850"); // Qt writes the name with a space
-    kdDebug(30515) << "\\pca " << textCodec->name() << endl; 
+    kdDebug(30515) << "\\pca " << (textCodec?textCodec->name():QString("-none-")) << endl; 
 }
 
 /**
@@ -673,7 +674,7 @@ void RTFImport::setPcaCodepage( RTFProperty * )
 void RTFImport::setPcCodepage( RTFProperty * )
 {
     textCodec=QTextCodec::codecForName("IBM 850"); // This is an approximation
-    kdDebug(30515) << "\\pc (approximation) " << textCodec->name() << endl;
+    kdDebug(30515) << "\\pc (approximation) " << (textCodec?textCodec->name():QString("-none-")) << endl;
 }
 
 /**
