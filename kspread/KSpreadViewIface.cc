@@ -107,6 +107,11 @@ void KSpreadViewIface::nextTable()
     m_view->nextTable();
 }
 
+bool KSpreadViewIface::showTable(QString tableName)
+{
+   return m_view->showTable(tableName);
+}
+
 void KSpreadViewIface::previousTable()
 {
     m_view->previousTable();

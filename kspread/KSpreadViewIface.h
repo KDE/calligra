@@ -41,6 +41,7 @@ k_dcop:
     virtual void preference();
     virtual void nextTable();
     virtual void previousTable();
+    virtual bool showTable(QString tableName);
     virtual void sortList();
     virtual void setAreaName();
     virtual void showAreaName();

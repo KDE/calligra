@@ -4599,6 +4599,19 @@ void KSpreadView::editCell()
   m_pCanvas->createEditor();
 }
 
+bool KSpreadView::showTable(const QString& tableName) {
+  KSpreadSheet *t=m_pDoc->map()->findTable(tableName);
+  if ( !t )
+  {
+    kdDebug(36001) << "Unknown table " <<tableName<<  endl;
+    return false;
+  }
+  m_pCanvas->closeEditor();
+  setActiveTable( t );
+
+  return true;	
+}
+
 void KSpreadView::nextTable(){
 
   KSpreadSheet * t = m_pDoc->map()->nextTable( activeTable() );

@@ -202,6 +202,8 @@ public:
      */
     void resetInsertHandle() { m_pInsertHandle = 0L; }
 
+    bool showTable(const QString& tableName);
+
 public slots:
     /**
     * refresh view when you hide/show vertical scrollbar
