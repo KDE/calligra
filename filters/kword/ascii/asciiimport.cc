@@ -164,6 +164,24 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
     str += "</FRAMESET>\n";
     if( table_no > 0) str += tbl;
     str += "</FRAMESETS>\n";
+    str+=" <STYLES>\n";
+    str+="  <STYLE>\n";
+    str+="   <NAME value=\"Standard\" />\n";
+    str+="   <FLOW align=\"left\" />\n";
+    str+="   <OFFSETS before=\"14.1733\" />\n";
+    str+="   <FOLLOWING name=\"Standard\" />\n";
+    str+="   <FORMAT id=\"1\" >\n";
+    str+="    <WEIGHT value=\"50\" />\n";
+    str+="    <COLOR blue=\"0\" red=\"0\" green=\"0\" />\n";
+    str+="    <FONT name=\"helvetica\" />\n";
+    str+="    <SIZE value=\"11\" />\n";
+    str+="    <ITALIC value=\"0\" />\n";
+    str+="    <UNDERLINE value=\"0\" />\n";
+    str+="    <STRIKEOUT value=\"0\" />\n";
+    str+="    <VERTALIGN value=\"0\" />\n";
+    str+="   </FORMAT>\n";
+    str+="  </STYLE>\n";
+    str+=" </STYLES>\n";
     str += "</DOC>\n";
 
 kdDebug() << str << endl;
