@@ -254,7 +254,7 @@ void Container::testDirty()
 void Container::recalc()
 {
     impl->dirty = false;
-    ContextStyle& context = document()->getContextStyle();
+    ContextStyle& context = impl->document->getContextStyle();
     rootElement()->calcSizes( context );
 
     emit formulaChanged( context.layoutUnitToPixelX( rootElement()->getWidth() ),
@@ -375,6 +375,11 @@ void Container::cut()
     }
 }
 
+
+void Container::emitErrorMsg( const QString& msg )
+{
+    emit errorMsg( msg );
+}
 
 void Container::execute(KCommand* command)
 {

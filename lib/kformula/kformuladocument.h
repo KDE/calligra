@@ -25,6 +25,7 @@
 #include <qobject.h>
 #include <qptrlist.h>
 #include <qstring.h>
+#include <qstringlist.h>
 
 #include <kaction.h>
 #include <kcommand.h>
@@ -58,6 +59,15 @@ class Document : public QObject {
 public:
 
     /**
+     * Creates a formula document.
+     *
+     * This Constructor exists to be able to create a document from a
+     * library. You need to call @ref setConfig and @ref
+     * setCommandStack by hand.
+     */
+    Document( QObject *parent, const char *name, const QStringList &args );
+
+    /**
      * Creates a formula document with actions.
      *
      * @param collection a place to put the document's actions.
@@ -74,6 +84,15 @@ public:
     Document( KConfig* config, KoCommandHistory* history = 0 );
 
     ~Document();
+
+    /**
+     * Creates the standard formula actions and puts them into
+     * the collection.
+     */
+    void createActions( KActionCollection* collection );
+
+    void setConfig( KConfig* config );
+    void setCommandStack( KoCommandHistory* his );
 
     /**
      * Factory method.
@@ -302,6 +321,11 @@ protected:
      */
     void formulaDies( Container* formula );
 
+    /**
+     * Sorts the list of formulas according to their screen positions.
+     */
+    void sortFormulaList();
+
 private:
 
     /**
@@ -317,12 +341,6 @@ private:
     void lazyInit();
 
     void initSymbolNamesAction();
-
-    /**
-     * Creates the standard formula actions and puts them into
-     * the collection.
-     */
-    void createActions(KActionCollection* collection);
 
     /**
      * @returns whether we have a formula that can get requests.

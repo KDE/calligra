@@ -239,9 +239,29 @@ public:
     double baseline() const;
 
     /**
-     * Moves the formula to a new location.
+     * Moves the formula to a new location. This location will be the
+     * upper left corner of the rectangle that is drawn by the painter.
      */
     void moveTo( int x, int y );
+
+    /**
+     * KWord uses a transformed painter to draw formulas, so every
+     * formula has the internal position (0,0). But we might need to
+     * sort our formulas according to their position inside the
+     * document. (This is only needed for math formulas.)
+     */
+    virtual double getDocumentX() const { return -1; }
+    virtual double getDocumentY() const { return -1; }
+    virtual void setDocumentPosition( double /*x*/, double /*y*/ ) {}
+
+    /**
+     * Start the documents evaluation at this formula. This must be the
+     * formula that changed. The formulas above it won't be affected
+     * by this change.
+     *
+     * This has no meaning in not evaluating formulas.
+     */
+    virtual void startEvaluation() {}
 
     /**
      * Recalcs the formula and emits the .*Changed signals if needed.
@@ -297,6 +317,11 @@ signals:
      * A message that might be a useful hint. Meant for the statusbar.
      */
     void statusMsg( const QString& msg );
+
+    /**
+     * A message that describes an error. Meant for a message box. (?)
+     */
+    void errorMsg( const QString& );
 
     /**
      * The element is going to leave the formula with and all its children.
@@ -357,6 +382,8 @@ protected:
      * Factory method.
      */
     virtual FormulaElement* createMainSequence();
+
+    void emitErrorMsg( const QString& );
 
 private:
 

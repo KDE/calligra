@@ -396,7 +396,8 @@ const ContextStyle& View::contextStyle() const
 
 bool View::cursorVisible()
 {
-    return !cursor()->isReadOnly() || cursor()->isSelection();
+    //return !cursor()->isReadOnly() || cursor()->isSelection();
+    return true;
 }
 
 KFORMULA_NAMESPACE_END

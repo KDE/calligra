@@ -50,12 +50,39 @@ static const char * CURRENT_DTD_VERSION = "1.3";
 static OrdinaryCreationStrategy creationStrategy;
 
 
+/**
+ * small utility class representing a sortable (by x,y position) list of formulas
+ * you can use sort() and inSort(item)
+ **/
+class FormulaList: public QPtrList<Container>
+{
+protected:
+    virtual int compareItems( QPtrCollection::Item a, QPtrCollection::Item b );
+};
+
+
+int FormulaList::compareItems( QPtrCollection::Item a, QPtrCollection::Item b )
+{
+    double ya = static_cast<Container*>( a )->getDocumentY();
+    double yb = static_cast<Container*>( b )->getDocumentY();
+    if ( fabs( ya-yb ) < 1e-4 ) {
+        double xa = static_cast<Container*>( a )->getDocumentX();
+        double xb = static_cast<Container*>( b )->getDocumentX();
+        if ( xa < xb ) return -1;
+        if ( xa > xb ) return 1;
+        return 0;
+    }
+    if ( ya < yb ) return -1;
+    return 1;
+}
+
+
 struct Document::Document_Impl {
 
-    Document_Impl( KConfig* c )
+    Document_Impl()
             : leftBracketChar( LeftRoundBracket ), rightBracketChar( RightRoundBracket ),
-              formula(0), firstTime( true ),
-              actionsCreated( false ), config( c )
+              formula( 0 ), history( 0 ), ownHistory( false ), firstTime( true ),
+              actionsCreated( false ), config( 0 )
     {
         SequenceElement::setCreationStrategy( &creationStrategy );
         formulae.setAutoDelete( false );
@@ -159,7 +186,7 @@ struct Document::Document_Impl {
     /**
      * All formulae that belong to this document.
      */
-    QPtrList<Container> formulae;
+    FormulaList formulae;
 
     /**
      * Lazy initialization. Read the symbol table only if
@@ -234,34 +261,54 @@ SymbolType Document::leftBracketChar() const  { return impl->leftBracketChar; }
 SymbolType Document::rightBracketChar() const { return impl->rightBracketChar; }
 
 
+Document::Document( QObject *parent, const char *name, const QStringList &/*args*/ )
+    : QObject( parent, name )
+{
+    impl = new Document_Impl;
+}
+
+
 Document::Document( KConfig* config,
                     KActionCollection* collection,
                     KoCommandHistory* his )
 {
-    impl = new Document_Impl( config );
+    impl = new Document_Impl;
 
-    KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "kformula/pics/");
-    createActions(collection);
-    //kdDebug( DEBUGID ) << "Document::Document " << collection << endl;
-    impl->contextStyle.readConfig( impl->config );
-    impl->syntaxHighlightingAction->setChecked( impl->contextStyle.syntaxHighlighting() );
-
-    if (his == 0) {
-        impl->history = new KoCommandHistory(collection);
-        impl->ownHistory = true;
-    }
-    else {
-        impl->history = his;
-        impl->ownHistory = false;
-    }
+    setConfig( config );
+    createActions( collection );
+    setCommandStack( his );
 }
 
 
 Document::Document( KConfig* config, KoCommandHistory* his )
 {
-    impl = new Document_Impl( config );
-    impl->contextStyle.readConfig( impl->config );
-    if (his == 0) {
+    impl = new Document_Impl;
+
+    setConfig( config );
+    setCommandStack( his );
+}
+
+
+Document::~Document()
+{
+    delete impl;
+}
+
+
+void Document::setConfig( KConfig* config )
+{
+    impl->config = config;
+    impl->contextStyle.readConfig( config );
+}
+
+
+void Document::setCommandStack( KoCommandHistory* his )
+{
+    if ( impl->ownHistory ) {
+        delete impl->history;
+    }
+
+    if ( his == 0 ) {
         impl->history = new KoCommandHistory;
         impl->ownHistory = true;
     }
@@ -269,12 +316,6 @@ Document::Document( KConfig* config, KoCommandHistory* his )
         impl->history = his;
         impl->ownHistory = false;
     }
-}
-
-
-Document::~Document()
-{
-    delete impl;
 }
 
 
@@ -400,6 +441,12 @@ void Document::formulaDies( Container* formula )
         impl->formula = 0;
     }
     impl->formulae.remove( formula );
+}
+
+
+void Document::sortFormulaList()
+{
+    impl->formulae.sort();
 }
 
 
@@ -529,6 +576,9 @@ void Document::setEnabled( bool enabled )
 
 void Document::createActions(KActionCollection* collection)
 {
+    KGlobal::dirs()->addResourceType("toolbar",
+                                     KStandardDirs::kde_default("data") + "kformula/pics/");
+
     impl->addNegThinSpaceAction = new KAction( i18n( "Add Negative Thin Space" ),
                                     0,
                                     this, SLOT( addNegThinSpace() ),
@@ -701,6 +751,7 @@ void Document::createActions(KActionCollection* collection)
                                                  0,
                                                  this, SLOT(toggleSyntaxHighlighting()),
                                                  collection, "formula_syntaxhighlighting");
+    impl->syntaxHighlightingAction->setChecked( impl->contextStyle.syntaxHighlighting() );
 
     impl->formatBoldAction = new KToggleAction( i18n( "&Bold" ), "text_bold",
                                                 0, //CTRL + Key_B,
