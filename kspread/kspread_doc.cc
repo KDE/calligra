@@ -47,6 +47,7 @@
 #include <kocommandhistory.h>
 #include <koTemplateChooseDia.h>
 #include <koxmlwriter.h>
+#include <koStoreDevice.h>
 
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
@@ -565,6 +566,31 @@ bool KSpreadDoc::loadChildren( KoStore* _store )
 
 bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
+
+    //Terminate current cell edition, if any
+    QPtrListIterator<KoView> it( views() );
+
+    /* don't pull focus away from the editor if this is just a background
+       autosave */
+    if (!isAutosaving())
+    {
+        for (; it.current(); ++it )
+            static_cast<KSpreadView *>( it.current() )->deleteEditor( true );
+    }
+    if ( !store->open( "maindoc.xml" ) )
+        return false;
+
+    KoStoreDevice dev( store );
+    KoXmlWriter xmlWriter( &dev, "office:document-content" );
+
+    //todo fixme just add a element for testing saving maindoc.xml
+    xmlWriter.startElement( "office:body" );
+
+    xmlWriter.endElement();
+    xmlWriter.endElement(); // root element
+    xmlWriter.endDocument();
+    if ( !store->close() )
+        return false;
     kdError() << "KSpreadDoc::saveOasis not implemented (for the moment :) )" << endl;
     return true;
 }

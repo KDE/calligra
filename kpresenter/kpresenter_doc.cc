@@ -899,6 +899,27 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
 
 bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
+    //todo necessary for new format ?
+    if ( saveOnlyPage == -1 ) {
+        emit sigProgress( 0 );
+    }
+    m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
+    recalcVariables( VT_DATE );
+    recalcVariables( VT_TIME );
+
+    if ( !store->open( "maindoc.xml" ) )
+        return false;
+
+    KoStoreDevice dev( store );
+    KoXmlWriter xmlWriter( &dev, "office:document-content" );
+    xmlWriter.startElement( "office:body" );
+
+    xmlWriter.endElement();
+    xmlWriter.endElement(); // root element
+    xmlWriter.endDocument();
+    if ( !store->close() )
+        return false;
+
     kdError() << "KPresenterDoc::saveOasis not implemented (for the moment :) )" << endl;
     return true;
 }
