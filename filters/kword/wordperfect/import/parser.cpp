@@ -820,7 +820,7 @@ Parser::parseDocWP6 (const QString & filename, int start)
             case 0xd41a:
               {
                 unsigned fontpid = pid[0];
-                if( fontpid > packets.count() ) continue;
+                if( fontpid == 0 || fontpid > packets.count() ) continue;
                 Packet* p = packets.at( fontpid-1 );
                 if( p->type==85 )
                 {
