@@ -37,8 +37,11 @@ namespace KexiDB
 	/*! \return list of types for a given \a typeGroup. */
 	KEXI_DB_EXPORT const TypeGroupList typesForGroup(KexiDB::Field::TypeGroup typeGroup);
 
-	/*! \return list of type i18n'd names for a given \a typeGroup. */
+	/*! \return list of i18n'd type names for a given \a typeGroup. */
 	KEXI_DB_EXPORT QStringList typeNamesForGroup(KexiDB::Field::TypeGroup typeGroup);
+
+	/*! \return list of (not-i18n'd) type names for a given \a typeGroup. */
+	KEXI_DB_EXPORT QStringList typeStringsForGroup(KexiDB::Field::TypeGroup typeGroup);
 }
 
 #endif

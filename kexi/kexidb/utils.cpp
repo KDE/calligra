@@ -43,6 +43,7 @@ bool KexiDB::replaceRow(Connection &conn, TableSchema *table, const QString &key
 
 //! Cache
 QMap< uint, TypeGroupList > tlist;
+QMap< uint, QStringList > nlist;
 QMap< uint, QStringList > slist;
 
 inline void initList()
@@ -53,14 +54,17 @@ inline void initList()
 	for (uint t=0; t<=KexiDB::Field::LastType; t++) {
 		const uint tg = KexiDB::Field::typeGroup( t );
 		TypeGroupList list;
-		QStringList str_list;
+		QStringList name_list, str_list;
 		if (tlist.find( tg )!=tlist.end()) {
 			list = tlist[ tg ];
+			name_list = nlist[ tg ];
 			str_list = slist[ tg ];
 		}
 		list+= t;
-		str_list += KexiDB::Field::typeName( t );
+		name_list += KexiDB::Field::typeName( t );
+		str_list += KexiDB::Field::typeString( t );
 		tlist[ tg ] = list;
+		nlist[ tg ] = name_list;
 		slist[ tg ] = str_list;
 	}
 }
@@ -72,6 +76,12 @@ const TypeGroupList KexiDB::typesForGroup(KexiDB::Field::TypeGroup typeGroup)
 }
 
 QStringList KexiDB::typeNamesForGroup(KexiDB::Field::TypeGroup typeGroup)
+{
+	initList();
+	return nlist[ typeGroup ];
+}
+
+QStringList KexiDB::typeStringsForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
 	initList();
 	return slist[ typeGroup ];

@@ -502,9 +502,9 @@ void Field::setExpression(KexiDB::Expression *expr)
 
 //-------------------------------------------------------
 #define ADDTYPE(type, i18, str) this->at(Field::type) = i18; \
-	this->at(Field::type+Field::LastType) = str
+	this->at(Field::type+Field::LastType+1) = str
 #define ADDGROUP(type, i18, str) this->at(Field::type) = i18; \
-	this->at(Field::type+Field::LastTypeGroup) = str
+	this->at(Field::type+Field::LastTypeGroup+1) = str
 
 Field::FieldTypeNames::FieldTypeNames()
  : QValueVector<QString>()
