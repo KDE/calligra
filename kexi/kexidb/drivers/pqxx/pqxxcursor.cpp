@@ -84,6 +84,11 @@ bool pqxxSqlCursor::drv_open(const QString& statement)
 		KexiDBDrvDbg << "pqxxSqlCursor::drv_open:exception - " << e.what() << endl;
         	return false;
     	}
+	catch(...)
+    	{
+    		setError();
+		return false;
+    	}
 }
 
 //==================================================================================

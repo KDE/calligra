@@ -186,7 +186,10 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName )
     {
         KexiDBDrvDbg << "pqxxSqlConnection::drv_useDatabase:exception - " << e.what() << endl;
         setError(ERR_DB_SPECIFIC,e.what());
-
+    }
+    catch(...)
+    {
+    	setError();
     }
     return false;
 }
@@ -252,6 +255,10 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
         //If an error ocurred then put the error description into _dbError
         setError(ERR_DB_SPECIFIC,e.what());
         KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL:exception - " << e.what() << endl;
+    }
+    catch(...)
+    {
+    	setError();
     }
     KexiDBDrvDbg << "EXECUTE SQL OK: OID was " <<m_res->inserted_oid() << endl;
     return ok;
