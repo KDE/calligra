@@ -1136,14 +1136,17 @@ void KSpreadView::deleteColumn()
   m_pTable->deleteColumn( m_pCanvas->markerColumn() );
   KSpreadTable *tbl;
   for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
-    tbl->recalc(true);
+	    tbl->recalc(true);
+
+  QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
+  for( ; it.current(); ++it )
+        it.current()->changeRef(m_pCanvas->markerColumn(),KSpreadTable::columnRemove, m_pTable->name());
 
   KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
   if ( cell->text() != 0L )
 	 editWidget()->setText( cell->text() );
   else
 	 editWidget()->setText( "" );
-  m_pTable->changeRef( m_pCanvas->markerColumn(),KSpreadTable::columnRemove, m_pTable->name());
 }
 
 void KSpreadView::deleteRow()
@@ -1153,14 +1156,18 @@ void KSpreadView::deleteRow()
   m_pTable->deleteRow( m_pCanvas->markerRow() );
   KSpreadTable *tbl;
   for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
-    tbl->recalc(true);
+	    tbl->recalc(true);
+
+  QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
+  for( ; it.current(); ++it )
+        it.current()->changeRef(m_pCanvas->markerRow(),KSpreadTable::rowRemove,m_pTable->name());
 
   KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
   if ( cell->text() != 0L )
 	 editWidget()->setText( cell->text() );
   else
 	 editWidget()->setText( "" );
-  m_pTable->changeRef( m_pCanvas->markerRow(),KSpreadTable::rowRemove,m_pTable->name());
+  	
 
 }
 
@@ -1172,14 +1179,19 @@ void KSpreadView::insertColumn()
 
   KSpreadTable *tbl;
   for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
-    tbl->recalc(true);
+	    tbl->recalc(true);
+
+  QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
+  for( ; it.current(); ++it )
+        it.current()->changeRef(m_pCanvas->markerColumn(),KSpreadTable::columnInsert,m_pTable->name());
+
 
   KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
   if ( cell->text() != 0L )
 	 editWidget()->setText( cell->text() );
   else
 	 editWidget()->setText( "" );
-  m_pTable->changeRef( m_pCanvas->markerColumn(),KSpreadTable::columnInsert,m_pTable->name());
+  	
 }
 
 void KSpreadView::insertRow()
@@ -1190,14 +1202,18 @@ void KSpreadView::insertRow()
 
   KSpreadTable *tbl;
   for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
-    tbl->recalc(true);
+		tbl->recalc(true);
+
+  QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
+  for( ; it.current(); ++it )
+        it.current()->changeRef(m_pCanvas->markerRow(),KSpreadTable::rowInsert,m_pTable->name());
 
   KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
   if ( cell->text() != 0L )
 	 editWidget()->setText( cell->text() );
   else
 	 editWidget()->setText( "" );
- m_pTable->changeRef( m_pCanvas->markerRow(),KSpreadTable::rowInsert,m_pTable->name());
+ 	
 }
 
 void KSpreadView::fontSelected( const QString &_font )
@@ -2165,14 +2181,18 @@ void KSpreadView::slotInsertColumn()
     m_pTable->insertColumn( m_pHBorderWidget->markerColumn() );
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
-     tbl->recalc(true);
+	     tbl->recalc(true);
+
+    QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
+    for( ; it.current(); ++it )
+        it.current()->changeRef(m_pHBorderWidget->markerColumn(),KSpreadTable::columnInsert,m_pTable->name());
 
     KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
     if ( cell->text() != 0L )
 	   editWidget()->setText( cell->text() );
     else
 	   editWidget()->setText( "" );
-   m_pTable->changeRef(m_pHBorderWidget->markerColumn(),KSpreadTable::columnInsert,m_pTable->name());
+   	
 }
 
 void KSpreadView::slotRemoveColumn()
@@ -2180,13 +2200,18 @@ void KSpreadView::slotRemoveColumn()
     m_pTable->deleteColumn( m_pHBorderWidget->markerColumn() );
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
-      tbl->recalc(true);
+	      tbl->recalc(true);
+
+    QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
+    for( ; it.current(); ++it )
+        it.current()->changeRef(m_pHBorderWidget->markerColumn(),KSpreadTable::columnRemove,m_pTable->name());
+
     KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
     if ( cell->text() != 0L )
 	   editWidget()->setText( cell->text() );
     else
 	   editWidget()->setText( "" );
-    m_pTable->changeRef(m_pHBorderWidget->markerColumn(),KSpreadTable::columnRemove,m_pTable->name());
+	
 }
 
 void KSpreadView::PopupMenuRow(const QPoint & _point )
@@ -2227,14 +2252,18 @@ void KSpreadView::slotInsertRow()
  m_pTable->insertRow( m_pVBorderWidget->markerRow() );
  KSpreadTable *tbl;
  for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
-    tbl->recalc(true);
+    	tbl->recalc(true);
+
+ QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
+ for( ; it.current(); ++it )
+  	it.current()->changeRef( m_pVBorderWidget->markerRow(),KSpreadTable::rowInsert,m_pTable->name());
 
  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
  if ( cell->text() != 0L )
 	editWidget()->setText( cell->text() );
  else
 	editWidget()->setText( "" );
- m_pTable->changeRef( m_pVBorderWidget->markerRow(),KSpreadTable::rowInsert,m_pTable->name());
+ 	
 }
 
 void KSpreadView::slotRemoveRow()
@@ -2245,12 +2274,17 @@ void KSpreadView::slotRemoveRow()
    for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
     	tbl->recalc(true);
 
+    	
+  QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
+  for( ; it.current(); ++it )
+        it.current()->changeRef(m_pVBorderWidget->markerRow(),KSpreadTable::rowRemove,m_pTable->name());
+
+
    KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
    if ( cell->text() != 0L )
 	   editWidget()->setText( cell->text() );
    else
 	   editWidget()->setText( "" );
-   m_pTable->changeRef(m_pVBorderWidget->markerRow(),KSpreadTable::rowRemove,m_pTable->name());
 }
 
 void KSpreadView::openPopupMenu( const QPoint & _point )

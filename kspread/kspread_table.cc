@@ -746,28 +746,43 @@ QIntDictIterator<KSpreadCell> it( m_dctCells );
 
     bool fix1 = FALSE;
     bool fix2 = FALSE;
-    bool good_name=true;
+    bool good_name;
+    bool old_value=false;
     while ( *p != 0 )
     {
 	if ( *p != '$' && !isalpha( *p ) )
 	{
 	    buf[0] = *p++;
 	    erg += buf;
-	    good_name=true;
+	    if(tabname==name())
+	    	good_name=true;
+	    else
+	    	good_name=false;
+	
 	    if(erg.right(1)=="!")
 	    	{
-	    	int pos=erg.findRev(name());
+	    	int pos=erg.findRev(tabname);
 	    	if(pos!=-1)
 	    		{
-	    		int pos2=erg.length()-name().length()-1;
-	    		if( erg.find(name(),pos2)!=-1)
+	    		int pos2=erg.length()-tabname.length()-1;
+	    		if( erg.find(tabname,pos2)!=-1)
 					good_name=true;
 			else
 					good_name=false;
+			
 			}
 		else
 			good_name=false;
+	    	//when you write Table1!A1:A2
+	    	//=>don't forget if it's the good name
+	    	old_value=good_name;
 	    	}
+	    else if(erg.right(1)==":")
+	    	   {
+	    	   good_name=old_value;
+	           }
+	    else
+	           old_value=good_name;
 	    fix1 = fix2 = FALSE;
 	}
 	else
@@ -892,7 +907,6 @@ QIntDictIterator<KSpreadCell> it( m_dctCells );
 	    	}	
 		}
            }
-
         it.current()->setText(erg);
 		}
 	

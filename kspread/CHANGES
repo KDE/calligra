@@ -120,3 +120,10 @@ reference.
 1999-09-30  -Montel laurent<montell@club-internet.fr>
 -----------------------------------------------------
 -Now when you insert or remove column (or row) all is recalcing.
+
+1999-10-01  -Montel laurent<montell@club-internet.fr>
+-----------------------------------------------------
+-Now Insert and remove column ( or row) works
+	=>change specific reference according to name table
+	and change in differents tables.
+	
