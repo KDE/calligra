@@ -783,7 +783,7 @@ void KWFramePartInternalCommand::execute()
 void KWFramePartInternalCommand::unexecute()
 {
     m_part->getChild()->document()->setStoreInternal(false);    
-    m_part->getChild()->document()->setUrl( m_url );    
+    m_part->getChild()->document()->setURL( m_url );    
 }
 
 
