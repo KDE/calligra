@@ -696,6 +696,7 @@ protected slots:
 
     void insertDirectCursor();
     void slotCorrectWord();
+    void editFindNext();
 
 // end of protected slots
 protected:
@@ -727,7 +728,6 @@ protected:
                              KActionMenu * parentMenu, const QString & menuText );
 
     void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
-    void editFindNext();
 
     void spellAddTextObject();
 
