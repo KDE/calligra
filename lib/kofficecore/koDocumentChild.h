@@ -32,7 +32,14 @@ class KoDocument;
 class KoDocumentChildPrivate;
 
 /**
- *  Holds an embedded object.
+ * Holds an embedded object.
+ *
+ * In addition to its base class @ref KoChild it cares about the content
+ * of an embedded document. That means it supports operations like
+ * loading and saving.
+ *
+ * If you need a representation for embedded documents in your KOffice
+ * component then you should inherit from this class.
  */
 class KoDocumentChild : public KoChild
 {
@@ -98,6 +105,7 @@ public:
   virtual bool isStoredExtern();
 
 protected:
+  // #### Torben: Is that still needed ?
   /**
    * Called if @ref #load finds a tag that it does not understand.
    *
