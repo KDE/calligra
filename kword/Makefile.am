@@ -39,7 +39,7 @@ kdelnkdir = $(kde_datadir)/koffice/partlnk
 kdemime_DATA = x-kword.kdelnk
 kdemimedir = $(kde_mimedir)/application
 
-SUBDIRS = toolbar templates filters
+SUBDIRS = toolbar templates filters dtd
 
 ####### Implicit rules
 

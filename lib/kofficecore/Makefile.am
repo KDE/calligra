@@ -22,7 +22,7 @@ include_HEADERS = koffice.h koView.h koFrame.h koIMR.h \
 
 libkofficecore_la_METASOURCES = koFrame.moc koMainWindow.moc koApplication.moc
 
-DISTCLEANFILES = $(libkofficecore_la_METASOURCES)
+DISTCLEANFILES = typerepo.cc typerepo.h trader.h trader.cc koffice.cc koffice.h
 
 idl_DATA = koffice.idl
 idl_HEADERS =  koffice.h

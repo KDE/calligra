@@ -13,10 +13,7 @@ noinst_HEADERS = main.h datatools.h
 
 METASOURCES =	main.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
-
-idl_DATA = 
-idl_HEADERS =  
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) datatools.h datatools.cc
 
 kdelnk_DATA = spell_tool.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/toollnk

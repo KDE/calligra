@@ -12,6 +12,8 @@ include_HEADERS = koStore.h
 idl_DATA = koStore.idl
 idl_HEADERS =  koStore_idl.h
 
+DISTCLEANFILES = koStore_idl.h koStore_idl.cc
+
 ####### Build rules
 
 BUILT_SOURCES = koStore_idl.h
