@@ -410,7 +410,8 @@
 <!ELEMENT LINESPACING
     EMPTY>
 <!ATTLIST LINESPACING
-    value CDATA #REQUIRED>
+    type (CDATA|oneandhalf|double|custom|atleast|exactly|multiple) #IMPLIED
+    spacingvalue CDATA #IMPLIED>
 
 <!--
         The borders can be used on a frame and on a paragraph.

@@ -908,15 +908,60 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresente
     element = parentElem.namedItem( "LINESPACING" ).toElement();
     if ( !element.isNull() )
     {
-#if 0
-        QString value = element.attribute( "value" );
-        if ( value == "oneandhalf" )
-            layout.lineSpacing = KoParagLayout::LS_ONEANDHALF;
-        else if ( value == "double" )
-            layout.lineSpacing = KoParagLayout::LS_DOUBLE;
+        //compatibility with koffice 1.1
+        if ( element.hasAttribute( "value" ))
+        {
+            QString value = element.attribute( "value" );
+            if ( value == "oneandhalf" )
+            {
+                layout.lineSpacingType = KoParagLayout::LS_ONEANDHALF;
+                layout.setLineSpacingValue(0);
+            }
+            else if ( value == "double" )
+            {
+                layout.lineSpacingType = KoParagLayout::LS_DOUBLE;
+                layout.setLineSpacingValue(0);
+            }
+            else
+            {
+                layout.lineSpacingType = KoParagLayout::LS_CUSTOM;
+                layout.setLineSpacingValue(value.toDouble());
+            }
+        }
         else
-            layout.lineSpacing = value.toDouble();
-#endif
+        {
+            QString type = element.attribute( "type" );
+            if ( type == "oneandhalf" )
+            {
+                layout.lineSpacingType = KoParagLayout::LS_ONEANDHALF;
+                layout.setLineSpacingValue(0);
+            }
+            else if ( type == "double" )
+            {
+                layout.lineSpacingType = KoParagLayout::LS_DOUBLE;
+                layout.setLineSpacingValue(0);
+            }
+            else if ( type == "custom" )
+            {
+                layout.lineSpacingType = KoParagLayout::LS_CUSTOM;
+                layout.setLineSpacingValue(element.attribute( "spacingvalue" ).toDouble());
+            }
+            else if ( type == "atleast" )
+            {
+                layout.lineSpacingType = KoParagLayout::LS_AT_LEAST;
+                layout.setLineSpacingValue(element.attribute( "spacingvalue" ).toDouble());
+            }
+            else if ( type == "exactly" )
+            {
+                layout.lineSpacingType = KoParagLayout::LS_EXACTLY;
+                layout.setLineSpacingValue(element.attribute( "spacingvalue" ).toDouble());
+            }
+            else if ( type == "multiple" )
+            {
+                layout.lineSpacingType = KoParagLayout::LS_MULTIPLE;
+                layout.setLineSpacingValue(element.attribute( "spacingvalue" ).toDouble());
+            }
+        }
     }
 
     element = parentElem.namedItem( "OFFSETS" ).toElement();
@@ -1047,18 +1092,37 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
             element.setAttribute( "after", layout.margins[QStyleSheetItem::MarginBottom] );
     }
 
-    if ( layout.lineSpacingValue() != 0 )
+    if ( layout.lineSpacingType != KoParagLayout::LS_SINGLE )
     {
-#if 0 //fixme
         element = doc.createElement( "LINESPACING" );
         parentElem.appendChild( element );
-        if ( layout.lineSpacing == KoParagLayout::LS_ONEANDHALF )
-            element.setAttribute( "value", "oneandhalf" );
-        else if ( layout.lineSpacing == KoParagLayout::LS_DOUBLE )
-            element.setAttribute( "value", "double" );
+        if ( layout.lineSpacingType == KoParagLayout::LS_ONEANDHALF )
+            element.setAttribute( "type", "oneandhalf" );
+        else if ( layout.lineSpacingType == KoParagLayout::LS_DOUBLE )
+            element.setAttribute( "type", "double" );
+        else if ( layout.lineSpacingType == KoParagLayout::LS_CUSTOM )
+        {
+            element.setAttribute( "type", "custom" );
+            element.setAttribute( "spacingvalue", layout.lineSpacingValue());
+        }
+        else if ( layout.lineSpacingType == KoParagLayout::LS_AT_LEAST )
+        {
+            element.setAttribute( "type", "atleast" );
+            element.setAttribute( "spacingvalue", layout.lineSpacingValue());
+        }
+        else if ( layout.lineSpacingType == KoParagLayout::LS_EXACTLY )
+        {
+            element.setAttribute( "type", "exactly" );
+            element.setAttribute( "spacingvalue", layout.lineSpacingValue());
+
+        }
+        else if ( layout.lineSpacingType == KoParagLayout::LS_MULTIPLE )
+        {
+            element.setAttribute( "type", "multiple" );
+            element.setAttribute( "spacingvalue", layout.lineSpacingValue());
+        }
         else
-            element.setAttribute( "value", layout.lineSpacing );
-#endif
+            kdDebug()<<" error in lineSpacing Type\n";
     }
 
     if ( layout.leftBorder.penWidth() > 0 )
