@@ -32,6 +32,8 @@ class QCheckBox;
 class KLineEdit;
 class KDoubleNumInput;
 class KoSpellConfigWidget;
+class PenStyleWidget;
+
 namespace KSpell2 {
     class ConfigWidget;
 }
@@ -144,7 +146,7 @@ private:
     KPresenterView* m_pView;
     KConfig* config;
 
-    ConfPenDia *m_confPenDia;
+    PenStyleWidget *m_confPenDia;
     ConfPieDia *m_confPieDia;
     ConfRectDia *m_confRectDia;
     ConfBrushDia *m_confBrushDia;

@@ -996,10 +996,7 @@ void PenCmd::addObjects( const QPtrList<KPObject> &_objects )
                 objects.append( obj );
                 obj->incCmdRef();
 
-                Pen * pen = new PenCmd::Pen;
-                pen->pen = obj->getPen();
-                pen->lineBegin = lineBegin;
-                pen->lineEnd = lineEnd;
+                Pen * pen = new PenCmd::Pen( obj->getPen(), lineBegin, lineEnd );
 
                 oldPen.append( pen );
             }

@@ -45,6 +45,7 @@
 #include "shadowdialogimpl.h"
 #include "imageEffectDia.h"
 #include "kpbackground.h"
+#include "penstylewidget.h"
 
 #include <koAutoFormat.h>
 
@@ -3343,7 +3344,7 @@ void KPresenterView::slotAfchooseCanceled()
 
 void KPresenterView::styleOk()
 {
-    ConfPenDia *confPenDia;
+    PenStyleWidget *confPenDia;
     ConfPieDia *confPieDia;
     ConfRectDia *confRectDia;
     ConfBrushDia *confBrushDia;

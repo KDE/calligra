@@ -1860,11 +1860,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags )
 {
     PenCmd * cmd = NULL;
 
-    PenCmd::Pen _newPen;
-
-    _newPen.pen = pen;
-    _newPen.lineBegin = lb;
-    _newPen.lineEnd = le;
+    PenCmd::Pen _newPen( pen, lb, le);
 
     QPtrList<KPObject> _objects;
     _objects.setAutoDelete( false );

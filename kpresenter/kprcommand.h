@@ -357,6 +357,12 @@ class PenCmd : public KNamedCommand
 {
 public:
     struct Pen {
+        Pen( QPen p, LineEnd lb, LineEnd le )
+        : pen( p )
+        , lineBegin( lb )
+        , lineEnd( le )
+        {}
+
         QPen pen;
         LineEnd lineBegin, lineEnd;
 

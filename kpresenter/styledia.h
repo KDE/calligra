@@ -47,86 +47,8 @@ class KPrCanvas;
 class KPresenterDoc;
 class KPresenterView;
 class KDoubleNumInput;
-
-/******************************************************************/
-/* class Pen and Brush preview                    */
-/******************************************************************/
-
-class PBPreview : public QFrame
-{
-    Q_OBJECT
-
-public:
-    enum PaintType {
-        Pen,
-        Brush,
-        Gradient
-    };
-
-    PBPreview( QWidget* parent, const char* name, PaintType _paintType );
-    ~PBPreview();
-    void setPen( const QPen &_pen ) { pen = _pen; repaint( true ); }
-    void setBrush( const QBrush &_brush ) { brush = _brush; }
-    void setLineBegin( LineEnd lb ) { lineBegin = lb; repaint( true ); }
-    void setLineEnd( LineEnd le ) { lineEnd = le; repaint( true ); }
-    void setGradient( KPGradient *g ) { gradient = g; }
-    void setPaintType( PaintType pt ) { paintType = pt; repaint(true);}
-
-protected:
-    void drawContents( QPainter *p );
-    void resizeEvent( QResizeEvent *e );
-
-private:
-    PaintType paintType;
-    QPen pen;
-    QBrush brush;
-    LineEnd lineBegin, lineEnd;
-    KPGradient *gradient;
-    KoZoomHandler *_zoomHandler;
-};
-
-/******************************************************************/
-/* class ConfPenDia                                               */
-/******************************************************************/
-
-class ConfPenDia : public QWidget
-{
-    Q_OBJECT
-
-public:
-    ConfPenDia( QWidget* parent, const char* name, int flags);
-    ~ConfPenDia();
-
-    void setPen( const QPen &_pen );
-    void setLineBegin( LineEnd lb );
-    void setLineEnd( LineEnd le );
-    void resetConfigChangedValues();
-
-    QPen getPen()const;
-    LineEnd getLineBegin()const;
-    LineEnd getLineEnd()const;
-    int getPenConfigChange() const;
-
-private:
-    int m_flags;
-    bool m_bLineBeginChanged, m_bLineEndChanged;
-    bool m_bColorChanged, m_bStyleChanged, m_bWidthChanged;
-    QPen oldPen;
-    LineEnd oldLb;
-    LineEnd oldLe;
-    KColorButton *choosePCol;
-    KIntNumInput *choosePWidth;
-    PBPreview *penPrev;
-    KComboBox *choosePStyle, *clineBegin, *clineEnd;
-
-private slots:
-    void slotReset();
-    void slotColorChanged();
-    void slotStyleChanged();
-    void slotWidthChanged();
-    void slotLineBeginChanged();
-    void slotLineEndChanged();
-};
+class PBPreview;
+class PenStyleWidget;
 
 /******************************************************************/
 /* class ConfBrushDia                                             */
@@ -247,7 +169,7 @@ public:
     bool isProtectContent()const;
 
 
-    ConfPenDia* getConfPenDia()const { return m_confPenDia; }
+    PenStyleWidget * getConfPenDia() const { return m_confPenDia; }
     ConfPieDia* getConfPieDia()const { return m_confPieDia; }
     ConfBrushDia* getConfBrushDia()const { return m_confBrushDia; }
     ConfRectDia* getConfRectangleDia()const { return m_confRectDia; }
@@ -274,7 +196,7 @@ private:
     KPresenterDoc *m_doc;
     KPresenterView *m_view;
     KPrCanvas *m_canvas;
-    ConfPenDia *m_confPenDia;
+    PenStyleWidget * m_confPenDia;
     ConfPieDia *m_confPieDia;
     ConfRectDia *m_confRectDia;
     ConfBrushDia *m_confBrushDia;

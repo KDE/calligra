@@ -41,6 +41,7 @@
 #include <qtabwidget.h>
 
 #include "styledia.h"
+#include "penstylewidget.h"
 #include "confpiedia.h"
 #include "confrectdia.h"
 #include "confpolygondia.h"
@@ -798,10 +799,8 @@ configureToolsPage::configureToolsPage( KPresenterView *_view, QWidget *parent, 
 
     QTabWidget *tab = new QTabWidget(this);
 
-    m_confPenDia = new ConfPenDia(tab, 0, StyleDia::SdAll);
-    m_confPenDia->setPen(m_pView->getPen());
-    m_confPenDia->setLineBegin(m_pView->getLineBegin());
-    m_confPenDia->setLineEnd(m_pView->getLineEnd());
+    PenCmd::Pen pen( m_pView->getPen(), m_pView->getLineBegin(), m_pView->getLineEnd() );
+    m_confPenDia = new PenStyleWidget(tab, 0, pen, true );
     tab->addTab(m_confPenDia, i18n("&Pen"));
 
     m_confBrushDia = new ConfBrushDia(tab, 0, StyleDia::SdAll);
@@ -876,10 +875,9 @@ void configureToolsPage::slotDefault()
     m_confPolygonDia->setCornersValue(3);
     m_confPolygonDia->setSharpnessValue(0);
     m_confRectDia->setRnds(0, 0);
-    m_confPenDia->setPen(QPen(black, 1, SolidLine));
     m_confBrushDia->setBrush(QBrush(white, SolidPattern));
-    m_confPenDia->setLineBegin(L_NORMAL);
-    m_confPenDia->setLineEnd(L_NORMAL);
+    PenCmd::Pen pen( QPen(black, 1, SolidLine), L_NORMAL, L_NORMAL );
+    m_confPenDia->setPen( pen );
     m_confBrushDia->setGradient(red, green, BCT_GHORZ, false, 100, 100);
     m_confBrushDia->setFillType(FT_BRUSH);
     m_pView->getActionBrushColor()->setCurrentColor((m_confBrushDia->getBrush()).color());

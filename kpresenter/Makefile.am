@@ -51,6 +51,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	kprduplicateobjdia.cc kpclosedlineobject.cc \
 	kprimportstyledia.cc \
 	imageEffectDia.cc imageEffectBase.ui customslideshowdia.cc \
+    pbpreview.cc penstyle.ui penstylewidget.cc \
 	slidetransitionwidget.ui slidetransitiondia.cc
 
 if include_ARTS
