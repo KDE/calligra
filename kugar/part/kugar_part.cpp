@@ -179,7 +179,7 @@ void KugarPart::slotPreferedTemplate(const QString &tpl)
 	KURL url(tpl);
 	QString localtpl;
 	bool isTemp = false;
- 
+
 	if (url.isMalformed())
 	{
 		if (tpl.find('/') >= 0)
@@ -194,21 +194,21 @@ void KugarPart::slotPreferedTemplate(const QString &tpl)
 		else
 			KMessageBox::sorry(widget(),i18n("Unable to download template file: %1").arg(url.prettyURL()));
 	}
- 
+
 	if (!localtpl.isNull())
 	{
 		QFile f(localtpl);
- 
+
 		if (f.open(IO_ReadOnly))
 		{
 			if (!view -> setReportTemplate(&f))
 				KMessageBox::sorry(widget(),i18n("Invalid template file: %1").arg(localtpl));
- 
+
 			f.close();
 		}
 		else
 			KMessageBox::sorry(widget(),i18n("Unable to open template file: %1").arg(localtpl));
- 
+
 		if (isTemp)
 			KIO::NetAccess::removeTempFile(localtpl);
 	}
@@ -220,6 +220,7 @@ void KugarPart::slotPreferedTemplate(const QString &tpl)
 KugarBrowserExtension::KugarBrowserExtension(KugarPart *parent)
 	: KParts::BrowserExtension(parent,"KugarBrowserExtension")
 {
+    emit enableAction( "print", true );
 }
 
 
