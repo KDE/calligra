@@ -50,6 +50,10 @@ class KFontAction;
 class KFontSizeAction;
 class KToggleAction;
 
+class QActionMenu;
+
+class DCOPObject;
+
 #include <qlist.h>
 #include <qscrollbar.h>
 #include <qlabel.h>
@@ -133,6 +137,8 @@ public:
      */
     void updateEditWidget();
 
+    virtual DCOPObject* dcopObject();
+    
 public slots:
     /**
      * Actions
@@ -402,7 +408,8 @@ private:
     KAction* m_oszi;
     KAction* m_autoSum;
     KToggleAction* m_showPageBorders;
-
+    QActionMenu* m_scripts;
+    
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.
@@ -415,8 +422,12 @@ private:
     QPopupMenu *m_pPopupRow;
     QPopupMenu *m_pPopupColumn;
 
+    /**
+     * This DCOP object represents the view.
+     */
+    DCOPObject* m_dcop;
 
-
+    
     /**
      * Tells whether the user modfied the current cell.
      * Some key events are passed to the @ref EditWindow. When this flag is set and you

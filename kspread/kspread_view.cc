@@ -40,6 +40,9 @@
 #include <kformulaedit.h>
 #include <kcoloractions.h>
 
+#include <dcopclient.h>
+#include <dcopref.h>
+
 #include <koPartSelectDia.h>
 #include <koQueryTypes.h>
 
@@ -70,8 +73,12 @@
 #include "kspread_dlg_oszi.h"
 #include "kspread_dlg_create.h"
 
+#include <kscript_scriptmenu.h>
+
 #include "handler.h"
 #include "toolbox.h"
+
+#include "KSpreadViewIface.h"
 
 /*****************************************************************************
  *
@@ -88,7 +95,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 	
     m_pDoc = doc;
     m_pPopupMenu = 0;
-
+    m_dcop = 0;
+    
     // Vert. Scroll Bar
     m_pVertScrollBar = new QScrollBar( this, "ScrollBar_2" );
     m_pVertScrollBar->setRange( 0, 4096 );
@@ -305,7 +313,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 			       actionCollection(), "borderColor" );
     m_tableFormat = new KAction( i18n("Table Format"), 0, this, SLOT( tableFormat() ), actionCollection(), "tableFormat" );
     m_oszi = new KAction( i18n("Oszilloscope"), 0, this, SLOT( oszilloscope() ), actionCollection(), "oszi" );
-
+    m_scripts = new KScriptMenu( DCOPRef( kapp->dcopClient()->appId(), dcopObject()->objId() ), KSpreadFactory::global(),
+				 i18n("Scripts"), actionCollection(), "scripts" );
+    
     connect( this, SIGNAL( childSelected( PartChild* ) ),
 	     this, SLOT( slotChildSelected( PartChild* ) ) );
     connect( this, SIGNAL( childUnselected( PartChild* ) ),
@@ -372,7 +382,7 @@ bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
     }
 
     // Done in KSpreadCanvas::keyPressEvent
-    
+
     // Are we making a selection right now ? Go thru this only if no selection is made
     // or if we neither selected complete rows nor columns.
     if ( ( _event->state() & ShiftButton ) == ShiftButton &&
@@ -388,8 +398,8 @@ bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
 	else
 	    m_pTable->unselect();
     }
-    
-    
+
+
     switch( _event->key() )
     {
     case Key_Return:
@@ -2357,6 +2367,14 @@ void KSpreadView::enableFormulaToolBar( bool b )
     m_formulaLeftSub->setEnabled( b );
     m_formulaSum->setEnabled( b );
     m_formulaProduct->setEnabled( b );
+}
+
+DCOPObject* KSpreadView::dcopObject()
+{
+    if ( !m_dcop )
+	m_dcop = new KSpreadViewIface( this );
+
+    return m_dcop;
 }
 
 #include "kspread_view.moc"

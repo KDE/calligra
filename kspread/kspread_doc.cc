@@ -125,6 +125,8 @@ Shell* KSpreadDoc::createShell()
 
 View* KSpreadDoc::createView( QWidget* parent, const char* name )
 {
+    if ( name == 0 )
+	name = "View";
     KSpreadView* view = new KSpreadView( parent, name, this );
     addView( view );
 
@@ -552,17 +554,17 @@ QString KSpreadDoc::completeHeading( const char *_data, int _page, const char *_
     KConfig *config = KGlobal::config();
     char hostname[80];
     struct passwd *p;
- 
+
     p = getpwuid(getuid());
     gethostname(hostname, 80);
- 
+
     config->setGroup("UserInfo");
     QString full_name = config->readEntry("FullName", p->pw_gecos);
     QString tmp = p->pw_name;
     tmp += "@"; tmp += hostname;
     QString email_addr = config->readEntry("EmailAddress", tmp );
     QString organization = config->readEntry("Organization");
-  
+
     tmp = _data;
     int pos = 0;
     while ( ( pos = tmp.find( "<page>", pos ) ) != -1 )
@@ -619,7 +621,7 @@ void KSpreadDoc::initInterpreter()
   m_context.setScope( new KSScope( m_pInterpreter->globalNamespace(), m_module ) );
 
   // Find all scripts
-  m_kscriptModules = KSpreadFactory::global()->dirs()->findAllResources( "scripts", "*.ks", TRUE );
+  m_kscriptModules = KSpreadFactory::global()->dirs()->findAllResources( "extensions", "*.ks", TRUE );
 
   // Remove dupes
   QMap<QString,QString> m;

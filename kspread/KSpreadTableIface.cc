@@ -116,7 +116,7 @@ bool KSpreadTableIface::processDynamic( const QCString& fun, const QByteArray& d
     uint len = fun.length();
     if ( len < 3 )
 	return FALSE;
-    
+
     if ( fun[ len - 1 ] != ')' || fun[ len - 2 ] != '(' )
 	return FALSE;
 
@@ -126,7 +126,7 @@ bool KSpreadTableIface::processDynamic( const QCString& fun, const QByteArray& d
 	return FALSE;
 
     QCString str = objId() + "/" + fun.left( len - 2 );
-    
+
     replyType = "DCOPRef";
     QDataStream out( replyData, IO_WriteOnly );
     out << DCOPRef( kapp->dcopClient()->appId(), str );

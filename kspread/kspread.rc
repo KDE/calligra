@@ -69,6 +69,8 @@
   <PluginAction name="kspreadcalc" plugin="libkspreadcalc" major="1" minor="0"/>
  </Menu>
  <Menu name="Scripts"><text>Scripts</text>
+  <Action name="scripts"/>
+  <Separator/>
   <Action name="editGlobalScripts"/>
   <Action name="editLocalScripts"/>
   <Action name="reloadScripts"/>

@@ -30,7 +30,7 @@ libkspread_la_SOURCES = kspread_canvas.cc \
 	KSpreadTableIface.skel KSpreadDocIface.cc KSpreadMapIface.cc \
 	KSpreadTableIface.cc KSpreadCellIface.cc KSpreadCellIface.skel \
 	KSpreadAppIface.cc KSpreadAppIface.skel kspread_dlg_format.cc \
-	kspread_dlg_oszi.cc \
+	kspread_dlg_oszi.cc KSpreadViewIface.skel KSpreadViewIface.cc \
 	qtai_bar.cpp qtai_base.cpp qtai_meter.cpp qtai_plot.cpp qtai_strip.cpp
 
 kspread_SOURCES = main.cc
@@ -47,7 +47,7 @@ noinst_HEADERS = kspread_shell.h kspread_doc.h \
 	kspread_dlg_sort.h kspread_dlg_create.h kspread_dlg_anchor.h  \
 	kspread_dlg_resize.h kspread_factory.h kspread_handler.h \
 	kspread_events.h kspread_global.h  \
-	kspread_dlg_show.h kspread_dlg_insert.h \
+	kspread_dlg_show.h kspread_dlg_insert.h KSpreadViewIface.h \
 	KSpreadCellIface.h KSpreadMapIface.h KSpreadTableIface.h KSpreadDocIface.h \
 	KSpreadAppIface.h kspread_dlg_format.h kspread_dlg_oszi.h \
 	qtai_bar.h qtai_base.h qtai_meter.h qtai_plot.h qtai_strip.h
@@ -63,7 +63,7 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/kspread
 rc_DATA = kspread.rc kspread_shell.rc
 
-SUBDIRS =  . plugins pics dtd toolbar scripts tablestyles
+SUBDIRS =  . plugins pics dtd toolbar scripts extensions tablestyles
 
 parser:
 	flex lex.l
