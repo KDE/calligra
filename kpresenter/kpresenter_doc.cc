@@ -3346,6 +3346,8 @@ void KPresenterDoc::deleteObjs( bool _add )
 /*========================== copy objects ========================*/
 void KPresenterDoc::copyObjs( int diffx, int diffy )
 {
+    if ( !numSelected() )
+	return;
     QClipboard *cb = QApplication::clipboard();
     string clip_str;
     tostrstream out( clip_str );

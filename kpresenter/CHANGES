@@ -607,3 +607,7 @@ Reggie, 28.12.1999:
 ---------------
 - Big speed improvement when inserting new slides into an already
   quite big presentation
+
+Reggie, 2.1.2000:
+--------------
+- If there is nothing to copy to the clipboard, copy noting

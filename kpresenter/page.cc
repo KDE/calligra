@@ -3850,9 +3850,9 @@ QSize Page::getPixmapOrigSize( KPPixmapObject *&obj )
 	    }
 	}
     }
-    
+
     return QSize( -1, -1 );
-}	    
+}	
 
 /*================================================================*/
 void Page::picViewOrig640x480()
@@ -3863,7 +3863,7 @@ void Page::picViewOrig640x480()
     QSize presSize( 640, 480 );
     if ( origSize == QSize( -1, -1 ) || !obj )
 	return;
-    
+
     scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
 }
 
@@ -3876,7 +3876,7 @@ void Page::picViewOrig800x600()
     QSize presSize( 800, 600 );
     if ( origSize == QSize( -1, -1 ) || !obj )
 	return;
-    
+
     scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
 }
 
@@ -3889,7 +3889,7 @@ void Page::picViewOrig1024x768()
     QSize presSize( 1024, 768 );
     if ( origSize == QSize( -1, -1 ) || !obj )
 	return;
-    
+
     scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
 }
 
@@ -3902,7 +3902,7 @@ void Page::picViewOrig1280x1024()
     QSize presSize( 1280, 1024 );
     if ( origSize == QSize( -1, -1 ) || !obj )
 	return;
-    
+
     scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
 }
 
@@ -3915,7 +3915,7 @@ void Page::picViewOrig1600x1200()
     QSize presSize( 1600, 1200 );
     if ( origSize == QSize( -1, -1 ) || !obj )
 	return;
-    
+
     scalePixmapToBeOrigIn( origSize, pgSize, presSize, obj );
 }
 
@@ -3925,13 +3925,13 @@ void Page::picViewOrigFactor()
 }
 
 /*================================================================*/
-void Page::scalePixmapToBeOrigIn( const QSize &origSize, const QSize &pgSize, 
+void Page::scalePixmapToBeOrigIn( const QSize &origSize, const QSize &pgSize,
 				  const QSize &presSize, KPPixmapObject *obj )
 {
     float fakt = (float)pgSize.width() / (float)presSize.width();
     int w = (int)( (float)origSize.width() * fakt );
     int h = (int)( (float)origSize.height() * fakt );
-    
+
     ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Scale Picture to be shown 1:1 in presentation mode" ),
 					  QPoint( 0, 0 ), QSize( w - origSize.width(), h - origSize.height() ),
 					  obj, view->kPresenterDoc() );
