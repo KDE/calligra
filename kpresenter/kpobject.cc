@@ -358,15 +358,16 @@ void KPObject::saveOasisObjectStyle( KoGenStyle &styleobjectauto )
 
 bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int objectId )
 {
-    if ( effect == EF_NONE && effect3==EF3_NONE)
+    if ( effect == EF_NONE && effect3==EF3_NONE && a_fileName.isEmpty() && d_fileName.isEmpty())
         return false;
-    if ( effect != EF_NONE ) //FIXME when style is EF_NONE
+    if ( effect != EF_NONE || !a_fileName.isEmpty() )
     {
         animation.startElement( "presentation:show-shape" );
         animation.addAttribute( "draw:shape-id", objectId );
         switch( effect )
         {
         case EF_NONE:
+            animation.addAttribute( "presentation:effect", "none" );
             break;
         case EF_COME_RIGHT:
             animation.addAttribute( "presentation:effect", "move" );
@@ -430,13 +431,14 @@ bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int object
 
 
     //FIXME oo doesn't support hide animation object
-    if ( effect3 != EF3_NONE )
+    if ( effect3 != EF3_NONE || !d_fileName.isEmpty())
     {
         animation.startElement( "presentation:hide-shape" );
         animation.addAttribute( "draw:shape-id", objectId );
         switch( effect3 )
         {
         case EF3_NONE:
+            animation.addAttribute( "presentation:effect", "none" );
             break;
         case EF3_GO_RIGHT:
             animation.addAttribute( "presentation:effect", "move" );

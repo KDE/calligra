@@ -61,6 +61,7 @@ Todo:
 -> save/load part element (necessary to modify koDocumentChild)
 -> save/load cubic/quadric/freehand object (define as svg object)
 -> save/load sticky object
+-> save/load picture object
 
 Bugs:
 -> load text layout format (bug into kpresenter)
