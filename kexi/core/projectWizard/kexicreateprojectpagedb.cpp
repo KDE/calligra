@@ -141,7 +141,9 @@ KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host,
 	QPixmap db_pix = kapp->iconLoader()->loadIcon("db", KIcon::Small);
 	for(QStringList::Iterator it = databases.begin(); it != databases.end(); it++)
 	{
+#ifndef Q_WS_WIN
 #warning FIXME
+#endif
 //		if (!db->isSystemDatabase(*it)) {
 		{
 			KListViewItem *item = new KListViewItem(m_databases, (*it));
