@@ -50,8 +50,8 @@
       <Help>
 	<Text>The AND() function returns True if all the values are true. Otherwise it returns False.</Text>
 	<Syntax>AND(value;value;...)</Syntax>
-	<Example>AND(True;True;True) returns True</Example>
-	<Example>AND(True;False) returns False</Example>
+	<Example>AND(true;true;true) returns True</Example>
+	<Example>AND(true;talse) returns False</Example>
       </Help>
     </Function>
 
@@ -81,8 +81,8 @@
       <Help>
 	<Text>The OR() function returns True if at least one of the values is true. Otherwise it returns False.</Text>
 	<Syntax>OR(value;value;...)</Syntax>
-	<Example>OR(False;False;False) returns False</Example>
-	<Example>OR(True;False) returns True</Example>
+	<Example>OR(false;false;false) returns False</Example>
+	<Example>OR(true;false) returns True</Example>
       </Help>
     </Function>
 
@@ -112,8 +112,8 @@
       <Help>
 	<Text>The NAND() function returns True if at least one value is not true. Otherwise it returns False.</Text>
 	<Syntax>NAND(value;value;...)</Syntax>
-	<Example>NAND(True;False;False) returns True</Example>
-	<Example>NAND(True;True) returns False</Example>
+	<Example>NAND(true;false;false) returns True</Example>
+	<Example>NAND(true;true) returns False</Example>
       </Help>
     </Function>
 
@@ -143,8 +143,8 @@
       <Help>
 	<Text>The NOR() function returns True if all the values given as parameters are of boolean type and have the value false. Otherwise it returns False.</Text>
 	<Syntax>NOR(value;value;...)</Syntax>
-	<Example>NOR(True;False;False) returns False</Example>
-	<Example>NOR(False;False) returns True</Example>
+	<Example>NOR(true;false;false) returns False</Example>
+	<Example>NOR(false;false) returns True</Example>
       </Help>
     </Function>
 
@@ -174,8 +174,8 @@
       <Help>
 	<Text>The XOR() function returns True if the number of True values is even. Otherwise it returns False.</Text>
 	<Syntax>XOR(value;value;...)</Syntax>
-	<Example>XOR(False;False;False) returns True</Example>
-	<Example>XOR(True;False) returns False</Example>
+	<Example>XOR(false;false;false) returns True</Example>
+	<Example>XOR(true;false) returns False</Example>
       </Help>
     </Function>
 
@@ -189,8 +189,8 @@
       <Help>
 	<Text>The NOT() function returns True if the value is False and returns False if the value is True.</Text>
 	<Syntax>NOT(bool)</Syntax>
-	<Example>NOT(False) returns True</Example>
-	<Example>NOT(True) returns False</Example>
+	<Example>NOT(false) returns True</Example>
+	<Example>NOT(true) returns False</Example>
       </Help>
     </Function>
 

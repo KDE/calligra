@@ -129,7 +129,7 @@
       <Help>
         <Text>The CONVERT() function returns a conversion from one measurement system to another.</Text>
         <Text>Supported mass units: g (gram), sg (pieces), lbm (pound), u (atomic mass), ozm (ounce), stone, ton, grain, pweight (pennyweight), hweight (hundredweight), bron (gross registered ton).</Text>
-        <Text>Supported distance units: m (meter), in (inch), ft (feet), mi (mile), Nmi (nautical mile), ang (Angstrom), parse, lightyear.</Text>
+        <Text>Supported distance units: m (meter), in (inch), ft (feet), mi (mile), Nmi (nautical mile), ang (Angstrom), parsec, lightyear.</Text>
         <Text>Supported pressure units: Pa (Pascal), atm (atmosphere), mmHg (mm of Mercury), psi, Torr.</Text>
         <Text>Supported force units: N (Newton), dyn, pound.</Text>
         <Text>Supported energy units: J (Joule), e (erg), c (Thermodynamic calorie), cal (IT calorie), eV (electronvolt), HPh (Horsepower-hour), Wh (Watt-hour), flb (foot-pound), BTU.</Text>

@@ -17,7 +17,7 @@
       </Parameter>
       <Help>
 	<Text>The SUBTOTAL() function returns a subtotal of a given list of arguments ignoring other subtotal results in there. Function can be one of the following numbers: 1 - Average, 2 - Count, 3 - CountA, 4 - Max, 5 - Min, 6 - Product, 7 - StDev, 8 - StDevP, 9 - Sum, 10 - Var, 11 - VarP.</Text>
-	<Syntax>SUBTOTAL(value; value)</Syntax>
+	<Syntax>SUBTOTAL(function; value)</Syntax>
 	<Example>If A1:A5 contains 7, 24, 23, 56 and 9:</Example>
 	<Example>SUBTOTAL(1; A1:A5) returns 23.8</Example>
 	<Example>SUBTOTAL(4; A1:A5) returns 56</Example>
@@ -404,7 +404,7 @@
         <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
-	<Text>The KPRODUCT() function calculates the product of all the values given as parameters. You can calculate the product of a range: KPRODUCT(A1:B5) or a list of values like product(12;5;12.5). If no numeric values are found 1 is returned.</Text>
+	<Text>The KPRODUCT() function calculates the product of all the values given as parameters. You can calculate the product of a range: KPRODUCT(A1:B5) or a list of values like KPRODUCT(12;5;12.5). If no numeric values are found 1 is returned.</Text>
 	<Syntax>KPRODUCT(value;value;...)</Syntax>
 	<Example>KPRODUCT(3;5;7) equals 105</Example>
 	<Example>KPRODUCT(12.5;2) equals 25</Example>
