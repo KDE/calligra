@@ -586,7 +586,7 @@ void KWCanvas::insertInlineTable()
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
     if(edit)
     {
-        m_insRect = KoRect( 0, 0, edit->frameSet()->frame(0)->width()-10, m_table.rows * 30 ); // mostly unused anyway
+        m_insRect = KoRect( 0, 0, edit->frameSet()->frame(0)->width(), 10 );
         KWTableFrameSet * table = createTable();
         m_doc->addFrameSet( table, false );
         edit->insertFloatingFrameSet( table, i18n("Insert Inline Table") );
@@ -1221,8 +1221,10 @@ KWTableFrameSet * KWCanvas::createTable() // uses m_insRect and m_table to creat
             frame->setNewFrameBehavior(KWFrame::NoFollowup);
         }
     }
-    table->setBoundingRect( m_insRect , static_cast<KWTableFrameSet::CellSize>( m_table.width ),
-         static_cast<KWTableFrameSet::CellSize>( m_table.height ));
+    KWTableFrameSet::CellSize w;
+    w=static_cast<KWTableFrameSet::CellSize>( m_table.width );
+    if(m_frameInline) w=KWTableFrameSet::TblManual;
+    table->setBoundingRect( m_insRect , w, static_cast<KWTableFrameSet::CellSize>( m_table.height ));
     return table;
 }
 
