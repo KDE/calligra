@@ -48,6 +48,7 @@
 
 #include <koGlobal.h>
 #include <koFilterChain.h>
+#include <koPictureKey.h>
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
@@ -116,8 +117,8 @@ private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
     QString m_pagesize; // Buffer for the <pagesize> tag
-    QMap<QString,QString> m_mapImageData;
-    QMap<QString,QString> m_mapClipartData;
+    QMap<QString,KoPictureKey> m_mapImageData;
+    QMap<QString,KoPictureKey> m_mapClipartData;
     StyleMap m_styleMap;
     double m_paperBorderTop,m_paperBorderLeft,m_paperBorderBottom,m_paperBorderRight;
 };
@@ -274,7 +275,7 @@ bool AbiWordWorker::convertUnknownImage(const QString& strName, QByteArray& imag
         kdWarning(30506) << "Could not open buffer! (AbiWordWorker::convertUnknownImage)" << endl;
         return false;
     }
-    
+
     imageIO.setIODevice(&buffer);
     imageIO.setFormat("PNG");
 
@@ -302,7 +303,7 @@ void AbiWordWorker::writeImageData(const QString& koStoreName, const QString& ke
     bool isImageLoaded=false;
 
     QString strMime;
-    
+
     if (strExtension=="png")
     {
         strMime="image/png";
@@ -387,20 +388,20 @@ bool AbiWordWorker::doCloseDocument(void)
     {
         *m_streamOut << "<data>\n";
 
-        QMap<QString,QString>::ConstIterator it;
+        QMap<QString,KoPictureKey>::ConstIterator it;
 
         // all images first
         for (it=m_mapImageData.begin(); it!=m_mapImageData.end(); it++)
         {
             // Warning: do not mix up KWord's key and the iterator's key!
-            writeImageData(it.key(),it.data());
+            writeImageData(it.key(),it.data().filename());
         }
 
         // then all cliparts
         for (it=m_mapClipartData.begin(); it!=m_mapClipartData.end(); it++)
         {
             // Warning: do not mix up KWord's key and the iterator's key!
-            writeClipartData(it.key(),it.data());
+            writeClipartData(it.key(),it.data().filename());
         }
 
         *m_streamOut << "</data>\n";
@@ -579,12 +580,14 @@ QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
 bool AbiWordWorker::makeImage(const FrameAnchor& anchor, const bool isImage)
 {
     kdDebug(30506) << "New image/clipart: " << anchor.picture.koStoreName
-        << " , " << anchor.picture.key << " (is image:" << isImage << ")" <<endl;
+        << " , " << anchor.picture.key.toString() << " (is image:" << isImage << ")" <<endl;
 
     const double height=anchor.bottom - anchor.top;
     const double width =anchor.right  - anchor.left;
 
-    *m_streamOut << "<image dataid=\"" << anchor.picture.key << "\"";
+    // TODO: we are only using the filename, not the rest of the key
+    // TODO:  (bad if they are two images of the same name, but of different key)
+    *m_streamOut << "<image dataid=\"" << anchor.picture.key.filename() << "\"";
     *m_streamOut << " props= \"height:" << height << "pt;width:" << width << "pt\"";
     *m_streamOut << "/>"; // NO end of line!
     // TODO: other props for image
