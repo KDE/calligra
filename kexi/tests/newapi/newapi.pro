@@ -25,7 +25,7 @@ QMAKE_CXXFLAGS += $(KEXI_OPTIONS)
 }
 
 DESTDIR = . # no # $KDEDIR/bin
-TARGET		= newapi
+TARGET		= kexidbtest
 
 SOURCES = \
 main.cpp
