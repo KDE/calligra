@@ -1990,31 +1990,22 @@ void KSpreadUndoChangeAreaTextCell::undo()
     if ( !util_isRowSelected( m_rctRect )
          && !util_isColumnSelected( m_rctRect ) )
     {
-      int bottom = m_rctRect.bottom();
-      int right  = m_rctRect.right();
-      int y      = m_rctRect.top();
-      KSpreadCell * cell = 0;
-      bool done = false;
-
-      QValueList<textOfCell>::Iterator it  = m_lstTextCell.begin();
-      QValueList<textOfCell>::Iterator end = m_lstTextCell.end();
-
-      for ( int x = m_rctRect.left(); x <= right; ++x )
-      {
-        for ( ; y <= bottom; ++y )
+      for ( int x = m_rctRect.left(); x <= m_rctRect.right(); ++x )
+        for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); ++y )
         {
-          cell = table->nonDefaultCell( x, y );
-          if ( (*it).col == x && (*it).row == y && !done)
-          {
-            cell->setCellText( (*it).text );
-            ++it;
-            if ( it == end )
-              done = true;
-          }
-          else
+          KSpreadCell* cell = table->nonDefaultCell( x, y );
+          bool found = false;
+          QValueList<textOfCell>::Iterator it;
+          for( it = m_lstTextCell.begin(); it != m_lstTextCell.end(); ++it )
+            if ( (*it).col == x && (*it).row == y && !found )
+            {
+              cell->setCellText( (*it).text );
+              found = true;
+            }            
+          if( !found )   
             cell->setCellText( "", true, true );
         }
-      }
+        
     }
     else
     {
@@ -2049,31 +2040,22 @@ void KSpreadUndoChangeAreaTextCell::redo()
     if ( !util_isRowSelected( m_rctRect )
          && !util_isColumnSelected( m_rctRect ) )
     {
-      int bottom = m_rctRect.bottom();
-      int right  = m_rctRect.right();
-      int y      = m_rctRect.top();
-      bool done  = false;
-      KSpreadCell * cell = 0;
-
-      QValueList<textOfCell>::Iterator it  = m_lstRedoTextCell.begin();
-      QValueList<textOfCell>::Iterator end = m_lstRedoTextCell.end();
-
-      for ( int x = m_rctRect.left(); x <= right; ++x )
-      {
-        for ( ; y <= bottom; ++y )
+      for ( int x = m_rctRect.left(); x <= m_rctRect.right(); ++x )
+        for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); ++y )
         {
-          cell = table->nonDefaultCell( x, y );
-          if ( (*it).col == x && (*it).row == y && !done)
-          {
-            cell->setCellText( (*it).text );
-            ++it;
-            if ( it == end )
-              done = true;
-          }
-          else
+          KSpreadCell* cell = table->nonDefaultCell( x, y );
+          bool found = false;
+          QValueList<textOfCell>::Iterator it;
+          for( it = m_lstRedoTextCell.begin(); it != m_lstRedoTextCell.end(); ++it )
+            if ( (*it).col == x && (*it).row == y && !found )
+            {
+              cell->setCellText( (*it).text );
+              found = true;
+            }            
+          if( !found )   
             cell->setCellText( "", true, true );
         }
-      }
+        
     }
     else
     {
