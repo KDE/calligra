@@ -4076,7 +4076,9 @@ void KTextObject::keyPressEvent( QKeyEvent* e )
 			}
 		    }
 		    insertChar( QChar( ' ' ) );
-		    repaint( FALSE );
+		    cursorChanged = TRUE;
+		    drawFullPara = TRUE;
+		    drawAbove = TRUE;
 		}
 		txtCursor->calcPos();
 		doDelete = false;
