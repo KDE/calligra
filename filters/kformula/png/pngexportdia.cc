@@ -189,6 +189,7 @@ void PNGExportDia::proportionalClicked()
 
 void PNGExportDia::setupGUI()
 {
+    resize( size() );
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
