@@ -46,6 +46,16 @@ KoBgSpellCheck::~KoBgSpellCheck()
     delete m_pKSpellConfig;
 }
 
+void KoBgSpellCheck::spellCheckParagraphDeleted( KoTextParag *_parag,  KoTextObject *obj)
+{
+    if ( m_bgSpell.currentTextObj == obj && m_bgSpell.currentParag == _parag)
+    {
+        stopSpellChecking();
+        startBackgroundSpellCheck();
+    }
+}
+
+
 void KoBgSpellCheck::enableBackgroundSpellCheck( bool b )
 {
     m_bSpellCheckEnabled=b;

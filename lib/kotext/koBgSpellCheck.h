@@ -52,7 +52,7 @@ public:
     void addIgnoreWordAll( const QString & word);
     void clearIgnoreWordAll( );
     void addIgnoreWordAllList( const QStringList & list);
-
+    void spellCheckParagraphDeleted( KoTextParag *_parag,  KoTextObject *obj);
 public slots:
     void startBackgroundSpellCheck();
 
