@@ -1108,7 +1108,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         if ( kpobject ) {
             ratio = static_cast<double>( kpobject->getSize().width() ) /
                     static_cast<double>( kpobject->getSize().height() );
-            oldRect = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
+            resizeRect = kpobject->getRect();
         }
     }
 }
@@ -1196,10 +1196,10 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     if ( toolEditMode == TEM_MOUSE && modType != MT_NONE && modType != MT_MOVE  && resizeObjNum ) {
         kpobject = resizeObjNum;
         if ( kpobject ) {
-            mv = KoPoint( kpobject->getOrig().x() - m_view->zoomHandler()->unzoomItX( oldRect.x()),
-                          kpobject->getOrig().y() - m_view->zoomHandler()->unzoomItY(oldRect.y()) );
-            sz = KoSize( kpobject->getSize().width() - m_view->zoomHandler()->unzoomItX(oldRect.width()),
-                         kpobject->getSize().height() - m_view->zoomHandler()->unzoomItY(oldRect.height()) );
+            mv = KoPoint( kpobject->getOrig().x() - resizeRect.x(),
+                          kpobject->getOrig().y() - resizeRect.y() );
+            sz = KoSize( kpobject->getSize().width() - resizeRect.width(),
+                         kpobject->getSize().height() - resizeRect.height() );
         }
         kpobject = 0L;
     }

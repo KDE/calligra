@@ -537,7 +537,8 @@ private:
     double axisX, axisY;
     int delPageId;
     bool drawRubber;
-    QRect rubber, oldBoundingRect, oldRect;
+    QRect rubber, oldBoundingRect;
+    KoRect resizeRect;
     ToolEditMode toolEditMode;
     QRect insRect;
     KoDocumentEntry partEntry;
