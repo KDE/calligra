@@ -36,6 +36,8 @@
 #include "kivio_point.h"
 #include "kivio_stencil.h"
 #include "kivio_factory.h"
+#include "kivio_command.h"
+
 
 TextTool::TextTool( KivioView* view )
 :Tool(view,"Text")
@@ -117,13 +119,15 @@ void TextTool::setStencilText()
         return;
 
     QString text = d.text();
-
+    KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Text"));
     while( stencil )
     {
+        KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand( i18n("Change Stencil Text"), stencil, stencil->text(), text, page);
+        macro->addCommand( cmd);
         stencil->setText( text );
         stencil = page->selectedStencils()->next();
     }
-
+    doc->addCommand( macro);
     doc->updateView(page);
 }
 

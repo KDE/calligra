@@ -117,6 +117,19 @@ public:
     void unexecute() { KivioAddStencilCommand::execute(); }
 };
 
+class KivioChangeStencilTextCommand : public KNamedCommand
+{
+public:
+    KivioChangeStencilTextCommand( const QString &_name, KivioStencil *_stencil, const QString & _oldText, const QString & _newText, KivioPage *_page);
+    ~KivioChangeStencilTextCommand();
+    virtual void execute();
+    virtual void unexecute();
+protected:
+    KivioStencil *m_stencil;
+    QString oldText;
+    QString newText;
+    KivioPage *m_page;
+};
 
 #endif
 

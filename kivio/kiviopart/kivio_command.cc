@@ -154,3 +154,29 @@ KivioRemoveStencilCommand::KivioRemoveStencilCommand(const QString &_name, Kivio
     : KivioAddStencilCommand(_name, _page, _layer, _stencil )
 {
 }
+
+KivioChangeStencilTextCommand::KivioChangeStencilTextCommand( const QString &_name, KivioStencil *_stencil, const QString & _oldText, const QString & _newText, KivioPage *_page)
+    : KNamedCommand( _name ),
+      m_stencil( _stencil),
+      oldText( _oldText ),
+      newText( _newText ),
+      m_page( _page)
+{
+}
+
+KivioChangeStencilTextCommand::~KivioChangeStencilTextCommand()
+{
+}
+
+void KivioChangeStencilTextCommand::execute()
+{
+    m_stencil->setText( newText );
+    m_page->doc()->updateView(m_page);
+}
+
+void KivioChangeStencilTextCommand::unexecute()
+{
+    m_stencil->setText( oldText );
+    m_page->doc()->updateView(m_page);
+}
+
