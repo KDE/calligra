@@ -89,7 +89,7 @@ namespace Kexi
 	}
 
 	//! QDateTime - a hack needed because QVariant(QTime) has broken isNull()
-	QDateTime stringToHackedQTime(const QString& s)
+	inline QDateTime stringToHackedQTime(const QString& s)
 	{
 		if (s.isEmpty())
 			return QDateTime();
