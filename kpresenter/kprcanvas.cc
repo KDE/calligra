@@ -1075,8 +1075,10 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 presMenu->hide();
                 setCursor( blankCursor );
             } else {
-                if ( drawMode )
+                if ( drawMode ) {
+                    setCursor( penCursor() );
                     drawLineInDrawMode = true;
+                }
                 else
                     m_view->screenNext();
             }
@@ -4758,6 +4760,8 @@ void KPrCanvas::slotGotoPage()
     if ( m_view->kPresenterDoc()->presentationDuration() )
         m_view->setPresentationDuration( pg - 1 );
 
+    if ( presMenu->isItemChecked ( PM_DM ) )
+        setCursor( penCursor() );
 }
 
 /*================================================================*/
@@ -4959,12 +4963,13 @@ void KPrCanvas::slotExitPres()
 /*================================================================*/
 void KPrCanvas::drawingMode()
 {
+    setCursor( penCursor() );
     if(!presMenu->isItemChecked ( PM_DM ))
     {
         presMenu->setItemChecked( PM_DM, true );
         presMenu->setItemChecked( PM_SM, false );
         drawMode = true;
-        setCursor( arrowCursor );
+        //setCursor( penCursor() );
     }
 }
 
