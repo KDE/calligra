@@ -40,15 +40,16 @@ class KSpellConfig;
 
 
 #include <koDocument.h>
-#include <kozoomhandler.h>
 #include <koPageLayoutDia.h>
+#include <kozoomhandler.h>
 
+#include <kcompletion.h>
+#include <qmap.h>
 #include <qobject.h>
-#include <qrect.h>
-#include <qstring.h>
 #include <qpainter.h>
 #include <qpen.h>
-#include <kcompletion.h>
+#include <qrect.h>
+#include <qstring.h>
 
 #include "kspread_interpreter.h"
 #include "kspread_locale.h"
@@ -60,6 +61,14 @@ struct Reference
     QString table_name;
     QString ref_name;
     QRect rect;
+};
+
+class KSpreadPlugin 
+{
+ public:
+  KSpreadPlugin() {}
+  virtual ~KSpreadPlugin() {}
+  virtual QDomElement saveXML( QDomDocument & doc ) = 0;
 };
 
 /**
@@ -177,7 +186,10 @@ public:
 
   virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
   void paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadSheet* table, bool drawCursor=true );
-
+  
+  bool docData( QString const & xmlTag, QDomElement & data );
+  void deregisterPlugin( KSpreadPlugin * plugin );
+  void registerPlugin( KSpreadPlugin * plugin );
 
   /**
    * Primary entry point for painting.  Use this function to paint groups of cells
@@ -516,6 +528,8 @@ protected:
    */
   KSContext m_context;
 
+  QPtrList<KSpreadPlugin> m_plugins;
+
   static QPtrList<KSpreadDoc>* s_docs;
   static int s_docId;
 
@@ -560,11 +574,15 @@ protected:
   KSpellConfig *m_pKSpellConfig;
   bool m_bDontCheckUpperWord;
   bool m_bDontCheckTitleCase;
-    QStringList m_spellListIgnoreAll;
+  QStringList m_spellListIgnoreAll;
   KoUnit::Unit m_unit;
-    KSpreadSheet *m_activeTable;
+  KSpreadSheet *m_activeTable;
 
   int m_numOperations;
+
+  class SavedDocParts : public QMap<QString, QDomElement> {};
+  SavedDocParts m_savedDocParts;
+
 private:
 
   /* helper functions for painting */
@@ -603,6 +621,7 @@ private:
   void retrieveMarkerInfo( const QRect &marker, const KSpreadSheet* table,
                            KSpreadView* view, const KoRect &viewRect,
                            double positions[], bool paintSides[] );
+  void loadPaper( QDomElement const & paper );
 };
 
 #endif

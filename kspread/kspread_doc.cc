@@ -80,6 +80,8 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   KSpreadFormat::setGlobalRowHeight( f.pointSizeFloat() + 3 );
   KSpreadFormat::setGlobalColWidth( ( f.pointSizeFloat() + 3 ) * 5 );
 
+  m_plugins.setAutoDelete( false );
+
   m_bDelayCalculation = false;
   m_syntaxVersion = CURRENT_SYNTAX_VERSION;
 
@@ -351,6 +353,22 @@ QDomDocument KSpreadDoc::saveXML()
         }
     }
 
+    SavedDocParts::const_iterator iter = m_savedDocParts.begin();
+    SavedDocParts::const_iterator end  = m_savedDocParts.end();
+    while ( iter != end )
+    {
+      // save data we loaded in the beginning and which has no owner back to file
+      spread.appendChild( iter.data() );
+      ++iter;
+    }
+
+    KSpreadPlugin * plugin = m_plugins.first();
+    for ( ; plugin != 0; plugin = m_plugins.next() )
+    {
+      QDomElement data( plugin->saveXML( doc ) );
+      spread.appendChild( data );
+    }
+
     QDomElement s = m_pStyleManager->save( doc );
     spread.appendChild( s );
 
@@ -443,7 +461,6 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
     }
   }
 
-
   // <map>
   QDomElement mymap = spread.namedItem( "map" ).toElement();
   if ( mymap.isNull() )
@@ -461,78 +478,30 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   //Backwards compatibility with older versions for paper layout
   if ( m_syntaxVersion < 1 )
   {
-    // <paper>
     QDomElement paper = spread.namedItem( "paper" ).toElement();
     if ( !paper.isNull() )
     {
-      QString format = paper.attribute( "format" );
-      QString orientation = paper.attribute( "orientation" );
-
-      // <borders>
-      QDomElement borders = paper.namedItem( "borders" ).toElement();
-      if ( !borders.isNull() )
-      {
-          float left = borders.attribute( "left" ).toFloat();
-          float right = borders.attribute( "right" ).toFloat();
-          float top = borders.attribute( "top" ).toFloat();
-          float bottom = borders.attribute( "bottom" ).toFloat();
-
-          //apply to all tables
-          QPtrListIterator<KSpreadSheet> it ( m_pMap->tableList() );
-          for( ; it.current(); ++it )
-          {
-            it.current()->print()->setPaperLayout( left, top, right, bottom,
-                                                   format, orientation );
-          }
-      }
-
-      QString hleft, hright, hcenter;
-      QString fleft, fright, fcenter;
-      // <head>
-      QDomElement head = paper.namedItem( "head" ).toElement();
-      if ( !head.isNull() )
-      {
-        QDomElement left = head.namedItem( "left" ).toElement();
-        if ( !left.isNull() )
-          hleft = left.text();
-        QDomElement center = head.namedItem( "center" ).toElement();
-        if ( !center.isNull() )
-        hcenter = center.text();
-        QDomElement right = head.namedItem( "right" ).toElement();
-        if ( !right.isNull() )
-          hright = right.text();
-      }
-      // <foot>
-      QDomElement foot = paper.namedItem( "foot" ).toElement();
-      if ( !foot.isNull() )
-      {
-        QDomElement left = foot.namedItem( "left" ).toElement();
-        if ( !left.isNull() )
-          fleft = left.text();
-        QDomElement center = foot.namedItem( "center" ).toElement();
-        if ( !center.isNull() )
-          fcenter = center.text();
-        QDomElement right = foot.namedItem( "right" ).toElement();
-        if ( !right.isNull() )
-          fright = right.text();
-      }
-      //The macro "<sheet>" formerly was typed as "<table>"
-      hleft   = hleft.replace(   QRegExp("<table>"), "<sheet>" );
-      hcenter = hcenter.replace( QRegExp("<table>"), "<sheet>" );
-      hright  = hright.replace(  QRegExp("<table>"), "<sheet>" );
-      fleft   = fleft.replace(   QRegExp("<table>"), "<sheet>" );
-      fcenter = fcenter.replace( QRegExp("<table>"), "<sheet>" );
-      fright  = fright.replace(  QRegExp("<table>"), "<sheet>" );
-
-      QPtrListIterator<KSpreadSheet> it ( m_pMap->tableList() );
-      for( ; it.current(); ++it )
-      {
-        it.current()->print()->setHeadFootLine( hleft, hcenter, hright,
-                                                fleft, fcenter, fright);
-      }
+      loadPaper( paper );
     }
-
   }
+
+  emit sigProgress( 85 );
+
+  QDomElement element( spread.firstChild().toElement() );
+  while ( !element.isNull() )
+  {
+    QString tagName( element.tagName() );
+
+    if ( tagName != "locale" && tagName != "map" && tagName != "styles" 
+         && tagName != "SPELLCHECKIGNORELIST" && tagName != "areaname" 
+         && tagName != "paper" )
+    {
+      // belongs to a plugin, load it and save it for later use
+      m_savedDocParts[ tagName ] = element;
+    }
+    
+    element = element.nextSibling().toElement();
+  }  
 
   emit sigProgress( 90 );
   initConfig();
@@ -541,6 +510,76 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
    kdDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
 
   return true;
+}
+
+void KSpreadDoc::loadPaper( QDomElement const & paper )
+{
+  // <paper>
+  QString format = paper.attribute( "format" );
+  QString orientation = paper.attribute( "orientation" );
+
+  // <borders>
+  QDomElement borders = paper.namedItem( "borders" ).toElement();
+  if ( !borders.isNull() )
+  {
+    float left = borders.attribute( "left" ).toFloat();
+    float right = borders.attribute( "right" ).toFloat();
+    float top = borders.attribute( "top" ).toFloat();
+    float bottom = borders.attribute( "bottom" ).toFloat();
+
+    //apply to all tables
+    QPtrListIterator<KSpreadSheet> it ( m_pMap->tableList() );
+    for( ; it.current(); ++it )
+    {
+      it.current()->print()->setPaperLayout( left, top, right, bottom,
+                                             format, orientation );
+    }
+  }
+
+  QString hleft, hright, hcenter;
+  QString fleft, fright, fcenter;
+  // <head>
+  QDomElement head = paper.namedItem( "head" ).toElement();
+  if ( !head.isNull() )
+  {
+    QDomElement left = head.namedItem( "left" ).toElement();
+    if ( !left.isNull() )
+      hleft = left.text();
+    QDomElement center = head.namedItem( "center" ).toElement();
+    if ( !center.isNull() )
+      hcenter = center.text();
+    QDomElement right = head.namedItem( "right" ).toElement();
+    if ( !right.isNull() )
+      hright = right.text();
+  }
+  // <foot>
+  QDomElement foot = paper.namedItem( "foot" ).toElement();
+  if ( !foot.isNull() )
+  {
+    QDomElement left = foot.namedItem( "left" ).toElement();
+    if ( !left.isNull() )
+      fleft = left.text();
+    QDomElement center = foot.namedItem( "center" ).toElement();
+    if ( !center.isNull() )
+      fcenter = center.text();
+    QDomElement right = foot.namedItem( "right" ).toElement();
+    if ( !right.isNull() )
+      fright = right.text();
+  }
+  //The macro "<sheet>" formerly was typed as "<table>"
+  hleft   = hleft.replace(   QRegExp("<table>"), "<sheet>" );
+  hcenter = hcenter.replace( QRegExp("<table>"), "<sheet>" );
+  hright  = hright.replace(  QRegExp("<table>"), "<sheet>" );
+  fleft   = fleft.replace(   QRegExp("<table>"), "<sheet>" );
+  fcenter = fcenter.replace( QRegExp("<table>"), "<sheet>" );
+  fright  = fright.replace(  QRegExp("<table>"), "<sheet>" );
+
+  QPtrListIterator<KSpreadSheet> it ( m_pMap->tableList() );
+  for( ; it.current(); ++it )
+  {
+    it.current()->print()->setHeadFootLine( hleft, hcenter, hright,
+                                            fleft, fcenter, fright);
+  }
 }
 
 bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
@@ -557,9 +596,31 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
   return true;
 }
 
+void KSpreadDoc::registerPlugin( KSpreadPlugin * plugin )
+{
+  m_plugins.append( plugin );
+}
+
+void KSpreadDoc::deregisterPlugin( KSpreadPlugin * plugin )
+{
+  m_plugins.remove( plugin );
+}
+
+bool KSpreadDoc::docData( QString const & xmlTag, QDomElement & data )
+{
+  SavedDocParts::iterator iter = m_savedDocParts.find( xmlTag );
+  if ( iter == m_savedDocParts.end() )
+    return false;
+
+  data = iter.data();
+  m_savedDocParts.erase( iter );
+
+  return true;
+}
+
 void KSpreadDoc::setDefaultGridPen( const QPen& p )
 {
-    m_defaultGridPen = p;
+  m_defaultGridPen = p;
 }
 
 KSpreadSheet* KSpreadDoc::createTable()
