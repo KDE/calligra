@@ -156,13 +156,13 @@ void KPresenterView_impl::insertPicture()
 {
   page->deSelectAllObj();
   QString file = KFileDialog::getOpenFileName(getenv("HOME"),
-					      "*.gif *GIF|GIF-Pictures\n"
+					      i18n("*.gif *GIF|GIF-Pictures\n"
 					      "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
 					      "*.bmp *.BMP|Windows Bitmaps\n"
-					      "*.xbm *.XBM|XWindow Pitmaps\n"
+					      "*.xbm *.XBM|XWindow Bitmaps\n"
 					      "*.xpm *.XPM|Pixmaps\n"
 					      "*.pnm *.PNM|PNM-Pictures\n"
-					      "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures",0);
+					      "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM|All pictures"),0);
   if (!file.isEmpty()) m_pKPresenterDoc->insertPicture((const char*)file,xOffset,yOffset);
 
 
@@ -177,7 +177,7 @@ void KPresenterView_impl::insertPicture()
 void KPresenterView_impl::insertClipart()
 {
   page->deSelectAllObj();
-  QString file = KFileDialog::getOpenFileName(getenv("HOME"),"*.WMF *.wmf|Windows Metafiles",0);
+  QString file = KFileDialog::getOpenFileName(getenv("HOME"),i18n("*.WMF *.wmf|Windows Metafiles"),0);
   if (!file.isEmpty()) m_pKPresenterDoc->insertClipart((const char*)file,xOffset,yOffset);
 
 //   QEvent ev(Event_Leave);
@@ -1213,7 +1213,7 @@ void KPresenterView_impl::changePicture(unsigned int,const char* filename)
 					      i18n("*.gif *GIF|GIF-Pictures\n"
 						   "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
 						   "*.bmp *.BMP|Windows Bitmaps\n"
-						   "*.xbm *.XBM|XWindow Pitmaps\n"
+						   "*.xbm *.XBM|XWindow Bitmaps\n"
 						   "*.xpm *.XPM|Pixmaps\n"
 						   "*.pnm *.PNM|PNM-Pictures\n"
 						   "*.gif *GIF *.jpg *.JPG *.jpeg *.JPEG *.bmp "
@@ -1585,7 +1585,7 @@ void KPresenterView_impl::setupMenu()
       tmp += "/kpresenter/toolbar/prev.xpm";
       pix = loadPixmap(tmp);
       m_idMenuScreen_Prev = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
-						    CORBA::string_dup(i18n("&Previous steo")),m_idMenuScreen,
+						    CORBA::string_dup(i18n("&Previous step")),m_idMenuScreen,
 						    this,CORBA::string_dup("screenPrev"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/next.xpm";
@@ -1792,7 +1792,7 @@ void KPresenterView_impl::setupTextToolbar()
       m_rToolBarText = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Text")));
  
       // size combobox
-      m_idComboText_FontSize = m_rToolBarText->insertCombo(false,CORBA::string_dup(i18n("Font Size")),60,
+      m_idComboText_FontSize = m_rToolBarText->insertCombo(true,CORBA::string_dup(i18n("Font Size")),60,
 							   this,CORBA::string_dup("sizeSelected"));
       for(unsigned int i = 4;i <= 100;i++)
 	{
@@ -1805,7 +1805,7 @@ void KPresenterView_impl::setupTextToolbar()
 
       // fonts combobox
       getFonts();
-      m_idComboText_FontList = m_rToolBarText->insertCombo(false,CORBA::string_dup(i18n("Font List")),200,
+      m_idComboText_FontList = m_rToolBarText->insertCombo(true,CORBA::string_dup(i18n("Font List")),200,
 							   this,CORBA::string_dup("fontSelected"));
       for(unsigned int i = 0;i <= fontList.count()-1;i++)
  	m_rToolBarText->insertComboItem(m_idComboText_FontList,CORBA::string_dup(fontList.at(i)),-1);
@@ -2032,7 +2032,7 @@ void KPresenterView_impl::setupScreenToolbar()
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/pen.xpm";
       pix = loadPixmap(tmp);
-      m_idButtonScreen_Pen = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Merker/Pen")),
+      m_idButtonScreen_Pen = m_rToolBarScreen->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Marker/Pen")),
 							    this,CORBA::string_dup("screenPen"));
     }
 }

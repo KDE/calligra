@@ -228,12 +228,9 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 	    {
 	    case OT_PICTURE: /* pciture */
 	      {
-		if (!mousePressed || mousePressed && !objPtr->isSelected)
-		  {
-		    painter->drawPixmap(objPtr->ox - diffx(),objPtr->oy - diffy(),
-					objPtr->graphObj->getPix());
-		    //0,0,objPtr->ow,objPtr->oh);
-		  }
+		painter->drawPixmap(objPtr->ox - diffx(),objPtr->oy - diffy(),
+				    objPtr->graphObj->getPix());
+		//0,0,objPtr->ow,objPtr->oh);
 	      } break;
 	    case OT_TEXT: /* text */
 	      {
@@ -1325,7 +1322,7 @@ bool Page::pNext(bool manual)
 	  QPixmap _pix2(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  drawPageInPix(_pix2,view->getDiffY() + view->KPresenterDoc()->getPageSize(1,0,0,_presFakt).height()+10);
 	  
-	  changePages(_pix1,_pix2,pageList()->at(currPresPage-1)->pageEffect);
+	  changePages(_pix1,_pix2,pageList()->at(currPresPage-2)->pageEffect);
 
 	  drawBack = true;
 	  return true;
@@ -1595,20 +1592,23 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 //   QTime _time;
 //   int _step = 0,_steps;
 
+//   printf("%d\n",(int)_effect);
+
 //   switch (_effect)
 //     {
 //     case PEF_CLOSE_HORZ:
 //       {
 // 	_steps = 10;
 // 	int _height = getPageSize(1,_presFakt).height() / _steps;
+// 	_time.start();
 
 // 	for (;;)
 // 	  {
 // 	    if (_step > _steps) break;
-// 	    if (_time.msec() >= 100)
+// 	    else if (_time.elapsed() >= 100)
 // 	      {
-// 		step++;
-// 		_time.setHMS(0,0,0,0);
+// 		_step++;
+// 		_time.restart();
 // 	      }
 // 	  }
 //       } break;
