@@ -49,7 +49,7 @@ public:
 protected:
     virtual void setupTranslations( void )
     {
-        KGlobal::locale()->insertCatalogue( "olefilterswinword97filter" );
+        KGlobal::locale()->insertCatalogue( "kofficefilters" );
     }
 };
 
