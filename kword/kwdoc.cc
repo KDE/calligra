@@ -3275,6 +3275,8 @@ void KWDocument::reactivateBgSpellChecking()
     KWTextFrameSet *frm;
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
         frm->textObject()->setBeedSpellCheck(true);
+        //fixme
+        slotRepaintChanged( frm );
     }
     startBackgroundSpellCheck();
 }
