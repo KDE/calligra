@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=KOSoap
+Exec=kosoap
+X-KDE-Library=libkosoappart
+MimeType=application/x-kosoap
+Type=Application
+Icon=KOSoap
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-NativeMimeType=application/x-kosoap

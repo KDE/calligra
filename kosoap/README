@@ -1,0 +1,10 @@
+If you want this example to be compiled (or if you want to compile your app
+based on that example), remove the 'configure.in.in' file!
+
+If you want to just build this application to test it perform a make in this
+ directory.
+
+This is still very unstable and may change in the near future.  If you are
+ interested in helping out please contact me via email at geiseri@yahoo.com.
+
+-ian reinhart geiser

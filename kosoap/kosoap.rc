@@ -1,0 +1,14 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KOSoap" version="1">
+<MenuBar>
+ <Menu name="File"><text>File</text>
+  <Action name="reload"/>
+ </Menu>
+ <Menu name="Edit"><text>Edit</text>
+  <Action name="copy"/>
+ </Menu>
+
+</MenuBar>
+<ToolBar name="editToolBar"><Text>Refresh</Text>
+  <Action name="reload"/>
+</ToolBar>
+</kpartgui>

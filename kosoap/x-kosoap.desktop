@@ -1,0 +1,10 @@
+# KDE Config File
+[Desktop Entry]
+MimeType=application/x-kosoap
+Comment="This will render data from SOAP messages"
+Type=MimeType
+Patterns=*.soap;
+X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.soap
