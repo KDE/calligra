@@ -831,12 +831,12 @@ bool KPresenterDocIface::refreshSideBar()const
     return doc->refreshSideBar();
 }
 
-bool KPresenterDocIface::displayFiedCode()const
+bool KPresenterDocIface::displayFieldCode()const
 {
     return doc->getVariableCollection()->variableSetting()->displayFiedCode();
 }
 
-void KPresenterDocIface::setDisplayFiedCode( bool b)
+void KPresenterDocIface::setDisplayFieldCode( bool b)
 {
     doc->getVariableCollection()->variableSetting()->setDisplayFiedCode( b );
     doc->recalcVariables(VT_ALL);

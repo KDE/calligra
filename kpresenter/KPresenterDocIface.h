@@ -240,8 +240,8 @@ k_dcop:
 
     void setRefreshSideBar( bool _b );
     bool refreshSideBar()const;
-    bool displayFiedCode()const;
-    void setDisplayFiedCode( bool b);
+    bool displayFieldCode()const;
+    void setDisplayFieldCode( bool b);
     QString configAutoFormatLanguage( )const;
 
 private:
