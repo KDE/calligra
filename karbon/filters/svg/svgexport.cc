@@ -255,9 +255,6 @@ SvgExport::exportFill( QTextStream& s, const QDomElement& node )
 void
 SvgExport::exportStroke( QTextStream& s, const QDomElement& node )
 {
-
-	// TODO: DASHPATTERN
-
 	if( !node.attribute( "lineWidth" ).isNull() )
 	{
 		s << " stroke-width=\"" << node.attribute( "lineWidth" ) << "\"";
@@ -320,6 +317,22 @@ SvgExport::exportStroke( QTextStream& s, const QDomElement& node )
 				{
 					s << " stroke-opacity=\"" << e.attribute( "opacity" ) << "\"";
 				}
+			}
+			else if( e.tagName() == "DASHPATTERN" )
+			{
+				s << " stroke-dashoffset=\"" << e.attribute( "offset" ) << "\"";
+
+				QDomNodeList dashlist = e.childNodes();
+				s << " stroke-dasharray=\" ";
+				for( uint j = 0; j < dashlist.count(); ++j )
+				{
+					QDomElement e = dashlist.item( j ).toElement();
+					if( e.tagName() == "DASH" )
+					{
+						s << e.attribute( "l", "0.0" ).toFloat() << " ";
+					}
+				}
+				s << "\"";
 			}
 		}
 	}
