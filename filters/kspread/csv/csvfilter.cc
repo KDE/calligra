@@ -32,14 +32,14 @@ const QDomDocument *CSVFilter::I_filter(const QCString &file, const QCString &fr
     bool bSuccess=true;
 
     if(to!="application/x-kspread" || from!="text/x-csv")
-        return false;
+        return 0;
 
     QFile in(file);
     if(!in.open(IO_ReadOnly)) {
         //kDebugError( 31501, "Unable to open input file!");
         KMessageBox::sorry( 0L, i18n("CSV filter can't open input file - please report.") );
         in.close();
-        return false;
+        return 0;
     }
 
     QTextStream inputStream(&in);
