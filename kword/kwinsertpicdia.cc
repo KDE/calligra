@@ -31,6 +31,7 @@
 #include <qcheckbox.h>
 #include <kimageio.h>
 #include <kio/netaccess.h>
+#include <kdebug.h>
 
 class KWInsertPicPreview : public QFrame
 {
@@ -48,9 +49,10 @@ public:
     void setPixmap( const QString & filename )
     {
         m_type = IPD_IMAGE;
-        m_pixmap = QPixmap( filename );
-        //const QBitmap nullBitmap;
-        //m_pixmap.setMask( nullBitmap );  //don't show transparency
+        m_pixmap.load( filename );
+        //kdDebug() << "setPixmap: m_pixmap is " << m_pixmap.width() << ", " << m_pixmap.height() << endl;
+        const QBitmap nullBitmap;
+        m_pixmap.setMask( nullBitmap );  //don't show transparency
         repaint(false);
     }
 
@@ -69,9 +71,9 @@ public:
         QFrame::drawContents( p );
         p->save();
         p->translate( contentsRect().x(), contentsRect().y() );
-        if ( m_type = IPD_IMAGE )
+        if ( m_type == IPD_IMAGE )
         {
-            p->drawPixmap( 0, 0, m_pixmap );
+            p->drawPixmap( QPoint( 0, 0 ), m_pixmap );
         }
         else
         {
