@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 2000-2004 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -366,27 +367,6 @@ private slots:
 private:
     KoMainWindowPrivate *d;
 
-};
-
-/**
- * Extension to KFileDialog in order to add special entries to the filter combo,
- * like "save as koffice-1.1", "save as dir" etc.
- * @note Used only when saving!
- */
-class KoFileDialog : public KFileDialog
-{
-    Q_OBJECT
-public:
-    KoFileDialog( const QString& startDir, const QString& filter,
-                  QWidget *parent, const char *name,
-                  bool modal );
-    void setSpecialMimeFilter( QStringList& mimeFilter,
-                               const QString& currentFormat, const int specialOutputFlag,
-                               const QString& nativeFormat,
-                               const QStringList& extraNativeMimeTypes );
-    int specialEntrySelected();
-private slots:
-    void slotChangedfilter( int index );
 };
 
 #endif
