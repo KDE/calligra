@@ -627,8 +627,15 @@ QDomDocument KPresenterDoc::saveXML()
                 element.appendChild(slide);
             }
             presenter.appendChild(element);
+
         }
 
+        if ( !m_presentationName.isEmpty() )
+        {
+            element = doc.createElement( "DEFAULTCUSTOMSLIDESHOWNAME" );
+            element.setAttribute( "name", m_presentationName );
+            presenter.appendChild(element);
+        }
     }
 
     if ( saveOnlyPage == -1 )
@@ -2373,6 +2380,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         } else if(elem.tagName()=="PRESSLIDES") {
             if(elem.hasAttribute("value") && elem.attribute("value").toInt()==0)
                 allSlides = TRUE;
+        } else if ( elem.tagName()=="DEFAULTCUSTOMSLIDESHOWNAME" ) {
+            if(elem.hasAttribute("name") )
+                m_presentationName=elem.attribute( "name" );
         } else if ( elem.tagName()=="CUSTOMSLIDESHOWCONFIG" ) {
             if ( _clean ) {
                 QDomElement slide=elem.firstChild().toElement();
