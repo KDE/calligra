@@ -303,8 +303,8 @@ void Ruler::drawRuler () {
   p.setBackgroundColor (colorGroup ().background ());
   p.setPen (black);
   p.setFont (QFont ("helvetica", 8));
-  buffer->fill (backgroundColor ());
-  p.eraseRect (0, 0, width (), height ());
+//  buffer->fill (backgroundColor ());
+  p.eraseRect (0, 0, buffer->width (), buffer->height ());
 
   if (orientation == Horizontal) {
     switch (munit) {
