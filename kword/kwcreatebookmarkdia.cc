@@ -49,11 +49,11 @@ KWCreateBookmarkDia::KWCreateBookmarkDia( const QStringList & _list, const QStri
 void KWCreateBookmarkDia::init()
 {
     KWCreateBookmarkDiaBase *dia = new KWCreateBookmarkDiaBase( this );
-    m_bookmarkName=dia->m_bookmarkName;
+    m_bookmarkName = dia->m_bookmarkName;
     enableButtonOK( false );
     connect( m_bookmarkName, SIGNAL(textChanged ( const QString & )), this, SLOT(nameChanged( const QString &)));
-    setMainWidget(dia);
-    resize( 300, 200);
+    setMainWidget( dia );
+    setInitialSize( QSize( 400, 100 ) ); // wide but not very high. It still gets high though.
     m_bookmarkName->setFocus();
 }
 

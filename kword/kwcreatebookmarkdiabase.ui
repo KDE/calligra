@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>KWCreateBookmarkDiaBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>376</width>
-            <height>172</height>
+            <width>358</width>
+            <height>66</height>
         </rect>
     </property>
     <property name="caption">
@@ -50,24 +50,7 @@
                 </widget>
             </hbox>
         </widget>
-        <spacer>
-            <property name="name">
-                <cstring>Spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
     </vbox>
 </widget>
-<layoutdefaults spacing="6" margin="0"/>
+<layoutdefaults spacing="6" margin="6"/>
 </UI>
