@@ -31,14 +31,14 @@ static const char *description =
 #ifdef OOPL_VERSION
 # include "oopl_aboutdata.h"
 #else //default
- 	const QString APP_NAME = I18N_NOOP("Kexi");
+# define APP_NAME I18N_NOOP("Kexi")
 	static const char *version=VERSION;
 	const char **APP_LOGO = 0;
 #endif
 
 KAboutData *newKexiAboutData()
 {
-	KAboutData *aboutData=new KAboutData( "kexi", APP_NAME.utf8(),
+	KAboutData *aboutData=new KAboutData( "kexi", APP_NAME,
 		version, description, KAboutData::License_LGPL,
 		I18N_NOOP(	"(c) 2002, 2003, Kexi Team\n"
 					"(c) 2003, OpenOffice Polska Ltd.\n"), 
