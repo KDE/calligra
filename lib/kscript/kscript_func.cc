@@ -264,6 +264,24 @@ static bool ksfunc_print( KSContext& context )
     cout << endl;
 
   for( ; it != end; ++it )
+    cout << (*it)->toString( context );
+
+  // context.value()->clear();
+  context.setValue( 0 );
+
+  return true;
+}
+
+static bool ksfunc_println( KSContext& context )
+{
+  // We know that the context always holds a list of parameters
+  QValueList<KSValue::Ptr>::Iterator it = context.value()->listValue().begin();
+  QValueList<KSValue::Ptr>::Iterator end = context.value()->listValue().end();
+
+  if ( it == end )
+    cout << endl;
+
+  for( ; it != end; ++it )
     cout << (*it)->toString( context ) << endl;
 
   // context.value()->clear();
@@ -294,6 +312,7 @@ KSModule::Ptr ksCreateModule_KScript( KSInterpreter* interp )
   KSModule::Ptr module = new KSModule( interp, "kscript" );
 
   module->addObject( "print", new KSValue( new KSBuiltinFunction( module, "print", ksfunc_print ) ) );
+  module->addObject( "println", new KSValue( new KSBuiltinFunction( module, "println", ksfunc_println ) ) );
   module->addObject( "connect", new KSValue( new KSBuiltinFunction( module, "connect", ksfunc_connect ) ) );
   module->addObject( "length", new KSValue( new KSBuiltinFunction( module, "length", ksfunc_length ) ) );
   module->addObject( "arg", new KSValue( new KSBuiltinFunction( module, "arg", ksfunc_arg ) ) );

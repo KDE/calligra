@@ -144,9 +144,11 @@ public:
     QValueList<Ptr>& listValue() { ASSERT( typ == ListType );  return *((QValueList<Ptr>*)val.ptr); }
     const QMap<QString,Ptr>& mapValue() const { ASSERT( typ == MapType ); return *((QMap<QString,Ptr>*)val.ptr); }
     QMap<QString,Ptr>& mapValue() { ASSERT( typ == MapType ); return *((QMap<QString,Ptr>*)val.ptr); }
-    KScript::Long intValue() const { ASSERT( typ == IntType ); return val.i; }
-    KScript::Boolean boolValue() const { ASSERT( typ == BoolType ); return val.b; }
-    KScript::Double doubleValue() const { ASSERT( typ == DoubleType ); return val.d; }
+    KScript::Long intValue() const { ASSERT( typ == IntType || typ == DoubleType ); if ( typ == IntType ) return val.i; return (int)val.d; }
+    KScript::Boolean boolValue() const { ASSERT( typ == BoolType || typ == StringType ); if ( typ == BoolType ) return val.b;
+                                         return !stringValue().isEmpty(); }
+    KScript::Double doubleValue() const { ASSERT( typ == DoubleType || typ == IntType ); if ( typ == DoubleType ) return val.d;
+                                          return (double)val.i; }
     const KScript::Char charValue() const { if ( typ == CharRefType ) return *((KScript::CharRef*)val.ptr);
                                             ASSERT( typ == CharType ); return QChar( val.c ); }
     KScript::CharRef& charRefValue() { ASSERT( typ == CharRefType ); return *((KScript::CharRef*)val.ptr); }
@@ -179,8 +181,17 @@ public:
     KSAttribute* attributeValue() { ASSERT( typ == AttributeType ); return ((KSAttribute*)val.ptr); }
     const KSAttribute* attributeValue() const { ASSERT( typ == AttributeType ); return ((KSAttribute*)val.ptr); }
 
+    /**
+     * DO NOT USE ANY MORE.
+     */
     bool cast( Type );
 
+    /**
+     * @return TRUE if the stored value is of type @p typ or can be implicit
+     *         casted to that type.
+     */
+    bool implicitCast( Type typ );
+    
     QString toString( KSContext& context );
 
     bool operator==( const KSValue& v ) const;

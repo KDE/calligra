@@ -94,5 +94,9 @@ extern bool KSEval_plus_assign( KSParseNode* node, KSContext& context );
 extern bool KSEval_bool_or( KSParseNode* node, KSContext& context );
 extern bool KSEval_bool_and( KSParseNode* node, KSContext& context );
 extern bool KSEval_t_regexp_group( KSParseNode* node, KSContext& context );
+extern bool KSEval_t_input( KSParseNode* node, KSContext& context );
+extern bool KSEval_t_line( KSParseNode* node, KSContext& context );
+extern bool KSEval_t_match_line( KSParseNode* node, KSContext& context );
+extern bool KSEval_t_file_op( KSParseNode* node, KSContext& context );
 
 #endif

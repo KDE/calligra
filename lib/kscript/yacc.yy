@@ -31,7 +31,10 @@ void yyerror( const char *s )
   KScript::Double _float;
 }
 
-
+%token <_str> T_FILE_OP
+%token <_str> T_MATCH_LINE
+%token T_LINE
+%token T_INPUT
 %token T_AMPERSAND
 %token T_ASTERISK
 %token T_CASE
@@ -594,6 +597,21 @@ primary_expr
           {
 	    $$ = $1;
 	  }
+	| T_INPUT
+	  {
+	    $$ = new KSParseNode( t_input );
+	  }
+	| T_MATCH_LINE
+	  {
+	    $$ = new KSParseNode( t_match_line );
+	    $$->setIdent( $1 );
+	  }
+	| T_FILE_OP assign_expr T_RIGHT_PARANTHESIS
+	  {
+	    $$ = new KSParseNode( t_file_op, $2 );
+	    $$->setIdent( $1 );
+	  }
+	| T_LESS_THAN_SIGN or_expr T_GREATER_THAN_SIGN { }
 	| T_LEFT_PARANTHESIS assign_expr T_RIGHT_PARANTHESIS
           {
 	    $$ = $2;
@@ -658,6 +676,10 @@ literal
 	| T_LEFT_CURLY_BRACKET dict_elements T_RIGHT_CURLY_BRACKET
 	  {
 	    $$ = new KSParseNode( t_dict_const, $2 );
+	  }
+	| T_LINE
+	  {
+	    $$ = new KSParseNode( t_line );
 	  }
 	| T_DOLLAR T_INTEGER_LITERAL
 	  {

@@ -11,6 +11,10 @@
 #include "kscript_context.h"
 #include "kscript_parsenode.h"
 #include "kscript_ptr.h"
+#include "kscript_value.h"
+
+class QTextStream;
+class QIODevice;
 
 /**
  * This class offers the API to kscript functionality. If you want to
@@ -32,7 +36,7 @@ public:
   /**
    * Destroys the interpreter and all associated modules etc.
    */
-  virtual ~KSInterpreter() { }
+  virtual ~KSInterpreter();
 
   /**
    * Reads the script @p filename from the hard disk and tries to execute it.
@@ -90,7 +94,20 @@ public:
    */
   virtual bool processExtension( KSContext& context, KSParseNode* node );
 
+  /**
+   * Internal function for implementing regexp and $0, $1, $2, ...
+   */
   KRegExp* regexp();
+
+  /**
+   * Internal function for implementing the <> operator.
+   */
+  QString readInput();
+    
+  /**
+   * Internal function used for implementin the $_ operator.
+   */
+  KSValue::Ptr lastInputLine() const;
     
 protected:
   /**
@@ -115,7 +132,37 @@ protected:
   /**
    * Rgeular expression matcher used for constructions like "/(.+) (.+)/".
    */
-  KRegExp m_regexp;  
+  KRegExp m_regexp;
+  /**
+   * The last arguments passed to @ref #runScript. They are saved here, since
+   * the <> operator may be used to read the files named by the arguments.
+   */
+  QStringList m_args;
+  /**
+   * When reading in files with the <> operator, then this variable tells us
+   * which file we just opened. So it is used like this: m_args[ m_currentArg ].
+   * The inital value is -1, that means no argument file was opened until now.
+   *
+   * @see #m_args.
+   */
+  int m_currentArg;
+  /**
+   * When reading in files with the <> operator, then this stream
+   * handles the current input file. If there is no such input file
+   * specified in the command line then this stream points to stdin.
+   */
+  QTextStream* m_outStream;
+  /**
+   * Used for @ref #m_stream
+   */
+  QIODevice* m_outDevice;
+  /**
+   * The last line read by the <> operator is stored here.
+   *
+   * @ref #lastInputLine
+   */
+  KSValue::Ptr m_lastInputLine;
+    // QString m_lastInputLine;
 };
 
 #endif

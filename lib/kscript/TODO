@@ -31,14 +31,20 @@ Tasks for KScript:
 
 ------------------------------------------------
     Reimplement certain simple classes natively:
-[ ] QRect
-[ ] QPoint
-[ ] QString
-[ ] QChar
+[x] QRect
+[x] QPoint
+[s] QString
+[s] QChar
 
 ------------------------------------------------
-[ ] write a nifty perl script that generates the
-    _ext_-files out of c++-headers. Would be 
+[s] write a nifty perl script that generates the
+    _ext_-files out of c++-headers. Would be
     nice for people that want to link KScript to
     their own apps.
 ------------------------------------------------
+
+
+Torbens Space
+=============
+
+- Dont use KSValue::cast. It is evil!

@@ -197,7 +197,11 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 						  yylval._str->truncate( yylval._str->length() - 1 );
 						  return T_MATCH;
 						}
-
+"/"(\\.|[^\\/])*"/"/" "*[^ A-Za-z0-9_.(]	{
+			 			  yylval._str = new QString( yytext + 1 );
+						  yylval._str->truncate( yylval._str->length() - 1 );
+						  return T_MATCH_LINE;
+						}
 
 "$"?[A-Z]+"$"?{Digits} {
 			  if ( !s_kspread )
@@ -239,6 +243,47 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 			  return T_RANGE;
 		       };
 
+"-r("			{
+				yylval._str = new QString("r");
+				return T_FILE_OP;
+			}
+"-w("			{
+				yylval._str = new QString("w");
+				return T_FILE_OP;
+			}
+"-d("			{
+				yylval._str = new QString("d");
+				return T_FILE_OP;
+			}
+"-l("			{
+				yylval._str = new QString("l");
+				return T_FILE_OP;
+			}
+"-f("			{
+				yylval._str = new QString("f");
+				return T_FILE_OP;
+			}
+"-e("			{
+				yylval._str = new QString("e");
+				return T_FILE_OP;
+			}
+"-x("			{
+				yylval._str = new QString("x");
+				return T_FILE_OP;
+			}
+"-g("			{
+				yylval._str = new QString("g");
+				return T_FILE_OP;
+			}
+"-o("			{
+				yylval._str = new QString("o");
+				return T_FILE_OP;
+			}
+"-s("			{
+				yylval._str = new QString("s");
+				return T_FILE_OP;
+			}
+
 "{"			return T_LEFT_CURLY_BRACKET;
 "}"			return T_RIGHT_CURLY_BRACKET;
 "["		 	return T_LEFT_SQUARE_BRACKET;
@@ -252,6 +297,7 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 "!="			return T_NOTEQUAL;
 "!"			return T_NOT;
 "="			return T_ASSIGN;
+"<>"			return T_INPUT;
 ">>"			return T_SHIFTRIGHT;
 "<<"			return T_SHIFTLEFT;
 "+"			return T_PLUS_SIGN;
@@ -271,6 +317,7 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 ">"			return T_GREATER_THAN_SIGN;
 "."			return T_MEMBER;
 "+="			return T_PLUS_ASSIGN;
+"$_"			return T_LINE;
 "$"			return T_DOLLAR;
 
 const			return T_CONST;

@@ -520,6 +520,11 @@ bool KSValue::cast( Type _typ )
       }
       return false;
     case StringType:
+      if ( _typ == BoolType )
+      {
+	  setValue( !stringValue().isEmpty() );
+	  return TRUE;
+      }
       return false;
     case CharRefType:
       if ( _typ != CharType )
@@ -803,4 +808,58 @@ bool KSValue::cmp( const KSValue& v ) const
 
   // Never reached
   return false;
+}
+
+bool KSValue::implicitCast( Type _typ )
+{
+    if ( typ == _typ )
+	return true;
+
+    switch( typ )
+    {
+    case Empty:
+	return false;
+    case IntType:
+	if ( _typ == DoubleType )
+	    return TRUE;
+	return false;
+    case BoolType:
+	return FALSE;
+    case DoubleType:
+	if ( _typ == IntType )
+	    return TRUE;
+      return false;
+    case StringType:
+	if ( _typ == BoolType )
+	    return TRUE;
+	return false;
+    case CharRefType:
+	if ( _typ == CharType )
+	    return TRUE;
+    case PropertyType:
+    case ListType:
+    case MapType:
+    case CharType:
+    case FunctionType:
+    case ClassType:
+    case ObjectType:
+    case MethodType:
+    case BuiltinMethodType:
+    case StructBuiltinMethodType:
+    case StructType:
+    case StructClassType:
+    case ModuleType:
+    case TypeCodeType:
+    case ProxyType:
+    case InterfaceType:
+    case AttributeType:
+    case ProxyBuiltinMethodType:
+      // They can be casted to nothing
+      return false;
+    case NTypes:
+      ASSERT(0);
+      break;
+    }
+
+    return FALSE;
 }

@@ -15,6 +15,8 @@
 
 #include <kregexp.h>
 
+#include <qfileinfo.h>
+
 // Get a left and right operand for arithmetic
 // operations like add, mul, div etc. If leftexpr
 // is true, then the left value must be assignable.
@@ -1471,7 +1473,7 @@ bool KSEval_t_while( KSParseNode* node, KSContext& context )
   {
     EVAL_LEFT_OP( context, l );
 
-    if ( !l.value()->cast( KSValue::BoolType ) )
+    if ( !l.value()->implicitCast( KSValue::BoolType ) )
     {
       QString tmp( "From %1 to Boolean" );
       context.setException( new KSException( "CastingError", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
@@ -1826,14 +1828,14 @@ bool KSEval_t_match( KSParseNode* node , KSContext& context )
 
     if ( !KSUtil::checkType( context, context.value(), KSValue::StringType, TRUE ) )
 	return FALSE;
-			     
+			
     KRegExp* exp = context.interpreter()->regexp();
     exp->compile( node->getIdent() );
-    
+
     qDebug("Matching %s against %s",context.value()->stringValue().latin1(), node->getIdent().latin1() );
-	       
+	
     context.setValue( new KSValue( exp->match( context.value()->stringValue().latin1() ) ) );
-    
+
     return TRUE;
 }
 
@@ -1851,16 +1853,16 @@ bool KSEval_t_subst( KSParseNode* node, KSContext& context )
 
     if ( !KSUtil::checkType( l, l.value(), KSValue::StringType, TRUE ) )
 	return FALSE;
-			     
+			
     int pos = node->getIdent().find( '/' );
     ASSERT( pos != -1 );
     QString match = node->getIdent().left( pos );
     QString subst = node->getIdent().mid( pos + 1 );
     KRegExp* exp = context.interpreter()->regexp();
     exp->compile( match );
-    
+
     qDebug("Matching %s against %s",l.value()->stringValue().latin1(), node->getIdent().latin1() );
-	       
+	
     if ( !exp->match( l.value()->stringValue().latin1() ) )
     {
 	context.setValue( new KSValue( FALSE ) );
@@ -1890,7 +1892,7 @@ bool KSEval_t_subst( KSParseNode* node, KSContext& context )
 	QString& str = l.value()->stringValue();
 	str.replace( exp->groupStart( 0 ), exp->groupEnd( 0 ) - exp->groupStart( 0 ), subst );
     }
-    
+
     context.setValue( new KSValue( TRUE ) );
     return TRUE;
 }
@@ -2484,6 +2486,69 @@ bool KSEval_t_regexp_group( KSParseNode* node, KSContext& context )
 	context.setValue( new KSValue( QString( grp ) ) );
     else
 	context.setValue( new KSValue( QString( "" ) ) );
+
+    return TRUE;
+}
+
+bool KSEval_t_input( KSParseNode*, KSContext& context )
+{
+    context.setValue( new KSValue( context.interpreter()->readInput() ) );
+    
+    return TRUE;
+}
+
+bool KSEval_t_line( KSParseNode* node, KSContext& context )
+{
+    context.setValue( context.interpreter()->lastInputLine() );
+    
+    return TRUE;
+}
+
+bool KSEval_t_match_line( KSParseNode* node, KSContext& context )
+{
+    KSValue::Ptr line = context.interpreter()->lastInputLine();
+    if ( !KSUtil::checkType( context, line, KSValue::StringType, TRUE ) )
+	return FALSE;
+			
+    KRegExp* exp = context.interpreter()->regexp();
+    exp->compile( node->getIdent() );
+
+    context.setValue( new KSValue( exp->match( line->stringValue().latin1() ) ) );
+
+    return TRUE;
+}
+
+bool KSEval_t_file_op( KSParseNode* node, KSContext& context )
+{
+    if ( !node->branch1()->eval( context ) )
+	return false;
+
+    if ( !KSUtil::checkType( context, context.value(), KSValue::StringType, TRUE ) )
+	return FALSE;
+
+    QFileInfo info( context.value()->stringValue() );
+    if ( node->getIdent()[0] == 'r' )
+	context.setValue( new KSValue( info.isReadable() ) );
+    else if ( node->getIdent()[0] == 'w' )
+	context.setValue( new KSValue( info.isWritable() ) );
+    else if ( node->getIdent()[0] == 'd' )
+	context.setValue( new KSValue( info.isDir() ) );
+    else if ( node->getIdent()[0] == 'l' )
+	context.setValue( new KSValue( info.isSymLink() ) );
+    else if ( node->getIdent()[0] == 'f' )
+	context.setValue( new KSValue( info.isFile() ) );
+    else if ( node->getIdent()[0] == 'e' )
+	context.setValue( new KSValue( info.isExecutable() ) );
+    else if ( node->getIdent()[0] == 'x' )
+	context.setValue( new KSValue( info.exists() ) );
+    else if ( node->getIdent()[0] == 'g' )
+	context.setValue( new KSValue( info.group() ) );
+    else if ( node->getIdent()[0] == 'o' )
+	context.setValue( new KSValue( info.owner() ) );
+    else if ( node->getIdent()[0] == 's' )
+	context.setValue( new KSValue( (KScript::Long)info.size() ) );
+    else
+	ASSERT( 0 );
     
     return TRUE;
 }

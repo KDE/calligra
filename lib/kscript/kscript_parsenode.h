@@ -97,7 +97,11 @@ typedef enum
   plus_assign,
   bool_or,
   bool_and,
-  t_regexp_group
+  t_regexp_group,
+  t_input,
+  t_line,
+  t_match_line,
+  t_file_op
 } KSParseNodeType;
 
 class KSContext;

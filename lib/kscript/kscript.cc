@@ -11,26 +11,46 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
+#include <qfile.h>
+#include <qtextstream.h>
+
 KSInterpreter::KSInterpreter()
 {
-  KSModule::Ptr m = ksCreateModule_KScript( this );
-  m_modules.insert( m->name(), m );
+    m_outStream = 0;
+    m_currentArg = -1;
+    m_outDevice = 0;
+    m_lastInputLine = new KSValue( QString() );
+    m_lastInputLine->setMode( KSValue::LeftExpr );
+    
+    KSModule::Ptr m = ksCreateModule_KScript( this );
+    m_modules.insert( m->name(), m );
 
-  // This module will serve as our global namespace
-  // since adressing all kscript builtin stuff via its module
-  // is too much typing for our users.
-  m_global = m->nameSpace();
+    // This module will serve as our global namespace
+    // since adressing all kscript builtin stuff via its module
+    // is too much typing for our users.
+    m_global = m->nameSpace();
 
-  m = ksCreateModule_Qt( this );
-  m_modules.insert( m->name(), m );
+    m = ksCreateModule_Qt( this );
+    m_modules.insert( m->name(), m );
 
-  // Integrate the Qt module in the global namespace for convenience
-  KSNamespace::Iterator it = m->nameSpace()->begin();
-  KSNamespace::Iterator end = m->nameSpace()->end();
-  for(; it != end; ++it )
-    m_global->insert( it.key(), it.data() );
+    // Integrate the Qt module in the global namespace for convenience
+    KSNamespace::Iterator it = m->nameSpace()->begin();
+    KSNamespace::Iterator end = m->nameSpace()->end();
+    for(; it != end; ++it )
+	m_global->insert( it.key(), it.data() );
 
-  m_globalContext.setScope( new KSScope( m_global, 0 ) );
+    m_globalContext.setScope( new KSScope( m_global, 0 ) );
+}
+
+KSInterpreter::~KSInterpreter()
+{
+    if ( m_outStream )
+	delete m_outStream;
+    if ( m_outDevice )
+    {
+	m_outDevice->close();
+	delete m_outDevice;
+    }
 }
 
 KSModule::Ptr KSInterpreter::module( const QString& name )
@@ -44,13 +64,16 @@ KSModule::Ptr KSInterpreter::module( const QString& name )
 
 QString KSInterpreter::runScript( const QString& filename, const QStringList& args )
 {
-  KSContext context( m_globalContext );
-  // The "" indicates that this is not a module but
-  // a script in its original meaning.
-  if ( !runModule( context, "", filename, args ) )
-    return context.exception()->toString( context );
+    // Save for usage by the <> operator
+    m_args = args;
+    
+    KSContext context( m_globalContext );
+    // The "" indicates that this is not a module but
+    // a script in its original meaning.
+    if ( !runModule( context, "", filename, args ) )
+	return context.exception()->toString( context );
 
-  return QString::null;
+    return QString::null;
 }
 
 bool KSInterpreter::runModule( KSContext& context, const QString& name )
@@ -174,7 +197,7 @@ bool KSInterpreter::runModule( KSContext& result, const QString& name, const QSt
     {
 	context.value()->listValue().append( new KSValue( *sit ) );
     }
-    
+
     if ( !code->functionValue()->call( context ) )
     {
       if ( context.exception() )
@@ -242,4 +265,55 @@ bool KSInterpreter::processExtension( KSContext& context, KSParseNode* node )
 KRegExp* KSInterpreter::regexp()
 {
     return &m_regexp;
+}
+
+QString KSInterpreter::readInput()
+{
+    if ( !m_outStream )
+    {
+	if ( m_args.count() > 0 )
+        {
+	    m_currentArg = 0;
+	    m_outDevice = new QFile( m_args[ m_currentArg ] );
+	    m_outDevice->open( IO_ReadOnly );
+	    m_outStream = new QTextStream( m_outDevice );
+	}
+	else
+	    m_outStream = new QTextStream( stdin, IO_ReadOnly );
+    }
+
+    QString tmp = m_outStream->readLine();
+    
+    if ( !tmp.isNull() )
+    {
+	tmp += "\n";
+	m_lastInputLine->setValue( tmp );
+	return tmp;
+    }
+    
+    m_lastInputLine->setValue( tmp );
+	
+    // Ended reading a file ...
+    
+    // Did we scan the last file ?
+    if ( m_currentArg == (int)m_args.count() - 1 )
+	return QString();
+    else
+    {
+	m_currentArg++;
+	if ( m_outStream )
+	    delete m_outStream;
+	if ( m_outDevice )
+	    delete m_outDevice;
+	m_outDevice = new QFile( m_args[ m_currentArg ] );
+	m_outDevice->open( IO_ReadOnly );
+	m_outStream = new QTextStream( m_outDevice );
+    }
+    
+    return readInput();
+}
+
+KSValue::Ptr KSInterpreter::lastInputLine() const
+{
+    return m_lastInputLine;;
 }
