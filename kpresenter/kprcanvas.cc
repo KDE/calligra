@@ -3080,6 +3080,9 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
     //kdDebug(33001) << "Page::startScreenPresentation Zooming backgrounds" << endl;
     // Zoom backgrounds to the correct size for full screen
     KPresenterDoc * doc = m_view->kPresenterDoc();
+    m_activePageBeforePresentation = doc->activePage();
+    doc->displayActivePage( doc->pageList().at( curPgNum-1 ) );
+
     m_zoomBeforePresentation=doc->zoomHandler()->zoom();
     // ## TODO get rid of presFakt
     doc->zoomHandler()->setZoomAndResolution( qRound(_presFakt*m_zoomBeforePresentation),
@@ -3131,6 +3134,7 @@ void KPrCanvas::stopScreenPresentation()
     setCursor( waitCursor );
 
     KPresenterDoc * doc = m_view->kPresenterDoc();
+    doc->displayActivePage( m_activePageBeforePresentation );
     _presFakt = 1.0;
     doc->zoomHandler()->setZoomAndResolution( m_zoomBeforePresentation,
                                               QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
@@ -3195,9 +3199,10 @@ bool KPrCanvas::pNext( bool )
     QValueList<int>::ConstIterator test(  slideListIterator );
     if ( ++test != slideList.end() )
     {
+        KPresenterDoc * doc = m_view->kPresenterDoc();
         if ( !spManualSwitch() && nextPageTimer ) {
             QValueList<int>::ConstIterator it( slideListIterator );
-            m_view->setCurrentTimer( m_view->kPresenterDoc()->pageList().at((*it) - 1 )->getPageTimer() * m_view->kPresenterDoc()->getPresSpeed() );
+            m_view->setCurrentTimer( doc->pageList().at((*it) - 1 )->getPageTimer() * doc->getPresSpeed() );
 
             nextPageTimer = false;
 
@@ -3218,13 +3223,14 @@ bool KPrCanvas::pNext( bool )
 
         tmpObjs.clear();
 
-        setActivePage(m_view->kPresenterDoc()->pageList().at(currPresPage-1));
+        doc->displayActivePage( doc->pageList().at( currPresPage-1 ) );
 
+        setActivePage(doc->pageList().at(currPresPage-1));
         QPtrListIterator<KPObject> oIt( getObjectList() );
         for (; oIt.current(); ++oIt )
             tmpObjs.append(oIt.current());
 
-        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage-1 );
+        presStepList = doc->reorderPage( currPresPage-1 );
         currPresStep = *presStepList.begin();
 
 #if KDE_IS_VERSION(3,1,90)
@@ -3232,7 +3238,7 @@ bool KPrCanvas::pNext( bool )
 #else
         QPixmap _pix2( QApplication::desktop()->width(), QApplication::desktop()->height() );
 #endif
-        int pageHeight = m_view->kPresenterDoc()->pageList().at(currPresPage-1)->getZoomPageRect().height();
+        int pageHeight = doc->pageList().at(currPresPage-1)->getZoomPageRect().height();
         int yOffset = ( presPage() - 1 ) * pageHeight;
         if ( height() > pageHeight )
             yOffset -= ( height() - pageHeight ) / 2;
@@ -3244,7 +3250,7 @@ bool KPrCanvas::pNext( bool )
         if ( !spManualSwitch() )
             m_view->autoScreenPresStopTimer();
 
-        KPBackGround * backtmp=m_view->kPresenterDoc()->pageList().at( ( *it ) - 1 )->background();
+        KPBackGround * backtmp=doc->pageList().at( ( *it ) - 1 )->background();
         PageEffect _pageEffect = backtmp->getPageEffect();
 
         bool _soundEffect = backtmp->getPageSoundEffect();
@@ -3325,12 +3331,15 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
         currPresPage = *( --slideListIterator );
 
         tmpObjs.clear();
+        KPresenterDoc * doc = m_view->kPresenterDoc();
+        doc->displayActivePage( doc->pageList().at( currPresPage-1 ) );
+
         //change active page.
-        setActivePage(m_view->kPresenterDoc()->pageList().at( currPresPage - 1 ) );
+        setActivePage(doc->pageList().at( currPresPage - 1 ) );
         QPtrListIterator<KPObject> oIt( getObjectList() );
         for (; oIt.current(); ++oIt )
             tmpObjs.append(oIt.current());
-        presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage - 1 );
+        presStepList = doc->reorderPage( currPresPage - 1 );
         currPresStep = *( --presStepList.end() );
 
         m_view->setPresentationDuration( currPresPage );

@@ -575,6 +575,7 @@ private:
     int m_tmpHelpPoint;
     KoPoint tmpHelpPointPos;
 
+    KPrPage * m_activePageBeforePresentation;
     int m_zoomBeforePresentation;
     int m_tmpHorizHelpline;
     int m_tmpVertHelpline;
