@@ -153,16 +153,18 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     hbox->addWidget( m_pOkButton );
     hbox->addSpacing( 6 );
 
-    // The line-editor that appears above the table and allows to
-    // edit the cells content. It knows about the two buttons.
-    m_pEditWidget = new KSpreadEditWidget( m_pToolWidget, this, m_pCancelButton, m_pOkButton );
-    m_pEditWidget->setFocusPolicy( QWidget::StrongFocus );
-    hbox->addWidget( m_pEditWidget, 2 );
-    hbox->addSpacing( 2 );
-	
     // The widget on which we display the table
     m_pCanvas = new KSpreadCanvas( m_pFrame, this, doc );
 
+    // The line-editor that appears above the table and allows to
+    // edit the cells content. It knows about the two buttons.
+    m_pEditWidget = new KSpreadEditWidget( m_pToolWidget, m_pCanvas, m_pCancelButton, m_pOkButton );
+    m_pEditWidget->setFocusPolicy( QWidget::StrongFocus );
+    hbox->addWidget( m_pEditWidget, 2 );
+    hbox->addSpacing( 2 );
+
+    m_pCanvas->setEditWidget( m_pEditWidget );
+	
     m_pHBorderWidget = new KSpreadHBorder( m_pFrame, m_pCanvas,this );
     m_pVBorderWidget = new KSpreadVBorder( m_pFrame, m_pCanvas ,this );
 
@@ -1698,13 +1700,6 @@ int KSpreadView::bottomBorder() const
 
 void KSpreadView::resizeEvent( QResizeEvent * )
 {
-  // HACK
-  // if ( x() == 5000 && y() == 5000 )
-  // return;
-
-    // ####### TODO
-    // if ( KoViewIf::hasFocus() || mode() == KOffice::View::RootMode )
-    // {
     m_pToolWidget->show();
     m_pToolWidget->setGeometry( 0, 0, width(), 30 );
     int top = 30;
@@ -1723,7 +1718,8 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     m_pTabBarLast->show();
     m_pTabBar->setGeometry( 64, height() - 16, width() / 2 - 64, 16 );
     m_pTabBar->show();
-	
+
+    // TODO: move the scrollbars to KSpreadCanvas, but keep those resize statements
     m_pHorzScrollBar->setGeometry( width() / 2, height() - 16, width() / 2 - 16, 16 );
     m_pHorzScrollBar->show();
     m_pVertScrollBar->setGeometry( width() - 16, top , 16, height() - 16 - top );
@@ -1733,33 +1729,14 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     m_pFrame->show();
 
     m_pCanvas->setGeometry( YBORDER_WIDTH, XBORDER_HEIGHT,
-								  m_pFrame->width() - YBORDER_WIDTH, m_pFrame->height() - XBORDER_HEIGHT );
+                            m_pFrame->width() - YBORDER_WIDTH, m_pFrame->height() - XBORDER_HEIGHT );
 
     m_pHBorderWidget->setGeometry( YBORDER_WIDTH, 0, m_pFrame->width() - YBORDER_WIDTH, XBORDER_HEIGHT );
     m_pHBorderWidget->show();
 
     m_pVBorderWidget->setGeometry( 0, XBORDER_HEIGHT, YBORDER_WIDTH,
-								   m_pFrame->height() - XBORDER_HEIGHT );
+                                   m_pFrame->height() - XBORDER_HEIGHT );
     m_pVBorderWidget->show();
-    /* }
-  else
-  {
-    m_pToolWidget->hide();
-    m_pToolWidget->hide();
-    m_pTabBarFirst->hide();
-    m_pTabBarLeft->hide();
-    m_pTabBarRight->hide();
-    m_pTabBarLast->hide();
-    m_pHorzScrollBar->hide();
-    m_pVertScrollBar->hide();
-    m_pHBorderWidget->hide();
-    m_pVBorderWidget->hide();
-
-    m_pFrame->setGeometry( 0, 0, width(), height() );
-    m_pFrame->show();
-    m_pCanvas->raise();
-    m_pCanvas->setGeometry( 0, 0, width(), height() );
-    } */
 }
 
 
@@ -2389,11 +2366,6 @@ void KSpreadView::repaintPolygon( const QPointArray& polygon )
 	arr.setPoint( i, m.map( arr.point( i ) ) );
 
     emit regionInvalidated( QRegion( arr ), TRUE );
-}
-
-QWidget* KSpreadView::canvas()
-{
-    return m_pCanvas;
 }
 
 void KSpreadView::paintContent( QPainter& painter, const QRect& rect, bool transparent )

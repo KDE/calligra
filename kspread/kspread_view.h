@@ -123,7 +123,6 @@ public:
 
     virtual bool printDlg();
 
-    QWidget* canvas();
     void paintContent( QPainter& painter, const QRect& rect, bool transparent );
 
     /**

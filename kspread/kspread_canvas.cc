@@ -1,3 +1,4 @@
+// -*- mode: c++; c-basic-offset: 2 -*-
 #include "kspread_canvas.h"
 #include "kspread_table.h"
 #include "kspread_cell.h"
@@ -26,19 +27,19 @@
  *
  ****************************************************************/
 
-KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadView *_view,
+KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
                                       QButton *cancelButton, QButton *okButton )
   : QLineEdit( _parent, "KSpreadEditWidget" )
 {
-  m_pView = _view;
-  if ( !m_pView->koDocument()->isReadWrite() )
+  m_pCanvas = _canvas;
+  // Those buttons are created by the caller, so that they are inserted
+  // properly in the layout - but they are then managed here.
+  m_pCancelButton = cancelButton;
+  m_pOkButton = okButton;
+  if ( !m_pCanvas->doc()->isReadWrite() )
     setEnabled( false );
   else
   {
-    // Those buttons are created by the caller, so that they are inserted
-    // properly in the layout - but they are then managed here.
-    m_pCancelButton = cancelButton;
-    m_pOkButton = okButton;
     QObject::connect( m_pCancelButton, SIGNAL( clicked() ),
                       this, SLOT( slotAbortEdit() ) );
     QObject::connect( m_pOkButton, SIGNAL( clicked() ),
@@ -49,13 +50,13 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadView *_view,
 
 void KSpreadEditWidget::slotAbortEdit()
 {
-  m_pView->canvasWidget()->deleteEditor( false /*discard changes*/ );
+  m_pCanvas->deleteEditor( false /*discard changes*/ );
   // will take care of the buttons
 }
 
 void KSpreadEditWidget::slotDoneEdit()
 {
-  m_pView->canvasWidget()->deleteEditor( true /*keep changes*/ );
+  m_pCanvas->deleteEditor( true /*keep changes*/ );
   // will take care of the buttons
 }
 
@@ -68,7 +69,7 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
     return;
   }
 
-  if ( !m_pView->koDocument()->isReadWrite() )
+  if ( !m_pCanvas->doc()->isReadWrite() )
     return;
 
   switch ( _ev->key() )
@@ -79,7 +80,7 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
     case Key_Enter:
 
       // Send to the canvas, which will handle it.
-      QApplication::sendEvent( m_pView->canvasWidget(), _ev );
+      QApplication::sendEvent( m_pCanvas, _ev );
 
       _ev->accept();
       break;
@@ -88,13 +89,13 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
 
       QLineEdit::keyPressEvent( _ev );
 
-      if ( !m_pView->canvasWidget()->editor() )
+      if ( !m_pCanvas->editor() )
       {
         // Start editing the current cell
-        m_pView->canvasWidget()->createEditor( KSpreadCanvas::CellEditor );
+        m_pCanvas->createEditor( KSpreadCanvas::CellEditor );
       }
       setFocus();
-      KSpreadTextEditor* cellEditor = (KSpreadTextEditor*) m_pView->canvasWidget()->editor();
+      KSpreadTextEditor* cellEditor = (KSpreadTextEditor*) m_pCanvas->editor();
       cellEditor->blockCheckChoose( TRUE );
       cellEditor->setText( text() );
       cellEditor->blockCheckChoose( FALSE );
@@ -112,7 +113,7 @@ void KSpreadEditWidget::focusOutEvent( QFocusEvent* ev )
 {
   kdDebug() << "EditWidget lost focus" << endl;
   // See comment about setLastEditorWithFocus
-  m_pView->canvasWidget()->setLastEditorWithFocus( KSpreadCanvas::EditWidget );
+  m_pCanvas->setLastEditorWithFocus( KSpreadCanvas::EditWidget );
 
   QLineEdit::focusOutEvent( ev );
 }
@@ -159,7 +160,8 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   m_bGeometryStarted = false;
   // m_bEditDirtyFlag = false;
 
-  m_pEditWidget = m_pView->editWidget();
+  //Now built afterwards(David)
+  //m_pEditWidget = m_pView->editWidget();
   m_pPosWidget = m_pView->posWidget();
 
   setBackgroundColor( white );

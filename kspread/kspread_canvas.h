@@ -35,7 +35,7 @@ class KSpreadEditWidget : public QLineEdit
 {
     Q_OBJECT
 public:
-    KSpreadEditWidget( QWidget *parent, KSpreadView *gui,
+    KSpreadEditWidget( QWidget *parent, KSpreadCanvas *canvas,
                        QButton *cancelButton, QButton *okButton);
 
     virtual void setText( const QString& t );
@@ -54,7 +54,7 @@ protected:
 private:
     QButton* m_pCancelButton;
     QButton* m_pOkButton;
-    KSpreadView* m_pView;
+    KSpreadCanvas* m_pCanvas;
 };
 
 /**
@@ -266,7 +266,12 @@ public:
     */
     void adjustArea();
 
+    // Created by the view since it's layout is managed there,
+    // but is in fact a sibling of the canvas, which needs to know about it.
+    void setEditWidget( KSpreadEditWidget * ew ) { m_pEditWidget = ew; }
+
     KSpreadView* view() { return m_pView; }
+    KSpreadDoc* doc() { return m_pDoc; }
 
 public slots:
     void slotScrollVert( int _value );
