@@ -682,6 +682,11 @@ GfxColorSpace *GfxICCBasedColorSpace::parse(Array *arr) {
   }
   nCompsA = obj2.getInt();
   obj2.free();
+  if (nCompsA > gfxColorMaxComps) {
+    error(-1, "ICCBased color space with too many (%d > %d) components",
+	  nCompsA, gfxColorMaxComps);
+    nCompsA = gfxColorMaxComps;
+  }
   if (dict->lookup("Alternate", &obj2)->isNull() ||
       !(altA = GfxColorSpace::parse(&obj2))) {
     switch (nCompsA) {
@@ -1023,6 +1028,11 @@ GfxColorSpace *GfxDeviceNColorSpace::parse(Array *arr) {
     goto err2;
   }
   nCompsA = obj1.arrayGetLength();
+  if (nCompsA > gfxColorMaxComps) {
+    error(-1, "DeviceN color space with too many (%d > %d) components",
+·         nCompsA, gfxColorMaxComps);
+    nCompsA = gfxColorMaxComps;
+  }
   for (i = 0; i < nCompsA; ++i) {
     if (!obj1.arrayGet(i, &obj2)->isName()) {
       error(-1, "Bad DeviceN color space (names)");
