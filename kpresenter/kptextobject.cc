@@ -549,6 +549,8 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
         element.setAttribute("wordbyword", true);
     if ( lastFormat->attributeFont()!= KoTextFormat::ATT_NONE )
         element.setAttribute("fontattribute", KoTextFormat::attributeFontToString(lastFormat->attributeFont() ));
+    if ( lastFormat->spellCheckingLanguage()!= QString::null)
+        element.setAttribute("language", lastFormat->spellCheckingLanguage());
 }
 
 QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFormat , QDomDocument &doc)
@@ -845,6 +847,8 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
 
     if ( n.hasAttribute("fontattribute") )
         format.setAttributeFont( KoTextFormat::stringToAttributeFont(n.attribute("fontattribute") )  );
+    if ( n.hasAttribute("language"))
+        format.setSpellCheckingLanguage( n.attribute("language"));
 
     //kdDebug(33001)<<"loadFormat :"<<format.key()<<endl;
     return format;
