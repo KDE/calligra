@@ -3525,18 +3525,31 @@ void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
     m_pDoc->emitBeginOperation(false);
 
     // Transform the view coordinates to document coordinates
-    QWMatrix m = matrix().invert();
-    QPoint tl = m.map( _geometry.topLeft() );
-    QPoint br = m.map( _geometry.bottomRight() );
+    KoRect unzoomedRect = m_pDoc->unzoomRect( _geometry );
+    unzoomedRect.moveBy( m_pCanvas->xOffset(), m_pCanvas->yOffset() );
+
+    //KOfficeCore cannot handle KoRect directly, so switching to QRect
+    QRect unzoomedGeometry = QRect( unzoomedRect.x(),
+                                    unzoomedRect.y(),
+                                    unzoomedRect.width(),
+                                    unzoomedRect.height() );
+
     if( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
     {
       KMessageBox::error( this, i18n("Area too large!"));
-      m_pTable->insertChart( QRect( tl, br ), _e, QRect( m_pCanvas->markerColumn(), m_pCanvas->markerRow(),1,1) );
+      m_pTable->insertChart( unzoomedGeometry,
+                             _e,
+                             QRect( m_pCanvas->markerColumn(),
+                                    m_pCanvas->markerRow(),
+                                    1,
+                                    1 ) );
     }
     else
     {
       // Insert the new child in the active table.
-      m_pTable->insertChart( QRect( tl, br ), _e, m_selectionInfo->selection() );
+      m_pTable->insertChart( unzoomedGeometry,
+                             _e,
+                             m_selectionInfo->selection() );
     }
     m_pDoc->emitEndOperation();
 }
@@ -3547,13 +3560,20 @@ void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
         return;
 
     m_pDoc->emitBeginOperation(false);
+
     // Transform the view coordinates to document coordinates
-    QWMatrix m = matrix().invert();
-    QPoint tl = m.map( _geometry.topLeft() );
-    QPoint br = m.map( _geometry.bottomRight() );
+    KoRect unzoomedRect = m_pDoc->unzoomRect( _geometry );
+    unzoomedRect.moveBy( m_pCanvas->xOffset(), m_pCanvas->yOffset() );
+
+    //KOfficeCore cannot handle KoRect directly, so switching to QRect
+    QRect unzoomedGeometry = QRect( unzoomedRect.x(),
+                                    unzoomedRect.y(),
+                                    unzoomedRect.width(),
+                                    unzoomedRect.height() );
+
 
     // Insert the new child in the active table.
-    m_pTable->insertChild( QRect( tl, br ), _e );
+    m_pTable->insertChild( unzoomedGeometry, _e );
     m_pDoc->emitEndOperation();
 }
 
