@@ -1,4 +1,4 @@
-<!--    $Id: $
+<!--    $Id$
 
 This is an XML document type definition (DTD) for the documentinfo.xml files which
 are used by all KOffice-1.1 and 1.1.1 programs, to store information about the
@@ -20,9 +20,11 @@ A third page, "log" is planned for the future.
   The "author" element stores information about the author of the document.
 -->
 <!ELEMENT author
-    (full-name?, title?, company?, email?, telephone?, fax?, country?, postal-code?, city?, street?)>
+    (full-name?, initial?, title?, company?, email?, telephone?, telephone-work?, fax?, country?, postal-code?, city?, street?, position?)>
 
 <!ELEMENT full-name
+    (#PCDATA)>
+<!ELEMENT initial
     (#PCDATA)>
 <!ELEMENT title
     (#PCDATA)>
@@ -31,6 +33,8 @@ A third page, "log" is planned for the future.
 <!ELEMENT email
     (#PCDATA)>
 <!ELEMENT telephone
+    (#PCDATA)>
+<!ELEMENT telephone-work
     (#PCDATA)>
 <!ELEMENT fax
     (#PCDATA)>
@@ -42,16 +46,22 @@ A third page, "log" is planned for the future.
     (#PCDATA)>
 <!ELEMENT street
     (#PCDATA)>
+<!ELEMENT position
+    (#PCDATA)>
 
 <!--
   The "about" element contains information about the document itself.
   This includes an optional title for the document, and an optional abstract.
 -->
 <!ELEMENT about
-    (abstract?, title?)>
+    (abstract?, title?, keyword?, subject?)>
 <!ELEMENT abstract
     (#PCDATA)>
 <!--title already defined above-->
+<!ELEMENT keyword
+    (#PCDATA)>
+<!ELEMENT subject
+    (#PCDATA)>
 
 <!--
   The "log" element is unused at the moment.
