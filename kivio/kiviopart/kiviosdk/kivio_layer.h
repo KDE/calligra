@@ -31,6 +31,8 @@ class KoPoint;
 class DCOPObject;
 class KoZoomHandler;
 class QDomElement;
+class KoStore;
+class KoXmlWriter;
 
 #include "kivio_stencil.h"
 
@@ -78,6 +80,7 @@ public:
 
     bool loadXML( const QDomElement & );
     QDomElement saveXML( QDomDocument & );
+    void saveOasis(KoStore* store, KoXmlWriter* docWriter);
 
     KivioStencil *checkForStencil( KoPoint *, int *, float, bool );
 

@@ -36,7 +36,9 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kozoomhandler.h>
-#include "koPoint.h"
+#include <koPoint.h>
+#include <koStore.h>
+#include <koxmlwriter.h>
 
 KivioLayer::KivioLayer( KivioPage *pPage )
     :m_pStencilList(NULL)
@@ -281,6 +283,11 @@ QDomElement KivioLayer::saveXML( QDomDocument &doc )
     }
 
     return e;
+}
+
+void KivioLayer::saveOasis(KoStore* store, KoXmlWriter* docWriter)
+{
+  // TODO OASIS: Implement saving of a layer
 }
 
 void KivioLayer::paintContent( KivioPainter& painter, const QRect&, bool, QPoint, 

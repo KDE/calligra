@@ -53,6 +53,8 @@ class KPrinter;
 class KivioView;
 class KoZoomHandler;
 class KoRect;
+class KoXmlWriter;
+class KoStore;
 
 #define BORDER_SPACE 1
 
@@ -86,9 +88,13 @@ class KivioPage : public QObject
     bool setPageName( const QString& name, bool init = FALSE );
 
     virtual QDomElement save( QDomDocument& );
+    virtual void saveOasis(KoStore* store, KoXmlWriter* docWriter);
     virtual bool loadXML( const QDomElement& );
     bool isLoading();
 
+    void saveLayout(KoXmlWriter* styleWriter);
+    void saveMasterPage(KoXmlWriter* styleWriter);
+    
     bool isHidden()const { return m_bPageHide; }
     void setHidden(bool hidden) { m_bPageHide=hidden; }
 

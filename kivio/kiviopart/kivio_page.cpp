@@ -48,6 +48,8 @@
 #include <koRect.h>
 #include <kozoomhandler.h>
 #include <kapplication.h>
+#include <koxmlwriter.h>
+#include <koStore.h>
 
 #include "kivio_page.h"
 #include "kivio_map.h"
@@ -175,6 +177,47 @@ QDomElement KivioPage::save( QDomDocument& doc )
     }
 
     return page;
+}
+
+void KivioPage::saveOasis(KoStore* store, KoXmlWriter* docWriter)
+{
+  docWriter->startElement("draw:page");
+  docWriter->addAttribute("draw:name", m_strName);
+  
+  if(m_pPageLayout == Kivio::Config::defaultPageLayout()) {
+    docWriter->addAttribute("draw:master-page-name", "Standard");
+  } else {
+    docWriter->addAttribute("draw:master-page-name", m_strName + "MasterPage");
+  }
+  
+  // TODO OASIS: Save guidelines!
+
+  // Iterate through all layers saving them as child elements
+  KivioLayer* layer = m_lstLayers.first();
+  
+  while(layer) {
+    layer->saveOasis(store, docWriter);
+    layer = m_lstLayers.next();
+  }
+  
+  docWriter->endElement(); // draw:page
+}
+
+void KivioPage::saveLayout(KoXmlWriter* styleWriter)
+{
+  if(m_pPageLayout != Kivio::Config::defaultPageLayout()) {
+    Kivio::savePageLayout(styleWriter, m_pPageLayout, m_strName + "PageLayout");
+  }
+}
+
+void KivioPage::saveMasterPage(KoXmlWriter* styleWriter)
+{
+  if(m_pPageLayout != Kivio::Config::defaultPageLayout()) {
+    styleWriter->startElement("style:master-page");
+    styleWriter->addAttribute("style:name", m_strName + "MasterPage");
+    styleWriter->addAttribute("style:page-layout-name", m_strName + "PageLayout");
+    styleWriter->endElement(); // style:master-page
+  }
 }
 
 QDomElement KivioPage::saveLayout( QDomDocument &doc )

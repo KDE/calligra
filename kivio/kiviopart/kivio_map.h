@@ -24,6 +24,7 @@ class KivioMap;
 class KivioDoc;
 
 class KoStore;
+class KoXmlWriter;
 
 class QDomElement;
 class QDomDocument;
@@ -40,82 +41,84 @@ class DCOPObject;
 
 class KivioMap : public QObject
 {
-public:
-  /**
-   * Created an empty map.
-   */
-  KivioMap( KivioDoc* doc, const char* name = 0 );
-  /**
-   * This deletes all pages contained in this map.
-   */
-  virtual ~KivioMap();
-
-  QDomElement save( QDomDocument& doc );
-  bool loadXML( const QDomElement& mymap );
-
-  /**
-   * @param _page becomes added to the map.
-   */
-  void addPage( KivioPage* );
-
+  public:
+    /**
+    * Created an empty map.
+    */
+    KivioMap( KivioDoc* doc, const char* name = 0 );
+    /**
+    * This deletes all pages contained in this map.
+    */
+    virtual ~KivioMap();
+  
+    QDomElement save( QDomDocument& doc );
+    void saveOasis(KoStore* store, KoXmlWriter* docWriter);
+    bool loadXML( const QDomElement& mymap );
+    
+    void saveLayouts(KoXmlWriter* styleWriter);
+    void saveMasterPages(KoXmlWriter* styleWriter);
+  
+    /**
+    * @param _page becomes added to the map.
+    */
+    void addPage( KivioPage* );
+  
     void takePage( KivioPage* page );
     void insertPage( KivioPage* page );
-
-
-  /**
-   * The page named @param _from is being moved to the page @param _to.
-   * If @param _before is true @param _from is inserted before (after otherwise)   * @param _to.
-   */
-  void movePage( const QString & _from, const QString & _to, bool _before = true );
-
-  KivioPage* findPage( const QString& name );
-
-  /**
-   * Use the @ref #nextPage function to get all the other pages.
-   * Attention: Function is not reentrant.
-   *
-   * @return a pointer to the first page in this map.
-   */
-  KivioPage* firstPage();
-
-  /**
-   * Call @ref #firstPage first. This will set the list pointer to
-   * the first page. Attention: Function is not reentrant.
-   *
-   * @return a pointer to the next page in this map.
-   */
-  KivioPage* nextPage();
-
-  QPtrList<KivioPage>& pageList() { return m_lstPages; }
   
-  /**
-   * Returns list of visible pages as stringlist.
-   */
-  QStringList visiblePages() const;
+    /**
+    * The page named @param _from is being moved to the page @param _to.
+    * If @param _before is true @param _from is inserted before (after otherwise)   * @param _to.
+    */
+    void movePage( const QString & _from, const QString & _to, bool _before = true );
   
-  /**
-   * Returns list of hidden pages as stringlist.
-   */
-  QStringList hiddenPages() const;
-
-  /**
-   * @return amount of pages in this map.
-   */
-  int count()const;
-
-  void update();
-
-  KivioDoc* doc()const;
-
+    KivioPage* findPage( const QString& name );
+  
+    /**
+    * Use the @ref #nextPage function to get all the other pages.
+    * Attention: Function is not reentrant.
+    *
+    * @return a pointer to the first page in this map.
+    */
+    KivioPage* firstPage();
+  
+    /**
+    * Call @ref #firstPage first. This will set the list pointer to
+    * the first page. Attention: Function is not reentrant.
+    *
+    * @return a pointer to the next page in this map.
+    */
+    KivioPage* nextPage();
+  
+    QPtrList<KivioPage>& pageList() { return m_lstPages; }
+    
+    /**
+    * Returns list of visible pages as stringlist.
+    */
+    QStringList visiblePages() const;
+    
+    /**
+    * Returns list of hidden pages as stringlist.
+    */
+    QStringList hiddenPages() const;
+  
+    /**
+    * @return amount of pages in this map.
+    */
+    int count()const;
+  
+    void update();
+  
+    KivioDoc* doc()const;
+  
     virtual DCOPObject* dcopObject();
 
-private:
-  QPtrList<KivioPage> m_lstPages;
+  private:
+    QPtrList<KivioPage> m_lstPages;
     QPtrList<KivioPage> m_lstDeletedPages;
-
-  KivioDoc* m_pDoc;
+  
+    KivioDoc* m_pDoc;
     DCOPObject* m_dcop;
-
 };
 
 #endif

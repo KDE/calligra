@@ -81,6 +81,7 @@
 #include <koApplication.h>
 #include <kglobal.h>
 #include <kocommandhistory.h>
+#include <koxmlwriter.h>
 
 //using namespace std;
 
@@ -264,10 +265,87 @@ QDomDocument KivioDoc::saveXML()
   return doc;
 }
 
-bool KivioDoc::loadOasis( const QDomDocument& /*doc*/, KoOasisStyles& /*oasisStyles*/, KoStore* )
+bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
 {
-    //todo
-    return true;
+  KoStoreDevice storeDev(store);
+  
+  if(!store->open("styles.xml")) {
+    return false;
+  }
+  
+  KoXmlWriter styleWriter(&storeDev, "office:document-styles");
+  
+  styleWriter.startElement("office:automatic-styles");
+  Kivio::savePageLayout(&styleWriter, Kivio::Config::defaultPageLayout(), "StandardPageLayout");
+  m_pMap->saveLayouts(&styleWriter); // Save layouts for pages thst don't use StandardPageLayout
+  styleWriter.endElement(); // office:automatic-styles
+  
+  // Save standard master page
+  styleWriter.startElement("office:master-styles");
+  styleWriter.startElement("style:master-page");
+  styleWriter.addAttribute("style:name", "Standard");
+  styleWriter.addAttribute("style:page-layout-name", "StandardPageLayout");
+  styleWriter.endElement(); // style:master-page
+  m_pMap->saveMasterPages(&styleWriter); // Save master pages for pages thst don't use Standard
+  styleWriter.endElement(); // office:master-styles
+  
+  styleWriter.endElement(); // Root element
+  styleWriter.endDocument();
+  
+  if(!store->close()) {
+    return false;
+  }
+
+  manifestWriter->addManifestEntry("content.xml", "text/xml");
+  
+  if(!store->open("content.xml")) {
+    return false;
+  }
+      
+  KoXmlWriter docWriter(&storeDev, "office:document-content");
+    
+  docWriter.startElement("office:body");
+  docWriter.startElement("office:drawing");
+  
+  m_pMap->saveOasis(store, &docWriter); // Save contents
+  
+  docWriter.endElement(); // office:drawing
+  docWriter.endElement(); // office:body
+  docWriter.endElement(); // Root element
+  docWriter.endDocument();
+  
+  if(!store->close()) {
+    return false;
+  }
+  
+  manifestWriter->addManifestEntry("content.xml", "text/xml");
+  
+  setModified(false);
+  return true;
+}
+
+bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* )
+{
+  m_bLoading = true;
+  
+  QDomElement contents = doc.documentElement();
+  QDomElement body(contents.namedItem("office:body").toElement());
+  
+  if(body.isNull()) {
+    kdDebug(43000) << "No office:body found!" << endl;
+    m_bLoading = false;
+    return false;
+  }
+  
+  body = body.namedItem("office:draw").toElement();
+
+  if(body.isNull()) {
+    kdDebug(43000) << "No office:draw found!" << endl;
+    m_bLoading = false;
+    return false;
+  }
+    
+  return true;
 }
 
 bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )

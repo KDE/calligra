@@ -20,7 +20,8 @@
 #include <qdom.h>
 #include <qmessagebox.h>
 
-
+#include <koStore.h>
+#include <koxmlwriter.h>
 
 #include "kivio_map.h"
 #include "kivio_doc.h"
@@ -117,6 +118,16 @@ QDomElement KivioMap::save( QDomDocument& doc )
   return mymap;
 }
 
+void KivioMap::saveOasis(KoStore* store, KoXmlWriter* docWriter)
+{
+  QPtrListIterator<KivioPage> it(m_lstPages);
+  
+  for( ; it.current(); ++it )
+  {
+    it.current()->saveOasis(store, docWriter);
+  }
+}
+
 bool KivioMap::loadXML( const QDomElement& mymap )
 {
   // FIXME: make this load the real page units and whatever
@@ -210,4 +221,24 @@ QStringList KivioMap::hiddenPages() const
   }
   
   return pages;
+}
+
+void KivioMap::saveLayouts(KoXmlWriter* styleWriter)
+{
+  QPtrListIterator<KivioPage> it(m_lstPages);
+  
+  for( ; it.current(); ++it )
+  {
+    it.current()->saveLayout(styleWriter);
+  }
+}
+
+void KivioMap::saveMasterPages(KoXmlWriter* styleWriter)
+{
+  QPtrListIterator<KivioPage> it(m_lstPages);
+  
+  for( ; it.current(); ++it )
+  {
+    it.current()->saveMasterPage(styleWriter);
+  }
 }
