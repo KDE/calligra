@@ -287,7 +287,7 @@ void KPresenterDoc::saveConfig()
     config->setGroup( "Interface" );
     config->writeEntry( "Zoom", m_zoomHandler->zoom() );
     config->writeEntry( "AllowAutoFormat" , m_bAllowAutoFormat );
-    config->writeEntry( "ShwoGrid" , m_bShowGrid );
+    config->writeEntry( "ShowGrid" , m_bShowGrid );
 
 }
 
@@ -308,7 +308,7 @@ void KPresenterDoc::initConfig()
         zoom = config->readNumEntry( "Zoom", 100 );
         setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ));
         setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ));
-        setShowGrid( config->readBoolEntry( "ShwoGrid" , false ));
+        setShowGrid( config->readBoolEntry( "ShowGrid" , false ));
 
     }
     else
