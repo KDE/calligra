@@ -88,9 +88,9 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 	m_popup->insertItem( SmallIconSet("editdelete"), i18n("&Remove Item"), this, SLOT(deleteWidget()), 0, MenuDelete);
 	m_popup->insertSeparator(MenuDelete + 1);
 
-	m_popup->insertItem( i18n("&Lay Out Horizontally"), this, SLOT(layoutHBox()), 0, MenuHBox);
-	m_popup->insertItem( i18n("&Lay Out Vertically"), this, SLOT(layoutVBox()), 0, MenuVBox);
-	m_popup->insertItem( i18n("&Lay Out in Grid"), this, SLOT(layoutGrid()), 0, MenuGrid);
+	m_popup->insertItem( i18n("Lay Out &Horizontally"), this, SLOT(layoutHBox()), 0, MenuHBox);
+	m_popup->insertItem( i18n("Lay Out &Vertically"), this, SLOT(layoutVBox()), 0, MenuVBox);
+	m_popup->insertItem( i18n("Lay Out in &Grid"), this, SLOT(layoutGrid()), 0, MenuGrid);
 	m_popup->insertSeparator(MenuGrid + 1);
 
 	m_treeview = 0;
@@ -936,17 +936,6 @@ FormManager::editTabOrder()
 }
 
 void
-FormManager::adjustWidgetSize()
-{
-	if(!m_active)
-		return;
-	if(m_active->selectedWidgets()->count() > 1)
-		return;
-
-	m_active->selectedWidgets()->first()->resize(m_active->selectedWidgets()->first()->sizeHint());
-}
-
-void
 FormManager::slotStyle()
 {
 	if(!activeForm())
@@ -1083,6 +1072,16 @@ FormManager::alignWidgetsToBottom()
 }
 
 void
+FormManager::adjustWidgetSize()
+{
+	if(!m_active)
+		return;
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+		w->resize(w->sizeHint());
+}
+
+void
 FormManager::alignWidgetsToGrid()
 {
 	if(!activeForm())
@@ -1100,6 +1099,116 @@ FormManager::alignWidgetsToGrid()
 		if((tmpx != w->x()) || (tmpy != w->y()))
 			w->move(tmpx, tmpy);
 	}
+}
+
+void
+FormManager::adjustSizeToGrid()
+{
+	if(!activeForm())
+		return;
+
+	alignWidgetsToGrid();
+
+	int gridX = activeForm()->gridX();
+	int gridY = activeForm()->gridY();
+	int tmpw, tmph;
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+	{
+		tmpw = int( (float)w->width() / ((float)gridX) + 0.5 ) * gridX;
+		tmph = int( (float)w->height() / ((float)gridY) + 0.5 ) * gridY;
+
+		if((tmpw != w->width()) || (tmph != w->height()))
+			w->resize(tmpw, tmph);
+	}
+}
+
+void
+FormManager::adjustWidthToSmall()
+{
+	if(!activeForm())
+		return;
+
+	int gridX = activeForm()->gridX();
+	int tmpw;
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+	{
+		tmpw = int( (float)w->width() / ((float)gridX)) * gridX;
+		if(tmpw != w->width())
+			w->resize(tmpw, w->height());
+	}
+}
+
+void
+FormManager::adjustWidthToBig()
+{
+	if(!activeForm())
+		return;
+
+	int gridX = activeForm()->gridX();
+	int tmpw;
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+	{
+		tmpw = int( (float)w->width() / ((float)gridX) + 1) * gridX;
+		if(tmpw != w->width())
+			w->resize(tmpw, w->height());
+	}
+}
+
+void
+FormManager::adjustHeightToSmall()
+{
+	if(!activeForm())
+		return;
+
+	int gridY = activeForm()->gridY();
+	int tmph;
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+	{
+		tmph = int( (float)w->height() / ((float)gridY)) * gridY;
+		if(tmph != w->height())
+			w->resize(w->width(), tmph);
+	}
+}
+
+void
+FormManager::adjustHeightToBig()
+{
+	if(!activeForm())
+		return;
+
+	int gridY = activeForm()->gridY();
+	int tmph;
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+	{
+		tmph = int( (float)w->height() / ((float)gridY) + 1) * gridY;
+		if(tmph != w->height())
+			w->resize(w->width(), tmph);
+	}
+}
+
+void
+FormManager::bringWidgetToFront()
+{
+	if(!activeForm())
+		return;
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+		w->raise();
+}
+
+void
+FormManager::sendWidgetToBack()
+{
+	if(!activeForm())
+		return;
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+		w->lower();
 }
 
 void

@@ -10,7 +10,7 @@ icon_ICON = button button_no test_it db form form_edit forms lineedit business_u
 	label calculation calculations key navigator_prev navigator_next navigator_first navigator_last \
 	navigator_new check combo groupbox line listbox listview progress radio slider spin mouse_pointer widgetstack \
 	pixmaplabel select_item spring signalslot grid aoleft aoright aotop aobottom \
-	new_sign
+	new_sign raise lower
 
 icondir = $(kde_datadir)/kexi/icons
 
