@@ -386,10 +386,6 @@ int KoTextParag::lineSpacing( int line ) const
         {
             return shadow + (height > zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() )) ? 0 : (zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() )-height);
         }
-        case KoParagLayout::LS_EXACTLY: // To be removed
-        {
-            return zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue()) -height +shadow ;
-        }
         }
     }
     kdWarning() << "Unhandled linespacing value : " << m_layout.lineSpacingValue() << endl;

@@ -270,11 +270,6 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
                 layout.lineSpacingType = KoParagLayout::LS_AT_LEAST;
                 layout.lineSpacing = element.attribute( "spacingvalue" ).toDouble();
             }
-            else if ( type == "exactly" )
-            {
-                layout.lineSpacingType = KoParagLayout::LS_EXACTLY;
-                layout.lineSpacing = element.attribute( "spacingvalue" ).toDouble();
-            }
             else if ( type == "multiple" )
             {
                 layout.lineSpacingType = KoParagLayout::LS_MULTIPLE;
@@ -411,12 +406,6 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
         {
             element.setAttribute( "type", "atleast" );
             element.setAttribute( "spacingvalue", layout.lineSpacing);
-        }
-        else if ( layout.lineSpacingType == KoParagLayout::LS_EXACTLY )
-        {
-            element.setAttribute( "type", "exactly" );
-            element.setAttribute( "spacingvalue", layout.lineSpacing);
-
         }
         else if ( layout.lineSpacingType == KoParagLayout::LS_MULTIPLE )
         {

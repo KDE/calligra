@@ -789,9 +789,8 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     cSpacing->insertItem( i18n( "Line spacing value", "Single" ) );
     cSpacing->insertItem( i18n( "Line spacing value", "1.5 lines" ) );
     cSpacing->insertItem( i18n( "Line spacing value", "Double" ) );
-    cSpacing->insertItem( i18n( "Custom (%1)" ).arg(unitName) );
-    cSpacing->insertItem( i18n( "At least (%1)" ).arg(unitName) );
     cSpacing->insertItem( i18n( "Exactly (%1)" ).arg(unitName) );
+    cSpacing->insertItem( i18n( "At least (%1)" ).arg(unitName) );
     cSpacing->insertItem( i18n( "Multiply") );
 
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
@@ -887,8 +886,6 @@ KoParagLayout::spacingType KoIndentSpacingWidget::lineSpacingType() const
     case 4:
         return KoParagLayout::LS_AT_LEAST;
     case 5:
-        return KoParagLayout::LS_EXACTLY;
-    case 6:
         return KoParagLayout::LS_MULTIPLE;
     default:
         return KoParagLayout::LS_SINGLE;
@@ -954,11 +951,8 @@ void KoIndentSpacingWidget::display( const KoParagLayout & lay )
     case KoParagLayout::LS_AT_LEAST:
         cSpacing->setCurrentItem( 4 );
         break;
-    case KoParagLayout::LS_EXACTLY:
-        cSpacing->setCurrentItem( 5 );
-        break;
     case KoParagLayout::LS_MULTIPLE:
-        cSpacing->setCurrentItem( 6 );
+        cSpacing->setCurrentItem( 5 );
         break;
     default:
         cSpacing->setCurrentItem( 0 );
