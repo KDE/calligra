@@ -346,9 +346,9 @@ VObjectListViewItem::update()
 
 	// set thumb preview, lock and visible pixmaps
 	setPixmap( 0, preview );
-	QString s = ( m_object->state() == VObject::normal_locked || m_object->state() == VObject::hidden_locked ) ? "locked.png" : "unlocked.png";
+	QString s = ( m_object->state() == VObject::normal_locked || m_object->state() == VObject::hidden_locked ) ? "locked" : "unlocked";
 	setPixmap( 1, *KarbonFactory::rServer()->cachePixmap( s, KIcon::Small ) );
-	s = ( m_object->state() == VObject::hidden || m_object->state() == VObject::hidden_locked ) ? "14_layer_novisible.png" : "14_layer_visible.png";
+	s = ( m_object->state() == VObject::hidden || m_object->state() == VObject::hidden_locked ) ? "14_layer_novisible" : "14_layer_visible";
 	setPixmap( 2, *KarbonFactory::rServer()->cachePixmap( s, KIcon::Small ) );
 }
 
@@ -388,9 +388,9 @@ VLayerListViewItem::update()
 
 	// set thumb preview, lock and visible pixmaps
 	setPixmap( 0, preview );
-	QString s = ( m_layer->state() == VObject::normal_locked || m_layer->state() == VObject::hidden_locked ) ? "locked.png" : "unlocked.png";
+	QString s = ( m_layer->state() == VObject::normal_locked || m_layer->state() == VObject::hidden_locked ) ? "locked" : "unlocked";
 	setPixmap( 1, *KarbonFactory::rServer()->cachePixmap( s, KIcon::Small ) );
-	s = ( m_layer->state() == VObject::normal || m_layer->state() == VObject::normal_locked ) ? "14_layer_visible.png" : "14_layer_novisible.png";
+	s = ( m_layer->state() == VObject::normal || m_layer->state() == VObject::normal_locked ) ? "14_layer_visible" : "14_layer_novisible";
 	setPixmap( 2, *KarbonFactory::rServer()->cachePixmap( s, KIcon::Small ) );
 } // VLayerListViewItem::update
 
@@ -420,19 +420,19 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 	m_buttonGroup = new QHButtonGroup( this );
 	m_buttonGroup->setInsideMargin( 3 );
 	button = new QToolButton( m_buttonGroup );
-	button->setIconSet( SmallIcon( "14_layer_newlayer.png" ) );
+	button->setIconSet( SmallIcon( "14_layer_newlayer" ) );
 	button->setTextLabel( i18n( "New" ) );
 	m_buttonGroup->insert( button );
 	button = new QToolButton( m_buttonGroup );
-	button->setIconSet( SmallIcon( "14_layer_raiselayer.png" ) );
+	button->setIconSet( SmallIcon( "14_layer_raiselayer" ) );
 	button->setTextLabel( i18n( "Raise" ) );
 	m_buttonGroup->insert( button );
 	button = new QToolButton( m_buttonGroup );
-	button->setIconSet( SmallIcon( "14_layer_lowerlayer.png" ) );
+	button->setIconSet( SmallIcon( "14_layer_lowerlayer" ) );
 	button->setTextLabel( i18n( "Lower" ) );
 	m_buttonGroup->insert( button );
 	button = new QToolButton( m_buttonGroup );
-	button->setIconSet( SmallIcon( "14_layer_deletelayer.png" ) );
+	button->setIconSet( SmallIcon( "14_layer_deletelayer" ) );
 	button->setTextLabel( i18n( "Delete" ) );
 	m_buttonGroup->insert( button );
 	layout->addWidget( m_buttonGroup, 1);
