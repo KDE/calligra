@@ -44,10 +44,10 @@ VTranslate::VTranslate( QWidget* parent, const char* name )
 	inputlayout->addWidget(labely, 1, 0);
 	inputlayout->addColSpacing(1, 1);
 	inputlayout->addColSpacing(3, 5);
-	m_inputX = new KDoubleNumInput(0.00, this);
+	m_inputX = new KDoubleNumInput( this );
 	m_inputX->setRange(-10000.00, 10000.00, 1.00, false); //range is just for example - for now :-)
 	inputlayout->addWidget(m_inputX, 0, 2);
-	m_inputY = new KDoubleNumInput(0.00, this);
+	m_inputY = new KDoubleNumInput( this );
 	m_inputY->setRange(-10000.00, 10000.00, 1.00, false);
 	inputlayout->addWidget(m_inputY, 1, 2);
 	m_labelUnit1 = new QLabel("", this);
