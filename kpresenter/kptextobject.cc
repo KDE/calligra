@@ -793,7 +793,7 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
 /*================================================================*/
 void KPTextObject::recalcPageNum( KPresenterDoc *doc )
 {
-    int h = doc->getPageRect( 0, 0, 0 ).height();
+    int h = doc->getPageRect( ).height();
     int pgnum = -1;
     for ( unsigned int i = 0; i < doc->getPageNums(); ++i ) {
         if ( (int)orig.y() <= ( (int)i + 1 ) * h ) {

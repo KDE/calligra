@@ -32,6 +32,12 @@ KPresenterPageIface::KPresenterPageIface( KPrPage *_page )
    m_page = _page;
 }
 
+DCOPRef KPresenterPageIface::getObject( int num )
+{
+    return DCOPRef( kapp->dcopClient()->appId(),
+		    m_page->getObject(num)->dcopObject()->objId() );
+}
+
 QString KPresenterPageIface::getManualTitle()const
 {
     return m_page->getManualTitle();
@@ -235,3 +241,7 @@ int KPresenterPageIface::getPieLength( int pieLength )const
     return m_page->getPieLength(pieLength);
 }
 
+QRect KPresenterPageIface::getPageRect() const
+{
+    return m_page->getZoomPageRect();
+}

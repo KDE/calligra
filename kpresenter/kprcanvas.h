@@ -266,7 +266,7 @@ protected:
     QColor txtBackCol() const;
     bool spInfinitLoop() const;
     bool spManualSwitch() const;
-    QRect getPageRect( unsigned int p, float fakt=1.0, bool decBorders = true );
+    QRect getPageRect( bool decBorders = true );
     unsigned int pageNums();
     float objSpeedFakt();
     float pageSpeedFakt();
@@ -336,6 +336,11 @@ private:
 
     void drawPolygon( const QPoint &startPoint, const QPoint &endPoint );
 
+    void drawPieObject(QPainter *p);
+    void limitSizeOfObject();
+
+    QPoint limitOfPoint(const QPoint& _point);
+
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
     void toColorChanged( const QColor &color ) { emit colorChanged( color ); }
@@ -395,6 +400,9 @@ private:
     KPrPage *m_activePage;
     int m_xOffset, m_yOffset;
     int m_xOffsetSaved, m_yOffsetSaved; // saved when going fullscreen
+
+    KoRect m_boundingRect; // when moving object(s)
+    KoPoint m_hotSpot; // when moving frame(s)
 };
 
 #endif //PAGE_H

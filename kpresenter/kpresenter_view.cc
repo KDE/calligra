@@ -2123,10 +2123,10 @@ void KPresenterView::createGUI()
     }
         KPrPage *initPage=m_pKPresenterDoc->initialActivePage();
     if (initPage)
-        m_canvas->setActivePage(initPage);
+        skipToPage(m_pKPresenterDoc->pageList().findRef( initPage));
     else
         //activate first page
-        m_canvas->setActivePage( m_pKPresenterDoc->pageList().at(0));
+        skipToPage(m_pKPresenterDoc->pageList().findRef(m_pKPresenterDoc->pageList().at(0)));
 }
 
 /*=============================================================*/
@@ -4145,8 +4145,17 @@ void KPresenterView::extraAutoFormat()
 void KPresenterView::extraSpelling()
 {
     if (m_spell.kspell) return; // Already in progress
-    m_spell.spellCurrTextObjNum = -1;
     m_spell.macroCmdSpellCheck=0L;
+    m_spell.firstSpellPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
+    m_spell.currentSpellPage=m_spell.firstSpellPage;
+
+    spellAddTextObject();
+    startKSpell();
+}
+
+void KPresenterView::spellAddTextObject()
+{
+    m_spell.spellCurrTextObjNum = -1;
     m_spell.textObject.clear();
     QPtrListIterator<KPObject> it( m_canvas->getObjectList() );
     for ( ; it.current() ; ++it )
@@ -4154,7 +4163,6 @@ void KPresenterView::extraSpelling()
         if(it.current()->getType()==OT_TEXT)
             m_spell.textObject.append(dynamic_cast<KPTextObject*>( it.current() ));
     }
-    startKSpell();
 }
 
 void KPresenterView::startKSpell()
@@ -4204,16 +4212,45 @@ void KPresenterView::spellCheckerReady()
         return;
     }
     //kdDebug() << "KPresenterView::spellCheckerReady done" << endl;
-
-    // Done
-    m_spell.kspell->cleanUp();
-    delete m_spell.kspell;
-    m_spell.kspell = 0;
-    m_spell.textObject.clear();
-    m_spell.ignoreWord.clear();
-    if(m_spell.macroCmdSpellCheck)
-        m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
+    if(!spellSwitchToNewPage())
+    {
+        // Done
+        m_spell.kspell->cleanUp();
+        delete m_spell.kspell;
+        m_spell.kspell = 0;
+        m_spell.firstSpellPage=-1;
+        m_spell.currentSpellPage=-1;
+        m_spell.textObject.clear();
+        m_spell.ignoreWord.clear();
+        m_spell.firstSpellPage=-1;
+        if(m_spell.macroCmdSpellCheck)
+            m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
+    }
+    else
+    {
+        spellAddTextObject();
+        spellCheckerReady();
+    }
 }
+
+bool KPresenterView::spellSwitchToNewPage()
+{
+    //there is not other page
+    if(m_pKPresenterDoc->pageList().count()==1)
+        return false;
+    m_spell.currentSpellPage++;
+    if( m_spell.currentSpellPage==m_pKPresenterDoc->pageList().count())
+        m_spell.currentSpellPage=0;
+    if( m_spell.currentSpellPage==m_spell.firstSpellPage)
+        return false;
+    if ( KMessageBox::questionYesNo( this,
+                                     i18n( "Do you want to spell new page?") )
+         != KMessageBox::Yes )
+        return false;
+    skipToPage(m_spell.currentSpellPage);
+    return true;
+}
+
 
 void KPresenterView::spellCheckerMisspelling( const QString &old, const QStringList &, unsigned int pos )
 {

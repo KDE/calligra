@@ -514,7 +514,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         drawRubber = true;
                         rubber = QRect( e->x(), e->y(), 0, 0 );
                     }
-
+                    m_hotSpot = docPoint - m_boundingRect.topLeft();
                 } break;
                 case INS_FREEHAND: {
                     deSelectAllObj();
@@ -792,26 +792,29 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 rubber = rubber.normalize();
                 rubber.moveBy(diffx(),diffy());
                 KPObject *kpobject = 0;
-                if ( (int)objectList().count() - 1 >= 0 ) {
-                    for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
-                        kpobject = objectList().at( i );
-                        if ( kpobject->intersects( m_view->zoomHandler()->unzoomRect(rubber) ) )
-                            selectObj( kpobject );
-                    }
+
+                QPtrListIterator<KPObject> it( getObjectList() );
+                for ( ; it.current() ; ++it )
+                {
+                    if ( it.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber) ) )
+                        selectObj( it.current() );
                 }
+
             }
         } break;
         case MT_MOVE: {
             if ( firstX != mx || firstY != my ) {
-                for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
-                    kpobject = objectList().at( i );
-                    if ( kpobject->isSelected() ) {
-                        _objects.append( kpobject );
-                        QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
+                QPtrListIterator<KPObject> it( getObjectList() );
+                for ( ; it.current() ; ++it )
+                {
+                    if ( it.current()->isSelected() )
+                    {
+                        _objects.append( it.current() );
+                        QRect br = m_view->zoomHandler()->zoomRect(it.current()->getBoundingRect() );
                         br.moveBy( firstX - mx, firstY - my );
                         _repaint( br ); // Previous position
                         //kdDebug() << "KPrCanvas::mouseReleaseEvent repainting " << DEBUGRECT(br) << endl;
-                        _repaint( kpobject ); // New position
+                        _repaint( it.current() ); // New position
                     }
                 }
                 MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
@@ -819,12 +822,14 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                                                       _objects, m_view->kPresenterDoc(),m_activePage );
                 m_view->kPresenterDoc()->addCommand( moveByCmd );
             } else
-                for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
-                    kpobject = objectList().at( i );
-                    if ( kpobject->isSelected() ) {
-                        _repaint( kpobject );
-                    }
+            {
+                QPtrListIterator<KPObject> it( getObjectList() );
+                for ( ; it.current() ; ++it )
+                {
+                    if(it.current()->isSelected())
+                        _repaint(it.current() );
                 }
+            }
         } break;
         case MT_RESIZE_UP: {
             if ( resizeObjNum < 0 ) break;
@@ -1009,6 +1014,15 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     mouseMoveEvent( e );
     ratio = 0.0;
     keepRatio = false;
+    m_boundingRect = KoRect();
+    QPtrListIterator<KPObject> it( getObjectList() );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->isSelected())
+        {
+            m_boundingRect|=it.current()->getBoundingRect();
+        }
+    }
 }
 
 /*==================== handle mouse moved ========================*/
@@ -1079,7 +1093,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 			p.end();
 		    }
 		} else if ( modType == MT_MOVE ) {
-		    moveObject( mx - oldMx, my - oldMy, false );
+                    m_hotSpot = docPoint - m_boundingRect.topLeft();
+		    moveObject( mx - oldMx , my - oldMy, false );
 		} else if ( modType != MT_NONE && resizeObjNum != -1 ) {
                     resizeObject( modType, mx - oldMx, my - oldMy );
 		}
@@ -1097,6 +1112,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		    p.drawRect( insRect );
 		insRect.setRight( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx() );
 		insRect.setBottom( ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                limitSizeOfObject();
 		p.drawRect( insRect );
 		p.end();
 
@@ -1114,6 +1130,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		    p.drawEllipse( insRect );
 		insRect.setRight( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx() );
 		insRect.setBottom( ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                limitSizeOfObject();
 		p.drawEllipse( insRect );
 		p.end();
 
@@ -1131,6 +1148,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		    p.drawRoundRect( insRect, m_view->getRndX(), m_view->getRndY() );
 		insRect.setRight( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx() );
 		insRect.setBottom( ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                limitSizeOfObject();
 		p.drawRoundRect( insRect, m_view->getRndX(), m_view->getRndY() );
 		p.end();
 
@@ -1148,6 +1166,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		    p.drawLine( insRect.topLeft(), insRect.bottomRight() );
 		insRect.setRight( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx() );
 		insRect.setBottom( ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                limitSizeOfObject();
 		p.drawLine( insRect.topLeft(), insRect.bottomRight() );
 		p.end();
 
@@ -1162,39 +1181,12 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		p.setBrush( NoBrush );
 		p.setRasterOp( NotROP );
 		if ( insRect.width() != 0 && insRect.height() != 0 ) {
-		    switch ( m_view->getPieType() ) {
-		    case PT_PIE:
-			p.drawPie( insRect.x(), insRect.y(), insRect.width() - 2,
-				   insRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
-			break;
-		    case PT_ARC:
-			p.drawArc( insRect.x(), insRect.y(), insRect.width() - 2,
-				   insRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
-			break;
-		    case PT_CHORD:
-			p.drawChord( insRect.x(), insRect.y(), insRect.width() - 2,
-				     insRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
-			break;
-		    default: break;
-		    }
+                    drawPieObject(&p);
 		}
 		insRect.setRight( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx() );
 		insRect.setBottom( ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
-		switch ( m_view->getPieType() ) {
-		case PT_PIE:
-		    p.drawPie( insRect.x(), insRect.y(), insRect.width() - 2,
-			       insRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
-		    break;
-		case PT_ARC:
-		    p.drawArc( insRect.x(), insRect.y(), insRect.width() - 2,
-			       insRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
-		    break;
-		case PT_CHORD:
-		    p.drawChord( insRect.x(), insRect.y(), insRect.width() - 2,
-				 insRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
-		    break;
-		default: break;
-		}
+                limitSizeOfObject();
+                drawPieObject(&p);
 		p.end();
 
 		mouseSelectedObject = true;
@@ -1209,6 +1201,9 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
+
+                m_dragEndPoint=limitOfPoint(m_dragEndPoint);
+
                 p.drawLine( m_dragStartPoint, m_dragEndPoint );
                 p.end();
 
@@ -1229,6 +1224,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.drawLine( m_dragStartPoint, m_dragEndPoint ); //
                 m_dragEndPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
                                          ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                m_dragEndPoint=limitOfPoint(m_dragEndPoint);
+
                 p.drawLine( m_dragStartPoint, m_dragEndPoint );
                 p.end();
 
@@ -1251,6 +1248,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
                 m_dragEndPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
                                          ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+                m_dragEndPoint=limitOfPoint(m_dragEndPoint);
 
                 drawPolygon( m_dragStartPoint, m_dragEndPoint ); // draw new polygon
 
@@ -1331,6 +1329,55 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     }
 }
 
+void KPrCanvas::drawPieObject(QPainter *p)
+{
+    switch ( m_view->getPieType() ) {
+    case PT_PIE:
+        p->drawPie( insRect.x(), insRect.y(), insRect.width() - 2,
+                   insRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
+        break;
+    case PT_ARC:
+        p->drawArc( insRect.x(), insRect.y(), insRect.width() - 2,
+                   insRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
+        break;
+    case PT_CHORD:
+        p->drawChord( insRect.x(), insRect.y(), insRect.width() - 2,
+                     insRect.height() - 2, m_view->getPieAngle(), m_view->getPieLength() );
+        break;
+    default: break;
+    }
+
+}
+
+void KPrCanvas::limitSizeOfObject()
+{
+    QRect pageRect=m_activePage->getZoomPageRect();
+
+    if(insRect.right()>pageRect.right()-1)
+        insRect.setRight(pageRect.width()-1);
+    else if( insRect.right()<pageRect.left()-1)
+        insRect.setRight(pageRect.left()+1);
+    if(insRect.bottom()>pageRect.bottom()-1)
+        insRect.setBottom(pageRect.height()-1);
+    else if( insRect.bottom()<pageRect.top()-1)
+        insRect.setBottom(pageRect.top()+1);
+}
+
+QPoint KPrCanvas::limitOfPoint(const QPoint& _point)
+{
+    QRect pageRect=m_activePage->getZoomPageRect();
+    QPoint point(_point);
+    if(point.x()>pageRect.right()-1)
+        point.setX(pageRect.width()-1);
+    else if( point.x()<pageRect.left()-1)
+        point.setX(pageRect.left()+1);
+    if(point.y()>pageRect.bottom()-1)
+        point.setY(pageRect.height()-1);
+    else if( point.y()<pageRect.top()-1)
+        point.setY(pageRect.top()+1);
+    return point;
+}
+
 /*====================== mouse wheel event =========================*/
 void KPrCanvas::wheelEvent( QWheelEvent *e )
 {
@@ -1389,6 +1436,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 	if ( e->state() & ControlButton ) {
             int offsetx=QMAX(1,m_view->zoomHandler()->zoomItX(10));
             int offsety=QMAX(1,m_view->zoomHandler()->zoomItY(10));
+            m_hotSpot = KoPoint(0,0);
 	    switch ( e->key() ) {
 	    case Key_Up:
 		moveObject( 0, -offsety, true );
@@ -4198,10 +4246,10 @@ bool KPrCanvas::spManualSwitch() const
 }
 
 /*================================================================*/
-QRect KPrCanvas::getPageRect( unsigned int p, float fakt, bool decBorders )
+QRect KPrCanvas::getPageRect( bool decBorders )
 {
     // ### TODO remove diffx, diffy
-    return m_view->kPresenterDoc()->getPageRect( p, diffx(), diffy(), fakt, decBorders );
+    return m_view->kPresenterDoc()->getPageRect( decBorders );
 }
 
 /*================================================================*/
@@ -4485,36 +4533,67 @@ bool KPrCanvas::pagesHelper(const QString &chunk, QValueList<int> &list) {
 
 void KPrCanvas::moveObject( int x, int y, bool key )
 {
-    KPObject *kpobject;
     QPtrList<KPObject> _objects;
     QPainter p;
     _objects.setAutoDelete( false );
     double newPosX=m_view->zoomHandler()->unzoomItX(x);
     double newPosY=m_view->zoomHandler()->unzoomItY(y);
-    if ( (int)objectList().count() - 1 >= 0 ) {
-        for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
-            kpobject = objectList().at( i );
-            if ( kpobject->isSelected() ) {
-                p.begin( this );
-                kpobject->moveBy(m_view->zoomHandler()->unzoomItX(-diffx()),m_view->zoomHandler()->unzoomItY(-diffy()));
-                kpobject->paintSelection( &p, m_view->zoomHandler() );
-                kpobject->moveBy( newPosX, newPosY );
-                kpobject->paintSelection( &p, m_view->zoomHandler() );
-                kpobject->moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
-                p.end();
+    KoRect boundingRect = m_boundingRect;
+    KoPoint point( m_boundingRect.topLeft() );
+    KoRect pageRect=m_activePage->getPageRect();
+    point.setX( (m_boundingRect.x()+newPosX) );
+    m_boundingRect.moveTopLeft( point );
+    if((boundingRect.left()+m_hotSpot.x()<pageRect.left()-1)|| (m_boundingRect.left() <pageRect.left()-1))
+    {
+        point.setX( pageRect.left()+1 );
+        m_boundingRect.moveTopLeft( point );
+    }
+    else if ( (boundingRect.left()+m_hotSpot.x()>pageRect.width()-1) || (m_boundingRect.right() > pageRect.width() - 1) )
+    {
+        point.setX(pageRect.width()-m_boundingRect.width() - 2  );
+        m_boundingRect.moveTopLeft( point );
+    }
 
-                _objects.append( kpobject );
-                //QRect br = m_view->zoomHandler()->zoomRect( kpobject->getBoundingRect() );
-                //_repaint( br );
-                _repaint( kpobject );
+    point = m_boundingRect.topLeft();
+    point.setY( m_boundingRect.y()+newPosY );
+    m_boundingRect.moveTopLeft( point );
 
-            }
+    if( (boundingRect.top()+m_hotSpot.y()<pageRect.top()-1)|| (m_boundingRect.top() < pageRect.top()-1))
+    {
+        point.setY(pageRect.top()+1);
+        m_boundingRect.moveTopLeft( point );
+    }
+    else if( (boundingRect.top()+m_hotSpot.y()>pageRect.height()-1)|| (m_boundingRect.bottom()> pageRect.height()-1))
+    {
+        point.setY( pageRect.height() - m_boundingRect.height() - 2 );
+        m_boundingRect.moveTopLeft( point );
+    }
+
+
+    if( m_boundingRect.topLeft() == boundingRect.topLeft() )
+        return; // nothing happende (probably due to the grid)
+    KoPoint _move=m_boundingRect.topLeft()-boundingRect.topLeft();
+    QPtrListIterator<KPObject> it( getObjectList() );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() ) {
+            p.begin( this );
+            it.current()->moveBy(m_view->zoomHandler()->unzoomItX(+diffx()),m_view->zoomHandler()->unzoomItY(+diffy()));
+            it.current()->paintSelection( &p, m_view->zoomHandler() );
+            it.current()->moveBy( _move );
+            it.current()->paintSelection( &p, m_view->zoomHandler() );
+            it.current()->moveBy(m_view->zoomHandler()->unzoomItX(-diffx()),m_view->zoomHandler()->unzoomItY(-diffy()));
+            p.end();
+            _objects.append( it.current() );
+            QRect br = m_view->zoomHandler()->zoomRect( it.current()->getBoundingRect() );
+            _repaint( br );
+            _repaint( it.current() );
         }
     }
 
     if ( key ) {
         MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
-                                              KoPoint( newPosX, newPosY ),
+                                              KoPoint( _move ),
                                               _objects, m_view->kPresenterDoc(),m_activePage );
         m_view->kPresenterDoc()->addCommand( moveByCmd );
     }
@@ -4524,16 +4603,21 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
 {
     double dx = m_view->zoomHandler()->unzoomItX( _dx);
     double dy = m_view->zoomHandler()->unzoomItY( _dy);
-
+    KoRect page=m_activePage->getPageRect();
     KPObject *kpobject = objectList().at( resizeObjNum );
-
+    KoRect objRect=kpobject->getBoundingRect();
+    KoRect pageRect=m_activePage->getPageRect();
+    KoPoint point=objRect.topLeft();
     QPainter p;
     p.begin( this );
     kpobject->moveBy(m_view->zoomHandler()->unzoomItX(-diffx()),m_view->zoomHandler()->unzoomItY(-diffy()));
     kpobject->draw( &p, m_view->zoomHandler(), true );
-
     switch ( _modType ) {
     case MT_RESIZE_LU: {
+        if( (point.x()+dx) <(pageRect.left()-1))
+            dx=0;
+        if( (point.y()+dy) <(pageRect.top()-1))
+            dy=0;
         if ( keepRatio && ratio != 0.0 ) {
             if ( !calcRatio( dx, dy, kpobject, ratio ) )
                 break;
@@ -4543,6 +4627,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     } break;
     case MT_RESIZE_LF: {
         dy = 0;
+        if( (point.x()+dx) <(pageRect.left()-1))
+            dx=0;
         if ( keepRatio && ratio != 0.0 ) {
             if ( !calcRatio( dx, dy, kpobject, ratio ) )
                 break;
@@ -4551,12 +4637,20 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         kpobject->resizeBy( -dx, -dy );
     } break;
     case MT_RESIZE_LD: {
+        if( (point.y()+objRect.height()+dy) > pageRect.height())
+            dy=0;
+        if( (point.x()+dx) <(pageRect.left()-1))
+            dx=0;
         if ( keepRatio && ratio != 0.0 )
             break;
         kpobject->moveBy( KoPoint( dx, 0 ) );
         kpobject->resizeBy( -dx, dy );
     } break;
     case MT_RESIZE_RU: {
+        if( (point.x()+objRect.width()+dx) > pageRect.width())
+            dx=0;
+        if( (point.y()+dy) <(pageRect.top()-1))
+            dy=0;
         if ( keepRatio && ratio != 0.0 )
             break;
         kpobject->moveBy( KoPoint( 0, dy ) );
@@ -4564,6 +4658,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     } break;
     case MT_RESIZE_RT: {
         dy = 0;
+        if( (point.x()+objRect.width()+dx) > pageRect.width())
+            dx=0;
         if ( keepRatio && ratio != 0.0 ) {
             if ( !calcRatio( dx, dy, kpobject, ratio ) )
                 break;
@@ -4571,6 +4667,10 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         kpobject->resizeBy( dx, dy );
     } break;
     case MT_RESIZE_RD: {
+        if( (point.y()+objRect.height()+dy) > pageRect.height())
+            dy=0;
+        if( (point.x()+objRect.width()+dx) > pageRect.width())
+            dx=0;
         if ( keepRatio && ratio != 0.0 ) {
             if ( !calcRatio( dx, dy, kpobject, ratio ) )
                 break;
@@ -4579,6 +4679,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     } break;
     case MT_RESIZE_UP: {
         dx = 0;
+        if( (point.y()+dy) <(pageRect.top()-1))
+            dy=0;
         if ( keepRatio && ratio != 0.0 ) {
             if ( !calcRatio( dx, dy, kpobject, ratio ) )
                 break;
@@ -4588,6 +4690,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     } break;
     case MT_RESIZE_DN: {
         dx = 0;
+        if( (point.y()+objRect.height()+dy) > pageRect.height())
+            dy=0;
         if ( keepRatio && ratio != 0.0 ) {
             if ( !calcRatio( dx, dy, kpobject, ratio ) )
                 break;
@@ -4944,14 +5048,14 @@ KPrPage* KPrCanvas::activePage()
 void KPrCanvas::setActivePage( KPrPage* _active)
 {
     Q_ASSERT(_active);
-    kdDebug()<<"KPrCanvas::setActivePage( KPrPage* _active) :"<<_active<<endl;
+    //kdDebug(33001)<<"KPrCanvas::setActivePage( KPrPage* _active) :"<<_active<<endl;
     m_activePage=_active;
 }
 
 void KPrCanvas::slotSetActivePage( KPrPage* _active)
 {
     Q_ASSERT(_active);
-    kdDebug()<<"void KPrCanvas::slotSetActivePage( KPrPage* _active) :"<<_active<<endl;
+    //kdDebug(33001)<<"void KPrCanvas::slotSetActivePage( KPrPage* _active) :"<<_active<<endl;
     m_activePage=_active;
 }
 

@@ -56,6 +56,9 @@ public:
     QString getNoteText( )const;
 
     const QPtrList<KPObject> & objectList() const { return m_objectList;}
+
+    KPObject *getObject(int num);
+
     void appendObject(KPObject *);
     void insertObject(KPObject *_oldObj, KPObject *_newObject);
     void takeObject(KPObject *_obj);
@@ -190,6 +193,9 @@ public:
 
     QValueList<int> reorderPage();
 
+    bool isSlideSelected()const {return  m_selectedSlides;}
+    void slideSelected(bool _b){m_selectedSlides=_b;}
+
 protected:
 
 private:
@@ -200,5 +206,6 @@ private:
     QString manualTitle;
     QString noteText;
     DCOPObject *dcop;
+    bool m_selectedSlides;
 };
 #endif //KPRPAGE_H

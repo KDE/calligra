@@ -34,6 +34,8 @@ public:
     KPresenterPageIface( KPrPage *_page );
 
 k_dcop:
+    virtual DCOPRef getObject( int num );
+
     virtual QString getManualTitle()const;
     virtual void insertManualTitle(const QString & title);
     virtual QString pageTitle( const QString &_title ) const;
@@ -84,6 +86,7 @@ k_dcop:
     virtual int getPieAngle( int pieAngle )const;
     virtual int getPieLength( int pieLength )const;
 
+    virtual QRect getPageRect()const;
 private:
     KPrPage *m_page;
 

@@ -148,8 +148,7 @@ public:
 
 
     // size of page
-    QRect getPageRect( unsigned int num, int diffx, int diffy,
-		       float fakt = 1.0, bool decBorders = true ) const;
+    QRect getPageRect( bool decBorders = true ) const;
 
     void insertObject(KPresenterChild* ch ){ insertChild(ch);}
 
@@ -218,10 +217,10 @@ public:
     KPFooterHeaderEditor *getHeaderFooterEdit() { return headerFooterEdit; }
 
     // Returns true if the slide pgNum (0 based)
-    bool isSlideSelected( int pgNum ) const;
+    bool isSlideSelected( int pgNum) ;
     // Returns the list of selected slides. Slide numbers are 0-based.
-    QValueList<int> selectedSlides() const;
-    QString selectedForPrinting() const;
+    QValueList<int> selectedSlides();
+    QString selectedForPrinting();
 
     virtual DCOPObject* dcopObject();
 
@@ -297,6 +296,8 @@ public:
     void AddRemovePage();
 
     void updateSideBarItem(int pgNum);
+
+    void emitSigChangedActivePage(KPrPage *page) {sig_changeActivePage(page );}
 
 public slots:
     void movePage( int from, int to );
@@ -396,7 +397,6 @@ protected:
 
     int saveOnlyPage;
     QString m_tempFileInClipboard;
-    QValueList<bool> m_selectedSlides;
     bool ignoreSticky;
 
     KoStyle *m_standardStyle;

@@ -67,7 +67,7 @@ KPrPage::KPrPage(KPresenterDoc *_doc )
     m_objectList.setAutoDelete( false );
     manualTitle=QString::null;
     noteText=QString::null;
-
+    m_selectedSlides=true;
     //dcopObject();
 
 }
@@ -88,6 +88,12 @@ DCOPObject* KPrPage::dcopObject()
 	dcop = new KPresenterPageIface( this );
 
     return dcop;
+}
+
+KPObject *KPrPage::getObject(int num)
+{
+    Q_ASSERT(num<m_objectList.count());
+    return m_objectList.at(num);
 }
 
 void KPrPage::appendObject(KPObject *_obj)
@@ -1741,6 +1747,7 @@ int KPrPage::getPenBrushFlags() const
                         flags=flags |StyleDia::SdBrush;
                     break;
                 case OT_RECT: case OT_PART:  case OT_ELLIPSE:
+                case OT_POLYGON:
                 case OT_TEXT: case OT_PICTURE: case OT_CLIPART: {
                     flags = flags | StyleDia::SdPen;
                     flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
@@ -1815,7 +1822,6 @@ bool KPrPage::setRectSettings( int _rx, int _ry )
 {
     bool ret = false;
     bool changed=false;
-    KPObject *kpobject = 0;
     QPtrList<KPObject> _objects;
     QPtrList<RectValueCmd::RectValues> _oldValues;
     RectValueCmd::RectValues _newValues, *tmp;
@@ -1831,12 +1837,11 @@ bool KPrPage::setRectSettings( int _rx, int _ry )
     {
         if(it.current()->getType()==OT_RECT)
         {
-            kpobject=it.current();
-    	    if ( kpobject->isSelected() ) {
+    	    if ( it.current()->isSelected() ) {
 		tmp = new RectValueCmd::RectValues;
-		dynamic_cast<KPRectObject*>( kpobject )->getRnds( tmp->xRnd, tmp->yRnd );
+		dynamic_cast<KPRectObject*>( it.current() )->getRnds( tmp->xRnd, tmp->yRnd );
 		_oldValues.append( tmp );
-		_objects.append( kpobject );
+		_objects.append(it.current() );
                 if(!changed && (tmp->xRnd!=_newValues.xRnd
                                 ||tmp->yRnd!=_newValues.yRnd) )
                     changed=true;
@@ -2239,10 +2244,11 @@ void KPrPage::slotRepaintVariable()
 
 void KPrPage::recalcPageNum()
 {
-    KPObject *kpobject = 0;
-    for ( kpobject = m_objectList.first(); kpobject; kpobject = m_objectList.next() ) {
-	if ( kpobject->getType() == OT_TEXT )
-	    ( (KPTextObject*)kpobject )->recalcPageNum( m_doc );
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+	if ( it.current()->getType() == OT_TEXT )
+	    ( (KPTextObject*)it.current() )->recalcPageNum( m_doc );
     }
 }
 
@@ -2337,11 +2343,9 @@ void KPrPage::enableEmbeddedParts( bool f )
 
 void KPrPage::deletePage( )
 {
-    KPObject *kpobject = 0L;
-    for ( int i = 0; i < static_cast<int>( m_objectList.count() ); i++ ) {
-	kpobject = m_objectList.at( i );
-        kpobject->setSelected( true );
-    }
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+        it.current()->setSelected( true );
 
     deleteObjs( false );
 }

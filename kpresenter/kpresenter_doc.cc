@@ -457,11 +457,10 @@ QDomDocument KPresenterDoc::saveXML()
     if ( saveOnlyPage == -1 )
     {
         element=doc.createElement("SELSLIDES");
-        QValueList<bool>::ConstIterator sit = m_selectedSlides.begin();
-        for ( int i = 0; sit != m_selectedSlides.end(); ++sit, ++i ) {
+        for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
             QDomElement slide=doc.createElement("SLIDE");
             slide.setAttribute("nr", i);
-            slide.setAttribute("show", ( *sit ));
+            slide.setAttribute("show", m_pageList.at(i)->isSlideSelected());
             element.appendChild(slide);
         }
         presenter.appendChild(element);
@@ -736,7 +735,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         _yRnd = 20;
         _txtBackCol = white;
         urlIntern = url().path();
-        m_selectedSlides.clear();
     }
 
     emit sigProgress( 5 );
@@ -937,8 +935,12 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                         if ( nr >= 0 )
                         {
                             //kdDebug(33001) << "KPresenterDoc::loadXML m_selectedSlides nr=" << nr << " show=" << show << endl;
-                            Q_ASSERT( nr == (int)m_selectedSlides.count() );
-                            m_selectedSlides.append( show );
+                            if( nr > (m_pageList.count()-1))
+                            {
+                                for (int i=(m_pageList.count()-1); i<nr;i++)
+                                    m_pageList.append(new KPrPage(this));
+                            }
+                            m_pageList.at(nr)->slideSelected(show);
                         } else kdWarning() << "Parse error. No nr in <SLIDE> !" << endl;
                     }
                     slide=slide.nextSibling().toElement();
@@ -973,6 +975,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     if ( _rastY == 0 ) _rastY = 10;
 
     if ( _clean ) {
+#if 0 // not necessary
         // Fix the selectedslides list (for all docs)
         while ( m_selectedSlides.count() < getPageNums() )
             m_selectedSlides.append(true);
@@ -984,6 +987,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             for ( ; sit != m_selectedSlides.end(); ++sit )
                 (*sit) = true;
         }
+#endif
     }
     if(activePage!=-1)
         m_initialActivePage=m_pageList.at(activePage);
@@ -1471,8 +1475,7 @@ QValueList<int> KPresenterDoc::reorderPage( unsigned int num )
 }
 
 /*================== get size of page ===========================*/
-QRect KPresenterDoc::getPageRect( unsigned int num, int diffx, int diffy,
-				  float fakt, bool decBorders ) const
+QRect KPresenterDoc::getPageRect( bool decBorders ) const
 {
     int pw, ph, bl = static_cast<int>(_pageLayout.ptLeft);
     int br = static_cast<int>(_pageLayout.ptRight);
@@ -1491,10 +1494,7 @@ QRect KPresenterDoc::getPageRect( unsigned int num, int diffx, int diffy,
     pw = wid  - ( bl + br );
     ph = hei - ( bt + bb );
 
-    pw = static_cast<int>( static_cast<float>( pw ) * fakt );
-    ph = static_cast<int>( static_cast<float>( ph ) * fakt );
-//FIXME : num
-    return QRect( -diffx + bl, -diffy + bt +/* num **/1* ( bt + bb + ph ), pw, ph );
+    return QRect( bl, bt, pw, ph );
 }
 
 /*================================================================*/
@@ -1531,7 +1531,7 @@ void KPresenterDoc::insertPage( KPrPage *_page, int position)
     m_pageList.insert( position,_page);
     //active this page
     emit sig_changeActivePage(_page );
-
+/*
     if ( position < (int)m_selectedSlides.count() )
     {
         kdDebug(33001) << "KPresenterDoc::insertPage inserting in m_selectedSlides at position " << position << endl;
@@ -1540,6 +1540,7 @@ void KPresenterDoc::insertPage( KPrPage *_page, int position)
     }
     else
         m_selectedSlides.append( true );
+*/
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->skipToPage(position);
@@ -1554,8 +1555,6 @@ void KPresenterDoc::takePage(KPrPage *_page)
     emit sig_changeActivePage(_page );
 
     repaint( false );
-    Q_ASSERT( pos < (int)m_selectedSlides.count() );
-    m_selectedSlides.remove( m_selectedSlides.at( pos ) );
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->skipToPage(pos-1);
@@ -1852,8 +1851,7 @@ void KPresenterDoc::clipboardDataChanged()
 void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
 {
     Q_ASSERT( pgNum >= 0 );
-    Q_ASSERT( pgNum < (int)m_selectedSlides.count() );
-    m_selectedSlides[ pgNum ] = select;
+    m_pageList.at(pgNum)->slideSelected(select);
     kdDebug(33001) << "KPresenterDoc::selectPage pgNum=" << pgNum << " select=" << select << endl;
     setModified(true);
 
@@ -1871,33 +1869,28 @@ void KPresenterDoc::updateSideBarItem(int pgNum)
         static_cast<KPresenterView*>(it.current())->updateSideBarItem( pgNum );
 }
 
-bool KPresenterDoc::isSlideSelected( int pgNum /* 0-based */ ) const
+bool KPresenterDoc::isSlideSelected( int pgNum /* 0-based */ )
 {
     Q_ASSERT( pgNum >= 0 );
-    Q_ASSERT( pgNum < (int)m_selectedSlides.count() );
-    return m_selectedSlides[ pgNum ];
+    return m_pageList.at(pgNum)->isSlideSelected();
 }
 
-QValueList<int> KPresenterDoc::selectedSlides() const /* returned list is 0-based */
+QValueList<int> KPresenterDoc::selectedSlides() /* returned list is 0-based */
 {
-
-    int pageNums = getPageNums(); // to be safe
     QValueList<int> result;
-    QValueList<bool>::ConstIterator sit = m_selectedSlides.begin();
-    for ( int i = 0; sit != m_selectedSlides.end(); ++sit, ++i )
-        if ( *sit && i < pageNums )
-            result << i;
+    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
+        if(m_pageList.at(i)->isSlideSelected())
+            result <<i;
+    }
     return result;
 }
 
-QString KPresenterDoc::selectedForPrinting() const {
-
+QString KPresenterDoc::selectedForPrinting() {
     QString ret;
-    QValueList<bool>::ConstIterator sit = m_selectedSlides.begin();
-    int start=-1, end=-1, i=0;
+    int start=-1, end=-1;
     bool continuous=false;
-    for ( ; sit!=m_selectedSlides.end(); ++sit, ++i) {
-        if(*sit) {
+    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
+        if(m_pageList.at(i)->isSlideSelected()) {
             if(continuous)
                 ++end;
             else {
@@ -1924,6 +1917,7 @@ QString KPresenterDoc::selectedForPrinting() const {
     }
     if(','==ret[ret.length()-1])
         ret.truncate(ret.length()-1);
+    kdDebug() << "KPresenterDoc::selectedForPrinting"<<ret << endl;
     return ret;
 }
 
