@@ -105,7 +105,7 @@
 #include <ktoolbarradiogroup.h>
 #endif
 
-#include "PageLayoutDia.h"
+#include "koPageLayoutDia.h"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

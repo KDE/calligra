@@ -50,6 +50,8 @@
 #include "GText.h"
 #include "GPixmap.h"
 
+#include <stdio.h>
+
 SVGExport::SVGExport () {
 }
 
@@ -60,7 +62,7 @@ bool SVGExport::setup (GDocument *, const char*) {
   return true;
 }
 
-bool SVGExport::exportToFile (GDocument* doc) { 
+bool SVGExport::exportToFile (GDocument* doc) {
   char buf[200];
 
   ofstream os (outputFileName ());
@@ -81,7 +83,7 @@ bool SVGExport::exportToFile (GDocument* doc) {
 
   // contents
   const vector<GLayer*>& layers = doc->getLayers ();
-  for (vector<GLayer*>::const_iterator li = layers.begin (); 
+  for (vector<GLayer*>::const_iterator li = layers.begin ();
        li != layers.end (); li++) {
     if ((*li)->isInternal ())
       continue;
@@ -98,21 +100,21 @@ bool SVGExport::exportToFile (GDocument* doc) {
 }
 
 void SVGExport::exportObject (XmlWriter& xw, GObject* obj) {
-  if (obj->isA ("GPolygon")) 
+  if (obj->isA ("GPolygon"))
     exportPolygon (xw, (GPolygon *) obj);
-  else if (obj->isA ("GPolyline")) 
+  else if (obj->isA ("GPolyline"))
     exportPolyline (xw, (GPolyline *) obj);
-  else if (obj->isA ("GText")) 
+  else if (obj->isA ("GText"))
     exportText (xw, (GText *) obj);
-  else if (obj->isA ("GOval")) 
+  else if (obj->isA ("GOval"))
     exportEllipse (xw, (GOval *) obj);
-  else if (obj->isA ("GBezier")) 
+  else if (obj->isA ("GBezier"))
     exportBezier (xw, (GBezier *) obj);
   else if (obj->isA ("GGroup"))
     exportGroup (xw, (GGroup *) obj);
   else if (obj->isA ("GCurve"))
     exportCurve (xw, (GCurve *) obj);
-  else if (obj->isA ("GPixmap")) 
+  else if (obj->isA ("GPixmap"))
     exportPixmap (xw, (GPixmap *) obj);
 }
 
@@ -140,7 +142,7 @@ void SVGExport::exportText (XmlWriter& xw, GText* obj) {
 
     //    xw.endTag ();
   }
-  else 
+  else
     exportTextLine (xw, obj, 0, 0, 0);
 }
 
@@ -185,18 +187,18 @@ void SVGExport::exportCurve (XmlWriter& xw, GCurve* obj) {
   for (int i = 0; i < obj->numOfSegments (); i++) {
     const GSegment& seg = obj->getSegment (i);
     if (first) {
-      s << "M " << seg.pointAt (0).x () << " " 
+      s << "M " << seg.pointAt (0).x () << " "
 	<< seg.pointAt (0).y () << " ";
       first = false;
     }
     if (seg.kind () == GSegment::sk_Line) {
-      s << "L " << seg.pointAt (1).x () << " " 
+      s << "L " << seg.pointAt (1).x () << " "
 	<< seg.pointAt (1).y () << " ";
     }
     else if (seg.kind () == GSegment::sk_Bezier) {
       s << "C ";
       for (int n = 1; n < 4; n++)
-	s << seg.pointAt (n).x () << " " 
+	s << seg.pointAt (n).x () << " "
 	  << seg.pointAt (n).y () << " ";
     }
   }
@@ -216,11 +218,11 @@ void SVGExport::exportGroup (XmlWriter& xw, GGroup* obj) {
   addStyleAttribute (xw, obj);
   xw.closeTag ();
   const list<GObject*>& objs = obj->getMembers ();
-  for (list<GObject*>::const_iterator i = objs.begin (); 
+  for (list<GObject*>::const_iterator i = objs.begin ();
        i != objs.end (); i++) {
     exportObject (xw, *i);
   }
-  
+
   xw.endTag ();
 }
 
@@ -274,8 +276,8 @@ void SVGExport::exportEllipse (XmlWriter& xw, GOval* obj) {
 
 void SVGExport::exportPolygon (XmlWriter& xw, GPolygon* obj) {
   if (obj->isRectangle ()) {
-    Coord p0 = obj->getPoint (0); 
-    Coord p2 = obj->getPoint (2); 
+    Coord p0 = obj->getPoint (0);
+    Coord p2 = obj->getPoint (2);
     //    const QWMatrix& m = obj->matrix ();
     xw.startTag ("rect", false);
     xw.addAttribute ("x", p0.x ());
@@ -307,16 +309,16 @@ void SVGExport::exportPixmap (XmlWriter& xw, GPixmap* obj) {
 void SVGExport::addTransformationAttribute (XmlWriter& xw, GObject* obj) {
   ostrstream s;
   QWMatrix im;
-  
+
   const QWMatrix& m = obj->matrix ();
   if (m != im) {
-    s << "matrix(" << m.m11 () << " " << m.m12 () << " " << m.m21 () 
-      << " " << m.m22 () << " " << m.dx () << " " << m.dy () 
+    s << "matrix(" << m.m11 () << " " << m.m12 () << " " << m.m21 ()
+      << " " << m.m22 () << " " << m.dx () << " " << m.dy ()
       << ")" << ends;
     xw.addAttribute ("transform", s.str ());
   }
 }
- 
+
 void SVGExport::addStyleAttribute (XmlWriter& xw, GObject* obj) {
   ostrstream s;
   GObject::FillInfo fInfo = obj->getFillInfo ();

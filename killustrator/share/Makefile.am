@@ -31,7 +31,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 Ruler.h AboutDialog.h \
 		 qwmf.h wmfstruct.h metafuncs.h version.h \
 		 Arrow.h Painter.h LineStyle.h \
-		 TransformationDialog.h PageLayoutDia.h \
+		 TransformationDialog.h \
 		 MainView.h PStateManager.h OptionDialog.h \
 		 Preview.h units.h UnitBox.h ScriptDialog.h \
 		 GLayer.h LayerDialog.h LayerView.h \
@@ -68,7 +68,7 @@ libkillu_la_SOURCES = ScriptDialog.cc Handle.cc GObject.cc GPolyline.cc GPolygon
 			  InsertObjCmd.cc ShearCmd.cc \
 			  SplitLineCmd.cc CommandHistory.cc \
 			  FilterInfo.cc ExportFilter.cc \
-			  ImportFilter.cc PageLayoutDia.cc \
+			  ImportFilter.cc \
 			  Ruler.cc AboutDialog.cc qwmf.cc \
 			  Arrow.cc Painter.cc LineStyle.cc \
 			  TransformationDialog.cc \

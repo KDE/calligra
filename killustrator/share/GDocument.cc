@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -58,6 +58,7 @@
 
 #include "units.h"
 #include <klocale.h>
+#include <kapp.h>
 
 using namespace std;
 
@@ -87,13 +88,13 @@ GDocument::GDocument () {
 }
 
 GDocument::~GDocument () {
-  for_each (layers.begin (), layers.end (), del_obj<GLayer> ()); 
+  for_each (layers.begin (), layers.end (), del_obj<GLayer> ());
   layers.clear ();
   selection.clear ();
 }
 
-void GDocument::setAutoUpdate (bool flag) { 
-  autoUpdate = flag; 
+void GDocument::setAutoUpdate (bool flag) {
+  autoUpdate = flag;
   if (autoUpdate) {
     selBoxIsValid = false;
     updateHandle ();
@@ -109,8 +110,8 @@ void GDocument::initialize () {
   pLayout.orientation = PG_PORTRAIT;
   pLayout.mmWidth = PG_A4_WIDTH;
   pLayout.mmHeight = PG_A4_HEIGHT;
-  pLayout.left = 0; pLayout.right = 0;
-  pLayout.top = 0; pLayout.bottom = 0;
+  pLayout.mmLeft = 0; pLayout.mmRight = 0;
+  pLayout.mmTop = 0; pLayout.mmBottom = 0;
   pLayout.unit = PG_MM;
 
   // in pt !!
@@ -131,7 +132,7 @@ void GDocument::initialize () {
   GLayer *l = addLayer ();
   l->setInternal ();
   l->setName (I18N("Helplines"));
-  connect (l, SIGNAL(propertyChanged ()), 
+  connect (l, SIGNAL(propertyChanged ()),
 	   this, SLOT(helplineStatusChanged ()));
 
   active_layer = addLayer ();
@@ -172,7 +173,7 @@ void GDocument::drawContents (QPainter& p, bool withBasePoints, bool outline) {
   }
 }
 
-void GDocument::drawContentsInRegion (QPainter& p, const Rect& r, 
+void GDocument::drawContentsInRegion (QPainter& p, const Rect& r,
 				      bool withBasePoints, bool outline) {
   vector<GLayer*>::iterator i = layers.begin ();
   for (; i != layers.end (); i++) {
@@ -181,8 +182,8 @@ void GDocument::drawContentsInRegion (QPainter& p, const Rect& r,
       const list<GObject*>& contents = layer->objects ();
       for (list<GObject*>::const_iterator oi = contents.begin ();
 	   oi != contents.end (); oi++) {
-	// draw the object only if its bounding box 
-	// intersects the active region 
+	// draw the object only if its bounding box
+	// intersects the active region
 	//	const Rect& bbox = (*oi)->boundingBox ();
 	//	if (r.intersects (bbox))
         if ((*oi)->intersects (r))
@@ -192,10 +193,10 @@ void GDocument::drawContentsInRegion (QPainter& p, const Rect& r,
   }
 }
 
-unsigned int GDocument::objectCount () const { 
+unsigned int GDocument::objectCount () const {
   unsigned int num = 0;
   vector<GLayer*>::const_iterator i = layers.begin ();
-  for (; i != layers.end (); i++) 
+  for (; i != layers.end (); i++)
     num += (*i)->objectCount ();
   return num;
 }
@@ -204,7 +205,7 @@ void GDocument::insertObject (GObject* obj) {
   obj->ref ();
   active_layer->insertObject (obj);
   connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
-  connect (obj, SIGNAL(changed(const Rect&)), 
+  connect (obj, SIGNAL(changed(const Rect&)),
 	   this, SLOT(objectChanged (const Rect&)));
   setModified ();
   if (autoUpdate)
@@ -313,7 +314,7 @@ Rect GDocument::boundingBoxForAllObjects () {
 
   bool init = false;
 
-  for (vector<GLayer*>::iterator li = layers.begin (); 
+  for (vector<GLayer*>::iterator li = layers.begin ();
        li != layers.end (); li++) {
     GLayer* layer = *li;
     if (! layer->isInternal () && layer->isEditable ()) {
@@ -336,7 +337,7 @@ void GDocument::deleteSelectedObjects () {
 	 i != selection.end (); i++) {
       GObject* obj = *i;
       disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
-      disconnect (obj, SIGNAL(changed(const Rect&)), 
+      disconnect (obj, SIGNAL(changed(const Rect&)),
 		  this, SLOT(objectChanged (const Rect&)));
       obj->getLayer ()->deleteObject (obj);
     }
@@ -358,12 +359,12 @@ void GDocument::deleteObject (GObject* obj) {
   assert (layer);
   if (layer->isEditable ()) {
     selected = obj->isSelected ();
-    if (selected) 
+    if (selected)
       selection.remove (obj);
     last = 0L;
     setModified ();
     disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
-    disconnect (obj, SIGNAL(changed(const Rect&)), 
+    disconnect (obj, SIGNAL(changed(const Rect&)),
 		this, SLOT(objectChanged (const Rect&)));
     layer->deleteObject (obj);
     if (selected) {
@@ -374,7 +375,7 @@ void GDocument::deleteObject (GObject* obj) {
     }
     if (autoUpdate)
       emit changed ();
-  } 
+  }
 }
 
 /**
@@ -385,13 +386,13 @@ void GDocument::deleteObject (GObject* obj) {
  * <tt>pidx</tt>.
  */
 bool GDocument::findNearestObject (const char* otype, int x, int y,
-				   float max_dist, GObject*& obj, 
+				   float max_dist, GObject*& obj,
 				   int& pidx, bool all) {
   float d, distance = MAXFLOAT;
   obj = 0L;
   Coord p (x, y);
 
-  for (vector<GLayer*>::reverse_iterator li = layers.rbegin (); 
+  for (vector<GLayer*>::reverse_iterator li = layers.rbegin ();
        li != layers.rend (); li++) {
     GLayer* layer = *li;
     if (layer->isEditable ()) {
@@ -415,7 +416,7 @@ bool GDocument::findNearestObject (const char* otype, int x, int y,
 
 GObject* GDocument::findContainingObject (int x, int y) {
   GObject* result = 0L;
-  // We are looking for the most relevant object, that means the object 
+  // We are looking for the most relevant object, that means the object
   // in front of all others. So, we have to start at the upper layer
   vector<GLayer*>::reverse_iterator i = layers.rbegin ();
   for (; i != layers.rend (); i++) {
@@ -431,7 +432,7 @@ GObject* GDocument::findContainingObject (int x, int y) {
 
 bool GDocument::findContainingObjects (int x, int y, QList<GObject>& olist) {
   Coord coord (x, y);
-  for (vector<GLayer*>::iterator li = layers.begin (); 
+  for (vector<GLayer*>::iterator li = layers.begin ();
        li != layers.end (); li++) {
     if ((*li)->isEditable ()) {
       list<GObject*>& contents = (*li)->objects ();
@@ -445,7 +446,7 @@ bool GDocument::findContainingObjects (int x, int y, QList<GObject>& olist) {
 }
 
 bool GDocument::findObjectsContainedIn (const Rect& r, QList<GObject>& olist) {
-  for (vector<GLayer*>::iterator li = layers.begin (); 
+  for (vector<GLayer*>::iterator li = layers.begin ();
        li != layers.end (); li++) {
     if ((*li)->isEditable ()) {
       list<GObject*>& contents = (*li)->objects ();
@@ -525,12 +526,12 @@ bool GDocument::saveToXml (ostream& os) {
   xml.startTag ("layout", false);
   xml.addAttribute ("format", formats[pLayout.format]);
   xml.addAttribute ("orientation", orientations[pLayout.orientation]);
-  xml.addAttribute ("width", pLayout.width);
-  xml.addAttribute ("height", pLayout.height);
-  xml.addAttribute ("lmargin", pLayout.left);
-  xml.addAttribute ("tmargin", pLayout.top);
-  xml.addAttribute ("rmargin", pLayout.right);
-  xml.addAttribute ("bmargin", pLayout.bottom);
+  xml.addAttribute ("width", pLayout.mmWidth);
+  xml.addAttribute ("height", pLayout.mmHeight);
+  xml.addAttribute ("lmargin", pLayout.mmLeft);
+  xml.addAttribute ("tmargin", pLayout.mmTop);
+  xml.addAttribute ("rmargin", pLayout.mmRight);
+  xml.addAttribute ("bmargin", pLayout.mmBottom);
   xml.closeTag (true);
 
   xml.startTag ("grid", false);
@@ -558,7 +559,7 @@ bool GDocument::saveToXml (ostream& os) {
   xml.endTag (); // </head>
 
   bool save_layer_info = (layers.size () > 2);
-  for (vector<GLayer*>::iterator li = layers.begin (); 
+  for (vector<GLayer*>::iterator li = layers.begin ();
        li != layers.end (); li++) {
     if ((*li)->isInternal ())
       continue;
@@ -639,12 +640,12 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
       finished = elem.isClosed () && elem.tag () != "point";
 
       if (elem.tag () == "layer") {
-	  if (layers.size () == 1 && active_layer->objectCount () == 0) 
+	  if (layers.size () == 1 && active_layer->objectCount () == 0)
 	      // add objects to the current layer
 	      ;
-	  else 
+	  else
 	      active_layer = addLayer ();
-	  list<XmlAttribute>::const_iterator first = 
+	  list<XmlAttribute>::const_iterator first =
 	      elem.attributes ().begin ();
 	  while (first != elem.attributes ().end ()) {
 	      const string& attr = (*first).name ();
@@ -682,10 +683,10 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
 
 	do {
 	  GSegment::Kind kind = GSegment::sk_Line;
-	  if (elem.tag () != "seg") 
+	  if (elem.tag () != "seg")
 	    return false;
 
-	  list<XmlAttribute>::const_iterator first = 
+	  list<XmlAttribute>::const_iterator first =
 	    elem.attributes ().begin ();
 	  while (first != elem.attributes ().end ()) {
 	    const string& attr = (*first).name ();
@@ -697,10 +698,10 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
 	  if (kind == GSegment::sk_Line) {
 	    for (int i = 0; i < 2; i++) {
 	      Coord p;
-	      if (! xml.readElement (elem) || elem.tag () != "point") 
+	      if (! xml.readElement (elem) || elem.tag () != "point")
 		return false;
 	      first = elem.attributes ().begin ();
-	      
+	
 	      while (first != elem.attributes ().end ()) {
 		if ((*first).name () == "x")
 		  p.x ((*first).floatValue ());
@@ -714,10 +715,10 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
 	  else {
 	    for (int i = 0; i < 4; i++) {
 	      Coord p;
-	      if (! xml.readElement (elem) || elem.tag () != "point") 
+	      if (! xml.readElement (elem) || elem.tag () != "point")
 		return false;
 	      first = elem.attributes ().begin ();
-	      
+	
 	      while (first != elem.attributes ().end ()) {
 		if ((*first).name () == "x")
 		  p.x ((*first).floatValue ());
@@ -728,22 +729,22 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
 	      seg.setPoint (i, p);
 	    }
 	  }
-	  if (! xml.readElement (elem) || elem.tag () != "seg" || 
-	      ! elem.isEndTag ()) 
+	  if (! xml.readElement (elem) || elem.tag () != "seg" ||
+	      ! elem.isEndTag ())
 	    return false;
 	  ((GCurve *) obj)->addSegment (seg);
 
 	  if (! xml.readElement (elem))
 	    return false;
 	  // end of element
-	  if (elem.tag () == "curve" && elem.isEndTag ()) 
+	  if (elem.tag () == "curve" && elem.isEndTag ())
 	    finished = true;
 	} while (! finished);
       }
       else if (elem.tag () == "text") {
 	obj = new GText (elem.attributes ());
-	// read font attributes 
-	if (! xml.readElement (elem) || elem.tag () != "font") 
+	// read font attributes
+	if (! xml.readElement (elem) || elem.tag () != "font")
 	  break;
 
 	list<XmlAttribute>::const_iterator first = elem.attributes ().begin ();
@@ -772,7 +773,7 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
 	    break;
 	  if (elem.tag () == "#PCDATA")
 	    text_str += xml.getText ().c_str ();
-	  else if (elem.tag () == "font" && elem.isEndTag ()) 
+	  else if (elem.tag () == "font" && elem.isEndTag ())
 	    // end of font tag - ignore it
 	    ;
 	  else if (elem.tag () == "br")
@@ -834,12 +835,12 @@ bool GDocument::parseBody (XmlReader& xml, list<GObject*>& newObjs,
 	  obj->setLayer (active_layer);
  	  groups.top ()->addObject (obj);
         }
-        else { 
+        else {
 	  if (markNew)
 	    newObjs.push_back (obj);
 	  if (obj->hasId ())
 	    idtable[obj->getId ()] =  obj;
-	  
+	
 	  insertObject (obj);
 	}
         obj = 0L;
@@ -885,14 +886,14 @@ bool GDocument::readFromXml (istream& is) {
   }
   */
   XmlElement elem;
-  if (! xml.readElement (elem) || 
+  if (! xml.readElement (elem) ||
       (elem.tag () != "kiml" && // for backward compatibility
-       elem.tag () != "doc")) 
+       elem.tag () != "doc"))
     return false;
 
   if (elem.tag () == "doc") {
     // check mime type
-    list<XmlAttribute>::const_iterator first = 
+    list<XmlAttribute>::const_iterator first =
       elem.attributes ().begin ();
     QString strComment="", strKeywords="";
     while (first != elem.attributes ().end ()) {
@@ -923,10 +924,10 @@ bool GDocument::readFromXml (istream& is) {
     kapp->processEvents (500);
 
     if (elem.tag () == "layout") {
-      // setup layout 
-      list<XmlAttribute>::const_iterator first = 
+      // setup layout
+      list<XmlAttribute>::const_iterator first =
 	elem.attributes ().begin ();
- 
+
       while (first != elem.attributes ().end ()) {
         if ((*first).name () == "format") {
 	  const string& v = (*first).stringValue ();
@@ -945,24 +946,24 @@ bool GDocument::readFromXml (istream& is) {
 	  else                       pLayout.orientation = PG_PORTRAIT;
 	}
         else if ((*first).name () == "width")
-	  pLayout.width = (*first).floatValue ();
+	  pLayout.mmWidth = (*first).floatValue ();
         else if ((*first).name () == "height")
-	  pLayout.height = (*first).floatValue ();
+	  pLayout.mmHeight = (*first).floatValue ();
         else if ((*first).name () == "lmargin")
-	  pLayout.left = (*first).floatValue ();
+	  pLayout.mmLeft = (*first).floatValue ();
         else if ((*first).name () == "tmargin")
-	  pLayout.top = (*first).floatValue ();
+	  pLayout.mmTop = (*first).floatValue ();
         else if ((*first).name () == "rmargin")
-	  pLayout.right = (*first).floatValue ();
+	  pLayout.mmRight = (*first).floatValue ();
         else if ((*first).name () == "bmargin")
-	  pLayout.bottom = (*first).floatValue ();
+	  pLayout.mmBottom = (*first).floatValue ();
         first++;
       }
     }
     else if (elem.tag () == "author")
-       ; 
+       ;
     else if (elem.tag () == "grid") {
-      list<XmlAttribute>::const_iterator first = 
+      list<XmlAttribute>::const_iterator first =
 	elem.attributes ().begin ();
        while (first != elem.attributes ().end ()) {
         if ((*first).name () == "dx")
@@ -976,7 +977,7 @@ bool GDocument::readFromXml (istream& is) {
     }
     else if (elem.tag () == "helplines") {
       bool endOfHelplines = false;
-      list<XmlAttribute>::const_iterator first = 
+      list<XmlAttribute>::const_iterator first =
 	elem.attributes ().begin ();
        while (first != elem.attributes ().end ()) {
 	 if ((*first).name () == "align")
@@ -993,7 +994,7 @@ bool GDocument::readFromXml (istream& is) {
 	  continue;
 	}
 	else if (elem.tag () == "hl") {
-	  list<XmlAttribute>::const_iterator first = 
+	  list<XmlAttribute>::const_iterator first =
 	    elem.attributes ().begin ();
 	  while (first != elem.attributes ().end ()) {
 	    if ((*first).name () == "pos")
@@ -1002,7 +1003,7 @@ bool GDocument::readFromXml (istream& is) {
 	  }
 	}
 	else if (elem.tag () == "vl") {
-	  list<XmlAttribute>::const_iterator first = 
+	  list<XmlAttribute>::const_iterator first =
 	    elem.attributes ().begin ();
 	  while (first != elem.attributes ().end ()) {
 	    if ((*first).name () == "pos")
@@ -1041,7 +1042,7 @@ void GDocument::insertObjectAtIndex (GObject* obj, unsigned int idx) {
     layer = active_layer;
   layer->insertObjectAtIndex (obj, idx);
   connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
-  connect (obj, SIGNAL(changed(const Rect&)), 
+  connect (obj, SIGNAL(changed(const Rect&)),
 	   this, SLOT(objectChanged (const Rect&)));
   setModified ();
   if (autoUpdate) {
@@ -1075,8 +1076,8 @@ void GDocument::setPageLayout (const KoPageLayout& layout) {
     paperHeight = (int) cvtMmToPt (pLayout.mmHeight);
     break;
   case PG_PT:
-    paperWidth = pLayout.ptWidth;
-    paperHeight = pLayout.ptHeight;
+    paperWidth = static_cast<int>(pLayout.ptWidth);
+    paperHeight = static_cast<int>(pLayout.ptHeight);
     break;
   case PG_INCH:
     paperWidth = (int) cvtInchToPt (pLayout.inchWidth);
@@ -1124,7 +1125,7 @@ void GDocument::raiseLayer (GLayer *layer) {
   if (layer == layers.back ())
     // layer is already on top
     return;
-  
+
   vector<GLayer*>::iterator i = layers.begin ();
   for (; i != layers.end (); i++) {
     if (*i == layer) {
@@ -1146,7 +1147,7 @@ void GDocument::lowerLayer (GLayer *layer) {
   if (layer == layers.front ())
     // layer is already at bottom
     return;
-  
+
   vector<GLayer*>::iterator i = layers.begin ();
   for (; i != layers.end (); i++) {
     if (*i == layer) {
@@ -1178,7 +1179,7 @@ void GDocument::deleteLayer (GLayer *layer) {
   if (layers.size () == 1)
     // we need at least one layer
     return;
-  
+
   bool update = (active_layer == layer);
 
   vector<GLayer*>::iterator i = layers.begin ();
@@ -1187,10 +1188,10 @@ void GDocument::deleteLayer (GLayer *layer) {
       // remove the layer from the array
       vector<GLayer*>::iterator n = layers.erase (i);
       // and delete the layer
-      disconnect (layer, SIGNAL(propertyChanged ()), 
+      disconnect (layer, SIGNAL(propertyChanged ()),
 		  this, SLOT(layerChanged ()));
       delete layer;
-      
+
       if (update) {
 	// the removed layer was the active layer !
 	
@@ -1216,12 +1217,12 @@ GLayer *GDocument::layerForHelplines () {
 bool GDocument::helplineLayerIsActive () {
   return (active_layer->isInternal ());
 }
- 
+
 void GDocument::printInfo (QString& s) {
     ostrstream os;
     int n = 0;
 
-    for (vector<GLayer*>::iterator li = layers.begin (); 
+    for (vector<GLayer*>::iterator li = layers.begin ();
 	 li != layers.end (); li++) {
 	GLayer* layer = *li;
 	list<GObject*>& contents = layer->objects ();
@@ -1232,9 +1233,9 @@ void GDocument::printInfo (QString& s) {
        << i18n ("Objects") << ": " << n << ends;
     s += os.str ();
 }
-  
+
 void GDocument::invalidateClipRegions () {
-  for (vector<GLayer*>::iterator li = layers.begin (); 
+  for (vector<GLayer*>::iterator li = layers.begin ();
        li != layers.end (); li++) {
     GLayer* layer = *li;
     if (layer->isVisible ()) {
@@ -1258,7 +1259,7 @@ void GDocument::getGrid (float& dx, float& dy, bool& snap) {
   snap = snapToGrid;
 }
 
-void GDocument::setHelplines (const vector<float>& hlines, 
+void GDocument::setHelplines (const vector<float>& hlines,
 			      const vector<float>& vlines,
 			      bool snap) {
   hHelplines = hlines;
@@ -1304,7 +1305,7 @@ void GDocument::selectNextObject () {
   else {
     GObject *oldSel = selection.front ();
     unsigned int idx = findIndexOfObject (oldSel);
-    if (++idx >= active_layer->objects ().size ()) 
+    if (++idx >= active_layer->objects ().size ())
       idx = 0;
     newSel = active_layer->objectAtIndex (idx);
   }

@@ -39,9 +39,9 @@
 #include "units.h"
 #include "PStateManager.h"
 #include <kapp.h>
-#include <stdio.h>
 #include <klocale.h>
 #include "version.h"
+#include <stdio.h>
 
 #include <list>
 #include <algorithm>

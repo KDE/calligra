@@ -40,7 +40,7 @@
 #include "GObject.h"
 #include "GLayer.h"
 
-#include "PageLayoutDia.h"
+#include "koPageLayoutDia.h"
 
 #define KILLUSTRATOR_MIMETYPE "application/x-killustrator"
 

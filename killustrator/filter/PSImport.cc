@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -23,6 +23,7 @@
 */
 
 #include <unistd.h>
+#include <stdio.h>
 #include <sys/param.h>
 #include <string.h>
 #include <fstream.h>
@@ -35,7 +36,7 @@ static const char *check_for_pstoedit (const char* dir) {
   sprintf (buf, "%s/pstoedit", dir);
   if (access (buf, X_OK) == 0)
     return buf;
-  else 
+  else
     return NULL;
 }
 
@@ -69,7 +70,7 @@ bool PSImport::importFromFile (GDocument *doc) {
   bool flag = false;
   char cmd[1000];
 
-  sprintf (cmd, "|%s -f kil %s 2> /dev/null", (const char *) fullPath, 
+  sprintf (cmd, "|%s -f kil %s 2> /dev/null", (const char *) fullPath,
 	   inputFileName ());
 
   // load it
@@ -80,7 +81,7 @@ bool PSImport::importFromFile (GDocument *doc) {
     GGroup* group = new GGroup ();
     group->ref ();
     // now copy all objects to the group
-    for (vector<GLayer*>::const_iterator li = tmpDoc->getLayers ().begin (); 
+    for (vector<GLayer*>::const_iterator li = tmpDoc->getLayers ().begin ();
 	 li != tmpDoc->getLayers ().end (); li++) {
       if ((*li)->isVisible ()) {
 	list<GObject*>& contents = (*li)->objects ();
@@ -94,7 +95,7 @@ bool PSImport::importFromFile (GDocument *doc) {
     }
     doc->insertObject (group);
   }
-  
+
   // and delete it
   delete tmpDoc;
   return flag;
