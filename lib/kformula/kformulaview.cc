@@ -353,12 +353,12 @@ void View::addText( QString str )
 
 void View::exitLeft()
 {
-    kdDebug( DEBUGID ) << "View::exitLeft" << endl;
+    //kdDebug( DEBUGID ) << "View::exitLeft" << endl;
 }
 
 void View::exitRight()
 {
-    kdDebug( DEBUGID ) << "View::exitRight" << endl;
+    //kdDebug( DEBUGID ) << "View::exitRight" << endl;
 }
 
 void View::emitCursorChanged()
