@@ -23,16 +23,18 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 
-static const char* description=I18N_NOOP("KOffice Kivio Application");
+static const char* description=I18N_NOOP("KOffice Flowchart And Diagram Tool");
 static const char* version="1.2";
 
 KAboutData * newKivioAboutData()
 {
     KAboutData * aboutData=new KAboutData( "kivio", I18N_NOOP("Kivio"),
                                            version, description, KAboutData::License_GPL,
-                                           "theKompany.com - Kivio",0,"www.thekompany.com");
-    aboutData->addAuthor("Dave Marotti", I18N_NOOP("Main author and the original author of Queesio, from which this source is based"),"lndshark@speakeasy.net");
-    aboutData->addAuthor("Max Judin", I18N_NOOP("GUI widgets"),"max@thekompany.com");
+                                           "The Kompany.com", 0, "www.thekompany.com/projects/kivio/");
+    aboutData->addAuthor("Dave Marotti", I18N_NOOP("Initial idea, development and basic stencil sets."),"lndshark@speakeasy.net");
+    aboutData->addAuthor("The Kompany.com - \"Where Open Source is at Home\"(TM)", I18N_NOOP("Development and additional stencil sets."), "info@thekompany.com");
+    aboutData->addAuthor("Peter Simonsson", I18N_NOOP("Development"), "psn@linux.se");
+    aboutData->addAuthor("Laurent Montel", I18N_NOOP("Development"), "lmontel@mandrakesoft.com");
     return aboutData;
 }
 

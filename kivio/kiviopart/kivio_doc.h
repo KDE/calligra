@@ -32,6 +32,7 @@ class KivioStencilSpawnerSet;
 class KivioStackBar;
 class KivioPainter;
 class KivioStencil;
+
 namespace Kivio {
 class DragBarButton;
 class ViewItemList;
@@ -58,80 +59,79 @@ class KCommand;
 using namespace Kivio;
 
 class KivioDoc : public KoDocument
-{ Q_OBJECT
-friend class KivioPage;
-public:
-  KivioDoc( QWidget *parentWidget = 0, const char* widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
-  ~KivioDoc();
+{
+  Q_OBJECT
+  friend class KivioPage;
+  public:
+    KivioDoc( QWidget *parentWidget = 0, const char* widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+    ~KivioDoc();
 
-  virtual DCOPObject* dcopObject();
+    virtual DCOPObject* dcopObject();
 
-  virtual void addShell(KoMainWindow *shell);
+    virtual QDomDocument saveXML();
 
-  virtual QDomDocument saveXML();
+    virtual bool loadXML( QIODevice *, const QDomDocument& doc );
 
-  virtual bool loadXML( QIODevice *, const QDomDocument& doc );
+    virtual bool initDoc();
 
-  virtual bool initDoc();
+    KivioOptions* config()const { return m_options; }
 
-  KivioOptions* config()const { return m_options; }
+    virtual QCString mimeType() const { return MIME_TYPE; }
 
-  virtual QCString mimeType() const { return MIME_TYPE; }
+    /**
+    * @return a pointer to a new KivioPage. The KivioPage is not added to the map nor added to the GUI.
+    */
+    KivioPage* createPage();
 
-  /**
-   * @return a pointer to a new KivioPage. The KivioPage is not added to the map nor added to the GUI.
-   */
-  KivioPage* createPage();
+    /**
+    * Adds a KivioPage to the GUI and makes it active. In addition the KivioPage is
+    * added to the map.
+    *
+    * @see KivioView
+    * @see KivioMap
+    */
+    void addPage( KivioPage* page );
 
-  /**
-   * Adds a KivioPage to the GUI and makes it active. In addition the KivioPage is
-   * added to the map.
-   *
-   * @see KivioView
-   * @see KivioMap
-   */
-  void addPage( KivioPage* page );
+    /**
+    * Adds a KivioStencilSpawnerSet to the list of spawner sets and make it active.
+    *
+    */
+    KivioStencilSpawnerSet *addSpawnerSet( const QString& );
+    KivioStencilSpawnerSet *addSpawnerSetDuringLoad( const QString& );
+    bool removeSpawnerSet( KivioStencilSpawnerSet * );
 
-  /**
-   * Adds a KivioStencilSpawnerSet to the list of spawner sets and make it active.
-   *
-   */
-  KivioStencilSpawnerSet *addSpawnerSet( const QString& );
-  KivioStencilSpawnerSet *addSpawnerSetDuringLoad( const QString& );
-  bool removeSpawnerSet( KivioStencilSpawnerSet * );
+    QPtrList<KivioStencilSpawnerSet> *spawnerSets()const { return m_pLstSpawnerSets; }
 
-  QPtrList<KivioStencilSpawnerSet> *spawnerSets()const { return m_pLstSpawnerSets; }
+    KivioStencilSpawner *findStencilSpawner( const QString& setId, const QString& stencilId );
+    KivioStencilSpawner *findInternalStencilSpawner( const QString& title );
 
-  KivioStencilSpawner *findStencilSpawner( const QString& setId, const QString& stencilId );
-  KivioStencilSpawner *findInternalStencilSpawner( const QString& title );
+    KivioMap* map() const { return m_pMap; }
 
-  KivioMap* map() const { return m_pMap; }
+    /**
+    * @return TRUE if the document is currently loading.
+    */
+    bool isLoading()const { return m_bLoading; }
 
-  /**
-   * @return TRUE if the document is currently loading.
-   */
-  bool isLoading()const { return m_bLoading; }
+    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
+    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint, float, bool );
 
-  virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
-  void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint, float, bool );
+    void printContent( KPrinter& prn );
+    bool exportPage( KivioPage *pPage, const QString &fileName, ExportPageDialog * );
 
-  void printContent( KPrinter& prn );
-  bool exportPage( KivioPage *pPage, const QString &fileName, ExportPageDialog * );
+    static QPtrList<KivioDoc>& documents();
 
-  static QPtrList<KivioDoc>& documents();
+    KivioGroupStencil *clipboard();
+    void setClipboard( KivioGroupStencil * );
 
-  KivioGroupStencil *clipboard();
-  void setClipboard( KivioGroupStencil * );
+    int units()const { return m_units; }
 
-  int units()const { return m_units; }
+    KivioGridData grid() { return gridData; }
+    void setGrid(KivioGridData g) { gridData = g; emit sig_updateGrid();}
 
-  KivioGridData grid() { return gridData; }
-  void setGrid(KivioGridData g) { gridData = g; emit sig_updateGrid();}
+    ViewItemList* viewItems()const { return viewItemList; }
 
-  ViewItemList* viewItems()const { return viewItemList; }
-
-  void initConfig();
-  void saveConfig();
+    void initConfig();
+    void saveConfig();
     void updateButton();
     void addCommand( KCommand * cmd );
 
@@ -144,97 +144,93 @@ public:
     void resetLayerPanel();
     void updateProtectPanelCheckBox();
 
-public slots:
-  void updateView(KivioPage*, bool modified=true);
+  public slots:
+    void updateView(KivioPage*, bool modified=true);
 
-  void slotDeleteStencilSet( DragBarButton *, QWidget *, KivioStackBar * );
-  void slotSelectionChanged();
-  void setUnits(int);
+    void slotDeleteStencilSet( DragBarButton *, QWidget *, KivioStackBar * );
+    void slotSelectionChanged();
+    void setUnits(int);
 
-  void aboutKivio();
-  void aboutGetStencilSets();
-
-protected slots:
+  protected slots:
     void slotDocumentRestored();
     void slotCommandExecuted();
 
+  signals:
+    void sig_selectionChanged();
+    void sig_addPage(KivioPage*);
+    void sig_addSpawnerSet( KivioStencilSpawnerSet * );
+    void sig_updateView(KivioPage*);
+    void sig_pageNameChanged(KivioPage*, const QString&);
+    void sig_deleteStencilSet( DragBarButton*, QWidget *, KivioStackBar * );
+    void sig_updateGrid();
 
-signals:
-  void sig_selectionChanged();
-  void sig_addPage(KivioPage*);
-  void sig_addSpawnerSet( KivioStencilSpawnerSet * );
-  void sig_updateView(KivioPage*);
-  void sig_pageNameChanged(KivioPage*, const QString&);
-  void sig_deleteStencilSet( DragBarButton*, QWidget *, KivioStackBar * );
-  void sig_updateGrid();
+    void unitsChanged(int);
 
-  void unitsChanged(int);
+  protected:
+    bool checkStencilsForSpawner( KivioStencilSpawner * );
+    bool checkGroupForSpawner( KivioStencil *, KivioStencilSpawner *);
+    bool setIsAlreadyLoaded( QString dirName, QString name );
 
-protected:
-  bool checkStencilsForSpawner( KivioStencilSpawner * );
-  bool checkGroupForSpawner( KivioStencil *, KivioStencilSpawner *);
-  bool setIsAlreadyLoaded( QString dirName, QString name );
+    KoView* createViewInstance( QWidget* parent, const char* name );
 
-  KoView* createViewInstance( QWidget* parent, const char* name );
-
-  /**
-   * List of stencil spawner sets
-   */
-  QPtrList <KivioStencilSpawnerSet> *m_pLstSpawnerSets;
+    /**
+    * List of stencil spawner sets
+    */
+    QPtrList <KivioStencilSpawnerSet> *m_pLstSpawnerSets;
 
 
-  /**
-   * Loads a KivioStencilSpawnerSet based on it's id
-   */
-  bool loadStencilSpawnerSet( const QString &id );
+    /**
+    * Loads a KivioStencilSpawnerSet based on it's id
+    */
+    bool loadStencilSpawnerSet( const QString &id );
 
-  /**
-   * Overloaded function of @ref KoDocument.
-   */
-  virtual bool completeLoading( KoStore* );
+    /**
+    * Overloaded function of @ref KoDocument.
+    */
+    virtual bool completeLoading( KoStore* );
 
-  /**
-   * Pointer to the map that holds all the pages.
-   */
-  KivioMap *m_pMap;
+    /**
+    * Pointer to the map that holds all the pages.
+    */
+    KivioMap *m_pMap;
 
-  /**
-   * This variable is used to give every KivioPage a unique default name.
-   *
-   * @see #newKivioPage
-   */
-  int m_iPageId;
+    /**
+    * This variable is used to give every KivioPage a unique default name.
+    *
+    * @see #newKivioPage
+    */
+    int m_iPageId;
 
-  /**
-   * The URL of the this part. This variable is only set if the @ref #load function
-   * had been called with an URL as argument.
-   *
-   * @see #load
-   */
-  QString m_strFileURL;
+    /**
+    * The URL of the this part. This variable is only set if the @ref #load function
+    * had been called with an URL as argument.
+    *
+    * @see #load
+    */
+    QString m_strFileURL;
 
-  /**
-   * TRUE if loading is in process, otherwise FALSE.
-   * This flag is used to avoid updates etc. during loading.
-   *
-   * @see #isLoading
-   */
-  bool m_bLoading;
+    /**
+    * TRUE if loading is in process, otherwise FALSE.
+    * This flag is used to avoid updates etc. during loading.
+    *
+    * @see #isLoading
+    */
+    bool m_bLoading;
 
-  KivioGroupStencil *m_pClipboard;
+    KivioGroupStencil *m_pClipboard;
 
-  static QPtrList<KivioDoc>* s_docs;
-  static int s_docId;
+    static QPtrList<KivioDoc>* s_docs;
+    static int s_docId;
 
-  KivioStencilSpawnerSet* m_pInternalSet;
+    KivioStencilSpawnerSet* m_pInternalSet;
 
-  int m_units;
-  KivioGridData gridData;
+    int m_units;
+    KivioGridData gridData;
 
-  ViewItemList* viewItemList;
+    ViewItemList* viewItemList;
 
-  KivioOptions* m_options;
-  DCOPObject *dcop;
+    KivioOptions* m_options;
+    DCOPObject *dcop;
     KCommandHistory * m_commandHistory;
 };
 

@@ -23,17 +23,13 @@
 #include "kivio_map.h"
 #include <dcopclient.h>
 #include <kapplication.h>
+#include <kmainwindow.h>
 #include "kivio_grid_data.h"
 
 KIvioDocIface::KIvioDocIface( KivioDoc *doc_ )
     : KoDocumentIface( doc_ )
 {
    doc = doc_;
-}
-
-void KIvioDocIface::aboutKivio()
-{
-    doc->aboutKivio();
 }
 
 DCOPRef KIvioDocIface::map()
