@@ -18,13 +18,38 @@
 
 #include <qdialog.h>
 #include <qlistview.h>
+#include <qlabel.h>
 
 class KPresenterDoc;
 class KPresenterView;
 class QSplitter;
+class QCheckBox;
 class QResizeEvent;
 class KPBackGround;
 class KPObject;
+class KPPresStructObjectItem;
+
+/******************************************************************
+ *
+ * Class: KPSlidePreview
+ *
+ ******************************************************************/
+
+class KPSlidePreview : public QLabel
+{
+    Q_OBJECT
+    
+public:
+    KPSlidePreview( QWidget *parent, KPresenterDoc *_doc, KPresenterView *_view );
+
+public slots:
+    void setPage( QListViewItem *item );
+    
+protected:
+    KPresenterDoc *doc;
+    KPresenterView *view;
+    
+};
 
 /******************************************************************
  *
@@ -38,14 +63,16 @@ public:
     KPPresStructObjectItem( QListView *parent );
     KPPresStructObjectItem( QListViewItem *parent );
     
-    void setPage( KPBackGround *p );
+    void setPage( KPBackGround *p, int pgnum );
     void setObject( KPObject *o );
     KPBackGround *getPage();
+    int getPageNum();
     KPObject *getObject();
     
 protected:
     KPBackGround *page;
     KPObject *object;
+    int pageNum;
     
 };
 
@@ -65,12 +92,15 @@ public:
 
 protected:
     void setupSlideList();
+    void setupPagePreview();
     void resizeEvent( QResizeEvent *e );
     
     KPresenterDoc *doc;
     KPresenterView *view;
     QListView *slides;
     QSplitter *hsplit;
+    QCheckBox *showPreview;
+    KPSlidePreview *slidePreview;
     
 signals:
     void presStructViewClosed();

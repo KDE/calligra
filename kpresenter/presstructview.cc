@@ -19,6 +19,8 @@
 #include "kpbackground.h"
 #include "kpobject.h"
 #include "kpresenter_doc.h"
+#include "kpresenter_view.h"
+#include "page.h"
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -26,6 +28,44 @@
 #include <qsplitter.h>
 #include <qevent.h>
 #include <qheader.h>
+#include <qwmatrix.h>
+#include <qvbox.h>
+#include <qcheckbox.h>
+
+/******************************************************************
+ *
+ * Class: KPSlidePreview
+ *
+ ******************************************************************/
+
+/*================================================================*/
+KPSlidePreview::KPSlidePreview( QWidget *parent, KPresenterDoc *_doc, KPresenterView *_view )
+    : QLabel( parent ), doc( _doc ), view( _view )
+{
+    setFrameStyle( StyledPanel | Sunken );
+}
+ 
+/*================================================================*/
+void KPSlidePreview::setPage( QListViewItem *item )
+{
+    if ( !item )
+	return;
+    
+    QPixmap pix( QSize( doc->getPageSize( 0, 0, 0 ).width(), doc->getPageSize( 0, 0, 0 ).height() ) );
+    pix.fill( Qt::white );
+    int i = ( (KPPresStructObjectItem*)item )->getPageNum();
+    view->getPage()->drawPageInPix2( pix, i * doc->getPageSize( 0, 0, 0 ).height(), i );
+
+    float faktW = static_cast<float>( width() ) / static_cast<float>( doc->getPageSize( 0, 0, 0 ).width() );
+    float faktH = static_cast<float>( height() ) / static_cast<float>( doc->getPageSize( 0, 0, 0 ).height() );
+    float fakt = QMIN( faktW, faktH );
+    
+    QWMatrix m;
+    m.scale( fakt, fakt );
+    pix = pix.xForm( m );
+
+    setPixmap( pix );
+}
 
 /******************************************************************
  *
@@ -46,9 +86,10 @@ KPPresStructObjectItem::KPPresStructObjectItem( QListViewItem *parent )
 }
 
 /*================================================================*/
-void KPPresStructObjectItem::setPage( KPBackGround *p )
+void KPPresStructObjectItem::setPage( KPBackGround *p, int pgnum )
 {
     page = p;
+    pageNum = pgnum;
     if ( page && !parent() )
 	setPixmap( 0, BarIcon( "dot" ) );
 }
@@ -114,6 +155,12 @@ KPObject *KPPresStructObjectItem::getObject()
     return object;
 }
 
+/*================================================================*/
+int KPPresStructObjectItem::getPageNum()
+{
+    return pageNum;
+}
+
 /******************************************************************
  *
  * Class: KPPresStructView
@@ -127,6 +174,7 @@ KPPresStructView::KPPresStructView( QWidget *parent, const char *name,
 {
     hsplit = new QSplitter( this );
     setupSlideList();
+    setupPagePreview();
     
     resize( 600, 400 );
 }
@@ -144,17 +192,34 @@ void KPPresStructView::setupSlideList()
     
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
         KPPresStructObjectItem *item = new KPPresStructObjectItem( slides );
-	item->setPage( doc->backgroundList()->at( i ) );
+	item->setPage( doc->backgroundList()->at( i ), i );
         item->setText( 0, QString( "%1" ).arg( i + 1 ) );
         item->setText( 1, doc->getPageTitle( i, i18n( "Slide %1" ).arg( i + 1 ) ) );
 	for ( int j = doc->objNums() - 1; j >= 0; --j ) {
 	    if ( doc->getPageOfObj( j, 0, 0 ) == (int)i + 1 ) {
 		KPPresStructObjectItem *item_ = new KPPresStructObjectItem( item );
-		item_->setPage( doc->backgroundList()->at( i ) );
+		item_->setPage( doc->backgroundList()->at( i ), i );
 		item_->setObject( doc->objectList()->at( j ) );
 	    }
 	}
     }
+}
+
+/*================================================================*/
+void KPPresStructView::setupPagePreview()
+{
+    QVBox *box = new QVBox( hsplit );
+    box->setMargin( 5 );
+    box->setSpacing( 5 );
+
+    showPreview = new QCheckBox( i18n( "&Show Preview" ), box );
+    showPreview->setChecked( TRUE );
+    // #### for now
+    showPreview->setEnabled( FALSE );
+    
+    slidePreview = new KPSlidePreview( box, doc, view );
+    connect( slides, SIGNAL( selectionChanged( QListViewItem * ) ),
+	     slidePreview, SLOT( setPage( QListViewItem * ) ) );
 }
 
 /*================================================================*/

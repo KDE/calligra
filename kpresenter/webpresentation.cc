@@ -472,7 +472,7 @@ void KPWebPresentationWizard::setupPage2()
     page2 = new QHBox( this );
 
     QLabel *helptext = new QLabel( page2 );
-    helptext->setBackgroundColor( QColor( 57, 63, 180 ) );
+    helptext->setBackgroundMode( PaletteLight );
     QString help = i18n("  Here you can configure the style  \n"
 			"  of the webpages ( colors ). You also	 \n"
 			"  need to specify the picture format  \n"
@@ -546,7 +546,7 @@ void KPWebPresentationWizard::setupPage3()
     page3 = new QHBox( this );
 
     QLabel *helptext = new QLabel( page3 );
-    helptext->setBackgroundColor( QColor( 57, 63, 180 ) );
+    helptext->setBackgroundMode( PaletteLight );
     helptext->setText( i18n( "	Here you can specify titles for	 \n"
 			     "	each slide. Click in the list on  \n"
 			     "	on a slide and then enter in the  \n"
