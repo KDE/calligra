@@ -174,7 +174,8 @@ public:
 
     // Returns the frame under the mouse (or 0)
     // The bool border is true if the mouse is on a border, false if it's inside the frame
-    KWFrame * frameUnderMouse( const QPoint& nPoint, bool* border = 0L );
+    // if firstNonSelected is set to true, frameUnderMouse searches for the upper frame that is not selected.
+    KWFrame * frameUnderMouse( const QPoint& nPoint, bool* border = 0L, bool firstNonSelected = false );
 
     // Return the total number of framesets
     unsigned int getNumFrameSets()
@@ -545,6 +546,11 @@ protected:
     DCOPObject *dcop;
 
 private:
+    //private helper functions for frameUnderMouse
+    KWFrame *topFrameUnderMouse( const QPoint& nPoint, bool* border=0L);
+    KWFrame *frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool *border=0L);
+    KWFrame *deepestInlineFrame(KWFrame *parent, const QPoint& nPoint, bool *border);
+
     QPtrList<KWView> m_lstViews;
     QPtrList<KWChild> m_lstChildren;
 

@@ -322,8 +322,16 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
         else if ( frame && !frame->isSelected() ) // clicked on a frame that wasn't selected
         {
             if ( ! ( e->state() & ShiftButton || e->state() & ControlButton ) )
-                selectAllFrames( FALSE );
-            selectFrame( frame, TRUE );
+                selectAllFrames( FALSE ); // if we don't hold shift or control, destroy old frame selection
+            KWFrame *f = m_doc->frameUnderMouse(nPoint, 0L, true);
+            if (f == frame) {
+                if (e->state() & ShiftButton)
+                selectAllFrames( FALSE ); // shift deselects everything.
+                selectFrame( frame, TRUE ); // select the frame.
+            }
+            else
+                m_ctrlClickOnSelectedFrame = true;
+
         }
         else if(frame)  // clicked on a frame that was already selected
         {
@@ -1104,13 +1112,16 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
     else
     {
         // No frame was moved or resized.
-        // If CTRL+click on selected frame, unselect it
         if ( e->state() & ControlButton )
         {
             KWFrame * frame = m_doc->frameUnderMouse( nPoint );
-            if ( m_ctrlClickOnSelectedFrame && frame->isSelected() )
+            if ( m_ctrlClickOnSelectedFrame /* && frame->isSelected() */ ) // kervel: why the && ?
             {
-                selectFrame( frame, false );
+            KWFrame *f = m_doc->frameUnderMouse( nPoint,0L,true );
+        if (e->state() & ShiftButton)
+                    selectAllFrames( false );
+        if (f)
+            selectFrame(f,true);
                 emit frameSelectedChanged();
             }
         }

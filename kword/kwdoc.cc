@@ -211,7 +211,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     addStyleTemplate( standardStyle );
 
     if ( name )
-	dcopObject();
+    dcopObject();
     connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
 
     // It's important to call this to have the kformula actions created.
@@ -222,7 +222,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 DCOPObject* KWDocument::dcopObject()
 {
     if ( !dcop )
-	dcop = new KWordDocIface( this );
+    dcop = new KWordDocIface( this );
 
     return dcop;
 }
@@ -2365,15 +2365,111 @@ KWFrameSet * KWDocument::frameSetByName( const QString & name )
     return 0L;
 }
 
-KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border )
-{
+KWFrame * KWDocument::deepestInlineFrame(KWFrame *parent, const QPoint& nPoint, bool *border) {
+    KWFrameSet *fs=parent->frameSet();
     KoPoint docPoint( unzoomPoint( nPoint ) );
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( fit.toLast(); fit.current() ; --fit ) // z-order
+
+    for (fit.toLast(); fit.current(); --fit) // z-order
     {
         KWFrameSet *frameSet = fit.current();
         if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
+                    continue;
+        if (!frameSet->isFloating())
             continue;
+        if (fs != frameSet->anchorFrameset())
+            continue;
+        // frameset is a child of parent. now find out if its under the mouse.
+        KWFrame *frsFrame = frameSet->frameByBorder(nPoint);
+        // yup it is. its even the border. stop looking for childs.
+        if (frsFrame) {
+            if (border) *border=true;
+            return frsFrame;
+        }
+        frsFrame = frameSet->frameAtPos(docPoint.x(),docPoint.y());
+        // yup it is. look for childs
+        if (frsFrame) {
+             return deepestInlineFrame(frsFrame,nPoint,border);
+        }
+    }
+    if (*border) border=false;
+    return parent;
+}
+
+KWFrame * KWDocument::frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool *border) {
+
+    KWFrameSet *fs = frame->frameSet();
+    KoPoint docPoint( unzoomPoint( nPoint ) );
+    bool reallyStartLooking=false;
+    if (fs->isFloating()) {
+        // inline frame: the frame below is the parent frame.
+        // since we know nPoint is already in frame, we don't have to check it for anchorFrame here.
+        KWFrameSet *frameSet = fs->anchorFrameset();
+        KWFrame *f = frameSet->frameByBorder(nPoint);
+        // for comments see below.
+        if (f) {
+            if (border) *border=true;
+            return f;
+        }
+        f = frameSet->frameAtPos(docPoint.x(),docPoint.y());
+        if (f) {
+            if (border) *border=false;
+            return f;
+        }
+
+
+    } else {
+        QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+        for (fit.toLast(); fit.current(); --fit) // z-order
+            {
+            KWFrameSet *frameSet = fit.current();
+            if ( !(frameSet->isVisible()) || frameSet->isRemoveableHeader() )
+                        continue;
+            // we're not interested in floating frames here.
+            if (frameSet->isFloating())
+                continue;
+            // if we are really looking (we already found the given frameset in the z-ordered
+            // tree)
+            if (reallyStartLooking) {
+                KWFrame *f = frameSet->frameByBorder(nPoint);
+                // We found a frame below the given frame that is okay for a border.
+                if (f) {
+                    if (border) *border=true;
+                    return f;
+                }
+                // We found a frame below the given frame that is okay.
+                f = frameSet->frameAtPos(docPoint.x(),docPoint.y());
+                // return the deepest inline frame. Remember less deep inline frames
+                // are 'below' deeper inline frames.
+                if (f) {
+                    return deepestInlineFrame(f,nPoint,border);
+                }
+            }
+
+            if (frameSet == fs)
+                reallyStartLooking=true;
+
+        }
+        return 0L;
+    }
+    return 0L;
+}
+
+
+KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border)
+{
+    KoPoint docPoint( unzoomPoint( nPoint ) );
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+
+    for ( fit.toLast(); fit.current() ; --fit ) // z-order
+    {
+        KWFrameSet *frameSet = fit.current();
+    // only consider non-inline frames.
+    if (frameSet->isFloating())
+        continue;
+        if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
+            continue;
+
         KWFrame * frame = frameSet->frameByBorder( nPoint );
         if ( frame )
         {
@@ -2381,16 +2477,38 @@ KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border )
             return frame;
         }
         frame = frameSet->frameAtPos( docPoint.x(), docPoint.y() );
-        //kdDebug() << "KWDocument::frameAtPos found frameset " << frameSet
-        // << " at position " << docPoint.x() << "," << docPoint.y() << endl;
         if ( frame )
         {
-            if ( border ) *border = false;
-            return frame;
+        return deepestInlineFrame(frame,nPoint,border);
         }
     }
     return 0L;
+}
 
+
+KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border, bool firstNonSelected )
+{
+    KWFrame *candidate=topFrameUnderMouse(nPoint,border);
+    if (!firstNonSelected)
+        return candidate;
+    KWFrame *goDeeper=candidate;
+    bool foundselected=false;
+    while (goDeeper) {
+        while (goDeeper && goDeeper->isSelected())
+        {
+            goDeeper=frameBelowFrame(nPoint, goDeeper, border);
+            foundselected=true;
+        }
+        if (foundselected)
+            if (goDeeper)
+                return goDeeper;
+            else
+                return candidate;
+        else
+            goDeeper=frameBelowFrame(nPoint, goDeeper, border);
+
+    }
+    return candidate;
 }
 
 QString KWDocument::generateFramesetName( const QString & templateName )
@@ -2408,18 +2526,14 @@ QString KWDocument::generateFramesetName( const QString & templateName )
 
 QCursor KWDocument::getMouseCursor( const QPoint &nPoint, bool controlPressed )
 {
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( fit.toLast(); fit.current() ; --fit )
-    {
-        KWFrameSet *frameSet = fit.current();
-        if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
-            continue;
-
+    bool border=true;
+    KWFrame *frame = frameUnderMouse(nPoint, &border );
+    if (frame) {
         QCursor cursor;
-        if ( frameSet->getMouseCursor( nPoint, controlPressed, cursor ) )
+        KWFrameSet *frameSet = frame->frameSet();
+    if ( frameSet->getMouseCursor(nPoint, controlPressed, cursor))
             return cursor;
     }
-
     return ibeamCursor;
 }
 
