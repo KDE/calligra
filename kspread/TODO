@@ -95,7 +95,12 @@ Philipp
 Norbert
 =======
 
-- currently in bug fixing and testing mode...
+- solver (see gnumeric)
+
+- Multiple Operations
+- Database functions 
+- more information functions (Excel compatible)
+=> all three after John is done enhancing KSContext (s.a.)
 
 Ariya
 =====
