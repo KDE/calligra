@@ -16,18 +16,13 @@
 <author>
 <firstname>Jonathan</firstname>
 <surname>Drews</surname>
-<affiliation>
 <address><email>j.e.drews@att.net</email></address>
-</affiliation>
 </author>
 
 <othercredit role="developer">
 <firstname>Ulrich</firstname>
 <othername></othername>
 <surname>K&uuml;ttler</surname>
-<affiliation>
-<address><email>ulrich.kuettler@gmx.de</email></address>
-</affiliation>
 <contrib>Developer</contrib>
 </othercredit>
 
