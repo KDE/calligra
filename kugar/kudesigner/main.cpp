@@ -37,6 +37,7 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char *argv[])
 {
+   KLocale::setMainCatalogue("kugar");
 	KAboutData aboutData( "kudesigner", I18N_NOOP("Kugar Report Designer"),
 		VERSION, description, KAboutData::License_GPL,
 		"(c) 2002, Alexander Dymo", 0, 0, "cloudtemple@mksat.net");

@@ -56,5 +56,3 @@ EXTRA_DIST = \
 	$(rc_DATA) \
 	$(apps_DATA)
 
-messages:  rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/kudesigner.pot
