@@ -46,27 +46,23 @@ public:
   const KisBrush  *currentBrush()	const;
   void 		  setCurrentBrush( const KisBrush * );
 
-
 protected:
   void 		initGUI();
 
   IconChooser 	*chooser;
 
-
 private:
-  QHBox 	*frame;
-  QLabel 	*lbSpacing;
-  IntegerWidget *slSpacing;
-
+    QHBox 	*frame;
+    QWidget *container;
+    QLabel 	*lbSpacing;
+    IntegerWidget *slSpacing;
 
 private slots:
   void 		slotItemSelected( IconItem * );
   void 		slotSetBrushSpacing( int );
 
-
 signals:
   void 		selected( const KisBrush * );
-
 
 };
 

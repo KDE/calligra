@@ -207,6 +207,7 @@ void LayerTable::updateTable()
         m_items = m_doc->current()->layerList().count();
         setNumRows( m_items );
         setNumCols( 1 );
+        
     }
     else
     {
@@ -214,6 +215,7 @@ void LayerTable::updateTable()
         setNumRows( 0 );
         setNumCols( 0 );
     }
+    updateScrollBars(); //jwc
     resize( sizeHint() );
 }
 
@@ -352,7 +354,6 @@ void LayerTable::slotAddLayer()
     updateTable();
     updateAllCells();
 }
-
 
 
 void LayerTable::slotRemoveLayer()

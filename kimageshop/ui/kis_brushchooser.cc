@@ -56,9 +56,11 @@ KisBrushChooser::KisBrushChooser( QWidget *parent, const char *name )
   // only serves as beautifier for the iconchooser
   frame = new QHBox( this );
   frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+  chooser = new IconChooser( frame, QSize(30,30), "icon chooser" );  
 
-  chooser = new IconChooser( frame, QSize(30,30), "icon chooser" );
-  
+  //container = new QWidget(frame);  
+  //chooser = new IconChooser( container, QSize(30,30), "icon chooser" );
+
   QList<KisBrush> bList = KisFactory::rServer()->brushes();
   
   for (KisBrush *brush = bList.first(); brush != 0; brush = bList.next())
@@ -82,6 +84,7 @@ KisBrushChooser::~KisBrushChooser()
 {
   delete lbSpacing;
   delete slSpacing;
+  // delete container;
   delete chooser;
   delete frame;
 }

@@ -177,7 +177,8 @@ class KisSideBar : public QWidget
   void slotSetBrush(const KisBrush&);
 
   void slotActivateTab(const QString& tab) { m_pDockFrame->slotActivateTab(tab); }
-
+    void slotHideChooserFrame();
+    
  signals:
   void fgColorChanged(const KisColor&);
   void bgColorChanged(const KisColor&);
