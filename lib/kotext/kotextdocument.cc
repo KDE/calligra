@@ -229,6 +229,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, QTextParag *parag, int cx, i
 
     // The cliprect is checked in layout units, in QTextParag::paint
     QRect crect_lu( m_zoomHandler->pixelToLayoutUnit( crect ) );
+    //kdDebug() << "KoTextDocument::drawParagWYSIWYG crect_lu=" << DEBUGRECT( crect_lu ) << endl;
     parag->paint( *painter, cg, drawCursor ? cursor : 0, TRUE,
                   crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
 
@@ -386,7 +387,8 @@ void KoTextCustomItem::draw(QPainter* p, int x, int _y, int cx, int cy, int cw, 
 {
     KoZoomHandler *zh=textDocument()->zoomHandler();
     //kdDebug()<<" x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
-    x=zh->layoutUnitToPixelX(x);
+
+    x=zh->layoutUnitToPixelX(x) + paragraph()->at( index() )->pixelxadj;
     int y=zh->layoutUnitToPixelY(_y);
     cx=zh->layoutUnitToPixelX(cx);
     cy=zh->layoutUnitToPixelY(_y,cy);
