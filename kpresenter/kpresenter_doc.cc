@@ -1587,10 +1587,11 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	//}
 
 
-          KPrPage *page;
-          for ( page = m_pageList.first(); page ; page = m_pageList.next() )
-              page->completeLoading( _clean, lastObj );
-
+        if ( saveOnlyPage == -1 ) {
+            KPrPage *page;
+            for ( page = m_pageList.first(); page ; page = m_pageList.next() )
+                page->completeLoading( _clean, lastObj );
+        }
     } else {
 	if ( _clean )
         {

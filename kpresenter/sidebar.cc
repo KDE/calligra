@@ -290,8 +290,10 @@ void Outline::doMoveItems()
         if ( numNow > num )
             numNow--;
     }
-    if(num!=numNow)
+    if(num!=numNow) {
         emit movePage( num, numNow );
+        setSelected( movedItem, true );
+    }
 }
 
 void Outline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )

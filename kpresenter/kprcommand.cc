@@ -1757,6 +1757,7 @@ void KPrInsertPageCmd::execute()
     doc->deSelectAllObj();
     doc->insertPage( m_page, position);
     doc->AddRemovePage();
+    m_page->completeLoading( false, -1 );
 }
 
 void KPrInsertPageCmd::unexecute()
