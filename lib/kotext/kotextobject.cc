@@ -59,6 +59,7 @@ void KoTextObject::init()
 {
     d = new KoTextObjectPrivate;
     m_needsSpellCheck = true;
+    m_protectContent = false;
     m_visible=true;
     m_availableHeight = -1;
     m_lastFormatted = textdoc->firstParag();
@@ -513,6 +514,8 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
                              bool removeSelected, const QString & commandName,
                              CustomItemsMap customItemsMap,int selectionId )
 {
+    if ( protectContent() )
+        return;
     //kdDebug(32001) << "KoTextObject::insert txt=" << txt << endl;
     KoTextDocument *textdoc = textDocument();
     emit hideCursor();
@@ -598,6 +601,8 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
 
 void KoTextObject::pasteText( KoTextCursor * cursor, const QString & text, KoTextFormat * currentFormat, bool removeSelected )
 {
+    if ( protectContent() )
+        return;
     kdDebug(32001) << "KoTextObject::pasteText" << endl;
     QString t = text;
     // Need to convert CRLF to NL
@@ -830,6 +835,9 @@ KCommand *KoTextObject::setFormatCommand( KoTextFormat *format, int flags, bool 
 KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat ** pCurrentFormat, KoTextFormat *format, int flags, bool zoomFont, int selectionId )
 {
     KCommand *ret = 0;
+    if ( protectContent() )
+        return ret;
+
     KoTextDocument * textdoc = textDocument();
     KoTextFormat* newFormat = 0;
     // Get new format from collection if
@@ -910,6 +918,8 @@ KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat *
 
 void KoTextObject::setFormat( KoTextCursor * cursor, KoTextFormat ** currentFormat, KoTextFormat *format, int flags, bool zoomFont )
 {
+    if ( protectContent() )
+        return;
     KCommand *cmd = setFormatCommand( cursor, currentFormat, format, flags, zoomFont );
     if (cmd)
         emit newCommand( cmd );
@@ -923,6 +933,8 @@ void KoTextObject::emitNewCommand(KCommand *cmd)
 
 KCommand *KoTextObject::setCounterCommand( KoTextCursor * cursor, const KoParagCounter & counter, int selectionId  )
 {
+    if ( protectContent() )
+        return 0L;
     KoTextDocument * textdoc = textDocument();
     const KoParagCounter * curCounter = 0L;
     if(cursor)
@@ -968,6 +980,8 @@ KCommand *KoTextObject::setCounterCommand( KoTextCursor * cursor, const KoParagC
 
 KCommand * KoTextObject::setAlignCommand( KoTextCursor * cursor, int align , int selectionId )
 {
+    if ( protectContent() )
+        return 0L;
     KoTextDocument * textdoc = textDocument();
     if ( !textdoc->hasSelection( selectionId ) && cursor &&
          cursor->parag()->alignment() == align )
@@ -1003,6 +1017,9 @@ KCommand * KoTextObject::setAlignCommand( KoTextCursor * cursor, int align , int
 }
 
 KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, QStyleSheetItem::Margin m, double margin , int selectionId ) {
+    if ( protectContent() )
+        return 0L;
+
     KoTextDocument * textdoc = textDocument();
     //kdDebug(32001) << "KoTextObject::setMargin " << m << " to value " << margin << endl;
     //kdDebug(32001) << "Current margin is " << cursor->parag()->margin(m) << endl;
@@ -1048,6 +1065,8 @@ KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, QStyleSheetIte
 
 KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double spacing, int selectionId )
 {
+    if ( protectContent() )
+        return 0L;
     KoTextDocument * textdoc = textDocument();
     //kdDebug(32001) << "KoTextObject::setLineSpacing to value " << spacing << endl;
     //kdDebug(32001) << "Current spacing is " << cursor->parag()->kwLineSpacing() << endl;
@@ -1089,7 +1108,9 @@ KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double sp
 
 KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder , int selectionId )
 {
-  KoTextDocument * textdoc = textDocument();
+    if ( protectContent() )
+        return 0L;
+    KoTextDocument * textdoc = textDocument();
   if ( !textdoc->hasSelection( selectionId ) && cursor &&
        cursor->parag()->leftBorder() ==leftBorder &&
        cursor->parag()->rightBorder() ==rightBorder &&
@@ -1147,6 +1168,8 @@ KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorde
 
 KCommand * KoTextObject::setTabListCommand( KoTextCursor * cursor, const KoTabulatorList &tabList, int selectionId  )
 {
+    if ( protectContent() )
+        return 0L;
     KoTextDocument * textdoc = textDocument();
     if ( !textdoc->hasSelection( selectionId ) && cursor &&
          cursor->parag()->tabList() == tabList )
@@ -1185,6 +1208,8 @@ KCommand * KoTextObject::setTabListCommand( KoTextCursor * cursor, const KoTabul
 
 KCommand * KoTextObject::setShadowCommand( KoTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId )
 {
+    if ( protectContent() )
+        return 0L;
     KoTextDocument * textdoc = textDocument();
     if ( !textdoc->hasSelection( selectionId ) && cursor &&
          cursor->parag()->shadowColor() == col &&
@@ -1228,6 +1253,8 @@ KCommand * KoTextObject::setShadowCommand( KoTextCursor * cursor,double dist, sh
 
 void KoTextObject::removeSelectedText( KoTextCursor * cursor, int selectionId, const QString & cmdName, bool createUndoRedo )
 {
+    if ( protectContent() )
+        return ;
     KoTextDocument * textdoc = textDocument();
     emit hideCursor();
     if( createUndoRedo)
@@ -1260,6 +1287,8 @@ void KoTextObject::removeSelectedText( KoTextCursor * cursor, int selectionId, c
 
 KCommand * KoTextObject::removeSelectedTextCommand( KoTextCursor * cursor, int selectionId )
 {
+    if ( protectContent() )
+        return 0L;
     undoRedoInfo.clear();
     textdoc->selectionStart( selectionId, undoRedoInfo.id, undoRedoInfo.index );
 
@@ -1290,6 +1319,8 @@ KCommand * KoTextObject::removeSelectedTextCommand( KoTextCursor * cursor, int s
 KCommand* KoTextObject::replaceSelectionCommand( KoTextCursor * cursor, const QString & replacement,
                                                    int selectionId, const QString & cmdName)
 {
+    if ( protectContent() )
+        return 0L;
     emit hideCursor();
     KMacroCommand * macroCmd = new KMacroCommand( cmdName );
 
@@ -1330,6 +1361,8 @@ KCommand* KoTextObject::replaceSelectionCommand( KoTextCursor * cursor, const QS
 
 KCommand * KoTextObject::insertParagraphCommand( KoTextCursor *cursor )
 {
+    if ( protectContent() )
+        return 0L;
     return replaceSelectionCommand( cursor, "\n", KoTextDocument::Standard, QString::null );
 }
 
@@ -1544,6 +1577,9 @@ void KoTextObject::typingDone()
 
 KCommand *KoTextObject::changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,KoTextCursor *cursor, KoTextParag *parag)
 {
+    if ( protectContent() )
+        return 0L;
+
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Change case") );
     KoTextFormat *curFormat = parag->paragraphFormat();
     QString text = parag->string()->toString().mid(cursorPosStart , cursorPosEnd - cursorPosStart );
@@ -1618,6 +1654,8 @@ KCommand *KoTextObject::changeCaseOfTextParag(int cursorPosStart, int cursorPosE
 
 KCommand *KoTextObject::changeCaseOfText(KoTextCursor *cursor,KoChangeCaseDia::TypeOfCase _type)
 {
+    if ( protectContent() )
+        return 0L;
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Change case") );
 
     KoTextCursor start = textDocument()->selectionStartCursor( KoTextDocument::Standard );
@@ -1712,6 +1750,8 @@ const KoParagLayout * KoTextObject::currentParagLayoutFormat() const
 
 KCommand *KoTextObject::setParagLayoutFormatCommand( KoParagLayout *newLayout,int flags,int marginIndex)
 {
+    if ( protectContent() )
+        return 0L;
     KoTextDocument *textdoc = textDocument();
     textdoc->selectAll( KoTextDocument::Temp );
     KoTextCursor *cursor = new KoTextCursor( textDocument() );
@@ -1723,6 +1763,8 @@ KCommand *KoTextObject::setParagLayoutFormatCommand( KoParagLayout *newLayout,in
 
 KCommand *KoTextObject::setParagLayoutFormatCommand( KoTextCursor* cursor, int selectionId, KoParagLayout *newLayout, int flags, int marginIndex)
 {
+    if ( protectContent() )
+        return 0L;
     KCommand *cmd =0L;
     KoParagCounter c;
     if(newLayout->counter)
@@ -1749,6 +1791,8 @@ KCommand *KoTextObject::setParagLayoutFormatCommand( KoTextCursor* cursor, int s
 
 void KoTextObject::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont )
 {
+    if ( protectContent() )
+        return ;
     // This version of setFormat works on the whole textobject - we use the Temp selection for that
     KoTextDocument *textdoc = textDocument();
     textdoc->selectAll( KoTextDocument::Temp );
@@ -1765,6 +1809,8 @@ void KoTextObject::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont
 
 KCommand *KoTextObject::setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type)
 {
+    if ( protectContent() )
+        return 0L;
     KoTextDocument *textdoc = textDocument();
     textdoc->selectAll( KoTextDocument::Standard );
     KoTextCursor *cursor = new KoTextCursor( textDocument() );

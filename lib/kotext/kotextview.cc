@@ -1099,7 +1099,7 @@ KCommand *KoTextView::dropEvent( KoTextObject *tmp, KoTextCursor dropCursor, boo
                     inSelection = dropCursor.parag() == endSel.parag() && dropCursor.index() <= endSel.index();
             }
         }
-        if ( inSelection )
+        if ( inSelection || m_textobj->protectContent() )
         {
             delete macroCmd;
             tmp->textDocument()->removeSelection( KoTextDocument::Standard );

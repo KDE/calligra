@@ -152,7 +152,8 @@ public:
 
     void setNeedSpellCheck(bool b){ m_needsSpellCheck = b;}
     bool needSpellCheck() const { return m_needsSpellCheck;}
-
+    void setProtectContent(bool b) { m_protectContent = b; }
+    bool protectContent() const{ return m_protectContent;}
     /**
      * Return the text document contained in this KoTextObject
      */
@@ -476,6 +477,7 @@ private:
 
     static const char s_customItemChar = '#'; // Has to be transparent to kspell but still be saved (not space)
     bool m_needsSpellCheck;
+    bool m_protectContent;
 };
 
 #endif
