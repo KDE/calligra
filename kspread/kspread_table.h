@@ -390,6 +390,8 @@ public:
     void setSelectionComment( const QPoint &_marker,QString _comment);
     void setSelectionRemoveComment( const QPoint &_marker);
 
+    void setSelectionAngle( const QPoint &_marker,int _value);
+
     void setSelectionTextColor( const QPoint &_marker, QColor tbColor );
     void setSelectionbgColor( const QPoint &_marker, QColor bg_Color );
     void setSelectionBorderColor( const QPoint &_marker, QColor bd_Color );
@@ -534,7 +536,7 @@ public:
      * convert the column from int to ascii format
      * (e.g. 1 -> 'A', 27 -> 'AA' , ...)
      */
-    const char *columnLabel( int _column );
+    //const char *columnLabel( int _column );
 
     void addCellBinding( CellBinding *_bind );
     void removeCellBinding( CellBinding *_bind );

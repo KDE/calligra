@@ -407,6 +407,7 @@ public:
     int richTextWidth() {return m_richWidth; }
     int richTextHeight() {return m_richHeight;}
 
+    void textSize(QPainter &_paint);
     /**
      * Like @ref updateDepending, but the cells content will be refreshed
      * on all views.
@@ -633,8 +634,12 @@ public:
     		delete m_firstCondition;
     	m_firstCondition=0;
     	}
-    	
+
     void conditionAlign(QPainter &painter,int _col,int _row);
+
+    void setAngle(int _angle) {m_rotateAngle=_angle;}
+
+    int getAngle(){return m_rotateAngle;}
 
     /**
      * Used for comparing cells (when sorting)
@@ -905,6 +910,12 @@ protected:
     * default is 0
     */
     int m_nbLines;
+
+    /**
+    * give angle of rotation
+    * default is null
+    */
+    int m_rotateAngle;
 };
 
 #endif

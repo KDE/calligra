@@ -105,6 +105,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_conditionIsTrue=false;
   m_numberOfCond=-1;
   m_nbLines=0;
+  m_rotateAngle=0;
 }
 
 void KSpreadCell::copyLayout( int _column, int _row )
@@ -175,6 +176,7 @@ void KSpreadCell::copyLayout( int _column, int _row )
   	tmpCondition->m_cond=o->getThirdCondition(0)->m_cond;
     }
     setComment(o->getComment());
+    setAngle(o->getAngle());
 }
 
 void KSpreadCell::copyAll( KSpreadCell *cell )
@@ -240,6 +242,7 @@ void KSpreadCell::defaultStyle()
   m_numberOfCond=-1;
   m_strComment="";
   m_bVerticalText=false;
+  m_rotateAngle=0;
 }
 
 void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
@@ -918,17 +921,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   else
         _painter.setFont( m_textFont );
 
+  textSize(_painter);
   QFontMetrics fm = _painter.fontMetrics();
-  if(!m_bVerticalText)
-        {
-        m_iOutTextWidth = fm.width( m_strOutText );
-        m_iOutTextHeight = fm.ascent() + fm.descent();
-        }
-  else
-        {
-        m_iOutTextWidth = fm.width( m_strOutText.at(0));
-        m_iOutTextHeight = (fm.ascent() + fm.descent())*(m_strOutText.length());
-        }
 
   // Calculate the size of the cell
   RowLayout *rl = m_pTable->rowLayout( m_iRow );
@@ -1161,7 +1155,7 @@ switch(i)
 		tmpCondition=m_thirdCondition;
 		break;
 	}
-	
+
 if(tmpCondition!=0 && tmpCondition->m_cond!=None && !m_pTable->getShowFormular())
         {
 
@@ -1251,11 +1245,21 @@ int h = rl->height();
 switch( m_eAlignY )
 {
         case KSpreadCell::Top:
-                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+                if(!m_rotateAngle)
+                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+                else
+                        m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
                 break;
         case KSpreadCell::Bottom:
-                if(!m_bVerticalText && !m_bMultiRow)
+                if(!m_bVerticalText && !m_bMultiRow && !m_rotateAngle)
                         m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
+                else if(m_rotateAngle!=0)
+                        {
+                        if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
+                                m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
+                        else
+                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                        }
                 else if(m_bMultiRow)
                         {
                         if((h - BORDER_SPACE - m_iOutTextHeight*m_nbLines- bottomBorderWidth( _col, _row ))>0)
@@ -1270,8 +1274,13 @@ switch( m_eAlignY )
                                 m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
                 break;
         case KSpreadCell::Middle:
-                if(!m_bVerticalText && !m_bMultiRow)
+                if(!m_bVerticalText && !m_bMultiRow && !m_rotateAngle)
                         m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+                else if(m_rotateAngle!=0)
+                        if(( h - m_iOutTextHeight )>0)
+                                m_iTextY = ( h - m_iOutTextHeight ) / 2 +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                        else
+                                m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
                 else if(m_bMultiRow)
                         if(( h - m_iOutTextHeight*m_nbLines )>0)
                                 m_iTextY = ( h - m_iOutTextHeight*m_nbLines ) / 2 +m_fmAscent;
@@ -1309,6 +1318,28 @@ switch( a )
   }
 }
 
+void KSpreadCell::textSize(QPainter &_paint)
+{
+QFontMetrics fm = _paint.fontMetrics();
+if(!m_bVerticalText && !m_rotateAngle)
+        {
+        m_iOutTextWidth = fm.width( m_strOutText );
+        m_iOutTextHeight = fm.ascent() + fm.descent();
+        }
+ else if(m_rotateAngle!=0)
+        {
+        m_iOutTextHeight = abs((int)(cos(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())+fm.width( m_strOutText )*sin(m_rotateAngle*M_PI/180)));
+        m_iOutTextWidth = abs((int)(sin(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())))+fm.width( m_strOutText )*cos(m_rotateAngle*M_PI/180);
+        }
+  else
+        {
+        m_iOutTextWidth = fm.width( m_strOutText.at(0));
+        m_iOutTextHeight = (fm.ascent() + fm.descent())*(m_strOutText.length());
+        }
+m_fmAscent=fm.ascent();
+
+}
+
 void KSpreadCell::conditionAlign(QPainter &_paint,int _col,int _row)
 {
 
@@ -1335,18 +1366,7 @@ else
 	{
 	_paint.setFont( m_textFont );
 	}
-QFontMetrics fm = _paint.fontMetrics();
-if(!m_bVerticalText)
-        {
-        m_iOutTextWidth = fm.width( m_strOutText );
-        m_iOutTextHeight = fm.ascent() + fm.descent();
-        }
-  else
-        {
-        m_iOutTextWidth = fm.width( m_strOutText.at(0));
-        m_iOutTextHeight = (fm.ascent() + fm.descent())*(m_strOutText.length());
-        }
-m_fmAscent=fm.ascent();
+textSize(_paint);
 
 offsetAlign(_col,_row);
 
@@ -1928,8 +1948,26 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     }
     //_painter.setFont( m_textFont );
     conditionAlign(_painter,_col,_row);
-    if ( !m_bMultiRow && !m_bVerticalText)
+    if ( !m_bMultiRow && !m_bVerticalText && !m_rotateAngle)
       _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
+    else if( m_rotateAngle!=0)
+    {
+    int angle=m_rotateAngle;
+    QFontMetrics fm = _painter.fontMetrics();
+    _painter.rotate(angle);
+    int x;
+    if(angle>0)
+        x=_tx + m_iTextX + dx;
+    else
+        x=_tx + m_iTextX + dx/*+m_iOutTextWidth*/;
+    int y;
+    if(angle>0)
+        y=_ty + m_iTextY + dy;
+    else
+        y=_ty + m_iTextY + dy+m_iOutTextHeight/*+(fm.descent() + fm.ascent())/tan(angle*3.14/180)*/;
+    _painter.drawText( x*cos(angle*M_PI/180)+y*sin(angle*M_PI/180),-x*sin(angle*M_PI/180) + y*cos(angle*M_PI/180) , m_strOutText );
+    _painter.rotate(-angle);
+    }
     else if( m_bMultiRow && !m_bVerticalText)
     {
       QString t;
@@ -2528,7 +2566,7 @@ const QColor& KSpreadCell::fallDiagonalColor( int _col, int _row )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->fallDiagonalColor();
 	else
@@ -3032,6 +3070,8 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   format.setAttribute( "floatcolor", (int)floatColor() );
   format.setAttribute( "faktor", m_dFaktor );
 
+  if(m_rotateAngle!=0)
+      format.setAttribute( "angle",m_rotateAngle);
   if ( m_textFont != m_pTable->defaultCell()->textFont() )
     format.appendChild( createElement( "font", m_textFont, doc ) );
   if ( textFontUnderline())
@@ -3051,7 +3091,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
     if(m_conditionIsTrue)
     {
 	m_textPen.setColor( textColor() );
-    }    	
+    }
     format.appendChild( createElement( "pen", m_textPen, doc ) );
   }
   format.setAttribute( "brushcolor",m_backGroundBrush.color().name() );
@@ -3073,8 +3113,11 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   goUpDiagonal.appendChild( createElement( "pen", m_goUpDiagonalPen, doc ) );
   format.appendChild( goUpDiagonal );
 
+  if(m_rotateAngle!=0)
+      format.setAttribute( "angle",m_rotateAngle);
+
   if((m_firstCondition!=0)||(m_secondCondition!=0)||(m_thirdCondition!=0))
-	{  	
+	{
   	QDomElement condition = doc.createElement("condition");
 
   	if(m_firstCondition!=0)
@@ -3345,6 +3388,12 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 
 	m_strPrefix = f.attribute( "prefix" );
 	m_strPostfix = f.attribute( "postfix" );
+        if ( f.hasAttribute( "angle" ) )
+        {
+            setAngle(f.attribute( "angle").toInt( &ok ));
+	    if ( !ok )
+		return false;
+        }
     }
 
 
@@ -3379,7 +3428,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    		m_firstCondition->fontcond=toFont(font) ;
 		
   	 	}
-  	 	
+
   	 QDomElement second = condition.namedItem( "second" ).toElement();
   	 if(!second.isNull())
   	 	{

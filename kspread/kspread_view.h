@@ -253,6 +253,7 @@ public slots:
     void verticalText(bool );
     void addModifyComment();
     void removeComment();
+    void changeAngle();
     //void showComment();
     /**
      * @ref #tabBar is connected to this slot.
@@ -462,6 +463,7 @@ private:
     KAction* m_removeComment;
     KAction* m_insertCell;
     KAction* m_removeCell;
+    KAction* m_changeAngle;
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.

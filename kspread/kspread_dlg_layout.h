@@ -217,6 +217,7 @@ public:
 public slots:
     void slotChangeHeightState();
     void slotChangeWidthState();
+    void slotChangeAngle(int);
 protected:
     QRadioButton *bottom;
     QRadioButton *top;
@@ -230,6 +231,7 @@ protected:
     CellLayoutDlg *dlg;
     QCheckBox *defaultWidth;
     QCheckBox *defaultHeight;
+    KIntNumInput *angleRotation;
 };
 
 
@@ -504,7 +506,8 @@ public:
     static QPixmap* formatRedAlwaysSignedPixmap;
 
     static QPixmap* undefinedPixmap;
-
+    int textRotation;
+    bool bTextRotation;
 public slots:
     void slotApply();
 

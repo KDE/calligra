@@ -190,6 +190,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 
     bMultiRow = obj->multiRow();
 
+    textRotation = obj->getAngle();
     RowLayout *rl;
     ColumnLayout *cl;
     widthSize=0;
@@ -234,6 +235,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     bTextFontItalic = TRUE;
     bStrike=TRUE;
     bUnderline=TRUE;
+    bTextRotation=TRUE;
     if( left==right)
         oneCol=TRUE;
     else
@@ -290,11 +292,15 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 		bTextFontItalic = FALSE;
 	    if ( bgColor != obj->bgColor( x, y ) )
 		bBgColor = FALSE;
+            if( textRotation !=obj->getAngle())
+                bTextRotation = FALSE;
 	    if ( eStyle != obj->style() )
 		eStyle = KSpreadCell::ST_Undef;
+
 	 }
         }
-
+    if(!bTextRotation)
+        textRotation=0;
     for ( int y = _top; y <= _bottom; y++ )
         {
         KSpreadCell *obj = table->cellAt( _left, y );
@@ -1136,7 +1142,19 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
 
     grid2->addWidget(multi,0,0);
     multi->setChecked(dlg->bMultiRow);
-    grid3->addMultiCellWidget(grp,1,1,0,1);
+
+    grid3->addWidget(grp,1,0);
+
+    grp = new QButtonGroup( i18n("Rotation"),this);
+
+    grid2 = new QGridLayout(grp,1,1,15,7);
+    angleRotation=new KIntNumInput(dlg->textRotation, grp, 10);
+    angleRotation->setLabel(i18n("Angle :"));
+    angleRotation->setRange(-90, 90, 1);
+
+    grid2->addWidget(angleRotation,0,0);
+    grid3->addWidget(grp,1,1);
+
 
     grp = new QButtonGroup( i18n("Size of cell"),this);
     grid2 = new QGridLayout(grp,2,2,15,7);
@@ -1158,6 +1176,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
 
     connect(defaultWidth , SIGNAL(clicked() ),this, SLOT(slotChangeWidthState()));
     connect(defaultHeight , SIGNAL(clicked() ),this, SLOT(slotChangeHeightState()));
+    connect(angleRotation, SIGNAL(valueChanged(int)),this,SLOT(slotChangeAngle(int)));
     this->resize( 400, 400 );
 
 }
@@ -1177,6 +1196,14 @@ void CellLayoutPagePosition::slotChangeHeightState()
         height->setEnabled(true);
 }
 
+void CellLayoutPagePosition::slotChangeAngle(int _angle)
+{
+if(_angle==0)
+    multi->setEnabled(true);
+else
+    multi->setEnabled(false);
+}
+
 void CellLayoutPagePosition::apply( KSpreadCell *_obj )
 {
   if(top->isChecked())
@@ -1192,7 +1219,11 @@ void CellLayoutPagePosition::apply( KSpreadCell *_obj )
     _obj->setAlign(KSpreadCell::Right);
   else if(center->isChecked())
     _obj->setAlign(KSpreadCell::Center);
-  _obj->setMultiRow(multi->isChecked());
+  if(multi->isEnabled())
+        _obj->setMultiRow(multi->isChecked());
+  else
+        _obj->setMultiRow(false);
+  _obj->setAngle(angleRotation->value());
 }
 
 int CellLayoutPagePosition::getSizeHeight()

@@ -80,6 +80,7 @@
 #include "kspread_dlg_resize2.h"
 #include "kspread_dlg_preference.h"
 #include "kspread_dlg_comment.h"
+#include "kspread_dlg_angle.h"
 #include <kscript_scriptmenu.h>
 
 #include "handler.h"
@@ -275,6 +276,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_firstLetterUpper = new KAction( i18n("Convert first letter to upper case"),"first_letter_upper" ,0, this, SLOT( firstLetterUpper() ), actionCollection(), "firstletterupper" );
     m_verticalText = new KToggleAction( i18n("Vertical text"),"vertical_text" ,0 ,actionCollection(), "verticaltext" );
     connect( m_verticalText, SIGNAL( toggled( bool ) ), this, SLOT( verticalText( bool ) ) );
+    m_changeAngle = new KAction( i18n("Change Angle"), 0, this, SLOT( changeAngle() ), actionCollection(), "changeangle" );
     m_addModifyComment = new KAction( i18n("Add/modify comment..."),"comment", 0, this, SLOT( addModifyComment() ), actionCollection(), "addmodifycomment" );
     //m_showComment = new KAction( i18n("Show comment"), 0, this, SLOT( showComment() ), actionCollection(), "showcomment" );
     m_removeComment = new KAction( i18n("Remove comment"),"removecomment", 0, this, SLOT( removeComment() ), actionCollection(), "removecomment" );
@@ -1651,6 +1653,14 @@ void KSpreadView::removeComment()
 	return;
   m_pCanvas->showComment();
 }*/
+
+void KSpreadView::changeAngle()
+{
+  if ( !m_pTable )
+        return;
+  KSpreadAngle* dlg = new KSpreadAngle( this, "Angle" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+  dlg->show();
+}
 
 void KSpreadView::consolidate()
 {

@@ -1555,7 +1555,7 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
   		}
   	else
   		{
-  		buffer=activeTable()->columnLabel( m_iMarkerColumn );
+  		buffer=util_columnLabel( m_iMarkerColumn );
   		buffer+=tmp.setNum(m_iMarkerRow);
   		}
   	}
@@ -1568,10 +1568,10 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
 		}
 	else
 		{
-  		buffer=activeTable()->columnLabel( m_iMarkerColumn );
+  		buffer=util_columnLabel( m_iMarkerColumn );
   		buffer+=tmp.setNum(m_iMarkerRow);
   		buffer+=":";
-  		buffer+=activeTable()->columnLabel( selection.right() );
+  		buffer+=util_columnLabel( selection.right() );
   		buffer+=tmp.setNum(selection.bottom());
   		}
   	}
@@ -1593,10 +1593,10 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
 	  	//Problem columnLabel return @@@@ when column >26*26
  	 	//=> it's not a good display
   		//=> for the moment I display pos of marker
-  		buffer=activeTable()->columnLabel( selection.left() );
+  		buffer=util_columnLabel( selection.left() );
   		buffer+=tmp.setNum(selection.top());
   		buffer+=":";
-  		buffer+=activeTable()->columnLabel( selection.right() );
+  		buffer+=util_columnLabel( selection.right() );
   		buffer+=tmp.setNum(selection.bottom());
   		//buffer=activeTable()->columnLabel( m_iMarkerColumn );
   		//buffer+=tmp.setNum(m_iMarkerRow);
@@ -2636,11 +2636,11 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
       painter.setPen( colorGroup().text() );
     if(!m_pView->activeTable()->getShowColumnNumber())
     	{
-    	int len = painter.fontMetrics().width( table->columnLabel(x) );
+    	int len = painter.fontMetrics().width( util_columnLabel(x) );
     	painter.drawText( xpos + ( col_lay->width( m_pCanvas ) - len ) / 2,
                       ( XBORDER_HEIGHT + painter.fontMetrics().ascent() -
                         painter.fontMetrics().descent() ) / 2,
-                      table->columnLabel(x) );
+                      util_columnLabel(x) );
         }
     else
 	{

@@ -76,6 +76,7 @@
   <Action name="removeTable"/>
   <Action name="hideTable"/>
   <Action name="showTable"/>
+  <Action name="changeangle"/>
   <Separator/>
   <Action name="showArea"/>
   <Separator/>

@@ -39,7 +39,8 @@ QString util_columnLabel( int column )
   else if ( column <= 26 * 26 )
     sprintf( buffer, "%c%c",'A'+((column-1)/26)-1,'A'+((column-1)%26));
   else
-    sprintf( buffer, "%c%c",'A'+((26-1)/26)-1,'A'+((26-1)%26));
+    sprintf( buffer, "%c%c",'Y','Z');
+    //sprintf( buffer, "%c%c",'A'+((26-1)/26)-1,'A'+((26-1)%26));
     //limit is 26*26
     //strcpy( buffer,"@@@");
 
