@@ -2072,7 +2072,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
         KoParagDia *paragDia = new KoParagDia( this, "",
                                                KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                                KoParagDia::PD_BORDERS |
-                                               KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, m_doc->getUnit(),edit->textFrameSet()->frame(0)->width() );
+                                               KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS | KoParagDia::PD_SHADOW, m_doc->getUnit(),edit->textFrameSet()->frame(0)->width() );
         paragDia->setCaption( i18n( "Paragraph settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
@@ -2194,6 +2194,16 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
         if ( paragDia->isPageBreakingChanged() )
         {
             cmd=edit->setPageBreakingCommand( paragDia->pageBreaking() );
+            if(cmd)
+            {
+                macroCommand->addCommand(cmd);
+                changed=true;
+            }
+        }
+
+        if( paragDia->isShadowChanged())
+        {
+            cmd=edit->setShadowCommand( paragDia->shadowDistance(),paragDia->shadowDirection(), paragDia->shadowColor() );
             if(cmd)
             {
                 macroCommand->addCommand(cmd);
