@@ -129,20 +129,31 @@ const GLine *GLine::hit(const QPoint &p) const {
 	double dy=static_cast<double>(m_b.y()-m_a.y());
 	double r=std::sqrt( dx*dx + dy*dy );
 	int ir=double2Int(r);
-	double alpha=std::asin( dy/r );
-
+	double alpha1=std::asin( QABS(dy)/r );
+	double alpha;
+	
+	if(dx>=0 && dy>=0)
+	    alpha=-alpha1;
+	else if(dx<0 && dy>=0)
+	    alpha=alpha1+M_PI;
+	else if(dx<0 && dy<0)
+	    alpha=M_PI-alpha1;
+	else // dx>=0 && dy<0
+	    alpha=alpha1;
+	
 	// make it easier for the user to select something by
 	// adding a (configurable) "fuzzy zone" :)
-        QRect fuzzyZone=QRect( QMIN( m_a.x(), m_a.x()+ir ) - GraphiteGlobal::self()->fuzzyBorder(),
-			       m_a.y() - GraphiteGlobal::self()->fuzzyBorder(),
-			       ir + 2 * GraphiteGlobal::self()->fuzzyBorder(),
-			       2 * GraphiteGlobal::self()->fuzzyBorder());
+	int w=double2Int(static_cast<double>(m_pen.width())/2.0);
+	int fb=GraphiteGlobal::self()->fuzzyBorder();
+        QRect fuzzyZone=QRect( QMIN( m_a.x(), m_a.x() + ir ) - fb - w,
+			       m_a.y() - fb - w,
+			       ir + 2*fb + w + 1, 2*fb + w + 1 );
 	// Don't change the original point!
 	QPoint tmp=p;
-	rotatePoint(tmp, alpha, m_a);
-	
+	rotatePoint(tmp, -alpha, m_a);
+
 	if(fuzzyZone.contains(tmp))
-	    return this;	
+	    return this;
     }
     return 0L;
 }

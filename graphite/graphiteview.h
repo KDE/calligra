@@ -36,7 +36,7 @@ public:
 		 const char *name=0);
     virtual ~GraphiteView();
 
-    virtual QWidget *canvas() { return m_canvas; }
+    virtual QWidget *canvas() { return m_canvas->viewport(); }
 
 protected:
     void resizeEvent(QResizeEvent *ev);

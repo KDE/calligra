@@ -296,10 +296,23 @@ inline const QPoint GObject::zoomIt(const QPoint &point) const {
 inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoint &center) const {
 
     double alpha=angle/2;
-    double r=std::sqrt( static_cast<double>((center.x()-x)*(center.x()-x)+(center.y()-y)*(center.y()-y)) );
-    double s=2*r*std::sin(alpha);
-    double gamma=std::asin( static_cast<double>(y-center.y()) / r );
-    double beta=90.0-gamma+alpha;
+    double dx=static_cast<double>(x-center.x());
+    double dy=static_cast<double>(y-center.y());
+    double r=std::sqrt(dx*dx+dy*dy);
+    double s=QABS(2*r*std::sin(alpha));
+    double gamma1=std::asin( QABS(dy)/r );
+    double gamma;
+
+    if(dx>=0 && dy>=0)
+	gamma=-gamma1;
+    else if(dx<0 && dy>=0)
+	gamma=gamma1+M_PI;
+    else if(dx<0 && dy<0)
+	gamma=M_PI-gamma1;
+    else // dx>=0 && dy<0
+	gamma=gamma1;
+
+    double beta=gamma+angle+M_PI_2-QABS(alpha);
     y+=double2Int(s*std::sin(beta));
     x+=double2Int(s*std::cos(beta));
 }
@@ -316,10 +329,23 @@ inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double 
 inline void GObject::rotatePoint(double &x, double &y, const double &angle, const QPoint &center) const {
 
     double alpha=angle/2;
-    double r=std::sqrt( static_cast<double>((center.x()-x)*(center.x()-x)+(center.y()-y)*(center.y()-y)) );
-    double s=2*r*std::sin(alpha);
-    double gamma=std::asin( static_cast<double>(y-center.y()) / r );
-    double beta=90.0-gamma+alpha;
+    double dx=x-static_cast<double>(center.x());
+    double dy=y-static_cast<double>(center.y());
+    double r=std::sqrt(dx*dx+dy*dy);
+    double s=QABS(2*r*std::sin(alpha));
+    double gamma1=std::asin( QABS(dy)/r );
+    double gamma;
+
+    if(dx>=0 && dy>=0)
+	gamma=-gamma1;
+    else if(dx<0 && dy>=0)
+	gamma=gamma1+M_PI;
+    else if(dx<0 && dy<0)
+	gamma=M_PI-gamma1;
+    else // dx>=0 && dy<0
+	gamma=gamma1;
+
+    double beta=gamma+angle+M_PI_2-QABS(alpha);
     y+=s*std::sin(beta);
     x+=s*std::cos(beta);
 }

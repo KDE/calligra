@@ -50,7 +50,7 @@ public:
     // and initializes all the "global" vars.
 
 private:
-    GraphiteGlobal() : m_fuzzyBorder(2) {}
+    GraphiteGlobal() : m_fuzzyBorder(3) {}
     GraphiteGlobal(const GraphiteGlobal &rhs);
     GraphiteGlobal &operator=(const GraphiteGlobal &rhs);
 
