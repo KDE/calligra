@@ -208,7 +208,7 @@ void KoTemplateChooseDia::setupDialog()
             canvas->sort();
             connect( canvas, SIGNAL( doubleClicked( QIconViewItem * ) ),
                      this, SLOT( chosen(QIconViewItem *) ) );
-            connect( canvas, SIGNAL( currentChanged( QIconViewItem * ) ),
+            connect( canvas, SIGNAL( clicked ( QIconViewItem * ) ),
                      this, SLOT( currentChanged( QIconViewItem * ) ) );
             d->canvasDict.insert(group->name(), canvas);
             // *uuuugggggllllyyyyyy* (Werner)
