@@ -62,7 +62,7 @@ void PropertyEditor::populateProperties(std::map<QString, PropPtr > *v_props,Can
         int row = table->numRows() + 1;
         table->setNumRows(row);
 
-        table->setText(row-1, 0, (*it).first);
+        table->setText(row-1, 0, (*it).second->description()); //(*it).first);
 
         QWidget *w = (*it).second->editorOfType(this,item);
         table->setCellWidget(row-1, 1, w);
