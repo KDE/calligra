@@ -558,20 +558,16 @@ EditListViewDialog::loadChildNodes(QListView *listview, QListViewItem *item, QLi
 		else
 			newItem = new QListViewItem(listview);
 	}
+
+	QListViewItem *last;
 	if(parent)
-	{
-		QListViewItem *last = parent->firstChild();
-		while(last->nextSibling())
-			last = last->nextSibling();
-		newItem->moveItem(last);
-	}
+		last = parent->firstChild();
 	else
-	{
-		QListViewItem *last = listview->firstChild();
-		while(last->nextSibling())
-			last = last->nextSibling();
-		newItem->moveItem(last);
-	}
+		last = listview->firstChild();
+
+	while(last->nextSibling())
+		last = last->nextSibling();
+	newItem->moveItem(last);
 
 	for(int i = 0; i < listview->columns(); i++)
 		newItem->setText(i, item->text(i));

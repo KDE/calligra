@@ -46,6 +46,7 @@
 
 #include "spacer.h"
 #include "formIO.h"
+#include "form.h"
 #include "stdwidgetfactory.h"
 
 // Some widgets subclass to allow event filtering and some other things
@@ -267,7 +268,7 @@ StdWidgetFactory::classes()
 }
 
 QWidget*
-StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesigner::Container *)
+StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
 {
 	kdDebug() << "StdWidgetFactory::create() " << this << endl;
 
@@ -307,7 +308,8 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	else if(c == "KListView")
 	{
 		w = new KListView(p, n);
-		((KListView*)w)->addColumn(i18n("Column 1"));
+		if(container->form()->interactiveMode())
+			((KListView*)w)->addColumn(i18n("Column 1"));
 		((KListView*)w)->setRootIsDecorated(true);
 	}
 	else if(c == "QSlider")
@@ -589,6 +591,17 @@ StdWidgetFactory::readListItem(QDomElement &node, QListViewItem *parent, KListVi
 		item = new KListViewItem(parent);
 	else
 		item = new KListViewItem(listview);
+
+	// We need to move the item at the end of the list
+	QListViewItem *last;
+	if(parent)
+		last = parent->firstChild();
+	else
+		last = listview->firstChild();
+
+	while(last->nextSibling())
+		last = last->nextSibling();
+	item->moveItem(last);
 
 	int i = 0;
 	for(QDomNode n = node.firstChild(); !n.isNull(); n = n.nextSibling())

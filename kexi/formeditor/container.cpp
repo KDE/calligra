@@ -267,6 +267,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton))
 			{
+				if(s == m_container)
+					return true;
 				m_container->repaint();
 				if(m_container->mapFromGlobal(mev->globalPos()) == m_moving->pos())
 				{
@@ -274,9 +276,11 @@ Container::eventFilter(QObject *s, QEvent *e)
 					return true;
 				}
 
+				m_form->setInteractiveMode(false);
 				m_form->manager()->copyWidget();
 				m_form->manager()->setInsertPoint(m_container->mapFromGlobal(mev->globalPos()));
 				m_form->manager()->pasteWidget();
+				m_form->setInteractiveMode(true);
 			}
 			else if(m_move)
 			{
@@ -331,6 +335,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			if(mev->state() == (Qt::LeftButton|Qt::ControlButton))
 			{
+				if(s == m_container)
+					return true;
 				QPainter p(m_container);
 				m_container->repaint(); // TODO: find a less cpu consuming solution
 				p.setBrush(QBrush::NoBrush);

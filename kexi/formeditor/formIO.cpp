@@ -947,6 +947,10 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 
 	readChildNodes(tree, container, lib, el, w);
 
+	QStringList list(container->form()->manager()->lib()->autoSaveProperties(w->className()));
+	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it)
+		tree->addModProperty(*it, w->property((*it).latin1()));
+
 	if(el.tagName() == "spacer")
 		Spacer::loadSpacer(w, el);
 	w->show();

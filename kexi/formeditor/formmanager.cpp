@@ -394,16 +394,16 @@ FormManager::copyWidget()
 	if(list->isEmpty())
 		return;
 
-	QDomElement parent = m_domDoc.namedItem("UI").toElement();
-	if(parent.hasChildNodes())
-		parent.clear();
+	m_domDoc.setContent(QString(), true);
+	QDomElement parent = m_domDoc.createElement("UI");
+	m_domDoc.appendChild(parent);
 
 	QWidget *w;
 	for(w = list->first(); w; w = list->next())
 	{
 		ObjectTreeItem *it = activeForm()->objectTree()->lookup(w->name());
 		if (!it)
-			return;
+			continue;
 		FormIO::saveWidget(it, parent, m_domDoc);
 	}
 }
