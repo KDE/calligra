@@ -34,7 +34,6 @@ class QObject;
 class VPainter;
 class QPoint;
 class KoPoint;
-class QRect;
 
 typedef QPtrList<VObject> VObjectList;
 typedef QPtrListIterator<VObject> VObjectListIterator;
@@ -146,7 +145,7 @@ private:
 	/**
 	 * Paint coordinates of handle rectangle and handle nodes.
 	 */
-	QRect* m_qrect;
+	KoRect *m_handleRect;
 
 	/**
 	 * Paint size of nodes.
