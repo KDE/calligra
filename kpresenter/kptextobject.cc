@@ -543,7 +543,7 @@ void KPTextObject::recalcPageNum( KPresenterDoc *doc )
 #endif
 }
 
-void KPTextObject::drawParags( QPainter *p, int from, int to )
+void KPTextObject::drawParags( QPainter */*p*/, int /*from*/, int /*to*/ )
 {
 #if 0
     int i = 0;
@@ -613,7 +613,7 @@ void KPTextView::ensureCursorVisible()
     kdDebug()<<"KPTextView::ensureCursorVisible()\n";
 }
 
-void KPTextView::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch )
+void KPTextView::doAutoFormat( QTextCursor* /*cursor*/, KoTextParag */*parag*/, int /*index*/, QChar /*ch*/ )
 {
     kdDebug()<<"doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch )\n";
 }
