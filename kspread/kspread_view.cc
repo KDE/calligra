@@ -2863,20 +2863,6 @@ void KSpreadView::insertHyperlink()
   dlg.exec();
 }
 
-void KSpreadView::setupPrinter( KPrinter &prt )
-{
-
-    //apply page layout parameters
-    KoFormat pageFormat = m_pDoc->paperFormat();
-
-    prt.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
-
-    if ( m_pDoc->orientation() == PG_LANDSCAPE || pageFormat == PG_SCREEN )
-        prt.setOrientation( KPrinter::Landscape );
-    else
-        prt.setOrientation( KPrinter::Portrait );
-}
-
 void KSpreadView::insertFromDatabase()
 {
   if ( m_pCanvas->editor() )
@@ -2944,6 +2930,20 @@ void KSpreadView::insertFromClipboard()
   //  dlg.exec();
 }
 
+void KSpreadView::setupPrinter( KPrinter &prt )
+{
+
+    //apply page layout parameters
+    KoFormat pageFormat = m_pDoc->paperFormat();
+
+    prt.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
+
+    if ( m_pDoc->orientation() == PG_LANDSCAPE || pageFormat == PG_SCREEN )
+        prt.setOrientation( KPrinter::Landscape );
+    else
+        prt.setOrientation( KPrinter::Portrait );
+}
+
 void KSpreadView::print( KPrinter &prt )
 {
     //store the current setting in a temporary variable
@@ -2951,9 +2951,13 @@ void KSpreadView::print( KPrinter &prt )
     
     //use the current orientation from print dialog
     if ( prt.orientation() == KPrinter::Landscape )
+    {
         m_pDoc->setPaperOrientation( PG_LANDSCAPE );
+    }
     else
+    {   
         m_pDoc->setPaperOrientation( PG_PORTRAIT );
+    }
     
     prt.setFullPage( TRUE );
     prt.setResolution ( 72 );
