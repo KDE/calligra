@@ -138,7 +138,7 @@ void ChannelView::slotInverseVisibility( int _index )
   m_doc->layerList().at( _index )->setVisible( !m_doc->layerList().at( _index )->isVisible() );
   updateCell( _index, 0 );
   m_doc->compositeImage( m_doc->layerList().at( _index )->imageExtents() );
-  m_doc->slotUpdateViews( m_doc->layerList().at( _index )->imageExtents() );
+  //  m_doc->slotUpdateViews( m_doc->layerList().at( _index )->imageExtents() );
 }
 
 void ChannelView::slotMenuAction( int _id )
@@ -218,7 +218,7 @@ void ChannelView::swapChannels( int a, int b )
       QRect rect = l1.intersect( l2 );
  
       m_doc->compositeImage( rect );
-      m_doc->slotUpdateViews( rect );
+      //      m_doc->slotUpdateViews( rect );
     }
   }
 }

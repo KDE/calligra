@@ -1,14 +1,14 @@
-#include "qlayout.h"
-#include "qlabel.h"
-#include "qslider.h"
-#include "qwidget.h"
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qslider.h>
+#include <qwidget.h>
 
-#include "klocale.h"
+#include <klocale.h>
 
-#include "gradientdlg.h"
 #include "kimageshop_doc.h"
-#include <integerwidget.h>
-#include <blendchooser.h>
+#include "gradientdlg.h"
+#include "integerwidget.h"
+#include "blendchooser.h"
 
 GradientDialog::GradientDialog( KImageShopDoc *_doc, QWidget *_parent, const char *_name )
   : KFloatingDialog( _parent, _name )

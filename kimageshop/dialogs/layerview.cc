@@ -37,6 +37,7 @@
 
 #include "misc.h"
 #include "kimageshop_doc.h"
+#include "kimageshop_factory.h"
 #include "layerview.h"
 #include "layerdlg.h"
 
@@ -91,6 +92,14 @@ void LayerView::init( KImageShopDoc* doc )
 
   connect( m_contextmenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
   connect( submenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
+
+  connect( doc, SIGNAL( layersUpdated()), this, SLOT( slotDocUpdated () ) );
+}
+
+void LayerView::slotDocUpdated()
+{
+  updateTable();
+  updateAllCells();
 }
 
 void LayerView::paintCell( QPainter* _painter, int _row, int )
@@ -164,7 +173,6 @@ void LayerView::slotInverseVisibility( int _index )
   m_doc->layerList().at( _index )->setVisible( !m_doc->layerList().at( _index )->isVisible() );
   updateCell( _index, 0 );
   m_doc->compositeImage( m_doc->layerList().at( _index )->imageExtents() );
-  m_doc->slotUpdateViews( m_doc->layerList().at( _index )->imageExtents() );
 }
 
 void LayerView::slotInverseLinking( int _index )
@@ -258,13 +266,12 @@ void LayerView::slotAddLayer()
 {
   cout << "LayerView::slotAddLayer()" << endl;
 
-  QString image = locate( "appdata", "images/cam9b.jpg" );	
+  QString image = locate( "kis_images", "cam9b.jpg", KImageShopFactory::global() );	
   m_doc->addRGBLayer( image );
   m_doc->setLayerOpacity( 255 );
 
   QRect updateRect = m_doc->layerList().at( m_doc->layerList().count() - 1 )->imageExtents();
   m_doc->compositeImage( updateRect );
-  m_doc->slotUpdateViews( updateRect );
 
   m_selected = m_doc->layerList().count() - 1;
 
@@ -283,7 +290,6 @@ void LayerView::slotRemoveLayer()
     m_doc->removeLayer( m_selected );
 
     m_doc->compositeImage( updateRect );
-    m_doc->slotUpdateViews( updateRect );
 
     if( m_selected == m_doc->layerList().count() )
       m_selected--;
@@ -308,7 +314,6 @@ void LayerView::swapLayers( int a, int b )
       QRect rect = l1.intersect( l2 );
 
       m_doc->compositeImage( rect );
-      m_doc->slotUpdateViews( rect );
     }
   }
 }
@@ -358,7 +363,6 @@ void LayerView::slotFrontLayer()
 
     QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
     m_doc->compositeImage( updateRect );
-    m_doc->slotUpdateViews( updateRect );
 
     updateAllCells();
   }
@@ -375,7 +379,6 @@ void LayerView::slotBackgroundLayer()
 
     QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
     m_doc->compositeImage( updateRect );
-    m_doc->slotUpdateViews( updateRect );
 
     updateAllCells();
   }
@@ -397,7 +400,6 @@ void LayerView::slotProperties()
 
     updateCell( m_selected, 0 );
     m_doc->compositeImage( updateRect );
-    m_doc->slotUpdateViews( updateRect );
   }
 }
 

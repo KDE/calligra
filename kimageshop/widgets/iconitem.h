@@ -32,7 +32,7 @@ public:
   IconItem() {}
   virtual ~IconItem() {}
 
-  virtual const QPixmap& pixmap() const = 0;
+  virtual QPixmap& pixmap() = 0;
 
 };
 

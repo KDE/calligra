@@ -52,11 +52,11 @@ public:
   MoveTool( KImageShopDoc *doc );
   ~MoveTool();
 
-  virtual QCString toolName() { return QCString( "MoveTool" ); }
+  virtual QString toolName() { return QString( "MoveTool" ); }
 
-  virtual void mousePress( const KImageShop::MouseEvent& e ); 
-  virtual void mouseMove( const KImageShop::MouseEvent& e );
-  virtual void mouseRelease( const KImageShop::MouseEvent& e );
+  virtual void mousePress( QMouseEvent *e ); 
+  virtual void mouseMove( QMouseEvent *e );
+  virtual void mouseRelease(QMouseEvent *e );
 
 protected:
 

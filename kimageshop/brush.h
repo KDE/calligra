@@ -1,10 +1,7 @@
 /*
  *  brush.h - part of KImageShop
  *
- *  Contains the imformation needed to describe a brush.
- *  Inherits the layer class.
- *
- *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
+ *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,37 +21,43 @@
 #ifndef __brush_h__
 #define __brush_h__
 
-#include "layer.h"
-#include "qsize.h"
-#include "qpoint.h"
+#include <qsize.h>
 
 #include "iconitem.h"
 
-class QImage;
+class QPoint;
 class QPixmap;
 
-class Brush : public Layer, public IconItem
+class Brush : public IconItem
 {
  public:
   Brush(QString file);
+  virtual ~Brush();
 
-  void 	 setSpacing(int s) 		{ spacingVal = s;    }
-  int    spacing()   		const	{ return spacingVal; }
-  QSize  brushSize() 		const	{ return sizeVal;    }
-  bool   isValid()   		const	{ return validVal;   }
-  void   setHotSpot(QPoint pt) 		{ hotSpotVal=pt;     } // XXX check in brush
-  QPoint hotSpot()   		const	{ return hotSpotVal; }
-  const QPixmap&  pixmap() 	const 	{ return pixmapVal;  }
+  void 	    setSpacing(int s)                 { m_spacing = s;     }
+  int       spacing()   	      const { return m_spacing;  }
+  bool      isValid()   	      const { return m_valid;    }
+  void      setHotSpot(QPoint);
+  QPoint    hotSpot()   	      const { return m_hotSpot;  }
+  QPixmap&  pixmap();
+  QSize     size()                    const { return QSize(m_w, m_h); } 
+  int       width()                   const { return m_w; }
+  int       height()                  const { return m_h; }
+  uchar     value(int x, int y);
+  uchar*    scanline(int);
+  uchar*    bits();
 
  private:
-  void loadBrush(QString file);
-  void createPixmap(const QImage& img, const QImage& alpha);
+  void      loadViaQImage(QString file);
 
-  bool validVal;;
-  int spacingVal;
-  QSize sizeVal;
-  QPoint hotSpotVal;
-  QPixmap pixmapVal;
+  bool      m_valid;
+  int       m_spacing;
+  QPoint    m_hotSpot;
+
+  int       m_w, m_h;
+  uchar*    m_pData;
+
+  QPixmap  *m_pPixmap;
 };
 
 #endif

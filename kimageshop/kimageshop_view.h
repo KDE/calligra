@@ -1,8 +1,9 @@
 /*
  *  kimageshop_view.h - part of KImageShop
  *
- *  Copyright (c) 1999 Michael Koch    <koch@kde.org>
- *                1999 Matthias Elter  <me@kde.org>
+ *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
+ *                1999 Michael Koch    <koch@kde.org>
+ *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,211 +23,138 @@
 #ifndef __kimageshop_view_h__
 #define __kimageshop_view_h__
 
-#include <kcolor.h>
-#include <qwidget.h>
-
-#include <opMenu.h>
-#include <opToolBar.h>
-#include <openparts_ui.h>
-
-#include <koFrame.h>
-#include <koView.h>
-
+#include <container.h>
 #include "kfloatingdialogowner.h"
-#include "kimageshop.h"
 
-class CanvasView;
+class KAction;
+class KToggleAction;
+class QPaintEvent;
+
+class BrushDialog;
+class GradientDialog;
+class GradientEditorDialog;
+class ColorDialog;
 class LayerDialog;
+
 class KImageShopDoc;
 class QScrollBar;
 class KRuler;
+
+class Brush;
+class BrushesWidget;
 class Tool;
 class MoveTool;
 class BrushTool;
 class ZoomTool;
-class Brush;
-class Gradient;
 class GradientTool;
-class GradientDialog;
-class GradientEditorDialog;
-class ColorDialog;
-class BrushDialog;
-class BrushesWidget;
 
-class KImageShopView : public QWidget,
-		       virtual public KoViewIf,
-		       virtual public KImageShop::View_skel,
-		       virtual public KFloatingDialogOwner
+class KImageShopView : public ContainerView
 {
-  Q_OBJECT
+  Q_OBJECT;
 
-public:
+ public:
+  KImageShopView( KImageShopDoc* doc, QWidget* parent = 0, const char* name = 0 );
 
-  KImageShopView(QWidget* _parent, const char* _name, KImageShopDoc* _doc);
-  ~KImageShopView();
+ public slots:
+  void slotDocUpdated();
+  void slotDocUpdated(const QRect&);
+  void slotSetBrush(const Brush *);
 
-  virtual void cleanUp();
-  virtual void createGUI();
+ signals:
+  void mousePressed(QMouseEvent *);
+  void mouseMoved(QMouseEvent *);
+  void mouseReleased(QMouseEvent *);
 
-  float zoomFactor() { return m_ZoomFactor; }
+ protected slots:
+  // edit action slots
+  void undo();
+  void redo();
+  void copy();
+  void cut();
+  void paste();
 
-  KImageShopDoc* doc();
-  bool printDlg();
+  // dialog action slots
+  void dialog_layer();
+  void dialog_color();
+  void dialog_brush();
+  void dialog_gradient();
+  void dialog_gradienteditor();
 
-  int xPaintOffset();
-  int yPaintOffset();
+  // layer action slots
+  void layer_rotate180();
+  void layer_rotateleft90();
+  void layer_rotateright90();
+  void layer_mirrorX();
+  void layer_mirrorY();
 
-  int docWidth();
-  int docHeight();
+  // image action slots
+  void merge_all_layers();
+  void merge_visible_layers();
+  void merge_linked_layers();
+  
+  // tool action slots
+  void tool_move();
+  void tool_zoom();
+  void tool_brush();
+  void tool_gradient();
 
-  int viewWidth();
-  int viewHeight();
+  // misc action slots
+  void preferences();
 
-  int hScrollValue();
-  int vScrollValue();
-
-  void scrollTo(const QPoint & pos);
-
-public slots:
-
-  void slotUpdateView(const QRect &area);
-
-  void slotCVPaint(QPaintEvent *e);
-  void slotCVMousePress(QMouseEvent *e);
-  void slotCVMouseMove(QMouseEvent *e);
-  void slotCVMouseRelease(QMouseEvent *e);
-
+  // scrollbar slots
   void scrollH(int);
   void scrollV(int);
 
-  void slotSetZoomFactor(float);
-  void slotSetFGColor(const KColor&);
-  void slotSetBGColor(const KColor&);
-  void slotSetBrush(const Brush *);
-  
-  virtual void slotEditUndo();
-  virtual void slotEditRedo();
 
-  virtual void slotEditCut();
-  virtual void slotEditCopy();
-  virtual void slotEditPaste();
+ protected:
+  virtual void paintEvent( QPaintEvent* );
+  virtual void resizeEvent( QResizeEvent* );
+  virtual void mousePressEvent ( QMouseEvent * );
+  virtual void mouseReleaseEvent ( QMouseEvent * );
+  virtual void mouseMoveEvent ( QMouseEvent * );
 
-  virtual void slotLayerDialog();
-  virtual void slotColorDialog();
-  virtual void slotBrushDialog();
-  virtual void slotGradientDialog();
-  virtual void slotGradientEditorDialog();
-  virtual void slotPreferences();
-
-  virtual void slotActivateMoveTool();
-  virtual void slotActivateBrushTool();
-  virtual void slotActivateZoomTool();
-  virtual void slotActivateGradientTool();
-
-	virtual void slotRotateLayer180();
-	virtual void slotRotateLayerLeft90();
-	virtual void slotRotateLayerRight90();
-	virtual void slotMirrorLayerX();
-	virtual void slotMirrorLayerY();
-
-  void changeUndo( QString, bool);
-  void changeRedo( QString, bool);
-
-  void activatedUndoMenu( long );
-  void activatedRedoMenu( long );
-
-private:
-
-  void undo( int _number );
-  void redo( int _number );
-
-protected:
-
-  virtual void init();
-
-  void setupScrollbars();
+  void setupScrollBars();
   void setupRulers();
 
-  virtual bool event( const QCString &_event, const CORBA::Any& _value );
-  virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
-  virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
+  void activateTool(Tool*);
 
-  virtual void newView();
-  virtual void helpUsing();
+ private:
+  int 	docWidth();
+  int 	docHeight();
 
-  virtual void resizeEvent(QResizeEvent* _ev);
+  int 	xPaintOffset();
+  int 	yPaintOffset();
 
-  OpenPartsUI::ToolBar_var m_vToolBarEdit;
-  OpenPartsUI::ToolBar_var m_vToolBarTools;
-  OpenPartsUI::ToolBar_var m_vToolBarDialogs;
-
-public:
-  OpenPartsUI::Menu_var m_vTBUndoMenu;
-  OpenPartsUI::Menu_var m_vTBRedoMenu;
-
-protected:
-  OpenPartsUI::Menu_var m_vMenuEdit;
-  long m_idMenuEdit_Undo;
-  long m_idMenuEdit_Redo;
-  long m_idMenuEdit_Cut;
-  long m_idMenuEdit_Copy;
-  long m_idMenuEdit_Paste;
-
-  OpenPartsUI::Menu_var m_vMenuView;
-  long m_idMenuView_LayerDialog;
-  long m_idMenuView_ColorDialog;
-  long m_idMenuView_BrushDialog;
-  long m_idMenuView_GradientDialog;
-  long m_idMenuView_GradientEditorDialog;
-  long m_idMenuView_Preferences;
-
-  OpenPartsUI::Menu_var m_vMenuImage;
-	long m_idMenuImage_Rotate180;
-	long m_idMenuImage_RotateLeft90;
-	long m_idMenuImage_RotateRight90;
-	long m_idMenuImage_MirrorX;
-	long m_idMenuImage_MirrorY;
-
-  OpenPartsUI::Menu_var m_vMenuPlugIns;
-  OpenPartsUI::Menu_var m_vMenuOptions;
-
-private:
-
-  enum { TBTOOLS_MOVETOOL, TBTOOLS_BRUSHTOOL, TBTOOLS_ZOOMTOOL, TBTOOLS_GRADIENTTOOL, TBEDIT_UNDO,
-	 TBEDIT_REDO, TBEDIT_COPY, TBEDIT_CUT, TBEDIT_PASTE, TBDIALOGS_LAYER, TBDIALOGS_COLOR,
-	 TBDIALOGS_BRUSH, TBDIALOGS_GRADIENT, TBDIALOGS_GRADIENTEDITOR };
+  // edit actions
+  KAction *m_undo, *m_redo, *m_copy, *m_cut, *m_paste;
+  // dialog actions
+  KToggleAction *m_dialog_layer, *m_dialog_color, *m_dialog_brush, *m_dialog_gradient, *m_dialog_gradienteditor;
+  // tool actions
+  KToggleAction *m_tool_move, *m_tool_zoom, *m_tool_brush, *m_tool_gradient;
+  // layer actions
+  KAction *m_layer_rotate180, *m_layer_rotateleft90, *m_layer_rotateright90, *m_layer_mirrorX, *m_layer_mirrorY;
+  // misc actions
+  KAction *m_preferences;
+  // image actions
+  KAction *m_merge_all_layers, *m_merge_visible_layers, *m_merge_linked_layers;
 
   KImageShopDoc        *m_pDoc;
-  LayerDialog          *m_pLayerDialog;
-  QScrollBar           *m_pHorz, *m_pVert;
-  KRuler               *m_pHRuler, *m_pVRuler;
-
-  CanvasView           *m_pCanvasView;
   Tool                 *m_pTool; // currently active tool
   MoveTool             *m_pMoveTool;
   BrushTool            *m_pBrushTool;
   ZoomTool             *m_pZoomTool;
-  const Brush          *m_pBrush; // current brush
-  BrushDialog          *m_pBrushDialog;
-  const BrushesWidget  *m_pBrushChooser;
-  Gradient             *m_actGradient;
   GradientTool         *m_pGradientTool;
+  const Brush          *m_pBrush; // current brush
+  const BrushesWidget  *m_pBrushChooser;
+
+  BrushDialog          *m_pBrushDialog;
+  LayerDialog          *m_pLayerDialog;
   GradientDialog       *m_pGradientDialog;
   GradientEditorDialog *m_pGradientEditorDialog;
   ColorDialog          *m_pColorDialog;
-  KColor               m_fg, m_bg;
-  float                m_ZoomFactor;
 
-  vector<int>          m_toolButtons; // id's from all Tools
-  void activateTool( int toolID );
+  QScrollBar           *m_pHorz, *m_pVert;
+  KRuler               *m_pHRuler, *m_pVRuler;
 };
 
 #endif
-
-
-
-
-
-
-
-

@@ -18,8 +18,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <qmessagebox.h>
 #include "tool.h"
-#include "canvas.h"
 
 Tool::Tool(KImageShopDoc *doc, KImageShopView *view)
 {
@@ -29,12 +29,18 @@ Tool::Tool(KImageShopDoc *doc, KImageShopView *view)
 
 Tool::~Tool() {}
 
-QCString Tool::toolName()
+QString Tool::toolName()
 {
-  return QCString("BaseTool");
+  return "BaseTool";
 }
 
 void Tool::optionsDialog()
 {
   QMessageBox::information (0L, "KimageShop", "No Options available for this tool.", 1);
 }
+
+void Tool::mousePress(QMouseEvent*){}
+void Tool::mouseMove(QMouseEvent*){}
+void Tool::mouseRelease(QMouseEvent*){}
+
+#include "tool.moc"

@@ -1,17 +1,13 @@
 [Desktop Entry]
 Name=KImageShop
-Name[eo]=Bildejo
 Exec=kimageshop
-CORBAExec=kimageshop --server
-Comment=Image processing application
-Comment[de]=Programm zur Bildverarbeitung
-Comment[eo]=Bildtrakta aplika¼o
-Comment[hu]=Kép feldolgozó alkalmazás
-Comment[ja]=¥¤¥á¡¼¥¸½èÍý¥¢¥×¥ê¥±¡¼¥·¥ç¥ó
-MimeType=application/x-kimageshop;image/gif
-X-KDE-RepoIds=IDL:KImageShop/DocumentFactory:1.0#KImageShop
-X-KDE-ActivationMode=shared
-Type=OpenPart
-Icon=kimageshop.xpm
-MiniIcon=kimageshop.xpm
-ServiceTypes=KOfficeDocument
+X-KDE-Library=libkimageshop
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=libcutesti.so
+Comment=KImageShop
+MimeType=application/x-kimageshop
+Type=Application
+Icon=kimageshop.png
+MiniIcon=kimageshop.png
+ServiceTypes=KOfficePart,KPart

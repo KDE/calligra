@@ -263,7 +263,7 @@ void IconChooser::mouseReleaseEvent( QMouseEvent * )
 
 
 // show the full pixmap of a large item in an extra widget
-void IconChooser::showFullPixmap( const QPixmap& pix, const QPoint& p )
+void IconChooser::showFullPixmap( const QPixmap& pix, const QPoint& )
 {
   pw = new PixmapWidget( pix, 0L );
 }

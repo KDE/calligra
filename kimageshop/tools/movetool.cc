@@ -64,14 +64,14 @@ void MoveCommand::moveTo( QPoint _pos )
     updateRect = oldRect.unite( newRect );
 
     m_pDoc->compositeImage( updateRect );
-    m_pDoc->slotUpdateViews( updateRect );
+    //m_pDoc->slotUpdateViews( updateRect );
   }
   else
   {
     m_pDoc->compositeImage( oldRect );
-    m_pDoc->slotUpdateViews( oldRect );
+    //m_pDoc->slotUpdateViews( oldRect );
     m_pDoc->compositeImage( newRect );
-    m_pDoc->slotUpdateViews( newRect );
+    //m_pDoc->slotUpdateViews( newRect );
   }
 }
 
@@ -85,31 +85,29 @@ MoveTool::~MoveTool()
 {
 }
 
-void MoveTool::mousePress( const KImageShop::MouseEvent& e )
+void MoveTool::mousePress( QMouseEvent *e )
 {
-  if( !e.leftButton )
+  if( e->button() != LeftButton )
     return;
 
   if( !m_pDoc->getCurrentLayer()->isVisible() )
     return;
 
-  if( !m_pDoc->getCurrentLayer()->imageExtents().contains( QPoint( e.posX, e.posY ) ) )
+  if( !m_pDoc->getCurrentLayer()->imageExtents().contains( e->pos() ))
     return;
 
   m_dragging = true;
-  m_dragStart.setX( e.posX );
-  m_dragStart.setY( e.posY );
+  m_dragStart.setX( e->x() );
+  m_dragStart.setY( e->y() );
   m_layerStart = m_pDoc->getCurrentLayer()->imageExtents().topLeft();
   m_layerPosition = m_layerStart;
 }
 
-void MoveTool::mouseMove( const KImageShop::MouseEvent& e )
+void MoveTool::mouseMove( QMouseEvent *e )
 {
   if( m_dragging )
   {
-    QPoint pos( e.posX, e.posY );
-
-    m_dragPosition = pos - m_dragStart;
+    m_dragPosition = e->pos() - m_dragStart;
 
     QRect updateRect( m_pDoc->getCurrentLayer()->imageExtents() );
     m_pDoc->moveLayer( m_dragPosition.x(), m_dragPosition.y() );
@@ -118,15 +116,15 @@ void MoveTool::mouseMove( const KImageShop::MouseEvent& e )
 
     m_layerPosition = m_pDoc->getCurrentLayer()->imageExtents().topLeft();
 
-    m_dragStart = pos;
+    m_dragStart = e->pos();
 
-    m_pDoc->slotUpdateViews( updateRect );
+    //m_pDoc->slotUpdateViews( updateRect );
   }
 }
 
-void MoveTool::mouseRelease( const KImageShop::MouseEvent& e )
+void MoveTool::mouseRelease(QMouseEvent *e )
 {
-  if( !e.leftButton )
+  if( e->button() != LeftButton )
     return;
 
   if( !m_dragging )

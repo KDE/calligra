@@ -30,7 +30,7 @@ class KImageShopCommand : public KoCommand
 public:
 
   KImageShopCommand( const QString& name, KImageShopDoc* doc );
-  ~KImageShopCommand();
+  virtual ~KImageShopCommand();
 
   virtual void execute() = 0;
   virtual void unexecute() = 0;

@@ -21,24 +21,26 @@
 #ifndef __tool_h__
 #define __tool_h__
 
-#include "qmessagebox.h"
-#include "kimageshop.h"
+#include <qobject.h>
 
 class KImageShopDoc;
 class KImageShopView;
 
-class Tool : public KImageShop::Tool_skel
+class Tool : public QObject
 {
+  Q_OBJECT;
+
  public:
   Tool(KImageShopDoc *doc, KImageShopView *view = 0L);
   ~Tool();
 
-  virtual QCString toolName();
-  virtual void optionsDialog();
+  QString toolName();
+  void optionsDialog();
 
-  virtual void mousePress(const KImageShop::MouseEvent& e) = 0; 
-  virtual void mouseMove(const KImageShop::MouseEvent& e) = 0;
-  virtual void mouseRelease(const KImageShop::MouseEvent& e) = 0;
+ public slots:
+  virtual void mousePress(QMouseEvent*); 
+  virtual void mouseMove(QMouseEvent*);
+  virtual void mouseRelease(QMouseEvent*);
     
  protected:
   KImageShopDoc  *m_pDoc;

@@ -25,10 +25,11 @@
 #include <qlabel.h>
 #include <qlayout.h>
 
-#include <kglobal.h>
+#include <klibglobal.h>
 #include <klocale.h>
 #include <kstddirs.h>
 
+#include "kimageshop_factory.h"
 #include "brusheswidget.h"
 #include "iconchooser.h"
 #include "integerwidget.h"
@@ -81,16 +82,14 @@ void BrushesWidget::loadBrushes()
   // (brushes will be saved differently)
 
   QStringList list;
-  list = KGlobal::dirs()->findAllResources("appdata",
-					   "brushes/*.jpg",
-					   false, true);
+  list = KImageShopFactory::global()->dirs()->findAllResources("kis_brushes", "*.png", false, true);
   QString file;
-  for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
-    file = *it;
-    if ( file.right( 10 ) != "-alpha.jpg" ) { // don't load the alphachannels
+  
+  for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+    {
+      file = *it;
       (void) loadBrush( file );
     }
-  }
 }
 
 

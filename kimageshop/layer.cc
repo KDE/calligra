@@ -182,10 +182,13 @@ Layer::allocateRect(QRect _r)
 
 void Layer::setPixel(int x, int y, uint pixel)
 {
-	printf("layer::setPixel(%d,%d, %d)\n",x,y,pixel);
-	dataChannels->setPixel(x,y, pixel);
+  dataChannels->setPixel(x,y, pixel);
 }
 
+uint Layer::getPixel(int x, int y)
+{
+  return dataChannels->getPixel(x,y);
+}
 
 void Layer::rotate180()
 {
@@ -216,5 +219,30 @@ void Layer::mirrorY()
 	alphaChannel->mirrorY();
 	dataChannels->mirrorY();
 }
+
+void Layer::renderOpacityToAlpha()
+{
+  uchar *alpha;
+  int xt = xTiles();
+  int yt = yTiles();
+
+  for(int y = 0; y < yt; y++)
+    {
+      for(int x = 0; x < xt; x++)
+	{
+	  alpha = channelMem(y * xt + x, 0, 0, true);
+
+	  for(int y = TILE_SIZE; y; y--)
+	    {
+	      for(int x = TILE_SIZE; x; x--)
+		{
+		  *alpha++ = static_cast<uchar>(*alpha - (255 - opacityVal));
+		}
+	    }
+	}
+    }
+  opacityVal = 255;
+}
+
 
 #include "layer.moc"

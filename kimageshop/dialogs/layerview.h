@@ -64,6 +64,8 @@ public slots:
   void slotFrontLayer();
   void slotBackgroundLayer();
 
+  void slotDocUpdated();
+
 protected:
 
   virtual void paintCell( QPainter*, int _row, int _col );

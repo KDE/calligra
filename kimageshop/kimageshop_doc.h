@@ -1,8 +1,8 @@
 /*
  *  kimageshop_doc.h - part of KImageShop
  *
- *  Copyright (c) 1999 Michael Koch    <koch@kde.org>
- *                1999 Matthias Elter  <me@kde.org>
+ *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
+ *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,85 +22,119 @@
 #ifndef __kimageshop_doc_h__
 #define __kimageshop_doc_h__
 
-#include <qlist.h>
-#include <qstring.h>
-
-#include <koFrame.h>
 #include <koDocument.h>
-#include <koPrintExt.h>
 #include <koUndo.h>
 
-#include "kimageshop.h"
-#include "kimageshop_view.h"
-#include "canvas.h"
+#include <qimage.h>
+#include <qlist.h>
 
-#define MIME_TYPE "application/x-kimageshop"
-#define EDITOR "IDL:KImageShop/Document:1.0"
+#include <stdlib.h>
+#include <X11/Xlib.h>
 
-class KImageShopDoc : public Canvas,
-		      virtual public KoDocument,
-		      virtual public KoPrintExt,
-		      virtual public KImageShop::Document_skel
+#include "layer.h"
+
+class Brush;
+
+struct canvasTileDescriptor
 {
-  Q_OBJECT
-    
+  QPixmap pix;
+};
+
+class KImageShopDoc : public KoDocument
+{
+    Q_OBJECT
 public:
+    KImageShopDoc( int w = 510, int h = 510, KoDocument* parent = 0, const char* name = 0 );
+    ~KImageShopDoc();
+    
+    // document
+    virtual View* createView( QWidget* parent = 0, const char* name = 0 );
+    virtual Shell* createShell();
+    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
+    virtual bool initDoc();
+    virtual QCString mimeType() const;
+    KoCommandHistory* commandHistory() { return &m_commands; };
 
-  KImageShopDoc(int w = 510, int h = 510);
-  ~KImageShopDoc();
+    void paintPixmap( QPainter *painter, QRect area );
+    int height() { return h; }
+    int width() { return w; }
 
-  virtual bool save( ostream&, const char* _format );
-//virtual bool completeSaving( KOStore::Store_ptr _store );
-  virtual bool hasToWriteMultipart() { return true; }
-//virtual bool loadXML( KOMLParser&, KOStore::Store_ptr _store );
-  virtual void cleanUp();
-  virtual void removeView( KImageShopView* _view );
+    Layer* getCurrentLayer() { return currentLayer; }
+    int getCurrentLayerIndex() { return layers.find( currentLayer ); }
+    void setCurrentLayer( int _layer );
+    
+    void upperLayer( unsigned int _layer );
+    void lowerLayer( unsigned int _layer );
+    void setFrontLayer( unsigned int _layer );
+    void setBackgroundLayer( unsigned int _layer );
 
-  virtual bool initDoc();
-  virtual KOffice::MainWindow_ptr createMainWindow();
-  
-  // Wrapper for @ref #createImageView
-  virtual OpenParts::View_ptr createView();
-  virtual KImageShopView* createImageView( QWidget* _parent = 0 );
+    void addRGBLayer( QString _file );
+    void removeLayer( unsigned int _layer );
+    void compositeImage( QRect _rect );
+    Layer* layerPtr( Layer *_layer );
+    void setLayerOpacity( uchar _opacity, Layer *_layer = 0 );
+    
+    void renderLayerIntoTile( QRect tileBoundary, const Layer *srcLay, 
+			      Layer *dstLay, int dstTile );
+    void moveLayer( int dx, int dy, Layer *lay = 0 );
+    void moveLayerTo( int x, int y, Layer *lay = 0 );
+    void renderTileQuadrant( const Layer *srcLay, int srcTile, Layer *dstLay,
+			     int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
+    void paintBrush( QPoint pt, const Brush *brush );
+    LayerList layerList() { return layers; };
+    
+    void rotateLayer180(Layer *_layer);
+    void rotateLayerLeft90(Layer *_layer);
+    void rotateLayerRight90(Layer *_layer);
+    void mirrorLayerX(Layer *_layer);
+    void mirrorLayerY(Layer *_layer);
 
-  virtual void viewList( OpenParts::Document::ViewList*& _list );
-  virtual QCString mimeType();
-  virtual bool isModified();
-  virtual int viewCount();
-  virtual void setModified( bool _c );
-  virtual bool isEmpty();
-  virtual void print( QPaintDevice* _dev );
-  virtual void draw( QPaintDevice* _dev, long _width, long _height, float _scale );
-
-  KoCommandHistory* commandHistory() { return &m_commands; };
-
+    void mergeAllLayers();
+    void mergeVisibleLayers();
+    void mergeLinkedLayers();
+    void mergeLayers(QList<Layer>);
+       
 public slots:
-
-  void slotUpdateViews( const QRect &area );
   void slotUndoRedoChanged( QString _undo, QString _redo );
   void slotUndoRedoChanged( QStringList _undo, QStringList _redo );
+  void setCurrentLayerOpacity( double opacity )
+    {  setLayerOpacity( (uchar) ( opacity * 255 / 100 ) ); };
+    
+protected:
+  virtual QString configFile() const;
+  KoCommandHistory m_commands;
+  
+  void compositeTile( int x, int y, Layer *dstLay = 0, int dstTile = -1 );
+  void convertTileToPixmap( Layer *lay, int tileNo, QPixmap *pix );
 
 signals:
+  void docUpdated();
+  void docUpdated( const QRect& rect);
+  void layersUpdated();
 
-  void sigUpdateView( const QRect &area );
-  
-protected:
+private:
 
-//virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
+  void setUpVisual();
+  void convertImageToPixmap( QImage *img, QPixmap *pix );
 
-  // List of views, that are connectet to the document.
-  QList<KImageShopView> m_lstViews;
+  enum dispVisual { unknown, rgb565, rgb888x } visual;
 
-  KoCommandHistory m_commands;
-
-  QString m_strImageFormat;
-  bool m_bEmpty;
+  int       w;
+  int       h;
+  int       channels;
+  QRect     viewportRect;
+  int       xTiles;
+  int       yTiles;
+  LayerList layers;
+  Layer     *compose;
+  QImage    img;
+  Layer     *currentLayer;
+  QPixmap   **tiles;
+  bool      dragging;
+  QPoint    dragStart;
+  uchar     *background;
+  char      *imageData;
+  XImage    *xi;
 };
 
 #endif
-
-
-
-
-
-

@@ -24,7 +24,6 @@
 #include <qpoint.h>
 
 #include "tool.h"
-#include "canvasview.h"
 
 class KImageShopDoc;
 class Gradient;
@@ -33,25 +32,21 @@ class GradientTool : public Tool
 {
 public:
 
-  GradientTool( KImageShopDoc *_doc, KImageShopView *_view, CanvasView *_view, Gradient *_gradient );
+  GradientTool( KImageShopDoc *_doc, Gradient *_gradient );
   ~GradientTool();
 
-  virtual QCString toolName() { return QCString("GradientTool"); }
+  virtual QString toolName() { return QString("GradientTool"); }
 
-  virtual void mousePress( const KImageShop::MouseEvent &_event );
-  virtual void mouseMove( const KImageShop::MouseEvent &_event );
-  virtual void mouseRelease( const KImageShop::MouseEvent &_event );
+  virtual void mousePress(QMouseEvent *_event );
+  virtual void mouseMove(QMouseEvent *_event );
+  virtual void mouseRelease(QMouseEvent *_event );
 
 
 protected:
- 
-  KImageShopView *m_pView; 
-  CanvasView     *m_pCanvasView;
-  QWidget        *m_helpWidget;
-  QPoint          m_dragStart;
-  QPoint          m_pointEnd;
-  bool            m_dragging;
-  Gradient       *m_gradient;
+
+  QPoint   m_dragStart;
+  bool     m_dragging;
+  Gradient *m_gradient;
 };
 
 #endif //__gradienttool_h__

@@ -68,12 +68,14 @@ class Layer : public QObject {
 	bool    boundryTileY(int tile) const;
 	void    allocateRect(QRect _r);
 	void    setPixel(int x, int y, uint val);
+	uint    getPixel(int x, int y);
 
 	void    rotate180();
 	void    rotateLeft90();
 	void    rotateRight90();
 	void    mirrorX();
 	void    mirrorY();
+	void    renderOpacityToAlpha();
 
  signals:
 	void layerPropertiesChanged();

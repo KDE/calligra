@@ -357,7 +357,6 @@ void ChannelData::rotateRight90()
 	}
 	delete newBlk;
 
-	int tmp;
 	int newOffX=tilesRect.bottom()-imageRect.bottom();
 	int newOffY=imageRect.left()-tilesRect.left();
 
@@ -400,7 +399,6 @@ void ChannelData::rotateLeft90()
 	}
 	delete newBlk;
 
-	int tmp;
 	int newOffX=imageRect.top()-tilesRect.top();
 	int newOffY=tilesRect.right()-imageRect.right();
 

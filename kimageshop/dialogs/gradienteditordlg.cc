@@ -7,9 +7,9 @@
 #include "kglobal.h"
 #include "kstddirs.h"
 
+#include "kimageshop_doc.h"
 #include "gradientview.h"
 #include "gradienteditordlg.h"
-#include "kimageshop_doc.h"
 
 GradientEditorDialog::GradientEditorDialog( KImageShopDoc *_doc, QWidget *_parent, const char *_name )
   : KFloatingDialog( _parent, _name )

@@ -79,14 +79,13 @@ void GradientView::updatePixmap()
   cout << "GradientView::updatePixmap()" << endl;
 
   int w, pos = 0;
-  float wfloat;
   float index = 0.0;
   KPixmap grad;
   GradientItem* item;
 
   m_pixmap.resize( size() );
   item = m_lstGradientItems.first();
-  for( int i = 0; i < m_lstGradientItems.count(); i++ )
+  for( unsigned int i = 0; i < m_lstGradientItems.count(); i++ )
   {
     // FIXME: Round up, if needed.
     if( i != ( m_lstGradientItems.count() -1 ) )

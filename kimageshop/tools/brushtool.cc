@@ -21,9 +21,10 @@
 #include "brushtool.h"
 #include "brush.h"
 #include "kimageshop_doc.h"
-#include "kvector.h"
+#include "vec.h"
 
-BrushTool::BrushTool(KImageShopDoc *doc, const Brush *_brush) : Tool(doc)
+BrushTool::BrushTool(KImageShopDoc *doc, const Brush *_brush)
+  : Tool(doc)
 {
   m_dragging = false;
   m_pBrush = _brush;
@@ -36,46 +37,43 @@ void BrushTool::setBrush(const Brush *_brush)
   m_pBrush = _brush;
 }
 
-void BrushTool::mousePress(const KImageShop::MouseEvent& e)
+void BrushTool::mousePress(QMouseEvent *e)
 {
-  if (!e.leftButton)
+  if (e->button() != QMouseEvent::LeftButton)
     return;
-
+  
   m_dragging = true;
-  QPoint pos(e.posX, e.posY);
-  m_dragStart = pos;
+  m_dragStart = e->pos();
 
   if (!m_pBrush)
     return;
 
-  m_pDoc->paintBrush(pos, m_pBrush);
+  m_pDoc->paintBrush(e->pos(), m_pBrush);
 
-  QRect updateRect(pos - m_pBrush->hotSpot(), m_pBrush->brushSize());
+  QRect updateRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
   m_pDoc->compositeImage(updateRect);
-  m_pDoc->slotUpdateViews(updateRect);
+  //m_pDoc->slotUpdateViews(updateRect);
 }
 
-void BrushTool::mouseMove(const KImageShop::MouseEvent& e)
+void BrushTool::mouseMove(QMouseEvent *e)
 {
   if(m_dragging)
     {
       if (!m_pBrush)
 		return;
 
-      QPoint pos(e.posX, e.posY);
-
-      KVector end(e.posX, e.posY);
+      KVector end(e->x(), e->y());
       KVector start(m_dragStart.x(), m_dragStart.y());
 	
       KVector moveVec = end-start;
       float length = moveVec.length();
 	
       QRect updateRect;
-
+      
       if (length < 10)
 		{
-		  m_pDoc->paintBrush(pos, m_pBrush);
-		  updateRect = QRect(pos - m_pBrush->hotSpot(), m_pBrush->brushSize());
+		  m_pDoc->paintBrush(e->pos(), m_pBrush);
+		  updateRect = QRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
 		}
       else
 		{
@@ -86,7 +84,7 @@ void BrushTool::mouseMove(const KImageShop::MouseEvent& e)
 			{
 			  if (i == steps)
 				{
-				  m_pDoc->paintBrush(pos, m_pBrush);
+				  m_pDoc->paintBrush(e->pos(), m_pBrush);
 				}
 			  else
 				{
@@ -96,19 +94,19 @@ void BrushTool::mouseMove(const KImageShop::MouseEvent& e)
 			}
 		
 		  updateRect = QRect(QPoint(start.x(), start.y()) - m_pBrush->hotSpot(),
-							 QSize(e.posX, e.posY) + m_pBrush->brushSize());
+							 QSize(e->x(), e->y()) + m_pBrush->size());
 		}
 
       m_pDoc->compositeImage(updateRect);
-      m_pDoc->slotUpdateViews(updateRect);
+      //m_pDoc->slotUpdateViews(updateRect);
 	
-      m_dragStart = pos;
+      m_dragStart = e->pos();
     }
 }
 
-void BrushTool::mouseRelease(const KImageShop::MouseEvent& e)
+void BrushTool::mouseRelease(QMouseEvent *e)
 {
-  if (!e.leftButton)
+  if (e->button() != LeftButton)
     return;
   m_dragging = false;
 }

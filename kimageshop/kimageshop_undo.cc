@@ -30,7 +30,5 @@ KImageShopCommand::KImageShopCommand( const QString& name, KImageShopDoc* doc )
 {
 }
 
-KImageShopCommand::~KImageShopCommand()
-{
-}
+KImageShopCommand::~KImageShopCommand(){}
 

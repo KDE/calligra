@@ -30,6 +30,7 @@
 #include "layerview.h"
 #include "channelview.h"
 #include "kimageshop_doc.h"
+#include "kimageshop_factory.h"
 
 QPixmap *LayerDialog::m_eyeIcon, *LayerDialog::m_linkIcon;
 QRect LayerDialog::m_eyeRect, LayerDialog::m_linkRect;
@@ -114,7 +115,7 @@ LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent )
   setCaption( i18n( "Layers&Channels" ) );
   if( !m_eyeIcon )
   {
-    QString _icon = locate( "appdata", "pics/eye.png" );
+    QString _icon = locate( "kis_pics", "eye.png", KImageShopFactory::global() );
     m_eyeIcon = new QPixmap;
     if( !m_eyeIcon->load( _icon ) )
       QMessageBox::critical( this, "Canvas", "Can't find eye.png" );
@@ -122,7 +123,7 @@ LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent )
   }
   if( !m_linkIcon )
   {
-    QString _icon = locate( "appdata", "pics/link.png" );
+    QString _icon = locate( "kis_pics", "link.png", KImageShopFactory::global() );
     m_linkIcon = new QPixmap;
     if( !m_linkIcon->load( _icon ) )
       QMessageBox::critical( this, "Canvas", "Can't find link.png" );

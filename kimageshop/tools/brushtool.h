@@ -32,14 +32,15 @@ class BrushTool : public Tool
  public:
   BrushTool(KImageShopDoc *doc, const Brush *_brush);
   ~BrushTool();
-
-  virtual QCString toolName() { return QCString("BrushTool"); }
-
-  virtual void mousePress(const KImageShop::MouseEvent& e);
-  virtual void mouseMove(const KImageShop::MouseEvent& e);
-  virtual void mouseRelease(const KImageShop::MouseEvent& e);
+  
+  QString toolName() { return QString("BrushTool"); }
 
   void setBrush(const Brush *_brush);
+
+ public slots:
+  virtual void mousePress(QMouseEvent*); 
+  virtual void mouseMove(QMouseEvent*);
+  virtual void mouseRelease(QMouseEvent*);
 
  protected:
   QPoint 	m_dragStart;

@@ -23,7 +23,7 @@
 
 #include <kdualcolorbtn.h>
 
-#include "kcolor.h"
+#include "color.h"
 #include "kpixmap.h"
 #include "kpixmapeffect.h"
 #include "kfloatingdialog.h"

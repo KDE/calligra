@@ -26,30 +26,32 @@
 ZoomTool::ZoomTool(KImageShopView *view) : Tool(0L, view){}
 ZoomTool::~ZoomTool() {}
 
-void ZoomTool::mousePress(const KImageShop::MouseEvent& e)
+void ZoomTool::mousePress(QMouseEvent *e)
 {
-  if (!e.leftButton)
+  if (e->button() != LeftButton)
     return;
-
-  float zf = m_pView->zoomFactor();
-
+  
+  /*
+    float zf = m_pView->zoomFactor();
+  
   if (zf == 0) zf = 1;
 
-  if (e.shiftButton)
-    zf/=2;
-  else
+  //if (e.shiftButton)
+  //  zf/=2;
+  // else
     zf*=2;
   
   m_pView->slotSetZoomFactor(zf);
 
-  int x = static_cast<int>(e.posX*zf - m_pView->viewWidth()/2);
-  int y = static_cast<int>(e.posY*zf - m_pView->viewHeight()/2);
+  int x = static_cast<int>(e->x()*zf - m_pView->viewWidth()/2);
+  int y = static_cast<int>(e->y()*zf - m_pView->viewHeight()/2);
 
   if (x < 0) x = 0;
   if (y < 0) y = 0;
 
   m_pView->scrollTo(QPoint(x,y));
+  */
 }
 
-void ZoomTool::mouseMove(const KImageShop::MouseEvent& ){}
-void ZoomTool::mouseRelease(const KImageShop::MouseEvent& ){}
+void ZoomTool::mouseMove(QMouseEvent *){}
+void ZoomTool::mouseRelease(QMouseEvent *){}

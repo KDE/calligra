@@ -1,10 +1,7 @@
 /*
  *  brush.cc - part of KImageShop
  *
- *  Contains the imformation needed to describe a brush.
- *  Inherits the layer class.
- *
- *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
+ *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,55 +18,104 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "brush.h"
-#include <qbitmap.h>
+#include <qpoint.h>
+#include <qsize.h>
+#include <qimage.h>
 #include <qpixmap.h>
-#include <qregexp.h>
-#include <stdio.h>
 
-Brush::Brush(QString file) : Layer(3), IconItem()
+#include "brush.h"
+
+Brush::Brush(QString file)
+  : IconItem()
 {
-  validVal=true;
-  loadBrush(file);
-  spacingVal=5;
-	// default hotSpot in the centre
-  hotSpotVal=QPoint(imageExtents().width()/2, imageExtents().height()/2);
+  m_valid    = false;
+  m_spacing  = 5;
+  loadViaQImage(file);
+
+  // default hotSpot in the centre
+  m_hotSpot = QPoint( width()/2, height()/2 );
 }
 
-void Brush::loadBrush(QString file)
+Brush::~Brush()
 {
-  printf("brush::loadBrush: %s\n",file.latin1());
+  delete [] m_pData;
+}
+
+void Brush::loadViaQImage(QString file)
+{
+  // load via QImage
   QImage img(file);
+
   if (img.isNull())
     {
-      printf("Unable to load image: %s\n",file.latin1());
-      validVal=false;
-      return;
+      m_valid = false;
+      qDebug("Unable to load brush: %s.", file.latin1());
     }
 
-  // XXX currently assumes the alpha image IS a greyscale and the same size as
-  // the other channels
-  QString alphaName=file;
-  alphaName.replace(QRegExp("\\.jpg$"),"-alpha.jpg");
-  printf("brush::loadBrushAlpha: %s\n",alphaName.latin1());
-  QImage alpha(alphaName);
-  if (!alpha.isNull() && (img.size()!=alpha.size()))
+  // create pixmap for preview dialog
+  m_pPixmap = new QPixmap;
+  m_pPixmap->convertFromImage(img, QPixmap::AutoColor);
+
+  m_w = img.width();
+  m_h = img.height();
+
+  m_pData = new uchar[m_h * m_w];
+
+  uchar *p;
+
+  for (int h = 0; h < m_h; h++)
     {
-      puts("Incorrect sized alpha channel - not loaded");
-      alpha=QImage();
-      validVal=false;
-      return;
+      p = img.scanLine(h);
+      for (int w = 0; w < m_w; w++)
+	{
+	  m_pData[m_w * h + w] = qRed(*((QRgb*)(p+w)));
+	  //qDebug ("%d", static_cast<int>(value(w,h)));
+	}
     }
-  loadRGBImage(img, alpha);
-  sizeVal=img.size();
-  createPixmap(img, alpha);
+ 
+  m_valid = true;
+  qDebug("Brush: %s loaded.",file.latin1());
 }
 
-
-void Brush::createPixmap(const QImage& img, const QImage& alpha)
+QPixmap& Brush::pixmap()
 {
-  pixmapVal = img;
-  QBitmap bm;
-  bm = alpha;
-  pixmapVal.setMask( bm );
+  return *m_pPixmap;
 }
+
+void Brush::setHotSpot(QPoint pt)
+{
+  int x = pt.x();
+  int y = pt.y();
+
+  if (x < 0)
+    x = 0;
+  else if (x >= m_w)
+    x = m_w-1;
+
+  if (y < 0)
+    y = 0;
+  else if (y >= m_h)
+    y = m_h-1;
+  
+  m_hotSpot = QPoint(x,y);
+}
+
+uchar Brush::value(int x, int y)
+{
+  return m_pData[m_w * y + x];
+}
+
+uchar* Brush::scanline(int i)
+{
+  if (i < 0)
+    i = 0;
+  if (i >= m_h)
+    i = m_h-1;
+  return (m_pData + m_w * i);
+}
+
+uchar* Brush::bits()
+{
+  return m_pData;
+}
+

@@ -1,8 +1,8 @@
-INCLUDES = -I.. $(all_includes)
+INCLUDES = -I$(srcdir)/.. $(all_includes)
 
-lib_LTLIBRARIES = libkiswidgets.la
-libkiswidgets_la_LDFLAGS = $(all_libraries) -version-info 1:0
-#libkiswidgets_la_LIBADD =
+noinst_LTLIBRARIES = libkiswidgets.la
+# libkiswidgets_a_LDFLAGS = $(all_libraries) -version-info 1:0
+#libkiswidgets_a_LIBADD =
 
 libkiswidgets_la_SOURCES = colorframe.cc colorslider.cc \
 	iconchooser.cc integerwidget.cc blendchooser.cc

@@ -31,10 +31,10 @@ class ZoomTool : public Tool
   ZoomTool(KImageShopView *view);
   ~ZoomTool();
 
-  virtual QCString toolName() { return QCString("ZoomTool"); }
-  virtual void mousePress(const KImageShop::MouseEvent& e);
-  virtual void mouseMove(const KImageShop::MouseEvent& e);
-  virtual void mouseRelease(const KImageShop::MouseEvent& e);
+  virtual QString toolName() { return QString("ZoomTool"); }
+  virtual void mousePress(QMouseEvent *e);
+  virtual void mouseMove(QMouseEvent *e);
+  virtual void mouseRelease(QMouseEvent *e);
 };
 
 #endif //__zoomtool_h__

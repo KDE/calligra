@@ -276,7 +276,7 @@ void ColorChooserWidget::slotShowLAB()
   m_pCMYKButton->setOn(false);
 }
 
-void ColorChooserWidget::resizeEvent(QResizeEvent *e)
+void ColorChooserWidget::resizeEvent(QResizeEvent *)
 {
   // color model buttons
   int w = width();
