@@ -38,6 +38,7 @@
 #include "kspread_undo.h"
 #include <kdebug.h>
 
+using namespace KSpread;
 
 static int tabbar_text_width( QPainter& painter, const QString& text )
 {
@@ -55,7 +56,7 @@ static int tabbar_text_width( QPainter& painter, const QString& text )
     return width;
 }
 
-KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent )
+TabBar::TabBar( KSpreadView *_parent )
     : QWidget( (QWidget *)_parent )
 {
     m_pView = _parent;
@@ -70,18 +71,18 @@ KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent )
     m_autoScroll = 0;
 }
 
-KSpreadTabBar::~KSpreadTabBar()
+TabBar::~TabBar()
 {
 }
 
-void KSpreadTabBar::addTab( const QString& _text )
+void TabBar::addTab( const QString& _text )
 {
     tabsList.append( _text );
 
     update();
 }
 
-void KSpreadTabBar::removeTab( const QString& _text )
+void TabBar::removeTab( const QString& _text )
 {
     int i = tabsList.findIndex( _text );
     if ( i == -1 )
@@ -103,7 +104,7 @@ void KSpreadTabBar::removeTab( const QString& _text )
     update();
 }
 
-void KSpreadTabBar::removeAllTabs()
+void TabBar::removeAllTabs()
 {
     tabsList.clear();
     tablehide.clear();
@@ -113,7 +114,7 @@ void KSpreadTabBar::removeAllTabs()
     update();
 }
 
-void KSpreadTabBar::moveTab( int _from, int _to, bool _before )
+void TabBar::moveTab( int _from, int _to, bool _before )
 {
     QStringList::Iterator it;
 
@@ -142,7 +143,7 @@ void KSpreadTabBar::moveTab( int _from, int _to, bool _before )
     repaint();
 }
 
-bool KSpreadTabBar::canScrollLeft() const
+bool TabBar::canScrollLeft() const
 {
     if ( tabsList.count() == 0 )
         return false;
@@ -153,7 +154,7 @@ bool KSpreadTabBar::canScrollLeft() const
     return true;
 }
 
-bool KSpreadTabBar::canScrollRight() const
+bool TabBar::canScrollRight() const
 {
     if ( tabsList.count() == 0 )
         return false;
@@ -167,7 +168,7 @@ bool KSpreadTabBar::canScrollRight() const
     return true;
 }
 
-void KSpreadTabBar::scrollLeft()
+void TabBar::scrollLeft()
 {
     if ( !canScrollLeft() )
         return;
@@ -176,7 +177,7 @@ void KSpreadTabBar::scrollLeft()
     repaint( false );
 }
 
-void KSpreadTabBar::scrollRight()
+void TabBar::scrollRight()
 {
     if ( !canScrollRight() )
         return;
@@ -185,7 +186,7 @@ void KSpreadTabBar::scrollRight()
     repaint( false );
 }
 
-void KSpreadTabBar::scrollFirst()
+void TabBar::scrollFirst()
 {
     if ( !canScrollLeft() )
         return;
@@ -194,7 +195,7 @@ void KSpreadTabBar::scrollFirst()
     repaint( false );
 }
 
-void KSpreadTabBar::scrollLast()
+void TabBar::scrollLast()
 {
     if ( !canScrollRight() )
         return;
@@ -220,7 +221,7 @@ void KSpreadTabBar::scrollLast()
     repaint( false );
 }
 
-void KSpreadTabBar::setActiveTab( const QString& _text )
+void TabBar::setActiveTab( const QString& _text )
 {
     int i = tabsList.findIndex( _text );
     if ( i == -1 )
@@ -236,14 +237,14 @@ void KSpreadTabBar::setActiveTab( const QString& _text )
 }
 
 
-void KSpreadTabBar::slotAdd()
+void TabBar::slotAdd()
 {
     m_pView->insertTable();
     m_pView->editWidget()->setText("");
     m_pView->activeTable()->setHidden(false);
 }
 
-void KSpreadTabBar::paintEvent( QPaintEvent* )
+void TabBar::paintEvent( QPaintEvent* )
 {
 
    if ( tabsList.count() == 0 )
@@ -318,7 +319,7 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
 }
 
 
-void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y,
+void TabBar::paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y,
                               bool isactive, bool ismovemarked )
 {
     QPointArray parr;
@@ -374,14 +375,14 @@ void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, in
 }
 
 
-void KSpreadTabBar::openPopupMenu( const QPoint &_global )
+void TabBar::openPopupMenu( const QPoint &_global )
 {
     if ( !m_pView->koDocument()->isReadWrite() )
       return;
     m_pView->openPopupMenuMenuPage( _global );
 }
 
-void KSpreadTabBar::renameTab( const QString& old_name, const QString& new_name )
+void TabBar::renameTab( const QString& old_name, const QString& new_name )
 {
     QStringList::Iterator it = tabsList.find( old_name );
     (*it) = new_name;
@@ -389,7 +390,7 @@ void KSpreadTabBar::renameTab( const QString& old_name, const QString& new_name 
     update();
 }
 
-void KSpreadTabBar::slotRename()
+void TabBar::slotRename()
 {
     // Store the current name of the active table
     KSpreadSheet * table = m_pView->activeTable();
@@ -401,7 +402,7 @@ void KSpreadTabBar::slotRename()
     rename( table, newName, activeName, ok );
 }
 
-void KSpreadTabBar::rename( KSpreadSheet * table, QString newName, QString const & activeName, bool ok )
+void TabBar::rename( KSpreadSheet * table, QString newName, QString const & activeName, bool ok )
 {
     // Have a different name ?
     if ( ok ) // User pushed an OK button.
@@ -457,7 +458,7 @@ void KSpreadTabBar::rename( KSpreadSheet * table, QString newName, QString const
     }
 }
 
-void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
+void TabBar::mousePressEvent( QMouseEvent* _ev )
 {
     int old_active = activeTab;
 
@@ -514,7 +515,7 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 }
 
 
-void KSpreadTabBar::mouseReleaseEvent( QMouseEvent* _ev )
+void TabBar::mouseReleaseEvent( QMouseEvent* _ev )
 {
 
     if ( !m_pView->koDocument()->isReadWrite())
@@ -542,7 +543,7 @@ void KSpreadTabBar::mouseReleaseEvent( QMouseEvent* _ev )
     }
 }
 
-void KSpreadTabBar::slotAutoScroll( )
+void TabBar::slotAutoScroll( )
 {
     if ( m_autoScroll == autoScrollLeft && leftTab > 1 )
     {
@@ -561,7 +562,7 @@ void KSpreadTabBar::slotAutoScroll( )
 }
 
 
-void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
+void TabBar::mouseMoveEvent( QMouseEvent* _ev )
 {
 
   if ( !m_pView->koDocument()->isReadWrite() )
@@ -647,14 +648,14 @@ void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
     painter.end();
 }
 
-void KSpreadTabBar::mouseDoubleClickEvent( QMouseEvent*  )
+void TabBar::mouseDoubleClickEvent( QMouseEvent*  )
 {
   if ( !m_pView->koDocument()->isReadWrite()|| !m_pView->doc()->getShowTabBar() || m_pView->activeTable()->isProtected())
         return;
     slotRename();
 }
 
-void KSpreadTabBar::hideTable()
+void TabBar::hideTable()
 {
     if ( tabsList.count() ==  1)
     {
@@ -672,7 +673,7 @@ void KSpreadTabBar::hideTable()
     }
 }
 
-void KSpreadTabBar::hideTable(const QString& tableName )
+void TabBar::hideTable(const QString& tableName )
 {
   removeTab( tableName );
   tablehide.append( tableName );
@@ -680,7 +681,7 @@ void KSpreadTabBar::hideTable(const QString& tableName )
 }
 
 
-void KSpreadTabBar::showTable(const QString& text)
+void TabBar::showTable(const QString& text)
 {
     KSpreadSheet *table;
     table=m_pView->doc()->map()->findTable( text);
@@ -692,7 +693,7 @@ void KSpreadTabBar::showTable(const QString& text)
     table->hideTable(false);
 }
 
-void KSpreadTabBar::showTable(QStringList list)
+void TabBar::showTable(QStringList list)
 {
     if ( list.count()==0 )
         return;
@@ -712,18 +713,18 @@ void KSpreadTabBar::showTable(QStringList list)
 }
 
 
-void KSpreadTabBar::displayTable(const QString& text)
+void TabBar::displayTable(const QString& text)
 {
     tablehide.remove( text );
     addTab( text );
     emit tabChanged( text );
 }
-void KSpreadTabBar::addHiddenTab(const QString & text)
+void TabBar::addHiddenTab(const QString & text)
 {
     tablehide.append( text );
 }
 
-void KSpreadTabBar::removeHiddenTab(const QString & text)
+void TabBar::removeHiddenTab(const QString & text)
 {
     tablehide.remove( text );
 }

@@ -36,7 +36,6 @@ class KSpreadPaperLayout;
 class KSpreadChildPicture;
 class KSpreadChildFrame;
 class KSpreadShell;
-class KSpreadTabBar;
 class KSpreadEditWidget;
 class KSpreadCanvas;
 class KSpreadHBorder;
@@ -63,6 +62,11 @@ class KActionMenu;
 class DCOPObject;
 class KReplace;
 class KFind;
+
+namespace KSpread
+{
+class TabBar;
+};
 
 #include <qptrlist.h>
 #include <qpoint.h>
@@ -106,7 +110,7 @@ public:
 
     const KSpreadSheet* activeTable() const { return m_pTable; }
     KSpreadSheet* activeTable() { return m_pTable; }
-    KSpreadTabBar* tabBar()const { return  m_pTabBar;}
+    KSpread::TabBar* tabBar()const { return  m_pTabBar;}
 
     void openPopupMenu( const QPoint &_global );
     void popupRowMenu(const QPoint & _point ) ;
@@ -518,7 +522,7 @@ private:
     QButton *m_pTabBarLast;
     QButton *m_pOkButton;
     QButton *m_pCancelButton;
-    KSpreadTabBar *m_pTabBar;
+    KSpread::TabBar *m_pTabBar;
     KSpreadLocationEditWidget *m_pPosWidget;
     KoCharSelectDia * m_specialCharDlg;
     KToggleAction* m_bold;

@@ -22,12 +22,15 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __kspread_tabbar_h__
-#define __kspread_tabbar_h__
+#ifndef KSPREAD_TABBAR
+#define KSPREAD_TABBAR
 
 #include <qwidget.h>
 #include <qpainter.h>
 #include <qstrlist.h>
+
+namespace KSpread
+{
 
 
 /**
@@ -42,12 +45,12 @@
  *
  * @short A bar with tabs and scroll buttons.
  */
-class KSpreadTabBar : public QWidget
+class TabBar : public QWidget
 {
     Q_OBJECT
 public:
-    KSpreadTabBar( KSpreadView *_parent );
-    virtual ~KSpreadTabBar();
+    TabBar( KSpreadView *_parent );
+    virtual ~TabBar();
 
     /**
      * Adds a tab to the bar and paints it. The tab does not become active.
@@ -220,4 +223,9 @@ protected:
     int m_autoScroll;
 };
 
-#endif
+};
+
+// for source compatibility only, remove in the future
+typedef KSpread::TabBar KSpreadTabBar;
+
+#endif // KSPREAD_TABBAR
