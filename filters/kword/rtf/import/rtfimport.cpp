@@ -261,12 +261,16 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     }
 
     // Verify document type and version (RTF version 1.x)
+    
+    // Change this to > 1 so to be able to open RTF0 documents created by "Ted" etc... 
+    // RTF Version 0 should be compatible with version 1.
+
     token.next();
 
     if (token.type != RTFTokenizer::ControlWord ||
-	strcmp( token.text, "rtf" ) || token.value != 1)
+	strcmp( token.text, "rtf" ) || token.value > 1)
     {
-	kdError() << "Wrong document type or version (RTF version 1.x expected)" << endl;
+	kdError() << "Wrong document type or version (RTF version 0 or 1.x expected)" << endl;
 	in.close();
 	return KoFilter::WrongFormat;
     }
