@@ -130,7 +130,7 @@ bool KprKword::filter(const QString &fileIn, const QString &fileOut,
     QDomElement font = outdoc.createElement( "FONT" );
     format.appendChild( font );
     // by picking up a font from the kpr doc we ensure that it's installed, at least
-    font.setAttribute( "value", aFont );
+    font.setAttribute( "name", aFont );
     QDomElement size = outdoc.createElement( "SIZE" );
     format.appendChild( size );
     size.setAttribute( "value", 24 );
