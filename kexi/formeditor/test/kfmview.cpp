@@ -67,7 +67,7 @@ KFMView::KFMView()
 
 	createGUI("kfmui.rc", true);
 	setXMLFile("kfmui.rc", true);
-
+	setAutoSaveSettings();
 }
 
 void

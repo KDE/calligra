@@ -131,7 +131,7 @@ class PasteWidgetCommand : public KCommand
 class DeleteWidgetCommand : public KCommand
 {
 	public:
-		DeleteWidgetCommand(WidgetList &list, Form *form);
+		DeleteWidgetCommand(::WidgetList &list, Form *form);
 
 		virtual void execute();
 		virtual void unexecute();

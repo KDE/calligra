@@ -18,6 +18,8 @@
 */
 #include <qlayout.h>
 #include <qdialog.h>
+#include <qcursor.h>
+#include <qobjectlist.h>
 
 #include <keditlistbox.h>
 #include <kstdguiitem.h>
@@ -124,7 +126,11 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 		return false;
 
 	if(ev->type() == QEvent::FocusOut)
-		resetEditor();
+	{
+		QWidget *focus = w->topLevelWidget()->focusWidget();
+		if(w != focus && !w->child(focus->name(), focus->className()))
+			resetEditor();
+	}
 	else if(ev->type() == QEvent::KeyPress)
 	{
 		QKeyEvent *e = static_cast<QKeyEvent*>(ev);
@@ -189,6 +195,21 @@ WidgetFactory::addValueDescription(Container *container, const char *value, cons
 {
 	ObjectPropertyBuffer *buff = container->form()->manager()->buffer();
 	buff->addValueDescription(value, desc);
+}
+
+void installRecursiveEventFilter(QObject *object, QObject *container)
+{
+	object->installEventFilter(container);
+	if(!object->isWidgetType())
+		return;
+	((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
+
+	if(!object->children())
+		return;
+
+	QObjectList list = *(object->children());
+	for(QObject *obj = list.first(); obj; obj = list.next())
+		installRecursiveEventFilter(obj, container);
 }
 
 WidgetFactory::~WidgetFactory()

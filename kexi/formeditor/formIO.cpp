@@ -29,6 +29,7 @@
 #include <qtabwidget.h>
 #include <qlayout.h>
 #include <qobjectlist.h>
+#include <qdatetime.h>
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -248,7 +249,6 @@ FormIO::prop(QDomElement &parentNode, QDomDocument &parent, const char *name, co
 			valueE = parent.createTextNode(s);
 			type.appendChild(valueE);
 		}
-		propertyE.appendChild(type);
 		parentNode.appendChild(propertyE);
 		return;
 	}
@@ -437,6 +437,75 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &type, QDomText &valueE, 
 			type = parent.createElement("pixmap");
 			valueE = parent.createTextNode(saveImage(parent, value.toPixmap()));
 			type.appendChild(valueE);
+			break;
+		}
+		case QVariant::Time:
+		{
+			type = parent.createElement("time");
+			QDomElement h = parent.createElement("hour");
+			QDomElement m = parent.createElement("minute");
+			QDomElement s = parent.createElement("second");
+			QDomText valueH = parent.createTextNode(QString::number(value.toTime().hour()));
+			QDomText valueM = parent.createTextNode(QString::number(value.toTime().minute()));
+			QDomText valueS = parent.createTextNode(QString::number(value.toTime().second()));
+
+			h.appendChild(valueH);
+			m.appendChild(valueM);
+			s.appendChild(valueS);
+
+			type.appendChild(h);
+			type.appendChild(m);
+			type.appendChild(s);
+			break;
+		}
+		case QVariant::Date:
+		{
+			type = parent.createElement("date");
+			QDomElement y = parent.createElement("year");
+			QDomElement m = parent.createElement("month");
+			QDomElement d = parent.createElement("day");
+			QDomText valueY = parent.createTextNode(QString::number(value.toDate().year()));
+			QDomText valueM = parent.createTextNode(QString::number(value.toDate().month()));
+			QDomText valueD = parent.createTextNode(QString::number(value.toDate().day()));
+
+			y.appendChild(valueY);
+			m.appendChild(valueM);
+			d.appendChild(valueD);
+
+			type.appendChild(y);
+			type.appendChild(m);
+			type.appendChild(d);
+			break;
+		}
+		case QVariant::DateTime:
+		{
+			type = parent.createElement("datetime");
+			QDomElement h = parent.createElement("hour");
+			QDomElement m = parent.createElement("minute");
+			QDomElement s = parent.createElement("second");
+			QDomElement y = parent.createElement("year");
+			QDomElement mo = parent.createElement("month");
+			QDomElement d = parent.createElement("day");
+			QDomText valueH = parent.createTextNode(QString::number(value.toDateTime().time().hour()));
+			QDomText valueM = parent.createTextNode(QString::number(value.toDateTime().time().minute()));
+			QDomText valueS = parent.createTextNode(QString::number(value.toDateTime().time().second()));
+			QDomText valueY = parent.createTextNode(QString::number(value.toDateTime().date().year()));
+			QDomText valueMo = parent.createTextNode(QString::number(value.toDateTime().date().month()));
+			QDomText valueD = parent.createTextNode(QString::number(value.toDateTime().date().day()));
+
+			h.appendChild(valueH);
+			m.appendChild(valueM);
+			s.appendChild(valueS);
+			y.appendChild(valueY);
+			mo.appendChild(valueMo);
+			d.appendChild(valueD);
+
+			type.appendChild(h);
+			type.appendChild(m);
+			type.appendChild(s);
+			type.appendChild(y);
+			type.appendChild(mo);
+			type.appendChild(d);
 			break;
 		}
 		default:

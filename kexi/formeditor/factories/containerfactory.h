@@ -21,7 +21,7 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		virtual QString				name();
 		virtual KFormDesigner::WidgetList	classes();
 		virtual QWidget				*create(const QString &, QWidget *, const char *, KFormDesigner::Container *);
-		virtual void				createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
+		virtual bool				createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
 		virtual void		startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
 		virtual bool		showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple) { return !multiple;}
 		virtual void     saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
@@ -34,7 +34,11 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 
 	public slots:
 		void AddTabPage();
-		void chTitle();
+		void AddStackPage();
+		void renameTabPage();
+		void removeTabPage();
+		void prevStackPage();
+		void nextStackPage();
 
 	private:
 		KFormDesigner::WidgetList		m_classes;

@@ -94,7 +94,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 */
 		QWidget	*createWidget(const QString &w, QWidget *parent, const char *name, Container *c);
 
-		void	createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
+		bool	createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
 
 		QString  displayName(const QString &classname);
 
@@ -102,7 +102,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 
 		void	saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		        QDomElement &parentNode, QDomDocument &parent);
-		void		readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w);
+		void	readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w);
 		bool    showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple);
 		QStringList  autoSaveProperties(const QString &classname);
 

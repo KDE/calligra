@@ -128,7 +128,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 	{
 		case QEvent::MouseButtonPress:
 		{
-			kdDebug() << "QEvent::MouseButtonPress sender object = " << s->name() << endl;
+			kdDebug() << "QEvent::MouseButtonPress sender object = " << s->name() << "of type " << s->className() << endl;
 			kdDebug() << "QEvent::MouseButtonPress this          = " << this->name() << endl;
 
 			m_moving = static_cast<QWidget*>(s);
@@ -137,7 +137,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if(m_moving->parentWidget())
 				{
 					m_moving = m_moving->parentWidget();
-					if(m_moving->parentWidget())
+					if(m_moving->parentWidget() && !m_moving->isA("QWidgetStack"))
 						m_moving = m_moving->parentWidget();
 				}
 				kdDebug() << "composed widget  " << m_moving->name() << endl;
@@ -188,8 +188,15 @@ Container::eventFilter(QObject *s, QEvent *e)
 				QString n = m_form->manager()->lib()->displayName(w->className());
 				KPopupMenu *p = new KPopupMenu();
 
-				m_form->manager()->lib()->createMenuActions(w->className(),w,p,this);
-				int id = parent->insertItem(n,p);
+				int id;
+				bool ok = m_form->manager()->lib()->createMenuActions(w->className(),w,p,this);
+				if(!ok)
+				{
+					id = parent->insertItem(n);
+					parent->setItemEnabled(id, false);
+				}
+				else
+					id = parent->insertItem(n,p);
 
 				m_form->manager()->setInsertPoint(m_container->mapFromGlobal(QCursor::pos()));
 				parent->exec(QCursor::pos());
@@ -287,6 +294,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 		}
 		case QEvent::MouseButtonDblClick:
 		{
+			kdDebug() << "Container: Mouse dbl click for widget " << s->name() << endl;
 			QWidget *w = static_cast<QWidget*>(s);
 			if(!w)
 				return false;

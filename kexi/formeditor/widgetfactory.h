@@ -90,7 +90,7 @@ class KFORMEDITOR_EXPORT Widget
 
 typedef QPtrList<Widget> WidgetList;
 
-
+void  installRecursiveEventFilter(QObject *object, QObject *container);
 /**
  * this is a poor virtual class, used for making widgets
  * avaible to the WidgetLibrary.
@@ -124,7 +124,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		virtual QWidget*	create(const QString &classname, QWidget *parent, const char *name,
 					 KFormDesigner::Container *container)=0;
 
-		virtual void		createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)=0;
+		virtual bool		createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)=0;
 
 		/*! Creates (if necessary) an editor to edit the contents of the widget directly in the Form
 		   (eg creates a line edit to change the text of a label). \a classname is the class the widget belongs to, \a w is the widget to edit

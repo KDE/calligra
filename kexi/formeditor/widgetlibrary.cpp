@@ -20,6 +20,7 @@
 #include <qdom.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 #include <klibloader.h>
 #include <kparts/componentfactory.h>
 #include <ktrader.h>
@@ -135,15 +136,14 @@ WidgetLibrary::createWidget(const QString &w, QWidget *parent, const char *name,
 	return wfactory->factory()->create(w, parent, name, c);
 }
 
-void
+bool
 WidgetLibrary::createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)
 {
 	Widget *wfactory = m_widgets[c];
 	if(!wfactory)
-		return ;
+		return false;
 
-	wfactory->factory()->createMenuActions(c, w, menu, container);
-	return;
+	return wfactory->factory()->createMenuActions(c, w, menu, container);
 }
 
 void
@@ -163,7 +163,7 @@ WidgetLibrary::displayName(const QString &classname)
 	if(m_widgets.find(classname))
 		return m_widgets[classname]->name();
 	else
-		return QString();
+		return i18n("Form");
 }
 
 void
