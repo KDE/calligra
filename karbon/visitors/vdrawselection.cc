@@ -86,6 +86,8 @@ VDrawSelection::visitVComposite( VComposite &composite )
 				if( ( editnodes || composite.state() == VObject::selected && m_nodeediting ) &&
 					jtr.current()->type() == VSegment::curve )
 				{
+					// Draw control lines:
+					bool drawNode1 = false, drawNode2 = false;
 					if(
 						jtr.current()->pointIsSelected( 1 ) ||
 						jtr.current()->knotIsSelected() )
@@ -97,14 +99,8 @@ VDrawSelection::visitVComposite( VComposite &composite )
 							jtr.current()->knot() );
 
 						m_painter->strokePath();
-						// Draw control node2:
-						m_painter->newPath();
-						m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue.light() );
-						m_painter->drawNode( jtr.current()->point( 1 ), 2 );
-						m_painter->strokePath();
+						drawNode2 = true;
 					}
-
-					// Draw control lines:
 					if(
 						jtr.current()->prev() &&
 						( jtr.current()->pointIsSelected( 0 ) ||
@@ -117,13 +113,24 @@ VDrawSelection::visitVComposite( VComposite &composite )
 							jtr.current()->point( 0 ) );
 
 						m_painter->strokePath();
+						drawNode1 = true;
+					}
+					if( drawNode1 )
+					{
 						// Draw control node1:
 						m_painter->newPath();
 						m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue.light() );
 						m_painter->drawNode( jtr.current()->point( 0 ), 2 );
 						m_painter->strokePath();
 					}
-
+					if( drawNode2 )
+					{
+						// Draw control node2:
+						m_painter->newPath();
+						m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue.light() );
+						m_painter->drawNode( jtr.current()->point( 1 ), 2 );
+						m_painter->strokePath();
+					}
 				}
 
 				// Draw knot:
