@@ -346,7 +346,9 @@ void KOSpell::nextWord()
     while ( word.isEmpty() && (lastpos < origbuffer.length()-1));
 
     if ( !spellWord( word ))
-        nextWord();
+    {
+        checkNextWord();
+    }
 }
 
 void KOSpell::previousWord()
@@ -399,8 +401,16 @@ bool KOSpell::check( const QString &_buffer, bool _usedialog )
         ksdlg->hide();
 
     //check new word.
-    nextWord();
+    checkNextWord();
     return TRUE;
+}
+
+void KOSpell::checkNextWord()
+{
+    if ( !ksdlg->previousWord() )
+        nextWord();
+    else
+        previousWord();
 }
 
 void KOSpell::dialog(const QString & word, QStringList & sugg )
@@ -477,7 +487,7 @@ void KOSpell::dialog2 (int result)
         break;
     }
     if ( testNextWord)
-        nextWord();
+        checkNextWord();
 }
 
 void KOSpell::spellCheckReplaceWord( const QString & _word)

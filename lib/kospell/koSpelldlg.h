@@ -29,6 +29,8 @@ class KListBox;
 class KLineEdit;
 class KProgress;
 class QComboBox;
+class QCheckBox;
+
 //Possible result codes
 enum KS_RESULT {
   KS_CANCEL=     0,
@@ -57,6 +59,8 @@ class KOSpellDlg : public KDialogBase
     QPushButton *qpbrep, *qpbrepa;
     QLabel *wordlabel;
     QString word, newword;
+    QCheckBox *m_previous;
+
     bool progressbar;
     int m_indexLanguage;
 public:
@@ -78,6 +82,8 @@ public:
     void standby() { emit(ready(false)); }
 
     int languageIndex()const { return m_indexLanguage;}
+
+    bool previousWord() const;
 
 public slots:
     /**

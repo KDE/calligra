@@ -441,8 +441,7 @@ protected:
     unsigned int curprog;
 
     void dialog (const QString & word, QStringList & sugg);
-    QString replacement () const
-        { return dlgreplacement; }
+    QString replacement () const { return dlgreplacement; }
 
     void setUpDialog ( bool reallyusedialogbox = TRUE);
 
@@ -452,10 +451,14 @@ protected:
     bool writePersonalDictionary ();
 
     bool spellWord( const QString &_word );
+
+    void checkNextWord();
     void nextWord();
     void previousWord();
+
     void spellCheckReplaceWord( const QString & _word);
     QStringList resultCheckWord( const QString &_word );
+
     bool initConfig();
     void changeSpellLanguage( int index );
 private:

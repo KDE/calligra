@@ -34,6 +34,7 @@
 #include <qcombobox.h>
 #include <koSconfig.h>
 #include "koSpelldlg.h"
+#include <qcheckbox.h>
 
 KOSpellDlg::KOSpellDlg(
   QWidget * parent,
@@ -43,123 +44,118 @@ KOSpellDlg::KOSpellDlg(
   bool _modal,
   bool _autocorrect
 )
-  : KDialogBase(
-      parent, name, _modal, i18n("Check spelling"), Help|Cancel|User1,
-      Cancel, true, i18n("&Stop")
-    ),
+  : KDialogBase(parent, name, _modal, i18n("Check spelling"), Help|Cancel|User1, Cancel, true, i18n("&Stop")),
     progressbar(_progressbar)
 {
-  QWidget * w = new QWidget(this);
-  setMainWidget(w);
-  m_indexLanguage=0;
-  wordlabel = new QLabel(w, "wordlabel");
-  wordlabel->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+    QWidget * w = new QWidget(this);
+    setMainWidget(w);
+    m_indexLanguage=0;
+    wordlabel = new QLabel(w, "wordlabel");
+    wordlabel->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 
-  editbox = new KLineEdit(w, "editbox");
+    editbox = new KLineEdit(w, "editbox");
 
-  listbox = new KListBox(w, "listbox");
+    listbox = new KListBox(w, "listbox");
 
 
-  QLabel * l_language =
-    new QLabel(i18n("Language:"), w, "l_language");
+    QLabel * l_language = new QLabel(i18n("Language:"), w, "l_language");
 
-  language = new QComboBox( w, "language");
+    language = new QComboBox( w, "language");
 
-  language->insertStringList( KOSpellConfig::listOfAspellLanguages());
-  language->setCurrentItem( indexOfLanguage);
-  QLabel * l_misspelled =
-    new QLabel(i18n("Misspelled word:"), w, "l_misspelled");
+    language->insertStringList( KOSpellConfig::listOfAspellLanguages());
+    language->setCurrentItem( indexOfLanguage);
 
-  QLabel * l_replacement =
-    new QLabel(i18n("Replacement:"), w, "l_replacement");
+    m_previous = new QCheckBox( i18n("Previous word"), w);
 
-  QLabel * l_suggestions =
-    new QLabel(i18n("Suggestions:"), w, "l_suggestions");
-  l_suggestions->setAlignment(Qt::AlignLeft | Qt::AlignTop );
+    QLabel * l_misspelled = new QLabel(i18n("Misspelled word:"), w, "l_misspelled");
 
-  KButtonBox * buttonBox = new KButtonBox(w, Vertical);
+    QLabel * l_replacement = new QLabel(i18n("Replacement:"), w, "l_replacement");
 
-  QPushButton * b = 0L;
+    QLabel * l_suggestions = new QLabel(i18n("Suggestions:"), w, "l_suggestions");
+    l_suggestions->setAlignment(Qt::AlignLeft | Qt::AlignTop );
 
-  b = buttonBox->addButton(i18n("&Replace"), this, SLOT(replace()));
-  connect(this, SIGNAL(ready(bool)), b, SLOT(setEnabled(bool)));
-  qpbrep = b;
+    KButtonBox * buttonBox = new KButtonBox(w, Vertical);
 
-  b = buttonBox->addButton(i18n("Replace &All"), this, SLOT(replaceAll()));
-  connect(this, SIGNAL(ready(bool)), b, SLOT(setEnabled(bool)));
-  qpbrepa = b;
+    QPushButton * b = 0L;
 
-  b = buttonBox->addButton(i18n("&Ignore"), this, SLOT(ignore()));
-  connect(this, SIGNAL(ready(bool)), b, SLOT(setEnabled(bool)));
+    b = buttonBox->addButton(i18n("&Replace"), this, SLOT(replace()));
+    connect(this, SIGNAL(ready(bool)), b, SLOT(setEnabled(bool)));
+    qpbrep = b;
 
-  b = buttonBox->addButton(i18n("I&gnore All"), this, SLOT(ignoreAll()));
-  connect(this, SIGNAL(ready(bool)), this, SLOT(setEnabled(bool)));
+    b = buttonBox->addButton(i18n("Replace &All"), this, SLOT(replaceAll()));
+    connect(this, SIGNAL(ready(bool)), b, SLOT(setEnabled(bool)));
+    qpbrepa = b;
 
-  b = buttonBox->addButton(i18n("A&dd"), this, SLOT(add()));
-  connect(this, SIGNAL(ready(bool)), b, SLOT(setEnabled(bool)));
+    b = buttonBox->addButton(i18n("&Ignore"), this, SLOT(ignore()));
+    connect(this, SIGNAL(ready(bool)), b, SLOT(setEnabled(bool)));
 
-  if ( _autocorrect )
-  {
-      b = buttonBox->addButton( i18n("AutoCorrection"), this, SLOT(addToAutoCorrect()));
-      connect( this,  SIGNAL( ready(bool)), b, SLOT(setEnabled(bool)));
-  }
+    b = buttonBox->addButton(i18n("I&gnore All"), this, SLOT(ignoreAll()));
+    connect(this, SIGNAL(ready(bool)), this, SLOT(setEnabled(bool)));
 
-  connect(this, SIGNAL(user1Clicked()), this, SLOT(stop()));
+    b = buttonBox->addButton(i18n("A&dd"), this, SLOT(add()));
+    connect(this, SIGNAL(ready(bool)), b, SLOT(setEnabled(bool)));
 
-  connect( language, SIGNAL( activated ( int )), this, SLOT( changeLanguage( int)));
+    if ( _autocorrect )
+    {
+        b = buttonBox->addButton( i18n("AutoCorrection"), this, SLOT(addToAutoCorrect()));
+        connect( this,  SIGNAL( ready(bool)), b, SLOT(setEnabled(bool)));
+    }
 
-  buttonBox->layout();
+    connect(this, SIGNAL(user1Clicked()), this, SLOT(stop()));
 
-  QHBoxLayout * layout = 0L;
+    connect( language, SIGNAL( activated ( int )), this, SLOT( changeLanguage( int)));
 
-  if (progressbar) {
+    buttonBox->layout();
 
-    QVBoxLayout * topLayout =
-      new QVBoxLayout(w, KDialog::marginHint(), KDialog::spacingHint());
+    QHBoxLayout * layout = 0L;
 
-    layout = new QHBoxLayout(topLayout);
-    progbar = new KProgress (w);
-    topLayout->addWidget(progbar);
+    if (progressbar)
+    {
 
-  } else {
+        QVBoxLayout * topLayout = new QVBoxLayout(w, KDialog::marginHint(), KDialog::spacingHint());
+        layout = new QHBoxLayout(topLayout);
+        progbar = new KProgress (w);
+        topLayout->addWidget(progbar);
 
-    layout =
-      new QHBoxLayout(w, KDialog::marginHint(), KDialog::spacingHint());
-  }
+    }
+    else
+    {
 
-  QGridLayout * leftGrid = new QGridLayout(layout);
+        layout =
+            new QHBoxLayout(w, KDialog::marginHint(), KDialog::spacingHint());
+    }
 
-  leftGrid->addWidget(l_misspelled,   0, 0);
-  leftGrid->addWidget(l_replacement,  1, 0);
+    QGridLayout * leftGrid = new QGridLayout(layout);
 
-  leftGrid->addWidget(l_suggestions,  2, 0);
-  leftGrid->addMultiCellWidget(wordlabel,      0,0, 1, 2);
-  leftGrid->addWidget(editbox,        1, 1);
-  leftGrid->addMultiCellWidget(listbox,        2, 2, 1, 2);
+    leftGrid->addWidget(l_misspelled,   0, 0);
+    leftGrid->addWidget(l_replacement,  1, 0);
 
-  leftGrid->addWidget(l_language,     3, 0);
-  leftGrid->addMultiCellWidget(language,       3, 3, 1, 2);
+    leftGrid->addWidget(l_suggestions,  2, 0);
+    leftGrid->addMultiCellWidget(wordlabel,      0,0, 1, 2);
+    leftGrid->addWidget(editbox,        1, 1);
+    leftGrid->addMultiCellWidget(listbox,        2, 2, 1, 2);
 
-  layout->addWidget(buttonBox);
+    leftGrid->addWidget(l_language,     3, 0);
+    leftGrid->addMultiCellWidget(language,       3, 3, 1, 2);
 
-  connect(
-    editbox,
-    SIGNAL(textChanged(const QString &)),
-    SLOT(textChanged(const QString &))
-  );
+    leftGrid->addMultiCellWidget( m_previous, 4, 4, 0, 2);
 
-  connect(editbox, SIGNAL(returnPressed()),   SLOT(replace()));
-  connect(listbox, SIGNAL(selected(int)),     SLOT(selected(int)));
-  connect(listbox, SIGNAL(highlighted(int)),  SLOT(highlighted (int)));
+    layout->addWidget(buttonBox);
 
-  QSize bs = sizeHint();
-  if (bs.width() < bs.height()) {
-    resize(9 * bs.height() / 6, bs.height());
-  }
+    connect( editbox, SIGNAL(textChanged(const QString &)), SLOT(textChanged(const QString &)));
 
-  setHelp("spelldlg", "kspell");
+    connect(editbox, SIGNAL(returnPressed()),   SLOT(replace()));
+    connect(listbox, SIGNAL(selected(int)),     SLOT(selected(int)));
+    connect(listbox, SIGNAL(highlighted(int)),  SLOT(highlighted (int)));
 
-  emit(ready(false));
+    QSize bs = sizeHint();
+    if (bs.width() < bs.height()) {
+        resize(9 * bs.height() / 6, bs.height());
+    }
+
+    setHelp("spelldlg", "kspell");
+
+    emit(ready(false));
 }
 
 void KOSpellDlg::addToAutoCorrect()
@@ -192,8 +188,7 @@ void KOSpellDlg::changeSuggList( QStringList *_lst )
     changeButtonState( _lst );
 }
 
-void
-KOSpellDlg::init(const QString & _word, QStringList * _sugg)
+void KOSpellDlg::init(const QString & _word, QStringList * _sugg)
 {
     sugg = _sugg;
     word = _word;
@@ -228,8 +223,7 @@ void KOSpellDlg::changeButtonState( QStringList * _sugg )
   }
 }
 
-void
-KOSpellDlg::slotProgress (unsigned int p)
+void KOSpellDlg::slotProgress (unsigned int p)
 {
   if (!progressbar)
     return;
@@ -237,22 +231,19 @@ KOSpellDlg::slotProgress (unsigned int p)
   progbar->setValue((int) p);
 }
 
-void
-KOSpellDlg::textChanged (const QString &)
+void KOSpellDlg::textChanged (const QString &)
 {
   qpbrep->setEnabled(true);
   qpbrepa->setEnabled(true);
 }
 
-void
-KOSpellDlg::selected (int i)
+void KOSpellDlg::selected (int i)
 {
   highlighted (i);
   replace();
 }
 
-void
-KOSpellDlg::highlighted (int i)
+void KOSpellDlg::highlighted (int i)
 {
   if (listbox->text (i)!=0)
     editbox->setText (listbox->text (i));
@@ -262,65 +253,61 @@ KOSpellDlg::highlighted (int i)
   exit functions
   */
 
-void
-KOSpellDlg::closeEvent( QCloseEvent * )
+void KOSpellDlg::closeEvent( QCloseEvent * )
 {
 	cancel();
 }
 
-void
-KOSpellDlg::done (int result)
+void KOSpellDlg::done (int result)
 {
   emit command (result);
 }
-void
-KOSpellDlg::ignore()
+void KOSpellDlg::ignore()
 {
   newword = word;
   done (KS_IGNORE);
 }
 
-void
-KOSpellDlg::ignoreAll()
+void KOSpellDlg::ignoreAll()
 {
   newword = word;
   done (KS_IGNOREALL);
 }
 
-void
-KOSpellDlg::add()
+void KOSpellDlg::add()
 {
   newword = word;
   done (KS_ADD);
 }
 
 
-void
-KOSpellDlg::cancel()
+void KOSpellDlg::cancel()
 {
   newword=word;
   done (KS_CANCEL);
 }
 
-void
-KOSpellDlg::replace()
+void KOSpellDlg::replace()
 {
   newword = editbox->text();
   done (KS_REPLACE);
 }
 
-void
-KOSpellDlg::stop()
+void KOSpellDlg::stop()
 {
   newword = word;
   done (KS_STOP);
 }
 
-void
-KOSpellDlg::replaceAll()
+void KOSpellDlg::replaceAll()
 {
   newword = editbox->text();
   done (KS_REPLACEALL);
+}
+
+bool KOSpellDlg::previousWord() const
+{
+    return m_previous->isChecked();
 }
 
 #include "koSpelldlg.moc"
