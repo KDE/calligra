@@ -422,7 +422,7 @@ void KWView::setupActions()
                                        actionCollection(), "tools_formula" );
 
     (void) new KAction( i18n( "&Table..." ), "inline_table",
-                        CTRL+Key_F1 /*same as kpr*/,
+                        Key_F5 ,
                         this, SLOT( insertTable() ),
                         actionCollection(), "insert_table" );
 
