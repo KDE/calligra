@@ -66,7 +66,7 @@ document</link></para>
 document</link></para>
 </listitem>
 <listitem>
-<para><link linkend="new-doc">Start an <quote>Empty</quote>
+<para><link linkend="loading-empty-doc">Start an <quote>Empty</quote>
 document. (This is the default)</link></para>
 </listitem>
 </itemizedlist
@@ -134,6 +134,13 @@ dialog box is revealed.  For more details on this dialog box refer to
 
 <sect3 id="loading-recent-doc">
 <title>Open a Recent Document</title>
+<para>&kword; keeps track of the most recently edited documents.  You can select one of these documents by using the drop-down box
+to the right of the radio button labeled <guilabel>Open a recent document</guilabel>.</para>
+
+
+</sect3>
+<sect3 id="loading-empty-doc">
+<title>Loading an Empty Document</title>
 
 <para>This is the default action, and begins a new document in Text Oriented Mode, with one frame per page.
 This is an excellent choice for every day correspondance, or general
@@ -141,6 +148,7 @@ word processing.  Simply click <guibutton>OK</guibutton> to
 begin.</para>
 
 </sect3>
+
 </sect2>
 
 </sect1>
@@ -152,9 +160,9 @@ begin.</para>
 usually want to save this to a file on your hard drive.</para>
 
 <sect2 id="command-save">
-<title>The <quote>Save</quote> Command</title>
+<title>The Save Command</title>
 
-<para>The <quote>Save</quote> command can be invoked 3 ways:</para>
+<para>The Save command can be invoked 3 ways:</para>
 
 <itemizedlist>
 <listitem>
@@ -219,9 +227,9 @@ probelm with the save, an error box will appear.</para>
 </sect2>
 
 <sect2 id="command-save-as">
-<title>The <quote>Save As..</quote> Command</title>
+<title>The Save As.. Command</title>
 
-<para>The <quote>Save As...</quote> command can be invoked 2
+<para>The Save As... command can be invoked 2
 ways:</para>
 
 <itemizedlist>

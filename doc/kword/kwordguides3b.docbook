@@ -6,7 +6,7 @@ letter, such as a book, newsletter, or resume, the document is often
 broken down into sections.  Each of these sections may have a similar
 appearance.  </para>
 
-<para>You can use styles to easily keep a consistant look throughout
+<para>You can use styles to easily keep a consistent look throughout
 your document.</para>
 
 <tip>
@@ -42,9 +42,9 @@ sections of text as <quote>Section Titles</quote> or <quote>Normal
 Text</quote>.</para>
 
 <para>Once we have finished the document, you can change the look of all
-the text labled <quote>Section Title</quote> all at once.  </para>
+the text labeled <quote>Section Title</quote> all at once.  </para>
 
-<para>This will ensure that all section titles appear consistant
+<para>This will ensure that all section titles appear consistent
 throughout your document.</para>
 
 <para>&kword; has 11 predefined Styles.  For a list of them, and the
@@ -69,8 +69,8 @@ the style from the list.</para>
 
 <listitem>
 <para>You can select the style using the drop down box on the Character
-Formatting Toolbar. (  <inlinemediaobject><imageobject><imagedata
-fileref="chstylebut" format="PNG"/></imageobject></inlinemediaobject>
+Formatting Tool-bar. (  <inlinemediaobject><imageobject><imagedata
+fileref="chstylebut.png" format="PNG"/></imageobject></inlinemediaobject>
 )</para>
 </listitem>
 </itemizedlist>
@@ -94,7 +94,7 @@ from the Menu bar.</para><para>This will bring up a dialog box</para>
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="styldlg1" format="PNG"/></imageobject>
+<imagedata fileref="styldlg1.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 </step>
@@ -106,16 +106,16 @@ from the Menu bar.</para><para>This will bring up a dialog box</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="styldlg3" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="styldlg3.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 </step>
 <step>
-<para>Type a descriptive name in the box labled
+<para>Type a descriptive name in the box labeled
 <guilabel>Name</guilabel>.  This will be the name of the style.</para>
 </step>
 <step>
-<para>Now select a style from the dropdown box labled
+<para>Now select a style from the drop-down box labeled
 <guilabel>Following Style Template</guilabel>. This will be the basic
 style that you modify to create your new style (You have to start
 somewhere right?).  If in doubt, <quote>Standard</quote> is fine.</para>
@@ -127,7 +127,7 @@ style.</para>
 <para>The preview box will show you what your new style will look
 like.</para>
 
-<para>Use the buttons labled <link linkend="style-font">Font</link>,
+<para>Use the buttons labeled <link linkend="style-font">Font</link>,
 <link linkend="style-color">Color</link>, <link
 linkend="style-space">Spacing and Indents</link>, <link
 linkend="style-align">Alignment</link>, <link
@@ -156,7 +156,7 @@ and toggle italics and bold face by clicking on
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="fchardlg" format="PNG"/></imageobject>
+<imagedata fileref="fchardlg.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
@@ -188,21 +188,21 @@ linkend="select-colors">Color Selection Dialog Box</link>.</para>
 <sect3 id="style-space">
 <title>Changing Paragraph Spacing and Indents</title>
 
-<para>To change the paragraph spacing and indention of the paragraph of
+<para>To change the paragraph spacing and indentation of the paragraph of
 your style, click on "Spacing and Indents".  This opens a new dialog
 box.</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="styldlg4" format="PNG"/></imageobject>
+<imagedata fileref="styldlg4.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
 <para>This dialog box allows you to set the paragraph margins, the
 spacing between lines, and the spacing between paragraphs.</para>
 
-<para>The first section of this dialog box is labled
+<para>The first section of this dialog box is labeled
 <guilabel>Indent</guilabel>, and consists of three parts:</para>
 
 <variablelist>
@@ -211,7 +211,7 @@ spacing between lines, and the spacing between paragraphs.</para>
 <listitem>
 <para>You can indent all the lines of a paragraph by entering a value in
 this box. The first line is unaffected by this box.  If you want to
-alter the first line, you must specify that seperately.</para>
+alter the first line, you must specify that separately.</para>
 </listitem>
 </varlistentry>
 
@@ -231,12 +231,12 @@ margin of the first line.</para>
 </varlistentry>
 </variablelist>
 
-<para>The next section is labled <guilabel>Line Spacing</guilabel>.  It
+<para>The next section is labeled <guilabel>Line Spacing</guilabel>.  It
 consists of two elements:</para>
 
 <variablelist>
 <varlistentry>
-<term>Dropdown box</term>
+<term>Drop-down box</term>
 <listitem>
 <para>!!!!!!!!!!!!!!Blacked out!!!!!!!!!!!!!!!</para>
 </listitem>
@@ -251,14 +251,14 @@ increase the spacing between lines.  If, on the other hand, you enter a
 negative number, you will decrease the spacing between lines.</para>
 
 <note>
-<para>Changes to this entry do NOT affect the line spaceing between
+<para>Changes to this entry do NOT affect the line spacing between
 lines of different paragraphs.</para>
 </note>
 </listitem>
 </varlistentry>
 </variablelist>
 
-<para>The last section is labled <guilabel>Paragraph Space</guilabel> .
+<para>The last section is labeled <guilabel>Paragraph Space</guilabel> .
 It consists of two entries:</para>
 
 <variablelist>
@@ -300,7 +300,7 @@ document.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="styldlg5" format="PNG"/></imageobject>
+<imagedata fileref="styldlg5.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
@@ -312,7 +312,7 @@ be moved on the line.</para>
 
 <para>If you choose <guilabel>Block</guilabel>, &kword; will increase
 the space <emphasis>between</emphasis> words, so that each line (with
-the exception of the last liine), reaches both the left and right
+the exception of the last line), reaches both the left and right
 margins.</para>
 
 <para>On the right of the dialog box, is a preview box, which will
@@ -329,7 +329,7 @@ document.</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="styldlg6" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="styldlg6.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
@@ -351,7 +351,7 @@ document.</para>
 <varlistentry>
 <term><guilabel>Style</guilabel></term>
 <listitem>
-<para>You can use this dropdown box to select the overall type of the
+<para>You can use this drop-down box to select the overall type of the
 new border. </para><para>Your choices are: Solid Line, Dash Line, Dot
 line, Dash Dot line, Dash Dot Dot line</para></listitem>
 </varlistentry>
@@ -384,7 +384,7 @@ box</link></para>
 <tbody>
 
 <row>
-<entry><inlinemediaobject><imageobject><imagedata fileref="borbutL"
+<entry><inlinemediaobject><imageobject><imagedata fileref="borbutL.png"
 format="PNG" align="right"/></imageobject></inlinemediaobject></entry>
 <entry valign="middle">Select/Unselect Left Border.  Clicking this
 button will apply the current options to the left paragraph border.
@@ -392,7 +392,7 @@ Clicking a second time will remove the left paragraph border.</entry>
 </row>
 
 <row>
-<entry><inlinemediaobject><imageobject><imagedata fileref="borbutR"
+<entry><inlinemediaobject><imageobject><imagedata fileref="borbutR.png"
 format="PNG" align="right"/></imageobject></inlinemediaobject></entry>
 <entry valign="middle">Select/Unselect Right Border.  Clicking this
 button will apply the current options to the right paragraph border.
@@ -400,7 +400,7 @@ Clicking a second time will remove the right paragraph border.</entry>
 </row>
 
 <row>
-<entry><inlinemediaobject><imageobject><imagedata fileref="borbutT"
+<entry><inlinemediaobject><imageobject><imagedata fileref="borbutT.png"
 format="PNG" align="right"/></imageobject></inlinemediaobject></entry>
 <entry valign="middle">Select/Unselect Top Border.  Clicking this button
 will apply the current options to the top paragraph border.  Clicking a
@@ -408,7 +408,7 @@ second time will remove the top paragraph border.</entry>
 </row>
 
 <row>
-<entry><inlinemediaobject><imageobject><imagedata fileref="borbutB"
+<entry><inlinemediaobject><imageobject><imagedata fileref="borbutB.png"
 format="PNG" align="right"/></imageobject></inlinemediaobject></entry>
 <entry valign="middle">Select/Unselect Bottom Border.  Clicking this
 button will apply the current options to the bottom paragraph border.
@@ -432,7 +432,7 @@ look.</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="styldlg7" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="styldlg7.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
@@ -440,7 +440,7 @@ look.</para>
 </sect3>
 
 <sect3 id="style-tabulators">
-<title>Changing Tabstops.</title>
+<title>Changing Tab-stops.</title>
 
 <para>You can define tab stops for your styles.  To do so, click
 <guilabel>Tabulators</guilabel>.  This will open a new dialog
@@ -449,7 +449,7 @@ box.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="styldlg8" format="PNG"/></imageobject>
+<imagedata fileref="styldlg8.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
@@ -488,7 +488,7 @@ from the Menu bar.</para><para>This will bring up a dialog box</para>
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="styldlg1" format="PNG"/></imageobject>
+<imagedata fileref="styldlg1.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 </step>
@@ -499,7 +499,7 @@ delete by clicking once with the mouse left mouse button.</para>
 <warning>
 <para>Be sure you have selected  the correct style before you click
 <guibutton>Delete</guibutton>.  &kword; will not ask for confirmation,
-so you will not be given an oportunity to back out.</para>
+so you will not be given an opportunity to back out.</para>
 </warning>
 </step>
 <step>
@@ -509,7 +509,7 @@ so you will not be given an oportunity to back out.</para>
 </procedure>
 
 <tip>
-<para>Certain styles in &kword; are considered fundimental (Standard,
+<para>Certain styles in &kword; are considered fundamental (Standard,
 Head 1, Head2, Head 3, Enumerated List, Bulleted List, and Alphabetical
 list) and cannot be deleted.
 </para>
@@ -524,8 +524,8 @@ list) and cannot be deleted.
 
 <para>The true power of styles, is the ability to edit the formatting
 options of that style <emphasis>after</emphasis> you have defined the
-style.  By changing the formatting of the style, you immediatly change
-every paragraph with that style, and you maintain a consistant look to
+style.  By changing the formatting of the style, you immediately change
+every paragraph with that style, and you maintain a consistent look to
 your document.</para>
 
 <para>You will also notice, that editing the formatting options of a
@@ -542,7 +542,7 @@ from the Menu bar.</para><para>This will bring up a dialog box</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="styldlg1" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="styldlg1.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 </step>
@@ -558,7 +558,7 @@ from the Menu bar.</para><para>This will bring up a dialog box</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="styldlg3" format="PNG"/>
+<imageobject><imagedata fileref="styldlg3.png" format="PNG"/>
 </imageobject>
 </mediaobject>
 </screenshot>
@@ -576,11 +576,11 @@ like.</para>
 <para>Doing so will delete your current style from the list (and create
 a new one with the new name).</para>
 
-<para>Any paragraphs which were origninally formatted with this style,
+<para>Any paragraphs which were originally formatted with this style,
 will revert to <quote>Standard</quote>.</para>
 </warning>
 
-<para>Use the buttons labled 
+<para>Use the buttons labeled 
 <link linkend="change-style-font">Font</link>, 
 <link linkend="change-style-color">Color</link>, 
 <link linkend="change-style-spacing">Spacing and Indents</link>, 
@@ -610,7 +610,7 @@ and toggle italics and bold face by clicking on
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="fchardlg" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="fchardlg.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
@@ -642,20 +642,20 @@ linkend="select-colors">Color Selection Dialog Box</link>.</para>
 <sect3 id="change-style-spacing">
 <title>Changing Paragraph Spacing and Indents</title>
 
-<para>To change the paragraph spacing and indention of the paragraph of
+<para>To change the paragraph spacing and indentation of the paragraph of
 your style, click on <guilabel>Spacing and Indents</guilabel>.  This
 opens a new dialog box.</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="styldlg4" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="styldlg4.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
 <para>This dialog box allows you to set the paragraph margins, the
 spacing between lines, and the spacing between paragraphs.</para>
 
-<para>The first section of this dialog box is labled
+<para>The first section of this dialog box is labeled
 <guilabel>Indent</guilabel>, and consists of three parts:</para>
 
 <variablelist>
@@ -664,7 +664,7 @@ spacing between lines, and the spacing between paragraphs.</para>
 <listitem>
 <para>You can indent all the lines of a paragraph by entering a value in
 this box. The first line is unaffected by this box.  If you want to
-alter the first line, you must specify that seperately.</para>
+alter the first line, you must specify that separately.</para>
 </listitem>
 </varlistentry>
 
@@ -684,12 +684,12 @@ margin of the first line.</para>
 </varlistentry>
 </variablelist>
 
-<para>The next section is labled <guilabel>Line Spacing</guilabel>.  It
+<para>The next section is labeled <guilabel>Line Spacing</guilabel>.  It
 consists of two elements:</para>
 
 <variablelist>
 <varlistentry>
-<term>Dropdown box</term>
+<term>Drop-down box</term>
 <listitem>
 <para>!!!!!!!!!!!!!!Blacked out!!!!!!!!!!!!!!!</para>
 </listitem>
@@ -705,13 +705,13 @@ negative number, you will decrease the spacing between lines.</para>
 
 <note>
 <para>Changes to this entry do <emphasis>NOT</emphasis> affect the line
-spaceing between lines of different paragraphs.</para>
+spacing between lines of different paragraphs.</para>
 </note>
 </listitem>
 </varlistentry>
 </variablelist>
 
-<para>The last section is labled <guilabel>Paragraph Space</guilabel>.
+<para>The last section is labeled <guilabel>Paragraph Space</guilabel>.
 It consists of two entries:</para>
 
 <variablelist>
@@ -757,7 +757,7 @@ with this dialog box.</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="styldlg5" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="styldlg5.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
@@ -769,7 +769,7 @@ be moved on the line.</para>
 
 <para>If you choose <guilabel>Block</guilabel>, &kword; will increase
 the space <emphasis>between</emphasis> words, so that each line (with
-the exception of the last liine), reaches both the left and right
+the exception of the last line), reaches both the left and right
 margins.</para>
 
 <para>On the right of the dialog box, is a preview box, which will
@@ -792,7 +792,7 @@ with this dialog box.</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="styldlg6" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="styldlg6.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
@@ -814,7 +814,7 @@ document.</para>
 <varlistentry>
 <term><guilabel>Style</guilabel></term>
 <listitem>
-<para>You can use this dropdown box to select the overall type of the
+<para>You can use this drop-down box to select the overall type of the
 new border. </para>
 
 <para>Your choices are: Solid Line, Dash Line, Dot line, Dash Dot line,
@@ -848,10 +848,10 @@ box</link></para>
 <informaltable frame="none">
 <tgroup cols="2" align="left">
 <tbody>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutL" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Left Border.  Clicking this button will apply the current options to the left paragraph border.  Clicking a second time will remove the left paragraph border.</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutR" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Right Border.  Clicking this button will apply the current options to the right paragraph border.  Clicking a second time will remove the right paragraph border.</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutT" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Top Border.  Clicking this button will apply the current options to the top paragraph border.  Clicking a second time will remove the top paragraph border.</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutB" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Bottom Border.  Clicking this button will apply the current options to the bottom paragraph border.  Clicking a second time will remove the bottom paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutL.png" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Left Border.  Clicking this button will apply the current options to the left paragraph border.  Clicking a second time will remove the left paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutR.png" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Right Border.  Clicking this button will apply the current options to the right paragraph border.  Clicking a second time will remove the right paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutT.png" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Top Border.  Clicking this button will apply the current options to the top paragraph border.  Clicking a second time will remove the top paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutB.png" format="PNG" align="right"/></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Bottom Border.  Clicking this button will apply the current options to the bottom paragraph border.  Clicking a second time will remove the bottom paragraph border.</entry></row>
 </tbody></tgroup></informaltable>
 
 
@@ -875,7 +875,7 @@ with this dialog box.</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="styldlg7" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="styldlg7.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
@@ -889,7 +889,7 @@ with this dialog box.</para>
 </sect3>
 
 <sect3 id="change-style-tabulators">
-<title>Changing Tabstops.</title>
+<title>Changing Tab-stops.</title>
 
 <para>You can define tab stops for your styles.  To do so, click
 <guilabel>Tabulators</guilabel>.  This will open a new dialog
@@ -897,7 +897,7 @@ box.</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="styldlg8" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="styldlg8.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
@@ -929,7 +929,7 @@ right.</para>
 
 <para>With some documents, you will want to ensure that every character
 within your document <emphasis>exactly</emphasis> matches the document
-style.  With other documents, you will need some additional flexability.
+style.  With other documents, you will need some additional flexibility.
 In this second case, you need to configure &kword; so it only changes
 certain specific aspects of the style with each update.</para>
 
@@ -943,19 +943,19 @@ from the Menu bar.</para><para>This will bring up a dialog box</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="styldlg1" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="styldlg1.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 </step>
 
 <step>
-<para>Now click on the tab labled <guilabel>Update
+<para>Now click on the tab labeled <guilabel>Update
 Configuration</guilabel>.</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="styldlg2" format="PNG"/></imageobject>
+<imagedata fileref="styldlg2.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 </step>
@@ -972,7 +972,7 @@ should control, and when they should be applied. Your choices for this
 drop-down box are:</para>
 <variablelist>
 <varlistentry>
-<term><guilabel>Dont Update Fonts</guilabel></term>
+<term><guilabel>Don't Update Fonts</guilabel></term>
 <listitem>
 <para>If this option is selected, &kword; will not alter any fonts (with
 respect to size, font name, italics or bold face, &etc;) when applying the
@@ -989,7 +989,7 @@ style unless the fonts size attribute of the selected text matches the
 font size within the style.  If the font sizes do not match, &kword;
 will not change any font attributes. If the size does match, the
 selected text will be changed to the font family of the style.  No
-otherchanges (bold face, italics, &etc;) will be made.</para>
+other changes (bold face, italics, &etc;) will be made.</para>
 </listitem>
 </varlistentry>
 
@@ -1060,7 +1060,7 @@ paragraph spacing should be changed to match the style or not.</para>
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Dont Update Indents and Spacings</guilabel></term>
+<term><guilabel>Don't Update Indents and Spacing</guilabel></term>
 <listitem>
 <para>If this option is selected, &kword; will not alter any indenting
 or paragraph spacing settings.</para>
@@ -1086,7 +1086,7 @@ alignment should be changed to match the style or not.</para>
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Dont Aligns/Flows</guilabel></term>
+<term><guilabel>Don't Aligns/Flows</guilabel></term>
 <listitem>
 <para>If this option is selected, &kword; will not alter any paragraph
 alignment settings.</para>
@@ -1109,17 +1109,17 @@ style.</para>
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Dont Update Numbering</guilabel></term>
+<term><guilabel>Don't Update Numbering</guilabel></term>
 <listitem>
 <para>If this option is selected, &kword; will not alter any
-autonumbering settings.</para>
+auto-numbering settings.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Update Colors</guilabel></term>
 <listitem>
-<para>When selected, &kword; will change the autonumbering attributes of
+<para>When selected, &kword; will change the auto-numbering attributes of
 selected text to match those defined in the font style.</para>
 </listitem>
 </varlistentry>
@@ -1131,7 +1131,7 @@ selected text to match those defined in the font style.</para>
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Dont Update Borders</guilabel></term>
+<term><guilabel>Don't Update Borders</guilabel></term>
 <listitem>
 <para>If this option is selected, &kword; will not alter any paragraph
 borders.</para>
@@ -1153,7 +1153,7 @@ those defined in the font style.</para>
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Dont Update Tabulators</guilabel></term>
+<term><guilabel>Don't Update Tabulators</guilabel></term>
 <listitem>
 <para>If this option is selected, &kword; will not alter any tab
 stops.</para>
@@ -1190,7 +1190,7 @@ your changes.</para>
 a user controlled space in between each column.</para>
 
 <note>
-<para>This feature is only available in Wordprocessing Templates.</para>
+<para>This feature is only available in Word processing Templates.</para>
 
 <para>If you are working in a <acronym>DTP</acronym> Template, you can
 build up several columns using a different frame for each column.</para>
@@ -1215,8 +1215,8 @@ Frames</guimenuitem></menuchoice> from the Menu bar</para>
 </listitem>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
-fileref="framemode" format="PNG"/></imageobject></inlinemediaobject> on
-the toolbar.</para>
+fileref="framemode.png" format="PNG"/></imageobject></inlinemediaobject> on
+the tool-bar.</para>
 </listitem>
 </itemizedlist>
 </step>
@@ -1237,18 +1237,18 @@ from the Menu bar.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="wpfmtpg1" format="PNG"/></imageobject>
+<imagedata fileref="wpfmtpg1.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 </step>
 <step>
-<para>Click on the table labled <guilabel>Columns</guilabel>.</para>
+<para>Click on the table labeled <guilabel>Columns</guilabel>.</para>
 
 <para>This will change the dialog panel.</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="wpfmtpg2" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="wpfmtpg2.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 </step>

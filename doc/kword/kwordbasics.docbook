@@ -33,15 +33,15 @@ Area</link>.</para></listitem>
 <para>The &kde; Titlebar surrounds all applications run under &kde;.
 For more information, please see the &kde; User Guide.</para>
 
-<para><emphasis><anchor id="mb"/>The menubar</emphasis></para>
+<para><emphasis><anchor id="mb"/>The menu bar</emphasis></para>
 
 <para>The Menu Bar provides access to all of &kword;'s functions and
-options.  Each part of the &kword; menubar is detailed in the section
+options.  Each part of the &kword; menu bar is detailed in the section
 entitled: <link linkend="basic-menubar">The Basic Menu Bar</link>.</para>
 
 <para><emphasis><anchor id="tb"/>The Toolbars</emphasis></para>
 <para>The Tool bars provide shortcuts to commonly used functions.
-&kword; uses 8 toolbars, with similar functions grouped together.</para>
+&kword; uses 8 tool bars, with similar functions grouped together.</para>
 
 <para><emphasis><anchor id="da"/>The Document Area.</emphasis></para>
 <para>The document area consists of:</para>
@@ -57,10 +57,10 @@ Rulers</link>.</para>
 </varlistentry>
 
 <varlistentry>
-<term>Scrollbar</term>
+<term>Scroll bar</term>
 <listitem>
-<para>The scrollbars are used to move through a &kword; document
-quickly.  The &kword; scroll bar functions similar to all scrollbars in
+<para>The scroll bars are used to move through a &kword; document
+quickly.  The &kword; scroll bar functions similar to all scroll bars in
 &kde; or &Windows;.</para>
 </listitem>
 </varlistentry>
@@ -116,14 +116,14 @@ toolbar.</para>
 <term><link linkend="basic-edit-toolbar">Edit Toolbar</link></term>
 <listitem>
 <para>This toolbar is for common editing functions such as cut, paste,
-undo, redo, find and spellcheck</para>
+undo, redo, find and spell check</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><link linkend="paragraph-toolbar">Paragraph Toolbar</link></term>
 <listitem>
-<para>This toolbar is used to insert pictures, clipart or special
+<para>This toolbar is used to insert pictures, clip-art or special
 characters in your document.</para>
 </listitem>
 </varlistentry>
@@ -161,7 +161,7 @@ components.</para>
 <para>Along the left and top edges of the Document area, are a
 horizontal and a vertical ruler.</para>
 
-<para>These rulers measure from the top right edge of the page. </para>
+<para>These rulers measure from the top left edge of the page. </para>
 
 <para>Each ruler has a bright area surrounded by a dark area.  The
 bright area shows the size and location of the currently selected frame
@@ -187,11 +187,11 @@ the new frame's settings.</para>
 of the rulers (either one), and click with the
 <mousebutton>right</mousebutton> button on your mouse.</para>
 
-<para>Select your choice from the submenu.  You will notice both rulers
+<para>Select your choice from the sub-menu.  You will notice both rulers
 change to the new unit of measure.</para>
 
 <para>You may also notice two vertical arrows (one pointed up, the other
-pointed down), on the right side of the bright area of the horizontal
+pointed down), on the left side of the bright area of the horizontal
 ruler. These are used to adjust the margin of a paragraph.  For more
 information, see the section entitled <link
 linkend="format-para">Formatting Paragraphs.</link></para>
@@ -213,7 +213,7 @@ and the Page Layout Dialog box will appear.</para>
 can be switched off.</para><para> Simply select <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure
 Kword</guimenuitem></menuchoice> from the Menu Bar.  Click on the
-<guibutton>Interface</guibutton> button.  The top checkbox will let you
+<guibutton>Interface</guibutton> button.  The top check box will let you
 toggle the rulers on and off.</para> 
 </note>
 

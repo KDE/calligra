@@ -8,7 +8,7 @@ well!!!</para>
 
 <para>If you need more complicated functionality or you want more
 control over the look of your table, you can <link
-linkend="insert-kspread">Imbed a &kspread; Table</link> in your
+linkend="insert-kspread">Embed a &kspread; Table</link> in your
 document.</para>
 
 <para>This section of the document will cover the formatting of tables
@@ -31,8 +31,8 @@ action="simul"><keycap>F9</keycap></keycombo></para>
 
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
-fileref="part-kspread" format="PNG"/></imageobject></inlinemediaobject>
-on the toolbar.</para>
+fileref="part-kspread.png" format="PNG"/></imageobject></inlinemediaobject>
+on the tool-bar.</para>
 </listitem>
 
 </itemizedlist>
@@ -42,7 +42,7 @@ on the toolbar.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="instab1" format="PNG"/></imageobject>
+<imagedata fileref="instab1.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
@@ -50,24 +50,24 @@ on the toolbar.</para>
 
 <para>The right half of the dialog box provides you a quick visual guide
 to how many rows and columns will be created in the table.  This is
-usefull for <quote>counting</quote> out your table.  You can not edit
+useful for <quote>counting</quote> out your table.  You can not edit
 your table layout here.</para>
 
 <para>The left half of the dialog box consists of two drop down boxes,
 and two number selection boxes.</para>
 
-<para>The number selection box labled <guilabel>Number of
+<para>The number selection box labeled <guilabel>Number of
 Rows</guilabel>, allows you to specify from 1 to 128 rows in the
 table.</para>
 
-<para>The number selection box labled <guilabel>Number of
+<para>The number selection box labeled <guilabel>Number of
 Columns</guilabel>, allows you to specify from 1 to 128 columns in the
 table.</para>
 
 <para>While adjusting either of these two options, the preview box
 adjusts to your new settings.</para>
 
-<para>The drop down box labled <guilabel>Cell Height</guilabel>, can be
+<para>The drop down box labeled <guilabel>Cell Height</guilabel>, can be
 set to either of two options.</para>
 
 <variablelist>
@@ -99,14 +99,14 @@ inches tall. </para>
 </varlistentry>
 </variablelist>
 
-<para>The drop down box labled <guilabel>Cell Widths</guilabel>, can be
+<para>The drop down box labeled <guilabel>Cell Widths</guilabel>, can be
 set to either of two options.</para>
 
 <variablelist>
 <varlistentry>
 <term><guilabel>Automatic</guilabel></term>
 <listitem>
-<para>If this option is selected, &kword; will determins the width of
+<para>If this option is selected, &kword; will determine the width of
 each cell, by dividing the total width of the frame by the number of
 columns.  It is unaffected by the table size you have
 <quote>drawn</quote> on the document.</para>
@@ -127,13 +127,13 @@ inches wide.</para>
 </varlistentry>
 </variablelist>
 
-<para>To change the properties of the table, click on the tab labled
+<para>To change the properties of the table, click on the tab labeled
 <guilabel>Properties</guilabel>.</para>
 
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="instab2" format="PNG"/></imageobject>
+<imagedata fileref="instab2.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
@@ -162,7 +162,7 @@ Table</guimenuitem></menuchoice> from the Menu bar</para>
 </step>
 </procedure>
 
-<para>The table will be immedately deleted.</para>
+<para>The table will be immediately deleted.</para>
 </sect2>
 
 <sect2 id="table-insert-row">
@@ -188,8 +188,8 @@ Row</guimenuitem></menuchoice> from the Menu bar</para>
 </listitem>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
-fileref="rowin" format="PNG"/></imageobject></inlinemediaobject> on the
-toolbar.</para>
+fileref="rowin.png" format="PNG"/></imageobject></inlinemediaobject> on the
+tool-bar.</para>
 </listitem>
 </itemizedlist>
 
@@ -197,13 +197,13 @@ toolbar.</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="insrowdlg" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="insrowdlg.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 </step>
 
 <step>
-<para>The number selection box labled <guilabel>Row</guilabel>, allows
+<para>The number selection box labeled <guilabel>Row</guilabel>, allows
 you to select any row within the table.  This number selection box
 limits you to the rows currently in the table.</para>
 <para>Select the row you want to use as a reference.</para>
@@ -241,8 +241,8 @@ Column</guimenuitem></menuchoice> from the Menu bar</para>
 </listitem>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
-fileref="colin" format="PNG"/></imageobject></inlinemediaobject> on the
-toolbar.</para>
+fileref="colin.png" format="PNG"/></imageobject></inlinemediaobject> on the
+tool-bar.</para>
 </listitem>
 </itemizedlist>
 
@@ -251,13 +251,13 @@ toolbar.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="inscoldlg" format="PNG"/></imageobject>
+<imagedata fileref="inscoldlg.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 </step>
 
 <step>
-<para>The number selection box labled <guilabel>Column</guilabel>,
+<para>The number selection box labeled <guilabel>Column</guilabel>,
 allows you to select any column within the table.  This number selection
 box limits you to the columns currently in the table.</para>
 
@@ -298,15 +298,15 @@ row</guimenuitem></menuchoice> from the Menu bar</para>
 </listitem>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
-fileref="rowout" format="PNG"/></imageobject></inlinemediaobject> on the
-toolbar.</para>
+fileref="rowout.png" format="PNG"/></imageobject></inlinemediaobject> on the
+tool-bar.</para>
 </listitem>
 </itemizedlist>
 <para>This will bring up a dialog box.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="delrowdlg" format="PNG"/></imageobject>
+<imagedata fileref="delrowdlg.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 </step>
@@ -350,8 +350,8 @@ Column</guimenuitem></menuchoice> from the Menu bar</para>
 </listitem>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
-fileref="colout" format="PNG"/></imageobject></inlinemediaobject> on the
-toolbar.</para>
+fileref="colout.png" format="PNG"/></imageobject></inlinemediaobject> on the
+tool-bar.</para>
 </listitem>
 </itemizedlist>
 
@@ -360,7 +360,7 @@ toolbar.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="delcoldlg" format="PNG"/></imageobject>
+<imagedata fileref="delcoldlg.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 </step>
@@ -398,7 +398,7 @@ more) adjacent cells of a table together.</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="joincell" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="joincell.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
@@ -428,8 +428,8 @@ Frames</guimenuitem></menuchoice> from the Menu bar</para>
 </listitem>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
-fileref="framemode" format="PNG"/></imageobject></inlinemediaobject> on
-the toolbar.</para>
+fileref="framemode.png" format="PNG"/></imageobject></inlinemediaobject> on
+the tool-bar.</para>
 </listitem>
 </itemizedlist>
 </step>
@@ -499,8 +499,8 @@ Frames</guimenuitem></menuchoice> from the Menu bar</para>
 </listitem>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
-fileref="framemode" format="PNG"/></imageobject></inlinemediaobject> on
-the toolbar.</para>
+fileref="framemode.png" format="PNG"/></imageobject></inlinemediaobject> on
+the tool-bar.</para>
 </listitem>
 </itemizedlist>
 </step>
@@ -541,7 +541,7 @@ the original cell will be relocated to the rightmost cell.</para>
 <para>With multi-page documents, you might want to provide certain
 information at the tops or bottoms of each page throughout the document.
 They can provide the reader with important information and they tie your
-doocuments together. </para>
+documents together. </para>
 
 <para>Fortunately, headers and footers are really just a special type of
 frame.  You can edit the text and data within the headers and
@@ -550,14 +550,14 @@ footers</para>
 <para>You can toggle headers and footers independently at any
 time.</para>
 
-<para>If you are using a Wordprocessing template, the footers will be
+<para>If you are using a Word processing template, the footers will be
 added below the margins you set under page setup.  The text within the
 main frames will be moved so the headers and/or footers do not overlap
 any text.</para>
 
 <para>If you are using a <acronym>DTP</acronym> template, the
 headers/footers will be placed at the margin edges, just like in the
-wordprocessing templates, but these frames are treated just like any
+word processing templates, but these frames are treated just like any
 other frame.  If the text frame below the Header/footer frame is set to
 wrap around text in overlapping frames, that will cause the text to
 move.</para>
@@ -575,8 +575,8 @@ from the Menu bar.</para>
 <sect1 id="template-creation">
 <title>Creating Templates/Saving a document as a template</title>
 
-<para>&kword; commes with several pre-defined templates (both
-Wordprocessing and <acronym>DTP</acronym> templates), which are designed
+<para>&kword; comes with several pre-defined templates (both
+Word processing and <acronym>DTP</acronym> templates), which are designed
 to get you started on your documents.</para>
 
 <para>If, however, you often use the same format for a document over and
@@ -604,7 +604,7 @@ Document</guimenuitem></menuchoice> from the Menu bar.</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="savetmpl1" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="savetmpl1.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
@@ -613,9 +613,9 @@ categories.</para>
 </step>
 
 <step>
-<para>As you can see, your templates will be saved into a subdirectory
+<para>As you can see, your templates will be saved into a sub-directory
 in your home directory.  You first need to create a Folder (which
-represents a subdirectory) within the <filename
+represents a sub-directory) within the <filename
 class="directory">templates</filename> directory.</para>
 
 <substeps>
@@ -626,7 +626,7 @@ example: <filename
 class="directory">/home/mmcbride/.kde/share/apps/kword/templates/</filename>)
 and click with the <mousebutton>right</mousebutton> mouse button.</para>
 
-<para>This will bring up a submenu.</para>
+<para>This will bring up a sub-menu.</para>
 </step>
 <step>
 <para>Select <guimenuitem>Add Folder</guimenuitem>.</para>
@@ -636,7 +636,7 @@ and click with the <mousebutton>right</mousebutton> mouse button.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="savetmpl2" format="PNG"/></imageobject>
+<imagedata fileref="savetmpl2.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 </step>
@@ -649,7 +649,7 @@ the types of templates you will be placing within it.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="savetmpl3" format="PNG"/></imageobject>
+<imagedata fileref="savetmpl3.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 <para>The dialog box will now show your new folder.</para>
@@ -657,7 +657,7 @@ the types of templates you will be placing within it.</para>
 <para>You do not need to create a new folder for each template.  The
 folders you create can be used to organize your templates.</para>
 <para>You must, however, have at least one folder.  You can not save any
-templates into the templates subdirectory.</para>
+templates into the templates sub-directory.</para>
 </note>
 </step>
 </substeps>
@@ -685,7 +685,7 @@ dialog.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
-<imagedata fileref="savetmpl4" format="PNG"/></imageobject>
+<imagedata fileref="savetmpl4.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 

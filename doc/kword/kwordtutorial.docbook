@@ -2,13 +2,13 @@
 <title>Step by Step Tutorial</title>
 
 <sect1 id="choose-template">
-<title>Choosing the initial template</title>
+<title>Tutorial: Choosing the initial template</title>
 
 <note><para>The steps to this tutorial are numbered from 1 thru 22.
 Beneath each step, is text in <emphasis>italics</emphasis>. This text
-will explain what the previous step in the tutorial acomplished.</para>
+will explain what the previous step in the tutorial accomplished.</para>
 
-<para>Also, you will notice a red rectangle on many screenshots. This
+<para>Also, you will notice a red rectangle on many screen shots. This
 rectangle outlines the next object you will need to push/change/click/&etc;
 Obviously a red rectangle will not appear when you are running
 &kword;.</para></note>
@@ -19,7 +19,7 @@ document</link> after &kword; is running), a dialog appears.</para>
 <mediaobject>
 <imageobject>
 <imagedata format="PNG" fileref="ChooseTempDia.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject>
+<textobject><phrase>Screen shot</phrase></textobject>
 </mediaobject>
 
 <para><emphasis>This dialog box is used to:</emphasis></para>
@@ -43,7 +43,7 @@ started.</emphasis></para>
 <para>Step 1: Click on the <guilabel>Page Layout</guilabel> tab.</para>
 
 <mediaobject><imageobject><imagedata format="PNG"
-fileref="Tut1.png"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject>
+fileref="Tut1.png"/></imageobject><textobject><phrase>Screen shot</phrase></textobject></mediaobject>
 
 <para><emphasis>This will list the Page Layout templates available on
 your system.</emphasis></para>
@@ -52,7 +52,7 @@ your system.</emphasis></para>
 clicking once with the left button of your mouse.</para>
 
 <mediaobject><imageobject><imagedata format="PNG"
-fileref="Tut2.png"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject>
+fileref="Tut2.png"/></imageobject><textobject><phrase>Screen shot</phrase></textobject></mediaobject>
 
 <para><emphasis>This is the template we will use for the
 tutorial</emphasis></para>
@@ -61,18 +61,18 @@ tutorial</emphasis></para>
 <guibutton>OK</guibutton> </para>
 
 <mediaobject><imageobject><imagedata format="PNG" fileref="Tut3.png"
-align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject>
+align="center"/></imageobject><textobject><phrase>Screen shot</phrase></textobject></mediaobject>
 
 <para><emphasis>To complete your selection</emphasis></para>
 
 <para><emphasis>&kword; will open a new document with three frames. The
-frames are outlined on the white background, as grey boxes. Each box is
+frames are outlined on the white background, as gray boxes. Each box is
 a separate frame.</emphasis></para>
 
 </sect1>
 
 <sect1 id="tutorial-frame-select">
-<title>Selecting a frame and entering text into that frame</title>
+<title>Tutorial: Selecting a frame and entering text into that frame</title>
 
 <para><emphasis>To begin entering text (or adding any sort of data for
 that matter), to a document, you must first let the computer know which
@@ -83,7 +83,7 @@ frame to put the data in.</emphasis></para>
 
 <mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut4.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject>
 
 <para><emphasis>This selects a frame.  You can tell this is the current
 frame because a cursor appears in the upper left
@@ -91,7 +91,7 @@ corner. </emphasis></para>
 
 <para>Step 6: Enter the following text into the keyboard: <userinput>KWord Press Release</userinput>.</para>
 <para><mediaobject><imageobject><imagedata format="PNG"
-fileref="Tut6.png"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+fileref="Tut6.png"/></imageobject><textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 <para><emphasis>This is some sample text for our
 newsletter.</emphasis></para>
@@ -104,21 +104,21 @@ background.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut7.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 <para>Step 8: Click inside the text size drop down box.  Change this
 number to 36.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut8.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 <para><emphasis>This changes the size of the text to one more
 appropriate for a title.</emphasis></para>
 
 </sect1>
 
-<sect1 id="tutorial-resize-frame"> <title>Changing the size of a frame</title>
+<sect1 id="tutorial-resize-frame"> <title>Tutorial: Changing the size of a frame</title>
 
 <para><emphasis>Now that we have entered some text, we can see that the
 frame is too large for the text. </emphasis></para>
@@ -127,33 +127,33 @@ frame is too large for the text. </emphasis></para>
 once.</para>
 
 <para><emphasis>This will select this frame, so it can be
-reshaped.</emphasis></para>
+re-shaped.</emphasis></para>
 
 <para><emphasis>You will now notice the frame is outlined in black, with
-8 black squares on the outline.  These squares are used for resizing the
+8 black squares on the outline.  These squares are used for re-sizing the
 frame.</emphasis></para>
 
 <para>Step 10: Place the mouse cursor over the black square in the lower
 right corner of the frame. Click with the left mouse button and hold it
-down. Drage the mouse up and to the left.</para>
+down. Drag the mouse up and to the left.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut11a.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 <para><emphasis>Notice how the frame changes shape.  Adjust the size and
 shape of the frame until it looks like this:</emphasis></para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut11b.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 <para>When it does, release the mouse button.</para>
 
 </sect1>
 
 <sect1 id="tutorial-move-frame"> 
-<title>Moving a frame on the page</title>
+<title>Tutorial: Moving a frame on the page</title>
 
 <para>Now that we have created a title block, we will center it at the
 top of the page.</para>
@@ -172,12 +172,12 @@ location, release the mouse button.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut13.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 </sect1>
 
 <sect1 id="tutorial-add-frame"> 
-<title>Adding a new frame/Making text flow between two frames</title>
+<title>Tutorial: Adding a new frame/Making text flow between two frames</title>
 
 <para>Step 13: Begin by selecting
 <menuchoice><guimenu>Insert</guimenu><guimenuitem>Text
@@ -185,7 +185,7 @@ Frame</guimenuitem></menuchoice></para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut14.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 <para><emphasis>The cursor has changed to cross-hairs.  You can draw
 your new text box with this cursor.  Start by placing the cursor at one
@@ -197,7 +197,7 @@ button.</emphasis></para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut14a.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 <para><emphasis>It is not important if your text box does not resemble
 the example for the purposes of this tutorial.</emphasis></para>
@@ -207,11 +207,11 @@ mouse button, a new dialog box appears.</emphasis></para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut15.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
-<para><emphasis>This dialog box lists all the current framesets.  The
+<para><emphasis>This dialog box lists all the current frame sets.  The
 default value is highlighted.  By selecting the default value, you will
-create a new framset (text will not flow from any other frame into this
+create a new frame set (text will not flow from any other frame into this
 frame)</emphasis></para>
 
 <para>Step 14: For the purposes of this tutorial, select
@@ -219,13 +219,13 @@ frame)</emphasis></para>
 
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="T
 ut15a.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 <para>Step 15: Select <guibutton>OK</guibutton></para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut16.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 <para><emphasis>What you have just done, is connect frameset 2 to your
 new text frame.  To test this:</emphasis></para>
@@ -234,24 +234,24 @@ new text frame.  To test this:</emphasis></para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut18.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
-<para><emphasis>Notice that your cursor immediatly jumps to the frame
+<para><emphasis>Notice that your cursor immediately jumps to the frame
 below the newly created text frame.  That is because that lower left
 frame is the first frame in the current frameset.</emphasis></para>
 
 <para>Step 17: Begin typing.  You will need to type quite a bit, but
 keep typing.  When you run out of space in the text frame, you will see
-your new text is moved immediatly into your new text frame.</para>
+your new text is moved immediately into your new text frame.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut19.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 </sect1>
 
 <sect1 id="tutorial-del-frame"> 
-<title>Deleting a frame</title>
+<title>Tutorial: Deleting a frame</title>
 
 <para>Now we will delete an unneeded frame. (Yes I know, we just created
 a new frame, but &kword; will forgive you being fickle).  We will delete
@@ -262,7 +262,7 @@ hand text frame, and click with the left mouse button.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut21.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 <para><emphasis>This selects the frame.</emphasis></para>
 
@@ -272,13 +272,13 @@ Frame</guimenuitem></menuchoice></para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut22.png"/></imageobject>
-<textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+<textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 <para><emphasis>This deletes the frame.</emphasis></para>
 
 </sect1>
 <sect1 id="tutorial-summary">
-<title>Summary</title>
+<title>Tutorial: Summary</title>
 
 <para>Hopefully this tutorial has introduced you to the basics of using
 frames in &kword;.</para>

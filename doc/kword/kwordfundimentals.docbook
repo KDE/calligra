@@ -52,7 +52,7 @@ processor? </emphasis></para>
 
 <para>Well the good news is, adjusting to a frames based word processor
 is easy and once you select a template, &kword; can act just like the
-page layout wordprocessor you are used to.  There are templates
+page layout word processor you are used to.  There are templates
 available for simple correspondence and day to day use.</para>
 
 <para>When you need to generate a more complex document (newsletters,
@@ -79,7 +79,7 @@ down to author a newsletter for a local organization, however, you may
 want a large title across the top, and several columns for quick news
 articles.</para>
 
-<para>With &kword;, you can use this preplanned notion of how your
+<para>With &kword;, you can use this predetermined notion of how your
 document should look too make your work easier.  By using a template,
 you can create a set of frames to approximate this final layout. For
 your business letter, you can select one large frame that covers the
@@ -96,7 +96,7 @@ column document and decide later that two columns is better for your
 needs, you can add another column. The purpose of templates is not to
 limit your ability to change your layout, but rather to take some of the
 work load off you whenever possible.  Choosing the correct template when
-you begin your document will simplify the formating (as opposed to
+you begin your document will simplify the formatting (as opposed to
 always selecting the default template and making your changes later.),
 but it is also important to remember that choosing the wrong template
 will not limit your work.</para>
@@ -163,7 +163,7 @@ your mind.</para>
 <term>Text Oriented</term>
 <listitem>
 <para>The Text Oriented templates are designed to act like page-oriented
-wordprocessors. When you select a Text Oriented template, you will
+word processors. When you select a Text Oriented template, you will
 create a template with one or more frames. The first frame is distinctly
 tied to the paper size of your document.  When you increase or decrease
 the paper size or change the margins, the frame size is automatically
@@ -173,7 +173,7 @@ adjust the size or position of this frame, you must <link
 linkend="page-format">adjust the margins</link>. On top of the first
 frame, you can, of course, add additional frames. These frames can
 contain pictures, text or whatever you want. These new frames can be
-moved, resized and deleted to suit your needs. If you want it, &kword;
+moved, re-sized and deleted to suit your needs. If you want it, &kword;
 will even wrap the text from the first frame around any information in
 any subsequent frames.</para>
 </listitem>
@@ -188,8 +188,8 @@ equal. This is where the difference between Page Layout and Text
 Oriented template lies. None of the frames in a Page Layout template are
 tied to the page as tightly as the main frame in a Text Oriented
 template is. Each of the frames is independent of the page size, and can
-be moved or resized without changing margins, &etc; Of course this also
-means that altering the margins or papersize of your document requires
+be moved or re-sized without changing margins, &etc; Of course this also
+means that altering the margins or paper size of your document requires
 that you individually move/resize each frame.  </para>
 
 </listitem>

@@ -25,18 +25,18 @@
 <firstname>Mike</firstname>
 <surname>McBride</surname>
 <affiliation>
-<address><email>mpmcbride7@yahoo.com</email></address>
+
 </affiliation>
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup> 
 
-<date>2001-24-06</date>
+<date>2001-31-07</date>
 <releaseinfo>1.01.00</releaseinfo>
 
 <abstract>
 <para>
-&kword; is a complete wordprocessing program. It is part of the
+&kword; is a complete word-processing program. It is part of the
 &koffice; suite of utilities.
 </para>
 </abstract>
@@ -50,65 +50,19 @@
 
 </bookinfo>
 
-<!-- **************************************************************************************************** -->   
+<!-- **************************************************************************************************** -->
 <chapter id="todo">
 <title>Current status of this manual</title>
 
 <warning>
-<para>
-This manual is out of date in many areas. Over the past year, &koffice;
-has continued to evolve into the start of a powerful office suite.
-During that time, however, my time has been short for updating the
-documentation for &kword; because of the tremendous need to document all
-of the new and updated applications in &kde; 2.0.  Because of this, the
-&kword; documentation has fallen behind.
-</para>
-
-<para>
-I have recently stepped down from that position, and I can commit more
-time and energy to this manual now.  Unfortunately I have a lot of
-catching up to do.
-</para>
-
-<para>
-&kword; has not changed drastically in how it operates, but you may find
-that many of the details of the interface have changed. This will be
-corrected ASAP.
-</para>
-
-<para>
-If any of you out there are interested in helping the &kde;
-documentation team, please feel free to send me a message at
-<email>mpmcbride7@yahoo.com</email>
-</para>
-
-<para>Sincerely,</para>
-<para>Mike</para>
+<para>This documentation is not current with the status of &kword;.</para>
+<para>Due to circumstances outside of my control, I have not been able to keep the manual in step with the tremendous
+rate of improvement and change that &kword; has gone through.</para>
+<para>If anyone is interested in helping with the documentation of &kword; or any other application for &kde;, please visit the
+<ulink url="http://i18n.kde.org/doc/">documenters web site</ulink>.</para>
 </warning>
 
-<sect1 id="todo1">
-<title>What's done and what needs to be done</title>
-
-<sect2 id="done">
-<title>What is done</title>
-
-<para>
-2001-09-06: Sections 1-5 have been reviewed, snapshots updated, icons
-correct, &etc;.  These sections are up to date. Any comments anyone has
-on these sections of the manual, would be greatly appreciated.
-</para>
-
-<para> 
-2001-24-06: Glossary completed.  Toolbars updated.  Deleted
-kword.rc section (which is beyond the scope of this manual).  Wrote 95%
-of Configuration options.
-</para>
-
-</sect2>
-
-<sect2 id="notdone">
-<title>What is not done</title>
-
+<!--
 <para>This is a list of things which still need
 work in this manual:</para>
 
@@ -120,8 +74,8 @@ sections.</para></listitem>
 <listitem><para>Make sure the <quote>Collate</quote> is correctly
 described when printing works again.</para></listitem>
 <listitem><para>Determine if formatting characters and patterns work in
-Search and Replace.</para></listitem> 
-<listitem><para>Return to Format->Frame/Frameset when automatic new page
+Search and Replace.</para></listitem>
+<listitem><para>Return to Format->Frame/Frame set when automatic new page
 is working.</para></listitem>
 <listitem><para>Serial characters still not clear how/if that
 works.</para></listitem>
@@ -130,8 +84,8 @@ to write about that section.</para></listitem>
 <listitem><para>Variables editor not working on first pass
 through.</para></listitem>
 <listitem><para>Determine if "Side Head" dialog works under
-Frames->Frameset->Options.</para></listitem>
-<listitem><para>Determine if "Line Spacing" dropdown box works under
+Frames->Frame set->Options.</para></listitem>
+<listitem><para>Determine if "Line Spacing" drop-down box works under
 Format->Paragraph->Indents and Spacing.</para></listitem>
 <listitem><para>Re-evaluate the need for the section on "Text Edit vs
 Frame Edit Modes".</para></listitem>
@@ -152,39 +106,15 @@ Options->Interfaces.</para></listitem>
 <listitem><para>Complete section on authors.....</para></listitem>
 <listitem><para>Write a section for each of the import/export filters
 (ASCII, HTML, Word97, etc).</para></listitem>
-<listitem><para>Check all screenshots for new features, different
+<listitem><para>Check all screen-shots for new features, different
 looks</para></listitem>
 <listitem><para>Recheck all default key-bindings.</para></listitem>
 
 </itemizedlist>
+-->
 
-<para>
-I want to make this very clear. This is a first draft (of many).  My
-initial goal, is to get a good start on every section of this
-documentation.  After this first draft is complete, I will rework each
-section again for more clarity/completeness.
-</para>
 
-<para>
-I would be very interested in any part of &kword; that people find
-particularly difficult or confusing.  You can either write me directly,
-or post your comments on the koffice mailing list (which I faithfully
-read).  These comments will help me focus the documentation better.
-</para>
 
-<para>
-You may also notice (if you are reading this closely at all), that
-sections of this guide will often end abruptly with "STUFF".  This is a
-marker to remind myself that more needs to be added, or the section
-needs to be worked on again.
-</para>
-
-<para>Thanks</para>
-
-<para>Mike <email>mpmcbride7@yahoo.com</email></para>
-
-</sect2>
-</sect1>
 </chapter>
 
 <!-- **************************************************************************************************** -->
@@ -199,7 +129,7 @@ needs to be worked on again.
 &kword;, is a full featured
 <indexterm><primary><acronym>WYSIWYG</acronym></primary></indexterm>
 <acronym>WYSIWYG</acronym> (What You See Is What You Get)
-Wordprocessor/Desktop Publishing Program.
+Word-processor/Desktop Publishing Program.
 </para>
 
 <para>
@@ -226,7 +156,7 @@ advanced features you expect from todays desktop environment.
 </para>
 
 <para>
-&kword; is a wordprocessor which can work either as a traditional word
+&kword; is a word-processor which can work either as a traditional word
 processor, or as a simple but powerful desktop publishing
 application. This is possible because &kword; is a frame oriented word
 processor, not a page oriented word processor (&Microsoft;
@@ -237,10 +167,10 @@ processors).
 
 <para>
 Frame oriented word processors work by creating one or more
-<emphasis>frames</emphasis> per page. Each frame acts as a boundry (like
+<emphasis>frames</emphasis> per page. Each frame acts as a boundary (like
 a frame which surrounds a photograph), which limits the text to the
-boundaries of the frame.  You can move and resize boundaries to define
-exactly where on the page the text will be placed.  As you resize
+boundaries of the frame.  You can move and re-size boundaries to define
+exactly where on the page the text will be placed.  As you re-size
 frames, the text is reworked to fit within these frames.
 </para>
 
@@ -265,7 +195,7 @@ frame, flows easily and automatically into the next.
 
 <para>
 In addition to text, you can include virtually anything inside a frame.
-A frame can contain a spreadsheet, clipart, pictures, a database form,
+A frame can contain a spreadsheet, clip-art, pictures, a database form,
 or nearly any piece of data. Since each page can have any number of
 frames, documents can appear quite sophisticated while still remaining
 easy to edit.
@@ -275,7 +205,7 @@ easy to edit.
 &kword; users also benefit from the auto wrap features of &kword;. When
 you place one frame on top of part of another frame, the text from the
 <emphasis>lowest</emphasis> frame can be automatically wrapped around
-the newly created frame. This reforeformatting occurs in a
+the newly created frame. This reformatting occurs in a
 <acronym>WYSIWYG</acronym> Graphical User Interface, and happens
 automatically while you edit.
 </para>
@@ -292,13 +222,13 @@ automatically while you edit.
 &kword; simplifies the creation of new pages (at the users option), by
 automatically creating frames for the next page, using the current page
 as a blueprint. This eliminates the need for the user to re-define the
-frame boundries each page.
+frame boundaries each page.
 </para>
 
 <para>
-As a wordprocessor, &kword; includes the most used options of many other
+As a word-processor, &kword; includes the most used options of many other
 word processors, while maintaining a simple interface. In addition to
-the features you expect from a modern wordprocessing package (text
+the features you expect from a modern word-processing package (text
 entry, bold face, italics, text alignment, text printing, &etc;),
 &kword; can:
 </para>
@@ -327,11 +257,11 @@ throughout.</para>
 <listitem>
 <para>Search through your document for text.  You can further refine
 your search by specifying font, format, font size and many other
-features of the text. By adding wildcards to your search, the search and
+features of the text. By adding wild-cards to your search, the search and
 replace functions can become very powerful.</para>
 </listitem>
 <listitem>
-<para>Complete footnote and endnote support.</para>
+<para>Complete footnote and end-note support.</para>
 </listitem>
 <listitem>
 <para>Tables. You can either use the table formatting capabilities of
@@ -349,7 +279,7 @@ the application at all.</para>
 easier on any computer, and with any font size. </para>
 </listitem>
 <listitem>
-<para>&kword; supports customizable toolbars and menus.</para>
+<para>&kword; supports customizable tool bars and menus.</para>
 </listitem>
 <listitem>
 <para>&kword; has extensive internationalization support.</para>
@@ -415,7 +345,7 @@ start using &kword;, you will find that using &kword; is easy.</para>
 <tbody>
 <row>
 <entry>Novice</entry>
-<entry>No previous computer expiexperience</entry>
+<entry>No previous computer experience</entry>
 <entry>
 <simplelist type="vert" columns="1">
 <member><link linkend="fundamentals">Fundamentals</link></member>
@@ -430,7 +360,7 @@ start using &kword;, you will find that using &kword; is easy.</para>
 
 <row>
 <entry>Intermediate</entry>
-<entry>Comfortable with other page based wordprocessors (&Microsoft;
+<entry>Comfortable with other page based word processors (&Microsoft;
 <application>Word</application>, <application>Word Perfect</application>
 and <application>Applixware</application>.)</entry>
 <entry><simplelist type="vert" columns="1">
@@ -444,7 +374,7 @@ and <application>Applixware</application>.)</entry>
 <entry>Comfortable with other frames based word processors (Frame Maker,
 &etc;).</entry>
 <entry><simplelist type="vert" columns="1">
-<member><link linkend="wp-vs-dtp">The difference between Wordprocessing and DTP templates</link></member>
+<member><link linkend="wp-vs-dtp">The difference between Word processing and DTP templates</link></member>
 </simplelist></entry></row>
 </tbody></tgroup>
 </informaltable>
@@ -553,10 +483,10 @@ What is a <literal role="extension">kwt</literal> file?</para>
 
 <qandaentry>
 <question>
-<para>How do I delete an entire frameset?</para>
+<para>How do I delete an entire frame-set?</para>
 </question>
 <answer>
-<para>By deleting the last frame of the frameset.</para>
+<para>By deleting the last frame of the frame-set.</para>
 </answer>
 </qandaentry>
 
@@ -589,7 +519,7 @@ What is a <literal role="extension">kwt</literal> file?</para>
 
 <qandaentry>
 <question>
-<para>How do I insert a new frame into a frameset between two frames
+<para>How do I insert a new frame into a frame-set between two frames
 that already exist?</para>
 </question>
 <answer>
@@ -636,7 +566,7 @@ that already exist?</para>
 <listitem><para>Ulrich Kuettler <email>ulrich.kuettler@mailbox.tu-dresden.de</email></para></listitem>
 </itemizedlist>
 
-<para>Documentation by Mike McBride <email>mpmcbride7@yahoo.com</email></para>
+<para>Documentation by Mike McBride </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 
@@ -673,7 +603,7 @@ url="http://www.trolltech.com">Trolltech</ulink>.</para>
 <listitem>
 <para>&kde; 2.2 libraries (kdelibs) and the &kde; 2.2 base package
 (kdebase).  These can be obtained from the <ulink
-url="http://www.kde.org">&kde; webpage.</ulink></para>
+url="http://www.kde.org">&kde; web page.</ulink></para>
 </listitem>
 
 <listitem>
@@ -737,7 +667,7 @@ find more help on the other command line options.</para>
 <prompt>$</prompt> <userinput><command>kword</command> <option>--help</option></userinput>
 </screen>
 
-<para>This will give you a few subjects to recieve help on.</para>
+<para>This will give you a few subjects to receive help on.</para>
 
 </appendix>
 
@@ -1189,9 +1119,9 @@ multiple consecutive spaces)</para></listitem>
 <listitem><para>Tables</para></listitem>
 <listitem><para>Images</para></listitem>
 <listitem><para>Lists</para></listitem>
-<listitem><para>Special treatement for paragraphs in fixed fonts (needed
+<listitem><para>Special treatment for paragraphs in fixed fonts (needed
 or not?)</para></listitem>
-<listitem><para><acronym>CSS2</acronym> (sttreatment)</para></listitem>
+<listitem><para><acronym>CSS2</acronym> (treatment)</para></listitem>
 <listitem><para>Have a correct font size algorithm</para></listitem>
 </itemizedlist>
 </entry>
@@ -1303,7 +1233,7 @@ http://www.primate.wisc.edu/software/RTF/</ulink></para>
 <row>
 <entry>Features</entry>
 <entry><itemizedlist>
-<listitem><para>Unicode to ansi conversion.</para></listitem>
+<listitem><para>Unicode to ANSI conversion.</para></listitem>
 <listitem><para>Text formatting. (font, size, weight, italic, undeANSIe,
 &eg;.)</para></listitem>
 <listitem><para>Paragraph numbering. (Head 1,2,3 Numeric, Alpha, Roman,
@@ -1336,7 +1266,7 @@ borders).</para></listitem>
 <listitem><para>Kpart inserts (&kspread;, &kpresenter;,
 &etc;).</para></listitem>
 <listitem><para>Page hard breaks.</para></listitem>
-<listitem><para>Identification of the ansi code page.</para></listitem>
+<listitem><para>Identification of the ANSI code page.</para></listitem>
 <listitem><para>Multi-strike markup. (no current
 plans).</para></listitem>
 <listitem><para>Bidirectional markup. (no current
@@ -1366,7 +1296,7 @@ supported.</para>
 <term>Status</term>
 <listitem>
 <para>The &Microsoft; <application>Word 97/2000</application> export
-filter is not currently functioning.  The inport filter is working, but
+filter is not currently functioning.  The import filter is working, but
 has some known limitations. It should be used with caution.</para>
 </listitem>
 </varlistentry>
@@ -1722,8 +1652,8 @@ interchange</emphasis>. This is what many people mean when they say
 <glossterm>Aspect Ratio</glossterm>
 <glossdef>
 <para>This is the ratio of the measurement of a screen or document
-horizontally compared to the verticle measurement.  All standard
-computer monitors have the same aspect ratio, reguardless of their
+horizontally compared to the vertical measurement.  All standard
+computer monitors have the same aspect ratio, regardless of their
 vertical resolution. Any &kword; document that conforms to the standard
 screen will look good on any monitor.</para>
 </glossdef>
@@ -1746,7 +1676,7 @@ linkend="defsourcecode">Source Code</link>.</para>
 <para>Bit mapped images are composed of individual dots.  This type of
 file is very good for photographs and complex drawings. The downside of
 using bitmap images, is that when you change the size of the image on
-the page, there is a loss of detail. The filenames of such pictures
+the page, there is a loss of detail. The file names of such pictures
 often end in jpeg, png or gif. Compare to <link
 linkend="defclipart">Clipart</link>.</para>
 </glossdef>
@@ -1765,9 +1695,9 @@ defined by a combination of the row and column of a heading.</para>
 <glossdef>
 <para>Clip art refers to vector based graphics. These graphic files
 describe the picture as a collection of lines, curves and dots.  These
-file formats are preferable to bitmapped images, because their size can
+file formats are preferable to bit-mapped images, because their size can
 be made larger or smaller, without any loss in quality. The downside of
-vector formats, is that it can be quite difficlt to describe certain
+vector formats, is that it can be quite difficult to describe certain
 types of photographs using only lines and curves.  This results
 difficult, complicated files and most of the benefits of vector formats
 are lost.  Compare to <link linkend="defbitmap">Bitmap
@@ -1794,7 +1724,7 @@ section on <link linkend="clipboard">Cut/Copy/Paste</link>.</para>
 <para>When you compile a program, you are converting it from
 a source file (which is easily edited by a programmer) into a binary
 file (which the computer uses). If you are planning on compiling &kword;,
-please try to find a binary verison of &koffice; first. Compiling programs
+please try to find a binary version of &koffice; first. Compiling programs
 is not for the beginner. For more information on versioning &kword;, see
 the section entitled <link
 linkend="installation">Installation</link></para></glossdef>
@@ -1837,7 +1767,7 @@ document).</para>
 <glossentry id="defdtp">
 <glossterm><acronym>DTP</acronym></glossterm>
 <glossdef>
-<para>Stands for <emphasis>DeskTop Publishing</emphasis>.</para>
+<para>Stands for <emphasis>Desktop Publishing</emphasis>.</para>
 </glossdef>
 </glossentry>
 
@@ -1858,11 +1788,11 @@ url="http://koffice.kde.org/faq/koffice-faq.html">here</ulink>.</para>
 <glossdef>
 <para>A file mask can be thought of as a strainer for you.  On the
 average computer, there are several thousand files. These files are
-sorted into subdirectories, but it is not uncommon for many users to
-have 100's of data files in a single subdirectory.</para>
+sorted into sub-directories, but it is not uncommon for many users to
+have 100's of data files in a single sub-directory.</para>
 <para>Fortunately for us, most applications use a suffix to their
 filenames.  By applying a file mask, &kword; will only show you the
-files which are not filterd out by the mask. (That is to say &kword;
+files which are not filtered out by the mask. (That is to say &kword;
 only shows the files that fit through the strainer).  This can be
 helpful if you have many files from many different applications. The
 file mask is incorporated in the <guilabel>File Type</guilabel> line of
@@ -1907,9 +1837,9 @@ of your document. Frames can be moved, resized, deleted etc.</para>
 <glossentry id="defframeset">
 <glossterm>Frameset</glossterm>
 <glossdef>
-<para>A frameset is a group of frames which are connected together. If
-you're writing text that doesn't fit into the first frame of a frameset,
-it will continue in the next frame belonging to that frameset.</para>
+<para>A frame-set is a group of frames which are connected together. If
+you're writing text that doesn't fit into the first frame of a frame-set,
+it will continue in the next frame belonging to that frame-set.</para>
 </glossdef>
 </glossentry>
 
@@ -1917,8 +1847,8 @@ it will continue in the next frame belonging to that frameset.</para>
 <glossterm>&FTP;</glossterm>
 <glossdef>
 <para>&FTP; is the <emphasis>File Transfer Protocol</emphasis>. It's an
-internet protocol that allows you to retrieve files from so-called &FTP;
-servers. If you want to download &koffice; from the internet, you'll
+Internet protocol that allows you to retrieve files from so-called &FTP;
+servers. If you want to download &koffice; from the Internet, you'll
 probably use &FTP;.</para>
 </glossdef>
 </glossentry>
@@ -1948,7 +1878,7 @@ as well. See <link linkend="deffooter">Footer</link>.</para>
 <glossterm><acronym>HTML</acronym></glossterm>
 <glossdef>
 <para>Stands for <emphasis>HyperText Markup Language</emphasis>. Most
-web pages on the internet are written in
+web pages on the Internet are written in
 <acronym>HTML</acronym>. &kword; can read and write
 <acronym>HTML</acronym> documents for publishing on the World Wide
 Web.</para>
@@ -1986,7 +1916,7 @@ linkend="options-keybindings">here</link>.</para>
 <para>When you have a standard sheet of paper, you can either orient
 your document with the long side vertically or horizontally.  When the
 horizontal dimension is greater than the vertical, this is termed
-Portrait.</para>
+Landscape.</para>
 <para>Example: <inlinemediaobject><imageobject><imagedata
 fileref="landscape.png"
 format="PNG"/></imageobject></inlinemediaobject></para>
@@ -2023,7 +1953,7 @@ Pictures are <link linkend="defbitmap">bit-mapped</link> images. See
 <para>When you have a standard sheet of paper, you can either orient
 your document with the long side vertically or horizontally.  When the
 vertical dimension is greater than the horizontal, this is termed
-Landscape.</para>
+Portrait.</para>
 <para>Example: <inlinemediaobject><imageobject><imagedata
 fileref="portrait.png" format="PNG"
 align="center"/></imageobject></inlinemediaobject></para>
@@ -2101,7 +2031,7 @@ linkend="defrpm">RPM</link>, <link linkend="defdeb">DEB</link>.</para>
 <glossterm>Toolbar</glossterm>
 <glossdef>
 <para>A toolbar is a line of buttons which are shortcuts to more of the
-commonly used features of &kword;.  More information on toolbars can be
+commonly used features of &kword;.  More information on tool bars can be
 found <link linkend="toolbars">here</link>.</para>
 <para>Example Toolbar: <inlinemediaobject><imageobject> <imagedata
 fileref="filetb.png" format="PNG"
@@ -2114,7 +2044,7 @@ align="center"/></imageobject></inlinemediaobject></para>
 <glossdef>
 <para>A vector based graphic is described in terms of lines and shapes,
 not in terms of dots.  These files are often referred to as <link
-linkend="defclipart">clipart</link>.Because of this, Clipart usually
+linkend="defclipart">clip-art</link>.Because of this, Clipart usually
 scales better than bit-mapped images. </para>
 </glossdef>
 </glossentry>
