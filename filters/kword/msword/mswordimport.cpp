@@ -2,6 +2,7 @@
 
 #include <qdom.h>
 #include <qfontinfo.h>
+#include <qfile.h>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -34,7 +35,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
     QDomElement mainFramesetElement;
     prepareDocument( mainDocument, mainFramesetElement );
 
-    Document document( m_chain->inputFile().ascii(), mainDocument, mainFramesetElement );
+    Document document( QFile::encodeName( m_chain->inputFile() ).data(), mainDocument, mainFramesetElement );
     document.parse();
 
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
