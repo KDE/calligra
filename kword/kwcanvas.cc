@@ -115,10 +115,9 @@ bool KWCanvas::isOutOfPage( QRect & r, int page ) const
         r.bottom() > ( page + 1 ) * static_cast<int>( doc->ptPaperHeight() );
 }
 
-void KWCanvas::print( QPainter *painter, QPrinter *printer,
-                      float left_margin, float top_margin )
+void KWCanvas::print( QPainter *painter, QPrinter *printer )
 {
-   kdDebug() << "KWCanvas::print from=" << printer->fromPage() << " to=" << printer->toPage() << endl;
+    kdDebug(32001) << "KWCanvas::print from=" << printer->fromPage() << " to=" << printer->toPage() << endl;
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
                               printer->toPage() - printer->fromPage() + 2, this );
     int j = 0;
@@ -136,7 +135,7 @@ void KWCanvas::print( QPainter *painter, QPrinter *printer,
         painter->resetXForm();
         int pgNum = i - 1;
         int yOffset = pgNum * doc->ptPaperHeight();
-        kdDebug() << "printing page " << pgNum << " yOffset=" << yOffset << endl;
+        kdDebug(32001) << "printing page " << pgNum << " yOffset=" << yOffset << endl;
         QRect pageRect( 0, yOffset, doc->ptPaperWidth(), doc->ptPaperHeight() );
         painter->fillRect( pageRect, white );
 

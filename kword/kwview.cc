@@ -663,10 +663,7 @@ void KWView::setupPrinter( QPrinter &prt )
     prt.setMinMax( 1, doc->getPages() );
     bool makeLandscape = FALSE;
 
-    KoPageLayout pgLayout;
-    KoColumns cl;
-    KoKWHeaderFooter hf;
-    doc->getPageLayout( pgLayout, cl, hf );
+    KoPageLayout pgLayout = doc->pageLayout();
 
     switch ( pgLayout.format ) {
     case PG_DIN_A3: prt.setPageSize( QPrinter::A3 );
@@ -705,6 +702,13 @@ void KWView::print( QPrinter &prt )
     prt.setFullPage( true );
     setCursor( waitCursor );
     gui->canvasWidget()->viewport()->setCursor( waitCursor );
+
+    int oldZoom = doc->getZoom();
+    if ( oldZoom != 100 ) {
+        doc->setZoom( 100 );
+        doc->updateFrameSizes( oldZoom );
+    }
+
     bool serialLetter = FALSE;
 #if 0
     QList<KWVariable> *vars = doc->getVariables();
@@ -720,24 +724,29 @@ void KWView::print( QPrinter &prt )
          doc->getSerialLetterDataBase()->getNumRecords() == 0 )
         serialLetter = FALSE;
 #endif
-    float left_margin = 0.0;
-    float top_margin = 0.0;
+    //float left_margin = 0.0;
+    //float top_margin = 0.0;
 
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
     doc->getPageLayout( pgLayout, cl, hf );
+    KoPageLayout oldPGLayout = pgLayout;
 
     if ( pgLayout.format == PG_SCREEN )
     {
-        left_margin = 25.8;
-        top_margin = 15.0;
+        //left_margin = 25.8;
+        //top_margin = 15.0;
+        pgLayout.ptLeft += 25.8;         // Not sure why we need this....
+        pgLayout.ptRight += 15.0;
+        // TODO the other units. Well, better get rid of the multiple-unit thing.
+        doc->setPageLayout( pgLayout, cl, hf );
     }
 
     if ( !serialLetter ) {
         QPainter painter;
         painter.begin( &prt );
-        gui->canvasWidget()->print( &painter, &prt, left_margin, top_margin );
+        gui->canvasWidget()->print( &painter, &prt );
         painter.end();
     } else {
 #if 0
@@ -753,6 +762,13 @@ void KWView::print( QPrinter &prt )
         painter.end();
 #endif
     }
+
+    if ( oldZoom != 100 ) {
+        doc->setZoom( oldZoom );
+        doc->updateFrameSizes( 100 );
+    }
+    if ( pgLayout.format == PG_SCREEN )
+        doc->setPageLayout( oldPGLayout, cl, hf );
 
     setCursor( arrowCursor );
     gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
@@ -1217,14 +1233,10 @@ void KWView::viewZoom( const QString &s )
     int zoom = z.toInt();
     int oldZoom = doc->getZoom();
     if ( zoom != doc->getZoom() ) {
-        KoPageLayout pgLayout;
-        KoColumns cl;
-        KoKWHeaderFooter hf;
-        doc->setZoom( 100 );
-        doc->getPageLayout( pgLayout, cl, hf );
+        //KoPageLayout pgLayout = doc->pageLayout();
         doc->setZoom( zoom );
         doc->updateFrameSizes( oldZoom );
-        newPageLayout( pgLayout );
+        //newPageLayout( pgLayout );
         gui->getVertRuler()->setZoom(static_cast<double>(zoom)/100.0);
         gui->getHorzRuler()->setZoom(static_cast<double>(zoom)/100.0);
         KWFrame *frame=doc->getFirstSelectedFrame();
@@ -2795,10 +2807,7 @@ KWGUI::KWGUI( QWidget *parent, bool, KWDocument *_doc, KWView *_view )
     l << 0;
     panner->setSizes( l );
 
-    KoPageLayout layout;
-    KoColumns cols;
-    KoKWHeaderFooter hf;
-    doc->getPageLayout( layout, cols, hf );
+    KoPageLayout layout = doc->pageLayout();
 
     tabChooser = new KoTabChooser( left, KoTabChooser::TAB_ALL );
 

@@ -137,6 +137,7 @@ public:
     void setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf );
 
     void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf );
+    KoPageLayout pageLayout() const { return m_pageLayout; }
 
     KWFrameSet *getFrameSet( unsigned int _num )
     { return frames.at( _num ); }
@@ -148,21 +149,19 @@ public:
     void addFrameSet( KWFrameSet *f );
     void delFrameSet( KWFrameSet *f, bool deleteit = true );
 
-    unsigned int ptTopBorder() const { return static_cast<unsigned int>(zoomIt( pageLayout.ptTop )); }
-    unsigned int ptBottomBorder() const { return static_cast<unsigned int>(zoomIt( pageLayout.ptBottom )); }
-    unsigned int ptLeftBorder() const { return static_cast<unsigned int>(zoomIt( pageLayout.ptLeft )); }
-    unsigned int ptRightBorder() const { return static_cast<unsigned int>(zoomIt( pageLayout.ptRight )); }
-    unsigned int ptPaperHeight() const { return static_cast<unsigned int>(zoomIt( pageLayout.ptHeight )); }
-    unsigned int ptPaperWidth() const { return static_cast<unsigned int>(zoomIt( pageLayout.ptWidth )); }
+    unsigned int ptTopBorder() const { return static_cast<unsigned int>(zoomIt( m_pageLayout.ptTop )); }
+    unsigned int ptBottomBorder() const { return static_cast<unsigned int>(zoomIt( m_pageLayout.ptBottom )); }
+    unsigned int ptLeftBorder() const { return static_cast<unsigned int>(zoomIt( m_pageLayout.ptLeft )); }
+    unsigned int ptRightBorder() const { return static_cast<unsigned int>(zoomIt( m_pageLayout.ptRight )); }
+    unsigned int ptPaperHeight() const { return static_cast<unsigned int>(zoomIt( m_pageLayout.ptHeight )); }
+    unsigned int ptPaperWidth() const { return static_cast<unsigned int>(zoomIt( m_pageLayout.ptWidth )); }
     unsigned int ptColumnWidth() const;
-    unsigned int ptColumnSpacing() const { return static_cast<unsigned int>(zoomIt( pageColumns.ptColumnSpacing )); }
+    unsigned int ptColumnSpacing() const { return static_cast<unsigned int>(zoomIt( m_pageColumns.ptColumnSpacing )); }
 
-    unsigned int getColumns() const { return pageColumns.columns; }
+    unsigned int getColumns() const { return m_pageColumns.columns; }
 
     bool isPTYInFrame( unsigned int _frameSet, unsigned int _frame, unsigned int _ypos );
     int getPageOfRect( QRect & _rect ) const;
-
-    void printBorders( QPainter &_painter, int xOffset, int yOffset, int _w, int _h );
 
     void updateAllViews( KWView *_view, bool _erase = false );
     void updateAllViewportSizes();
@@ -227,8 +226,8 @@ public:
 
     void recalcFrames( bool _cursor = false );
 
-    KoHFType getHeaderType() { return pageHeaderFooter.header; }
-    KoHFType getFooterType() { return pageHeaderFooter.footer; }
+    KoHFType getHeaderType() { return m_pageHeaderFooter.header; }
+    KoHFType getFooterType() { return m_pageHeaderFooter.footer; }
 
     bool canResize( KWFrameSet *frameset, KWFrame *frame, int page, int diff );
 
@@ -269,9 +268,9 @@ public:
 
     KWAutoFormat &getAutoFormat() { return autoFormat; }
 
-    void setPageLayoutChanged( bool c ) { pglChanged = c; }
+    //void setPageLayoutChanged( bool c ) { pglChanged = c; }
 
-    bool getPageLayoutChanged() const { return pglChanged; }
+    //bool getPageLayoutChanged() const { return pglChanged; }
 
     //void addImageRequest( const QString &filename, KWCharImage *img );
     void addImageRequest( const QString &filename, KWPictureFrameSet *fs );
@@ -299,9 +298,6 @@ public:
     }
 
     void createContents();
-    //KWContents *getContents() {
-    //    return contents;
-    //}
 
     bool canRemovePage( int num, KWFrame *f );
 
@@ -401,9 +397,9 @@ private:
     unsigned int m_itemsLoaded;
     unsigned int m_nrItemsToLoad;
 
-    KoPageLayout pageLayout;
-    KoColumns pageColumns;
-    KoKWHeaderFooter pageHeaderFooter;
+    KoPageLayout m_pageLayout;
+    KoColumns m_pageColumns;
+    KoKWHeaderFooter m_pageHeaderFooter;
     unsigned int m_ptColumnWidth;
 
     KWImageCollection m_imageCollection;
@@ -433,7 +429,7 @@ private:
     KWAutoFormat autoFormat;
 
     QString urlIntern;
-    bool pglChanged;
+    //bool pglChanged;
 
     QStringList pixmapKeys, pixmapNames;
 //    QDict<KWCharImage> imageRequests;

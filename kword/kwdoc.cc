@@ -157,7 +157,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
       unit( "mm" ), // footNoteManager( this ),
       history( actionCollection(), false ),
       autoFormat(this),
-      urlIntern(), pglChanged( TRUE )
+      urlIntern()
 {
     m_lstViews.setAutoDelete( false );
     m_lstChildren.setAutoDelete( true );
@@ -208,22 +208,22 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 /*================================================================*/
 bool KWDocument::initDoc()
 {
-    pageLayout.unit = PG_MM;
+    m_pageLayout.unit = PG_MM;
     m_pages = 1;
 
-    pageColumns.columns = 1; //STANDARD_COLUMNS;
-    pageColumns.ptColumnSpacing = tableCellSpacing;
-    pageColumns.mmColumnSpacing = POINT_TO_MM( tableCellSpacing );
-    pageColumns.inchColumnSpacing = POINT_TO_INCH( tableCellSpacing );
+    m_pageColumns.columns = 1; //STANDARD_COLUMNS;
+    m_pageColumns.ptColumnSpacing = tableCellSpacing;
+    m_pageColumns.mmColumnSpacing = POINT_TO_MM( tableCellSpacing );
+    m_pageColumns.inchColumnSpacing = POINT_TO_INCH( tableCellSpacing );
 
-    pageHeaderFooter.header = HF_SAME;
-    pageHeaderFooter.footer = HF_SAME;
-    pageHeaderFooter.ptHeaderBodySpacing = 10;
-    pageHeaderFooter.ptFooterBodySpacing = 10;
-    pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
-    pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
-    pageHeaderFooter.mmHeaderBodySpacing = POINT_TO_MM( 10 );
-    pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
+    m_pageHeaderFooter.header = HF_SAME;
+    m_pageHeaderFooter.footer = HF_SAME;
+    m_pageHeaderFooter.ptHeaderBodySpacing = 10;
+    m_pageHeaderFooter.ptFooterBodySpacing = 10;
+    m_pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
+    m_pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
+    m_pageHeaderFooter.mmHeaderBodySpacing = POINT_TO_MM( 10 );
+    m_pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
 
     QString _template;
 
@@ -251,22 +251,22 @@ bool KWDocument::initDoc()
 
 void KWDocument::initEmpty()
 {
-    pageLayout.unit = PG_MM;
+    m_pageLayout.unit = PG_MM;
     m_pages = 1;
 
-    pageColumns.columns = 1; //STANDARD_COLUMNS;
-    pageColumns.ptColumnSpacing = tableCellSpacing;
-    pageColumns.mmColumnSpacing = POINT_TO_MM( tableCellSpacing );
-    pageColumns.inchColumnSpacing = POINT_TO_INCH( tableCellSpacing );
+    m_pageColumns.columns = 1; //STANDARD_COLUMNS;
+    m_pageColumns.ptColumnSpacing = tableCellSpacing;
+    m_pageColumns.mmColumnSpacing = POINT_TO_MM( tableCellSpacing );
+    m_pageColumns.inchColumnSpacing = POINT_TO_INCH( tableCellSpacing );
 
-    pageHeaderFooter.header = HF_SAME;
-    pageHeaderFooter.footer = HF_SAME;
-    pageHeaderFooter.ptHeaderBodySpacing = 10;
-    pageHeaderFooter.ptFooterBodySpacing = 10;
-    pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
-    pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
-    pageHeaderFooter.mmHeaderBodySpacing = POINT_TO_MM( 10 );
-    pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
+    m_pageHeaderFooter.header = HF_SAME;
+    m_pageHeaderFooter.footer = HF_SAME;
+    m_pageHeaderFooter.ptHeaderBodySpacing = 10;
+    m_pageHeaderFooter.ptFooterBodySpacing = 10;
+    m_pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
+    m_pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
+    m_pageHeaderFooter.mmHeaderBodySpacing = POINT_TO_MM( 10 );
+    m_pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
 
     QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::global() ) );
     /*bool ok = */loadNativeFormat( fileName );
@@ -279,28 +279,27 @@ void KWDocument::initEmpty()
 /*================================================================*/
 void KWDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf )
 {
-    pglChanged = TRUE;
     if ( m_processingType == WP ) {
         //kdDebug() << "KWDocument::setPageLayout WP" << endl;
-        pageLayout = _layout;
-        pageColumns = _cl;
-        pageHeaderFooter = _hf;
+        m_pageLayout = _layout;
+        m_pageColumns = _cl;
+        m_pageHeaderFooter = _hf;
     } else {
         //kdDebug() << "KWDocument::setPageLayout NON-WP" << endl;
-        pageLayout = _layout;
-        pageLayout.ptLeft = 0;
-        pageLayout.ptRight = 0;
-        pageLayout.ptTop = 0;
-        pageLayout.ptBottom = 0;
-        pageLayout.mmLeft = 0;
-        pageLayout.mmRight = 0;
-        pageLayout.mmTop = 0;
-        pageLayout.mmBottom = 0;
-        pageLayout.inchLeft = 0;
-        pageLayout.inchRight = 0;
-        pageLayout.inchTop = 0;
-        pageLayout.inchBottom = 0;
-        pageHeaderFooter = _hf;
+        m_pageLayout = _layout;
+        m_pageLayout.ptLeft = 0;
+        m_pageLayout.ptRight = 0;
+        m_pageLayout.ptTop = 0;
+        m_pageLayout.ptBottom = 0;
+        m_pageLayout.mmLeft = 0;
+        m_pageLayout.mmRight = 0;
+        m_pageLayout.mmTop = 0;
+        m_pageLayout.mmBottom = 0;
+        m_pageLayout.inchLeft = 0;
+        m_pageLayout.inchRight = 0;
+        m_pageLayout.inchTop = 0;
+        m_pageLayout.inchBottom = 0;
+        m_pageHeaderFooter = _hf;
     }
 
     recalcFrames();
@@ -311,8 +310,8 @@ void KWDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderF
 unsigned int KWDocument::ptColumnWidth() const
 {
     return ( ptPaperWidth() - ptLeftBorder() - ptRightBorder() -
-             ptColumnSpacing() * ( pageColumns.columns - 1 ) )
-        / pageColumns.columns;
+             ptColumnSpacing() * ( m_pageColumns.columns - 1 ) )
+        / m_pageColumns.columns;
 }
 
 /*================================================================*/
@@ -340,33 +339,33 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
             FrameInfo fi = fs->getFrameInfo();
             if ( fi == FI_FIRST_HEADER && isHeaderVisible() ) {
                 firstHeader = dynamic_cast<KWTextFrameSet*>( fs );
-                firstHeadOffset = static_cast<int>(pageHeaderFooter.ptHeaderBodySpacing +
+                firstHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
                                                    fs->getFrame( 0 )->height());
             }
             if ( fi == FI_EVEN_HEADER && isHeaderVisible() ) {
                 evenHeader = dynamic_cast<KWTextFrameSet*>( fs );
-                evenHeadOffset = static_cast<int>(pageHeaderFooter.ptHeaderBodySpacing +
+                evenHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
                                                   fs->getFrame( 0 )->height());
             }
             if ( fi == FI_ODD_HEADER && isHeaderVisible() ) {
                 oddHeader = dynamic_cast<KWTextFrameSet*>( fs );
-                oddHeadOffset = static_cast<int>(pageHeaderFooter.ptHeaderBodySpacing +
+                oddHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
                                                  fs->getFrame( 0 )->height());
             }
 
             if ( fi == FI_FIRST_FOOTER && isFooterVisible() ) {
                 firstFooter = dynamic_cast<KWTextFrameSet*>( fs );
-                firstFootOffset = static_cast<int>(pageHeaderFooter.ptFooterBodySpacing +
+                firstFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
                                                    fs->getFrame( 0 )->height());
             }
             if ( fi == FI_EVEN_FOOTER && isFooterVisible() ) {
                 evenFooter = dynamic_cast<KWTextFrameSet*>( fs );
-                evenFootOffset = static_cast<int>(pageHeaderFooter.ptFooterBodySpacing +
+                evenFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
                                                   fs->getFrame( 0 )->height());
             }
             if ( fi == FI_ODD_FOOTER && isFooterVisible() ) {
                 oddFooter = dynamic_cast<KWTextFrameSet*>( fs );
-                oddFootOffset = static_cast<int>(pageHeaderFooter.ptFooterBodySpacing +
+                oddFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
                                                  fs->getFrame( 0 )->height());
             }
         }
@@ -414,7 +413,7 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
         int oldPages = m_pages;
 
         // Determine number of pages
-        m_pages = static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( pageColumns.columns ) ) );
+        m_pages = static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( m_pageColumns.columns ) ) );
         int pages2=0;
         for (int m = getNumFrameSets()-1; m>=0; m--) {
             KWFrameSet *fs=getFrameSet(m);
@@ -431,7 +430,7 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
 
         for ( unsigned int j = 0;
               j < static_cast<unsigned int>( ceil( static_cast<double>( frms ) /
-                                                   static_cast<double>( pageColumns.columns ) ) ); j++ ) {
+                                                   static_cast<double>( m_pageColumns.columns ) ) ); j++ ) {
             if ( j == 0 ) {
                 headOffset = firstHeadOffset;
                 footOffset = firstFootOffset;
@@ -443,9 +442,9 @@ void KWDocument::recalcFrames( bool /*_cursor*/)
                 footOffset = oddFootOffset;
             }
 
-            for ( int i = 0; i < pageColumns.columns; i++ ) {
-                if ( j * pageColumns.columns + i < frameset->getNumFrames() ) {
-                    frameset->getFrame( j * pageColumns.columns + i )->setRect(
+            for ( int i = 0; i < m_pageColumns.columns; i++ ) {
+                if ( j * m_pageColumns.columns + i < frameset->getNumFrames() ) {
+                    frameset->getFrame( j * m_pageColumns.columns + i )->setRect(
                         ptLeftBorder() + i * ( ptColumnWidth + ptColumnSpacing() ),
                         j * ptPaperHeight() + ptTopBorder() + headOffset,
                         ptColumnWidth,
@@ -748,21 +747,21 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 //    imageRequests.clear();
     imageRequests2.clear();
 
-    pageLayout.unit = PG_MM;
+    m_pageLayout.unit = PG_MM;
 
-    pageColumns.columns = 1; //STANDARD_COLUMNS;
-    pageColumns.ptColumnSpacing = tableCellSpacing;
-    pageColumns.mmColumnSpacing = POINT_TO_MM( tableCellSpacing );
-    pageColumns.inchColumnSpacing = POINT_TO_INCH( tableCellSpacing );
+    m_pageColumns.columns = 1; //STANDARD_COLUMNS;
+    m_pageColumns.ptColumnSpacing = tableCellSpacing;
+    m_pageColumns.mmColumnSpacing = POINT_TO_MM( tableCellSpacing );
+    m_pageColumns.inchColumnSpacing = POINT_TO_INCH( tableCellSpacing );
 
-    pageHeaderFooter.header = HF_SAME;
-    pageHeaderFooter.footer = HF_SAME;
-    pageHeaderFooter.ptHeaderBodySpacing = 10;
-    pageHeaderFooter.ptFooterBodySpacing = 10;
-    pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
-    pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
-    pageHeaderFooter.mmHeaderBodySpacing = POINT_TO_MM( 10 );
-    pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
+    m_pageHeaderFooter.header = HF_SAME;
+    m_pageHeaderFooter.footer = HF_SAME;
+    m_pageHeaderFooter.ptHeaderBodySpacing = 10;
+    m_pageHeaderFooter.ptFooterBodySpacing = 10;
+    m_pageHeaderFooter.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
+    m_pageHeaderFooter.inchFooterBodySpacing = POINT_TO_INCH( 10 );
+    m_pageHeaderFooter.mmHeaderBodySpacing = POINT_TO_MM( 10 );
+    m_pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
 
 #if 0
     defaultParagLayout = new KWParagLayout( this );
@@ -1505,23 +1504,23 @@ QDomDocument KWDocument::saveXML()
 
     QDomElement paper = doc.createElement( "PAPER" );
     kwdoc.appendChild( paper );
-    paper.setAttribute( "format", static_cast<int>( pageLayout.format ) );
-    paper.setAttribute( "width", pageLayout.ptWidth ); // ## the DTD says mm but the loading code says pt (!)
-    paper.setAttribute( "height", pageLayout.ptHeight );
-    paper.setAttribute( "orientation", static_cast<int>( pageLayout.orientation ) );
-    paper.setAttribute( "columns", pageColumns.columns );
-    paper.setAttribute( "columnspacing", pageColumns.ptColumnSpacing );
-    paper.setAttribute( "hType", static_cast<int>( pageHeaderFooter.header ) );
-    paper.setAttribute( "fType", static_cast<int>( pageHeaderFooter.footer ) );
-    paper.setAttribute( "spHeadBody", pageHeaderFooter.ptHeaderBodySpacing );
-    paper.setAttribute( "spFootBody", pageHeaderFooter.ptFooterBodySpacing );
+    paper.setAttribute( "format", static_cast<int>( m_pageLayout.format ) );
+    paper.setAttribute( "width", m_pageLayout.ptWidth ); // ## the DTD says mm but the loading code says pt (!)
+    paper.setAttribute( "height", m_pageLayout.ptHeight );
+    paper.setAttribute( "orientation", static_cast<int>( m_pageLayout.orientation ) );
+    paper.setAttribute( "columns", m_pageColumns.columns );
+    paper.setAttribute( "columnspacing", m_pageColumns.ptColumnSpacing );
+    paper.setAttribute( "hType", static_cast<int>( m_pageHeaderFooter.header ) );
+    paper.setAttribute( "fType", static_cast<int>( m_pageHeaderFooter.footer ) );
+    paper.setAttribute( "spHeadBody", m_pageHeaderFooter.ptHeaderBodySpacing );
+    paper.setAttribute( "spFootBody", m_pageHeaderFooter.ptFooterBodySpacing );
 
     QDomElement borders = doc.createElement( "PAPERBORDERS" );
     paper.appendChild( borders );
-    borders.setAttribute( "left", pageLayout.ptLeft );
-    borders.setAttribute( "top", pageLayout.ptTop );
-    borders.setAttribute( "right", pageLayout.ptRight );
-    borders.setAttribute( "bottom", pageLayout.ptBottom );
+    borders.setAttribute( "left", m_pageLayout.ptLeft );
+    borders.setAttribute( "top", m_pageLayout.ptTop );
+    borders.setAttribute( "right", m_pageLayout.ptRight );
+    borders.setAttribute( "bottom", m_pageLayout.ptBottom );
 
     QDomElement docattrs = doc.createElement( "ATTRIBUTES" );
     kwdoc.appendChild( docattrs );
@@ -1891,76 +1890,6 @@ bool KWDocument::isPTYInFrame( unsigned int _frameSet, unsigned int _frame, unsi
 }
 
 /*================================================================*/
-void KWDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, int, int )
-{
-    // move this to KWFrame
-    KWFrameSet *frameset = 0;
-    KWFrame *tmp;
-    QRect frame;
-
-    for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
-        frameset = getFrameSet( i );
-        if ( !frameset->isVisible() )
-            continue;
-        for ( unsigned int j = 0; j < frameset->getNumFrames(); j++ ) {
-            bool isRight = TRUE, isBottom = TRUE;
-            if ( frameset->getGroupManager() ) {
-                unsigned int r, c;
-                r=frameset->getGroupManager()->getCell( frameset )->row;
-                c=frameset->getGroupManager()->getCell( frameset )->col;
-                if ( r < frameset->getGroupManager()->getRows() - 1 ) isBottom = FALSE;
-                if ( c < frameset->getGroupManager()->getCols() - 1 ) isRight = FALSE;
-            }
-
-            tmp = frameset->getFrame( j );
-            frame = QRect( tmp->x() - xOffset - 1, tmp->y() - yOffset - 1, tmp->width() + 2, tmp->height() + 2 );
-
-            //if ( !frame.intersects( QRect( xOffset, yOffset, _w, _h ) ) ) continue;
-
-            if ( isAHeader( frameset->getFrameInfo() ) || isAFooter( frameset->getFrameInfo() ) )
-                tmp = frameset->getFrame( 0 );
-            else
-                tmp = frameset->getFrame( j );
-
-            _painter.fillRect( QRect( frame.x(), frame.y(), frame.width() - ( isRight ? 1 : 0 ),
-                                      frame.height() - ( isBottom ? 1 : 0 ) ), tmp->getBackgroundColor() );
-
-            if ( tmp->getLeftBorder().ptWidth > 0 && tmp->getLeftBorder().color != tmp->getBackgroundColor().color() ) {
-                QPen p( Border::borderPen( tmp->getLeftBorder() ) );
-                _painter.setPen( p );
-                _painter.drawLine( frame.x() + tmp->getLeftBorder().ptWidth / 2, frame.y(),
-                                   frame.x() + tmp->getLeftBorder().ptWidth / 2, frame.bottom() + ( isBottom ? 0 : 1 ) );
-            }
-            if ( tmp->getRightBorder().ptWidth > 0 && tmp->getRightBorder().color != tmp->getBackgroundColor().color() ) {
-                QPen p( Border::borderPen( tmp->getRightBorder() ) );
-                _painter.setPen( p );
-                int w = tmp->getRightBorder().ptWidth;
-                if ( ( w / 2 ) * 2 == w ) w--;
-                w /= 2;
-                _painter.drawLine( frame.right() - w, frame.y(),
-                                   frame.right() - w, frame.bottom() + ( isBottom ? 0 : 1 ) );
-            }
-            if ( tmp->getTopBorder().ptWidth > 0 && tmp->getTopBorder().color != tmp->getBackgroundColor().color() ) {
-                QPen p( Border::borderPen( tmp->getTopBorder() ) );
-                _painter.setPen( p );
-                _painter.drawLine( frame.x(), frame.y() + tmp->getTopBorder().ptWidth / 2,
-                                   frame.right() + ( isRight ? 0 : 1 ), frame.y() + tmp->getTopBorder().ptWidth / 2 );
-            }
-            if ( tmp->getBottomBorder().ptWidth > 0 &&
-                 tmp->getBottomBorder().color != tmp->getBackgroundColor().color() ) {
-                QPen p( Border::borderPen( tmp->getBottomBorder() ) );
-                _painter.setPen( p );
-                int w = tmp->getBottomBorder().ptWidth;
-                if ( ( w / 2 ) * 2 == w ) w--;
-                w /= 2;
-                _painter.drawLine( frame.x(), frame.bottom() - w,
-                                   frame.right() + ( isRight ? 0 : 1 ), frame.bottom() - w );
-            }
-        }
-    }
-}
-
-/*================================================================*/
 /* Update all views of this document, area can be cleared
    before redrawing with the _erase flag. (false implied)
    All views EXCEPT the argument _view are updated
@@ -1987,11 +1916,11 @@ void KWDocument::updateAllViewportSizes()
 void KWDocument::setUnitToAll()
 {
     if ( unit == "mm" )
-        pageLayout.unit = PG_MM;
+        m_pageLayout.unit = PG_MM;
     else if ( unit == "pt" )
-        pageLayout.unit = PG_PT;
+        m_pageLayout.unit = PG_PT;
     else if ( unit == "inch" )
-        pageLayout.unit = PG_INCH;
+        m_pageLayout.unit = PG_INCH;
 
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
         if ( viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget() ) {
@@ -2804,40 +2733,9 @@ void KWDocument::createContents()
 
 void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf )
 {
-    _layout = pageLayout;
-    _cl = pageColumns;
-    _hf = pageHeaderFooter;
-    /*if ( zoom != 100 ) {
-        _layout.ptWidth = zoomIt( _layout.ptWidth );
-        _layout.ptHeight = zoomIt( _layout.ptHeight );
-        _layout.ptLeft = zoomIt( _layout.ptLeft );
-        _layout.ptRight = zoomIt( _layout.ptRight );
-        _layout.ptTop = zoomIt( _layout.ptTop );
-        _layout.ptBottom = zoomIt( _layout.ptBottom );
-        _layout.mmWidth = zoomIt( _layout.mmWidth );
-        _layout.mmHeight = zoomIt( _layout.mmHeight );
-        _layout.mmLeft = zoomIt( _layout.mmLeft );
-        _layout.mmRight = zoomIt( _layout.mmRight );
-        _layout.mmTop = zoomIt( _layout.mmTop );
-        _layout.mmBottom = zoomIt( _layout.mmBottom );
-        _layout.inchWidth = zoomIt( _layout.inchWidth );
-        _layout.inchHeight = zoomIt( _layout.inchHeight );
-        _layout.inchLeft = zoomIt( _layout.inchLeft );
-        _layout.inchRight = zoomIt( _layout.inchRight );
-        _layout.inchTop = zoomIt( _layout.inchTop );
-        _layout.inchBottom = zoomIt( _layout.inchBottom );
-
-        _cl.ptColumnSpacing = zoomIt( _cl.ptColumnSpacing );
-        _cl.mmColumnSpacing = zoomIt( _cl.mmColumnSpacing );
-        _cl.inchColumnSpacing = zoomIt( _cl.inchColumnSpacing );
-
-        _hf.ptHeaderBodySpacing = zoomIt( _hf.ptHeaderBodySpacing );
-        _hf.ptFooterBodySpacing = zoomIt( _hf.ptFooterBodySpacing );
-        _hf.mmHeaderBodySpacing = zoomIt( _hf.mmHeaderBodySpacing );
-        _hf.mmFooterBodySpacing = zoomIt( _hf.mmFooterBodySpacing );
-        _hf.inchHeaderBodySpacing = zoomIt( _hf.inchHeaderBodySpacing );
-        _hf.inchFooterBodySpacing = zoomIt( _hf.inchFooterBodySpacing );
-	}*/
+    _layout = m_pageLayout;
+    _cl = m_pageColumns;
+    _hf = m_pageHeaderFooter;
 }
 
 void KWDocument::updateFrameSizes( int oldZoom )
