@@ -7,7 +7,8 @@ REAL BUGS:
 -	shape creation: the last temporary shape looks slightly different than the final shape
 -	shear tool: the last temporary shape looks slightly different than the final shape
 -	canvas doesn't repaint correctly while scrolling with the scrollbar
--	CMYK color model has a bug when converting to RGB color (in VColor.cc) weird things happen when K value is used
+-	CMYK color model has a bug (in VColor.cc) - weird things happen when K value is used
+-	HSB color model doesn't display correctly (VColor.cc)
 
 TODO:
 -	remove defaultFill/Stroke stuff from VDocument and just use VSelection's fill/stroke.
