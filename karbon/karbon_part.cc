@@ -20,6 +20,7 @@
 
 #include <qdom.h>
 #include <qpainter.h>
+#include <qpaintdevicemetrics.h>
 #include <qfileinfo.h>
 
 #include <kconfig.h>
@@ -225,13 +226,20 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	kdDebug() << "**** part->paintContent()" << endl;
 	painter.eraseRect( rect );
 	VPainterFactory *painterFactory = new VPainterFactory;
+	QPaintDeviceMetrics metrics( painter.device() );
 	painterFactory->setPainter( painter.device(), rect.width(), rect.height() );
 	VPainter *p = painterFactory->painter();
 	//VPainter *p = new VKoPainter( painter.device() );
 	p->begin();
 	p->setZoomFactor( zoomX );
-	kdDebug() << painter.worldMatrix().dx() << endl;
-	p->setWorldMatrix( painter.worldMatrix() );
+	//kdDebug() << "painter.worldMatrix().dx() : " << painter.worldMatrix().dx() << endl;
+	//kdDebug() << "rect.x() : "<< rect.x() << endl;
+	//kdDebug() << "rect.y() : "<< rect.y() << endl;
+	//p->setWorldMatrix( painter.worldMatrix() );
+	QWMatrix mat;
+	mat.scale( 1, -1 );
+	mat.translate( painter.worldMatrix().dx(), painter.worldMatrix().dy() - metrics.height() );
+	p->setWorldMatrix( mat );
 
 	m_doc.selection()->clear();
 	QPtrListIterator<VLayer> itr( m_doc.layers() );
