@@ -78,16 +78,16 @@ public:
 
     typedef struct CHPXFKP
     {
-        U8 grpprlBytes;
-        U8 *grpprl;
+        U8 count;
+        U8 *ptr;
     } CHPXFKP;
     unsigned read(const U8 *in, CHPXFKP *out);
 
     typedef struct PAPXFKP
     {
         U16 istd;
-        U16 grpprlBytes;
-        U8 *grpprl;
+        U16 count;
+        U8 *ptr;
     } PAPXFKP;
     unsigned read(const U8 *in, PAPXFKP *out);
 

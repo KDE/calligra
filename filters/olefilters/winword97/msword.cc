@@ -197,7 +197,7 @@ void MsWord::decodeParagraph(const QString &text, MsWord::PHE &layout, MsWord::P
             // A TAP describes the row.
 
             memset(&tap, 0, sizeof(tap));
-            paragraph.apply(style.grpprl, style.grpprlBytes, &tap);
+            paragraph.apply(style.ptr, style.count, &tap);
             gotTableRow(m_tableText, m_tableStyle, tap);
             m_tableColumn = 0;
         }
@@ -432,8 +432,8 @@ void MsWord::getChpxs(U32 startFc, U32 endFc, CHPXarray &result)
 
         style.startFc = startFc;
         style.endFc = endFc;
-        style.data.grpprlBytes = 0;
-        style.data.grpprl = (U8 *)0;
+        style.data.count = 0;
+        style.data.ptr = (U8 *)0;
         result.resize(1);
         result[1] = style;
     }
@@ -478,8 +478,8 @@ void MsWord::getChpxs(const U8 *fkp, U32 startFc, U32 endFc, CHPXarray &result)
         //kdDebug(s_area) << "found chp from: " << style.startFc << ".." << style.endFc << ": rgb: " << rgb << endl;
         if (!rgb)
         {
-            style.data.grpprlBytes = 0;
-            style.data.grpprl = (U8 *)0;
+            style.data.count = 0;
+            style.data.ptr = (U8 *)0;
         }
 
         unsigned index = result.size();
@@ -563,7 +563,7 @@ void MsWord::getParagraphsFromPapxs(
             {
                 // Paragraph paragraph = Paragraph(*this);
 
-                // paragraph.apply(chpxs[i].data.grpprl, chpxs[i].data.grpprlBytes);
+                // paragraph.apply(chpxs[i].data.ptr, chpxs[i].data.count);
             }
 
             decodeParagraph(text, layout, style, chpxs);
@@ -880,41 +880,38 @@ void MsWord::parse()
             clxtPlcfpcd = 2
         };
 
-        struct
-        {
-            U32 byteCountOffset;
-            U32 count;
-        } grpprls;
-
-        struct
-        {
-            const U8 *ptr;
-            U32 byteCount;
-        } textPlex;
+        QArray<unsigned> grpprlCounts;
+        QArray<const U8 *> grpprlPtrs;
+        unsigned pieceCount;
+        const U8 *piecePtr;
 
         unsigned count = 0;
         const U8 *ptr;
         const U8 *end;
         U8 clxt = 0;
-        U16 cb;
-        U32 lcb;
 
         // First skip the grpprls.
 
         ptr = m_tableStream + m_fib.fcClx;
         end = ptr + m_fib.lcbClx;
-        grpprls.byteCountOffset = (ptr + 1) - m_tableStream;
-        grpprls.count = 0;
         while (ptr < end)
         {
+            U16 cb;
+
             ptr += MsWordGenerated::read(ptr, &clxt);
             if (clxt != clxtGrpprl)
             {
                 ptr--;
                 break;
             }
-            grpprls.count++;
             ptr += MsWordGenerated::read(ptr, &cb);
+
+            unsigned index = grpprlCounts.size();
+
+            grpprlCounts.resize(index + 1);
+            grpprlPtrs.resize(index + 1);
+            grpprlCounts[index] = cb;
+            grpprlPtrs[index] = ptr;
             ptr += cb;
         }
 
@@ -922,6 +919,8 @@ void MsWord::parse()
 
         while (ptr < end)
         {
+            U32 cb;
+
             ptr += MsWordGenerated::read(ptr, &clxt);
             if (clxt != clxtPlcfpcd)
             {
@@ -929,10 +928,10 @@ void MsWord::parse()
                 break;
             }
             count++;
-            ptr += MsWordGenerated::read(ptr, &lcb);
-            textPlex.byteCount = lcb;
-            textPlex.ptr = ptr;
-            ptr += lcb;
+            ptr += MsWordGenerated::read(ptr, &cb);
+            pieceCount = cb;
+            piecePtr = ptr;
+            ptr += cb;
         }
         if ((clxt != clxtPlcfpcd) ||
             (count != 1))
@@ -945,18 +944,22 @@ void MsWord::parse()
 
         Plex<PCD, 8> *pieceTable = new Plex<PCD, 8>(this);
 
-        U32 startFc;
-        U32 endFc;
+        U32 startCp;
+        U32 endCp;
         PCD data;
         const U32 codepage1252mask = 0x40000000;
         bool unicode;
 
-        kdDebug(s_area) << "text stream from: " << m_fib.fcMin << ".." << m_fib.fcMac << endl;
-        kdDebug(s_area) << "body from: " << m_fib.fcMin << ".." << m_fib.fcMin + m_fib.ccpText << endl;
-        pieceTable->startIteration(textPlex.ptr, textPlex.byteCount);
-        while (pieceTable->getNext(&startFc, &endFc, &data))
+        kdDebug(s_area) << "text stream: FCs: " << m_fib.fcMin << ".." << m_fib.fcMac << endl;
+        kdDebug(s_area) << "body text: " << m_fib.ccpText << endl;
+        pieceTable->startIteration(piecePtr, pieceCount);
+        while (pieceTable->getNext(&startCp, &endCp, &data))
         {
-            kdDebug(s_area) << "piece table from: " << startFc << ".." << endFc << " offset: " << data.fc << endl;
+            unsigned prmCount;
+            const U8 *prmPtr;
+            U8 sprm[3];
+
+            kdDebug(s_area) << "piece table: CPs: " << startCp << ".." << endCp << " at FC: " << data.fc << endl;
             unicode = ((data.fc & codepage1252mask) != codepage1252mask);
             //unicode = unicode || m_fib.fExtChar;
             if (!unicode)
@@ -964,7 +967,35 @@ void MsWord::parse()
                 data.fc &= ~ codepage1252mask;
                 data.fc /= 2;
             }
-            getParagraphsFromBtes(m_mainStream + data.fc, endFc - startFc, unicode);
+
+            // Get the relevant property modifier(s).
+
+            if (data.prm.fComplex)
+            {
+                unsigned igrpprl = (data.prm.val << 7) + data.prm.isprm;
+
+                prmCount = grpprlCounts[igrpprl];
+                prmPtr = grpprlPtrs[igrpprl];
+            }
+            else
+            {
+                U16 opcode = Paragraph::getRealOpcode(data.prm.isprm);
+
+                sprm[0] = opcode;
+                sprm[1] = opcode >> 8;
+                sprm[2] = data.prm.val;
+                prmCount = sizeof(sprm);
+                prmPtr = &sprm[0];
+            }
+
+            // TBD: Now eliminate any deleted text.
+
+            {
+                Paragraph paragraph = Paragraph(*this);
+
+                paragraph.apply(prmPtr, prmCount);
+            }
+            getParagraphsFromBtes(m_mainStream + data.fc, endCp - startCp, unicode);
         }
     }
     else
@@ -1053,9 +1084,9 @@ unsigned MsWord::read(const U8 *in, CHPXFKP *out)
 {
     unsigned bytes = 0;
 
-    bytes += MsWordGenerated::read(in + bytes, &out->grpprlBytes);
-    out->grpprl = (U8 *)(in + bytes);
-    bytes += out->grpprlBytes;
+    bytes += MsWordGenerated::read(in + bytes, &out->count);
+    out->ptr = (U8 *)(in + bytes);
+    bytes += out->count;
     return bytes;
 }
 
@@ -1073,23 +1104,23 @@ unsigned MsWord::read(const U8 *in, PAPXFKP *out)
         if (!cw)
         {
             bytes += MsWordGenerated::read(in + bytes, &cw);
-            out->grpprlBytes = 2 * (cw - 1);
+            out->count = 2 * (cw - 1);
         }
         else
         {
-            out->grpprlBytes = 2 * (cw - 1) - 1;
+            out->count = 2 * (cw - 1) - 1;
         }
         bytes += MsWordGenerated::read(in + bytes, &out->istd);
-        out->grpprl = (U8 *)(in + bytes);
-        bytes += out->grpprlBytes;
+        out->ptr = (U8 *)(in + bytes);
+        bytes += out->count;
     }
     else
     {
-        out->grpprlBytes = 2 * (cw - 1);
+        out->count = 2 * (cw - 1);
         // The spec says that the Word6 istd is a byte, but that seems to be wrong.
         bytes += MsWordGenerated::read(in + bytes, &out->istd);
-        out->grpprl = (U8 *)(in + bytes);
-        bytes += out->grpprlBytes;
+        out->ptr = (U8 *)(in + bytes);
+        bytes += out->count;
     }
     return bytes;
 }
