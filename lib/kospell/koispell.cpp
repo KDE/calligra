@@ -86,7 +86,7 @@ KOISpell::KOISpell( QWidget *_parent, const QString &_caption,
 		bool _progressbar, bool _modal, KOSpellerType _type )
     :KOSpell(_parent,_caption,_ksc,_modal,/*_autocorrect*/false,  _type)
 {
-  initialize( _parent, _caption, obj, slot, _ksc,
+    initialize( _parent, _caption, obj, slot, _ksc,
               _progressbar, _modal );
 }
 
@@ -248,7 +248,7 @@ QStringList KOISpell::resultCheckWord( const QString &_word )
     disconnect();
     checkWord (_word, false, true);
     QStringList sug = suggestions();
-    return suggestions();
+    return sug;
 }
 
 
@@ -261,7 +261,7 @@ void KOISpell::ispellErrors (KProcess *, char *buffer, int buflen)
 void KOISpell::KSpell2 (KProcIO *)
 
 {
-  kdDebug(30006) << "KSpell::KSpell2" << endl;
+    kdDebug(30006) << "KSpell::KSpell2" << endl;
   trystart=maxtrystart;  //We've officially started ispell and don't want
        //to try again if it dies.
   QString line;
@@ -438,7 +438,6 @@ bool KOISpell::checkWord (const QString & buffer, bool _usedialog)
 bool KOISpell::checkWord (const QString & buffer, bool _usedialog, bool synchronous )
 {
   QString qs = buffer.simplifyWhiteSpace();
-
   if (qs.find (' ')!=-1 || qs.isEmpty())    // make sure it's a _word_
     return false;
 
@@ -449,23 +448,25 @@ bool KOISpell::checkWord (const QString & buffer, bool _usedialog, bool synchron
   setUpDialog(false);
 
   ksdlg->hide();
-
   if ( synchronous ) {
+      //ready signal is never call, after initialize
+#if 0
     if ( !m_ready ) {
       connect( this, SIGNAL(ready(KOSpell*)),
-               SLOT(slotSynchronousReady()) );
+               SL1OT(slotSynchronousReady()) );
       enter_loop();
     }
+#endif
     OUTPUT (checkWord2Synchronous);
   }
   else
     OUTPUT (checkWord2);
   //  connect (this, SIGNAL (dialog3()), this, SLOT (checkWord3()));
-
   proc->fputs ("%"); // turn off terse mode
   cleanFputsWord( qs ); // send the word to ispell
-  enter_loop();
 
+  // I don't know what we wait...
+  //enter_loop();
   return true;
 }
 
@@ -852,7 +853,6 @@ void KOISpell::checkList4 ()
 
 bool KOISpell::check( const QString &_buffer, bool _usedialog )
 {
-    kdDebug(30006)<<" bool KOISpell::check( const QString &_buffer, bool _usedialog )************************************\n";
   QString qs;
 
   usedialog=_usedialog;
@@ -1281,7 +1281,7 @@ void KOISpell::initialize( QWidget *_parent, const QString &_caption,
                          QObject *obj, const char *slot, KOSpellConfig *_ksc,
                          bool _progressbar, bool _modal )
 {
-  m_ready = false;
+    m_ready = false;
   m_bIgnoreUpperWords=false;
   m_bIgnoreTitleCase=false;
 
