@@ -30,7 +30,9 @@
 
 
 
-#define CHECK_STYLE(x,y)  check(__FILE__,__LINE__,#x,x,y)
+#define CHECK_STYLE(x,y)  check_ptr(__FILE__,__LINE__,#x,x,y)
+#define CHECK_QUAD(x,y)  check_value(__FILE__,__LINE__,#x,x,y)
+#define CHECK_FAILS_QUAD(x,y)  check_fails_value(__FILE__,__LINE__,#x,x,y)
 
 
 using namespace KSpread;
@@ -45,8 +47,41 @@ QString StyleClusterTester::name()
   return QString("Test Cell Styles");
 }
 
+void StyleClusterTester::check_value( const char *file, int line, const char* msg, void * result, 
+  void * expected )
+{
+  testCount++;
+  if( result != expected )
+  {
+    QString message;
+    QTextStream ts( &message, IO_WriteOnly );
+    ts << msg;
+    ts << "  Result:";
+    ts << result;
+    ts << ", ";
+    ts << "Expected:";
+    ts << expected;
+    fail( file, line, message );
+  }
+}
+
+void StyleClusterTester::check_fails_value( const char *file, int line, const char* msg, void * result, 
+  void * expected )
+{
+  testCount++;
+  if( result == expected )
+  {
+    QString message;
+    QTextStream ts( &message, IO_WriteOnly );
+    ts << msg;
+    ts << "  Result shouldn't be:";
+    ts << result;
+    fail( file, line, message );
+  }
+}
+
 template<typename T>
-void StyleClusterTester::check( const char *file, int line, const char* msg, const T &result, 
+void StyleClusterTester::check_ptr( const char *file, int line, const char* msg, const T &result, 
   const T &expected )
 {
   testCount++;
@@ -79,16 +114,26 @@ void StyleClusterTester::run()
   CHECK_STYLE(stylecluster.lookup(1001,2001), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
   CHECK_STYLE(stylecluster.lookup(1000,2001), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
   CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
+  
+  void *quad1 = stylecluster.lookupNode(0,0); 
+  CHECK_QUAD(stylecluster.lookupNode(0,0), quad1);
+  
   stylecluster.insert(0,0, style1);
   stylecluster.insert(1,0, style1);
   stylecluster.insert(0,1, style1);
+  CHECK_FAILS_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
   stylecluster.insert(1,1, style1);
   
+  CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
+  CHECK_QUAD(stylecluster.lookupNode(1,0), stylecluster.lookupNode(1,1));
+
   CHECK_STYLE(stylecluster.lookup(0,0), *style1);
   CHECK_STYLE(stylecluster.lookup(0,1), *style1);
   CHECK_STYLE(stylecluster.lookup(1,0), *style1);
   CHECK_STYLE(stylecluster.lookup(1,1), *style1);
   CHECK_STYLE(stylecluster.lookup(0,2), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
+
+
 
 
 }

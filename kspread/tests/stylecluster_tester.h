@@ -39,7 +39,9 @@ public:
   virtual void run();
 private:
   template<typename T>
-  void check( const char *file, int line, const char* msg, const T& result, const T& expected );
+  void check_ptr( const char *file, int line, const char* msg, const T& result, const T& expected );
+  void check_value( const char *file, int line, const char* msg, void * result, void * expected );
+  void check_fails_value( const char *file, int line, const char* msg, void * result, void * expected );
   KSpreadSheet *m_sheet;
 };
 

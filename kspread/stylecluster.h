@@ -36,6 +36,7 @@ namespace KSpread {
 */
 
 class StyleClusterQuad;
+class StyleClusterTester;
 
 // class StyleManipulator;
 
@@ -76,6 +77,8 @@ class KSPREAD_EXPORT StyleCluster : public QObject
      * @see insert
      */
     const KSpreadStyle& lookup(int x, int y);
+    
+    StyleClusterQuad* lookupNode(int x, int y);
 
 //     friend class StyleManipulator;
 

@@ -226,8 +226,12 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
   
 }
 
-const KSpreadStyle& StyleCluster::lookup(int x, int y)
-{
+
+const KSpreadStyle& StyleCluster::lookup(int x, int y) {
+  return *(lookupNode(x,y)->m_style);
+}
+
+StyleClusterQuad* StyleCluster::lookupNode(int x, int y) {
   //walk over quad-tree
   // see gnumeric sheet-style.c  cell_tile_apply_pos(...)
   //  these implementations rather differ though
@@ -264,9 +268,9 @@ const KSpreadStyle& StyleCluster::lookup(int x, int y)
       }
     }
   }
-  if( !current_node ) return *(last_node->m_style);
+  if( !current_node ) return last_node;
 
-  return *(current_node->m_style);
+  return current_node;
 }
 
 }
