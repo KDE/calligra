@@ -8,20 +8,22 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 
-void usage(char *a)
+void usage(const QCString a)
 {
-	kdDebug() << "usage: " << a << " <driver_name>" << endl;
+	kdDebug() << "usage: " << a << " <driver_name> <test_name>" << endl;
+	kdDebug() << "test names can be: cursors, schema" << endl;
 }
 
 int main(int argc, char** argv)
 {
 	QFileInfo info=QFileInfo(argv[0]);
 	KInstance instance( info.baseName().latin1() );
-	if (argc<=1) {
-		usage(argv[0]);
+	if (argc<=2) {
+		usage(instance.instanceName());
 		return 0;
 	}
 	QCString drv_name(argv[1]);
+	QCString test_name = QString(argv[2]).lower();
 
 	KexiDB::DriverManager manager; // = KexiDB::DriverManager::self();
 	QStringList names = manager.driverNames();
@@ -44,102 +46,18 @@ int main(int argc, char** argv)
 	KexiDB::ConnectionData conn_data;
 //	conn_data.host = "myhost";
 //	conn_data.password = "mypwd";
-#if 0
-	conn_data.setFileName( "db" );
 
-	KexiDB::Connection *conn = driver->createConnection(conn_data);
-	if (driver->error()) {
-		kdDebug() << driver->errorMsg() << endl;
-		return 1;
+	if (test_name == "cursors") {
+#include "cursors_test.h"
 	}
-	if (!conn->connect()) {
-		kdDebug() << conn->errorMsg() << endl;
-		return 1;
+	else if (test_name == "schema") {
+#include "schema_test.h"
 	}
-	kdDebug() << "DATABASES:" << conn->databaseNames() << endl;
-	if (conn->error()) {
-		kdDebug() << conn->errorMsg() << endl;
-		return 1;
-	}
-	if (conn->databaseExists( "db" )) {
-		debug("dropDatabase()=%d",conn->dropDatabase());
-	}
-	debug("createDatabase()=%d",conn->createDatabase("db"));
-
-#endif
-
-#if 1
-	conn_data.setFileName( "mydb" );
-
-	KexiDB::Connection *conn = driver->createConnection(conn_data);
-	if (driver->error()) {
-		kdDebug() << driver->errorMsg() << endl;
-		return 1;
-	}
-	if (!conn->connect()) {
-		kdDebug() << conn->errorMsg() << endl;
-		return 1;
-	}
-	if (!conn->databaseExists( "mydb" )) {
-		if (!conn->createDatabase( "mydb" )) {
-			kdDebug() << conn->errorMsg() << endl;
-			return 1;
-		}
-		kdDebug() << "DB created"<< endl;
-	}
-	if (!conn->useDatabase( "mydb" )) {
-		kdDebug() << conn->errorMsg() << endl;
-		return 1;
-	}
-	KexiDB::Cursor *cursor = conn->executeQuery( "select * from osoby", KexiDB::Cursor::Buffered );
-	kdDebug()<<"executeQuery() = "<<!!cursor<<endl;
-	if (cursor) {
-		kdDebug()<<"Cursor::moveLast() == "<<cursor->moveLast()<<endl;
-		kdDebug()<<"Cursor::moveFirst() == "<<cursor->moveFirst()<<endl;
-
-		kdDebug()<<"Cursor::moveNext() == "<<cursor->moveNext()<<endl;
-		kdDebug()<<"Cursor::moveNext() == "<<cursor->moveNext()<<endl;
-		kdDebug()<<"Cursor::moveNext() == "<<cursor->moveNext()<<endl;
-		kdDebug()<<"Cursor::moveNext() == "<<cursor->moveNext()<<endl;
-		kdDebug()<<"Cursor::eof() == "<<cursor->eof()<<endl;
-		conn->deleteCursor(cursor);
-//		delete cursor;
-	}
-#endif
-
-#if 0
-	conn_data.setFileName( "db" );
-
-	KexiDB::Connection *conn = driver->createConnection(conn_data);
-	if (driver->error()) {
-		kdDebug() << driver->errorMsg() << endl;
-		return 1;
-	}
-	if (!conn->connect()) {
-		kdDebug() << conn->errorMsg() << endl;
-		return 1;
-	}
-	if (!conn->useDatabase( "db" )) {
-		kdDebug() << conn->errorMsg() << endl;
+	else {
+		kdDebug() << "No such test: " << test_name << endl;
+		usage(instance.instanceName());
 		return 1;
 	}
 
-	KexiDB::Table *t = conn->tableSchema( "persons" );
-	if (t)
-		t->debug();
-	t = conn->tableSchema( "cars" );
-	if (t)
-		t->debug();
-
-#endif
-//	conn->tableNames();
-/*
-	if (!conn->disconnect()) {
-		kdDebug() << conn->errorMsg() << endl;
-		return 1;
-	}*/
-//	debug("before del");
-//	delete conn;
-//	debug("after del");
 	return 0;
 }
