@@ -75,7 +75,7 @@ bool KoApplication::start()
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( nativeFormat );
     if ( entry.isEmpty() )
     {
-        kdError(30003) << "Unknown KOffice MimeType " << nativeFormat << ". Check your installation !" << endl;
+        // Error message already shown by queryByMimeType
         return false;
     }
 

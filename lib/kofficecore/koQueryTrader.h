@@ -178,31 +178,9 @@ public:
    *                 components.
    */
   static QValueList<KoFilterDialogEntry> query( const QString & _constr = QString::null );
- 
-private:
-  KService::Ptr m_service;
-};
-
-/**
- * Torben says: DONT USE. Use KoDataToolInfo instead!
-class KoToolEntry
-{
-public:
-  KoToolEntry() { };
-  KoToolEntry( const KoComponentEntry& _entry );
-  KoToolEntry( const KoToolEntry& entry );
-
-  QStringList mimeTypes;
-  QStringList commands;
-  QStringList commandsI18N;
-
-  bool supports( const QString &_mime_type ) const { return ( mimeTypes.find( _mime_type ) != mimeTypes.end() ); }
-
-  static QValueList<KoToolEntry> query( const QString &_mime_type );
 
 private:
   KService::Ptr m_service;
 };
-*/
 
 #endif

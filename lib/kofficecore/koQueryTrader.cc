@@ -23,6 +23,7 @@
 #include <koQueryTrader.h>
 #include <koDocument.h>
 #include <ktrader.h>
+#include <kservicetype.h>
 
 #include <qstringlist.h>
 #include <qfile.h>
@@ -77,12 +78,31 @@ KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name )
 
 KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
 {
-    QString constr( "'%1' in ServiceTypes" );
-    constr = constr.arg( mimetype );
+    QString constr = QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1'" ).arg( mimetype );
 
     QValueList<KoDocumentEntry> vec = query( constr );
     if ( vec.isEmpty() )
-        return KoDocumentEntry();
+    {
+        kdWarning(30003) << "Got no results with " << constr << endl;
+        // Fallback to the old way (which was probably wrong, but better be safe)
+        QString constr = QString::fromLatin1( "'%1' in ServiceTypes" ).arg( mimetype );
+        vec = query( constr );
+        if ( vec.isEmpty() )
+        {
+            // Still no match. Either the mimetype itself is unknown, or we have no service for it.
+            // Help the user debugging stuff by providing some more diagnostics
+            if ( KServiceType::serviceType( mimetype ) == 0L )
+            {
+                kdError(30003) << "Unknown KOffice MimeType " << mimetype << "." << endl;
+                kdError(30003) << "Check your installation (for instance, run 'kde-config --path mime' and check the result)." << endl;
+            } else
+            {
+                kdError(30003) << "Found no KOffice part able to handle " << mimetype << "!" << endl;
+                kdError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and KOfficePart, did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+            }
+            return KoDocumentEntry();
+        }
+    }
 
     return vec[0];
 }
@@ -220,39 +240,3 @@ KoFilterDialog* KoFilterDialogEntry::createFilterDialog( QObject* parent, const 
 
     return (KoFilterDialog*)obj;
 }
-
-#if 0
-
-/*******************************************************************
- *
- * KoToolEntry
- *
- *******************************************************************/
-
-KoToolEntry::KoToolEntry( KService::Ptr service )
-  : m_service( service )
-{
-    mimeTypes = service->property( "MimeTypes" ).toString();
-    commands = service->property( "Commands" ).toString();
-    commandsI18N = service->property( "CommandsI18N" ).toString();
-}
-
-QValueList<KoToolEntry> KoToolEntry::query( const QString &_mime_type )
-{
-  QValueList<KoToolEntry> lst;
-
-  KTrader::OfferList offers = KTrader::self()->query( "KOfficeTool" );
-
-  KTrader::OfferList::ConstIterator it = offers.begin();
-  for (; it != offers.end(); ++it )
-  {
-    KoToolEntry t( koParseToolProperties( *it ) );
-
-    if ( t.mimeTypes.find( _mime_type ) != t.mimeTypes.end() )
-        lst.append( t );
-  }
-
-  return lst;
-}
-
-#endif
