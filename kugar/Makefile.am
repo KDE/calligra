@@ -1,4 +1,5 @@
-SUBDIRS = lib part shell samples kudesigner
+#SUBDIRS = lib part shell samples kudesigner
+SUBDIRS = lib part samples kudesigner
 
 
 KDE_ICON = kugar kugardata

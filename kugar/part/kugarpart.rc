@@ -17,5 +17,5 @@
    <Action name="kuFirstPage" />
    <Action name="kuLastPage" />
  </ToolBar>
- <StatusBar/>
+<!-- <StatusBar/> -->
 </kpartgui>
