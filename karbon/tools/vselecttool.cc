@@ -52,7 +52,7 @@ VSelectTool::draw()
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
-	KoPoint current = m_current;
+	KoPoint current = view()->canvasWidget()->toContents( QPoint( m_current.x(), m_current.y() ) );
 	//current.setY( -current.y() + view()->canvasWidget()->contentsHeight() );
 
 	KoRect rect = view()->part()->document().selection()->boundingBox();
@@ -74,11 +74,11 @@ VSelectTool::draw()
 	{
 		painter->setPen( Qt::DotLine );
 		painter->newPath();
-		painter->moveTo( KoPoint( first( true ).x(), first( true ).y() ) );
-		painter->lineTo( KoPoint( m_current.x(), first( true ).y() ) );
-		painter->lineTo( KoPoint( m_current.x(), m_current.y() ) );
-		painter->lineTo( KoPoint( first( true ).x(), m_current.y() ) );
-		painter->lineTo( KoPoint( first( true ).x(), first( true ).y() ) );
+		painter->moveTo( KoPoint( first().x(), first().y() ) );
+		painter->lineTo( KoPoint( last().x(), first().y() ) );
+		painter->lineTo( KoPoint( last().x(), last().y() ) );
+		painter->lineTo( KoPoint( first().x(), last().y() ) );
+		painter->lineTo( KoPoint( first().x(), first().y() ) );
 		painter->strokePath();
 
 		m_state = normal;
@@ -288,9 +288,9 @@ VSelectTool::mouseDragRelease( const KoPoint& current )
 	{
 		// Y mirroring
 		KoPoint fp = first();
-		fp.setY( -fp.y() + view()->canvasWidget()->contentsHeight() );
+		//fp.setY( -fp.y() + view()->canvasWidget()->contentsHeight() );
 		KoPoint lp = last();
-		lp.setY( -lp.y() + view()->canvasWidget()->contentsHeight() );
+		//lp.setY( -lp.y() + view()->canvasWidget()->contentsHeight() );
 		view()->part()->document().selection()->clear();
 		view()->part()->document().selection()->append(
 			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
@@ -305,7 +305,7 @@ VSelectTool::mouseDragRelease( const KoPoint& current )
 			new VTranslateCmd(
 				&view()->part()->document(),
 				qRound( last().x() - first().x() ),
-				qRound( first().y() - last().y() ) ),
+				qRound( last().y() - first().y() ) ),
 			true );
 	}
 
@@ -371,9 +371,9 @@ VSelectTool::recalc()
 		// Build affine matrix:
 		QWMatrix mat;
 		// Y mirroring
-		mat.scale( 1, -1 );
-		mat.translate( 0, -view()->canvasWidget()->contentsHeight() );
-		mat.translate( last().x() - first().x(), first().y() - last().y() );
+		//mat.scale( 1, -1 );
+		//mat.translate( 0, -view()->canvasWidget()->contentsHeight() );
+		mat.translate( last().x() - first().x(), last().y() - first().y() );
 
 
 		// Copy selected objects and transform:
