@@ -854,7 +854,7 @@ void KPresenterView::extraLayout()
 void KPresenterView::extraConfigure()
 {
     KPConfig configDia( this );
-    configDia.show();
+    configDia.exec();
 }
 /*===============================================================*/
 void KPresenterView::extraCreateTemplate()
