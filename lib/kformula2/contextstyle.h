@@ -18,14 +18,19 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef __CONTEXTSTYLE_H
+#define __CONTEXTSTYLE_H
+
 //KDE Include
-#include <kconfig.h>
+//#include <kconfig.h>
 
 //Qt Include
+#include <qcolor.h>
+#include <qfont.h>
 
 //Formula include
 
-enum DrawMode {CharSize,FixedHeight,FixedWidth}
+enum DrawMode {CharSize,FixedHeight,FixedWidth};
 
 /**
  * Contains info on fonts etc..
@@ -43,7 +48,7 @@ public:
 /**
  * Build a context style reading settings from config
  */
-  ContextStyle(KConfig *config);
+    //ContextStyle(KConfig *config);
 
 /**
  * return defalt color
@@ -53,7 +58,7 @@ QColor getDefaultColor();
 
 
 private:
- QFont defaultFont;H
+ QFont defaultFont;
  QColor defaultColor;
 
  
@@ -61,3 +66,5 @@ private:
  bool editing;
  
 };
+
+#endif // __CONTEXTSTYLE_H
