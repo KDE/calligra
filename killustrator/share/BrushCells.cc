@@ -57,11 +57,11 @@ BrushCells::BrushCells (QWidget *parent, const char *name)
 BrushCells::~BrushCells () {
 }
 
-int BrushCells::cellWidth (int col) {
+int BrushCells::cellWidth (int) {
   return CELL_WIDTH;
 }
 
-int BrushCells::cellHeight (int row) {
+int BrushCells::cellHeight (int) {
   return CELL_HEIGHT;
 }
 

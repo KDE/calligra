@@ -42,7 +42,7 @@ void KChartPiePainter::paintChart( QPainter* painter, table_t* table )
 
 bool KChartPiePainter::setupCoords( QPaintDevice* paintdev )
 {
-  QPaintDeviceMetrics pdm( paintdev );
+  // QPaintDeviceMetrics pdm( paintdev );
 
   _chart->_pieheight = (int)rint( 0.1 * _chart->_height );
 
@@ -83,7 +83,7 @@ bool KChartPiePainter::setupCoords( QPaintDevice* paintdev )
 }
 
 
-void KChartPiePainter::drawText( QPainter* painter, table_t* table )
+void KChartPiePainter::drawText( QPainter* painter, table_t* /*table*/ )
 {
   if( _chart->_textfontheight ) {
 	int tx = _xcenter - _chart->_title.length() * _chart->_titlefontwidth/2;
@@ -94,7 +94,7 @@ void KChartPiePainter::drawText( QPainter* painter, table_t* table )
 					   fm.height(), Qt::AlignLeft, _chart->_title );
   }
 
-  QPaintDeviceMetrics pdm( painter->device() );
+  // QPaintDeviceMetrics pdm( painter->device() );
   if( _chart->_xlabelfontheight ) {
 	int tx = _xcenter - _chart->_xlabel.length() * _chart->_xlabelfontwidth/2;
 	int ty = _chart->_height - _chart->_bottommargin - _chart->_xlabelfontheight;
@@ -107,7 +107,7 @@ void KChartPiePainter::drawText( QPainter* painter, table_t* table )
 }
 
 
-void KChartPiePainter::drawPie( QPainter* painter, table_t* table )
+void KChartPiePainter::drawPie( QPainter* painter, table_t* /*table*/ )
 {
   int left = _xcenter - _chart->_width/2;
 

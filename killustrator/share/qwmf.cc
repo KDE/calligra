@@ -746,13 +746,13 @@ void QWinMetaFile::createPenIndirect(short num, short* parm)
 }
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::saveDC(short num, short* parm)
+void QWinMetaFile::saveDC(short , short* )
 {
   mPainter.save ();
 }
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::restoreDC(short num, short* parm)
+void QWinMetaFile::restoreDC(short, short* )
 {
   mPainter.restore ();
 }

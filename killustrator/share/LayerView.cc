@@ -73,7 +73,7 @@ int LayerView::cellWidth (int col) {
   return (col == 3 ? CELL2_WIDTH : CELL1_WIDTH);
 }
 
-int LayerView::cellHeight (int row) {
+int LayerView::cellHeight (int) {
   return QMAX (CELL_HEIGHT, fontMetrics ().lineSpacing () + 1);
 }
 

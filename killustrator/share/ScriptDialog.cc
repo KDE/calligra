@@ -73,7 +73,7 @@ ScriptDialog::ScriptDialog (QWidget* parent, const char* name) :
 //  setMaximumSize (430, 400);
 }
 
-void ScriptDialog::setActiveDocument (GDocument* doc) {
+void ScriptDialog::setActiveDocument (GDocument* ) {
 }
 
 void ScriptDialog::loadScripts () {

@@ -78,12 +78,12 @@ KoDiagrammView::~KoDiagrammView()
 {
 }
 
-void KoDiagrammView::resizeEvent( QResizeEvent *_ve )
+void KoDiagrammView::resizeEvent( QResizeEvent * )
 {
   update();
 }
 
-void KoDiagrammView::paintEvent( QPaintEvent *_ev )
+void KoDiagrammView::paintEvent( QPaintEvent * )
 {
   QPainter painter;
   painter.begin( this );

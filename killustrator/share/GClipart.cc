@@ -84,7 +84,7 @@ const char* GClipart::typeName () {
   return I18N ("Clipart object");
 }
 
-void GClipart::draw (Painter& p, bool withBasePoints, bool outline) {
+void GClipart::draw (Painter& p, bool /*withBasePoints*/, bool outline) {
   p.save ();
   if (outline) {
     p.setPen (black);

@@ -54,7 +54,8 @@ void KChartAxesPainter::paintChart( QPainter* painter, table_t* table )
 }
 
 
-void KChartAxesPainter::setupLegend( QPaintDevice* paintdev, table_t* table )
+void KChartAxesPainter::setupLegend( QPaintDevice* /*paintdev*/, 
+				     table_t* table )
 {
   // No need to setup anything if there are no legends
   if( _chart->_legends.count() == 0 )
@@ -154,7 +155,8 @@ void KChartAxesPainter::setupLegend( QPaintDevice* paintdev, table_t* table )
 
 
 
-bool KChartAxesPainter::setupCoords( QPaintDevice* paintdev, table_t* table )
+bool KChartAxesPainter::setupCoords( QPaintDevice* /*paintdev*/, 
+				     table_t* table )
 {
   // sanity check
   if( numDatasets( table ) != 2 )
@@ -375,7 +377,7 @@ double KChartAxesPainter::lowerBound( double val )
 
 
 
-void KChartAxesPainter::drawText( QPainter* painter, table_t* table )
+void KChartAxesPainter::drawText( QPainter* painter, table_t* /*table*/ )
 {
   // title
   if( _chart->_titlefontheight ) {

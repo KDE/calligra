@@ -167,7 +167,7 @@ bool KDiagrammDoc::save( ostream& out, const char* /* format */ )
   return true;
 }
 
-bool KDiagrammDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
+bool KDiagrammDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr /*_store*/ )
 {
   cerr << "------------------------ LOADING --------------------" << endl;
 
@@ -467,7 +467,8 @@ void KDiagrammDoc::setPaperLayout( float _leftBorder, float _topBorder, float _r
   m_bModified = TRUE;
 }
 
-QString KDiagrammDoc::completeHeading( const char *_data, int _page, const char *_table )
+QString KDiagrammDoc::completeHeading( const char *_data, int , 
+				       const char *_table )
 {
   /* QString page;
     page.sprintf( "%i", _page );

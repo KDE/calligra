@@ -22,7 +22,7 @@ KChartPie3DPainter::~KChartPie3DPainter()
 
 bool KChartPie3DPainter::setupCoords( QPaintDevice* paintdev )
 {
-  QPaintDeviceMetrics pdm( paintdev );
+  // QPaintDeviceMetrics pdm( paintdev );
 
   _chart->_pieheight = (int)rint( 0.1 * _chart->_height );
 
@@ -63,7 +63,7 @@ bool KChartPie3DPainter::setupCoords( QPaintDevice* paintdev )
 }
 
 
-void KChartPie3DPainter::drawPie( QPainter* painter, table_t* table )
+void KChartPie3DPainter::drawPie( QPainter* painter, table_t* /*table*/ )
 {
   int left = _xcenter - _chart->_width/2;
 

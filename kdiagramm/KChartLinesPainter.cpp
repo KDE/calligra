@@ -42,7 +42,7 @@ void KChartLinesPainter::drawData( QPainter* painter, table_t* table )
 
 
 void KChartLinesPainter::drawLegendMarker( QPainter* painter, int number,
-										   int x, int y, table_t* table )
+					   int x, int y, table_t* /*table*/ )
 {
   QColor datacolor = chooseDataColor( number );
   Qt::PenStyle type = chooseLineType( number );
