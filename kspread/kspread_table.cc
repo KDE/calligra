@@ -59,7 +59,7 @@
 #include "../kchart/kchart_part.h"
 
 /* ############ Torben
-   There is this m_lstChildren in KSpreadTable. Make shure to keep in addition
+   There is this m_lstChildren in KSpreadTable. Make sure to keep in addition
    the m_lstChildren of ContainerPart up to date.
 */
 
@@ -933,27 +933,27 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker )
 
 void KSpreadTable::changeCellTabName(QString old_name,QString new_name)
 {
- QIntDictIterator<KSpreadCell> it( m_dctCells );
- for ( ; it.current(); ++it )
-      	{
-      	if(it.current()->isFormular())
-      		{
-      		if(it.current()->text().find(old_name)!=-1)
-      			{
-      			int nb = it.current()->text().contains(old_name+"!");
-      			QString tmp=old_name+"!";
-      			int len=tmp.length();
-      			tmp=it.current()->text();
-      			
-      			for(int i=0;i<nb;i++)
-      				{
-      				 int pos= tmp.find(old_name+"!");
-      				 tmp.replace(pos,len,new_name+"!");
-      				}
-      			it.current()->setText(tmp);
-      			}
-      		}
-      	}
+    QIntDictIterator<KSpreadCell> it( m_dctCells );
+    for ( ; it.current(); ++it )
+    {
+        if(it.current()->isFormular())
+        {
+            if(it.current()->text().find(old_name)!=-1)
+            {
+                int nb = it.current()->text().contains(old_name+"!");
+                QString tmp=old_name+"!";
+                int len=tmp.length();
+                tmp=it.current()->text();
+
+                for(int i=0;i<nb;i++)
+                {
+                    int pos= tmp.find(old_name+"!");
+                    tmp.replace(pos,len,new_name+"!");
+                }
+                it.current()->setText(tmp);
+            }
+        }
+    }
 }
 
 void KSpreadTable::insertRightCell( const QPoint &_marker )
@@ -1155,367 +1155,345 @@ void KSpreadTable::removeTopCell(const QPoint &_marker)
 
 void KSpreadTable::changeNameCellRef(int pos,ChangeRef ref,QString tabname)
 {
-QIntDictIterator<KSpreadCell> it( m_dctCells );
- for ( ; it.current(); ++it )
-      	{
-      	if(it.current()->isFormular())
-      	{
-	QString erg = "";
-
-    const char *p = it.current()->text().ascii();
-    char buf[ 2 ];
-    buf[ 1 ] = 0;
-
-    bool fix1 = FALSE;
-    bool fix2 = FALSE;
-    bool good_name;
-    bool old_value=false;
-    while ( *p != 0 )
+  QIntDictIterator<KSpreadCell> it( m_dctCells );
+  for ( ; it.current(); ++it )
+  {
+    if(it.current()->isFormular())
     {
+      QString erg = "";
+
+      const char *p = it.current()->text().ascii();
+      char buf[ 2 ];
+      buf[ 1 ] = 0;
+
+      bool fix1 = FALSE;
+      bool fix2 = FALSE;
+      bool correct_tablename;
+      bool old_value=false;
+      while ( *p != 0 )
+      {
 	if ( *p != '$' && !isalpha( *p ) )
 	{
-	    buf[0] = *p++;
-	    erg += buf;
-	    if(tabname==name())
-	    	good_name=true;
-	    else
-	    	good_name=false;
+          buf[0] = *p++;
+          erg += buf;
+          //// ### David : shouldn't this be before the while ?
+          correct_tablename = (tabname==name());
 	
-	    if(erg.right(1)=="!")
-	    	{
-	    	int pos=erg.findRev(tabname);
-	    	if(pos!=-1)
-	    		{
-	    		int pos2=erg.length()-tabname.length()-1;
-	    		if( erg.find(tabname,pos2)!=-1)
-					good_name=true;
-			else
-					good_name=false;
+          if(erg.right(1)=="!")
+          {
+            int pos=erg.findRev(tabname);
+            if(pos!=-1)
+            {
+              int pos2=erg.length()-tabname.length()-1;
+              if( erg.find(tabname,pos2)!=-1)
+                correct_tablename=true;
+              else
+                correct_tablename=false;
 			
-			}
-		else
-			good_name=false;
-	    	//when you write Table1!A1:A2
-	    	//=>don't forget if it's the good name
-	    	old_value=good_name;
-	    	}
-	    else if(erg.right(1)==":")
-	    	   {
-	    	   good_name=old_value;
-	           }
-	    else
-	           old_value=good_name;
-	    fix1 = fix2 = FALSE;
+            }
+            else
+              correct_tablename=false;
+            //when you write Table1!A1:A2
+            //=>don't forget if it's the good name
+            old_value=correct_tablename;
+          }
+          else if(erg.right(1)==":")
+          {
+            correct_tablename=old_value;
+          }
+          else
+            old_value=correct_tablename;
+          fix1 = fix2 = FALSE;
 	}
 	else
 	{
-	    QString tmp = "";
-	    if ( *p == '$' )
-	    {
-		tmp = "$";
-		p++;
-		fix1 = TRUE;
-	    }
-	    if ( isalpha( *p ) )
-	    {
-		char buffer[ 1024 ];
-		char *p2 = buffer;
-		while ( *p && isalpha( *p ) )
-		{
-		    buf[ 0 ] = *p;
-		    tmp += buf;
-		    *p2++ = *p++;
-		}
-		*p2 = 0;
-		if ( *p == '$' )
-		{
-		    tmp += "$";
-		    p++;
-		    fix2 = TRUE;
-		}
-		if ( isdigit( *p ) )
-		{
-		    const char *p3 = p;
-		    int row = atoi( p );
-		    while ( *p != 0 && isdigit( *p ) ) p++;
-		    // Is it a table
-		    if ( *p == '!' )
-		    {
-		    	erg += tmp;
-			fix1 = fix2 = FALSE;
-			p = p3;
+          QString tmp = "";
+          if ( *p == '$' )
+          {
+            tmp = "$";
+            p++;
+            fix1 = TRUE;
+          }
+          if ( isalpha( *p ) )
+          {
+            char buffer[ 1024 ];
+            char *p2 = buffer;
+            while ( *p && isalpha( *p ) )
+            {
+              buf[ 0 ] = *p;
+              tmp += buf;
+              *p2++ = *p++;
+            }
+            *p2 = 0;
+            if ( *p == '$' )
+            {
+              tmp += "$";
+              p++;
+              fix2 = TRUE;
+            }
+            if ( isdigit( *p ) )
+            {
+              const char *p3 = p;
+              int row = atoi( p );
+              while ( *p != 0 && isdigit( *p ) ) p++;
+              // Is it a table
+              if ( *p == '!' )
+              {
+                erg += tmp;
+                fix1 = fix2 = FALSE;
+                p = p3;
 			
-		     }
-		    else // It must be a cell identifier
-		    {
-			int col = 0;
-			if ( strlen( buffer ) >= 2 )
-			{
-			    col += 26 * ( buffer[0] - 'A' + 1 );
-			    col += buffer[1] - 'A' + 1;
-			}
-			else
-			    col += buffer[0] - 'A' + 1;
-			if ( fix1 )
-			    erg+="$"+util_columnLabel(col);
-			else
-				{
+              }
+              else // It must be a cell identifier
+              {
+                int col = 0;
+                if ( strlen( buffer ) >= 2 )
+                {
+                  col += 26 * ( buffer[0] - 'A' + 1 );
+                  col += buffer[1] - 'A' + 1;
+                }
+                else
+                  col += buffer[0] - 'A' + 1;
+                if ( fix1 )
+                  erg+="$"+util_columnLabel(col);
+                else
+                {
 				
-				if(ref==ColumnInsert && good_name==true)
-					{
-					if(col >=pos)
-						erg+=util_columnLabel(col+1);
-					else
-					 	erg+=util_columnLabel(col);
-					}
-				else if(ref==ColumnRemove && good_name==true)
-					{
-					if(col >pos)
-						erg+=util_columnLabel(col-1);
-					else
-					 	erg+=util_columnLabel(col);
-					}
-				else
-					{
-					erg+=util_columnLabel(col);
-					}
-				}
-			if ( fix2 )
-				{
-			    	sprintf( buffer, "$%i", row );
-			    	}
-			else
-			    	{
-			    	if ( fix2 )
-				{
-			    	sprintf( buffer, "$%i", row );
-			    	}
-			else
-			    {
-			    if(ref==RowInsert && good_name==true)
-			    	{
-			    	if(row >=pos)
-			    		sprintf( buffer, "%i", (row+1)  );
-			    	else
-			    		sprintf( buffer, "%i", row  );
-				}
-			    else if(ref==RowRemove && good_name==true)
-			    	{
-			    	if(row >pos)
-			    		sprintf( buffer, "%i", (row-1)  );
-			    	else
-			    		sprintf( buffer, "%i", row  );
-				}
-			    else
-			    	{
-			    	sprintf( buffer, "%i", row  );
-			    	}
-			    }
-			
-			erg += buffer;
-		    }
-			}
-		}
-		else
-		{
-		    erg += tmp;
-		    fix1 = fix2 = FALSE;
-		}
-	    }
-	    else
-	    	{
-		erg += tmp;
-		fix1 = FALSE;
-	    	}	
-		}
-           }
-        it.current()->setText(erg);
-		}
-	
-      	}
+                  if(ref==ColumnInsert && correct_tablename==true)
+                  {
+                    if(col >=pos)
+                      erg+=util_columnLabel(col+1);
+                    else
+                      erg+=util_columnLabel(col);
+                  }
+                  else if(ref==ColumnRemove && correct_tablename==true)
+                  {
+                    if(col >pos)
+                      erg+=util_columnLabel(col-1);
+                    else
+                      erg+=util_columnLabel(col);
+                  }
+                  else
+                  {
+                    erg+=util_columnLabel(col);
+                  }
+                }
+                if ( fix2 )
+                {
+                  sprintf( buffer, "$%i", row );
+                }
+                else
+                {
+                  if(ref==RowInsert && correct_tablename==true)
+                  {
+                    if(row >=pos)
+                      sprintf( buffer, "%i", (row+1)  );
+                    else
+                      sprintf( buffer, "%i", row  );
+                  }
+                  else if(ref==RowRemove && correct_tablename==true)
+                  {
+                    if(row >pos)
+                      sprintf( buffer, "%i", (row-1)  );
+                    else
+                        sprintf( buffer, "%i", row  );
+                    }
+                    else
+                    {
+                      sprintf( buffer, "%i", row  );
+                    }
+                  erg += buffer;
+                }
+              }
+            }
+            else
+            {
+              erg += tmp;
+              fix1 = fix2 = FALSE;
+            }
+          }
+          else
+          {
+            erg += tmp;
+            fix1 = FALSE;
+          }	
+        }
+      }
+      it.current()->setText(erg);
+    }
+  }
 }
 
 void KSpreadTable::changeNameCellRef2(const QPoint & pos,
 ChangeRef ref,QString tabname)
 {
-QIntDictIterator<KSpreadCell> it( m_dctCells );
- for ( ; it.current(); ++it )
-      	{
-      	if(it.current()->isFormular())
-      	{
-	QString erg = "";
-
-    const char *p = it.current()->text().ascii();
-    char buf[ 2 ];
-    buf[ 1 ] = 0;
-
-    bool fix1 = FALSE;
-    bool fix2 = FALSE;
-    bool good_name;
-    bool old_value=false;
-    while ( *p != 0 )
+  QIntDictIterator<KSpreadCell> it( m_dctCells );
+  for ( ; it.current(); ++it )
+  {
+    if(it.current()->isFormular())
     {
+      QString erg = "";
+
+      const char *p = it.current()->text().ascii();
+      char buf[ 2 ];
+      buf[ 1 ] = 0;
+
+      bool fix1 = FALSE;
+      bool fix2 = FALSE;
+      bool correct_tablename;
+      bool old_value=false;
+      while ( *p != 0 )
+      {
 	if ( *p != '$' && !isalpha( *p ) )
 	{
-	    buf[0] = *p++;
-	    erg += buf;
-	    if(tabname==name())
-	    	good_name=true;
-	    else
-	    	good_name=false;
+          buf[0] = *p++;
+          erg += buf;
+          correct_tablename = (tabname==name());
 	
-	    if(erg.right(1)=="!")
-	    	{
-	    	int pos=erg.findRev(tabname);
-	    	if(pos!=-1)
-	    		{
-	    		int pos2=erg.length()-tabname.length()-1;
-	    		if( erg.find(tabname,pos2)!=-1)
-					good_name=true;
-			else
-					good_name=false;
-			
-			}
-		else
-			good_name=false;
-	    	//when you write Table1!A1:A2
-	    	//=>don't forget if it's the good name
-	    	old_value=good_name;
-	    	}
-	    else if(erg.right(1)==":")
-	    	   {
-	    	   good_name=old_value;
-	           }
-	    else
-	           old_value=good_name;
-	    fix1 = fix2 = FALSE;
+          if(erg.right(1)=="!")
+          {
+            int pos=erg.findRev(tabname);
+            if(pos!=-1)
+            {
+              int pos2=erg.length()-tabname.length()-1;
+              if( erg.find(tabname,pos2)!=-1)
+                correct_tablename=true;
+              else
+                correct_tablename=false;
+
+            }
+            else
+              correct_tablename=false;
+            //when you write Table1!A1:A2
+            //=>don't forget if it's the good name
+            old_value=correct_tablename;
+          }
+          else if(erg.right(1)==":")
+          {
+            correct_tablename=old_value;
+          }
+          else
+            old_value=correct_tablename;
+          fix1 = fix2 = FALSE;
 	}
 	else
 	{
-	    QString tmp = "";
-	    if ( *p == '$' )
-	    {
-		tmp = "$";
-		p++;
-		fix1 = TRUE;
-	    }
-	    if ( isalpha( *p ) )
-	    {
-		char buffer[ 1024 ];
-		char *p2 = buffer;
-		while ( *p && isalpha( *p ) )
-		{
-		    buf[ 0 ] = *p;
-		    tmp += buf;
-		    *p2++ = *p++;
-		}
-		*p2 = 0;
-		if ( *p == '$' )
-		{
-		    tmp += "$";
-		    p++;
-		    fix2 = TRUE;
-		}
-		if ( isdigit( *p ) )
-		{
-		    const char *p3 = p;
-		    int row = atoi( p );
-		    while ( *p != 0 && isdigit( *p ) ) p++;
-		    // Is it a table
-		    if ( *p == '!' )
-		    {
-		    	erg += tmp;
-			fix1 = fix2 = FALSE;
-			p = p3;
+          QString tmp = "";
+          if ( *p == '$' )
+          {
+            tmp = "$";
+            p++;
+            fix1 = TRUE;
+          }
+          if ( isalpha( *p ) )
+          {
+            char buffer[ 1024 ];
+            char *p2 = buffer;
+            while ( *p && isalpha( *p ) )
+            {
+              buf[ 0 ] = *p;
+              tmp += buf;
+              *p2++ = *p++;
+            }
+            *p2 = 0;
+            if ( *p == '$' )
+            {
+              tmp += "$";
+              p++;
+              fix2 = TRUE;
+            }
+            if ( isdigit( *p ) )
+            {
+              const char *p3 = p;
+              int row = atoi( p );
+              while ( *p != 0 && isdigit( *p ) ) p++;
+              // Is it a table
+              if ( *p == '!' )
+              {
+                erg += tmp;
+                fix1 = fix2 = FALSE;
+                p = p3;
 			
-		     }
-		    else // It must be a cell identifier
-		    {
-			int col = 0;
-			if ( strlen( buffer ) >= 2 )
-			{
-			    col += 26 * ( buffer[0] - 'A' + 1 );
-			    col += buffer[1] - 'A' + 1;
-			}
-			else
-			    col += buffer[0] - 'A' + 1;
-			if ( fix1 )
-			    erg+="$"+util_columnLabel(col);
-			else
-				{
+              }
+              else // It must be a cell identifier
+              {
+                int col = 0;
+                if ( strlen( buffer ) >= 2 )
+                {
+                  col += 26 * ( buffer[0] - 'A' + 1 );
+                  col += buffer[1] - 'A' + 1;
+                }
+                else
+                  col += buffer[0] - 'A' + 1;
+                if ( fix1 )
+                  erg+="$"+util_columnLabel(col);
+                else
+                {
 				
-				if(ref==ColumnInsert && good_name==true)
-					{
-					if(col >=pos.x()&&row==pos.y())
-						erg+=util_columnLabel(col+1);
-					else
-					 	erg+=util_columnLabel(col);
-					}
-				else if(ref==ColumnRemove && good_name==true)
-					{
-					if(col >pos.x() &&row==pos.y())
-						erg+=util_columnLabel(col-1);
-					else
-					 	erg+=util_columnLabel(col);
-					}
-				else
-					{
-					erg+=util_columnLabel(col);
-					}
-				}
-			if ( fix2 )
-				{
-			    	sprintf( buffer, "$%i", row );
-			    	}
-			else
-			    	{
-			    	if ( fix2 )
-				{
-			    	sprintf( buffer, "$%i", row );
-			    	}
-			else
-			    {
-			    if(ref==RowInsert && good_name==true)
-			    	{
-			    	if(row >=pos.y()&&col==pos.x())
-			    		sprintf( buffer, "%i", (row+1)  );
-			    	else
-			    		sprintf( buffer, "%i", row  );
-				}
-			    else if(ref==RowRemove && good_name==true)
-			    	{
-			    	if(row >pos.y()&&col==pos.x())
-			    		sprintf( buffer, "%i", (row-1)  );
-			    	else
-			    		sprintf( buffer, "%i", row  );
-				}
-			    else
-			    	{
-			    	sprintf( buffer, "%i", row  );
-			    	}
-			    }
-			
-			erg += buffer;
-		    }
-			}
-		}
-		else
-		{
-		    erg += tmp;
-		    fix1 = fix2 = FALSE;
-		}
-	    }
-	    else
-	    	{
-		erg += tmp;
-		fix1 = FALSE;
-	    	}	
-		}
-           }
-        it.current()->setText(erg);
-		}
+                  if(ref==ColumnInsert && correct_tablename==true)
+                  {
+                    if(col >=pos.x()&&row==pos.y())
+                      erg+=util_columnLabel(col+1);
+                    else
+                      erg+=util_columnLabel(col);
+                  }
+                  else if(ref==ColumnRemove && correct_tablename==true)
+                  {
+                    if(col >pos.x() &&row==pos.y())
+                      erg+=util_columnLabel(col-1);
+                    else
+                      erg+=util_columnLabel(col);
+                  }
+                  else
+                  {
+                    erg+=util_columnLabel(col);
+                  }
+                }
+                if ( fix2 )
+                {
+                  sprintf( buffer, "$%i", row );
+                }
+                else
+                {
+                  if(ref==RowInsert && correct_tablename==true)
+                  {
+                    if(row >=pos.y()&&col==pos.x())
+                      sprintf( buffer, "%i", (row+1)  );
+                    else
+                      sprintf( buffer, "%i", row  );
+                  }
+                  else if(ref==RowRemove && correct_tablename==true)
+                  {
+                    if(row >pos.y()&&col==pos.x())
+                      sprintf( buffer, "%i", (row-1)  );
+                    else
+                      sprintf( buffer, "%i", row  );
+                  }
+                  else
+                  {
+                    sprintf( buffer, "%i", row  );
+                  }
+                  erg += buffer;
+                }
+              }
+            }
+            else
+            {
+              erg += tmp;
+              fix1 = fix2 = FALSE;
+            }
+          }
+          else
+          {
+            erg += tmp;
+            fix1 = FALSE;
+          }	
+        }
+      }
+      it.current()->setText(erg);
+    }
 	
-      	}
+  }
 }
 
 
@@ -3674,7 +3652,7 @@ void KSpreadTable::setShowPageBorders( bool b )
 {
     if ( b == m_bShowPageBorders )
 	return;
-    
+
     m_bShowPageBorders = b;
     emit sig_updateView( this );
 }

@@ -343,7 +343,7 @@ public:
      * @see #chooseRect
      */
     void setChooseRect( const QRect& rect );
-    
+
     QRect selectionRect() const { return m_rctSelection; }
     void setSelection( const QRect &_rect, KSpreadCanvas *_canvas = 0L );
 
@@ -406,7 +406,6 @@ public:
     * For example =Table1!A1 when you insert Column in A1 so
     * so reference change =Table1!B1
     */
-
     void changeNameCellRef(int pos,ChangeRef ref,QString tabname);
     /**
     * Change name of reference when you insert or remove column or row
@@ -414,6 +413,7 @@ public:
     * so reference change =Table1!B1 it's specific for insert and remove cell
     */
     void changeNameCellRef2(const QPoint & pos,ChangeRef ref,QString tabname);
+
     bool isHide(){return m_tableHide;}
 
     /**
@@ -650,7 +650,7 @@ protected:
      * @ref #setChooseRect
      */
     QRect m_chooseRect;
-    
+
     /**
      * Indicates whether the table should paint the page breaks.
      * Doing so costs some time, so by default it should be turned off.

@@ -114,7 +114,7 @@ public:
      * Move the choose selection. That may include switching the table.
      * The canvas is scrolled to the appropriate position if needed.
      *
-     * @param make_select determines wether this move if the marker is part of a 
+     * @param make_select determines wether this move if the marker is part of a
      *                    selection, that means: The user holds the shift key and
      *                    moves the cursor keys.
      */
@@ -151,7 +151,7 @@ public:
      * Changes the position of the marker. if it is visible, it is hidden, moved and shown again.
      * This method does not scroll the canvas so that the cell is visible. In this case you may
      * want to use @ref #gotoLocation
-     */    
+     */
     void setMarker( const QPoint& marker );
     QPoint marker() const { return QPoint( m_iMarkerColumn, m_iMarkerRow ); }
     bool isMarkerVisible() { return ( m_iMarkerVisible == 1 ); }
@@ -214,13 +214,13 @@ public:
      * Move the cursor to the specified cell. This may include switching
      * the table. In addition @ref #KSpreadView::updateEditWidget is called.
      *
-     * @param make_select determines wether this move of the marker is part of a 
+     * @param make_select determines wether this move of the marker is part of a
      *                    selection, that means: The user holds the shift key and
      *                    moves the cursor keys. In this case the selection is
      *                    updated accordingly.
      */
     void gotoLocation( int x, int y, KSpreadTable* table = 0, bool make_select = FALSE );
-    
+
     /**
      * Chooses the correct @ref #EditorType by looking at
      * the current cells value. By default CellEditor is chosen.
@@ -314,7 +314,6 @@ private:
     bool choose_visible;
     int  length_namecell;
     int  length_text;
-    QString name_tab;
 
     KSpreadView *m_pView;
     KSpreadDoc* m_pDoc;
@@ -418,7 +417,7 @@ private:
      * table is saved here.
      */
     KSpreadTable* m_chooseStartTable;
-    
+
     // int m_choosePos;
 
     /**

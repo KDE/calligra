@@ -111,7 +111,7 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
     m_chooseStartTable = 0;
     m_pEditor = 0;
     m_bChoose = FALSE;
-    
+
     m_iMarkerColumn = 1;
     m_iMarkerRow = 1;
     m_iMarkerVisible = 1;
@@ -1477,7 +1477,8 @@ void KSpreadCanvas::updateChooseMarker( const QRect& _old, const QRect& _new )
     // ##### Torben: Clean up here!
     QString name_cell;
 
-    if( name_tab != table->tableName() )
+    kDebugInfo( "%s,%s", m_chooseStartTable->tableName().ascii(), table->tableName().ascii());
+    if( m_chooseStartTable != table )
     {
 	if ( _new.left() >= _new.right() && _new.top() >= _new.bottom() )
 	    name_cell = util_cellName( table, _new.left(), _new.top() );
