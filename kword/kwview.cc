@@ -144,6 +144,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 /*================================================================*/
 KWView::~KWView()
 {
+    statusBar()->removeItem(statusPage);
 }
 
 /*=============================================================*/
