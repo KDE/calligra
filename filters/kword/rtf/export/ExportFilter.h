@@ -40,7 +40,7 @@ public:
 class RTFWorker : public KWEFBaseWorker
 {
 public:
-    RTFWorker(void) : m_ioDevice(NULL), m_streamOut(NULL), m_eol("\r\n"), m_inTable(false) { }
+    RTFWorker(void);
     virtual ~RTFWorker(void) { }
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);

@@ -63,6 +63,16 @@ static QString mapFieldName( const QString& kwordField )
   return rtfField;
 }
 
+RTFWorker::RTFWorker(): 
+    m_ioDevice(NULL), m_streamOut(NULL), m_eol("\r\n"), m_inTable(false),
+    m_paperOrientation(false), m_paperWidth(20), m_paperHeight(20),
+    m_paperMarginTop(72), m_paperMarginLeft(72), 
+    m_paperMarginBottom(72), m_paperMarginRight(72),
+    m_headerType(0), m_footerType(0)
+{
+}
+
+
 bool RTFWorker::makeTable(const FrameAnchor& anchor)
 {
 
