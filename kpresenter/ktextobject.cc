@@ -29,6 +29,8 @@
 
 #include <kapp.h>
 #include <klocale.h>
+#include <kiconloader.h>
+#include <kglobal.h>
 
 #include <stdio.h>
 #include <stdlib.h>
