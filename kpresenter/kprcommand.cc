@@ -209,7 +209,7 @@ void SetBackCmd::execute()
                               unbalanced, xfactor, yfactor );
         m_page->setBackType( backType );
         m_page->setBackView( backView );
-        m_page->setBackPixmap( backPix );
+        m_page->setBackPicture( backPix );
         doc->restoreBackground( m_page );
     } else {
         QPtrListIterator<KPrPage> it( doc->getPageList() );
@@ -219,7 +219,7 @@ void SetBackCmd::execute()
                                         unbalanced, xfactor, yfactor );
             it.current()->setBackType( backType );
             it.current()->setBackView( backView );
-            it.current()->setBackPixmap( backPix );
+            it.current()->setBackPicture( backPix );
             doc->restoreBackground(it.current());
         }
 
@@ -249,7 +249,7 @@ void SetBackCmd::unexecute()
                                oldUnbalanced, oldXFactor, oldYFactor );
         m_page->setBackType( oldBackType );
         m_page->setBackView( oldBackView );
-        m_page->setBackPixmap( oldBackPix );
+        m_page->setBackPicture( oldBackPix );
         doc->restoreBackground( m_page );
     } else {
         QPtrListIterator<KPrPage> it( doc->getPageList() );
@@ -259,7 +259,7 @@ void SetBackCmd::unexecute()
                                         oldUnbalanced, oldXFactor, oldYFactor );
             it.current()->setBackType( oldBackType );
             it.current()->setBackView( oldBackView );
-            it.current()->setBackPixmap( oldBackPix );
+            it.current()->setBackPicture( oldBackPix );
             doc->restoreBackground(it.current());
         }
     }

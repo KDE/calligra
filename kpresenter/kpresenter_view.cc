@@ -1281,15 +1281,14 @@ void KPresenterView::extraAlignObjs()
 void KPresenterView::extraBackground()
 {
     delete backDia;
-    backDia =0L;
+    backDia =0;
 
     KPrPage *page=m_canvas->activePage();
     backDia = new BackDia( this, "InfoDia", page->getBackType(  ),
                            page->getBackColor1(  ),
                            page->getBackColor2(  ),
                            page->getBackColorType(  ),
-                           page->getBackPixKey(  ).filename(),
-                           page->getBackPixKey(  ).lastModified(),
+                           page->getBackPicture(  ),
                            page->getBackView(),
                            page->getBackUnbalanced(),
                            page->getBackXFactor(),
@@ -3508,8 +3507,7 @@ void KPresenterView::backOk( bool takeGlobal )
 					     backDia->getBackColor2(), backDia->getBackColorType(),
 					     backDia->getBackUnbalanced(),
 					     backDia->getBackXFactor(), backDia->getBackYFactor(),
-					     KoPictureKey( backDia->getBackPixFilename(),
-                                                         backDia->getBackPixLastModified() ),
+					     backDia->getBackPicture().getKey(),
 					     backDia->getBackView(), backDia->getBackType(),
 					     page->getBackColor1(  ),
 					     page->getBackColor2(  ),
@@ -3517,7 +3515,7 @@ void KPresenterView::backOk( bool takeGlobal )
 					     page->getBackUnbalanced( ),
 					     page->getBackXFactor(  ),
 					     page->getBackYFactor(  ),
-					     page->getBackPixKey(  ),
+					     page->getBackPictureKey(  ),
 					     page->getBackView(  ),
 					     page->getBackType(  ),
 					     takeGlobal, m_pKPresenterDoc,page);

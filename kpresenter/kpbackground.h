@@ -68,7 +68,6 @@ public:
     { removeGradient(); xfactor = _xfactor; }
     void setBackYFactor( int _yfactor )
     { removeGradient(); yfactor = _yfactor; }
-    void setBackPixmap( const QString &_filename, const QDateTime &_lastModified );
     /// set the back picture to a new KoPicture
     void setBackPicture( const KoPicture& picture );
     void setBackPicture ( const KoPictureKey& key );
@@ -93,8 +92,10 @@ public:
     { return backColor2; }
     BCType getBackColorType() const
     { return bcType; }
-    KoPictureKey getBackPixKey() const
+    KoPictureKey getBackPictureKey() const
     { return backPicture.getKey(); }
+    KoPicture getBackPicture() const
+    { return backPicture;}
 
     PageEffect getPageEffect() const
     { return pageEffect; }

@@ -255,12 +255,12 @@ int KPresenterPageIface::backColorType()const
 
 QString KPresenterPageIface::backPixFilename()const
 {
-    return m_page->getBackPixKey().filename();
+    return m_page->getBackPictureKey().filename();
 }
 
 QString KPresenterPageIface::backClipFilename()const
 {
-    return m_page->getBackPixKey().filename();
+    return m_page->getBackPictureKey().filename();
 }
 
 int KPresenterPageIface::pageEffect()const

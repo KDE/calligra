@@ -26,6 +26,8 @@
 
 #include <global.h>
 
+#include <koPicture.h>
+
 class QLabel;
 class QComboBox;
 class QPushButton;
@@ -73,7 +75,7 @@ public:
     BackDia( QWidget* parent, const char* name,
 	     BackType backType, const QColor &backColor1,
 	     const QColor &backColor2, BCType _bcType,
-	     const QString &backPic, const QDateTime &picLM,
+	     const KoPicture &backPic,
 	     BackView backPicView, bool _unbalanced,
 	     int _xfactor, int _yfactor, KPrPage *m_page  );
 
@@ -81,8 +83,7 @@ public:
     QColor getBackColor2() const;
     BCType getBackColorType() const;
     BackType getBackType() const;
-    QString getBackPixFilename() const { return chosenPic; }
-    QDateTime getBackPixLastModified() const { return picLastModified; }
+    KoPicture getBackPicture() const { return m_picture; }
     BackView getBackView() const;
     bool getBackUnbalanced() const;
     int getBackXFactor() const;
@@ -90,7 +91,6 @@ public:
 
 protected:
     void showEvent( QShowEvent *e );
-    QString selectPicture( const QStringList& mimetypes );
 private:
     QLabel *lPicName, *picPreview;
     QCheckBox *unbalanced;
@@ -98,10 +98,8 @@ private:
     QPushButton *picChoose;
     KColorButton *color1Choose, *color2Choose;
     QSlider *xfactor, *yfactor;
-    QString chosenPic;
     BackPreview *preview;
     bool picChanged, lockUpdate;
-    QDateTime picLastModified;
     QLabel *labXFactor, *labYFactor;
     QTabWidget *tabWidget;
 
@@ -109,11 +107,12 @@ private:
     QColor oldBackColor1;
     QColor oldBackColor2;
     BCType oldBcType;
-    QString oldBackPic;
     BackView oldBackPicView;
     bool oldUnbalanced;
     int oldXFactor;
     int oldYFactor;
+
+    KoPicture m_picture, m_oldpicture;
 
 private slots:
     void selectPic();

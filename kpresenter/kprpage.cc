@@ -2610,7 +2610,7 @@ void KPrPage::setBackColor(const  QColor &backColor1, const QColor &backColor2, 
     kpbackground->setBackYFactor( yfactor );
 }
 
-void KPrPage::setBackPixmap( const KoPictureKey & key )
+void KPrPage::setBackPicture( const KoPictureKey & key )
 {
     kpbackground->setBackPicture( key );
 }
@@ -2618,11 +2618,6 @@ void KPrPage::setBackPixmap( const KoPictureKey & key )
 bool KPrPage::getBackUnbalanced(  )const
 {
     return kpbackground->getBackUnbalanced();
-}
-
-void KPrPage::setBackClipart( const KoPictureKey & key )
-{
-    kpbackground->setBackPicture( key );
 }
 
 void KPrPage::setBackView( BackView backView )
@@ -2655,7 +2650,6 @@ void KPrPage::setPageSoundFileName(  const QString &fileName )
     kpbackground->setPageSoundFileName( fileName );
 }
 
-
 BackType KPrPage::getBackType(  )const
 {
     return kpbackground->getBackType();
@@ -2666,14 +2660,14 @@ BackView KPrPage::getBackView( )const
     return kpbackground->getBackView();
 }
 
-KoPictureKey KPrPage::getBackPixKey( )const
+KoPictureKey KPrPage::getBackPictureKey( )const
 {
-    return kpbackground->getBackPixKey();
+    return kpbackground->getBackPictureKey();
 }
 
-KoPictureKey KPrPage::getBackClipKey(  )const
+KoPicture KPrPage::getBackPicture( )const
 {
-    return kpbackground->getBackPixKey();
+    return kpbackground->getBackPicture();
 }
 
 QColor KPrPage::getBackColor1( )const
@@ -2907,7 +2901,7 @@ void KPrPage::makeUsedPixmapList()
    }
 
    if( kpbackground->getBackType()==BT_PICTURE || kpbackground->getBackType()==BT_CLIPART)
-       m_doc->insertPixmapKey(kpbackground->getBackPixKey());
+       m_doc->insertPixmapKey(kpbackground->getBackPictureKey());
 }
 
 void KPrPage::makeUsedPixmapListForGroupObject( KPObject *_obj )

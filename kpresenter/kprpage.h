@@ -203,9 +203,8 @@ public:
 
     void setBackColor( const QColor &backColor1, const QColor &backColor2, BCType bcType,
 			    bool unbalanced, int xfactor, int yfactor );
-    void setBackPixmap( const KoPictureKey & key );
+    void setBackPicture( const KoPictureKey & key );
     bool getBackUnbalanced(  )const;
-    void setBackClipart( const KoPictureKey & key );
     void setBackView( BackView backView );
     void setBackType( BackType backType );
 
@@ -215,8 +214,8 @@ public:
     void setPageSoundFileName(  const QString &fileName );
     BackType getBackType(  ) const ;
     BackView getBackView( )const ;
-    KoPictureKey getBackPixKey( )const ;
-    KoPictureKey getBackClipKey(  )const ;
+    KoPictureKey getBackPictureKey( )const ;
+    KoPicture getBackPicture( )const ;
     QColor getBackColor1( )const ;
     QColor getBackColor2()const ;
     int getBackXFactor()const ;

@@ -40,6 +40,8 @@
 #include <kbuttonbox.h>
 #include <kio/netaccess.h>
 
+#include <koPicture.h>
+
 /*******************************************************************
  *
  * Class: BackPreview
@@ -78,10 +80,11 @@ void BackPreview::drawContents( QPainter *p )
 BackDia::BackDia( QWidget* parent, const char* name,
                   BackType backType, const QColor &backColor1,
                   const QColor &backColor2, BCType _bcType,
-                  const QString &backPic, const QDateTime &picLM,
+                  const KoPicture &backPic,
                   BackView backPicView, bool _unbalanced,
                   int _xfactor, int _yfactor, KPrPage *m_page )
-    : KDialogBase( parent, name, true, "",KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel|KDialogBase::User1|KDialogBase::User2 ), picLastModified( picLM )
+    : KDialogBase( parent, name, true, "",KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel|KDialogBase::User1|KDialogBase::User2 ),
+    m_picture(backPic),m_oldpicture(backPic)
 {
     lockUpdate = true;
 
@@ -89,7 +92,6 @@ BackDia::BackDia( QWidget* parent, const char* name,
     oldBackColor1=backColor1;
     oldBackColor2 = backColor2;
     oldBcType= _bcType;
-    oldBackPic=backPic;
     oldBackPicView=backPicView;
     oldUnbalanced=_unbalanced;
     oldXFactor=_xfactor;
@@ -189,15 +191,10 @@ BackDia::BackDia( QWidget* parent, const char* name,
     connect( picChoose, SIGNAL( clicked() ),
              this, SLOT( selectPic() ) );
 
-    if ( !backPic.isEmpty() )
-        chosenPic = backPic;
-    else
-        chosenPic = QString::null;
-
     lPicName = new QLabel( picTab, "picname" );
     lPicName->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    if ( !backPic.isEmpty() )
-        lPicName->setText( backPic );
+    if ( !backPic.isNull() )
+        lPicName->setText( backPic.getKey().filename() );
     else
         lPicName->setText( i18n( "No Picture" ) );
     lPicName->setFixedHeight( lPicName->sizeHint().height() );
@@ -239,13 +236,10 @@ void BackDia::slotReset()
     color2Choose->setColor( oldBackColor2 );
     cType->setCurrentItem( oldBcType );
 
-    if ( !oldBackPic.isEmpty() )
-        chosenPic = oldBackPic;
-    else
-        chosenPic = QString::null;
+    m_picture=m_oldpicture;
 
-    if ( !oldBackPic.isEmpty() )
-        lPicName->setText( oldBackPic );
+    if ( !m_picture.isNull() )
+        lPicName->setText( m_picture.getKey().filename() );
     else
         lPicName->setText( i18n( "No Picture" ) );
 
@@ -315,11 +309,11 @@ void BackDia::updateConfiguration()
     preview->backGround()->setBackUnbalanced( getBackUnbalanced() );
     preview->backGround()->setBackXFactor( getBackXFactor() );
     preview->backGround()->setBackYFactor( getBackYFactor() );
-    if ( !chosenPic.isEmpty() && picChanged )
-        preview->backGround()->setBackPixmap( getBackPixFilename(), picLastModified );
+    if ( !m_picture.isNull() && picChanged )
+        preview->backGround()->setBackPicture( m_picture );
     preview->backGround()->setBackType( getBackType() );
     if ( preview->isVisible() && isVisible() ) {
-        preview->backGround()->reload();
+        preview->backGround()->reload(); // ### TODO: instead of reloading, load or remove the picture correctly.
         preview->repaint( true );
     }
 
@@ -374,11 +368,14 @@ int BackDia::getBackYFactor() const
     return yfactor->value();
 }
 
-
-
 /*=============================================================*/
-QString BackDia::selectPicture( const QStringList& mimetypes )
+void BackDia::selectPic()
 {
+    QStringList mimetypes;
+    mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
+    mimetypes += KoPictureFilePreview::clipartMimeTypes();
+
+    KoPicture picture;
     KURL url;
 
     KFileDialog fd( QString::null, QString::null, 0, 0, true );
@@ -387,33 +384,18 @@ QString BackDia::selectPicture( const QStringList& mimetypes )
 
     if ( fd.exec() == QDialog::Accepted )
     {
-        KURL url = fd.selectedURL();
-        QString strTemp = QString::null;
-        // ### FIXME: Problem: for a remote file, we have not any typical picture extension for the temp file name.
-        if (!KIO::NetAccess::download( url, strTemp ))
-            return QString::null;
-        lPicName->setText( url.prettyURL() );
-        return strTemp;
-        // ### TODO/FIXME Problem : when to remove the temp file ?
+        url = fd.selectedURL();
+        picture.setKeyAndDownloadPicture(url);
     }
-    return QString::null;
-}
-
-/*=============================================================*/
-void BackDia::selectPic()
-{
-    QStringList mimetypes;
-    mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
-    mimetypes += KoPictureFilePreview::clipartMimeTypes();
-
-    QString strResult=selectPicture( mimetypes );
-    if ( strResult.isEmpty() )
+    
+    // Dialog canceled or download unsuccessful
+    if ( picture.isNull() )
         return;
 
+    lPicName->setText( url.prettyURL() );
     backCombo->setCurrentItem( 1 );
-    chosenPic=strResult;
+    m_picture=picture;
     picChanged = true;
-    picLastModified = QDateTime(QDate(1970,1,1));
     updateConfiguration();
 }
 

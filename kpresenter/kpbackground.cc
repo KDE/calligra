@@ -60,13 +60,6 @@ KPBackGround::KPBackGround( KPrPage *_page )
     m_page=_page;
 }
 
-void KPBackGround::setBackPixmap( const QString &_filename, const QDateTime &_lastModified )
-{
-    if ( backType != BT_PICTURE )
-        return;
-    backPicture = pictureCollection()->findOrLoad( _filename, _lastModified );
-}
-
 void KPBackGround::setBackPicture( const KoPicture& picture )
 {
     if ( backType != BT_PICTURE )
@@ -121,7 +114,7 @@ void KPBackGround::draw( QPainter *_painter, const QSize& ext, const QRect& crec
 void KPBackGround::reload()
 {
     if ( ( backType == BT_PICTURE ) || ( backType == BT_CLIPART ) )
-        setBackPicture( backPicture.getKey() );
+        backPicture = pictureCollection()->insertPicture(backPicture);
     else
         backPicture.clear();
 }
