@@ -52,8 +52,8 @@ class GNUMERICFilter : public KoFilter
   QString convertVars( QString const & str, KSpreadSheet * table ) const;
   void ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * table );
   void ParseFormat(QString const & formatString, KSpreadCell * kspread_cell);
-  void setStyleInfo(QDomNode *sheet, KSpreadSheet *table);
+  void setStyleInfo(QDomNode * sheet, KSpreadSheet * table);
   bool setType( KSpreadCell * kspread_cell, QString const & formatString, QString & cell_content );
-  
+  void convertFormula( QString & formula ) const;
 };
 #endif // GNUMERICFILTER_H

@@ -733,7 +733,7 @@ QString GNUMERICFilter::convertVars( QString const & str, KSpreadSheet * table )
     list1 << "&[TAB]" << "&[DATE]" << "&[PAGE]"
           << "&[PAGES]";
     list2 << table->tableName() << "<date>" << "<page>"
-          << "<page>"; // TODO: KSpread doesn't support "<pages>"
+          << "<pages>";
     count = list1.count();
   }
 
@@ -948,7 +948,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * ksp
     red = true;
     kspread_cell->setFloatColor( KSpreadLayout::NegRed );
   }
-  if (formatString.find('(', lastPos) != -1)
+  if ( formatString.find('(', lastPos) != -1 )
   {
     if ( red )
       kspread_cell->setFloatColor( KSpreadLayout::NegRedBrackets );
@@ -957,25 +957,46 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * ksp
   }
 }
 
+void GNUMERICFilter::convertFormula( QString & formula ) const
+{
+  int n = formula.find( '=', 1 );
+
+  // TODO: check if we do not screw something up here...
+  if ( n != -1 )  
+    formula = formula.replace( n, 1, "==" );
+
+  bool inQuote1 = false;
+  bool inQuote2 = false;
+  int l = formula.length();
+  for ( int i = 0; i < l; ++i )
+  {
+    if ( formula[i] == '\'' )
+      inQuote1 = !inQuote1;
+    else if ( formula[i] == '"' )
+      inQuote2 = !inQuote2;
+    else if ( formula[i] == ',' && !inQuote1 && !inQuote2 )
+      formula = formula.replace( i, 1, ";" );
+  }
+}
 
 void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
 {
   kdDebug() << "SetStyleInfo entered " << endl;
   
   int row, column;
-  QDomNode styles =  sheet->namedItem("gmr:Styles");
+  QDomNode styles =  sheet->namedItem( "gmr:Styles" );
   if ( !styles.isNull() )
   {
     // Get a style region within that sheet.
-    QDomNode style_region =  styles.namedItem("gmr:StyleRegion");
+    QDomNode style_region =  styles.namedItem( "gmr:StyleRegion" );
     
     while ( !style_region.isNull() )
     {
       QDomElement e = style_region.toElement(); // try to convert the node to an element.
       
-      QDomNode style = style_region.namedItem("gmr:Style");
-      QDomNode font = style.namedItem("gmr:Font");
-      QDomNode gmr_styleborder = style.namedItem("gmr:StyleBorder");
+      QDomNode style = style_region.namedItem( "gmr:Style" );
+      QDomNode font = style.namedItem( "gmr:Font" );
+      QDomNode gmr_styleborder = style.namedItem( "gmr:StyleBorder" );
       int startCol = e.attribute( "startCol" ).toInt() + 1;
       int endCol   = e.attribute( "endCol" ).toInt() + 1;
       int startRow = e.attribute( "startRow" ).toInt() + 1;
@@ -1403,6 +1424,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
     // This is a mapping of exprID to expressions.
 
     QDict<char> exprID_dict( 17, FALSE );
+    int num = 1;
 
     while (!sheet.isNull())
     {
@@ -1414,9 +1436,12 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
         if ( currentTab == selectedTab )
           selTable = table;
 
-	/* This is probably not safe... */
+        QDomElement name = sheet.namedItem( "gmr:Name" ).toElement();
 
-	table->setTableName( sheet.namedItem("gmr:Name").toElement().text(), false, false );
+        if ( !name.isNull() )
+          table->setTableName( name.text(), false, false );
+        else
+          table->setTableName( "Sheet" + QString::number( num ), false, false );
         table->enableScrollBarUpdates( false );
 
 	setObjectInfo(&sheet, table);
@@ -1461,6 +1486,8 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 		row    = e.attribute( "Row" ).toInt() + 1;
 
 		QString cell_content( content.text() );
+                if ( cell_content[0] == '=' )
+                  convertFormula( cell_content );
 
                 KSpreadCell * kspread_cell = table->nonDefaultCell( column, row );
 
@@ -1546,6 +1573,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
         table->enableScrollBarUpdates( true );
         
 	sheet = sheet.nextSibling();
+        ++num;
       }
 
     if ( selTable )
