@@ -5649,7 +5649,7 @@ void KWView::insertFile()
     KoStore* store=KoStore::createStore( url.path(), KoStore::Read );
     QMap<KoPictureKey, QString> *pixmapMap =0L;
     QMap<KoPictureKey, QString> *clipartMap = 0L;
-    if ( store->open("maindoc.xml") )
+    if ( store && store->open("maindoc.xml") )
     {
         QDomDocument doc;
         doc.setContent( store->device() );
@@ -5761,14 +5761,15 @@ void KWView::insertFile()
             delete clipartMap;
             clipartMap = 0L;
         }
+        store->close();
     }
-    m_doc->setPixmapMap( pixmapMap );
-    m_doc->setClipartMap( clipartMap );
-    store->close();
-
-    m_doc->loadImagesFromStore( store );
-    m_doc->processImageRequests();
-
+    if (store && (pixmapMap||clipartMap) )
+    {
+        m_doc->setPixmapMap( pixmapMap );
+        m_doc->setClipartMap( clipartMap );
+        m_doc->loadImagesFromStore( store );
+        m_doc->processImageRequests();
+    }
     delete store;
 }
 
