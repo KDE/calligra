@@ -602,7 +602,7 @@ if(action==Qt::Key_Right)
 	    	    warning("thePosition %d  int:%d",thePosition,eList.current()->pos);
 		    eList.clear();
             	    theFirstElement->makeList();  
-            	    //thePosition++;      
+            	    thePosition++;      
 		    eList.at(thePosition);		
 	    	    warning("the New Position %d int:%d",thePosition,eList.current()->pos);
 	           
