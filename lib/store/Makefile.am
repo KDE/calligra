@@ -13,6 +13,7 @@ idl_HEADERS =  koStore_idl.h
 
 ####### Build rules
 
+BUILDSOURCES = koStore_idl.h
 koStore_idl.cc: koStore_idl.h
 koStore_idl.h: koStore.idl
 	$(IDL) -I./ --relative-paths --query-server-for-narrow --name koStore_idl $(srcdir)/koStore.idl
