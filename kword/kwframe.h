@@ -202,8 +202,8 @@ private:
     FrameBehaviour frameBehaviour;
     NewFrameBehaviour newFrameBehaviour;
     double runAroundGap;
-    bool selected:1;
-    bool mostRight:1;
+    bool selected;
+    bool mostRight;
     int m_pageNum;
 
     //QList<QRect> intersections;
