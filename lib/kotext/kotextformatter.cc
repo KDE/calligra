@@ -104,19 +104,55 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
 	if ( c->c.unicode() >= 32 || c->isCustom() ) {
 	    ww = string->width( i );
 
-            // Pixel size - need to change the font temporarily (same code as KoTextParag::drawParagString)
-            QTextStringChar *c = &string->at( i );
-            KoTextFormat *origFormat = static_cast<KoTextFormat *>(c->format()); // remember it
-            KoTextFormat tmpFormat( *origFormat );  // make a copy
-            tmpFormat.setPointSizeFloat( zh->layoutUnitToFontSize( tmpFormat.font().pointSize(), false /* TODO forPrint*/ ) );
-            c->setFormat( &tmpFormat );
-            pixelww = string->width( i );
+            if ( c->isCustom() )
+                pixelww = zh->layoutUnitToPixelX( ww );
+            else if ( c->c.unicode() == 0xad ) // soft hyphen
+                pixelww = 0;
+            else
+            {
+                // Pixel size - we want the metrics of the font that's going to be used.
+                KoTextFormat *origFormat = static_cast<KoTextFormat *>(c->format()); // remember it
+
+                // Code from QTextString::width, duplicated to avoid having to set the format
+                int r = c->c.row();
+                if( r < 0x06 || r > 0x1f )
+                {
+                    // Code from QTextFormat::width, duplicated to avoid having to actually create the format
+                    //w = tmpFormat.width( c->c );
+                    QFont f( origFormat->font() );
+                    f.setPointSizeFloat( zh->layoutUnitToFontSize( f.pointSize(), false /* TODO forPrint*/ ) );
+                    if ( origFormat->vAlign() == QTextFormat::AlignNormal ) {
+                        QFontMetrics fm( f );
+                        pixelww = fm.width( c->c );
+                    } else {
+                        f.setPointSize( ( f.pointSize() * 2 ) / 3 );
+                        QFontMetrics fm_( f );
+                        pixelww = fm_.width( c->c );
+                    }
+                }
+                else {
+                    // Here we have no choice, we need to create the format
+                    KoTextFormat tmpFormat( *origFormat );  // make a copy
+                    tmpFormat.setPointSizeFloat( zh->layoutUnitToFontSize( tmpFormat.font().pointSize(), false /* TODO forPrint*/ ) );
+                    // complex text. We need some hacks to get the right metric here
+                    QString str;
+                    int pos = 0;
+                    if( i > 4 )
+                        pos = i - 4;
+                    int off = i - pos;
+                    int end = QMIN( len, i + 4 );
+                    while ( pos < end ) {
+                        str += parag->at(pos)->c;
+                        pos++;
+                    }
+                    pixelww = tmpFormat.width( str, off );
+                }
+            }
 #ifdef DEBUG_FORMATTER
             qDebug( "KoTextFormatter::format: char=%s, LU-size=%d, font-size=%d LU-width=%d pixel-width=%d format=%s",
                     QString(c->c).latin1(), origFormat->font().pointSize(),
                     tmpFormat.font().pointSize(), ww, pixelww, origFormat->key().latin1() );
 #endif
-            c->setFormat( origFormat );
 	} else if ( c->c == '\t' ) {
 	    int nx = parag->nextTab( i, x );
 	    if ( nx < x )
