@@ -4706,9 +4706,6 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
       m_value = KSpreadValue::empty();
       clearAllErrors();
 
-      kdDebug() << "Content (" << m_iColumn << ", " << m_iRow << "): " 
-                << text.text() << "Datatype: " << dataType << endl;
-
       // boolean ?
       if( dataType == "Bool" )
       {
@@ -4802,7 +4799,6 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
   if ( text.hasAttribute( "outStr" ) ) // very new docs
   {
     m_strOutText = text.attribute( "outStr" );
-    kdDebug() << "OutStr: " << m_strOutText << endl;
     clearFlag( Flag_TextFormatDirty );
   }
 
