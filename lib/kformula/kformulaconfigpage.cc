@@ -362,10 +362,6 @@ MathFontsConfigurePage::MathFontsConfigurePage( Document* document, QWidget* vie
     QSpacerItem* spacer1 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
     vLayout->addItem( spacer1 );
 
-    moveUp = new KPushButton( fontWidget );
-    moveUp->setText( i18n( "up" ) );
-    vLayout->addWidget( moveUp );
-
     addFont = new KPushButton( fontWidget );
     addFont->setText( "->" );
     vLayout->addWidget( addFont );
@@ -374,18 +370,26 @@ MathFontsConfigurePage::MathFontsConfigurePage( Document* document, QWidget* vie
     removeFont->setText( "<-" );
     vLayout->addWidget( removeFont );
 
-    moveDown = new KPushButton( fontWidget );
-    moveDown->setText( i18n( "down" ) );
-    vLayout->addWidget( moveDown );
-
     QSpacerItem* spacer2 = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
     vLayout->addItem( spacer2 );
 
     hLayout->addLayout( vLayout );
 
+    vLayout = new QVBoxLayout( 0, 0, 6 );
+
+    moveUp = new KPushButton( fontWidget );
+    moveUp->setText( i18n( "up" ) );
+    vLayout->addWidget( moveUp );
+
     requestedFonts = new KListView( fontWidget );
     requestedFonts->addColumn( i18n( "Used Fonts" ) );
-    hLayout->addWidget( requestedFonts );
+    vLayout->addWidget( requestedFonts );
+
+    moveDown = new KPushButton( fontWidget );
+    moveDown->setText( i18n( "down" ) );
+    vLayout->addWidget( moveDown );
+
+    hLayout->addLayout( vLayout );
 
     fontLayout->addLayout( hLayout, 0, 0 );
 

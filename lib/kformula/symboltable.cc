@@ -289,16 +289,16 @@ void SymbolTable::init( ContextStyle* context )
 
     if ( availableFonts.size() > 0 ) {
         bool anySuccess = false;
-        for ( QStringList::ConstIterator it = context->requestedFonts().begin();
-              it != context->requestedFonts().end();
-              ++it ) {
-            if ( availableFonts.find( *it ) != availableFonts.end() ) {
-                QString fileName = availableFonts[ *it ];
+        uint len = context->requestedFonts().size();
+        for ( uint i = len; i > 0; --i ) {
+            QString fontName = context->requestedFonts()[i-1];
+            if ( availableFonts.find( fontName ) != availableFonts.end() ) {
+                QString fileName = availableFonts[ fontName ];
                 //kdDebug() << "SymbolTable::init requested Font=" << *it << " " << fileName << endl;
                 QFile file( fileName );
                 if ( file.open( IO_ReadOnly ) ) {
                     FontReader reader( &unicodeTable, &fontTable );
-                    if ( reader.read( file, *it ) ) {
+                    if ( reader.read( file, fontName ) ) {
                         anySuccess = true;
                     }
                     else {
@@ -310,7 +310,7 @@ void SymbolTable::init( ContextStyle* context )
                 }
             }
             else {
-                kdWarning( DEBUGID ) << "Font '" << ( *it ).latin1() << "' not available." << endl;
+                kdWarning( DEBUGID ) << "Font '" << fontName.latin1() << "' not available." << endl;
             }
         }
         if ( !anySuccess ) {
