@@ -110,14 +110,18 @@ void TabBarPrivate::layoutTabs()
           QString text = visibleTabs[ c ];
           int tw = fm.width( text ) + 4;
           rect = QRect( x, 0, tw + 20, tabbar->height() );
-
           x = x + tw + 10;
-
-          if ( x - 10 < tabbar->width() )
-              rightTab = c;
       }
       tabRects.append( rect );
     }
+
+    rightTab = tabRects.count();
+    for( unsigned i = 0; i < tabRects.count(); i++ )
+      if( tabRects[i].right()-10 > tabbar->width() )
+      {
+        rightTab = i;
+        break;
+      }
 }
 
 int TabBarPrivate::tabAt( const QPoint& pos )
@@ -342,7 +346,11 @@ void TabBar::scrollLast()
     int fullWidth = d->tabRects[ d->tabRects.count()-1 ].right();
     int delta = fullWidth - width();
     for( unsigned i = 0; i < d->tabRects.count(); i++ )
-        if( d->tabRects[i].x() > delta ) d->leftTab = i+1;
+        if( d->tabRects[i].x() > delta )
+        {
+          d->leftTab = i+1;
+          break;
+        }
 
     update();
 }
