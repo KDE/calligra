@@ -5326,9 +5326,17 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
 {
     kdDebug()<<"validationName:"<<validationName<<endl;
     QDomElement element = table()->doc()->loadingInfo()->validation( validationName);
-    for ( ; !element.isNull() ; element = element.nextSibling().toElement() ) {
-        kdDebug()<<" Tag recognize :"<<element.tagName()<<endl;
-
+    d->extra()->validity = new KSpreadValidity;
+    if ( element.hasAttribute( "table:condition" ) )
+        kdDebug()<<" element.attribute( table:condition ) "<<element.attribute( "table:condition" )<<endl;
+    QDomElement error = element.namedItem( "table:error-message" ).toElement();
+    if ( !error.isNull() )
+    {
+        if ( error.hasAttribute( "table:condition" ) )
+            kdDebug()<<"element.attribute( table:condition ) "<<element.attribute( "table:condition" )<<endl;
+        QDomElement attrText = error.namedItem( "text:p" ).toElement();
+        if ( !attrText.isNull() )
+            kdDebug()<<"attrText.text() :"<<attrText.text()<<endl;
     }
 }
 

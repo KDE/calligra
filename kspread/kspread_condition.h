@@ -106,6 +106,9 @@ class KSpreadConditions
    */ 
   void loadConditions( const QDomElement & element );
 
+  void loadOasisConditions( const QDomElement & element );
+    
+
   /**
    * returns the style that matches first (or NULL if no condition matches)
    */

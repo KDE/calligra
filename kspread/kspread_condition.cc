@@ -289,6 +289,10 @@ QDomElement KSpreadConditions::saveConditions( QDomDocument & doc ) const
   }
 }
 
+void KSpreadConditions::loadOasisConditions( const QDomElement & element )
+{
+}
+
 void KSpreadConditions::loadConditions( const QDomElement & element )
 {
   QDomNodeList nodeList = element.childNodes();
