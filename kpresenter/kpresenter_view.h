@@ -68,6 +68,7 @@ class KoSearchContext;
 class KPrFindReplace;
 class KPrCanvas;
 class KoFontDia;
+class KoParagDia;
 
 class PageBase : public QWidget
 {
@@ -595,6 +596,8 @@ protected slots:
 
     void refreshRuler( bool state );
     void slotApplyFont();
+    void slotApplyParag();
+
 
 // end of protected slots
 protected:
@@ -954,6 +957,7 @@ private:
     KoSearchContext *m_searchEntry, *m_replaceEntry;
     KPrFindReplace *m_findReplace;
     KoFontDia *m_fontDlg;
+    KoParagDia *m_paragDlg;
     int m_searchPage;
     int m_initSearchPage;
 

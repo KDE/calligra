@@ -67,6 +67,7 @@ class KWFindReplace;
 class KoTextFormat;
 class KoTextParag;
 class KoFontDia;
+class KoParagDia;
 
 /******************************************************************/
 /* Class: KWView						  */
@@ -335,6 +336,8 @@ protected slots:
     void spellCheckerFinished( );
     void spellCheckerIgnoreAll( const QString &);
     void slotApplyFont();
+    void slotApplyParag();
+
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
@@ -510,6 +513,7 @@ private:
 
     KoCharSelectDia *m_specialCharDlg;
     KoFontDia *m_fontDlg;
+    KoParagDia *m_paragDlg;
 
     KWGUI *m_gui;
 

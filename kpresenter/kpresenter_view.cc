@@ -273,7 +273,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_searchPage=-1;
 
     m_fontDlg=0L;
-
+    m_paragDlg=0L;
     m_pKPresenterDoc = _doc;
 
     createGUI();
@@ -391,6 +391,7 @@ KPresenterView::~KPresenterView()
     delete afChoose;
     delete confPictureDia;
     delete m_fontDlg;
+    delete m_paragDlg;
 }
 
 /*=========================== file print =======================*/
@@ -5068,143 +5069,157 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
     KPTextView *edit=m_canvas->currentTextObjectView();
     if (edit)
     {
-        KoParagDia *paragDia = new KoParagDia( this, "",
-                                               KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
-                                               KoParagDia::PD_BORDERS |
-                                               KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS |KoParagDia::PD_SHADOW , m_pKPresenterDoc->getUnit(),edit->kpTextObject()->getSize().width(),false );
-        paragDia->setCaption( i18n( "Paragraph settings" ) );
+        if( m_paragDlg )
+        {
+            delete m_paragDlg;
+            m_paragDlg=0L;
+        }
+        m_paragDlg = new KoParagDia( this, "",
+                                     KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
+                                     KoParagDia::PD_BORDERS |
+                                     KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS |KoParagDia::PD_SHADOW , m_pKPresenterDoc->getUnit(),edit->kpTextObject()->getSize().width(),false );
+        m_paragDlg->setCaption( i18n( "Paragraph settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
         KoParagLayout lay = static_cast<KoTextParag *>(edit->cursor()->parag())->paragLayout();
-        paragDia->setParagLayout( lay );
+        m_paragDlg->setParagLayout( lay );
         // Set initial page and initial tabpos if necessary
         if ( initialPage != -1 )
         {
-            paragDia->setCurrentPage( initialPage );
+            m_paragDlg->setCurrentPage( initialPage );
             if ( initialPage == KoParagDia::PD_TABS )
-                paragDia->tabulatorsWidget()->setCurrentTab( initialTabPos );
+                m_paragDlg->tabulatorsWidget()->setCurrentTab( initialTabPos );
         }
+        connect( m_paragDlg, SIGNAL( apply() ), this, SLOT( slotApplyParag()));
 
-        if(!paragDia->exec())
-            return;
-        KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph settings" ) );
-        KCommand *cmd=0L;
-        bool changed=false;
-        if(paragDia->isLeftMarginChanged())
-        {
-            cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, paragDia->leftIndent() );
-            if(cmd)
-            {
-                macroCommand->addCommand(cmd);
-                changed=true;
-            }
-
-            h_ruler->setLeftIndent( KoUnit::ptToUnit( paragDia->leftIndent(), m_pKPresenterDoc->getUnit() ) );
-        }
-
-        if(paragDia->isRightMarginChanged())
-        {
-            cmd=edit->setMarginCommand( QStyleSheetItem::MarginRight, paragDia->rightIndent() );
-            if(cmd)
-            {
-                macroCommand->addCommand(cmd);
-                changed=true;
-            }
-            h_ruler->setRightIndent( KoUnit::ptToUnit( paragDia->rightIndent(), m_pKPresenterDoc->getUnit() ) );
-        }
-        if(paragDia->isSpaceBeforeChanged())
-        {
-            cmd=edit->setMarginCommand( QStyleSheetItem::MarginTop, paragDia->spaceBeforeParag() );
-            if(cmd)
-            {
-                macroCommand->addCommand(cmd);
-                changed=true;
-            }
-        }
-        if(paragDia->isSpaceAfterChanged())
-        {
-            cmd=edit->setMarginCommand( QStyleSheetItem::MarginBottom, paragDia->spaceAfterParag() );
-            if(cmd)
-            {
-                macroCommand->addCommand(cmd);
-                changed=true;
-            }
-        }
-        if(paragDia->isFirstLineChanged())
-        {
-            cmd=edit->setMarginCommand( QStyleSheetItem::MarginFirstLine, paragDia->firstLineIndent());
-            if(cmd)
-            {
-                macroCommand->addCommand(cmd);
-                changed=true;
-            }
-            h_ruler->setFirstIndent(KoUnit::ptToUnit( paragDia->leftIndent() + paragDia->firstLineIndent(), m_pKPresenterDoc->getUnit() ) );
-        }
-
-        if(paragDia->isAlignChanged())
-        {
-            cmd=edit->setAlignCommand( paragDia->align() );
-            if(cmd)
-            {
-                macroCommand->addCommand(cmd);
-                changed=true;
-            }
-        }
-        if(paragDia->isCounterChanged())
-        {
-            cmd=edit->setCounterCommand( paragDia->counter() );
-            if(cmd)
-            {
-                macroCommand->addCommand(cmd);
-                changed=true;
-            }
-        }
-        if(paragDia->listTabulatorChanged())
-        {
-            cmd=edit->setTabListCommand( paragDia->tabListTabulator() );
-            if(cmd)
-            {
-                macroCommand->addCommand(cmd);
-                changed=true;
-            }
-        }
-
-        if(paragDia->isLineSpacingChanged())
-        {
-            cmd=edit->setLineSpacingCommand( paragDia->lineSpacing() );
-            if(cmd)
-            {
-                macroCommand->addCommand(cmd);
-                changed=true;
-            }
-        }
-        if(paragDia->isBorderChanged())
-        {
-            cmd=edit->setBordersCommand( paragDia->leftBorder(), paragDia->rightBorder(),
-                              paragDia->topBorder(), paragDia->bottomBorder() );
-            if(cmd)
-            {
-                macroCommand->addCommand(cmd);
-                changed=true;
-            }
-        }
-
-        if( paragDia->isShadowChanged())
-        {
-            cmd=edit->setShadowCommand( paragDia->shadowDistance(),paragDia->shadowDirection(), paragDia->shadowColor() );
-            if(cmd)
-            {
-                macroCommand->addCommand(cmd);
-                changed=true;
-            }
-        }
-
-        if(changed)
-            m_pKPresenterDoc->addCommand(macroCommand);
-        else
-            delete macroCommand;
-        delete paragDia;
+        m_paragDlg->exec();
+        delete m_paragDlg;
+        m_paragDlg=0L;
     }
+
+}
+
+void KPresenterView::slotApplyParag()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if( !edit )
+        return;
+    KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph settings" ) );
+    KCommand *cmd=0L;
+    bool changed=false;
+    if(m_paragDlg->isLeftMarginChanged())
+    {
+        cmd=edit->setMarginCommand( QStyleSheetItem::MarginLeft, m_paragDlg->leftIndent() );
+        if(cmd)
+        {
+            macroCommand->addCommand(cmd);
+            changed=true;
+        }
+
+        h_ruler->setLeftIndent( KoUnit::ptToUnit( m_paragDlg->leftIndent(), m_pKPresenterDoc->getUnit() ) );
+    }
+
+    if(m_paragDlg->isRightMarginChanged())
+    {
+        cmd=edit->setMarginCommand( QStyleSheetItem::MarginRight, m_paragDlg->rightIndent() );
+        if(cmd)
+        {
+            macroCommand->addCommand(cmd);
+            changed=true;
+        }
+        h_ruler->setRightIndent( KoUnit::ptToUnit( m_paragDlg->rightIndent(), m_pKPresenterDoc->getUnit() ) );
+    }
+    if(m_paragDlg->isSpaceBeforeChanged())
+    {
+        cmd=edit->setMarginCommand( QStyleSheetItem::MarginTop, m_paragDlg->spaceBeforeParag() );
+        if(cmd)
+        {
+            macroCommand->addCommand(cmd);
+            changed=true;
+        }
+    }
+    if(m_paragDlg->isSpaceAfterChanged())
+    {
+        cmd=edit->setMarginCommand( QStyleSheetItem::MarginBottom, m_paragDlg->spaceAfterParag() );
+        if(cmd)
+        {
+            macroCommand->addCommand(cmd);
+            changed=true;
+        }
+    }
+    if(m_paragDlg->isFirstLineChanged())
+    {
+        cmd=edit->setMarginCommand( QStyleSheetItem::MarginFirstLine, m_paragDlg->firstLineIndent());
+        if(cmd)
+        {
+            macroCommand->addCommand(cmd);
+            changed=true;
+        }
+        h_ruler->setFirstIndent(KoUnit::ptToUnit( m_paragDlg->leftIndent() + m_paragDlg->firstLineIndent(), m_pKPresenterDoc->getUnit() ) );
+    }
+
+    if(m_paragDlg->isAlignChanged())
+    {
+        cmd=edit->setAlignCommand( m_paragDlg->align() );
+        if(cmd)
+        {
+            macroCommand->addCommand(cmd);
+            changed=true;
+        }
+    }
+    if(m_paragDlg->isCounterChanged())
+    {
+        cmd=edit->setCounterCommand( m_paragDlg->counter() );
+        if(cmd)
+        {
+            macroCommand->addCommand(cmd);
+            changed=true;
+        }
+    }
+    if(m_paragDlg->listTabulatorChanged())
+    {
+        cmd=edit->setTabListCommand( m_paragDlg->tabListTabulator() );
+        if(cmd)
+        {
+            macroCommand->addCommand(cmd);
+            changed=true;
+        }
+    }
+
+    if(m_paragDlg->isLineSpacingChanged())
+    {
+        cmd=edit->setLineSpacingCommand( m_paragDlg->lineSpacing() );
+        if(cmd)
+        {
+            macroCommand->addCommand(cmd);
+            changed=true;
+        }
+    }
+    if(m_paragDlg->isBorderChanged())
+    {
+        cmd=edit->setBordersCommand( m_paragDlg->leftBorder(), m_paragDlg->rightBorder(),
+                                     m_paragDlg->topBorder(), m_paragDlg->bottomBorder() );
+        if(cmd)
+        {
+            macroCommand->addCommand(cmd);
+            changed=true;
+        }
+    }
+
+    if( m_paragDlg->isShadowChanged())
+    {
+        cmd=edit->setShadowCommand( m_paragDlg->shadowDistance(),m_paragDlg->shadowDirection(), m_paragDlg->shadowColor() );
+        if(cmd)
+        {
+            macroCommand->addCommand(cmd);
+            changed=true;
+        }
+    }
+
+    if(changed)
+        m_pKPresenterDoc->addCommand(macroCommand);
+    else
+        delete macroCommand;
 
 }
 
