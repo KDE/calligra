@@ -37,13 +37,16 @@ public:
 
     void publicKeyPressEvent ( QKeyEvent* _ev );
 
+    bool isActivate() { return active; }
+    void setActivate( bool _active) { active= _active;}
+
 public slots:
     void slotAbortEdit();
     void slotDoneEdit();            
 
 protected:    
     virtual void keyPressEvent ( QKeyEvent* _ev );
-    
+    bool active;
     KSpreadView* m_pView;
 };
 
@@ -90,7 +93,16 @@ public:
     QScrollBar* vertScrollBar() { return m_pVertScrollBar; }    
     KSpreadEditWidget* editWidget() { return m_pEditWidget; }
 
-    QPoint marker() { return QPoint( m_iMarkerColumn, m_iMarkerRow ); }  
+    //laurent
+    QString editEditor();
+    void setEditor(QString text);
+    KSpreadCellEditor * pointeur() {return m_pEditor ;}
+
+    bool EditorisActivate() {return E_activate;}
+    void setEditorActivate(bool _E_activate) { E_activate= _E_activate;}
+
+
+    QPoint marker() { return QPoint( m_iMarkerColumn, m_iMarkerRow ); }
     bool isMarkerVisible() { return ( m_iMarkerVisible == 1 ); }
     int markerColumn() { return m_iMarkerColumn; }
     int markerRow() { return m_iMarkerRow; }
@@ -283,6 +295,9 @@ private:
      * @see #showMarker
      */
     int m_iMarkerVisible;
+
+    //laurent
+    bool E_activate;
 };
 
 /**

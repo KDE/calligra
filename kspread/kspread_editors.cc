@@ -16,6 +16,7 @@ KSpreadCellEditor::~KSpreadCellEditor()
 {
 }
 
+ 
 KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, QWidget* _parent, const char* _name )
   : KSpreadCellEditor( _cell, _parent, _name )
 {
@@ -46,6 +47,12 @@ QString KSpreadTextEditor::text()
 {
   return m_pEdit->text();
 }
+
+void KSpreadTextEditor::setText(QString text)
+{
+if(m_pEdit !=0)
+	m_pEdit->setText(text);
+}	
 
 bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
 {
@@ -110,6 +117,13 @@ QString KSpreadFormulaEditor::text()
   tmp += m_pEdit->text();
   return tmp;
 }
+
+void KSpreadFormulaEditor::setText(QString text)
+{
+if(m_pEdit !=0)
+	m_pEdit->setText(text);
+}	
+
 
 bool KSpreadFormulaEditor::eventFilter( QObject* o, QEvent* e )
 {

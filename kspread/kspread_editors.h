@@ -23,7 +23,7 @@ public:
 
   virtual void handleKeyPressEvent( QKeyEvent* _ev ) = 0;
   virtual QString text() = 0;
-
+  virtual void setText(QString text) = 0;
 private:
   KSpreadCell* m_pCell;
 };
@@ -37,6 +37,7 @@ public:
 
   virtual void handleKeyPressEvent( QKeyEvent* _ev );
   virtual QString text();
+  virtual void setText(QString text);
 
 protected:
   void resizeEvent( QResizeEvent* );
@@ -59,6 +60,7 @@ public:
 
   virtual void handleKeyPressEvent( QKeyEvent* _ev );
   virtual QString text();
+  virtual void setText(QString text);
 
 protected slots:
   void slotSizeHint( QSize );

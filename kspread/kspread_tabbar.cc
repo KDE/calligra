@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include <qbitmap.h>
 #include <qmessagebox.h>
@@ -51,7 +51,7 @@ KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent ) : QWidget( (QWidget *)_pare
 void KSpreadTabBar::addTab( const QString& _text )
 {
     tabsList.append( _text );
-    
+
     repaint();
 }
 
@@ -63,7 +63,7 @@ void KSpreadTabBar::removeTab( const QString& _text )
 	printf("ERROR: KSpreadTable '%s' not found\n", _text.ascii() );
 	return;
     }
-    
+
     if ( activeTab == i + 1 )
 	activeTab = i;
 
@@ -71,7 +71,7 @@ void KSpreadTabBar::removeTab( const QString& _text )
 	leftTab = 1;
     else if ( leftTab > activeTab )
 	leftTab = activeTab;
-    
+
     tabsList.remove( _text );
 
     repaint();
@@ -82,7 +82,7 @@ void KSpreadTabBar::removeAllTabs()
     tabsList.clear();
     activeTab = 0;
     leftTab = 1;
-    
+
     repaint();
 }
 
@@ -121,10 +121,10 @@ void KSpreadTabBar::scrollLeft()
 {
     if ( tabsList.count() == 0 )
 	return;
-    
+
     if ( leftTab == 1 )
 	return;
-    
+
     leftTab--;
     repaint( false );
 }
@@ -136,10 +136,10 @@ void KSpreadTabBar::scrollRight()
 	
 	if ( m_rightTab == (int)tabsList.count() )
 	return;
-    
+
     if ( (unsigned int )leftTab == tabsList.count() )
 	return;
-    
+
     leftTab++;
     repaint( false );
 }
@@ -148,10 +148,10 @@ void KSpreadTabBar::scrollFirst()
 {
     if ( tabsList.count() == 0 )
 	return;
-    
+
     if ( leftTab == 1 )
 	return;
-    
+
     leftTab = 1;
     repaint( false );
 }
@@ -173,7 +173,7 @@ void KSpreadTabBar::scrollLast()
 	return;
 	
     QStringList::Iterator it;
-	it = tabsList.end(); 
+	it = tabsList.end();
 	do
 	{
 		--it;
@@ -196,7 +196,7 @@ void KSpreadTabBar::setActiveTab( const QString& _text )
     int i = tabsList.findIndex( _text );
     if ( i == -1 )
 	return;
-    
+
     activeTab = i + 1;
     repaint( false );
 }
@@ -214,7 +214,7 @@ void KSpreadTabBar::slotRemove( )
     if ( ret == 0 )
     {
         KSpreadTable *tbl = m_pView->activeTable();
-        m_pView->doc()->map()->removeTable( tbl ); 
+        m_pView->doc()->map()->removeTable( tbl );
 		m_pView->removeTable(tbl);
         delete tbl;
     }
@@ -234,7 +234,7 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
 	erase();
 	return;
     }
-    
+
     QPainter painter;
     QPixmap pm(size());
 	pm.fill( backgroundColor() );
@@ -242,7 +242,7 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
 
     if ( leftTab > 1 )
 	paintTab( painter, -10, QString(""), 0, 0, FALSE );
-    
+
     int i = 1;
     int x = 0;
     QString text;
@@ -251,7 +251,7 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
     int active_width = 0;
     int active_y = 0;
 
-    QStringList::Iterator it;    
+    QStringList::Iterator it;
     for ( it = tabsList.begin(); it != tabsList.end(); ++it )
     {
         text = *it;
@@ -284,7 +284,7 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
 
 //    if ( active_text != 0L )
 	paintTab( painter, active_x, active_text, active_width, active_y, TRUE );
-	    
+	
     painter.end();
 	bitBlt( this, 0, 0, &pm );
 }
@@ -300,16 +300,16 @@ void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, in
     if ( isactive )
 	painter.setBackgroundColor( white );
     else
-	painter.setBackgroundColor( lightGray );
+	painter.setBackgroundColor( colorGroup().background() );
     painter.eraseRect( x, 0, text_width + 20, height() );
     painter.setClipping( FALSE );
-    
+
     painter.drawLine( x, 0, x + 10, height() - 1 );
     painter.drawLine( x + 10, height() - 1, x + text_width + 10, height() - 1 );
     painter.drawLine( x + 10 + text_width, height() - 1, x + 20 + text_width, 0 );
     if ( !isactive )
 	painter.drawLine( x, 0, x + 20 + text_width, 0 );
-	if ( ismovemarked ) 
+	if ( ismovemarked )
 	{
 		if ( m_moveTabFlag == moveTabBefore )
 		{
@@ -371,13 +371,13 @@ void KSpreadTabBar::renameTab()
 void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 {
     int old_active = activeTab;
-    
+
     if ( tabsList.count() == 0 )
     {
 	erase();
 	return;
     }
-    
+
     QPainter painter;
     painter.begin( this );
 
@@ -385,9 +385,9 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
     int x = 0;
     QString text;
     const char *active_text = 0L;
-   
+
     QStringList::Iterator it;
-    for ( it = tabsList.begin(); it != tabsList.end(); ++it ) 
+    for ( it = tabsList.begin(); it != tabsList.end(); ++it )
     {
         text = *it;
 	QFontMetrics fm = painter.fontMetrics();
@@ -400,12 +400,12 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 		activeTab = i;
 		active_text = text;
 	    }
-	    
+	
 	    x += 10 + text_width;
 	}
 	i++;
     }
-	    
+	
     painter.end();
 
     if ( activeTab != old_active )
@@ -454,7 +454,7 @@ void KSpreadTabBar::slotAutoScroll( )
 		m_moveTab = leftTab - 1;
 		scrollLeft();
 	}
-	else if ( m_autoScroll == autoScrollRight ) 
+	else if ( m_autoScroll == autoScrollRight )
 	{
 		scrollRight();
 	}
@@ -481,7 +481,7 @@ void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
 		scrollLeft();
 		m_pAutoScrollTimer->start( 400 );
 	}
-	else if ( _ev->pos().x() > size().width() ) 
+	else if ( _ev->pos().x() > size().width() )
 	{
 		int i = tabsList.count();
 		if ( activeTab != i && m_moveTab != i && activeTab != i - 1 )
@@ -502,9 +502,9 @@ void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
 	{
 	    int i = 1;
     	int x = 0;
-   
+
 	    QStringList::Iterator it;
-    	for ( it = tabsList.begin(); it != tabsList.end(); ++it ) 
+    	for ( it = tabsList.begin(); it != tabsList.end(); ++it )
 	    {
 			QFontMetrics fm = painter.fontMetrics();
 			int text_width = fm.width( *it );
@@ -524,7 +524,7 @@ void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
 					{
 						m_moveTabFlag = moveTabBefore;
 						m_moveTab = i;
-	   					repaint( false ); 
+	   					repaint( false );
 					}
 					else if ( (m_moveTab != i && m_moveTab != 0) || (activeTab == i - 1 && m_moveTab != 0) )
 					{
@@ -538,7 +538,7 @@ void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
 	    }
 		--i;
 		
-		if ( x + 10 <= _ev->pos().x() && _ev->pos().x() < size().width() ) 
+		if ( x + 10 <= _ev->pos().x() && _ev->pos().x() < size().width() )
 		{
 			if ( activeTab != i && m_moveTabFlag != moveTabAfter )
 			{

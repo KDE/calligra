@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __kspread_gui_h__
 #define __kspread_gui_h__
@@ -54,7 +54,7 @@ class KoToolEntry;
 
 #include <qlist.h>
 #include <qscrbar.h>
-#include <qlabel.h> 
+#include <qlabel.h>
 #include <qbutton.h>
 #include <qpoint.h>
 
@@ -66,7 +66,7 @@ class KSpreadChildPicture : public KoDocumentChildPicture
 public:
   KSpreadChildPicture( KSpreadView*, KSpreadChild* );
   virtual ~KSpreadChildPicture();
-  
+
 protected:
   KSpreadView *m_pView;
 };
@@ -77,7 +77,7 @@ class KSpreadChildFrame : public KoFrame
   Q_OBJECT
 public:
   KSpreadChildFrame( KSpreadView*, KSpreadChild* );
-  
+
   KSpreadChild* child() { return m_pChild; }
   /**
    * @return the view owning this frame.
@@ -103,25 +103,25 @@ public:
 
     // IDL
     virtual KSpread::Book_ptr book();
-  
+
     // C++
     KSpreadCanvas* canvasWidget() { return m_pCanvas; }
-    KSpreadHBorder* hBorderWidget() { return m_pHBorderWidget; }    
-    KSpreadVBorder* vBorderWidget() { return m_pVBorderWidget; }    
-    QScrollBar* horzScrollBar() { return m_pHorzScrollBar; }    
-    QScrollBar* vertScrollBar() { return m_pVertScrollBar; }    
+    KSpreadHBorder* hBorderWidget() { return m_pHBorderWidget; }
+    KSpreadVBorder* vBorderWidget() { return m_pVBorderWidget; }
+    QScrollBar* horzScrollBar() { return m_pHorzScrollBar; }
+    QScrollBar* vertScrollBar() { return m_pVertScrollBar; }
     KSpreadEditWidget* editWidget() { return m_pEditWidget; }
-    QLabel* posWidget() { return m_pPosWidget; }  
+    QLabel* posWidget() { return m_pPosWidget; }
 
     KSpreadDoc* doc() { return m_pDoc; }
-    
+
     void addTable( KSpreadTable *_t );
     void removeTable( KSpreadTable *_t );
     void removeAllTables();
-    
+
     void setActiveTable( KSpreadTable *_t );
 
-    KSpreadTable* activeTable() { return m_pTable; }   
+    KSpreadTable* activeTable() { return m_pTable; }
 
     void openPopupMenu( const QPoint &_global );
 
@@ -216,7 +216,7 @@ public:
      * Menu Scripts->Run Local Script
      */
     void runLocalScript();
-    
+
     /**
      * Menu View->New View
      */
@@ -230,7 +230,7 @@ public:
      * Menu Data
      */
     void consolidate();
-  
+
     /**
      * Menu Folder
      */
@@ -239,7 +239,7 @@ public:
     /**
      * Menu Auto Fill
      */
-    void autoFill();    
+    void autoFill();
 
     /**
      * Menu for help menu
@@ -252,9 +252,9 @@ public:
     // void print();
     /**
      * ToolBar
-     */    
+     */
     void insertChart();
-    
+
     /**
      * ToolBar
      */
@@ -268,7 +268,7 @@ public:
      * ToolBar
      */
     void moneyFormat();
-    
+
     /**
      * ToolBar
      */
@@ -285,7 +285,7 @@ public:
      * ToolBar
      */
     void multiRow();
-    
+
     /**
      * ToolBar
      */
@@ -294,12 +294,12 @@ public:
      * ToolBar
      */
     void precisionPlus();
-    
+
     /**
      * ToolBar
      */
     void percent();
-    
+
     /**
      * ToolBar
      */
@@ -333,9 +333,14 @@ public:
      * ToolBar
      */
     void insertRow();
+    /**
+     *Toolbar
+     */
+
+    void formulaselection( const CORBA::WChar *_math );
 
     virtual void cleanUp();
-  
+
 protected slots:
     // C++
     /**
@@ -376,7 +381,7 @@ protected slots:
     /**
      * Scroll @ref #tabBar.
      */
-    void slotScrollToLeftTable();    
+    void slotScrollToLeftTable();
     /**
      * Scroll @ref #tabBar.
      */
@@ -420,7 +425,7 @@ public slots:
 
 signals:
     void sig_selectionChanged( KSpreadTable* _table, const QRect& _selection );
-  
+
 protected:
     // C++
     virtual void init();
@@ -433,13 +438,13 @@ protected:
     virtual bool mappingEventSetText( KSpread::EventSetText& _event );
     virtual bool mappingEventKeyPressed( KSpread::EventKeyPressed& _event );
     virtual bool mappingEventChartInserted( KSpread::EventChartInserted& _event );
-  
+
     virtual void keyPressEvent ( QKeyEvent * _ev );
     virtual void resizeEvent( QResizeEvent *_ev );
 
     // GUI stuff
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
-  
+
     QScrollBar *m_pHorzScrollBar;
     QScrollBar *m_pVertScrollBar;
     KSpreadCanvas *m_pCanvas;
@@ -449,13 +454,13 @@ protected:
     QWidget *m_pFrame;
     QFrame *m_pToolWidget;
     QButton *m_pTabBarFirst;
-    QButton *m_pTabBarLeft;    
+    QButton *m_pTabBarLeft;
     QButton *m_pTabBarRight;
     QButton *m_pTabBarLast;
     QButton *m_pOkButton;
     QButton *m_pCancelButton;
     KSpreadTabBar *m_pTabBar;
-    QLabel *m_pPosWidget;  
+    QLabel *m_pPosWidget;
 
     OpenPartsUI::ToolBar_var m_vToolBarEdit;
     CORBA::Long m_idButtonEdit_Copy;
@@ -510,6 +515,8 @@ protected:
     OpenPartsUI::Menu_var m_vMenuHelp;
     CORBA::Long m_idMenuHelp_About;
     CORBA::Long m_idMenuHelp_Using;
+    OpenPartsUI::ToolBar_var m_vToolBarMath ;
+    CORBA::Long m_idComboMath;
 
     /**
      * Pointer to the last popup menu.
@@ -534,9 +541,9 @@ protected:
      * The active KSpreadTable. This table has the input focus. It may be 0L, too.
      */
     KSpreadTable* m_pTable;
-    
+
     KSpreadDoc *m_pDoc;
-  
+
     /**
      * Tells wether undo is possible right now or not.
      *
@@ -557,7 +564,7 @@ protected:
      * @see #showGUI
      */
     bool m_bShowGUI;
-  
+
     QList<KSpreadChildFrame> m_lstFrames;
 #ifdef USE_PICTURES
     QList<KSpreadChildPicture> m_lstPictures;

@@ -656,6 +656,36 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
 
   m_vToolBarLayout->enable( OpenPartsUI::Show );
 
+  //laurent
+
+  m_vToolBarMath = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+  m_vToolBarMath->setFullWidth(false);
+  
+  OpenPartsUI::StrList math;
+  math.length( 16 );
+  math[0] = CORBA::string_dup( "cos" );
+  math[1] = CORBA::string_dup( "sin" );
+  math[2] = CORBA::string_dup( "tan" );
+  math[3] = CORBA::string_dup( "acos" );
+  math[4] = CORBA::string_dup( "asin" );
+  math[5] = CORBA::string_dup( "atan" );
+  math[6] = CORBA::string_dup( "sqrt" );
+  math[7] = CORBA::string_dup( "sum" );
+  math[8] = CORBA::string_dup( "ln" );
+  math[9] = CORBA::string_dup( "log" );
+  math[10] = CORBA::string_dup( "exp" );
+  math[11] = CORBA::string_dup( "fabs" );
+  math[12] = CORBA::string_dup( "floor" );
+  math[13] = CORBA::string_dup( "ceil" );
+  math[14] = CORBA::string_dup( "max" );
+  math[15] = CORBA::string_dup( "min" );
+  m_idComboMath = m_vToolBarMath->insertCombo( math, 1, false, SIGNAL( activated( const QString & ) ), this,
+					       "formulaselection", true, ( wstr = Q2C( i18n( "Formula") ) ),
+					       60,-1, OpenPartsUI::AtBottom );
+  
+  m_vToolBarMath->enable( OpenPartsUI::Show );
+  
+
   m_pluginManager->fillToolBar( _factory );
 
   /* m_vToolBarLayout->enable( OpenPartsUI::Hide );
@@ -886,6 +916,34 @@ void KSpreadView::fontSelected( const CORBA::WChar *_font )
     if ( m_pTable != 0L )
       m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), C2Q( _font ) );
 }
+
+void KSpreadView::formulaselection( const CORBA::WChar *_math )
+{
+    if ( m_pTable != 0L )
+    {
+     	QString chaine;
+     	chaine="";
+     		
+     	if( C2Q(_math) =="sum" || C2Q(_math) =="max" || C2Q(_math) =="min")
+	{
+	    chaine=":";
+	}
+     	if(editWidget()->isActivate() )
+	{
+	    editWidget()->setText(editWidget()->text() +C2Q( _math ) + "(" + chaine + ")");
+	}
+     	if(m_pCanvas->pointeur() != 0)
+	{
+	    if(m_pCanvas->EditorisActivate())
+	    {
+		m_pCanvas->setEditor(m_pCanvas->editEditor() +C2Q( _math ) + "(" + chaine + ")");
+	    }
+	}
+     	
+    }
+
+ }
+
 
 void KSpreadView::fontSizeSelected( const CORBA::WChar *_size )
 {
@@ -1301,23 +1359,23 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     m_pOkButton->setGeometry( 90, 2, 26, 26 );
     m_pEditWidget->setGeometry( 125, 2, 200, 26 );
 	
-    m_pTabBarFirst->setGeometry( 0, height() - 20, 20, 20 );
+    m_pTabBarFirst->setGeometry( 0, height() - 16, 16, 16 );
     m_pTabBarFirst->show();
-    m_pTabBarLeft->setGeometry( 20, height() - 20, 20, 20 );
+    m_pTabBarLeft->setGeometry( 16, height() - 16, 16, 16 );
     m_pTabBarLeft->show();
-    m_pTabBarRight->setGeometry( 40, height() - 20, 20, 20 );
+    m_pTabBarRight->setGeometry( 40, height() - 16, 16, 16 );
     m_pTabBarRight->show();
-    m_pTabBarLast->setGeometry( 60, height() - 20, 20, 20 );
+    m_pTabBarLast->setGeometry( 60, height() - 16, 16, 16 );
     m_pTabBarLast->show();
-    m_pTabBar->setGeometry( 80, height() - 20, width() / 2 - 80, 20 );
+    m_pTabBar->setGeometry( 80, height() - 16, width() / 2 - 80, 16 );
     m_pTabBar->show();
 	
-    m_pHorzScrollBar->setGeometry( width() / 2, height() - 20, width() / 2 - 20, 20 );
+    m_pHorzScrollBar->setGeometry( width() / 2, height() - 16, width() / 2 - 16, 16 );
     m_pHorzScrollBar->show();
-    m_pVertScrollBar->setGeometry( width() - 20, top , 20, height() - 20 - top );
+    m_pVertScrollBar->setGeometry( width() - 16, top , 16, height() - 16 - top );
     m_pVertScrollBar->show();
 
-    m_pFrame->setGeometry( 0, top, width() - 20, height() - 20 - top );
+    m_pFrame->setGeometry( 0, top, width() - 16, height() - 16 - top );
     m_pFrame->show();
 
     m_pCanvas->setGeometry( YBORDER_WIDTH, XBORDER_HEIGHT,

@@ -23,6 +23,8 @@
 KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadView *_view ) : QLineEdit( _parent, "KSpreadEditWidget" )
 {
   m_pView = _view;
+  setActivate(false);
+
 }
 
 void KSpreadEditWidget::publicKeyPressEvent ( QKeyEvent* _ev )
@@ -33,12 +35,14 @@ void KSpreadEditWidget::publicKeyPressEvent ( QKeyEvent* _ev )
 
 void KSpreadEditWidget::slotAbortEdit()
 {
+  setActivate(false);
   m_pView->canvasWidget()->setFocus();
   setText( "" );
 }
 
 void KSpreadEditWidget::slotDoneEdit()
 {
+  setActivate(false);
   if ( !m_pView->activeTable() )
     return;
 
@@ -49,6 +53,8 @@ void KSpreadEditWidget::slotDoneEdit()
 
 void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
 {
+  m_pView->canvasWidget()->setEditorActivate(false);
+
   if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
   {
     QLineEdit::keyPressEvent( _ev );
@@ -68,14 +74,21 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
 	    m_pView->setText( text() );
 	    setText( "" );
 	    QApplication::sendEvent( m_pView->canvasWidget(), _ev );
+	
+	    //desactivate bool EditWidget
+	
+	    setActivate(false);
 	}
 	else
 	    _ev->accept();
 	
+	    setActivate(false);
 	break;
 	
     default:
-	QLineEdit::keyPressEvent( _ev );
+	 if( _ev->key()==Key_Equal)
+       		setActivate(true);
+         QLineEdit::keyPressEvent( _ev );
     }
 }
 
@@ -85,7 +98,7 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
  *
  ****************************************************************/
 
-KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* _doc ) 
+KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* _doc )
     : QWidget( _parent, "", WNorthWestGravity )
 {
   m_pHorzScrollBar = 0;
@@ -120,6 +133,9 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   setMouseTracking( TRUE );
 
   setBackgroundMode( NoBackground );
+
+  //laurent
+  setEditorActivate(false);
 }
 
 
@@ -144,6 +160,17 @@ KSpreadTable* KSpreadCanvas::findTable( const QString& _name )
   }
 
   return 0L;
+}
+
+//laurent
+QString KSpreadCanvas::editEditor()
+{
+return m_pEditor->text();
+}
+
+void KSpreadCanvas::setEditor(QString text)
+{
+m_pEditor->setText(text);
 }
 
 KSpreadTable* KSpreadCanvas::activeTable()
@@ -536,6 +563,9 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
 void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 {
   KSpreadTable *table = activeTable();
+  //desactivate EditWidget when you click on a table
+  m_pEditWidget->setActivate(false);
+  setEditorActivate(false);
   if ( !table )
     return;
 
@@ -790,6 +820,8 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
 void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 {
   KSpreadTable *table = activeTable();
+
+
   if ( !table )
     return;
 
@@ -817,6 +849,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     case Key_Return:
     case Key_Enter:
     case Key_Down:
+    	
 	if ( markerRow() == 0xFFFF )
 	  return;
 
@@ -827,9 +860,11 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  delete m_pEditor;
 	  m_pEditor = 0;
 	}
+	setEditorActivate(false);
 	break;
 	
     case Key_Up:
+    	
 	if ( markerRow() == 1 )
 	    return;
 
@@ -840,9 +875,11 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  delete m_pEditor;
 	  m_pEditor = 0;
 	}
+	setEditorActivate(false);
 	break;
 	
     case Key_Left:
+    	
 	if ( markerColumn() == 1 )
 	    return;
 
@@ -853,9 +890,11 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  delete m_pEditor;
 	  m_pEditor = 0;
 	}
+	setEditorActivate(false);
 	break;
 
     case Key_Right:
+    	
 	if ( markerColumn() == 0xFFFF )
 	    return;
 
@@ -866,12 +905,14 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  delete m_pEditor;
 	  m_pEditor = 0;
 	}
+	setEditorActivate(false);
 	break;
 
 	/**
 	 * Handle here
 	 */
     case Key_Escape:
+    	
       _ev->accept();
       if ( m_pEditor )
       {
@@ -885,6 +926,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	delete m_pEditor;
 	m_pEditor = 0;
       }
+      setEditorActivate(false);
       return;
 
     default:
@@ -902,8 +944,10 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  m_pEditor = new KSpreadFormulaEditor( cell, this );
 	else
 	// TODO: Choose the correct editor here!
+	  {
 	  m_pEditor = new KSpreadTextEditor( cell, this );
-
+	  setEditorActivate(true);
+	  }
 	int w = cell->width( m_iMarkerColumn, this );
 	int h = cell->height( m_iMarkerRow, this );
 	int xpos = table->columnPos( markerColumn(), this );
@@ -1183,7 +1227,7 @@ KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSprea
   m_pView = _view;
   m_pCanvas = _canvas;
 
-  setBackgroundColor( lightGray );
+  setBackgroundMode( PaletteBackground );
   setMouseTracking( TRUE );
   m_bResize = FALSE;
   m_bSelection = FALSE;
@@ -1383,15 +1427,15 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 
     if ( selected )
     {
-      static QColorGroup g2( black, white, white, darkGray, lightGray, black, black );
-      static QBrush fill2( black );
-      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, row_lay->height( m_pCanvas ), g2, FALSE, 1, &fill2 );
+//       static QColorGroup g2( black, white, white, darkGray, lightGray, black, black );
+	static QBrush fill2( black );
+	qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, row_lay->height( m_pCanvas ), colorGroup(), FALSE, 1, &fill2 );
     }
     else
     {
-      static QColorGroup g( black, white, white, darkGray, lightGray, black, black );
-      static QBrush fill( lightGray );
-      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, row_lay->height( m_pCanvas ), g, FALSE, 1, &fill );
+//       static QColorGroup g( black, white, white, darkGray, lightGray, black, black );
+	static QBrush fill( colorGroup().brush( QColorGroup::Background ) );
+	qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, row_lay->height( m_pCanvas ), colorGroup(), FALSE, 1, &fill );
     }
 	
     char buffer[ 20 ];
@@ -1400,7 +1444,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     if ( selected )
       painter.setPen( white );
     else
-      painter.setPen( black );
+      painter.setPen( colorGroup().text() );
 
     painter.drawText( 3, ypos + ( row_lay->height( m_pCanvas ) + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2, buffer );
 
@@ -1422,7 +1466,7 @@ KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpread
   m_pView = _view;
   m_pCanvas = _canvas;
 
-  setBackgroundColor( lightGray );
+  setBackgroundMode( PaletteBackground );
   setMouseTracking( TRUE );
   m_bResize = FALSE;
   m_bSelection = FALSE;
@@ -1611,15 +1655,15 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 
     if ( selected )
     {
-      static QColorGroup g2( black, white, white, darkGray, lightGray, black, black );
+//       static QColorGroup g2( black, white, white, darkGray, lightGray, black, black );
       static QBrush fill2( black );
-      qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ), XBORDER_HEIGHT, g2, FALSE, 1, &fill2 );
+      qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ), XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill2 );
     }
     else
     {
-      static QColorGroup g( black, white, white, darkGray, lightGray, black, black );
-      static QBrush fill( lightGray );
-      qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ), XBORDER_HEIGHT, g, FALSE, 1, &fill );
+//       static QColorGroup g( black, white, white, darkGray, lightGray, black, black );
+      static QBrush fill( colorGroup().brush( QColorGroup::Background ) );
+      qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ), XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill );
     }
 
     int len = painter.fontMetrics().width( table->columnLabel(x) );
@@ -1627,7 +1671,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
     if ( selected )
       painter.setPen( white );
     else
-      painter.setPen( black );
+      painter.setPen( colorGroup().text() );
 	
     painter.drawText( xpos + ( col_lay->width( m_pCanvas ) - len ) / 2,
 		      ( XBORDER_HEIGHT + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2,
