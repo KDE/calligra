@@ -47,7 +47,7 @@ pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringLi
 	beh->AUTO_INCREMENT_FIELD_OPTION = "serial";
 	beh->ALWAYS_AVAILABLE_DATABASE_NAME = "template1";
 
-	m_typeNames[Field::Byte]="CHAR";
+	m_typeNames[Field::Byte]="SMALLINT";
 	m_typeNames[Field::ShortInteger]="SMALLINT";
 	m_typeNames[Field::Integer]="INTEGER";
 	m_typeNames[Field::BigInteger]="BIGINT";
