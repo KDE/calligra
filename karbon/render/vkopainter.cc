@@ -185,6 +185,22 @@ VKoPainter::clear( const QColor &c )
 }
 
 void
+VKoPainter::clear( const KoRect &r, const QColor &c )
+{
+	unsigned int color = c.rgb();
+	int x		= QMAX( 0, r.x() );
+	int y		= QMAX( 0, r.y() );
+	int width	= QMIN( int( m_width ),		r.x() + r.width() );
+	int height	= QMIN( int( m_height ),	r.y() + r.height() );
+	if ( m_buffer )
+	{
+		for( unsigned int i = y;i < height;i++)
+			memset( m_buffer + int( x * 4) + int( i * ( m_width * 4 ) ),
+					qRgba( qRed( color ), qGreen( color ), qBlue( color ), 100 ), int( width * 4 ) );
+	}
+}
+
+void
 VKoPainter::setWorldMatrix( const QWMatrix &mat )
 {
 	m_matrix = mat;

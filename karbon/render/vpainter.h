@@ -52,6 +52,7 @@ public:
 	virtual void end() = 0;
 	virtual void blit( const KoRect & ) = 0;
 	virtual void clear( const QColor & ) = 0;
+	virtual void clear( const KoRect &, const QColor & ) = 0;
 
 	// matrix manipulation
 	virtual void setWorldMatrix( const QWMatrix & ) = 0;

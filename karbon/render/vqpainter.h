@@ -40,6 +40,7 @@ public:
 	virtual void end();
 	virtual void blit( const KoRect & );
 	virtual void clear( const QColor & );
+	virtual void clear( const KoRect &, const QColor & ) {}
 
 	// matrix manipulation
 	virtual void setWorldMatrix( const QWMatrix & );

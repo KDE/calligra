@@ -115,7 +115,8 @@ VCanvas::setYMirroring( bool edit )
 void
 VCanvas::viewportPaintEvent( QPaintEvent *e )
 {
-	//kdDebug() << " e->rect() : " << e->rect().x() << ", " << e->rect().y() << ", " << e->rect().width() << ", " << e->rect().height() << endl;
+	kdDebug() << "viewp e->rect() : " << e->rect().x() << ", " << e->rect().y() << ", " << e->rect().width() << ", " << e->rect().height() << endl;
+	viewport()->setUpdatesEnabled( false );
 	KoRect rect( e->rect().x() - 1, e->rect().y() - 2, e->rect().width() + 2, e->rect().height() + 4 );
 	VPainter *p = m_view->painterFactory()->painter();
 	if( m_bScrolling )
@@ -123,7 +124,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		// TODO : only update ROIs
 		KoRect r( 0, 0, viewport()->width(), viewport()->height() );
 		p->begin();
-		p->clear( QColor( 195, 194, 193 ) );
+		p->clear( rect, QColor( 195, 194, 193 ) );
 		p->setZoomFactor( m_view->zoom() );
 		setYMirroring( false );
 
@@ -149,6 +150,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
 	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect.toQRect() );
+	viewport()->setUpdatesEnabled( true );
 	//bitBlt( this, QPoint( rect.x(), rect.y() - 20 ), p->device(), rect );
 }
 
