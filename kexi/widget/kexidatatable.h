@@ -31,6 +31,7 @@ class QLineEdit;
 class KPrinter;
 
 class KexiDBRecordSet;
+class KexiDBUpdateRecord;
 class KexiView;
 class KexiTableView;
 class KexiDB;
@@ -61,7 +62,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 		void slotRemoved(QObject *sender, const QString &table, uint record);
 
 		void slotSearchChanged(const QString &);
-
+		void recordInsertFinished(KexiDBUpdateRecord*);
 	private:
 		KexiTableView	*m_tableView;
 		QStatusBar	*m_statusBar;
@@ -71,6 +72,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 
 		bool		m_first;
 		KexiDB		*m_db;
+		QMap<KexiDBUpdateRecord*,KexiTableItem*> m_insertMapping;
 };
 
 #endif

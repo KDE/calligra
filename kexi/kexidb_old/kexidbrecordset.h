@@ -51,6 +51,9 @@ class KEXIDB_EXPORT KexiDBRecordSet : public QObject
 		KexiDBRecordSet(KexiDB *parent, const char *name);
 		virtual ~KexiDBRecordSet() {kdDebug()<<"KexiDBRecord::~KexiDBRecord()"<<endl;};
 
+	signals:
+		/* the record is being deleted, after that signals returns, so DON'T store it */
+		void recordInserted(KexiDBUpdateRecord*);
 	public slots:
 
 //		virtual KexiDBRecord *query(KexiDB *db, QString query) static;
@@ -128,8 +131,10 @@ class KEXIDB_EXPORT KexiDBRecordSet : public QObject
 		 *  @code record->commit(true); //commits changes on current record and inserts insertBuffer
 		 *
 		 *  @returns a record-identification integer
+		 * after a writeOut has been done the record is deleted automatically, so don't store the 
+		 * pointer. It can be use d for identifying a record during a recordInsertedHandler();
 		 */
-		virtual KexiDBUpdateRecord *insert() = 0;
+		virtual KexiDBUpdateRecord *insert(bool wantNotification=false) = 0;
 
 
 		/*!

@@ -33,7 +33,8 @@ public:
 	bool setValue(QString name, QVariant value);
 	bool setValue(int id, QVariant value);
 	bool resetValue(QString name);
-	bool value(QString name);
+	QVariant value(QString name);
+	QVariant value(int id);
 	QStringList fieldNames();
 	QMap<QString,QVariant> primaryKeys();
 
@@ -42,11 +43,12 @@ public:
 	bool isInsert();
 	bool addField(QString name, QVariant resetValue);
 	bool addPrimaryKey(QString name, QVariant value);
-	KexiDBUpdateRecord(bool insert);
+	KexiDBUpdateRecord(bool insert, bool wantNotification=false);
 	~KexiDBUpdateRecord();
 	bool firstUpdateField( QString &retName, QVariant &retValue);
 	bool nextUpdateField( QString &retName, QVariant &retValue);
 
+	bool wantNotification();
 private:
 
 	class KexiUpdateField {
@@ -72,6 +74,7 @@ private:
 	bool m_insertRecord;
 	QMap<QString,QVariant> m_primaryKeys;
 	QDictIterator<KexiUpdateField> *update_it;
+	bool m_wantNotification;
 
 };
 

@@ -90,14 +90,16 @@ void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
 	if(!m_first)
 		m_tableView->clearAll();
 
+	if (m_record) disconnect(m_record,0,this,0);
 	m_record=rec;
-
+	
 	if(!m_record)
 	{
 		kdDebug() << "KexiDataTable::setDataSet(): record doesn't exist" << endl;
 		return;
 	}
 
+	connect(m_record,SIGNAL(recordInserted(KexiDBUpdateRecord*)),this,SLOT(recordInsertFinished(KexiDBUpdateRecord*)));
 	for(uint i = 0; i < m_record->fieldCount(); i++)
 	{
 		QVariant defaultval = QVariant("");
@@ -174,8 +176,9 @@ KexiDataTable::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
 	{
 		i->setInsertItem(false);
 		i->setHint("UPDATING");//;QVariant(m_record->insert()));
-		KexiDBUpdateRecord *urec=m_record->insert();
+		KexiDBUpdateRecord *urec=m_record->insert(true);
 		urec->setValue(col,i->getValue(col));
+		m_insertMapping.insert(urec,i);
 
 //		m_record->update(i->getHint().toInt(), col, i->getValue(col));
 
@@ -223,9 +226,21 @@ KexiDataTable::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
 }
 
 void
+KexiDataTable::recordInsertFinished(KexiDBUpdateRecord* ur) {
+	kdDebug()<<"KexiDataTable::recordInsertFinished:INSERT FINISHED CALLED"<<endl;
+	if (m_insertMapping.contains(ur)) {
+		KexiTableItem *it=m_insertMapping[ur];
+		m_insertMapping.remove(ur);
+		for (int i=0;i<m_tableView->cols();i++)
+			it->setValue(i,ur->value(i));
+	}
+}
+
+void
 KexiDataTable::slotUpdated(QObject *sender, const QString &table, const QString &fieldName,
  uint record, QVariant &value)
 {
+return;
 	kdDebug() << "KexiDataTable::slotUpdated() " << this << endl;
 	kdDebug() << "KexiDataTable::slotUpdated() table: " << table << endl;
 	kdDebug() << "KexiDataTable::slotUpdated() field: " << fieldName << endl;

@@ -101,7 +101,21 @@ MySqlRecord::writeOut(KexiDBUpdateRecord * ur)
 			QString statement="insert into "+m_table+" ("+fieldList+") VALUES ("+valueList+");";
 			kdDebug()<<"INSERT STATEMENT:"<<statement<<endl;
 			m_db->query(statement);
-
+			if (ur->wantNotification()) {
+				kdDebug()<<"wantNotification == true"<<endl;
+				uint autoID=m_db->lastAuto();
+				if (autoID!=0) {
+					for (int i=0;i<fieldCount();i++) {
+						if (fieldInfo(i)->auto_increment()) {
+							kdDebug()<<"Auto inc field found"<<endl;
+							ur->setValue(fieldInfo(i)->name(),QVariant(autoID));
+#warning "FIXME: Here should be a query of the record in question, not just an id update"
+							emit recordInserted(ur);
+							break;
+						}
+					}
+				}
+			}
 		}
 	}
 	else
@@ -449,11 +463,11 @@ MySqlRecord::update(QMap<QString,QVariant> fieldNameValueMap)
 }
 
 KexiDBUpdateRecord *
-MySqlRecord::insert()
+MySqlRecord::insert(bool wantNotification)
 {
 	kdDebug()<<"KexiDBUpdateRecord * MySqlRecord::insert() entered "<<endl;
 	if (readOnly()) return 0; //perhaps a kexidberror should be set here too
-	KexiDBUpdateRecord *rec=new KexiDBUpdateRecord(true);
+	KexiDBUpdateRecord *rec=new KexiDBUpdateRecord(true,wantNotification);
 	for (uint i=0;i<fieldCount();i++) {
 		KexiDBField *f=fieldInfo(i);
 		rec->addField(f->name(),f->defaultValue());

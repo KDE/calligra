@@ -95,7 +95,7 @@ class KEXI_MYSQL_IFACE_EXPORT MySqlRecord : public KexiDBRecordSet, public MySql
 
 		bool deleteRecord(uint record);
 
-		KexiDBUpdateRecord *insert();
+		KexiDBUpdateRecord *insert(bool wantNotification=false);
 		KexiDBUpdateRecord *updateCurrent();
 		KexiDBUpdateRecord *update(unsigned long record){ return 0; }
 		KexiDBUpdateRecord *update(QMap<QString,QVariant> fieldNameValueMap);

@@ -22,10 +22,14 @@
 
 //BEGIN KexiDBUpdateRecord
 
-KexiDBUpdateRecord::KexiDBUpdateRecord(bool insert)
-	: m_insertRecord(insert),update_it(0) {
+KexiDBUpdateRecord::KexiDBUpdateRecord(bool insert, bool wantNotification)
+	: m_insertRecord(insert),update_it(0),m_wantNotification(wantNotification) {
 
 	m_fieldsByName.setAutoDelete(true);
+}
+
+bool KexiDBUpdateRecord::wantNotification() {
+	return m_wantNotification;
 }
 
 void KexiDBUpdateRecord::reset() {
@@ -33,6 +37,12 @@ void KexiDBUpdateRecord::reset() {
 		KexiUpdateField *kuf =it.current();
 		kuf->reset();
 	}
+}
+
+QVariant KexiDBUpdateRecord::value(int id) {
+	KexiUpdateField *kuf=m_fields.at(id);
+	if (!kuf) return QVariant();
+	return kuf->value();
 }
 
 bool KexiDBUpdateRecord::setValue(QString name, QVariant value) {
