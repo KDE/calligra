@@ -161,3 +161,27 @@ void KWordDocIface::recalcAllVariables()
     //recalc all variable
     doc->recalcVariables(VT_ALL);
 }
+
+void KWordDocIface::recalcVariables(int _var)
+{
+    doc->recalcVariables(_var);
+}
+
+void KWordDocIface::recalcVariables(const QString &varName)
+{
+    if(varName=="VT_DATE")
+        doc->recalcVariables(0);
+    else if(varName=="VT_TIME")
+        doc->recalcVariables(2);
+    else if(varName=="VT_PGNUM")
+        doc->recalcVariables(4);
+    else if(varName=="VT_CUSTOM")
+        doc->recalcVariables(6);
+    else if(varName=="VT_SERIALLETTER")
+        doc->recalcVariables(7);
+    else if(varName=="VT_FIELD")
+        doc->recalcVariables(8);
+    else if(varName=="VT_ALL")
+        doc->recalcVariables(256);
+}
+

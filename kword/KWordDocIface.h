@@ -67,7 +67,8 @@ k_dcop:
     virtual void setUndoRedoLimit(int _val);
 
     virtual void recalcAllVariables();
-
+    virtual void recalcVariables(int _var);
+    virtual void recalcVariables(const QString &varName);
 private:
     KWDocument *doc;
 
