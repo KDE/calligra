@@ -129,6 +129,8 @@ public:
 
     void updateHelpLineButton();
 
+    void updateGridButton();
+
 signals:
     void currentPageChanged( int );
 
@@ -156,6 +158,8 @@ public slots:
     void insertComment();
     void editComment();
     void viewHelpLines();
+
+    void viewGrid();
 
     // insert menu
     void insertPage();
@@ -691,6 +695,8 @@ private:
     KToggleAction *actionViewShowNoteBar;
 
     KToggleAction *actionViewShowHelpLine;
+
+    KToggleAction *actionViewShowGrid;
 
     KAction *actionInsertPage;
     KAction *actionInsertPicture;

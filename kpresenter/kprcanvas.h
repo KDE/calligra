@@ -290,6 +290,9 @@ protected:
     // draw all helpline
     void drawHelplines(QPainter *painter, const QRect &rect2);
 
+    // draw all helpline
+    void drawGrid(QPainter *painter, const QRect &rect2);
+
 
     QRect getOldBoundingRect( const KPObject *obj );
 

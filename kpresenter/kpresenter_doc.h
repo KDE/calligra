@@ -273,6 +273,9 @@ public:
     bool showStatusBar() const { return m_bShowStatusBar;}
     void setShowStatusBar( bool _status ) { m_bShowStatusBar = _status;}
 
+    bool showGrid() const { return m_bShowGrid; }
+    void setShowGrid ( bool _grid ) { m_bShowGrid = _grid; }
+
 
     // The user-chosen global unit
     QString getUnitName() { return KoUnit::unitName( m_unit ); }
@@ -491,6 +494,8 @@ protected:
     bool m_bShowStatusBar;
     bool m_bAllowAutoFormat;
     bool m_bShowHelplines;
+
+    bool m_bShowGrid;
 
     double m_indent; // in pt
 

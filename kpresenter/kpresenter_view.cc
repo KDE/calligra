@@ -132,6 +132,7 @@
 
 #include <kstdaccel.h>
 #include <koDocumentInfo.h>
+#include <kaccelgen.h>
 
 #define DEBUG
 
@@ -2368,6 +2369,8 @@ void KPresenterView::initGui()
 
     updateHelpLineButton();
 
+    updateGridButton();
+
     m_pKPresenterDoc->updateZoomRuler();
     updatePageInfo();
 }
@@ -2438,6 +2441,11 @@ void KPresenterView::setupActions()
     actionViewShowHelpLine= new KToggleAction( i18n( "HelpLines" ), 0,
                                           this, SLOT( viewHelpLines() ),
                                           actionCollection(), "view_helplines" );
+
+    actionViewShowGrid = new KToggleAction( i18n( "Grid" ), 0,
+                                          this, SLOT( viewGrid() ),
+                                          actionCollection(), "view_grid" );
+
 
     // ---------------- insert actions
 
@@ -2988,6 +2996,9 @@ void KPresenterView::setupActions()
                                            actionCollection(), "format_style" );
     connect( actionFormatStyle, SIGNAL( activated( int ) ),
              this, SLOT( textStyleSelected( int ) ) );
+#if KDE_VERSION >= 305
+    actionFormatStyle->setRemoveAmpersandsInCombo( true );
+#endif
     updateStyleList();
 
     actionAllowAutoFormat = new KToggleAction( i18n( "Enable Autocorrection" ), 0,
@@ -5649,8 +5660,19 @@ void KPresenterView::updateStyleList()
     for (; styleIt.current(); ++styleIt ) {
         lst << styleIt.current()->translatedName();
     }
-    actionFormatStyle->setItems( lst );
-    showStyle( currentStyle );
+
+    QStringList lstWithAccels;
+    // Generate unique accelerators for the menu items
+#if KDE_VERSION >= 305  // but only if the '&' will be removed from the combobox
+    KAccelGen::generate( lst, lstWithAccels );
+#else
+    lstWithAccels = lst;
+#endif
+    actionFormatStyle->setItems( lstWithAccels );
+    uint pos = 0;
+    for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++pos )
+        if ( (*it) == currentStyle )
+            actionFormatStyle->setCurrentItem( pos );
 }
 
 void KPresenterView::extraStylist()
@@ -5764,6 +5786,14 @@ void KPresenterView::viewHelpLines()
     m_canvas->repaint(false);
 }
 
+
+void KPresenterView::viewGrid()
+{
+    m_pKPresenterDoc->setShowGrid( actionViewShowGrid->isChecked() );
+    m_canvas->repaint(false);
+}
+
+
 void KPresenterView::drawTmpHelpLine( const QPoint & pos, bool _horizontal)
 {
     QPoint newPos( pos.x() -16 , pos.y()-16);
@@ -5787,6 +5817,11 @@ void KPresenterView::updateHelpLineButton()
     bool state = m_pKPresenterDoc->showHelplines();
     actionViewShowHelpLine->setChecked( state );
     refreshRuler( state );
+}
+
+void KPresenterView::updateGridButton()
+{
+    actionViewShowGrid->setChecked( m_pKPresenterDoc->showGrid() );
 }
 
 void KPresenterView::refreshRuler( bool state )

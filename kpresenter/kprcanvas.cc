@@ -273,8 +273,13 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             selectionMode = SM_NONE; // case of screen presentation mode
         drawObjects( &bufPainter, crect, true, selectionMode, true );
 
-        if( editMode && m_view->kPresenterDoc()->showHelplines())
-            drawHelplines( &bufPainter, crect);
+        if( editMode)
+        {
+            if( m_view->kPresenterDoc()->showHelplines())
+                drawHelplines( &bufPainter, crect);
+            if( m_view->kPresenterDoc()->showGrid())
+                drawGrid( &bufPainter, crect);
+        }
 
         bufPainter.end();
 
@@ -403,6 +408,52 @@ void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCurs
 		       stickyPage()->objectList());
 
 }
+
+void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2)
+{
+    KPresenterDoc *doc=m_view->kPresenterDoc();
+
+    if(!doc->isReadWrite())
+        return;
+    if( editMode && m_view->kPresenterDoc()->showGrid())
+    {
+        KoRect rect = m_view->zoomHandler()->unzoomRect(rect2);
+        QPen _pen = QPen( Qt::black, 6, Qt::DotLine );
+        painter->save();
+        painter->setPen( _pen );
+        QRect pageRect=activePage()->getZoomPageRect();
+        int offset = (int)(pageRect.width()/10);
+        for( int i = pageRect.left() ; i< pageRect.width();)
+        {
+            if( rect2.intersects( QRect( i, pageRect.top(), 1 , pageRect.height())))
+            {
+                for ( int j = pageRect.top() ; j< pageRect.height();)
+                {
+                    painter->drawPoint( i , j );
+                    j+=offset;
+                }
+            }
+            i+=offset;
+        }
+
+        for( int i = pageRect.top () ; i< pageRect.height();)
+        {
+            if( rect2.intersects( QRect(  pageRect.left(), i, pageRect.width() , 1)))
+            {
+                for ( int j = pageRect.left() ; j< pageRect.width();)
+                {
+                    painter->drawPoint( j , i );
+                    j+=offset;
+                }
+            }
+            i+=offset;
+        }
+
+        painter->restore();
+
+    }
+}
+
 
 void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2)
 {

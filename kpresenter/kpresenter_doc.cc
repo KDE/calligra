@@ -189,6 +189,8 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     m_bShowHelplines = false;
 
+    m_bShowGrid = false;
+
     usedSoundFile = QStringList();
     haveNotOwnDiskSoundFile = QStringList();
 
