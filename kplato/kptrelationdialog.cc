@@ -46,6 +46,9 @@ KPTAddRelationDialog::KPTAddRelationDialog(KPTRelation *rel, QWidget *p, QString
         setCaption(i18n("Add Relationship"));
     m_relation = rel;
     m_panel = new RelationPanel(plainPage());
+    setMainWidget(m_panel);
+    m_panel->setActiveWindow();
+    
     m_panel->fromName->setText(rel->parent()->name());
     m_panel->toName->setText(rel->child()->name());
     m_panel->relationType->setButton(rel->type());
@@ -56,8 +59,15 @@ KPTAddRelationDialog::KPTAddRelationDialog(KPTRelation *rel, QWidget *p, QString
     m_panel->lag->setFieldUnit(2, i18n("minutes"));
     m_panel->lag->setValue(rel->lag());
     
-    resize( QSize(370, 300).expandedTo(minimumSizeHint()) ); //FIXME 
+    //HACK to make this work at least in 'normal' cases. 
+    // The problem I think, stems from KPTDurationWidget /QLineEdit which
+    // wants to sizeHint larger than I want, so I use unusual sizepolisies 
+    // to avoid that.
+    //kdDebug()<<k_funcinfo<<"sizehint panel="<<m_panel->sizeHint().width()<<"x"<<m_panel->sizeHint().height()<<"  dia="<<sizeHint().width()<<"x"<<sizeHint().height()<<" plain="<<plainPage()->sizeHint().width()<<"x"<<plainPage()->sizeHint().height()<<" lag="<<m_panel->lag->sizeHint().width()<<"x"<<m_panel->lag->sizeHint().height()<<endl;
+    QSize s = QSize(QMAX(sizeHint().width(),m_panel->sizeHint().width())+ 20 /*borders*/, sizeHint().height()+m_panel->sizeHint().height());
+    resize( s.expandedTo(minimumSizeHint()) ); //FIXME why doesn't it resize properly?
     
+    m_panel->relationType->setFocus();
     enableButtonOK(false);
     connect(m_panel->relationType, SIGNAL(clicked(int)), SLOT(typeClicked(int)));
     connect(m_panel->lag, SIGNAL(valueChanged()), SLOT(lagChanged()));

@@ -300,4 +300,3 @@ void KPTDurationWidget::setFieldUnit(int f, QString unit)
     }
 }
 
-

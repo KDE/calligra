@@ -8,240 +8,336 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>300</width>
-            <height>20</height>
+            <width>240</width>
+            <height>22</height>
         </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
     </property>
     <property name="maximumSize">
         <size>
-            <width>600</width>
-            <height>45</height>
+            <width>32767</width>
+            <height>32767</height>
         </size>
     </property>
     <property name="caption">
         <string>KPTDurationWidget</string>
     </property>
-    <widget class="QFrame">
+    <hbox>
         <property name="name">
-            <cstring>m_frame</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>300</width>
-                <height>20</height>
-            </rect>
+        <property name="margin">
+            <number>0</number>
         </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>5</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>200</width>
-                <height>20</height>
-            </size>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>300</width>
-                <height>20</height>
-            </size>
-        </property>
-        <property name="paletteBackgroundColor">
-            <color>
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-            </color>
-        </property>
-        <property name="frameShape">
-            <enum>LineEditPanel</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Sunken</enum>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Use whole numbers or decimal fractions</string>
-        </property>
-        <hbox>
+        <widget class="QFrame">
             <property name="name">
-                <cstring>unnamed</cstring>
+                <cstring>m_frame</cstring>
             </property>
-            <property name="margin">
-                <number>1</number>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
-            <widget class="QLabel">
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>32676</width>
+                    <height>20</height>
+                </size>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="frameShape">
+                <enum>LineEditPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Use whole numbers or decimal fractions</string>
+            </property>
+            <hbox>
                 <property name="name">
-                    <cstring>m_hhSpace</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="text">
-                    <string></string>
+                <property name="margin">
+                    <number>1</number>
                 </property>
-                <property name="buddy" stdset="0">
-                    <cstring>m_hh</cstring>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>m_ddd</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>50</width>
-                        <height>0</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>0</string>
-                    <comment>AAA</comment>
-                </property>
-                <property name="frame">
-                    <bool>false</bool>
-                </property>
-                <property name="alignment">
-                    <set>AlignRight</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>m_ddUnit</cstring>
-                </property>
-                <property name="text">
-                    <string>d</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>m_mmColon</cstring>
-                </property>
-                <property name="text">
-                    <string>:</string>
-                </property>
-                <property name="buddy" stdset="0">
-                    <cstring>m_mm</cstring>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>m_hh</cstring>
-                </property>
-                <property name="text">
-                    <string>00</string>
-                </property>
-                <property name="frame">
-                    <bool>false</bool>
-                </property>
-                <property name="alignment">
-                    <set>AlignRight</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>m_hhUnit</cstring>
-                </property>
-                <property name="text">
-                    <string>h</string>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>m_mm</cstring>
-                </property>
-                <property name="text">
-                    <string>00</string>
-                </property>
-                <property name="frame">
-                    <bool>false</bool>
-                </property>
-                <property name="alignment">
-                    <set>AlignRight</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>m_mmUnit</cstring>
-                </property>
-                <property name="text">
-                    <string>m</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>m_ssColon</cstring>
-                </property>
-                <property name="text">
-                    <string>:</string>
-                </property>
-                <property name="buddy" stdset="0">
-                    <cstring>m_ss</cstring>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>m_ss</cstring>
-                </property>
-                <property name="text">
-                    <string>00</string>
-                </property>
-                <property name="frame">
-                    <bool>false</bool>
-                </property>
-                <property name="alignment">
-                    <set>AlignRight</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>m_ssUnit</cstring>
-                </property>
-                <property name="text">
-                    <string>s</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>m_dot</cstring>
-                </property>
-                <property name="text">
-                    <string>.</string>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>m_ms</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>32</width>
-                        <height>0</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>000</string>
-                </property>
-                <property name="frame">
-                    <bool>false</bool>
-                </property>
-                <property name="alignment">
-                    <set>AlignRight</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>m_msUnit</cstring>
-                </property>
-                <property name="text">
-                    <string>ms</string>
-                </property>
-            </widget>
-        </hbox>
-    </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>m_hhSpace</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_ddd</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>m_ddd</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>2</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>50</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>70</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>0</string>
+                        <comment>AAA</comment>
+                    </property>
+                    <property name="frame">
+                        <bool>false</bool>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>m_ddUnit</cstring>
+                    </property>
+                    <property name="text">
+                        <string>d</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_ddd</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>m_mmColon</cstring>
+                    </property>
+                    <property name="text">
+                        <string>:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_hh</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>m_hh</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>2</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>50</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>00</string>
+                    </property>
+                    <property name="frame">
+                        <bool>false</bool>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>m_hhUnit</cstring>
+                    </property>
+                    <property name="text">
+                        <string>h</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_hh</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>m_mm</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>2</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>50</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>00</string>
+                    </property>
+                    <property name="frame">
+                        <bool>false</bool>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>m_mmUnit</cstring>
+                    </property>
+                    <property name="text">
+                        <string>m</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_mm</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>m_ssColon</cstring>
+                    </property>
+                    <property name="text">
+                        <string>:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_ss</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>m_ss</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>2</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>50</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>00</string>
+                    </property>
+                    <property name="frame">
+                        <bool>false</bool>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>m_ssUnit</cstring>
+                    </property>
+                    <property name="text">
+                        <string>s</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_ss</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>m_dot</cstring>
+                    </property>
+                    <property name="text">
+                        <string>.</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_ms</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>m_ms</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>2</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>32</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>50</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>000</string>
+                    </property>
+                    <property name="frame">
+                        <bool>false</bool>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>m_msUnit</cstring>
+                    </property>
+                    <property name="text">
+                        <string>ms</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>m_ms</cstring>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </hbox>
 </widget>
 <connections>
     <connection>
