@@ -41,6 +41,7 @@ class LayerDialog;
 class KisDoc;
 class KisCanvas;
 class KisTabBar;
+class KisSideBar;
 class QScrollBar;
 class KRuler;
 
@@ -136,6 +137,7 @@ class KisView : public ContainerView
   virtual void resizeEvent( QResizeEvent* );
 
   void setupCanvas();
+  void setupSideBar();
   void setupScrollBars();
   void setupRulers();
   void setupTools();
@@ -187,6 +189,7 @@ class KisView : public ContainerView
   ColorDialog          *m_pColorDialog;
 
   KisCanvas            *m_pCanvas;
+  KisSideBar           *m_pSideBar;
   QScrollBar           *m_pHorz, *m_pVert;
   KRuler               *m_pHRuler, *m_pVRuler;
   KisColor              m_fg, m_bg;

@@ -34,6 +34,7 @@
 #include "kis_view.h"
 #include "kis_doc.h"
 #include "kis_canvas.h"
+#include "kis_sidebar.h"
 #include "kis_tabbar.h"
 #include "kis_brush.h"
 #include "kis_tool.h"
@@ -70,16 +71,13 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
   m_bg = KisColor::white();
 
   setupCanvas();
+  setupSideBar();
   setupScrollBars();
   setupRulers();
   setupTabBar();
   setupActions();
   setupDialogs();
   setupTools();
-
-  //QPopupMenu *fm = new QPopupMenu();
-  //KisFactory::pServer()->buildFilterMenu(fm);
-  //fm->exec();
 }
 
 void KisView::setupCanvas()
@@ -98,6 +96,11 @@ void KisView::setupCanvas()
   QObject::connect( m_pCanvas, SIGNAL( gotPaintEvent (QPaintEvent* ) ),
 		    this, SLOT( canvasGotPaintEvent ( QPaintEvent* ) ) );
   
+}
+
+void KisView::setupSideBar()
+{
+  m_pSideBar = new KisSideBar(this, "kis_sidebar");  
 }
 
 void KisView::setupScrollBars()
@@ -336,8 +339,13 @@ void KisView::slotTabSelected(const QString& name)
 
 void KisView::resizeEvent(QResizeEvent*)
 {
+  int sideW = m_pSideBar->width();
+
+  // sidebar geometry
+  m_pSideBar->setGeometry(width()-sideW, 0, sideW, height());
+
   // ruler geometry
-  m_pHRuler->setGeometry(20, 0, width()-20, 20);
+  m_pHRuler->setGeometry(20, 0, width()-20-sideW, 20);
   m_pVRuler->setGeometry(0, 20, 20, height()-36);
 
   // tabbar control buttons
@@ -347,53 +355,51 @@ void KisView::resizeEvent(QResizeEvent*)
   m_pTabLast->setGeometry(48, height()-16, 16, 16);
 
   // KisView heigth/width - ruler heigth/width
-  int canH = m_pCanvas->height();
-  int canW = m_pCanvas->width();
-  int viewH = height() - 20 - 16;
-  int viewW = width() - 20;
+  int drawH = height() - 20 - 16;
+  int drawW = width() - 20 - sideW;
   int docH = docHeight();
   int docW = docWidth();
 
   // scrollbar geometry
-  if (docH <= canH && docW <= canW) // we need no scrollbars
+  if (docH <= drawH && docW <= drawW) // we need no scrollbars
     {
       m_pVert->hide();
       m_pHorz->hide();
       m_pVert->setValue(0);
       m_pHorz->setValue(0);
-      m_pCanvas->setGeometry(20, 20, viewW, viewH);
-      m_pTabBar->setGeometry(64, height() - 16 , width() - 64, 16);
+      m_pCanvas->setGeometry(20, 20, drawW, drawH);
+      m_pTabBar->setGeometry(64, height() - 16 , width() - sideW - 64, 16);
     }
-  else if (docH <= canH) // we need a horizontal scrollbar
+  else if (docH <= drawH) // we need a horizontal scrollbar
     {
       m_pVert->hide();
       m_pVert->setValue(0);
-      m_pHorz->setRange(0, docW - canW);
-      m_pHorz->setGeometry(64  + (width()-64)/2, height()-16, (width()-64)/2, 16);
+      m_pHorz->setRange(0, docW - drawW);
+      m_pHorz->setGeometry(64  + (width()-sideW-64)/2, height()-16, (width()-sideW-64)/2, 16);
       m_pHorz->show();
-      m_pCanvas->setGeometry(20, 20, viewW, viewH);
-      m_pTabBar->setGeometry(64, height() - 16 , (width()-64)/2, 16);
+      m_pCanvas->setGeometry(20, 20, drawW, drawH);
+      m_pTabBar->setGeometry(64, height() - 16 , (width()-sideW-64)/2, 16);
     }
-  else if(docW <= canW) // we need a vertical scrollbar
+  else if(docW <= drawW) // we need a vertical scrollbar
     {
       m_pHorz->hide();
       m_pHorz->setValue(0);
-      m_pVert->setRange(0, docH - canH);
-      m_pVert->setGeometry(width()-16, 20, 16, height()-36);
+      m_pVert->setRange(0, docH - drawH);
+      m_pVert->setGeometry(width()-16-sideW, 20, 16, height()-36);
       m_pVert->show();
-      m_pCanvas->setGeometry(20, 20, viewW-16, viewH);
-      m_pTabBar->setGeometry(64, height() - 16 , width() - 64, 16);
+      m_pCanvas->setGeometry(20, 20, drawW-16, drawH);
+      m_pTabBar->setGeometry(64, height() - 16 , width() - sideW - 64, 16);
     }
   else // we need both scrollbars
     {
-      m_pVert->setRange(0, docH - canH);
-      m_pVert->setGeometry(width()-16, 20, 16, height()-36);
+      m_pVert->setRange(0, docH - drawH);
+      m_pVert->setGeometry(width()-16-sideW, 20, 16, height()-36);
       m_pVert->show();
-      m_pHorz->setRange(0, docW - canW);
-      m_pHorz->setGeometry(64  + (width()-80)/2, height()-16, (width()-80)/2, 16);
+      m_pHorz->setRange(0, docW - drawW);
+      m_pHorz->setGeometry(64  + (width()-sideW-64)/2, height()-16, (width()-sideW-64)/2, 16);
       m_pHorz->show();
-      m_pCanvas->setGeometry(20, 20, viewW-16, viewH);
-      m_pTabBar->setGeometry(64, height() - 16 , (width()-80)/2, 16);
+      m_pCanvas->setGeometry(20, 20, drawW-16, drawH);
+      m_pTabBar->setGeometry(64, height() - 16 , (width()-sideW-64)/2, 16);
     }
 
   // ruler ranges
