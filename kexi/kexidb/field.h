@@ -69,14 +69,14 @@ class KEXI_DB_EXPORT Field
 			Text = 11,         /*! other name: Varchar; no more than 200 bytes, for efficiency */
 			LongText = 12,     /*! other name: Memo. More than 200 bytes*/
 			BLOB = 13,         /*! large binary object */
-			Enum = 14,	   /*! a integer internal with a string list of hints */
 
-			LastType = 14,     /*! This line should be at the end of the list of types! */
+			LastType = 13,     /*! This line should be at the end of the list of types! */
 			
 			//! special, interanal types:
-			Asterisk = 128     /*! type used in QueryAsterisk subclass objects only,
+			Asterisk = 128,    /*! type used in QueryAsterisk subclass objects only,
 			                       not used in table definitions,
 			                       but only in query definitions */
+			Enum = 129         /*! a integer internal with a string list of hints */
 		};
 
 		const int defaultTextLength() { return 200; }

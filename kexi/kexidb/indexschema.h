@@ -74,7 +74,7 @@ class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
 		 the index is bulit on, otherwise field couldn't be added. */
 		virtual FieldList& addField(Field *field);
 
-		/*! \return table on that index is built */
+		/*! \return table that index is built on */
 		TableSchema* table() const;
 
 		/*! \return list of references to the table (of this index), i.e. any such reference in which

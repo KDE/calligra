@@ -132,7 +132,7 @@ Field::~Field() {
 
 QString Field::typeName(uint type)
 {
-	return m_typeNames.at(type);
+	return (type <= LastType) ? m_typeNames.at(type) : QString::number(type);
 }
 
 bool Field::isIntegerType( uint type )
