@@ -742,6 +742,8 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
         //appendShadow( doc, p ); // this is necessary to take care of shadowed paragraphs
         pos += length;
 
+        formats.appendChild(format);
+
         m_styleStack.clearObjectMark(); // remove possible text:span styles from the stack
         // DF: this looks wrong to me. We're losing the text:p styles too!
     }
