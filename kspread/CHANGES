@@ -26,6 +26,7 @@ Bugfixes:
 - Fix compilation, when QT is compiled without SQL framework
 - Fix painting of cell content in several cases
   (merging cells, return from edit mode, dragging cell content).
+- Fix display of cells overlapping in vertical direction
 
 
 Changes from 1.1 to 1.2

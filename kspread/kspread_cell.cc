@@ -1030,6 +1030,59 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         setFlag(Flag_CellTooShort);
       }
     }
+// 
+// 
+    // Do we have to occupy additional cells at the bottom ?
+    if ( m_iOutTextHeight > h - 2 * BORDER_SPACE -
+         topBorderWidth( _col, _row ) - bottomBorderWidth( _col, _row ) )
+    {
+      int r = m_iRow;
+      int end = 0;
+      // Find free cells bottom to this one
+      while ( !end )
+      {
+        RowLayout *rl2 = m_pTable->rowLayout( r + 1 );
+        KSpreadCell *cell = m_pTable->visibleCellAt( m_iColumn, r + 1 );
+        if ( cell->isEmpty() )
+        {
+          h += rl2->dblHeight() - 1.0;
+          r++;
+
+          // Enough space ?
+          if ( m_iOutTextHeight <= h - 2 * BORDER_SPACE -
+               topBorderWidth( _col, _row ) - bottomBorderWidth( _col, _row ) )
+            end = 1;
+        }
+        // Not enough space, but the next cell is not empty
+        else
+          end = -1;
+      }
+
+      /* Check to make
+         sure we haven't already force-merged enough cells
+      */
+      if( r - m_iRow > m_iMergedYCells )
+      {
+        m_iExtraYCells = r - m_iRow;
+        m_dExtraHeight = h;
+        for( int i = m_iRow + 1; i <= r; ++i )
+        {
+          KSpreadCell *cell = m_pTable->nonDefaultCell( m_iColumn, i );
+          cell->obscure( this );
+        }
+        //Not enough space
+        if( end == -1 )
+        {
+          setFlag( Flag_CellTooShort );
+        }
+      }
+      else
+      {
+        setFlag( Flag_CellTooShort );
+      }
+    }
+// 
+// 
     clearFlag(Flag_LayoutDirty);
 
     return;
