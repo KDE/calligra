@@ -41,6 +41,8 @@ class KexiFormScrollView : public QScrollView
 
 		void  setWidget(QWidget *w);
 		void  setResizingEnabled(bool enabled) { m_enableResizing = enabled; }
+		//void  setSnapFormToGrid(bool enable, int gridX, int gridY);
+		void  setForm(Form *form) { m_form = form; }
 
 	protected:
 		virtual void contentsMousePressEvent(QMouseEvent * ev);
@@ -51,6 +53,10 @@ class KexiFormScrollView : public QScrollView
 		bool    m_resizing;
 		bool    m_enableResizing;
 		QWidget *m_widget;
+
+		Form    *m_form;
+		bool   m_snapToGrid;
+		int    m_gridX, m_gridY;
 };
 
 class KexiFormView : public KexiViewBase
@@ -75,7 +81,7 @@ class KexiFormView : public KexiViewBase
 	protected:
 		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
 		virtual bool afterSwitchFrom(int mode, bool &cancelled);
-		virtual KexiPropertyBuffer* propertyBuffer();
+		virtual KexiPropertyBuffer* propertyBuffer() { return m_buffer; }
 
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 		virtual bool storeData(bool &cancel);
@@ -97,6 +103,7 @@ class KexiFormView : public KexiViewBase
 		KexiDBForm   *m_dbform;
 		KexiFormScrollView   *m_scrollView;
 		bool   m_preview;
+		KexiPropertyBuffer  *m_buffer;
 };
 
 #endif

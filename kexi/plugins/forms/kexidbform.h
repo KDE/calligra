@@ -44,6 +44,8 @@ class KexiDBForm : public QWidget, public KFormDesigner::FormWidget
 		void setDatasource(const QString &s) { m_ds = s; }
 		void showRecordNavigator(bool s) { m_nav = s; }*/
 
+		virtual void paintEvent(QPaintEvent *ev);
+
 		void drawRect(const QRect& r, int type);
 		void initRect();
 		void clearRect();

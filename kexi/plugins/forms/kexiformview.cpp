@@ -40,7 +40,7 @@
 #define NO_DSWIZARD
 
 KexiFormScrollView::KexiFormScrollView(QWidget *parent, const char *name)
- : QScrollView(parent, name, WStaticContents), m_widget(0)
+ : QScrollView(parent, name, WStaticContents), m_widget(0), m_form(0)
 {
 	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
@@ -51,6 +51,9 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, const char *name)
 	viewport()->setMouseTracking(true);
 	m_resizing = false;
 	m_enableResizing = true;
+	m_snapToGrid = false;
+	m_gridX = 0;
+	m_gridY = 0;
 }
 
 void
@@ -69,7 +72,12 @@ KexiFormScrollView::contentsMousePressEvent(QMouseEvent *ev)
 	QRect r(m_widget->width(),  0, 4, m_widget->height() + 4);
 	QRect r2(0, m_widget->height(), m_widget->width() + 4, 4);
 	if(r.contains(ev->pos()) || r2.contains(ev->pos()))
+	{
 		m_resizing = true;
+		m_snapToGrid = m_form->manager()->snapWidgetsToGrid();
+		m_gridX = m_form->gridY();
+		m_gridY = m_form->gridY();
+	}
 }
 
 void
@@ -77,6 +85,7 @@ KexiFormScrollView::contentsMouseReleaseEvent(QMouseEvent *)
 {
 	if(m_resizing)
 		m_resizing = false;
+	unsetCursor();
 }
 
 void
@@ -88,11 +97,33 @@ KexiFormScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 	if(m_resizing) // resize widget
 	{
 		if(cursor().shape() == QCursor::SizeHorCursor)
-			m_widget->resize(ev->pos().x(), m_widget->height());
+		{
+			if(m_snapToGrid)
+				m_widget->resize( int( float(ev->x()) / float(m_gridX) + 0.5 ) * m_gridX, m_widget->height());
+			else
+				m_widget->resize(ev->x(), m_widget->height());
+		}
 		else if(cursor().shape() == QCursor::SizeVerCursor)
-			m_widget->resize(m_widget->width(), ev->pos().y());
+		{
+			if(m_snapToGrid)
+				m_widget->resize(m_widget->width(), int( float(ev->y()) / float(m_gridY) + 0.5 ) * m_gridY);
+			else
+				m_widget->resize(m_widget->width(), ev->y());
+		}
 		else if(cursor().shape() == QCursor::SizeFDiagCursor)
-			m_widget->resize(ev->pos().x(), ev->pos().y());
+		{
+			if(m_snapToGrid)
+				m_widget->resize(int( float(ev->x()) / float(m_gridX) + 0.5 ) * m_gridX,
+				   int( float(ev->y()) / float(m_gridY) + 0.5 ) * m_gridY);
+			else
+				m_widget->resize(ev->x(), ev->y());
+		}
+
+		// Ensure there is always space to resize Form
+		if(m_widget->width() + 200 > contentsWidth())
+			resizeContents(contentsWidth() + 300, contentsHeight());
+		if(m_widget->height() + 200 > contentsHeight())
+			resizeContents(contentsWidth(), contentsHeight() + 300);
 	}
 	else // update mouse cursor
 	{
@@ -119,7 +150,7 @@ KexiFormScrollView::~KexiFormScrollView()
 //////////////////////////////////////////////////////////////////////
 
 KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, bool preview/*, KexiDB::Connection *conn*/)
- : KexiViewBase(win, parent, name), m_preview(preview)
+ : KexiViewBase(win, parent, name), m_preview(preview), m_buffer(0)
 {
 	QHBoxLayout *l = new QHBoxLayout(this);
 	l->setAutoAdd(true);
@@ -130,6 +161,7 @@ KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *nam
 	m_dbform = new KexiDBForm(m_scrollView->viewport(), name/*, conn*/);
 	m_scrollView->setWidget(m_dbform);
 	m_scrollView->setResizingEnabled(!preview);
+
 	initForm();
 
 	if(!preview)
@@ -183,12 +215,6 @@ KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *nam
 
 }
 
-KexiPropertyBuffer*
-KexiFormView::propertyBuffer()
-{
-	return formPart()->manager()->buffer();
-}
-
 KFormDesigner::Form*
 KexiFormView::form() const
 {
@@ -239,6 +265,7 @@ KexiFormView::initForm()
 		loadForm();
 
 	formPart()->manager()->importForm(form(), m_preview);
+	m_scrollView->setForm(form());
 }
 
 void
@@ -262,8 +289,9 @@ KexiFormView::loadForm()
 }
 
 void
-KexiFormView::managerPropertyChanged(KexiPropertyBuffer *)
+KexiFormView::managerPropertyChanged(KexiPropertyBuffer *b)
 {
+	m_buffer = b;
 	propertyBufferSwitched();
 }
 
@@ -320,7 +348,7 @@ KexiFormView::storeData(bool &)
 {
 	kdDebug(44000) << "KexiDBForm::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 	QByteArray data;
-	KFormDesigner::FormIO::saveForm(form(), data);
+	KFormDesigner::FormIO::saveForm(tempData()->form, data);
 	storeDataBlock(data);//, QString::number(m_id));
 	tempData()->tempForm = QByteArray();
 

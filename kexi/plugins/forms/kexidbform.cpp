@@ -38,6 +38,17 @@ KexiDBForm::~KexiDBForm()
 	kdDebug() << "KexiDBForm::~KexiDBForm(): close" << endl;
 }
 
+void
+KexiDBForm::paintEvent(QPaintEvent *ev)
+{
+	QWidget::paintEvent(ev);
+
+	QPainter p(this);
+	p.setPen(QPen(black, 1));
+	p.drawLine(width() - 1, 0, width() - 1, height());
+	p.drawLine(0, height() - 1, width(), height() - 1);
+}
+
 //repaint all children widgets
 static void repaintAll(QWidget *w)
 {
