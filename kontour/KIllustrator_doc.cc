@@ -130,17 +130,6 @@ bool KIllustratorDocument::saveChildren (KoStore* _store, const QString &_path)
   return true;
 }
 
-// I admire that piece of art, so I didn't dare touching it... (Werner)
-/*
-bool KIllustratorDocument::completeSaving (KoStore* store)
-{
-  if (!store)
-    return true;
-
-  return true;
-}
-*/
-
 void KIllustratorDocument::insertPart (const QRect& rect, KoDocumentEntry& e)
 {
     KoDocument* doc = e.createDoc(this);
