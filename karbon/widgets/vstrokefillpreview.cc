@@ -45,7 +45,16 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->setPen( Qt::NoPen );
 	if( s.type() != stroke_none )
 	{
-		m_painter->setBrush( s.color() );
+		/*if( s.type() == stroke_gradient )
+		{
+			VStroke stroke;
+			stroke = s;
+			stroke.gradient().setOrigin( KoPoint( 20, 10 ) );
+			stroke.gradient().setVector( KoPoint( 20, 40 ) );
+			m_painter->setBrush( stroke );
+		}
+		else*/
+			m_painter->setBrush( s.color() );
 
 		m_painter->newPath();
 		m_painter->moveTo( KoPoint( 10.0, 10.0 ) );
@@ -58,7 +67,16 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 
 	if( f.type() != fill_none )
 	{
-		m_painter->setBrush( f.color() );
+		if( f.type() == fill_gradient )
+		{
+			VFill fill;
+			fill = f;
+			fill.gradient().setOrigin( KoPoint( 30, 20 ) );
+			fill.gradient().setVector( KoPoint( 30, 50 ) );
+			m_painter->setBrush( fill );
+		}
+		else
+			m_painter->setBrush( f.color() );
 
 		m_painter->newPath();
 		m_painter->moveTo( KoPoint( 20.0, 20.0 ) );

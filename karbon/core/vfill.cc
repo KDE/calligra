@@ -23,6 +23,12 @@ VFill::VFill( const VColor &c )
 	m_color = c;
 }
 
+VFill::VFill( const VFill& fill )
+{
+	// doesnt copy parent:
+	*this = fill;
+}
+
 void
 VFill::save( QDomElement& element ) const
 {
@@ -72,5 +78,18 @@ VFill::load( const QDomElement& element )
 	}
 }
 
+VFill&
+VFill::operator=( const VFill& fill )
+{
+	if( this != &fill )
+	{
+		// dont copy the parent!
+		m_type = fill.m_type;
+		m_color = fill.m_color;
+		m_gradient = fill.m_gradient;
+	}
+
+	return *this;
+}
 
 

@@ -40,6 +40,7 @@ class VFill
 public:
 	VFill();
 	VFill( const VColor & );
+	VFill( const VFill & );
 
 	const VColor& color() const { return m_color; }
 	void setColor( const VColor& color ) { m_color = color; m_type = fill_fill; }
@@ -55,6 +56,8 @@ public:
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
+
+	VFill& operator=( const VFill& fill );
 
 private:
 	VColor m_color;
