@@ -417,6 +417,9 @@ public:
 
     void reorganize();
 
+    // For NoteBar
+    NoteBar *getNoteBar() { return notebar; }
+
 protected slots:
     // dialog slots
     void backOk( bool );

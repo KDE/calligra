@@ -20,8 +20,12 @@
 
 #include <qlayout.h>
 #include <qtextedit.h>
+#include <qpainter.h>
+#include <qpaintdevicemetrics.h>
+#include <qsimplerichtext.h>
 
 #include <kglobalsettings.h>
+#include <kprinter.h>
 #include <kdebug.h>
 
 #include <notebar.h>
@@ -31,7 +35,7 @@
 
 
 NoteBar::NoteBar( QWidget *_parent, KPresenterDoc *_doc, KPresenterView *_view )
-    : QWidget( _parent ), doc( _doc ), view( _view )
+    : QWidget( _parent ), doc( _doc ), view( _view ), initialize( true )
 {
     QBoxLayout *topLayout = new QVBoxLayout( this, 2 );
     textEdit = new QTextEdit( this );
@@ -45,6 +49,18 @@ NoteBar::NoteBar( QWidget *_parent, KPresenterDoc *_doc, KPresenterView *_view )
 
     connect( textEdit, SIGNAL( textChanged() ),
              this, SLOT( slotTextChanged() ) );
+
+    connect( textEdit, SIGNAL( selectionChanged() ),
+             this, SLOT( slotSelectionChanged() ) );
+
+    connect( textEdit, SIGNAL( copyAvailable( bool ) ),
+             this, SLOT( slotSelectionChanged() ) );
+
+    connect( textEdit, SIGNAL( undoAvailable( bool ) ),
+             this, SLOT( slotUndoAvailable( bool ) ) );
+
+    connect( textEdit, SIGNAL( redoAvailable( bool ) ),
+             this, SLOT( slotRedoAvailable( bool ) ) );
 
     topLayout->addWidget( textEdit );
 }
@@ -62,8 +78,92 @@ void NoteBar::setCurrentNoteText( const QString &_text )
 void NoteBar::slotTextChanged()
 {
     int currentPageNum = view->getCurrPgNum(); // 1 base.
-    if ( currentPageNum > 0 )
+    if ( currentPageNum > 0 && !initialize ) {
         doc->setNoteText( currentPageNum - 1, textEdit->text() );
+        textEdit->setModified( true );
+    }
+
+    initialize = false;
+}
+
+void NoteBar::slotSelectionChanged()
+{
+    kdDebug() << "slotSelectionChanged(): " << textEdit->hasSelectedText() << endl;
+}
+
+void NoteBar::slotCopyAvailable( bool yes )
+{
+    kdDebug() << "slotCopyAvailable( " << yes << " )" << endl;
+}
+
+void NoteBar::slotUndoAvailable( bool yes )
+{
+    kdDebug() << "slotUndoAvailable( " << yes << " )" << endl;
+}
+
+void NoteBar::slotRedoAvailable( bool yes )
+{
+    kdDebug() << "slotRedoAvailable( " << yes << " )" << endl;
+}
+
+void NoteBar::printNote( QPainter *_painter, KPrinter *_printer )
+{
+    // base code from $QTDIR/example/textedit/textedit.cpp
+    _painter->save();
+
+    QPaintDeviceMetrics metrics( _painter->device() );
+    int dpix = metrics.logicalDpiX();
+    int dpiy = metrics.logicalDpiY();
+
+    const int margin = 72; // pt
+    QRect body( margin * dpix / 72, margin * dpiy / 72,
+                metrics.width() - margin * dpix / 72 * 2,
+                metrics.height() - margin * dpiy / 72 * 2 );
+
+    QFont font = KoGlobal::defaultFont();
+    QString allText = getAllNoteTextForPrinting();
+    QString str = QStyleSheet::convertFromPlainText( allText );
+
+    QSimpleRichText richText( str, font, QString::null, QStyleSheet::defaultSheet(),
+                              QMimeSourceFactory::defaultFactory(), body.height() );
+
+    richText.setWidth( _painter, body.width() );
+
+    QRect viewRect( body );
+    do {
+        richText.draw( _painter, body.left(), body.top(), viewRect, colorGroup() );
+        viewRect.moveBy( 0, body.height() );
+        _painter->translate( 0, -body.height() );
+        _painter->setFont( font );
+
+        if ( viewRect.top() >= richText.height() )
+             break;
+
+        _printer->newPage();
+    } while ( true );
+
+    _painter->restore();
+}
+
+QString NoteBar::getAllNoteTextForPrinting()
+{
+    QString allText = QString::null;
+    bool firstText = true;
+    int pageCount = 1;
+    QStringList lists = doc->getNoteTextList();
+    QStringList::iterator it;
+    for ( it = lists.begin(); it != lists.end(); ++it ) {
+        if ( !firstText )
+            allText += QString("\n\n");
+
+        allText += i18n( "Page Note %1:\n" ).arg( pageCount );
+        allText += *it;
+
+        firstText = false;
+        ++pageCount;
+    }
+
+    return allText;
 }
 
 #include <notebar.moc>

@@ -44,6 +44,7 @@
 #include <gotopage.h>
 #include <kptextobject.h>
 #include <kpresenter_sound_player.h>
+#include <notebar.h>
 
 #include <kapp.h>
 #include <kmimemagic.h>
@@ -3249,6 +3250,14 @@ void Page::print( QPainter *painter, KPrinter *printer, float left_margin, float
         view->setDiffY( i * ( getPageRect( 1, 1.0, false ).height() ) - MM_TO_POINT( top_margin ) );
     }
 
+    NoteBar *noteBar = view->getNoteBar();
+    if ( noteBar ) {
+        printer->newPage();
+        painter->resetXForm();
+        noteBar->printNote( painter, printer );
+        painter->resetXForm();
+    }
+
     setToolEditMode( toolEditMode );
     view->setDiffX( _xOffset );
     view->setDiffY( _yOffset );
@@ -4057,7 +4066,7 @@ void Page::lowerObject()
     }
 }
 
-void Page::playSound( QString soundFileName )
+void Page::playSound( const QString &soundFileName )
 {
     delete soundPlayer;
     soundPlayer = new KPresenterSoundPlayer( soundFileName );
@@ -4071,6 +4080,11 @@ void Page::stopSound()
         delete soundPlayer;
         soundPlayer = 0;
     }
+}
+
+void Page::setXimPosition( int x, int y, int w, int h, QFont *f )
+{
+    QWidget::setMicroFocusHint( x - view->getDiffX(), y - view->getDiffY(), w, h, true, f );
 }
 
 #include <page.moc>

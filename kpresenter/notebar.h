@@ -24,9 +24,11 @@
 
 
 class QTextEdit;
+class QPainter;
 
 class KPresenterDoc;
 class KPresenterView;
+class KPrinter;
 
 class NoteBar : public QWidget
 {
@@ -38,14 +40,25 @@ public:
 
     void setCurrentNoteText( const QString &_text );
 
+    // print
+    void printNote( QPainter *_painter, KPrinter *_printer );
+
 private slots:
     void slotTextChanged();
+    void slotSelectionChanged(); 
+    void slotCopyAvailable( bool );
+    void slotUndoAvailable( bool );
+    void slotRedoAvailable( bool );
 
 private:
+    QString getAllNoteTextForPrinting();
+
     QTextEdit *textEdit;
 
     KPresenterDoc *doc;
     KPresenterView *view;
+
+    bool initialize;
 };
 
 #endif

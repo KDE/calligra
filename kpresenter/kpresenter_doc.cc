@@ -132,6 +132,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_varColl=new KoVariableCollection;
 
     dcop = 0;
+    m_kpresenterView = 0;
     m_autoFormat = new KoAutoFormat(this);
     _clean = true;
     _objectList = new QPtrList<KPObject>;
@@ -3745,7 +3746,8 @@ void KPresenterDoc::makeUsedPixmapList()
 /*================================================================*/
 KoView* KPresenterDoc::createViewInstance( QWidget* parent, const char* name )
 {
-    return new KPresenterView( this, parent, name );
+    m_kpresenterView = new KPresenterView( this, parent, name );
+    return (KoView *)m_kpresenterView;
 }
 
 /*================================================================*/

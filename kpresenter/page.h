@@ -160,6 +160,8 @@ public:
     //for KPTextView
     void dragStarted() { mousePressed = false; }
 
+    void setXimPosition( int x, int y, int w, int h, QFont *f );
+
 public slots:
     void exitEditMode();
 
@@ -328,7 +330,7 @@ private:
 
     bool nextPageTimer;
 
-    void playSound( QString soundFileName );
+    void playSound( const QString &soundFileName );
 
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }

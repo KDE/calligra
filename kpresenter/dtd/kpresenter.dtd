@@ -21,7 +21,7 @@
 		editor:		The program this file was written with
 		mime:		The MIME type (must always have the value application/x-kpresenter
 -->
-<!ELEMENT DOC (PAPER | BACKGROUND | HEADER | FOOTER | PAGETITLES | OBJECTS | INFINITLOOP | MANUALSWITCH | PRESSPEED | PIXMAPS | SELSLIDES | PIXMAPS | CLIPARTS)* >
+<!ELEMENT DOC (PAPER | BACKGROUND | HEADER | FOOTER | PAGETITLES | PAGENOTES | OBJECTS | INFINITLOOP | MANUALSWITCH | PRESSPEED | PIXMAPS | SELSLIDES | PIXMAPS | CLIPARTS)* >
 <!ATTLIST DOC	author CDATA #IMPLIED
 				email CDATA #IMPLIED
 				editor CDATA #IMPLIED
@@ -83,7 +83,7 @@
                         9... part
                         10.. group
 -->
-<!ELEMENT OBJECT (ORIG|SIZE|SHADOW|EFFECTS|ANGLE|TEXTOBJ|PEN|BRUSH|RNDS|PRESNUM|FILLTYPE|GRADIENT|KEY|LINETYPE|LINEEND|LINEBEGIN|PRESNUM|FILENAME|DISAPPEAR|APPEARSOUNDEFFECT)*>
+<!ELEMENT OBJECT (ORIG|SIZE|SHADOW|EFFECTS|ANGLE|TEXTOBJ|PEN|BRUSH|RNDS|PRESNUM|FILLTYPE|GRADIENT|KEY|LINETYPE|LINEEND|LINEBEGIN|PRESNUM|FILENAME|DISAPPEAR|TIMER|APPEARSOUNDEFFECT|DISAPPEARSOUNDEFFECT)*>
 <!ATTLIST OBJECT  type	NMTOKEN #REQUIRED>
 
 <!--	The position of an object in the document.
@@ -143,17 +143,40 @@
 		effect	NMTOKEN #REQUIRED
 		effect2 NMTOKEN #REQUIRED>
 
+<!--    The timer of effect object
+                Attributes:
+                appearTimer              appear effect object's timer
+                disappearTimer           disappear effect object's timer
+-->
+
+<!ELEMENT TIMER EMPTY>
+<!ATTLIST TIMER
+                appearTimer     NMTOKEN #REQUIRED
+                disappearTimer  NMTOKEN #REQUIRED>
+
 <!--    The effect to play sound
                 Attributes:
                 appearSoundFileName      sound name
-                appearSoundEffect        ?????
+                appearSoundEffect        use or don't use sound with appear object
 -->
 
 
 <!ELEMENT APPEARSOUNDEFFECT EMPTY>
 <!ATTLIST APPEARSOUNDEFFECT
-                appearSoundFileName #REQUIRED
-                appearSoundEffect   #REQUIRED>
+                appearSoundFileName  CDATA     #REQUIRED
+                appearSoundEffect    ( 0 | 1 )  #REQUIRED>
+
+<!--    The effect to play sound
+                Attributes:
+                disappearSoundFileName      sound name
+                disappearSoundEffect        use or don't use sound with disappear object
+-->
+
+
+<!ELEMENT DISAPPEARSOUNDEFFECT EMPTY>
+<!ATTLIST DISAPPEARSOUNDEFFECT
+                disappearSoundFileName  CDATA      #REQUIRED
+                disappearSoundEffect    ( 0 | 1 )  #REQUIRED>
 
 <!--	The "step" number in which the object appears, while showing the presentation.
         This is relative to the current page.
@@ -429,7 +452,7 @@
 			rastY	NMTOKEN	#REQUIRED
 			color	CDATA	#REQUIRED>
 
-<!ELEMENT PAGE (BACKTYPE|BACKVIEW|BACKCOLOR1|BACKCOLOR2|BCTYPE|PGEFFECT)*>
+<!ELEMENT PAGE (BACKTYPE|BACKVIEW|BACKCOLOR1|BACKCOLOR2|BCTYPE|PGEFFECT|PGTIMER|PGSOUNDEFFECT)*>
 
 <!ELEMENT BACKTYPE EMPTY>
 <!ATTLIST BACKTYPE value CDATA #REQUIRED>
@@ -451,6 +474,12 @@
 			green		CDATA	#REQUIRED
 			blue		CDATA	#REQUIRED>
 
+<!ELEMENT PGTIMER EMPTY>
+<!ATTLIST PGTIMER timer NMTOKEN #REQUIRED>
+
+<!ELEMENT PGSOUNDEFFECT EMPTY>
+<!ATTLIST PGSOUNDEFFECT soundEffect    ( 0 | 1 )  #REQUIRED
+                        soundFileNmae  CDATA      #REQUIRED>
 
 <!ELEMENT CLIPARTS EMPTY >
 
@@ -499,3 +528,7 @@
 <!ELEMENT PAGETITLES ( Title+ ) >
 <!ELEMENT Title EMPTY>
 <!ATTLIST Title title CDATA #REQUIRED>
+
+<!ELEMENT PAGENOTES ( Note+ ) >
+<!ELEMENT Note EMPTY>
+<!ATTLIST Note note CDATA #REQUIRED>

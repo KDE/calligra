@@ -362,6 +362,10 @@ public:
     // For NoteBar
     void setNoteText( int _pageNum, const QString &_text );
     QString getNoteText( int _pageNum );
+    QStringList getNoteTextList() { return noteTextList; }
+
+    // Get KPresenterView
+    KPresenterView *getKPresenterView() const { return m_kpresenterView; }
 
 public slots:
     void movePage( int from, int to );
@@ -498,6 +502,8 @@ private:
     void pageNoteInsert( unsigned int _pageNum );
     void pageNoteDelete( unsigned int _pageNum );
 
+
+    KPresenterView *m_kpresenterView;;
 };
 
 #endif
