@@ -427,3 +427,8 @@ Reggie, 27.8.1999:
 - Improved DnD
 - Removed lots of unused code in the KTextObject
 - Fix in extending contents to height
+
+Reggie, 29.8.1999:
+------------------
+- Set a better default font for textobj
+- Fixes in textobj

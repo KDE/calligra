@@ -91,6 +91,8 @@ QChar TxtCursor::character()
 /*==================== cursor char forward =======================*/
 void TxtCursor::charForward()
 {
+    if ( txtObj )
+	setMaxPosition( txtObj->textLength() );
     if ( absPos < objMaxPos-1 )
     {
 	absPos++;
@@ -143,6 +145,8 @@ void TxtCursor::lineUp()
 /*==================== cursor line down ==========================*/
 void TxtCursor::lineDown()
 {
+    if ( txtObj )
+	setMaxPosition( txtObj->textLength() );
     if ( absPos < objMaxPos-1 && txtObj )
     {
 
@@ -186,6 +190,8 @@ void TxtCursor::lineDown()
 /*==================== cursor word forward =======================*/
 void TxtCursor::wordForward()
 {
+    if ( txtObj )
+	setMaxPosition( txtObj->textLength() );
     char c;
 
     c = character();
@@ -403,7 +409,7 @@ TxtObj::TxtObj()
 {
     // init the object
     objType = TEXT;
-    objColor = Qt::red;
+    objColor = Qt::black;
     objFont = QFont( "utopia", 20 );
     objFont.setBold( true );
     objVertAlign = NORMAL;
@@ -487,7 +493,7 @@ TxtLine::TxtLine( bool init )
     _f.setBold( true );
 
     if ( init )
-	append( " ", _f, Qt::red, TxtObj::NORMAL, TxtObj::SEPARATOR );
+	append( " ", _f, Qt::black, TxtObj::NORMAL, TxtObj::SEPARATOR );
 
 }
 
@@ -1361,7 +1367,7 @@ KTextObject::KTextObject( QWidget *parent, const char *name, ObjType ot,
     for ( int i = 0; i < 16; i++ )
     {
 	objUnsortListType.font->append( new QFont( "times", 20 ) );
-	objUnsortListType.color->append( new QColor( Qt::red ) );
+	objUnsortListType.color->append( new QColor( Qt::black ) );
 	objUnsortListType.chr->append( new QChar( '-' ) );
 	objUnsortListType.font->append( new QFont() );
     }
@@ -1394,7 +1400,7 @@ KTextObject::KTextObject( QWidget *parent, const char *name, ObjType ot,
 
     currFont = QFont( "utopia", 20 );
     currFont.setBold( true );
-    currColor = Qt::red;
+    currColor = Qt::black;
 
     setMouseTracking( true );
     mousePressed = false;

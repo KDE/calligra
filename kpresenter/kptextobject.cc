@@ -930,7 +930,7 @@ void KPTextObject::loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst 
     if ( ult.font->count() < 16 ) {
 	while ( ult.font->count() < 16 ) {
 	    ult.font->append( new QFont( "times", 20 ) );
-	    ult.color->append( new QColor( Qt::red ) );
+	    ult.color->append( new QColor( Qt::black ) );
 	    ult.chr->append( new QChar( '-' ) );
 	    ult.ofont->append( new QFont() );
 	}
