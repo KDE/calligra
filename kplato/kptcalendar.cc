@@ -462,10 +462,12 @@ int KPTCalendarWeeks::state(const QDate &date) {
 
 
 /////   KPTCalendar   ////
+
+QDict<KPTCalendar> KPTCalendar::calendarIdDict;
+
 KPTCalendar::KPTCalendar()
     : m_parent(0),
-      m_deleted(false),
-      m_id(-1) {
+      m_deleted(false) {
 
     init();
 }
@@ -473,8 +475,7 @@ KPTCalendar::KPTCalendar()
 KPTCalendar::KPTCalendar(QString name, KPTCalendar *parent)
     : m_name(name),
       m_parent(parent),
-      m_deleted(false),
-      m_id(-1) {
+      m_deleted(false) {
     
     init();
 }
@@ -503,16 +504,73 @@ const KPTCalendar &KPTCalendar::copy(KPTCalendar &calendar) {
 }
 
 void KPTCalendar::init() {
+    generateId();
     m_days.setAutoDelete(true);
     m_weeks = new KPTCalendarWeeks();
     m_weekdays = new KPTCalendarWeekdays();
 }
 
+
+void KPTCalendar::setDeleted(bool yes) {
+    if (yes) {
+        calendarIdDict.remove(m_id);
+    } else {
+        setId(m_id);
+    }
+    m_deleted = yes;
+}
+bool KPTCalendar::setId(QString id) {
+    //kdDebug()<<k_funcinfo<<id<<endl;
+    if (id.isEmpty()) {
+        kdError()<<k_funcinfo<<"id is empty"<<endl;
+        m_id = id;
+        return false;
+    }
+    KPTCalendar *c = calendarIdDict.find(m_id);
+    if (c == this) {
+        //kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
+        calendarIdDict.remove(m_id);
+    } else if (c) {
+        //can happen when making a copy
+        kdError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different node: "<<c->name()<<endl;
+    }
+    if (calendarIdDict.find(id)) {
+        kdError()<<k_funcinfo<<"id '"<<id<<"' is already used for different node: "<<calendarIdDict.find(id)->name()<<endl;
+        m_id = QString(); // hmmm
+        return false;
+    }
+    m_id = id;
+    calendarIdDict.insert(id, this);
+    //kdDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
+    return true;
+}
+
+void KPTCalendar::generateId() {
+    if (!m_id.isEmpty()) {
+        calendarIdDict.remove(m_id);
+    }
+    for (int i=0; i<32000 ; ++i) {
+        m_id = m_id.setNum(i);
+        if (!calendarIdDict.find(m_id)) {
+            calendarIdDict.insert(m_id, this);
+            return;
+        }
+    }
+    m_id = QString();
+}
+
+KPTCalendar *KPTCalendar::find(const QString id) {
+    if (id.isEmpty()) {
+        return 0;
+    }
+    return calendarIdDict.find(id);
+}
+
 bool KPTCalendar::load(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<element.text()<<endl;
     bool ok;
-    m_id = QString(element.attribute("id","-1")).toInt(&ok);
-    m_parentId = QString(element.attribute("parent","-1")).toInt(&ok);
+    setId(element.attribute("id"));
+    m_parentId = element.attribute("parent");
     m_name = element.attribute("name","");
     //TODO parent
     
@@ -896,7 +954,7 @@ void KPTCalendarWeeks::printDebug(QCString indent) {
 }
 void KPTCalendar::printDebug(QCString indent) {
     kdDebug()<<indent<<"KPTCalendar "<<m_id<<": '"<<m_name<<"' Deleted="<<m_deleted<<endl;
-    if (m_parent) kdDebug()<<indent<<"  Parent: "<<m_parent->name()<<endl;
+    kdDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : "No parent")<<endl;
     m_weekdays->printDebug(indent + "  ");
     m_weeks->printDebug(indent + "  ");
     kdDebug()<<indent<<"  Days --------"<<endl;

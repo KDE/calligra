@@ -236,7 +236,7 @@ class KPTResource {
         KPTProject *project() const { return m_project; }
 
         KPTCalendar *calendar() const;
-        KPTCalendar *calendar(int id) const;
+        KPTCalendar *calendar(const QString id) const;
         void setCalendar(KPTCalendar *calendar) { m_calendar = calendar; }
     
         /**

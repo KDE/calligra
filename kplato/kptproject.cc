@@ -298,17 +298,7 @@ bool KPTProject::load(QDomElement &element) {
             kdError()<<k_funcinfo<<"Calendar want itself as parent"<<endl;
             continue;
         }
-        QPtrListIterator<KPTCalendar> cals(m_calendars);
-        for (; cals.current(); ++cals) {
-            if (cals.current()->id() == calit.current()->parentId()) {
-                if (cals.current()->hasParent(calit.current())) {
-                    kdError()<<k_funcinfo<<"Avoid circular dependancy"<<endl;
-                } else {
-                    calit.current()->setParent(cals.current());
-                }
-                break;
-            }
-        }
+        calit.current()->setParent(calendar(calit.current()->parentId()));
     }
     return true;
 }
@@ -328,11 +318,7 @@ void KPTProject::save(QDomElement &element)  {
 
     // save calendars
     QPtrListIterator<KPTCalendar> calit(m_calendars);
-    for (int i=1; calit.current(); ++calit) {
-        if (!calit.current()->isDeleted())
-            calit.current()->setId(i++);
-    }
-    for (calit.toFirst(); calit.current(); ++calit) {
+    for (; calit.current(); ++calit) {
         calit.current()->save(me);
     }
     // save standard worktime
@@ -625,13 +611,8 @@ void KPTProject::addCalendar(KPTCalendar *calendar) {
     m_calendars.append(calendar);
 }
 
-KPTCalendar *KPTProject::calendar(int id) const {
-    QPtrListIterator<KPTCalendar> it = m_calendars;
-    for(; it.current(); ++it) {
-        if (it.current()->id() == id)
-            return it.current();
-    }
-    return 0;
+KPTCalendar *KPTProject::calendar(const QString id) const {
+    return KPTCalendar::find(id);
 }
 
 void KPTProject::addStandardWorktime(KPTStandardWorktime * worktime) {

@@ -322,10 +322,8 @@ KPTCalendar *KPTResource::calendar() const {
     return m_calendar; //hmmm, default calendar?
 }
 
-KPTCalendar *KPTResource::calendar(int id) const {
-    if (!m_project)
-        return 0;
-    return m_project->calendar(id); //hmmm, default calendar?
+KPTCalendar *KPTResource::calendar(const QString id) const {
+    return KPTCalendar::find(id);
 }
 
 KPTDateTime *KPTResource::getFirstAvailableTime(KPTDateTime /*after*/) {
@@ -344,7 +342,7 @@ bool KPTResource::load(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
     setId(element.attribute("id"));
     m_name = element.attribute("name");
-    m_calendar = calendar(element.attribute("calendar-id", "-1").toInt());
+    m_calendar = KPTCalendar::find(element.attribute("calendar-id"));
     return true;
 }
 

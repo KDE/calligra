@@ -25,6 +25,7 @@
 
 #include <qptrlist.h>
 #include <qpair.h>
+#include <qdict.h>
 
 class QDomElement;
 class QDateTime;
@@ -220,10 +221,12 @@ public:
     void setParent(KPTCalendar *parent) { m_parent = parent; }
 
     bool isDeleted() const { return m_deleted; }
-    void setDeleted(bool yes) { m_deleted = yes; }
+    void setDeleted(bool yes);
 
-    int id() const { return m_id; }
-    void setId(int id) { m_id = id; }
+    QString id() const { return m_id; }
+    bool setId(QString id);
+    void generateId();
+    static KPTCalendar *find(const QString id);
     
     bool load(QDomElement &element);
     void save(QDomElement &element);
@@ -243,8 +246,8 @@ public:
     KPTCalendarWeekdays *weekdays() { return m_weekdays; }
     KPTCalendarDay *weekday(int day) const { return m_weekdays->weekday(day); }
 
-    int parentId() const { return m_parentId; }
-    void setParentId(int id) { m_parentId = id; }
+    QString parentId() const { return m_parentId; }
+    void setParentId(QString id) { m_parentId = id; }
 
     bool hasParent(KPTCalendar *cal);
 
@@ -283,12 +286,13 @@ private:
     QString m_name;
     KPTCalendar *m_parent;
     bool m_deleted;
-    int m_id;
-    int m_parentId;
+    QString m_id;
+    QString m_parentId;
 
     QPtrList<KPTCalendarDay> m_days;
     KPTCalendarWeeks *m_weeks;
     KPTCalendarWeekdays *m_weekdays;
+    static QDict<KPTCalendar> calendarIdDict;
 
 
 #ifndef NDEBUG
