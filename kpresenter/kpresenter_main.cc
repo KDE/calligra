@@ -40,6 +40,7 @@ KPresenterApp::KPresenterApp( int &argc, char** argv )
   : OPApplication(argc,argv,"kpresenter")
 {
     getLocale()->insertCatalogue("koffice");
+    getIconLoader()->insertDirectory(3, kde_datadir() + "/koffice/toolbar");
 }
 
 /*====================== destrcutor ==============================*/
