@@ -178,7 +178,7 @@ KEnumListDia::KEnumListDia( QWidget* parent, const char* name, int __type, QFont
     else
         alphabeth->setChecked( true );
 
-    bbox = new KButtonBox( this, KButtonBox::HORIZONTAL, 7 );
+    bbox = new KButtonBox( this, Horizontal, 7 );
     bbox->addStretch( 20 );
     bOk = bbox->addButton( "OK" );
     bOk->setAutoRepeat( false );

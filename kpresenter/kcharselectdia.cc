@@ -141,7 +141,7 @@ KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, QList<QFont> 
 
     grid->addWidget( wid, 1, 0 );
 
-    bbox = new KButtonBox( this, KButtonBox::HORIZONTAL, 7 );
+    bbox = new KButtonBox( this, Horizontal, 7 );
     bbox->addStretch( 20 );
     bOk = bbox->addButton( "OK" );
     bOk->setAutoRepeat( false );

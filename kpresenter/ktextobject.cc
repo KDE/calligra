@@ -39,6 +39,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -1954,7 +1955,7 @@ void KTextObject::openASCII( QString filename )
 	f.close();
     }
 
-    addText( s, KGlobal::generalFont(), colorGroup().text(), false, TxtParagraph::LEFT, false );
+    addText( s, KGlobalSettings::generalFont(), colorGroup().text(), false, TxtParagraph::LEFT, false );
 
     doRepaints = true;
 

@@ -78,7 +78,7 @@ void KWStyleManager::setupTab1()
     connect( lStyleList, SIGNAL( selected( int ) ), this, SLOT( editStyle( int ) ) );
     grid1->addWidget( lStyleList, 0, 0 );
 
-    bButtonBox = new KButtonBox( tab1, KButtonBox::VERTICAL );
+    bButtonBox = new KButtonBox( tab1, Vertical );
     bAdd = bButtonBox->addButton( i18n( "&Add.." ), false );
     connect( bAdd, SIGNAL( clicked() ), this, SLOT( addStyle() ) );
     bDelete = bButtonBox->addButton( i18n( "&Delete" ), false );
@@ -443,7 +443,7 @@ void KWStyleEditor::setupTab1()
     preview = new KWStylePreview( i18n( "Preview" ), tab1, style );
     grid1->addWidget( preview, 1, 0 );
 
-    bButtonBox = new KButtonBox( tab1, KButtonBox::VERTICAL );
+    bButtonBox = new KButtonBox( tab1, Vertical );
     bFont = bButtonBox->addButton( i18n( "&Font..." ), false );
     connect( bFont, SIGNAL( clicked() ), this, SLOT( changeFont() ) );
     bButtonBox->addStretch();

@@ -25,6 +25,7 @@
 
 #include <klocale.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
 #include <kcolorbtn.h>
 #include <kbuttonbox.h>
 
@@ -300,7 +301,7 @@ void KWSearchDia::setupTab1()
      * ------------------ search buttonbox --------------
      */
 
-    bbSearch = new KButtonBox( tab1, KButtonBox::HORIZONTAL );
+    bbSearch = new KButtonBox( tab1, Horizontal );
     bSearchFirst = bbSearch->addButton( i18n( "Find &First" ), false );
     connect( bSearchFirst, SIGNAL( clicked() ), this, SLOT( searchFirst() ) );
     bSearchNext = bbSearch->addButton( i18n( "Find &Next" ), false );
@@ -530,7 +531,7 @@ void KWSearchDia::setupTab2()
     QWidget *wid = new QWidget( tab2 );
     QGridLayout *subgrid = new QGridLayout( wid, 1, 2, 0, 10 );
 
-    bbReplace = new KButtonBox( wid, KButtonBox::HORIZONTAL );
+    bbReplace = new KButtonBox( wid, Horizontal );
     bReplaceFirst = bbReplace->addButton( i18n( "Replace &First" ) );
     connect( bReplaceFirst, SIGNAL( clicked() ), this, SLOT( replaceFirst() ) );
     bReplaceNext = bbReplace->addButton( i18n( "Replace &Next" ) );
@@ -622,7 +623,7 @@ void KWSearchDia::slotCheckFamily()
     else
     {
         cmFamily->setEnabled( false );
-        eSearch->setFont( KGlobal::generalFont() );
+        eSearch->setFont( KGlobalSettings::generalFont() );
     }
 }
 
