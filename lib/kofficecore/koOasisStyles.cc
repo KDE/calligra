@@ -208,8 +208,11 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
         } else if ( localName == "day-of-week" ) {
             format += shortForm ? "ddd" : "dddd";
         } else if ( localName == "month" ) {
+            if ( e.attributeNS( KoXmlNS::number, "possessive-form", QString::null ) == "true" ) {
+                format += shortForm ? "PPP" : "PPPP";
+            }
             // TODO the spec has a strange mention of number:format-source
-            if ( e.attributeNS( KoXmlNS::number, "textual", QString::null ) == "true" ) {
+            else if ( e.attributeNS( KoXmlNS::number, "textual", QString::null ) == "true" ) {
                 format += shortForm ? "MMM" : "MMMM";
             } else { // month number
                 format += shortForm ? "M" : "MM";
@@ -756,25 +759,26 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
                 elementWriter.endElement();
                 format = format.remove( 0, 1 );
             }
-            //TODO implement it !
             else if ( format.startsWith( "PPPP" ) )
             {
                 addTextNumber( text, elementWriter );
                 //<number:month number:possessive-form="true" number:textual="true" number:style="long"/>
-                //elementWriter.startElement( "number:month" );
-                //elementWriter.addAttribute( "number:style", "short" );
-                //elementWriter.addAttribute( "number:textual", "false");
-                //elementWriter.endElement();
+                elementWriter.startElement( "number:month" );
+                elementWriter.addAttribute( "number:style", "short" );
+                elementWriter.addAttribute( "number:textual", "false");
+                elementWriter.addAttribute( "number:possessive-form", "true" );
+                elementWriter.endElement();
                 format = format.remove( 0, 4 );
             }
-            //TODO implement it
             else if ( format.startsWith( "PPP" ) )
             {
                 addTextNumber( text, elementWriter );
                 //<number:month number:possessive-form="true" number:textual="true" number:style="short"/>
-                //elementWriter.startElement( "number:month" );
-                //elementWriter.addAttribute( "number:style", "short" );
-                //elementWriter.addAttribute( "number:textual", "false");
+                elementWriter.startElement( "number:month" );
+                elementWriter.addAttribute( "number:possessive-form", "true" );
+
+                elementWriter.addAttribute( "number:style", "short" );
+                elementWriter.addAttribute( "number:textual", "false");
                 elementWriter.endElement();
                 format = format.remove( 0, 3 );
             }
