@@ -297,64 +297,64 @@ void Document::formulaDies(Container* f)
 
 void Document::createActions(KActionCollection* collection)
 {
-    impl->addThinSpaceAction = new KAction( i18n( "Add/change to thin space" ),
+    impl->addThinSpaceAction = new KAction( i18n( "Add thin space" ),
                                     0,
                                     this, SLOT( addThinSpace() ),
                                     collection, "formula_addthinspace") ;
-    impl->addMediumSpaceAction = new KAction( i18n( "Add/change to medium space" ),
+    impl->addMediumSpaceAction = new KAction( i18n( "Add medium space" ),
                                     0,
                                     this, SLOT( addMediumSpace() ),
                                     collection, "formula_addmediumspace" );
-    impl->addThickSpaceAction = new KAction( i18n( "Add/change to thick space" ),
+    impl->addThickSpaceAction = new KAction( i18n( "Add thick space" ),
                                     0,
                                     this, SLOT( addThickSpace() ),
                                     collection, "formula_addthickspace" );
-    impl->addQuadSpaceAction = new KAction( i18n( "Add/change to quad space" ),
+    impl->addQuadSpaceAction = new KAction( i18n( "Add quad space" ),
                                     0,
                                     this, SLOT( addQuadSpace() ),
                                     collection, "formula_addquadspace" );
 
-    impl->addIntegralAction = new KAction(i18n("Add/change to integral"),
+    impl->addIntegralAction = new KAction(i18n("Add integral"),
                                     "int",
                                     CTRL + Key_6,
                                     this, SLOT(addIntegral()),
                                     collection, "formula_addintegral");
-    impl->addSumAction      = new KAction(i18n("Add/change to sum"),
+    impl->addSumAction      = new KAction(i18n("Add sum"),
                                     "sum",
                                     CTRL + Key_7,
                                     this, SLOT(addSum()),
                                     collection, "formula_addsum");
-    impl->addProductAction  = new KAction(i18n("Add/change to product"),
+    impl->addProductAction  = new KAction(i18n("Add product"),
                                     "prod",
                                     CTRL + Key_4,
                                     this, SLOT(addProduct()),
                                     collection, "formula_addproduct");
-    impl->addRootAction     = new KAction(i18n("Add/change to root"),
+    impl->addRootAction     = new KAction(i18n("Add root"),
                                     "sqrt",
                                     CTRL + Key_2,
                                     this, SLOT(addRoot()),
                                     collection, "formula_addroot");
-    impl->addFractionAction = new KAction(i18n("Add/change to fraction"),
+    impl->addFractionAction = new KAction(i18n("Add fraction"),
                                     "frac",
                                     CTRL + Key_3,
                                     this, SLOT(addFraction()),
                                     collection, "formula_addfrac");
-    impl->addBracketAction  = new KAction(i18n("Add/change to bracket"),
+    impl->addBracketAction  = new KAction(i18n("Add bracket"),
                                     "paren",
                                     0,
                                     this, SLOT(addDefaultBracket()),
                                     collection,"formula_addbra");
-    impl->addSBracketAction = new KAction(i18n("Add/change to square bracket"),
+    impl->addSBracketAction = new KAction(i18n("Add square bracket"),
                                     "brackets",
                                     0,
                                     this, SLOT(addSquareBracket()),
                                     collection,"formula_addsqrbra");
-    impl->addCBracketAction = new KAction(i18n("Add/change to curly bracket"),
+    impl->addCBracketAction = new KAction(i18n("Add curly bracket"),
                                     "brace",
                                     0,
                                     this, SLOT(addCurlyBracket()),
                                     collection,"formula_addcurbra");
-    impl->addAbsAction      = new KAction(i18n("Add/change to abs"),
+    impl->addAbsAction      = new KAction(i18n("Add abs"),
                                     "abs",
                                     0,
                                     this, SLOT(addLineBracket()),
