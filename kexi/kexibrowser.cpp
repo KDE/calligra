@@ -149,9 +149,12 @@ void KexiBrowser::slotCreate(QListViewItem *i)
 		{
 			if ( r->type() == KexiBrowserItem::Child)
 			{
-    			    KexiFormBase *fb = new KexiFormBase(kexi->mainWindow()->workspace(), "form",r->identifier());
-			    kexi->mainWindow()->workspace()->addItem(fb);
-			    fb->show();
+			    kexi->project()->formManager()->showForm(r->identifier(), KexiFormManager::View,
+				kexi->mainWindow()->workspace()); 
+
+//    			    KexiFormBase *fb = new KexiFormBase(kexi->mainWindow()->workspace(), "form",r->identifier());
+//			    kexi->mainWindow()->workspace()->addItem(fb);
+//			    fb->show();
 			}
 			break;
 		}

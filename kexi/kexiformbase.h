@@ -78,13 +78,11 @@ class KexiFormBase : public KexiDialogBase
 		KexiFormBase(QWidget *parent=0, const char *name=0, QString identifier=QString::null);
 		~KexiFormBase();
 		
-		void setActions(QPtrList<KAction> *actions);
-		void unregisterActions(QPtrList<KAction> *actions);
 		static int dotSpacing();
+                virtual KXMLGUIClient *guiClient();
+		virtual void activateActions();
+		virtual void deactivateActions();
 	protected:
-		void initActions();
-		void registerAction(KAction *action);
-
 		void paintEvent(QPaintEvent *ev);
 		void mouseMoveEvent(QMouseEvent *ev);
 		void mouseReleaseEvent(QMouseEvent *ev);
@@ -116,6 +114,10 @@ class KexiFormBase : public KexiDialogBase
 		QWidget *m_activeWidget;
 		QWidget *m_activeMoveWidget;
 		KexiFormBaseResizeHandleSet *m_resizeHandleSet;
+	private:
+		class EditGUIClient;
+		friend class EditGUIClient;
+		static EditGUIClient *m_editGUIClient;
 	protected slots:
 		void slotWidgetLineEdit();
 		void slotWidgetPushButton();

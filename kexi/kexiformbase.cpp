@@ -42,6 +42,41 @@
 #include "kexiformbase.h"
 
 
+class KexiFormBase::EditGUIClient: public KXMLGUIClient
+{
+	public:
+		EditGUIClient():KXMLGUIClient()
+		{
+		        m_lineedit = new KAction(i18n("Line Edit"), "lineedit",
+                		Key_F5, actionCollection(), "widget_line_edit");
+
+		        m_button = new KAction(i18n("Push Button"), "button",
+		                Key_F6,  actionCollection(), "widget_push_button");
+
+		        m_urlreq = new KAction(i18n("URL Request"), "button",
+		                Key_F7, actionCollection(), "widget_url_requester");
+			setXMLFile("kexiformeditorui.rc");
+		}
+		virtual ~EditGUIClient(){;}
+		void activate(QObject* o)
+		{
+			connect(m_lineedit,SIGNAL(activated()),o,SLOT(slotWidgetLineEdit()));
+			connect(m_button,SIGNAL(activated()),o,SLOT(slotWidgetPushButton()));
+			connect(m_urlreq,SIGNAL(activated()),o,SLOT(slotWidgetURLRequester()));
+		}
+		void deactivate(QObject* o)
+		{
+			m_lineedit->disconnect(o);
+			m_button->disconnect(o);
+			m_urlreq->disconnect(o);
+		}
+	private:
+	KAction *m_lineedit;
+	KAction *m_button;
+	KAction *m_urlreq;
+};
+
+KexiFormBase::EditGUIClient *KexiFormBase::m_editGUIClient=0;
 
 KexiFormBaseResizeHandle::KexiFormBaseResizeHandle(QWidget *parent,QWidget *buddy, HandlePos pos):QWidget(parent)
 {
@@ -202,7 +237,7 @@ KexiFormBaseResizeHandleSet::~KexiFormBaseResizeHandleSet()
 KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString identifier)
 	: KexiDialogBase(parent,name)
 {
-	initActions();
+//	initActions();
 	
 	setCaption(identifier);
 
@@ -227,54 +262,32 @@ int KexiFormBase::dotSpacing()
 	return 10;
 }
 
+KXMLGUIClient *KexiFormBase::guiClient()
+{
+	if (!m_editGUIClient)
+		m_editGUIClient=new EditGUIClient();
+	return m_editGUIClient;	
+}
+
+void KexiFormBase::activateActions()
+{
+	m_editGUIClient->activate(this);
+}
+
+void KexiFormBase::deactivateActions()
+{
+	m_editGUIClient->deactivate(this);
+}
+
+
+#if 0
 void KexiFormBase::initActions()
 {
         //own-actions
-        KAction *actionWidgetLineEdit = new KAction(i18n("Line Edit"), "lineedit",
-                Key_F5, this, SLOT(slotWidgetLineEdit()), actionCollection(), "widget_line_edit");
-
-        KAction *actionWidgetPushButton = new KAction(i18n("Push Button"), "button",
-                Key_F6, this, SLOT(slotWidgetPushButton()), actionCollection(), "widget_push_button");
-
-        KAction *actionWidgetURLRequest = new KAction(i18n("URL Request"), "button",
-                Key_F7, this, SLOT(slotWidgetURLRequester()), actionCollection(), "widget_url_requester");
-	setXMLFile("kexiformeditorui.rc");
+#if 0
+#endif
 }
-
-void KexiFormBase::setActions(QPtrList<KAction> *actions)
-{
-	kdDebug() << "actions set..." << endl;
-	QPtrListIterator<KAction> it(*actions);
-	for(; it.current() != 0; ++it)
-	{
-		registerAction(it.current());
-	}
-}
-
-void KexiFormBase::unregisterActions(QPtrList<KAction> *actions)
-{
-	kdDebug() << "unregistering actions..." << endl;
-	QPtrListIterator<KAction> it(*actions);
-	for(; it.current() != 0; ++it)
-	{
-		disconnect(it.current(), 0, 0, 0);
-	}
-}
-
-void KexiFormBase::registerAction(KAction *action)
-{
-	kdDebug() << "registerd: " << action->name() << endl;
-
-	
-	if(!strcmp(action->name(),"widget_line_edit")==1)
-	{
-		connect(action, SIGNAL(activated()), this, SLOT(slotWidgetLineEdit()));
-	}
-	else
-	{
-		connect(action, SIGNAL(activated()), this, SLOT(slotWidgetPushButton()));
-	}
-}
+#endif
 
 void KexiFormBase::slotWidgetLineEdit()
 {

@@ -3,11 +3,11 @@
 
 #include <qdict.h>
 #include <qguardedptr.h>
-#include <qworkspace.h>
 class QString;
 class QStringList;
 class QDomDocument;
 class KexiFormBase;
+class KexiWorkspace;
 
 class KexiFormManager
 {
@@ -22,7 +22,7 @@ public:
 	bool deleteForm(const QString& name);
 	QString newForm();
 	void clear();
-	void showForm(const QString& name, Mode, QWorkspace *parent);
+	void showForm(const QString& name, Mode, KexiWorkspace *parent);
 
 protected:
 	class Item

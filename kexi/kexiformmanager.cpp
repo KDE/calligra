@@ -1,5 +1,6 @@
 #include "kexiformmanager.h"
 #include "kexiformbase.h"
+#include "kexiworkspace.h"
 #include <klocale.h>
 
 #include <qstring.h>
@@ -59,9 +60,18 @@ void KexiFormManager::clear()
 {
 }
 
-void KexiFormManager::showForm(const QString& name, Mode, QWorkspace *parent)
+void KexiFormManager::showForm(const QString& name, Mode, KexiWorkspace *parent)
 {
-	
+	Item *item=m_forms[name];
+	if (!item) return;
+	if (item->form.isNull())
+	{
+        	item->form = new KexiFormBase(parent, "form",name);
+                parent->addItem(item->form);
+                item->form->show();
+	}
+	else
+		item->form->showNormal();
 }
 
 

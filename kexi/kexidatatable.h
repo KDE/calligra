@@ -37,6 +37,8 @@ class KexiDataTable : public KexiDialogBase
 		~KexiDataTable();
 		
 		bool executeQuery(QString query);
+		
+		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 
 	protected:
 		QStringList getInvolvedTables(QString query);
