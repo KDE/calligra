@@ -547,10 +547,29 @@ public:
     void penColorChanged( const QPen & _pen );
     void brushColorChanged( const QBrush & _brush );
 
-    void autoScreenPresReStartTimer();
-    void autoScreenPresIntervalTimer();
-    void autoScreenPresStopTimer();
-    void setCurrentTimer( int _currentTimer );
+    /**
+     * Restart the timer for going to the next page.
+     * This is used in automatic presentation mode.
+     */
+    void restartAutoPresTimer();
+
+    /**
+     * Continue the stopped timer for going to the next page.
+     * This is used in automatic presentation mode.
+     */
+    void continueAutoPresTimer();
+
+    /**
+     * Stop the timer for going to the next page.
+     * This is used in automatic presentation mode.
+     */
+    void stopAutoPresTimer();
+
+    /**
+     * Set the timer for going to next step to sec seconds.
+     * This is used in automatic presentation mode.
+     */
+    void setAutoPresTimer( int sec );
 
     void showCounter( KoParagCounter &c );
 
@@ -663,7 +682,17 @@ protected slots:
     void extraPenWidth10();
     void setExtraPenWidth( unsigned int width );
 
-    void stopPres() {continuePres = false; }
+    /**
+     * Restart the presenation from the first shown slide. 
+     * This only works in automatic presentation and infinite loop mode.
+     */
+    void restartPresentation() { m_autoPresRestart = true; }
+    /**
+     * Finish the automatic presentation mode.
+     * This only works in automatic presentation mode.
+     */
+    void stopAutomaticPresentation() { m_autoPresStop = true; }
+
     void newPageLayout( const KoPageLayout &_layout );
     void openPageLayoutDia() { extraLayout(); }
     void unitChanged( QString );
@@ -752,7 +781,17 @@ private:
     KPresenterDoc *m_pKPresenterDoc;
 
     // flags
-    bool continuePres, exitPres;
+    /**
+     * Set to true if the presentation sould be restarted.
+     * This only works in automatic presentation and infinite loop mode.
+     */
+    bool m_autoPresRestart;
+
+    /**
+     * Set to true if the presentation sould be stoped.
+     * This only works in automatic presentation mode.
+     */
+    bool m_autoPresStop;
     bool m_screenSaverWasEnabled;
 
     // right button popup menus
@@ -1070,11 +1109,16 @@ private:
 
     KAction *actionAddWordToPersonalDictionary;
 
-    QTimer automaticScreenPresTimer;
-    QTime automaticScreenPresTime;
-    int automaticScreenPresWaitTime;
-    bool automaticScreenPresFirstTimer;
-    int currentTimer;
+    /// timer for automatic presentation mode
+    QTimer m_autoPresTimer;
+    /// time for messuring the elapsed time of the timer
+    QTime m_autoPresTime;
+    /// the elapsed time if the timer gets stopped in milliseconds
+    int m_autoPresElapsedTime;
+    /// the value of m_autoPresTimer in milliseconds
+    int m_autoPresTimerValue;
+    /// true if the timer is connected to doAutomaticScreenPres
+    bool m_autoPresTimerConnected;
 
     /// timer for duration of a page
     QTime m_duration;

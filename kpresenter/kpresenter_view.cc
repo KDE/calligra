@@ -235,8 +235,8 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_bShowGUI = true;
     m_bRectSelection = false;
     presStarted = false;
-    continuePres = false;
-    exitPres = false;
+    m_autoPresRestart = false;
+    m_autoPresStop = false;
     rndX = 0;
     rndY = 0;
     allowWebPres = true;
@@ -252,7 +252,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_canvas = 0L;
     m_spell.kospell = 0;
 
-    automaticScreenPresFirstTimer = true;
+    m_autoPresTimerConnected = false;
     m_actionList.setAutoDelete( true );
     checkConcavePolygon = false;
     cornersValue = 3;
@@ -1447,6 +1447,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 
         deSelectAllObjects();
         presStarted = true;
+        m_autoPresRestart = false;
 #if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
 #else
@@ -1500,20 +1501,16 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         }
 
         if ( !kPresenterDoc()->spManualSwitch() ) {
-            continuePres = true;
-            exitPres = false;
+            m_autoPresStop = false;
             m_pKPresenterDoc->repaint( false );
 
-            if ( automaticScreenPresFirstTimer ) {
-                connect( &automaticScreenPresTimer, SIGNAL( timeout() ), SLOT( doAutomaticScreenPres() ) );
-                automaticScreenPresTime.start();
-                automaticScreenPresWaitTime = 0;
-                setCurrentTimer( 1 );
-                automaticScreenPresTimer.start( currentTimer );
-                automaticScreenPresFirstTimer = false;
+            if ( ! m_autoPresTimerConnected ) {
+                connect( &m_autoPresTimer, SIGNAL( timeout() ), SLOT( doAutomaticScreenPres() ) );
+                setAutoPresTimer( 1 );
+                m_autoPresTimerConnected = true;
             }
             else
-                autoScreenPresReStartTimer();
+                restartAutoPresTimer();
         }
     }
 }
@@ -1521,8 +1518,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 void KPresenterView::screenStop()
 {
     if ( presStarted ) {
-        continuePres = false;
-        exitPres = true;
+        m_autoPresStop = true;
         m_canvas->setNextPageTimer( true );
         m_canvas->stopSound();
         m_canvas->showNormal();
@@ -1595,7 +1591,7 @@ void KPresenterView::screenPrev()
 
     if ( presStarted ) {
         if ( !kPresenterDoc()->spManualSwitch() ) {
-            setCurrentTimer( 1 );
+            setAutoPresTimer( 1 );
             m_canvas->setNextPageTimer( true );
         }
 #if KDE_IS_VERSION(3,1,90)
@@ -1644,7 +1640,7 @@ void KPresenterView::screenNext()
             m_canvas->setFocus();
 
             if ( !kPresenterDoc()->spManualSwitch() ) {
-                setCurrentTimer( 1 );
+                setAutoPresTimer( 1 );
                 m_canvas->setNextPageTimer( true );
             }
         } else {
@@ -2245,7 +2241,10 @@ void KPresenterView::createGUI()
     setupRulers();
 
     if ( m_pKPresenterDoc && m_canvas )
-        QObject::connect( m_canvas, SIGNAL( stopPres() ), this, SLOT( stopPres() ) );
+    {
+        QObject::connect( m_canvas, SIGNAL( stopAutomaticPresentation() ), this, SLOT( stopAutomaticPresentation() ) );
+        QObject::connect( m_canvas, SIGNAL( restartPresentation() ), this, SLOT( restartPresentation() ) );
+    }
 
     if ( sidebar )
     {
@@ -3877,16 +3876,14 @@ void KPresenterView::keyPressEvent( QKeyEvent *e )
 
 void KPresenterView::doAutomaticScreenPres()
 {
-    if ( exitPres ) // A user pushed Escape key or clicked "Exit presentation" menu.
+    if ( m_autoPresStop ) // A user pushed Escape key or clicked "Exit presentation" menu.
         return;
-    else if ( !continuePres && kPresenterDoc()->spInfiniteLoop() ) {
-        continuePres = true;
+    else if ( m_autoPresRestart && kPresenterDoc()->spInfiniteLoop() ) {
+        m_autoPresRestart = false;
         m_canvas->presGotoFirstPage(); // return to first page.
-        setCurrentTimer( 1 );
+        setAutoPresTimer( 1 );
         m_canvas->setNextPageTimer( true );
     }
-    else if ( !continuePres )
-        return;
     else
         screenNext();
 }
@@ -4601,29 +4598,29 @@ void KPresenterView::brushColorChanged( const QBrush & _brush )
     actionBrushColor->setCurrentColor(_brush.style ()==Qt::NoBrush ? Qt::white : _brush.color() );
 }
 
-void KPresenterView::autoScreenPresReStartTimer()
+void KPresenterView::restartAutoPresTimer()
 {
-    automaticScreenPresTime.start();
-    automaticScreenPresWaitTime = 0;
-    automaticScreenPresTimer.changeInterval( currentTimer );
+    m_autoPresTime.start();
+    m_autoPresElapsedTime = 0;
+    m_autoPresTimer.changeInterval( m_autoPresTimerValue );
 }
 
-void KPresenterView::autoScreenPresIntervalTimer()
+void KPresenterView::continueAutoPresTimer()
 {
-    automaticScreenPresTime.restart();
-    automaticScreenPresTimer.changeInterval( currentTimer - automaticScreenPresWaitTime );
+    m_autoPresTime.restart();
+    m_autoPresTimer.changeInterval( m_autoPresTimerValue - m_autoPresElapsedTime );
 }
 
-void KPresenterView::autoScreenPresStopTimer()
+void KPresenterView::stopAutoPresTimer()
 {
-    automaticScreenPresTimer.stop();
-    automaticScreenPresWaitTime += automaticScreenPresTime.elapsed();
+    m_autoPresTimer.stop();
+    m_autoPresElapsedTime += m_autoPresTime.elapsed();
 }
 
-void KPresenterView::setCurrentTimer( int _currentTimer )
+void KPresenterView::setAutoPresTimer( int sec )
 {
-    currentTimer = _currentTimer * 1000;
-    autoScreenPresReStartTimer();
+    m_autoPresTimerValue = sec * 1000;
+    restartAutoPresTimer();
 }
 
 void KPresenterView::insertSpecialChar()

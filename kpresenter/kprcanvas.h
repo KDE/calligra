@@ -400,7 +400,16 @@ signals:
     void colorChanged( const QColor & );
     void alignChanged( int );
     void updateSideBarItem( int );
-    void stopPres();
+    /** 
+     * Emmitted when presentation should be restarted
+     * This is used in automatic screen and infinite loop mode.
+     */
+    void stopAutomaticPresentation();
+    /** 
+     * Emmitted when presentation should be restarted
+     * This is used in automatic screen and infinite loop mode.
+     */
+    void restartPresentation();
     void objectSelectedChanged();
     void objectSizeChanged();
     // Emitted when the current frameset edit changes

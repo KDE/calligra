@@ -1125,7 +1125,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             m_view->screenPrev();
         else if ( e->button() == RightButton ) {
             if ( !drawMode && !spManualSwitch() )
-                m_view->autoScreenPresStopTimer();
+                m_view->stopAutoPresTimer();
 
             setCursor( arrowCursor );
             QPoint pnt = QCursor::pos();
@@ -2095,12 +2095,12 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             m_view->screenStop(); break;
         case Key_G:
             if ( !spManualSwitch() )
-                m_view->autoScreenPresStopTimer();
+                m_view->stopAutoPresTimer();
             slotGotoPage(); break;
         case Key_Home:  // go to first page
             presGotoFirstPage();
             if ( !spManualSwitch() ) {
-                m_view->setCurrentTimer( 1 );
+                m_view->setAutoPresTimer( 1 );
                 setNextPageTimer( true );
             }
             break;
@@ -2108,7 +2108,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             if ( m_presentationSlidesIterator != m_presentationSlides.end() ) {
                 gotoPage( *(--m_presentationSlides.end()) );
                 if ( !spManualSwitch() ) {
-                    m_view->setCurrentTimer( 1 );
+                    m_view->setAutoPresTimer( 1 );
                     setNextPageTimer( true );
                 }
             }
@@ -3184,7 +3184,7 @@ bool KPrCanvas::pNext( bool )
     {
         if ( !spManualSwitch() && nextPageTimer ) {
             QValueList<int>::ConstIterator it( m_presentationSlidesIterator );
-            m_view->setCurrentTimer( doc->pageList().at((*it) - 1 )->getPageTimer() * doc->getPresSpeed() );
+            m_view->setAutoPresTimer( doc->pageList().at((*it) - 1 )->getPageTimer() * doc->getPresSpeed() );
 
             nextPageTimer = false;
 
@@ -3234,7 +3234,7 @@ bool KPrCanvas::pNext( bool )
         --it;
 
         if ( !spManualSwitch() )
-            m_view->autoScreenPresStopTimer();
+            m_view->stopAutoPresTimer();
 
         KPBackGround * backtmp=doc->pageList().at( ( *it ) - 1 )->background();
         PageEffect _pageEffect = backtmp->getPageEffect();
@@ -3251,7 +3251,7 @@ bool KPrCanvas::pNext( bool )
 
 
         if ( !spManualSwitch() )
-            m_view->autoScreenPresReStartTimer();
+            m_view->restartAutoPresTimer();
 
         doObjEffects();
         return true;
@@ -3280,7 +3280,7 @@ bool KPrCanvas::pNext( bool )
         p.drawText( 50, 50, i18n( "End of presentation. Click to exit." ) );
         bitBlt( this, 0, 0, &lastSlide, 0, 0, lastSlide.width(), lastSlide.height() );
         showingLastSlide = true;
-        emit stopPres(); // no automatic mode for last slide
+        emit stopAutomaticPresentation(); // no automatic mode for last slide
     }
     else if ( showingLastSlide ) // after last slide stop presentation
     {
@@ -3290,7 +3290,7 @@ bool KPrCanvas::pNext( bool )
     else
     {
         m_view->setPageDuration( m_step.m_pageNumber );
-        emit stopPres(); // tells automatic mode to restart
+        emit restartPresentation(); // tells automatic mode to restart
     }
 
     return false;
@@ -3680,7 +3680,7 @@ void KPrCanvas::doObjEffects()
     if ( effects )
     {
         if ( !spManualSwitch() && timer > 0 )
-            m_view->autoScreenPresStopTimer();
+            m_view->stopAutoPresTimer();
 
         if ( _soundEffect && !_soundFileName.isEmpty() ) {
             stopSound();
@@ -4196,7 +4196,7 @@ void KPrCanvas::doObjEffects()
     }
 
     if ( !spManualSwitch() && timer > 0 )
-        m_view->setCurrentTimer( timer );
+        m_view->setAutoPresTimer( timer );
 
     delete screen;
 }
@@ -4935,7 +4935,7 @@ void KPrCanvas::slotGotoPage()
     gotoPage( pg );
 
     if ( !spManualSwitch() ) {
-        m_view->setCurrentTimer( 1 );
+        m_view->setAutoPresTimer( 1 );
         setNextPageTimer( true );
     }
 
@@ -5201,7 +5201,6 @@ void KPrCanvas::drawingMode()
         presMenu->setItemChecked( PM_DM, true );
         presMenu->setItemChecked( PM_SM, false );
         drawMode = true;
-        //setCursor( KPresenterUtils::penCursor() );
     }
 }
 
@@ -5211,11 +5210,14 @@ void KPrCanvas::switchingMode()
     {
         presMenu->setItemChecked( PM_DM, false );
         presMenu->setItemChecked( PM_SM, true );
-        drawMode = false; setCursor( blankCursor );
-
-        if ( !spManualSwitch() )
-            m_view->autoScreenPresIntervalTimer();
     }
+    
+    // the following have to be done even when nothing changed
+    // we don't want to see the cursor nor the automatic pesentation stopped
+    drawMode = false; setCursor( blankCursor );
+
+    if ( !spManualSwitch() )
+        m_view->continueAutoPresTimer();
 }
 
 void KPrCanvas::calcRatio( double &dx, double &dy, ModifyType _modType, double ratio ) const
