@@ -305,7 +305,7 @@ VSelectTool::mouseDragRelease( const KoPoint& current )
 			new VTranslateCmd(
 				&view()->part()->document(),
 				qRound( last().x() - first().x() ),
-				qRound( last().y() - first().y() ) ),
+				qRound( first().y() - last().y() ) ),
 			true );
 	}
 
@@ -373,7 +373,7 @@ VSelectTool::recalc()
 		// Y mirroring
 		mat.scale( 1, -1 );
 		mat.translate( 0, -view()->canvasWidget()->viewport()->height() );
-		mat.translate( last().x() - first().x(), last().y() - first().y() );
+		mat.translate( last().x() - first().x(), first().y() - last().y() );
 
 
 		// Copy selected objects and transform:
