@@ -29,4 +29,11 @@ void FormulaClass::setActiveElement(BasicElement* c)
   theActiveElement=c;
   if(c!=0L)theActiveElement->setActive(TRUE);    
  }
+void FormulaClass::setFirstElement(BasicElement* c)
+ { 
+  
+  if(c!=0L) theFirstElement=c;
+    else
+     warning("Try to set first element to 0L");
+ }
 

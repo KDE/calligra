@@ -72,14 +72,6 @@ class BasicElement
    */
   virtual void setNumericFont(int newValue); 
   
-  /*
-   * Change font of children
-   * in BasicElement it does nothing
-   * but other element need it.
-   * it usually called by changeFont
-   */
-  virtual void scaleChildrenFont(int level) { ; }  //BasicElement has no child
-  
    /*  
     * Change pointer of next element
     */

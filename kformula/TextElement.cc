@@ -19,6 +19,8 @@ TextElement::TextElement(FormulaClass *Formula,BasicElement *Prev=0L,int Relatio
  // warning("A new text is born.. ");
   font=0L;  
   position=content.length();
+  warning("creation %i",position);
+  if(position<0) position = 0;
 
 }
 
@@ -65,13 +67,20 @@ if(beActive)
   myArea=globalSize;
   myArea.moveBy(x,y);
 #ifdef RECT
-  QRect  localArea;
+  /*QRect  localArea;
   localArea=localSize;
   localArea.moveBy(x,y);  
   pen->drawRect(localArea); 
   localArea=familySize;
   localArea.moveBy(x,y);  
   pen->drawRect(localArea); 
+*/  pen->setBrush(green);
+  pen->setBrush(NoBrush);
+  pen->drawRect(myArea);   
+  QRect area(localSize);
+  area.moveBy(x,y);
+  pen->drawRect(area); 
+  pen->setBrush(SolidPattern);
 #endif
   drawIndexes(pen,resolution);
 
@@ -130,8 +139,10 @@ void TextElement::checkSize()
 
 int TextElement::takeAsciiFromKeyb(char ch) 
 {
+  warning("...pos:%i",position);
 content.insert(position,ch);
 position++;
+  warning("ins %i",position);
 return 1;
 }     
 
@@ -148,7 +159,8 @@ if(action==Key_Backspace)
  else 
  if(action==Key_Delete) 
      content.remove(position,1);   //Change this....
-
+if(position>content.length()) position=content.length();
+if(position<0)position=0;
 return position;
 }
 

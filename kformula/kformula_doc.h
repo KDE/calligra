@@ -97,8 +97,8 @@ class KFormulaDocument : public QObject,
     void addFractionElement();
     void addSymbolElement();
     void addDecorationElement();
-    void addBraceElement();
-    */
+*/    void addBracketElement(QString cont);
+
     
  signals:
     void sig_modified();

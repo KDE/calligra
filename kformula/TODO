@@ -1,0 +1,25 @@
+TODO List  (05 Oct 1998)
+
+Elements:
+-TextElement Split function
+-BracketElement add types {}<> & other
+-Start: fraction, integral, matrix, symbol,decoration
+-Change textFont/lineShape proportionality
+-implement saveMe()
+-implement openMe()  //Bad name :-(
+-scaleFont modifications
+-usedColor fucntion 
+-use of typeid() or typeof() or boh()...
+
+Interface/doc:
+-merge FormulaClass with KFormulaDoc
+-Open/Save functions (need saveMe() )
+-Toolbars,widgets,properties dialogs etc..
+-Font
+-Print
+-Add menus!!!
+
+General:
+-Remove numbers & replace with defined const
+-Rewrite comments in newer Element files
+

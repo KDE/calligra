@@ -59,16 +59,16 @@ void RootElement::draw(QPoint drawPoint,int resolution=72)
   }*/
   warning("Array");
   QPointArray points(10);
-  points.setPoint(1,x+familySize.x(),y+familySize.y()+unit+1);
-  points.setPoint(2,x+familySize.x()+unit,y+familySize.bottom()+3);
-  points.setPoint(3,x+familySize.x()+unit+ofs,y+familySize.bottom()+3+ofs);
-  points.setPoint(4,x+familySize.x()+unit+ofs,y+familySize.y()+3+ofs);
-  points.setPoint(5,x+familySize.right()+ofs-2,y+familySize.y()+3+ofs);
-  points.setPoint(6,x+familySize.right()+ofs-2,y+familySize.y()+3);
-  points.setPoint(7,x+familySize.x()+unit,y+familySize.y()+3);  
-  points.setPoint(8,x+familySize.x()+unit,y+familySize.bottom()+3-2*ofs);  
- // points.setPoint(9,x+familySize.x()+unit,y+familySize.bottom()+3);  
-  points.setPoint(9,x+familySize.x()+ofs,y+familySize.y()+unit+1);
+  points.setPoint(1,x+familySize.x(),y+familySize.y()+unit);
+  points.setPoint(2,x+familySize.x()+unit,y+familySize.bottom()+1);
+  points.setPoint(3,x+familySize.x()+unit+ofs,y+familySize.bottom()+1+ofs);
+  points.setPoint(4,x+familySize.x()+unit+ofs,y+familySize.y()+1+ofs);
+  points.setPoint(5,x+familySize.right()+ofs-2,y+familySize.y()+1+ofs);
+  points.setPoint(6,x+familySize.right()+ofs-2,y+familySize.y()+1);
+  points.setPoint(7,x+familySize.x()+unit,y+familySize.y()+1);  
+  points.setPoint(8,x+familySize.x()+unit,y+familySize.bottom()+1-2*ofs);  
+ // points.setPoint(9,x+familySize.x()+unit,y+familySize.bottom()+1);  
+  points.setPoint(9,x+familySize.x()+ofs,y+familySize.y()+unit);
   pen->setBrush(pen->pen().color());
   pen->drawPolygon(points,FALSE,1,9);
   /*

@@ -64,6 +64,10 @@ class TextElement : public BasicElement
     */
    virtual void setNumericFont(int newValue); 
       
+   /*
+    * Need when cloning.
+    */
+//    virtual void setContent(QString c) {content=c;position=c.length();}   
    
    /*  
     * Change "font"     

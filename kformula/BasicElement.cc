@@ -171,27 +171,23 @@ void BasicElement::scaleNumericFont(int level)
   if((level & FN_ELEMENT)>0) { 
     if ((level & FN_REDUCE)>0)
       {
-	if((level & FN_ONE)>0) 
-	  setNumericFont(numericFont-1);
+	if((level & FN_BYNUM)>0) 
+	  setNumericFont(numericFont-(level & 255));
    else  { 
-     if((level & FN_P34)>0)
-       setNumericFont((numericFont*3)/4);
-     else 
-       setNumericFont(numericFont/2);
-   }
-      }
-    else
-      {
-	if(level & FN_ONE)
-	  setNumericFont(numericFont+1);
-	else   
-	  { if(level & FN_P34)
-	    setNumericFont((numericFont*4)/3);
-	  else
-	    setNumericFont(numericFont*2);
-	  }
-      }
-    
+           int den=(level & 15);
+           int num=((level>>4) & 15);
+            setNumericFont((numericFont*num)/den);
+	}
+      } else {
+	if((level & FN_BYNUM)>0) 
+	    setNumericFont(numericFont+(level & 255));
+           else
+	    { 
+             int num=(level & 15);
+             int den=((level>>4) & 15);
+             setNumericFont((numericFont*num)/den);
+	    }
+      }    
   }
   int ps;
   if(level & FN_INDEXES)
@@ -203,7 +199,6 @@ void BasicElement::scaleNumericFont(int level)
   
   if(level & FN_CHILDREN)
   {
-//    scaleChildrenFont(level|FN_ALL);
    for(ps=0;ps<childrenNumber;ps++)
     if(child[ps]!=0L)child[ps]->scaleNumericFont(level|FN_ALL);
   }
@@ -261,14 +256,17 @@ void  BasicElement::substituteElement(BasicElement *clone)
       else
 	prev->setChild(clone,relation-4);
     }
- //warning("Substituted %p with %p,  waiting to be deleted",this,clone); 
+   else //I'm the first element!! 
+     formula->setFirstElement(clone);  
+ warning("Substituted %p with %p,  waiting to be deleted",this,clone); 
 }
 
 int BasicElement::takeAsciiFromKeyb(char ch) 
 {
-//warning("ascii,need to be cloned");
-  content.insert(content.length(),ch);
+if(type()==EL_BASIC)     //This function may be used by RootElement
+//  content.insert(content.length(),ch);
   return FCOM_TEXTCLONE; //  Ask to be cloned into text & deleted
+  else return 1;
 }     
 
 

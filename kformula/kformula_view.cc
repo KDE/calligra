@@ -289,6 +289,7 @@ void KFormulaView::addVertSpace()
 void KFormulaView::addBracket()
 {
     debug("##adding parenthesis");
+    m_pDoc->addBracketElement("[]");
 }
 
 void KFormulaView::addIntegral()
@@ -304,28 +305,28 @@ void KFormulaView::addSymbol()
 void KFormulaView::reduce()
 {
     debug("reduce");
-    m_pDoc->activeElement()->scaleNumericFont(FN_REDUCE | FN_ELEMENT);
+    m_pDoc->activeElement()->scaleNumericFont(FN_P43 | FN_REDUCE | FN_ELEMENT);
     update();
 }
 
 void KFormulaView::enlarge()
 {
     debug("enlarge");
-    m_pDoc->activeElement()->scaleNumericFont(FN_ENLARGE | FN_ELEMENT);
+    m_pDoc->activeElement()->scaleNumericFont(FN_P43|FN_ENLARGE | FN_ELEMENT);
     update();
 }
 
 void KFormulaView::reduceRecur()
 {
     debug("reduce recur");
-    m_pDoc->activeElement()->scaleNumericFont(FN_REDUCE | FN_ALL);
+    m_pDoc->activeElement()->scaleNumericFont(FN_P43|FN_REDUCE | FN_ALL);
     update();
 }
 
 void KFormulaView::enlargeRecur()
 {
     debug("enlarge recur");
-    m_pDoc->activeElement()->scaleNumericFont(FN_ENLARGE | FN_ALL);
+    m_pDoc->activeElement()->scaleNumericFont(FN_P43|FN_ENLARGE | FN_ALL);
     update();
 }
 

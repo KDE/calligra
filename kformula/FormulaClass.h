@@ -24,6 +24,7 @@ public:
  void setCursor(QRect r) { theCursor=r; }
  void setFont(QFont f) { theFont=f;}
  void setColor(QColor c) { theColor=c;}
+ void setFirstElement(BasicElement* c);
  QPainter * painter() { return thePainter; } 
  BasicElement *activeElement() {return theActiveElement; } 
  QRect cursor() {return theCursor;}
