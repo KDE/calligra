@@ -27,7 +27,7 @@
 
 class QPainter;
 class QLabel;
-class QLineEdit;
+class KIntNumInput;
 class QGroupBox;
 class QPushButton;
 
@@ -44,7 +44,7 @@ public:
     ~RectPreview() {}
 
     void setRnds( int _rx, int _ry )
-    { xRnd = _rx; yRnd = _ry; repaint( true ); }
+    { xRnd = _rx; yRnd = _ry; repaint( contentsRect(), true ); }
 
 protected:
     void drawContents( QPainter* );
@@ -74,16 +74,16 @@ public:
 
 protected:
     QLabel *lRndX, *lRndY;
-    QLineEdit *eRndX, *eRndY;
-    QGroupBox *gSettings, *gPreview;
+    KIntNumInput *eRndX, *eRndY;
+    QGroupBox *gSettings;
     RectPreview *rectPreview;
     QPushButton *okBut, *applyBut, *cancelBut;
 
     int xRnd, yRnd;
 
 protected slots:
-    void rndXChanged( const QString & );
-    void rndYChanged( const QString & );
+    void rndXChanged( int );
+    void rndYChanged( int );
     void Apply() { emit confRectDiaOk(); }
 
 signals:

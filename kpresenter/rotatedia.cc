@@ -23,8 +23,6 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qvbuttongroup.h>
-#include <qhbox.h>
-#include <qvbox.h>
 #include <qlayout.h>
 #include <qradiobutton.h>
 #include <qcolor.h>
@@ -90,14 +88,6 @@ void RotatePreview::drawContents( QPainter* painter )
 
     painter->restore();
 }
-
-/*
-void RotatePreview::resizeEvent( QResizeEvent *e )
-{
-    QFrame::resizeEvent( e );
-    this->resize( contentsRect().size() );
-}
-*/
 
 /******************************************************************/
 /* class RotateDia                                                */

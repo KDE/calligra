@@ -26,11 +26,12 @@
 #include <qcolor.h>
 #include <qpainter.h>
 #include <qpen.h>
-#include <qvalidator.h>
-#include <qlineedit.h>
+#include <qlayout.h>
 
+#include <knuminput.h>
 #include <klocale.h>
 #include <kapp.h>
+#include <kbuttonbox.h>
 
 #include <stdlib.h>
 
@@ -46,6 +47,8 @@ RectPreview::RectPreview( QWidget* parent, const char* name )
     setBackgroundColor( white );
     xRnd = 0;
     yRnd = 0;
+
+    setMinimumSize( 200, 100 );
 }
 
 /*====================== draw contents ===========================*/
@@ -54,10 +57,12 @@ void RectPreview::drawContents( QPainter* painter )
     int ow = width();
     int oh = height();
 
-    painter->setPen( QPen( red ) );
-    painter->setBrush( QBrush( blue ) );
+    painter->setPen( QPen( Qt::red, 3 ) );
+    painter->setBrush( QBrush( Qt::blue ) );
 
+    painter->save();
     painter->drawRoundRect( 10, 10, ow - 20, oh - 20, xRnd, yRnd );
+    painter->restore();
 }
 
 /******************************************************************/
@@ -68,71 +73,57 @@ void RectPreview::drawContents( QPainter* painter )
 ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
     : QDialog( parent, name, true )
 {
-    gSettings = new QGroupBox( i18n( "Settings" ), this );
-    gSettings->move( 20, 20 );
+    
+    // ------------------------ layout
+    QVBoxLayout *layout = new QVBoxLayout( this );
+    layout->setMargin( 5 );
+    layout->setSpacing( 5 );
+    QHBoxLayout *hbox = new QHBoxLayout( layout );
+    hbox->setSpacing( 5 );
 
+    // ------------------------ settings
+    gSettings = new QGroupBox( 2, Qt::Horizontal, i18n( "Settings" ), this );
+    
     lRndX = new QLabel( i18n( "Roundedness X" ), gSettings );
-    lRndX->resize( lRndX->sizeHint() );
-    lRndX->move( 10, 20 );
 
-    eRndX = new QLineEdit( gSettings );
-    eRndX->setValidator( new QIntValidator( eRndX ) );
-    eRndX->resize( eRndX->sizeHint() );
-    eRndX->move( lRndX->x(), lRndX->y() + lRndX->height() + 5 );
-    connect( eRndX, SIGNAL( textChanged( const QString & ) ), this, SLOT( rndXChanged( const QString & ) ) );
+    eRndX = new KIntNumInput( gSettings );
+    eRndX->setRange(0, 99);
+    connect( eRndX, SIGNAL( valueChanged( int ) ), this, SLOT( rndXChanged( int ) ) );
 
     lRndY = new QLabel( i18n( "Roundedness Y" ), gSettings );
-    lRndY->resize( lRndY->sizeHint() );
-    lRndY->move( eRndX->x(), eRndX->y() + eRndX->height() + 20 );
 
-    eRndY = new QLineEdit( gSettings );
-    eRndY->setValidator( new QIntValidator( eRndY ) );
-    eRndY->resize( eRndY->sizeHint() );
-    eRndY->move( lRndY->x(), lRndY->y() + lRndY->height() + 5 );
-    connect( eRndY, SIGNAL( textChanged( const QString & ) ), this, SLOT( rndYChanged( const QString & ) ) );
+    eRndY = new KIntNumInput( gSettings );
+    eRndY->setRange(0, 99);
+    connect( eRndY, SIGNAL( valueChanged( int ) ), this, SLOT( rndYChanged( int ) ) );
 
-    gSettings->resize(QMAX(QMAX(QMAX(lRndX->x() + lRndX->width(),eRndX->x() + eRndX->width()),
-                              lRndY->x() + lRndY->width() ), eRndY->x() + eRndY->width() ) + 20,
-                      eRndY->y() + eRndY->height() + 20 );
+    hbox->addWidget( gSettings );
 
-    gPreview = new QGroupBox( i18n( "Preview" ), this );
-    gPreview->move( gSettings->x() + gSettings->width() + 20, 20 );
-    gPreview->resize( gSettings->size() );
+    // ------------------------ preview
+    rectPreview = new RectPreview( this, "preview" );
+    
+    hbox->addWidget( rectPreview );
 
-    rectPreview = new RectPreview( gPreview, "preview" );
-    rectPreview->setGeometry( 10, 20, gPreview->width() - 20, gPreview->height() - 30 );
+    // ------------------------ buttons
+    KButtonBox *bb = new KButtonBox( this );
+    bb->addStretch();
 
-    cancelBut = new QPushButton( this, "BCancel" );
-    cancelBut->setText( i18n( "Cancel" ) );
-
-    applyBut = new QPushButton( this, "BApply" );
-    applyBut->setText( i18n( "Apply" ) );
-
-    okBut = new QPushButton( this, "BOK" );
-    okBut->setText( i18n( "OK" ) );
+    okBut = bb->addButton( i18n( "OK" ) );
     okBut->setAutoRepeat( false );
-    okBut->setAutoResize( false );
     okBut->setAutoDefault( true );
     okBut->setDefault( true );
-
-    int butW = QMAX(cancelBut->sizeHint().width(),
-                   QMAX(applyBut->sizeHint().width(),okBut->sizeHint().width()));
-    int butH = cancelBut->sizeHint().height();
-
-    cancelBut->resize( butW, butH );
-    applyBut->resize( butW, butH );
-    okBut->resize( butW, butH );
-
-    cancelBut->move( gPreview->x() + gPreview->width() - butW, gPreview->y() + gPreview->height() + 25 );
-    applyBut->move( cancelBut->x() - 5 - applyBut->width(), cancelBut->y() );
-    okBut->move( applyBut->x() - 10 - okBut->width(), cancelBut->y() );
+    applyBut = bb->addButton( i18n( "Apply" ) );
+    cancelBut = bb->addButton( i18n( "Cancel" ) );
 
     connect( okBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
     connect( applyBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
     connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
     connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
 
-    resize( gPreview->x() + gPreview->width() + 20, gPreview->y() + gPreview->height() + 20 + butH + 20 );
+    bb->layout();
+
+    bb->setMaximumHeight( okBut->sizeHint().height() + 5 );
+
+    layout->addWidget( bb );    
 }
 
 /*===================== destructor ===============================*/
@@ -141,16 +132,16 @@ ConfRectDia::~ConfRectDia()
 }
 
 /*================================================================*/
-void ConfRectDia::rndXChanged( const QString & _rx )
+void ConfRectDia::rndXChanged( int _rx )
 {
-    xRnd = _rx.toInt();
+    xRnd = _rx;
     rectPreview->setRnds( xRnd, yRnd );
 }
 
 /*================================================================*/
-void ConfRectDia::rndYChanged( const QString & _ry )
+void ConfRectDia::rndYChanged( int _ry )
 {
-    yRnd = _ry.toInt();
+    yRnd = _ry;
     rectPreview->setRnds( xRnd, yRnd );
 }
 
@@ -161,8 +152,6 @@ void ConfRectDia::setRnds( int _rx, int _ry )
     yRnd = _ry;
     rectPreview->setRnds( xRnd, yRnd );
 
-    QString str=QString::number(xRnd);
-    eRndX->setText( str );
-    str=QString::number(yRnd);
-    eRndY->setText( str );
+    eRndX->setValue( xRnd );
+    eRndY->setValue( yRnd );
 }

@@ -44,11 +44,10 @@ public:
     RotatePreview( QWidget* parent, const char* );
     ~RotatePreview() {}
 
-    void setAngle( float __angle ) {_angle = __angle; repaint( true ); }
+    void setAngle( float __angle ) {_angle = __angle; repaint( contentsRect(), true ); }
 
 protected:
     void drawContents( QPainter* );
-    //void resizeEvent( QResizeEvent *e );
 
     float _angle;
 
