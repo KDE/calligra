@@ -48,7 +48,9 @@
 class TextFormatting
 {
     public:
-        TextFormatting () {}
+        TextFormatting () : italic (false), underline (false), strikeout (false),
+                            weight (50), fontSize (0), verticalAlignment (0),
+                            missing (true) {}
 
         TextFormatting ( QString f,
                          bool    i,
