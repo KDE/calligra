@@ -65,7 +65,7 @@ void
 VPolylineTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Polyline Tool" ) );
-	view()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( QCursor( Qt::arrowCursor ) );
 
 	m_bezierPoints.clear();
 	m_close = false;
