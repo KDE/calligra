@@ -46,6 +46,7 @@
 
 KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
  : QScrollView(parent, name, WStaticContents)
+ , KexiActionProxy(this)
 {
 //	m_relation=relation;
 //	m_relation->incUsageCount();
@@ -59,6 +60,9 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
 	setFocusPolicy(StrongFocus);
 	setResizePolicy(Manual);
+
+	plugSharedAction("edit_delete",this, SLOT(removeSelectedObject()));
+
 
 #if 0
 	//actions
@@ -301,6 +305,7 @@ KexiRelationView::contentsMousePressEvent(QMouseEvent *ev)
 	}
 }
 
+/*
 void
 KexiRelationView::keyPressEvent(QKeyEvent *ev)
 {
@@ -314,7 +319,7 @@ KexiRelationView::keyPressEvent(QKeyEvent *ev)
 	if(ev->key() == Key_Delete)
 		removeSelectedConnection();
 
-}
+}*/
 
 void
 KexiRelationView::recalculateSize(int width, int height)
@@ -351,15 +356,13 @@ KexiRelationView::stretchExpandSize()
 }
 
 void
-KexiRelationView::removeSelectedConnection()
+KexiRelationView::removeSelectedObject()
 {
-	if(!m_selectedConnection)
-		return;
+	if (m_selectedConnection) {
+		m_connectionViews.remove(m_selectedConnection);
+		updateContents(m_selectedConnection->connectionRect());
 
-	m_connectionViews.remove(m_selectedConnection);
-	updateContents(m_selectedConnection->connectionRect());
-
-	kdDebug() << "KexiRelationView::removeSelectedConnection()" << endl;
+		kdDebug() << "KexiRelationView::removeSelectedConnection()" << endl;
 
 #if 0
 	RelationList l = m_relation->projectRelations();
@@ -383,17 +386,18 @@ KexiRelationView::removeSelectedConnection()
 	kdDebug() << "KexiRelationView::removeSelectedConnection(): d2" << endl;
 	m_relation->updateRelationList(this, nl);
 	kdDebug() << "KexiRelationView::removeSelectedConnection(): d3" << endl;
-
-	delete m_selectedConnection;
-	m_selectedConnection = 0;
-	invalidateActions();
 #endif
+		delete m_selectedConnection;
+		m_selectedConnection = 0;
+		invalidateActions();
+	}
+//TODO	else if (
 }
 
-void KexiRelationView::removeSelectedTableQuery()
+/*void KexiRelationView::removeSelectedTableQuery()
 {
 	//TODO
-}
+}*/
 
 void KexiRelationView::tableViewEndDrag()
 {

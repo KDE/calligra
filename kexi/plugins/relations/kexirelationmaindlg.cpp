@@ -33,14 +33,14 @@ KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *win)
  : KexiDialogBase(win, i18n("Relations"))
 {
 	kdDebug() << "KexiRelationMainDlg()" << endl;
+	setIcon(SmallIcon("relation"));
+	setDocID(0xdeadbeef);
 
 	m_view = new KexiRelationDialog(this, win);
 
 	QVBoxLayout *g = new QVBoxLayout(this);
 	g->addWidget(m_view);
 
-	setIcon(SmallIcon("relation")); 
-	setDocID(0xdeadbeef);
 	registerDialog();
 }
 

@@ -26,7 +26,7 @@
 #include <qdict.h>
 
 #include "kexirelationviewconnection.h"
-
+#include "kexiactionproxy.h"
 
 class QFrame;
 
@@ -53,7 +53,7 @@ struct SourceConnection
 
 };
 
-class KexiRelationView : public QScrollView
+class KexiRelationView : public QScrollView, public KexiActionProxy
 {
 	Q_OBJECT
 
@@ -70,8 +70,11 @@ class KexiRelationView : public QScrollView
 
 	public slots:
 		void		slotTableScrolling(QString);
-		void		removeSelectedConnection();
-		void		removeSelectedTableQuery();
+//		void		removeSelectedConnection();
+//		void		removeSelectedTableQuery();
+
+		//! removes selected table or connection
+		void removeSelectedObject();
 
 	protected slots:
 		void		containerMoved(KexiRelationViewTableContainer *c);
@@ -80,9 +83,10 @@ class KexiRelationView : public QScrollView
 		void		tableViewGotFocus();
 
 	protected:
+
 		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 		void		contentsMousePressEvent(QMouseEvent *ev);
-		virtual void	keyPressEvent(QKeyEvent *ev);
+//		virtual void	keyPressEvent(QKeyEvent *ev);
 
 		void		recalculateSize(int width, int height);
 		void		stretchExpandSize();

@@ -210,15 +210,48 @@ TODO: on Connection::updateRow(): pass field's name together with error message
     -additional mapping is needed, eg QMap<QString,QString> err;
     err["KexiDB::Field::name"]="ID";
 
-TODO: win32: Fix saving config files via KConfig (now are ugly overwritten)
+TODO: win32: Fix saving config files via KConfig (now the files are ugly overwritten)
+
+TODO: add toolbar for toggling views (design-textedit-dataview)
+
+TABLE VIEW TODO:
+- fix not-db-aware mode
+- add SpreadSheet mode (eg. for alter table, and query editor)
+- add support for enums (combo boxes)
+
+2004-01-06
+- KexiTableView: 
+  -rowEditStarted(int) signal is emitted when row editing is started
+    (for updating or inserting)
+  -rowEditTerminated(int) emmited when row editing is terminated 
+    (no matter if accepted or not)
+  -proper availability updates for "edit_delete_row" (disabled when tv is
+   readonly) and "data_save_row" (enabled only on row editing)
+- KexiDialogBase/KexiPart : fixed caption icons setting for dialogs created by
+  parts
+- Shared Actions:
+  - KexiSharedActionHost introduced - it's "action sharing" functionality extracted from KexiMainWindow.
+  - global default KexiSharedActionHost added for convenience
+  - KexiActionProxy now uses KexiSharedActionHost as it's host instead of explicity pointed KexiMainWindow
+
+-KMDI:
+  -caption's icon is resized on setIcon() when needed
+  -default icon changed to SmallIcon("filenew"), 
+   if not found - filenew.xpm is used
 
 2004-01-05
 - QueryAsterisk: 
   -setTable() added - a must for parser to work
   -debug improoved
 - Connection: dropTable() added
-
 - Query Part ported to win32
+- KexiBrowser: nice title added for popup under part item
+- KexiTableView: 
+  -navigator showing/hiding implemented
+  -cursor setting a bit fixed for empty view
+  -cell's text has now proper color for read-only column
+- KMDI: fixed bad QWidget filter lookup and unsafe identifier hiding in childview's eventfilter
+- kexipropertyeditor ported to win32, kexiproperty and kexipropertybuffer moved from core
 
 2004-01-04
 - KexiActionProxy: "action" term in methods substituted by more readable: "sharedAction"
