@@ -353,7 +353,7 @@ void KSpreadTabBar::slotRename()
 
     bool ok;
     QString activeName = table->tableName();
-    QString newName = KLineEditDlg::getText( i18n("Rename Sheet"),i18n("Rename Sheet:"), activeName, &ok, this );
+    QString newName = KLineEditDlg::getText( i18n("Rename Sheet"),i18n("Rename sheet:"), activeName, &ok, this );
 
     // Have a different name ?
     if ( ok ) // User pushed an OK button.

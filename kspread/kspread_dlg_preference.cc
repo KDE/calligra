@@ -901,7 +901,7 @@ configureSpellPage::configureSpellPage( KSpreadView* _view,QVBox *box , char *na
 void configureSpellPage::slotClearIgnoreAllHistory()
 {
     int ret = KMessageBox::warningContinueCancel(0L,
-                                                 i18n("Warning! You are about to erase the entire Ignore word history."));
+                                                 i18n("Warning! You are about to erase the entire ignore word history."));
     if (ret == KMessageBox::Continue)
         m_pView->doc()->clearIgnoreWordAll();
 }

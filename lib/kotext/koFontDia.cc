@@ -70,10 +70,10 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
     lay1->addWidget(grp);
     QGridLayout *grid = new QGridLayout( grp, 2, 3, KDialog::marginHint(), KDialog::spacingHint() );
 
-    m_superScript = new QRadioButton(i18n("SuperScript"),grp);
+    m_superScript = new QRadioButton(i18n("Superscript"),grp);
     grid->addWidget(m_superScript,0,0);
 
-    m_subScript = new QRadioButton(i18n("SubScript"),grp);
+    m_subScript = new QRadioButton(i18n("Subscript"),grp);
     grid->addWidget(m_subScript,1,0);
 
     if(!_withSubSuperScript)
@@ -108,7 +108,7 @@ void KoFontChooser::setupTab2()
     lay1->addWidget(grp);
     QGridLayout *grid = new QGridLayout( grp, 10, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    QLabel * lab = new QLabel( i18n("Underlining"), grp);
+    QLabel * lab = new QLabel( i18n("Underlining:"), grp);
     grid->addWidget( lab, 0, 0);
 
     m_underlining = new QComboBox( grp );
@@ -123,9 +123,9 @@ void KoFontChooser::setupTab2()
     m_underlineType = new QComboBox(grp );
     grid->addWidget( m_underlineType, 1, 1);
     QStringList lstType;
-    lstType <<i18n("Solid line");
-    lstType <<i18n("Dash line");
-    lstType <<i18n("Dot line");
+    lstType <<i18n("Solid Line");
+    lstType <<i18n("Dash Line");
+    lstType <<i18n("Dot Line");
     lstType <<i18n("Dash Dot line");
     lstType <<i18n("Dash Dot Dot line");
     m_underlineType->insertStringList( lstType );
@@ -135,7 +135,7 @@ void KoFontChooser::setupTab2()
     grid->addWidget(m_underlineColorButton,1,2);
 
 
-    lab = new QLabel( i18n("StrikeThrough"), grp);
+    lab = new QLabel( i18n("Strikethrough:"), grp);
     grid->addWidget( lab, 2, 0);
 
     d->m_strikeOut = new QComboBox( grp );

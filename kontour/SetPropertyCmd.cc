@@ -65,7 +65,7 @@ void SetPropertyCmd::unexecute()
 
 
 SetOutlineCmd::SetOutlineCmd(GDocument *aGDoc, bool b):
-SetPropertyCmd(aGDoc, i18n("Set outline"))
+SetPropertyCmd(aGDoc, i18n("Set Outline"))
 {
   outline = b;
 }

@@ -124,7 +124,7 @@ void KFCAdd::unexecute()
 
 KFCRemoveSelection::KFCRemoveSelection(Container *document,
                                        Direction direction)
-        : Command(i18n("Remove selected text"), document),
+        : Command(i18n("Remove Selected Text"), document),
           dir(direction)
 {
     removedList.setAutoDelete( true );
@@ -181,7 +181,7 @@ void KFCReplace::unexecute()
 
 KFCRemove::KFCRemove(Container *document,
                      Direction direction)
-        : Command(i18n("Remove selected text"), document),
+        : Command(i18n("Remove Selected Text"), document),
           element(0), simpleRemoveCursor(0), dir(direction)
 {
     removedList.setAutoDelete( true );
@@ -225,7 +225,7 @@ void KFCRemove::unexecute()
 
 KFCRemoveEnclosing::KFCRemoveEnclosing(Container* document,
                                        Direction dir)
-        : Command(i18n("Remove enclosing element"), document),
+        : Command(i18n("Remove Enclosing Element"), document),
           element(0), direction(dir)
 {
 }
@@ -292,7 +292,7 @@ void KFCAddReplacing::unexecute()
 // ******  Add index command
 
 KFCAddGenericIndex::KFCAddGenericIndex(Container* document, ElementIndexPtr _index)
-        : KFCAdd(i18n("Add index"), document), index(_index)
+        : KFCAdd(i18n("Add Index"), document), index(_index)
 {
     addElement(new SequenceElement());
 }
@@ -306,7 +306,7 @@ void KFCAddGenericIndex::execute()
 
 KFCAddIndex::KFCAddIndex(Container* document,
                          IndexElement* element, ElementIndexPtr index)
-        : KFCAddReplacing(i18n("Add index"), document),
+        : KFCAddReplacing(i18n("Add Index"), document),
           addIndex(document, index)
 {
     setElement(element);

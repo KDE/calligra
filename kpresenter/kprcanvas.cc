@@ -6225,7 +6225,7 @@ void KPrCanvas::alignObjTop()
 
 void KPrCanvas::alignObjCenterV()
 {
-    KMacroCommand *macro= new KMacroCommand(i18n( "Align Object(s) Center / Vertical" ));
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align Object(s) Center/Vertical" ));
     bool createMacro=false;
     KCommand *cmd=0L;
     KPresenterDoc *doc =m_view->kPresenterDoc();

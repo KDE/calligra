@@ -203,7 +203,7 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
 	}
 
 	m_undoRedo = new KIntNumInput( m_oldUndoRedo, tmpQGroupBox );
-	m_undoRedo->setLabel( i18n( "Undo/Redo Limit:" ) );
+	m_undoRedo->setLabel( i18n( "Undo/redo limit:" ) );
 	m_undoRedo->setRange( 10, 60, 1 );
 
 	grid->addWidget( m_undoRedo, 0, 0 );

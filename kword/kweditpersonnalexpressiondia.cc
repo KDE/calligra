@@ -183,7 +183,7 @@ void KWEditPersonnalExpression::slotOk()
 void KWEditPersonnalExpression::slotAddExpression()
 {
     bool ok;
-    QString expr=KLineEditDlg::getText(i18n("Add Expression:"),i18n("New expression:"), "",
+    QString expr=KLineEditDlg::getText(i18n("Add Expression"),i18n("New expression:"), "",
                                        &ok, this);
     if(ok && !expr.isEmpty())
     {
@@ -222,7 +222,7 @@ void KWEditPersonnalExpression::slotRenameExpression()
     QString oldName=m_listOfExpression->currentText ();
     if(oldName.isEmpty())
         return;
-    QString newName=KLineEditDlg::getText(i18n("Rename Expression:"),i18n("Name:"), "",
+    QString newName=KLineEditDlg::getText(i18n("Rename Expression"),i18n("Name:"), "",
                                        &ok, this);
     if(ok && !newName.isEmpty()&&oldName!=newName )
     {
@@ -245,7 +245,7 @@ void KWEditPersonnalExpression::slotRenameExpression()
 void KWEditPersonnalExpression::slotAddGroup()
 {
     bool ok;
-    QString expr=KLineEditDlg::getText(i18n("Add Group:"),i18n("New group:"), "",
+    QString expr=KLineEditDlg::getText(i18n("Add Group"),i18n("New group:"), "",
                                        &ok, this);
     if(ok && !expr.isEmpty())
     {
@@ -289,7 +289,7 @@ void KWEditPersonnalExpression::slotRenameGroup()
     bool ok;
     if(group.isEmpty())
         return;
-    QString newName=KLineEditDlg::getText(i18n("Rename Group:"),i18n("Name:"), "",
+    QString newName=KLineEditDlg::getText(i18n("Rename Group"),i18n("Name:"), "",
                                        &ok, this);
     if(ok && !newName.isEmpty() && newName!=group)
     {

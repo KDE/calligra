@@ -349,7 +349,7 @@ void KivioTabBar::slotRename()
 
     bool ok;
     QString activeName = page->pageName();
-    QString newName = KLineEditDlg::getText( i18n("Page Name"), activeName, &ok, this );
+    QString newName = KLineEditDlg::getText( i18n("Page Name"), i18n("Enter page name:"), activeName, &ok, this );
 
     // Have a different name ?
     if ( ok ) // User pushed an OK button.

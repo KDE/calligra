@@ -72,7 +72,7 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
 
   tmpQLabel = new QLabel( this, "Label_1" );
   grid1->addWidget(tmpQLabel,4,0);
-  tmpQLabel->setText( i18n("Entered References:") );
+  tmpQLabel->setText( i18n("Entered references:") );
 
   m_pRefs = new QListBox( this );
   grid1->addMultiCellWidget( m_pRefs,5,8,0,0);

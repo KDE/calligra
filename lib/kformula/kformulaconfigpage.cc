@@ -70,22 +70,22 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     operatorFont = contextStyle.getOperatorFont();
 
     connect( buildFontLine( gbox, grid, 0, defaultFont,
-            i18n( "Default Font:" ), defaultFontName ),
+            i18n( "Default font:" ), defaultFontName ),
             SIGNAL( clicked() ), SLOT( selectNewDefaultFont() ) );
 
     connect( buildFontLine( gbox, grid, 1, nameFont,
-            i18n( "Name Font:" ), nameFontName ),
+            i18n( "Name font:" ), nameFontName ),
             SIGNAL( clicked() ), SLOT( selectNewNameFont() ) );
 
     connect( buildFontLine( gbox, grid, 2, numberFont,
-            i18n( "Number Font:" ), numberFontName ),
+            i18n( "Number font:" ), numberFontName ),
             SIGNAL( clicked() ), SLOT( selectNewNumberFont() ) );
 
     connect( buildFontLine( gbox, grid, 3, operatorFont,
-            i18n( "Operator Font:" ), operatorFontName ),
+            i18n( "Operator font:" ), operatorFontName ),
             SIGNAL( clicked() ), SLOT( selectNewOperatorFont() ) );
 
-    QLabel* sizeTitle = new QLabel( i18n( "Default Base Size:" ), gbox );
+    QLabel* sizeTitle = new QLabel( i18n( "Default base size:" ), gbox );
     grid->addWidget( sizeTitle, 4, 0 );
 
     sizeSpin = new KIntNumInput( contextStyle.baseSize(), gbox );
@@ -108,7 +108,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     grid->setSpacing( KDialog::spacingHint() );
 
     QLabel* defaultLabel = new QLabel( hlBox, "defaultLabel" );
-    defaultLabel->setText( i18n( "Default Color:" ) );
+    defaultLabel->setText( i18n( "Default color:" ) );
     grid->addWidget( defaultLabel, 0, 0 );
 
     defaultColorBtn = new KColorButton( hlBox, "defaultColor" );
@@ -117,7 +117,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
 
     QLabel* numberLabel = new QLabel( hlBox, "numberLabel" );
-    numberLabel->setText( i18n( "Number Color:" ) );
+    numberLabel->setText( i18n( "Number color:" ) );
     grid->addWidget( numberLabel, 1, 0 );
 
     numberColorBtn = new KColorButton( hlBox, "numberColor" );
@@ -126,7 +126,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
 
     QLabel* operatorLabel = new QLabel( hlBox, "operatorLabel" );
-    operatorLabel->setText( i18n( "Operator Color:" ) );
+    operatorLabel->setText( i18n( "Operator color:" ) );
     grid->addWidget( operatorLabel, 2, 0 );
 
     operatorColorBtn = new KColorButton( hlBox, "operatorColor" );
@@ -135,7 +135,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
 
     QLabel* emptyLabel = new QLabel( hlBox, "emptyLabel" );
-    emptyLabel->setText( i18n( "Empty Color:" ) );
+    emptyLabel->setText( i18n( "Empty color:" ) );
     grid->addWidget( emptyLabel, 3, 0 );
 
     emptyColorBtn = new KColorButton( hlBox, "emptyColor" );
@@ -144,7 +144,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
 
     QLabel* errorLabel = new QLabel( hlBox, "errorLabel" );
-    errorLabel->setText( i18n( "Error Color:" ) );
+    errorLabel->setText( i18n( "Error color:" ) );
     grid->addWidget( errorLabel, 4, 0 );
 
     errorColorBtn = new KColorButton( hlBox, "errorColor" );

@@ -2607,7 +2607,7 @@ void KPresenterView::setupActions()
                                                this, SLOT( textStrikeOut() ),
                                                actionCollection(), "format_strike" );
 
-    actionTextColor = new TKSelectColorAction( i18n( "&Color" ), TKSelectColorAction::TextColor,
+    actionTextColor = new TKSelectColorAction( i18n( "&Color..." ), TKSelectColorAction::TextColor,
                                                actionCollection(), "text_color" ,true);
     connect( actionTextColor, SIGNAL( activated() ), SLOT( textColor() ) );
     actionTextColor->setDefaultColor(QColor());
@@ -2863,12 +2863,12 @@ void KPresenterView::setupActions()
 
      // ----------------- colorbar(Brush and Pen) action
 
-     actionBrushColor = new TKSelectColorAction( i18n( "Brush Color" ), TKSelectColorAction::FillColor,
+     actionBrushColor = new TKSelectColorAction( i18n( "Brush Color..." ), TKSelectColorAction::FillColor,
                                                  actionCollection(), "brush_color" ,true);
      connect( actionBrushColor, SIGNAL( activated() ), SLOT( brushChosen() ) );
      actionBrushColor->setDefaultColor(QColor());
 
-     actionPenColor = new TKSelectColorAction( i18n( "Pen Color" ), TKSelectColorAction::LineColor,
+     actionPenColor = new TKSelectColorAction( i18n( "Pen Color..." ), TKSelectColorAction::LineColor,
                                                actionCollection(), "pen_color" );
      connect( actionPenColor, SIGNAL( activated() ), SLOT( penChosen() ) );
      actionPenColor->setDefaultColor(QColor());
@@ -2929,7 +2929,7 @@ void KPresenterView::setupActions()
                         this, SLOT( insertSpecialChar() ),
                         actionCollection(), "insert_specialchar" );
 
-    actionInsertLink = new KAction( i18n( "Insert Link" ), 0,
+    actionInsertLink = new KAction( i18n( "Link..." ), 0,
                                     this, SLOT( insertLink() ),
                                     actionCollection(), "insert_link" );
 
@@ -2963,7 +2963,7 @@ void KPresenterView::setupActions()
                                      this, SLOT( openLink() ),
                                      actionCollection(), "open_link" );
 
-    actionChangeLink=new KAction( i18n("Change Link"), 0,
+    actionChangeLink=new KAction( i18n("Change Link..."), 0,
                                   this,SLOT(changeLink()),
                                   actionCollection(), "change_link");
 
@@ -3040,10 +3040,10 @@ void KPresenterView::setupActions()
     actComplete->plugAccel( accel );
 
 
-    actionInsertComment = new KAction( i18n( "Comment" ), 0,
+    actionInsertComment = new KAction( i18n( "Comment..." ), 0,
                                     this, SLOT( insertComment() ),
                                     actionCollection(), "insert_comment" );
-    actionEditComment = new KAction( i18n("Edit Comment"), 0,
+    actionEditComment = new KAction( i18n("Edit Comment..."), 0,
                                   this,SLOT(editComment()),
                                   actionCollection(), "edit_comment");
 
@@ -4814,7 +4814,7 @@ void KPresenterView::showFormat( const KoTextFormat &currentFormat )
     QColor col=currentFormat.textBackgroundColor();
     actionBrushColor->setEnabled(true);
     actionBrushColor->setCurrentColor( col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
-    //actionBrushColor->setText(i18n("Text Background Color"));
+    //actionBrushColor->setText(i18n("Text Background Color..."));
     actionTextColor->setCurrentColor( currentFormat.color() );
 
     switch(currentFormat.vAlign())
@@ -6540,7 +6540,7 @@ void KPresenterView::applyAutoFormat()
         macro->addCommand( cmd2 );
     }
 
-    while(switchInOtherPage(i18n( "Do you want to Apply Autoformat in new page?")) )
+    while(switchInOtherPage(i18n( "Do you want to apply autoformat in new page?")) )
     {
         KCommand * cmd = applyAutoFormatToCurrentPage(m_canvas->activePage()->objectText());
         if ( cmd )

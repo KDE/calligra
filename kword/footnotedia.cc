@@ -39,7 +39,7 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
 
     setButtonOKText(i18n("&Insert"));
 
-    setCaption( i18n("Insert Footnote / Endnote") );
+    setCaption( i18n("Insert Footnote/Endnote") );
 
     QVBox *page = makeVBoxMainWidget();
 

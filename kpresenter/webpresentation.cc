@@ -641,7 +641,7 @@ void KPWebPresentationWizard::setupPage3()
     QVBox *canvas = new QVBox( page3 );
 
     QHBox *row = new QHBox( canvas );
-    QLabel *label = new QLabel( i18n( "Slide Title:" ), row );
+    QLabel *label = new QLabel( i18n( "Slide title:" ), row );
     label->setAlignment( Qt::AlignVCenter );
     label->setMinimumWidth( label->sizeHint().width() );
     label->setMaximumWidth( label->sizeHint().width() );

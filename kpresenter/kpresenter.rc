@@ -308,22 +308,15 @@
   <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
-   <Separator/>
    <Action name="extra_aligncenterh"/>
-   <Separator/>
    <Action name="extra_alignright"/>
-   <Separator/>
    <Action name="extra_aligntop"/>
-   <Separator/>
    <Action name="extra_aligncenterv"/>
-   <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
   <Menu name="Vertical Alignment"><text>Vertical Alignment</text>
    <Action name="align_top"/>
-   <Separator/>
    <Action name="align_center"/>
-   <Separator/>
    <Action name="align_bottom"/>
   </Menu>
   <Separator/>
@@ -344,15 +337,10 @@
   <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
-   <Separator/>
    <Action name="extra_aligncenterh"/>
-   <Separator/>
    <Action name="extra_alignright"/>
-   <Separator/>
    <Action name="extra_aligntop"/>
-   <Separator/>
    <Action name="extra_aligncenterv"/>
-   <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
   <Separator/>
@@ -371,15 +359,10 @@
   <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
-   <Separator/>
    <Action name="extra_aligncenterh"/>
-   <Separator/>
    <Action name="extra_alignright"/>
-   <Separator/>
    <Action name="extra_aligntop"/>
-   <Separator/>
    <Action name="extra_aligncenterv"/>
-   <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
   <Separator/>
@@ -398,15 +381,10 @@
   <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
-   <Separator/>
    <Action name="extra_aligncenterh"/>
-   <Separator/>
    <Action name="extra_alignright"/>
-   <Separator/>
    <Action name="extra_aligntop"/>
-   <Separator/>
    <Action name="extra_aligncenterv"/>
-   <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
   <Separator/>
@@ -429,15 +407,10 @@
   </Menu>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
-   <Separator/>
    <Action name="extra_aligncenterh"/>
-   <Separator/>
    <Action name="extra_alignright"/>
-   <Separator/>
    <Action name="extra_aligntop"/>
-   <Separator/>
    <Action name="extra_aligncenterv"/>
-   <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
   <Separator/>
@@ -463,15 +436,10 @@
   <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
-   <Separator/>
    <Action name="extra_aligncenterh"/>
-   <Separator/>
    <Action name="extra_alignright"/>
-   <Separator/>
    <Action name="extra_aligntop"/>
-   <Separator/>
    <Action name="extra_aligncenterv"/>
-   <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
   <Separator/>
@@ -495,15 +463,10 @@
   <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
-   <Separator/>
    <Action name="extra_aligncenterh"/>
-   <Separator/>
    <Action name="extra_alignright"/>
-   <Separator/>
    <Action name="extra_aligntop"/>
-   <Separator/>
    <Action name="extra_aligncenterv"/>
-   <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
   <Separator/>
@@ -525,15 +488,10 @@
   <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
-   <Separator/>
    <Action name="extra_aligncenterh"/>
-   <Separator/>
    <Action name="extra_alignright"/>
-   <Separator/>
    <Action name="extra_aligntop"/>
-   <Separator/>
    <Action name="extra_aligncenterv"/>
-   <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
   <Separator/>
@@ -555,15 +513,10 @@
   <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
-   <Separator/>
    <Action name="extra_aligncenterh"/>
-   <Separator/>
    <Action name="extra_alignright"/>
-   <Separator/>
    <Action name="extra_aligntop"/>
-   <Separator/>
    <Action name="extra_aligncenterv"/>
-   <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
   <Separator/>
@@ -658,15 +611,10 @@
   <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
-   <Separator/>
    <Action name="extra_aligncenterh"/>
-   <Separator/>
    <Action name="extra_alignright"/>
-   <Separator/>
    <Action name="extra_aligntop"/>
-   <Separator/>
    <Action name="extra_aligncenterv"/>
-   <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
   <Separator/>

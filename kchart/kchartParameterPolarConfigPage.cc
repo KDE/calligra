@@ -43,7 +43,7 @@ KChartParameterPolarConfigPage::KChartParameterPolarConfigPage( KChartParams* pa
     angle->resize(100, angle->sizeHint().height() );
     grid3->addWidget( angle,5,0);
 
-    label=new QLabel(i18n("Line Width:"),gb3);
+    label=new QLabel(i18n("Line width:"),gb3);
     label->resize(label->sizeHint());
     label->setAlignment(Qt::AlignCenter);
     grid3->addWidget(label,6,0);

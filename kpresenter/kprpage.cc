@@ -1497,7 +1497,7 @@ KCommand * KPrPage::alignObjsCenterV(const KoRect &rect)
     }
     if(newPosition)
     {
-        moveByCmd2 = new MoveByCmd2( i18n( "Align Object(s) Center / Vertical" ), _diffs, _objects, m_doc );
+        moveByCmd2 = new MoveByCmd2( i18n( "Align Object(s) Center/Vertical" ), _diffs, _objects, m_doc );
         moveByCmd2->execute();
     }
     else

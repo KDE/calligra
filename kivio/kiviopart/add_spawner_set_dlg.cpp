@@ -231,11 +231,11 @@ AddSpawnerSetDlg::AddSpawnerSetDlg( QWidget *par, const char *name, QString /*rd
     KButtonBox *bb = new KButtonBox( this );
     bb->addStretch();
 
-    m_ok = bb->addButton( i18n("OK") );
+    m_ok = bb->addButton( i18n("&OK") );
     m_ok->setDefault( TRUE );
     m_ok->setEnabled(false);
 
-    QPushButton *pCancel = bb->addButton( i18n( "Cancel" ) );
+    QPushButton *pCancel = bb->addButton( i18n( "&Cancel" ) );
     bb->layout();
     vbox->addWidget( bb );
     connect( m_ok, SIGNAL( clicked() ), this, SLOT( slotOk() ) );

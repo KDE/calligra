@@ -238,7 +238,7 @@ void KoAutoFormatDia::setupTab1()
     vbox->addWidget(cbUpperUpper);
 
     cbDetectUrl=new QCheckBox( tab1 );
-    cbDetectUrl->setText( i18n( "Auto format &URLs" ) );
+    cbDetectUrl->setText( i18n( "Autoformat &URLs" ) );
     QWhatsThis::add( cbDetectUrl, i18n(
             "Detect when a URL (Universal Remote Location) is typed and "
             "provide formatting that matches the way an Internet browser "

@@ -45,7 +45,7 @@ TextTool::TextTool( KivioView* view )
   setSortNum(2);
 
   ToolSelectAction* text = new ToolSelectAction( actionCollection(), "ToolAction" );
-  KAction* m_z1 = new KAction( i18n("Edit Stencil Text"), "kivio_text", CTRL+Key_T, actionCollection(), "text" );
+  KAction* m_z1 = new KAction( i18n("Edit Stencil Text..."), "kivio_text", CTRL+Key_T, actionCollection(), "text" );
   text->insert(m_z1);
 
   m_mode = stmNone;

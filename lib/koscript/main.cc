@@ -40,7 +40,7 @@ int main( int argc, char** argv )
 {
   const char *appName = (argc > 1) ? argv[1] : "koscript";
   KCmdLineArgs::init(argc, argv, appName,
-        I18N_NOOP("KOffice Script interpreter."),
+        I18N_NOOP("KOffice script interpreter."),
         "2.0.0");
 
   KCmdLineArgs::addCmdLineOptions(options);

@@ -492,7 +492,7 @@ void KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
         {
             unsigned int length = lastWord.length();
             int start = index+1 - length;
-            KMacroCommand *macro = new KMacroCommand( i18n("Completion word"));
+            KMacroCommand *macro = new KMacroCommand( i18n("Completion Word"));
 
             KoTextCursor cursor( parag->document() );
             cursor.setParag( parag );
@@ -507,7 +507,7 @@ void KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
 
             macro->addCommand( txtObj->replaceSelectionCommand( textEditCursor, word,
                                                               KoTextObject::HighlightSelection,
-                                                              i18n("Completion word") ));
+                                                              i18n("Completion Word") ));
             if ( m_completionAppendSpace && !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) )
             {
                 int newPos = word.length() + index - 3;
@@ -758,7 +758,7 @@ KCommand *KoAutoFormat::doTypographicQuotes( KoTextCursor* textEditCursor, KoTex
     }
     return txtObj->replaceSelectionCommand( textEditCursor, replacement,
                               KoTextObject::HighlightSelection,
-                                            i18n("Typographic quote") );
+                                            i18n("Typographic Quote") );
 }
 
 KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag *parag,
@@ -1002,7 +1002,7 @@ KCommand * KoAutoFormat::doAutoChangeFormat( KoTextCursor *textEditCursor, KoTex
         QString replacement=word.mid(1,word.length()-2);
         int start = index - word.length();
         KoTextDocument * textdoc = parag->textDocument();
-        KMacroCommand *macro=new KMacroCommand(i18n("Autocorrection: change format."));
+        KMacroCommand *macro=new KMacroCommand(i18n("Autocorrection: Change Format."));
         KoTextCursor cursor( parag->document() );
 
         cursor.setParag( parag );

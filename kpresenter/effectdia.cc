@@ -147,7 +147,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     appearSoundEffect = new QCheckBox( i18n( "Sound effect" ), grp1 );
     appearSoundEffect->setChecked( obj->getAppearSoundEffect() );
     upperRow->addWidget( appearSoundEffect, 4, 0 );
-    QWhatsThis::add( appearSoundEffect, i18n("If you use sound effect, please do not select No Effect.") );
+    QWhatsThis::add( appearSoundEffect, i18n("If you use sound effect, please do not select 'No Effect'.") );
 
     if ( static_cast<int>( obj->getEffect() ) == 0 )
         appearSoundEffect->setEnabled( false );
@@ -239,7 +239,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     disappearSoundEffect = new QCheckBox( i18n( "Sound effect" ), grp2 );
     disappearSoundEffect->setChecked( obj->getDisappearSoundEffect() );
     lowerRow->addWidget( disappearSoundEffect, 3, 0 );
-    QWhatsThis::add( disappearSoundEffect, i18n("If you use sound effect, please do not select No Effect.") );
+    QWhatsThis::add( disappearSoundEffect, i18n("If you use sound effect, please do not select 'No Effect'.") );
 
     if ( static_cast<int>( obj->getEffect3() ) == 0 )
         disappearSoundEffect->setEnabled( false );

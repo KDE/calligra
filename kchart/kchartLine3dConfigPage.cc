@@ -30,7 +30,7 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
 
   connect(line3d, SIGNAL(toggled ( bool )),this,SLOT(slotChange3DParameter(bool)));
 
-  QLabel *tmpLabel = new QLabel( i18n( "Line Width:" ), gb );
+  QLabel *tmpLabel = new QLabel( i18n( "Line width:" ), gb );
   grid1->addWidget(tmpLabel,1,0);
 
   lineWidth=new KIntNumInput(0, gb, 10);

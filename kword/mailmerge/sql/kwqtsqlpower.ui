@@ -142,7 +142,7 @@
                         <cstring>TextLabel1_2</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Available Tables:</string>
+                        <string>&amp;Available tables:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>tables</cstring>

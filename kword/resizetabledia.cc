@@ -36,7 +36,7 @@
 KWResizeTableDia::KWResizeTableDia( QWidget *parent, const char *name, KWTableFrameSet *_table, KWDocument *_doc, ResizeType _type, KWCanvas *_canvas )
     : KDialogBase( parent, name , true, "", Ok | Cancel )
 {
-    setCaption( i18n("Change Help Line position") );
+    setCaption( i18n("Change Help Line Position") );
 
     type = _type;
     table = _table;

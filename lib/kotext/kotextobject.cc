@@ -400,7 +400,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
     case ActionDelete: {
         checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
         if ( !undoRedoInfo.valid() ) {
-            newPlaceHolderCommand( i18n("Delete text") );
+            newPlaceHolderCommand( i18n("Delete Text") );
             undoRedoInfo.id = parag->paragId();
             undoRedoInfo.index = cursor->index();
             undoRedoInfo.text = QString::null;
@@ -440,7 +440,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
         {
             checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
             if ( !undoRedoInfo.valid() ) {
-                newPlaceHolderCommand( i18n("Delete text") );
+                newPlaceHolderCommand( i18n("Delete Text") );
                 undoRedoInfo.id = parag->paragId();
                 undoRedoInfo.index = cursor->index();
                 undoRedoInfo.text = QString::null;
@@ -466,7 +466,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
     case ActionReturn: {
         checkUndoRedoInfo( cursor, UndoRedoInfo::Return );
         if ( !undoRedoInfo.valid() ) {
-            newPlaceHolderCommand( i18n("Insert text") );
+            newPlaceHolderCommand( i18n("Insert Text") );
             undoRedoInfo.id = cursor->parag()->paragId();
             undoRedoInfo.index = cursor->index();
             undoRedoInfo.text = QString::null;
@@ -497,7 +497,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
         if ( !cursor->atParagEnd() || cursor->parag()->next() ) {
             checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
             if ( !undoRedoInfo.valid() ) {
-                newPlaceHolderCommand( i18n("Delete text") );
+                newPlaceHolderCommand( i18n("Delete Text") );
                 undoRedoInfo.id = cursor->parag()->paragId();
                 undoRedoInfo.index = cursor->index();
                 undoRedoInfo.text = QString::null;
@@ -661,7 +661,7 @@ KCommand *KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newSt
     /// 2 - Changing the character formatting for each char in the paragraph (setFormat(indices))
     /// 3 - Changing the character formatting for the whole paragraph (setFormat()) [just in case]
     /// -> We need a macro command to hold the 3 commands
-    KMacroCommand * macroCmd = createUndoRedo ? new KMacroCommand( i18n("Apply style %1").
+    KMacroCommand * macroCmd = createUndoRedo ? new KMacroCommand( i18n("Apply Style %1").
                                                                    arg(newStyle->translatedName() ) ) : 0;
 
     // 1
@@ -921,7 +921,7 @@ KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat *
             textdoc, id, index, eid, eindex, undoRedoInfo.text.rawData(),
             format, flags );
         textdoc->addCommand( cmd );
-        ret = new KoTextCommand( this, /*cmd, */i18n("Format text") );
+        ret = new KoTextCommand( this, /*cmd, */i18n("Format Text") );
         undoRedoInfo.clear();
         setLastFormattedParag( c1.parag() );
         formatMore();
@@ -1005,7 +1005,7 @@ KCommand *KoTextObject::setCounterCommand( KoTextCursor * cursor, const KoParagC
     undoRedoInfo.clear(); // type is still Invalid -> no command created
     emit showCursor();
     emit updateUI( true );
-    return new KoTextCommand( this, /*cmd, */i18n("Change list type") );
+    return new KoTextCommand( this, /*cmd, */i18n("Change List Type") );
 }
 
 KCommand * KoTextObject::setAlignCommand( KoTextCursor * cursor, int align , int selectionId )
@@ -1634,7 +1634,7 @@ KCommand *KoTextObject::changeCaseOfTextParag(int cursorPosStart, int cursorPosE
     if ( protectContent() )
         return 0L;
 
-    KMacroCommand * macroCmd = new KMacroCommand( i18n("Change case") );
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Change Case") );
     KoTextFormat *curFormat = parag->paragraphFormat();
     QString text = parag->string()->toString().mid(cursorPosStart , cursorPosEnd - cursorPosStart );
     QString repl;
@@ -1710,7 +1710,7 @@ KCommand *KoTextObject::changeCaseOfText(KoTextCursor *cursor,KoChangeCaseDia::T
 {
     if ( protectContent() )
         return 0L;
-    KMacroCommand * macroCmd = new KMacroCommand( i18n("Change case") );
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Change Case") );
 
     KoTextCursor start = textDocument()->selectionStartCursor( KoTextDocument::Standard );
     KoTextCursor end = textDocument()->selectionEndCursor( KoTextDocument::Standard );

@@ -156,17 +156,17 @@ void GObjectM9r::createPropertyDialog() {
 
     grid->setRowStretch(4, 1);
 
-    label=new QLabel(i18n("Bounding Rectangle:"), information);
+    label=new QLabel(i18n("Bounding rectangle:"), information);
     grid->addMultiCellWidget(label, 5, 5, 0, 3);
 
-    label=new QLabel(i18n("Top-Left:"), information);
+    label=new QLabel(i18n("Top-left:"), information);
     grid->addWidget(label, 6, 0);
 
     label=new QLabel(i18n("x=%1, y=%2").arg(m_object->boundingRect().x()).
                      arg(m_object->boundingRect().y()), information);
     grid->addWidget(label, 6, 2);
 
-    label=new QLabel(i18n("Bottom-Right:"), information);
+    label=new QLabel(i18n("Bottom-right:"), information);
     grid->addWidget(label, 7, 0);
 
     label=new QLabel(i18n("x=%1, y=%2").arg(m_object->boundingRect().bottomRight().x()).

@@ -108,7 +108,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
     QVBoxLayout *vbox = new QVBoxLayout( hbox );
     vbox->setSpacing( 5 );
 
-    vbox->addWidget( new QLabel( i18n( "Background Type:" ), page ) );
+    vbox->addWidget( new QLabel( i18n( "Background type:" ), page ) );
 
     backCombo = new QComboBox( false, page );
     backCombo->insertItem( i18n( "Color/Gradient" ) );
@@ -178,7 +178,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
     picTab->setSpacing( 5 );
     picTab->setMargin( 5 );
 
-    QLabel *l = new QLabel( i18n( "View Mode:" ), picTab );
+    QLabel *l = new QLabel( i18n( "View mode:" ), picTab );
     l->setFixedHeight( l->sizeHint().height() );
 
     picView = new QComboBox( false, picTab );

@@ -584,7 +584,7 @@ void KoPageLayoutDia::setupTab3()
 
     QString str = KoUnit::unitDescription( m_unit );
 
-    QLabel *lCSpacing = new QLabel( i18n("Column Spacing (%1):").arg(str), tab3 );
+    QLabel *lCSpacing = new QLabel( i18n("Column spacing (%1):").arg(str), tab3 );
     grid3->addWidget( lCSpacing, 2, 0 );
 
     nCSpacing = new KDoubleNumInput( tab3, "" );

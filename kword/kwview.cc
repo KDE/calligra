@@ -476,13 +476,13 @@ void KWView::setupActions()
     actionInsertFrameBreak->setToolTip( i18n( "Force the remainder of the text into the next frame." ) );
     actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next frame in the frameset." ) );
 
-     actionInsertLink = new KAction( i18n( "Link" ), 0,
+     actionInsertLink = new KAction( i18n( "Link..." ), 0,
                                         this, SLOT( insertLink() ),
                                         actionCollection(), "insert_link" );
     actionInsertLink->setToolTip( i18n( "Insert a web address, email address or hyperlink to a file." ) );
     actionInsertLink->setWhatsThis( i18n( "Insert a web address, email address or hyperlink to a file." ) );
 
-    actionInsertComment = new KAction( i18n( "Comment" ), 0,
+    actionInsertComment = new KAction( i18n( "Comment..." ), 0,
                                     this, SLOT( insertComment() ),
                                     actionCollection(), "insert_comment" );
     actionEditComment = new KAction( i18n("Edit Comment..."), 0,
@@ -873,7 +873,7 @@ void KWView::setupActions()
     actionOpenLink = new KAction( i18n( "Open Link" ), 0,
                                      this, SLOT( openLink() ),
                                      actionCollection(), "open_link" );
-    actionChangeLink=new KAction( i18n("Change Link"), 0,
+    actionChangeLink=new KAction( i18n("Change Link..."), 0,
                                   this,SLOT(changeLink()),
                                   actionCollection(), "change_link");
 
@@ -929,16 +929,16 @@ void KWView::setupActions()
     actionCreateStyleFromSelection = new KAction( i18n( "Create Style From Selection" ), 0,
                                         this, SLOT( createStyleFromSelection()),
                                         actionCollection(), "create_style" );
-    actionConfigureFootEndNote = new KAction( i18n( "Configure FootNote/EndNote" ), 0,
+    actionConfigureFootEndNote = new KAction( i18n( "Configure Footnote/Endnote" ), 0,
                                         this, SLOT( configureFootEndNote()),
                                         actionCollection(), "configure_footendnote" );
 
-    actionEditFootEndNote= new KAction( i18n( "Edit FootNote/EndNote" ), 0,
+    actionEditFootEndNote= new KAction( i18n( "Edit Footnote/Endnote" ), 0,
                                         this, SLOT( editFootEndNote()),
                                         actionCollection(), "edit_footendnote" );
 
 
-    actionChangeFootNoteType = new KAction( i18n("Change FootNote/EndNote Parameter"), 0,
+    actionChangeFootNoteType = new KAction( i18n("Change Footnote/Endnote Parameter"), 0,
                                         this, SLOT( changeFootNoteType() ),
                                             actionCollection(), "change_footendtype");
 
@@ -2546,7 +2546,7 @@ void KWView::displayFrameInlineInfo()
 {
     KMessageBox::information(this,
                              i18n("Set cursor where you want to insert inline frame."),
-                             i18n("Insert Inline frame"),
+                             i18n("Insert Inline Frame"),
                              "SetCursorInsertInlineFrame",true);
 
     KStatusBar * sb = statusBar();
@@ -3745,7 +3745,7 @@ void KWView::textSuperScript()
     bool createmacro=false;
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Text SuperScript") );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Text Superscript") );
     for ( ; it.current() ; ++it )
     {
         KCommand *cmd = it.current()->setTextSuperScriptCommand(actionFormatSuper->isChecked());
@@ -3767,7 +3767,7 @@ void KWView::textSubScript()
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
     bool createmacro=false;
-    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Text SubScript") );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Text Subscript") );
     for ( ; it.current() ; ++it )
     {
         KCommand *cmd = it.current()->setTextSubScriptCommand(actionFormatSub->isChecked());
@@ -4529,8 +4529,8 @@ void KWView::slotFrameSetEditChanged()
 
 void KWView::changeFootNoteMenuItem( bool _footnote)
 {
-    actionEditFootEndNote->setText( _footnote? i18n("Edit FootNote"): i18n("Edit EndNote"));
-    actionChangeFootNoteType->setText( _footnote? i18n("Change FootNote Parameter"):i18n("Change EndNote Parameter"));
+    actionEditFootEndNote->setText( _footnote? i18n("Edit Footnote"): i18n("Edit Endnote"));
+    actionChangeFootNoteType->setText( _footnote? i18n("Change Footnote Parameter"):i18n("Change Endnote Parameter"));
 }
 
 void KWView::slotUpdateRuler()
@@ -4868,7 +4868,7 @@ void KWView::inlineFrame()
     if(actionInlineFrame->isChecked())
     {
 
-        KMacroCommand* macroCmd = new KMacroCommand( i18n("Make FrameSet Inline") );
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Frameset Inline") );
         QPtrList<FrameIndex> frameindexList;
         QPtrList<FrameResizeStruct> frameindexMove;
 
@@ -4877,7 +4877,7 @@ void KWView::inlineFrame()
 
         move->sizeOfBegin=frame->normalize();
         // turn non-floating frame into floating frame
-        KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make FrameSet Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "true" );
+        KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make Frameset Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "true" );
         cmd->execute();
 
         move->sizeOfEnd=frame->normalize();
@@ -4893,7 +4893,7 @@ void KWView::inlineFrame()
     }
     else
     {
-        KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make FrameSet Non-Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "false" );
+        KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Make Frameset Non-Inline"), parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "false" );
         m_doc->addCommand(cmd);
         cmd->execute();
     }
@@ -5149,7 +5149,7 @@ void KWView::changeFootNoteType()
             {
                 FootNoteParameter oldParam( var );
                 FootNoteParameter newParam(dia.noteType(), dia.numberingType(), dia.manualString() );
-                KWChangeFootNoteParametersCommand * cmd = new KWChangeFootNoteParametersCommand( i18n("Change FootNote parameters"), var , oldParam, newParam, m_doc);
+                KWChangeFootNoteParametersCommand * cmd = new KWChangeFootNoteParametersCommand( i18n("Change Footnote Parameters"), var , oldParam, newParam, m_doc);
                 cmd->execute();
                 m_doc->addCommand ( cmd );
             }

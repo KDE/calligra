@@ -2949,7 +2949,7 @@ void KWDocument::deleteSeveralFrame()
 
     int docItem=0;
 
-    KMacroCommand * macroCmd = new KMacroCommand( i18n("Delete frames") );
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Delete Frames") );
     for ( tmp=frames.first(); tmp != 0; tmp=frames.next() )
     {
         KWFrameSet *fs = tmp->frameSet();

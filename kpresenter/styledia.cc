@@ -339,7 +339,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
 
     left->setSpacing( 5 );
 
-    QLabel *l = new QLabel( i18n( "Fill Type:" ), left );
+    QLabel *l = new QLabel( i18n( "Fill type:" ), left );
     l->setFixedHeight( l->sizeHint().height() );
 
     cFillType = new KComboBox( false, left );
@@ -403,7 +403,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     stack->addWidget( gradientConfig, 1 );
     gradientConfig->setSpacing( 5 );
 
-    l = new QLabel( i18n( "Gradient Colors:" ), gradientConfig );
+    l = new QLabel( i18n( "Gradient colors:" ), gradientConfig );
     l->setFixedHeight( l->sizeHint().height() );
 
     gradient1 = new KColorButton( red, gradientConfig );
@@ -413,7 +413,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     connect( gradient2, SIGNAL( changed( const QColor & ) ),
 	     this, SLOT( updateBrushConfiguration() ) );
 
-    l = new QLabel( i18n( "Gradient Style:" ), gradientConfig );
+    l = new QLabel( i18n( "Gradient style:" ), gradientConfig );
     l->setFixedHeight( l->sizeHint().height() );
 
     gradients = new KComboBox( false, gradientConfig );

@@ -53,7 +53,7 @@
   <Action name="insertPart"/>
   <Action name="insertChart"/>
   <Separator/>
-  <Menu name="ExternalData"><text>&amp;External data</text>
+  <Menu name="ExternalData"><text>&amp;External Data</text>
     <Action name="insertFromDatabase"/>
     <Action name="insertFromTextfile"/>
     <Action name="insertFromClipboard"/>

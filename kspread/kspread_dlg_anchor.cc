@@ -34,7 +34,7 @@
 #include <kseparator.h>
 
 KSpreadLinkDlg::KSpreadLinkDlg( KSpreadView* parent, const char* /*name*/ )
-:  KDialogBase(KDialogBase::IconList,i18n("Create Hyperlink") ,
+:  KDialogBase(KDialogBase::IconList,i18n("Insert Link") ,
 		KDialogBase::Ok | KDialogBase::Cancel,
 		KDialogBase::Ok)
 {
@@ -199,7 +199,7 @@ mailAnchor::mailAnchor( KSpreadView* _view,QWidget *parent , char *name )
   tmpQLabel = new QLabel( this);
 
   lay2->addWidget(tmpQLabel);
-  tmpQLabel->setText(i18n("Text:"));
+  tmpQLabel->setText(i18n("Comment:"));
 
   text = new QLineEdit( this );
   lay2->addWidget(text);
@@ -280,7 +280,7 @@ fileAnchor::fileAnchor( KSpreadView* _view,QWidget *parent , char *name )
   tmpQLabel = new QLabel( this);
 
   lay2->addWidget(tmpQLabel);
-  tmpQLabel->setText(i18n("Text:"));
+  tmpQLabel->setText(i18n("Comment:"));
 
   text = new QLineEdit( this );
   lay2->addWidget(text);
@@ -365,7 +365,7 @@ cellAnchor::cellAnchor( KSpreadView* _view,QWidget *parent , char *name )
   tmpQLabel = new QLabel( this);
 
   lay2->addWidget(tmpQLabel);
-  tmpQLabel->setText(i18n("Text:"));
+  tmpQLabel->setText(i18n("Comment:"));
 
   text = new QLineEdit( this );
   lay2->addWidget(text);

@@ -53,7 +53,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
     setName( "KSpreadSortDlg" );
 
   resize( 528, 316 );
-  setCaption( i18n( "Sort - attention: this is still work in progress!!" ) );
+  setCaption( i18n( "Sort - Attention: This is still Work in Progress!" ) );
   setSizeGripEnabled( true );
 
   QVBoxLayout * KSpreadSortDlgLayout

@@ -59,7 +59,7 @@ class KSpreadUndoInsertData : public KSpreadUndoChangeAreaTextCell
   KSpreadUndoInsertData( KSpreadDoc * _doc, KSpreadTable * _table, QRect & _selection )
     : KSpreadUndoChangeAreaTextCell( _doc, _table, _selection )
   {
-    name = i18n("Insert data from database");
+    name = i18n("Insert Data From Database");
   }
 };
 
@@ -77,7 +77,7 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   if ( !name )
     setName( "KSpreadDatabaseDlg" );
 
-  setCaption( i18n( "Insert data from database" ) );
+  setCaption( i18n( "Insert Data From Database" ) );
 
   // database page
 

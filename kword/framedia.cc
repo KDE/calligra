@@ -719,7 +719,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     grid4->addMultiCellWidget( floating, row, row, 0, 1 );
 
     row++;
-    protectSize = new QCheckBox( i18n("Protect Size and Position"), tab4);
+    protectSize = new QCheckBox( i18n("Protect size and position"), tab4);
     grid4->addMultiCellWidget( protectSize, row, row, 0, 1 );
     connect( protectSize, SIGNAL( toggled(bool) ), this, SLOT( slotProtectSizeToggled(bool) ) );
 
@@ -1591,7 +1591,7 @@ bool KWFrameDia::applyChanges()
         if ( floating->isChecked() && !parentFs->isFloating() )
         {
             if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Make FrameSet Inline") );
+                macroCmd = new KMacroCommand( i18n("Make Frameset Inline") );
 
             QPtrList<FrameIndex> frameindexList;
             QPtrList<FrameResizeStruct> frameindexMove;
@@ -1618,7 +1618,7 @@ bool KWFrameDia::applyChanges()
         else if ( !floating->isChecked() && parentFs->isFloating() )
         {
             if(!macroCmd)
-                macroCmd = new KMacroCommand( i18n("Make FrameSet Non-Inline") );
+                macroCmd = new KMacroCommand( i18n("Make Frameset Non-Inline") );
             // turn floating-frame into non-floating frame
             KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null, parentFs, KWFrameSetPropertyCommand::FSP_FLOATING, "false" );
             macroCmd->addCommand(cmd);

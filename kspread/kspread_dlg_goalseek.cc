@@ -131,7 +131,7 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   m_resultFrameLayout->addWidget( m_currentValue, 2, 1 );
 
   m_resultText = new QLabel( m_resultFrame, "m_resultText" );
-  m_resultText->setText( i18n( "Goal seeking with Cell <cell> found <a | no> solution:" ) );
+  m_resultText->setText( i18n( "Goal seeking with cell <cell> found <a | no> solution:" ) );
   m_resultText->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
 
   m_resultFrameLayout->addMultiCellWidget( m_resultText, 0, 0, 0, 1 );
@@ -348,7 +348,7 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
     //    m_targetCell->setCalcDirtyFlag();
     m_targetCell->calc( false );
 
-    m_resultText->setText( i18n( "Goal seeking with Cell %1 found a solution:" ).arg( m_sourceEdit->text() ) );
+    m_resultText->setText( i18n( "Goal seeking with cell %1 found a solution:" ).arg( m_sourceEdit->text() ) );
     m_newValue->setText( m_targetValueEdit->text() );
     m_currentValue->setText( QString::number( resultA + _goal ) );
     m_restored = false;
@@ -360,7 +360,7 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
     m_sourceCell->updateDepending();
     m_targetCell->setCalcDirtyFlag();
     m_targetCell->calc( false );
-    m_resultText->setText( i18n( "Goal seeking with Cell %1 has found NO solution." ).arg( m_sourceEdit->text() ) );
+    m_resultText->setText( i18n( "Goal seeking with cell %1 has found NO solution." ).arg( m_sourceEdit->text() ) );
     m_newValue->setText( m_targetValueEdit->text() );
     m_currentValue->setText( "" );
     m_restored = true;

@@ -306,7 +306,7 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
   tmpQLabel = new QLabel( this);
   lay2->addWidget(tmpQLabel);
 
-  tmpQLabel->setText(i18n("File:"));
+  tmpQLabel->setText(i18n("File location:"));
   m_hrefName = new KURLRequester( this );
 
   lay2->addWidget(m_hrefName);

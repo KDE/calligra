@@ -486,7 +486,7 @@ void KSpreadView::initializeInsertActions()
                            SLOT( insertSeries() ), actionCollection(), "series");
   tmpAction ->setToolTip(i18n("Insert a series."));
 
-  tmpAction = new KAction( i18n("&Hyperlink..."), 0, this,
+  tmpAction = new KAction( i18n("&Link..."), 0, this,
                            SLOT( insertHyperlink() ), actionCollection(),
                            "insertHyperlink" );
   tmpAction->setToolTip(i18n("Insert an internet hyperlink."));
@@ -500,15 +500,15 @@ void KSpreadView::initializeInsertActions()
                                   SLOT( insertChart() ), actionCollection(),
                                   "insertChart" );
   m_insertChartFrame->setToolTip(i18n("Insert a chart."));
-  m_insertFromDatabase = new KAction( i18n("From &Database"), 0, this,
+  m_insertFromDatabase = new KAction( i18n("From &Database..."), 0, this,
                                       SLOT( insertFromDatabase() ),
                                       actionCollection(), "insertFromDatabase");
   m_insertFromDatabase->setToolTip(i18n("Insert data from a SQL database"));
-  m_insertFromTextfile = new KAction( i18n("From &Text File"), 0, this,
+  m_insertFromTextfile = new KAction( i18n("From &Text File..."), 0, this,
                                       SLOT( insertFromTextfile() ),
                                       actionCollection(), "insertFromTextfile");
   m_insertFromTextfile->setToolTip(i18n("Insert data from a text file to the current cursor position/selection"));
-  m_insertFromClipboard = new KAction( i18n("From &Clipboard"), 0, this,
+  m_insertFromClipboard = new KAction( i18n("From &Clipboard..."), 0, this,
                                       SLOT( insertFromClipboard() ),
                                       actionCollection(), "insertFromClipboard");
   m_insertFromClipboard->setToolTip(i18n("Insert csv data from the clipboard to the current cursor position/selection"));
@@ -563,7 +563,7 @@ void KSpreadView::initializeAreaOperationActions()
   m_sortList = new KAction( i18n("Custom Lists..."), 0, this,
                             SLOT( sortList() ), actionCollection(),
                             "sortlist" );
-  m_sortList->setToolTip(i18n("Create custom lists for sorting or auto fill"));
+  m_sortList->setToolTip(i18n("Create custom lists for sorting or autofill"));
 
   m_sort = new KAction( i18n("&Sort..."), 0, this, SLOT( sort() ),
                         actionCollection(), "sort" );
@@ -581,11 +581,11 @@ void KSpreadView::initializeAreaOperationActions()
                            SLOT( sortInc() ), actionCollection(), "sortInc" );
   m_sortInc->setToolTip(i18n("Sort a group of cells in ascending (first to last) order."));
 
-  m_goalSeek = new KAction( i18n("&Goal Seek"), 0, this,
+  m_goalSeek = new KAction( i18n("&Goal Seek..."), 0, this,
                             SLOT( goalSeek() ), actionCollection(), "goalSeek" );
   m_goalSeek->setToolTip( i18n("Repeating calculation to find a specific value") );
 
-  m_textToColumns = new KAction( i18n("&Text to Columns"), 0, this,
+  m_textToColumns = new KAction( i18n("&Text to Columns..."), 0, this,
                             SLOT( textToColumns() ), actionCollection(), "textToColumns" );
   m_textToColumns->setToolTip( i18n("Expand the content of cells to multiple columns") );
 
@@ -966,7 +966,7 @@ void KSpreadView::initializeTableActions()
                                "insertTable" );
   m_insertTable->setToolTip(i18n("Insert a new sheet."));
 
-  m_removeTable = new KAction( i18n("Remove Sheet"), "delete_table",0,this,
+  m_removeTable = new KAction( i18n("Remove Sheet..."), "delete_table",0,this,
                                SLOT( removeTable() ), actionCollection(),
                                "removeTable" );
   m_removeTable->setToolTip(i18n("Remove the active sheet."));
@@ -996,11 +996,11 @@ void KSpreadView::initializeTableActions()
                              "lastTable");
   m_lastTable->setToolTip(i18n("Move to the last sheet."));
 
-  m_showTable = new KAction(i18n("Show Sheet"),0 ,this,SLOT( showTable()),
+  m_showTable = new KAction(i18n("Show Sheet..."),0 ,this,SLOT( showTable()),
                             actionCollection(), "showTable" );
   m_showTable->setToolTip(i18n("Show a hidden sheet."));
 
-  m_hideTable = new KAction(i18n("Hide Sheete"),0 ,this,SLOT( hideTable()),
+  m_hideTable = new KAction(i18n("Hide Sheet"),0 ,this,SLOT( hideTable()),
                             actionCollection(), "hideTable" );
   m_hideTable->setToolTip(i18n("Hide the active sheet."));
 
@@ -1068,7 +1068,7 @@ void KSpreadView::initializeRowColumnActions()
                            SLOT( hideRow() ), actionCollection(), "hideRow" );
   m_hideRow->setToolTip(i18n("Hide a row from view."));
 
-  m_showRow = new KAction( i18n("Show Row(s)"), "show_table_row", 0, this,
+  m_showRow = new KAction( i18n("Show Row(s)..."), "show_table_row", 0, this,
                            SLOT( showRow() ), actionCollection(), "showRow" );
   m_showRow->setToolTip(i18n("Show hidden rows."));
 
@@ -1083,7 +1083,7 @@ void KSpreadView::initializeRowColumnActions()
                               "hideColumn" );
   m_hideColumn->setToolTip(i18n("Hide the column from view."));
 
-  m_showColumn = new KAction( i18n("Show Column(s)"), "show_table_column", 0,
+  m_showColumn = new KAction( i18n("Show Column(s)..."), "show_table_column", 0,
                               this, SLOT( showColumn() ), actionCollection(),
                               "showColumn" );
   m_showColumn->setToolTip(i18n("Show hidden columns."));
@@ -2917,7 +2917,7 @@ void KSpreadView::sort()
 
 void KSpreadView::insertHyperlink()
 {
-  KSpreadLinkDlg dlg( this, "Create Hyperlink" );
+  KSpreadLinkDlg dlg( this, "Insert Link" );
   dlg.exec();
 }
 

@@ -49,9 +49,9 @@ KivioPageShow::KivioPageShow( KivioView* parent, const char* name )
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
-  m_pOk = bb->addButton( i18n("OK") );
+  m_pOk = bb->addButton( i18n("&OK") );
   m_pOk->setDefault( TRUE );
-  m_pClose = bb->addButton( i18n( "Close" ) );
+  m_pClose = bb->addButton( i18n( "&Close" ) );
   bb->layout();
   lay1->addWidget( bb );
   QString text;

@@ -118,7 +118,7 @@ bool KWInsertDia::doInsert()
     unsigned int insert= value->value() - ( rBefore->isChecked() ? 1 : 0 );
     if ( type == ROW )
     {
-         KWInsertRowCommand *cmd = new KWInsertRowCommand( i18n("Insert row"), table, insert);
+         KWInsertRowCommand *cmd = new KWInsertRowCommand( i18n("Insert Row"), table, insert);
          cmd->execute();
          doc->addCommand(cmd);
     }
@@ -134,7 +134,7 @@ bool KWInsertDia::doInsert()
         else
             // non inline table: max offset of the page
             maxRightOffset = doc->ptPaperWidth() - doc->ptRightBorder();
-        KWInsertColumnCommand *cmd = new KWInsertColumnCommand( i18n("Insert column"), table, insert,  maxRightOffset);
+        KWInsertColumnCommand *cmd = new KWInsertColumnCommand( i18n("Insert Column"), table, insert,  maxRightOffset);
         cmd->execute();
         doc->addCommand(cmd);
     }

@@ -82,7 +82,7 @@ public:
 
 KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstance *instance,
                                           const QString &file, const QPixmap &pix, QWidget *parent ) :
-    KDialogBase( parent, "template create dia", true, i18n( "Create a Template" ),
+    KDialogBase( parent, "template create dia", true, i18n( "Create Template" ),
                  KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_file(file), m_pixmap(pix) {
 
     d=new KoTemplateCreateDiaPrivate();
@@ -312,7 +312,7 @@ void KoTemplateCreateDia::slotSelect() {
     d->m_custom->setChecked(true);
 
     KFileDialog fd(QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true);
-    fd.setCaption(i18n("Select a Picture"));
+    fd.setCaption(i18n("Select Picture"));
     KURL url;
     if (fd.exec()==QDialog::Accepted)
         url=fd.selectedURL();
@@ -442,7 +442,7 @@ void KoTemplateCreateDia::fillGroupTree() {
 
 
 KoNewGroupDia::KoNewGroupDia(QWidget *parent) :
-    KDialogBase(parent, "KoNewGroupDia", true, i18n("Enter a Name"),
+    KDialogBase(parent, "KoNewGroupDia", true, i18n("Enter Name"),
                 KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok) {
 
     QFrame *mainwidget=makeMainWidget();

@@ -441,14 +441,14 @@ if( chooseType->currentItem()==1)
         val_min->text().toDouble(&ok);
         if(! ok)
                 {
-                KMessageBox::error( this , i18n("This is not a valid value !"),i18n("Error"));
+                KMessageBox::error( this , i18n("This is not a valid value!"),i18n("Error"));
                 val_min->setText("");
                 return;
                 }
         val_max->text().toDouble(&ok);
         if(! ok && choose->currentItem() >=5 )
                 {
-                KMessageBox::error( this , i18n("This is not a valid value !"),i18n("Error"));
+                KMessageBox::error( this , i18n("This is not a valid value!"),i18n("Error"));
                 val_max->setText("");
                 return;
                 }
@@ -459,14 +459,14 @@ else if( chooseType->currentItem()==2 || chooseType->currentItem()==6)
         val_min->text().toInt(&ok);
         if(! ok)
                 {
-                KMessageBox::error( this , i18n("This is not a valid value !"),i18n("Error"));
+                KMessageBox::error( this , i18n("This is not a valid value!"),i18n("Error"));
                 val_min->setText("");
                 return;
                 }
         val_max->text().toInt(&ok);
         if(! ok && choose->currentItem() >=5 )
                 {
-                KMessageBox::error( this , i18n("This is not a valid value !"),i18n("Error"));
+                KMessageBox::error( this , i18n("This is not a valid value!"),i18n("Error"));
                 val_max->setText("");
                 return;
                 }
@@ -475,13 +475,13 @@ else  if(  chooseType->currentItem()==5)
         {
         if(! m_pView->doc()->locale()->readTime(val_min->text()).isValid())
                 {
-                KMessageBox::error( this , i18n("This is not a valid time !"),i18n("Error"));
+                KMessageBox::error( this , i18n("This is not a valid time!"),i18n("Error"));
                 val_min->setText("");
                 return;
                 }
         if(! m_pView->doc()->locale()->readTime(val_max->text()).isValid() && choose->currentItem()  >=5)
                 {
-                KMessageBox::error( this , i18n("This is not a valid time !"),i18n("Error"));
+                KMessageBox::error( this , i18n("This is not a valid time!"),i18n("Error"));
                 val_max->setText("");
                 return;
                 }
@@ -490,13 +490,13 @@ else  if(  chooseType->currentItem()==4)
         {
         if(! m_pView->doc()->locale()->readDate(val_min->text()).isValid())
                 {
-                KMessageBox::error( this , i18n("This is not a valid date !"),i18n("Error"));
+                KMessageBox::error( this , i18n("This is not a valid date!"),i18n("Error"));
                 val_min->setText("");
                 return;
                 }
         if(! m_pView->doc()->locale()->readDate(val_max->text()).isValid() && choose->currentItem()  >=5 )
                 {
-                KMessageBox::error( this , i18n("This is not a valid date !"),i18n("Error"));
+                KMessageBox::error( this , i18n("This is not a valid date!"),i18n("Error"));
                 val_max->setText("");
                 return;
                 }

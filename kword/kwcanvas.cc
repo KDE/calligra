@@ -1189,7 +1189,7 @@ void KWCanvas::mrCreatePixmap()
         frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
         fs->addFrame( frame, false );
         m_doc->addFrameSet( fs );
-        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a picture frame"), frame );
+        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a Picture Frame"), frame );
         m_doc->addCommand(cmd);
         m_doc->frameChanged( frame );
     }
@@ -1219,7 +1219,7 @@ void KWCanvas::mrCreateFormula()
         frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
         frameset->addFrame( frame, false );
         m_doc->addFrameSet( frameset );
-        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a formula frame"), frame );
+        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create a Formula Frame"), frame );
         m_doc->addCommand(cmd);
         m_doc->frameChanged( frame );
     }
@@ -1238,7 +1238,7 @@ void KWCanvas::mrCreateTable()
         }
         else {
             KWTableFrameSet * table = createTable();
-            KWCreateTableCommand *cmd=new KWCreateTableCommand( i18n("Create table"), table );
+            KWCreateTableCommand *cmd=new KWCreateTableCommand( i18n("Create Table"), table );
             m_doc->addCommand(cmd);
             cmd->execute();
             emit docStructChanged(Tables);
@@ -1382,7 +1382,7 @@ KCommand *KWCanvas::setLeftFrameBorder( KoBorder newBorder, bool on )
 
     if(leftFrameBorderChanged)
     {
-        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Left Border frame"),frameindexList,tmpBorderList,newBorder);
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Left Border Frame"),frameindexList,tmpBorderList,newBorder);
         m_doc->repaintAllViews();
         return cmd;
     }
@@ -1436,7 +1436,7 @@ KCommand *KWCanvas::setRightFrameBorder( KoBorder newBorder, bool on )
 
     if( rightFrameBorderChanged)
     {
-        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Right Border frame"),frameindexList,tmpBorderList,newBorder);
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Right Border Frame"),frameindexList,tmpBorderList,newBorder);
         m_doc->repaintAllViews();
         return cmd;
     }
@@ -1491,7 +1491,7 @@ KCommand *KWCanvas::setTopFrameBorder( KoBorder newBorder, bool on )
 
     if(topFrameBorderChanged)
     {
-        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Top Border frame"),frameindexList,tmpBorderList,newBorder);
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Top Border Frame"),frameindexList,tmpBorderList,newBorder);
         m_doc->repaintAllViews();
         return cmd;
     }
@@ -1545,7 +1545,7 @@ KCommand *KWCanvas::setBottomFrameBorder( KoBorder newBorder, bool on )
 
     if(bottomFrameBorderChanged)
     {
-        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Bottom Border frame"),frameindexList,tmpBorderList,newBorder);
+        KWFrameBorderCommand *cmd=new KWFrameBorderCommand(i18n("Change Bottom Border Frame"),frameindexList,tmpBorderList,newBorder);
         m_doc->repaintAllViews();
         return cmd;
     }

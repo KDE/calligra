@@ -30,7 +30,7 @@
 /******************************************************************/
 
 KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _enableFont , bool _modal)
-    : KDialogBase( Plain, i18n("Select a Character"), Ok | Cancel, Ok , parent, name, _modal )
+    : KDialogBase( Plain, i18n("Select Character"), Ok | Cancel, Ok , parent, name, _modal )
 {
     initDialog(_chr,_font,_enableFont);
 
@@ -40,7 +40,7 @@ KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QChar
 }
 
 KoCharSelectDia::KoCharSelectDia( QWidget *parent, const char *name, const QString &_font, const QChar &_chr, bool _modal )
-    : KDialogBase( Plain, i18n("Select a Character"), User1 | Close, User1 , parent, name, _modal )
+    : KDialogBase( Plain, i18n("Select Character"), User1 | Close, User1 , parent, name, _modal )
 {
     initDialog(_chr,_font,true);
 

@@ -31,7 +31,7 @@
 KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc )
     : KDialogBase(Tabbed, QString::null, Ok | Cancel , Ok, parent, name, true)
 {
-    setCaption( i18n("Configure EndNote/FootNote") );
+    setCaption( i18n("Configure Endnote/Footnote") );
     m_doc = _doc;
 
     setupTab1();
@@ -40,7 +40,7 @@ KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWD
 
 void KWConfigFootNoteDia::setupTab1()
 {
-    QVBox * page = addVBoxPage( i18n( "FootNotes" ) );
+    QVBox * page = addVBoxPage( i18n( "Footnotes" ) );
     m_footNoteConfig = new KoCounterStyleWidget( false, true, page );
     //m_footNoteConfig->numTypeChanged( KoParagCounter::NUM_LIST );
     m_footNoteConfig->setCounter (static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->footNoteCounter() );
@@ -48,7 +48,7 @@ void KWConfigFootNoteDia::setupTab1()
 
 void KWConfigFootNoteDia::setupTab2()
 {
-    QVBox * page = addVBoxPage( i18n( "EndNotes" ) );
+    QVBox * page = addVBoxPage( i18n( "Endnotes" ) );
     m_endNoteConfig = new KoCounterStyleWidget( false, true/*onlyStyleLetter*/, page );
     //m_endNoteConfig->numTypeChanged( KoParagCounter::NUM_LIST );
     m_endNoteConfig->setCounter (static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->endNoteCounter() );
@@ -57,20 +57,20 @@ void KWConfigFootNoteDia::setupTab2()
 
 void KWConfigFootNoteDia::slotOk()
 {
-    KMacroCommand * macro = new KMacroCommand(i18n("Change EndFootNote Variable Settings"));
+    KMacroCommand * macro = new KMacroCommand(i18n("Change End-/Footnote Variable Settings"));
     bool createMacro = false;
     KWChangeFootEndNoteSettingsCommand *cmd = 0L;
     KoParagCounter counter =static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->footNoteCounter();
     if (counter != m_footNoteConfig->counter() )
     {
-        cmd= new KWChangeFootEndNoteSettingsCommand( i18n("Change EndFootNote Variable Settings") , counter, m_footNoteConfig->counter() ,true ,m_doc);
+        cmd= new KWChangeFootEndNoteSettingsCommand( i18n("Change End-/FootNote Variable Settings") , counter, m_footNoteConfig->counter() ,true ,m_doc);
         macro->addCommand(cmd );
         createMacro = true;
     }
     counter = static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->endNoteCounter();
     if (counter != m_endNoteConfig->counter() )
     {
-        cmd= new KWChangeFootEndNoteSettingsCommand( i18n("Change EndFootNote Variable Settings") , counter, m_endNoteConfig->counter() ,false ,m_doc);
+        cmd= new KWChangeFootEndNoteSettingsCommand( i18n("Change End-/Footnote Variable Settings") , counter, m_endNoteConfig->counter() ,false ,m_doc);
         macro->addCommand(cmd );
         createMacro = true ;
     }
