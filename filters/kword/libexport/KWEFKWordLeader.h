@@ -27,6 +27,7 @@
 
 #include <koFilterChain.h>
 
+#include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
 
 class KWEFKWordLeader
@@ -63,10 +64,13 @@ class KWEFKWordLeader
         bool doHeader(const HeaderData&);
         bool doFooter(const FooterData&);
 
+        QValueList<FootnoteData> footnoteList;
+
         void setHeaderType(int hType) { m_hType = hType; }
         void setFooterType(int fType) { m_fType = fType; }
         int headerType() { return m_hType; }
         int footerType() { return m_fType; }
+
     protected: // leader/worker functions
         bool doOpenFile (const QString& filenameOut, const QString& to);
         bool doCloseFile (void);

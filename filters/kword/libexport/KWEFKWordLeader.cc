@@ -576,6 +576,43 @@ static void FreeCellParaLists ( QValueList<ParaData> &paraList )
     }
 }
 
+// like ProcessFramesetTag, but only handle footnotes
+static void ProcessFootnoteFramesetTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
+{
+    QString frameName;
+    int frameType = -1, frameInfo = -1;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList 
+        << AttrProcessing ( "name",      "QString", (void *) &frameName      )
+        << AttrProcessing ( "frameType", "int",     (void *) &frameType )
+        << AttrProcessing ( "frameInfo", "int",     (void *) &frameInfo )
+        ;
+    ProcessAttributes (myNode, attrProcessingList);
+
+    // for footnote frame, frameType is 1 and frameInfo is 7
+    if( ( frameType == 1 ) && ( frameInfo == 7 ) )
+    {
+        FootnoteData footnote;
+        footnote.frameName = frameName;
+        QValueList<TagProcessing> tagProcessingList;
+        tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+        tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &footnote.para ));
+        ProcessSubtags (myNode, tagProcessingList, leader);
+        leader->footnoteList.append( footnote );
+    }
+}
+
+// like ProcessFramesetsTag, but only handle footnotes
+static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
+{
+    AllowNoAttributes (myNode);
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList << TagProcessing ( "FRAMESET", ProcessFootnoteFramesetTag, tagData );
+    ProcessSubtags (myNode, tagProcessingList, leader);
+}
+
 /*static*/ void ProcessDocTag ( QDomNode         myNode,
     void* /*tagData*/, KWEFKWordLeader* leader )
 {
@@ -612,6 +649,13 @@ static void FreeCellParaLists ( QValueList<ParaData> &paraList )
     else
         ProcessStylesPluralTag (nodeStyles, NULL, leader);
 
+    // Process framesets, but only to find and extract footnotes
+    QValueList<FootnoteData> footnotes;
+    QDomNode nodeFramesets=myNode.namedItem("FRAMESETS");
+    if ( !nodeFramesets.isNull() )
+        ProcessFootnoteFramesetsTag(nodeFramesets, &footnotes, leader );
+
+    // Process all framesets and pictures
     QValueList<TagProcessing> tagProcessingList;
     QValueList<ParaData> paraList;
 

@@ -174,11 +174,12 @@ class FrameAnchor
 class VariableData
 {
 public:
-    VariableData (): m_type(-1) {}
+    VariableData (): m_type(-1), footnotePara(0) {}
     VariableData ( const QString& text ) : m_text(text), m_type(-1) {}
     VariableData ( const VariableData& other ) : 
       m_key(other.m_key), m_text(other.m_text), 
-      m_type(other.m_type), propertyMap(other.propertyMap) {}
+      m_type(other.m_type), propertyMap(other.propertyMap),
+      footnotePara(other.footnotePara) {}
 public:
     /**
      * Set parameters of a <LINK> element
@@ -198,14 +199,20 @@ public:
     void setField(const QString& subtype, const QString& value);
     QString getFieldName(void) const; 
     QString getFieldValue(void) const;
+    /*
+     * Set parameters of a <FOOTNOTE> element
+     */
+    void setFootnote(const QString& value, QValueList<ParaData>* para);
+    QString getFootnoteValue(void) const;
+    QValueList<ParaData>* getFootnotePara(void) const;
 
-public:
     QString m_key;
     QString m_text;
     int m_type;
 
 protected:
     QMap<QString,QString> propertyMap;
+    QValueList<ParaData>* footnotePara;
 };
 
 class FormatData
@@ -402,6 +409,13 @@ struct HeaderFooterData
 
 typedef HeaderFooterData HeaderData;
 typedef HeaderFooterData FooterData;
+
+// data for FRAMESET which holds footnotes
+struct FootnoteData
+{
+    QString frameName;
+    QValueList<ParaData> para;
+};
 
 class KWEFDocumentInfo
 {

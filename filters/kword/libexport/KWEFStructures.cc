@@ -61,7 +61,6 @@ bool TabulatorData::operator == (const TabulatorData& other) const
         && (m_width==other.m_width));
 }
 
-
 void VariableData::setLink(const QString& linkName, const QString& hrefName)
 {
     propertyMap["link:linkName"]=linkName;
@@ -110,6 +109,22 @@ QString VariableData::getFieldName(void) const
 QString VariableData::getFieldValue(void) const
 {
     return propertyMap["field:value"];
+}
+
+void VariableData::setFootnote(const QString& value, QValueList<ParaData>* para)
+{
+    propertyMap["footnote:value"]=value;
+    footnotePara = para;
+}
+
+QString VariableData::getFootnoteValue(void) const
+{
+    return propertyMap["footnote:value"];
+}
+
+QValueList<ParaData>* VariableData::getFootnotePara(void) const
+{
+    return footnotePara;
 }
 
 void CreateMissingFormatData (QString &paraText, ValueListFormatData &paraFormatDataList)

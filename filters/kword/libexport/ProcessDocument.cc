@@ -378,6 +378,27 @@ static void ProcessFieldTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
         variable->setField(name, value);
 }
 
+static void ProcessFootnoteTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+{
+    VariableData *variable = (VariableData *) tagData;
+    QString frameset, value;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("value", "QString", &value) );
+    attrProcessingList.append ( AttrProcessing ("frameset", "QString", &frameset) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    // search for frameset in the footnoteList
+    for(unsigned i=0;i<leader->footnoteList.count();i++)
+    {
+       if( leader->footnoteList[i].frameName == frameset ) 
+       {
+           variable->setFootnote(value, &leader->footnoteList[i].para);
+           break;
+       }
+    }
+}
+
 static void ProcessVariableTag (QDomNode myNode, void* tagData, KWEFKWordLeader* leader)
 {
     VariableData *variable = (VariableData *) tagData;
@@ -393,7 +414,7 @@ static void ProcessVariableTag (QDomNode myNode, void* tagData, KWEFKWordLeader*
         << TagProcessing ( "SERIALLETTER",  NULL,                   NULL     )
         << TagProcessing ( "FIELD",         ProcessFieldTag,        variable )
         << TagProcessing ( "LINK",          ProcessLinkTag,         variable )
-        << TagProcessing ( "NOTE",          NULL,                   NULL     )
+        << TagProcessing ( "FOOTNOTE",      ProcessFootnoteTag,     variable )
         ;
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
