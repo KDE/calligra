@@ -59,7 +59,8 @@ private:
     void appendPolyline( QDomDocument & doc, QDomElement & source, QDomElement & target,  bool polygone = false);
     void appendPicture( QDomDocument & doc, QDomElement & source, QDomElement & target );
     void createPictureList( QDomNode &pictures );
-
+    void appendNote( QDomDocument & doc, QDomElement & source, QDomElement & target );
+    void appendGroupObject( QDomDocument & doc, QDomElement & source, QDomElement & target );
     QString rotateValue( double val );
     QString pictureKey( QDomElement &element );
     void createHelpLine( QDomNode &helpline );

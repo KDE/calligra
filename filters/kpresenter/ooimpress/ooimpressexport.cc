@@ -643,7 +643,7 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
                 kdDebug()<<" part object not implemented \n";
                 break;
             case 10:
-                kdDebug()<<" group not implemented \n";
+                appendGroupObject( doccontent, o, drawPage );
                 break;
             case 11:
                 kdDebug()<<" free hand not implemented\n";
@@ -667,6 +667,24 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
         body.appendChild( drawPage );
         m_currentPage++;
     }
+}
+
+void OoImpressExport::appendGroupObject( QDomDocument & doc, QDomElement & source, QDomElement & target )
+{
+    kdDebug()<<" group not implemented \n";
+#if 0
+    QDomElement groupElement = doc.createElement( "draw:g" );
+    target.appendChild( groupElement );
+#endif
+}
+
+void OoImpressExport::appendNote( QDomDocument & doc, QDomElement & source, QDomElement & target )
+{
+    kdDebug()<<" note not implemented \n";
+#if 0
+    QDomElement noteElement = doc.createElement( "presentation:notes" );
+    target.appendChild( noteElement );
+#endif
 }
 
 void OoImpressExport::appendTextbox( QDomDocument & doc, QDomElement & source, QDomElement & target )
