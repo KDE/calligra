@@ -186,7 +186,7 @@ void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize
 void KWTableDia::setupTab2()
 {
     readTableStyles();
-  
+
     tab2 = addPage( i18n("Properties"));
     QGridLayout *grid = new QGridLayout( tab2, 4, 3, 15, 7 );
 
@@ -267,6 +267,12 @@ void KWTableDia::slotOk()
    {
       KDialogBase::slotOk();
    }
+}
+/*================================================================*/
+void KWTableDia::slotCancel()
+{
+    page->setMouseMode(MM_EDIT);
+    KDialogBase::slotCancel();
 }
 
 /*================================================================*/
