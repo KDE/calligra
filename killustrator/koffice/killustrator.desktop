@@ -1,6 +1,7 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KIllustrator
+Name[eo]=Ilustranto
 Name[hu]=KIllusztrátor
 Name[is]=Teiknir
 Name[no]=Illustratør
@@ -15,12 +16,14 @@ Comment[ca]=Aplicació de gràfics vectorials
 Comment[cs]=Aplikace pro práci s vektorovou grafikou
 Comment[da]=KIllustrator vektorgrafik anvendelse
 Comment[de]=Vektorgrafik-Anwendung
+Comment[eo]=Vektorgrafika desegnilo
 Comment[es]=Aplicación de Gráficos Vectoriales KIllustrator
 Comment[fi]=Vektorigrafiikkaohjelmisto
 Comment[fr]=KIllustrator est une Application de dessin vectoriel
 Comment[hr]=Killustrator program za vektorsku grafiku
 Comment[hu]=KIllusztrátor vektor grafikus rajzolóprogram
 Comment[is]=killustrator:  Hlutbundið teikniforrit K-vöndulsins
+Comment[ja]=KIllustrator ¥Ù¥¯¥È¥ë¥°¥é¥Õ¥£¥Ã¥¯¥¹¥¢¥×¥ê¥±¡¼¥·¥ç¥ó
 Comment[no]=Vektorgrafikkprogrammet KIllustrator
 Comment[pl]=Program do grafiki wektorowej
 Comment[pt]=Ferramenta para desenho vectorial
@@ -34,6 +37,6 @@ MimeType=application/x-killustrator
 X-KDE-RepoIds=IDL:KIllustrator/DocumentFactory:1.0#KIllustrator
 X-KDE-ActivationMode=shared
 Type=OpenPart
-Icon=killustrator.xpm
-MiniIcon=killustrator.xpm
+Icon=lo-killustrator.png
+MiniIcon=mini-killustrator.png
 ServiceTypes=KOfficeDocument
