@@ -555,7 +555,7 @@ void KWord13OasisGenerator::writeStylesXml( void )
     QValueList<KoGenStyles::NamedStyle> styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_USER );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle(  stylesWriter, m_oasisGenStyles, "style:style", (*it).name, "style:paragraph-properties" );
+        (*it).style->writeStyle( stylesWriter, m_oasisGenStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
     stylesWriter->endElement(); // office:styles
 
@@ -564,7 +564,7 @@ void KWord13OasisGenerator::writeStylesXml( void )
     styles = m_oasisGenStyles.styles( KWDocument::STYLE_FRAME );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, m_oasisGenStyles, "style:style", (*it).name , "style:graphic-properties"  );
+        (*it).style->writeStyle( stylesWriter, m_oasisGenStyles, "style:style", (*it).name , "style:graphic-properties"  );
     }
 #endif
 
@@ -596,6 +596,7 @@ void KWord13OasisGenerator::writeStylesXml( void )
     stylesWriter->endDocument();
     io.close();
     m_store->close();
+    delete stylesWriter;
 
     if ( m_manifestWriter )
     {
@@ -648,6 +649,7 @@ void KWord13OasisGenerator::writeContentXml(void)
     writer->endElement();
     writer->endDocument();
     io.close();
+    delete writer;
     m_store->close();
 
     if ( m_manifestWriter )
@@ -768,6 +770,7 @@ void KWord13OasisGenerator::writeMetaXml(void)
 
     writer->endElement();
     writer->endDocument();
+    delete writer;
 
     io.close();
     m_store->close();
