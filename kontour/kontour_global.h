@@ -37,8 +37,7 @@ namespace Kontour
   const double maxZoomFactor = 100.0;
   const double pi = 3.14159265358979323846;
   const double minGridDistance = 6.0;
-  const int brushCellWidth = 40;
-  const int brushCellHeight = 30;
+  const double snapDistance = 10.0;
 
   enum HandlePosition{ HPosTop = 1, HPosRight = 2, HPosBottom = 4, HPosLeft = 8, HPosTopR = 16, HPosRightR = 32, HPosBottomR = 64, HPosLeftR = 128, HPosCenter = 256 };
   

@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001-2002 Igor Janssen (rm@kde.org)
+  Copyright (C) 2001-2002 Igor Jansen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -34,7 +34,7 @@ class GOval : public GObject
 public:
   enum Type{ Arc, Sector, Segment };
 
-  GOval(double rx, double ry);
+  GOval(double rx, double ry, Type aType = Arc, double a1 = 270.0, double a2 = 270.0);
   GOval(const QDomElement &element);
   GOval(const GOval &obj);
 
@@ -61,11 +61,11 @@ public:
   bool isConvertible() const;
 
 private:
+  double      mRX;                // X radius
+  double      mRY;                // Y radius
   Type        mType;              // Oval type
-  double      mRX;                //
-  double      mRY;                //
-  double      sAngle;             // Start angle
-  double      eAngle;             // End angle
+  double      mAngle1;            // Start angle
+  double      mAngle2;            // End angle
   KoPoint     segPoint[2];        //
 };
 

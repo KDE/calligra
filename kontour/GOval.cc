@@ -3,7 +3,7 @@
   $Id$
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001-2002 Igor Janssen (rm@kde.org)
+  Copyright (C) 2001-2002 Igor Jansen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -35,14 +35,14 @@
 #include "kontour_global.h"
 #include "GPath.h"
 
-GOval::GOval(double rx, double ry):
+GOval::GOval(double rx, double ry, Type aType = Arc, double a1 = 270.0, double a2 = 270.0):
 GObject()
 {
-  mType = Arc;
   mRX = rx;
   mRY = ry;
-  sAngle = 270.0;
-  eAngle = 270.0;
+  mType = aType;
+  mAngle1 = a1;
+  mAngle2 = a2;
   calcBoundingBox();
 }
 
@@ -51,19 +51,20 @@ GObject(element.namedItem("go").toElement())
 {
   mRX = element.attribute("rx").toDouble();
   mRY = element.attribute("ry").toDouble();
-  sAngle = element.attribute("a1").toDouble();
-  eAngle = element.attribute("a2").toDouble();
+  mType = static_cast<Type>(element.attribute("type").toInt());
+  mAngle1 = element.attribute("a1").toDouble();
+  mAngle2 = element.attribute("a2").toDouble();
   calcBoundingBox();
 }
 
 GOval::GOval(const GOval &obj):
 GObject(obj)
 {
-  mType = obj.mType;
   mRX = obj.mRX;
   mRY = obj.mRY;
-  sAngle = obj.sAngle;
-  eAngle = obj.eAngle;
+  mType = obj.mType;
+  mAngle1 = obj.mAngle1;
+  mAngle2 = obj.mAngle2;
   calcBoundingBox();
 }
 
@@ -79,8 +80,8 @@ GObject *GOval::copy() const
 
 void GOval::setAngles(const double sa, const double ea)
 {
-  sAngle = sa;
-  eAngle = ea;
+  mAngle1 = sa;
+  mAngle2 = ea;
 }
 
 QString GOval::typeName() const
@@ -97,8 +98,8 @@ QDomElement GOval::writeToXml(QDomDocument &document)
   // TODO save type
   oval.setAttribute("rx", mRX);
   oval.setAttribute("ry", mRY);
-  oval.setAttribute("a1", sAngle);
-  oval.setAttribute("a2", eAngle);
+  oval.setAttribute("a1", mAngle1);
+  oval.setAttribute("a2", mAngle2);
   oval.appendChild(GObject::writeToXml(document));
   return oval;
 }
@@ -139,13 +140,13 @@ void GOval::calcBoundingBox()
 
   double x, y, angle;
 
-  angle = sAngle * Kontour::pi / 180.0;
+  angle = mAngle1 * Kontour::pi / 180.0;
   x = mRX * cos(angle);
   y = mRY * sin(angle);
   segPoint[0].setX(x);
   segPoint[0].setY(y);
 
-  angle = eAngle * Kontour::pi / 180.0;
+  angle = mAngle2 * Kontour::pi / 180.0;
   x = mRX * cos(angle);
   y = mRY * sin(angle);
   segPoint[1].setX(x);
@@ -154,79 +155,17 @@ void GOval::calcBoundingBox()
 
 int GOval::getNeighbourPoint(const KoPoint &p)
 {
-// TODO implement isNear() and transform()
-/*  for(int i = 1; i >= 0; i--)
+  for(int i = 1; i >= 0; i--)
   {
     KoPoint c = segPoint[i].transform(tMatrix);
     if(c.isNear(p, Kontour::nearDistance))
       return i;
-  }*/
+  }
   return -1;
 }
 
 void GOval::movePoint (int idx, double dx, double dy, bool /*ctrlPressed*/)
 {
-/*  double adx = fabs (dx);
-  double ady = fabs (dy);
-  double angle = 0;
-
-  if (idx == 0 && segPoint[0] == segPoint[1])
-    idx = 1;
-
-  Rect r (sPoint, ePoint);
-  r.normalize ();
-
-  double a = r.width () / 2.0;
-  double b = r.height () / 2.0;
-
-  if (adx > ady) {
-    double x = segPoint[idx].x () + dx;
-    if (x < r.left ())
-      x = r.left ();
-    else if (x > r.right ())
-      x = r.right ();
-
-    x -= (r.left () + a);
-    angle = acos (x / a) * RAD_FACTOR;
-    if (segPoint[idx].y () < r.center ().y ())
-      angle = 360 - angle;
-  }
-  else {
-    double y = segPoint[idx].y () + dy;
-    if (y < r.top ())
-      y = r.top ();
-    else if (y > r.bottom ())
-      y = r.bottom ();
-
-    y -= (r.top () + b);
-    angle = asin (y / b) * RAD_FACTOR;
-    if (segPoint[idx].y () < r.center ().y ()) {
-      if (segPoint[idx].x () > r.center ().x ())
-        angle += 360;
-      else
-        angle = 180 - angle;;
-    }
-    else if (segPoint[idx].x () < r.center ().x ())
-      angle = 180 - angle;
-  }
-  if (idx == 0)
-    sAngle = angle;
-  else
-    eAngle = angle;
-
-  // test for equality
-  double a1 = qRound (sAngle < 0 ? sAngle + 360 : sAngle);
-  double a2 = qRound (eAngle < 0 ? eAngle + 360 : eAngle);
-  if (a1 >= a2 - 1 && a1 <= a2 + 1) {
-    eAngle = sAngle;
-    outlineInfo.shape = GObject::OutlineInfo::DefaultShape;
-  }
-  else if (outlineInfo.shape == GObject::OutlineInfo::DefaultShape)
-    outlineInfo.shape = GObject::OutlineInfo::ArcShape;
-
-  gShape.setInvalid ();
-
-  updateRegion ();*/
 }
 
 void GOval::removePoint(int idx)

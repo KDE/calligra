@@ -507,7 +507,9 @@ void GPage::updateSelection()
 {
   // TODO may be not recalculate box?
   KoRect r = mBBox;
+//  kdDebug(38000) << "BOX1: x=" << mBBox.x() << " y=" << mBBox.y() << " w=" << mBBox.width() << " h=" << mBBox.height() <<endl;
   calcBoxes();
+//  kdDebug(38000) << "BOX2: x=" << mBBox.x() << " y=" << mBBox.y() << " w=" << mBBox.width() << " h=" << mBBox.height() <<endl;
   r = r.unite(mBBox);
   document()->emitChanged(r, true);
 }

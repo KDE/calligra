@@ -25,6 +25,8 @@
 
 #include "Canvas.h"
 
+#include <cmath>
+
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 #include <qscrollbar.h>
@@ -237,98 +239,60 @@ void Canvas::zoomToPoint(double /*scale*/, int /*x*/, int /*y*/)
 
 void Canvas::snapPositionToGrid(double &x, double &y)
 {
-/*  bool snap = false;
-
-  if (mGDoc->snapToHelplines())
-  {
-    // try to snap to help lines
-    QValueList<double>::Iterator i;
-    for (i = mGDoc->horizHelplines().begin (); i != mGDoc->horizHelplines().end (); ++i)
-    {
-      if (fabs (*i - y) <= 10.0)
-      {
-        y = *i;
-        snap = true;
-        break;
-      }
-    }
-    for (i = mGDoc->vertHelplines().begin (); i != mGDoc->vertHelplines().end (); ++i)
-    {
-      if (fabs (*i - x) <= 10.0)
-      {
-        x = *i;
-        snap = true;
-        break;
-      }
-    }
-  }
-  if (mGDoc->snapToGrid() && ! snap)
-  {
-    int n = (int) (x / mGDoc->xGrid());
-    double r = fmod (x, mGDoc->xGrid());
-    if (r > (mGDoc->xGrid() / 2.0))
-      n++;
-    x = mGDoc->xGrid() * n;
-
-    n = (int) (y / mGDoc->yGrid());
-    r = fmod (y, mGDoc->yGrid());
-    if (r > (mGDoc->yGrid() / 2.0))
-      n++;
-    y = mGDoc->yGrid() * n;
-  }*/
+  x = snapXPositionToGrid(x);
+  y = snapXPositionToGrid(y);
 }
 
 KoRect Canvas::snapTranslatedBoxToGrid(const KoRect &r)
 {
-/*  double x1, x2, y1, y2;
-
-  if (mGDoc->snapToHelplines() || mGDoc->snapToGrid())
+  double x1, x2, y1, y2;
+  if(mGDoc->snapToHelplines() || mGDoc->snapToGrid())
   {
-    x1 = snapXPositionToGrid (r.left ());
-    x2 = snapXPositionToGrid (r.right ());
-    y1 = snapYPositionToGrid (r.top ());
-    y2 = snapYPositionToGrid (r.bottom ());
-
-    double x = 0, y = 0;
-    if (fabs (r.left () - x1) < fabs (r.right () - x2))
+    x1 = snapXPositionToGrid(r.left());
+    x2 = snapXPositionToGrid(r.right());
+    y1 = snapYPositionToGrid(r.top());
+    y2 = snapYPositionToGrid(r.bottom());
+    double x;
+    double y;
+    if(fabs(r.left() - x1) < fabs(r.right() - x2))
       x = x1;
     else
-      x = x2 - r.width ();
-
-    if (fabs (r.top () - y1) < fabs (r.bottom () - y2))
+      x = x2 - r.width();
+    if(fabs(r.top() - y1) < fabs(r.bottom() - y2))
       y = y1;
     else
-      y = y2 - r.height ();
-    return KoRect (x, y, r.width (), r.height ());
+      y = y2 - r.height();
+    return KoRect(x, y, r.width(), r.height());
   }
-  else*/
-  return r;
+  else
+    return r;
 }
 
 KoRect Canvas::snapScaledBoxToGrid(const KoRect &r, int hmask)
 {
-/*  double x1, x2, y1, y2;
+  double x1, x2, y1, y2;
 
-  if (mGDoc->snapToHelplines() || mGDoc->snapToGrid())
-   {
-    x1 = snapXPositionToGrid (r.left ());
-    x2 = snapXPositionToGrid (r.right ());
-    y1 = snapYPositionToGrid (r.top ());
-    y2 = snapYPositionToGrid (r.bottom ());
+  if(mGDoc->snapToHelplines() || mGDoc->snapToGrid())
+  {
+    x1 = snapXPositionToGrid(r.left());
+    x2 = snapXPositionToGrid(r.right());
+    y1 = snapYPositionToGrid(r.top());
+    y2 = snapYPositionToGrid(r.bottom());
 
-    KoRect retval (r);
-    if (hmask & Handle::HPos_Left)
-      retval.left (x1);
-    if (hmask & Handle::HPos_Top)
-      retval.top (y1);
-    if (hmask & Handle::HPos_Right)
-      retval.right (x2);
-    if (hmask & Handle::HPos_Bottom)
-      retval.bottom (y2);
+    KoRect retval(r);
+    if(hmask & Kontour::HPosLeft)
+      retval.setLeft(x1);
+    if(hmask & Kontour::HPosTop)
+      retval.setTop(y1);
+    if(hmask & Kontour::HPosRight)
+      retval.setRight(x2);
+    if(hmask & Kontour::HPosBottom)
+      retval.setBottom(y2);
+    kdDebug() << "SCALED BOX:" << endl;
     return retval;
-   }
-  else*/
-  return r;
+  }
+  else
+    return r;
 }
 
 void Canvas::drawTmpHelpline(int x, int y, bool horizH)
@@ -516,6 +480,8 @@ void Canvas::scrollY(int v)
 
 void Canvas::updateRegion(const KoRect &r, bool handle)
 {
+  if(r.isEmpty())
+    return;
   // TODO : small handle size bug
   int x = static_cast<int>(r.x() * zoomFactor()) + mXOffset;
   int y = static_cast<int>(r.y() * zoomFactor()) + mYOffset;
@@ -528,7 +494,7 @@ void Canvas::updateRegion(const KoRect &r, bool handle)
     w += 36;
     h += 36;
   }
-  kdDebug(38000) << "update: x=" << x << " y=" << y << " w=" << w << " h=" << h <<endl;
+//  kdDebug(38000) << "update: x=" << x << " y=" << y << " w=" << w << " h=" << h <<endl;
   QRect rr(x, y, w, h);
   updateBuf(rr);
   repaint(rr);
@@ -609,55 +575,44 @@ void Canvas::drawHelplines(const QRect &rect)
 
 double Canvas::snapXPositionToGrid(double pos)
 {
-/*  bool snap = false;
-
-  if (mGDoc->snapToHelplines())
+  if(mGDoc->snapToHelplines())
   {
-    // try to snap to help lines
+    // try to snap to helplines
     QValueList<double>::Iterator i;
-    for (i = mGDoc->vertHelplines().begin (); i != mGDoc->vertHelplines().end (); ++i)
-    {
-      if (fabs (*i - pos) <= 10.0) {
-        pos = *i;
-        snap = true;
-        break;
-      }
-    }
+    // TODO Snap distance isnt constant
+    for(i = mGDoc->vertHelplines().begin(); i != mGDoc->vertHelplines().end(); ++i)
+      if(fabs(*i - pos) <= Kontour::snapDistance)
+        return *i;
   }
-  if (mGDoc->snapToGrid() && ! snap) {
-    int n = (int) (pos / mGDoc->xGrid());
-    double r = fmod (pos, mGDoc->xGrid());
-    if (r > (mGDoc->xGrid() / 2.0))
+  if(mGDoc->snapToGrid())
+  {
+    int n = static_cast<int>(pos / mGDoc->xGrid());
+    double r = fmod(pos, mGDoc->xGrid());
+    if(r > mGDoc->xGrid() / 2.0)
       n++;
-    pos = mGDoc->xGrid() * n;
-  }*/
+    return mGDoc->xGrid() * n;
+  }
   return pos;
 }
 
 double Canvas::snapYPositionToGrid(double pos)
 {
-/*  bool snap = false;
-
-  if (mGDoc->snapToHelplines())
+  if(mGDoc->snapToHelplines())
   {
-    // try to snap to help lines
+    // try to snap to helplines
     QValueList<double>::Iterator i;
-    for (i = mGDoc->horizHelplines().begin (); i != mGDoc->horizHelplines().end (); ++i) {
-      if (fabs (*i - pos) <= 10.0) {
-        pos = *i;
-        snap = true;
-        break;
-      }
-    }
+    for(i = mGDoc->horizHelplines().begin(); i != mGDoc->horizHelplines().end(); ++i)
+      if(fabs(*i - pos) <= Kontour::snapDistance)
+        return *i;
   }
-  if (mGDoc->snapToGrid() && ! snap)
+  if(mGDoc->snapToGrid())
   {
-    int n = (int) (pos / mGDoc->yGrid());
-    double r = fmod (pos, mGDoc->yGrid());
-    if (r > (mGDoc->yGrid() / 2.0))
+    int n = static_cast<int>(pos / mGDoc->yGrid());
+    double r = fmod(pos, mGDoc->yGrid());
+    if(r > mGDoc->yGrid() / 2.0)
       n++;
-    pos = mGDoc->yGrid() * n;
-  }*/
+    return mGDoc->yGrid() * n;
+  }
   return pos;
 }
 

@@ -212,12 +212,12 @@ void OptionsDialog::createGridWidget(QWidget *parent)
   vspinbox->setValue(mGDoc->yGrid());
 
   gbutton = new QCheckBox(i18n("Snap To Grid"), parent);
-  gbutton->setDown(mGDoc->snapToGrid());
+  gbutton->setChecked(mGDoc->snapToGrid());
   connect(gbutton, SIGNAL(stateChanged(int)), this, SLOT(slotSetDocModified()));
   layout->addWidget(gbutton, 1, 0);
 
   sbutton = new QCheckBox(i18n("Show Grid"), parent);
-  sbutton->setDown(mGDoc->showGrid());
+  sbutton->setChecked(mGDoc->showGrid());
   connect(sbutton, SIGNAL(stateChanged(int)), this, SLOT(slotSetDocModified()));
   connect(sbutton, SIGNAL(stateChanged(int)), this, SLOT(slotSetViewUpdate()));
   layout->addWidget(sbutton, 1, 1);
@@ -231,7 +231,7 @@ void OptionsDialog::createGridWidget(QWidget *parent)
   layout->addWidget(clabel, 2, 0);
 }
 
-/*Helplines*/
+// Helplines
 void OptionsDialog::createHorizLineWidget(QWidget* parent)
 {
 

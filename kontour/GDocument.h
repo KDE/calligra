@@ -74,8 +74,8 @@ public:
   void gridColor(QColor color);
 
   void setGridDistance(double hdist, double vdist);
-  double xGrid() const;
-  double yGrid() const;
+  double xGrid() const {return mXGrid; }
+  double yGrid() const {return mYGrid; }
   double xGridZ() const {return mXGridZ; }
   double yGridZ() const {return mYGridZ; }
 

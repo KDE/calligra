@@ -636,17 +636,18 @@ void SelectTool::processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas *canvas)
 
 void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool permanent)
 {
-/*  if (snap) {
-    const Rect& obox = origbox;
-    Rect newbox = canvas->snapTranslatedBoxToGrid (obox.translate (dx, dy));
-    if (! (newbox == obox)) {
-      dx = newbox.x () - obox.x ();
-      dy = newbox.y () - obox.y ();
-    }
-  }*/
+  for(QPtrListIterator<GObject> it(page->getSelection()); it.current(); ++it)
+    (*it)->initTmpMatrix();
+  page->calcBoxes();
+  if(snap)
+  {
+    KoRect obox = page->shapeBoxForSelection();
+    KoRect nbox = toolController()->view()->canvas()->snapTranslatedBoxToGrid(obox.translate(dx, dy));
+    dx = nbox.x() - obox.x();
+    dy = nbox.y() - obox.y();
+  }
   if(dx == 0 && dy == 0)
     return;
-//  kdDebug(38000) << "DX=" << dx << " DY=" << dy << endl;
   if(permanent)
   {
     QPtrListIterator<GObject> it(page->getSelection());
@@ -664,7 +665,6 @@ void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool pe
     for(; it.current(); ++it)
     {
       (*it)->setWorkInProgress(true);
-      (*it)->initTmpMatrix();
       (*it)->ttransform(m);
     }
     page->updateSelection();
@@ -703,7 +703,7 @@ void SelectTool::scale(GPage *page, double dx, double dy, bool type, bool perman
   if(mask & Kontour::HPosTop)
     newbox.setTop(newbox.top() + dy);
 
-//  canvas->snapScaledBoxToGrid(newbox, mask);
+  newbox = toolController()->view()->canvas()->snapScaledBoxToGrid(newbox, mask);
 
   sx = newbox.width() / origbox.width();
   sy = newbox.height() / origbox.height();

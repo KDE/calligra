@@ -45,12 +45,13 @@ QFrame(parent, name)
   zeroPoint = 0;
   currentPosition = -1;
   buffer = 0L;
-  
-  setFrameStyle(Box | Raised);
+
+  setBackgroundMode(NoBackground);  
+  setFrameStyle(Box | Sunken);
   setLineWidth(1);
   setMidLineWidth(0);
   setMouseTracking(true);
-  
+
   isMousePressed = false;
 
   if(mOrientation == Horizontal)

@@ -120,16 +120,6 @@ void GDocument::gridColor(QColor color)
   setModified();
 }
 
-double GDocument::xGrid() const
-{
-  return 1.0;
-}
-
-double GDocument::yGrid() const
-{
-  return 1.0;
-}
-
 void GDocument::setGridDistance(double hdist, double vdist)
 {
   // TODO ZOOM!!!
