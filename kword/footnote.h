@@ -19,6 +19,16 @@
 #include <qlist.h>
 #include <qpainter.h>
 
+#include <iostream>
+#include <koStream.h>
+#include <koIMR.h>
+#include <komlMime.h>
+#include <strstream>
+#include <fstream>
+#include <unistd.h>
+
+#include <string>
+
 class KWFootNote;
 class KWordDocument;
 class KWFormatContext;
@@ -47,9 +57,14 @@ public:
 
   void insertFootNote(KWFootNote *fn);
   void removeFootNote(KWFootNote *fn);
-
+  void insertFootNoteInternal(KWFootNote *fn)
+  { footNotes.append(fn); }
+  
   NoteType getNoteType() { return noteType; }
   void setNoteType(NoteType nt) { noteType = nt; }
+
+  void save(ostream &out);
+  void load(KOMLParser&,vector<KOMLAttrib>&);
 
 protected:
   void addFootNoteText(KWFootNote *fn);
@@ -100,8 +115,11 @@ public:
   void updateDescription(int _start);
   void makeTempNames();
   void updateNames();
-  
+
   void destroy();
+
+  void save(ostream &out);
+  void load(string name,string tag,KOMLParser &parser,vector<KOMLAttrib>& lst);
 
 protected:
   void makeText();

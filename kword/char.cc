@@ -306,6 +306,12 @@ void KWString::saveFormat(ostream &out)
 		_data_[i].attrib->save(out);
 		out << etag << "</FORMAT>" << endl;
 	      } break;
+	    case ID_KWCharFootNote:
+	      {
+		out << otag << "<FORMAT id=\"" << _data_[i].attrib->getClassId() << "\" pos=\"" << i << "\">" << endl;
+		_data_[i].attrib->save(out);
+		out << etag << "</FORMAT>" << endl;
+	      } break;
 	    default: break;
 	    }
 	  start = i + 1;
@@ -477,6 +483,42 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 			    return;
 			  }	
 		      }
+		  } break;
+		case ID_KWCharFootNote:
+		  {
+		    KWFootNote *fn = new KWFootNote(doc,new QList<KWFootNote::KWFootNoteInternal>());
+		    KWCharFootNote *v = new KWCharFootNote(fn);
+		
+		    while (parser.open(0L,tag))
+		      {
+			KOMLParser::parseTag(tag.c_str(),name,lst);
+
+			if (name == "FRMAT" && v)
+			  {
+			    _format = new KWFormat();
+			    _format->load(parser,lst,_doc);
+			    format = _doc->getFormatCollection()->getFormat(*_format);
+			    freeChar(_data_[__pos],doc);
+			    v->setFormat(format);
+			    _data_[__pos].attrib = v;
+			    _data_[__pos].c = 0;
+			    delete _format;
+			    _format = 0;
+			  }
+			else
+			  {
+			    if (fn)
+			      fn->load(name,tag,parser,lst);
+			  }
+				
+			if (!parser.close(tag))
+			  {
+			    cerr << "ERR: Closing Child" << endl;
+			    return;
+			  }	
+		      }
+		    
+		    doc->getFootNoteManager().insertFootNoteInternal(fn);
 		  } break;
 		default: break;
 		}	
@@ -748,14 +790,14 @@ int KWString::findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _i
 QString KWString::decoded()
 {
   QString str = toString(0,size());
-  
+
   str.append("_");
-  
+
   str.replace(QRegExp("<"),"&lt;");
   str.replace(QRegExp(">"),"&gt;");
-  
+
   str.remove(str.length() - 1,1);
-  
+
   return QString(str);
 }
 

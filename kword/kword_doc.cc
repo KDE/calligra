@@ -992,6 +992,16 @@ bool KWordDocument::loadXML(KOMLParser& parser,KOStore::Store_ptr)
 	    }
 	}
 
+      else if (name == "FOOTNOTEMGR")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	    }
+	  footNoteManager.load(parser,lst);
+	}
+
       else if (name == "FRAMESETS")
 	{
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
@@ -1293,6 +1303,10 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
       << "\" hasHeader=\"" << hasHeader() << "\" hasFooter=\"" << hasFooter()
       << "\" unit=\"" << getUnit().ascii() << "\"/>" << endl;
 
+  out << otag << "<FOOTNOTEMGR>" << endl;
+  footNoteManager.save(out);
+  out << etag << "</FOOTNOTEMGR>" << endl;
+    
   out << otag << "<FRAMESETS>" << endl;
 
   KWFrameSet *frameSet = 0L;
@@ -1890,7 +1904,7 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 	
 	  // Test next character.
 	  i++;
-	  if (_fc.cursorGotoNextChar( _painter ) != 1 || (text[_fc.getTextPos()].c == ' ' && 
+	  if (_fc.cursorGotoNextChar( _painter ) != 1 || (text[_fc.getTextPos()].c == ' ' &&
 							  _fc.getParag()->getParagLayout()->getFlow() == KWParagLayout::BLOCK) || i >= 199)
 	    {
 	      // there was a blank _or_ there will be a font switch _or_ a special object next, so print

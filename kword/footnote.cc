@@ -38,6 +38,7 @@ void KWFootNoteManager::recalc()
 {
   KWFootNote *fn = 0L;
   int curr = start;
+  
   for (fn = footNotes.first();fn;fn = footNotes.next())
     {
       fn->updateDescription(curr);
@@ -163,10 +164,8 @@ void KWFootNoteManager::addFootNoteText(KWFootNote *fn)
   bool hardBreak = false;
 
   if (firstParag.isEmpty())
-    {
-      hardBreak = true;
-    }
-
+    hardBreak = true;
+    
   KWTextFrameSet *frameSet = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(0));
   KWParag *parag = frameSet->getLastParag();
   KWParag *next = 0L;
@@ -175,7 +174,7 @@ void KWFootNoteManager::addFootNoteText(KWFootNote *fn)
     {
       while (parag && parag->getParagName() != firstParag)
 	parag = parag->getPrev();
-
+      
       int i = start;
       while (parag && i < fn->getStart() - 1)
 	{
@@ -205,6 +204,69 @@ void KWFootNoteManager::addFootNoteText(KWFootNote *fn)
     firstParag = parag2->getParagName();
 
 }
+
+/*================================================================*/
+void KWFootNoteManager::save(ostream &out)
+{
+  out << indent << "<START value=\"" << start << "\"/>" << endl;
+  out << indent << "<FORMAT superscript=\"" << superscript 
+      << "\" type=\"" << static_cast<int>(noteType) << "\"/>" << endl;
+  out << indent << "<FIRSTPARAG ref=\"" << firstParag.ascii() << "\"/>" << endl;
+}
+
+/*================================================================*/
+void KWFootNoteManager::load(KOMLParser &parser,vector<KOMLAttrib> &lst)
+{
+  string tag;
+  string name;
+
+  while (parser.open(0L,tag))
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+	
+      if (name == "START")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		start = atoi((*it).m_strValue.c_str());
+	    }
+	}
+      else if (name == "FORMAT")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "superscript")
+		superscript = static_cast<bool>(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "type")
+		noteType = static_cast<NoteType>(atoi((*it).m_strValue.c_str()));
+	    }
+	}
+      else if (name == "FIRSTPARAG")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "ref")
+		firstParag = (*it).m_strValue.c_str();
+	    }
+	}
+      
+      else
+	cerr << "Unknown tag '" << tag << "' in FOOTNOTEMGR" << endl;
+
+      if (!parser.close(tag))
+	{
+	  cerr << "ERR: Closing Child" << endl;
+	  return;
+	}
+    }
+}	
 
 /******************************************************************/
 /* Class: KWFootNote                                              */
@@ -320,7 +382,7 @@ void KWFootNote::makeTempNames()
     }
   else
     warning(i18n("Footnote couldn't find the parag with the footnote description"));
-  
+
 }
 
 /*================================================================*/
@@ -341,7 +403,7 @@ void KWFootNote::updateNames()
     }
   else
     warning(i18n("Footnote couldn't find the parag with the footnote description"));
-  
+
 }
 
 /*================================================================*/
@@ -370,3 +432,97 @@ void KWFootNote::destroy()
   else
     warning(i18n("Footnote couldn't find the parag with the footnote description"));
 }
+
+/*================================================================*/
+void KWFootNote::save(ostream &out)
+{
+  out << otag << "<INTERNAL>" << endl;
+  KWFootNoteInternal *fi = 0L;
+  for (fi = parts.first();fi;fi = parts.next())
+    out << indent << "<PART from=\"" << fi->from << "\" to=\"" << fi->to 
+	<< "\" space=\"" << fi->space.ascii() << "\"/>" << endl;
+  out << etag << "</INTERNAL>" << endl;
+  out << indent << "<RANGE start=\"" << start << "\" end=\"" << end << "\"/>" << endl;
+  out << indent << "<TEXT before=\"" << before.ascii() << "\" after=\"" << after.ascii() << "\"/>" << endl;
+  out << indent << "<DESCRIPT ref=\"" << parag.ascii() << "\"/>" << endl;
+}
+
+/*================================================================*/
+void KWFootNote::load(string name,string tag,KOMLParser &parser,vector<KOMLAttrib>& lst)
+{
+  if (name == "INTERNAL")
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+      vector<KOMLAttrib>::const_iterator it = lst.begin();
+      for(;it != lst.end();it++)
+	{
+	}
+
+      while (parser.open(0L,tag))
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  if (name == "PART")
+	    {
+	      KOMLParser::parseTag(tag.c_str(),name,lst);
+	      vector<KOMLAttrib>::const_iterator it = lst.begin();
+
+	      KWFootNoteInternal *part = new KWFootNoteInternal;
+	      
+	      for(;it != lst.end();it++)
+		{
+		  if ((*it).m_strName == "from")
+		    part->from = atoi((*it).m_strValue.c_str());
+		  else if ((*it).m_strName == "to")
+		    part->to = atoi((*it).m_strValue.c_str());
+		  else if ((*it).m_strName == "space")
+		    part->space = (*it).m_strValue.c_str();
+		}
+	      parts.append(part);
+	    }
+	  else
+	    cerr << "Unknown tag '" << tag << "' in INTERNAL" << endl;
+	
+	  if (!parser.close(tag))
+	    {
+	      cerr << "ERR: Closing Child" << endl;
+	      return;
+	    }
+	}
+    }
+  else if (name == "RANGE")
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+      vector<KOMLAttrib>::const_iterator it = lst.begin();
+      for(;it != lst.end();it++)
+	{
+	  if ((*it).m_strName == "start")
+	    start = atoi((*it).m_strValue.c_str());
+	  else if ((*it).m_strName == "end")
+	    end = atoi((*it).m_strValue.c_str());
+	}
+    }
+  else if (name == "TEXT")
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+      vector<KOMLAttrib>::const_iterator it = lst.begin();
+      for(;it != lst.end();it++)
+	{
+	  if ((*it).m_strName == "before")
+	    before = (*it).m_strValue.c_str();
+	  else if ((*it).m_strName == "after")
+	    after = (*it).m_strValue.c_str();
+	}
+    }
+  else if (name == "DESCRIPT")
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+      vector<KOMLAttrib>::const_iterator it = lst.begin();
+      for(;it != lst.end();it++)
+	{
+	  if ((*it).m_strName == "ref")
+	    parag = (*it).m_strValue.c_str();
+	}
+    }
+
+  makeText();
+}	

@@ -147,7 +147,7 @@ public:
   KWFootNote *getFootNote() { return fn; }
 
   virtual void save(ostream &out) {
-    //fn->save(out);
+    fn->save(out);
     out << otag << "<FRMAT>" << endl;
     KWCharFormat::save(out);
     out << etag << "</FRMAT>" << endl;
@@ -215,7 +215,7 @@ public:
   KWordDocument *getDocument() { return doc; }
 
   QString decoded();
-  
+
 protected:
   KWChar* alloc(unsigned int _size);
   void free(KWChar* _data,unsigned int _len);
