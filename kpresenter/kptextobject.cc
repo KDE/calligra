@@ -2381,6 +2381,7 @@ void KPTextView::dropEvent( QDropEvent * e )
             kpTextObject()->getOrig()+KoPoint( kpTextObject()->bLeft(),kpTextObject()->bTop()+kpTextObject()->alignmentValue()));
         dropPoint=doc->zoomHandler()->pixelToLayoutUnit( QPoint(dropPoint.x()+ m_canvas->diffx(),dropPoint.y()+m_canvas->diffy()) );
         KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
+        bool addMacroCmd = false;
         dropCursor.place( dropPoint, textDocument()->firstParag() );
         kdDebug(33001) << "KPTextView::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
 
@@ -2401,6 +2402,7 @@ void KPTextView::dropEvent( QDropEvent * e )
                     obj->layout();
                     kpTextObject()->layout();
                     macroCmd->addCommand(cmd);
+                    addMacroCmd = true;
                 }
                 else
                 {
@@ -2422,7 +2424,10 @@ void KPTextView::dropEvent( QDropEvent * e )
             {
                 KCommand *cmd = kpTextObject()->pasteOasis( cursor(), QCString(arr, arr.size()+1), false );
                 if ( cmd )
+                {
                     macroCmd->addCommand(cmd);
+                    addMacroCmd = true;
+                }
             }
         }
         else
@@ -2431,7 +2436,10 @@ void KPTextView::dropEvent( QDropEvent * e )
             if ( QTextDrag::decode( e, text ) )
                 textObject()->pasteText( cursor(), text, currentFormat(), false );
         }
-        doc->addCommand(macroCmd);
+        if ( addMacroCmd )
+            doc->addCommand(macroCmd);
+        else
+            delete macroCmd;
     }
 }
 
