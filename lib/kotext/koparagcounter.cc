@@ -596,7 +596,10 @@ int KoParagCounter::bulletX()
 // Only exists to centralize code. Does no caching.
 KoTextFormat* KoParagCounter::counterFormat( const KoTextParag *paragraph )
 {
-    return paragraph->at( 0 )->format();
+    KoTextFormat* refFormat = paragraph->at( 0 )->format();
+    KoTextFormat format( *refFormat );
+    format.setVAlign( KoTextFormat::AlignNormal );
+    return refFormat->parent()->format( &format );
     /*paragraph->paragFormat()*/
 }
 
