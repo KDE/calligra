@@ -283,6 +283,8 @@ KarbonView::textTool()
 
 	f->setFamily( m_setFontFamily->font() );
 	f->setPointSize( m_setFontSize->fontSize() );
+	f->setBold( m_setFontBold->isChecked() );
+	f->setItalic( m_setFontItalic->isChecked() );
 
 	// TODO : find a way to edit the text, no predefined strings
 	m_part->addCommand( new VCCmdText( m_part, *f, "KARBON" ), true );
@@ -508,10 +510,15 @@ KarbonView::initActions()
 	// text
 
 	m_setFontFamily = new KFontAction( i18n( "Set Font Family" ), 0, actionCollection(), "setFontFamily" );
+	m_setFontFamily->setCurrentItem( 0 );
+
 	//connect( m_setFontFamily, SIGNAL(activated(const QString&)), SLOT(setFontFamily(const QString&)) );
 
 	m_setFontSize = new KFontSizeAction( i18n( "Set Font Size" ), 0, actionCollection(), "setFontSize" );
 	//connect( m_setFontSize, SIGNAL(activated(const QString&)), SLOT(setFontSize(const QString&)) );
+
+	m_setFontItalic = new KToggleAction( i18n( "&Italic" ), "text_italic", 0, actionCollection(), "setFontItalic" );
+	m_setFontBold = new KToggleAction(	i18n( "&Bold" ), "text_bold", 0, actionCollection(), "setFontBold" );
 
 	//m_setTextColor = new TKSelectColorAction( i18n("Set Text Color"), TKSelectColorAction::TextColor, actionCollection(), "setTextColor" );
 	//connect( m_setTextColor, SIGNAL(activated()), SLOT(setTextColor()) );

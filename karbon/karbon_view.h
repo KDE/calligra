@@ -134,8 +134,8 @@ private:
 	// text
 	KFontAction *m_setFontFamily;
 	KFontSizeAction *m_setFontSize;
-	KToggleAction *m_setBold;
-	KToggleAction *m_setItalics;
+	KToggleAction *m_setFontBold;
+	KToggleAction *m_setFontItalic;
 	KToggleAction *m_setUnderline;
 	//KSelectColorAction *m_setTextColor;
 
