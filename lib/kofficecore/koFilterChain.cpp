@@ -167,7 +167,8 @@ KoFilter::ConversionStatus KoFilterChain::invokeChain()
     }
 
     m_state = Done;
-    finalizeIO();
+    if (status == KoFilter::OK)
+      finalizeIO();
     return status;
 }
 
