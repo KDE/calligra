@@ -30,9 +30,17 @@ KPTNode::KPTNode(KPTNode *parent) : m_nodes(), m_dependChildNodes(), m_dependPar
 }
 
 KPTNode::~KPTNode() {
+    KPTRelation *rel = 0;
+    while ((rel = m_dependParentNodes.getFirst())) {
+        delete rel;
+    }
+    while ((rel = m_dependChildNodes.getFirst())) {
+        delete rel;
+    }
 }
 
 void KPTNode::init() {
+    m_nodes.setAutoDelete(true);
     m_name="";
     m_startTime = KPTDateTime();
     m_endTime = KPTDateTime();
@@ -146,6 +154,7 @@ bool KPTNode::addDependChildNode( KPTRelation *relation) {
     return true;
 }
 
+// These delDepend... methods look suspicious to me, can someone review?
 void KPTNode::delDependChildNode( KPTNode *node, bool remove) {
     if ( m_nodes.findRef(node) != -1 ) {
         if(remove)
@@ -171,6 +180,11 @@ void KPTNode::delDependChildNode( int number, bool remove) {
         m_dependChildNodes.take(number);
 }
 
+void KPTNode::takeDependChildNode(KPTRelation *rel) {
+    if (m_dependChildNodes.findRef(rel) != -1) {
+        m_dependChildNodes.take();
+    }
+}
 
 void KPTNode::addDependParentNode( KPTNode *node, TimingType t, TimingRelation p) {
     addDependParentNode(node,t,p,KPTDuration());
@@ -199,6 +213,7 @@ bool KPTNode::addDependParentNode( KPTRelation *relation) {
     return true;
 }
 
+// These delDepend... methods look suspicious to me, can someone review?
 void KPTNode::delDependParentNode( KPTNode *node, bool remove) {
     if ( m_nodes.findRef(node) != -1 ) {
         if(remove)
@@ -224,6 +239,12 @@ void KPTNode::delDependParentNode( int number, bool remove) {
         m_dependParentNodes.take(number);
 }
 
+void KPTNode::takeDependParentNode(KPTRelation *rel) {
+    if (m_dependParentNodes.findRef(rel) != -1) {
+        rel = m_dependParentNodes.take();
+    }      
+}
+
 void KPTNode::addPredesessorNode( KPTRelation *relation) {
     //kdDebug()<<k_funcinfo<<"rel="<<relation<<endl;
     m_predesessorNodes.append(relation);
@@ -247,18 +268,29 @@ bool KPTNode::isParentOf(KPTNode *node) {
 	return false;
 }
 
-KPTRelation *KPTNode::findRelation(KPTNode *node) {
+KPTRelation *KPTNode::findParentRelation(KPTNode *node) {
     for (int i=0; i<numDependParentNodes(); i++) {
         KPTRelation *rel = getDependParentNode(i);
         if (rel->parent() == node)
             return rel;
     }
+    return (KPTRelation *)0;
+}
+
+KPTRelation *KPTNode::findChildRelation(KPTNode *node) {
     for (int i=0; i<numDependChildNodes(); i++) {
         KPTRelation *rel = getDependChildNode(i);
         if (rel->child() == node)
             return rel;
     }
     return (KPTRelation *)0;
+}
+
+KPTRelation *KPTNode::findRelation(KPTNode *node) {
+    KPTRelation *rel = findParentRelation(node);
+    if (!rel)
+        rel = findChildRelation(node);
+    return rel;
 }
 
 bool KPTNode::isDependChildOf(KPTNode *node) {

@@ -131,6 +131,12 @@ public:
     }
     QPtrList<KPTRelation> &dependChildNodes() { return m_dependChildNodes; }
 
+    /**
+     * Takes the relation @rel.
+     * Never deletes even when autoDelete = true.
+     */
+    void takeDependChildNode(KPTRelation *rel);
+    
     int numDependParentNodes() const { return m_dependParentNodes.count(); }
     virtual void addDependParentNode(KPTNode *node, TimingType t=START_ON_DATE,
 				     TimingRelation p=FINISH_START);
@@ -146,10 +152,18 @@ public:
     KPTRelation *getDependParentNode( int number) {
 	return m_dependParentNodes.at(number);
     }
+    
+    /**
+     * Takes the relation @rel.
+     * Never deletes even when autoDelete = true.
+     */
+    void takeDependParentNode(KPTRelation *rel);
 
 	bool isParentOf(KPTNode *node);
     bool isDependChildOf(KPTNode *node);
 
+    KPTRelation *findParentRelation(KPTNode *node);
+    KPTRelation *findChildRelation(KPTNode *node);
     KPTRelation *findRelation(KPTNode *node);
 
     void setStartTime(KPTDateTime startTime) { m_startTime=startTime; }

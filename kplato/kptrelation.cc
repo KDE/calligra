@@ -45,6 +45,11 @@ KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingR
 }
 
 KPTRelation::~KPTRelation() {
+    //kdDebug()<<k_funcinfo<<"parent: "<<(m_parent ? m_parent->name():"none")<<" child: "<<(m_child ? m_child->name():"None")<<endl;
+    if (m_parent)
+        m_parent->takeDependChildNode(this);
+    if (m_child)
+        m_child->takeDependParentNode(this);
 }
 
 void KPTRelation::setTimingType(TimingType tt) {

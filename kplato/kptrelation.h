@@ -43,6 +43,11 @@ public:
 
     KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingRelation tr, KPTDuration lag);
     KPTRelation(KPTNode *parent=0, KPTNode *child=0, TimingType tt=START_ON_DATE, TimingRelation tr=FINISH_START);
+    
+    /** 
+    *  When deleted the relation will remove itself from 
+    *  the parent- and child nodes lists
+    */
     ~KPTRelation();
 
     void setTimingType(TimingType );
