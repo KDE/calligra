@@ -2709,7 +2709,8 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
       // #### todo: paint only if child is visible inside rect
       painter.save();
       m_pDoc->paintChild( it.current(),
-                          painter, m_pView );
+                          painter, m_pView,
+                          doc()->zoomedResolutionX(), doc()->zoomedResolutionY() );
       painter.restore();
     }
   }
@@ -2955,7 +2956,7 @@ void KSpreadCanvas::paintUpdates()
         cell->calc();
         cell->makeLayout( painter, x, y );
         cell->paintCell( unzoomedRect, painter, m_pView, dblCorner,
-                         QPoint(cell->column(), cell->row()) );
+                         QPoint( x, y ) );
 
       }
       dblCorner.setY( dblCorner.y() + activeTable()->rowLayout( y )->dblHeight( this ) );
