@@ -1069,8 +1069,8 @@ KarbonView::pageLayout()
 		m_horizRuler->setUnit( unit );
 		m_vertRuler->setPageLayout( layout );
 		m_vertRuler->setUnit( unit );
-		m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 40 ) * zoom() ),
-								  int( ( part()->pageLayout().ptHeight + 80 ) * zoom() ) );
+		m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 300 ) * zoom() ),
+								  int( ( part()->pageLayout().ptHeight + 460 ) * zoom() ) );
 		part()->repaintAllViews();
 	}
 }
