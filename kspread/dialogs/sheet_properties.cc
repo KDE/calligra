@@ -32,14 +32,6 @@ SheetPropertiesDialog::SheetPropertiesDialog( QWidget* parent ):
 {
   QVBox* mainWidget = makeVBoxMainWidget();
   d = new SheetPropertiesBase( mainWidget );
-  
-  showButtonOK( true );
-  showButtonCancel( true );
-  showButtonApply( false );
-  showButton( Default, true );
-  
-  setCaption( i18n("Sheet Properties") );
-  enableButtonSeparator( true );
 }
 
 SheetPropertiesDialog::~SheetPropertiesDialog()
