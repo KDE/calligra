@@ -546,7 +546,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	    KPresenterChild *ch = new KPresenterChild( this );
 	    KPPartObject *kppartobject = 0L;
 	    QRect r;
-	    
+	
 	    while ( parser.open( 0L, tag ) ) {
 		KOMLParser::parseTag( tag.c_str(), name, lst );
 		if ( name == "OBJECT" ) {
@@ -573,8 +573,6 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		}
 	    }
 	    if ( kppartobject ) {
-		qDebug( "HHHHHHHHHHHHHHERE: %d %d %d %d",
-			r.x(), r.y(), r.width(), r.height() );
 		kppartobject->setOrig( r.x(), r.y() );
 		kppartobject->setSize( r.width(), r.height() );
 	    }
