@@ -56,17 +56,9 @@ void KWBgSpellCheck::slotRepaintChanged(KoTextObject *obj)
 
 KoTextObject *KWBgSpellCheck::nextTextObject( KoTextObject *obj )
 {
-    if( m_currentFrame->textObject()==obj)
-    {
-        m_currentFrame=m_doc->nextTextFrameSet(m_currentFrame);
-        if(!m_currentFrame)
-            return 0L;
-        else
-            return m_currentFrame->textObject();
-    }
-    else
-    {
-        m_currentFrame=0L;
+    m_currentFrame=m_doc->nextTextFrameSet(m_currentFrame);
+    if(!m_currentFrame)
         return 0L;
-    }
+    else
+        return m_currentFrame->textObject();
 }

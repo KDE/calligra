@@ -534,7 +534,6 @@ public:
     void startBackgroundSpellCheck();
     void reactivateBgSpellChecking();
     KWTextFrameSet* nextTextFrameSet(KWTextFrameSet *obj);
-    void changeBackGroundSpellCheckTextFrameSet(KWTextFrameSet *fs);
 
     void updateHeaderButton();
     void updateFooterButton();
