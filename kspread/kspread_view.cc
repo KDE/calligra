@@ -4898,20 +4898,23 @@ void KSpreadView::refreshView()
   d->vBorderWidget->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
   d->vBorderWidget->setMinimumWidth( d->doc->zoomItX( YBORDER_WIDTH ) );
   
-  if( table->layoutDirection() == KSpreadSheet::LeftToRight )
+  KSpreadSheet::LayoutDirection sheetDir = table->layoutDirection();
+  bool interfaceIsRTL = QApplication::reverseLayout();
+
+  if ((sheetDir == KSpreadSheet::LeftToRight && !interfaceIsRTL) ||
+      (sheetDir == KSpreadSheet::RightToLeft && interfaceIsRTL))
   {
     d->formulaBarLayout->setDirection( QBoxLayout::LeftToRight );
     d->viewLayout->setOrigin( QGridLayout::TopLeft );
     d->tabScrollBarLayout->setDirection( QBoxLayout::LeftToRight );
-    d->tabBar->setReverseLayout( false );
+    d->tabBar->setReverseLayout( interfaceIsRTL );
   }
-
-  if( table->layoutDirection() == KSpreadSheet::RightToLeft )
+  else
   {
     d->formulaBarLayout->setDirection( QBoxLayout::RightToLeft );
     d->viewLayout->setOrigin( QGridLayout::TopRight );
     d->tabScrollBarLayout->setDirection( QBoxLayout::RightToLeft );
-    d->tabBar->setReverseLayout( true );
+    d->tabBar->setReverseLayout( !interfaceIsRTL );
   }
 
 }
