@@ -62,6 +62,9 @@ protected:
   KSpreadValidity result;
   QCheckBox *displayMessage;
   QCheckBox *allowEmptyCell;
+    QCheckBox *displayHelp;
+    QTextEdit *messageHelp;
+    QLineEdit *titleHelp;
 };
 
 

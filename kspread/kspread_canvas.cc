@@ -334,6 +334,7 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   m_chooseStartTable = NULL;
   m_pEditor = 0;
   m_bChoose = FALSE;
+  m_validationInfo = 0L;
 
   QWidget::setFocusPolicy( QWidget::StrongFocus );
 
@@ -586,6 +587,18 @@ void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
   if ( !m_pEditor && !m_bChoose )
     m_pView->updateEditWidgetOnPress();
 
+  if ( m_validationInfo )
+      delete m_validationInfo;
+  else if ( selectionInfo()->singleCellSelection() )
+  {
+      KSpreadCell * cell = table->cellAt( selectionInfo()->marker().x(),selectionInfo()->marker().y() );
+      if ( cell && cell->getValidity() && cell->getValidity()->displayValidationInformation)
+      {
+          kdDebug()<<" display info validation\n";
+          //todo add pos
+          //m_validationInfo->show();
+      }
+  }
   updatePosWidget();
 }
 

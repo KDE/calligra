@@ -169,6 +169,35 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   grid2->addMultiCellWidget(message,3, 4,1, 1);
   lay1->addWidget(tmpQButtonGroup);
 
+  QFrame *page3 = addPage(i18n("Input Help"));
+  lay1 = new QVBoxLayout( page3, KDialogBase::marginHint(), KDialogBase::spacingHint() );
+
+  tmpQButtonGroup = new QButtonGroup( 0, Qt::Vertical, i18n("Contents"), page3, "ButtonGroup_2" );
+  tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());
+  tmpQButtonGroup->layout()->setMargin(KDialog::marginHint());
+
+  QGridLayout *grid3 = new QGridLayout(tmpQButtonGroup->layout(),5,2);
+
+  displayHelp = new QCheckBox(i18n( "Show input help when cell is selected" ),tmpQButtonGroup );
+  displayMessage->setChecked( false );
+  grid3->addMultiCellWidget(displayHelp,0, 0,0, 1);
+
+  tmpQLabel = new QLabel( tmpQButtonGroup, "Label_6" );
+  tmpQLabel->setText(i18n("Title:" ));
+  grid3->addWidget(tmpQLabel,2,0);
+
+  titleHelp=new QLineEdit(  tmpQButtonGroup);
+  grid3->addWidget(titleHelp,2,1);
+
+  tmpQLabel = new QLabel( tmpQButtonGroup, "Label_7" );
+  tmpQLabel->setText(i18n("Message:" ));
+  grid3->addWidget(tmpQLabel,3,0);
+
+  messageHelp =new QTextEdit( tmpQButtonGroup);
+  grid3->addMultiCellWidget(messageHelp,3, 4,1, 1);
+  lay1->addWidget(tmpQButtonGroup);
+
+
   connect(choose,SIGNAL(activated(int )),this,SLOT(changeIndexCond(int)));
   connect(chooseType,SIGNAL(activated(int )),this,SLOT(changeIndexType(int)));
   connect( this, SIGNAL(user1Clicked()), SLOT(OkPressed()) );
@@ -453,6 +482,9 @@ void KSpreadDlgValidity::init()
     }
     displayMessage->setChecked( tmpValidity->displayMessage );
     allowEmptyCell->setChecked( tmpValidity->allowEmptyCell );
+    titleHelp->setText( tmpValidity->titleInfo );
+    messageHelp->setText( tmpValidity->messageInfo );
+    displayHelp->setChecked( tmpValidity->displayValidationInformation );
   }
   changeIndexType(chooseType->currentItem()) ;
   changeIndexCond(choose->currentItem()) ;
@@ -471,6 +503,9 @@ void KSpreadDlgValidity::clearAllPressed()
   chooseAction->setCurrentItem(0);
   changeIndexType(0);
   changeIndexCond(0);
+  messageHelp->setText("" );
+  titleHelp->setText( "" );
+  displayHelp->setChecked( false );
 }
 
 void KSpreadDlgValidity::OkPressed()
@@ -702,6 +737,10 @@ void KSpreadDlgValidity::OkPressed()
   }
   result.displayMessage = displayMessage->isChecked();
   result.allowEmptyCell = allowEmptyCell->isChecked();
+  result.displayValidationInformation = displayHelp->isChecked();
+  result.messageInfo= messageHelp->text();
+  result.titleInfo = titleHelp->text();
+
   m_pView->doc()->emitBeginOperation( false );
   m_pView->activeTable()->setValidity( m_pView->selectionInfo(),  result);
   m_pView->slotUpdateView( m_pView->activeTable() );

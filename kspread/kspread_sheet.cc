@@ -5134,6 +5134,9 @@ struct SetValidityWorker : public KSpreadSheet::CellWorker {
 		tmpValidity->dateMax=tmp.dateMax;
                 tmpValidity->displayMessage=tmp.displayMessage;
                 tmpValidity->allowEmptyCell=tmp.allowEmptyCell;
+                tmpValidity->displayValidationInformation=tmp.displayValidationInformation;
+                tmpValidity->titleInfo=tmp.titleInfo;
+                tmpValidity->messageInfo=tmp.messageInfo;
 	    }
 	    cell->clearDisplayDirtyFlag();
 	}

@@ -469,6 +469,8 @@ private:
      */
     EditorType m_focusEditorType;
 
+    QLabel *m_validationInfo;
+
 private:
 
   void startTheDrag();
