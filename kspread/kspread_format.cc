@@ -220,7 +220,8 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
 
     //FIXME fallback ????
     KSpreadFormat::Align a = KSpreadFormat::Undefined;
-    if ( hasProperty( KSpreadFormat::PAlign ) || !hasNoFallBackProperties( KSpreadFormat::PAlign ) )
+
+    if ( hasProperty( KSpreadFormat::PAlign,true ) || hasNoFallBackProperties( KSpreadFormat::PAlign ) )
     {
         a = m_pStyle->alignX(  );
         QString value ="start";
@@ -300,6 +301,10 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
                 currentCellStyle.addProperty( "style:cell-protect", "protected" );
         }
     }
+    if ( ( hasProperty( KSpreadFormat::PBackgroundColor ) || !hasNoFallBackProperties( KSpreadFormat::PBackgroundColor ) ) )
+        currentCellStyle.addProperty( "fo:background-color", m_pStyle->bgColor().name() );
+
+
 #if 0
     if ( hasProperty( KSpreadFormat::PLeftBorder ) || !hasNoFallBackProperties( KSpreadFormat::PLeftBorder ) )
         cs.left  = leftBorderPen( col, row );
@@ -404,6 +409,10 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, int _col, 
                 currentCellStyle.addProperty( "style:cell-protect", "protected" );
         }
     }
+    if ( ( hasProperty( PBackgroundColor ) || hasNoFallBackProperties( PBackgroundColor ) )
+         && bgColor(_col, _row ).isValid() )
+        currentCellStyle.addProperty( "fo:background-color", bgColor(_col, _row).name() );
+
 #if 0
     if ( hasProperty( KSpreadFormat::PLeftBorder ) || !hasNoFallBackProperties( KSpreadFormat::PLeftBorder ) )
         cs.left  = leftBorderPen( col, row );

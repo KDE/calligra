@@ -6709,7 +6709,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
     }
 
     KoStyleStack styleStack;
-    styleStack.setTypeProperties("column");
+    styleStack.setTypeProperties("cell"); //style for column is cell format
     if ( column.hasAttribute( "table:default-cell-style-name" ) )
     {
         //todo load cell attribute default into this column
@@ -6725,7 +6725,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
         }
     }
 
-
+    styleStack.setTypeProperties("column");
     if ( column.hasAttribute( "table:style-name" ) )
     {
         QString str = column.attribute( "table:style-name" );
