@@ -52,6 +52,8 @@ protected:
 	virtual void mouseDrag();
 	virtual void mouseDragRelease();
 
+	virtual void arrowKeyReleased( Qt::Key );
+
 	void recalc();
 
 protected:

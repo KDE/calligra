@@ -124,6 +124,28 @@ VZoomTool::mouseDragRelease()
 }
 
 void
+VZoomTool::arrowKeyReleased( Qt::Key key )
+{
+	kdDebug() << "VZoomTool::arrowKeyReleased" << endl;
+	double zoomChange = 0;
+	if( key == Qt::Key_Up )
+		zoomChange = 0.75;
+	else if( key == Qt::Key_Down )
+		zoomChange = 1.50;
+
+	if( zoomChange != 0 )
+	{
+		kdDebug() << zoomChange << endl;
+		double viewportX = view()->canvasWidget()->visibleWidth() * zoomChange / view()->zoom();
+		double viewportY = view()->canvasWidget()->visibleHeight() * zoomChange / view()->zoom();
+		KoRect rect( last().x() - viewportX / 2.0, last().y() - viewportY / 2.0, viewportX, viewportY );
+		rect = rect.normalize();
+		view()->canvasWidget()->setContentsRect( rect );
+		view()->part()->repaintAllViews();
+	}
+}
+
+void
 VZoomTool::recalc()
 {
 	m_current = last();
