@@ -3,7 +3,7 @@
    dnl Check for aspell library
    AC_MSG_CHECKING([for kspell2/broker.h (kdelibs>3.2)])
    AC_FIND_FILE(kspell2/broker.h, $kde_includes, ac_kspell2_includes)
-   if test -n "$ac_kspell2_includes"; then
+   if test -n "$ac_kspell2_includes" && test -r "$ac_kspell2_includes/kspell2/broker.h"; then
            dnl the header and the lib exist -> ok
            dnl this is for config.h
            AC_DEFINE(HAVE_LIBKSPELL2, 1, [If we are going to use libkspell2 for spell-checking])
