@@ -22,68 +22,42 @@
 
 #include <handlers.h>
 #include <qstring.h>
-#include <qcolor.h>
 #include <qdom.h>
+#include <qobject.h>
 
 #include <string>
 
 namespace wvWare {
-    class Style;
     class Parser;
-    namespace Word97 {
-        class PAP;
-    }
 }
+class KWordReplacementHandler;
+class KWordTextHandler;
 
-class KWordReplacementHandler : public wvWare::InlineReplacementHandler
+class Document : public QObject, public wvWare::SubDocumentHandler
 {
-public:
-    virtual wvWare::U8 hardLineBreak();
-    virtual wvWare::U8 nonBreakingHyphen();
-    virtual wvWare::U8 nonRequiredHyphen();
-};
-
-class Document : public wvWare::TextHandler
-{
+    Q_OBJECT
 public:
     Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& mainFramesetElement );
     virtual ~Document();
 
+    virtual void startBody();
+    virtual void endBody();
+
     bool parse();
 
-    virtual void sectionStart( wvWare::SharedPtr<const wvWare::Word97::SEP> sep );
-    virtual void sectionEnd();
-    virtual void pageBreak();
-    virtual void headersFound( const wvWare::HeaderFunctor& parseHeaders );
-
-    virtual void paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties );
-    virtual void paragraphEnd();
-    virtual void runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
+protected slots:
+    // Connected to the KWordTextHandler only when parsing the body
+    void slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> );
 
 private:
-    QString getFont(unsigned fc) const;
     void prepareDocument();
     void processStyles();
-    void writeOutParagraph( const QString& styleName, const QString& text );
-    // Write a <FORMAT> tag from the given CHP
-    void writeFormat( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len );
-    // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
-    void writeLayout( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties );
-    void writeCounter( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties );
 
-
-    QString m_paragraph;
     QDomDocument& m_mainDocument;
     QDomElement& m_mainFramesetElement;
-    QDomElement m_formats;
-    QDomElement m_oldLayout;
-    int m_index;
-    int m_sectionNumber;
-    const wvWare::Style* m_currentStyle;
-    wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
     KWordReplacementHandler* m_replacementHandler;
+    KWordTextHandler* m_textHandler;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
-    bool m_shadowTextFound;
 };
 
 #endif // DOCUMENT_H
