@@ -206,6 +206,14 @@ public:
     bool replace(QString &text, const QRect &expose);
 
     /**
+     * @param text  The text fragment to modify
+     * @param index The starting index where there is word found.
+     * @param matchedlength The length of word found
+     */
+    virtual bool validateMatch( const QString &/*text*/, int /*index*/, int /*matchedlength*/ ) { return true; }
+
+
+    /**
      * Search the given string, and returns whether a match was found. If one is,
      * the replacement string length is also returned.
      *

@@ -152,9 +152,14 @@ bool KoReplace::replace(QString &text, const QRect &expose)
             {
                 // Tell the world about the match we found, in case someone wants to
                 // highlight it.
-                emit highlight(m_text, m_index, m_matchedLength, m_expose);
-                show();
-                kapp->enter_loop();
+                if ( validateMatch( m_text, m_index, m_matchedLength ))
+                {
+                    emit highlight(m_text, m_index, m_matchedLength, m_expose);
+                    show();
+                    kapp->enter_loop();
+                }
+                else
+                    m_index = m_index+m_matchedLength;
             }
             else
             {

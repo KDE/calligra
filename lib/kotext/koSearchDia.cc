@@ -51,7 +51,7 @@ KoSearchContextUI::KoSearchContextUI( KoSearchContext *ctx, QWidget *parent )
     m_checkFamily = 0L;
 
     // ### currently not implemented
-    m_btnShowOptions->setEnabled( false );
+    m_btnShowOptions->setEnabled( /*false*/true );
 }
 
 void KoSearchContextUI::slotShowOptions()
@@ -239,7 +239,7 @@ void KoReplaceDia::slotOk()
 
 
 KoFindReplace::KoFindReplace( QWidget * parent, KoSearchDia * dialog, KoTextView *textView,const QPtrList<KoTextObject> & lstObject)
-    : m_find( new KoFind( dialog->pattern(), dialog->options(), parent ) ),
+    : m_find( new KoTextFind( dialog->pattern(), dialog->options(), dialog->searchContext(),this, parent ) ),
       m_replace( 0L ),
       m_findDlg( dialog ), // guaranteed to remain alive while we live
       m_replaceDlg( 0L ),
@@ -256,7 +256,7 @@ KoFindReplace::KoFindReplace( QWidget * parent, KoSearchDia * dialog, KoTextView
 
 KoFindReplace::KoFindReplace( QWidget * parent, KoReplaceDia * dialog, KoTextView *textView,const QPtrList<KoTextObject> & lstObject)
     : m_find( 0L ),
-      m_replace( new KoReplace( dialog->pattern(), dialog->replacement(), dialog->options(), parent ) ),
+      m_replace( new KoTextReplace( dialog->pattern(), dialog->replacement(), dialog->options(), dialog->searchContext(), dialog->replaceContext(), this, parent ) ),
       m_findDlg( 0L ),
       m_replaceDlg( dialog ), // guaranteed to remain alive while we live
       m_options( dialog->options() ),
@@ -480,6 +480,128 @@ void KoFindReplace::abort()
        m_findDlg->reparent( 0, QPoint( 0, 0 ) );
     else if ( m_replaceDlg )
        m_replaceDlg->reparent( 0, QPoint( 0, 0 ) );
+}
+
+KoTextFind::KoTextFind( const QString &pattern, long options, KoSearchContext * _searchContext, KoFindReplace *_findReplace, QWidget *parent )
+    : KoFind( pattern, options, parent),
+      m_searchContext(_searchContext),
+      m_findReplace( _findReplace)
+{
+}
+
+KoTextFind::~KoTextFind()
+{
+}
+
+bool KoTextFind::validateMatch( const QString &/*text*/, int index, int matchedlength )
+{
+    if ( !m_searchContext || !m_searchContext->m_optionsMask)
+        return true;
+    KoTextString * s = m_findReplace->currentParag()->string();
+    for ( int i = index ; i < index+matchedlength ; ++i )
+    {
+        KoTextStringChar & ch = s->at(i);
+        KoTextFormat *format = ch.format();
+        if (m_searchContext->m_optionsMask & KoSearchContext::Bold)
+        {
+            if ( (!format->font().bold() && (m_searchContext->m_options & KoSearchContext::Bold)) || (format->font().bold() && ((m_searchContext->m_options & KoSearchContext::Bold)==0)))
+                return false;
+        }
+        if (m_searchContext->m_optionsMask & KoSearchContext::Size)
+        {
+            if ( format->font().pointSize () != m_searchContext->m_size)
+                return false;
+        }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::Family)
+        {
+            if (format->font().family() != m_searchContext->m_family)
+                return false;
+        }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::Color)
+        {
+            if (format->color() != m_searchContext->m_color)
+                return false;
+        }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::Italic)
+        {
+            if ( (!format->font().italic() && (m_searchContext->m_options & KoSearchContext::Italic)) || (format->font().italic() && ((m_searchContext->m_options & KoSearchContext::Italic)==0)))
+                return false;
+
+        }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::Underline)
+        {
+            if ( (!format->font().underline() && (m_searchContext->m_options & KoSearchContext::Underline)) || (format->font().underline() && ((m_searchContext->m_options & KoSearchContext::Underline)==0)))
+                return false;
+        }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::VertAlign)
+        {
+        }
+    }
+    return true;
+}
+
+KoTextReplace::KoTextReplace(const QString &pattern, const QString &replacement, long options, KoSearchContext * _searchContext, KoSearchContext *_replaceContext, KoFindReplace *_findReplace, QWidget *parent )
+    : KoReplace( pattern,replacement, options, parent),
+      m_searchContext(_searchContext),
+      m_replaceContext(_replaceContext),
+      m_findReplace( _findReplace)
+{
+}
+
+KoTextReplace::~KoTextReplace()
+{
+}
+
+bool KoTextReplace::validateMatch( const QString &/*text*/, int index, int matchedlength )
+{
+    if ( !m_searchContext || !m_searchContext->m_optionsMask)
+        return true;
+
+    if ( !m_searchContext || !m_searchContext->m_optionsMask)
+        return true;
+    KoTextString * s = m_findReplace->currentParag()->string();
+    for ( int i = index ; i < index+matchedlength ; ++i )
+    {
+        KoTextStringChar & ch = s->at(i);
+        KoTextFormat *format = ch.format();
+        if (m_searchContext->m_optionsMask & KoSearchContext::Bold)
+        {
+            if ( (!format->font().bold() && (m_searchContext->m_options & KoSearchContext::Bold)) || (format->font().bold() && ((m_searchContext->m_options & KoSearchContext::Bold)==0)))
+                return false;
+        }
+        if (m_searchContext->m_optionsMask & KoSearchContext::Size)
+        {
+            if ( format->font().pointSize () != m_searchContext->m_size)
+                return false;
+        }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::Family)
+        {
+            if (format->font().family() != m_searchContext->m_family)
+                return false;
+        }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::Color)
+        {
+            if (format->color() != m_searchContext->m_color)
+                return false;
+        }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::Italic)
+        {
+            if ( (!format->font().italic() && (m_searchContext->m_options & KoSearchContext::Italic)) || (format->font().italic() && ((m_searchContext->m_options & KoSearchContext::Italic)==0)))
+                return false;
+
+        }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::Underline)
+        {
+            if ( (!format->font().underline() && (m_searchContext->m_options & KoSearchContext::Underline)) || (format->font().underline() && ((m_searchContext->m_options & KoSearchContext::Underline)==0)))
+                return false;
+        }
+        if ( m_searchContext->m_optionsMask & KoSearchContext::VertAlign)
+        {
+        }
+
+    }
+    return true;
+
 }
 
 #include "koSearchDia.moc"

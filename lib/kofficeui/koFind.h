@@ -277,6 +277,8 @@ public:
      */
     bool find(const QString &text, const QRect &expose);
 
+    virtual bool validateMatch( const QString &/*text*/, int /*index*/, int /*matchedlength*/ ) { return true; }
+
     /**
      * Search the given string, and returns whether a match was found. If one is,
      * the length of the string matched is also returned.

@@ -40,6 +40,8 @@ class KoTextView;
 class KoTextObject;
 class KCommand;
 class KoTextDocument;
+class KoTextFind;
+class KoTextReplace;
 //
 // This class represents the KWord-specific search extension items, and also the
 // corresponding replace items.
@@ -83,7 +85,7 @@ public:
     KoSearchContextUI( KoSearchContext *ctx, QWidget *parent );
     void setCtxOptions( long options );
     void setCtxHistory( const QStringList & history );
-
+    KoSearchContext *context() const { return m_ctx;}
 private slots:
     void slotShowOptions();
 
@@ -120,7 +122,9 @@ class KoSearchDia:
 
 public:
     KoSearchDia( QWidget *parent, const char *name, KoSearchContext *find, bool hasSelection );
-
+    KoSearchContext * searchContext() {
+        return m_findUI->context();
+    }
 protected slots:
     void slotOk();
 
@@ -139,6 +143,13 @@ class KoReplaceDia:
 public:
 
     KoReplaceDia( QWidget *parent, const char *name, KoSearchContext *find, KoSearchContext *replace, bool hasSelection );
+    KoSearchContext * searchContext() {
+        return m_findUI->context();
+    }
+    KoSearchContext * replaceContext() {
+        return m_replaceUI->context();
+    }
+
 
 protected slots:
     void slotOk();
@@ -161,6 +172,10 @@ public:
     KoFindReplace( QWidget * parent, KoSearchDia * dialog,KoTextView *textView ,const QPtrList<KoTextObject> & lstObject);
     KoFindReplace( QWidget * parent, KoReplaceDia * dialog, KoTextView *textView,const QPtrList<KoTextObject> & lstObject);
     ~KoFindReplace();
+
+    KoTextParag *currentParag() {
+        return m_currentParag;
+    }
 
     /** Do the complete loop for find or replace. When it exits, we're done */
     void proceed();
@@ -186,8 +201,8 @@ protected slots:
 
 private:
     // Only one of those two will be set
-    KoFind * m_find;
-    KoReplace * m_replace;
+    KoTextFind * m_find;
+    KoTextReplace * m_replace;
 
     // Only one of those two will be set
     KoSearchDia * m_findDlg;
@@ -201,8 +216,32 @@ private:
     KoTextView *m_textView;
     QPtrList<KoTextObject> m_lstObject;
     bool m_destroying;
+};
+
+class KoTextFind : public KoFind
+{
+    Q_OBJECT
+public:
+    KoTextFind(const QString &pattern, long options, KoSearchContext * _searchContext, KoFindReplace *_findReplace, QWidget *parent = 0);
+    ~KoTextFind();
+    virtual bool validateMatch( const QString &text, int index, int matchedlength );
+private:
+    KoSearchContext *m_searchContext;
+    KoFindReplace * m_findReplace;
+};
 
 
+class KoTextReplace : public KoReplace
+{
+    Q_OBJECT
+public:
+    KoTextReplace(const QString &pattern, const QString &replacement, long options, KoSearchContext * _searchContext, KoSearchContext *_replaceContext, KoFindReplace *_findReplace, QWidget *parent = 0);
+    ~KoTextReplace();
+    virtual bool validateMatch( const QString &text, int index, int matchedlength );
+private:
+    KoSearchContext *m_searchContext;
+    KoSearchContext *m_replaceContext;
+    KoFindReplace * m_findReplace;
 };
 
 #endif
