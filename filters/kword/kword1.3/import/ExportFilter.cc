@@ -916,7 +916,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 // ### TODO: make it a member of OOWriterWorker (when table support will work)
 static QString cellToProperties( const TableCell& cell, QString& key)
 {
-    return QString::null;
+    return " fo:vertical-align=\"bottom\""; // Just a dummy to avoid an endless loop in OOWriter (### FIXME)
 }
 #endif
 
