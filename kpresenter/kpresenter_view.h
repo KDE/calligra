@@ -368,6 +368,7 @@ public slots:
     void addToBookmark();
     void slotSoftHyphen();
     void slotNonbreakingSpace();
+    void slotNonbreakingHyphen();
     void slotLineBreak();
     void slotIncreaseNumberingLevel();
     void slotDecreaseNumberingLevel();

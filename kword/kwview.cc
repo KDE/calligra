@@ -1113,6 +1113,8 @@ void KWView::setupActions()
     // ------------------- Actions with a key binding and no GUI item
     new KAction( i18n( "Insert Non-Breaking Space" ), CTRL+Key_Space,
                  this, SLOT( slotNonbreakingSpace() ), actionCollection(), "nonbreaking_space" );
+    new KAction( i18n( "Insert Non-Breaking Hyphen" ), CTRL+SHIFT+Key_Minus,
+                 this, SLOT( slotNonbreakingHyphen() ), actionCollection(), "nonbreaking_hyphen" );
     new KAction( i18n( "Insert Soft Hyphen" ), CTRL+Key_Minus,
                  this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
     new KAction( i18n( "Line Break" ), SHIFT+Key_Return,
@@ -6065,6 +6067,13 @@ void KWView::slotNonbreakingSpace()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->insertNonbreakingSpace();
+}
+
+void KWView::slotNonbreakingHyphen()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertNonbreakingHyphen();
 }
 
 void KWView::slotLineBreak()

@@ -2953,6 +2953,8 @@ void KPresenterView::setupActions()
     // ------------------- Actions with a key binding and no GUI item
     new KAction( i18n( "Insert Non-Breaking Space" ), CTRL+Key_Space,
                  this, SLOT( slotNonbreakingSpace() ), actionCollection(), "nonbreaking_space" );
+    new KAction( i18n( "Insert Non-Breaking Hyphen" ), CTRL+SHIFT+Key_Minus,
+                 this, SLOT( slotNonbreakingHyphen() ), actionCollection(), "nonbreaking_hyphen" );
     new KAction( i18n( "Insert Soft Hyphen" ), CTRL+Key_Minus,
                  this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
     new KAction( i18n( "Line Break" ), SHIFT+Key_Return,
@@ -4721,6 +4723,13 @@ void KPresenterView::slotNonbreakingSpace()
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
         edit->insertNonbreakingSpace();
+}
+
+void KPresenterView::slotNonbreakingHyphen()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+        edit->insertNonbreakingHyphen();
 }
 
 void KPresenterView::slotLineBreak()
