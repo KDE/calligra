@@ -269,9 +269,15 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 	else
 	    selectionMode = SM_NONE;
 
-        if ( !m_view->kPresenterDoc()->gridToFront())
+        KPresenterDoc *doc =m_view->kPresenterDoc();
+        if ( doc->showGrid() && !doc->gridToFront())
         {
-            drawGridHelpLine( &bufPainter, crect );
+            drawGrid( &bufPainter, crect);
+        }
+
+        if ( doc->showHelplines() && !doc->helpLineToFront())
+        {
+            drawHelplines( &bufPainter, crect);
         }
 
 
@@ -279,9 +285,14 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             selectionMode = SM_NONE; // case of screen presentation mode
         drawObjects( &bufPainter, crect, true, selectionMode, true );
 
-        if ( m_view->kPresenterDoc()->gridToFront())
+        if ( doc->showGrid() && doc->gridToFront())
         {
-            drawGridHelpLine( &bufPainter, crect );
+            drawGrid( &bufPainter, crect);
+        }
+
+        if ( doc->showHelplines() && doc->helpLineToFront())
+        {
+            drawHelplines( &bufPainter, crect);
         }
 
 
@@ -290,17 +301,6 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         bitBlt( this, paintEvent->rect().topLeft(), &buffer, paintEvent->rect() );
     }
     //else kdDebug(33001) << "KPrCanvas::paintEvent with updates disabled" << endl;
-}
-
-void KPrCanvas::drawGridHelpLine(QPainter *painter, const QRect& rect )
-{
-    if( editMode)
-    {
-        if( m_view->kPresenterDoc()->showHelplines())
-            drawHelplines( painter, rect);
-        if( m_view->kPresenterDoc()->showGrid())
-            drawGrid( painter, rect);
-    }
 }
 
 /*======================= draw background ========================*/

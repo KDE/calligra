@@ -188,7 +188,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bAllowAutoFormat = true;
 
     m_bShowHelplines = false;
-
+    m_bHelplinesToFront = false;
     m_bShowGrid = false;
     m_bGridToFont = false;
 
@@ -290,6 +290,7 @@ void KPresenterDoc::saveConfig()
     config->writeEntry( "AllowAutoFormat" , m_bAllowAutoFormat );
     config->writeEntry( "ShowGrid" , m_bShowGrid );
     config->writeEntry( "GridToFront" , m_bGridToFont );
+    config->writeEntry( "HelpLineToFront" , m_bHelplinesToFront );
 }
 
 void KPresenterDoc::initConfig()
@@ -311,7 +312,7 @@ void KPresenterDoc::initConfig()
         setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ));
         setShowGrid( config->readBoolEntry( "ShowGrid" , false ));
         setGridToFront(  config->readBoolEntry( "GridToFront" , false ));
-
+        setHelpLineToFront( config->readBoolEntry( "HelpLineToFront" , false ));
     }
     else
         zoom=100;

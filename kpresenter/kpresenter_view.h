@@ -163,6 +163,8 @@ public slots:
 
     void viewGridToFront();
 
+    void viewHelpLineToFront();
+
     // insert menu
     void insertPage();
     void insertPicture();
@@ -700,6 +702,8 @@ private:
 
     KToggleAction *actionViewShowGrid;
     KToggleAction *actionViewGridToFront;
+    KToggleAction *actionViewHelpLineToFront;
+
 
 
     KAction *actionInsertPage;

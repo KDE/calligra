@@ -194,6 +194,9 @@ k_dcop:
     bool gridToFront() const;
     void setGridToFront( bool _front );
 
+    bool helpLineToFront() const;
+    void setHelpLineToFront( bool _front );
+
 private:
     KPresenterDoc *doc;
 

@@ -381,6 +381,9 @@ public:
     bool gridToFront() const { return m_bGridToFont; }
     void setGridToFront( bool _front ) { m_bGridToFont = _front; }
 
+    bool helpLineToFront() const { return m_bHelplinesToFront; }
+    void setHelpLineToFront( bool _front ) { m_bHelplinesToFront = _front; }
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -504,6 +507,8 @@ protected:
     bool m_bShowStatusBar;
     bool m_bAllowAutoFormat;
     bool m_bShowHelplines;
+
+    bool m_bHelplinesToFront;
 
     bool m_bShowGrid;
 

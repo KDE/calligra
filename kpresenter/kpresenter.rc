@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="54">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="55">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -36,6 +36,7 @@
   <Action name="view_footer"/>
   <Separator/>
   <Action name="view_helplines"/>
+  <Action name="view_helplinetofront"/>
   <Action name="view_grid"/>
   <Action name="view_gridtofront"/>
   <Separator/>
@@ -268,6 +269,7 @@
   <Action name="add_helpline"/>
   <Separator/>
   <Action name="view_helplines"/>
+  <Action name="view_helplinetofront"/>
   <Action name="view_grid"/>
   <Action name="view_gridtofront"/>
   <Separator/>

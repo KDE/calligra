@@ -670,6 +670,20 @@ bool KPresenterDocIface::gridToFront() const
 void KPresenterDocIface::setGridToFront( bool _front )
 {
     doc->setGridToFront( _front);
+    doc->updateGridButton();
+    if( showGrid() )
+        doc->repaint( false );
+}
+
+bool KPresenterDocIface::helpLineToFront() const
+{
+    return doc->helpLineToFront();
+}
+
+void KPresenterDocIface::setHelpLineToFront( bool _front )
+{
+    doc->setHelpLineToFront(_front );
+    doc->updateHelpLineButton();
     if( showGrid() )
         doc->repaint( false );
 }

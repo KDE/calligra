@@ -2449,6 +2449,11 @@ void KPresenterView::setupActions()
                                           this, SLOT( viewGridToFront() ),
                                           actionCollection(), "view_gridtofront" );
 
+    actionViewHelpLineToFront= new KToggleAction( i18n( "HelpLine to Front" ), 0,
+                                          this, SLOT( viewHelpLineToFront() ),
+                                          actionCollection(), "view_helplinetofront" );
+
+
     // ---------------- insert actions
 
     actionInsertPage = new KAction( i18n( "&Page..." ), "newslide", Key_F2,
@@ -5803,6 +5808,13 @@ void KPresenterView::viewGridToFront()
     m_canvas->repaint(false);
 }
 
+void KPresenterView::viewHelpLineToFront()
+{
+    m_pKPresenterDoc->setHelpLineToFront( actionViewHelpLineToFront->isChecked() );
+    m_pKPresenterDoc->setModified( true );
+    m_canvas->repaint(false);
+}
+
 void KPresenterView::drawTmpHelpLine( const QPoint & pos, bool _horizontal)
 {
     QPoint newPos( pos.x() -16 , pos.y()-16);
@@ -5825,6 +5837,7 @@ void KPresenterView::updateHelpLineButton()
 {
     bool state = m_pKPresenterDoc->showHelplines();
     actionViewShowHelpLine->setChecked( state );
+    actionViewHelpLineToFront->setChecked( m_pKPresenterDoc->helpLineToFront() );
     refreshRuler( state );
 }
 

@@ -287,8 +287,6 @@ protected:
 
     void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj );
 
-    void drawGridHelpLine(QPainter *painter, const QRect& rect );
-
     // draw all helpline
     void drawHelplines(QPainter *painter, const QRect &rect2);
 
