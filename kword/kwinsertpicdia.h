@@ -63,6 +63,7 @@ protected:
 private:
     int m_type;
     QString m_filename;
+    bool m_bFirst;
     QCheckBox *m_cbInline, *m_cbKeepRatio;
     KWInsertPicPreview *m_preview;
 };

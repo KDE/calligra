@@ -110,7 +110,7 @@ KWInsertPicDia::KWInsertPicDia( QWidget *parent, const char *name )
     : KDialogBase( Plain, i18n("Insert Picture"), Ok|Cancel, Ok, parent, name, true )
 {
     setInitialSize( QSize(400, 300) );
-
+    m_bFirst =true;
     QWidget *page = plainPage();
     QGridLayout *grid = new QGridLayout( page, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
@@ -137,7 +137,6 @@ KWInsertPicDia::KWInsertPicDia( QWidget *parent, const char *name )
     m_cbKeepRatio->setChecked(true);
     enableButtonOK( false );
     setFocus();
-
     slotChooseImage(); // save the user time, directly open the dialog
 }
 
@@ -154,6 +153,10 @@ bool KWInsertPicDia::keepRatio() const
 void KWInsertPicDia::slotChooseImage()
 {
     int result = KWInsertPicDia::selectPictureDia( m_filename, SelectImage | SelectClipart );
+    if ( m_filename.isEmpty() && m_bFirst)
+    {
+        KDialogBase::close();
+    }
     if ( result == SelectImage )
     {
         if ( m_preview->setPixmap( m_filename ) )
@@ -173,6 +176,7 @@ void KWInsertPicDia::slotChooseImage()
             m_cbKeepRatio->setChecked( false );
         }
     }
+    m_bFirst= false;
 }
 
 int KWInsertPicDia::selectPictureDia( QString &filename, int flags, const QString & _path)
