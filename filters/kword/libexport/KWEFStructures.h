@@ -130,14 +130,14 @@ public:
 class LayoutData
 {
 public:
-    LayoutData():indentFirst(0.0), indentLeft(0.0), indentRight(0.0)
+  LayoutData():indentFirst(0.0), indentLeft(0.0), indentRight(0.0), marginBottom(0.0), marginTop(0.0)
       { }
 
     QString styleName;
     QString alignment;
     CounterData counter;
     FormatData formatData;
-    double indentFirst, indentLeft, indentRight;
+    double indentFirst, indentLeft, indentRight, marginBottom, marginTop;
     bool pageBreakBefore, pageBreakAfter;
     QString abiprops; // AbiWord properties (TODO: get rid of it)
 };
