@@ -6501,8 +6501,8 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
         }
     }
 
-    int rowIndex = 1;
-    int indexCol = 1;
+    int rowIndex = 0;
+    int indexCol = 0;
     QDomNode rowNode = tableElement.firstChild();
     while( !rowNode.isNull() )
     {
@@ -6753,8 +6753,8 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
 
         insertColumnFormat( col );
         ++indexCol;
-        kdDebug()<<" après !!!!!!!!!!!!!!!!!! :"<<indexCol<<endl;
     }
+    kdDebug()<<" after index column !!!!!!!!!!!!!!!!!! :"<<indexCol<<endl;
     return true;
 }
 
