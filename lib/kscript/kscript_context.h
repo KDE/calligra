@@ -196,7 +196,7 @@ public:
   void setScope( KSScope::Ptr& p ) { m_scope = p; }
   void setScope( KSScope* p ) { m_scope = p; }
   KSScope* scope() { return m_scope; }
-  KSValue* object( const QString& _name ) { if ( m_scope ) return m_scope->object( _name, m_bLeftExpr ); return 0; }
+  KSValue* object( const QString& _name ) { if ( !!m_scope ) return m_scope->object( _name, m_bLeftExpr ); return 0; }
 
   void setLeftExpr( bool b ) { m_bLeftExpr = b; }
   bool leftExpr() { return m_bLeftExpr; }

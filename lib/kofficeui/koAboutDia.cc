@@ -33,7 +33,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
     case KPresenter: 
       {
 	setCaption(i18n("KPresenter - About")); 
-	pLogo = ICON("koKPresenter.xpm");
+	pLogo = BarIcon("koKPresenter");
 	author = "Reginald Stadlbauer";
 	email = "<reggie@kde.org>";
 	add = i18n("WMF Clipart Support (c) by Stefan Taferner <taferner@kde.org>");
@@ -41,7 +41,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
     case KSpread: 
       {
 	setCaption(i18n("KSpread - About")); 
-	pLogo = ICON("koKSpread.xpm");
+	pLogo = BarIcon("koKSpread");
 	author = "Torben Weis";
 	email = "<weis@kde.org>";
 	add = "";
@@ -49,7 +49,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
     case KCharts: 
       {
 	setCaption(i18n("KCharts - About"));
-	pLogo = ICON("koKCharts.xpm");
+	pLogo = BarIcon("koKCharts");
 	author = "Kalle Dalheimer and Torben Weis";
 	email = "<weis@kde.org>";
 	add = "";
@@ -57,7 +57,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
     case KImage:
       {
 	setCaption(i18n("KImage - About"));
-	pLogo = ICON("koKImage.xpm");
+	pLogo = BarIcon("koKImage");
 	author = "Torben Weis";
 	email = "<weis@kde.org>";
 	add = "";
@@ -65,7 +65,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
     case KAutoformEdit: 
       {
 	setCaption(i18n("KAutoformEdit - About"));
-	pLogo = ICON("koKAutoformEdit.xpm");
+	pLogo = BarIcon("koKAutoformEdit");
 	author = "Reginald Stadlbauer";
 	email = "<reggie@kde.org>";
 	add = "";
@@ -73,7 +73,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
     case KOffice: 
       {
 	setCaption(i18n("KOffice - About"));
-	pLogo = ICON("koKOffice.xpm");
+	pLogo = BarIcon("koKOffice");
 	author = i18n("the KOffice Team");
 	email = i18n("<koffice@kde.org>");
 	add = "";

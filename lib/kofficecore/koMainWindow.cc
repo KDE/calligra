@@ -57,13 +57,13 @@ KoMainWindow::KoMainWindow( const char * )
   (void)statusBarManager();
 
   // build a toolbar and insert some buttons
-  opToolBar()->insertButton(Icon("filenew.xpm"),TOOLBAR_NEW, SIGNAL( clicked() ), this, SLOT( slotFileNew() ), true,i18n("New"));
-  opToolBar()->insertButton(Icon("fileopen.xpm"),TOOLBAR_OPEN, SIGNAL( clicked() ), this, SLOT( slotFileOpen() ),
+  opToolBar()->insertButton(BarIcon("filenew"),TOOLBAR_NEW, SIGNAL( clicked() ), this, SLOT( slotFileNew() ), true,i18n("New"));
+  opToolBar()->insertButton(BarIcon("fileopen"),TOOLBAR_OPEN, SIGNAL( clicked() ), this, SLOT( slotFileOpen() ),
 			    true,i18n("Open File"));
-  opToolBar()->insertButton(Icon("filefloppy.xpm"), TOOLBAR_SAVE, SIGNAL( clicked() ), this, SLOT( slotFileSave() ),
+  opToolBar()->insertButton(BarIcon("filefloppy"), TOOLBAR_SAVE, SIGNAL( clicked() ), this, SLOT( slotFileSave() ),
 			    true,i18n("Save File"));
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, false );
-  opToolBar()->insertButton(Icon("fileprint.xpm"), TOOLBAR_PRINT, SIGNAL( clicked() ), this, SLOT( slotFilePrint() ),
+  opToolBar()->insertButton(BarIcon("fileprint"), TOOLBAR_PRINT, SIGNAL( clicked() ), this, SLOT( slotFilePrint() ),
 			    true,i18n("Print"));
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, false );
 
@@ -165,24 +165,24 @@ void KoMainWindow::createFileMenu( OPMenuBar* _menubar )
 // Do we really want to add new, open, save, ... to a menu already containing those ??? (David)
 
   KStdAccel stdAccel;
-  m_idMenuFile_New = m_pFileMenu->insertItem( Icon( "filenew.xpm" ) , i18n( "&New" ), this, SLOT( slotFileNew() ), stdAccel.openNew() );
-  m_idMenuFile_Open = m_pFileMenu->insertItem( Icon( "fileopen.xpm" ), i18n( "&Open..." ), this, SLOT( slotFileOpen() ), stdAccel.open() );
+  m_idMenuFile_New = m_pFileMenu->insertItem( BarIcon( "filenew" ) , i18n( "&New" ), this, SLOT( slotFileNew() ), stdAccel.openNew() );
+  m_idMenuFile_Open = m_pFileMenu->insertItem( BarIcon( "fileopen" ), i18n( "&Open..." ), this, SLOT( slotFileOpen() ), stdAccel.open() );
   m_pFileMenu->insertSeparator(-1);
-  m_idMenuFile_Save = m_pFileMenu->insertItem( Icon( "filefloppy.xpm" ), i18n( "&Save" ), this, SLOT( slotFileSave() ), stdAccel.save() );
+  m_idMenuFile_Save = m_pFileMenu->insertItem( BarIcon( "filefloppy" ), i18n( "&Save" ), this, SLOT( slotFileSave() ), stdAccel.save() );
   m_pFileMenu->setItemEnabled( m_idMenuFile_Save, false );
 
   m_idMenuFile_SaveAs = m_pFileMenu->insertItem( i18n( "&Save as..." ), this, SLOT( slotFileSaveAs() ) );
   m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, false );
 
   m_pFileMenu->insertSeparator(-1);
-  m_idMenuFile_Print = m_pFileMenu->insertItem( Icon( "fileprint.xpm" ), i18n( "&Print..." ), this, SLOT( slotFilePrint() ),  stdAccel.print() );
+  m_idMenuFile_Print = m_pFileMenu->insertItem( BarIcon( "fileprint" ), i18n( "&Print..." ), this, SLOT( slotFilePrint() ),  stdAccel.print() );
   m_pFileMenu->setItemEnabled( m_idMenuFile_Print, false );
 
   m_pFileMenu->insertSeparator(-1);
   m_idMenuFile_Close = m_pFileMenu->insertItem( i18n( "&Close" ), this, SLOT( slotFileClose() ), stdAccel.close() );
   m_pFileMenu->setItemEnabled( m_idMenuFile_Close, false );
 
-  m_idMenuFile_Quit = m_pFileMenu->insertItem( Icon( "exit.xpm" ), i18n( "&Quit" ), this, SLOT( slotFileQuit() ), stdAccel.quit() );
+  m_idMenuFile_Quit = m_pFileMenu->insertItem( BarIcon( "exit" ), i18n( "&Quit" ), this, SLOT( slotFileQuit() ), stdAccel.quit() );
 
   if (bInsertFileMenu)
     _menubar->insertItem( i18n( "&File" ), m_pFileMenu, -1, 0 );

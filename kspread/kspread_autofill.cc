@@ -227,7 +227,7 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
 	erg.sprintf("%i", ivalue + _no * (int)_delta );
 	break;
     case FLOAT:
-	erg.sprintf("%i", ivalue + (float)_no * _delta );
+	erg.sprintf("%f", ivalue + (float)_no * _delta );
 	break;
     case FORMULAR:
     case STRING:

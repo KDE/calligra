@@ -141,19 +141,19 @@ void KWFrameDia::setupTab2TextFrame()
 
     runGrid = new QGridLayout( runGroup, 5, 2, 15, 7 );
 
-    QPixmap pixmap = Icon( "run_not.xpm" );
+    QPixmap pixmap = BarIcon( "run_not" );
     lRunNo = new QLabel( runGroup );
     lRunNo->setBackgroundPixmap( pixmap );
     lRunNo->resize( pixmap.size() );
     runGrid->addWidget( lRunNo, 1, 0 );
 
-    pixmap = Icon( "run_bounding.xpm" );
+    pixmap = BarIcon( "run_bounding" );
     lRunBounding = new QLabel( runGroup );
     lRunBounding->setBackgroundPixmap( pixmap );
     lRunBounding->resize( pixmap.size() );
     runGrid->addWidget( lRunBounding, 2, 0 );
 
-    pixmap = Icon( "run_contur.xpm" );
+    pixmap = BarIcon( "run_contur" );
     lRunContur = new QLabel( runGroup );
     lRunContur->setBackgroundPixmap( pixmap );
     lRunContur->resize( pixmap.size() );

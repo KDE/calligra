@@ -6076,9 +6076,9 @@ void KTextObject::createRBMenu()
 {
     rbMenu = new QPopupMenu();
     CHECK_PTR( rbMenu );
-    CB_CUT = rbMenu->insertItem( ICON("editcut.xpm"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    CB_COPY = rbMenu->insertItem( ICON("editcopy.xpm"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    CB_PASTE = rbMenu->insertItem( ICON("editpaste.xpm"), i18n( "&Paste" ), this, SLOT( clipPaste() ) );
+    CB_CUT = rbMenu->insertItem( BarIcon("editcut"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
+    CB_COPY = rbMenu->insertItem( BarIcon("editcopy"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
+    CB_PASTE = rbMenu->insertItem( BarIcon("editpaste"), i18n( "&Paste" ), this, SLOT( clipPaste() ) );
     rbMenu->setMouseTracking( true );
 }
 

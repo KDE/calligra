@@ -101,13 +101,13 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   m_pHorzScrollBar->setOrientation( QScrollBar::Horizontal );
 
   // Tab Bar
-  m_pTabBarFirst = newIconButton( "tab_first.xpm" );
+  m_pTabBarFirst = newIconButton( "tab_first" );
   QObject::connect( m_pTabBarFirst, SIGNAL( clicked() ), SLOT( slotScrollToFirstTable() ) );
-  m_pTabBarLeft = newIconButton( "tab_left.xpm" );
+  m_pTabBarLeft = newIconButton( "tab_left" );
   QObject::connect( m_pTabBarLeft, SIGNAL( clicked() ), SLOT( slotScrollToLeftTable() ) );
-  m_pTabBarRight = newIconButton( "tab_right.xpm" );
+  m_pTabBarRight = newIconButton( "tab_right" );
   QObject::  connect( m_pTabBarRight, SIGNAL( clicked() ), SLOT( slotScrollToRightTable() ) );
-  m_pTabBarLast = newIconButton( "tab_last.xpm" );
+  m_pTabBarLast = newIconButton( "tab_last" );
   QObject::connect( m_pTabBarLast, SIGNAL( clicked() ), SLOT( slotScrollToLastTable() ) );
 
   m_pTabBar = new KSpreadTabBar( this );
@@ -126,9 +126,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   m_pPosWidget->setFrameStyle( QFrame::WinPanel|QFrame::Sunken );
   m_pPosWidget->setGeometry( 2,2,50,26 );
 
-  m_pCancelButton = newIconButton( "abort.xpm", TRUE, m_pToolWidget );
+  m_pCancelButton = newIconButton( "abort", TRUE, m_pToolWidget );
   m_pCancelButton->setGeometry( 60, 2, 26, 26 );
-  m_pOkButton = newIconButton( "done.xpm", TRUE, m_pToolWidget );
+  m_pOkButton = newIconButton( "done", TRUE, m_pToolWidget );
   m_pOkButton->setGeometry( 90, 2, 26, 26 );
 
   m_pEditWidget = new KSpreadEditWidget( m_pToolWidget, this );
@@ -557,27 +557,27 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   m_vToolBarEdit->setFullWidth(false);
 
   OpenPartsUI::Pixmap_var pix;
-  pix = OPUIUtils::convertPixmap( ICON("editcopy.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("editcopy") );
   m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "copySelection", true, ( wstr = Q2C( i18n( "Copy" ) ) ), -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("editcut.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("editcut") );
   m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ), this, "cutSelection", true, ( wstr = Q2C( i18n( "Cut" ) ) ), -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("editpaste.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("editpaste") );
   m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "paste", true, ( wstr = Q2C( i18n( "Paste" ) ) ), -1 );
 
   m_vToolBarEdit->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("rowout.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("rowout") );
   m_idButtonEdit_DelRow = m_vToolBarEdit->insertButton2( pix, 4, SIGNAL( clicked() ), this, "deleteRow", true, ( wstr = Q2C( i18n( "Delete Row" ) ) ), -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("colout.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("colout") );
   m_idButtonEdit_DelCol = m_vToolBarEdit->insertButton2( pix, 5, SIGNAL( clicked() ), this, "deleteColumn", true, ( wstr = Q2C( i18n( "Delete Column") ) ), -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("rowin.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("rowin") );
   m_idButtonEdit_InsRow = m_vToolBarEdit->insertButton2( pix, 6, SIGNAL( clicked() ), this, "insertRow", true, ( wstr = Q2C( i18n( "Insert Row"  ) ) ), -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("colin.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("colin") );
   m_idButtonEdit_InsCol = m_vToolBarEdit->insertButton2( pix, 7, SIGNAL( clicked() ), this, "insertColumn", true, ( wstr = Q2C( i18n( "Insert Column"  ) ) ), -1 );
 
   m_vToolBarEdit->setFullWidth(false);
@@ -610,48 +610,48 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
 							    this, "fontSizeSelected", true,
 							    ( wstr = Q2C( i18n( "Font Size"  ) ) ), 50, -1, OpenPartsUI::AtBottom );
 
-  pix = OPUIUtils::convertPixmap( ICON("bold.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("bold") );
   m_idButtonLayout_Bold = m_vToolBarLayout->insertButton2( pix, 3, SIGNAL( clicked() ), this, "bold", true, ( wstr = Q2C( i18n( "Bold" ) ) ), -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("italic.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("italic") );
   m_idButtonLayout_Italic = m_vToolBarLayout->insertButton2( pix, 4, SIGNAL( clicked() ), this, "italic", true, ( wstr = Q2C( i18n( "Italic" ) ) ), -1 );
 
   m_vToolBarLayout->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("money.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("money") );
   m_idButtonLayout_Money = m_vToolBarLayout->insertButton2( pix, 5, SIGNAL( clicked() ), this, "moneyFormat", true, ( wstr = Q2C( i18n( "Money Format" ) ) ), -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("percent.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("percent") );
   m_idButtonLayout_Percent = m_vToolBarLayout->insertButton2( pix, 6, SIGNAL( clicked() ), this, "percent", true, ( wstr = Q2C( i18n( "Percent Format" ) ) ), -1 );
 
   m_vToolBarLayout->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("left.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("left") );
   m_idButtonLayout_Left = m_vToolBarLayout->insertButton2( pix, 7, SIGNAL( clicked() ), this, "alignLeft", true, ( wstr = Q2C( i18n( "Align Left" ) ) ), -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("center.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("center") );
   m_idButtonLayout_Center = m_vToolBarLayout->insertButton2( pix, 8, SIGNAL( clicked() ), this, "alignCenter", true, ( wstr = Q2C( i18n( "Align Center" ) ) ), -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("right.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("right") );
   m_idButtonLayout_Right = m_vToolBarLayout->insertButton2( pix, 9, SIGNAL( clicked() ), this, "alignRight", true, ( wstr = Q2C( i18n( "Align Right" ) ) ), -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("multirow.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("multirow") );
   m_idButtonLayout_MultiRows = m_vToolBarLayout->insertButton2( pix, 10, SIGNAL( clicked() ), this, "multiRow", true,
 							       ( wstr = Q2C( i18n( "Allow multiple lines" ) ) ), -1 );
 
   m_vToolBarLayout->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("precminus.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("precminus") );
   m_idButtonLayout_PrecMinus = m_vToolBarLayout->insertButton2( pix, 11, SIGNAL( clicked() ), this, "precisionMinus", true,
 								 ( wstr = Q2C( i18n( "Lower Precision"  ) ) ), -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("precplus.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("precplus") );
   m_idButtonLayout_PrecPlus = m_vToolBarLayout->insertButton2( pix, 12, SIGNAL( clicked() ), this, "precisionPlus", true,
 							      ( wstr = Q2C( i18n( "Higher Precision" ) ) ), -1 );
 
   m_vToolBarLayout->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("chart.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("chart") );
   m_idButtonLayout_Chart = m_vToolBarLayout->insertButton2( pix, 13, SIGNAL( clicked() ), this, "insertChart", true, ( wstr = Q2C( i18n( "Insert Chart" ) ) ), -1 );
 
   m_vToolBarLayout->enable( OpenPartsUI::Show );
@@ -690,20 +690,20 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   _menubar->insertMenu( ( wstr = Q2C( i18n( "&Edit" ) ) ), m_vMenuEdit, -1, -1 );
 
   OpenPartsUI::Pixmap_var pix;
-  pix = OPUIUtils::convertPixmap( ICON("undo.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("undo") );
   m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, ( wstr = Q2C( i18n( "Un&do") ) ), this, "undo", stdAccel.undo(), -1, -1 );
-  pix = OPUIUtils::convertPixmap( ICON("redo.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("redo") );
   m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, ( wstr = Q2C( i18n( "&Redo") ) ), this, "redo", 0, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("editcut.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("editcut") );
   m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, ( wstr = Q2C( i18n( "C&ut") ) ), this, "cutSelection", stdAccel.cut(), -1, -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("editcopy.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("editcopy") );
   m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, ( wstr = Q2C( i18n( "&Copy") ) ), this, "copySelection", stdAccel.copy(), -1, -1 );
 
-  pix = OPUIUtils::convertPixmap( ICON("editpaste.xpm") );
+  pix = OPUIUtils::convertPixmap( BarIcon("editpaste") );
   m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, ( wstr = Q2C( i18n( "&Paste") ) ), this, "paste", stdAccel.paste(), -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
@@ -812,7 +812,7 @@ QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget 
 
   QPixmap *pixmap = 0L;
 
-  pixmap = new QPixmap(ICON(_file) );
+  pixmap = new QPixmap(BarIcon(_file) );
 
   QButton *pb;
   if ( !_kbutton )

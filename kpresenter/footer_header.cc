@@ -136,19 +136,19 @@ void KPFooterHeaderEditor::setupHeader()
     htool2->insertSeparator();
 
     h_bold = 1;
-    htool2->insertButton( ICON( "bold.xpm" ), h_bold,
+    htool2->insertButton( BarIcon( "bold" ), h_bold,
 			  SIGNAL( clicked() ), this,
 			  SLOT( headerBold() ), true, i18n( "Bold" ) );
     htool2->setToggle( h_bold, true );
 
     h_italic = 2;
-    htool2->insertButton( ICON( "italic.xpm" ), h_italic,
+    htool2->insertButton( BarIcon( "italic" ), h_italic,
 			  SIGNAL( clicked() ), this,
 			  SLOT( headerItalic() ), true, i18n( "Italic" ) );
     htool2->setToggle( h_italic, true );
 
     h_underline = 3;
-    htool2->insertButton( ICON( "underl.xpm" ), h_underline,
+    htool2->insertButton( BarIcon( "underl" ), h_underline,
 			  SIGNAL( clicked() ), this,
 			  SLOT( headerUnderline() ), true, i18n( "Underline" ) );
     htool2->setToggle( h_underline, true );
@@ -165,19 +165,19 @@ void KPFooterHeaderEditor::setupHeader()
     htool2->insertSeparator();
 
     h_aleft = 5;
-    htool2->insertButton( ICON( "alignLeft.xpm" ), h_aleft,
+    htool2->insertButton( BarIcon( "alignLeft" ), h_aleft,
 			  SIGNAL( clicked() ), this,
 			  SLOT( headerAlignLeft() ), true, i18n( "Align Left" ) );
     htool2->setToggle( h_aleft, true );
 
     h_acenter = 6;
-    htool2->insertButton( ICON( "alignCenter.xpm" ), h_acenter,
+    htool2->insertButton( BarIcon( "alignCenter" ), h_acenter,
 			  SIGNAL( clicked() ), this,
 			  SLOT( headerAlignCenter() ), true, i18n( "Align Center" ) );
     htool2->setToggle( h_acenter, true );
 
     h_aright = 7;
-    htool2->insertButton( ICON( "alignRight.xpm" ), h_aright,
+    htool2->insertButton( BarIcon( "alignRight" ), h_aright,
 			  SIGNAL( clicked() ), this,
 			  SLOT( headerAlignRight() ), true, i18n( "Align Right" ) );
     htool2->setToggle( h_aright, true );
@@ -250,19 +250,19 @@ void KPFooterHeaderEditor::setupFooter()
     ftool2->insertSeparator();
 
     f_bold = 1;
-    ftool2->insertButton( ICON( "bold.xpm" ), f_bold,
+    ftool2->insertButton( BarIcon( "bold" ), f_bold,
 			  SIGNAL( clicked() ), this,
 			  SLOT( footerBold() ), true, i18n( "Bold" ) );
     ftool2->setToggle( f_bold, true );
 
     f_italic = 2;
-    ftool2->insertButton( ICON( "italic.xpm" ), f_italic,
+    ftool2->insertButton( BarIcon( "italic" ), f_italic,
 			  SIGNAL( clicked() ), this,
 			  SLOT( footerItalic() ), true, i18n( "Italic" ) );
     ftool2->setToggle( f_italic, true );
 
     f_underline = 3;
-    ftool2->insertButton( ICON( "underl.xpm" ), f_underline,
+    ftool2->insertButton( BarIcon( "underl" ), f_underline,
 			  SIGNAL( clicked() ), this,
 			  SLOT( footerUnderline() ), true, i18n( "Underline" ) );
     ftool2->setToggle( f_underline, true );
@@ -279,19 +279,19 @@ void KPFooterHeaderEditor::setupFooter()
     ftool2->insertSeparator();
 
     f_aleft = 5;
-    ftool2->insertButton( ICON( "alignLeft.xpm" ), f_aleft,
+    ftool2->insertButton( BarIcon( "alignLeft" ), f_aleft,
 			  SIGNAL( clicked() ), this,
 			  SLOT( footerAlignLeft() ), true, i18n( "Align Left" ) );
     ftool2->setToggle( f_aleft, true );
 
     f_acenter = 6;
-    ftool2->insertButton( ICON( "alignCenter.xpm" ), f_acenter,
+    ftool2->insertButton( BarIcon( "alignCenter" ), f_acenter,
 			  SIGNAL( clicked() ), this,
 			  SLOT( footerAlignCenter() ), true, i18n( "Align Center" ) );
     ftool2->setToggle( f_acenter, true );
 
     f_aright = 7;
-    ftool2->insertButton( ICON( "alignRight.xpm" ), f_aright,
+    ftool2->insertButton( BarIcon( "alignRight" ), f_aright,
 			  SIGNAL( clicked() ), this,
 			  SLOT( footerAlignRight() ), true, i18n( "Align Right" ) );
     ftool2->setToggle( f_aright, true );

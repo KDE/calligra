@@ -50,8 +50,8 @@ KoRuler::KoRuler(QWidget *_parent,QWidget *_canvas,Orientation _orientation,
     hasToDelete = false;
     whileMovingBorderLeft = whileMovingBorderRight = whileMovingBorderTop = whileMovingBorderBottom = false;
 
-    pmFirst = Icon( "koRulerFirst.xpm" );
-    pmLeft = Icon( "koRulerLeft.xpm" );
+    pmFirst = BarIcon( "koRulerFirst" );
+    pmLeft = BarIcon( "koRulerLeft" );
     currTab = -1;
 
     tabList.setAutoDelete(false);
