@@ -856,3 +856,14 @@ void KPresenterDocIface::setPicturePath( const QString & _path )
 {
     doc->setPicturePath( _path );
 }
+
+void KPresenterDocIface::setBackupFile( bool _b )
+{
+    doc->setBackupFile( _b);
+}
+
+bool KPresenterDocIface::backupFile()const
+{
+    return doc->backupFile();
+}
+

@@ -247,6 +247,9 @@ k_dcop:
     QString picturePath()const;
     void setPicturePath( const QString & _path );
 
+    void setBackupFile( bool _b );
+    bool backupFile()const;
+
 
 private:
     KPresenterDoc *doc;
