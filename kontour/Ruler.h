@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,35 +23,36 @@
 
 */
 
-#ifndef Ruler_h_
-#define Ruler_h_
+#ifndef __Ruler_h__
+#define __Ruler_h__
 
 #include <qframe.h>
-#include <PStateManager.h>
+#include "units.h"
 
 class QPixmap;
-class KIllustratorDocument;
+class KontourDocument;
 
-class Ruler : public QFrame {
+class Ruler : public QFrame
+{
   Q_OBJECT
 public:
   enum Orientation { Horizontal, Vertical };
 
-  Ruler (KIllustratorDocument *_doc, Orientation o, MeasurementUnit mu = UnitPoint, QWidget *parent = 0L,
-         const char* name = 0L);
+  Ruler(KontourDocument *aDoc, Orientation o, MeasurementUnit mu = UnitPoint, QWidget *parent = 0L, const char* name = 0L);
   ~Ruler();
 
-  MeasurementUnit measurementUnit () const;
-  void setMeasurementUnit (MeasurementUnit mu);
+  MeasurementUnit unit() const {return mUnit; }
+  void unit(MeasurementUnit mu);
+
+  void setZoomFactor(double zf, int xpos, int ypos);
 
 public slots:
-  void setZoomFactor (float zf, int xpos, int ypos);
-  void updatePointer (int x, int y);
-  //void updateVisibleArea (int xpos, int ypos);
-  void updateVisibleArea (const QRect& area);
+  void updatePointer(int x, int y);
+  void updateOffset(int o);
 
-  void hide ();
-  void show ();
+  void show();
+  void hide();
+
 
 signals:
   /*emit signal for drawing a ruler, note: the position is in sceen positions
@@ -60,34 +62,37 @@ signals:
     orientationHoriz = true <=> horizontal
    */
   void drawHelpline(int x, int y, bool orientationHoriz);
-  void addHelpline (int x, int y, bool orientationHoriz);
+  void addHelpline(int x, int y, bool orientationHoriz);
   void rmbPressed();
 
 protected:
-  void paintEvent  (QPaintEvent *e);
-  void resizeEvent (QResizeEvent *e);
-
-  void recalculateSize (QResizeEvent *e);
-  void drawRuler ();
-
-  void initMarker (int w, int h);
-  void drawNum (QPainter &p, int x, int y, int a, bool orient);
+  void paintEvent(QPaintEvent *e);
+  void resizeEvent(QResizeEvent *e);
 
 protected slots:
-  void mousePressEvent ( QMouseEvent * );
-  void mouseReleaseEvent ( QMouseEvent * );
-  void mouseMoveEvent ( QMouseEvent * );
+  void mousePressEvent(QMouseEvent *);
+  void mouseMoveEvent(QMouseEvent *);
+  void mouseReleaseEvent(QMouseEvent *);
 
 private:
+  void drawRuler();
+  void drawMarker();
+  void drawNum(QPainter &p, int x, int y, int a, bool orient);
+  void recalculateSize(QResizeEvent *e);
+
+private:
+  KontourDocument *mDoc;  
+
+  MeasurementUnit mUnit;
+  Orientation mOrientation;
   bool isMousePressed;
-  float zoom;
-  KIllustratorDocument *doc;
-  MeasurementUnit munit;
-  Orientation orientation;
-  QPixmap *buffer;
+  double zoom;
   int zeroPoint;
   int currentPosition;
-  QPixmap *marker, *bg;
+
+  QPixmap *buffer;
+  QPixmap *bg;
+  QPixmap *mNums;
 };
 
 #endif

@@ -2,9 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
-  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2000-01 Igor Janssen (rm@linux.ru.net)
+  This file is part of Kontour.
+  Copyright (C) 1998-1999 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2000-2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -23,21 +23,17 @@
 
 */
 
-#ifndef GPage_h_
-#define GPage_h_
+#ifndef __GPage_h__
+#define __GPage_h__
 
 #include <qobject.h>
-#include <qlist.h>
-#include <qvaluelist.h>
-#include <qstring.h>
-
-#include "Handle.h"
-#include "GDocument.h"
-
+#include <qptrlist.h>
+#include <koRect.h>
 #include <koPageLayoutDia.h>
 
-class GObject;
+class GDocument;
 class GLayer;
+class GObject;
 class QDomDocument;
 class QDomElement;
 
@@ -45,143 +41,124 @@ class GPage : public QObject
 {
   Q_OBJECT
 public:
-  GPage (GDocument *adoc);
-  ~GPage ();
+  GPage(GDocument *aGDoc);
+  ~GPage();
 
-  void initialize ();
-  void setAutoUpdate (bool flag) { doc->setAutoUpdate(flag); };
-  void setModified (bool flag = true);
+  GDocument *document(void) const {return mGDoc; }
 
-  GDocument *document(void) const {return doc;};
+  QString name() const {return mName; }
+  void name(QString aName);
 
-  void setPaperSize (int width, int height);
-  int getPaperWidth () const;
-  int getPaperHeight () const;
+  void bgColor(QColor aBGColor);
+  QColor bgColor() const { return mBGColor; }
+  
+  int paperWidth() const {return mPaperWidth; }
+  int paperHeight() const {return mPaperHeight; }
+  void setPaperSize(int width, int height);
 
-  QString name() const {return mName;};
-  void setName(QString aName);
+  KoPageLayout pageLayout();
+  void pageLayout(const KoPageLayout &layout);
 
-  void drawContents (QPainter& p, bool withBasePoints = false,
-                     bool outline = false, bool withEditMarks=true);
-  void drawContentsInRegion (QPainter& p, const Rect& r, const Rect& rr,
-                             bool withBasePoints = false,
-                             bool outline = false, bool withEditMarks=true);
+  QDomElement saveToXml(QDomDocument &document);
+  bool readFromXml(const QDomElement &page);
 
-  void invalidateClipRegions ();
-
-  /*
-   * Layer management
+  /**
+   * Layers management.
+   *
    */
-
-  // get an array with all layers of the document
-  const QList<GLayer>& getLayers ();
-
-  // set the active layer where further actions take place
-  void setActiveLayer (GLayer *layer);
-
+  
+  QPtrList<GLayer> &getLayers() {return layers; }
+  
   // retrieve the active layer
-  GLayer* activeLayer ();
-
-  // raise the given layer
-  void raiseLayer (GLayer *layer);
-
-  // lower the given layer
-  void lowerLayer (GLayer *layer);
+  GLayer *activeLayer();
+  
+  // set the active layer where further actions take place
+  void activeLayer(GLayer *aLayer);
 
   // add a new layer on top of existing layers
-  GLayer* addLayer ();
+  GLayer *addLayer();
 
   // delete the given layer as well as all contained objects
-  void deleteLayer (GLayer *layer);
+  void deleteLayer(GLayer *aLayer);
 
-  void insertObject (GObject* obj);
-  void selectObject (GObject* obj);
-  void unselectObject (GObject* obj);
-  void unselectAllObjects ();
-  void selectAllObjects ();
+  // raise the given layer
+  void raiseLayer(GLayer *aLayer);
 
-  void selectNextObject ();
-  void selectPrevObject ();
+  // lower the given layer
+  void lowerLayer(GLayer *aLayer);
 
-  GObject* lastObject () { return last; }
-  void setLastObject (GObject* obj);
-
-  QList<GObject>& getSelection () { return selection; }
-  bool selectionIsEmpty () const { return selection.isEmpty (); }
-  unsigned int selectionCount () const { return selection.count(); }
-
-  unsigned int objectCount () const;
-
-  Rect boundingBoxForSelection ();
-  Rect boundingBoxForAllObjects ();
-  void deleteSelectedObjects ();
-  void deleteObject (GObject* obj);
-
-  GObject* findContainingObject (int x, int y);
-
-  bool findNearestObject (const QString &otype, int x, int y,
-                          float max_dist, GObject*& obj, int& pidx,
-                          bool all = false);
-
-  bool findContainingObjects (int x, int y, QList<GObject>& olist);
-  bool findObjectsContainedIn (const Rect& r, QList<GObject>& olist);
+  /**
+   *  Objects management,
+   *
+   */
   
-  void bgColor(QColor color);
-  QColor bgColor() const { return mBGColor; };
-  
-/*
-   Load/Save Page.
-*/
-  QDomElement saveToXml(QDomDocument &document);
-  bool readFromXml (const QDomElement &page);
-  bool readFromXmlV2 (const QDomElement &page);
-  bool insertFromXml (const QDomDocument &document, QList<GObject>& newObjs);
+  unsigned int objectCount() const;
 
-  Handle& handle () { return selHandle; }
+  void insertObject(GObject *obj);
+  void deleteObject(GObject *obj);
 
-  unsigned int findIndexOfObject (GObject *obj);
-  void insertObjectAtIndex (GObject* obj, unsigned int idx);
-  void moveObjectToIndex (GObject* obj, unsigned int idx);
+  unsigned int findIndexOfObject(GObject *obj);
+  void insertObjectAtIndex(GObject *obj, unsigned int idx);
+  void moveObjectToIndex(GObject *obj, unsigned int idx);
 
-  KoPageLayout pageLayout ();
-  void setPageLayout (const KoPageLayout& layout);
+  void selectObject(GObject *obj);
+  void unselectObject(GObject *obj);
 
-  void emitHandleChanged();
+  void selectAllObjects();
+  void unselectAllObjects();
 
-  void updateHandle ();
+  void selectNextObject();
+  void selectPrevObject();
 
-protected:
-  bool parseBody (const QDomElement &element, QList<GObject>& newObjs, bool markNew);
+  void deleteSelectedObjects();
+
+  KoRect boundingBoxForSelection();
+  KoRect boundingBoxForAllObjects();
+
+  QPtrList<GObject> &getSelection() {return selection; }
+  bool selectionIsEmpty() const {return selection.isEmpty(); }
+  unsigned int selectionCount() const {return selection.count(); }
+
+  void drawContents(QPainter &p, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
+  void drawContentsInRegion(QPainter &p, const KoRect &r, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
+
+  void invalidateClipRegions();
+  GObject *findContainingObject(int x, int y);
+  bool findNearestObject(const QString &otype, int x, int y, double max_dist, GObject *&obj, int &pidx, bool all = false);
+  bool findContainingObjects(int x, int y, QPtrList<GObject> &olist);
+  bool findObjectsContainedIn(const KoRect &r, QPtrList<GObject> &olist);
 
 public slots:
-  void objectChanged ();
-  void objectChanged (const Rect& r);
-  void layerChanged ();
+//  void objectChanged ();
+//  void objectChanged (const KoRect &r);
+//  void layerChanged ();
 
 signals:
-  void handleChanged();
-  void changed ();
-  void changed (const Rect& r);
-  void selectionChanged ();
-  void sizeChanged ();
+  void changed();
+  void changed(const KoRect& r);
+  void selectionChanged();
+  void sizeChanged();
+private:
+  GDocument *mGDoc;
 
-  void wasModified (bool flag);
-
-protected:
-  GDocument *doc;
+  QString mName;                  // page name
   QColor mBGColor;                // background color
-  bool autoUpdate;
-  QString mName;                // page name
-  QString filename;
-  int paperWidth, paperHeight;  // pt
-  QList<GLayer> layers;         // the array of all layers
-  QList<GObject> selection;
-  GLayer* active_layer;          // the current layer
-  GObject *last;
-  Handle selHandle;
-  Rect selBox;
+  int mPaperWidth;                // paper width (pt)
+  int mPaperHeight;               // paper height (pt)
+  
+  QPtrList<GLayer> layers;        // the array of all layers
+  GLayer *active_layer;           // the current layer
+  QPtrList<GObject> selection;    // the array of selected objects
+
+  int mCurLayerNum;
+
+  KoRect mSelBox;
   bool selBoxIsValid;
-  KoPageLayout pLayout;
+
+  bool autoUpdate;
+
+  KoPageLayout mPageLayout;
+  //Handle selHandle;
 };
 
 #endif

@@ -22,90 +22,105 @@
 
 */
 
-#include <OvalTool.h>
+#include "OvalTool.h"
 
-#include <qkeycode.h>
+#include <qpainter.h>
 
 #include <klocale.h>
-#include <kconfig.h>
-#include <kapp.h>
 #include <kdebug.h>
 
-#include "KIllustrator_doc.h"
-#include <GDocument.h>
-#include "GPage.h"
-#include <Canvas.h>
-#include <CreateOvalCmd.h>
-#include <CommandHistory.h>
-#include <EllipseConfigDialog.h>
-#include <units.h>
-#include <PStateManager.h>
-#include "GOval.h"
+#include "kontour_view.h"
+#include "Canvas.h"
 #include "ToolController.h"
-#include <KIllustrator_factory.h>
 
-
-#include <math.h>
-#include <stdio.h>
-
-OvalTool::OvalTool (CommandHistory *history) : Tool (history)
+OvalTool::OvalTool(QString aId, ToolController *tc):
+Tool(aId, tc)
 {
-  oval = 0L;
-  kdDebug(38000)<<"OvalTool::OvalTool()"<<endl;
-  m_id=ToolEllipse;
+  ToolSelectAction* zoom = new ToolSelectAction(actionCollection(), "ToolAction" );
+  KRadioAction *mT1 = new KRadioAction(i18n("Circle"), "ellipse1", 0, actionCollection());
+  KRadioAction *mT2 = new KRadioAction(i18n("Circle"), "ellipse2", 0, actionCollection());
+  mT1->setExclusiveGroup("OvalTool");
+  mT2->setExclusiveGroup("OvalTool");
+  zoom->insert(mT1);
+  zoom->insert(mT2);
+}
+  
+void OvalTool::activate()
+{
+  kdDebug(38000) << "OvalTool::activate()" << endl;
+  state = S_Init;
 }
 
-void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
+void OvalTool::deactivate()
 {
-  if(!doc->document()->isReadWrite())
-      return;
-   if (e->type () == QEvent::MouseButtonPress)
-   {
+  kdDebug(38000) << "OvalTool::deactivate()" << endl;
+}
+
+void OvalTool::processEvent(QEvent *e)
+{
+  Canvas *canvas = toolController()->view()->canvas();
+  if(e->type() == QEvent::MouseButtonPress)
+  {
+    if(state == S_Init)
+    {
+      QMouseEvent *me = (QMouseEvent *)e;
+      p1.setX(me->x());
+      p1.setY(me->y());
+      state = S_Resize;
+    }
+//    float xpos = me->x (), ypos = me->y ();
+//    canvas->snapPositionToGrid (xpos, ypos);
+
+/*    bool flag = me->state () & Qt::ControlButton;
+    rect = new GPolygon (doc, flag ? GPolygon::PK_Square : GPolygon::PK_Rectangle);
+
+    rect->addPoint (0, Coord (xpos, ypos));
+    rect->addPoint (1, Coord (xpos, ypos));
+    rect->addPoint (2, Coord (xpos, ypos));
+    rect->addPoint (3, Coord (xpos, ypos));
+    doc->activePage()->insertObject (rect);
+    m_toolController->emitModeSelected(m_id,flag?i18n("Create Square"):i18n("Create Rectangle"));*/
+  }
+  else if(e->type() == QEvent::MouseMove)
+  {
+    if(state == S_Resize)
+    {
       QMouseEvent *me = (QMouseEvent *) e;
-      float xpos = me->x (), ypos = me->y ();
-      canvas->snapPositionToGrid (xpos, ypos);
-
-      pos = Coord (xpos, ypos);
-      bool flag = me->state () & Qt::ControlButton;
-      oval = new GOval (doc, flag);
-      oval->setStartPoint (pos);
-      oval->setEndPoint (pos);
-      doc->activePage()->insertObject (oval);
-      m_toolController->emitModeSelected (m_id,flag?i18n("Create Circle"):i18n("Create Ellipse"));
-   }
-   else if (e->type () == QEvent::MouseMove)
-   {
-      if (oval == 0L)
-         return;
-      QMouseEvent *me = (QMouseEvent *) e;
-      float xpos = me->x (), ypos = me->y ();
-
-      canvas->snapPositionToGrid (xpos, ypos);
-
-      if (useFixedCenter)
+      canvas->repaint(r);
+      if(p1.x() <= me->x())
       {
-         float dx = fabs (xpos - pos.x ()),
-         dy = fabs (ypos - pos.y ());
-         Coord ps, pe;
-         if (oval->isCircle ())
-         {
-            float off = qRound ((dx > dy ? dx : dy) / 2.0);
-            ps = Coord (pos.x () - off, pos.y () - off);
-            pe = Coord (pos.x () + off, pos.y () + off);
-         }
-         else
-         {
-            ps = Coord (pos.x () - qRound (dx / 2.0),
-                        pos.y () - qRound (dy / 2.0));
-            pe = Coord (pos.x () + qRound (dx / 2.0),
-                        pos.y () + qRound (dy / 2.0));
-         }
-         oval->setStartPoint (ps);
-         oval->setEndPoint (pe);
+        r.setLeft(p1.x());
+        r.setRight(me->x());
       }
-      else oval->setEndPoint (Coord (xpos, ypos));
+      else
+      {
+        r.setLeft(me->x());
+        r.setRight(p1.x());
+      }
+      if(p1.y() <= me->y())
+      {
+        r.setTop(p1.y());
+        r.setBottom(me->y());
+      }
+      else
+      {
+        r.setTop(me->y());
+        r.setBottom(p1.y());
+      }
+      QPainter p(canvas);
+      p.setPen(blue);
+      p.drawEllipse(r);
+    }
+/*      if (rect == 0L)
+         return;
 
-      Rect r = oval->boundingBox ();
+      QMouseEvent *me = (QMouseEvent *) e;
+      float xpos = me->x (), ypos = me->y ();
+      canvas->snapPositionToGrid (xpos, ypos);
+      rect->setEndPoint (Coord (xpos, ypos));
+      bool flag = me->state () & Qt::ControlButton;
+
+      Rect r = rect->boundingBox ();
       MeasurementUnit unit =
          PStateManager::instance ()->defaultMeasurementUnit ();
       QString u = unitToString (unit);
@@ -115,9 +130,8 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
       wval = cvtPtToUnit (unit, r.width ());
       hval = cvtPtToUnit (unit, r.height ());
 
-      msgbuf=oval->isCircle () ? i18n("Create Circle") : i18n("Create Ellipse");
-      msgbuf+=" [";
-      msgbuf+=QString::number(xval, 'f', 3);
+      msgbuf=flag ? i18n("Create Square") : i18n("Create Rectangle");
+      msgbuf+=" ["+QString::number(xval, 'f', 3);
       msgbuf+=QString(" ") + u + QString(", ");
       msgbuf+=QString::number(yval, 'f', 3);
       msgbuf+=QString(" ") + u + QString(", ");
@@ -125,70 +139,43 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
       msgbuf+=QString(" ") + u + QString(", ");
       msgbuf+=QString::number(hval, 'f', 3);
       msgbuf+=QString(" ") + u + QString("]");
-      m_toolController->emitModeSelected (m_id,msgbuf);
-   }
-   else if (e->type () == QEvent::MouseButtonRelease)
-   {
-      if (oval == 0L)
+      m_toolController->emitModeSelected (m_id,msgbuf);*/
+  }
+  else if(e->type() == QEvent::MouseButtonRelease)
+  {
+    if(state == S_Resize)
+    {
+      state = S_Init;
+    }
+/*      if (rect == 0L)
          return;
+
       QMouseEvent *me = (QMouseEvent *) e;
       float xpos = me->x (), ypos = me->y ();
+      kdDebug(38000)<<"RectTool::processMouseEvent(): x: "<<xpos<<" y: "<<ypos<<endl;
       canvas->snapPositionToGrid (xpos, ypos);
-
-      if (useFixedCenter)
+      kdDebug(38000)<<"RectTool::processMouseEvent(): x: "<<xpos<<" y: "<<ypos<<endl;
+      rect->setEndPoint (Coord (xpos, ypos));
+      if (! rect->isValid ())
       {
+         doc->activePage()->deleteObject (rect);
       }
       else
-         oval->setEndPoint (Coord (xpos, ypos));
-      doc->activePage()->unselectAllObjects ();
-
-      if (! oval->isValid ())
-         doc->activePage()->deleteObject (oval);
-      else
       {
-         doc->activePage()->setLastObject (oval);
-
-         CreateOvalCmd *cmd = new CreateOvalCmd (doc, oval);
+         CreateRectangleCmd *cmd = new CreateRectangleCmd (doc, rect);
          history->addCommand (cmd);
+
+         doc->activePage()->unselectAllObjects ();
+         doc->activePage()->setLastObject (rect);
       }
-      oval = 0L;
-   }
-   else if (e->type () == QEvent::KeyPress)
-   {
-      QKeyEvent *ke = (QKeyEvent *) e;
+      rect = 0L;*/
+  }
+  else if(e->type() == QEvent::KeyPress)
+  {
+/*      QKeyEvent *ke = (QKeyEvent *) e;
       if (ke->key () == Qt::Key_Escape)
-         m_toolController->emitOperationDone (m_id);
-   }
-}
-
-void OvalTool::activate (GDocument* , Canvas* canvas)
-{
-   canvas->setCursor(Qt::crossCursor);
-   if (!m_configRead)
-   {
-      KConfig* config = KIllustratorFactory::global()->config();
-
-      config->setGroup("EllipseTool");
-      useFixedCenter = config->readBoolEntry("FixedCenter", false);
-      m_configRead=true;
-   };
-   m_toolController->emitModeSelected (m_id,i18n ("Create ellipses (Hold CTRL for circles)"));
-}
-
-void OvalTool::aroundFixedCenter (bool flag) {
-  if (useFixedCenter != flag) {
-    useFixedCenter = flag;
-
-    kdDebug(38000)<<"OvalTool::aroundFixedCenter()"<<endl;
-    KConfig* config = KIllustratorFactory::global()->config ();
-
-    config->setGroup ("EllipseTool");
-    config->writeEntry ("FixedCenter", useFixedCenter);
+         m_toolController->emitOperationDone (m_id);*/
   }
 }
 
-void OvalTool::configure ()
-{
-   EllipseConfigDialog::setupTool (this);
-}
-
+#include "OvalTool.moc"

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,39 +23,29 @@
 
 */
 
-#ifndef ZoomTool_h_
-#define ZoomTool_h_
+#ifndef __ZoomTool_h__
+#define __ZoomTool_h__
 
-#include <Tool.h>
-#include <qvaluelist.h>
+#include "Tool.h"
 
-class Canvas;
-class GDocument;
-class Coord;
+#include <qpoint.h>
+#include <qrect.h>
 
-class ZoomTool : public Tool {
+class ZoomTool : public Tool
+{
+  Q_OBJECT
 public:
-  ZoomTool (CommandHistory *history);
-
-  virtual void processEvent (QEvent* e, GDocument* _doc, Canvas* _canvas);
-  virtual void activate (GDocument* _doc, Canvas* _canvas);
+  ZoomTool(QString aId, ToolController *tc);
   
-  void zoomIn (Canvas* cnv);
-  void zoomOut (Canvas* cnv);
-  void zoomInRegion(int x1,int y1, int x2, int y2);
-  void zoomOutRegion(int x1,int y1, int x2, int y2);
+  void activate();
+  void deactivate();
+  void processEvent(QEvent *e);
 
-protected:
-  void processMouseMoveEvent (QMouseEvent* e);
-  void processButtonReleaseEvent (QMouseEvent* e);
-  
 private:
-  GDocument *doc;
-  Canvas *canvas;
-
-  enum State { S_Init, S_Rubberband};
+  enum State{ S_Init, S_Rubberband};
   State state;
-  Coord selPoint[2];
+  QPoint p1;
+  QRect r;
 };
 
 #endif

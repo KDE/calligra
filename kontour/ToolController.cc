@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -23,85 +24,96 @@
 */
 
 #include "ToolController.h"
-#include "KIllustrator_view.h"
-#include "GDocument.h"
-#include "GPage.h"
-#include "GLayer.h"
+
+#include <kxmlgui.h>
 #include <kdebug.h>
 
+#include "kontour_view.h"
 
-ToolController::ToolController (KIllustratorView *view) {
-  activeTool = 0;
-  mainView = view;
+ToolController::ToolController(KontourView *aView)
+{
+  mActiveTool = 0L;
+  mView = aView;
 }
 
-ToolController::~ToolController () {
+ToolController::~ToolController()
+{
 }
 
-void ToolController::emitModeSelected (Tool::ToolID id, const QString &msg)
+void ToolController::registerTool(Tool *tool)
 {
-   emit modeSelected(id, msg);
-};
+  tools.append(tool);
+}
 
-void ToolController::emitOperationDone (Tool::ToolID id)
+void ToolController::selectTool(Tool *t)
 {
-   emit operationDone(id);
-};
+  if(mActiveTool == t || !t)
+    return;
 
-void ToolController::emitActivated (Tool::ToolID id, bool b)
-{
-   emit activated(id,b);
-};
+  if(mActiveTool)
+    mActiveTool->deactivate();
 
-void ToolController::emitPartSelected (Tool::ToolID id, GObject *o)
-{
-   emit partSelected(id,o);
-};
+  mActiveTool = t;
 
-void ToolController::registerTool (Tool* tool)
+  QPtrListIterator<Tool> it(tools);
+  for(; it.current(); ++it)
+    if(it.current()->action())
+      if(it.current() != mActiveTool)
+        it.current()->action()->setToggleState(false);
+      else
+        it.current()->action()->setToggleState(true);
+
+  mActiveTool->activate();
+}
+
+void ToolController::selectTool(QString id)
 {
-   if (tool==0)
+  QPtrListIterator<Tool> it(tools);
+  for(; it.current(); ++it)
+    if(it.current()->id() == id)
+    {
+      selectTool(it.current());
       return;
-  tools.insert ((long) tool->id(), tool);
-  tool->m_toolController=this;
+    }
 }
 
-Tool* ToolController::getActiveTool ()
+void ToolController::delegateEvent(QEvent *e)
 {
-  return activeTool;
+  if(mActiveTool)
+    mActiveTool->processEvent(e);
 }
 
-void ToolController::delegateEvent (QEvent *e, GDocument *doc,
-                                    Canvas *canvas) {
-  if (doc->activePage()->activeLayer ()->isEditable () && activeTool)
-    activeTool->processEvent (e, doc, canvas);
-}
-
-/*
-void ToolController::reset () {
-  toolSelected (0);
-}
-*/
-
-void ToolController::toolSelected (Tool::ToolID id)
+void ToolController::initToolBar()
 {
-   if (activeTool)
-   {
-      if (activeTool->id()==id) return;
-      activeTool->deactivate (mainView->activeDocument (),
-                              mainView->getCanvas ());
-   };
+  QWidget *tb = mView->factory()->container("tools", mView);
+  tb->hide();
 
-   activeTool = tools.find ((long) id);
-   if (activeTool)
-      activeTool->activate(mainView->activeDocument (),mainView->getCanvas());
+  kdDebug(38000) << "Tools:" << endl;
+  QPtrListIterator<Tool> it(tools);
+  for(; it.current(); ++it)
+  {
+//    kdDebug(38000) << it.currentKey().local8Bit() << endl;
+    KAction *ta = it.current()->action();
+    if(ta && tb)
+    {
+      ta->plug(tb);
+      connect(ta, SIGNAL(activated()), SLOT(toolActivated()));
+    }
+  }
+  tb->show();
 }
 
-void ToolController::configureTool (Tool::ToolID id)
+void ToolController::toolActivated()
 {
-   Tool *t = tools.find ((long) id);
-   if (t)
-      t->configure ();
+  ToolSelectAction *ta = (ToolSelectAction*)sender();
+
+  QPtrListIterator<Tool> it(tools);
+  for(; it.current(); ++it)
+    if(it.current()->action() == ta)
+    {
+      selectTool(it.current());
+      break;
+    }
 }
 
-#include <ToolController.moc>
+#include "ToolController.moc"

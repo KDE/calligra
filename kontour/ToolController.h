@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,53 +23,42 @@
 
 */
 
-#ifndef ToolController_h_
-#define ToolController_h_
+#ifndef __ToolController_h__
+#define __ToolController_h__
 
-#include <qintdict.h>
+#include <qobject.h>
+#include <qptrlist.h>
 #include <Tool.h>
 
-class GDocument;
-class Canvas;
-class KIllustratorView;
+class KontourView;
+class QEvent;
 
-//this one serves also as a signal proxy for the various tools
-//this makes the tool objects smaller
 class ToolController : public QObject
 {
   Q_OBJECT
 public:
-  ToolController (KIllustratorView *view);
-  ~ToolController ();
+  ToolController(KontourView *aView);
+  ~ToolController();
 
-  //void registerTool (int id, Tool* tool);
-  void registerTool (Tool* tool);
-  Tool* getActiveTool ();
+  KontourView *view() const {return mView; }
 
-  void delegateEvent (QEvent *e, GDocument *doc, Canvas *canvas);
+  void initToolBar();
+  void registerTool(Tool *tool);
 
-  void emitModeSelected (Tool::ToolID id, const QString &msg);
-  void emitOperationDone (Tool::ToolID id);
-  void emitActivated (Tool::ToolID id, bool b);
-  void emitPartSelected (Tool::ToolID id, GObject *);
-
-
-signals:
-  void modeSelected (Tool::ToolID id, const QString &msg);
-  void operationDone (Tool::ToolID id );
-  void activated (Tool::ToolID id, bool);
-  void partSelected (Tool::ToolID id, GObject *);
+  void delegateEvent(QEvent *e);
 
 public slots:
-   void toolSelected (Tool::ToolID id);
-   void configureTool (Tool::ToolID id);
+  void selectTool(Tool *t);
+  void selectTool(QString id);
 
-  //  void reset ();
+private slots:
+  void toolActivated();
 
 private:
-  QIntDict<Tool> tools;
-  Tool* activeTool;
-  KIllustratorView *mainView;
+  KontourView *mView;
+
+  QPtrList<Tool> tools;
+  Tool *mActiveTool;
 };
 
 #endif

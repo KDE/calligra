@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,42 +23,42 @@
 
 */
 
-#ifndef UnitBox_h_
-#define UnitBox_h_
+#ifndef __UnitBox_h__
+#define __UnitBox_h__
 
 #include <qhbox.h>
-#include <units.h>
+#include "units.h"
 
 class QComboBox;
 class KDoubleNumInput;
 
-class UnitBox : public QHBox {
+class UnitBox : public QHBox
+{
   Q_OBJECT
 public:
-  UnitBox (QWidget* parent = 0L, const char* name = 0L);
-  ~UnitBox ();
+  UnitBox(QWidget *parent = 0L, const char *name = 0L);
+  ~UnitBox();
 
-  void setFormatString (const char* fmt);
+  void setFormatString(const char* fmt);
 
-  float getValue ();
-  void setValue (float value);
+  double getValue();
+  void setValue(double value);
 
-  void setStep (float step);
-  float getStep () const;
+  void setStep(double step);
+  double getStep() const;
 
-  void setRange (float minVal, float maxVal);
-  void getRange (float& minVal, float& maxVal);
+  void setRange(double minVal, double maxVal);
+  void getRange(double &minVal, double &maxVal);
 
-  void setEditable (bool);
-  void enableUnits (bool flag);
+  void enableUnits(bool flag);
 
-  static void setDefaultMeasurementUnit (MeasurementUnit unit);
+  static void setDefaultMeasurementUnit(MeasurementUnit unit);
 
 signals:
-  void valueChanged (float val);
+  void valueChanged(double val);
 
 protected slots:
-  void unitChanged (int id);
+  void unitChanged(int id);
   void slotValueChanged(double f);
 
 private:
@@ -65,8 +66,8 @@ private:
   bool isUnitEnabled;
   QComboBox *unitCombo;
   MeasurementUnit unit;
-  float ptMinVal, ptMaxVal; // the minimal and maximal value in points
-  float m_step;
+  double ptMinVal, ptMaxVal; // the minimal and maximal value in points
+  double m_step;
 
   static MeasurementUnit defaultUnit;
 };

@@ -7,8 +7,8 @@ Comment[da]=Kontour illustreringsprogram
 Comment[eo]=Vektorgrafikprogramo Konturo
 Icon=kontour
 Type=MimeType
-Patterns=*.kil;
+Patterns=*.kon;
 X-KDE-AutoEmbed=false
 [Property::X-KDE-NativeExtension]
 Type=QString
-Value=.kil
+Value=.kon

@@ -2,7 +2,7 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
   Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
@@ -23,145 +23,160 @@
 
 */
 
-#ifndef GDocument_h_
-#define GDocument_h_
+#ifndef __GDocument_h__
+#define __GDocument_h__
 
 #include <qobject.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qvaluelist.h>
-#include <qstring.h>
-#include <qcolor.h>
 
-#include "Coord.h"
+#include "GStyleList.h"
 
-#define KILLUSTRATOR_MIMETYPE "application/x-killustrator"
-
-class GObject;
-class GLayer;
+class KontourDocument;
 class GPage;
 class QDomDocument;
 class QDomElement;
-class KIllustratorDocument;
+
 
 class GDocument : public QObject
 {
   Q_OBJECT
 public:
-  GDocument (KIllustratorDocument *_doc);
-  ~GDocument ();
+  GDocument(KontourDocument *aDoc);
+  ~GDocument();
 
-  void initialize ();
-  void setAutoUpdate (bool flag);
+  KontourDocument *document() const {return mDoc; }
 
-  KIllustratorDocument *document(void) const {return doc;};
-  QString fileName () const { return filename; }
-  void setFileName (const QString &s) { filename = s; }
+  GStyleList *styles() {return &mStyles; }
 
-  bool isModified () const { return modifyFlag; }
+  /**
+   *
+   *
+   */
+  double zoomFactor() const {return mZoomFactor; }
+  void zoomFactor(double factor);
+
+  int xCanvas() const {return mXCanvas; }
+  int yCanvas() const {return mYCanvas; }
+
+  // Grid
+  bool showGrid() const {return mShowGrid; }
+  void showGrid(bool flag);
+
+  bool snapToGrid() const {return mSnapToGrid; }
+  void snapToGrid(bool flag);
+
+  QColor gridColor() const {return mGridColor; }
+  void gridColor(QColor color);
+
+  void setGridDistance(double hdist, double vdist);
+  double xGrid() const;
+  double yGrid() const;
+  double xGridZ() const {return mXGridZ; }
+  double yGridZ() const {return mYGridZ; }
+
+  // Helplines
+  bool showHelplines() const {return mShowHelplines; }
+  void showHelplines(bool flag);
+  
+  
+  bool snapToHelplines() const {return mSnapToHelplines; }
+  void snapToHelplines(bool flag);
+
+  QValueList<double> &horizHelplines() {return mHorizHelplines; }
+  QValueList<double> &vertHelplines() {return mVertHelplines; }
+  void horizHelplines(const QValueList<double> &lines);
+  void vertHelplines(const QValueList<double> &lines);
+
+  int indexOfHorizHelpline(double pos);
+  int indexOfVertHelpline(double pos);
+  void updateHorizHelpline(int idx, double pos);
+  void updateVertHelpline(int idx, double pos);
+  
+  void addHorizHelpline(double pos);
+  void addVertHelpline(double pos);
+
+  /**
+   *
+   *
+   */
+  QDomDocument saveToXml();
+  bool readFromXml(const QDomDocument &document);
 
   /*
    * Pages management
    */
 
-  // get an array with all pages of the document
-  const QList<GPage>& getPages ();
+  QPtrList<GPage> &getPages() {return pages; }
 
   // retrieve the active page
-  GPage *activePage();
+  GPage *activePage() const {return mActivePage; }
 
   // set the active page
-  void setActivePage (GPage *page);
-  void setActivePage (int i);
+  void activePage(GPage *page);
+  void activePage(int i);
 
   // add a new page
-  GPage *addPage ();
-
-  // convert index to page
-  GPage *pageForIndex (int i);
-  
-  // movq page
-  void movePage( int from, int to, bool before );
+  GPage *addPage();
 
   // delete the given page
-  void deletePage (GPage *page);
+  void deletePage(GPage *page);
+
+  // convert index to page
+  GPage *pageForIndex(int i);
+
+  // move page
+  void movePage(int from, int to, bool before);
 
   // find page with name
   GPage *findPage(QString name);
 
-  QDomDocument saveToXml();
-  bool readFromXml (const QDomDocument &document);
-
-//  Grid
-  void showGrid (bool flag);
-  bool showGrid () const { return gridIsOn; }
-
-  void snapToGrid (bool flag);
-  bool snapToGrid () const { return gridSnapIsOn; }
-  
-  void gridColor(QColor color);
-  QColor gridColor() const { return mGridColor; };
-
-  void setGridDistance (float hdist, float vdist);
-  float horizGridDistance () const { return gridx; }
-  float vertGridDistance () const { return gridy; }
-
-//  Helplines
-  void setHorizHelplines(const QValueList<float>& lines);
-  void setVertHelplines(const QValueList<float>& lines);
-  QValueList<float>& horizHelplines () { return hHelplines;};
-  QValueList<float>& vertHelplines () { return vHelplines;};
-  void alignToHelplines (bool flag);
-  bool alignToHelplines () { return helplinesSnapIsOn;};
-  void showHelplines (bool flag);
-  bool showHelplines () { return helplinesAreOn;};
-  int indexOfHorizHelpline (float pos);
-  int indexOfVertHelpline (float pos);
-  void updateHorizHelpline (int idx, float pos);
-  void updateVertHelpline (int idx, float pos);
-  void addHorizHelpline (float pos);
-  void addVertHelpline (float pos);
-
 public slots:
-  void setModified (bool flag = true);
-  void helplineStatusChanged ();
-  void emitChanged();
-  void emitChanged(const Rect& r);
-  void emitHandleChanged();
-  void emitSizeChanged();
+  void setModified(bool flag = true);
 
 signals:
-  void pageChanged();
-  void handleChanged();
-  void changed ();
-  void changed (const Rect& r);
-  void selectionChanged ();
-  void sizeChanged ();
-  void gridChanged ();
+  void zoomFactorChanged(double scale);  // zoom factor was changed
+  void gridChanged();
+  void helplinesChanged();
+  void pageChanged();                    // active page was changed
+  void updateLayerView();
 
-  void wasModified (bool flag);
+private slots:
+  void changeCanvas();
 
-protected:
-  KIllustratorDocument *doc;
-  QList<GPage> pages;            // the array of all pages
-  GPage *active_page;            // the current page
+private:
+  KontourDocument *mDoc;
   
+  GStyleList mStyles;                  // the list of styles
+
+  double mXRes;
+  double mYRes;
+
   /*Grid settings*/
-  QColor mGridColor;
-  float gridx, gridy;
-  bool gridSnapIsOn;
-  bool gridIsOn;
-
+  QColor mGridColor;                   // grid color
+  double mXGridZ;                      //
+  double mYGridZ;                      //
+  double mXGrid;                       //
+  double mYGrid;                       //
+  bool mShowGrid:1;                    //
+  bool mSnapToGrid:1;                  //
+  
   /*Helplines settings*/
-  QValueList<float> hHelplines, vHelplines;
-  bool helplinesSnapIsOn;
-  bool helplinesAreOn;
+  QValueList<double> mHorizHelplines;  //
+  QValueList<double> mVertHelplines;   //
+  bool mShowHelplines:1;               //
+  bool mSnapToHelplines:1;             //
+  
+  /*Zoom*/
+  double mZoomFactor;                  // zoom factor
+  
+  int mXCanvas;
+  int mYCanvas;
+  
+  QPtrList<GPage> pages;               // the array of all pages
+  GPage *mActivePage;                  // the current page
 
-  int curPageNum;
-  bool autoUpdate;
-  bool modifyFlag; 
-  QString filename;
-  Rect selBox;
-  bool selBoxIsValid;
+  int mCurPageNum;
 };
 
 #endif

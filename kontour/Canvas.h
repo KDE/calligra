@@ -2,7 +2,7 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
   Copyright (C) 2000-2001 Igor Janssen (rm@linux.ru.net)
 
@@ -23,160 +23,109 @@
 
 */
 
-#ifndef Canvas_h_
-#define Canvas_h_
+#ifndef __Canvas_h__
+#define __Canvas_h__
 
 #include <qwidget.h>
-#include <qvaluelist.h>
-#include <qscrollview.h>
-#include <koprinter.h>
 
-#include "Coord.h"
+#include <koRect.h>
+#include "GDocument.h"
 
-class GDocument;
+class KontourView;
 class GObject;
-class ToolController;
-class QPixmap;
-class QPainter;
-class Rect;
-class QColor;
-class QSize;
 class QScrollBar;
-class KPrinter;
 
-class Canvas : public QWidget {
+class Canvas : public QWidget
+{
   Q_OBJECT
 public:
-  Canvas (GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidget *parent = 0, const char *name = 0);
-  ~Canvas ();
+  Canvas(GDocument *aGDoc, KontourView *aView, QScrollBar *hb, QScrollBar *vb, QWidget *parent = 0, const char *name = 0);
+  ~Canvas();
 
-  void setDocument (GDocument* doc);
-  GDocument* getDocument () const { return document; };
+  GDocument *document() const {return mGDoc; }
 
-  void setZoomFactor (float factor, int centerX, int centerY);
-  void setZoomFactor (float factor);
-  float getZoomFactor () const { return zoomFactor; };
+  double zoomFactor() const {return mGDoc->zoomFactor(); }
 
-  float scaleFactor () const { return resolution * zoomFactor / 72.0; };
+  void outlineMode(bool flag);
+  void paintFlag(bool flag);
 
-  //int xOffset () const {return mXOffset; };
-  //int yOffset () const {return mYOffset; };
-
-  //put the given point in the center of the canvas
-  //x and y are relative to the center of the paper
-  void center(int x=0, int y=0);
-
-  //return the rectangle covered by the paper in points on the screen
-  //upper left corner is always (0,0)
-  //it changes only when zooming or chaning the paper size
-  QRect paperArea()             {return m_paperArea;};
-  //return the currently visible rectangle
-  //coordinates are relative to the upper left corner of the paper
-  //it changes when scrolling, zooming, resizing, alex
-  QRect visibleArea()           {return m_visibleArea;};
-
-  //return the coordinates of the paper relative to current canvas size
-  //((-10,-10),(-10,-10)) means that the paper is on every edge
-  //10 points bigger than the current canvas
-  //it changes when scrolling, zooming, resizing and changing the paper size, alex
-  QRect relativePaperArea()     {return m_relativePaperArea;};
-
-  void snapPositionToGrid (float& x, float& y);
-  Rect snapTranslatedBoxToGrid (const Rect& r);
-  Rect snapScaledBoxToGrid (const Rect& r, int hmask);
-
-  void setToolController (ToolController *tc);
-
-  /* Printing */
-  void setupPrinter( KPrinter &printer );
-  void print( KPrinter &printer );
-
-  void showBasePoints (bool flag = true);
-  void setOutlineMode (bool flag);
+  void updateBuf();
+  void updateBuf(const QRect &rect);
 
   void setXimPosition(int x, int y, int w, int h);
 
+  /**
+   *  Put the given point in the center of the canvas
+   *  x and y are relative to the center of the paper.
+   */
+  void center(int x = 0, int y = 0);
+
+  void snapPositionToGrid(double &x, double &y);
+  KoRect snapTranslatedBoxToGrid(const KoRect &r);
+  KoRect snapScaledBoxToGrid(const KoRect &r, int hmask);
+
+public slots:
+  void addHelpline(int x, int y, bool horizH);
+  void drawTmpHelpline(int x, int y, bool horizH);
+
 protected:
-  QRect m_paperArea;
-  QRect m_visibleArea;
-  QRect m_relativePaperArea;
-
-  //if you call more than one of them, thy should be called in the order
-  //of the prepended numbers, since they depend on each other
-  //(this doesn't mean you have to call all of them), alex
-  //none of the adjust*() functions emits any signal to avoid multiple signals
-  void adjustPaperArea1();
-  void adjustScrollBarRanges2();
-  void adjustScrollBarPositions3(int x, int y);
-  void adjustVisibleArea4();
-  void adjustRelativePaperArea5();
-
-  float snapXPositionToGrid (float pos);
-  float snapYPositionToGrid (float pos);
-
-  bool eventFilter (QObject *, QEvent *);
-  /* Events */
-  void mousePressEvent (QMouseEvent *e);
-  void mouseReleaseEvent (QMouseEvent *e);
-  void mouseMoveEvent (QMouseEvent *e);
-  void wheelEvent (QWheelEvent *e);
-  void keyPressEvent (QKeyEvent *e);
-  void paintEvent (QPaintEvent *e);
-  void moveEvent (QMoveEvent *e);
-  void resizeEvent (QResizeEvent *e);
+  bool eventFilter(QObject *o, QEvent *e);
+  void resizeEvent(QResizeEvent *e);
+  void paintEvent(QPaintEvent *e);
+  void wheelEvent(QWheelEvent *e);
+  void mousePressEvent(QMouseEvent *e);
+  void mouseReleaseEvent(QMouseEvent *e);
+  void mouseMoveEvent(QMouseEvent *e);
+  void keyPressEvent(QKeyEvent *e);
 
 signals:
+  void offsetXChanged(int v);
+  void offsetYChanged(int v);
+  void mousePositionChanged(int x, int y);
+
   void rightButtonAtObjectClicked (int x, int y, GObject *obj);
   void rightButtonAtSelectionClicked (int x, int y);
   void rightButtonClicked (int x, int y);
-
-  void visibleAreaChanged (const QRect& area);
-  //void visibleAreaChanged (int x, int y);
-  void zoomFactorChanged (float zoom);
-
-  void mousePositionChanged (int x, int y);
-
-    void backSpaceCalled();
-public slots:
-  void updateRegion (const Rect& r);
-  void ensureVisibility (bool flag);
-  void docSizeChanged();
-
-  void addHelpline (int x, int y, bool horizH);
-  void drawTmpHelpline (int x, int y, bool horizH);
+  void backSpaceCalled();
 
 private slots:
-  void retryUpdateRegion ();
-  void scroll();
+  void changePage();
+  void changeZoomFactor(double scale);
+  void updateScrollBars();
+  void scrollX(int v);
+  void scrollY(int v);
 
 private:
-  GDocument *document;
+  void propagateMouseEvent(QMouseEvent *e);
+  void drawGrid(QPainter &p, const QRect &rect);
+  void drawHelplines(QPainter &p, const QRect &rect);
 
+  double snapXPositionToGrid(double pos);
+  double snapYPositionToGrid(double pos);
 
-  void propagateMouseEvent (QMouseEvent *e);
-  void drawGrid (QPainter& p);
-  void drawHelplines (QPainter& p);
+private:
+  GDocument *mGDoc;
+  KontourView *mView;
 
-  QPixmap *buffer;
   QScrollBar *hBar;
   QScrollBar *vBar;
 
-  int m_width, m_height;
-  int xPaper, yPaper;
-  float resolution;
-  float zoomFactor;
-  ToolController *toolController;
-  int pendingRedraws;
-  Rect regionForUpdate, region;
+  QPixmap *buffer;
 
-  float tmpHorizHelpline, tmpVertHelpline;
+  int mXOffset;
+  int mYOffset;
 
+  int mXCenter;
+  int mYCenter;
 
-  bool dragging:1;
-  bool ensureVisibilityFlag:1;
-  bool drawBasePoints:1;
-  bool outlineMode:1;
-  bool guiActive:1;
+  int mWidthH;
+  int mHeightH;
+
+  bool mPaintFlag:1;
+  bool mOutlineMode:1;
+
+  double tmpHorizHelpline;
+  double tmpVertHelpline;
 };
 
 #endif

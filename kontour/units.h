@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,32 +23,33 @@
 
 */
 
-#ifndef units_h_
-#define units_h_
+#ifndef __units_h__
+#define __units_h__
 
 class QString;
 
-enum MeasurementUnit {
+enum MeasurementUnit
+{
   UnitPoint, UnitMillimeter, UnitInch, UnitPica, UnitCentimeter,
   UnitDidot, UnitCicero
 };
 
-float cvtPtToMm (float value);
-float cvtPtToCm (float value);
-float cvtPtToInch (float value);
-float cvtPtToPica (float value);
-float cvtPtToDidot (float value);
-float cvtPtToCicero (float value);
-float cvtMmToPt (float value);
-float cvtCmToPt (float value);
-float cvtInchToPt (float value);
-float cvtPicaToPt (float value);
-float cvtDidotToPt (float value);
-float cvtCiceroToPt (float value);
+double cvtPtToMm(double value);
+double cvtPtToCm(double value);
+double cvtPtToInch(double value);
+double cvtPtToPica(double value);
+double cvtPtToDidot(double value);
+double cvtPtToCicero(double value);
+double cvtMmToPt(double value);
+double cvtCmToPt(double value);
+double cvtInchToPt(double value);
+double cvtPicaToPt(double value);
+double cvtDidotToPt(double value);
+double cvtCiceroToPt(double value);
 
-float cvtPtToUnit (MeasurementUnit unit, float value);
-float cvtUnitToPt (MeasurementUnit unit, float value);
+double cvtPtToUnit(MeasurementUnit unit, double value);
+double cvtUnitToPt(MeasurementUnit unit, double value);
 
-QString unitToString (MeasurementUnit unit);
+QString unitToString(MeasurementUnit unit);
 
 #endif

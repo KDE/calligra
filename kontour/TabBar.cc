@@ -2,7 +2,7 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
@@ -38,17 +38,17 @@
 #include <kdebug.h>
 
 #include "TabBar.h"
-#include "Canvas.h"
-#include "KIllustrator_view.h"
-#include "KIllustrator_doc.h"
+#include "kontour_view.h"
+#include "kontour_doc.h"
 #include "GDocument.h"
 #include "GPage.h"
-#include "KIllustrator_factory.h"
+#include "kontour_factory.h"
 
-TabBar::TabBar( QWidget *parent, KIllustratorView *view )
-: QWidget(parent), m_pView(view)
+TabBar::TabBar(QWidget *parent, KontourView *view)
+:QWidget(parent)
 {
-  m_pPopupMenu = 0L;
+  mView = view;
+  mPopupMenu = 0L;
   doc = view->activeDocument();
 
   leftTab = 1;
@@ -59,7 +59,7 @@ TabBar::TabBar( QWidget *parent, KIllustratorView *view )
   setFixedHeight(16);
 }
 
-void TabBar::moveTab( int _from, int _to, bool _before )
+void TabBar::moveTab(int _from, int _to, bool _before)
 {
   doc->movePage(_from, _to, _before);
   if(_from < _to)
@@ -79,14 +79,14 @@ void TabBar::scrollLeft()
 
 void TabBar::scrollRight()
 {
-  if ( m_rightTab == static_cast<int>(doc->getPages().count()) )
+/*  if ( m_rightTab == static_cast<int>(doc->getPages().count()) )
     return;
 
   if ( leftTab == static_cast<int>(doc->getPages().count()) )
     return;
 
   leftTab++;
-  repaint( false );
+  repaint( false );*/
 }
 
 void TabBar::scrollFirst()
@@ -97,22 +97,22 @@ void TabBar::scrollFirst()
 
 void TabBar::scrollLast()
 {
-  activeTab = doc->getPages().count();
-  setActiveTab();
+//  activeTab = doc->getPages().count();
+//  setActiveTab();
 }
 
 void TabBar::setActiveTab()
 {
     if(activeTab >= 1)
-        doc->setActivePage(activeTab - 1);
+        doc->activePage(activeTab - 1);
     else
-        doc->setActivePage(0);//first page
+        doc->activePage(0);//first page
   update();
 }
 
 void TabBar::slotRemove( )
 {
-  if(doc->getPages().count() <= 1)
+/*  if(doc->getPages().count() <= 1)
   {
     QApplication::beep();
     KMessageBox::error( this,i18n("You cannot delete the only page of the map."), i18n("Remove page") );
@@ -125,7 +125,7 @@ void TabBar::slotRemove( )
     if(activeTab >= 1)
       activeTab--;
     setActiveTab();
-  }
+  }*/
 }
 
 void TabBar::slotAdd()
@@ -152,7 +152,7 @@ void TabBar::paintEvent( QPaintEvent* )
   int active_width = 0;
   int active_y = 0;
 
-  for(QListIterator<GPage> it(doc->getPages()); it.current(); ++it)
+  for(QPtrListIterator<GPage> it(doc->getPages()); it.current(); ++it)
   {
         text = ((GPage *)it)->name();
         QFontMetrics fm = painter.fontMetrics();
@@ -239,14 +239,14 @@ void TabBar::openPopupMenu( const QPoint &_global )
   if(!doc->document()->isReadWrite())
     return;
 
-  if ( m_pPopupMenu != 0L )
-    delete m_pPopupMenu;
-  m_pPopupMenu = new QPopupMenu();
+  if ( mPopupMenu != 0L )
+    delete mPopupMenu;
+  mPopupMenu = new QPopupMenu();
 
-  m_pPopupMenu->insertItem( BarIcon("item_rename", KIllustratorFactory::global()), i18n( "Rename page..." ), this, SLOT( slotRename() ) );
-  m_pPopupMenu->insertItem( BarIcon("item_add", KIllustratorFactory::global()), i18n( "Insert page" ), this, SLOT( slotAdd() ) );
-  m_pPopupMenu->insertItem( BarIcon("item_remove", KIllustratorFactory::global()),i18n( "Remove page" ), this, SLOT( slotRemove() ) );
-  m_pPopupMenu->popup( _global );
+  mPopupMenu->insertItem( BarIcon("item_rename", KontourFactory::global()), i18n( "Rename page..." ), this, SLOT( slotRename() ) );
+  mPopupMenu->insertItem( BarIcon("item_add", KontourFactory::global()), i18n( "Insert page" ), this, SLOT( slotAdd() ) );
+  mPopupMenu->insertItem( BarIcon("item_remove", KontourFactory::global()),i18n( "Remove page" ), this, SLOT( slotRemove() ) );
+  mPopupMenu->popup( _global );
 }
 
 void TabBar::slotRename()
@@ -278,7 +278,7 @@ void TabBar::slotRename()
                  // Recursion
                  slotRename();
              }*/
-             page->setName( newName );
+             page->name( newName );
              update();
              doc->setModified( true );
         }
@@ -297,7 +297,7 @@ void TabBar::mousePressEvent( QMouseEvent* _ev )
   QString text;
   const char *active_text = 0L;
 
-  for(QListIterator<GPage> it(doc->getPages()); it.current(); ++it)
+  for(QPtrListIterator<GPage> it(doc->getPages()); it.current(); ++it)
   {
     text = ((GPage *)it)->name();
     QFontMetrics fm = painter.fontMetrics();
@@ -344,7 +344,7 @@ void TabBar::mouseReleaseEvent( QMouseEvent* _ev )
 
   if ( _ev->button() == LeftButton && m_moveTab != 0 )
   {
-/*        m_pView->doc()->map()->movePage( (*tabsList.at( activeTab - 1 )),
+/*        mView->doc()->map()->movePage( (*tabsList.at( activeTab - 1 )),
                                           (*tabsList.at( m_moveTab - 1 )),
                                           m_moveTabFlag == moveTabBefore );*/
     moveTab( activeTab - 1, m_moveTab - 1, m_moveTabFlag == moveTabBefore );
@@ -392,7 +392,7 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
     {
       int i = 1;
       int x = 0;
-      for(QListIterator<GPage> it(doc->getPages()); it.current(); ++it)
+      for(QPtrListIterator<GPage> it(doc->getPages()); it.current(); ++it)
       {
         QFontMetrics fm = painter.fontMetrics();
         int text_width = fm.width( ((GPage *)it)->name() );

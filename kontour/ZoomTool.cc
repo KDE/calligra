@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -23,230 +24,156 @@
 */
 
 #include "ZoomTool.h"
-#include "Coord.h"
+
+#include <qpainter.h>
+
+#include <kaction.h>
+#include <klocale.h>
+
+#include "kontour_view.h"
 #include "Canvas.h"
 #include "ToolController.h"
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <CommandHistory.h>
-
-#define KILLU_ZOOM_MAX 100
-#define KILLU_ZOOM_MIN 0.05
-
-ZoomTool::ZoomTool (CommandHistory* history)
-:Tool (history)
+ZoomTool::ZoomTool(QString aId, ToolController *tc):
+Tool(aId, tc)
 {
-  m_id=ToolZoom;
+  ToolSelectAction* zoom = new ToolSelectAction(actionCollection(), "ToolAction");
+  KRadioAction *mT1 = new KRadioAction(i18n("Zoom in"), "viewmag+", 0, actionCollection());
+  KRadioAction *mT2 = new KRadioAction(i18n("Zoom out"), "viewmag-", 0, actionCollection());
+  mT1->setExclusiveGroup("ZoomTool");
+  mT2->setExclusiveGroup("ZoomTool");
+  zoom->insert(mT1);
+  zoom->insert(mT2);
+}
+  
+void ZoomTool::activate()
+{
+  state = S_Init;
 }
 
-void ZoomTool::processEvent (QEvent* e, GDocument *, Canvas*)
+void ZoomTool::deactivate()
 {
-   if (e->type () == QEvent::MouseButtonRelease)
-   {
-      processButtonReleaseEvent((QMouseEvent *) e);
-      m_toolController->emitOperationDone (m_id);
-   }
-   else if (e->type () == QEvent::MouseMove)
-   {
-      processMouseMoveEvent((QMouseEvent *) e);
-      m_toolController->emitOperationDone (m_id);
-   }
 }
 
-void ZoomTool::activate (GDocument *_doc, Canvas *_canvas)
+void ZoomTool::processEvent(QEvent *e)
 {
-   state = S_Init;
-   doc = _doc;
-   canvas = _canvas;
-   canvas->setCursor(Qt::arrowCursor);
-   m_toolController->emitModeSelected (m_id,i18n ("Zoom in and out"));
-}
+  Canvas *canvas = toolController()->view()->canvas();
+  if(e->type() == QEvent::MouseButtonPress)
+  {
+    if(state == S_Init)
+    {
+      QMouseEvent *me = (QMouseEvent *)e;
+      p1.setX(me->x());
+      p1.setY(me->y());
+      state = S_Rubberband;
+    }
+//    float xpos = me->x (), ypos = me->y ();
+//    canvas->snapPositionToGrid (xpos, ypos);
 
-void ZoomTool::processMouseMoveEvent (QMouseEvent* e)
-{
-   //kdDebug(38000)<<"processMouseMoveEvent()"<<endl;
-   if ((state == S_Init) && ((e->state () == Qt::LeftButton) ||(e->state()==Qt::MidButton)))
-   {
-      //kdDebug(38000)<<"processMouseMoveEvent() entering rubberband mode"<<endl;
-      selPoint[0].x(e->x());
-      selPoint[0].y(e->y());
-      selPoint[1].x(e->x());
-      selPoint[1].y(e->y());
-      state=S_Rubberband;
-   }
-   else if (state == S_Rubberband)
-   {
-      //kdDebug(38000) << "S_Rubberband\n";
-      selPoint[1].x(e->x());
-      selPoint[1].y(e->y());
-      canvas->repaint();
-      QPainter painter;
-      painter.save();
-      QPen pen(Qt::blue, 1, Qt::DotLine);
-      painter.begin(canvas);
-      painter.translate(canvas->relativePaperArea().left(), canvas->relativePaperArea().top());
-      painter.setPen(pen);
-      float sfactor = canvas->scaleFactor();
-      painter.scale(sfactor, sfactor);
-      Rect selRect(selPoint[0], selPoint[1]);
-      painter.drawRect((int) selRect.x (), (int) selRect.y (),
-                       (int) selRect.width (), (int) selRect.height ());
-      painter.restore();
-      painter.end();
-      return;
-   }
-}
+/*    bool flag = me->state () & Qt::ControlButton;
+    rect = new GPolygon (doc, flag ? GPolygon::PK_Square : GPolygon::PK_Rectangle);
 
-void ZoomTool::processButtonReleaseEvent (QMouseEvent* e)
-{
-   if (state == S_Rubberband)
-   {
-      kdDebug(38000)<<"processButtonReleaseEvent() rubberband" <<endl;
-      if (e->state()==Qt::MidButton)
-          zoomOutRegion(qRound (selPoint[0].x()), qRound (selPoint[0].y()),
-                        qRound (selPoint[1].x()), qRound (selPoint[1].y()));
+    rect->addPoint (0, Coord (xpos, ypos));
+    rect->addPoint (1, Coord (xpos, ypos));
+    rect->addPoint (2, Coord (xpos, ypos));
+    rect->addPoint (3, Coord (xpos, ypos));
+    doc->activePage()->insertObject (rect);
+    m_toolController->emitModeSelected(m_id,flag?i18n("Create Square"):i18n("Create Rectangle"));*/
+  }
+  else if(e->type() == QEvent::MouseMove)
+  {
+    if(state == S_Rubberband)
+    {
+      QMouseEvent *me = (QMouseEvent *)e;
+      canvas->repaint(r);
+      if(p1.x() <= me->x())
+      {
+        r.setLeft(p1.x());
+        r.setRight(me->x());
+      }
       else
-          zoomInRegion(qRound (selPoint[0].x()), qRound (selPoint[0].y()),
-                       qRound (selPoint[1].x()), qRound (selPoint[1].y()));
+      {
+        r.setLeft(me->x());
+        r.setRight(p1.x());
+      }
+      if(p1.y() <= me->y())
+      {
+        r.setTop(p1.y());
+        r.setBottom(me->y());
+      }
+      else
+      {
+        r.setTop(me->y());
+        r.setBottom(p1.y());
+      }
+      QPainter p(canvas);
+      p.setPen(QPen(blue, 1, Qt::DotLine));
+      p.drawRect(r);
+    }
+/*      if (rect == 0L)
+         return;
+      QMouseEvent *me = (QMouseEvent *) e;
+      float xpos = me->x (), ypos = me->y ();
+      canvas->snapPositionToGrid (xpos, ypos);
+      rect->setEndPoint (Coord (xpos, ypos));
+      bool flag = me->state () & Qt::ControlButton;
 
-      canvas->repaint ();
+      Rect r = rect->boundingBox ();
+      MeasurementUnit unit =
+         PStateManager::instance ()->defaultMeasurementUnit ();
+      QString u = unitToString (unit);
+      float xval, yval, wval, hval;
+      xval = cvtPtToUnit (unit, r.x ());
+      yval = cvtPtToUnit (unit, r.y ());
+      wval = cvtPtToUnit (unit, r.width ());
+      hval = cvtPtToUnit (unit, r.height ());
+
+      msgbuf=flag ? i18n("Create Square") : i18n("Create Rectangle");
+      msgbuf+=" ["+QString::number(xval, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(yval, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(wval, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(hval, 'f', 3);
+      msgbuf+=QString(" ") + u + QString("]");
+      m_toolController->emitModeSelected (m_id,msgbuf);*/
+  }
+  else if(e->type() == QEvent::MouseButtonRelease)
+  {
+    if(state == S_Rubberband)
+    {
       state = S_Init;
-   }
-   else if(state == S_Init)
-   {
-      if (((e->button()== Qt::LeftButton) && (e->state()==Qt::NoButton))
-          ||((e->button()==Qt::MidButton) && (e->state()==Qt::ShiftButton)))
-         zoomIn (canvas);
-      else if (((e->button()== Qt::MidButton) && (e->state()==Qt::NoButton))
-               || ((e->button()==Qt::LeftButton) && (e->state()==Qt::ShiftButton)))
-         zoomOut (canvas);
-   }
-}
-#include <kdebug.h>
-void ZoomTool::zoomIn(Canvas* cnv)
-{
-   float z = cnv->getZoomFactor();
-   float val=KILLU_ZOOM_MAX;
-   if(z == val)
-       return;
-   z *= 1.25;
-   if(z > KILLU_ZOOM_MAX)
-      z = KILLU_ZOOM_MAX;
-   cnv->setZoomFactor(z);
-}
+    }
+/*      if (rect == 0L)
+         return;
 
-void ZoomTool::zoomOut (Canvas* cnv)
-{
-   float z = cnv->getZoomFactor();
-   //laurent
-   //we can't compare directly z and KILLU_ZOOM_MIN
-   float val=KILLU_ZOOM_MIN;
-   if(z == val)
-       return;
-   z *= 0.8;
-   if(z < KILLU_ZOOM_MIN)
-      z = KILLU_ZOOM_MIN;
-   cnv->setZoomFactor(z);
+      QMouseEvent *me = (QMouseEvent *) e;
+      float xpos = me->x (), ypos = me->y ();
+      kdDebug(38000)<<"RectTool::processMouseEvent(): x: "<<xpos<<" y: "<<ypos<<endl;
+      canvas->snapPositionToGrid (xpos, ypos);
+      kdDebug(38000)<<"RectTool::processMouseEvent(): x: "<<xpos<<" y: "<<ypos<<endl;
+      rect->setEndPoint (Coord (xpos, ypos));
+      if (! rect->isValid ())
+      {
+         doc->activePage()->deleteObject (rect);
+      }
+      else
+      {
+         CreateRectangleCmd *cmd = new CreateRectangleCmd (doc, rect);
+         history->addCommand (cmd);
+
+         doc->activePage()->unselectAllObjects ();
+         doc->activePage()->setLastObject (rect);
+      }
+      rect = 0L;*/
+  }
+  else if(e->type() == QEvent::KeyPress)
+  {
+/*      QKeyEvent *ke = (QKeyEvent *) e;
+      if (ke->key () == Qt::Key_Escape)
+         m_toolController->emitOperationDone (m_id);*/
+  }
 }
 
-void ZoomTool::zoomInRegion(int x1, int y1, int x2, int y2)
-{
-
-   int tmp;
-
-   x1=qRound (x1*canvas->getZoomFactor());
-   x2=qRound (x2*canvas->getZoomFactor());
-   y1=qRound (y1*canvas->getZoomFactor());
-   y2=qRound (y2*canvas->getZoomFactor());
-
-   if (x2<x1)
-   {
-      tmp=x2;
-      x2=x1;
-      x1=tmp;
-   };
-   if (y2<y1)
-   {
-      tmp=y2;
-      y2=y1;
-      y1=tmp;
-   };
-
-   int dx=x2-x1;
-   int dy=y2-y1;
-
-   int cw = canvas->width();
-   int ch = canvas->height();
-
-   float zoomX(100000);
-   if (dx!=0)
-      zoomX=float(cw)/dx;
-
-   float zoomY(100000);
-   if (dy!=0)
-      zoomY=float(ch)/dy;
-
-   float zoom=zoomX;
-   if (zoomY<zoom)
-      zoom=zoomY;
-   zoom*=canvas->getZoomFactor();
-
-   if(zoom > KILLU_ZOOM_MAX)
-      zoom = KILLU_ZOOM_MAX;
-   else if(zoom < KILLU_ZOOM_MIN)
-      zoom = KILLU_ZOOM_MIN;
-
-   kdDebug(38000)<<"ZoomTool::zoomInRegion() area ( "<<x1<<" | "<<y1<<" ) to ( "<<x2<<" | "<< y2<<" )"<<endl;
-
-   canvas->setZoomFactor(zoom,(x2+x1)/2,(y2+y1)/2);
-}
-
-void ZoomTool::zoomOutRegion(int x1, int y1, int x2, int y2)
-{
-   int tmp;
-
-   x1=qRound (x1*canvas->getZoomFactor());
-   x2=qRound (x2*canvas->getZoomFactor());
-   y1=qRound (y1*canvas->getZoomFactor());
-   y2=qRound (y2*canvas->getZoomFactor());
-   if (x2<x1)
-   {
-      tmp=x2;
-      x2=x1;
-      x1=tmp;
-   };
-   if (y2<y1)
-   {
-      tmp=y2;
-      y2=y1;
-      y1=tmp;
-   };
-
-   int dx=x2-x1;
-   int dy=y2-y1;
-
-   int cw = canvas->width();
-   int ch = canvas->height();
-
-   float zoomX=float(dx)/cw;
-
-   float zoomY=float(dy)/ch;
-
-   float zoom=zoomX;
-   if (zoomY>zoom)
-      zoom=zoomY;
-
-   zoom*=canvas->getZoomFactor();
-
-   if(zoom > KILLU_ZOOM_MAX)
-      zoom = KILLU_ZOOM_MAX;
-   else if(zoom < KILLU_ZOOM_MIN)
-      zoom = KILLU_ZOOM_MIN;
-
-   canvas->setZoomFactor(zoom,(x2+x1)/2,(y2+y1)/2);
-   //canvas->setZoomFactor(zoom);
-}
-
+#include "ZoomTool.moc"

@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,68 +23,92 @@
 
 */
 
-#ifndef GLayer_h_
-#define GLayer_h_
+#ifndef __GLayer_h__
+#define __GLayer_h__
 
 #include <qobject.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class GPage;
 class GObject;
 class QString;
+class QDomDocument;
+class QDomElement;
 
-class GLayer : public QObject {
+class GLayer : public QObject
+{
   Q_OBJECT
 public:
-  GLayer (GPage* doc, const QString &text=QString::null);
-  ~GLayer ();
+  GLayer(GPage *aPage);
+  ~GLayer();
 
-  /*
-   * Layer properties
+  /**
+   * Layer properties.
    */
-  QString name () const;
-  void setName(const QString &text);
+  QString name() const {return mName; }
+  void name(const QString &aName);
 
-  bool isVisible () const { return visibleFlag; }
-  bool isPrintable () const { return printableFlag; }
-  bool isEditable () const { return editableFlag; }
-  bool isInternal () const { return internalFlag; }
+  bool isVisible() const {return visibleFlag; }
+  void setVisible(bool flag);
+  
+  bool isPrintable() const {return printableFlag; }
+  void setPrintable(bool flag);
+  
+  bool isEditable() const {return editableFlag; }
+  void setEditable(bool flag);
 
-  void setVisible (bool flag);
-  void setPrintable (bool flag);
-  void setEditable (bool flag);
-  void setInternal ();
+  QDomElement saveToXml(QDomDocument &document);
+  bool readFromXml(const QDomElement &layer);
 
-  /*
+  /**
    * Content management
    */
-  const QList<GObject> &objects () { return contents; }
-  unsigned int objectCount () const { return contents.count(); }
-  void insertObject (GObject* obj);
-  void deleteObject (GObject* obj);
-  GObject* findContainingObject (int x, int y);
-
-  int findIndexOfObject (GObject *obj);
-  void insertObjectAtIndex (GObject* obj, unsigned int idx);
-  void moveObjectToIndex (GObject* obj, unsigned int idx);
-  GObject *objectAtIndex (unsigned int idx);
+  
+  /**
+   * Read only objects manipulation.
+   */
+  const QPtrList<GObject> &objects() const {return contents; }
+  
+  /**
+   * 
+   */
+  unsigned int objectCount() const {return contents.count(); }
+  
+  /**
+   * 
+   */
+  void insertObject(GObject *obj);
+  
+  /**
+   * 
+   */
+  void deleteObject(GObject *obj);
+  
+  
+  /**
+   * 
+   */
+  GObject *findContainingObject(int x, int y);
+  
+  int findIndexOfObject(GObject *obj);
+  void insertObjectAtIndex(GObject *obj, unsigned int idx);
+  void moveObjectToIndex(GObject *obj, unsigned int idx);
+  GObject *objectAtIndex(unsigned int idx);
 
 signals:
-  void propertyChanged ();
-  void contentChanged ();
+  void propertyChanged();
+//  void contentChanged();
 
 private:
-  QString ident;    // layer identifier
-  bool visibleFlag, // layer is visible
-    printableFlag,  // layer is printable
-    editableFlag,   // layer is editable
-    wasEditable,    // layer was editable before the change to unvisible
-    internalFlag;   // layer used for helplines
+  QString mName;               // layer identifier
+  
+  bool visibleFlag:1;          // layer is visible
+  bool printableFlag:1;        // layer is printable
+  bool editableFlag:1;         // layer is editable
+  bool wasEditable:1;          // layer was editable before the change to unvisible
 
-  QList<GObject> contents; // the list of objects
-  GPage* document;
-
-  static int lastID;
+  QPtrList<GObject> contents;  // the list of objects
+  GPage *mPage;
 };
 
 #endif

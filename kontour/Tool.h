@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,44 +23,64 @@
 
 */
 
-#ifndef Tool_h_
-#define Tool_h_
+#ifndef __Tool_h__
+#define __Tool_h__
 
-#include <GObject.h>
-#include <qnamespace.h>
+#include <kaction.h>
+#include <qobject.h>
+#include <kxmlguiclient.h>
 
-class GDocument;
-class Canvas;
-class CommandHistory;
-class QEvent;
 class ToolController;
 
-class Tool
+class ToolSelectAction : public KActionMenu
 {
-   friend class ToolController;
-protected:
-  Tool (CommandHistory* chist);
-
+  Q_OBJECT
 public:
+  ToolSelectAction(QObject *parent = 0, const char *name = 0);
 
-  virtual ~Tool () {}
-  enum ToolID {ToolDummy, ToolSelect, ToolEditPoint, ToolFreeHand, ToolLine,\
-  ToolBezier, ToolRectangle, ToolPolygon, ToolEllipse, ToolText, ToolZoom, ToolPathText, ToolInsertPart};
+  void insert(KAction *, int index = -1);
+  void remove(KAction* );
 
-  virtual void processEvent (QEvent* e, GDocument* doc, Canvas* canvas) = 0;
-  virtual void activate (GDocument* doc, Canvas* canvas);
-  virtual void deactivate (GDocument*, Canvas*) {}
+  int plug(QWidget *widget, int index = -1);
 
-  virtual void configure () {}
+  void setDefaultAction(KAction* );
+  KAction* defaultAction() { return m_def; }
 
-  ToolID id() const {return m_id;};
+  int count() { return m_count; }
+
+public slots:
+  virtual void slotActivated();
+  void setToggleState( bool );
+
+protected slots:
+  void childActivated();
 
 protected:
-  CommandHistory* history;
-  QString msgbuf;
-  ToolID m_id;
-  bool m_configRead;
-  ToolController *m_toolController;
+  bool m_init;
+  KAction* m_def;
+  int m_count;
+  bool m_actSelf;
+};
+
+class Tool : public QObject, public KXMLGUIClient
+{
+  Q_OBJECT
+public:
+  Tool(QString aId, ToolController *tc);
+  virtual ~Tool();
+
+  ToolController *toolController() const {return mToolController; }
+  QString id() const {return mId; }
+
+  virtual void activate() = 0;
+  virtual void deactivate() = 0;
+  virtual void processEvent(QEvent *e) = 0;
+  
+  ToolSelectAction *action();
+  
+private:
+  ToolController *mToolController;
+  QString mId;
 };
 
 #endif

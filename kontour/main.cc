@@ -1,20 +1,26 @@
-/* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+/* -*- C++ -*-
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+  $Id$
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+  This file is part of Kontour.
+  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Library General Public License as
+  published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
 
 #include <koApplication.h>
@@ -23,27 +29,24 @@
 #include <klocale.h>
 #include <dcopclient.h>
 
-#include <KIllustrator_aboutdata.h>
+#include "kontour_about.h"
 
-static const KCmdLineOptions options[]=
+static const KCmdLineOptions options[] =
 {
-        {"+[file]", I18N_NOOP("File To Open"),0},
-        {0,0,0}
+  {"+[file]", I18N_NOOP("File To Open"), 0},
+  {0, 0, 0}
 };
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    KCmdLineArgs::init( argc, argv, newKIllustratorAboutData() );
-    KCmdLineArgs::addCmdLineOptions( options );
+  KCmdLineArgs::init(argc, argv, newKontourAboutData());
+  KCmdLineArgs::addCmdLineOptions(options);
 
-    KoApplication app;
-    app.dcopClient()->attach();
-    app.dcopClient()->registerAs( "kontour" );
+  KoApplication app;
+  app.dcopClient()->attach();
+  app.dcopClient()->registerAs("kontour");
 
-    KGlobal::locale()->insertCatalogue("killustrator"); // use killustrator.pot
-
-
-    if (!app.start())
-       return 1;
-    return app.exec();
+  if(!app.start())
+    return 1;
+  return app.exec();
 }

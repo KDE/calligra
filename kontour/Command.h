@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,51 +23,40 @@
 
 */
 
-#ifndef Command_h_
-#define Command_h_
+#ifndef __Command_h__
+#define __Command_h__
 
-#include <GObject.h>
-#include <qvector.h>
+#include <kcommand.h>
 
 class GDocument;
 
-class Command
+class Command : public KCommand
 {
-protected:
-  Command (const QString& n) { name = n; }
-
 public:
-  virtual ~Command () {}
+  Command(const QString &name);
 
-  // every subclass has to implement this method
-  virtual void execute () = 0;
-
-  // only undoable commands have to implement this
-  virtual void unexecute () {}
-
-  QString getName() const { return name; }
-
+  GDocument *document() const {return mGDoc; }
+  void document(GDocument *aGDoc);
+  
 private:
-  QString name;
-
+  GDocument *mGDoc;
 };
 
-class ObjectManipCmd : public Command
+/*class ObjectManipCmd : public Command
 {
 protected:
-  ObjectManipCmd (GDocument* doc, const QString& name);
-  ObjectManipCmd (GObject* obj, const QString& name);
+  ObjectManipCmd(GDocument *doc, const QString &name);
+  ObjectManipCmd(GObject *obj, const QString &name);
 
 public:
-  ~ObjectManipCmd ();
+  ~ObjectManipCmd();
 
-  void execute ();
-  void unexecute ();
+  void execute();
+  void unexecute();
 
 protected:
-  GDocument *document;
   QVector<GObject> objects;
   QVector<GOState> states;
 };
-
+*/
 #endif

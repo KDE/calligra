@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,8 +23,10 @@
 
 */
 
-#include <units.h>
+#include "units.h"
+
 #include <qstring.h>
+
 #include <klocale.h>
 
 /*
@@ -32,117 +35,134 @@
  * 1 Inch = 72 pt = 6 pica = 25.4 mm = 67.54151050 dd =  5.628459208 cc
  */
 
-float cvtPtToMm (float value) {
+double cvtPtToMm(double value)
+{
   return 25.4 * value / 72.0;
 }
 
-float cvtPtToCm (float value) {
+double cvtPtToCm(double value)
+{
   return 2.54 * value / 72.0;
 }
 
-float cvtPtToPica (float value) {
+double cvtPtToPica(double value)
+{
   return value / 12.0;
 }
 
-float cvtPicaToPt (float value) {
+double cvtPicaToPt(double value)
+{
   return value * 12.0;
 }
 
-float cvtPtToInch (float value) {
+double cvtPtToInch(double value)
+{
   return value / 72.0;
 }
 
-float cvtPtToDidot (float value) {
+double cvtPtToDidot(double value)
+{
   return value * 1238.0 / 1157.0; // 1157 dd = 1238 pt
 }
 
-float cvtPtToCicero (float value) {
+double cvtPtToCicero(double value)
+{
   return value * 1238.0 / (1157.0 * 12.0); // 1 cc = 12 dd
 }
 
-float cvtInchToPt (float value) {
+double cvtInchToPt(double value)
+{
   return value * 72.0;
 }
 
-float cvtMmToPt (float value) {
+double cvtMmToPt(double value)
+{
   return value / 25.4 * 72.0;
 }
 
-float cvtCmToPt (float value) {
+double cvtCmToPt(double value)
+{
   return value / 2.54 * 72.0;
 }
 
-float cvtDidotToPt (float value) {
+double cvtDidotToPt(double value)
+{
   return value * 1157.0 / 1238.0;
 }
 
-float cvtCiceroToPt (float value) {
+double cvtCiceroToPt(double value)
+{
   return value * (1157.0 * 12.0) / 1238.0;
 }
 
-float cvtPtToUnit (MeasurementUnit unit, float value) {
-  switch (unit) {
+double cvtPtToUnit(MeasurementUnit unit, double value)
+{
+  switch (unit)
+  {
   case UnitMillimeter:
-    return cvtPtToMm (value);
+    return cvtPtToMm(value);
     break;
   case UnitPica:
-    return cvtPtToPica (value);
+    return cvtPtToPica(value);
     break;
   case UnitInch:
-    return cvtPtToInch (value);
+    return cvtPtToInch(value);
     break;
   case UnitCentimeter:
-    return cvtPtToCm (value);
+    return cvtPtToCm(value);
     break;
   case UnitDidot:
-    return cvtPtToDidot (value);
+    return cvtPtToDidot(value);
     break;
   case UnitCicero:
-    return cvtPtToCicero (value);
+    return cvtPtToCicero(value);
     break;
   default:
     return value;
   }
 }
 
-float cvtUnitToPt (MeasurementUnit unit, float value) {
-  switch (unit) {
+double cvtUnitToPt(MeasurementUnit unit, double value)
+{
+  switch(unit)
+  {
   case UnitMillimeter:
-    return cvtMmToPt (value);
+    return cvtMmToPt(value);
     break;
   case UnitInch:
-    return cvtInchToPt (value);
+    return cvtInchToPt(value);
     break;
   case UnitCentimeter:
-    return cvtCmToPt (value);
+    return cvtCmToPt(value);
     break;
   case UnitDidot:
-    return cvtDidotToPt (value);
+    return cvtDidotToPt(value);
     break;
   case UnitPica:
-    return cvtPicaToPt (value);
+    return cvtPicaToPt(value);
     break;
   case UnitCicero:
-    return cvtCiceroToPt (value);
+    return cvtCiceroToPt(value);
     break;
   default:
     return value;
   }
 }
 
-QString unitToString (MeasurementUnit unit) {
-    if(unit==UnitPoint)
-        return i18n("pt");
-    else if(unit==UnitMillimeter)
-        return i18n("mm");
-    else if(unit==UnitInch)
-        return i18n("inch");
-    else if(unit==UnitPica)
-        return i18n("pica");
-    else if(unit==UnitCentimeter)
-        return i18n("cm");
-    else if(unit==UnitDidot)
-        return i18n("didot");
-    else
-        return i18n("cicero");
+QString unitToString(MeasurementUnit unit)
+{
+  if(unit == UnitPoint)
+    return i18n("pt");
+  else if(unit == UnitMillimeter)
+    return i18n("mm");
+  else if(unit == UnitInch)
+    return i18n("inch");
+  else if(unit == UnitPica)
+    return i18n("pica");
+  else if(unit == UnitCentimeter)
+    return i18n("cm");
+  else if(unit == UnitDidot)
+    return i18n("didot");
+  else
+    return i18n("cicero");
 }

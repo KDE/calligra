@@ -2,7 +2,7 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
@@ -22,20 +22,20 @@
 
 */
 
-#ifndef __tabbar_h__
-#define __tabbar_h__
+#ifndef __TabBar_h__
+#define __TabBar_h__
 
 #include <qwidget.h>
 #include <qpainter.h>
 #include <qstrlist.h>
 
-class KIllustratorView;
+class KontourView;
 class GDocument;
 
 class TabBar : public QWidget {
   Q_OBJECT
 public:
-    TabBar( QWidget* parent, KIllustratorView *view );
+    TabBar( QWidget* parent, KontourView *view );
 
     /**
      * Moves the tab with number _from befor tab number _to if @param _before is
@@ -85,7 +85,7 @@ protected:
 
     void openPopupMenu( QPoint &_global );
 
-    KIllustratorView* m_pView;
+    KontourView *mView;
     GDocument *doc;
 
     enum { autoScrollNo = 0, autoScrollLeft, autoScrollRight };
@@ -94,7 +94,7 @@ protected:
      * Pointer to the last popup menu.
      * If this pointer is not 0L delete before usage.
      */
-    QPopupMenu *m_pPopupMenu;
+    QPopupMenu *mPopupMenu;
 
     /**
      * Timer that causes the tabbar to scroll when the user drag a tab.

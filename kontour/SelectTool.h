@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,26 +23,20 @@
 
 */
 
-#ifndef __OvalTool_h__
-#define __OvalTool_h__
+#ifndef __SelectTool_h__
+#define __SelectTool_h__
 
 #include "Tool.h"
 
-class OvalTool : public Tool
+class SelectTool : public Tool
 {
   Q_OBJECT
 public:
-  OvalTool(QString aId, ToolController *tc);
+  SelectTool(QString aId, ToolController *tc);
   
   void activate();
   void deactivate();
   void processEvent(QEvent *e);
-
-private:
-  enum State{S_Init, S_Resize};
-  State state;
-  QPoint p1;
-  QRect r;
 };
 
 #endif

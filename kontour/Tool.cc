@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -23,23 +24,120 @@
 */
 
 #include "Tool.h"
-#include "GDocument.h"
-#include "GPage.h"
-#include <CommandHistory.h>
+
+#include <qwidget.h>
+
+#include <ktoolbar.h>
+#include <ktoolbarbutton.h>
+#include <kdebug.h>
+
 #include "ToolController.h"
-#include "Canvas.h"
 
-Tool::Tool (CommandHistory *chist)
-   :m_id(ToolDummy)
-   ,m_configRead(false)
+ToolSelectAction::ToolSelectAction(QObject* parent, const char* name)
+:KActionMenu("",parent,name)
 {
-  history = chist;
+  m_actSelf = false;
+  m_init = false;
+  m_def = 0L;
+  m_count = 0;
 }
 
-void Tool::activate (GDocument* doc, Canvas* canvas)
+void ToolSelectAction::insert( KAction* a, int index )
 {
-   canvas->setCursor(Qt::crossCursor);
-   doc->activePage()->unselectAllObjects ();
-   m_toolController->emitModeSelected(m_id,"");
+  kdDebug() << "INSERT! i=" << index << endl;
+  m_count++;
+  KActionMenu::insert(a,index);
+  if (!m_init) {
+    setDefaultAction(a);
+    m_init = true;
+  }
+  connect(a,SIGNAL(activated()),SLOT(childActivated()));
 }
 
+void ToolSelectAction::remove( KAction* a )
+{
+  m_count--;
+  KActionMenu::remove(a);
+  a->disconnect(this,SIGNAL(activated()));
+}
+
+int ToolSelectAction::plug( QWidget* widget, int index )
+{
+  if ( widget->inherits("KToolBar") ) {
+    KToolBar* bar = (KToolBar*)widget;
+    int i = ( m_count == 1 ) ? KAction::plug(widget,index):KActionMenu::plug(widget,index);
+    bar->setToggle(itemId(i),true);
+    return i;
+  }
+  return -1;
+}
+
+void ToolSelectAction::setDefaultAction( KAction* a )
+{
+  KAction::setText(a->text());
+  setAccel(a->accel());
+  setGroup(a->group());
+  setWhatsThis(a->whatsThis());
+  setToolTip(a->toolTip());
+  setStatusText(a->statusText());
+  setEnabled(a->isEnabled());
+  setIcon(a->icon());
+
+  m_def = a;
+}
+
+void ToolSelectAction::slotActivated()
+{
+  emit activated();
+
+  if (m_def) {
+    m_actSelf = true;
+    if ( m_def->inherits("KToggleAction") ) {
+      KToggleAction* ta = (KToggleAction*)m_def;
+      ta->setChecked(false);
+      ta->activate();
+      ta->setChecked(true);
+    } else {
+      m_def->activate();
+    }
+    m_actSelf = false;
+  }
+}
+
+void ToolSelectAction::childActivated()
+{
+  kdDebug() << "CHILD ACTIVATED!" << endl;
+  setDefaultAction((KAction*)sender());
+  if (!m_actSelf)
+    activate();
+}
+
+void ToolSelectAction::setToggleState( bool state )
+{
+  int len = containerCount();
+  for( int id = 0; id < len; ++id ) {
+    KToolBar* w = (KToolBar*)container( id );
+    KToolBarButton* b = w->getButton(itemId(id));
+    b->on(state);
+  }
+}
+
+/*-----------------------*/
+
+Tool::Tool(QString aId, ToolController *tc)
+{
+  mToolController = tc;
+  mId = aId;
+}
+
+Tool::~Tool()
+{
+
+}
+
+ToolSelectAction *Tool::action()
+{
+  return (ToolSelectAction*)actionCollection()->action("ToolAction");
+}
+
+#include "Tool.moc"

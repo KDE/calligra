@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -23,120 +24,195 @@
 */
 
 #include "GLayer.h"
+
+#include <qdom.h>
+#include <klocale.h>
+
 #include "GPage.h"
 #include "GObject.h"
 
-#include <klocale.h>
+const int LAYER_VISIBLE = 1;
+const int LAYER_EDITABLE = 2;
+const int LAYER_PRINTABLE = 4;
 
-int GLayer::lastID = 0;
-
-GLayer::GLayer (GPage* doc, const QString &text) :
-  visibleFlag (true), printableFlag (true),
-  editableFlag (true), wasEditable (true), internalFlag (false),
-  document (doc) {
-  if (text.isEmpty())
-    ident=i18n("Layer #") + QString::number(lastID++);
+GLayer::GLayer(GPage *aPage)
+{
+  mPage = aPage;
+  visibleFlag = true;
+  printableFlag = true;
+  editableFlag = true;
+  wasEditable = true;
+//    mName = i18n("Layer #") + QString::number(lastID++);
 }
 
-GLayer::~GLayer () {
-  for (GObject *o=contents.first(); o!=0L; o=contents.next()) {
-    if (o->isSelected ())
-      document->unselectObject (o);
-    o->setLayer (0L);
-    o->unref ();
+GLayer::~GLayer()
+{
+  for(GObject *o = contents.first(); o != 0L; o = contents.next())
+  {
+    if(o->isSelected())
+      mPage->unselectObject(o);
+    o->layer(0L);
+//    o->unref (); //TODO
   }
   contents.clear ();
 }
 
-QString GLayer::name () const {
-  return ident;
+void GLayer::name(const QString &aName)
+{
+  mName = aName;
 }
 
-void GLayer::setName (const QString &text) {
-  ident = text;
-}
-
-void GLayer::setVisible (bool flag) {
-  if (visibleFlag != flag) {
+void GLayer::setVisible(bool flag)
+{
+  if(visibleFlag != flag)
+  {
     visibleFlag = flag;
-    if (!visibleFlag)
+    if(!visibleFlag)
       editableFlag = false;
-    else {
-      if (wasEditable)
-        editableFlag = true;
-    }
-    emit propertyChanged ();
+    else if(wasEditable)
+      editableFlag = true;
+    emit propertyChanged();
   }
 }
-
-void GLayer::setPrintable (bool flag) {
-  if (isInternal ())
-    return;
-
-  if (printableFlag != flag) {
+  
+void GLayer::setPrintable(bool flag)
+{
+  if(printableFlag != flag) 
+  {
     printableFlag = flag;
-    emit propertyChanged ();
+    emit propertyChanged();
   }
 }
-
-void GLayer::setEditable (bool flag) {
-  if (editableFlag != flag) {
+  
+void GLayer::setEditable(bool flag)
+{
+  if(editableFlag != flag)
+  {
     editableFlag = flag;
-    if (editableFlag)
+    if(editableFlag)
       visibleFlag = true;
     wasEditable = editableFlag;
-    emit propertyChanged ();
+    emit propertyChanged();
   }
 }
 
-void GLayer::setInternal () {
-  internalFlag = true;
-  printableFlag = false;
+
+QDomElement GLayer::saveToXml(QDomDocument &document)
+{
+  QDomElement layer = document.createElement("layer");
+  int flags = (isVisible() ? LAYER_VISIBLE : 0) + (isPrintable() ? LAYER_PRINTABLE : 0) + (isEditable() ? LAYER_EDITABLE : 0);
+  layer.setAttribute("id", name());
+  layer.setAttribute("flags", QString::number(flags));
+  for(QPtrListIterator<GObject> oi(contents); oi.current(); ++oi)
+    layer.appendChild((*oi)->writeToXml(document));
+  return layer;
 }
 
-void GLayer::insertObject (GObject* obj) {
-  obj->setLayer (this);
+bool GLayer::readFromXml(const QDomElement &layer)
+{
+/*  GObject *obj = 0L;
+//  QDict<GObject> refDict;
+  QString id = layer.attribute("id");
+  if(id.isEmpty())
+    return;
+  setName(id);
+  
+  int flags = layer.attribute("flags").toInt();
+  setVisible(flags & LAYER_VISIBLE);
+  setPrintable(flags & LAYER_EDITABLE);
+  setEditable(flags & LAYER_PRINTABLE);
+
+  QDomNode cn = layer.firstChild();
+  while(!cn.isNull())
+  {
+    QDomElement child = cn.toElement();
+//    obj = KIllustrator::objectFactory(child, document()->document());
+    if(!obj)
+      kdDebug(38000) << "invalid object type: " << child.tagName() << endl;
+    if (child.tagName() == "group")
+      ((GGroup*)obj)->layer(this);
+    if(obj->hasId())
+          refDict.insert(obj->getId(), obj);
+        insertObject(obj);
+        cn=cn.nextSibling();
+        newObjs.append(obj);
+      }
+    }
+    n=n.nextSibling();
+  }
+//TODO change GOBject \/
+// update object connections
+  for (QListIterator<GLayer> i(layers); i.current(); ++i)
+  {
+    const QList<GObject>& contents = (*i)->objects ();
+    for (QListIterator<GObject> oi(contents); oi.current(); ++oi)
+    {
+    // this should be more general !!
+      if ((*oi)->hasRefId () && (*oi)->isA ("GText"))
+      {
+        GObject *o = refDict[(*oi)->getRefId ()];
+        if(o)
+	{
+          GText *tobj = (GText *) *oi;
+          tobj->setPathObject (o);
+        }
+      }
+    }
+  }
+  setAutoUpdate (true);*/
+  return true;
+}
+
+void GLayer::insertObject(GObject *obj)
+{
+  obj->layer(this);
   contents.append(obj);
 }
 
-void GLayer::deleteObject (GObject* obj) {
+void GLayer::deleteObject(GObject *obj)
+{
   GObject *o = contents.at(contents.findRef(obj));
-  if (o!=0L) {
-    //    o->setLayer (0L);
-    o->unref ();
+  if(o != 0L)
+  {
+    o->layer (0L);
+//    o->unref (); //TODO
     contents.removeRef(o);
   }
 }
 
-GObject* GLayer::findContainingObject (int x, int y) {
+GObject *GLayer::findContainingObject(int x, int y)
+{
   // We are looking for the most relevant object, that means the object
   // in front of all others. So, we have to start at the end of the
   // list ...
-  GObject *o=contents.last();
-  for (; o!=0L; o=contents.prev())
-    if (o->contains (Coord (x, y)))
+  GObject *o = contents.last();
+  for(; o != 0L; o = contents.prev())
+    if(o->contains(KoPoint(x, y)))
       return o;
   // nothing found
   return 0L;
 }
 
-int GLayer::findIndexOfObject (GObject *obj) {
-    return contents.findRef(obj);
+int GLayer::findIndexOfObject(GObject *obj)
+{
+  return contents.findRef(obj);
 }
 
-void GLayer::insertObjectAtIndex (GObject* obj, unsigned int idx) {
+void GLayer::insertObjectAtIndex(GObject* obj, unsigned int idx)
+{
   contents.insert (idx, obj);
-  obj->setLayer (this);
+  obj->layer (this);
 }
 
-GObject *GLayer::objectAtIndex (unsigned int idx) {
-    return contents.at(idx);
+GObject *GLayer::objectAtIndex(unsigned int idx)
+{
+  return contents.at(idx);
 }
 
-
-void GLayer::moveObjectToIndex (GObject* obj, unsigned int idx) {
-    if(contents.removeRef(obj))
-        contents.insert(idx, obj);
+void GLayer::moveObjectToIndex(GObject* obj, unsigned int idx)
+{
+  if(contents.removeRef(obj))
+    contents.insert(idx, obj);
 }
 
-#include <GLayer.moc>
+#include "GLayer.moc"

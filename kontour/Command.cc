@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,12 +23,20 @@
 
 */
 
-#include <Command.h>
-#include <GDocument.h>
-#include "GPage.h"
-#include <kdebug.h>
+#include "Command.h"
 
-ObjectManipCmd::ObjectManipCmd (GDocument* doc, const QString& name) :
+Command::Command(const QString &name):
+KCommand(name)
+{
+
+}
+
+void Command::document(GDocument *aGDoc)
+{
+  mGDoc = aGDoc;
+}
+
+/*ObjectManipCmd::ObjectManipCmd (GDocument* doc, const QString& name) :
   Command(name)
 {
   objects.resize (doc->activePage()->selectionCount ());
@@ -80,6 +89,4 @@ void ObjectManipCmd::unexecute () {
   for (unsigned int i = 0; i < objects.count (); i++) {
     objects[i]->restoreState (states[i]);
     document->activePage()->selectObject (objects[i]);
-  }
-}
-
+  }*/

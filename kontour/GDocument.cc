@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,224 +23,188 @@
 
 */
 
-#include <qfile.h>
-
 #include "GDocument.h"
-#include "GPage.h"
 
-#include "GPolygon.h"
-#include "GText.h"
-#include "GPolyline.h"
-#include "GOval.h"
-#include "GBezier.h"
-#include "GClipart.h"
-#include "GGroup.h"
-#include "GPixmap.h"
-#include "GCurve.h"
-#include "GLayer.h"
-
-#include <assert.h>
-#include <kdebug.h>
-
-#if defined(__FreeBSD__) || defined(__NetBSD__)
-#include <math.h>
-#else
-#include <values.h>
-#endif
-
-#include <float.h>
-
-#include <units.h>
-#include <klocale.h>
-#include <qdict.h>
 #include <qdom.h>
 
-#include <iostream.h>
+#include <klocale.h>
 
-#define LAYER_VISIBLE   1
-#define LAYER_EDITABLE  2
-#define LAYER_PRINTABLE 4
+#include "kontour_global.h"
+#include "kontour_doc.h"
+#include "GPage.h"
 
-GDocument::GDocument (KIllustratorDocument *_doc)
-:doc(_doc)
+const double MIN_GRID_DIST = 6.0;
+
+GDocument::GDocument(KontourDocument *aDoc)
 {
-    initialize ();
+  mDoc = aDoc;
+
+  mXRes = 72.0;
+  mYRes = 72.0;
+
+  mZoomFactor = 1.0;
+
+  mXGridZ = 20.0;
+  mYGridZ = 20.0;
+  mXGrid = 20.0;
+  mYGrid = 20.0;
+  mShowGrid = false;
+  mSnapToGrid = false;
+  mGridColor = lightGray;
+
+  mShowHelplines = true;
+  mSnapToHelplines = false;
+
+  pages.setAutoDelete(true);
+  pages.clear();
+
+  mActivePage = addPage();
+  mActivePage->name(i18n("Page %1").arg(1));
+  mCurPageNum = 2;
+  
+  changeCanvas();
 }
 
-GDocument::~GDocument ()
+GDocument::~GDocument()
 {
   pages.clear();
 }
 
-void GDocument::initialize ()
+void GDocument::zoomFactor(double factor)
 {
-  gridx = 20.0;
-  gridy = 20.0;
-  gridSnapIsOn = false;
-  gridIsOn = false;
-  mGridColor = lightGray;
-
-  helplinesSnapIsOn = false;
-  helplinesAreOn = true;
-
-  modifyFlag = false;
-  filename = i18n("<unnamed>");
-
-  pages.setAutoDelete(true);
-  pages.clear ();
-
-  active_page = addPage();
-  active_page->setName(i18n("Page %1").arg(1));
-  curPageNum = 2;
-
-  autoUpdate = true;
-  emit changed ();
-  emit sizeChanged();
-}
-
-const QList<GPage>& GDocument::getPages ()
-{
-  return pages;
-}
-
-GPage *GDocument::activePage()
-{
-  return active_page;
-}
-
-void GDocument::setActivePage (GPage *page)
-{
-  QListIterator<GPage> i(pages);
-  for (; i.current(); ++i)
-  {
-    if ((*i) == page)
-    {
-      active_page = page;
-      break;
-    }
-  }
-  emit pageChanged();
-}
-
-void GDocument::emitChanged()
-{
-  emit changed();
-}
-
-void GDocument::emitHandleChanged()
-{
-  emit handleChanged();
-}
-
-void GDocument::emitSizeChanged()
-{
-  emit sizeChanged();
-}
-
-void GDocument::emitChanged(const Rect& r)
-{
-  emit changed(r);
-}
-
-void GDocument::setActivePage (int i)
-{
-  active_page = pages.at(i);
-  emit pageChanged();
-}
-
-GPage *GDocument::pageForIndex (int i)
-{
-  return pages.at(i);
-}
-
-GPage *GDocument::addPage ()
-{
-  GPage *aPage = new GPage (this);
-  pages.append(aPage);
-  aPage->setName(i18n("Page %1").arg(curPageNum));
-  curPageNum++;
-  return aPage;
-}
-
-void GDocument::movePage( int from, int to, bool before )
-{
-
-  if ( !before )
-    ++to;
-
-  if ( to > static_cast<int>(pages.count()) )
-  {
-   kdDebug(38000) << "?" <<endl;
-  }
-  else
-  {
-    GPage *p=pages.take(from);
-    if(from < to)
-      pages.insert( to-1, p );
-    else
-      pages.insert( to, p );
-  }
-}
-
-void GDocument::deletePage (GPage *pg)
-{
-  if (pages.count() == 1)
+  if(factor == mZoomFactor)
     return;
+  
+  /* Change grid distance. */
+  mXGridZ = mXGrid * factor;
+  while(mXGridZ < MIN_GRID_DIST)
+    mXGridZ *= 2.0;
+  mYGridZ = mYGrid * factor;
+  while(mYGridZ < MIN_GRID_DIST)
+    mYGridZ *= 2.0;
+  
+  double scale = factor / mZoomFactor;
+  mZoomFactor = factor;
+  changeCanvas();
+  emit zoomFactorChanged(scale);
+}
 
-  int pos=pages.findRef(pg);
-  if(pos!=-1)
+void GDocument::showGrid(bool flag)
+{
+  if(mShowGrid != flag)
   {
-      // remove the page from the array
-      GPage *p=pages.take(pos);
-
-      // and delete the page
-      delete p;
+    mShowGrid = flag;
+    emit gridChanged();   //TODO emit?
   }
+  setModified();
 }
 
-GPage *GDocument::findPage(QString name)
+void GDocument::snapToGrid(bool flag)
 {
-  for(QListIterator<GPage> it(pages); it.current(); ++it)
-    if(((GPage *)it)->name() == name)
-      return (GPage *)it;
-  return 0;
+  mSnapToGrid = flag;
+  setModified();
 }
 
-void GDocument::setAutoUpdate (bool flag)
+void GDocument::gridColor(QColor color)
 {
-  autoUpdate = flag;
-  if (autoUpdate)
-  {
-    selBoxIsValid = false;
-    assert( active_page );
-    active_page->updateHandle ();
-    emit changed ();
-  }
+  mGridColor = color;   //TODO emit?
+  setModified();
 }
 
-void GDocument::setModified (bool flag)
+double GDocument::xGrid() const
 {
-  modifyFlag = flag;
-  emit wasModified (flag);
+  return 1.0;
 }
 
-QDomDocument GDocument::saveToXml ()
+double GDocument::yGrid() const
 {
-  QDomDocument document("killustrator");
-  document.appendChild( document.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-  QDomElement killustrator=document.createElement("killustrator");
-  killustrator.setAttribute("editor", "KIllustrator");
-  killustrator.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
-  killustrator.setAttribute("version", "3");
-  document.appendChild(killustrator);
+  return 1.0;
+}
 
-  QDomElement head=document.createElement("head");
-  head.setAttribute ("currentpagenum", curPageNum);
-  killustrator.appendChild(head);
+void GDocument::setGridDistance(double hdist, double vdist)
+{
+  // TODO ZOOM!!!
+  mXGridZ = hdist;
+  mYGridZ = vdist;
+}
 
-  QDomElement grid=document.createElement("grid");
-  grid.setAttribute ("dx", gridx);
-  grid.setAttribute ("dy", gridy);
+void GDocument::showHelplines(bool flag)
+{
+  mShowHelplines = flag;
+  setModified();
+}
+  
+void GDocument::snapToHelplines(bool flag)
+{
+  mSnapToHelplines = flag;
+  setModified();
+}
+
+void GDocument::horizHelplines(const QValueList<double> &lines)
+{
+  mHorizHelplines = lines;
+}
+
+void GDocument::vertHelplines(const QValueList<double> &lines)
+{
+  mVertHelplines = lines;
+}
+
+int GDocument::indexOfHorizHelpline(double pos)
+{
+  int ret = 0;
+  for(QValueList<double>::Iterator i = mHorizHelplines.begin(); i != mHorizHelplines.end(); ++i, ++ret)
+    if(pos - NEAR_DISTANCE < *i && pos + NEAR_DISTANCE > *i)
+      return ret;
+  return -1;
+}
+
+int GDocument::indexOfVertHelpline(double pos)
+{
+  int ret = 0;
+  for(QValueList<double>::Iterator i = mVertHelplines.begin(); i != mVertHelplines.end(); ++i, ++ret)
+    if(pos - NEAR_DISTANCE < *i && pos + NEAR_DISTANCE > *i)
+      return ret;
+  return -1;
+}
+
+void GDocument::updateHorizHelpline(int idx, double pos)
+{
+  mHorizHelplines[idx] = pos;
+}
+
+void GDocument::updateVertHelpline(int idx, double pos)
+{
+  mVertHelplines[idx] = pos;
+}
+  
+void GDocument::addHorizHelpline(double pos)
+{
+  mHorizHelplines.append(pos);
+}
+
+void GDocument::addVertHelpline(double pos)
+{
+  mVertHelplines.append(pos);
+}
+
+QDomDocument GDocument::saveToXml()
+{
+  QDomDocument document("kontour");
+  document.appendChild(document.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+/*  QDomElement kontour = document.createElement("kontour");
+  kontour.setAttribute("editor", "kontour 2.0");
+  kontour.setAttribute("mime", );
+  kontour.setAttribute("version", "1");
+  document.appendChild(kontour);
+
+  QDomElement head = document.createElement("head");
+  head.setAttribute("currentpagenum", curPageNum);
+  kontour.appendChild(head);
+
+  QDomElement grid = document.createElement("grid");
+  grid.setAttribute("dx", gridx);
+  grid.setAttribute("dy", gridy);
   grid.setAttribute ("align", gridSnapIsOn ? 1 : 0);
   grid.setAttribute ("show", gridIsOn ? 1 : 0);
   grid.setAttribute ("color", mGridColor.name());
@@ -248,7 +213,7 @@ QDomDocument GDocument::saveToXml ()
   QDomElement helplines=document.createElement("helplines");
   helplines.setAttribute ("align", helplinesSnapIsOn ? 1 : 0);
   helplines.setAttribute ("show", helplinesAreOn ? 1 : 0);
-  QValueList<float>::Iterator hi;
+  QValueList<double>::Iterator hi;
   for(hi = hHelplines.begin(); hi != hHelplines.end(); ++hi)
   {
     QDomElement hl=document.createElement("hl");
@@ -263,21 +228,21 @@ QDomDocument GDocument::saveToXml ()
   }
   grid.appendChild(helplines);
 
-  for (QListIterator<GPage> pi(pages); pi.current(); ++pi)
+  for (QPtrListIterator<GPage> pi(pages); pi.current(); ++pi)
   {
     GPage *p = (*pi);
     QDomElement page;
     page = p->saveToXml(document);
     killustrator.appendChild(page);
-  }
-  setModified (false);
+  }*/
+  setModified(false);  //TODO need?
   return document;
 }
 
-bool GDocument::readFromXml (const  QDomDocument &document)
+bool GDocument::readFromXml(const QDomDocument &document)
 {
-  kdDebug(38000)<<"GDocument::readFromXml()"<<endl;
-  if ( document.doctype().name() != "killustrator" )
+  return true;
+  /*if ( document.doctype().name() != "kontour" )
     return false;
   QDomElement killustrator = document.documentElement();
   if ( killustrator.attribute( "mime" ) != KILLUSTRATOR_MIMETYPE )
@@ -289,8 +254,8 @@ bool GDocument::readFromXml (const  QDomDocument &document)
     curPageNum = head.attribute("currentpagenum").toInt();
 
     QDomElement grid=head.namedItem("grid").toElement();
-    gridx=grid.attribute("dx").toFloat();
-    gridy=grid.attribute("dy").toFloat();
+    gridx=grid.attribute("dx").todouble();
+    gridy=grid.attribute("dy").todouble();
     gridSnapIsOn = (grid.attribute("align").toInt() == 1);
     gridIsOn = (grid.attribute("show").toInt() == 1);
     mGridColor.setNamedColor(grid.attribute("color"));
@@ -303,14 +268,14 @@ bool GDocument::readFromXml (const  QDomDocument &document)
     for( ; !l.isNull(); l=helplines.nextSibling().toElement())
     {
       if(l.tagName()=="hl")
-        hHelplines.append(l.attribute("pos").toFloat());
+        hHelplines.append(l.attribute("pos").todouble());
       else
         if(l.tagName()=="vl")
-          vHelplines.append(l.attribute("pos").toFloat());
+          vHelplines.append(l.attribute("pos").todouble());
     }
 
     pages.clear ();
-    active_page = 0;
+    mActivePage = 0;
     QDomNode n = killustrator.firstChild();
     while(!n.isNull())
     {
@@ -319,161 +284,111 @@ bool GDocument::readFromXml (const  QDomDocument &document)
       if (pe.tagName() == "page")
       {
         GPage *page = addPage();
-        if ( !active_page )
-            active_page = page;
+        if ( !mActivePage )
+            mActivePage = page;
         page->readFromXml(pe);
       }
       n=n.nextSibling();
     }
-    if ( !active_page )
+    if ( !mActivePage )
         kdWarning(38000) << "No page found !" << endl;
 
     setModified (false);
     emit gridChanged ();
     return true;
   }
-  if( killustrator.attribute("version") == "2")
+  return false;*/
+}
+
+void GDocument::activePage(GPage *page)
+{
+  // TODO rewrite?
+  QPtrListIterator<GPage> i(pages);
+  for(; i.current(); ++i)
   {
-    QDomElement head = killustrator.namedItem("head").toElement();
-    setAutoUpdate (false);
-
-    QDomElement grid = head.namedItem("grid").toElement();
-    gridx = grid.attribute("dx").toFloat();
-    gridy = grid.attribute("dy").toFloat();
-    gridSnapIsOn = (grid.attribute("align").toInt() == 1);
-
-    QDomElement helplines=grid.namedItem("helplines").toElement();
-    helplinesSnapIsOn = (helplines.attribute("align").toInt()==1);
-
-    QDomElement l = helplines.firstChild().toElement();
-    for( ; !l.isNull(); l=helplines.nextSibling().toElement())
+    if((*i) == page)
     {
-      if(l.tagName() == "hl")
-        hHelplines.append(l.attribute("pos").toFloat());
-      else
-        if(l.tagName() == "vl")
-          vHelplines.append(l.attribute("pos").toFloat());
+      mActivePage = page;
+      emit pageChanged();
+      break;
     }
-
-    pages.clear ();
-
-    active_page = addPage();
-    active_page->readFromXmlV2(killustrator);
-    active_page->setName(i18n("Page %1").arg(1));
-    curPageNum = 2;
-
-    setModified (false);
-    emit gridChanged ();
-    return true;
   }
-
-  kdError(38000) << "Sorry, KIllustrator's current file format is incompatible to the old format." << endl;
-  return false;
 }
 
-// called from internal layer when visible flag was changed
-void GDocument::helplineStatusChanged ()
+void GDocument::activePage(int i)
 {
-  emit gridChanged ();
+  mActivePage = pages.at(i);
+  emit pageChanged();
 }
 
-/****************[Helplines]*****************/
-
-void GDocument::setHorizHelplines (const QValueList<float>& lines)
+GPage *GDocument::addPage()
 {
-  hHelplines = lines;
-  if (helplinesAreOn);
+  GPage *page = new GPage(this);
+  pages.append(page);
+  page->name(i18n("Page %1").arg(mCurPageNum));
+  mCurPageNum++;
+  emit updateLayerView();
+  return page;
 }
 
-void GDocument::setVertHelplines (const QValueList<float>& lines)
+void GDocument::deletePage(GPage *page)
 {
-  vHelplines = lines;
-  if (helplinesAreOn);
-}
+  // TODO test and rewrite (active page....)
+  if(pages.count() == 1)
+    return;
 
-void GDocument::alignToHelplines (bool flag)
-{
-  if (helplinesSnapIsOn != flag)
+  int pos = pages.findRef(page);
+  if(pos != -1)
   {
-    helplinesSnapIsOn = flag;
+    /* remove the page from the array */
+    GPage *p = pages.take(pos);
+    /* and delete the page */
+    delete p;
+    emit updateLayerView();
   }
 }
 
-void GDocument::showHelplines (bool flag)
+GPage *GDocument::pageForIndex(int i)
 {
-  if (helplinesAreOn != flag)
+  return pages.at(i);
+}
+
+void GDocument::movePage(int from, int to, bool before)
+{
+  // TODO test and rewrite (active page....)
+  if(!before)
+    ++to;
+
+  if(to > static_cast<int>(pages.count()))
   {
-    helplinesAreOn = flag;
   }
-}
-
-int GDocument::indexOfHorizHelpline (float pos)
-{
-  int ret=0;
-  for (QValueList<float>::Iterator i = hHelplines.begin(); i!=hHelplines.end(); ++i, ++ret)
-    if (pos - NEAR_DISTANCE < *i && pos + NEAR_DISTANCE > *i)
-      return ret;
-  return -1;
-}
-
-int GDocument::indexOfVertHelpline (float pos)
-{
-  int ret=0;
-  for (QValueList<float>::Iterator i = vHelplines.begin(); i!=vHelplines.end(); ++i, ++ret)
-    if (pos - NEAR_DISTANCE < *i && pos + NEAR_DISTANCE > *i)
-      return ret;
-  return -1;
-}
-
-void GDocument::updateHorizHelpline (int idx, float pos)
-{
-  hHelplines[idx] = pos;
-}
-
-void GDocument::updateVertHelpline (int idx, float pos)
-{
-  vHelplines[idx] = pos;
-}
-
-void GDocument::addHorizHelpline(float pos)
-{
-  hHelplines.append(pos);
-  if (helplinesAreOn);
-}
-
-void GDocument::addVertHelpline(float pos)
-{
-  vHelplines.append(pos);
-  if (helplinesAreOn);
-}
-
-/****************[Grid]**********************/
-
-void GDocument::showGrid (bool flag)
-{
-  if (gridIsOn != flag)
+  else
   {
-    gridIsOn = flag;
+    GPage *p = pages.take(from);
+    if(from < to)
+      pages.insert(to-1, p);
+    else
+      pages.insert(to, p);
   }
 }
 
-void GDocument::snapToGrid (bool flag)
+GPage *GDocument::findPage(QString name)
 {
-  if(gridSnapIsOn != flag)
-  {
-    gridSnapIsOn = flag;
-  }
+  for(QPtrListIterator<GPage> it(pages); it.current(); ++it)
+    if(((GPage *)it)->name() == name)
+      return (GPage *)it;
+  return 0L;
 }
 
-void GDocument::gridColor(QColor color)
+void GDocument::setModified(bool flag)
 {
-  mGridColor = color;
+  mDoc->setModified(flag);
 }
 
-void GDocument::setGridDistance (float hdist, float vdist)
+void GDocument::changeCanvas()
 {
-  gridx = hdist;
-  gridy = vdist;
+  mXCanvas = static_cast<int>(activePage()->paperWidth() * mZoomFactor * mXRes / 72.0);
+  mYCanvas = static_cast<int>(activePage()->paperHeight() * mZoomFactor * mYRes / 72.0);
 }
 
-#include <GDocument.moc>
+#include "GDocument.moc"
