@@ -207,7 +207,7 @@ KWView::~KWView()
     clearSelection();
     if ( m_findReplace )
     {
-        // Abort any find/relace
+        // Abort any find/replace
         m_findReplace->abort();
     }
     // Delete gui while we still exist ( it needs documentDeleted() )
@@ -307,8 +307,12 @@ void KWView::setupActions()
     actionExtraCreateTemplate = new KAction( i18n( "&Create Template from Document..." ), 0,
                                              this, SLOT( extraCreateTemplate() ),
                                              actionCollection(), "extra_template" );
-    actionFileStatistics = new KAction( i18n( "Statistics" ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
+    actionExtraCreateTemplate->setStatusText( i18n( "Save this document and use it later as a template" ) );
+    actionExtraCreateTemplate->setWhatsThis( i18n( "You can save this document as a template.<br><br>You can use this new template as a starting point for another document." ) );
 
+    actionFileStatistics = new KAction( i18n( "Statistics" ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
+    actionFileStatistics->setStatusText( i18n( "Sentence, word and letter counts of this document" ) );
+    actionFileStatistics->setWhatsThis( i18n( "Information on number of letters, words, syllables, and sentances of document.<p>  Evaluates readability using the Flesch reading score." ) );
     // -------------- Edit actions
     actionEditCut = KStdAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
     actionEditCopy = KStdAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
