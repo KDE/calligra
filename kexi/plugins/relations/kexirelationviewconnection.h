@@ -32,7 +32,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewConnection
 {
 	public:
 
-		KexiRelationViewConnection(KexiRelationViewTableContainer *srcTbl, KexiRelationViewTableContainer *rcvTbl, KexiRelationView *parent);
+		KexiRelationViewConnection(KexiRelationViewTableContainer *srcTbl, KexiRelationViewTableContainer *rcvTbl, struct SourceConnection &s, KexiRelationView *parent);
 		~KexiRelationViewConnection();
 
 
@@ -65,7 +65,6 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewConnection
 		QRect				m_oldRect;
 
 		bool				m_selected;
-//		SourceConnection		m_conn;
 
 		KexiRelationView		*m_parent;
 };

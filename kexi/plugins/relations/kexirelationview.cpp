@@ -136,9 +136,8 @@ KexiRelationView::addTable(KexiDB::TableSchema *t)
             SLOT(containerMoved(KexiRelationViewTableContainer *)));
 }
 
-#if 0
 void
-KexiRelationView::addConnection(SourceConnection conn, bool interactive)
+KexiRelationView::addConnection(SourceConnection conn, bool)
 {
 	kdDebug() << "KexiRelationView::addConnection()" << endl;
 
@@ -165,11 +164,11 @@ KexiRelationView::addConnection(SourceConnection conn, bool interactive)
 
 	kdDebug() << "KexiRelationView::addConnection(): finalSRC = " << m_tables[conn.srcTable] << endl;
 
-	KexiRelationViewConnection *connView = new KexiRelationViewConnection(m_tables[conn.srcTable],
-	 m_tables[conn.rcvTable], conn, this);
+	KexiRelationViewConnection *connView = new KexiRelationViewConnection(src, rcv, conn, this);
 	m_connectionViews.append(connView);
 	updateContents(connView->connectionRect());
 
+#if 0
 	if(!interactive)
 	{
 		kdDebug() << "KexiRelationView::addConnection: adding self" << endl;
@@ -177,8 +176,8 @@ KexiRelationView::addConnection(SourceConnection conn, bool interactive)
 		l.append(conn);
 		m_relation->updateRelationList(this, l);
 	}
-}
 #endif
+}
 
 void
 KexiRelationView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)

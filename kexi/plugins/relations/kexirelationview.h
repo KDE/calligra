@@ -44,6 +44,15 @@ namespace KexiDB
 typedef QDict<KexiRelationViewTableContainer> TableList;
 typedef QPtrList<KexiRelationViewConnection> ConnectionList;
 
+struct SourceConnection
+{
+	QString	srcTable;
+	QString rcvTable;
+	QString srcField;
+	QString rcvField;
+
+};
+
 class KexiRelationView : public QScrollView
 {
 	Q_OBJECT
@@ -53,7 +62,7 @@ class KexiRelationView : public QScrollView
 		~KexiRelationView();
 
 		void		addTable(KexiDB::TableSchema *t);
-//		void		addConnection(SourceConnection con, bool interactive=true);
+		void		addConnection(SourceConnection con, bool interactive=true);
 
 //		RelationList	getConnections()const { return m_connections; };
 		void setReadOnly(bool);
