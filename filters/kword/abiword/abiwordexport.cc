@@ -117,13 +117,14 @@ private:
     void writeAbiProps(const TextFormatting& formatLayout, const TextFormatting& format);
     void writeImageData(const QString& koStoreName, const QString& keyName);
     void writeClipartData(const QString& koStoreName, const QString& keyName);
+    void writeSvgData(const QString& koStoreName, const QString& keyName);
+    void writePictureData(const QString& koStoreName, const QString& keyName);
 
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
     QString m_pagesize; // Buffer for the <pagesize> tag
-    QMap<QString,KoPictureKey> m_mapImageData;
-    QMap<QString,KoPictureKey> m_mapClipartData;
+    QMap<QString,KoPictureKey> m_mapPictureData;
     StyleMap m_styleMap;
     double m_paperBorderTop,m_paperBorderLeft,m_paperBorderBottom,m_paperBorderRight;
     bool m_inIgnoreWords; // true if <ignorewords> has been written
@@ -299,6 +300,8 @@ bool AbiWordWorker::convertUnknownImage(const QString& strName, QByteArray& imag
 
 void AbiWordWorker::writeImageData(const QString& koStoreName, const QString& keyName)
 {
+    kdDebug(30506) << "Picture is Image " << endl;
+    
     QByteArray image;
 
     QString strExtension(koStoreName);
@@ -325,8 +328,6 @@ void AbiWordWorker::writeImageData(const QString& koStoreName, const QString& ke
         isImageLoaded=convertUnknownImage(koStoreName,image);
     }
 
-    kdDebug(30506) << "Image " << koStoreName << endl;
-
     if (isImageLoaded)
     {
         *m_streamOut << "<d name=\"" << keyName << "\""
@@ -350,7 +351,7 @@ void AbiWordWorker::writeClipartData(const QString& koStoreName, const QString& 
     // We must always convert the image to SVG
     QString strMime="image/svg-xml"; // Yes, it is -xml not +xml
 
-    kdDebug(30506) << "Clipart " << koStoreName << endl;
+    kdDebug(30506) << "Picture is QPicture " << koStoreName << endl;
 
     QPicture picture;
 
@@ -368,13 +369,13 @@ void AbiWordWorker::writeClipartData(const QString& koStoreName, const QString& 
             << " mime=\"" << strMime << "\">\n"
             << "<![CDATA["; // Open CDATA section
         // Do not add a new line after <![CDATA[ (No white space before a XML declaration)
-        // TODO/FIXME. aarrgg, we cannot have a XML declaration at all!
+        // TODO/FIXME. aarrgghh, we cannot have a XML declaration at all!
 
         // Save picture as SVG
 
         // Not sure what is better: call the QIODevice directly or through QTextStream::device()?
         // QPicture::save saves in UTF-8, so we have no problem!
-        // TODO/FIXME. aarrgg, we cannot have a XML declaration at all!
+        // TODO/FIXME. aarrgghh, we cannot have a XML declaration at all!
         if (!picture.save(m_streamOut->device(),"svg"))
         {
             kdWarning(30506) << "Could not save clipart: "  << koStoreName << endl;
@@ -389,28 +390,84 @@ void AbiWordWorker::writeClipartData(const QString& koStoreName, const QString& 
     }
 }
 
+void AbiWordWorker::writeSvgData(const QString& koStoreName, const QString& keyName)
+{
+    QByteArray svg;
+    QString strMime="image/svg-xml"; // Yes, it is -xml not +xml
+
+    kdDebug(30506) << "Picture is SVG" << endl;
+
+    if (!loadKoStoreFile(koStoreName,svg))
+    {
+        // NO message error, as there must be already one
+        return;
+    }
+
+    QDomDocument svgDoc;
+    if (!svgDoc.setContent(svg))
+    {
+        kdWarning(30506) << "Parsing of SVG failed..." << endl;
+        return; // TODO: full error line/column/message
+    }
+
+    *m_streamOut << "<d name=\"" << keyName << "\""
+        << " base64=\"no\""
+        << " mime=\"" << strMime << "\">\n"
+        << "<![CDATA["; // Open CDATA section
+
+    // Do not add a new line after <![CDATA[ (No white space before a XML declaration)
+    // TODO/FIXME. aarrgghh, we cannot have a XML declaration at all!
+    *m_streamOut << svgDoc;
+
+    *m_streamOut << "]]>\n" // Close CDATA section
+        << "</d>\n";
+}
+
+void AbiWordWorker::writePictureData(const QString& koStoreName, const QString& keyName)
+{
+    kdDebug(30506) << "Picture " << koStoreName << endl;
+    QString strExtension(koStoreName);
+    const int result=koStoreName.findRev(".");
+    if (result>=0)
+    {
+        strExtension=koStoreName.mid(result+1).lower();
+    }
+
+    if (strExtension=="wmf")
+    {
+        kdDebug(30506) << "Type " << strExtension << " not supported!" << endl;
+    }
+    else if (strExtension=="svg")
+    {
+        writeSvgData(koStoreName,keyName);
+    }
+    else if (strExtension=="qpic")
+    {
+        writeClipartData(koStoreName,keyName);
+    }
+    else
+    {
+        writeImageData(koStoreName,keyName);
+    }
+}
+
+
 bool AbiWordWorker::doCloseDocument(void)
 {
     // Before writing the <data> element,
     //  we must be sure that we have data and that we can retrieve it.
 
-    if (m_kwordLeader && (!m_mapImageData.isEmpty() || !m_mapClipartData.isEmpty()))
+    if (m_kwordLeader && !m_mapPictureData.isEmpty())
     {
         *m_streamOut << "<data>\n";
 
         QMap<QString,KoPictureKey>::ConstIterator it;
 
         // all images first
-        for (it=m_mapImageData.begin(); it!=m_mapImageData.end(); it++)
+        for (it=m_mapPictureData.begin(); it!=m_mapPictureData.end(); it++)
         {
             // Warning: do not mix up KWord's key and the iterator's key!
             writeImageData(it.key(),it.data().filename());
-        }
-
-        // then all cliparts
-        for (it=m_mapClipartData.begin(); it!=m_mapClipartData.end(); it++)
-        {
-            // Warning: do not mix up KWord's key and the iterator's key!
             writeClipartData(it.key(),it.data().filename());
         }
 
@@ -602,14 +659,7 @@ bool AbiWordWorker::makeImage(const FrameAnchor& anchor, const bool isImage)
     *m_streamOut << "/>"; // NO end of line!
     // TODO: other props for image
 
-    if (isImage)
-    {
-        m_mapImageData[anchor.picture.koStoreName]=anchor.picture.key;
-    }
-    else
-    {
-        m_mapClipartData[anchor.picture.koStoreName]=anchor.picture.key;
-    }
+    m_mapPictureData[anchor.picture.koStoreName]=anchor.picture.key;
 
     return true;
 }
