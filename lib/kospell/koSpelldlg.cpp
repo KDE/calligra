@@ -140,7 +140,7 @@ KOSpellDlg::KOSpellDlg(
 
 void KOSpellDlg::addToAutoCorrect()
 {
-    newword = word;
+    newword = editbox->text();
     done (KS_ADDAUTOCORRECT);
 }
 
