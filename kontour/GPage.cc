@@ -487,8 +487,8 @@ void GPage::drawContentsInRegion(KoPainter *p, const QWMatrix &m, const KoRect &
         // intersects the active region
         //      const KoRect& bbox = (*oi)->boundingBox ();
         //      if (r.intersects (bbox))
-        if((*oi)->intersects(r))
-          (*oi)->draw(p, m, withBasePoints && (*oi)->isSelected(), outline, withEditMarks);
+//        if((*oi)->intersects(r))
+//          (*oi)->draw(p, m, withBasePoints && (*oi)->isSelected(), outline, withEditMarks);
       }
     }
   }

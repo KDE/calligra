@@ -109,9 +109,11 @@ void OvalTool::processEvent(QEvent *e)
   {
     if(state == S_Resize)
     {
-      GOval *oval = new GOval();
-      float zoom = toolController()->view()->activeDocument()->zoomFactor();
-      oval->setPoints(KoPoint((r.left() - canvas->xOffset()) / zoom, (r.top() - canvas->yOffset()) / zoom), KoPoint((r.right() - canvas->xOffset()) / zoom, (r.bottom() - canvas->yOffset()) / zoom));
+      double zoom = toolController()->view()->activeDocument()->zoomFactor();
+      GOval *oval = new GOval(r.width() / zoom / 2.0, r.height() / zoom / 2.0);
+      QWMatrix m;
+      m = m.translate((r.left() + r.width() / 2 - canvas->xOffset()) / zoom, (r.top() + r.height() / 2 - canvas->yOffset()) / zoom);
+      oval->transform(m);
       CreateOvalCmd *cmd = new CreateOvalCmd(toolController()->view()->activeDocument(), oval);
       KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
       oval->style(doc->document()->styles()->style()); // copy current style

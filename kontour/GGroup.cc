@@ -146,9 +146,9 @@ void GGroup::calcBoundingBox()
       o->calcBoundingBox ();
 
   o = members.first();*/
-  box = o->boundingBox();
+  mBBox = o->boundingBox();
   for(o = members.next(); o != 0L; o=members.next())
-    box = box.unite(o->boundingBox());
+    mBBox = mBBox.unite(o->boundingBox());
 
 /*  Coord p[4];
   p[0] = r.topLeft ().transform (tmpMatrix);

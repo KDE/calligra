@@ -32,8 +32,8 @@ class GPolygon : public GObject
 {
   Q_OBJECT
 public:
-  GPolygon(const KoPoint &p, int n, double r, double a);
-  GPolygon(const KoPoint &p, int n, double r1, double r2, double a);
+  GPolygon(int n, double r, double a);
+  GPolygon(int n, double r1, double r2, double a);
   GPolygon(const QDomElement &element);
   GPolygon(const GPolygon &obj);
 
@@ -55,7 +55,6 @@ public:
 
 private:
   int mVertex;
-  KoPoint mCenter;
   double mAAngle;
   double mBAngle;
   double mARadius;

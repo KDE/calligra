@@ -160,9 +160,10 @@ public:
   virtual int getNeighbourPoint(const KoPoint &point) = 0;
   virtual void movePoint(int idx, double dx, double dy, bool ctrlPressed = false) = 0;
   virtual void removePoint(int idx, bool update = true) = 0;
-  // TODO need update?
 
   virtual bool findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all) = 0;
+
+  virtual void calcBoundingBox() = 0;
 
   /**
    * Retrieve the transformation matrix associated with the object.
@@ -182,29 +183,14 @@ public:
 
   /**
    * Transform the object according to the given matrix.
-   *
-   * @param m      The matrix for combining with the current transformation
-   *               matrix.
-   * @param update if true, the bounding box of the object is immediatly
-   *               updated, otherwise not. This is usefull for a sequence of
-   *               transformations in order to avoid flickering.
    */
-  void transform(const QWMatrix &m, bool update = false);
+  void transform(const QWMatrix &m);
 
   /**
    * Transform the object temporary according to the given matrix. The
    * transformation matrix is not modified.
-   *
-   * @param m      The matrix for combining with the current transformation
-   *               matrix.
-   * @param update if true, the bounding box of the object is immediatly
-   *               updated, otherwise not.
-   * @see
    */
-  void ttransform(const QWMatrix &m, bool update = false);
-  
-  virtual void calcBoundingBox() = 0;
-  // TODO protected?
+  void ttransform(const QWMatrix &m);
   
   /**
    * Test, if the object contains the given point.
@@ -213,11 +199,10 @@ public:
    * @param p  The coodinates of a point.
    * @return   true, if the object contains the point, otherwise false.
    */
-  virtual bool contains(const KoPoint &p);
-
-  virtual bool intersects(const KoRect &r);
+  virtual bool contains(const KoPoint &p) = 0;
   
-  const KoRect &boundingBox() const {return box; }
+  const KoRect &boundingBox() const {return mBBox; }
+  const KoRect &shapeBox() const {return mSBox; }
 
   /**
    * Convert object to path.
@@ -237,10 +222,7 @@ signals:
 protected:
   QDomElement createMatrixElement(const QWMatrix &matrix, QDomDocument &document);
   QWMatrix toMatrix(const QDomElement &matrix);
-  void updateBoundingBox(const KoRect &r);
-  void updateBoundingBox(const KoPoint &p1, const KoPoint &p2);
   KoRect calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint &tright, const KoPoint &bright, const KoPoint &bleft);
-  void updateRegion(bool recalcBBox = true);
   void setPen(KoPainter *p);
   void setBrush(KoPainter *p);
 
@@ -252,13 +234,14 @@ protected:
   unsigned int mId;               // object ID
 
   GLayer *mLayer;                 // the layer containing this object
-  
+
   bool sflag:1;                   // object is selected
   bool inWork:1;                  // the object is currently manipulated,
-  
+
   GStyle *mStyle;
-  
-  KoRect box;                     // the bounding box
+
+  KoRect mBBox;                   // the bounding box
+  KoRect mSBox;
 
   QWMatrix tMatrix;               // transformation matrix
   QWMatrix tmpMatrix;             // temporary transformation matrix

@@ -665,7 +665,7 @@ void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool pe
     {
       (*it)->setWorkInProgress(true);
       (*it)->initTmpMatrix();
-      (*it)->ttransform(m, true);
+      (*it)->ttransform(m);
     }
     page->updateSelection();
   }
@@ -770,7 +770,7 @@ void SelectTool::scale(GPage *page, double dx, double dy, bool type, bool perman
       (*it)->initTmpMatrix();
       (*it)->ttransform(m1);
       (*it)->ttransform(m2);
-      (*it)->ttransform(m3, true);
+      (*it)->ttransform(m3);
     }
     page->updateSelection();
   }
@@ -820,7 +820,7 @@ void SelectTool::shear(GPage *page, double dx, double dy, bool permanent)
       (*it)->initTmpMatrix();
       (*it)->ttransform(m1);
       (*it)->ttransform(m2);
-      (*it)->ttransform(m3, true);
+      (*it)->ttransform(m3);
     }
     page->updateSelection();
   }
@@ -869,7 +869,7 @@ void SelectTool::rotate(GPage *page, double xf, double yf, double xp, double yp,
       (*it)->initTmpMatrix();
       (*it)->ttransform(m1);
       (*it)->ttransform(m2);
-      (*it)->ttransform(m3, true);
+      (*it)->ttransform(m3);
     }
     page->updateSelection();
   }

@@ -97,7 +97,7 @@ void PolygonTool::processEvent(QEvent *e)
   {
     if(state == S_Resize)
     {
-      QRect rect = QRect(static_cast<int>(mCenter.x() - radius + canvas->xOffset()) - 1, static_cast<int>(mCenter.y() - radius + canvas->yOffset()) - 1, 2 * static_cast<int>(radius) + 2, 2 * static_cast<int>(radius) + 2);
+      QRect rect = QRect(static_cast<int>(mCenter.x() - radius + canvas->xOffset()), static_cast<int>(mCenter.y() - radius + canvas->yOffset()), 2 * static_cast<int>(radius) + 2, 2 * static_cast<int>(radius) + 2);
       canvas->repaint(rect);  
       radius = sqrt((x - mCenter.x()) * (x - mCenter.x()) + (y - mCenter.y()) * (y - mCenter.y()));
       double a = (x - mCenter.x()) / radius;
@@ -121,9 +121,12 @@ void PolygonTool::processEvent(QEvent *e)
         a = 2.0 * Kontour::pi - a;
       GPolygon *polygon;
       if(type == Polygon)
-        polygon = new GPolygon(mCenter, n, radius, a);
+        polygon = new GPolygon(n, radius, a);
       else if(type == Star)
-        polygon = new GPolygon(mCenter, n, radius, 0.5 * radius, a);
+        polygon = new GPolygon(n, radius, 0.5 * radius, a);
+      QWMatrix m;
+      m = m.translate(mCenter.x(), mCenter.y());
+      polygon->transform(m);
       CreatePolygonCmd *cmd = new CreatePolygonCmd(toolController()->view()->activeDocument(), polygon);
       KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
       polygon->style(doc->document()->styles()->style());

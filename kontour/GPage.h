@@ -137,11 +137,6 @@ public:
 
   void updateSelection();
 
-public slots:
-//  void objectChanged ();
-//  void objectChanged (const KoRect &r);
-//  void layerChanged ();
-
 private:
   GDocument *mGDoc;
 

@@ -36,9 +36,11 @@
 #include "kontour_global.h"
 #include "GPath.h"
 
-GRect::GRect(bool roundness):
+GRect::GRect(double sx, double sy, bool roundness):
 GObject()
 {
+  mSX = sx;
+  mSY = sy;
   if(roundness)
   {
     mXRoundness = 0.25;
@@ -54,28 +56,16 @@ GObject()
 GRect::GRect(const QDomElement &element):
 GObject(element.namedItem("go").toElement())
 {
-  double x = 0;
-  double y = 0;
-  double sx = 0;
-  double sy = 0;
-
-  x = element.attribute("x").toDouble();
-  y = element.attribute("y").toDouble();
-  sx = element.attribute("sx").toDouble();
-  sy = element.attribute("sy").toDouble();
-
-  sPoint.setX(x);
-  sPoint.setY(y);
-  ePoint.setX(x + sx);
-  ePoint.setY(y + sy);
+  mSX = element.attribute("sx").toDouble();
+  mSY = element.attribute("sy").toDouble();
   calcBoundingBox();
 }
 
 GRect::GRect(const GRect &obj):
 GObject(obj)
 {
-  ePoint = obj.ePoint;
-  sPoint = obj.sPoint;
+  mSX = obj.mSX;
+  mSY = obj.mSY;
   mXRoundness = obj.mXRoundness;
   mYRoundness = obj.mYRoundness;
   calcBoundingBox();
@@ -88,22 +78,10 @@ GObject *GRect::copy() const
 
 bool GRect::isSquare() const
 {
-  if(ePoint.x() - sPoint.x() == ePoint.y() - sPoint.y())
+  if(mSX == mSY)
     return true;
   else
     return false;
-}
-
-void GRect::startPoint(const KoPoint &p)
-{
-  sPoint = p;
-  calcBoundingBox();
-}
-
-void GRect::endPoint(const KoPoint &p)
-{
-  ePoint = p;
-  calcBoundingBox();
 }
 
 QString GRect::typeName() const
@@ -116,14 +94,9 @@ QString GRect::typeName() const
 
 QDomElement GRect::writeToXml(QDomDocument &document)
 {
-  KoRect r(sPoint, ePoint);
-  r = r.normalize();
-
   QDomElement rect = document.createElement("rect");
-  rect.setAttribute("x", r.left());
-  rect.setAttribute("y", r.top());
-  rect.setAttribute("sx", r.width());
-  rect.setAttribute("sy", r.height());
+  rect.setAttribute("sx", mSX);
+  rect.setAttribute("sy", mSY);
   rect.appendChild(GObject::writeToXml(document));
   return rect;
 }
@@ -132,7 +105,7 @@ void GRect::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outl
 {
   setPen(p);
   setBrush(p);
-  KoVectorPath *v = KoVectorPath::rectangle(sPoint.x(), sPoint.y(), ePoint.x() - sPoint.x(), ePoint.y() - sPoint.y(), 0.5 * mXRoundness * (ePoint.x() - sPoint.x()), 0.5 * mYRoundness * (ePoint.y() - sPoint.y()));
+  KoVectorPath *v = KoVectorPath::rectangle(0.0, 0.0, mSX, mSY, 0.5 * mXRoundness * mSX, 0.5 * mYRoundness * mSY);
   v->transform(tmpMatrix * m);
   p->drawVectorPath(v);
   delete v;
@@ -140,12 +113,12 @@ void GRect::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outl
 
 void GRect::calcBoundingBox()
 {
-  KoPoint p1(sPoint.x(), sPoint.y());
-  KoPoint p2(ePoint.x(), sPoint.y());
-  KoPoint p3(ePoint.x(), ePoint.y());
-  KoPoint p4(sPoint.x(), ePoint.y());
-  box = calcUntransformedBoundingBox(p1, p2, p3, p4);
-  adjustBBox(box);
+  KoPoint p1(0.0, 0.0);
+  KoPoint p2(0.0, mSY);
+  KoPoint p3(mSX, mSY);
+  KoPoint p4(mSX, 0.0);
+  mBBox = calcUntransformedBoundingBox(p1, p2, p3, p4);
+  adjustBBox(mBBox);
 }
 
 int GRect::getNeighbourPoint(const KoPoint &p)
@@ -169,36 +142,11 @@ void GRect::removePoint(int idx, bool update)
 
 bool GRect::contains(const KoPoint &p)
 {
-  double x1, y1, x2, y2;
-
-  if(box.contains(p))
-  {
-    QPoint pp = iMatrix.map(QPoint(static_cast<int>(p.x()), static_cast<int>(p.y())));
-    if(sPoint.x() >= ePoint.x())
-    {
-      x1 = ePoint.x();
-      x2 = sPoint.x();
-    }
-    else
-    {
-      x1 = sPoint.x();
-      x2 = ePoint.x();
-    }
-    if(sPoint.y() >= ePoint.y())
-    {
-      y1 = ePoint.y();
-      y2 = sPoint.y();
-    }
-    else
-    {
-      y1 = sPoint.y();
-      y2 = ePoint.y();
-    }
-
-    if(pp.x() <= x2 && pp.x() >= x1 && pp.y() <= y2 && pp.y() >= y1)
-      return true;
-  }
-  return false;
+  QPoint pp = iMatrix.map(QPoint(static_cast<int>(p.x()), static_cast<int>(p.y())));
+  if(pp.x() <= mSX && pp.x() >= 0.0 && pp.y() <= mSY && pp.y() >= 0.0)
+    return true;
+  else
+    return false;
 }
 
 bool GRect::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
@@ -209,40 +157,35 @@ bool GRect::findNearestPoint(const KoPoint &p, double max_dist, double &dist, in
 GPath *GRect::convertToPath() const
 {
   GPath *path = new GPath(true);
-  KoVectorPath *vec = new KoVectorPath;
-  double rx = 0.5 * mXRoundness * (ePoint.x() - sPoint.x());
-  double ry = 0.5 * mYRoundness * (ePoint.y() - sPoint.y());
+  double rx = 0.5 * mXRoundness * mSX;
+  double ry = 0.5 * mYRoundness * mSY;
   if(mXRoundness != 0.0 && mYRoundness != 0.0)
   {
-    double w = ePoint.x() - sPoint.x();
-    double h = ePoint.y() - sPoint.y();
-    double rx = 0.5 * mXRoundness * w;
-    double ry = 0.5 * mYRoundness * h;
-    if(rx > w / 2)
-      rx = w / 2;
-    if(ry > h / 2)
-      ry = h / 2;
-    path->beginTo(sPoint.x() + rx, sPoint.y());
-    path->curveTo(sPoint.x(), sPoint.y() + ry, sPoint.x() + rx * (1 - 0.552), sPoint.y(), sPoint.x(), sPoint.y() + ry * (1 - 0.552));
-    if(ry < h / 2)
-      path->lineTo(sPoint.x(), sPoint.y() + h - ry);
-    path->curveTo(sPoint.x() + rx, sPoint.y() + h, sPoint.x(), sPoint.y() + h - ry * (1 - 0.552), sPoint.x() + rx * (1 - 0.552), sPoint.y() + h);
-    if(rx < w / 2)
-      path->lineTo(sPoint.x() + w - rx, sPoint.y() + h);
-    path->curveTo(sPoint.x() + w, sPoint.y() + h - ry, sPoint.x() + w - rx * (1 - 0.552), sPoint.y() + h, sPoint.x() + w, sPoint.y() + h - ry * (1 - 0.552));
-    if(ry < h / 2)
-      path->lineTo(sPoint.x() + w, sPoint.y() + ry);
-    path->curveTo(sPoint.x() + w - rx, sPoint.y(), sPoint.x() + w, sPoint.y() + ry * (1 - 0.552), sPoint.x() + w - rx * (1 - 0.552), sPoint.y());
-    if(rx < w / 2)
-      path->lineTo(sPoint.x() + rx, sPoint.y());
+    if(rx > mSX / 2.0)
+      rx = mSX / 2.0;
+    if(ry > mSY / 2.0)
+      ry = mSY / 2.0;
+    path->beginTo(rx, 0.0);
+    path->curveTo(0.0, ry, rx * 0.448, 0.0, 0.0, ry * 0.448);
+    if(ry < mSY / 2.0)
+      path->lineTo(0.0, mSY - ry);
+    path->curveTo(rx, mSY, 0.0, mSY - ry * 0.448, rx * 0.448, mSY);
+    if(rx < mSX / 2.0)
+      path->lineTo(mSX - rx, mSY);
+    path->curveTo(mSX, mSY - ry, mSX - rx * 0.448, mSY, mSX, mSY - ry * 0.448);
+    if(ry < mSY / 2.0)
+      path->lineTo(mSX, ry);
+    path->curveTo(mSX - rx, 0.0, mSX, ry * 0.448, mSX - rx * 0.448, 0.0);
+    if(rx < mSX / 2.0)
+      path->lineTo(rx, 0.0);
   }
   else
   {
-    path->beginTo(sPoint.x(), sPoint.y());
-    path->lineTo(sPoint.x(), ePoint.y());
-    path->lineTo(ePoint.x(), ePoint.y());
-    path->lineTo(ePoint.x(), sPoint.y());
-    path->lineTo(sPoint.x(), sPoint.y());
+    path->beginTo(0.0, 0.0);
+    path->lineTo(mSX, 0.0);
+    path->lineTo(mSX, mSY);
+    path->lineTo(0.0, mSY);
+    path->lineTo(0.0, 0.0);
   }
   path->matrix(matrix());
   path->style(style());

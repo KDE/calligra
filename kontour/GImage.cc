@@ -126,7 +126,7 @@ void GImage::removePoint(int idx, bool update)
 bool GImage::contains(const KoPoint &p)
 {
   double x1, y1, x2, y2;
-  if(box.contains(p))
+  if(mBBox.contains(p))
   {
     QPoint pp = iMatrix.map(QPoint(static_cast<int>(p.x()), static_cast<int>(p.y())));
     if(pp.x() <= mImage->width() && pp.x() >= 0 && pp.y() <= mImage->height() && pp.y() >= 0)
@@ -142,7 +142,7 @@ bool GImage::findNearestPoint(const KoPoint &p, double max_dist, double &dist, i
 
 void GImage::calcBoundingBox()
 {
-  box = calcUntransformedBoundingBox(KoPoint(0, 0), KoPoint(mImage->width(), 0), KoPoint(mImage->width(), mImage->height()), KoPoint(0, mImage->height()));
+  mBBox = calcUntransformedBoundingBox(KoPoint(0, 0), KoPoint(mImage->width(), 0), KoPoint(mImage->width(), mImage->height()), KoPoint(0, mImage->height()));
 }
 
 GPath *GImage::convertToPath() const

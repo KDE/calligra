@@ -80,7 +80,7 @@ void DuplicateCmd::execute()
   {
     GObject *o = i->copy();
     o->ref();
-    o->transform(m, true);
+    o->transform(m);
     document()->activePage()->insertObject(o);
     document()->activePage()->selectObject(o);
     new_objects.append(o);

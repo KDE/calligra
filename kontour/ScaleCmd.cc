@@ -72,7 +72,7 @@ void ScaleCmd::execute()
   {
     objects[i]->transform(m1);
     objects[i]->transform(m2);
-    objects[i]->transform(m3, true);
+    objects[i]->transform(m3);
   }
   document()->activePage()->updateSelection();
 }

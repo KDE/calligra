@@ -35,53 +35,36 @@
 #include "kontour_global.h"
 #include "GPath.h"
 
-GOval::GOval(bool cFlag):
+GOval::GOval(double rx, double ry):
 GObject()
 {
-  circleFlag = cFlag;
   mType = Ellipse;
+  mRX = rx;
+  mRY = ry;
   sAngle = 270.0;
   eAngle = 270.0;
+  calcBoundingBox();
 }
 
-GOval::GOval(const QDomElement &element, bool cFlag):
+GOval::GOval(const QDomElement &element):
 GObject(element.namedItem("go").toElement())
 {
-  double x = 0;
-  double y = 0;
-  double rx = 0;
-  double ry = 0;
-  sAngle = eAngle = 270;
-
-  x = element.attribute("x").toDouble();
-  y = element.attribute("y").toDouble();
-  rx = element.attribute("rx").toDouble();
-  ry = element.attribute("ry").toDouble();
-  sAngle = element.attribute("sa").toDouble();
-  eAngle = element.attribute("ea").toDouble();
-
-  sPoint.setX(x - rx);
-  sPoint.setY(y - ry);
-  ePoint.setX(x + rx);
-  ePoint.setY(y + ry);
-  circleFlag = cFlag;
+  mRX = element.attribute("rx").toDouble();
+  mRY = element.attribute("ry").toDouble();
+  sAngle = element.attribute("a1").toDouble();
+  eAngle = element.attribute("a2").toDouble();
   calcBoundingBox();
 }
 
 GOval::GOval(const GOval &obj):
 GObject(obj)
 {
-  circleFlag = obj.circleFlag;
-  ePoint = obj.ePoint;
-  sPoint = obj.sPoint;
+  mType = obj.mType;
+  mRX = obj.mRX;
+  mRY = obj.mRY;
   sAngle = obj.sAngle;
   eAngle = obj.eAngle;
   calcBoundingBox();
-}
-
-GObject *GOval::copy() const
-{
-  return new GOval(*this);
 }
 
 void GOval::type(Type t)
@@ -89,29 +72,9 @@ void GOval::type(Type t)
   mType = t;
 }
 
-void GOval::setPoints(const KoPoint &p1, const KoPoint &p2)
+GObject *GOval::copy() const
 {
-  double xmin = p1.x();
-  double xmax = p2.x();
-  double ymin = p1.y();
-  double ymax = p2.y();
-  if(xmin > xmax)
-  {
-    double s = xmax;
-    xmax = xmin;
-    xmin = s;
-  }
-  if(ymin > ymax)
-  {
-    double s = ymax;
-    ymax = ymin;
-    ymin = s;
-  }
-  sPoint.setX(xmin);
-  sPoint.setY(ymin);
-  ePoint.setX(xmax);
-  ePoint.setY(ymax);
-  calcBoundingBox();
+  return new GOval(*this);
 }
 
 void GOval::setAngles(const double sa, const double ea)
@@ -122,7 +85,7 @@ void GOval::setAngles(const double sa, const double ea)
 
 QString GOval::typeName() const
 {
-  if(circleFlag)
+  if(mRX == mRY)
     return i18n("Circle");
   else
     return i18n("Ellipse");
@@ -130,14 +93,12 @@ QString GOval::typeName() const
 
 QDomElement GOval::writeToXml(QDomDocument &document)
 {
-  KoRect r(sPoint, ePoint);
   QDomElement oval = document.createElement("oval");
-  oval.setAttribute("x", r.left() + r.width() / 2.0);
-  oval.setAttribute("y", r.top() + r.height() / 2.0);
-  oval.setAttribute("rx", r.width() / 2.0);
-  oval.setAttribute("ry", r.height() / 2.0);
-  oval.setAttribute("sa", sAngle);
-  oval.setAttribute("ea", eAngle);
+  // TODO save type
+  oval.setAttribute("rx", mRX);
+  oval.setAttribute("ry", mRY);
+  oval.setAttribute("a1", sAngle);
+  oval.setAttribute("a2", eAngle);
   oval.appendChild(GObject::writeToXml(document));
   return oval;
 }
@@ -146,42 +107,46 @@ void GOval::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outl
 {
   setPen(p);
   setBrush(p);
-  double rx = (ePoint.x() - sPoint.x()) * 0.5;
-  double ry = (ePoint.y() - sPoint.y()) * 0.5;
-  double cx = (ePoint.x() + sPoint.x()) * 0.5;
-  double cy = (ePoint.y() + sPoint.y()) * 0.5;
-  KoVectorPath *v = KoVectorPath::ellipse(cx, cy, rx, ry);
+  KoVectorPath *v = KoVectorPath::ellipse(0.0, 0.0, mRX, mRY);
   v->transform(tmpMatrix * m);
   p->drawVectorPath(v);
   delete v;
+  if(withBasePoints)
+  {
+    int x;
+    int y;
+    KoPoint c;
+    c = segPoint[0].transform(tmpMatrix * m);
+    x = static_cast<int>(c.x());
+    y = static_cast<int>(c.y());
+    drawNode(p, x, y, false);
+    c = segPoint[1].transform(tmpMatrix * m);
+    x = static_cast<int>(c.x());
+    y = static_cast<int>(c.y());
+    drawNode(p, x, y, false);
+  }
 }
 
 void GOval::calcBoundingBox()
 {
-  KoPoint p1(sPoint.x(), sPoint.y());
-  KoPoint p2(ePoint.x(), sPoint.y());
-  KoPoint p3(ePoint.x(), ePoint.y());
-  KoPoint p4(sPoint.x(), ePoint.y());
-  box = calcUntransformedBoundingBox(p1, p2, p3, p4);
-  adjustBBox(box);
+  KoPoint p1(-mRX, 0.0);
+  KoPoint p2(0.0, mRY);
+  KoPoint p3(mRX, 0.0);
+  KoPoint p4(0.0, -mRY);
+  mBBox = calcUntransformedBoundingBox(p1, p2, p3, p4);
+  adjustBBox(mBBox);
 
-  double x, y;
+  double x, y, angle;
 
-  KoRect r(sPoint, ePoint);
-  double a = r.width() / 2.0;
-  double b = r.height() / 2.0;
-
-  double angle = sAngle * M_PI / 180.0;
-  x = a * cos(angle) + r.left() + a;
-  y = b * sin(angle) + r.top() + b;
-
+  angle = sAngle * Kontour::pi / 180.0;
+  x = mRX * cos(angle);
+  y = mRY * sin(angle);
   segPoint[0].setX(x);
   segPoint[0].setY(y);
 
-  angle = eAngle * M_PI / 180.0;
-  x = a * cos(angle) + r.left () + a;
-  y = b * sin(angle) + r.top () + b;
-
+  angle = eAngle * Kontour::pi / 180.0;
+  x = mRX * cos(angle);
+  y = mRY * sin(angle);
   segPoint[1].setX(x);
   segPoint[1].setY(y);
 }
@@ -269,9 +234,9 @@ void GOval::removePoint(int idx, bool update)
 
 bool GOval::contains(const KoPoint &p)
 {
-  double x1, y1, x2, y2;
+/*  double x1, y1, x2, y2;
 
-  if(box.contains(p))
+  if(mBBox.contains(p))
   {
     QPoint pp = iMatrix.map(QPoint(static_cast<int>(p.x()), static_cast<int>(p.y())));
     x1 = sPoint.x();
@@ -303,7 +268,7 @@ bool GOval::contains(const KoPoint &p)
       if(my - sqr <= pp.y() && pp.y() <= my + sqr)
         return true;
     }
-  }
+  }*/
   return false;
 }
 
@@ -314,19 +279,14 @@ bool GOval::findNearestPoint(const KoPoint &p, double max_dist, double &dist, in
 
 GPath *GOval::convertToPath() const
 {
-  double w = ePoint.x() - sPoint.x();
-  double h = ePoint.y() - sPoint.y();
-  double cx = (ePoint.x() + sPoint.x()) / 2.0;
-  double cy = (ePoint.y() + sPoint.y()) / 2.0;
   GPath *path = new GPath(true);
-  path->beginTo(-0.5, 0.0);
-  path->arcTo(-0.5, 0.5, 0.0, 0.5, 0.5);
-  path->arcTo(0.5, 0.5, 0.5, 0.0, 0.5);
-  path->arcTo(0.5, -0.5, 0.0, -0.5, 0.5);
-  path->arcTo(-0.5, -0.5, -0.5, 0.0, 0.5);
+  path->beginTo(-1.0, 0.0);
+  path->arcTo(-1.0, 1.0, 0.0, 1.0, 1.0);
+  path->arcTo(1.0, 1.0, 1.0, 0.0, 1.0);
+  path->arcTo(1.0, -1.0, 0.0, -1.0, 1.0);
+  path->arcTo(-1.0, -1.0, -1.0, 0.0, 1.0);
   QWMatrix m;
-  m.translate(cx, cy);
-  m.scale(w, h);
+  m.scale(mRX, mRY);
   path->matrix(m * matrix());
   path->style(style());
   return path;

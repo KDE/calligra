@@ -150,37 +150,21 @@ void GObject::matrix(QWMatrix m)
 
 void GObject::initTmpMatrix()
 {
-  kdDebug(38000) << "SET TMP MATRIX!!!" << endl;
   tmpMatrix = tMatrix;
 }
 
-void GObject::transform(const QWMatrix &m, bool update)
+void GObject::transform(const QWMatrix &m)
 {
   tMatrix = tMatrix * m;
-  if(update)
-  {
-    iMatrix = tMatrix.invert();
-    initTmpMatrix();
-    calcBoundingBox();
-  }
+  iMatrix = tMatrix.invert();
+  initTmpMatrix();
+  calcBoundingBox();
 }
 
-void GObject::ttransform(const QWMatrix &m, bool update)
+void GObject::ttransform(const QWMatrix &m)
 {
   tmpMatrix = tmpMatrix * m;
-  if(update)
-    calcBoundingBox();
-}
-  
-bool GObject::contains(const KoPoint &p)
-{
-  kdDebug(38000) << "GObject::contains" << endl;
-  return box.contains(p);
-}
-
-bool GObject::intersects(const KoRect &r)
-{
-  return r.intersects(box);
+  calcBoundingBox();
 }
 
 GObject *GObject::objectFactory(const QDomElement &element)
@@ -226,17 +210,6 @@ QWMatrix GObject::toMatrix(const QDomElement &matrix)
   return QWMatrix(m11, m12, m21, m22, dx, dy);
 }
 
-void GObject::updateBoundingBox(const KoRect &r)
-{
-  box = r.normalize();
-}
-
-void GObject::updateBoundingBox(const KoPoint &p1, const KoPoint &p2)
-{
-  KoRect r(p1, p2);
-  updateBoundingBox(r);
-}
-
 KoRect GObject::calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint &tright, const KoPoint &bright, const KoPoint &bleft)
 {
   KoPoint p[4];
@@ -260,20 +233,6 @@ KoRect GObject::calcUntransformedBoundingBox(const KoPoint &tleft, const KoPoint
     r.setBottom(QMAX(p[i].y(), r.bottom()));
   }
   return r;
-}
-
-void GObject::updateRegion(bool recalcBBox)
-{
-  kdDebug(38000) << "GObject::updateRegion()" << endl;
-/*  KoRect newbox = boundingBox();//redrawBox();
-  if(recalcBBox)
-  {
-    calcBoundingBox();
-    newbox = boundingBox().unite(newbox);//redrawBox().unite(oldbox);
-  }
-
-  layer()->page()->updateHandle();
-  layer()->page()->document()->emitChanged(newbox, true);*/
 }
 
 void GObject::setPen(KoPainter *p)

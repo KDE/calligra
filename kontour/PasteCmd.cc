@@ -72,7 +72,7 @@ void PasteCmd::execute()
     for(GObject *o = objects.first(); o != 0L; o = objects.next())
     {
       o->ref();
-      o->transform(m, true);
+      o->transform(m);
       document()->activePage()->selectObject(o);
     }
   }

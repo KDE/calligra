@@ -46,6 +46,6 @@ void TranslateCmd::execute()
   /* save the states */
   TransformationCmd::execute();
   for(unsigned int i = 0; i < objects.count(); i++)
-    objects[i]->transform(m, true);
+    objects[i]->transform(m);
   document()->activePage()->updateSelection();
 }

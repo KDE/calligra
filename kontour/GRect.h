@@ -32,19 +32,13 @@ class GRect : public GObject
 {
   Q_OBJECT
 public:
-  GRect(bool roundness = false);
+  GRect(double sx, double sy, bool roundness = false);
   GRect(const QDomElement &element);
   GRect(const GRect &obj);
 
   GObject *copy() const;
 
   bool isSquare() const;
-
-  const KoPoint &startPoint() const {return sPoint; }
-  void startPoint(const KoPoint &p);
-
-  const KoPoint &endPoint() const {return ePoint; }
-  void endPoint(const KoPoint &p);
 
   QString typeName () const;
   QDomElement writeToXml(QDomDocument &document);
@@ -61,8 +55,8 @@ public:
   bool isConvertible() const;
 
 private:
-  KoPoint     sPoint;           // Start point
-  KoPoint     ePoint;           // End point
+  double      mSX;              // Width
+  double      mSY;              // Height
   double      mXRoundness;      // Rectangle roundness
   double      mYRoundness;      // Rectangle roundness
 };

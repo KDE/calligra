@@ -34,20 +34,16 @@ class GOval : public GObject
 public:
   enum Type{ Ellipse, Pie, Segment };
 
-  GOval(bool cFlag = false);
-  GOval(const QDomElement &element, bool cFlag = false);
+  GOval(double rx, double ry);
+  GOval(const QDomElement &element);
   GOval(const GOval &obj);
 
-  virtual GObject *copy() const;
+  GObject *copy() const;
 
   Type type() const {return mType; }
   void type(Type t);
 
-  bool isCircle() const {return circleFlag; }
-
-  const KoPoint &startPoint() const {return sPoint; }
-  const KoPoint &endPoint() const {return ePoint; }
-  void setPoints(const KoPoint &p1, const KoPoint &p2);
+  bool isCircle() const;
 
   void setAngles(const double sa, const double ea);
 
@@ -66,13 +62,12 @@ public:
   bool isConvertible() const;
 
 private:
-  Type mType;            // Oval type
-  KoPoint sPoint;        // Start point
-  KoPoint ePoint;        // End point
-  double sAngle;         // Start angle
-  double eAngle;         // End angle
-  bool circleFlag:1;     // Circle flag
-  KoPoint segPoint[2];   //
+  Type        mType;              // Oval type
+  double      mRX;                //
+  double      mRY;                //
+  double      sAngle;             // Start angle
+  double      eAngle;             // End angle
+  KoPoint     segPoint[2];        //
 };
 
 #endif

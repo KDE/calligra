@@ -168,17 +168,17 @@ void RectTool::processEvent(QEvent *e)
       }
       else
       {
-        GRect *rect = new GRect(mRoundness);
         double zoom = toolController()->view()->activeDocument()->zoomFactor();
-        rect->startPoint(KoPoint((r.left() - canvas->xOffset()) / zoom, (r.top() - canvas->yOffset()) / zoom));
-        rect->endPoint(KoPoint((r.right() - canvas->xOffset()) / zoom, (r.bottom() - canvas->yOffset()) / zoom));
+        GRect *rect = new GRect(r.width() / zoom, r.height() / zoom, mRoundness);
+        QWMatrix m;
+        m = m.translate((r.left() - canvas->xOffset()) / zoom, (r.top() - canvas->yOffset()) / zoom);
+        rect->transform(m);
         CreateRectCmd *cmd = new CreateRectCmd(toolController()->view()->activeDocument(), rect);
         KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
         rect->style(doc->document()->styles()->style());  // copy current style
 	if(!mFill)
 	  rect->style()->filled(GStyle::NoFill);
         doc->history()->addCommand(cmd);
-//        page->updateSelection();
       }
       state = S_Init;
     }

@@ -76,7 +76,7 @@ void InsertImageTool::processEvent(QEvent *e)
     double zoom = toolController()->view()->activeDocument()->zoomFactor();
     QWMatrix m;
     m = m.translate((static_cast<QMouseEvent *>(e)->x() - canvas->xOffset()) / zoom, (static_cast<QMouseEvent *>(e)->y() - canvas->yOffset()) / zoom);
-    img->transform(m, true);
+    img->transform(m);
     CreateImageCmd *cmd = new CreateImageCmd(toolController()->view()->activeDocument(), img);
     doc->history()->addCommand(cmd);
   }

@@ -457,7 +457,7 @@ void GPath::calcBoundingBox()
   QPtrListIterator<GSegment> seg(segments);
   if(!seg.current())
   {
-    box = KoRect();
+    mBBox = KoRect();
     return;
   }
   double xmin = (*seg)->point(0).x();
@@ -480,8 +480,8 @@ void GPath::calcBoundingBox()
     if(y > ymax)
       ymax = y;
   }
-  box = KoRect(xmin, ymin, xmax - xmin, ymax - ymin).transform(tmpMatrix);
-  adjustBBox(box);
+  mBBox = KoRect(xmin, ymin, xmax - xmin, ymax - ymin).transform(tmpMatrix);
+  adjustBBox(mBBox);
 }
 
 GPath *GPath::convertToPath() const
