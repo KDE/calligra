@@ -110,8 +110,6 @@
   <Action name="screen_next"/>
   <Action name="screen_last"/>
   <Separator/>
-  <Action name="screen_skip"/>
-  <Separator/>
   <Action name="screen_pencolor"/>
   <Action name="screen_penwidth"/>
   <Separator/>
