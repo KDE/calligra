@@ -342,14 +342,28 @@ void KoDocument::slotAutoSave()
 
 KAction *KoDocument::action( const QDomElement &element ) const
 {
-    return d->m_views.getFirst()->action( element );
+    // First look in the document itself
+    KAction* act = KParts::ReadWritePart::action( element );
+    if ( act )
+        return act;
+
+    Q_ASSERT( d->m_bSingleViewMode );
+    // Then look in the first view (this is for the single view mode)
+    if ( !d->m_views.isEmpty() )
+        d->m_views.getFirst()->action( element );
+    else
+        return 0L;
 }
 
 QDomDocument KoDocument::domDocument() const
 {
-//  assert(!d->m_views.isEmpty());
-//  return d->m_views.getFirst()->domDocument();
-    return QDomDocument();
+    // When embedded into e.g. konqueror, we want the view's GUI (hopefully a reduced one)
+    // to be used.
+    Q_ASSERT( d->m_bSingleViewMode );
+    if ( d->m_views.isEmpty() )
+        return QDomDocument();
+    else
+        return d->m_views.getFirst()->domDocument();
 }
 
 void KoDocument::setManager( KParts::PartManager *manager )
@@ -1009,9 +1023,18 @@ bool KoDocument::openFile()
 
     if ( ok && d->m_bSingleViewMode )
     {
+        // See addClient below
+        KXMLGUIFactory* guiFactory = factory();
+        assert( guiFactory );
+        guiFactory->removeClient( this );
+
         KoView *view = createView( d->m_wrapperWidget );
         d->m_wrapperWidget->setKoView( view );
         view->show();
+
+        // Ok, now we have a view, so action() and domDocument() will work as expected
+        // -> rebuild GUI
+        guiFactory->addClient( this );
     }
 
     // We decided not to save in the file's original format by default
