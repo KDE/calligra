@@ -154,7 +154,8 @@ int Counter::number( const KWTextParag *paragraph )
                 ( otherCounter->m_numbering == NUM_CHAPTER ) &&         // ...same number type.
                 ( otherCounter->m_depth <= m_depth ) )        // ...same or higher level.
             {
-                if ( otherCounter->m_depth == m_depth )
+                if ( ( otherCounter->m_depth == m_depth ) &&
+                   ( otherCounter->m_style == m_style ) )
                 {
                     // Found a preceeding paragraph of exactly our type!
                     m_cache.number = otherCounter->number( otherParagraph ) + 1;
@@ -180,7 +181,8 @@ int Counter::number( const KWTextParag *paragraph )
                 if ( ( otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
                     ( otherCounter->m_depth <= m_depth ) )    // ...same or higher level.
                 {
-                    if ( otherCounter->m_depth == m_depth )
+                    if ( ( otherCounter->m_depth == m_depth ) &&
+                       ( otherCounter->m_style == m_style ) )
                     {
                         // Found a preceeding paragraph of exactly our type!
                         m_cache.number = otherCounter->number( otherParagraph ) + 1;
@@ -348,9 +350,6 @@ Counter::Style Counter::style() const
 {
     switch ( m_style )
     {
-    case STYLE_NONE:
-        return STYLE_NUM;
-        break;
     case STYLE_DISCBULLET:
     case STYLE_SQUAREBULLET:
     case STYLE_CIRCLEBULLET:
