@@ -45,13 +45,24 @@ KWord13OasisGenerator::~KWord13OasisGenerator( void )
 
 bool KWord13OasisGenerator::prepare( KWord13Document& kwordDocument )
 {
-    if ( m_kwordDocument && ( (void*) m_kwordDocument ) != ( (void*) &kwordDocument ) )
+    if ( !m_kwordDocument )
+    {
+        kdError(30520) << "No document declared!" << endl;
+    }
+    else if ( m_kwordDocument && ( (void*) m_kwordDocument ) != ( (void*) &kwordDocument ) )
     {
         kdWarning(30520) << "KWord Document is different!" <<endl;
     }
     
     m_kwordDocument = &kwordDocument;
 
+    // Declare styles
+    for ( QValueList<KWord13Layout>::Iterator it = m_kwordDocument->m_styles.begin();
+        it != m_kwordDocument->m_styles.end(); ++it)
+    {
+        declareStyle( *it );    
+    }
+    
     // ### TODO
     
     return true;
