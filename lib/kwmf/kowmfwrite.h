@@ -36,31 +36,30 @@ class KoWmfWritePrivate;
  * most of the functions are compatible with QPainter format
  *
  * sample of utilization :
- *   KoWmfWrite  wmf;
+ *   KoWmfWrite  wmf("/home/test.wmf");
  *   wmf.begin();
  *   wmf.setWindow(0, 0, 200, 200);
  *   wmf.drawRect(10, 20, 50, 120);
  *   wmf.end();
- *   wmf.save("/home/test.wmf");
  */
 
 class KoWmfWrite
 {
 public:
-    KoWmfWrite();
+    KoWmfWrite( const QString& fileName );
     virtual ~KoWmfWrite();
-
-    /**
-     * Save WMF file. Returns true on success.
-     */
-    bool save( const QString& fileName );
-//    bool save( const QByteArray& array ) { return true; }
 
 
     // -------------------------------------------------------------------------
     // virtual Painter
     // for a good documentation : check QPainter documentation
+    /**
+     * Open the file. Returns true on success.
+     */
     bool  begin();
+    /**
+     * Close the file. Returns true on success.
+     */
     bool  end();
     void  save();
     void  restore();

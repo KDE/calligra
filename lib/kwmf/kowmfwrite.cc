@@ -32,59 +32,29 @@
 class KoWmfWritePrivate
 {
 public:
-    bool     mIsValid;
     QRect    mBBox;      // bounding rectangle
     int      mDpi;       // number of point per inch for the default size
     int      mMaxRecordSize;
 
     // memory allocation for WMF file
-    QBuffer  *mBuffer;
+    QFile mFileOut;
     QDataStream mSt;
-    int         mOffsetFirstRecord;
 };
 
 
 
-KoWmfWrite::KoWmfWrite() {
+KoWmfWrite::KoWmfWrite( const QString& fileName ) {
     d = new KoWmfWritePrivate;    
+    
     d->mDpi = 1024;
-    d->mIsValid = false;
     d->mMaxRecordSize = 0;
-
-    // initialize memory buffer
-    d->mBuffer = new QBuffer(  );
-    d->mBuffer->open( IO_ReadWrite );
-    d->mSt.setDevice( d->mBuffer );
-    d->mSt.setByteOrder( QDataStream::LittleEndian );
+    d->mFileOut.setName( fileName );
 }
 
 KoWmfWrite::~KoWmfWrite() {
-    d->mBuffer->close();
-    delete d->mBuffer;
     delete d;
 }
 
-
-bool KoWmfWrite::save( const QString &fileName ) {
-    QFile file( fileName );
-
-    if ( !d->mIsValid ) {
-        kdDebug() << "KWinMetaFile::save : Invalid WMF !" << endl;
-        return false;
-    }
-
-    if ( !file.open( IO_WriteOnly ) )
-    {
-        kdDebug() << "KWinMetaFile::save : Cannot open file " << QFile::encodeName(fileName) << endl;
-        return false;
-    }
-
-    d->mBuffer->at( 0 );
-    file.writeBlock( d->mBuffer->buffer() );
-
-    file.close();
-    return true;
-}
 
 void KoWmfWrite::setDefaultDpi( int dpi ) { 
     d->mDpi = dpi; 
@@ -95,7 +65,14 @@ void KoWmfWrite::setDefaultDpi( int dpi ) {
 // Virtual Painter => create the WMF
 
 bool KoWmfWrite::begin() {
-    // TODO : reset du buffer
+    
+    if ( !d->mFileOut.open( IO_WriteOnly ) )
+    {
+        kdDebug() << "Cannot open file " << QFile::encodeName(d->mFileOut.name()) << endl;
+        return false;
+    }
+    d->mSt.setDevice( &d->mFileOut );
+    d->mSt.setByteOrder( QDataStream::LittleEndian );
 
     // reserved placeable and standard header
     for ( int i=0 ; i < 10 ; i++ ) {
@@ -106,6 +83,7 @@ bool KoWmfWrite::begin() {
     for ( int i=0 ; i < 4 ; i++ ) {
         d->mSt << (Q_UINT32)8 << (Q_UINT16)0x02FA << (Q_UINT16)0 << (Q_UINT32)0 << (Q_UINT32)0;
     }
+    d->mMaxRecordSize = 8;
 
     return true;
 }
@@ -127,16 +105,16 @@ bool KoWmfWrite::end() {
     checksum = KoWmfReadPrivate::calcCheckSum( &pheader );
     
     // write headers
-    d->mBuffer->at( 0 );
+    d->mFileOut.at( 0 );
     d->mSt << (Q_UINT32)0x9AC6CDD7 << (Q_UINT16)0;
     d->mSt << (Q_INT16)d->mBBox.left() << (Q_INT16)d->mBBox.top() << (Q_INT16)d->mBBox.right() << (Q_INT16)d->mBBox.bottom();
     d->mSt << (Q_UINT16)d->mDpi << (Q_UINT32)0 << checksum;
-    d->mSt << (Q_UINT16)1 << (Q_UINT16)9 << (Q_UINT16)0x300 << (Q_UINT32)(d->mBuffer->size()/2);
-    d->mSt << (Q_UINT16)4 << (Q_UINT32)30 << (Q_UINT16)0;
+    d->mSt << (Q_UINT16)1 << (Q_UINT16)9 << (Q_UINT16)0x300 << (Q_UINT32)(d->mFileOut.size()/2);
+    d->mSt << (Q_UINT16)4 << (Q_UINT32)d->mMaxRecordSize << (Q_UINT16)0;
 
-    d->mIsValid = true;
-
-    return 0;
+    d->mFileOut.close();
+    
+    return true;
 }
 
 
@@ -269,6 +247,8 @@ void KoWmfWrite::drawRoundRect( int left, int top, int width, int height , int r
 
     d->mSt << (Q_UINT32)9 << (Q_UINT16)0x061C << (Q_UINT16)heightCorner << (Q_UINT16)widthCorner;
     d->mSt << (Q_UINT16)rec.bottom() << (Q_UINT16)rec.right() << (Q_UINT16)rec.top() << (Q_UINT16)rec.left();
+    
+    d->mMaxRecordSize = QMAX( d->mMaxRecordSize, 9 );
 }
 
 
@@ -293,6 +273,8 @@ void KoWmfWrite::drawArc( int left, int top, int width, int height , int a, int 
     d->mSt << (Q_UINT16)(yCenter + offYStart) << (Q_UINT16)(xCenter + offXStart);
     d->mSt << (Q_UINT16)(top + height) << (Q_UINT16)(left + width);
     d->mSt << (Q_UINT16)top << (Q_UINT16)left;
+
+    d->mMaxRecordSize = QMAX( d->mMaxRecordSize, 11 );
 }
 
 
@@ -309,6 +291,8 @@ void KoWmfWrite::drawPie( int left, int top, int width, int height , int a, int 
     d->mSt << (Q_UINT16)(yCenter + offYStart) << (Q_UINT16)(xCenter + offXStart);
     d->mSt << (Q_UINT16)(top + height) << (Q_UINT16)(left + width);
     d->mSt << (Q_UINT16)top << (Q_UINT16)left;
+
+    d->mMaxRecordSize = QMAX( d->mMaxRecordSize, 11 );
 }
 
 
@@ -325,18 +309,28 @@ void KoWmfWrite::drawChord( int left, int top, int width, int height , int a, in
     d->mSt << (Q_UINT16)(yCenter + offYStart) << (Q_UINT16)(xCenter + offXStart);
     d->mSt << (Q_UINT16)(top + height) << (Q_UINT16)(left + width);
     d->mSt << (Q_UINT16)top << (Q_UINT16)left;
+
+    d->mMaxRecordSize = QMAX( d->mMaxRecordSize, 11 );
 }
 
 
 void KoWmfWrite::drawPolyline( const QPointArray &pa ) {
-    d->mSt << (Q_UINT32)(4 + (pa.size() * 2)) << (Q_UINT16)0x0325 << (Q_UINT16)pa.size();
+    int size = 4 + (pa.size() * 2);
+    
+    d->mSt << (Q_UINT32)size << (Q_UINT16)0x0325 << (Q_UINT16)pa.size();
     pointArray( pa );
+
+    d->mMaxRecordSize = QMAX( d->mMaxRecordSize, size );
 }
 
 
 void KoWmfWrite::drawPolygon( const QPointArray &pa, bool  ) {
-    d->mSt << (Q_UINT32)(4 + (pa.size() * 2)) << (Q_UINT16)0x0324 << (Q_UINT16)pa.size();
+    int size = 4 + (pa.size() * 2);
+    
+    d->mSt << (Q_UINT32)size << (Q_UINT16)0x0324 << (Q_UINT16)pa.size();
     pointArray( pa );
+    
+    d->mMaxRecordSize = QMAX( d->mMaxRecordSize, size );
 }
 
 
@@ -346,7 +340,8 @@ void KoWmfWrite::drawPolyPolygon( int numberPoly, const QPointArray pa[], bool  
     for ( int i=0 ; i < numberPoly ; i++ ) {
         sizeArrayPoly += (pa[ i ].size() * 2);
     }
-    d->mSt << (Q_UINT32)(4 + numberPoly + sizeArrayPoly) << (Q_UINT16)0x0538 << (Q_UINT16)numberPoly;
+    int size = 4 + numberPoly + sizeArrayPoly;
+    d->mSt << (Q_UINT32)size << (Q_UINT16)0x0538 << (Q_UINT16)numberPoly;
 
     // number of point for each Polygon
     for ( int i=0 ; i < numberPoly ; i++ ) {
@@ -357,6 +352,8 @@ void KoWmfWrite::drawPolyPolygon( int numberPoly, const QPointArray pa[], bool  
     for ( int i=0 ; i < numberPoly ; i++ ) {
         pointArray( pa[ i ] );
     }
+
+    d->mMaxRecordSize = QMAX( d->mMaxRecordSize, size );
 }
 
 
