@@ -19,7 +19,7 @@ DCOPRef KSpreadDocIface::map()
 
 QString KSpreadDocIface::url()
 {
-    return m_doc->url();
+    return m_doc->url().url();
 }
 
 bool KSpreadDocIface::isModified()

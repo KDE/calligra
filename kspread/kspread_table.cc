@@ -3967,7 +3967,7 @@ void ChartChild::update()
 
 bool ChartChild::save( ostream& out )
 {
-    QString u = document()->url();
+    QString u = document()->url().url();
     QString mime = document()->mimeType();
 
     out << indent << "<CHART url=\"" << u.ascii() << "\" mime=\"" << mime.ascii()<< "\">"

@@ -535,13 +535,13 @@ QString KSpreadDoc::completeHeading( const char *_data, int _page, const char *_
 {
     QString page;
     page.sprintf( "%i", _page );
-    QString f = m_strFileURL.data();
+    QString f = m_strFileURL;
     if ( f.isNull() )
 	f = "";
     QString n = "";
     if ( f != "" )
     {
-	KURL u( f.data() );
+	KURL u( f );
 	n = u.filename();
     }
     QString t = QTime::currentTime().toString().copy();
