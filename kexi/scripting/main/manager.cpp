@@ -74,11 +74,6 @@ bool Manager::addModule(Object* module)
     return true;
 }
 
-bool Manager::addQObject(QObject* object, const QString& name)
-{
-    return addModule(new QtObject(object, name.isEmpty() ? object->name() : name));
-}
-
 ScriptContainer* Manager::getScriptContainer(const QString& scriptname)
 {
     if(m_scriptcontainers.contains(scriptname))

@@ -20,8 +20,8 @@
 #include "qtobject.h"
 #include "object.h"
 #include "variant.h"
-#include "../main/scriptcontainer.h"
 #include "signalhandler.h"
+#include "../main/scriptcontainer.h"
 
 #include <qobject.h>
 #include <qsignal.h>
@@ -33,11 +33,12 @@
 
 using namespace Kross::Api;
 
-QtObject::QtObject(QObject* object, const QString& name)
+QtObject::QtObject(ScriptContainer* scriptcontainer, QObject* object, const QString& name)
     : Kross::Api::Class<QtObject>(name)
+    , m_scriptcontainer(scriptcontainer)
     , m_object(object)
 {
-    m_signalhandler = new SignalHandler(this);
+    m_signalhandler = new SignalHandler(scriptcontainer, this);
 
     addFunction("propertyNames", &QtObject::propertyNames,
         Kross::Api::ArgumentList(),
@@ -119,7 +120,7 @@ QObject* QtObject::getObject()
     return m_object;
 }
 
-Kross::Api::Object* QtObject::propertyNames(Kross::Api::List* args)
+Kross::Api::Object* QtObject::propertyNames(Kross::Api::List*)
 {
     return Kross::Api::Variant::create(
            QStringList::fromStrList(m_object->metaObject()->propertyNames(false)),

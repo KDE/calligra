@@ -31,9 +31,9 @@ using namespace Kross::Api;
 ScriptContainer::ScriptContainer(Manager* manager, const QString& name)
     : QObject()
     , m_manager(manager)
-    , m_name(name)
     , m_script(0)
     , m_signalhandler(0)
+    , m_name(name)
 {
 }
 
@@ -41,6 +41,14 @@ ScriptContainer::~ScriptContainer()
 {
     delete m_signalhandler;
     finalize();
+}
+
+bool ScriptContainer::addQObject(QObject* object, const QString& name)
+{
+    QString n = name.isEmpty() ? object->name() : name;
+    if(m_qtobjects.contains(n)) return false;
+    m_qtobjects.replace(n, new QtObject(this, object, n));
+    return true;
 }
 
 const QString& ScriptContainer::getName()

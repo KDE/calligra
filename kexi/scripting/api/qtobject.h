@@ -32,6 +32,7 @@ namespace Kross { namespace Api {
     class Variant;
     class ScriptContainer;
     class SignalHandler;
+    class ScriptContrainer;
 
     /**
      * Class to wrap \a QObject or inherited instances.
@@ -41,18 +42,19 @@ namespace Kross { namespace Api {
      */
     class QtObject : public Kross::Api::Class<QtObject>
     {
-            friend class SignalHandler;
-
         public:
 
             /**
              * Constructor.
              *
+             * \param scriptcontrainer The \a ScriptContrainer
+             *       instance this QObject should be
+             *       wrapped for.
              * \param object The \a QObject instance this
              *        class wraps.
              * \param name The name this QtObject has.
              */
-            QtObject(QObject* object, const QString& name = "qtobject");
+            QtObject(ScriptContainer* scriptcontainer, QObject* object, const QString& name = "qtobject");
 
             /**
              * Destructor.
@@ -73,6 +75,7 @@ namespace Kross { namespace Api {
             QObject* getObject();
 
         private:
+            ScriptContainer* m_scriptcontainer;
             QObject* m_object;
             SignalHandler* m_signalhandler;
 

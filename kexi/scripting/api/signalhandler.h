@@ -34,14 +34,14 @@ namespace Kross { namespace Api {
     // Forward declarations.
     class ScriptContainer;
     class QtObject;
+    class SignalHandlerConnection;
 
     class SignalHandler : public QObject
     {
             Q_OBJECT
 
         public:
-            explicit SignalHandler(QtObject* qtobj);
-            explicit SignalHandler(ScriptContainer* scriptcontainer);
+            SignalHandler(ScriptContainer* scriptcontainer, QtObject* qtobj = 0);
             ~SignalHandler();
 
             bool connect(QObject *sender, const char *signal, const QString& functionname);
@@ -51,35 +51,16 @@ namespace Kross { namespace Api {
             //void connect(const char *signal, QObject *receiver, const char *slot);
             //bool disconnect(const char *signal, QObject *receiver, const char *slot);
 
-            //QObject *currentObject() const { return object; }
-
-        public slots:
-            //void setCurrentObject(QObject *newObject);
-
-        private slots:
-            void callback();
-            void callback(QString& s) {
-                QObject* o = (QObject*)sender();
-                kdDebug()<<QString("SignalHandler callback(QString) sender='%1' param1='%2'").arg(o->name()).arg(s)<<endl;
-            }
-
         private:
             ScriptContainer* m_scriptcontainer;
             QtObject* m_qtobj;
+            QValueList<SignalHandlerConnection*> m_connections;
 
-            struct Connection
-            {
-                QGuardedPtr<QObject> sender;
-                //QGuardedPtr<QObject> receiver;
-                const char* signal;
-                QString function;
-            };
+            bool connect(SignalHandlerConnection* connection);
+            bool disconnect(SignalHandlerConnection* connection);
 
-            bool connect(const Connection& connection);
-            bool disconnect(const Connection& connection);
-
-            //QGuardedPtr<QObject> m_object;
-            QValueList<Connection> m_connections;
+        private slots:
+            void callback();
     };
 
 }}

@@ -95,20 +95,6 @@ namespace Kross { namespace Api {
             bool addModule(Object* module);
 
             /**
-             * Add a QObject to publish it's slots, signals
-             * and properties by using \a Kross::Api::QtObject
-             * as QObject-wrapper.
-             *
-             * \param object The QObject to wrap and publish.
-             * \param name The name the QObject should be
-             *        accessible as. If QString::null, then
-             *        the QObject's name() will be used.
-             * \return true if the QObject was successfully
-             *         added else false.
-             */
-            bool addQObject(QObject* object, const QString& name = QString::null);
-
-            /**
              * Return the existing \a ScriptContainer with scriptname
              * or create a new \a ScriptContainer instance and associate
              * the passed scriptname with it.

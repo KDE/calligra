@@ -19,49 +19,52 @@
 
 #include "signalhandler.h"
 
-//#include "object.h"
 #include "interpreter.h"
 #include "qtobject.h"
-//#include "script.h"
 #include "../main/scriptcontainer.h"
-//#include "python/pythonextension.h"
-//#include "python/pythonmodule.h"
-//#include "../python/pythoninterpreter.h"
-//#include "../kjs/kjsinterpreter.h"
 
 using namespace Kross::Api;
 
-SignalHandler::SignalHandler(QtObject* qtobj)
-    : QObject(qtobj->m_object)
-    , m_scriptcontainer(0)
-    , m_qtobj(qtobj)
-{
-}
+namespace Kross { namespace Api {
 
-SignalHandler::SignalHandler(ScriptContainer* scriptcontainer)
-    : QObject(scriptcontainer)
+    /// Private class to handle Qt signal/slot connections.
+    class SignalHandlerConnection
+    {
+        public:
+            QGuardedPtr<QObject> sender;
+            //QGuardedPtr<QObject> receiver;
+            const char* signal;
+            QString function;
+    };
+
+}}
+
+SignalHandler::SignalHandler(ScriptContainer* scriptcontainer, QtObject* qtobj)
+    : QObject(scriptcontainer) //QObject(qtobj ? qtobj->getObject() : scriptcontainer)
     , m_scriptcontainer(scriptcontainer)
-    , m_qtobj(0)
+    , m_qtobj(qtobj)
 {
 }
 
 SignalHandler::~SignalHandler()
 {
+    for(QValueList<SignalHandlerConnection*>::Iterator it = m_connections.begin(); it != m_connections.end(); ++it)
+        delete *it;
 }
 
-//void SignalHandler::connect(QObject *sender, const char *signal, const char *slot)
 bool SignalHandler::connect(QObject *sender, const char *signal, const QString& functionname)
 {
-    Connection conn;
-    conn.sender = sender;
-    conn.signal = signal;
-    conn.function = functionname;
-    m_connections << conn;
-    return connect(conn);
+    SignalHandlerConnection* connection = new SignalHandlerConnection();
+    connection->sender = sender;
+    connection->signal = signal;
+    connection->function = functionname;
+    m_connections << connection;
+    return connect(connection);
 }
 
 bool SignalHandler::disconnect(QObject *sender, const char *signal, const QString& /*functionname*/)
 {
+    /*
     for(QValueList<Connection>::Iterator it = m_connections.begin(); it != m_connections.end(); ++it) {
         Connection conn = *it;
         if((QObject*)conn.sender == sender
@@ -74,42 +77,26 @@ bool SignalHandler::disconnect(QObject *sender, const char *signal, const QStrin
         }
     }
     return false;
-}
-
-/*
-void SignalHandler::connect(const char *signal, QObject *receiver, const char *slot)
-{
-}
-
-bool SignalHandler::disconnect(const char *signal, QObject *receiver, const char *slot)
-{
-}
-*/
-
-bool SignalHandler::connect(const Connection& connection)
-{
-    if(connection.sender) {
-
-        QString s = "blaaaaaaaaaaaaaaa";
-        QObject::connect( (QObject*)connection.sender, connection.signal,
-                          this, SLOT(callback()) );
-                          //this, connection.slot ); //SLOT(callback()) );
-                          //connection.slot
-    }
-
-    /*
-    if (!object) return;
-    if (!connection.sender && !connection.receiver) return;
-    if (connection.sender)
-        QObject::connect((QObject*)connection.sender, connection.signal, (QObject*)object, connection.slot);
-    else
-        QObject::connect((QObject*)object, connection.signal, (QObject*)connection.receiver, connection.slot);
-    }
     */
+    return false;
+}
+
+bool SignalHandler::connect(SignalHandlerConnection* connection)
+{
+    if(! connection || ! connection->sender) {
+        kdDebug() << "SignalHandler::connect() failed cause connection is invalid." << endl;
+        return false;
+    }
+    QObject::connect(
+        (QObject*)connection->sender,
+        connection->signal,
+        this,
+        SLOT(callback())
+    );
     return true;
 }
 
-bool SignalHandler::disconnect(const Connection& connection)
+bool SignalHandler::disconnect(SignalHandlerConnection* connection)
 {
     //TODO
     return true;
@@ -120,20 +107,19 @@ void SignalHandler::callback()
     QObject* senderobj = (QObject*)sender();
     if(! senderobj)
         throw RuntimeException("SignalHandler::callback() failed cause sender is not a QObject.");
+    kdDebug()<<QString("SignalHandler callback() sender='%1'").arg(senderobj->name())<<endl;
 
-    for(QValueList<Connection>::Iterator it = m_connections.begin(); it != m_connections.end(); ++it) {
-        Connection conn = *it;
-        if((QObject*)conn.sender == senderobj)
+    for(QValueList<SignalHandlerConnection*>::Iterator it = m_connections.begin(); it != m_connections.end(); ++it) {
+
+        if(static_cast<QObject*>((*it)->sender) == senderobj
            //&& qstrcmp(conn.signal, signal) == 0
-           //&& qstrcmp(conn.slot, slot) == 0)
+           //&& qstrcmp(conn.slot, slot) == 0) //TODO
+        )
         {
             kdDebug() << QString("SignalHandler callback() sender='%1' signal='%2' slot='%3'")
-                         .arg(senderobj->name()).arg(conn.signal).arg(conn.function) << endl;
-
-//TODO
-if(m_scriptcontainer) m_scriptcontainer->callFunction(conn.function);
+                         .arg(senderobj->name()).arg((*it)->signal).arg((*it)->function) << endl;
+            //TODO
+            m_scriptcontainer->callFunction((*it)->function);
         }
     }
-
-    kdDebug()<<QString("SignalHandler callback() sender='%1'").arg(senderobj->name())<<endl;
 }

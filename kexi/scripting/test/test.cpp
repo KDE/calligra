@@ -92,7 +92,6 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
 
     //TESTCASE
     TestObject* testobject = new TestObject(app);
-    manager->addQObject(testobject);
 
     // Add modules that should be accessible by scripting. Those
     // modules are wrappers around functionality you want to be
@@ -109,6 +108,7 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
     //scriptcontainer->enableModule("KexiDB");
     scriptcontainer->setInterpreterName(interpretername);
     scriptcontainer->setCode(scriptcode);
+    scriptcontainer->addQObject(testobject);
 
     try {
         scriptcontainer->execute();
