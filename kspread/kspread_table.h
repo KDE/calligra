@@ -598,7 +598,7 @@ public:
      * @param x2, y2: values from target cell
      * @param cpLayout: if true: cell layout (format) gets copied, too
      */
-  void copyCells( int x1, int y1, int x2, int y2, bool cpLayout );
+    void copyCells( int x1, int y1, int x2, int y2, bool cpLayout );
     void setSeries( const QPoint &_marker, double start, double end, double step, Series mode, Series type );
 
     /**
@@ -1237,9 +1237,9 @@ protected:
     QPoint m_marker;
     QPoint m_cursorPosition;
 
-  QPoint m_chooseMarker;
-  QPoint m_chooseAnchor;
-  QPoint m_chooseCursor;
+    QPoint m_chooseMarker;
+    QPoint m_chooseAnchor;
+    QPoint m_chooseCursor;
 
     /**
      * Indicates whether the table should paint the page breaks.
@@ -1431,6 +1431,16 @@ public:
     QString footRight()const { if ( m_footRight.isNull() ) return ""; return m_footRight; }
 
     /**
+     * Returns the print range. 
+     * Returns ( QPoint (1, 1), QPoint(KS_colMax, KS_rowMax) ) if nothing is defined
+     */
+    QRect printRange() const { return m_printRange; }
+    /**
+     * Sets the print range. 
+     * Set it to ( QPoint (1, 1), QPoint(KS_colMax, KS_rowMax) ) to undefine it
+     */
+    void setPrintRange( QRect _printRange ) { m_printRange = _printRange; }
+    /**
      * Replaces in _text all _search text parts by _replace text parts.
      * Included is a test to not change if _search == _replace.
      * The arguments should not include neither the beginning "<" nor the leading ">", this is already
@@ -1540,7 +1550,10 @@ protected:
      */
     QString m_footMid;
 
-
+    /**
+     * Defined printable area
+     */
+    QRect m_printRange;
 
 public:
     // see kspread_table.cc for an explanation of this

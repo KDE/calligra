@@ -33,6 +33,9 @@
 #include <qlayout.h>
 #include <qvbox.h>
 #include <qcheckbox.h>
+#include <qlabel.h>
+#include <qlineedit.h>
+#include <kmessagebox.h>
 
 #include <koReplace.h>
 #include <kprinter.h>
@@ -280,6 +283,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_paperWidth = PG_A4_WIDTH;
   m_paperHeight = PG_A4_HEIGHT;
   m_orientation = PG_PORTRAIT;
+  m_printRange = QRect( QPoint( 1, 1 ), QPoint( KS_colMax ,KS_rowMax ) );
   calcPaperSize();
 
 }
@@ -6008,6 +6012,11 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
             cell_range.setBottom( i );
     }
 
+    // Adjust to the print range
+    if ( cell_range.top() < m_printRange.top() ) cell_range.setTop( m_printRange.top() );
+    if ( cell_range.left() < m_printRange.left() ) cell_range.setLeft( m_printRange.left() );
+    if ( cell_range.bottom() > m_printRange.bottom()-1 ) cell_range.setBottom( m_printRange.bottom()-1 );
+    if ( cell_range.right() > m_printRange.right()-1 ) cell_range.setRight( m_printRange.right()-1 );
 
     //
     // Find out how many pages need printing
@@ -6021,22 +6030,22 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
     rect.setCoords( 0, 0, (int)( MM_TO_POINT ( printableWidth()  )),
                           (int)( MM_TO_POINT ( printableHeight() )) );
 
-    // Up to this row everything is already handled
-    int bottom = 0;
+    // Up to this row everything is already handled, starting with the print range
+    int bottom = m_printRange.top()-1;
     // Start of the next page
-    int top = 1;
+    int top = bottom + 1;
     // Calculate all pages, but if we are embedded, print only the first one
     while ( bottom < cell_range.bottom() /* && page_list.count() == 0 */ )
     {
-        kdDebug(36001) << "bottom=" << bottom << " bottom_range=" << cell_range.bottom() << endl;
+        kdDebug(36001) << "KSpreadTable::print: bottom=" << bottom << " bottom_range=" << cell_range.bottom() << endl;
 
-        // Up to this column everything is already printed
-        int right = 0;
+        // Up to this column everything is already printed, starting with the print range
+        int right = m_printRange.left()-1;
         // Start of the next page
-        int left = 1;
+        int left = right + 1;
         while ( right < cell_range.right() )
         {
-            kdDebug(36001) << "right=" << right << " right_range=" << cell_range.right() << endl;
+            kdDebug(36001) << "KSpreadTable::print: right=" << right << " right_range=" << cell_range.right() << endl;
 
             QRect page_range;
             page_range.setLeft( left );
@@ -6044,7 +6053,7 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
 
             int col = left;
             int x = columnLayout( col )->width();
-            while ( x < rect.width() )
+            while ( x < rect.width() && col <= m_printRange.right() )
             {
                 col++;
                 x += columnLayout( col )->width();
@@ -6056,7 +6065,7 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
 
             int row = top;
             int y = rowLayout( row )->height();
-            while ( y < rect.height() )
+            while ( y < rect.height() && row <= m_printRange.bottom() )
             {
                 row++;
                 y += rowLayout( row )->height();
@@ -7180,23 +7189,33 @@ void KSpreadTable::paperLayoutDlg()
     hf.footRight = localizeHeadFootLine( footRight() );
     hf.footMid   = localizeHeadFootLine( footMid()   );
 
-//    ksop.printGrid = getPrintGrid();
-
     KoUnit::Unit unit = m_pDoc->getUnit();
 
     KoPageLayoutDia dlg( 0, "PageLayout", pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit );
     
     // ------------- options ---------------
     QWidget *tab = dlg.addPage(i18n( "Options" ));
-    QGridLayout *grid = new QGridLayout( tab, 7, 3, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( tab, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-//    QLabel *lHead = new QLabel( i18n( "Print grid" ), tab );
-//    grid->addWidget( lHead, 0, 0 );
-
-    QCheckBox *pPrintGrid = new QCheckBox ( i18n("&Print grid"), tab );
+    QCheckBox *pPrintGrid = new QCheckBox ( i18n("Print &grid"), tab );
     pPrintGrid->setChecked( getPrintGrid() );
     grid->addWidget( pPrintGrid, 0, 0 );
 
+    QLabel *pPrintRange = new QLabel ( i18n("Print range:"), tab );
+    grid->addWidget( pPrintRange, 1, 0 );
+
+    QLineEdit *ePrintRange = new QLineEdit( tab );
+    grid->addWidget( ePrintRange, 1, 1 );
+    ePrintRange->setText( util_rangeName( m_printRange ) );
+    
+    // --------------- main grid ------------------
+    grid->addColSpacing( 0, pPrintGrid->width() );
+    grid->addColSpacing( 0, pPrintRange->width() );
+    grid->addColSpacing( 1, ePrintRange->width() );
+    grid->addRowSpacing( 0, pPrintGrid->height() );
+    grid->addRowSpacing( 1, pPrintRange->height() );
+    grid->addRowSpacing( 1, ePrintRange->height() );
+    grid->setRowStretch( 2, 1 );
     
     int result = dlg.exec();
     if ( result == QDialog::Accepted )
@@ -7205,13 +7224,36 @@ void KSpreadTable::paperLayoutDlg()
         hf = dlg.getHeadFoot();
         unit = dlg.unit();
         setPrintGrid( pPrintGrid->isChecked() );
+        QString tmpPrintRange = ePrintRange->text();
+        if ( tmpPrintRange.isEmpty() )
+        {
+            m_printRange = QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) );
+        }
+        else
+        {
+            bool error = true;
+            int first = tmpPrintRange.find(":");
+            if ( ( first != -1 ) && ( (int)tmpPrintRange.length() > first ) )
+            {
+                KSpreadPoint point1 ( tmpPrintRange.left( first ) );
+                if ( point1.isValid() )
+                {
+                    KSpreadPoint point2 ( tmpPrintRange.mid( first+1 ) );
+                    if ( point2.isValid() )
+                    {
+                        error = false;
+                        m_printRange = QRect( QPoint( point1.pos.x(), point1.pos.y() ), QPoint( point2.pos.x(), point2.pos.y() ) );
+                    }
+                }
+            }
+    
+            if ( error ) KMessageBox::information( 0, i18n( "Print range wrong, changes are ignored." ) );
+        }
     }
     else
     {
         return;
     }
-//    if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit ) )
-//        return;
 
     if ( pl.format == PG_CUSTOM )
     {
@@ -7227,7 +7269,6 @@ void KSpreadTable::paperLayoutDlg()
                      localizeHeadFootLine( hf.footLeft  ),
                      localizeHeadFootLine( hf.footMid   ),
                      localizeHeadFootLine( hf.footRight ) );
-//    setPrintGrid ( ksop.printGrid );
 
     m_pDoc->setUnit( unit );
 }

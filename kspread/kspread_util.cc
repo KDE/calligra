@@ -367,20 +367,18 @@ void
     uint p = 0;
 
     // Fixed ?
-    if (_str[0] == '$') {
+    if ( _str[0] == '$' )
+    {
 	columnFixed = true;
 	p++;
-    } else
+    }
+    else
 	columnFixed = false;
 
     // Malformed ?
-    /*if ( p == len || _str[p] < 'A' || _str[p] > 'Z' )
-       return;
-     */
-    if (p == len || _str[p] < 'A' || _str[p] > 'Z') {
-	if (_str[p] < 'a' || _str[p] > 'z')
+    if ( p == len || _str[p] < 'A' || _str[p] > 'Z' )
+	if ( _str[p] < 'a' || _str[p] > 'z' )
 	    return;
-    }
 
     //default is error
     int x = -1;
@@ -389,43 +387,56 @@ void
     int result = tmpStr.find(QRegExp("[^A-Za-z]+"));
 
     //get the colomn number for the character between actual position and the first non text charakter
-    if (result != -1)
+    if ( result != -1 )
 	x = util_decodeColumnLabelText( tmpStr.mid( 0, result ) ); // x is defined now
     p += result;
 
     //limit is KS_colMax
-    if ( x > KS_colMax ) {
+    if ( x > KS_colMax )
+    {
 	kdDebug(36001) << "KSpreadPoint::init: column value too high (col: " << x << ")" << endl;
 	return;
     }
+
     // Malformed ?
     if (p == len)
+    {
+	kdDebug(36001) << "KSpreadPoint::init: p==len after cols" << endl;
 	return;
+    }
 
-    if (_str[p] == '$') {
+    if (_str[p] == '$')
+    {
 	rowFixed = true;
 	p++;
 	// Malformed ?
-	if (p == len)
+	if ( p == len )
+	{
+	    kdDebug(36001) << "KSpreadPoint::init: p==len after $ of row" << endl;
 	    return;
-    } else
+	}
+    }
+    else
 	rowFixed = false;
 
     uint p2 = p;
-    while (p < len) {
-	if (!isdigit(_str[p++]))
+    while ( p < len )
+    {
+	if ( !isdigit(_str[p++]) )
 	    return;
     }
 
-    int y = atoi(_str.latin1() + p2);
-    if ( y > KS_rowMax ) {
+    int y = atoi( _str.mid( p2, p-p2 ).latin1() );
+kdDebug(36001) << "p: " << p << "  p2: " << p2 << endl;
+    if ( y > KS_rowMax )
+    {
 	kdDebug(36001) << "KSpreadPoint::init: row value too high (row: " << y << ")" << endl;
 	return;
     }
-    if (y <= 0)
+    if ( y <= 0 )
 	return;
 
-    pos = QPoint(x, y);
+    pos = QPoint( x, y );
 }
 
 KSpreadPoint::KSpreadPoint(const QString & _str, KSpreadMap * _map,
