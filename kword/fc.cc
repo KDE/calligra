@@ -834,7 +834,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
       }
     else if ( parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT )
       {      
-	ptPos = xShift + document->getPTColumnWidth() - right - ptTextLen;
+	ptPos = xShift + document->getPTColumnWidth() - right - ptTextLen - indent;
 	ptStartPos = ptPos;
       }
 

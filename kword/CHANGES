@@ -202,3 +202,7 @@ Reggie, 8.10.1998:
 - Fixed a bug in KWFormatContext::cursorGotoPos(...)
 - Bugfix in paste
 - Fixed another redraw bug
+
+Reggie, 9.10.1998:
+------------------
+- Small fixes
