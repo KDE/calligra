@@ -35,17 +35,17 @@
 #define PANEL_SIZEY		50.0
 
 #define FILL_TOPX		15.0
-#define FILL_TOPY		20.0
-#define FILL_BOTTOMX	45.0
-#define FILL_BOTTOMY	50.0
+#define FILL_TOPY		15.0
+#define FILL_BOTTOMX		45.0
+#define FILL_BOTTOMY		45.0
 
 #define STROKE_TOPX		5.0
-#define STROKE_TOPY		10.0
-#define STROKE_BOTTOMX	35.0
-#define STROKE_BOTTOMY	40.0
+#define STROKE_TOPY		5.0
+#define STROKE_BOTTOMX		35.0
+#define STROKE_BOTTOMY		35.0
 
-#define STROKE_TOPX_INNER		STROKE_TOPX + 4
-#define STROKE_TOPY_INNER		STROKE_TOPY + 4
+#define STROKE_TOPX_INNER	STROKE_TOPX + 4
+#define STROKE_TOPY_INNER	STROKE_TOPY + 4
 #define STROKE_BOTTOMX_INNER	STROKE_BOTTOMX - 4
 #define STROKE_BOTTOMY_INNER	STROKE_BOTTOMY - 4
 
@@ -136,10 +136,10 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	VFill fill;
 	m_painter->setPen( Qt::NoPen );
 
-	for( unsigned int y = 0; y < PANEL_SIZEX; y += 10 )
-		for( unsigned int x = 0;x < PANEL_SIZEX;x += 10 )
+	for( unsigned char y = 0; y < PANEL_SIZEY; y += 10 )
+		for( unsigned char x = 0; x < PANEL_SIZEX; x += 10 )
 		{
-			fill.setColor( ( ( ( x + y ) % 20 ) == 0 ) ? QColor( 153, 153, 153 ) : QColor( 102, 102, 102 ) );
+			fill.setColor( ( ( ( x + y ) % 20 ) == 0 ) ? QColor( 180, 180, 180 ) : QColor( 100, 100, 100 ) );
 			m_painter->setBrush( fill );
 			m_painter->drawRect( x, y, 10, 10 );
 		}
@@ -315,9 +315,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		else
 			m_painter->setBrush( f );
 
-		m_painter->drawRect( KoRect(	FILL_TOPX, FILL_TOPY,
-										FILL_BOTTOMX - FILL_TOPX,
-										FILL_BOTTOMY - FILL_TOPY ) );
+		m_painter->drawRect( KoRect( FILL_TOPX, FILL_TOPY, FILL_BOTTOMX - FILL_TOPX, FILL_BOTTOMY - FILL_TOPY ) );
 	}
 	else
 	{
