@@ -18,6 +18,7 @@ libkwordpart_la_SOURCES =  kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
                 contents.cc stylist.cc searchdia.cc \
                 resizehandles.cc kwcommand.cc \
 		KWordMailMergeDatabaseIface.skel kwordmailmergedatabaseiface.cc mailmerge.cc \
+		mailmerge_actions.cc \
 		kweditpersonnalexpressiondia.cc \
 		splitcellsdia.cc kwinsertpicdia.cc \
 		KWordDocIface.skel KWordDocIface.cc \

@@ -53,6 +53,7 @@
 #include <koSearchDia.h>
 #include "searchdia.h"
 #include "mailmerge.h"
+#include "mailmerge_actions.h"
 #include "splitcellsdia.h"
 #include "stylist.h"
 #include "tabledia.h"
@@ -344,9 +345,13 @@ void KWView::setupActions()
     actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
 
 
-    (void) new KAction( i18n( "Configure Mai&l Merge ..." ), 0,
+    (void) new KAction( i18n( "Configure Mai&l Merge ..." ), "configure",0,
                         this, SLOT( editMailMergeDataBase() ),
                         actionCollection(), "edit_sldatabase" );
+
+    (void) new  KWMailMergeLabelAction::KWMailMergeLabelAction( i18n("Drag me"), 0,
+                    this, SLOT(editMailMergeDataBase()), actionCollection(), "mailmerge_draglabel" );
+
 
     // -------------- Frame menu
     actionEditDelFrame = new KAction( i18n( "&Delete Frame" ), 0,

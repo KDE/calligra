@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="35">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="36">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -190,6 +190,12 @@
   <Action name="border_color"/>
   <Action name="border_backgroundcolor"/>
 </ToolBar>
+<ToolBar hidden="true" name="mailmerge_toolbar" position="top"><Text>MailMerge</Text>
+  <Action name="mailmerge_draglabel"/>
+  <Action name="mailmerge_varchooser"/>
+  <Action name="edit_sldatabase"/>
+
+</ToolBar>
 <ToolBar hidden="true" name="formula_toolbar" position="bottom"><Text>Formula</Text>
   <Action name="formula_addtext"/>
   <Action name="formula_addroot"/>
@@ -213,6 +219,7 @@
   <Separator/>
   <Action name="formula_insertsymbol"/>
 </ToolBar>
+
 <StatusBar/>
 <Menu name="text_popup">
  <Action name="text_default"/>
