@@ -50,10 +50,8 @@ VSelectNodesTool::~VSelectNodesTool()
 void
 VSelectNodesTool::activate()
 {
-	//if( m_state == normal )
+	if( m_state == normal )
 		view()->statusMessage()->setText( i18n( "EditNode" ) );
-	//else
-//		view()->statusMessage()->setText( i18n( "Scale" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
 	view()->part()->document().selection()->setState( VObject::edit );
 }
@@ -143,16 +141,14 @@ VSelectNodesTool::draw()
 void
 VSelectNodesTool::setCursor() const
 {
-/*
-	if( !m_isDragging ) return;
+	//if( !m_isDragging ) return;
 
-	KoPoint lpp = KoPoint( p.x() / view()->zoom(), p.y() / view()->zoom() );
 	double tolerance = 1.0 / view()->zoom();
 
 	if( view()->part()->document().selection()->pathNode(
 		KoRect(
-			lpp.x() - tolerance,
-			lpp.y() - tolerance,
+			last().x() - tolerance,
+			last().y() - tolerance,
 			2 * tolerance + 1,
 			2 * tolerance * 1 ) ) )
 	{
@@ -160,7 +156,6 @@ VSelectNodesTool::setCursor() const
 	}
 	else
 		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
-*/
 }
 
 void
