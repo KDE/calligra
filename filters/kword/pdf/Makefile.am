@@ -1,6 +1,6 @@
 SUBDIRS = xpdf
 
-INCLUDES= $(KOFFICECORE_INCLUDES) -I$(srcdir) -I$(srcdir)/xpdf/goo -I$(srcdir)/xpdf/xpdf $(all_includes)
+INCLUDES= $(KOFFICE_INCLUDES) -I$(srcdir) -I$(srcdir)/xpdf/goo -I$(srcdir)/xpdf/xpdf $(all_includes)
 
 kde_module_LTLIBRARIES = libpdfimport.la
 
