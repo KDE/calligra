@@ -50,6 +50,7 @@ int kchartEngine::doLabels() {
   }
 #endif
   kdDebug(35001) << "labels read" << endl;
+  return 0;
 };
 
 

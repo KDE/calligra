@@ -190,6 +190,7 @@ int kchartEngine::out_graph() {
       kdDebug(35001) << "Draw annotation" << endl;
       drawAnnotation();
     }
+  return 0;
 }
 
 /* rem circle:  x = rcos(@), y = rsin(@)	*/
