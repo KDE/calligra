@@ -18,13 +18,17 @@
 */
 
 #include "kwanchor.h"
+#include "kwcommand.h"
 #include "kwtextdocument.h"
 #include "kwtextframeset.h"
 #include "kwdoc.h"
 #include <kdebug.h>
 
 KWAnchor::KWAnchor( KWTextDocument *textdoc, KWFrame * frame )
-    : QTextCustomItem( textdoc ), m_frame( frame )
+    : KWTextCustomItem( textdoc ),
+      // We store the frame as frameset+framenum for undo/redo purposes
+      m_frameset( frame->getFrameSet() ),
+      m_frameNum( m_frameset->getFrameFromPtr( frame ) )
 {
     resize();
 }
@@ -34,8 +38,20 @@ KWAnchor::~KWAnchor()
     kdDebug() << "KWAnchor::~KWAnchor" << endl;
 }
 
+KWFrame * KWAnchor::frame() const
+{
+    ASSERT( !m_deleted );
+    if ( m_deleted )
+        return 0L;
+    return m_frameset->getFrame( m_frameNum );
+}
+
 void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
 {
+    ASSERT( !m_deleted );
+    if ( m_deleted ) // can't happen !
+        return;
+
     if ( placement() != PlaceInline ) {
         x = xpos;
         y = ypos;
@@ -44,7 +60,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     int paragy = paragraph()->rect().y();
     //kdDebug(32001) << "KWAnchor::draw " << x << "," << y << " paragy=" << paragy
     //               << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
-    KWDocument * doc = m_frame->getFrameSet()->kWordDocument();
+    KWDocument * doc = m_frameset->kWordDocument();
     KWTextFrameSet * fs = textDocument()->textFrameSet();
 
     // 1 - move frame. We have to do this here since QTextCustomItem doesn't
@@ -54,7 +70,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     {
         //kdDebug(32001) << "KWAnchor::draw moving frame to [zoomed pos] " << cPoint.x() << "," << cPoint.y() << endl;
         // Move the frame to position x,y.
-        m_frame->moveTopLeft( KoPoint( cPoint.x() / doc->zoomedResolutionX(), cPoint.y() / doc->zoomedResolutionY() ) );
+        frame()->moveTopLeft( KoPoint( cPoint.x() / doc->zoomedResolutionX(), cPoint.y() / doc->zoomedResolutionY() ) );
     }
 
     // 2 - draw
@@ -73,25 +89,37 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     }
     // Draw the frame
     QColorGroup cg2( cg );
-    m_frame->getFrameSet()->drawContents( p, crect, cg2, false /*?*/, false /*?*/ );
+    m_frameset->drawContents( p, crect, cg2, false /*?*/, false /*?*/ );
     p->restore();
 }
 
 QSize KWAnchor::size() const
 {
-    KWDocument * doc = m_frame->getFrameSet()->kWordDocument();
-    return QSize( doc->zoomItX( m_frame->width() ), doc->zoomItY( m_frame->height() ) );
+    KWDocument * doc = m_frameset->kWordDocument();
+    KWFrame * f = frame();
+    ASSERT( f );
+    return QSize( doc->zoomItX( f->width() ), doc->zoomItY( f->height() ) );
 }
 
 void KWAnchor::resize()
 {
+    if ( m_deleted )
+        return;
     QSize s = size();
     width = s.width();
     height = s.height();
-    kdDebug() << "KWAnchor::resize " << width << "x" << height << endl;
+    //kdDebug() << "KWAnchor::resize " << width << "x" << height << endl;
 }
 
 KWTextDocument * KWAnchor::textDocument() const
 {
     return static_cast<KWTextDocument *>( parent );
+}
+
+void KWAnchor::addDeleteCommand( KMacroCommand * macroCmd )
+{
+    kdDebug() << "KWAnchor::addDeleteCommand" << endl;
+    KWDeleteFrameCommand * cmd = new KWDeleteFrameCommand( QString::null, m_frameset->kWordDocument(), frame() );
+    macroCmd->addCommand( cmd );
+    cmd->execute(); // deletes the frame
 }

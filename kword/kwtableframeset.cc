@@ -99,7 +99,7 @@ void KWTableFrameSet::addCell( Cell *cell )
 
     // Find the insertion point in the list.
     for ( i = 0; i < m_cells.count() && m_cells.at( i )->isAboveOrLeftOf( cell->m_row, cell->m_col ); i++ ) ;
-    cell->setName( name + ' ' + cell->m_col + ',' + cell->m_row );
+    cell->setName( m_name + ' ' + cell->m_col + ',' + cell->m_row );
 
     // If the group is anchored, we must adjust the incoming frameset.
 #if 0
@@ -1411,7 +1411,7 @@ KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned 
     m_cols = 1;
     setGroupManager( m_table );
     m_table->addCell( this );
-    name = QString("table cell %1,%2").arg(m_row).arg(m_col);
+    m_name = QString("table cell %1,%2").arg(m_row).arg(m_col);
 }
 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, const Cell &original ) :
@@ -1422,7 +1422,7 @@ KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, const Cell &original ) :
     m_col = original.m_col;
     m_rows = original.m_rows;
     m_cols = original.m_cols;
-    setName(original.name);
+    setName(original.m_name);
     setGroupManager( m_table );
     m_table->addCell( this );
 }

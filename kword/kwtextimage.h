@@ -21,20 +21,12 @@
 #define kwtextimage_h
 
 #include <kwimage.h>
-#include <qrichtext_p.h>
-using namespace Qt3;
-
-/*class KWTextCustomItem : public QTextCustomItem
-{
-public:
-    KWTextCustomItem( KWTextDocument *textdoc ) : QTextCustomItem( textdoc ) {}
-
-};*/
+#include <kwtextdocument.h>
 
 /**
  * This class is used by "Insert Picture", i.e. having an image inline in a paragraph.
  */
-class KWTextImage : public QTextCustomItem
+class KWTextImage : public KWTextCustomItem
 {
 public:
     /**

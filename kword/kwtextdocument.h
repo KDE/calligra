@@ -24,6 +24,7 @@
 using namespace Qt3;
 class KWTextFrameSet;
 class KWTextFormatCollection;
+class KMacroCommand;
 
 /**
  * This is our QTextDocument reimplementation, to create KWTextParag instead of QTextParags,
@@ -45,6 +46,27 @@ public:
 private:
     KWTextFrameSet * m_textfs;
     bool m_bDestroying;
+};
+
+/**
+ * KWord's base class for QRT custom items (i.e. special chars)
+ */
+class KWTextCustomItem : public QTextCustomItem
+{
+public:
+    KWTextCustomItem( KWTextDocument *textdoc ) : QTextCustomItem( textdoc )
+    { m_deleted = false; }
+
+    // Called when the item is 'deleted' by the user
+    virtual void addDeleteCommand( KMacroCommand * ) {}
+
+    // When the user deletes a custom item, it isn't destroyed but
+    // moved into the undo/redo history - setDeleted( true )
+    // and it can be then copied back from there into the real world - setDeleted( false ).
+    virtual void setDeleted( bool b ) { m_deleted = b; }
+
+protected:
+    bool m_deleted;
 };
 
 #endif

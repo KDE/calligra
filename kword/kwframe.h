@@ -440,8 +440,9 @@ public:
     /** get the visibility of the frameset. */
     void setVisible( bool v ) { visible = v; }
 
-    QString getName() const { return name; }
-    void setName( const QString &_name ) { name = _name; }
+    /** get/set frameset name. For tables in particular, this _must_ be unique */
+    QString getName() const { return m_name; }
+    void setName( const QString &_name ) { m_name = _name; }
 
 signals:
 
@@ -468,7 +469,7 @@ protected:
     int m_current; // used for headers and footers, not too sure what it means
     KWTableFrameSet *grpMgr;
     bool removeableHeader, visible;
-    QString name;
+    QString m_name;
     KWAnchorPosition m_anchorPos;
 };
 

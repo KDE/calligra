@@ -20,24 +20,23 @@
 #ifndef kwanchor_h
 #define kwanchor_h
 
-#include <qrichtext_p.h>
-using namespace Qt3;
-class KWTextDocument;
+#include "kwtextdocument.h"
 class KWFrame;
+class KWFrameSet;
 
 /**
  * An anchor is a special character, or 'custom item'.
  * It never appears as such. It is as big as the frame it is related to,
  * so that the frame is effectively inline in the text.
  */
-class KWAnchor : public QTextCustomItem
+class KWAnchor : public KWTextCustomItem
 {
 public:
     KWAnchor( KWTextDocument *textdoc, KWFrame * m_frame );
     ~KWAnchor();
 
     // The frame related to this anchor.
-    KWFrame * frame() const { return m_frame; }
+    KWFrame * frame() const;
 
     // The text document in which this anchor is
     KWTextDocument * textDocument() const;
@@ -52,9 +51,13 @@ public:
     virtual int widthHint() const { return size().width(); }
     virtual int minimumWidth() const { return size().width(); }
 
-    void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
+    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
+
+    virtual void addDeleteCommand( KMacroCommand * macroCmd );
+
 private:
-    KWFrame * m_frame;
+    KWFrameSet * m_frameset;
+    int m_frameNum;
 };
 
 #endif

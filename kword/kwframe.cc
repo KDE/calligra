@@ -330,21 +330,21 @@ void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
     _frame->setFrameSet(this);
     if(recalc)
         updateFrames();
-    if ( isFloating() )
+    /*if ( isFloating() )
     {
         findFirstAnchor();
         updateAnchors();
-    }
+    }*/
 }
 
 void KWFrameSet::delFrame( unsigned int _num )
 {
-    if ( isFloating() )
-        deleteAnchors();
+    //if ( isFloating() )
+    //    deleteAnchors();
     KWFrame *frm = frames.at( _num );
     delFrame(frm,true);
-    if ( isFloating() )
-        updateAnchors();
+    //if ( isFloating() )
+    //    updateAnchors();
 }
 
 /*================================================================*/
@@ -354,8 +354,8 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
     if ( _num == -1 )
         return;
 
-    if ( isFloating() )
-        deleteAnchors();
+    //if ( isFloating() )
+    //    deleteAnchors();
 
     frm->setFrameSet(0L);
     if ( !remove )
@@ -366,8 +366,8 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
 
     updateFrames();
 
-    if ( isFloating() )
-        updateAnchors();
+    //if ( isFloating() )
+    //    updateAnchors();
 }
 
 /*================================================================*/
@@ -649,7 +649,7 @@ void KWFrameSet::updateFrames()
         QListIterator<KWFrame> frameIt = frameIterator();
         for ( ; frameIt.current(); ++frameIt )
         {
-            kdDebug() << "KWFrameSet::updateFrames anchor=" << frameIt.current()->anchor() << endl;
+            //kdDebug() << "KWFrameSet::updateFrames anchor=" << frameIt.current()->anchor() << endl;
             if ( frameIt.current()->anchor() )
                 frameIt.current()->anchor()->resize();
         }

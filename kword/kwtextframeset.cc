@@ -776,7 +776,7 @@ void KWTextFrameSet::save( QDomElement &parentElem )
     framesetElem.setAttribute( "frameInfo", static_cast<int>( frameInfo ) );
     framesetElem.setAttribute( "removable", static_cast<int>( removeableHeader ) );
     framesetElem.setAttribute( "visible", static_cast<int>( visible ) );
-    framesetElem.setAttribute( "name", correctQString( name ) );
+    framesetElem.setAttribute( "name", correctQString( m_name ) );
 
     KWFrameSet::save( framesetElem ); // Save all frames
 
@@ -1316,6 +1316,22 @@ void KWTextFrameSet::UndoRedoInfo::clear()
             case Delete:
             case RemoveSelected:
                 cmd = new KWTextDeleteCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
+                // Deleting any custom items -> macro command, to let custom items add their command
+                if ( !customItemsMap.isEmpty() )
+                {
+                    textdoc->addCommand( cmd );
+                    KMacroCommand * macroCmd = new KMacroCommand( name );
+                    macroCmd->addCommand( new KWTextCommand( textfs, /*cmd, */name ) );
+                    CustomItemsMap::Iterator it = customItemsMap.begin();
+                    for ( ; it != customItemsMap.end(); ++it )
+                    {
+                        KWTextCustomItem * item = static_cast<KWTextCustomItem *>( it.data() );
+                        item->addDeleteCommand( macroCmd );
+                        item->setDeleted( true );
+                    }
+                    textfs->kWordDocument()->addCommand( macroCmd );
+                    cmd = 0L;
+                }
                 break;
             case Format:
                 cmd = new QTextFormatCommand( textdoc, id, index, eid, eindex, text.rawData(), format, flags );

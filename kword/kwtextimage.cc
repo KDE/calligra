@@ -25,7 +25,7 @@
 #include <kdebug.h>
 
 KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
-    : QTextCustomItem( textdoc ), place( PlaceInline )
+    : KWTextCustomItem( textdoc ), place( PlaceInline )
 {
     KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
     if ( !filename.isEmpty() )

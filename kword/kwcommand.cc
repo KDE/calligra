@@ -69,7 +69,10 @@ QTextCursor * KWTextDeleteCommand::execute( QTextCursor *c )
     {
         QTextStringChar * ch = cursor.parag()->at( cursor.index() );
         if ( ch->isCustom() )
+        {
+            static_cast<KWTextCustomItem *>( ch->customItem() )->setDeleted( true );
             ch->loseCustomItem();
+        }
         cursor.gotoRight();
     }
 
@@ -99,6 +102,7 @@ QTextCursor * KWTextDeleteCommand::unexecute( QTextCursor *c )
             {
                 kdDebug() << "KWTextDeleteCommand::unexecute setting custom item " << it.data() << endl;
                 cursor.parag()->at( cursor.index() )->setCustomItem( it.data() );
+                static_cast<KWTextCustomItem *>( it.data() )->setDeleted( false );
                 cursor.parag()->invalidate( 0 );
             }
             cursor.gotoRight();

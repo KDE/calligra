@@ -146,10 +146,6 @@ public:
     /** point the outlines of all the cells */
     //void drawAllRects( QPainter &p, int xOffset, int yOffset );
 
-    /** sets the name of the table, this _must_ be a unique name! */
-    void setName( QString _name ) { name = _name; }
-    QString getName() { return name; }
-
     /** select all frames from the first selected to the argument frameset. */
     void selectUntil( Cell *cell );
     /** convenience method */
@@ -221,7 +217,6 @@ protected:
     unsigned int m_rows, m_cols;
     KWTblCellSize m_widthMode;
     KWTblCellSize m_heightMode;
-    QString m_name;
     bool m_showHeaderOnAllPages;
     bool m_hasTmpHeaders;
     bool m_active;
