@@ -104,6 +104,7 @@ bool KisDoc::initDoc()
 	// returns false if there is no templae selected
 
 	if (m_current_view) {
+		removeView(m_current_view);
 		delete m_current_view;
 		m_current_view = 0;
 	}
@@ -1545,7 +1546,7 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 {
 	KisView *view;
 
-	if ((view = currentView())) {
+	if ((view = currentView()) && !view -> parentWidget()) {
 		view -> reparent(parent, QPoint(0, 0));
 		view -> setName(name);
 	}
