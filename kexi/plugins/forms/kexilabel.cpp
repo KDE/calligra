@@ -299,14 +299,17 @@ QRect KexiLabelPrivate::getBounding( const QImage &image, const QRect& startRect
 
 
 KexiLabel::KexiLabel( QWidget *parent, const char *name, WFlags f )
-		: QLabel( parent, name, f ), p_pixmapDirty( true ), p_shadowEnabled( false ) {
+		: QLabel( parent, name, f ), KexiDataItemInterface(),
+		p_pixmapDirty( true ), p_shadowEnabled( false ) {
 
 	p_privateLabel = new KexiLabelPrivate( this );
 	p_privateLabel->hide();
 }
 
 KexiLabel::KexiLabel( const QString& text, QWidget *parent, const char *name, WFlags f )
-		: QLabel( parent, name, f ), p_pixmapDirty( true ), p_shadowEnabled( false ) {
+		: QLabel( parent, name, f ), KexiDataItemInterface(),
+		p_pixmapDirty( true ), p_shadowEnabled( false ) {
+
 	p_privateLabel = new KexiLabelPrivate( this );
 	p_privateLabel->hide();
 	setText( text );
@@ -358,6 +361,14 @@ void KexiLabel::paintEvent( QPaintEvent* e ) {
 	}
 
 	QLabel::paintEvent( e );
+}
+
+void KexiLabel::setValueInternal( const QVariant& value ) {
+	setText( value.toString() );
+}
+
+QVariant KexiLabel::value() {
+	return text();
 }
 
 #include "kexilabel.moc"

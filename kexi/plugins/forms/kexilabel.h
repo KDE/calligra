@@ -25,6 +25,8 @@
 
 #include <kpixmap.h>
 
+#include <kexidataiteminterface.h>
+
 class QPainter;
 
 class KexiLabelPrivate : public QLabel {
@@ -47,8 +49,9 @@ The text on it may have a drop-shadow.
 
 @author Christian Nitschkowski
 */
-class KexiLabel : public QLabel {
+class KexiLabel : public QLabel, KexiDataItemInterface {
 		Q_OBJECT
+		Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true )
 		Q_PROPERTY( bool shadowEnabled READ shadowEnabled WRITE setShadowEnabled DESIGNABLE true )
 		Q_OVERRIDE( QPixmap pixmap DESIGNABLE false )
 		Q_OVERRIDE( bool scaledContents DESIGNABLE false )
@@ -58,6 +61,12 @@ class KexiLabel : public QLabel {
 		KexiLabel( const QString& text, QWidget *parent, const char *name = 0, WFlags f = 0 );
 
 		virtual ~KexiLabel() {}
+
+		inline QString dataSource() const {
+			return KexiDataItemInterface::dataSource();
+		}
+
+		virtual QVariant value();
 
 		bool shadowEnabled() const {
 			return p_shadowEnabled;
@@ -78,6 +87,11 @@ class KexiLabel : public QLabel {
 			p_pixmapDirty = true;
 			QLabel::resizeEvent( e );
 		}
+
+		/*!
+		Sets value \a value for a widget.
+		*/
+		virtual void setValueInternal( const QVariant& value );
 
 		virtual void fontChange( const QFont& font ) {
 			p_pixmapDirty = true;
@@ -124,9 +138,20 @@ class KexiLabel : public QLabel {
 		bool p_shadowEnabled;
 
 	public slots:
+		/*!
+		Sets the datasource to \a ds
+		*/
+		inline void setDataSource( const QString &ds ) {
+			KexiDataItemInterface::setDataSource( ds );
+		}
+
 		virtual void setText( const QString& text ) {
 			p_pixmapDirty = true;
 			QLabel::setText( text );
+			/*
+			This is necessary for KexiDataItemInterface
+			*/
+			valueChanged();
 		}
 	};
 
