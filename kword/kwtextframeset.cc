@@ -2256,6 +2256,7 @@ void KWTextFrameSetEdit::slotFrameDeleted( KWFrame *frm )
 void KWTextFrameSetEdit::paste()
 {
     QMimeSource *data = QApplication::clipboard()->data();
+    // Hmm, we could reuse the result of KWView::checkClipboard...
     if ( data->provides( KWTextDrag::selectionMimeType() ) )
     {
         QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );

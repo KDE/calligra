@@ -1206,7 +1206,8 @@ void KWView::checkClipboard( QMimeSource *data, bool &providesImage, bool &provi
         providesImage = ( formats.findIndex( type ) != -1 );
     }
     providesFormula = formats.findIndex( KFormula::MimeSource::selectionMimeType() ) != -1;
-    providesKWordText = formats.findIndex( KWTextDrag::selectionMimeType() ) != -1;
+    // providesKWordText is true for kword text and for plain text, we send both to KWTextFrameSetEdit::paste
+    providesKWordText = formats.findIndex( KWTextDrag::selectionMimeType() ) != -1 || formats.findIndex( "text/plain" ) != -1;
     providesKWord = formats.findIndex( KWDrag::selectionMimeType() ) != -1;
     //kdDebug() << "KWView::checkClipboard providesFormula=" << providesFormula << " providesKWordText=" << providesKWordText << " providesKWord=" << providesKWord << endl;
 }
