@@ -5036,7 +5036,14 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
 	  setValue( text );
 	}
     }
-    
+
+    QDomElement annotation = element.namedItem( "office:annotation" ).toElement();
+    if ( !annotation.isNull() )
+    {
+      QDomElement comment = annotation.namedItem( "text:p" ).toElement();
+      if ( !comment.isNull() )
+	setComment( comment.text() );
+    }
     return true;
 }
 
