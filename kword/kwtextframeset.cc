@@ -2519,11 +2519,9 @@ void KWTextFrameSetEdit::setFamily(const QString &font){
     textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Family );
 }
 
-void KWTextFrameSetEdit::setFont(const QFont &font,bool _underline,bool _subscript,bool _superscript, bool _strikeOut){
+void KWTextFrameSetEdit::setFont(const QFont &font,bool _subscript,bool _superscript){
     QTextFormat format( *currentFormat );
-    QFont _font=font;
-    _font.setStrikeOut( _strikeOut);
-    format.setFont( _font );
+    format.setFont( font );
 
     if(!_subscript)
         {
@@ -2534,9 +2532,6 @@ void KWTextFrameSetEdit::setFont(const QFont &font,bool _underline,bool _subscri
         }
     else
         format.setVAlign(QTextFormat::AlignSubScript);
-
-    format.setUnderline( _underline );
-
     textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Format,true /* zoom the font size */);
 }
 

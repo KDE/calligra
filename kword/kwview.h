@@ -418,8 +418,6 @@ protected:
     KAction *actionConfigure;
 
     // text toolbar values
-    QFont tbFont;
-    QColor tbColor;
     QStringList fontList;
 
     KWGUI *gui;

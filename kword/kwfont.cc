@@ -32,9 +32,10 @@
 #include <qvbox.h>
 
 
-KWFontDia::KWFontDia( KWView* parent, const char* name, const QFont &_font, bool _underline, bool _subscript,bool _superscript, bool _strikeOut)
+KWFontDia::KWFontDia( KWView* parent, const char* name, const QFont &_font,  bool _subscript,bool _superscript)
     :QDialog( parent, name, true )
 {
+    newFont=_font;
     QVBoxLayout *lay1 = new QVBoxLayout( this );
     lay1->setMargin( 5 );
     lay1->setSpacing( 10 );
@@ -47,7 +48,7 @@ KWFontDia::KWFontDia( KWView* parent, const char* name, const QFont &_font, bool
     QGridLayout *grid=new QGridLayout( grp, 2, 2, 15, 7 );
 
     m_underline=new QCheckBox(i18n("Underline"),grp);
-    m_underline->setChecked(_underline);
+    m_underline->setChecked(_font.underline());
     grid->addWidget(m_underline,0,1);
 
 
@@ -60,7 +61,7 @@ KWFontDia::KWFontDia( KWView* parent, const char* name, const QFont &_font, bool
     grid->addWidget(m_subScript,1,0);
 
     m_strikeOut=new QCheckBox(i18n("Strike Out"),grp);
-    m_strikeOut->setChecked( _strikeOut);
+    m_strikeOut->setChecked( _font.strikeOut());
     grid->addWidget(m_strikeOut,1,1);
 
     KButtonBox *bb = new KButtonBox( this );
@@ -74,8 +75,29 @@ KWFontDia::KWFontDia( KWView* parent, const char* name, const QFont &_font, bool
     connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
     connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
 
+    connect( m_underline,SIGNAL(clicked ()), this, SLOT( slotUnderlineClicked() ) );
+    connect( m_strikeOut ,SIGNAL(clicked ()), this, SLOT( slotStrikeOutClicked() ) );
+
     connect( m_subScript,SIGNAL(clicked ()), this, SLOT( slotSubScriptClicked() ) );
     connect( m_superScript ,SIGNAL(clicked ()), this, SLOT( slotSuperScriptClicked() ) );
+    connect( m_chooseFont,SIGNAL( fontSelected( const QFont & )), this,SLOT(slotFontChanged(const QFont &)));
+}
+
+void KWFontDia::slotFontChanged(const QFont &_f)
+{
+    newFont=_f;
+}
+
+void KWFontDia::slotUnderlineClicked()
+{
+    newFont.setUnderline(m_underline->isChecked());
+    m_chooseFont->setFont(newFont);
+}
+
+void KWFontDia::slotStrikeOutClicked()
+{
+    newFont.setStrikeOut(m_strikeOut->isChecked());
+    m_chooseFont->setFont(newFont);
 }
 
 void KWFontDia::slotSubScriptClicked()

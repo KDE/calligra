@@ -284,7 +284,7 @@ public:
     void setTextColor(const QColor &color);
     void setPointSize( int s );
     void setFamily(const QString &font);
-    void setFont(const QFont &font,bool _underline,bool _subscript,bool _superscript, bool _strikeOut);
+    void setFont(const QFont &font,bool _subscript,bool _superscript);
     void setTextSubScript(bool on);
     void setTextSuperScript(bool on);
 
