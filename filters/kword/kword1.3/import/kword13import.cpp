@@ -86,7 +86,7 @@ bool KWord13Import::parseRoot( QIODevice* io, KWord13Document& kwordDocument )
 
     QXmlSimpleReader reader;
     reader.setContentHandler( &handler );
-    //### TODO: reader.setErrorHandler( &handler );
+    reader.setErrorHandler( &handler );
 
     QXmlInputSource source( io ); // Read the file
     

@@ -608,3 +608,27 @@ bool KWord13Parser :: characters ( const QString & ch )
 
     return success;
 }
+
+bool KWord13Parser::warning(const QXmlParseException& exception)
+{
+    kdWarning(30520) << "XML parsing warning: line " << exception.lineNumber()
+        << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
+    return true;
+}
+
+bool KWord13Parser::error(const QXmlParseException& exception)
+{
+    // A XML error is recoverable, so it is only a KDE warning
+    kdWarning(30520) << "XML parsing error: line " << exception.lineNumber()
+        << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
+    return true;
+}
+
+bool KWord13Parser::fatalError (const QXmlParseException& exception)
+{
+    kdError(30520) << "XML parsing fatal error: line " << exception.lineNumber()
+        << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
+    // ### TODO: user message box
+    return false; // Stop parsing now, we do not need further errors.
+}
+

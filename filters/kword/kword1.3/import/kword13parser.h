@@ -78,13 +78,16 @@ class KWord13Parser : public QXmlDefaultHandler
 public:
     KWord13Parser( KWord13Document* kwordDocument );
     virtual ~KWord13Parser( void );
-public:
+protected: //QXml
     /// Process opening tag
     virtual bool startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes);
     /// Process closing tag
     virtual bool endElement( const QString&, const QString& , const QString& qName);
     /// Process element's characters (between opening and closing tags)
     virtual bool characters ( const QString & ch );
+    virtual bool warning(const QXmlParseException& exception);
+    virtual bool error(const QXmlParseException& exception);
+    virtual bool fatalError(const QXmlParseException& exception);
 protected:
     /// Process children of \<FORMAT id="1"\>
     bool startElementFormatOneProperty( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem);
