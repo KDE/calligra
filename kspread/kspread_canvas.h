@@ -66,6 +66,7 @@ class QScrollBar;
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
 
+class CanvasPrivate;
 
 /**
  * The canvas builds a part of the GUI of KSpread.
@@ -108,7 +109,7 @@ public:
      * For example the user selects "Sheet1!A1:B2" then this function
      * returns 12.
      */
-    int chooseTextLen() const { return length_namecell; }
+    int chooseTextLen() const;
 
     KSpreadSelection* selectionInfo() const;
     QRect selection() const;
@@ -242,8 +243,8 @@ public:
     // but is in fact a sibling of the canvas, which needs to know about it.
     void setEditWidget( KSpreadEditWidget * ew ) { m_pEditWidget = ew; }
 
-    KSpreadView* view()const { return m_pView; }
-    KSpreadDoc* doc()const { return m_pDoc; }
+    KSpreadView* view() const;
+    KSpreadDoc* doc() const;
 
     virtual bool focusNextPrevChild( bool );
 
@@ -328,14 +329,6 @@ private:
     // void showMarker( QPainter& );
 
     // void drawMarker( QPainter * _painter = 0L );
-
-    bool choose_visible;
-    int  length_namecell;
-    int  length_text;
-
-    KSpreadView *m_pView;
-    KSpreadDoc* m_pDoc;
-    QTimer * m_scrollTimer;
 
     /**
      * If the user is dragging around with the mouse then this tells us what he is doing.
@@ -515,6 +508,10 @@ private:
    */
   void setSelectionChangePaintDirty(KSpreadSheet* sheet,
                                     QRect area1, QRect area2);
+
+private:
+  CanvasPrivate* d;
+
 };
 
 /**
