@@ -31,6 +31,7 @@
 #include "koPictureImage.h"
 #include "koPictureEps.h"
 #include "koPictureClipart.h"
+#include "koPictureWmf.h"
 #include "koPictureShared.h"
 
 KoPictureShared::KoPictureShared(void) : m_base(NULL)
@@ -105,19 +106,19 @@ bool KoPictureShared::loadWmf(QIODevice* io)
     // The extension .wmf was used (KOffice 1.1.x) for QPicture files
     // For an extern file or in the storage, .wmf can mean a real Windows Meta File.
 
-    QByteArray array=io->readAll();
-    QPicture picture(KoPictureType::formatVersionQPicture);
-    KoPictureClipart* picClip;
-    m_base=picClip=new KoPictureClipart();
-
-    QString extension(picClip->loadWmfFromArray(picture, array));
-    if (extension.isEmpty())
-        return false;
+    QByteArray array ( io->readAll() );
+    
+    if ((array[0]=='Q') && (array[1]=='P') &&(array[2]=='I') && (array[3]=='C'))
+    {
+        m_base=new KoPictureClipart();
+        setExtension("qpic");
+    }
     else
     {
-        setExtension(extension);
-        return true;
+        m_base=new KoPictureWmf();
+        setExtension("wmf");
     }
+    return m_base->load(array, m_extension);
 }
 
 bool KoPictureShared::loadTmp(QIODevice* io)

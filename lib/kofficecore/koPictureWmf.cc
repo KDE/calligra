@@ -27,37 +27,38 @@
 #include <kdebug.h>
 #include <kdebugclasses.h>
 
+#include <qwmf.h>
 #include "koPictureKey.h"
 #include "koPictureBase.h"
-#include "koPictureClipart.h"
+#include "koPictureWmf.h"
 
-KoPictureClipart::KoPictureClipart(void) : m_clipart(KoPictureType::formatVersionQPicture)
+KoPictureWmf::KoPictureWmf(void) : m_clipart(KoPictureType::formatVersionQPicture)
 {
 }
 
-KoPictureClipart::~KoPictureClipart(void)
+KoPictureWmf::~KoPictureWmf(void)
 {
 }
 
-KoPictureBase* KoPictureClipart::newCopy(void) const
+KoPictureBase* KoPictureWmf::newCopy(void) const
 {
-    return new KoPictureClipart(*this);
+    return new KoPictureWmf(*this);
 }
 
-KoPictureType::Type KoPictureClipart::getType(void) const
+KoPictureType::Type KoPictureWmf::getType(void) const
 {
-    return KoPictureType::TypeClipart;
+    return KoPictureType::TypeWmf;
 }
 
-bool KoPictureClipart::isNull(void) const
+bool KoPictureWmf::isNull(void) const
 {
     return m_clipart.isNull();
 }
 
-void KoPictureClipart::drawQPicture(QPicture& clipart, QPainter& painter,
+void KoPictureWmf::drawQPicture(QPicture& clipart, QPainter& painter,
     int x, int y, int width, int height, int sx, int sy, int sw, int sh)
 {
-    kdDebug(30003) << "Drawing KoPictureClipart " << this << endl;
+    kdDebug(30003) << "Drawing KoPictureWmf " << this << endl;
     kdDebug(30003) << "  x=" << x << " y=" << y << " width=" << width << " height=" << height << endl;
     kdDebug(30003) << "  sx=" << sx << " sy=" << sy << " sw=" << sw << " sh=" << sh << endl;
     painter.save();
@@ -74,82 +75,62 @@ void KoPictureClipart::drawQPicture(QPicture& clipart, QPainter& painter,
     painter.restore();
 }
 
-void KoPictureClipart::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool /*fastMode*/)
+void KoPictureWmf::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool /*fastMode*/)
 {
     drawQPicture(m_clipart, painter, x, y, width, height, sx, sy, sw, sh);
 }
 
-bool KoPictureClipart::load(const QByteArray& array, const QString& extension)
+bool KoPictureWmf::load(const QByteArray& array, const QString& /* extension */)
 {
     // Second, create the original clipart
     kdDebug(30003) << "Trying to load clipart... (Size:" << m_rawData.size() << ")" << endl;
     m_rawData=array;
-    QBuffer buffer(m_rawData);
-    buffer.open(IO_ReadWrite);
-    bool check = true;
-    if (extension=="svg")
+    
+    QBuffer buffer(array);
+    buffer.open(IO_ReadOnly);
+    QWinMetaFile wmf;
+    if (!wmf.load(buffer))
     {
-        if (!m_clipart.load(&buffer, "svg"))
-        {
-            kdWarning(30003) << "Loading SVG has failed! (KoPictureClipart::load)" << endl;
-            check = false;
-        }
-    }
-    else
-    {
-        if (!m_clipart.load(&buffer, NULL))
-        {
-            kdWarning(30003) << "Loading QPicture has failed! (KoPictureClipart::load)" << endl;
-            check = false;
-        }
+        kdWarning(30003) << "Loading WMF has failed! (KoPictureWmf::load)" << endl;
+        buffer.close();
+        return false;
     }
     buffer.close();
-    return check;
+    wmf.paint(&m_clipart);
+    
+    return true;
 }
 
-bool KoPictureClipart::save(QIODevice* io)
+bool KoPictureWmf::save(QIODevice* io)
 {
     // We save the raw data, as the SVG supposrt in QPicture is poor
     Q_ULONG size=io->writeBlock(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
     return (size==m_rawData.size());
 }
 
-bool KoPictureClipart::saveAsKOffice1Dot1(QIODevice* io, const QString& extension)
+bool KoPictureWmf::saveAsKOffice1Dot1(QIODevice* io, const QString& /* extension */)
 {
     QPicture picture(3); //compatibility with QT 2.1 and later (KOffice 1.1.x was with QT 2.3.1 or QT 3.0.x)
 
     bool result=false;
-    if (extension=="svg")
+    QBuffer buffer(m_rawData);
+    buffer.open(IO_ReadOnly);
+    QWinMetaFile wmf;
+    if (wmf.load(buffer))
     {
-        // SVG: convert it to QPicture
-        QBuffer buffer(m_rawData);
-        buffer.open(IO_ReadWrite);
-        if (picture.load(&buffer,"svg"))
-        {
-            result=picture.save(io,NULL);
-        }
-        buffer.close();
+        wmf.paint(&picture);
+        result=picture.save(io,NULL);
     }
-    else if (extension=="qpic")
-    {
-        // We cannot do much with a QPicture, we cannot convert it to previous formats
-        result=save(io);
-    }
-    else
-    {
-        kdWarning(30003)<< "Unsupported clipart extension " << extension << " (KoPictureClipart::saveAsKOffice1Dot1)" << endl;
-        result=save(io); // Always save something!
-    }
-
+    buffer.close();
     return result;
 }
 
-QSize KoPictureClipart::getOriginalSize(void) const
+QSize KoPictureWmf::getOriginalSize(void) const
 {
     return m_clipart.boundingRect().size();
 }
 
-QPixmap KoPictureClipart::generatePixmap(const QSize& size, bool /*smoothScale*/)
+QPixmap KoPictureWmf::generatePixmap(const QSize& size, bool /*smoothScale*/)
 {
     // Not sure if it works, but it worked for KoPictureFilePreviewWidget::setClipart
     QPixmap pixmap(size);
@@ -167,18 +148,12 @@ QPixmap KoPictureClipart::generatePixmap(const QSize& size, bool /*smoothScale*/
     return pixmap;
 }
 
-bool KoPictureClipart::isClipartAsKOffice1Dot1(void) const
+bool KoPictureWmf::isClipartAsKOffice1Dot1(void) const
 {
     return true;
 }
 
-QString KoPictureClipart::getMimeType(const QString& extension) const
+QString KoPictureWmf::getMimeType(const QString& /* extension */) const
 {
-    // ### TODO: give QPicture a mime type
-    // ### TODO/FIXME: be sure to handle *.qpic (no mime type) and *.wmf (could be a QPicture)
-    if (extension=="svg")
-        return "image/svg+xml";
-    else
-        return QString(UNKNOWN_MIME_TYPE);
+    return "image/x-wmf";
 }
-

@@ -17,8 +17,8 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#ifndef __koPictureClipart_h__
-#define __koPictureClipart_h__
+#ifndef __koPictureWmf_h__
+#define __koPictureWmf_h__
 
 #include <qstring.h>
 #include <qpicture.h>
@@ -29,20 +29,20 @@ class QSize;
 // TODO: fix documentation
 
 /**
- * KoPictureClipart is a container class
+ * KoPictureWmf is a container class
  */
-class KoPictureClipart : public KoPictureBase
+class KoPictureWmf : public KoPictureBase
 {
 public:
     /**
      * Default constructor.
      */
-    KoPictureClipart();
+    KoPictureWmf();
 
     /**
      * Destructor.
      */
-    virtual ~KoPictureClipart();
+    virtual ~KoPictureWmf();
 
     virtual KoPictureType::Type getType(void) const;
 
@@ -89,7 +89,7 @@ public:
 
     virtual QPixmap generatePixmap(const QSize& size, bool smoothScale = false);
 
-    /**
+     /**
      * Helper function for saving
      * @return true if it is a clipart in KOffice 1.1, false if not
      */
@@ -110,4 +110,4 @@ protected:
     QSize m_size;
 };
 
-#endif /* __koPictureClipart_h__ */
+#endif /* __koPictureWmf_h__ */
