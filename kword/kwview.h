@@ -106,8 +106,8 @@ public:
 
     void setNoteType(NoteType nt, bool change=true);
 
-    KWDocument *kWordDocument() { return m_doc; }
-    KWGUI *getGUI() { return m_gui; }
+    KWDocument *kWordDocument()const { return m_doc; }
+    KWGUI *getGUI()const { return m_gui; }
     void updateStyleList();
 
     void initGui();
@@ -320,7 +320,7 @@ public slots:
     void changeLink();
     void editComment();
     void showDocStructure();
-	void showRuler();
+    void showRuler();
 
     void slotSoftHyphen();
     void slotLineBreak();
@@ -335,6 +335,7 @@ public slots:
     void applyAutoFormat();
     void createStyleFromSelection();
     // end of public slots
+    void configureFootEndNote();
 
 protected slots:
     void spellCheckerReady();
@@ -411,7 +412,7 @@ private:
     KToggleAction *actionViewFootNotes;
     KToggleAction *actionViewEndNotes;
     KToggleAction *actionShowDocStruct;
-	KToggleAction *actionShowRuler;
+    KToggleAction *actionShowRuler;
     KToggleAction *actionAllowAutoFormat;
 
 
@@ -528,6 +529,8 @@ private:
 
     KAction *actionRefreshAllVariable;
     KAction *actionCreateStyleFromSelection;
+
+    KAction *actionConfigureFootEndNote;
 
     KoCharSelectDia *m_specialCharDlg;
     KoFontDia *m_fontDlg;

@@ -69,6 +69,7 @@
 #include "tabledia.h"
 #include "kwvariable.h"
 #include "KWordViewIface.h"
+#include "configfootnotedia.h"
 
 #include <kaccel.h>
 #include <kmessagebox.h>
@@ -917,6 +918,10 @@ void KWView::setupActions()
     actionCreateStyleFromSelection = new KAction( i18n( "Create Style From Selection" ), 0,
                                         this, SLOT( createStyleFromSelection()),
                                         actionCollection(), "create_style" );
+    actionConfigureFootEndNote = new KAction( i18n( "Configure FootNote/EndNote" ), 0,
+                                        this, SLOT( configureFootEndNote()),
+                                        actionCollection(), "configure_footendnote" );
+
 }
 
 void KWView::refreshMenuExpression()
@@ -5000,6 +5005,12 @@ void KWView::switchModeView()
     actionInsertFormula->setEnabled(state);
     actionInsertTable->setEnabled(state);
 
+}
+void KWView::configureFootEndNote()
+{
+    KWConfigFootNoteDia *dia = new KWConfigFootNoteDia( this, "configfootnote", m_doc);
+    dia->exec();
+    delete dia;
 }
 
 /******************************************************************/
