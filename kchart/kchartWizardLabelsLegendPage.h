@@ -24,10 +24,15 @@ public slots:
   void changeXLabelFont();
   void changeYLabelFont();
   void changeTitleFont();
+  void changeLegendTitleFont();
+  void changeLegendTextFont();
   void changeXLabelColor(const QColor &);
   void changeYLabelColor(const QColor &);
   void changeTitleColor(const QColor &);
   void changeYTitle2Color(const QColor &);
+  void changeLegendTitleColor(const QColor &);
+  void changeLegendTextColor(const QColor &);
+
 protected:
   void paintEvent( QPaintEvent * );
 
@@ -47,6 +52,14 @@ private:
   KColorButton *titlecolor;
   KColorButton *ytitle2color;
 
+  QLineEdit *_legendTitleText;
+
+  KColorButton *legendTextColor;
+  KColorButton *legendTitleColor;
+
+  QPushButton *legendTextFont;
+  QPushButton *legendTitleFont;
+
   QFont xlabel;
   QFont ylabel;
   QFont title;
@@ -54,6 +67,12 @@ private:
   QColor y_color;
   QColor y_color2;
   QColor title_color;
+
+  QColor _legendTextColor;
+  QColor _legendTitleColor;
+
+  QFont _legendTextFont;
+  QFont _legendTitleFont;
 
 };
 

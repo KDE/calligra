@@ -103,13 +103,48 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
     //   xlabel=_chart->params()->xTitleFont();
     //   ylabel=_chart->params()->yTitleFont();
 
+
+    QLabel* lab = new QLabel( i18n( "Legend Title:" ), tmpQGroupBox );
+    grid2->addWidget(lab,4,0);
+
+    _legendTitleText = new QLineEdit( tmpQGroupBox );
+    grid2->addWidget(_legendTitleText,4,1);
+    _legendTitleText->setText( _chart->params()->legendTitleText() );
+
+
+    legendTitleFont = new QPushButton( tmpQGroupBox );
+    legendTitleFont->setText(i18n("Font"));
+    _legendTitleFont=_chart->params()->legendTitleFont();
+    grid2->addWidget(legendTitleFont,4,2);
+
+    legendTitleColor=new KColorButton(tmpQGroupBox);
+    _legendTitleColor=_chart->params()->legendTitleTextColor();
+    legendTitleColor->setColor( _legendTitleColor );
+    grid2->addWidget(legendTitleColor,4,3);
+
+
+    lab = new QLabel( i18n( "Legend text:" ), tmpQGroupBox );
+    grid2->addWidget(lab,5,0);
+
+    legendTextFont = new QPushButton( tmpQGroupBox );
+    _legendTextFont=_chart->params()->legendFont();
+    legendTextFont->setText(i18n("Font"));
+    grid2->addWidget(legendTextFont,5,2);
+
+    legendTextColor=new KColorButton(tmpQGroupBox);
+    _legendTextColor=_chart->params()->legendTextColor();
+    legendTextColor->setColor( _legendTextColor );
+    grid2->addWidget(legendTextColor,5,3);
+
     title=_chart->params()->header1Font();
     grid1->addWidget(tmpQGroupBox,0,0);
 
     connect(xtitlefont,SIGNAL(clicked()),this,SLOT(changeXLabelFont()));
     connect(ytitlefont,SIGNAL(clicked()),this,SLOT(changeYLabelFont()));
     connect(titlefont,SIGNAL(clicked()),this,SLOT(changeTitleFont()));
+    connect(legendTitleFont,SIGNAL(clicked()),this,SLOT(changeLegendTitleFont()));
 
+    connect(legendTextFont,SIGNAL(clicked()),this,SLOT(changeLegendTextFont()));
 
     connect(xtitlecolor,SIGNAL(changed( const QColor & )),
             this,SLOT(changeXLabelColor(const QColor &)));
@@ -119,6 +154,11 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
             this,SLOT(changeTitleColor(const QColor &)));
     connect(ytitle2color,SIGNAL(changed( const QColor & )),
             this,SLOT(changeYTitle2Color(const QColor &)));
+    connect(legendTitleColor,SIGNAL(changed( const QColor & )),
+            this,SLOT(changeLegendTitleColor(const QColor &)));
+
+    connect(legendTextColor,SIGNAL(changed( const QColor & )),
+            this,SLOT(changeLegendTextColor(const QColor &)));
 
     resize( 600, 300 );
 }
@@ -129,12 +169,24 @@ KChartWizardLabelsLegendPage::~KChartWizardLabelsLegendPage()
     //  _chart->removeAutoUpdate( preview );
 }
 
+void KChartWizardLabelsLegendPage::changeLegendTextFont()
+{
+    if (KFontDialog::getFont( _legendTextFont,false,this ) == QDialog::Rejected )
+        return;
+}
+
+void KChartWizardLabelsLegendPage::changeLegendTitleFont()
+{
+    if (KFontDialog::getFont( _legendTitleFont,false,this ) == QDialog::Rejected )
+        return;
+}
+
 void KChartWizardLabelsLegendPage::changeXLabelFont()
 {
     if (KFontDialog::getFont( xlabel,false,this ) == QDialog::Rejected )
         return;
-
 }
+
 void KChartWizardLabelsLegendPage::changeYLabelFont()
 {
     if (KFontDialog::getFont( ylabel ,false,this ) == QDialog::Rejected )
@@ -146,6 +198,11 @@ void KChartWizardLabelsLegendPage::changeTitleFont()
     if (KFontDialog::getFont( title ,false,this ) == QDialog::Rejected )
         return;
 
+}
+
+void KChartWizardLabelsLegendPage::changeLegendTextColor(const QColor &_color)
+{
+    _legendTextColor=_color;
 }
 
 void KChartWizardLabelsLegendPage::changeXLabelColor(const QColor &_color)
@@ -166,6 +223,11 @@ void KChartWizardLabelsLegendPage::changeTitleColor(const QColor &_color)
 void KChartWizardLabelsLegendPage::changeYTitle2Color(const QColor &_color)
 {
     y_color2=_color;
+}
+
+void KChartWizardLabelsLegendPage::changeLegendTitleColor(const QColor &_color)
+{
+    _legendTitleColor=_color;
 }
 
 void KChartWizardLabelsLegendPage::paintEvent( QPaintEvent * )
@@ -195,6 +257,11 @@ void KChartWizardLabelsLegendPage::apply(  )
     //    _chart->params()->YTitle2Color=y_color2;
     //    _chart->params()->ytitle2=_ylabel2ED->text();
     _chart->params()->setHeader1Font(title);
+    _chart->params()->setLegendTitleText(_legendTitleText->text());
+    _chart->params()->setLegendTitleTextColor(_legendTitleColor);
+    _chart->params()->setLegendTitleFont(_legendTitleFont,true);
+    _chart->params()->setLegendTextColor(_legendTextColor);
+    _chart->params()->setLegendFont( _legendTextFont,true);
 }
 
 
