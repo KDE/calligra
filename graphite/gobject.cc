@@ -147,7 +147,9 @@ void GObjectM9r::createPropertyDialog() {
 
     label=new QLabel(i18n("Angle:"), information);
     grid->addWidget(label, 3, 0);
-    label=new QLabel(i18n("%1 rad").arg(m_object->angle()), information);
+    QString rad=QString::number(m_object->angle());
+    QString deg=QString::number(Graphite::rad2deg(m_object->angle()));
+    label=new QLabel(i18n("%1 rad (%2 degrees)").arg(rad).arg(deg), information);
     grid->addWidget(label, 3, 2);
 
     grid->setRowStretch(4, 1);
@@ -530,7 +532,7 @@ QDomElement GObject::save(QDomDocument &doc) const {
     static QString attrXFactor=QString::fromLatin1("xfactor");
     static QString attrYFactor=QString::fromLatin1("yfactor");
     static QString tagPen=QString::fromLatin1("pen");
-    
+
     QDomElement e=doc.createElement(tagObject);
     e.setAttribute(attrName, m_name);
     e.setAttribute(attrState, m_state);
@@ -657,6 +659,7 @@ GObject::GObject(const QDomElement &element) : m_parent(0L), m_zoom(100),
 }
 
 
+// be really "greedy"
 QSizePolicy PWidget::sizePolicy() const {
     return QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }

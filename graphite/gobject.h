@@ -61,7 +61,7 @@ class PWidget;
 
 // This is the manipulator class for GObject. Manipulators (M9r's)
 // are used to handle the creation, selection, movement, rotation,...
-// of objects.
+// of objects. They also provide a property dialog (lazy creation)
 // The pure virtual GObject::createM9r() factory method ensures that
 // the correct manipulator is created :) (factory method pattern)
 // The M9r is used every time a user wants to create or change an object
@@ -71,6 +71,8 @@ class PWidget;
 // decides to handle the event, it returns true afterwards. If the Event
 // remains unhandled, the M9r returns false and the Event has to be processed
 // by the calling method.
+// Note: The M9r is bound to a specific view and it won't work (correctly)
+// if you use one M9r for more than one view.
 // Whenever a repaint is needed (movement,...), the dirty rect has to be
 // set (i.e. something different to (0, 0, 0, 0)).
 // Some of the M9rs can be in two different "modes": Create and Manipulate
@@ -88,9 +90,10 @@ public:
 
     const GraphiteView *view() const { return m_view; }
 
-    // call drawHandles
+    // calls drawHandles
     virtual void draw(QPainter &p) = 0;
 
+    // return false when you couldn't handle the event
     virtual const bool mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
     virtual const bool mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
     virtual const bool mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
@@ -104,6 +107,8 @@ public:
 protected slots:
     // All these slots just tell us that something has been changed
     // Yes, I know that this is an ugly hack :(
+    // It was necessary to either have this or to store the temporary
+    // values (because of the Ok/Apply/Cancel stuff).
     virtual void slotChanged(const QString &);
     virtual void slotChanged(int);
     virtual void slotChanged(const QColor &);
@@ -116,38 +121,35 @@ protected:
     GObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
 	       GraphiteView *view, const QString &type);
 
-    // This menthod returns a property dialog for an object. It
-    // creates an empty KDialogBase (IconList mode!) or returns the
-    // existing one.
+    // This menthod returns a property dialog for the object. It
+    // creates a dialog (i.e. adds a few pages to *this). The
+    // dialog is cached for further use and destroyed on destrucion
+    // of this object.
     // If you decide to override this method make sure that the first
-    // thing you do in your implementation is calling this method of
-    // your parent. Then add your pages to the dialog.
+    // thing you do in your implementation is checking whether the dialog
+    // has been created already. Then call the method of your parent.
+    // Then add your pages to the dialog and initialize the contents.
     // Note: This dialog is modal and it has an "Apply" button. The
     // user is able to change the properties and see the result after
-    // pressing 'Apply'.
-    // This dialog will be destroyed whenever the M9r gets deleted.
-
-    // Note: We might have to store the parent and do a
-    // "reparent" if the constructed dia is called for another view.
-    // Is this possible? (TODO)
+    // clicking 'Apply'.
     virtual void createPropertyDialog();
 
     GObject *m_object;
     Mode m_mode;
     bool first_call; // Whether this is the first call for this M9r (no hit test!)
-    GraphitePart *m_part;  // we need that for the history
+    GraphitePart *m_part;     // we need that for the history
     QList<QRect> *m_handles;  // contains all the handle rects
-    bool m_changed;      // true, if the Apply btn is active
-    bool m_created;      // dia created?
+    bool m_changed;           // true, if the Apply button is "active"
+    bool m_created;           // dia created?
 
 private:
-    QString m_type;        // Type of object
-    QLineEdit *m_line;      // line ed. for the name
-    GraphiteView *m_view;
+    QString m_type;         // Type of object (e.g. "Line", "Rectangle")
+    QLineEdit *m_line;      // line ed. for the name field
+    GraphiteView *m_view;   // "our" parent view
 };
 
 
-// Provides a dialog with a "pen" page
+// This class adds a "Pen" dialog page to the empty dialog
 class G1DObjectM9r : public GObjectM9r {
 
     Q_OBJECT
@@ -170,7 +172,7 @@ private:
 };
 
 
-// Adds a "brush/gradient" page to the dialog
+// This class adds a fill style (none/brush/gradient) page to the dialog
 class G2DObjectM9r : public G1DObjectM9r {
 
     Q_OBJECT
@@ -180,8 +182,9 @@ public:
 protected slots:
     virtual void slotChanged(int x);
     virtual void slotChanged(const QColor &x);
+
     virtual void slotApply();
-    virtual void resizeEvent(QResizeEvent *e);
+    virtual void resizeEvent(QResizeEvent *e);  // update the preview on resize
 
 protected:
     G2DObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
@@ -190,7 +193,7 @@ protected:
     virtual void createPropertyDialog();
 
 private slots:
-    void slotBalance();
+    void slotBalance();   // activate/deactivate the sliders (xfactor/yfactor)
 
 private:
     void updatePage();
@@ -212,7 +215,7 @@ private:
 // implemented as a composite (pattern) - sort of :)
 // There are complex classes (classes which are composed of many
 // objects, like a group) and leaf classes which don't have any
-// children.
+// children (e.g. line, rect,...).
 // The resulting tree represents the Z-Order of the document. (First
 // the object draws "itself" and then its children)
 class GObject {
@@ -285,7 +288,7 @@ public:
 
     // Note: radians!
     virtual void rotate(const QPoint &center, const double &angle) = 0;
-    const double &angle() const { return m_angle; }
+    virtual const double &angle() const { return m_angle; }
 
     virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor) = 0;
     virtual void resize(const QRect &boundingRect) = 0;  // resize, that it fits in this rect
@@ -332,13 +335,11 @@ protected:
     void scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
 		    const QPoint &center) const;
 
-    const int double2Int(const double &value) const;   // convert back to int
-
     QString m_name;                              // name of the object
     State m_state;                               // are there handles to draw or not?
     mutable GObject *m_parent;
     int m_zoom;                                  // zoom value 100 -> 100% -> 1
-    double m_angle;			         // angle (radians!)
+    mutable double m_angle;                      // angle (radians!)
 
     mutable bool m_boundingRectDirty;            // is the cached bounding rect still correct?
     mutable QRect m_boundingRect;           // bounding rect (cache) - don't use directly!
@@ -354,6 +355,49 @@ private:
     GObject &operator=(const GObject &rhs); // don't assign the objects, clone them
 };
 
+
+// Some helper functions
+namespace Graphite {
+
+inline const int double2Int(const double &value) {
+
+    if( static_cast<double>((value-static_cast<int>(value)))>=0.5 )
+	return static_cast<int>(value)+1;
+    else if( static_cast<double>((value-static_cast<int>(value)))<=-0.5 )
+	return static_cast<int>(value)-1;
+    else
+	return static_cast<int>(value);
+}
+
+inline const double rad2deg(const double &rad) {
+    return rad*180.0*M_1_PI;   // M_1_PI = 1/M_PI :)
+}
+
+inline const double deg2rad(const double &deg) {
+    return deg*M_PI/180.0;
+}
+
+inline const double normalizeRad(const double &rad) {
+
+    double nRad=rad;
+    while(nRad>2*M_PI)
+	nRad-=2*M_PI;
+    while(nRad<0)
+	nRad+=2*M_PI;
+    return nRad;
+}
+
+inline const double normalizeDeg(const double &deg) {
+
+    double nDeg=deg;
+    while(nDeg>360)
+	nDeg-=360;
+    while(nDeg<0)
+	nDeg+=360;
+    return nDeg;
+}
+
+}; // Graphite::
 
 inline const double GObject::zoomIt(const double &value) const {
     if(m_zoom==100)
@@ -399,8 +443,8 @@ inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoi
 	gamma=gamma1;
 
     double beta=gamma+angle+M_PI_2-QABS(alpha);
-    y+=double2Int(s*std::sin(beta));
-    x+=double2Int(s*std::cos(beta));
+    y+=Graphite::double2Int(s*std::sin(beta));
+    x+=Graphite::double2Int(s*std::cos(beta));
 }
 
 inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) const {
@@ -446,8 +490,8 @@ inline void GObject::scalePoint(int &x, int &y, const double &xfactor, const dou
 			 const QPoint &center) const {
     if(xfactor<=0 || yfactor<=0)
 	return;
-    x=double2Int( static_cast<double>(center.x()) + static_cast<double>(x-center.x())*xfactor );
-    y=double2Int( static_cast<double>(center.y()) + static_cast<double>(y-center.y())*yfactor );
+    x=Graphite::double2Int( static_cast<double>(center.x()) + static_cast<double>(x-center.x())*xfactor );
+    y=Graphite::double2Int( static_cast<double>(center.y()) + static_cast<double>(y-center.y())*yfactor );
 }
 
 inline void GObject::scalePoint(unsigned int &x, unsigned int &y, const double &xfactor,
@@ -474,17 +518,10 @@ inline void GObject::scalePoint(QPoint &p, const double &xfactor, const double &
     scalePoint(p.rx(), p.ry(), xfactor, yfactor, center);
 }
 
-inline const int GObject::double2Int(const double &value) const {
 
-    if( static_cast<double>((value-static_cast<int>(value)))>=0.5 )
-	return static_cast<int>(value)+1;
-    else if( static_cast<double>((value-static_cast<int>(value)))<=-0.5 )
-	return static_cast<int>(value)-1;
-    else
-	return static_cast<int>(value);
-}
-
-
+// This *huge* class is needed to present the preview pixmap.
+// It is simply a plain Widget which tries to get all the free
+// space it can get (in x and y direction).
 class PWidget : public QWidget {
 
 public:

@@ -21,9 +21,14 @@
 #include <gobjectfactory.h>
 
 // these includes are needed to create the prototypes in the CTOR :)
+// primitives
 #include <gline.h>
 
+// compound objects
+#include <ggroup.h>
+
 GObjectFactory *GObjectFactory::m_self=0L;
+
 
 GObjectFactory *GObjectFactory::self() {
 
@@ -68,7 +73,15 @@ GObject *GObjectFactory::create(const QDomElement &element) {
 GObjectFactory::GObjectFactory() : m_registry(17, false) {
 
     // set up the dict with all the types we are aware of
+    // TODO: Change the size of the Hash Table to fit the
+    // number of objects better
     m_registry.setAutoDelete(true);
+    
+    // primitives
     registerPrototype(QString::fromLatin1("gline"),
 		      new GLine(QString::fromLatin1("line")));
+
+    // compound objects
+    registerPrototype(QString::fromLatin1("ggroup"),
+		      new GGroup(QString::fromLatin1("group")));
 }

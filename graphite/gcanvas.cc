@@ -25,7 +25,7 @@ GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     : QScrollView(view, "GCanvas", WNorthWestGravity),
       m_view(view), m_doc(doc) {
 
-    // Note: Not sure about NWGravity! Check if properly repainted!
+    // Note: Not sure about WNWGravity! Check if properly repainted!
     setFocusPolicy(QWidget::StrongFocus);
     viewport()->setFocusProxy(this);
     setMouseTracking(true);
@@ -33,8 +33,7 @@ GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     setFocus();
     // uncomment that as soon as we paint the whole area!
     // viewport()->setBackgroundMode(NoBackground);
-    setBackgroundMode(PaletteBackground);
-    //resizeContents(2000, 2000);
+    //resizeContents(2000, 2000); // <- for testing :P
 }
 
 void GCanvas::viewportPaintEvent(QPaintEvent */*e*/) {

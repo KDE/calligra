@@ -143,7 +143,7 @@ void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
     else
 	return; // no need to draw handles - shouldn't happen
 
-    int offset=double2Int(static_cast<double>(size)*0.5);
+    int offset=Graphite::double2Int(static_cast<double>(size)*0.5);
 
     QRect *r1=new QRect(m_a.x()-offset, m_a.y()-offset, size, size);
     QRect *r2=new QRect(m_b.x()-offset, m_b.y()-offset, size, size);
@@ -151,8 +151,8 @@ void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
 
     if(boundingRect().width()>GraphiteGlobal::self()->thirdHandleTrigger() ||
        boundingRect().height()>GraphiteGlobal::self()->thirdHandleTrigger())
-	r3=new QRect(m_a.x()+double2Int(static_cast<double>(m_b.x()-m_a.x())*0.5)-offset,
-		     m_a.y()+double2Int(static_cast<double>(m_b.y()-m_a.y())*0.5)-offset,
+	r3=new QRect(m_a.x()+Graphite::double2Int(static_cast<double>(m_b.x()-m_a.x())*0.5)-offset,
+		     m_a.y()+Graphite::double2Int(static_cast<double>(m_b.y()-m_a.y())*0.5)-offset,
 		     size, size);
 
     if(m_state==Handles) {
@@ -192,7 +192,7 @@ const GLine *GLine::hit(const QPoint &p) const {
 	double dx=static_cast<double>(m_b.x()-m_a.x());
 	double dy=static_cast<double>(m_b.y()-m_a.y());
 	double r=std::sqrt( dx*dx + dy*dy );
-	int ir=double2Int(r);
+	int ir=Graphite::double2Int(r);
 	double alpha1=std::asin( QABS(dy)/r );
 	double alpha;
 	
@@ -207,7 +207,7 @@ const GLine *GLine::hit(const QPoint &p) const {
 	
 	// make it easier for the user to select something by
 	// adding a (configurable) "fuzzy zone" :)
-	int w=double2Int(static_cast<double>(m_pen.width())/2.0);
+	int w=Graphite::double2Int(static_cast<double>(m_pen.width())/2.0);
 	int fb=GraphiteGlobal::self()->fuzzyBorder();
         QRect fuzzyZone=QRect( QMIN( m_a.x(), m_a.x() + ir ) - fb - w,
 			       m_a.y() - fb - w,
@@ -304,6 +304,13 @@ void GLine::rotate(const QPoint &center, const double &angle) {
     rotatePoint(m_a, angle, center);
     rotatePoint(m_b, angle, center);
     m_boundingRectDirty=true;
+}
+
+const double &GLine::angle() const {
+
+    m_angle=std::atan( static_cast<double>(m_b.y()-m_a.y()) /
+		       static_cast<double>(m_b.x()-m_a.x()) );
+    return m_angle;
 }
 
 void GLine::scale(const QPoint &origin, const double &xfactor, const double &yfactor) {

@@ -35,6 +35,7 @@
 #include <gobject.h>
 #include <ggroup.h>
 #include <kdialogbase.h>
+#include <math.h>
 
 GraphitePart::GraphitePart(QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parent, name, singleViewMode) {
@@ -67,6 +68,9 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     // test
     // TODO: Check the view - if it's the same as "before" -> ok :)
     GObject *o=new GGroup(QString::fromLatin1("foo"));
+    o->rotate(QPoint(10, 10), 45.0*180.0*M_1_PI);
+    kdDebug(37001) << "atan(0): " << std::atan(0)
+		   << "atan(pi/2)" << std::atan(M_PI_2) << endl;
     GObjectM9r *m=o->createM9r(this, view);
     QRect r;
     m->mousePressEvent(e, r);

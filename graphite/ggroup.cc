@@ -300,6 +300,7 @@ void GGroup::rotate(const QPoint &center, const double &angle) {
     for( ; it!=0L; ++it)
 	it.current()->rotate(center, angle);
     m_angle+=angle;
+    m_angle=Graphite::normalizeRad(m_angle);
     m_boundingRectDirty=true;
 }
 
