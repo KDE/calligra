@@ -564,6 +564,7 @@ bool RTFWorker::doOpenDocument(void)
     // Make the file header
 
     // Note: we use \\ansicpg1252 because 1200 is not supposed to be supported
+    // Note2: we assume using \\ansicpg1252 in RTFWorker::escapeRtfText
     *m_streamOut << "{\\rtf1\\ansi\\ansicpg1252\\uc0\\deff0" << m_eol;
 
     // Default color table
@@ -804,7 +805,7 @@ QString RTFWorker::escapeRtfText ( const QString& text ) const
         if ( QCh == '\\' )  escapedText += "\\\\"; // back-slash
         else if ( QCh == '{' )   escapedText += "\\{";
         else if ( QCh == '}' )   escapedText += "\\}";
-        else if ( ch >= 32 && ch <= 126) // ASCII character
+        else if ( ch >= 32 && ch <= 127) // ASCII character
             escapedText += QCh;
         else if ( ch == 0x0009 ) escapedText += "\\tab "; // tabulator
         else if ( ch == 0x00a0 ) escapedText += "\\~"; // Non-breaking space
@@ -825,16 +826,9 @@ QString RTFWorker::escapeRtfText ( const QString& text ) const
         else if ( ch == 0x201c ) escapedText += "\\ldblquote ";
         else if ( ch == 0x201d ) escapedText += "\\rdblquote ";
         else if ( ch == 0x2022 ) escapedText += "\\bullet ";
-        else if ( false ) // check if the (non-ASCII) character would be in the codepage
-        {
-            // ### TODO: how do we check that we can use \'
+        else if ( ch >= 160 && ch < 256) // check for ISO-8859-1 chararcters (needed for OOWriter 1.0x)
+        {   // NOTE: 128 to 159 in CP1252 are somewhere else in UTF-8 and do not exist in ISO-8859-1 (### TODO?)
             escapedText += "\\\'";   // escape upper page character to 7 bit
-            escapedText += QString::number ( ch, 16 );
-        }
-        else if ( ch >= 127 && ch < 256) // check for a 8 bit non-ASCII character (127 is already non-ASCII)
-        {
-			// bp: added for OpenOffice compatibility
-			escapedText += "\\\'";
             escapedText += QString::number ( ch, 16 );
         }
         else if ( ch >= 256) // check for a higher code non-ASCII character
