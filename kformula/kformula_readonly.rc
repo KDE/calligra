@@ -1,0 +1,13 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KFormula" version="1">
+<MenuBar>
+ <Menu name="edit"><text>&amp;Edit</text>
+  <Action name="edit_copy"/>
+  <Separator/>
+  <Action name="edit_select_all"/>
+ </Menu>
+</MenuBar>
+
+<ToolBar fullWidth="false" name="edit_toolbar" position="top"><Text>Edit</Text>
+  <Action name="edit_copy"/>
+</ToolBar>
+</kpartgui>

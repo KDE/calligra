@@ -48,7 +48,10 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
         : KoView( _doc, _parent, _name ), m_pDoc(_doc)
 {
     setInstance(KFormulaFactory::global());
-    setXMLFile("kformula.rc");
+    if ( !_doc->isReadWrite() )
+        setXMLFile("kformula_readonly.rc");
+    else
+        setXMLFile("kformula.rc");
 
     m_dcop = 0;
     dcopObject(); // build it
