@@ -29,10 +29,6 @@
 #include <kdebug.h>
 //#define  kdDebug()  cout
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 bool qwmfDebug = false;
 
 #include "qwmf.h"

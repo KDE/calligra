@@ -30,7 +30,6 @@
 
 #include <kdebug.h>
 
-#include <config.h>
 #include <qfileinfo.h>
 #include <qfile.h>
 
