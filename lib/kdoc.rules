@@ -4,10 +4,7 @@
 #
 # -Taj (Apr 1999)
 
-kde_MODULES = koml store kofficecore kofficeui kscript
-
-koml_FILES = *.idl *.h
-koml_LIBS = -lparts -lpartsui -lkom -lqt
+kde_MODULES = store kofficecore kofficeui kscript
 
 store_FILES = *.idl *.h
 store_LIBS = -lparts -lpartsui -lkom -lqt
