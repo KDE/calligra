@@ -69,9 +69,11 @@ PBPreview::PBPreview( QWidget* parent, const char* name, PaintType _paintType )
 void PBPreview::resizeEvent( QResizeEvent *e )
 {
     QFrame::resizeEvent( e );
-    if ( gradient )//FIXME
-	gradient->setSize( KoSize( contentsRect().width(),
-				  contentsRect().height() ) );
+    if ( gradient )
+    {
+	gradient->setSize( KoSize( _zoomHandler->unzoomItX(contentsRect().width()), _zoomHandler->unzoomItY( contentsRect().height()) ) );
+        repaint();
+    }
 }
 
 /*==============================================================*/
@@ -108,7 +110,8 @@ void PBPreview::drawContents( QPainter *painter )
 			   colorGroup().base() );
 	painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(), brush );
     } else if ( paintType == Gradient && gradient ) {
-	painter->drawPixmap( 0, 0, *gradient->getGradient() );
+	painter->drawPixmap( 0, 0 ,*gradient->getGradient());
+        gradient->paint(painter,_zoomHandler);
     }
 
     painter->restore();

@@ -58,7 +58,7 @@ public:
 
     QPixmap* getGradient() const { return (QPixmap*)&pixmap; }
     QSize getSize() const { return pixmap.size(); }
-
+    KoSize getKoSize() const { return gradientSize;}
     void setSize( const KoSize &_size );
 
     void addRef();
