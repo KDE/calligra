@@ -372,7 +372,7 @@ QString KSpreadDlgFormula::createFormula()
     {
 	first = FALSE;
 	if ( !first )
-	    tmp=tmp+","+createParameter(secondElement->text(), 1 );
+	    tmp=tmp+";"+createParameter(secondElement->text(), 1 );
 	else
 	    tmp=tmp+createParameter(secondElement->text(), 1 );
     }
@@ -380,7 +380,7 @@ QString KSpreadDlgFormula::createFormula()
     {
 	first = FALSE;
 	if ( !first )
-	    tmp=tmp+","+createParameter(thirdElement->text(), 2 );
+	    tmp=tmp+";"+createParameter(thirdElement->text(), 2 );
         else
 	    tmp=tmp+createParameter(thirdElement->text(), 2 );
     }
@@ -388,7 +388,7 @@ QString KSpreadDlgFormula::createFormula()
     {
 	first = FALSE;
 	if ( !first )
-	    tmp=tmp+","+createParameter(fourElement->text(), 3 );
+	    tmp=tmp+";"+createParameter(fourElement->text(), 3 );
         else
 	    tmp=tmp+createParameter(fourElement->text(), 3 );
     }
@@ -396,7 +396,7 @@ QString KSpreadDlgFormula::createFormula()
     {
 	first = FALSE;
 	if ( !first )
-	    tmp=tmp+","+createParameter(fiveElement->text(), 4 );
+	    tmp=tmp+";"+createParameter(fiveElement->text(), 4 );
         else
 	    tmp=tmp+createParameter(fiveElement->text(), 4 );
     }
