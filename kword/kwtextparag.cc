@@ -286,6 +286,13 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             elem.setAttribute( "blue", curFormat->textBackgroundColor().blue() );
         }
 
+    if( !refFormat || curFormat->isAnchor() != refFormat->isAnchor())
+    {
+        elem = doc.createElement( "LINK" );
+        formatElem.appendChild( elem );
+        elem.setAttribute( "linkName", curFormat->anchorName());
+        elem.setAttribute( "hrefName", curFormat->anchorHref() );
+    }
     return formatElem;
 }
 
@@ -450,6 +457,12 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
                     elem.attribute("green").toInt(),
                     elem.attribute("blue").toInt() );
         format.setTextBackgroundColor( col );
+    }
+    elem = formatElem.namedItem( "LINK" ).toElement();
+    if ( !elem.isNull() )
+    {
+        format.setAnchorName(elem.attribute( "linkName"));
+        format.setAnchorHref(elem.attribute("hrefName"));
     }
 
     //kdDebug() << "KWTextParag::loadFormat format=" << format.key() << endl;

@@ -2798,29 +2798,10 @@ void  KWTextFrameSetEdit::insertExpression(const QString &_c)
 
 void KWTextFrameSetEdit::insertLink(const QString &_linkName, const QString & hrefName)
 {
-    textObject()->insert( cursor(), currentFormat(), _linkName , false /* no newline */, true, i18n("Insert Link") );
-
-    QTextCursor c1( textDocument() );
-    QTextCursor c2( textDocument() );
-
-    QTextCursor start = textDocument()->selectionStartCursor( QTextDocument::Standard );
-    int startSel=cursor()->index()-_linkName.length();
-    int endSel=cursor()->index();
-    c1.setParag( cursor()->parag()  );
-    c1.setIndex( startSel );
-    c2.setParag( cursor()->parag() );
-    c2.setIndex( endSel );
-
-    textDocument()->setSelectionStart( QTextDocument::Standard, &c1 );
-    textDocument()->setSelectionEnd( QTextDocument::Standard, &c2 );
-
     KoTextFormat format=*currentFormat();
     format.setAnchorName(_linkName);
     format.setAnchorHref( hrefName);
-    KoTextFormat *format2=currentFormat();
-
-    textObject()->setFormatCommand( cursor(), format2 , &format, QTextFormat::Link,false );
-    textDocument()->removeSelection( QTextDocument::Standard );
+    textObject()->insert( cursor(), &format, _linkName , false , true, i18n("Insert Link") );
 }
 
 void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString & commandName )
