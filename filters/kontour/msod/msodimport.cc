@@ -21,15 +21,13 @@ DESCRIPTION
 */
 
 #include <kdebug.h>
-#include <kurl.h>
-#include <kmimetype.h>
 #include <ktempfile.h>
+#include <kmimetype.h>
 #include <kgenericfactory.h>
 #include <koFilterChain.h>
 #include <qfile.h>
 #include <msodimport.h>
 #include <qpointarray.h>
-#include <unistd.h>
 
 typedef KGenericFactory<MSODImport, KoFilter> MSODImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libmsodimport, MSODImportFactory( "msodimport" ) );
@@ -157,17 +155,13 @@ void MSODImport::gotPicture(
             m_embeddeeData = data;
             m_embeddeeLength = length;
 
-            // We need to resort to an ugly hack to determine the mimetype
-            // from the extension, as kservicetypefactory.h isn't installed
-            KURL url;
-            url.setPath( QString( "dummy.%1" ).arg( extension ) );
-            KMimeType::Ptr m( KMimeType::findByURL( url, 0, true, true ) );
-            if ( m->name() == KMimeType::defaultMimeType() )
+            QString srcMime( KoEmbeddingFilter::mimeTypeByExtension( extension ) );
+            if ( srcMime == KMimeType::defaultMimeType() )
                 kdWarning( s_area ) << "Couldn't determine the mimetype from the extension" << endl;
 
             QCString destMime; // intentionally empty, the filter manager will do the rest
             KoFilter::ConversionStatus status;
-            partRef = embedPart( m->name().latin1(), destMime, status, QString::number( key ) );
+            partRef = embedPart( srcMime.latin1(), destMime, status, QString::number( key ) );
 
             m_embeddeeData = 0;
             m_embeddeeLength = 0;

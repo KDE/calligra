@@ -29,7 +29,6 @@ DESCRIPTION
 #include <ktempfile.h>
 #include <kgenericfactory.h>
 #include <kmimetype.h>
-#include <kurl.h>
 #include <koFilterManager.h>
 #include <koFilterChain.h>
 #include <koQueryTrader.h>
@@ -139,17 +138,13 @@ void OLEFilter::slotSavePart(
         m_embeddeeData = data;
         m_embeddeeLength = length;
 
-        // We need to resort to an ugly hack to determine the mimetype
-        // from the extension, as kservicetypefactory.h isn't installed
-        KURL url;
-        url.setPath( QString( "dummy.%1" ).arg( extension ) );
-        KMimeType::Ptr m( KMimeType::findByURL( url, 0, true, true ) );
-        if ( m->name() == KMimeType::defaultMimeType() )
+        QString srcMime( KoEmbeddingFilter::mimeTypeByExtension( extension ) );
+        if ( srcMime == KMimeType::defaultMimeType() )
             kdWarning( s_area ) << "Couldn't determine the mimetype from the extension" << endl;
 
         KoFilter::ConversionStatus status;
         QCString destMime( mimeType.latin1() );
-        storageId = QString::number( embedPart( m->name().latin1(), destMime, status, nameIN ) );
+        storageId = QString::number( embedPart( srcMime.latin1(), destMime, status, nameIN ) );
 
         // copy back what the method returned
         mimeType = destMime;
