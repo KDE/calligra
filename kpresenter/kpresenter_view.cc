@@ -373,6 +373,11 @@ KPresenterView::~KPresenterView()
     delete m_searchEntry;
     delete m_replaceEntry;
     delete m_specialCharDlg;
+    delete styleDia;
+    delete pgConfDia;
+    delete rotateDia;
+    delete shadowDia;
+
 }
 
 /*=========================== file print =======================*/
