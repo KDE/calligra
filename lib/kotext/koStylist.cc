@@ -46,6 +46,10 @@
    Otherwise all changes are copied from the changed ones to the origs on OK.
    OK also frees all the changed ones and updates the doc if styles are deleted.
 */
+/* Months later the above seems SOO stupid.. Just should have created a small class 
+   containing the orig and the copy and an enum plus some simple methods..
+   Well; just keep that for those loonly uninspiring days :) (Thomas Z)
+*/
 
 KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrList<KoStyle> & style)
     : KDialogBase( _parent, "Stylist", true,
@@ -565,7 +569,7 @@ void KoStyleParagTab::resizeEvent( QResizeEvent *e )
 KoStyleFontTab::KoStyleFontTab( QWidget * parent )
     : KoStyleManagerTab( parent )
 {
-    m_chooser = new KoFontChooser( this );
+    m_chooser = new KoFontChooser( this, 0, true, KFontChooser::SmoothScalableFonts);
     m_zoomHandler = new KoZoomHandler;
 }
 
