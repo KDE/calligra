@@ -149,3 +149,23 @@ void Conversion::setBorderAttributes( QDomElement& borderElement, const wvWare::
     borderElement.setAttribute( "style", style );
     // We ignore brc.dptSpace (spacing), brc.fShadow (shadow), and brc.fFrame (?)
 }
+
+int Conversion::numberFormatCode( int nfc )
+{
+    switch ( nfc )
+    {
+    case 1: // upper case roman
+        return 5;
+    case 2: // lower case roman
+        return 4;
+    case 3: // upper case letter
+        return 3;
+    case 4: // lower case letter
+        return 2;
+    case 5: // ordinal - not supported by KWord
+    case 0: // arabic
+        return 0;
+    }
+    kdWarning() << k_funcinfo << "Unknown NFC: " << nfc << endl;
+    return 0;
+}

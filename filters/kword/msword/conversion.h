@@ -50,11 +50,14 @@ namespace Conversion
     // Convert color code (ico) to QColor
     QColor color(int number, int defaultcolor, bool defaultWhite = false);
 
-    // Conversion alignment code to string
+    // Convert alignment code to string
     QString alignment( int jc );
 
-    // Conversion linespacing struct to string
+    // Convert linespacing struct to string
     QString lineSpacing( const wvWare::Word97::LSPD& lspd );
+
+    // Convert number format code to KWord's COUNTER.type code
+    int numberFormatCode( int nfc );
 
     // Set all border attributes in the XML element, from a BRC structure
     void setBorderAttributes( QDomElement& borderElement, const wvWare::Word97::BRC& brc );
