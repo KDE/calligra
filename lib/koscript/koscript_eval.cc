@@ -739,6 +739,7 @@ bool KSEval_func_dcl( KSParseNode* node, KSContext& context )
   // Are parameters left ?
   if ( !context.value()->listValue().isEmpty() )
   {
+    // x-gettext: no-c-format
     const QString tmp( i18n("1 argument is not needed", "%n arguments are not needed", context.value()->listValue().count() ) );
     context.setException( new KSException( "TooManyArguments", tmp, node->getLineNo() ) );
     context.scope()->popLocalScope();
@@ -2126,6 +2127,7 @@ bool KSEval_destructor_dcl( KSParseNode* node, KSContext& context )
   // Are parameters left ?
   if ( !context.value()->listValue().isEmpty() )
   {
+    // x-gettext: no-c-format
     const QString tmp( i18n("1 argument is not needed", "%n arguments are not needed", context.value()->listValue().count() ) );
     context.setException( new KSException( "TooManyArguments", tmp, node->getLineNo() ) );
     context.scope()->popLocalScope();
