@@ -434,6 +434,7 @@ void KWTextFrameSet::layout()
 
 void KWTextFrameSet::invalidate()
 {
+    kdDebug() << "KWTextFrameSet::invalidate" << endl;
     m_lastFormatted = textdoc->firstParag();
     textdoc->invalidate(); // lazy layout, real update follows upon next repaint
 }
@@ -1721,7 +1722,8 @@ void KWTextFrameSet::formatMore()
                 frames.last()->setBottom( wantedPosition );
 
             m_doc->updateAllFrames();
-            m_doc->invalidate();
+            /// We don't want to start from the beginning every time !
+            ////m_doc->invalidate();
 
             if ( m_lastFormatted )
             {
