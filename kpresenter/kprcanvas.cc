@@ -2607,6 +2607,12 @@ QPtrList<KPTextObject> KPrCanvas::selectedTextObjs() const
         if ( it.current()->isSelected() && it.current()->getType() == OT_TEXT )
             lst.append( static_cast<KPTextObject*>( it.current() ) );
     }
+    //get sticky obj
+    it=m_view->kPresenterDoc()->stickyPage()->objectList();
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->isSelected() && it.current()->getType() == OT_TEXT )
+            lst.append( static_cast<KPTextObject*>( it.current() ));
+    }
     return lst;
 }
 
