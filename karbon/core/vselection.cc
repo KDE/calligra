@@ -174,10 +174,13 @@ VSelection::draw( QPainter* painter, double zoomFactor ) const
 		QRect temp;
 		for( uint i = node_lt; i <= node_rb; ++i )
 		{
-			temp.setRect(	zoomFactor * m_qrect[ i ].left() - m_handleNodeSize,
-							zoomFactor * m_qrect[ i ].top()  - m_handleNodeSize,
-							2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
-			painter->drawRect( temp );
+			if( i != node_mm )
+			{
+				temp.setRect(	zoomFactor * m_qrect[ i ].left() - m_handleNodeSize,
+								zoomFactor * m_qrect[ i ].top()  - m_handleNodeSize,
+								2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
+				painter->drawRect( temp );
+			}
 		}
 	}
 }
