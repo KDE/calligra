@@ -37,6 +37,7 @@ MatrixElement::~MatrixElement()
 void MatrixElement::setChildrenNumber(int n)
 {
     childrenNumber=n;
+    minChildren=n;
     child.resize(childrenNumber);
     childPoint.resize(childrenNumber);
     hby.resize(childrenNumber);  //It's too much, but they are 2 only bytes..
@@ -332,7 +333,7 @@ And now columns!!
 } */
 int MatrixElement::takeActionFromKeyb(int)
 {
-    return -1;
+    return 0;
 }
 
 void MatrixElement::setNumericFont(int value)

@@ -25,6 +25,7 @@ PrefixedElement::PrefixedElement(KFormulaDoc *Formula,
     */
     usePixmap=FALSE;
     childrenNumber=3;
+    minChildren=1;
     child.resize(childrenNumber);
     child[1]=0L;
     child[2]=0L;

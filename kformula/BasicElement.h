@@ -9,6 +9,7 @@
  Author: Andrea Rizzi <rizzi@kde.org>
  License:GPL
 */
+#include <koStream.h>
 
 #include <qpoint.h>
 #include <qstring.h>
@@ -62,6 +63,13 @@ class BasicElement
      */ 
     virtual void checkSize(); 
   
+    /*
+     * Check if needed children exists.
+     *
+     */
+    virtual void check();
+     
+     
     /*
      * Must be called by draw() 
      * RootElement may need to rewrite it.
@@ -172,9 +180,15 @@ class BasicElement
     void insertElement(BasicElement *element);    
   
     /*
-     * Again, in  the future....
+     * delete this element, its children & index 
      */
-    void save(int file);
+    void deleteElement(bool deleteme=true);    
+  
+    /*
+     *  At the moment they do nothing.
+     *  
+     */
+    void save(ostream& out);
     void load(int file);
   
  protected:
@@ -220,6 +234,12 @@ class BasicElement
      * The number of children.
      */
     int childrenNumber;
+
+    /*
+     * The number of children.
+     */
+    int minChildren;
+
     /*
      * real data: text,symbol code,delimiter code,matrix rows&cols
      */

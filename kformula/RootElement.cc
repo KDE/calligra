@@ -25,6 +25,7 @@ RootElement::RootElement(KFormulaDoc *Formula,
     */
     usePixmap=FALSE;
     childrenNumber=1;
+    minChildren=1;
     child.resize(childrenNumber);
 }
 
@@ -48,6 +49,7 @@ void RootElement::draw(QPoint drawPoint,int resolution)
 	Draw root!!
     */
     int ofs=(numericFont/24);
+    if (ofs<1) ofs=1;
     /*
       I think I'll change this part of code using a Fill function
       Because painting on a printer I think I may have problems.
@@ -68,8 +70,8 @@ void RootElement::draw(QPoint drawPoint,int resolution)
      
      
       pen->setPen(QPen(elementColor,ofs*2));
-      pen->drawLine(x+familySize.x()+unit/3,y+familySize.y()+unit+1,
-      x+familySize.x()+unit/2+unit/3,y+familySize.bottom()+3);//familySize.y is < 0
+      pen->drawLine(x+familySize.x()+unit/3,y+familySize.y()+unit+2,
+      x+familySize.x()+unit/2+unit/3,y+familySize.bottom()+1);//familySize.y is < 0
 
       pen->setPen(QPen(elementColor,ofs));
 
@@ -77,7 +79,7 @@ void RootElement::draw(QPoint drawPoint,int resolution)
       x+familySize.x()+unit/2+unit/3,y+familySize.bottom());
 
       pen->drawLine(x+familySize.x()+unit+unit/3,y+familySize.y()+3,
-      x+familySize.right()+1+unit/3,y+familySize.y()+3);
+      x+familySize.right()+1,y+familySize.y()+3);
       	
       pen->drawLine(x+familySize.x()+unit/3,y+familySize.y()+unit+1,
              x+familySize.x(),y+familySize.y()+unit+1+unit/2);
@@ -102,7 +104,7 @@ void RootElement::draw(QPoint drawPoint,int resolution)
     */
     if( beActive )
 	pen->setPen(Qt::blue);
-    child[0]->draw(QPoint(x+familySize.x()+unit+2+ofs+1,y),resolution);
+    child[0]->draw(QPoint(x+familySize.x()+unit+unit/3+2+ofs+1,y),resolution);
     myArea=globalSize;;
     myArea.moveBy(x,y);
     // globalArea=
@@ -115,7 +117,7 @@ void RootElement::draw(QPoint drawPoint,int resolution)
 	index[0]->draw(drawPoint+
 		       familySize.topLeft()-
 		       index[0]->getSize().bottomRight()
-		       +QPoint(unit/2,unit),
+		       +QPoint(unit/2+unit/3,unit),
 		       resolution);
 
     drawIndexes(pen,resolution);
@@ -166,7 +168,7 @@ int RootElement::takeAsciiFromKeyb(int)
 */
 int RootElement::takeActionFromKeyb(int)
 {
-    return -1;
+    return 0;
 }
 
 void RootElement::setNumericFont(int value)

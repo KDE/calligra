@@ -87,8 +87,15 @@ bool KFormulaDoc::save( ostream& out, const char* /* format */ )
     out << otag << "<DOC author=\"" << "Andrea Rizzi" << "\" email=\""
 	<< "rizzi@kde.org" << "\" editor=\"" << "KFormula"
 	<< "\" mime=\"" << MIME_TYPE << "\" >" << endl;
-    out << etag << "</DOC>" << endl;
+    
+    out << "<FORMULA>" << endl;
 
+    out << "<ELEM FIRST ";
+    theFirstElement->save(out);
+    
+    out << "</FORMULA>" << endl;    
+    out << etag << "</DOC>" << endl;
+ 
     return true;
 }
 
@@ -471,8 +478,7 @@ cerr << " key received , " << k->ascii() << endl;
               break;
 	      case '_':
 		addIndex(IN_BOTTOMRIGHT);
-              break;
-	      
+              break;	      
 	     default:
 	     {
 	    if (theActiveElement!=0L)
@@ -483,9 +489,10 @@ cerr << " key received , " << k->ascii() << endl;
 	}
     else   //Not ascii
 	{
-	    if (theActiveElement!=0L)
-		elReturn=theActiveElement->takeActionFromKeyb(k->key());
-	}	
+    	    if (theActiveElement!=0L)
+              elReturn=theActiveElement->takeActionFromKeyb(k->key());
+	    warning("Not Ascii return %d",elReturn);
+  	}	
         
 	if (elReturn==FCOM_ADDTEXT) 
  	    { 
@@ -493,8 +500,19 @@ cerr << " key received , " << k->ascii() << endl;
 	     if((k->ascii()>32)&&(k->ascii()<127))
  		theActiveElement->takeAsciiFromKeyb(k->ascii());
 	    }
+	if (elReturn==FCOM_DELETEME)
+	    {
 
+		 BasicElement *newActive;
+		 BasicElement *prev;
+	         newActive=theActiveElement->getNext();
+		 prev=theActiveElement->getPrev();
+		 theActiveElement->deleteElement();
+		 if(prev!=0)
+		   prev->check();
+		 setActiveElement(newActive);
 
+	    }
 
     //ChText(Blocks[getCurrent()]->getcont());
     //ChType(Blocks[getCurrent()]->gettype());
@@ -505,13 +523,24 @@ cerr << " key received , " << k->ascii() << endl;
 
 void KFormulaDoc::paintEvent( QPaintEvent *, QWidget *paintGround )
 {
-//    QPixmap pm(paintGround->size());  //double buffer
+/*		    //paintGround->size()    
+    QPixmap pm(100,100);  //double buffer
+    pm.fill();
+    QPainter q;
+    thePainter=&q;
+*/
     thePainter->begin(paintGround);
     thePainter->setPen( black );
     theFirstElement->checkSize();
     theFirstElement->draw(QPoint(0,0)-theFirstElement->getSize().topLeft());
     if(theActiveElement && typeid(*theActiveElement) == typeid(TextElement))
-	thePainter->drawWinFocusRect(theCursor);
+	{
+	 //thePainter->drawWinFocusRect(theCursor);
+	 thePainter->drawLine(theCursor.topLeft()+QPoint(0,1),theCursor.topRight()+QPoint(0,1));
+	 thePainter->drawLine(theCursor.bottomLeft()-QPoint(0,1),theCursor.bottomRight()-QPoint(0,1));
+	 thePainter->drawLine(theCursor.topLeft()+QPoint(theCursor.width()/2,1),
+	                     theCursor.bottomLeft()+QPoint(theCursor.width()/2,-1));	 
+	}
     thePainter->end();
 //    bitBlt(paintGround,0,0,&pm,0,0,-1,-1);
 }

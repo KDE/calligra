@@ -60,7 +60,7 @@ void TextElement::draw(QPoint drawPoint,int resolution)
 	    QFontMetrics fm(formulaFont);
 	    formula->setCursor(QRect(x+familySize.x()+fm.width(content,position),
 				     y+familySize.top()-1,
-				     3,familySize.height()+2));
+				     5,familySize.height()+2));
 	}
 	
     }
@@ -149,17 +149,24 @@ int TextElement::takeActionFromKeyb(int action)
 {
     if(action==Qt::Key_Backspace)
 	{
+	if(content!="")	{
 	    if(position > 0) {
 		position--;
 		content.remove(position,1);
 	    }
+	   }
+	    else return FCOM_DELETEME;
 	}
     else
      if(action==Qt::Key_Delete)
-	    content.remove(position,1);   //Change this....
+
+         content.remove(position,1);   //Change this....
+	 
       else
        if(action==Qt::Key_Left)
             position--;	
+       if(action==Qt::Key_Right)
+            position++;	
 
 
 

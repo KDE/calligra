@@ -31,6 +31,7 @@ BasicElement::BasicElement(KFormulaDoc *Formula,
 	numericFont=24;
 
     childrenNumber=0;
+    minChildren=0;
     index[0]=0L;
     index[1]=0L;
     index[2]=0L;
@@ -143,6 +144,15 @@ void BasicElement::checkSize()
 
 }
 
+void BasicElement::check()
+{
+  int i=0; 
+  for(i=0;i<childrenNumber;i++)
+      if (child[i]==0L)
+         if (i<minChildren)
+	     child[i]=new BasicElement(formula,this,i+4);
+
+}
 void BasicElement::checkIndexesSize()
 {
     QRect indexDimension;
@@ -237,9 +247,27 @@ void BasicElement::setNumericFont(int value)
     numericFont=value;
 }
 
-int BasicElement::takeActionFromKeyb(int)
+int BasicElement::takeActionFromKeyb(int action)
 {
-    return  0;
+if(action==Qt::Key_Delete)
+ {
+    warning("Key Delete");
+    return  FCOM_DELETEME;
+ }
+if(action==Qt::Key_BackSpace)
+  if(prev!=0)
+    {
+     formula->setActiveElement(prev);
+     return  FCOM_DELETEME;    
+    }
+if(action==Qt::Key_Left)
+  if(prev!=0)
+     formula->setActiveElement(prev); 
+if(action==Qt::Key_Right)
+  if(next!=0)
+     formula->setActiveElement(next); 
+
+ return 0;
 }
 
 void  BasicElement::substituteElement(BasicElement *clone)
@@ -278,28 +306,7 @@ void  BasicElement::substituteElement(BasicElement *clone)
 
 int BasicElement::takeAsciiFromKeyb(char ch)
 {
-/*    if(typeid(* this) == typeid(BasicElement))     //This function may be used by RootElement
-	//  content.insert(content.length(),ch);
-	return FCOM_TEXTCLONE; //  Ask to be cloned into text & deleted
-    else return 1; */
-/* Code moved on DOC
- switch(ch) 
- {
-  case '(':
-   return FCOM_ADDBRACKET;
-   break;
-  case '@':
-   return FCOM_ADDROOT;
-   break;    
-  case '^':
-   return FCOM_ADDINDEXTR;
-   break;    
-  case '/':
-   return FCOM_ADDFRACTION;
-   break;      
- }
- */     
-return FCOM_ADDTEXT;    
+  return FCOM_ADDTEXT;    
 }
 
 
@@ -328,8 +335,86 @@ void  BasicElement::insertElement(BasicElement *element)
     relation=-1;
 }
 
-void  BasicElement::save(int)
+void  BasicElement::deleteElement(bool deleteme=true)
 {
+    warning("deleteElement of -> %p   prev %p    next %p",this,prev,next);
+//    bool deleteme=true;
+    if(next!=0L)
+     {
+     next->setPrev(prev);
+     next->setRelation(relation);
+     }
+    if(prev!=0L)
+     	{
+	    if(relation<4)
+		{
+		    if(relation>=0)
+			prev->setIndex(next,relation);
+		    else
+			prev->setNext(next);
+		}
+	    else
+		prev->setChild(next,relation-4);
+	}
+    
+    else //I'm the first element.
+     if(next!=0L)
+      formula->setFirstElement(next);    
+     else
+      formula->setFirstElement(new BasicElement(formula));    
+//      deleteme=false;
+      
+   int nc=0;     
+   while (nc<childrenNumber)
+      { 
+       if (child[nc]!=0L)
+       {
+       	warning("I'm %p, I delete my child[%d]=%p i.e. %d of %d",this,nc,child[nc],nc+1,childrenNumber);    
+        child[nc]->deleteElement();
+       }
+        else 
+	 nc++;
+      }
+   while (nc<4)
+      { 
+       if (index[nc]!=0L)
+         index[nc]->deleteElement();
+        else 
+	 nc++;
+      }
+//if(deleteme)
+ delete this;  // It is a good call ?
+//else
+
+}
+
+
+void  BasicElement::save(ostream& out)
+{
+out << "TYPE=" << -1 << " "
+    << "CONTENT=" << (const char *) content << " "
+    << "NUMERICFONT=" << numericFont << " "
+    << " >" << endl;
+
+for(int i=0;i<4;i++)
+ if(index[i]!=0L)
+    {
+     out << " <ELEM INDEX=" << i << " ";
+     index[i]->save(out);     
+    } 
+    
+for(int i=0;i<childrenNumber;i++)
+ if(child[i]!=0L)
+    {
+     out << " <ELEM CHILD=" << i << " ";
+     child[i]->save(out);     
+    } 
+if(next!=0)
+    {
+     out << " <ELEM NEXT ";
+     next->save(out);     
+    }         
+out << "</ELEM>" << endl;
 }
 
 void  BasicElement::load(int)

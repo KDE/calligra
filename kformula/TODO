@@ -2,10 +2,10 @@ TODO List  (5 Jen 1999)
 
 Elements:
 -BracketElement add types {}<> & other
--Decoration  //Started!!
+-Decoration  (Started)
 -Symbol
--implement saveMe()
--implement openMe()  //Bad name :-(
+-implement save()  (Started)
+-implement load()  
 -usedColor fucntion 
 -Use shape & qpen better
 -Bitmap drawing (for root,integral etc) // XXI Century
@@ -19,13 +19,13 @@ Interface/doc:
 -General properties dialog
 -Font dialog
 -Color dialog
--Print
+-Print  (DONE)
 -(de)Activate element menu entries
 -Solve Focus/input problems
 -Template (for lim, sup , inf, max ,min, etc...)
--Delete Element !!!!!
+-Delete Element !!!!!  (DONE)
 
 General:
--Remove numbers & replace with defined const
--Rewrite comments in newer Element files
--Keyb navigation
+-Remove numbers & replace with defined const (Done)
+-Rewrite comments in newer Element files 
+

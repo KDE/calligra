@@ -24,6 +24,7 @@ BracketElement::BracketElement(KFormulaDoc *Formula,
   */
   usePixmap=FALSE;
   childrenNumber=1;
+  minChildren=1;
   child.resize(childrenNumber);
 }
 

@@ -27,6 +27,7 @@ FractionElement::FractionElement(KFormulaDoc *Formula,
     */
     content="FMC5";
     childrenNumber=2;
+    minChildren=2;
     child.resize(childrenNumber);
 }
 
