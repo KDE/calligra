@@ -296,9 +296,9 @@ void CSVDialog::fillTable( )
           lastCharDelimiter = false;
     }
 
-    // file with only one line without '\n'
-    if (field.length() > 0)
+    if ( !field.isEmpty() )
     {
+      // the last line of the file had not any line end
       setText(row - m_startRow, column - m_startCol, field);
       ++row;
       field = QString::null;
