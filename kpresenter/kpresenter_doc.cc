@@ -2060,25 +2060,12 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
         bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
         newZoomAndResolution( false, forPrint );
     }
-    unsigned int i = 0;
-#if 0
-    QPtrListIterator<KPBackGround> bIt( _backgroundList );
-    for (; bIt.current(); ++bIt, i++ )
+    //for the moment draw first page.
+    QPtrListIterator<KPObject> it( m_pageList.first()->objectList() );
+    for ( ; it.current() ; ++it )
     {
-        QRect r = getPageRect( i, 0, 0, 1.0, false );
-        if ( rect.intersects( r ) )
-            bIt.current()->draw( &painter, QPoint( r.x(), r.y() ), false );
+        it.current()->draw( &painter, zoomHandler(), false );
     }
-#endif
-    kdDebug()<<"paintContent==================================\n";
-#if 0
-    QPtrListIterator<KPObject> oIt( *_objectList );
-    for (; oIt.current(); ++oIt )
-        if ( rect.intersects( oIt.current()->getBoundingRect( 0, 0 ) ) )
-        {
-            oIt.current()->draw( &painter, 0, 0, flag for "don't draw selection" );
-        }
-#endif
 }
 
 
