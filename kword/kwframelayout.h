@@ -78,9 +78,16 @@ namespace KWFrameLayout
             }
     };
 
-    void layout( KWDocument* doc, KWFrameSet* mainTextFrameSet,
+    /**
+     * The main method of this file. Do the frame layout.
+     * @param mainTextFrameSet if set, its frames will be resized. Usually: set in WP mode, not set in DTP mode.
+     * @param numColumns number of columns to create for the main textframeset. Only relevant if mainTextFrameSet!=0.
+     * TODO: use fromPage/toPage to reduce the re-calc to the right page(s).
+     */
+    void layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int numColumns,
                  QPtrList<HeaderFooterFrameset>& info,
                  int fromPage, int toPage );
+//protected:
     void resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, uint frameNumber, const KoRect& rect );
 };
 

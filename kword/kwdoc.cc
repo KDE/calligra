@@ -311,7 +311,7 @@ void KWDocument::initConfig()
       m_viewFrameBorders = config->readBoolEntry( "ViewFrameBorders", true );
 
       m_zoom = config->readNumEntry( "Zoom", 100 );
-      m_bShowDocStruct = config->readBoolEntry("showDocStruct",true); 
+      m_bShowDocStruct = config->readBoolEntry("showDocStruct",true);
       m_lastViewMode= config->readEntry( "viewmode","ModeNormal");
       setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ));
       setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ));
@@ -586,6 +586,7 @@ void KWDocument::recalcFrames()
 
     // This allocation each time might slow things down a bit.
     // TODO KWHeaderFooterFrameSet : public KWTextFrameSet, and store the HeaderFooterFrameset data into there.
+    // ... hmm, but then KWFootNoteFrameSet needs to inherit KWHeaderFooterFrameSet?
     QPtrList<KWFrameLayout::HeaderFooterFrameset> headerFooterList;
     headerFooterList.setAutoDelete( true );
 
@@ -599,9 +600,6 @@ void KWDocument::recalcFrames()
                 firstHeader->setVisible( false );
                 firstHeader->deleteAllCopies();
 
-                oddHeader = evenHeader;
-                firstHeader = evenHeader;
-
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
                                              evenHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing ) );
                 break;
@@ -610,8 +608,6 @@ void KWDocument::recalcFrames()
                 oddHeader->setVisible( false );
                 oddHeader->deleteAllCopies();
                 firstHeader->setVisible( true );
-
-                oddHeader = evenHeader;
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
                                              firstHeader, 0, 0, m_pageHeaderFooter.ptHeaderBodySpacing ) );
@@ -623,8 +619,6 @@ void KWDocument::recalcFrames()
                 oddHeader->setVisible( true );
                 firstHeader->setVisible( false );
                 firstHeader->deleteAllCopies();
-
-                firstHeader = oddHeader;
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
                                              evenHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing, KWFrameLayout::HeaderFooterFrameset::Even ) );
@@ -642,9 +636,6 @@ void KWDocument::recalcFrames()
                 firstFooter->setVisible( false );
                 firstFooter->deleteAllCopies();
 
-                oddFooter = evenFooter;
-                firstFooter = evenFooter;
-
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
                                              evenFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
                 break;
@@ -653,8 +644,6 @@ void KWDocument::recalcFrames()
                 oddFooter->setVisible( false );
                 oddFooter->deleteAllCopies();
                 firstFooter->setVisible( true );
-
-                oddFooter = evenFooter;
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
                                              evenFooter, 0, 0, m_pageHeaderFooter.ptFooterBodySpacing ) );
@@ -666,8 +655,6 @@ void KWDocument::recalcFrames()
                 oddFooter->setVisible( true );
                 firstFooter->setVisible( false );
                 firstFooter->deleteAllCopies();
-
-                firstFooter = oddFooter;
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
                                              evenFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing,
@@ -742,41 +729,6 @@ void KWDocument::recalcFrames()
             recalcVariables( VT_PGNUM );
         }
 
-#if 0
-        // Create new frames or resize the existing frames in the main text frameset
-        // ( taking into account the header/footer sizes )
-        for ( uint j = 0; j < (uint) m_pages; j++ ) {
-            if ( j == 0 ) {
-                headOffset = firstHeadOffset;
-                footOffset = firstFootOffset;
-            } else if ( ( j + 1 ) % 2 == 0 ) {
-                headOffset = evenHeadOffset;
-                footOffset = evenFootOffset;
-            } else {
-                headOffset = oddHeadOffset;
-                footOffset = oddFootOffset;
-            }
-
-            for ( int i = 0; i < m_pageColumns.columns; i++ ) {
-                // Calculate wanted rect for this frame
-                /////// TODO ##################### include footnotes
-                KoRect rect( ptLeftBorder() + i * ( ptColumnWidth + ptColumnSpacing() ),
-                             j * ptPaperHeight() + ptTopBorder() + headOffset,
-                             ptColumnWidth,
-                             ptPaperHeight() - ptTopBorder() - ptBottomBorder() -
-                             headOffset - footOffset );
-
-                if ( j * m_pageColumns.columns + i < frameset->getNumFrames() ) {
-                    // Resize existing frame
-                    frameset->frame( j * m_pageColumns.columns + i )->setRect( rect );
-                } else {
-                    // Create new frame
-                    KWFrame * frame = new KWFrame( frameset, rect.x(), rect.y(), rect.width(), rect.height() );
-                    frameset->addFrame( frame );
-                }
-            }
-        }
-#endif
     } else {
         // DTP mode: calculate the number of pages from the frames.
         double height=0;
@@ -795,196 +747,8 @@ void KWDocument::recalcFrames()
         // so the headers and footers are at the edge of the page....
     }
 
-    KWFrameLayout::layout( this, frameset, headerFooterList, 0, m_pages-1 );
+    KWFrameLayout::layout( this, frameset, m_pageColumns.columns, headerFooterList, 0, m_pages-1 );
 
-#if 0
-    if ( isHeaderVisible() ) {
-        switch ( getHeaderType() ) {
-        case HF_SAME: {
-            double h = evenHeader->frame( 0 )->height();
-            for ( int l = 0; l < m_pages; l++ ) {
-                KoRect rect( ptLeftBorder(),
-                             l * ptPaperHeight() + ptTopBorder(),
-                             ptPaperWidth() -
-                             ptLeftBorder() - ptRightBorder(), h );
-                resizeOrCreateHeaderFooter( evenHeader, l, rect );
-            }
-            if ( m_pages < static_cast<int>( evenHeader->getNumFrames() ) ) {
-                int diff = evenHeader->getNumFrames() - m_pages;
-                for ( ; diff > 0; diff-- )
-                    evenHeader->delFrame( evenHeader->getNumFrames() - 1 );
-            }
-        } break;
-        case HF_EO_DIFF: {
-            double h1 = evenHeader->frame( 0 )->height();
-            double h2 = oddHeader->frame( 0 )->height();
-            int even = 0, odd = 0; // frame number in each frameset
-            for ( int l = 0; l < m_pages; l++ ) {
-                if ( ( l + 1 ) % 2 ) {
-                    //kdDebug(32002) << "KWDocument::recalcFrames considering page " << l << "(odd)" << endl;
-                    KoRect rect( ptLeftBorder(),
-                                 l * ptPaperHeight() + ptTopBorder(),
-                                 ptPaperWidth() - ptLeftBorder() - ptRightBorder(),
-                                 h2 );
-                    resizeOrCreateHeaderFooter( oddHeader, odd, rect );
-                    odd++;
-                } else {
-                    //kdDebug(32002) << "KWDocument::recalcFrames considering page " << l << "(even)" << endl;
-                    KoRect rect( ptLeftBorder(),
-                                 l * ptPaperHeight() + ptTopBorder(),
-                                 ptPaperWidth() - ptLeftBorder() - ptRightBorder(),
-                                 h1 );
-                    resizeOrCreateHeaderFooter( evenHeader, even, rect );
-                    even++;
-                }
-            }
-            if ( even + 1 < static_cast<int>( evenHeader->getNumFrames() ) ) {
-                int diff = evenHeader->getNumFrames() - even;
-#ifdef DEBUG_PAGES
-                kdDebug(32002) << "KWDocument::recalcFrames deleting " << diff << " even headers" << endl;
-#endif
-                for ( ; diff > 0; diff-- )
-                    evenHeader->delFrame( evenHeader->getNumFrames() - 1 );
-            }
-            if ( odd + 1 < static_cast<int>( oddHeader->getNumFrames() ) ) {
-                int diff = oddHeader->getNumFrames() - odd;
-#ifdef DEBUG_PAGES
-                kdDebug(32002) << "KWDocument::recalcFrames deleting " << diff << " odd headers" << endl;
-#endif
-                for ( ; diff > 0; diff-- )
-                    oddHeader->delFrame( oddHeader->getNumFrames() - 1 );
-            }
-            if ( m_pages == 1 && evenHeader->getNumFrames() > 0 ) {
-#ifdef DEBUG_PAGES
-                kdDebug(32002) << "KWDocument::recalcFrames 1 page, " << evenHeader->getNumFrames() << " frames" << endl;
-#endif
-                // Only one page, no room to show the even header -> 'hide' it, moving it after the page.
-                for ( unsigned int m = 0; m < evenHeader->getNumFrames(); m++ )
-                    evenHeader->frame( m )->setRect( 0, ptPaperHeight() + h1,
-                                                        ptPaperWidth() - ptLeftBorder() -
-                                                        ptRightBorder(), h1 );
-            }
-        } break;
-        case HF_FIRST_DIFF: {
-            // Take care of the first header
-            double h = firstHeader->frame( 0 )->height();
-            firstHeader->frame( 0 )->setRect( ptLeftBorder(), ptTopBorder(),
-                                                 ptPaperWidth() - ptLeftBorder() -
-                                                 ptRightBorder(), h );
-            if ( firstHeader->getNumFrames() > 1 ) {
-                int diff = firstHeader->getNumFrames() - 1;
-                for ( ; diff > 0; diff-- )
-                    firstHeader->delFrame( firstHeader->getNumFrames() - 1 );
-            }
-            // Now lay out all the other headers (same)
-            h = evenHeader->frame( 0 )->height();
-            for ( int l = 1; l < m_pages; l++ ) {
-                KoRect rect( ptLeftBorder(), l * ptPaperHeight() +
-                             ptTopBorder(),
-                             ptPaperWidth() - ptLeftBorder() -
-                             ptRightBorder(), h );
-                resizeOrCreateHeaderFooter( evenHeader, l - 1, rect );
-            }
-            if ( m_pages < static_cast<int>( evenHeader->getNumFrames() ) ) {
-                int diff = evenHeader->getNumFrames() - m_pages;
-                for ( ; diff > 0; diff-- )
-                    evenHeader->delFrame( evenHeader->getNumFrames() - 1 );
-            }
-            // Only one page -> hide frames from normal header
-            if ( m_pages == 1 && evenHeader->getNumFrames() > 0 ) {
-                for ( unsigned int m = 0; m < evenHeader->getNumFrames(); m++ )
-                    evenHeader->frame( m )->setRect( 0, ptPaperHeight() + h,
-                                                        ptPaperWidth() - ptLeftBorder() -
-                                                        ptRightBorder(), h );
-            }
-        } break;
-        }
-    }
-
-    if ( isFooterVisible() ) {
-        switch ( getFooterType() ) {
-        case HF_SAME: {
-            double h = evenFooter->frame( 0 )->height();
-            for ( int l = 0; l < m_pages; l++ ) {
-                KoRect rect( ptLeftBorder(), ( l + 1 ) * ptPaperHeight() -
-                             ptBottomBorder() - h,
-                             ptPaperWidth() - ptLeftBorder() -
-                             ptRightBorder(), h );
-                resizeOrCreateHeaderFooter( evenFooter, l, rect );
-            }
-            if ( m_pages < static_cast<int>( evenFooter->getNumFrames() ) ) {
-                int diff = evenFooter->getNumFrames() - m_pages;
-                for ( ; diff > 0; diff-- )
-                    evenFooter->delFrame( evenFooter->getNumFrames() - 1 );
-            }
-        } break;
-        case HF_EO_DIFF: {
-            double h1 = evenFooter->frame( 0 )->height();
-            double h2 = oddFooter->frame( 0 )->height();
-            int even = 0, odd = 0;
-            for ( int l = 0; l < m_pages; l++ ) {
-                if ( ( l + 1 ) % 2 ) {
-                    KoRect rect( ptLeftBorder(),
-                                 ( l + 1 )  * ptPaperHeight() - ptBottomBorder() - h2,
-                                 ptPaperWidth() - ptLeftBorder() - ptRightBorder(), h2 );
-                    resizeOrCreateHeaderFooter( oddFooter, odd, rect );
-                    odd++;
-                } else {
-                    KoRect rect( ptLeftBorder(),
-                                 ( l + 1 )  * ptPaperHeight() - ptBottomBorder() - h1,
-                                 ptPaperWidth() - ptLeftBorder() - ptRightBorder(), h1 );
-                    resizeOrCreateHeaderFooter( evenFooter, even, rect );
-                    even++;
-                }
-            }
-            if ( even + 1 < static_cast<int>( evenFooter->getNumFrames() ) ) {
-                int diff = evenFooter->getNumFrames() - even;
-                for ( ; diff > 0; diff-- )
-                    evenFooter->delFrame( evenFooter->getNumFrames() - 1 );
-            }
-            if ( odd + 1 < static_cast<int>( oddFooter->getNumFrames() ) ) {
-                int diff = oddFooter->getNumFrames() - odd;
-                for ( ; diff > 0; diff-- )
-                    oddFooter->delFrame( oddFooter->getNumFrames() - 1 );
-            }
-            if ( m_pages == 1 && evenFooter->getNumFrames() > 0 ) {
-                for ( unsigned int m = 0; m < evenFooter->getNumFrames(); m++ )
-                    evenFooter->frame( m )->setRect( 0, m_pages * ptPaperHeight() + h1,
-                                                        ptPaperWidth() - ptLeftBorder() -
-                                                        ptRightBorder(), h1 );
-            }
-        } break;
-        case HF_FIRST_DIFF: {
-            double h = firstFooter->frame( 0 )->height();
-            firstFooter->frame( 0 )->setRect( ptLeftBorder(), ptPaperHeight() - ptBottomBorder() - h,
-                                                 ptPaperWidth() - ptLeftBorder() - ptRightBorder(), h );
-            if ( firstFooter->getNumFrames() > 1 ) {
-                int diff = firstFooter->getNumFrames() - 1;
-                for ( ; diff > 0; diff-- )
-                    firstFooter->delFrame( firstFooter->getNumFrames() - 1 );
-            }
-            h = evenFooter->frame( 0 )->height();
-            for ( int l = 1; l < m_pages; l++ ) {
-                KoRect rect( ptLeftBorder(),
-                             ( l + 1 ) * ptPaperHeight() - ptBottomBorder() - h,
-                             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), h );
-                resizeOrCreateHeaderFooter( evenFooter, l-1, rect );
-            }
-            if ( m_pages < static_cast<int>( evenFooter->getNumFrames() ) ) {
-                int diff = evenFooter->getNumFrames() - m_pages;
-                for ( ; diff > 0; diff-- )
-                    evenFooter->delFrame( evenFooter->getNumFrames() - 1 );
-            }
-            if ( m_pages == 1 && evenFooter->getNumFrames() > 0 ) {
-                for ( unsigned int m = 0; m < evenFooter->getNumFrames(); m++ )
-                    evenFooter->frame( m )->setRect( 0, m_pages * ptPaperHeight() + h,
-                                                        ptPaperWidth() - ptLeftBorder() -
-                                                        ptRightBorder(), h );
-            }
-        } break;
-        }
-    }
-#endif
 }
 
 bool KWDocument::loadChildren( KoStore *_store )
