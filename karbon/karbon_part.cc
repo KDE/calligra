@@ -336,10 +336,18 @@ KarbonPart::initUnit()
 	//load it for new file or empty file
 	KConfig* config = KarbonPart::instance()->config();
 
-	if( config->hasGroup( "Misc" ) )
-	{
-		config->setGroup( "Misc" );
-		m_doc.setUnit( KoUnit::unit( config->readEntry( "Units", KoUnit::unitName( KoUnit::U_MM ) ) ) );
+
+	if (KGlobal::locale()->measureSystem() == KLocale::Imperial) {
+		setUnit( KoUnit::U_INCH );
+	} else {
+		setUnit( KoUnit::U_CM );
+	}
+
+	if(config->hasGroup("Misc") ) {
+	        config->setGroup( "Misc" );
+		if ( config->hasKey( "Units" ) ) {
+		         setUnit( KoUnit::unit( config->readEntry("Units") ) );
+		} 
 	}
 }
 
