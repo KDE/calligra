@@ -80,8 +80,7 @@ public:
     void setState(State s);
 
     QString name() { return m_resource->name(); }
-    void setName(const QString &newName) { kdDebug()<<k_funcinfo<<"old="<<m_resource->name()<<" new="<<newName<<endl;
-            m_resource->setName(newName); setState(Modified); }
+    void setName(const QString &newName) { m_resource->setName(newName); setState(Modified); }
 
     void saveResource(KPTGroupItem *gitem);
 
@@ -265,8 +264,6 @@ void KPTResourcesPanel::slotEditResource() {
         item->setName(r->name()); // refresh list
         listOfResources->triggerUpdate(false);
         emit changed();
-
-        kdDebug()<<k_funcinfo<<"Resource="<<r->name()<<endl;
     }
     delete dia;
 }
@@ -301,7 +298,7 @@ void KPTResourcesPanel::slotGroupChanged( QListBoxItem *item) {
     QPtrListIterator<KPTResourceItem> it(m_groupItem->m_group->m_resourceItems);
     for ( ; it.current(); ++it ) {
         listOfResources->insertItem(new KPTResourceLBItem(it.current()));
-        kdDebug()<<k_funcinfo<<"Insert resource item: "<<it.current()->name()<<endl;
+        //kdDebug()<<k_funcinfo<<"Insert resource item: "<<it.current()->name()<<endl;
     }
 }
 
@@ -336,7 +333,6 @@ void KPTResourcesPanel::slotResourceRename( const QString &newName) {
     KPTResourceLBItem *i = dynamic_cast<KPTResourceLBItem *>(item);
     if (i->name() == newName) return;
 
-    kdDebug()<<k_funcinfo<<" Old name: "<<i->name()<<" ("<<i<<") "<<"  New name: "<<newName<<endl;
     i->setName(newName);
     listOfResources->triggerUpdate(false);
 

@@ -149,7 +149,7 @@ void KPTResourceGroup::makeAppointments() {
     }
     KPTResourceGroupRequest *request;
     QPtrListIterator<KPTNode> nodes(m_nodes);
-    kdDebug()<<k_funcinfo<<"No of nodes: "<<nodes.count()<<endl;
+    //kdDebug()<<k_funcinfo<<"No of nodes: "<<nodes.count()<<endl;
     for (; nodes.current(); ++nodes) {
         KPTTask *task = dynamic_cast<KPTTask *>(nodes.current());
         if (!task) {
@@ -188,7 +188,7 @@ void KPTResourceGroup::makeAppointments() {
                     m_resources.at(pos)->setOverbooked(true);
                     task->setResourceOverbooked(true);
                     // TODO: tell the other task(s) also
-                    kdDebug()<<k_funcinfo<<"'"<<m_resources.at(pos)->name()<<"' overbooked"<<endl;
+                    //kdDebug()<<k_funcinfo<<"'"<<m_resources.at(pos)->name()<<"' overbooked"<<endl;
                 }
             }
         } else {
@@ -404,7 +404,7 @@ KPTRisk::~KPTRisk() {
 KPTResourceRequest::KPTResourceRequest(KPTResource *resource, int units)
     : m_resource(resource),
     m_units(units) {
-    kdDebug()<<k_funcinfo<<"Request to: "<<(resource ? resource->name() : QString("None"))<<endl;
+    //kdDebug()<<k_funcinfo<<"Request to: "<<(resource ? resource->name() : QString("None"))<<endl;
 }
 
 KPTResourceRequest::~KPTResourceRequest() {
@@ -432,7 +432,7 @@ void KPTResourceRequest::save(QDomElement &element) {
 KPTResourceGroupRequest::KPTResourceGroupRequest(KPTResourceGroup *group, int numResources)
     : m_group(group), m_units(numResources) {
 
-    kdDebug()<<k_funcinfo<<"Request to: "<<(group ? group->name() : QString("None"))<<endl;
+    //kdDebug()<<k_funcinfo<<"Request to: "<<(group ? group->name() : QString("None"))<<endl;
     m_resourceRequests.setAutoDelete(true);
 }
 

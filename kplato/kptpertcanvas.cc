@@ -66,7 +66,7 @@ KPTPertCanvas::~KPTPertCanvas()
 
 void KPTPertCanvas::draw(KPTProject& project)
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     clear();
 	m_summaryColumn = 0;
     updateContents();
@@ -91,7 +91,7 @@ void KPTPertCanvas::draw(KPTProject& project)
 
 void KPTPertCanvas::drawChildren(KPTNode* node)
 {
-    kdDebug()<<k_funcinfo<<"node="<<node->name()<<endl;
+    //kdDebug()<<k_funcinfo<<"node="<<node->name()<<endl;
 
 	if ( node->type() == KPTNode::Type_Project)
 		drawProject( node );
@@ -117,7 +117,7 @@ void KPTPertCanvas::drawProject( KPTNode *node)
 
 void KPTPertCanvas::drawSubproject( KPTNode *node)
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 	if ( !node->isDrawn()) {
 	    if (node->numDependChildNodes() == 0 &&
 		    node->numDependParentNodes() == 0)
@@ -127,7 +127,7 @@ void KPTPertCanvas::drawSubproject( KPTNode *node)
 			pertItem->show();
 			node->setPertItem( pertItem );
 			node->setDrawn( true, false);
-			kdDebug()<<k_funcinfo<<" draw project("<<0<<","<<col<<"): "<<node->name()<<endl;
+			//kdDebug()<<k_funcinfo<<" draw project("<<0<<","<<col<<"): "<<node->name()<<endl;
 			return;
 		}
 		if (!node->allParentsDrawn()) {
@@ -146,7 +146,7 @@ void KPTPertCanvas::drawSubproject( KPTNode *node)
 
 void KPTPertCanvas::drawMilestone( KPTNode *node)
 {
-	kdDebug()<< "draw task " << node->name()<<endl;
+	//kdDebug()<< "draw task " << node->name()<<endl;
 	if ( !node->isDrawn()) {
 		if ( node->numChildren() > 0 ) {
 			int col = summaryColumn();
@@ -154,7 +154,7 @@ void KPTPertCanvas::drawMilestone( KPTNode *node)
 			node->setPertItem( pertItem );
 			pertItem->show();
 			node->setDrawn( true, false ); // drawn, but not recursive
-			kdDebug()<<k_funcinfo<<" drawn milestone(?)("<<0<<","<<col<<"): "<<node->name()<<endl;
+			//kdDebug()<<k_funcinfo<<" drawn milestone(?)("<<0<<","<<col<<"): "<<node->name()<<endl;
 			return;
 		}
 		if (!node->allParentsDrawn()) {
@@ -172,7 +172,7 @@ void KPTPertCanvas::drawMilestone( KPTNode *node)
 
 void KPTPertCanvas::drawTask( KPTNode *node)
 {
-	kdDebug()<< "draw task " << node->name()<<endl;
+	//kdDebug()<< "draw task " << node->name()<<endl;
 	if ( !node->isDrawn()) {
 		if ( node->numChildren() > 0  &&
 	         node->numDependChildNodes() == 0 &&
@@ -183,7 +183,7 @@ void KPTPertCanvas::drawTask( KPTNode *node)
 			node->setPertItem( pertItem );
 			pertItem->show();
 			node->setDrawn( true, false );
-			kdDebug()<<k_funcinfo<<" drawn summary task("<<0<<","<<col<<"): "<< node->name() <<endl;
+			//kdDebug()<<k_funcinfo<<" drawn summary task("<<0<<","<<col<<"): "<< node->name() <<endl;
 			return;
 		}
 		if (!node->allParentsDrawn()) {
@@ -203,7 +203,7 @@ void KPTPertCanvas::drawTask( KPTNode *node)
 
 void KPTPertCanvas::drawRelations()
 {
-	kdDebug()<<k_funcinfo<<endl;
+	//kdDebug()<<k_funcinfo<<endl;
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it)
@@ -223,7 +223,7 @@ void KPTPertCanvas::drawRelations()
 
 void KPTPertCanvas::drawRelation( KPTRelation* relation)
 {
-	kdDebug()<<k_funcinfo<<endl;
+	//kdDebug()<<k_funcinfo<<endl;
 	//Only draw if both nodes are shown on canvas
 	if (relation->parent()->isDrawn() && relation->child()->isDrawn())
 	{
@@ -235,7 +235,7 @@ void KPTPertCanvas::drawRelation( KPTRelation* relation)
 
 QSize KPTPertCanvas::canvasSize()
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 	QSize s(0,0);
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
@@ -263,7 +263,7 @@ void KPTPertCanvas::clear()
 
 void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 {
-    kdDebug()<<k_funcinfo<<" gl.X,gl.Y="<<e->globalX()<<","<<e->globalY()<<" x,y="<<e->x()<<","<<e->y()<<endl;
+    //kdDebug()<<k_funcinfo<<" gl.X,gl.Y="<<e->globalX()<<","<<e->globalY()<<" x,y="<<e->x()<<","<<e->y()<<endl;
     switch (e->button())
     {
         case QEvent::LeftButton:
@@ -279,7 +279,7 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 					KPTPertNodeItem *par = selectedItem();
 					if ( !par)
 					{
-						kdDebug()<<k_funcinfo<<" First node="<<item->node().name()<<endl;
+						//kdDebug()<<k_funcinfo<<" First node="<<item->node().name()<<endl;
 						item->setSelected(true);
 						canvas()->update();
 						return;
@@ -289,7 +289,7 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 					{
 						break;
 					}
-					kdDebug()<<k_funcinfo<<" Second node="<<item->node().name()<<endl;
+					//kdDebug()<<k_funcinfo<<" Second node="<<item->node().name()<<endl;
 					// open relation dialog
 					if (legalToLink(par->node(), item->node()))
 					{
@@ -340,7 +340,7 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 
 bool KPTPertCanvas::legalToLink(KPTNode &par, KPTNode &child)
 {
-    kdDebug()<<k_funcinfo<<par.name()<<" ("<<par.numDependParentNodes()<<" parents) "<<child.name()<<" ("<<child.numDependChildNodes()<<" children)"<<endl;
+    //kdDebug()<<k_funcinfo<<par.name()<<" ("<<par.numDependParentNodes()<<" parents) "<<child.name()<<" ("<<child.numDependChildNodes()<<" children)"<<endl;
 	if (par.isDependChildOf(&(child)))
 	{
 		KMessageBox::sorry(this, i18n("Cannot link already dependent nodes"));
@@ -373,7 +373,7 @@ bool KPTPertCanvas::legalParents(KPTNode *par, KPTNode *child)
 		KPTNode *pNode = par->getDependParentNode(i)->parent();
 		if (child->isParentOf(pNode) || pNode->isParentOf(child))
 		{
-	        kdDebug()<<k_funcinfo<<"Found: "<<pNode->name()<<" is related to "<<child->name()<<endl;
+	        //kdDebug()<<k_funcinfo<<"Found: "<<pNode->name()<<" is related to "<<child->name()<<endl;
 			legal = false;
 		}
 		else
@@ -393,7 +393,7 @@ bool KPTPertCanvas::legalChildren(KPTNode *par, KPTNode *child)
 		KPTNode *cNode = child->getDependChildNode(j)->child();
 		if (par->isParentOf(cNode) || cNode->isParentOf(par))
 		{
-			kdDebug()<<k_funcinfo<<"Found: "<<par->name()<<" is related to "<<cNode->name()<<endl;
+			//kdDebug()<<k_funcinfo<<"Found: "<<par->name()<<" is related to "<<cNode->name()<<endl;
 			legal = false;
 		}
 		else

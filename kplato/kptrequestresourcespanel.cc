@@ -43,7 +43,7 @@ KPTResourceTableItem::KPTResourceTableItem(KPTResource *resource, bool check) {
     m_checked = check;
     m_checkitem = 0;
     m_units = 0;
-    kdDebug()<<k_funcinfo<<"Added: '"<<resource->name()<<"' checked="<<m_checked<<endl;
+    //kdDebug()<<k_funcinfo<<"Added: '"<<resource->name()<<"' checked="<<m_checked<<endl;
 }
 
 KPTResourceTableItem::~KPTResourceTableItem() {
@@ -60,7 +60,7 @@ void KPTResourceTableItem::ok(KPTResourceGroupRequest *group) {
     // assume old request is cleared, so we just create new one
     if (m_checked) {
         group->addResourceRequest(new KPTResourceRequest(m_resource, /*m_units*/ 1)); //FIXME
-        kdDebug()<<k_funcinfo<<"Resource request to "<<m_resource->name()<<" added"<<endl;
+        //kdDebug()<<k_funcinfo<<"Resource request to "<<m_resource->name()<<" added"<<endl;
     }
 }
 
@@ -70,7 +70,7 @@ void KPTResourceTableItem::insert(QTable *table, int row) {
     m_checkitem = new QCheckTableItem(table, m_resource->name());
     m_checkitem->setChecked(m_checked);
     table->setItem(row, 0, m_checkitem);
-    kdDebug()<<k_funcinfo<<"Added: '"<<m_resource->name()<<"' checked="<<m_checked<<endl;
+    //kdDebug()<<k_funcinfo<<"Added: '"<<m_resource->name()<<"' checked="<<m_checked<<endl;
 }
 
 KPTGroupLVItem::KPTGroupLVItem(QListView *parent, KPTResourceGroup *group, KPTTask &task)
@@ -92,7 +92,7 @@ KPTGroupLVItem::KPTGroupLVItem(QListView *parent, KPTResourceGroup *group, KPTTa
 }
 
 KPTGroupLVItem::~KPTGroupLVItem() {
-    kdDebug()<<k_funcinfo<<m_group->name()<<endl;
+    //kdDebug()<<k_funcinfo<<m_group->name()<<endl;
     m_resources.clear();
 }
 
@@ -123,7 +123,7 @@ void KPTGroupLVItem::insert(QTable *table) {
 }
 
 void KPTGroupLVItem::ok(KPTTask &task) {
-    kdDebug()<<k_funcinfo<<"numRequests="<<numRequests()<<endl;
+    //kdDebug()<<k_funcinfo<<"numRequests="<<numRequests()<<endl;
     // assume old requests are cleared, so we just create new ones
     if (numRequests() > 0) {
         KPTResourceGroupRequest *g = new KPTResourceGroupRequest(m_group, m_units);
@@ -136,7 +136,7 @@ void KPTGroupLVItem::ok(KPTTask &task) {
 }
 
 int KPTGroupLVItem::numRequests() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     int value = m_units;
     QPtrListIterator<KPTResourceTableItem> it(m_resources);
     for (; it.current(); ++it) {
@@ -216,12 +216,12 @@ void KPTRequestResourcesPanel::groupChanged(QListViewItem *item) {
 }
 
 void KPTRequestResourcesPanel::resourceChanged(int, int) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     sendChanged();
 }
 
 void KPTRequestResourcesPanel::unitsChanged(int units) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if (selectedGroup) {
         selectedGroup->m_units = units;
         sendChanged();

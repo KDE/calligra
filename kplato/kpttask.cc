@@ -73,7 +73,7 @@ KPTDuration *KPTTask::getRandomDuration() {
 }
 
 void KPTTask::setStartTime() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if(numChildren() == 0) {
         switch (m_constraint)
         {
@@ -125,7 +125,7 @@ void KPTTask::setStartTime() {
 }
 
 void KPTTask::setEndTime() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if(numChildren() == 0) {
         m_endTime.set(m_startTime);
         m_endTime.add(m_duration);
@@ -282,7 +282,7 @@ void KPTTask::requestResources() const {
         for (; it.current(); ++it) {
             // Tell the resource group I want resource(s)
             it.current()->group()->addNode(this);
-            kdDebug()<<k_funcinfo<<name()<<" made request to: "<<it.current()->group()->name()<<endl;
+            //kdDebug()<<k_funcinfo<<name()<<" made request to: "<<it.current()->group()->name()<<endl;
         }
     } else if (type() == KPTNode::Type_Summarytask) {
         QPtrListIterator<KPTNode> nit(m_nodes);
@@ -322,7 +322,7 @@ void KPTTask::setConstraint(KPTNode::ConstraintType type) {
 }
 
 void KPTTask::calculateStartEndTime() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     setStartEndTime();
     QPtrListIterator<KPTRelation> it(m_dependChildNodes);
     for (; it.current(); ++it) {
@@ -331,7 +331,7 @@ void KPTTask::calculateStartEndTime() {
 }
 
 void KPTTask::calculateStartEndTime(const KPTDuration &start) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if (start > m_startTime) { //TODO: handle different constraints
         m_startTime.set(start);
         setEndTime();

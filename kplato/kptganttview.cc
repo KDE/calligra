@@ -140,7 +140,7 @@ void KPTTaskAppointmentsView::clear()
 
 void KPTTaskAppointmentsView::draw(KPTTask *task)
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     clear();
     if (!task)
         return;
@@ -219,7 +219,7 @@ void KPTGanttView::clear()
 
 void KPTGanttView::draw(KPTProject &project)
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 	m_gantt->setUpdateEnabled(false);
 	clear();
 	KPTDuration *time;
@@ -372,7 +372,7 @@ void KPTGanttView::drawRelations(KPTNode &node)
 		KPTRelation *rel = node.getDependChildNode(i);
 		if (node.ganttItem() && rel->child()->ganttItem())
 		{
-			kdDebug()<<k_funcinfo<<"Relations for node="<<node.name()<<" to "<<rel->child()->name()<<endl;
+			//kdDebug()<<k_funcinfo<<"Relations for node="<<node.name()<<" to "<<rel->child()->name()<<endl;
 			//FIXME: This doesn't work. Maybe bug in KDGantt, maybe wrong use
             //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(rel->child()->ganttItem(), node.ganttItem());
 		}

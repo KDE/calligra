@@ -276,7 +276,7 @@ KPTRelationCanvasItem::KPTRelationCanvasItem( KPTPertCanvas *view, KPTRelation *
 	childCol =  rel->child()->pertItem()->column();
 	parentRow = rel->parent()->pertItem()->row();
 	parentCol =  rel->parent()->pertItem()->column();
-    kdDebug()<<k_funcinfo<<"Parent="<<rel->parent()->name()<<" ("<<parentRow<<","<<parentCol<<") Child="<<rel->child()->name()<<" ("<<childRow<<","<<childCol<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"Parent="<<rel->parent()->name()<<" ("<<parentRow<<","<<parentCol<<") Child="<<rel->child()->name()<<" ("<<childRow<<","<<childCol<<")"<<endl;
 
 	switch (rel->timingRelation())
 	{
@@ -406,7 +406,7 @@ void KPTRelationCanvasItem::setFinishStartPoints()
 
 void KPTRelationCanvasItem::setFinishFinishPoints()
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 	QPoint parentPoint = m_rel->parent()->pertItem()->exitPoint(FINISH_FINISH);
 	QPoint childPoint = m_rel->child()->pertItem()->entryPoint(FINISH_FINISH);
 	

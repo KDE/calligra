@@ -47,7 +47,7 @@
 
 void KPTPertView::init(QLayout *layout)
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     QGridLayout *gl = new QGridLayout(this, 1, 1, -1, -1, "Pert QGridLayout");
     m_canvasview = new KPTPertCanvas(this);
 	gl->addWidget(m_canvasview, 0, 0);
@@ -58,14 +58,14 @@ void KPTPertView::init(QLayout *layout)
 
 void KPTPertView::draw() 
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_canvasview->draw(m_mainview->getPart()->getProject());
     m_canvasview->show();
 }
 
 void KPTPertView::slotRMBPressed(KPTNode *node, const QPoint & point)
 {
-    kdDebug()<<k_funcinfo<<" node: "<<node->name()<<endl;
+    //kdDebug()<<k_funcinfo<<" node: "<<node->name()<<endl;
 	m_node = node;
 	QPopupMenu *menu = m_mainview->popupMenu("node_popup");
 	if (menu)

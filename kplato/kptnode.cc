@@ -226,13 +226,13 @@ void KPTNode::delDependParentNode( int number, bool remove) {
 }
 
 void KPTNode::addPredesessorNode( KPTRelation *relation) {
-    kdDebug()<<k_funcinfo<<"rel="<<relation<<endl;
+    //kdDebug()<<k_funcinfo<<"rel="<<relation<<endl;
     m_predesessorNodes.append(relation);
 }
 
 void KPTNode::delPredesessorNode() {
     KPTRelation *relation = m_predesessorNodes.take();
-    kdDebug()<<k_funcinfo<<"rel="<<relation<<endl;
+    //kdDebug()<<k_funcinfo<<"rel="<<relation<<endl;
     delete relation;
 }
 
@@ -289,7 +289,7 @@ int KPTNode::getColumn(KPTNode *parent) {
 	}
 	if (parent && parent->isDrawn())
 	{
-        kdDebug()<<k_funcinfo<<"Col="<<col<<" parent col="<<parent->pertItem()->column()<<endl;
+        //kdDebug()<<k_funcinfo<<"Col="<<col<<" parent col="<<parent->pertItem()->column()<<endl;
 	    col = QMAX(col+1, parent->pertItem()->column());
 	}
 	return col;
@@ -307,7 +307,7 @@ int KPTNode::getRow(KPTNode *parent) {
 	}
 	if (parent && parent->isDrawn())
 	{
-        kdDebug()<<k_funcinfo<<"Row="<<row<<" parent row="<<parent->pertItem()->row()<<endl;
+        //kdDebug()<<k_funcinfo<<"Row="<<row<<" parent row="<<parent->pertItem()->row()<<endl;
 	    row = QMAX(row, parent->pertItem()->row());
     }
 	return row;
@@ -408,7 +408,7 @@ const KPTDuration& KPTNode::pessimisticDuration(const KPTDuration &start)
 
 const KPTDuration& KPTNode::expectedDuration(const KPTDuration &start)
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_duration.set(KPTDuration::zeroDuration);
     if (m_effort)
         calcDuration(start, m_effort->expected());
@@ -417,7 +417,7 @@ const KPTDuration& KPTNode::expectedDuration(const KPTDuration &start)
 
 const KPTDuration& KPTNode::expectedDuration() const
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     return m_duration;
 }
 
@@ -437,7 +437,7 @@ QPtrList<KPTAppointment> KPTNode::appointments(const KPTNode *node) {
 }
 
 void KPTNode::showPopup() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 }
 
 void KPTNode::setDrawn(bool drawn, bool children) {
@@ -544,7 +544,7 @@ void KPTEffort::set(int weeks, int days, int hours, int minutes) {
     dur.addSecs(hours*3600+minutes*60);
     dur.addDays(weeks*5+days); //FIXME: workdays in a week
     set(dur);
-    kdDebug()<<k_funcinfo<<"effort="<<dur.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<"effort="<<dur.toString()<<endl;
 }
 
 void KPTEffort::expectedEffort(int *weeks, int *days, int *hours, int *minutes) {
@@ -602,13 +602,13 @@ void KPTNode::printDebug(bool children, QCString indent) {
     kdDebug()<<indent<<"  End time: " <<m_endTime.dateTime().toString()<<endl;
     kdDebug()<<indent<<"  Earliest start: "<<earliestStart.dateTime().toString()<<endl;
     kdDebug()<<indent<<"  Latest finish: " <<latestFinish.dateTime().toString()<<endl;
-    //kdDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : QString("None"))<<endl;
+    kdDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : QString("None"))<<endl;
     kdDebug()<<indent<<"  Predecessors="<<start_node()->predecessors.number<<" unvisited="<<start_node()->predecessors.unvisited<<endl;
-    kdDebug()<<indent<<"  Successors="<<start_node()->successors.number<<" unvisited="<<start_node()->successors.unvisited<<endl;
+    //kdDebug()<<indent<<"  Successors="<<start_node()->successors.number<<" unvisited="<<start_node()->successors.unvisited<<endl;
 
 
     QPtrListIterator<KPTRelation> pit(m_dependParentNodes);
-    kdDebug()<<indent<<"  Dependant parents="<<pit.count()<<endl;
+    //kdDebug()<<indent<<"  Dependant parents="<<pit.count()<<endl;
     if (pit.count() > 0) {
         for ( ; pit.current(); ++pit ) {
             pit.current()->printDebug(indent);
@@ -616,14 +616,14 @@ void KPTNode::printDebug(bool children, QCString indent) {
     }
 
     QPtrListIterator<KPTRelation> cit(m_dependChildNodes);
-    kdDebug()<<indent<<"  Dependant children="<<cit.count()<<endl;
+    //kdDebug()<<indent<<"  Dependant children="<<cit.count()<<endl;
     if (cit.count() > 0) {
         for ( ; cit.current(); ++cit ) {
             cit.current()->printDebug(indent);
         }
     }
 
-    kdDebug()<<indent<<endl;
+    //kdDebug()<<indent<<endl;
     indent += "  ";
     if (children) {
         QPtrListIterator<KPTNode> it(m_nodes);
