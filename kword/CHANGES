@@ -335,3 +335,7 @@ Reggie, 7.11.1998:
 ------------------
 - Implemented saving/loading picture frames (currently it only saves filenames)
 - Fixed many, many bugs
+
+Reggie, 12.11.1998:
+-------------------
+- Scrolling is faster now (esp. for long documents)

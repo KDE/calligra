@@ -888,7 +888,7 @@ void KWPage::paintEvent(QPaintEvent* e)
     }
   painter.setClipRect(e->rect());
 
-  painter.eraseRect(e->rect().x() - xOffset,e->rect().y() - yOffset,
+  painter.eraseRect(e->rect().x() + xOffset,e->rect().y() + yOffset,
 		    e->rect().width(),e->rect().height());
 
   drawBorders(painter,e->rect());
@@ -913,10 +913,11 @@ void KWPage::paintEvent(QPaintEvent* e)
 	  } break;
 	case FT_TEXT:
 	  {
-	    KWParag *p = doc->findFirstParagOfPage(firstVisiblePage,i);
+	    //KWParag *p = doc->findFirstParagOfPage(firstVisiblePage,i);
+	    KWParag *p = doc->findFirstParagOfRect(e->rect().y() + yOffset,firstVisiblePage,i);
 	    if (p)
 	      {
-		if (p->getPrev()) p = p->getPrev();
+		//if (p->getPrev()) p = p->getPrev();
 		paintfc->setFrameSet(i + 1);
 		paintfc->init(p,painter,true,recalcAll);
 		
@@ -931,7 +932,6 @@ void KWPage::paintEvent(QPaintEvent* e)
 		    if (paintfc->getPage() > lastVisiblePage)
 		      bend = true; 
 		  }
-      
 	      }
 	  } break;
 	default: break;

@@ -208,6 +208,7 @@ public:
   KWParagLayout* findParagLayout(const char *_name);
 
   KWParag* findFirstParagOfPage(unsigned int _page,unsigned int _frameset);
+  KWParag* findFirstParagOfRect(unsigned int _ypos,unsigned int _page,unsigned int _frameset);
     
 
   float getMMTopBorder() { return pageLayout.top; }

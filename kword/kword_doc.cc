@@ -749,6 +749,24 @@ KWParag* KWordDocument::findFirstParagOfPage(unsigned int _page,unsigned int _fr
 }
 
 /*================================================================*/
+KWParag* KWordDocument::findFirstParagOfRect(unsigned int _ypos,unsigned int _page,unsigned int _frameset)
+{
+  if (frames.at(_frameset)->getFrameType() != FT_TEXT) return 0L;
+
+  KWParag *p = dynamic_cast<KWTextFrameSet*>(frames.at(_frameset))->getFirstParag();
+  while (p)
+    {
+      if (p->getPTYEnd() >= _ypos || p->getPTYStart() >= _ypos || (p->getPTYEnd() >= _ypos && p->getPTYStart() <= _ypos)
+	  || (p->getPTYEnd() <= _ypos && p->getPTYStart() <= _ypos && p->getPTYStart() > p->getPTYEnd() &&
+	      (p->getEndPage() == _page || p->getStartPage() == _page || (p->getEndPage() > _page && p->getStartPage() < _page))))
+ 	return p;
+      p = p->getNext();
+    }
+  
+  return 0L;
+}
+
+/*================================================================*/
 void KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset, int _w, int _h )
 {
   _painter.save();
