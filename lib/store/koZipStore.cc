@@ -25,24 +25,17 @@
 KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QCString & appIdentification )
 {
     kdDebug(s_area) << "KoZipStore Constructor filename = " << _filename
-                    << " mode = " << int(_mode) << endl;
+                    << " mode = " << int(_mode)
+                    << " mimetype = " << appIdentification << endl;
 
     m_pZip = new KoZip( _filename );
-
-    m_bGood = init( _mode ); // open the zip file and init some vars
-
-    //if ( m_bGood && _mode == Write )
-    //    m_pZip->setOrigFileName( appIdentification );
+    m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
 }
 
 KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentification )
 {
     m_pZip = new KoZip( dev );
-
-    m_bGood = init( mode );
-
-    //if ( m_bGood && mode == Write )
-    //    m_pZip->setOrigFileName( appIdentification );
+    m_bGood = init( mode, appIdentification );
 }
 
 KoZipStore::~KoZipStore()
@@ -52,7 +45,7 @@ KoZipStore::~KoZipStore()
     delete m_pZip;
 }
 
-bool KoZipStore::init( Mode _mode )
+bool KoZipStore::init( Mode _mode, const QCString& appIdentification )
 {
     KoStore::init( _mode );
     m_currentDir = 0;
@@ -60,6 +53,15 @@ bool KoZipStore::init( Mode _mode )
 
     if ( good && _mode == Read )
         good = m_pZip->directory() != 0;
+    else if ( good && _mode == Write )
+    {
+        //kdDebug() << "KoZipStore::init writing typeid " << appIdentification << endl;
+
+        m_pZip->setCompression( KoZip::NoCompression );
+        // Write identification
+        (void)m_pZip->writeFile( "typeid", "", "", appIdentification.length(), appIdentification.data() );
+        m_pZip->setCompression( KoZip::DeflateCompression );
+    }
     return true;
 }
 
@@ -91,7 +93,8 @@ bool KoZipStore::openRead( const QString& name )
         //return KIO::ERR_IS_DIRECTORY;
         return false;
     }
-    KArchiveFile * f = (KArchiveFile *) entry;
+    // Must cast to KoZipFileEntry, not only KArchiveFile, because device() isn't virtual!
+    const KoZipFileEntry * f = static_cast<const KoZipFileEntry *>(entry);
     delete m_stream;
     m_stream = f->device();
     m_iSize = f->size();

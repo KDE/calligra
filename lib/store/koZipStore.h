@@ -34,7 +34,7 @@ public:
 
     virtual Q_LONG write( const char* _data, Q_ULONG _len );
 protected:
-    virtual bool init( Mode _mode );
+    virtual bool init( Mode _mode, const QCString& appIdentification );
     virtual bool openWrite( const QString& name );
     virtual bool openRead( const QString& name );
     virtual bool closeWrite();
@@ -49,10 +49,6 @@ protected:
     // In "Read" mode this pointer is pointing to the
     // current directory in the archive to speed up the verification process
     const KArchiveDirectory* m_currentDir;
-
-    // Buffer used when writing
-    //QByteArray m_byteArray;
-
 };
 
 #endif

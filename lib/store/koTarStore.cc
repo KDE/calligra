@@ -32,7 +32,7 @@ KoTarStore::KoTarStore( const QString & _filename, Mode _mode, const QCString & 
     m_bGood = init( _mode ); // open the targz file and init some vars
 
     if ( m_bGood && _mode == Write )
-        m_pTar->setOrigFileName( appIdentification );
+        m_pTar->setOrigFileName( completeMagic( appIdentification ) );
 }
 
 KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const QCString & appIdentification )
@@ -42,13 +42,22 @@ KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const QCString & appIdentific
     m_bGood = init( mode );
 
     if ( m_bGood && mode == Write )
-        m_pTar->setOrigFileName( appIdentification );
+        m_pTar->setOrigFileName( completeMagic( appIdentification ) );
 }
 
 KoTarStore::~KoTarStore()
 {
     m_pTar->close();
     delete m_pTar;
+}
+
+QCString KoTarStore::completeMagic( const QCString& appMimetype )
+{
+    QCString res( "KOffice " );
+    res += appMimetype;
+    res += '\004'; // Two magic bytes to make the identification
+    res += '\006'; // more reliable (DF)
+    return res;
 }
 
 bool KoTarStore::init( Mode _mode )

@@ -41,6 +41,8 @@ protected:
     virtual bool enterAbsoluteDirectory( const QString& path );
     virtual bool fileExists( const QString& absPath );
 
+    static QCString completeMagic( const QCString& appMimetype );
+
     // The tar archive
     KTar * m_pTar;
 

@@ -49,8 +49,9 @@ public:
    * Auto means automatically-determined for reading,
    * and the current format (now Zip) for writing.
    *
-   * @param appIdentification a string that identifies the application,
-   * to be written in the store header. Only meaningful if mode is Write, and if backend!=Directory.
+   * @param appIdentification the application's mimetype,
+   * to be written in the file for "mime-magic" identification.
+   * Only meaningful if mode is Write, and if backend!=Directory.
    */
   static KoStore* createStore( const QString& fileName, Mode mode, const QCString & appIdentification = "", Backend backend = Auto );
 

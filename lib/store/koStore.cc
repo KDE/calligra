@@ -33,8 +33,8 @@
 #include <qfileinfo.h>
 #include <qfile.h>
 
-#define DefaultFormat KoStore::Tar
-//#define DefaultFormat KoStore::Zip
+//#define DefaultFormat KoStore::Tar
+#define DefaultFormat KoStore::Zip
 
 KoStore::Backend KoStore::determineBackend( QIODevice* dev )
 {
@@ -93,13 +93,13 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QCString & ap
   }
   switch ( backend )
   {
-  case Zip:
-    return new KoZipStore( device, mode, appIdentification );
+  case Tar:
+    return new KoTarStore( device, mode, appIdentification );
   case Directory:
     kdError(s_area) << "Can't create a Directory store for a memory buffer!" << endl;
     // fallback
-  case Tar:
-    return new KoTarStore( device, mode, appIdentification );
+  case Zip:
+    return new KoZipStore( device, mode, appIdentification );
   default:
     kdWarning(s_area) << "Unsupported backend requested for KoStore : " << backend << endl;
     return 0L;
