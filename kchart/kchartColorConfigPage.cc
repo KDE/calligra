@@ -16,6 +16,7 @@
 #include <qhbox.h>
 #include <klistbox.h>
 #include "kchart_params.h"
+#include <kdebug.h>
 
 KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
                                               QWidget* parent, KoChart::Data *dat ) :
@@ -192,10 +193,11 @@ void KChartColorConfigPage::initDataColorList()
     for(uint i =0;i<data->rows();i++)
     {
         extColor.resize( _params->maxDataColor() );
-
         if(i<_params->maxDataColor())
+        {
             _dataColorLB->insertItem(_params->legendText( i ).isEmpty() ? i18n("Series %1").arg(i+1) :_params->legendText( i ) );
-        extColor[i] =_params->dataColor(i);
+            extColor[i] =_params->dataColor(i);
+        }
     }
     _dataColorLB->setCurrentItem(0);
     _dataColorCB->setColor( extColor[index]);
