@@ -32,7 +32,7 @@ if test -n "$MAGICK_CONFIG"; then
  	       ;;
           esac
      done
-     LIBMAGICK_RPATH=`echo $LIBMAGICK_RPATH | $PERL -pe "s/-L/-R/g"`
+     LIBMAGICK_RPATH=`echo $LIBMAGICK_RPATH | $SED -e "s/-L/-R/g"`
      LIBMAGICK_CPPFLAGS="`$MAGICK_CONFIG --cppflags`"
      AC_DEFINE(HAVE_MAGICK,1, [ImageMagick is available])
   else

@@ -38,8 +38,8 @@ in /usr/bin /opt/mysql/bin /usr/local/mysql/bin ], [
 ])
 
 if test -n "$MYSQL_CONFIG"; then
-	mysql_incdir=`$MYSQL_CONFIG --cflags| $PERL -pe "s,mysql'$,,g"| $PERL -pe "s,-I',,g"`
-	mysql_libdir=`$MYSQL_CONFIG --libs| $PERL -pe "s,',,g"`
+	mysql_incdir=`$MYSQL_CONFIG --cflags| $SED -e "s,mysql'$,,g"| $SED -e "s,-I',,g"`
+	mysql_libdir=`$MYSQL_CONFIG --libs| $SED -e "s,',,g"`
 	MYSQL_INC=$mysql_incdir
 	MYSQL_LIBS=$mysql_libdir
 	AC_SUBST(MYSQL_INC)

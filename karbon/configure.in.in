@@ -4,7 +4,7 @@ KDE_FIND_PATH(freetype-config, FREETYPE_CONFIG, [${prefix}/bin ${exec_prefix}/bi
 ])
 
 if test -n "$FREETYPE_CONFIG"; then
-  vers=`$FREETYPE_CONFIG --version 2>/dev/null | $PERL -pe 's/libfreetype //' | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  vers=`$FREETYPE_CONFIG --version 2>/dev/null | $SED -e 's/libfreetype //' | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
   if test -n "$vers" && test "$vers" -ge 5000000
   then
      LIBFREETYPE_LIBS="`$FREETYPE_CONFIG --libs`"
@@ -16,7 +16,7 @@ if test -n "$FREETYPE_CONFIG"; then
  	       ;;
           esac
      done
-     LIBFREETYPE_RPATH=`echo $LIBFREETYPE_RPATH | $PERL -pe "s/-L/-R/g"`
+     LIBFREETYPE_RPATH=`echo $LIBFREETYPE_RPATH | $SED -e "s/-L/-R/g"`
      LIBFREETYPE_CFLAGS="`$FREETYPE_CONFIG --cflags`"
   else
      AC_MSG_WARN([You need at least libfreetype 5.0])
@@ -45,7 +45,7 @@ if test -n "$LIBART_CONFIG"; then
  	       ;;
           esac
      done
-     LIBART_RPATH=`echo $LIBART_RPATH | $PERL -pe "s/-L/-R/g"`
+     LIBART_RPATH=`echo $LIBART_RPATH | $SED -e "s/-L/-R/g"`
      LIBART_CFLAGS="`$LIBART_CONFIG --cflags`"
 
      AC_DEFINE_UNQUOTED(HAVE_LIBART, 1, [Defines if your system has the libart library])
@@ -67,7 +67,7 @@ KDE_FIND_PATH(fontconfig-config, FONTCONFIG_CONFIG, [${prefix}/bin ${exec_prefix
 ])
 
 if test -n "$PKGCONFIG"; then
-  vers=`$PKGCONFIG fontconfig --modversion 2>/dev/null | $PERL -pe 's/libfontconfig //' | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  vers=`$PKGCONFIG fontconfig --modversion 2>/dev/null | $SED -e 's/libfontconfig //' | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
   if test -n "$vers" && test "$vers" -ge 1000001
   then
      LIBFONTCONFIG_LIBS="`$PKGCONFIG fontconfig --libs`"
@@ -79,7 +79,7 @@ if test -n "$PKGCONFIG"; then
                ;;
           esac
      done
-     LIBFONTCONFIG_RPATH=`echo $LIBFONTCONFIG_RPATH | $PERL -pe "s/-L/-R/g"`
+     LIBFONTCONFIG_RPATH=`echo $LIBFONTCONFIG_RPATH | $SED -e "s/-L/-R/g"`
      LIBFONTCONFIG_CFLAGS="`$PKGCONFIG fontconfig --cflags`"
 
      AC_DEFINE_UNQUOTED(HAVE_FONTCONFIG, 1, [Defines if your system has the libfontconfig library])
@@ -87,7 +87,7 @@ if test -n "$PKGCONFIG"; then
 fi
 
 if test -n "$FONTCONFIG_CONFIG"; then
-  vers=`$FONTCONFIG_CONFIG --version 2>/dev/null | $PERL -pe 's/libfontconfig //' | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  vers=`$FONTCONFIG_CONFIG --version 2>/dev/null | $SED -e 's/libfontconfig //' | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
   if test -n "$vers" && test "$vers" -ge 1000001
   then
      LIBFONTCONFIG_LIBS="`$FONTCONFIG_CONFIG --libs`"
@@ -99,7 +99,7 @@ if test -n "$FONTCONFIG_CONFIG"; then
                ;;
           esac
      done
-     LIBFONTCONFIG_RPATH=`echo $LIBFONTCONFIG_RPATH | $PERL -pe "s/-L/-R/g"`
+     LIBFONTCONFIG_RPATH=`echo $LIBFONTCONFIG_RPATH | $SED -e "s/-L/-R/g"`
      LIBFONTCONFIG_CFLAGS="`$FONTCONFIG_CONFIG --cflags`"
 
      AC_DEFINE_UNQUOTED(HAVE_FONTCONFIG, 1, [Defines if your system has the libfontconfig library])

@@ -23,7 +23,7 @@ if [ test $search_for_wv2 != no ]; then
 fi
 
 if test -n "$WV2_CONFIG"; then
-  vers=`$WV2_CONFIG --version 2>/dev/null | $PERL -pe 's/libwv2 //' | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  vers=`$WV2_CONFIG --version 2>/dev/null | $SED -e 's/libwv2 //' | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
   if test -n "$vers" && test "$vers" -ge 1009
   then
      LIBWV2_LIBS="`$WV2_CONFIG --libs`"
@@ -35,7 +35,7 @@ if test -n "$WV2_CONFIG"; then
  	       ;;
           esac
      done
-     LIBWV2_RPATH=`echo $LIBWV2_RPATH | $PERL -pe "s/-L/-R/g"`
+     LIBWV2_RPATH=`echo $LIBWV2_RPATH | $SED -e "s/-L/-R/g"`
      LIBWV2_CFLAGS="`$WV2_CONFIG --cflags`"
 
      AC_DEFINE_UNQUOTED(HAVE_WV2, 1, [Defines if your system has the wv2 library])
