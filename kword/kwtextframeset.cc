@@ -3436,8 +3436,7 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat, bool force )
         m_paragLayout.margins[QStyleSheetItem::MarginRight] = parag->margin(QStyleSheetItem::MarginRight);
         m_canvas->gui()->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine], m_paragLayout.margins[QStyleSheetItem::MarginRight] );
     }
-
-    if( m_paragLayout.tabList() != parag->tabList() )
+    if( m_paragLayout.tabList() != parag->tabList() || force)
     {
         m_paragLayout.setTabList( parag->tabList() );
         KoRuler * hr = m_canvas->gui()->getHorzRuler();
