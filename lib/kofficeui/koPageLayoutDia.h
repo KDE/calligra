@@ -28,6 +28,8 @@
 #include <qcolor.h>
 #include <qpixmap.h>
 #include <qlined.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
 
 #include <kapp.h>
 #include <krestrictedline.h>
@@ -56,10 +58,12 @@ const int FORMAT_AND_BORDERS = 1;
 const int HEADER_AND_FOOTER = 2;
 const int COLUMNS = 4;
 const int DISABLE_BORDERS = 8;
+const int KW_HEADER_AND_FOOTER = 16;
 
 enum KoFormat {PG_DIN_A3 = 0,PG_DIN_A4 = 1,PG_DIN_A5 = 2,PG_US_LETTER = 3,PG_US_LEGAL = 4,PG_SCREEN = 5,PG_CUSTOM = 6,PG_DIN_B5 = 7,PG_US_EXECUTIVE = 8};
 enum KoOrientation {PG_PORTRAIT = 0,PG_LANDSCAPE = 1};
 enum KoUnit {PG_MM = 0,PG_CM = 1,PG_INCH = 2};
+enum KoHFType {HF_SAME = 0,HF_FIRST_DIFF = 2,HF_EO_DIFF = 3};
 
 // structure for page layout
 struct KoPageLayout
@@ -111,6 +115,14 @@ struct KoColumns
   int columnSpacing;
 };
 
+// structure for KWord header-Footer
+struct KoKWHeaderFooter
+{
+  KoHFType header;
+  KoHFType footer;
+  int ptHeaderBodySpacing,ptFooterBodySpacing;
+};
+
 /******************************************************************/
 /* class KoPagePreview                                            */
 /******************************************************************/
@@ -153,12 +165,12 @@ public:
   // constructor - destructor
   KoPageLayoutDia(QWidget*,const char*,KoPageLayout,KoHeadFoot,int);
   KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _layout,KoHeadFoot _hf,
-		  KoColumns _kw,int tabs);
+		  KoColumns _kw,KoKWHeaderFooter _kwhf,int tabs);
   ~KoPageLayoutDia();              
 
   // show page layout dialog
   static bool pageLayout(KoPageLayout&,KoHeadFoot&,int);
-  static bool pageLayout(KoPageLayout&,KoHeadFoot&,KoColumns&,int);
+  static bool pageLayout(KoPageLayout&,KoHeadFoot&,KoColumns&,KoKWHeaderFooter&,int);
 
   // get a standard page layout
   static KoPageLayout standardLayout();
@@ -167,6 +179,7 @@ public:
   KoPageLayout getLayout() {return layout;};
   KoHeadFoot getHeadFoot();
   KoColumns getColumns();
+  KoKWHeaderFooter getKWHeaderFooter();
 
 protected:
 
@@ -175,14 +188,16 @@ protected:
   void setValuesTab1();
   void setupTab2();
   void setupTab3();
+  void setupTab4();
 
   // update preview
   void updatePreview(KoPageLayout);
 
   // dialog objects
   QGroupBox *formatFrame,*borderFrame;
-  QWidget *tab1,*tab2,*tab3;
-  QGridLayout *grid1,*grid3,*formatGrid,*borderGrid,*grid2;
+  QButtonGroup *gHeader,*gFooter;
+  QWidget *tab1,*tab2,*tab3,*tab4;
+  QGridLayout *grid1,*grid3,*formatGrid,*borderGrid,*grid2,*grid4,*footerGrid,*headerGrid;
   QLabel *lpgFormat,*lpgOrientation,*lpgUnit,*lpgWidth,*lpgHeight,*lbrLeft,*lbrRight,*lbrTop,*lbrBottom;
   QComboBox *cpgFormat,*cpgOrientation,*cpgUnit;
   KRestrictedLine *epgWidth,*epgHeight,*ebrLeft,*ebrRight,*ebrTop,*ebrBottom;
@@ -191,13 +206,16 @@ protected:
   QLineEdit *eHeadLeft,*eHeadMid,*eHeadRight;
   QLabel *lFootLeft,*lFootMid,*lFootRight,*lFoot,*lMacros1,*lMacros2;
   QLineEdit *eFootLeft,*eFootMid,*eFootRight;
-  KNumericSpinBox *nColumns,*nCSpacing;
-  QLabel *lColumns,*lCSpacing;
+  KNumericSpinBox *nColumns,*nCSpacing,*nHSpacing,*nFSpacing;
+  QLabel *lColumns,*lCSpacing,*lHSpacing,*lFSpacing;
+  QRadioButton *rhSame,*rhFirst,*rhEvenOdd;
+  QRadioButton *rfSame,*rfFirst,*rfEvenOdd;
 
   // layout
   KoPageLayout layout;
   KoHeadFoot hf;
   KoColumns cl;
+  KoKWHeaderFooter kwhf;
 
   bool retPressed;
   bool enableBorders;
