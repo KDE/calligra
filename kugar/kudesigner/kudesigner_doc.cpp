@@ -397,6 +397,18 @@ void KudesignerDoc::loadPlugin(const QString &name)
 	else kdDebug()<<"plugin couldn't be loaded :("<<endl;
 }
 
+bool KudesignerDoc::completeSaving( KoStore* store )
+{
+	if (m_plugin) return m_plugin->store(store);
+	return true;
+}
+
+bool KudesignerDoc::completeLoading( KoStore* store )
+{
+	if (m_plugin) return m_plugin->load(store);
+	return true;
+}
+
 KuDesignerPlugin *KudesignerDoc::plugin()
 {
 	return m_plugin;

@@ -52,6 +52,8 @@ public:
     void setForcedPropertyEditorPosition(Dock);
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
+    virtual bool completeSaving( KoStore* store );
+    virtual bool completeLoading( KoStore* store );
 
 protected slots:
     void commandExecuted();
