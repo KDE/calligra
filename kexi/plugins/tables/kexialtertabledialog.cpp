@@ -94,7 +94,7 @@ void KexiAlterTableDialog::init()
 		m_constraints.insert(i, buff);
 	}
 
-	for (int i=m_table->fieldCount(); i<100; i++) {
+	for (int i=m_table->fieldCount(); i<40; i++) {
 		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
 		buff->insert("pkey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
 		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
