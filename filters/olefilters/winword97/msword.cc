@@ -551,6 +551,7 @@ void MsWord::getParagraphsFromPapxs(
 //    m_listLevels: an array of arrays of pointers to LVLFs for each list style in the
 //    LST array. The entries must be looked up using the list id and list level.
 
+#include <iostream.h>
 void MsWord::getListStyles()
 {
     const U8 *ptr = m_tableStream + m_fib.fcPlcfLst; //lcbPlcfLst.
@@ -575,12 +576,16 @@ void MsWord::getListStyles()
 
     // Construct the array of styles, and then walk the array reading in the style definitions.
 
+    cerr << "MsWord::getListStyles: lstfCount: " << lstfCount << endl;
+    cerr << "MsWord::getListStyles: sizeof(LSTF): " << sizeof(LSTF) << endl;
+    cerr << "MsWord::getListStyles: sizeof(LVLF): " << sizeof(LVLF) << endl;
     m_listStyles = new LVLF **[lstfCount];
     for (unsigned i = 0; i < lstfCount; i++)
     {
         LSTF data;
         unsigned levelCount;
 
+        cerr << "MsWord::getListStyles: LSTF[" << i << "]: " << hex << (long)ptr << dec << endl;
         ptr += MsWordGenerated::read(ptr, &data);
         if (data.fSimpleList)
             levelCount = 1;
@@ -592,6 +597,7 @@ void MsWord::getListStyles()
         m_listStyles[i] = new LVLF *[levelCount];
         for (unsigned j = 0; j < levelCount; j++)
         {
+            cerr << "MsWord::getListStyles: LVLF[" << i << "][" << j << "]: " << hex << (long)ptr2 << dec << endl;
             m_listStyles[i][j] = (LVLF *)ptr2;
 
             // Skip the variable length parts.
@@ -601,9 +607,12 @@ void MsWord::getListStyles()
             QString numberText;
 
             ptr2 += MsWordGenerated::read(ptr2, &level);
+            cerr << "MsWord::getListStyles: cbGrpprlPapx: " << (int)level.cbGrpprlPapx<< endl;
+            cerr << "MsWord::getListStyles: cbGrpprlChpx: " << (int)level.cbGrpprlChpx<< endl;
             ptr2 += level.cbGrpprlPapx;
             ptr2 += level.cbGrpprlChpx;
             ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
+            cerr << "MsWord::getListStyles: numberTextLength: " << numberTextLength << endl;
             ptr2 += read(m_fib.lid, ptr2, &numberText, numberTextLength, true);
         }
     }

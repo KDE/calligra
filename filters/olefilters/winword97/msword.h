@@ -142,7 +142,7 @@ public:
 
         //
         const U8 *grupx;
-    } __attribute__ ((packed)) STD;
+    } STD;
     unsigned read(U16 lid, const U8 *in, unsigned baseInFile, STD *out, unsigned count=1);
 
     static unsigned read(const U8 *in, FIB *out, unsigned count=1);
