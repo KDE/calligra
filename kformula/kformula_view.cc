@@ -27,7 +27,7 @@ KFormulaView::KFormulaView( QWidget *_parent, const char *_name) :
     Control_impl::setFocusPolicy( OPControls::Control::ClickFocus );
  
     m_pDoc = 0L;
-
+    
     setGeometry( 5000, 5000, 100, 100 );
 }
 
@@ -113,18 +113,6 @@ CORBA::Long KFormulaView::addToolButton (ToolBar_ref toolbar,
 
 void KFormulaView::createGUI()
 { 
-    m_vMenuBarFactory = m_vPartShell->menuBarFactory();
-    if ( !CORBA::is_nil( m_vMenuBarFactory ) ) {
-	// Menubar
-	m_rMenuBar = m_vMenuBarFactory->createMenuBar( this );
-	
-	// View
-	m_idMenuView = m_rMenuBar->insertMenu( i18n( "&View" ) );
-	
-	m_idMenuView_NewView = m_rMenuBar->insertItem( i18n( "&New View" ),
-						       m_idMenuView,
-						       this, "newView" );
-    }
     QPixmap pix;
     QString tmp = KApplication::kde_datadir().copy();
     tmp += "/kformula/pics/";
@@ -143,6 +131,174 @@ void KFormulaView::createGUI()
       mn_indexList->setMouseTracking(true);
       mn_indexList->setCheckable(false);
 
+    m_vMenuBarFactory = m_vPartShell->menuBarFactory();
+    if ( !CORBA::is_nil( m_vMenuBarFactory ) ) {
+
+    QString tmp = KApplication::kde_datadir().copy();
+    tmp += "/kformula/pics/";    
+
+
+
+
+	// Menubar
+	m_rMenuBar = m_vMenuBarFactory->createMenuBar( this );
+	
+	// View
+	m_idMenuView = m_rMenuBar->insertMenu( i18n( "&View" ) );
+	
+	m_idMenuView_NewView = m_rMenuBar->insertItem( i18n( "&New View" ),
+						       m_idMenuView,
+						       this, "newView" );
+	m_idMenuView_FontToolbar = m_rMenuBar->insertItem( i18n( "Font Toolbar" ),
+						       m_idMenuView,
+						       this, "newView" );
+	m_idMenuView_TextToolbar = m_rMenuBar->insertItem( i18n( "Formula Toolbar" ),
+						       m_idMenuView,
+						       this, "newView" );
+	m_idMenuView_TypeToolbar = m_rMenuBar->insertItem( i18n( "Type Toolbar" ),
+						       m_idMenuView,
+						       this, "newView" );
+    
+	// Element
+	m_idMenuElement = m_rMenuBar->insertMenu( i18n( "&Element" ) );
+	
+	m_idMenuElement_AddIndex = m_rMenuBar->insertSubMenu( i18n( "Add Index to..." ),
+						       m_idMenuElement);
+						       
+	m_idMenuElement_AddIndex_TL = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"index0.xpm" )), 
+							i18n( "Top left" ),
+						       m_idMenuElement_AddIndex,
+						       this, "addTopLeftIndex" );
+	m_idMenuElement_AddIndex_BL = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"index1.xpm" )),
+						       i18n( "Bottom left" ),
+						       m_idMenuElement_AddIndex,
+						       this, "addBottomLeftIndex" );
+	m_idMenuElement_AddIndex_TR = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"index2.xpm" )), 
+							i18n( "Top right" ),
+						       m_idMenuElement_AddIndex,
+						       this, "addTopRightIndex" );
+	m_idMenuElement_AddIndex_BR = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"index3.xpm" )), 
+						       i18n( "Bottom Right" ),
+						       m_idMenuElement_AddIndex,
+						       this, "addBottomRightIndex" );
+	
+	m_idMenuElement_AddElement = m_rMenuBar->insertSubMenu( i18n( "Add Element..." ),
+						       m_idMenuElement);
+	m_idMenuElement_AddElement_T = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"mini-xy.xpm" )), 
+							i18n( "Plain text" ),
+						       m_idMenuElement_AddElement,
+						       this, "addText" );
+	m_idMenuElement_AddElement_R = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"mini-root.xpm" )), 
+							i18n( "Root" ),
+						       m_idMenuElement_AddElement,
+						       this, "addRoot" );
+	m_idMenuElement_AddElement_B = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"mini-bra.xpm" )),
+						       i18n( "Bracket" ),
+						       m_idMenuElement_AddElement,
+						       this, "addBracket" );
+	m_idMenuElement_AddElement_F = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"mini-frac.xpm" )), 
+							i18n( "Fraction" ),
+						       m_idMenuElement_AddElement,
+						       this, "addFraction" );
+	m_idMenuElement_Color = m_rMenuBar->insertItem( i18n( "Set Color" ),
+						       m_idMenuElement,
+						       this, "elementColor" );
+	m_idMenuElement_Remove = m_rMenuBar->insertItem( i18n( "Remove element" ),
+						       m_idMenuElement,
+						       this, "remove" );
+	
+       m_rMenuBar->insertSeparator(m_idMenuElement);
+       
+       m_idMenuElement_Text = m_rMenuBar->insertSubMenu( i18n( "Text..." ),
+						       m_idMenuElement);
+       m_idMenuElement_Text_Font = m_rMenuBar->insertItem( i18n( "Set Font" ),
+						       m_idMenuElement_Text,
+						       this, "textFont" );
+       m_idMenuElement_Text_Split = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"split.xpm" )),
+                                                       i18n( "Split at current Position" ),
+						       m_idMenuElement_Text,
+						       this, "textSplit" );
+
+       m_idMenuElement_Root = m_rMenuBar->insertSubMenu( i18n( "Root..." ),
+						       m_idMenuElement);    
+       m_idMenuElement_Root_Pixmap = m_rMenuBar->insertItem( i18n( "Use pixmap" ),
+						       m_idMenuElement_Root,
+						       this, "togglePixmap" );
+       m_idMenuElement_Root_Index = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"rootindex.xpm" )), i18n( "Add root index(Top Left)" ),
+						       m_idMenuElement_Root,
+						       this, "addTopLeftIndex" );
+						       
+       m_idMenuElement_Bracket = m_rMenuBar->insertSubMenu( i18n( "Bracket..." ),
+						       m_idMenuElement);    
+       m_idMenuElement_Bracket_Type = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"delimiter.xpm" )),
+                                                       i18n( "Set delimiter..." ),
+						       m_idMenuElement_Bracket,
+						       this, "bracketType" );
+
+       m_idMenuElement_Fraction = m_rMenuBar->insertSubMenu( i18n( "Fraction..." ),
+						       m_idMenuElement);
+       m_idMenuElement_Fraction_VA = m_rMenuBar->insertItem( i18n( "Vertical Align..." ),
+						       m_idMenuElement_Fraction,
+						       this, "addFraction" );       
+       m_idMenuElement_Fraction_HA = m_rMenuBar->insertItem( i18n( "Horizontal Align..." ),
+						       m_idMenuElement_Fraction,
+						       this, "fractionHAlign" );	    
+       m_idMenuElement_Fraction_MidLine = m_rMenuBar->insertItem( i18n( "Set Midline" ),
+						       m_idMenuElement_Fraction,
+						       this, "toggleMidline" );	    
+
+       m_idMenuElement_Integral = m_rMenuBar->insertSubMenu( i18n( "Integral..." ),
+						       m_idMenuElement);
+       m_idMenuElement_Integral_Pixmap = m_rMenuBar->insertItem( i18n( "Use pixmap" ),
+						       m_idMenuElement_Integral,
+						       this, "togglePixmap" );	    
+       m_idMenuElement_Integral_Higher = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"higher.xpm" )),
+                                                        i18n( "Add higher limit" ),
+						       m_idMenuElement_Integral,
+						       this, "addHigher" );
+       m_idMenuElement_Integral_Lower = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"lower.xpm" )),
+                                                       i18n( "Add lower limit" ),
+						       m_idMenuElement_Integral,
+						       this, "addLower" );	
+						       					           
+       m_idMenuElement_Matrix = m_rMenuBar->insertSubMenu( i18n( "Matrix..." ),
+						       m_idMenuElement);
+       m_idMenuElement_Matrix_Set = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"setmatrix.xpm" )), 
+                                                       i18n( "Set dimension" ),
+						       m_idMenuElement_Matrix,
+						       this, "matrixSet" );	
+       m_idMenuElement_Matrix_InsRow = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"insrow.xpm" )),
+                                                        i18n( "Insert a row" ),
+						       m_idMenuElement_Matrix,
+						       this, "matrixInsRow" );	
+       m_idMenuElement_Matrix_InsCol = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"inscol.xpm" )),
+                                        		i18n( "Insert a column" ),
+						       m_idMenuElement_Matrix,
+						       this, "matrixInsCol" );	
+       m_idMenuElement_Matrix_RemRow = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"remrow.xpm" )),
+                					i18n( "Remove a row" ),
+						       m_idMenuElement_Matrix,
+						       this, "matrixRemRow" );	
+       m_idMenuElement_Matrix_RemCol = m_rMenuBar->insertItemP(CORBA::string_dup(loadPixmap( tmp+"remcol.xpm" )),
+                                                        i18n( "Remove a column" ),
+						       m_idMenuElement_Matrix,
+						       this, "matrixRemCol" );	
+
+       m_idMenuElement_Decoration = m_rMenuBar->insertSubMenu( i18n( "Decoration..." ),
+						       m_idMenuElement);    
+       m_idMenuElement_Symbol = m_rMenuBar->insertSubMenu( i18n( "Symbol..." ),
+						       m_idMenuElement);    
+	    
+	// Element
+	m_idMenuFormula = m_rMenuBar->insertMenu( i18n( "&Formula" ) );
+       m_idMenuFormula_Color = m_rMenuBar->insertItem( i18n( "Set general color" ),
+						       m_idMenuFormula,
+						       this, "addFraction" );	
+       m_idMenuFormula_Font = m_rMenuBar->insertItem( i18n( "Set general font" ),
+						       m_idMenuFormula,
+						       this, "generalFont" );
+    }
+
     QObject::connect(mn_indexList,SIGNAL(activated(int)),this,SLOT(insertIndex(int)));
 
     m_vToolBarFactory = m_vPartShell->toolBarFactory();
@@ -158,7 +314,7 @@ void KFormulaView::createGUI()
 					    i18n( "Add/change to root" ), "addRoot" );
 
 	m_idButtonFormula_2 = addToolButton(m_rToolBarFormula, "mini-frac.xpm",
-					    i18n( "Add/change fract line" ), "addFrac");
+					    i18n( "Add/change fract line" ), "addFraction");
 
 	m_idButtonFormula_3 = addToolButton(m_rToolBarFormula, "mini-vspace.xpm",
 					    i18n( "Add/change vertical space" ), "addVertSpace");
@@ -172,6 +328,9 @@ void KFormulaView::createGUI()
 
 	m_idButtonFormula_6 = addToolButton(m_rToolBarFormula, "mini-symbols.xpm",
 					    i18n( "Add/change a block with symbols" ), "addSymbol" );
+
+	m_idButtonFormula_6 = addToolButton(m_rToolBarFormula, "matrix.xpm",
+					    i18n( "Add/change matrix" ), "addMatrix" );
     	
 	m_idButtonFormula_7 = addToolButton(m_rToolBarFormula, "index.xpm", 
 					     i18n( "Add an index at position..." ), "indexList" );
@@ -182,49 +341,148 @@ void KFormulaView::createGUI()
 	{
 	    m_rToolBarFont = m_vToolBarFactory->createToolBar( this, i18n( "Font" ) );
 
+//	    m_rToolBarFont->setPos(KToolBar::Left);
+       m_idComboFont_FontFamily = m_rToolBarFont->insertCombo(true,CORBA::string_dup(i18n("Font Family")),70,
+							   this,CORBA::string_dup("fontSelected"));
+	m_rToolBarFont->insertComboItem(m_idComboFont_FontFamily ,CORBA::string_dup("utopia"),-1);
+	m_rToolBarFont->insertComboItem(m_idComboFont_FontFamily ,CORBA::string_dup("symbol"),-1);
+        m_rToolBarFont->setCurrentComboItem(m_idComboFont_FontFamily ,0);
+	    
+	m_idComboFont_FontSize = m_rToolBarFont->insertCombo(true,CORBA::string_dup(i18n("Font Size of active Element")),60,
+							   this,CORBA::string_dup("sizeSelected"));
+              for(unsigned int i = 4;i <= 100;i++)
+		{
+		  char buffer[10];
+		  sprintf(buffer,"%i",i);
+		  m_rToolBarFont->insertComboItem(m_idComboFont_FontSize,CORBA::string_dup(buffer),-1);
+		}
+	    m_rToolBarFont->setCurrentComboItem(m_idComboFont_FontSize,28);
+
+	    m_idButtonFont_Bold = addToolButton(m_rToolBarFont, "bold.xpm",
+					     i18n( "Bold" ),"fontSwitch");
+      
+	    m_idButtonFont_Italic = addToolButton(m_rToolBarFont, "italic.xpm",
+					     i18n( "Italic" ),"fontSwitch");
+
+	    m_idButtonFont_Underl = addToolButton(m_rToolBarFont, "underl.xpm",
+					     i18n( "Underlined" ), "fontSwitch");
+
+
+
+            m_rToolBarFont->insertSeparator();
+            m_idComboFont_ScaleMode = m_rToolBarFont->insertCombo(true,CORBA::string_dup(i18n("Font Scale Mode")),80,
+							   this,CORBA::string_dup("sizeSelected"));
+              for(unsigned int i = 1;i <= 10;i++)
+		{
+		  char buffer[10];
+		  sprintf(buffer,"+(-) %i",i);
+		  m_rToolBarFont->insertComboItem(m_idComboFont_ScaleMode,CORBA::string_dup(buffer),-1);
+		}
+              for(unsigned int i = 1;i <= 6;i++)
+		{
+		  char buffer[10];
+		  sprintf(buffer,"*(/) %i/%i",i,i+1);
+		  m_rToolBarFont->insertComboItem(m_idComboFont_ScaleMode,CORBA::string_dup(buffer),-1);
+		}
+        m_rToolBarFont->setCurrentComboItem(m_idComboFont_ScaleMode,12);		
+	    
+	
 	    m_idButtonFont_0 = addToolButton(m_rToolBarFont, "reduce.xpm",
-					     i18n( "Reduce the font of active block" ), "reduce");
+					     i18n( "Reduce the fontSize" ), "reduce");
 
 	    m_idButtonFont_1 = addToolButton(m_rToolBarFont, "enlarge.xpm",
-					     i18n( "Enlarge the font of active block" ), "enlarge");
-
-	    m_idButtonFont_2 = addToolButton(m_rToolBarFont, "reduceall.xpm",
-					     i18n( "Reduce the font of active block & children" ), "reduceRecur");
+					     i18n( "Increase the fontSize" ), "enlarge");
+            m_rToolBarFont->insertSeparator();
+ 
+	    m_idButtonFont_2 = addToolButton(m_rToolBarFont, "elementsw.xpm",
+					     i18n( "Reduce/Increase active element fontSize" ),"fontSwitch");
       
-	    m_idButtonFont_3 = addToolButton(m_rToolBarFont, "enlargeall.xpm",
-					     i18n( "Enlarge the font of active block & children" ), "enlargeRecur" );
+	    m_idButtonFont_3 = addToolButton(m_rToolBarFont, "indexsw.xpm",
+					     i18n( "Reduce/Increase indexes fontSize" ),"fontSwitch");
 
-	    m_idButtonFont_4 = addToolButton(m_rToolBarFont, "enlargenext.xpm",
-					     i18n( "Reduce the font of active block, children & next blocks" ), "enlargeAll");
+	    m_idButtonFont_4 = addToolButton(m_rToolBarFont, "childrensw.xpm",
+					     i18n( "Reduce/Increase children (content) fontSize" ), "fontSwitch");
 
-	    m_idButtonFont_5 = addToolButton(m_rToolBarFont, "greek.xpm",
-					     i18n( "Set greek font" ), "setGreek" );
+	    m_idButtonFont_5 = addToolButton(m_rToolBarFont, "nextsw.xpm",
+					     i18n( "Reduce/Increase next element fontSize" ), "fontSwitch" );
+	    m_rToolBarFont->setToggle( m_idButtonFont_Bold, true );
+	    m_rToolBarFont->setToggle( m_idButtonFont_Underl, true );
+	    m_rToolBarFont->setToggle( m_idButtonFont_Italic, true );
+	    m_rToolBarFont->setToggle( m_idButtonFont_2, true );
+	    m_rToolBarFont->setToggle( m_idButtonFont_3, true );
+	    m_rToolBarFont->setToggle( m_idButtonFont_4, true );
 	    m_rToolBarFont->setToggle( m_idButtonFont_5, true );
+	    
+	    m_rToolBarFont->setButton( m_idButtonFont_2, true );
+	    m_rToolBarFont->setButton( m_idButtonFont_3, true );
+	    m_rToolBarFont->setButton( m_idButtonFont_4, true );
+	    m_rToolBarFont->setButton( m_idButtonFont_5, false );
+	    
+
 	}
   
     if ( !CORBA::is_nil( m_vToolBarFactory ) )
 	{
 	    m_rToolBarType = m_vToolBarFactory->createToolBar( this, i18n( "Type" ) );
-	  
-	    m_idButtonType_0 = addToolButton(m_rToolBarType, "index0.xpm", 
-					     i18n( "Add TopLeft index or RootIndex" ), "addTopLeftIndex" );
 
-	    m_idButtonType_1 = addToolButton(m_rToolBarType, "index1.xpm", 
-					     i18n( "Add BottomLeft index" ), "addBottomLeftIndex" );
 
-	    m_idButtonType_2 = addToolButton(m_rToolBarType, "index2.xpm", 
-					     i18n( "Add TopRight index (exponent)" ), "addTopRightIndex" );
+// ************************* Text *********************
+	    m_idButtonType_Spl = addToolButton(m_rToolBarType, "split.xpm", 
+					     i18n( "Split text into 2 elment" ), "textSplit" );
+            m_rToolBarType->insertSeparator();		  
+// ************************** Root ********************
+	    m_idButtonType_RIn = addToolButton(m_rToolBarType, "rootindex.xpm", 
+					     i18n( "Add root index (i.e. Top Left index)" ), "addTopLeftIndex" );
 
-	    m_idButtonType_3 = addToolButton(m_rToolBarType, "index3.xpm", 
-					     i18n( "Add BottomRight index" ), "addBottomRightIndex" );
+// ************************** Brackets ********************	  
+            m_rToolBarType->insertSeparator();	
 
-	    m_idButtonType_4 = addToolButton(m_rToolBarType, "index.xpm", 
-					     i18n( "Add an index at position..." ), "indexList" );
+	    m_idButtonType_Del = addToolButton(m_rToolBarType, "delimiter.xpm", 
+					     i18n( "Set delimiter type" ), "bracketType" );
 
-	    // TODO check, why two exponents button exist!
-	    m_idButtonType_5 = addToolButton(m_rToolBarType, "kformula2-3.xpm", 
-					     i18n( "Add exponent" ), "addCh2" );
+            m_rToolBarType->insertSeparator();
+// ************************** Fraction ********************
+	    m_idButtonType_MAl = addToolButton(m_rToolBarType, "midalign.xpm", 
+					     i18n( "Align fraction to midline" ), "fractionAlignM" );
 
+	    m_idButtonType_UAl = addToolButton(m_rToolBarType, "upalign.xpm", 
+					     i18n( "Align fraction to numerator" ), "fractionAlignU" );
+
+	    m_idButtonType_DAl = addToolButton(m_rToolBarType, "downalign.xpm", 
+					     i18n( "Align fraction to denominator" ), "fractionAlignD" );
+
+	    m_idButtonType_Mid = addToolButton(m_rToolBarType, "midline.xpm", 
+					     i18n( "Toggle fraction line" ), "toggleMidline" );
+            m_rToolBarType->insertSeparator();
+// *******************  Integral **************************+
+	    m_idButtonType_AddH = addToolButton(m_rToolBarType, "higher.xpm", 
+					     i18n( "Add higher limit" ), "integralHigher" );
+
+	    m_idButtonType_AddL = addToolButton(m_rToolBarType, "lower.xpm", 
+					     i18n( "Add lower limit" ), "integralLower" );
+            m_rToolBarType->insertSeparator();
+// *********************** Matrix *************************
+	    m_idButtonType_SetM = addToolButton(m_rToolBarType, "setmatrix.xpm", 
+					     i18n( "Set matrix dimension" ), "matrixSet" );
+	    m_idButtonType_InR = addToolButton(m_rToolBarType, "insrow.xpm", 
+					     i18n( "Insert a row" ), "matrixInsRow" );
+	    m_idButtonType_InC = addToolButton(m_rToolBarType, "inscol.xpm", 
+					     i18n( "Insert a column" ), "matrixInsCol" );
+	    m_idButtonType_ReR = addToolButton(m_rToolBarType, "remrow.xpm", 
+					     i18n( "Remove a row" ), "matrixRemRow" );
+	    m_idButtonType_ReC = addToolButton(m_rToolBarType, "remcol.xpm", 
+					     i18n( "Remove a column" ), "matrixRemCol" );
+
+            m_rToolBarType->insertSeparator();
+// *********************** General *************************
+	    m_idButtonType_Pix = addToolButton(m_rToolBarType, "pixmap.xpm", 
+					     i18n( "Remove a column" ), "togglePixmap" );
+
+	    m_rToolBarType->setToggle( m_idButtonType_UAl, true );
+	    m_rToolBarType->setToggle( m_idButtonType_MAl, true );
+	    m_rToolBarType->setToggle( m_idButtonType_DAl, true );
+	    m_rToolBarType->setToggle( m_idButtonType_Mid, true );
+	    
 	    // TODO insert Line Edit control
 	}  
 }
@@ -232,13 +490,13 @@ void KFormulaView::createGUI()
 
 void KFormulaView::slotTypeChanged(int type)
 {   
-   m_rToolBarType->setItemEnabled(m_idButtonType_0,(type==0));          
+/*   m_rToolBarType->setItemEnabled(m_idButtonType_0,(type==0));          
    m_rToolBarType->setItemEnabled(m_idButtonType_1,(type==0));          
    m_rToolBarType->setItemEnabled(m_idButtonType_2,(type==1));          
    m_rToolBarType->setItemEnabled(m_idButtonType_3,(type==2));          
    m_rToolBarType->setItemEnabled(m_idButtonType_4,(type==2));          
    m_rToolBarType->setItemEnabled(m_idButtonType_5,(type==3));          
-debug("Type Changed");
+*/debug("Type Changed");
     update();
 
 }
@@ -268,6 +526,7 @@ void KFormulaView::addText()
 {
     debug("adding Text");
     m_pDoc->addTextElement();
+//    m_rToolBarType->show();
 }
 
 void KFormulaView::addRoot()
@@ -290,6 +549,12 @@ void KFormulaView::addBracket()
 {
     debug("##adding parenthesis");
     m_pDoc->addBracketElement("[]");
+//    m_rToolBarType->hide();
+}
+
+void KFormulaView::addMatrix()
+{
+    debug("##adding Integral");
 }
 
 void KFormulaView::addIntegral()
@@ -304,38 +569,64 @@ void KFormulaView::addSymbol()
 
 void KFormulaView::reduce()
 {
-    debug("reduce");
-    m_pDoc->activeElement()->scaleNumericFont(FN_P43 | FN_REDUCE | FN_ELEMENT);
+    if(m_pDoc->activeElement()==0) return;
+    int level;
+    level= FN_REDUCE | FN_P43; 
+ if(m_rToolBarFont->isButtonOn(m_idButtonFont_2)) level=level | FN_ELEMENT;
+ if(m_rToolBarFont->isButtonOn(m_idButtonFont_3)) level=level | FN_INDEXES;
+ if(m_rToolBarFont->isButtonOn(m_idButtonFont_4)) level=level | FN_CHILDREN;
+ if(m_rToolBarFont->isButtonOn(m_idButtonFont_5)) level=level | FN_NEXT;
+
+    m_pDoc->activeElement()->scaleNumericFont(level);
     update();
 }
 
 void KFormulaView::enlarge()
 {
-    debug("enlarge");
-    m_pDoc->activeElement()->scaleNumericFont(FN_P43|FN_ENLARGE | FN_ELEMENT);
+    if(m_pDoc->activeElement()==0) return;
+    int level;
+    level= FN_ENLARGE | FN_P43;
+
+//    warning(m_rToolBarFont->comboItem(m_idComboFont_ScaleMode));
+ if(m_rToolBarFont->isButtonOn(m_idButtonFont_2)) level=level | FN_ELEMENT;
+ if(m_rToolBarFont->isButtonOn(m_idButtonFont_3)) level=level | FN_INDEXES;
+ if(m_rToolBarFont->isButtonOn(m_idButtonFont_4)) level=level | FN_CHILDREN;
+ if(m_rToolBarFont->isButtonOn(m_idButtonFont_5)) level=level | FN_NEXT;
+
+    m_pDoc->activeElement()->scaleNumericFont(level);
     update();
 }
 
-void KFormulaView::reduceRecur()
+
+void KFormulaView::fractionAlignM()
 {
-    debug("reduce recur");
-    m_pDoc->activeElement()->scaleNumericFont(FN_P43|FN_REDUCE | FN_ALL);
-    update();
+ m_rToolBarType->setButton(m_idButtonType_MAl,false);
+ m_rToolBarType->setButton(m_idButtonType_DAl,false);
+ m_rToolBarType->setButton(m_idButtonType_UAl,false);
+ update();
+}
+void KFormulaView::fractionAlignU()
+{
+ m_rToolBarType->setButton(m_idButtonType_MAl,false);
+ m_rToolBarType->setButton(m_idButtonType_DAl,false);
+ m_rToolBarType->setButton(m_idButtonType_UAl,false);
+ update();
 }
 
-void KFormulaView::enlargeRecur()
+void KFormulaView::fractionAlignD()
 {
-    debug("enlarge recur");
-    m_pDoc->activeElement()->scaleNumericFont(FN_P43|FN_ENLARGE | FN_ALL);
-    update();
+ m_rToolBarType->setButton(m_idButtonType_MAl,false);
+ m_rToolBarType->setButton(m_idButtonType_DAl,false);
+ m_rToolBarType->setButton(m_idButtonType_UAl,false);
+ update();
 }
 
-void KFormulaView::enlargeAll()
+void KFormulaView::fontSwitch()
 {
-}
-
-void KFormulaView::setGreek()
-{
+ if(m_rToolBarFont->isButtonOn(m_idButtonFont_2)) warning("element");
+ if(m_rToolBarFont->isButtonOn(m_idButtonFont_3)) warning("index");
+ if(m_rToolBarFont->isButtonOn(m_idButtonFont_4)) warning("children");
+ if(m_rToolBarFont->isButtonOn(m_idButtonFont_5)) warning("next");
 }
 
 void KFormulaView::addTopLeftIndex()
@@ -375,6 +666,98 @@ void KFormulaView::insertIndex(int i)
     m_pDoc->addIndex(i);
 }
 
+void KFormulaView::sizeSelected(const char *size)
+{
+  //setPointSize(atoi(size));
+   warning(size);
+}
+void KFormulaView::fontSelected(const char *font)
+{
+//  tbFont.setFamily(qstrdup(font));
+warning(font);
+}
+
+void KFormulaView::modeSelected(const char *mode)
+{
+warning("mode");
+}
+void KFormulaView::textFont()
+{ 
+warning("Slot textFont");
+}
+void KFormulaView::textSplit()
+{ 
+warning("Slot textSplit");
+}
+void KFormulaView::togglePixmap()
+{ 
+warning("Slot togglePixmap");
+}
+void KFormulaView::integralLower()
+{
+warning("Slot integralLower");
+}
+void KFormulaView::integralHigher()
+{ 
+warning("Slot integralHigher");
+}
+void KFormulaView::bracketType()
+{ 
+warning("Slot bracketType");
+}
+void KFormulaView::matrixSet()
+{ 
+warning("Slot matrixSet");
+}
+void KFormulaView::matrixRemRow()
+{ 
+warning("Slot matrixRemRow");
+}
+void KFormulaView::matrixRemCol()
+{ 
+warning("Slot matrixRemCol");
+}
+void KFormulaView::matrixInsRow()
+{ 
+warning("Slot matrixInsRow");
+}
+void KFormulaView::matrixInsCol()
+{ 
+warning("Slot matrixInsCol");
+}
+void KFormulaView::fractionHAlign()
+{ 
+warning("Slot fractionHAlign");
+}
+void KFormulaView::toggleMidline()
+{ 
+warning("Slot toggleMidline");
+}
+void KFormulaView::symbolType()
+{ 
+warning("Slot sybolType");
+}
+void KFormulaView::DecorationType()
+{ 
+warning("Slot decorationType");
+}
+void KFormulaView::remove()
+{ 
+warning("Slot remove");
+}
+void KFormulaView::elementColor()
+{ 
+warning("Slot elementColor");
+}
+void KFormulaView::generalColor()
+{ 
+warning("Slot generalColor");
+}
+void KFormulaView::generalFont()
+{ 
+warning("Slot generalFont");
+}
+    
 
 #include "kformula_view.moc"
 
