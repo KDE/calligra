@@ -1125,8 +1125,10 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 
   if ( !d->bMainWindowGUIBuilt )
   {
+#ifdef KDE_VERSION >= 305
     // Load mainwindow plugins
     KParts::Plugin::loadPlugins( this, this, instance(), true );
+#endif
     createShellGUI();
   }
 
