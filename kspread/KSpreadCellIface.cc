@@ -1142,6 +1142,54 @@ bool KSpreadCellIface::hasValidation() const
         return false;
 }
 
+QString KSpreadCellIface::validationTitle() const
+{
+    if( !m_table ) return "";
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    if ( cell->getValidity( 0  ) )
+    {
+        return cell->getValidity( 0  )->title;
+    }
+    else
+        return "";
+}
+
+QString KSpreadCellIface::validationMessage() const
+{
+    if( !m_table ) return "";
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    if ( cell->getValidity( 0  ) )
+    {
+        return cell->getValidity( 0  )->message;
+    }
+    else
+        return "";
+}
+
+bool KSpreadCellIface::displayValidationMessage() const
+{
+    if( !m_table ) return false;
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    if ( cell->getValidity( 0  ) )
+    {
+        return cell->getValidity( 0  )->displayMessage;
+    }
+    else
+        return false;
+}
+
+bool KSpreadCellIface::validationAllowEmptyCell() const
+{
+    if( !m_table ) return false;
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    if ( cell->getValidity( 0  ) )
+    {
+        return cell->getValidity( 0  )->allowEmptyCell;
+    }
+    else
+        return false;
+}
+
 void KSpreadCellIface::removeValidity()
 {
     if( !m_table ) return;

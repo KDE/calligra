@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 2002-2003 Joseph Wenninger <jowenn@kde.org>
    Copyright 2002 Ariya Hidayat <ariya@kde.org>
    Copyright 2002 Philipp Mueller <philipp.mueller@gmx.de>
@@ -22,7 +22,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-   
+
 */
 
 #ifndef KSPREAD_CELL_IFACE_H
@@ -152,6 +152,12 @@ k_dcop:
     virtual bool getDontprintText() const ;
     virtual bool hasValidation() const;
     virtual void removeValidity();
+    virtual QString validationTitle() const;
+    virtual QString validationMessage() const;
+    virtual bool displayValidationMessage() const;
+    virtual bool validationAllowEmptyCell() const;
+
+
 private:
     QPoint m_point;
     KSpreadSheet* m_table;
