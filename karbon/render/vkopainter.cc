@@ -81,6 +81,8 @@ VKoPainter::VKoPainter( unsigned char *buffer, unsigned int w, unsigned int h ) 
 	m_stroke = 0L;
 	m_fill = 0L;
 
+	gc = 0L;
+
 	m_zoomFactor = 1;
 }
 
