@@ -167,7 +167,8 @@ enum PageEffect {
     PEF_COVER_RIGHT_DOWN = 33,
     PEF_UNCOVER_RIGHT_DOWN = 34,
     PEF_DISSOLVE = 35,
-    PEF_RANDOM = 36
+    PEF_LAST_MARKER = 36, // only marker, don't use this !
+    PEF_RANDOM = -1
 };
 enum LineEnd {
     L_NORMAL = 0,

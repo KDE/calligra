@@ -130,6 +130,10 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     effectCombo->setCurrentItem( static_cast<int>( pageEffect ) );
     grid->addWidget( effectCombo, 1, 1 );
 
+    // workaround, because Random Effect is always negative
+    if( pageEffect == PEF_RANDOM )
+      effectCombo->setCurrentItem( effectCombo->count() );
+
     connect( effectCombo, SIGNAL( activated( int ) ), this, SLOT( effectChanged( int ) ) );
 
     lTimer = new QLabel( i18n( "Timer of the page:" ), grp );
@@ -250,7 +254,10 @@ bool PgConfDia::getManualSwitch() const
 /*================================================================*/
 PageEffect PgConfDia::getPageEffect() const
 {
-    return static_cast<PageEffect>( effectCombo->currentItem() );
+    if( effectCombo->currentText() == i18n( "Random Transition" ) )
+      return PEF_RANDOM;
+    else
+      return static_cast<PageEffect>( effectCombo->currentItem() );
 }
 
 /*================================================================*/

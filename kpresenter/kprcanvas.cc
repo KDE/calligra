@@ -4382,8 +4382,7 @@ void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
     {
         KRandomSequence random;
 
-        // assume PEF_RANDOM is the last effect !
-        changePages( _pix1, _pix2, static_cast<PageEffect>( random.getLong( PEF_RANDOM ) ) );
+        changePages( _pix1, _pix2, static_cast<PageEffect>( random.getLong( PEF_LAST_MARKER ) ) );
 
     } break;
 
