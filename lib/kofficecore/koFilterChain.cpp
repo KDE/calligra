@@ -143,7 +143,7 @@ QString KoFilterChain::inputFile()
              KoFilterManager::Import )
             m_inputFile = filterManagerImportFile();
         else
-            inputFileHelper( filterManagerKoDocument(), filterManagerExportFile() );
+            inputFileHelper( filterManagerKoDocument(), filterManagerImportFile() );
     }
     else
         if ( m_inputFile.isEmpty() )
