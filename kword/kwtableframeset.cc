@@ -1174,6 +1174,7 @@ void KWTableFrameSet::group()
 }
 
 KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd) {
+    //kdDebug()<<"colBegin :"<<colBegin<<" rowBegin :"<<rowBegin<<" colEnd :"<<colEnd<<" rowEnd :"<<rowEnd<<endl;
     Cell *firstCell = getCell(rowBegin, colBegin);
     if(colBegin==0 && rowBegin==0 && colEnd==0 && rowEnd==0)
     {
@@ -1248,9 +1249,9 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
 }
 
 KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols, int _col, int _row,QList<KWFrameSet> listFrameSet, QList<KWFrame>listFrame) {
+    //kdDebug()<<"intoRows :"<<intoRows<<" intoCols :"<< intoCols <<" _col :"<<_col<<" _row "<<_row<<" listFrameSet :"<<listFrameSet.count()<<" listFrame :"<<listFrame.count()<<endl;
     if(intoRows < 1 || intoCols < 1)
         return 0L;
-        //return false; // assertion.
 
     unsigned int col, row;
     if(_col!=-1 && _row!=-1)
@@ -1262,7 +1263,6 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
     {
         if ( !isOneSelected( row, col ) )
             return 0L;
-        //return false;
     }
 
 
@@ -1339,7 +1339,6 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
                 lastFrameSet= new Cell( this, y + row, x + col );
                 lastFrameSet->m_rows = 1;
                 lastFrameSet->m_cols = 1;
-                kdDebug()<<"y + row :"<<(y + row)<<" x + col :"<<(x + col)<<endl;
             }
             else
             {
@@ -1360,10 +1359,7 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
                 lastFrameSet->addFrame( frame,false );
             }
             else
-            {
-                frame=listFrame.at(i);
-                lastFrameSet->addFrame( frame,false );
-            }
+                lastFrameSet->addFrame( listFrame.at(i)->getCopy(),false );
             i++;
 
             // if the orig cell spans more rows/cols than it is split into, make first col/row wider.

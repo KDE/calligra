@@ -1218,26 +1218,26 @@ void KWSplitCellCommand::unexecute()
     //kdDebug()<<"Join Cell m_colBegin :"<<m_colBegin<<" m_colEnd :"<<m_colBegin+m_colEnd-1<<" m_rowBegin :"<<m_rowBegin<<" m_rowEnd :"<<m_rowBegin+m_rowEnd-1<<endl;
 
     if(m_ListFrameSet.isEmpty())
+    {
+        for ( unsigned int i = 0; i < m_pTable->getCols(); i++ )
         {
-            for ( unsigned int i = 0; i < m_pTable->getCols(); i++ )
+            for ( unsigned int j = 0; j < m_pTable->getRows(); j++ )
+            {
+                if(j>=m_rowBegin && j<=(m_rowBegin+m_rowEnd-1)
+                   && i>=m_colBegin && i<=(m_colEnd+m_colBegin-1))
                 {
-                    for ( unsigned int j = 0; j < m_pTable->getRows(); j++ )
-                        {
-                            if(j>=m_rowBegin && j<=(m_rowBegin+m_rowEnd-1)
-                               && i>=m_colBegin && i<=(m_colEnd+m_colBegin-1))
-                                {
-                                    //don't store first cell
-                                    if( !(j==m_rowBegin && i==m_colBegin))
-                                        {
-                                            kdDebug()<<"store cell row :"<<j<<" col :"<<i<<endl;
-                                            KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( j,i ));
-                                            m_ListFrameSet.append(cell);
-                                        }
-                                }
-
-                        }
+                    //don't store first cell
+                    if( !(j==m_rowBegin && i==m_colBegin))
+                    {
+                        kdDebug()<<"store cell row :"<<j<<" col :"<<i<<endl;
+                        KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( j,i ));
+                        m_ListFrameSet.append(cell);
+                    }
                 }
+
+            }
         }
+    }
     m_pTable->joinCells(m_colBegin,m_rowBegin,m_colEnd+m_colBegin-1,m_rowBegin+m_rowEnd-1);
 
     doc->frameSelectedChanged();
