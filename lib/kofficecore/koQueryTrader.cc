@@ -102,12 +102,12 @@ static KoComponentEntry koParseComponentProperties( KService::Ptr service )
   e.exec = service->CORBAExec();
   e.activationMode = service->activationMode();
 
-  QStringList lst = KGlobal::dirs()->getResourceDirs("icon");
+  QStringList lst = KGlobal::dirs()->resourceDirs("icon");
   QStringList::ConstIterator it = lst.begin();
   while (!e.icon.load( *it + "/" + service->icon() ) && it != lst.end() )
     it++;
 
-  lst = KGlobal::dirs()->getResourceDirs("mini");
+  lst = KGlobal::dirs()->resourceDirs("mini");
   it = lst.begin();
   while (!e.miniIcon.load( *it + "/" + service->icon() ) && it != lst.end() )
     it++;
