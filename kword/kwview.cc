@@ -7146,12 +7146,35 @@ void KWView::deleteFrameSet( KWFrameSet * frameset)
 
 QPtrList<KAction> KWView::listOfResultOfCheckWord( const QString &word )
 {
+#if HAVE_LIBASPELL
+    KOSpell *tmpSpell = new KOSpell( m_doc->getKOSpellConfig());
+    QStringList lst = tmpSpell->resultCheckWord(word );
+    QPtrList<KAction> listAction=QPtrList<KAction>();
+    QStringList::ConstIterator it = lst.begin();
+    for ( int i = 0; it != lst.end() ; ++it, ++i )
+    {
+        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+        {
+            KAction * act = new KAction( (*it));
+            connect( act, SIGNAL(activated()),this, SLOT(slotCorrectWord()) );
+            listAction.append( act );
+        }
+    }
+    return listAction;
+#endif
+
     return QPtrList<KAction>();
 }
 
 void KWView::slotCorrectWord()
 {
-    //todo
+    KAction * act = (KAction *)(sender());
+    KWTextFrameSetEdit* edit = currentTextEdit();
+    if ( edit )
+    {
+        edit->selectWordUnderCursor( *(edit->cursor()) );
+        m_doc->addCommand( edit->textObject()->replaceSelectionCommand( edit->cursor(), act->text(), KoTextDocument::Standard, i18n("Replace Word") ));
+    }
 }
 
 
