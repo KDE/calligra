@@ -87,7 +87,7 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
     }
 
     QString html_table_tag = "table";
-    QString html_table_options = " border";
+    QString html_table_options = " border=\"1\"";
     QString html_row_tag = "tr";
     QString html_row_options = "";
     QString html_cell_tag = "td";
@@ -117,7 +117,7 @@ bool HTMLExport::filterExport(const QString &file, KoDocument * document,
     str += "<meta http-equiv=\"Content-Type\" ";
     str += "content=\"text/html; charset=UTF-8\">\n";
     str += "<meta name=\"Generator\" ";
-    str += "content=\"KSpread HTML Export Filter Version = 0.1\">\n";
+    str += "content=\"KSpread HTML Export Filter Version = 0.2\">\n";
     // I have no idea where to get the document name from :-(  table->tableName()
     str += "<title>" + title + "</title>\n";
     str += "</head>\n";
