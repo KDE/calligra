@@ -182,6 +182,8 @@ public:
 
     void selectionChangedNotify( bool enableActions = true );
 
+    void emitNewCommand(KCommand *cmd);
+
 signals:
     /** Emitted by availableHeight() when the available height hasn't been
      * calculated yet or is invalid. Connect to a slot that calls setAvailableHeight() */

@@ -830,6 +830,12 @@ void KoTextObject::setFormat( QTextCursor * cursor, KoTextFormat * & currentForm
         emit newCommand( cmd );
 }
 
+void KoTextObject::emitNewCommand(KCommand *cmd)
+{
+    if(cmd)
+        emit newCommand( cmd );
+}
+
 KCommand *KoTextObject::setCounterCommand( QTextCursor * cursor, const KoParagCounter & counter )
 {
     QTextDocument * textdoc = textDocument();
