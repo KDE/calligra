@@ -123,6 +123,9 @@ They are not compiled into the library by default, and are not present in the pr
 distributed on the download page."
 
 TODO: add possibility in cursor: "Operating in-place on data returned by sqlite_get_table()"
+
+TODO: for import data from native-sqlite databases: use "pragma table_info"
+TODO: maybe also use "pragma table_info" for sanity checking, or more in kexidb driver??
 </SQLITE>
 
 <RENAME_PROPOSALS>
@@ -219,6 +222,22 @@ TABLE VIEW TODO:
 - add SpreadSheet mode (eg. for alter table, and query editor)
 - add support for enums (combo boxes)
 - shrink viewport area after each row removing (so scrollbars can be updated)
+
+TODO:
+- KMdiChildArea::getCaptionColors - change to KGlobalSettings::inactiveTextColor(), etc.
+  (for win32 - reimpl. KGlobalSettings::inactiveTextColor() with code from getCaptionColors())
+
+2004-01-12
+- Relation View:
+  - tables focusing fixed
+  - actions 'remove table', 'remove relation' work (not impl)
+  - "relation view" widget extracted and moved from relations/ plugin to widget/relations/
+   (because it's used also in queries)
+  - KexiRelationDialog renamed to KexiRelationWidget to avoid mistakes
+  - actions moved from KexiRelationView up to KexiRelationDialog (simplicity)
+  - added new actions: "open table", "design table"
+- KexiActionProxy:
+	new plugSharedAction() overload added for easy creating alternative action names. 
 
 2004-01-10
 - KexiDB::Field::isIntegerType() added. Now It's easier to detect if a field is integer.

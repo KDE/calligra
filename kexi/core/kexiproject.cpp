@@ -316,6 +316,13 @@ bool KexiProject::openObject(KexiMainWindow *wnd, const KexiPart::Item& item, bo
 	return true;
 }
 
+bool KexiProject::openObject(KexiMainWindow *wnd, const QString &mime, const QString& name, 
+	bool designMode)
+{
+	KexiPart::Item *it = item(mime, name);
+	return it ? openObject(wnd, *it, designMode) : false;
+}
+
 bool KexiProject::removeObject(KexiMainWindow *wnd, const KexiPart::Item& item)
 {
 	KexiPart::Part *part = Kexi::partManager().part(item.mime());

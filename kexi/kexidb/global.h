@@ -55,6 +55,7 @@ enum ObjectTypes {
 	TableObjectType = 1,
 	QueryObjectType = 2,
 	IndexObjectType = 3,
+	LastObjectType = 3, //ALWAYS UPDATE THIS
 
 	KexiDBSystemTableObjectType = 128 //!< helper, not used in storage 
 	                                  //!< (allows to select kexidb system tables

@@ -24,6 +24,9 @@
 #include <qasciidict.h>
 #include <qobject.h>
 #include <qpair.h>
+#include <qptrlist.h>
+
+#include <kaction.h>
 
 #include "kexisharedactionhost.h"
 
@@ -48,7 +51,9 @@ class KEXICORE_EXPORT KexiActionProxy
 		KexiActionProxy(QObject *receiver , KexiSharedActionHost *host = 0 );
 		~KexiActionProxy();
 
-		void activateSharedAction(const char *action_name);
+		/*! Activates  action named \a action_name for this proxy. If the action is executed
+		 (accepted), true is returned. */
+		bool activateSharedAction(const char *action_name);
 
 		/*! Sets host to \a host; rerely used. */
 		void setSharedActionHost(KexiSharedActionHost& host) { m_host = &host; }
@@ -68,8 +73,16 @@ class KEXICORE_EXPORT KexiActionProxy
 		 as an item. \a w will typically be a menu, popup menu or a toolbar. 
 		 Does nothing if no action found, so generally this is safer than just caling e.g.
 		 <code> action("myaction")->plug(myPopup); </code> 
+		 \return index of inserted item, or -1 if there is not action with name \a action_name.
 		 \sa action(), KAction::plug(QWidget*, int) */
-		void plugSharedAction(const char *action_name, QWidget* w);
+		int plugSharedAction(const char *action_name, QWidget* w);
+
+		/*! Like above, but creates alternative action as a copy of \a action_name,
+		 with \a alternativeText set. When this action is activated, just original action
+		 specified by \a action_name is activated. The aternative action has autmatically set name as:
+		 action_name + "_alt". 
+		 \return newly created action or 0 if \a action_name not found. */
+		KAction* plugSharedAction(const char *action_name, const QString& alternativeText, QWidget* w);
 
 		/*! \return action named with \a name or NULL if there is no such action. */
 		KAction* sharedAction(const char* name);
@@ -79,11 +92,33 @@ class KEXICORE_EXPORT KexiActionProxy
 		bool isAvailable(const char* action_name);
 		void setAvailable(const char* action_name, bool set);
 
+		/*! Adds \a child of this proxy. Children will receive activateSharedAction() event,
+		 If activateSharedAction() "event" is not consumed by the main proxy,
+		 we start to iterate over proxy children (in unspecified order) to and call 
+		 activateSharedAction() on every child until one of them accept the "event".
+		 
+		 If proxy child is destroyed, it is automatically detached from its parent proxy. 
+		 Parent proxy is 0 by default. This pointer is properly cleared when parent proxy is destroyed. */
+		void addActionProxyChild( KexiActionProxy* child );
+
+		void takeActionProxyChild( KexiActionProxy* child );
+
 		KexiSharedActionHost *m_host;
 		QGuardedPtr<QObject> m_receiver;
 		QAsciiDict< QPair<QSignal*,bool> > m_signals;
 
+		QPtrList<KexiActionProxy> m_sharedActionChildren;
+
+		QPtrList<KAction> m_alternativeActions;
+
+		KexiActionProxy* m_actionProxyParent;
+
 		QObject m_signal_parent; //!< it's just to have common parent for owned signals
+
+	public:
+		//! For internal use by addActionProxyChild(). \a parent can be 0.
+		void setActionProxyParent_internal( KexiActionProxy* parent );
+
 	friend class KexiSharedActionHost;
 };
 

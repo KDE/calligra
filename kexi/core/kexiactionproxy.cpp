@@ -22,22 +22,36 @@
 #include <kdebug.h>
 #include <kaction.h>
 #include <kmainwindow.h>
+#include <kshortcut.h>
 
 #include <qwidget.h>
 #include <qsignal.h>
+#include <qiconset.h>
 
 KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
  : m_host( host ? host : &KexiSharedActionHost::defaultHost() )
  , m_receiver(receiver)
  , m_signals(47)
+ , m_actionProxyParent(0)
  , m_signal_parent( 0, "signal_parent" )
 {
 	m_signals.setAutoDelete(true);
+	m_sharedActionChildren.setAutoDelete(false);
+	m_alternativeActions.setAutoDelete(true);
 	m_host->plugActionProxy( this );
 }
 
 KexiActionProxy::~KexiActionProxy()
 {
+	QPtrListIterator<KexiActionProxy> it(m_sharedActionChildren);
+	//detach myself from every child
+	for (;it.current();++it) {
+		it.current()->setActionProxyParent_internal( 0 );
+	}
+	//take me from parent
+	if (m_actionProxyParent)
+		m_actionProxyParent->takeActionProxyChild( this );
+
 	m_host->takeActionProxyFor(m_receiver);
 }
 
@@ -48,27 +62,58 @@ void KexiActionProxy::plugSharedAction(const char *action_name, QObject* receive
 	m_signals.insert(action_name, p);
 }
 
-void KexiActionProxy::plugSharedAction(const char *action_name, QWidget* w)
+int KexiActionProxy::plugSharedAction(const char *action_name, QWidget* w)
 {
 	KAction *a = sharedAction(action_name);
 	if (!a) {
-		kdWarning() << "KexiActionProxy::plugAction(): NO SUCH ACTION: " << action_name << endl;
-		return;
+		kdWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name << endl;
+		return -1;
 	}
-	a->plug(w);
+	return a->plug(w);
 }
 
-void KexiActionProxy::activateSharedAction(const char *action_name)
+KAction* KexiActionProxy::plugSharedAction(const char *action_name, const QString& alternativeText, QWidget* w)
+{
+	KAction *a = sharedAction(action_name);
+	if (!a) {
+		kdWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name << endl;
+		return 0;
+	}
+	QCString altName = a->name();
+	altName += "_alt";
+	KAction *alt_act = new KAction(alternativeText, a->iconSet(), a->shortcut(), 
+		0, 0, a->parent(), altName);
+	QObject::connect(alt_act, SIGNAL(activated()), a, SLOT(activate()));
+	alt_act->plug(w);
+	return alt_act;
+}
+
+bool KexiActionProxy::activateSharedAction(const char *action_name)
 {
 	QPair<QSignal*,bool> *p = m_signals[action_name];
-	if (!p || !p->second)
-		return;
+	if (!p || !p->second) {
+		//try in children...
+		QPtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
+		for( ; it.current(); ++it ) {
+			if (it.current()->activateSharedAction( action_name ))
+				return true;
+		}
+		return false;
+	}
+	//activate in this proxy...
 	p->first->activate();
+	return true;
 }
 
 KAction* KexiActionProxy::sharedAction(const char* name)
 {
 	return m_host->mainWindow()->actionCollection()->action(name);
+}
+
+bool KexiActionProxy::isAvailable(const char* action_name)
+{
+	QPair<QSignal*,bool> *p = m_signals[action_name];
+	return p && p->second;
 }
 
 void KexiActionProxy::setAvailable(const char* action_name, bool set)
@@ -80,9 +125,21 @@ void KexiActionProxy::setAvailable(const char* action_name, bool set)
 	m_host->updateActionAvailable(action_name, set, m_receiver);
 }
 
-bool KexiActionProxy::isAvailable(const char* action_name)
+void KexiActionProxy::addActionProxyChild( KexiActionProxy* child )
 {
-	QPair<QSignal*,bool> *p = m_signals[action_name];
-	return p && p->second;
+	if (!child || child==this)
+		return;
+	child->setActionProxyParent_internal( this );
+	m_sharedActionChildren.append( child );
 }
 
+void KexiActionProxy::takeActionProxyChild( KexiActionProxy* child )
+{
+	if (m_sharedActionChildren.findRef( child ) != -1)
+		m_sharedActionChildren.take();
+}
+
+void KexiActionProxy::setActionProxyParent_internal( KexiActionProxy* parent )
+{
+	m_actionProxyParent = parent;
+}

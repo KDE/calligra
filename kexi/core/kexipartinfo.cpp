@@ -26,8 +26,6 @@ using namespace KexiPart;
 Info::Info(KService::Ptr ptr) //, Manager *manager)
 {
 	m_ptr = ptr;
-//	m_manager = manager;
-//	m_instance = 0;
 
 	m_groupName = m_ptr->name();
 	m_mime = m_ptr->property("X-Kexi-TypeMime").toString();
@@ -45,6 +43,10 @@ Info::Info(KService::Ptr ptr) //, Manager *manager)
 		m_projectPartID = KexiDB::TableObjectType;
 	else if(objectName() == "query")
 		m_projectPartID = KexiDB::QueryObjectType;
+#ifdef OOPL_VERSION //tmp
+	else if(objectName() == "html")
+		m_projectPartID = KexiDB::LastObjectType+1; //4?
+#endif
 	else
 		m_projectPartID = -1; //TODO!!
 

@@ -102,6 +102,14 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 
 		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
 		virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false);
+
+		bool openObject(KexiPart::Item *item, bool designMode = false);
+		//! for convenience
+		bool openObject(const QString& mime, const QString& name, bool designMode = false);
+
+		bool newObject( KexiPart::Info *info );
+		bool removeObject( KexiPart::Item *item );
+
 	protected:
 		//! reimplementation of events
 		virtual void	closeEvent(QCloseEvent *);
@@ -196,12 +204,6 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		 * and will unregister stuff
 		 */
 		void		childClosed(KMdiChildView *dlg);
-
-		bool openObject(KexiPart::Item *item, bool designMode = false);
-		//! for convenience
-		bool openObject(const QString& mime, const QString& name, bool designMode = false);
-		bool newObject( KexiPart::Info *info );
-		bool removeObject( KexiPart::Item *item );
 
 		void slotPartLoaded(KexiPart::Part* p);
 

@@ -50,7 +50,7 @@ class KexiMainWindow;
  * this class represents a project it contains data about connections, 
  * current file state etc..
  */
-class KexiProject : public QObject, public KexiDB::Object
+class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 {
 	Q_OBJECT
 
@@ -115,6 +115,9 @@ class KexiProject : public QObject, public KexiDB::Object
 		KexiProjectData *data() const { return m_data; }
 
 		bool openObject(KexiMainWindow *wnd, const KexiPart::Item& item, bool designMode);
+		//! For convenience
+		bool openObject(KexiMainWindow *wnd, const QString &mime, const QString& name, bool designMode);
+
 		bool removeObject(KexiMainWindow *wnd, const KexiPart::Item& item);
 
 
