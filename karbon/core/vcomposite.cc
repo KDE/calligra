@@ -347,6 +347,8 @@ VComposite::load( const QDomElement& element )
 {
 	setState( normal );
 
+	VObject::load( element );
+
 	QString data = element.attribute( "d" );
 	if( data.length() > 0 )
 	{

@@ -239,3 +239,9 @@ VDocument::accept( VVisitor& visitor )
 	visitor.visitVDocument( *this );
 }
 
+QString
+VDocument::objectName( const VObject *obj ) const
+{
+	QMap<const VObject *, QString>::ConstIterator it = m_objectNames.find( obj );
+    return it == m_objectNames.end() ? 0L : it.data();
+}

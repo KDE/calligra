@@ -91,6 +91,9 @@ VObject::save( QDomElement& element ) const
 
 	if( m_fill )
 		m_fill->save( element );
+
+	if( document() && !document()->objectName( this ).isEmpty() )
+		element.setAttribute( "ID", QString( document()->objectName( this ) ) );
 }
 
 void
@@ -111,12 +114,23 @@ VObject::load( const QDomElement& element )
 	{
 		m_fill->load( element );
 	}
+
+	if( !element.attribute( "ID" ).isEmpty() )
+		document()->setObjectName( this, element.attribute( "ID" ) );
 }
 
-char *
-VObject::name( VDocument *doc ) const
+VDocument *
+VObject::document() const
 {
-	VObject *obj = this;
-	return doc->objectName( obj );
+	VObject *obj = (VObject *)this;
+	while( obj->parent() )
+		obj = obj->parent();
+	return dynamic_cast<VDocument *>( obj );
+}
+
+QString
+VObject::name() const
+{
+	return document() ? document()->objectName( this ) : QString();
 }
 

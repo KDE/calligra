@@ -290,7 +290,7 @@ VSelectTool::updateStatusBar() const
 
 		QString selectMessage = QString( "Selection [(%1, %2), (%3, %4)] (%5)" ).arg( KoUnit::ptToUnit( rect.x(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::ptToUnit( rect.y(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::ptToUnit( rect.right(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::ptToUnit( rect.bottom(), view()->part()->unit() ), 0, 'f', 1 ).arg( view()->part()->unitName() );
 
-		VSelectionDescription selectionDesc( &( view()->part()->document() ) );
+		VSelectionDescription selectionDesc;
 		selectionDesc.visit( *view()->part()->document().selection() );
 		selectMessage += QString( "(%1)" ).arg( selectionDesc.description() );
 

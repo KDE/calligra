@@ -151,7 +151,8 @@ public:
 	 */
 	virtual void insertInfrontOf( VObject* /*newObject*/, VObject* /*oldObject*/ ) { }
 
-	virtual char *name( VDocument *doc ) const;
+	virtual QString name() const;
+	VDocument *document() const;
 
 protected:
 	/// Bounding box.

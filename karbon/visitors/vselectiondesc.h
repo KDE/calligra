@@ -23,14 +23,12 @@
 #include "vvisitor.h"
 #include <qstring.h>
 
-class VDocument;
-
 /***
  */
 class VSelectionDescription : public VVisitor
 {
 public:
-	VSelectionDescription( VDocument *doc ) : m_document( doc ) { m_desc = ""; m_shortdesc = ""; }
+	VSelectionDescription() { m_desc = ""; m_shortdesc = ""; }
 
 	virtual void visitVSelection( VSelection& );
 	virtual void visitVGroup( VGroup& );
@@ -44,7 +42,6 @@ public:
 private:
 	QString		m_desc;
 	QString		m_shortdesc;
-	VDocument	*m_document;
 };
 
 #endif

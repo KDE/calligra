@@ -187,8 +187,8 @@ public:
 	 */
 	void append( VObject* object );
 
-	char *objectName( VObject *obj ) const { return m_objectNames[ obj ]; }
-	void setObjectName( VObject *obj, char *name ) { m_objectNames.insert( obj, name ); }
+	QString objectName( const VObject *obj ) const;
+	void setObjectName( const VObject *obj, const QString name ) { m_objectNames.insert( obj, name ); }
 
 private:
 	/**
@@ -230,7 +230,7 @@ private:
 	/// The syntax version.
 	QString m_syntaxVersion;
 
-	QPtrDict<char>	m_objectNames;
+	QMap<const VObject *, QString>	m_objectNames;
 };
 
 #endif

@@ -328,7 +328,7 @@ VObjectListViewItem::update()
 	m_object->draw( &p );
 	p.end();
 
-	VSelectionDescription selectionDesc( m_document );
+	VSelectionDescription selectionDesc;
 	selectionDesc.visit( *m_object );
 	setText( 0, QString( "%1" ).arg( selectionDesc.shortDescription() ) );
 	if( m_object->state() == VObject::normal_locked || m_object->state() == VObject::hidden_locked )
@@ -539,10 +539,10 @@ VLayersTab::renameLayer( QListViewItem* item, const QPoint&, int col )
 			VObjectListViewItem *objectItem = dynamic_cast< VObjectListViewItem *>( m_layersListView->selectedItem() );
 			VObject *obj = objectItem->object();
 			QString name = QInputDialog::getText( i18n( "Current object" ), i18n( "Change the name of the object:" ),
-																	QLineEdit::Normal, obj->name( m_document ), &ok, this );
+																	QLineEdit::Normal, obj->name(), &ok, this );
 			if( ok )
 			{
-				m_document->setObjectName( obj, (char *)name.latin1() );
+				m_document->setObjectName( obj, name );
 				objectItem->update();
 			}
 		}

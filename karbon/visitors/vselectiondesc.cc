@@ -37,7 +37,7 @@ void
 VSelectionDescription::visitVComposite( VComposite& composite )
 {
 	m_desc = QString( i18n( "1 composite path" ) );
-	m_shortdesc = composite.name( m_document ) ? QString( composite.name( m_document ) ) : QString( i18n( "path" ) );
+	m_shortdesc = !composite.name().isEmpty() ? composite.name() : QString( i18n( "path" ) );
 }
 
 void
