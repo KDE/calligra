@@ -18,6 +18,7 @@
 
 VQPainter::VQPainter( QWidget *target, int w, int h ) : VPainter( target, w, h ), m_painter( 0L ), m_target( target ), m_width( w ), m_height( h )
 {
+	m_zoomFactor = 1;
 	m_index = 0;
 	m_painter = new QPainter( target );
 }
@@ -54,6 +55,15 @@ void
 VQPainter::setWorldMatrix( const QWMatrix& /*mat*/ )
 {
 	//m_painter->setWorldMatrix( mat );
+}
+
+void
+VQPainter::setZoomFactor( double zoomFactor )
+{
+	m_zoomFactor = zoomFactor;
+	QWMatrix mat;
+	mat.scale( zoomFactor, zoomFactor );
+	m_painter->setWorldMatrix( mat );
 }
 
 void 

@@ -34,6 +34,7 @@ public:
 
 	// matrix manipulation
 	virtual void setWorldMatrix( const QWMatrix & ) = 0;
+	virtual void setZoomFactor( double ) = 0;
 
 	// drawing
 	virtual void drawRect( double x, double y, double w, double h ) = 0;

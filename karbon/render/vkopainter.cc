@@ -51,6 +51,8 @@ VKoPainter::VKoPainter( QWidget *target, int w, int h ) : VPainter( target, w, h
 							  target->x11Screen() ), target->x11Depth() );
 
 	gc = XCreateGC( target->x11Display(), target->handle(), 0, 0 );
+
+	m_zoomFactor = 1;
 }
 
 VKoPainter::~VKoPainter()
@@ -102,6 +104,12 @@ void
 VKoPainter::setWorldMatrix( const QWMatrix &mat )
 {
 	m_matrix = mat;
+}
+
+void
+VKoPainter::setZoomFactor( double zoomFactor )
+{
+	m_zoomFactor = zoomFactor;
 }
 
 void 
@@ -285,12 +293,12 @@ VKoPainter::drawVPath( ArtVpath *vec )
 
 	// set up world matrix
 	double affine[6];
-	affine[0] = m_matrix.m11();
-	affine[1] = m_matrix.m12();
-	affine[2] = m_matrix.m21();
-	affine[3] = m_matrix.m22();
-	affine[4] = m_matrix.dx();
-	affine[5] = m_matrix.dy();
+	affine[0] = m_zoomFactor;//m_matrix.m11();
+	affine[1] = 0;//m_matrix.m12();
+	affine[2] = 0;//m_matrix.m21();
+	affine[3] = m_zoomFactor;//m_matrix.m22();
+	affine[4] = 0;//m_matrix.dx();
+	affine[5] = 0;//m_matrix.dy();
 	ArtVpath *temp = art_vpath_affine_transform( vec, affine );
 	vec = temp;
 

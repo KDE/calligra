@@ -30,6 +30,7 @@ public:
 
 	// matrix manipulation
 	virtual void setWorldMatrix( const QWMatrix & );
+	virtual void setZoomFactor( double );
 
 	// drawing
 	virtual void drawRect( double x, double y, double w, double h );
@@ -68,6 +69,7 @@ private:
 	QWMatrix m_matrix;
 	VStroke *m_stroke;
 	VFill *m_fill;
+	double m_zoomFactor;
 
 	GC gc;
 };

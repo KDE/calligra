@@ -26,6 +26,7 @@ public:
 
 	// matrix manipulation
 	virtual void setWorldMatrix( const QWMatrix & );
+	virtual void setZoomFactor( double );
 
 	// drawing
 	virtual void drawRect( double x, double y, double w, double h );
@@ -51,6 +52,7 @@ public:
 	virtual void setRasterOp( Qt::RasterOp );
 
 private:
+	double m_zoomFactor;
 	unsigned int m_index;
 	QPointArray m_pa;
 	QPainter *m_painter;
