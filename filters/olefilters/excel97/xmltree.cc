@@ -318,7 +318,6 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
       format.setAttribute("indent", (indent*10));
     if ((xfs[xf]->align >> 3) & 0x01 == 1)
         format.setAttribute("multirow", "yes");
-  
     switch (xfs[xf]->ifmt)
     {
         case 0x00:  // We need this to avoid 'default'
@@ -431,9 +430,58 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
 	  format.setAttribute("float","3");
 	  format.setAttribute("floatcolor","1");
 	  break;
-        default:
-            s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
-                                    formats[xfs[xf]->ifmt]->cch);
+    case 0xAC: //fix me format. (neg black)
+	  format.setAttribute("format", "0");
+	  format.setAttribute("faktor", "1");
+	  format.setAttribute("precision", "2");
+	  format.setAttribute("float","3");
+	  format.setAttribute("floatcolor","2");
+	  break;
+    case 0xAD: //fix me format. (neg red)
+	  format.setAttribute("format", "0");
+	  format.setAttribute("faktor", "1");
+	  format.setAttribute("precision", "2");
+	  format.setAttribute("float","3");
+	  format.setAttribute("floatcolor","1");
+	  break;
+    case 0xAE: //date d/m
+	  format.setAttribute("format", "211");
+	  break;
+    case 0xB0: //date 2/2/00
+      format.setAttribute("format", "204");
+      break;
+    case 0xB1: //date 2-feb
+	  format.setAttribute("format", "202");
+	  break;
+    case 0xB2: //date 2-feb-00
+      format.setAttribute("format", "200");
+	  break;
+    case 0xB3: //date february-00
+      format.setAttribute("format", "207");
+	  break;
+    case 0xB4: //date 2 february 2000 : doesn't exist in kspread =>
+      // 2-feb-2000
+	  format.setAttribute("format", "201");
+	  break;
+    case 0xB5:  //date 2/2/00 12:00 AM :doesn't exist in kspread
+      //=>2/2/00
+          format.setAttribute("format", "204");
+	  break;
+    case 0xB6: //date 2/2/00 0:00 : doesn't exist in kspread
+      //=>2/2/00
+          format.setAttribute("format", "204");
+	  break;
+    case 0xB7: //date F doesn't exist in kspread
+      //=>F-00
+          format.setAttribute("format", "209");
+	  break;
+    case 0xB8: //date F-00
+      format.setAttribute("format", "209");
+      break;
+    case 0xB9: //time format ?
+    default:
+      s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
+			      formats[xfs[xf]->ifmt]->cch);
     }
 
     getFont(xf, format, fontid);
@@ -1275,6 +1323,7 @@ bool XMLTree::_mulblank(Q_UINT16 size, QDataStream& body)
 
 bool XMLTree::_mulrk(Q_UINT16 size, QDataStream& body)
 {
+
   double value = 0;
 
   QString s;
@@ -1311,14 +1360,16 @@ bool XMLTree::_mulrk(Q_UINT16 size, QDataStream& body)
     case 15:
     case 16:
     case 17:
-    case 164: // These are undocumented
-    case 168:
-    case 165:
-    case 166:
-    case 167:
-    case 169:
-    case 170:
-    case 171:
+    case 174:
+    case 176:
+    case 177:
+    case 178:
+    case 179:
+    case 180:
+    case 181: 
+    case 182:
+    case 183:
+    case 184:
       int year, month, day;
       getDate((int) value, year, month, day);
       s.sprintf("%d/%d/%d", year, month, day);
@@ -1335,7 +1386,6 @@ bool XMLTree::_mulrk(Q_UINT16 size, QDataStream& body)
 
     QDomElement text = root->createElement("text");
     text.appendChild(root->createTextNode(s));
-
     e.appendChild(text);
     table->appendChild(e);
   }
@@ -1449,14 +1499,16 @@ bool XMLTree::_rk(Q_UINT16, QDataStream& body)
   case 15:
   case 16:
   case 17:
-  case 164: // These are undocumented
-  case 168:
-  case 165:
-  case 166:
-  case 167:
-  case 169:
-  case 170:
-  case 171:
+  case 174:
+  case 176:
+  case 177:
+  case 178:
+  case 179:
+  case 180:
+  case 181:
+  case 182:
+  case 183:
+  case 184:
     int year, month, day;
     getDate((int) value, year, month, day);
     s.sprintf("%d/%d/%d", year, month, day);
