@@ -647,8 +647,8 @@ static bool kspreadfunc_sum_helper( KSContext& context, QValueList<KSValue::Ptr>
       {
       result += (*it)->doubleValue();
       }
-    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
-      return false;
+    /*else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
+      return false;*/
   }
 
   return true;
@@ -723,8 +723,6 @@ static bool kspreadfunc_max_helper( KSContext& context, QValueList<KSValue::Ptr>
       if(result <  (*it)->doubleValue())
         result =(*it)->doubleValue();
     }
-    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
-      return false;
   }
 
   return true;
@@ -768,8 +766,6 @@ static bool kspreadfunc_min_helper( KSContext& context, QValueList<KSValue::Ptr>
       if(result >  (*it)->doubleValue())
         result =(*it)->doubleValue();
     }
-    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
-      return false;
   }
 
   return true;
@@ -807,8 +803,6 @@ static bool kspreadfunc_average_helper( KSContext& context, QValueList<KSValue::
       result += (*it)->doubleValue();
       number++;
       }
-    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
-      return false;
   }
 
   return true;
@@ -849,8 +843,6 @@ static bool kspreadfunc_variance_helper( KSContext& context, QValueList<KSValue:
       {
       result += ( (*it)->doubleValue() - avera ) * ( (*it)->doubleValue() - avera );
       }
-    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
-      return false;
   }
 
   return true;
@@ -895,8 +887,6 @@ static bool kspreadfunc_stddev_helper( KSContext& context, QValueList<KSValue::P
     {
       result += (((*it)->doubleValue()-avera)*((*it)->doubleValue()-avera));
     }
-    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
-      return false;
   }
 
   return true;
@@ -938,8 +928,6 @@ static bool kspreadfunc_mult_helper( KSContext& context, QValueList<KSValue::Ptr
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
       result *= (*it)->doubleValue();
-    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
-      return false;
   }
 
   return true;
