@@ -3,13 +3,13 @@
 
 
 FilterBase::FilterBase() : QObject() {
-    ready=false;
     success=true;
+    ready=false;
 }
 
 const bool FilterBase::filter() {
-    ready=true;
     success=false;
+    ready=true;
     return success;
 }
 
@@ -66,13 +66,9 @@ const QString FilterBase::part() {
         "</DOC>\n";
 }
 
-void FilterBase::slotSavePic(const char *data, const char *type, const unsigned int size,
+void FilterBase::slotSavePic(const char *data, const char *type, const unsigned long size,
                              char **nameOUT) {
     emit signalSavePic(data, type, size, nameOUT);
-}
-
-void FilterBase::slotPart(const char *nameIN, const char *type, char **nameOUT) {
-    emit signalPart(nameIN, type, nameOUT);
 }
 
 void FilterBase::slotFilterError() {

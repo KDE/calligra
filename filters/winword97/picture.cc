@@ -1,6 +1,7 @@
 #include <picture.h>
+#include <picture.moc>
 
-Picture::Picture() {
+Picture::Picture() : QObject() {
 }
 
 Picture::~Picture() {

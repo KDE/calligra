@@ -105,16 +105,14 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
         buffer[i] = static_cast<unsigned char>(data[i]);
     buffer[len] = 0;
 
-    QString nameOut="/tmp/testOLE.kwd";
     docFile.data=buffer;   // see myfile.h
     docFile.length=len;
-    myOLEFilter=new OLEFilter(docFile, nameOut, in, out);
+    myOLEFilter=new OLEFilter(docFile, in, out);
 
     QString str;
 
     if(myOLEFilter->isOk() && myOLEFilter->filter()) {
-        // OK :)
-        // Note: "shortcut" evaluation!
+        str=myOLEFilter->part();
     }
     else {
         // Ohh, something went wrong...
@@ -415,7 +413,7 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
             "</DOC>";
         }
     }
-    // will disappear soon
+    // will disappear soon?
     QCString cstr=QCString(str.utf8());
     len = cstr.length();
     data.length(len);

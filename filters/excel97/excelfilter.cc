@@ -5,11 +5,11 @@
 #include <excelfilter.h>
 #include <excelfilter.moc>
 
+#include <kdebug.h>
+
 ExcelFilter::ExcelFilter(const myFile &mainStream) 
   : FilterBase() 
 {
-
-  filterOk=false;
 
   QByteArray a;
   a.setRawData((char*) mainStream.data, (int) mainStream.length);
@@ -35,8 +35,7 @@ ExcelFilter::~ExcelFilter()
 
 const bool ExcelFilter::filter()
 {
-// Sorry Percy - had to comment it out due to crashes :)
-/*  QByteArray rec;
+  QByteArray rec;
   Q_UINT16 opcode, size, i;
 
   bool ret;
@@ -55,7 +54,7 @@ const bool ExcelFilter::filter()
 
     for (i = 0; biff[i].opcode != opcode && biff[i].opcode != 0; i++);
 
-    if (biff[i].opcode == opcode) {
+    if (biff[i].opcode == opcode && opcode != 0) {
       ret = (tree->*(biff[i].func))(size, *body);
     } 
     else {
@@ -69,15 +68,17 @@ const bool ExcelFilter::filter()
 
   //delete body;
   //delete rec;
-*/
-  filterOk=false;
-  return false;
+
+  ready=true;
+  return success;
 }
 
 const QString ExcelFilter::part() {
 
-    if(filterOk)
+    if(ready && success) {
+        kdebug(KDEBUG_INFO, 31000, tree->part());
         return tree->part();
+    }
     else {
         QString str;
         str+="<?xml version=\"1.0\"?>\n"

@@ -19,25 +19,22 @@ public:
     virtual const QString extension() { return ".kwd"; }
 
 signals:
-    void signalSavePic(const char *data, const char *type, const unsigned int size,
+    void signalSavePic(const char *data, const char *type, const unsigned long size,
                                char **nameOUT);
-    void signalPart(const char *nameIN, const char *type, char **nameOUT);
     void signalGetStream(const long &handle, myFile &stream);
     // Note: might return wrong stream as names are NOT unique!!!
     // (searching only in current dir)
     void signalGetStream(const QString &name, myFile &stream);
 
 protected slots:
-    void slotSavePic(const char *data, const char *type, const unsigned int size,
+    void slotSavePic(const char *data, const char *type, const unsigned long size,
                              char **nameOUT);
-    void slotPart(const char *nameIN, const char *type, char **nameOUT);
-
     void slotFilterError();
 
 protected:
     bool success;      // ok, the filtering process was successful
-    bool ready;        // can't get file, because filtering was not
-                       // started yet - error :)
+    bool ready;        // filtering took place, you may fetch the file now
+
 private:
     FilterBase(const FilterBase &);
     const FilterBase &operator=(const FilterBase &);

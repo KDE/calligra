@@ -19,13 +19,11 @@ public:
     ~ExcelFilter();
 
     virtual const bool filter();
-    virtual const QString extension() { return ".ksp"; }
     virtual const QString part();
 
 private:
     QDataStream *s;
     XMLTree *tree;
-    bool filterOk;
 };
 
 #endif // EXCELFILTER_H

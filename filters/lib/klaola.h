@@ -69,6 +69,9 @@ public:
                                        // of the LAOLA-project)
  
 private:
+    KLaola(const KLaola &);
+    const KLaola &operator=(const KLaola &);
+
     struct OLETree {
         long handle;
         short subtree;

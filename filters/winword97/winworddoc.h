@@ -15,6 +15,9 @@ public:
     ~WinWordDoc();
 
 private:
+    WinWordDoc(const WinWordDoc &);
+    const WinWordDoc &operator=(const WinWordDoc &);
+
     void FIBInfo();
     void readFIB();
 

@@ -2,7 +2,7 @@
 INCLUDES = -I$(srcdir) -I$(srcdir)/lib -I$(srcdir)/winword97 -I$(srcdir)/excel97 \
 $(KOFFICE_INCLUDES) $(KOFFICECORE_INCLUDES) $(all_includes) $(MICO_INCLUDES)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = ./lib/libfilterbase.la ./lib/libklaola.la ./lib/libktar.la ./lib/libqtext.la \
+LDADD = ./lib/libfilterbase.la ./lib/libklaola.la ./lib/libqtext.la \
 ./winword97/libwinword97.la ./excel97/libexcel97.la $(LIB_KOFFICECORE)
 
 ####### Files

@@ -13,6 +13,9 @@ public:
     const bool isOk() const { return success; }
 
 private:
+    KWordDoc(const KWordDoc &);
+    const KWordDoc &operator=(const KWordDoc &);
+
     QString kwd;
     bool success;
 };
