@@ -5910,7 +5910,7 @@ void KWView::savePicture()
         kdDebug() << "Picture has mime type: " << mimetype << endl;
         QStringList mimetypes;
         mimetypes << mimetype;
-        KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
+        KFileDialog fd( oldFile, QString::null, this, 0, TRUE );
         fd.setMimeFilter( mimetypes );
         fd.setCaption(i18n("Save Picture"));
         if ( fd.exec() == QDialog::Accepted )
@@ -6461,7 +6461,7 @@ void KWView::deleteFrameSet()
 
 void KWView::insertFile()
 {
-    KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
+    KFileDialog fd( QString::null, QString::null, this, 0, TRUE );
     fd.setMimeFilter( "application/x-kword" );
     fd.setCaption(i18n("Insert File"));
     KURL url;
