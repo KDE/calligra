@@ -1480,6 +1480,7 @@ void KSpreadView::validity()
          KSpreadDlgValidity *dlg=new KSpreadDlgValidity( this,"validity",rect);
          dlg->show();
          }
+
 }
 
 

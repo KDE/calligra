@@ -1060,3 +1060,8 @@ Now you can apply parameters at a entire column/row
 -Add new functions : OCT2BIN ,OCT2HEX,OCT2DEC ; HEX2BIN ,HEX2OCT,HEX2DEC ; BIN2HEX ,BIN2OCT,BIN2DEC
 renamed DECBIN -> DEC2BIN  , DECHEx -> DEC2HEX , DECOCT -> DEC2OCT but there is against
 compatibility with old function you can used against DECHEX, DECOCT, DECBIN
+
+2000-11-09-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Fix bug when we copy/paste cell and row/column has layout parameters
+-Bug fix

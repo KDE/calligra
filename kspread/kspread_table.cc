@@ -757,6 +757,35 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
         if ( _strike >= 0 )
                 cl->setTextFontStrike( (bool)_strike );
         }
+      RowLayout* rw =m_rows.first();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && rw->hasProperty(KSpreadCell::PFont))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        if ( _font )
+                                cell->setTextFontFamily( _font );
+                        if ( _size > 0 )
+                                cell->setTextFontSize( _size );
+                        if ( _italic >= 0 )
+                                cell->setTextFontItalic( (bool)_italic );
+                        if ( _bold >= 0 )
+                                cell->setTextFontBold( (bool)_bold );
+                        if ( _underline >= 0 )
+                                cell->setTextFontUnderline( (bool)_underline );
+                        if ( _strike >= 0 )
+                                cell->setTextFontStrike( (bool)_strike );
+                        }
+                }
+        }
+
       emit sig_updateView( this );
       return;
     }
@@ -861,6 +890,24 @@ void KSpreadTable::setSelectionSize( const QPoint &_marker, int _size )
                 ColumnLayout *cl=nonDefaultColumnLayout(i);
                 cl->setTextFontSize( size + _size );
                 }
+      RowLayout* rw =m_rows.first();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && rw->hasProperty(KSpreadCell::PFont))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        cell->setTextFontSize( size + _size );
+                        }
+                }
+        }
+
         emit sig_updateView( this, m_rctSelection );
         return;
     }
@@ -1278,6 +1325,25 @@ void KSpreadTable::setSelectionAngle( const QPoint &_marker,int _value)
         ColumnLayout *cl=nonDefaultColumnLayout(i);
         cl->setAngle(_value);
         }
+
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && rw->hasProperty(KSpreadCell::PAngle))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        cell->setAngle(_value);
+                        }
+                }
+        }
+
       emit sig_updateView( this );
       return;
     }
@@ -1446,6 +1512,23 @@ void KSpreadTable::setSelectionTextColor( const QPoint &_marker, const QColor &t
         ColumnLayout *cl=nonDefaultColumnLayout(i);
         cl->setTextColor(tb_Color);
         }
+      RowLayout* rw =m_rows.first();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && rw->hasProperty(KSpreadCell::PTextPen))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        cell->setTextColor(tb_Color);
+                        }
+                }
+        }
 
       emit sig_updateView( this );
       return;
@@ -1535,7 +1618,23 @@ void KSpreadTable::setSelectionbgColor( const QPoint &_marker, const QColor &bg_
         ColumnLayout *cl=nonDefaultColumnLayout(i);
         cl->setBgColor( bg_Color );
         }
-
+      RowLayout* rw =m_rows.first();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && rw->hasProperty(KSpreadCell::PBackgroundColor))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        cell->setBgColor( bg_Color );
+                        }
+                }
+        }
       emit sig_updateView( this );
       return;
     }
@@ -1855,7 +1954,6 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
         ColumnLayout *cl=nonDefaultColumnLayout(i);
         if(!b)
                 {
-
                 cl->setFaktor( 1.0 );
                 cl->setPrecision( 0 );
                 cl->setFormatNumber(KSpreadCell::Number);
@@ -1865,6 +1963,35 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
                 cl->setFaktor( 100.0 );
                 cl->setPrecision( 0 );
                 cl->setFormatNumber(KSpreadCell::Percentage);
+                }
+        }
+      RowLayout* rw =m_rows.first();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PFormatNumber)
+        ||rw->hasProperty(KSpreadCell::PPrecision) || rw->hasProperty(KSpreadCell::PFaktor)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                         if(!b)
+                                {
+                                cell->setFaktor( 1.0 );
+                                cell->setPrecision( 0 );
+                                cell->setFormatNumber(KSpreadCell::Number);
+                                }
+                        else
+                                {
+                                cell->setFaktor( 100.0 );
+                                cell->setPrecision( 0 );
+                                cell->setFormatNumber(KSpreadCell::Percentage);
+                                }
+                        }
                 }
         }
 
@@ -2200,9 +2327,6 @@ else
   selection.setCoords(left,top,right,bottom);
   }
   return selection;
-
-
-
 }
 
 void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref, QString tabname)
@@ -3528,6 +3652,25 @@ void KSpreadTable::setSelectionAlign( const QPoint &_marker, KSpreadLayout::Alig
         cl->setAlign( _align );
         }
 
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && rw->hasProperty(KSpreadCell::PAlign))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        cell->setAlign( _align );
+                        }
+                }
+        }
+
+
       emit sig_updateView( this );
       return;
     }
@@ -3614,6 +3757,24 @@ void KSpreadTable::setSelectionAlignY( const QPoint &_marker, KSpreadLayout::Ali
         {
         ColumnLayout *cl=nonDefaultColumnLayout(i);
         cl->setAlignY( _alignY );
+        }
+
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && rw->hasProperty(KSpreadCell::PAlignY))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        cell->setAlignY( _alignY );
+                        }
+                }
         }
 
       emit sig_updateView( this );
@@ -3829,6 +3990,38 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
                 }
         }
 
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PFormatNumber)
+        ||rw->hasProperty(KSpreadCell::PPrecision) || rw->hasProperty(KSpreadCell::PFaktor)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+
+                        if(b)
+                                {
+                                cell->setFormatNumber(KSpreadCell::Money);
+                                cell->setFaktor( 1.0 );
+                                cell->setPrecision( KGlobal::locale()->fracDigits() );
+                                }
+                        else
+                                {
+                                cell->setFormatNumber(KSpreadCell::Number);
+                                cell->setFaktor( 1.0 );
+                                cell->setPrecision( 0 );
+                                }
+
+                        }
+                }
+        }
+
       emit sig_updateView( this );
       return;
     }
@@ -3935,6 +4128,25 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
         cl->setIndent( tmpIndent+10);
         }
 
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PIndent)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        cell->setIndent( tmpIndent+10);
+                        }
+                }
+        }
+
+
       emit sig_updateView( this );
       return;
     }
@@ -4032,6 +4244,27 @@ void KSpreadTable::decreaseIndent( const QPoint &_marker )
                 cl->setIndent( tmpIndent-10);
           else
                 cl->setIndent( 0);
+        }
+
+        RowLayout* rw =m_rows.first();
+        for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PIndent)))
+                {
+                for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+                        {
+                        KSpreadCell *cell = cellAt( i,  rw->row());
+                        if ( cell == m_pDefaultCell )
+                                {
+                                cell = new KSpreadCell( this, i,  rw->row() );
+                                m_cells.insert( cell, i,  rw->row() );
+                                }
+                        if((tmpIndent-10)>=0)
+                                cell->setIndent( tmpIndent-10);
+                        else
+                                cell->setIndent( 0);
+                        }
+                }
         }
 
       emit sig_updateView( this );
@@ -5738,7 +5971,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
     doc.appendChild( spread );
 
     // Save all cells.
-    KSpreadCell* c = m_cells.firstCell();
+    /*KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
     {
         if ( !c->isDefault() && !c->isObscuringForced())
@@ -5747,7 +5980,26 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
             if ( _rect.contains( p ) )
                 spread.appendChild( c->save( doc, _rect.left() - 1, _rect.top() - 1  ,true));
         }
-    }
+    } */
+    //store all cell
+    //when they don't exist we created them
+    //because it's necessary when there is a  layout on a column/row
+    //but I remove cell which is inserted.
+    for (int i=_rect.left();i<=_rect.right();i++)
+        for(int j=_rect.top();j<=_rect.bottom();j++)
+                {
+                bool insert=false;
+                KSpreadCell *cell = cellAt( i, j );
+                if ( cell == m_pDefaultCell )
+               {
+                  cell = new KSpreadCell( this, i, j );
+                  m_cells.insert( cell, i, j );
+                  insert=true;
+               }
+                spread.appendChild( cell->save( doc, _rect.left() - 1, _rect.top() - 1  ,true));
+                if(insert)
+                        m_cells.remove(i,j);
+                }
 
     return doc;
 }
