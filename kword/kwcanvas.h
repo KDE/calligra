@@ -199,7 +199,7 @@ signals:
     void frameSelectedChanged();
     // Emitted when the document structure has changed
     // ### DF: IMHO this should be only emitted by KWDocument (e.g. addFrameSet)
-    void docStructChanged(TypeStructDocItem _type);
+    void docStructChanged(int _type);
 
 private slots:
     void slotContentsMoving( int, int );

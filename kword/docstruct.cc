@@ -539,33 +539,22 @@ void KWDocStructTree::setup()
     item = new QListViewItem( arrangement, i18n ( "Empty" ) );
 }
 
-void KWDocStructTree::refreshTree(TypeStructDocItem _type)
+void KWDocStructTree::refreshTree(int _type)
 {
-
-    switch ( _type )
-    {
-        case Arrangement:
-            arrangement->setupArrangement();
-            break;
-        case TextFrames:
-            textfrms->setupTextFrames();
-            break;
-        case FormulaFrames:
-            formulafrms->setupFormulaFrames();
-            break;
-        case Tables:
-            tables->setupTables();
-            break;
-        case Pictures:
-            pictures->setupPictures();
-            break;
-        case Cliparts:
-            cliparts->setupCliparts();
-            break;
-        case Embedded:
-            embedded->setupEmbedded();
-            break;
-    }
+    if(((int)Arrangement) & _type)
+        arrangement->setupArrangement();
+    if(((int)TextFrames) & _type)
+        textfrms->setupTextFrames();
+    if(((int)FormulaFrames) & _type)
+        formulafrms->setupFormulaFrames();
+    if(((int)Tables) & _type)
+        tables->setupTables();
+    if(((int)Pictures) & _type)
+        pictures->setupPictures();
+    if(((int)Cliparts) & _type)
+        cliparts->setupCliparts();
+    if(((int)Embedded) & _type)
+        embedded->setupEmbedded();
 }
 
 /******************************************************************/

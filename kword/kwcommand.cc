@@ -794,8 +794,11 @@ void KWUngroupTableCommand::execute()
     //when you ungroup a table
     // you must remove table item in docstruct
     // create items in text item in docstruct
-    doc->refreshDocStructure(FT_TEXT);
-    doc->refreshDocStructure(FT_TABLE);
+
+    int refresh=0;
+    refresh |=Tables;
+    refresh |=TextFrames;
+    doc->refreshDocStructure(refresh);
 
     doc->updateAllFrames();
     doc->repaintAllViews();
@@ -816,8 +819,13 @@ void KWUngroupTableCommand::unexecute()
         m_pTable->addCell( cell );
     }
     doc->addFrameSet(m_pTable);
-    doc->refreshDocStructure(FT_TEXT);
-    doc->refreshDocStructure(FT_TABLE);
+
+    int refresh=0;
+    refresh |=Tables;
+    refresh |=TextFrames;
+    doc->refreshDocStructure(refresh);
+
+
     doc->updateAllFrames();
     doc->repaintAllViews();
 }
@@ -835,7 +843,7 @@ void KWDeleteTableCommand::execute()
     kdDebug() << "KWDeleteTableCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->removeFrameSet(m_pTable);
-    doc->refreshDocStructure(FT_TABLE);
+    doc->refreshDocStructure((int)Tables);
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();
@@ -846,7 +854,7 @@ void KWDeleteTableCommand::unexecute()
     kdDebug() << "KWDeleteTableCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->addFrameSet(m_pTable);
-    doc->refreshDocStructure(FT_TABLE);
+    doc->refreshDocStructure((int)Tables);
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();

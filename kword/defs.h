@@ -42,7 +42,7 @@ enum KWTblCellSize {
     TblManual
 };
 
-enum TypeStructDocItem {Arrangement, Tables, Pictures, Cliparts, TextFrames, Embedded, FormulaFrames};
+enum TypeStructDocItem {Arrangement=1, Tables=2, Pictures=4, Cliparts=8, TextFrames=16, Embedded=32, FormulaFrames=64};
 
 #define KWBarIcon( x ) BarIcon( x, KWFactory::global() )
 

@@ -484,6 +484,7 @@ public:
     void clearUndoRedoInfos();
 
     void refreshDocStructure(FrameType);
+    void refreshDocStructure(int);
 
     void renameButtonTOC(const QString & _name);
 
@@ -501,7 +502,7 @@ signals:
     void newContentsSize();
     void pageNumChanged();
 
-    void docStructureChanged(TypeStructDocItem);
+    void docStructureChanged(int);
     void sig_terminateEditing( KWFrameSet * fs );
 
 public slots:

@@ -197,7 +197,7 @@ public:
     KWDocStructTree( QWidget *_parent, KWDocument *_doc, KWGUI*__parent );
 
     void setup();
-    void refreshTree(TypeStructDocItem _type);
+    void refreshTree(int _type);
     QSize	minimumSizeHint() const {
 	return QSize( 0, 0 );
     }

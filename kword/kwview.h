@@ -245,7 +245,7 @@ public slots:
     void slotFrameSetEditChanged();
     void setTool( MouseMode _mouseMode );
     void frameSelectedChanged();
-    void docStructChanged(TypeStructDocItem _type);
+    void docStructChanged(int _type);
 
     void pageNumChanged();
 

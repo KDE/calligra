@@ -2626,29 +2626,33 @@ void KWDocument::slotDocumentInfoModifed()
     recalcVariables( VT_FIELD );
 }
 
+void KWDocument::refreshDocStructure(int type)
+{
+     emit docStructureChanged(type);
+}
 
 void KWDocument::refreshDocStructure(FrameType _type)
 {
-    TypeStructDocItem typeItem;
+    int typeItem;
     switch(_type)
     {
         case FT_TEXT:
-            typeItem=TextFrames;
+            typeItem=(int)TextFrames;
             break;
         case FT_PICTURE:
-            typeItem=Pictures;
+            typeItem=(int)Pictures;
             break;
         case FT_PART:
-            typeItem=Embedded;
+            typeItem=(int)Embedded;
             break;
         case FT_FORMULA:
-            typeItem=FormulaFrames;
+            typeItem=(int)FormulaFrames;
             break;
         case FT_TABLE:
-            typeItem=Tables;
+            typeItem=(int)Tables;
             break;
         default:
-            typeItem=TextFrames;
+            typeItem=(int)TextFrames;
     }
     emit docStructureChanged(typeItem);
 }

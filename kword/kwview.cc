@@ -133,8 +133,8 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     connect( m_doc, SIGNAL( pageNumChanged() ),
              this, SLOT( pageNumChanged()) );
 
-    connect( m_doc, SIGNAL( docStructureChanged(TypeStructDocItem) ),
-             this, SLOT( docStructChanged(TypeStructDocItem)) );
+    connect( m_doc, SIGNAL( docStructureChanged(int) ),
+             this, SLOT( docStructChanged(int)) );
 
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
@@ -158,8 +158,9 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     connect( m_gui->canvasWidget(), SIGNAL(frameSelectedChanged()),
              this, SLOT(frameSelectedChanged()));
 
-    connect( m_gui->canvasWidget(), SIGNAL(docStructChanged(TypeStructDocItem)),
-             this, SLOT(docStructChanged(TypeStructDocItem)));
+    connect( m_gui->canvasWidget(), SIGNAL(docStructChanged(int)),
+             this, SLOT(docStructChanged(int)));
+
     if(shell())
         connect( shell(), SIGNAL( documentSaved()), m_doc,SLOT(slotDocumentInfoModifed() ) );
 
@@ -2829,7 +2830,7 @@ void KWView::frameSelectedChanged()
     updateFrameStatusBarItem();
 }
 
-void KWView::docStructChanged(TypeStructDocItem _type)
+void KWView::docStructChanged(int _type)
 {
     KWDocStruct *m_pDocStruct=m_gui->getDocStruct();
     if(m_pDocStruct)
