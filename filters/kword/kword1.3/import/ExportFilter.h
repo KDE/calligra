@@ -39,6 +39,8 @@
 #include <KWEFUtil.h>
 #include <KWEFKWordLeader.h>
 
+#define STRICT_OOWRITER_VERSION_1
+
 class KZip;
 
 class StyleMap : public QMap<QString,LayoutData>

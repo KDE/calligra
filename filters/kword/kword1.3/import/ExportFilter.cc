@@ -291,9 +291,12 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
 
     zipWriteData(" office:class=\"text\"");
 
+#ifdef STRICT_OOWRITER_VERSION_1
+    zipWriteData(" office:version=\"1.0\"");
+#else
     // We are using an (rejected draft OASIS) extension compared to version 1.0, so we cannot write the version string.
     // (We do not even write it for context.xml and meta.xml, as OOWriter 1.0.1 does not like it in this case.)
-    //zipWriteData("office:version=\"1.0\"");
+#endif
 
     zipWriteData(">\n");
 }
@@ -436,8 +439,8 @@ void OOWriterWorker::writeMetaXml(void)
     zipWriteData(" <office:meta>\n");
 
     // Tell who we are in case that we have a bug in our filter output!
-    zipWriteData("  <meta:generator>KWord's OOWriter Export Filter");
-    zipWriteData(QString("$Revision$").mid(10).remove('$')); // has a leading and a trailing space.
+    zipWriteData( "  <meta:generator>KWord's OOWriter Export Filter " );
+    zipWriteData( QString( "$Revision$" ).remove( '$' ) );
 
     zipWriteData("</meta:generator>\n");
 
@@ -1182,7 +1185,9 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
         else if (layout.alignment == "auto")
         {
             props += "fo:text-align=\"left\" ";
+#ifndef STRICT_OOWRITER_VERSION_1
             props += "style:text-auto-align=\"true\" "; // rejected draft OASIS extension
+#endif
             styleKey += 'A';
         }
         else
