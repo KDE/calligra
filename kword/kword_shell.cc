@@ -40,7 +40,7 @@
 #include "preview.h"
 
 QList<KWordShell>* KWordShell::s_lstShells = 0L;
-bool KWordShell::previewHandlerRegistered = false;
+bool KWordShell::previewHandlerRegistered = FALSE;
 
 /******************************************************************/
 /* Class: KWordShell                                              */
@@ -57,8 +57,7 @@ KWordShell::KWordShell()
 
     s_lstShells->append( this );
 
-    if ( !previewHandlerRegistered )
-    {
+    if ( !previewHandlerRegistered ) {
         QStringList list = KImageIO::types(KImageIO::Reading);
         QStringList::ConstIterator it;
         for (it = list.begin(); it != list.end(); it++)
@@ -67,7 +66,7 @@ KWordShell::KWordShell()
         KFilePreviewDialog::registerPreviewModule( "wmf", wmfPreviewHandler, PreviewPixmap );
         KFilePreviewDialog::registerPreviewModule( "WMF", wmfPreviewHandler, PreviewPixmap );
 
-        previewHandlerRegistered = true;
+        previewHandlerRegistered = TRUE;
     }
     interface()->setMaximumToolBarWraps( 1 );
 }
@@ -88,7 +87,7 @@ bool KWordShell::isModified()
     if ( m_pDoc )
         return ( bool )m_pDoc->isModified();
 
-    return false;
+    return FALSE;
 }
 
 /*================================================================*/
@@ -101,9 +100,9 @@ bool KWordShell::requestClose()
         return saveDocument( "", "" );
 
     if ( res == 1 )
-        return true;
+        return TRUE;
 
-    return false;
+    return FALSE;
 }
 
 /*================================================================*/
@@ -131,36 +130,33 @@ void KWordShell::setDocument( KWordDocument *_doc )
     setRootPart( m_pView );
     interface()->setActivePart( m_pView->id() );
 
-    if( m_pFileMenu )
-    {
-        m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
-        m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
-        m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
-        m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
+    if( m_pFileMenu ) {
+        m_pFileMenu->setItemEnabled( m_idMenuFile_Save, TRUE );
+        m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, TRUE );
+        m_pFileMenu->setItemEnabled( m_idMenuFile_Print, TRUE );
+        m_pFileMenu->setItemEnabled( m_idMenuFile_Close, TRUE );
     }
 
-    opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
-    opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
-    opToolBar()->setFullWidth( false );
+    opToolBar()->setItemEnabled( TOOLBAR_PRINT, TRUE );
+    opToolBar()->setItemEnabled( TOOLBAR_SAVE, TRUE );
+    opToolBar()->setFullWidth( FALSE );
 }
 
 /*================================================================*/
 bool KWordShell::newDocument()
 {
-    if ( m_pDoc )
-    {
+    if ( m_pDoc ) {
         KWordShell *s = new KWordShell();
         s->show();
         s->newDocument();
-        return true;
+        return TRUE;
     }
 
     m_pDoc = new KWordDocument;
-    if ( !m_pDoc->initDoc() )
-    {
+    if ( !m_pDoc->initDoc() ) {
         releaseDocument();
         cerr << "ERROR: Could not initialize document" << endl;
-        return false;
+        return FALSE;
     }
 
     m_pView = m_pDoc->createWordView( frame() );
@@ -173,21 +169,20 @@ bool KWordShell::newDocument()
     setRootPart( m_pView );
     interface()->setActivePart( m_pView->id() );
 
-    if( m_pFileMenu )
-    {
-        m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
-        m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
-        m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
-        m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
+    if( m_pFileMenu ) {
+        m_pFileMenu->setItemEnabled( m_idMenuFile_Save, TRUE );
+        m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, TRUE );
+        m_pFileMenu->setItemEnabled( m_idMenuFile_Print, TRUE );
+        m_pFileMenu->setItemEnabled( m_idMenuFile_Close, TRUE );
     }
 
-    opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
-    opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
-    opToolBar()->setFullWidth( false );
+    opToolBar()->setItemEnabled( TOOLBAR_PRINT, TRUE );
+    opToolBar()->setItemEnabled( TOOLBAR_SAVE, TRUE );
+    opToolBar()->setFullWidth( FALSE );
 
     cerr << "*2 ) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
-    return true;
+    return TRUE;
 }
 
 /*================================================================*/
@@ -198,8 +193,7 @@ bool KWordShell::openDocument( const char *_url, const char *_format )
 
     if ( m_pDoc && m_pDoc->isEmpty() )
         releaseDocument();
-    else if ( m_pDoc && !m_pDoc->isEmpty() )
-    {
+    else if ( m_pDoc && !m_pDoc->isEmpty() ) {
         KWordShell *s = new KWordShell();
         s->show();
         return s->openDocument( _url, _format );
@@ -209,7 +203,7 @@ bool KWordShell::openDocument( const char *_url, const char *_format )
 
     m_pDoc = new KWordDocument;
     if ( !m_pDoc->loadFromURL( _url, _format ) )
-        return false;
+        return FALSE;
 
     m_pView = m_pDoc->createWordView( frame() );
     m_pView->setShell( this );
@@ -220,21 +214,20 @@ bool KWordShell::openDocument( const char *_url, const char *_format )
     setRootPart( m_pView );
     interface()->setActivePart( m_pView->id() );
 
-    if ( m_pFileMenu )
-    {
-        m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
-        m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
-        m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
-        m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
+    if ( m_pFileMenu ) {
+        m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, TRUE );
+        m_pFileMenu->setItemEnabled( m_idMenuFile_Save, TRUE );
+        m_pFileMenu->setItemEnabled( m_idMenuFile_Print, TRUE );
+        m_pFileMenu->setItemEnabled( m_idMenuFile_Close, TRUE );
     }
 
-    opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
-    opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
-    opToolBar()->setFullWidth( false );
+    opToolBar()->setItemEnabled( TOOLBAR_PRINT, TRUE );
+    opToolBar()->setItemEnabled( TOOLBAR_SAVE, TRUE );
+    opToolBar()->setFullWidth( FALSE );
 
     m_pDoc->setURL( _url );
 
-    return true;
+    return TRUE;
 }
 
 /*================================================================*/
@@ -243,32 +236,29 @@ bool KWordShell::saveDocument( const char *_url, const char *_format )
     assert( m_pDoc != 0L );
 
     CORBA::String_var url;
-    if ( _url == 0L || *_url == 0 )
-    {
+    if ( _url == 0L || *_url == 0 ) {
         url = m_pDoc->url();
         _url = url.in();
     }
 
     QString file;
-    if ( _url == 0L || *_url == 0 )
-    {
-//         QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
-//                                                                     "application/x-kword",
-//                                                                     "*.kwd", "KWord",
-//                                                                     true );
+    if ( _url == 0L || *_url == 0 ) {
+	QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
+								    "application/x-kword",
+								    "*.kwd", "KWord",
+								    TRUE );
 
         file = KFileDialog::getSaveFileName( getenv( "HOME" ) );
         if ( file.isNull() )
-            return false;
+            return FALSE;
 
-//         KMimeType *t = KMimeType::findByURL( KURL( QString( file ) ), 0, true );
-//         if ( t->mimeType() != "application/x-kword" )
-//         {
-//             m_pDoc->saveToURL( "/tmp/kofficefilter", _format );
-//             KoFilterManager::self()->export( "/tmp/kofficefilter", file, "application/x-kword" );
+	KMimeType *t = KMimeType::findByURL( KURL( QString( file ) ), 0, TRUE );
+	if ( t->mimeType() != "application/x-kword" ) {
+	    m_pDoc->saveToURL( "/tmp/kofficefilter", _format );
+	    KoFilterManager::self()->export_( "/tmp/kofficefilter", file, "application/x-kword" );
 
-//             return true;
-//         }
+	    return TRUE;
+	}	
 
         _url = file.latin1();
         m_pDoc->setURL( _url );
@@ -298,29 +288,26 @@ void KWordShell::helpAbout()
 /*================================================================*/
 bool KWordShell::closeDocument()
 {
-    if ( isModified() )
-    {
+    if ( isModified() ) {
         if ( !requestClose() )
-            return false;
+            return FALSE;
     }
 
-    return true;
+    return TRUE;
 }
 
 /*================================================================*/
 bool KWordShell::closeAllDocuments()
 {
     KWordShell* s;
-    for( s = s_lstShells->first(); s != 0L; s = s_lstShells->next() )
-    {
-        if ( s->isModified() )
-        {
+    for( s = s_lstShells->first(); s != 0L; s = s_lstShells->next() ) {
+        if ( s->isModified() ) {
             if ( !s->requestClose() )
-                return false;
+                return FALSE;
         }
     }
 
-    return true;
+    return TRUE;
 }
 
 /*================================================================*/
@@ -375,63 +362,62 @@ void KWordShell::releaseDocument()
 
     if( m_pFileMenu )
     {
-        m_pFileMenu->setItemEnabled( m_idMenuFile_Save, false );
-        m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, false );
-        m_pFileMenu->setItemEnabled( m_idMenuFile_Print, false );
-        m_pFileMenu->setItemEnabled( m_idMenuFile_Close, false );
+        m_pFileMenu->setItemEnabled( m_idMenuFile_Save, FALSE );
+        m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, FALSE );
+        m_pFileMenu->setItemEnabled( m_idMenuFile_Print, FALSE );
+        m_pFileMenu->setItemEnabled( m_idMenuFile_Close, FALSE );
     }
 
-    opToolBar()->setItemEnabled( TOOLBAR_PRINT, false );
-    opToolBar()->setItemEnabled( TOOLBAR_SAVE, false );
+    opToolBar()->setItemEnabled( TOOLBAR_PRINT, FALSE );
+    opToolBar()->setItemEnabled( TOOLBAR_SAVE, FALSE );
 }
 
 /*================================================================*/
 void KWordShell::slotFileNew()
 {
     if ( m_pDoc )
-        m_pDoc->enableEmbeddedParts( false );
+        m_pDoc->enableEmbeddedParts( FALSE );
     if ( !newDocument() )
         QMessageBox::critical( this, i18n( "KWord Error" ), i18n( "Could not create new document" ), i18n( "Ok" ) );
     if ( m_pDoc )
-        m_pDoc->enableEmbeddedParts( true );
+        m_pDoc->enableEmbeddedParts( TRUE );
     if ( m_pView )
-        m_pView->getGUI()->getPaperWidget()->repaintScreen( false );
+        m_pView->getGUI()->getPaperWidget()->repaintScreen( FALSE );
 }
 
 /*================================================================*/
 void KWordShell::slotFileOpen()
 {
     if ( m_pDoc )
-        m_pDoc->enableEmbeddedParts( false );
+        m_pDoc->enableEmbeddedParts( FALSE );
 
     QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
                                                                 "application/x-kword",
                                                                 "*.kwd", "KWord",
-                                                                true );
+                                                                TRUE );
 
-//     QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
-//     if ( file.isNull() )
-//         return;
-
-//     file = KoFilterManager::self()->import( file, "application/x-kword" );
-//     if ( file.isNull() )
-//         return;
-
-    QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
-
+    QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
     if ( file.isNull() )
-        return;
+	return;
 
-    if ( !openDocument( file, "" ) )
-    {
+    file = KoFilterManager::self()->import( file, "application/x-kword" );
+    if ( file.isNull() )
+	return;
+
+//     QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
+
+//     if ( file.isNull() )
+//         return;
+
+    if ( !openDocument( file, "" ) ) {
         QString tmp;
         tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
         QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
     }
     if ( m_pDoc )
-        m_pDoc->enableEmbeddedParts( true );
+        m_pDoc->enableEmbeddedParts( TRUE );
     if ( m_pView )
-        m_pView->getGUI()->getPaperWidget()->repaintScreen( false );
+        m_pView->getGUI()->getPaperWidget()->repaintScreen( FALSE );
 }
 
 /*================================================================*/
@@ -439,48 +425,44 @@ void KWordShell::slotFileSave()
 {
     assert( m_pDoc != 0L );
 
-    m_pDoc->enableEmbeddedParts( false );
+    m_pDoc->enableEmbeddedParts( FALSE );
 
     CORBA::String_var url = m_pDoc->url();
-    if ( strlen( url.in() ) == 0 )
-    {
+    if ( strlen( url.in() ) == 0 ) {
         slotFileSaveAs();
         return;
     }
 
-    if ( !saveDocument( url.in(), "" ) )
-    {
+    if ( !saveDocument( url.in(), "" ) ) {
         QString tmp;
         tmp.sprintf( i18n( "Could not save\n%s" ), url.in() );
         QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
     }
 
-    m_pDoc->enableEmbeddedParts( true );
-    m_pView->getGUI()->getPaperWidget()->repaintScreen( false );
+    m_pDoc->enableEmbeddedParts( TRUE );
+    m_pView->getGUI()->getPaperWidget()->repaintScreen( FALSE );
 }
 
 /*================================================================*/
 void KWordShell::slotFileSaveAs()
 {
-    m_pDoc->enableEmbeddedParts( false );
+    m_pDoc->enableEmbeddedParts( FALSE );
 
     QString _url = "";
-    if ( m_pDoc )
-    {
+    if ( m_pDoc ) {
         _url = m_pDoc->url();
         m_pDoc->setURL( "" );
     }
 
-    if ( !saveDocument( "", "" ) )
-    {
+    if ( !saveDocument( "", "" ) ) {
         QString tmp;
         tmp.sprintf( i18n( "Could not save file" ) );
         QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
         if ( m_pDoc ) m_pDoc->setURL( _url );
     }
 
-    m_pDoc->enableEmbeddedParts( true );
-    m_pView->getGUI()->getPaperWidget()->repaintScreen( false );
+    m_pDoc->enableEmbeddedParts( TRUE );
+    m_pView->getGUI()->getPaperWidget()->repaintScreen( FALSE );
 }
 
 /*================================================================*/
@@ -528,5 +510,3 @@ KOffice::View_ptr KWordShell::view()
 }
 
 #include "kword_shell.moc"
-
-

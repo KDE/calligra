@@ -65,7 +65,7 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     setKeyCompression( TRUE );
     setFocusPolicy( QWidget::StrongFocus );
     viewport()->setFocusProxy( this );
-    
+
     editNum = -1;
     recalcingText = FALSE;
     maybeDrag = FALSE;
@@ -2860,14 +2860,18 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack )
 	    if ( v_area.intersects( frame ) && frameset->getGroupManager() )
 	    {
 		_painter.fillRect( frame, tmp->getBackgroundColor() );
-		_painter.drawLine( tmp->right() - contentsX() + 1, tmp->y() - contentsY() - 1, tmp->right() - contentsX() + 1, tmp->bottom() - contentsY() + 1 );
-		_painter.drawLine( tmp->x() - contentsX() - 1, tmp->bottom() - contentsY() + 1, tmp->right() - contentsX() + 1, tmp->bottom() - contentsY() + 1 );
+		_painter.drawLine( tmp->right() - contentsX() + 1, tmp->y() - contentsY() - 1, 
+				   tmp->right() - contentsX() + 1, tmp->bottom() - contentsY() + 1 );
+		_painter.drawLine( tmp->x() - contentsX() - 1, tmp->bottom() - contentsY() + 1, 
+				   tmp->right() - contentsX() + 1, tmp->bottom() - contentsY() + 1 );
 		unsigned int row = 0, col = 0;
 		frameset->getGroupManager()->getFrameSet( frameset, row, col );
 		if ( row == 0 )
-		    _painter.drawLine( tmp->x() - contentsX() - 1, tmp->y() - contentsY() - 1, tmp->right() - contentsX() + 1, tmp->y() - contentsY() - 1 );
+		    _painter.drawLine( tmp->x() - contentsX() - 1, tmp->y() - contentsY() - 1, 
+				       tmp->right() - contentsX() + 1, tmp->y() - contentsY() - 1 );
 		if ( col == 0 )
-		    _painter.drawLine( tmp->x() - contentsX() - 1, tmp->y() - contentsY() - 1, tmp->x() - contentsX() - 1, tmp->bottom() - contentsY() + 1 );
+		    _painter.drawLine( tmp->x() - contentsX() - 1, tmp->y() - contentsY() - 1, 
+				       tmp->x() - contentsX() - 1, tmp->bottom() - contentsY() + 1 );
 	    }
 
 	    if ( mouseMode == MM_EDIT_FRAME && tmp->isSelected() )
@@ -4177,7 +4181,7 @@ void KWPage::startDrag()
 	stopBlinkCursor();
 
     KWordDrag *drag = new KWordDrag( this );
-    
+
     if ( doc->has_selection() )
 	doc->copySelectedText();
 
@@ -4186,7 +4190,7 @@ void KWPage::startDrag()
     drag->setPlain( cb->data()->encodedData( "text/plain" ) );
     if ( drag->drag() )
 	doc->deleteSelectedText( fc );
-    
+
     if ( blinking )
 	startBlinkCursor();
 }
@@ -4325,14 +4329,14 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 	system( cmd.ascii() );
 	e->acceptAction();
     } else if ( QUriDrag::canDecode( e ) ) {
-    
+
 	QStringList lst;
 	QUriDrag::decodeLocalFiles( e, lst );
 
 	QStringList::Iterator it = lst.begin();
 	for ( ;it != lst.end(); ++it ) {
 	    KURL url( *it );
-	    if ( !url.isLocalFile() ) 
+	    if ( !url.isLocalFile() )
 		return;
 
 	    QString filename = url.path();
@@ -4378,7 +4382,7 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 	editPaste( s );
 	e->acceptAction();
     }
-    
+
     startBlinkCursor();
 }
 
@@ -4722,3 +4726,4 @@ bool KWPage::focusNextPrevChild( bool next )
 {
     return FALSE;
 }
+    
