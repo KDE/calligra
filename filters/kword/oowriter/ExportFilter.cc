@@ -1661,7 +1661,9 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
         else if (layout.alignment == "auto")
         {
             props += "fo:text-align=\"start\" ";
+#ifndef STRICT_OOWRITER_VERSION_1
             props += "style:text-auto-align=\"true\" "; // rejected draft OASIS extension
+#endif	    
             styleKey += 'A';
         }
         else
