@@ -135,7 +135,7 @@ VPath::draw( VPainter *painter, const QRect& rect,
 	}
 
 	// draw simplistic contour:
-	if( state() == state_edit || state() == state_selected )
+	if( state() == state_edit )//|| state() == state_selected )
 	{
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
@@ -169,6 +169,7 @@ VPath::draw( VPainter *painter, const QRect& rect,
 		}
 
 		painter->setRasterOp( Qt::XorROP );
+		//painter->setPen( stroke() );
 		painter->setPen( Qt::yellow );
 		painter->setBrush( Qt::NoBrush );
 		painter->strokePath();
@@ -177,19 +178,21 @@ VPath::draw( VPainter *painter, const QRect& rect,
 	// draw small boxes for path nodes:
 	if( state() == state_selected )
 	{
-		QPainter qpainter( painter->device() );
-		qpainter.setRasterOp( Qt::CopyROP );
-		qpainter.setPen( Qt::NoPen );
-		qpainter.setBrush( Qt::blue.light() );
+		//QPainter qpainter( painter->device() );
+		painter->setRasterOp( Qt::CopyROP );
+		painter->setPen( Qt::NoPen );
 
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
 			VSegmentListIterator jtr( *( itr.current() ) );
 			for( ; jtr.current(); ++jtr )
 			{
-				qpainter.drawRect(
-					qRound( zoomFactor * jtr.current()->knot2().x() ) - 2,
-					qRound( zoomFactor * jtr.current()->knot2().y() ) - 2, 5, 5 );
+				painter->setBrush( Qt::blue.light() );
+				painter->moveTo( KoPoint( jtr.current()->knot2().x() - 2 / zoomFactor, jtr.current()->knot2().y() - 2 / zoomFactor ) );
+				painter->lineTo( KoPoint( jtr.current()->knot2().x() + 2 / zoomFactor, jtr.current()->knot2().y() - 2 / zoomFactor ) );
+				painter->lineTo( KoPoint( jtr.current()->knot2().x() + 2 / zoomFactor, jtr.current()->knot2().y() + 2 / zoomFactor ) );
+				painter->lineTo( KoPoint( jtr.current()->knot2().x() - 2 / zoomFactor, jtr.current()->knot2().y() + 2 / zoomFactor ) );
+				painter->fillPath();
 			}
 		}
 	}
