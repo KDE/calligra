@@ -264,10 +264,10 @@ const KSpreadStyle& StyleCluster::lookup(int x, int y)
     }
   }
   if( !current_node ) return *(last_node->m_style);
-  
+
   return *(current_node->m_style);
 }
 
-};
+}
 
 #include "stylecluster.moc"

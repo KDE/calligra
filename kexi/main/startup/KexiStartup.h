@@ -63,7 +63,7 @@ class KEXIMAIN_EXPORT KexiStartupHandler
 		enum DetectDriverForFileOptions { 
 			DontConvert = 1, //!< skip asking for conversion (used e.g. when dropdb is called)
 			ThisIsAProjectFile = 2, //!< a hint, forces detection of the file as a project file
-			ThisIsAShortcutToAProjectFile = 4, //!< a hint, forces detection of the file 
+			ThisIsAShortcutToAProjectFile = 4 //!< a hint, forces detection of the file 
 											   //!< as a shortcut to a project file
 		};
 
