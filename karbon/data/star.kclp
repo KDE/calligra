@@ -1,0 +1,30 @@
+<PREDEFCLIPART>
+  <COMPOSITE>
+    <STROKE lineWidth="1" lineJoin="0" lineCap="0" miterLimit="10" >
+      <COLOR v2="0" v3="0" opacity="1" colorSpace="0" v1="0" />
+    </STROKE>
+    <FILL fillRule="1" >
+      <GRADIENT originX="0.220695" originY="0.46096" repeatMethod="1" type="0" vectorX="0.758147" vectorY="0.46096" >
+        <COLORSTOP ramppoint="0" midpoint="0.5" >
+          <COLOR v2="0" v3="0" opacity="1" colorSpace="0" v1="1" />
+        </COLORSTOP>
+        <COLORSTOP ramppoint="1" midpoint="0.5" >
+          <COLOR v2="1" v3="0" opacity="1" colorSpace="0" v1="1" />
+        </COLORSTOP>
+      </GRADIENT>
+    </FILL>
+    <PATH isClosed="1" >
+      <MOVE x="0.994625" y="0.364219" />
+      <LINE x="0.747567" y="0.60555" />
+      <LINE x="0.806309" y="0.945885" />
+      <LINE x="0.500444" y="0.785495" />
+      <LINE x="0.194918" y="0.946531" />
+      <LINE x="0.252942" y="0.606072" />
+      <LINE x="0.00537452" y="0.365263" />
+      <LINE x="0.3471" y="0.315239" />
+      <LINE x="0.499621" y="0.00537452" />
+      <LINE x="0.652795" y="0.314916" />
+      <LINE x="0.994625" y="0.364219" />
+    </PATH>
+  </COMPOSITE>
+</PREDEFCLIPART>
