@@ -48,6 +48,12 @@ void ColorPicker::mousePress(QMouseEvent *e)
   if (e->button() != QMouseEvent::LeftButton
       && e->button() != QMouseEvent::RightButton)
     return;
+
+  if( !m_pDoc->getCurrentLayer()->isVisible() )
+    return;
+  
+  if( !m_pDoc->getCurrentLayer()->imageExtents().contains( e->pos() ))
+    return;
   
   m_dragging = true;
   
@@ -61,6 +67,12 @@ void ColorPicker::mouseMove(QMouseEvent *e)
 {
   if(m_dragging)
     {
+      if( !m_pDoc->getCurrentLayer()->isVisible() )
+	return;
+      
+      if( !m_pDoc->getCurrentLayer()->imageExtents().contains( e->pos() ))
+	  return;
+
       if (e->button() == QMouseEvent::LeftButton)
 	m_pView->slotSetFGColor(pick(e->pos().x(), e->pos().y()));
       else if (e->button() == QMouseEvent::RightButton)

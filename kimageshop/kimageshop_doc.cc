@@ -125,6 +125,9 @@ bool KImageShopDoc::loadFromURL( const QString& _url )
 
 bool KImageShopDoc::initDoc()
 {
+  addRGBLayer(QRect(0, 0, w, h), QColor(255, 255, 255), "background");
+  setLayerOpacity(255);
+
   // load some test layers
   QString _image = locate("kis_images", "cam9b.jpg", KImageShopFactory::global());
   addRGBLayer(_image);
@@ -135,6 +138,7 @@ bool KImageShopDoc::initDoc()
   moveLayer(256,384);
   setLayerOpacity(180);
 
+  /*
   _image = locate("kis_images", "cam05.jpg", KImageShopFactory::global());
   addRGBLayer(_image);
   setLayerOpacity(255);
@@ -147,6 +151,7 @@ bool KImageShopDoc::initDoc()
   _image = locate("kis_images", "img2.jpg", KImageShopFactory::global());
   addRGBLayer(_image);
    setLayerOpacity(80);
+  */
 
   compositeImage(QRect());
   return true;
@@ -324,6 +329,18 @@ void KImageShopDoc::addRGBLayer(QString file)
   lay->setName(QFileInfo(file).fileName());
 
   lay->loadRGBImage(img, alpha);
+  layers.append(lay);
+  currentLayer=lay;
+}
+
+void KImageShopDoc::addRGBLayer(const QRect& rect, const QColor& c, const QString& name)
+{
+  Layer *lay = new Layer(3);
+  lay->setName(name);
+
+  lay->allocateRect(rect);
+  lay->clear(c);
+
   layers.append(lay);
   currentLayer=lay;
 }

@@ -39,6 +39,32 @@ Layer::~Layer()
   delete alphaChannel;
 }
 
+void Layer::clear(const QColor& c)
+{
+  uchar r = static_cast<uchar>(c.red());
+  uchar g = static_cast<uchar>(c.green());
+  uchar b = static_cast<uchar>(c.blue());
+
+  for(int y = 0; y < yTiles(); y++)
+    for(int x = 0; x < xTiles(); x++)
+      {
+	// set the alpha channel to opaque
+	memset(channelMem(y * xTiles() + x, 0,0, true),255, TILE_SIZE*TILE_SIZE);
+	
+	uchar* data = channelMem(y * xTiles() + x, 0,0, false);
+	
+	// set data channels to color
+	for(int y = 0; y < TILE_SIZE; y++)
+	  for(int x = 0; x < TILE_SIZE; x++)
+	    {
+	      *(data + 3 * (y*TILE_SIZE+x)) = b;
+	      *(data + 3 * (y*TILE_SIZE+x)+1) = g;
+	      *(data + 3 * (y*TILE_SIZE+x)+2) = r;
+	    }
+	
+      }
+}
+
 void Layer::setOpacity(uchar o)
 {
   opacityVal=o;

@@ -42,6 +42,12 @@ void BrushTool::mousePress(QMouseEvent *e)
 {
   if (e->button() != QMouseEvent::LeftButton)
     return;
+
+  if( !m_pDoc->getCurrentLayer()->isVisible() )
+    return;
+
+  if( !m_pDoc->getCurrentLayer()->imageExtents().contains( e->pos() ))
+    return;
   
   m_dragging = true;
   m_dragStart = e->pos();
@@ -104,25 +110,28 @@ void BrushTool::mouseMove(QMouseEvent *e)
 {
   if(m_dragging)
     {
-      if (!m_pBrush)
+      if( !m_pDoc->getCurrentLayer()->isVisible() )
 	return;
-      
+
+      if( !m_pDoc->getCurrentLayer()->imageExtents().contains( e->pos() ))
+	  return;
+
       KVector end(e->x(), e->y());
       KVector start(m_dragStart.x(), m_dragStart.y());
       
       KVector moveVec = end-start;
       float length = moveVec.length();
       
-      QRect updateRect;
+      QRect updateRect = QRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
+      paint(e->pos());
       
-      if (length < 10)
+      /*if (length < 5)
 	{
-	  paint(e->pos());
-	  updateRect = QRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
+	  paint(e->pos());	  
 	}
       else
 	{
-	  int steps = (int) (length / 10); // FIXME: configurable stepping
+	  int steps = (int) (length / 5); // FIXME: configurable stepping
 	  moveVec.normalize();
 	  
 	  for (int i=0; i<=steps; i++)
@@ -135,12 +144,12 @@ void BrushTool::mouseMove(QMouseEvent *e)
 		{
 		  KVector bpos = start + moveVec * i * 10;
 		  paint(QPoint(bpos.x(), bpos.y()));
+
+		  updateRect.unite(QRect(QPoint(bpos.x(), bpos.y()), m_pBrush->size()));
 		}
 	    }
-	  
-	  updateRect = QRect(QPoint(start.x(), start.y()) - m_pBrush->hotSpot(),
-			     QSize(e->x(), e->y()) + m_pBrush->size());
 	}
+      */
       
       m_pDoc->compositeImage(updateRect);
       m_dragStart = e->pos();

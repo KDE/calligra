@@ -70,6 +70,8 @@ class Layer : public QObject {
 	void    setPixel(int x, int y, uint val);
 	uint    getPixel(int x, int y);
 
+	void    clear(const QColor& c);
+
 	void    rotate180();
 	void    rotateLeft90();
 	void    rotateRight90();

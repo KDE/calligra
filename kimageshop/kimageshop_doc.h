@@ -71,6 +71,7 @@ public:
     void setBackgroundLayer( unsigned int _layer );
 
     void addRGBLayer( QString _file );
+    void addRGBLayer(const QRect& r, const QColor& c, const QString& name);
     void removeLayer( unsigned int _layer );
     void compositeImage( QRect _rect );
     Layer* layerPtr( Layer *_layer );

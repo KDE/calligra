@@ -284,11 +284,15 @@ void KImageShopView::resizeEvent(QResizeEvent*)
 
   // KImageShopView heigth/width - ruler heigth/width
 
+  int canH = m_pCanvas->height();
+  int canW = m_pCanvas->width();
   int viewH = height() - 20;
   int viewW = width() - 20;
+  int docH = docHeight();
+  int docW = docWidth();
 
   // scrollbar geometry
-  if (docHeight() <= viewH && docWidth() <= viewW) // we need no scrollbars
+  if (docH <= canH && docW <= canW) // we need no scrollbars
     {
       m_pVert->hide();
       m_pHorz->hide();
@@ -296,38 +300,38 @@ void KImageShopView::resizeEvent(QResizeEvent*)
       m_pHorz->setValue(0);
       m_pCanvas->setGeometry(20, 20, viewW, viewH);
     }
-  else if (docHeight() <= viewH) // we need a horizontal scrollbar
+  else if (docH <= canH) // we need a horizontal scrollbar
     {
       m_pVert->hide();
       m_pVert->setValue(0);
-      m_pHorz->setRange(0, docWidth() - viewW);
+      m_pHorz->setRange(0, docW - canW);
       m_pHorz->setGeometry(20, height()-16, width()-16, 16);
       m_pHorz->show();
       m_pCanvas->setGeometry(20, 20, viewW, viewH-16);
     }
-  else if(docWidth() <= viewW) // we need a vertical scrollbar
+  else if(docW <= canW) // we need a vertical scrollbar
     {
       m_pHorz->hide();
       m_pHorz->setValue(0);
-      m_pVert->setRange(0, docHeight() - viewH);
+      m_pVert->setRange(0, docH - canH);
       m_pVert->setGeometry(width()-16, 20, 16, height()-16);
       m_pVert->show();
       m_pCanvas->setGeometry(20, 20, viewW-16, viewH);
     }
   else // we need both scrollbars
     {
-      m_pVert->setRange(0, docHeight() - viewH + 16);
+      m_pVert->setRange(0, docH - canH);
       m_pVert->setGeometry(width()-16, 20, 16, height()-36);
       m_pVert->show();
-      m_pHorz->setRange(0, docWidth() - viewW + 16);
+      m_pHorz->setRange(0, docW - canW);
       m_pHorz->setGeometry(20, height()-16, width()-36, 16);
       m_pHorz->show();
       m_pCanvas->setGeometry(20, 20, viewW-16, viewH-16);
     }
 
   // ruler ranges
-  m_pVRuler->setRange(0, docHeight());
-  m_pHRuler->setRange(0, docWidth());
+  m_pVRuler->setRange(0, docH);
+  m_pHRuler->setRange(0, docW);
 
   // ruler offset
   if(m_pVert->isVisible())
@@ -360,7 +364,7 @@ void KImageShopView::slotDocUpdated()
 
 void KImageShopView::slotDocUpdated(const QRect& r)
 {
-  m_pCanvas->repaint(r.left() + xPaintOffset() // FIXME ######
+  m_pCanvas->repaint(r.left() + xPaintOffset()// FIXME ######
 		     , r.top() + yPaintOffset()
 		     , r.width() + xPaintOffset()
 		     , r.height()  + yPaintOffset()); 
@@ -403,7 +407,7 @@ void KImageShopView::canvasGotPaintEvent( QPaintEvent*e )
 
   p.begin( m_pCanvas );
 
-  // draw background ##### OPTIMIZE THIS TO REDUCE FLICKER
+  // draw background
   p.eraseRect(0, 0, xPaintOffset(), height());
   p.eraseRect(xPaintOffset(), 0, width(), yPaintOffset());
   p.eraseRect(xPaintOffset(), yPaintOffset() + docHeight(), width(), height());
