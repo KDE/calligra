@@ -1176,6 +1176,8 @@ protected:
     bool loadTableStyleFormat( QDomElement *style );
     void loadOasisMasterLayoutPage( KoStyleStack &styleStack );
 
+    QString saveOasisTableStyleName( KoGenStyles &mainStyles );
+
     QString getPart( const QDomNode & part );
     void replaceMacro( QString & text, const QString & old, const QString & newS );
 

@@ -6929,8 +6929,23 @@ QString KSpreadSheet::translateOpenCalcPoint( const QString & str )
 
 bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles )
 {
+    xmlWriter.startElement( "table:table" );
+    xmlWriter.addAttribute( "table:name", m_strName );
+    xmlWriter.addAttribute( "table:style-name", saveOasisTableStyleName(mainStyles )  );
+
+    xmlWriter.endElement();
     return true;
 }
+
+QString KSpreadSheet::saveOasisTableStyleName( KoGenStyles &mainStyles )
+{
+    KoGenStyle pageStyle( KSpreadDoc::STYLE_PAGE, "table"/*FIXME I don't know if name is table*/ );
+    pageStyle.addAttribute( "style:master-page-name",  "Standard" ); //FIXME me style
+    pageStyle.addProperty( "table:display", !m_bTableHide );
+    //todo
+    return mainStyles.lookup( pageStyle, "ta" );
+}
+
 
 bool KSpreadSheet::loadXML( const QDomElement& table )
 {

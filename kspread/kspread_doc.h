@@ -121,6 +121,9 @@ public:
    */
   ~KSpreadDoc();
 
+    enum { STYLE_PAGE = 20 };
+
+
   /**
    * Returns list of all documents.
    */
