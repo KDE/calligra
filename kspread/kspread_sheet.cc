@@ -6292,11 +6292,6 @@ void KSpreadSheet::dissociateCell( const QPoint &cellRef )
   cell->forceExtraCells( marker.x() ,marker.y(), 0, 0 );
   QRect selection( marker.x(), marker.y(), x, y );
   refreshMergedCell();
-
-  // Must be called, because the call to refreshMergedCell() doesn't
-  // set this flag on the cell itself.
-  cell->setLayoutDirtyFlag(true);
-
   emit sig_updateView( this, selection );
 }
 
