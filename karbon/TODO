@@ -4,8 +4,6 @@ GUI:
 -	remove the "Selection property" docker, this is basically the same as the above docker
 -	remove the dialogs which show up when double clicking the strokefillpreview, this job is done
 	by "color manager" docker
--	"color manger": dont update color/create a action each time the color slider is dragged
-	but only if it is released.
 -	make some pattern widget, krita seems to have a nice one, maybe we can work
 	together, share pattern images and put something in kofficeui.
 -	we need a gradient widget, maybe cooperate with krita too
