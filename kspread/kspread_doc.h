@@ -503,7 +503,25 @@ private:
   void PaintRegion(QPainter& painter, QRect viewRegion, QRect paintRegion,
                    KSpreadTable* table);
   void PaintChooseRect(QPainter& painter, QRect viewRect, KSpreadTable* table);
+  void PaintNormalMarker(QPainter& painter, QRect viewRect, KSpreadTable* table);
 
+  /**
+   * helper function in drawing the marker and choose marker.
+   * @param marker the rectangle that represents the marker being drawn
+   *               (cell coordinates)
+   * @param table the table this marker is on
+   * @param viewRect the visible area on the canvas
+   * @param positions output parameter where the viewable left, top, right, and
+   *                  bottom of the marker will be.  They are stored in the array
+   *                  in that order, and take into account cropping due to part
+   *                  of the marker being off screen.  This array should have
+   *                  at least a size of 4 pre-allocated.
+   * @param paintSides booleans indicating whether a particular side is visible.
+   *                   Again, these are in the order left, top, right, bottom.
+   *                   This should be preallocated with a size of at least 4.
+   */
+  void RetrieveMarkerInfo(QRect marker, KSpreadTable* table, QRect viewRect,
+                          int positions[], bool paintSides[]);
 };
 
 #endif

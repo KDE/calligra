@@ -1701,81 +1701,6 @@ QString KSpreadCell::valueString() const
   return m_strText;
 }
 
-/**
- * @param pos describes what to draw. The value for edges are:
- *            top = 1, right = 2, bottom = 3, left = 4.
- *            The values for corners are:
- *            top left = 11, top_right = 12, bottom_right = 13, bottom_left = 14.
- */
-static void paintCellHelper( QPainter& _painter, int _tx, int _ty, int col, int row,
-                             int w, int h, int pos, const QRect& selection )
-{
-    QPoint p = selection.bottomRight();
-
-    switch( pos )
-    {
-    // top
-    case 1:
-        if ( p.x() == col && p.y() == row - 1 )
-        {
-            _painter.drawLine( _tx, _ty, _tx + w - 3, _ty );
-            _painter.fillRect( _tx + w - 2, _ty - 1, 5, 5, _painter.pen().color() );
-        }
-        else
-            _painter.drawLine( _tx, _ty, _tx + w, _ty );
-        break;
-    // bottom
-    case 3:
-        if ( p.x() == col && p.y() == row )
-        {
-            _painter.drawLine( _tx, _ty + h, _tx + w - 3, _ty + h );
-            _painter.fillRect( _tx + w - 2, _ty + h - 1, 5, 5, _painter.pen().color() );
-        }
-        else
-            _painter.drawLine( _tx, _ty + h, _tx + w, _ty + h );
-        break;
-    // left
-    case 4:
-        if ( p.x() == col - 1 && p.y() == row )
-        {
-            _painter.drawLine( _tx, _ty - 1, _tx, _ty + h - 3 );
-            _painter.fillRect( _tx - 2, _ty + h - 1, 5, 5, _painter.pen().color() );
-        }
-        else
-            _painter.drawLine( _tx, _ty - 1, _tx, _ty + h + 2 );
-        break;
-    // right
-    case 2:
-        if ( p.x() == col && p.y() == row )
-        {
-            _painter.drawLine( _tx + w, _ty - 1, _tx + w, _ty + h - 3 );
-            _painter.fillRect( _tx + w - 2, _ty + h - 1, 5, 5, _painter.pen().color() );
-        }
-        else
-            _painter.drawLine( _tx + w, _ty - 1, _tx + w, _ty + h + 2 );
-        break;
-    // top left
-    case 11:
-        if ( p.x() == col - 1 && p.y() == row - 1 )
-            _painter.fillRect( _tx - 2, _ty - 1, 5, 5, _painter.pen().color() );
-        else
-            _painter.drawLine( _tx, _ty, _tx, _ty + 1 );
-        break;
-    // top right
-    case 12:
-        _painter.drawLine( _tx + w, _ty - 1, _tx + w, _ty + 1 );
-        break;
-    // bottom right
-    case 13:
-        _painter.drawLine( _tx + w, _ty + h - 1, _tx + w, _ty + h + 1 );
-        break;
-    // bottom left
-    case 14:
-        _painter.drawLine( _tx, _ty + h - 1, _tx, _ty + h + 1 );
-        break;
-    }
-}
-
 void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
                              QPoint corner, QPoint cellRef, bool drawCursor )
 {
@@ -1864,10 +1789,6 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
   } /* if (!isObscured()) */
 
 
-  if (drawCursor)
-  {
-    paintSelectionBox(painter, corner, cellRef);
-  }
   paintPageBorders( painter,corner, cellRef);
 
 
@@ -1894,7 +1815,6 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
       painter.restore();
     }
   }
-  painter.flush();
 }
 /* the following code was commented out in the above function.  I'll leave
    it here in case this functionality is ever re-implemented and someone
@@ -2385,97 +2305,6 @@ void KSpreadCell::paintPageBorders(QPainter& painter, QPoint corner,
   }
 }
 
-void KSpreadCell::paintSelectionBox(QPainter& painter, QPoint corner,
-                                    QPoint cellRef)
-{
-  if ( painter.device()->isExtDev() )
-    return;
-
-  ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
-  RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
-
-  /* as far as borders are concerned, we only print our own, even if we are
-     merged into another cell.  So don't use m_iExtraWidth/Height */
-  int height = rowLayout->height();
-  int width =  colLayout->width();
-
-  //
-  // Draw the selection box
-  //
-  // Some of this code is duplicated in KSpreadCanvas::updateSelection
-  //
-  QRect selection = m_pTable->selection();
-  QRect larger;
-  larger.setCoords( selection.left() - 1, selection.top() - 1,
-                    selection.right() + 1, selection.bottom() + 1 );
-
-  QPen pen(Qt::black,3);
-  painter.setPen( pen );
-
-  if ( selection.contains( cellRef ) )
-  {
-    // Upper border ?
-    if ( cellRef.y() == selection.top() )
-      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 1, selection );
-    // Left border ?
-    if ( cellRef.x() == selection.left() )
-      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 4, selection );
-    // Lower border ?
-    if ( cellRef.y() == selection.bottom() )
-      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 3, selection );
-    // Right border ?
-    if ( cellRef.x() == selection.right() )
-      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(),
-                       cellRef.y(), width, height, 2, selection );
-  }
-  // Dont obey extra cells
-  else if ( larger.contains( QPoint(cellRef.x(), cellRef.y()) ) )
-  {
-    // Upper border ?
-    if ( cellRef.x() >= selection.left() && cellRef.x() <= selection.right() &&
-         cellRef.y() - 1 == selection.bottom() )
-      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 1, selection );
-    // Left border ?
-    if ( cellRef.y() >= selection.top() && cellRef.y() <= selection.bottom() &&
-         cellRef.x() - 1 == selection.right() )
-      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 4, selection );
-    // Lower border ?
-    if ( cellRef.x() >= selection.left() && cellRef.x() <= selection.right() &&
-         cellRef.y() + 1 == selection.top() )
-      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 3, selection );
-    // Right border ?
-    if ( cellRef.y() >= selection.top() && cellRef.y() <= selection.bottom() &&
-         cellRef.x() + 1 == selection.left() )
-      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 2, selection );
-    // Top left corner ?
-    if ( cellRef.y() == selection.bottom() + 1 &&
-         cellRef.x() == selection.right() + 1 )
-      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 11, selection );
-    // Top right corner ?
-    if ( cellRef.y() == selection.bottom() + 1 &&
-         cellRef.x() == selection.left() - 1 )
-      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 12, selection );
-    // Bottom right corner ?
-    if ( cellRef.y() == selection.top() - 1 &&
-         cellRef.x() == selection.left() - 1 )
-      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 13, selection );
-    // Bottom left corner ?
-    if ( cellRef.y() == selection.top() - 1 &&
-         cellRef.x() == selection.right() + 1 )
-      paintCellHelper( painter, corner.x(), corner.y(), cellRef.x(), cellRef.y(),
-                       width, height, 14, selection );
-  }
-}
 
 void KSpreadCell::paintCellBorders(QPainter& painter, QPoint corner,
                                    QPoint cellRef)

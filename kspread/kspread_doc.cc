@@ -639,8 +639,8 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
 }
 
 void KSpreadDoc::paintCellRegions(QPainter& painter, QRect viewRect,
-                                  QValueList<QRect> cellRegions, KSpreadTable* table,
-                                  bool drawCursor)
+                                  QValueList<QRect> cellRegions,
+                                  KSpreadTable* table, bool drawCursor)
 {
   //
   // Clip away children
@@ -671,12 +671,11 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, QRect viewRect,
     PaintRegion(painter, viewRect, cellRegion, table);
   }
 
-
-  if (drawCursor)
+  if (drawCursor && !(painter.device()->isExtDev()))
   {
+    PaintNormalMarker(painter, viewRect, table);
     PaintChooseRect(painter, viewRect, table);
   }
-
 }
 
 void KSpreadDoc::PaintRegion(QPainter &painter, QRect viewRegion,
@@ -724,46 +723,159 @@ void KSpreadDoc::PaintChooseRect(QPainter& painter, QRect viewRect,
                                  KSpreadTable* table)
 {
   QRect chooseRect = table->getChooseRect();
+  int positions[4];
+  bool paintSides[4];
 
   if ( chooseRect.left() != 0 )
   {
-    /* TODO:  Use the input parameter view to see if we need to do any of the
-       painting?  Does it matter?
-    */
-
-    int xpos, ypos, w, h;
-
-    xpos = table->columnPos( chooseRect.left() );
-    ypos = table->rowPos( chooseRect.top() );
-
-    int x = table->columnPos( chooseRect.right() );
-    KSpreadCell *cell = table->cellAt( chooseRect.right(), chooseRect.top() );
-    int tw = cell->width( chooseRect.right() );
-    w = ( x - xpos ) + tw;
-    cell = table->cellAt( chooseRect.left(), chooseRect.bottom() );
-    int y = table->rowPos( chooseRect.bottom() );
-    int th = cell->height( chooseRect.bottom() );
-    h = ( y - ypos ) + th;
-
-    RasterOp rop = painter.rasterOp();
-
-    painter.setRasterOp( NotROP );
     QPen pen;
     pen.setWidth( 2 );
     pen.setStyle(DashLine);
+
+    RetrieveMarkerInfo(chooseRect, table, viewRect, positions, paintSides);
+
+    int left = positions[0];
+    int top = positions[1];
+    int right = positions[2];
+    int bottom = positions[3];
+    bool paintLeft = paintSides[0];
+    bool paintTop = paintSides[1];
+    bool paintRight = paintSides[2];
+    bool paintBottom = paintSides[3];
+
+    RasterOp rop = painter.rasterOp();
+    painter.setRasterOp( NotROP );
     painter.setPen( pen );
 
-    painter.drawLine( xpos - 2, ypos - 1, xpos + w + 2, ypos - 1 );
-    painter.drawLine( xpos - 1, ypos + 1, xpos - 1, ypos + h + 3 );
-    painter.drawLine( xpos + 1, ypos + h + 1, xpos + w - 3, ypos + h + 1 );
-    painter.drawLine( xpos + w, ypos + 1, xpos + w, ypos + h - 2 );
+    if (paintTop)
+    {
+      painter.drawLine( left, top, right, top );
+    }
+    if (paintLeft)
+    {
+      painter.drawLine( left, top, left, bottom );
+    }
+    if (paintRight)
+    {
+      painter.drawLine( right, top, right, bottom );
+    }
+    if (paintBottom)
+    {
+      painter.drawLine( left, bottom, right, bottom );
+    }
 
-    // painter.fillRect( xpos + w - 2, ypos + h - 1, 5, 5, black );
     /* restore the old raster mode */
-    painter.setRasterOp( rop );
+    painter.setRasterOp(rop);
+
   }
   return;
 }
+
+void KSpreadDoc::PaintNormalMarker(QPainter& painter, QRect viewRect,
+                                   KSpreadTable* table)
+{
+  QRect marker = table->selection();
+  int positions[4];
+  bool paintSides[4];
+
+  QPen pen(Qt::black,3);
+  painter.setPen( pen );
+
+  RetrieveMarkerInfo(marker, table, viewRect, positions, paintSides);
+
+  painter.setPen( pen );
+
+  int left = positions[0];
+  int top = positions[1];
+  int right = positions[2];
+  int bottom = positions[3];
+  bool paintLeft = paintSides[0];
+  bool paintTop = paintSides[1];
+  bool paintRight = paintSides[2];
+  bool paintBottom = paintSides[3];
+
+  /* the extra '-1's thrown in here account for the thickness of the pen.
+     want to look like this:                     not this:
+                            * * * * * *                     * * * *
+                            *         *                   *         *
+     .                      *         *                   *         *
+  */
+  if (paintTop)
+  {
+    painter.drawLine( left - 1, top, right + 2, top );
+  }
+  if (paintLeft)
+  {
+    painter.drawLine( left, top, left, bottom );
+  }
+  if (paintRight && paintBottom)
+  {
+    /* then the 'handle' in the bottom right corner is visible. */
+    painter.drawLine( right, top, right, bottom - 2 );
+    painter.drawLine( left - 1, bottom, right - 3, bottom );
+    painter.fillRect( right - 2, bottom - 1, 5, 5, painter.pen().color() );
+  }
+  else
+  {
+    if (paintRight)
+    {
+      painter.drawLine( right, top, right, bottom );
+    }
+    if (paintBottom)
+    {
+      painter.drawLine( left - 1, bottom, right, bottom );
+    }
+  }
+}
+
+
+void KSpreadDoc::RetrieveMarkerInfo(QRect marker, KSpreadTable* table,
+                                    QRect viewRect, int positions[],
+                                    bool paintSides[])
+{
+  int xpos, ypos, w, h;
+
+  xpos = table->columnPos( marker.left() );
+  ypos = table->rowPos( marker.top() );
+
+  int x = table->columnPos( marker.right() );
+  KSpreadCell *cell = table->cellAt( marker.right(), marker.top() );
+  int tw = cell->width( marker.right() );
+  w = ( x - xpos ) + tw;
+  cell = table->cellAt( marker.left(), marker.bottom() );
+  int y = table->rowPos( marker.bottom() );
+  int th = cell->height( marker.bottom() );
+  h = ( y - ypos ) + th;
+
+  /* left, top, right, bottom */
+  positions[0] = xpos;
+  positions[1]= ypos;
+  positions[2] = xpos + w;
+  positions[3] = ypos + h;
+
+  /* these vars are used for clarity, the array for simpler function arguments  */
+  int left = positions[0];
+  int top = positions[1];
+  int right = positions[2];
+  int bottom = positions[3];
+
+  /* left, top, right, bottom */
+  paintSides[0] = (viewRect.left() <= left) && (left <= viewRect.right()) &&
+                  (bottom >= viewRect.top()) && (top <= viewRect.bottom());
+  paintSides[1] = (viewRect.top() <= top) && (top <= viewRect.bottom()) &&
+                  (right >= viewRect.left()) && (left <= viewRect.right());
+  paintSides[2] = (viewRect.left() <= right ) && (right <= viewRect.right()) &&
+                  (bottom >= viewRect.top()) && (top <= viewRect.bottom());
+  paintSides[3] = (viewRect.top() <= bottom) && (bottom <= viewRect.bottom()) &&
+                  (right >= viewRect.left()) && (left <= viewRect.right());
+
+  positions[0] = QMAX(left, viewRect.left());
+  positions[1] = QMAX(top, viewRect.top());
+  positions[2] = QMIN(right, viewRect.right());
+  positions[3] = QMIN(bottom, viewRect.bottom());
+
+}
+
 
 KSpreadDoc::~KSpreadDoc()
 {
