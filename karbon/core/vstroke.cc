@@ -22,7 +22,7 @@
 
 #include "vobject.h"
 #include "vstroke.h"
-
+#include <kdebug.h>
 
 VStroke::VStroke( VObject* parent, float width, const VLineCap cap, const VLineJoin join,
 			float miterLimit )
@@ -33,6 +33,7 @@ VStroke::VStroke( VObject* parent, float width, const VLineCap cap, const VLineJ
 	m_lineCap = cap;
 	m_lineJoin = join;
 	m_miterLimit = miterLimit;
+	kdDebug() << "Size of VStroke : " << sizeof(*this) << endl;
 }
 
 VStroke::VStroke( const VColor &c, VObject* parent, float width, const VLineCap cap, const VLineJoin join,
@@ -45,6 +46,7 @@ VStroke::VStroke( const VColor &c, VObject* parent, float width, const VLineCap 
 	m_lineJoin = join;
 	m_miterLimit = miterLimit;
 	m_color = c;
+	kdDebug() << "Size of VStroke : " << sizeof(*this) << endl;
 }
 
 VStroke::VStroke( const VStroke& stroke )
@@ -72,9 +74,9 @@ VStroke::save( QDomElement& element ) const
 	// save stroke parameters:
 	if( m_lineWidth != 1.0 )
 		me.setAttribute( "lineWidth", m_lineWidth );
-	if( m_lineCap != capButt )
+	if( !( m_lineCap == capButt ) )
 		me.setAttribute( "lineCap", m_lineCap );
-	if( m_lineJoin != joinMiter )
+	if( !( m_lineJoin == joinMiter ) )
 		me.setAttribute( "lineJoin", m_lineJoin );
 	if( m_miterLimit != 10.0 )
 		me.setAttribute( "miterLimit", m_miterLimit );

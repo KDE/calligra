@@ -121,8 +121,8 @@ private:
 	VGradient m_gradient;
 	VPattern m_pattern;
 	float m_lineWidth;
-	VLineCap m_lineCap;
-	VLineJoin m_lineJoin;
+	VLineCap m_lineCap : 2;
+	VLineJoin m_lineJoin : 2;
 	float m_miterLimit;
 	VDashPattern m_dashPattern;
 };
