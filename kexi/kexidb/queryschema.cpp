@@ -85,8 +85,8 @@ KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
 {
 	if (!field)
 		return *this;
-	if (!field->isQueryAsterisk() && !field->table()) {
-		KexiDBDbg << "QuerySchema::addField(): WARNINGL field must contain table information!" <<endl;
+		if (!field->isQueryAsterisk() && !field->table()) {
+		KexiDBDbg << "QuerySchema::addField(): WARNING: field '"<<field->name()<<"' must contain table information!" <<endl;
 		return *this;
 	}
 	FieldList::addField(field);
