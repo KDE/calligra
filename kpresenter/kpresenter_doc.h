@@ -109,6 +109,12 @@ class KPresenterDoc : public KoDocument
     Q_PROPERTY( double tabStopValue READ tabStopValue WRITE setTabStopValue )
     Q_PROPERTY( bool snapToGrid READ snapToGrid WRITE setSnapToGrid )
     Q_PROPERTY( bool backgroundSpellCheckEnabled READ backgroundSpellCheckEnabled WRITE enableBackgroundSpellCheck )
+    Q_PROPERTY( bool dontCheckUpperWord READ dontCheckUpperWord WRITE setDontCheckUpperWord )
+    Q_PROPERTY( bool dontCheckTitleCase READ dontCheckTitleCase WRITE setDontCheckTitleCase )
+    Q_PROPERTY( bool spInfiniteLoop READ spInfiniteLoop WRITE setInfiniteLoop )
+    Q_PROPERTY( bool spManualSwitch READ spManualSwitch WRITE setManualSwitch )
+    Q_PROPERTY( bool presentationDuration READ presentationDuration WRITE setPresentationDuration )
+
 
 public:
 

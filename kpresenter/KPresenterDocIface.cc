@@ -53,25 +53,6 @@ DCOPRef KPresenterDocIface::stickyPage()
 		    doc->stickyPage()->dcopObject()->objId() );
 }
 
-bool KPresenterDocIface::dontCheckUpperWord() const
-{
-    return doc->dontCheckUpperWord();
-}
-
-void KPresenterDocIface::setDontCheckUpperWord(bool _b)
-{
-    doc->setDontCheckUpperWord(_b);
-}
-
-bool KPresenterDocIface::dontCheckTitleCase() const
-{
-    return doc->dontCheckTitleCase();
-}
-
-void KPresenterDocIface::setDontCheckTitleCase(bool _b)
-{
-    doc->setDontCheckTitleCase(_b);
-}
 
 void KPresenterDocIface::setShowRuler(bool b)
 {
@@ -197,35 +178,6 @@ void KPresenterDocIface::recalcPageNum()
     doc->recalcPageNum();
 }
 
-bool KPresenterDocIface::presentationDuration() const
-{
-    return doc->presentationDuration();
-}
-
-void KPresenterDocIface::setPresentationDuration( bool pd )
-{
-    doc->setPresentationDuration(pd);
-}
-
-bool KPresenterDocIface::spInfiniteLoop() const
-{
-    return doc->spInfiniteLoop();
-}
-
-bool KPresenterDocIface::spManualSwitch() const
-{
-    return doc->spManualSwitch();
-}
-
-void KPresenterDocIface::setInfiniteLoop( bool il )
-{
-    doc->setInfiniteLoop(il);
-}
-
-void KPresenterDocIface::setManualSwitch( bool ms )
-{
-    doc->setManualSwitch(ms);
-}
 
 void KPresenterDocIface::setHeader( bool b )
 {

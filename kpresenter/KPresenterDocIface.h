@@ -42,12 +42,6 @@ k_dcop:
 
     bool selectPage( int page,bool select);
 
-    virtual bool dontCheckUpperWord() const;
-    virtual void setDontCheckUpperWord(bool _b);
-
-    virtual bool dontCheckTitleCase() const ;
-    virtual void setDontCheckTitleCase(bool _b);
-
 
     virtual void setShowRuler(bool );
     virtual bool showRuler() const;
@@ -68,13 +62,6 @@ k_dcop:
     virtual void deSelectAllObj();
     virtual void recalcPageNum();
 
-    virtual bool presentationDuration() const;
-    virtual void setPresentationDuration( bool pd );
-
-    virtual bool spInfiniteLoop() const;
-    virtual bool spManualSwitch() const;
-    virtual void setInfiniteLoop( bool il );
-    virtual void setManualSwitch( bool ms );
 
     virtual void setHeader( bool b );
     virtual void setFooter( bool b );
