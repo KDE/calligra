@@ -1448,7 +1448,6 @@ bool KWFrameDia::applyChanges()
         name = eFrameSetName->text();
         if ( name.isEmpty() ) // Don't allow empty names
             name = doc->generateFramesetName( i18n( "Text Frameset %1" ) );
-
         KWFrameSet *fs = 0L;
         QListViewItem *frameSetItem  = lFrameSList->selectedItem();
         if(frameSetItem) {
@@ -1479,7 +1478,7 @@ bool KWFrameDia::applyChanges()
                 macroCmd->addCommand(cmd);
                 cmd->execute();
             }
-            if(frame) {
+            if(frame && fs ) {
                 if(frame->frameSet() != fs)  {
                     if(frame->frameSet()!=0) {
                         // reconnect.
@@ -1489,7 +1488,7 @@ bool KWFrameDia::applyChanges()
                     }
                     fs->addFrame(frame);
                 }
-            } else {
+            } else if ( fs ){
                 // first check all frames and ask the user if its ok to reconnect.
                 for(KWFrame *f=allFrames.first();f; f=allFrames.next()) {
                     if(f->frameSet() != fs) {  // reconnect.
@@ -1889,7 +1888,6 @@ bool KWFrameDia::applyChanges()
             f=allFrames.next();
         }
     }
-
     if(macroCmd)
         doc->addCommand(macroCmd);
 
