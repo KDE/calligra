@@ -69,10 +69,9 @@ public:
 
 	const VLayerList& layers() const { return m_layers; }
 
-	bool loadXML( const QDomElement& element );
+	bool loadXML( const QDomElement& doc );
 	virtual void save( QDomElement& ) const;
-	virtual void load( const QDomElement& element )
-		{ loadXML( element ); }
+	virtual void load( const QDomElement& element );
 
 	virtual VDocument* clone() const;
 

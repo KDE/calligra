@@ -93,7 +93,14 @@ KarbonPart::createViewInstance( QWidget* parent, const char* name )
 bool
 KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 {
-	return m_doc.loadXML( document.documentElement() );
+	QDomElement root = document.documentElement();
+	QDomElement paper = root.namedItem( "PAPER" ).toElement();
+	if( !paper.isNull() )
+	{
+		m_pageLayout.ptWidth = paper.attribute( "width", "0.0" ).toDouble();
+		m_pageLayout.ptHeight = paper.attribute( "height", "0.0" ).toDouble();
+	}
+	return m_doc.loadXML( root );
 }
 
 QDomDocument

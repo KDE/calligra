@@ -107,6 +107,12 @@ VDocument::clone() const
 	return new VDocument( *this );
 }
 
+void
+VDocument::load( const QDomElement& doc )
+{
+	loadXML( doc );
+}
+
 bool
 VDocument::loadXML( const QDomElement& doc )
 {
