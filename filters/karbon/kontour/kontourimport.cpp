@@ -79,7 +79,7 @@ KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QC
 void
 KontourImport::parseGObject( VObject *object, const QDomElement &e )
 {
-	if( !e.attribute( "fillcolor" ).isEmpty() )
+	if( !e.attribute( "fillstyle" ).isEmpty() )
 	{
 		VFill fill;
 		QColor c;
@@ -90,6 +90,13 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 		{
 			case 1: fill.setType( VFill::solid );
 					fill.setColor( color );
+					break;
+			case 4: 
+					{
+					VGradient grad;
+					fill.setType( VFill::grad );
+					fill.gradient() = grad;
+					}
 					break;
 		}
 		object->setFill( fill );
