@@ -61,6 +61,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row, const cha
   m_pPrivate = 0L;
   m_pQML = 0;
   m_pVisualFormula = 0;
+  m_bError = false;
 
   m_lstDepends.setAutoDelete( TRUE );
 
@@ -207,7 +208,6 @@ void KSpreadCell::unobscure()
 
 void KSpreadCell::clicked( KSpreadCanvas *_canvas )
 {
-  cerr << "CELL CLICKED" << endl;
   if ( m_style == KSpreadCell::ST_Normal )
     return;
   else if ( m_style == KSpreadCell::ST_Select )
@@ -377,7 +377,7 @@ QString KSpreadCell::encodeFormular( int _col, int _row )
     return erg;
 }
 
-QString KSpreadCell::decodeFormular( const char *_text, int _col, int _row )
+QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
 {
     if ( _col == -1 )
 	_col = m_iColumn;
@@ -464,6 +464,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   m_leftBorderPen.setWidth( leftBorderWidth( _col, _row ) );
   m_topBorderPen.setWidth( topBorderWidth( _col, _row ) );
 
+  /**
+   * RichText
+   */
   if ( m_pQML )
   {
     // Calculate how many cells we could use in addition right hand
@@ -553,6 +556,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     m_bLayoutDirtyFlag = false;
     return;
   }
+  /**
+   * A visual formula
+   */
   else if ( m_pVisualFormula )
   {
     // Calculate how many cells we could use in addition right hand
@@ -639,6 +645,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     return;
   }
 
+  /**
+   * A usual numeric, boolean or string value.
+   */
   const char *ptext;
   if ( isFormular() )
     ptext = m_strFormularOut;
@@ -1072,16 +1081,22 @@ bool KSpreadCell::makeFormular()
 
   KSContext context;
   m_pCode = m_pTable->doc()->interpreter()->parse( context, m_pTable, m_strText, m_lstDepends );
+  // Did a syntax error occur ?
   if ( context.exception() )
   {
     clearFormular();
+    
+    m_bError = true;
     m_strFormularOut = "####";
     m_bBool = false;
-    m_bValue = true;
+    m_bValue = false;
     m_dValue = 0.0;
     m_bLayoutDirtyFlag = true;
     DO_UPDATE;
-    QMessageBox::critical( 0, i18n("KSpread error"), context.exception()->toString() );
+    QString tmp("Error in cell %1\n\n");
+    tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
+    tmp += context.exception()->toString();
+    QMessageBox::critical( 0, i18n("KSpread error"), tmp );
     return false;
   }
 
@@ -1090,7 +1105,6 @@ bool KSpreadCell::makeFormular()
 
 void KSpreadCell::clearFormular()
 {
-  // m_strFormular = "";
   m_lstDepends.clear();
   if ( m_pCode )
   {
@@ -1101,20 +1115,23 @@ void KSpreadCell::clearFormular()
 
 bool KSpreadCell::calc( bool _makedepend )
 {
+  if ( m_bProgressFlag )
+  {
+    printf("ERROR: Circle\n");
+    m_bError = true;
+    m_bValue = false;
+    m_bBool = false;
+    m_strFormularOut = "####";
+    m_bLayoutDirtyFlag = true;
+    DO_UPDATE;
+    return false;
+  }
+
   if ( !isFormular() )
     return true;
 
   if ( !m_bCalcDirtyFlag )
     return true;
-
-  if ( m_bProgressFlag )
-  {
-    printf("ERROR: Circle\n");
-    m_strFormularOut = "####";
-    m_bLayoutDirtyFlag = true;
-    DO_UPDATE;
-    return FALSE;
-  }
 
   m_bLayoutDirtyFlag= true;
   m_bProgressFlag = true;
@@ -1160,6 +1177,7 @@ bool KSpreadCell::calc( bool _makedepend )
 	ok = cell->calc( _makedepend );
 	if ( !ok )
 	{
+	  m_bError = true;
 	  m_strFormularOut = "####";
 	  m_bValue = false;
 	  m_bBool = false;
@@ -1178,9 +1196,15 @@ bool KSpreadCell::calc( bool _makedepend )
     // If we got an error during evaluation ...
     if ( m_pCode )
     {
+      // Print out exception if any
       if ( context.exception() )
-	QMessageBox::critical( 0, i18n("KSpread error"), context.exception()->toString() );
-
+      {
+	QString tmp("Error in cell %1\n\n");
+	tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
+	tmp += context.exception()->toString();
+	QMessageBox::critical( 0, i18n("KSpread error"), tmp );
+      }
+      m_bError = true;
       m_strFormularOut = "####";
       m_bValue = false;
       m_bBool = false;
@@ -1874,6 +1898,7 @@ void KSpreadCell::initAfterLoading()
 
 void KSpreadCell::setText( const QString& _text )
 {
+  m_bError = false;
   m_strText = _text;
 
   m_lstDepends.clear();
@@ -1940,8 +1965,12 @@ void KSpreadCell::setText( const QString& _text )
     m_bLayoutDirtyFlag = true;
     m_content = RichText;
   }
+  /**
+   * Some numeric value or a string.
+   */
   else
   {
+    // Find out what it is
     checkValue();
 		
     m_bLayoutDirtyFlag = true;
@@ -1949,6 +1978,7 @@ void KSpreadCell::setText( const QString& _text )
   }
 
   // Do not update formulars and stuff here
+  // if we are still loading
   if ( !m_pTable->isLoading() )
     update();
 }
@@ -2054,7 +2084,7 @@ void KSpreadCell::checkValue()
     // If the input is empty, we dont have a value
     if ( m_strText.isEmpty() )
     {
-      m_bValue = true;
+      m_bValue = false;
       m_dValue = 0;
       m_bBool = false;
       m_strOutText = "";
@@ -2072,7 +2102,7 @@ void KSpreadCell::checkValue()
     // If the output is empty, we dont have a value
     if ( p == 0L )
     {
-      m_bValue = FALSE;
+      m_bValue = false;
       m_bBool = false;
       return;
     }
@@ -2123,38 +2153,43 @@ void KSpreadCell::checkValue()
 
 void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row )
 {
-    bool isdep = FALSE;
+  // Dont go in an infinite loop if the stupid user
+  // entered some formulas with circular dependencies.
+  if ( m_bCalcDirtyFlag )
+    return;
 
-    KSpreadDepend *dep;
-    for ( dep = m_lstDepends.first(); dep != 0L; dep = m_lstDepends.next() )
+  bool isdep = FALSE;
+
+  KSpreadDepend *dep;
+  for ( dep = m_lstDepends.first(); dep != 0L; dep = m_lstDepends.next() )
+  {
+    if ( dep->m_iColumn2 != -1 )
     {
-	if ( dep->m_iColumn2 != -1 )
-	{
-	    int left = dep->m_iColumn < dep->m_iColumn2 ? dep->m_iColumn : dep->m_iColumn2;
-	    int right = dep->m_iColumn > dep->m_iColumn2 ? dep->m_iColumn : dep->m_iColumn2;
-	    int top = dep->m_iRow < dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
-	    int bottom = dep->m_iRow > dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
-	    if ( _table == dep->m_pTable )
-		if ( left <= _column && _column <= right )
-		    if ( top <= _row && _row <= bottom )
-			isdep = TRUE;
-	}
-	else if ( dep->m_iColumn == _column && dep->m_iRow == _row && dep->m_pTable == _table )
+      int left = dep->m_iColumn < dep->m_iColumn2 ? dep->m_iColumn : dep->m_iColumn2;
+      int right = dep->m_iColumn > dep->m_iColumn2 ? dep->m_iColumn : dep->m_iColumn2;
+      int top = dep->m_iRow < dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
+      int bottom = dep->m_iRow > dep->m_iRow2 ? dep->m_iRow : dep->m_iRow2;
+      if ( _table == dep->m_pTable )
+	if ( left <= _column && _column <= right )
+	  if ( top <= _row && _row <= bottom )
 	    isdep = TRUE;
     }
+    else if ( dep->m_iColumn == _column && dep->m_iRow == _row && dep->m_pTable == _table )
+      isdep = TRUE;
+  }
 
-    if ( isdep )
+  if ( isdep )
+  {
+    m_bCalcDirtyFlag = TRUE;
+
+    QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
+    for( ; it.current(); ++it )
     {
-	m_bCalcDirtyFlag = TRUE;
-
-	QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
-	for( ; it.current(); ++it )
-	{
-	    QIntDictIterator<KSpreadCell> it2( it.current()->m_dctCells );
-	    for ( ; it2.current(); ++it2 )
-		it2.current()->setCalcDirtyFlag( m_pTable, m_iColumn, m_iRow );
-	}
+      QIntDictIterator<KSpreadCell> it2( it.current()->m_dctCells );
+      for ( ; it2.current(); ++it2 )
+	it2.current()->setCalcDirtyFlag( m_pTable, m_iColumn, m_iRow );
     }
+  }
 }
 
 bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
@@ -2196,10 +2231,11 @@ bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
     if ( isFormular() )
     {
       // TODO: Not unicode here!
-      out << indent << encodeFormular().ascii() << endl;
+      out << indent << encodeFormular().utf8() << endl;
+      // out << indent << encodeFormular().ascii() << endl;
     }
     else
-      out << indent << m_strText.ascii() << endl;
+      out << indent << m_strText.utf8() << endl;
   }
 
   out << etag << "</CELL>" << endl;
@@ -2427,16 +2463,16 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
     }
   } while( res );
 
-  text.stripWhiteSpace();
-  cerr << "TEXT: '" << text << "'" << endl;
-  if ( text[0] == '=' )
-  {
-    QString tmp = decodeFormular( text.c_str(), m_iColumn, m_iRow );
-    cerr << "DECODED: '" << tmp.ascii() << "'" << endl;
-    setText( tmp );
-  }
-  else
-    setText( text.c_str() );
+  // Set the text of the cell
+  QString t;
+  // HACK: Once we have Unicode in KOML we dont need that
+  t = QString::fromUtf8( text.c_str() );
+  t = t.stripWhiteSpace();
+
+  if ( t[0] == '=' )
+    t = decodeFormular( t, m_iColumn, m_iRow );
+
+  setText( t );
 
   return true;
 }

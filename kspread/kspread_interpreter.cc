@@ -285,9 +285,19 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       QString tmp( "The expression %1 is not valid" );
       tmp = tmp.arg( node->getStringLiteral() );
       context.setException( new KSException( "InvalidCellExpression", tmp ) );
+      return false;
     }
 
     KSpreadCell* cell = point->cell();
+
+    if ( cell->hasError() )
+    {
+      QString tmp( "The cell %1 has an error:\n\n%2" );
+      tmp = tmp.arg( util_cellName( cell->table(), cell->column(), cell->row() ) );
+      tmp = tmp.arg( node->getStringLiteral() );
+      context.setException( new KSException( "ErrorInCell", tmp ) );
+      return false;
+    }
     
     if ( cell->isDefault() )
       context.setValue( new KSValue( 0.0 ) );
@@ -295,6 +305,8 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       context.setValue( new KSValue( cell->valueDouble() ) );
     else if ( cell->isBool() )
       context.setValue( new KSValue( cell->valueBool() ) );
+    else if ( cell->valueString().isEmpty() )
+      context.setValue( new KSValue( 0.0 ) );
     else
       context.setValue( new KSValue( cell->valueString() ) );
     return true;
@@ -309,6 +321,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       QString tmp( "The expression %1 is not valid" );
       tmp = tmp.arg( node->getStringLiteral() );
       context.setException( new KSException( "InvalidRangeExpression", tmp ) );
+      return false;
     }
     
     KSValue* v = new KSValue( KSValue::ListType );
@@ -321,12 +334,23 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
 	KSValue* c;
 	KSpreadCell* cell = r->table->cellAt( r->range.x() + x, r->range.y() + y );
 
+	if ( cell->hasError() )
+	{
+	  QString tmp( "The cell %1 has an error:\n\n%2" );
+	  tmp = tmp.arg( util_cellName( cell->table(), cell->column(), cell->row() ) );
+	  tmp = tmp.arg( node->getStringLiteral() );
+	  context.setException( new KSException( "ErrorInCell", tmp ) );
+	  return false;
+	}
+
 	if ( cell->isDefault() )
 	  c = new KSValue( 0.0 );
 	else if ( cell->isValue() )
 	  c = new KSValue( cell->valueDouble() );
 	else if ( cell->isBool() )
 	  c = new KSValue( cell->valueBool() );
+	else if ( cell->valueString().isEmpty() )
+	  c = new KSValue( 0.0 );
 	else
 	  c = new KSValue( cell->valueString() );
 

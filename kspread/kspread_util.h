@@ -93,6 +93,7 @@ struct KSpreadRange
   bool bottomFixed;
 };
 
+QString util_cellName( KSpreadTable*, int _col, int _row );
 QString util_cellName( int _col, int _row );
 QString util_rangeName( QRect _area );
 QString util_rangeName( KSpreadTable *_table, QRect _area );

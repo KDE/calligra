@@ -722,10 +722,6 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   if ( m_pDoc->isLoading() )
     return;
 
-  // HACK
-  // if ( x() == 5000 && y() == 5000 )
-  // return;
-
   KSpreadTable *table = activeTable();
   if ( !table )
     return;
@@ -736,7 +732,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   painter.begin( this );
   painter.save();
 
-  printf("PAINT CANVAS %i/%i %i/%i\n",_ev->rect().left(),_ev->rect().top(),_ev->rect().right(),_ev->rect().bottom());
+  // printf("PAINT CANVAS %i/%i %i/%i\n",_ev->rect().left(),_ev->rect().top(),_ev->rect().right(),_ev->rect().bottom());
 
   int xpos;
   int ypos;

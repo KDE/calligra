@@ -450,6 +450,12 @@ public:
     QString encodeFormular( int _col = -1, int _row = -1 );
     QString decodeFormular( const char *_text, int _col = -1, int _row = -1 );
 
+    /**
+     * @return TRUE if the cell contains a formula that could not
+     *         be evaluated. These cells usually appear with "####" on the screen.
+     */
+    bool hasError() { return m_bError; }
+
 protected:
 
     virtual void makeLayout( QPainter &_painter, int _col, int _row );
@@ -518,6 +524,7 @@ protected:
     double m_dValue;
     bool m_bValue;
     bool m_bBool;
+    bool m_bError;
 
     /**
      * Flag showing wether the current layout is OK.

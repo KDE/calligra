@@ -44,12 +44,16 @@ QString util_columnLabel( int column )
 
 QString util_cellName( int _col, int _row )
 {
-  QString label( util_columnLabel( _col ) );
-  
-  char buffer[ 20 ];
-  sprintf( buffer, "%s%d", label.data(), _row );
+  QString result( "%1%2" );
+  result = result.arg( util_columnLabel( _col ) ).arg( _row );
+  return result;
+}
 
-  return QString( buffer );
+QString util_cellName( KSpreadTable* table, int _col, int _row )
+{
+  QString result( "%1!%2%3" );
+  result = result.arg( table->name() ).arg( util_columnLabel( _col ) ).arg( _row );
+  return result;
 }
 
 QString util_rangeName( QRect _area )

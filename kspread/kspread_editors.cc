@@ -75,9 +75,12 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
 KSpreadFormulaEditor::KSpreadFormulaEditor( KSpreadCell* _cell, QWidget* _parent, const char* _name )
   : KSpreadCellEditor( _cell, _parent, _name )
 {
-  m_pEdit = new KFormulaEdit( this, 0, 0, TRUE ); // make the formula restricted
-  m_pEdit->setExtraChars(QString("$,"));  // extra characters which are allowed in formula
-  
+  // m_pEdit = new KFormulaEdit( this, 0, 0, TRUE ); // make the formula restricted
+  // m_pEdit->setExtraChars(QString("$,"));  // extra characters which are allowed in formula
+
+  m_pEdit = new KFormulaEdit( this );
+  m_pEdit->enableSizeHintSignal( true );
+
   m_pEdit->installEventFilter( this );
   connect( m_pEdit, SIGNAL( sizeHint( QSize ) ), this, SLOT( slotSizeHint( QSize ) ) );
 
@@ -97,7 +100,7 @@ void KSpreadFormulaEditor::resizeEvent( QResizeEvent* )
 
 void KSpreadFormulaEditor::handleKeyPressEvent( QKeyEvent* _ev )
 {
-  // Send the key event to the QLineEdit
+  // Send the key event to the KFormulaEdit
   QApplication::sendEvent( m_pEdit, _ev );
 }
 

@@ -251,8 +251,6 @@ KSpread::Book_ptr KSpreadView::book()
 
 bool KSpreadView::event( const char* _event, const CORBA::Any& _value )
 {
-  cerr << "CALLED" << endl;
-
   EVENT_MAPPER( _event, _value );
 
   MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_ptr,
