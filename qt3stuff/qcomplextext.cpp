@@ -28,8 +28,8 @@ QBidiContext::~QBidiContext()
 	delete parent;
 }
 
-static QChar *shapeBuffer = 0;
-static int shapeBufSize = 0;
+//static QChar *shapeBuffer = 0;
+//static int shapeBufSize = 0;
 
 /*
    Arabic shaping obeys a number of rules according to the joining classes (see Unicode book, section on
