@@ -48,6 +48,7 @@ kisDoc::kisDoc( KoDocument* parent, const char* name )
   : KoDocument( parent, name )
   , m_commands()
 {
+  m_pCurrent = 0L;
   QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
                     this, SLOT( slotUndoRedoChanged( QString, QString ) ) );
   QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QStringList, QStringList ) ),
@@ -67,6 +68,9 @@ bool kisDoc::initDoc()
 
 void kisDoc::setCurrentImage(kisImage *img)
 {
+  if (!img)
+    return;
+
   if (m_pCurrent)
     {
       // disconnect old current image
