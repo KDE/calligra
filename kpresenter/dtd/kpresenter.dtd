@@ -313,9 +313,22 @@
 
 <!--	Describes a text of a text object
 
-		Attributes:
-                strikeoutstyleline solid, dash, dot, dashdot, dashdotdot
-                underlinestyleline solid, dash, dot, dashdot, dashdotdot
+     family: font family name
+     pointSize: font size in pt
+     [...]
+     strikeoutstyleline: solid, dash, dot, dashdot, dashdotdot
+     underlinestyleline: solid, dash, dot, dashdot, dashdotdot
+     [...]
+     VERTALIGN: Super/sub script.
+             0 = Normal
+             1 = Subscript
+             2 = Superscript
+     relativetextsize
+             0.75 means 3/4 of the normal font size.
+     [...]
+
+TODO: finish documentation
+
 -->
 <!ELEMENT TEXT (#PCDATA)>
 <!ATTLIST TEXT
@@ -415,12 +428,18 @@
 
 <!-- 
         The space to be added between two consecutive lines in a given paragraph.
-        value in points. Can also be "oneandhalf" for 1.5 lines and "double".
+        The "type" can be "oneandhalf" for 1.5 lines and "double" for 2 lines.
+        More generally it can also be "multiple", where spacingvalue=3 means 3 lines.
+        Other values for the type are
+        "custom": spacingvalue is the exact value of the linespacing in pt
+        "atleast": the linespacing is at least spacingvalue (in pt)
+
+        spacingvalue isn't used if type is "oneandhalf" or "double".
 -->
 <!ELEMENT LINESPACING
     EMPTY>
 <!ATTLIST LINESPACING
-    type (CDATA|oneandhalf|double|custom|atleast|multiple) #IMPLIED
+    type (oneandhalf|double|custom|atleast|multiple) #IMPLIED
     spacingvalue CDATA #IMPLIED>
 
 <!--
@@ -490,6 +509,9 @@
             filling:            0 .. blank
                                 1 .. dots
                                 2 .. line
+                                3 .. dash
+                                4 .. dash-dot
+                                5 .. dash-dot-dot
 
             width:              Width of the filling, in pt
 -->
@@ -500,13 +522,6 @@
     ptpos CDATA #REQUIRED
     filling CDATA #IMPLIED
     width CDATA #IMPLIED>
-
-<!-- VERTALIGN
-            Super/sub script.
-            0 = Normal
-            1 = Subscript 
-            2 = Superscript
--->
 
 <!--    Defines the position of a tabulation
         Attributes:
