@@ -40,7 +40,7 @@ class KWDeleteDia : public KDialogBase
 
 public:
     enum DeleteType {ROW, COL};
-    KWDeleteDia( QWidget *parent, const char *name, KWTableFrameSet *_grpMgr, KWDocument *_doc, DeleteType _type, KWCanvas *_canvas );
+    KWDeleteDia( QWidget *parent, const char *name, KWTableFrameSet *_table, KWDocument *_doc, DeleteType _type, KWCanvas *_canvas );
 
 protected:
     void setupTab1();
@@ -51,7 +51,7 @@ protected:
     QLabel *rc;
     QSpinBox *value;
 
-    KWTableFrameSet *grpMgr;
+    KWTableFrameSet *table;
     KWDocument *doc;
     DeleteType type;
     KWCanvas *canvas;

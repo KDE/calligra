@@ -70,7 +70,7 @@ KWTableFrameSet::KWTableFrameSet( KWTableFrameSet &original ) :
 KWTableFrameSet::~KWTableFrameSet()
 {
     if ( m_doc )
-        m_doc->delGroupManager( this, false );
+        m_doc->delFrameSet( this, false );
     m_doc = 0L;
 }
 
@@ -1202,6 +1202,20 @@ bool KWTableFrameSet::contains( unsigned int mx, unsigned int my ) {
     return getBoundingRect().contains(mx,my);
 }
 
+void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
+        QColorGroup & cg, bool onlyChanged, bool resetChanged )
+{
+    for (unsigned int i=0; i < m_cells.count() ; i++)
+        m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged );
+
+}
+bool KWTableFrameSet::isVisible()
+{
+    for (unsigned int i=0; i < m_cells.count() ; i++)
+        if(m_cells.at(i)->isVisible()) return true;
+
+    return false;
+}
 
 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col ) :
@@ -1236,23 +1250,6 @@ bool KWTableFrameSet::Cell::isAboveOrLeftOf( unsigned row, unsigned col )
 {
     return ( m_row < row ) || ( ( m_row == row ) && ( m_col < col ) );
 }
-
-void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
-        QColorGroup & cg, bool onlyChanged, bool resetChanged )
-{
-    for (unsigned int i=0; i < m_cells.count() ; i++)
-        m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged );
-
-}
-bool KWTableFrameSet::isVisible()
-{
-    for (unsigned int i=0; i < m_cells.count() ; i++)
-        if(m_cells.at(i)->isVisible()) return true;
-
-    return false;
-}
-
-////////////////
 
 KWTableFrameSetEdit::~KWTableFrameSetEdit()
 {

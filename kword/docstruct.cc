@@ -21,10 +21,10 @@
 #include "kwview.h"
 #include "kwcanvas.h"
 #include "kwframe.h"
-#include "kwgroupmanager.h"
 #include "docstruct.h"
 #include "docstruct.moc"
 #include "kwtextframeset.h"
+#include "kwtableframeset.h"
 #include "counter.h"
 
 #include <klocale.h>
@@ -35,6 +35,7 @@
 #include <qlayout.h>
 #include <qpixmap.h>
 #include <qintdict.h>
+
 
 /******************************************************************/
 /* Class: KWDocStructParagItem                                    */
@@ -90,7 +91,7 @@ void KWDocStructFrameItem::slotDoubleClicked( QListViewItem *_item )
 /******************************************************************/
 
 /*================================================================*/
-KWDocStructTableItem::KWDocStructTableItem( QListViewItem *_parent, QString _text, KWGroupManager *_table, KWGUI*__parent )
+KWDocStructTableItem::KWDocStructTableItem( QListViewItem *_parent, QString _text, KWTableFrameSet *_table, KWGUI*__parent )
     : QListViewItem( _parent, _text )
 {
     table = _table;
@@ -420,13 +421,17 @@ void KWDocStructRootItem::setupTables()
     QString _name;
     KWDocStructTableItem *child;
 
-    for ( int i = doc->getNumGroupManagers() - 1; i >= 0; i-- )
+    for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
-        if ( !doc->getGroupManager( i )->isActive() )
+        KWFrameSet *fs = doc->getFrameSet(i);
+        if ( fs->getFrameType() != FT_TABLE)
+            continue;
+        KWTableFrameSet *tfs = static_cast<KWTableFrameSet *> (fs);
+        if(!tfs->isActive() )
             continue;
 
         _name=i18n( "Table %1" ).arg(QString::number( i + 1 ));
-        child = new KWDocStructTableItem( this, _name, doc->getGroupManager( i ), gui );
+        child = new KWDocStructTableItem( this, _name, tfs, gui );
         QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
     }
 

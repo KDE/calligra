@@ -21,7 +21,6 @@
 #include "kwview.h"
 #include "kwcanvas.h"
 #include "kwframe.h"
-#include "kwgroupmanager.h"
 #include "defs.h"
 #include "kwutils.h"
 #include "resizehandles.h"

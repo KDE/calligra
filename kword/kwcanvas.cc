@@ -21,7 +21,8 @@
 #include "kwcanvas.h"
 #include "kwframe.h"
 #include "kwtextframeset.h"
-#include "kwgroupmanager.h"
+#include "kwtableframeset.h"
+#include "kwtableframeset.h"
 #include "kwdoc.h"
 #include "kwview.h"
 #include "kwtextparag.h"
@@ -712,7 +713,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
 void KWCanvas::mmEditFrameMove( int mx, int my )
 {
     if ( mx != oldMx || my != oldMy ) {
-        QList<KWGroupManager> undos, updates;
+        QList<KWTableFrameSet> undos, updates;
         undos.setAutoDelete( FALSE );
         updates.setAutoDelete( FALSE );
         bool bFirst = true;
@@ -765,14 +766,14 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         if ( !updates.isEmpty() ) {
             //kdDebug() << "KWCanvas::mmEditFrameMove UPDATES" << endl;
             for ( unsigned int i = 0; i < updates.count(); i++ ) {
-                KWGroupManager *grpMgr = updates.at( i );
-                for ( unsigned k = 0; k < grpMgr->getNumCells(); k++ ) {
-                    KWFrame * frame = grpMgr->getCell( k )->getFrame( 0 );
+                KWTableFrameSet *table = updates.at( i );
+                for ( unsigned k = 0; k < table->getNumCells(); k++ ) {
+                    KWFrame * frame = table->getCell( k )->getFrame( 0 );
                     QRect oldRect( *frame );
                     frame->moveBy( mx - oldMx, my - oldMy );
                     if ( frame->x() < 0 || frame->right() > static_cast<int>( doc->paperWidth() ) || frame->y() < 0 ) {
-                        if ( undos.findRef( grpMgr ) == -1 )
-                            undos.append( grpMgr );
+                        if ( undos.findRef( table ) == -1 )
+                            undos.append( table );
                     }
                     // Calculate new rectangle for this frame
                     QRect newRect( *frame );
@@ -835,10 +836,10 @@ void KWCanvas::mmCreate( int mx, int my ) // Mouse move when creating a frame
     else {
 #if 0
         if ( m_table.useAnchor ) {
-            KWGroupManager *grpMgr;
-            grpMgr = new KWGroupManager( doc );
-            insertAnchor( grpMgr );
-            anchor = grpMgr;
+            KWTableFrameSet *table;
+            table = new KWTableFrameSet( doc );
+            insertAnchor( table );
+            anchor = table;
         }
 #endif
     }
@@ -919,12 +920,12 @@ void KWCanvas::mrEditFrame() // Can be called from KWCanvas and from KWResizeHan
 
     if ( frameMoved || frameResized )
     {
-        KWGroupManager *grpMgr = firstFrame->getFrameSet()->getGroupManager();
-        if (grpMgr) {
-            grpMgr->recalcCols();
-            grpMgr->recalcRows();
-            grpMgr->updateTempHeaders();
-            //repaintTableHeaders( grpMgr );
+        KWTableFrameSet *table = firstFrame->getFrameSet()->getGroupManager();
+        if (table) {
+            table->recalcCols();
+            table->recalcRows();
+            table->updateTempHeaders();
+            //repaintTableHeaders( table );
         }
 
         // Create command
@@ -1034,44 +1035,43 @@ void KWCanvas::mrCreateTable()
                                            "is not enough space available."));
             }
         else {
-            KWGroupManager *grpMgr;
+            KWTableFrameSet *table;
 
             /*if ( m_table.useAnchor ) {
-                grpMgr = static_cast<KWGroupManager *>(anchor);
+                table = static_cast<KWTableFrameSet *>(anchor);
                 } else*/
-                grpMgr = new KWGroupManager( doc );
+                table = new KWTableFrameSet( doc );
 
             QString _name;
-            int numGroupManagers=doc->getNumGroupManagers();
+            int numTables=doc->getNumFrameSets();
             bool found=true;
-            while(found) { // need a new name for the new groupmanager.
+            while(found) { // need a new name for the new table.
                 bool same = false;
-                _name.sprintf( "grpmgr_%d",numGroupManagers);
-                for ( unsigned int i = 0;!same && i < doc->getNumGroupManagers(); ++i ) {
-                    if ( doc->getGroupManager( i )->getName() == _name ){
+                _name.sprintf( "table_%d",numTables);
+                for ( unsigned int i = 0;!same && i < doc->getNumFrameSets(); ++i ) {
+                    if ( doc->getFrameSet( i )->getName() == _name ){
                         same = true;
                         break;
                     }
                 }
                 if (!same) found=false;
-                numGroupManagers++;
+                numTables++;
             }
-            grpMgr->setName( _name );
-            doc->addGroupManager( grpMgr );
-            doc->addFrameSet( grpMgr );
+            table->setName( _name );
+            doc->addFrameSet( table );
             for ( unsigned int i = 0; i < m_table.rows; i++ ) {
                 for ( unsigned int j = 0; j < m_table.cols; j++ ) {
-                    KWTableFrameSet::Cell *_frameSet = new KWTableFrameSet::Cell( grpMgr, i, j );
+                    KWTableFrameSet::Cell *_frameSet = new KWTableFrameSet::Cell( table, i, j );
                     KWFrame *frame = new KWFrame(_frameSet, m_insRect.x(), m_insRect.y(), (doc->paperWidth() - m_insRect.x())/m_table.cols, m_insRect.height() );
                     _frameSet->addFrame( frame );
                     frame->setFrameBehaviour(AutoExtendFrame);
                     frame->setNewFrameBehaviour(NoFollowup);
-//                    grpMgr->addCell( _frameSet, i, j );
+//                    table->addCell( _frameSet, i, j );
                 }
             }
-            grpMgr->init( m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height(),
+            table->init( m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height(),
                           m_table.width, m_table.height );
-            grpMgr->recalcRows();
+            table->recalcRows();
         }
         doc->updateAllFrames();
         doc->layout();
@@ -1532,7 +1532,7 @@ void KWCanvas::selectFrame( int mx, int my, bool select )
     }
 }
 
-KWGroupManager *KWCanvas::getTable()
+KWTableFrameSet *KWCanvas::getTable()
 {
     if( !m_currentFrameSetEdit)
         return 0L;
@@ -1565,18 +1565,18 @@ void KWCanvas::deleteFrame( KWFrame * frame )
     cmd->execute();
 }
 
-void KWCanvas::deleteTable( KWGroupManager *groupManager )
+void KWCanvas::deleteTable( KWTableFrameSet *table )
 {
-    if ( !groupManager )
+    if ( !table )
         return;
-    if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() == groupManager )
+    if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() == table )
     {
         // Terminate edition of that frameset
         delete m_currentFrameSetEdit;
         m_currentFrameSetEdit = 0L;
     }
     // ## TODO undo/redo support
-    doc->delGroupManager( groupManager );
+    doc->delFrameSet( table );
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();

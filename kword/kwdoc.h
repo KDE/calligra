@@ -252,11 +252,6 @@ public:
 
     bool canResize( KWFrameSet *frameset, KWFrame *frame, int page, int diff );
 
-    void addGroupManager( KWTableFrameSet *gm ) { grpMgrs.append( gm ); }
-    unsigned int getNumGroupManagers() { return grpMgrs.count(); }
-    KWTableFrameSet *getGroupManager( int i ) { return grpMgrs.at( i ); }
-    void delGroupManager( KWTableFrameSet *g, bool deleteit = true );
-
     //void enableEmbeddedParts( bool f );
 
     //void setRunAround( RunAround _ra );
@@ -273,8 +268,6 @@ public:
     void setUnit( QString _unit ) { unit = _unit; }
 
     void addCommand( KCommand * cmd );
-
-    void updateTableHeaders( QList<KWTableFrameSet> &grpMgrs );
 
     //QIntDict<KWVariableFormat> &getVarFormats() { return varFormats; }
 
@@ -467,7 +460,6 @@ private:
     KWImageCollection m_imageCollection;
     QList<KWFrameSet> frames;
     QList<KWStyle> m_styleList;
-    QList<KWTableFrameSet> grpMgrs;
 
     // Cached value for findStyle()
     KWStyle *m_lastStyle;

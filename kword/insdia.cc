@@ -19,10 +19,10 @@
 
 #include "kwdoc.h"
 #include "kwframe.h"
-#include "kwgroupmanager.h"
 #include "kwcanvas.h"
 #include "insdia.h"
 #include "insdia.moc"
+#include "kwtableframeset.h"
 
 #include <klocale.h>
 
@@ -34,16 +34,17 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 
+
 /******************************************************************/
 /* Class: KWInsertDia                                             */
 /******************************************************************/
 
 /*================================================================*/
-KWInsertDia::KWInsertDia( QWidget *parent, const char *name, KWGroupManager *_grpMgr, KWDocument *_doc, InsertType _type, KWCanvas *_canvas )
+KWInsertDia::KWInsertDia( QWidget *parent, const char *name, KWTableFrameSet *_table, KWDocument *_doc, InsertType _type, KWCanvas *_canvas )
     : KDialogBase( Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true )
 {
     type = _type;
-    grpMgr = _grpMgr;
+    table = _table;
     doc = _doc;
     canvas = _canvas;
 
@@ -93,9 +94,9 @@ void KWInsertDia::setupTab1()
     rc->setAlignment( AlignLeft | AlignBottom );
     grid1->addWidget( rc, 1, 0 );
 
-    value = new QSpinBox( 1, type == ROW ? grpMgr->getRows() : grpMgr->getCols(), 1, tab1 );
+    value = new QSpinBox( 1, type == ROW ? table->getRows() : table->getCols(), 1, tab1 );
     value->resize( value->sizeHint() );
-    value->setValue( type == ROW ? grpMgr->getRows() : grpMgr->getCols() );
+    value->setValue( type == ROW ? table->getRows() : table->getCols() );
     grid1->addWidget( value, 2, 0 );
 
     grid1->addRowSpacing( 0, grp->height() );
@@ -115,9 +116,9 @@ void KWInsertDia::setupTab1()
 bool KWInsertDia::doInsert()
 {
     if ( type == ROW )
-        grpMgr->insertRow( value->value() - ( rBefore->isChecked() ? 1 : 0 ) );
+        table->insertRow( value->value() - ( rBefore->isChecked() ? 1 : 0 ) );
     else
-        grpMgr->insertCol( value->value() - ( rBefore->isChecked() ? 1 : 0 ) );
+        table->insertCol( value->value() - ( rBefore->isChecked() ? 1 : 0 ) );
 
     doc->recalcFrames();
     doc->updateAllFrames();

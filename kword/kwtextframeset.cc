@@ -20,12 +20,12 @@
 #include <qrichtext_p.h>
 
 #include "kwtextframeset.h"
+#include "kwtableframeset.h"
 #include "kwdoc.h"
 #include "kwview.h"
 #include "kwcanvas.h"
 #include "kwutils.h"
 #include "kwcommand.h"
-#include "kwgroupmanager.h"
 #include "kwdrag.h"
 #include "kwstyle.h"
 #include "kwformat.h"

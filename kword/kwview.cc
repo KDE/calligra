@@ -35,10 +35,10 @@
 
 #include "kwview.h"
 #include "kwtextframeset.h"
+#include "kwtableframeset.h"
 #include "kwdoc.h"
 #include "kwframe.h"
 #include "kwstyle.h"
-#include "kwgroupmanager.h"
 #include "defs.h"
 #include "paragdia.h"
 #include "searchdia.h"
@@ -1729,15 +1729,15 @@ void KWView::toolsPart()
 void KWView::tableInsertRow()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
-    KWGroupManager *grpMgr = gui->canvasWidget()->getTable();
-    if ( !grpMgr )
+    KWTableFrameSet *table = gui->canvasWidget()->getTable();
+    if ( !table )
     {
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
                                   "before inserting a new row." ),
                             i18n( "Insert Row" ) );
     } else {
-        KWInsertDia dia( this, "", grpMgr, doc, KWInsertDia::ROW, gui->canvasWidget() );
+        KWInsertDia dia( this, "", table, doc, KWInsertDia::ROW, gui->canvasWidget() );
         dia.setCaption( i18n( "Insert Row" ) );
         dia.show();
     }
@@ -1747,16 +1747,16 @@ void KWView::tableInsertRow()
 void KWView::tableInsertCol()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
-    KWGroupManager *grpMgr = gui->canvasWidget()->getTable();
-    if ( !grpMgr )
+    KWTableFrameSet *table = gui->canvasWidget()->getTable();
+    if ( !table )
     {
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
                                   "before inserting a new column." ),
                             i18n( "Insert Column" ) );
     } else {
-        // value = 62 because a insert column = 60 +2 (border )see kwgroupmanager.cc
-        if ( grpMgr->getBoundingRect().right() + 62 > static_cast<int>( doc->ptPaperWidth() ) )
+        // value = 62 because a insert column = 60 +2 (border )see kwtableframeset.cc
+        if ( table->getBoundingRect().right() + 62 > static_cast<int>( doc->ptPaperWidth() ) )
         {
             KMessageBox::sorry( this,
                             i18n( "There is not enough space at the right of the table\n"
@@ -1765,7 +1765,7 @@ void KWView::tableInsertCol()
         }
         else
         {
-            KWInsertDia dia( this, "", grpMgr, doc, KWInsertDia::COL, gui->canvasWidget() );
+            KWInsertDia dia( this, "", table, doc, KWInsertDia::COL, gui->canvasWidget() );
             dia.setCaption( i18n( "Insert Column" ) );
             dia.show();
         }
@@ -1777,8 +1777,8 @@ void KWView::tableDeleteRow()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
 
-    KWGroupManager *grpMgr = gui->canvasWidget()->getTable();
-    if ( !grpMgr )
+    KWTableFrameSet *table = gui->canvasWidget()->getTable();
+    if ( !table )
     {
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
@@ -1787,7 +1787,7 @@ void KWView::tableDeleteRow()
     }
     else
     {
-        if ( grpMgr->getRows() == 1 )
+        if ( table->getRows() == 1 )
         {
             int result;
             result = KMessageBox::warningContinueCancel(this,
@@ -1798,12 +1798,12 @@ void KWView::tableDeleteRow()
                                                         i18n("&Delete"));
             if (result == KMessageBox::Continue)
             {
-                gui->canvasWidget()->deleteTable( grpMgr );
+                gui->canvasWidget()->deleteTable( table );
             }
         }
         else
         {
-            KWDeleteDia dia( this, "", grpMgr, doc, KWDeleteDia::ROW, gui->canvasWidget() );
+            KWDeleteDia dia( this, "", table, doc, KWDeleteDia::ROW, gui->canvasWidget() );
             dia.setCaption( i18n( "Delete Row" ) );
             dia.show();
         }
@@ -1816,8 +1816,8 @@ void KWView::tableDeleteCol()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
 
-    KWGroupManager *grpMgr = gui->canvasWidget()->getTable();
-    if ( !grpMgr )
+    KWTableFrameSet *table = gui->canvasWidget()->getTable();
+    if ( !table )
     {
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
@@ -1826,7 +1826,7 @@ void KWView::tableDeleteCol()
     }
     else
     {
-        if ( grpMgr->getCols() == 1 )
+        if ( table->getCols() == 1 )
         {
             int result;
             result = KMessageBox::warningContinueCancel(this,
@@ -1837,12 +1837,12 @@ void KWView::tableDeleteCol()
                                                         i18n("&Delete"));
             if (result == KMessageBox::Continue)
             {
-                gui->canvasWidget()->deleteTable( grpMgr );
+                gui->canvasWidget()->deleteTable( table );
             }
         }
         else
         {
-            KWDeleteDia dia( this, "", grpMgr, doc, KWDeleteDia::COL, gui->canvasWidget() );
+            KWDeleteDia dia( this, "", table, doc, KWDeleteDia::COL, gui->canvasWidget() );
             dia.setCaption( i18n( "Delete Column" ) );
             dia.show();
         }
@@ -1854,8 +1854,8 @@ void KWView::tableJoinCells()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
 
-    KWGroupManager *grpMgr = gui->canvasWidget()->getCurrentTable();
-    if ( !grpMgr )
+    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    if ( !table )
     {
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
@@ -1864,7 +1864,7 @@ void KWView::tableJoinCells()
     } else {
         QPainter painter;
         painter.begin( gui->canvasWidget() );
-        if ( !grpMgr->joinCells() )
+        if ( !table->joinCells() )
         {
             KMessageBox::sorry( this,
                                 i18n( "You have to select some cells which are next to each other\n"
@@ -1872,7 +1872,7 @@ void KWView::tableJoinCells()
                                 i18n( "Join Cells" ) );
         }
         painter.end();
-        QRect r = grpMgr->getBoundingRect();
+        QRect r = table->getBoundingRect();
         r = QRect( r.x() - gui->canvasWidget()->contentsX(),
                    r.y() - gui->canvasWidget()->contentsY(),
                    r.width(), r.height() );
@@ -1887,12 +1887,12 @@ void KWView::tableSplitCells()
     gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
 
     QList <KWFrame> selectedFrames = doc->getSelectedFrames();
-    KWGroupManager *grpMgr = gui->canvasWidget()->getCurrentTable();
-    if ( !grpMgr && selectedFrames.count() > 0) {
-        grpMgr=selectedFrames.at(0)->getFrameSet()->getGroupManager();
+    KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
+    if ( !table && selectedFrames.count() > 0) {
+        table=selectedFrames.at(0)->getFrameSet()->getGroupManager();
     }
 
-    if(selectedFrames.count() >1 || grpMgr == 0) {
+    if(selectedFrames.count() >1 || table == 0) {
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
                             //i18n( "You have to select one table cell\n"
@@ -1904,14 +1904,14 @@ void KWView::tableSplitCells()
     QPainter painter;
     painter.begin( gui->canvasWidget() );
     int rows=1, cols=2;
-    if ( !grpMgr->splitCell(rows,cols) ) {
+    if ( !table->splitCell(rows,cols) ) {
         KMessageBox::sorry( this,
                             i18n("You have to select a joined cell."),
                             //i18n("There is not enough space to split the cell into that many parts"),
                             i18n("Split Cells") );
     }
     painter.end();
-    QRect r = grpMgr->getBoundingRect();
+    QRect r = table->getBoundingRect();
     r = QRect( r.x() - gui->canvasWidget()->contentsX(),
                r.y() - gui->canvasWidget()->contentsY(),
                r.width(), r.height() );
@@ -1925,8 +1925,8 @@ void KWView::tableUngroupTable()
 {
     gui->canvasWidget()->setMouseMode( MM_EDIT );
 
-    KWGroupManager *grpMgr = gui->canvasWidget()->getTable();
-    if ( !grpMgr )
+    KWTableFrameSet *table = gui->canvasWidget()->getTable();
+    if ( !table )
     {
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table\n"
@@ -1940,14 +1940,14 @@ void KWView::tableUngroupTable()
                         i18n("Ungroup Table"), i18n("&Ungroup"));
         if (result == KMessageBox::Continue)
         {
-            QRect r = grpMgr->getBoundingRect();
-            grpMgr->ungroup();
+            QRect r = table->getBoundingRect();
+            table->ungroup();
             r = QRect( r.x() - gui->canvasWidget()->contentsX(),
                        r.y() - gui->canvasWidget()->contentsY(),
                        r.width(), r.height() );
 
             //gui->canvasWidget()->repaintScreen( r, TRUE );
-            doc->delGroupManager(grpMgr);
+            doc->delFrameSet(table);
         }
         gui->canvasWidget()->repaintAll();
     }
@@ -1956,8 +1956,8 @@ void KWView::tableUngroupTable()
 /*===============================================================*/
 void KWView::tableDelete()
 {
-    KWGroupManager *grpMgr = gui->canvasWidget()->getTable();
-    if ( !grpMgr )
+    KWTableFrameSet *table = gui->canvasWidget()->getTable();
+    if ( !table )
     {
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table \n"
@@ -1966,7 +1966,7 @@ void KWView::tableDelete()
     }
     else
     {
-        gui->canvasWidget()->deleteTable( grpMgr );
+        gui->canvasWidget()->deleteTable( table );
     }
 }
 

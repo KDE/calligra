@@ -55,7 +55,7 @@ protected:
     QLabel *rc;
     QSpinBox *value;
 
-    KWTableFrameSet *grpMgr;
+    KWTableFrameSet *table;
     KWDocument *doc;
     InsertType type;
     KWCanvas *canvas;

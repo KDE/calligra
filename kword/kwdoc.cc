@@ -184,7 +184,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_lastStyle = 0L;
     frames.setAutoDelete( TRUE );
-    grpMgrs.setAutoDelete( false );
  //   variables.setAutoDelete( FALSE );
 
 //    slDataBase = new KWSerialLetterDataBase( this );
@@ -2284,9 +2283,7 @@ KWFrameSet *KWDocument::getFrameCoords( unsigned int &x, unsigned int &y,
 /*================================================================*/
 void KWDocument::setFrameMargins( KWUnit l, KWUnit r, KWUnit t, KWUnit b )
 {
-    QList<KWTableFrameSet> grpMgrs;
-    grpMgrs.setAutoDelete( FALSE );
-
+    // todo, make this more OO, and update the tableheaders as well..
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
         if ( getFrameSet( i )->hasSelectedFrame() ) {
             KWFrameSet *frameset = getFrameSet( i );
@@ -2297,13 +2294,10 @@ void KWDocument::setFrameMargins( KWUnit l, KWUnit r, KWUnit t, KWUnit b )
                     getFrameSet( i )->getFrame( j )->setBTop( t );
                     getFrameSet( i )->getFrame( j )->setBBottom( b );
                 }
-                if ( frameset->getGroupManager() && grpMgrs.findRef( frameset->getGroupManager() ) == -1 )
-                    grpMgrs.append( frameset->getGroupManager() );
             }
         }
     }
 
-    updateTableHeaders( grpMgrs );
     setModified(TRUE);
 }
 
@@ -2323,15 +2317,6 @@ void KWDocument::setFrameCoords( unsigned int x, unsigned int y, unsigned int w,
     }
 //    updateAllSelections();
     setModified(TRUE);
-}
-
-/*================================================================*/
-void KWDocument::updateTableHeaders( QList<KWTableFrameSet> &grpMgrs )
-{
-    KWTableFrameSet *grpMgr;
-
-    for ( grpMgr = grpMgrs.first(); grpMgr != 0; grpMgr = grpMgrs.next() )
-        grpMgr->updateTempHeaders();
 }
 
 /*================================================================*/
@@ -2409,14 +2394,6 @@ void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeade
     _layout = m_pageLayout;
     _cl = m_pageColumns;
     _hf = m_pageHeaderFooter;
-}
-
-void KWDocument::delGroupManager( KWTableFrameSet *g, bool deleteit )
-{
-  if (deleteit)
-    grpMgrs.remove( g );
-  else
-    grpMgrs.take(grpMgrs.find(g));
 }
 
 void KWDocument::addFrameSet( KWFrameSet *f )

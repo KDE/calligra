@@ -19,8 +19,8 @@
 
 #include "kwdoc.h"
 #include "kwframe.h"
+#include "kwtableframeset.h"
 #include "kwcanvas.h"
-#include "kwgroupmanager.h"
 #include "deldia.h"
 #include "deldia.moc"
 
@@ -43,11 +43,11 @@
 /******************************************************************/
 
 /*================================================================*/
-KWDeleteDia::KWDeleteDia( QWidget *parent, const char *name, KWGroupManager *_grpMgr, KWDocument *_doc, DeleteType _type, KWCanvas *_canvas )
+KWDeleteDia::KWDeleteDia( QWidget *parent, const char *name, KWTableFrameSet *_table, KWDocument *_doc, DeleteType _type, KWCanvas *_canvas )
     : KDialogBase( Plain, QString::null, Ok | Cancel, Ok, parent, name, true )
 {
     type = _type;
-    grpMgr = _grpMgr;
+    table = _table;
     doc = _doc;
     canvas = _canvas;
 
@@ -70,9 +70,9 @@ void KWDeleteDia::setupTab1()
     rc->setAlignment( AlignLeft | AlignBottom );
     grid1->addWidget( rc, 1, 0 );
 
-    value = new QSpinBox( 1, type == ROW ? grpMgr->getRows() : grpMgr->getCols(), 1, tab1 );
+    value = new QSpinBox( 1, type == ROW ? table->getRows() : table->getCols(), 1, tab1 );
     value->resize( value->sizeHint() );
-    value->setValue( type == ROW ? grpMgr->getRows() : grpMgr->getCols() );
+    value->setValue( type == ROW ? table->getRows() : table->getCols() );
     grid1->addWidget( value, 2, 0 );
 
     grid1->addRowSpacing( 1, rc->height() );
@@ -92,19 +92,19 @@ bool KWDeleteDia::doDelete()
 {
 
      if ( type == ROW )
-        grpMgr->deleteRow( value->value() - 1 );
+        table->deleteRow( value->value() - 1 );
     else
-        grpMgr->deleteCol( value->value() - 1 );
+        table->deleteCol( value->value() - 1 );
 #if 0
     QPainter p;
     p.begin( canvas );
 
     if ( type == ROW )
-        grpMgr->deleteRow( value->value() - 1 );
+        table->deleteRow( value->value() - 1 );
     else
-        grpMgr->deleteCol( value->value() - 1 );
+        table->deleteCol( value->value() - 1 );
 
-    canvas->getCursor()->setFrameSet( doc->getFrameSetNum( grpMgr->getFrameSet( 0, 0 ) ) + 1 );
+    canvas->getCursor()->setFrameSet( doc->getFrameSetNum( table->getFrameSet( 0, 0 ) ) + 1 );
     doc->drawMarker( *canvas->getCursor(), &p, canvas->contentsX(), canvas->contentsY() );
     canvas->getCursor()->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( canvas->getCursor()->getFrameSet() - 1 ) )->getFirstParag(), true );
     canvas->getCursor()->gotoStartOfParag();

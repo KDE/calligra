@@ -21,7 +21,7 @@
 #include "kwview.h"
 #include "kwcommand.h"
 #include "kwtextframeset.h"
-#include "kwgroupmanager.h"
+#include "kwtableframeset.h"
 #include <qrichtext_p.h>
 #include <kdebug.h>
 
@@ -533,12 +533,12 @@ void KWFrameResizeCommand::execute()
     ASSERT( frame );
     frame->setCoords(m_FrameResize.sizeOfEnd.left(),m_FrameResize.sizeOfEnd.top(),m_FrameResize.sizeOfEnd.right(),m_FrameResize.sizeOfEnd.bottom());
 
-    KWGroupManager *grpMgr = frame->getFrameSet()->getGroupManager();
-    if (grpMgr) {
-        grpMgr->recalcCols();
-        grpMgr->recalcRows();
-        grpMgr->updateTempHeaders();
-        //repaintTableHeaders( grpMgr );
+    KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
+    if (table) {
+        table->recalcCols();
+        table->recalcRows();
+        table->updateTempHeaders();
+        //repaintTableHeaders( table );
     }
     if(frame->isSelected())
         frame->setSelected(true);
@@ -551,12 +551,12 @@ void KWFrameResizeCommand::unexecute()
     KWFrameSet *frameSet =m_pDoc->getFrameSet(m_IndexFrame.m_iFrameSetIndex);
     KWFrame *frame=frameSet->getFrame(m_IndexFrame.m_iFrameIndex);
     frame->setCoords(m_FrameResize.sizeOfBegin.left(),m_FrameResize.sizeOfBegin.top(),m_FrameResize.sizeOfBegin.right(),m_FrameResize.sizeOfBegin.bottom());
-    KWGroupManager *grpMgr = frame->getFrameSet()->getGroupManager();
-    if (grpMgr) {
-        grpMgr->recalcCols();
-        grpMgr->recalcRows();
-        grpMgr->updateTempHeaders();
-        //repaintTableHeaders( grpMgr );
+    KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
+    if (table) {
+        table->recalcCols();
+        table->recalcRows();
+        table->updateTempHeaders();
+        //repaintTableHeaders( table );
     }
     if(frame->isSelected())
         frame->setSelected(true);
