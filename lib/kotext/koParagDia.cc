@@ -366,7 +366,7 @@ void KoNumPreview::drawContents( QPainter* painter )
 }
 
 
-KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, QWidget * parent, const char * name )
+KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine, QWidget * parent, const char * name )
         : KoParagLayoutWidget( KoParagDia::PD_SPACING, parent, name ), m_unit( unit )
 {
     QString unitName = KoUnit::unitName( m_unit );
@@ -444,6 +444,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, QWidget * paren
     endFramePageGrid->setRowStretch( endFramePageGrid->numRows()-1, 1 );
     mainGrid->addWidget( endFramePage, 2, 0 );
 
+    endFramePage->setEnabled(breakLine);
 
     // --------------- line spacing ---------------
     QGroupBox * spacingFrame = new QGroupBox( i18n( "Line Spacing" ), this );
@@ -1669,14 +1670,14 @@ QString KoParagTabulatorsWidget::tabName() {
 /* Class: KoParagDia                                              */
 /******************************************************************/
 KoParagDia::KoParagDia( QWidget* parent, const char* name,
-                        int flags, KoUnit::Unit unit, double _frameWidth )
+                        int flags, KoUnit::Unit unit, double _frameWidth, bool breakLine )
     : KDialogBase(Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true )
 {
     m_flags = flags;
     if ( m_flags & PD_SPACING )
     {
         QVBox * page = addVBoxPage( i18n( "Indent and Spacing" ) );
-        m_indentSpacingWidget = new KoIndentSpacingWidget( unit, page, "indent-spacing" );
+        m_indentSpacingWidget = new KoIndentSpacingWidget( unit, breakLine,page, "indent-spacing" );
     }
     if ( m_flags & PD_ALIGN )
     {

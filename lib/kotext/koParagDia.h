@@ -92,7 +92,7 @@ class KoIndentSpacingWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoIndentSpacingWidget( KoUnit::Unit unit, QWidget * parent, const char * name = 0 );
+    KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine, QWidget * parent,const char * name = 0 );
     virtual ~KoIndentSpacingWidget() {}
 
     virtual void display( const KoParagLayout & lay );
@@ -344,7 +344,10 @@ class KoParagDia : public KDialogBase
 public:
     enum { PD_SPACING = 1, PD_ALIGN = 2, PD_BORDERS = 4, PD_NUMBERING = 8, PD_TABS = 16 };
 
-    KoParagDia( QWidget*, const char*, int flags, KoUnit::Unit unit, double _frameWidth=-1);
+    /**
+     * breakLine : kpresenter didn't used this attibute, kword use it.
+     */
+    KoParagDia( QWidget*, const char*, int flags, KoUnit::Unit unit, double _frameWidth=-1,bool breakLine=true);
     ~KoParagDia();
 
     int getFlags() { return m_flags; }
