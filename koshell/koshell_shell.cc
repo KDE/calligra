@@ -30,6 +30,7 @@
 #include <kstddirs.h>
 #include <klibloader.h>
 #include <kservice.h>
+#include <kmessagebox.h>
 
 #include <koQueryTrader.h>
 #include <koKoolBar.h>
@@ -147,10 +148,9 @@ void KoShellWindow::slotKSLoadCompleted()
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotKSLoadCompleted()));
     disconnect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotKSLoadCanceled( const QString & )));
-    return true;
 }
 
-void KoMainWindow::slotKSLoadCanceled( const QString & errMsg )
+void KoShellWindow::slotKSLoadCanceled( const QString & errMsg )
 {
     KMessageBox::error( this, errMsg );
     // ... can't delete the document, it's the one who emitted the signal...
