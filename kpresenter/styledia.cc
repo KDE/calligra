@@ -242,6 +242,8 @@ StyleDia::StyleDia( QWidget* parent, const char* name, int flags )
     gradients->insertItem( i18n( "Diagonal Gradient 2" ), -1 );
     gradients->insertItem( i18n( "Circle Gradient" ), -1 );
     gradients->insertItem( i18n( "Rectangle Gradient" ), -1 );
+    gradients->insertItem( i18n( "PipeCross Gradient" ), -1 );
+    gradients->insertItem( i18n( "Pyramid Gradient" ), -1 );
     gradients->resize( chooseBStyle->size() );
     connect( gradients, SIGNAL( activated( int ) ), this, SLOT( gcStyle( int ) ) );
 

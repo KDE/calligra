@@ -335,7 +335,13 @@ Reggie, 23.6.1999:
 ------------------
 - Don't flicker when resizing the page
 - Optimized drawing background - produces much smaller PS output now
- 
+
 Reggie, 29.6.1999:
 ------------------
 - Removed focus hacks
+
+Reggie, 31.7.1999:
+--------------
+- Using better gradients and effects from KPixmapEffects
+- Using the new and cool gradients in the demo
+

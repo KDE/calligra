@@ -130,6 +130,8 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     cType->insertItem( i18n( "Diagonal Gradient 2" ), -1 );
     cType->insertItem( i18n( "Circle Gradient" ), -1 );
     cType->insertItem( i18n( "Rectangle Gradient" ), -1 );
+    cType->insertItem( i18n( "PipeCross Gradient" ), -1 );
+    cType->insertItem( i18n( "Pyramid Gradient" ), -1 );
     cType->resize( cType->sizeHint() );
     cType->move( 10, color2Choose->y()+color2Choose->height()+20 );
     connect( cType, SIGNAL( activated( int ) ), this, SLOT( selectCType( int ) ) );

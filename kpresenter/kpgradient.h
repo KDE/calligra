@@ -1,27 +1,26 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Gradients (header)                                     */
+/* Module: Gradients (header)					  */
 /******************************************************************/
 
 #ifndef kpgradient_h
 #define kpgradient_h
 
 #include <qcolor.h>
-#include <qpixmap.h>
-#include <qlist.h>
-
 #include <qsize.h>
 #include <qrect.h>
+
+#include <kpixmap.h>
 
 #include "global.h"
 
@@ -35,7 +34,7 @@
 class QPainter;
 
 /******************************************************************/
-/* Class: KPGradient                                              */
+/* Class: KPGradient						  */
 /******************************************************************/
 
 class KPGradient
@@ -60,7 +59,7 @@ public:
     { bcType = _type; paint(); }
 
     virtual QPixmap* getGradient()
-    { return &pixmap; }
+    { return (QPixmap*)&pixmap; }
     virtual QSize getSize()
     { return pixmap.size(); }
 
@@ -74,14 +73,13 @@ protected:
     KPGradient()
     {; }
     virtual void paint();
-    virtual void makeLineGradient( QPixmap &pmCrop, QColor _color1, QColor _color2, int _ySize );
-    virtual void makeColorList( QList<QColor> &_colorList, QColor _color1, QColor _color2, int _ySize );
 
     QColor color1, color2;
     BCType bcType;
 
-    QPixmap pixmap;
+    KPixmap pixmap;
     int refCount;
+
 };
 
 #endif
