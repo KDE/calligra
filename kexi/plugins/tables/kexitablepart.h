@@ -36,7 +36,7 @@ class KexiTablePart : public KexiPart::Part
 
 //		virtual void execute(KexiMainWindow *win, const KexiPart::Item &);
 		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item);
-		virtual void createGUIClient(KexiMainWindow *win);
+//moved to Part:		virtual void createGUIClient(KexiMainWindow *win);
 
 		virtual QString instanceName() const;
 };

@@ -22,7 +22,6 @@
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
-#include <kxmlguiclient.h>
 
 #include "keximainwindow.h"
 #include "kexiproject.h"
@@ -33,28 +32,6 @@
 #include <kexidb/cursor.h>
 #include <kexipartinfo.h>
 
-
-namespace KexiPart {
-
-class GUIClient : public QObject, public KXMLGUIClient
-{
-public:
-	GUIClient(KexiMainWindow *win, Part* part, const QString &i18nInstanceName);
-	virtual ~GUIClient() {};
-
-	inline Part *part() { return static_cast<Part*>(parent()); }
-};
-
-GUIClient::GUIClient(KexiMainWindow *win, Part* part, const QString &i18nInstanceName)
- : QObject(win, part->info()->objectName().latin1()), KXMLGUIClient(win)
-{
-	new KAction(i18nInstanceName+"...", part->info()->itemIcon(), 0, this, 
-		SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").utf8());
-		setXMLFile(QString("kexi")+part->info()->objectName()+"partui.rc");
-		win->guiFactory()->addClient(this);
-}
-
-}
 
 /*class KexiTablePartGUIClient: public KexiPart::GUIClient {
 public:
@@ -128,11 +105,11 @@ QString KexiTablePart::instanceName() const
 	return i18n("Table");
 }
 
+/*moved to Part:
 void
 KexiTablePart::createGUIClient(KexiMainWindow *win) {
-//	KXMLGUIClient *guiclient =new KexiTablePartGUIClient(win);
 	(void)new KexiPart::GUIClient(win, this, instanceName());
-}
+}*/
 
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_table, KGenericFactory<KexiTablePart> )
