@@ -26,7 +26,6 @@
 #include <klocale.h>
 
 #include "vtool.h"
-#include "vselection.h"
 
 class KarbonView;
 

@@ -22,8 +22,6 @@
 #define __VSHEARTOOL_H__
 
 #include "vtool.h"
-#include "vselection.h"
-
 
 class VShearTool : public VTool
 {
