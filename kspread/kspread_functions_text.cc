@@ -559,6 +559,23 @@ bool kspreadfunc_sleek( KSContext& context )
     return true;
 }
 
+// Function: T
+bool kspreadfunc_t( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "T", true ) )
+    return false;
+
+  QString result = "";
+
+  bool istext = KSUtil::checkType( context, args[0], KSValue::StringType, false );
+  if( istext ) result = args[0]->stringValue();
+
+  context.setValue( new KSValue( result ));
+  return true;
+}
+
 // Function: TOGGLE
 bool kspreadfunc_toggle( KSContext& context )
 {

@@ -48,6 +48,21 @@
     </Function>
 
     <Function>
+      <Name>T</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The T() returns the text referred to by value. If value is or refers to text, T return value. If value does not refer to text, T return empty text.</Text>
+	<Syntax>T(value)</Syntax>
+	<Example>VALUE("KOffice") returns "KOffice"</Example>
+	<Example>VALUE(1.2) returns "" (empty text)</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>PROPER</Name>
       <Type>String</Type>
       <Parameter>
