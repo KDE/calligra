@@ -381,7 +381,7 @@ void ATFInterpreter::interpret()
                     lPtr->l = LEVEL_ATTR;
                     level.push(lPtr);
                 }
-                else if (line.latin1() == END)
+                else if (line == QString(END))
                 {
                     level.pop();
                     coordList.append(coordPtr);
