@@ -273,6 +273,7 @@ static void ProcessStrikeoutTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ("value" , "QString", (void *) &type );
     attrProcessingList << AttrProcessing ("styleline" , "QString", (void *) &linestyle );
+    attrProcessingList << AttrProcessing ( "wordbyword", "", 0 ); // ### TODO
     ProcessAttributes (myNode, attrProcessingList);
 
     if( type.isEmpty() )
@@ -660,10 +661,11 @@ static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, KWEFKWor
     QValueList<AttrProcessing> attrProcessingList;
 
     attrProcessingList
-        << AttrProcessing ( "ptpos",   "double", &tabulator.m_ptpos   )
-        << AttrProcessing ( "type",    "int",    &tabulator.m_type    )
-        << AttrProcessing ( "filling", "int",    &tabulator.m_filling )
-        << AttrProcessing ( "width",   "double", &tabulator.m_width   )
+        << AttrProcessing ( "ptpos",     "double", &tabulator.m_ptpos   )
+        << AttrProcessing ( "type",      "int",    &tabulator.m_type    )
+        << AttrProcessing ( "filling",   "int",    &tabulator.m_filling )
+        << AttrProcessing ( "width",     "double", &tabulator.m_width   )
+        << AttrProcessing ( "alignchar", "",       0 )
         ;
 
     if ( leader->m_syntaxVersion == 1 )
