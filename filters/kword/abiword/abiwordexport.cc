@@ -266,9 +266,15 @@ bool AbiWordWorker::convertUnknownImage(const QString& strName, QByteArray& imag
         return false;
     }
 
-    kdDebug(30506) << "Image: " << strName << " has format " << imageIO.format() << endl;
+    kdDebug(30506) << "Image: " << strName << " (AbiWordWorker::convertUnknownImage)" << endl;
 
     QBuffer buffer(image); // A QBuffer is a QIODevice
+    if (!buffer.open(IO_WriteOnly))
+    {
+        kdWarning(30506) << "Could not open buffer! (AbiWordWorker::convertUnknownImage)" << endl;
+        return false;
+    }
+    
     imageIO.setIODevice(&buffer);
     imageIO.setFormat("PNG");
 
@@ -277,6 +283,7 @@ bool AbiWordWorker::convertUnknownImage(const QString& strName, QByteArray& imag
         kdWarning(30506) << "Could not write converted image! (AbiWordWorker::convertUnknownImage)" << endl;
         return false;
     }
+    buffer.close();
 
     return true;
 }
@@ -295,6 +302,7 @@ void AbiWordWorker::writeImageData(const QString& koStoreName, const QString& ke
     bool isImageLoaded=false;
 
     QString strMime;
+    
     if (strExtension=="png")
     {
         strMime="image/png";
@@ -308,7 +316,7 @@ void AbiWordWorker::writeImageData(const QString& koStoreName, const QString& ke
         isImageLoaded=convertUnknownImage(koStoreName,image);
     }
 
-    kdDebug(30506) << "Image " << koStoreName << " Type: " << strMime << endl;
+    kdDebug(30506) << "Image " << koStoreName << endl;
 
     if (isImageLoaded)
     {
