@@ -394,7 +394,16 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
 
   calcPaperSize();
 
-  emit sig_updateView();
+  KSpreadView *v;
+  for( v = (KSpreadView*)firstView(); v != 0L; v = (KSpreadView*)nextView() )
+  {
+        // We need to trigger the appropriate repaintings in the cells near the
+        // border of the page. The easiest way for this is to turn the borders
+        // off and on (or on and off if they were off).
+        bool bBorderWasShown = v->activeTable()->isShowPageBorders();
+        v->activeTable()->setShowPageBorders( !bBorderWasShown );
+        v->activeTable()->setShowPageBorders( bBorderWasShown );
+  }
 
   setModified( TRUE );
 }
@@ -480,8 +489,14 @@ void KSpreadDoc::calcPaperSize()
     case PG_SCREEN:
         m_paperWidth = PG_SCREEN_WIDTH;
         m_paperHeight = PG_SCREEN_HEIGHT;
+        break;
     case PG_CUSTOM:
         return;
+    }
+    if ( m_orientation == PG_LANDSCAPE ) {
+        double tmp=m_paperWidth;
+        m_paperWidth=m_paperHeight;
+        m_paperHeight=tmp;
     }
 }
 

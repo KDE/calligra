@@ -256,7 +256,7 @@ void KSpreadCell::defaultStyle()
   setComment("");
   setVerticalText(false);
   setAngle(m_rotateAngle);
-  setFormatNumber(KSpreadCell::Number);
+  setFormatNumber(Number);
 }
 
 void KSpreadCell::layoutChanged()
@@ -3698,7 +3698,7 @@ void KSpreadCell::checkFormat(bool _formular)
                 m_dValue/=100.0;
                 m_strText=tmp.setNum(m_dValue);
                 setFaktor(100.0);
-                setPrecision(2);
+                setPrecision(0);
                 if(_formular)
                         m_strText="="+m_strText;
                 return;
@@ -4242,6 +4242,7 @@ void KSpreadCell::setStyle( Style _s )
 
   if ( m_pPrivate )
     delete m_pPrivate;
+  m_pPrivate = 0;
 
   if ( _s != ST_Select )
     return;
