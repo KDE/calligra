@@ -1253,13 +1253,17 @@ void RTFImport::parseFontTable( RTFProperty * )
 		font.name.truncate(space);
 		qFont.setFamily( font.name );
 	    }
-	    QFontInfo *info=new QFontInfo( qFont );
-	    fontTable.insert( state.format.font, info->family() );
-	    //kdDebug(30515) << "Font " << state.format.font << " asked: " << font.name << " given: " << info->family() << endl;
+            const QFontInfo info( qFont );
+            const QString newFontName ( info.family() );
+            kdDebug(30515) << "Font " << state.format.font << " asked: " << font.name << " given: " << newFontName << endl;
+
+            if ( newFontName.isEmpty() )
+               fontTable.insert(  state.format.font, font.name );
+            else
+               fontTable.insert( state.format.font, newFontName );
 	    font.name.truncate( 0 );
 	    font.styleHint = QFont::AnyStyle;
 	    font.fixedPitch = 0;
-            delete info;
 	}
     }
 }
