@@ -21,6 +21,7 @@ for args in $SUBDIRLIST ; do
         kpresenter) COMPILE_FILTER_KPRESENTER="$args " ;;
         kformula) COMPILE_FILTER_KFORMULA="$args " ;;
         kugar) COMPILE_FILTER_KUGAR="$args " ;;
+        krita) COMPILE_FILTER_KRITA="$args " ;;
     esac
 done
 
@@ -34,6 +35,7 @@ for args in $DO_NOT_COMPILE ; do
         kpresenter) COMPILE_FILTER_KPRESENTER= ;;
         kformula) COMPILE_FILTER_KFORMULA= ;;
         kugar) COMPILE_FILTER_KUGAR= ;;
+        krita) COMPILE_FILTER_KRITA= ;;
     esac
 done
 
@@ -47,3 +49,4 @@ AM_CONDITIONAL(compile_filter_KARBON, test -n "$COMPILE_FILTER_KARBON")
 AM_CONDITIONAL(compile_filter_KPRESENTER, test -n "$COMPILE_FILTER_KPRESENTER")
 AM_CONDITIONAL(compile_filter_KFORMULA, test -n "$COMPILE_FILTER_KFORMULA")
 AM_CONDITIONAL(compile_filter_KUGAR, test -n "$COMPILE_FILTER_KUGAR")
+AM_CONDITIONAL(compile_filter_KRITA, test -n "$COMPILE_FILTER_KRITA")

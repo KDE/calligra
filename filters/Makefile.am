@@ -31,4 +31,9 @@ if compile_filter_KUGAR
 KUGARDIR = kugar
 endif
 
-SUBDIRS = generic_wrapper $(KSPREADDIR) $(KWORDDIR) $(KPRESENTERDIR) olefilters $(KONTOURDIR) $(XSLTFILTERDIR) $(KFORMULADIR) $(KARBONDIR) $(KUGARDIR)
+if compile_filter_KRITA
+KRITADIR = krita
+endif
+
+
+SUBDIRS = generic_wrapper $(KSPREADDIR) $(KWORDDIR) $(KPRESENTERDIR) olefilters $(KONTOURDIR) $(XSLTFILTERDIR) $(KFORMULADIR) $(KARBONDIR) $(KUGARDIR) $(KRITADIR)
