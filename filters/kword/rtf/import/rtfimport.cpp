@@ -1864,7 +1864,7 @@ void RTFImport::parseFootNote( RTFProperty * property)
         RTFTextState* newTextState=new RTFTextState;
         footnotes.append(newTextState);
         fnnum++;
-        destination.target=(char*)newTextState;
+        destination.target = newTextState;
 
         QCString str;
         str.setNum(fnnum);
@@ -1890,7 +1890,7 @@ void RTFImport::parseRichText( RTFProperty * )
     {
 	// Save and change rich text destination
 	RTFTextState *oldState = textState;
-	textState = (RTFTextState *)destination.target;
+	textState = destination.target;
 	destination.target = oldState;
 	destination.group = "Text";
 
@@ -1939,7 +1939,7 @@ void RTFImport::parseRichText( RTFProperty * )
 	    finishTable();
 
 	// Restore rich text destination
-	textState = (RTFTextState *)destination.target;
+	textState = destination.target;
     }
 }
 
@@ -1947,11 +1947,11 @@ void RTFImport::parsePlainText( RTFProperty * )
 {
     if (token.type == RTFTokenizer::OpenGroup)
     {
-	((DomNode *)destination.target)->clear();
+	destination.target->node.clear();
     }
     else if (token.type == RTFTokenizer::PlainText)
     {
-        ((DomNode *)destination.target)->addTextNode( token.text, textCodec );
+        destination.target->node.addTextNode( token.text, textCodec );
     }
 }
 
@@ -1978,7 +1978,7 @@ void RTFImport::changeDestination( RTFProperty *property )
     destinationStack.push( destination );
     destination.name	 = property->name;
     destination.destproc = property->cwproc;
-    destination.target	 = (char *)this + property->offset;
+    destination.target	 = (RTFTextState*) ( (char *)this + property->offset );
 
     state.brace0 = true;
 

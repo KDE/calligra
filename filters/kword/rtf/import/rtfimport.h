@@ -56,13 +56,15 @@ struct RTFField
     const char *value;
 };
 
+struct RTFTextState;
+
 /// RTF destination
 struct RTFDestination
 {
     const char *group;
     const char *name;
     void (RTFImport::*destproc)( RTFProperty * );
-    void *target;
+    RTFTextState* target;
 };
 
 /// Paragraph border
