@@ -2073,7 +2073,7 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
 
     painter.setPen( table()->doc()->defaultGridPen() );
     painter.drawLine( corner.x(), corner.y() + dt,
-                      corner.x(), corner.y() + height - db - dt );
+                      corner.x(), corner.y() + height - db );
   }
 
   /* should we do the right border? */
@@ -2095,7 +2095,7 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
 
     painter.setPen( table()->doc()->defaultGridPen() );
     painter.drawLine( corner.x() + width, corner.y() + dt,
-                      corner.x() + width, corner.y() + height - db - dt );
+                      corner.x() + width, corner.y() + height - db );
   }
 
   /* should we do the top border? */
@@ -2114,8 +2114,8 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
         dr = r.width() / 2;
     }
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( corner.x() + dl,              corner.y(),
-                      corner.x() + width - dr - dl, corner.y() );
+    painter.drawLine( corner.x() + dl,         corner.y(),
+                      corner.x() + width - dr, corner.y() );
   }
 
   /* should we do the bottom border? */
@@ -2134,8 +2134,8 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, KSpreadView* view,
         dr = r.width() / 2;
     }
     painter.setPen( table()->doc()->defaultGridPen() );
-    painter.drawLine( corner.x() + dl,              corner.y() + height,
-                      corner.x() + width - dr - dl, corner.y() + height );
+    painter.drawLine( corner.x() + dl,         corner.y() + height,
+                      corner.x() + width - dr, corner.y() + height );
   }
 }
 
