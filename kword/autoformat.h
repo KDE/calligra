@@ -53,14 +53,24 @@ protected:
 class KWAutoFormat
 {
 public:
-  KWAutoFormat(KWordDocument *_doc);
+  struct TypographicQuotes
+  {
+    TypographicQuotes() : begin('»'), end('«'), replace(true)
+    {}
+    
+    QChar begin,end;
+    bool replace;
+  };
   
+  KWAutoFormat(KWordDocument *_doc);
+
   bool doAutoFormat(KWParag *parag,KWFormatContext *fc);
   bool doTypographicQuotes(KWParag *parag,KWFormatContext *fc);
-  
+
 protected:
   KWordDocument *doc;
-
+  TypographicQuotes typographicQuotes;
+  
 };
 
 #endif

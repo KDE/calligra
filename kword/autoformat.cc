@@ -23,7 +23,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KWAutoFormatEntry::KWAutoFormatEntry() 
+KWAutoFormatEntry::KWAutoFormatEntry()
 {
   checkFamily = checkColor = checkSize = checkBold = checkItalic = checkUnderline = checkVertAlign = false;
   expr = "";
@@ -42,9 +42,10 @@ KWAutoFormatEntry::KWAutoFormatEntry()
 /******************************************************************/
 
 /*================================================================*/
-KWAutoFormat::KWAutoFormat(KWordDocument *_doc) 
-{ 
-  doc = _doc; 
+KWAutoFormat::KWAutoFormat(KWordDocument *_doc)
+  : typographicQuotes()
+{
+  doc = _doc;
 }
 
 /*================================================================*/
@@ -56,5 +57,21 @@ bool KWAutoFormat::doAutoFormat(KWParag *parag,KWFormatContext *fc)
 /*================================================================*/
 bool KWAutoFormat::doTypographicQuotes(KWParag *parag,KWFormatContext *fc)
 {
+  if (!typographicQuotes.replace)
+    return false;
+  
+  if (parag->getKWString()->data()[fc->getTextPos()].c == QChar('\"') ||
+      parag->getKWString()->data()[fc->getTextPos()].c == typographicQuotes.begin ||
+      parag->getKWString()->data()[fc->getTextPos()].c == typographicQuotes.end)
+    {
+      if (fc->getTextPos() == 0 || fc->getTextPos() > 0 &&
+	  parag->getKWString()->data()[fc->getTextPos() - 1].c == QChar(' '))
+	parag->getKWString()->data()[fc->getTextPos()].c = typographicQuotes.begin;
+      else
+	parag->getKWString()->data()[fc->getTextPos()].c = typographicQuotes.end;
+
+      return true;
+    }
+
   return false;
 }

@@ -736,7 +736,7 @@ void KWTextFrameSet::deleteParag(KWParag *_parag)
 {
   if (_parag->getInfo() == KWParag::PI_FOOTNOTE)
     return;
-  
+
   KWParag *p,*p2;
 
   if (!getFirstParag()->getPrev() && !getFirstParag()->getNext()) return;
@@ -1215,7 +1215,13 @@ void KWPictureFrameSet::setSize(KSize _imgSize)
 {
   if (image && _imgSize == image->size()) return;
 
-  setFileName(filename,_imgSize);
+  if (!QFile::exists(filename))
+    {
+      QString key;
+      image = doc->getImageCollection()->getImage(*image,key,_imgSize);
+    }
+  else
+    setFileName(filename,_imgSize);
 }
 
 /*================================================================*/
