@@ -112,7 +112,10 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     case OT_TEXT: {
         cEffect2->insertItem( i18n( "Paragraph after paragraph" ) );
     } break;
-    default: break;
+    default:
+        lEffect2->setEnabled(false);
+        cEffect2->setEnabled(false);
+        break;
     }
 
     if ( obj->getEffect2() == EF2_NONE )
