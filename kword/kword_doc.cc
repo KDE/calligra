@@ -225,7 +225,7 @@ bool KWordDocument::loadTemplate( const char *_url )
 
 //     _loaded = FALSE;
 //     return TRUE;
-    bool ok = loadFromURL( _url, "application/x-kword" );
+    bool ok = loadFromURL( _url );
     _loaded = FALSE;
     return ok;
 }
@@ -635,7 +635,7 @@ bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
     QListIterator<KWordChild> it( m_lstChildren );
     for( ; it.current(); ++it ) {
 	cerr << "Loading child" << endl;
-	if ( !it.current()->loadDocument( _store, it.current()->mimeType() ) )
+	if ( !it.current()->loadDocument( _store ) )
 	    return FALSE;
     }
 
@@ -1501,24 +1501,22 @@ void KWordDocument::enableEmbeddedParts( bool f )
 }
 
 /*================================================================*/
-void KWordDocument::makeChildListIntern( KOffice::Document_ptr _doc, const char *_path )
+bool KWordDocument::saveChildren( KOStore::Store_ptr _store, const char *_path )
 {
-    cerr << "void KWordDocument::makeChildList( OPParts::Document_ptr _doc, const char *_path )" << endl;
+    cerr << "void KWordDocument::saveChildren( const char *_path )" << endl;
 
     int i = 0;
 
     QListIterator<KWordChild> it( m_lstChildren );
     for( ; it.current(); ++it )
-    {
-	QString tmp;
-	tmp.sprintf( "/%i", i++ );
-	QString path( _path );
-	path += tmp.data();
-	cerr << "SETTING NAME To " << path.data() << endl;
-
+    { 
+	// set the child document's url to an internal url (ex: "tar:/0/1")
+	QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
 	KOffice::Document_var doc = it.current()->document();
-	doc->makeChildList( _doc, path );
+        if ( !doc->saveToStore( _store, 0L, internURL ) )
+          return false;
     }
+    return true;
 }
 
 /*================================================================*/

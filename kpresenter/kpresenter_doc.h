@@ -348,11 +348,9 @@ protected:
 
     // ************ functions ************
     /**
-     * Overloaded function from @ref Document_impl. This function is needed for
-     * saving. We must know about every direct and indirect child so that we
-     * can save them all.
+     * Overloaded function from @ref Document_impl. Saves all children.
      */
-    virtual void makeChildListIntern( KOffice::Document_ptr _root, const char *_path );
+    virtual bool saveChildren( KOStore::Store_ptr _store, const char *_path );
     /*
      * Overloaded function from @ref KoDocument.
      *

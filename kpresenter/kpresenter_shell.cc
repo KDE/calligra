@@ -189,24 +189,21 @@ bool KPresenterShell::newDocument()
 }
 
 /*================================================================*/
-bool KPresenterShell::openDocument( const char *_url, const char *_format )
+bool KPresenterShell::openDocument( const char *_url )
 {
-    if ( _format == 0L || *_format == 0 )
-        _format = "application/x-kpresenter";
-
     if ( m_pDoc && m_pDoc->isEmpty() )
         releaseDocument();
     else if ( m_pDoc && !m_pDoc->isEmpty() )
     {
         KPresenterShell *s = new KPresenterShell();
         s->show();
-        return s->openDocument( _url, _format );
+        return s->openDocument( _url );
     }
 
     cerr << "Creating new document" << endl;
 
     m_pDoc = new KPresenterDoc;
-    if ( !m_pDoc->loadFromURL( _url, _format ) )
+    if ( !m_pDoc->loadFromURL( _url ) )
         return false;
 
     m_pView = m_pDoc->createPresenterView( frame() );
@@ -381,7 +378,7 @@ void KPresenterShell::slotFileOpen()
     if ( file.isNull() )
 	return;
 
-    if ( !openDocument( file, "" ) )
+    if ( !openDocument( file ) )
     {
         QString tmp;
         tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );

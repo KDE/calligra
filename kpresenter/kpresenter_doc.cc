@@ -240,20 +240,18 @@ bool KPresenterDoc::hasToWriteMultipart()
 }
 
 /*======================= make child list intern ================*/
-void KPresenterDoc::makeChildListIntern( KOffice::Document_ptr _doc, const char *_path )
+bool KPresenterDoc::saveChildren( KOStore::Store_ptr _store, const char *_path )
 {
     int i = 0;
 
     QListIterator<KPresenterChild> it( m_lstChildren );
     for( ; it.current(); ++it ) {
-	QString tmp;
-	tmp.sprintf( "/%i", i++ );
-	QString path( _path );
-	path += tmp.data();
-
+	QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
 	KOffice::Document_var doc = it.current()->document();
-	doc->makeChildList( _doc, path );
+	if ( !doc->saveToStore( _store, 0L, internURL ) )
+          return false;
     }
+    return true;
 }
 
 /*========================== save ===============================*/
@@ -483,7 +481,7 @@ bool KPresenterDoc::loadChildren( KOStore::Store_ptr _store )
 {
     QListIterator<KPresenterChild> it( m_lstChildren );
     for( ; it.current(); ++it ) {
-	if ( !it.current()->loadDocument( _store, it.current()->mimeType() ) )
+	if ( !it.current()->loadDocument( _store ) )
 	    return false;
     }
 
@@ -493,7 +491,7 @@ bool KPresenterDoc::loadChildren( KOStore::Store_ptr _store )
 /*========================= load a template =====================*/
 bool KPresenterDoc::load_template( const QString &_url )
 {
-    return loadFromURL( _url, "application/x-kpresenter" );
+    return loadFromURL( _url );
 }
 
 /*========================== load ===============================*/

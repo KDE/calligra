@@ -186,23 +186,20 @@ bool KWordShell::newDocument()
 }
 
 /*================================================================*/
-bool KWordShell::openDocument( const char *_url, const char *_format )
+bool KWordShell::openDocument( const char *_url )
 {
-    if ( _format == 0L || *_format == 0 )
-        _format = "application/x-kword";
-
     if ( m_pDoc && m_pDoc->isEmpty() )
         releaseDocument();
     else if ( m_pDoc && !m_pDoc->isEmpty() ) {
         KWordShell *s = new KWordShell();
         s->show();
-        return s->openDocument( _url, _format );
+        return s->openDocument( _url );
     }
 
     cerr << "Creating new document" << endl;
 
     m_pDoc = new KWordDocument;
-    if ( !m_pDoc->loadFromURL( _url, _format ) )
+    if ( !m_pDoc->loadFromURL( _url ) )
         return FALSE;
 
     m_pView = m_pDoc->createWordView( frame() );
@@ -375,7 +372,7 @@ void KWordShell::slotFileOpen()
 //     if ( file.isNull() )
 //         return;
 
-    if ( !openDocument( file, "" ) ) {
+    if ( !openDocument( file ) ) {
         QString tmp;
         tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
         QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );

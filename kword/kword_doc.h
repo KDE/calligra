@@ -109,7 +109,7 @@ public:
     // C++
     virtual bool loadXML( KOMLParser& parser, KOStore::Store_ptr _store );
     virtual bool loadChildren( KOStore::Store_ptr _store );
-    virtual bool save( ostream& out, const char *_format );
+    virtual bool save( ostream& out, const char* _format );
     virtual bool completeSaving( KOStore::Store_ptr _store );
 
     virtual bool loadTemplate( const char *_url );
@@ -383,7 +383,8 @@ protected slots:
 
 protected:
     virtual void insertChild( KWordChild* );
-    virtual void makeChildListIntern( KOffice::Document_ptr _doc, const char *_path );
+    virtual bool saveChildren( KOStore::Store_ptr _store, const char *_path );
+
     virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
 
     virtual void draw( QPaintDevice*, CORBA::Long _width, CORBA::Long _height,
