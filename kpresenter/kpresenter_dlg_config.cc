@@ -420,10 +420,10 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
 
     KPresenterDoc* doc = m_pView->kPresenterDoc();
 
-    m_displayLink=new QCheckBox(i18n("Displays link"),tmpQGroupBox);
+    m_displayLink=new QCheckBox(i18n("Display links"),tmpQGroupBox);
     grid->addWidget(m_displayLink,3,0);
     m_displayLink->setChecked(doc->getVariableCollection()->variableSetting()->displayLink());
-    m_displayComment=new QCheckBox(i18n("Displays comment"),tmpQGroupBox);
+    m_displayComment=new QCheckBox(i18n("Display comments"),tmpQGroupBox);
     m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
     grid->addWidget(m_displayComment,4,0);
 

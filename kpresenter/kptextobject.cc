@@ -1107,14 +1107,14 @@ KCommand * KPTextObject::textObjectToContents()
     {
         m_doc->repaint(this);
         KoSize size= KoSize(m_doc->zoomHandler()->unzoomItX(widthTxt), txtHeight ) - getRect().size();
-        ResizeCmd *cmd = new ResizeCmd( i18n("TextContentsToHeight"), KoPoint( 0,0), size, this, m_doc);
+        ResizeCmd *cmd = new ResizeCmd( i18n("Resize Text Contents to Height"), KoPoint( 0,0), size, this, m_doc);
         return cmd;
     }
     else
     {
         m_doc->repaint(this);
         KoSize size= KoSize(m_doc->zoomHandler()->unzoomItX(widthTxt), getRect().height()) - getRect().size();
-        ResizeCmd *cmd = new ResizeCmd( i18n("TextContentsToHeight"), KoPoint( 0,0), size, this, m_doc);
+        ResizeCmd *cmd = new ResizeCmd( i18n("Resize Text Contents to Height"), KoPoint( 0,0), size, this, m_doc);
         return cmd;
     }
     return 0L;
