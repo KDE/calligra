@@ -477,7 +477,12 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
         m_paperWidth = PG_A4_HEIGHT;
     }
     else
+    {
         f = KoPageFormat::formatFromString( paper );
+        if ( f == PG_CUSTOM )
+            // We have no idea about height or width, therefore assume ISO A4
+            f = PG_DIN_A4; 
+    }
 
     if ( strcmp( "Portrait", _orientation ) == 0L )
         o = PG_PORTRAIT;

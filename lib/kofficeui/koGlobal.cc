@@ -294,7 +294,8 @@ KoFormat KoPageFormat::formatFromString( const QString & string )
         return PG_DIN_B4;
     if ( string == "B6" )
         return PG_DIN_B6;
-    return PG_DIN_A4;   // let's make Tru64's cxx happy
+    // We do not know the format name, so we have a custom format
+    return PG_CUSTOM;
 }
 
 QString KoPageFormat::name( KoFormat format )
