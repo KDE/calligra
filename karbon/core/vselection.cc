@@ -22,7 +22,7 @@ VSelection::VSelection( const VSelection& selection )
 {
 	m_qrect = new QRect[9];
 
-	VObjectListIterator itr = m_objects;
+	VObjectListIterator itr = selection.m_objects;
 	for ( ; itr.current() ; ++itr )
 		append( itr.current() );
 }
