@@ -741,7 +741,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     /* End Made into a function */
 
-    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins, top, left, bottom, right, orientation, paper, header, footer, customSize, cellComment, objects;
+    QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins, top, left, bottom, right, orientation, paper, header, footer, customSize, cellComment, objects, repeatColumns, repeatRows;
 
     KoDocumentInfo *DocumentInfo = document->documentInfo();
     KoDocumentInfoAbout *aboutPage = static_cast<KoDocumentInfoAbout *>(DocumentInfo->page( "about" ));
@@ -936,6 +936,24 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
         //<gmr:repeat_top value="A1:IV5"/>
         //<gmr:repeat_left value="B1:D65536"/>
 
+        int _tmpRepeatColumnStart = table->print()->printRepeatColumns().first;
+        int _tmpRepeatColumnEnd = table->print()->printRepeatColumns().second;
+        if ( _tmpRepeatColumnStart!=0 )
+        {
+            repeatColumns = gnumeric_doc.createElement( "gmr:repeat_left" );
+            QString value = KSpreadCell::columnName( _tmpRepeatColumnStart )+"1:"+KSpreadCell::columnName(_tmpRepeatColumnEnd )+"65536";
+            repeatColumns.setAttribute( "value", value );
+            tmp.appendChild( repeatColumns );
+        }
+        int _tmpRepeatRowStart = table->print()->printRepeatRows().first;
+        int _tmpRepeatRowEnd = table->print()->printRepeatRows().second;
+        if ( _tmpRepeatRowStart!=0 )
+        {
+            repeatRows = gnumeric_doc.createElement( "gmr:repeat_top" );
+            QString value = "A"+ QString::number(_tmpRepeatRowStart ) +":IV"+QString::number( _tmpRepeatRowEnd );
+            repeatRows.setAttribute( "value", value );
+            tmp.appendChild( repeatRows );
+        }
 
         header = gnumeric_doc.createElement( "gmr:Header" );
         header.setAttribute( "Left", convertVariable(table->print()->headLeft() ) );
