@@ -1179,7 +1179,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
     else if ( format->underline() ||
                 format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD)
     {
-        int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
+        int y = lastY + baseLine- format->offsetFromBaseLine()+ KoBorder::zoomWidthY( 1, zh, 0 );
         QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
         p->save();
         unsigned int dim = (format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD)? KoBorder::zoomWidthY( 2, zh, 1 ) : KoBorder::zoomWidthY( 1, zh, 1 );
@@ -1284,7 +1284,8 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
             y = lastY + baseLine + KoBorder::zoomWidthY( 2, zh, 0 );
         else
             y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
-        p->drawLine( startX, y - h/2 + 2, startX + bw, y- h/2 +2 );
+        y-=(p->fontMetrics().height()  + format->offsetFromBaseLine())/2 + 2;
+        p->drawLine( startX, y, startX + bw, y );
         p->restore();
         font.setStrikeOut( FALSE );
         p->setFont( font );
@@ -1314,8 +1315,9 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
             p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
         }
         int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
-        p->drawLine( startX, y - h/2 + 2 -KoBorder::zoomWidthY( 1, zh, 0 ), startX + bw, y- h/2 +2 -KoBorder::zoomWidthY( 1, zh, 0 ));
-        p->drawLine( startX, y - h/2 + 2 + KoBorder::zoomWidthY( 1, zh, 0 ), startX + bw, y- h/2 +2 +KoBorder::zoomWidthY( 1, zh, 0 ));
+        y-=(p->fontMetrics().height()  + format->offsetFromBaseLine())/2 + 2;
+        p->drawLine( startX, y -KoBorder::zoomWidthY( 1, zh, 0 ), startX + bw, y -KoBorder::zoomWidthY( 1, zh, 0 ));
+        p->drawLine( startX, y + 2 + KoBorder::zoomWidthY( 1, zh, 0 ), startX + bw, y +2 +KoBorder::zoomWidthY( 1, zh, 0 ));
         p->restore();
         font.setStrikeOut( FALSE );
         p->setFont( font );
