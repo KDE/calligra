@@ -11,6 +11,7 @@
 #include "pageoptionsdialog.h"
 #include "stencilsbaroptionsdialog.h"
 
+#include <kdebug.h>
 #include <qheader.h>
 #include <qlabel.h>
 #include <qlistview.h>
@@ -51,43 +52,38 @@ void KivioOptionsDialog::slotCurrentChanged(QListViewItem* i)
   int id = pname.toInt();
 
   if (!page) {
-
     if (id == PageOption) {
       page = new PageOptionsDialog(m_pView, page, pname.ascii());
     }
-
-    if (id == PageSize) {
+    else if (id == PageSize) {
       page = new PageSetupDialog(m_pView, page, pname.ascii());
     }
-
-    if (id == PageGrid) {
+    else if (id == PageGrid) {
       page = new GridSetupDialog(m_pView, page, pname.ascii());
     }
-
-    if (id == Guides) {
+    else if (id == Guides) {
       page = new GuidesSetupDialog(m_pView, page, pname.ascii());
     }
-
-    if (id == GuidesAll) {
+    else if (id == GuidesAll) {
       page = new GuidesTwoPositionPage(m_pView, page, pname.ascii());
     }
-
-    if (id == GuidesHorizontal) {
+    else if (id == GuidesHorizontal) {
       page = new GuidesOnePositionPage(Horizontal, m_pView, page, pname.ascii());
     }
-
-    if (id == GuidesVertical) {
+    else if (id == GuidesVertical) {
       page = new GuidesOnePositionPage(Vertical, m_pView, page, pname.ascii());
     }
-
-    if (id == StencilsBar) {
+    else if (id == StencilsBar) {
       page = new StencilsBarOptionsDialog(m_pView, page, pname.ascii());
     }
+    else
+        kdDebug()<<"unknown id value\n";
 
     if (page) {
       connect(this, SIGNAL(sig_apply(QWidget*)), page, SLOT(apply(QWidget*)));
       stack->addWidget(page,0);
     }
+
   }
 
   if (page) {

@@ -24,6 +24,7 @@ protected:
   void setCurrent(KivioGuideLineData*);
   void updateListViewColumn();
   void updateListView(bool);
+  void updateButton();
 
 protected slots:
   void slotUnitChanged(int);

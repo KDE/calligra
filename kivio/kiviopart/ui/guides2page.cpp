@@ -76,6 +76,7 @@ void GuidesTwoPositionPage::updateListView(bool rebuild)
     slotCurrentChanged(0);
 
     listView->triggerUpdate();
+    updateButton();
     return;
   }
 
@@ -92,6 +93,17 @@ void GuidesTwoPositionPage::updateListView(bool rebuild)
   deleteButton->setEnabled(haveSelections);
 
   listView->setFocus();
+}
+
+void GuidesTwoPositionPage::updateButton()
+{
+    bool state=listView->childCount()>0;
+    moveButton->setEnabled(state);
+    moveByButton->setEnabled(state);
+    deleteButton->setEnabled(state);
+    deleteAllButton->setEnabled(state);
+    selectAllButton->setEnabled(state);
+    clearSelectionButton->setEnabled(state);
 }
 
 void GuidesTwoPositionPage::updateListViewColumn()
