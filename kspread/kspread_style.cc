@@ -20,6 +20,7 @@
 
 #include "kspread_style.h"
 #include "kspread_util.h"
+#include "kspread_doc.h"
 
 #include <kdebug.h>
 #include <koGlobal.h>
@@ -115,9 +116,133 @@ KSpreadStyle::~KSpreadStyle()
 {
 }
 
-void KSpreadStyle::saveOasis( KoGenStyles &mainStyles )
+void KSpreadStyle::saveOasisStyle( KoGenStyle &style )
 {
-    //todo
+#if 0
+    if ( featureSet( SAlignX ) && alignX() != KSpreadFormat::Undefined )
+        format.setAttribute( "alignX", (int) m_alignX );
+
+    if ( featureSet( SAlignY ) && alignY() != KSpreadFormat::Middle )
+        format.setAttribute( "alignY", (int) m_alignY );
+
+    if ( featureSet( SBackgroundColor ) && m_bgColor != QColor() && m_bgColor.isValid() )
+        format.setAttribute( "bgcolor", m_bgColor.name() );
+
+    if ( featureSet( SMultiRow ) && hasProperty( PMultiRow ) )
+        format.setAttribute( "multirow", "yes" );
+
+    if ( featureSet( SVerticalText ) && hasProperty( PVerticalText ) )
+        format.setAttribute( "verticaltext", "yes" );
+
+    if ( featureSet( SPrecision ) )
+        format.setAttribute( "precision", m_precision );
+
+    if ( featureSet( SPrefix ) && !prefix().isEmpty() )
+        format.setAttribute( "prefix", m_prefix );
+
+    if ( featureSet( SPostfix ) && !postfix().isEmpty() )
+        format.setAttribute( "postfix", m_postfix );
+
+    if ( featureSet( SFloatFormat ) )
+        format.setAttribute( "float", (int) m_floatFormat );
+
+    if ( featureSet( SFloatColor ) )
+        format.setAttribute( "floatcolor", (int)m_floatColor );
+
+    if ( featureSet( SFactor ) )
+        format.setAttribute( "factor", m_factor );
+
+    if ( featureSet( SFormatType ) )
+        format.setAttribute( "format",(int) m_formatType );
+
+    if ( featureSet( SCustomFormat ) && !strFormat().isEmpty() )
+        format.setAttribute( "custom", m_strFormat );
+
+    if ( featureSet( SFormatType ) && formatType() == KSpreadFormat::Money )
+    {
+        format.setAttribute( "type", (int) m_currency.type );
+        format.setAttribute( "symbol", m_currency.symbol );
+    }
+
+    if ( featureSet( SAngle ) )
+        format.setAttribute( "angle", m_rotateAngle );
+
+    if ( featureSet( SIndent ) )
+        format.setAttribute( "indent", m_indent );
+
+    if ( featureSet( SDontPrintText ) && hasProperty( PDontPrintText ) )
+        format.setAttribute( "dontprinttext", "yes" );
+
+    if ( featureSet( SNotProtected ) && hasProperty( PNotProtected ) )
+        format.setAttribute( "noprotection", "yes" );
+
+    if ( featureSet( SHideAll ) && hasProperty( PHideAll ) )
+        format.setAttribute( "hideall", "yes" );
+
+    if ( featureSet( SHideFormula ) && hasProperty( PHideFormula ) )
+        format.setAttribute( "hideformula", "yes" );
+
+    if ( featureSet( SFontFamily ) )
+        format.setAttribute( "font-family", m_fontFamily );
+    if ( featureSet( SFontSize ) )
+        format.setAttribute( "font-size", m_fontSize );
+    if ( featureSet( SFontFlag ) )
+        format.setAttribute( "font-flags", m_fontFlags );
+
+    //  if ( featureSet( SFont ) )
+    //    format.appendChild( util_createElement( "font", m_textFont, doc ) );
+
+    if ( featureSet( STextPen ) && m_textPen.color().isValid() )
+        format.appendChild( util_createElement( "pen", m_textPen, doc ) );
+
+    if ( featureSet( SBackgroundBrush ) )
+    {
+        format.setAttribute( "brushcolor", m_backGroundBrush.color().name() );
+        format.setAttribute( "brushstyle", (int) m_backGroundBrush.style() );
+    }
+
+    if ( featureSet( SLeftBorder ) )
+    {
+        QDomElement left = doc.createElement( "left-border" );
+        left.appendChild( util_createElement( "pen", m_leftBorderPen, doc ) );
+        format.appendChild( left );
+    }
+
+    if ( featureSet( STopBorder ) )
+    {
+        QDomElement top = doc.createElement( "top-border" );
+        top.appendChild( util_createElement( "pen", m_topBorderPen, doc ) );
+        format.appendChild( top );
+    }
+
+    if ( featureSet( SRightBorder ) )
+    {
+        QDomElement right = doc.createElement( "right-border" );
+        right.appendChild( util_createElement( "pen", m_rightBorderPen, doc ) );
+        format.appendChild( right );
+    }
+
+    if ( featureSet( SBottomBorder ) )
+    {
+        QDomElement bottom = doc.createElement( "bottom-border" );
+        bottom.appendChild( util_createElement( "pen", m_bottomBorderPen, doc ) );
+        format.appendChild( bottom );
+    }
+
+    if ( featureSet( SFallDiagonal ) )
+    {
+        QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
+        fallDiagonal.appendChild( util_createElement( "pen", m_fallDiagonalPen, doc ) );
+        format.appendChild( fallDiagonal );
+    }
+
+    if ( featureSet( SGoUpDiagonal ) )
+    {
+        QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
+        goUpDiagonal.appendChild( util_createElement( "pen", m_goUpDiagonalPen, doc ) );
+        format.appendChild( goUpDiagonal );
+    }
+#endif
 }
 
 
@@ -1488,6 +1613,22 @@ KSpreadCustomStyle::KSpreadCustomStyle( QString const & name, KSpreadCustomStyle
 
 KSpreadCustomStyle::~KSpreadCustomStyle()
 {
+}
+
+void KSpreadCustomStyle::saveOasis( KoGenStyles &mainStyles )
+{
+    if ( m_name.isEmpty() )
+        return;
+    KoGenStyle gs;
+    if ( m_type == AUTO )
+        gs = KoGenStyle(KSpreadDoc::STYLE_DEFAULTSTYLE );
+    else
+        gs = KoGenStyle( KSpreadDoc::STYLE_USERSTYLE ); //FIXME name of style
+    if ( m_parent )
+        gs.addAttribute( "style:parent-style-name", m_parent->name() );
+    gs.addAttribute( "style:display-name", m_name );
+    saveOasisStyle( gs );
+    mainStyles.lookup( gs, "custom-style" );
 }
 
 void KSpreadCustomStyle::save( QDomDocument & doc, QDomElement & styles )

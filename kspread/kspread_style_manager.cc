@@ -50,7 +50,22 @@ KSpreadStyleManager::~KSpreadStyleManager()
 
 void KSpreadStyleManager::saveOasis( KoGenStyles &mainStyles )
 {
-    //todo
+    kdDebug() << "Saving default oasis style" << endl;
+    m_defaultStyle->saveOasis( mainStyles );
+
+    Styles::iterator iter = m_styles.begin();
+    Styles::iterator end  = m_styles.end();
+
+    while ( iter != end )
+    {
+        kdDebug() << "Saving style" << endl;
+        KSpreadCustomStyle * styleData = iter.data();
+
+        styleData->saveOasis( mainStyles );
+
+        ++iter;
+    }
+
 }
 
 QDomElement KSpreadStyleManager::save( QDomDocument & doc )

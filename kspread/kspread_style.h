@@ -103,7 +103,7 @@ class KSpreadStyle
   void saveXML( QDomDocument & doc, QDomElement & format ) const;
   bool loadXML( QDomElement & format );
 
-    void saveOasis( KoGenStyles &mainStyles );
+    void saveOasisStyle( KoGenStyle &style );
 
 
   bool release();
@@ -314,7 +314,9 @@ class KSpreadCustomStyle : public KSpreadStyle
   QString const & name()       const { return m_name;       }
 
   void save( QDomDocument & doc, QDomElement & styles );
-  bool loadXML( QDomElement const & style, QString const & name );
+    void saveOasis( KoGenStyles &mainStyles );
+
+ bool loadXML( QDomElement const & style, QString const & name );
 
   void setType( StyleType type ) { m_type = type; }
 

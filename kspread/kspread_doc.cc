@@ -601,6 +601,8 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
 
     d->workbook->saveOasis( contentTmpWriter, mainStyles );
+    d->styleManager->saveOasis( mainStyles );
+
     saveOasisAreaName( contentTmpWriter );
     contentTmpWriter.endElement(); ////office:body
 
@@ -679,6 +681,20 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
+
+    styles = mainStyles.styles( KSpreadDoc::STYLE_USERSTYLE );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name, "style:cell-properties" );
+    }
+
+    styles = mainStyles.styles( KSpreadDoc::STYLE_DEFAULTSTYLE );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:default-style", (*it).name, "style:cell-properties" );
+    }
+
+
     stylesWriter.endElement(); // office:styles
 
     stylesWriter.startElement( "office:automatic-styles" );
