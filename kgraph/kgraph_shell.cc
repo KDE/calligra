@@ -21,6 +21,7 @@
 #include <kgraph_part.h>
 #include <kgraph_factory.h>
 #include <kgraph_shell.h>
+#include <klocale.h>
 
 
 KGraphShell::KGraphShell(const char *name)
@@ -29,6 +30,10 @@ KGraphShell::KGraphShell(const char *name)
 }
 
 KGraphShell::~KGraphShell() {
+}
+
+QString KGraphShell::nativeFormatName() const {
+  return i18n("KGraph");
 }
 
 KoDocument *KGraphShell::createDoc() {

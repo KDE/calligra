@@ -33,7 +33,7 @@ public:
     ~KGraphShell();
 
     QString nativeFormatPattern() const { return "*.kgr"; }
-    QString nativeFormatName() const { return "KGraph"; }
+    QString nativeFormatName() const;
 
 protected:
     virtual KoDocument *createDoc();
