@@ -1,3 +1,5 @@
+KDE_OPTIONS = nofinal
+
 noinst_LTLIBRARIES =libkiviosdk.la
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
