@@ -22,14 +22,12 @@ REAL BUGS:
 -	copying works wrong: the last selected shape is pasted instead of the shape one copied
 -	crashes in vtext
 -	make curve1To, curve2To work
+-	vpolylinetool creates beziers where it could create lines
 
 TODO:
 -	move the X11-hacks from VPolylineTool to VCanvas so that other tools can benefit from that.
 -	remove all setYMirroring() outside of VCanvas, this is an implementation detail
 -	make pattern and gradient coords absolute and not relative to the shape
--	polylinetool seems to generate flat beziers instead of lines. this gives unexpected results
-	in "round corners".
--	vroundcorners needs to be improved for beziers and big radii (lenny)
 -	VImage
 -	VPattern like VImage with embedded binaries instead of paths
 -	bring text support back, ideally using fontconfig and freetype, and no xft.

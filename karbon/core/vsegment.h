@@ -181,7 +181,7 @@ public:
 
 	/**
 	 * Returns the arclength from p0 to the point parametrized
-	 * by 0 <= t <= 1.
+	 * by 0 <= t <= 1. For beziers this functionis a bit expensive.
 	 */
 	double length( double t = 1.0 ) const;
 

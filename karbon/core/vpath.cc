@@ -189,9 +189,7 @@ VPath::currentPoint() const
 bool
 VPath::moveTo( const KoPoint& p )
 {
-	if( isClosed() ) return false;
-
-	// move "begin" when path is still empty:
+	// Move "begin" when path is still empty.
 	if( getLast()->type() == VSegment::begin )
 	{
 		getLast()->setKnot( p );

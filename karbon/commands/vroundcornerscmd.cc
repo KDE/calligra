@@ -164,8 +164,18 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	double param;
 
 	// "Begin" step.
+	// =============
+
+	// Convert flat beziers to lines.
+	if( path.current()->isFlat() )
+		path.current()->setType( VSegment::line );
+
+	if( path.getLast()->isFlat() )
+		path.getLast()->setType( VSegment::line );
+
 	if(
 		path.isClosed() &&
+		// Don't touch curve/curve joins.
 		!(
 			path.current()->type() == VSegment::curve &&
 			path.getLast()->type() == VSegment::curve ) )
@@ -196,78 +206,113 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	}
 
 
-	// "Middle" step.
+	// "Loop" step.
+	// ============
+
 	while(
 		path.current() &&
 		path.current()->next() )
 	{
-		if(
-			!(
-				path.current()->type() == VSegment::curve &&
-				path.current()->next()->type() == VSegment::curve ) )
-		{
-			length = path.current()->length();
+		// Convert flat beziers to lines.
+		if( path.current()->isFlat() )
+			path.current()->setType( VSegment::line );
 
-			param = length > 2 * m_radius
-				? path.current()->param( length - m_radius )
-				: 0.5;
+		if( path.current()->next()->isFlat() )
+			path.current()->next()->setType( VSegment::line );
+
+
+		// Don't touch curve/curve joins.
+		if(
+			path.current()->type() == VSegment::curve &&
+			path.current()->next()->type() == VSegment::curve )
+		{
+			newPath.append( path.current()->clone() );
+			path.next();
+			continue;
+		}
+
+
+		// Split the current segment at param( m_radius ) counting
+		// from the end.
+		length = path.current()->length();
+
+		// If the current segment is too short to be split, just don't split it
+		// because it was split already a t=0.5 during the former step.
+		if( length > m_radius )
+		{
+			param = path.current()->param( length - m_radius );
 
 			path.insert(
 				path.current()->splitAt( param ) );
 			newPath.append(
 				path.current()->clone() );
-			path.next();
-
 
 			path.next();
-
-
-			length = path.current()->length();
-
-			param = length > 2 * m_radius
-				? path.current()->param( m_radius )
-				: 0.5;
-
-			path.insert(
-				path.current()->splitAt( param ) );
-
-
-			// Round corner.
-			newPath.curveTo(
-				path.current()->prev()->point( 0.5 ),
-				path.current()->point( 0.5 ),
-				path.current()->knot() );
-
-
-			if( !success() )
-				setSuccess();
 		}
-		else
-			newPath.append( path.current()->clone() );
+
+
+		// Jump to the next untouched segment.
+		path.next();
+
+
+		// Split the current segment at param( m_radius ).
+		length = path.current()->length();
+
+		param = length > 2 * m_radius
+			? path.current()->param( m_radius )
+			: 0.5;
+
+		path.insert(
+			path.current()->splitAt( param ) );
+
+
+		// Round corner.
+		newPath.curveTo(
+			path.current()->prev()->point( 0.5 ),
+			path.current()->point( 0.5 ),
+			path.current()->knot() );
+
+
+		if( !success() )
+			setSuccess();
 
 		path.next();
 	}
 
 
 	// "End" step.
+	// ===========
+
 	if( path.isClosed() )
 	{
+		// Convert flat beziers to lines.
+		if( path.current()->isFlat() )
+			path.current()->setType( VSegment::line );
+
+		if( path.getFirst()->next()->isFlat() )
+			path.getFirst()->next()->setType( VSegment::line );
+
 		if(
+			// Don't touch curve/curve joins.
 			!(
 				path.current()->type() == VSegment::curve &&
 				path.getFirst()->next()->type() == VSegment::curve ) )
 		{
 			length = path.current()->length();
 
-			param = length > 2 * m_radius
-				? path.current()->param( length - m_radius )
-				: 0.5;
+			// If the current segment is too short to be split, just don't split it
+			// because it was split already a t=0.5 during the former step.
+			if( length > m_radius )
+			{
+				param = path.current()->param( length - m_radius );
 
-			path.insert(
-				path.current()->splitAt( param ) );
-			newPath.append(
-				path.current()->clone() );
-			path.next();
+				path.insert(
+					path.current()->splitAt( param ) );
+				newPath.append(
+					path.current()->clone() );
+
+				path.next();
+			}
 
 
 			path.first();

@@ -586,7 +586,7 @@ VSegment::prev() const
 {
 	VSegment* segment = m_prev;
 
-	while( segment && segment->state() != normal )
+	while( segment && segment->state() == deleted )
 	{
 		segment = segment->m_prev;
 	}
@@ -599,7 +599,7 @@ VSegment::next() const
 {
 	VSegment* segment = m_next;
 
-	while( segment && segment->state() != normal )
+	while( segment && segment->state() == deleted )
 	{
 		segment = segment->m_next;
 	}
