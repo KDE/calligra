@@ -25,7 +25,7 @@ TKFloatSpinBoxAction::TKFloatSpinBoxAction( const QString& text, const QString& 
 {
   setText(text);
   setIcon(icon);
-  setAccel(accel);
+  setShortcut(KShortcut(accel));
 
   m_decimal = 3;
   m_value = 0.0;
@@ -43,7 +43,7 @@ TKFloatSpinBoxAction::TKFloatSpinBoxAction( const QString& text, int accel, QObj
 : TKAction(parent,name)
 {
   setText(text);
-  setAccel(accel);
+  setShortcut(KShortcut(accel));
 
   m_decimal = 3;
   m_value = 0.0;

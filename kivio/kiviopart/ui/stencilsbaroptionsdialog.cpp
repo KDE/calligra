@@ -10,7 +10,7 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kimageio.h>

@@ -149,7 +149,7 @@
 <customwidgets>
     <customwidget>
         <class>KColorButton</class>
-        <header location="global">kcolorbtn.h</header>
+        <header location="global">kcolorbutton.h</header>
         <sizehint>
             <width>40</width>
             <height>25</height>

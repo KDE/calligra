@@ -5,7 +5,7 @@
 #include "tkfloatspinbox.h"
 #include "tkunits.h"
 
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 #include <qcheckbox.h>
 
 GridSetupDialog::GridSetupDialog(KivioView* view, QWidget* parent, const char* name)
