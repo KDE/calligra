@@ -154,12 +154,12 @@ void GObject::unref () {
 }
 
 void GObject::updateRegion (bool recalcBBox) {
-  Rect newbox = box;
+  Rect newbox = redrawBox ();
   
   if (recalcBBox) {
-    Rect oldbox = box;
+    Rect oldbox = newbox;
     calcBoundingBox ();
-    newbox = box.unite (oldbox);
+    newbox = redrawBox ().unite (oldbox);
   }
 
   if (isSelected ())

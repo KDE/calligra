@@ -49,6 +49,7 @@ class PStateManager;
 class ScriptDialog;
 class LayerDialog;
 class EditPointTool;
+class FilterManager;
 
 #define ID_FILE_NEW              1
 #define ID_FILE_OPEN             2
@@ -195,6 +196,7 @@ private:
 
   void about (int id);
 
+  QString getExportFileName (FilterManager *filterMgr);
   void openFile (const char* fname);
   void openURL (const char* url);
   void exportToFile ();
@@ -237,6 +239,7 @@ private:
   CommandHistory cmdHistory;
 
   QString localFile;
+  QString lastExport;
   QArray<float> zFactors;
   PStateManager* psm;
   int selectedColorIdx;

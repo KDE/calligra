@@ -82,7 +82,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 		last += 1;
 	      points.clear ();
 	      break;
-	    } else printf ("last == %d (%d)\n", last, obj->numOfPoints ());
+	    } 
 	  }
 	  ++it;
 	}

@@ -62,6 +62,7 @@ public:
   QList<Coord>& getPoints ();
 
   virtual int containingSegment (float xpos, float ypos);
+  virtual bool isValid ();
 
   int getNeighbourPoint (const Coord& p);
   unsigned int numOfPoints () const;

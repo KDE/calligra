@@ -142,6 +142,14 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	changed = true;
       }
     }
+    else if (ke->key () == Key_Home) {
+      x = 0;
+      changed = true;
+    }
+    else if (ke->key () == Key_End) {
+      x = text->line (y).length ();
+      changed = true;
+    }
     else if (ke->ascii ()) {
       if (ke->ascii () == 13)
 	text->insertChar ('\n');

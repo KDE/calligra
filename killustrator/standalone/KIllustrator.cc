@@ -706,6 +706,7 @@ void KIllustrator::menuCallback (int item) {
   case ID_FILE_NEW:
     if (askForSave ()) {
       document->initialize ();
+      lastExport = "";
       cmdHistory.reset ();
       setFileCaption (UNNAMED_FILE);
       resetTools ();
@@ -1099,6 +1100,7 @@ void KIllustrator::saveAsFile () {
     PStateManager::instance ()->addRecentFile ((const char *) fname);
     setFileCaption (fname);
     setUnsavedData (false);
+    lastExport = "";
   }
 }
 
@@ -1228,12 +1230,40 @@ void KIllustrator::updateZoomFactor (float zFactor) {
   }
 }
 
+QString KIllustrator::getExportFileName (FilterManager *filterMgr) {
+    const char *defaultExt = 0L;
+    QString extension;
+
+    if (! lastExport.isEmpty ()) {
+	int pos = lastExport.findRev ('.', -1, false);
+	if (pos != -1) {
+	    extension = 
+		lastExport.right (lastExport.length () - pos - 1);
+	    defaultExt = (const char *) extension;
+	}
+    }
+    QString filter = filterMgr->exportFilters (defaultExt);
+    KFileDialog *dlg = new KFileDialog (0L, (const char *) filter, this,
+					0L, true, false);
+    dlg->setCaption (i18n ("Save As"));
+    if (! lastExport.isEmpty ()) {
+	dlg->setSelection ((const char *) lastExport);
+    }
+    QString filename;
+
+    if (dlg->exec() == QDialog::Accepted)
+	filename = dlg->selectedFile ();
+
+    delete dlg;
+
+    return filename;
+}
+
 void KIllustrator::exportToFile () {
   FilterManager* filterMgr = FilterManager::instance ();
   QString filter = filterMgr->exportFilters ();
   
-  QString fname = 
-    KFileDialog::getSaveFileName (0, (const char *) filter, this);
+  QString fname = getExportFileName (filterMgr);
 
   if (! fname.isEmpty ()) {
     FilterInfo* filterInfo = filterMgr->findFilter (fname, 
@@ -1244,6 +1274,7 @@ void KIllustrator::exportToFile () {
       if (filter->setup (document, filterInfo->extension ())) {
 	filter->setOutputFileName (fname);
 	filter->exportToFile (document);
+	lastExport = fname;
       }
       else
 	QMessageBox::critical (this, i18n ("KIllustrator Error"), 

@@ -72,11 +72,16 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
     canvas->snapPositionToGrid (xpos, ypos);
 
     rect->setEndPoint (Coord (xpos, ypos));
-    CreateRectangleCmd *cmd = new CreateRectangleCmd (doc, rect);
-    history->addCommand (cmd);
-
-    doc->unselectAllObjects ();
-    doc->setLastObject (rect);
+    if (! rect->isValid ()) {
+      doc->deleteObject (rect);
+    }
+    else {
+      CreateRectangleCmd *cmd = new CreateRectangleCmd (doc, rect);
+      history->addCommand (cmd);
+      
+      doc->unselectAllObjects ();
+      doc->setLastObject (rect);
+    }
     rect = NULL;
   }
   else if (e->type () == Event_KeyPress) {

@@ -100,12 +100,29 @@ QString FilterManager::importFilters () {
   return s;
 }
 
-QString FilterManager::exportFilters () {
+QString FilterManager::exportFilters (const char* defaultExt) {
+  // filter info for defaultExt should be at top of the list 
   QString s;
   QDictIterator<FilterInfo> iter (filters);
-  for (; iter.current (); ++iter) {
+  if (defaultExt != 0L) {
+      for (; iter.current (); ++iter) {
+	  FilterInfo *fi = iter.current ();
+	  if (fi->kind () == FilterInfo::FKind_Export &&
+	      ::strcmp (fi->extension (), defaultExt) == 0) {
+	      QString buf;
+	      buf.sprintf ("*.%s|%s (*.%s)", fi->extension (), fi->type (),
+			   fi->extension ());
+	      s += buf;
+	  }
+      }
+  }
+  for (iter.toFirst (); iter.current (); ++iter) {
     FilterInfo *fi = iter.current ();
     if (fi->kind () == FilterInfo::FKind_Export) {
+	if (defaultExt != 0L && 
+	    ::strcmp (fi->extension (), defaultExt) == 0)
+	    continue;
+
       QString buf;
       buf.sprintf ("*.%s|%s (*.%s)", fi->extension (), fi->type (),
 		   fi->extension ());

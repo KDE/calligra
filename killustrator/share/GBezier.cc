@@ -339,7 +339,7 @@ void GBezier::drawHelpLinesForWorkingSegment (Painter& p) {
 }
 
 bool GBezier::contains (const Coord& p) {
-  if (box.contains (p)) {
+  if (rbox.contains (p)) {
     Coord pc = p.transform (iMatrix);
 
     for (unsigned int i = 1; i + 3 < points.count (); i += 3) {
@@ -448,7 +448,11 @@ void GBezier::calcBoundingBox () {
   }
 
   r.enlarge (2); // for the help lines
-  updateBoundingBox (r);
+  //  updateBoundingBox (r);
+  rbox = r.normalize ();
+  QRect pbox = ppoints.boundingRect ();
+  box = Rect (pbox.x (), pbox.y (), pbox.width (), pbox.height ());
+  box = box.transform (tmpMatrix);
 }
 
 void GBezier::removePoint (int idx, bool update) {
@@ -649,6 +653,7 @@ void GBezier::getPath (vector<Coord>& path) {
 }
 
 bool GBezier::intersects (const Rect& r) {
-  return GObject::intersects (r);
+  return r.intersects (rbox);
+  //  return GObject::intersects (r);
 }
 

@@ -44,7 +44,7 @@ public:
   FilterInfo* getFilterForType (const char* ftype);
   QStrList getInstalledFilters ();
   QString importFilters ();
-  QString exportFilters ();
+  QString exportFilters (const char* defaultExt = 0L);
 
 private:
   QString extension (const char *fname);

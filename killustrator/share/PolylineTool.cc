@@ -183,16 +183,22 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	// the polyline is closed, so convert it into a polygon
 	GPolygon* obj = new GPolygon (line->getPoints ());
 	doc->deleteObject (line);
-	doc->insertObject (obj);
-	doc->setLastObject (obj);
-	CreatePolygonCmd *cmd = new CreatePolygonCmd (doc, obj);
-	history->addCommand (cmd);
+	if (obj->isValid ()) {
+	  doc->insertObject (obj);
+	  doc->setLastObject (obj);
+	  CreatePolygonCmd *cmd = new CreatePolygonCmd (doc, obj);
+	  history->addCommand (cmd);
+	}
       }
       else {
 	doc->setLastObject (line);
 	if (newObj) {
-	  CreatePolylineCmd *cmd = new CreatePolylineCmd (doc, line);
-	  history->addCommand (cmd);
+	  if (! line->isValid ())
+	    doc->deleteObject (line);
+	  else {
+	    CreatePolylineCmd *cmd = new CreatePolylineCmd (doc, line);
+	    history->addCommand (cmd);
+	  }
 	}
 	else {
 	  // remove the first point: it's equal to the last point

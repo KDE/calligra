@@ -100,11 +100,15 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     else
       oval->setEndPoint (Coord (xpos, ypos));
     doc->unselectAllObjects ();
-    doc->setLastObject (oval);
 
-    CreateOvalCmd *cmd = new CreateOvalCmd (doc, oval);
-    history->addCommand (cmd);
-
+    if (! oval->isValid ()) 
+      doc->deleteObject (oval);
+    else {
+      doc->setLastObject (oval);
+      
+      CreateOvalCmd *cmd = new CreateOvalCmd (doc, oval);
+      history->addCommand (cmd);
+    }
     oval = NULL;
   }
   else if (e->type () == Event_KeyPress) {

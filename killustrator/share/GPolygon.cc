@@ -535,3 +535,13 @@ void GPolygon::getPath (vector<Coord>& path) {
   }
   path[num] = points.at (0)->transform (tMatrix);
 }
+
+// Check for a valid polygon
+//  (1) more than 3 points
+//  (2) dimension greater or equal 1
+bool GPolygon::isValid () {
+  if (points.count () >= 3) 
+    return GPolyline::isValid ();
+  else
+    return false;
+}

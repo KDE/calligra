@@ -58,6 +58,7 @@ public:
 
   bool isRectangle () const;
   bool isFilled () const;
+  virtual bool isValid ();
 
   // a shortcut for rectangles and squares
   void setEndPoint (const Coord& p);

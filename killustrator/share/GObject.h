@@ -276,6 +276,8 @@ public:
    */
   bool isSelected () const { return sflag; }
 
+  virtual bool isValid () { return true; }
+
   bool gradientFill () const { 
     return fillInfo.fstyle == GObject::FillInfo::GradientFill;
   }
@@ -286,6 +288,7 @@ public:
    * @return The rectangle with the bounding box parameters.
    */
   const Rect& boundingBox () const { return box; }
+  virtual const Rect& redrawBox () const { return box; }
 
   void setLayer (GLayer* l);
   GLayer* getLayer () { return layer; }

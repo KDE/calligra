@@ -491,3 +491,7 @@ void GOval::getPath (vector<Coord>& path) {
   }
 }
 
+bool GOval::isValid () {
+  return (fabs (sPoint.x () - ePoint.x ()) > 1 || 
+	  fabs (sPoint.y () - ePoint.y ()) > 1);
+}

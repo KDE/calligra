@@ -74,11 +74,16 @@ void PolygonTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     obj->setSymmetricPolygon (sPoint, Coord (xpos, ypos), nCorners, 
 			      createConcavePolygon, sharpValue);
 
-    CreatePolygonCmd *cmd = new CreatePolygonCmd (doc, obj);
-    history->addCommand (cmd);
-
-    doc->unselectAllObjects ();
-    doc->setLastObject (obj);
+    if (! obj->isValid ()) {
+      doc->deleteObject (obj);
+    }
+    else {
+      CreatePolygonCmd *cmd = new CreatePolygonCmd (doc, obj);
+      history->addCommand (cmd);
+      
+      doc->unselectAllObjects ();
+      doc->setLastObject (obj);
+    }
     obj = 0L;
   }
   else if (e->type () == Event_KeyPress) {

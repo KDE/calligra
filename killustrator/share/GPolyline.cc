@@ -451,3 +451,19 @@ int GPolyline::containingSegment (float xpos, float ypos) {
   }
   return seg;
 }
+
+// Check for a valid polyline
+//  (1) at least 2 points
+//  (2) dimension greater or equal 1
+
+bool GPolyline::isValid () {
+  if (points.count () > 1) {
+   const Coord& p0 = *points.at (0);
+    for (int i = 1; i< points.count (); i++) {
+      const Coord& p = *points.at (i);
+      if (fabs (p.x () - p0.x ()) > 1 || fabs (p.y () - p0.y ()) > 1)
+	return true;
+    }
+  }
+  return false;
+}

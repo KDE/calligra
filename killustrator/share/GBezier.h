@@ -74,6 +74,7 @@ public:
   virtual void getPath (vector<Coord>& path);
 
   virtual bool intersects (const Rect& r);
+  virtual const Rect& redrawBox () const { return rbox; }
 
 protected:
   void calcBoundingBox ();
@@ -88,6 +89,7 @@ protected:
   void updateGradientShape (QPainter& p);
 
 private:
+  Rect rbox;                // the bounding box for redrawing
   int wSegment;
   QPointArray ppoints; // Points for the computed polygon
   bool closed;

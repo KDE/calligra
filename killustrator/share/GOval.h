@@ -58,6 +58,8 @@ public:
   const Coord& endPoint () const { return ePoint; }
   bool isCircle () const { return circleFlag; }
 
+  virtual bool isValid ();
+
   virtual GObject* copy ();
   virtual GObject* clone (const list<XmlAttribute>& attribs);
 
