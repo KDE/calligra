@@ -2122,7 +2122,8 @@ void KSpreadTable::find( const QPoint &_marker, QString _find, long options )
                 text = cell->text();
                 cellRegion.setTop( row );
                 cellRegion.setLeft( col );
-                dialog.find( text, cellRegion );
+                if ( !dialog.find( text, cellRegion ) )
+                    break;
             }
         }
     }
