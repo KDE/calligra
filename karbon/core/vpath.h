@@ -20,6 +20,10 @@ class VPainter;
 class VSegment;
 
 
+typedef QPtrList<VSegmentList> VSegmentListList;
+typedef QPtrListIterator<VSegmentList> VSegmentListListIterator;
+
+
 class VPath : public VObject
 {
 public:
@@ -95,6 +99,9 @@ public:
 	const VSegment* lastSegment() const
 		{ return m_segmentLists.getLast()->getLast(); }
 
+	const VSegmentListList& segmentLists() const
+		{ return m_segmentLists; }
+
 	/// Applies an affine transformation.
 	virtual void transform( const QWMatrix& m );
 
@@ -109,7 +116,7 @@ public:
 	virtual void accept( VVisitor& visitor );
 
 private:
-	QPtrList<VSegmentList> m_segmentLists;		// list of segmentList
+	VSegmentListList m_segmentLists;		// list of segmentList
 };
 
 #endif

@@ -5,7 +5,7 @@
 #ifndef __VGROUP_H__
 #define __VGROUP_H__
 
-#include "qptrlist.h"
+#include <qptrlist.h>
 
 #include "vobject.h"
 

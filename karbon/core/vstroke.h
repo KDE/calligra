@@ -52,6 +52,9 @@ public:
 	VStroke( float width = 1.0, const VLineCap cap = cap_butt,
 			 const VLineJoin join = join_miter, float miterLimit = 10.0 );
 
+	VStrokeType type() const { return m_type; }
+	void setType( VStrokeType type ) { m_type = type; }
+
 	const VColor& color() const { return m_color; }
 	void setColor( const VColor& color ) { m_color = color; }
 
@@ -73,6 +76,8 @@ public:
 	void load( const QDomElement& element );
 
 private:
+	VStrokeType m_type;
+
 	VColor m_color;
 	float m_lineWidth;
 	VLineCap m_lineCap;

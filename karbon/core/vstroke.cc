@@ -9,7 +9,7 @@
 
 VStroke::VStroke( float width, const VLineCap cap, const VLineJoin join,
 			float miterLimit )
-	: m_lineWidth( width ), m_lineCap( cap ), m_lineJoin( join ),
+	: m_type( stroke_stroke ), m_lineWidth( width ), m_lineCap( cap ), m_lineJoin( join ),
 		m_miterLimit( miterLimit )
 {
 }
