@@ -32,7 +32,7 @@ public:
     StyleStack();
     virtual ~StyleStack();
 
-    enum Marks { PageMark = 0, ObjectMark, ParagraphMark };
+    enum Marks { PageMark = 0, ObjectMark, ParagraphMark, SpanMark };
 
     /**
      * Clears the complete stack.
