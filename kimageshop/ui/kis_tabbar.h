@@ -36,6 +36,23 @@ class KisTabBar : public QWidget
 public:
     KisTabBar( KisView *_view, KisDoc *_doc );
 
+signals:
+    void tabSelected( const QString& _text );
+
+public slots:
+    void slotImageListUpdated();
+    void slotScrollLeft();
+    void slotScrollRight();    
+    void slotScrollFirst();
+    void slotScrollLast();
+
+protected slots:
+    void slotRename( );
+    void slotRemove( );
+    void slotAdd();
+    void slotAutoScroll( ); 
+
+protected:
     /**
      * Adds a tab to the bar and paints it. The tab does not become active.
      * call @ref #setActiveTab to do so.
@@ -59,11 +76,6 @@ public:
      */
     void removeAllTabs();
     
-    void scrollLeft();
-    void scrollRight();    
-    void scrollFirst();
-    void scrollLast();
-    
     /**
      * Highlights this tab.
      */
@@ -79,17 +91,6 @@ public:
      */
     void openPopupMenu( const QPoint &_global );
 
-    void init(const QString & text);
-signals:
-    void tabChanged( const QString& _text );
-   
-protected slots:
-    void slotRename( );
-    void slotRemove( );
-    void slotAdd();
-    void slotAutoScroll( ); 
-
-protected:
     virtual void paintEvent ( QPaintEvent* _ev );
     virtual void mousePressEvent ( QMouseEvent* _ev );
     virtual void mouseReleaseEvent ( QMouseEvent* _ev );
@@ -101,7 +102,7 @@ protected:
     
     void openPopupMenu( QPoint &_global );
     
-    KisView  *m_pView;
+    KisView *m_pView;
     KisDoc  *m_pDoc;
     
     enum { autoScrollNo = 0, autoScrollLeft, autoScrollRight };

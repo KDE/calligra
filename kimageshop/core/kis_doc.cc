@@ -71,6 +71,7 @@ bool KisDoc::initDoc()
   img->setLayerOpacity(255);
   img->compositeImage(QRect(0, 0, 512, 512));
   
+  emit imageListUpdated();
   return true;
 }
 
@@ -98,6 +99,8 @@ void KisDoc::setCurrentImage(KisImage *img)
 		    this, SLOT( slotImageUpdated( const QRect& ) ) );
   QObject::connect( m_pCurrent, SIGNAL( layersUpdated() ),
 		    this, SLOT( slotLayersUpdated() ) );
+  emit imageListUpdated();
+  emit layersUpdated();
   emit docUpdated();
 }
 
@@ -182,7 +185,6 @@ KisImage* KisDoc::newImage(const QString& _name, int w, int h, int /*colorModel*
   KisImage *img = new KisImage( _name, w, h );
   m_Images.append(img);
   setCurrentImage(img);
-  emit imageAdded(img->name());
   return img;
 }
 
@@ -190,6 +192,8 @@ void KisDoc::removeImage( KisImage *img )
 {
   m_Images.remove(img);
   delete img;
+
+  setCurrentImage(m_Images.last()); // #### FIXME
 }
 
 void KisDoc::slotRemoveImage( const QString& _name )

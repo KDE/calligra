@@ -107,7 +107,7 @@ public:
     QString currentImage();
 
     void setCurrentImage(KisImage *img);
-    void setCurrentImage(const QString& _name);
+    
 
     QStringList images();
     
@@ -121,6 +121,7 @@ public slots:
   void slotLayersUpdated();
 
   void slotNewImage();
+  void setCurrentImage(const QString& _name);
 
   void slotRemoveImage( const QString& name );
  
@@ -128,7 +129,7 @@ signals:
   void docUpdated();
   void docUpdated( const QRect& rect );
   void layersUpdated();
-  void imageAdded(const QString& name);
+  void imageListUpdated();
     
 protected:
   virtual QString configFile() const;

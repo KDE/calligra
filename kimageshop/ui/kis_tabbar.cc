@@ -60,10 +60,7 @@ void KisTabBar::removeTab( const QString& _text )
 {
   int i = tabsList.findIndex( _text );
   if ( i == -1 )
-    {
-      printf("ERROR: KImageShopImage '%s' not found\n", _text.ascii() );
       return;
-    }
   
   if ( activeTab == i + 1 )
     activeTab = i;
@@ -117,7 +114,7 @@ void KisTabBar::moveTab( int _from, int _to, bool _before )
 }
 
 
-void KisTabBar::scrollLeft()
+void KisTabBar::slotScrollLeft()
 {
   if ( tabsList.count() == 0 )
     return;
@@ -129,7 +126,7 @@ void KisTabBar::scrollLeft()
   repaint( false );
 }
 
-void KisTabBar::scrollRight()
+void KisTabBar::slotScrollRight()
 {
   if ( tabsList.count() == 0 )
     return;
@@ -144,7 +141,7 @@ void KisTabBar::scrollRight()
   repaint( false );
 }
 
-void KisTabBar::scrollFirst()
+void KisTabBar::slotScrollFirst()
 {
   if ( tabsList.count() == 0 )
     return;
@@ -156,7 +153,7 @@ void KisTabBar::scrollFirst()
   repaint( false );
 }
 
-void KisTabBar::scrollLast()
+void KisTabBar::slotScrollLast()
 {
   if ( tabsList.count() == 0 )
     return;
@@ -200,8 +197,6 @@ void KisTabBar::setActiveTab( const QString& _text )
   
   activeTab = i + 1;
   repaint( false );
-  
-  emit tabChanged( _text );
 }
 
 void KisTabBar::slotRemove( )
@@ -211,10 +206,34 @@ void KisTabBar::slotRemove( )
 				  i18n("Yes"), i18n("No"), QString::null, 1, 1);
   if ( ret == 0 ) 
     {
-      // FIXME
+      int i = 1;
+      QStringList::Iterator it;
+      for ( it = tabsList.begin(); it != tabsList.end(); ++it )
+	{
+	  if (i == activeTab)
+	    m_pDoc->slotRemoveImage(*it);
+	  i++;
+	}
     }
 }
 
+void KisTabBar::slotImageListUpdated()
+{
+  // clear list
+  removeAllTabs();
+
+  // populate list
+  QStringList lst = m_pDoc->images();
+  if (!lst.isEmpty())
+    {
+      QStringList::Iterator it;
+      
+      for ( it = lst.begin(); it != lst.end(); ++it )
+	addTab(*it);
+    }
+  // set active
+  setActiveTab(m_pDoc->currentImage());
+}
 
 void KisTabBar::slotRename()
 {
@@ -416,7 +435,7 @@ void KisTabBar::mousePressEvent( QMouseEvent* _ev )
     if ( activeTab != old_active )
     {
       repaint( false );
-      emit tabChanged( active_text );
+      emit tabSelected( active_text );
     }
     
     if ( _ev->button() == LeftButton )
@@ -460,11 +479,11 @@ void KisTabBar::slotAutoScroll( )
   if ( m_autoScroll == autoScrollLeft && leftTab > 1 )
     {
       m_moveTab = leftTab - 1;
-	scrollLeft();
+	slotScrollLeft();
     }
   else if ( m_autoScroll == autoScrollRight )
     {
-      scrollRight();
+      slotScrollRight();
     }
   if ( leftTab <= 1 )
     {
@@ -485,7 +504,7 @@ void KisTabBar::mouseMoveEvent( QMouseEvent* _ev )
     {
       m_autoScroll = autoScrollLeft;
       m_moveTab = leftTab - 1;
-      scrollLeft();
+      slotScrollLeft();
       m_pAutoScrollTimer->start( 400 );
     }
   else if ( _ev->pos().x() > size().width() )
@@ -501,7 +520,7 @@ void KisTabBar::mouseMoveEvent( QMouseEvent* _ev )
         {
 	  m_autoScroll = autoScrollRight;
 	  m_moveTab = leftTab;
-	  scrollRight();
+	  slotScrollRight();
 	  m_pAutoScrollTimer->start( 400 );
 	}
     }

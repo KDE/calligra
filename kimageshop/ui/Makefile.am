@@ -7,7 +7,8 @@ libkisui_la_SOURCES = colorframe.cc colorslider.cc \
 	kis_dlg_gradient.cc kis_dlg_brush.cc brusheswidget.cc \
 	kis_dlg_color.cc kis_dlg_gradienteditor.cc gradientview.cc \
 	kis_dlg_new.cc kis_dlg_preferences.cc layerview.cc channelview.cc \
-	kis_dlg_layer.cc kfloatingdialog.cc kfloatingtabdialog.cc kfloatingdialogowner.cc
+	kis_dlg_layer.cc kfloatingdialog.cc kfloatingtabdialog.cc kfloatingdialogowner.cc \
+	kis_tabbar.cc
 
 libkisui_la_METASOURCES = AUTO
 

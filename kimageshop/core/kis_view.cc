@@ -131,41 +131,31 @@ void KisView::setupTabBar()
 {
   // tabbar
   m_pTabBar = new KisTabBar(this, m_pDoc);
+  m_pTabBar->slotImageListUpdated();
 
-  QStringList images = m_pDoc->images();
-  if (!images.isEmpty())
-    {
-      QStringList::Iterator it;
+  QObject::connect( m_pTabBar, SIGNAL( tabSelected( const QString& ) ),
+		    m_pDoc, SLOT( setCurrentImage( const QString& ) ) );
 
-      for ( it = images.begin(); it != images.end(); ++it )
-	  m_pTabBar->addTab(*it);
-
-      m_pTabBar->setActiveTab(*images.begin());
-    }
-
-  QObject::connect( m_pTabBar, SIGNAL( tabChanged( const QString& ) ),
-		    this, SLOT( slotTabSelected( const QString& ) ) );
-
-  QObject::connect( m_pDoc, SIGNAL( imageAdded( const QString& ) ),
-		    this, SLOT( slotImageAdded( const QString& ) ) );
+  QObject::connect( m_pDoc, SIGNAL( imageListUpdated() ),
+		    m_pTabBar, SLOT( slotImageListUpdated( ) ) );
 
  
   // tabbar control buttons
   m_pTabFirst = new QPushButton( this );
   m_pTabFirst->setPixmap( QPixmap( KISBarIcon( "tab_first" ) ) );
-  QObject::connect( m_pTabFirst, SIGNAL( clicked() ), this, SLOT( slotScrollToFirstTab() ) );
+  QObject::connect( m_pTabFirst, SIGNAL( clicked() ), m_pTabBar, SLOT( slotScrollFirst() ) );
 
   m_pTabLeft = new QPushButton( this );
   m_pTabLeft->setPixmap( QPixmap( KISBarIcon( "tab_left" ) ) );
-  QObject::connect( m_pTabLeft, SIGNAL( clicked() ), this, SLOT( slotScrollToLeftTab() ) );
+  QObject::connect( m_pTabLeft, SIGNAL( clicked() ), m_pTabBar, SLOT( slotScrollLeft() ) );
 
   m_pTabRight = new QPushButton( this );
   m_pTabRight->setPixmap( QPixmap( KISBarIcon( "tab_right" ) ) );
-  QObject::connect( m_pTabRight, SIGNAL( clicked() ), this, SLOT( slotScrollToRightTab() ) );
+  QObject::connect( m_pTabRight, SIGNAL( clicked() ), m_pTabBar, SLOT( slotScrollRight() ) );
 
   m_pTabLast = new QPushButton( this );
   m_pTabLast->setPixmap( QPixmap( KISBarIcon( "tab_last" ) ) );
-  QObject::connect( m_pTabLast, SIGNAL( clicked() ), this, SLOT( slotScrollToLastTab() ) );
+  QObject::connect( m_pTabLast, SIGNAL( clicked() ), m_pTabBar, SLOT( slotScrollLast() ) );
 }
 
 void KisView::setupTools()
@@ -337,12 +327,6 @@ void KisView::slotTabSelected(const QString& name)
 {
   m_pDoc->setCurrentImage(name);
   resizeEvent(0L);
-}
-
-void KisView::slotImageAdded(const QString& name)
-{
-  m_pTabBar->addTab(name);
-  m_pTabBar->setActiveTab(name);
 }
 
 void KisView::resizeEvent(QResizeEvent*)
@@ -816,26 +800,6 @@ void KisView::slotSetFGColor(const KisColor& c)
 void KisView::slotSetBGColor(const KisColor& c)
 {
   m_bg = c;
-}
-
-void KisView::slotScrollToFirstTab()
-{
-  m_pTabBar->scrollFirst();
-}
-
-void KisView::slotScrollToLeftTab()
-{
-  m_pTabBar->scrollLeft();
-}
-
-void KisView::slotScrollToRightTab()
-{
-  m_pTabBar->scrollRight();
-}
-
-void KisView::slotScrollToLastTab()
-{
-  m_pTabBar->scrollLast();
 }
 
 #include "kis_view.moc"

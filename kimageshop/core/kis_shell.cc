@@ -74,7 +74,7 @@ void KisShell::slotFileNew()
 
 void KisShell::slotFileOpen()
 {
-  QString filter = "*.kis|KImageShop picture\n" + KImageIO::pattern( KImageIO::Reading );
+  QString filter =  KImageIO::pattern( KImageIO::Reading ) + "*.kis|KImageShop picture\n";
 
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
   
@@ -89,6 +89,42 @@ void KisShell::slotFileOpen()
       tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
       QMessageBox::critical( 0L, i18n( "IO Error" ), tmp, i18n( "OK" ) );
     }
+}
+
+void KisShell::slotFileSave()
+{
+  // ##### FIXME
+  slotFileSaveAs();
+}
+
+void KisShell::slotFileSaveAs()
+{
+  QString filter =  KImageIO::pattern( KImageIO::Reading ) + "*.kis|KImageShop picture\n";
+
+  QString file = KFileDialog::getSaveFileName( getenv( "HOME" ), filter );
+  
+  if ( file.isNull() )
+    return;
+  
+  KisDoc* doc = (KisDoc*)document();
+  
+  if (!doc->saveCurrentImage( file ))
+    {
+      QString tmp;
+      tmp.sprintf( i18n( "Could not save\n%s" ), file.data() );
+      QMessageBox::critical( 0L, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+    }
+}
+
+void KisShell::slotFilePrint()
+{
+  // TODO
+}
+
+void KisShell::slotFileClose()
+{
+  KisDoc* doc = (KisDoc*)document();
+  doc->slotRemoveImage( doc->currentImage() );
 }
 
 #include "kis_shell.moc"
