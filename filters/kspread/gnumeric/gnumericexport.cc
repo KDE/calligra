@@ -799,11 +799,15 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     KSpreadView * view = static_cast<KSpreadView*>( ksdoc->views().getFirst());
     KSpreadCanvas * canvas;
-
+    QString activeTableName;
     if (view)
+    {
         canvas = view->canvasWidget();
-
-    for (table = ksdoc->map()->firstTable(); table != 0L; table =ksdoc->map()->nextTable())
+        activeTableName =  canvas->activeTable()->tableName();
+    }
+    int i = 0;
+    int indexActiveTable=0;
+    for (table = ksdoc->map()->firstTable(); table != 0L; table =ksdoc->map()->nextTable(), i++)
     {
         if ( table->print()->paperFormat()==PG_CUSTOM )
         {
@@ -831,6 +835,9 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
          */
 
         tmp = gnumeric_doc.createElement("gmr:Name");
+        if ( table->tableName()==activeTableName )
+            indexActiveTable = i;
+
         tmp.appendChild(gnumeric_doc.createTextNode(table->tableName()));
 
         sheet.appendChild(tmp);
@@ -1137,6 +1144,9 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
         if (mergedCells)
             sheet.appendChild(merged);
     }
+    QDomElement uidata = gnumeric_doc.createElement("gmr:UIData");
+    uidata.setAttribute( "SelectedTab", indexActiveTable );
+    workbook.appendChild(uidata);
 
     str = gnumeric_doc.toString ();
 
