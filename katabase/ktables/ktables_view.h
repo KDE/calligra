@@ -60,7 +60,7 @@ public:
   ~KtablesView();
 
   virtual void cleanUp();
-  CORBA::Boolean printDlg();
+  bool printDlg();
 
   // IDL slots
   void cutSelection();
@@ -97,20 +97,20 @@ protected:
 	OpenPartsUI::Menu_var    m_vMenuHelp;
 	OpenPartsUI::ToolBar_var m_vToolBarQuery;
 	
-	CORBA::Long m_idButtonQuery_server;
+	long int m_idButtonQuery_server;
 	
-	CORBA::Long m_idMenuEdit_cut;
-	CORBA::Long m_idMenuEdit_copy;
-	CORBA::Long m_idMenuEdit_paste;
-	CORBA::Long m_idMenuEdit_insert;
-	CORBA::Long m_idMenuEdit_remove;
-	CORBA::Long m_idMenuEdit_commit;
-	CORBA::Long m_idMenuEdit_discard;
+	long int m_idMenuEdit_cut;
+	long int m_idMenuEdit_copy;
+	long int m_idMenuEdit_paste;
+	long int m_idMenuEdit_insert;
+	long int m_idMenuEdit_remove;
+	long int m_idMenuEdit_commit;
+	long int m_idMenuEdit_discard;
 	
-	CORBA::Long m_idMenuQuery_server;
-	CORBA::Long m_idMenuQuery_tables;
-	CORBA::Long m_idMenuQuery_query;
-	CORBA::Long m_idMenuQuery_tuples;
+	long int m_idMenuQuery_server;
+	long int m_idMenuQuery_tables;
+	long int m_idMenuQuery_query;
+	long int m_idMenuQuery_tuples;
 	
 	KtablesDoc    *m_pDoc;
 	KtablesServer *_selectServer;

@@ -63,7 +63,7 @@ class KtablesDoc :  public QObject,
   virtual ~KtablesDoc();
 
   virtual void cleanUp();
-  virtual CORBA::Boolean initDoc();
+  virtual bool initDoc();
   virtual KOffice::MainWindow_ptr createMainWindow();
 
   virtual KtablesView *createTableView(QWidget *p=0);
@@ -71,7 +71,7 @@ class KtablesDoc :  public QObject,
   virtual void viewList( OpenParts::Document::ViewList*& _list );
   virtual int viewCount();
   virtual bool isEmpty();
-  virtual void draw(QPaintDevice *, CORBA::Long, CORBA::Long, CORBA::Float) { };
+  virtual void draw(QPaintDevice *, long int, long int, float) { };
 
   virtual void addView(KtablesView *);
   virtual void removeView(KtablesView *);
@@ -84,7 +84,7 @@ class KtablesDoc :  public QObject,
 	void title(const char* title);
 	const QString& getTitle() const;
 	
-  char *mimeType() { return  CORBA::string_dup( "application/x-ktables" ); };
+  QCString mimeType() { return "application/x-ktables"; };
   virtual bool hasToWriteMultipart() { return false; };
   virtual bool loadXML( KOMLParser& parser, KOStore::Store_ptr _store );
   virtual bool save( ostream& out,const char * /* format */ );

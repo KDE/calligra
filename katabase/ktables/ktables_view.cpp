@@ -319,14 +319,14 @@ bool KtablesView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr p_factor
     return true;
   }
 
-  CORBA::WString_var wstr;
+  QString wstr;
 
   m_vToolBarQuery = p_factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarQuery->setFullWidth(false);
 
   OpenPartsUI::Pixmap_var pix;
   pix = OPICON( "network_settings" );
-  m_idButtonQuery_server = m_vToolBarQuery->insertButton2( pix,1,SIGNAL(clicked()),this,"selectServer",true,(wstr = Q2C(i18n( "Server"))),-1 );
+  m_idButtonQuery_server = m_vToolBarQuery->insertButton2( pix,1,SIGNAL(clicked()),this,"selectServer",true,(wstr = i18n( "Server")),-1 );
 
   return true;
 }
@@ -344,59 +344,59 @@ bool KtablesView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr p_mbar )
     return true;
   }
 
-  CORBA::WString_var text;
+  QString text;
   OpenPartsUI::Pixmap_var pix;
 
   // Edit menu
-  text = Q2C( i18n( "&Edit" ) );
+  text = i18n( "&Edit" ) ;
   p_mbar->insertMenu( text, m_vMenuEdit, -1, -1 );
 
-  text = Q2C( i18n( "Cu&t" ) );
+  text = i18n( "Cu&t" );
   pix = OPICON( "editcut" );
   m_idMenuEdit_cut = m_vMenuEdit->insertItem6( pix, text, this, "cutSelection", stdAccel.cut(), -1, -1 );
 
-  text = Q2C( i18n( "&Copy" ) );
+  text = i18n( "&Copy" ) ;
   pix = OPICON( "editcopy" );
   m_idMenuEdit_copy = m_vMenuEdit->insertItem6( pix, text,this, "copySelection", stdAccel.copy(), -1, -1 );
 
-  text = Q2C( i18n( "&Paste" ) );
+  text = i18n( "&Paste" ) ;
   pix = OPICON( "editpaste" );
   m_idMenuEdit_paste = m_vMenuEdit->insertItem6( pix, text, this, "paste", stdAccel.paste(), -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  text = Q2C(i18n("&Insert row"));
+  text = i18n("&Insert row");
   m_idMenuEdit_insert = m_vMenuEdit->insertItem4( text, this, "insertRow", 0, -1, -1 );
 
-  text = Q2C(i18n("&Delete row"));
+  text = i18n("&Delete row");
   m_idMenuEdit_remove = m_vMenuEdit->insertItem4( text, this, "removeRow", 0, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  text = Q2C(i18n("Co&mmit edits"));
+  text = i18n("Co&mmit edits");
   m_idMenuEdit_commit = m_vMenuEdit->insertItem4( text, this, "commit", 0, -1, -1 );
 
-  text = Q2C( i18n( "Di&scard edits" ) );
+  text = i18n( "Di&scard edits" ) ;
   m_idMenuEdit_discard = m_vMenuEdit->insertItem4( text, this, "reScanTable", 0, -1, -1 );
 
   // Query menu
-  text = Q2C( i18n( "&Query" ) );
+  text = i18n( "&Query" ) ;
   p_mbar->insertMenu( text, m_vMenuQuery, -1, -1 );
 	
-  text = Q2C( i18n( "&Connect..." ) );
+  text = i18n( "&Connect..." ) ;
   m_idMenuQuery_server = m_vMenuQuery->insertItem4( text, this, "selectServer", 0, -1, -1 );
 
   m_vMenuQuery->insertSeparator( -1 );
 
-  text = Q2C( i18n( "Select &Tables" ) );
+  text = i18n( "Select &Tables" ) ;
   m_idMenuQuery_tables = m_vMenuQuery->insertItem4( text, this, "selectTables", 0, -1, -1 );
 
-  text = Q2C( i18n( "Set &Criteria" ) );
+  text = i18n( "Set &Criteria" ) ;
   m_idMenuQuery_query = m_vMenuQuery->insertItem4( text, this, "selectQuery", 0, -1, -1 );
 
   m_vMenuQuery->insertSeparator( -1 );
 
-  text = Q2C( i18n( "&Fetch tuples" ) );
+  text = i18n( "&Fetch tuples" ) ;
   m_idMenuQuery_tuples = m_vMenuQuery->insertItem4( text, this, "setupView", 0, -1, -1 );
 
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_insert, false  );
@@ -411,7 +411,7 @@ bool KtablesView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr p_mbar )
   return true;
 }
 
-CORBA::Boolean
+bool
 KtablesView::printDlg()
 {
   QPrinter prt;

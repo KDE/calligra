@@ -72,7 +72,7 @@ KtablesDoc::cleanUp()
   KoDocument::cleanUp();
 }
 
-CORBA::Boolean
+bool
 KtablesDoc::initDoc()
 {
   return true;
@@ -189,13 +189,13 @@ KtablesDoc::slotUpdateAllViews(KtablesView *p_sender)
 void
 KtablesDoc::viewList(OpenParts::Document::ViewList*& _list )
 {
-  _list->length( m_lstViews.count() );
-
   int i = 0;
   QListIterator<OPViewIf> it( m_lstViews );
+
+  _list->clear();
   for( ; it.current(); ++it )
   {
-    (*_list)[i++] = OpenParts::View::_duplicate( it.current() );
+    _list->append( OpenParts::View::_duplicate( it.current() ) );
   }
 }
 
