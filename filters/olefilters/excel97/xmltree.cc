@@ -303,8 +303,16 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 
 		pen.setAttribute("width", qtpen.width());
 		pen.setAttribute("style", qtpen.style());
-		pen.setAttribute("color", ((xfs[xf]->sideBColor ) & 0x7f) == 64 ?
+		if((xfs[xf]->sideBColor) & 0x7f > 65)
+		{
+			kdDebug() << "Weird workaround needed for this problem! WEIRD!" << endl;
+			pen.setAttribute("color", "#000000");
+		}
+		else
+		{
+			pen.setAttribute("color", ((xfs[xf]->sideBColor ) & 0x7f) == 64 ?
 				"#000000" : palette[(xfs[xf]->sideBColor  ) & 0x7f]);
+		}
 		/*palette[xfs[xf]->sideBColor & 0x7f]);*/
 		border.appendChild(pen);
 		f.appendChild(border);
