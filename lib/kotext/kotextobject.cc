@@ -85,6 +85,9 @@ void KoTextObject::init()
     // Apply default style to initial paragraph
     if ( m_lastFormatted && m_defaultStyle )
         m_lastFormatted->applyStyle( m_defaultStyle );
+
+    connect( this, SIGNAL(paragraphModified( KoTextParag* )), this, SLOT(slotParagraphModified(KoTextParag *)));
+    connect( this, SIGNAL(paragraphCreated( KoTextParag* )), this, SLOT(slotParagraphCreated(KoTextParag *)));
 }
 
 KoTextObject::~KoTextObject()
@@ -103,6 +106,19 @@ int KoTextObject::availableHeight() const
     Q_ASSERT( m_availableHeight != -1 );
     return m_availableHeight;
 }
+
+void KoTextObject::slotParagraphModified(KoTextParag *parag)
+{
+    if (parag )
+        parag->string()->setNeedsSpellCheck( true );
+}
+
+void KoTextObject::slotParagraphCreated(KoTextParag * parag)
+{
+    if (parag )
+        parag->string()->setNeedsSpellCheck( true );
+}
+
 
 int KoTextObject::docFontSize( KoTextFormat * format ) const
 {

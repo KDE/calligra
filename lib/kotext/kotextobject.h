@@ -454,7 +454,8 @@ private slots:
      * in the case of undoing a floating-frame insertion, we need to delete
      * the frame first) */
     void slotAfterUndoRedo();
-
+    void slotParagraphModified(KoTextParag *);
+    void slotParagraphCreated(KoTextParag *);
 private:
     void init();
 
