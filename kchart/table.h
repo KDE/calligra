@@ -39,7 +39,7 @@ public:
 public slots:
     void showText( int row, int col, QString s) { setText( row, col, s); }
     void nextInput();
-    void moveInput( int row, int col, int initialization );
+    void moveInput( int row, int col );
     void makeVisible( int row, int col );
 
 signals:        
@@ -67,6 +67,7 @@ private:
     QLineEdit *input;
     int inRow;
     int inCol;
+    bool inCol_inRow_initialization;
     void placeInput();
 
     friend class Sheet; //###
