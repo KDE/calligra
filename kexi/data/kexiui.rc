@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="101">
+<kpartgui name="kexi" version="102">
 <MenuBar noMerge="0">
   <Menu name="file" noMerge="1">
     <text>&amp;Project</text>
@@ -41,16 +41,26 @@
   <Menu name="view">
     <text>&amp;View</text>
     <Action name="view_viewmode"/>
+    <Action name="view_next_window"/>
+    <Action name="view_previous_window"/>
+    <Action name="view_first_window"/>
+    <Action name="view_last_window"/>
+    <Action name="file_switchto"/>
     <Separator/>
-    <Action name="show_nav"/>
-    <Action name="show_contexthelp"/>
+    <!--Action name="show_nav"/>
+    <Action name="show_contexthelp"/-->
   </Menu>
   
   <Menu name="create">
     <text>&amp;Create</text>
   </Menu>
 
-  <Menu name="window" noMerge="1">
+  <Menu name="window">
+    <text>&amp;Window</text>
+    <DefineGroup name="window_operations"/>
+    <Merge/>
+  </Menu>
+  <!-- Menu name="window">
     <text>&amp;Window</text>
     <Separator/>
     <Action name="window_next"/>
@@ -58,17 +68,23 @@
     <Action name="window_switchto"/>
     <Separator/>
     <DefineGroup name="window_list"/>
-  </Menu>
+  </Menu -->
   
   <Menu name="settings" noMerge="1">
     <text>&amp;Settings</text>
     <Action name="options_show_menubar"/>
     <Action name="options_show_toolbar"/>
-    <Merge name="StandardToolBarMenuHandler" />
+    <Merge name="StandardToolBarMenuHandler"/>
     <Merge name="KMDIViewActions"/>
     <MergeLocal name="show_toolbar_merge"/>
     <Action name="options_show_statusbar"/>
     <MergeLocal name="show_merge"/>
+    <Separator/>
+    <Menu name="options_show_other">
+      <Text>&amp;Other</Text>
+      <Action name="options_show_nav"/>
+      <Action name="options_show_contexthelp"/>
+    </Menu>
     <Separator/>
     <Action name="options_configure_keybinding"/>
     <Action name="options_configure_toolbars"/>

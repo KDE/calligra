@@ -33,7 +33,7 @@ namespace KexiDB {
  Change these defaults in you Driver subclass
  constructor, if needed.
 */
-class DriverBehaviour
+class KEXI_DB_EXPORT DriverBehaviour
 {
 	public:
 		DriverBehaviour();

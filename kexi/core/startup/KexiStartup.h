@@ -29,7 +29,7 @@ namespace Kexi
 {
 	/*! Detects filename by mime type and returns project data, if it can be detected,
 	 otherwise - NULL. \a parent is passed as parent for potential error message boxes */
-	extern KexiProjectData* detectProjectData( const QString &fname, QWidget *parent = 0 );
+	KEXICORE_EXPORT KexiProjectData* detectProjectData( const QString &fname, QWidget *parent = 0 );
 }
 
 #endif

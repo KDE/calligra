@@ -39,15 +39,19 @@ public :
 	typedef enum Mode { Opening = 1, SavingFileBasedDB = 2, SavingServerBasedDB = 3 };
 	
 	KexiStartupFileDialog(
-		const QString& startDir,
-		KexiStartupFileDialog::Mode mode,
+		const QString& startDir, Mode mode,
 		QWidget *parent=0, const char *name=0);
 		
 	void setMode(KexiStartupFileDialog::Mode mode);
 	
 	KURL currentURL();
 
-	KURLComboBox *locationWidget() { return locationEdit; }
+#ifndef Q_WS_WIN
+	KURLComboBox *locationWidget() const;
+#endif
+	//! just sets locationWidget()->setCurrentText(fn)
+	//! (and something similar on win32)
+	void setLocationText(const QString& fn);
 	
 	/*! \return true if the current URL meets requiec constraints (eg. exists);
 	 shows appropriate msg box if not */

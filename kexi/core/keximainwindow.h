@@ -43,7 +43,7 @@ typedef QIntDict<KexiDialogBase> WidgetDict;
 /**
  * @short Kexi's main window
  */
-class KexiMainWindow : public KMdiMainFrm
+class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 {
 	Q_OBJECT
 

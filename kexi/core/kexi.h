@@ -31,31 +31,31 @@
 namespace Kexi
 {
 	//! A set of known connections
-	extern KexiDBConnectionSet connset;
+	KEXICORE_EXPORT KexiDBConnectionSet& connset();
 	
 	//! A set avaiulable of project infos
-	extern KexiProjectSet recentProjects;
+	KEXICORE_EXPORT KexiProjectSet& recentProjects();
 	
 	//! shared driver manager
-	extern KexiDB::DriverManager driverManager;
+	KEXICORE_EXPORT KexiDB::DriverManager& driverManager();
 	
 	//! shared part manager
-	extern KexiPart::Manager partManager;
+	KEXICORE_EXPORT KexiPart::Manager& partManager();
 
 	//some utils
 	
 	//! \return valid filename based on \a s
-	extern QString string2FileName(const QString &s);
+	KEXICORE_EXPORT QString string2FileName(const QString &s);
 	
 	/*! always returns valid identifier based on \a s.
 	 Non alphanumeric chars (or spaces) are replaced with '_'.
 	 If a number char is at the beginning, '_' is added at start.
 	 Empty strings are not changed.
 	*/
-	extern QString string2Identifier(const QString &s);
+	KEXICORE_EXPORT QString string2Identifier(const QString &s);
 	
 	//! class validates input for identifier name
-	class IdentifierValidator : public QValidator
+	class KEXICORE_EXPORT IdentifierValidator : public QValidator
 	{
 		public:
 			IdentifierValidator(QObject * parent, const char * name = 0);

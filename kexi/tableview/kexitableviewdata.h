@@ -38,7 +38,7 @@ class QuerySchema;
 }
 
 /*! Single column definition. */
-class KexiTableViewColumn {
+class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 	public:
 		KexiTableViewColumn();
 		virtual ~KexiTableViewColumn();
@@ -61,7 +61,7 @@ class KexiTableViewColumn {
 //		Private *d;
 };
 
-class KexiDBTableViewColumn : public KexiTableViewColumn {
+class KEXIDATATABLE_EXPORT KexiDBTableViewColumn : public KexiTableViewColumn {
 	public:
 		KexiDBTableViewColumn();
 		KexiDBTableViewColumn(const KexiDB::QuerySchema &query, KexiDB::Field& field);

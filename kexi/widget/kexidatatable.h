@@ -11,7 +11,7 @@ namespace KexiDB
 	class Cursor;
 }
 
-class KexiDataTable : public KexiDialogBase
+class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 {
 	Q_OBJECT
 

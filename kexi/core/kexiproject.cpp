@@ -47,7 +47,7 @@ KexiProject::KexiProject(KexiProjectData *pdata)
 //js	m_partManager = new KexiPart::Manager(this);
 
 //TODO: partmanager is outside project, so can be initialised just once:
-	Kexi::partManager.lookup();
+	Kexi::partManager().lookup();
 	
 	m_connection = 0;
 }
@@ -122,9 +122,9 @@ KexiProject::createConnection()
 	closeConnection();//for sanity
 	clearError();
 	
-	KexiDB::Driver *driver = Kexi::driverManager.driver(m_data->connectionData()->driverName);
+	KexiDB::Driver *driver = Kexi::driverManager().driver(m_data->connectionData()->driverName);
 	if(!driver) {
-		setError(&Kexi::driverManager);
+		setError(&Kexi::driverManager());
 		return false;
 	}
 
@@ -164,7 +164,7 @@ KexiProject::initProject()
 //	emit dbAvailable();
 	kdDebug() << "KexiProject::open(): checking project parts..." << endl;
 	
-	Kexi::partManager.checkProject(m_connection);
+	Kexi::partManager().checkProject(m_connection);
 }
 
 bool
@@ -209,15 +209,15 @@ KexiProject::items(KexiPart::Info *i)
 
 void KexiProject::setError(int code, const QString &msg )
 {
-	KexiDB::Object::setError(code, msg);
-	if (KexiDB::Object::error())
+	Object::setError(code, msg);
+	if (Object::error())
 		emit error(m_error_title, this);
 }
 
 void KexiProject::setError( const QString &msg )
 {
-	KexiDB::Object::setError(msg);
-	if (KexiDB::Object::error())
+	Object::setError(msg);
+	if (Object::error())
 		emit error(m_error_title, this);
 }
 
@@ -225,8 +225,8 @@ void KexiProject::setError( KexiDB::Object *obj )
 {
 	if (!obj)
 		return;
-	KexiDB::Object::setError(obj);
-	if (KexiDB::Object::error())
+	Object::setError(obj);
+	if (Object::error())
 		emit error(m_error_title, obj);
 }
 

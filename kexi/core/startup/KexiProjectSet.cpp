@@ -43,9 +43,9 @@ KexiProjectSet::KexiProjectSet()
 KexiProjectSet::KexiProjectSet(KexiDB::ConnectionData &conndata)
 : d(new KexiProjectSetPrivate())
 {
-	KexiDB::Driver *drv = Kexi::driverManager.driver(conndata.driverName);
+	KexiDB::Driver *drv = Kexi::driverManager().driver(conndata.driverName);
 	if (!drv) {
-		setError(&Kexi::driverManager);
+		setError(&Kexi::driverManager());
 		return;
 	}
 	KexiDB::Connection *conn = drv->createConnection(conndata);

@@ -33,7 +33,7 @@ namespace KexiPart
 /**
  * the main class for kexi frontend parts like tables, queries, relations
  */
-class Part : public QObject
+class KEXICORE_EXPORT Part : public QObject
 {
 	Q_OBJECT
 

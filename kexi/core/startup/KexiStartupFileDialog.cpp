@@ -29,7 +29,7 @@
 #include <kurlcombobox.h>
 
 KexiStartupFileDialog::KexiStartupFileDialog(
-		const QString& startDir, KexiStartupFileDialog::Mode mode,
+		const QString& startDir, Mode mode,
 		QWidget *parent, const char *name)
 	:  KFileDialog(startDir, "", parent, name, 0)
 {
@@ -56,7 +56,9 @@ KexiStartupFileDialog::KexiStartupFileDialog(
 	}
 	delete l;
 	
+#ifndef Q_WS_WIN
 	setFocusProxy( locationWidget() );
+#endif
 }
 	
 void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode)
@@ -117,7 +119,12 @@ KURL KexiStartupFileDialog::currentURL()
 	setResult( QDialog::Accepted ); // selectedURL tests for it
 	
 //	KURL url = KFileDialog::selectedURL();
+#ifdef Q_WS_WIN
+	QString path = selectedFile();
+	//js @todo
+#else
 	QString path = locationEdit->currentText().stripWhiteSpace(); //url.path().stripWhiteSpace();
+#endif
 	kdDebug() << "KFileDialog::selectedURL() == " << KFileDialog::selectedURL().path() <<endl;
 	
 	if (!currentFilter().isEmpty()) {
@@ -192,6 +199,23 @@ void KexiStartupFileDialog::reject()
 	kdDebug() << "KexiStartupFileDialog: reject!" << endl;
 	emit cancelClicked();
 }
+
+#ifndef Q_WS_WIN
+KURLComboBox *KexiStartupFileDialog::locationWidget() const
+{
+	return locationEdit;
+}
+#endif
+
+void KexiStartupFileDialog::setLocationText(const QString& fn)
+{
+#ifdef Q_WS_WIN
+	//js @todo
+#else
+	locationWidget()->setCurrentText(fn);
+#endif
+}
+
 
 #include "KexiStartupFileDialog.moc"
 

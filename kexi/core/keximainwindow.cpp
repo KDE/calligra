@@ -209,26 +209,26 @@ void KexiMainWindow::startup(KexiProjectData *projectData)
 			conndata->hostName = "myhost.org";
 			conndata->userName = "otheruser";
 			conndata->port = 53121;
-		Kexi::connset.addConnectionData(conndata);
+		Kexi::connset().addConnectionData(conndata);
 		conndata = new KexiDB::ConnectionData();
 			conndata->name = "Local pgsql connection";
 			conndata->driverName = "postgresql";
 			conndata->hostName = "localhost"; // -- default //"host.net";
 			conndata->userName = getlogin(); //-- temporary e.g."jarek"
-		Kexi::connset.addConnectionData(conndata);
+		Kexi::connset().addConnectionData(conndata);
 
 		//some recent projects data
 		projectData = new KexiProjectData( *conndata, "bigdb", "Big DB" );
 		projectData->setCaption("My Big Project");
 		projectData->setHelpText("This is my first biger project started yesterday. Have fun!");
-		Kexi::recentProjects.addProjectData(projectData);
+		Kexi::recentProjects().addProjectData(projectData);
 	//</TEMP>
 
 		if (!KexiStartupDialog::shouldBeShown())
 			return;
 
 		KexiStartupDialog dlg(KexiStartupDialog::Everything, KexiStartupDialog::CheckBoxDoNotShowAgain,
-			Kexi::connset, Kexi::recentProjects, 0, "dlg");
+			Kexi::connset(), Kexi::recentProjects(), 0, "dlg");
 		if (dlg.exec()!=QDialog::Accepted)
 			return;
 		
@@ -284,7 +284,7 @@ bool KexiMainWindow::openProject(KexiProjectData *projectData)
 		return false;
 	}
 	initNavigator();
-	Kexi::recentProjects.addProjectData( projectData );
+	Kexi::recentProjects().addProjectData( projectData );
 	invalidateActions();
 	
 	return true;
@@ -339,12 +339,12 @@ KexiMainWindow::initNavigator()
 	{
 		m_nav->clear();
 
-		KexiPart::PartList *pl = Kexi::partManager.partList(); //m_project->partManager()->partList();
+		KexiPart::PartList *pl = Kexi::partManager().partList(); //m_project->partManager()->partList();
 		for(KexiPart::Info *it = pl->first(); it; it = pl->next())
 		{
 			kdDebug() << "KexiMainWindow::initNavigator(): adding " << it->groupName() << endl;
 			m_nav->addGroup(it);
-			KexiPart::Part *p=Kexi::partManager.part(it);
+			KexiPart::Part *p=Kexi::partManager().part(it);
 			if (p) p->createGUIClient(this);
 		}
 	}
@@ -505,7 +505,7 @@ KexiMainWindow::slotProjectNew()
 bool
 KexiMainWindow::createBlankDatabase()
 {
-	KexiNewProjectWizard wiz(Kexi::connset, 0, "KexiNewProjectWizard", true);
+	KexiNewProjectWizard wiz(Kexi::connset(), 0, "KexiNewProjectWizard", true);
 	if (wiz.exec() != QDialog::Accepted)
 		return false;
 	
@@ -536,7 +536,7 @@ KexiMainWindow::createBlankDatabase()
 	}
 	kdDebug() << "KexiMainWindow::slotProjectNew(): new project created --- " << endl;
 	initNavigator();
-	Kexi::recentProjects.addProjectData( new_data );
+	Kexi::recentProjects().addProjectData( new_data );
 
 	invalidateActions();
 	return true;
@@ -546,7 +546,7 @@ void
 KexiMainWindow::slotProjectOpen()
 {
 	KexiStartupDialog dlg(
-		KexiStartupDialog::OpenExisting, 0, Kexi::connset, Kexi::recentProjects,
+		KexiStartupDialog::OpenExisting, 0, Kexi::connset(), Kexi::recentProjects(),
 		this, "KexiOpenDialog");
 	
 	if (dlg.exec()!=QDialog::Accepted)

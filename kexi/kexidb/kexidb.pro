@@ -8,6 +8,7 @@ DEFINES += MAKE_KEXI_DB_LIB
 TARGET		= kexidb$$KDEBUG
 
 system( moc connection.h -o moc/connection.moc )
+system( moc drivermanager_p.h -o moc/drivermanager_p.moc )
 
 #system( moc kexidb.h -o moc/kexidb.moc )
 #system( moc kexidbinterfacemanager.h -o moc/kexidbinterfacemanager.moc )

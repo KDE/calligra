@@ -22,6 +22,7 @@
 using namespace KexiPart;
 
 Part::Part(QObject *parent, const char *name, const QStringList &)
+: QObject(parent, name)
 {
 	m_info = 0;
 }

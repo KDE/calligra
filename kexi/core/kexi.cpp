@@ -23,14 +23,19 @@
 
 using namespace Kexi;
 
-KEXICORE_EXPORT KexiDBConnectionSet Kexi::connset;
-KEXICORE_EXPORT KexiProjectSet Kexi::recentProjects;
-KEXICORE_EXPORT KexiDB::DriverManager Kexi::driverManager;
-KEXICORE_EXPORT KexiPart::Manager Kexi::partManager;
+KexiDBConnectionSet _connset;
+KexiProjectSet _recentProjects;
+KexiDB::DriverManager _driverManager;
+KexiPart::Manager _partManager;
+
+KexiDBConnectionSet& Kexi::connset() { return _connset; }
+KexiProjectSet& Kexi::recentProjects() { return _recentProjects; }
+KexiDB::DriverManager& Kexi::driverManager() { return _driverManager; }
+KexiPart::Manager& Kexi::partManager() { return _partManager; }
 
 //--------------------------------------------------------------------------------
 
-KEXICORE_EXPORT QString Kexi::string2FileName(const QString &s)
+QString Kexi::string2FileName(const QString &s)
 {
 	QString fn = s.simplifyWhiteSpace();
 	fn.replace(' ',"_"); fn.replace('$',"_");
@@ -39,7 +44,7 @@ KEXICORE_EXPORT QString Kexi::string2FileName(const QString &s)
 	return fn;
 }
 
-KEXICORE_EXPORT QString Kexi::string2Identifier(const QString &s)
+QString Kexi::string2Identifier(const QString &s)
 {
 	QString r, id = s.simplifyWhiteSpace();
 	if (id.isEmpty())
@@ -51,11 +56,11 @@ KEXICORE_EXPORT QString Kexi::string2Identifier(const QString &s)
 		r="_";
 	r+=id[0];
 	for (uint i=1; i<id.length(); i++) {
-		QChar c = id[i].upper();
+		QChar c = id.at(i).upper();
 		if (!(c>='A' && c<='Z') && !(c>='0' && c<='9') && c!='_')
 			r+='_';
 		else
-			r+=id[i];
+			r+=id.at(i);
 	}
 	return r;
 }
@@ -74,10 +79,10 @@ IdentifierValidator::~IdentifierValidator()
 QValidator::State IdentifierValidator::validate( QString& input, int& pos) const
 {
 	uint i;
-	for (i=0; i<input.length() && input[i]==' '; i++)
+	for (i=0; i<input.length() && input.at(i)==' '; i++)
 		;
 	pos -= i; //i chars will be removed from beginning
-	if (i<input.length() && input[i]>='0' && input[i]<='9')
+	if (i<input.length() && input.at(i)>='0' && input.at(i)<='9')
 		pos++; //_ will be added at the beginning
 	bool addspace = (input.right(1)==" ");
 	input = string2Identifier(input);

@@ -225,7 +225,7 @@ void KexiNewProjectWizard::showPage(QWidget *page)
 			QString fn = Kexi::string2FileName( m_db_title->le_caption->text() );
 			if (!fn.endsWith(".kexi"))
 				fn += ".kexi";
-			m_conn_sel->m_fileDlg->locationWidget()->setCurrentText(fn);
+			m_conn_sel->m_fileDlg->setLocationText(fn);
 			setFinishEnabled(m_conn_sel,true);
 			m_conn_sel->setFocus();
 		}

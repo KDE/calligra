@@ -27,7 +27,7 @@ class KexiMainWindow;
 class KActionCollection;
 class KexiContextHelpInfo;
 
-class KexiDialogBase : public KMdiChildView, public KXMLGUIClient
+class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KXMLGUIClient
 {
 	Q_OBJECT
 

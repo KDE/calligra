@@ -227,7 +227,7 @@ void KexiTableView::setupNavigator()
 	
 	KLineEdit *lbl_of = new KLineEdit(i18n("of"), d->navPanel);
 	lbl_of->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
-	lbl_of->setMaximumWidth(fm.width(lbl_of->text()+10));
+	lbl_of->setMaximumWidth(fm.width(lbl_of->text())+10);
 	lbl_of->setReadOnly(true);
 	lbl_of->setLineWidth(0);
 	lbl_of->setFocusPolicy(NoFocus);
@@ -2507,3 +2507,4 @@ void KexiTableView::scrollBarTipTimeout()
 }
 
 #include "kexitableview.moc"
+

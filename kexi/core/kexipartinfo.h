@@ -32,7 +32,7 @@ namespace KexiPart
 /**
  * information about available modules
  */
-class Info
+class KEXICORE_EXPORT Info
 {
 	public:
 		Info(KService::Ptr service); //js, Manager *manager);

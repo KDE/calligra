@@ -173,23 +173,141 @@ TODO:  CURSOR
 		m_readAhead = drv_getNextRecord(); //true if any record in this query
   ---FIX THIS for other drivers than SQLITE
 
-TODO: Change "File" menu entry to "Database"
 TODO: add sorting projects information using KexiProjectData::lastOpened
 TODO: also add this info as "Database>Open Recent" menu subentry
-
-MAYBE TODO: REUSE QSignalMapper for actions with arguments
-
 
 TODO: add permissions information to connection : and - for sqlite - check if file is RO
    and then set RO flag
 
+MOST RECENT TODO:
+- port old ProjectWizard as ConnectionWizard and plug it to "Add connection" action
+  or add "Edit connection dialog" [difficulty: 3]
+- reuse recent project tab as separate window for "More projects..." menu action [difficulty: 1]
+- implement contents update for "recentprojects" menu action [difficulty: 2]
+- implement starting a new Kexi process for "open" and "new" actions, when there 
+  is already project opened in Kexi [difficulty: 2]
+- start using .xml files for recent connections and recent projects
+- implement use of xml .kexis file [difficulty: 2]
+- implement: drag-and-drop of the project file to the outside of Kexi, [difficulty: 2]
+- saveas== saving another shortcut to a project if it is server-based [difficulty: 2]
+
+TODO: improove security for password information in .kexis files
+TODO: for .kexis files' conenction data - if password attr. is not present - ask for password
+IDEA: integrate password information in .kexis files with KWallet
+
+2003-12-06
+- sources synced with win32 target, again
+
+2003-12-03
+- KMDI modes enabled
+- KexiStatusBar introduced
+
+2003-11-30
+- KexiDB::Field::isFPNumericType() added
+- KexiTableView now entirely uses KexiDB::Field::Type for types checking, not QVariant
+- KexiTableView::paintCell() simplified
+
+2003-11-28
+- KexiStartupDialog: existing file opening fixed (problem with autocompletion);
+   "accept" aborting when no filename entered
+- some minor fixes and TODOs
+   
+2003-11-25
+Finally commited again
+General:
+- PostgreSQL-based projects: tables are now visible in Kexi
+- KexiProjectSelectorWidget for "projectopen" action reused with KexiProjectSelectorDialog
+- most KexiDB errors are connected to message boxes, even driver loading failures
+
+- after unsuccessfull Cursor::moveFirst() eof() and bof() now return true
+- '..' substituted with ".." for message strings
+
+- pqxx driver: 
+  - cursor's internal transaction is now destroyed on error in drv_open()
+  - cursor's internal transaction has an unique name for easy debugging
+ 
+- Kexi::detectProjectData() added for detecting file type both on startup and after
+    filename is selected in Kexi's file dialog
+- KexiPart::Manager is now shared between project sessions
+- KexiPart:: classes' implementation a bit refreshed
+- QValidator and helper functions for identifiers added
+
+- Main Window:
+  - "Open Existing Project" action works both for file- and server-based projects
+  - "New Project" action works both for file- and server-based projects
+  - above actions now work also after startup, from toolbar
+
+- KexiPart::dbAvailable signal not needed since openProject() function returns boolean
+
+- KexiStartupDialog:
+  - KexiConnSelectorWidget reused
+  - if single page is configured, no tabs are visible, 
+    so KexiStartupDialog is reused for projectopen and projectnew actions
+
+- KexiStartupFileDialog introduced as embeddable widget, 
+    reusable for different file types (e.g. .kexi and .kexis)
+- KexiNewProjectWizard introduced for creating empty projects (both file and server based)
+    it will be also reused for "project templates wizards"
+  
+2003-11-24
+2003-11-23
+- KexiDB: Connection::databaseExists() now works correctly with file-based drivers
+	- just file existence is checked
+
+- KexiDB::Connection 
+   - creating or dropping system database is not permitted
+   - databaseExists(): full file paths are compared for file-based drivers
+- KexiDB::Driver i18n fix, thanks for Malcolm Hunter
+CCMAIL: malcolm.hunter@gmx.co.uk
+
+- KexiPart::Manager is now shared
+- KexiPart::  classes' implementation a bit refreshed
+
+TODO: keep ownership properly in KexiPart namespace!!!!!!
+
+
+2003-11-22
+2003-11-21
+- drivermanager cleanup hack
+- some improovements in kexidb clases
+- KexiDB:
+  - Driver::isSystemDatabaseName() added
+  - some methods converted to const
+  - Connection::databaseNames() now has parameter for skipping system database names
+  - Driver::isValid()
+    - now checks driver's major version and compares against kexidb library major version
+    - now is called on createConnection() instead of Connection::connect() so errors 
+	  can be catch earlier
+  - KEXIDB_DRIVER (like Q_OBJECT) in driver.h and KEXIDB_DRIVER_INFO in driver_p.h macros 
+    introduced for ease driver development and decrease error count
+  
+
+2003-11-19
+- KexiNewProjectWizard added
+- KexiStartupFileDialog convenient KFileDialog subclass added/reused
+   
+2003-11-17
+- KexiDB: buffered cursors: the first record was shown 2 times
+- KexiDB::Connection: some internal query fixes
+- newapi tests: -buffered-cursors switch added, non-internal cursor for all tests
+   are now unbuffered by default; fixed buggy behaviour on nonsuccessful t.v. test
+   
+2003-11-15
+- small compiler issues fixed in pqxxconnection
+   
+2003-11-14
+- Field: inlines fixed for newer compilers
+- DriverManagerInternal::slotAppQuits() used to destroy all drivers
+  on QApplication quit, so even if there are DriverManager's static
+  instances that are destroyed on program "static destruction", 
+  drivers are not kept after QApplication death.
 
 2003-11-12
 2003-11-13
 - Kexi startup procedure for both files and db connections introduced
 - startup dialog integrated
 - projectdata redesigned
-- menu items improoved, polished
+- menu items improoved, polished; e.g. Changed "File" menu entry to "Database"
 - ConnectionData:
   -added id for connectiondata
   -some const added
@@ -197,7 +315,6 @@ TODO: add permissions information to connection : and - for sqlite - check if fi
 2003-11-10
 - added global kexi version info, like in koffice
 - configure.in.in: added checking for qextmdi if required
-
 
 2003-11-07
 2003-11-06
@@ -207,13 +324,11 @@ TODO: add permissions information to connection : and - for sqlite - check if fi
  - cell's focus indicator frame is now also visible after focusout
  - before entering to  edit mode, we ensure that current cell is visible
  - vscrollbar tooltip added
-
 - Cursor: some members made private or protected
 - Cursor: m_beforeFirst is probably not needed anymore; m_at==0 is enough
 - Field: isNumericType(), isTextType() added, etc.;  
    type names are now i18n'd in an array;
    some methods inlined
-
 
 TODO: void KexiTableView::cancelRowEdit() still dont repaint properly!!
 TODO: update on lostfocus
@@ -933,5 +1048,4 @@ dock windows visiblity fixed, simplified code
 
 
 2003-03-28
-- first touch on Kexi sources for porting
-
+- f

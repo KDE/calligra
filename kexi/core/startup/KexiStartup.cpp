@@ -33,7 +33,7 @@
 
 using namespace Kexi;
 
-KEXICORE_EXPORT KexiProjectData* Kexi::detectProjectData( const QString &fname, QWidget *parent)
+KexiProjectData* Kexi::detectProjectData( const QString &fname, QWidget *parent)
 {
 	KexiProjectData *projectData = 0;
 	QFileInfo finfo(fname);
@@ -51,7 +51,7 @@ KEXICORE_EXPORT KexiProjectData* Kexi::detectProjectData( const QString &fname, 
 		return 0;//TODO: get information for xml shortcut file
 	}
 	// "application/x-kexiproject-sqlite", etc
-	QString drivername = Kexi::driverManager.lookupByMime(mimename);
+	QString drivername = Kexi::driverManager().lookupByMime(mimename);
 	kdDebug() << "Kexi::detectProjectData(): driver name: " << drivername << endl;
 	if(drivername.isEmpty()) {
 		KMessageBox::detailedSorry(parent, QString( I18N_NOOP( "The file \"%1\" is not recognized as supported by Kexi.") ).arg(fname),

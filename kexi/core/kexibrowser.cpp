@@ -184,7 +184,7 @@ KexiBrowser::slotExecuteItem(QListViewItem *vitem)
 
 //	kdDebug() << "KexiBrowser::slotExecuteItem() info=" << info << endl;
 
-	KexiPart::Part *part = Kexi::partManager.part(it->mime());
+	KexiPart::Part *part = Kexi::partManager().part(it->mime());
 //	if(!info->instance())
 	if (!part)
 		return;
