@@ -1,6 +1,9 @@
 #SUBDIRS = lib part shell samples kudesigner
-SUBDIRS = lib part samples kudesigner_lib kudesigner
+if compile_mimetypes_kde31
+    KDE31MIMEDIR = kde31
+endif
 
+SUBDIRS = lib part samples kudesigner_lib kudesigner $(KDE31MIMEDIR)
 
 KDE_ICON = kugar kugardata
 
