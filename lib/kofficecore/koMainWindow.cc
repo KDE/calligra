@@ -30,6 +30,7 @@
 #include <qwhatsthis.h>
 #include <qmime.h>
 #include <qmessagebox.h>
+#include <qfileinfo.h>
 
 #include <kapp.h>
 #include <kstdaccel.h>
@@ -133,7 +134,8 @@ bool KoMainWindow::openDocument( const char* _url )
     return TRUE;
 }
 
-bool KoMainWindow::saveDocument( const char* _native_format, const char* _native_pattern, const char* _native_name, bool saveas )
+bool KoMainWindow::saveDocument( const char* _native_format, const char* _native_pattern, 
+				 const char* _native_name, bool saveas )
 {
     KoDocument* pDoc = document();
 
@@ -142,28 +144,36 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
 
     if ( url.isEmpty() || saveas )
     {
-	    QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
-	    _native_format, _native_pattern, _native_name, TRUE );
-        QString file;
+	QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
+								    _native_format, _native_pattern, 
+								    _native_name, TRUE );
+	QString file;
 
-        bool bOk = true;
-        do {
-            file = KFileDialog::getSaveFileName( getenv( "HOME" ), filter );
-            if ( file.isNull() )
-                return false;
+	bool bOk = true;
+	do {
+	    file = KFileDialog::getSaveFileName( getenv( "HOME" ), filter );
+	    if ( file.isNull() )
+		return false;
 
-            if ( QFile::exists( file ) ) { // this file exists => ask for confirmation
-                bOk = KMessageBox::questionYesNo( this,
-                                                  i18n("A document with this name already exists\n"\
-                                                  "Do you want to overwrite it ?"),
-                                                  i18n("Warning") ) == KMessageBox::Yes;
-            }
-        } while ( !bOk );
-	    KMimeType::Ptr t = KMimeType::findByURL( KURL( file ), 0, TRUE );
-        outputMimeType = t->mimeType();
+	    if ( QFileInfo( file ).extension().isEmpty() ) {
+		// assume a that the the native patterns ends with .extension
+		QString s( _native_pattern );
+		QString extension = s.mid( s.find( "." ) );
+		file += extension;
+	    }
+	    
+	    if ( QFile::exists( file ) ) { // this file exists => ask for confirmation
+		bOk = KMessageBox::questionYesNo( this,
+						  i18n("A document with this name already exists\n"\
+						       "Do you want to overwrite it ?"),
+						  i18n("Warning") ) == KMessageBox::Yes;
+	    }
+	} while ( !bOk );
+	KMimeType::Ptr t = KMimeType::findByURL( KURL( file ), 0, TRUE );
+	outputMimeType = t->mimeType();
 
-        url = file;
-        pDoc->setURL( url );
+	url = file;
+	pDoc->setURL( url );
     }
 
     QApplication::setOverrideCursor( waitCursor );
@@ -171,7 +181,7 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
     KURL u( url );
     if ( !u.isLocalFile() ) return false; // only local files
     if ( QFile::exists( u.path() ) ) { // this file exists => backup
-        // TODO : make this configurable ?
+	// TODO : make this configurable ?
 	system( QString( "rm -rf %1~" ).arg( u.path() ).latin1() );
 	QString cmd = "cp %1 %2~";
 	cmd = cmd.arg( u.path() ).arg( u.path() );
@@ -180,20 +190,20 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
 
     // Not native format : save using export filter
     if ( outputMimeType != _native_format ) {
-        QString nativeFile=KoFilterManager::self()->prepareExport(url, _native_format);
-        bool ret;
-        ret = pDoc->saveToURL( nativeFile, _native_format ) && KoFilterManager::self()->export_();
-        QApplication::restoreOverrideCursor();
-        return ret;
+	QString nativeFile=KoFilterManager::self()->prepareExport(url, _native_format);
+	bool ret;
+	ret = pDoc->saveToURL( nativeFile, _native_format ) && KoFilterManager::self()->export_();
+	QApplication::restoreOverrideCursor();
+	return ret;
     }
 
     bool ret = true;
     // Native format => normal save
     if ( !pDoc->saveToURL( url, _native_format ) ) {
-        QString tmp;
-        tmp.sprintf( i18n( "Could not save\n%s" ), url.ascii() );
-        KMessageBox::error( this, i18n( "IO Error" ) );
-        ret = false;
+	QString tmp;
+	tmp.sprintf( i18n( "Could not save\n%s" ), url.ascii() );
+	KMessageBox::error( this, i18n( "IO Error" ) );
+	ret = false;
     }
     QApplication::restoreOverrideCursor();
     return ret;
