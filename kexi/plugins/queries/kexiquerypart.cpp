@@ -121,7 +121,7 @@ QStringList KexiQueryPart::datasets(QWidget*) {
 	return list;
 }
 
-KexiDBRecord *KexiQueryPart::records(QWidget* dpar,const QString& identifier,Parameters params) {
+KexiDBRecordSet *KexiQueryPart::records(QWidget* dpar,const QString& identifier,Parameters params) {
 	QString shortID=localIdentifier(identifier);
 
 	KexiProjectHandlerItem *it=(*items())[shortID];

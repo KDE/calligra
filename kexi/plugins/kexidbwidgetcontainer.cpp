@@ -46,7 +46,7 @@ KexiDBWidgetContainer::setDataSource(QString source)
 }
 
 void
-KexiDBWidgetContainer::setRecord(KexiDBRecord *rec)
+KexiDBWidgetContainer::setRecord(KexiDBRecordSet *rec)
 {
 	if(!rec)
 		return;

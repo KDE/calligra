@@ -50,7 +50,7 @@ class KexiQueryPart : public KexiProjectHandler, KexiDataProvider
 
 		virtual QStringList datasets(QWidget*);
 		virtual QStringList datasetNames(QWidget*);
-		virtual KexiDBRecord *records(QWidget*,const QString& identifier,Parameters params);
+		virtual KexiDBRecordSet *records(QWidget*,const QString& identifier,Parameters params);
 		virtual QStringList fields(QWidget*,const QString& identifier);
 	protected:
 		friend class KexiQueryPartProxy;

@@ -22,14 +22,14 @@
 
 #include <qwidget.h>
 
-class KexiDBRecord;
+class KexiDBRecordSet;
 
 class KexiRecordNavigator : public QWidget
 {
 	Q_OBJECT
 
 	public:
-		KexiRecordNavigator(KexiDBRecord *record, QWidget *parent, const char *name=0);
+		KexiRecordNavigator(KexiDBRecordSet *record, QWidget *parent, const char *name=0);
 		~KexiRecordNavigator();
 
 	signals:

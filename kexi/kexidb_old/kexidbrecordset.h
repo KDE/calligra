@@ -26,11 +26,11 @@ Boston, MA 02111-1307, USA.
 
 class QVariant;
 
-class KexiDBResult;
+class KexiDB;
 
 class KexiDBError;
 
-class KexiDBRecord : public QObject
+class KexiDBRecordSet : public QObject
 {
 	Q_OBJECT
 
@@ -46,8 +46,8 @@ class KexiDBRecord : public QObject
 		 *  @param buffer use true if you have e.g. a form-desingner and don't want to save your own,
 		 *  but note, that it will be quite memory-consuming so use it with care
 		 */
-		KexiDBRecord(QObject *parent, const char *name);
-		virtual ~KexiDBRecord() {kdDebug()<<"KexiDBRecord::~KexiDBRecord()"<<endl;};
+		KexiDBRecordSet(KexiDB *parent, const char *name);
+		virtual ~KexiDBRecordSet() {kdDebug()<<"KexiDBRecord::~KexiDBRecord()"<<endl;};
 
 	public slots:
 
@@ -173,7 +173,6 @@ class KexiDBRecord : public QObject
 		virtual unsigned long last_id() = 0;
 		virtual bool isForignField(uint field) { return false; }
 
-
 /*!
 		 *  the last error which occured. The pointer must neither be stored by the caller nor
 		 *  freed by the caller. If there has been no error the pointer to a KexiDBError containing an error code of 0 is returned;
@@ -186,6 +185,13 @@ class KexiDBRecord : public QObject
 		 */
 		virtual KexiDBError *latestError()=0;
 
+
+		/*! returns the numbers of rows in the result */
+		virtual unsigned int	numRows()=0;
+
+		KexiDB *database();
+	private:
+		KexiDB *m_db;
 };
 
 #endif

@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <koStore.h>
 #include <qdom.h>
-#include <kexiDB/kexidbrecord.h>
+#include <kexiDB/kexidbrecordset.h>
 #include <qtextstream.h>
 #include <qfile.h>
 #include <kexikugarwrapper.h>
@@ -199,7 +199,7 @@ QString KexiKugarHandlerItem::generateDataFile() {
 			}
 
 
-			KexiDBRecord  *recs=prov->records(0,KexiProjectHandler::localIdentifier(queryLine),KexiDataProvider::Parameters());
+			KexiDBRecordSet  *recs=prov->records(0,KexiProjectHandler::localIdentifier(queryLine),KexiDataProvider::Parameters());
 			if (recs) {
 				kdDebug()<<"There are records"<<endl;
 

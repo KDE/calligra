@@ -143,7 +143,7 @@ bool  CqlDB::commitWork() {
 	}
 }
 
-KexiDBRecord*
+KexiDBRecordSet*
 CqlDB::queryRecord(QString statement, bool buffer)
 {
 	kdDebug() << "CqlDB::queryRecord()" << endl;

@@ -30,7 +30,7 @@ class QLineEdit;
 
 class KPrinter;
 
-class KexiDBRecord;
+class KexiDBRecordSet;
 class KexiView;
 class KexiTableView;
 class KexiDB;
@@ -44,7 +44,7 @@ class KexiDataTable : public KexiDialogBase
 		~KexiDataTable();
 
 		bool executeQuery(const QString &query);
-		void setDataSet(KexiDBRecord *rec);
+		void setDataSet(KexiDBRecordSet *rec);
 
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 		virtual void print(KPrinter &printer);
@@ -65,7 +65,7 @@ class KexiDataTable : public KexiDialogBase
 		QStatusBar	*m_statusBar;
 		QLineEdit	*m_search;
 
-		KexiDBRecord	*m_record;
+		KexiDBRecordSet	*m_record;
 
 		bool		m_first;
 		KexiDB		*m_db;

@@ -26,9 +26,9 @@ Boston, MA 02111-1307, USA.
 //#include <qintdict.h>
 
 
-#include <kexidbrecord.h>
+#include <kexidbrecordset.h>
 #include <CqlSqlInclude.h>
-#include <qvariant.h>
+// #include <qvariant.h>
 #include <qvaluevector.h>
 
 #include "kexidbfield.h"
@@ -38,19 +38,19 @@ typedef QIntDict<CqlString> RecordSet;
 typedef QValueVector<CqlString> DataVector;
 typedef QValueVector<bool> NullVector;
 
-class CqlRecord : public KexiDBRecord
+class CqlRecord : public KexiDBRecordSet
 {
 	Q_OBJECT
 
 	public:
-		CqlRecord(QObject *p, const char *name, SqlHandle *handle, const QString statement, bool force=true);
+		CqlRecord(KexiDB *p, const char *name, SqlHandle *handle, const QString statement, bool force=true);
 		~CqlRecord();
 
 		bool		readOnly();
 		void		reset();
 
 		bool		commit(unsigned int record, bool insertBuffer=false);
-		
+
 		QVariant	value(unsigned int field);
 		QVariant	value(QString field);
 
@@ -73,7 +73,7 @@ class CqlRecord : public KexiDBRecord
 		void		gotoRecord(unsigned int record);
 
 		unsigned int	fieldCount();
-		
+
 		QString		fieldName(unsigned int field);
 
 		bool		next();
@@ -82,6 +82,7 @@ class CqlRecord : public KexiDBRecord
 		unsigned long	last_id();
 
                 virtual KexiDBError *latestError();
+		virtual unsigned int	numRows(){return 0;}
 	protected:
 		void		setupCursor();
 

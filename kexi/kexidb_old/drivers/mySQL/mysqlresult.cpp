@@ -25,7 +25,7 @@ Boston, MA 02111-1307, USA.
 #include "mysqlresult.h"
 #include "mysqldb.h"
 
-MySqlResult::MySqlResult(MYSQL_RES *result, QObject *parent) : KexiDBResult(parent)
+MySqlResult::MySqlResult(MYSQL_RES *result, QObject *parent)
 {
 	//various initialisations...
 	m_result = result;
@@ -55,7 +55,7 @@ MySqlResult::MySqlResult(MYSQL_RES *result, QObject *parent) : KexiDBResult(pare
 		f->setUniqueKey(m_field->flags & UNIQUE_KEY_FLAG);
 		f->setNotNull(m_field->flags & NOT_NULL_FLAG);
 		m_fields.insert(i, f);
-		
+
 		//incrementing...
 		i++;
 	}
@@ -109,7 +109,7 @@ MySqlResult::value(unsigned int field)
 	{
 		return 0;
 	}
-	
+
 	switch(fieldInfo(field)->type())
 	{
 		case QVariant::Date:

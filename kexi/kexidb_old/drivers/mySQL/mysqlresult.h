@@ -24,14 +24,13 @@ Boston, MA 02111-1307, USA.
 
 #include <qmap.h>
 #include <qintdict.h>
-
-#include "../../kexidbresult.h"
+#include <qobject.h>
 #include "../../kexidbfield.h"
 
 typedef QMap<QString, int> FieldNames;
 typedef QIntDict<KexiDBField> FieldInfo;
 
-class MySqlResult : public KexiDBResult
+class MySqlResult
 {
 	public:
 		MySqlResult(MYSQL_RES *result, QObject *parent=0);
@@ -39,7 +38,7 @@ class MySqlResult : public KexiDBResult
 
 		QVariant	value(unsigned int field);
 		QVariant	value(QString field);
-		
+
 		bool		next();
 		bool		prev();
 

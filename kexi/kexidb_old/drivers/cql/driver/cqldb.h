@@ -23,7 +23,7 @@ Boston, MA 02111-1307, USA.
 #include <CqlSqlInclude.h>
 
 #include <kexidb.h>
-#include <kexidbresult.h>
+#include <kexidbrecordset.h>
 
 class CqlDB : public KexiDB
 {
@@ -44,7 +44,7 @@ class CqlDB : public KexiDB
 		QString		error();
 
 		bool		query(QString statement);
-		KexiDBRecord*	queryRecord(QString query, bool buffer=false);
+		KexiDBRecordSet*	queryRecord(QString query, bool buffer=false);
 
 		bool alterField(const QString& table, const QString& field,
 			const QString& newFieldName,
@@ -64,6 +64,7 @@ class CqlDB : public KexiDB
 		QString getNativeDataType(const KexiDBField::ColumnType& t);
                 virtual KexiDBError *latestError();
 		virtual bool commitWork();
+
 	private:
 		SqlHandle	*m_db;
                 KexiDBError     m_error;

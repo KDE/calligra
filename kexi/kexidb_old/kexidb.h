@@ -23,14 +23,14 @@ Boston, MA 02111-1307, USA.
 #include <qobject.h>
 #include <qptrlist.h>
 
-#include "kexidbresult.h"
+
 #include "kexidbfield.h"
 #include "kexidbtable.h"
 #include "kexidbwatcher.h"
 
 class KexiDBInterfaceManager;
 class KexiDBDriver;
-class KexiDBRecord;
+class KexiDBRecordSet;
 class KexiDBError;
 
 typedef struct SourceConnection
@@ -69,7 +69,7 @@ class KexiDB : public QObject
 		virtual QString driverName();
 		virtual DBType dbType() { return NoDB; }
 
-		virtual KexiDBRecord* queryRecord(QString query, bool buffer=false);
+		virtual KexiDBRecordSet* queryRecord(QString query, bool buffer=false);
 
 		/*! connect to database hope that is ansi-compatible */
 		virtual bool connect(QString host, QString user, QString password, QString socket, QString port);
@@ -97,7 +97,6 @@ class KexiDB : public QObject
 			KexiDBTableStruct fields, bool createTable = false);
 		/* the createTable method should be overloaded to get betterperformance */
 		virtual bool createTable(const KexiDBTable& tableDef);
-		virtual KexiDBResult		*getResult();
 
 		virtual KexiDBTableStruct	getStructure(const QString& table);
 		virtual QString	getNativeDataType(const KexiDBField::ColumnType& t);

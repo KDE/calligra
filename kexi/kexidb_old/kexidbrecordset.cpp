@@ -17,52 +17,21 @@ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 */
 
-#include "kexidbresult.h"
-#include "kexidbfield.h"
+#include "kexidbrecordset.h"
+#include "kexidb.h"
 
-#include <qvariant.h>
-
-KexiDBResult::KexiDBResult(QObject *parent)
+KexiDBRecordSet::KexiDBRecordSet(KexiDB *parent, const char *name)
+ : QObject(parent, name)
 {
+	m_db=parent;
 }
 
-KexiDBField*
-KexiDBResult::fieldInfo(unsigned int)
-{
-	return 0;
+void KexiDBRecordSet::latestError(KexiDBError **error) {
+    *error=latestError();
 }
 
-KexiDBField*
-KexiDBResult::fiedlInfo(QString)
-{
-	return 0;
+KexiDB *KexiDBRecordSet::database() {
+    return m_db;
 }
 
-
-QVariant
-KexiDBResult::value(unsigned int)
-{
-	return QVariant();
-}
-
-QVariant
-KexiDBResult::value(QString)
-{
-	return QVariant();
-}
-
-bool
-KexiDBResult::next()
-{
-	return false;
-}
-
-unsigned int
-KexiDBResult::numRows()
-{
-	return 0;
-}
-
-KexiDBResult::~KexiDBResult()
-{
-}
+#include "kexidbrecordset.moc"

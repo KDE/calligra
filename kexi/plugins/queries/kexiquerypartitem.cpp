@@ -32,7 +32,7 @@
 #include <kexitablelist.h>
 #include <kexitableitem.h>
 #include <kmessagebox.h>
-#include <kexidbrecord.h>
+#include <kexidbrecordset.h>
 
 KexiQueryPartItem::KexiQueryPartItem(KexiProjectHandler *parent,
 		const QString& name, const QString& mime,
@@ -212,7 +212,7 @@ KexiQueryPartItem::load(KoStore* store)
 }
 
 
-KexiDBRecord *KexiQueryPartItem::records(QWidget* dpar,KexiDataProvider::Parameters params) {
+KexiDBRecordSet *KexiQueryPartItem::records(QWidget* dpar,KexiDataProvider::Parameters params) {
 	if(m_sql.isEmpty()) return 0;
 
 	QString query=m_sql;
@@ -252,7 +252,7 @@ KexiDBRecord *KexiQueryPartItem::records(QWidget* dpar,KexiDataProvider::Paramet
 	}
 
 	kdDebug()<<"resulting query string: "<<query<<endl;
-	KexiDBRecord *rec;
+	KexiDBRecordSet *rec;
 
         rec = projectPart()->kexiProject()->db()->queryRecord(query, true);
         if (!rec)

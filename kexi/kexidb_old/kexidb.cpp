@@ -21,7 +21,7 @@
 #include <kdebug.h>
 
 #include "kexidbinterfacemanager.h"
-#include "kexidbrecord.h"
+#include "kexidbrecordset.h"
 #include "kexidb.h"
 
 KexiDB::KexiDB(QObject *parent, const char *name) : QObject(parent, name)
@@ -57,7 +57,7 @@ KexiDB::databases()
 	return QStringList();
 }
 
-KexiDBRecord*
+KexiDBRecordSet*
 KexiDB::queryRecord(QString, bool)
 {
 	return 0;
@@ -141,11 +141,6 @@ KexiDB::createField(const KexiDBField& newField, KexiDBTableStruct fields,
 	return false;
 }
 
-KexiDBResult*
-KexiDB::getResult()
-{
-	return new KexiDBResult(this);
-}
 
 unsigned long
 KexiDB::affectedRows()

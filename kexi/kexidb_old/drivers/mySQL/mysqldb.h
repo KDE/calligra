@@ -24,13 +24,12 @@ Boston, MA 02111-1307, USA.
 #include <qstringlist.h>
 
 #include <kexidb.h>
-#include <kexidbresult.h>
 #include <kexidberror.h>
 
 typedef struct st_mysql MYSQL;
 
-class MySqlRecord;
-
+class MySqlRecordSet;
+class MySqlResult;
 /*!
  * should overwrite kexiDB/kexiDB
  * all other members ar done by the
@@ -57,7 +56,7 @@ class MySqlDB : public KexiDB
 	public slots:
 		QString		driverName();
 
-		KexiDBRecord	*queryRecord(QString querystatement, bool buffer=false);
+		KexiDBRecordSet	*queryRecord(QString querystatement, bool buffer=false);
 
 		bool		connect(QString host, QString user, QString password, QString socket, QString port);
 		bool		connect(QString host, QString user, QString password, QString socket, QString port,
@@ -94,13 +93,13 @@ class MySqlDB : public KexiDB
 		/*!
 		 *  friendy mode
 		 */
-		KexiDBResult	*getResult();
+		MySqlResult	*getResult();
 
 		/*!
 		 * mysql_store_result
 		 */
-		KexiDBResult	*storeResult();
-		KexiDBResult	*useResult();
+		MySqlResult	*storeResult();
+		MySqlResult	*useResult();
 
 		unsigned long	affectedRows();
 

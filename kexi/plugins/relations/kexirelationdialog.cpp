@@ -29,7 +29,7 @@
 #include <koStore.h>
 
 #include "kexiDB/kexidb.h"
-#include "kexiDB/kexidbrecord.h"
+#include "kexiDB/kexidbrecordset.h"
 
 #include "kexiproject.h"
 #include "kexirelationview.h"
@@ -91,7 +91,7 @@ KexiRelationDialog::slotAddTable()
 	if (m_tableCombo->currentItem()!=-1) //(m_tableCombo->count() > 0)
 	{
 		QString tname = m_tableCombo->text(m_tableCombo->currentItem());
-		KexiDBRecord *r = m_db->queryRecord("select * from " + tname + " limit 1");
+		KexiDBRecordSet *r = m_db->queryRecord("select * from " + tname + " limit 1");
 		QStringList fields;
 		for(uint i=0; i < r->fieldCount(); i++)
 		{

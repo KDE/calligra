@@ -112,7 +112,7 @@ KexiTablePartProxy::slotOpen(const QString& identifier)
 	kdDebug() << "KexiTablePartProxy::slotOpen(): kexiView = " << kexiView() << endl;
 
 	//trying to get data
-	KexiDBRecord  *data=m_tablePart->records(kexiView(),
+	KexiDBRecordSet  *data=m_tablePart->records(kexiView(),
 		identifier,KexiDataProvider::Parameters());
 	if (!data) {
 		 kdDebug() <<"KexitablePartProxy::slotOpen(): error while retrieving data, aborting"<<endl;

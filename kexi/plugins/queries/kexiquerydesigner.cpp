@@ -92,7 +92,7 @@ KexiQueryDesigner::query()
 {
 	m_item->setSQL(m_statement);
 	m_item->setParameters(m_parameters);
-	KexiDBRecord *rec=m_item->records(this);
+	KexiDBRecordSet *rec=m_item->records(this);
 	if (rec) {
 		m_view->setDataSet(rec);
 		emit queryExecuted(m_statement,true);

@@ -55,7 +55,7 @@ class KexiTablePart : public KexiProjectHandler, public KexiDataProvider
         	virtual QStringList datasets(QWidget*);
 		virtual QStringList datasetNames(QWidget*);
 	        virtual QStringList fields(QWidget*,const QString& identifier);
-	        virtual KexiDBRecord *records(QWidget*,const QString&
+	        virtual KexiDBRecordSet *records(QWidget*,const QString&
 			identifier,Parameters params);
         	virtual ParameterList parameters(QWidget*,const QString &identifier){}
 

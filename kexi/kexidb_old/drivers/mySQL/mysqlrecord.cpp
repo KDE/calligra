@@ -28,7 +28,7 @@ Boston, MA 02111-1307, USA.
 #include "mysqlrecord.h"
 
 MySqlRecord::MySqlRecord(MYSQL_RES *result, MySqlDB *db, const char *name, bool buffer, MySqlRecord *parent)
- : KexiDBRecord(db, name), MySqlResult(result, db)
+ : KexiDBRecordSet(db, name), MySqlResult(result, db)
 {
 	m_db = db;
 	m_lastItem = 0;
@@ -165,7 +165,7 @@ MySqlRecord::forignUpdate(const QString &field, const QString &value, const QStr
 	QString fkeyq("SELECT * FROM " + ftable + " WHERE " +
 	 ffield + " = " + "'" + value + "'");
 	kdDebug() << "MySqlRecord::forignUpdate(): fm: " << fkeyq << endl;
-	KexiDBRecord *r = m_db->queryRecord(fkeyq, false);
+	KexiDBRecordSet *r = m_db->queryRecord(fkeyq, false);
 	if(r)
 	{
 		if(r->next())
@@ -406,6 +406,10 @@ MySqlRecord::~MySqlRecord()
 
 KexiDBError *MySqlRecord::latestError() {
 	return &m_error;
+}
+
+unsigned int	MySqlRecord::numRows() {
+	return MySqlResult::numRows();
 }
 
 #include "mysqlrecord.moc"

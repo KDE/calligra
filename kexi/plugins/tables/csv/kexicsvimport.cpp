@@ -34,7 +34,7 @@
 
 #include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbfield.h"
-#include "kexiDB/kexidbrecord.h"
+#include "kexiDB/kexidbrecordset.h"
 
 #include "preview.h"
 #include "kexicsvimport.h"
@@ -225,7 +225,7 @@ KexiCSVImport::import()
 	m_db->alterField(*fieldID, 0, *table);
 
 
-	KexiDBRecord *rec = m_db->queryRecord("SELECT * FROM " + m_dlg->table->text(), true);
+	KexiDBRecordSet *rec = m_db->queryRecord("SELECT * FROM " + m_dlg->table->text(), true);
 	if(!rec)
 		return;
 

@@ -26,7 +26,6 @@ Boston, MA 02111-1307, USA.
 #include <kgenericfactory.h>
 #include <kdebug.h>
 
-#include <kexidbresult.h>
 #include <kexidberror.h>
 
 #include "mysqldb.h"
@@ -47,7 +46,7 @@ MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &) : KexiD
 }
 
 
-KexiDBRecord*
+KexiDBRecordSet*
 MySqlDB::queryRecord(QString querystatement, bool buffer)
 {
 	m_error.setup(0);
@@ -165,7 +164,7 @@ MySqlDB::databases()
 	QStringList s;
 
 	query("show databases");
-	KexiDBResult *result = storeResult();
+	MySqlResult *result = storeResult();
 
 	if(!result)
 		return s;
@@ -189,7 +188,7 @@ MySqlDB::tables()
 	QStringList s;
 
 	query("show tables");
-	KexiDBResult *result = storeResult();
+	MySqlResult *result = storeResult();
 
 	if(!result)
 		return s;
@@ -230,13 +229,13 @@ MySqlDB::uhQuery(QString statement)
 	return false;
 }
 
-KexiDBResult*
+MySqlResult*
 MySqlDB::getResult()
 {
 	return useResult();
 }
 
-KexiDBResult*
+MySqlResult*
 MySqlDB::storeResult()
 {
 	kdDebug() << "MySqlDB::storeResult(): error: " << mysql_error(m_mysql) << endl;
@@ -252,7 +251,7 @@ MySqlDB::storeResult()
 	}
 }
 
-KexiDBResult*
+MySqlResult*
 MySqlDB::useResult()
 {
 	kdDebug() << "MySqlDB::useResult(): error: " << mysql_error(m_mysql) << endl;

@@ -113,13 +113,13 @@ KexiTablePart::embeddReadOnly(QWidget *w, KexiView *v)
 	return 0;
 }
 
-KexiDBRecord *KexiTablePart::records(QWidget*,const QString& identifier,Parameters params)
+KexiDBRecordSet *KexiTablePart::records(QWidget*,const QString& identifier,Parameters params)
 {
-	kdDebug()<<"KexiDBRecord *KexiTablePart::records(const QString& identifier,Parameters params)"<<endl;
-	kdDebug()<<"KexiDBRecord *KexiTablePart::records(): id: "<< identifier << endl;
-	kdDebug()<<"KexiDBRecord *KexiTablePart::records(): local-id: "<< localIdentifier(identifier) << endl;
+	kdDebug()<<"KexiDBRecordSet *KexiTablePart::records(const QString& identifier,Parameters params)"<<endl;
+	kdDebug()<<"KexiDBRecordSet *KexiTablePart::records(): id: "<< identifier << endl;
+	kdDebug()<<"KexiDBRecordSet *KexiTablePart::records(): local-id: "<< localIdentifier(identifier) << endl;
 
-	KexiDBRecord *m_record=0;
+	KexiDBRecordSet *m_record=0;
         m_record = kexiProject()->db()->queryRecord("select * from " + localIdentifier(identifier), true);
 
 	if(!m_record)

@@ -29,7 +29,7 @@
 
 #include <koStore.h>
 
-#include "kexiDB/kexidbrecord.h"
+#include "kexiDB/kexidbrecordset.h"
 
 #include "kexiproject.h"
 //#include "kexirelationview.h"

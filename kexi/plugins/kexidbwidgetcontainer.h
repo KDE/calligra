@@ -24,7 +24,7 @@
 #include "formeditor/container_frame.h"
 
 
-#include <kexiDB/kexidbrecord.h>
+#include <kexiDB/kexidbrecordset.h>
 
 /**
  * this class aims to be a replacement for KFormEditor's default widget container
@@ -53,7 +53,7 @@ class KexiDBWidgetContainer : public KFormEditor::WidgetContainer
 		QString		dataSource() const;
 		void		setDataSource(QString source);
 
-		void		setRecord(KexiDBRecord *rec);
+		void		setRecord(KexiDBRecordSet *rec);
 		void		setWidgetWatcher(KFormEditor::WidgetWatcher *ww) { m_ww = ww; }
 
 	public slots:
@@ -65,7 +65,7 @@ class KexiDBWidgetContainer : public KFormEditor::WidgetContainer
 
 	private:
 		QString		m_dataSource;
-		KexiDBRecord	*m_rec;
+		KexiDBRecordSet	*m_rec;
 		KFormEditor::WidgetWatcher	*m_ww;
 };
 

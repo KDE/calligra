@@ -31,7 +31,7 @@ Boston, MA 02111-1307, USA.
 
 #include "mysqlresult.h"
 
-#include <kexidbrecord.h>
+#include <kexidbrecordset.h>
 #include <kexidbfield.h>
 
 class KexiDB;
@@ -52,7 +52,7 @@ typedef QMap<QString , QVariant> ContentBuffer;
 typedef QValueVector<QString> FieldName;
 typedef QMap<uint, QVariant> KeyBuffer;
 
-class MySqlRecord : public KexiDBRecord, public MySqlResult
+class MySqlRecord : public KexiDBRecordSet, public MySqlResult
 {
 	Q_OBJECT
 
@@ -107,6 +107,9 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 		void takeInsertBuffer(MySqlRecord *buffer);
 
 		virtual KexiDBError *latestError();
+
+		virtual unsigned int	numRows();
+
 	protected:
 		bool		findKey(); /* finds the key for updateing */
 		QString		forignUpdate(const QString &field, const QString &value, const QString &key, bool n);

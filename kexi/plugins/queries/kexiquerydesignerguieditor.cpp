@@ -31,7 +31,7 @@
 #include <kpushbutton.h>
 
 #include "kexiDB/kexidb.h"
-#include "kexiDB/kexidbrecord.h"
+#include "kexiDB/kexidbrecordset.h"
 
 #include "kexitableview.h"
 #include "kexitableitem.h"

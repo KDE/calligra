@@ -51,7 +51,7 @@ public:
 	void store(KoStore*);
 	void load(KoStore*);
 
-	KexiDBRecord *records(QWidget*,KexiDataProvider::Parameters params=KexiDataProvider::Parameters());
+	KexiDBRecordSet *records(QWidget*,KexiDataProvider::Parameters params=KexiDataProvider::Parameters());
 
 
 protected:

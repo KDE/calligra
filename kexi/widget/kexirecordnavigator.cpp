@@ -23,9 +23,9 @@
 
 #include "kexirecordnavigator.h"
 
-#include <kexiDB/kexidbrecord.h>
+#include <kexiDB/kexidbrecordset.h>
 
-KexiRecordNavigator::KexiRecordNavigator(KexiDBRecord *record, QWidget *parent, const char *name)
+KexiRecordNavigator::KexiRecordNavigator(KexiDBRecordSet *record, QWidget *parent, const char *name)
 {
 //	setFixedHeight(20);
 

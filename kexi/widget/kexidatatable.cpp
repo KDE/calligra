@@ -42,7 +42,7 @@
 
 
 #include "kexiDB/kexidb.h"
-#include "kexiDB/kexidbrecord.h"
+#include "kexiDB/kexidbrecordset.h"
 #include "kexiDB/kexidberror.h"
 #include "kexiDB/kexidbwatcher.h"
 
@@ -89,7 +89,7 @@ KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, QString caption, co
 
 }
 
-void KexiDataTable::setDataSet(KexiDBRecord *rec)
+void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
 {
 	if(!m_first)
 		m_tableView->clearAll();
@@ -108,7 +108,7 @@ void KexiDataTable::setDataSet(KexiDBRecord *rec)
 		if(m_record->isForignField(i))
 		{
 			QStringList fdata;
-			KexiDBRecord *ftr = m_db->queryRecord("SELECT * FROM " + m_record->fieldInfo(i)->table());
+			KexiDBRecordSet *ftr = m_db->queryRecord("SELECT * FROM " + m_record->fieldInfo(i)->table());
 			if(ftr)
 			{
 				while(ftr->next())

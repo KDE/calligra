@@ -27,8 +27,8 @@ Boston, MA 02111-1307, USA.
 #include "cqldb.h"
 #include "cqlrecord.h"
 
-CqlRecord::CqlRecord(QObject *p, const char *name, SqlHandle *handle, const QString statement, bool force)
- : KexiDBRecord(p, name)
+CqlRecord::CqlRecord(KexiDB *p, const char *name, SqlHandle *handle, const QString statement, bool force)
+ : KexiDBRecordSet(p, name)
 {
 	m_force = force;
 	try
@@ -49,12 +49,12 @@ CqlRecord::CqlRecord(QObject *p, const char *name, SqlHandle *handle, const QStr
 	}
 	catch(CqlException &err)
 	{
-		
+
 		cerr << err << endl;
 		m_error.setup(1,CqlDB::errorText(err));
 //		throw KexiDBError(0, CqlDB::errorText(err));
 	}
-	
+
 //	m_cursor->GetResultInfo();
 }
 
@@ -190,10 +190,10 @@ CqlRecord::next()
 	{
 		cerr << err << endl;
 	}
-	
+
 //	return false;
 //	kdDebug() << "CqlRecord::next (dbg2)" << endl;
-	
+
 }
 
 unsigned long
@@ -215,7 +215,7 @@ CqlRecord::setupCursor()
 		m_fields.insert(fields, field);
 
 //		m_datavector.push_back(CqlString());
-		
+
 		bool null;
 		m_nullvector.push_back(null);
 //		CqlString *s = new CqlString();

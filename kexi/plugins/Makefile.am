@@ -29,7 +29,7 @@ kexihandler_form_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 kexihandler_form_la_LIBADD = ../core/libkexicore.la ../formeditor/libkformeditor.la \
 		../widget/libkexiextendedwidgets.la ../kexiDB/libkexidb.la
 
-SUBDIRS = tables . $(scripting_dir) kugar calculations
+SUBDIRS = tables . $(scripting_dir) kugar
 #SUBDIRS = . forms
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
