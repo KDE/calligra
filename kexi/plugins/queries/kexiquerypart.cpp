@@ -31,7 +31,6 @@
 #include <kexidb/cursor.h>
 #include <kexidb/parser/parser.h>
 
-#include "kexiquerydocument.h"
 #include "kexiqueryview.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexiquerydesignersql.h"
@@ -86,6 +85,7 @@ KexiQueryPart::remove(KexiMainWindow *win, KexiPart::Item &item)
 	return conn->dropQuery( sch );
 }
 
+#if 0
 KexiQueryDocument *
 KexiQueryPart::data(KexiDB::Connection *conn, KexiPart::Item &i)
 {
@@ -116,6 +116,7 @@ KexiQueryPart::data(KexiDB::Connection *conn, KexiPart::Item &i)
 	delete parser;
 	return doc;
 }
+#endif
 
 KexiPart::DataSource *
 KexiQueryPart::dataSource()

@@ -18,36 +18,55 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kexiquerydesignersqleditor.h"
+
+//uncomment this to enable Qt-only editor
+//#define QT_ONLY_SQL_EDITOR
+
+//TODO: detect if KTextEditor returned something, if not- force QT_ONLY_SQL_EDITOR option
+
 #include <qlayout.h>
 #include <qpushbutton.h>
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
-#include <ktexteditor/editorchooser.h>
-#include <ktexteditor/highlightinginterface.h>
-#include <ktexteditor/editinterface.h>
-#include <ktexteditor/viewcursorinterface.h>
 
-#include <ktextedit.h>//TEMP
+#ifdef QT_ONLY_SQL_EDITOR
+# include <ktextedit.h>
+#else
+# include <ktexteditor/document.h>
+# include <ktexteditor/view.h>
+# include <ktexteditor/editorchooser.h>
+# include <ktexteditor/highlightinginterface.h>
+# include <ktexteditor/editinterface.h>
+# include <ktexteditor/viewcursorinterface.h>
+#endif
 
-#include "kexiquerydesignersqleditor.h"
+class KexiQueryDesignerSQLEditorPrivate {
+	public:
+		KexiQueryDesignerSQLEditorPrivate() {}
+#ifdef QT_ONLY_SQL_EDITOR
+		KTextEdit *view;
+#else
+		KTextEditor::Document	*doc;
+		KTextEditor::View	*view;
+#endif
+};
 
-//KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(QWidget *parent, const char *name)
-// : QWidget(parent, name)
+//=====================
+
 KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 	KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : KexiViewBase(mainWin, parent, name)
-#ifndef Q_WS_WIN //(TEMP)
-	, m_doc( KTextEditor::EditorChooser::createDocument(this, "sqlDoc") )
-	, m_view( m_doc->createView(this, 0L) )
-#else
-	, m_view( new  KTextEdit( "", QString::null, this, "sqlDoc_editor" ) )
-#endif
+ ,d(new KexiQueryDesignerSQLEditorPrivate())
 {
-#ifndef Q_WS_WIN //(TEMP)
-	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(m_doc);
+#ifdef QT_ONLY_SQL_EDITOR
+	d->view = new KTextEdit( "", QString::null, this, "sqlDoc_editor" );
+	connect(d->view, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
+#else
+	d->doc =  KTextEditor::EditorChooser::createDocument(this, "sqlDoc");
+	d->view = d->doc->createView(this, 0L);
+	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(d->doc);
 	for(uint i=0; i < hl->hlModeCount(); i++)
 	{
 		if(hl->hlModeName(i) == "SQL-MySQL")
@@ -57,8 +76,11 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 		}
 		i++;
 	}
+	connect(d->doc, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 #endif
-	setViewWidget(m_view);
+
+	setViewWidget(d->view);
+
 //	m_view->installEventFilter(this);
 //	setFocusProxy(m_view);
 
@@ -71,43 +93,18 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 //	g->addWidget(btnQuery,		0, 0);
 //	g->addWidget(btnClear,		0, 1);
 //	g->addMultiCellWidget(m_view,	1, 1, 0, 1);
-#ifndef Q_WS_WIN //(TEMP)
-	g->addWidget(m_view,		0, 0);
-#else
-	g->addWidget(m_view,		0, 0);
-#endif
+	g->addWidget(d->view,		0, 0);
 }
 
 KexiQueryDesignerSQLEditor::~KexiQueryDesignerSQLEditor()
 {
 }
 
-QString
-KexiQueryDesignerSQLEditor::text()
-{
-#ifndef Q_WS_WIN //(TEMP)
-	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(m_doc);
-	kdDebug() << "KexiQueryDesignerSQLEditor::getText(): iface: " << eIface << " " << eIface->text() << endl;
-	return eIface->text();
-#else
-	return m_view->text();
-#endif
-}
-
-void
-KexiQueryDesignerSQLEditor::setText(const QString &text)
-{
-#ifndef Q_WS_WIN
-	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(m_doc);
-	eIface->setText(text);
-#else
-	m_view->setText(text);
-#endif
-}
-
 bool
 KexiQueryDesignerSQLEditor::eventFilter(QObject *o, QEvent *ev)
 {
+//TODO is it needed?
+
 	if(ev->type() == QEvent::KeyRelease)
 	{
 		QKeyEvent *ke = static_cast<QKeyEvent*>(ev);
@@ -118,23 +115,44 @@ KexiQueryDesignerSQLEditor::eventFilter(QObject *o, QEvent *ev)
 			return true;
 		}
 	}
-	else if (o==m_view && (ev->type() == QEvent::FocusIn || ev->type() == QEvent::FocusOut)) {
+	else if (o==d->view && (ev->type() == QEvent::FocusIn || ev->type() == QEvent::FocusOut)) {
 		emit focus(ev->type() == QEvent::FocusIn);
 	}
 
 	return false;
 }
 
+// === KexiQueryDesignerSQLEditor impelmentation using KTextEditor ===
+
+#ifdef QT_ONLY_SQL_EDITOR
+# include "kexiquerydesignersqleditor_qt.cpp"
+#else
+
+QString
+KexiQueryDesignerSQLEditor::text()
+{
+	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
+	kdDebug() << "KexiQueryDesignerSQLEditor::getText(): iface: " << eIface << " " << eIface->text() << endl;
+	return eIface->text();
+}
+
+void
+KexiQueryDesignerSQLEditor::setText(const QString &text)
+{
+	const bool was_dirty = dirty();
+	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
+	eIface->setText(text);
+	setDirty(was_dirty);
+}
+
 void
 KexiQueryDesignerSQLEditor::jump(int col)
 {
-#ifndef Q_WS_WIN //(TEMP)
-	KTextEditor::ViewCursorInterface *ci = viewCursorInterface(m_view);
+	KTextEditor::ViewCursorInterface *ci = KTextEditor::viewCursorInterface(d->view);
 	ci->setCursorPosition(0, col);
-#else
-	m_view->setCursorPosition(0, col);
-#endif
 }
 
+#endif //!QT_ONLY_SQL_EDITOR
 
 #include "kexiquerydesignersqleditor.moc"
+

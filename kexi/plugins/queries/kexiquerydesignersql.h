@@ -26,7 +26,6 @@
 class KexiQueryDesigner;
 class KexiQueryDesignerSQLEditor;
 class KexiQueryDesignerSQLHistory;
-class KexiQueryDocument;
 class KexiSectionHeader;
 
 /*! The KexiQueryDesignerSQLView class is a view containing SQL text editor 

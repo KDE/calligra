@@ -39,7 +39,6 @@
 #include <kexitableitem.h>
 #include <kexitableviewdata.h>
 #include <kexidragobjects.h>
-#include "kexiquerydocument.h"
 #include "kexiquerypart.h"
 #include "kexidialogbase.h"
 #include "kexidatatable.h"

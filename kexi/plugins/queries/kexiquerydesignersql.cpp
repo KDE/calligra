@@ -36,10 +36,18 @@
 #include "kexiquerydesignersqleditor.h"
 #include "kexiquerydesignersqlhistory.h"
 #include "kexiquerydesignersql.h"
-#include "kexiquerydocument.h"
 #include "kexiquerypart.h"
 
 #include "kexisectionheader.h"
+
+
+static bool compareSQL(const QString& sql1, const QString& sql2)
+{
+	//TODO: use reformatting functions here
+	return sql1!=sql2;
+}
+
+//===================
 
 KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : KexiViewBase(mainWin, parent, name)
@@ -51,12 +59,14 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWid
 //	m_history = new KexiQueryDesignerSQLHistory(l, "sqlh");
 	m_head = new KexiSectionHeader(i18n("SQL Query Text"), Vertical, l);
 	m_editor = new KexiQueryDesignerSQLEditor(mainWin, m_head, "sqle");
+	connect(m_editor, SIGNAL(textChanged()), this, SLOT(setDirty()));
 	addChildView(m_editor);
 	setViewWidget(m_editor);
 	l->setFocusProxy(m_editor);
 	setFocusProxy(m_editor);
 
 	QHBox *hbox = new QHBox(l);
+	l->setResizeMode(hbox, QSplitter::KeepSize);
 	hbox->setSpacing(0);
 	m_pixmapStatus = new QLabel(hbox);
 	m_pixmapStatus->setFixedWidth(m_statusPixmapOk.width()*3/2);

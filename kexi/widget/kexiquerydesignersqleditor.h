@@ -25,6 +25,7 @@
 #include "kexiviewbase.h"
 
 class KTextEdit;
+class KexiQueryDesignerSQLEditorPrivate;
 
 namespace KTextEditor
 {
@@ -48,6 +49,7 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiViewBase
 		void		jump(int col);
 
 	public slots:
+		/*! Sets editor's text to \a text. 'Dirty' flag remains unchanged. */
 		void		setText(const QString &text);
 
 	protected:
@@ -55,14 +57,10 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiViewBase
 
 	signals:
 		void		execQ();
+		void textChanged();
 
 	private:
-#ifndef Q_WS_WIN //(TEMP)
-		KTextEditor::Document	*m_doc;
-		KTextEditor::View	*m_view;
-#else
-		KTextEdit *m_view;
-#endif
+		KexiQueryDesignerSQLEditorPrivate *d;
 };
 
 #endif

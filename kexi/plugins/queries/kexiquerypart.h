@@ -35,11 +35,10 @@ namespace KexiDB
 	class Connection;
 }
 
-class KexiQueryDocument;
 class KexiQueryDataSource;
 class KexiProject;
 
-typedef QMap<int, KexiQueryDocument *> QueryData;
+//typedef QMap<int, KexiQueryDocument *> QueryData;
 
 class KexiQueryPart : public KexiPart::Part
 {
@@ -54,7 +53,7 @@ class KexiQueryPart : public KexiPart::Part
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
 			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 
-		KexiQueryDocument	*data(KexiDB::Connection *conn, KexiPart::Item &item);
+//		KexiQueryDocument	*data(KexiDB::Connection *conn, KexiPart::Item &item);
 
 		virtual KexiPart::DataSource *dataSource();
 
@@ -72,7 +71,7 @@ class KexiQueryPart : public KexiPart::Part
 		virtual void initActions();
 
 	private:
-		QueryData		m_data;
+//		QueryData		m_data;
 };
 
 class KexiQueryDataSource : public KexiPart::DataSource

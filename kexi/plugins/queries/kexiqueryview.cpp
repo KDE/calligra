@@ -22,7 +22,6 @@
 #include <kexidb/parser/parser.h>
 #include <keximainwindow.h>
 
-#include "kexiquerydocument.h"
 #include "kexiqueryview.h"
 #include "kexiquerypart.h"
 #include "kexitableview.h"
