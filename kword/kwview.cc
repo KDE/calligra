@@ -2034,8 +2034,6 @@ void KWView::tableUngroupTable()
     macroCmd->addCommand( cmd );
     doc->addCommand( macroCmd );
     macroCmd->execute(); // do it all
-
-    gui->canvasWidget()->repaintAll(); // ## the command should do it
 }
 
 void KWView::tableDelete()

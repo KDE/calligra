@@ -788,11 +788,15 @@ void KWUngroupTableCommand::execute()
     }
     m_pTable->ungroup();
     doc->delFrameSet(m_pTable,false);
+
     //when you ungroup a table
     // you must remove table item in docstruct
     // create items in text item in docstruct
     doc->refreshDocStructure(FT_TEXT);
     doc->refreshDocStructure(FT_TABLE);
+
+    doc->updateAllFrames();
+    doc->repaintAllViews();
 }
 
 void KWUngroupTableCommand::unexecute()
@@ -812,6 +816,8 @@ void KWUngroupTableCommand::unexecute()
     doc->addFrameSet(m_pTable);
     doc->refreshDocStructure(FT_TEXT);
     doc->refreshDocStructure(FT_TABLE);
+    doc->updateAllFrames();
+    doc->repaintAllViews();
 }
 
 

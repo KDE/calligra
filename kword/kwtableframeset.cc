@@ -163,7 +163,8 @@ void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeH
 void KWTableFrameSet::deleteAnchors()
 {
     if ( m_anchor )
-        m_anchorTextFs->deleteAnchoredFrame( m_anchor );
+        deleteAnchor( m_anchor );
+    m_anchor = 0L;
 }
 
 void KWTableFrameSet::addCell( Cell *cell )

@@ -108,7 +108,7 @@ public:
     void setFrameSet( KWFrameSet *fs ) { frameSet = fs; }
 
     KWAnchor *anchor() const { return m_anchor; }
-    // Called by KWFrameSet::updateAnchors
+    // Called by KWFrameSet's createAnchor and deleteAnchor
     void setAnchor( KWAnchor * anchor ) { m_anchor = anchor; }
     void deleteAnchor();
 
@@ -465,6 +465,7 @@ protected:
     QRegion frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect,
                              KWViewMode * viewMode, bool onlyChanged );
 
+    void deleteAnchor( KWAnchor * anchor );
     virtual void deleteAnchors();
     virtual void createAnchors( KWTextParag * parag, int index, bool placeHolderExists = false );
 

@@ -390,19 +390,25 @@ void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolder
     emit repaintChanged( m_anchorTextFs );
 }
 
+void KWFrameSet::deleteAnchor( KWAnchor * anchor )
+{
+    // Simple deletion, no undo/redo
+    QTextCursor c( m_anchorTextFs->textDocument() );
+    c.setParag( anchor->paragraph() );
+    c.setIndex( anchor->index() );
+    c.remove(); // This deletes the character _and_ the customitem( anchor )
+    c.parag()->setChanged( true );
+}
+
 void KWFrameSet::deleteAnchors()
 {
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
+    {
         if ( frameIt.current()->anchor() )
-        {
-            KWAnchor * anchor = frameIt.current()->anchor();
-            QTextCursor c( m_anchorTextFs->textDocument() );
-            c.setParag( anchor->paragraph() );
-            c.setIndex( anchor->index() );
-            c.remove(); // This deletes the character _and_ the customitem( anchor )
-            c.parag()->setChanged( true );
-        }
+            deleteAnchor( frameIt.current()->anchor() );
+        frameIt.current()->setAnchor( 0L );
+    }
 
     emit repaintChanged( m_anchorTextFs );
 }
