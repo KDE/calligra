@@ -173,6 +173,7 @@ void KWAutoFormatDia::setupTab3()
     m_listException=m_autoFormat.listException();
     exceptionList->insertStringList(m_listException);
     grid->addMultiCellWidget(exceptionList,2,6,0,0);
+    pbRemoveException->setEnabled(m_listException.count()>0);
 
 }
 
@@ -187,6 +188,7 @@ void KWAutoFormatDia::slotAddException()
 
         exceptionList->clear();
         exceptionList->insertStringList(m_listException);
+        pbRemoveException->setEnabled(m_listException.count()>0);
         exceptionLine->clear();
     }
 }
@@ -197,6 +199,7 @@ void KWAutoFormatDia::slotRemoveException()
     {
         m_listException.remove(exceptionList->currentText());
         exceptionList->clear();
+        pbRemoveException->setEnabled(m_listException.count()>0);
         exceptionList->insertStringList(m_listException);
     }
 }
