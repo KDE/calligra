@@ -45,6 +45,7 @@ protected:
 	virtual void mouseButtonPress();
 	virtual void mouseDragRelease();
 	virtual void mouseDrag();
+	void cancel();
 
 private:
 	VGradient            m_gradient;

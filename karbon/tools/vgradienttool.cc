@@ -165,3 +165,11 @@ VGradientTool::mouseDragRelease()
 	view()->selectionChanged();
 }
 
+void
+VGradientTool::cancel()
+{
+	// Erase old object:
+	if( isDragging() )
+		draw();
+}
+
