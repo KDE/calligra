@@ -126,6 +126,16 @@ KCommand * KWAnchor::deleteCommand()
     return m_frameset->anchoredObjectDeleteCommand( m_frameNum );
 }
 
+void KWAnchor::setDeleted( bool b )
+{
+    kdDebug() << "KWAnchor::setDeleted " << b << endl;
+    if ( b )
+        m_frameset->setAnchored( 0L );
+    else
+        m_frameset->setAnchored( textDocument()->textFrameSet() );
+    KWTextCustomItem::setDeleted( b );
+}
+
 void KWAnchor::save( QDomElement &formatElem )
 {
     formatElem.setAttribute( "id", 6 ); // code for an anchor

@@ -107,11 +107,11 @@ public:
     KWFrameSet *getFrameSet() const { return frameSet; }
     void setFrameSet( KWFrameSet *fs ) { frameSet = fs; }
 
-    KWAnchor *anchor() const { return m_anchor; }
+/*    KWAnchor *anchor() const { return m_anchor; }
     // Called by KWFrameSet's createAnchor and deleteAnchor
     void setAnchor( KWAnchor * anchor ) { m_anchor = anchor; }
     void deleteAnchor();
-
+*/
     void setPageNum( int i ) { m_pageNum = i; }
     int pageNum() { return m_pageNum; }
 
@@ -182,7 +182,7 @@ private:
     QList<KWResizeHandle> handles;
     KWFrameSet *frameSet;
 
-    KWAnchor *m_anchor;
+    //KWAnchor *m_anchor;
 
     KWFrame &operator=( const KWFrame &_frame );
     KWFrame ( const KWFrame &_frame );
@@ -401,8 +401,10 @@ public:
     bool isFloating() { return m_anchorTextFs; }
     /** Return the frameset in which our anchor is - assuming isFloating() */
     KWTextFrameSet * anchorFrameset() const { return m_anchorTextFs; }
+    /** Return the anchor object for this frame number */
+    KWAnchor * findAnchor( int frameNum );
 
-    /** Create an anchor for the floating frame identified by frameNum (and usually store it) */
+    /** Create an anchor for the floating frame identified by frameNum */
     virtual KWAnchor * createAnchor( KWTextDocument * textdoc, int frameNum );
 
     /** Move the frame frameNum to the given position - this is called when

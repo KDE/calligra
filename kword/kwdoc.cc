@@ -2551,12 +2551,11 @@ void KWDocument::deleteTable( KWTableFrameSet *table )
 {
     if ( !table )
         return;
-    kdDebug() << "KWDocument::deleteTable floating:" << table->isFloating()
-              << " anchor:" << table->anchor() << endl;
-    if ( table->anchor() )
+    if ( table->isFloating() )
     {
         emit sig_terminateEditing( table ); // to unselect its cells, especially
-        table->anchorFrameset()->deleteAnchoredFrame( table->anchor() );
+        KWAnchor * anchor = table->findAnchor( 0 );
+        table->anchorFrameset()->deleteAnchoredFrame( anchor );
     }
     else
     {
@@ -2596,7 +2595,8 @@ void KWDocument::deleteFrame( KWFrame * frame )
     if ( fs->isFloating() )
     {
         frame->setSelected( false );
-        fs->anchorFrameset()->deleteAnchoredFrame( frame->anchor() );
+        KWAnchor * anchor = fs->findAnchor( 0 );
+        fs->anchorFrameset()->deleteAnchoredFrame( anchor );
     }
     else
     {

@@ -757,8 +757,6 @@ void KWDeleteFrameCommand::unexecute()
     KWFrame * frame = m_copyFrame->getCopy();
     frame->setFrameSet( frameSet );
     frameSet->addFrame( frame );
-    if(frame->anchor())
-        frame->anchor()->setDeleted(false);
 
     KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>( frameSet );
     if ( textfs )
@@ -834,6 +832,7 @@ KWDeleteTableCommand::KWDeleteTableCommand( const QString &name, KWTableFrameSet
 
 void KWDeleteTableCommand::execute()
 {
+    kdDebug() << "KWDeleteTableCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->removeFrameSet(m_pTable);
     doc->refreshDocStructure(FT_TABLE);
@@ -844,6 +843,7 @@ void KWDeleteTableCommand::execute()
 
 void KWDeleteTableCommand::unexecute()
 {
+    kdDebug() << "KWDeleteTableCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->addFrameSet(m_pTable);
     doc->refreshDocStructure(FT_TABLE);

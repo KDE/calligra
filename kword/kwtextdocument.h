@@ -67,6 +67,8 @@ public:
     // and it can be then copied back from there into the real world - setDeleted( false ).
     virtual void setDeleted( bool b ) { m_deleted = b; }
 
+    bool isDeleted() const { return m_deleted; }
+
     // Called when the item is created or 'deleted' by the user
     // Most custom items don't need to reimplement those, since
     // the custom item is simply moved into the undo/redo history

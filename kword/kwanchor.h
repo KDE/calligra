@@ -42,6 +42,10 @@ public:
     // The text document in which this anchor is
     KWTextDocument * textDocument() const;
 
+    // The frameset and frame number anchored here
+    KWFrameSet * frameSet() const { return m_frameset; }
+    int frameNum() const { return m_frameNum; }
+
     // Return the size of the item, i.e. the size of the frame (zoomed)
     QSize size() const;
 
@@ -56,6 +60,7 @@ public:
 
     virtual KCommand * createCommand();
     virtual KCommand * deleteCommand();
+    virtual void setDeleted( bool b );
     virtual void save( QDomElement &formatElem );
 
 private:

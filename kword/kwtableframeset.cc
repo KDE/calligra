@@ -43,7 +43,7 @@ KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     m_isRendered = false;
     m_cells.setAutoDelete( true );
     frames.setAutoDelete(false);
-    m_anchor = 0L;
+    //m_anchor = 0L;
     if ( name.isEmpty() )
         m_name = doc->generateFramesetName( i18n( "Table %1" ) );
     else
@@ -62,7 +62,7 @@ KWTableFrameSet::KWTableFrameSet( KWTableFrameSet &original ) :
     m_active = original.m_active;
     m_isRendered = original.m_isRendered;
     m_cells.setAutoDelete( true );
-    m_anchor = 0L;
+    //m_anchor = 0L;
 
     // Copy all cells.
     for ( unsigned int i = 0; i < original.m_cells.count(); i++ )
@@ -76,8 +76,8 @@ KWTableFrameSet::KWTableFrameSet( KWTableFrameSet &original ) :
 
 KWTableFrameSet::~KWTableFrameSet()
 {
-    delete m_anchor;
-    m_anchor = 0L;
+    //delete m_anchor;
+    //m_anchor = 0L;
     m_doc = 0L;
 }
 
@@ -113,10 +113,10 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
 
         // Recalc all "frames on top" everywhere
         kWordDocument()->updateAllFrames();
-        // Draw the table in the new position
-        //kWordDocument()->repaintAllViews(true /* ARGL*/);
-        //This leads to crashes. We are called from KWAnchor::draw, inside a paintevent, so
-        //we are not allowed to create a paint event ourselves. KWAnchor draws the table in theory anyway!
+        // Don't call any drawing method from here.
+        // We are called from KWAnchor::draw, inside a paintevent, so
+        // we are not allowed to create a paint event ourselves.
+        // KWAnchor draws the table in theory anyway!
     }
 }
 
@@ -139,24 +139,21 @@ KCommand * KWTableFrameSet::anchoredObjectDeleteCommand( int /*frameNum*/ )
 
 KWAnchor * KWTableFrameSet::createAnchor( KWTextDocument * textdoc, int frameNum )
 {
-    // TODO make one rect per page, and replace m_anchor with a QList<KWAnchor>
-    ASSERT( !m_anchor );
     kdDebug() << "KWTableFrameSet::createAnchor" << endl;
-    m_anchor = new KWAnchor( textdoc, this, frameNum );
-    return m_anchor;
+    return new KWAnchor( textdoc, this, frameNum );
 }
 
 void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/ )
 {
     kdDebug() << "KWTableFrameSet::createAnchors" << endl;
-    // TODO make one rect per page, and replace m_anchor with a QList<KWAnchor>
-    if ( !m_anchor )
+    // TODO make one rect per page, and create one anchor per page
+    //if ( !m_anchor )
     {
         // Anchor this frame, after the previous one
-        createAnchor( m_anchorTextFs->textDocument(), 0 );
+        KWAnchor * anchor = createAnchor( m_anchorTextFs->textDocument(), 0 );
         if ( !placeHolderExists )
             parag->insert( index, QChar(' ') );
-        parag->setCustomItem( index, m_anchor, 0 );
+        parag->setCustomItem( index, anchor, 0 );
         kdDebug() << "KWTableFrameSet::createAnchors setting anchor" << endl;
     }
     parag->setChanged( true );
@@ -165,10 +162,9 @@ void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeH
 
 void KWTableFrameSet::deleteAnchors()
 {
-    kdDebug() << "KWTableFrameSet::deleteAnchors m_anchor=" << m_anchor << endl;
-    if ( m_anchor )
-        deleteAnchor( m_anchor );
-    m_anchor = 0L;
+    KWAnchor * anchor = findAnchor( 0 );
+    kdDebug() << "KWTableFrameSet::deleteAnchors anchor=" << anchor << endl;
+    deleteAnchor( anchor );
 }
 
 void KWTableFrameSet::addCell( Cell *cell )

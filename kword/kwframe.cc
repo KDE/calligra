@@ -59,8 +59,8 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       bright( 0 ),
       btop( 0 ),
       bbottom( 0 ),
-      frameSet( fs ),
-      m_anchor( 0 )
+      frameSet( fs )/*,
+      m_anchor( 0 )*/
 {
     //kdDebug() << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
     m_pageNum = fs ? fs->kWordDocument()->getPageOfRect( *this ) : 0;
@@ -72,8 +72,8 @@ KWFrame::~KWFrame()
     //kdDebug() << "KWFrame::~KWFrame " << this << endl;
     if (selected)
         removeResizeHandles();
-    if(anchor())
-        anchor()->setDeleted(true);
+    /*if(anchor())
+        anchor()->setDeleted(true);*/
 }
 
 QCursor KWFrame::getMouseCursor( const KoPoint & docPoint, bool table, QCursor defaultCursor )
@@ -134,16 +134,16 @@ KWFrame *KWFrame::getCopy() {
     frm->setBRight(getBRight());
     frm->setBTop(getBTop());
     frm->setBBottom(getBBottom());
-    if(anchor())
-        frm->setAnchor(anchor());
+    /*if(anchor())
+        frm->setAnchor(anchor());*/
     return frm;
 }
 
-void KWFrame::deleteAnchor()
+/*void KWFrame::deleteAnchor()
 {
     delete m_anchor;
     m_anchor = 0L;
-}
+}*/
 
 // Insert all resize handles
 void KWFrame::createResizeHandles() {
@@ -331,6 +331,7 @@ void KWFrameSet::setFloating()
         QPoint cPoint( qRound( frames.first()->x() ), qRound( frames.first()->y() ) );
         kdDebug() << "KWFrameSet::setFloating looking for pos at " << cPoint.x() << " " << cPoint.y() << endl;
         frameSet->findPosition( cPoint, parag, index );
+        // Create anchor. TODO: refcount the anchors!
         setAnchored( frameSet, parag->paragId(), index );
         frameSet->layout();
         frames.first()->updateResizeHandles();
@@ -357,6 +358,26 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs )
     m_anchorTextFs = textfs;
 }
 
+// Find where our anchor is ( if we are anchored ).
+// We can't store a pointers to anchors, because over time we might change anchors
+// (Especially, undo/redo of insert/delete can reuse an old anchor and forget a newer one etc.)
+KWAnchor * KWFrameSet::findAnchor( int frameNum )
+{
+    ASSERT( m_anchorTextFs );
+    QListIterator<QTextCustomItem> cit( m_anchorTextFs->textDocument()->allCustomItems() );
+    for ( ; cit.current() ; ++cit )
+    {
+        KWAnchor * anchor = dynamic_cast<KWAnchor *>( cit.current() );
+        if ( anchor && !anchor->isDeleted()
+             && anchor->frameSet() == this && anchor->frameNum() == frameNum )
+                return anchor;
+    }
+    // kdWarning
+    kdFatal() << "KWFrameSet::findAnchor anchor not found (frameset='" << getName()
+                << "' frameNum=" << frameNum << ")" << endl;
+    return 0L;
+}
+
 void KWFrameSet::setFixed()
 {
     kdDebug() << "KWFrameSet::setFixed" << endl;
@@ -369,7 +390,7 @@ KWAnchor * KWFrameSet::createAnchor( KWTextDocument * textdoc, int frameNum )
 {
     KWFrame * frame = getFrame( frameNum );
     KWAnchor * anchor = new KWAnchor( textdoc, this, frameNum );
-    frame->setAnchor( anchor );
+    //frame->setAnchor( anchor );
     return anchor;
 }
 
@@ -380,7 +401,7 @@ void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolder
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt, ++index )
     {
-        if ( ! frameIt.current()->anchor() )
+        //if ( ! frameIt.current()->anchor() )
         {
             // Anchor this frame, after the previous one
             KWAnchor * anchor = createAnchor( m_anchorTextFs->textDocument(), getFrameFromPtr( frameIt.current() ) );
@@ -403,6 +424,7 @@ void KWFrameSet::deleteAnchor( KWAnchor * anchor )
     c.parag()->at( c.index() )->loseCustomItem();
     c.remove(); // This deletes the character where the anchor was
     // We don't delete the anchor since it might be in a customitemmap in a text-insert command
+    // TODO: refcount the anchors
     c.parag()->setChanged( true );
 }
 
@@ -410,11 +432,17 @@ void KWFrameSet::deleteAnchors()
 {
     kdDebug() << "KWFrameSet::deleteAnchors" << endl;
     QListIterator<KWFrame> frameIt = frameIterator();
-    for ( ; frameIt.current(); ++frameIt )
+    int frameNum = 0;
+    // At the moment there's only one anchor per frameset
+    // With tables the loop below will be wrong anyway...
+    //for ( ; frameIt.current(); ++frameIt, ++frameNum )
     {
-        if ( frameIt.current()->anchor() )
+/*        if ( frameIt.current()->anchor() )
             deleteAnchor( frameIt.current()->anchor() );
         frameIt.current()->setAnchor( 0L );
+*/
+        KWAnchor * anchor = findAnchor( frameNum );
+        deleteAnchor( anchor );
     }
 
     emit repaintChanged( m_anchorTextFs );
@@ -569,10 +597,15 @@ void KWFrameSet::updateFrames()
 
     if ( isFloating() )
     {
+        //kdDebug() << "KWFrameSet::updateFrames " << getName() << " is floating" << endl;
         QListIterator<KWFrame> frameIt = frameIterator();
-        for ( ; frameIt.current(); ++frameIt )
+        int frameNum = 0;
+        // At the moment there's only one anchor per frameset
+        // With tables the loop below will be wrong anyway...
+        //for ( ; frameIt.current(); ++frameIt, ++frameNum )
         {
-            KWAnchor * anchor = frameIt.current()->anchor();
+            KWAnchor * anchor = findAnchor( frameNum );
+            //KWAnchor * anchor = frameIt.current()->anchor();
             //kdDebug() << "KWFrameSet::updateFrames anchor=" << anchor << endl;
             if ( anchor )
             {
