@@ -107,6 +107,10 @@ KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, ToolCont
 KivioCanvas::~KivioCanvas()
 {
   delete m_buffer;
+  delete m_borderTimer;
+  delete m_guideLinesTimer;
+  delete storedCursor;
+  delete unclippedPainter;
 }
 
 KivioPage* KivioCanvas::findPage( const QString& _name )
@@ -249,7 +253,7 @@ void KivioCanvas::setUpdatesEnabled( bool isUpdate )
   }
 }
 
-void KivioCanvas::zoomIn(QPoint p)
+void KivioCanvas::zoomIn(const QPoint &p)
 {
   setUpdatesEnabled(false);
   TKPoint p0 = mapFromScreen(p);
@@ -260,7 +264,7 @@ void KivioCanvas::zoomIn(QPoint p)
   setUpdatesEnabled(true);
 }
 
-void KivioCanvas::zoomOut(QPoint p)
+void KivioCanvas::zoomOut(const QPoint &p)
 {
   setUpdatesEnabled(false);
   TKPoint p0 = mapFromScreen(p);
@@ -439,7 +443,7 @@ QPoint KivioCanvas::actualPaperOrigin()
   return QPoint(px0,py0);
 }
 
-float KivioCanvas::zoom()
+float KivioCanvas::zoom() const
 {
   return m_pZoom;
 }
@@ -607,6 +611,7 @@ void KivioCanvas::mouseMoveEvent(QMouseEvent* e)
                 gl->moveSelectedByX(p.x()/m_pZoom);
             if (p.y() != 0)
                 gl->moveSelectedByY(p.y()/m_pZoom);
+            m_pDoc->setModified( true );
             paintGuides();
         } else {
             if ((e->state() & ~ShiftButton) == NoButton) {
@@ -642,7 +647,7 @@ QPoint KivioCanvas::mapToScreen( TKPoint pos )
   return p;
 }
 
-TKPoint KivioCanvas::mapFromScreen( QPoint pos )
+TKPoint KivioCanvas::mapFromScreen( const QPoint & pos )
 {
   QPoint p0 = actualPaperOrigin();
   int x = pos.x() + m_iXOffset - p0.x();

@@ -74,10 +74,10 @@ public:
   KivioPage* activePage();
   KivioPage* findPage( const QString& _name );
 
-  KivioView* view() { return m_pView; }
-  KivioDoc* doc() { return m_pDoc; }
+  KivioView* view()const  { return m_pView; }
+  KivioDoc* doc()const { return m_pDoc; }
 
-  float zoom();
+  float zoom() const;
 
   QSize actualSize();
 
@@ -88,7 +88,7 @@ public:
   void startRectDraw( const QPoint &p, RectType t );
   void continueRectDraw( const QPoint &p, RectType t );
   void endRectDraw();
-  QRect rect() { return currRect; }
+  QRect rect()const { return currRect; }
 
   void startSpawnerDragDraw( const QPoint &p );
   void continueSpawnerDragDraw( const QPoint &p );
@@ -103,7 +103,7 @@ public:
   float snapToGridX(float);
   float snapToGridY(float);
 
-  TKPoint mapFromScreen( QPoint );
+  TKPoint mapFromScreen( const QPoint& );
   QPoint mapToScreen( TKPoint );
 
   void beginUnclippedSpawnerPainter();
@@ -129,8 +129,8 @@ public slots:
 
   void toggleShowRulers(bool);
   void setZoom(float);
-  void zoomIn(QPoint);
-  void zoomOut(QPoint);
+  void zoomIn(const QPoint&);
+  void zoomOut(const QPoint&);
 
   void scrollDx(int dx);
   void scrollDy(int dy);
