@@ -57,6 +57,8 @@ public:
     virtual bool doFullPaperBorders (const double top, const double left,
         const double bottom, const double right);
     virtual bool doFullDefineStyle(LayoutData& layout);
+    virtual bool doHeader(const HeaderData& header);
+    virtual bool doFooter(const HeaderData& footer);
 
 private:
     QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
@@ -65,7 +67,7 @@ private:
     void openSpan(const FormatData& formatOrigin, const FormatData& format);
     void closeSpan(const FormatData& formatOrigin, const FormatData& format);
     QString escapeRtfText ( const QString& text ) const;
-    void ProcessParagraphData ( const QString& strTag, const QString &paraText,
+    QString ProcessParagraphData ( const QString &paraText,
         const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
     void formatTextParagraph(const QString& strText,
         const FormatData& formatOrigin, const FormatData& format);

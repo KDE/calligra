@@ -50,6 +50,18 @@
 #define PT_TO_TWIP(x) (x)*20
 #define TWIP_TO_PT(x) (x)/20
 
+// map KWord field name to RTF field name
+// e.g authorName -> AUTHOR
+static QString mapFieldName( const QString& kwordField )
+{
+  QString rtfField;
+
+  if( kwordField == "fileName" ) rtfField = "FILENAME";
+  else if( kwordField == "authorName" ) rtfField = "AUTHOR";
+  else if( kwordField == "docTitle" ) rtfField = "TITLE";
+
+  return rtfField;
+}
 
 bool RTFWorker::makeTable(const FrameAnchor& anchor)
 {
@@ -278,9 +290,11 @@ void RTFWorker::formatTextParagraph(const QString& strText,
     }
 }
 
-void RTFWorker::ProcessParagraphData (const QString& strTag, const QString &paraText,
+QString RTFWorker::ProcessParagraphData ( const QString &paraText,
     const LayoutData& layout, const ValueListFormatData &paraFormatDataList)
 {
+    QString str;
+
     if (paraText.isEmpty())
     {
         // ### TODO: verify if a paragragh can be empty in RTF
@@ -322,48 +336,69 @@ void RTFWorker::ProcessParagraphData (const QString& strTag, const QString &para
                 if (0==(*paraFormatDataIt).variable.m_type) // variable date
                 {
                    // ### TODO: fixed date
-                   m_textBody += "\\chdate";
+                   str += "\\chdate";
                 }
                 else if (2==(*paraFormatDataIt).variable.m_type) // variable time
                 {
                    // ### TODO: fixed time
-                   m_textBody += "\\chtime";
+                   str += "\\chtime";
                 }
                 else if (4==(*paraFormatDataIt).variable.m_type)
                 {
                     QString strFieldType;
                     if ((*paraFormatDataIt).variable.isPageNumber())
                     {
-                        m_textBody += "\\chpgn ";
+                        str += "\\chpgn ";
                     }
 #if 0
                     else if ((*paraFormatDataIt).variable.isPageCount())
                     {
-                        m_textBody += "page_count";
+                        str += "page_count";
                     }
 #endif
                     else
                     {
                         // Unknown subtype, therefore write out the result
-                        m_textBody += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                        str += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                    }
+                }
+                else if (8==(*paraFormatDataIt).variable.m_type)
+                {
+                    // Field
+                    QString name = escapeRtfText((*paraFormatDataIt).variable.getFieldName());
+                    QString value = escapeRtfText((*paraFormatDataIt).variable.getFieldValue());
+                    QString rtfField = mapFieldName(name);
+
+                    if( rtfField.isEmpty() )
+                        // Couldn't map field name, just write out the value
+                        str += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                    else
+                    {
+                        str += "{\\field";
+                        str += "{\\*\\fldinst { ";
+                        str +=  rtfField;
+                        str += "  \\\\* MERGEFORMAT }}";
+                        str += "{\\fldrslt {";
+                        str += value;
+                        str += "}}}";
                     }
                 }
                 else if (9==(*paraFormatDataIt).variable.m_type)
                 {
                     // A link
-                    m_textBody += "{\\field";
-                    m_textBody += "{\\*\\fldinst { HYPERLINK ";
-                    m_textBody +=  escapeRtfText((*paraFormatDataIt).variable.getHrefName());
-                    m_textBody += "}}";
-                    m_textBody += "{\\fldrslt ";
-                    m_textBody += "{\\ul\\cf2";   // underline+blue, TODO: use style Hyperlink
-                    m_textBody += escapeRtfText((*paraFormatDataIt).variable.getLinkName());
-                    m_textBody += "}}}";
+                    str += "{\\field";
+                    str += "{\\*\\fldinst { HYPERLINK ";
+                    str +=  escapeRtfText((*paraFormatDataIt).variable.getHrefName());
+                    str += "}}";
+                    str += "{\\fldrslt ";
+                    str += "{\\ul\\cf2";   // underline+blue, TODO: use style Hyperlink
+                    str += escapeRtfText((*paraFormatDataIt).variable.getLinkName());
+                    str += "}}}";
                 }
                 else
                 {
                     // Generic variable
-                    m_textBody += escapeRtfText((*paraFormatDataIt).variable.m_text);
+                    str += escapeRtfText((*paraFormatDataIt).variable.m_text);
                 }
             }
             else if (6==(*paraFormatDataIt).id)
@@ -402,100 +437,68 @@ void RTFWorker::ProcessParagraphData (const QString& strTag, const QString &para
             closeParagraph(layout);
         }
     }
+
+    return str;
 }
 
 bool RTFWorker::doFullParagraph(const QString& paraText,
     const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
     kdDebug(30503) << "Entering RTFWorker::doFullParagraph" << endl << paraText << endl;
-    QString strParaText=paraText;
-    QString strTag; // Tag that will be written.
 
-#if 0
-    if ( layout.counter.numbering == CounterData::NUM_LIST )
-    {
-        const uint layoutDepth=layout.counter.depth+1; // Word's depth starts at 0!
-        const uint listDepth=m_listStack.size();
-        // We are in a list, but has it the right depth?
-        if (layoutDepth>listDepth)
-        {
-            ListInfo newList;
-            newList.m_typeList=layout.counter.style;
-            for (uint i=listDepth; i<layoutDepth; i++)
-            {
-                m_textBody += getStartOfListOpeningTag(layout.counter.style,newList.m_orderedList);
-                m_listStack.push(newList);
-            }
-        }
-        else if (layoutDepth<listDepth)
-        {
-            for (uint i=listDepth; i>layoutDepth; i--)
-            {
-                ListInfo oldList=m_listStack.pop();
-                if (oldList.m_orderedList)
-                {
-                    m_textBody += "</ol>\n";
-                }
-                else
-                {
-                    m_textBody += "</ul>\n";
-                }
-            }
-        }
-
-        // We have a list but does it have the right type?
-        if ( layout.counter.style!=m_listStack.top().m_typeList)
-        {
-            // No, then close the previous list
-            ListInfo oldList=m_listStack.pop();
-            if (oldList.m_orderedList)
-            {
-                m_textBody += "</ol>\n";
-            }
-            else
-            {
-                m_textBody += "</ul>\n";
-            }
-            ListInfo newList;
-            m_textBody += getStartOfListOpeningTag(layout.counter.style,newList.m_orderedList);
-            newList.m_typeList=layout.counter.style;
-            m_listStack.push(newList);
-        }
-        strTag="li";
-    }
-    else
-    {
-        // Close all open lists first
-        if (!m_listStack.isEmpty())
-        {
-            for (uint i=m_listStack.size(); i>0; i--)
-            {
-                ListInfo oldList=m_listStack.pop();
-                if (oldList.m_orderedList)
-                {
-                    m_textBody += "</ol>\n";
-                }
-                else
-                {
-                    m_textBody += "</ul>\n";
-                }
-            }
-        }
-        if ( (layout.counter.numbering == CounterData::NUM_CHAPTER)
-            && (layout.counter.depth<6) )
-        {
-            strTag=QString("h%1").arg(layout.counter.depth + 1); // H1 ... H6
-        }
-        else
-        {
-            strTag="p";
-        }
-    }
-#endif
-
-    ProcessParagraphData(strTag, strParaText, layout, paraFormatDataList);
+    m_textBody += ProcessParagraphData( paraText, layout, paraFormatDataList);
 
     kdDebug(30503) << "Quiting RTFWorker::doFullParagraph" << endl;
+    return true;
+}
+
+bool RTFWorker::doHeader(const HeaderData& header)
+{
+    if( header.page == HeaderData::PAGE_ODD )
+        m_textBody += "\\facingp{\\headerr";
+    else if( header.page == HeaderData::PAGE_EVEN )
+        m_textBody += "\\facingp{\\headerl";
+    else if( header.page == HeaderData::PAGE_FIRST )
+        m_textBody += "\\facingp{\\headerl";
+    else if( header.page == HeaderData::PAGE_ALL )
+        m_textBody += "{\\header";
+    else
+        return false;
+
+    QValueList<ParaData>::ConstIterator it;
+    for (it=header.para.begin();it!=header.para.end();it++)
+    {
+        if (!doFullParagraph((*it).text,(*it).layout,(*it).formattingList))
+            return false;
+    }
+
+    m_textBody += "}";
+
+    return true;
+}
+
+bool RTFWorker::doFooter(const FooterData& footer)
+{
+    if( footer.page == FooterData::PAGE_ODD )
+        m_textBody += "\\facingp{\\footerr";
+    else if( footer.page == FooterData::PAGE_EVEN )
+        m_textBody += "\\facingp{\\footerl";
+    else if( footer.page == FooterData::PAGE_FIRST )
+        m_textBody += "\\facingp{\\headerl";
+    else if( footer.page == FooterData::PAGE_ALL )
+        m_textBody += "{\\footer";
+    else
+        return false;
+
+    QValueList<ParaData>::ConstIterator it;
+    for (it=footer.para.begin();it!=footer.para.end();it++)
+    {
+        if (!doFullParagraph((*it).text,(*it).layout,(*it).formattingList))
+            return false;
+    }
+
+    m_textBody += "}";
+
     return true;
 }
 
@@ -766,7 +769,7 @@ void RTFWorker::openParagraph(const LayoutData& layout)
     m_textBody += " ";
 }
 
-void RTFWorker::closeParagraph(const LayoutData& layout)
+void RTFWorker::closeParagraph(const LayoutData& /*layout*/)
 {
     m_textBody += m_eol;
     m_textBody += "\\par";
@@ -1134,7 +1137,21 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
                 case 2:  strLayout += "\\tqr"; break;
                 case 3:  strLayout += "\\tqdec"; break;
             }
-    
+
+            switch ((*it).m_filling)
+            {
+                case TabulatorData::TF_NONE: default: break; // without leader/filling
+                case TabulatorData::TF_DOT:  strLayout += "\\tldot"; break;
+                case TabulatorData::TF_LINE:  strLayout += "\\tlul"; break;
+
+                // these belows are all treated as RTF's \tqul
+                case TabulatorData::TF_DASH:
+                case TabulatorData::TF_DASHDOT:
+                case TabulatorData::TF_DASHDOTDOT:
+                    strLayout += "\\tlul"; break;
+            }
+
+            // must be the last
             strLayout += "\\tx";
             strLayout += QString::number(int((*it).m_ptpos)*20, 10);
 
