@@ -22,12 +22,13 @@
 
 #include <qobject.h>
 #include <qdom.h>
+#include <qptrlist.h>
 
-template<class type> class QPtrList;
 class QWidget;
 class QWorkspace;
 class KPopupMenu;
 class KexiPropertyEditor;
+class KexiPropertyBuffer;
 class KActionCollection;
 class KAction;
 
@@ -107,7 +108,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Deletes the Form \a form and removes it from our list. */
 		void deleteForm(Form *form);
 
-		
+		/*! Shows a propertybuffer in PropertyBuffer */
+		virtual void showPropertyBuffer(ObjectPropertyBuffer *buff);
 
 	public slots:
 		/*! Creates a new blank Form with default class top widget (ie QWidget). The new Form is shown and becomes
@@ -155,8 +157,13 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  */
 		void windowChanged(QWidget *w);
 
+
 	protected:
 		void initForm(Form *form);
+
+	signals:
+		/*! this signal is emmited as the property buffer switched */
+		void bufferSwitched(KexiPropertyBuffer *buff);
 
 	private:
 		ObjectPropertyBuffer	*m_buffer;

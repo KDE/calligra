@@ -60,7 +60,7 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 	m_popup->insertItem(i18n("Paste"), this, SLOT(pasteWidget()));
 	m_popup->insertItem(i18n("Remove Item"), this, SLOT(deleteWidget()));
 	m_treeview = 0;
-	m_buffer = 0;
+	m_editor = 0;
 }
 
 void 
@@ -68,7 +68,9 @@ FormManager::setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview)
 {
 	m_editor = editor;
 	m_treeview = treeview;
-	editor->setBuffer(m_buffer);
+
+	if(editor)
+		editor->setBuffer(m_buffer);
 
 	connect(treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget *)));
 	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), this, SLOT(setSelWidget(QWidget*)));
@@ -236,7 +238,8 @@ void
 FormManager::importForm(QWidget *w)
 {
 	Form *form = new Form(this, w->name());
-	form->createToplevel(w, w->className());
+	//form->createToplevel(w, w->className());
+	form->createToplevel(w, w->name());
 	w->setCaption(w->name());
 	w->setIcon(SmallIcon("kexi"));
 	w->resize(350, 300);
@@ -271,8 +274,7 @@ FormManager::initForm(Form *form)
 	m_active = form;
 	m_count++;
 
-	if(m_buffer)
-		m_buffer->setWidget(form->toplevelContainer()->widget());
+	m_buffer->setWidget(form->toplevelContainer()->widget());
 
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget*)));
 	connect(form, SIGNAL(addedSelectedWidget(QWidget*)), m_buffer, SLOT(addWidget(QWidget*)));
@@ -308,7 +310,11 @@ FormManager::saveFormAs()
 bool
 FormManager::isTopLevel(QWidget *w)
 {
+	kdDebug() << "FormManager::isTopLevel(): for: " << w->name() << " = " << activeForm()->objectTree()->lookup(w->name())<< endl;
 	ObjectTreeItem *item = activeForm()->objectTree()->lookup(w->name());
+	if(!item)
+		return true;
+
 	return (!item->parent());
 }
 
@@ -401,6 +407,15 @@ FormManager::debugTree()
 {
 	if (activeForm() && activeForm()->objectTree())
 		activeForm()->objectTree()->debug();
+}
+
+void
+FormManager::showPropertyBuffer(ObjectPropertyBuffer *buff)
+{
+	if(m_editor)
+		m_editor->setBuffer(buff);
+
+	emit bufferSwitched(buff);
 }
 
 }

@@ -84,6 +84,7 @@ ObjectPropertyBuffer::changeProperty(const QString &property, const QVariant &va
 void
 ObjectPropertyBuffer::setWidget(QWidget *widg)
 {
+	kdDebug() << "ObjectPropertyBuffer::setWidget()" << endl;
 	QObject *obj = (QObject*)widg; 
 	if(obj==m_object && !m_multiple)
 		return;
@@ -97,7 +98,8 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 	if(m_object)
 		m_object->removeEventFilter(this);
 
-	m_manager->editor()->reset(false);
+	//luci, TODO: m_manager->editor()->reset(false);
+	m_manager->showPropertyBuffer(0);
 	clear();
 
 	m_object = obj;
@@ -142,7 +144,7 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 			createLayoutProperty(objectIt->container());
 	}
 
-	m_manager->editor()->setBuffer(this);
+	m_manager->showPropertyBuffer(this);
 
 	obj->installEventFilter(this);
 }
@@ -158,7 +160,7 @@ ObjectPropertyBuffer::addWidget(QWidget *widg)
 	if(m_object->className() == widg->className())
 		classn = m_object->className();
 
-	m_manager->editor()->clear();
+	//luci, TODO change back: m_manager->editor()->clear();
 
 	QDictIterator<KexiProperty> it(*this);
 	for(; it.current(); ++it)
@@ -167,7 +169,7 @@ ObjectPropertyBuffer::addWidget(QWidget *widg)
 			(*this)[it.currentKey()]->setVisible(false);
 	}
 
-	m_manager->editor()->setBuffer(this);
+	m_manager->showPropertyBuffer(this);
 }
 
 bool
