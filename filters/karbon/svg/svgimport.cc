@@ -206,16 +206,18 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 	QDomElement b = e.firstChild().toElement();
 	for( ; !b.isNull(); b = b.nextSibling().toElement() )
 	{
+		VObject *obj = 0L;
 		if( b.tagName() == "g" )
 		{
 			VGroup *group = new VGroup( grp ? grp : &m_document );
 			parseStyle( group, b );
+			parseGroup( group, b );
 			if( grp )
 				grp->append( group );
 			else
 				m_document.append( group );
-			parseGroup( group, b );
 			m_gc.pop();
+			continue;
 		}
 		else if( b.tagName() == "rect" )
 		{
@@ -223,13 +225,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			int y = b.attribute( "y" ).toInt();
 			int width = b.attribute( "width" ).toInt();
 			int height = b.attribute( "height" ).toInt();
-			VObject *rect = new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
-			parseStyle( rect, b );
-			if( grp )
-				grp->append( rect );
-			else
-				m_document.append( rect );
-			m_gc.pop();
+			obj = new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
 		}
 		else if( b.tagName() == "ellipse" )
 		{
@@ -238,13 +234,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			double left	= b.attribute( "cx" ).toDouble() - ( rx / 2.0 );
 			double top	= b.attribute( "cy" ).toDouble() + ( ry / 2.0 );
 			// Append the ellipse to the document
-			VObject *ellipse = new VEllipse( 0L, KoPoint( left, top ), rx * 2.0, ry * 2.0 );
-			parseStyle( ellipse, b );
-			if( grp )
-				grp->append( ellipse );
-			else
-				m_document.append( ellipse );
-			m_gc.pop();
+			obj = new VEllipse( 0L, KoPoint( left, top ), rx * 2.0, ry * 2.0 );
 		}
 		else if( b.tagName() == "circle" )
 		{
@@ -252,13 +242,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			double left	= b.attribute( "cx" ).toDouble() - ( r / 2.0 );
 			double top	= b.attribute( "cy" ).toDouble() + ( r / 2.0 );
 			// Append the ellipse to the document
-			VObject *circle = new VEllipse( 0L, KoPoint( left, top ), r * 2.0, r * 2.0 );
-			parseStyle( circle, b );
-			if( grp )
-				grp->append( circle );
-			else
-				m_document.append( circle );
-			m_gc.pop();
+			obj = new VEllipse( 0L, KoPoint( left, top ), r * 2.0, r * 2.0 );
 		}
 		else if( b.tagName() == "line" )
 		{
@@ -269,12 +253,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			double y2 = b.attribute( "y2" ).isEmpty() ? 0.0 : b.attribute( "y2" ).toDouble();
 			path->moveTo( KoPoint( x1, y1 ) );
 			path->lineTo( KoPoint( x2, y2 ) );
-			parseStyle( path, b );
-			if( grp )
-				grp->append( path );
-			else
-				m_document.append( path );	
-			m_gc.pop();
+			obj = path;
 		}
 		else if( b.tagName() == "polyline" || b.tagName() == "polygon" )
 		{
@@ -297,13 +276,14 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 					path->lineTo( KoPoint( (*(it++)).toDouble(), (*it).toDouble() ) );
 			}
 			if( b.tagName() == "polygon" ) path->close();
-			parseStyle( path, b );
-			if( grp )
-				grp->append( path );
-			else
-				m_document.append( path );	
-			m_gc.pop();
+			obj = path;
 		}
+		parseStyle( obj, b );
+		if( grp )
+			grp->append( obj );
+		else
+			m_document.append( obj );
+		m_gc.pop();
 	}
 }
 
