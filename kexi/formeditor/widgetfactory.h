@@ -51,6 +51,9 @@ class ObjectTreeItem;
 class KFORMEDITOR_EXPORT WidgetInfo
 {
 	public:
+		typedef QPtrList<WidgetInfo> List;
+		typedef QDict<WidgetInfo> Dict;
+
 		WidgetInfo(WidgetFactory *f=0) {m_factory = f; }
 		virtual ~WidgetInfo() { }
 
@@ -96,9 +99,6 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		QGuardedPtr<WidgetFactory>	m_factory;
 
 };
-
-typedef QPtrList<WidgetInfo> WidgetInfoList;
-typedef QDict<WidgetInfo> WidgetInfoDict;
 
 //! The base class for all widget Factories
 /*! This is the class you need to inherit to create a new Factory. There are few
@@ -153,7 +153,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		/**
 		 * \return all classes which are provided by this factory
 		 */
-		virtual	WidgetInfoList	classes()=0;
+		virtual WidgetInfo::List classes()=0;
 
 		/*!
 		 * Creates a widget (and if needed a \ref Container)

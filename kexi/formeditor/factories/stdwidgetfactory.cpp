@@ -294,7 +294,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	m_classes.append(wDateTime);
 }
 
-KFormDesigner::WidgetInfoList
+KFormDesigner::WidgetInfo::List
 StdWidgetFactory::classes()
 {
 	return m_classes;

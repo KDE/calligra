@@ -36,8 +36,8 @@
 #include "objecttree.h"
 #include "widgetfactory.h"
 
+using namespace KFormDesigner;
 
-namespace KFormDesigner {
 
 static void setRecursiveCursor(QWidget *w, Form *form)
 {
@@ -59,6 +59,11 @@ static void setRecursiveCursor(QWidget *w, Form *form)
 WidgetFactory::WidgetFactory(QObject *parent, const char *name)
  : QObject(parent, name)
 {
+}
+
+WidgetFactory::~WidgetFactory()
+{
+	
 }
 
 KLineEdit*
@@ -311,10 +316,5 @@ void
 WidgetFactory::saveSpecialProperty(const QString &, const QString &, const QVariant&, QWidget *, QDomElement &,  QDomDocument &)
 {}
 
-WidgetFactory::~WidgetFactory()
-{
-}
-
-}
 
 #include "widgetfactory.moc"

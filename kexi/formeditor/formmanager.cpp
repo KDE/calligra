@@ -102,6 +102,12 @@ FormManager::FormManager(QObject *parent=0, const char *name=0)
 	connect( this, SIGNAL(connectionCreated(Form*, Connection&)), this, SLOT(slotConnectionCreated(Form*, Connection&)));
 }
 
+FormManager::~FormManager()
+{
+	delete m_popup;
+	delete m_connection;
+}
+
 void
 FormManager::setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview)
 {
@@ -1076,12 +1082,6 @@ void
 FormManager::deleteWidgetLaterTimeout()
 {
 	m_deleteWidgetLater_list.clear();
-}
-
-FormManager::~FormManager()
-{
-	delete m_popup;
-	delete m_connection;
 }
 
 #include "formmanager.moc"

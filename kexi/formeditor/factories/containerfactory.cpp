@@ -341,7 +341,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	m_classes.append(wSubForm);
 }
 
-KFormDesigner::WidgetInfoList
+KFormDesigner::WidgetInfo::List
 ContainerFactory::classes()
 {
 	return m_classes;

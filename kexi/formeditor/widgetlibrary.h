@@ -41,6 +41,7 @@ namespace KFormDesigner {
 
 class Container;
 class ObjectTreeItem;
+class WidgetLibraryPrivate;
 
 typedef QPtrList<KAction> ActionList;
 
@@ -50,7 +51,6 @@ typedef QPtrList<KAction> ActionList;
  * You call WidgetLibrary functions instead of calling directly factories.
  * See WidgetFactory for a description of the functions.
  */
-
 class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 {
 	Q_OBJECT
@@ -58,26 +58,6 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 	public:
 		WidgetLibrary(QObject *parent=0);
 		~WidgetLibrary();
-
-		/**
-		 * add a factory to the library. this creates actions for widgets in the added factory.
-		 * this function mostly won't be called directly but by the factory locater
-		 */
-		void	addFactory(WidgetFactory *f);
-
-		/**
-		 * you can restrict the loaded factories by setting the filter to a pattern
-		 * like 'kexi|containers' in that case only factory containing 'kexi' or containers will be loaded.
-		 * this is useful if you want to embedd formeditor and provide e.g. a LineEdit with special features
-		 * but don't want to confuse the user... are you confused now?
-		 * NB: not implemented yet
-		 */
-		void	setFilter(const QRegExp &expr);
-
-		/**
-		 * scans for widget factories (note that this function get called by the constructor as well!)
-		 */
-		void	scan();
 
 		/**
 		 * creates actions
@@ -117,10 +97,30 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 	signals:
 		void	prepareInsert(const QString &c);
 
-	private:
-		// dict which associates a class name with a Widget class
-		WidgetInfoDict	m_widgets;
-		QMap<QString, QString>  m_alternates;
+	protected:
+		/**
+		 * add a factory to the library. this creates actions for widgets in the added factory.
+		 * this function mostly won't be called directly but by the factory locater
+		 */
+		void	addFactory(WidgetFactory *f);
+
+#if 0 //UNIMPLEMENTED
+		/**
+		 * you can restrict the loaded factories by setting the filter to a pattern
+		 * like 'kexi|containers' in that case only factory containing 'kexi' or containers will be loaded.
+		 * this is useful if you want to embedd formeditor and provide e.g. a LineEdit with special features
+		 * but don't want to confuse the user... are you confused now?
+		 * NB: not implemented yet
+		 */
+		void setFilter(const QRegExp &expr);
+#endif
+
+		/**
+		 * scans for widget factories (note that this function get called by the constructor as well!)
+		 */
+		void scan();
+
+		WidgetLibraryPrivate *d;
 };
 
 }

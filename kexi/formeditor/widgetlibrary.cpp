@@ -31,10 +31,31 @@
 #include "libactionwidget.h"
 
 namespace KFormDesigner {
+class WidgetLibraryPrivate
+{
+	public:
+		WidgetLibraryPrivate()
+		{}
+		// dict which associates a class name with a Widget class
+		WidgetInfo::Dict widgets;
+		QMap<QString, QString> alternates;
+};
+}
+
+using namespace KFormDesigner;
+
+//-------------------------------------------
+
 WidgetLibrary::WidgetLibrary(QObject *parent)
  : QObject(parent)
+ , d(new WidgetLibraryPrivate())
 {
 	scan();
+}
+
+WidgetLibrary::~WidgetLibrary()
+{
+	delete d;
 }
 
 void
@@ -43,13 +64,13 @@ WidgetLibrary::addFactory(WidgetFactory *f)
 	if(!f)
 		return;
 
-	WidgetInfoList widgets = f->classes();
+	WidgetInfo::List widgets = f->classes();
 	for(WidgetInfo *w = widgets.first(); w; w = widgets.next())
 	{
 		kdDebug() << "WidgetLibrary::addFactory(): adding class " << w->className() << endl;
-		m_widgets.insert(w->className(), w);
+		d->widgets.insert(w->className(), w);
 		if(!w->alternateClassName().isEmpty())
-			m_alternates.insert(w->alternateClassName(), w->className());
+			d->alternates.insert(w->alternateClassName(), w->className());
 	}
 }
 
@@ -100,7 +121,7 @@ WidgetLibrary::createXML()
 	QDomElement menu = doc.createElement("Menu");
 	menu.setAttribute("name", "widgets");
 
-	QDictIterator<WidgetInfo> it(m_widgets);
+	QDictIterator<WidgetInfo> it(d->widgets);
 	int i = 0;
 	for(; it.current(); ++it)
 	{
@@ -119,7 +140,7 @@ ActionList
 WidgetLibrary::createActions(KActionCollection *parent,  QObject *receiver, const char *slot)
 {
 	ActionList actions;
-	QDictIterator<WidgetInfo> it(m_widgets);
+	QDictIterator<WidgetInfo> it(d->widgets);
 	for(; it.current(); ++it)
 	{
 		LibActionWidget *a = new LibActionWidget(*it, parent);
@@ -134,7 +155,7 @@ WidgetLibrary::createActions(KActionCollection *parent,  QObject *receiver, cons
 QWidget*
 WidgetLibrary::createWidget(const QString &w, QWidget *parent, const char *name, Container *c)
 {
-	WidgetInfo *wfactory = m_widgets[w];
+	WidgetInfo *wfactory = d->widgets[w];
 	kdDebug() << "WidgetLibrary::createWidget(): " << w << "  " << name << endl;
 	if(!wfactory)
 		return 0;
@@ -145,7 +166,7 @@ WidgetLibrary::createWidget(const QString &w, QWidget *parent, const char *name,
 bool
 WidgetLibrary::createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container, QValueVector<int> *menuIds)
 {
-	WidgetInfo *wfactory = m_widgets[c];
+	WidgetInfo *wfactory = d->widgets[c];
 	if(!wfactory)
 		return false;
 
@@ -155,7 +176,7 @@ WidgetLibrary::createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu,
 void
 WidgetLibrary::startEditing(const QString &classname, QWidget *w, Container *container)
 {
-	WidgetInfo *wfactory = m_widgets[classname];
+	WidgetInfo *wfactory = d->widgets[classname];
 	if(!wfactory)
 		return ;
 
@@ -165,7 +186,7 @@ WidgetLibrary::startEditing(const QString &classname, QWidget *w, Container *con
 void
 WidgetLibrary::previewWidget(const QString &classname, QWidget *widget, Container *container)
 {
-	WidgetInfo *wfactory = m_widgets[classname];
+	WidgetInfo *wfactory = d->widgets[classname];
 	if(!wfactory)
 		return ;
 
@@ -175,8 +196,8 @@ WidgetLibrary::previewWidget(const QString &classname, QWidget *widget, Containe
 QString
 WidgetLibrary::displayName(const QString &classname)
 {
-	if(m_widgets.find(classname))
-		return m_widgets[classname]->name();
+	if(d->widgets.find(classname))
+		return d->widgets[classname]->name();
 	else
 		return classname;
 }
@@ -184,8 +205,8 @@ WidgetLibrary::displayName(const QString &classname)
 QString
 WidgetLibrary::namePrefix(const QString &classname)
 {
-	if(m_widgets.find(classname))
-		return m_widgets[classname]->namePrefix();
+	if(d->widgets.find(classname))
+		return d->widgets[classname]->namePrefix();
 	else
 		return i18n("Form");
 }
@@ -193,7 +214,7 @@ WidgetLibrary::namePrefix(const QString &classname)
 QString
 WidgetLibrary::textForWidgetName(const QString &name, const QString &className)
 {
-	WidgetInfo *widget = m_widgets[className];
+	WidgetInfo *widget = d->widgets[className];
 	if(!widget)
 		return QString::null;
 
@@ -207,12 +228,12 @@ WidgetLibrary::textForWidgetName(const QString &name, const QString &className)
 QString
 WidgetLibrary::checkAlternateName(const QString &classname)
 {
-	if(m_widgets.find(classname))
+	if(d->widgets.find(classname))
 		return classname;
-	else if(m_alternates.contains(classname))
+	else if(d->alternates.contains(classname))
 	{
-		kdDebug() << "WidgetLibrary::alternateName() : The name " << classname << " will be replaced with " << m_alternates[classname] << endl;
-		return m_alternates[classname];
+		kdDebug() << "WidgetLibrary::alternateName() : The name " << classname << " will be replaced with " << d->alternates[classname] << endl;
+		return d->alternates[classname];
 	}
 	else // widget not supported
 		return QString("CustomWidget");
@@ -221,8 +242,8 @@ WidgetLibrary::checkAlternateName(const QString &classname)
 QString
 WidgetLibrary::includeFile(const QString &classname)
 {
-	if(m_widgets.find(classname))
-		return m_widgets[classname]->includeFile();
+	if(d->widgets.find(classname))
+		return d->widgets[classname]->includeFile();
 	else
 		return QString::null;
 }
@@ -230,8 +251,8 @@ WidgetLibrary::includeFile(const QString &classname)
 QString
 WidgetLibrary::icon(const QString &classname)
 {
-	if(m_widgets.find(classname))
-		return m_widgets[classname]->pixmap();
+	if(d->widgets.find(classname))
+		return d->widgets[classname]->pixmap();
 	else
 		return QString("form");
 }
@@ -239,8 +260,8 @@ WidgetLibrary::icon(const QString &classname)
 void
 WidgetLibrary::saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
 {
-	if(m_widgets.find(classname))
-		m_widgets[classname]->factory()->saveSpecialProperty(classname, name, value, w, parentNode, parent);
+	if(d->widgets.find(classname))
+		d->widgets[classname]->factory()->saveSpecialProperty(classname, name, value, w, parentNode, parent);
 	else
 		return;
 }
@@ -248,8 +269,8 @@ WidgetLibrary::saveSpecialProperty(const QString &classname, const QString &name
 void
 WidgetLibrary::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w, ObjectTreeItem *item)
 {
-	if(m_widgets.find(classname))
-		m_widgets[classname]->factory()->readSpecialProperty(classname, node, w, item);
+	if(d->widgets.find(classname))
+		d->widgets[classname]->factory()->readSpecialProperty(classname, node, w, item);
 	else
 		return;
 }
@@ -257,8 +278,8 @@ WidgetLibrary::readSpecialProperty(const QString &classname, QDomElement &node, 
 bool
 WidgetLibrary::showProperty(const QString &classname, QWidget *w, const QString &property, bool multiple)
 {
-	if(m_widgets.find(classname))
-		return m_widgets[classname]->factory()->showProperty(classname, w, property, multiple);
+	if(d->widgets.find(classname))
+		return d->widgets[classname]->factory()->showProperty(classname, w, property, multiple);
 	else
 		return true;
 }
@@ -266,15 +287,10 @@ WidgetLibrary::showProperty(const QString &classname, QWidget *w, const QString 
 QStringList
 WidgetLibrary::autoSaveProperties(const QString &classname)
 {
-	if(m_widgets.find(classname))
-		return m_widgets[classname]->factory()->autoSaveProperties(classname);
+	if(d->widgets.find(classname))
+		return d->widgets[classname]->factory()->autoSaveProperties(classname);
 	else
 		return QStringList();
-}
-
-WidgetLibrary::~WidgetLibrary()
-{
-}
 }
 
 #include "widgetlibrary.moc"
