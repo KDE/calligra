@@ -627,12 +627,11 @@ KarbonView::zoomChanged( const KoPoint &p )
 	double centerX;
 	double centerY;
 	double zoomFactor;
-	bool bOK;
 	if( !p.isNull() )
 	{
 		centerX = ( ( p.x() ) * zoom() + m_canvas->pageOffsetX() ) / double( m_canvas->contentsWidth() );
 		centerY = 1 - ( ( p.y() ) * zoom() + m_canvas->pageOffsetY() ) / double( m_canvas->contentsHeight() );
-		zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
+		zoomFactor = m_zoomAction->currentText().remove( '%' ).toDouble() / 100.0;
 	}
 	else if( m_zoomAction->currentText() == i18n("  Width") )
 	{
@@ -658,7 +657,7 @@ KarbonView::zoomChanged( const KoPoint &p )
 			centerY = double( m_canvas->contentsY() + ( height() - 20 ) / 2 ) / double( m_canvas->contentsHeight() );
 		else
 			centerY = 0.5;
-		zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
+		zoomFactor = m_zoomAction->currentText().remove( '%' ).toDouble() / 100.0;
 	}
 	kdDebug(38000) << "centerX : " << centerX << endl;
 	kdDebug(38000) << "centerY : " << centerY << endl;
