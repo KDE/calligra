@@ -1376,13 +1376,13 @@ void KSpreadCanvas::updateCellRect( const QRect &_rect )
   int left = table->columnPos( param.left() );
   int top = table->rowPos( param.top() );
   if ( param.right() < 0x7fff )
-    right = left + table->columnPos( param.right() + 5 );
+    right = table->columnPos( param.right() + 1 );
   else
-    right = left + int( (double)width() / m_pView->xScaling() );
+    right = int( (double)width() / m_pView->xScaling() );
   if ( param.bottom() < 0x7fff )
-    bottom = top + table->rowPos( param.bottom() + 5 );
+    bottom = table->rowPos( param.bottom() + 1 );
   else
-    bottom = top + int( (double)height() / m_pView->yScaling() );
+    bottom = int( (double)height() / m_pView->yScaling() );
 
   QPoint tl( left, top );
   QPoint br( right, bottom );
