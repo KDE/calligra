@@ -1,4 +1,1 @@
 SUBDIRS = kspread kword olefilters
-
-
-

@@ -216,7 +216,7 @@ void OLEFilter::convert(const QString &dirname) {
             else if(node->name=="PowerPoint Document") {
                 // PowerPoint
                 kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): Power Point");
-                myFilter=new FilterBase();
+                myFilter=new PowerPointFilter();
                 // connect SIGNALs&SLOTs
                 connectCommon(&myFilter);
             }

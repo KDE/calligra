@@ -1,17 +1,17 @@
 ####### General stuff
 
-#INCLUDES=	-I$(srcdir) -I$(srcdir)/.. $(all_includes) 
-#LDFLAGS	=	$(all_libraries) -version-info 1:0:0
+INCLUDES= -I$(srcdir) -I$(srcdir)/../lib $(all_includes)
+LDFLAGS	= $(all_libraries) -version-info 1:0:0
 
 ####### Files
 
-#lib_LTLIBRARIES = libwinword97.la
+lib_LTLIBRARIES = libpowerpoint97.la
 
-#libwinword97_la_SOURCES = wordfilter.cc winworddoc.cc
+libpowerpoint97_la_SOURCES = powerpointfilter.cc
 
-#noinst_HEADERS = winworddoc.h kworddoc.h anld.h anlv.h asumy.h
+noinst_HEADERS = powerpointfilter.h
 
-#METASOURCES = wordfilter.moc winworddoc.moc kworddoc.moc
+METASOURCES = AUTO
 
 service_DATA = ole_powerpoint97_import.desktop
 servicedir = $(kde_servicesdir)
