@@ -38,10 +38,11 @@ protected:
     virtual void closeParagraph(const QString& strTag, const LayoutData& layout);
     virtual void openSpan(const FormatData& format);
     virtual void closeSpan(const FormatData& format);
-    virtual bool writeDocType(void);
+    virtual bool doOpenBody(void); // HTML's <body>
+    virtual void writeDocType(void);
 private:
-    void openFormatData(const FormatData& format);
-    void closeFormatData(const FormatData& format);
+    void openFormatData(const FormatData& format, const bool allowBold);
+    void closeFormatData(const FormatData& format, const bool allowBold);
     QString textFormatToCss(const TextFormatting& formatData) const;
 };
 

@@ -34,12 +34,8 @@
 #include "ExportBasic.h"
 
 QString HtmlBasicWorker::textFormatToCss(const TextFormatting& formatData) const
-{
-    // TODO: as this method comes from the AbiWord filter,
-    // TODO:   verify that it is working for HTML
-
-    // TODO: rename variable formatData
-    QString strElement; // TODO: rename this variable
+{// PROVISORY
+    QString strElement;
 
     // Font name
     QString fontName = formatData.fontName;
@@ -49,29 +45,6 @@ QString HtmlBasicWorker::textFormatToCss(const TextFormatting& formatData) const
         strElement+=fontName; // TODO: add alternative font names
         strElement+="; ";
     }
-
-    // Font style
-    strElement+="font-style: ";
-    if ( formatData.italic )
-    {
-        strElement+="italic";
-    }
-    else
-    {
-        strElement+="normal";
-    }
-    strElement+="; ";
-
-    strElement+="font-weight: ";
-    if ( formatData.weight >= 75 )
-    {
-        strElement+="bold";
-    }
-    else
-    {
-        strElement+="normal";
-    }
-    strElement+="; ";
 
     const int size=formatData.fontSize;
     if (size>0)
@@ -89,30 +62,6 @@ QString HtmlBasicWorker::textFormatToCss(const TextFormatting& formatData) const
         strElement+=formatData.fgColor.name();
         strElement+="; ";
     }
-    if ( formatData.bgColor.isValid() )
-    {
-        // Give background colour
-        strElement+="bgcolor: ";
-        strElement+=formatData.bgColor.name();
-        strElement+="; ";
-    }
-
-    strElement+="text-decoration: ";
-    if ( formatData.underline )
-    {
-        strElement+="underline";
-    }
-    else if ( formatData.strikeout )
-    {
-        strElement+="line-through";
-    }
-    else
-    {
-        strElement+="none";
-    }
-    // As this is the last property, do not put a semi-colon
-    //strElement+="; ";
-
     return strElement;
 }
 
@@ -193,7 +142,7 @@ QString HtmlBasicWorker::getStartOfListOpeningTag(const CounterData::Style typeL
     return strResult;
 }
 
-bool HtmlBasicWorker::writeDocType(void)
+void HtmlBasicWorker::writeDocType(void)
 {
     // write <!DOCTYPE
     *m_streamOut << "<!DOCTYPE ";
@@ -210,31 +159,61 @@ bool HtmlBasicWorker::writeDocType(void)
     }
 }
 
-void HtmlBasicWorker::openFormatData(const FormatData& format)
+void HtmlBasicWorker::openFormatData(const FormatData& format, const bool allowBold)
 {
-    *m_streamOut << "<!--";
-    *m_streamOut << textFormatToCss(format.text);
-    *m_streamOut << "-->"; // close span opening tag
+    // TODO: <font>
 
-    if ( 1==format.text.verticalAlignment )
+    if (allowBold && (format.text.weight>=75))
+    {
+        *m_streamOut << "<b>";
+    }
+    if (format.text.italic)
+    {
+        *m_streamOut << "<i>";
+    }
+    if (format.text.underline)
+    {
+        *m_streamOut << "<u>";
+    }
+    if (format.text.strikeout)
+    {
+        *m_streamOut << "<s>";
+    }
+    if (1==format.text.verticalAlignment)
     {
         *m_streamOut << "<sub>"; //Subscript
     }
-    else if ( 2==format.text.verticalAlignment )
+    else if (2==format.text.verticalAlignment)
     {
         *m_streamOut << "<sup>"; //Superscript
     }
 }
 
-void HtmlBasicWorker::closeFormatData(const FormatData& format)
+void HtmlBasicWorker::closeFormatData(const FormatData& format, const bool allowBold)
 {
-    if ( 2==format.text.verticalAlignment )
+    if (2==format.text.verticalAlignment)
     {
         *m_streamOut << "</sup>"; //Superscript
     }
-    else if ( 1==format.text.verticalAlignment )
+    else if (1==format.text.verticalAlignment)
     {
         *m_streamOut << "</sub>"; //Subscript
+    }
+    if (format.text.strikeout)
+    {
+        *m_streamOut << "</s>";
+    }
+    if (format.text.underline)
+    {
+        *m_streamOut << "</u>";
+    }
+    if (format.text.italic)
+    {
+        *m_streamOut << "</i>";
+    }
+    if (allowBold && (format.text.weight >= 75))
+    {
+        *m_streamOut << "</b>";
     }
 }
 
@@ -254,22 +233,30 @@ void HtmlBasicWorker::openParagraph(const QString& strTag, const LayoutData& lay
 
     *m_streamOut << ">";
 
-    openFormatData(layout.formatData);
+    openFormatData(layout.formatData,(strTag[0]!='h')); // Allow bold only if tag is not a heading!
 }
 
 void HtmlBasicWorker::closeParagraph(const QString& strTag, const LayoutData& layout)
 {
-    closeFormatData(layout.formatData);
+    closeFormatData(layout.formatData,(strTag[0]!='h')); // Allow bold only if tag is not a heading!
 
     *m_streamOut << "</" << strTag << ">\n";
 }
 
 void HtmlBasicWorker::openSpan(const FormatData& format)
 {
-    openFormatData(format);
+    openFormatData(format, true);
 }
 
 void HtmlBasicWorker::closeSpan(const FormatData& format)
 {
-    closeFormatData(format);
+    closeFormatData(format, true);
 }
+
+bool HtmlBasicWorker::doOpenBody(void)
+{
+    // Define the background colour as white!
+    *m_streamOut << "<body bgcolor=\"#FFFFFF\">\n";
+    return true;
+}
+

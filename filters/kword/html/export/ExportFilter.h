@@ -50,7 +50,7 @@ protected:
     virtual void closeParagraph(const QString& strTag, const LayoutData& layout)=0;
     virtual void openSpan(const FormatData& format)=0;
     virtual void closeSpan(const FormatData& format)=0;
-    virtual bool writeDocType(void);
+    virtual void writeDocType(void);
 public:
     inline bool isXML  (void) const { return m_xml; }
     inline void setXML (const bool flag ) { m_xml=flag; }

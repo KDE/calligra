@@ -358,7 +358,7 @@ bool HtmlWorker::doCloseFile(void)
     return (m_ioDevice);
 }
 
-bool HtmlWorker::writeDocType(void)
+void HtmlWorker::writeDocType(void)
 {
     // write <!DOCTYPE
     *m_streamOut << "<!DOCTYPE ";
@@ -464,7 +464,6 @@ bool HtmlWorker::doCloseBody(void)
 
 bool HtmlWorker::doOpenTextFrameSet(void)
 {
-    *m_streamOut << "<div>\n"; // For compatibility with AbiWord's XHTML import filter
     return true;
 }
 
@@ -484,6 +483,5 @@ bool HtmlWorker::doCloseTextFrameSet(void)
         }
         m_inList=false;
     }
-    *m_streamOut << "</div>\n"; // For compatibility with AbiWord's XHTML import filter
     return true;
 }
