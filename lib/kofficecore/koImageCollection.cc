@@ -65,7 +65,7 @@ KoImage KoImageCollection::loadImage( const QString &fileName )
     return i;
 }
 
-void KoImageCollection::saveToStore( KoStore *_store, QValueList<KoImageKey> keys, const QString & prefix ) const
+void KoImageCollection::saveToStore( KoStore *store, QValueList<KoImageKey> keys, const QString & prefix ) const
 {
     int i = 0;
     QValueList<KoImageKey>::Iterator it = keys.begin();
@@ -80,14 +80,14 @@ void KoImageCollection::saveToStore( KoStore *_store, QValueList<KoImageKey> key
             QString storeURL = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
             storeURL.prepend( prefix );
 
-            if ( _store->open( storeURL ) ) {
-                KoStoreDevice dev( _store );
+            if ( store->open( storeURL ) ) {
+                KoStoreDevice dev( store );
                 QImageIO io;
                 io.setIODevice( &dev );
                 io.setImage( image.image() );
                 io.setFormat( format.latin1() );
                 io.write();
-                _store->close();
+                store->close();
             }
         }
     }

@@ -27,8 +27,8 @@ class KoStore;
 
 /**
  * This is a little extension to a QMap holding a bunch of @ref KoImage
- * objects. It actually inherits from QMap, but it provides to additional
- * methods. See @ref findImage and @ref insertImage
+ * objects. It actually inherits from QMap, but it provides additional
+ * methods.
  */
 class KoImageCollection : public QMap<KoImageKey, KoImage>
 {

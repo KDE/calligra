@@ -1,9 +1,10 @@
 ####### General stuff
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES= $(KSTORE_INCLUDES) $(all_includes)
+INCLUDES= $(KSTORE_INCLUDES) $(KWMF_INCLUDES) $(all_includes)
 libkofficecore_la_LIBADD  = \
-	$(top_builddir)/lib/store/libkstore.la $(LIB_KPARTS) $(LIB_KDEPRINT)
+	$(top_builddir)/lib/store/libkstore.la $(top_builddir)/lib/kwmf/libkwmf.la \
+	$(LIB_KPARTS) $(LIB_KDEPRINT)
 
 ####### Files
 
@@ -15,13 +16,14 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	koApplication.cc koQueryTrader.cc \
 	koDataTool.cc koFilter.cc \
 	koImage.cc koImageCollection.cc \
+	koClipart.cc koClipartCollection.cc \
 	koDocumentInfo.cc koFilterDialog.cc \
 	koView.cc koFrame.cc handler.cpp koDocumentChild.cc \
 	koDocumentInfoDlg.cc koFactory.cc koChild.cc \
 	KoApplicationIface.cc KoApplicationIface.skel \
 	KoDocumentIface.cc KoDocumentIface.skel KoViewIface.cc KoViewIface.skel
 
-libkofficecore_la_LDFLAGS = $(KDE_LDFLAGS)  -version-info 1:0:0 -no-undefined
+libkofficecore_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
 
 include_HEADERS = koFilter.h \
 	koDocument.h \
@@ -32,7 +34,8 @@ include_HEADERS = koFilter.h \
 	koFilterDialog.h koView.h koFrame.h handler.h koDocumentChild.h \
 	koDocumentInfoDlg.h koFactory.h koChild.h \
 	KoApplicationIface.h KoDocumentIface.h KoViewIface.h \
-	koImage.h koImageCollection.h koprinter.h
+	koImage.h koImageCollection.h koClipart.h koClipartCollection.h \
+	koprinter.h
 
 noinst_HEADERS = koDocument_p.h
 
