@@ -160,8 +160,9 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 	}
 	xoffset += 2 / scaleFactor;
 	yoffset += 2 / scaleFactor;
-	if( !m_docpixmap )
+	if( !m_docpixmap || m_docpixmap->width() != width() || m_docpixmap->height() != height() )
 	{
+		delete m_docpixmap;
 		m_docpixmap = new QPixmap( width(), height() );
 		VKoPainter p( m_docpixmap, width(), height() );
 		p.clear( QColor( 195, 194, 193 ) );
