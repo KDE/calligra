@@ -365,4 +365,18 @@ private:
     KoParagLayout m_paragLayout;
 };
 
+class KWFootNoteVariable;
+class KWFootNoteFrameSet : public KWTextFrameSet
+{
+public:
+    /** constructor */
+    KWFootNoteFrameSet( KWDocument *doc, const QString & name )
+        : KWTextFrameSet( doc, name ) {}
+
+    void setFootNoteVariable( KWFootNoteVariable* var ) { m_footNoteVar = var; }
+    KWFootNoteVariable* footNoteVariable() const { return m_footNoteVar; }
+
+private:
+    KWFootNoteVariable* m_footNoteVar;
+};
 #endif

@@ -582,7 +582,6 @@ protected:
     // fix up Z-order for import from older kword versions.
     void fixZOrders();
     KoView* createViewInstance( QWidget* parent, const char* name );
-    void resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, uint frameNumber, const KoRect& rect );
     virtual bool saveChildren( KoStore *_store );
 
     virtual bool completeLoading( KoStore* _store );

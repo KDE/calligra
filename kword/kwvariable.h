@@ -116,6 +116,8 @@ public:
     // Nothing to do here. Numbering done by KWTextFrameSet::renumberFootNotes
     virtual void recalc() { }
 
+    // Important: we need a sequence number, to order footnotes.
+    // Don't remove this when implementing the QVariant-based solution ;)
     void setNum( int num ) { m_num = num; }
     int num() const { return m_num; }
 

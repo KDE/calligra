@@ -53,6 +53,7 @@
 #include "kwbgspellcheck.h"
 #include "KWordDocIface.h"
 #include "kwvariable.h"
+#include "kwframelayout.h"
 
 //#define DEBUG_PAGES
 
@@ -500,6 +501,27 @@ double KWDocument::ptColumnWidth() const
         / m_pageColumns.columns;
 }
 
+class KWFootNoteFrameSetList : public QPtrList<KWFootNoteFrameSet>
+{
+protected:
+    virtual int compareItems(QPtrCollection::Item a, QPtrCollection::Item b)
+    {
+        KWFootNoteFrameSet* fsa = ((KWFootNoteFrameSet *)a);
+        KWFootNoteFrameSet* fsb = ((KWFootNoteFrameSet *)b);
+        Q_ASSERT( fsa->footNoteVariable() );
+        Q_ASSERT( fsb->footNoteVariable() );
+        if ( fsa->footNoteVariable() && fsb->footNoteVariable() )
+        {
+            int numa = fsa->footNoteVariable()->num();
+            int numb = fsb->footNoteVariable()->num();
+            if (numa == numb) return 0;
+            if (numa < numb) return -1;
+            return 1;
+        }
+        return -1; // whatever
+    }
+};
+
 /* append headers and footers if needed, and create enough pages for all the existing frames */
 void KWDocument::recalcFrames()
 {
@@ -511,14 +533,13 @@ void KWDocument::recalcFrames()
 
     double ptColumnWidth = this->ptColumnWidth();
 
-    int firstHeadOffset = 0, evenHeadOffset = 0, oddHeadOffset = 0;
-    int firstFootOffset = 0, evenFootOffset = 0, oddFootOffset = 0;
     KWTextFrameSet *firstHeader = 0L, *evenHeader = 0L, *oddHeader = 0L;
     KWTextFrameSet *firstFooter = 0L, *evenFooter = 0L, *oddFooter = 0L;
 
     // Lookup the various header / footer framesets into the variables above
     // [Done in all cases, in order to hide unused framesets]
 
+    KWFootNoteFrameSetList footnotesList;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -527,47 +548,47 @@ void KWDocument::recalcFrames()
             case KWFrameSet::FI_FIRST_HEADER:
                 if ( isHeaderVisible() ) {
                     firstHeader = dynamic_cast<KWTextFrameSet*>( fs );
-                    firstHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
-                                                       fs->frame( 0 )->height());
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
             case KWFrameSet::FI_EVEN_HEADER:
                 if ( isHeaderVisible() ) {
                     evenHeader = dynamic_cast<KWTextFrameSet*>( fs );
-                    evenHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
-                                                      fs->frame( 0 )->height());
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
             case KWFrameSet::FI_ODD_HEADER:
                 if ( isHeaderVisible() ) {
                     oddHeader = dynamic_cast<KWTextFrameSet*>( fs );
-                    oddHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
-                                                     fs->frame( 0 )->height());
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
             case KWFrameSet::FI_FIRST_FOOTER:
                 if ( isFooterVisible() ) {
                     firstFooter = dynamic_cast<KWTextFrameSet*>( fs );
-                    firstFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
-                                                       fs->frame( 0 )->height());
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
             case KWFrameSet::FI_EVEN_FOOTER:
                 if ( isFooterVisible() ) {
                     evenFooter = dynamic_cast<KWTextFrameSet*>( fs );
-                    evenFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
-                                                      fs->frame( 0 )->height());
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
                 break;
             case KWFrameSet::FI_ODD_FOOTER:
                 if ( isFooterVisible() ) {
                     oddFooter = dynamic_cast<KWTextFrameSet*>( fs );
-                    oddFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
-                                                     fs->frame( 0 )->height());
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
+            case KWFrameSet::FI_FOOTNOTE: {
+                KWFootNoteFrameSet* fnfs = dynamic_cast<KWFootNoteFrameSet *>(fs);
+                if (fnfs)
+                    footnotesList.append( fnfs );
+            }
+            break;
             default: break;
         }
     }
+
+    // This allocation each time might slow things down a bit.
+    // TODO KWHeaderFooterFrameSet : public KWTextFrameSet, and store the HeaderFooterFrameset data into there.
+    QPtrList<KWFrameLayout::HeaderFooterFrameset> headerFooterList;
+    headerFooterList.setAutoDelete( true );
+
     // Now hide & forget the unused header/footer framesets (e.g. 'odd pages' if we are in 'all the same' mode etc.)
     if ( isHeaderVisible() ) {
         switch ( getHeaderType() ) {
@@ -580,8 +601,9 @@ void KWDocument::recalcFrames()
 
                 oddHeader = evenHeader;
                 firstHeader = evenHeader;
-                oddHeadOffset = evenHeadOffset;
-                firstHeadOffset = evenHeadOffset;
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing ) );
                 break;
             case HF_FIRST_DIFF:
                 evenHeader->setVisible( true );
@@ -590,7 +612,11 @@ void KWDocument::recalcFrames()
                 firstHeader->setVisible( true );
 
                 oddHeader = evenHeader;
-                oddHeadOffset = evenHeadOffset;
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             firstHeader, 0, 0, m_pageHeaderFooter.ptHeaderBodySpacing ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing ) );
                 break;
             case HF_EO_DIFF:
                 evenHeader->setVisible( true );
@@ -599,7 +625,11 @@ void KWDocument::recalcFrames()
                 firstHeader->deleteAllCopies();
 
                 firstHeader = oddHeader;
-                firstHeadOffset = oddHeadOffset;
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing, KWFrameLayout::HeaderFooterFrameset::Even ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             oddHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing, KWFrameLayout::HeaderFooterFrameset::Odd ) );
                 break;
         }
     }
@@ -614,8 +644,9 @@ void KWDocument::recalcFrames()
 
                 oddFooter = evenFooter;
                 firstFooter = evenFooter;
-                oddFootOffset = evenFootOffset;
-                firstFootOffset = evenFootOffset;
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
                 break;
             case HF_FIRST_DIFF:
                 evenFooter->setVisible( true );
@@ -624,7 +655,11 @@ void KWDocument::recalcFrames()
                 firstFooter->setVisible( true );
 
                 oddFooter = evenFooter;
-                oddFootOffset = evenFootOffset;
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenFooter, 0, 0, m_pageHeaderFooter.ptFooterBodySpacing ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             firstFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
                 break;
             case HF_EO_DIFF:
                 evenFooter->setVisible( true );
@@ -633,14 +668,41 @@ void KWDocument::recalcFrames()
                 firstFooter->deleteAllCopies();
 
                 firstFooter = oddFooter;
-                firstFootOffset = oddFootOffset;
+
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             evenFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing,
+                                             KWFrameLayout::HeaderFooterFrameset::Even ) );
+                headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                             oddFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing,
+                                             KWFrameLayout::HeaderFooterFrameset::Odd ) );
                 break;
         }
     }
 
+
+    // The frameset order _on screen_ is:
+    // Header
+    // Main text frame (if WP)
+    // Footnote_s_
+    // Footer
+    // In the list it will have to be from top and from bottom:
+    // Header, Footer, Footnote from bottom to top
+
+    QPtrListIterator<KWFootNoteFrameSet> fnfsIt( footnotesList );  // fnfs == "footnote frameset"
+    for ( ; fnfsIt.current() ; ++fnfsIt )
+    {
+        KWFootNoteFrameSet* fnfs = fnfsIt.current();
+        KWFootNoteVariable* var = fnfs->footNoteVariable();
+        KWFrame* frame = fnfs->getNumFrames() > 0 ? fnfs->frame(0) : 0L;
+        int pageNum = frame ? frame->pageNum() : 0;
+        headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
+                                     fnfs, pageNum, pageNum /*TODO overflows*/,
+                                     m_pageHeaderFooter.ptFooterBodySpacing, // do we need another var?
+                                     KWFrameLayout::HeaderFooterFrameset::All ) );
+    }
+
     if ( m_processingType == WP ) { // In WP mode the pages are created automatically. In DTP not...
 
-        int headOffset = 0, footOffset = 0;
         int oldPages = m_pages;
         unsigned int frms = frameset->getNumFrames();
 
@@ -680,6 +742,7 @@ void KWDocument::recalcFrames()
             recalcVariables( VT_PGNUM );
         }
 
+#if 0
         // Create new frames or resize the existing frames in the main text frameset
         // ( taking into account the header/footer sizes )
         for ( uint j = 0; j < (uint) m_pages; j++ ) {
@@ -696,6 +759,7 @@ void KWDocument::recalcFrames()
 
             for ( int i = 0; i < m_pageColumns.columns; i++ ) {
                 // Calculate wanted rect for this frame
+                /////// TODO ##################### include footnotes
                 KoRect rect( ptLeftBorder() + i * ( ptColumnWidth + ptColumnSpacing() ),
                              j * ptPaperHeight() + ptTopBorder() + headOffset,
                              ptColumnWidth,
@@ -712,6 +776,7 @@ void KWDocument::recalcFrames()
                 }
             }
         }
+#endif
     } else {
         // DTP mode: calculate the number of pages from the frames.
         double height=0;
@@ -730,6 +795,9 @@ void KWDocument::recalcFrames()
         // so the headers and footers are at the edge of the page....
     }
 
+    KWFrameLayout::layout( this, frameset, headerFooterList, 0, m_pages-1 );
+
+#if 0
     if ( isHeaderVisible() ) {
         switch ( getHeaderType() ) {
         case HF_SAME: {
@@ -916,23 +984,7 @@ void KWDocument::recalcFrames()
         } break;
         }
     }
-}
-
-void KWDocument::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, uint frameNumber, const KoRect& rect )
-{
-    if ( frameNumber < headerFooter->getNumFrames() )
-        headerFooter->frame( frameNumber )->setRect( rect );
-    else
-    {
-#ifdef DEBUG_PAGES
-        kdDebug(32002) << "KWDocument::resizeOrCreateHeaderFooter creating frame for " << headerFooter->name() << endl;
 #endif
-        KWFrame *frame = new KWFrame( headerFooter, rect.x(), rect.y(), rect.width(), rect.height() );
-        frame->setFrameBehavior( KWFrame::AutoExtendFrame );
-        frame->setNewFrameBehavior( KWFrame::Copy );
-        frame->setCopy( true );
-        headerFooter->addFrame( frame );
-    }
 }
 
 bool KWDocument::loadChildren( KoStore *_store )
