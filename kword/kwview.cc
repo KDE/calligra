@@ -5581,7 +5581,7 @@ void KWView::frameSelectedChanged()
     actionTableJoinCells->setEnabled( table && (nbFrame>1));
     actionTableDelRow->setEnabled( table && table->isRowsSelected());
     actionTableDelCol->setEnabled( table && table->isColsSelected());
-    actionConvertTableToText->setEnabled( table );
+    actionConvertTableToText->setEnabled( table && table->isFloating());
     bool state=(table && nbFrame==1);
 
     actionTableSplitCells->setEnabled( state );
