@@ -110,7 +110,10 @@ void LayerPanel::stateOfButton(){
     if(document && document->activePage())
     {
         bool state=document->activePage()->getLayers().count()>1;
-        btn_dl->setEnabled(state);
+        bool readWrite=document->document()->isReadWrite();
+        btn_nl->setEnabled(readWrite);
+        btn_dl->setEnabled(state&&readWrite);
+
         btn_rl->setEnabled(state);
         btn_ll->setEnabled(state);
         slotLayerChanged();
