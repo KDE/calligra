@@ -141,7 +141,7 @@ void ChartBinding::cellChanged( KSpreadCell* )
        range.table = m_pTable->name(); */
 
     m_child->chart()->setPart( matrix );
-    
+
     // Force a redraw of the chart on all views
     table()->emit_polygonInvalidated( m_child->framePointArray() );
 }
@@ -4664,6 +4664,7 @@ bool ChartChild::load( const QDomElement& element )
 		 element.attribute( "bottom-cell" ).toInt() );
 
     setDataArea( r );
+    return true;
 }
 
 QDomElement ChartChild::save( QDomDocument& doc )
@@ -4687,7 +4688,7 @@ bool ChartChild::loadDocument( KoStore* _store )
 
     // Did we see a cell rectangle ?
     if ( !m_pBinding )
-	return false;
+	return true;
 
     update();
 
