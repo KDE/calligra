@@ -171,12 +171,17 @@ void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter)
 void KPrPage::pasteObjs( const QByteArray & data )
 {
     m_doc->deSelectAllObj();
+    int num = m_objectList.count();
     QString clip_str = QString::fromUtf8( data );
     if ( clip_str.isEmpty() ) return;
     m_doc->loadPastedObjs( clip_str,this );
-    m_objectList.last()->moveBy( 20,20 );
-    m_objectList.last()->setSelected( true );
-    m_doc->repaint(m_objectList.last());
+    //move and select all new pasted in objects
+    KPObject *_tempObj;
+    for (_tempObj = m_objectList.at(num); _tempObj; _tempObj = m_objectList.next()) {
+      _tempObj->moveBy( 20,20 );
+      _tempObj->setSelected( true );
+      m_doc->repaint(_tempObj);
+    }
     m_doc->setModified(true);
 }
 
