@@ -32,7 +32,6 @@
 
 #include "filter/ImageExport.h"
 #include "filter/EPSExport.h"
-#include "filter/KilluImport.h"
 #include "filter/XfigImport.h"
 #include "filter/CmxImport.h"
 #include "filter/PSImport.h"
@@ -67,17 +66,7 @@ void FilterManager::installDefaultFilters () {
                                            "XPM Image Format", "xpm",
                                            "Kai-Uwe Sattler",
                                            "1.0", 0L, filter));
-    filters.insert ("GIF", new FilterInfo (FilterInfo::FKind_Export,
-                                           "GIF Image Format", "gif",
-                                           "Kai-Uwe Sattler",
-                                           "1.0", 0L, filter));
   }
-  KilluImport* killuFilter = new KilluImport ();
-  filters.insert ("KIllustrator", new FilterInfo (FilterInfo::FKind_Import,
-                                                  "KIllustrator Document",
-                                                  "kil",
-                                                  "Kai-Uwe Sattler",
-                                                  "0.1", killuFilter, 0L));
   XfigImport* xfigFilter = new XfigImport ();
   filters.insert ("Xfig", new FilterInfo (FilterInfo::FKind_Import,
                                                   "Xfig Document", "fig",

@@ -80,7 +80,6 @@
 #include <koPartSelectDia.h>
 #include <kaction.h>
 #include <kstdaction.h>
-//#include <kdebug.h>
 #include <kcoloractions.h>
 #include <kmessagebox.h>
 #include <kpopupmenu.h>
@@ -524,7 +523,7 @@ void KIllustratorView::setPenColor (long int id) {
   }
   else {
     int result =
-      KMessageBox::warningYesNo(this, 
+      KMessageBox::warningYesNo(this,
                             i18n ("This action will set the default\n"
                                   "properties for new objects !\n"
                                   "Would you like to do it ?"));
@@ -556,7 +555,7 @@ void KIllustratorView::setFillColor (long int id) {
   }
   else {
     int result =
-      KMessageBox::warningYesNo(this, 
+      KMessageBox::warningYesNo(this,
                            i18n ("This action will set the default\n"
                                  "properties for new objects !\n"
                                  "Would you like to do it ?"));
@@ -679,7 +678,7 @@ void KIllustratorView::slotImport()
     QString filter = filterMgr->importFilters ();
 
     KURL url = KFileDialog::getOpenURL( lastImportDir, filter, this );
-    if (!url.isLocalFile())
+    if (!url.isEmpty() && !url.isLocalFile())
         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
     QString fname = url.path();
     if (! fname.isEmpty ())
@@ -745,8 +744,7 @@ void KIllustratorView::slotExport()
 void KIllustratorView::slotInsertBitmap()
 {
     KURL url = KFileDialog::getOpenURL
-               (lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
-                                    "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
+               (lastBitmapDir, i18n("*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
                                     "*.png | PNG Images\n"
                                     "*.xbm | X11 Bitmaps\n"
                                     "*.xpm | X11 Pixmaps"),

@@ -32,7 +32,6 @@
 #include <kimageio.h>
 #include "ImageExport.h"
 #include "GDocument.h"
-#include "gif.h"
 
 #define RESOLUTION 72.0
 
@@ -40,8 +39,6 @@ ImageExport::ImageExport () {
 // #ifdef HAVE_QIMGIO
 //   qInitImageIO ();
 // #endif
-  QImageIO::defineIOHandler ("GIF", "^GIF[0-9][0-9][a-z]", 0,
-                             0, write_gif_image);
 }
 
 ImageExport::~ImageExport () {
