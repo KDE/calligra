@@ -3,12 +3,16 @@
 Name=KWord
 Name[is]=Ritvinnsla
 Name[no]=Ord
+Name[ro]=Word
 Name[ru]=Текстовый процессор
+Name[sv]=Ord
 Exec=kword.bin --server
 Comment=KWord
 Comment[fi]=TekstinkДsittelyohjelma
 Comment[is]=kword:  Ritvinnsluforrit K vЖndulsins
+Comment[ro]=Word
 Comment[ru]=Тестовый процессор
+Comment[sv]=Ordbehandlare
 MimeTypes=application/x-kword,
 RepoID=IDL:KWord/DocumentFactory:1.0,
 ActivationMode=shared
