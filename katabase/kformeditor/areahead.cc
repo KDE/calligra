@@ -17,36 +17,23 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "formregion.h"
-#include "formarea.h"
 #include "areahead.h"
 
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-
-// only for debug
-#include <iostream.h>
-
-FormRegion::FormRegion( const QString& _title, QWidget* _form )
-  : QWidget( _form )
-{
-  QVBoxLayout* layout = new QVBoxLayout( this );
-
-  // TODO: Label oder nicht drueckbaren Button einfuegen fuer Titel
-
-  AreaHead* head = new AreaHead( _title, this );
-  layout->addWidget( head, 0 );
-
-  m_pArea = new FormArea( this );
-  layout->addWidget( m_pArea, 1 );
-
-  resize( 300, 500 );
-}
-
-FormRegion::~FormRegion()
+AreaHead::AreaHead( const QString& _title, QWidget* _parent )
+  : QLabel( _title, _parent )
 {
 }
 
-#include "formregion.moc"
+void AreaHead::mousePressEvent( QMouseEvent* _event )
+{
+  if( _event->button() & LeftButton )
+    setCursor( sizeVerCursor );
+}
+
+void AreaHead::mouseReleaseEvent( QMouseEvent* _event )
+{
+  setCursor( arrowCursor ); 
+}
+
+#include "areahead.moc"
 

@@ -42,7 +42,6 @@
 #include "kformeditor_doc.h"
 #include "kformeditor_view.h"
 #include "kformeditor_shell.h"
-
 #include "form.h"
 #include "resizewidget.h"
 
@@ -128,13 +127,31 @@ void KformEditorView::init()
 
   m_pForm = new Form( m_pDoc, this );
 
-  ResizeWidget* rw1 = new ResizeWidget( m_pForm, ResizeWidget::Right, blue );
+  ResizeWidget* rw1 = new ResizeWidget( this, m_pForm, ResizeWidget::Right, darkGray );
+  rw1->resize( RESIZEWIDGET_SIZE, m_pDoc->getFormHeight() );
   rw1->move( m_pDoc->getFormWidth(), 0 );
   rw1->raise();
 
-  ResizeWidget* rw2 = new ResizeWidget( m_pForm, ResizeWidget::Bottom, blue );
-  rw1->move( 0, m_pDoc->getFormHeight() );
-  rw1->raise();
+  ResizeWidget* rw2 = new ResizeWidget( this, m_pForm, ResizeWidget::Bottom, darkGray );
+  rw2->resize( m_pDoc->getFormWidth(), RESIZEWIDGET_SIZE );
+  rw2->move( 0, m_pDoc->getFormHeight() );
+  rw2->raise();
+
+  ResizeWidget* rw3 = new ResizeWidget( this, m_pForm, ResizeWidget::BottomRight, darkGray );
+  rw3->resize( RESIZEWIDGET_SIZE, RESIZEWIDGET_SIZE );
+  rw3->move( m_pDoc->getFormWidth(), m_pDoc->getFormHeight() );
+  rw3->raise();
+
+  QObject::connect( rw1, SIGNAL( resizing( const QRect& ) ), m_pForm, SLOT( slotResizing( const QRect& ) ) );
+  QObject::connect( rw2, SIGNAL( resizing( const QRect& ) ), m_pForm, SLOT( slotResizing( const QRect& ) ) );
+  QObject::connect( rw3, SIGNAL( resizing( const QRect& ) ), m_pForm, SLOT( slotResizing( const QRect& ) ) );
+
+  QObject::connect( rw1, SIGNAL( rearrangeResizers() ), rw2, SLOT( slotRearrange() ) );
+  QObject::connect( rw1, SIGNAL( rearrangeResizers() ), rw3, SLOT( slotRearrange() ) );
+  QObject::connect( rw2, SIGNAL( rearrangeResizers() ), rw1, SLOT( slotRearrange() ) );
+  QObject::connect( rw2, SIGNAL( rearrangeResizers() ), rw3, SLOT( slotRearrange() ) );
+  QObject::connect( rw3, SIGNAL( rearrangeResizers() ), rw1, SLOT( slotRearrange() ) );
+  QObject::connect( rw3, SIGNAL( rearrangeResizers() ), rw2, SLOT( slotRearrange() ) );
 }
 
 void KformEditorView::cleanUp()
@@ -463,48 +480,6 @@ void KformEditorView::newView()
   shell->show();
   shell->setDocument( m_pDoc );
 }
-
-/*
-void KformEditorView::initChilds()
-{
-  // Remove all existing childs
-
-  // insert childs, data from m_pDoc
-  QValueList<FormObject*>::Iterator it = m_pDoc->m_lstFormObjects.begin();
-  for( ; it != m_pDoc->m_lstFormObjects.end(); ++it )
-  {
-    cerr << "KFormViewer: Inserting child" << endl;
- 
-//  QWidget* wrapper = new WidgetWrapper( (*it)->create( this ) );
-    QWidget* wrapper = new WidgetWrapper( 0 );
- 
-    if( wrapper )
-    {
-      QScrollView::addChild( wrapper );
-      QScrollView::moveChild( wrapper, (*it)->posx(), (*it)->posy() );
- 
-      QObject::connect( wrapper,  SIGNAL( clicked( WidgetWrapper* ) ),
-                        this, SLOT( slotClick( WidgetWrapper* ) ) );
-      QObject::connect( wrapper,  SIGNAL( clickedShift( WidgetWrapper* ) ),
-                        this, SLOT( slotShiftClick( WidgetWrapper* ) ) );
-      QObject::connect( this, SIGNAL( unselectAll() ),
-                        wrapper,  SLOT( slotUnselect() ) );
-      QObject::connect( wrapper, SIGNAL( moveWidget( WidgetWrapper*, const QPoint& ) ),
-                        this,  SLOT( slotMoveWidget( WidgetWrapper*, const QPoint& ) ) );
-      wrapper->setBackgroundColor( m_pDoc->backgroundColor() );
-    }
-  }
-
-  m_primaryWidget = NULL;
-  m_countSelectedWidgets = 0;
-}
-
-void KformEditorView::drawContents( QPainter* _painter, int _clipx, int _clipy, int _clipw, int _cliph )
-{
-  QColor color( 80, 80, 80 );
-  _painter->fillRect( _clipx, _clipy, _clipw, _cliph, QBrush( color ) );
-}
-*/
 
 void KformEditorView::editUndo()
 {

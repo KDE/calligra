@@ -22,6 +22,8 @@
 
 #include <qwidget.h>
 
+class QGridLayout;
+class FormRegion;
 class KformEditorDoc;
 
 class Form : public QWidget
@@ -45,9 +47,17 @@ public:
    */
   ~Form();
 
+  void addRegion( FormRegion* _region );
+
+public slots:
+
+  void slotResizing( const QRect& _rect );
+
 private:
 
   KformEditorDoc* m_pDoc;
+  QList<FormRegion> m_lstRegions;
+  QGridLayout* m_layout;
 };
 
 #endif  // __form_h__

@@ -18,6 +18,7 @@
 */
 
 #include <qlayout.h>
+#include <qlist.h>
 
 #include "resizewidget.h"
 #include "form.h"
@@ -34,17 +35,36 @@ Form::Form( KformEditorDoc* _pDoc, QWidget* _parent )
 
   // TODO: Insert all (not one) form regions here.
 
-  // TODO: Ich glaubem der Hintergrund kann gar nicht gesehen werden.
-  setBackgroundColor( darkGray );
+  m_layout = new QGridLayout( this, 1, 1 );
 
-  QGridLayout* layout = new QGridLayout( this, 1, 1 );
-
-  FormRegion* region = new FormRegion( "Formular", this );
-  layout->addWidget( region, 0, 0);
+  addRegion( new FormRegion( "Formularregion 1", this ) );
+  addRegion( new FormRegion( "Formularregion 2", this ) );
 }
 
 Form::~Form()
 {
+}
+
+void Form::slotResizing( const QRect& _rect )
+{
+  if( _rect.height() >= sizeHint().height() )
+    resize( _rect.width(), _rect.height() );
+}
+
+void Form::addRegion( FormRegion* _region )
+{
+  m_lstRegions.append( _region );
+  m_layout->addWidget( _region, m_lstRegions.count() - 1, 0 );
+
+  for( int i = 0; i < m_lstRegions.count() - 1; i++ )
+  {
+    m_layout->setRowStretch( i, 0 );
+    m_layout->addRowSpacing( i, 50 );
+
+    // TODO: fix spacing
+  }
+  m_layout->setRowStretch( m_lstRegions.count() - 1, 1 );
+  m_layout->addRowSpacing( m_lstRegions.count() - 1, 1 );
 }
 
 #include "form.moc"

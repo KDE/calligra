@@ -1,9 +1,10 @@
 
-SUBDIRS = formassistent pics toolbar cursors
-
 INCLUDES  = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) 
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD     = $(LIB_KOFFICEUI) $(LIB_KIMGIO)
+
+#SUBDIRS = formassistent pics toolbar cursors
+SUBDIRS = pics toolbar
 
 ####### Files
 
@@ -19,6 +20,7 @@ kformeditor_SOURCES = \
  formregion.cc \
  formobject.cc \
  formarea.cc \
+ areahead.cc \
  widgetwrapper.cc \
  resizewidget.cc \
  backgrounddlg.cc \
@@ -34,6 +36,7 @@ noinst_HEADERS = \
  form.h \
  formregion.h \
  formarea.h \
+ areahead.h \
  formobject.h \
  widgetwrapper.h \
  resizewidget.h \
@@ -49,6 +52,7 @@ METASOURCES = \
  form.moc \
  formregion.moc \
  formarea.moc \
+ areahead.moc \
  backgrounddlg.moc \
  formpropertydlg.moc \
  formsizedlg.moc \

@@ -33,20 +33,28 @@ public:
 
   enum Type { TopLeft, TopRight, BottomLeft, BottomRight, Top, Left, Right, Bottom };
 
+  ResizeWidget( QWidget* _parent, QWidget* _widget, Type _type, QColor _color, WFlags f = 0 );
   ResizeWidget( QWidget* _widget, Type _type, QColor _color, WFlags f = 0 );
   ~ResizeWidget();
 
   void resizeMini();
+  void setType( Type _type );
 
   virtual QSize sizeHint() const;
+
+public slots:
+
+  void slotRearrange();
 
 signals:
 
   void resizing( const QRect& _rect );
+  void rearrangeResizers();
 
 protected:
 
   virtual void mouseMoveEvent( QMouseEvent* _event );
+  virtual void paintEvent( QPaintEvent* _event );
 
 private:
 

@@ -22,12 +22,34 @@
 // only for debug
 #include <iostream.h>
 
+ResizeWidget::ResizeWidget( QWidget* _parent, QWidget* _widget, Type _type, QColor _color, WFlags f )
+  : QWidget( _parent, 0, f ), m_widget( _widget ), m_type ( _type ), m_color ( _color )
+{
+  setBackgroundColor( m_color );
+  setType( m_type );
+}
+
 ResizeWidget::ResizeWidget( QWidget* _widget, Type _type, QColor _color, WFlags f )
   : QWidget( _widget, 0, f ), m_widget( _widget ), m_type ( _type ), m_color ( _color )
 {
   setBackgroundColor( m_color );
+  setType( m_type );
+}
 
-  switch( _type )
+ResizeWidget::~ResizeWidget()
+{
+}
+
+void ResizeWidget::resizeMini()
+{
+  resize( RESIZEWIDGET_SIZE, RESIZEWIDGET_SIZE );
+}
+
+void ResizeWidget::setType( Type _type )
+{
+  m_type = _type;
+
+  switch( m_type )
   {
     case TopLeft :
     case BottomRight :
@@ -50,29 +72,81 @@ ResizeWidget::ResizeWidget( QWidget* _widget, Type _type, QColor _color, WFlags 
   }
 }
 
-ResizeWidget::~ResizeWidget()
-{
-}
-
-void ResizeWidget::resizeMini()
-{
-  resize( RESIZEWIDGET_SIZE, RESIZEWIDGET_SIZE );
-}
-
 QSize ResizeWidget::sizeHint() const
 {
   return QSize( RESIZEWIDGET_SIZE, RESIZEWIDGET_SIZE );
+}
+
+#include <qpainter.h>
+
+void ResizeWidget::paintEvent( QPaintEvent* _event )
+{
+  // TODO: paint some button style stuff
+
+  int x1, y1, x2, y2;
+  QPainter p;
+  QColorGroup g = colorGroup();
+
+  rect().coords( &x1, &y1, &x2, &y2 );   // get coordinates
+  int w = x2 + 1;
+  int h = y2 + 1;
+
+  p.begin( this );
+
+  p.setPen( g.dark() );
+  p.drawRect( x1, y1, x2, y2 );
+
+  p.end();
 }
 
 void ResizeWidget::mouseMoveEvent( QMouseEvent* _event )
 {
   if( _event->state() & LeftButton )
   {
-    QPoint pos;
+    QRect newSize;
+    QPoint pos = mapToParent( _event->pos() );
 
-    pos = mapToParent( _event->pos() );
+    switch( m_type )
+    {
+      case Bottom :
+        newSize = QRect( 0, 0 , m_widget->width(), pos.y() );
+        break;
+      case Right :
+        newSize = QRect( 0, 0 , pos.x(), m_widget->height() );
+        break;
+      case BottomRight :
+        newSize = QRect( 0, 0 , pos.x(), pos.y() );
+        break;
+      default :
+        cerr << "Hier ist der Wurm drin!!!!" << endl;
+        break;
+    }
 
-    emit resizing( QRect( QPoint( 0, 0 ), pos ) );
+    emit resizing( newSize );
+    emit rearrangeResizers();
+    slotRearrange();
+  }
+}
+
+void ResizeWidget::slotRearrange()
+{
+  switch( m_type )
+  {
+    case Right :
+      move( m_widget->x() + m_widget->width(), m_widget->y() );
+      resize( RESIZEWIDGET_SIZE, m_widget->height() );
+      break;
+    case Bottom :
+      move( m_widget->x(), m_widget->y() + m_widget->height() );
+      resize( m_widget->width(), RESIZEWIDGET_SIZE );
+      break;
+    case BottomRight :
+      move( m_widget->x() + m_widget->width(), m_widget->y() + m_widget->height() );
+      resizeMini();
+      break;
+    default :
+      cerr << "Hier ist der Wurm drin!!!!" << endl;
+      break;
   }
 }
 
