@@ -371,7 +371,7 @@ void PropertyEditor::createFillWidget (QWidget* parent)
     gradientAngle->setSuffix(i18n("°"));
     gradlayout->addWidget(gradientAngle, 3, 1);
     connect (gradientAngle, SIGNAL(valueChanged(int)),
-             this, SLOT(gradientAngleChanged(int)));
+      this, SLOT(gradientAngleChanged(int)));
     QGroupBox *box = new QVGroupBox(groupbox);
     gradlayout->addMultiCellWidget(box, 4, 4, 0, 1);
     gradPreview = new PWidget(box);
@@ -516,7 +516,7 @@ void PropertyEditor::applyPressed ()
 
 void PropertyEditor::readProperties ()
 {
-   QString buf;
+    QString buf;
    PStateManager *psm = PStateManager::instance ();
    MeasurementUnit munit = psm->defaultMeasurementUnit ();
    QString ustr=" ";
@@ -597,8 +597,10 @@ void PropertyEditor::readProperties ()
                fillColorBtn2->setColor (g.getColor2 ());
                gradStyleCombo->setCurrentItem ((int) g.getStyle ());
                gradientAngle->setEnabled(((int) g.getStyle ()== 0)?true:false);
-               gradientAngle->setValue(g.getAngle());
+
                updateGradient ();
+               gradientAngle->setValue(g.getAngle());
+
                wstack->raiseWidget (GRADIENT_BOX);
             }
             break;
