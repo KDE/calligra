@@ -76,20 +76,14 @@ void KImageShopShell::slotFileOpen()
 {
   QString filter = "*.kis|KImageShop picture\n" + KImageIO::pattern( KImageIO::Reading );
 
-  QString tempfile;
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
   
   if ( file.isNull() )
     return;
+
+  kisDoc* doc = (kisDoc*)document();
   
-  if( KImageIO::isSupported( KImageIO::mimeType( file ) ) )
-    {
-      tempfile = KoFilterManager::self()->import( file, nativeFormatMimeType() );
-      if( tempfile.isNull() )
-	return;
-    }
-  
-  if( !openDocument( KURL( file ), tempfile != file ) )
+  if (!doc->loadImage(file))
     {
       QString tmp;
       tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );

@@ -49,6 +49,7 @@ kisDoc::kisDoc( KoDocument* parent, const char* name )
   , m_commands()
 {
   m_pCurrent = 0L;
+  m_pNewDialog = 0L;
   QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
                     this, SLOT( slotUndoRedoChanged( QString, QString ) ) );
   QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QStringList, QStringList ) ),
@@ -61,7 +62,14 @@ bool kisDoc::initDoc()
 {
   QString name;
   name.sprintf("image %d", m_Images.count()+1);
-  newImage(name, 512, 512, RGB, WHITE);
+  kisImage *img = newImage(name, 512, 512, RGB, WHITE);
+  if (!img)
+    return false;
+  
+  // add background layer
+  img->addRGBLayer(QRect(0, 0, 512, 512), QColor(255, 255, 255), "background");
+  img->setLayerOpacity(255);
+  img->compositeImage(QRect(0, 0, 512, 512));
   
   return true;
 }
@@ -199,14 +207,29 @@ void kisDoc::slotRemoveImage( const QString& _name )
     }
 }
 
-void kisDoc::saveImage( const QString& /*file*/, kisImage */*img*/ )
+bool kisDoc::saveImage( const QString& /*file*/, kisImage */*img*/ )
 {
-  
+  return false;
 }
 
-void kisDoc::loadImage( const QString& /*file*/ )
+bool kisDoc::saveCurrentImage( const QString& file )
 {
+  return saveImage(file, m_pCurrent);
+}
+
+bool kisDoc::loadImage( const QString& file )
+{
+  QString name;
+  name.sprintf("image %d", m_Images.count()+1);
+  kisImage *img = newImage(name, 512, 512, RGB, WHITE);
+  if (!img)
+    return false;
   
+  // add background layer
+  img->addRGBLayer(file);
+  img->setLayerOpacity(255);
+  img->compositeImage(QRect(0, 0, 512, 512));
+  return true;
 }
 
 void kisDoc::slotNewImage()
@@ -226,18 +249,16 @@ void kisDoc::slotNewImage()
   QString name;
   name.sprintf("image %d", m_Images.count()+1);
 
-  newImage(name, w, h, bg, cm);
+  kisImage *img = newImage(name, w, h, bg, cm);
+  if (!img)
+    return;
+
+  // add background layer
+  img->addRGBLayer(QRect(0, 0, w, h), QColor(255, 255, 255), "background");
+  img->setLayerOpacity(255);
+  img->compositeImage(QRect(0, 0, w, h));  
 }
 
-void kisDoc::slotLoadImage()
-{
-  // FIXME: KFileDialog -> loadImage( file );
-}
-
-void kisDoc::slotSaveCurrentImage()
-{
-  // FIXME: KFileDialog -> saveImage(file, m_pCurrent);
-}
 
 bool kisDoc::loadFromURL( const QString& _url )
 {

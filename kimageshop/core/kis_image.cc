@@ -84,10 +84,6 @@ kisImage::kisImage( const QString& _name, int width, int height )
       *(background+channels*(y*TILE_SIZE+x)+2)=128+63*((x/16+y/16)%2);
     }
 
-  // add background layer
-  addRGBLayer(QRect(0, 0, w, h), QColor(255, 255, 255), "background");
-  setLayerOpacity(255);
-
   // load some test layers
   //QString _image = locate("kis_images", "cam9b.jpg", KImageShopFactory::global());
   //addRGBLayer(_image);
@@ -237,30 +233,39 @@ void kisImage::setUpVisual()
 
 void kisImage::addRGBLayer(QString file)
 {
-  printf("kisImage::addRGBLayer: %s\n",file.latin1());
-
   QImage img(file);
-  if (img.isNull()) {
-    KIS_DEBUG("Unable to load image: %s\n",file.latin1());
-    return;
-  }
-  img=img.convertDepth(32);
+ 
+  QString alphaName = file;
+  alphaName.replace(QRegExp("\\.jpg$"),"-alpha.jpg");
+  qDebug("alphaname=%s\n",alphaName.latin1());
+  QImage alpha(alphaName);
 
+  addRGBLayer(img, alpha, QFileInfo(file).fileName());
+}
+
+void kisImage::addRGBLayer(QImage& img, QImage &alpha, const QString name)
+{
   // XXX currently assumes the alpha image IS a greyscale and the same size as
   // the other channels
-  QString alphaName=file;
-  alphaName.replace(QRegExp("\\.jpg$"),"-alpha.jpg");
+  
+  qDebug("kisImage::addRGBLayer: %s\n",name.latin1());
 
-	printf("alphaname=%s\n",alphaName.latin1());
-  QImage alpha(alphaName);
-  if (!alpha.isNull() && (img.size()!=alpha.size())) {
-    puts("Incorrect sized alpha channel - not loaded");
-    alpha=QImage();
-  }
+  if (img.isNull())
+    {
+      qDebug("Unable to load image: %s\n",name.latin1());
+      return;
+    }
 
-  Layer *lay=new Layer(3);
-  lay->setName(QFileInfo(file).fileName());
+  img = img.convertDepth(32);
+  
+  if (alpha.isNull() || (img.size()!= alpha.size()))
+    {
+      qDebug("Incorrect sized alpha channel - not loaded");
+      alpha = QImage();
+    }
 
+  Layer *lay = new Layer(3);
+  lay->setName(name);
   lay->loadRGBImage(img, alpha);
   layers.append(lay);
   currentLayer=lay;

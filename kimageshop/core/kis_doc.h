@@ -99,11 +99,11 @@ public:
     void mergeLayers(QList<Layer>);
 
     kisImage* newImage(const QString& _name, int w, int h, int colorModel = RGB, int backgroundMode = WHITE);
-    void saveImage( const QString& file, kisImage *img );
-    void loadImage( const QString& file );
+    bool saveImage( const QString& file, kisImage *img );
+    bool saveCurrentImage( const QString& file );
+    bool loadImage( const QString& file );
     void removeImage( kisImage *img );
-    void slotRemoveImage( const QString& name );
-
+    
     QString currentImage();
 
     void setCurrentImage(kisImage *img);
@@ -121,8 +121,8 @@ public slots:
   void slotLayersUpdated();
 
   void slotNewImage();
-  void slotLoadImage();
-  void slotSaveCurrentImage();
+
+  void slotRemoveImage( const QString& name );
  
 signals:
   void docUpdated();

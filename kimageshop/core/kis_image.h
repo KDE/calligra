@@ -70,6 +70,7 @@ class kisImage : public QObject
     void setLayerOpacity( uchar _opacity, Layer *_layer = 0 );
 
     void addRGBLayer( QString _file );
+    void addRGBLayer(QImage& img, QImage& alpha, const QString name);
     void addRGBLayer(const QRect& r, const QColor& c, const QString& name);
     void removeLayer( unsigned int _layer );
 
