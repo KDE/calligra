@@ -12,7 +12,7 @@
 #ifndef _FORMULA_DEF_H_
 #define _FORMULA_DEF_H_
 
-#define FN_P12        0   // red/en 1/2 of prev (or 2)
+#define FN_P34        0   // red/en 3/4 of prev (or 4/3)
 #define FN_ENLARGE    0   // enlarge is default
 #define FN_REDUCE     1   // reduce isn't default
 #define FN_ELEMENT    2   // red/en current element
@@ -20,8 +20,12 @@
 #define FN_NEXT       8   // red/en next elements
 #define FN_INDEXES   16   // red/en indexes
 #define FN_ONE       32   // red/en +(-) 1 
-#define FN_P34       64   // red/en  3/4 of previous (or 4/3)
-#define FN_ALL   FN_ELEMENT | FN_CHILDREN | FN_NEXT | FN_INDEXES  
+#define FN_P12       64   // red/en  1/2 of previous (or *2)
+#define FN_LOCAL FN_ELEMENT | FN_CHILDREN | FN_INDEXES
+#define FN_ALL   FN_NEXT | FN_LOCAL  
+#define FN_MIN        2   // min value of numericFont
+#define FN_MAX      120   // max value of numericFont
+   
 
 /*
  * Elements Type

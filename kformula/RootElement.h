@@ -48,7 +48,11 @@ class RootElement : public BasicElement
     */
    virtual void setNumericFont(int newValue); 
       
-   
+   /*
+    * Scale font of my child
+    */
+//   virtual  void scaleChildrenFont(int level) { child[0]->scaleNumericFont(level); }  
+    
    /*
     * usually call by keyPressEvent()
     * if input is delete,backspace,arrows,home,end....
@@ -56,7 +60,10 @@ class RootElement : public BasicElement
     */
     
    virtual int takeActionFromKeyb(int action);
- 
+ /*
+ * do nothing
+ */
+    virtual int takeAsciiFromKeyb(int action);
    
    /*
     * Index[0] isn't external:
@@ -74,6 +81,7 @@ class RootElement : public BasicElement
    virtual void drawIndexes(QPainter *pen,int resolution=72);    
 
    virtual int type() {return EL_ROOT; }   
+
    /*
     * Again, in  the future....
     */

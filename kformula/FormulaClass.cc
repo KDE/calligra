@@ -9,6 +9,8 @@
 #include "BasicElement.h"
 FormulaClass::FormulaClass(QPainter *p=0L) 
 { 
+if(p==0L)
+ p=new QPainter();
  thePainter=p; 
 }
 

@@ -125,7 +125,26 @@ void KFormulaView::createGUI()
 						       m_idMenuView,
 						       this, "newView" );
     }
-    
+    QPixmap pix;
+    QString tmp = KApplication::kde_datadir().copy();
+    tmp += "/kformula/pics/";
+      mn_indexList = new QPopupMenu();
+      pix.load(tmp+"index0.xpm");
+      mn_indexList->insertItem(pix,this,SLOT(addTopLeftIndex()));
+      mn_indexList->insertSeparator();
+      pix.load(tmp+"index1.xpm");
+      mn_indexList->insertItem(pix,this,SLOT(addBottomLeftIndex()));
+      mn_indexList->insertSeparator();
+      pix.load(tmp+"index2.xpm");
+      mn_indexList->insertItem(pix,this,SLOT(addTopRightIndex()));
+      mn_indexList->insertSeparator();
+      pix.load(tmp+"index3.xpm");
+      mn_indexList->insertItem(pix,this,"addBottomRightIndex");
+      mn_indexList->setMouseTracking(true);
+      mn_indexList->setCheckable(false);
+
+//    QObject::connect(mn_indexList,SIGNAL(activated(int)),this,SLOT(insertIndex(unsigned long)));
+
     m_vToolBarFactory = m_vPartShell->toolBarFactory();
     if ( !CORBA::is_nil( m_vToolBarFactory ) ) {
 	
@@ -153,6 +172,10 @@ void KFormulaView::createGUI()
 
 	m_idButtonFormula_6 = addToolButton(m_rToolBarFormula, "mini-symbols.xpm",
 					    i18n( "Add/change a block with symbols" ), "addSymbol" );
+    	
+	m_idButtonFormula_7 = addToolButton(m_rToolBarFormula, "index.xpm", 
+					     i18n( "Add an index at position..." ), "indexList" );
+
     }
 
     if ( !CORBA::is_nil( m_vToolBarFactory ) )
@@ -183,20 +206,20 @@ void KFormulaView::createGUI()
 	{
 	    m_rToolBarType = m_vToolBarFactory->createToolBar( this, i18n( "Type" ) );
 	  
-	    m_idButtonType_0 = addToolButton(m_rToolBarType, "kformula1-0.xpm", 
-					     i18n( "Add exponent" ), "addCh1" );
+	    m_idButtonType_0 = addToolButton(m_rToolBarType, "index0.xpm", 
+					     i18n( "Add TopLeft index or RootIndex" ), "addTopLeftIndex" );
 
-	    m_idButtonType_1 = addToolButton(m_rToolBarType, "kformula2-0.xpm", 
-					     i18n( "Add index" ), "addCh2" );
+	    m_idButtonType_1 = addToolButton(m_rToolBarType, "index1.xpm", 
+					     i18n( "Add BottomLeft index" ), "addBottomLeftIndex" );
 
-	    m_idButtonType_2 = addToolButton(m_rToolBarType, "kformula2-1.xpm", 
-					     i18n( "Add root index" ), "addCh2" );
+	    m_idButtonType_2 = addToolButton(m_rToolBarType, "index2.xpm", 
+					     i18n( "Add TopRight index (exponent)" ), "addTopRightIndex" );
 
-	    m_idButtonType_3 = addToolButton(m_rToolBarType, "kformula2-2.xpm", 
-					     i18n( "Add high limit" ), "addCh2" );
+	    m_idButtonType_3 = addToolButton(m_rToolBarType, "index3.xpm", 
+					     i18n( "Add BottomRight index" ), "addBottomRightIndex" );
 
-	    m_idButtonType_4 = addToolButton(m_rToolBarType, "kformula3-2.xpm", 
-					     i18n( "Add low limit" ), "addCh3" );
+	    m_idButtonType_4 = addToolButton(m_rToolBarType, "index.xpm", 
+					     i18n( "Add an index at position..." ), "indexList" );
 
 	    // TODO check, why two exponents button exist!
 	    m_idButtonType_5 = addToolButton(m_rToolBarType, "kformula2-3.xpm", 
@@ -294,12 +317,14 @@ void KFormulaView::enlarge()
 
 void KFormulaView::reduceRecur()
 {
+    debug("reduce recur");
     m_pDoc->activeElement()->scaleNumericFont(FN_REDUCE | FN_ALL);
     update();
 }
 
 void KFormulaView::enlargeRecur()
 {
+    debug("enlarge recur");
     m_pDoc->activeElement()->scaleNumericFont(FN_ENLARGE | FN_ALL);
     update();
 }
@@ -312,24 +337,43 @@ void KFormulaView::setGreek()
 {
 }
 
-void KFormulaView::addCh1()
+void KFormulaView::addTopLeftIndex()
 {
-    debug("addCh1");
-//    m_pDoc->addRootElement();
+    debug("add TopLeft index[0]");
+    m_pDoc->addIndex(IN_TOPLEFT);
 
 }
 
-void KFormulaView::addCh2()
+void KFormulaView::addBottomLeftIndex()
 {
-    debug("addCh2");
-//    m_pDoc->addCh2();
-
+    debug("add BottomLeft index[1]");
+    m_pDoc->addIndex(IN_BOTTOMLEFT);
 }
 
-void KFormulaView::addCh3()
+void KFormulaView::addTopRightIndex()
 {
-    debug("addCh3");
+    debug("add Top Right index[2]");
+    m_pDoc->addIndex(IN_TOPRIGHT);
 }
+
+void KFormulaView::addBottomRightIndex()
+{
+    debug("add Top Right index[3]");
+    m_pDoc->addIndex(IN_BOTTOMRIGHT);
+}
+
+void KFormulaView::indexList()
+{
+    debug("index");
+  QPoint pnt(QCursor::pos());
+  mn_indexList->popup(pnt);  
+}
+void KFormulaView::insertIndex(unsigned long i)
+{
+    debug("index %i",i);
+    m_pDoc->addIndex(i);
+}
+
 
 #include "kformula_view.moc"
 

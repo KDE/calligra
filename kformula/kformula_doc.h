@@ -90,6 +90,7 @@ class KFormulaDocument : public QObject,
     
     void addTextElement();
     void addRootElement();
+    void addIndex(int index);
     /*
     void addMatrixElement();
     void addIntegralElement();

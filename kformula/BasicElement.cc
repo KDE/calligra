@@ -22,7 +22,7 @@ BasicElement::BasicElement(FormulaClass *Formula,BasicElement *Prev=0L,int Relat
   content=Content;
   if(prev!=NULL) {
     numericFont=prev->getNumericFont();
-    warning("Font OK");
+    //warning("Font OK");
   }
   else 
     {
@@ -63,7 +63,7 @@ BasicElement *BasicElement::isInside(QPoint point)
 	{
           if(child[i]!=0) 
 	    {
-	      warning("Child!!");
+	      //warning("Child!!");
 	      if((aValue=child[i]->isInside(point))!=0L) 
 		return aValue;
 	    }
@@ -82,17 +82,19 @@ void BasicElement::draw(QPoint drawPoint,int resolution=72)
   y=drawPoint.y();
   if( beActive )
     pen->setPen(red);
-  pen->drawRect(x,y-5,10,10);
+  pen->drawRect(x+familySize.x(),y-5,10,10);
   
   myArea=globalSize;
   myArea.moveBy(x,y);
 #ifdef RECT
   pen->drawRect(myArea);   
 #endif
+if(beActive)
   pen->setPen(blue);
   drawIndexes(pen,resolution);
+if(beActive)
   pen->setPen( black);
-  if(next!=0L) next->draw(drawPoint+QPoint(aSize.width(),0),resolution);
+  if(next!=0L) next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
 }
 
 void BasicElement::drawIndexes(QPainter *pen,int resolution=72)
@@ -107,6 +109,7 @@ void BasicElement::drawIndexes(QPainter *pen,int resolution=72)
 
 void BasicElement::checkSize()
 {
+//warning("%p",this);
   QRect nextDimension; 
   
   if (next!=0L)
@@ -114,13 +117,13 @@ void BasicElement::checkSize()
       next->checkSize();
       nextDimension=next->getSize();
     }
-  aSize=QRect(0,-5,10,10);
-  familySize=aSize;
-  checkIndexesSize();  //This will change aSize adding Indexes Size
-  familySize.moveBy(-aSize.left(),0);
-  aSize.moveBy(-aSize.left(),0);
-  globalSize=aSize;
-  nextDimension.moveBy(aSize.width(),0);
+  localSize=QRect(0,-5,10,10);
+  familySize=localSize;
+  checkIndexesSize();  //This will change localSize adding Indexes Size
+  familySize.moveBy(-localSize.left(),0);
+  localSize.moveBy(-localSize.left(),0);
+  globalSize=localSize;
+  nextDimension.moveBy(localSize.width(),0);
   globalSize=globalSize.unite(nextDimension);
   
 }
@@ -137,14 +140,14 @@ void BasicElement::checkIndexesSize()
       indexDimension=index[0]->getSize();
       vectorT=familySize.topLeft()-indexDimension.bottomRight();
       indexDimension.moveBy(vectorT.x(),vectorT.y());
-      aSize=aSize.unite(indexDimension);
+      localSize=localSize.unite(indexDimension);
     }
   if(index[1]!=0L)
     {
       indexDimension=index[1]->getSize();
       vectorT=familySize.bottomLeft()-indexDimension.topRight();
       indexDimension.moveBy(vectorT.x(),vectorT.y());
-      aSize=aSize.unite(indexDimension);
+      localSize=localSize.unite(indexDimension);
     }  
   
   if(index[2]!=0L)
@@ -152,14 +155,14 @@ void BasicElement::checkIndexesSize()
       indexDimension=index[2]->getSize();
       vectorT=familySize.topRight()-indexDimension.bottomLeft();
       indexDimension.moveBy(vectorT.x(),vectorT.y());
-      aSize=aSize.unite(indexDimension);
+      localSize=localSize.unite(indexDimension);
     } 
  if(index[3]!=0L)
     {
       indexDimension=index[3]->getSize();
       vectorT=familySize.bottomRight()-indexDimension.topLeft();
       indexDimension.moveBy(vectorT.x(),vectorT.y());
-      aSize=aSize.unite(indexDimension);
+      localSize=localSize.unite(indexDimension);
     }
 }
 
@@ -193,16 +196,19 @@ void BasicElement::scaleNumericFont(int level)
   int ps;
   if(level & FN_INDEXES)
     for(ps=0;ps<4;ps++) 
-  if(index[ps]!=0L) index[ps]->scaleNumericFont(level||FN_ALL);
+  if(index[ps]!=0L) index[ps]->scaleNumericFont(level|FN_ALL);
   
   if(level & FN_NEXT)
-    if(next!=0) next->scaleNumericFont(level||FN_ALL);
+    if(next!=0) next->scaleNumericFont(level|FN_ALL);
   
   if(level & FN_CHILDREN)
-    scaleNumericFont(level||FN_ALL);
-  
-  if(numericFont<1) numericFont=1;
-  
+  {
+//    scaleChildrenFont(level|FN_ALL);
+   for(ps=0;ps<childrenNumber;ps++)
+    if(child[ps]!=0L)child[ps]->scaleNumericFont(level|FN_ALL);
+  }
+  if(numericFont<FN_MIN) numericFont=FN_MIN;
+  if(numericFont>FN_MAX) numericFont=FN_MAX;
 }
 
 
@@ -228,13 +234,18 @@ return  0;
 
 void  BasicElement::substituteElement(BasicElement *clone)
 {
+ int i;
   clone->setContent(content);
   clone->setNext(next);
   clone->setPrev(prev);
-  clone->setIndex(index[0],0);
-  clone->setIndex(index[1],1);
+  for(i=0;i<4;i++) {
+    clone->setIndex(index[i],i);
+    if(index[i]!=0L) index[i]->setPrev(clone);
+   }
+/*  clone->setIndex(index[1],1);
   clone->setIndex(index[2],2);
   clone->setIndex(index[3],3);
+  */
   clone->setNumericFont(numericFont);
   clone->setColor(defaultColor);
   clone->setRelation(relation);
@@ -250,11 +261,12 @@ void  BasicElement::substituteElement(BasicElement *clone)
       else
 	prev->setChild(clone,relation-4);
     }
-  
+ //warning("Substituted %p with %p,  waiting to be deleted",this,clone); 
 }
 
 int BasicElement::takeAsciiFromKeyb(char ch) 
 {
+//warning("ascii,need to be cloned");
   content.insert(content.length(),ch);
   return FCOM_TEXTCLONE; //  Ask to be cloned into text & deleted
 }     

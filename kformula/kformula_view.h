@@ -53,7 +53,7 @@ protected:
     void keyPressEvent( QKeyEvent *k );
 
     KFormulaDocument *m_pDoc;
-
+    QPopupMenu *mn_indexList;
     OPParts::MenuBarFactory_var m_vMenuBarFactory;
     MenuBar_ref m_rMenuBar;
     CORBA::Long m_idMenuView;
@@ -70,6 +70,7 @@ protected:
     CORBA::Long m_idButtonFormula_4;
     CORBA::Long m_idButtonFormula_5;
     CORBA::Long m_idButtonFormula_6;
+    CORBA::Long m_idButtonFormula_7;
     CORBA::Long m_idButtonFont_0;
     CORBA::Long m_idButtonFont_1;
     CORBA::Long m_idButtonFont_2;
@@ -97,9 +98,12 @@ protected:
     virtual void enlargeRecur();
     virtual void enlargeAll();
     virtual void setGreek();
-    virtual void addCh1();
-    virtual void addCh2();
-    virtual void addCh3();
+    virtual void addTopLeftIndex();
+    virtual void addBottomLeftIndex();
+    virtual void addTopRightIndex();
+    virtual void addBottomRightIndex();
+    virtual void indexList();
+    virtual void insertIndex(unsigned long i);
 };
 
 #endif

@@ -30,7 +30,9 @@ KFormulaDocument::KFormulaDocument()
     m_lstViews.setAutoDelete( false );
     m_bModified = false;
     theFirstElement= new TextElement(this,0L,-1,0L,"First");
-    setActiveElement(theFirstElement);
+    setActiveElement(0L);
+    warning("SIZE OF:  basic:%i,text:%i,root:%i",sizeof(BasicElement),
+		    sizeof(TextElement),sizeof(RootElement));
 }
 
 CORBA::Boolean KFormulaDocument::init()
@@ -229,6 +231,25 @@ void KFormulaDocument::addB2()
  * If activeElement is a BasicElement it "substitute"
  *  this basicElement with a TextElement
  */
+void KFormulaDocument::addIndex(int index)
+{
+  BasicElement *oldIndexElement;
+  BasicElement *newElement;
+   if(theActiveElement==0L)
+     setActiveElement(theFirstElement);
+  
+  oldIndexElement=theActiveElement->getIndex(index);
+  if(oldIndexElement==0L)        
+    theActiveElement->setIndex(newElement = 
+		new BasicElement(this,theActiveElement,index),index);
+  else
+   {
+    oldIndexElement->insertElement(newElement = new BasicElement(this));
+   }
+    setActiveElement(newElement);
+    emit sig_modified();
+} 
+
 void KFormulaDocument::addTextElement()
 {   
 BasicElement *nextElement;
@@ -251,9 +272,6 @@ BasicElement *newElement;
 	 }
     setActiveElement(newElement);
     emit sig_modified();
-    warning("Sig emitted");
-
-
 }
 /*
 void KFormulaDocument::addB5()
@@ -348,7 +366,7 @@ void KFormulaDocument::addB3()
 
 void KFormulaDocument::mousePressEvent( QMouseEvent *a,QWidget *wid)
 {
-   //theActiveElement->setActive(FALSE);
+ 
    setActiveElement(theFirstElement->isInside(a->pos()));  
    emit sig_modified();
 if(a->button()==RightButton){
@@ -414,12 +432,23 @@ if(k->key()==Key_Backspace) {
     if(type==0) Blocks[c]->getcont().remove(pos,1); else deleteIt(Blocks[c]);  
     }    else 
  */
-  warning("%i",k->ascii());
+ int elReturn;
  if((k->ascii()>32)&&(k->ascii()<127))
   { 
-    warning("Ascii");
-   if (theActiveElement!=0L)
-     theActiveElement->takeAsciiFromKeyb(k->ascii());
+   if (theActiveElement!=0L) {
+     elReturn=theActiveElement->takeAsciiFromKeyb(k->ascii());
+    if (elReturn==FCOM_TEXTCLONE)
+      {
+          BasicElement *newElement;
+	  theActiveElement->substituteElement(newElement = new TextElement(this));
+	  BasicElement *b;
+	  b=theActiveElement;
+	  setActiveElement(newElement);
+	  warning("delete %p",b);
+	  delete b;
+
+      }
+     }
     }	
 
 //ChText(Blocks[getCurrent()]->getcont());
@@ -431,13 +460,12 @@ if(k->key()==Key_Backspace) {
 
 void KFormulaDocument::paintEvent( QPaintEvent *_ev, QWidget *paintGround )
 {
-    QPainter painter(paintGround);
-    painter.setPen( black );
-    thePainter=&painter;
-//    theFormula->setPainter(&painter);
+    
+    thePainter->begin(paintGround);    
+    thePainter->setPen( black );
     theFirstElement->checkSize();
     theFirstElement->draw(QPoint(0,0)-theFirstElement->getSize().topLeft());
-    
+    thePainter->end();
 }
 
 #include "kformula_doc.moc"

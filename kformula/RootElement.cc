@@ -57,19 +57,20 @@ void RootElement::draw(QPoint drawPoint,int resolution=72)
   pen->drawLine(x+familySize.x()+unit+ofs,y+familySize.y()+3+ofs,
 		x+familySize.right()+rootFont+1,y+familySize.y()+3+ofs);
   }*/
-  QPointArray points(9);
+  warning("Array");
+  QPointArray points(10);
   points.setPoint(1,x+familySize.x(),y+familySize.y()+unit+1);
   points.setPoint(2,x+familySize.x()+unit,y+familySize.bottom()+3);
   points.setPoint(3,x+familySize.x()+unit+ofs,y+familySize.bottom()+3+ofs);
   points.setPoint(4,x+familySize.x()+unit+ofs,y+familySize.y()+3+ofs);
-  points.setPoint(5,x+familySize.right()+unit+ofs,y+familySize.y()+3+ofs);
-  points.setPoint(6,x+familySize.right()+unit+ofs,y+familySize.y()+3);
+  points.setPoint(5,x+familySize.right()+ofs-2,y+familySize.y()+3+ofs);
+  points.setPoint(6,x+familySize.right()+ofs-2,y+familySize.y()+3);
   points.setPoint(7,x+familySize.x()+unit,y+familySize.y()+3);  
   points.setPoint(8,x+familySize.x()+unit,y+familySize.bottom()+3-2*ofs);  
  // points.setPoint(9,x+familySize.x()+unit,y+familySize.bottom()+3);  
   points.setPoint(9,x+familySize.x()+ofs,y+familySize.y()+unit+1);
   pen->setBrush(pen->pen().color());
-  pen->drawPolygon(points,FALSE);
+  pen->drawPolygon(points,FALSE,1,9);
   /*
     Draw child[0], it must exist
   */    
@@ -94,13 +95,14 @@ void RootElement::draw(QPoint drawPoint,int resolution=72)
   drawIndexes(pen,resolution);
   if( beActive )
     pen->setPen(black);
-  if(next!=0L) next->draw(drawPoint+QPoint(aSize.width(),0),resolution);
+  if(next!=0L) next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
   
   
 }
 
 void RootElement::checkSize()
 {
+ //warning("R %p",this);
   QRect nextDimension; 
   
   if (next!=0L)
@@ -115,22 +117,26 @@ void RootElement::checkSize()
   familySize.setLeft(familySize.left()-8-(numericFont/30)-(familySize.height()/4));  
   
   /*
-    aSize is
+    localSize is
     child[0]+lines or pixmap
     here put the code to calc it
     unit=familySize.height()/4;
   */
   
-  aSize=familySize;
-  checkIndexesSize();  //This will change aSize adding Indexes Size
-  familySize.moveBy(-aSize.left(),0);
-  aSize.moveBy(-aSize.left(),0);
-  globalSize=aSize;
-  nextDimension.moveBy(aSize.width(),0);
+  localSize=familySize;
+  checkIndexesSize();  //This will change localSize adding Indexes Size
+  familySize.moveBy(-localSize.left(),0);
+  localSize.moveBy(-localSize.left(),0);
+  globalSize=localSize;
+  nextDimension.moveBy(localSize.width(),0);
   globalSize=globalSize.unite(nextDimension);
-  
+  //warning("end");
 }
 
+int RootElement::takeAsciiFromKeyb(int action)
+{
+  return 2;
+}
 int RootElement::takeActionFromKeyb(int action)
 {
   return -1;

@@ -133,7 +133,17 @@ class BasicElement
     * Return prev
     */
   BasicElement * getPrev() { return prev; }
+
+   /*
+    * Return index
+    */
+  BasicElement * getIndex(int ind) { return index[ind]; }
   
+   /*
+    * Return child
+    */
+  BasicElement * getChild(int chi) { if(chi<childrenNumber) return child[chi]; else return 0L; }
+
   /*
    * Return the default color of element
    */ 
@@ -227,7 +237,7 @@ class BasicElement
    * Size of family & indexes
    * This name isn't very good.I'm sorry.
    */
-  QRect aSize;   
+  QRect localSize;   
   
   /*
    * Size of Family:father & children  (without indexes )
@@ -236,7 +246,7 @@ class BasicElement
   
   /*
    * Area where I am painted (last time)
-   * aSize+drawPoint
+   * localSize+drawPoint
    */
   QRect myArea;    
   

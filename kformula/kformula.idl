@@ -21,10 +21,12 @@ module KFormula
 	  slot void enlargeRecur();
 	  slot void enlargeAll();
 	  slot void setGreek();
-	  slot void addCh1();
-	  slot void addCh2();
-	  slot void addCh3();
-
+	  slot void addTopLeftIndex();
+	  slot void addBottomLeftIndex();
+	  slot void addTopRightIndex();
+	  slot void addBottomRightIndex();
+          slot void indexList();
+	  slot void insertIndex(in unsigned long i);
 	};
 
 	interface Document : OPParts::Document

@@ -21,7 +21,10 @@ included in ...*/
 TextElement::TextElement(FormulaClass *Formula,BasicElement *Prev=0L,int Relation=-1,BasicElement *Next=0L,
 			    QString Content="") : BasicElement(Formula,Prev,Relation,Next,Content)
 {
-warning("Utopiaaa");
+//warning("Utopiaaa");
+  /*
+   * I'll remove this code to use formula->getFont()
+   */
      font.setFamily( "utopia" );
      font.setPointSize( numericFont );
      font.setWeight( QFont::Normal );
@@ -45,13 +48,17 @@ void TextElement::draw(QPoint drawPoint,int resolution=72)
   if( beActive )
     pen->setPen(red);
   if ( content == "" )
-    pen->drawRect(x,y-5,10,10);
+    pen->drawRect(x+familySize.x(),y-5,10,10);
   else {
+/*
+* I MUST to implement a generalFont
+*/
     pen->setFont(font);
     pen->drawText(x+familySize.x(),y+offsetY,content); 
     // if( active )
     //          m_pDoc->setCursor(QRect(x+fm.width(content,m_pDoc->getPos()),y-oyu,2,oyu+oyd));
   }
+if(beActive)
   pen->setPen(blue);
   myArea=globalSize;
   myArea.moveBy(x,y);
@@ -60,7 +67,7 @@ void TextElement::draw(QPoint drawPoint,int resolution=72)
 #ifdef RECT
  // pen->drawRect(myArea); 
   QRect  localArea;
-  localArea=aSize;
+  localArea=localSize;
   localArea.moveBy(x,y);  
   pen->drawRect(localArea); 
   localArea=familySize;
@@ -69,12 +76,15 @@ void TextElement::draw(QPoint drawPoint,int resolution=72)
 
 #endif
   drawIndexes(pen,resolution);
+
+if(beActive)
   pen->setPen(black);
-  if(next!=0L) next->draw(drawPoint+QPoint(aSize.width(),0),resolution);
+  if(next!=0L) next->draw(drawPoint+QPoint(localSize.width(),0),resolution);
 }
 
 void TextElement::checkSize()
 {
+//warning("T %p",this);
   QFontMetrics fm(font);
   QRect nextDimension; 
 
@@ -101,14 +111,14 @@ void TextElement::checkSize()
        familySize.setLeft(0); 
        offsetX=0;
       }
-  aSize=familySize;
-  checkIndexesSize();  //This will change aSize adding Indexes Size
-  familySize.moveBy(-aSize.left()-offsetX,0);
-  aSize.moveBy(-aSize.left(),0);
-  globalSize=aSize;
-  nextDimension.moveBy(aSize.width(),0);
+  localSize=familySize;
+  checkIndexesSize();  //This will change localSize adding Indexes Size
+  familySize.moveBy(-localSize.left()-offsetX,0);
+  localSize.moveBy(-localSize.left(),0);
+  globalSize=localSize;
+  nextDimension.moveBy(localSize.width(),0);
   globalSize=globalSize.unite(nextDimension);
-
+//warning("End");
 }
 
 int TextElement::takeAsciiFromKeyb(char ch) 
