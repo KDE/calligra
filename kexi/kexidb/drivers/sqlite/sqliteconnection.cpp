@@ -110,6 +110,7 @@ bool SQLiteConnection::drv_closeDatabase()
 	if (!d->data)
 		return false;
 	sqlite_close(d->data);
+	d->data = 0;
 	return true;
 }
 

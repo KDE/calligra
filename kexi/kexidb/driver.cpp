@@ -56,7 +56,7 @@ Driver::Driver( QObject *parent, const char *name, const QStringList & )
 	, beh( new DriverBehaviour() )
 	, d(0) //because unsused
 {
-	m_connections.setAutoDelete(true);
+	m_connections.setAutoDelete(false);
 	//reasonable size
 	m_connections.resize(101);
 	m_typeNames.resize(Field::LastType + 1);
@@ -66,7 +66,12 @@ Driver::~Driver()
 {
 	KexiDBDbg << "Driver::~Driver()" << endl;
 //	Connection *conn;
-	m_connections.clear();
+	QPtrDictIterator<Connection> it( m_connections );
+	Connection *conn;
+	while ( (conn = it.toFirst()) ) {
+		delete conn;
+	}
+//	m_connections.clear();
 	delete beh;
 /*	for ( conn = m_connections.first(); conn ; conn = m_connections.next() ) {
 		conn->disconnect();
