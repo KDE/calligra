@@ -78,7 +78,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 and any database within this connection is properly used
 		 with useDatabase(). */
 		bool isDatabaseUsed();
-		
+
+		/*! Reimplemented from Object: also clears sql string.
+		 @sa recentSQLString() */
+		virtual void clearError();
+
 		/*! \brief Disconnects from driver with given parameters.
 		 
 		 The database (if used) is closed, and any active transactions 
@@ -488,6 +492,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		QString selectStatement( KexiDB::QuerySchema& querySchema ) const;
 
+		/*! \return sql string of actually executed SQL statement,
+		 usually using drv_executeSQL(). */
+		const QString recentSQLString() const { return m_sql; }
+
 	protected:
 		/*! Used by Driver */
 		Connection( Driver *driver, ConnectionData &conn_data );
@@ -744,6 +752,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		//! cursors created for this connection
 		QPtrDict<KexiDB::Cursor> m_cursors;
 //		ConnectionInternal* m_internal;
+
+		//! used to store of actually executed SQL statement
+		QString m_sql; 
+	
 	friend class KexiDB::Driver;
 	friend class KexiDB::Cursor;
 	friend class KexiDB::TableSchema; //!< for removeMe()

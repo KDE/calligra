@@ -49,8 +49,17 @@
 #define ERR_INVALID_DRIVER_IMPL 180 //! driver's implementation is invalid
 #define ERR_INCOMPAT_DRIVER_VERSION 181 //!< driver's version is incompatible
 
-//errors related to data updating to server
-#define ERR_UPDATE_NULL_PKEY_FIELD 190 //!< null pkey field
+//! errors related to data updating on the server
+#define ERR_UPDATE_NULL_PKEY_FIELD 190 //!< null pkey field on updating
+#define ERR_UPDATE_SERVER_ERROR 191 //!< error @ the server side during data updating
+
+//! errors related to data inserting on the server
+#define ERR_INSERT_NULL_PKEY_FIELD 220 //!< null pkey field on updating
+#define ERR_INSERT_SERVER_ERROR 221 //!< error @ the server side during data inserting
+
+//! errors related to data deleting on the server
+#define ERR_DELETE_NULL_PKEY_FIELD 250 //!< null pkey field on updating
+#define ERR_DELETE_SERVER_ERROR 251 //!< error @ the server side during data deleting
 
 #define ERR_OTHER 0xffff //!< use this if you have not (yet?) the name for given error 
 

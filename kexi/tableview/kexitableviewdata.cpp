@@ -398,7 +398,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert)
 		if (insert) {
 			if (!m_cursor->insertRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() )) {
 				m_result.msg = i18n("Row inserting failed.");
-				KexiDB::getHTMLErrorMesage(m_cursor, m_result.desc);
+				KexiDB::getHTMLErrorMesage(m_cursor, &m_result);
 
 /*			if (desc)
 			*desc = 
@@ -471,6 +471,7 @@ bool KexiTableViewData::deleteRow(KexiTableItem& item)
 		if (!m_cursor->deleteRow( static_cast<KexiDB::RowData&>(item) )) {
 			m_result.msg = i18n("Row deleting failed.");
 /*js: TODO: use KexiDB::errorMessage() for description (desc) as in KexiTableViewData::saveRow() */
+			KexiDB::getHTMLErrorMesage(m_cursor, &m_result);
 			m_result.success = false;
 			return false;
 		}

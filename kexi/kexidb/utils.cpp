@@ -92,19 +92,28 @@ QStringList KexiDB::typeStringsForGroup(KexiDB::Field::TypeGroup typeGroup)
 
 void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
 {
+	Connection *conn = 0;
 	if (!obj || !obj->error()) {
-		if (dynamic_cast<Cursor*>(obj))
-			obj = dynamic_cast<Cursor*>(obj)->connection();
-		else
+		if (dynamic_cast<Cursor*>(obj)) {
+			conn = dynamic_cast<Cursor*>(obj)->connection();
+			obj = conn;
+		}
+		else {
 			return;
+		}
 	}
 	if (!obj || !obj->error())
 		return;
-	if (!msg.isEmpty())
-		msg += "<p>";
-	msg += obj->errorMsg();
+	//lower level message is added th the details, if there is alread message specified
+	if (msg.isEmpty())
+		msg = "<p>" + obj->errorMsg();
+	else
+		details += "<p>" + obj->errorMsg();
+
 	if (!obj->serverErrorMsg().isEmpty())
 		details += "<p><b><nobr>" +i18n("Message from server:") + "</nobr></b><br>" + obj->serverErrorMsg();
+	if (conn && !conn->recentSQLString().isEmpty())
+		details += "<p><b><nobr>" +i18n("SQL statement:") + "</nobr></b><br>" + conn->recentSQLString();
 	QString resname = obj->serverResultName();
 	if (!resname.isEmpty())
 		details += (QString("<p><b><nobr>")+i18n("Server result name:")+"</nobr></b><br>"+resname);
@@ -116,5 +125,10 @@ void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
 void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg)
 {
 	getHTMLErrorMesage(obj, msg, msg);
+}
+
+void KexiDB::getHTMLErrorMesage(Object* obj, ResultInfo *result)
+{
+	getHTMLErrorMesage(obj, result->msg, result->desc);
 }
 

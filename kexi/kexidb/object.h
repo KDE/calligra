@@ -86,7 +86,7 @@ class KEXI_DB_EXPORT Object
 		 \sa serverErrorMsg(), drv_clearServerResult()
 		*/
 		virtual QString serverResultName();
-		
+
 	protected:
 		Object();
 		virtual ~Object();

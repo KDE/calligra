@@ -142,6 +142,12 @@ bool Connection::isDatabaseUsed()
 	return !m_usedDatabase.isEmpty() && m_is_connected && drv_isDatabaseUsed();
 }
 
+void Connection::clearError()
+{
+	Object::clearError();
+	m_sql = QString::null;
+}
+
 bool Connection::disconnect()
 {
 	clearError();
@@ -1042,7 +1048,8 @@ bool Connection::dropTable( KexiDB::TableSchema* tableSchema )
 	}
 //js TODO DO THIS INSIDE TRANSACTION!!!!
 
-	if (!drv_executeSQL("DROP TABLE " + tableSchema->name()))
+	m_sql = "DROP TABLE " + tableSchema->name();
+	if (!drv_executeSQL(m_sql))
 		return false;
 
 	TableSchema *ts = m_tables_byname["kexi__fields"];
@@ -1100,9 +1107,9 @@ bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )
 
 bool Connection::drv_createTable( const KexiDB::TableSchema& tableSchema )
 {
-	QString sql = createTableStatement(tableSchema);
-	KexiDBDbg<<"******** "<<sql<<endl;
-	return drv_executeSQL(sql);
+	m_sql = createTableStatement(tableSchema);
+	KexiDBDbg<<"******** "<<m_sql<<endl;
+	return drv_executeSQL(m_sql);
 }
 
 bool Connection::drv_createTable( const QString& tableSchemaName )
@@ -1404,7 +1411,8 @@ bool Connection::setupObjectSchemaData( const KexiDB::RowData &data, SchemaData 
 bool Connection::querySingleRecord(const QString& sql, KexiDB::RowData &data)
 {
 	KexiDB::Cursor *cursor;
-	if (!(cursor = executeQuery( sql ))) {
+	m_sql = sql;
+	if (!(cursor = executeQuery( m_sql ))) {
 		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
 		return false;
 	}
@@ -1662,7 +1670,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		return false;
 	}
 	//update the record:
-	QString sql = "UPDATE " + query.parentTable()->name() + " SET ";
+	m_sql = "UPDATE " + query.parentTable()->name() + " SET ";
 	QString sqlset, sqlwhere;
 	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
@@ -1678,7 +1686,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 				sqlwhere+=" AND ";
 			QVariant val = data[ pkeyFieldsOrder[i] ];
 			if (val.isNull() || !val.isValid()) {
-				setError(ERR_UPDATE_NULL_PKEY_FIELD, i18n("Field cannot be empty"));
+				setError(ERR_UPDATE_NULL_PKEY_FIELD, i18n("Primary key's field \"%1\" cannot be empty.").arg(it.current()->name()));
 //js todo: pass the field's name somewhere!
 				return false;
 			}
@@ -1686,13 +1694,13 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 				+ m_driver->valueToSQL( it.current(), val ) );
 		}
 	}
-	sql += (sqlset + " WHERE " + sqlwhere);
-	KexiDBDrvDbg << " -- SQL == " << sql << endl;
+	m_sql += (sqlset + " WHERE " + sqlwhere);
+	KexiDBDrvDbg << " -- SQL == " << m_sql << endl;
 
-	bool res = drv_executeSQL(sql);
+	bool res = drv_executeSQL(m_sql);
 
 	if (!res) {
-//TODO: js: we would like to know a reason of failures...
+		setError(ERR_UPDATE_SERVER_ERROR, i18n("Row updating on the server failed."));
 		return false;
 	}
 	//success: now also assign new value in memory:
@@ -1722,7 +1730,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		KexiDBDrvDbg << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
 
 	//insert the record:
-	QString sql = "INSERT INTO " + query.parentTable()->name() + " (";
+	m_sql = "INSERT INTO " + query.parentTable()->name() + " (";
 	QString sqlcols, sqlvals;
 	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
@@ -1733,14 +1741,14 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		sqlcols += it.key()->name();
 		sqlvals += m_driver->valueToSQL(it.key(),it.data());
 	}
-	sql += (sqlcols + ") VALUES (" + sqlvals + ")");
-	KexiDBDrvDbg << " -- SQL == " << sql << endl;
+	m_sql += (sqlcols + ") VALUES (" + sqlvals + ")");
+	KexiDBDrvDbg << " -- SQL == " << m_sql << endl;
 
-	bool res = drv_executeSQL(sql);
+	bool res = drv_executeSQL(m_sql);
 
 	if (!res) {
-//TODO: js: we would like to know a reason of failures...
-		return false;
+		setError(ERR_INSERT_SERVER_ERROR, i18n("Row inserting on the server failed."));
+	return false;
 	}
 	//success: now also assign new value in memory:
 	QMap<Field*,uint> fieldsOrder = query.fieldsOrder();
@@ -1791,7 +1799,7 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 		KexiDBDrvDbg << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
 	
 	//update the record:
-	QString sql = "DELETE FROM " + query.parentTable()->name() + " WHERE ";
+	m_sql = "DELETE FROM " + query.parentTable()->name() + " WHERE ";
 	QString sqlwhere;
 	QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
 	if (pkey->fieldCount()>0) {
@@ -1801,7 +1809,7 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 				sqlwhere+=" AND ";
 			QVariant val = data[ pkeyFieldsOrder[i] ];
 			if (val.isNull() || !val.isValid()) {
-				setError(ERR_UPDATE_NULL_PKEY_FIELD, i18n("Field cannot be empty"));
+				setError(ERR_DELETE_NULL_PKEY_FIELD, i18n("Primary key's field \"%1\" cannot be empty.").arg(it.current()->name()));
 //js todo: pass the field's name somewhere!
 				return false;
 			}
@@ -1809,13 +1817,13 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 				+ m_driver->valueToSQL( it.current(), val ) );
 		}
 	}
-	sql += sqlwhere;
-	KexiDBDrvDbg << " -- SQL == " << sql << endl;
+	m_sql += sqlwhere;
+	KexiDBDrvDbg << " -- SQL == " << m_sql << endl;
 
-	bool res = drv_executeSQL(sql);
+	bool res = drv_executeSQL(m_sql);
 
 	if (!res) {
-//TODO: js: we would like to know a reason of failures...
+		setError(ERR_DELETE_SERVER_ERROR, i18n("Row deleting on the server failed."));
 		return false;
 	}
 
