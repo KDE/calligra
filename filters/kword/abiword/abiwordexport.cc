@@ -121,7 +121,7 @@ private:
         const LayoutData& layout, const bool force) const;
     QString escapeAbiWordText(const QString& strText) const;
     bool makeTable(const FrameAnchor& anchor);
-    bool makeImage(const FrameAnchor& anchor, const bool isImage);
+    bool makePicture(const FrameAnchor& anchor);
     bool convertUnknownPicture(const QString& name, const QString& extension, QByteArray& image);
     void writeAbiProps(const TextFormatting& formatLayout, const TextFormatting& format);
     void writePictureData(const QString& koStoreName, const QString& keyName);
@@ -518,10 +518,10 @@ bool AbiWordWorker::makeTable(const FrameAnchor& anchor)
     return true;
 }
 
-bool AbiWordWorker::makeImage(const FrameAnchor& anchor, const bool isImage)
+bool AbiWordWorker::makePicture(const FrameAnchor& anchor)
 {
     kdDebug(30506) << "New image/clipart: " << anchor.picture.koStoreName
-        << " , " << anchor.picture.key.toString() << " (is image:" << isImage << ")" <<endl;
+        << " , " << anchor.picture.key.toString() << endl;
 
     const double height=anchor.bottom - anchor.top;
     const double width =anchor.right  - anchor.left;
@@ -674,14 +674,10 @@ void AbiWordWorker::processAnchor ( const QString&,
     const FormatData& formatData)
 {
     // We have an image or a table
-    // However, AbiWord does not support tables
-    if (2==formatData.frameAnchor.type)
-    {   // <IMAGE>
-        makeImage(formatData.frameAnchor,true);
-    }
-    else if (5==formatData.frameAnchor.type)
-    {   // <CLIPART>
-        makeImage(formatData.frameAnchor,false);
+    if ( (2==formatData.frameAnchor.type) // <IMAGE> or <PICTURE>
+        || (5==formatData.frameAnchor.type) ) // <CLIPART> 
+    {
+        makePicture(formatData.frameAnchor);
     }
     else if (6==formatData.frameAnchor.type)
     {

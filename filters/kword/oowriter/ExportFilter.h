@@ -89,7 +89,7 @@ private:
         const LayoutData& layout, const bool force);
     QString escapeOOText(const QString& strText) const;
     bool makeTable(const FrameAnchor& anchor);
-    bool makeImage(const FrameAnchor& anchor, const bool isImage);
+    bool makePicture(const FrameAnchor& anchor);
     bool convertUnknownPicture(const QString& name, const QString& extension, QByteArray& image);
     void writeAbiProps(const TextFormatting& formatLayout, const TextFormatting& format);
     void declareFont(const QString& fontName);

@@ -300,10 +300,10 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor)
 #endif
 }
 
-bool OOWriterWorker::makeImage(const FrameAnchor& anchor, const bool isImage)
+bool OOWriterWorker::makePicture(const FrameAnchor& anchor)
 {
     kdDebug(30518) << "New image/clipart: " << anchor.picture.koStoreName
-        << " , " << anchor.picture.key.toString() << " (is image:" << isImage << ")" <<endl;
+        << " , " << anchor.picture.key.toString() << endl;
 
     QString koStoreName(anchor.picture.koStoreName);
         
@@ -489,14 +489,10 @@ void OOWriterWorker::processAnchor ( const QString&,
     const FormatData& formatData)
 {
     // We have an image or a table
-    // However, AbiWord does not support tables
-    if (2==formatData.frameAnchor.type)
-    {   // <IMAGE>
-        makeImage(formatData.frameAnchor,true);
-    }
-    else if (5==formatData.frameAnchor.type)
-    {   // <CLIPART>
-        makeImage(formatData.frameAnchor,false);
+    if ( (2==formatData.frameAnchor.type) // <IMAGE> or <PICTURE>
+        || (5==formatData.frameAnchor.type) ) // <CLIPART>
+    {
+        makePicture(formatData.frameAnchor);
     }
     else if (6==formatData.frameAnchor.type)
     {
