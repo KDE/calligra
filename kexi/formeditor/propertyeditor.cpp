@@ -37,8 +37,8 @@
 PropertyEditor::PropertyEditor(QWidget *parent, bool returnToAccept, const char *name)
  : KListView(parent, name)
 {
-	addColumn(i18n("Property"));
-	addColumn(i18n("Value"));
+	addColumn(i18n("Property"), 145);
+	addColumn(i18n("Value"), 100);
 
 	m_currentEditor = 0;
 	m_returnToAccept = returnToAccept;

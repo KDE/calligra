@@ -303,4 +303,32 @@ KexiView::print(KPrinter &printer)
 */
 }
 
+bool
+KexiView::activateWindow(const QString &id)
+{
+	kdDebug() << "KexiView::activateWindow()" << endl;
+	KexiDialogBase *dlg = m_wins[id];
+	kdDebug() << "KexiView::activateWindow(): dlg: " << dlg << endl;
+	if(dlg)
+	{
+		workspace()->activateView(dlg);
+		return true;
+	}
+
+	return false;
+}
+
+void
+KexiView::registerDialog(KexiDialogBase *dlg, const QString &identifier)
+{
+	m_wins.insert(identifier, dlg);
+}
+
+void
+KexiView::removeDialog(const QString &identifier)
+{
+//	if(m_wins)
+	m_wins.remove(identifier);
+}
+
 #include "kexiview.moc"

@@ -150,7 +150,7 @@ KexiBrowser::slotContextMenu(KListView *, QListViewItem *item, const QPoint &pos
 			static_cast<KexiDialogBase*>(parent()->parent())->kexiView()
 			)->itemContext(it->identifier());
 		}
-	
+
 		pg->setIdentifier(it->identifier());
 		pg->exec(pos);
 		delete pg;
@@ -169,11 +169,15 @@ KexiBrowser::slotExecuteItem(QListViewItem *item)
 		if(it->identifier() != QString::null)
 		{
 			if (it->proxy())
+			{
 				it->proxy()->executeItem(it->identifier());
+			}
 			else
+			{
 				it->item()->projectPart()->proxy(
 	                        static_cast<KexiDialogBase*>(parent()->parent())->kexiView()
         	                )->executeItem(it->identifier());
+			}
 		}
 	}
 }

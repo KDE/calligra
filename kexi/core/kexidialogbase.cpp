@@ -45,6 +45,7 @@ KexiDialogBase::KexiDialogBase(KexiView* view,QWidget *parent, const char *name)
 	m_project=view->project();
 	m_contextTitle = QString::null;
 	m_contextMessage = QString::null;
+	m_identifier = QString::null;
 #if 0
 	if (s_DocumentWindows==0) s_DocumentWindows=new QPtrList<KexiDialogBase>();
 	if (s_ToolWindows==0) s_ToolWindows=new QPtrList<KexiDialogBase>();
@@ -74,7 +75,7 @@ KexiDialogBase::setContextHelp(const QString &title, const QString &message)
 	m_view->help()->setContextHelp(title, message);
 }
 
-void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
+void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt, const QString &identifier)
 {
 	m_wt=wt;
 	m_registered=true;
@@ -94,6 +95,12 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 	reparent(m_view->workspaceWidget(),QPoint(0,0),true);
 	m_registering=false;
 	m_view->workspace()->activateView(this);
+	if(!identifier.isNull())
+	{
+		m_view->registerDialog(this, identifier);
+		m_identifier = identifier;
+		kdDebug() << "KexiDialogBase::registerAs() " << identifier << endl;
+	}
 //	showMaximized();
 	return;
 #if 0
@@ -157,7 +164,38 @@ void KexiDialogBase::closeEvent(QCloseEvent *ev)
 	finishUpForClosing();
 	emit closing(this);
 //	close();
+
+	if(!m_identifier.isNull() && m_view)
+		m_view->removeDialog(m_identifier);
+
 	ev->accept();
+}
+
+void KexiDialogBase::registerChild(QWidget *child)
+{
+	m_widgets.append(child);
+}
+
+void KexiDialogBase::aboutToShow()
+{
+	kdDebug() << "KexiDialogBase::aboutToShow()" << endl;
+	QWidget *it;
+	for(it = m_widgets.first(); it; it = m_widgets.next())
+	{
+		kdDebug() << "KexiDialogBase::aboutToShow(): it " << it << endl;
+		it->show();
+	}
+}
+
+void KexiDialogBase::aboutToHide()
+{
+	kdDebug() << "KexiDialogBase::aboutToHide()" << endl;
+	QWidget *it;
+	for(it = m_widgets.first(); it; it = m_widgets.next())
+	{
+		kdDebug() << "KexiDialogBase::aboutToHide(): it " << it << endl;
+		it->hide();
+	}
 }
 
 KexiDialogBase::~KexiDialogBase()

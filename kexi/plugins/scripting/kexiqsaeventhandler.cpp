@@ -77,6 +77,7 @@ KexiQSAEventHandler::callConnect(QObject *sender, const char *signal, QString fu
 void
 KexiQSAEventHandler::provideObject(QObject *o)
 {
+	kdDebug() << "KexiQSAEventHandler::provideObject(): o=" << o->name() << endl;
 	m_host->interpreter()->addObject(o);
 }
 

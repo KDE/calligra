@@ -33,8 +33,9 @@ KexiFormHandlerItem::KexiFormHandlerItem(KexiProjectHandler *parent, const QStri
 	m_propertyBuffer = new PropertyBuffer(this, "pb");
 //	m_widgetList = new WidgetList();
 	m_widgetWatcher = new KFormEditor::WidgetWatcher(this, m_propertyBuffer);
+	m_container = new KexiDBWidgetContainer(0, "form", "bar");
 
-	m_container = 0;
+//	m_container = 0;
 }
 
 void
@@ -56,7 +57,7 @@ KexiFormHandlerItem::load(KoStore *store)
 	store->open("/form/" + name() + ".ui");
 	QByteArray data = store->read(store->size());
 	store->close();
-	m_container = new KexiDBWidgetContainer(0, "foo", "bar");
+//	m_container = new KexiDBWidgetContainer(0, "foo", "bar");
 	KexiWidgetProvider *provider = new KexiWidgetProvider();
 	m_widgetWatcher->load(m_container, provider, data);
 }

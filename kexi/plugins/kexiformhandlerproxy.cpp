@@ -78,10 +78,10 @@ KexiFormHandlerProxy::slotCreate()
 	{
 		kdDebug() << "KexiFormHandlerProxy::slotCreate(): source: " << d->source() << endl;
 		QString name = d->name();
-		KexiFormHandlerItem *i = new KexiFormHandlerItem(part(), name, name);
-		part()->items()->insert(name, i);
+		KexiFormHandlerItem *i = new KexiFormHandlerItem(part(), name, name + ".ui");
+		part()->items()->insert("kexi/form/" + name + ".ui", i);
         emit m_formHandler->itemListChanged(part());
-		KexiFormBase *nform = new KexiFormBase(kexiView(), i, 0, d->source(), "nform", name);
+		KexiFormBase *nform = new KexiFormBase(kexiView(), i, 0, false, d->source(), "nform", name);
 		nform->show();
 		kexiView()->project()->addFileReference(FileReference("Forms",name,"/form/" + name + ".ui"));
 	}
@@ -90,11 +90,15 @@ KexiFormHandlerProxy::slotCreate()
 void
 KexiFormHandlerProxy::slotOpen(const QString &identifier)
 {
+	if(kexiView()->activateWindow(identifier))
+		return;
+
+
 	KexiFormHandlerItem *i = static_cast<KexiFormHandlerItem *>(part()->items()->find(identifier));
 	kdDebug() << "KexiFormHandlerProxy::slotOpen() i: " << identifier << " " << i << endl;
 	if(i)
 	{
-		KexiFormBase *nform = new KexiFormBase(kexiView(), i, 0, "aa", "nform", i->name(), i->container());
+		KexiFormBase *nform = new KexiFormBase(kexiView(), i, 0, true, "aa", "nform", i->name());
 		nform->show();
 	}
 }

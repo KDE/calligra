@@ -42,6 +42,7 @@ void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 	m_activeDialog=static_cast<KexiDialogBase*>(w);
 	if (olddialog)
 	{
+		olddialog->aboutToHide();
 		if (m_activeDialog.isNull())
 		{
 			olddialog->deactivateActions();
@@ -54,23 +55,27 @@ void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 			{
 				olddialog->deactivateActions();
 				if (olddialog->guiClient()->factory()==m_mainwindow->factory())
-					m_mainwindow->factory()->removeClient(olddialog->guiClient());			
+					m_mainwindow->factory()->removeClient(olddialog->guiClient());
 				m_mainwindow->factory()->addClient(m_activeDialog->guiClient());
 				m_activeDialog->activateActions();
+				m_activeDialog->aboutToShow();
+
 			}
 			else
 			{
 				olddialog->deactivateActions();
 				m_activeDialog->activateActions();
+				m_activeDialog->aboutToShow();
 			}
 		}
-	
+
 	}
 	else
 	if (!m_activeDialog.isNull())
 	{
 		m_mainwindow->factory()->addClient(m_activeDialog->guiClient());
 		m_activeDialog->activateActions();
+		m_activeDialog->aboutToShow();
 	}
 }
 
@@ -78,6 +83,17 @@ KexiDialogBase *
 KexiWorkspaceMDI::activeDocumentView()
 {
 	return static_cast<KexiDialogBase*>(activeWindow());
+}
+
+void
+KexiWorkspaceMDI::activateView(KexiDialogBase *kdb)
+{
+	if(!kdb)
+		return;
+
+	slotWindowActivated(kdb);
+	kdb->showNormal();
+	kdb->setFocus();
 }
 
 KexiWorkspaceMDI::~KexiWorkspaceMDI()

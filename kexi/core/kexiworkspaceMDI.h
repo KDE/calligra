@@ -22,7 +22,7 @@ class KexiWorkspaceMDI : public QWorkspace, public KexiWorkspace
 		virtual unsigned int count() { return no; };
 //                virtual KexiDialogBase * activeDocumentView() {return m_activeDialog;};		
                 virtual KexiDialogBase * activeDocumentView();		
-		virtual void activateView(KexiDialogBase *kdb){slotWindowActivated(kdb);}
+		virtual void activateView(KexiDialogBase *kdb);
 	protected:
 		unsigned int no;
 

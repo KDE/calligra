@@ -30,6 +30,8 @@ class KexiProject;
 
 class KPrinter;
 
+typedef QPtrList<QWidget> Widgets;
+
 class KexiDialogBase : public QWidget
 {
 	Q_OBJECT
@@ -53,13 +55,17 @@ class KexiDialogBase : public QWidget
 
 		virtual void print(KPrinter &printer) {; }
 
+		void aboutToShow();
+		void aboutToHide();
+
 	signals:
 		void closing(KexiDialogBase *);
 
 	protected:
 		virtual void focusInEvent ( QFocusEvent *);
 		enum WindowType {ToolWindow, DocumentWindow};
-		void registerAs(KexiDialogBase::WindowType wt);
+		void registerAs(KexiDialogBase::WindowType wt, const QString &identifier=QString::null);
+		void registerChild(QWidget *w);
 		void closeEvent(QCloseEvent *ev);
 		virtual void finishUpForClosing(){;}
 		static KexiDialogBase *s_activeDocumentWindow;
@@ -78,6 +84,8 @@ class KexiDialogBase : public QWidget
 		bool	m_registering;
 		QString	m_contextTitle;
 		QString	m_contextMessage;
+		Widgets	m_widgets;
+		QString	m_identifier;
 };
 
 #endif

@@ -156,13 +156,16 @@ KexiFormBase::EditGUIClient *KexiFormBase::m_editGUIClient=0;
 KexiFormBase::ViewGUIClient *KexiFormBase::m_viewGUIClient=0;
 
 
-KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent, const QString &s, const char *name, QString identifier, KFormEditor::WidgetContainer *content)
+KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent, bool modeview, const QString &s, const char *name, QString identifier)
 	: KexiDialogBase(view,parent,identifier.utf8())
 {
 	setMinimumWidth(50);
 	setMinimumHeight(50);
 
 //	initActions();
+
+	KFormEditor::WidgetContainer *content = item->container();
+	kdDebug() << "KexiFormBase::KexiFormBase(): content = " << content << endl;
 
 	m_source = s;
 	m_project = view->project();
@@ -195,6 +198,7 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 	editorWindow->setCaption(i18n("Properties"));
 	editorWindow->setResizeEnabled(true);
 	view->mainWindow()->moveDockWindow(editorWindow, DockRight);
+	registerChild(editorWindow);
 
 	QTabWidget *formProperties = new QTabWidget(editorWindow);
 	editorWindow->setWidget(formProperties);
@@ -223,7 +227,8 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 		}
 	}
 
-	m_item->setContainer(topLevelEditor);
+	if(!content)
+		m_item->setContainer(topLevelEditor);
 //	peditor->show();
 //	eeditor->show();
 
@@ -235,13 +240,20 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 //	mainWindow()->guiFactory()->addClient(guiClient());
 //	activateActions();
 
-	registerAs(DocumentWindow);
+	registerAs(DocumentWindow, m_item->identifier());
 
-	if(content)
+	if(content && modeview)
 	{
 		slotToggleFormMode(false);
 		if(m_editGUIClient)
 			m_editGUIClient->toggleMode(false);
+	}
+
+	for(KFormEditor::WidgetWatcher::Iterator it = m_item->widgetWatcher()->begin(); it != m_item->widgetWatcher()->end(); it++)
+	{
+		kdDebug() << "KexiFormBase::KexiFormBase(): container contains: " << it.data()->name() << endl;
+		if(it.data()->name() != "KexiDBWidgetContainer")
+			slotWidgetInserted(it.data());
 	}
 
 }

@@ -92,6 +92,9 @@ KexiTablePartProxy::slotCreate()
 void
 KexiTablePartProxy::slotOpen(const QString& identifier)
 {
+	if(kexiView()->activateWindow(identifier))
+		return;
+
 	kdDebug() << "KexiTablePartProxy::slotOpen(): indentifier = " << identifier << endl;
 	kdDebug() << "KexiTablePartProxy::slotOpen(): kexiView = " << kexiView() << endl;
 

@@ -22,6 +22,7 @@
 #include <kdockwidget.h>
 #include <kurl.h>
 #include <koView.h>
+#include <qmap.h>
 
 /**
   *@author lucijan busch
@@ -34,6 +35,7 @@ class KToggleAction;
 class KRecentFilesAction;
 
 class KexiContextHelp;
+class KexiDialogBase;
 
 class KexiWorkspace;
 class KexiTabBrowser;
@@ -42,7 +44,10 @@ class KexiFormBase;
 class KexiProject;
 class DCOPObject;
 
-class KexiView : public KoView  {
+typedef QMap<QString, KexiDialogBase *> Windows;
+
+class KexiView : public KoView
+{
    Q_OBJECT
 
 public:
@@ -71,6 +76,10 @@ public:
 
     void addQDockWindow(QDockWindow *w);
     void removeQDockWindow(QDockWindow * w);
+
+    bool activateWindow(const QString &id);
+    void registerDialog(KexiDialogBase *dlg, const QString &identifier);
+    void removeDialog(const QString &identifier);
 //public slots:
 //    void slotShowRelations();
 protected:
@@ -115,6 +124,7 @@ private:
 	KexiProject *m_project;
 	DCOPObject *dcop;
 	QPtrList<QDockWindow> m_dockWins;
+	Windows		m_wins;
 };
 
 #endif

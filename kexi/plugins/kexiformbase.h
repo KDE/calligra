@@ -43,16 +43,17 @@ class KexiFormBase : public KexiDialogBase
 {
 
 	Q_OBJECT
-   
-	public: 
-		KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent=0,
-		 const QString &data=QString::null, const char *name=0, QString identifier=QString::null,
-		 KFormEditor::WidgetContainer *content=0);
+
+	public:
+		KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent=0, bool modeview=false,
+		 const QString &data=QString::null, const char *name=0, QString identifier=QString::null);
 		~KexiFormBase();
 
                 virtual KXMLGUIClient *guiClient();
 		virtual void activateActions();
 		virtual void deactivateActions();
+
+		void		setDesignMode(bool m);
 
 	private:
 		class EditGUIClient;

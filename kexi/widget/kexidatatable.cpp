@@ -83,7 +83,7 @@ KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, QString caption, co
 	m_first = true;
 
 	if(!embedd)
-		registerAs(DocumentWindow);
+		registerAs(DocumentWindow, caption);
 	else
 		m_statusBar->hide();
 
