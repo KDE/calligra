@@ -114,6 +114,7 @@ k_dcop:
     virtual void screenPresStructView();
     virtual void screenAssignEffect();
     virtual void screenStart();
+    virtual void screenStartFromFirst();
     virtual void screenStop();
     virtual void screenPause();
     virtual void screenFirst();

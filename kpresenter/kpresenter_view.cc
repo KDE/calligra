@@ -1509,6 +1509,11 @@ void KPresenterView::screenStart()
     startScreenPres( getCurrPgNum() );
 }
 
+void KPresenterView::screenStartFromFirst()
+{
+    startScreenPres( 1 );
+}
+
 void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 {
     // no slide is selected ?
@@ -3044,6 +3049,11 @@ void KPresenterView::setupActions()
                                      "1rightarrow", 0,
                                      this, SLOT( screenStart() ),
                                      actionCollection(), "screen_start" );
+
+    actionScreenStartFromFirst = new KAction( i18n( "&Start From First Slide" ),
+                                     "1rightarrow", 0,
+                                     this, SLOT( screenStartFromFirst() ),
+                                     actionCollection(), "screen_startfromfirst" );
 
     actionScreenFirst = new KAction( i18n( "&Go to Start" ),
                                      "start", Key_Home,

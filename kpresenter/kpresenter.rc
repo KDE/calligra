@@ -161,6 +161,7 @@
   <Action name="screen_transeffect"/>
   <Separator/>
   <Action name="screen_start"/>
+  <Action name="screen_startfromfirst"/>
   <Separator/>
   <Action name="screen_first"/>
   <Action name="screen_prev"/>

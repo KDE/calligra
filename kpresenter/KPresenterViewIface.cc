@@ -307,6 +307,11 @@ void KPresenterViewIface::screenStart()
     view->screenStart();
 }
 
+void KPresenterViewIface::screenStartFromFirst()
+{
+    view->screenStartFromFirst();
+}
+
 void KPresenterViewIface::screenStop()
 {
     view->screenStop();
