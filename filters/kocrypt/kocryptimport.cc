@@ -95,6 +95,7 @@ QFile outf(fileOut);
       return false;   // we only know one crypto algorithm too.
     }
 
+kdDebug() << "++++++++++++ Checkpoint 1" << endl;
     /*
      *   Decrypt it.  don't forget to toss the extra data at the beginning and
      *   end of the file!
@@ -109,7 +110,9 @@ QFile outf(fileOut);
 
     // We skip the rest of this block since previous_rand%5120 has to be >=
     // blocksize.
+kdDebug() << "             previous_rand = " << previous_rand << endl;
     previous_rand -= (blocksize-2);
+kdDebug() << "++++++++++++ Checkpoint 2" << endl;
 
     unsigned int remaining = 0;
     while (previous_rand > 0) {
@@ -123,6 +126,7 @@ QFile outf(fileOut);
          previous_rand = 0;
       }
     }
+kdDebug() << "++++++++++++ Checkpoint 3" << endl;
 
     // read in the file size
     fsize = 0;
@@ -136,6 +140,8 @@ QFile outf(fileOut);
        remaining--;
     }
 
+kdDebug() << "             fsize = " << fsize << endl;
+kdDebug() << "++++++++++++ Checkpoint 4" << endl;
     // Empty out this remaining block that we read in
     if (remaining > 0) {
       if (remaining > fsize) {
@@ -149,6 +155,7 @@ QFile outf(fileOut);
       }
     }
 
+kdDebug() << "++++++++++++ Checkpoint 5" << endl;
     // read in the rest of the file and decode
     while (fsize > 0) {
       inf.readBlock(p, blocksize);
@@ -164,6 +171,7 @@ QFile outf(fileOut);
       }
     }
 
+kdDebug() << "++++++++++++ Checkpoint 6" << endl;
     // FIXME: check the filesize and the hash to make sure it was successful
 
     return true;

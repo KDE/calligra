@@ -19,6 +19,7 @@
 
 #include <config.h>
 #include <qstring.h>
+#include <kdebug.h>
 
 #include "kocryptpwddlg.h"
 
@@ -27,6 +28,8 @@
 KoCryptPwdDlg::KoCryptPwdDlg(QWidget *parent, const char *name) 
 : KoFilterDialog(parent, name) {
    _password = "";
+   kdDebug() << "+++++++++++++++++++++++++++++++++++++ OUTPUT +++++++++++"
+             << endl;
 }
 
 

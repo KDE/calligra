@@ -109,6 +109,7 @@ int rc;
     while ((previous_rand % 5120) < (unsigned int)blocksize)
        previous_rand = rand() % 0x10000;
 
+kdDebug() << "++++++++++++++++++ Output previous_rand: " << previous_rand%5120 << endl;
     for (char *t = p+2; t-p < (int)(previous_rand % 5120)+2; t += sizeof(int)) {
        *((int *)t) = rand();
     }
@@ -121,6 +122,7 @@ int rc;
     // Write the size of the file out.
     unsigned int filelen = inf.size();
 
+kdDebug() << "++++++++++++++++++ Output fsize: " << filelen << endl;
     p[(previous_rand % 5120)+2] = filelen         & 0x00ff;
     p[(previous_rand % 5120)+3] = (filelen >> 8)  & 0x00ff;
     p[(previous_rand % 5120)+4] = (filelen >> 16) & 0x00ff;
@@ -139,8 +141,8 @@ int rc;
 
        // if we ran out of data already (!?!?) append random data.
        cursize += rc;
-       shortness = cursize % blocksize;
-       while (shortness) {
+       shortness = blocksize - (cursize % blocksize);
+       while (shortness > 0) {
           p[cursize++] = (char) (rand()%0x100);
           shortness--;
           done = true;
@@ -166,7 +168,7 @@ int rc;
 
        if (rc != 4096) {
           done = true;
-          shortness = cursize % blocksize;
+          shortness = blocksize - (cursize % blocksize);
           while (shortness) {
              p[cursize++] = (char) (rand()%0x100);
              shortness--;
