@@ -48,6 +48,23 @@
 #include <qdom.h>
 #include <qtextstream.h>
 
+#undef DEBUG_KWORD_TAGS // Debugging KWord's tags and attributes
+
+class ClassExportFilterBase
+{
+    public:
+        ClassExportFilterBase(void) {}
+        virtual ~ClassExportFilterBase(void) {}
+    public: //Non-virtual
+        const bool filter(const QString  &filenameIn, const QString  &filenameOut,
+                          const QString  &from, const QString  &to, const QString& );
+        QString& escapeText(QString& str) const;
+    public: //virtual
+        virtual QString getDocType(void) const = 0;
+    protected:
+        QDomDocument qDomDocumentIn;
+};
+
 // Start processor's header
 
 // The class TagProcessing and the two functions ProcessSubtags () and
@@ -65,18 +82,19 @@ class TagProcessing
         {}
 
         TagProcessing (QString  n,
-                       void     (*p)(QDomNode, void *, QString &),
+                       void     (*p)(QDomNode, void *, QString &, ClassExportFilterBase*),
                        void    *d) : name (n), processor (p), data (d)
         {}
 
         QString  name;
-        void     (*processor)(QDomNode, void *, QString &);
+        void     (*processor)(QDomNode, void *, QString &, ClassExportFilterBase*);
         void    *data;
 };
 
 void ProcessSubtags     ( QDomNode                   parentNode,
                           QValueList<TagProcessing>  &tagProcessingList,
-                          QString                    &outputText         );
+                          QString                    &outputText,
+                          ClassExportFilterBase      *exportFilter);
 
 void AllowNoSubtags ( QDomNode  myNode );
 
@@ -125,7 +143,8 @@ void AllowNoAttributes ( QDomNode  myNode );
 
 void ProcessSubtags ( QDomNode                    parentNode,
                       QValueList<TagProcessing>  &tagProcessingList,
-                      QString                    &outputText         )
+                      QString                    &outputText,
+                      ClassExportFilterBase      *exportFilter)
 {
     QDomNode childNode;
 
@@ -148,7 +167,7 @@ void ProcessSubtags ( QDomNode                    parentNode,
 
                     if ( (*tagProcessingIt).processor != NULL )
                     {
-                        ((*tagProcessingIt).processor) ( childNode, (*tagProcessingIt).data, outputText );
+                        ((*tagProcessingIt).processor) ( childNode, (*tagProcessingIt).data, outputText, exportFilter );
                     }
                     else
                     {
@@ -167,13 +186,20 @@ void ProcessSubtags ( QDomNode                    parentNode,
     }
 }
 
+#ifdef DEBUG_KWORD_TAGS
+// Version for debugging (process all sub tags)
 void AllowNoSubtags ( QDomNode  myNode )
 {
     QString outputText;
     QValueList<TagProcessing> tagProcessingList;
-    ProcessSubtags (myNode, tagProcessingList, outputText);
+    ProcessSubtags (myNode, tagProcessingList, outputText, NULL);
 }
-
+#else
+// Normal version: no subtags expected, so do not search any!
+void AllowNoSubtags ( QDomNode )
+{
+}
+#endif
 
 // The class AttrProcessing and the two functions ProcessAttributes ()
 // and AllowNoSubtags () allow for easing parsing of the current tag's
@@ -243,12 +269,20 @@ void ProcessAttributes ( QDomNode                     myNode,
     }
 }
 
-
+#ifdef DEBUG_KWORD_TAGS
+// Version for debugging (process all attributes)
 void AllowNoAttributes ( QDomNode  myNode )
 {
     QValueList<AttrProcessing> attrProcessingList;
     ProcessAttributes (myNode, attrProcessingList);
 }
+#else
+// Normal version: no attributes expected, so do not process any!
+void AllowNoAttributes ( QDomNode )
+{
+}
+#endif
+
 // End processor's functions
 
 // Every tag has its own processing function. All of those functions
@@ -276,7 +310,7 @@ void AllowNoAttributes ( QDomNode  myNode )
 // FormatData is a container for data retreived from the FORMAT tag
 // and its subtags to be used in the PARAGRAPH tag.
 
-static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString & )
+static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* )
 {
     QString *layout = (QString *) tagData;
 
@@ -296,7 +330,7 @@ static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString & )
 }
 
 
-static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText )
+static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, ClassExportFilterBase* exportFilter )
 {
     QString *layout = (QString *) tagData;
 
@@ -310,7 +344,7 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     tagProcessingList.append ( TagProcessing ( "FORMAT",    NULL,                 NULL            ) );
     tagProcessingList.append ( TagProcessing ( "TABULATOR", NULL,                 NULL            ) );
     tagProcessingList.append ( TagProcessing ( "FLOW",      NULL,                 NULL            ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText);
+    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
 class FormatData
@@ -353,7 +387,7 @@ class FormatData
 
 // FORMAT's subtags
 
-static void ProcessItalicTag (QDomNode myNode, void* formatDataPtr , QString&)
+static void ProcessItalicTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -366,7 +400,7 @@ static void ProcessItalicTag (QDomNode myNode, void* formatDataPtr , QString&)
     formatData->italic=(value!=0);
 }
 
-static void ProcessUnderlineTag (QDomNode myNode, void* formatDataPtr , QString&)
+static void ProcessUnderlineTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -379,7 +413,7 @@ static void ProcessUnderlineTag (QDomNode myNode, void* formatDataPtr , QString&
     formatData->underline=(value!=0);
 }
 
-static void ProcessWeightTag (QDomNode myNode, void* formatDataPtr , QString&)
+static void ProcessWeightTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -392,7 +426,7 @@ static void ProcessWeightTag (QDomNode myNode, void* formatDataPtr , QString&)
     formatData->weight=weight;
 }
 
-static void ProcessSizeTag (QDomNode myNode, void* formatDataPtr , QString&)
+static void ProcessSizeTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -405,7 +439,7 @@ static void ProcessSizeTag (QDomNode myNode, void* formatDataPtr , QString&)
     formatData->fontSize=size;
 }
 
-static void ProcessFontTag (QDomNode myNode, void* formatDataPtr , QString& )
+static void ProcessFontTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase* )
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -418,7 +452,7 @@ static void ProcessFontTag (QDomNode myNode, void* formatDataPtr , QString& )
     formatData->fontName=fontName;
 }
 
-static void ProcessColorTag (QDomNode myNode, void* formatDataPtr , QString&)
+static void ProcessColorTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -435,7 +469,7 @@ static void ProcessColorTag (QDomNode myNode, void* formatDataPtr , QString&)
     formatData->colourBlue=blue;
 }
 
-static void ProcessVertAlignTag (QDomNode myNode, void* formatDataPtr , QString&)
+static void ProcessVertAlignTag (QDomNode myNode, void* formatDataPtr , QString&, ClassExportFilterBase*)
 {
     FormatData* formatData = (FormatData*) formatDataPtr;
 
@@ -449,7 +483,7 @@ static void ProcessVertAlignTag (QDomNode myNode, void* formatDataPtr , QString&
 }
 
 
-static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &)
+static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* exportFilter)
 {
     QValueList<FormatData> *formatDataList = (QValueList<FormatData> *) tagData;
 
@@ -485,13 +519,13 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &)
 
     QString strDummy;
 
-    ProcessSubtags (myNode, tagProcessingList, strDummy);
+    ProcessSubtags (myNode, tagProcessingList, strDummy, exportFilter);
 
     formatDataList->append (formatData);
 }
 
 
-static void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText )
+static void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputText, ClassExportFilterBase* exportFilter )
 {
     QValueList<FormatData> *formatDataList = (QValueList<FormatData> *) tagData;
 
@@ -500,11 +534,11 @@ static void ProcessFormatsTag ( QDomNode myNode, void *tagData, QString &outputT
     (*formatDataList).clear ();
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "FORMAT", ProcessFormatTag, (void *) formatDataList ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText);
+    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
 
-static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &)
+static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase*)
 {
     QString *tagText = (QString *) tagData;
 
@@ -528,21 +562,10 @@ static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &)
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
 
-static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText )
+static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText, ClassExportFilterBase* exportFilter)
 {
     if (! paraText.isEmpty() )
     {
-        const QString strAmp ("&amp;");
-        const QString strLt  ("&lt;");
-        const QString strGt  ("&gt;");
-        //const QString strApos("&apos;");  //Only predefined in XHTML
-        const QString strQuot("&quot;");
-
-        const QRegExp regExpAmp ("&");
-        const QRegExp regExpLt  ("<");
-        const QRegExp regExpGt  (">");
-        //const QRegExp regExpApos("'");    //Only predefined in XHTML
-        const QRegExp regExpQuot("\"");
 
         QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
 
@@ -555,11 +578,7 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
             //Retrieve text
             partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
             //Code all possible predefined HTML entities
-            partialText.replace (regExpAmp , strAmp); //Must be the first!!
-            partialText.replace (regExpLt  , strLt);
-            partialText.replace (regExpGt  , strGt);
-            //partialText.replace (regExpApos, strApos);    // Only predefined in XHTML
-            partialText.replace (regExpQuot, strQuot);
+            exportFilter->escapeText(partialText);
 
             // TODO: first and last characters of partialText should not be a space (white space problems!)
             // TODO: replace multiples spaces in non-breaking spaces!
@@ -610,7 +629,7 @@ static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &pa
 }
 
 
-static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText )
+static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter)
 {
     AllowNoAttributes (myNode);
 
@@ -623,10 +642,10 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     tagProcessingList.append ( TagProcessing ( "FORMATS", ProcessFormatsTag,    (void *) &paraFormatDataList ) );
     tagProcessingList.append ( TagProcessing ( "LAYOUT",  ProcessLayoutTag,     (void *) &paraLayout         ) );
     tagProcessingList.append ( TagProcessing ( "HARDBRK", NULL,                 NULL) ); // Not documented!
-    ProcessSubtags (myNode, tagProcessingList, outputText);
+    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 
     QString strParaText;
-    ProcessParagraphData ( paraText, paraFormatDataList, strParaText );
+    ProcessParagraphData ( paraText, paraFormatDataList, strParaText, exportFilter );
     if (strParaText.isEmpty())
     {
         //An empty paragraph is not allowed in HTML, so add a non-breaking space!
@@ -680,7 +699,7 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
 }
 
 
-static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText )
+static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter)
 {
     int frameType=-1;
     int frameInfo=-1;
@@ -699,23 +718,23 @@ static void ProcessFramesetTag ( QDomNode myNode, void *, QString   &outputText 
         QValueList<TagProcessing> tagProcessingList;
         tagProcessingList.append ( TagProcessing ( "FRAME",     NULL,                NULL ) );
         tagProcessingList.append ( TagProcessing ( "PARAGRAPH", ProcessParagraphTag, NULL ) );
-        ProcessSubtags (myNode, tagProcessingList, outputText);
+        ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 
     }
     //TODO: Treat the other types of frames (frameType)
 }
 
 
-static void ProcessFramesetsTag (QDomNode myNode, void *, QString   &outputText )
+static void ProcessFramesetsTag (QDomNode myNode, void *, QString   &outputText, ClassExportFilterBase* exportFilter)
 {
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "FRAMESET", ProcessFramesetTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText);
+    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
-static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText)
+static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText, ClassExportFilterBase* exportFilter)
 {
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList.append ( AttrProcessing ( "editor",        "", NULL ) );
@@ -731,24 +750,32 @@ static void ProcessDocTag (QDomNode myNode, void *,  QString &outputText)
     tagProcessingList.append ( TagProcessing ( "PIXMAPS",     NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "SERIALL",     NULL,                NULL ) );
     tagProcessingList.append ( TagProcessing ( "FRAMESETS",   ProcessFramesetsTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText);
+    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 }
 
 // ClassExportFilterBase
+         const QString strAmp ("&amp;");
+        const QString strLt  ("&lt;");
+        const QString strGt  ("&gt;");
+        //const QString strApos("&apos;");  //Only predefined in XHTML
+        const QString strQuot("&quot;");
 
-class ClassExportFilterBase
-{
-    public:
-        ClassExportFilterBase(void) {}
-        virtual ~ClassExportFilterBase(void) {}
-    public: //Non-virtual
-        const bool filter(const QString  &filenameIn, const QString  &filenameOut,
-                          const QString  &from, const QString  &to, const QString& );
-    public: //virtual
-        virtual QString getDocType(void) const = 0;
-    protected:
-        QDomDocument qDomDocumentIn;
-};
+        const QRegExp regExpAmp ("&");
+        const QRegExp regExpLt  ("<");
+        const QRegExp regExpGt  (">");
+        //const QRegExp regExpApos("'");    //Only predefined in XHTML
+        const QRegExp regExpQuot("\"");
+
+
+QString& ClassExportFilterBase::escapeText(QString& str) const
+{// TODO: escape text that cannot be encoded in the current encoding!
+    //Code all possible predefined HTML entities
+    str.replace (regExpAmp , strAmp)
+       .replace (regExpLt  , strLt)
+       .replace (regExpGt  , strGt)
+       .replace (regExpQuot, strQuot);
+    return str;
+}
 
 const bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &filenameOut,
                                          const QString& , const QString& , const QString& )
@@ -809,7 +836,14 @@ const bool ClassExportFilterBase::filter(const QString  &filenameIn, const QStri
               << strVersion.mid(10).replace(QRegExp("\\$"),"") // Note: double escape character (one for C++, one for QRegExp!)
               << "\">" << endl; //TODO: in XHTML empty element!
 
-    streamOut << "<title>No name</title>\n";  // GRR: Just temporary! <TITLE> is mandatory in HTML 4.01 !
+    // Put the filename as HTML title // TODO: take the real title from documentinfo.xml (if any!)
+    QString strTitle(filenameOut);
+    const int result=strTitle.findRev("/");
+    if (result>=0)
+    {
+        strTitle=strTitle.mid(result+1);
+    }
+    streamOut << "<title>"<< escapeText(strTitle) <<"</title>\n";  // <TITLE> is mandatory in HTML 4.01 !
 
     //TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 
@@ -817,7 +851,7 @@ const bool ClassExportFilterBase::filter(const QString  &filenameIn, const QStri
 
     // Now that we have the header, we can do the real work!
     QString stringBufOut;
-    ProcessDocTag (docNodeIn, NULL, stringBufOut);
+    ProcessDocTag (docNodeIn, NULL, stringBufOut, this);
     streamOut << stringBufOut;
 
     // Add the tail of the file
