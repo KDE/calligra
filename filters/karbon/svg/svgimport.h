@@ -57,7 +57,6 @@ protected:
 		QFont		font;
 	};
 
-	void parsePath( VComposite *, const QString & );
 	void parseGroup( VGroup *, const QDomElement & );
 	void parseStyle( VObject *, const QDomElement & );
 	void parsePA( GraphicsContext *, const QString &, const QString & );
@@ -69,9 +68,6 @@ protected:
 	QDomDocument inpdoc;
 	QDomDocument outdoc;
 	void convert();
-
-private:
-	const char *getCoord( const char *, double & );
 
 private:
 	VDocument					m_document;
