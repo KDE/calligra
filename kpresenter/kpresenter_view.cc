@@ -3080,7 +3080,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   fonts.length( fontList.count() );
   for(unsigned int i = 0;i < fontList.count(); i++ )
     fonts[i] = CORBA::string_dup( fontList.at(i) );
-  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, false, SIGNAL( activated( const char* ) ), this,
+  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, true, SIGNAL( activated( const char* ) ), this,
 							"fontSelected", true, i18n("Font List"),
 							200, -1, OpenPartsUI::AtBottom );
   tbFont.setFamily(fontList.at(0));
