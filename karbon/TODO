@@ -1,4 +1,5 @@
 REAL BUGS:
+-	include lineWidth in vpath::boundingbox (tricky: trigger linewidth changes)
 -	mirror coordinate-system so origin is bottom-left
 -	replace VObject::isInside() with a polygonizevisitor in vselectool (lenny)
 -	rotate/scale/shear tool dont work

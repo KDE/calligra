@@ -44,6 +44,7 @@ public:
 	void setColor( const VColor& color ) { m_color = color; m_type = fill_fill; }
 
 	VGradient& gradient() { return m_gradient; }
+	const VGradient& gradient() const { return m_gradient; }
 
 	VFillType type() const { return m_type; }
 	void setType( VFillType type ) { m_type = type; }

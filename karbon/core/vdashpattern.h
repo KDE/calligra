@@ -7,7 +7,9 @@
 
 #include <qvaluelist.h>
 
+
 class QDomElement;
+
 
 /**
  * The dash pattern consistes of a sequence of on/off values.
@@ -19,6 +21,7 @@ class QDomElement;
  *
  * Default is no dashes.
  */
+
 class VDashPattern
 {
 public:

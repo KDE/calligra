@@ -72,8 +72,10 @@ public:
 	void setMiterLimit( float limit ) { m_miterLimit = limit; }
 
 	VGradient& gradient() { return m_gradient; }
+	const VGradient& gradient() const { return m_gradient; }
 
 	VDashPattern& dashPattern() { return m_dashPattern; }
+	const VDashPattern& dashPattern() const { return m_dashPattern; }
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
