@@ -26,6 +26,9 @@
 
 class VDocument;
 
+#define NumEncodeFmts 1
+#define NumDecodeFmts 1
+
 class KarbonDrag : public QDragObject
 {
 	Q_OBJECT
@@ -33,14 +36,13 @@ public:
 	KarbonDrag( QWidget* dragSource = 0, const char* name = 0 );
 	const char* format( int i ) const;
 	QByteArray encodedData( const char* mimetype ) const;
-	bool canDecode( QMimeSource * );
-	bool decode( QMimeSource* e, VObjectList& sl, VDocument& vdoc );
+	static bool canDecode( QMimeSource * );
+	static bool decode( QMimeSource* e, VObjectList& sl, VDocument& vdoc );
 	void setObjectList( VObjectList l );
 
 private:
-	enum { NumEncodeFmts = 1, NumDecodeFmts = 1 };
-	QCString m_encodeFormats[NumEncodeFmts];
-	QCString m_decodeFormats[NumDecodeFmts];
+	static QCString m_encodeFormats[NumEncodeFmts];
+	static QCString m_decodeFormats[NumDecodeFmts];
 	VObjectList m_objects;
 };
 

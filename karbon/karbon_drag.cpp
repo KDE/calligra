@@ -25,6 +25,9 @@
 
 #include "vdocument.h"
 
+QCString KarbonDrag::m_encodeFormats[NumEncodeFmts];
+QCString KarbonDrag::m_decodeFormats[NumDecodeFmts];
+
 KarbonDrag::KarbonDrag( QWidget *dragSource, const char *name )
  : QDragObject( dragSource, name )
 {
@@ -88,12 +91,15 @@ KarbonDrag::decode( QMimeSource* e, VObjectList& sl, VDocument& vdoc )
 		// Try to parse the clipboard data
 		if( clip.tagName() == "clip" )
 		{
-			VObjectList selection;
 			VGroup grp( &vdoc );
 			grp.load( clip );
 			VObjectListIterator itr( grp.objects() );
 			for( ; itr.current() ; ++itr )
-				sl.append( itr.current()->clone() );
+			{
+				VObject *obj = itr.current()->clone();
+				obj->setParent( 0L );
+				sl.append( obj );
+			}
 
 			return true;
 		}
