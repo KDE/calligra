@@ -2,8 +2,11 @@
 Encoding=UTF-8
 Type=Service
 Name=Krita Magick Import Filter
+Name[pt]=Filtro de Importação de Magick para o Krita
+Name[pt_BR]=Filtro de Importação de Magick para o Krita
+Name[sv]=Krita Magick-importfilter
 X-KDE-Export=application/x-krita
-X-KDE-Import="text/plain,image/png,image/gif,image/cgm,image/jpeg,image/tiff,image/x-bmp,image/x-ico,image/x-pcx,image/x-portable-pixmap,image/x-targa,image/x-xbm,image/x-xcf-gimp,image/x-xpm"
+X-KDE-Import="text/text,image/png,image/gif,image/cgm,image/jpeg,image/tiff,image/x-bmp,image/x-ico,image/x-pcx,image/x-portable-pixmap,image/x-targa,image/x-xbm,image/x-xcf-gimp,image/x-xpm,application/x-photoshop"
 X-KDE-Weight=1
 X-KDE-Library=libmagickimport
 ServiceTypes=KOfficeFilter
