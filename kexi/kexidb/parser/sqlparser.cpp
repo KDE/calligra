@@ -858,7 +858,7 @@
 		KexiDB::TableSchema *s = parser->db()->tableSchema(table);
 		if(!s)
 		{
-			KexiDB::ParserError err(i18n("Field List Error"), i18n("Table '%1' doesn't exist").arg(table), ctoken, current);
+			KexiDB::ParserError err(i18n("Field List Error"), i18n("Table '%1' does not exist").arg(table), ctoken, current);
 			parser->setError(err);
 			yyerror("field list error");
 		}
