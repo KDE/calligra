@@ -20,6 +20,8 @@
 
 #include <kiconloader.h>
 #include <qapplication.h>
+#include <qstyle.h>
+#include <qpainter.h>
 #include <qpixmap.h>
 #include <kdebug.h>
 #include "qdrawutil.h"
@@ -101,8 +103,11 @@ DragBarButton::~DragBarButton()
 
 void DragBarButton::drawButton( QPainter* paint )
 {
+#ifdef __GNUC__
+#warning "Left out for now, lacking a style expert (Werner)"
+#endif
   const QColorGroup& g = colorGroup();
-  style().drawPushButton(this, paint);
+  style().drawControl( QStyle::CE_PushButton, paint, this, QRect(0, 0, width(), height()), colorGroup() );
 
   int m = 3;
   int tw = 0;
@@ -110,7 +115,7 @@ void DragBarButton::drawButton( QPainter* paint )
 
   if ( m_pIcon ) {
     pw = m_pIcon->width();
-    style().drawItem( paint, m, 0, pw, height(),
+    style().drawItem( paint, QRect( m, 0, pw, height() ),
                       AlignLeft | AlignVCenter,
                       colorGroup(), isEnabled(),
                       m_pIcon, QString::null, -1,
@@ -122,7 +127,7 @@ void DragBarButton::drawButton( QPainter* paint )
     QSize sz = fm.size( ShowPrefix, text() );
     tw = sz.width();
     int x = m + pw + (tw!=0 && pw!=0 ?m:0);
-    style().drawItem( paint, x, 0, tw, height(),
+    style().drawItem( paint, QRect( x, 0, tw, height() ),
                       AlignLeft | AlignVCenter|ShowPrefix,
                       colorGroup(), isEnabled(),
                       0L, text(), -1,

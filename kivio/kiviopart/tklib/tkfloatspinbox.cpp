@@ -80,9 +80,6 @@ void TKFloatSpinBox::initSpinBox()
   vi->setValidator( validate );
   vi->installEventFilter( this );
 
-  setPalettePropagation( AllChildren );
-  setFontPropagation( AllChildren );
-
   setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
   setFrameStyle( Panel|Sunken );
   updateDisplay();
@@ -181,7 +178,7 @@ QSize TKFloatSpinBox::sizeHint() const
   int fw = frameWidth();
 
   int h = m_minimum ? 9 : QMAX(12,fm.height()); // ensure enough space for the button pixmaps
-	
+
 	// button width - see resizeevent()
 	int bw;
 	if (m_minimum)

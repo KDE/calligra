@@ -20,6 +20,7 @@
 #define KIVIO_DIA_STENCIL_SPAWNER_H
 
 #include <qdom.h>
+#include <qvaluelist.h>
 #include <qlist.h>
 #include <qstring.h>
 

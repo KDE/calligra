@@ -19,6 +19,7 @@
 
 #include <gcanvas.h>
 
+#include <qpainter.h>
 #include <kdebug.h>
 
 #include <graphiteview.h>

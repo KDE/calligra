@@ -27,6 +27,7 @@
 #include "kivio_common.h"
 
 #include <qbrush.h>
+#include <qcursor.h>
 #include <qpalette.h>
 #include <klocale.h>
 #include <kdebug.h>

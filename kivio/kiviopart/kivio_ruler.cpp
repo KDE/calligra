@@ -26,7 +26,7 @@
 #define RULER_SIZE 20
 
 KivioRuler::KivioRuler(Orientation o, QWidget *parent, const char *name)
-: QFrame(parent, name, WRepaintNoErase, WResizeNoErase)
+: QFrame(parent, name, WRepaintNoErase | WResizeNoErase)
 {
   setBackgroundMode(NoBackground);
   setFrameStyle(Box | Sunken/*Raised*/);

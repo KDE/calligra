@@ -20,6 +20,7 @@
 #include <qmessagebox.h>
 #include <qpointarray.h>
 #include <qstring.h>
+#include <qtimer.h>
 #include <qstrlist.h>
 #include <qpopupmenu.h>
 

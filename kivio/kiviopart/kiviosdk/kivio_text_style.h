@@ -5,6 +5,7 @@
 #include <config.h>
 #endif
 
+#include <qfont.h>
 
 class QDomDocument;
 class QPainter;

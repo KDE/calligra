@@ -22,6 +22,7 @@
 
 #include <qpainter.h>
 #include <qpopupmenu.h>
+#include <qcursor.h>
 #include <klocale.h>
 
 Ruler::Ruler(QWidget *parent, QWidget *canvas, Qt::Orientation orientation,

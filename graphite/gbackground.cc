@@ -19,6 +19,7 @@
 
 #include <qdom.h>
 #include <qpopupmenu.h>
+#include <qpainter.h>
 
 #include <kiconloader.h>
 #include <klocale.h>

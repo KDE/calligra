@@ -18,6 +18,7 @@
  */
 #include "kivio_zoomaction.h"
 #include "tkcombobox.h"
+#include <qregexp.h>
 
 ZoomAction::ZoomAction(QObject* parent, const char* name)
 : TKSelectAction(parent,name)
