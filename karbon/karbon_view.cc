@@ -632,7 +632,7 @@ KarbonView::zoomChanged( const KoPoint &p )
 	{
 		centerX = ( ( p.x() ) * zoom() + m_canvas->pageOffsetX() ) / double( m_canvas->contentsWidth() );
 		centerY = 1 - ( ( p.y() ) * zoom() + m_canvas->pageOffsetY() ) / double( m_canvas->contentsHeight() );
-		zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
+		zoomFactor = m_zoomAction->currentText().remove( '%' ).toDouble( &bOK ) / 100.0;
 	}
 	else if( m_zoomAction->currentText() == i18n("  Width") )
 	{
@@ -658,7 +658,7 @@ KarbonView::zoomChanged( const KoPoint &p )
 			centerY = double( m_canvas->contentsY() + ( height() - 20 ) / 2 ) / double( m_canvas->contentsHeight() );
 		else
 			centerY = 0.5;
-		zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
+		zoomFactor = m_zoomAction->currentText().remove( '%' ).toDouble( &bOK ) / 100.0;
 	}
 	kdDebug(38000) << "centerX : " << centerX << endl;
 	kdDebug(38000) << "centerY : " << centerY << endl;
@@ -875,10 +875,10 @@ KarbonView::initActions()
 	m_snapGridAction->setToolTip( i18n( "Snaps to grid." ) );
 	//m_snapGridAction->setChecked( true );
 	m_groupObjects = new KAction(
-		i18n( "&Group Objects" ), "14_group", QKeySequence( "Ctrl+G" ), this,
+		i18n( "&Group Objects" ), "group", QKeySequence( "Ctrl+G" ), this,
 		SLOT( groupSelection() ), actionCollection(), "selection_group" );
 	m_ungroupObjects = new KAction(
-		i18n( "&Ungroup Objects" ), "14_ungroup", QKeySequence( "Ctrl+U" ), this,
+		i18n( "&Ungroup Objects" ), "ungroup", QKeySequence( "Ctrl+U" ), this,
 		SLOT( ungroupSelection() ), actionCollection(), "selection_ungroup" );
 	// object <-----
 
