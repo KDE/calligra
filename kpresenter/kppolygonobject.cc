@@ -97,7 +97,7 @@ QDomDocumentFragment KPPolygonObject::save( QDomDocument& doc, double offset )
 
     if ( !points.isNull() ) {
         QDomElement elemPoints = doc.createElement( "POINTS" );
-	KoPointArray::ConstIterator it;
+        KoPointArray::ConstIterator it;
         for ( it = points.begin(); it != points.end(); ++it ) {
             QDomElement elemPoint = doc.createElement( "Point" );
             KoPoint point = (*it);
