@@ -1203,14 +1203,19 @@ void RTFImport::parseFontTable( RTFProperty * )
     }
     else if (token.type == RTFTokenizer::PlainText)
     {
+        if (!textCodec)
+        {
+            kdError(30515) << "No text codec for font!" << endl;
+            return; // We have no text codec, so we cannot proceed!
+        }
 	// Semicolons separate fonts
-	if (strchr( token.text, ';' ) == 0L)
-	    font.name += QString::fromUtf8( token.text ); // ### FIXME: wrong codec!
+	if (strchr( token.text, ';' ) == 0L) // ### TODO: is this allowed with multi-byte Asian characters?
+	    font.name += textCodec->toUnicode( token.text );
 	else
 	{
 	    // Add font to font table
-	    *strchr( token.text, ';' ) = 0;
-	    font.name += QString::fromUtf8( token.text ); // ### FIXME: wrong codec!
+	    *strchr( token.text, ';' ) = 0; // ### TODO: is this allowed with multi-byte Asian characters?
+	    font.name += textCodec->toUnicode( token.text );
 
 	    // Use Qt to look up the closest matching installed font
 	    QFont qFont( font.name );
@@ -1226,7 +1231,7 @@ void RTFImport::parseFontTable( RTFProperty * )
 	    }
 	    QFontInfo *info=new QFontInfo( qFont );
 	    fontTable.insert( state.format.font, info->family() );
-	    // kdDebug(30515) << "Font " << state.format.font << " asked: " << font.name << " given: " << info->family() << endl;
+	    //kdDebug(30515) << "Font " << state.format.font << " asked: " << font.name << " given: " << info->family() << endl;
 	    font.name.truncate( 0 );
 	    font.styleHint = QFont::AnyStyle;
 	    font.fixedPitch = 0;
