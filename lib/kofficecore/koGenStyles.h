@@ -253,7 +253,8 @@ public:
      *  @param elementName the name of the XML element, e.g. "style:style"
      *  @param name must come from the collection
      *  @param propertiesElementName the name of the XML element with the style properties,
-     *  e.g. "style:text-properties"
+     *  e.g. "style:text-properties". Can be 0 in special cases where there should be no such item,
+     *  in which case the attributes and elements are added under the style itself.
      *  @param closeElement set it to false to be able to add more child elements to the style element
      *  @param drawElement set it to true to add "draw:name" (used for gradient/hatch style) otherwise add "style:name"
      */
