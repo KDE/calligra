@@ -467,6 +467,9 @@ bool KoMainWindow::saveDocument( bool saveas )
     connect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
     QCString _native_format = pDoc->nativeFormatMimeType();
+    bool wasModified = pDoc->isModified();
+
+    bool ret = false;
 
     if ( pDoc->url().isEmpty() || saveas )
     {
@@ -487,6 +490,9 @@ bool KoMainWindow::saveDocument( bool saveas )
                 newURL=dialog->selectedURL();
 #if KDE_VERSION >= 220 // only in kdelibs > 2.1
                 outputFormat=dialog->currentMimeFilter().latin1();
+#else
+                KMimeType::Ptr t = KMimeType::findByURL( m_url, 0, TRUE );
+                outputFormat = t->name().latin1();
 #endif
             }
             else
@@ -529,22 +535,44 @@ bool KoMainWindow::saveDocument( bool saveas )
                 KRecentDocument::add(newURL.path(-1));
             else
                 KRecentDocument::add(newURL.url(-1), true);
-#if KDE_VERSION >= 220
             pDoc->setOutputMimeType( outputFormat );
-#endif
-            bool ret = pDoc->saveAs( newURL );
+            if ( outputFormat != _native_format )
+            {
+                // Warn the user
+                KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
+                QString comment = ( mime->name() == KMimeType::defaultMimeType() ) ? i18n( "Unknown file type %1" ).arg( outputFormat )
+                                  : mime->comment();
+                int res = KMessageBox::warningContinueCancel(
+                    0, i18n( "<qt>You are about to save the document using the format %1"
+                             "This might lose parts of the formatting of the document. Proceed?</qt>" )
+                    .arg( QString( "<b>%1</b><p>" ).arg( comment ) ), // in case we want to remove the bold later
+                    i18n( "File Export: Confirmation Required" ),
+                    i18n( "Continue" ),
+                    "FileExportConfirmation", true );
+                if (res == KMessageBox::Cancel )
+                    return false;
+            }
+
+
+            ret = pDoc->saveAs( newURL );
+
             pDoc->setTitleModified();
-            disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-            return ret;
         }
-        disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-        return false;
+        else
+            ret = false;
     }
     else {
-        bool ret=pDoc->save();
-        disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-        return ret;
+        ret = pDoc->save();
     }
+
+    // When exporting to a non-native format, we don't reset modified.
+    // This way the user will be reminded to save it again in the native format,
+    // if he/she doesn't want to lose formatting.
+    if ( wasModified && pDoc->outputMimeType() != _native_format )
+        pDoc->setModified( true );
+
+    disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    return ret;
 }
 
 void KoMainWindow::closeEvent(QCloseEvent *e) {
@@ -583,16 +611,18 @@ bool KoMainWindow::queryClose()
     return true;
 
   // see DTOR for a descr. for the 2nd test
-  if ( rootDocument()->isModified() &&
-       !rootDocument()->isEmbedded())
+  if ( d->m_rootDoc->isModified() &&
+       !d->m_rootDoc->isEmbedded())
   {
       int res = KMessageBox::warningYesNoCancel( 0L,
                     i18n( "The document has been modified.\nDo you want to save it ?" ));
 
       switch(res) {
-          case KMessageBox::Yes :
-              if (! saveDocument() )
+          case KMessageBox::Yes : {
+              bool isNative = ( d->m_rootDoc->outputMimeType() == d->m_rootDoc->nativeFormatMimeType() );
+              if (! saveDocument( !isNative ) )
                   return false;
+          }
           case KMessageBox::No :
               break;
           default : // case KMessageBox::Cancel :

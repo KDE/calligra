@@ -173,6 +173,7 @@ public:
    * have to call it.
    */
   void setOutputMimeType( const QCString & mimeType );
+  QCString outputMimeType() const;
 
   /**
    * Set the filter-manager to be used for the next load/save operation.
