@@ -78,13 +78,13 @@ void RowEditBuffer::debug()
 		kdDebug() << "RowEditBuffer type=DB-AWARE, " << m_dbBuffer->count() <<" items"<< endl;
 		for (DBMap::Iterator it = m_dbBuffer->begin(); it!=m_dbBuffer->end(); ++it) {
 			kdDebug() << "* field name=" <<it.key()->name()<<" val="
-				<< (it.data().isNull ? QString("<NULL>") : it.data().toString()) <<endl;
+				<< (it.data().isNull() ? QString("<NULL>") : it.data().toString()) <<endl;
 		}
 		return;
 	}
 	kdDebug() << "RowEditBuffer type=SIMPLE, " << m_simpleBuffer->count() <<" items"<< endl;
 	for (SimpleMap::Iterator it = m_simpleBuffer->begin(); it!=m_simpleBuffer->end(); ++it) {
 		kdDebug() << "* field name=" <<it.key()<<" val="
-			<< (it.data().isNull ? QString("<NULL>") : it.data().toString()) <<endl;
+			<< (it.data().isNull() ? QString("<NULL>") : it.data().toString()) <<endl;
 	}
 }
