@@ -29,6 +29,7 @@
 #include <word97_generated.h>
 #include <parser.h>
 #include <parserfactory.h>
+#include <paragraphproperties.h>
 
 
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& framesetsElement )
@@ -51,6 +52,7 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
 
 Document::~Document()
 {
+    delete m_textHandler;
     delete m_replacementHandler;
 }
 
