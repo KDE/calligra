@@ -20,7 +20,9 @@ exactly the same as a frame around text.  It contains the picture and determines
 frame. If text is inserted in front of the picture, the picture travels down the frame just like any text would.  This means the picture will
 stay in the same area of the page as the text that surrounds it.</para>
 <para>Framed pictures, on the other hand, need to be moved by hand on the page.  </para>
-<sect2 id="insert-graphics"><title>Insert Graphics</title>
+
+<para>&kword; can use pictures <link linkend="insert-graphics">already stored in a file</link> or <link linkend="scan-graphics"> acquire an image from a scanner</link>.</para>
+<sect2 id="insert-graphics"><title>Insert Graphics from a file</title>
 <indexterm><primary>graphics</primary><secondary>inserting</secondary></indexterm>
 
 <para>There are three ways to insert a picture into a document:</para>
@@ -92,6 +94,92 @@ will not be possible to change the horizontal measurement without also changing 
 frame with the mouse.  Click and hold the &LMB; down.  Drag the cursor to adjust the size of the picture frame.  When the size of the 
 picture frame is correct, release the &LMB;.  &kword; will insert the picture into the frame, and resize the picture to fit within the
 frame.</para>
+</sect2>
+
+<sect2 id="scan-graphics"><title>Using a picture from a scanner</title>
+<note><para>A complete discussion of how to operate a scanner is beyond the scope of this documentation.  This document will confine itself to the controls available in &kword; but will not 
+go into detail on the use of these controls.</para></note>
+<para>To use a scanner to insert a picture into your kword document, begin by selecting <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Scan Image...</guimenuitem></menuchoice> from
+the menubar.</para>
+<para> &kword; will open a dialog box for you to choose your scanner.  Simply click on the radio button to the left of your scanner.  Then click <guibutton>OK</guibutton>.  This will bring up the scanning dialog:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="scan.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>You should begin by selecting the image type that you want to scan and the resolution.  First determine the picture type using the drop down box labeled 
+<guilabel>Scan Mode</guilabel>.  You can choose between <guilabel>Color</guilabel>, <guilabel>Greyscale</guilabel> or <guilabel>Binary</guilabel> image.</para>
+<para>If you want to select a different scanner, click the <guibutton>Source...</guibutton> button.</para>
+<para>If you have selected a <guilabel>Binary</guilabel> image, you can use the drop down box labeled <guilabel>Halftoning</guilabel> to select your halftone protocol.</para>
+<para>Select your resolution using the drop down box labeled <guilabel>Resolution</guilabel></para>
+<para>Now place the object you want to scan in the scanner and click <guibutton>Preview Scan</guibutton>.  Your scanner will take a low resolution 
+scan and preview it in the window in the far right of the dialog</para>
+<para>Using your mouse, click on the upper left corner of he area you want to scan with the &LMB; and hold the button down.  Drag the mouse down and 
+to the right to create a box for a high-resolution scan. When you have an appropriate sized box, release the &LMB;. Once the box is drawn, you 
+can adjust the selection box using the mouse. </para>
+<para>You can refer to the box to the left of the preview window labeled <guilabel>Selection</guilabel>.  This box will show you the height and 
+width of your selection and the amount of disk space you will need to store this image in the &kword; file. </para>
+<para>Once you are satisfied with the size and position of the selection box, click <guibutton>Final Scan</guibutton>.  The scanner will scan the selected area at the resolution you selected.  </para>
+<para>When the scanner is finished, click <guibutton>Close</guibutton> to close the dialog box.  Your cursor will now be crosshairs.  Using this cursor, draw the size and position you want your picture on the 
+page. The scanned image will be inserted in a separate frame.  You can now adjust the size of the picture by <link linkend="resize-frame">changing the size of the frame</link></para>
+<sect3 id="scan-adjust"><title>Adjusting the image prior to final scanning</title>
+<para>You can use the lower left part of this dialog to adjust your image prior to scanning. </para>
+<para>By moving the slider bar labeled <guilabel>Threshold</guilabel> you can adjust the cutoff point of white in the scanned image.  </para>
+<para>By moving the slider bars labeled <guilabel>Brightness</guilabel> and <guilabel>Sharpness</guilabel> you can adjust the relative brightness and the sharpness of the scanned image.</para>
+<note><para>The preview window will not show you the effects of changes to your scanned image in the preview window.</para></note>
+<para>You can select from one of three pre-defined gamma tables or you can select the <guilabel>User defined</guilabel> option from the drop 
+down box labeled <guilabel>Use custom gamma table</guilabel>.  If you selected <guilabel>User defined</guilabel> you can click the <guibutton>Edit...</guibutton> 
+to alter the <guilabel>Brightness</guilabel>, <guilabel>Contrast</guilabel> and <guilabel>Gamma</guilabel> for your customized gamma table. </para>
+</sect3>
+<sect3 id="scan-preview"><title>Adjusting the preview scan size</title>
+<para>If you know the size of the object you are scanning, you can select the preview area from the drop-down box labeled <guilabel>Scan size</guilabel>.  You can also use the radio buttons 
+labeled <guibutton>Landscape</guibutton> and <guibutton>Portrait</guibutton> to change the orientation of the preview area.</para>
+<note><para>Changing the orientation between portrait and landscape does not change the orientation of the scanned text or image.</para></note>
+</sect3>
+<sect3 id="scan-autosel"><title>Using auto-selection</title>
+<para>&kword; can try to automatically select the object you want to scan.  It does this by looking for an area within the preview window that seems to 
+define an object in the picture.  By default this option is disabled.  You can enable autoselection in this dialog.</para>
+<para>The autoselection area of the dialog is located just to the left of the preview window in the middle of the dialog box. It consists of three controls:</para>
+<variablelist>
+<varlistentry>
+<term>Checkbox</term>
+<listitem><para>If a mark is placed in the checkbox, auto-selection is enabled.
+ If there is no mark in the checkbox, then auto-selection is disabled.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Drop down box</term>
+<listitem><para>This drop down box contains two possible choices:  <guilabel>Black</guilabel> and <guilabel>White</guilabel>.  If 
+<guilabel>Black</guilabel> is chosen, then &kword; will look for an area surrounded by black to select automatically.  
+If <guilabel>White</guilabel> is chosen, then &kword; will look for an area surrounded by white to select automatically.</para></listitem>
+</varlistentry> 
+<varlistentry>
+
+<term>Slider bar labeled <guilabel>Threshold</guilabel></term>
+<listitem><para>By adjusting this slider bar, you determine the threshold auto-selection uses to determine the area to select automatically.</para></listitem>
+</varlistentry>
+</variablelist>
+</sect3>
+<sect3 id="scan-misc"><title>Miscellaneous scanning options</title>
+<para>There are two additional options for scanning that are accessed by clicking on the <guilabel>Options</guilabel> tab.</para><screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="scan2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>The checkbox labeled <guilabel>Ask for the scan device on plugin startup</guilabel> toggles the scanner selection dialog on and off.  If there is a mark in this 
+checkbox, &kword; will ask you to select your scanner each time you insert a scanned image into your document.  If there is no mark, then &kword; uses the previously 
+selected scanner.  If you have access to only one scanner, or you only use one scanner, you should remove any mark from this box.</para>
+<para>The checbox labled <guilabel>Query the network for scan devices</guilabel> is also used to select scanners.  If there is a mark in this checkbox, 
+&kword; will check your local network for scanners that are avaialbe.  If there is no mark in this box, &kword; will only look for scanners connected directly to 
+your machine.</para>
+<para>To save these options, click <guibutton>Close</guibutton>.</para>
+
+</sect3>
+
 </sect2>
 <sect2 id="resize-Graphics"><title>Changing the size of a picture</title>
 <indexterm><primary>graphics</primary><secondary>change the size of</secondary></indexterm>

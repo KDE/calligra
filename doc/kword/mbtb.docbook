@@ -1186,7 +1186,8 @@ using the menubar. </para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Allows you to access your scanner for inserting data into your document.</action></para>
+<para><action>Allows you to access your scanner for inserting pictures into your document.</action> For more information see 
+the section entitled <link linkend="scan-graphics">Useing a picture from a scanner</link>.</para>
 </listitem>
 </varlistentry>
 </variablelist>

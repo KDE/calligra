@@ -60,7 +60,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-1-15</date>
+<date>2005-1-22</date>
 <releaseinfo>1.3</releaseinfo>
 
 <abstract>
@@ -87,7 +87,6 @@ TODO:
 - Write Migrating section
 - Write Watermark procedure
 - Write Chapter Numbering
-- Write section on Scanning images
 - Personal expressions path
 - Personal dictionary
 - "Load from Address Book" Button in Document Information (When working)
