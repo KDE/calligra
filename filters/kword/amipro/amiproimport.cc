@@ -134,10 +134,6 @@ static QString AmiProLayoutAsXML( const AmiProLayout& layout )
           layout.align==AmiProLayout::Justify ? "justify" :
           "left";
 
-  QFont font = KoGlobal::defaultFont();
-  QString fontFamily = font.family();
-  int fontSize = font.pointSize();
-
   result.append( "<LAYOUT>\n" );
   result.append( "  <NAME value=\"" + referredStyle + "\" />\n" );
   result.append( "  <FLOW align=\"" + align + "\" />\n" );
