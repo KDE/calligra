@@ -22,7 +22,6 @@ Boston, MA 02111-1307, USA.
 #ifndef confpicturedia_h
 #define confpicturedia_h
 
-#include <qframe.h>
 #include <qlabel.h>
 
 #include "global.h"
@@ -34,47 +33,7 @@ class QGroupBox;
 class QPushButton;
 class QRadioButton;
 class QCheckBox;
-
-class PicturePreview : public QFrame
-{
-    Q_OBJECT
-
-public:
-    PicturePreview( QWidget* parent, const char* name);
-    ~PicturePreview() {}
-
-    void setDepth( int depth);
-    void setMirrorType (PictureMirrorType _t);
-    void setPicturePixmap(const QPixmap &_pixmap);
-
-public slots:
-    void slotNormalPicture();
-    void slotHorizontalMirrorPicture();
-    void slotVerticalMirrorPicture();
-    void slotHorizontalAndVerticalMirrorPicture();
-
-    void slotPictureDepth0();
-    void slotPictureDepth1();
-    void slotPictureDepth8();
-    void slotPictureDepth16();
-    void slotPictureDepth32();
-
-    void slotSwapRGBPicture( bool _on );
-
-    void slotGrayscalPicture( bool _on );
-
-    void slotBrightValue( int _value );
-
-protected:
-    virtual void drawContents( QPainter *painter );
-
-    PictureMirrorType mirrorType;
-    int depth;
-    bool swapRGB;
-    int bright;
-    bool grayscal;
-    QPixmap origPixmap;
-};
+class PicturePreview;
 
 class ConfPictureDia : public QWidget
 {

@@ -56,10 +56,11 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	rectpreview.cc rectpropertyui.ui rectproperty.cc \
 	piepreview.cc \
 	polygonpreview.cc \
+    picturepreview.cc \
 	brushpropertyui.ui gradientpropertyui.ui brushproperty.cc \
 	generalpropertyui.ui generalproperty.cc \
 	polygonpropertyui.ui polygonproperty.cc \
-    piepropertyui.ui pieproperty.cc \
+	piepropertyui.ui pieproperty.cc \
 	marginui.ui kpmarginwidget.cc textproperty.cc \
 	kpobjectproperties.cc \
 	propertyeditor.cc \
