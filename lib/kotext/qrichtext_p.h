@@ -901,6 +901,7 @@ public:
     QString focusHref() const;
 
     void invalidateOriginalText() { oTextValid = FALSE; }
+    void informParagraphDeleted( KoTextParag* parag );
 
 signals:
     void minimumWidthChanged( int );

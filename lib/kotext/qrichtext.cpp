@@ -1962,6 +1962,31 @@ void KoTextDocument::invalidate()
     }
 }
 
+void KoTextDocument::informParagraphDeleted( KoTextParag* parag )
+{
+    QMap<int, KoTextDocumentSelection>::Iterator it = selections.begin();
+    for ( ; it != selections.end(); ++it )
+    {
+        if ( (*it).startCursor.parag() == parag ) {
+            if ( parag->prev() ) {
+                KoTextParag* prevP = parag->prev();
+                (*it).startCursor.setParag( prevP );
+                (*it).startCursor.setIndex( prevP->length()-1 );
+            } else
+                (*it).startCursor.setParag( parag->next() ); // sets index to 0
+        }
+        if ( (*it).endCursor.parag() == parag ) {
+            if ( parag->prev() ) {
+                KoTextParag* prevP = parag->prev();
+                (*it).endCursor.setParag( prevP );
+                (*it).endCursor.setIndex( prevP->length()-1 );
+            } else
+                (*it).endCursor.setParag( parag->next() ); // sets index to 0
+        }
+    }
+    emit paragraphDeleted( parag );
+}
+
 void KoTextDocument::selectionStart( int id, int &paragId, int &index )
 {
     QMap<int, KoTextDocumentSelection>::Iterator it = selections.find( id );
@@ -3578,9 +3603,9 @@ KoTextParag::~KoTextParag()
        n->setPrev(p);
 
     //// kotext
-    if ( !document()->isDestroying() )
+    if ( doc && !doc->isDestroying() )
     {
-        emit document()->paragraphDeleted( this );
+        doc->informParagraphDeleted( this );
     }
     //kdDebug(32500) << "KoTextParag::~KoTextParag " << this << endl;
     ////
