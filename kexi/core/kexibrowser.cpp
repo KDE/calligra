@@ -105,6 +105,7 @@ KexiBrowser::slotItemListChanged(KexiProjectHandler *parent)
 {
 
 	kdDebug() << "KexiBrowser::slotItemListChanged() " << parent->items()->count() << " items" << endl;
+	kdDebug() << "KexiBrowser::slotItemListChanged() " << m_mime << endl;
 
 	if(m_mime == "kexi/db")
 	{

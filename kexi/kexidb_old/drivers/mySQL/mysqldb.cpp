@@ -320,7 +320,7 @@ MySqlDB::alterField(const QString& table, const QString& field, const QString& n
 	QString qstr = "ALTER TABLE " + table + " CHANGE " + field + " " + newFieldName;
 	qstr += " " + createDefinition(newFieldName, dtype, length, precision, constraints, binary,
 		unsignedType, defaultVal);
-	
+
 	kdDebug() << "MySqlDB::alterField: Query: " << qstr << endl;
 	return query(qstr);
 }
@@ -334,7 +334,7 @@ MySqlDB::createField(const QString& table, const QString& field, KexiDBField::Co
 	kdDebug() << "MySqlDB::createField: DataType: " << getNativeDataType(dtype) << "ColumnType: " << dtype << endl;
 	QString qstr = "ALTER TABLE " + table + " ADD " + field;
 	qstr += " " + createDefinition(field, dtype, length, precision, constraints, binary, unsignedType, defaultVal);
-	
+
 	kdDebug() << "MySqlDB::createField: Query: " << qstr << endl;
 	return query(qstr);
 }
@@ -415,7 +415,7 @@ MySqlDB::getStructure(const QString& table)
 	KexiDBTableStruct dbStruct;
 	MYSQL_RES* result= mysql_list_fields(m_mysql, table.local8Bit().data(), 0);
 	kdDebug() << "MySqlDB::getStructure: Get fields..." << endl;
-	
+
 	if(result)
 	{
 		MYSQL_FIELD* field;
@@ -536,6 +536,105 @@ MySqlDB::getInternalDataType(int t)
 
 	}
 	return KexiDBField::SQLInvalid;
+}
+
+bool
+MySqlDB::alterField(const KexiDBField& changedField, unsigned int index,
+	KexiDBTableStruct fields)
+{
+	kdDebug() << "MySqlDB::alterField: Table: " << changedField.table() << " Field: " << fields.at(index)->name() << endl;
+	kdDebug() << "MySqlDB::alterField: DataType: " << getNativeDataType(
+		changedField.sqlType()) << "ColumnType: " << changedField.sqlType() << endl;
+	QString qstr = "ALTER TABLE " + changedField.table() + " CHANGE " +
+		fields.at(index)->name() + " " + changedField.name();
+	qstr += " " + createDefinition(changedField, index, fields);
+
+	kdDebug() << "MySqlDB::alterField: Query: " << qstr << endl;
+	return query(qstr);
+}
+
+bool
+MySqlDB::createField(const KexiDBField& newField, KexiDBTableStruct fields,
+	bool createTable)
+{
+	kdDebug() << "MySqlDB::createField: Table: " << newField.table() << " Field: " << newField.name() << endl;
+	kdDebug() << "MySqlDB::createField: DataType: " << getNativeDataType(
+		newField.sqlType()) << "ColumnType: " << newField.sqlType() << endl;
+	QString qstr = "ALTER TABLE " + newField.table() + " ADD " + newField.name();
+	qstr += " " + createDefinition(newField, -1, fields);
+
+	kdDebug() << "MySqlDB::createField: Query: " << qstr << endl;
+	return query(qstr);
+}
+
+QString
+MySqlDB::createDefinition(const KexiDBField& field,
+	unsigned int index, KexiDBTableStruct fields)
+{
+	QString qstr = getNativeDataType(field.sqlType());
+	bool allowUnsigned = false;
+
+	switch(field.sqlType())
+	{
+		case KexiDBField::SQLInteger:
+		case KexiDBField::SQLSmallInt:
+		case KexiDBField::SQLTinyInt:
+		case KexiDBField::SQLBigInt:
+			allowUnsigned = true;
+		case KexiDBField::SQLVarchar:
+			qstr += "(" + QString::number(field.length()) + ")";
+			break;
+		case KexiDBField::SQLDecimal:
+		case KexiDBField::SQLFloat:
+		case KexiDBField::SQLDouble:
+		case KexiDBField::SQLNumeric:
+			allowUnsigned = true;
+			qstr += "(" + QString::number(field.length()) + "," + QString::number(field.precision()) + ")";
+			break;
+		case KexiDBField::SQLInvalid:
+		case KexiDBField::SQLBinary:
+		case KexiDBField::SQLBoolean:
+		case KexiDBField::SQLDate:
+		case KexiDBField::SQLLongVarBinary:
+		case KexiDBField::SQLTime:
+		case KexiDBField::SQLTimeStamp:
+		case KexiDBField::SQLVarBinary:
+		case KexiDBField::SQLInterval:
+		case KexiDBField::SQLLongVarchar:
+		case KexiDBField::SQLLastType:
+			break;
+	}
+
+	if(field.constraints() & KexiDBField::CCNotNull)
+	{
+		qstr += " NOT NULL";
+	}
+	else
+	{
+		qstr += " NULL";
+	}
+
+	if(field.binary() && (field.sqlType() == KexiDBField::SQLVarchar))
+	{
+		qstr += " BINARY";
+	}
+
+	if(field.unsignedType() && allowUnsigned)
+	{
+		qstr += " UNSIGNED";
+	}
+
+	if(!field.defaultValue().toString().isEmpty())
+	{
+		qstr += " DEFAULT " + field.defaultValue().toString();
+	}
+
+	if(field.constraints() & KexiDBField::CCAutoInc)
+	{
+		qstr += " AUTO_INCREMENT";
+	}
+
+	return qstr;
 }
 
 MySqlDB::~MySqlDB()

@@ -165,6 +165,20 @@ KexiDB::createField(const QString& /*table*/, const QString& /*field*/, KexiDBFi
 	return false;
 }
 
+bool
+KexiDB::alterField(const KexiDBField& changedField, unsigned int index,
+	KexiDBTableStruct fields)
+{
+	return false;
+}
+
+bool
+KexiDB::createField(const KexiDBField& newField, KexiDBTableStruct fields,
+	bool createTable)
+{
+	return false;
+}
+
 KexiDBResult*
 KexiDB::getResult()
 {

@@ -70,6 +70,9 @@ class KexiAlterTable : public KexiDialogBase
 
 	protected slots:
 		void changeShownField(KexiTableItem* i);
+		void tableItemChanged(KexiTableItem *i, int col);
+		void changeTable();
+		void propertyChanged();
 
 	private:
 		QString m_table;

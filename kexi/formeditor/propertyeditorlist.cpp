@@ -38,13 +38,14 @@ PropertyEditorList::PropertyEditorList(QWidget *parent, QVariant::Type type, QVa
  : PropertyEditorEditor(parent, type, value, name)
 {
 	m_combo = new QComboBox(this);
-	
+
 	m_combo->setGeometry(frameGeometry());
 	m_combo->insertStringList(list);
 	m_combo->setCurrentItem(value.toInt());
 	m_combo->show();
 
 	setWidget(m_combo);
+	connect(m_combo, SIGNAL(activated(int)), SLOT(valueChanged()));
 }
 
 QVariant
@@ -57,6 +58,12 @@ void
 PropertyEditorList::setList(QStringList l)
 {
 	m_combo->insertStringList(l);
+}
+
+void
+PropertyEditorList::valueChanged()
+{
+	emit changed(this);
 }
 
 /*********************

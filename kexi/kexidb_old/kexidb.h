@@ -82,6 +82,10 @@ class KexiDB : public QObject
 		virtual bool createField(const QString& table, const QString& field, KexiDBField::ColumnType dtype,
 			int length, int precision, KexiDBField::ColumnConstraints constraints, bool binary, bool unsignedType,
 			const QString& defaultVal);
+		virtual bool alterField(const KexiDBField& changedField,
+			unsigned int index, KexiDBTableStruct fields);
+		virtual bool createField(const KexiDBField& newField,
+			KexiDBTableStruct fields, bool createTable = false);
 
 		virtual KexiDBResult		*getResult();
 

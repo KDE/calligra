@@ -42,6 +42,9 @@ class PropertyEditorList : public PropertyEditorEditor
 		
 		void setList(QStringList l);
 
+	protected slots:
+		void valueChanged();
+
 	protected:
 		QComboBox		*m_combo;
 };

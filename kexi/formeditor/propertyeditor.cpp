@@ -139,8 +139,10 @@ PropertyEditor::createEditor(PropertyEditorItem *i, const QRect &geometry)
 void
 PropertyEditor::slotValueChanged(PropertyEditorEditor *editor)
 {
-	if(m_currentEditor)
+	if(m_currentEditor) {
 		m_editItem->setValue(m_currentEditor->getValue(), true);
+		emit itemRenamed(m_editItem);
+	}
 }
 
 void

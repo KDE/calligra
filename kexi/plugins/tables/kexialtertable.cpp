@@ -212,8 +212,8 @@ KexiAlterTable::initView()
 	m_propList = new PropertyEditor(this);
 	m_propList->setFullWidth(true);
 	m_nameItem = new PropertyEditorItem(m_propList, i18n("Field Name"), QVariant::String, "");
-	m_datatypeItem = new PropertyEditorItem(m_propList, i18n("Datatype"), QVariant::StringList, KexiDBField::SQLVarchar, strings);
-	m_lengthItem = new PropertyEditorItem(m_propList, i18n("Field Length"), QVariant::Int, 0);
+	m_datatypeItem = new PropertyEditorItem(m_propList, i18n("Datatype"), QVariant::StringList, KexiDBField::SQLVarchar - 1, strings);
+	m_lengthItem = new PropertyEditorItem(m_propList, i18n("Field Length"), QVariant::Int, 50);
 	m_requiredItem = new PropertyEditorItem(m_propList, i18n("Required Field"), QVariant::Bool, QVariant(false, 1));
 	m_defaultItem = new PropertyEditorItem(m_propList, i18n("Default Value"), QVariant::String, "");
 	m_unsignedItem = new PropertyEditorItem(m_propList, i18n("Unsigned Value"), QVariant::Bool, QVariant(false, 1));
@@ -229,6 +229,8 @@ KexiAlterTable::initView()
 	l->addWidget(m_propList, 3, 0);
 
 	connect(m_fieldTable, SIGNAL(itemSelected(KexiTableItem*)), SLOT(changeShownField(KexiTableItem*)));
+	connect(m_fieldTable, SIGNAL(itemChanged(KexiTableItem *, int)), SLOT(tableItemChanged(KexiTableItem *, int)));
+	connect(m_propList, SIGNAL(itemRenamed(QListViewItem*)), SLOT(propertyChanged()));
 	kdDebug() << "Ready." << endl;
 }
 
@@ -259,31 +261,130 @@ KexiAlterTable::changeShownField(KexiTableItem* i)
 	KexiDBField* field = m_tableFields.first();
 	bool found = false;
 
-	while(field && !found)
+	if(!i->isInsertItem())
 	{
-		if(field->name() == i->getText(0))
+		while(field && !found)
 		{
-			found = true;
+			if(field->name() == i->getText(0))
+			{
+				found = true;
+			}
+			else
+			{
+				field = m_tableFields.next();
+			}
+		}
+
+		if(!found)
+		{
+			return;
+		}
+
+		m_nameItem->setValue(field->name());
+		m_datatypeItem->setValue(field->sqlType() - 1);
+		m_lengthItem->setValue(field->length());
+		m_requiredItem->setValue(QVariant(field->not_null(), 1));
+		m_defaultItem->setValue(field->defaultValue());
+		m_unsignedItem->setValue(QVariant(field->unsignedType(), 1));
+		m_precisionItem->setValue(field->precision());
+		m_autoIncItem->setValue(QVariant(field->auto_increment(), 1));
+	}
+	else
+	{
+		m_nameItem->setValue("");
+		m_datatypeItem->setValue(KexiDBField::SQLVarchar - 1);
+		m_lengthItem->setValue(50);
+		m_requiredItem->setValue(QVariant(false, 1));
+		m_defaultItem->setValue("");
+		m_unsignedItem->setValue(QVariant(false, 1));
+		m_precisionItem->setValue(0);
+		m_autoIncItem->setValue(QVariant(false, 1));
+	}
+}
+
+void
+KexiAlterTable::tableItemChanged(KexiTableItem *i, int col)
+{
+	if(col == 0)
+	{
+		m_nameItem->setValue(i->getValue(col).toString());
+	}
+	else if(col == 1)
+	{
+		m_datatypeItem->setValue(i->getValue(col).toInt());
+	}
+
+	changeTable();
+}
+
+void
+KexiAlterTable::changeTable()
+{
+	KexiDBField* field = new KexiDBField(m_table);
+	field->setName(m_nameItem->value().toString());
+	field->setColumnType(static_cast<KexiDBField::ColumnType>(m_datatypeItem->value().toInt() + 1));
+	field->setLength(m_lengthItem->value().toInt());
+	field->setNotNull(m_requiredItem->value().toBool());
+	field->setDefaultValue(m_defaultItem->value());
+	field->setUnsigned(m_unsignedItem->value().toBool());
+	field->setPrecision(m_precisionItem->value().toInt());
+	field->setAutoIncrement(m_autoIncItem->value().toBool());
+	KexiTableItem* i = m_fieldTable->selectedItem();
+	bool ok = false;
+
+	if(i->isInsertItem())
+	{
+		if(i->getValue(0).toString() != "" && i->getValue(1).toInt() != 0)
+		{
+			kdDebug() << "Create new field!" << endl;
+			ok = kexiProject()->db()->createField(*field, m_tableFields);
+
+			if(ok)
+			{
+				kdDebug() << "New field created!" << endl;
+				i->setInsertItem(false);
+				m_tableFields.append(field);
+				// Insert item
+				KexiTableItem *insert = new KexiTableItem(m_fieldTable);
+				insert->setValue(1, KexiDBField::SQLVarchar - 1);
+				insert->setHint(QVariant(i->getHint().toInt() + 1));
+				insert->setInsertItem(true);
+			}
+		}
+	}
+	else
+	{
+		int index = i->getHint().toInt();
+		kdDebug() << "KexiAlterTable::changeTable(" << index <<
+			")" << endl;
+		ok = kexiProject()->db()->alterField(*field, index, m_tableFields);
+
+		if(ok)
+		{
+			kdDebug() << "Field changed!" << endl;
+			m_tableFields.replace(index, field);
 		}
 		else
 		{
-			field = m_tableFields.next();
+			i->setValue(0, field->name());
+			i->setValue(1, field->sqlType() - 1);
+			changeShownField(i);
 		}
 	}
 
-	if(!found)
+	if(!ok)
 	{
-		return;
+		delete field;
 	}
+}
 
-	m_nameItem->setValue(field->name());
-	m_datatypeItem->setValue(field->sqlType() - 1);
-	m_lengthItem->setValue(field->length());
-	m_requiredItem->setValue(QVariant(field->not_null(), 1));
-	m_defaultItem->setValue(field->defaultValue());
-	m_unsignedItem->setValue(QVariant(field->unsignedType(), 1));
-	m_precisionItem->setValue(field->precision());
-	m_autoIncItem->setValue(QVariant(field->auto_increment(), 1));
+void
+KexiAlterTable::propertyChanged()
+{
+	m_fieldTable->selectedItem()->setValue(0, m_nameItem->value());
+	m_fieldTable->selectedItem()->setValue(1, m_datatypeItem->value());
+
+	changeTable();
 }
 
 #include "kexialtertable.moc"
