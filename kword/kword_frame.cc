@@ -948,7 +948,7 @@ void KWTextFrameSet::save( QTextStream&out )
 
         unsigned int _row = 0, _col = 0;
         _row=grpMgr->getCell( this )->row;
-        _col=grpMgr->getCell( this )->row;
+        _col=grpMgr->getCell( this )->col;
         KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
         QString tmp = "";
         tmp.sprintf( "\" row=\"%d\" col=\"%d\" rows=\"%d\" cols=\"%d", _row, _col, cell->rows, cell->cols  );
