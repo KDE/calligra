@@ -814,10 +814,10 @@ void KWView::showAlign( int align ) {
 }
 
 /*================================================================*/
-void KWView::showCounterStyle( Counter::Style c )
+void KWView::showCounter( Counter &c )
 {
-    actionFormatEnumList->setChecked( c == Counter::STYLE_NUM );
-    actionFormatUnsortList->setChecked( c == Counter::STYLE_DISCBULLET );
+    actionFormatEnumList->setChecked( ( c.numbering() == Counter::NUM_LIST ) && ( c.style() == Counter::STYLE_NUM ) );
+    actionFormatUnsortList->setChecked( ( c.numbering() == Counter::NUM_LIST ) && ( c.style() == Counter::STYLE_DISCBULLET ) );
 }
 
 /*================================================================*/
@@ -1979,9 +1979,14 @@ void KWView::textEnumList()
 {
     Counter c;
     if(actionFormatEnumList->isChecked())
+    {
+        c.setNumbering( Counter::NUM_LIST );
         c.setStyle( Counter::STYLE_NUM );
+    }
     else
-        c.setStyle( Counter::STYLE_NONE );
+    {
+        c.setNumbering( Counter::NUM_NONE );
+    }
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setCounter( c );
@@ -1992,9 +1997,14 @@ void KWView::textUnsortList()
 {
     Counter c;
     if(actionFormatUnsortList->isChecked())
+    {
+        c.setNumbering( Counter::NUM_LIST );
         c.setStyle( Counter::STYLE_DISCBULLET );
+    }
     else
-        c.setStyle( Counter::STYLE_NONE );
+    {
+        c.setNumbering( Counter::NUM_NONE );
+    }
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setCounter( c );

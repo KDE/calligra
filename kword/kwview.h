@@ -112,7 +112,7 @@ public:
     // They do NOT do anything to the text
     void showFormat( const QTextFormat &currentFormat );
     void showAlign( int align );
-    void showCounterStyle( Counter::Style c );
+    void showCounter( Counter &c );
     void showParagBorders( Border _left, Border _right,
                           Border _top, Border _bottom );
     void showFrameBorders( Border _left, Border _right,
