@@ -63,6 +63,7 @@
 
 KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *contents)
 :QScrollView(parent, name, Qt::WRepaintNoErase | Qt::WStaticContents | Qt::WResizeNoErase)
+	,m_editOnDubleClick(true)
 {
 	setResizePolicy(Manual);
 	viewport()->setBackgroundMode(NoBackground);
