@@ -26,7 +26,6 @@
 #include <koDocumentInfo.h>
 #include <koDocumentInfoDlg.h>
 #include <koQueryTrader.h>
-#include <koPrintPreview.h>
 #include "KoMainWindowIface.h"
 
 #include <kprinter.h>
