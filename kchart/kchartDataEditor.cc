@@ -45,7 +45,7 @@ void kchartDataEditor::getData(KChartData* dat) {
 	    t.exists = false;
 	else
 	    t.exists= true;
-	t.value.setValue(val);
+	t.value = val;
 	cerr << "Set cell for " << row << "," << col << "\n";
 	dat->setCell(row,col,t);
 	//   maxY = _widget->getCell(row,col) > maxY ? _widget->getCell(row,col) : maxY;
@@ -67,7 +67,7 @@ for (int row = 0;row < _widget->rows();row++)
 
 void kchartDataEditor::getLegend(KChartParameters* params)
 {
-params->legend.clear();		  
+params->legend.clear();		
 for (int row = 0;row < _widget->rows();row++)
 	{
 	if(! (row >= _widget->usedRows()) )
@@ -93,7 +93,7 @@ for (int col = 0;col < _widget->cols();col++)
 
 void kchartDataEditor::getXLabel(KChartParameters* params)
 {
-  
+
 params->xlbl.clear();
 for (int col = 0;col < _widget->cols();col++)
 	{

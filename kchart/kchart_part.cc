@@ -77,7 +77,7 @@ void KChartPart::initRandomData()
 	for (col = 0;col < 4;col++) {
 	  KChartValue t;
 	  t.exists= true;
-	  t.value.setValue((double)row+col);
+	  t.value = (double)row+col;
 	  // cerr << "Set cell for " << row << "," << col << "\n";
 	  currentData.setCell(row,col,t);
 	 }
@@ -439,7 +439,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
 	  cerr << i << " " << j << "=" << val << "\n";
 	  KChartValue t;
 	  t.exists= true;
-	  t.value.setValue(val);
+	  t.value = val;
 	  // cerr << "Set cell for " << row << "," << col << "\n";
 	  currentData.setCell(i,j,t);
           if ( e.hasAttribute( "hide" ) )
@@ -843,6 +843,9 @@ bool KChartPart::load( istream& in, KoStore* store )
 
 /**
  * $Log$
+ * Revision 1.27  2000/02/13 19:32:03  mlaurent
+ * bug fix
+ *
  * Revision 1.26  2000/02/13 14:34:18  hausmann
  * - fixed segfault in KoView destructor (use a QGuardedPtr on the manager)
  * - hacked KoDocument to hold a list of associated shells and kill them

@@ -115,7 +115,7 @@ void KChartView::createTempData()
 		//	  _widget->fillCell(row,col,row+col);
 		KChartValue t;
 		t.exists= true;
-		t.value.setValue((double)row+col);
+		t.value = (double)row+col;
 		cerr << "Set cell for " << row << "," << col << "\n";
 		dat->setCell(row,col,t);
 	    }
