@@ -3,9 +3,6 @@ Type: note
 Description: KOffice is Beta!!!
  This version of KOffice is a beta release before version 1.1.
  Most day to day functions will work.  However, there may be crashes.
- In addition the HTML user documentation is completely broken due to a
- transition in the documentation system.
- .
  The main reason for including this version of KOffice at this time is to
  work out packaging problems and non-documentation related bugs.
 
