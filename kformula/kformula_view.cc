@@ -348,10 +348,10 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
 				      i18n( "Add/change a block with symbols" ), "addSymbol", 6 );
 
   m_idButtonFormula_6 = addToolButton(m_vToolBarFormula, "matrix.xpm",
-				      i18n( "Add/change matrix" ), "addMatrix", 6 );
+				      i18n( "Add/change matrix" ), "addMatrix", 7  );
     	
   m_idButtonFormula_7 = addToolButton(m_vToolBarFormula, "index.xpm", 
-				      i18n( "Add an index at position..." ), "indexList", 7 );
+				      i18n( "Add an index at position..." ), "indexList", 8 );
 
 
   // Font
@@ -363,7 +363,7 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
   fonts[1] = CORBA::string_dup( "symbol" );
   fonts[2] = CORBA::string_dup( "(default)" );
 
-  m_idComboFont_FontFamily = m_vToolBarFont->insertCombo( fonts, 1, false, SIGNAL( activated( const char* ) ), this,
+  m_idComboFont_FontFamily = m_vToolBarFont->insertCombo( fonts,   0, false, SIGNAL( activated( const char* ) ), this,
 							    "fontSelected", true, i18n("Font Family"),
 							    120, -1, OpenPartsUI::AtBottom );
   m_vToolBarFont->setCurrentComboItem( m_idComboFont_FontFamily, 0 );
@@ -377,22 +377,25 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
     sprintf( buffer, "%i", sizes[i] );
     sizelist[i] = CORBA::string_dup( buffer );
   }
-  m_idComboFont_FontSize = m_vToolBarFont->insertCombo( sizelist, 2, true, SIGNAL( activated( const char* ) ),
+  m_idComboFont_FontSize = m_vToolBarFont->insertCombo( sizelist,  1, true, SIGNAL( activated( const char* ) ),
 							    this, "sizeSelected", true,
 							    i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
-  m_vToolBarFont->setCurrentComboItem( m_idComboFont_FontSize, 21 );
+  m_vToolBarFont->setCurrentComboItem( m_idComboFont_FontSize, 2  );
 
   m_idButtonFont_Bold = addToolButton(m_vToolBarFont, "bold.xpm",
-				      i18n( "Bold" ), "fontSwitch", 3 );
+				      i18n( "Bold" ), "fontSwitch", 2 );
       
   m_idButtonFont_Italic = addToolButton(m_vToolBarFont, "italic.xpm",
-					i18n( "Italic" ),"fontSwitch", 4 );
+					i18n( "Italic" ),"fontSwitch", 3 );
 
   m_idButtonFont_Underl = addToolButton(m_vToolBarFont, "underl.xpm",
-					i18n( "Underlined" ), "fontSwitch", 5 );
+					i18n( "Underlined" ), "fontSwitch", 4 );
 
-  m_vToolBarFont->insertSeparator( -1 );
-
+    warning("provo1");
+//     m_vToolBarFont->insertSeparator(   6  );
+ //  warning("provo");
+ // 
+ 
   sizelist.length( 16 );
   for( unsigned int i = 1; i <= 10; i++ )
   {
@@ -406,30 +409,33 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
     sprintf(buffer,"*(/) %i/%i",i,i+1);
     sizelist[ 10 + i - 1 ] = CORBA::string_dup( buffer );
   }
-  m_idComboFont_ScaleMode = m_vToolBarFont->insertCombo( sizelist, 6, true, SIGNAL( activated( const char* ) ),
-							    this, "sizeSelected", true,
-							    i18n( "Font scale mode" ), 80, -1, OpenPartsUI::AtBottom );
-  m_vToolBarFont->setCurrentComboItem( m_idComboFont_ScaleMode, 12 );
-	    
+  warning("provo1");
+   m_idComboFont_ScaleMode = m_vToolBarFont->insertCombo( sizelist,  5    ,true, SIGNAL( activated( const char* ) ),
+					                 this, "sizeSelected", true,
+	  						    i18n( "Font scale mode" ), 80, -1, OpenPartsUI::AtBottom );
+warning("provo1");
+
+//    m_vToolBarFont->setCurrentComboItem( m_idComboFont_ScaleMode,  2 );
+	    warning("provo1");
   m_idButtonFont_0 = addToolButton(m_vToolBarFont, "reduce.xpm",
-				   i18n( "Reduce the fontSize" ), "reduce", 7 );
+				   i18n( "Reduce the fontSize" ), "reduce", 6 );
 
   m_idButtonFont_1 = addToolButton(m_vToolBarFont, "enlarge.xpm",
-				   i18n( "Increase the fontSize" ), "enlarge", 8 );
+				   i18n( "Increase the fontSize" ), "enlarge", 7 );
 
-  m_vToolBarFont->insertSeparator( -1 );
+//m_vToolBarFont->insertSeparator( -1 );
  
   m_idButtonFont_2 = addToolButton(m_vToolBarFont, "elementsw.xpm",
-				   i18n( "Reduce/Increase active element fontSize" ),"fontSwitch", 9 );
+				   i18n( "Reduce/Increase active element fontSize" ),"fontSwitch", 8 );
       
   m_idButtonFont_3 = addToolButton(m_vToolBarFont, "indexsw.xpm",
-				   i18n( "Reduce/Increase indexes fontSize" ),"fontSwitch", 10 );
+				   i18n( "Reduce/Increase indexes fontSize" ),"fontSwitch",  9 );
 
   m_idButtonFont_4 = addToolButton(m_vToolBarFont, "childrensw.xpm",
-				   i18n( "Reduce/Increase children (content) fontSize" ), "fontSwitch", 11 );
+				   i18n( "Reduce/Increase children (content) fontSize" ), "fontSwitch", 10 );
 
   m_idButtonFont_5 = addToolButton(m_vToolBarFont, "nextsw.xpm",
-				   i18n( "Reduce/Increase next element fontSize" ), "fontSwitch", 12 );
+				   i18n( "Reduce/Increase next element fontSize" ), "fontSwitch", 11 );
 
   m_vToolBarFont->setToggle( m_idButtonFont_Bold, true );
   m_vToolBarFont->setToggle( m_idButtonFont_Underl, true );
@@ -444,20 +450,20 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
   m_vToolBarFont->setButton( m_idButtonFont_4, true );
   m_vToolBarFont->setButton( m_idButtonFont_5, false );
 	    
-
+warning("Fine ");
   // Type
   m_vToolBarType = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   
   // ************************* Text *********************
   m_idButtonType_Spl = addToolButton(m_vToolBarType, "split.xpm", 
-				     i18n( "Split text into 2 elment" ), "textSplit", 1 );
-  m_vToolBarType->insertSeparator( -1 );
+				     i18n( "Split text into 2 elment" ), "textSplit", 0 );
+//m_vToolBarType->insertSeparator(  -1);
   // ************************** Root ********************
   m_idButtonType_RIn = addToolButton(m_vToolBarType, "rootindex.xpm", 
-				     i18n( "Add root index (i.e. Top Left index)" ), "addTopLeftIndex", 2 );
+				     i18n( "Add root index (i.e. Top Left index)" ), "addTopLeftIndex",  1 );
 
   // ************************** Brackets ********************	  
-  m_vToolBarType->insertSeparator( -1 );
+ //m_vToolBarType->insertSeparator(  -1);
 
   //    m_idButtonType_Del = addToolButton(m_vToolBarType, "delimiter.xpm", 
   //				     i18n( "Set delimiter type" ), "bracketType" );
@@ -472,7 +478,7 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
   fonts[6] = CORBA::string_dup("]");
   fonts[7] = CORBA::string_dup(">");
   fonts[8] = CORBA::string_dup("|");
-  m_idComboType_DelLeft = m_vToolBarType->insertCombo( fonts, 3, false, SIGNAL( activated( const char* ) ), this,
+  m_idComboType_DelLeft = m_vToolBarType->insertCombo( fonts, 2 ,false, SIGNAL( activated( const char* ) ), this,
 						       "delimiterLeft", true, i18n("Left delimiter"),
 						       40, -1, OpenPartsUI::AtBottom );
 
@@ -485,72 +491,72 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
   fonts[6] = CORBA::string_dup("[");
   fonts[7] = CORBA::string_dup("<");
   fonts[8] = CORBA::string_dup("|");
-  m_idComboType_DelRight = m_vToolBarType->insertCombo( fonts, 4, false, SIGNAL( activated( const char* ) ), this,
+  m_idComboType_DelRight = m_vToolBarType->insertCombo( fonts, 3, false, SIGNAL( activated( const char* ) ), this,
 							"delimiterRight", true, i18n("Right delimiter"),
 							40, -1, OpenPartsUI::AtBottom );
-  m_vToolBarType->insertSeparator( -1 );
+//m_vToolBarType->insertSeparator(  7 );
 
   // ************************** Fraction ********************
   m_idButtonType_MAl = addToolButton(m_vToolBarType, "midalign.xpm", 
-				     i18n( "Align fraction to midline" ), "fractionAlignM", 5 );
+				     i18n( "Align fraction to midline" ), "fractionAlignM", 4 );
 
   m_idButtonType_UAl = addToolButton(m_vToolBarType, "upalign.xpm", 
-				     i18n( "Align fraction to numerator" ), "fractionAlignU", 6 );
+				     i18n( "Align fraction to numerator" ), "fractionAlignU", 5 );
 
   m_idButtonType_DAl = addToolButton(m_vToolBarType, "downalign.xpm", 
-				     i18n( "Align fraction to denominator" ), "fractionAlignD", 7 );
+				     i18n( "Align fraction to denominator" ), "fractionAlignD",6  );
 
   m_idButtonType_CAl = addToolButton(m_vToolBarType, "centralign.xpm", 
-				     i18n( "Align center" ), "fractionAlignC", 8 );
+				     i18n( "Align center" ), "fractionAlignC", 7 );
   
   m_idButtonType_LAl = addToolButton(m_vToolBarType, "leftalign.xpm", 
-				     i18n( "Align left" ), "fractionAlignL", 9 );
+				     i18n( "Align left" ), "fractionAlignL", 8 );
 
   m_idButtonType_RAl = addToolButton(m_vToolBarType, "rightalign.xpm", 
-				     i18n( "Align Right" ), "fractionAlignR", 10 );
+				     i18n( "Align Right" ), "fractionAlignR",  9 );
 
   m_idButtonType_Les = addToolButton(m_vToolBarType, "near.xpm", 
-				     i18n( "Reduce element vertical distance" ), "fractionDistLess", 11 );
+				     i18n( "Reduce element vertical distance" ), "fractionDistLess", 10 );
 
   m_idButtonType_Mor = addToolButton(m_vToolBarType, "far.xpm", 
-				     i18n( "Increase element vertical distance" ), "fractionDistMore", 12 );
+				     i18n( "Increase element vertical distance" ), "fractionDistMore", 11 );
 
   m_idButtonType_Mid = addToolButton(m_vToolBarType, "midline.xpm", 
-				     i18n( "Toggle fraction line" ), "toggleMidline", 13 );
+				     i18n( "Toggle fraction line" ), "toggleMidline", 12 );
 
-  m_vToolBarType->insertSeparator( -1 );
+//m_vToolBarType->insertSeparator( 17 );
 
   // *******************  Integral **************************+
   m_idButtonType_AddH = addToolButton(m_vToolBarType, "Ihigher.xpm", 
-				      i18n( "Add higher limit" ), "integralHigher", 14 );
+				      i18n( "Add higher limit" ), "integralHigher", 13 );
 
   m_idButtonType_AddL = addToolButton(m_vToolBarType, "Ilower.xpm", 
-				      i18n( "Add lower limit" ), "integralLower", 15 );
+				      i18n( "Add lower limit" ), "integralLower", 14 );
 
-  m_vToolBarType->insertSeparator( -1 );
+//m_vToolBarType->insertSeparator( 20 );
 
   // *********************** Matrix *************************
   m_idButtonType_SetM = addToolButton(m_vToolBarType, "matrix.xpm", 
-				      i18n( "Set matrix dimension" ), "matrixSet", 16 );
+				      i18n( "Set matrix dimension" ), "matrixSet", 15 );
 
   m_idButtonType_InR = addToolButton(m_vToolBarType, "insrow.xpm", 
-				     i18n( "Insert a row" ), "matrixInsRow", 17 );
+				     i18n( "Insert a row" ), "matrixInsRow", 16 );
 
   m_idButtonType_InC = addToolButton(m_vToolBarType, "inscol.xpm", 
-				     i18n( "Insert a column" ), "matrixInsCol", 18 );
+				     i18n( "Insert a column" ), "matrixInsCol",17  );
 
   m_idButtonType_ReR = addToolButton(m_vToolBarType, "remrow.xpm", 
-				     i18n( "Remove a row" ), "matrixRemRow", 19 );
+				     i18n( "Remove a row" ), "matrixRemRow", 18 );
 
   m_idButtonType_ReC = addToolButton(m_vToolBarType, "remcol.xpm", 
-				     i18n( "Remove a column" ), "matrixRemCol", 20 );
+				     i18n( "Remove a column" ), "matrixRemCol", 19 );
 
-  m_vToolBarType->insertSeparator( -1 );
+//m_vToolBarType->insertSeparator( 26 );
 
   // *********************** General *************************
   m_idButtonType_Pix = addToolButton(m_vToolBarType, "pixmap.xpm", 
-				     i18n( "Toggle pixmap use" ), "togglePixmap", 21 );
-
+				     i18n( "Toggle pixmap use" ), "togglePixmap", 20 );
+warning("vai");
   m_vToolBarType->setToggle( m_idButtonType_UAl, true );
   m_vToolBarType->setToggle( m_idButtonType_MAl, true );
   m_vToolBarType->setToggle( m_idButtonType_DAl, true );
