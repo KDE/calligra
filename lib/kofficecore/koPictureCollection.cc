@@ -29,9 +29,11 @@
 #include "koPicture.h"
 #include "koPictureCollection.h"
 
+#define DEBUG_PICTURES
+
 KoPicture KoPictureCollection::findPicture(const KoPictureKey& key) const
 {
-    kdDebug(30003) << "KoPictureCollection::findPicture " << key.toString() << endl;
+    //kdDebug(30003) << "KoPictureCollection::findPicture " << key.toString() << endl;
     ConstIterator it = find( key );
     if ( it == end() )
     {
@@ -45,11 +47,11 @@ KoPicture KoPictureCollection::findPicture(const KoPictureKey& key) const
 
 KoPicture KoPictureCollection::insertPicture(const KoPictureKey& key, const KoPicture& picture)
 {
-    kdDebug(30003) << "KoPictureCollection::insertPicture " << key.toString() << endl;
+    //kdDebug(30003) << "KoPictureCollection::insertPicture " << key.toString() << endl;
     KoPicture c = findPicture(key);
     if (c.isNull())
     {
-        kdDebug(30003) << "KoPictureCollection::insertPicture not found -> inserting" << endl;
+        //kdDebug(30003) << "KoPictureCollection::insertPicture not found -> inserting" << endl;
         c=picture;
         c.setKey(key); // Be sure that the key is correctly set in the KoPicture!
         insert(key, c);
@@ -65,7 +67,6 @@ KoPicture KoPictureCollection::insertPicture(const KoPicture& picture)
 KoPicture KoPictureCollection::downloadPicture(const KURL& url)
 {
     kdDebug(30003) << "KoPictureCollection::downloadPicture " << url.prettyURL() << endl;
-    
 
     // If it is a local file, we can check the last modification date, so we should better use loadPicture
     if (url.isLocalFile())
@@ -74,7 +75,7 @@ KoPicture KoPictureCollection::downloadPicture(const KURL& url)
 
     // We have really a remote file, so we cannot check the last modification date
     // Therefore we have to always download the file
-    
+
     KoPicture pic;
     kdDebug(30003) << "Trying to download picture from file " << url.prettyURL() << endl;
 
@@ -82,13 +83,13 @@ KoPicture KoPictureCollection::downloadPicture(const KURL& url)
         insertPicture(pic.getKey(), pic);
     else
         kdWarning(30003) << "Could not download KoPicture from " << url.prettyURL() << endl;
-    
+
     return pic;
 }
 
 KoPicture KoPictureCollection::loadPicture(const QString& fileName)
 {
-    kdDebug(30003) << "KoPictureCollection::loadPicture " << fileName << endl;
+    //kdDebug(30003) << "KoPictureCollection::loadPicture " << fileName << endl;
     // Check the last modified date of the file, as it is now.
     KoPictureKey key;
     key.setKeyFromFile(fileName);

@@ -6,3 +6,4 @@ Changes after KOffice-1.2
 Changes after KOffice-1.3-beta1
 ===============================
 - Support for opening backup files (e.g. foo.kwd~)
+- KoText: Fixed drawing of word-by-word underline and strikeout
