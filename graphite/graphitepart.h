@@ -29,7 +29,6 @@ class KAction;
 
 class GraphiteView;
 class GCommandHistory;
-class GObjectFactory;
 
 
 class GraphitePart : public KoDocument {
@@ -72,7 +71,6 @@ private:
     GraphitePart &operator=(const GraphitePart &rhs);
 
     GCommandHistory *m_history;
-    GObjectFactory *m_factory;
     // TODO: Do we need isLoading() like in KSpread?
     // TODO: If an object is selected, store a pointer
     //       to its M9r here and draw the handles after

@@ -29,7 +29,7 @@
 #include <graphitefactory.h>
 #include <graphitepart.h>
 #include <gcommand.h>
-#include <gobjectfactory.h>
+//#include <gobjectfactory.h>
 
 
 GraphitePart::GraphitePart(QObject *parent, const char *name, bool singleViewMode)
@@ -40,9 +40,6 @@ GraphitePart::GraphitePart(QObject *parent, const char *name, bool singleViewMod
     m_history=new GCommandHistory(undo, redo);
 
     KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut" );
-
-    // object factory (prototype pattern)
-    m_factory=new GObjectFactory();
 }
 
 GraphitePart::~GraphitePart() {
@@ -61,7 +58,7 @@ void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
     //kdDebug(37001) << "MM x=" << e->x() << " y=" << e->y() << endl;
 }
 
-void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
+void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView */*view*/) {
     kdDebug(37001) << "MP x=" << e->x() << " y=" << e->y() << endl;
 }
 

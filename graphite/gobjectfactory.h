@@ -18,7 +18,8 @@
 */
 
 // This class creates all the gobjects from XML via the instantiate
-// method from GObject. (prototype pattern)
+// method from GObject. (prototype pattern) There is only *one*
+// GObjectFactory for the whole application (singleton)
 
 #ifndef gobjectfactory_h
 #define gobjectfactory_h
@@ -32,9 +33,8 @@ class QDomElement;
 class GObjectFactory {
 
 public:
-    GObjectFactory();     // TODO: init the Dict with some prototypes
-    ~GObjectFactory() {}
-
+    static GObjectFactory *self();
+    
     void registerPrototype(const QString &classname, const GObject *prototype);
     void unregisterPrototype(const QString &classname);
 
@@ -42,6 +42,10 @@ public:
     GObject *create(const QDomElement &element); // create & initialize!
 
 private:
+    GObjectFactory();
+    ~GObjectFactory() {}
+    
     QDict<const GObject> m_registry;
+    static GObjectFactory *m_self;
 };
 #endif // gobjectfactory_h

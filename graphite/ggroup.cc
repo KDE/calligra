@@ -18,38 +18,70 @@
 */
 
 #include <qdom.h>
+
 #include <ggroup.h>
+#include <gobjectfactory.h>
 
 
-GGroup::GGroup(const QString &name) : GObject(name) {
-    // TODO
+GGroup::GGroup(const QString &name) : GObject(name), m_iterator(0L) {
+
+    m_iterator=new QListIterator<GObject>(m_members);
 }
 
-GGroup::GGroup(const GGroup &rhs) : GObject(rhs) {
-    // TODO
+GGroup::GGroup(const GGroup &rhs) : GObject(rhs), m_iterator(0L) {
+
+    m_iterator=new QListIterator<GObject>(m_members);
+
+    for(const GObject *object=rhs.firstChild(); object!=0L; object=rhs.nextChild())
+	m_members.append(object->clone());
 }
 
-GGroup::GGroup(const QDomElement &element) : GObject(element.namedItem("gobject").toElement()) {
-    // TODO
+GGroup::GGroup(const QDomElement &element) : GObject(element.namedItem("gobject").toElement()),
+                                             m_iterator(0L) {
+    if(!m_ok)
+	return;
+
+    m_iterator=new QListIterator<GObject>(m_members);
+
+    QDomElement children=element.namedItem("children").toElement();
+    QDomElement e=children.firstChild().toElement();
+    for( ; !e.isNull(); e=children.nextSibling().toElement()) {
+	const GObject *object=GObjectFactory::self()->create(e);
+	if(object->isOk())
+	    m_members.append(object);
+    }
+}
+
+GGroup::~GGroup() {
+
+    delete m_iterator;
+    m_iterator=0L;
 }
 
 const bool GGroup::isOk() const {
-    // TODO
-    return false;
+
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L && it.current()->isOk(); ++it);
+
+    if(it==0L)
+	return true;
+    else
+	return false;
 }
 
-void GGroup::setOk(const bool &/*ok*/) {
-    // TODO
+void GGroup::setOk(const bool &ok) {
+
+    QListIterator<GObject> it(m_members);
+    for( ; it!=0L; ++it)
+	it.current()->setOk(ok);
 }
 
 GObject *GGroup::clone() const {
-    // TODO
-    return 0L;
+    return new GGroup(*this);
 }
 
-GObject *GGroup::instantiate(const QDomElement &/*element*/) const {
-    // TODO
-    return 0L;
+GObject *GGroup::instantiate(const QDomElement &element) const {
+    return new GGroup(element);
 }
 
 const bool GGroup::plugChild(GObject */*child*/, const Position &/*pos*/) {
@@ -62,33 +94,30 @@ const bool GGroup::unplugChild(GObject */*child*/, const Position &/*pos*/) {
     return false;
 }
 
-const GObject *GGroup::firstChild() {
-    // TODO
-    return 0L;
+const GObject *GGroup::firstChild() const {
+    return m_iterator->toFirst();
 }
 
-const GObject *GGroup::nextChild() {
-    // TODO
-    return 0L;
+const GObject *GGroup::nextChild() const {
+    ++m_iterator;
+    return m_iterator->current();
 }
 
-const GObject *GGroup::lastChild() {
-    // TODO
-    return 0L;
+const GObject *GGroup::lastChild() const {
+    return m_iterator->toLast();
 }
 
-const GObject *GGroup::prevChild() {
-    // TODO
-    return 0L;
+const GObject *GGroup::prevChild() const {
+    --m_iterator;
+    return m_iterator->current();
 }
 
-const GObject *GGroup::current() {
-    // TODO
-    return 0L;
+const GObject *GGroup::current() const {
+    return m_iterator->current();
 }
 
 QDomElement GGroup::save(QDomDocument &/*doc*/) const {
-    // TODO
+    // TODO - "children" !
     return QDomElement();
 }
 

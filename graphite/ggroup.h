@@ -28,10 +28,11 @@ class GGroup : public GObject {
 
 public:
     GGroup(const QString &name=QString::null);
+    // Note: copying changes the iterator!
     GGroup(const GGroup &rhs);
     GGroup(const QDomElement &element);
 
-    virtual ~GGroup() {}
+    virtual ~GGroup();
 
     virtual const bool isOk() const;
     virtual void setOk(const bool &ok=true);
@@ -42,11 +43,11 @@ public:
     virtual const bool plugChild(GObject *child, const Position &pos=Current);
     virtual const bool unplugChild(GObject *child, const Position &pos=Current);
 
-    virtual const GObject *firstChild();
-    virtual const GObject *nextChild();
-    virtual const GObject *lastChild();
-    virtual const GObject *prevChild();
-    virtual const GObject *current();
+    virtual const GObject *firstChild() const;
+    virtual const GObject *nextChild() const;
+    virtual const GObject *lastChild() const;
+    virtual const GObject *prevChild() const;
+    virtual const GObject *current() const;
 
     virtual QDomElement save(QDomDocument &doc) const;
 
@@ -81,7 +82,7 @@ public:
 
 protected:
     QList<GObject> m_members;
-    QListIterator<GObject> *m_iterator;
+    mutable QListIterator<GObject> *m_iterator;
 
 private:
     GGroup &operator=(const GGroup &rhs);

@@ -171,11 +171,11 @@ public:
     // These methods are used to access the object's children
     // Implemented via QListIterator - Leaf classes don't override
     // that default behavior...
-    virtual const GObject *firstChild() { return 0L; }
-    virtual const GObject *nextChild() { return 0L; }
-    virtual const GObject *lastChild() { return 0L; }
-    virtual const GObject *prevChild() { return 0L; }
-    virtual const GObject *current() { return 0L; }
+    virtual const GObject *firstChild() const { return 0L; }
+    virtual const GObject *nextChild() const { return 0L; }
+    virtual const GObject *lastChild() const { return 0L; }
+    virtual const GObject *prevChild() const { return 0L; }
+    virtual const GObject *current() const { return 0L; }
 
     virtual QDomElement save(QDomDocument &doc) const; // save the object (and all its children) to xml
 

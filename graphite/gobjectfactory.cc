@@ -23,12 +23,13 @@
 // these includes are needed to create the prototypes in the CTOR :)
 #include <gline.h>
 
+GObjectFactory *GObjectFactory::m_self=0L;
 
-GObjectFactory::GObjectFactory() : m_registry(17, false) {
-
-    // set up the dict with all the types we are aware of
-    m_registry.setAutoDelete(true);
-    registerPrototype("gline", new GLine("line"));
+GObjectFactory *GObjectFactory::self() {
+    
+    if(m_self==0)
+	m_self=new GObjectFactory();
+    return m_self;
 }
 
 void GObjectFactory::registerPrototype(const QString &classname, const GObject *prototype) {
@@ -62,4 +63,11 @@ GObject *GObjectFactory::create(const QDomElement &element) {
     }
     else
 	return 0L;
+}
+
+GObjectFactory::GObjectFactory() : m_registry(17, false) {
+
+    // set up the dict with all the types we are aware of
+    m_registry.setAutoDelete(true);
+    registerPrototype("gline", new GLine("line"));
 }
