@@ -2933,6 +2933,10 @@ void KWView::slotHRulerDoubleClicked( double ptpos )
 
 void KWView::slotHRulerDoubleClicked()
 {
+    QString mode = m_gui->canvasWidget()->viewMode()->type();
+    bool state = (mode!="ModeText");
+    if ( !state )
+        return;
     if ( m_gui->getHorzRuler()->flags() & KoRuler::F_TABS )
         formatParagraph();
     else
@@ -2943,6 +2947,11 @@ void KWView::formatPage()
 {
     if( !m_doc->isReadWrite())
         return;
+    QString mode = m_gui->canvasWidget()->viewMode()->type();
+    bool state = (mode!="ModeText");
+    if ( !state )
+        return;
+
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter kwhf;
@@ -5103,6 +5112,11 @@ void KWView::switchModeView()
     actionViewFooter->setEnabled( state );
     actionViewHeader->setEnabled( state );
     actionShowDocStruct->setEnabled(state);
+    if ( m_gui->getHorzRuler())
+        m_gui->getHorzRuler()->displayLayoutMenuItem(state );
+    if (m_gui->getVertRuler() )
+        m_gui->getVertRuler()->displayLayoutMenuItem(state );
+
     if ( !state )
     {
         if ( m_doc->showdocStruct() )

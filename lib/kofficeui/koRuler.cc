@@ -49,7 +49,7 @@ public:
     KoTabulatorList::Iterator removeTab;     // Do we have to remove a certain tab in the DC Event?
     KoTabulatorList::Iterator currTab;
     QPopupMenu *rb_menu;
-    int mMM, mPT, mINCH, mRemoveTab; // menu item ids
+    int mMM, mPT, mINCH, mRemoveTab, mPageLayout; // menu item ids
     int frameEnd;
     double i_right;
     bool m_bReadWrite;
@@ -83,7 +83,6 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
     d->flags = _flags;
 
     d->m_bReadWrite=true;
-
     diffx = 0;
     diffy = 0;
     i_left=0.0;
@@ -129,6 +128,11 @@ KoRuler::~KoRuler()
 {
     delete d->rb_menu;
     delete d;
+}
+
+void KoRuler::displayLayoutMenuItem(bool b)
+{
+    d->rb_menu->setItemEnabled(d->mPageLayout, b);
 }
 
 /*================================================================*/
@@ -922,7 +926,7 @@ void KoRuler::setupMenu()
     d->mINCH = d->rb_menu->insertItem( KoUnit::unitDescription( KoUnit::U_INCH ),
 				       this, SLOT( rbINCH() ) );
     d->rb_menu->insertSeparator();
-    d->rb_menu->insertItem(i18n("Page Layout..."), this, SLOT(pageLayoutDia()));
+    d->mPageLayout=d->rb_menu->insertItem(i18n("Page Layout..."), this, SLOT(pageLayoutDia()));
     d->rb_menu->insertSeparator();
     d->mRemoveTab=d->rb_menu->insertItem(i18n("Remove Tabulator"), this, SLOT(rbRemoveTab()));
     int uid;

@@ -202,6 +202,8 @@ public:
      */
     int flags() const;
 
+    void displayLayoutMenuItem(bool b);
+
 signals:
     void newPageLayout( KoPageLayout );
     void newLeftIndent( double );
