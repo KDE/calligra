@@ -45,7 +45,8 @@ QTextFormat * KWTextFormatCollection::format( const QFont &f, const QColor &c )
 
     QString key = QTextFormat::getKey( f, c, FALSE, QString::null, QString::null, QTextFormat::AlignNormal );
     //kdDebug() << "format() textformat=" << this << " pointsizefloat=" << f.pointSizeFloat() << endl;
-     // SYNC any changes with generateKey below
+    // SYNC any changes with generateKey below
+    ASSERT( !key.contains( '+' ) );
     key += '+';
     key += QString::number( (int)f.strikeOut() );
     key += '/';
@@ -89,8 +90,9 @@ void KWTextFormat::copyFormat( const QTextFormat & nf, int flags )
     if ( flags & KWTextFormat::StrikeOut )
         fn.setStrikeOut( nf.font().strikeOut() );
     update();
-    //kdDebug() << "KWTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf << " " << nf.key()
-    //          << " flags=" << flags << " ==> result " << this << " " << key() << endl;
+    //kdDebug() << "KWTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf
+    //          << " " << nf.key() " flags=" << flags
+    //          << " ==> result " << this << " " << key() << endl;
 }
 
 void KWTextFormat::setPointSizeFloat( float size )
@@ -119,6 +121,7 @@ void KWTextFormat::generateKey()
 
     QTextFormat::generateKey();
     QString k = key();
+    ASSERT( !k.contains( '+' ) );
     // SYNC any changes to the key format with ::format above
     k += '+';
     k += QString::number( (int)fn.strikeOut() );

@@ -623,6 +623,9 @@ int KWTextParag::nextTab( int chnum, int x )
 //static
 QDomElement KWTextParag::saveFormat( QDomDocument & doc, KWTextFormat * curFormat, KWTextFormat * refFormat, int pos, int len )
 {
+    //kdDebug() << "KWTextParag::saveFormat refFormat=" << (  refFormat ? refFormat->key() : "none" )
+    //          << " curFormat=" << curFormat->key()
+    //          << " pos=" << pos << " len=" << len << endl;
     QDomElement formatElem = doc.createElement( "FORMAT" );
     formatElem.setAttribute( "id", 1 ); // text format
     if ( len ) // 0 when saving the format of a style
@@ -705,6 +708,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
     for ( int i = from; i <= to; ++i, ++index )
     {
         QTextStringChar & ch = string()->at(i);
+        KWTextFormat * newFormat = static_cast<KWTextFormat *>( ch.format() );
         if ( ch.isCustom() )
         {
             if ( startPos > -1 && curFormat) { // Save former format
@@ -714,7 +718,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
                     formatsElem.appendChild( formatElem );
             }
 
-            QDomElement formatElem = saveFormat( doc, curFormat, paragraphFormat(), index, 1 );
+            QDomElement formatElem = saveFormat( doc, newFormat, paragraphFormat(), index, 1 );
             formatsElem.appendChild( formatElem );
             static_cast<KWTextCustomItem *>( ch.customItem() )->save( formatElem );
             startPos = -1;
@@ -725,7 +729,6 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
         }
         else
         {
-            KWTextFormat * newFormat = static_cast<KWTextFormat *>( ch.format() );
             if ( newFormat != curFormat )
             {
                 // Format changed.
