@@ -1,5 +1,25 @@
+/* This file is part of the KDE project
+   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1999 Simon Hausmann <hausmann@kde.org>
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; see the file COPYING.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 #include <qprinter.h>
 #include <qmsgbox.h>
+#include <qhbox.h>
 
 #include "koshell_shell.h"
 
@@ -31,10 +51,14 @@ KoShellWindow::KoShellWindow()
   
   s_lstShells->append( this );
 
-  QWidget *w = new QWidget( opToolBar(1) );
-  QBoxLayout *ml = new QVBoxLayout(w);
+  m_pLayout = new QHBox( this );
 
-  m_pKoolBar = new KoKoolBar( w );
+  m_pKoolBar = new KoKoolBar( m_pLayout );
+
+  setView( m_pLayout );
+
+  m_pFrame->reparent( m_pLayout, 0, QPoint( 80, 0 ), true );
+  
   m_grpFile = m_pKoolBar->insertGroup("Parts");
   m_lstComponents = KoDocumentEntry::query();
   QValueList<KoDocumentEntry>::Iterator it = m_lstComponents.begin();
@@ -52,14 +76,7 @@ KoShellWindow::KoShellWindow()
   m_pKoolBar->setFixedWidth( 80 );
   m_pKoolBar->setMinimumHeight( 300 );
   
-  ml->addWidget(m_pKoolBar);
-  ml->activate();
-
-  opToolBar(1)->insertWidget( 1, 80, w );
-  
-  opToolBar(1)->setBarPos(KToolBar::Left);
-
-  m_pKfmFrame = m_pFrame;
+  m_vKfm = 0L;
 
   this->resize(550, 400);
 }
@@ -81,17 +98,18 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
   }
   else if ( _grp == m_grpDocuments )
   {
+    if ( m_activePage != m_lstPages.end() &&
+         (*m_activePage).m_id == _item )
+      return;
+  
     QValueList<Page>::Iterator it = m_lstPages.begin();
     while( it != m_lstPages.end() )
     {
       if ( (*it).m_id == _item )
       {
-	if ( m_pFrame )
-	  m_pFrame->hide();
 	m_activePage = it;
-	m_pFrame = (*it).m_pFrame;
-	setView( m_pFrame );
-	m_pFrame->show();
+        m_pFrame->detach();
+        m_pFrame->attachView( (*it).m_vView );
 	interface()->setActivePart( (*it).m_vView->id() );
 	return;
       }
@@ -129,25 +147,6 @@ void KoShellWindow::cleanUp()
   releasePages();
 
   KoMainWindow::cleanUp();
-}
-
-void KoShellWindow::attachView( KoFrame* _frame, unsigned long _part_id )
-{
-  OpenParts::Part_var part;
-  if ( _part_id != 0 )
-  {    
-    part = interface()->findPart( _part_id );
-    assert( !CORBA::is_nil( part ) );
-  }
-  
-  _frame->detach();
-  
-  if ( _part_id != 0 )
-  {
-    KOffice::View_var view = KOffice::View::_narrow( part );    
-    assert( !CORBA::is_nil( view ) );
-    _frame->attachView( view );
-  }
 }
 
 /*
@@ -198,7 +197,8 @@ bool KoShellWindow::newPage( KoDocumentEntry& _e )
     QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( "Ok" ) );
     return false;
   }
-
+  
+  doc->incRef();
   doc->initDoc();
 
   // Create a view
@@ -216,25 +216,18 @@ bool KoShellWindow::newPage( KoDocumentEntry& _e )
     QMessageBox::critical( 0L, i18n("KOffice Error"), i18n("Could not create a koffice compliant view") );
     return false;
   }
+  view->incRef();
   view->setMode( KOffice::View::RootMode );
   view->setMainWindow( this->koInterface() );
 
-  // Create a new frame
-  KoFrame* frame = new KoFrame( this );
-  if ( m_pFrame )
-    m_pFrame->hide();
-  m_pFrame = frame;
-  setView( m_pFrame );
-  m_pFrame->show();
-  
-  attachView( frame, view->id() );
+  m_pFrame->detach();
+  m_pFrame->attachView( view );
   interface()->setActivePart( view->id() );
   
   // Create a new page
   Page page;
   page.m_vDoc = KOffice::Document::_duplicate( doc );
   page.m_vView = KOffice::View::_duplicate( view );
-  page.m_pFrame = frame;
   page.m_id = m_pKoolBar->insertItem( m_grpDocuments, _e.icon, i18n("No name"), this,
 				      SLOT( slotKoolBar( int, int ) ) );
   
@@ -367,7 +360,14 @@ int KoShellWindow::documentCount()
 
 void KoShellWindow::releasePages()
 {
-  // TODO
+  m_pFrame->detach();
+  QValueList<Page>::ConstIterator it = m_lstPages.begin();
+  for (; it != m_lstPages.end(); ++it )
+  {
+    (*it).m_vView->decRef();
+    (*it).m_vDoc->decRef();
+  }
+  m_lstPages.clear();
 }
 
 /*
@@ -510,12 +510,8 @@ void KoShellWindow::slotFileOpen()
 
   if ( !CORBA::is_nil( m_vKfm ) )
   {
-    if ( m_pFrame && m_pFrame != m_pKfmFrame )
-      m_pFrame->hide();
-    m_pFrame = m_pKfmFrame;
-    m_pFrame->raise();
-    setView( m_pFrame );
-    m_pFrame->show();
+    m_pFrame->detach();
+    m_pFrame->OPFrame::attach( m_vKfm );
     interface()->setActivePart( m_vKfm->id() );
     return;
   }
@@ -526,16 +522,10 @@ void KoShellWindow::slotFileOpen()
   OpenParts::Application_var app = OpenParts::Application::_narrow( obj );
   assert( !CORBA::is_nil( app ) );
 
-  if ( m_pFrame && m_pFrame != m_pKfmFrame )
-    m_pFrame->hide();
-  m_pFrame = m_pKfmFrame;
-  m_pFrame->raise();
-  setView( m_pFrame );
-  m_pFrame->show();
-
   m_vKfm = app->createPart();
   assert( !CORBA::is_nil( m_vKfm ) );
   m_vKfm->setMainWindow( this->koInterface() );
+  m_pFrame->detach();
   m_pFrame->OPFrame::attach( m_vKfm );
   interface()->setActivePart( m_vKfm->id() );
   
