@@ -123,6 +123,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     // Now ensure the containing frame is the one actually containing our text
     // (for copies, e.g. headers and footers, we need to go back until finding a real frame)
 
+    KWFrame* containingFrame = fs->currentDrawnFrame();
     if ( containingFrame->isCopy() )
     {
         // Find last real frame, in case we are in a copied frame
