@@ -30,6 +30,8 @@
 #include "kppieobject.h"
 
 #include <qpainter.h>
+#include <iostream>
+using namespace std;  
 
 /******************************************************************/
 /* Class: KPGroupObject						  */

@@ -32,6 +32,8 @@
 #include <kapp.h>
 
 #include <math.h>
+#include <iostream>
+using namespace std;  
 
 /******************************************************************/
 /* Class: KPAutoformObject					  */

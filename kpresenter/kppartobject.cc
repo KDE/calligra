@@ -27,6 +27,8 @@
 #include <qwidget.h>
 #include <qpainter.h>
 #include <koDocument.h>
+#include <iostream>
+using namespace std;  
 
 /******************************************************************/
 /* Class: KPPartObject						  */

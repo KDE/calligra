@@ -996,7 +996,7 @@ void KPresenterView::screenStart()
                                1.0 ? static_cast<float>( dh ) /
                                static_cast<float>( kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height() )
                                : 1.0;
-            float _presFakt = min(_presFaktW,_presFaktH);
+            float _presFakt = QMIN(_presFaktW,_presFaktH);
             page->setPresFakt( _presFakt );
         } else {
             float _presFakt = 1.0;

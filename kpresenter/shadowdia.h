@@ -26,10 +26,6 @@
 
 #include "global.h"
 
-#ifndef max
-#define max(a,b) ((a)>(b)?(a):(b))
-#endif
-
 class QWidget;
 class QSpinBox;
 class QGroupBox;

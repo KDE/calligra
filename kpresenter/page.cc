@@ -1743,7 +1743,7 @@ void Page::startScreenPresentation( bool zoom, int curPgNum )
 			   static_cast<float>( height() ) /
 	    static_cast<float>( getPageSize( 0, 1.0, false ).height() ) :
 			   1.0;
-	_presFakt = min(_presFaktW,_presFaktH);
+	_presFakt = QMIN(_presFaktW,_presFaktH);
     } else {
 	_presFakt = 1.0;
     }
@@ -2553,48 +2553,48 @@ void Page::doObjEffects()
 		switch ( kpobject->getEffect() )
 		{
 		case EF_COME_LEFT:
-		    x_pos1 = max( x_pos1, x - diffx() + w );
+		    x_pos1 = QMAX( x_pos1, x - diffx() + w );
 		    break;
 		case EF_COME_TOP:
-		    y_pos1 = max( y_pos1, y - diffy() + h );
+		    y_pos1 = QMAX( y_pos1, y - diffy() + h );
 		    break;
 		case EF_COME_RIGHT:
-		    x_pos2 = min( x_pos2, x - diffx() );
+		    x_pos2 = QMIN( x_pos2, x - diffx() );
 		    break;
 		case EF_COME_BOTTOM:
-		    y_pos2 = min( y_pos2, y - diffy() );
+		    y_pos2 = QMIN( y_pos2, y - diffy() );
 		    break;
 		case EF_COME_LEFT_TOP:
 		{
-		    x_pos1 = max( x_pos1, x - diffx() + w );
-		    y_pos1 = max( y_pos1, y - diffy() + h );
+		    x_pos1 = QMAX( x_pos1, x - diffx() + w );
+		    y_pos1 = QMAX( y_pos1, y - diffy() + h );
 		} break;
 		case EF_COME_LEFT_BOTTOM:
 		{
-		    x_pos1 = max( x_pos1, x - diffx() + w );
-		    y_pos2 = min( y_pos2, y - diffy() );
+		    x_pos1 = QMAX( x_pos1, x - diffx() + w );
+		    y_pos2 = QMIN( y_pos2, y - diffy() );
 		} break;
 		case EF_COME_RIGHT_TOP:
 		{
-		    x_pos2 = min( x_pos2, x - diffx() );
-		    y_pos1 = max( y_pos1, y - diffy() + h );
+		    x_pos2 = QMIN( x_pos2, x - diffx() );
+		    y_pos1 = QMAX( y_pos1, y - diffy() + h );
 		} break;
 		case EF_COME_RIGHT_BOTTOM:
 		{
-		    x_pos2 = min( x_pos2, x - diffx() );
-		    y_pos2 = min( y_pos2, y - diffy() );
+		    x_pos2 = QMIN( x_pos2, x - diffx() );
+		    y_pos2 = QMIN( y_pos2, y - diffy() );
 		} break;
 		case EF_WIPE_LEFT:
-		    x_pos1 = max( x_pos1, w );
+		    x_pos1 = QMAX( x_pos1, w );
 		    break;
 		case EF_WIPE_RIGHT:
-		    x_pos1 = max( x_pos1, w );
+		    x_pos1 = QMAX( x_pos1, w );
 		    break;
 		case EF_WIPE_TOP:
-		    y_pos1 = max( y_pos1, h );
+		    y_pos1 = QMAX( y_pos1, h );
 		    break;
 		case EF_WIPE_BOTTOM:
-		    y_pos1 = max( y_pos1, h );
+		    y_pos1 = QMAX( y_pos1, h );
 		    break;
 		default: break;
 		}
@@ -2615,48 +2615,48 @@ void Page::doObjEffects()
 		switch ( kpobject->getEffect() )
 		{
 		case EF3_GO_LEFT:
-		    x_pos1 = max( x_pos1, x - diffx() + w );
+		    x_pos1 = QMAX( x_pos1, x - diffx() + w );
 		    break;
 		case EF3_GO_TOP:
-		    y_pos1 = max( y_pos1, y - diffy() + h );
+		    y_pos1 = QMAX( y_pos1, y - diffy() + h );
 		    break;
 		case EF3_GO_RIGHT:
-		    x_pos2 = min( x_pos2, x - diffx() );
+		    x_pos2 = QMIN( x_pos2, x - diffx() );
 		    break;
 		case EF3_GO_BOTTOM:
-		    y_pos2 = min( y_pos2, y - diffy() );
+		    y_pos2 = QMIN( y_pos2, y - diffy() );
 		    break;
 		case EF3_GO_LEFT_TOP:
 		{
-		    x_pos1 = max( x_pos1, x - diffx() + w );
-		    y_pos1 = max( y_pos1, y - diffy() + h );
+		    x_pos1 = QMAX( x_pos1, x - diffx() + w );
+		    y_pos1 = QMAX( y_pos1, y - diffy() + h );
 		} break;
 		case EF3_GO_LEFT_BOTTOM:
 		{
-		    x_pos1 = max( x_pos1, x - diffx() + w );
-		    y_pos2 = min( y_pos2, y - diffy() );
+		    x_pos1 = QMAX( x_pos1, x - diffx() + w );
+		    y_pos2 = QMIN( y_pos2, y - diffy() );
 		} break;
 		case EF3_GO_RIGHT_TOP:
 		{
-		    x_pos2 = min( x_pos2, x - diffx() );
-		    y_pos1 = max( y_pos1, y - diffy() + h );
+		    x_pos2 = QMIN( x_pos2, x - diffx() );
+		    y_pos1 = QMAX( y_pos1, y - diffy() + h );
 		} break;
 		case EF3_GO_RIGHT_BOTTOM:
 		{
-		    x_pos2 = min( x_pos2, x - diffx() );
-		    y_pos2 = min( y_pos2, y - diffy() );
+		    x_pos2 = QMIN( x_pos2, x - diffx() );
+		    y_pos2 = QMIN( y_pos2, y - diffy() );
 		} break;
 		case EF3_WIPE_LEFT:
-		    x_pos1 = max( x_pos1, w );
+		    x_pos1 = QMAX( x_pos1, w );
 		    break;
 		case EF3_WIPE_RIGHT:
-		    x_pos1 = max( x_pos1, w );
+		    x_pos1 = QMAX( x_pos1, w );
 		    break;
 		case EF3_WIPE_TOP:
-		    y_pos1 = max( y_pos1, h );
+		    y_pos1 = QMAX( y_pos1, h );
 		    break;
 		case EF3_WIPE_BOTTOM:
-		    y_pos1 = max( y_pos1, h );
+		    y_pos1 = QMAX( y_pos1, h );
 		    break;
 		default: break;
 		}

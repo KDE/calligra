@@ -23,10 +23,6 @@
 #include <qdialog.h>
 #include <qframe.h>
 
-#ifndef max
-#define max(a,b) ((a)>(b)?(a):(b))
-#endif
-
 class QRadioButton;
 class QWidget;
 class QPainter;

@@ -91,7 +91,7 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
     eRndY->move( lRndY->x(), lRndY->y() + lRndY->height() + 5 );
     connect( eRndY, SIGNAL( textChanged( const QString & ) ), this, SLOT( rndYChanged( const QString & ) ) );
 
-    gSettings->resize(max(max(max(lRndX->x() + lRndX->width(),eRndX->x() + eRndX->width()),
+    gSettings->resize(QMAX(QMAX(QMAX(lRndX->x() + lRndX->width(),eRndX->x() + eRndX->width()),
                               lRndY->x() + lRndY->width() ), eRndY->x() + eRndY->width() ) + 20,
                       eRndY->y() + eRndY->height() + 20 );
 
@@ -115,8 +115,8 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
     okBut->setAutoDefault( true );
     okBut->setDefault( true );
 
-    int butW = max(cancelBut->sizeHint().width(),
-                   max(applyBut->sizeHint().width(),okBut->sizeHint().width()));
+    int butW = QMAX(cancelBut->sizeHint().width(),
+                   QMAX(applyBut->sizeHint().width(),okBut->sizeHint().width()));
     int butH = cancelBut->sizeHint().height();
 
     cancelBut->resize( butW, butH );

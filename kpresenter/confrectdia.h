@@ -25,10 +25,6 @@
 
 #include "global.h"
 
-#ifndef max
-#define max(a,b) ((a)>(b)?(a):(b))
-#endif
-
 class QPainter;
 class QLabel;
 class QLineEdit;

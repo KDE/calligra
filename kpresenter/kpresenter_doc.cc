@@ -88,6 +88,9 @@
 #include <math.h>
 
 #include "KPresenterDocIface.h"
+#include <iostream>
+#include <cassert>
+using namespace std;
 
 #ifndef QT_NO_ASCII_CAST
 #define QT_NO_ASCII_CAST

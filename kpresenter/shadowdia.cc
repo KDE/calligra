@@ -227,8 +227,8 @@ ShadowDia::ShadowDia( QWidget* parent, const char* name )
     okBut->setAutoDefault( true );
     okBut->setDefault( true );
 
-    int butW = max(cancelBut->sizeHint().width(),
-                   max(applyBut->sizeHint().width(),okBut->sizeHint().width()));
+    int butW = QMAX(cancelBut->sizeHint().width(),
+                   QMAX(applyBut->sizeHint().width(),okBut->sizeHint().width()));
     int butH = cancelBut->sizeHint().height();
 
     cancelBut->resize( butW, butH );

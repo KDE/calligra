@@ -24,6 +24,8 @@
 #include <qwmatrix.h>
 
 #include <math.h>
+#include <iostream>
+using namespace std;
 
 /******************************************************************/
 /* Class: KPLineObject                                             */

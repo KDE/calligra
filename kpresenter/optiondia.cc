@@ -55,7 +55,7 @@ OptionDia::OptionDia( QWidget *parent, const char *name )
     lRastY->move( col1, lRastX->y()+lRastX->height()+15 );
     lRastY->resize( lRastY->sizeHint() );
 
-    dummy = max(lRastX->sizeHint().width(),lRastY->sizeHint().width());
+    dummy = QMAX(lRastX->sizeHint().width(),lRastY->sizeHint().width());
     lRastX->resize( dummy, lRastX->height() );
     lRastY->resize( dummy, lRastY->height() );
 
@@ -96,8 +96,8 @@ OptionDia::OptionDia( QWidget *parent, const char *name )
 
     objects->resize( txtObj->width() + 40, txtObj->height() + 40 );
 
-    w = max(objects->width(),general->width());
-    h = max(objects->height(),general->height());
+    w = QMAX(objects->width(),general->width());
+    h = QMAX(objects->height(),general->height());
 
 
     resize( 300, 200 );

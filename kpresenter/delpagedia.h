@@ -24,10 +24,6 @@
 
 #include "global.h"
 
-#ifndef max
-#define max(a,b) ((a)>(b)?(a):(b))
-#endif
-
 class KPresenterDoc;
 class QWidget;
 class QGridLayout;

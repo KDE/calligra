@@ -24,6 +24,8 @@
 #include <qpicture.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
+#include <iostream>
+using namespace std;  
 
 /******************************************************************/
 /* Class: KPPieObject						  */

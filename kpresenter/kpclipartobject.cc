@@ -23,6 +23,8 @@
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qfileinfo.h>
+#include <iostream>
+using namespace std;
 
 /******************************************************************/
 /* Class: KPClipartObject					 */

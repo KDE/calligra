@@ -32,6 +32,8 @@
 
 #include "kpresenter_view.h"
 #include "kpresenter_doc.h"
+#include <iostream>
+using namespace std;  
 
 /******************************************************************/
 /* Class: KPTextObject                                            */

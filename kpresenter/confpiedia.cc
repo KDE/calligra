@@ -121,7 +121,7 @@ ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
     eLen->move( lLen->x(), lLen->y() + lLen->height() + 5 );
     connect( eLen, SIGNAL( textChanged( const QString & ) ), this, SLOT( lengthChanged( const QString & ) ) );
 
-    gSettings->resize(max(max(max(max(cType->x() + cType->width(),lAngle->x() + lAngle->width()),eAngle->x() + eAngle->width()),
+    gSettings->resize(QMAX(QMAX(QMAX(QMAX(cType->x() + cType->width(),lAngle->x() + lAngle->width()),eAngle->x() + eAngle->width()),
                               lLen->x() + lLen->width() ), eLen->x() + eLen->width() ) + 20,
                       eLen->y() + eLen->height() + 20 );
 
@@ -145,8 +145,8 @@ ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
     okBut->setAutoDefault( true );
     okBut->setDefault( true );
 
-    int butW = max(cancelBut->sizeHint().width(),
-                   max(applyBut->sizeHint().width(),okBut->sizeHint().width()));
+    int butW = QMAX(cancelBut->sizeHint().width(),
+                   QMAX(applyBut->sizeHint().width(),okBut->sizeHint().width()));
     int butH = cancelBut->sizeHint().height();
 
     cancelBut->resize( butW, butH );
