@@ -340,10 +340,9 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 		//..or both are not empty and values differ
 			|| !m_value.toString().isEmpty() && !v.toString().isEmpty() && m_value != v);
 	}
-	else if (m_value.type()==QVariant::Pixmap || v.type()==QVariant::Pixmap) {
-		//property is unchanged if we're moving from null value to null pixmap or so...
-		ch = m_value.isNull() != v.toPixmap().isNull();
-	}
+	else if ((m_value.type()==QVariant::Pixmap && m_value.toPixmap().isNull() && v.isNull())
+			|| (v.type()==QVariant::Pixmap && v.toPixmap().isNull() && m_value.isNull()))
+		return;
 	else
 		ch = (m_value != v);
 
