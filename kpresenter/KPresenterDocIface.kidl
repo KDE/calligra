@@ -1,0 +1,16 @@
+<!DOCTYPE DCOP-IDL><DCOP-IDL>
+<INCLUDE file="qstring.h"/>
+<INCLUDE file="dcopref.h"/>
+<INCLUDE file="dcopobject.h"/>
+<CLASS name="KPresenterDocIface">
+<SUPER name="DCOPObject"/>
+<FUNC name="url" qual=""><RET type="QString"/></FUNC>
+<FUNC name="firstView" qual=""><RET type="DCOPRef"/></FUNC>
+<FUNC name="nextView" qual=""><RET type="DCOPRef"/></FUNC>
+<FUNC name="getNumObjects" qual=""><RET type="int"/></FUNC>
+<FUNC name="getObject" qual=""><RET type="DCOPRef"/><ARG name="num" type="int"/></FUNC>
+<FUNC name="getNumPages" qual=""><RET type="int"/></FUNC>
+<FUNC name="getPage" qual=""><RET type="DCOPRef"/><ARG name="num" type="int"/></FUNC>
+<FUNC name="getPageOfObj" qual=""><RET type="int"/><ARG name="obj" type="int"/></FUNC>
+</CLASS>
+</DCOP-IDL>
