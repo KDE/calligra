@@ -227,13 +227,13 @@ void KWAutoFormatDia::setupTab2()
 
 void KWAutoFormatDia::setupTab3()
 {
-    tab3 = addPage( i18n( "Exception" ) );
+    tab3 = addPage( i18n( "Exceptions" ) );
     QVBoxLayout *grid = new QVBoxLayout(tab3, 5, 5);
     grid->setAutoAdd( true );
 
-    abbreviation=new KWAutoFormatExceptionWidget(tab3,i18n("Abbreviation (Word with a point at the end):"),m_autoFormat.listException(),true);
+    abbreviation=new KWAutoFormatExceptionWidget(tab3,i18n("Don't treat as end of sentence:"),m_autoFormat.listException(),true);
     ( void )new QWidget( tab3 );
-    twoUpperLetter=new KWAutoFormatExceptionWidget(tab3,i18n("Two Upper Letter in the word:"),m_autoFormat.listTwoUpperLetterException());
+    twoUpperLetter=new KWAutoFormatExceptionWidget(tab3,i18n("Accept two uppercase letters in:"),m_autoFormat.listTwoUpperLetterException());
     ( void )new QWidget( tab3 );
 }
 

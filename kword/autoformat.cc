@@ -36,7 +36,7 @@
 KWAutoFormat::KWAutoFormat( KWDocument *_doc )
     : m_doc( _doc ), m_configRead( false ), m_typographicQuotes(), /*m_enabled( true ),*/
       m_convertUpperCase( false ), m_convertUpperUpper( false ),
-      m_dontUpper(false),m_maxlen( 0 )
+      m_maxlen( 0 )
 {
 }
 
@@ -145,13 +145,6 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
 
     //if ( !m_enabled )
     //    return;
-    if( ch==".")
-    {
-        QString text=getLastWord(parag,index);
-        text=text+".";
-        m_dontUpper=(upperCaseExceptions.findIndex(text)!=-1);
-        kdDebug()<<"m_dontUpper :"<<m_dontUpper<<endl;
-    }
     // Auto-correction happens when pressing space, tab, CR etc.
     if ( ch.isSpace() )
     {
@@ -175,7 +168,9 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
 
 bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *parag, int index )
 {
-
+    // Prepare an array with words of different lengths, all terminating at "index".
+    // Obviously only full words are put into the array
+    // But this allows 'find strings' with spaces and punctuation in them.
     QString * wordArray = new QString[m_maxFindLength+1];
     {
         QString word;
@@ -190,36 +185,37 @@ bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *para
                 break;
         }
     }
-    for(int i=m_maxFindLength;i>=0;--i)
+    // Now for each entry in the autocorrect list, look if
+    // the word of the same size in wordArray matches.
+    // This allows an o(n) behaviour instead of an o(n^2).
+    KWAutoFormatEntryMap::ConstIterator it = m_entries.begin();
+    KWAutoFormatEntryMap::ConstIterator end = m_entries.end();
+    for ( ; it != end ; ++it )
     {
-        if(wordArray[i]!=0)
+        int i = it.key().length();
+        if ( it.key() == wordArray[i] )
         {
-            QString word=wordArray[i];
-            KWAutoFormatEntryMap::Iterator it = m_entries.find( word );
-            if ( it != m_entries.end()  )
-            {
-                KWTextDocument * textdoc = parag->textDocument();
-                unsigned int length = word.length();
-                int start = index - length;
-                QTextCursor cursor( parag->document() );
-                cursor.setParag( parag );
-                cursor.setIndex( start );
-                textdoc->setSelectionStart( KWTextFrameSet::HighlightSelection, &cursor );
-                cursor.setIndex( start + length );
-                textdoc->setSelectionEnd( KWTextFrameSet::HighlightSelection, &cursor );
+            KWTextDocument * textdoc = parag->textDocument();
+            unsigned int length = wordArray[i].length();
+            int start = index - length;
+            QTextCursor cursor( parag->document() );
+            cursor.setParag( parag );
+            cursor.setIndex( start );
+            textdoc->setSelectionStart( KWTextFrameSet::HighlightSelection, &cursor );
+            cursor.setIndex( start + length );
+            textdoc->setSelectionEnd( KWTextFrameSet::HighlightSelection, &cursor );
 
-                KWTextFrameSet * textfs = textdoc->textFrameSet();
-                textfs->replaceSelection( textEditCursor, it.data().replace(),
-                                          KWTextFrameSet::HighlightSelection,
-                                          i18n("Autocorrect word") );
-                // The space/tab/CR that we inserted is still there but delete/insert moved the cursor
-                // -> go right
-                textfs->emitHideCursor();
-                textEditCursor->gotoRight();
-                textfs->emitShowCursor();
-                delete [] wordArray;
-                return true;
-            }
+            KWTextFrameSet * textfs = textdoc->textFrameSet();
+            textfs->replaceSelection( textEditCursor, it.data().replace(),
+                                      KWTextFrameSet::HighlightSelection,
+                                      i18n("Autocorrect word") );
+            // The space/tab/CR that we inserted is still there but delete/insert moved the cursor
+            // -> go right
+            textfs->emitHideCursor();
+            textEditCursor->gotoRight();
+            textfs->emitShowCursor();
+            delete [] wordArray;
+            return true;
         }
     }
     delete [] wordArray;
@@ -265,9 +261,8 @@ void KWAutoFormat::doUpperCase( QTextCursor *textEditCursor, KWTextParag *parag,
     QChar firstChar = backCursor.parag()->at( backCursor.index() )->c;
     bool bNeedMove = false;
 
-    if ( m_convertUpperCase && isLower( firstChar ) && !m_dontUpper)
+    if ( m_convertUpperCase && isLower( firstChar ) )
     {
-
         bool beginningOfSentence = true; // true if beginning of text
         // Go back over any space/tab/CR
         while ( backCursor.index() > 0 || backCursor.parag()->prev() )
@@ -280,6 +275,16 @@ void KWAutoFormat::doUpperCase( QTextCursor *textEditCursor, KWTextParag *parag,
         // We are now at the first non-space char before the word
         if ( !beginningOfSentence )
             beginningOfSentence = isMark( backCursor.parag()->at( backCursor.index() )->c );
+
+        // Now look for exceptions
+        if ( beginningOfSentence )
+        {
+            QChar punct = backCursor.parag()->at( backCursor.index() )->c;
+            QString text = getLastWord( static_cast<KWTextParag*>( backCursor.parag() ), backCursor.index() )
+                           + punct;
+            // text has the word at the end of the 'sentence', including the termination. Example: "Mr."
+            beginningOfSentence = (upperCaseExceptions.findIndex(text)==-1); // Ok if we can't find it
+        }
 
         if ( beginningOfSentence )
         {

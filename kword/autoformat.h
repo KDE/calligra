@@ -150,7 +150,6 @@ private:
     //bool m_enabled;
     bool m_configRead;
     bool m_convertUpperCase, m_convertUpperUpper;
-    bool m_dontUpper;
     TypographicQuotes m_typographicQuotes;
 
     typedef QMap< QString, KWAutoFormatEntry > KWAutoFormatEntryMap;
