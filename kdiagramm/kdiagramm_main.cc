@@ -37,7 +37,7 @@ typedef OPAutoLoader<KDiagrammFactory> KDiagrammAutoLoader;
 KDiagrammApp::KDiagrammApp( int &argc, char** argv ) : 
   KoApplication( argc, argv, "kdiagramm" )
 {
-  m_pShell = 0L;
+  //  m_pShell = 0L;
 }
 
 KDiagrammApp::~KDiagrammApp()

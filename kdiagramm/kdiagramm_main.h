@@ -34,8 +34,11 @@ public:
   KDiagrammApp( int &argc, char** argv );
   ~KDiagrammApp();
   
+  class KoMainWindow* createNewShell() {return new KDiagrammShell;};
+  /*
 protected:
   KDiagrammShell *m_pShell;
+  */
 };
 
 #endif
