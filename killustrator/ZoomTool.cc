@@ -125,10 +125,13 @@ void ZoomTool::processButtonReleaseEvent (QMouseEvent* e)
          zoomOut (canvas);
    }
 }
-
+#include <kdebug.h>
 void ZoomTool::zoomIn(Canvas* cnv)
 {
    float z = cnv->getZoomFactor();
+   float val=KILLU_ZOOM_MAX;
+   if(z == val)
+       return;
    z *= 1.25;
    if(z > KILLU_ZOOM_MAX)
       z = KILLU_ZOOM_MAX;
@@ -138,6 +141,11 @@ void ZoomTool::zoomIn(Canvas* cnv)
 void ZoomTool::zoomOut (Canvas* cnv)
 {
    float z = cnv->getZoomFactor();
+   //laurent
+   //we can't compare directly z and KILLU_ZOOM_MIN
+   float val=KILLU_ZOOM_MIN;
+   if(z == val)
+       return;
    z *= 0.8;
    if(z < KILLU_ZOOM_MIN)
       z = KILLU_ZOOM_MIN;
