@@ -543,6 +543,8 @@ bool KWTextFrameSet::isPTYInFrame( unsigned int _frame, unsigned int _ypos )
 /*================================================================*/
 void KWTextFrameSet::save( QDomElement &parentElem )
 {
+    unzoom();
+
     QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
     parentElem.appendChild( framesetElem );
 
@@ -573,6 +575,8 @@ void KWTextFrameSet::save( QDomElement &parentElem )
         start->save( framesetElem );
         start = static_cast<KWTextParag *>( start->next() );
     }
+
+    zoom();
 }
 
 /*================================================================*/
@@ -604,6 +608,8 @@ void KWTextFrameSet::load( QDomElement &attributes )
     text->setLastParag( lastParagraph );
     m_lastFormatted = text->firstParag();
     //kdDebug(32001) << "KWTextFrameSet::load done" << endl;
+
+    zoom();
 }
 
 void KWTextFrameSet::zoom()
@@ -612,14 +618,23 @@ void KWTextFrameSet::zoom()
         unzoom();
     QTextFormatCollection * coll = text->formatCollection();
     double factor = kWordDocument()->zoomedResolutionY();
-    kdDebug() << "KWTextFrameSet::zoom " << factor << endl;
+    //kdDebug() << "KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
     QDictIterator<QTextFormat> it( coll->dict() );
     for ( ; it.current() ; ++it ) {
         QTextFormat * format = it.current();
         m_origFontSizes.insert( format, new int( format->font().pointSize() ) );
-        kdDebug() << "KWTextFrameSet::zooming format " << format->key() << " to " << static_cast<float>( format->font().pointSize() ) * factor << endl;
+        //kdDebug() << "KWTextFrameSet::zooming format " << format->key() << " to " << static_cast<float>( format->font().pointSize() ) * factor << endl;
         format->setPointSize( static_cast<int>( static_cast<float>( format->font().pointSize() ) * factor ) );
     }
+
+    // Mark all paragraphs as changed !
+    for ( QTextParag * s = text->firstParag() ; s ; s = s->next() )
+    {
+        s->setChanged( TRUE );
+        s->invalidate( 0 );
+    }
+    m_lastFormatted = text->firstParag();
+    // emit repaintChanged(); // we shall see about that - we do updateAllViews anyway
 }
 
 void KWTextFrameSet::unzoom()
@@ -634,7 +649,7 @@ void KWTextFrameSet::unzoom()
             kdDebug() << "Can't unzoom: " << it.current()->key() << endl;
         else
         {
-            kdDebug() << "KWTextFrameSet::unzoom format=" << format->key() << " oldSize=" << *oldSize << endl;
+            //kdDebug() << "KWTextFrameSet::unzoom format=" << format->key() << " oldSize=" << *oldSize << endl;
             format->setPointSize( *oldSize );
         }
     }
@@ -873,7 +888,7 @@ void KWTextFrameSet::formatMore()
     }
     m_lastFormatted = lastFormatted;
 
-    if ( lastFormatted && bottom + lastFormatted->rect().height() > m_availableHeight )
+    if ( lastFormatted && bottom != -1 && bottom + lastFormatted->rect().height() > m_availableHeight )
     {
         kdDebug(32002) << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " next parag's height=" << lastFormatted->rect().height() << " m_availableHeight=" << m_availableHeight << endl;
         // #### KWFormatContext::makeLineLayout had much code about this,
@@ -1141,7 +1156,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
     undoRedoInfo.text = str;
     readFormats( c1, c2, 0, undoRedoInfo.text );
 
-    QTextFormat * newFormat = const_cast<QTextFormat *>(& newStyle->format());
+    QTextFormat * newFormat = textdoc->formatCollection()->format( const_cast<QTextFormat *>( & newStyle->format() ) );
 
     cmd = new QTextFormatCommand( textdoc, firstParag->paragId(), 0, lastParag->paragId(), c2.index(),
                                   undoRedoInfo.text.rawData(), newFormat,

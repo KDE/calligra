@@ -799,8 +799,9 @@ void KWTextParag::copyParagData( QTextParag *_parag )
         else if ( style != newStyle ) // if same style, keep paragraph-specific changes as usual
         {
             setParagLayout( newStyle->paragLayout() );
-            setFormat( &newStyle->format() );
-            string()->setFormat( 0, &newStyle->format(), true ); // prepare format for text insertion
+            QTextFormat * format = textdoc->formatCollection()->format( &newStyle->format() );
+            setFormat( format );
+            string()->setFormat( 0, format, true ); // prepare format for text insertion
             styleApplied = true;
         }
     }
@@ -1046,7 +1047,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
             int len = formatElem.attribute( "len" ).toInt();
 
             //kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
-            setFormat( index, len, &f );
+            setFormat( index, len, document()->formatCollection()->format( &f ) );
         }
     }
 }

@@ -792,47 +792,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_pageHeaderFooter.mmFooterBodySpacing = POINT_TO_MM( 10 );
 
 #if 0
-    defaultParagLayout = new KWParagLayout( this );
-    defaultParagLayout->setName( "Standard" );
-    defaultParagLayout->setCounterType( KWParagLayout::CT_NONE );
-    defaultParagLayout->setCounterDepth( 0 );
-
-    KWFormat f( this );
-    f.setUserFont( findUserFont( "helvetica" ) );
-    f.setWeight( 75 );
-    f.setPTFontSize( 24 );
-    KWParagLayout *lay = new KWParagLayout( this );
-    lay->setName( "Head 1" );
-    lay->setFollowingParagLayout( "Standard" );
-    lay->setCounterType( KWParagLayout::CT_NUM );
-    lay->setCounterDepth( 0 );
-    lay->setStartCounter( 1 );
-    lay->setCounterRightText( "." );
-    lay->setNumberingType( KWParagLayout::NT_CHAPTER );
-    lay->setFormat( f );
-
-    f.setPTFontSize( 16 );
-    lay = new KWParagLayout( this );
-    lay->setName( "Head 2" );
-    lay->setFollowingParagLayout( "Standard" );
-    lay->setCounterType( KWParagLayout::CT_NUM );
-    lay->setCounterDepth( 1 );
-    lay->setStartCounter( 1 );
-    lay->setCounterRightText( "." );
-    lay->setNumberingType( KWParagLayout::NT_CHAPTER );
-    lay->setFormat( f );
-
-    f.setPTFontSize( 12 );
-    lay = new KWParagLayout( this );
-    lay->setName( "Head 3" );
-    lay->setFollowingParagLayout( "Standard" );
-    lay->setCounterType( KWParagLayout::CT_NUM );
-    lay->setCounterDepth( 2 );
-    lay->setStartCounter( 1 );
-    lay->setCounterRightText( "." );
-    lay->setNumberingType( KWParagLayout::NT_CHAPTER );
-    lay->setFormat( f );
-
     if ( TRUE /*no variable formats were loaded*/) {
         varFormats.clear();
         varFormats.insert( VT_DATE_FIX, new KWVariableDateFormat() );

@@ -88,7 +88,7 @@ void KWContents::createContents()
     //parag->setInfo( KWParag::PI_CONTENTS );
     KWStyle * style = findOrCreateTOCStyle( -1 ); // "Contents Title"
     parag->setParagLayout( style->paragLayout() );
-    parag->setFormat( 0, parag->string()->length(), &style->format() );
+    parag->setFormat( 0, parag->string()->length(), textdoc->formatCollection()->format( &style->format() ) );
 
     // Insert table and THEN set page numbers
     // Otherwise the page numbers are incorrect
@@ -138,7 +138,7 @@ void KWContents::createContents()
         int depth = p->counter()->depth();    // we checked for p->counter() before putting in the map
         KWStyle * tocStyle = findOrCreateTOCStyle( depth );
         parag->setParagLayout( tocStyle->paragLayout() );
-        parag->setFormat( 0, parag->string()->length(), &tocStyle->format() );
+        parag->setFormat( 0, parag->string()->length(), textdoc->formatCollection()->format( &tocStyle->format() ) );
     }
 
     // Is that "jump to next page" ? We need that then.

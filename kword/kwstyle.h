@@ -44,6 +44,8 @@ public:
     const KWParagLayout & paragLayout() const { return m_paragLayout; }
     KWParagLayout & paragLayout()  { return m_paragLayout; }
 
+    // Return a format. Don't forget to use the format collection
+    // of your QTextDocument from the result of that method.
     const QTextFormat & format() const { return m_format; }
     QTextFormat & format() { return m_format; }
 
