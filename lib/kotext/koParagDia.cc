@@ -897,7 +897,7 @@ KoParagLayout::spacingType KoIndentSpacingWidget::lineSpacingType() const
 
 double KoIndentSpacingWidget::lineSpacing() const
 {
-    return (lineSpacingType() ==KoParagLayout::LS_MULTIPLE) ? QMAX(0, eSpacing->value()): QMAX(0,KoUnit::ptFromUnit( eSpacing->value(), m_unit ));
+    return (lineSpacingType() ==KoParagLayout::LS_MULTIPLE) ? QMAX(1, eSpacing->value()): QMAX(0,KoUnit::ptFromUnit( eSpacing->value(), m_unit ));
 }
 
 int KoIndentSpacingWidget::pageBreaking() const
@@ -968,7 +968,7 @@ void KoIndentSpacingWidget::display( const KoParagLayout & lay )
     eSpacing->setEnabled( (_type != KoParagLayout::LS_SINGLE &&
                               _type != KoParagLayout::LS_ONEANDHALF &&
                               _type != KoParagLayout::LS_DOUBLE));
-    eSpacing->setValue( (_type == KoParagLayout::LS_MULTIPLE) ? _spacing : KoUnit::ptToUnit( _spacing, m_unit ) );
+    eSpacing->setValue( (_type == KoParagLayout::LS_MULTIPLE) ? QMAX( 1, _spacing) : KoUnit::ptToUnit( _spacing, m_unit ) );
 
     prev1->setSpacing( _spacing );
 
