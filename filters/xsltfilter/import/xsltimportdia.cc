@@ -238,8 +238,7 @@ void XSLTImportDia::okSlot()
 	tempFile->open(IO_WriteOnly);
 
 	/* Generate the data in the temp file */
-	XSLTProc* xsltproc = new XSLTProc(_fileIn.latin1(), temp.name(),
-							 stylesheet.latin1());
+	XSLTProc* xsltproc = new XSLTProc(_fileIn, temp.name(), stylesheet);
 	xsltproc->parse();
 
 	/* Save the temp file in the store */

@@ -27,6 +27,8 @@
  */
 #include "xsltproc.h"
 
+#include <qfile.h>
+
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif
@@ -71,23 +73,25 @@ xmlParserInputPtr xmlNoNetExternalEntityLoader(const char *URL,
 	                                       const char *ID,
 					       xmlParserCtxtPtr ctxt);
 
+#if 0
 XSLTProc::XSLTProc(const char* fileIn, const char* fileOut, const char* xsltsheet)
 {
-	_fileIn = strdup(fileIn);
-	_fileOut = strdup(fileOut);
-	_stylesheet = strdup(xsltsheet);
+	_fileIn = fileIn;
+	_fileOut = fileOut;
+	_stylesheet = xsltsheet;
 	nbparams = 0;
 	debug = 0;
 	repeat = 0;
 	novalid = 0;
 	output = NULL;
 }
+#endif
 
 XSLTProc::XSLTProc(QString fileIn, QString fileOut, QString xsltsheet)
 {
-	_fileIn = fileIn.latin1();
-	_fileOut = fileOut.latin1();
-	_stylesheet = xsltsheet.latin1();
+	_fileIn = QFile::encodeName(fileIn);
+	_fileOut = QFile::encodeName(fileOut);
+	_stylesheet = QFile::encodeName(xsltsheet);
 	nbparams = 0;
 	debug = 0;
 	repeat = 0;
@@ -250,7 +254,7 @@ int XSLTProc::parse()
    	style = xmlParseFile((const char *) _stylesheet);
   	if (style == NULL)
 	{
-		fprintf(stderr,  "cannot parse %s\n", _stylesheet);
+		fprintf(stderr,  "cannot parse %s\n", _stylesheet.data());
 		cur = NULL;
 	}
 	else
@@ -290,7 +294,7 @@ int XSLTProc::parse()
 		doc = NULL;
         doc = xmlParseFile(_fileIn);
         if (doc == NULL)
-			fprintf(stderr, "unable to parse %s\n", _fileIn);
+			fprintf(stderr, "unable to parse %s\n", _fileIn.data());
 		else
 			xsltProcess(doc, cur, _fileIn);
     }

@@ -34,9 +34,9 @@
 
 class XSLTProc
 {
-	const char* _fileIn;
-	const char* _fileOut;
-	const char* _stylesheet;
+	QCString    _fileIn;
+	QCString    _fileOut;
+	QCString    _stylesheet;
 
 	const char *params[NB_PARAMETER_MAX + 1];
 	int nbparams;
