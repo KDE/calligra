@@ -231,7 +231,6 @@ void KWDocStructRootItem::setOpen( bool o )
 /*================================================================*/
 void KWDocStructRootItem::setupArrangement()
 {
-    //#if 0
     if ( childCount() > 0 )
         {
             QListViewItem *child = firstChild(), *delChild;
@@ -249,14 +248,11 @@ void KWDocStructRootItem::setupArrangement()
 
     KWFrameSet *frameset = 0L;
     KWTextParag *parag = 0L;
-    //    KWParagLayout *pLayout = 0L;
-
     QTextDocument * textdoc=0L;
 
     QListViewItem *item = 0L;
     QString _name;
 
-    //int j = 0;
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
         {
             frameset = doc->getFrameSet( i );
@@ -270,7 +266,7 @@ void KWDocStructRootItem::setupArrangement()
                     parag = static_cast<KWTextParag *>(textdoc->firstParag());
                     while ( parag )
                         {
-                            if ( (parag->counter()->style() != /*Style::*/Counter::NUM_NONE) &&  (parag->counter()->numbering() == /*Numbering::*/Counter::NUM_CHAPTER) )
+                            if ( (parag->counter()->style() != Counter:: STYLE_NONE) &&  (parag->counter()->numbering() == Counter::NUM_CHAPTER) )
                                 {
                                     int _depth = parag->counter()->depth();
                                     if ( _depth == 0 )
@@ -296,7 +292,7 @@ void KWDocStructRootItem::setupArrangement()
 
     if ( childCount() == 0 )
         ( void )new QListViewItem( this, i18n( "Empty" ) );
-    //#endif
+
 }
 
 /*================================================================*/
