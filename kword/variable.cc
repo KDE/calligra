@@ -78,14 +78,16 @@ void KWVariable::resize()
 {
     if ( m_deleted )
         return;
-    QTextFormat fmt = *format(); // make an out-of-collection copy
-    QTextString txt;
-    txt.insert( 0, text(), &fmt );
+    //QTextFormat fmt = *format(); // make an out-of-collection copy
+    //QTextString txt;
+    //txt.insert( 0, text(), &fmt );
+    QTextFormat  * fmt = format();
+    QString txt = text();
     width = 0;
     for ( int i = 0 ; i < txt.length() ; ++i )
-        width += txt.width( i );
-    height = fmt.height();
-    //kdDebug() << "KWVariable::resize width=" << width << endl;
+        width += fmt->width( txt, i );
+    height = fmt->height();
+    kdDebug() << "KWVariable::resize text=" << txt << " width=" << width << endl;
 }
 
 void KWVariable::draw( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected )
