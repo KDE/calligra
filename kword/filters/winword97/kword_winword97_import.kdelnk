@@ -6,6 +6,7 @@ Name[de]=KWord Winword97-Filter
 Name[fr]=Filtre Winword97 vers KWord
 Exec=kword_winword97.bin --server
 Comment=Werner's KWord Winword97 Filter
+Comment[cs]=Wernerùv Winword97 filtr pro KWord
 Comment[da]=Werner's KWord Winword97 filter
 Comment[de]=Werners KWord Winword97-Filter
 Comment[fr]=Filtre Winword97 vers KWord de Werner

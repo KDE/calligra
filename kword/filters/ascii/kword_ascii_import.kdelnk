@@ -6,6 +6,7 @@ Name[es]=Filtro Ascii KWord
 Name[is]=ASCII sía fyrir ritvinnslu
 Exec=kword_ascii.bin --server
 Comment=Reggie's KWord Ascii Filter
+Comment[cs]=Reggieho ASCII filter pro KWord
 Comment[da]=Reggie's KWord Ascii filter
 Comment[de]=Reggies KWord ASCII-Filter
 Comment[es]=Filtro Ascii KWord de Reggie
