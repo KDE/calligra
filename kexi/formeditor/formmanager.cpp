@@ -59,6 +59,8 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 	m_popup->insertItem(i18n("Cut"), this, SLOT(cutWidget()));
 	m_popup->insertItem(i18n("Paste"), this, SLOT(pasteWidget()));
 	m_popup->insertItem(i18n("Remove Item"), this, SLOT(deleteWidget()));
+	m_treeview = 0;
+	m_buffer = 0;
 }
 
 void 
@@ -262,10 +264,15 @@ void
 FormManager::initForm(Form *form)
 {
 	m_forms.append(form);
-	m_treeview->setForm(form);
+
+	if(m_treeview)
+		m_treeview->setForm(form);
+
 	m_active = form;
 	m_count++;
-	m_buffer->setWidget(form->toplevelContainer()->widget());
+
+	if(m_buffer)
+		m_buffer->setWidget(form->toplevelContainer()->widget());
 
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget*)));
 	connect(form, SIGNAL(addedSelectedWidget(QWidget*)), m_buffer, SLOT(addWidget(QWidget*)));
