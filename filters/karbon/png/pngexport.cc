@@ -89,8 +89,9 @@ PngExport::convert( const QCString& from, const QCString& to )
 		itr.current()->draw( &p, &rect );
 
 	QImage image = img.swapRGB();
+	QImage mirrored = image.mirror( false, true );
 	// save png
-	image.save( m_chain->outputFile(), "PNG" );
+	mirrored.save( m_chain->outputFile(), "PNG" );
 
 	return KoFilter::OK;
 }
