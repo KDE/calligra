@@ -140,6 +140,8 @@ protected:
     KoPictureCollection *pictureCollection() const;
     KPGradientCollection *gradientCollection() const;
 
+    QString saveOasisGradientStyle( KoGenStyles& mainStyles );
+
 private:
     BackType backType;
     BackView backView;

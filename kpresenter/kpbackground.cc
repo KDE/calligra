@@ -210,9 +210,19 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
     switch ( backType )
     {
     case BT_COLOR:
-        stylepageauto.addProperty( "draw:fill","solid" );
-        stylepageauto.addProperty( "draw:fill-color", backColor1.name() );
+    {
+        if ( bcType == BCT_PLAIN )
+        {
+            stylepageauto.addProperty( "draw:fill","solid" );
+            stylepageauto.addProperty( "draw:fill-color", backColor1.name() );
+        }
+        else
+        {
+            stylepageauto.addProperty( "draw:fill","gradient" );
+            stylepageauto.addProperty( "draw:fill-gradient-name", saveOasisGradientStyle( mainStyles ) );
+        }
         break;
+    }
     case BT_CLIPART:
     case BT_PICTURE:
         //todo
@@ -220,6 +230,59 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
     }
 
     return mainStyles.lookup( stylepageauto, "dp" );
+}
+
+QString KPBackGround::saveOasisGradientStyle( KoGenStyles& mainStyles )
+{
+    KoGenStyle gradientStyle( KPresenterDoc::STYLE_GRADIENT /*no family name*/);
+    gradientStyle.addAttribute( "draw:start-color", backColor1.name() );
+    gradientStyle.addAttribute( "draw:end-color", backColor2.name() );
+    if ( unbalanced )
+    {
+    }
+    else
+    {
+    }
+    switch( bcType )
+    {
+    case BCT_PLAIN:
+        gradientStyle.addAttribute( "draw:angle", 0 );
+        gradientStyle.addAttribute( "draw:style", "linear" );
+        break;
+    case BCT_GHORZ:
+        gradientStyle.addAttribute( "draw:angle", 0 );
+        gradientStyle.addAttribute( "draw:style", "linear" );
+        break;
+    case BCT_GVERT:
+        gradientStyle.addAttribute( "draw:angle", 900 );
+        gradientStyle.addAttribute( "draw:style", "linear" );
+        break;
+    case BCT_GDIAGONAL1:
+        gradientStyle.addAttribute( "draw:angle", 450 );
+        gradientStyle.addAttribute( "draw:style", "linear" );
+        break;
+    case BCT_GDIAGONAL2:
+        gradientStyle.addAttribute( "draw:angle", 135 );
+        gradientStyle.addAttribute( "draw:style", "linear" );
+        break;
+    case BCT_GCIRCLE:
+        gradientStyle.addAttribute( "draw:angle", 0 );
+        gradientStyle.addAttribute( "draw:style", "radial" );
+        break;
+    case BCT_GRECT:
+        gradientStyle.addAttribute( "draw:angle", 0 );
+        gradientStyle.addAttribute( "draw:style", "square" );
+        break;
+    case BCT_GPIPECROSS:
+        gradientStyle.addAttribute( "draw:angle", 0 );
+        gradientStyle.addAttribute( "draw:style", "axial" );
+        break;
+    case BCT_GPYRAMID: //todo fixme ! it doesn't work !
+        gradientStyle.addAttribute( "draw:angle", 0 );
+        gradientStyle.addAttribute( "draw:style", 0 );
+        break;
+    }
+    return mainStyles.lookup( gradientStyle, "gradient" );
 }
 
 void KPBackGround::loadOasis(KoOasisContext & context )

@@ -1294,12 +1294,9 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
     case FT_GRADIENT:
         styleobjectauto.addProperty( "draw:fill","gradient" );
         styleobjectauto.addProperty( "draw:fill-gradient-name", saveOasisGradientStyle( mainStyles ) );
-        //todo
         break;
     }
-
     return mainStyles.lookup( styleobjectauto, "gr" );
-
 }
 
 QString KP2DObject::saveOasisHatchStyle( KoGenStyles& mainStyles )
