@@ -44,16 +44,12 @@ class KexiDBForm : public QWidget, public KFormDesigner::FormWidget
 
 		virtual void paintEvent(QPaintEvent *ev);
 
-		void drawRect(const QRect& r, int type);
-		void initRect();
-		void clearRect();
-		void highlightWidgets(QWidget *from, QWidget *to/*, const QPoint &p*/);
+		virtual void drawRect(const QRect& r, int type);
+		virtual void initBuffer();
+		virtual void clearForm();
+		virtual void highlightWidgets(QWidget *from, QWidget *to/*, const QPoint &p*/);
 
 		virtual QSize sizeHint() const;
-
-//TODO: COMPILE fix, Cedric: what's up with these methods?
-		virtual void initBuffer() {};
-		virtual void clearForm() {};
 
 	private:
 		/*QString m_ds;

@@ -87,7 +87,7 @@ KexiDBForm::drawRect(const QRect& r, int type)
 }
 
 void
-KexiDBForm::initRect()
+KexiDBForm::initBuffer()
 {
 	repaintAll(this);
 	buffer.resize( width(), height() );
@@ -96,7 +96,7 @@ KexiDBForm::initRect()
 }
 
 void
-KexiDBForm::clearRect()
+KexiDBForm::clearForm()
 {
 	QPainter p;
 	p.begin(this, true);
