@@ -476,17 +476,10 @@ void TabBar::mousePressEvent( QMouseEvent* _ev )
 
     d->layoutTabs();
 
-    int old_active = d->activeTab;
-    for( unsigned i = 0; i < d->tabRects.count(); i++ )
+    int tab = d->tabAt( _ev->pos() ) + 1;
+    if( ( tab > 0 ) && ( tab != d->activeTab ) )
     {
-      QRect rect = d->tabRects[ i ];
-      if( rect.isNull() ) continue;
-      if( rect.contains( _ev->pos() ) )
-        d->activeTab = i+1;
-    }
-
-    if ( d->activeTab != old_active )
-    {
+        d->activeTab = tab;
         update();
         emit tabChanged( d->visibleTabs[ d->activeTab-1] );
     }
