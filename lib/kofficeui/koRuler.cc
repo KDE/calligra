@@ -65,6 +65,7 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
     currTab = -1;
 
     tabList.setAutoDelete( FALSE );
+    removeTab=false;
     frameStart = -1;
 
     allowUnits = TRUE;
@@ -402,6 +403,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 	_tab->inchPos = cPOINT_TO_INCH( _tab->ptPos );
 
 	tabList.append( _tab );
+	removeTab=true;
 	emit tabListChanged( &tabList );
 	repaint( FALSE );
     }
@@ -729,10 +731,11 @@ void KoRuler::resizeEvent( QResizeEvent *e )
 /*================================================================*/
 void KoRuler::mouseDoubleClickEvent( QMouseEvent* )
 {
-    if ( ( tabChooser && ( flags & F_TABS ) && tabChooser->getCurrTabType() != 0 ) ) {
+    if ( tabChooser && ( flags & F_TABS ) && tabChooser->getCurrTabType() != 0 && removeTab ) {
 	tabList.remove( tabList.count() - 1 );
 	emit tabListChanged( &tabList );
 	repaint( FALSE );
+	removeTab=false;
     }
 
     emit openPageLayoutDia();

@@ -158,6 +158,7 @@ protected:
     QPixmap pmFirst, pmLeft;
     KoTabChooser *tabChooser;
     QList<KoTabulator> tabList;
+    bool removeTab;     // Do we have to remove a tab in the DC Event?
     int currTab;
     int frameStart;
     bool allowUnits;
