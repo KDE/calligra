@@ -578,6 +578,6 @@ void kchartEngine::drawPie()
   val[0]=50;
   
   
-  pie_gif( imagewidth,imageheight,p,params,num_points,lbl2[num_points][10],val);   
+  pie_gif( imagewidth,imageheight,p,params,num_points,(char**)lbl2[num_points][10],val);   
 }
 
