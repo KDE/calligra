@@ -29,6 +29,7 @@
 #include <kapp.h>
 #include <klocale.h>
 #include "version.h"
+#include <math.h>
 
 static float seg_length (const Coord& p1, const Coord& p2) {
   float dx = p2.x () - p1.x ();
