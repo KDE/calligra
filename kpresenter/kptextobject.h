@@ -106,7 +106,7 @@ public:
     void applyStyleChange( StyleChangeDefMap changed );
 
     void removeHighlight();
-    void highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas *canvas, bool repaint );
+    void highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas *canvas, bool repaint, KDialogBase* dialog = 0 );
 
     KCommand * pasteKPresenter( KoTextCursor * cursor, const QCString & data, bool removeSelected );
 

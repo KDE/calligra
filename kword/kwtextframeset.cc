@@ -2641,7 +2641,7 @@ QString KWTextFrameSet::selectedText() const
     return m_textobj->selectedText();
 }
 
-void KWTextFrameSet::highlightPortion( KoTextParag * parag, int index, int length, KWCanvas * canvas, bool repaint )
+void KWTextFrameSet::highlightPortion( KoTextParag * parag, int index, int length, KWCanvas * canvas, bool repaint, KDialogBase* dialog )
 {
     Q_ASSERT( isVisible() );
     Q_ASSERT( m_textobj->isVisible() );
@@ -2656,6 +2656,14 @@ void KWTextFrameSet::highlightPortion( KoTextParag * parag, int index, int lengt
                                (expose.top()+expose.bottom()) / 2,
                                (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
                                (expose.bottom()-expose.top()) / 2);
+#if KDE_IS_VERSION(3,1,90)
+        if ( dialog ) {
+            //kdDebug() << k_funcinfo << " dialog=" << dialog << " avoiding rect=" << expose << endl;
+            QRect globalRect( expose );
+            globalRect.moveTopLeft( canvas->mapToGlobal( globalRect.topLeft() ) );
+            KDialog::avoidArea( dialog, globalRect );
+        }
+#endif
     }
 }
 

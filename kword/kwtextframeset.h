@@ -183,7 +183,7 @@ public:
     void findPosition( const KoPoint &dPoint, KoTextParag * & parag, int & index );
 
     /** Highlighting support (for search/replace, spellchecking etc.) */
-    void highlightPortion( KoTextParag * parag, int index, int length, KWCanvas * canvas, bool repaint = true );
+    void highlightPortion( KoTextParag * parag, int index, int length, KWCanvas * canvas, bool repaint = true, KDialogBase* dialog = 0 );
     void removeHighlight( bool repaint = true );
 
     virtual void addTextFrameSets( QPtrList<KWTextFrameSet> &lst, bool onlyReadWrite=false );

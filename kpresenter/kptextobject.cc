@@ -32,6 +32,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kdeversion.h>
 
 #include "kpresenter_view.h"
 #include "kpresenter_doc.h"
@@ -1359,7 +1360,7 @@ void KPTextObject::removeHighlight ()
     m_textobj->removeHighlight( true /*repaint*/ );
 }
 
-void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas* canvas, bool repaint )
+void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas* canvas, bool repaint, KDialogBase* dialog )
 {
     m_textobj->highlightPortion( parag, index, length, repaint );
     if ( repaint )
@@ -1392,6 +1393,13 @@ void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length,
                                (expose.top()+expose.bottom()) / 2,
                                (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
                                (expose.bottom()-expose.top()) / 2);
+#if KDE_IS_VERSION(3,1,90)
+        if ( dialog ) {
+            QRect globalRect( expose );
+            globalRect.moveTopLeft( canvas->mapToGlobal( globalRect.topLeft() ) );
+            KDialog::avoidArea( dialog, globalRect );
+        }
+#endif
     }
 }
 
