@@ -404,18 +404,25 @@ void KWTextParag::setTabList( const KoTabulatorList &tabList )
 {
     // TODO support for centered tabs, right-aligned tabs etc.
     m_layout.setTabList( tabList );
-    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
-    KoTabulatorList::ConstIterator it = tabList.begin();
-    QValueList<int> sortedTabs;
-    for ( int i = 0; it != tabList.end() ; ++it, ++i )
-        sortedTabs.append( (int)doc->zoomItX( (*it).ptPos ) );
-    qHeapSort( sortedTabs );
-    int * tabs = new int( tabList.count() ); // will be deleted by ~QTextParag
-    QValueList<int>::Iterator it2 = sortedTabs.begin();
-    for ( int i = 0; it2 != sortedTabs.end() ; ++it2, ++i )
-        tabs[i] = *it2;
-    delete [] tabArray();
-    setTabArray( tabs );
+    if ( !tabList.isEmpty() )
+    {
+        KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
+        KoTabulatorList::ConstIterator it = tabList.begin();
+        QValueList<int> sortedTabs;
+        for ( int i = 0; it != tabList.end() ; ++it, ++i )
+            sortedTabs.append( (int)doc->zoomItX( (*it).ptPos ) );
+        qHeapSort( sortedTabs );
+        int * tabs = new int( tabList.count() ); // will be deleted by ~QTextParag
+        QValueList<int>::Iterator it2 = sortedTabs.begin();
+        for ( int i = 0; it2 != sortedTabs.end() ; ++it2, ++i )
+            tabs[i] = *it2;
+        delete [] tabArray();
+        setTabArray( tabs );
+    } else
+    {
+        delete [] tabArray();
+        setTabArray( 0 );
+    }
     invalidate( 0 );
 }
 
@@ -658,6 +665,7 @@ void KWTextParag::load( QDomElement &attributes )
     QDomElement element = attributes.namedItem( "TEXT" ).toElement();
     if ( !element.isNull() )
     {
+        //kdDebug() << "KWTextParag::load '" << element.text() << "'" << endl;
         append( element.text() );
         // Apply default format - this should be automatic !!
         setFormat( 0, string()->length(), paragFormat(), TRUE );
