@@ -1063,6 +1063,11 @@ public:
 
 						// convert twip measurements that aren't in 72dpi
 						int defaultDpi = wmf.defaultDpi ();
+						if (defaultDpi <= 0)
+						{
+							kdWarning (30509) << "Invalid defaultDPI: " << defaultDpi << endl;
+							defaultDpi = 1440;
+						}
 						imageActualWidth = width * 1440 / defaultDpi;
 						imageActualHeight = height * 1440 / defaultDpi;
 
