@@ -257,7 +257,7 @@ KexiInputTableEdit::value()
 
 				double lastValue = 0;
 				QString lastOp = "";
-				for(int i=0; i < values.count(); i++)
+				for(int i=0; i < (int)values.count(); i++)
 				{
 					double next;
 

@@ -73,7 +73,7 @@ void KexiDataSourceComboBox::fillList(KexiProject *proj,
 
 void KexiDataSourceComboBox::selectGlobalIdentifier(const QString& gid) {
 //better with iterator and find
-	for ( int i=0;i<m_list.count();i++) {
+	for ( int i=0;i<int(m_list.count());i++) {
 		if ((*m_list.at(i)).globalIdentifier==gid)
 		{
 			setCurrentItem(i);

@@ -42,7 +42,7 @@ class KMultiTabBarTabPrivate;
 class KMultiTabBarButtonPrivate;
 class KMultiTabBarInternal;
 
-class KMultiTabBar: public QWidget
+class KEXICORE_EXPORT KMultiTabBar: public QWidget
 {
 	Q_OBJECT
 public:
@@ -75,7 +75,7 @@ private:
 	KMultiTabBarPrivate *d;
 };
 
-class KMultiTabBarButton: public QPushButton
+class KEXICORE_EXPORT KMultiTabBarButton: public QPushButton
 {
 	Q_OBJECT
 public:
@@ -104,7 +104,7 @@ protected slots:
 };
 
 
-class KMultiTabBarTab: public KMultiTabBarButton
+class KEXICORE_EXPORT KMultiTabBarTab: public KMultiTabBarButton
 {
 	Q_OBJECT
 public:

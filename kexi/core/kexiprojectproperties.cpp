@@ -68,6 +68,8 @@ KexiProjectProperties::encoding()
 		case 3:
 			return KexiDB::Ascii;
 	}
+	qFatal("KexiProjectProperties::encoding()");
+	return KexiDB::Latin1;
 }
 
 void

@@ -105,11 +105,13 @@ MySqlRecord::writeOut(KexiDBUpdateRecord * ur)
 				kdDebug()<<"wantNotification == true"<<endl;
 				uint autoID=m_db->lastAuto();
 				if (autoID!=0) {
-					for (int i=0;i<fieldCount();i++) {
+					for (int i=0;i<int(fieldCount());i++) {
 						if (fieldInfo(i)->auto_increment()) {
 							kdDebug()<<"Auto inc field found"<<endl;
 							ur->setValue(fieldInfo(i)->name(),QVariant(autoID));
+#ifdef __GNUC__ 
 #warning "FIXME: Here should be a query of the record in question, not just an id update"
+#endif
 							emit recordInserted(ur);
 							break;
 						}

@@ -287,13 +287,13 @@ void KexiProject::loadReferences(QDomElement &fileRefs)
 	QDomNodeList reflist = fileRefs.childNodes();
 	kdDebug() << "KexiProject::loadProject(): looking up references: " << reflist.count() << endl;
 
-	for(int ci = 0; ci < reflist.count(); ci++)
+	for(int ci = 0; ci < int(reflist.count()); ci++)
 	{
 		QDomNode groups = reflist.item(ci);
 		QDomNodeList groupList = groups.childNodes();
 		QString groupName = groups.toElement().tagName();
 		kdDebug() << "KexiProject::loadProject(): looking up groups: " << groupList.count() << " for " << groupName << endl;
-		for(int gi = 0; gi < groupList.count(); gi++)
+		for(int gi = 0; gi < int(groupList.count()); gi++)
 		{
 			QDomElement item = groupList.item(gi).toElement();
 			QString name = item.attribute("name");

@@ -64,7 +64,7 @@ bool KexiFilterManager::import(unsigned long importType)
 
 	for (;it!=filters.end(); ++it) {
 		QStringList mts=(*it)->property("X-KEXI-Import").toStringList();
-		for (int i=0;i<mts.count();i++) {
+		for (int i=0;i<(int)mts.count();i++) {
 			mapping.insert(mts[i],(*it)->library());
 
 			KMimeType::Ptr mt = KMimeType::mimeType( mts[i] );

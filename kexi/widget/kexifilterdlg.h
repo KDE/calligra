@@ -27,7 +27,7 @@ class QListView;
 class QListViewItem;
 class KexiProject;
 
-class KexiFilterDlg : public QDialog
+class KEXIEXTWIDGETS_EXPORT KexiFilterDlg : public QDialog
 {
 	Q_OBJECT
 

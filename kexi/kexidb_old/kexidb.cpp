@@ -126,7 +126,7 @@ bool KexiDB::createTable(const KexiDBTable& tableDef) {
 	if (tableDef.fieldCount()<1) return false;
 	KexiDBField f=tableDef.field(0);
 	if (!createField(f,KexiDBTableStruct(),true)) return false;
-	for(int i=1;i<tableDef.fieldCount();i++)
+	for(int i=1;i<int(tableDef.fieldCount());i++)
 	{
 		f=tableDef.field(i);
 		if (!createField(f,KexiDBTableStruct(),false))

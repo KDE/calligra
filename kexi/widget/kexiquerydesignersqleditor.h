@@ -28,7 +28,7 @@ namespace KTextEditor
 	class View;
 }
 
-class KexiQueryDesignerSQLEditor : public QWidget
+class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public QWidget
 {
 	Q_OBJECT
 

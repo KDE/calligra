@@ -257,7 +257,7 @@ return;
 				KexiTableItem *item = m_tableView->itemAt(i);
 				kdDebug() << "KexiDataTable::slotUpdated(): current record:" << item->getHint().toInt() <<
 				 " " << item->isInsertItem() << endl;
-				if(item->getHint().toInt() == record)
+				if(item->getHint().toUInt() == record)
 				{
 					kdDebug() << "KexiDataTable::slotUpdated(): record match:" << endl;
 					if(!item->isInsertItem())
@@ -298,7 +298,7 @@ KexiDataTable::slotRemoved(QObject *sender, const QString &table, uint record)
 			for(int i=0; i < m_tableView->rows(); i++)
 			{
 				KexiTableItem *item = m_tableView->itemAt(i);
-				if(item->getHint().toInt() == record)
+				if(item->getHint().toUInt() == record)
 				{
 					kdDebug() << "KexiDataTable::slotRemoved(): record match" << endl;
 					m_tableView->remove(m_tableView->itemAt(i));

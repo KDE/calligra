@@ -20,7 +20,6 @@
 
 #ifndef KEXIDIALOGBASE_H
 #define KEXIDIALOGBASE_H
-#undef KEXI_NO_PRINT
 
 #include <qwidget.h>
 #include <kxmlguiclient.h>
@@ -56,10 +55,8 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget
 
 		void	setContextHelp(const QString &title, const QString &message);
 
-#ifndef KEXI_NO_PRINT
 		virtual void setupPrinter(KPrinter &printer){;}
 		virtual void print(KPrinter &printer) {; }
-#endif
 		void aboutToShow();
 		void aboutToHide();
 
