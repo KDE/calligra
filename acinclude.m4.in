@@ -1599,10 +1599,7 @@ AC_DEFUN(AC_HAVE_GL,
 AC_DEFUN(AC_PATH_PAM,
  [AC_REQUIRE_CPP()dnl
 
-  kde_save_LIBS="$LIBS"
-  LIBS="$LIBS -ldl"
-  AC_CHECK_LIB(pam_misc, main, [PAM_MISC_LIB="-lpam_misc"])
-  LIBS="$kde_save_LIBS"
+  AC_CHECK_LIB(pam_misc, main, [PAM_MISC_LIB="-lpam_misc"], [], [-lpam -ldl])
 
  AC_MSG_CHECKING(for PAM)
  AC_ARG_WITH(pam, 
@@ -1669,6 +1666,19 @@ AC_DEFUN(AC_PATH_PAM,
    AC_DEFINE_UNQUOTED(KDE_PAM_SERVICE,"$pam_service")
    AC_MSG_RESULT(["pam service name will be: " $pam_service])
  fi
+dnl test whether struct pam_message is const (Linux) or not (Sun)
+   pam_appl_h="$ac_pam_includes/security/pam_appl.h"
+   AC_MSG_CHECKING(for const pam_message)
+   AC_EGREP_HEADER([struct pam_message],
+      $pam_appl_h,
+      [ AC_EGREP_HEADER([const struct pam_message],
+                        $pam_appl_h,
+                        [AC_MSG_RESULT(["const: Linux-type PAM"]) ],
+                        [AC_MSG_RESULT(["nonconst: Sun-type PAM"])
+                        AC_DEFINE(PAM_MESSAGE_NONCONST)] 
+                        )],
+       [AC_MSG_RESULT(["not found - assume const, Linux-type PAM"])]
+       )
  fi
  
  if test "x$pam_libraries" != x && test "x$pam_libraries" != xNONE ; then
@@ -2072,4 +2082,28 @@ AC_DEFUN(KDE_CHECK_STL,
        fi
     fi
 
+])
+
+AC_DEFUN(AC_FIND_QIMGIO,
+   [AC_MSG_CHECKING([for qimgio])
+AC_CACHE_VAL(ac_cv_lib_qimgio,
+[ac_save_LIBS="$LIBS"
+LIBS="$all_libraries -lqimgio -lpng -lz -lqt $LIBJPEG -lX11 $LIBSOCKET"
+AC_TRY_LINK(dnl
+[
+void qInitImageIO ();
+],
+            [qInitImageIO();],
+            eval "ac_cv_lib_qimgio=yes",
+            eval "ac_cv_lib_qimgio=no")
+LIBS="$ac_save_LIBS"
+])dnl
+if eval "test \"`echo $ac_cv_lib_qimgio`\" = yes"; then
+  LIBQIMGIO="-lqimgio -lpng -lz $LIBJPEG"
+  AC_MSG_RESULT(yes)
+  AC_DEFINE_UNQUOTED(HAVE_QIMGIO)
+  AC_SUBST(LIBQIMGIO)
+else
+  AC_MSG_RESULT(not found)
+fi
 ])
