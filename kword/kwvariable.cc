@@ -87,7 +87,7 @@ KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVaria
 	return new KWMailMergeVariable( textdoc, QString::null, coll->format("STRING"), this, m_doc );
     case VT_FOOTNOTE:
         if ( !varFormat )
-            varFormat =  coll->format("NUMBER");
+            varFormat =  coll->format("STRING");
         return new KWFootNoteVariable( textdoc, varFormat, this, m_doc );
     default:
         return KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc, doc );
