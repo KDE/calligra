@@ -90,7 +90,10 @@ public:
     ////////////////////////////////
 
     bool load( const QDomElement& f,PasteMode pm );
+    bool loadLayout( const QDomElement& f,PasteMode pm=Normal);
     QDomElement save( QDomDocument& doc ) const;
+
+    QDomElement saveLayout( QDomDocument& doc ) const;
 
     ////////////////////////////////
     //
