@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kinstance.h>
 #include <klocale.h>
 
