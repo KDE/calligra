@@ -29,19 +29,24 @@
 #include <koFilterChain.h>
 #include <kdebug.h>
 #include <qdom.h>
+#include <qfile.h>
 #include <qapplication.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kgenericfactory.h>
 
 #include "blowfish.h"
 #include "cbc.h"
 #include "sha1.h"
+#include "keyutil.h"
 
 #include <stdlib.h>
 #include <time.h>
 
 #include <pwdprompt.h>
 
+typedef KGenericFactory<KoCryptExport, KoFilter> KoCryptExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkocryptexport, KoCryptExportFactory( "kocryptfilter" ) );
 
 #define READ_ERROR_CHECK()  do {                                           \
       if (rc < 0) {                                                        \
@@ -92,7 +97,7 @@
 
 
 
-KoCryptExport::KoCryptExport(KoFilter *, const char *) :
+KoCryptExport::KoCryptExport(KoFilter *, const char *, const QStringList&) :
                              KoFilter() {
 }
 
@@ -138,7 +143,8 @@ int rc;
         // FIXME: Report
     }
 
-    if (KeyUtil::strengthCheck(thekey, strlen(thekey)*8) < 25) {
+    // ###### FIXME: I added &cipher, is that correct? (Werner)
+    if (KeyUtil::strengthCheck(thekey, strlen(thekey)*8, &cipher) < 25) {
         // FIXME: Report, make "25" configurable
     }
 

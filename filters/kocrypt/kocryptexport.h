@@ -20,21 +20,14 @@
 #ifndef KOCRYPTEXPORT_H
 #define KOCRYPTEXPORT_H
 
-#include <qstring.h>
-#include <qcstring.h>
-#include <qfile.h>
-#include <qobject.h>
-
 #include <koFilter.h>
-#include <koStore.h>
-
 
 class KoCryptExport : public KoFilter {
 
     Q_OBJECT
 
 public:
-    KoCryptExport(KoFilter *parent, const char *name);
+    KoCryptExport(KoFilter *parent, const char *name, const QStringList&);
     virtual ~KoCryptExport() {}
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
@@ -45,7 +38,4 @@ private:
     QString pass;
 };
 
-
-
 #endif
-

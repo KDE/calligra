@@ -25,16 +25,20 @@
 
 #include <kocryptdefs.h>
 
+#include <qfile.h>
 #include <qtextstream.h>
 #include <kocryptimport.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <koFilterChain.h>
+#include <kgenericfactory.h>
 #include <qapplication.h>
 
 #include "pwdprompt.h"
 
+typedef KGenericFactory<KoCryptImport, KoFilter> KoCryptImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkocryptimport, KoCryptImportFactory( "kocryptfilter" ) );
 
 
 #define READ_ERROR_CHECK(XX)  do {                                         \
@@ -86,7 +90,7 @@
 
 
 
-KoCryptImport::KoCryptImport(KoFilter *, const char *) :
+KoCryptImport::KoCryptImport(KoFilter *, const char *, const QStringList&) :
                              KoFilter() {
 }
 

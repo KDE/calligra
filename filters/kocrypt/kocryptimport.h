@@ -20,20 +20,14 @@
 #ifndef KOCRYPTIMPORT_H
 #define KOCRYPTIMPORT_H
 
-#include <qstring.h>
-#include <qfile.h>
-#include <qobject.h>
-
 #include <koFilter.h>
-#include <koStore.h>
-
 
 class KoCryptImport : public KoFilter {
 
     Q_OBJECT
 
 public:
-    KoCryptImport(KoFilter *parent, const char *name);
+    KoCryptImport(KoFilter *parent, const char *name, const QStringList&);
     KoCryptImport();
     virtual ~KoCryptImport() {}
 
