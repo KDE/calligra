@@ -315,11 +315,11 @@ void KSpreadValue::setValue( const QDate& date )
 // get the value as date/time
 QDateTime KSpreadValue::asDateTime() const
 {
-  QDateTime dt = QDate( 1899, 12, 31 );
+  QDateTime dt = QDate( 1899, 12, 30 );
 
   double f = asFloat();
   dt = dt.addSecs( qRound( (f-(int)f) * 86400 ) );
-  if( f > 1.0 ) dt = dt.addDays( (int) f-1 );
+  dt = dt.addDays( (int) f );
   
   return dt;
 }
