@@ -15,6 +15,8 @@
   <Action name="edit_selectall"/>
   <Separator/>
   <Action name="edit_find"/>
+  <Action name="edit_findnext"/>
+  <Action name="edit_findprevious"/>
   <Action name="edit_replace"/>
   <Separator/>
   <Action name="delete_page"/>

@@ -279,11 +279,8 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
 KWView::~KWView()
 {
     clearSelection();
-    if ( m_findReplace )
-    {
-        // Abort any find/replace
-        m_findReplace->abort();
-    }
+    // Abort any find/replace
+    delete m_findReplace;
     deselectAllFrames(); // don't let resizehandles hang around
     // Delete gui while we still exist ( it needs documentDeleted() )
     delete m_gui;
@@ -463,6 +460,8 @@ void KWView::setupActions()
     actionEditCopy = KStdAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
     actionEditPaste = KStdAction::paste( this, SLOT( editPaste() ), actionCollection(), "edit_paste" );
     actionEditFind = KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
+    actionEditFindNext = KStdAction::findNext( this, SLOT( editFindNext() ), actionCollection(), "edit_findnext" );
+    actionEditFindPrevious = KStdAction::findPrev( this, SLOT( editFindPrevious() ), actionCollection(), "edit_findprevious" );
     actionEditReplace = KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
@@ -665,21 +664,13 @@ void KWView::setupActions()
                                             actionCollection(), "insert_expression" );
     loadexpressionActions( actionInsertExpression);
 
-    actionToolsCreateText = new KToggleAction( i18n( "Te&xt Frame" ), "frame_text", Key_F2,
+    actionToolsCreateText = new KToggleAction( i18n( "Te&xt Frame" ), "frame_text", Key_F10 /*same as kpr*/,
                                                this, SLOT( toolsCreateText() ),
                                                actionCollection(), "tools_createtext" );
     actionToolsCreateText->setToolTip( i18n( "Create a new text frame." ) );
     actionToolsCreateText->setWhatsThis( i18n( "Create a new text frame." ) );
 
     actionToolsCreateText->setExclusiveGroup( "tools" );
-    actionToolsCreatePix = new KToggleAction( i18n( "P&icture..." ), "frame_image", // or inline_image ?
-                                              Key_F3 /*same as kpr*/,
-                                              this, SLOT( insertPicture() ),
-                                              actionCollection(), "insert_picture" );
-    actionToolsCreatePix->setToolTip( i18n( "Create a new frame for a picture." ) );
-    actionToolsCreatePix->setWhatsThis( i18n( "Create a new frame for a picture or diagram." ) );
-
-    actionToolsCreatePix->setExclusiveGroup( "tools" );
     actionInsertFormula = new KAction( i18n( "For&mula" ), "frame_formula", Key_F4,
                                        this, SLOT( insertFormula() ),
                                        actionCollection(), "tools_formula" );
@@ -693,8 +684,15 @@ void KWView::setupActions()
     actionInsertTable->setToolTip( i18n( "Create a table." ) );
     actionInsertTable->setWhatsThis( i18n( "Create a table.<br><br>The table can either exist in a frame of its own or inline." ) );
 
+    actionToolsCreatePix = new KToggleAction( i18n( "P&icture..." ), "frame_image", // or inline_image ?
+                                              SHIFT + Key_F5 /*same as kpr*/,
+                                              this, SLOT( insertPicture() ),
+                                              actionCollection(), "insert_picture" );
+    actionToolsCreatePix->setToolTip( i18n( "Create a new frame for a picture." ) );
+    actionToolsCreatePix->setWhatsThis( i18n( "Create a new frame for a picture or diagram." ) );
+    actionToolsCreatePix->setExclusiveGroup( "tools" );
+
     actionToolsCreatePart = new KoPartSelectAction( i18n( "&Object Frame" ), "frame_query",
-                                                    /*CTRL+Key_F2 same as kpr,*/
                                                     this, SLOT( toolsPart() ),
                                                     actionCollection(), "tools_part" );
     actionToolsCreatePart->setToolTip( i18n( "Insert an object into a new frame." ) );
@@ -2326,13 +2324,6 @@ void KWView::editSelectAll()
 
 void KWView::editFind()
 {
-    // Already a find or replace running ?
-    if ( m_findReplace )
-    {
-        m_findReplace->setActiveWindow();
-        return;
-    }
-
     if (!m_searchEntry)
         m_searchEntry = new KoSearchContext();
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit());
@@ -2341,20 +2332,14 @@ void KWView::editFind()
 
     if ( dialog.exec() == QDialog::Accepted )
     {
-        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog,edit ,m_gui->canvasWidget()->kWordDocument()->frameTextObject(m_gui->canvasWidget()->viewMode()));
-        doFindReplace();
+        delete m_findReplace;
+        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog ,m_gui->canvasWidget()->kWordDocument()->visibleTextObjects(m_gui->canvasWidget()->viewMode()), edit);
+        editFindNext();
     }
 }
 
 void KWView::editReplace()
 {
-    // Already a find or replace running ?
-    if ( m_findReplace )
-    {
-        m_findReplace->setActiveWindow();
-        return;
-    }
-
     if (!m_searchEntry)
         m_searchEntry = new KoSearchContext();
     if (!m_replaceEntry)
@@ -2366,29 +2351,30 @@ void KWView::editReplace()
     KoReplaceDia dialog( m_gui->canvasWidget(), "replace", m_searchEntry, m_replaceEntry,hasSelection );
     if ( dialog.exec() == QDialog::Accepted )
     {
-        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog,edit ,m_gui->canvasWidget()->kWordDocument()->frameTextObject(m_gui->canvasWidget()->viewMode()));
-        doFindReplace();
+        delete m_findReplace;
+        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog, m_gui->canvasWidget()->kWordDocument()->visibleTextObjects(m_gui->canvasWidget()->viewMode()), edit);
+        editFindNext();
     }
 }
 
-void KWView::doFindReplace()
+void KWView::editFindNext()
 {
-    KWFindReplace* findReplace = m_findReplace; // keep a copy. "this" might be deleted before we exit this method
+    if ( !m_findReplace ) // shouldn't be called before find or replace is activated
+        return;
+    bool ret = m_findReplace->findNext();
+    kdDebug() << k_funcinfo << "ret=" << ret << endl;
+    actionEditFindNext->setEnabled( ret ); // true except when completely done
+    actionEditFindPrevious->setEnabled( true );
+}
 
-    bool ret = findReplace->proceed();
-    while( ret )
-    {
-        // this can ask the user whether to restart
-        if ( !findReplace->shouldRestart() )
-            break;
-        // not very useful since we can't create frames during a search/replace...
-        //findReplace->changeListObject( m_gui->canvasWidget()->kWordDocument()->frameTextObject() );
-        ret = findReplace->proceed();
-    }
-
-    if ( !findReplace->aborted() ) // Only if we still exist....
-        m_findReplace = 0L;
-    delete findReplace;
+void KWView::editFindPrevious()
+{
+    if ( !m_findReplace ) // shouldn't be called before find or replace is activated
+        return;
+    bool ret = m_findReplace->findPrevious();
+    kdDebug() << k_funcinfo << "ret=" << ret << endl;
+    actionEditFindPrevious->setEnabled( ret ); // true except when completely done
+    actionEditFindNext->setEnabled( true );
 }
 
 void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
@@ -6251,11 +6237,11 @@ void KWView::applyAutoFormat()
 {
     m_doc->getAutoFormat()->readConfig();
     KMacroCommand *macro = 0L;
-    QPtrList<KoTextObject> list(m_doc->frameTextObject(m_gui->canvasWidget()->viewMode()));
-    QPtrListIterator<KoTextObject> fit(list);
-    for ( ; fit.current() ; ++fit )
+    QValueList<KoTextObject *> list(m_doc->visibleTextObjects(m_gui->canvasWidget()->viewMode()));
+    QValueList<KoTextObject *>::Iterator fit = list.begin();
+    for ( ; fit != list.end() ; ++fit )
     {
-        KCommand *cmd = m_doc->getAutoFormat()->applyAutoFormat( fit.current() );
+        KCommand *cmd = m_doc->getAutoFormat()->applyAutoFormat( *fit );
         if ( cmd )
         {
             if ( !macro )
@@ -6877,7 +6863,7 @@ void KWView::selectBookmark()
         {
             if ( !book->startParag() || !book->endParag() )
                 return;
-            m_gui->canvasWidget()->editTextFrameSet( book->frameSet(), book->startParag(), book->bookmarkStartIndex(),true );
+            m_gui->canvasWidget()->editTextFrameSet( book->frameSet(), book->startParag(), book->bookmarkStartIndex() );
             KWTextFrameSetEdit * edit = currentTextEdit();
             if ( edit )
             {
@@ -6991,7 +6977,7 @@ void KWView::convertTableToText()
 
             m_gui->canvasWidget()->emitFrameSelectedChanged();
             deleteFrame( false );
-            m_gui->canvasWidget()->editTextFrameSet( frameset, parag, pos,true );
+            m_gui->canvasWidget()->editTextFrameSet( frameset, parag, pos );
             QMimeSource *data = QApplication::clipboard()->data();
             // Hmm, we could reuse the result of KWView::checkClipboard...
             if ( data->provides( KWTextDrag::selectionMimeType() ) )

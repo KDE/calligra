@@ -204,6 +204,8 @@ public slots:
     void editPaste();
     void editSelectAll();
     void editFind();
+    void editFindNext();
+    void editFindPrevious();
     void editReplace();
     void editDeleteFrame();
     void editCustomVariable();
@@ -456,7 +458,6 @@ protected:
     QPtrList<KoTextFormatInterface> applicableTextInterfaces() const;
 
     void setupActions();
-    void doFindReplace();
 
     virtual void resizeEvent( QResizeEvent *e );
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
@@ -507,6 +508,8 @@ private:
     KAction *actionEditCustomVars;
     KAction *actionEditCustomVarsEdit;
     KAction *actionEditFind;
+    KAction *actionEditFindNext;
+    KAction *actionEditFindPrevious;
     KAction *actionEditReplace;
     KAction *actionApplyAutoFormat;
 

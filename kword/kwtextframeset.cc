@@ -2550,6 +2550,9 @@ void KWTextFrameSet::highlightPortion( KoTextParag * parag, int index, int lengt
 {
     m_textobj->highlightPortion( parag, index, length, repaint );
     if ( repaint ) {
+        // Position the cursor
+        canvas->editTextFrameSet( this, parag, index );
+        // Ensure text is fully visible
         QRect expose = canvas->viewMode()->normalToView( paragRect( parag ) );
         canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
                                (expose.top()+expose.bottom()) / 2,

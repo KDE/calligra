@@ -44,8 +44,8 @@ class KWFindReplace : public KoFindReplace
 {
     Q_OBJECT
 public:
-    KWFindReplace( KWCanvas * canvas, KoSearchDia * dialog , KWTextFrameSetEdit*textView ,const QPtrList<KoTextObject> & lstObject);
-    KWFindReplace( KWCanvas * parent, KoReplaceDia * dialog, KWTextFrameSetEdit *textView,const QPtrList<KoTextObject> & lstObject);
+    KWFindReplace( KWCanvas * canvas, KoSearchDia * dialog, const QValueList<KoTextObject *> & lstObjects, KWTextFrameSetEdit* textView );
+    KWFindReplace( KWCanvas * parent, KoReplaceDia * dialog, const QValueList<KoTextObject *> & lstObjects, KWTextFrameSetEdit* textView );
     ~KWFindReplace();
 
     virtual void emitNewCommand(KCommand *);

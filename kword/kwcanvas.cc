@@ -1999,7 +1999,7 @@ void KWCanvas::editFrameSet( KWFrameSet * frameSet, bool onlyText )
     emit updateRuler();
 }
 
-void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index , bool forceEdit)
+void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index )
 {
     if ( selectAllFrames( false ) )
         emit frameSelectedChanged();
@@ -2015,22 +2015,23 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
     KWTableFrameSet *table = fs->getGroupManager();
     bool emitChanged = checkCurrentEdit( table ? table : fs );
 
-    if ( emitChanged || forceEdit) { // emitted after mousePressEvent [for tables]
-        if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet()->type()==FT_TEXT ) {
-            if ( !parag )
-            {
-                KWTextDocument *tmp = static_cast<KWTextFrameSet*>(m_currentFrameSetEdit->frameSet())->kwTextDocument();
-                parag = tmp->firstParag();
-            }
-            static_cast<KWTextFrameSetEdit*>( m_currentFrameSetEdit )->setCursor( parag, index );
-
-            // The _new_ cursor position must be visible.
-            KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
-            if ( textedit )
-                textedit->ensureCursorVisible();
+    if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet()->type()==FT_TEXT ) {
+        if ( !parag )
+        {
+            KWTextDocument *tmp = static_cast<KWTextFrameSet*>(m_currentFrameSetEdit->frameSet())->kwTextDocument();
+            parag = tmp->firstParag();
         }
-        emit currentFrameSetEditChanged();
+        // The _new_ cursor position must be visible.
+        KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+        if ( textedit ) {
+            textedit->hideCursor();
+            textedit->setCursor( parag, index );
+            textedit->showCursor();
+            textedit->ensureCursorVisible();
+        }
     }
+    if ( emitChanged )
+        emit currentFrameSetEditChanged();
     emit updateRuler();
 }
 

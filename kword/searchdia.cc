@@ -30,16 +30,16 @@
 #include "kwtextdocument.h"
 //#include <kotextdocument.h>
 
-KWFindReplace::KWFindReplace( KWCanvas * canvas, KoSearchDia * dialog ,KWTextFrameSetEdit *textView ,const QPtrList<KoTextObject> & lstObject)
-    :KoFindReplace( canvas, dialog,textView ,lstObject)
+KWFindReplace::KWFindReplace( KWCanvas * canvas, KoSearchDia * dialog, const QValueList<KoTextObject *> & lstObjects, KWTextFrameSetEdit *textView)
+    : KoFindReplace( canvas, dialog, lstObjects, textView )
 {
-    m_canvas= canvas;
+    m_canvas = canvas;
 }
 
-KWFindReplace::KWFindReplace( KWCanvas * canvas, KoReplaceDia * dialog, KWTextFrameSetEdit *textView,const QPtrList<KoTextObject> & lstObject)
-    :KoFindReplace( canvas, dialog,textView ,lstObject)
+KWFindReplace::KWFindReplace( KWCanvas * canvas, KoReplaceDia * dialog, const QValueList<KoTextObject *> & lstObjects, KWTextFrameSetEdit *textView )
+    : KoFindReplace( canvas, dialog, lstObjects, textView )
 {
-    m_canvas= canvas;
+    m_canvas = canvas;
 }
 
 KWFindReplace::~KWFindReplace()

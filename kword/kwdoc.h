@@ -286,7 +286,7 @@ public:
     // Prefer this over frameSet(i), if iterating over all of them
     QPtrListIterator<KWFrameSet> framesetsIterator() const { return QPtrListIterator<KWFrameSet>(m_lstFrameSet); }
 
-    QPtrList<KoTextObject> frameTextObject(KWViewMode *viewmode) const;
+    QValueList<KoTextObject *> visibleTextObjects(KWViewMode *viewmode) const;
 
     void addFrameSet( KWFrameSet *f, bool finalize = true );
     // Remove frameset from list (don't delete)

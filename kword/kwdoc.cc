@@ -4241,10 +4241,9 @@ void KWDocument::setGridX(double _gridx) {
         viewPtr->getGUI()->getHorzRuler()->setGridSize(_gridx);
 }
 
-// TODO rename
-QPtrList<KoTextObject> KWDocument::frameTextObject(KWViewMode *viewmode) const
+QValueList<KoTextObject *> KWDocument::visibleTextObjects(KWViewMode *viewmode) const
 {
-    QPtrList<KoTextObject>lst;
+    QValueList<KoTextObject *> lst;
     QPtrList<KWTextFrameSet> textFramesets;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit ) {
@@ -4252,10 +4251,10 @@ QPtrList<KoTextObject> KWDocument::frameTextObject(KWViewMode *viewmode) const
     }
 
     KWTextFrameSet *frm;
-    for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
-        if ( frm && frm->isVisible(viewmode) && !frm->textObject()->protectContent())
+    for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ) {
+        if ( frm && frm->isVisible(viewmode) && !frm->textObject()->protectContent() )
         {
-            lst.append(frm->textObject());
+            lst.append( frm->textObject() );
         }
     }
 
