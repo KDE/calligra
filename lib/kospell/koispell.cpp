@@ -1148,11 +1148,6 @@ void KOISpell::emitProgress ()
 // send bug reports regarding the modal stuff to me.
 // --------------------------------------------------
 
-int
-KOISpell::modalCheck( QString& text )
-{
-    return modalCheck( text,0 );
-}
 
 int
 KOISpell::modalCheck( QString& text, KOSpellConfig* _kcs )

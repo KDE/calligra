@@ -63,8 +63,6 @@ public:
 
     virtual ~KOISpell();
 
-    static int modalCheck( QString& text ); // marked as deprecated
-
     static int modalCheck( QString& text, KOSpellConfig * kcs );
 
 protected slots:

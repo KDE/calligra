@@ -68,6 +68,7 @@ KOASpell::KOASpell( KOSpellConfig *_ksc )
     QTimer::singleShot( 0, this, SLOT( slotEmitCheckerReady() ) );
 }
 
+//TODO FIXME !!!! KOSpellConfig not used.
 void KOASpell::initSpell(KOSpellConfig *_ksc)
 {
 
@@ -571,11 +572,6 @@ void KOASpell::changeSpellLanguage( int index )
 #endif
 }
 
-
-int KOASpell::modalCheck(  QString& text )
-{
-    return modalCheck( text,0 );
-}
 
 int KOASpell::modalCheck( QString& text, KOSpellConfig* _kcs )
 {

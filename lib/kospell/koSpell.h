@@ -37,7 +37,6 @@ public:
     static KOSpell *createKoSpell( QWidget *parent, const QString &caption, QObject *receiver, const char *slot,KOSpellConfig *kcs, bool modal, bool _autocorrect );
 
     static int modalCheck( QString& text, KOSpellConfig * kcs );
-    static int modalCheck( QString& text);
 
 
    /**

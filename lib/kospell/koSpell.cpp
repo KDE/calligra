@@ -67,11 +67,6 @@ KOSpell *KOSpell::createKoSpell( QWidget *parent, const QString &caption, QObjec
 
 }
 
-int KOSpell::modalCheck( QString& text)
-{
-    return KOSpell::modalCheck( text, 0L );
-}
-
 int KOSpell::modalCheck( QString& text, KOSpellConfig * _ksc )
 {
     KOSpellConfig *ksc;

@@ -59,8 +59,6 @@ public:
 
     virtual ~KOASpell();
 
-    static int modalCheck( QString& text ); // marked as deprecated
-
     static int modalCheck( QString& text, KOSpellConfig * kcs );
 
     virtual bool check (const QString &_buffer, bool usedialog = TRUE) ;
