@@ -1395,6 +1395,66 @@ void KSpreadDoc::emitEndOperation()
    }
 }
 
+void KSpreadDoc::emitEndOperation( Task task, QRect const & rect )
+{
+  ElapsedTime et( "*KSpreadDoc::emitEndOperation - 2 -*" );
+  KSpreadSheet * t = 0;
+  CellBinding  * b = 0;
+  m_numOperations--;
+
+  if ( m_numOperations > 0 || !m_activeTable )
+  {
+    KoDocument::emitEndOperation();
+    QApplication::restoreOverrideCursor();
+    return;
+  }
+
+  m_numOperations = 0;
+  m_bDelayCalculation = false;
+
+  if ( task == Paint )
+  {
+    {
+      ElapsedTime etm( "Updating active table..." );
+      m_activeTable->updateCellArea( rect );
+    }
+
+    ElapsedTime etm2( "Sub: Updating cellbindings..." );
+    for ( b = m_activeTable->firstCellBinding(); b != 0; b = m_activeTable->nextCellBinding() )
+    {
+      b->cellChanged( 0 );
+    }
+  }
+  else
+  {
+    // TODO...
+    for ( t = m_pMap->firstTable(); t != NULL; t = m_pMap->nextTable() )
+    {
+      ElapsedTime etm( "Updating table..." );
+      t->update();
+      
+      ElapsedTime etm2( "Sub: Updating cellbindings..." );
+      for (b = t->firstCellBinding(); b != NULL; b = t->nextCellBinding())
+      {
+        b->cellChanged(NULL);
+      }
+    }
+  }
+
+  {
+    ElapsedTime et2( "*KoDocument::emitEndOperation*" );
+    KoDocument::emitEndOperation();
+  }
+  QApplication::restoreOverrideCursor();
+  
+  if ( m_numOperations == 0 )
+  {
+    /* do this after the parent class emitEndOperation because that allows updates
+       on the view again
+    */
+    paintUpdates();
+  }
+}
 
 bool KSpreadDoc::delayCalculation()
 {

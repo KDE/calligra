@@ -2202,7 +2202,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     processOtherKey( _ev );
     break;
   }
-  m_pDoc->emitEndOperation();
+  m_pDoc->emitEndOperation( KSpreadDoc::Paint, table->visibleRect( this ) );
   return;
 }
 

@@ -366,7 +366,7 @@ int KSpreadSheet::leftColumn( int _xpos, double &_left,
     while ( x < _xpos )
     {
         // Should never happen
-        if ( col > KS_colMax - 1 )
+        if ( col >= KS_colMax )
 	{
 	    kdDebug(36001) << "KSpreadSheet:leftColumn: invalid column (col: " << col + 1 << ")" << endl;
 	    return KS_colMax + 1; //Return out of range value, so other code can react on this
@@ -401,6 +401,72 @@ int KSpreadSheet::rightColumn( int _xpos, const KSpreadCanvas *_canvas ) const
     return col - 1;
 }
 
+QRect KSpreadSheet::visibleRect( KSpreadCanvas const * const _canvas ) const
+{
+  int top    = 0;
+  int left   = 0;
+
+  int x      = 0;
+  int y      = 0;  
+  int width  = 0;
+  int height = 0;
+
+  if ( _canvas )
+  {
+    y     += int( _canvas->yOffset() );
+    x     += int( _canvas->xOffset() );
+    width  = _canvas->width();
+    height = _canvas->height();
+  }
+  
+  double yn = rowFormat( top )->dblHeight( _canvas );
+  while ( yn < y )
+  {
+    if ( top >= KS_rowMax ) // Should never happen
+      break;
+
+    ++top;
+    yn += rowFormat( top )->dblHeight( _canvas );
+  }
+
+  int bottom = top + 1;
+
+  y += height;
+  while ( yn < y )
+  {
+    if ( bottom > KS_rowMax ) // Should never happen
+      break;
+
+    ++bottom;
+    yn += rowFormat( bottom )->dblHeight( _canvas );
+  }
+
+  double xn = columnFormat( left )->dblWidth( _canvas );
+  while ( xn < x )
+  {
+    if ( left >= KS_colMax )    // Should never happen
+      break;
+
+    ++left;
+    xn += columnFormat( left )->dblWidth( _canvas );
+  }
+  x += width;
+
+  int right = left + 1;
+
+  while ( xn < x )
+  {
+    if ( right > KS_colMax )    // Should never happen
+      break;
+
+    ++right;
+    xn += columnFormat( right )->dblWidth( _canvas );
+  }
+  x += width;
+
+  return QRect( left, top, right - left, bottom - top );
+}
+
 int KSpreadSheet::topRow( int _ypos, double & _top,
                           const KSpreadCanvas *_canvas ) const
 {
@@ -417,7 +483,7 @@ int KSpreadSheet::topRow( int _ypos, double & _top,
     while ( y < _ypos )
     {
         // Should never happen
-        if ( row > KS_rowMax - 1 )
+        if ( row >= KS_rowMax )
         {
             kdDebug(36001) << "KSpreadSheet:topRow: invalid row (row: " << row + 1 << ")" << endl;
             return KS_rowMax + 1; //Return out of range value, so other code can react on this
@@ -6867,9 +6933,10 @@ void KSpreadSheet::clearPaintDirtyData()
   m_paintDirtyList.clear();
 }
 
-bool KSpreadSheet::cellIsPaintDirty(QPoint const & cell)
+bool KSpreadSheet::cellIsPaintDirty( QPoint const & cell )
 {
   QValueList<QRect>::iterator it;
+  QValueList<QRect>::iterator end = m_paintDirtyList.end();
   bool found = false;
 
   /* Yes, this seems an inefficient method....I just want to get it working
@@ -6877,10 +6944,9 @@ bool KSpreadSheet::cellIsPaintDirty(QPoint const & cell)
      And it might not matter -- this is going to be cleared every repaint
      of the screen, so it will never grow large
   */
-  for (it = m_paintDirtyList.begin(); it != m_paintDirtyList.end() && !found;
-       it++)
+  for ( it = m_paintDirtyList.begin(); it != end && !found; ++it )
   {
-    found = (*it).contains(cell);
+    found = (*it).contains( cell );
   }
   return found;
 }
