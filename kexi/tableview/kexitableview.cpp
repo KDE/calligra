@@ -104,18 +104,20 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	//m_additionPolicy = NoAdd;
 	setAdditionPolicy( NoAdd );
 
-	setMargins(14, fontMetrics().height() + 4, 0, 0);
+//	setMargins(14, fontMetrics().height() + 4, 0, 0);
 
 	// Create headers
-	d->pTopHeader = new QHeader(0, this);
-//	d->pTopHeader = new QHeader(d->numCols, this);
+	d->pTopHeader = new QHeader(this, "topHeader");
 	d->pTopHeader->setOrientation(Horizontal);
 	d->pTopHeader->setTracking(false);
 	d->pTopHeader->setMovingEnabled(false);
 
 	d->pVerticalHeader = new KexiTableRM(this);
 	d->pVerticalHeader->setCellHeight(d->rowHeight);
+//	d->pVerticalHeader->setFixedWidth(d->rowHeight);
 	d->pVerticalHeader->setCurrentRow(-1);
+
+	setMargins(d->pTopHeader->sizeHint().height(), d->pTopHeader->sizeHint().height(), 0, 0);
 
 /*	d->pVerticalHeader = new KexiTableHeader(this);
 	
@@ -166,7 +168,7 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 	}
 	m_owner = owner;
 	if(!data) {
-		m_data = new KexiTableViewData(KexiTableViewColumnList());
+		m_data = new KexiTableViewData();
 		m_owner = true;
 		clearData();
 	}
@@ -186,14 +188,7 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 		d->pTopHeader->setUpdatesEnabled(true);
 		//add rows
 		triggerUpdate();
-		for(KexiTableItem *it = m_data->first(); it; it = m_data->next())
-		{
-			d->pVerticalHeader->addLabel();
-/*			if(!it->isInsertItem())
-				d->pVerticalHeader->addLabel("",  d->rowHeight);
-			else
-				d->pVerticalHeader->addLabel("*",  d->rowHeight);*/
-		}
+		d->pVerticalHeader->addLabels(m_data->count());
 	}
 }
 

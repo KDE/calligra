@@ -21,6 +21,8 @@
    Original Project: buX (www.bux.at)
 */
 
+#include "kexitablerm.h"
+
 #include <qcolor.h>
 #include <qstyle.h>
 #include <qpixmap.h>
@@ -28,7 +30,24 @@
 
 #include <kdebug.h>
 
-#include "kexitablerm.h"
+static const unsigned char img_pen_data[] = {
+    0x00,0x00,0x03,0x30,0x78,0x9c,0xfb,0xff,0xff,0x3f,0xc3,0x7f,0x32,0x30,
+    0x10,0x80,0x88,0xff,0xe4,0xe8,0x85,0xe9,0xc7,0xc6,0x26,0x55,0x3f,0x3a,
+    0x4d,0x8e,0x7e,0x72,0xfc,0x32,0xd2,0xf5,0xa3,0xeb,0xa5,0xb5,0x7e,0x5c,
+    0xe9,0x85,0x54,0xfb,0xb1,0xa5,0x1b,0x52,0xdc,0x0e,0x00,0xf2,0xea,0x0a,
+    0x13
+};
+
+static struct EmbedImage {
+    int width, height, depth;
+    const unsigned char *data;
+    ulong compressed;
+    int numColors;
+    const QRgb *colorTable;
+    bool alpha;
+    const char *name;
+} embed_image = 
+    { 17, 12, 32, (const unsigned char*)img_pen_data, 57, 0, 0, TRUE, "pen.png" };
 
 KexiTableRM::KexiTableRM(QWidget *parent)
 :QWidget(parent)
@@ -39,6 +58,20 @@ KexiTableRM::KexiTableRM(QWidget *parent)
 	m_insertRow=-1;
 	m_pointerColor = QColor(99,0,0);
 	m_max = 0;
+
+	QByteArray baunzip;
+	baunzip = qUncompress( img_pen_data, embed_image.compressed );
+	QImage img((uchar*)baunzip.data(),
+			embed_image.width,
+			embed_image.height,
+			embed_image.depth,
+			(QRgb*)embed_image.colorTable,
+			embed_image.numColors,
+			QImage::BigEndian
+	);
+	m_penImg = img.copy();
+	if ( embed_image.alpha )
+		m_penImg.setAlphaBuffer(TRUE);
 }
 
 KexiTableRM::~KexiTableRM()
@@ -54,6 +87,12 @@ void KexiTableRM::addLabel()
 void KexiTableRM::removeLabel()
 {
 	m_max--;
+	update();
+}
+
+void KexiTableRM::addLabels(int num)
+{
+	m_max += num;
 	update();
 }
 
@@ -83,15 +122,26 @@ void KexiTableRM::paintEvent(QPaintEvent *e)
 
 	if(m_currentRow >= first-1 && m_currentRow <= last)
 	{
-		int pos = ((m_rowHeight*m_currentRow)-m_offset)-1;
 
 		p.setBrush(colorGroup().foreground());
-		QPointArray points;
+		QPointArray points(3);
+		int ofs = m_rowHeight / 4;
+		int ofs2 = m_rowHeight / 3;
+		int pos = ((m_rowHeight*m_currentRow)-m_offset)-ofs/2+1;
+		points.putPoints(0, 3, ofs2+1, pos+ofs, ofs2 + 1 + ofs, pos+ofs*2, 
+			ofs2+1,pos+ofs*3);
+
+/*
 		int half = m_rowHeight / 2;
-		points.setPoints(3, 2, pos + 2, width() - 5, pos + half, 2, pos + (2 * half) - 2);
+		points.setPoints(3, 2, pos + 2, width() - 5, pos + half, 2, pos + (2 * half) - 2);*/
+
 		p.drawPolygon(points);
 	}
 
+#if 0 //(js) : will be used
+	p.drawImage((m_rowHeight-m_penImg.width())/2+2,(m_rowHeight-m_penImg.height())/2+pos,m_penImg);
+#endif
+	
 #if 0
 
 	p.setPen(QColor(0,0,99));

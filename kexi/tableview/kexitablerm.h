@@ -25,6 +25,7 @@
 #define KEXITABLERM_H
 
 #include <qwidget.h>
+#include <qimage.h>
 
 /**record marker (at the left side of a table)
   *@author till busch
@@ -51,6 +52,9 @@ public slots:
 	void addLabel();
 	void removeLabel();
 
+	/*! Adds \num labels */
+	void addLabels(int num);
+
 	void clear();
 
 protected:
@@ -61,6 +65,7 @@ protected:
 	int	m_max;
 
 	QColor	m_pointerColor;
+	QImage m_penImg;
 };
 
 #endif
