@@ -36,13 +36,17 @@ KoShellWindow::KoShellWindow()
   QBoxLayout *ml = new QVBoxLayout(w);
 
   m_pKoolBar = new KoKoolBar( w );
-  int file = m_pKoolBar->insertGroup("Parts");
-  vector<KoDocumentEntry> entries = koQueryDocuments();
-  vector<KoDocumentEntry>::iterator it = entries.begin();
-  for( ; it != entries.end(); ++it )
+  m_grpFile = m_pKoolBar->insertGroup("Parts");
+  m_lstComponents = koQueryDocuments();
+  vector<KoDocumentEntry>::iterator it = m_lstComponents.begin();
+  for( ; it != m_lstComponents.end(); ++it )
     if ( !it->icon.isNull() )
-      m_pKoolBar->insertItem( file, it->icon );
-    
+    {
+      int id = m_pKoolBar->insertItem( m_grpFile, it->icon, it->name,
+				       this, SLOT( slotKoolBar( int, int ) ) );
+      m_mapComponents[ id ] = &*it;
+    }
+  
     /* QPixmap pix;
   pix.load( "/opt/kde/share/icons/image.xpm" );
   m_pKoolBar->insertItem( file, pix );
@@ -54,7 +58,7 @@ KoShellWindow::KoShellWindow()
   m_pKoolBar->insertItem( file, pix );
   m_pKoolBar->insertGroup("Edit");
   m_pKoolBar->insertGroup("View"); */
-  m_pKoolBar->insertGroup("Documents");
+  m_grpDocuments = m_pKoolBar->insertGroup("Documents");
   m_pKoolBar->insertGroup("Snippets");
 
   m_pKoolBar->setFixedWidth( 80 );
@@ -75,6 +79,33 @@ KoShellWindow::~KoShellWindow()
   cleanUp();
   
   s_lstShells->removeRef( this );
+}
+
+void KoShellWindow::slotKoolBar( int _grp, int _item )
+{
+  if ( _grp == m_grpFile )
+  {
+    newPage( *(m_mapComponents[ _item ]) );
+  }
+  else if ( _grp == m_grpDocuments )
+  {
+    list<Page>::iterator it = m_lstPages.begin();
+    while( it != m_lstPages.end() )
+    {
+      if ( it->m_id == _item )
+      {
+	if ( m_pFrame )
+	  m_pFrame->hide();
+	m_activePage = it;
+	m_pFrame = it->m_pFrame;
+	setView( m_pFrame );
+	m_pFrame->show();
+	interface()->setActivePart( it->m_vView->id() );
+	return;
+      }
+      ++it;
+    }
+  }
 }
 
 bool KoShellWindow::isModified()
@@ -212,6 +243,9 @@ bool KoShellWindow::newPage( KoDocumentEntry& _e )
   page.m_vDoc = KOffice::Document::_duplicate( doc );
   page.m_vView = KOffice::View::_duplicate( view );
   page.m_pFrame = frame;
+  page.m_id = m_pKoolBar->insertItem( m_grpDocuments, _e.icon, i18n("No name"), this,
+				      SLOT( slotKoolBar( int, int ) ) );
+  
   m_lstPages.push_back( page );
   m_activePage = m_lstPages.end();
   m_activePage--;

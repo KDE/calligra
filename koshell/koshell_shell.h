@@ -10,6 +10,8 @@
 #include <qstring.h>
 
 #include <list>
+#include <vector>
+#include <map>
 
 class KoShellWindow : public KoMainWindow
 {
@@ -39,6 +41,8 @@ protected slots:
   void slotFileClose();
   void slotFileQuit();
 
+  void slotKoolBar( int _grp, int _item );
+  
 protected:
   // C++
   virtual KOffice::Document_ptr document();
@@ -56,12 +60,19 @@ protected:
     KOffice::Document_var m_vDoc;
     KOffice::View_var m_vView;
     KoFrame* m_pFrame;
+    int m_id;
   };
   list<Page> m_lstPages;
   
   list<Page>::iterator m_activePage;
 
   KoKoolBar* m_pKoolBar;
+
+  int m_grpFile;
+  int m_grpDocuments;
+  
+  vector<KoDocumentEntry> m_lstComponents;
+  map<int,KoDocumentEntry*> m_mapComponents;
   
   static QList<KoShellWindow>* s_lstShells;
 };
