@@ -294,10 +294,9 @@ QDomElement KSpreadLayout::saveLayout( QDomDocument& doc,int _col, int _row, boo
 	format.setAttribute( "alignY", (int)alignY(_col,_row) );
     if ( ( hasProperty( PBackgroundColor ) || force ) && m_bgColor.isValid() )
 	format.setAttribute( "bgcolor", bgColor(_col,_row).name() );
-    if ( ( hasProperty( PMultiRow ) || force ) && testFlag(Flag_MultiRow) )
+    if ( ( hasProperty( PMultiRow ) || force ) && multiRow( _col, _row )  )
 	format.setAttribute( "multirow", "yes" );
-    if ( ( hasProperty( PVerticalText ) || force ) &&
-         testFlag( Flag_VerticalText) )
+    if ( ( hasProperty( PVerticalText ) || force ) &&verticalText( _col, _row ) )
 	format.setAttribute( "verticaltext", "yes" );
     if ( hasProperty( PPrecision ) || force )
 	format.setAttribute( "precision", precision(_col, _row) );
@@ -317,8 +316,7 @@ QDomElement KSpreadLayout::saveLayout( QDomDocument& doc,int _col, int _row, boo
 	format.setAttribute( "angle", getAngle(_col, _row) );
     if ( hasProperty( PIndent ) || force )
 	format.setAttribute( "indent", getIndent(_col, _row) );
-    if( ( hasProperty( PDontPrintText ) || force ) &&
-        testFlag( Flag_DontPrintText))
+    if( ( hasProperty( PDontPrintText ) || force ) &&getDontprintText(_col,_row))
 	format.setAttribute( "dontprinttext", "yes" );
     if ( hasProperty( PFont ) || force )
 	format.appendChild( createElement( "font", textFont( _col, _row ), doc ) );
