@@ -48,13 +48,13 @@ void KChartEngine::drawAnnotation() {
                 p->drawLine( x2,PY(highest)-2,x2-annote_hgt/2, PY(highest)-2-annote_hgt/2 );
                 p->setFont( params->annotationFont() );
                 QRect br = QFontMetrics( params->annotationFont() ).boundingRect( 0, 0, MAXINT,
-								   MAXINT,
-								   Qt::AlignRight,
-								   params->annotation->note );
+                                                                   MAXINT,
+                                                                   Qt::AlignRight,
+                                                                   params->annotation->note );
                 p->drawText(   x2-annote_hgt/2-1-annote_len - 1,
-		     PY(highest)-annote_hgt+1,
-		     br.width(), br.height(),
-		     Qt::AlignRight, params->annotation->note );
+                     PY(highest)-annote_hgt+1,
+                     br.width(), br.height(),
+                     Qt::AlignRight, params->annotation->note );
                 }
         else
                 { /* note to right */
@@ -62,14 +62,14 @@ void KChartEngine::drawAnnotation() {
                 p->drawLine( x2, PY(highest)-2,x2+annote_hgt/2, PY(highest)-2-annote_hgt/2 );
                 p->setFont( params->annotationFont() );
                 QRect br = QFontMetrics( params->annotationFont() ).boundingRect( 0, 0,
-									MAXINT,
-									MAXINT,
-									Qt::AlignLeft,
-									params->annotation->note );
+                                                                        MAXINT,
+                                                                        MAXINT,
+                                                                        Qt::AlignLeft,
+                                                                        params->annotation->note );
                 p->drawText( x2+annote_hgt/2+1 + 1,
-		   PY(highest)-annote_hgt+1,
-		   br.width(), br.height(),
-		   Qt::AlignLeft, params->annotation->note );
+                   PY(highest)-annote_hgt+1,
+                   br.width(), br.height(),
+                   Qt::AlignLeft, params->annotation->note );
                 }
         }
   setno = 0;
@@ -79,34 +79,34 @@ void KChartEngine::titleText() {
     if( !params->title.isEmpty() )
         {
         int tlen=0;
-        QColor	titlecolor = params->TitleColor;
+        QColor  titlecolor = params->TitleColor;
         cnt_nl( params->title.latin1(), &tlen );
         p->setFont( params->titleFont() );
         p->setPen( titlecolor );
         QRect br = QFontMetrics( params->titleFont() ).boundingRect( 0, 0,
-				MAXINT,
-				MAXINT,
-				Qt::AlignCenter,
-				params->title );
+                                MAXINT,
+                                MAXINT,
+                                Qt::AlignCenter,
+                                params->title );
         p->drawText( imagewidth/2 - tlen*params->titleFontWidth()/2, // x
-				0, // y
-				br.width(), br.height(),
-				Qt::AlignCenter, params->title );
+                                0, // y
+                                br.width(), br.height(),
+                                Qt::AlignCenter, params->title );
         }
 
     kdDebug(35001) << "done with the title text" << endl;
 
     if( !params->xtitle.isEmpty() )
         {
-        //QColor	titlecolor = params->XTitleColor == Qt::black ?
+        //QColor        titlecolor = params->XTitleColor == Qt::black ?
         //                PlotColor: params->XTitleColor;
-        
-        QColor	titlecolor = params->XTitleColor;
+
+        QColor  titlecolor = params->XTitleColor;
         p->setPen( titlecolor );
         p->setFont( params->xTitleFont() );
         p->drawText( imagewidth/2 - params->xtitle.length()*params->xTitleFontWidth()/2,
                         imageheight-params->xTitleFontHeight()-1, params->xtitle );
-    	}
+        }
 }
 
 
@@ -131,47 +131,47 @@ void KChartEngine::drawThumbnails() {
     if( w || n )
         {
         int chgcolor  = thumbval>0.0? ThumbUColor: ThumbDColor;
-        int thmbvalwidth = SFONTWDTH +	// up/down arrow
-	        (w?strlen(whole)*SFONTWDTH: 0) +	// whole
-	        (n?strlen(nmrtr)*TFONTWDTH+// numerator
-	        SFONTWDTH +	// /
-	        strlen(dmntr)*TFONTWDTH:// denominator
-	        0);// no frac part
+        int thmbvalwidth = SFONTWDTH +  // up/down arrow
+                (w?strlen(whole)*SFONTWDTH: 0) +        // whole
+                (n?strlen(nmrtr)*TFONTWDTH+// numerator
+                SFONTWDTH +     // /
+                strlen(dmntr)*TFONTWDTH:// denominator
+                0);// no frac part
 
         smallarrow( p, graphwidth/2-thmbvalwidth/2, SFONTHGT, thumbval>0.0, chgcolor );
         if( w )
                 {
-	        p->setFont( gdFontSmall );
-	        p->setPen( chgcolor );
-	        p->drawText( (graphwidth/2-thmbvalwidth/2)+SFONTWDTH,
-		     SFONTHGT+2,
-		     whole );
+                p->setFont( gdFontSmall );
+                p->setPen( chgcolor );
+                p->drawText( (graphwidth/2-thmbvalwidth/2)+SFONTWDTH,
+                     SFONTHGT+2,
+                     whole );
                 }
         if( n )
                 {
-	        p->setFont( gdFontTiny );
-	        p->setPen( chgcolor );
-	        p->drawText( (graphwidth/2-thmbvalwidth/2)   +	// start
-		     SFONTWDTH	+	// arrow
-		     (w? strlen(whole)*SFONTWDTH: 0) +	// whole
-		     2,
-		     SFONTHGT+2-2,
-		     nmrtr );
-	        p->setFont( gdFontSmall );
-	        p->drawText( (graphwidth/2-thmbvalwidth/2)  +	// start
-		     SFONTWDTH	 +	// arrow
-		     (w? strlen(whole)*SFONTWDTH: 0) +	// whole
-		     strlen(nmrtr)*TFONTWDTH,	// numerator
-		     SFONTHGT+2,
-		     '/' );
-	        p->setFont( gdFontTiny );
-	        p->drawText( (graphwidth/2-thmbvalwidth/2)  +	// start
-		     SFONTWDTH	 +		// arrow
-		     (w? strlen(whole)*SFONTWDTH: 0) +	// whole
-		     strlen(nmrtr)*TFONTWDTH +	// numerator
-		     SFONTWDTH - 3,
-		     SFONTHGT+2+4,
-		     dmntr );
+                p->setFont( gdFontTiny );
+                p->setPen( chgcolor );
+                p->drawText( (graphwidth/2-thmbvalwidth/2)   +  // start
+                     SFONTWDTH  +       // arrow
+                     (w? strlen(whole)*SFONTWDTH: 0) +  // whole
+                     2,
+                     SFONTHGT+2-2,
+                     nmrtr );
+                p->setFont( gdFontSmall );
+                p->drawText( (graphwidth/2-thmbvalwidth/2)  +   // start
+                     SFONTWDTH   +      // arrow
+                     (w? strlen(whole)*SFONTWDTH: 0) +  // whole
+                     strlen(nmrtr)*TFONTWDTH,   // numerator
+                     SFONTHGT+2,
+                     '/' );
+                p->setFont( gdFontTiny );
+                p->drawText( (graphwidth/2-thmbvalwidth/2)  +   // start
+                     SFONTWDTH   +              // arrow
+                     (w? strlen(whole)*SFONTWDTH: 0) +  // whole
+                     strlen(nmrtr)*TFONTWDTH +  // numerator
+                     SFONTWDTH - 3,
+                     SFONTHGT+2+4,
+                     dmntr );
                 }
         }
     // thumblabel, thumbval
@@ -181,36 +181,38 @@ void KChartEngine::drawThumbnails() {
 
 void KChartEngine::drawBackgroundImage()
 {
-  static KPixmap backpix;
+    static KPixmap *backpix=0L;
+    if(backpix==0L)
+        backpix=new KPixmap();
 
   if( params->backgroundPixmap.isNull() ) {
-	return;
+        return;
   }
 
   if( params->backgroundPixmapIsDirty ) {
-	// scale loaded pixmap if necessary
-	if( params->backgroundPixmapScaled ) {
-	  QImage img = params->backgroundPixmap.convertToImage();
-	  QImage imgscaled = img.smoothScale( imagewidth, imageheight );
-	  backpix.convertFromImage( imgscaled );
-	} else
-	  backpix = params->backgroundPixmap;
-	  
-	// tone lighter
-	KPixmapEffect::intensity( backpix, params->backgroundPixmapIntensity );
+        // scale loaded pixmap if necessary
+        if( params->backgroundPixmapScaled ) {
+          QImage img = params->backgroundPixmap.convertToImage();
+          QImage imgscaled = img.smoothScale( imagewidth, imageheight );
+          backpix->convertFromImage( imgscaled );
+        } else
+          *backpix = params->backgroundPixmap;
 
-	// only need to recompute when the user changes settings
-	params->backgroundPixmapIsDirty = false;
+        // tone lighter
+        KPixmapEffect::intensity( *backpix, params->backgroundPixmapIntensity );
+
+        // only need to recompute when the user changes settings
+        params->backgroundPixmapIsDirty = false;
   }
 
   // Now draw, either NW or centered
   int xpos = 0, ypos = 0;
   if( params->backgroundPixmapCentered ) {
-	xpos = ( imagewidth - backpix.width() ) / 2;
-	ypos = ( imageheight - backpix.height() ) / 2;
+        xpos = ( imagewidth - backpix->width() ) / 2;
+        ypos = ( imageheight - backpix->height() ) / 2;
   }
-  
-  p->drawPixmap( xpos, ypos, backpix );
+
+  p->drawPixmap( xpos, ypos, *backpix );
 }
 
 
@@ -221,27 +223,27 @@ void KChartEngine::prepareColors()
         for(int j=0; j<num_sets; ++j )
           if( params->ExtColor.count() )
                 {
-	        //kdDebug(35001) << "Ext color" << endl;
-	        // changed by me, BL
-	        //QColor ext_clr = params->ExtColor.color( num_points*j+i );
+                //kdDebug(35001) << "Ext color" << endl;
+                // changed by me, BL
+                //QColor ext_clr = params->ExtColor.color( num_points*j+i );
                 //Montel change to allow that all same think has the same color
                 //QColor ext_clr = params->ExtColor.color( (num_points*j+i) % params->ExtColor.count());
                 QColor ext_clr = params->ExtColor.color( (j) % params->ExtColor.count());
                 ExtColor[j][i] = ext_clr;
                 if( params->threeD() )
                         ExtColorShd[j][i] = QColor( ext_clr.red() / 2, ext_clr.green() / 2, ext_clr.blue() / 2 );
-	        }
-	   else if( params->SetColor.count() )
+                }
+           else if( params->SetColor.count() )
                 {
-	        QColor set_clr = params->SetColor.color( j );
-	        ExtColor[j][i] = QColor( set_clr );
+                QColor set_clr = params->SetColor.color( j );
+                ExtColor[j][i] = QColor( set_clr );
 
                 if( params->threeD() )
                         ExtColorShd[j][i] = QColor( set_clr.red() / 2, set_clr.green() / 2, set_clr.blue() / 2 );
-	        }
-	   else {
-		 ExtColor[j][i] = PlotColor;
-		 if( params->threeD() )
-		   ExtColorShd[j][i] = QColor( params->PlotColor.red() / 2, params->PlotColor.green() / 2, params->PlotColor.blue() / 2 );
-	   }
+                }
+           else {
+                 ExtColor[j][i] = PlotColor;
+                 if( params->threeD() )
+                   ExtColorShd[j][i] = QColor( params->PlotColor.red() / 2, params->PlotColor.green() / 2, params->PlotColor.blue() / 2 );
+           }
 }
