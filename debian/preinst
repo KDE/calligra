@@ -1,21 +1,19 @@
 #! /bin/sh
-# postinst script for koffice
+# preinst script for koffice
 #
 # see: dh_installdeb(1)
 
 set -e
 
 case "$1" in
-    configure)
-	ldconfig
+    install|upgrade)
     ;;
 
-    abort-upgrade|abort-remove|abort-deconfigure)
-
+    abort-upgrade)
     ;;
 
     *)
-        echo "postinst called with unknown argument \`$1'" >&2
+        echo "preinst called with unknown argument \`$1'" >&2
         exit 0
     ;;
 esac

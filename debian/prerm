@@ -1,21 +1,17 @@
 #! /bin/sh
-# postinst script for koffice
+# prerm script for koffice
 #
 # see: dh_installdeb(1)
 
 set -e
 
 case "$1" in
-    configure)
-	ldconfig
-    ;;
-
-    abort-upgrade|abort-remove|abort-deconfigure)
-
-    ;;
-
+    remove|upgrade|deconfigure)
+        ;;
+    failed-upgrade)
+        ;;
     *)
-        echo "postinst called with unknown argument \`$1'" >&2
+        echo "prerm called with unknown argument \`$1'" >&2
         exit 0
     ;;
 esac
@@ -25,6 +21,7 @@ esac
 
 #DEBHELPER#
 #KDEHELPER#
+
 
 exit 0
 

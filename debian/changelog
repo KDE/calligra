@@ -1,3 +1,11 @@
+koffice-cvs (2.0-19990912-1) experimental; urgency=low
+
+  * new CVS version
+  * Rebuild post/pre scripts to follow debian policy
+  * Finishes migration to /usr/share/doc
+
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sun, 12 Sep 1999 19:30:06 -0400
+
 koffice-cvs (2.0-19990820-1) experimental; urgency=low
 
   * new CVS version
