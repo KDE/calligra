@@ -320,30 +320,30 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler, b
                     {
                     case 0:
                     {
-                        pnt3.setX( pnt4.x() - diff1.width() / 2 );
+                        pnt3.setX( pnt4.x() - (int)diff1.width() / 2 );
                         pnt3.setY( pnt1.y() );
                     } break;
                     case 180:
                     {
-                        pnt3.setX( pnt4.x() + diff1.width() / 2 );
+                        pnt3.setX( pnt4.x() + (int)diff1.width() / 2 );
                         pnt3.setY( pnt1.y() );
                     } break;
                     case 90:
                     {
                         pnt3.setX( pnt1.x() );
-                        pnt3.setY( pnt4.y() - diff1.width() / 2 );
+                        pnt3.setY( pnt4.y() - (int)diff1.width() / 2 );
                     } break;
                     case 270:
                     {
                         pnt3.setX( pnt1.x() );
-                        pnt3.setY( pnt4.y() + diff1.width() / 2 );
+                        pnt3.setY( pnt4.y() + (int)diff1.width() / 2 );
                     } break;
                     default:
                         pnt3 = pnt1;
                         break;
                     }
 
-                    drawFigure( lineBegin, _painter, pnt3, pen2.color(), _w, _angle, _zoomHandler );
+                    drawFigure( lineBegin, _painter, _zoomHandler->unzoomPoint( pnt3 ), pen2.color(), (int)_w, _angle, _zoomHandler );
                 }
 
                 if ( lineEnd != L_NORMAL )
@@ -356,30 +356,30 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler, b
                     {
                     case 0:
                     {
-                        pnt3.setX( pnt4.x() - diff2.width() / 2 );
+                        pnt3.setX( pnt4.x() - (int)diff2.width() / 2 );
                         pnt3.setY( pnt1.y() );
                     } break;
                     case 180:
                     {
-                        pnt3.setX( pnt4.x() + diff2.width() / 2 );
+                        pnt3.setX( pnt4.x() + (int)diff2.width() / 2 );
                         pnt3.setY( pnt1.y() );
                     } break;
                     case 90:
                     {
                         pnt3.setX( pnt1.x() );
-                        pnt3.setY( pnt4.y() - diff2.width() / 2 );
+                        pnt3.setY( pnt4.y() - (int)diff2.width() / 2 );
                     } break;
                     case 270:
                     {
                         pnt3.setX( pnt1.x() );
-                        pnt3.setY( pnt4.y() + diff2.width() / 2 );
+                        pnt3.setY( pnt4.y() + (int)diff2.width() / 2 );
                     } break;
                     default:
                         pnt3 = pnt1;
                         break;
                     }
 
-                    drawFigure( lineEnd, _painter, pnt3, pen2.color(), _w, _angle,_zoomHandler );
+                    drawFigure( lineEnd, _painter, _zoomHandler->unzoomPoint( pnt3 ), pen2.color(), (int)_w, _angle,_zoomHandler );
                 }
             }
 
