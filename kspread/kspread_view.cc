@@ -691,91 +691,91 @@ void KSpreadView::formulaPower()
 {
     activateFormulaEditor();
 	
-    canvasWidget()->insertFormulaChar(POWER );
+    canvasWidget()->insertFormulaChar(Box::POWER );
 }
 
 void KSpreadView::formulaSubscript()
 {
     activateFormulaEditor();
 	
-    canvasWidget()->insertFormulaChar(SUB );
+    canvasWidget()->insertFormulaChar(Box::SUB );
 }
 
 void KSpreadView::formulaParentheses()
 {
     activateFormulaEditor();
 	
-    canvasWidget()->insertFormulaChar(PAREN );
+    canvasWidget()->insertFormulaChar(Box::PAREN );
 }
 
 void KSpreadView::formulaAbsValue()
 {
     activateFormulaEditor();
 
-    canvasWidget()->insertFormulaChar(ABS );
+    canvasWidget()->insertFormulaChar(Box::ABS );
 }
 
 void KSpreadView::formulaBrackets()
 {
     activateFormulaEditor();
 
-    canvasWidget()->insertFormulaChar(BRACKET );
+    canvasWidget()->insertFormulaChar(Box::BRACKET );
 }
 
 void KSpreadView::formulaFraction()
 {
     activateFormulaEditor();
 	
-    canvasWidget()->insertFormulaChar(DIVIDE );
+    canvasWidget()->insertFormulaChar(Box::DIVIDE );
 }
 
 void KSpreadView::formulaRoot()
 {
     activateFormulaEditor();
 
-    canvasWidget()->insertFormulaChar(SQRT );
+    canvasWidget()->insertFormulaChar(Box::SQRT );
 }
 
 void KSpreadView::formulaIntegral()
 {
     activateFormulaEditor();
 
-    canvasWidget()->insertFormulaChar(INTEGRAL );
+    canvasWidget()->insertFormulaChar(Box::INTEGRAL );
 }
 
 void KSpreadView::formulaMatrix()
 {
     activateFormulaEditor();
 
-    canvasWidget()->insertFormulaChar(MATRIX );
+    canvasWidget()->insertFormulaChar(Box::MATRIX );
 }
 
 void KSpreadView::formulaLeftSuper()
 {
     activateFormulaEditor();
 	
-    canvasWidget()->insertFormulaChar(LSUP );
+    canvasWidget()->insertFormulaChar(Box::LSUP );
 }
 
 void KSpreadView::formulaLeftSub()
 {
     activateFormulaEditor();
 	
-    canvasWidget()->insertFormulaChar(LSUB );
+    canvasWidget()->insertFormulaChar(Box::LSUB );
 }
 
 void KSpreadView::formulaSum()
 {
     activateFormulaEditor();
 	
-    canvasWidget()->insertFormulaChar(SUM );
+    canvasWidget()->insertFormulaChar(Box::SUM );
 }
 
 void KSpreadView::formulaProduct()
 {
     activateFormulaEditor();
 
-    canvasWidget()->insertFormulaChar(PRODUCT );
+    canvasWidget()->insertFormulaChar(Box::PRODUCT );
 }
 
 void KSpreadView::tableFormat()
