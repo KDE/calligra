@@ -60,6 +60,8 @@ KPTProject::KPTProject(KPTNode *parent)
     m_maxGroupId = 0;
     m_maxResourceId = 0;
     
+    m_standardWorktime = 0;
+    
     m_calendars.setAutoDelete(true);
 
 }
@@ -68,6 +70,7 @@ KPTProject::KPTProject(KPTNode *parent)
 KPTProject::~KPTProject() {
     m_resourceGroups.setAutoDelete(true);
     m_resourceGroups.clear();
+    delete m_standardWorktime;
 }
 
 int KPTProject::type() const { return KPTNode::Type_Project; }

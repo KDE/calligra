@@ -21,6 +21,7 @@
 #define KPTCALENDAR_H
 
 #include "kptmap.h"
+#include "kptduration.h"
 
 #include <qptrlist.h>
 #include <qpair.h>
@@ -29,7 +30,6 @@ class QDomElement;
 class QDateTime;
 class QTime;
 class QDate;
-class KPTDuration;
 class KPTDateTime;
 
 class KPTCalendarDay {
@@ -272,4 +272,37 @@ public:
 #endif
 };
 
+class KPTStandardWorktime
+{
+public:
+    KPTStandardWorktime();
+    ~KPTStandardWorktime();
+    
+    /// The number of work hours in a normal year.
+    KPTDuration year();
+    /// The number of work hours in a normal month
+    KPTDuration month();
+    /// The number of work hours in a normal week
+    KPTDuration week();
+    /// The number of work hours in a normal day
+    KPTDuration day();
+    /// Returns the time when the @param weekday starts
+    QTime startOfDay(int weekday);
+    /// Returns the time when the @param weekday ends
+    QTime endOfDay(int weekday);
+    
+    bool load(QDomElement &element);
+    void save(QDomElement &element);
+
+private:
+    KPTDuration m_year;
+    KPTDuration m_month;
+    KPTCalendarDay m_day;
+    KPTCalendarWeekdays m_weekdays;
+    
+#ifndef NDEBUG
+public:
+    void printDebug(QCString indent=""){}
+#endif
+};
 #endif

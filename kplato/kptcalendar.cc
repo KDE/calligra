@@ -571,6 +571,44 @@ bool KPTCalendar::hasInterval(const KPTDateTime &start, const KPTDateTime &end) 
     return false;
 }
 
+/////////////
+KPTStandardWorktime::KPTStandardWorktime() {
+}
+
+KPTStandardWorktime::~KPTStandardWorktime() {
+}
+    
+KPTDuration KPTStandardWorktime::year() {
+    return m_year;
+}
+
+KPTDuration KPTStandardWorktime::month() {
+    return m_month;
+}
+
+KPTDuration KPTStandardWorktime::week() {
+    return 0;
+}
+
+KPTDuration KPTStandardWorktime::day() {
+    return 0;
+}
+
+QTime KPTStandardWorktime::startOfDay(int weekday) {
+    return QTime();
+}
+
+QTime KPTStandardWorktime::endOfDay(int weekday) {
+    return QTime();
+}
+    
+bool KPTStandardWorktime::load(QDomElement &element) {
+    return true;
+}
+
+void KPTStandardWorktime::save(QDomElement &element) {
+}
+
 #ifndef NDEBUG
 void KPTCalendarDay::printDebug(QCString indent) {
     QString s[] = {"None", "Non-working", "Working"};

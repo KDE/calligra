@@ -34,6 +34,7 @@
 #include <algorithm>
 
 class KPTCalendar;
+class KPTStandardWorktime;
 
 //#define DEBUGPERT
 /**
@@ -148,17 +149,9 @@ public:
     /**
      * Used eg. for estimation and calculation of effort, 
      * and presentation in gantt chart.
-     */
-    // FIXME: move to sep. class?
-    int standardDay() const { return 8; } // hours
-    int standardWeek() const { return 40; }  // hours
-    int standardMonth() const { return 22*standardDay(); } // hours
-    int standardYear() const { return 220*standardDay(); } // hours
-    QTime startOfDay() const { return QTime(8, 0, 0); }
-    QTime endOfDay() const { return QTime(16, 0, 0); }
-    
-    KPTDuration standardDuration(KPTDuration &duration);
-    
+     */    
+    KPTStandardWorktime *standardWorktime() { return m_standardWorktime; }
+
 protected:
     /**
      * @return The start node.
@@ -207,6 +200,8 @@ protected:
     KPTCalendar *m_defaultCalendar;
     QPtrList<KPTCalendar> m_calendars;
 
+    KPTStandardWorktime *m_standardWorktime;
+    
 private:
     // we need unique id's for referencing objects when saving/loading
     QMap<int, KPTNode *>m_nodeMap;
