@@ -32,9 +32,14 @@
 #include <qdom.h>
 
 #include <kdebug.h>
+#include <koFilterChain.h>
+#include <kgenericfactory.h>
 
 #include "wpimport.h"
 #include "wpimport.moc"
+
+typedef KGenericFactory<WPImport, KoFilter> WPImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libwpimport, WPImportFactory( "wpimport" ) );
 
 // for WP 5.x
 const int Code_PageNumber = 0x02;
@@ -71,29 +76,27 @@ static void XMLEscape( QString &text )
   text.replace(QRegExp(">"), "&gt;");
 }
 
-WPImport::WPImport( KoFilter *parent, const char *name ):
-                     KoFilter(parent, name)
+WPImport::WPImport( KoFilter *, const char *, const QStringList& ):
+                     KoFilter()
 {
   m_docstart = 0;
-
 }
 
 // this is the main beast
-bool WPImport::filter(const QString &fileIn, const QString &fileOut,
-                         const QString& from, const QString& to,
-                         const QString &)
+KoFilter::ConversionStatus WPImport::convert( const QCString& from, const QCString& to )
 {
   // check for proper conversion
   if( to!= "application/x-kword" || from != "application/wordperfect" )
-     return false;
+     return KoFilter::NotImplemented;
 
   // open input file
+  QString fileIn = m_chain->inputFile();
   QFile in(fileIn);
   if(!in.open(IO_ReadOnly))
     {
       kdError() << "WordPerfect import filter error: Unable to open input file!" << endl;
       in.close();
-      return false;
+      return KoFilter::FileNotFound;
     }
 
   // redirect input stream
@@ -113,7 +116,7 @@ bool WPImport::filter(const QString &fileIn, const QString &fileOut,
   if( !readHeader() )
     {
       kdError() << "WordPerfect import filter: unable to identify header !" << endl;
-      return false;
+      return KoFilter::WrongFormat;
     }
 
   root = QDomDocument( "DOC" );
@@ -157,7 +160,7 @@ bool WPImport::filter(const QString &fileIn, const QString &fileOut,
   if( !parseDocument( ) )
     {
       kdError() << "WordPerfect import filter: unable to parse document !" << endl;
-      return false;
+      return KoFilter::WrongFormat;
     }
 
   in.close();
@@ -180,21 +183,20 @@ bool WPImport::filter(const QString &fileIn, const QString &fileOut,
   paperborders.setAttribute( "bottom", WPUToPoint( document.pagesettings.bottommargin ) );
 
   // prepare storage
-  KoStore out=KoStore( QString(fileOut), KoStore::Write );
+  KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
 
   // store output document
-  if( out.open( "root" ) )
+  if( out )
     {
       QCString cstring = root.toString().utf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
 
-      out.write( (const char*) cstring, cstring.length() );
-      out.close();
-
+      out->writeBlock( (const char*) cstring, cstring.length() );
     }
 
   // store document information
-  if( out.open("documentinfo.xml") )
+  out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
+  if( out )
     {
       QDomDocument docinfo( "document-info" );
       QDomElement main = docinfo.createElement( "documentinfo" );
@@ -219,11 +221,10 @@ bool WPImport::filter(const QString &fileIn, const QString &fileOut,
       QCString cstring = docinfo.toString().utf8();
       cstring.prepend( "<?xml version=\"1.0\"?>\n" );
 
-      out.write( (const char*)cstring, cstring.length() );
-      out.close();
+      out->writeBlock( (const char*)cstring, cstring.length() );
     }
 
-  return true;
+  return KoFilter::OK;
 }
 
 // return false if error or failed

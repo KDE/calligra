@@ -21,28 +21,28 @@
 #include <kdebug.h>
 #include <qdom.h>
 #include <qfile.h>
+#include <koFilterChain.h>
+#include <kgenericfactory.h>
 
 #include "wpexport.h"
 #include "wpexport.moc"
 
+typedef KGenericFactory<WPExport, KoFilter> WPExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libwpexport, WPExportFactory( "wpexport" ) );
 
-WPExport::WPExport(KoFilter *parent, const char *name) :
-                     KoFilter(parent, name) 
+
+WPExport::WPExport(KoFilter *, const char *, const QStringList&) :
+                     KoFilter()
 {
 }
 
-bool WPExport::filter(const QString  &filenameIn,
-                         const QString  &filenameOut,
-                         const QString  &from,
-                         const QString  &to,
-                         const QString  &         )
+KoFilter::ConversionStatus WPExport::convert( const QCString& from, const QCString& to )
 {
   // check for proper conversion
   if ( to != "application/wordperfect" || from != "application/x-kword" )
-      return false;
+      return KoFilter::NotImplemented;
 
   kdDebug() << "KWord WordPerfect filter: sorry, export is not supported now " << endl;
 
-  return false;
+  return KoFilter::NotImplemented;
 }
-

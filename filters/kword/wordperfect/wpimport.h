@@ -38,7 +38,7 @@ class WPParagraphLayout
     int linespace;
 };
 
-typedef struct 
+typedef struct
 {
 
   typedef struct
@@ -57,9 +57,9 @@ typedef struct
     QString typist;
     QString abstract;
   } Summary;
-  
+
   typedef struct
-  { 
+  {
     int type;
     long size, pos;
     QMemArray<int> data;
@@ -70,7 +70,7 @@ typedef struct
     int type, pos, len;
   } TextFormat;
 
-  typedef struct   
+  typedef struct
   {
     int pos, len;
     int red, green, blue;
@@ -80,7 +80,7 @@ typedef struct
   {
     int major, minor;
   } Version;
-  
+
   QPtrList<Packet> packets;
   QPtrList<TextFormat> formats;
   QPtrList<FontColor> colors;
@@ -91,7 +91,7 @@ typedef struct
 
 } WPDocument;
 
-class WPImport : public KoFilter 
+class WPImport : public KoFilter
 {
 
     Q_OBJECT
@@ -114,14 +114,12 @@ class WPImport : public KoFilter
 
   public:
 
-    WPImport(KoFilter *parent, const char *name);
+    WPImport(KoFilter *parent, const char *name, const QStringList&);
     WPImport();
 
     virtual ~WPImport() {}
 
-    virtual bool filter(const QString &fileIn, const QString &fileOut,
-                        const QString &from, const QString &to,
-                        const QString &config=QString::null);
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
     int readByte();
 

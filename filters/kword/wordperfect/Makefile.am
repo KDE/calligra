@@ -10,10 +10,10 @@ libwpexport_la_LIBADD = $(KOFFICE_LIBS)
 
 kde_module_LTLIBRARIES = libwpimport.la libwpexport.la
 
-libwpimport_la_SOURCES = wpimport.cc wpimport_factory.cc
-libwpexport_la_SOURCES = wpexport.cc wpexport_factory.cc
+libwpimport_la_SOURCES = wpimport.cc
+libwpexport_la_SOURCES = wpexport.cc
 
-noinst_HEADERS = wpimport.h wpimport_factory.h wpexport.h wpexport_factory.h
+noinst_HEADERS = wpimport.h wpexport.h
 
 METASOURCES = AUTO
 
