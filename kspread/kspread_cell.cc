@@ -874,7 +874,7 @@ QString KSpreadCell::encodeFormula( bool _era, int _col, int _row )
                             erg += QString( "$%1" ).arg( col );
                         else
                             if (_era)
-                                erg += QString( "\%%1" ).arg( col );
+                                erg += QString( "§%1" ).arg( col );
                             else
                                 erg += QString( "#%1" ).arg( col - _col );
 
@@ -882,7 +882,7 @@ QString KSpreadCell::encodeFormula( bool _era, int _col, int _row )
                             erg += QString( "$%1#").arg( row );
                         else
                             if (_era)
-                                erg += QString( "\%%1#" ).arg( row );
+                                erg += QString( "§%1#" ).arg( row );
                             else
                                 erg += QString( "#%1#" ).arg( row - _row );
                     }
@@ -937,7 +937,7 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
             if ( pos < length )
                 erg += _text[pos++];
         }
-        else if ( _text[pos] == '#' || _text[pos] == '$' || _text[pos] == '%')
+        else if ( _text[pos] == '#' || _text[pos] == '$' || _text[pos] == '§')
         {
             bool abs1 = FALSE;
             bool abs2 = FALSE;
@@ -945,7 +945,7 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
             bool era2 = FALSE;
             switch ( _text[pos++] ) {
                 case '$': abs1 = TRUE; break ;
-                case '%': era1 = TRUE; break ;
+                case '§': era1 = TRUE; break ;
             }
             int col = 0;
             unsigned int oldPos = pos;
@@ -957,7 +957,7 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
             // Skip '#' or '$'
             switch ( _text[pos++] ) {
                 case '$': abs2 = TRUE; break ;
-                case '%': era2 = TRUE; break ;
+                case '§': era2 = TRUE; break ;
             }
             int row = 0;
             oldPos = pos;
