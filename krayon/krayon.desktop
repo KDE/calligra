@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Krayon
+Name[af]=KRAYON
 Name[eo]=Krajono
-Name[hu]=Krayon képszerkesztő
 Name[is]=Vaxlitir
 Name[ko]=K크레용
 Name[pt_BR]=Krayon - Editor de imagens
@@ -49,9 +49,10 @@ Comment[sk]=KOffice kresliaci program
 Comment[sl]=Program za obdelavo slik iz KOffice
 Comment[sr]=KOffice program za manipulaciju slikama
 Comment[sv]=Bildmanipuleringsprogram för Koffice.
-Comment[ta]=KOffice ¯ÕÅ ¨¸Â¡Ùõ ÀÂýÀ¡Î.
+Comment[ta]=KOffice ¯Õì ¨¸Â¡Ùõ ¿¢Ãø.
 Comment[tr]=KOffice resim işleme uygulaması
 Comment[uk]=Програма редагування зображень KOffice
+Comment[vi]=Chương trình thao tác ảnh của KOffice 
 Comment[zh_CN.GB2312]=KOffice 图像处理程序。
 Comment[zh_TW.Big5]=KOffice 影像處理應用程式
 MimeType=application/x-krayon
