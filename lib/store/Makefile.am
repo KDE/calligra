@@ -8,6 +8,6 @@ IDL_FLAGS = --relative-paths
 
 libkstore_la_LIBADD = $(LIB_KDECORE)
 libkstore_la_SOURCES = koTarStore.cc koStoreStream.cc koBinaryStore.cc
-include_HEADERS = koTarStore.h koStoreStream.h koBinaryStore.h
+include_HEADERS = koStore.h koTarStore.h koStoreStream.h koBinaryStore.h
 
 
