@@ -2235,6 +2235,7 @@ void KWTextFrameSetEdit::paste()
         if ( !text.isEmpty() )
             textObject()->pasteText( cursor(), text, currentFormat(), true );
     }
+    frameSet()->layout();
 }
 
 void KWTextFrameSetEdit::cut()
