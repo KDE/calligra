@@ -2178,7 +2178,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 	}
         else if ( m_currentTextObjectView )
         {
-            if ( !m_currentTextObjectView->kpTextObject()->isProtectContent() )
+            if ( !m_currentTextObjectView->kpTextObject()->isProtectContent() || (e->text().length() == 0))
                 m_currentTextObjectView->keyPressEvent( e );
             else
                 KMessageBox::information(this, i18n("Read-only content cannot be changed. No modifications will be accepted"));

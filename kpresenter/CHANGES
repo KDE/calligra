@@ -74,6 +74,7 @@ Bugfixes:
 - Fix webpresentation => display real variable value 
 - Fix autocorrection (crash/change language etc...)
 - Fix update sidebar
+- Fix key event when text object is protect content.
 
 Crashes:
 - Fixed crash when we close kword and "special char dialogbox" is not closed
