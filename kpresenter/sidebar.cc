@@ -74,7 +74,7 @@ public:
     OutlineSlideItem( KListView * parent, KPrPage* page );
     OutlineSlideItem( KListView * parent, OutlineSlideItem *after, KPrPage* page );
 
-    KPrPage* page(){ return m_page; }
+    KPrPage* page() const { return m_page; }
 
     void setPage( KPrPage* p );
 
@@ -91,7 +91,7 @@ public:
     OutlineObjectItem( OutlineSlideItem * parent, KPObject* object,
                        bool sticky, const QString& name = QString::null );
 
-    KPObject* object(){ return m_object; }
+    KPObject* object() const { return m_object; }
 
     void setObject( KPObject* o );
 
@@ -788,7 +788,7 @@ void Outline::addItem( int pos )
         OutlineSlideItem *after = slideItem( pos - 1 );
         item = new OutlineSlideItem( this, after, page );
     }
-    
+
     item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() );
     // update title
     for( ; item; item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() ) )
@@ -810,8 +810,8 @@ void Outline::moveItem( int oldPos, int newPos )
     // moving backwards
     if ( newPos < oldPos )
         newPos--;
-    
-    for ( int index = 0; item; ++index, item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() ) ) 
+
+    for ( int index = 0; item; ++index, item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() ) )
     {
         if ( index == oldPos )
             itemToMove = item;
@@ -880,11 +880,11 @@ void Outline::itemClicked( QListViewItem *item )
     }
 }
 
-/** 
+/**
  * The listview no longer moves the item by itself. It just calls m_doc->movePage
  * which then moves the item. At the moment the method only works as long as
  * only one object is moves.
- * When an item is about to move (using drag-and-drop), it makes shure that 
+ * When an item is about to move (using drag-and-drop), it makes shure that
  * it's not moved right after an object.
  */
 void Outline::slotDropped( QDropEvent * /* e */, QListViewItem *parent, QListViewItem *target )
@@ -892,7 +892,7 @@ void Outline::slotDropped( QDropEvent * /* e */, QListViewItem *parent, QListVie
     kdDebug(33001) << "slotDropped" << endl;
     /* slide doesn't have parent (always 0)
      * Only slides can move at the moment, objects can't. */
-    if ( parent ) 
+    if ( parent )
         return;
 
     // This code is taken from KListView
@@ -909,7 +909,7 @@ void Outline::slotDropped( QDropEvent * /* e */, QListViewItem *parent, QListVie
 
         i->setSelected( false );
 
-        // don't move the item as it is allready 
+        // don't move the item as it is allready
         moveItem(i, parent, target );
 
         // Only one item can be moved
@@ -948,7 +948,7 @@ void Outline::contentsDropEvent( QDropEvent *e )
 void Outline::moveItem( QListViewItem *i, QListViewItem *, QListViewItem *newAfter )
 {
     OutlineSlideItem* srcItem = dynamic_cast<OutlineSlideItem*>( i );
-    if ( !srcItem ) 
+    if ( !srcItem )
         return;
 
     int num = m_doc->pageList().findRef( srcItem->page() );
@@ -957,11 +957,11 @@ void Outline::moveItem( QListViewItem *i, QListViewItem *, QListViewItem *newAft
     if ( newAfter )
     {
         OutlineSlideItem* dstItem = dynamic_cast<OutlineSlideItem*>( newAfter );
-        if( !dstItem ) 
+        if( !dstItem )
             return;
 
         numNow = m_doc->pageList().findRef( dstItem->page() );
-        if ( numNow < num ) 
+        if ( numNow < num )
             numNow++;
     }
 
