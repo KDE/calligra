@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=image
+Type=MimeType
+MimeType=image/x-vnd.adobe.photoshop
+Patterns=*.psd;*.PSD;
+Comment=Adobe Photoshop Image
