@@ -563,6 +563,10 @@ void WinWordDoc::gotParagraph(
     m_body.append(m_styles.names[pap->istd]);
     m_body.append("\"/>\n");
     m_body.append(
+        "   <FLOW ");
+    m_body.append(justification(pap->jc));
+    m_body.append("/>\n");
+    m_body.append(
         " </LAYOUT>\n");
     m_body.append("</PARAGRAPH>\n");
 }
@@ -584,6 +588,10 @@ void WinWordDoc::gotHeadingParagraph(
         "  <NAME value=\"");
     m_body.append(m_styles.names[pap->istd]);
     m_body.append("\"/>\n");
+    m_body.append(
+        "   <FLOW ");
+    m_body.append(justification(pap->jc));
+    m_body.append("/>\n");
 //    m_body.append("  <COUNTER type=\"");
 //    m_body.append(numbering(styles.baseStyle.anld.nfc));
 //    m_body.append("\" depth=\"");
@@ -617,6 +625,10 @@ void WinWordDoc::gotListParagraph(
         "  <FOLLOWING name=\"");
     paragraph.append(m_styles.names[styleIndex]);
     paragraph.append("\"/>\n");
+    paragraph.append(
+        "   <FLOW ");
+    paragraph.append(justification(pap->jc));
+    paragraph.append("/>\n");
     paragraph.append(
         "  <COUNTER type=\"");
     paragraph.append(numbering(pap->anld.nfc));
@@ -676,7 +688,7 @@ void WinWordDoc::gotStyle(
         "   <NAME value=\"");
     styleDef.append(name);
     styleDef.append("\" />\n");
-    if (isHeading(styleIndex))
+    if (isHeading(styleIndex) && style.getPap()->ilvl)
     {
         // Headings are followed by normal text.
         styleDef.append(
@@ -684,16 +696,16 @@ void WinWordDoc::gotStyle(
         styleDef.append(m_styles.names[stiNormal]);
         styleDef.append("\"/>\n");
         styleDef.append(
-            "   <FLOW align=\"");
+            "   <FLOW ");
         styleDef.append(justification(style.getPap()->jc));
-        styleDef.append("\" />\n");
+        styleDef.append("/>\n");
         styleDef.append(
             "   <COUNTER numberingtype=\"1\" type=\"1\" bullet=\"45\" lefttext=\"\" bulletfont=\"\" righttext=\".\" start=\"1\" depth=\"");
         styleDef.append(QString::number(styleIndex - stiLev1));
         styleDef.append("\" customdef=\"\"/>\n");
     }
     else
-    if (isListAlpha(styleIndex) || isListBullet(styleIndex) || isListNumber(styleIndex) || isListContination(styleIndex))
+    if ((isListAlpha(styleIndex) || isListBullet(styleIndex) || isListNumber(styleIndex) || isListContination(styleIndex)) && style.getPap()->ilvl)
     {
         // Note: it is quite common to encounter list paragraphs which do not
         // use one of these list styles (!!). Instead, they often seem to be
@@ -708,9 +720,9 @@ void WinWordDoc::gotStyle(
         styleDef.append(name);
         styleDef.append("\"/>\n");
         styleDef.append(
-            "   <FLOW align=\"");
+            "   <FLOW ");
         styleDef.append(justification(style.getPap()->jc));
-        styleDef.append("\" />\n");
+        styleDef.append("/>\n");
         styleDef.append(
             "   <COUNTER numberingtype=\"0\" type=\"");
         styleDef.append(numbering(anld.nfc));
@@ -732,9 +744,9 @@ void WinWordDoc::gotStyle(
         styleDef.append(m_styles.names[stiNormal]);
         styleDef.append("\"/>\n");
         styleDef.append(
-            "   <FLOW align=\"");
+            "   <FLOW ");
         styleDef.append(justification(style.getPap()->jc));
-        styleDef.append("\" />\n");
+        styleDef.append("/>\n");
 //        styleDef.append(
 //            "   <COUNTER numberingtype=\"2\" type=\"0\" bullet=\"45\" lefttext=\"\" bulletfont=\"\" righttext=\"\" start=\"1\" depth=\"0\" customdef=\"\"/>\n");
     }
@@ -939,7 +951,7 @@ QColor WinWordDoc::colorForNumber(QString number, int defaultcolor, bool default
     }
 }
 
-const char *WinWordDoc::justification(unsigned jc) const
+QString WinWordDoc::justification(unsigned jc) const
 {
     // Word justification codes are:
     //
@@ -956,7 +968,9 @@ const char *WinWordDoc::justification(unsigned jc) const
         "justify"
     };
 
-    return justificationTypes[jc];
+    if (jc > 3)
+        jc = 3;
+    return QString("align=\"").append(justificationTypes[jc]).append("\" ");
 }
 
 const char *WinWordDoc::list(unsigned nfc) const
@@ -971,6 +985,8 @@ const char *WinWordDoc::list(unsigned nfc) const
         "Bullet List"
     };
 
+    if (nfc > 5)
+        nfc = 5;
     return listStyle[nfc];
 }
 
@@ -990,6 +1006,8 @@ char WinWordDoc::numbering(unsigned nfc) const
         '1', '5', '4', '3', '2', '6'
     };
 
+    if (nfc > 5)
+        nfc = 5;
     return numberingTypes[nfc];
 }
 

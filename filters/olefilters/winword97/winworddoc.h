@@ -104,7 +104,7 @@ private:
 
     QColor colorForNumber(QString number, int defaultcolor, bool defaultWhite = false);
 
-    const char *justification(unsigned jc) const;   // Justification codes.
+    QString justification(unsigned jc) const;      // Justification codes.
     const char *list(unsigned nfc) const;           // Number format codes.
     char numbering(unsigned nfc) const;
     char borderStyle(unsigned btc) const;           // Border type codes.
