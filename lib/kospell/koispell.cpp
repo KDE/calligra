@@ -1234,11 +1234,10 @@ KOISpell::modalCheck( QString& text, KOSpellConfig* _kcs )
 				0, _kcs, true, true );
     //qApp->enter_loop();
 
-    while (spell->status()!=Finished)
+    while ((spell->status()==Starting) || (spell->status()==Running) || (spell->status()==Cleaning))
       kapp->processEvents();
 
     text = modaltext;
-
 
     delete spell;
     return modalreturn;
