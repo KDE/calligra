@@ -1838,14 +1838,14 @@ KWTableFrameSet *KWCanvas::getTable()
     return 0L;
 }
 
-void KWCanvas::editFrameSet( KWFrameSet * frameSet )
+void KWCanvas::editFrameSet( KWFrameSet * frameSet, bool onlyText )
 {
     if ( selectAllFrames( false ) )
         emit frameSelectedChanged();
 
     bool emitChanged = false;
     KWTableFrameSet *table = frameSet->getGroupManager();
-    emitChanged = checkCurrentEdit( table ? table : frameSet );
+    emitChanged = checkCurrentEdit( table ? table : frameSet, onlyText );
 
     if ( emitChanged ) // emitted after mousePressEvent [for tables]
         emit currentFrameSetEditChanged();

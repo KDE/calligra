@@ -180,7 +180,7 @@ public:
 
     void inlinePictureStarted();
 
-    void editFrameSet( KWFrameSet * frameSet );
+    void editFrameSet( KWFrameSet * frameSet,bool onlyText = false );
     // forceEdit : necessary otherwise we can move cursor into
     //a frame which is edited
     void editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index, bool forceEdit=false );

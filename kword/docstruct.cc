@@ -225,7 +225,8 @@ void KWDocStructFormulaItem::selectFrameSet()
 
 void KWDocStructFormulaItem::editFrameSet()
 {
-    //todo
+    gui->canvasWidget()->editFrameSet(form );
+
 }
 
 /******************************************************************/

@@ -35,7 +35,7 @@ DCOPRef KWordPartFrameSetIface::startEditing()
 {
     KWDocument *doc=m_part->kWordDocument();
     QPtrList <KWView> lst=doc->getAllViews();
-    lst.at(0)->getGUI()->canvasWidget()->checkCurrentEdit(m_part );
+    lst.at(0)->getGUI()->canvasWidget()->editFrameSet(m_part );
     return DCOPRef( kapp->dcopClient()->appId(),
 		    (static_cast<KWPartFrameSetEdit *>( lst.at(0)->getGUI()->canvasWidget()->currentFrameSetEdit()))->dcopObject()->objId() );
 }
