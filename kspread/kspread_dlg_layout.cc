@@ -113,10 +113,18 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     formatAlwaysSignedPixmap = 0L;
     formatRedAlwaysSignedPixmap = 0L;
     table = _table;
+
+    //We need both conditions quite often, so store the condition here too
+    isRowSelected = table->isRowSelected();
+    isColumnSelected = table->isColumnSelected();
+
+    //following values are the same as from table->selectionRect() 
+    //Do we really need them as arguments?
     left = _left;
     top = _top;
     right = _right;
     bottom = _bottom;
+
     m_pView = _view;
 
     m_bValue=false;
@@ -294,7 +302,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     widthSize = 0;
     heigthSize = 0;
 
-    if( _right!=0x7FFF)
+    if( !isRowSelected )
         {
         for ( int x = _left; x <= _right; x++ )
                 {
@@ -303,7 +311,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
                 }
         }
 
-    if(_bottom!=0x7FFF)
+    if( !isColumnSelected )
         {
         for ( int y = _top; y <= _bottom; y++ )
                 {
@@ -313,7 +321,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
         }
 
     //select column(s)
-    if( _bottom==0x7FFF)
+    if( isColumnSelected )
     {
       int y=1;
       for(int x=_left;x<=_right;x++)
@@ -335,7 +343,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
         }
 
     }
-    else if( _right==0x7FFF)
+    else if( isRowSelected )
     {
       int x=1;
       for(int y=_top;y<=_bottom;y++)
@@ -378,7 +386,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     if( !bTextRotation )
         textRotation = 0;
 
-    if( _bottom==0x7FFF)
+    if( isColumnSelected )
     {
      int y=1;
      ColumnLayout *obj=table->nonDefaultColumnLayout(_left);
@@ -434,7 +442,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
         }
 
     }
-    else if( _right==0x7FFF)
+    else if( isRowSelected )
     {
       int x=1;
       bool once=false;
@@ -772,11 +780,11 @@ void CellLayoutDlg::slotApply()
         QRect rect;
         // Since the right/bottom border is stored in objects right + 1 ( or: bottom + 1 )
         // So we have to save these layouts, too
-        if(right!=0x7FFF && bottom!=0x7FFF)
+        if( (!isRowSelected ) && ( !isColumnSelected ) )
             rect.setCoords( left, top, right + 1, bottom + 1 );
-        else if( right==0x7FFF)
+        else if( isRowSelected )
             rect.setCoords( left, top, right , bottom+1  );
-        else if( bottom==0x7FFF)
+        else if( isColumnSelected )
         {
             //create cell before to apply
             RowLayout* rw =table->firstRow();
@@ -811,7 +819,7 @@ void CellLayoutDlg::slotApply()
 
 
 
-    if(right!=0x7FFF && bottom!=0x7FFF)
+    if( ( !isRowSelected ) && ( !isColumnSelected ) )
     {
         for ( int x = left; x <= right; x++ )
             for ( int y = top; y <= bottom; y++ )
@@ -853,7 +861,7 @@ void CellLayoutDlg::slotApply()
         }
 
     }
-    else if( right==0x7FFF )
+    else if( isRowSelected )
     {
         for(int i=top;i<=bottom;i++)
         {
@@ -878,7 +886,7 @@ void CellLayoutDlg::slotApply()
                 m_pView->vBorderWidget()->resizeRow(positionPage->getSizeHeight(),x,false );
         }
     }
-    else if( bottom==0x7FFF)
+    else if( isColumnSelected )
     {
         for(int i=left;i<=right;i++)
         {
@@ -2427,7 +2435,7 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     grid2 = new QGridLayout(grp,1,1,15,7);
     mergeCell=new QCheckBox(i18n("Merge cells"),grp);
     mergeCell->setChecked(dlg->isMerged);
-    mergeCell->setEnabled(!dlg->oneCell &&  (dlg->right!=0x7FFF&& dlg->bottom!=0x7FFF));
+    mergeCell->setEnabled(!dlg->oneCell && ((!dlg->isRowSelected) && (!dlg->isColumnSelected)));
     grid2->addWidget(mergeCell,0,0);
     grid3->addWidget(grp,2,0);
 
@@ -2447,13 +2455,13 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     grid2->addWidget(tmpLabel,0,0);
 
     width=new KIntNumInput(dlg->widthSize, grp, 10);
-    if(dlg->right==0x7FFF && (dlg->right!=dlg->left))
+    if( dlg->isRowSelected )
         width->setEnabled(false);
     width->setRange(2, 400, 1);
 
     grid2->addWidget(width,0,1);
     defaultWidth=new QCheckBox(i18n("Default width (60)"),grp);
-    if(dlg->right==0x7FFF && (dlg->right!=dlg->left))
+    if( dlg->isRowSelected )
         defaultWidth->setEnabled(false);
 
     grid2->addMultiCellWidget(defaultWidth,1,1,0,1);
@@ -2463,14 +2471,14 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     grid2->addWidget(tmpLabel,0,2);
 
     height=new KIntNumInput(dlg->heigthSize, grp, 10);
-    if(dlg->bottom==0x7FFF && (dlg->bottom!=dlg->top))
+    if( dlg->isColumnSelected )
         height->setEnabled(false);
 
     height->setRange(2, 400, 1);
     grid2->addWidget(height,0,3);
 
     defaultHeight=new QCheckBox(i18n("Default height (20)"),grp);
-    if(dlg->bottom==0x7FFF && (dlg->bottom!=dlg->top))
+    if( dlg->isColumnSelected )
         defaultHeight->setEnabled(false);
 
     grid2->addMultiCellWidget(defaultHeight,1,1,2,3);
@@ -3284,7 +3292,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
     if( horizontal->isChanged())
     {
         QPen tmpPen( horizontal->getColor(),horizontal->getPenWidth(),horizontal->getPenStyle());
-        if( _bottom!=0x7FFF && _right!=0x7FFF)
+        if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
         {
         for ( int x = _left; x <= _right; x++ )
                 {
@@ -3296,7 +3304,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                         }
                 }
          }
-         else if( _bottom==0x7FFF )
+         else if( dlg->isColumnSelected )
          {
                 KSpreadCell*c= dlg->getTable()->firstCell();
                 for( ;c; c = c->nextCell() )
@@ -3330,7 +3338,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
 		  }
                 }
          }
-         else if( _right==0x7FFF)
+         else if( dlg->isRowSelected )
          {
                 KSpreadCell*c= dlg->getTable()->firstCell();
                 for( ;c; c = c->nextCell() )
@@ -3354,7 +3362,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
     if( vertical->isChanged())
     {
     QPen tmpPen( vertical->getColor(),vertical->getPenWidth(),vertical->getPenStyle());
-    if( _bottom!=0x7FFF && _right!=0x7FFF)
+    if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
         {
         for ( int x = _left+1; x <= _right; x++ )
                 {
@@ -3366,7 +3374,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                         }
                 }
         }
-        else if( _bottom==0x7FFF )
+        else if( dlg->isRowSelected )
         {
                 KSpreadCell*c= dlg->getTable()->firstCell();
                 for( ;c; c = c->nextCell() )
@@ -3399,7 +3407,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
 		  }
                 }
         }
-         else if( _right==0x7FFF)
+         else if( dlg->isColumnSelected )
          {
                 KSpreadCell*c= dlg->getTable()->firstCell();
                 for( ;c; c = c->nextCell() )
@@ -3424,7 +3432,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
  if ( left->isChanged() )
     {
     QPen tmpPen( left->getColor(),left->getPenWidth(),left->getPenStyle());
-    if( _bottom!=0x7FFF && _right!=0x7FFF)
+    if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
         {
         for ( int y = _top; y <= _bottom; y++ )
                 {
@@ -3433,7 +3441,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                         obj->setLeftBorderPen( tmpPen );
                 }
         }
-    else if( _bottom==0x7FFF )
+    else if( dlg->isColumnSelected )
         {
                 KSpreadCell*c= dlg->getTable()->firstCell();
                 for( ;c; c = c->nextCell() )
@@ -3462,7 +3470,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
 		  }
                 }
         }
-    else if( _right==0x7FFF)
+    else if( dlg->isRowSelected )
         {
         KSpreadCell*c= dlg->getTable()->firstCell();
         for( ;c; c = c->nextCell() )
@@ -3487,7 +3495,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
     {
     bool once=false;
     QPen tmpPen( right->getColor(),right->getPenWidth(),right->getPenStyle());
-    if( _bottom!=0x7FFF && _right!=0x7FFF)
+    if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
         {
         for ( int y = _top; y <= _bottom; y++ )
                 {
@@ -3504,7 +3512,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                         }
                 }
         }
-    else if(  _bottom==0x7FFF)
+    else if(  dlg->isColumnSelected )
         {
                 KSpreadCell*c= dlg->getTable()->firstCell();
                 for( ;c; c = c->nextCell() )
@@ -3527,21 +3535,23 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
 		  {
 		    for(int i=dlg->left;i<=dlg->right;i++)
 		    {
-		      KSpreadCell *cell = 
+		      KSpreadCell *cell =
 			dlg->getTable()->nonDefaultCell( i,  rw->row(), true );
 		      cell->setRightBorderPen(tmpPen);
 		    }
 		  }
                 }
         }
-    else if(  _right==0x7FFF)
+    else if(  dlg->isRowSelected )
         {
         KSpreadCell*c= dlg->getTable()->firstCell();
         for( ;c; c = c->nextCell() )
                 {
                 int row = c->row();
                 if ( dlg->top <= row && dlg->bottom >= row
-                                &&!c->isObscuringForced() && c->column()==0x7FFF)
+                                && !c->isObscuringForced()
+/* Dunno if this is necessary, isn't used for columns either (Philipp)
+   therefore I commented it out  && c->column()==0x7FFF*/)
                         {
                         c->clearProperty(KSpreadCell::PRightBorder);
                         c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
@@ -3568,7 +3578,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
  if ( top->isChanged() )
     {
     QPen tmpPen( top->getColor(),top->getPenWidth(),top->getPenStyle());
-    if( _bottom!=0x7FFF && _right!=0x7FFF)
+    if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
         {
         for ( int x = _left; x <= _right; x++ )
                 {
@@ -3577,7 +3587,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                         obj->setTopBorderPen( tmpPen );
                 }
         }
-    else if( _bottom==0x7FFF)
+    else if( dlg->isColumnSelected )
         {
          for ( int x = _left; x <= _right; x++ )
                 {
@@ -3586,7 +3596,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                         obj->setTopBorderPen( tmpPen );
                 }
         }
-    else if(  _right==0x7FFF)
+    else if( dlg->isRowSelected )
         {
         KSpreadCell*c= dlg->getTable()->firstCell();
         for( ;c; c = c->nextCell() )
@@ -3609,7 +3619,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
     {
     bool once = false;
     QPen tmpPen( bottom->getColor(),bottom->getPenWidth(),bottom->getPenStyle());
-    if( _bottom!=0x7FFF && _right!=0x7FFF)
+    if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
         {
         for ( int x = _left; x <= _right; x++ )
                 {
@@ -3626,7 +3636,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                         }
                 }
         }
-    else if( _bottom==0x7FFF)
+    else if( dlg->isColumnSelected )
         {
         for ( int x = _left; x <= _right; x++ )
                 {
@@ -3643,7 +3653,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                         }
                 }
         }
-    else if(  _right==0x7FFF)
+    else if( dlg->isRowSelected )
         {
         KSpreadCell*c= dlg->getTable()->firstCell();
         for( ;c; c = c->nextCell() )
@@ -3664,7 +3674,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
 
  QPen tmpPenFall( fallDiagonal->getColor(),fallDiagonal->getPenWidth(),fallDiagonal->getPenStyle());
  QPen tmpPenGoUp( goUpDiagonal->getColor(),goUpDiagonal->getPenWidth(),goUpDiagonal->getPenStyle());
- if( _bottom!=0x7FFF && _right!=0x7FFF)
+ if( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
  {
         for ( int x = _left; x <= _right; x++ )
         {
@@ -3681,7 +3691,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                 }
         }
  }
- else if(  _bottom==0x7FFF)
+ else if( dlg->isColumnSelected )
  {
         KSpreadCell*c= dlg->getTable()->firstCell();
         for( ;c; c = c->nextCell() )
@@ -3728,7 +3738,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                 }
         }
  }
- else if(  _right==0x7FFF)
+ else if( dlg->isRowSelected )
  {
         KSpreadCell*c= dlg->getTable()->firstCell();
         for( ;c; c = c->nextCell() )

@@ -594,6 +594,8 @@ public:
     bool isMerged;
     bool oneCell;
 
+    bool isRowSelected;
+    bool isColumnSelected;
 
     // The rectangular area for which this dlg has been opened.
     int left;
