@@ -3250,15 +3250,18 @@ int KPresenterDoc::getPageOfObj( int objNum, int diffx, int diffy, float fakt )
     KPObject *kpobject = 0;
 
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-        kpobject = objectList()->at( i );
-        if ( i == objNum ) {
-            for ( int j = 0; j < static_cast<int>( _backgroundList.count() ); j++ ) {
-                rect = getPageSize( j, diffx, diffy, fakt, false );
-                rect.setWidth( QApplication::desktop()->width() );
-                if ( rect.intersects( kpobject->getBoundingRect( diffx, diffy ) ) )
-                    return j+1;
-            }
-        }
+	kpobject = objectList()->at( i );
+	if ( i == objNum ) {
+	    for ( int j = 0; j < static_cast<int>( _backgroundList.count() ); j++ ) {
+		rect = getPageSize( j, diffx, diffy, fakt, false );
+		rect.setWidth( QApplication::desktop()->width() );
+		if ( rect.intersects( kpobject->getBoundingRect( diffx, diffy ) ) ) {
+		    QRect r = rect.intersect( kpobject->getBoundingRect( diffx, diffy ) );
+		    if ( r.width() * r.height() > ( kpobject->getBoundingRect( diffx, diffy ).width() * kpobject->getBoundingRect( diffx, diffy ).height() ) / 4 )
+			return j+1;
+		}
+	    }
+	}
     }
     return -1;
 }
