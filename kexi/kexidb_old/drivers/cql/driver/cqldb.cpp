@@ -55,7 +55,14 @@ CqlDB::load(QString file)
 	if(!m_db)
 		return false;
 
-	m_db->connect("PUBLIC");
+	try
+	{
+		m_db->connect("PUBLIC");
+	}
+	catch(CqlException& ex)
+	{
+		cerr << ex << endl;
+	}
 }
 
 QStringList
