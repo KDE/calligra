@@ -66,22 +66,19 @@ private:
     static int styleNumber;
     KoStyle *m_lastStyle;
 };
-/**
- * A style is a combination of formatting attributes (font, color, etc.)
- * and paragraph-layout attributes, all grouped under a name.
- */
-class KoStyle
+
+class KoCharStyle
 {
 public:
-    /** Create a blank style (with default attributes) */
-    KoStyle( const QString & name );
+/** Create a blank style (with default attributes) */
+    KoCharStyle( const QString & name );
 
     /** Copy another style */
-    KoStyle( const KoStyle & rhs ) { *this = rhs; }
+    KoCharStyle( const KoCharStyle & rhs ) { *this = rhs; }
 
-    ~KoStyle() {}
+    virtual ~KoCharStyle() {}
 
-    void operator=( const KoStyle & );
+    void operator=( const KoCharStyle & );
 
     /** The internal name (untranslated if a standard style) */
     QString name() const { return m_name; }
@@ -96,6 +93,30 @@ public:
     void setShortCutName( const QString & _shortCut) {
         m_shortCut_name=_shortCut;
     }
+
+protected:
+    QString m_name;
+    QString m_shortCut_name;
+    KoTextFormat m_format;
+};
+
+/**
+ * A style is a combination of formatting attributes (font, color, etc.)
+ * and paragraph-layout attributes, all grouped under a name.
+ */
+class KoStyle : public KoCharStyle
+{
+public:
+    /** Create a blank style (with default attributes) */
+    KoStyle( const QString & name );
+
+    /** Copy another style */
+    KoStyle( const KoStyle & rhs );
+
+    ~KoStyle() {}
+
+    void operator=( const KoStyle & );
+
 
     const KoParagLayout & paragLayout() const;
     KoParagLayout & paragLayout();
@@ -135,8 +156,6 @@ public:
 
 private:
     KoParagLayout m_paragLayout;
-    QString m_name;
-    QString m_shortCut_name;
     KoTextFormat m_format;
     KoStyle *m_followingStyle;
     KoStyle *m_parentStyle;
