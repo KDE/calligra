@@ -17,12 +17,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koOasisStyles.h>
 #include "kooasiscontext.h"
+#include <koOasisStyles.h>
 #include <kdebug.h>
 
-KoOasisContext::KoOasisContext( KoOasisStyles& styles )
-    : m_styles( styles )
+KoOasisContext::KoOasisContext( KoDocument* doc, KoVariableCollection *varColl, KoOasisStyles& styles )
+    : m_doc( doc ), m_varColl( varColl ), m_styles( styles )
 {
 }
 
@@ -92,4 +92,8 @@ bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, // for de
     kdDebug(32500) << "Pushing list-level-style from list-style " << listStyleName << " level " << level << endl;
     m_listStyleStack.push( listLevelStyle );
     return true;
+}
+
+KoOasisContext::~KoOasisContext()
+{
 }

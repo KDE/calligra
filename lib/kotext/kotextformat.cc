@@ -137,6 +137,7 @@ KoTextFormat::KoTextFormat( const QFont &_font,
     ref = 0;
     collection = 0;
     fn = _font;
+    fn.setStyleStrategy( QFont::ForceOutline );
     col = _color;
     missp = false;
     va = _valign;
@@ -200,7 +201,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     //dsc = f.dsc;
     missp = f.missp;
     va = f.va;
-    k = f.k;
+    m_key = f.m_key;
     //linkColor = f.linkColor;
     //// kotext addition
     delete d;
@@ -455,16 +456,7 @@ void KoTextFormat::load( KoOasisContext& context )
 void KoTextFormat::update()
 {
     //kdDebug(32500) << this << " KoTextFormat::update " << fn.family() << " " << pointSize() << endl;
-    fn.setStyleStrategy( QFont::ForceOutline );
-    //fm = QFontMetrics( fn );
-    //leftBearing = fm.minLeftBearing();
-    //rightBearing = fm.minRightBearing();
-    //hei = fm.height();
-    //asc = fm.ascent();
-    //dsc = fm.descent();
-    generateKey();
-    //updateStyleFlags();
-    //// kotext
+    m_key = QString::null; // invalidate key, recalc at the next key() call
     assert( d );
     d->clearCache(); // i.e. recalc at the next screenFont[Metrics]() call
     ////
@@ -583,9 +575,10 @@ void KoTextFormat::setPointSize( int s )
 
 void KoTextFormat::setFont( const QFont &f )
 {
-    if ( f == fn && !k.isEmpty() )
+    if ( f == fn )
 	return;
     fn = f;
+    fn.setStyleStrategy( QFont::ForceOutline );
     update();
 }
 
@@ -619,7 +612,7 @@ int KoTextFormat::minRightBearing() const
 // ## readable form when !NDEBUG, like QFont does?
 void KoTextFormat::generateKey()
 {
-    k = fn.key();
+    QString k = fn.key();
     k += '/';
     if ( col.isValid() ) // just to shorten the key in the common case
         k += QString::number( (uint)col.rgb() );
@@ -661,6 +654,7 @@ void KoTextFormat::generateKey()
     k += QString::number( (double)d->m_underLineWidth);
     ////
     // Keep in sync with method below
+    m_key = k;
 }
 
 // This is used to create "simple formats", with font and color etc., but without
@@ -701,6 +695,14 @@ QString KoTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelle
 
     ////
     return k;
+}
+
+
+QString KoTextFormat::key() const
+{
+    if ( m_key.isEmpty() )
+        const_cast<KoTextFormat*>( this )->generateKey();
+    return m_key;
 }
 
 void KoTextFormat::addRef()
@@ -1219,7 +1221,7 @@ void KoTextFormat::parseShadowFromCss( const QString& _css )
             kdWarning(32500) << "Parse error in text-shadow: " << css << endl;
             return;
         }
-        // Check which token looks like a colour
+        // Check which token looks like a color
         QColor col( tokens.first() );
         if ( col.isValid() )
             tokens.pop_front();
@@ -1241,7 +1243,9 @@ void KoTextFormat::parseShadowFromCss( const QString& _css )
             tokens.pop_front();
         }
         // We ignore whatever else is in the string (e.g. blur radius, other shadows)
+
     }
+    update();
 }
 
 QColor KoTextFormat::shadowColor() const
@@ -1450,7 +1454,6 @@ QStringList KoTextFormat::strikeOutStyleList()
     lst <<i18n("Dash Dot Dot Line");
     return lst;
 }
-
 
 #ifndef NDEBUG
 void KoTextFormat::printDebug()
@@ -1669,5 +1672,4 @@ void KoTextFormatCollection::debug()
     }
     kdDebug(32500) << "------------ KoTextFormatCollection: debug --------------- END" << endl;
 }
-
 #endif

@@ -22,6 +22,9 @@
 
 class KoOasisStyles;
 class QDomElement;
+class KoVariableCollection;
+class KoDocument;
+
 #include <koStyleStack.h>
 #include "koliststylestack.h"
 
@@ -40,7 +43,13 @@ public:
     /// Stores reference to the KoOasisStyles parsed by KoDocument.
     /// Make sure that the KoOasisStyles instance outlives this KoOasisContext instance.
     /// (This is the case during loaiding, when using the KoOasisStyles given by KoDocument)
-    KoOasisContext( KoOasisStyles& styles );
+    /// @param doc KoDocument, needed by some field variables
+    /// @param varColl collection, to create variables
+    KoOasisContext( KoDocument* doc, KoVariableCollection *varColl, KoOasisStyles& styles );
+    ~KoOasisContext();
+
+    KoDocument* koDocument() { return m_doc; }
+    KoVariableCollection *variableCollection() { return m_varColl; }
 
     KoOasisStyles& oasisStyles() { return m_styles; }
     KoStyleStack& styleStack() { return m_styleStack; }
@@ -65,12 +74,16 @@ private:
     bool pushListLevelStyle( const QString& listStyleName, const QDomElement& fullListStyle, int level );
 
 private:
+    KoDocument* m_doc;
+    KoVariableCollection *m_varColl;
     KoOasisStyles& m_styles;
     KoStyleStack m_styleStack;
 
     KoListStyleStack m_listStyleStack;
     QString m_currentListStyleName;
+
+    class Private;
+    Private *d;
 };
 
 #endif /* KOOASISCONTEXT_H */
-

@@ -1660,6 +1660,8 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         QString textData;
         QString tagName( ts.tagName() );
         bool textFoo = tagName.startsWith( "text:" );
+        QString afterText = tagName.mid( 5 );
+        KoTextCustomItem* customItem = 0;
 
         // Try to keep the order of the tag names by probability of happening
         if ( node.isText() )
@@ -1667,14 +1669,14 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
             QDomText t ( node.toText() );
             textData = t.data();
         }
-        else if ( tagName == "text:span" )
+        else if ( afterText == "span" ) // text:span
         {
             context.styleStack().save();
             context.fillStyleStack( ts, "text:style-name" );
             loadOasisSpan( ts, context, pos ); // recurse
             context.styleStack().restore();
         }
-        else if ( textFoo && tagName == "text:s" )
+        else if ( textFoo && afterText == "s" ) // text:s
         {
             int howmany = 1;
             if (ts.hasAttribute("text:c"))
@@ -1683,7 +1685,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
             textData.fill(32, howmany);
             //shouldWriteFormat=true;
         }
-        else if ( textFoo && tagName == "text:tab-stop" )
+        else if ( textFoo && afterText == "tab-stop" ) // text:tab-stop
         {
             // KWord currently uses \t.
             // Known bug: a line with only \t\t\t\t isn't loaded - XML (QDom) strips out whitespace.
@@ -1691,37 +1693,37 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
             textData = '\t';
             //shouldWriteFormat=true;
         }
-        else if ( textFoo && tagName == "text:line-break" )
+        else if ( textFoo && afterText == "line-break" ) // text:line-break
         {
             textData = '\n';
             //shouldWriteFormat=true;
         }
         else if ( textFoo &&
-                  (tagName == "text:date" // fields
-                   || tagName == "text:print-time"
-                   || tagName == "text:print-date"
-                   || tagName == "text:creation-time"
-                   || tagName == "text:creation-date"
-                   || tagName == "text:modification-time"
-                   || tagName == "text:modification-date"
-                   || tagName == "text:time"
-                   || tagName == "text:page-number"
-                   || tagName == "text:file-name"
-                   || tagName == "text:author-name"
-                   || tagName == "text:author-initials"
-                   || tagName == "text:subject"
-                   || tagName == "text:title"
-                   || tagName == "text:description"
-                   || tagName == "text:variable-set"
-                   || tagName == "text:page-variable-get"
-                   || tagName == "text:user-defined" ) )
-            // TODO in kword: text:printed-by, initial-creator
+                  (afterText == "date" // fields
+                   || afterText == "print-time"
+                   || afterText == "print-date"
+                   || afterText == "creation-time"
+                   || afterText == "creation-date"
+                   || afterText == "modification-time"
+                   || afterText == "modification-date"
+                   || afterText == "time"
+                   || afterText == "page-number"
+                   || afterText == "file-name"
+                   || afterText == "author-name"
+                   || afterText == "author-initials"
+                   || afterText == "subject"
+                   || afterText == "title"
+                   || afterText == "description"
+                   || afterText == "variable-set"
+                   || afterText == "page-variable-get"
+                   || afterText == "user-defined" ) )
+            // TODO in kotext: text:printed-by, initial-creator
         {
-            textData = "#";     // field placeholder
-#if 0 // TODO
-            appendField(doc, outputFormats, ts, pos);
-#endif
-            // see KWTextParag::loadFormatting "case 4:" for inspiration
+            KoVariable* var = context.variableCollection()->loadOasisField( textDocument(), ts, context );
+            if ( var ) {
+                textData = "#";     // field placeholder
+                customItem = var;
+            }
         }
         else
         {
@@ -1737,8 +1739,11 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         if ( length )
         {
             append( textData );
+            if ( customItem )
+                setCustomItem( pos, customItem, 0 );
             KoTextFormat f;
             f.load( context );
+            kdDebug(32002) << "loadOasisField: applying formatting from " << pos << " to " << pos+length << "\n   format=" << f.key() << endl;
             setFormat( pos, length, document()->formatCollection()->format( &f ), TRUE );
             pos += length;
         }

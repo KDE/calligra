@@ -38,6 +38,9 @@
 #include "dateformatwidget_impl.h"
 #include "kocommand.h"
 #include "kotextobject.h"
+#include <koOasisStyles.h>
+#include "kooasiscontext.h"
+#include <kcalendarsystem.h>
 
 class KoVariableSettings::KoVariableSettingPrivate
 {
@@ -179,8 +182,8 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
 
     QString tmp ( dateTime.toString(m_strFormat) );
     const int month = dateTime.date().month();
-    tmp.replace("PPPP", KGlobal::locale()->monthNamePossessive(month, false)); //long possessive month name
-    tmp.replace("PPP",  KGlobal::locale()->monthNamePossessive(month, true));  //short possessive month name
+    tmp.replace("PPPP", KGlobal::locale()->calendar()->monthNamePossessive(month, false)); //long possessive month name
+    tmp.replace("PPP",  KGlobal::locale()->calendar()->monthNamePossessive(month, true));  //short possessive month name
     return tmp;
 }
 
@@ -581,6 +584,277 @@ void KoVariableCollection::slotChangeFormat()
     }
 }
 
+KoVariable * KoVariableCollection::createVariable( int type, short int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct, bool _forceDefaultFormat )
+{
+    Q_ASSERT( coll == m_formatCollection ); // why do we need a parameter ?!?
+    QCString string;
+    QStringList stringList;
+    if ( varFormat == 0L )
+    {
+        // Get the default format for this variable (this method is only called in the interactive case, not when loading)
+        switch ( type ) {
+        case VT_DATE:
+        case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
+        {
+            if ( _forceDefaultFormat || subtype == KoDateVariable::VST_DATE_LAST_PRINTING || subtype ==KoDateVariable::VST_DATE_CREATE_FILE || subtype ==KoDateVariable::VST_DATE_MODIFY_FILE)
+                varFormat = coll->format( KoDateVariable::defaultFormat() );
+            else
+            {
+                QCString result = KoDateVariable::formatStr(_correct);
+                if ( result == 0 )//we cancel insert variable
+                    return 0L;
+                varFormat = coll->format( result );
+            }
+            break;
+        }
+        case VT_TIME:
+        case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
+        {
+            if ( _forceDefaultFormat )
+                varFormat = coll->format( KoTimeVariable::defaultFormat() );
+            else
+                varFormat = coll->format( KoTimeVariable::formatStr(_correct) );
+            break;
+        }
+        case VT_PGNUM:
+            varFormat = coll->format( "NUMBER" );
+            break;
+        case VT_FIELD:
+        case VT_CUSTOM:
+        case VT_MAILMERGE:
+        case VT_LINK:
+        case VT_NOTE:
+            varFormat = coll->format( "STRING" );
+            break;
+        case VT_FOOTNOTE: // this is a KWord-specific variable
+            kdError() << "Footnote type not handled in KoVariableCollection: VT_FOOTNOTE" << endl;
+            return 0L;
+        }
+    }
+    Q_ASSERT( varFormat );
+    if ( varFormat == 0L ) // still 0 ? Impossible!
+        return 0L ;
+
+    kdDebug(32500) << "Creating variable. Format=" << varFormat->key() << " type=" << type << endl;
+    KoVariable * var = 0L;
+    switch ( type ) {
+        case VT_DATE:
+        case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
+            var = new KoDateVariable( textdoc, subtype, varFormat, this, _correct );
+            break;
+        case VT_TIME:
+        case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
+            var = new KoTimeVariable( textdoc, subtype, varFormat, this, _correct );
+            break;
+        case VT_PGNUM:
+            kdError() << "VT_PGNUM must be handled by the application's reimplementation of KoVariableCollection::createVariable" << endl;
+            //var = new KoPgNumVariable( textdoc, subtype, varFormat, this );
+            break;
+        case VT_FIELD:
+            var = new KoFieldVariable( textdoc, subtype, varFormat,this,doc );
+            break;
+        case VT_CUSTOM:
+            var = new KoCustomVariable( textdoc, QString::null, varFormat, this);
+            break;
+        case VT_MAILMERGE:
+            var = new KoMailMergeVariable( textdoc, QString::null, varFormat ,this);
+            break;
+        case VT_LINK:
+            var = new KoLinkVariable( textdoc,QString::null, QString::null, varFormat ,this);
+            break;
+        case VT_NOTE:
+            var = new KoNoteVariable( textdoc, QString::null, varFormat ,this);
+            break;
+    }
+    Q_ASSERT( var );
+    return var;
+}
+
+
+KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context )
+{
+    const QString tagName (tag.tagName());
+    QString key;
+    int type = -1;
+//    int subtype = -1;
+
+    if ( tagName.endsWith( "date" ) || tagName.endsWith( "time" ) )
+    {
+        QString dataStyleName = tag.attribute( "style:data-style-name" );
+        QString dateFormat = "locale";
+        const KoOasisStyles::DataFormatsMap& map = context.oasisStyles().dateTimeFormats();
+        KoOasisStyles::DataFormatsMap::const_iterator it = map.find( dataStyleName );
+        if ( it != map.end() )
+            dateFormat = (*it);
+
+        if ( tagName.endsWith( "date" ) )
+        {
+            key = "DATE" + dateFormat;
+            type = VT_DATE;
+        }
+        else // ends with "time"
+        {
+            key = "TIME" + dateFormat;
+            type = VT_TIME;
+        }
+
+            // VT_TIME:
+#if 0
+
+            // Use QDateTime to work around a possible problem of QTime::FromString in Qt 3.2.2
+            QDateTime dt(QDateTime::fromString(elem.attribute("text:time-value"), Qt::ISODate));
+
+            bool fixed = (elem.hasAttribute("text:fixed") && elem.attribute("text:fixed")=="true");
+
+            if (!dt.isValid()) {
+                dt = QDateTime::currentDateTime(); // OOo docs say so :)
+                fixed = false;
+            }
+
+            const QTime time(dt.time());
+            timeElement.setAttribute("fix", fixed ? 1 : 0);
+            timeElement.setAttribute("hour", time.hour());
+            timeElement.setAttribute("minute", time.minute());
+            timeElement.setAttribute("second", time.second());
+            /*if (elem.hasAttribute("text:time-adjust"))
+              timeElem.setAttribute("correct", elem.attribute("text:time-adjust"));*/ // ### TODO
+#endif
+
+#if 0
+
+            // more VT_DATE:
+        else if ( tagName == "text:print-time"
+                  || tagName == "text:print-date"
+                  || tagName == "text:creation-time"
+                  || tagName == "text:creation-date"
+                  || tagName == "text:modification-time"
+                  || tagName == "text:modification-date" )
+        {
+
+            if ( tagName.startsWith( "text:print" ) )
+                subtype = VST_DATE_LAST_PRINTING;
+            else if ( tagName.startsWith( "text:creation" ) )
+                subtype = VST_DATE_CREATE_FILE;
+            else if ( tagName.startsWith( "text:modification" ) )
+                subtype = VST_DATE_MODIFY_FILE;
+            // We do NOT include the date value here. It will be retrieved from
+            // meta.xml
+            dateElement.setAttribute("subtype", subtype);
+            if (elem.hasAttribute("text:date-adjust"))
+                dateElement.setAttribute("correct", elem.attribute("text:date-adjust"));
+        }
+#endif
+    }// end of date/time variables
+    else if (tagName == "text:page-number")
+    {
+#if 0
+        subtype = VST_PGNUM_CURRENT;
+
+        if (elem.hasAttribute("text:select-page"))
+        {
+            const QString select = elem.attribute("text:select-page");
+
+            if (select == "previous")
+                subtype = VST_PGNUM_PREVIOUS;
+            else if (select == "next")
+                subtype = VST_PGNUM_NEXT;
+            else
+                subtype = VST_PGNUM_CURRENT;
+        }
+
+        pgnumElement.setAttribute("subtype", subtype);
+        pgnumElement.setAttribute("value", elem.text());
+#endif
+        key = "NUMBER";
+        type = VT_PGNUM;
+    }
+    else if (tagName == "text:file-name")
+    {
+#if 0
+        subtype = VST_PATHFILENAME;
+
+        if (elem.hasAttribute("text:display"))
+        {
+            const QString display = elem.attribute("text:display");
+
+            if (display == "path")
+                subtype = VST_DIRECTORYNAME;
+            else if (display == "name")
+                subtype = VST_FILENAMEWITHOUTEXTENSION;
+            else if (display == "name-and-extension")
+                subtype = VST_FILENAME;
+            else
+                subtype = VST_PATHFILENAME;
+        }
+
+        fieldElement.setAttribute("subtype", subtype);
+        fieldElement.setAttribute("value", elem.text());
+#endif
+        key = "STRING";
+        type = VT_FIELD;
+    }
+    else if (tagName == "text:author-name"
+             || tagName == "text:author-initials"
+             || tagName == "text:subject"
+             || tagName == "text:title"
+             || tagName == "text:description"
+        )
+    {
+#if 0
+        subtype = VST_AUTHORNAME;
+
+        if (tagName == "text:author-initials")
+            subtype = VST_INITIAL;
+        else if ( tagName == "text:subject" ) // TODO in kword
+            subtype = VST_TITLE;
+        else if ( tagName == "text:title" )
+            subtype = VST_TITLE;
+        else if ( tagName == "text:description" )
+            subtype = VST_ABSTRACT;
+
+        authorElem.setAttribute("subtype", subtype);
+        authorElem.setAttribute("value", elem.text());
+#endif
+        key = "STRING";
+        type = VT_FIELD;
+    }
+    else if ( tagName == "text:variable-set"
+              || tagName == "text:user-defined" )
+    {
+        // We treat both the same. For OO the difference is that
+        // - variable-set is related to variable-decls (defined in <body>);
+        //                 its value can change in the middle of the document.
+        // - user-defined is related to meta::user-defined in meta.xml
+#if 0
+        QDomElement customElem = doc.createElement( "CUSTOM" );
+        customElem.setAttribute( "name", elem.attribute( "text:name" ) );
+        customElem.setAttribute( "value", elem.text() );
+#endif
+        key = "STRING";
+        type = VT_CUSTOM;
+    }
+    else
+    {
+        kdWarning(30518) << "Unsupported field " << tagName << endl;
+        return 0;
+    }
+// TODO tagName == "text:page-variable-get", "initial-creator" and many more
+// TODO VT_MAILMERGE
+
+//    const int type = typeElem.attribute( "type" ).toInt();
+    KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_formatCollection->format( key.latin1() );
+    // If varFormat is 0 (no key specified), the default format will be used.
+#if 0
+    int correct = 0;
+    if (typeElem.hasAttribute( "correct" ))
+        correct = typeElem.attribute("correct").toInt();
+#endif
+
+    KoVariable* var = createVariable( type, -1, m_formatCollection, varFormat, textdoc, context.koDocument(), 0 /*correct*/, true );
+    var->loadOasis( tag, context );
+    return var;
+}
+
 /******************************************************************/
 /* Class: KoVariable                                              */
 /******************************************************************/
@@ -734,89 +1008,9 @@ void KoVariable::load( QDomElement & )
 {
 }
 
-KoVariable * KoVariableCollection::createVariable( int type, short int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct, bool _forceDefaultFormat )
-{
-    QCString string;
-    QStringList stringList;
-    if ( varFormat == 0L )
-    {
-        // Get the default format for this variable (this method is only called in the interactive case, not when loading)
-        switch ( type ) {
-        case VT_DATE:
-        case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
-        {
-            if ( _forceDefaultFormat || subtype == KoDateVariable::VST_DATE_LAST_PRINTING || subtype ==KoDateVariable::VST_DATE_CREATE_FILE || subtype ==KoDateVariable::VST_DATE_MODIFY_FILE)
-                varFormat = coll->format( KoDateVariable::defaultFormat() );
-            else
-            {
-                QCString result = KoDateVariable::formatStr(_correct);
-                if ( result == 0 )//we cancel insert variable
-                    return 0L;
-                varFormat = coll->format( result );
-            }
-            break;
-        }
-        case VT_TIME:
-        case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
-        {
-            if ( _forceDefaultFormat )
-                varFormat = coll->format( KoTimeVariable::defaultFormat() );
-            else
-                varFormat = coll->format( KoTimeVariable::formatStr(_correct) );
-            break;
-        }
-        case VT_PGNUM:
-            varFormat = coll->format( "NUMBER" );
-            break;
-        case VT_FIELD:
-        case VT_CUSTOM:
-        case VT_MAILMERGE:
-        case VT_LINK:
-        case VT_NOTE:
-            varFormat = coll->format( "STRING" );
-            break;
-        case VT_FOOTNOTE: // this is a KWord-specific variable
-            kdError() << "Footnote type not handled in KoVariableCollection: VT_FOOTNOTE" << endl;
-            return 0L;
-        }
-    }
-    Q_ASSERT( varFormat );
-    if ( varFormat == 0L ) // still 0 ? Impossible!
-        return 0L ;
 
-    kdDebug(32500) << "Creating variable. Format=" << varFormat->key() << " type=" << type << endl;
-    KoVariable * var = 0L;
-    switch ( type ) {
-        case VT_DATE:
-        case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
-            var = new KoDateVariable( textdoc, subtype, varFormat, this, _correct );
-            break;
-        case VT_TIME:
-        case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
-            var = new KoTimeVariable( textdoc, subtype, varFormat, this, _correct );
-            break;
-        case VT_PGNUM:
-            kdError() << "VT_PGNUM must be handled by the application's reimplementation of KoVariableCollection::createVariable" << endl;
-            //var = new KoPgNumVariable( textdoc, subtype, varFormat, this );
-            break;
-        case VT_FIELD:
-            var = new KoFieldVariable( textdoc, subtype, varFormat,this,doc );
-            break;
-        case VT_CUSTOM:
-            var = new KoCustomVariable( textdoc, QString::null, varFormat, this);
-            break;
-        case VT_MAILMERGE:
-            var = new KoMailMergeVariable( textdoc, QString::null, varFormat ,this);
-            break;
-        case VT_LINK:
-            var = new KoLinkVariable( textdoc,QString::null, QString::null, varFormat ,this);
-            break;
-        case VT_NOTE:
-            var = new KoNoteVariable( textdoc, QString::null, varFormat ,this);
-            break;
-    }
-    Q_ASSERT( var );
-    return var;
+void KoVariable::loadOasis( const QDomElement &/*elem*/, KoOasisContext& /*context*/ )
+{
 }
 
 void KoVariable::setVariableFormat( KoVariableFormat *_varFormat )
@@ -940,6 +1134,34 @@ void KoDateVariable::load( QDomElement& elem )
     }
 }
 
+void KoDateVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+{
+    const QString tagName( elem.tagName() );
+    if ( tagName == "text:date" ) // current (or fixed) date
+    {
+        m_subtype = VST_DATE_CURRENT;
+
+        // Standard form of the date is in text:date-value. Example: 2004-01-21T10:57:05
+        QDateTime dt(QDate::fromString(elem.attribute("text:date-value"), Qt::ISODate));
+
+        bool fixed = (elem.hasAttribute("text:fixed") && elem.attribute("text:fixed")=="true");
+        if (!dt.isValid())
+            fixed = false; // OOo docs say so: not valid = current datetime
+        if ( fixed ) {
+            m_subtype = VST_DATE_FIX;
+            m_varValue = QVariant( dt );
+        }
+        m_correctDate = elem.attribute("text:date-adjust").toInt();
+    }
+    else if ( tagName.startsWith( "text:print" ) )
+        m_subtype = VST_DATE_LAST_PRINTING;
+    else if ( tagName.startsWith( "text:creation" ) )
+        m_subtype = VST_DATE_CREATE_FILE;
+    else if ( tagName.startsWith( "text:modification" ) )
+        m_subtype = VST_DATE_MODIFY_FILE;
+
+}
+
 QStringList KoDateVariable::actionTexts()
 {
     QStringList lst;
@@ -1022,7 +1244,7 @@ QCString KoDateVariable::formatStr(int & correct)
     }
     config->sync();
     delete dialog;
-    return QCString(QCString("DATE") + string );
+    return QCString("DATE") + string;
 }
 
 /******************************************************************/
@@ -1818,4 +2040,3 @@ void KoPgNumVariable::setSectionTitle( const QString& _title )
     }
     m_varValue = QVariant( title );
 }
-

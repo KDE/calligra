@@ -382,7 +382,7 @@ private:
     VerticalAlignment va;
     KoTextFormatCollection *collection;
     int ref;
-    QString k;
+    QString m_key;
 };
 
 #if defined(Q_TEMPLATEDLL)
@@ -453,17 +453,12 @@ inline KoTextFormat::VerticalAlignment KoTextFormat::vAlign() const
 
 inline bool KoTextFormat::operator==( const KoTextFormat &f ) const
 {
-    return k == f.k;
+    return key() == f.key();
 }
 
 inline KoTextFormatCollection *KoTextFormat::parent() const
 {
     return collection;
-}
-
-inline QString KoTextFormat::key() const
-{
-    return k;
 }
 
 //inline bool KoTextFormat::useLinkColor() const

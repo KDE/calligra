@@ -23,6 +23,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kcalendarsystem.h>
 #include <kinstance.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
@@ -128,7 +129,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
     m_listCompletion->setIgnoreCase( true );
     KLocale klocale(m_doc->instance()->instanceName());
     for (int i = 0; i <7; i++)
-        m_cacheNameOfDays.append(klocale.weekDayName( i ).lower());
+        m_cacheNameOfDays.append(klocale.calendar()->weekDayName( i ).lower());
 }
 
 KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
