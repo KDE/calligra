@@ -25,6 +25,7 @@
 #include <qdom.h>
 #include <qptrlist.h>
 
+class KoGenStyles;
 class KoStyle;
 class KoOasisContext;
 
@@ -56,6 +57,7 @@ public:
      */
     KoStyle* styleAt( int i ) { return m_styleList.at(i); }
 
+   // #### TODO: remove Template from those method names
     KoStyle* addStyleTemplate( KoStyle *style );
 
     void removeStyleTemplate ( KoStyle *style );
@@ -63,6 +65,9 @@ public:
     void updateStyleListOrder( const QStringList &list );
 
     void loadOasisStyleTemplates( KoOasisContext& context );
+    /// Save the entire style collection to OASIS
+    /// @p styleType is the STYLE_* value for this style.
+    void saveOasis( KoGenStyles& styles, int styleType );
 
 private:
     QPtrList<KoStyle> m_styleList;
@@ -134,14 +139,17 @@ public:
     void setFollowingStyle( KoStyle *fst ) { m_followingStyle = fst; }
 
     /// Saves the name, layout, the following style and the outline bool. Not the format.
-    /// @deprecated
+    /// @deprecated  (1.3 format)
     void saveStyle( QDomElement & parentElem );
     /// Loads the name, layout and the outline bool. Not the "following style" nor the format.
-    /// @deprecated
+    /// (1.3 format)
     void loadStyle( QDomElement & parentElem, int docVersion = 2 );
 
     /// Load the style from OASIS
     void loadStyle( QDomElement & styleElem, KoOasisContext& context );
+    /// Save the style to OASIS
+    /// Don't use, use the method in KoStyleCollection instead
+    QString saveStyle( KoGenStyles& genStyles, int styleType );
 
     static int getAttribute(const QDomElement &element, const char *attributeName, int defaultValue)
       {

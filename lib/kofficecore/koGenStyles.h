@@ -70,6 +70,7 @@ public:
      * @return the name for this style
      */
     QString lookup( const KoGenStyle& style, const QString& name = QString::null, bool forceNumbering = true );
+    // ### rename lookup to insert
 
     typedef QMap<KoGenStyle, QString> StyleMap;
     /**
@@ -88,14 +89,28 @@ public:
      */
     QValueList<NamedStyle> styles( int type ) const;
 
+    /**
+     * @return an existing style by name
+     */
+    const KoGenStyle* style( const QString& name ) const;
+
+    /**
+     * @return an existing style by name, which can be modified.
+     * Note that this is DANGEROUS.
+     * It basically defeats the purpose of lookup()!
+     * Only do this if you know for sure no other 'user' of that style will
+     * be affected.
+     */
+    KoGenStyle* styleForModification( const QString& name );
+
 private:
     QString makeUniqueName( const QString& base, bool forceNumbering ) const;
 
     /// style definition -> name
     StyleMap m_styles;
 
-    /// name -> style   (only used to check for name uniqueness)
-    typedef QMap<QString, bool /*KoGenStyle*/> NameMap;
+    /// name -> style   (used to check for name uniqueness)
+    typedef QMap<QString, bool> NameMap;
     NameMap m_names;
 };
 
@@ -122,7 +137,8 @@ public:
      *
      * @param parentName If set, name of the parent style from which this one inherits.
      */
-    KoGenStyle( int type = 0, const char* familyName = 0, const QString& parentName = QString::null )
+    explicit KoGenStyle( int type = 0, const char* familyName = 0,
+                         const QString& parentName = QString::null )
         : m_type( type ), m_familyName( familyName ), m_parentName( parentName ) {}
 
     /// Return the type of this style, as set in the constructor
@@ -134,13 +150,23 @@ public:
     /// Return the name of style's parent, if set
     QString parentName() const { return m_parentName; }
 
+    /*  The types of properties.
+     *  DefaultPropertyType depends on family: e.g. paragraph-properties if family=paragraph
+     *  or on the type of style (e.g. page-layout -> page-layout-properties).
+     *  (In fact that tag name is the one passed to writeStyle)
+     *
+     *  TextPropertyType is always text-properties.
+     *  This is because only paragraph styles contain two types of properties
+     */
+    enum PropertyType { DefaultType = 0, TextType, N_NumTypes /*internal*/ };
+
     /// Add a property to the style
-    void addProperty( const QString& propName, const QString& propValue ) {
-        m_properties.insert( propName, propValue );
+    void addProperty( const QString& propName, const QString& propValue, PropertyType type = DefaultType ) {
+        m_properties[type].insert( propName, propValue );
     }
     /// Overloaded of addProperty version that converts an int to a string
-    void addProperty( const QString& propName, int propValue ) {
-        m_properties.insert( propName, QString::number( propValue ) );
+    void addProperty( const QString& propName, int propValue, PropertyType type = DefaultType ) {
+        m_properties[type].insert( propName, QString::number( propValue ), type );
     }
 
     /**
@@ -149,7 +175,7 @@ public:
      *  (unlike QString::number and setNum, which default to 6 digits),
      *  and the unit name ("pt") is appended to it.
      */
-    void addPropertyPt( const QString& propName, double propValue );
+    void addPropertyPt( const QString& propName, double propValue, PropertyType type = DefaultType );
 
     /**
      *  Add an attribute to the style
@@ -166,13 +192,15 @@ public:
 
     /**
      *  Write the definition of this style to @p writer, using the OASIS format.
+     *  @param writer the KoXmlWriter in which @p elementName will be created and filled in
+     *  @param styles the styles collection, used to look up the parent style
      *  @param elementName the name of the XML element, e.g. "style:style"
      *  @param name must come from the collection
      *  @param propertiesElementName the name of the XML element with the style properties,
      *  e.g. "style:text-properties"
      *  @param closeElement set it to false to be able to add more child elements to the style element
      */
-    void writeStyle( KoXmlWriter* writer, const char* elementName, const QString& name,
+    void writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name,
                      const char* propertiesElementName, bool closeElement = true ) const;
 
     /**
@@ -185,19 +213,23 @@ public:
     bool operator<( const KoGenStyle &other ) const {
         if ( m_type != other.m_type ) return m_type < other.m_type;
         if ( m_parentName != other.m_parentName ) return m_parentName < other.m_parentName;
-        if ( m_properties.count() != other.m_properties.count() ) return m_properties.count() < other.m_properties.count();
+        for ( uint i = 0 ; i < N_NumTypes ; ++i )
+            if ( m_properties[i].count() != other.m_properties[i].count() )
+                return m_properties[i].count() < other.m_properties[i].count();
         if ( m_attributes.count() != other.m_attributes.count() ) return m_attributes.count() < other.m_attributes.count();
         // Same number of properties and attributes, no other choice than iterating
-        QMap<QString, QString>::const_iterator it = m_properties.begin();
-        QMap<QString, QString>::const_iterator oit = other.m_properties.begin();
-        for ( ; it != m_properties.end(); ++it, ++oit ) {
-            if ( it.key() != oit.key() )
-                return it.key() < oit.key();
-            if ( it.data() != oit.data() )
-                return it.data() < oit.data();
+        for ( uint i = 0 ; i < N_NumTypes ; ++i ) {
+            QMap<QString, QString>::const_iterator it = m_properties[i].begin();
+            QMap<QString, QString>::const_iterator oit = other.m_properties[i].begin();
+            for ( ; it != m_properties[i].end(); ++it, ++oit ) {
+                if ( it.key() != oit.key() )
+                    return it.key() < oit.key();
+                if ( it.data() != oit.data() )
+                    return it.data() < oit.data();
+            }
         }
-        it = m_attributes.begin();
-        oit = other.m_attributes.begin();
+        QMap<QString, QString>::const_iterator it = m_attributes.begin();
+        QMap<QString, QString>::const_iterator oit = other.m_attributes.begin();
         for ( ; it != m_attributes.end(); ++it, ++oit ) {
             if ( it.key() != oit.key() )
                 return it.key() < oit.key();
@@ -211,17 +243,21 @@ public:
     bool operator==( const KoGenStyle &other ) const {
         if ( m_type != other.m_type ) return false;
         if ( m_parentName != other.m_parentName ) return false;
-        if ( m_properties.count() != other.m_properties.count() ) return false;
+        for ( uint i = 0 ; i < N_NumTypes ; ++i )
+            if ( m_properties[i].count() != other.m_properties[i].count() )
+                return false;
         if ( m_attributes.count() != other.m_attributes.count() ) return false;
         // Same number of properties and attributes, no other choice than iterating
-        QMap<QString, QString>::const_iterator it = m_properties.begin();
-        QMap<QString, QString>::const_iterator oit = other.m_properties.begin();
-        for ( ; it != m_properties.end(); ++it, ++oit ) {
-            if ( it.key() != oit.key() || it.data() != oit.data() )
-                return false;
+        for ( uint i = 0 ; i < N_NumTypes ; ++i ) {
+            QMap<QString, QString>::const_iterator it = m_properties[i].begin();
+            QMap<QString, QString>::const_iterator oit = other.m_properties[i].begin();
+            for ( ; it != m_properties[i].end(); ++it, ++oit ) {
+                if ( it.key() != oit.key() || it.data() != oit.data() )
+                    return false;
+            }
         }
-        it = m_attributes.begin();
-        oit = other.m_attributes.begin();
+        QMap<QString, QString>::const_iterator it = m_attributes.begin();
+        QMap<QString, QString>::const_iterator oit = other.m_attributes.begin();
         for ( ; it != m_attributes.end(); ++it, ++oit ) {
             if ( it.key() != oit.key() || it.data() != oit.data() )
                 return false;
@@ -230,13 +266,32 @@ public:
     }
 
 private:
+    QString property( const QString& propName, PropertyType type ) const {
+        QMap<QString, QString>::const_iterator it = m_properties[type].find( propName );
+        if ( it != m_properties[type].end() )
+            return it.data();
+        return QString::null;
+    }
+
+    QString attribute( const QString& propName ) const {
+        QMap<QString, QString>::const_iterator it = m_attributes.find( propName );
+        if ( it != m_attributes.end() )
+            return it.data();
+        return QString::null;
+    }
+
+#ifndef NDEBUG
+    void printDebug() const;
+#endif
+
+private:
     // Note that the copy constructor and assignment operator are allowed.
     // Better not use pointers below!
     int m_type;
     QCString m_familyName;
     QString m_parentName;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
-    QMap<QString, QString> m_properties;
+    QMap<QString, QString> m_properties[N_NumTypes];
     QMap<QString, QString> m_attributes;
 };
 

@@ -20,6 +20,7 @@
 #include "kotextformat.h"
 #include "korichtext.h" // for KoTextParag etc.
 #include "kozoomhandler.h"
+#include <koGenStyles.h>
 #include <kglobal.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -242,27 +243,16 @@ static void importTextPosition( const QString& text_position, double fontSize, K
         if ( !lst.isEmpty() )
             textSize = lst.front().stripWhiteSpace();
         Q_ASSERT( lst.count() == 1 );
-        bool super = textPos == "super";
-        bool sub = textPos == "sub";
         if ( textPos.endsWith("%") )
         {
             textPos.truncate( textPos.length() - 1 );
             double val = textPos.toDouble();
-#if 0
-            // This is where we interpret the text position into kotext's simpler
-            // "super" or "sub".
-            if ( val > 0 )
-                super = true;
-            else if ( val < 0 )
-                sub = true;
-#else
             offset = qRound( fontSize * val / 100.0 );
             kdDebug(32500) << "offset=" << offset << endl;
-#endif
         }
-        if ( super )
+        if ( textPos == "super" )
             value = KoTextFormat::AlignSuperScript;
-        else if ( sub )
+        else if ( textPos == "sub" )
             value = KoTextFormat::AlignSubScript;
         else
             value = KoTextFormat::AlignNormal;
@@ -304,6 +294,22 @@ static void importOasisUnderline( const QString& type, const QString& style,
       underline = KoTextFormat::U_WAVE;
   // TODO bold. But this is another attribute in OASIS (text-underline-width), which makes sense.
   // We should separate them in kotext...
+}
+
+QString exportOasisUnderline( KoTextFormat::UnderlineStyle styleline )
+{
+    switch( styleline ) {
+    case KoTextFormat::U_DOT:
+        return "dotted";
+    case KoTextFormat::U_DASH:
+        return "dash";
+    case KoTextFormat::U_DASH_DOT:
+        return "dot-dash";
+    case KoTextFormat::U_DASH_DOT_DOT:
+        return "dot-dot-dash";
+    default:
+        return "solid";
+    }
 }
 
 // Helper for load. Legacy OO format.
@@ -374,12 +380,15 @@ void KoTextFormat::load( KoOasisContext& context )
     }
     if ( styleStack.hasAttribute( "fo:font-weight" ) ) { // 3.10.24
         QString fontWeight = styleStack.attribute( "fo:font-weight" );
-        int boldness = fontWeight.toInt();
-        if ( fontWeight == "bold" )
-            boldness = 75;
-        else if ( boldness == 0 )
+        int boldness;
+        if ( fontWeight == "normal" )
             boldness = 50;
-        // TODO: check if OO supports more?
+        else if ( fontWeight == "bold" )
+            boldness = 75;
+        else
+            // XSL/CSS has 100,200,300...900. Not the same scale as Qt!
+            // See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#font-weight
+            boldness = fontWeight.toInt() / 10;
         fn.setWeight( boldness );
     }
     if ( styleStack.hasAttribute( "fo:font-style" ) ) // 3.10.19
@@ -388,9 +397,12 @@ void KoTextFormat::load( KoOasisContext& context )
             fn.setItalic( true );
         }
 
+    d->m_bWordByWord = styleStack.attribute( "style:text-underline-mode" ) == "skip-white-space";
+    // TODO style:text-line-through-mode
+
+#if 0 // OO compat code, to move to OO import filter
     d->m_bWordByWord = (styleStack.hasAttribute("fo:score-spaces")) // 3.10.25
                       && (styleStack.attribute("fo:score-spaces") == "false");
-#if 0 // OO compat code, to move to OO import filter
     if( styleStack.hasAttribute("style:text-crossing-out" )) { // 3.10.6
         QString strikeOutType = styleStack.attribute( "style:text-crossing-out" );
         if( strikeOutType =="double-line")
@@ -457,8 +469,9 @@ void KoTextFormat::load( KoOasisContext& context )
         if ( m_language == "en" )
             m_language = "en_US";
     }
-    if ( styleStack.hasAttribute("style:text-background-color") ) { // 3.10.28
-        QString tmp = styleStack.attribute("style:text-background-color");
+    // ###### TODO ensure that it's loaded from text-properties, not paragraph-properties
+    if ( styleStack.hasAttribute("fo:background-color") ) {
+        QString tmp = styleStack.attribute("fo:background-color");
         if (tmp != "transparent")
             m_textBackColor.setNamedColor( tmp );
     }
@@ -497,7 +510,60 @@ void KoTextFormat::load( KoOasisContext& context )
 
     generateKey();
     addRef();
+}
 
+void KoTextFormat::save( KoGenStyle& gs )
+{
+    KoGenStyle::PropertyType tt = KoGenStyle::TextType;
+    gs.addProperty( "fo:color", col.isValid() ? col.name() : "#000000", tt );
+    // TODO declare svg font faces stuff according to the OASIS format;
+    gs.addProperty( "style:font-name", fn.family(), tt ); // hack
+    gs.addPropertyPt( "fo:font-size", fn.pointSize(), tt );
+    int w = fn.weight();
+    gs.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( w * 10 ), tt );
+    gs.addProperty( "fo:font-style", fn.italic() ? "italic" : "normal", tt );
+    gs.addProperty( "style:text-underline-mode", d->m_bWordByWord ? "skip-white-space" : "continuous", tt );
+    gs.addProperty( "style:text-underline-type", m_underlineType == U_NONE ? "none" :
+                    m_underlineType == U_DOUBLE ? "double" : "single", tt );
+    QString styleline;
+    if ( m_underlineType == U_WAVE )
+        styleline = "wave";
+    else
+        styleline = exportOasisUnderline( m_underlineStyle );
+    gs.addProperty( "style:text-underline-style", styleline, tt );
+    gs.addProperty( "style:text-underline-color", m_textUnderlineColor.isValid() ? m_textUnderlineColor.name() : "font-color", tt );
+    // TODO U_SIMPLE_BOLD
+    // TODO style:text-line-through-mode
+    gs.addProperty( "style:text-line-through-type", m_strikeOutType == S_NONE ? "none" :
+                    m_strikeOutType == S_DOUBLE ? "double" : "single", tt );
+
+    styleline = exportOasisUnderline( (UnderlineStyle) m_strikeOutStyle );
+    gs.addProperty( "style:text-line-through-style", styleline, tt );
+    //gs.addProperty( "style:text-line-through-color", ...) TODO in kotext
+
+    QString textPos;
+    if ( d->m_offsetFromBaseLine != 0 )
+        textPos = QString::number( 100 * d->m_offsetFromBaseLine / fn.pointSizeFloat() ) + '%';
+    else if ( va == AlignSuperScript ) textPos = "super";
+    else if ( va == AlignSubScript ) textPos = "sub";
+    else textPos = "0%";
+    textPos += ' ';
+    textPos += QString::number( d->m_relativeTextSize * 100 );
+    textPos += '%';
+    gs.addProperty( "style:text-position", textPos, tt );
+
+    if ( m_attributeFont == ATT_SMALL_CAPS )
+        gs.addProperty( "fo:font-variant", "small-caps", tt );
+    else if ( m_attributeFont == ATT_UPPER )
+        gs.addProperty( "fo:text-transform", "uppercase", tt );
+    else if ( m_attributeFont == ATT_LOWER )
+        gs.addProperty( "fo:text-transform", "lowercase", tt );
+
+    gs.addProperty( "fo:language", m_language == "en_US" ? QString("en") : m_language, tt );
+    gs.addProperty( "fo:background-color",
+                    m_textBackColor.isValid() ? m_textBackColor.name() : "transparent", tt );
+    gs.addProperty( "fo:text-shadow", shadowAsCss(), tt );
+    gs.addProperty( "fo:hyphenate", d->m_bHyphenation, tt );
 }
 
 void KoTextFormat::update()

@@ -19,6 +19,7 @@
 #include "koGenStyles.h"
 #include <koxmlwriter.h>
 #include <float.h>
+#include <kdebug.h>
 
 KoGenStyles::KoGenStyles()
 {
@@ -73,35 +74,115 @@ QValueList<KoGenStyles::NamedStyle> KoGenStyles::styles( int type ) const
     return lst;
 }
 
+const KoGenStyle* KoGenStyles::style( const QString& name ) const
+{
+#if 0 // This is if NameMap contains KoGenStyle. But then we have two copies of it...
+    NameMap::const_iterator it = m_names.find( name );
+    if ( it != m_names.end() )
+        return &it.data();
+#endif
+    StyleMap::const_iterator it = m_styles.begin();
+    StyleMap::const_iterator end = m_styles.end();
+    for ( ; it != end ; ++it ) {
+        if ( it.data() == name )
+            return &it.key();
+    }
+    return 0;
+}
+
+KoGenStyle* KoGenStyles::styleForModification( const QString& name )
+{
+    return const_cast<KoGenStyle *>( style( name ) );
+}
+
 ////
 
-void KoGenStyle::writeStyle( KoXmlWriter* writer, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement ) const
+void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement ) const
 {
     writer->startElement( elementName );
     writer->addAttribute( "style:name", name );
-    if ( !m_parentName.isEmpty() )
+    const KoGenStyle* parentStyle = 0;
+    if ( !m_parentName.isEmpty() ) {
         writer->addAttribute( "style:parent-style-name", m_parentName );
-    // ## maybe get the family from the parent style?
+        parentStyle = styles.style( m_parentName );
+        if ( parentStyle && m_familyName.isEmpty() ) {
+            // get family from parent style, just in case
+            const_cast<KoGenStyle *>( this )->
+                m_familyName = parentStyle->attribute( "style:family" ).latin1();
+        }
+    }
     if ( !m_familyName.isEmpty() )
-        writer->addAttribute( "style:family", m_familyName );
+        const_cast<KoGenStyle *>( this )->
+            addAttribute( "style:family", m_familyName );
+
+#if 0 // #ifndef NDEBUG
+    kdDebug() << "style: " << name << endl;
+    printDebug();
+    if ( parentStyle ) {
+        kdDebug() << " parent: " << m_parentName << endl;
+        parentStyle->printDebug();
+    }
+#endif
+
+    // Write attributes [which differ from the parent style]
+    // We only look at the direct parent style because we assume
+    // that styles are fully specified, i.e. the inheritance is
+    // only in the final file, not in the caller's code.
     QMap<QString, QString>::const_iterator it = m_attributes.begin();
-    for ( ; it != m_attributes.end(); ++it )
-        writer->addAttribute( it.key().utf8(), it.data().utf8() );
-    if ( !m_properties.isEmpty() ) {
-        writer->startElement( propertiesElementName );
-        it = m_properties.begin();
-        for ( ; it != m_properties.end(); ++it )
+    for ( ; it != m_attributes.end(); ++it ) {
+        if ( !parentStyle || parentStyle->attribute( it.key() ) != it.data() )
             writer->addAttribute( it.key().utf8(), it.data().utf8() );
+    }
+
+    KoGenStyle::PropertyType i = KoGenStyle::DefaultType;
+    if ( !m_properties[i].isEmpty() ) {
+        writer->startElement( propertiesElementName );
+        it = m_properties[i].begin();
+        for ( ; it != m_properties[i].end(); ++it ) {
+            if ( !parentStyle || parentStyle->property( it.key(), i ) != it.data() )
+                writer->addAttribute( it.key().utf8(), it.data().utf8() );
+        }
+        writer->endElement();
+    }
+    i = KoGenStyle::TextType;
+    if ( !m_properties[i].isEmpty() ) {
+        writer->startElement( "style:text-properties" );
+        it = m_properties[i].begin();
+        for ( ; it != m_properties[i].end(); ++it ) {
+            if ( !parentStyle || parentStyle->property( it.key(), i ) != it.data() )
+                writer->addAttribute( it.key().utf8(), it.data().utf8() );
+        }
         writer->endElement();
     }
     if ( closeElement )
         writer->endElement();
 }
 
-void KoGenStyle::addPropertyPt( const QString& propName, double propValue )
+void KoGenStyle::addPropertyPt( const QString& propName, double propValue, PropertyType type )
 {
     QString str;
     str.setNum( propValue, 'g', DBL_DIG );
     str += "pt";
-    m_properties.insert( propName, str );
+    m_properties[type].insert( propName, str );
 }
+
+#ifndef NDEBUG
+void KoGenStyle::printDebug() const
+{
+    int i = DefaultType;
+    kdDebug() << m_properties[i].count() << " properties." << endl;
+    for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
+        kdDebug() << "     " << it.key() << " = " << it.data() << endl;
+    }
+    i = TextType;
+    kdDebug() << m_properties[i].count() << " text properties." << endl;
+    for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
+        kdDebug() << "     " << it.key() << " = " << it.data() << endl;
+    }
+    kdDebug() << m_attributes.count() << " attributes." << endl;
+    for( QMap<QString,QString>::ConstIterator it = m_attributes.begin(); it != m_attributes.end(); ++it ) {
+        kdDebug() << "     " << it.key() << " = " << it.data() << endl;
+    }
+    kdDebug() << endl;
+}
+#endif

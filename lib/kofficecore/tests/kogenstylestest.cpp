@@ -31,6 +31,7 @@ int main( int, char** ) {
     KoGenStyle first( STYLE_AUTO, "paragraph" );
     first.addAttribute( "style:master-page-name", "Standard" );
     first.addProperty( "style:page-number", "0" );
+    first.addProperty( "style:foobar", "2", KoGenStyle::TextType );
 
     QString firstName = coll.lookup( first );
     kdDebug() << "The first style got assigned the name " << firstName << endl;
@@ -40,20 +41,24 @@ int main( int, char** ) {
     KoGenStyle second( STYLE_AUTO, "paragraph" );
     second.addAttribute( "style:master-page-name", "Standard" );
     second.addProperty( "style:page-number", "0" );
+    second.addProperty( "style:foobar", "2", KoGenStyle::TextType );
 
     QString secondName = coll.lookup( second );
     kdDebug() << "The second style got assigned the name " << secondName << endl;
 
     assert( firstName == secondName ); // check that sharing works
-    // Interesting
-    //assert( first == second ); // check that operator== works :)
+    assert( first == second ); // check that operator== works :)
+
+    const KoGenStyle* s = coll.style( firstName ); // check lookup of existing style
+    assert( s );
+    assert( *s == first );
+    s = coll.style( "foobarblah" ); // check lookup of non-existing style
+    assert( !s );
 
     KoGenStyle third( STYLE_AUTO, "paragraph", secondName ); // inherited style
-    // We *have* to set the family even in derived styles.
-    // But that means we can't implement "diff with parent" in koGenStyles...
-    // Hmm, well we'll see. Either it will have an exception, or this needs
-    // to be done at the level above.
     third.addProperty( "style:margin-left", "1.249cm" );
+    third.addProperty( "style:page-number", "0" ); // same as parent
+    third.addProperty( "style:foobar", "3", KoGenStyle::TextType ); // different from parent
     assert( third.parentName() == secondName );
 
     QString thirdName = coll.lookup( third, "P" );
@@ -72,12 +77,12 @@ int main( int, char** ) {
     assert( coll.styles( STYLE_USER ).count() == 1 );
 
     TEST_BEGIN( 0, 0 );
-    first.writeStyle( &writer, "style:style", firstName, "style:paragraph-properties" );
-    TEST_END( "XML for first/second style", "<r>\n <style:style style:name=\"A1\" style:family=\"paragraph\" style:master-page-name=\"Standard\">\n  <style:paragraph-properties style:page-number=\"0\"/>\n </style:style>\n</r>\n" );
+    first.writeStyle( &writer, coll, "style:style", firstName, "style:paragraph-properties" );
+    TEST_END( "XML for first/second style", "<r>\n <style:style style:name=\"A1\" style:family=\"paragraph\" style:master-page-name=\"Standard\">\n  <style:paragraph-properties style:page-number=\"0\"/>\n  <style:text-properties style:foobar=\"2\"/>\n </style:style>\n</r>\n" );
 
     TEST_BEGIN( 0, 0 );
-    third.writeStyle( &writer, "style:style", thirdName, "style:paragraph-properties" );
-    TEST_END( "XML for third style", "<r>\n <style:style style:name=\"P1\" style:parent-style-name=\"A1\" style:family=\"paragraph\">\n  <style:paragraph-properties style:margin-left=\"1.249cm\"/>\n </style:style>\n</r>\n" );
+    third.writeStyle( &writer, coll, "style:style", thirdName, "style:paragraph-properties" );
+    TEST_END( "XML for third style", "<r>\n <style:style style:name=\"P1\" style:parent-style-name=\"A1\" style:family=\"paragraph\">\n  <style:paragraph-properties style:margin-left=\"1.249cm\"/>\n  <style:text-properties style:foobar=\"3\"/>\n </style:style>\n</r>\n" );
 
 
     fprintf( stderr, "OK\n" );

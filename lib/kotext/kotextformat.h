@@ -29,6 +29,7 @@
 #include <qstring.h>
 #include <qdict.h>
 
+class KoGenStyle;
 class QFontMetrics;
 class KoCharStyle;
 class KoTextFormatCollection;
@@ -352,6 +353,8 @@ public:
 
     /// Load a text format from OASIS XML
     void load( KoOasisContext& context );
+    /// Save a text format to OASIS XML
+    void save( KoGenStyle& gs );
 
 #ifndef NDEBUG
     void printDebug();
