@@ -66,69 +66,69 @@ public:
         // when adding a new unit, make sure to implement support for it in koRuler too
     };
 
-    // Prepare ptValue to be displayed in pt
+    /// Prepare ptValue to be displayed in pt
     static double toPoint( double ptValue ) {
         // No conversion, only rounding (to 0.001 precision)
         return qRound( ptValue * 1000.0 ) / 1000.0;
     }
 
-    // Prepare ptValue to be displayed in mm
+    /// Prepare ptValue to be displayed in mm
     static double toMM( double ptValue ) {
         // "mm" values are rounded to 0.0001 millimeters
         return qRound( POINT_TO_MM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
-    // Prepare ptValue to be displayed in cm
+    /// Prepare ptValue to be displayed in cm
     static double toCM( double ptValue ) {
         return qRound( POINT_TO_CM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
-    // Prepare ptValue to be displayed in dm
+    /// Prepare ptValue to be displayed in dm
     static double toDM( double ptValue ) {
         return qRound( POINT_TO_DM( ptValue ) * 10000.0 ) / 10000.0;
     }
 
-    // Prepare ptValue to be displayed in inch
+    /// Prepare ptValue to be displayed in inch
     static double toInch( double ptValue ) {
         // "in" values are rounded to 0.00001 inches
         return qRound( POINT_TO_INCH( ptValue ) * 100000.0 ) / 100000.0;
     }
 
-    // Prepare ptValue to be displayed in pica
+    /// Prepare ptValue to be displayed in pica
     static double toPI( double ptValue ) {
         // "pi" values are rounded to 0.00001 inches
         return qRound( POINT_TO_PI( ptValue ) * 100000.0 ) / 100000.0;
     }
 
-    // Prepare ptValue to be displayed in didot
+    /// Prepare ptValue to be displayed in didot
     static double toDD( double ptValue ) {
         // "dd" values are rounded to 0.00001 inches
         return qRound( POINT_TO_DD( ptValue ) * 100000.0 ) / 100000.0;
     }
 
-    // Prepare ptValue to be displayed in cicero
+    /// Prepare ptValue to be displayed in cicero
     static double toCC( double ptValue ) {
         // "cc" values are rounded to 0.00001 inches
         return qRound( POINT_TO_CC( ptValue ) * 100000.0 ) / 100000.0;
     }
 
-    // This method is the one to use to display a value in a dialog
-    // Return the value @ptValue converted to @p unit and rounded, ready to be displayed
+    /// This method is the one to use to display a value in a dialog
+    /// Return the value @ptValue converted to @p unit and rounded, ready to be displayed
     static double ptToUnit( double ptValue, Unit unit );
 
-    // This method is the one to use to display a value in a dialog
-    // Return the value @ptValue converted to @p unit and rounded, ready to be displayed
+    /// This method is the one to use to display a value in a dialog
+    /// Return the value @ptValue converted to @p unit and rounded, ready to be displayed
     static QString userValue( double ptValue, Unit unit );
 
-    // This method is the one to use to read a value from a dialog
-    // Return the value in @p unit, converted to points for internal use
+    /// This method is the one to use to read a value from a dialog
+    /// Return the value in @p unit, converted to points for internal use
     static double ptFromUnit( double value, Unit unit );
 
-    // This method is the one to use to read a value from a dialog
-    // Return the value in @p unit, converted to points for internal use
+    /// This method is the one to use to read a value from a dialog
+    /// Return the value in @p unit, converted to points for internal use
     static double fromUserValue( const QString& value, Unit unit );
 
-    // Convert a unit name into a Unit enum
+    /// Convert a unit name into a Unit enum
     static Unit unit( const QString &_unitName ) {
         if ( _unitName == QString::fromLatin1( "mm" ) ) return U_MM;
         if ( _unitName == QString::fromLatin1( "cm" ) ) return U_CM;
@@ -140,7 +140,7 @@ public:
         if ( _unitName == QString::fromLatin1( "cc" ) ) return U_CC;
         return U_PT;
     }
-    // Get the name of a unit
+    /// Get the name of a unit
     static QString unitName( Unit _unit ) {
         if ( _unit == U_MM ) return QString::fromLatin1( "mm" );
         if ( _unit == U_CM ) return QString::fromLatin1( "cm" );
@@ -151,12 +151,13 @@ public:
         if ( _unit == U_CC ) return QString::fromLatin1( "cc" );
         return QString::fromLatin1( "pt" );
     }
-    // Get the full (translated) description of a unit
+    /// Get the full (translated) description of a unit
     static QString unitDescription( Unit _unit );
     static QStringList listOfUnitName();
 
-    // parse common koffice and OO values, like "10cm", "5mm" to pt
+    /// parse common koffice and OO values, like "10cm", "5mm" to pt
     static double parseValue( QString value, double defaultVal = 0.0 );
+    // Note: the above method doesn't take a const ref, since it modifies the arg.
 };
 
 
