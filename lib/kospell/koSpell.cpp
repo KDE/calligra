@@ -361,7 +361,7 @@ void KOSpell::previousWord()
     do
     {
         int i =0;
-        for ( i = lastpos; i<(int)origbuffer.length();i++)
+        for ( i = lastpos; i>=0;i--)
         {
             QChar ch = origbuffer[i];
             if ( ch.isSpace() || ch.isPunct() )
@@ -369,12 +369,12 @@ void KOSpell::previousWord()
                 lastpos --;
                 break;
             }
-            word.append(ch);
+            word.prepend(ch);
         }
         lastpos= i-1;
         testIgnoreWord( word );
     }
-    while ( word.isEmpty() && (lastpos > 0/*todo fixme !!!!!!!!!!)*/));
+    while ( word.isEmpty() && (lastpos >= 0));
 
     if ( m_status != Finished && !spellWord( word ))
     {
@@ -441,7 +441,10 @@ void KOSpell::dialog(const QString & word, QStringList & sugg )
 
     connect (ksdlg, SIGNAL (command (int)), this, SLOT (dialog2(int)));
     ksdlg->init (word, &sugg);
-    emit misspelling (word, sugg, lastpos+offset-word.length()-1);
+    if (!ksdlg->previousWord())
+        emit misspelling (word, sugg, lastpos+offset-word.length()-1);
+    else
+        emit misspelling (word, sugg, lastpos+offset-word.length()-1);
 
     ksdlg->show();
 }
