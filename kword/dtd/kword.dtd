@@ -491,7 +491,7 @@ don't put a </?xml...> at the end of the file!).
                                     2...a picture - in that case, only IMAGE is specified.
                                                     This is DEPRECATED, use a floating frame instead.
                                     3...tabulator - Not supported anymore. Use a '\t' in the text instead.
-                                    4...a variable - in that case, only VARIABLE is specified
+                                    4...a variable - in that case, VARIABLE is also specified
                                     5...a footnote - was in KOffice-1.0, needs to be implemented again.
                                     6...an anchor for a floating frame - in that case, only ANCHOR is specified.
 
@@ -929,15 +929,15 @@ don't put a </?xml...> at the end of the file!).
             distance:           Shadow distance in pt
 
             direction:          Direction of the shadow
-                                1 = SD_LEFT_UP
-                                2 = SD_UP
-                                3 = SD_RIGHT_UP
-                                4 = SD_RIGHT
-                                5 = SD_RIGHT_BOTTOM
-                                6 = SD_BOTTOM
-                                7 = SD_LEFT_BOTTOM
-                                8 = SD_LEFT
-            red, green ,blue:   color of shadow
+                                1 = Top Left
+                                2 = Top
+                                3 = Top Right
+                                4 = Right
+                                5 = Bottom Right
+                                6 = Bottom
+                                7 = Bottom Left
+                                8 = Left
+            red, green, blue:   color of shadow
 
 -->
 <!ATTLIST SHADOW
