@@ -87,8 +87,10 @@ public:
    *                 components.
    */
   // MERGE WITH ABOVE METHODE WHEN BIC CHANGES ARE ALLOWED
-  static QValueList<KoDocumentEntry> query( bool _onlyDocEmb /*=true */,const QString& _constr = QString::null );
-
+  static QValueList<KoDocumentEntry> query( bool _onlyDocEmb,const QString& _constr);
+  /* this is how the signature should be looking after merging
+  static QValueList<KoDocumentEntry> query( bool _onlyDocEmb =true,const QString& _constr = QString::null );
+  */
 
 
   /**
