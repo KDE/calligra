@@ -35,6 +35,7 @@ class KexiRelation;
 class KexiProjectHandler;
 class KexiDBConnection;
 class KexiDBInterfaceManager;
+class KexiFilterManager;
 
 typedef QPtrList<KexiProjectHandler> ProviderList;
 
@@ -104,6 +105,7 @@ public:
 	KexiDB* db()const { return m_db; };
 	KexiDBInterfaceManager* manager() {return m_dbInterfaceManager;}
 	bool dbIsAvaible()const { return m_dbAvaible; }
+	KexiFilterManager* const filterManager() {return m_filterManager;}
 	QString boolToString(bool b);
 	bool stringToBool(const QString &s);
 	KexiRelation *relationManager();
@@ -150,6 +152,8 @@ private:
 
 	KexiDBConnection *m_projectConnection;
 	KexiDB		*m_projectDB;
+
+	KexiFilterManager *m_filterManager;
 };
 
 #endif

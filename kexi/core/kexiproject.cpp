@@ -43,6 +43,7 @@
 #include "kexirelation.h"
 #include "kexiprojecthandler.h"
 #include "kexidbconnection.h"
+#include "filters/kexifiltermanager.h"
 
 #undef JoWenn_VERY_EXPERIMENTAL
 
@@ -60,6 +61,7 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
 	//m_db = new KexiDB(this, "db");
 	m_dbInterfaceManager=KexiDBInterfaceManager::self();
 	m_dbInterfaceManager->addRef();
+	m_filterManager=new KexiFilterManager(this);
 	m_dbconnection = new KexiDBConnection();
 	m_projectConnection=new KexiDBConnection();
 	m_relationManager=new KexiRelation(this);
@@ -471,4 +473,5 @@ void KexiProject::loadHandlers()
 
 void KexiProject::slotImportData()
 {
+	m_filterManager->import(KexiFilterManager::AllEntries);
 }
