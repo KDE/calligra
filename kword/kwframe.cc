@@ -226,6 +226,10 @@ KWFrame *KWFrame::getCopy() {
     frm->setRightBorder(getRightBorder());
     frm->setTopBorder(getTopBorder());
     frm->setBottomBorder(getBottomBorder());
+    frm->setBLeft(getBLeft());
+    frm->setBRight(getBRight());
+    frm->setBTop(getBTop());
+    frm->setBBottom(getBBottom());
     if(anchor())
         frm->setAnchor(anchor());
     return frm;
