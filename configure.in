@@ -18,6 +18,9 @@ AM_ENABLE_STATIC(no)
 KDE_PROG_LIBTOOL
 AC_PATH_KDE 
 
+LIBMICO="-lmico2.0.5 -ldl"
+AC_SUBST(LIBMICO)
+
 idldir="\$(prefix)/idl"
 AC_SUBST(idldir)
 
@@ -31,7 +34,7 @@ AC_OUTPUT(Makefile \
 	lib/Makefile \
 	lib/kofficecore/Makefile \
 	lib/kofficeui/pics/Makefile \
-	lib/kofficeui/test/Makefile \
+	lib/test/Makefile \
 	lib/kofficeui/Makefile \
 	lib/koml/Makefile \
 	kpresenter/Makefile \
