@@ -143,7 +143,6 @@ void GObject::style(const GStyle *s)
 
 void GObject::matrix(QWMatrix m)
 {
-  kdDebug(38000) << "SET MATRIX!!!" << endl;
   tMatrix = m;
   iMatrix = tMatrix.invert();
   initTmpMatrix();
@@ -152,6 +151,7 @@ void GObject::matrix(QWMatrix m)
 
 void GObject::initTmpMatrix()
 {
+  kdDebug(38000) << "SET TMP MATRIX!!!" << endl;
   tmpMatrix = tMatrix;
 }
 

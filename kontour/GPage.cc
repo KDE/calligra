@@ -347,6 +347,7 @@ void GPage::selectObject(GObject *obj)
     obj->select(true);
     if(obj->isConvertible())
       mConvertibleCount++;
+    obj->ref();
     selection.append(obj);
     updateSelection();
     document()->emitSelectionChanged();
@@ -362,6 +363,7 @@ void GPage::unselectObject(GObject *obj)
     obj->select(false);
     if(obj->isConvertible())
       mConvertibleCount--;
+    obj->unref();
     selection.remove(i);
     updateSelection();
     document()->emitSelectionChanged();

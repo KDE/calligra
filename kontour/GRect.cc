@@ -321,7 +321,7 @@ bool GRect::findNearestPoint(const KoPoint &p, double max_dist, double &dist, in
 GPath *GRect::convertToPath() const
 {
   GPath *path = new GPath(true);
-  path->moveTo(sPoint.x(), sPoint.y());
+  path->beginTo(sPoint.x(), sPoint.y());
   path->lineTo(sPoint.x(), ePoint.y());
   path->lineTo(ePoint.x(), ePoint.y());
   path->lineTo(ePoint.x(), sPoint.y());

@@ -29,6 +29,7 @@
 #include <klocale.h>
 
 #include "kontour_view.h"
+#include "GPage.h"
 #include "Canvas.h"
 #include "ToolController.h"
 
@@ -44,6 +45,7 @@ void EditPointTool::activate()
 {
   toolController()->view()->canvas()->setCursor(Qt::crossCursor);
   toolController()->view()->canvas()->withBasePoints(true);
+  toolController()->view()->activeDocument()->activePage()->updateSelection();
 }
 
 void EditPointTool::deactivate()

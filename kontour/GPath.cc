@@ -3,8 +3,8 @@
   $Id$
 
   This file is part of Kontour.
-  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 1998-1999 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -43,110 +43,112 @@ GSegment::GSegment(const QDomElement &element)
 {
 }
 
-
-GLine::GLine()
+GSegment::~GSegment()
 {
 }
 
-GLine::GLine(const QDomElement &element)
-{
-}
-
-const KoPoint &GLine::point(int i) const
+const KoPoint &GSegment::point(int i) const
 {
   return points[i];
 }
 
-void GLine::point(int i, const KoPoint &c)
+void GSegment::point(int i, const KoPoint &c)
 {
   points[i] = c;
 }
 
-QDomElement GLine::writeToXml(QDomDocument &document)
-{
-  QDomElement line = document.createElement("l");
-  line.setAttribute("x1", points[0].x());
-  line.setAttribute("y1", points[0].y());
-  line.setAttribute("x2", points[1].x());
-  line.setAttribute("y2", points[1].y());
-  return line;
-}
-
-void GLine::draw(QPainter &p, QWMatrix &m, bool withBasePoints, bool outline)
-{
-  p.drawLine(static_cast<int>(points[0].x()), static_cast<int>(points[0].y()), static_cast<int>(points[1].x()), static_cast<int>(points[1].y()));
-/*  if(withBasePoints)
-  {
-    KoPoint c = points[1].transform(m);
-    int x = static_cast<int>(c.x());
-    int y = static_cast<int>(c.y());
-    drawNode(p, x, y, false);
-  }*/
-}
-
-void GLine::movePoint(int idx, double dx, double dy, bool ctrlPressed)
+void GSegment::movePoint(int idx, double dx, double dy, bool ctrlPressed)
 {
   points[idx].setX(points[idx].x() + dx);
   points[idx].setY(points[idx].y() + dy);
   // TODO Ctrl Pressed
 }
 
-KoRect GLine::boundingBox()
+/*      GBegin      */
+
+GBegin::GBegin()
 {
-  KoRect r(points[0], points[1]);
-  return r.normalize();
+  points.resize(1);
+  points[0].setX(0.0);
+  points[0].setY(0.0);
 }
 
-bool GLine::contains(const KoPoint &p)
+GBegin::GBegin(const QDomElement &element)
 {
-  double x1, x2, y1, y2;
-
-  x1 = points[0].x();
-  x2 = points[1].x();
-  if(x2 <= x1)
-  {
-    /* swap the points */
-    x2 = x1;
-    x1 = points[1].x();
-    y2 = points[0].y();
-    y1 = points[1].y();
-  }
-  else
-  {
-    y1 = points[0].y();
-    y2 = points[1].y();
-  }
-    if (x1 - 3 <= p.x () && p.x () <= x2 + 3) {
-      if (abs (int (x1 - x2)) < 5) {
-        if ((y1 <= p.y () && p.y () <= y2) ||
-            (y2 <= p.y () && p.y () <= y1))
-            return true;
-      }
-      else {
-        double xp, yp, m, n;
-
-        // y = m * x + n;
-        m = (y2 - y1) / (x2 - x1);
-        n = y1 - m * x1;
-
-        if (m > 1) {
-          xp = ((double) p.y () - n) / m;
-          if (xp - 5 <= p.x () && p.x () <= xp + 5)
-            return true;
-        }
-        else {
-          yp = m * p.x () + n;
-
-          if (yp - 5 <= p.y () && p.y () <= yp + 5)
-            return true;
-        }
-      }
-    }
+  points.resize(1);
 }
 
-QPointArray GLine::getPoints() const
+const char GBegin::type() const
 {
-  return QPointArray();
+  return 'b';
+}
+
+QDomElement GBegin::writeToXml(QDomDocument &document)
+{
+  QDomElement begin = document.createElement("b");
+  begin.setAttribute("x", points[0].x());
+  begin.setAttribute("y", points[0].y());
+  return begin;
+}
+
+double GBegin::length() const
+{
+  return 0.0;
+}
+
+/*        GMove      */
+
+GMove::GMove()
+{
+  points.resize(1);
+}
+
+GMove::GMove(const QDomElement &element)
+{
+  points.resize(1);
+}
+
+const char GMove::type() const
+{
+  return 'm';
+}
+
+QDomElement GMove::writeToXml(QDomDocument &document)
+{
+  QDomElement move = document.createElement("m");
+  move.setAttribute("x", points[0].x());
+  move.setAttribute("y", points[0].y());
+  return move;
+}
+
+double GMove::length() const
+{
+  return 0.0;
+}
+
+//-----------
+
+GLine::GLine()
+{
+  points.resize(1);
+}
+
+GLine::GLine(const QDomElement &element)
+{
+  points.resize(1);
+}
+
+const char GLine::type() const
+{
+  return 'l';
+}
+
+QDomElement GLine::writeToXml(QDomDocument &document)
+{
+  QDomElement line = document.createElement("l");
+  line.setAttribute("x", points[0].x());
+  line.setAttribute("y", points[0].y());
+  return line;
 }
 
 double GLine::length() const
@@ -158,25 +160,22 @@ double GLine::length() const
 
 GCubicBezier::GCubicBezier()
 {
+  points.resize(3);
 }
 
 GCubicBezier::GCubicBezier(const QDomElement &element)
 {
+  points.resize(3);
 }
 
-const KoPoint &GCubicBezier::point(int i) const
+const char GCubicBezier::type() const
 {
-  return points[i];
-}
-
-void GCubicBezier::point(int i, const KoPoint &c)
-{
-  points[i] = c;
+  return 'c';
 }
 
 QDomElement GCubicBezier::writeToXml(QDomDocument &document)
 {
-  QDomElement arc = document.createElement("a");
+  QDomElement arc = document.createElement("c");
   arc.setAttribute("x1", points[0].x());
   arc.setAttribute("y1", points[0].y());
   arc.setAttribute("x2", points[1].x());
@@ -184,529 +183,10 @@ QDomElement GCubicBezier::writeToXml(QDomDocument &document)
   return arc;
 }
 
-void GCubicBezier::draw(QPainter &p, QWMatrix &m, bool withBasePoints, bool outline)
-{
-}
-
-void GCubicBezier::movePoint(int idx, double dx, double dy, bool ctrlPressed)
-{
-  points[idx].setX(points[idx].x() + dx);
-  points[idx].setY(points[idx].y() + dy);
-  // TODO Ctrl Pressed
-}
-
-KoRect GCubicBezier::boundingBox()
-{
-  return KoRect(points[0], points[1]);
-}
-
-bool GCubicBezier::contains(const KoPoint &p)
-{
-  return true;
-}
-
-QPointArray GCubicBezier::getPoints() const
-{
-  return QPointArray();
-}
-
 double GCubicBezier::length() const
 {
   return Kontour::segLength(points[0], points[1]);
 }
-
-
-/*
-static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
-  // s1 == Line, s2 == Bezier
-  float xp, yp;
-
-  //float llen = s1.length ();
-  float blen = s2.length ();
-  float slen = 0;
-  for (int i = 0; i < idx; i++) {
-     slen += seg_length (s2.pointAt (i), s2.pointAt (i + 1));
-  }
-  float dx = s1.pointAt (1).x () - s1.pointAt (0).x ();
-  float dy = s1.pointAt (1).y () - s1.pointAt (0).y ();
-  xp = slen / blen * dx + s1.pointAt (0).x ();
-  yp = slen / blen * dy + s1.pointAt (0).y ();
-
-  return Coord (xp, yp);
-}
-
-static Coord blendPoints (const Coord& p1, const Coord& p2,
-                          int step, int num) {
-  float dx = ((p2.x () - p1.x ()) / (num + 1.0)) * (step + 1.0);
-  float dy = ((p2.y () - p1.y ()) / (num + 1.0)) * (step + 1.0);
-  return Coord (p1.x () + dx, p1.y () + dy);
-}
-
-static GSegment blendSegments (const GSegment& s1, const GSegment& s2,
-                               int step, int num) {
-  GSegment::Kind kind = GSegment::sk_Bezier;
-  if (s1.kind () == GSegment::sk_Line && s2.kind () == GSegment::sk_Line)
-    kind = GSegment::sk_Line;
-  GSegment seg (kind);
-  if (kind == GSegment::sk_Line) {
-    seg.setPoint (0, blendPoints (s1.pointAt (0), s2.pointAt (0), step, num));
-    seg.setPoint (1, blendPoints (s1.pointAt (1), s2.pointAt (1), step, num));
-  }
-  else {
-    if (s1.kind () == GSegment::sk_Line) {
-      GSegment snew (GSegment::sk_Bezier);
-      snew.setPoint (0, s1.pointAt (0));
-      snew.setPoint (1, computePoint (1, s1, s2));
-      snew.setPoint (2, computePoint (2, s1, s2));
-      snew.setPoint (3, s1.pointAt (1));
-      for (int i = 0; i < 4; i++)
-        seg.setPoint (i, blendPoints (snew.pointAt (i), s2.pointAt (i),
-                                      step, num));
-    }
-    else if (s2.kind () == GSegment::sk_Line) {
-      GSegment snew (GSegment::sk_Bezier);
-      snew.setPoint (0, s2.pointAt (0));
-      snew.setPoint (1, computePoint (1, s2, s1));
-      snew.setPoint (2, computePoint (2, s2, s1));
-      snew.setPoint (3, s2.pointAt (1));
-      for (int i = 0; i < 4; i++)
-        seg.setPoint (i, blendPoints (s1.pointAt (i), snew.pointAt (i),
-                                      step, num));
-    }
-    else {
-      for (int i = 0; i < 4; i++)
-        seg.setPoint (i, blendPoints (s1.pointAt (i), s2.pointAt (i),
-                                      step, num));
-    }
-  }
-  return seg;
-}
-
-bool GSegment::contains (const Coord& p) {
-  if (skind == sk_Line) {
-    float x1, x2, y1, y2;
-
-    x1 = points[0].x ();
-    x2 = points[1].x ();
-    if (x2 <= x1) {
-      // swap the points
-      x2 = x1;
-      x1 = points[1].x ();
-      y2 = points[0].y ();
-      y1 = points[1].y ();
-    }
-    else {
-      y1 = points[0].y ();
-      y2 = points[1].y ();
-    }
-    if (x1 - 3 <= p.x () && p.x () <= x2 + 3) {
-      if (abs (int (x1 - x2)) < 5) {
-        if ((y1 <= p.y () && p.y () <= y2) ||
-            (y2 <= p.y () && p.y () <= y1))
-            return true;
-      }
-      else {
-        float xp, yp, m, n;
-
-        // y = m * x + n;
-        m = (y2 - y1) / (x2 - x1);
-        n = y1 - m * x1;
-
-        if (m > 1) {
-          xp = ((float) p.y () - n) / m;
-          if (xp - 5 <= p.x () && p.x () <= xp + 5)
-            return true;
-        }
-        else {
-          yp = m * p.x () + n;
-
-          if (yp - 5 <= p.y () && p.y () <= yp + 5)
-            return true;
-        }
-      }
-    }
-  }
-  else {
-    return GBezier::bezier_segment_contains (points[0], points[1],
-                                             points[2], points[3], p);
-  }
-  return false;
-}
-
-void GSegment::draw (QPainter& p, bool withBasePoints, bool outline,
-                     bool drawFirst) {
-  if (skind == sk_Line)
-    Painter::drawLine (p, points[0].x (), points[0].y (),
-                points[1].x (), points[1].y ());
-  else
-    p.drawQuadBezier (bpoints);
-  if (withBasePoints) {
-    p.save ();
-    p.setPen (Qt::black);
-    if (drawFirst)
-      Painter::drawRect (p, points[0].x () - 2, points[0].y () - 2, 4, 4);
-    if (skind == sk_Line)
-      Painter::drawRect (p, points[1].x () - 2, points[1].y () - 2, 4, 4);
-    else
-      Painter::drawRect (p, points[3].x () - 2, points[3].y () - 2, 4, 4);
-    p.restore ();
-  }
-}
-
-void GSegment::movePoint (int idx, float dx, float dy, bool ctrlPressed) {
-  assert (idx >= 0 && ((skind == sk_Bezier && idx < 4) ||
-                       (skind == sk_Line && idx < 2)));
-  points[idx].x (points[idx].x () + dx);
-  points[idx].y (points[idx].y () + dy);
-  if (skind == sk_Bezier) {
-    bpoints.setPoint (idx, qRound (points[idx].x ()), qRound (points[idx].y ()));
-  }
-}
-
-Rect GSegment::boundingBox () {
-  Rect r;
-  if (skind == sk_Line)
-    r = Rect (points[0], points[1]);
-  else {
-    r = Rect (points[0], points[0]);
-    for (unsigned int i = 1; i < 4; i++) {
-      const Coord& p = points[i];
-      r.left (QMIN(p.x (), r.left ()));
-      r.top (QMIN(p.y (), r.top ()));
-      r.right (QMAX(p.x (), r.right ()));
-      r.bottom (QMAX(p.y (), r.bottom ()));
-    }
-  }
-  return r.normalize ();
-}
-
-QPointArray GSegment::getPoints () const {
-
-  if (skind == sk_Line) {
-    QPointArray result (2);
-    result.setPoint (0, qRound (points[0].x ()), qRound (points[0].y ()));
-    result.setPoint (1, qRound (points[1].x ()), qRound (points[1].y ()));
-    return result;
-  }
-  else
-    return bpoints.quadBezier ();
-}
-
-float GSegment::length () const {
-  float len = 0.0;
-
-  if (skind == sk_Line) {
-    len = seg_length (points[0], points[1]);
-  }
-  else
-   for (int i = 0; i < 3; i++)
-     len += seg_length (points[i], points[i + 1]);
-  return len;
-}*/
-
-/*
-
-GPath::GPath (GDocument* doc, const QDomElement &element)
-:GObject (doc, element.namedItem("gobject").toElement())
-{
-
-    closed=(element.attribute("closed").toInt()==1);
-    QDomElement segment = element.firstChild().toElement();
-    for( ; !segment.isNull(); segment = segment.nextSibling().toElement() ) {
-        if(segment.tagName()=="seg")
-            addSegment(GSegment(segment));
-    }
-    if (closed)
-        updatePath();
-}
-
-GPath::GPath (const GPath& obj)
-:GObject(obj)
-{
-  segments = obj.segments;
-}
-
-void GPath::draw (QPainter& p, bool withBasePoints, bool outline, bool) {
-  QPen pen;
-  QBrush brush;
-  initPen (pen);
-  p.save ();
-  p.setPen (pen);
-  p.setWorldMatrix (tmpMatrix, true);
-  bool drawFirst = true;
-
-  if (closed) {
-    if (! workInProgress () && !outline) {
-      initBrush (brush);
-      p.setBrush (brush);
-
-      if (gradientFill ()) {
-        //if (! gShape.valid ())
-          updateGradientShape (p);
-        gShape.draw (p);
-      }
-    }
-    p.drawPolygon (points);
-  if (withBasePoints) {
-    p.setPen (Qt::black);
-    p.setBrush (Qt::white);
-    for (unsigned int i = 0; i < points.size (); i++) {
-      QPoint pnt = points.point (i);
-      Painter::drawRect (p, pnt.x () - 2, pnt.y () - 2, 4, 4);
-    }
-  }
-
-  }
-  else {
-    QValueList<GSegment>::Iterator i;
-    for (i = segments.begin (); i != segments.end (); ++i) {
-      (*i).draw (p, withBasePoints, outline, drawFirst);
-      drawFirst = false;
-    }
-  }
-  p.restore ();
-}
-
-void GPath::movePoint (int idx, float dx, float dy, bool ctrlPressed) {
-  int pidx = 0;
-  QValueList<GSegment>::Iterator i;
-  float ndx = dx * iMatrix.m11 () + dy * iMatrix.m21 ();
-  float ndy = dy * iMatrix.m22 () + dx * iMatrix.m12 ();
-
-  for (i = segments.begin (); i != segments.end (); ++i) {
-    int num = ((*i).kind () == GSegment::sk_Line ? 2 : 4);
-    pidx += num;
-    if (pidx > idx) {
-      // move point of segment[i]
-      int sidx = idx - (pidx - num);
-      (*i).movePoint (sidx, ndx, ndy);
-      if (sidx == num - 1) {
-        // it's a endpoint, so move the first point of segment[i+1]
-        ++i;
-        if (i != segments.end ()) {
-          (*i).movePoint (0, ndx, ndy);
-        }
-      }
-      else if (sidx == 0) {
-        // it's a startpoint, so move the first point of segment[i-1]
-        if (i == segments.begin () && closed) {
-            GSegment& seg = segments.last();
-            seg.movePoint (seg.kind () == GSegment::sk_Line ? 1 : 3, ndx, ndy);
-        }
-      }
-      updatePath ();
-      updateRegion (true);
-      return;
-    }
-  }
-}
-
-int GPath::getNeighbourPoint (const Coord& p)
-{
-  Coord c;
-  int idx = 0;
-
-  QValueList<GSegment>::Iterator i;
-  for(i = segments.begin (); i != segments.end (); ++i)
-  {
-    int num  = ((*i).kind () == GSegment::sk_Line ? 2 : 4);
-    for(int n = 0; n < num; n++)
-    {
-      c = (*i).pointAt (n).transform (tMatrix);
-      if (c.isNear (p, NEAR_DISTANCE))
-        return idx;
-      idx++;
-    }
-  }
-  return -1;
-}
-
-QString GPath::typeName () const {
-  if (closed)
-    return i18n("Closed Curve");
-  else
-    return i18n("Curve");
-}
-
-GObject* GPath::copy () {
-  return new GPath (*this);
-}
-
-GObject* GPath::create (GDocument *doc, const QDomElement &element)
-{
-  return new GPath(doc, element);
-}
-
-void GPath::getPath (QValueList<Coord>& ) {
-}
-
-void GPath::setClosed (bool flag) {
-  if (! closed) {
-    closed = flag;
-    updatePath ();
-    updateRegion ();
-  }
-  else
-    closed = flag;
-}
-
-void GPath::addLineSegment (const Coord& p1, const Coord& p2) {
-  GSegment seg (GSegment::sk_Line);
-  seg.setPoint (0, p1);
-  seg.setPoint (1, p2);
-  segments.append(seg);
-  updatePath ();
-  updateRegion (true);
-}
-
-void GPath::addBezierSegment (const Coord& p1, const Coord& p2,
-                               const Coord& p3, const Coord& p4) {
-  GSegment seg (GSegment::sk_Bezier);
-  seg.setPoint (0, p1);
-  seg.setPoint (1, p2);
-  seg.setPoint (2, p3);
-  seg.setPoint (3, p4);
-  segments.append(seg);
-  updatePath ();
-  updateRegion (true);
-}
-
-void GPath::addSegment (const GSegment& s) {
-  segments.append(s);
-  updatePath ();
-  updateRegion (true);
-}
-
-const GSegment& GPath::getSegment (int idx) {
-    return (*segments.at(idx));
-}
-
-void GPath::removePoint (int idx, bool update)
-{
-  kdDebug(38000) << "GPath::removePoint isn't implemented" <<endl;
-
-    int pidx = 0;
-    QValueList<GSegment>::Iterator i;
-
-  if (segments.count() > 1) {
-    if (idx == 0) {
-      // remove the first segment
-      segments.remove (segments.begin ());
-    }
-    else {
-      for (i = segments.begin (); i != segments.end (); i++) {
-        int num = ((*i).kind () == GSegment::sk_Line ? 2 : 4);
-        pidx += num;
-        if (pidx > idx) {
-          // remove this segment and set the first point
-          // of the following
-        }
-      }
-    }
-  }
-
-  if (update)
-    updateRegion ();
-
-}
-
-GPath* GPath::blendCurves (GPath *start, GPath *end, int step, int num) {
-  GPath *res = new GPath (0);
-  // TODO: Attribute setzen
-  res->outlineInfo = start->outlineInfo;
-  res->fillInfo = start->fillInfo;
-
-  QValueList<GSegment>::Iterator si, ei;
-  si = start->segments.begin ();
-  ei = end->segments.begin ();
-
-  // (1) both curves with the same number of segments
-  if (start->numOfSegments () <= end->numOfSegments ()) {
-    while (si != start->segments.end ()) {
-      GSegment seg = blendSegments (*si, *ei, step, num);
-      res->segments.append(seg);
-      ++si; ++ei;
-    }
-    if (start->numOfSegments () < end->numOfSegments ()) {
-      // create a pseudo segment with the last point
-      GSegment lseg (GSegment::sk_Line);
-      const GSegment& last = start->segments.last();
-      Coord p = (last.kind () == GSegment::sk_Line ? last.pointAt (1) :
-                 last.pointAt (3));
-      lseg.setPoint (0, p);
-      lseg.setPoint (1, p);
-
-      while (ei != end->segments.end ()) {
-        GSegment seg = blendSegments (lseg, *ei, step, num);
-        res->segments.append(seg);
-        ++ei;
-      }
-    }
-  }
-  else {
-    while (ei != end->segments.end ()) {
-      GSegment seg = blendSegments (*si, *ei, step, num);
-      res->segments.append(seg);
-      ++si; ++ei;
-    }
-    GSegment lseg (GSegment::sk_Line);
-    const GSegment& last = end->segments.last();
-    Coord p = (last.kind () == GSegment::sk_Line ? last.pointAt (1) :
-               last.pointAt (3));
-    lseg.setPoint (0, p);
-    lseg.setPoint (1, p);
-
-    while (si != start->segments.end ()) {
-      GSegment seg = blendSegments (*si, lseg, step, num);
-      res->segments.append(seg);
-      ++si;
-    }
-  }
-  res->setOutlineColor (blendColors (start->getOutlineColor (),
-                                     end->getOutlineColor (), step, num));
-  if (start->isClosed () && end->isClosed ()) {
-    // blend fill properties
-    if (start->getFillStyle () == end->getFillStyle () &&
-        start->getFillStyle () == GObject::FillInfo::SolidFill) {
-      res->setFillStyle (GObject::FillInfo::SolidFill);
-      res->setFillColor (blendColors (start->getFillColor (),
-                                      end->getFillColor (), step, num));
-    }
-    res->setClosed (true);
-  }
-  res->calcBoundingBox ();
-  return res;
-}
-
-QColor GPath::blendColors (const QColor& c1, const QColor& c2, int step,
-                            int num) {
-  if (c1 == c2)
-    return c1;
-  else {
-    int r, g, b;
-    r = (c2.red () - c1.red ()) / (num + 1) * (step + 1) + c1.red ();
-    g = (c2.green () - c1.green ()) / (num + 1) * (step + 1) + c1.green ();
-    b = (c2.blue () - c1.blue ()) / (num + 1) * (step + 1) + c1.blue ();
-    return QColor (r, g, b);
-  }
-}
-
-void GPath::updatePath ()
-{
-  if (! closed)
-    return;
-
-  points.resize (0);
-  unsigned int last = 0;
-  QValueList<GSegment>::Iterator i;
-  for (i = segments.begin (); i != segments.end (); ++i) {
-    QPointArray parray = (*i).getPoints ();
-    points.resize (last + parray.size ());
-    for (unsigned int i = 0; i < parray.size (); i++)
-      points.setPoint (last + i, parray.point (i));
-    last += parray.size ();
-  }
-}*/
 
 /*******************[GPath]*********************/
 
@@ -714,21 +194,25 @@ GPath::GPath(bool aClosed):
 GObject()
 {
   mClosed = aClosed;
+  segments.setAutoDelete(true);
 }
 
 GPath::GPath(const QDomElement &element):
 GObject(element.namedItem("go").toElement())
 {
+  segments.setAutoDelete(true);
 }
 
 GPath::GPath(const GPath &obj):
 GObject(obj)
 {
+  segments.setAutoDelete(true);
+  segments = obj.segments;
 }
 
 GObject *GPath::copy() const
 {
-    return new GPath(this);
+  return new GPath(this);
 }
 
 void GPath::closed(bool aClosed)
@@ -736,22 +220,106 @@ void GPath::closed(bool aClosed)
   mClosed = aClosed;
 }
 
+void GPath::beginTo(const double x, const double y)
+{
+  segments.clear();
+  GBegin *seg = new GBegin;
+  seg->point(0, KoPoint(x, y));
+  segments.append(seg);
+  calcBoundingBox();
+}
+
 void GPath::moveTo(const double x, const double y)
 {
-  endx = x;
-  endy = y;
+  GMove *seg = new GMove;
+  seg->point(0, KoPoint(x, y));
+  segments.append(seg);
   calcBoundingBox();
 }
 
 void GPath::lineTo(const double x, const double y)
 {
-  GLine *seg = new GLine();
-  seg->point(0, KoPoint(endx, endy));
-  seg->point(1, KoPoint(x, y));
+  GLine *seg = new GLine;
+  seg->point(0, KoPoint(x, y));
   segments.append(seg);
-  endx = x;
-  endy = y;
   calcBoundingBox();
+}
+
+void GPath::curveTo(const double x, const double y, const double x1, const double y1, const double x2, const double y2)
+{
+  GCubicBezier *seg = new GCubicBezier;
+  seg->point(0, KoPoint(x, y));
+  seg->point(1, KoPoint(x1, y1));
+  seg->point(2, KoPoint(x2, y2));
+  segments.append(seg);
+  calcBoundingBox();
+}
+
+void GPath::arcTo(const double x1, const double y1, const double x2, const double y2, const double r)
+{
+  //<karbon_code>
+  // we need to calculate the tangent points. therefore calculate tangents
+  // D10=P1P0 and D12=P1P2 first:
+  double dx10 = segments.getLast()->point(0).x() - x1;
+  double dy10 = segments.getLast()->point(0).y() - y1;
+  double dx12 = x2 - x1;
+  double dy12 = y2 - y1;
+
+  // calculate distance squares:
+  double dsq10 = dx10 * dx10 + dy10 * dy10;
+  double dsq12 = dx12 * dx12 + dy12 * dy12;
+
+  // we now calculate tan(a/2) where a is the angular between D10 and D12.
+  // we take advantage of D10*D12=d10*d12*cos(a), |D10xD12|=d10*d12*sin(a)
+  // (cross product) and tan(a/2)=sin(a)/[1-cos(a)].
+  double num   = dx10 * dy12 - dy10 * dx12;
+  double denom = sqrt(dsq10 * dsq12) - dx10 * dx12 + dy10 * dy12;
+
+  if(1.0 + denom == 1.0)	// points are co-linear
+    lineTo(x1, y1);	        // just add a line to first point
+  else
+  {
+  // calculate distances from P1 to tangent points:
+    double dist = fabs(r * num / denom);
+    double d1t0 = dist / sqrt(dsq10);
+    double d1t1 = dist / sqrt(dsq12);
+
+  // TODO: check for r<0
+
+    double bx0 = x1 + dx10 * d1t0;
+    double by0 = y1 + dy10 * d1t0;
+
+  // if(bx0,by0) deviates from current point, add a line to it:
+  // TODO: decide via radius<XXX or sthg?
+    if(bx0 != segments.getLast()->point(0).x() || by0 != segments.getLast()->point(0).y())
+    {
+      lineTo(bx0, by0);
+    }
+    double bx3 = x1 + dx12 * d1t1;
+    double by3 = y1 + dy12 * d1t1;
+
+    // the two bezier-control points are located on the tangents at a fraction
+    // of the distance [tangent points<->tangent intersection].
+    double distsq = (x1 - bx0) * (x1 - bx0) + (y1 - by0) * (y1 - by0);
+    double rsq = r * r;
+    double fract;
+
+  // TODO: make this nicer?
+
+    if(distsq >= rsq * 1.0e8) // r is very small
+      fract = 0.0; // dist==r==0
+    else
+      fract = ( 4.0 / 3.0 ) / ( 1.0 + sqrt( 1.0 + distsq / rsq ));
+
+    double bx1 = bx0 + (x1 - bx0) * fract;
+    double by1 = by0 + (y1 - by0) * fract;
+    double bx2 = bx3 + (x1 - bx3) * fract;
+    double by2 = by3 + (y1 - by3) * fract;
+
+    // finally add the bezier-segment:
+    curveTo(bx3, by3, bx1, by1, bx2, by2);
+  }
+  //</karbon_code>
 }
 
 QString GPath::typeName() const
@@ -765,28 +333,89 @@ QString GPath::typeName() const
 QDomElement GPath::writeToXml(QDomDocument &document)
 {
   QDomElement path = document.createElement("path");
-  path.setAttribute("closed", (int)mClosed);
-
-/*  QValueList<GSegment>::Iterator i;
-    for (i = segments.begin (); i != segments.end (); ++i)
-        element.appendChild((*i).writeToXml (document));
-    element.appendChild(GObject::writeToXml(document));*/
+  path.setAttribute("closed", mClosed);
+  path.appendChild(GObject::writeToXml(document));
+  for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
+    path.appendChild((*seg)->writeToXml(document));
   return path;
 }
 
 void GPath::draw(QPainter &p, bool withBasePoints, bool outline, bool withEditMarks)
 {
   p.save();
-  p.setWorldMatrix(tmpMatrix, true);
+//  p.setWorldMatrix(tmpMatrix, true);
   setPen(&p);
   setBrush(&p);
+
+  int x;
+  int y;
+  int xc;
+  int yc;
+  int x1;
+  int y1;
+  int x2;
+  int y2;
+  KoPoint c;
 
   for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
   {
     GSegment *s = *seg;
-    s->draw(p, tmpMatrix, withBasePoints, outline);
+    if(s->type() == 'b')
+    {
+      c = s->point(0).transform(tmpMatrix);
+      x = static_cast<int>(c.x());
+      y = static_cast<int>(c.y());
+    }
+    else if(s->type() == 'm')
+    {
+      c = s->point(0).transform(tmpMatrix);
+      x = static_cast<int>(c.x());
+      y = static_cast<int>(c.y());
+    }
+    else if(s->type() == 'l')
+    {
+      c = s->point(0).transform(tmpMatrix);
+      xc = static_cast<int>(c.x());
+      yc = static_cast<int>(c.y());
+      p.drawLine(x, y, xc, yc);
+      x = xc;
+      y = yc;
+    }
+    else if(s->type() == 'c')
+    {
+      c = s->point(0).transform(tmpMatrix);
+      xc = static_cast<int>(c.x());
+      yc = static_cast<int>(c.y());
+      c = s->point(1).transform(tmpMatrix);
+      x1 = static_cast<int>(c.x());
+      y1 = static_cast<int>(c.y());
+      c = s->point(2).transform(tmpMatrix);
+      x2 = static_cast<int>(c.x());
+      y2 = static_cast<int>(c.y());
+      QPointArray a(4);
+      a.setPoint(0, x, y);
+      a.setPoint(1, x1, y1);
+      a.setPoint(2, x2, y2);
+      a.setPoint(3, xc, yc);
+      p.drawCubicBezier(a);
+      x = xc;
+      y = yc;
+    }
   }
   p.restore();
+  if(withBasePoints)
+  {
+    int x;
+    int y;
+    KoPoint c;
+    for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
+    {
+      c = (*seg)->point(0).transform(tmpMatrix);
+      x = static_cast<int>(c.x());
+      y = static_cast<int>(c.y());
+      drawNode(p, x, y, false);
+    }
+  }
 }
 
 int GPath::getNeighbourPoint(const KoPoint &point)
@@ -804,16 +433,30 @@ void GPath::removePoint(int idx, bool update)
 
 bool GPath::contains(const KoPoint &p)
 {
-  KoPoint pp = p.transform(iMatrix);
-  if(box.contains(pp))
+  double x;
+  double y;
+  double xc;
+  double yc;
+  for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
   {
-    for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
-      if((*seg)->contains(pp))
-        return true;
-    return false;
+    GSegment *s = *seg;
+    if(s->type() == 'b' || s->type() == 'm')
+    {
+      x = s->point(0).x();
+      y = s->point(0).y();
+    }
+    else if(s->type() == 'l')
+    {
+      x = s->point(0).x();
+      y = s->point(0).y();
+    }
+    else if(s->type() == 'c')
+    {
+      x = s->point(0).x();
+      y = s->point(0).y();
+    }
   }
-  else
-    return false;
+  return false;
 }
 
 bool GPath::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
@@ -829,15 +472,27 @@ void GPath::calcBoundingBox()
     box = KoRect();
     return;
   }
-
-  KoRect r = (*seg)->boundingBox();
+  double xmin = (*seg)->point(0).x();
+  double xmax = (*seg)->point(0).x();
+  double ymin = (*seg)->point(0).y();
+  double ymax = (*seg)->point(0).y();
+  double x;
+  double y;
   ++seg;
   for(; seg.current(); ++seg)
   {
-    KoRect rr = (*seg)->boundingBox();
-    r = r.unite(rr);
+    x = (*seg)->point(0).x();
+    y = (*seg)->point(0).y();
+    if(x < xmin)
+      xmin = x;
+    if(x > xmax)
+      xmax = x;
+    if(y < ymin)
+      ymin = y;
+    if(y > ymax)
+      ymax = y;
   }
-  box = r.transform(tmpMatrix);
+  box = KoRect(xmin, ymin, xmax - xmin, ymax - ymin).transform(tmpMatrix);
 }
 
 GPath *GPath::convertToPath() const

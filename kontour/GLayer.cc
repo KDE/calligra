@@ -54,9 +54,9 @@ GLayer::~GLayer()
     if(o->isSelected())
       mPage->unselectObject(o);
     o->layer(0L);
-//    o->unref (); //TODO
+    o->unref (); 
   }
-  contents.clear ();
+  contents.clear();
 }
 
 void GLayer::name(const QString &aName)

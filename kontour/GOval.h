@@ -46,12 +46,10 @@ public:
   bool isCircle() const {return circleFlag; }
 
   const KoPoint &startPoint() const {return sPoint; }
-  void startPoint(const KoPoint &p);
-
   const KoPoint &endPoint() const {return ePoint; }
-  void endPoint(const KoPoint &p);
+  void setPoints(const KoPoint &p1, const KoPoint &p2);
 
-  void setAngles(double sa, double ea);
+  void setAngles(const double sa, const double ea);
 
   QString typeName () const;
   QDomElement writeToXml(QDomDocument &document);

@@ -3,8 +3,8 @@
   $Id$
 
   This file is part of Kontour.
-  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 1998-1999 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -41,23 +41,57 @@ class GSegment
 public:
   GSegment();
   GSegment(const QDomElement &element);
-  virtual ~GSegment() {}
+  virtual ~GSegment();
 
-  virtual const KoPoint &point(int i) const = 0;
-  virtual void point(int i, const KoPoint &c) = 0;
+  virtual const char type() const = 0;
+
+  const KoPoint &point(int i) const;
+  void point(int i, const KoPoint &c);
+  void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
 
   virtual QDomElement writeToXml(QDomDocument &document) = 0;
-  virtual void draw(QPainter &p, QWMatrix &m, bool withBasePoints, bool outline) = 0;
-  virtual void movePoint(int idx, double dx, double dy, bool ctrlPressed = false) = 0;
-
-  virtual KoRect boundingBox() = 0;
-  virtual bool contains(const KoPoint &p) = 0;
-
-  virtual QPointArray getPoints() const = 0;
 
   virtual double length() const = 0;
+
+protected:
+  QMemArray<KoPoint> points;
 };
 
+/**
+ * Begin segment.
+ *
+ */
+
+class GBegin : public GSegment
+{
+public:
+  GBegin();
+  GBegin(const QDomElement &element);
+
+  const char type() const;
+
+  QDomElement writeToXml(QDomDocument &document);
+
+  double length() const;
+};
+
+/**
+ * Move segment.
+ *
+ */
+
+class GMove : public GSegment
+{
+public:
+  GMove();
+  GMove(const QDomElement &element);
+
+  const char type() const;
+
+  QDomElement writeToXml(QDomDocument &document);
+
+  double length() const;
+};
 
 /**
  * Line segment.
@@ -70,21 +104,11 @@ public:
   GLine();
   GLine(const QDomElement &element);
 
-  const KoPoint &point(int i) const;
-  void point(int i, const KoPoint &c);
+  const char type() const;
 
   QDomElement writeToXml(QDomDocument &document);
-  void draw(QPainter &p, QWMatrix &m, bool withBasePoints, bool outline);
-  void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
-
-  KoRect boundingBox();
-  bool contains(const KoPoint &p);
-
-  QPointArray getPoints() const;
 
   double length() const;
-private:
-  KoPoint points[2];
 };
 
 
@@ -99,21 +123,11 @@ public:
   GCubicBezier();
   GCubicBezier(const QDomElement &element);
 
-  const KoPoint &point(int i) const;
-  void point(int i, const KoPoint &c);
+  const char type() const;
 
   QDomElement writeToXml(QDomDocument &document);
-  void draw(QPainter &p, QWMatrix &m, bool withBasePoints, bool outline);
-  void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
-
-  KoRect boundingBox();
-  bool contains(const KoPoint &p);
-
-  QPointArray getPoints() const;
 
   double length() const;
-private:
-  KoPoint points[4];
 };
 
 
@@ -130,10 +144,12 @@ public:
   bool closed() const {return mClosed; }
   void closed(bool aClosed);
 
+  /* Construct path */
+  void beginTo(const double x, const double y);
   void moveTo(const double x, const double y);
   void lineTo(const double x, const double y);
-//  void curveTo();
-//  void arcTo();
+  void curveTo(const double x, const double y, const double x1, const double y1, const double x2, const double y2);
+  void arcTo(const double x1, const double y1, const double x2, const double y2, const double r);
 
   QString typeName() const;
   QDomElement writeToXml(QDomDocument &document);
@@ -152,8 +168,6 @@ public:
 private:
   QPtrList<GSegment> segments;
   bool mClosed;
-  double endx;
-  double endy;
 };
 
 #endif
