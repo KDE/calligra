@@ -1,0 +1,16 @@
+usr/share/apps/killustrator/*
+usr/share/icons/hicolor/32x32/apps/killustrator.png
+usr/share/icons/hicolor/48x48/apps/killustrator.png
+usr/share/icons/locolor/16x16/apps/killustrator.png
+usr/share/icons/locolor/32x32/apps/killustrator.png
+usr/share/applnk/Office/killustrator.desktop
+usr/share/mimelnk/application/x-killustrator.desktop
+usr/lib/libkillustratorpart.so
+usr/lib/libkillustratorpart.la
+usr/lib/killustrator.so
+usr/lib/killustrator.la
+usr/bin/killustrator
+usr/share/man/man1/killustrator*
+usr/share/doc/koffice/killustrator/*
+usr/share/doc/kde/HTML/en/killustrator/*
+usr/share/lintian/overrides/killustrator

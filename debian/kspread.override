@@ -1,0 +1,4 @@
+# modules
+kspread: no-shlibs-control-file usr/lib/kspread.so
+kspread: no-shlibs-control-file usr/lib/libkspreadpart.so
+kspread: no-shlibs-control-file usr/lib/libkspreadcalc.so

@@ -1,6 +1,7 @@
 ?package(kword):\
 	needs=x11\
 	section=Apps/Editors\
+	hints="KDE"\
 	title="KWord"\
 	command=kword
 

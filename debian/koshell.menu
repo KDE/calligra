@@ -1,0 +1,7 @@
+?package(koshell):\
+	needs=x11\
+	section=Apps/Tools\
+	hints="KDE"\
+	title="KOffice Workspace"\
+	command=koshell
+
