@@ -5,16 +5,16 @@
 #ifndef __VTOOLCONTAINER_H__
 #define __VTOOLCONTAINER_H__
 
-#include <qwidget.h>
+#include <qtoolbar.h>
 
 class KarbonView;
 class QButtonGroup;
 
-class VToolContainer : public QWidget
+class VToolContainer : public QToolBar
 {
 	Q_OBJECT
 public:
-	VToolContainer( QObject* parent = 0L, const char* name = 0L );
+	VToolContainer( KarbonView* parent = 0L, const char* name = 0L );
 	~VToolContainer();
 private:
 	QButtonGroup *btngroup;

@@ -3,21 +3,20 @@
 */
 
 #include <qbuttongroup.h>
-#include <qpushbutton.h>
 #include <qlayout.h>
-#include <klocale.h>
 #include <kpixmap.h>
 #include <kstandarddirs.h>
 #include <qtoolbutton.h>
+#include <kdualcolorbutton.h>
 
 #include "vtoolcontainer.h"
 
-VToolContainer::VToolContainer( QObject* parent, const char* name )
+VToolContainer::VToolContainer( KarbonView* parent, const char* name )
 {
 	QToolButton *button;
-	QVBoxLayout *layout = new QVBoxLayout(this, 1);
+	QHBoxLayout *layout = new QHBoxLayout(this, 1);
 
-	setCaption(i18n("Tools"));
+	setLabel("");
 	btngroup = new QButtonGroup( 2, Horizontal, this );
 	btngroup->setExclusive( true );
 	button = new QToolButton(btngroup);
@@ -87,11 +86,11 @@ VToolContainer::VToolContainer( QObject* parent, const char* name )
 	button->setToggleButton( true );
 	btngroup->insert( button, Spiral );
 
-	btngroup->setInsideSpacing(0);
-	btngroup->setInsideMargin(0);
+	btngroup->setInsideSpacing(2);
+	btngroup->setInsideMargin(5);
 	connect(btngroup, SIGNAL(clicked(int)), this, SLOT(slotButton(int)));
 	layout->addWidget(btngroup);
-	setFixedSize(btngroup->baseSize());
+	//setFixedSize(btngroup->baseSize());
 	layout->activate();
 }
 
