@@ -3802,7 +3802,7 @@ void KWView::frameStyleSelected( int index )
         KWFrame * single = m_gui->canvasWidget()->currentFrameSetEdit()->currentFrame();
         if ( single ) {
 
-            KCommand *cmd = new KWFrameStyleCommand( i18n("Apply framestyle to frame"), single, m_doc->frameStyleCollection()->frameStyleAt( index ) );
+            KCommand *cmd = new KWFrameStyleCommand( i18n("Apply Framestyle to Frame"), single, m_doc->frameStyleCollection()->frameStyleAt( index ) );
             if (cmd) {
                 m_doc->addCommand( cmd );
                 cmd->execute();
@@ -3817,12 +3817,12 @@ void KWView::frameStyleSelected( int index )
         // yes, indeed frames are selected.
         QPtrListIterator<KWFrame> it( selectedFrames );
 
-        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply framestyle to frame") : i18n("Apply framestyle to frames"));
+        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply Framestyle to Frame") : i18n("Apply Framestyle to Frames"));
 
         for ( ; it.current() ; ++it )
         {
             KWFrame *curFrame = it.current();
-            KCommand *cmd = new KWFrameStyleCommand( i18n("Apply framestyle"), curFrame, m_doc->frameStyleCollection()->frameStyleAt( index ) );
+            KCommand *cmd = new KWFrameStyleCommand( i18n("Apply Framestyle"), curFrame, m_doc->frameStyleCollection()->frameStyleAt( index ) );
             if (cmd)
                 globalCmd->addCommand( cmd );
         }
@@ -3868,7 +3868,7 @@ void KWView::tableStyleSelected( int index )
         KWFrame * single = m_gui->canvasWidget()->currentFrameSetEdit()->currentFrame();
         if ( (single) && ( single->frameSet()->type() == FT_TEXT ) )
         {
-            KCommand *cmd =  new KWTableStyleCommand( i18n("Apply tablestyle to frame"), single, m_doc->tableStyleCollection()->tableStyleAt( index ) );
+            KCommand *cmd =  new KWTableStyleCommand( i18n("Apply Tablestyle to Frame"), single, m_doc->tableStyleCollection()->tableStyleAt( index ) );
             if (cmd) {
                 m_doc->addCommand( cmd );
                 cmd->execute();
@@ -3883,12 +3883,12 @@ void KWView::tableStyleSelected( int index )
 
         QPtrListIterator<KWFrame> it( selectedFrames );
 
-        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply tablestyle to frame") : i18n("Apply tablestyle to frames"));
+        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply Tablestyle to Frame") : i18n("Apply Tablestyle to Frames"));
 
         for ( ; ( ( it.current() ) && ( it.current()->frameSet()->type() == FT_TEXT ) ); ++it )
         {
             KWFrame *curFrame = it.current();
-            KCommand *cmd = new KWTableStyleCommand( i18n("Apply tablestyle to frame"), curFrame, m_doc->tableStyleCollection()->tableStyleAt( index ) );
+            KCommand *cmd = new KWTableStyleCommand( i18n("Apply Tablestyle to Frame"), curFrame, m_doc->tableStyleCollection()->tableStyleAt( index ) );
             if (cmd)
                 globalCmd->addCommand( cmd );
         }
