@@ -1713,8 +1713,16 @@ void KSpreadUndoCellPaste::undo()
     }
     else
     {
-    table->deleteCells( m_selection );
-    table->paste( m_data,m_selection.topLeft());
+    if(!b_insert)
+        {
+        table->deleteCells( m_selection );
+        table->paste( m_data,m_selection.topLeft());
+        }
+    else
+        {
+        //table->unshiftRow(m_selection);
+        table->unshiftColumn(m_selection);
+        }
     }
 
     if(table->getAutoCalc())
@@ -1767,6 +1775,11 @@ void KSpreadUndoCellPaste::redo()
     }
     else
     {
+    if(b_insert)
+        {
+        //table->shiftRow(m_selection);
+        table->shiftColumn(m_selection);
+        }
     table->deleteCells( m_selection );
     table->paste( m_dataRedo,m_selection.topLeft());
     }

@@ -2200,10 +2200,10 @@ void KSpreadTable::changeCellTabName(QString old_name,QString new_name)
     }
 }
 
-bool KSpreadTable::shiftRow( const QRect &rect )
+bool KSpreadTable::shiftRow( const QRect &rect,bool makeUndo )
 {
     m_pDoc->setModified( true );
-    if ( !m_pDoc->undoBuffer()->isLocked() )
+    if ( !m_pDoc->undoBuffer()->isLocked()  &&makeUndo)
     {
             KSpreadUndoInsertCellRow *undo = new KSpreadUndoInsertCellRow( m_pDoc, this,rect );
             m_pDoc->undoBuffer()->appendUndo( undo );
@@ -2232,10 +2232,10 @@ bool KSpreadTable::shiftRow( const QRect &rect )
     return res;
 }
 
-bool KSpreadTable::shiftColumn( const QRect& rect )
+bool KSpreadTable::shiftColumn( const QRect& rect,bool makeUndo )
 {
     m_pDoc->setModified( true );
-    if ( !m_pDoc->undoBuffer()->isLocked() )
+    if ( !m_pDoc->undoBuffer()->isLocked()  &&makeUndo)
     {
             KSpreadUndoInsertCellCol *undo = new KSpreadUndoInsertCellCol( m_pDoc, this,rect);
             m_pDoc->undoBuffer()->appendUndo( undo );
@@ -2263,10 +2263,10 @@ bool KSpreadTable::shiftColumn( const QRect& rect )
     return res;
 }
 
-void KSpreadTable::unshiftColumn( const QRect & rect )
+void KSpreadTable::unshiftColumn( const QRect & rect,bool makeUndo )
 {
     m_pDoc->setModified( true );
-    if ( !m_pDoc->undoBuffer()->isLocked() )
+    if ( !m_pDoc->undoBuffer()->isLocked()  &&makeUndo)
     {
             KSpreadUndoRemoveCellCol *undo = new KSpreadUndoRemoveCellCol( m_pDoc, this,rect);
             m_pDoc->undoBuffer()->appendUndo( undo );
@@ -2291,10 +2291,10 @@ void KSpreadTable::unshiftColumn( const QRect & rect )
     emit sig_updateView( this );
 }
 
-void KSpreadTable::unshiftRow( const QRect & rect )
+void KSpreadTable::unshiftRow( const QRect & rect,bool makeUndo )
 {
     m_pDoc->setModified( true );
-    if ( !m_pDoc->undoBuffer()->isLocked() )
+    if ( !m_pDoc->undoBuffer()->isLocked() &&makeUndo)
     {
             KSpreadUndoRemoveCellRow *undo = new KSpreadUndoRemoveCellRow( m_pDoc, this,rect );
             m_pDoc->undoBuffer()->appendUndo( undo );
@@ -5873,15 +5873,22 @@ void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int 
 
     }
     rect.setCoords(left,top,right,bottom);
+
     c = e.firstChild().toElement();
     if(!c.isNull())
     {
         if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, 0,0, _xshift,_yshift,rect,false );
+                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, 0,0, _xshift,_yshift,rect,insert );
                 m_pDoc->undoBuffer()->appendUndo( undo );
         }
+    if(insert)
+        {
+        //shiftRow(rect,false);
+        shiftColumn(rect,false);
+        }
     }
+
 
 }
 
