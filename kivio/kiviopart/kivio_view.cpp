@@ -611,7 +611,7 @@ void KivioView::paperLayoutDlg()
 
 void KivioView::removePage()
 {
-  if ( doc()->map()->count() <= 1 ) {
+  if ( doc()->map()->count() <= 1 || m_pTabBar->listshow().count()<=1 ) {
     QApplication::beep();
     KMessageBox::sorry( this, i18n("You cannot delete the only page of the document."), i18n("Remove page") );
     return;

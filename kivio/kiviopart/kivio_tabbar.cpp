@@ -212,31 +212,6 @@ void KivioTabBar::setActiveTab( const QString& _text )
     emit tabChanged( _text );
 }
 
-void KivioTabBar::slotRemove( )
-{
-    if ( (m_pView->doc()->map()->count() <= 1 )||(tabsList.count()<=1) )
-    {
-        QApplication::beep();
-        KMessageBox::error( this,i18n("You cannot delete the only page of the map."), i18n("Remove page") ); // FIXME bad english? no english!
-        return;
-    }
-    QApplication::beep();
-    int ret = KMessageBox::warningYesNo( this, i18n("You are going to remove the active page.\nDo you want to continue?"), i18n("Remove page"));
-    if ( ret == 3 )
-    {
-        KivioPage *tbl = m_pView->activePage();
-        m_pView->doc()->map()->removePage( tbl );
-                m_pView->removePage(tbl);
-        delete tbl;
-    }
-}
-
-void KivioTabBar::slotAdd()
-{
-    m_pView->insertPage();
-    m_pView->activePage()->setHidden(false);
-}
-
 void KivioTabBar::paintEvent( QPaintEvent* )
 {
     if ( tabsList.count() == 0 )

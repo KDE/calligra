@@ -126,11 +126,6 @@ public slots:
     void slotRename( );
 
 protected slots:
-    /**
-     * Opens a dialog to rename active tab.
-     */
-    void slotRemove( );
-    void slotAdd();
     void slotAutoScroll( );
 
 protected:
