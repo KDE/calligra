@@ -213,6 +213,70 @@ void ProcessIndentTag ( QDomNode    myNode,
     AllowNoSubtags (myNode);
 }   // end ProcessIndentTag
 
+
+void ProcessTimeTag ( QDomNode    myNode,
+                      void       *tagData,
+                      QString    &         )
+// Gets the attributes in the time tags
+// called by ProcessFormatTag()
+
+{
+    Time *time = (Time *) tagData;
+
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "msecond", "int", (void *) &time->msecond )
+                       << AttrProcessing ( "second",  "int", (void *) &time->second  )
+                       << AttrProcessing ( "minute",  "int", (void *) &time->minute  )
+                       << AttrProcessing ( "hour",    "int", (void *) &time->hour    )
+                       << AttrProcessing ( "fix",     "int", (void *) &time->fix     );
+    ProcessAttributes (myNode, attrProcessingList);
+
+
+    AllowNoSubtags (myNode);
+}   // end ProcessTimeTag
+
+
+void ProcessDateTag ( QDomNode    myNode,
+                      void       *tagData,
+                      QString    &         )
+// Gets the attributes in the Date tags
+// called by ProcessFormatTag()
+
+{
+    Date *date = (Date *) tagData;
+
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "day",   "int", (void *) &date->day   )
+                       << AttrProcessing ( "month", "int", (void *) &date->month )
+                       << AttrProcessing ( "year",  "int", (void *) &date->year  )
+                       << AttrProcessing ( "fix",   "int", (void *) &date->fix   );
+    ProcessAttributes (myNode, attrProcessingList);
+
+
+    AllowNoSubtags (myNode);
+}   // end ProcessDateTag
+
+/***************************************************************************/
+
+// ProcessTypeTag is used to process the type attribute in the TYPE tag
+// called by ProcessFormatTat()
+
+void ProcessTypeTag ( QDomNode   myNode,
+                      void      *tagData,
+                      QString   &         )
+{
+    int *value = (int *) tagData;
+
+    *value = -1;
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "type", "int", (void *) value );
+    ProcessAttributes (myNode, attrProcessingList);
+    AllowNoSubtags (myNode);
+
+}  // end ProcessTypeTag()
+
 /***************************************************************************/
 
 void ProcessPaperTag ( QDomNode    myNode,
@@ -237,6 +301,10 @@ void ProcessPaperTag ( QDomNode    myNode,
                        << AttrProcessing ( "spHeadBody",    "",    NULL                                  )
                        << AttrProcessing ( "spFootBody",    "",    NULL                                  );
     ProcessAttributes (myNode, attrProcessingList);
+
+    // set global variables
+    GhType = paperattributes->hType;  // set document indicator for page header
+    GfType = paperattributes->fType;
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "PAPERBORDERS", ProcessPaperBordersTag,(void *) &paperBorders);
@@ -382,9 +450,9 @@ void ProcessLayoutTag ( QDomNode   myNode,
     paraFormatDataList.clear(); // clear global value list for new layout
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList << TagProcessing ( "NAME",         ProcessValueTag,        (void *) &name                 )
+    tagProcessingList << TagProcessing ( "NAME",         ProcessValueTag,        (void *) &name                )
                       << TagProcessing ( "COUNTER",      ProcessCounterTag,      (void *) layout               )
-                      << TagProcessing ( "TABULATOR",    ProcessTabulatorTag,    (void *) &layout->tabularData           )
+                      << TagProcessing ( "TABULATOR",    ProcessTabulatorTag,    (void *) &layout->tabularData )
                       << TagProcessing ( "FLOW",         ProcessFlowTag,         (void *) layout               )
                       << TagProcessing ( "INDENTS",      ProcessIndentTag,       (void *) layout               )
                       << TagProcessing ( "OFFSETS",      NULL,                   NULL                          )
@@ -620,11 +688,16 @@ void ProcessFormatTag ( QDomNode   myNode,
     switch ( formatId )
     {
        case 1:   // regular text
+       case 4:   // variable items time, date, page number
           if ( formatPos != -1 && formatLen != -1 )
           {
-             int fontSize     = -1;
-             int fontWeight   = -1;
-             int vertalign    = -1;
+             int     fontSize     = -1;
+             int     fontWeight   = -1;
+             int     vertalign    = -1;
+             int     pageNum      = -1;
+             int     varType      = -1;
+             Time    time;
+             Date    date;
              QString fontName = "";
              bool    italic    = false;
              bool    underline = false;
@@ -637,12 +710,16 @@ void ProcessFormatTag ( QDomNode   myNode,
                                << TagProcessing ( "FONT",      ProcessFontTag,      (void *) &fontName   )
                                << TagProcessing ( "VERTALIGN", ProcessIntValueTag,  (void *) &vertalign  )
                                << TagProcessing ( "COLOR",     ProcessColorTag,     (void *) &color      )
+                               << TagProcessing ( "DATE",      ProcessDateTag,      (void *) &date       )
+                               << TagProcessing ( "TIME",      ProcessTimeTag,      (void *) &time       )
+                               << TagProcessing ( "PGNUM",     ProcessIntValueTag,  (void *) &pageNum    )
+                               << TagProcessing ( "TYPE",      ProcessTypeTag,      (void *) &varType    )
                                << TagProcessing ( "ITALIC",    ProcessItalicTag,    (void *) &italic     );
              ProcessSubtags (myNode, tagProcessingList, outputText);
 
              (*formatDataList) << FormatData ( TextFormatting (formatId, formatPos,
              formatLen, fontSize, fontWeight, fontName, italic, underline, strikeout,
-             vertalign, color.red, color.blue, color.green) );
+             vertalign, color.red, color.blue, color.green, pageNum, time, date, varType ));
           }
 
           break;
@@ -969,7 +1046,6 @@ void ProcessDocTag ( QDomNode   myNode,
                       << TagProcessing ( "EMBEDDED",     NULL,                  NULL                  )
                       << TagProcessing ( "FRAMESETS",    ProcessFramesetsTag,   (void *) &docData     );
     ProcessSubtags (myNode, tagProcessingList, outputText);
-
 
     // Process the paper size and margins
     paperSize( paper, paperBorders );

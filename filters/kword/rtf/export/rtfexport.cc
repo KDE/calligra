@@ -20,13 +20,14 @@
 */
 
 #include <rtfexport.h>
+#include <qtextcodec.h>
 #include <rtfexport.moc>
+#include <qdatetime.h>
 
 
 // global variables
 QValueList<FontTable> fontTable; // holds all fonts found in the parsed text
 QString fontHeader;  // Font header string (markup)
-char ctrla = 1;  // this is a control A character
 paraNumberingType type[10];  // type of paragraph numbering for 10 levels
 // paragraph numbers for ten levels
 char paraNumber[10] = {0,0,0,0,0,0,0,0,0,0};
@@ -34,6 +35,8 @@ QString pageMarkup;  // global to store page size markup
 QString bookMarkup;  // markup for document info file
 QString colorHeader; // color table markup
 QValueList<ColorTable> colorTable; // used to create color table markup
+int GhType; // defines header type
+int GfType;
 
 /***************************************************************************/
 
@@ -44,14 +47,18 @@ QValueList<ColorTable> colorTable; // used to create color table markup
 void ProcessParagraphData ( QString                     &paraText,
                             QValueList<FormatData>      &paraFormatDataList,
                             QValueList<AnchoredInsert>  &anchoredInsertList,
-                            QString                     &outputText          )
+                            QString                     &outputText,
+                            QValueList<Variable>        *varList          )
 {
 #if !INSERT_TABLE_IN_PARA
     QValueList<AnchoredInsert> tmpAnchoredInsertList;
 #endif
 
 QString text;  // used for processing paragraph text
+QValueList<Variable>::Iterator varListIt; // iterator for variables list
 
+    if( !varList->isEmpty() )  // escape for variables
+       varListIt = varList->begin();
 
     if ( paraText.length () > 0 )
     {
@@ -65,6 +72,7 @@ QString text;  // used for processing paragraph text
             switch ( (*paraFormatDataIt).id )
             {
                case 1: // Paragraph
+               case 4: // Variable time, date, page number
                   {
 
                   // generate the text color markup
@@ -78,7 +86,7 @@ QString text;  // used for processing paragraph text
                                                       colorTable, colorHeader  );
                      }  // end if
 
-                  // create rtf markup to handle font sizes
+                  // create rtf markup for font sizes
                   if((*paraFormatDataIt).text.fontSize >= 0)
                      {
                      outputText += "{\\fs";;  // begin font size markup
@@ -107,16 +115,29 @@ QString text;  // used for processing paragraph text
                   outputText += fontMarkup( (*paraFormatDataIt).text.fontName,
                                             fontTable, fontHeader);
 
-                  text = paraText.mid ( (*paraFormatDataIt).text.pos, (*paraFormatDataIt).text.len )
-                                        .replace ( QRegExp ( "&amp;" ), "&" )
-                                        .replace ( QRegExp ( "&lt;" ), "<"  )
-                                        .replace ( QRegExp ( "&gt;" ), ">"  )
-                                        .replace ( QRegExp( QString(QChar(ctrla))), "" );
 
-                  text = escapeRTFsymbols( text );
+                  // extract text to be formatted
+                  text = paraText.mid ( (*paraFormatDataIt).text.pos, (*paraFormatDataIt).text.len );
+                  // Run through the variables list backwards and
+                  // replace markers with markup
+                  if( !varList->isEmpty() && (*paraFormatDataIt).text.formatId == 4 )  // escape for variables
+                     {
+                     // replace marker in text with time, date, page number markup
+                     text = text.replace( 0, 5, (*varListIt).markup );
+                     varListIt++;
+                     }  // end if(varList.isEmpty() && ...)
 
+                   // escape special kword symbols
+                  text = text.replace ( QRegExp ( "&amp;" ), "&" )
+                             .replace ( QRegExp ( "&lt;" ), "<"  )
+                             .replace ( QRegExp ( "&gt;" ), ">"  );
+
+                  // escape special RTF symbols for non-variables
+                  if( (*paraFormatDataIt).text.formatId != 4 )
+                      text = escapeRTFsymbols( text );
+
+                  // encode unicode in seven bit ansi
                   text = encodeSevenBit( text );
-
                   outputText += " " + text;  // prepend a space to terminate RTF commands
 
                   if ( (*paraFormatDataIt).text.vertalign == 2 )  // end superscript
@@ -185,6 +206,9 @@ QString text;  // used for processing paragraph text
                                                  << (*paraFormatDataIt).id << "!" << endl;
            } // end switch()
         }  // end for()
+
+
+
     }  // end if( paraText.length() > 0 )
 
 
@@ -201,7 +225,41 @@ QString text;  // used for processing paragraph text
 #endif
 }  // end ProcessParagraphData
 
+/***************************************************************************/
+QString codec()
+   {
+   QTextCodec *mapping;
+   char * tcname;
+   if(!(mapping = QTextCodec::codecForIndex(0)))
+      {
+      kdDebug () << "No codec identified for codepage" << endl;
+      return "";
+      }
+   tcname = (char *) mapping->name();
+   return QString (tcname );
+   } // end codec()
 
+/***************************************************************************/
+ QString codePage()
+   {
+   int i;
+   QString mapping;
+   QString codepage;
+
+   mapping = codec();  // get codec identifier
+   // check for mapping ID in codeTable
+   for( i = 0; i < CODE_PAGE_SIZE; i++ )
+      {
+      if( mapping == codeTable[i].mapId )
+         {
+         codepage = "\\ansicpg";
+         codepage += codeTable[i].page;
+         return codepage;
+         }
+      }
+   kdDebug () << "Codec " << mapping << " not in table" << endl;
+   return "";
+   }  // end codePage()
 /***************************************************************************/
 
 // ProcessPictureData () takes the available picture data, makes a
@@ -1090,6 +1148,18 @@ QValueList < FormatData > combineFormatData(  QValueList<FormatData> &paraFormat
             {
             (*formatIt).text.vertalign  = (*paraFormatDataIt).text.vertalign ;
             }
+         if( (*formatIt).text.varType == -1 )
+            {
+            (*formatIt).text.varType  = (*paraFormatDataIt).text.varType ;
+            }
+         if( (*formatIt).text.pageNum == -1 )
+            {
+            (*formatIt).text.pageNum  = (*paraFormatDataIt).text.pageNum ;
+            }
+         if( (*formatIt).text.formatId == -1 )
+            {
+            (*formatIt).text.formatId  = (*paraFormatDataIt).text.formatId ;
+            }
 
          if( (*formatIt).text.pos > refPos )  // indicates default format applies
             {
@@ -1138,9 +1208,14 @@ void ProcessParagraph ( QString &paraText,
     bool listIndicator;  // used to process list numbering
     QValueList<FormatData>   formatList; // combined format lists
     bool header = false;  // indicates paragraph is a page header or a footer
+    QValueList<Variable>varList;  // list for time, date, page numbers
 
     // combine format data in layout and formats
     formatList = combineFormatData( paraFormatDataList, paraFormatDataFormats );
+
+    varList.clear();  // clear the variables list
+    // process the variable inserts - time, date, page number
+    processVariables( varList, formatList );
 
     // calculate indentations
     if( layout.idFirst > 0)
@@ -1161,37 +1236,42 @@ void ProcessParagraph ( QString &paraText,
        {
        switch( (*docData).frameInfo )
           {
-          case 1: // header - all pages
+          case 1: // header - first or all pages
              {
-             outputText += "{\\header";
+             if( GhType == 2 )
+                  outputText += "\\titlepg{\\headerf";   // first page
+             else outputText += "{\\header";  // all pages
              header = true;
              break;
              }
-          case 2: // odd (left) page header
-             {
-             outputText += "\\facingp{\\headerl";
-             header = true;
-             break;
-             }
-          case 3: // even (right) page header
+          case 2: // odd (right) page header
              {
              outputText += "\\facingp{\\headerr";
              header = true;
              break;
              }
-          case 4: // all page footer
+          case 3: // even (left) page header
              {
-             outputText += "{\\footer";
+             outputText += "\\facingp{\\headerl";
              header = true;
              break;
              }
-          case 5: // odd (left) page footer
+          case 4: // first or all page footer
              {
-             outputText += "\\facingp{\\footerl";
+kdError(3500) << "GfType = " << GfType  << endl;
+             if( GfType == 2 )
+                  outputText += "\\titlepg{\\footerf";  // first page
+             else outputText += "{\\footer";  // all pages
              header = true;
              break;
              }
-          case 6: // even (right) page footer
+          case 5: // odd (right) page footer
+             {
+             outputText += "\\facingp{\\footerr";
+             header = true;
+             break;
+             }
+          case 6: // even (left) page footer
              {
              outputText += "\\facingp{\\footerl";
              header = true;
@@ -1274,7 +1354,8 @@ void ProcessParagraph ( QString &paraText,
            (*docData).head1 = true;
            }
         // extract heading text
-        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList, outputText );
+        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList,
+                               outputText, &varList);
         outputText += "\n\\par";   // end paragraph
     }
     else if ( paraLayout == "Head 2" )
@@ -1303,7 +1384,8 @@ void ProcessParagraph ( QString &paraText,
 
 
         // extract heading text
-        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList, outputText );
+        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList,
+                               outputText, &varList );
         outputText += "\n\\par";  // end paragraph
     }
     else if ( paraLayout == "Head 3" )
@@ -1330,7 +1412,8 @@ void ProcessParagraph ( QString &paraText,
 
 
         // extract heading text
-        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList, outputText );
+        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList,
+                               outputText, &varList );
         outputText += "\n\\par";  // end paragraph
     }
     else if ( layout.type == 6 )  // Bullet list
@@ -1355,7 +1438,8 @@ void ProcessParagraph ( QString &paraText,
 
         (*docData).bulletList = true;
         // output list item text
-        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList, outputText );
+        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList,
+                               outputText, &varList );
         outputText += "\n\\par";  // end paragraph
     }
     else if ( layout.type == 1 || layout.type == 4 || layout.type == 5 ) // numeric/roman
@@ -1407,7 +1491,8 @@ void ProcessParagraph ( QString &paraText,
 
 
         // output text
-        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList, outputText );
+        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList,
+                               outputText, &varList );
         outputText += "\n\\par";  // end paragraph
     }
     else if ( layout.type == 2 || layout.type == 3 )  // Alphabetical lists
@@ -1448,11 +1533,12 @@ void ProcessParagraph ( QString &paraText,
 
            }
 
-        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList, outputText );
+        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList,
+                               outputText, &varList );
         outputText += "\n\\par";  // end paragraph
     }
 
-    else
+    else   // Regular paragraph
     {
 //        CloseLists (*docData);
 
@@ -1486,7 +1572,8 @@ void ProcessParagraph ( QString &paraText,
           outputText += "\\qj\n";
           }
 
-        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList, outputText );
+        ProcessParagraphData ( paraText, formatList, docData->anchoredInsertList,
+                               outputText, &varList );
 //        if( !(*docData).grpMgr )  // check not table
            outputText += "\n\\par"; // delimit paragraph if not table cell
     }
@@ -1599,3 +1686,68 @@ QString borderMarkup (QString borderId, BorderStyle *border )
    return markup;
 
    }  // end borderMarkup
+
+
+/***************************************************************************/
+// This function processes the variable time, date, and page number items.
+// The indicator is a format ID of 4 which means some type of variable item.
+
+void processVariables( QValueList<Variable>&varList,
+                       QValueList<FormatData>paraFormat )
+   {
+   QString markup;
+   QValueList<FormatData>::Iterator  paraFormatDataIt;
+
+   for( paraFormatDataIt = paraFormat.begin();
+        paraFormatDataIt != paraFormat.end();
+        paraFormatDataIt++ )
+      {
+
+      if((*paraFormatDataIt).text.formatId  == 4 )  // indicates format for variable insert
+         {
+         switch ((*paraFormatDataIt).text.varType )
+            {
+            case 0:  // fixed date
+               {
+               // convert date to QString
+               QDate fixDate = QDate( (*paraFormatDataIt).text.date.year,
+                                      (*paraFormatDataIt).text.date.month,
+                                      (*paraFormatDataIt).text.date.day );
+               markup = fixDate.toString();
+               break;
+               }
+            case 1:  // variable date
+               {
+               markup = "\\chdate";
+               break;
+               }
+            case 2:  // fixed time
+               {
+               markup = QString::number( (*paraFormatDataIt).text.time.hour );   // 24 hour format?
+               markup += ":";
+               markup += QString::number( (*paraFormatDataIt).text.time.minute );
+               break;
+               }
+            case 3:  // variable time
+               {
+               markup = "\\chtime";
+               break;
+               }
+            case 4:  // page number
+               {
+               markup = "\\chpgn";
+               break;
+               }
+            default :
+               {
+               markup = "";
+               }
+            }  // end switch
+      varList << Variable ( (*paraFormatDataIt).text.pos, markup );
+         }  // end if((*(paraFormatDataIt).text.formatId == 4 )
+
+
+      }  // end for(...
+
+   }  // end processVariables()
+

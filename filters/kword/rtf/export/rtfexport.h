@@ -34,6 +34,21 @@
 #define KDEBUG_RTFFILTER 30505
 #define O
 
+struct CodeTable
+   {
+   QString mapId;
+   QString page;
+   };
+
+#define CODE_PAGE_SIZE 6
+// global declaration
+CodeTable codeTable[CODE_PAGE_SIZE] = {"ISO-8859-1", "1252",   // Latin1
+                                      "ISO-8859-5", "1251",   // Cryllic
+                                      "ISO-8859-6", "1256",   // Arabic
+                                      "ISO-8859-7", "1253",   // Greek
+                                      "ISO-8859-8", "1255",   // Hebrew
+                                      "ISO-10646",  "1200"};   // Unicode
+
 class RTFExport : public KoFilter
 {
         Q_OBJECT
@@ -77,11 +92,23 @@ class ColorTable
 
    ColorTable()  {}
    ColorTable ( int r,
-                   int g,
-                   int b ) : red(r), green(g), blue(b) {}
+                int g,
+                int b ) : red(r), green(g), blue(b) {}
    int red;
    int green;
    int blue;
+   };
+
+/************************************************************************/
+class Variable
+   {
+   public :
+   Variable() {}
+   Variable ( int p, QString m ) : pos(p), markup(m) {}
+
+
+   int pos;
+   QString markup;
    };
 
 /************************************************************************/
@@ -106,7 +133,8 @@ void paperSize( PaperAttributes &paper, PaperBorders &paperBorders  );
 void ProcessParagraphData ( QString                     &paraText,
                             QValueList<FormatData>      &paraFormatDataList,
                             QValueList<AnchoredInsert>  &anchoredInsertList,
-                            QString                     &outputText          );
+                            QString                     &outputText,
+                            QValueList<Variable>        *varList          );
 
 QString encodeSevenBit( QString text);
 
@@ -120,5 +148,8 @@ QString colorMarkup(int red, int blue, int green,
                  QString &colorHeader);
 
 QString borderMarkup (QString borderId, BorderStyle *border );
+
+void processVariables( QValueList<Variable>&varList,
+                       QValueList<FormatData>paraFormat );
 
 #endif // RTFEXPORT_H
