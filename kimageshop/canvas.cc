@@ -644,7 +644,7 @@ void Canvas::setFrontLayer( int _layer )
 {
   ASSERT( ( _layer >= 0 ) && ( _layer < layers.count() ) );
  
-  if( _layer > 0 )
+  if( _layer < ( layers.count() - 1 ) )
   {
     Layer *pLayer = layers.take( _layer );
     layers.append( pLayer );
@@ -655,7 +655,7 @@ void Canvas::setBackgroundLayer( int _layer )
 {
   ASSERT( ( _layer >= 0 ) && ( _layer < layers.count() ) );
  
-  if( _layer < ( layers.count() - 1 ) )
+  if( _layer > 0 )
   {
     Layer *pLayer = layers.take( _layer );
     layers.insert( 0, pLayer );
