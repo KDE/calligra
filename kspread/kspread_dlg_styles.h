@@ -41,16 +41,18 @@ class StyleWidget : public QWidget
 
   KListView * m_styleList;
   KComboBox * m_displayBox;
+signals:
+    void modifyStyle();
 };
 
 class KSpreadStyleDlg : public KDialogBase
 {
-  Q_OBJECT  
+  Q_OBJECT
  public:
-  KSpreadStyleDlg( KSpreadView * parent, KSpreadStyleManager * manager, 
+  KSpreadStyleDlg( KSpreadView * parent, KSpreadStyleManager * manager,
                    const char * name = "KSpreadStyleDlg" );
   ~KSpreadStyleDlg();
-  
+
  protected slots:
   void slotOk();
   void slotUser1();

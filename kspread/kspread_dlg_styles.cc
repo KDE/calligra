@@ -38,13 +38,13 @@
 StyleWidget::StyleWidget( QWidget * parent, const char * name, WFlags fl )
   : QWidget( parent, name, fl )
 {
-  QVBoxLayout * layout = new QVBoxLayout( this, 11, 6, "layout"); 
-  
+  QVBoxLayout * layout = new QVBoxLayout( this, 11, 6, "layout");
+
   m_styleList = new KListView( this, "m_styleList" );
   m_styleList->addColumn( i18n( "Styles" ) );
   m_styleList->setResizeMode( KListView::AllColumns );
   layout->addWidget( m_styleList );
-  
+
   m_displayBox = new KComboBox( FALSE, this, "m_displayBox" );
   layout->addWidget( m_displayBox );
 
@@ -54,7 +54,7 @@ StyleWidget::StyleWidget( QWidget * parent, const char * name, WFlags fl )
   m_displayBox->insertItem( i18n( "Applied Styles" ) );
   m_displayBox->insertItem( i18n( "Custom Styles" ) );
   m_displayBox->insertItem( i18n( "Hierachical" ) );
-
+  connect( m_styleList, SIGNAL(doubleClicked ( QListViewItem *)),this, SIGNAL( modifyStyle()));
   resize( QSize(446, 384).expandedTo(minimumSizeHint()) );
 }
 
@@ -64,10 +64,10 @@ StyleWidget::~StyleWidget()
 
 
 
-KSpreadStyleDlg::KSpreadStyleDlg( KSpreadView * parent, KSpreadStyleManager * manager, 
+KSpreadStyleDlg::KSpreadStyleDlg( KSpreadView * parent, KSpreadStyleManager * manager,
                                   const char * name )
   : KDialogBase( parent, name, true, "",
-                 KDialogBase::Ok | KDialogBase::User1 | KDialogBase::User2 | KDialogBase::User3 | KDialogBase::Close, 
+                 KDialogBase::Ok | KDialogBase::User1 | KDialogBase::User2 | KDialogBase::User3 | KDialogBase::Close,
                  KDialogBase::Ok, false, KGuiItem( i18n( "&New" ) ), KGuiItem( i18n( "&Modify" ) ), KGuiItem( i18n( "&Delete" ) ) ),
     m_view( parent ),
     m_styleManager( manager ),
@@ -82,10 +82,11 @@ KSpreadStyleDlg::KSpreadStyleDlg( KSpreadView * parent, KSpreadStyleManager * ma
   enableButton( KDialogBase::User2, true );
   enableButton( KDialogBase::User3, false );
 
-  connect( m_dlg->m_styleList, SIGNAL( selectionChanged( QListViewItem * ) ), 
+  connect( m_dlg->m_styleList, SIGNAL( selectionChanged( QListViewItem * ) ),
            this, SLOT( slotSelectionChanged( QListViewItem * ) ) );
   connect( m_dlg->m_displayBox, SIGNAL( activated( int ) ), this, SLOT( slotDisplayMode( int ) ) );
   connect( this, SIGNAL( user3Clicked() ), this, SLOT( slotUser3() ) );
+  connect( m_dlg, SIGNAL( modifyStyle() ), this, SLOT( slotUser2()));
 }
 
 KSpreadStyleDlg::~KSpreadStyleDlg()
@@ -110,7 +111,7 @@ void KSpreadStyleDlg::fillComboBox()
     {
       if ( iter.data()->parent() == 0 )
         entries[iter.data()] = new KListViewItem( m_dlg->m_styleList, iter.data()->name() );
-      else 
+      else
       {
         Map::const_iterator i = entries.find( iter.data()->parent() );
         if ( i != entries.end() )
@@ -140,10 +141,10 @@ void KSpreadStyleDlg::slotDisplayMode( int mode )
 
   if ( mode != 2 )
     new KListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
-  
+
   KSpreadStyleManager::Styles::iterator iter = m_styleManager->m_styles.begin();
   KSpreadStyleManager::Styles::iterator end  = m_styleManager->m_styles.end();
-  
+
   while ( iter != end )
   {
     KSpreadCustomStyle * styleData = iter.data();
@@ -167,7 +168,7 @@ void KSpreadStyleDlg::slotDisplayMode( int mode )
       new KListViewItem( m_dlg->m_styleList, styleData->name() );
 
     ++iter;
-  }  
+  }
 }
 
 void KSpreadStyleDlg::slotOk()
@@ -200,10 +201,10 @@ void KSpreadStyleDlg::slotOk()
 
     if ( sheet )
     {
-      m_view->doc()->emitBeginOperation( false );      
+      m_view->doc()->emitBeginOperation( false );
       sheet->setSelectionStyle( m_view->selectionInfo(), s );
     }
-  }  
+  }
 
   m_view->slotUpdateView( m_view->activeTable() );
   accept();

@@ -6055,7 +6055,6 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
     m_equalizeRow->setEnabled( !colSelected );
     m_validity->setEnabled( !colSelected && !rowSelected);
     m_conditional->setEnabled( !colSelected && !rowSelected);
-
     m_resizeColumn->setEnabled( !rowSelected );
     m_equalizeColumn->setEnabled( !rowSelected );
 
