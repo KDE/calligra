@@ -161,6 +161,8 @@ public slots:
     void paste();
     void specialPaste();
     void editCell();
+    void setAreaName();
+    void showAreaName();
     void undo();
     void redo();
     void adjust();
@@ -314,7 +316,7 @@ signals:
 
 protected:
     // bool eventKeyPressed( QKeyEvent* _event, bool choose );
-	
+
     virtual void keyPressEvent ( QKeyEvent * _ev );
     virtual void resizeEvent( QResizeEvent *_ev );
 
@@ -428,7 +430,8 @@ private:
     KToggleAction* m_showPageBorders;
     KActionMenu* m_scripts;
     KAction* m_default;
-
+    KAction* m_areaName;
+    KAction* m_showArea;
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.

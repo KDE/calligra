@@ -12,4 +12,10 @@ enum PasteMode { Normal, Text, Format, NoBorder, NormalAndTranspose, TextAndTran
 enum Operation { OverWrite, Add, Mul, Sub, Div };
 enum Conditional { None, Equal,Superior,Inferior,SuperiorEqual,InferiorEqual,Between,Different};
 enum Series {Column,Row,Linear,Geometric};
+struct Reference
+    {
+    QString table_name;
+    QString ref_name;
+    QRect rect;
+    };
 #endif

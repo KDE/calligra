@@ -58,6 +58,7 @@
   <Action name="hideTable"/>
   <Action name="showTable"/>
   <Action name="hideGrid"/>
+  <Action name="showArea"/>
  </Menu>
  <Menu name="Data"><text>Data</text>
   <Action name="sort"/>
@@ -99,7 +100,7 @@
  <Action name="sortDec"/>
  <Separator/>
  <Action name="insertChart"/>
- <Action name="insert_part"/>
+ <Action name="insertPart"/>
  <Action name="transform"/>
 </ToolBar>
 <ToolBar name="fontPropertyToolBar">

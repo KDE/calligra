@@ -4279,7 +4279,7 @@ bool KSpreadTable::setTableName( const QString& name, bool init )
 {
     if ( map()->findTable( name ) )
 	return FALSE;
-	
+
     if ( m_strName == name )
 	return TRUE;
 
@@ -4299,6 +4299,7 @@ bool KSpreadTable::setTableName( const QString& name, bool init )
 	m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
+    m_pDoc->changeAreaTableName(old_name,name);
     emit sig_nameChanged( this, old_name );
 
     return TRUE;

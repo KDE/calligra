@@ -882,4 +882,33 @@ DCOPObject* KSpreadDoc::dcopObject()
     return m_dcop;
 }
 
+void KSpreadDoc::addAreaName(QRect &_rect,QString name,QString tableName)
+{
+  Reference tmp;
+  tmp.rect = _rect;
+  tmp.table_name = tableName;
+  tmp.ref_name = name;
+  m_refs.append( tmp);
+}
+
+void KSpreadDoc::removeArea( QString name)
+{
+  QValueList<Reference>::Iterator it2;
+  for ( it2 = m_refs.begin(); it2 != m_refs.end(); ++it2 )
+    	{
+    	if((*it2).ref_name==name)
+                   m_refs.remove(it2);
+        }
+}
+
+void KSpreadDoc::changeAreaTableName(QString oldName,QString tableName)
+{
+  QValueList<Reference>::Iterator it2;
+  for ( it2 = m_refs.begin(); it2 != m_refs.end(); ++it2 )
+    	{
+    	if((*it2).table_name==oldName)
+                   (*it2).table_name=tableName;
+        }
+}
+
 #include "kspread_doc.moc"

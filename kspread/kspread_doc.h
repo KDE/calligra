@@ -71,7 +71,7 @@ public:
   virtual bool initDoc();
 
   virtual QCString mimeType() const { return MIME_TYPE; }
-	
+
   /**
    * @return a pointer to a new KSpreadTable. The KSpreadTable is not added to the map
    *         nor added to the GUI.
@@ -238,6 +238,11 @@ public:
   virtual DCOPObject* dcopObject();
 
   static QList<KSpreadDoc>& documents();
+
+  void addAreaName(QRect &_rect,QString name,QString tableName);
+  QValueList<Reference> listArea(){return m_refs;}
+  void removeArea( QString name);
+  void changeAreaTableName(QString oldName,QString tableName);
 
 public slots:
   /**
@@ -453,6 +458,8 @@ protected:
 
   static QList<KSpreadDoc>* s_docs;
   static int s_docId;
+
+  QValueList<Reference> m_refs;
 };
 
 #endif

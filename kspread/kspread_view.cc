@@ -75,7 +75,8 @@
 #include "kspread_dlg_oszi.h"
 #include "kspread_dlg_conditional.h"
 #include "kspread_dlg_series.h"
-
+#include "kspread_dlg_reference.h"
+#include "kspread_dlg_area.h"
 #include <kscript_scriptmenu.h>
 
 #include "handler.h"
@@ -230,6 +231,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_clear = new KAction( i18n("Clear"), 0, this, SLOT( clearSelection() ), actionCollection(), "clear" );
     m_adjust = new KAction( i18n("Adjust row and column"), 0, this, SLOT( adjust() ), actionCollection(), "adjust" );
     m_default = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ), actionCollection(), "default" );
+    m_areaName = new KAction( i18n("Area name"), 0, this, SLOT( setAreaName() ), actionCollection(), "areaname" );
+    m_showArea = new KAction( i18n("Show area"), 0, this, SLOT( showAreaName() ), actionCollection(), "showArea" );
     m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
     m_undo->setEnabled( FALSE );
     m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );
@@ -438,7 +441,7 @@ bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
     {
     case Key_Return:
     case Key_Enter:
-    case Key_Down:	
+    case Key_Down:
 	// Note: choose is only TRUE, if we get Key_Down
 	
 	(m_pCanvas->*hideMarker)();
@@ -1520,7 +1523,7 @@ void KSpreadView::gotoCell()
 {
     KSpreadgoto* dlg = new KSpreadgoto( this, "GotoCell" );
     dlg->show();
-
+    
 }
 
 void KSpreadView::replace()
@@ -1891,6 +1894,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_clear->plug( m_pPopupMenu );
     m_adjust->plug( m_pPopupMenu );
     m_default->plug( m_pPopupMenu );
+    m_areaName->plug( m_pPopupMenu );
     /* m_pPopupMenu->insertItem( i18n("Layout"), this, SLOT( layoutDlg() ) );
     m_pPopupMenu->insertItem( i18n("Copy"), this, SLOT( slotCopy() ) );
     m_pPopupMenu->insertItem( i18n("Cut"), this, SLOT( slotCut() ) );
@@ -1926,7 +1930,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
         {
 	  QStringList lst = (*entry).userCommands();
 	  QStringList::ConstIterator it = lst.begin();
-	
+
 	  // ### Torben: Insert pixmaps here, too
 	  for (; it != lst.end(); ++it )
 	    m_pPopupMenu->insertItem( *it, m_popupMenuFirstToolId + i++ );
@@ -2056,6 +2060,19 @@ void KSpreadView::slotRemove()
 {
     KSpreadinsert* dlg = new KSpreadinsert( this, "Remove",QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow()),KSpreadinsert::Remove );
 
+    dlg->show();
+}
+
+void KSpreadView::setAreaName()
+{
+    KSpreadarea* dlg = new KSpreadarea( this, "Area Name",QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow()) );
+
+    dlg->show();
+}
+
+void KSpreadView::showAreaName()
+{
+    KSpreadreference* dlg = new KSpreadreference( this, "Show area" );
     dlg->show();
 }
 
