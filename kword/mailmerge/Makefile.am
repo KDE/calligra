@@ -18,5 +18,5 @@ if include_sql
 SQLDIRECTORY=sql
 endif
 
-SUBDIRS = . kabc $(SQLDIRECTORY)
+SUBDIRS = . kabc kspread $(SQLDIRECTORY)
 

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+ServiceTypes=KWord/MailMergePlugin
+
+Name=KSpread Table Source
+Comment=This datasource type lets you use your entries from a kspread file.
+
+X-KDE-Library=kwmailmerge_kspread
+X-KDE-Capabilities=open
+X-KDE-InternalName=KSpread
