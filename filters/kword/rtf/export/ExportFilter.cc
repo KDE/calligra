@@ -468,8 +468,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                     }
                     if (!key.isEmpty())
                     {
-                        QRegExp regexp("AP");
-                        regexp.setCaseSensitive(false);
+                        const QRegExp regexp("AP",false); // Not case-sensitive
                         if (regexp.search(key)!=-1)
                         {
                             // 12h
