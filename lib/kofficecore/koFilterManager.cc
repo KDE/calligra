@@ -146,6 +146,8 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
         if ( m_document )
         {
             QCString nativeFormat = m_document->nativeFormatMimeType ();
+
+            QApplication::setOverrideCursor (arrowCursor);
             KoFilterChooser *chooser = new KoFilterChooser
                                             (0,
                                             KoFilterManager::mimeFilter (nativeFormat, KoFilterManager::Import),
@@ -166,6 +168,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
                 userCancelled = true;
 
             delete chooser;
+            QApplication::restoreOverrideCursor ();
         }
 
         if (!m_graph.isValid())
@@ -239,6 +242,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString
         if ( !m_graph.isValid() ) {
             kdWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser" << endl;
 
+            QApplication::setOverrideCursor (arrowCursor);
             KoFilterChooser *chooser = new KoFilterChooser (0, KoFilterManager::mimeFilter ());
             if (chooser->exec ())
                 m_graph.setSourceMimeType (chooser->filterSelected ().latin1 ());
@@ -246,6 +250,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString
                 userCancelled = true;
 
             delete chooser;
+            QApplication::restoreOverrideCursor ();
         }
     }
 
