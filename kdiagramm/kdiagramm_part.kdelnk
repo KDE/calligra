@@ -1,30 +1,8 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KDiagramm
-Name[cs]=KDiagram
-Name[da]=KDiagram
-Name[fi]=KDiagram
-Name[no]=Diagram
-Name[pt]=Diagramas
-Name[ro]=Diagramm
-Name[ru]=‰…¡«“¡ÕÕŸ
 Exec=kdiagramm.bin --server
 Comment=Torben's Chart
-Comment[br]=Frammlun Torben
-Comment[ca]=Els gr‡fics de Torben
-Comment[da]=Torbens graf
-Comment[de]=Torbens Chart
-Comment[es]=El Renderizador de Tablas de Torben
-Comment[fi]=Torbenin kuvaajaohjelma
-Comment[no]=Torbens graf
-Comment[pl]=Wykresy Torbena Weisa
-Comment[pt]=Ferramenta para fazer diagramas
-Comment[pt_BR]=Programa para confecÁ„o de diagramas
-Comment[ro]=Kdiagram
-Comment[ru]=Á“¡∆…À… Torben'¡
-Comment[sk]=Torbenova tabuµk·
-Comment[sl]=Torbenovi grafikoni
-Comment[sv]=Torbens diagram
 MimeTypes=application/x-kdiagramm,
 RepoID=IDL:KDiagramm/DocumentFactory:1.0,IDL:Chart/SimpleChart:1.0,
 ActivationMode=shared

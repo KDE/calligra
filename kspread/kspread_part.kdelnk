@@ -1,33 +1,8 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KSpread
-Name[da]=Kregneark
-Name[hu]=KSzámolótábla
-Name[is]=Töflureiknir
-Name[pt]=Folha de Cálculo
-Name[ro]=SpreadSheet
-Name[ru]=ôÁÂÌÉÃÁ
-Name[sv]=Kalkyl
 Exec=kspread.bin --server
 Comment=Torben's Spread Sheet
-Comment[br]=Loger Torben
-Comment[ca]=La fulla de càlcul de Torben
-Comment[cs]=Torbenùv tabulkový procesor
-Comment[da]=Torbens regneark
-Comment[de]=Torbens Tabellenkalkulation
-Comment[es]=Hoja de Cálculo de Torben
-Comment[fi]=Torbenin taulukkolaskenta
-Comment[hu]=Torben számolótáblája
-Comment[is]=Töflureiknir K vöndulsins
-Comment[no]=Torbens regneark
-Comment[pl]=Arkusz kalkulacyjny
-Comment[pt]=Folha de cálculo
-Comment[pt_BR]=Planilha Eletrônica
-Comment[ro]=SpreadSheet
-Comment[ru]=ôÁÂÌÉÃÙ Torben'Á
-Comment[sk]=Torbenov Spread Sheet
-Comment[sl]=Torbenova preglednica
-Comment[sv]=Torbens kalkylprogram
 MimeTypes=application/x-kspread,
 RepoID=IDL:KSpread/DocumentFactory:1.0,
 ActivationMode=shared
