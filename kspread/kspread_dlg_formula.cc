@@ -966,7 +966,7 @@ void KSpreadDlgFormula::changeFunction()
         	tmp1=i18n("The ln() function returns the\n"
 			  "natural logarithm of x.\n");
 		tmp1+=i18n("Syntax : %1(Double)").arg(m_funcName);
-	        tmp1+=i18n("Example : \n");
+	        tmp1+=i18n("\nExample : \n");
                 tmp1+="ln(0.8) equals -0.22314355.\nln(0) equals -inf.";
                 tmp.help=tmp1;
                 }
@@ -974,7 +974,7 @@ void KSpreadDlgFormula::changeFunction()
         	{
         	tmp1=i18n("The log() function returns\nthe base-10 logarithm of x.\n");
 		tmp1+=i18n("Syntax : %1(Double)").arg(m_funcName);
-	        tmp1+=i18n("Example : \n");
+	        tmp1+=i18n("\nExample : \n");
                 tmp1+="log(0.8) equals -0.09691001.\nlog(0) equals -inf.";
                 tmp.help=tmp1;
                 }
@@ -985,7 +985,7 @@ void KSpreadDlgFormula::changeFunction()
 			  "of x. It fails and sets errno to\n"
 			  "EDOM, if x is  negative.\n");
 		tmp1+=i18n("Syntax : %1(Double)").arg(m_funcName);
-	        tmp1+=i18n("Example : \n");
+	        tmp1+=i18n("\nExample : \n");
                 tmp1+="sqrt(9) equals 3.\nsqrt(-9) equals nan.";
                 tmp.help=tmp1;
                 }
@@ -998,6 +998,36 @@ void KSpreadDlgFormula::changeFunction()
         	tmp1+=i18n("Syntax : ") +m_funcName+"("+"Double"+")\n";
 	        tmp1+=i18n("Example : \n");
                 tmp1+="sqrt(9) equals 3.\nsqrt(-9) equals nan.";
+                tmp.help=tmp1;
+                }
+        else if(m_funcName=="ceil")
+        	{
+        	tmp1=i18n("The  ceil() function rounds x \n"
+                           "upwards to the nearest integer, \n"
+                           "returning that value as a double.\n");
+		tmp1+=i18n("Syntax : %1(Double)").arg(m_funcName);
+	        tmp1+=i18n("\nExample : \n");
+                tmp1+="ceil(12.5) equals 13.\nceil(-12.5) equals -12.";
+                tmp.help=tmp1;
+                }
+        else if(m_funcName=="fabs")
+        	{
+        	tmp1=i18n("The  fabs()  function  returns\n"
+                          "the  absolute value of the \n"
+                          "floating-point number x.\n");
+		tmp1+=i18n("Syntax : %1(Double)").arg(m_funcName);
+	        tmp1+=i18n("\nExample : \n");
+                tmp1+="fabs(12.5) equals 12.5.\nceil(-12.5) equals 12.5.";
+                tmp.help=tmp1;
+                }
+        else if(m_funcName=="floor")
+        	{
+        	tmp1=i18n(" The  floor()  function  rounds\n"
+                          " x downwards to the nearest integer, \n"
+                          " returning that value as a double.\n");
+		tmp1+=i18n("Syntax : %1(Double)").arg(m_funcName);
+	        tmp1+=i18n("\nExample : \n");
+                tmp1+="floor(12.5) equals 12.\nceil(-12.5) equals -13.";
                 tmp.help=tmp1;
                 }
         else

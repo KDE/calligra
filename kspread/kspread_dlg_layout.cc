@@ -493,7 +493,7 @@ void CellLayoutDlg::slotApply()
     		m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x );
     		}
     	}
-    	
+
     // Outline
       borderPage->applyOutline( left, top, right, bottom );
 
@@ -569,7 +569,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     format->insertItem( *CellLayoutDlg::formatRedAlwaysSignedPixmap, 4 );
     format->insertItem( *CellLayoutDlg::undefinedPixmap, 5 );
 
-    tmpQLabel = new QLabel( this, "Label_4" );
+    tmpQLabel = new QLabel( box, "Label_4" );
     grid->addWidget(tmpQLabel,0,2);
     tmpQLabel->setText( i18n("Format") );
 
@@ -1706,6 +1706,11 @@ void CellLayoutPageBorder::slotChangeStyle(int)
 		kdDebug(36001)<<"Error in combobox\n";
 		break;
 	}
+ if(selectedPattern!=customize)
+        {
+        slotUnselect2(customize);
+        customize->slotSelect();
+        }
 }
 
 QPixmap* CellLayoutPageBorder::paintFormatPixmap(PenStyle _style)
