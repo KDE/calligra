@@ -55,7 +55,7 @@ public:
 
 signals:
     // See olefilter.h for information
-    void signalSavePic(const QString &extension, unsigned int length, const unsigned char *data, const QString &key, QString &id);
+    void signalSavePic(const QString &extension, unsigned int length, const char *data, const QString &key, QString &id);
     void signalPart(const char *nameIN, char **nameOUT);
     void signalGetStream(const int &handle, myFile &stream);
     // Note: might return wrong stream as names are NOT unique!!!
