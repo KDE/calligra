@@ -893,7 +893,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     cSpacing->insertItem( i18n( "Line spacing value", "Single" ) );
     cSpacing->insertItem( i18n( "Line spacing value", "1.5 Lines" ) );
     cSpacing->insertItem( i18n( "Line spacing value", "Double" ) );
-    cSpacing->insertItem( i18n( "Multiply") );
+    cSpacing->insertItem( i18n( "Proportional") ); // LS_MULTIPLE, called Proportional like in OO
     cSpacing->insertItem( i18n( "Line Distance (%1)" ).arg(unitName) ); // LS_CUSTOM
     cSpacing->insertItem( i18n( "At Least (%1)" ).arg(unitName) );
     cSpacing->insertItem( i18n( "Fixed (%1)").arg(unitName) ); // LS_FIXED
