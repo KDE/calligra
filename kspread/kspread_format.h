@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __kspread_layout_h__
-#define __kspread_layout_h__
+#ifndef __kspread_format_h__
+#define __kspread_format_h__
 
 class KSpreadSheet;
 class KSpreadCanvas;
@@ -39,7 +39,7 @@ class KSpreadCurrency;
 
 /**
  */
-class KSpreadLayout
+class KSpreadFormat
 {
 public:
     enum Align { Left = 1, Center = 2, Right = 3, Undefined = 4 };
@@ -97,12 +97,12 @@ public:
       QString symbol;
     };
 
-    KSpreadLayout( KSpreadSheet *_table );
-    virtual ~KSpreadLayout();
+    KSpreadFormat( KSpreadSheet *_sheet );
+    virtual ~KSpreadFormat();
 
-    void copy( const KSpreadLayout &_l );
+    void copy( const KSpreadFormat &_l );
 
-    void defaultStyleLayout();
+    void defaultStyleFormat();
 
     ////////////////////////////////
     //
@@ -111,10 +111,10 @@ public:
     ////////////////////////////////
 
     bool load( const QDomElement& f, PasteMode pm );
-    bool loadLayout( const QDomElement& f, PasteMode pm=Normal);
+    bool loadFormat( const QDomElement& f, PasteMode pm=Normal);
     QDomElement save( QDomDocument& doc,int _col, int _row,bool force = false ) const;
-    QDomElement saveLayout( QDomDocument& doc, bool force = false ) const;
-    QDomElement saveLayout( QDomDocument& doc, int _col, int _row, bool force=false ) const;
+    QDomElement saveFormat( QDomDocument& doc, bool force = false ) const;
+    QDomElement saveFormat( QDomDocument& doc, int _col, int _row, bool force=false ) const;
 
 
     ////////////////////////////////
@@ -135,19 +135,19 @@ public:
     // Flags
     //
     ///////////////////////////////
-    enum LayoutFlags{ Flag_MultiRow      = 0x00000001,
+    enum FormatFlags{ Flag_MultiRow      = 0x00000001,
                       Flag_VerticalText  = 0x00000002,
                       Flag_DontPrintText = 0x00000004
                       /* reserve the bits 0xFFFF0000 for subclasses to use */
                     };
-    void clearFlag( LayoutFlags flag );
-    void setFlag( LayoutFlags flag );
-    bool testFlag( LayoutFlags flag ) const;
+    void clearFlag( FormatFlags flag );
+    void setFlag( FormatFlags flag );
+    bool testFlag( FormatFlags flag ) const;
 
 
     ////////////////////////////////
     //
-    // Methods for setting layout stuff.
+    // Methods for setting format stuff.
     //
     ////////////////////////////////
 
@@ -234,7 +234,7 @@ public:
 
     ////////////////////////////////
     //
-    // Methods for querying layout stuff.
+    // Methods for querying format stuff.
     //
     ////////////////////////////////
 
@@ -351,7 +351,7 @@ public:
 
     QString getCurrencySymbol() const { return m_currency.symbol; }
 
-  QFont font() { return m_textFont; }
+    QFont font() const { return m_textFont; }
 
 protected:
     virtual const QPen& rightBorderPen() const;
@@ -360,16 +360,16 @@ protected:
     /**
      * Default implementation does nothing.
      */
-    virtual void layoutChanged();
+    virtual void formatChanged();
 
     /**
      * Default implementation returns 0.
      */
-    virtual KSpreadLayout* fallbackLayout( int col, int row );
+    virtual KSpreadFormat* fallbackFormat( int col, int row );
     /**
      * Default implementation returns 0.
      */
-    virtual const KSpreadLayout* fallbackLayout( int col, int row ) const;
+    virtual const KSpreadFormat* fallbackFormat( int col, int row ) const;
 
     /**
      * Default implementation returns TRUE.
@@ -385,7 +385,7 @@ protected:
      * Format of the content, e.g. #.##0.00, dd/mmm/yyyy,...
      */
     QString m_strFormat;
-  
+
     /**
      * Alignment of the text
      */
@@ -525,11 +525,11 @@ private:
 
 /**
  */
-class RowLayout : public KSpreadLayout
+class RowFormat : public KSpreadFormat
 {
 public:
-    RowLayout( KSpreadSheet *_table, int _row );
-    ~RowLayout();
+    RowFormat( KSpreadSheet *_sheet, int _row );
+    ~RowFormat();
 
     virtual DCOPObject* dcopObject();
 
@@ -576,7 +576,7 @@ public:
     void setMMHeight( double _h );
 
     /**
-     * Use this function to tell this layout that it is the default layout.
+     * Use this function to tell this format that it is the default format.
      */
     void setDefault() { m_bDefault = TRUE; }
     /**
@@ -585,7 +585,7 @@ public:
     bool isDefault() const;
 
     /**
-     * @return the row for this RowLayout. May be 0 if this is the default layout.
+     * @return the row for this RowFormat. May be 0 if this is the default format.
      *
      * @see #row
      */
@@ -596,10 +596,10 @@ public:
     void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true; }
     void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
 
-    RowLayout* next() const { return m_next; }
-    RowLayout* previous() const { return m_prev; }
-    void setNext( RowLayout* c ) { m_next = c; }
-    void setPrevious( RowLayout* c ) { m_prev = c; }
+    RowFormat* next() const { return m_next; }
+    RowFormat* previous() const { return m_prev; }
+    void setNext( RowFormat* c ) { m_next = c; }
+    void setPrevious( RowFormat* c ) { m_prev = c; }
 
     /**
      * @reimp
@@ -628,11 +628,11 @@ protected:
     /**
      * @reimp
      */
-    KSpreadLayout* fallbackLayout( int col, int row );
+    KSpreadFormat* fallbackFormat( int col, int row );
     /**
      * @reimp
      */
-    const KSpreadLayout* fallbackLayout( int col, int row ) const;
+    const KSpreadFormat* fallbackFormat( int col, int row ) const;
 
     /**
      * Width of the cell in unzoomed points.
@@ -640,15 +640,15 @@ protected:
     double m_fHeight;
 
     /**
-     * Flag that indicates whether this is the default layout.
+     * Flag that indicates whether this is the default format.
      *
      * @see #isDefault
      * @see #setDefault
      */
     bool m_bDefault;
     /**
-     * This is the row to which this layout belongs. If this value is 0, then
-     * this might be the default layout.
+     * This is the row to which this format belongs. If this value is 0, then
+     * this might be the default format.
      *
      * @see #row
      */
@@ -656,18 +656,18 @@ protected:
 
     bool m_bDisplayDirtyFlag;
     bool m_bHide;
-    RowLayout* m_next;
-    RowLayout* m_prev;
+    RowFormat* m_next;
+    RowFormat* m_prev;
     DCOPObject*m_dcop;
 };
 
 /**
  */
-class ColumnLayout : public KSpreadLayout
+class ColumnFormat : public KSpreadFormat
 {
 public:
-    ColumnLayout( KSpreadSheet *_table, int _column );
-    ~ColumnLayout();
+    ColumnFormat( KSpreadSheet *_table, int _column );
+    ~ColumnFormat();
 
     virtual QDomElement save( QDomDocument&, int xshift = 0 ) const;
     virtual bool load( const QDomElement& row, int xshift = 0,PasteMode sp=Normal );
@@ -716,7 +716,7 @@ public:
     void setMMWidth( double _w );
 
     /**
-     * Use this function to tell this layout that it is the default layout.
+     * Use this function to tell this format that it is the default format.
      */
     void setDefault() { m_bDefault = TRUE; }
     /**
@@ -725,7 +725,7 @@ public:
     bool isDefault() const;
 
     /**
-     * @return the column of this ColumnLayout. May be 0 if this is the default layout.
+     * @return the column of this ColumnFormat. May be 0 if this is the default format.
      *
      * @see #column
      */
@@ -736,10 +736,10 @@ public:
     void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true; }
     void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
 
-    ColumnLayout* next() const { return m_next; }
-    ColumnLayout* previous() const { return m_prev; }
-    void setNext( ColumnLayout* c ) { m_next = c; }
-    void setPrevious( ColumnLayout* c ) { m_prev = c; }
+    ColumnFormat* next() const { return m_next; }
+    ColumnFormat* previous() const { return m_prev; }
+    void setNext( ColumnFormat* c ) { m_next = c; }
+    void setPrevious( ColumnFormat* c ) { m_prev = c; }
 
     /**
      * @reimp
@@ -766,11 +766,11 @@ protected:
     /**
      * @reimp
      */
-    KSpreadLayout* fallbackLayout( int col, int row );
+    KSpreadFormat* fallbackFormat( int col, int row );
     /**
      * @reimp
      */
-    const KSpreadLayout* fallbackLayout( int col, int row ) const;
+    const KSpreadFormat* fallbackFormat( int col, int row ) const;
 
     /**
      * Width of the cells in unzoomed pixels.
@@ -778,15 +778,15 @@ protected:
     double m_fWidth;
 
     /**
-     * Flag that indicates whether this is the default layout.
+     * Flag that indicates whether this is the default format.
      *
      * @see #isDefault
      * @see #setDefault
      */
     bool m_bDefault;
     /**
-     * This is the column to which this layout belongs. If this value is 0, then
-     * this might be the default layout.
+     * This is the column to which this format belongs. If this value is 0, then
+     * this might be the default format.
      *
      * @see #column
      */
@@ -796,8 +796,8 @@ protected:
 
     bool m_bHide;
 
-    ColumnLayout* m_next;
-    ColumnLayout* m_prev;
+    ColumnFormat* m_next;
+    ColumnFormat* m_prev;
     DCOPObject*m_dcop;
 };
 
@@ -805,14 +805,14 @@ class KSpreadCurrency
 {
  public:
 
-  typedef enum F1 { Gnumeric, OpenCalc, ApplixSpread, 
+  typedef enum F1 { Gnumeric, OpenCalc, ApplixSpread,
                     GobeProductiveSpread, HancomSheet } currencyFormat;
 
   KSpreadCurrency();
   ~KSpreadCurrency();
-  
+
   KSpreadCurrency(int index);
-  
+
   /**
    * If code doesn't fit to index the index gets ignored
    */
@@ -821,7 +821,7 @@ class KSpreadCurrency
   /**
    * code: e.g. EUR, USD,..
    * Looks up index, if code found more than once: saved without country info
-   * currencyFormat: in Gnumeric the code is: [$EUR] 
+   * currencyFormat: in Gnumeric the code is: [$EUR]
    *                 saves some work in the filter...
    */
   KSpreadCurrency(QString const & code, currencyFormat format);
@@ -836,7 +836,7 @@ class KSpreadCurrency
   QString getName() const;
   QString getDisplayCode() const;
   int     getIndex() const;
-    
+
   static QString getChooseString(int type, bool & ok);
   static QString getDisplaySymbol(int type);
   static QString getCurrencyCode( int type);
