@@ -1983,6 +1983,7 @@ KoParagShadowWidget::KoParagShadowWidget( QWidget * parent, const char * name )
     grid2->addWidget(ldistance,2,0);
 
     distance = new QSpinBox( 0, 20, 1, shadow );
+    distance->setSuffix(i18n("pt"));
     connect( distance, SIGNAL( valueChanged( int ) ), this, SLOT( distanceChanged( int ) ) );
     grid2->addWidget(distance,3,0);
 
