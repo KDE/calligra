@@ -778,3 +778,13 @@ void KWordDocIface::setPicturePath( const QString & _path )
 {
     doc->setPicturePath( _path );
 }
+
+void KWordDocIface::setBackupFile( bool _b )
+{
+    doc->setBackupFile( _b);
+}
+
+bool KWordDocIface::backupFile()const
+{
+    return doc->backupFile();
+}
