@@ -68,6 +68,9 @@
 // ToolBars
 #include "vselecttoolbar.h"
 
+// Statusbar
+#include "vsmallpreview.h"
+
 // The rest.
 #include "karbon_factory.h"
 #include "karbon_part.h"
@@ -120,6 +123,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_cursorCoords->setAlignment( AlignLeft | AlignVCenter );
 	m_cursorCoords->setMinimumWidth( 50 );
 	addStatusBarItem( m_cursorCoords, 0 );
+	m_smallPreview = new VSmallPreview( p, parent, name );
+	addStatusBarItem( m_smallPreview );
 
 	initActions();
 
@@ -183,6 +188,7 @@ KarbonView::~KarbonView()
 	}
 
 	// widgets:
+	delete( m_smallPreview );
 	delete( m_status );
 	delete( m_cursorCoords );
 
@@ -1097,6 +1103,7 @@ KarbonView::selectionChanged()
 		if( count == 1 )
 		{
 			m_strokeFillPreview->update( *obj->stroke(), *obj->fill() );
+			m_smallPreview->update( *obj->stroke(), *obj->fill() );
 			m_strokeDocker->setStroke( *( obj->stroke() ) );
 			VGroup *group = dynamic_cast<VGroup *>( part()->document().selection()->objects().getFirst() );
 			m_ungroupObjects->setEnabled( group );
@@ -1109,6 +1116,7 @@ KarbonView::selectionChanged()
 			stroke.setType( VStroke::none );
 			VFill fill;
 			m_strokeFillPreview->update( stroke, fill );
+			m_smallPreview->update( stroke, fill );
 			m_groupObjects->setEnabled( true );
 		}
 

@@ -21,6 +21,7 @@ noinst_HEADERS = \
 	vstrokefillpreview.h \
 	vtranslate.h \
 	vselecttoolbar.h \
+	vsmallpreview.h \
 	vstatebutton.h \
 	vtoolbox.h \
 	vtypebuttonbox.h
@@ -36,6 +37,7 @@ libkarbonwidgets_la_SOURCES = \
 	vstrokefillpreview.cc \
 	vtranslate.cc \
 	vselecttoolbar.cc \
+	vsmallpreview.cc \
 	vstatebutton.cc \
 	vtoolbox.cc \
 	vtypebuttonbox.cc

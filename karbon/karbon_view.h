@@ -51,6 +51,7 @@ class VTransformDocker;
 class VFill;
 class VPainterFactory;
 class VSelectToolBar;
+class VSmallPreview;
 class VStateButton;
 class VStroke;
 class VStrokeFillPreview;
@@ -227,6 +228,9 @@ private:
 
 	// dcop
 	DCOPObject		*m_dcop;
+
+	//Status Bar
+	VSmallPreview		*m_smallPreview;
 };
 
 #endif
